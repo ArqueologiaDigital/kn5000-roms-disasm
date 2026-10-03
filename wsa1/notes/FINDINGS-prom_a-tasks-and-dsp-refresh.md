@@ -62,7 +62,7 @@ field from "unidentified" into a four-link chain:
    `0xF85746`-`0xF85759`. Three heads scanned in order are three priority levels.
 2. `Kernel_YieldRotate` and `Kernel_RotateQueue` both address a head as
    `0x032C + A*4`, and `A = 1, 2, 3` gives exactly `0x0330`, `0x0334`, `0x0338`.
-3. `sub_F85EC2` calls `Kernel_YieldRotate` with `A = 3`, so those small integers
+3. `SoftTimer_RotateLevel3` calls `Kernel_YieldRotate` with `A = 3`, so those small integers
    really are used as that index somewhere.
 4. All **seven** `+10` fields across prom_a and prom_c lie in 1..3, never 0 or 4
    (checked, both images, by `notes/prom_a_byte_checks.py`).
@@ -186,7 +186,7 @@ routine, three buses.**
 
 ⚠ **Nothing calls it**, by the same two searches used for the table above.
 
-## 4. `sub_F85EC2` — deliberately not named
+## 4. `SoftTimer_RotateLevel3` — deliberately not named
 
 Six bytes: `ld A,3` / `calr 0xF85877` / `ret`. `0xF85877` is a kernel primitive
 reached through prom_b thunk `0xF42D74`; it takes a small selector in A, walks a

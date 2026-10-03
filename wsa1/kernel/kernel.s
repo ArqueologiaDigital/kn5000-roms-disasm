@@ -445,7 +445,7 @@ Kernel_InitRam__msg_queues:
 ;                              (+0 countdown, +2 reload, +4 callback), and this
 ;                              block is a REQUEST with a different +0, so the
 ;                              two layouts must not be conflated.
-;            +4  LE32  0x00F85EC2  a code address in this file -- sub_F85EC2,
+;            +4  LE32  0x00F85EC2  a code address in this file -- SoftTimer_RotateLevel3,
 ;                              which notes/prom_a_byte_checks.py records as
 ;                              calling Kernel_YieldRotate with A = 3.
 ; Evidence: it is DATA and not code, and that is settled by the branch, not by
@@ -477,7 +477,7 @@ Kernel_InitRam__msg_queues:
 SoftTimer_Request_Boot:
 	.short 0x0001                                ; F856E0/F98245  01 00   slot number, read as a BYTE by SoftTimer_Register   slot index, read as a byte by 0xF85D78
 	.short 0x0001                                ; F856E2/F98247  01 00   copied into BOTH slot+0 and slot+2   ⚠ role not established
-	.long KERNEL_BOOT_TIMER_CALLBACK             ; F856E4/F98249  a=c2 5e f8 00 c=12 81 f9 00   c: the callback: SoftTimer_RotateLevel2   sub_F85EC2
+	.long KERNEL_BOOT_TIMER_CALLBACK             ; F856E4/F98249  a=c2 5e f8 00 c=12 81 f9 00   c: the callback: SoftTimer_RotateLevel2   SoftTimer_RotateLevel3
 Kernel_InitRam__install:
 	call SoftTimer_Register                      ; F856E8/F9824D  a=1d 78 5d f8 c=1d dd 88 f9   c: call 0xf988dd   install that request, then FALL INTO Kernel_Start
 
@@ -1254,7 +1254,7 @@ Kernel_YieldRotate_StackArg:
 ; ---------------------------------------------------------------------
 ; Kernel_YieldRotate -- move ready-queue A's head task to the back and reschedule
 ;
-; Called from: sub_F85EC2 (0xF85EC4, converted below) with A = 3; and prom_b
+; Called from: SoftTimer_RotateLevel3 (0xF85EC4, converted below) with A = 3; and prom_b
 ;          thunk 0xF42D74 (notes/prom_a_xref.py 0xF85877), so it is a published
 ;          kernel entry, not a local helper.
 ; Inputs:  A = the queue number.  The list at 0x032C + A*4.

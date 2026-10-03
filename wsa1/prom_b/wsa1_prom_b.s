@@ -214,35 +214,35 @@
 	.set	Paint_S0ngC0py, 0xF80261
 	.set	ScreenLeave_S0ngC0py_Nop, 0xF803C8
 	.set	Paint_N0teChange, 0xF80439
-	.set	sub_F804EC, 0xF804EC
+	.set	ScreenLeaveBody_N0teChange, 0xF804EC
 	.set	ButtonTable_N0teChange_207EZero_Nop7, 0xF8051E
 	.set	Paint_MeasureC0py, 0xF8076C
-	.set	sub_F80809, 0xF80809
+	.set	ScreenLeaveBody_MeasureC0py, 0xF80809
 	.set	Paint_MeasureInsert, 0xF80AC9
-	.set	sub_F80B66, 0xF80B66
+	.set	ScreenLeaveBody_MeasureInsert, 0xF80B66
 	.set	Paint_S0ngSelectName, 0xF80E2E
-	.set	sub_F80EAF, 0xF80EAF
-	.set	sub_F80EB4, 0xF80EB4
+	.set	ScreenLeaveBody_S0ngSelectName, 0xF80EAF
+	.set	ScreenButtonBody_S0ngSelectName, 0xF80EB4
 	.set	sub_F80F3A, 0xF80F3A
 	.set	sub_F80F4F, 0xF80F4F
 	.set	Paint_StepRecordPartSelect, 0xF80F5A
-	.set	sub_F80FC0, 0xF80FC0
+	.set	ScreenLeaveBody_StepRecordPartSelect, 0xF80FC0
 	.set	sub_F8101E, 0xF8101E
 	.set	sub_F81039, 0xF81039
 	.set	Paint_SequencerMedley, 0xF81048
-	.set	sub_F810F0, 0xF810F0
-	.set	sub_F819E9, 0xF819E9
-	.set	sub_F82028, 0xF82028
+	.set	ScreenLeaveBody_SequencerMedley, 0xF810F0
+	.set	SongStore_MeasureSongSize, 0xF819E9
+	.set	MainTask_Loop, 0xF82028
 	.set	Queue2C00_DrainPassAB, 0xF823AC
 	.set	Queue2C00_DrainPassB, 0xF823C8
-	.set	sub_F82407, 0xF82407
-	.set	sub_F82557, 0xF82557
+	.set	TimedEvents_DrainDue, 0xF82407
+	.set	SeqBuf_FlushStaged, 0xF82557
 	.set	Ring601850_ServiceIfNotEmpty, 0xF825C7
 	.set	T_F4001C_Nop, 0xF8262E
-	.set	sub_F82630, 0xF82630
-	.set	sub_F82634, 0xF82634
-	.set	sub_F82638, 0xF82638
-	.set	sub_F827C8, 0xF827C8
+	.set	ModuleInit_Phase0Veneer, 0xF82630
+	.set	ModuleInit_Phase1Veneer, 0xF82634
+	.set	ModuleInit_Phase2Veneer, 0xF82638
+	.set	MainTask_Entry, 0xF827C8
 	.set	Dev7F_WriteSlot8_Slot0, 0xF83171
 	.set	Dev7F_WriteSlot8_Slot1, 0xF83179
 	.set	Dev7F_WriteSlot8_Slot2, 0xF83181
@@ -431,10 +431,10 @@
 	.set	PanelHold_Tick, 0xF86C5C
 	.set	Ctrl_Normalise, 0xF89800
 	.set	Ctrl_Nop_Ret, 0xF89804
-	.set	sub_F8A000, 0xF8A000
-	.set	sub_F8A023, 0xF8A023
+	.set	PanelWire_EntryThunks, 0xF8A000
+	.set	PanelWire_Service, 0xF8A023
 	.set	T_F40618_Nop, 0xF8A027
-	.set	sub_F8A81D, 0xF8A81D
+	.set	PanelEvent_Service, 0xF8A81D
 	.set	sub_F8BC00, 0xF8BC00
 	.set	sub_F8BC04, 0xF8BC04
 	.set	sub_F8BC08, 0xF8BC08
@@ -87453,7 +87453,7 @@ T_Dev7F_WriteSlot8_Slot2:	jp Dev7F_WriteSlot8_Slot2  ; F4000C (was T_F4000C) -> 
 ; Evidence: slot 0xF40010 is `jp 0xF83189`; prom_a 0xF83189 carries the label
 ;           Dev7F_WriteSlot8_Slot3, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Dev7F_WriteSlot8_Slot3:	jp Dev7F_WriteSlot8_Slot3  ; F40010 (was T_F40010) -> prom_a 0x03189   x7
-T_F40014:	jp sub_F82028  ; -> prom_a 0x02028
+T_F40014:	jp MainTask_Loop  ; -> prom_a 0x02028
 ; Evidence: slot 0xF40018 is `jp 0xF823AC`; prom_a 0xF823AC carries the label
 ;           Queue2C00_DrainPassAB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_DrainPassAB:	jp Queue2C00_DrainPassAB  ; F40018 (was T_F40018) -> prom_a 0x023AC   x16
@@ -87461,15 +87461,15 @@ T_F4001C:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 ; Evidence: slot 0xF40020 is `jp 0xF825C7`; prom_a 0xF825C7 carries the label
 ;           Ring601850_ServiceIfNotEmpty (graded CONTENT).  DERIVATIVE name.
 T_Ring601850_ServiceIfNotEmpty:	jp Ring601850_ServiceIfNotEmpty  ; F40020 (was T_F40020) -> prom_a 0x025C7
-T_F40024:	jp sub_F82557  ; -> prom_a 0x02557   x2
+T_F40024:	jp SeqBuf_FlushStaged  ; -> prom_a 0x02557   x2
 T_F40028:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
-T_F4002C:	jp sub_F82630  ; -> prom_a 0x02630
-T_F40030:	jp sub_F82634  ; -> prom_a 0x02634
-T_F40034:	jp sub_F82638  ; -> prom_a 0x02638   x2
+T_F4002C:	jp ModuleInit_Phase0Veneer  ; -> prom_a 0x02630
+T_F40030:	jp ModuleInit_Phase1Veneer  ; -> prom_a 0x02634
+T_F40034:	jp ModuleInit_Phase2Veneer  ; -> prom_a 0x02638   x2
 ; Evidence: slot 0xF40038 is `jp 0xF823C8`; prom_a 0xF823C8 carries the label
 ;           Queue2C00_DrainPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_DrainPassB:	jp Queue2C00_DrainPassB  ; F40038 (was T_F40038) -> prom_a 0x023C8   x21
-T_F4003C:	jp sub_F82407  ; -> prom_a 0x02407
+T_F4003C:	jp TimedEvents_DrainDue  ; -> prom_a 0x02407
 T_F40040:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F40044:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F40048:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
@@ -87477,7 +87477,7 @@ T_F4004C:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F40050:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F40054:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F40058:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
-T_F4005C:	jp sub_F827C8  ; -> prom_a 0x027C8
+T_F4005C:	jp MainTask_Entry  ; -> prom_a 0x027C8
 	.fill 0x40, 1, 0x0E  ; 0xF40060: 64 x ret
 ; --- the SWI7 pair.  prom_a's vector table sends SWI7 (0xFFFF1C) here, not to a
 ;     routine: the vector value IS 0x00F400A4.  See the display-list block at
@@ -87614,12 +87614,12 @@ T_Ctrl_Normalise:	jp Ctrl_Normalise  ; F405F0 (was T_F405F0) -> prom_a 0x09800  
 ;           Ctrl_Nop_Ret, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Ctrl_Nop_Ret:	jp Ctrl_Nop_Ret  ; F405F4 (was T_F405F4) -> prom_a 0x09804
 	.fill 0x18, 1, 0x0E  ; 0xF405F8: 24 x ret
-T_F40610:	.long sub_F8A000	; ptr -> 0xF8A000 (prom_a 0x0A000)
-T_F40614:	jp sub_F8A023  ; -> prom_a 0x0A023   x1
+T_F40610:	.long PanelWire_EntryThunks	; ptr -> 0xF8A000 (prom_a 0x0A000)
+T_F40614:	jp PanelWire_Service  ; -> prom_a 0x0A023   x1
 T_F40618:	jp T_F40618_Nop  ; -> prom_a 0x0A027
 	.fill 0x14, 1, 0x0E  ; 0xF4061C: 20 x ret
 T_F40630:	.long 0x00F8A800	; ptr -> 0xF8A800 (prom_a 0x0A800)
-T_F40634:	jp sub_F8A81D  ; -> prom_a 0x0A81D   x1
+T_F40634:	jp PanelEvent_Service  ; -> prom_a 0x0A81D   x1
 	.fill 0x28, 1, 0x0E  ; 0xF40638: 40 x ret
 T_F40660:	.long sub_F8C000	; ptr -> 0xF8C000 (prom_a 0x0C000)
 T_F40664:	jp sub_F8C18B  ; -> prom_a 0x0C18B   x2
@@ -190109,7 +190109,7 @@ ScreenEnter_N0teChange:
 ; Evidence: the +4 word of screen object F43120 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF804EC` then `ret`.  [round7-entrypoints]
 ScreenLeave_N0teChange:
-	call	sub_F804EC	; F7D21C  call 0xf804ec
+	call	ScreenLeaveBody_N0teChange	; F7D21C  call 0xf804ec
 	ret	; F7D220  ret
 ; Evidence: the +8 word of screen object F43120 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DED8 / 0xF7DF58 and calls T_F41B08.  [round7-entrypoints]
@@ -190158,7 +190158,7 @@ ScreenEnter_MeasureC0py:
 ; Evidence: the +4 word of screen object F430C0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80809` then `ret`.  [round7-entrypoints]
 ScreenLeave_MeasureC0py:
-	call	sub_F80809	; F7D23D  call 0xf80809
+	call	ScreenLeaveBody_MeasureC0py	; F7D23D  call 0xf80809
 	ret	; F7D241  ret
 ; Evidence: the +8 word of screen object F430C0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DFD8 / 0xF7E058 and calls T_F41B08.  [round7-entrypoints]
@@ -190207,7 +190207,7 @@ ScreenEnter_MeasureInsert:
 ; Evidence: the +4 word of screen object F430D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80B66` then `ret`.  [round7-entrypoints]
 ScreenLeave_MeasureInsert:
-	call	sub_F80B66	; F7D25E  call 0xf80b66
+	call	ScreenLeaveBody_MeasureInsert	; F7D25E  call 0xf80b66
 	ret	; F7D262  ret
 ; Evidence: the +8 word of screen object F430D0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7E0D8 / 0xF7E158 and calls T_F41B08.  [round7-entrypoints]
@@ -190251,12 +190251,12 @@ ScreenEnter_S0ngSelectName:
 ; Evidence: the +4 word of screen object F431A0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80EAF` then `ret`.  [round7-entrypoints]
 ScreenLeave_S0ngSelectName:
-	call	sub_F80EAF	; F7D27F  call 0xf80eaf
+	call	ScreenLeaveBody_S0ngSelectName	; F7D27F  call 0xf80eaf
 	ret	; F7D283  ret
 ; Evidence: the +8 word of screen object F431A0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80EB4` then `ret`.  [round7-entrypoints]
 ScreenButton_S0ngSelectName:
-	call	sub_F80EB4	; F7D284  call 0xf80eb4
+	call	ScreenButtonBody_S0ngSelectName	; F7D284  call 0xf80eb4
 	ret	; F7D288  ret
 ; Evidence: the +0x0C word of screen object F431A0 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
@@ -190294,7 +190294,7 @@ ScreenEnter_StepRecordPartSelect:
 ; Evidence: the +4 word of screen object F43170 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF80FC0` then `ret`.  [round7-entrypoints]
 ScreenLeave_StepRecordPartSelect:
-	call	sub_F80FC0	; F7D28F  call 0xf80fc0
+	call	ScreenLeaveBody_StepRecordPartSelect	; F7D28F  call 0xf80fc0
 	ret	; F7D293  ret
 ; Evidence: the +8 word of screen object F43170 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button table at 0xF7E1D8 and calls T_F41B08.  [round7-entrypoints]
@@ -190338,7 +190338,7 @@ ScreenEnter_SequencerMedley:
 ; Evidence: the +4 word of screen object F43150 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF810F0` then `ret`.  [round7-entrypoints]
 ScreenLeave_SequencerMedley:
-	call	sub_F810F0	; F7D2A4  call 0xf810f0
+	call	ScreenLeaveBody_SequencerMedley	; F7D2A4  call 0xf810f0
 	ret	; F7D2A8  ret
 ; Evidence: the +8 word of screen object F43150 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button table at 0xF7E258 and calls T_F41B08.  [round7-entrypoints]
@@ -194504,7 +194504,7 @@ Paint_SongClear_Skip:
 	cp	a, 10	; F7EB1A  cp A,0x0a
 	jr	z, Paint_SongClear_Skip2	; F7EB1D  jr Z,0xf7eb37
 	ld	(3634:16), a	; F7EB1F  ld (0x0e32),A
-	call	sub_F819E9	; F7EB23  call 0xf819e9
+	call	SongStore_MeasureSongSize	; F7EB23  call 0xf819e9
 	ld	wa, (3631:16)	; F7EB27  ld WA,(0x0e2f)
 	ld	(4862:16), wa	; F7EB2B  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EB2F  ld A,(0x0e31)
@@ -194628,7 +194628,7 @@ SoftKeyCol3_SongClear:
 	cp	a, 10	; F7EBED  cp A,0x0a
 	jr	z, SoftKeyCol3_SongClear_Skip	; F7EBF0  jr Z,0xf7ec0a
 	ld	(3634:16), a	; F7EBF2  ld (0x0e32),A
-	call	sub_F819E9	; F7EBF6  call 0xf819e9
+	call	SongStore_MeasureSongSize	; F7EBF6  call 0xf819e9
 	ld	wa, (3631:16)	; F7EBFA  ld WA,(0x0e2f)
 	ld	(4862:16), wa	; F7EBFE  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EC02  ld A,(0x0e31)
@@ -194692,7 +194692,7 @@ SoftKeyCol4_SongClear:
 	cp	a, 10	; F7EC1F  cp A,0x0a
 	jr	z, SoftKeyCol4_SongClear_Skip	; F7EC22  jr Z,0xf7ec3c
 	ld	(3634:16), a	; F7EC24  ld (0x0e32),A
-	call	sub_F819E9	; F7EC28  call 0xf819e9
+	call	SongStore_MeasureSongSize	; F7EC28  call 0xf819e9
 	ld	wa, (3631:16)	; F7EC2C  ld WA,(0x0e2f)
 	ld	(4862:16), wa	; F7EC30  ld (0x12fe),WA
 	ld	a, (3633:16)	; F7EC34  ld A,(0x0e31)

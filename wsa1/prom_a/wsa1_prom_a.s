@@ -2231,33 +2231,25 @@ wsa1_prom_a:
 ; interpreter entry -- and they are `sub_XXXXXX` because nothing here says WHICH
 ; screen.  Nine labels in the span are semantic, and all nine are data.
 ; ==============================================================================
-sub_F80000:
+; AdvanceDelay_SelectField1 -- the prom_a half of prom_b's LcdKeyRow1_AdvanceDelay_207EZero: select field 1 of the ADVANCE/DELAY screen
+; Evidence: that handler's last instructions `bit 7,W / jr Z,0xF80019` (0xF7FFFB-0xF7FFFF) fall through the chip boundary into 0xF80000; nothing calls or names 0xF80000 (24-bit scan of prom_a/b/c).
+; Body: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_F42A68 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.
+; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_207EZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
+AdvanceDelay_SelectField1:
 	m_cp_mi8 MB16, 0x0de5, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, .LF80019                                       ; F80005  66 12
 	calr sub_F7F245                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8000A  c1 75 20 3e 01
 	call T_F42A68                                        ; F8000F  1d 68 2a f4
-	calr sub_F80086                                      ; F80013  1e 70 00
-	calr sub_F8001A                                      ; F80016  1e 01 00
+	calr AdvanceDelay_DrawValues                                      ; F80013  1e 70 00
+	calr AdvanceDelay_DrawFieldCursor                                      ; F80016  1e 01 00
 .LF80019:
 	ret                                                  ; F80019  0e
-; sub_F8001A -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 8
-; instructions to its first `ret`:
-;     site 0xF8002C  interpreter A  list 0xF39551-0xF39559
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F8001A:
+; AdvanceDelay_DrawFieldCursor -- clear LCD layer 1, then fill the box of the ADVANCE/DELAY field (0x12FC) selects
+; Evidence: (0x2540)=1; site 0xF8002C runs DL_F39551-0xF39559 (interpreter A), one op-0E record = svc 0x0E LCD_Svc_0E_ClearColumns with IY=0, BC=0x28, HL=0xF0 (40 columns x 240 rows); then T_F4181C (jp DLB_Handler_Array8) on the op-03 record 0xF3B3A7: (0x12FC)&7 indexes DLBoxes_F3B3B2, swi 5 = LCD_Svc_05_FillRect.
+; Screen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_207EZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_F42A68..T_F42A74.
+; calr 0xF7E2D8 at 0xF8001F is a bare `ret` in prom_b.
+AdvanceDelay_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8001A  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F8001F  1e b6 e2
 	ld XIY,DL_F39551                                     ; F80022  45 51 95 f3 00
@@ -2273,8 +2265,8 @@ sub_F8001A:
 	calr sub_F7F237                                          ; F80046  1e ee f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80049  c1 75 20 3e 01
 	call T_F42A6C                                        ; F8004E  1d 6c 2a f4
-	calr sub_F80086                                      ; F80052  1e 31 00
-	calr sub_F8001A                                      ; F80055  1e c2 ff
+	calr AdvanceDelay_DrawValues                                      ; F80052  1e 31 00
+	calr AdvanceDelay_DrawFieldCursor                                      ; F80055  1e c2 ff
 .LF80058:
 	ret                                                  ; F80058  0e
 	bit 0x07,W                                           ; F80059  c8 33 07
@@ -2284,8 +2276,8 @@ sub_F8001A:
 	calr sub_F7F237                                          ; F80065  1e cf f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80068  c1 75 20 3e 01
 	call T_F42A70                                        ; F8006D  1d 70 2a f4
-	calr sub_F80086                                      ; F80071  1e 12 00
-	calr sub_F8001A                                      ; F80074  1e a3 ff
+	calr AdvanceDelay_DrawValues                                      ; F80071  1e 12 00
+	calr AdvanceDelay_DrawFieldCursor                                      ; F80074  1e a3 ff
 	jr .LF80085                                          ; F80077  68 0c
 .LF80079:
 	calr sub_F7F245                                          ; F80079  1e c9 f1
@@ -2293,23 +2285,11 @@ sub_F8001A:
 	call T_F42A80                                        ; F80081  1d 80 2a f4
 .LF80085:
 	ret                                                  ; F80085  0e
-; sub_F80086 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 6
-; instructions to its first `ret`:
-;     site 0xF80098  interpreter B  list 0xF3B379-0xF3B3A7
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80086:
+; AdvanceDelay_DrawValues -- redraw the live values of the ADVANCE/DELAY screen on layer 0
+; Evidence: (0x2540)=0; site 0xF80098 runs interpreter B over DL_F3B379-0xF3B3A7: track (0x12F6) via DLText_0To16All, 3-digit (0x12F7) and (0x12F9), signed 2-digit (0x12FB).
+; Paint_AdvanceDelay (prom_b 0xF7FFB6) runs the same list start; BlinkArgPtrs_F8024D[2..4] are its records 0xF3B388/0xF3B392/0xF3B39C, i.e. fields 2-4.
+; calr 0xF7E2D8 at 0xF8008B is a bare `ret` in prom_b.
+AdvanceDelay_DrawValues:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80086  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F8008B  1e 4a e2
 	ld XIY,DL_F3B379                                     ; F8008E  45 79 b3 f3 00
@@ -2323,8 +2303,8 @@ sub_F80086:
 	calr sub_F7F237                                          ; F800A9  1e 8b f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F800AC  c1 75 20 3e 01
 	call T_F42A74                                        ; F800B1  1d 74 2a f4
-	calr sub_F80086                                      ; F800B5  1e ce ff
-	calr sub_F8001A                                      ; F800B8  1e 5f ff
+	calr AdvanceDelay_DrawValues                                      ; F800B5  1e ce ff
+	calr AdvanceDelay_DrawFieldCursor                                      ; F800B8  1e 5f ff
 	jr .LF800BD                                          ; F800BB  68 00
 .LF800BD:
 	ret                                                  ; F800BD  0e
@@ -2352,10 +2332,10 @@ sub_F80086:
 .LF800EF:
 	call T_F42A78                                        ; F800EF  1d 78 2a f4
 .LF800F3:
-	calr sub_F80086                                      ; F800F3  1e 90 ff
+	calr AdvanceDelay_DrawValues                                      ; F800F3  1e 90 ff
 	ret                                                  ; F800F6  0e
 	ret                                                  ; F800F7  0e
-	calr sub_F8012F                                      ; F800F8  1e 34 00
+	calr AdvanceDelay_NumberPad                                      ; F800F8  1e 34 00
 	ret                                                  ; F800FB  0e
 	ret                                                  ; F800FC  0e
 	ret                                                  ; F800FD  0e
@@ -2389,7 +2369,10 @@ sub_F80086:
 	ret                                                  ; F8012C  0e
 	ret                                                  ; F8012D  0e
 	ret                                                  ; F8012E  0e
-sub_F8012F:
+; AdvanceDelay_NumberPad -- NUMBER PAD key on the ADVANCE/DELAY screen: dispatch on the keypad code (0x2267)
+; Evidence: reached only by `calr` at 0xF800F8, slot 27 (NumberPadKey) of ButtonTable_AdvanceDelay_207EZero.  (0x2267)<=9 -> AdvanceDelay_KeypadDigit, 0x0F -> AdvanceDelay_KeypadCommit, 0x80 -> AdvanceDelay_KeypadSign; then always AdvanceDelay_BlinkSelectedField.
+; The codes are PanelKeypad_OrdinalToKey_V1's: 0..9 digit (shifted into 0x2821-0x2823), 0x80 sign toggle of (0x2820), 0x0F commit.
+AdvanceDelay_NumberPad:
 	ld a, (0x2267:16)                                   ; F8012F  c1 67 22 21
 	cp A,0x09                                            ; F80133  c9 cf 09
 	jr ule, .LF80144                                     ; F80136  63 0c
@@ -2402,19 +2385,22 @@ sub_F8012F:
 	calr Blink_SetEnable_1                                      ; F80144  1e 0e 00
 	jr .LF80151                                          ; F80147  68 08
 .LF80149:
-	calr sub_F8015F                                      ; F80149  1e 13 00
+	calr AdvanceDelay_KeypadCommit                                      ; F80149  1e 13 00
 	jr .LF80151                                          ; F8014C  68 03
 .LF8014E:
-	calr sub_F8020D                                      ; F8014E  1e bc 00
+	calr AdvanceDelay_KeypadSign                                      ; F8014E  1e bc 00
 .LF80151:
-	calr sub_F80220                                      ; F80151  1e cc 00
+	calr AdvanceDelay_BlinkSelectedField                                      ; F80151  1e cc 00
 	ret                                                  ; F80154  0e
 Blink_SetEnable_1:
 	pushw 0x01                                           ; F80155  0b 01 00
 	call T_Blink_SetEnable                               ; F80158  1d 28 2e f4
 	inc 2,XSP                                            ; F8015C  ef 62
 	ret                                                  ; F8015E  0e
-sub_F8015F:
+; AdvanceDelay_KeypadCommit -- keypad code 0x0F: convert the typed digits and store them into the field (0x0DE5) selects
+; Evidence: field 4: (0x2826)=2, T_AsciiField_ToSignedValue, accepts <=+0x60 when (0x2820)='+' else >=-0x60, stores (0x0DEC)/(0x12FB).  Fields 2/3: (0x2826)=3, T_AsciiDigits3_ToValue, 1..999 into (0x0DE8)/(0x12F7) or (0x0DEA)/(0x12F9), keeping (0x0DE8)<=(0x0DEA); (0x0E06)=(0x0DEA)-(0x0DE8)+1.
+; Then T_Blink_Stop and AdvanceDelay_DrawValues; out-of-range input returns with nothing stored.
+AdvanceDelay_KeypadCommit:
 	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F8015F  c1 e5 0d 3f 04
 	jr nz, .LF80176                                      ; F80164  6e 10
 	ld (0x2826:16), 0x02                                 ; F80166  f1 26 28 00 02
@@ -2476,10 +2462,12 @@ sub_F8015F:
 	ld (0x12fb:16), a                                   ; F80201  f1 fb 12 41
 .LF80205:
 	call T_Blink_Stop                                    ; F80205  1d 24 2e f4
-	calr sub_F80086                                      ; F80209  1e 7a fe
+	calr AdvanceDelay_DrawValues                                      ; F80209  1e 7a fe
 .LF8020C:
 	ret                                                  ; F8020C  0e
-sub_F8020D:
+; AdvanceDelay_KeypadSign -- keypad code 0x80: put '+' back in the sign cell (0x2820) unless field 4 is selected
+; Evidence: `bit 1,(0x2075)` (blink enable, FINDINGS-prom_b-field-blink.md) and `cp (0x0DE5),4` gate `ld (0x2820),0x2B`; field 4 is the only one AdvanceDelay_KeypadCommit converts as signed.
+AdvanceDelay_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits                                ; F8020D  f1 75 20 c9
 	jr z, .LF8021F                                       ; F80211  66 0c
 	m_cp_mi8 MB16, 0x0de5, 0x04                          ; F80213  c1 e5 0d 3f 04
@@ -2487,7 +2475,9 @@ sub_F8020D:
 	ld (0x2820:16), 0x2b                                 ; F8021A  f1 20 28 00 2b
 .LF8021F:
 	ret                                                  ; F8021F  0e
-sub_F80220:
+; AdvanceDelay_BlinkSelectedField -- start the field blink on the field (0x0DE5) selects
+; Evidence: unless (0x2075) bit 1 is clear or (0x2267)=0x0F: (0x2540)=0, push BlinkArgPtrs_F8024D[(0x0DE5)], call T_Blink_Command.
+AdvanceDelay_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits                                ; F80220  f1 75 20 c9
 	jr z, .LF8024C                                       ; F80224  66 26
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80226  c1 67 22 3f 0f
@@ -2586,29 +2576,15 @@ Paint_S0ngC0py:
 	ld XIX,DL_TrackMergeOkTrackTrackTrack                ; F802D2  44 7f a4 f3 00
 	call T_DisplayList_Run                               ; F802D7  1d f0 17 f4
 .LF802DB:
-	call sub_F802EC                                      ; F802DB  1d ec 02 f8
-	call sub_F80338                                      ; F802DF  1d 38 03 f8
-	call sub_F80384                                      ; F802E3  1d 84 03 f8
+	call S0ngC0py_DrawFromSong                                      ; F802DB  1d ec 02 f8
+	call S0ngC0py_DrawToSong                                      ; F802DF  1d 38 03 f8
+	call S0ngC0py_DrawTracks                                      ; F802E3  1d 84 03 f8
 	call PromB_LCD_ScreenRedraw_End                                        ; F802E7  1d e7 e2 f7
 	ret                                                  ; F802EB  0e
-; sub_F802EC -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 2 time(s) in the 23
-; instructions to its first `ret`:
-;     site 0xF80301  interpreter B  list 0xF3C199-0xF3C1A3
-;     site 0xF80333  interpreter B  list 0xF3C15D-0xF3C16C
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F802EC:
+; S0ngC0py_DrawFromSong -- redraw the FROM song number and its six-character name on the SONG COPY screen
+; Evidence: (0x12F6)=(0x0E0C); site 0xF80301 runs B record 0xF3C199 ((0x12F6) at IX 0x0A84, x=12 beside 'SONG ' x=7 under 'FROM' x=8 in DL_S0ngC0pyFromToSongSongOk); ldir 6 bytes from 0x610000+((0x0E0C)-1)*0xC00+0xCA (song bank name, FINDINGS-prom_b-block-store.md) to 0x12F8; site 0xF80333 runs DL_F3C15D (string 0x12F8 at IX 0x0DA0).
+; Callers: Paint_S0ngC0py and the SoftKeyCol1/2 slot handlers (0xF803C9/0xF803D2) after T_F42A14/T_F42A10 step (0x0E0C) down/up in 1..10.
+S0ngC0py_DrawFromSong:
 	xor XWA,XWA                                          ; F802EC  e8 d0
 	ld a, (0x0e0c:16)                                   ; F802EE  c1 0c 0e 21
 	ld (0x12f6:16), a                                   ; F802F2  f1 f6 12 41
@@ -2633,24 +2609,10 @@ sub_F802EC:
 	ld XIX,DL_F3C16C                                     ; F8032E  44 6c c1 f3 00
 	call T_DisplayListB_Run                              ; F80333  1d f4 17 f4
 	ret                                                  ; F80337  0e
-; sub_F80338 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 2 time(s) in the 23
-; instructions to its first `ret`:
-;     site 0xF8034D  interpreter B  list 0xF3C1A3-0xF3C1AD
-;     site 0xF8037F  interpreter B  list 0xF3C16C-0xF3C17B
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80338:
+; S0ngC0py_DrawToSong -- redraw the TO song number and name on the SONG COPY screen
+; Evidence: (0x12F7)=(0x0E0D); site 0xF8034D runs B record 0xF3C1A3 (IX 0x0A95, x=29 under 'TO' x=26); name of bank (0x0E0D)-1 copied to 0x12FE; site 0xF8037F runs DL_F3C16C (IX 0x0DB1).
+; Callers: Paint_S0ngC0py and the SoftKeyCol5/6 slot handlers (0xF803ED/0xF803F6) after T_F42A24/T_F42A20.
+S0ngC0py_DrawToSong:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ld a, (0x0e0d:16)                                   ; F8033A  c1 0d 0e 21
 	ld (0x12f7:16), a                                   ; F8033E  f1 f7 12 41
@@ -2674,7 +2636,10 @@ sub_F80338:
 	ld XIX,DL_F3C17B                                     ; F8037A  44 7b c1 f3 00
 	call T_DisplayListB_Run                              ; F8037F  1d f4 17 f4
 	ret                                                  ; F80383  0e
-sub_F80384:
+; S0ngC0py_DrawTracks -- redraw the FROM and TO track fields of the SONG COPY screen
+; Evidence: (0x0E0E)=0x12 draws DL_AllAll ('  ALL   ' at both columns); otherwise (0x1304)=(0x0E0E), (0x1305)=(0x0E0F), DLB DL_F3C17B (two DLText_0To17All readouts at IX 0x1344/0x1355) and DL_TrackTrack.
+; Callers: Paint_S0ngC0py and SoftKeyCol3/4/7/8 handlers after T_F42A1C/18/2C/28 step (0x0E0E)/(0x0E0F) in 1..0x12.
+S0ngC0py_DrawTracks:
 	m_cp_mi8 MB16, 0x0e0e, 0x12                          ; F80384  c1 0e 0e 3f 12
 	jr nz, .LF8039B                                      ; F80389  6e 10
 	ld XIY,DL_AllAll                                     ; F8038B  45 45 c1 f3 00
@@ -2697,28 +2662,28 @@ sub_F80384:
 ScreenLeave_S0ngC0py_Nop:
 	ret                                                  ; F803C8  0e
 	call T_F42A14                                        ; F803C9  1d 14 2a f4
-	call sub_F802EC                                      ; F803CD  1d ec 02 f8
+	call S0ngC0py_DrawFromSong                                      ; F803CD  1d ec 02 f8
 	ret                                                  ; F803D1  0e
 	call T_F42A10                                        ; F803D2  1d 10 2a f4
-	call sub_F802EC                                      ; F803D6  1d ec 02 f8
+	call S0ngC0py_DrawFromSong                                      ; F803D6  1d ec 02 f8
 	ret                                                  ; F803DA  0e
 	call T_F42A1C                                        ; F803DB  1d 1c 2a f4
-	call sub_F80384                                      ; F803DF  1d 84 03 f8
+	call S0ngC0py_DrawTracks                                      ; F803DF  1d 84 03 f8
 	ret                                                  ; F803E3  0e
 	call T_F42A18                                        ; F803E4  1d 18 2a f4
-	call sub_F80384                                      ; F803E8  1d 84 03 f8
+	call S0ngC0py_DrawTracks                                      ; F803E8  1d 84 03 f8
 	ret                                                  ; F803EC  0e
 	call T_F42A24                                        ; F803ED  1d 24 2a f4
-	call sub_F80338                                      ; F803F1  1d 38 03 f8
+	call S0ngC0py_DrawToSong                                      ; F803F1  1d 38 03 f8
 	ret                                                  ; F803F5  0e
 	call T_F42A20                                        ; F803F6  1d 20 2a f4
-	call sub_F80338                                      ; F803FA  1d 38 03 f8
+	call S0ngC0py_DrawToSong                                      ; F803FA  1d 38 03 f8
 	ret                                                  ; F803FE  0e
 	call T_F42A2C                                        ; F803FF  1d 2c 2a f4
-	call sub_F80384                                      ; F80403  1d 84 03 f8
+	call S0ngC0py_DrawTracks                                      ; F80403  1d 84 03 f8
 	ret                                                  ; F80407  0e
 	call T_F42A28                                        ; F80408  1d 28 2a f4
-	call sub_F80384                                      ; F8040C  1d 84 03 f8
+	call S0ngC0py_DrawTracks                                      ; F8040C  1d 84 03 f8
 	ret                                                  ; F80410  0e
 	ret                                                  ; F80411  0e
 	call T_F42A30                                        ; F80412  1d 30 2a f4
@@ -2818,7 +2783,9 @@ Paint_N0teChange:
 	call T_DisplayListB_Run                              ; F804E4  1d f4 17 f4
 	calr PromB_LCD_ScreenRedraw_End                                          ; F804E8  1e fc dd
 	ret                                                  ; F804EB  0e
-sub_F804EC:
+; ScreenLeaveBody_N0teChange -- the whole body of the N0teChange screen's Leave method
+; Evidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_F42A8C / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_F409E0.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay.
+ScreenLeaveBody_N0teChange:
 	call T_F42A8C                                        ; F804EC  1d 8c 2a f4
 	ret                                                  ; F804F0  0e
 	ret                                                  ; F804F1  0e
@@ -2838,7 +2805,7 @@ sub_F804EC:
 .LF80514:
 	call T_F42AA4                                        ; F80514  1d a4 2a f4
 .LF80518:
-	calr sub_F805B8                                      ; F80518  1e 9d 00
+	calr N0teChange_DrawValues                                      ; F80518  1e 9d 00
 	ret                                                  ; F8051B  0e
 	ret                                                  ; F8051C  0e
 	ret                                                  ; F8051D  0e
@@ -2857,27 +2824,14 @@ ButtonTable_N0teChange_207EZero_Nop7:
 	calr sub_F7F237                                          ; F8053B  1e f9 ec
 	call T_F42A9C                                        ; F8053E  1d 9c 2a f4
 .LF80542:
-	calr sub_F805B8                                      ; F80542  1e 73 00
-	calr sub_F80549                                      ; F80545  1e 01 00
+	calr N0teChange_DrawValues                                      ; F80542  1e 73 00
+	calr N0teChange_DrawFieldCursor                                      ; F80545  1e 01 00
 .LF80548:
 	ret                                                  ; F80548  0e
-; sub_F80549 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 8
-; instructions to its first `ret`:
-;     site 0xF8055B  interpreter A  list 0xF39551-0xF39559
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80549:
+; N0teChange_DrawFieldCursor -- clear LCD layer 1, then fill the box of the NOTE CHANGE field (0x1301) selects
+; Evidence: (0x2540)=1; site 0xF8055B runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); then DLB_Handler_Array8 (T_F4181C) on op-03 record 0xF3B05A: (0x1301)&7 indexes the boxes at 0xF3B065, swi 5 FillRect.  (0x1301) is written with (0x0DED) (T_F42A88 = prom_b 0xF7C853).
+; Callers: the row-key handlers of ButtonTable_N0teChange_207EZero at 0xF8051F-0xF805AB.
+N0teChange_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80549  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F8054E  1e 87 dd
 	ld XIY,DL_F39551                                     ; F80551  45 51 95 f3 00
@@ -2899,8 +2853,8 @@ sub_F80549:
 	calr sub_F7F237                                          ; F80585  1e af ec
 	call T_F42AA0                                        ; F80588  1d a0 2a f4
 .LF8058C:
-	calr sub_F805B8                                      ; F8058C  1e 29 00
-	calr sub_F80549                                      ; F8058F  1e b7 ff
+	calr N0teChange_DrawValues                                      ; F8058C  1e 29 00
+	calr N0teChange_DrawFieldCursor                                      ; F8058F  1e b7 ff
 	jr .LF80594                                          ; F80592  68 00
 .LF80594:
 	ret                                                  ; F80594  0e
@@ -2910,31 +2864,17 @@ sub_F80549:
 	jr z, .LF805B7                                       ; F8059F  66 16
 	calr sub_F7F237                                          ; F805A1  1e 93 ec
 	call T_F42A98                                        ; F805A4  1d 98 2a f4
-	calr sub_F805B8                                      ; F805A8  1e 0d 00
-	calr sub_F80549                                      ; F805AB  1e 9b ff
+	calr N0teChange_DrawValues                                      ; F805A8  1e 0d 00
+	calr N0teChange_DrawFieldCursor                                      ; F805AB  1e 9b ff
 	jr .LF805B7                                          ; F805AE  68 07
 .LF805B0:
 	calr sub_F7F245                                          ; F805B0  1e 92 ec
 	call T_F42AAC                                        ; F805B3  1d ac 2a f4
 .LF805B7:
 	ret                                                  ; F805B7  0e
-; sub_F805B8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 6
-; instructions to its first `ret`:
-;     site 0xF805CA  interpreter B  list 0xF3AFE7-0xF3B05A
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F805B8:
+; N0teChange_DrawValues -- redraw the live values of the NOTE CHANGE screen on layer 0
+; Evidence: (0x2540)=0; site 0xF805CA runs interpreter B over DL_F3AFE7-0xF3B05A (readouts of 0x12F6-0x12FA, 0x12FB, 0x12FC, 0x12FE, 0x12FF), the list Paint_N0teChange runs at 0xF804DA; BlinkArgPtrs_F80754[2..5] are its records for fields 2-5.
+N0teChange_DrawValues:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F805B8  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F805BD  1e 18 dd
 	ld XIY,DL_F3AFE7                                     ; F805C0  45 e7 af f3 00
@@ -2965,10 +2905,10 @@ sub_F805B8:
 .LF80600:
 	call T_F42AA4                                        ; F80600  1d a4 2a f4
 .LF80604:
-	calr sub_F805B8                                      ; F80604  1e b1 ff
+	calr N0teChange_DrawValues                                      ; F80604  1e b1 ff
 	ret                                                  ; F80607  0e
 	ret                                                  ; F80608  0e
-	calr sub_F8062A                                      ; F80609  1e 1e 00
+	calr N0teChange_NumberPad                                      ; F80609  1e 1e 00
 	ret                                                  ; F8060C  0e
 	ret                                                  ; F8060D  0e
 	ret                                                  ; F8060E  0e
@@ -2986,7 +2926,9 @@ sub_F805B8:
 	call T_F42AB0                                        ; F80624  1d b0 2a f4
 	ret                                                  ; F80628  0e
 	ret                                                  ; F80629  0e
-sub_F8062A:
+; N0teChange_NumberPad -- NUMBER PAD key on the NOTE CHANGE screen: dispatch on (0x2267)
+; Evidence: reached only by `calr` at 0xF80609, slot 27 of ButtonTable_N0teChange_207EZero; <=9 -> N0teChange_KeypadDigit, 0x0F -> N0teChange_KeypadCommit, 0x80 -> N0teChange_KeypadSign, then N0teChange_BlinkSelectedField.
+N0teChange_NumberPad:
 	ld a, (0x2267:16)                                   ; F8062A  c1 67 22 21
 	cp A,0x09                                            ; F8062E  c9 cf 09
 	jr ule, .LF8063F                                     ; F80631  63 0c
@@ -2999,19 +2941,22 @@ sub_F8062A:
 	calr Blink_SetEnable_1_2                                      ; F8063F  1e 0e 00
 	jr .LF8064C                                          ; F80642  68 08
 .LF80644:
-	calr sub_F8065A                                      ; F80644  1e 13 00
+	calr N0teChange_KeypadCommit                                      ; F80644  1e 13 00
 	jr .LF8064C                                          ; F80647  68 03
 .LF80649:
-	calr sub_F80714                                      ; F80649  1e c8 00
+	calr N0teChange_KeypadSign                                      ; F80649  1e c8 00
 .LF8064C:
-	calr sub_F80727                                      ; F8064C  1e d8 00
+	calr N0teChange_BlinkSelectedField                                      ; F8064C  1e d8 00
 	ret                                                  ; F8064F  0e
 Blink_SetEnable_1_2:
 	pushw 0x01                                           ; F80650  0b 01 00
 	call T_Blink_SetEnable                               ; F80653  1d 28 2e f4
 	inc 2,XSP                                            ; F80657  ef 62
 	ret                                                  ; F80659  0e
-sub_F8065A:
+; N0teChange_KeypadCommit -- keypad code 0x0F: store the typed number into the NOTE CHANGE field (0x0DED) selects
+; Evidence: T_AsciiDigits3_ToValue; fields 2/3 accept 1..999 into (0x0DF0)/(0x12FC) and (0x0DF2)/(0x12FF) keeping first<=last, (0x129E)=last-first+1; fields 4/5 accept 0..127 into (0x0DF4)/(0x12FB) and (0x0DF5)/(0x12FE), and `divs WA,12` splits each into (0x12F7)/(0x12F8) and (0x12F9)/(0x12FA).
+; Then T_Blink_Stop and N0teChange_DrawValues.
+N0teChange_KeypadCommit:
 	ld (0x2826:16), 0x03                                 ; F8065A  f1 26 28 00 03
 	call T_AsciiDigits3_ToValue                          ; F8065F  1d f0 32 f4
 	m_cp_mi8 MB16, 0x0ded, 0x02                          ; F80663  c1 ed 0d 3f 02
@@ -3074,10 +3019,12 @@ sub_F8065A:
 	ld (0x12fa:16), a                                   ; F80708  f1 fa 12 41
 .LF8070C:
 	call T_Blink_Stop                                    ; F8070C  1d 24 2e f4
-	calr sub_F805B8                                      ; F80710  1e a5 fe
+	calr N0teChange_DrawValues                                      ; F80710  1e a5 fe
 .LF80713:
 	ret                                                  ; F80713  0e
-sub_F80714:
+; N0teChange_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)
+; Evidence: `bit 1,(0x2075)` and `cp (0x0DB8),4` gate `ld (0x2820),0x2B`.  This screen's field index is (0x0DED); why it tests (0x0DB8) is not established.
+N0teChange_KeypadSign:
 	m_bit 1, MD16, UI_RequestBits                                ; F80714  f1 75 20 c9
 	jr z, .LF80726                                       ; F80718  66 0c
 	m_cp_mi8 MB16, 0x0db8, 0x04                          ; F8071A  c1 b8 0d 3f 04
@@ -3085,7 +3032,9 @@ sub_F80714:
 	ld (0x2820:16), 0x2b                                 ; F80721  f1 20 28 00 2b
 .LF80726:
 	ret                                                  ; F80726  0e
-sub_F80727:
+; N0teChange_BlinkSelectedField -- start the field blink on the field (0x0DED) selects
+; Evidence: unless blink is off or (0x2267)=0x0F: push BlinkArgPtrs_F80754[(0x0DED)], call T_Blink_Command.
+N0teChange_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits                                ; F80727  f1 75 20 c9
 	jr z, .LF80753                                       ; F8072B  66 26
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F8072D  c1 67 22 3f 0f
@@ -3183,7 +3132,9 @@ Paint_MeasureC0py:
 	ret                                                  ; F80807  0e
 Paint_MeasureC0py_Nop:
 	ret                                                  ; F80808  0e
-sub_F80809:
+; ScreenLeaveBody_MeasureC0py -- the whole body of the MeasureC0py screen's Leave method
+; Evidence: prom_b ScreenLeave_MeasureC0py (0xF7D23D) is `call 0xF80809 / ret` (+4 of screen object 0xF430C0); body `call T_F429DC / ret`.  Bytes after it are ButtonTable_MeasureC0py slot handlers.
+ScreenLeaveBody_MeasureC0py:
 	call T_F429DC                                        ; F80809  1d dc 29 f4
 	ret                                                  ; F8080D  0e
 	ret                                                  ; F8080E  0e
@@ -3233,28 +3184,14 @@ sub_F80809:
 .LF8087F:
 	ld a, (0x0dbc:16)                                   ; F8087F  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F80883  f1 ff 12 41
-	calr sub_F8099D                                      ; F80887  1e 13 01
-	calr sub_F80891                                      ; F8088A  1e 04 00
+	calr MeasureC0py_DrawValues                                      ; F80887  1e 13 01
+	calr MeasureC0py_DrawFieldCursor                                      ; F8088A  1e 04 00
 	calr Paint_MeasureC0py_Nop                                      ; F8088D  1e 78 ff
 .LF80890:
 	ret                                                  ; F80890  0e
-; sub_F80891 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 8
-; instructions to its first `ret`:
-;     site 0xF808A3  interpreter A  list 0xF39551-0xF39559
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80891:
+; MeasureC0py_DrawFieldCursor -- clear LCD layer 1, then fill the box of the MEASURE COPY field (0x12FF) selects
+; Evidence: (0x2540)=1; site 0xF808A3 runs DL_F39551-0xF39559 (op 0E ClearColumns, whole layer); DLB_Handler_Array8 on op-03 record 0xF3BD4D: (0x12FF)&7 indexes boxes 0xF3BD58, swi 5 FillRect.  Every caller first stores (0x0DBC) into (0x12FF) (0xF8087F, 0xF808D4, 0xF80909).
+MeasureC0py_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80891  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F80896  1e 3f da
 	ld XIY,DL_F39551                                     ; F80899  45 51 95 f3 00
@@ -3278,8 +3215,8 @@ sub_F80891:
 .LF808D4:
 	ld a, (0x0dbc:16)                                   ; F808D4  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F808D8  f1 ff 12 41
-	calr sub_F8099D                                      ; F808DC  1e be 00
-	calr sub_F80891                                      ; F808DF  1e af ff
+	calr MeasureC0py_DrawValues                                      ; F808DC  1e be 00
+	calr MeasureC0py_DrawFieldCursor                                      ; F808DF  1e af ff
 	calr Paint_MeasureC0py_Nop                                      ; F808E2  1e 23 ff
 .LF808E5:
 	ret                                                  ; F808E5  0e
@@ -3298,8 +3235,8 @@ sub_F80891:
 .LF80909:
 	ld a, (0x0dbc:16)                                   ; F80909  c1 bc 0d 21
 	ld (0x12ff:16), a                                   ; F8090D  f1 ff 12 41
-	calr sub_F8099D                                      ; F80911  1e 89 00
-	calr sub_F80891                                      ; F80914  1e 7a ff
+	calr MeasureC0py_DrawValues                                      ; F80911  1e 89 00
+	calr MeasureC0py_DrawFieldCursor                                      ; F80914  1e 7a ff
 	calr Paint_MeasureC0py_Nop                                      ; F80917  1e ee fe
 .LF8091A:
 	ret                                                  ; F8091A  0e
@@ -3334,7 +3271,7 @@ sub_F80891:
 	call T_DisplayListB_Run                              ; F80962  1d f4 17 f4
 	ret                                                  ; F80966  0e
 	ret                                                  ; F80967  0e
-	calr sub_F809AD                                      ; F80968  1e 42 00
+	calr MeasureC0py_NumberPad                                      ; F80968  1e 42 00
 	ret                                                  ; F8096B  0e
 	ret                                                  ; F8096C  0e
 	ret                                                  ; F8096D  0e
@@ -3366,29 +3303,17 @@ sub_F80891:
 .LF8099B:
 	ret                                                  ; F8099B  0e
 	ret                                                  ; F8099C  0e
-; sub_F8099D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 4
-; instructions to its first `ret`:
-;     site 0xF809A7  interpreter B  list 0xF3BD07-0xF3BD4D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F8099D:
+; MeasureC0py_DrawValues -- redraw the live values of the MEASURE COPY screen
+; Evidence: site 0xF809A7 runs interpreter B over DL_F3BD07-0xF3BD4D: string readouts (0x12F6) (0x12FB), 3-digit (0x12F7) (0x12F9) (0x12FC), (0x12FE) -- the list Paint_MeasureC0py runs at 0xF807F6.  It does not set (0x2540); callers have.
+MeasureC0py_DrawValues:
 	ld XIY,DL_F3BD07                                     ; F8099D  45 07 bd f3 00
 	ld XIX,0x00f3bd4d                                    ; F809A2  44 4d bd f3 00
 	call T_DisplayListB_Run                              ; F809A7  1d f4 17 f4
 	ret                                                  ; F809AB  0e
 	ret                                                  ; F809AC  0e
-sub_F809AD:
+; MeasureC0py_NumberPad -- NUMBER PAD key on the MEASURE COPY screen: dispatch on (0x2267)
+; Evidence: reached only by `calr` at 0xF80968, slot 27 of ButtonTable_MeasureC0py_207EZero; digit / 0x0F / 0x80 arms then MeasureC0py_BlinkSelectedField.
+MeasureC0py_NumberPad:
 	ld a, (0x2267:16)                                   ; F809AD  c1 67 22 21
 	cp A,0x09                                            ; F809B1  c9 cf 09
 	jr le, .LF809C2                                      ; F809B4  62 0c
@@ -3401,19 +3326,22 @@ sub_F809AD:
 	calr Blink_SetEnable_1_3                                      ; F809C2  1e 0e 00
 	jr .LF809CF                                          ; F809C5  68 08
 .LF809C7:
-	calr sub_F809DD                                      ; F809C7  1e 13 00
+	calr MeasureC0py_KeypadCommit                                      ; F809C7  1e 13 00
 	jr .LF809CF                                          ; F809CA  68 03
 .LF809CC:
-	calr sub_F80A7A                                      ; F809CC  1e ab 00
+	calr MeasureC0py_KeypadSign                                      ; F809CC  1e ab 00
 .LF809CF:
-	calr sub_F80A80                                      ; F809CF  1e ae 00
+	calr MeasureC0py_BlinkSelectedField                                      ; F809CF  1e ae 00
 	ret                                                  ; F809D2  0e
 Blink_SetEnable_1_3:
 	pushw 0x01                                           ; F809D3  0b 01 00
 	call T_Blink_SetEnable                               ; F809D6  1d 28 2e f4
 	inc 2,XSP                                            ; F809DA  ef 62
 	ret                                                  ; F809DC  0e
-sub_F809DD:
+; MeasureC0py_KeypadCommit -- keypad code 0x0F: store the typed measure number into the field (0x0DBC) selects
+; Evidence: T_AsciiDigits3_ToValue, 1..999; field 2 -> (0x0C18), (0x603470), (0x12F7), (0x0C30) with last (0x0C32) raised to match; field 3 -> (0x0C32)/(0x12F9) with first lowered; (0x603472)=last-first+1; field 5 -> (0x0C1A), (0x603475), (0x12FC).  Then T_Blink_Stop and MeasureC0py_DrawValues.
+; It first returns when `cp (0x02),0x20` is equal -- address 0x0002 is not a named SFR and the other screens' commits lack the test; not established.
+MeasureC0py_KeypadCommit:
 	m_cp_mi8 MB8, 0x02, 0x20                             ; F809DD  c0 02 3f 20
 	jrl z, .LF80A79                                      ; F809E1  76 95 00
 	ld (0x2826:16), 0x03                                 ; F809E4  f1 26 28 00 03
@@ -3463,13 +3391,17 @@ sub_F809DD:
 	ld (0x12fc:16), wa                                  ; F80A6E  f1 fc 12 50
 .LF80A72:
 	call T_Blink_Stop                                    ; F80A72  1d 24 2e f4
-	calr sub_F8099D                                      ; F80A76  1e 24 ff
+	calr MeasureC0py_DrawValues                                      ; F80A76  1e 24 ff
 .LF80A79:
 	ret                                                  ; F80A79  0e
-sub_F80A7A:
+; MeasureC0py_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)
+; Evidence: body is `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of MeasureC0py_NumberPad (no field here is signed).
+MeasureC0py_KeypadSign:
 	ld (0x2820:16), 0x2b                                 ; F80A7A  f1 20 28 00 2b
 	ret                                                  ; F80A7F  0e
-sub_F80A80:
+; MeasureC0py_BlinkSelectedField -- start the field blink on the field (0x0DBC) selects
+; Evidence: unless blink is off or (0x2267)=0x0F: push BlinkArgPtrs_F80AAD[(0x0DBC)], call T_Blink_Command; the non-null entries 2/3/5 are the records of (0x12F7)/(0x12F9)/(0x12FC), the variables MeasureC0py_KeypadCommit writes.
+MeasureC0py_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits                                ; F80A80  f1 75 20 c9
 	jr z, .LF80AAC                                       ; F80A84  66 26
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80A86  c1 67 22 3f 0f
@@ -3570,7 +3502,9 @@ Paint_MeasureInsert:
 	ret                                                  ; F80B64  0e
 Paint_MeasureInsert_Nop:
 	ret                                                  ; F80B65  0e
-sub_F80B66:
+; ScreenLeaveBody_MeasureInsert -- the whole body of the MeasureInsert screen's Leave method
+; Evidence: prom_b ScreenLeave_MeasureInsert (0xF7D25E) is `call 0xF80B66 / ret` (+4 of screen object 0xF430D0); body `call T_F429AC / ret`.
+ScreenLeaveBody_MeasureInsert:
 	call T_F429AC                                        ; F80B66  1d ac 29 f4
 	ret                                                  ; F80B6A  0e
 	ret                                                  ; F80B6B  0e
@@ -3620,28 +3554,14 @@ sub_F80B66:
 .LF80BDC:
 	ld a, (0x0dda:16)                                   ; F80BDC  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80BE0  f1 ff 12 41
-	calr sub_F80CFB                                      ; F80BE4  1e 14 01
-	calr sub_F80BEE                                      ; F80BE7  1e 04 00
+	calr MeasureInsert_DrawValues                                      ; F80BE4  1e 14 01
+	calr MeasureInsert_DrawFieldCursor                                      ; F80BE7  1e 04 00
 	calr Paint_MeasureInsert_Nop                                      ; F80BEA  1e 78 ff
 .LF80BED:
 	ret                                                  ; F80BED  0e
-; sub_F80BEE -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 8
-; instructions to its first `ret`:
-;     site 0xF80C00  interpreter A  list 0xF39551-0xF39559
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80BEE:
+; MeasureInsert_DrawFieldCursor -- clear LCD layer 1, then fill the box of the MEASURE INSERT field (0x12FF) selects
+; Evidence: (0x2540)=1; site 0xF80C00 runs DL_F39551-0xF39559 (op 0E ClearColumns); execution falls through the unreferenced label sub_F80C04 into DLB_Handler_Array8 on op-03 record 0xF3BF3D ((0x12FF)&7, boxes 0xF3BF48, swi 5 FillRect).  Callers first store (0x0DDA) into (0x12FF).
+MeasureInsert_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80BEE  f1 40 25 00 01
 	calr sub_F7E39F_Nop                                          ; F80BF3  1e e2 d6
 	ld XIY,DL_F39551                                     ; F80BF6  45 51 95 f3 00
@@ -3666,8 +3586,8 @@ sub_F80C04:
 .LF80C31:
 	ld a, (0x0dda:16)                                   ; F80C31  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80C35  f1 ff 12 41
-	calr sub_F80CFB                                      ; F80C39  1e bf 00
-	calr sub_F80BEE                                      ; F80C3C  1e af ff
+	calr MeasureInsert_DrawValues                                      ; F80C39  1e bf 00
+	calr MeasureInsert_DrawFieldCursor                                      ; F80C3C  1e af ff
 	calr Paint_MeasureInsert_Nop                                      ; F80C3F  1e 23 ff
 .LF80C42:
 	ret                                                  ; F80C42  0e
@@ -3686,8 +3606,8 @@ sub_F80C04:
 .LF80C66:
 	ld a, (0x0dda:16)                                   ; F80C66  c1 da 0d 21
 	ld (0x12ff:16), a                                   ; F80C6A  f1 ff 12 41
-	calr sub_F80CFB                                      ; F80C6E  1e 8a 00
-	calr sub_F80BEE                                      ; F80C71  1e 7a ff
+	calr MeasureInsert_DrawValues                                      ; F80C6E  1e 8a 00
+	calr MeasureInsert_DrawFieldCursor                                      ; F80C71  1e 7a ff
 	calr Paint_MeasureInsert_Nop                                      ; F80C74  1e ee fe
 .LF80C77:
 	ret                                                  ; F80C77  0e
@@ -3722,7 +3642,7 @@ sub_F80C04:
 	call T_DisplayListB_Run                              ; F80CBF  1d f4 17 f4
 	ret                                                  ; F80CC3  0e
 	ret                                                  ; F80CC4  0e
-	calr sub_F80D12                                      ; F80CC5  1e 4a 00
+	calr MeasureInsert_NumberPad                                      ; F80CC5  1e 4a 00
 	ret                                                  ; F80CC8  0e
 	ret                                                  ; F80CC9  0e
 	ret                                                  ; F80CCA  0e
@@ -3755,30 +3675,18 @@ sub_F80C04_Return:
 .LF80CF9:
 	ret                                                  ; F80CF9  0e
 	ret                                                  ; F80CFA  0e
-; sub_F80CFB -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 6
-; instructions to its first `ret`:
-;     site 0xF80D0D  interpreter B  list 0xF3BEF7-0xF3BF3D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80CFB:
+; MeasureInsert_DrawValues -- redraw the live values of the MEASURE INSERT screen on layer 0
+; Evidence: (0x2540)=0; site 0xF80D0D runs interpreter B over DL_F3BEF7-0xF3BF3D (same six variables as MeasureC0py_DrawValues), the list Paint_MeasureInsert runs at 0xF80B53.
+MeasureInsert_DrawValues:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80CFB  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F80D00  1e d5 d5
 	ld XIY,DL_F3BEF7                                     ; F80D03  45 f7 be f3 00
 	ld XIX,0x00f3bf3d                                    ; F80D08  44 3d bf f3 00
 	call T_DisplayListB_Run                              ; F80D0D  1d f4 17 f4
 	ret                                                  ; F80D11  0e
-sub_F80D12:
+; MeasureInsert_NumberPad -- NUMBER PAD key on the MEASURE INSERT screen: dispatch on (0x2267)
+; Evidence: reached only by `calr` at 0xF80CC5, slot 27 of ButtonTable_MeasureInsert_207EZero; digit / 0x0F / 0x80 arms then MeasureInsert_BlinkSelectedField.
+MeasureInsert_NumberPad:
 	ld a, (0x2267:16)                                   ; F80D12  c1 67 22 21
 	cp A,0x09                                            ; F80D16  c9 cf 09
 	jr le, .LF80D27                                      ; F80D19  62 0c
@@ -3791,19 +3699,22 @@ sub_F80D12:
 	calr Blink_SetEnable_1_4                                      ; F80D27  1e 0e 00
 	jr .LF80D34                                          ; F80D2A  68 08
 .LF80D2C:
-	calr sub_F80D42                                      ; F80D2C  1e 13 00
+	calr MeasureInsert_KeypadCommit                                      ; F80D2C  1e 13 00
 	jr .LF80D34                                          ; F80D2F  68 03
 .LF80D31:
-	calr sub_F80DDF                                      ; F80D31  1e ab 00
+	calr MeasureInsert_KeypadSign                                      ; F80D31  1e ab 00
 .LF80D34:
-	calr sub_F80DE5                                      ; F80D34  1e ae 00
+	calr MeasureInsert_BlinkSelectedField                                      ; F80D34  1e ae 00
 	ret                                                  ; F80D37  0e
 Blink_SetEnable_1_4:
 	pushw 0x01                                           ; F80D38  0b 01 00
 	call T_Blink_SetEnable                               ; F80D3B  1d 28 2e f4
 	inc 2,XSP                                            ; F80D3F  ef 62
 	ret                                                  ; F80D41  0e
-sub_F80D42:
+; MeasureInsert_KeypadCommit -- keypad code 0x0F: store the typed measure number into the field (0x0DDA) selects
+; Evidence: 1..999; field 2 -> (0x0C18), (0x603468), (0x12F7), (0x0DDC); field 3 -> (0x0DDE)/(0x12F9), keeping first<=last; (0x60346A)=last-first+1; field 5 -> (0x0C1A), (0x60346D), (0x12FC); then T_Blink_Stop and MeasureInsert_DrawValues.
+; Same `cp (0x02),0x20` early return as MeasureC0py_KeypadCommit -- not established.
+MeasureInsert_KeypadCommit:
 	m_cp_mi8 MB8, 0x02, 0x20                             ; F80D42  c0 02 3f 20
 	jrl z, .LF80DDE                                      ; F80D46  76 95 00
 	ld (0x2826:16), 0x03                                 ; F80D49  f1 26 28 00 03
@@ -3853,13 +3764,17 @@ sub_F80D42:
 	ld (0x12fc:16), wa                                  ; F80DD3  f1 fc 12 50
 .LF80DD7:
 	call T_Blink_Stop                                    ; F80DD7  1d 24 2e f4
-	calr sub_F80CFB                                      ; F80DDB  1e 1d ff
+	calr MeasureInsert_DrawValues                                      ; F80DDB  1e 1d ff
 .LF80DDE:
 	ret                                                  ; F80DDE  0e
-sub_F80DDF:
+; MeasureInsert_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)
+; Evidence: `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of MeasureInsert_NumberPad.
+MeasureInsert_KeypadSign:
 	ld (0x2820:16), 0x2b                                 ; F80DDF  f1 20 28 00 2b
 	ret                                                  ; F80DE4  0e
-sub_F80DE5:
+; MeasureInsert_BlinkSelectedField -- start the field blink on the field (0x0DDA) selects
+; Evidence: push BlinkArgPtrs_F80E12[(0x0DDA)], call T_Blink_Command, unless blink is off or (0x2267)=0x0F.
+MeasureInsert_BlinkSelectedField:
 	m_bit 1, MD16, UI_RequestBits                                ; F80DE5  f1 75 20 c9
 	jr z, .LF80E11                                       ; F80DE9  66 26
 	m_cp_mi8 MB16, 0x2267, 0x0f                          ; F80DEB  c1 67 22 3f 0f
@@ -3919,7 +3834,7 @@ BlinkArgPtrs_F80E12:
 ; ---------------------------------------------------------------------
 Paint_S0ngSelectName:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80E2E  1d 80 2e f4
-	call sub_F8178D                                      ; F80E32  1d 8d 17 f8
+	call S0ngSelectName_PrepareValues                                      ; F80E32  1d 8d 17 f8
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80E36  c1 75 20 3e 01
 	ldw (0x209b:16), 0x0605                              ; F80E3B  f1 9b 20 02 05 06
 	ldw (0x2666:16), 0xffff                              ; F80E41  f1 66 26 02 ff ff
@@ -3932,8 +3847,8 @@ Paint_S0ngSelectName:
 	ld XIX,DL_F3C31E                                     ; F80E60  44 1e c3 f3 00
 	call T_DisplayList_Run                               ; F80E65  1d f0 17 f4
 .LF80E69:
-	call sub_F8147D                                      ; F80E69  1d 7d 14 f8
-	call sub_F80E9B                                      ; F80E6D  1d 9b 0e f8
+	call S0ngSelectName_UpdateSizeValues                                      ; F80E69  1d 7d 14 f8
+	call S0ngSelectName_DrawValues                                      ; F80E6D  1d 9b 0e f8
 	call SongName_Draw6Chars                                      ; F80E71  1d 5e 16 f8
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F80E75  f1 40 25 00 01
 	ld XIY,DL_F3C351                                     ; F80E7A  45 51 c3 f3 00
@@ -3944,32 +3859,24 @@ Paint_S0ngSelectName:
 	call T_DLB_Handler_Array8                                        ; F80E92  1d 1c 18 f4
 	call PromB_LCD_ScreenRedraw_End                                        ; F80E96  1d e7 e2 f7
 	ret                                                  ; F80E9A  0e
-; sub_F80E9B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 5
-; instructions to its first `ret`:
-;     site 0xF80EAA  interpreter B  list 0xF3C31E-0xF3C351
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F80E9B:
+; S0ngSelectName_DrawValues -- redraw the song name, song number, size in KB and percent on the SONG SELECT & NAME screen
+; Evidence: (0x2540)=0; site 0xF80EAA runs interpreter B over DL_F3C31E-DL_F3C351: string 0x12F6 (6 bytes, svc 8 at 0x0998), (0x12FC) 2 digits beside 'S0NG', (0x12FD) 3 digits at (0xF8,0x30) beside ' KB' (0x10A,0x30), (0x12FF) at (0xF0,0x3D) beside '%' (0x111,0x3D).
+; Caller: Paint_S0ngSelectName only.
+S0ngSelectName_DrawValues:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80E9B  f1 40 25 00 00
 	ld XIY,DL_F3C31E                                     ; F80EA0  45 1e c3 f3 00
 	ld XIX,DL_F3C351                                     ; F80EA5  44 51 c3 f3 00
 	call T_DisplayListB_Run                              ; F80EAA  1d f4 17 f4
 	ret                                                  ; F80EAE  0e
-sub_F80EAF:
-	call sub_F817F7                                      ; F80EAF  1d f7 17 f8
+; ScreenLeaveBody_S0ngSelectName -- the Leave method body of the S0ngSelectName screen
+; Evidence: prom_b ScreenLeave_S0ngSelectName (0xF7D27F) is `call 0xF80EAF / ret` (+4 of screen object 0xF431A0); body `call S0ngSelectName_Leave / ret`.
+ScreenLeaveBody_S0ngSelectName:
+	call S0ngSelectName_Leave                                      ; F80EAF  1d f7 17 f8
 	ret                                                  ; F80EB3  0e
-sub_F80EB4:
+; ScreenButtonBody_S0ngSelectName -- the Button method body of the S0ngSelectName screen: dispatch on the button slot in HL
+; Evidence: prom_b ScreenButton_S0ngSelectName (0xF7D284) is `call 0xF80EB4 / ret`.  Slots 0/0x11 -> S0ngSelectName_PrevSong, 1/0x12 -> NextSong, 3/0x14 -> CursorLeft, 4/0x15 -> CursorRight, 5/0x16 -> CharPrev, 6/0x17 -> CharNext, 7/0x18 -> ClearName; 0x0F (ExitKey) posts (0x2070)=0x8004 when W bit 7 is clear.
+; The bottom row of DL_S0ngSelectNameKbS0ngName reads SONG < >, POSITION < >, ABC..789 < >, CLR, which is this pairing.
+ScreenButtonBody_S0ngSelectName:
 	cp hl, 0x00:i3                                         ; F80EB4  db d8
 	jr z, .LF80F11                                       ; F80EB6  66 59
 	cp HL,0x0011                                         ; F80EB8  db cf 11 00
@@ -4007,25 +3914,25 @@ sub_F80EB4:
 .LF80F0E:
 	jrl .LF80F39                                         ; F80F0E  78 28 00
 .LF80F11:
-	call sub_F81434                                      ; F80F11  1d 34 14 f8
+	call S0ngSelectName_PrevSong                                      ; F80F11  1d 34 14 f8
 	jr .LF80F39                                          ; F80F15  68 22
 .LF80F17:
-	call sub_F814C7                                      ; F80F17  1d c7 14 f8
+	call S0ngSelectName_NextSong                                      ; F80F17  1d c7 14 f8
 	jr .LF80F39                                          ; F80F1B  68 1c
 .LF80F1D:
-	call sub_F81512                                      ; F80F1D  1d 12 15 f8
+	call S0ngSelectName_CursorLeft                                      ; F80F1D  1d 12 15 f8
 	jr .LF80F39                                          ; F80F21  68 16
 .LF80F23:
-	call sub_F81574                                      ; F80F23  1d 74 15 f8
+	call S0ngSelectName_CursorRight                                      ; F80F23  1d 74 15 f8
 	jr .LF80F39                                          ; F80F27  68 10
 .LF80F29:
-	call sub_F815D6                                      ; F80F29  1d d6 15 f8
+	call S0ngSelectName_CharPrev                                      ; F80F29  1d d6 15 f8
 	jr .LF80F39                                          ; F80F2D  68 0a
 .LF80F2F:
-	call sub_F8161A                                      ; F80F2F  1d 1a 16 f8
+	call S0ngSelectName_CharNext                                      ; F80F2F  1d 1a 16 f8
 	jr .LF80F39                                          ; F80F33  68 04
 .LF80F35:
-	call sub_F81670                                      ; F80F35  1d 70 16 f8
+	call S0ngSelectName_ClearName                                      ; F80F35  1d 70 16 f8
 .LF80F39:
 	ret                                                  ; F80F39  0e
 sub_F80F3A:
@@ -4090,7 +3997,9 @@ Paint_StepRecordPartSelect:
 .LF80FBC:
 	calr PromB_LCD_ScreenRedraw_End                                          ; F80FBC  1e 28 d3
 	ret                                                  ; F80FBF  0e
-sub_F80FC0:
+; ScreenLeaveBody_StepRecordPartSelect -- the Leave method body of the StepRecordPartSelect screen
+; Evidence: prom_b ScreenLeave_StepRecordPartSelect (0xF7D28F) is `call 0xF80FC0 / ret` (+4 of screen object 0xF43170); body `call T_F42BC8 / ret` (prom_b 0xF6650F: (0x60341E)=(0x3010), T_F40CB4, and (0x34BB),0xFB).
+ScreenLeaveBody_StepRecordPartSelect:
 	call T_F42BC8                                        ; F80FC0  1d c8 2b f4
 	ret                                                  ; F80FC4  0e
 	call SoftKeyCol1_TrackClear_207EZero                 ; F80FC5  1d ff ec f7
@@ -4212,10 +4121,12 @@ Paint_SequencerMedley:
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F810DA  45 78 c7 f3 00
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
 	call T_DisplayListB_Run                              ; F810E4  1d f4 17 f4
-	call sub_F81350                                      ; F810E8  1d 50 13 f8
+	call SequencerMedley_DrawPlayState                                      ; F810E8  1d 50 13 f8
 	calr PromB_LCD_ScreenRedraw_End                                          ; F810EC  1e f8 d1
 	ret                                                  ; F810EF  0e
-sub_F810F0:
+; ScreenLeaveBody_SequencerMedley -- the Leave method body of the SequencerMedley screen
+; Evidence: prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret` (+4 of screen object 0xF43150).  Unless (0x207A)=0x13 it clears (0x2094) bit 6, which Paint_SequencerMedley sets; then call T_F42BD0 (prom_b 0xF6614E).  Bytes after the `ret` are ButtonTable_SequencerMedley slot handlers.
+ScreenLeaveBody_SequencerMedley:
 	m_cp_mi8 MB16, 0x207a, 0x13                          ; F810F0  c1 7a 20 3f 13
 	jr z, .LF810FC                                       ; F810F5  66 05
 	m_and_mi8 MB16, 0x2094, 0xbf                         ; F810F7  c1 94 20 3c bf
@@ -4228,8 +4139,8 @@ sub_F810F0:
 	call T_Blink_Stop                                    ; F81109  1d 24 2e f4
 	call T_F42C18                                        ; F8110D  1d 18 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F81111  1d bf 13 f8
-	call sub_F813FF                                      ; F81115  1d ff 13 f8
-	call sub_F8141C                                      ; F81119  1d 1c 14 f8
+	call SequencerMedley_DrawSourceBox                                      ; F81115  1d ff 13 f8
+	call SequencerMedley_DrawFileTypeBox                                      ; F81119  1d 1c 14 f8
 .LF8111D:
 	ret                                                  ; F8111D  0e
 	m_cp_mi8 MB16, 0x220b, 0x01                          ; F8111E  c1 0b 22 3f 01
@@ -4237,7 +4148,7 @@ sub_F810F0:
 	call T_Blink_Stop                                    ; F81125  1d 24 2e f4
 	call T_F42C1C                                        ; F81129  1d 1c 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F8112D  1d bf 13 f8
-	call sub_F813FF                                      ; F81131  1d ff 13 f8
+	call SequencerMedley_DrawSourceBox                                      ; F81131  1d ff 13 f8
 .LF81135:
 	ret                                                  ; F81135  0e
 	ret                                                  ; F81136  0e
@@ -4266,7 +4177,7 @@ sub_F810F0:
 	call T_Blink_Stop                                    ; F81174  1d 24 2e f4
 	call T_F42C24                                        ; F81178  1d 24 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F8117C  1d bf 13 f8
-	call sub_F8141C                                      ; F81180  1d 1c 14 f8
+	call SequencerMedley_DrawFileTypeBox                                      ; F81180  1d 1c 14 f8
 .LF81184:
 	ret                                                  ; F81184  0e
 	m_cp_mi8 MB16, 0x0e35, 0x00                          ; F81185  c1 35 0e 3f 00
@@ -4274,7 +4185,7 @@ sub_F810F0:
 	call T_Blink_Stop                                    ; F8118C  1d 24 2e f4
 	call T_F42C28                                        ; F81190  1d 28 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F81194  1d bf 13 f8
-	call sub_F8141C                                      ; F81198  1d 1c 14 f8
+	call SequencerMedley_DrawFileTypeBox                                      ; F81198  1d 1c 14 f8
 .LF8119C:
 	ret                                                  ; F8119C  0e
 	ret                                                  ; F8119D  0e
@@ -4289,7 +4200,7 @@ sub_F810F0:
 	m_cp_mi8 MB16, 0x220b, 0x00                          ; F811B8  c1 0b 22 3f 00
 	jr nz, .LF811E1                                      ; F811BD  6e 22
 	calr Draw_FirstS0ngLastS0ng                                          ; F811BF  1e fd 01
-	call sub_F81350                                      ; F811C2  1d 50 13 f8
+	call SequencerMedley_DrawPlayState                                      ; F811C2  1d 50 13 f8
 	jr .LF811E1                                          ; F811C6  68 19
 .LF811C8:
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F811C8  c1 c1 0d 3f 01
@@ -4298,7 +4209,7 @@ sub_F810F0:
 	jr z, .LF811E1                                       ; F811D4  66 0b
 	calr sub_F7F237                                          ; F811D6  1e 5e e0
 	call T_F42B7C                                        ; F811D9  1d 7c 2b f4
-	call sub_F813E7                                      ; F811DD  1d e7 13 f8
+	call SequencerMedley_DrawFieldBox                                      ; F811DD  1d e7 13 f8
 .LF811E1:
 	ret                                                  ; F811E1  0e
 	bit 0x07,W                                           ; F811E2  c8 33 07
@@ -4309,7 +4220,7 @@ sub_F810F0:
 	jr z, .LF811FE                                       ; F811F1  66 0b
 	calr sub_F7F237                                          ; F811F3  1e 41 e0
 	call T_F42BD8                                        ; F811F6  1d d8 2b f4
-	call sub_F81350                                      ; F811FA  1d 50 13 f8
+	call SequencerMedley_DrawPlayState                                      ; F811FA  1d 50 13 f8
 .LF811FE:
 	ret                                                  ; F811FE  0e
 	bit 0x07,W                                           ; F811FF  c8 33 07
@@ -4323,7 +4234,7 @@ sub_F810F0:
 	jr z, .LF81223                                       ; F81216  66 0b
 	calr sub_F7F237                                          ; F81218  1e 1c e0
 	call T_F42B80                                        ; F8121B  1d 80 2b f4
-	call sub_F813E7                                      ; F8121F  1d e7 13 f8
+	call SequencerMedley_DrawFieldBox                                      ; F8121F  1d e7 13 f8
 .LF81223:
 	ret                                                  ; F81223  0e
 	bit 0x07,W                                           ; F81224  c8 33 07
@@ -4332,10 +4243,12 @@ sub_F810F0:
 .LF8122F:
 	ret                                                  ; F8122F  0e
 	ret                                                  ; F81230  0e
-	calr sub_F81236                                      ; F81231  1e 02 00
+	calr SequencerMedley_NumberPad                                      ; F81231  1e 02 00
 	ret                                                  ; F81234  0e
 	ret                                                  ; F81235  0e
-sub_F81236:
+; SequencerMedley_NumberPad -- NUMBER PAD key on the SEQUENCER MEDLEY screen: dispatch on (0x2267)
+; Evidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_F42BD4); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField.
+SequencerMedley_NumberPad:
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81236  c1 c1 0d 3f 01
 	jr z, .LF8125F                                       ; F8123B  66 22
 	ld a, (0x2267:16)                                   ; F8123D  c1 67 22 21
@@ -4350,19 +4263,22 @@ sub_F81236:
 	calr Blink_SetEnable_1_5                                      ; F81252  1e 0e 00
 	jr .LF8125F                                          ; F81255  68 08
 .LF81257:
-	calr sub_F8126D                                      ; F81257  1e 13 00
+	calr SequencerMedley_KeypadCommit                                      ; F81257  1e 13 00
 	jr .LF8125F                                          ; F8125A  68 03
 .LF8125C:
-	calr sub_F8130A                                      ; F8125C  1e ab 00
+	calr SequencerMedley_KeypadSign                                      ; F8125C  1e ab 00
 .LF8125F:
-	calr sub_F81310                                      ; F8125F  1e ae 00
+	calr SequencerMedley_BlinkSelectedField                                      ; F8125F  1e ae 00
 	ret                                                  ; F81262  0e
 Blink_SetEnable_1_5:
 	pushw 0x01                                           ; F81263  0b 01 00
 	call T_Blink_SetEnable                               ; F81266  1d 28 2e f4
 	inc 2,XSP                                            ; F8126A  ef 62
 	ret                                                  ; F8126C  0e
-sub_F8126D:
+; SequencerMedley_KeypadCommit -- keypad code 0x0F: store the typed song number as FIRST or LAST medley song
+; Evidence: T_AsciiDigits3_ToValue; upper bound 10 when (0x220B)=0, 20 when (0x0E35)=0, else 100; value-1 goes to (0x2208) for field (0x0C0F)=1 (raising (0x2209) to match) or (0x2209) for field 2 (lowering (0x2208)); when (0x2208) changed, T_F42580 with W=1 (moved down) or 0 (up).
+; Then T_Blink_Stop and SequencerMedley_DrawFirstLastSong.
+SequencerMedley_KeypadCommit:
 	ld (0x2826:16), 0x03                                 ; F8126D  f1 26 28 00 03
 	call T_AsciiDigits3_ToValue                          ; F81272  1d f0 32 f4
 	cp wa, 0x01:i3                                         ; F81276  d8 d9
@@ -4423,10 +4339,14 @@ sub_F8126D:
 	calr Draw_FirstS0ngLastS0ng                                            ; F81306  1e b6 00
 .LF81309:
 	ret                                                  ; F81309  0e
-sub_F8130A:
+; SequencerMedley_KeypadSign -- keypad code 0x80: put '+' back in (0x2820)
+; Evidence: `ld (0x2820),0x2B / ret`; only caller is the 0x80 arm of SequencerMedley_NumberPad.
+SequencerMedley_KeypadSign:
 	ld (0x2820:16), 0x2b                                 ; F8130A  f1 20 28 00 2b
 	ret                                                  ; F8130F  0e
-sub_F81310:
+; SequencerMedley_BlinkSelectedField -- start the field blink on the FIRST or LAST song field
+; Evidence: unless (0x0DC1)=1, blink off or (0x2267)=0x0F: push BlinkArgPtrs_F81344[(0x0C0F)] (entry 1 = DL_FirstS0ngLastS0ng, the (0x12FE) record), call T_Blink_Command.
+SequencerMedley_BlinkSelectedField:
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81310  c1 c1 0d 3f 01
 	jr z, .LF81343                                       ; F81315  66 2c
 	m_bit 1, MD16, UI_RequestBits                                ; F81317  f1 75 20 c9
@@ -4462,24 +4382,10 @@ BlinkArgPtrs_F81344:
 	.long 0x00000000                                 ; F81344  [  0]
 	.long DL_FirstS0ngLastS0ng                       ; F81348  [  1]
 	.long 0x00f3c782                                 ; F8134C  [  2]
-; sub_F81350 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 2 time(s) in the 27
-; instructions to its first `ret`:
-;     site 0xF81366  interpreter A  list 0xF3C86B-0xF3C873
-;     site 0xF81392  interpreter B  list 0xF3C89D-0xF3C8A7
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F81350:
+; SequencerMedley_DrawPlayState -- draw or erase the NOW PLAYING line and move the START/STOP box
+; Evidence: (0x0DC1)!=1: site 0xF81366 runs DL_F3C86B (op 0E ClearColumns at 0x05CC, 0x21 x 0x10); (0x0DC1)=1: T_DLHandler_IX_Text on 0xF3C873 ('N0W PLAYING S0NG ') and 0xF3C888 (' :'), (0x12F6)=(0x220A)+1 drawn by site 0xF81392 (DL_F3C89D, 3 digits), string record 0xF3C88E.
+; Then layer 1: EraseRect record 0xF3C7D8 and FillRect record 0xF3C7AD on (0x1305)=(0x0DC1); box 1 (0x106,0x46)-(0x132,0x55) encloses 'START', box 0 (0x106,0x70)-(0x132,0x7F) 'STOP'.  (0x0DC1)=1 is set by T_F42BD4 (prom_b 0xF66191) and cleared by T_F42BD8 (0xF66201).
+SequencerMedley_DrawPlayState:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81350  f1 40 25 00 00
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F81355  c1 c1 0d 3f 01
 	jr z, .LF8136C                                       ; F8135A  66 10
@@ -4521,30 +4427,20 @@ Draw_FirstS0ngLastS0ng:
 	ld XIX,0x00f3c78c                                    ; F813DD  44 8c c7 f3 00
 	call T_DisplayListB_Run                              ; F813E2  1d f4 17 f4
 	ret                                                  ; F813E6  0e
-sub_F813E7:
+; SequencerMedley_DrawFieldBox -- move the layer-1 highlight to the FIRST or LAST song field
+; Evidence: (0x2540)=1; T_F41820 on record 0xF3C7B8 (swi 0x1B LCD_Svc_1B_EraseRect, array 0xF3C833) then T_F4181C on 0xF3C78C (swi 5 FillRect, Data_F3C7E3), both indexed by (0x1302); entries 1/2 are the FIRST S0NG box (0x0B,0x43)-(0xC2,0x62) and the LAST S0NG box (0x0B,0x8F)-(0xC2,0xAE), in opposite order in the two arrays.
+; (0x1302)=(0x0C0F) is written by T_F42B7C / T_F42B80 (prom_b 0xF66246 / 0xF66251) just before both calls.
+SequencerMedley_DrawFieldBox:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F813E7  f1 40 25 00 01
 	ld XIY,0x00f3c7b8                                    ; F813EC  45 b8 c7 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F813F1  1d 20 18 f4
 	ld XIY,0x00f3c78c                                    ; F813F5  45 8c c7 f3 00
 	call T_DLB_Handler_Array8                                        ; F813FA  1d 1c 18 f4
 	ret                                                  ; F813FE  0e
-; sub_F813FF -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 7
-; instructions to its first `ret`:
-;     site 0xF8140E  interpreter A  list 0xF3C7C3-0xF3C7CD
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F813FF:
+; SequencerMedley_DrawSourceBox -- highlight the selected medley source, INT / FD / HD
+; Evidence: (0x2540)=1; site 0xF8140E runs DL_F3C7C3, one op-1B record = svc 0x1B EraseRect over (0x24,0xD4)-(0x98,0xE4), the span of the three SELECT boxes of DL_F3C6B3 / DL_SelectIntFd; then T_F4181C on 0xF3C797: FillRect of entry (0x1303) of Data_F3C7E3+0x18 = (0x24..0x44) INT, (0x4D..0x6D) FD, (0x78..0x98) HD.
+; (0x1303) is loaded from (0x220B) (Paint_SequencerMedley 0xF810CB).
+SequencerMedley_DrawSourceBox:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F813FF  f1 40 25 00 01
 	ld XIY,DL_F3C7C3                                     ; F81404  45 c3 c7 f3 00
 	ld XIX,DL_F3C7CD                                     ; F81409  44 cd c7 f3 00
@@ -4552,30 +4448,19 @@ sub_F813FF:
 	ld XIY,0x00f3c797                                    ; F81412  45 97 c7 f3 00
 	call T_DLB_Handler_Array8                                        ; F81417  1d 1c 18 f4
 	ret                                                  ; F8141B  0e
-sub_F8141C:
+; SequencerMedley_DrawFileTypeBox -- highlight NORM FILE or MIDI FILE
+; Evidence: (0x2540)=1; EraseRect record 0xF3C7CD (array 0xF3C84B) then FillRect record 0xF3C7A2 (array 0xF3C813), both on (0x1304); value 0 fills (0x11C,0xCE)-(0x13D,0xE7) around 'NORM'/'FILE', value 1 fills (0xF3,0xCE)-(0x113,0xE7) around 'MIDI'/'FILE' (DL_SequencerMedleyStartFirstS0ng).  (0x1304) is loaded from (0x0E35).
+SequencerMedley_DrawFileTypeBox:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8141C  f1 40 25 00 01
 	ld XIY,DL_F3C7CD                                     ; F81421  45 cd c7 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F81426  1d 20 18 f4
 	ld XIY,0x00f3c7a2                                    ; F8142A  45 a2 c7 f3 00
 	call T_DLB_Handler_Array8                                        ; F8142F  1d 1c 18 f4
 	ret                                                  ; F81433  0e
-; sub_F81434 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 23
-; instructions to its first `ret`:
-;     site 0xF81453  interpreter B  list 0xF3C367-0xF3C37D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F81434:
+; S0ngSelectName_PrevSong -- SONG '<': save the current song, step (0x360A) down and load that song
+; Evidence: SoftKeyCol1 arm of ScreenButtonBody_S0ngSelectName.  Unless (0x0E45)!=0 or (0x360A)=0: site 0xF81453 erases both boxes (DL_F3C367-DLTable_F3C37D, svc 0x1B), S0ngSelectName_SaveWorkspaceToBank, dec (0x360A), (0x12FC)=song+1, S0ngSelectName_LoadSongFromBank, (0x0E45)=4, S0ngSelectName_UpdateSizeValues, (0x2095),0x10.
+; The 0 bound at 0xF8143F is the one FINDINGS-memory-map.md cites for the ten song banks.
+S0ngSelectName_PrevSong:
 	m_cp_mi8 MB16, 0x0e45, 0x00                          ; F81434  c1 45 0e 3f 00
 	jr nz, .LF8147C                                      ; F81439  6e 41
 	ld a, (BStore_CurrentBank:16)                                   ; F8143B  c1 0a 36 21
@@ -4588,28 +4473,32 @@ sub_F81434:
 	call T_DisplayListB_Run                              ; F81453  1d f4 17 f4
 	popw wa                                              ; F81457  48
 	push XWA                                             ; F81458  38
-	call sub_F8149A                                      ; F81459  1d 9a 14 f8
+	call S0ngSelectName_SaveWorkspaceToBank                                      ; F81459  1d 9a 14 f8
 	pop XWA                                              ; F8145D  58
 	dec 1,A                                              ; F8145E  c9 69
 	ld (BStore_CurrentBank:16), a                                   ; F81460  f1 0a 36 41
 	inc 1,A                                              ; F81464  c9 61
 	ld (0x12fc:16), a                                   ; F81466  f1 fc 12 41
-	call sub_F8180D                                      ; F8146A  1d 0d 18 f8
+	call S0ngSelectName_LoadSongFromBank                                      ; F8146A  1d 0d 18 f8
 	ld (0x0e45:16), 0x04                                 ; F8146E  f1 45 0e 00 04
-	call sub_F8147D                                      ; F81473  1d 7d 14 f8
+	call S0ngSelectName_UpdateSizeValues                                      ; F81473  1d 7d 14 f8
 	m_or_mi8 MB16, 0x2095, 0x10                          ; F81477  c1 95 20 3e 10
 .LF8147C:
 	ret                                                  ; F8147C  0e
-sub_F8147D:
+; S0ngSelectName_UpdateSizeValues -- compute the selected song's size and copy it to the display variables
+; Evidence: (0x0E32)=(0x360A); SongStore_MeasureSongSize; (0x12FD)=(0x0E2F) and (0x12FF)=(0x0E31), the variables S0ngSelectName_DrawValues shows beside ' KB' and '%'.
+S0ngSelectName_UpdateSizeValues:
 	ld a, (BStore_CurrentBank:16)                                   ; F8147D  c1 0a 36 21
 	ld (0x0e32:16), a                                   ; F81481  f1 32 0e 41
-	call sub_F819E9                                      ; F81485  1d e9 19 f8
+	call SongStore_MeasureSongSize                                      ; F81485  1d e9 19 f8
 	ld wa, (0x0e2f:16)                                 ; F81489  d1 2f 0e 20
 	ld (0x12fd:16), wa                                  ; F8148D  f1 fd 12 50
 	ld a, (0x0e31:16)                                   ; F81491  c1 31 0e 21
 	ld (0x12ff:16), a                                   ; F81495  f1 ff 12 41
 	ret                                                  ; F81499  0e
-sub_F8149A:
+; S0ngSelectName_SaveWorkspaceToBank -- copy the 3 KiB song workspace back into its bank (0x360A)
+; Evidence: (0x60341E)=(0x360C); `ld XIX,0x610000+n*0xC00 / ld XIY,0x603400 / ld BC,0x0C00 / ldir` (ldir writes (XIX+) from (XIY+)).  Same effect as prom_b BStore_Workspace_SaveToBank (0xF64BE3), written independently (instruction order differs).
+S0ngSelectName_SaveWorkspaceToBank:
 	ld xwa, (0x360c:16)                                 ; F8149A  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; F8149E  f2 1e 34 60 60
 	xor XWA,XWA                                          ; F814A3  e8 d0
@@ -4625,23 +4514,9 @@ sub_F8149A:
 	ldw bc, 0x0c00                                       ; F814C1  31 00 0c
 	ldir85                                               ; F814C4  85 11
 	ret                                                  ; F814C6  0e
-; sub_F814C7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 23
-; instructions to its first `ret`:
-;     site 0xF814E7  interpreter B  list 0xF3C367-0xF3C37D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F814C7:
+; S0ngSelectName_NextSong -- SONG '>': save the current song, step (0x360A) up and load that song
+; Evidence: SoftKeyCol2 arm of ScreenButtonBody_S0ngSelectName; identical to S0ngSelectName_PrevSong except `cp A,0x09` (0xF814D2) and `inc` -- site 0xF814E7 erases both boxes on layer 1 first.
+S0ngSelectName_NextSong:
 	m_cp_mi8 MB16, 0x0e45, 0x00                          ; F814C7  c1 45 0e 3f 00
 	jr nz, .LF81510                                      ; F814CC  6e 42
 	ld a, (BStore_CurrentBank:16)                                   ; F814CE  c1 0a 36 21
@@ -4654,36 +4529,22 @@ sub_F814C7:
 	call T_DisplayListB_Run                              ; F814E7  1d f4 17 f4
 	popw wa                                              ; F814EB  48
 	pushw wa                                             ; F814EC  28
-	call sub_F8149A                                      ; F814ED  1d 9a 14 f8
+	call S0ngSelectName_SaveWorkspaceToBank                                      ; F814ED  1d 9a 14 f8
 	popw wa                                              ; F814F1  48
 	inc 1,A                                              ; F814F2  c9 61
 	ld (BStore_CurrentBank:16), a                                   ; F814F4  f1 0a 36 41
 	inc 1,A                                              ; F814F8  c9 61
 	ld (0x12fc:16), a                                   ; F814FA  f1 fc 12 41
-	call sub_F8180D                                      ; F814FE  1d 0d 18 f8
+	call S0ngSelectName_LoadSongFromBank                                      ; F814FE  1d 0d 18 f8
 	ld (0x0e45:16), 0x04                                 ; F81502  f1 45 0e 00 04
-	call sub_F8147D                                      ; F81507  1d 7d 14 f8
+	call S0ngSelectName_UpdateSizeValues                                      ; F81507  1d 7d 14 f8
 	m_or_mi8 MB16, 0x2095, 0x10                          ; F8150B  c1 95 20 3e 10
 .LF81510:
 	ret                                                  ; F81510  0e
 	ret                                                  ; F81511  0e
-; sub_F81512 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 24
-; instructions to its first `ret`:
-;     site 0xF8152C  interpreter B  list 0xF3C367-0xF3C37D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F81512:
+; S0ngSelectName_CursorLeft -- POSITION '<': move the name-edit cursor one character left
+; Evidence: SoftKeyCol4 arm.  (0x2075),9; site 0xF8152C erases the position and character boxes (DL_F3C367-DLTable_F3C37D, svc 0x1B); (0x222D)-1 if >=0 into (0x222D)/(0x2721)/(0x1301); SongName_CharIndexAtCursor; (0x1302)=(0x21F9); fills both boxes again (records DL_F3C351/0xF3C35C, svc 5).
+S0ngSelectName_CursorLeft:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F81512  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F81517  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8151D  f1 40 25 00 01
@@ -4697,7 +4558,7 @@ sub_F81512:
 	ld (0x222d:16), a                                   ; F8153A  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F8153E  f1 21 27 41
 	ld (0x1301:16), a                                   ; F81542  f1 01 13 41
-	call sub_F81688                                      ; F81546  1d 88 16 f8
+	call SongName_CharIndexAtCursor                                      ; F81546  1d 88 16 f8
 	ld a, (0x21f9:16)                                   ; F8154A  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F8154E  f1 02 13 41
 .LF81552:
@@ -4709,23 +4570,9 @@ sub_F81512:
 	ld XIX,DL_F3C367                                     ; F8156A  44 67 c3 f3 00
 	call T_DLB_Handler_Array8                                        ; F8156F  1d 1c 18 f4
 	ret                                                  ; F81573  0e
-; sub_F81574 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 24
-; instructions to its first `ret`:
-;     site 0xF8158E  interpreter B  list 0xF3C367-0xF3C37D
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F81574:
+; S0ngSelectName_CursorRight -- POSITION '>': move the name-edit cursor one character right
+; Evidence: SoftKeyCol5 arm; as S0ngSelectName_CursorLeft with `inc` and `cp A,5 / jr gt` (six positions); site 0xF8158E is the erase.
+S0ngSelectName_CursorRight:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F81574  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F81579  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8157F  f1 40 25 00 01
@@ -4739,7 +4586,7 @@ sub_F81574:
 	ld (0x222d:16), a                                   ; F8159C  f1 2d 22 41
 	ld (0x2721:16), a                                   ; F815A0  f1 21 27 41
 	ld (0x1301:16), a                                   ; F815A4  f1 01 13 41
-	call sub_F81688                                      ; F815A8  1d 88 16 f8
+	call SongName_CharIndexAtCursor                                      ; F815A8  1d 88 16 f8
 	ld a, (0x21f9:16)                                   ; F815AC  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F815B0  f1 02 13 41
 .LF815B4:
@@ -4751,14 +4598,16 @@ sub_F81574:
 	ld XIX,DL_F3C367                                     ; F815CC  44 67 c3 f3 00
 	call T_DLB_Handler_Array8                                        ; F815D1  1d 1c 18 f4
 	ret                                                  ; F815D5  0e
-sub_F815D6:
+; S0ngSelectName_CharPrev -- character '<': replace the character under the cursor with the previous one of CharSet_F81768
+; Evidence: SoftKeyCol6 arm; erases the character box (record 0xF3C372), SongName_StepCharAtCursor with W=0x81, (0x1302)=(0x21F9), SongName_Draw6Chars on layer 0, fills the box (0xF3C35C).
+S0ngSelectName_CharPrev:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F815D6  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F815DB  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F815E1  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F815E6  45 72 c3 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F815EB  1d 20 18 f4
 	ld w, 0x81:opc                                          ; F815EF  20 81
-	call sub_F816DA                                      ; F815F1  1d da 16 f8
+	call SongName_StepCharAtCursor                                      ; F815F1  1d da 16 f8
 	ld a, (0x21f9:16)                                   ; F815F5  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F815F9  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F815FD  f1 40 25 00 00
@@ -4768,14 +4617,16 @@ sub_F815D6:
 	ld XIX,DL_F3C367                                     ; F81610  44 67 c3 f3 00
 	call T_DLB_Handler_Array8                                        ; F81615  1d 1c 18 f4
 	ret                                                  ; F81619  0e
-sub_F8161A:
+; S0ngSelectName_CharNext -- character '>': replace the character under the cursor with the next one of CharSet_F81768
+; Evidence: SoftKeyCol7 arm; as S0ngSelectName_CharPrev with W=0x01.
+S0ngSelectName_CharNext:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; F8161A  c1 75 20 3e 09
 	ldw (0x209b:16), 0x0605                              ; F8161F  f1 9b 20 02 05 06
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81625  f1 40 25 00 01
 	ld XIY,0x00f3c372                                    ; F8162A  45 72 c3 f3 00
 	call T_DLB_Handler_Array8_2                                        ; F8162F  1d 20 18 f4
 	ld w, 0x01:opc                                          ; F81633  20 01
-	call sub_F816DA                                      ; F81635  1d da 16 f8
+	call SongName_StepCharAtCursor                                      ; F81635  1d da 16 f8
 	ld a, (0x21f9:16)                                   ; F81639  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F8163D  f1 02 13 41
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81641  f1 40 25 00 00
@@ -4789,8 +4640,8 @@ sub_F8161A:
 ; SongName_Draw6Chars -- draw the six-character name buffer at 0x6034CA
 ;
 ; Called from: prom_a Paint_S0ngSelectName (`call`) at 0xF80E71
-;          prom_a sub_F815D6 (`call`) at 0xF81602
-;          prom_a sub_F8161A (`call`) at 0xF81646
+;          prom_a S0ngSelectName_CharPrev (`call`) at 0xF81602
+;          prom_a S0ngSelectName_CharNext (`call`) at 0xF81646
 ; Issues:  SWI7 service 0x08 at 0xF8166E -- LCD_Svc_08_DrawText16x16, draw 16x16 text
 ; Evidence: `ld HL,0x0000` + `ld BC,0x0006` + `ld XIY,0x006034CA` + `ld IX,0x0998` +
 ;           service 0x08, the 16x16 text service, so it draws six characters from that
@@ -4810,49 +4661,19 @@ SongName_Draw6Chars:
 	ld a, 0x08:opc                                          ; F8166C  21 08
 	swi 7                                                ; F8166E  ff
 	ret                                                  ; F8166F  0e
-; sub_F81670 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
-;
-; Its body reaches the display-list interpreters 1 time(s) in the 6
-; instructions to its first `ret`:
-;     site 0xF8167F  interpreter B  list 0xF3C367-0xF3C372
-; Evidence: the list bounds are the `ld XIY,0x00...` and `ld XIX,0x00...`
-;          immediates of the LAST such loads before each cited `call` -- within
-;          five instructions above it; --selftest measures every distance;
-;          0xF417F0 enters interpreter A and 0xF417F4 interpreter B
-;          (notes/FINDINGS-ui-display-list.md).
-; Unknown: WHAT SCREEN.  Not one of these lists holds an `.ascii` record,
-;          so the rule that named 24 of prom_a's painters -- take the
-;          name from the text the list draws -- has nothing to read here.
-;          The label stays sub_XXXXXX on purpose; naming it would need the
-;          list's opcodes decoded or a caller that says what it is.
-; ---------------------------------------------------------------------
-sub_F81670:
+; S0ngSelectName_ClearName -- CLR: blank the song name to '______'
+; Evidence: SoftKeyCol8 arm ('CLR' in DL_S0ngSelectNameKbS0ngName); (0x2540)=1, site 0xF8167F erases the position box (DL_F3C367-0xF3C372, svc 0x1B), then SongName_ResetToUnderscores (which zeroes cursor and character index and sets (0x2071) bit 4).
+S0ngSelectName_ClearName:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F81670  f1 40 25 00 01
 	ld XIY,DL_F3C367                                     ; F81675  45 67 c3 f3 00
 	ld XIX,0x00f3c372                                    ; F8167A  44 72 c3 f3 00
 	call T_DisplayListB_Run                              ; F8167F  1d f4 17 f4
 	call SongName_ResetToUnderscores                                      ; F81683  1d ea 18 f8
 	ret                                                  ; F81687  0e
-; ---------------------------------------------------------------------
-; sub_F81688 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
-;
-; Called from: prom_a sub_F81512 (`call`) at 0xF81546
-;          prom_a sub_F81574 (`call`) at 0xF815A8
-;          prom_a sub_F8178D (`call`) at 0xF817CE
-;          prom_a sub_F81812 (`call`) at 0xF81890
-;
-;     0xF816C0 loads 0xF81768, where the ROM reads:
-;        "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
-; ---------------------------------------------------------------------
-sub_F81688:
+; SongName_CharIndexAtCursor -- (0x21F9) = index in CharSet_F81768 of the name character under the cursor (0 if absent)
+; Evidence: reads the byte at 0x610000+(0x360A)*0xC00+0xCA+(0x222D) (the bank copy of the name), then compares it with each of the 37 bytes of CharSet_F81768 (`ld BC,0x25` / djnz; 0xF816C0 loads 0xF81768, '_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'); returns at once when (0x222D) is negative.
+; Called from: S0ngSelectName_CursorLeft/Right, S0ngSelectName_PrepareValues, S0ngSelectName_LoadSongFromBank.
+SongName_CharIndexAtCursor:
 	ld l, (0x222d:16)                                   ; F81688  c1 2d 22 27
 	cp l, 0x00:i3                                          ; F8168C  cf d8
 	jr lt, .LF816D9                                      ; F8168E  61 49
@@ -4885,16 +4706,20 @@ sub_F81688:
 	ld (0x21f9:16), l                                   ; F816D5  f1 f9 21 47
 .LF816D9:
 	ret                                                  ; F816D9  0e
-sub_F816DA:
+; SongName_StepCharAtCursor -- step the character under the name cursor: W bit 7 clear = next, set = previous
+; Evidence: `bit 7,W` chooses SongName_NextCharAtCursor or SongName_PrevCharAtCursor; callers pass W=0x01 (S0ngSelectName_CharNext) and 0x81 (S0ngSelectName_CharPrev).
+SongName_StepCharAtCursor:
 	bit 0x07,W                                           ; F816DA  c8 33 07
 	jr nz, .LF816E5                                      ; F816DD  6e 06
-	call sub_F816EA                                      ; F816DF  1d ea 16 f8
+	call SongName_NextCharAtCursor                                      ; F816DF  1d ea 16 f8
 	jr .LF816E9                                          ; F816E3  68 04
 .LF816E5:
-	call sub_F81700                                      ; F816E5  1d 00 17 f8
+	call SongName_PrevCharAtCursor                                      ; F816E5  1d 00 17 f8
 .LF816E9:
 	ret                                                  ; F816E9  0e
-sub_F816EA:
+; SongName_NextCharAtCursor -- (0x21F9)+1, clamped to 0x24 (the last of 37), then store it
+; Evidence: `inc 1,A / cp A,0x25 / jr lt / ld A,0x24`, then SongName_StoreCharAtCursor.
+SongName_NextCharAtCursor:
 	ld a, (0x21f9:16)                                   ; F816EA  c1 f9 21 21
 	inc 1,A                                              ; F816EE  c9 61
 	cp A,0x25                                            ; F816F0  c9 cf 25
@@ -4902,9 +4727,11 @@ sub_F816EA:
 	ld a, 0x24:opc                                          ; F816F5  21 24
 .LF816F7:
 	ld (0x21f9:16), a                                   ; F816F7  f1 f9 21 41
-	call sub_F81716                                      ; F816FB  1d 16 17 f8
+	call SongName_StoreCharAtCursor                                      ; F816FB  1d 16 17 f8
 	ret                                                  ; F816FF  0e
-sub_F81700:
+; SongName_PrevCharAtCursor -- (0x21F9)-1, clamped at 0, then store it
+; Evidence: `dec 1,A / cp A,0xFF / jr nz / ld A,0`, then SongName_StoreCharAtCursor.
+SongName_PrevCharAtCursor:
 	ld a, (0x21f9:16)                                   ; F81700  c1 f9 21 21
 	dec 1,A                                              ; F81704  c9 69
 	cp A,0xff                                            ; F81706  c9 cf ff
@@ -4912,26 +4739,12 @@ sub_F81700:
 	ld a, 0x00:opc                                          ; F8170B  21 00
 .LF8170D:
 	ld (0x21f9:16), a                                   ; F8170D  f1 f9 21 41
-	call sub_F81716                                      ; F81711  1d 16 17 f8
+	call SongName_StoreCharAtCursor                                      ; F81711  1d 16 17 f8
 	ret                                                  ; F81715  0e
-; ---------------------------------------------------------------------
-; sub_F81716 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
-;
-; Called from: prom_a sub_F816EA (`call`) at 0xF816FB
-;          prom_a sub_F81700 (`call`) at 0xF81711
-;
-;     0xF8171C loads 0xF81768, where the ROM reads:
-;        "_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
-; ---------------------------------------------------------------------
-sub_F81716:
+; SongName_StoreCharAtCursor -- write CharSet_F81768[(0x21F9)] at position (0x222D) of all three copies of the song name
+; Evidence: 0xF8171C loads CharSet_F81768 ('_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') and reads entry (0x21F9); the byte is stored at (XIX+HL), HL=(0x222D), for XIX = 0x610000+(0x360A)*0xC00+0xCA (bank), 0x6034CA (workspace) and 0x12F6 (display) -- the same three copies SongName_ResetToUnderscores writes.
+; Called from: SongName_NextCharAtCursor, SongName_PrevCharAtCursor.
+SongName_StoreCharAtCursor:
 	ld l, (0x21f9:16)                                   ; F81716  c1 f9 21 27
 	xor H,H                                              ; F8171A  ce d6
 	ld XIX,CharSet_F81768                                ; F8171C  44 68 17 f8 00
@@ -4974,7 +4787,9 @@ CharSet_F81768:
 	.byte 0x5f, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e, 0x4f  ; F81768
 	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x30, 0x31, 0x32, 0x33, 0x34  ; F81778
 	.byte 0x35, 0x36, 0x37, 0x38, 0x39                                        ; F81788
-sub_F8178D:
+; S0ngSelectName_PrepareValues -- set up the SONG SELECT & NAME display variables on entry
+; Evidence: first call of Paint_S0ngSelectName (0xF80E32).  Unless (0x207B)=0x0D: (0x0E45)=0, T_F409AC, (0x34BB),4, cursor (0x222D)=(0x1301)=0, (0x60341E)=(0x360C).  Always: 6 bytes 0x6034CA -> 0x12F6, (0x12FC)=(0x360A)+1, SongName_CharIndexAtCursor -> (0x1302), and the KB/percent pair as S0ngSelectName_UpdateSizeValues does.
+S0ngSelectName_PrepareValues:
 	m_cp_mi8 MB16, 0x207b, 0x0d                          ; F8178D  c1 7b 20 3f 0d
 	jr z, .LF817B5                                       ; F81792  66 21
 	ld (0x0e45:16), 0x00                                 ; F81794  f1 45 0e 00 00
@@ -4993,18 +4808,20 @@ sub_F8178D:
 	ld a, (BStore_CurrentBank:16)                                   ; F817C4  c1 0a 36 21
 	inc 1,A                                              ; F817C8  c9 61
 	ld (0x12fc:16), a                                   ; F817CA  f1 fc 12 41
-	call sub_F81688                                      ; F817CE  1d 88 16 f8
+	call SongName_CharIndexAtCursor                                      ; F817CE  1d 88 16 f8
 	ld a, (0x21f9:16)                                   ; F817D2  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F817D6  f1 02 13 41
 	ld a, (BStore_CurrentBank:16)                                   ; F817DA  c1 0a 36 21
 	ld (0x0e32:16), a                                   ; F817DE  f1 32 0e 41
-	call sub_F819E9                                      ; F817E2  1d e9 19 f8
+	call SongStore_MeasureSongSize                                      ; F817E2  1d e9 19 f8
 	ld wa, (0x0e2f:16)                                 ; F817E6  d1 2f 0e 20
 	ld (0x12fd:16), wa                                  ; F817EA  f1 fd 12 50
 	ld a, (0x0e31:16)                                   ; F817EE  c1 31 0e 21
 	ld (0x12ff:16), a                                   ; F817F2  f1 ff 12 41
 	ret                                                  ; F817F6  0e
-sub_F817F7:
+; S0ngSelectName_Leave -- the work of the S0ngSelectName Leave method
+; Evidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_F411B8, (0x0E45)=0.
+S0ngSelectName_Leave:
 	m_cp_mi8 MB16, 0x207a, 0x0d                          ; F817F7  c1 7a 20 3f 0d
 	jr z, .LF8180C                                       ; F817FC  66 0e
 	m_and_mi8 MB16, 0x34bb, 0xfb                         ; F817FE  c1 bb 34 3c fb
@@ -5012,7 +4829,10 @@ sub_F817F7:
 	ld (0x0e45:16), 0x00                                 ; F81807  f1 45 0e 00 00
 .LF8180C:
 	ret                                                  ; F8180C  0e
-sub_F8180D:
+; S0ngSelectName_LoadSongFromBank -- load song (0x360A) from its bank into the workspace and refresh the name-edit state
+; Evidence: saves workspace words +0xB8/+0xBA in (0x0E2B)/(0x0E2D), ldir 0xC00 bytes 0x610000+(0x360A)*0xC00 -> 0x603400 and restores the two words (as prom_b BStore_Workspace_LoadFromBank does), (0x360C)=(0x60341E), (0x3752)=bit 0 of (0x603420), cursor 0, name -> 0x12F6, SongName_CharIndexAtCursor; then the (0x6034C6)/(0x7F4D) queue post, T_F42578, T_F409E0, T_F40AC8, (0x360B) bit 0 cleared.
+; The label sub_F81812 one instruction in is unreferenced and part of this routine.
+S0ngSelectName_LoadSongFromBank:
 	ld wa, (BStore_FreeHead:24)                                ; F8180D  d2 b8 34 60 20
 sub_F81812:
 	ld (0x0e2b:16), wa                                  ; F81812  f1 2b 0e 50
@@ -5051,7 +4871,7 @@ sub_F81812:
 	ld XIY,0x006034ca                                    ; F81886  45 ca 34 60 00
 	ldw bc, 0x06                                         ; F8188B  31 06 00
 	ldir85                                               ; F8188E  85 11
-	call sub_F81688                                      ; F81890  1d 88 16 f8
+	call SongName_CharIndexAtCursor                                      ; F81890  1d 88 16 f8
 	ld a, (0x21f9:16)                                   ; F81894  c1 f9 21 21
 	ld (0x1302:16), a                                   ; F81898  f1 02 13 41
 	m_cp_mi8 MB24, 0x6034c6, 0xff                        ; F8189C  c2 c6 34 60 3f ff
@@ -5083,7 +4903,7 @@ sub_F81812:
 ; ---------------------------------------------------------------------
 ; SongName_ResetToUnderscores -- blank all three copies of the six-character name buffer
 ;
-; Called from: prom_a sub_F81670 (`call`) at 0xF81683
+; Called from: prom_a S0ngSelectName_ClearName (`call`) at 0xF81683
 ; Evidence: three `ldir` runs of BC = 6 from the same source 0xF81948 (`______`) to
 ;           0x006034CA, to 0x00610000 + ((0x360A) << 11) + ((0x360A) << 10) + 0xCA, and
 ;           to 0x0012F6.  The destinations are read straight off the three `ld XIX`
@@ -5189,7 +5009,10 @@ sub_F819A2:
 	inc 1,C                                              ; F819E3  cb 61
 	djnz8 l, .LF819AD                                    ; F819E5  cf 1c c5
 	ret                                                  ; F819E8  0e
-sub_F819E9:
+; SongStore_MeasureSongSize -- size of song (0x0E32): (0x0E2F) = KB, (0x0E31) = percent of the block heap
+; Evidence: directory = 0x603500 when (0x0E32)=(0x360A) (the song in the workspace), else 0x610000+n*0xC00+0x100 (the bank's copy); for each 3-byte entry 0..0x30 with bit 7 set, SongStore_CountChainBlocks; (0x0E31) = blocks*100/(0x3608)+1, max 99 ((0x3608) = heap block count, BStore_FreeList_Init); (0x0E2F) = blocks/4, at least 1 (256-byte blocks).
+; Callers display them beside ' KB' and '%': S0ngSelectName and prom_b Paint_SongClear (0xF7EB23) / SongClear soft keys.  (0x126E) is preserved.
+SongStore_MeasureSongSize:
 	ld xwa, (BStore_CursorBlockAddr:16)                                 ; F819E9  e1 6e 12 20
 	push XWA                                             ; F819ED  38
 	xor XWA,XWA                                          ; F819EE  e8 d0
@@ -5219,7 +5042,7 @@ sub_F819E9:
 	push XBC                                             ; F81A2A  39
 	push XDE                                             ; F81A2B  3a
 	push XIX                                             ; F81A2C  3c
-	call sub_F81A83                                      ; F81A2D  1d 83 1a f8
+	call SongStore_CountChainBlocks                                      ; F81A2D  1d 83 1a f8
 	pop XIX                                              ; F81A31  5c
 	pop XDE                                              ; F81A32  5a
 	pop XBC                                              ; F81A33  59
@@ -5253,7 +5076,9 @@ sub_F819E9:
 	pop XWA                                              ; F81A7D  58
 	ld (BStore_CursorBlockAddr:16), xwa                                 ; F81A7E  f1 6e 12 60
 	ret                                                  ; F81A82  0e
-sub_F81A83:
+; SongStore_CountChainBlocks -- XBC3 = number of heap blocks in one directory entry's chain
+; Evidence: HL = word at (XIX+DE+1) (directory entry head block, FINDINGS-prom_b-block-store.md); 0xFFFF -> 0; else count 1 and follow each block's +3 next word via SongStore_SeekBlock until 0xFFFF.  The caller adds XBC3 into XBC.
+SongStore_CountChainBlocks:
 	.byte 0xe7, 0x34, 0xa8                               ; F81A83  e7 34 a8   ld XBC3,0
 	ld WA,DE                                             ; F81A86  da 88
 	inc 1,WA                                             ; F81A88  d8 61
@@ -5263,7 +5088,7 @@ sub_F81A83:
 	.byte 0xe7, 0x34, 0x61                               ; F81A95  e7 34 61   inc 1,XBC3
 .LF81A98:
 	.byte 0xe7, 0x34, 0x04                               ; F81A98  e7 34 04   push XBC3
-	call sub_F81AB5                                      ; F81A9B  1d b5 1a f8
+	call SongStore_SeekBlock                                      ; F81A9B  1d b5 1a f8
 	.byte 0xe7, 0x34, 0x05                               ; F81A9F  e7 34 05   pop XBC3
 	ld xhl, (BStore_CursorBlockAddr:16)                                 ; F81AA2  e1 6e 12 23
 	ld HL,(XHL+0x03)                                     ; F81AA6  9b 03 23
@@ -5273,42 +5098,10 @@ sub_F81A83:
 	jr .LF81A98                                          ; F81AB2  68 e4
 .LF81AB4:
 	ret                                                  ; F81AB4  0e
-; sub_F81AB5 -- paints the screen whose own text reads "MASTER TRACK CLEAR", "ATTENTION!", "Using MASTER TRACK CLEAR will"
-;
-; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
-; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
-; carry text, and those are the ones that name this routine:
-;     site 0xF81B21  interpreter A  list 0xF3E06E  DL_MasterTrackClearAttention
-;        text: "MASTER TRACK CLEAR"; "ATTENTION!"; "Using MASTER TRACK CLEAR will"; "YES"; "erase any existing recordings"; "in the MASTER TRACK."
-; Evidence: the list address is the `ld XIY,0x00F3E06E` IMMEDIATE at the
-;          instruction two before the cited `call`, and the text quoted
-;          above is the `.ascii` the interpreter draws verbatim.  Every
-;          alphabetic morpheme of this name occurs in that text; the
-;          check is notes/prom_a_understanding_round5.py --morphemes.
-;          `Paint_` is a structural verb, not ROM text.
-;          ⚠ ROUND 5: where the label reads `InstallPainter_`, the body contains
-;          ZERO display-list calls -- it INSTALLS the callback that paints this
-;          screen, through `call 0xF42E84`. The screen association is real one hop
-;          away; the earlier `Paint_` verb claimed the body did the drawing and it
-;          does not. Any display-list COUNT in a header above such a label is the
-;          installed callback's, not this routine's.
-; Unknown: whether this routine also handles input for the screen, and
-;          whether any other routine paints it.  Neither was searched.
-; ⚠⚠ NAME RETRACTED IN ROUND 5, AND THE REASON MATTERS MORE THAN THE NAME.
-;    This routine was called Paint_MasterTrackClear. The screen text quoted above is real
-;    and every morpheme of that name really is in it -- but the text belongs to a
-;    DIFFERENT function. The namer credited each display-list site to the nearest
-;    preceding label BY SOURCE LINE and never checked the routine's own `ret`, so a
-;    site inside an unlabelled function was attributed to whatever label came before
-;    it. This body is a ten-instruction record-address computation -- base + (index-1)*256
-;    stored at 0x126E -- and the screen it was named for lives at 0xF81ACB, which this
-;    routine never calls and which has ZERO pointer references in all four ROM images.
-;    That is LOCATED, not IDENTIFIED -- the failure this tree has documented before.
-;    The evidence below is left in place because it is true about the SCREEN; what is
-;    not established is that THIS routine paints it.
-; Unknown: what this routine is for. Its body contains ZERO display-list calls.
-; ---------------------------------------------------------------------
-sub_F81AB5:
+; SongStore_SeekBlock -- (0x126E) = address of heap block HL (1-based)
+; Evidence: `ld XIY,(0x3604) / extz XHL / dec 1,XHL / sla 8,XHL / add XIY,XHL / ld (0x126E),XIY / xor XHL,XHL`, XIY saved and restored -- the value prom_b BStore_SeekBlock computes; called only by SongStore_CountChainBlocks.
+; Retraction kept from round 5: the 'MASTER TRACK CLEAR' text once credited to this label is drawn by the UNLABELLED function at 0xF81ACB (ld XIY,DL_MasterTrackClearAttention / call T_DisplayList_Run at 0xF81B21), which this routine never calls and nothing references.
+SongStore_SeekBlock:
 	push XIY                                             ; F81AB5  3d
 	ld xiy, (BStore_HeapBase:16)                                 ; F81AB6  e1 04 36 25
 	extz XHL                                             ; F81ABA  eb 12
@@ -5552,14 +5345,14 @@ Paint_StepRecordTrackClrMeas:
 	ld L,C                                               ; F81D75  cb 8f
 	mx_ld_rm MXB, ra_IY, ra_HL, r7                       ; F81D77  c3 07 f4 ec 27
 	and L,0x0f                                           ; F81D7C  cf cc 0f
-	calr sub_F81DFE                                      ; F81D7F  1e 7c 00
+	calr StepRecord_DrawNibbleAsStars                                      ; F81D7F  1e 7c 00
 	add XIX,0x00000004                                   ; F81D82  ec c8 04 00 00 00
 	xor HL,HL                                            ; F81D88  db d3
 	ld L,C                                               ; F81D8A  cb 8f
 	mx_ld_rm MXB, ra_IY, ra_HL, r7                       ; F81D8C  c3 07 f4 ec 27
 	and L,0xf0                                           ; F81D91  cf cc f0
 	srl l, 0x04                                          ; F81D94  cf ef 04
-	calr sub_F81DFE                                      ; F81D97  1e 64 00
+	calr StepRecord_DrawNibbleAsStars                                      ; F81D97  1e 64 00
 	add XIX,0x00000004                                   ; F81D9A  ec c8 04 00 00 00
 	inc 1,C                                              ; F81DA0  cb 61
 	cp C,D                                               ; F81DA2  cc f3
@@ -5594,7 +5387,10 @@ Paint_StepRecordTrackClrMeas:
 .LF81DF9:
 	m_and_mi8 MB8, 0xc6, 0xfe                            ; F81DF9  c0 c6 3c fe
 	ret                                                  ; F81DFD  0e
-sub_F81DFE:
+; StepRecord_DrawNibbleAsStars -- draw the low nibble of L as four 8x14 cells: '*' for a set bit, glyph 0x91 for a clear one
+; Evidence: (0x2540)=0, XIY=0xF3DC7B, BC=4, svc 6 (LCD_Svc_06_DrawText8x14) with HL=L; the 64 bytes at 0xF3DC7B are 16 entries of 4 where cell k of entry n is 0x2A iff bit k of n is set (all 16 checked against the ROM).
+; Caller: the unlabelled STEP RECORD painter at 0xF81D41 (gated on (0x207C)=0x0E), two nibbles per byte of 0x12C6..
+StepRecord_DrawNibbleAsStars:
 	push XIY                                             ; F81DFE  3d
 	push XIX                                             ; F81DFF  3c
 	pushw de                                             ; F81E00  2a
@@ -5787,7 +5583,10 @@ Data_F82000:
 	jp Data_F82000_Nop                                        ; F8201C  1b 2f 26 f8
 	jp Data_F82000_Nop                                        ; F82020  1b 2f 26 f8
 	jp Data_F82000_Nop                                        ; F82024  1b 2f 26 f8
-sub_F82028:
+; MainTask_Loop -- CPU 1's main loop: poll the rota flags and rings for ever
+; Evidence: ends with unconditional `jrl MainTask_Loop` (0xF821C5); entered by `jp` from MainTask_Entry (0xF8282E) and published as prom_b slot T_F40014.  `tset n,(0x88)` / `tset n,(0x98)` gate PanelHold_Tick, SC1_TxFlush, Link_ServiceTask, Blink_Tick (bit 7 at 0xF82182, FINDINGS-prom_b-field-blink.md) etc.; it services the MIDI-in rings (MidiIn_RoutePortA/B), MIDI_DrainQueue, PanelWire_Service, PanelEvent_Service, UiEventList_Publish.
+; The four instructions at 0xF8202C-0xF8203A are jumped over by the `jr` at 0xF8202A.
+MainTask_Loop:
 	ei 0x00                                              ; F82028  06 00
 	jr .LF8203B                                          ; F8202A  68 0f
 	ld XWA,Data_F82000                                   ; F8202C  40 00 20 f8 00
@@ -5805,7 +5604,7 @@ sub_F82028:
 .LF82050:
 	m_cp_mi8 MB8, 0xc2, 0x00                             ; F82050  c0 c2 3f 00
 	jr nz, .LF82059                                      ; F82054  6e 03
-	calr sub_F821C8                                      ; F82056  1e 6f 01
+	calr MainTask_RearmTickCountdown                                      ; F82056  1e 6f 01
 .LF82059:
 	ei 0x06                                              ; F82059  06 06
 	ld_sd8b a, 0x9e                                      ; F8205B  c0 9e 21
@@ -5824,12 +5623,12 @@ sub_F82028:
 	call T_Ring600C1E_IsEmpty                            ; F82081  1d b4 1d f4
 	and WA,WA                                            ; F82085  d8 c0
 	jr z, .LF8208C                                       ; F82087  66 03
-	calr sub_F82204                                      ; F82089  1e 78 01
+	calr MidiIn_RoutePortA                                      ; F82089  1e 78 01
 .LF8208C:
 	call T_Ring601028_IsEmpty                            ; F8208C  1d d8 1d f4
 	and WA,WA                                            ; F82090  d8 c0
 	jr z, .LF82097                                       ; F82092  66 03
-	calr sub_F822D4                                      ; F82094  1e 3d 02
+	calr MidiIn_RoutePortB                                      ; F82094  1e 3d 02
 .LF82097:
 	tset_dd8 0x00, 0x88                                  ; F82097  f0 88 a8
 	jr nz, .LF820A0                                      ; F8209A  6e 04
@@ -5847,8 +5646,8 @@ sub_F82028:
 	jr nz, .LF820B9                                      ; F820B3  6e 04
 	call T_F41250                                        ; F820B5  1d 50 12 f4
 .LF820B9:
-	calr sub_F823A4                                      ; F820B9  1e e8 02
-	calr sub_F823E2                                      ; F820BC  1e 23 03
+	calr MainTask_ServiceTimedEvents                                      ; F820B9  1e e8 02
+	calr TimedEvents_Service                                      ; F820BC  1e 23 03
 	call T_Ring60195A_IsEmpty                            ; F820BF  1d 24 1d f4
 	and WA,WA                                            ; F820C3  d8 c0
 	jr z, .LF820CB                                       ; F820C5  66 04
@@ -5886,9 +5685,9 @@ sub_F82028:
 	jr z, .LF82120                                       ; F8211A  66 04
 	call T_F411BC                                        ; F8211C  1d bc 11 f4
 .LF82120:
-	call sub_F821D7                                      ; F82120  1d d7 21 f8
-	calr sub_F823A4                                      ; F82124  1e 7d 02
-	calr sub_F823E2                                      ; F82127  1e b8 02
+	call MainTask_RunUiPassC                                      ; F82120  1d d7 21 f8
+	calr MainTask_ServiceTimedEvents                                      ; F82124  1e 7d 02
+	calr TimedEvents_Service                                      ; F82127  1e b8 02
 	call T_Ring601850_IsEmpty                            ; F8212A  1d 68 1e f4
 	and WA,WA                                            ; F8212E  d8 c0
 	jr z, .LF82136                                       ; F82130  66 04
@@ -5901,7 +5700,7 @@ sub_F82028:
 .LF82142:
 	tset_dd8 0x06, 0x98                                  ; F82142  f0 98 ae
 	jr nz, .LF8214B                                      ; F82145  6e 04
-	call sub_F821E9                                      ; F82147  1d e9 21 f8
+	call MainTask_PanelTimersTick                                      ; F82147  1d e9 21 f8
 .LF8214B:
 	tset_dd8 0x04, 0x88                                  ; F8214B  f0 88 ac
 	jr nz, .LF82160                                      ; F8214E  6e 10
@@ -5939,28 +5738,35 @@ sub_F82028:
 	jr z, .LF821AE                                       ; F821A8  66 04
 	call T_F42584                                        ; F821AA  1d 84 25 f4
 .LF821AE:
-	calr sub_F821C8                                      ; F821AE  1e 17 00
-	calr sub_F823A4                                      ; F821B1  1e f0 01
+	calr MainTask_RearmTickCountdown                                      ; F821AE  1e 17 00
+	calr MainTask_ServiceTimedEvents                                      ; F821B1  1e f0 01
 	xor A,A                                              ; F821B4  c9 d1
 	st_dd8b a, 0xc1                                      ; F821B6  f0 c1 41
 	call T_F409C8                                        ; F821B9  1d c8 09 f4
 	call T_F42ED0                                        ; F821BD  1d d0 2e f4
 	call T_F40950                                        ; F821C1  1d 50 09 f4
-	jrl sub_F82028                                       ; F821C5  78 60 fe
-sub_F821C8:
+	jrl MainTask_Loop                                       ; F821C5  78 60 fe
+; MainTask_RearmTickCountdown -- (0xC1)=0, call T_F409C4, then reload the tick countdown (0xC2) with 10
+; Evidence: `xor A / ld (0xC1),A / call T_F409C4 / ld A,0x0A / ld (0xC2),A`; INTTR4_SequencerTick decrements (0xC2) once per tick (0xF83024); MainTask_Loop calls this when (0xC2) is 0 (0xF82050) and unconditionally at the end of each pass (0xF821AE).
+; T_F409C4 -> T_F40B44 -> prom_b sub_F47800 is unnamed.
+MainTask_RearmTickCountdown:
 	xor A,A                                              ; F821C8  c9 d1
 	st_dd8b a, 0xc1                                      ; F821CA  f0 c1 41
 	call T_F409C4                                        ; F821CD  1d c4 09 f4
 	ld a, 0x0a:opc                                          ; F821D1  21 0a
 	st_dd8b a, 0xc2                                      ; F821D3  f0 c2 41
 	ret                                                  ; F821D6  0e
-sub_F821D7:
+; MainTask_RunUiPassC -- run UI event pass C, then empty the 0x2030 event list and the 0x2C00 queue
+; Evidence: call T_UiEventList_RunPassC, call T_F40780 (unnamed), ld (0x2030),0xFF (the list PanelGroupQueue_ExpandToEvents fills), call Queue2C00_DrainPassAB; one caller, MainTask_Loop 0xF82120.
+MainTask_RunUiPassC:
 	call T_UiEventList_RunPassC                          ; F821D7  1d 64 0f f4
 	call T_F40780                                        ; F821DB  1d 80 07 f4
 	ld (0x2030:16), 0xff                                 ; F821DF  f1 30 20 00 ff
 	call Queue2C00_DrainPassAB                                      ; F821E4  1d ac 23 f8
 	ret                                                  ; F821E8  0e
-sub_F821E9:
+; MainTask_PanelTimersTick -- one tick of the panel timers
+; Evidence: call T_F413CC (unnamed), T_PanelTimers_Step, T_PanelHold_Tick; called from MainTask_Loop when `tset 6,(0x98)` finds bit 6 clear (0xF82142).  The 4 instructions after its `ret` (0xF821F6) are not reached from here.
+MainTask_PanelTimersTick:
 	call T_F413CC                                        ; F821E9  1d cc 13 f4
 	call T_PanelTimers_Step                              ; F821ED  1d 44 0f f4
 	call T_PanelHold_Tick                                ; F821F1  1d 74 0f f4
@@ -5969,7 +5775,10 @@ sub_F821E9:
 	call T_F41F18                                        ; F821FA  1d 18 1f f4
 	m_and_mi8 MB16, 0x34d0, 0xfd                         ; F821FE  c1 d0 34 3c fd
 	ret                                                  ; F82203  0e
-sub_F82204:
+; MidiIn_RoutePortA -- split pending MIDI IN port A bytes into a run of note-class messages or a run of other messages, and hand the run to its consumer
+; Evidence: ring 0x600C1E (MidiIn_PumpPortA's), scanned from (ring-8) to (ring-4) mod 0x400.  Note class = status 0x8n, 0x9n, or 0xBn whose next byte is >=0x7B (cp 0x7B at 0xF8224A/0xF82280).  At the first class change it stores the position in (ring-6) and calls T_F413B4 (prom_a sub_FC80E2) for a note run, or MidiIn_PumpPortA + T_F41F14 + Queue2C00_DrainPassAB otherwise; then (ring-8)=(ring-6) and (ring-2) += bytes consumed.
+; Called from MainTask_Loop 0xF82089 when (0x89)!=0xFF and the ring is not empty.
+MidiIn_RoutePortA:
 	ld XHL,0x00600c1e                                    ; F82204  43 1e 0c 60 00
 	ld iy, (xhl-8)                                       ; F82209  9b f8 25
 	ld ix, (xhl-4)                                       ; F8220C  9b fc 24
@@ -6058,7 +5867,9 @@ sub_F82204:
 	popw wa                                              ; F822CF  48
 	add (xhl-2), wa                                      ; F822D0  9b fe 88
 	ret                                                  ; F822D3  0e
-sub_F822D4:
+; MidiIn_RoutePortB -- MidiIn_RoutePortA for MIDI IN port B
+; Evidence: the same code on ring 0x601028; the note run goes to T_F413F8 (prom_a sub_FC8448), the rest to T_MidiIn_PumpPortB + T_F41F14 + Queue2C00_DrainPassAB (0xF8237F-0xF82391).  Called from MainTask_Loop 0xF82094.
+MidiIn_RoutePortB:
 	ld XHL,0x00601028                                    ; F822D4  43 28 10 60 00
 	ld iy, (xhl-8)                                       ; F822D9  9b f8 25
 	ld ix, (xhl-4)                                       ; F822DC  9b fc 24
@@ -6147,11 +5958,13 @@ sub_F822D4:
 	popw wa                                              ; F8239F  48
 	add (xhl-2), wa                                      ; F823A0  9b fe 88
 	ret                                                  ; F823A3  0e
-sub_F823A4:
-	calr sub_F823A4_Nop                                      ; F823A4  1e 04 00
-	calr sub_F823E2                                      ; F823A7  1e 38 00
+; MainTask_ServiceTimedEvents -- MainTask_Loop's call into TimedEvents_Service
+; Evidence: `calr sub_F823AB` (a bare `ret`) then `calr TimedEvents_Service`; called three times per pass, 0xF820B9, 0xF82124, 0xF821B1.
+MainTask_ServiceTimedEvents:
+	calr MainTask_ServiceTimedEvents_Nop                                      ; F823A4  1e 04 00
+	calr TimedEvents_Service                                      ; F823A7  1e 38 00
 	ret                                                  ; F823AA  0e
-sub_F823A4_Nop:
+MainTask_ServiceTimedEvents_Nop:
 	ret                                                  ; F823AB  0e
 ; ---------------------------------------------------------------------
 ; Queue2C00_DrainPassAB -- run pass A and pass B over the 0x2C00 event
@@ -6201,7 +6014,10 @@ Queue2C00_DrainPassB:
 	ret                                                  ; F823DF  0e
 	ret                                                  ; F823E0  0e
 	ret                                                  ; F823E1  0e
-sub_F823E2:
+; TimedEvents_Service -- service the time-stamped event ring 0x60080A
+; Evidence: (0x34D0) bit 5 set -> T_F409E4 and T_F40720 instead; otherwise (ring-4)!=(ring-8) -> TimedEvents_DrainDue, else res 6,(0x34D4).  Called from MainTask_ServiceTimedEvents and MainTask_Loop 0xF820BC/0xF82127.
+; Ring 0x60080A (capacity 0x200, FINDINGS-prom_a-ring-buffers.md) is filled at 0xFEA57C/0xFEA585; why its bytes are time-stamped is TimedEvents_DispatchDueRun's evidence.
+TimedEvents_Service:
 	m_bit 5, MD16, 0x34d0                                ; F823E2  f1 d0 34 cd
 	jr z, .LF823F1                                       ; F823E6  66 09
 	call T_F409E4                                        ; F823E8  1d e4 09 f4
@@ -6215,9 +6031,11 @@ sub_F823E2:
 	m_res 6, MD16, 0x34d4                                ; F823FE  f1 d4 34 b6
 	ret                                                  ; F82402  0e
 .LF82403:
-	calr sub_F82407                                      ; F82403  1e 01 00
+	calr TimedEvents_DrainDue                                      ; F82403  1e 01 00
 	ret                                                  ; F82406  0e
-sub_F82407:
+; TimedEvents_DrainDue -- dispatch due runs of ring 0x60080A until it is empty or the head is not yet due
+; Evidence: only when (0x34D4) bit 6 or (0x96) bit 2 is set; loop `ld WA,(XIX-4) / cp (XIX-8),WA / jr z` -> TimedEvents_DispatchDueRun -> `and IZ,IZ / jr nz`.  Also prom_b directory slot T_F4003C.
+TimedEvents_DrainDue:
 	ld XIX,0x0060080a                                    ; F82407  44 0a 08 60 00
 	m_bit 6, MD16, 0x34d4                                ; F8240C  f1 d4 34 ce
 	jr nz, .LF82417                                      ; F82410  6e 05
@@ -6227,12 +6045,15 @@ sub_F82407:
 	ld wa, (xix-4)                                       ; F82417  9c fc 20
 	m_cp_rm MWD+r4, 0xf8, r0                             ; F8241A  9c f8 f0
 	jr z, .LF82426                                       ; F8241D  66 07
-	calr sub_F82427                                      ; F8241F  1e 05 00
+	calr TimedEvents_DispatchDueRun                                      ; F8241F  1e 05 00
 	and IZ,IZ                                            ; F82422  de c6
 	jr nz, .LF82417                                      ; F82424  6e f1
 .LF82426:
 	ret                                                  ; F82426  0e
-sub_F82427:
+; TimedEvents_DispatchDueRun -- take the next run of same-class, due events off ring 0x60080A and hand it to that class's consumer
+; Evidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_F413BC, 2 -> T_F411BC, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.
+; Out: IZ = bytes consumed.  What the classes are is not established.
+TimedEvents_DispatchDueRun:
 	ld XHL,0x0060080a                                    ; F82427  43 0a 08 60 00
 	ld iy, (xhl-8)                                       ; F8242C  9b f8 25
 	ld ix, (xhl-4)                                       ; F8242F  9b fc 24
@@ -6247,7 +6068,7 @@ sub_F82427:
 	jrl .LF824C8                                         ; F82445  78 80 00
 .LF82448:
 	mx_ld_rm MXB, ra_HL, ra_IY, r1                       ; F82448  c3 07 ec f4 21
-	calr sub_F8252B                                      ; F8244D  1e db 00
+	calr TimedEvents_ClassifyStatus                                      ; F8244D  1e db 00
 	ld C,E                                               ; F82450  cd 8b
 	inc 1,IZ                                             ; F82452  de 61
 	minc1_16 iy, 0x01ff                                  ; F82454  dd 38 ff 01
@@ -6274,7 +6095,7 @@ sub_F82427:
 	bit	7, (xhl+iy)                          ; F82484  f3 07 ec f4 cf
 	jr z, .LF824D6                                       ; F82489  66 4b
 	mx_ld_rm MXB, ra_HL, ra_IY, r1                       ; F8248B  c3 07 ec f4 21
-	calr sub_F8252B                                      ; F82490  1e 98 00
+	calr TimedEvents_ClassifyStatus                                      ; F82490  1e 98 00
 	ld A,E                                               ; F82493  cd 89
 	cp A,C                                               ; F82495  cb f1
 	jr nz, .LF824C4                                      ; F82497  6e 2b
@@ -6288,7 +6109,7 @@ sub_F82427:
 	m_bit 6, MD16, 0x34d4                                ; F824A8  f1 d4 34 ce
 	jr nz, .LF82484                                      ; F824AC  6e d6
 	mx_ld_rm MXB, ra_HL, ra_IY, r0                       ; F824AE  c3 07 ec f4 20
-	calr sub_F82546                                      ; F824B3  1e 90 00
+	calr TimedEvents_IsNotYetDue                                      ; F824B3  1e 90 00
 	jr c, .LF824E2                                       ; F824B6  67 2a
 	inc 1,IZ                                             ; F824B8  de 61
 	minc1_16 iy, 0x01ff                                  ; F824BA  dd 38 ff 01
@@ -6347,7 +6168,9 @@ sub_F82427:
 	m_res 6, MD16, 0x34d4                                ; F82526  f1 d4 34 b6
 .LF8252A:
 	ret                                                  ; F8252A  0e
-sub_F8252B:
+; TimedEvents_ClassifyStatus -- E = class of status byte A: 0x82 -> 3, 0x88 -> 2, 0x9n -> 1, anything else -> 0
+; Evidence: `ld E,3 / cp A,0x82 / jr z`, `xor E,E / cp A,0x88 / ld E,2`, `and A,0xF0 / cp A,0x90 / ld E,1`; called twice by TimedEvents_DispatchDueRun.
+TimedEvents_ClassifyStatus:
 	ld e, 0x03:opc                                          ; F8252B  25 03
 	cp A,0x82                                            ; F8252D  c9 cf 82
 	jr z, .LF82545                                       ; F82530  66 13
@@ -6362,7 +6185,10 @@ sub_F8252B:
 	ld e, 0x01:opc                                          ; F82543  25 01
 .LF82545:
 	ret                                                  ; F82545  0e
-sub_F82546:
+; TimedEvents_IsNotYetDue -- C set when stamp W is less than 0x30 ticks ahead of the tick counter (0x93), modulo 0x60
+; Evidence: W<0x60: W -= (0x93), +0x60 unless the result is >0; then `cp W,0x30`.  W>=0x60 compares as is (not due).  (0x93) is the tick SeqBuf_AppendEvent stamps; 0x60 = 96 is the tick count the INTTR4 comment at 0xF82FDF calls one beat.
+; Called from TimedEvents_DispatchDueRun 0xF824B3.
+TimedEvents_IsNotYetDue:
 	cp W,0x60                                            ; F82546  c8 cf 60
 	jr nc, .LF82553                                      ; F82549  6f 08
 	m_sub_rm MB8, 0x93, r0                               ; F8254B  c0 93 a0
@@ -6371,7 +6197,9 @@ sub_F82546:
 .LF82553:
 	cp W,0x30                                            ; F82553  c8 cf 30
 	ret                                                  ; F82556  0e
-sub_F82557:
+; SeqBuf_FlushStaged -- copy the bytes staged at 0xAE into the sequencer event ring and leave staging mode
+; Evidence: with `ei 6`, for HL=0..(0xAC)-1: E=(0xAE+HL), SeqBuf_PutByte; then res 0,(0xAA) and (0xAC)=0.  SeqBuf_AppendMarker's bit-0-of-(0xAA) path writes to 0xAE+(0xAC).  prom_b directory slot T_F40024, called from 0xFAE9C7 and 0xFCAD6E.
+SeqBuf_FlushStaged:
 	push XIX                                             ; F82557  3c
 	pushw hl                                             ; F82558  2b
 	ld XIX,0x000000ae                                    ; F82559  44 ae 00 00 00
@@ -6381,7 +6209,7 @@ sub_F82557:
 	m_cp_rm MW8, 0xac, r3                                ; F82562  d0 ac f3
 	jr nc, .LF82573                                      ; F82565  6f 0c
 	mx_ld_rm MXB, ra_IX, ra_HL, r5                       ; F82567  c3 07 f0 ec 25
-	calr sub_F825A0                                      ; F8256C  1e 31 00
+	calr SeqBuf_PutByte                                      ; F8256C  1e 31 00
 	inc 1,HL                                             ; F8256F  db 61
 	jr .LF82562                                          ; F82571  68 ef
 .LF82573:
@@ -6394,7 +6222,7 @@ sub_F82557:
 	bit_dd8 0x00, 0xaa                                   ; F8257F  f0 aa c8
 	jr nz, .LF8258A                                      ; F82582  6e 06
 	ld e, 0x81:opc                                          ; F82584  25 81
-	calr sub_F825A0                                      ; F82586  1e 17 00
+	calr SeqBuf_PutByte                                      ; F82586  1e 17 00
 	ret                                                  ; F82589  0e
 .LF8258A:
 	push XIX                                             ; F8258A  3c
@@ -6405,7 +6233,9 @@ sub_F82557:
 	st_dd8w hl, 0xac                                     ; F8259B  f0 ac 53
 	pop XIX                                              ; F8259E  5c
 	ret                                                  ; F8259F  0e
-sub_F825A0:
+; SeqBuf_PutByte -- append byte E to the 512-byte sequencer event ring at 0x600A14
+; In: E.  Evidence: XIX=0x600A14; drops when (XIX-2) (free count, 0x600A12) is 0; else (XIX+HL)=E with HL=(XIX-4) (write index), HL+1 mod 0x200 (minc1_16 0x1FF), free count -1.  Same ring and fields as SeqBuf_AppendMarker.
+SeqBuf_PutByte:
 	push XIX                                             ; F825A0  3c
 	pushw hl                                             ; F825A1  2b
 	pushw wa                                             ; F825A2  28
@@ -6526,14 +6356,20 @@ T_F4001C_Nop:
 	ret                                                  ; F8262E  0e
 Data_F82000_Nop:
 	ret                                                  ; F8262F  0e
-sub_F82630:
-	calr sub_F82832                                          ; F82630  1e ff 01
+; ModuleInit_Phase0Veneer -- directory-callable `calr ModuleInit_RunPhase0 / ret`
+; Evidence: prom_b slot T_F4002C is `jp ModuleInit_Phase0Veneer`.
+ModuleInit_Phase0Veneer:
+	calr ModuleInit_RunPhase0                                          ; F82630  1e ff 01
 	ret                                                  ; F82633  0e
-sub_F82634:
-	calr sub_F82836                                          ; F82634  1e ff 01
+; ModuleInit_Phase1Veneer -- directory-callable `calr ModuleInit_RunPhase1 / ret`
+; Evidence: prom_b slot T_F40030 is `jp ModuleInit_Phase1Veneer`.
+ModuleInit_Phase1Veneer:
+	calr ModuleInit_RunPhase1                                          ; F82634  1e ff 01
 	ret                                                  ; F82637  0e
-sub_F82638:
-	calr sub_F8283A                                          ; F82638  1e ff 01
+; ModuleInit_Phase2Veneer -- directory-callable `calr ModuleInit_RunPhase2 / ret`
+; Evidence: prom_b slot T_F40034 is `jp ModuleInit_Phase2Veneer`; called from prom_a 0xFB3DC0.  The `call T_F413B8 / ret` at 0xF8263C after it is unlabelled.
+ModuleInit_Phase2Veneer:
+	calr ModuleInit_RunPhase2                                          ; F82638  1e ff 01
 	ret                                                  ; F8263B  0e
 	call T_F413B8                                        ; F8263C  1d b8 13 f4
 	ret                                                  ; F82640  0e
@@ -6904,35 +6740,37 @@ RESET__clear_dram_hi:
 ;
 ; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
 ; ==============================================================================
-sub_F827C8:
+; MainTask_Entry -- entry of CPU 1's first kernel task: power-on initialisation, then MainTask_Loop
+; Evidence: EntryPoint_Records[0] is {0x00F4005C, 0x0060E800, 0x8800, 3} and slot T_F4005C is `jp MainTask_Entry` (prom_c's record 0 is MAIN).  Body: INTET10=0x30, INTE45=0x40, INTET54=0x03; T_F40144; PowerFail_VerifySavedBlocks; Variant_SetFromPB0; ModuleInit_RunPhase0; ExtBoard_Identify; ModuleInit_RunPhaseByChecksums; ModuleInit_RunPhase3; Irq_InitLevelsTC23; waits for (0x80)>=0x384; the three power-on chords; Kernel_StartTask(2); `jp MainTask_Loop`.
+MainTask_Entry:
 	ld (0x73:8), 0x30:io                                      ; F827C8  08 73 30
 	ld (0x71:8), 0x40:io                                      ; F827CB  08 71 40
 	ld (0x75:8), 0x03:io                                      ; F827CE  08 75 03
 	call T_F40144                                        ; F827D1  1d 44 01 f4
-	calr sub_F82C80                                          ; F827D5  1e a8 04
+	calr PowerFail_VerifySavedBlocks                                          ; F827D5  1e a8 04
 	calr Variant_SetFromPB0                              ; F827D8  1e a7 00
 	ei 0x00                                              ; F827DB  06 00
-	calr sub_F82832                                      ; F827DD  1e 52 00
+	calr ModuleInit_RunPhase0                                      ; F827DD  1e 52 00
 	calr sub_F82CE8                                          ; F827E0  1e 05 05
 	ei 0x06                                              ; F827E3  06 06
-	calr sub_F828D1                                            ; F827E5  1e e9 00
+	calr PowerOnChord_ClearRamAndReset                                            ; F827E5  1e e9 00
 	ei 0x00                                              ; F827E8  06 00
 	calr ExtBoard_Identify                               ; F827EA  1e a2 00
 	res_dd8 0x04, 0x13                                   ; F827ED  f0 13 b4
-	calr sub_F82CAB                                          ; F827F0  1e b8 04
+	calr ModuleInit_RunPhaseByChecksums                                          ; F827F0  1e b8 04
 	ei 0x00                                              ; F827F3  06 00
 	calr ExtBoard_Identify                               ; F827F5  1e 97 00
 	call T_F40148                                        ; F827F8  1d 48 01 f4
-	calr sub_F8283E                                      ; F827FC  1e 3f 00
-	calr sub_F82870                                      ; F827FF  1e 6e 00
+	calr ModuleInit_RunPhase3                                      ; F827FC  1e 3f 00
+	calr Irq_InitLevelsTC23                                      ; F827FF  1e 6e 00
 	ei 0x00                                              ; F82802  06 00
 .LF82804:
 	m_cp_mi16 MW8, Tick_Count, 0x0384                          ; F82804  d0 80 3f 84 03
 	jr c, .LF82804                                       ; F82809  67 f9
 	res_dd8 0x05, 0x13                                   ; F8280B  f0 13 b5
-	calr sub_F8294C                                          ; F8280E  1e 3b 01
+	calr PowerOnChord_ShowRevisionLeds                                          ; F8280E  1e 3b 01
 	ei 0x00                                              ; F82811  06 00
-	calr sub_F82A04                                          ; F82813  1e ee 01
+	calr PowerOnChord_VersionScreen                                          ; F82813  1e ee 01
 	ld XIX,0x00000097                                    ; F82816  44 97 00 00 00
 	ld A,(XIX)                                           ; F8281B  84 21
 	and A,0x03                                           ; F8281D  c9 cc 03
@@ -6941,17 +6779,25 @@ sub_F827C8:
 	ld a, 0x02:opc                                          ; F82825  21 02
 	call T_Kernel_StartTask                              ; F82827  1d 6c 2d f4
 	set_dd8 0x03, 0x20                                   ; F8282B  f0 20 bb
-	jp sub_F82028                                          ; F8282E  1b 28 20 f8
-sub_F82832:
+	jp MainTask_Loop                                          ; F8282E  1b 28 20 f8
+; ModuleInit_RunPhase0 -- run phase 0 (offset 0x00) of every module in ModuleInitDirectory_F82641
+; Evidence: `ld A,0x00 / jr 0xF82846`, the walker that calls (vector + WA) for each of the 25 modules.  Callers: MainTask_Entry 0xF827DD, ModuleInit_Phase0Veneer.
+ModuleInit_RunPhase0:
 	ld a, 0x00:opc                                          ; F82832  21 00
 	jr .LF82846                                          ; F82834  68 10
-sub_F82836:
+; ModuleInit_RunPhase1 -- run phase 1 (offset 0x04) of every module
+; Evidence: `ld A,0x04 / jr 0xF82846`.  Callers: ModuleInit_RunPhaseByChecksums (both power-fail checksums valid), ModuleInit_Phase1Veneer.
+ModuleInit_RunPhase1:
 	ld a, 0x04:opc                                          ; F82836  21 04
 	jr .LF82846                                          ; F82838  68 0c
-sub_F8283A:
+; ModuleInit_RunPhase2 -- run phase 2 (offset 0x08) of every module
+; Evidence: `ld A,0x08 / jr 0xF82846`.  Callers: ModuleInit_RunPhaseByChecksums (a checksum failed), ModuleInit_Phase2Veneer.
+ModuleInit_RunPhase2:
 	ld a, 0x08:opc                                          ; F8283A  21 08
 	jr .LF82846                                          ; F8283C  68 08
-sub_F8283E:
+; ModuleInit_RunPhase3 -- run phase 3 (offset 0x0C) of every module
+; Evidence: `ld A,0x0C / jr 0xF82846`; caller MainTask_Entry 0xF827FC.  This label's span also holds the unlabelled phase-4 entry 0xF82842 (`ld A,0x10`) and the walker 0xF82846-0xF8286F.
+ModuleInit_RunPhase3:
 	ld a, 0x0c:opc                                          ; F8283E  21 0c
 	jr .LF82846                                          ; F82840  68 04
 	ld a, 0x10:opc                                          ; F82842  21 10
@@ -6976,7 +6822,9 @@ sub_F8283E:
 	jr .LF8284D                                          ; F8286D  68 de
 .LF8286F:
 	ret                                                  ; F8286F  0e
-sub_F82870:
+; Irq_InitLevelsTC23 -- write 0xDD to INTETC23
+; Evidence: `ld (0x7A),0xDD / ret`; 0x7A is INTETC23 in include/tmp95c061_sfr.inc.  One caller, MainTask_Entry 0xF827FF.  The DSP_ChannelRegs_Write8 call at 0xF82874 after the `ret` is a separate unlabelled fragment.
+Irq_InitLevelsTC23:
 	ld (0x7a:8), 0xdd:io                                      ; F82870  08 7a dd
 	ret                                                  ; F82873  0e
 	ld XIY,Link_HandshakeTimeouts                                    ; F82874  45 db 07 60 00
@@ -7108,7 +6956,10 @@ ExtBoard_Identify:
 ; ---------------------------------------------------------------------
 ExtBoardMagic_Wsa1Extbd:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x45, 0x58, 0x54, 0x42, 0x44          ; F828C7
-sub_F828D1:
+; PowerOnChord_ClearRamAndReset -- unless (0x7FCA)=0x5AA5, on the FACTORY CLEAR chord zero both RAMs and restart
+; Evidence: returns at once when (0x7FCA)=0x5AA5; chord: variant 1 (0x2B38)=0x07, variant 2 (0x2B38)&3=3 (FINDINGS-prom_a-boot-and-version-screen.md �4).  On it: ei 7, zero 0x1FE0 longs from 0x80 and 0x20000 longs from 0x600000, (0x7FD2)=(0x7FD4)=0, (0x7FC7),0x18, (0x7FCA)=0x5AA5, (0x7FD1)=0, (0x97) bits, `jrl RESET`.  Without it: (0x7FC7) bit 4 cleared, (0x97),0x20.
+; Caller: MainTask_Entry 0xF827E5.
+PowerOnChord_ClearRamAndReset:
 	m_cp_mi16 MW16, 0x7fca, 0x5aa5                       ; F828D1  d1 ca 7f 3f a5 5a
 	jr z, .LF82940                                       ; F828D7  66 67
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F828D9  c0 c4 3f 01
@@ -7151,23 +7002,10 @@ sub_F828D1:
 	m_and_mi8 MB16, 0x7fc7, 0xef                         ; F82941  c1 c7 7f 3c ef
 	m_or_mi8 MB8, 0x97, 0x20                             ; F82946  c0 97 3e 20
 	jr .LF82940                                          ; F8294A  68 f4
-; ---------------------------------------------------------------------
-; sub_F8294C -- loads a pointer straight at ROM TEXT.  NOT NAMED.
-;
-; Called from: prom_a sub_F827C8 (`calr`) at 0xF8280E
-;
-;     0xF82974 loads 0xFFFFF0, where the ROM reads:
-;        "wsaa_822"
-; Evidence: the immediate at the cited instruction, and the bytes
-;          at that address in original_ROMs/, read as printable
-;          ASCII until the first non-printable byte.
-; NOT NAMED because the text says what the routine READS, not what it DOES
-;          with it; a name taken from it would claim a role nothing here
-;          establishes. The string is recorded so the next round starts
-;          from evidence instead of a search.
-; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
-; ---------------------------------------------------------------------
-sub_F8294C:
+; PowerOnChord_ShowRevisionLeds -- on its chord, show the prom_a and prom_c revision nibbles on panel LEDs, for ever
+; Evidence: chord variant 1 (0x2B32)&7=7, variant 2 (0x2B30)&0x70=0x70; reads 11 bytes of remote 0x00FFFFF0 (0xF82974 loads BUILD_TAG, ROM text 'wsaa_822'; remotely it is prom_c's tag) into 0x2640 via T_Link_SendCommandE2 + T_Link_WaitBlockDone, (0x2648)=0xFF on failure; then loops: RomRevisions_ShowOnLeds, T_SC1_Entry_F40F18_Ret, wait 50 ticks of (0x80).  Never returns.
+; Caller: MainTask_Entry 0xF8280E.  The LCD version screen is the other chord, PowerOnChord_VersionScreen.
+PowerOnChord_ShowRevisionLeds:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F8294C  c0 c4 3f 01
 	jr nz, .LF8295F                                      ; F82950  6e 0d
 	ld a, (Panel_SwitchShadow+0x12:16)                                   ; F82952  c1 32 2b 21
@@ -7193,7 +7031,7 @@ sub_F8294C:
 	jr z, .LF8298E                                       ; F82987  66 05
 	ld (0x2648:16), 0xff                                 ; F82989  f1 48 26 00 ff
 .LF8298E:
-	calr sub_F829A6                                      ; F8298E  1e 15 00
+	calr RomRevisions_ShowOnLeds                                      ; F8298E  1e 15 00
 	call T_SC1_Entry_F40F18_Ret                          ; F82991  1d 18 0f f4
 	m_ld_rm MW8, Tick_Count, r2                                ; F82995  d0 80 22
 .LF82998:
@@ -7204,7 +7042,9 @@ sub_F8294C:
 	jr .LF8298E                                          ; F829A3  68 e9
 .LF829A5:
 	ret                                                  ; F829A5  0e
-sub_F829A6:
+; RomRevisions_ShowOnLeds -- send the two ROM revision nibbles to two panel LED wires
+; Evidence: A = LedNibblePatterns_F829F4[(0xFFFFF8)&0x0F] (prom_a's own tag) -> T_F40678 with W=0, then [(0x2648)&0x0F] (the tag read from remote 0xFFFFF0) -> W=1; on variant 2 ((0xC4)!=1) A is `srl 4` first; ends with T_SC1_TxFlush.
+RomRevisions_ShowOnLeds:
 	ld c, (BUILD_TAG+8:24)                                 ; F829A6  c2 f8 ff ff 23
 	and C,0x0f                                           ; F829AB  cb cc 0f
 	ld XIY,LedNibblePatterns_F829F4                      ; F829AE  45 f4 29 f8 00
@@ -7263,7 +7103,9 @@ sub_F829A6:
 ; ---------------------------------------------------------------------
 LedNibblePatterns_F829F4:
 	.byte 0x80, 0xc0, 0xa0, 0xe0, 0x90, 0xd0, 0xb0, 0xf0, 0x88, 0xc8, 0xa8, 0xe8, 0x98, 0xd8, 0xb8, 0xf8  ; F829F4
-sub_F82A04:
+; PowerOnChord_VersionScreen -- on its chord, show the ROM VERSION screen
+; Evidence: variant 1 (0x2B3A)&0xE0=0xE0, variant 2 (0x2B33)&0xE0=0xE0 -> `calr VersionScreen_Show`; caller MainTask_Entry 0xF82813.
+PowerOnChord_VersionScreen:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; F82A04  c0 c4 3f 01
 	jr nz, .LF82A18                                      ; F82A08  6e 0e
 	ld a, (Panel_SwitchShadow+0x1a:16)                                   ; F82A0A  c1 3a 2b 21
@@ -7452,29 +7294,34 @@ VersionScreen_Glyphs:
 	.byte 0x40, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x71, 0xc7, 0x8c, 0xdb, 0xf6, 0x63, 0xc1, 0x00, 0xff  ; F82C50
 	.byte 0xff, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01  ; F82C60
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0xff, 0x01, 0xc1, 0xc7, 0xf9, 0xe1, 0xc1, 0x81, 0x81, 0x01, 0xff  ; F82C70
-sub_F82C80:
+; PowerFail_VerifySavedBlocks -- check the two 512-byte blocks the power-fail NMI check-summed; result in (0x7FD1)
+; Evidence: (0x7FD1)=0; PowerFail_VerifyChecksum512 on XIY=0x7620/XIX=0x7FD2 sets bit 0 when it matches, on 0x617800/0x7FD4 bit 1 -- the same two pairs NMI_PowerFail_SaveAndHalt hands PowerFail_Checksum512 (0xF83086/0xF83093).
+; Caller: MainTask_Entry 0xF827D5; ModuleInit_RunPhaseByChecksums reads the bits.
+PowerFail_VerifySavedBlocks:
 	ld XHL,0x00007fd1                                    ; F82C80  43 d1 7f 00 00
 	ld (XHL),0x00                                        ; F82C85  b3 00 00
 	ld XIY,0x00007620                                    ; F82C88  45 20 76 00 00
 	ld XIX,0x00007fd2                                    ; F82C8D  44 d2 7f 00 00
-	calr sub_F82CD3                                      ; F82C92  1e 3e 00
+	calr PowerFail_VerifyChecksum512                                      ; F82C92  1e 3e 00
 	jr c, .LF82C99                                       ; F82C95  67 02
 	set 0,(XHL)                                          ; F82C97  b3 b8
 .LF82C99:
 	ld XIY,0x00617800                                    ; F82C99  45 00 78 61 00
 	ld XIX,0x00007fd4                                    ; F82C9E  44 d4 7f 00 00
-	calr sub_F82CD3                                      ; F82CA3  1e 2d 00
+	calr PowerFail_VerifyChecksum512                                      ; F82CA3  1e 2d 00
 	jr c, .LF82CAA                                       ; F82CA6  67 02
 	set 1,(XHL)                                          ; F82CA8  b3 b9
 .LF82CAA:
 	ret                                                  ; F82CAA  0e
-sub_F82CAB:
+; ModuleInit_RunPhaseByChecksums -- run module phase 1 when both saved blocks verified, else phase 2
+; Evidence: (0x7FD1) bit 0 and bit 1 set -> ModuleInit_RunPhase1; bit 0 clear -> (0x97)&0x23|0x01, bit 1 clear -> (0x97)&0x37|0x14, then ModuleInit_RunPhase2.  Caller MainTask_Entry 0xF827F0.
+ModuleInit_RunPhaseByChecksums:
 	ld XHL,0x00007fd1                                    ; F82CAB  43 d1 7f 00 00
 	bit 0,(XHL)                                          ; F82CB0  b3 c8
 	jr z, .LF82CBD                                       ; F82CB2  66 09
 	bit 1,(XHL)                                          ; F82CB4  b3 c9
 	jr z, .LF82CC7                                       ; F82CB6  66 0f
-	calr sub_F82836                                          ; F82CB8  1e 7b fb
+	calr ModuleInit_RunPhase1                                          ; F82CB8  1e 7b fb
 	jr .LF82CD2                                          ; F82CBB  68 15
 .LF82CBD:
 	m_and_mi8 MB8, 0x97, 0x23                            ; F82CBD  c0 97 3c 23
@@ -7484,10 +7331,12 @@ sub_F82CAB:
 	m_and_mi8 MB8, 0x97, 0x37                            ; F82CC7  c0 97 3c 37
 	m_or_mi8 MB8, 0x97, 0x14                             ; F82CCB  c0 97 3e 14
 .LF82CCF:
-	calr sub_F8283A                                          ; F82CCF  1e 68 fb
+	calr ModuleInit_RunPhase2                                          ; F82CCF  1e 68 fb
 .LF82CD2:
 	ret                                                  ; F82CD2  0e
-sub_F82CD3:
+; PowerFail_VerifyChecksum512 -- C clear when NOT(sum of 256 words at XIY) equals the word at (XIX)
+; Evidence: PowerFail_Checksum512's loop (`ld BC,0x100 / add WA,(XIY+) / djnz / cpl WA`) followed by `cp (XIX),WA` and scf/rcf instead of the store.  Called twice by PowerFail_VerifySavedBlocks.
+PowerFail_VerifyChecksum512:
 	ldw bc, 0x0100                                       ; F82CD3  31 00 01
 	xor WA,WA                                            ; F82CD6  d8 d0
 .LF82CD8:
@@ -10777,7 +10626,7 @@ INTT3_KernelTick:
 ;               2. Kernel_YieldRotate and Kernel_RotateQueue address a head as
 ;                  0x032C + A*4, and A = 1, 2, 3 gives exactly 0x0330, 0x0334,
 ;                  0x0338 -- the same three;
-;               3. sub_F85EC2 (0xF85EC2, below) calls Kernel_YieldRotate with
+;               3. SoftTimer_RotateLevel3 (0xF85EC2, below) calls Kernel_YieldRotate with
 ;                  A = 3, so the small integers really are used as that index;
 ;               4. all SEVEN +10 fields across prom_a and prom_c lie in 1..3 and
 ;                  never 0 or 4.
@@ -10827,26 +10676,10 @@ EntryPoint_Records:
 	.byte 0x00, 0x01, 0x00, 0x01			; F85EBA
 	.byte 0x00, 0x00, 0x00, 0x00			; F85EBE
 
-; ---------------------------------------------------------------------
-; sub_F85EC2 -- calls the 0xF85877 kernel primitive with A = 3
-;
-; Called from: not established.  The bytes 0xF856E4-0xF856E7 are the LE32
-;          0x00F85EC2, but the disassembly around them does not frame those four
-;          bytes as a pointer (0xF856DE is `jr T,0xF856E8`, which jumps over
-;          them), so that is a coincidence candidate, not a caller.
-; Inputs:  none.  Outputs: whatever 0xF85877 does for selector 3.
-; Evidence: NONE for a semantic name -- hence sub_.  What is known: 0xF85877 is
-;          reached through prom_b thunk 0xF42D74, takes a small selector in A,
-;          walks a doubly-linked list at 0x032C + A*4, and when that list is
-;          empty jumps to Kernel_ResumeTask (0xF85763, converted above) rather
-;          than returning -- i.e. it is a blocking kernel primitive.  Naming it,
-;          and therefore naming this wrapper, needs that routine converted.
-; Unknown:  what selector 3 selects; who calls this.
-;          It is written out rather than left inside the .incbin only because it
-;          is the six bytes between the record table and the task below, and
-;          hiding a boundary there would cost more than it saves.
-; ---------------------------------------------------------------------
-sub_F85EC2:
+; SoftTimer_RotateLevel3 -- the boot software timer's callback: round-robin ready queue 3
+; Evidence: its address is the +4 callback of SoftTimer_Request_Boot (kernel.s 0xF856E4, KERNEL_BOOT_TIMER_CALLBACK = 0x00F85EC2 in kernel/kernel_maincpu.inc), which SoftTimer_Register installs in software-timer slot 1; body `ld A,3 / calr Kernel_YieldRotate` (0xF85877) / `ret`.
+; prom_c's same-position callback is SoftTimer_RotateLevel2 with A=2; as there, the `ret` is unreachable because Kernel_YieldRotate leaves through Kernel_Dispatch or Kernel_ResumeTask.
+SoftTimer_RotateLevel3:
 	ld a, 0x03:opc                                   ; F85EC2  21 03
 	calr (0xF85877 - 0xF85EC7)                    ; F85EC4  1e b0 f9   the blocking primitive
 	ret                                           ; F85EC7  0e
@@ -18420,8 +18253,10 @@ Ctrl_SpanTable:
 ; decoded ONE object in it.
 ; ==============================================================================
 
-sub_F8A000:
-	jp sub_F8A000_Join                                        ; F8A000  1b 18 a0 f8
+; PanelWire_EntryThunks -- the panel wire-to-group module's six-slot phase vector
+; Evidence: ModuleInitDirectory_F82641[3] = T_F40610, whose word is .long 0xF8A000; slot 0 (phase 0) is `jp PanelWire_ModuleReset`, slots 1-5 are `ret` + 3 pad bytes.  Same layout as MidiIn_EntryThunks.  Not a routine.
+PanelWire_EntryThunks:
+	jp PanelWire_EntryThunks_Join                                        ; F8A000  1b 18 a0 f8
 	ret                                                  ; F8A004  0e
 	nop                                                  ; F8A005  00
 	nop                                                  ; F8A006  00
@@ -18442,16 +18277,20 @@ sub_F8A000:
 	nop                                                  ; F8A015  00
 	nop                                                  ; F8A016  00
 	nop                                                  ; F8A017  00
-sub_F8A000_Join:
+PanelWire_EntryThunks_Join:
 	ld (0x2000:16), 0xff                                 ; F8A018  f1 00 20 00 ff
 	ld (0x219a:16), 0x00                                 ; F8A01D  f1 9a 21 00 00
 	ret                                                  ; F8A022  0e
-sub_F8A023:
-	calr sub_F8A028                                      ; F8A023  1e 02 00
+; PanelWire_Service -- the panel wire module's per-loop entry
+; Evidence: prom_b slot T_F40614 is `jp PanelWire_Service`; MainTask_Loop calls it at 0xF8204C beside T_AnalogScan_All and T_SC1_Service; body `calr PanelWire_ThrottledPoll / ret`.
+PanelWire_Service:
+	calr PanelWire_ThrottledPoll                                      ; F8A023  1e 02 00
 	ret                                                  ; F8A026  0e
 T_F40618_Nop:
 	ret                                                  ; F8A027  0e
-sub_F8A028:
+; PanelWire_ThrottledPoll -- run PanelWire_PollProducers on every other call, or at once after 16 idle ticks
+; Evidence: inc (0x219B); inc (0x2196), phase=(0x2196)&3, forced to 0 when (0x80)-(0x2197)>=0x10; Dispatch_F8A05F[phase] = PollProducers for 0/2, the `ret` at 0xF8A05E for 1/3; (0x2197) is the (0x80) stamp PollProducers stores.
+PanelWire_ThrottledPoll:
 	ld XIY,0x0000219b                                    ; F8A028  45 9b 21 00 00
 	incm8 0x01, (xiy)                                    ; F8A02D  85 61
 	ld XIY,0x00002196                                    ; F8A02F  45 96 21 00 00
@@ -18486,18 +18325,20 @@ sub_F8A028:
 ; ---------------------------------------------------------------------
 
 Dispatch_F8A05F:
-	.long sub_F8A070                                 ; F8A05F  [  0]
+	.long PanelWire_PollProducers                                 ; F8A05F  [  0]
 	.long .LF8A05E                                   ; F8A063  [  1]
-	.long sub_F8A070                                 ; F8A067  [  2]
+	.long PanelWire_PollProducers                                 ; F8A067  [  2]
 	.long .LF8A05E                                   ; F8A06B  [  3]
 	ret                                                  ; F8A06F  0e
-sub_F8A070:   ; entry: named by 2 `.long` operands, first at 0xF8A05F
+; PanelWire_PollProducers -- run the three producers of the panel group queue
+; Evidence: (0x2197)=(0x80); unless (0x207A)=0xDB: PanelWireQueue_DrainToGroupQueue, AssignableSwitch_Poll, PanelGroupQueue_AppendFlaggedGroups.  Reached through Dispatch_F8A05F slots 0 and 2.
+PanelWire_PollProducers:   ; entry: named by 2 `.long` operands, first at 0xF8A05F
 	m_ld_rm MW8, Tick_Count, r0                                ; F8A070  d0 80 20
 	ld (0x2197:16), wa                                  ; F8A073  f1 97 21 50
 	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8A077  c1 7a 20 3f db
 	jr z, .LF8A087                                       ; F8A07C  66 09
 	calr PanelWireQueue_DrainToGroupQueue                                      ; F8A07E  1e 07 00
-	calr sub_F8A209                                          ; F8A081  1e 85 01
+	calr AssignableSwitch_Poll                                          ; F8A081  1e 85 01
 	calr PanelGroupQueue_AppendFlaggedGroups                                          ; F8A084  1e 7c 02
 .LF8A087:
 	ret                                                  ; F8A087  0e
@@ -18676,7 +18517,10 @@ PanelWireGroupMap_Variant2:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F8A1D9
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x20, 0x06, 0x07, 0x08, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F8A1E9
 	.byte 0x20, 0x20, 0x20, 0x0e, 0x20, 0x20, 0x20, 0x0f, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; F8A1F9
-sub_F8A209:
+; AssignableSwitch_Poll -- read the two switch inputs on P7 bits 6 and 7 (variant 1 only)
+; Evidence: returns when (0xC4)=2; `ld A,(0x13)` (P7 in include/tmp95c061_sfr.inc); (0x2190)=bit 6, (0x2191)=bit 7, each XORed with bit 0 / bit 1 of (0x7F12); calls AssignableSwitch_PostChanges when either is 1 or word (0x2194) is non-zero.
+; Caller: PanelWire_PollProducers.
+AssignableSwitch_Poll:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8A209  c0 c4 3f 02
 	jr z, .LF8A249                                           ; F8A20D  66 3a
 	ld_sd8b a, 0x13                                      ; F8A20F  c0 13 21
@@ -18701,10 +18545,12 @@ sub_F8A209:
 	and WA,WA                                            ; F8A242  d8 c0
 	jr z, .LF8A249                                           ; F8A244  66 03
 .LF8A246:
-	calr sub_F8A24A                                            ; F8A246  1e 01 00
+	calr AssignableSwitch_PostChanges                                            ; F8A246  1e 01 00
 .LF8A249:
 	ret                                                  ; F8A249  0e
-sub_F8A24A:
+; AssignableSwitch_PostChanges -- post a group event for each of the two P7 switches whose state changed (groups 0x16 and 0x17)
+; Evidence: (0x219C)=0x16, incremented per input; per input it combines new (0x2190+i), old (0x2192+i) and (0x2194+i), and on a change calls PanelGroupQueue_Append with E=(0x219C), or, when (0x219A)>=7, parks the pair in (0x2185+2i) and sets (0x219D+i) bit 0 for the next call.  Groups 0x16/0x17 are what PanelAction_AssignableSwitch handles (v1, mask 01).
+AssignableSwitch_PostChanges:
 	link XIZ,0xffec                                      ; F8A24A  ee 0c ec ff
 	ld XIX,0x00002190                                    ; F8A24E  44 90 21 00 00
 	ld (xiz-4), xix                                      ; F8A253  be fc 64
@@ -18994,10 +18840,10 @@ PanelGroupQueue_Append:
 ;      prom_b's routine directory at 0xF40635.
 ;
 ; ★ THE TWO RUNS EVEN CARRY LABELS AT THE SAME OFFSETS: sub_F8A49D and
-;   sub_F8A4A1 sit at +0x52 and +0x56, exactly where the live run carries
+;   PanelEvent_ShiftThenRunAction_DeadCopy sit at +0x52 and +0x56, exactly where the live run carries
 ;   sub_F8A89D and PanelEvent_ShiftThenRunAction.  They are their dead twins.
 ;   ⚠ The twinning stops at +0x7B: 0xF8A4C6 onward is NOT a copy of 0xF8A8C6
-;   onward, so sub_F8A4A1 shares only its first 37 bytes with the live one and
+;   onward, so PanelEvent_ShiftThenRunAction_DeadCopy shares only its first 37 bytes with the live one and
 ;   is NOT renamed here.
 ;
 ; The likely history is a relocated build in which this copy's operands were
@@ -19030,7 +18876,7 @@ PanelGroupQueue_ExpandToEvents_DeadCopy:
 	ld DE,(XIY)                                          ; F8A479  95 22
 	and D,W                                              ; F8A47B  c8 c4
 	and E,W                                              ; F8A47D  c8 c5
-	calr sub_F8A4A1                                            ; F8A47F  1e 1f 00
+	calr PanelEvent_ShiftThenRunAction_DeadCopy                                            ; F8A47F  1e 1f 00
 	jr .LF8A462                                               ; F8A482  68 de
 .LF8A484:
 	inc 2,XIY                                            ; F8A484  ed 62
@@ -19049,7 +18895,9 @@ sub_F8A49D:
 	nop                                                  ; F8A49E  00
 	nop                                                  ; F8A49F  00
 	ret                                                  ; F8A4A0  0e
-sub_F8A4A1:
+; PanelEvent_ShiftThenRunAction_DeadCopy -- an older, unreachable copy of PanelEvent_ShiftThenRunAction
+; Evidence: inside 0xF8A44B-0xF8A7FF, which nothing outside names (PanelGroupQueue_ExpandToEvents_DeadCopy header, check C4).  Byte diff against 0xF8A8A1 over 111 bytes: the first 37 equal, 65 positions differ; the shift/drop logic is the same and the action lookup uses the single table 0xF8AF9F with no (0xC4) select, then `jp (XBC)` or falls to PanelEvent_CommitValue_DeadCopy.
+PanelEvent_ShiftThenRunAction_DeadCopy:
 	ld a, (xhl-1)                                        ; F8A4A1  8b ff 21
 	inc 1,XHL                                            ; F8A4A4  eb 61
 	cp a, 0x00:i3                                          ; F8A4A6  c9 d8
@@ -19090,17 +18938,21 @@ sub_F8A4A1:
 .LF8A4F3:
 	popw hl                                              ; F8A4F3  4b
 	pop XIY                                              ; F8A4F4  5d
-	jr sub_F8A500                                              ; F8A4F5  68 09
+	jr PanelEvent_CommitValue_DeadCopy                                              ; F8A4F5  68 09
 .LF8A4F7:
 	mx_ld_rm MXL, ra_IY, ra_HL, r1                       ; F8A4F7  e3 07 f4 ec 21
 	popw hl                                              ; F8A4FC  4b
 	pop XIY                                              ; F8A4FD  5d
 	jp (xbc)                                             ; F8A4FE  b1 d8
-sub_F8A500:
+; PanelEvent_CommitValue_DeadCopy -- dead twin of PanelEvent_CommitValue
+; Evidence: f5 f1 52 0e (`ld (XIX+),DE / ret`) = the 4 bytes at 0xF8A90B; every caller is inside the unreachable 0xF8A44B-0xF8A7FF region.
+PanelEvent_CommitValue_DeadCopy:
 	ld (xix+), de                                     ; F8A500  f5 f1 52
 .LF8A503:
 	ret                                                  ; F8A503  0e
-sub_F8A504:
+; PanelEvent_Drop_DeadCopy -- dead twin of PanelEvent_Drop
+; Evidence: ec 6a 68 fb (`dec 2,XIX / jr` to the `ret`) = the 4 bytes at 0xF8A90F; callers are inside the unreachable region.
+PanelEvent_Drop_DeadCopy:
 	dec 2,XIX                                            ; F8A504  ec 6a
 	jr .LF8A503                                                ; F8A506  68 fb
 ; ---------------------------------------------------------------------
@@ -19238,9 +19090,9 @@ BitMask32ByIndex_DeadCopy:
 	.long 0x80000000  ; F8A609  [32]
 	cp e, 0x00:i3                                          ; F8A60D  cd d8
 	jr z, .LF8A615                                           ; F8A60F  66 04
-	jp sub_F8A500                                        ; F8A611  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A611  1b 00 a5 f8
 .LF8A615:
-	jp sub_F8A504                                        ; F8A615  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A615  1b 04 a5 f8
 	cp e, 0x00:i3                                          ; F8A619  cd d8
 	jr z, .LF8A648                                           ; F8A61B  66 2b
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A61D  1e e8 fe
@@ -19257,18 +19109,18 @@ BitMask32ByIndex_DeadCopy:
 	jr z, .LF8A644                                           ; F8A63E  66 04
 	ld (xix-1), 0x1a                                     ; F8A640  bc ff 00 1a
 .LF8A644:
-	jp sub_F8A500                                        ; F8A644  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A644  1b 00 a5 f8
 .LF8A648:
-	jp sub_F8A504                                        ; F8A648  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A648  1b 04 a5 f8
 	cp e, 0x00:i3                                          ; F8A64C  cd d8
 	jr z, .LF8A662                                           ; F8A64E  66 12
 	ldw de, 0x7f40                                       ; F8A650  32 40 7f
-	calr sub_F8A500                                          ; F8A653  1e aa fe
+	calr PanelEvent_CommitValue_DeadCopy                                          ; F8A653  1e aa fe
 	ldw (xix+), 0x00b9                            ; F8A656  f5 f1 02 b9 00
 	ldw de, 0x7f40                                       ; F8A65B  32 40 7f
-	jp sub_F8A500                                        ; F8A65E  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A65E  1b 00 a5 f8
 .LF8A662:
-	jp sub_F8A504                                        ; F8A662  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A662  1b 04 a5 f8
 	m_cp_mi8 MB16, 0x2806, 0x00                          ; F8A666  c1 06 28 3f 00
 	jr nz, .LF8A682                                          ; F8A66B  6e 15
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A66D  1e 98 fe
@@ -19277,14 +19129,14 @@ BitMask32ByIndex_DeadCopy:
 	add XDE,PanelOrdinalToEventValue_A_DeadCopy                       ; F8A674  ea c8 86 a6 f8 00
 	ld E,(XDE)                                           ; F8A67A  82 25
 	ld d, 0xff:opc                                          ; F8A67C  24 ff
-	jp sub_F8A500                                        ; F8A67E  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A67E  1b 00 a5 f8
 .LF8A682:
-	jp sub_F8A504                                        ; F8A682  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A682  1b 04 a5 f8
 ; ---------------------------------------------------------------------
 ; PanelOrdinalToEventValue_A_DeadCopy -- 9 bytes, identical to
 ;          PanelOrdinalToEventValue_A (0xF8AB39) (check C5).
 ; Read by: the unlabelled handler at 0xF8A666 -- `add XDE,<this> / ld E,(XDE)`
-;          at 0xF8A674, then `ld D,0xFF / jp sub_F8A500`, the dead module's
+;          at 0xF8A674, then `ld D,0xFF / jp PanelEvent_CommitValue_DeadCopy`, the dead module's
 ;          `ld (XIX+),DE`.  It is an OLDER form of the live handler 0xF8AB08:
 ;          it lacks the value-3 / (0x3614) bit-0 case.  No pool record names
 ;          0xF8A666 (check C1).
@@ -19304,14 +19156,14 @@ PanelOrdinalToEventValue_A_DeadCopy:
 	add XDE,PanelOrdinalToEventValue_B_DeadCopy                       ; F8A69D  ea c8 af a6 f8 00
 	ld E,(XDE)                                           ; F8A6A3  82 25
 	ld d, 0xff:opc                                          ; F8A6A5  24 ff
-	jp sub_F8A500                                        ; F8A6A7  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A6A7  1b 00 a5 f8
 .LF8A6AB:
-	jp sub_F8A504                                        ; F8A6AB  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A6AB  1b 04 a5 f8
 ; ---------------------------------------------------------------------
 ; PanelOrdinalToEventValue_B_DeadCopy -- 9 bytes, identical to
 ;          PanelOrdinalToEventValue_B (0xF8AB67) (check C5).
 ; Read by: the unlabelled handler at 0xF8A68F -- `add XDE,<this> / ld E,(XDE)`
-;          at 0xF8A69D, then `ld D,0xFF / jp sub_F8A500`.  An OLDER form of
+;          at 0xF8A69D, then `ld D,0xFF / jp PanelEvent_CommitValue_DeadCopy`.  An OLDER form of
 ;          the live handler 0xF8AB42, which also clears bit 0 of (0x3614).
 ;          No pool record names 0xF8A68F (check C1).
 ; COUNT 9 = ordinals 0..8, as its live twin.
@@ -19368,9 +19220,9 @@ sub_F8A6F3:
 	ld w, (0x216a:16)                                   ; F8A718  c1 6a 21 20
 	jr .LF8A6D4                                               ; F8A71C  68 b6
 .LF8A71E:
-	jp sub_F8A500                                        ; F8A71E  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A71E  1b 00 a5 f8
 .LF8A722:
-	jp sub_F8A504                                        ; F8A722  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A722  1b 04 a5 f8
 	cp e, 0x00:i3                                          ; F8A726  cd d8
 	jrl z, .LF8A7D7                                          ; F8A728  76 ac 00
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A72B  1e da fd
@@ -19450,11 +19302,11 @@ sub_F8A6F3:
 .LF8A7D1:
 	ld E,A                                               ; F8A7D1  c9 8d
 .LF8A7D3:
-	jp sub_F8A500                                        ; F8A7D3  1b 00 a5 f8
+	jp PanelEvent_CommitValue_DeadCopy                                        ; F8A7D3  1b 00 a5 f8
 .LF8A7D7:
-	jp sub_F8A504                                        ; F8A7D7  1b 04 a5 f8
+	jp PanelEvent_Drop_DeadCopy                                        ; F8A7D7  1b 04 a5 f8
 	m_bit 1, MD16, UI_RequestBits                                ; F8A7DB  f1 75 20 c9
-	jr nz, sub_F8A81D                                          ; F8A7DF  6e 3c
+	jr nz, PanelEvent_Service                                          ; F8A7DF  6e 3c
 	cp e, 0x00:i3                                          ; F8A7E1  cd d8
 	jr z, 0x34                                           ; F8A7E3  66 34
 	calr LowestSetBitIndex1Based_Copy                                          ; F8A7E5  1e 20 fd
@@ -19494,7 +19346,9 @@ sub_F8A6F3:
 sub_F8A6F3_Join:
 	call T_AsciiField_Clear                              ; F8A818  1d f8 32 f4
 	ret                                                  ; F8A81C  0e
-sub_F8A81D:
+; PanelEvent_Service -- expand the panel group queue into UI events, then post-process the event list
+; Evidence: prom_b slot T_F40634 is `jp PanelEvent_Service`, called from MainTask_Loop 0xF820F1; body `calr PanelGroupQueue_ExpandToEvents / calr sub_F8B2C4 / ret` (sub_F8B2C4 walks the 0x2030 list, class 0x20 -> Var2250_AcceptList check, class 0 -> sub_F8B307).
+PanelEvent_Service:
 	calr PanelGroupQueue_ExpandToEvents                                            ; F8A81D  1e 04 00
 	calr sub_F8B2C4                                          ; F8A820  1e a1 0a
 	ret                                                  ; F8A823  0e
@@ -19503,7 +19357,7 @@ sub_F8A81D:
 ; UI events in the fixed list at RAM 0x2030.  ★★ THIS IS THE ROUTINE THAT
 ; READS THE LAYER-2 TABLES.
 ;
-; Called from: sub_F8A81D (`calr` at 0xF8A81D), which prom_b's routine
+; Called from: PanelEvent_Service (`calr` at 0xF8A81D), which prom_b's routine
 ;          directory publishes as slot 0xF40634.  No 24-bit reference to
 ;          0xF8A824 itself exists in either of CPU 1's ROMs.
 ; Body:    XIY = 0x2000, XIX = 0x2030.  Per queue record it reads the GROUP
@@ -19657,17 +19511,21 @@ PanelEvent_ShiftThenRunAction:
 .LF8A8FE:
 	popw hl                                              ; F8A8FE  4b
 	pop XIY                                              ; F8A8FF  5d
-	jr sub_F8A90B                                              ; F8A900  68 09
+	jr PanelEvent_CommitValue                                              ; F8A900  68 09
 .LF8A902:
 	mx_ld_rm MXL, ra_IY, ra_HL, r1                       ; F8A902  e3 07 f4 ec 21
 	popw hl                                              ; F8A907  4b
 	pop XIY                                              ; F8A908  5d
 	jp (xbc)                                             ; F8A909  b1 d8
-sub_F8A90B:
+; PanelEvent_CommitValue -- commit the (D,E) value pair of the current event: `ld (XIX+),DE / ret`
+; Evidence: PanelEvent_ShiftThenRunAction falls into it when no action record matches (0xF8A900), and the action handlers end with `jp PanelEvent_CommitValue` (20 jump/call sites, e.g. PanelAction_AssignableController, PanelAction_Keypad_V2); PanelEvent_ShiftThenRunAction's header calls this the commit.
+PanelEvent_CommitValue:
 	ld (xix+), de                                     ; F8A90B  f5 f1 52
 .LF8A90E:
 	ret                                                  ; F8A90E  0e
-sub_F8A90F:
+; PanelEvent_Drop -- drop the current event: `dec 2,XIX`, then return
+; Evidence: backs XIX over the class/code pair PanelGroupQueue_ExpandToEvents already stored, as the shift-to-zero path at 0xF8A8C3 does; action handlers end with `jp PanelEvent_Drop` to discard (15 sites).
+PanelEvent_Drop:
 	dec 2,XIX                                            ; F8A90F  ec 6a
 	jr .LF8A90E                                                ; F8A911  68 fb
 ; ---------------------------------------------------------------------
@@ -19818,10 +19676,13 @@ BitMask32ByIndex:
 	.long 0x80000000                                           ; F8AA14  [32..32]
 	cp e, 0x00:i3                                          ; F8AA18  cd d8
 	jr z, .LF8AA20                                           ; F8AA1A  66 04
-	jp sub_F8A90B                                        ; F8AA1C  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AA1C  1b 0b a9 f8
 .LF8AA20:
-	jp sub_F8A90F                                        ; F8AA20  1b 0f a9 f8
-sub_F8AA24:   ; entry: PanelGroupActionListPool
+	jp PanelEvent_Drop                                        ; F8AA20  1b 0f a9 f8
+; PanelAction_LowestBitOneHot -- action handler of v1 group 0x08, mask 0x3F: keep only the lowest set bit of the value
+; Evidence: PanelGroupActionListPool record 0xF8B95C ({0x08,0x3F} -> 0xF8AA24).  E=0 -> PanelEvent_Drop; else E=IndexToBitMask8(LowestSetBitIndex1Based(E)), D=0x3F; when bit 0 of byte +0x18 of RecordFieldPtrs_RAM76A2_Plus20[(0x2250)] is set, the stored code becomes 0x1A (`ld (XIX-1),0x1A`); then PanelEvent_CommitValue.
+; Which panel control group 0x08 is, and what code 0x1A means, are not established.
+PanelAction_LowestBitOneHot:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AA24  cd d8
 	jr z, .LF8AA53                                           ; F8AA26  66 2b
 	calr LowestSetBitIndex1Based                                          ; F8AA28  1e e8 fe
@@ -19838,9 +19699,9 @@ sub_F8AA24:   ; entry: PanelGroupActionListPool
 	jr z, .LF8AA4F                                           ; F8AA49  66 04
 	ld (xix-1), 0x1a                                     ; F8AA4B  bc ff 00 1a
 .LF8AA4F:
-	jp sub_F8A90B                                        ; F8AA4F  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AA4F  1b 0b a9 f8
 .LF8AA53:
-	jp sub_F8A90F                                        ; F8AA53  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AA53  1b 0f a9 f8
 sub_F8AA57:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8AA57  cd d8
 	jr z, .LF8AAA8                                           ; F8AA59  66 4d
@@ -19856,13 +19717,13 @@ sub_F8AA57:   ; entry: PanelGroupActionListPool
 	pop XIX                                              ; F8AA74  5c
 	ld (xix-2), a                                        ; F8AA75  bc fe 41
 	ldw de, 0x7f40                                       ; F8AA78  32 40 7f
-	calr sub_F8A90B                                          ; F8AA7B  1e 8d fe
+	calr PanelEvent_CommitValue                                          ; F8AA7B  1e 8d fe
 .LF8AA7E:
 	ld a, 0x80:opc                                          ; F8AA7E  21 80
 	cp (0x600001:24), a                               ; F8AA80  c2 01 00 60 f9
 	jr z, .LF8AA90                                           ; F8AA85  66 09
 	ld (0x600001:24), a                                 ; F8AA87  f2 01 00 60 41
-	jp sub_F8A90F                                        ; F8AA8C  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AA8C  1b 0f a9 f8
 .LF8AA90:
 	push XIX                                             ; F8AA90  3c
 	ld XIX,0x00007f28                                    ; F8AA91  44 28 7f 00 00
@@ -19871,9 +19732,9 @@ sub_F8AA57:   ; entry: PanelGroupActionListPool
 	ld (xix+), a                                    ; F8AA9A  f5 f0 41
 	ld (xix+), 0x00                                  ; F8AA9D  f5 f0 00 00
 	ldw de, 0x7f40                                       ; F8AAA1  32 40 7f
-	jp sub_F8A90B                                        ; F8AAA4  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AAA4  1b 0b a9 f8
 .LF8AAA8:
-	jp sub_F8A90F                                        ; F8AAA8  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AAA8  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelCtrl_AssignToParamNumber -- A = the parameter number for the controller
 ;          assignment byte at (XIX); 0xFE when the byte is none of the ten.
@@ -19970,9 +19831,9 @@ PanelAction_OrdinalToEventValue_A:   ; entry: PanelGroupActionListPool
 .LF8AB2C:
 	m_and_mi8 MB16, 0x3614, 0xfe                         ; F8AB2C  c1 14 36 3c fe
 .LF8AB31:
-	jp sub_F8A90B                                        ; F8AB31  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AB31  1b 0b a9 f8
 .LF8AB35:
-	jp sub_F8A90F                                        ; F8AB35  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AB35  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelOrdinalToEventValue_A -- 9 bytes: switch ordinal -> event VALUE byte.
 ; Read by: the action handler at 0xF8AB08 -- `add XDE,<this> / ld E,(XDE)` at
@@ -19983,7 +19844,7 @@ PanelAction_OrdinalToEventValue_A:   ; entry: PanelGroupActionListPool
 ;          bit and LowestSetBitIndex1Based makes it the ordinal 1..8.
 ;          The handler runs only while (0x2806) is 0, sets D = 0xFF, turns
 ;          a value of 3 into 8 when bit 0 of (0x3614) is set, clears that
-;          bit, and commits DE through sub_F8A90B (`ld (XIX+),DE`).
+;          bit, and commits DE through PanelEvent_CommitValue (`ld (XIX+),DE`).
 ; So every switch in those groups raises the SAME event (A9,20) and this
 ;          table's byte is what tells them apart.
 ; COUNT 9 = ordinals 0..8; the records reach 1..6 (v1) and 1..4 (v2).
@@ -20009,9 +19870,9 @@ PanelAction_OrdinalToEventValue_B:   ; entry: PanelGroupActionListPool
 	ld E,(XDE)                                           ; F8AB56  82 25
 	ld d, 0xff:opc                                          ; F8AB58  24 ff
 	m_and_mi8 MB16, 0x3614, 0xfe                         ; F8AB5A  c1 14 36 3c fe
-	jp sub_F8A90B                                        ; F8AB5F  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AB5F  1b 0b a9 f8
 .LF8AB63:
-	jp sub_F8A90F                                        ; F8AB63  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AB63  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelOrdinalToEventValue_B -- 9 bytes: switch ordinal -> event VALUE byte.
 ; Read by: the action handler at 0xF8AB42 -- `add XDE,<this> / ld E,(XDE)` at
@@ -20020,7 +19881,7 @@ PanelAction_OrdinalToEventValue_B:   ; entry: PanelGroupActionListPool
 ;          records are class 0xA9 code 0x20, shift 0, one bit each (check C2),
 ;          the same event PanelOrdinalToEventValue_A feeds.  The handler
 ;          runs only while (0x2806) is 0, sets D = 0xFF, clears bit 0 of
-;          (0x3614) and commits DE through sub_F8A90B.
+;          (0x3614) and commits DE through PanelEvent_CommitValue.
 ; COUNT 9 = ordinals 0..8; the records reach 1..4.
 ; ⚠ What the values 0x01 0x02 0x17 0x16 denote is not established.
 ; (was framed as code; notes/proma-2026-09-25/reframe_panel_tables.py,
@@ -20085,9 +19946,9 @@ sub_F8AB70:   ; entry: PanelGroupActionListPool
 	ld w, (0x216a:16)                                   ; F8ABEF  c1 6a 21 20
 	jr .LF8ABAB                                               ; F8ABF3  68 b6
 .LF8ABF5:
-	jp sub_F8A90B                                        ; F8ABF5  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8ABF5  1b 0b a9 f8
 .LF8ABF9:
-	jp sub_F8A90F                                        ; F8ABF9  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8ABF9  1b 0f a9 f8
 sub_F8ABFD:   ; entry: PanelGroupActionListPool
 	cp e, 0x00:i3                                          ; F8ABFD  cd d8
 	jrl z, .LF8ACE4                                          ; F8ABFF  76 e2 00
@@ -20188,9 +20049,9 @@ sub_F8ABFD:   ; entry: PanelGroupActionListPool
 .LF8ACDE:
 	ld E,A                                               ; F8ACDE  c9 8d
 .LF8ACE0:
-	jp sub_F8A90B                                        ; F8ACE0  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8ACE0  1b 0b a9 f8
 .LF8ACE4:
-	jp sub_F8A90F                                        ; F8ACE4  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8ACE4  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelAction_SoundSelectOrKeypad_V1 -- action handler of v1 groups 0x01 and
 ;          0x02, mask FF: sixteen switches with two uses.
@@ -20243,9 +20104,9 @@ PanelAction_SoundSelectOrKeypad_V1_Skip:
 	jr z, .LF8AD50                                           ; F8AD46  66 08
 .LF8AD48:
 	ld (0x2169:16), e                                   ; F8AD48  f1 69 21 45
-	jp sub_F8A90B                                        ; F8AD4C  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AD4C  1b 0b a9 f8
 .LF8AD50:
-	jp sub_F8A90F                                        ; F8AD50  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AD50  1b 0f a9 f8
 .LF8AD54:
 	m_ld_mi16 MDD+r4, 0xfe, 0x1ba9                       ; F8AD54  bc fe 02 a9 1b
 	cp e, 0x00:i3                                          ; F8AD59  cd d8
@@ -20294,9 +20155,9 @@ PanelAction_SoundSelectOrKeypad_V1_Skip:
 .LF8ADC2:
 	ldw de, 0x0202                                       ; F8ADC2  32 02 02
 .LF8ADC5:
-	jp sub_F8A90B                                        ; F8ADC5  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8ADC5  1b 0b a9 f8
 .LF8ADC9:
-	jp sub_F8A90F                                        ; F8ADC9  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8ADC9  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelKeypad_OrdinalToKey_V1 -- 17 bytes: keypad switch ordinal -> key.
 ; Read by: `add XDE,<this> / ld E,(XDE)` at 0xF8AD75, in the keypad path
@@ -20315,7 +20176,7 @@ PanelAction_SoundSelectOrKeypad_V1_Skip:
 ;         '-' (0x2D);
 ;   0x0F  stored to (0x2267) -- unless (0x2823) holds 0x20 (a space),
 ;         in which case the event is dropped;
-;   0xFF  above 9 and not special: dropped (`jp sub_F8A90F`).
+;   0xFF  above 9 and not special: dropped (`jp PanelEvent_Drop`).
 ;         So 0x2820-0x2823 is a sign and three ASCII digits.
 ; Here: ordinals 1-9 -> digits 1-9, 10 -> 0, 11 -> 0x80, 12 -> 0x0F,
 ;          0 and 13-16 -> 0xFF.  COUNT 17 = ordinals 0..16.
@@ -20380,9 +20241,9 @@ PanelAction_Keypad_V2:   ; entry: PanelGroupActionListPool
 .LF8AE4C:
 	ldw de, 0x0202                                       ; F8AE4C  32 02 02
 .LF8AE4F:
-	jp sub_F8A90B                                        ; F8AE4F  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AE4F  1b 0b a9 f8
 .LF8AE53:
-	jp sub_F8A90F                                        ; F8AE53  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8AE53  1b 0f a9 f8
 ; ---------------------------------------------------------------------
 ; PanelKeypad_OrdinalToKey_V2 -- 17 bytes: keypad switch ordinal -> key.
 ; Read by: `add XDE,<this> / ld E,(XDE)` at 0xF8ADFF in the action handler
@@ -20444,7 +20305,7 @@ sub_F8AE68:   ; entry: PanelGroupActionListPool
 	and	(0x2252:16), xde                     ; F8AED0  e1 52 22 ca
 	ldw de, 0x0100                                       ; F8AED4  32 00 01
 .LF8AED7:
-	jp sub_F8A90B                                        ; F8AED7  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AED7  1b 0b a9 f8
 sub_F8AEDB:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AEDB  da 89
 	ld e, (xix-1)                                        ; F8AEDD  8c ff 25
@@ -20489,7 +20350,7 @@ sub_F8AEDB:   ; entry: PanelGroupActionListPool
 	and	(0x2256:16), xde                     ; F8AF43  e1 56 22 ca
 	ldw de, 0x0200                                       ; F8AF47  32 00 02
 .LF8AF4A:
-	jp sub_F8A90B                                        ; F8AF4A  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AF4A  1b 0b a9 f8
 sub_F8AF4E:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AF4E  da 89
 	ld e, (xix-1)                                        ; F8AF50  8c ff 25
@@ -20510,7 +20371,7 @@ sub_F8AF4E:   ; entry: PanelGroupActionListPool
 	and	(0x2252:16), xde                     ; F8AF76  e1 52 22 ca
 	ldw de, 0x0100                                       ; F8AF7A  32 00 01
 .LF8AF7D:
-	jp sub_F8A90B                                        ; F8AF7D  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AF7D  1b 0b a9 f8
 sub_F8AF81:   ; entry: PanelGroupActionListPool
 	ld BC,DE                                             ; F8AF81  da 89
 	ld e, (xix-1)                                        ; F8AF83  8c ff 25
@@ -20531,10 +20392,10 @@ sub_F8AF81:   ; entry: PanelGroupActionListPool
 	and	(0x2256:16), xde                     ; F8AFA9  e1 56 22 ca
 	ldw de, 0x0200                                       ; F8AFAD  32 00 02
 .LF8AFB0:
-	jp sub_F8A90B                                        ; F8AFB0  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AFB0  1b 0b a9 f8
 sub_F8AFB4:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8AFB4  c0 c4 3f 02
-	jrl z, sub_F8A90F                                         ; F8AFB8  76 54 f9
+	jrl z, PanelEvent_Drop                                         ; F8AFB8  76 54 f9
 	xor D,D                                              ; F8AFBB  cc d4
 	sla de, 0x07                                         ; F8AFBD  da ec 07
 	srl e, 0x01                                          ; F8AFC0  cd ef 01
@@ -20542,7 +20403,7 @@ sub_F8AFB4:   ; entry: PanelGroupActionListPool
 	jr c, .LF8AFCC                                           ; F8AFC7  67 03
 	ldw de, 0x7f7f                                       ; F8AFC9  32 7f 7f
 .LF8AFCC:
-	jp sub_F8A90B                                        ; F8AFCC  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8AFCC  1b 0b a9 f8
 ; ---------------------------------------------------------------------
 ; PanelAction_AssignableController -- action handler of the 7-bit (mask 7F)
 ;          groups v1 0x0B 0x0D 0x10 0x11 0x13 0x14 0x15 and v2 0x14 0x15:
@@ -20566,7 +20427,7 @@ PanelAction_AssignableController:   ; entry: PanelGroupActionListPool
 	jr z, .LF8AFF2                                           ; F8AFE8  66 08
 	cp A,0x16                                            ; F8AFEA  c9 cf 16
 	jr z, .LF8AFF2                                           ; F8AFED  66 03
-	jrl sub_F8A90F                                            ; F8AFEF  78 1d f9
+	jrl PanelEvent_Drop                                            ; F8AFEF  78 1d f9
 .LF8AFF2:
 	extz WA                                              ; F8AFF2  d8 12
 	extz XWA                                             ; F8AFF4  e8 12
@@ -20575,52 +20436,52 @@ PanelAction_AssignableController:   ; entry: PanelGroupActionListPool
 	cp a, 0x01:i3                                          ; F8AFFE  c9 d9
 	jr nz, .LF8B00A                                          ; F8B000  6e 08
 	ld (xix-2), 0xb2                                     ; F8B002  bc fe 00 b2
-	jp sub_F8A90B                                        ; F8B006  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B006  1b 0b a9 f8
 .LF8B00A:
 	cp a, 0x02:i3                                          ; F8B00A  c9 da
 	jr nz, .LF8B016                                          ; F8B00C  6e 08
 	ld (xix-2), 0xbc                                     ; F8B00E  bc fe 00 bc
-	jp sub_F8A90B                                        ; F8B012  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B012  1b 0b a9 f8
 .LF8B016:
 	cp a, 0x04:i3                                          ; F8B016  c9 dc
 	jr nz, .LF8B022                                          ; F8B018  6e 08
 	ld (xix-2), 0xbd                                     ; F8B01A  bc fe 00 bd
-	jp sub_F8A90B                                        ; F8B01E  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B01E  1b 0b a9 f8
 .LF8B022:
 	cp A,0x0b                                            ; F8B022  c9 cf 0b
 	jr nz, .LF8B02F                                          ; F8B025  6e 08
 	ld (xix-2), 0xb3                                     ; F8B027  bc fe 00 b3
-	jp sub_F8A90B                                        ; F8B02B  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B02B  1b 0b a9 f8
 .LF8B02F:
 	cp A,0x10                                            ; F8B02F  c9 cf 10
 	jr nz, .LF8B03C                                          ; F8B032  6e 08
 	ld (xix-2), 0xb8                                     ; F8B034  bc fe 00 b8
-	jp sub_F8A90B                                        ; F8B038  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B038  1b 0b a9 f8
 .LF8B03C:
 	cp A,0x11                                            ; F8B03C  c9 cf 11
 	jr nz, .LF8B049                                          ; F8B03F  6e 08
 	ld (xix-2), 0xb9                                     ; F8B041  bc fe 00 b9
-	jp sub_F8A90B                                        ; F8B045  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B045  1b 0b a9 f8
 .LF8B049:
 	cp A,0x12                                            ; F8B049  c9 cf 12
 	jr nz, .LF8B056                                          ; F8B04C  6e 08
 	ld (xix-2), 0xba                                     ; F8B04E  bc fe 00 ba
-	jp sub_F8A90B                                        ; F8B052  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B052  1b 0b a9 f8
 .LF8B056:
 	cp A,0x13                                            ; F8B056  c9 cf 13
 	jr nz, .LF8B063                                          ; F8B059  6e 08
 	ld (xix-2), 0xbb                                     ; F8B05B  bc fe 00 bb
-	jp sub_F8A90B                                        ; F8B05F  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B05F  1b 0b a9 f8
 .LF8B063:
 	cp A,0x40                                            ; F8B063  c9 cf 40
 	jr nz, .LF8B070                                          ; F8B066  6e 08
 	ld (xix-2), 0xb5                                     ; F8B068  bc fe 00 b5
-	jp sub_F8A90B                                        ; F8B06C  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B06C  1b 0b a9 f8
 .LF8B070:
 	cp A,0x81                                            ; F8B070  c9 cf 81
-	jrl nz, sub_F8A90F                                        ; F8B073  7e 99 f8
+	jrl nz, PanelEvent_Drop                                        ; F8B073  7e 99 f8
 	ld (xix-2), 0xb4                                     ; F8B076  bc fe 00 b4
-	jp sub_F8A90B                                        ; F8B07A  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B07A  1b 0b a9 f8
 ; ---------------------------------------------------------------------
 ; PanelGroupToRam7F12Slot -- 13 bytes: panel group 0x0B..0x17 -> slot in the
 ;          RAM byte array at 0x7F12 (index = group - 0x0B).
@@ -20663,7 +20524,7 @@ PanelGroupToRam7F12Slot:
 ; ---------------------------------------------------------------------
 PanelAction_AssignableSwitch:   ; entry: PanelGroupActionListPool
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8B08B  c0 c4 3f 02
-	jrl z, sub_F8A90F                                         ; F8B08F  76 7d f8
+	jrl z, PanelEvent_Drop                                         ; F8B08F  76 7d f8
 	sub A,0x0b                                           ; F8B092  c9 ca 0b
 	extz WA                                              ; F8B095  d8 12
 	extz XWA                                             ; F8B097  e8 12
@@ -20686,7 +20547,7 @@ PanelAction_AssignableSwitch:   ; entry: PanelGroupActionListPool
 	jp sub_F8B1C1                                        ; F8B0C4  1b c1 b1 f8
 .LF8B0C8:
 	cp A,0x90                                            ; F8B0C8  c9 cf 90
-	jrl nz, sub_F8A90F                                        ; F8B0CB  7e 41 f8
+	jrl nz, PanelEvent_Drop                                        ; F8B0CB  7e 41 f8
 	jp sub_F8B2B5                                        ; F8B0CE  1b b5 b2 f8
 sub_F8B0D2:
 	ld a, (0x2076:16)                                   ; F8B0D2  c1 76 20 21
@@ -20744,17 +20605,17 @@ sub_F8B0D2:
 	xor H,H                                              ; F8B14F  ce d6
 .LF8B151:
 	ld E,C                                               ; F8B151  cb 8d
-	calr sub_F8A90B                                          ; F8B153  1e b5 f7
+	calr PanelEvent_CommitValue                                          ; F8B153  1e b5 f7
 	inc 2,XIX                                            ; F8B156  ec 62
 	ld DE,HL                                             ; F8B158  db 8a
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B15A  c2 20 f0 60 3e 02
 	popw hl                                              ; F8B160  4b
 	pop XIY                                              ; F8B161  5d
-	jp sub_F8A90B                                        ; F8B162  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B162  1b 0b a9 f8
 .LF8B166:
 	popw hl                                              ; F8B166  4b
 	pop XIY                                              ; F8B167  5d
-	jp sub_F8A90F                                        ; F8B168  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8B168  1b 0f a9 f8
 .LF8B16C:
 	push XIY                                             ; F8B16C  3d
 	pushw hl                                             ; F8B16D  2b
@@ -20784,17 +20645,17 @@ sub_F8B0D2:
 	xor H,H                                              ; F8B1A4  ce d6
 .LF8B1A6:
 	ld E,C                                               ; F8B1A6  cb 8d
-	calr sub_F8A90B                                          ; F8B1A8  1e 60 f7
+	calr PanelEvent_CommitValue                                          ; F8B1A8  1e 60 f7
 	inc 2,XIX                                            ; F8B1AB  ec 62
 	ld DE,HL                                             ; F8B1AD  db 8a
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B1AF  c2 20 f0 60 3e 02
 	popw hl                                              ; F8B1B5  4b
 	pop XIY                                              ; F8B1B6  5d
-	jp sub_F8A90B                                        ; F8B1B7  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B1B7  1b 0b a9 f8
 .LF8B1BB:
 	popw hl                                              ; F8B1BB  4b
 	pop XIY                                              ; F8B1BC  5d
-	jp sub_F8A90F                                        ; F8B1BD  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8B1BD  1b 0f a9 f8
 sub_F8B1C1:
 	ld a, (0x2076:16)                                   ; F8B1C1  c1 76 20 21
 	cp A,0x09                                            ; F8B1C5  c9 cf 09
@@ -20841,17 +20702,17 @@ sub_F8B1C1:
 	ld H,A                                               ; F8B228  c9 8e
 .LF8B22A:
 	ld E,C                                               ; F8B22A  cb 8d
-	calr sub_F8A90B                                          ; F8B22C  1e dc f6
+	calr PanelEvent_CommitValue                                          ; F8B22C  1e dc f6
 	inc 2,XIX                                            ; F8B22F  ec 62
 	ld DE,HL                                             ; F8B231  db 8a
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B233  c2 20 f0 60 3e 02
 	popw hl                                              ; F8B239  4b
 	pop XIY                                              ; F8B23A  5d
-	jp sub_F8A90B                                        ; F8B23B  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B23B  1b 0b a9 f8
 .LF8B23F:
 	popw hl                                              ; F8B23F  4b
 	pop XIY                                              ; F8B240  5d
-	jp sub_F8A90F                                        ; F8B241  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8B241  1b 0f a9 f8
 .LF8B245:
 	push XIY                                             ; F8B245  3d
 	pushw hl                                             ; F8B246  2b
@@ -20881,31 +20742,31 @@ sub_F8B265:
 	ld H,A                                               ; F8B27B  c9 8e
 .LF8B27D:
 	ld E,C                                               ; F8B27D  cb 8d
-	calr sub_F8A90B                                          ; F8B27F  1e 89 f6
+	calr PanelEvent_CommitValue                                          ; F8B27F  1e 89 f6
 	inc 2,XIX                                            ; F8B282  ec 62
 	ld DE,HL                                             ; F8B284  db 8a
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B286  c2 20 f0 60 3e 02
 	popw hl                                              ; F8B28C  4b
 	pop XIY                                              ; F8B28D  5d
-	jp sub_F8A90B                                        ; F8B28E  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B28E  1b 0b a9 f8
 .LF8B292:
 	popw hl                                              ; F8B292  4b
 	pop XIY                                              ; F8B293  5d
-	jp sub_F8A90F                                        ; F8B294  1b 0f a9 f8
+	jp PanelEvent_Drop                                        ; F8B294  1b 0f a9 f8
 sub_F8B298:
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B298  c2 20 f0 60 3e 02
 	m_ld_mi16 MDD+r4, 0xfe, 0x00b5                       ; F8B29E  bc fe 02 b5 00
 	and E,D                                              ; F8B2A3  cc c5
 	jr z, .LF8B2AE                                           ; F8B2A5  66 07
 	ldw de, 0x7f7f                                       ; F8B2A7  32 7f 7f
-	jp sub_F8A90B                                        ; F8B2AA  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B2AA  1b 0b a9 f8
 .LF8B2AE:
 	ldw de, 0x7f00                                       ; F8B2AE  32 00 7f
-	jp sub_F8A90B                                        ; F8B2B1  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B2B1  1b 0b a9 f8
 sub_F8B2B5:
 	m_or_mi8 MB24, 0x60f020, 0x02                        ; F8B2B5  c2 20 f0 60 3e 02
 	m_ld_mi16 MDD+r4, 0xfe, 0x11a8                       ; F8B2BB  bc fe 02 a8 11
-	jp sub_F8A90B                                        ; F8B2C0  1b 0b a9 f8
+	jp PanelEvent_CommitValue                                        ; F8B2C0  1b 0b a9 f8
 sub_F8B2C4:
 	ld XIX,0x00002030                                    ; F8B2C4  44 30 20 00 00
 .LF8B2C9:
@@ -21706,7 +21567,7 @@ PanelGroupActionListPool:
 	.byte 0x08, 0x40                                           ; F8B956  group 08 mask 40 -> 0xF8AA57
 	.long sub_F8AA57                                         ; F8B958
 	.byte 0x08, 0x3f                                           ; F8B95C  group 08 mask 3F -> 0xF8AA24
-	.long sub_F8AA24                                         ; F8B95E
+	.long PanelAction_LowestBitOneHot                                         ; F8B95E
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B962  end of list
 	; -- v1 g09
 	.byte 0x09, 0x01                                           ; F8B968  group 09 mask 01 -> 0xF8AF4E
@@ -127696,7 +127557,7 @@ sub_FD21E9:
 ;           write cursor (0x608A06). sub_FD2014's own body reaches
 ;           T_Ring608A0A_Get, so the loop consumes what it tests.
 ;           Published by prom_b slot T_F42380 and reached from `call
-;           0xF42380` at 0xF8213E, inside sub_F82028
+;           0xF42380` at 0xF8213E, inside MainTask_Loop
 ; Unknown:  what sub_FD2014 does with each item
 ; Was `sub_FD2504`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------

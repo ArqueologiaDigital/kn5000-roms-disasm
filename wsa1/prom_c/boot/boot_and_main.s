@@ -157,7 +157,7 @@ EntryPoint_Records:
 ;          INTT3, whose handler increments (0x0090) and whose count
 ;          Kernel_Dispatch drains.  Level 2 is the level of both MAIN and task 2,
 ;          so this is what time-slices them against each other.
-;          prom_a has the same routine, sub_F85EC2, with A = 3 -- its own
+;          prom_a has the same routine, SoftTimer_RotateLevel3, with A = 3 -- its own
 ;          lowest-priority level -- and left it unnamed only because
 ;          Kernel_YieldRotate was still .incbin there.
 ; Unknown:  ⚠ `ret` after `calr Kernel_YieldRotate` is unreachable:
