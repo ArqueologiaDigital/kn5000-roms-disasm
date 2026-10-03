@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,435
-#   semantic names ........... 50,533 (98.2%)
+#   symbols .................. 51,445
+#   semantic names ........... 50,543 (98.2%)
 #   positional names ......... 902
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -34433,7 +34433,17 @@ AccompSeq_SendAllOff 00F6E753
 AccompSeq_SendAllOff_Loop1 00F6E79A
 AccompSeq_SendAllOff_Loop2 00F6E7AF
 AccompSeq_MidiFilterCodeBlock 00F6E7BC
-AccompSeq_MidiFilterCodeBlock_Code 00F6E836
+AccompSeq_MidiFilterCodeBlock_Step 00F6E7C3
+AccompSeq_MidiFilterCodeBlock_Code_Skip 00F6E7CE
+AccompSeq_MidiFilterCodeBlock_Code_Skip2 00F6E7E1
+AccompSeq_MidiFilterCodeBlock_Code_Skip3 00F6E7E3
+AccompSeq_MidiFilterCodeBlock_Code_Join 00F6E7EC
+AccompSeq_MidiFilterCodeBlock_Step2 00F6E7FC
+AccompSeq_MidiFilterCodeBlock_Code_Entry 00F6E813
+AccompSeq_MidiFilterCodeBlock_Step2_Compare 00F6E821
+AccompSeq_MidiFilterCodeBlock_Step2_Store 00F6E827
+AccompSeq_MidiFilterCodeBlock_Code_Return 00F6E835
+AccompSeq_LowestBitIndex 00F6E836
 AccompSeq_ProcessChordChange 00F6E876
 AccompSeq_ChordChange_Reinit 00F6E8AC
 AccompSeq_ChordChange_CheckOverride 00F6E8C1

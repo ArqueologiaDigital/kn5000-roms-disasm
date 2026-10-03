@@ -1,0 +1,3 @@
+# accompseq_routines.s (v10/v9 0xF6EC3A): byte a (0..63) = index of the lowest set bit of a; was a positional
+# "Code" name on bytes decoded as `nop / .byte 0x01 / push sr` ...
+s/\bAccompSeq_MidiFilterCodeBlock_Code\b/AccompSeq_LowestBitIndex/g

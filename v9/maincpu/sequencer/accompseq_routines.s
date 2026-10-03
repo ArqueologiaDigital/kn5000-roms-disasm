@@ -1096,7 +1096,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
-	ld	xix, AccompSeq_MidiFilterCodeBlock_Code
+	ld	xix, AccompSeq_LowestBitIndex
 	ld	h, (xix+hl)
 	ld l, (64786:16)
 	cp l, 17
@@ -1669,9 +1669,11 @@ AccompSeq_SendAllOff_Loop2:
 	ret
 
 AccompSeq_MidiFilterCodeBlock:
-	.byte 0xc1, 0xe2, 0xe3
-	push	xiz
-	ld	(P3CR:8), 14:io
+	or	(0xe3e2:16), 8
+	ret
+	ret
+	; No reference found.  Unless (0x7F0B) is set, steps (0xFD12) within 0..12 (bit 7 of W = down).
+AccompSeq_MidiFilterCodeBlock_Step:
 	cp	(0x7f0b:16), 0
 	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
 	jp	AccompSeq_MidiFilterCodeBlock_Code_Return
@@ -1696,9 +1698,9 @@ AccompSeq_MidiFilterCodeBlock_Code_Join:
 	ld	(0x7e78:16), 0
 	or	(0xe3e0:16), 16
 	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
-	.byte 0xc1
-	jrl	16254
-	nop
+	; No reference found.  Was `.byte 0xc1 / jrl 16254 / nop`: `cp (0x7e78:16), 0`.
+AccompSeq_MidiFilterCodeBlock_Step2:
+	cp	(0x7e78:16), 0
 	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Entry
 	ld	(0x7e79:16), a
 	ld	(0x7e78:16), 1
@@ -1709,81 +1711,25 @@ AccompSeq_MidiFilterCodeBlock_Code_Entry:
 	ld	w, 10:opc
 	add	a, w
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, AccompSeq_MidiFilterCodeBlock_Step2_Compare
 	dec	1, a
+AccompSeq_MidiFilterCodeBlock_Step2_Compare:
 	cp	a, e
-	jr	ule, 2
+	jr	ule, AccompSeq_MidiFilterCodeBlock_Step2_Store
 	ld	a, e
+AccompSeq_MidiFilterCodeBlock_Step2_Store:
 	ld	(0xfd12:16), a
 	ld	(0x7e78:16), 0
 	or	(0xe3de:16), 16
 AccompSeq_MidiFilterCodeBlock_Code_Return:
 	ret
-AccompSeq_MidiFilterCodeBlock_Code:
-	nop
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	pop	sr
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	.byte 0x04
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	pop	sr
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	halt
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	pop	sr
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	.byte 0x04
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
-	pop	sr
-	nop
-	.byte 0x01
-	nop
-	push	sr
-	nop
-	.byte 0x01
-	nop
+AccompSeq_LowestBitIndex:
+	; Byte a (0..63) = the index of the lowest set bit of a, 0 for a = 0.  AccompSeq_ProcessAfterNote
+	; reads it with `ld h, (xix+hl)` after `and a, 63`.  Was decoded as `nop / .byte 0x01 / push sr` ...
+	.byte	0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 
 AccompSeq_ProcessChordChange:
 	and (0x7e6e:16), 254

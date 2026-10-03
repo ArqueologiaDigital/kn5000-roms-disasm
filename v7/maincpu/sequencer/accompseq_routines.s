@@ -1067,7 +1067,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
-	ld	xix, AccompSeq_MidiFilterCodeBlock_Code
+	ld	xix, AccompSeq_LowestBitIndex
 	ld	h, (xix+hl)
 	ld	l, (64786:16)
 	cp	l, 17
@@ -1618,8 +1618,67 @@ AccompSeq_SendAllOff_Loop2:
 	ret
 
 AccompSeq_MidiFilterCodeBlock:
-	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin", 0x0, 0x7A
-AccompSeq_MidiFilterCodeBlock_Code:	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin", 0x7A, 0x40
+	or	(0xe31c:16), 8
+	ret
+	ret
+AccompSeq_MidiFilterCodeBlock_Step:
+	; No reference found.  Unless (0x7E6F) is set, steps (0xFD12) within 0..12 (bit 7 of W = down).
+	cp	(0x7e6f:16), 0
+	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
+	jp	AccompSeq_MidiFilterCodeBlock_Code_Return
+AccompSeq_MidiFilterCodeBlock_Code_Skip:
+	ld	e, 12:opc
+	ld	a, (0xfd12:16)
+	bit	7, w
+	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip3
+	inc	1, a
+	cp	a, e
+	jr	ule, AccompSeq_MidiFilterCodeBlock_Code_Skip2
+	ld	a, e
+AccompSeq_MidiFilterCodeBlock_Code_Skip2:
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Join
+AccompSeq_MidiFilterCodeBlock_Code_Skip3:
+	dec	1, a
+	cp	a, 255
+	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Join
+	ld	a, 0:opc
+AccompSeq_MidiFilterCodeBlock_Code_Join:
+	ld	(0xfd12:16), a
+	ld	(0x7ddc:16), 0
+	or	(0xe31a:16), 16
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
+AccompSeq_MidiFilterCodeBlock_Step2:
+	; No reference found.
+	cp	(0x7ddc:16), 0
+	jr	nz, AccompSeq_MidiFilterCodeBlock_Code_Entry
+	ld	(0x7ddd:16), a
+	ld	(0x7ddc:16), 1
+	or	(0xe318:16), 16
+	jr	AccompSeq_MidiFilterCodeBlock_Code_Return
+AccompSeq_MidiFilterCodeBlock_Code_Entry:
+	ld	a, (0x7ddd:16)
+	ld	w, 10:opc
+	add	a, w
+	cp	a, 0:i3
+	jr	z, AccompSeq_MidiFilterCodeBlock_Step2_Compare
+	dec	1, a
+AccompSeq_MidiFilterCodeBlock_Step2_Compare:
+	cp	a, e
+	jr	ule, AccompSeq_MidiFilterCodeBlock_Step2_Store
+	ld	a, e
+AccompSeq_MidiFilterCodeBlock_Step2_Store:
+	ld	(0xfd12:16), a
+	ld	(0x7ddc:16), 0
+	or	(0xe318:16), 16
+AccompSeq_MidiFilterCodeBlock_Code_Return:
+	ret
+AccompSeq_LowestBitIndex:
+	; Byte a (0..63) = the index of the lowest set bit of a, 0 for a = 0.  AccompSeq_ProcessAfterNote
+	; reads it with `ld h, (xix+hl)` after `and a, 63`.
+	.byte	0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+	.byte	4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 AccompSeq_ProcessChordChange:
 	and (0x7dd2:16), 0xfe
 	and (0x7dd3:16), 0xfe

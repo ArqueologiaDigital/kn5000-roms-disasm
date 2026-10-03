@@ -248,3 +248,20 @@ The fixes, renamed by `scripts/renaming/rename_accvoice_setupslots_data.sed` in 
 v7: four `port_islands.py --whole ... --delta 0x404` runs (11, 21, 20 and 4 B), then
 `accvoice_v7_postport.py`. It restates the comments with v7's names and RAM (0x372D/0x37FC/0x3835/0x343B)
 and drops the 17 old "v10 does not spell this byte either" notes of the name and its two following bytes.
+
+### `accompseq_step_<tree>.json` (2026-10-03)
+
+accompseq_routines.s, v10/v9 0xF6EBC0-0xF6EC7A. These held three refusals in v10: R5 at 0xF6EC01 and R3 at
+0xF6EC21/0xF6EC27.
+
+- `AccompSeq_MidiFilterCodeBlock` is `or (0xe3e2), 8 / ret`, followed by a second, unreached `ret`.
+- Two routines that step (0xFD12) follow: `AccompSeq_MidiFilterCodeBlock_Step` and `_Step2`. The second
+  was `.byte 0xc1 / jrl 16254 / nop`, which is `cp (0x7e78:16), 0`. No reference reaches either: the ROM
+  hits for 0xF6EC00 straddle two adjacent `.long`s.
+- `AccompSeq_LowestBitIndex` (renamed from `AccompSeq_MidiFilterCodeBlock_Code` by
+  `scripts/renaming/rename_accompseq_lowest_bit_index.sed`, all three trees) is a 64-byte
+  count-trailing-zeros table, checked against the ROM for every a.
+
+v7 held the block as the romslice `v7_transplant_AccompSeq_MidiFilterCodeBlock.bin` (0xF6E7BC). It is ported
+(`port_islands.py --whole 1621-1622 --delta 0x404`, 186 B), its comments are restated for v7 (0x7E6F), and
+the bin is removed.

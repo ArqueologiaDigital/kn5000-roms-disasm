@@ -1,0 +1,38 @@
+[
+ {
+  "file": "v9/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xF6EBC0",
+  "end": "0xF6EC7A",
+  "keep_original_code": true,
+  "segments": [
+   {
+    "kind": "code",
+    "len": 122
+   },
+   {
+    "kind": "byte",
+    "len": 64,
+    "per_line": 16,
+    "decimal": true
+   }
+  ],
+  "labels": {
+   "0xF6EBC7": "AccompSeq_MidiFilterCodeBlock_Step",
+   "0xF6EC00": "AccompSeq_MidiFilterCodeBlock_Step2",
+   "0xF6EC25": "AccompSeq_MidiFilterCodeBlock_Step2_Compare",
+   "0xF6EC2B": "AccompSeq_MidiFilterCodeBlock_Step2_Store"
+  },
+  "comments": {
+   "0xF6EBC7": [
+    "No reference found.  Unless (0x7F0B) is set, steps (0xFD12) within 0..12 (bit 7 of W = down)."
+   ],
+   "0xF6EC00": [
+    "No reference found.  Was `.byte 0xc1 / jrl 16254 / nop`: `cp (0x7e78:16), 0`."
+   ],
+   "0xF6EC3A": [
+    "Byte a (0..63) = the index of the lowest set bit of a, 0 for a = 0.  AccompSeq_ProcessAfterNote",
+    "reads it with `ld h, (xix+hl)` after `and a, 63`.  Was decoded as `nop / .byte 0x01 / push sr` ..."
+   ]
+  }
+ }
+]
