@@ -26500,7 +26500,7 @@ Blink_SetEnable_Skip2:
 ; ---------------------------------------------------------------------
 Blink_Stop:
 	call	T_AsciiField_Clear	; F0E82B  call 0xf432f8
-	ld	(10450:16), 0	; F0E82F  ld (0x28d2),0x00
+	ld	(Blink_State:16), 0	; F0E82F  ld (0x28d2),0x00
 	ret	; F0E834  ret
 
 ; ---------------------------------------------------------------------
@@ -26511,7 +26511,7 @@ Blink_Stop:
 ; Evidence: `ld A,(0x28d2) / ret`, five bytes.
 ; ---------------------------------------------------------------------
 Blink_GetState:
-	ld	a, (10450:16)	; F0E835  ld A,(0x28d2)
+	ld	a, (Blink_State:16)	; F0E835  ld A,(0x28d2)
 	ret	; F0E839  ret
 
 ; ---------------------------------------------------------------------
@@ -26547,12 +26547,12 @@ Blink_GetState:
 ; ---------------------------------------------------------------------
 Blink_Tick:
 	push	xix	; F0E83A  push XIX
-	lda	xix, (10451:16)	; F0E83B  lda XIX,0x28d3
-	inc	1, (10449:16)	; F0E83F  inc 1,(0x28d1)
+	lda	xix, (Blink_PostToRing:16)	; F0E83B  lda XIX,0x28d3
+	inc	1, (Blink_Phase:16)	; F0E83F  inc 1,(0x28d1)
 	ld	c, (8309:16)	; F0E843  ld C,(0x2075)
 	and	c, 2	; F0E847  and C,0x02
 	jrl	z, Blink_Stop_Epilogue	; F0E84A  jrl Z,0xf0e904
-	ld	bc, (10450:16)	; F0E84D  ld BC,(0x28d2)
+	ld	bc, (Blink_State:16)	; F0E84D  ld BC,(0x28d2)
 	extz	bc	; F0E851  extz BC
 	cp	bc, 0:i3	; F0E853  cp BC,0
 	jrl	z, Blink_Stop_Epilogue	; F0E855  jrl Z,0xf0e904
@@ -26562,12 +26562,12 @@ Blink_Tick:
 	jr	z, Blink_Stop_Skip	; F0E85F  jr Z,0xf0e864
 	jrl	Blink_Stop_Epilogue	; F0E861  jrl T,0xf0e904
 Blink_Stop_Skip:
-	ld	c, (10449:16)	; F0E864  ld C,(0x28d1)
+	ld	c, (Blink_Phase:16)	; F0E864  ld C,(0x28d1)
 	and	c, 7	; F0E868  and C,0x07
 	jr	nz, Blink_Stop_Join3	; F0E86B  jr NZ,0xf0e8b3
-	m_cp_mi8 MB16, 0x28c9, 0x17	; F0E86D  cp (0x28c9),0x17
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x17	; F0E86D  cp (0x28c9),0x17
 	jr	z, Blink_Stop_Skip2	; F0E872  jr Z,0xf0e87b
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0E874  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0E874  cp (0x28c9),0x1c
 	jr	nz, Blink_Stop_Skip4	; F0E879  jr NZ,0xf0e891
 Blink_Stop_Skip2:
 	ld	c, (xix)	; F0E87B  ld C,(XIX)
@@ -26598,13 +26598,13 @@ Blink_Stop_Join2:
 	call	T_Kernel_SemaSignal_StackArg	; F0E8AD  call 0xf42dc0
 	inc	6, xsp	; F0E8B1  inc 6,XSP
 Blink_Stop_Join3:
-	ld	c, (10449:16)	; F0E8B3  ld C,(0x28d1)
+	ld	c, (Blink_Phase:16)	; F0E8B3  ld C,(0x28d1)
 	and	c, 7	; F0E8B7  and C,0x07
 	cp	c, 4:i3	; F0E8BA  cp C,4
 	jr	nz, Blink_Stop_Epilogue	; F0E8BC  jr NZ,0xf0e904
-	m_cp_mi8 MB16, 0x28c9, 0x17	; F0E8BE  cp (0x28c9),0x17
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x17	; F0E8BE  cp (0x28c9),0x17
 	jr	z, Blink_Stop_Skip6	; F0E8C3  jr Z,0xf0e8cc
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0E8C5  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0E8C5  cp (0x28c9),0x1c
 	jr	nz, Blink_Stop_Skip8	; F0E8CA  jr NZ,0xf0e8e2
 Blink_Stop_Skip6:
 	ld	c, (xix)	; F0E8CC  ld C,(XIX)
@@ -26705,10 +26705,10 @@ Blink_DrawField_Op02:
 	ldir85	; F0E93B  ldir
 	pop	xix	; F0E93D  pop XIX
 	ld	h, (LCD_CurrentLayer:16)	; F0E93E  ld H,(0x2540)
-	m_ld_m16m MB16, 0x28c8, 0x2540	; F0E942  ld (0x2540),(0x28c8)
-	m_ld_mm16 MDD+r4, 0x06, 0x28c9	; F0E948  ld (XIX+0x06),(0x28c9)
-	m_ldw_mm16 MDD+r4, 0x0d, 0x28ca	; F0E94D  ldw (XIX+0x0d),(0x28ca)
-	ld	bc, (10448:16)	; F0E952  ld BC,(0x28d0)
+	m_ld_m16m MB16, Blink_Layer, LCD_CurrentLayer	; F0E942  ld (0x2540),(0x28c8)
+	m_ld_mm16 MDD+r4, 0x06, Blink_SwiFunction	; F0E948  ld (XIX+0x06),(0x28c9)
+	m_ldw_mm16 MDD+r4, 0x0d, Blink_Op02Word0D	; F0E94D  ldw (XIX+0x0d),(0x28ca)
+	ld	bc, (Blink_BytesPerEntry:16)	; F0E952  ld BC,(0x28d0)
 	extz	bc	; F0E956  extz BC
 	ld	(xix+11), bc	; F0E958  ld (XIX+0x0b),BC
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0E95B  cp (XIZ+0x08),0x00
@@ -26754,11 +26754,11 @@ Blink_DrawField_Op07:
 	ldir85	; F0E98D  ldir
 	pop	xix	; F0E98F  pop XIX
 	ld	h, (LCD_CurrentLayer:16)	; F0E990  ld H,(0x2540)
-	m_ld_m16m MB16, 0x28c8, 0x2540	; F0E994  ld (0x2540),(0x28c8)
-	m_ld_mm16 MDD+r4, 0x06, 0x28c9	; F0E99A  ld (XIX+0x06),(0x28c9)
-	m_ldw_mm16 MDD+r4, 0x0d, 0x28cc	; F0E99F  ldw (XIX+0x0d),(0x28cc)
-	m_ldw_mm16 MDD+r4, 0x0f, 0x28ce	; F0E9A4  ldw (XIX+0x0f),(0x28ce)
-	ld	bc, (10448:16)	; F0E9A9  ld BC,(0x28d0)
+	m_ld_m16m MB16, Blink_Layer, LCD_CurrentLayer	; F0E994  ld (0x2540),(0x28c8)
+	m_ld_mm16 MDD+r4, 0x06, Blink_SwiFunction	; F0E99A  ld (XIX+0x06),(0x28c9)
+	m_ldw_mm16 MDD+r4, 0x0d, Blink_Op07Word0D	; F0E99F  ldw (XIX+0x0d),(0x28cc)
+	m_ldw_mm16 MDD+r4, 0x0f, Blink_Op07Word0F	; F0E9A4  ldw (XIX+0x0f),(0x28ce)
+	ld	bc, (Blink_BytesPerEntry:16)	; F0E9A9  ld BC,(0x28d0)
 	extz	bc	; F0E9AD  extz BC
 	ld	(xix+11), bc	; F0E9AF  ld (XIX+0x0b),BC
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0E9B2  cp (XIZ+0x08),0x00
@@ -26802,16 +26802,16 @@ Blink_DrawField_Op07_Skip:
 Blink_Command:
 	link XIZ,0xfffa	; F0E9CF  link XIZ,0xfffa
 	push	xix	; F0E9D3  push XIX
-	lda	xix, (10450:16)	; F0E9D4  lda XIX,0x28d2
+	lda	xix, (Blink_State:16)	; F0E9D4  lda XIX,0x28d2
 	ld	xbc, 6350848	; F0E9D8  ld XBC,0x0060e800
 	ld	(xiz-6), xbc	; F0E9DD  ld (XIZ+0xfa),XBC
-	ld	(10451:16), 1	; F0E9E0  ld (0x28d3),0x01
+	ld	(Blink_PostToRing:16), 1	; F0E9E0  ld (0x28d3),0x01
 	lda	xwa, (xiz-2)	; F0E9E5  lda XWA,XIZ+0xfe
 	cp	xwa, xbc	; F0E9E8  cp XWA,XBC
 	jr	nc, Blink_DrawField_Op07_Skip2	; F0E9EA  jr NC,0xf0e9f1
-	ld	(10451:16), 0	; F0E9EC  ld (0x28d3),0x00
+	ld	(Blink_PostToRing:16), 0	; F0E9EC  ld (0x28d3),0x00
 Blink_DrawField_Op07_Skip2:
-	m_ld_m16m MB16, LCD_CurrentLayer, 0x28c8	; F0E9F1  ld (0x28c8),(0x2540)
+	m_ld_m16m MB16, LCD_CurrentLayer, Blink_Layer	; F0E9F1  ld (0x28c8),(0x2540)
 	ld	xbc, (xiz+8)	; F0E9F7  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)	; F0E9FA  ld A,(XBC)
 	extz	wa	; F0E9FC  extz WA
@@ -27145,31 +27145,31 @@ sub_F0EA9F_Skip3:
 sub_F0EA9F_Join2:
 	ld	xbc, (xiz+8)	; F0EAFF  ld XBC,(XIZ+0x08)
 	ld	h, (xbc)	; F0EB02  ld H,(XBC)
-	ld	(10441:16), h	; F0EB04  ld (0x28c9),H
+	ld	(Blink_SwiFunction:16), h	; F0EB04  ld (0x28c9),H
 	inc	1, xbc	; F0EB08  inc 1,XBC
 	ld	(xiz+8), xbc	; F0EB0A  ld (XIZ+0x08),XBC
 	cp	h, 23	; F0EB0D  cp H,0x17
 	jr	z, sub_F0EA9F_Skip4	; F0EB10  jr Z,0xf0eb19
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0EB12  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0EB12  cp (0x28c9),0x1c
 	jr	nz, sub_F0EA9F_Skip5	; F0EB17  jr NZ,0xf0eb2b
 sub_F0EA9F_Skip4:
 	ld	xbc, (xiz+8)	; F0EB19  ld XBC,(XIZ+0x08)
-	m_ld_m16m MWI+r1, 0, 0x28cc	; F0EB1C  ldw (0x28cc),(XBC)
+	m_ld_m16m MWI+r1, 0, Blink_Op07Word0D	; F0EB1C  ldw (0x28cc),(XBC)
 	inc	2, xbc	; F0EB20  inc 2,XBC
 	ld	(xiz+8), xbc	; F0EB22  ld (XIZ+0x08),XBC
-	m_ld_m16m MWI+r1, 0, 0x28ce	; F0EB25  ldw (0x28ce),(XBC)
+	m_ld_m16m MWI+r1, 0, Blink_Op07Word0F	; F0EB25  ldw (0x28ce),(XBC)
 	jr	sub_F0EA9F_Join3	; F0EB29  jr T,0xf0eb32
 sub_F0EA9F_Skip5:
 	ld	xbc, (xiz+8)	; F0EB2B  ld XBC,(XIZ+0x08)
-	m_ld_m16m MWI+r1, 0, 0x28ca	; F0EB2E  ldw (0x28ca),(XBC)
+	m_ld_m16m MWI+r1, 0, Blink_Op02Word0D	; F0EB2E  ldw (0x28ca),(XBC)
 sub_F0EA9F_Join3:
 	sub	xbc, xbc	; F0EB32  sub XBC,XBC
 	inc	2, xbc	; F0EB34  inc 2,XBC
 	add	(xiz+8), xbc	; F0EB36  add (XIZ+0x08),XBC
 	ld	xwa, (xiz+8)	; F0EB39  ld XWA,(XIZ+0x08)
-	m_ld_m16m MBI+r0, 0, 0x28d0	; F0EB3C  ld (0x28d0),(XWA)
+	m_ld_m16m MBI+r0, 0, Blink_BytesPerEntry	; F0EB3C  ld (0x28d0),(XWA)
 	m_ld_m16m MBD+r0, 0x01, 0x28d6	; F0EB40  ld (0x28d6),(XWA+0x01)
-	lda	xix, (10432:16)	; F0EB45  lda XIX,0x28c0
+	lda	xix, (Blink_TextPtr:16)	; F0EB45  lda XIX,0x28c0
 	cp	l, 5:i3	; F0EB49  cp L,5
 	jr	z, sub_F0EA9F_Skip6	; F0EB4B  jr Z,0xf0eb53
 	cp	l, 11	; F0EB4D  cp L,0x0b
@@ -27187,12 +27187,12 @@ sub_F0EA9F_Skip6:
 	pop	xix	; F0EB66  pop XIX
 	pop	xhl	; F0EB67  pop XHL
 	pop	xde	; F0EB68  pop XDE
-	m_cp_mi8 MB16, 0x28d2, 0x02	; F0EB69  cp (0x28d2),0x02
+	m_cp_mi8 MB16, Blink_State, 0x02	; F0EB69  cp (0x28d2),0x02
 	jr	nz, sub_F0EA9F_Skip7	; F0EB6E  jr NZ,0xf0eb8f
 	ld	c, (10272:16)	; F0EB70  ld C,(0x2820)
 	ld	(xix), c	; F0EB74  ld (XIX),C
 	inc	1, xix	; F0EB76  inc 1,XIX
-	ld	bc, (10448:16)	; F0EB78  ld BC,(0x28d0)
+	ld	bc, (Blink_BytesPerEntry:16)	; F0EB78  ld BC,(0x28d0)
 	extz	bc	; F0EB7C  extz BC
 	ldw	hl, 3	; F0EB7E  ld HL,0x0003
 	sub	hl, bc	; F0EB81  sub HL,BC
@@ -27205,7 +27205,7 @@ sub_F0EA9F_Skip7:
 	ld	c, (9824:16)	; F0EB8F  ld C,(0x2660)
 	ld	(xix), c	; F0EB93  ld (XIX),C
 	inc	1, xix	; F0EB95  inc 1,XIX
-	ld	bc, (10448:16)	; F0EB97  ld BC,(0x28d0)
+	ld	bc, (Blink_BytesPerEntry:16)	; F0EB97  ld BC,(0x28d0)
 	extz	bc	; F0EB9B  extz BC
 	ldw	hl, 3	; F0EB9D  ld HL,0x0003
 	sub	hl, bc	; F0EBA0  sub HL,BC
@@ -27226,9 +27226,9 @@ sub_F0EA9F_Loop:
 	add	(xiz-4), xbc	; F0EBBD  add (XIZ+0xfc),XBC
 	add	h, c	; F0EBC0  add H,C
 sub_F0EA9F_Join5:
-	m_cp_rm MB16, 0x28d0, 6	; F0EBC2  cp H,(0x28d0)
+	m_cp_rm MB16, Blink_BytesPerEntry, 6	; F0EBC2  cp H,(0x28d0)
 	jr	c, sub_F0EA9F_Loop	; F0EBC6  jr C,0xf0ebb0
-	inc	1, (10448:16)	; F0EBC8  inc 1,(0x28d0)
+	inc	1, (Blink_BytesPerEntry:16)	; F0EBC8  inc 1,(0x28d0)
 	jr	sub_F0EA9F_Join8	; F0EBCC  jr T,0xf0ec22
 sub_F0EA9F_Skip8:
 	push	xde	; F0EBCE  push XDE
@@ -27241,11 +27241,11 @@ sub_F0EA9F_Skip8:
 	pop	xix	; F0EBDB  pop XIX
 	pop	xhl	; F0EBDC  pop XHL
 	pop	xde	; F0EBDD  pop XDE
-	ld	bc, (10448:16)	; F0EBDE  ld BC,(0x28d0)
+	ld	bc, (Blink_BytesPerEntry:16)	; F0EBDE  ld BC,(0x28d0)
 	extz	bc	; F0EBE2  extz BC
 	ldw	hl, 3	; F0EBE4  ld HL,0x0003
 	sub	hl, bc	; F0EBE7  sub HL,BC
-	m_cp_mi8 MB16, 0x28d2, 0x02	; F0EBE9  cp (0x28d2),0x02
+	m_cp_mi8 MB16, Blink_State, 0x02	; F0EBE9  cp (0x28d2),0x02
 	jr	nz, sub_F0EA9F_Skip9	; F0EBEE  jr NZ,0xf0ebfc
 	ldw	bc, 10273	; F0EBF0  ld BC,0x2821
 	add	bc, hl	; F0EBF3  add BC,HL
@@ -27270,13 +27270,13 @@ sub_F0EA9F_Loop2:
 	add	(xiz-4), xbc	; F0EC17  add (XIZ+0xfc),XBC
 	add	h, c	; F0EC1A  add H,C
 sub_F0EA9F_Join7:
-	m_cp_rm MB16, 0x28d0, 6	; F0EC1C  cp H,(0x28d0)
+	m_cp_rm MB16, Blink_BytesPerEntry, 6	; F0EC1C  cp H,(0x28d0)
 	jr	c, sub_F0EA9F_Loop2	; F0EC20  jr C,0xf0ec0a
 sub_F0EA9F_Join8:
-	ld	(10449:16), 0	; F0EC22  ld (0x28d1),0x00
-	m_cp_mi8 MB16, 0x28c9, 0x17	; F0EC27  cp (0x28c9),0x17
+	ld	(Blink_Phase:16), 0	; F0EC22  ld (0x28d1),0x00
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x17	; F0EC27  cp (0x28c9),0x17
 	jr	z, sub_F0EA9F_Skip10	; F0EC2C  jr Z,0xf0ec35
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0EC2E  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0EC2E  cp (0x28c9),0x1c
 	jr	nz, sub_F0EA9F_Skip11	; F0EC33  jr NZ,0xf0ec3d
 sub_F0EA9F_Skip10:
 	pushw	1	; F0EC35  push 0x0001
@@ -27341,27 +27341,27 @@ sub_F0EC4A_Skip:
 	ld	xix, (xiz+8)	; F0EC86  ld XIX,(XIZ+0x08)
 	inc	1, xix	; F0EC89  inc 1,XIX
 	ld	d, (xix)	; F0EC8B  ld D,(XIX)
-	ld	(10441:16), d	; F0EC8D  ld (0x28c9),D
+	ld	(Blink_SwiFunction:16), d	; F0EC8D  ld (0x28c9),D
 	ld	xbc, (xix+1)	; F0EC91  ld XBC,(XIX+0x01)
 	ld	(xiz-4), xbc	; F0EC94  ld (XIZ+0xfc),XBC
-	m_ld_m16m MBD+r4, 0x05, 0x28d0	; F0EC97  ld (0x28d0),(XIX+0x05)
+	m_ld_m16m MBD+r4, 0x05, Blink_BytesPerEntry	; F0EC97  ld (0x28d0),(XIX+0x05)
 	ld	xwa, xix	; F0EC9C  ld XWA,XIX
 	inc	7, xwa	; F0EC9E  inc 7,XWA
 	ld	(xiz+8), xwa	; F0ECA0  ld (XIZ+0x08),XWA
 	cp	d, 23	; F0ECA3  cp D,0x17
 	jr	z, sub_F0EC4A_Skip2	; F0ECA6  jr Z,0xf0ecaf
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0ECA8  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0ECA8  cp (0x28c9),0x1c
 	jr	nz, sub_F0EC4A_Skip3	; F0ECAD  jr NZ,0xf0ecbd
 sub_F0EC4A_Skip2:
 	ld	xbc, (xiz+8)	; F0ECAF  ld XBC,(XIZ+0x08)
-	m_ld_m16m MWI+r1, 0, 0x28cc	; F0ECB2  ldw (0x28cc),(XBC)
-	m_ld_m16m MWD+r1, 0x02, 0x28ce	; F0ECB6  ldw (0x28ce),(XBC+0x02)
+	m_ld_m16m MWI+r1, 0, Blink_Op07Word0D	; F0ECB2  ldw (0x28cc),(XBC)
+	m_ld_m16m MWD+r1, 0x02, Blink_Op07Word0F	; F0ECB6  ldw (0x28ce),(XBC+0x02)
 	jr	sub_F0EC4A_Join2	; F0ECBB  jr T,0xf0ecc4
 sub_F0EC4A_Skip3:
 	ld	xbc, (xiz+8)	; F0ECBD  ld XBC,(XIZ+0x08)
-	m_ld_m16m MWI+r1, 0, 0x28ca	; F0ECC0  ldw (0x28ca),(XBC)
+	m_ld_m16m MWI+r1, 0, Blink_Op02Word0D	; F0ECC0  ldw (0x28ca),(XBC)
 sub_F0EC4A_Join2:
-	m_cp_mi8 MB16, 0x28d2, 0x02	; F0ECC4  cp (0x28d2),0x02
+	m_cp_mi8 MB16, Blink_State, 0x02	; F0ECC4  cp (0x28d2),0x02
 	jr	nz, sub_F0EC4A_Skip4	; F0ECC9  jr NZ,0xf0ecfb
 	ld	c, (10275:16)	; F0ECCB  ld C,(0x2823)
 	cp	c, 32	; F0ECCF  cp C,0x20
@@ -27383,9 +27383,9 @@ sub_F0EC4A_Join3:
 	cp	d, l	; F0ECF7  cp D,L
 	jr	c, sub_F0EC4A_Loop	; F0ECF9  jr C,0xf0ecf1
 sub_F0EC4A_Skip4:
-	lda	xix, (10432:16)	; F0ECFB  lda XIX,0x28c0
+	lda	xix, (Blink_TextPtr:16)	; F0ECFB  lda XIX,0x28c0
 	ld	c, (10452:16)	; F0ECFF  ld C,(0x28d4)
-	m_mul MB16, 0x28d0, 3	; F0ED03  mul BC,(0x28d0)
+	m_mul MB16, Blink_BytesPerEntry, 3	; F0ED03  mul BC,(0x28d0)
 	extz	xbc	; F0ED07  extz XBC
 	add	(xiz-4), xbc	; F0ED09  add (XIZ+0xfc),XBC
 	ld	d, 0:opc	; F0ED0C  ld D,0x00
@@ -27400,12 +27400,12 @@ sub_F0EC4A_Loop2:
 	add	(xiz-4), xbc	; F0ED1D  add (XIZ+0xfc),XBC
 	add	d, c	; F0ED20  add D,C
 sub_F0EC4A_Join4:
-	m_cp_rm MB16, 0x28d0, 4	; F0ED22  cp D,(0x28d0)
+	m_cp_rm MB16, Blink_BytesPerEntry, 4	; F0ED22  cp D,(0x28d0)
 	jr	c, sub_F0EC4A_Loop2	; F0ED26  jr C,0xf0ed10
-	ld	(10449:16), 0	; F0ED28  ld (0x28d1),0x00
-	m_cp_mi8 MB16, 0x28c9, 0x17	; F0ED2D  cp (0x28c9),0x17
+	ld	(Blink_Phase:16), 0	; F0ED28  ld (0x28d1),0x00
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x17	; F0ED2D  cp (0x28c9),0x17
 	jr	z, sub_F0EC4A_Skip5	; F0ED32  jr Z,0xf0ed3b
-	m_cp_mi8 MB16, 0x28c9, 0x1c	; F0ED34  cp (0x28c9),0x1c
+	m_cp_mi8 MB16, Blink_SwiFunction, 0x1c	; F0ED34  cp (0x28c9),0x1c
 	jr	nz, sub_F0EC4A_Skip6	; F0ED39  jr NZ,0xf0ed43
 sub_F0EC4A_Skip5:
 	pushw	1	; F0ED3B  push 0x0001
@@ -121035,11 +121035,11 @@ Ring_PutBlockWrapped_Done:
 ; ---------------------------------------------------------------------
 Clear_600780_98:
 	lda	xiy, (Zero9:24)	; F57D1E  lda XIY,0xf57d46
-	lda	xix, (6293465:24)	; F57D23  lda XIX,0x6007d9
+	lda	xix, (Link_TxBurstsLeft:24)	; F57D23  lda XIX,0x6007d9
 	ld	xbc, 9	; F57D28  ld XBC,0x00000009
 	ldir85	; F57D2D  ldir
 	ld	xbc, 89	; F57D2F  ld XBC,0x00000059
-	lda	xix, (6293376:24)	; F57D34  lda XIX,0x600780
+	lda	xix, (Link_RxCommand:24)	; F57D34  lda XIX,0x600780
 	xor	wa, wa	; F57D39  xor WA,WA
 Clear_600780_98_Loop:
 	ld	(xix+), a	; F57D3B  ld (XIX+),A

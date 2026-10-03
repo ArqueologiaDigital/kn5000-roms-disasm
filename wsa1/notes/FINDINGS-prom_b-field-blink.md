@@ -113,6 +113,13 @@ Each field is named by the instruction that touches it, and by nothing else.
 | `(0x28D3)` | 0 ⇒ draw inline, non-0 ⇒ post to the ring buffer | written by `Blink_Command` from a stack-address test |
 | `(0x28C0)` | the template's default `+7`, i.e. where the text is | the template's own bytes; nothing in this module writes it |
 
+**Named in the source (2026-10-03).** These ten addresses are symbols in
+`wsa1/include/wsa1_ram.inc` -- `Blink_TextPtr` (0x28C0), `Blink_Layer`, `Blink_SwiFunction`,
+`Blink_Op02Word0D`, `Blink_Op07Word0D`, `Blink_Op07Word0F`, `Blink_BytesPerEntry`, `Blink_Phase`,
+`Blink_State`, `Blink_PostToRing` (0x28C8-0x28D3) -- 55 operands in prom_b, the memory-to-memory
+macros' second addresses included (`scripts/tools/name_wsa1_ram.py`).  `(0x2075)` stays a number:
+it is a shared flag byte with several owners.
+
 `(0x2075)` bit 1 is the enable: `Blink_SetEnable` writes it and `Blink_Tick`
 refuses to run when it is clear. Bit 3 of the same byte is set by
 `Dispatch_Code80` at `0xF5B9EB` — it is a shared flag byte with several owners.

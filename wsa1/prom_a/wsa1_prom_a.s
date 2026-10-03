@@ -6979,7 +6979,7 @@ sub_F8283E:
 sub_F82870:
 	ld (0x7a:8), 0xdd:io                                      ; F82870  08 7a dd
 	ret                                                  ; F82873  0e
-	ld XIY,0x006007db                                    ; F82874  45 db 07 60 00
+	ld XIY,Link_HandshakeTimeouts                                    ; F82874  45 db 07 60 00
 	push XIY                                             ; F82879  3d
 	pushw wa                                             ; F8287A  28
 	call T_DSP_ChannelRegs_Write8                        ; F8287B  1d e0 2d f4
@@ -23881,7 +23881,7 @@ Link_SendCountedBlock:
 	jr .LF8E0F0                                          ; F8E095  68 59
 .LF8E097:
 	res_dd8 0x00, 0x13                                   ; F8E097  f0 13 b0
-	ld (0x6007d9:24), 0x01                             ; F8E09A  f2 d9 07 60 00 01
+	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E09A  f2 d9 07 60 00 01
 	ld L,H                                               ; F8E0A0  ce 8f
 	dec 1,L                                              ; F8E0A2  cf 69
 	ld C,(XIZ+0x08)                                      ; F8E0A4  8e 08 23
@@ -23913,7 +23913,7 @@ Link_SendCountedBlock:
 	set_dd8 0x02, 0x20                                   ; F8E0E3  f0 20 ba
 	inc 6,XSP                                            ; F8E0E6  ef 66
 .LF8E0E8:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E0E8  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E0E8  c2 d9 07 60 3f 00
 	jr nz, .LF8E0E8                                      ; F8E0EE  6e f8
 .LF8E0F0:
 	pushw 0x02                                           ; F8E0F0  0b 02 00
@@ -23964,10 +23964,10 @@ Link_SendCommandE2:
 	cp DE,0x4e20                                         ; F8E113  da cf 20 4e
 	jrl ugt, .LF8E17B                                    ; F8E117  7b 61 00
 .LF8E11A:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E11A  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E11A  c2 d9 07 60 3f 00
 	jr nz, .LF8E10F                                      ; F8E120  6e ed
 	res_dd8 0x00, 0x13                                   ; F8E122  f0 13 b0
-	ld (0x6007d9:24), 0x01                             ; F8E125  f2 d9 07 60 00 01
+	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E125  f2 d9 07 60 00 01
 	ld XBC,0x007c0000                                    ; F8E12B  41 00 00 7c 00
 	ld (XBC),0xe2                                        ; F8E130  b1 00 e2
 	ldw hl, 0x00                                         ; F8E133  33 00 00
@@ -23996,7 +23996,7 @@ Link_SendCommandE2:
 	m_set 7, MD24, 0x00008a                              ; F8E16C  f2 8a 00 00 bf
 	inc 6,XSP                                            ; F8E171  ef 66
 .LF8E173:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E173  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E173  c2 d9 07 60 3f 00
 	jr nz, .LF8E173                                      ; F8E179  6e f8
 .LF8E17B:
 	pop XIX                                              ; F8E17B  5c
@@ -24030,10 +24030,10 @@ Link_SendCommandAndLong:
 	cp DE,0x4e20                                         ; F8E190  da cf 20 4e
 	jrl ugt, .LF8E1F9                                    ; F8E194  7b 62 00
 .LF8E197:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E197  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E197  c2 d9 07 60 3f 00
 	jr nz, .LF8E18C                                      ; F8E19D  6e ed
 	res_dd8 0x00, 0x13                                   ; F8E19F  f0 13 b0
-	ld (0x6007d9:24), 0x01                             ; F8E1A2  f2 d9 07 60 00 01
+	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E1A2  f2 d9 07 60 00 01
 	ld D,(XIZ+0x0c)                                      ; F8E1A8  8e 0c 24
 	or D,0xe0                                            ; F8E1AB  cc ce e0
 	ld XBC,0x007c0000                                    ; F8E1AE  41 00 00 7c 00
@@ -24061,7 +24061,7 @@ Link_SendCommandAndLong:
 	m_set 7, MD24, 0x00008a                              ; F8E1EA  f2 8a 00 00 bf
 	inc 6,XSP                                            ; F8E1EF  ef 66
 .LF8E1F1:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E1F1  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E1F1  c2 d9 07 60 3f 00
 	jr nz, .LF8E1F1                                      ; F8E1F7  6e f8
 .LF8E1F9:
 	popw de                                              ; F8E1F9  4a
@@ -24142,10 +24142,10 @@ Link_SendCommand5_WaitDone:
 	cp BC,0x09c4                                         ; F8E249  d9 cf c4 09
 	jr le, .LF8E23C                                      ; F8E24D  62 ed
 	ld (0x7f:8), 0x00:io                                      ; F8E24F  08 7f 00
-	ld (0x6007da:24), 0x00                             ; F8E252  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                             ; F8E252  f2 da 07 60 00 00
 	set_dd8 0x01, 0x13                                   ; F8E258  f0 13 b9
 	m_res 7, MD24, 0x00008a                              ; F8E25B  f2 8a 00 00 b7
-	inc 0x01, (0x6007db:24)                           ; F8E260  c2 db 07 60 61
+	inc 0x01, (Link_HandshakeTimeouts:24)                           ; F8E260  c2 db 07 60 61
 	ldw wa, 0xffff                                       ; F8E265  30 ff ff
 	jr .LF8E26C                                          ; F8E268  68 02
 .LF8E26A:
@@ -24184,10 +24184,10 @@ Link_SendCommandE1:
 	cp DE,0x4e20                                         ; F8E284  da cf 20 4e
 	jrl ugt, .LF8E31A                                    ; F8E288  7b 8f 00
 .LF8E28B:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E28B  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E28B  c2 d9 07 60 3f 00
 	jr nz, .LF8E280                                      ; F8E291  6e ed
 	res_dd8 0x00, 0x13                                   ; F8E293  f0 13 b0
-	ld (0x6007d9:24), 0x02                             ; F8E296  f2 d9 07 60 00 02
+	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E296  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E29C  41 00 00 7c 00
 	ld (XBC),0xe1                                        ; F8E2A1  b1 00 e1
 	ldw hl, 0x00                                         ; F8E2A4  33 00 00
@@ -24205,20 +24205,20 @@ Link_SendCommandE1:
 	ld XBC,(XIZ+0x08)                                    ; F8E2BF  ae 08 21
 	ld (XIX),XBC                                         ; F8E2C2  b4 61
 	ld XBC,(XIZ+0x0e)                                    ; F8E2C4  ae 0e 21
-	ld (0x6007a1:24), xbc                               ; F8E2C7  f2 a1 07 60 61
+	ld (Link_TxDest:24), xbc                               ; F8E2C7  f2 a1 07 60 61
 	ld BC,(XIZ+0x0c)                                     ; F8E2CC  9e 0c 21
 	ld (XIX+0x04),BC                                     ; F8E2CF  bc 04 51
 	ld BC,(XIZ+0x0c)                                     ; F8E2D2  9e 0c 21
-	ld (0x6007a5:24), bc                                ; F8E2D5  f2 a5 07 60 51
+	ld (Link_TxCount:24), bc                                ; F8E2D5  f2 a5 07 60 51
 	pushw 0x06                                           ; F8E2DA  0b 06 00
-	lda xbc, (0x6007a1:24)                               ; F8E2DD  f2 a1 07 60 31
+	lda xbc, (Link_TxDest:24)                               ; F8E2DD  f2 a1 07 60 31
 	push XBC                                             ; F8E2E2  39
 	call uDMA2_SetSource                                        ; F8E2E3  1d af e6 f8
 	ld (0x7e:8), 0x12:io                                      ; F8E2E7  08 7e 12
 	set_dd8 0x02, 0x20                                   ; F8E2EA  f0 20 ba
 	inc 6,XSP                                            ; F8E2ED  ef 66
 .LF8E2EF:
-	m_cp_mi8 MB24, 0x6007d9, 0x01                        ; F8E2EF  c2 d9 07 60 3f 01
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E2EF  c2 d9 07 60 3f 01
 	jr nz, .LF8E2EF                                      ; F8E2F5  6e f8
 	ld h, 0xc8:opc                                          ; F8E2F7  26 c8
 .LF8E2F9:
@@ -24234,7 +24234,7 @@ Link_SendCommandE1:
 	set_dd8 0x02, 0x20                                   ; F8E30D  f0 20 ba
 	inc 6,XSP                                            ; F8E310  ef 66
 .LF8E312:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E312  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E312  c2 d9 07 60 3f 00
 	jr nz, .LF8E312                                      ; F8E318  6e f8
 .LF8E31A:
 	pop XIX                                              ; F8E31A  5c
@@ -24269,10 +24269,10 @@ Link_SendCommandE4:
 	cp DE,0x4e20                                         ; F8E335  da cf 20 4e
 	jrl ugt, .LF8E3CB                                    ; F8E339  7b 8f 00
 .LF8E33C:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E33C  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E33C  c2 d9 07 60 3f 00
 	jr nz, .LF8E331                                      ; F8E342  6e ed
 	res_dd8 0x00, 0x13                                   ; F8E344  f0 13 b0
-	ld (0x6007d9:24), 0x02                             ; F8E347  f2 d9 07 60 00 02
+	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E347  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E34D  41 00 00 7c 00
 	ld (XBC),0xe4                                        ; F8E352  b1 00 e4
 	ldw hl, 0x00                                         ; F8E355  33 00 00
@@ -24303,7 +24303,7 @@ Link_SendCommandE4:
 	set_dd8 0x02, 0x20                                   ; F8E39B  f0 20 ba
 	inc 6,XSP                                            ; F8E39E  ef 66
 .LF8E3A0:
-	m_cp_mi8 MB24, 0x6007d9, 0x01                        ; F8E3A0  c2 d9 07 60 3f 01
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E3A0  c2 d9 07 60 3f 01
 	jr nz, .LF8E3A0                                      ; F8E3A6  6e f8
 	ld h, 0xc8:opc                                          ; F8E3A8  26 c8
 .LF8E3AA:
@@ -24319,7 +24319,7 @@ Link_SendCommandE4:
 	set_dd8 0x02, 0x20                                   ; F8E3BE  f0 20 ba
 	inc 6,XSP                                            ; F8E3C1  ef 66
 .LF8E3C3:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E3C3  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E3C3  c2 d9 07 60 3f 00
 	jr nz, .LF8E3C3                                      ; F8E3C9  6e f8
 .LF8E3CB:
 	pop XIX                                              ; F8E3CB  5c
@@ -24357,10 +24357,10 @@ Link_SendCommandE7:
 	cp DE,0x4e20                                         ; F8E3E6  da cf 20 4e
 	jrl ugt, .LF8E479                                    ; F8E3EA  7b 8c 00
 .LF8E3ED:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E3ED  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E3ED  c2 d9 07 60 3f 00
 	jr nz, .LF8E3E2                                      ; F8E3F3  6e ed
 	res_dd8 0x00, 0x13                                   ; F8E3F5  f0 13 b0
-	ld (0x6007d9:24), 0x02                             ; F8E3F8  f2 d9 07 60 00 02
+	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E3F8  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E3FE  41 00 00 7c 00
 	ld (XBC),0xe7                                        ; F8E403  b1 00 e7
 	ldw hl, 0x00                                         ; F8E406  33 00 00
@@ -24389,7 +24389,7 @@ Link_SendCommandE7:
 	set_dd8 0x02, 0x20                                   ; F8E449  f0 20 ba
 	inc 6,XSP                                            ; F8E44C  ef 66
 .LF8E44E:
-	m_cp_mi8 MB24, 0x6007d9, 0x01                        ; F8E44E  c2 d9 07 60 3f 01
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E44E  c2 d9 07 60 3f 01
 	jr nz, .LF8E44E                                      ; F8E454  6e f8
 	ld h, 0xc8:opc                                          ; F8E456  26 c8
 .LF8E458:
@@ -24405,7 +24405,7 @@ Link_SendCommandE7:
 	set_dd8 0x02, 0x20                                   ; F8E46C  f0 20 ba
 	inc 6,XSP                                            ; F8E46F  ef 66
 .LF8E471:
-	m_cp_mi8 MB24, 0x6007d9, 0x00                        ; F8E471  c2 d9 07 60 3f 00
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E471  c2 d9 07 60 3f 00
 	jr nz, .LF8E471                                      ; F8E477  6e f8
 .LF8E479:
 	pop XIX                                              ; F8E479  5c
@@ -24487,7 +24487,7 @@ INT0_LinkByte:
 	jrl nz, INT0_Link__return                              ; F8E48C  7e 98 00
 	ld XBC,0x007c0000                             ; F8E48F  41 00 00 7c 00   the inter-processor link port
 	ld H,(XBC)                                    ; F8E494  81 26   read the command byte
-	ld (0x600780:24), h                          ; F8E496  f2 80 07 60 46   and keep it
+	ld (Link_RxCommand:24), h                          ; F8E496  f2 80 07 60 46   and keep it
 	ld C,H                                        ; F8E49B  ce 8b
 	extz BC                                       ; F8E49D  d9 12
 	cp BC,0x00e1                                  ; F8E49F  d9 cf e1 00
@@ -24498,9 +24498,9 @@ INT0_LinkByte:
 	jr z, INT0_Cmd_E6                                ; F8E4AF  66 40
 	jr INT0_Cmd_Other                                   ; F8E4B1  68 4b
 INT0_Cmd_E1:
-	ld (0x6007da:24), 0x02                      ; F8E4B3  f2 da 07 60 00 02   (0x6007DA) = which completion path INTTC3 should take
+	ld (Link_CompletionSelector:24), 0x02                      ; F8E4B3  f2 da 07 60 00 02   (0x6007DA) = which completion path INTTC3 should take
 	pushw 0x06                                    ; F8E4B9  0b 06 00   count = 6
-	lda xbc, (0x6007d3:24)                        ; F8E4BC  f2 d3 07 60 31   destination = 0x6007D3
+	lda xbc, (Link_E1Dest:24)                        ; F8E4BC  f2 d3 07 60 31   destination = 0x6007D3
 	push XBC                                      ; F8E4C1  39
 	lda xiy, (.LF8E4CA:24)                        ; F8E4C2  f2 ca e4 f8 35   the return address for the stack-argument call
 	push XIY                                      ; F8E4C7  3d
@@ -24510,9 +24510,9 @@ INT0_Cmd_E1:
 	res_dd8 0x01, 0x13                            ; F8E4CD  f0 13 b1   absorbs the rest of the message.  P7 bit 1 = the acknowledge line
 	jr INT0_Link__drop_args                                   ; F8E4D0  68 53
 INT0_Cmd_E2:
-	ld (0x6007da:24), 0x03                      ; F8E4D2  f2 da 07 60 00 03
+	ld (Link_CompletionSelector:24), 0x03                      ; F8E4D2  f2 da 07 60 00 03
 	pushw 0x0a                                    ; F8E4D8  0b 0a 00   count = 10
-	lda xbc, (0x600788:24)                        ; F8E4DB  f2 88 07 60 31   destination = 0x600788
+	lda xbc, (Link_E2Payload:24)                        ; F8E4DB  f2 88 07 60 31   destination = 0x600788
 	push XBC                                      ; F8E4E0  39
 	lda xiy, (.LF8E4E9:24)                        ; F8E4E1  f2 e9 e4 f8 35
 	push XIY                                      ; F8E4E6  3d
@@ -24522,17 +24522,17 @@ INT0_Cmd_E2:
 	res_dd8 0x01, 0x13                            ; F8E4EC  f0 13 b1
 	jr INT0_Link__drop_args                                   ; F8E4EF  68 34
 INT0_Cmd_E6:
-	ld (0x6007da:24), 0x00                      ; F8E4F1  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E4F1  f2 da 07 60 00 00
 	m_res 6, MD24, 0x00008a                       ; F8E4F7  f2 8a 00 00 b6   0xE6 takes no payload at all
 	jr INT0_Link__return                                   ; F8E4FC  68 29
 INT0_Cmd_Other:
-	ld (0x6007da:24), 0x01                      ; F8E4FE  f2 da 07 60 00 01
-	ld c, (0x600780:24)                          ; F8E504  c2 80 07 60 23   any other command: the low 5 bits are the payload LENGTH - 1
+	ld (Link_CompletionSelector:24), 0x01                      ; F8E4FE  f2 da 07 60 00 01
+	ld c, (Link_RxCommand:24)                          ; F8E504  c2 80 07 60 23   any other command: the low 5 bits are the payload LENGTH - 1
 	and C,0x1f                                    ; F8E509  cb cc 1f
 	extz BC                                       ; F8E50C  d9 12
 	inc 1,BC                                      ; F8E50E  d9 61
 	pushw bc                                      ; F8E510  29
-	lda xbc, (0x6007b3:24)                        ; F8E511  f2 b3 07 60 31   destination = 0x6007B3
+	lda xbc, (Link_RxPayload:24)                        ; F8E511  f2 b3 07 60 31   destination = 0x6007B3
 	push XBC                                      ; F8E516  39
 	lda xiy, (.LF8E51F:24)                        ; F8E517  f2 1f e5 f8 35
 	push XIY                                      ; F8E51C  3d
@@ -24573,14 +24573,14 @@ INT0_Link__return:
 ; ---------------------------------------------------------------------
 INTTC2_uDMA2Done:
 	res_dd8 0x02, 0x20                            ; F8E52D  f0 20 b2   TRUN bit 2 = stop timer 2, which is what triggers channel 2
-	m_cp_mi8 MB24, 0x6007d9, 0x01                 ; F8E530  c2 d9 07 60 3f 01
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                 ; F8E530  c2 d9 07 60 3f 01
 	jr nz, INTTC2_uDMA2Done__try2                               ; F8E536  6e 08
-	ld (0x6007d9:24), 0x00                      ; F8E538  f2 d9 07 60 00 00
+	ld (Link_TxBurstsLeft:24), 0x00                      ; F8E538  f2 d9 07 60 00 00
 	jr INTTC2_uDMA2Done__ret                                   ; F8E53E  68 0e
 INTTC2_uDMA2Done__try2:
-	m_cp_mi8 MB24, 0x6007d9, 0x02                 ; F8E540  c2 d9 07 60 3f 02
+	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x02                 ; F8E540  c2 d9 07 60 3f 02
 	jr nz, INTTC2_uDMA2Done__ret                               ; F8E546  6e 06
-	ld (0x6007d9:24), 0x01                      ; F8E548  f2 d9 07 60 00 01
+	ld (Link_TxBurstsLeft:24), 0x01                      ; F8E548  f2 d9 07 60 00 01
 INTTC2_uDMA2Done__ret:
 	reti                                          ; F8E54E  07
 
@@ -24645,7 +24645,7 @@ INTTC3_LinkDmaDone:
 	pushw wa                                      ; F8E550  28
 	push XIY                                      ; F8E551  3d
 	push QWA                                      ; F8E552  d7 e2 04
-	ld bc, (0x6007da:24)                         ; F8E555  d2 da 07 60 21   the selector INT0 left behind
+	ld bc, (Link_CompletionSelector:24)                         ; F8E555  d2 da 07 60 21   the selector INT0 left behind
 	extz BC                                       ; F8E55A  d9 12
 	cp bc, 0x01:i3                                  ; F8E55C  d9 d9
 	jr z, INTTC3_Sel1_GeneralCmd                  ; F8E55E  66 10
@@ -24668,14 +24668,14 @@ INTTC3_LinkDmaDone:
 ; All eight have a 0x00 high byte and land inside 0xF00000-0xFFFFFF, which is
 ; what says the table really is eight entries wide and not longer.
 INTTC3_Sel1_GeneralCmd:
-	lda xbc, (0x6007b3:24)                        ; F8E570  f2 b3 07 60 31   arg 1: the payload buffer
+	lda xbc, (Link_RxPayload:24)                        ; F8E570  f2 b3 07 60 31   arg 1: the payload buffer
 	push XBC                                      ; F8E575  39
-	ld a, (0x600780:24)                          ; F8E576  c2 80 07 60 21
+	ld a, (Link_RxCommand:24)                          ; F8E576  c2 80 07 60 21
 	and A,0x1f                                    ; F8E57B  c9 cc 1f
 	extz WA                                       ; F8E57E  d8 12
 	inc 1,WA                                      ; F8E580  d8 61   arg 2: (cmd & 0x1F) + 1 = the length
 	pushw wa                                      ; F8E582  28
-	ld w, (0x600780:24)                          ; F8E583  c2 80 07 60 20
+	ld w, (Link_RxCommand:24)                          ; F8E583  c2 80 07 60 20
 	srl w, 0x05                                   ; F8E588  c8 ef 05   the top three bits are the opcode
 	ld C,W                                        ; F8E58B  c8 8b
 	mul C,0x04                                    ; F8E58D  cb 08 04
@@ -24686,7 +24686,7 @@ INTTC3_Sel1_GeneralCmd:
 	push XIY                                      ; F8E59F  3d   the handler's `ret` lands there
 	jp (xbc)                                      ; F8E5A0  b1 d8
 INTTC3_Sel1__resume:
-	ld (0x6007da:24), 0x00                      ; F8E5A2  f2 da 07 60 00 00   the exchange is over
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E5A2  f2 da 07 60 00 00   the exchange is over
 	set_dd8 0x01, 0x13                            ; F8E5A8  f0 13 b9   P7 bit 1 back to idle
 	jr INTTC3__drop_args                          ; F8E5AB  68 19
 
@@ -24695,13 +24695,13 @@ INTTC3_Sel1__resume:
 ; re-points INT0's own vector at the DMA engine again so the block is absorbed
 ; without another interrupt, and selector 4 is what will see it finish.
 INTTC3_Sel2_ArmPayload:
-	ld bc, (0x6007d7:24)                         ; F8E5AD  d2 d7 07 60 21   count
+	ld bc, (Link_E1Count:24)                         ; F8E5AD  d2 d7 07 60 21   count
 	pushw bc                                      ; F8E5B2  29
-	ld xbc, (0x6007d3:24)                        ; F8E5B3  e2 d3 07 60 21   destination
+	ld xbc, (Link_E1Dest:24)                        ; F8E5B3  e2 d3 07 60 21   destination
 	push XBC                                      ; F8E5B8  39
 	call uDMA3_SetDest                            ; F8E5B9  1d c9 e6 f8   DMAD3 := dest, DMAC3 := count
 	ld (DMA3V:8), 0x0a:io                              ; F8E5BD  08 7f 0a   0x0A << 2 = 0x28 = INT0
-	ld (0x6007da:24), 0x04                      ; F8E5C0  f2 da 07 60 00 04
+	ld (Link_CompletionSelector:24), 0x04                      ; F8E5C0  f2 da 07 60 00 04
 INTTC3__drop_args:
 	inc 6,XSP                                     ; F8E5C6  ef 66   drop the two pushed arguments
 	jr INTTC3__return                             ; F8E5C8  68 24
@@ -24712,14 +24712,14 @@ INTTC3__drop_args:
 ; from interrupt context.
 INTTC3_Sel3_ReadRequest:
 	ld (0x600781:24), 0xff                      ; F8E5CA  f2 81 07 60 00 ff
-	ld (0x6007da:24), 0x00                      ; F8E5D0  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E5D0  f2 da 07 60 00 00
 	set_dd8 0x01, 0x13                            ; F8E5D6  f0 13 b9   P7 bit 1 back to idle
-	m_set 7, MD24, 0x600792                       ; F8E5D9  f2 92 07 60 bf   "an 0xE2 is pending"
+	m_set 7, MD24, Link_PendingFlags                       ; F8E5D9  f2 92 07 60 bf   "an 0xE2 is pending"
 	jr INTTC3__return                             ; F8E5DE  68 0e
 
 ; --- selector 4: the payload of an 0xE1 block finished arriving --------------
 INTTC3_Sel4_BlockDone:
-	ld (0x6007da:24), 0x00                      ; F8E5E0  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E5E0  f2 da 07 60 00 00
 	m_res 7, MD24, 0x00008a                       ; F8E5E6  f2 8a 00 00 b7   release Link_WaitBlockDone
 	set_dd8 0x01, 0x13                            ; F8E5EB  f0 13 b9   P7 bit 1 back to idle
 INTTC3__return:
@@ -24760,15 +24760,15 @@ Link_ServiceTask:
 	push XIX                                      ; F8E5F6  3c
 	lda xix, (0x6007dd:24)                        ; F8E5F7  f2 dd 07 60 34   XIX = &stall counter
 	ei 0x06                                       ; F8E5FC  06 06
-	m_bit 7, MD24, 0x600792                       ; F8E5FE  f2 92 07 60 cf   0xE2 pending?
+	m_bit 7, MD24, Link_PendingFlags                       ; F8E5FE  f2 92 07 60 cf   0xE2 pending?
 	jr z, Link_ServiceTask__watchdog               ; F8E603  66 20
-	m_res 7, MD24, 0x600792                       ; F8E605  f2 92 07 60 b7
+	m_res 7, MD24, Link_PendingFlags                       ; F8E605  f2 92 07 60 b7
 	ei 0x00                                       ; F8E60A  06 00
-	ld xbc, (0x60078c:24)                        ; F8E60C  e2 8c 07 60 21   field 2: destination
+	ld xbc, (Link_E2Payload+4:24)                        ; F8E60C  e2 8c 07 60 21   field 2: destination
 	push XBC                                      ; F8E611  39
-	ld bc, (0x600790:24)                         ; F8E612  d2 90 07 60 21   field 3: count
+	ld bc, (Link_E2Payload+8:24)                         ; F8E612  d2 90 07 60 21   field 3: count
 	pushw bc                                      ; F8E617  29
-	ld xbc, (0x600788:24)                        ; F8E618  e2 88 07 60 21   field 1: source
+	ld xbc, (Link_E2Payload:24)                        ; F8E618  e2 88 07 60 21   field 1: source
 	push XBC                                      ; F8E61D  39
 	calr Link_SendCommandE1                    ; F8E61E  1e 4e fc   the 0xE1 block transmitter
 	inc 8,XSP                                     ; F8E621  ef 60   +8
@@ -24778,7 +24778,7 @@ Link_ServiceTask__watchdog:
 	bit_dd8 0x01, 0x13                            ; F8E627  f0 13 c9   P7 bit 1 set = nothing in flight
 	jr nz, Link_ServiceTask__idle                 ; F8E62A  6e 1e
 	call uDMA3_GetCount                           ; F8E62C  1d da e6 f8   WA := DMAC3
-	cp (0x6007df:24), wa                      ; F8E630  d2 df 07 60 f8   same as last pass?
+	cp (Link_LastDmaCount:24), wa                      ; F8E630  d2 df 07 60 f8   same as last pass?
 	jr nz, Link_ServiceTask__moved                ; F8E635  6e 04
 	incw 0x01, (xix)                              ; F8E637  94 61   stalled: count it
 	jr Link_ServiceTask__save                     ; F8E639  68 04
@@ -24786,7 +24786,7 @@ Link_ServiceTask__moved:
 	m_ld_mi16 MDI+r4, 0, 0x0000                   ; F8E63B  b4 02 00 00   progress: reset the count
 Link_ServiceTask__save:
 	call uDMA3_GetCount                           ; F8E63F  1d da e6 f8
-	ld (0x6007df:24), wa                         ; F8E643  f2 df 07 60 50
+	ld (Link_LastDmaCount:24), wa                         ; F8E643  f2 df 07 60 50
 	jr Link_ServiceTask__check                    ; F8E648  68 04
 Link_ServiceTask__idle:
 	m_ld_mi16 MDI+r4, 0, 0x0000                   ; F8E64A  b4 02 00 00
@@ -24796,9 +24796,9 @@ Link_ServiceTask__check:
 	jr ule, Link_ServiceTask__done                ; F8E654  63 15
 	m_ld_mi16 MDI+r4, 0, 0x0000                   ; F8E656  b4 02 00 00   eleven equal samples: abort
 	ld (DMA3V:8), 0x00:io                              ; F8E65A  08 7f 00   un-point INT0 from the DMA engine
-	ld (0x6007da:24), 0x00                      ; F8E65D  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E65D  f2 da 07 60 00 00
 	set_dd8 0x01, 0x13                            ; F8E663  f0 13 b9   P7 bit 1 back to idle
-	inc 0x01, (0x6007dc:24)                    ; F8E666  c2 dc 07 60 61   error counter
+	inc 0x01, (Link_StallAborts:24)                    ; F8E666  c2 dc 07 60 61   error counter
 Link_ServiceTask__done:
 	pop XIX                                       ; F8E66B  5c
 	ret                                           ; F8E66C  0e
@@ -24842,10 +24842,10 @@ Link_WaitBlockDone__poll:
 	cp BC,0x01f4                                  ; F8E67D  d9 cf f4 01   500 ticks
 	jr le, Link_WaitBlockDone__poll               ; F8E681  62 ee
 	ld (DMA3V:8), 0x00:io                              ; F8E683  08 7f 00
-	ld (0x6007da:24), 0x00                      ; F8E686  f2 da 07 60 00 00
+	ld (Link_CompletionSelector:24), 0x00                      ; F8E686  f2 da 07 60 00 00
 	set_dd8 0x01, 0x13                            ; F8E68C  f0 13 b9
 	m_res 7, MD24, 0x00008a                       ; F8E68F  f2 8a 00 00 b7
-	inc 0x01, (0x6007e1:24)                    ; F8E694  c2 e1 07 60 61   error counter
+	inc 0x01, (Link_BlockDoneTimeouts:24)                    ; F8E694  c2 e1 07 60 61   error counter
 	ldw wa, 0xffff                                ; F8E699  30 ff ff   timed out
 .LF8E69C:
 	jr Link_WaitBlockDone__ret                    ; F8E69C  68 02
@@ -25046,11 +25046,11 @@ MemCopyWords:
 	pop XHL                                       ; F8E749  5b
 	ret                                           ; F8E74A  0e
 	lda xiy, (ZeroInitData_F8E773:24)             ; F8E74B  f2 73 e7 f8 35
-	lda xix, (0x6007d3:24)                        ; F8E750  f2 d3 07 60 34
+	lda xix, (Link_E1Dest:24)                        ; F8E750  f2 d3 07 60 34
 	ld XBC,0x00000009                             ; F8E755  41 09 00 00 00
 	ldir85                                        ; F8E75A  85 11
 	ld XBC,0x00000053                             ; F8E75C  41 53 00 00 00
-	lda xix, (0x600780:24)                        ; F8E761  f2 80 07 60 34
+	lda xix, (Link_RxCommand:24)                        ; F8E761  f2 80 07 60 34
 	xor WA,WA                                     ; F8E766  d8 d0
 .LF8E768:
 	ld (xix+), a                             ; F8E768  f5 f0 41

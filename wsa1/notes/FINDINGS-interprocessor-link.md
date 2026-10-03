@@ -94,6 +94,17 @@ actually transmits.
 
 ⚠ **What the blocks CONTAIN is still not established.**
 
+**Named in the source (2026-10-03).** The addresses this note establishes are symbols in
+`wsa1/include/wsa1_ram.inc` -- `Link_RxCommand` (0x600780), `Link_E2Payload` (0x600788; its long at
++4 and word at +8 are written `Link_E2Payload+4` / `+8`, their roles not being separately named here),
+`Link_PendingFlags` (0x600792), `Link_TxDest` / `Link_TxCount` (0x6007A1 / 0x6007A5),
+`Link_RxPayload` (0x6007B3), `Link_E1Dest` / `Link_E1Count` (0x6007D3 / 0x6007D7),
+`Link_TxBurstsLeft` (0x6007D9), `Link_CompletionSelector` (0x6007DA), the three counters
+`Link_HandshakeTimeouts` / `Link_StallAborts` / `Link_BlockDoneTimeouts` and the watchdog's
+`Link_LastDmaCount` (0x6007DF) -- 65 operands in prom_a and prom_b
+(`scripts/tools/name_wsa1_ram.py`).  0x600781, 0x600782, 0x600793, 0x60079D, 0x6007A7, 0x6007AB,
+0x6007AD, 0x6007B1 and 0x6007DD are used too but not established here, and stay numbers.
+
 ## `(0x6007DA)`, the completion selector
 
 | value | set by | what `INTTC3` then does |
