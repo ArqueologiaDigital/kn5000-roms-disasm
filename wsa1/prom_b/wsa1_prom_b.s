@@ -89740,9 +89740,9 @@ T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
 T_F42BF4:	jp sub_F6656E  ; -> prom_b 0x6656E   x1
 T_F42BF8:	jp sub_F665B4  ; -> prom_b 0x665B4   x1
 T_F42BFC:	jp T_F42BFC_Nop  ; -> prom_b 0x665F1
-T_F42C00:	jp sub_F665F2  ; -> prom_b 0x665F2   x1
-T_F42C04:	jp sub_F665FF  ; -> prom_b 0x665FF   x1
-T_F42C08:	jp sub_F6660C  ; -> prom_b 0x6660C   x1
+T_F42C00:	jp TrackAssignPresets_SelectField1  ; -> prom_b 0x665F2   x1
+T_F42C04:	jp TrackAssignPresets_SelectField2  ; -> prom_b 0x665FF   x1
+T_F42C08:	jp TrackAssignPresets_SelectField3  ; -> prom_b 0x6660C   x1
 T_F42C0C:	jp sub_F66619  ; -> prom_b 0x66619   x1
 T_F42C10:	jp sub_F66639  ; -> prom_b 0x66639   x1
 T_F42C14:	jp sub_F66658  ; -> prom_b 0x66658   x1
@@ -143809,17 +143809,14 @@ T_F42BFC_Nop:		; <- T_F42BFC
 	ret	; F665F1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F665F2
+; TrackAssignPresets_SelectField1
 ; Called from: T_F42C00 (x1)
 ; Touches: (0x0DFD) (0x12F6)
-; Evidence: thunk slot T_F42C00 holds `jp 0x00F665F2`, and 0xF665F2 is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 1 into (0x0DFD) and 1 - 1 into DisplayListB_Stage; (0x0DFD) is read by
+;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
+; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F665F2:		; <- T_F42C00
+TrackAssignPresets_SelectField1:		; <- T_F42C00
 	ld	a, 1:opc	; F665F2  ld A,0x01
 	ld	(3581:16), a	; F665F4  ld (0x0dfd),A
 	dec	1, a	; F665F8  dec 1,A
@@ -143827,17 +143824,14 @@ sub_F665F2:		; <- T_F42C00
 	ret	; F665FE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F665FF
+; TrackAssignPresets_SelectField2
 ; Called from: T_F42C04 (x1)
 ; Touches: (0x0DFD) (0x12F6)
-; Evidence: thunk slot T_F42C04 holds `jp 0x00F665FF`, and 0xF665FF is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 2 into (0x0DFD) and 2 - 1 into DisplayListB_Stage; (0x0DFD) is read by
+;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
+; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F665FF:		; <- T_F42C04
+TrackAssignPresets_SelectField2:		; <- T_F42C04
 	ld	a, 2:opc	; F665FF  ld A,0x02
 	ld	(3581:16), a	; F66601  ld (0x0dfd),A
 	dec	1, a	; F66605  dec 1,A
@@ -143845,17 +143839,14 @@ sub_F665FF:		; <- T_F42C04
 	ret	; F6660B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6660C
+; TrackAssignPresets_SelectField3
 ; Called from: T_F42C08 (x1)
 ; Touches: (0x0DFD) (0x12F6)
-; Evidence: thunk slot T_F42C08 holds `jp 0x00F6660C`, and 0xF6660C is an
-;           instruction boundary of this transcription (re-asserted on every
-;           emit).  That is ALL the name rests on -- the name IS the
-;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Evidence: it stores 3 into (0x0DFD) and 3 - 1 into DisplayListB_Stage; (0x0DFD) is read by
+;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
+; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-sub_F6660C:		; <- T_F42C08
+TrackAssignPresets_SelectField3:		; <- T_F42C08
 	ld	a, 3:opc	; F6660C  ld A,0x03
 	ld	(3581:16), a	; F6660E  ld (0x0dfd),A
 	dec	1, a	; F66612  dec 1,A

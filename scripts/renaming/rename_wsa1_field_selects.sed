@@ -32,3 +32,7 @@ s/\bOldCopy_sub_F7AA02\b/OldCopy_BStore_AppendBytes_Join4_Veneer/g
 s/\bOldCopy_sub_F7ACC5\b/OldCopy_TrackMerge_SelectField1/g
 s/\bOldCopy_sub_F7ACD0\b/OldCopy_TrackMerge_SelectField2/g
 s/\bOldCopy_sub_F7ACDB\b/OldCopy_TrackMerge_SelectField3/g
+# cell 0x0DFD, read by ScreenLeaveBody_TrackAssignPresets
+s/\bsub_F665F2\b/TrackAssignPresets_SelectField1/g
+s/\bsub_F665FF\b/TrackAssignPresets_SelectField2/g
+s/\bsub_F6660C\b/TrackAssignPresets_SelectField3/g
