@@ -54,7 +54,7 @@ reachable. The default cap is deliberately generous.
 ## `sysex_error_codes.py` — signal being read
 
 The status byte is **field 4 of the parse record** whose pointer is RAM
-`(0x60FCD8)`; prom_a `sub_FB6219` (0xFB6219) is the setter and `sub_FB62D3`
+`(0x60FCD8)`; prom_a `U8Rec16_SetField` (0xFB6219) is the setter and `U8Rec16_GetField`
 (0xFB62D3) the getter, both 16-way jump tables over offsets +0..+15.
 
 * `sub_FB7DFE` (0xFB7DFE) reads field 4 at the end of a session:
@@ -776,7 +776,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
   number reaches a handler only out of parse-record field 0, and field 0 is
   written at exactly **19** sites, **all** of them inside the grammar walker
   `0xFB63D1-0xFB6B87`. The script finds those sites by locating every
-  call/`calr` to the setter `sub_FB6219` and reading the `pushw` immediates
+  call/`calr` to the setter `U8Rec16_SetField` and reading the `pushw` immediates
   behind it, so "no accepted sequence" really does mean "no way in".
 * **0x0D is the receive half of the transmitter at `0xFB248A`**, which has no
   caller in prom_a. Its header prom_b `0xF4FF10` is `20 00 00 / 00 00 10` —

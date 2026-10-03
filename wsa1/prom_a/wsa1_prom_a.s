@@ -86567,7 +86567,7 @@ sub_FB20CE:
 	ret                                                  ; FB215F  0e
 sub_FB2160:
 	push XIX                                             ; FB2160  3c
-	lda xix, (sub_FB62D3:24)                             ; FB2161  f2 d3 62 fb 34
+	lda xix, (U8Rec16_GetField:24)                             ; FB2161  f2 d3 62 fb 34
 	call sub_FB63AF                                      ; FB2166  1d af 63 fb
 	pushw 0x04                                           ; FB216A  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB216D  e2 d8 fc 60 21
@@ -86682,7 +86682,7 @@ sub_FB21CB:
 	ret                                                  ; FB225C  0e
 sub_FB225D:
 	push XIX                                             ; FB225D  3c
-	lda xix, (sub_FB62D3:24)                             ; FB225E  f2 d3 62 fb 34
+	lda xix, (U8Rec16_GetField:24)                             ; FB225E  f2 d3 62 fb 34
 	call sub_FB63AF                                      ; FB2263  1d af 63 fb
 	pushw 0x04                                           ; FB2267  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB226A  e2 d8 fc 60 21
@@ -86782,7 +86782,7 @@ sub_FB2323:
 	pushw 0x00                                           ; FB2347  0b 00 00
 	ld XBC,(XIX)                                         ; FB234A  a4 21
 	push XBC                                             ; FB234C  39
-	call sub_FB62D3                                      ; FB234D  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB234D  1d d3 62 fb
 	inc 8,XSP                                            ; FB2351  ef 60
 	inc 4,XSP                                            ; FB2353  ef 64
 	cp A,0x08                                            ; FB2355  c9 cf 08
@@ -86797,24 +86797,24 @@ sub_FB2323:
 	pushw 0x04                                           ; FB2367  0b 04 00
 	ld XBC,(XIX)                                         ; FB236A  a4 21
 	push XBC                                             ; FB236C  39
-	call sub_FB6219                                      ; FB236D  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB236D  1d 19 62 fb
 	inc 8,XSP                                            ; FB2371  ef 60
 	jr .LFB23DF                                          ; FB2373  68 6a
 .LFB2375:
 	pushw 0x06                                           ; FB2375  0b 06 00
 	ld XBC,(XIX)                                         ; FB2378  a4 21
 	push XBC                                             ; FB237A  39
-	call sub_FB62D3                                      ; FB237B  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB237B  1d d3 62 fb
 	ld (0x60fc90:24), a                                 ; FB237F  f2 90 fc 60 41
 	pushw 0x07                                           ; FB2384  0b 07 00
 	ld XBC,(XIX)                                         ; FB2387  a4 21
 	push XBC                                             ; FB2389  39
-	call sub_FB62D3                                      ; FB238A  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB238A  1d d3 62 fb
 	ld (0x60fc91:24), a                                 ; FB238E  f2 91 fc 60 41
 	pushw 0x08                                           ; FB2393  0b 08 00
 	ld XBC,(XIX)                                         ; FB2396  a4 21
 	push XBC                                             ; FB2398  39
-	call sub_FB62D3                                      ; FB2399  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2399  1d d3 62 fb
 	ld (0x60fc92:24), a                                 ; FB239D  f2 92 fc 60 41
 	ld h, 0x03:opc                                          ; FB23A2  26 03
 	add XSP,0x00000012                                   ; FB23A4  ef c8 12 00 00 00
@@ -86828,7 +86828,7 @@ sub_FB2323:
 	pushw 0x00                                           ; FB23C0  0b 00 00
 	ld XBC,(XIX)                                         ; FB23C3  a4 21
 	push XBC                                             ; FB23C5  39
-	call sub_FB62D3                                      ; FB23C6  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB23C6  1d d3 62 fb
 	inc 8,XSP                                            ; FB23CA  ef 60
 	inc 4,XSP                                            ; FB23CC  ef 64
 	cp a, 0x01:i3                                          ; FB23CE  c9 d9
@@ -86858,7 +86858,7 @@ sub_FB23F9:
 	pushw 0x04                                           ; FB23F9  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB23FC  e2 d8 fc 60 21
 	push XBC                                             ; FB2401  39
-	call sub_FB62D3                                      ; FB2402  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2402  1d d3 62 fb
 	inc 6,XSP                                            ; FB2406  ef 66
 	cp a, 0x00:i3                                          ; FB2408  c9 d8
 	jr nz, .LFB243D                                      ; FB240A  6e 31
@@ -86866,7 +86866,7 @@ sub_FB23F9:
 	pushw 0x03                                           ; FB240F  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2412  e2 e0 fc 60 21
 	push XBC                                             ; FB2417  39
-	call sub_FB6219                                      ; FB2418  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2418  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB241C  f2 f8 fc 60 31
 	push XBC                                             ; FB2421  39
 	call sub_FB75BA                                      ; FB2422  1d ba 75 fb
@@ -86882,7 +86882,7 @@ sub_FB243E:
 	pushw 0x04                                           ; FB243E  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2441  e2 d8 fc 60 21
 	push XBC                                             ; FB2446  39
-	call sub_FB62D3                                      ; FB2447  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2447  1d d3 62 fb
 	inc 6,XSP                                            ; FB244B  ef 66
 	cp a, 0x00:i3                                          ; FB244D  c9 d8
 	jr nz, .LFB2482                                      ; FB244F  6e 31
@@ -86890,7 +86890,7 @@ sub_FB243E:
 	pushw 0x03                                           ; FB2454  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2457  e2 e0 fc 60 21
 	push XBC                                             ; FB245C  39
-	call sub_FB6219                                      ; FB245D  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB245D  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB2461  f2 f8 fc 60 31
 	push XBC                                             ; FB2466  39
 	call sub_FB75E4                                      ; FB2467  1d e4 75 fb
@@ -86939,7 +86939,7 @@ sub_FB2483:
 	pushw 0x04                                           ; FB248A  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB248D  e2 d8 fc 60 21
 	push XBC                                             ; FB2492  39
-	call sub_FB62D3                                      ; FB2493  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2493  1d d3 62 fb
 	inc 6,XSP                                            ; FB2497  ef 66
 	cp a, 0x00:i3                                          ; FB2499  c9 d8
 	jr nz, .LFB24EB                                      ; FB249B  6e 4e
@@ -86947,7 +86947,7 @@ sub_FB2483:
 	pushw 0x03                                           ; FB24A0  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB24A3  e2 e0 fc 60 21
 	push XBC                                             ; FB24A8  39
-	call sub_FB6219                                      ; FB24A9  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB24A9  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB24AD  f2 f8 fc 60 31
 	push XBC                                             ; FB24B2  39
 	call sub_FB7629                                      ; FB24B3  1d 29 76 fb
@@ -86994,7 +86994,7 @@ Remote_E80000_Read32Blocks:
 	pushw 0x04                                           ; FB24EE  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB24F1  e2 d8 fc 60 21
 	push XBC                                             ; FB24F6  39
-	call sub_FB62D3                                      ; FB24F7  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB24F7  1d d3 62 fb
 	inc 6,XSP                                            ; FB24FB  ef 66
 	cp a, 0x00:i3                                          ; FB24FD  c9 d8
 	jrl nz, .LFB2580                                     ; FB24FF  7e 7e 00
@@ -87002,7 +87002,7 @@ Remote_E80000_Read32Blocks:
 	pushw 0x03                                           ; FB2505  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2508  e2 e0 fc 60 21
 	push XBC                                             ; FB250D  39
-	call sub_FB6219                                      ; FB250E  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB250E  1d 19 62 fb
 	pushw 0x0c                                           ; FB2512  0b 0c 00
 	lda xbc, (0xf4ff1c:24)                               ; FB2515  f2 1c ff f4 31
 	push XBC                                             ; FB251A  39
@@ -87065,7 +87065,7 @@ sub_FB25A2:
 	pushw 0x04                                           ; FB25A2  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB25A5  e2 d8 fc 60 21
 	push XBC                                             ; FB25AA  39
-	call sub_FB62D3                                      ; FB25AB  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB25AB  1d d3 62 fb
 	inc 6,XSP                                            ; FB25AF  ef 66
 	cp a, 0x00:i3                                          ; FB25B1  c9 d8
 	jr nz, .LFB25E6                                      ; FB25B3  6e 31
@@ -87073,7 +87073,7 @@ sub_FB25A2:
 	pushw 0x03                                           ; FB25B8  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB25BB  e2 e0 fc 60 21
 	push XBC                                             ; FB25C0  39
-	call sub_FB6219                                      ; FB25C1  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB25C1  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB25C5  f2 f8 fc 60 31
 	push XBC                                             ; FB25CA  39
 	call sub_FB766F                                      ; FB25CB  1d 6f 76 fb
@@ -87089,7 +87089,7 @@ sub_FB25E7:
 	pushw 0x04                                           ; FB25E7  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB25EA  e2 d8 fc 60 21
 	push XBC                                             ; FB25EF  39
-	call sub_FB62D3                                      ; FB25F0  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB25F0  1d d3 62 fb
 	inc 6,XSP                                            ; FB25F4  ef 66
 	cp a, 0x00:i3                                          ; FB25F6  c9 d8
 	jr nz, .LFB262B                                      ; FB25F8  6e 31
@@ -87097,7 +87097,7 @@ sub_FB25E7:
 	pushw 0x03                                           ; FB25FD  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2600  e2 e0 fc 60 21
 	push XBC                                             ; FB2605  39
-	call sub_FB6219                                      ; FB2606  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2606  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB260A  f2 f8 fc 60 31
 	push XBC                                             ; FB260F  39
 	call sub_FB7692                                      ; FB2610  1d 92 76 fb
@@ -87113,7 +87113,7 @@ sub_FB262C:
 	pushw 0x04                                           ; FB262C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB262F  e2 d8 fc 60 21
 	push XBC                                             ; FB2634  39
-	call sub_FB62D3                                      ; FB2635  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2635  1d d3 62 fb
 	inc 6,XSP                                            ; FB2639  ef 66
 	cp a, 0x00:i3                                          ; FB263B  c9 d8
 	jr nz, .LFB2674                                      ; FB263D  6e 35
@@ -87121,7 +87121,7 @@ sub_FB262C:
 	pushw 0x03                                           ; FB2642  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2645  e2 e0 fc 60 21
 	push XBC                                             ; FB264A  39
-	call sub_FB6219                                      ; FB264B  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB264B  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB264F  f2 f8 fc 60 31
 	push XBC                                             ; FB2654  39
 	call sub_FB76B5                                      ; FB2655  1d b5 76 fb
@@ -87143,7 +87143,7 @@ sub_FB267F:
 	pushw 0x04                                           ; FB267F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2682  e2 d8 fc 60 21
 	push XBC                                             ; FB2687  39
-	call sub_FB62D3                                      ; FB2688  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2688  1d d3 62 fb
 	inc 6,XSP                                            ; FB268C  ef 66
 	cp a, 0x00:i3                                          ; FB268E  c9 d8
 	jr nz, .LFB26E6                                      ; FB2690  6e 54
@@ -87151,7 +87151,7 @@ sub_FB267F:
 	pushw 0x03                                           ; FB2695  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2698  e2 e0 fc 60 21
 	push XBC                                             ; FB269D  39
-	call sub_FB6219                                      ; FB269E  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB269E  1d 19 62 fb
 	lda xbc, (0x60fcf8:24)                               ; FB26A2  f2 f8 fc 60 31
 	push XBC                                             ; FB26A7  39
 	call sub_FB76F2                                      ; FB26A8  1d f2 76 fb
@@ -87179,7 +87179,7 @@ sub_FB26E7:
 	pushw 0x04                                           ; FB26E9  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB26EC  e2 d8 fc 60 21
 	push XBC                                             ; FB26F1  39
-	call sub_FB62D3                                      ; FB26F2  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB26F2  1d d3 62 fb
 	inc 6,XSP                                            ; FB26F6  ef 66
 	cp a, 0x00:i3                                          ; FB26F8  c9 d8
 	jrl nz, .LFB277B                                     ; FB26FA  7e 7e 00
@@ -87187,7 +87187,7 @@ sub_FB26E7:
 	pushw 0x03                                           ; FB2700  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB2703  e2 e0 fc 60 21
 	push XBC                                             ; FB2708  39
-	call sub_FB6219                                      ; FB2709  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2709  1d 19 62 fb
 	pushw 0x0c                                           ; FB270D  0b 0c 00
 	lda xbc, (0xf4ff55:24)                               ; FB2710  f2 55 ff f4 31
 	push XBC                                             ; FB2715  39
@@ -87234,7 +87234,7 @@ sub_FB277E:
 	pushw 0x04                                           ; FB277E  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2781  e2 d8 fc 60 21
 	push XBC                                             ; FB2786  39
-	call sub_FB62D3                                      ; FB2787  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2787  1d d3 62 fb
 	inc 6,XSP                                            ; FB278B  ef 66
 	cp a, 0x00:i3                                          ; FB278D  c9 d8
 	jr nz, .LFB27AC                                      ; FB278F  6e 1b
@@ -87250,7 +87250,7 @@ sub_FB277E:
 	ret                                                  ; FB27AC  0e
 sub_FB27AD:
 	push XIX                                             ; FB27AD  3c
-	lda xix, (sub_FB62D3:24)                             ; FB27AE  f2 d3 62 fb 34
+	lda xix, (U8Rec16_GetField:24)                             ; FB27AE  f2 d3 62 fb 34
 	pushw 0x04                                           ; FB27B3  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB27B6  e2 d8 fc 60 21
 	push XBC                                             ; FB27BB  39
@@ -87305,7 +87305,7 @@ sub_FB27AD:
 	pushw 0x00                                           ; FB282D  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB2830  e2 d8 fc 60 21
 	push XBC                                             ; FB2835  39
-	call sub_FB62D3                                      ; FB2836  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2836  1d d3 62 fb
 	inc 6,XSP                                            ; FB283A  ef 66
 	cp a, 0x07:i3                                          ; FB283C  c9 df
 	jr c, .LFB2873                                       ; FB283E  67 33
@@ -87318,7 +87318,7 @@ sub_FB27AD:
 	pushw 0x04                                           ; FB284C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB284F  e2 d8 fc 60 21
 	push XBC                                             ; FB2854  39
-	call sub_FB62D3                                      ; FB2855  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2855  1d d3 62 fb
 	inc 6,XSP                                            ; FB2859  ef 66
 	cp a, 0x00:i3                                          ; FB285B  c9 d8
 	jr z, .LFB2863                                       ; FB285D  66 04
@@ -87341,7 +87341,7 @@ sub_FB2877:
 	pushw 0x04                                           ; FB2878  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB287B  e2 d8 fc 60 21
 	push XBC                                             ; FB2880  39
-	call sub_FB62D3                                      ; FB2881  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2881  1d d3 62 fb
 	inc 6,XSP                                            ; FB2885  ef 66
 	cp a, 0x00:i3                                          ; FB2887  c9 d8
 	jr nz, .LFB28BC                                      ; FB2889  6e 31
@@ -87411,17 +87411,17 @@ sub_FB28BE:
 	pushw 0x06                                           ; FB292B  0b 06 00
 	ld XBC,(XIX)                                         ; FB292E  a4 21
 	push XBC                                             ; FB2930  39
-	call sub_FB62D3                                      ; FB2931  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2931  1d d3 62 fb
 	ld (0x60fc94:24), a                                 ; FB2935  f2 94 fc 60 41
 	pushw 0x07                                           ; FB293A  0b 07 00
 	ld XBC,(XIX)                                         ; FB293D  a4 21
 	push XBC                                             ; FB293F  39
-	call sub_FB62D3                                      ; FB2940  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2940  1d d3 62 fb
 	ld (0x60fc95:24), a                                 ; FB2944  f2 95 fc 60 41
 	pushw 0x08                                           ; FB2949  0b 08 00
 	ld XBC,(XIX)                                         ; FB294C  a4 21
 	push XBC                                             ; FB294E  39
-	call sub_FB62D3                                      ; FB294F  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB294F  1d d3 62 fb
 	ld (0x60fc96:24), a                                 ; FB2953  f2 96 fc 60 41
 	m_set 7, MD24, 0x60fd40                              ; FB2958  f2 40 fd 60 bf
 	ld (0x60fd44:24), 0x02                             ; FB295D  f2 44 fd 60 00 02
@@ -87437,7 +87437,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2978  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB297B  e2 dc fc 60 21
 	push XBC                                             ; FB2980  39
-	call sub_FB62D3                                      ; FB2981  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2981  1d d3 62 fb
 	inc 6,XSP                                            ; FB2985  ef 66
 	cp a, 0x00:i3                                          ; FB2987  c9 d8
 	jr nz, .LFB29A8                                      ; FB2989  6e 1d
@@ -87455,14 +87455,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB29AB  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB29AE  e2 d8 fc 60 21
 	push XBC                                             ; FB29B3  39
-	call sub_FB6219                                      ; FB29B4  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB29B4  1d 19 62 fb
 .LFB29B8:
 	inc 8,XSP                                            ; FB29B8  ef 60
 	ret                                                  ; FB29BA  0e
 	pushw 0x03                                           ; FB29BB  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB29BE  e2 dc fc 60 21
 	push XBC                                             ; FB29C3  39
-	call sub_FB62D3                                      ; FB29C4  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB29C4  1d d3 62 fb
 	inc 6,XSP                                            ; FB29C8  ef 66
 	cp a, 0x02:i3                                          ; FB29CA  c9 da
 	jr nz, .LFB29DE                                      ; FB29CC  6e 10
@@ -87477,14 +87477,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB29E1  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB29E4  e2 d8 fc 60 21
 	push XBC                                             ; FB29E9  39
-	call sub_FB6219                                      ; FB29EA  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB29EA  1d 19 62 fb
 	inc 8,XSP                                            ; FB29EE  ef 60
 .LFB29F0:
 	ret                                                  ; FB29F0  0e
 	pushw 0x03                                           ; FB29F1  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB29F4  e2 dc fc 60 21
 	push XBC                                             ; FB29F9  39
-	call sub_FB62D3                                      ; FB29FA  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB29FA  1d d3 62 fb
 	inc 6,XSP                                            ; FB29FE  ef 66
 	cp a, 0x00:i3                                          ; FB2A00  c9 d8
 	jr nz, .LFB2A14                                      ; FB2A02  6e 10
@@ -87499,7 +87499,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2A17  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2A1A  e2 d8 fc 60 21
 	push XBC                                             ; FB2A1F  39
-	call sub_FB6219                                      ; FB2A20  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2A20  1d 19 62 fb
 	inc 8,XSP                                            ; FB2A24  ef 60
 .LFB2A26:
 	ret                                                  ; FB2A26  0e
@@ -87507,7 +87507,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2A28  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2A2B  e2 dc fc 60 21
 	push XBC                                             ; FB2A30  39
-	call sub_FB62D3                                      ; FB2A31  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2A31  1d d3 62 fb
 	inc 6,XSP                                            ; FB2A35  ef 66
 	cp a, 0x00:i3                                          ; FB2A37  c9 d8
 	jr nz, .LFB2A67                                      ; FB2A39  6e 2c
@@ -87531,7 +87531,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2A6A  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2A6D  e2 d8 fc 60 21
 	push XBC                                             ; FB2A72  39
-	call sub_FB6219                                      ; FB2A73  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2A73  1d 19 62 fb
 	inc 8,XSP                                            ; FB2A77  ef 60
 .LFB2A79:
 	pop XIX                                              ; FB2A79  5c
@@ -87539,7 +87539,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2A7B  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2A7E  e2 dc fc 60 21
 	push XBC                                             ; FB2A83  39
-	call sub_FB62D3                                      ; FB2A84  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2A84  1d d3 62 fb
 	inc 6,XSP                                            ; FB2A88  ef 66
 	cp a, 0x00:i3                                          ; FB2A8A  c9 d8
 	jr nz, .LFB2AAB                                      ; FB2A8C  6e 1d
@@ -87557,14 +87557,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2AAE  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2AB1  e2 d8 fc 60 21
 	push XBC                                             ; FB2AB6  39
-	call sub_FB6219                                      ; FB2AB7  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2AB7  1d 19 62 fb
 .LFB2ABB:
 	inc 8,XSP                                            ; FB2ABB  ef 60
 	ret                                                  ; FB2ABD  0e
 	pushw 0x03                                           ; FB2ABE  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2AC1  e2 dc fc 60 21
 	push XBC                                             ; FB2AC6  39
-	call sub_FB62D3                                      ; FB2AC7  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2AC7  1d d3 62 fb
 	inc 6,XSP                                            ; FB2ACB  ef 66
 	cp A,0x08                                            ; FB2ACD  c9 cf 08
 	jr nz, .LFB2AE2                                      ; FB2AD0  6e 10
@@ -87579,14 +87579,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2AE5  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2AE8  e2 d8 fc 60 21
 	push XBC                                             ; FB2AED  39
-	call sub_FB6219                                      ; FB2AEE  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2AEE  1d 19 62 fb
 	inc 8,XSP                                            ; FB2AF2  ef 60
 .LFB2AF4:
 	ret                                                  ; FB2AF4  0e
 	pushw 0x03                                           ; FB2AF5  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2AF8  e2 dc fc 60 21
 	push XBC                                             ; FB2AFD  39
-	call sub_FB62D3                                      ; FB2AFE  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2AFE  1d d3 62 fb
 	inc 6,XSP                                            ; FB2B02  ef 66
 	cp A,0x09                                            ; FB2B04  c9 cf 09
 	jr nz, .LFB2B1D                                      ; FB2B07  6e 14
@@ -87602,14 +87602,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2B20  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2B23  e2 d8 fc 60 21
 	push XBC                                             ; FB2B28  39
-	call sub_FB6219                                      ; FB2B29  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2B29  1d 19 62 fb
 	inc 8,XSP                                            ; FB2B2D  ef 60
 .LFB2B2F:
 	ret                                                  ; FB2B2F  0e
 	pushw 0x03                                           ; FB2B30  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2B33  e2 dc fc 60 21
 	push XBC                                             ; FB2B38  39
-	call sub_FB62D3                                      ; FB2B39  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2B39  1d d3 62 fb
 	inc 6,XSP                                            ; FB2B3D  ef 66
 	cp a, 0x00:i3                                          ; FB2B3F  c9 d8
 	jr nz, .LFB2B5C                                      ; FB2B41  6e 19
@@ -87626,14 +87626,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2B5F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2B62  e2 d8 fc 60 21
 	push XBC                                             ; FB2B67  39
-	call sub_FB6219                                      ; FB2B68  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2B68  1d 19 62 fb
 .LFB2B6C:
 	inc 8,XSP                                            ; FB2B6C  ef 60
 	ret                                                  ; FB2B6E  0e
 	pushw 0x03                                           ; FB2B6F  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2B72  e2 dc fc 60 21
 	push XBC                                             ; FB2B77  39
-	call sub_FB62D3                                      ; FB2B78  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2B78  1d d3 62 fb
 	inc 6,XSP                                            ; FB2B7C  ef 66
 	cp A,0x0c                                            ; FB2B7E  c9 cf 0c
 	jr nz, .LFB2B93                                      ; FB2B81  6e 10
@@ -87648,14 +87648,14 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2B96  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2B99  e2 d8 fc 60 21
 	push XBC                                             ; FB2B9E  39
-	call sub_FB6219                                      ; FB2B9F  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2B9F  1d 19 62 fb
 	inc 8,XSP                                            ; FB2BA3  ef 60
 .LFB2BA5:
 	ret                                                  ; FB2BA5  0e
 	pushw 0x03                                           ; FB2BA6  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2BA9  e2 dc fc 60 21
 	push XBC                                             ; FB2BAE  39
-	call sub_FB62D3                                      ; FB2BAF  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2BAF  1d d3 62 fb
 	inc 6,XSP                                            ; FB2BB3  ef 66
 	cp A,0x0d                                            ; FB2BB5  c9 cf 0d
 	jr nz, .LFB2BCE                                      ; FB2BB8  6e 14
@@ -87671,7 +87671,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2BD1  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2BD4  e2 d8 fc 60 21
 	push XBC                                             ; FB2BD9  39
-	call sub_FB6219                                      ; FB2BDA  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2BDA  1d 19 62 fb
 	inc 8,XSP                                            ; FB2BDE  ef 60
 .LFB2BE0:
 	ret                                                  ; FB2BE0  0e
@@ -87679,7 +87679,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2BE2  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2BE5  e2 dc fc 60 21
 	push XBC                                             ; FB2BEA  39
-	call sub_FB62D3                                      ; FB2BEB  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2BEB  1d d3 62 fb
 	inc 6,XSP                                            ; FB2BEF  ef 66
 	cp a, 0x00:i3                                          ; FB2BF1  c9 d8
 	jr nz, .LFB2C21                                      ; FB2BF3  6e 2c
@@ -87703,7 +87703,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2C24  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2C27  e2 d8 fc 60 21
 	push XBC                                             ; FB2C2C  39
-	call sub_FB6219                                      ; FB2C2D  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2C2D  1d 19 62 fb
 	inc 8,XSP                                            ; FB2C31  ef 60
 .LFB2C33:
 	pop XIX                                              ; FB2C33  5c
@@ -87711,7 +87711,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2C35  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2C38  e2 dc fc 60 21
 	push XBC                                             ; FB2C3D  39
-	call sub_FB62D3                                      ; FB2C3E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2C3E  1d d3 62 fb
 	inc 6,XSP                                            ; FB2C42  ef 66
 	cp A,0x10                                            ; FB2C44  c9 cf 10
 	jr nz, .LFB2C59                                      ; FB2C47  6e 10
@@ -87726,7 +87726,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2C5C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2C5F  e2 d8 fc 60 21
 	push XBC                                             ; FB2C64  39
-	call sub_FB6219                                      ; FB2C65  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2C65  1d 19 62 fb
 	inc 8,XSP                                            ; FB2C69  ef 60
 .LFB2C6B:
 	ret                                                  ; FB2C6B  0e
@@ -87734,7 +87734,7 @@ sub_FB28BE:
 	pushw 0x03                                           ; FB2C6D  0b 03 00
 	ld xbc, (0x60fcdc:24)                               ; FB2C70  e2 dc fc 60 21
 	push XBC                                             ; FB2C75  39
-	call sub_FB62D3                                      ; FB2C76  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2C76  1d d3 62 fb
 	ld H,A                                               ; FB2C7A  c9 8e
 	inc 6,XSP                                            ; FB2C7C  ef 66
 	cp A,0x12                                            ; FB2C7E  c9 cf 12
@@ -87753,7 +87753,7 @@ sub_FB28BE:
 	pushw 0x04                                           ; FB2C9D  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB2CA0  e2 d8 fc 60 21
 	push XBC                                             ; FB2CA5  39
-	call sub_FB6219                                      ; FB2CA6  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2CA6  1d 19 62 fb
 	inc 8,XSP                                            ; FB2CAA  ef 60
 	ret                                                  ; FB2CAC  0e
 sub_FB2CAD:
@@ -87763,12 +87763,12 @@ sub_FB2CAD:
 	pushw 0x03                                           ; FB2CB6  0b 03 00
 	ld XBC,(XIX)                                         ; FB2CB9  a4 21
 	push XBC                                             ; FB2CBB  39
-	call sub_FB6219                                      ; FB2CBC  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2CBC  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2CC0  1d b5 72 fb
 	pushw 0x0f                                           ; FB2CC4  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2CC7  a4 21
 	push XBC                                             ; FB2CC9  39
-	call sub_FB62D3                                      ; FB2CCA  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2CCA  1d d3 62 fb
 	inc 8,XSP                                            ; FB2CCE  ef 60
 	inc 6,XSP                                            ; FB2CD0  ef 66
 	cp a, 0x00:i3                                          ; FB2CD2  c9 d8
@@ -87777,7 +87777,7 @@ sub_FB2CAD:
 	pushw 0x03                                           ; FB2CD9  0b 03 00
 	ld XBC,(XIX)                                         ; FB2CDC  a4 21
 	push XBC                                             ; FB2CDE  39
-	call sub_FB6219                                      ; FB2CDF  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2CDF  1d 19 62 fb
 	inc 8,XSP                                            ; FB2CE3  ef 60
 .LFB2CE5:
 	pop XIX                                              ; FB2CE5  5c
@@ -87789,12 +87789,12 @@ sub_FB2CE7:
 	pushw 0x03                                           ; FB2CF0  0b 03 00
 	ld XBC,(XIX)                                         ; FB2CF3  a4 21
 	push XBC                                             ; FB2CF5  39
-	call sub_FB6219                                      ; FB2CF6  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2CF6  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2CFA  1d b5 72 fb
 	pushw 0x0f                                           ; FB2CFE  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D01  a4 21
 	push XBC                                             ; FB2D03  39
-	call sub_FB62D3                                      ; FB2D04  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2D04  1d d3 62 fb
 	inc 8,XSP                                            ; FB2D08  ef 60
 	inc 6,XSP                                            ; FB2D0A  ef 66
 	cp a, 0x00:i3                                          ; FB2D0C  c9 d8
@@ -87803,7 +87803,7 @@ sub_FB2CE7:
 	pushw 0x03                                           ; FB2D13  0b 03 00
 	ld XBC,(XIX)                                         ; FB2D16  a4 21
 	push XBC                                             ; FB2D18  39
-	call sub_FB6219                                      ; FB2D19  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2D19  1d 19 62 fb
 	inc 8,XSP                                            ; FB2D1D  ef 60
 .LFB2D1F:
 	pop XIX                                              ; FB2D1F  5c
@@ -87815,12 +87815,12 @@ sub_FB2D21:
 	pushw 0x03                                           ; FB2D2A  0b 03 00
 	ld XBC,(XIX)                                         ; FB2D2D  a4 21
 	push XBC                                             ; FB2D2F  39
-	call sub_FB6219                                      ; FB2D30  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2D30  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2D34  1d b5 72 fb
 	pushw 0x0f                                           ; FB2D38  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D3B  a4 21
 	push XBC                                             ; FB2D3D  39
-	call sub_FB62D3                                      ; FB2D3E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2D3E  1d d3 62 fb
 	inc 8,XSP                                            ; FB2D42  ef 60
 	inc 6,XSP                                            ; FB2D44  ef 66
 	cp a, 0x00:i3                                          ; FB2D46  c9 d8
@@ -87829,7 +87829,7 @@ sub_FB2D21:
 	pushw 0x03                                           ; FB2D4D  0b 03 00
 	ld XBC,(XIX)                                         ; FB2D50  a4 21
 	push XBC                                             ; FB2D52  39
-	call sub_FB6219                                      ; FB2D53  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2D53  1d 19 62 fb
 	ld XBC,0x00e80000                                    ; FB2D57  41 00 00 e8 00
 	push XBC                                             ; FB2D5C  39
 	pushw 0x00                                           ; FB2D5D  0b 00 00
@@ -87847,12 +87847,12 @@ sub_FB2D72:
 	pushw 0x03                                           ; FB2D7B  0b 03 00
 	ld XBC,(XIX)                                         ; FB2D7E  a4 21
 	push XBC                                             ; FB2D80  39
-	call sub_FB6219                                      ; FB2D81  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2D81  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2D85  1d b5 72 fb
 	pushw 0x0f                                           ; FB2D89  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2D8C  a4 21
 	push XBC                                             ; FB2D8E  39
-	call sub_FB62D3                                      ; FB2D8F  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2D8F  1d d3 62 fb
 	inc 8,XSP                                            ; FB2D93  ef 60
 	inc 6,XSP                                            ; FB2D95  ef 66
 	cp a, 0x00:i3                                          ; FB2D97  c9 d8
@@ -87861,7 +87861,7 @@ sub_FB2D72:
 	pushw 0x03                                           ; FB2D9E  0b 03 00
 	ld XBC,(XIX)                                         ; FB2DA1  a4 21
 	push XBC                                             ; FB2DA3  39
-	call sub_FB6219                                      ; FB2DA4  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2DA4  1d 19 62 fb
 	inc 8,XSP                                            ; FB2DA8  ef 60
 .LFB2DAA:
 	pop XIX                                              ; FB2DAA  5c
@@ -87873,12 +87873,12 @@ sub_FB2DAC:
 	pushw 0x03                                           ; FB2DB5  0b 03 00
 	ld XBC,(XIX)                                         ; FB2DB8  a4 21
 	push XBC                                             ; FB2DBA  39
-	call sub_FB6219                                      ; FB2DBB  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2DBB  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2DBF  1d b5 72 fb
 	pushw 0x0f                                           ; FB2DC3  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2DC6  a4 21
 	push XBC                                             ; FB2DC8  39
-	call sub_FB62D3                                      ; FB2DC9  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2DC9  1d d3 62 fb
 	inc 8,XSP                                            ; FB2DCD  ef 60
 	inc 6,XSP                                            ; FB2DCF  ef 66
 	cp a, 0x00:i3                                          ; FB2DD1  c9 d8
@@ -87887,7 +87887,7 @@ sub_FB2DAC:
 	pushw 0x03                                           ; FB2DD8  0b 03 00
 	ld XBC,(XIX)                                         ; FB2DDB  a4 21
 	push XBC                                             ; FB2DDD  39
-	call sub_FB6219                                      ; FB2DDE  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2DDE  1d 19 62 fb
 	inc 8,XSP                                            ; FB2DE2  ef 60
 .LFB2DE4:
 	pop XIX                                              ; FB2DE4  5c
@@ -87899,12 +87899,12 @@ sub_FB2DE6:
 	pushw 0x03                                           ; FB2DEF  0b 03 00
 	ld XBC,(XIX)                                         ; FB2DF2  a4 21
 	push XBC                                             ; FB2DF4  39
-	call sub_FB6219                                      ; FB2DF5  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2DF5  1d 19 62 fb
 	call sub_FB72B5                                      ; FB2DF9  1d b5 72 fb
 	pushw 0x0f                                           ; FB2DFD  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E00  a4 21
 	push XBC                                             ; FB2E02  39
-	call sub_FB62D3                                      ; FB2E03  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2E03  1d d3 62 fb
 	inc 8,XSP                                            ; FB2E07  ef 60
 	inc 6,XSP                                            ; FB2E09  ef 66
 	cp a, 0x00:i3                                          ; FB2E0B  c9 d8
@@ -87913,7 +87913,7 @@ sub_FB2DE6:
 	pushw 0x03                                           ; FB2E12  0b 03 00
 	ld XBC,(XIX)                                         ; FB2E15  a4 21
 	push XBC                                             ; FB2E17  39
-	call sub_FB6219                                      ; FB2E18  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2E18  1d 19 62 fb
 	inc 8,XSP                                            ; FB2E1C  ef 60
 .LFB2E1E:
 	pop XIX                                              ; FB2E1E  5c
@@ -87925,7 +87925,7 @@ sub_FB2E20:
 	pushw 0x03                                           ; FB2E29  0b 03 00
 	ld XBC,(XIX)                                         ; FB2E2C  a4 21
 	push XBC                                             ; FB2E2E  39
-	call sub_FB6219                                      ; FB2E2F  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2E2F  1d 19 62 fb
 	pushw 0x03                                           ; FB2E33  0b 03 00
 	call sub_FB5FF5                                      ; FB2E36  1d f5 5f fb
 	inc 8,XSP                                            ; FB2E3A  ef 60
@@ -87937,7 +87937,7 @@ sub_FB2E20:
 	pushw 0x0f                                           ; FB2E48  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E4B  a4 21
 	push XBC                                             ; FB2E4D  39
-	call sub_FB62D3                                      ; FB2E4E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2E4E  1d d3 62 fb
 	inc 6,XSP                                            ; FB2E52  ef 66
 	cp a, 0x00:i3                                          ; FB2E54  c9 d8
 	jr nz, .LFB2E67                                      ; FB2E56  6e 0f
@@ -87945,7 +87945,7 @@ sub_FB2E20:
 	pushw 0x03                                           ; FB2E5B  0b 03 00
 	ld XBC,(XIX)                                         ; FB2E5E  a4 21
 	push XBC                                             ; FB2E60  39
-	call sub_FB6219                                      ; FB2E61  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2E61  1d 19 62 fb
 	inc 8,XSP                                            ; FB2E65  ef 60
 .LFB2E67:
 	pop XIX                                              ; FB2E67  5c
@@ -87957,7 +87957,7 @@ sub_FB2E69:
 	pushw 0x03                                           ; FB2E72  0b 03 00
 	ld XBC,(XIX)                                         ; FB2E75  a4 21
 	push XBC                                             ; FB2E77  39
-	call sub_FB6219                                      ; FB2E78  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2E78  1d 19 62 fb
 	pushw 0x03                                           ; FB2E7C  0b 03 00
 	call sub_FB5FF5                                      ; FB2E7F  1d f5 5f fb
 	inc 8,XSP                                            ; FB2E83  ef 60
@@ -87969,7 +87969,7 @@ sub_FB2E69:
 	pushw 0x0f                                           ; FB2E91  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2E94  a4 21
 	push XBC                                             ; FB2E96  39
-	call sub_FB62D3                                      ; FB2E97  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2E97  1d d3 62 fb
 	inc 6,XSP                                            ; FB2E9B  ef 66
 	cp a, 0x00:i3                                          ; FB2E9D  c9 d8
 	jr nz, .LFB2EB0                                      ; FB2E9F  6e 0f
@@ -87977,7 +87977,7 @@ sub_FB2E69:
 	pushw 0x03                                           ; FB2EA4  0b 03 00
 	ld XBC,(XIX)                                         ; FB2EA7  a4 21
 	push XBC                                             ; FB2EA9  39
-	call sub_FB6219                                      ; FB2EAA  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2EAA  1d 19 62 fb
 	inc 8,XSP                                            ; FB2EAE  ef 60
 .LFB2EB0:
 	pop XIX                                              ; FB2EB0  5c
@@ -87989,7 +87989,7 @@ sub_FB2EB2:
 	pushw 0x03                                           ; FB2EBB  0b 03 00
 	ld XBC,(XIX)                                         ; FB2EBE  a4 21
 	push XBC                                             ; FB2EC0  39
-	call sub_FB6219                                      ; FB2EC1  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2EC1  1d 19 62 fb
 	pushw 0x03                                           ; FB2EC5  0b 03 00
 	call sub_FB5FF5                                      ; FB2EC8  1d f5 5f fb
 	inc 8,XSP                                            ; FB2ECC  ef 60
@@ -88001,7 +88001,7 @@ sub_FB2EB2:
 	pushw 0x0f                                           ; FB2EDA  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2EDD  a4 21
 	push XBC                                             ; FB2EDF  39
-	call sub_FB62D3                                      ; FB2EE0  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2EE0  1d d3 62 fb
 	inc 6,XSP                                            ; FB2EE4  ef 66
 	cp a, 0x00:i3                                          ; FB2EE6  c9 d8
 	jr nz, .LFB2EF9                                      ; FB2EE8  6e 0f
@@ -88009,7 +88009,7 @@ sub_FB2EB2:
 	pushw 0x03                                           ; FB2EED  0b 03 00
 	ld XBC,(XIX)                                         ; FB2EF0  a4 21
 	push XBC                                             ; FB2EF2  39
-	call sub_FB6219                                      ; FB2EF3  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2EF3  1d 19 62 fb
 	inc 8,XSP                                            ; FB2EF7  ef 60
 .LFB2EF9:
 	pop XIX                                              ; FB2EF9  5c
@@ -88021,12 +88021,12 @@ sub_FB2EFB:
 	pushw 0x03                                           ; FB2F04  0b 03 00
 	ld XBC,(XIX)                                         ; FB2F07  a4 21
 	push XBC                                             ; FB2F09  39
-	call sub_FB6219                                      ; FB2F0A  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2F0A  1d 19 62 fb
 	call sub_FB7365                                      ; FB2F0E  1d 65 73 fb
 	pushw 0x0f                                           ; FB2F12  0b 0f 00
 	ld XBC,(XIX)                                         ; FB2F15  a4 21
 	push XBC                                             ; FB2F17  39
-	call sub_FB62D3                                      ; FB2F18  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB2F18  1d d3 62 fb
 	inc 8,XSP                                            ; FB2F1C  ef 60
 	inc 6,XSP                                            ; FB2F1E  ef 66
 	cp a, 0x00:i3                                          ; FB2F20  c9 d8
@@ -88035,7 +88035,7 @@ sub_FB2EFB:
 	pushw 0x03                                           ; FB2F27  0b 03 00
 	ld XBC,(XIX)                                         ; FB2F2A  a4 21
 	push XBC                                             ; FB2F2C  39
-	call sub_FB6219                                      ; FB2F2D  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2F2D  1d 19 62 fb
 	inc 8,XSP                                            ; FB2F31  ef 60
 .LFB2F33:
 	pop XIX                                              ; FB2F33  5c
@@ -88049,7 +88049,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB2F43  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB2F46  e2 d8 fc 60 21
 	push XBC                                             ; FB2F4B  39
-	call sub_FB6219                                      ; FB2F4C  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB2F4C  1d 19 62 fb
 	call sub_FB7365                                      ; FB2F50  1d 65 73 fb
 	inc 8,XSP                                            ; FB2F54  ef 60
 	cp WA,0xffff                                         ; FB2F56  d8 cf ff ff
@@ -88123,7 +88123,7 @@ sub_FB2F35:
 	pushw 0x0f                                           ; FB3003  0b 0f 00
 	ld xbc, (0x60fcd8:24)                               ; FB3006  e2 d8 fc 60 21
 	push XBC                                             ; FB300B  39
-	call sub_FB62D3                                      ; FB300C  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB300C  1d d3 62 fb
 	inc 6,XSP                                            ; FB3010  ef 66
 	cp a, 0x00:i3                                          ; FB3012  c9 d8
 	jr nz, .LFB303C                                      ; FB3014  6e 26
@@ -88131,7 +88131,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB3019  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB301C  e2 d8 fc 60 21
 	push XBC                                             ; FB3021  39
-	call sub_FB6219                                      ; FB3022  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB3022  1d 19 62 fb
 	ld BC,(XIX+0x08)                                     ; FB3026  9c 08 21
 	inc 8,XSP                                            ; FB3029  ef 60
 	cp bc, 0x00:i3                                         ; FB302B  d9 d8
@@ -88169,14 +88169,14 @@ sub_FB2F35:
 	pushw 0x04                                           ; FB306F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB3072  e2 d8 fc 60 21
 	push XBC                                             ; FB3077  39
-	call sub_FB6219                                      ; FB3078  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB3078  1d 19 62 fb
 	inc 8,XSP                                            ; FB307C  ef 60
 	ret                                                  ; FB307E  0e
 	pushw 0x00                                           ; FB307F  0b 00 00
 	pushw 0x03                                           ; FB3082  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB3085  e2 d8 fc 60 21
 	push XBC                                             ; FB308A  39
-	call sub_FB6219                                      ; FB308B  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB308B  1d 19 62 fb
 	m_set 7, MD24, 0x60fd41                              ; FB308F  f2 41 fd 60 bf
 	inc 8,XSP                                            ; FB3094  ef 60
 	ret                                                  ; FB3096  0e
@@ -88184,7 +88184,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB309A  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB309D  e2 d8 fc 60 21
 	push XBC                                             ; FB30A2  39
-	call sub_FB6219                                      ; FB30A3  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB30A3  1d 19 62 fb
 	m_set 6, MD24, 0x60fd41                              ; FB30A7  f2 41 fd 60 be
 	inc 8,XSP                                            ; FB30AC  ef 60
 	ret                                                  ; FB30AE  0e
@@ -88192,7 +88192,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB30B2  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30B5  e2 d8 fc 60 21
 	push XBC                                             ; FB30BA  39
-	call sub_FB6219                                      ; FB30BB  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB30BB  1d 19 62 fb
 	m_set 5, MD24, 0x60fd41                              ; FB30BF  f2 41 fd 60 bd
 	inc 8,XSP                                            ; FB30C4  ef 60
 	ret                                                  ; FB30C6  0e
@@ -88200,7 +88200,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB30CA  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30CD  e2 d8 fc 60 21
 	push XBC                                             ; FB30D2  39
-	call sub_FB6219                                      ; FB30D3  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB30D3  1d 19 62 fb
 	m_set 4, MD24, 0x60fd41                              ; FB30D7  f2 41 fd 60 bc
 	inc 8,XSP                                            ; FB30DC  ef 60
 	ret                                                  ; FB30DE  0e
@@ -88208,7 +88208,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB30E2  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30E5  e2 d8 fc 60 21
 	push XBC                                             ; FB30EA  39
-	call sub_FB6219                                      ; FB30EB  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB30EB  1d 19 62 fb
 	m_set 3, MD24, 0x60fd41                              ; FB30EF  f2 41 fd 60 bb
 	inc 8,XSP                                            ; FB30F4  ef 60
 	ret                                                  ; FB30F6  0e
@@ -88216,7 +88216,7 @@ sub_FB2F35:
 	pushw 0x03                                           ; FB30FA  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB30FD  e2 d8 fc 60 21
 	push XBC                                             ; FB3102  39
-	call sub_FB6219                                      ; FB3103  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB3103  1d 19 62 fb
 	m_res 4, MD24, 0x60fd40                              ; FB3107  f2 40 fd 60 b4
 	calr sub_FB317E                                      ; FB310C  1e 6f 00
 	calr sub_FB31CC                                      ; FB310F  1e ba 00
@@ -88417,7 +88417,7 @@ sub_FB328D:
 	pushw 0x03                                           ; FB329B  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB329E  e2 d8 fc 60 21
 	push XBC                                             ; FB32A3  39
-	call sub_FB6219                                      ; FB32A4  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB32A4  1d 19 62 fb
 	call sub_FB7365                                      ; FB32A8  1d 65 73 fb
 	inc 8,XSP                                            ; FB32AC  ef 60
 	cp WA,0xffff                                         ; FB32AE  d8 cf ff ff
@@ -88470,7 +88470,7 @@ sub_FB328D:
 	pushw 0x0f                                           ; FB332B  0b 0f 00
 	ld xbc, (0x60fcd8:24)                               ; FB332E  e2 d8 fc 60 21
 	push XBC                                             ; FB3333  39
-	call sub_FB62D3                                      ; FB3334  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3334  1d d3 62 fb
 	inc 6,XSP                                            ; FB3338  ef 66
 	cp a, 0x00:i3                                          ; FB333A  c9 d8
 	jr nz, .LFB3350                                      ; FB333C  6e 12
@@ -88478,7 +88478,7 @@ sub_FB328D:
 	pushw 0x03                                           ; FB3341  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB3344  e2 d8 fc 60 21
 	push XBC                                             ; FB3349  39
-	call sub_FB6219                                      ; FB334A  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB334A  1d 19 62 fb
 	inc 8,XSP                                            ; FB334E  ef 60
 .LFB3350:
 	pop XIX                                              ; FB3350  5c
@@ -88653,7 +88653,7 @@ sub_FB34F1:
 	pushw 0x01                                           ; FB34F1  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB34F4  e2 d8 fc 60 21
 	push XBC                                             ; FB34F9  39
-	call sub_FB62D3                                      ; FB34FA  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB34FA  1d d3 62 fb
 	extz WA                                              ; FB34FE  d8 12
 	inc 6,XSP                                            ; FB3500  ef 66
 	extz XWA                                             ; FB3502  e8 12
@@ -88717,7 +88717,7 @@ sub_FB3555:
 	pushw 0x02                                           ; FB355B  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB355E  e2 d8 fc 60 21
 	push XBC                                             ; FB3563  39
-	call sub_FB62D3                                      ; FB3564  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3564  1d d3 62 fb
 	ld H,A                                               ; FB3568  c9 8e
 	inc 6,XSP                                            ; FB356A  ef 66
 	cp A,0x17                                            ; FB356C  c9 cf 17
@@ -88755,7 +88755,7 @@ sub_FB35A9:
 	pushw 0x02                                           ; FB35AF  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB35B2  e2 d8 fc 60 21
 	push XBC                                             ; FB35B7  39
-	call sub_FB62D3                                      ; FB35B8  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB35B8  1d d3 62 fb
 	ld H,A                                               ; FB35BC  c9 8e
 	inc 6,XSP                                            ; FB35BE  ef 66
 	cp a, 0x05:i3                                          ; FB35C0  c9 dd
@@ -88793,7 +88793,7 @@ sub_FB35FC:
 	pushw 0x02                                           ; FB3602  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB3605  e2 d8 fc 60 21
 	push XBC                                             ; FB360A  39
-	call sub_FB62D3                                      ; FB360B  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB360B  1d d3 62 fb
 	ld H,A                                               ; FB360F  c9 8e
 	inc 6,XSP                                            ; FB3611  ef 66
 	cp A,0x19                                            ; FB3613  c9 cf 19
@@ -88833,7 +88833,7 @@ sub_FB3651:
 	pushw 0x02                                           ; FB3657  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB365A  e2 d8 fc 60 21
 	push XBC                                             ; FB365F  39
-	call sub_FB62D3                                      ; FB3660  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3660  1d d3 62 fb
 	ld H,A                                               ; FB3664  c9 8e
 	inc 6,XSP                                            ; FB3666  ef 66
 	cp A,0x13                                            ; FB3668  c9 cf 13
@@ -88871,7 +88871,7 @@ sub_FB36A5:
 	pushw 0x02                                           ; FB36AB  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB36AE  e2 d8 fc 60 21
 	push XBC                                             ; FB36B3  39
-	call sub_FB62D3                                      ; FB36B4  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB36B4  1d d3 62 fb
 	ld H,A                                               ; FB36B8  c9 8e
 	inc 6,XSP                                            ; FB36BA  ef 66
 	cp A,0x28                                            ; FB36BC  c9 cf 28
@@ -88909,7 +88909,7 @@ sub_FB36F9:
 	pushw 0x02                                           ; FB36FF  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB3702  e2 d8 fc 60 21
 	push XBC                                             ; FB3707  39
-	call sub_FB62D3                                      ; FB3708  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3708  1d d3 62 fb
 	ld H,A                                               ; FB370C  c9 8e
 	inc 6,XSP                                            ; FB370E  ef 66
 	cp a, 0x02:i3                                          ; FB3710  c9 da
@@ -89173,7 +89173,7 @@ sub_FB38C3:
 	pushw 0x0a                                           ; FB395C  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB395F  e2 d8 fc 60 21
 	push XBC                                             ; FB3964  39
-	call sub_FB62D3                                      ; FB3965  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3965  1d d3 62 fb
 	sub A,0x20                                           ; FB3969  c9 ca 20
 	or (XIX),A                                           ; FB396C  84 e9
 	ld XBC,(XIZ+0x08)                                    ; FB396E  ae 08 21
@@ -89241,7 +89241,7 @@ sub_FB39FA:
 	pushw 0x0a                                           ; FB3A06  0b 0a 00
 	ld xwa, (0x60fcd8:24)                               ; FB3A09  e2 d8 fc 60 20
 	push XWA                                             ; FB3A0E  38
-	call sub_FB62D3                                      ; FB3A0F  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3A0F  1d d3 62 fb
 	ld E,A                                               ; FB3A13  c9 8d
 	sub E,0x20                                           ; FB3A15  cd ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB3A18  ae 08 21
@@ -89317,7 +89317,7 @@ sub_FB3ACA:
 	pushw 0x0b                                           ; FB3AD1  0b 0b 00
 	ld xbc, (0x60fcd8:24)                               ; FB3AD4  e2 d8 fc 60 21
 	push XBC                                             ; FB3AD9  39
-	call sub_FB62D3                                      ; FB3ADA  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3ADA  1d d3 62 fb
 	extz WA                                              ; FB3ADE  d8 12
 	extz XWA                                             ; FB3AE0  e8 12
 	add XWA,0x00f4fa9c                                   ; FB3AE2  e8 c8 9c fa f4 00
@@ -89366,7 +89366,7 @@ sub_FB3ACA:
 	ld xiy, (0x60fcd8:24)                               ; FB3B46  e2 d8 fc 60 25
 	push XIY                                             ; FB3B4B  3d
 sub_FB3B4C:
-	call sub_FB62D3                                      ; FB3B4C  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3B4C  1d d3 62 fb
 	ld D,A                                               ; FB3B50  c9 8c
 	sub D,0x20                                           ; FB3B52  cc ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB3B55  ae 08 21
@@ -89450,7 +89450,7 @@ sub_FB3C02:
 	pushw 0x0a                                           ; FB3C10  0b 0a 00
 	ld xwa, (0x60fcd8:24)                               ; FB3C13  e2 d8 fc 60 20
 	push XWA                                             ; FB3C18  38
-	call sub_FB62D3                                      ; FB3C19  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3C19  1d d3 62 fb
 	ld L,A                                               ; FB3C1D  c9 8f
 	sub L,0x20                                           ; FB3C1F  cf ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB3C22  ae 08 21
@@ -89591,7 +89591,7 @@ sub_FB3C34:
 	pushw 0x0a                                           ; FB3D71  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB3D74  e2 d8 fc 60 21
 	push XBC                                             ; FB3D79  39
-	call sub_FB62D3                                      ; FB3D7A  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB3D7A  1d d3 62 fb
 	sub A,0x20                                           ; FB3D7E  c9 ca 20
 	or (xiz-4), a                                        ; FB3D81  8e fc e9
 	ld XBC,(XIZ+0x08)                                    ; FB3D84  ae 08 21
@@ -90178,7 +90178,7 @@ sub_FB3C34:
 	pushw 0x01                                           ; FB42AB  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB42AE  e2 d8 fc 60 21
 	push XBC                                             ; FB42B3  39
-	call sub_FB62D3                                      ; FB42B4  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB42B4  1d d3 62 fb
 	extz WA                                              ; FB42B8  d8 12
 	inc 6,XSP                                            ; FB42BA  ef 66
 	extz XWA                                             ; FB42BC  e8 12
@@ -90243,7 +90243,7 @@ sub_FB430F:
 	pushw 0x02                                           ; FB4315  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB4318  e2 d8 fc 60 21
 	push XBC                                             ; FB431D  39
-	call sub_FB62D3                                      ; FB431E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB431E  1d d3 62 fb
 	ld H,A                                               ; FB4322  c9 8e
 	inc 6,XSP                                            ; FB4324  ef 66
 	cp A,0x17                                            ; FB4326  c9 cf 17
@@ -90281,7 +90281,7 @@ sub_FB4363:
 	pushw 0x02                                           ; FB4369  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB436C  e2 d8 fc 60 21
 	push XBC                                             ; FB4371  39
-	call sub_FB62D3                                      ; FB4372  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB4372  1d d3 62 fb
 	ld H,A                                               ; FB4376  c9 8e
 	inc 6,XSP                                            ; FB4378  ef 66
 	cp a, 0x01:i3                                          ; FB437A  c9 d9
@@ -90320,7 +90320,7 @@ sub_FB43B6:
 	pushw 0x02                                           ; FB43BC  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB43BF  e2 d8 fc 60 21
 	push XBC                                             ; FB43C4  39
-	call sub_FB62D3                                      ; FB43C5  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB43C5  1d d3 62 fb
 	ld H,A                                               ; FB43C9  c9 8e
 	inc 6,XSP                                            ; FB43CB  ef 66
 	cp A,0x19                                            ; FB43CD  c9 cf 19
@@ -90360,7 +90360,7 @@ sub_FB440B:
 	pushw 0x02                                           ; FB4411  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB4414  e2 d8 fc 60 21
 	push XBC                                             ; FB4419  39
-	call sub_FB62D3                                      ; FB441A  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB441A  1d d3 62 fb
 	ld H,A                                               ; FB441E  c9 8e
 	inc 6,XSP                                            ; FB4420  ef 66
 	cp A,0x13                                            ; FB4422  c9 cf 13
@@ -90398,7 +90398,7 @@ sub_FB445F:
 	pushw 0x02                                           ; FB4465  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB4468  e2 d8 fc 60 21
 	push XBC                                             ; FB446D  39
-	call sub_FB62D3                                      ; FB446E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB446E  1d d3 62 fb
 	ld H,A                                               ; FB4472  c9 8e
 	inc 6,XSP                                            ; FB4474  ef 66
 	cp A,0x28                                            ; FB4476  c9 cf 28
@@ -90436,7 +90436,7 @@ sub_FB44B3:
 	pushw 0x02                                           ; FB44B9  0b 02 00
 	ld xbc, (0x60fcd8:24)                               ; FB44BC  e2 d8 fc 60 21
 	push XBC                                             ; FB44C1  39
-	call sub_FB62D3                                      ; FB44C2  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB44C2  1d d3 62 fb
 	ld H,A                                               ; FB44C6  c9 8e
 	inc 6,XSP                                            ; FB44C8  ef 66
 	cp a, 0x02:i3                                          ; FB44CA  c9 da
@@ -90642,7 +90642,7 @@ sub_FB44B3:
 	pushw 0x0a                                           ; FB46A1  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB46A4  e2 d8 fc 60 21
 	push XBC                                             ; FB46A9  39
-	call sub_FB62D3                                      ; FB46AA  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB46AA  1d d3 62 fb
 	ld H,A                                               ; FB46AE  c9 8e
 	sub H,0x20                                           ; FB46B0  ce ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB46B3  ae 08 21
@@ -90684,7 +90684,7 @@ sub_FB44B3:
 	pushw 0x0a                                           ; FB4708  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB470B  e2 d8 fc 60 21
 	push XBC                                             ; FB4710  39
-	call sub_FB62D3                                      ; FB4711  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB4711  1d d3 62 fb
 	ld H,A                                               ; FB4715  c9 8e
 	sub H,0x20                                           ; FB4717  ce ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB471A  ae 08 21
@@ -90733,7 +90733,7 @@ sub_FB44B3:
 	pushw 0x0a                                           ; FB4783  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB4786  e2 d8 fc 60 21
 	push XBC                                             ; FB478B  39
-	call sub_FB62D3                                      ; FB478C  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB478C  1d d3 62 fb
 	ld L,A                                               ; FB4790  c9 8f
 	sub L,0x20                                           ; FB4792  cf ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB4795  ae 08 21
@@ -90828,7 +90828,7 @@ sub_FB44B3:
 	pushw 0x0a                                           ; FB4872  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB4875  e2 d8 fc 60 21
 	push XBC                                             ; FB487A  39
-	call sub_FB62D3                                      ; FB487B  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB487B  1d d3 62 fb
 	ld L,A                                               ; FB487F  c9 8f
 	sub L,0x20                                           ; FB4881  cf ca 20
 	ld XBC,(XIZ+0x08)                                    ; FB4884  ae 08 21
@@ -90933,7 +90933,7 @@ sub_FB44B3:
 	pushw 0x0a                                           ; FB4981  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB4984  e2 d8 fc 60 21
 	push XBC                                             ; FB4989  39
-	call sub_FB62D3                                      ; FB498A  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB498A  1d d3 62 fb
 	ld D,A                                               ; FB498E  c9 8c
 	sub D,0x20                                           ; FB4990  cc ca 20
 	ld L,(XIX+0x06)                                      ; FB4993  8c 06 27
@@ -90999,7 +90999,7 @@ sub_FB49AF:
 	pushw 0x0b                                           ; FB4A17  0b 0b 00
 	ld xbc, (0x60fcd8:24)                               ; FB4A1A  e2 d8 fc 60 21
 	push XBC                                             ; FB4A1F  39
-	call sub_FB62D3                                      ; FB4A20  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB4A20  1d d3 62 fb
 	extz WA                                              ; FB4A24  d8 12
 	extz XWA                                             ; FB4A26  e8 12
 	add XWA,0x00f4fa9c                                   ; FB4A28  e8 c8 9c fa f4 00
@@ -91033,7 +91033,7 @@ sub_FB49AF:
 	pushw 0x0b                                           ; FB4A72  0b 0b 00
 	ld xbc, (0x60fcd8:24)                               ; FB4A75  e2 d8 fc 60 21
 	push XBC                                             ; FB4A7A  39
-	call sub_FB62D3                                      ; FB4A7B  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB4A7B  1d d3 62 fb
 	ld (xiz-8), a                                        ; FB4A7F  be f8 41
 	pushw 0x06                                           ; FB4A82  0b 06 00
 	lda xbc, (xiz-10)                                    ; FB4A85  be f6 31
@@ -91785,7 +91785,7 @@ sub_FB516A:
 	pushw 0x04                                           ; FB5187  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB518A  e2 d8 fc 60 21
 	push XBC                                             ; FB518F  39
-	call sub_FB6219                                      ; FB5190  1d 19 62 fb
+	call U8Rec16_SetField                                      ; FB5190  1d 19 62 fb
 	inc 8,XSP                                            ; FB5194  ef 60
 .LFB5196:
 	ret                                                  ; FB5196  0e
@@ -91794,14 +91794,14 @@ sub_FB5197:
 	pushw 0x04                                           ; FB5198  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB519B  e2 d8 fc 60 21
 	push XBC                                             ; FB51A0  39
-	call sub_FB62D3                                      ; FB51A1  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB51A1  1d d3 62 fb
 	inc 6,XSP                                            ; FB51A5  ef 66
 	cp a, 0x00:i3                                          ; FB51A7  c9 d8
 	jr z, .LFB51E5                                       ; FB51A9  66 3a
 	pushw 0x05                                           ; FB51AB  0b 05 00
 	ld xbc, (0x60fcd8:24)                               ; FB51AE  e2 d8 fc 60 21
 	push XBC                                             ; FB51B3  39
-	call sub_FB62D3                                      ; FB51B4  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB51B4  1d d3 62 fb
 	ld H,A                                               ; FB51B8  c9 8e
 	inc 6,XSP                                            ; FB51BA  ef 66
 	cp A,0x2b                                            ; FB51BC  c9 cf 2b
@@ -93421,7 +93421,7 @@ sub_FB6098:
 	pushw 0x04                                           ; FB60AD  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB60B0  e2 d8 fc 60 21
 	push XBC                                             ; FB60B5  39
-	calr sub_FB62D3                                          ; FB60B6  1e 1a 02
+	calr U8Rec16_GetField                                          ; FB60B6  1e 1a 02
 	inc 6,XSP                                            ; FB60B9  ef 66
 	cp a, 0x00:i3                                          ; FB60BB  c9 d8
 	jrl nz, .LFB6161                                     ; FB60BD  7e a1 00
@@ -93475,7 +93475,7 @@ sub_FB6098:
 	pushw 0x04                                           ; FB611E  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6121  e2 d8 fc 60 21
 	push XBC                                             ; FB6126  39
-	calr sub_FB6219                                      ; FB6127  1e ef 00
+	calr U8Rec16_SetField                                      ; FB6127  1e ef 00
 	jr .LFB6154                                          ; FB612A  68 28
 .LFB612C:
 	cp H,0xf7                                            ; FB612C  ce cf f7
@@ -93493,7 +93493,7 @@ sub_FB6098:
 	pushw 0x04                                           ; FB6145  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6148  e2 d8 fc 60 21
 	push XBC                                             ; FB614D  39
-	calr sub_FB6219                                      ; FB614E  1e c8 00
+	calr U8Rec16_SetField                                      ; FB614E  1e c8 00
 	set	5, (MIDI_RX_SysExState:8)                                   ; FB6151  f0 a9 bd
 .LFB6154:
 	inc 8,XSP                                            ; FB6154  ef 60
@@ -93594,7 +93594,10 @@ sub_FB61B1:
 	popw hl                                              ; FB6215  4b
 	unlk XIZ                                             ; FB6216  ee 0d
 	ret                                                  ; FB6218  0e
-sub_FB6219:
+; U8Rec16_SetField(u8 *rec, index, value): rec[index] = value for index 0..15 (a compiled 16-arm switch
+;   over U8Rec16_SetField_Cases); out of range does nothing.  The SysEx engine uses it on its parse
+;   records ((0x60FCD8), (0x60FCDC); wsa1/notes/sysex-probes/README.md).
+U8Rec16_SetField:
 	link XIZ,0x0000                                      ; FB6219  ee 0c 00 00
 	pushw hl                                             ; FB621D  2b
 	push XIX                                             ; FB621E  3c
@@ -93606,12 +93609,12 @@ sub_FB6219:
 	cp BC,0x000f                                         ; FB622C  d9 cf 0f 00
 	jrl ugt, .LFB62CE                                        ; FB6230  7b 9b 00
 	sll bc, 0x02                                         ; FB6233  d9 ee 02
-	add XBC,JumpTable_FB6240                             ; FB6236  e9 c8 40 62 fb 00
+	add XBC,U8Rec16_SetField_Cases                             ; FB6236  e9 c8 40 62 fb 00
 	ld XBC,(XBC)                                         ; FB623C  a1 21
 	jp (xbc)                                             ; FB623E  b1 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FB6240 -- 16 LE32 code addresses, an INLINE jump table
+; U8Rec16_SetField_Cases -- 16 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XBC,0x00FB6240 / ld XBC,(XBC) / jp (XBC)` at
 ;          0xFB6236-0xFB623E.
@@ -93627,76 +93630,77 @@ sub_FB6219:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FB6240:
-	.long sub_FB6280                                 ; FB6240  [  0]
-	.long sub_FB6285                                 ; FB6244  [  1]
-	.long sub_FB628A                                 ; FB6248  [  2]
-	.long sub_FB628F                                 ; FB624C  [  3]
-	.long sub_FB6294                                 ; FB6250  [  4]
-	.long sub_FB6299                                 ; FB6254  [  5]
-	.long sub_FB629E                                 ; FB6258  [  6]
-	.long sub_FB62A3                                 ; FB625C  [  7]
-	.long sub_FB62A8                                 ; FB6260  [  8]
-	.long sub_FB62AD                                 ; FB6264  [  9]
-	.long sub_FB62B2                                 ; FB6268  [ 10]
-	.long sub_FB62B7                                 ; FB626C  [ 11]
-	.long sub_FB62BC                                 ; FB6270  [ 12]
-	.long sub_FB62C1                                 ; FB6274  [ 13]
-	.long sub_FB62C6                                 ; FB6278  [ 14]
-	.long sub_FB62CB                                 ; FB627C  [ 15]
-sub_FB6280:   ; entry: named by 1 `.long` operand, first at 0xFB6240
+U8Rec16_SetField_Cases:
+	.long U8Rec16_SetField_Case0                                 ; FB6240  [  0]
+	.long U8Rec16_SetField_Case1                                 ; FB6244  [  1]
+	.long U8Rec16_SetField_Case2                                 ; FB6248  [  2]
+	.long U8Rec16_SetField_Case3                                 ; FB624C  [  3]
+	.long U8Rec16_SetField_Case4                                 ; FB6250  [  4]
+	.long U8Rec16_SetField_Case5                                 ; FB6254  [  5]
+	.long U8Rec16_SetField_Case6                                 ; FB6258  [  6]
+	.long U8Rec16_SetField_Case7                                 ; FB625C  [  7]
+	.long U8Rec16_SetField_Case8                                 ; FB6260  [  8]
+	.long U8Rec16_SetField_Case9                                 ; FB6264  [  9]
+	.long U8Rec16_SetField_Case10                                 ; FB6268  [ 10]
+	.long U8Rec16_SetField_Case11                                 ; FB626C  [ 11]
+	.long U8Rec16_SetField_Case12                                 ; FB6270  [ 12]
+	.long U8Rec16_SetField_Case13                                 ; FB6274  [ 13]
+	.long U8Rec16_SetField_Case14                                 ; FB6278  [ 14]
+	.long U8Rec16_SetField_Case15                                 ; FB627C  [ 15]
+U8Rec16_SetField_Case0:   ; entry: named by 1 `.long` operand, first at 0xFB6240
 	ld (XIX),H                                           ; FB6280  b4 46
 	jrl .LFB62CE                                         ; FB6282  78 49 00
-sub_FB6285:   ; entry: named by 1 `.long` operand, first at 0xFB6244
+U8Rec16_SetField_Case1:   ; entry: named by 1 `.long` operand, first at 0xFB6244
 	ld (XIX+0x01),H                                      ; FB6285  bc 01 46
 	jr .LFB62CE                                          ; FB6288  68 44
-sub_FB628A:   ; entry: named by 1 `.long` operand, first at 0xFB6248
+U8Rec16_SetField_Case2:   ; entry: named by 1 `.long` operand, first at 0xFB6248
 	ld (XIX+0x02),H                                      ; FB628A  bc 02 46
 	jr .LFB62CE                                          ; FB628D  68 3f
-sub_FB628F:   ; entry: named by 1 `.long` operand, first at 0xFB624C
+U8Rec16_SetField_Case3:   ; entry: named by 1 `.long` operand, first at 0xFB624C
 	ld (XIX+0x03),H                                      ; FB628F  bc 03 46
 	jr .LFB62CE                                          ; FB6292  68 3a
-sub_FB6294:   ; entry: named by 1 `.long` operand, first at 0xFB6250
+U8Rec16_SetField_Case4:   ; entry: named by 1 `.long` operand, first at 0xFB6250
 	ld (XIX+0x04),H                                      ; FB6294  bc 04 46
 	jr .LFB62CE                                          ; FB6297  68 35
-sub_FB6299:   ; entry: named by 1 `.long` operand, first at 0xFB6254
+U8Rec16_SetField_Case5:   ; entry: named by 1 `.long` operand, first at 0xFB6254
 	ld (XIX+0x05),H                                      ; FB6299  bc 05 46
 	jr .LFB62CE                                          ; FB629C  68 30
-sub_FB629E:   ; entry: named by 1 `.long` operand, first at 0xFB6258
+U8Rec16_SetField_Case6:   ; entry: named by 1 `.long` operand, first at 0xFB6258
 	ld (XIX+0x06),H                                      ; FB629E  bc 06 46
 	jr .LFB62CE                                          ; FB62A1  68 2b
-sub_FB62A3:   ; entry: named by 1 `.long` operand, first at 0xFB625C
+U8Rec16_SetField_Case7:   ; entry: named by 1 `.long` operand, first at 0xFB625C
 	ld (XIX+0x07),H                                      ; FB62A3  bc 07 46
 	jr .LFB62CE                                          ; FB62A6  68 26
-sub_FB62A8:   ; entry: named by 1 `.long` operand, first at 0xFB6260
+U8Rec16_SetField_Case8:   ; entry: named by 1 `.long` operand, first at 0xFB6260
 	ld (XIX+0x08),H                                      ; FB62A8  bc 08 46
 	jr .LFB62CE                                          ; FB62AB  68 21
-sub_FB62AD:   ; entry: named by 1 `.long` operand, first at 0xFB6264
+U8Rec16_SetField_Case9:   ; entry: named by 1 `.long` operand, first at 0xFB6264
 	ld (XIX+0x09),H                                      ; FB62AD  bc 09 46
 	jr .LFB62CE                                          ; FB62B0  68 1c
-sub_FB62B2:   ; entry: named by 1 `.long` operand, first at 0xFB6268
+U8Rec16_SetField_Case10:   ; entry: named by 1 `.long` operand, first at 0xFB6268
 	ld (XIX+0x0a),H                                      ; FB62B2  bc 0a 46
 	jr .LFB62CE                                          ; FB62B5  68 17
-sub_FB62B7:   ; entry: named by 1 `.long` operand, first at 0xFB626C
+U8Rec16_SetField_Case11:   ; entry: named by 1 `.long` operand, first at 0xFB626C
 	ld (XIX+0x0b),H                                      ; FB62B7  bc 0b 46
 	jr .LFB62CE                                          ; FB62BA  68 12
-sub_FB62BC:   ; entry: named by 1 `.long` operand, first at 0xFB6270
+U8Rec16_SetField_Case12:   ; entry: named by 1 `.long` operand, first at 0xFB6270
 	ld (XIX+0x0c),H                                      ; FB62BC  bc 0c 46
 	jr .LFB62CE                                          ; FB62BF  68 0d
-sub_FB62C1:   ; entry: named by 1 `.long` operand, first at 0xFB6274
+U8Rec16_SetField_Case13:   ; entry: named by 1 `.long` operand, first at 0xFB6274
 	ld (XIX+0x0d),H                                      ; FB62C1  bc 0d 46
 	jr .LFB62CE                                          ; FB62C4  68 08
-sub_FB62C6:   ; entry: named by 1 `.long` operand, first at 0xFB6278
+U8Rec16_SetField_Case14:   ; entry: named by 1 `.long` operand, first at 0xFB6278
 	ld (XIX+0x0e),H                                      ; FB62C6  bc 0e 46
 	jr .LFB62CE                                          ; FB62C9  68 03
-sub_FB62CB:   ; entry: named by 1 `.long` operand, first at 0xFB627C
+U8Rec16_SetField_Case15:   ; entry: named by 1 `.long` operand, first at 0xFB627C
 	ld (XIX+0x0f),H                                      ; FB62CB  bc 0f 46
 .LFB62CE:
 	pop XIX                                              ; FB62CE  5c
 	popw hl                                              ; FB62CF  4b
 	unlk XIZ                                             ; FB62D0  ee 0d
 	ret                                                  ; FB62D2  0e
-sub_FB62D3:
+; U8Rec16_GetField(u8 *rec, index): A = rec[index] for index 0..15, the getter of U8Rec16_SetField.
+U8Rec16_GetField:
 	link XIZ,0x0000                                      ; FB62D3  ee 0c 00 00
 	push XIX                                             ; FB62D7  3c
 	ld XIX,(XIZ+0x08)                                    ; FB62D8  ae 08 24
@@ -93704,14 +93708,14 @@ sub_FB62D3:
 	extz BC                                              ; FB62DE  d9 12
 	extz XBC                                             ; FB62E0  e9 12
 	cp BC,0x000f                                         ; FB62E2  d9 cf 0f 00
-	jrl ugt, JumpTable_FB62F6_Code_Skip                                        ; FB62E6  7b c0 00
+	jrl ugt, U8Rec16_GetField_OutOfRange                                        ; FB62E6  7b c0 00
 	sll bc, 0x02                                         ; FB62E9  d9 ee 02
-	add XBC,JumpTable_FB62F6                             ; FB62EC  e9 c8 f6 62 fb 00
+	add XBC,U8Rec16_GetField_Cases                             ; FB62EC  e9 c8 f6 62 fb 00
 	ld XBC,(XBC)                                         ; FB62F2  a1 21
 	jp (xbc)                                             ; FB62F4  b1 d8
 
 ; ---------------------------------------------------------------------
-; JumpTable_FB62F6 -- 16 LE32 code addresses, an INLINE jump table
+; U8Rec16_GetField_Cases -- 16 LE32 code addresses, an INLINE jump table
 ;
 ; Read by: ONE site, `add XBC,0x00FB62F6 / ld XBC,(XBC) / jp (XBC)` at
 ;          0xFB62EC-0xFB62F4.
@@ -93724,88 +93728,88 @@ sub_FB62D3:
 ; Unknown:  what the arms DO.  A jump table names its targets, not its
 ;          operations.
 ; ---------------------------------------------------------------------
-JumpTable_FB62F6:
-	.long sub_FB6336                                 ; FB62F6  [  0]
-	.long sub_FB633D                                 ; FB62FA  [  1]
-	.long sub_FB6345                                 ; FB62FE  [  2]
-	.long sub_FB634D                                 ; FB6302  [  3]
-	.long sub_FB6355                                 ; FB6306  [  4]
-	.long sub_FB635C                                 ; FB630A  [  5]
-	.long sub_FB6363                                 ; FB630E  [  6]
-	.long sub_FB636A                                 ; FB6312  [  7]
-	.long sub_FB6371                                 ; FB6316  [  8]
-	.long sub_FB6378                                 ; FB631A  [  9]
-	.long sub_FB637F                                 ; FB631E  [ 10]
-	.long sub_FB6386                                 ; FB6322  [ 11]
-	.long sub_FB638D                                 ; FB6326  [ 12]
-	.long sub_FB6394                                 ; FB632A  [ 13]
-	.long sub_FB639B                                 ; FB632E  [ 14]
-	.long sub_FB63A2                                 ; FB6332  [ 15]
-sub_FB6336:   ; entry: named by 1 `.long` operand, first at 0xFB62F6
+U8Rec16_GetField_Cases:
+	.long U8Rec16_GetField_Case0                                 ; FB62F6  [  0]
+	.long U8Rec16_GetField_Case1                                 ; FB62FA  [  1]
+	.long U8Rec16_GetField_Case2                                 ; FB62FE  [  2]
+	.long U8Rec16_GetField_Case3                                 ; FB6302  [  3]
+	.long U8Rec16_GetField_Case4                                 ; FB6306  [  4]
+	.long U8Rec16_GetField_Case5                                 ; FB630A  [  5]
+	.long U8Rec16_GetField_Case6                                 ; FB630E  [  6]
+	.long U8Rec16_GetField_Case7                                 ; FB6312  [  7]
+	.long U8Rec16_GetField_Case8                                 ; FB6316  [  8]
+	.long U8Rec16_GetField_Case9                                 ; FB631A  [  9]
+	.long U8Rec16_GetField_Case10                                 ; FB631E  [ 10]
+	.long U8Rec16_GetField_Case11                                 ; FB6322  [ 11]
+	.long U8Rec16_GetField_Case12                                 ; FB6326  [ 12]
+	.long U8Rec16_GetField_Case13                                 ; FB632A  [ 13]
+	.long U8Rec16_GetField_Case14                                 ; FB632E  [ 14]
+	.long U8Rec16_GetField_Case15                                 ; FB6332  [ 15]
+U8Rec16_GetField_Case0:   ; entry: named by 1 `.long` operand, first at 0xFB62F6
 	ld C,(XIX)                                           ; FB6336  84 23
 	ld A,C                                               ; FB6338  cb 89
 	jrl .LFB63AB                                         ; FB633A  78 6e 00
-sub_FB633D:   ; entry: named by 1 `.long` operand, first at 0xFB62FA
+U8Rec16_GetField_Case1:   ; entry: named by 1 `.long` operand, first at 0xFB62FA
 	ld C,(XIX+0x01)                                      ; FB633D  8c 01 23
 	ld A,C                                               ; FB6340  cb 89
 	jrl .LFB63AB                                         ; FB6342  78 66 00
-sub_FB6345:   ; entry: named by 1 `.long` operand, first at 0xFB62FE
+U8Rec16_GetField_Case2:   ; entry: named by 1 `.long` operand, first at 0xFB62FE
 	ld C,(XIX+0x02)                                      ; FB6345  8c 02 23
 	ld A,C                                               ; FB6348  cb 89
 	jrl .LFB63AB                                         ; FB634A  78 5e 00
-sub_FB634D:   ; entry: named by 1 `.long` operand, first at 0xFB6302
+U8Rec16_GetField_Case3:   ; entry: named by 1 `.long` operand, first at 0xFB6302
 	ld C,(XIX+0x03)                                      ; FB634D  8c 03 23
 	ld A,C                                               ; FB6350  cb 89
 	jrl .LFB63AB                                         ; FB6352  78 56 00
-sub_FB6355:   ; entry: named by 1 `.long` operand, first at 0xFB6306
+U8Rec16_GetField_Case4:   ; entry: named by 1 `.long` operand, first at 0xFB6306
 	ld C,(XIX+0x04)                                      ; FB6355  8c 04 23
 	ld A,C                                               ; FB6358  cb 89
 	jr .LFB63AB                                          ; FB635A  68 4f
-sub_FB635C:   ; entry: named by 1 `.long` operand, first at 0xFB630A
+U8Rec16_GetField_Case5:   ; entry: named by 1 `.long` operand, first at 0xFB630A
 	ld C,(XIX+0x05)                                      ; FB635C  8c 05 23
 	ld A,C                                               ; FB635F  cb 89
 	jr .LFB63AB                                          ; FB6361  68 48
-sub_FB6363:   ; entry: named by 1 `.long` operand, first at 0xFB630E
+U8Rec16_GetField_Case6:   ; entry: named by 1 `.long` operand, first at 0xFB630E
 	ld C,(XIX+0x06)                                      ; FB6363  8c 06 23
 	ld A,C                                               ; FB6366  cb 89
 	jr .LFB63AB                                          ; FB6368  68 41
-sub_FB636A:   ; entry: named by 1 `.long` operand, first at 0xFB6312
+U8Rec16_GetField_Case7:   ; entry: named by 1 `.long` operand, first at 0xFB6312
 	ld C,(XIX+0x07)                                      ; FB636A  8c 07 23
 	ld A,C                                               ; FB636D  cb 89
 	jr .LFB63AB                                          ; FB636F  68 3a
-sub_FB6371:   ; entry: named by 1 `.long` operand, first at 0xFB6316
+U8Rec16_GetField_Case8:   ; entry: named by 1 `.long` operand, first at 0xFB6316
 	ld C,(XIX+0x08)                                      ; FB6371  8c 08 23
 	ld A,C                                               ; FB6374  cb 89
 	jr .LFB63AB                                          ; FB6376  68 33
-sub_FB6378:   ; entry: named by 1 `.long` operand, first at 0xFB631A
+U8Rec16_GetField_Case9:   ; entry: named by 1 `.long` operand, first at 0xFB631A
 	ld C,(XIX+0x09)                                      ; FB6378  8c 09 23
 	ld A,C                                               ; FB637B  cb 89
 	jr .LFB63AB                                          ; FB637D  68 2c
-sub_FB637F:   ; entry: named by 1 `.long` operand, first at 0xFB631E
+U8Rec16_GetField_Case10:   ; entry: named by 1 `.long` operand, first at 0xFB631E
 	ld C,(XIX+0x0a)                                      ; FB637F  8c 0a 23
 	ld A,C                                               ; FB6382  cb 89
 	jr .LFB63AB                                          ; FB6384  68 25
-sub_FB6386:   ; entry: named by 1 `.long` operand, first at 0xFB6322
+U8Rec16_GetField_Case11:   ; entry: named by 1 `.long` operand, first at 0xFB6322
 	ld C,(XIX+0x0b)                                      ; FB6386  8c 0b 23
 	ld A,C                                               ; FB6389  cb 89
 	jr .LFB63AB                                          ; FB638B  68 1e
-sub_FB638D:   ; entry: named by 1 `.long` operand, first at 0xFB6326
+U8Rec16_GetField_Case12:   ; entry: named by 1 `.long` operand, first at 0xFB6326
 	ld C,(XIX+0x0c)                                      ; FB638D  8c 0c 23
 	ld A,C                                               ; FB6390  cb 89
 	jr .LFB63AB                                          ; FB6392  68 17
-sub_FB6394:   ; entry: named by 1 `.long` operand, first at 0xFB632A
+U8Rec16_GetField_Case13:   ; entry: named by 1 `.long` operand, first at 0xFB632A
 	ld C,(XIX+0x0d)                                      ; FB6394  8c 0d 23
 	ld A,C                                               ; FB6397  cb 89
 	jr .LFB63AB                                          ; FB6399  68 10
-sub_FB639B:   ; entry: named by 1 `.long` operand, first at 0xFB632E
+U8Rec16_GetField_Case14:   ; entry: named by 1 `.long` operand, first at 0xFB632E
 	ld C,(XIX+0x0e)                                      ; FB639B  8c 0e 23
 	ld A,C                                               ; FB639E  cb 89
 	jr .LFB63AB                                          ; FB63A0  68 09
-sub_FB63A2:   ; entry: named by 1 `.long` operand, first at 0xFB6332
+U8Rec16_GetField_Case15:   ; entry: named by 1 `.long` operand, first at 0xFB6332
 	ld C,(XIX+0x0f)                                      ; FB63A2  8c 0f 23
 	ld A,C                                               ; FB63A5  cb 89
 	jr .LFB63AB                                          ; FB63A7  68 02
-JumpTable_FB62F6_Code_Skip:
+U8Rec16_GetField_OutOfRange:
 	sub A,A                                              ; FB63A9  c9 a1
 .LFB63AB:
 	pop XIX                                              ; FB63AB  5c
@@ -93815,7 +93819,7 @@ sub_FB63AF:
 	pushw 0x04                                           ; FB63AF  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB63B2  e2 d8 fc 60 21
 	push XBC                                             ; FB63B7  39
-	calr sub_FB62D3                                          ; FB63B8  1e 18 ff
+	calr U8Rec16_GetField                                          ; FB63B8  1e 18 ff
 	inc 6,XSP                                            ; FB63BB  ef 66
 	cp a, 0x00:i3                                          ; FB63BD  c9 d8
 	jr nz, .LFB63D0                                      ; FB63BF  6e 0f
@@ -93863,7 +93867,7 @@ sub_FB63D1:
 	pushw 0x05                                           ; FB641F  0b 05 00
 	ld xbc, (0x60fcd8:24)                               ; FB6422  e2 d8 fc 60 21
 	push XBC                                             ; FB6427  39
-	calr sub_FB6219                                          ; FB6428  1e ee fd
+	calr U8Rec16_SetField                                          ; FB6428  1e ee fd
 	ld xix, (xiz-6)                                      ; FB642B  ae fa 24
 	ld XBC,XIX                                           ; FB642E  ec 89
 	inc 1,XBC                                            ; FB6430  e9 61
@@ -93878,7 +93882,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6445  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6448  e2 d8 fc 60 21
 	push XBC                                             ; FB644D  39
-	calr sub_FB6219                                          ; FB644E  1e c8 fd
+	calr U8Rec16_SetField                                          ; FB644E  1e c8 fd
 	ld xix, (xiz-6)                                      ; FB6451  ae fa 24
 	inc 2,XIX                                            ; FB6454  ec 62
 	lda xbc, (0xf5115b:24)                               ; FB6456  f2 5b 11 f5 31
@@ -93891,7 +93895,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB6466  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6469  e2 d8 fc 60 21
 	push XBC                                             ; FB646E  39
-	calr sub_FB6219                                          ; FB646F  1e a7 fd
+	calr U8Rec16_SetField                                          ; FB646F  1e a7 fd
 	lda xbc, (0xf5115b:24)                               ; FB6472  f2 5b 11 f5 31
 	add XBC,XIX                                          ; FB6477  ec 81
 	ld XWA,(XBC)                                         ; FB6479  a1 20
@@ -93942,7 +93946,7 @@ sub_FB63D1:
 	pushw 0x06                                           ; FB64D4  0b 06 00
 	ld xbc, (0x60fcd8:24)                               ; FB64D7  e2 d8 fc 60 21
 	push XBC                                             ; FB64DC  39
-	calr sub_FB6219                                          ; FB64DD  1e 39 fd
+	calr U8Rec16_SetField                                          ; FB64DD  1e 39 fd
 	ld BC,DE                                             ; FB64E0  da 89
 	extz XBC                                             ; FB64E2  e9 12
 	ld (xiz-4), xbc                                      ; FB64E4  be fc 61
@@ -93955,7 +93959,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB64F3  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB64F6  e2 d8 fc 60 21
 	push XBC                                             ; FB64FB  39
-	calr sub_FB6219                                          ; FB64FC  1e 1a fd
+	calr U8Rec16_SetField                                          ; FB64FC  1e 1a fd
 	ld XBC,XIX                                           ; FB64FF  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6501  ae f6 81
 	ld H,(XBC)                                           ; FB6504  81 26
@@ -93969,7 +93973,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6513  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6516  e2 d8 fc 60 21
 	push XBC                                             ; FB651B  39
-	calr sub_FB6219                                          ; FB651C  1e fa fc
+	calr U8Rec16_SetField                                          ; FB651C  1e fa fc
 	ld xbc, (xiz-4)                                      ; FB651F  ae fc 21
 	inc 2,XBC                                            ; FB6522  e9 62
 	ld (xiz-10), xbc                                     ; FB6524  be f6 61
@@ -93982,7 +93986,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB6532  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6535  e2 d8 fc 60 21
 	push XBC                                             ; FB653A  39
-	calr sub_FB6219                                          ; FB653B  1e db fc
+	calr U8Rec16_SetField                                          ; FB653B  1e db fc
 	ld XBC,XIX                                           ; FB653E  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6540  ae f6 81
 	ld XWA,(XBC)                                         ; FB6543  a1 20
@@ -94031,7 +94035,7 @@ sub_FB63D1:
 	pushw 0x07                                           ; FB6597  0b 07 00
 	ld xbc, (0x60fcd8:24)                               ; FB659A  e2 d8 fc 60 21
 	push XBC                                             ; FB659F  39
-	calr sub_FB6219                                          ; FB65A0  1e 76 fc
+	calr U8Rec16_SetField                                          ; FB65A0  1e 76 fc
 	ld BC,DE                                             ; FB65A3  da 89
 	extz XBC                                             ; FB65A5  e9 12
 	ld (xiz-4), xbc                                      ; FB65A7  be fc 61
@@ -94044,7 +94048,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB65B6  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB65B9  e2 d8 fc 60 21
 	push XBC                                             ; FB65BE  39
-	calr sub_FB6219                                          ; FB65BF  1e 57 fc
+	calr U8Rec16_SetField                                          ; FB65BF  1e 57 fc
 	ld XBC,XIX                                           ; FB65C2  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB65C4  ae f6 81
 	ld H,(XBC)                                           ; FB65C7  81 26
@@ -94058,7 +94062,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB65D6  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB65D9  e2 d8 fc 60 21
 	push XBC                                             ; FB65DE  39
-	calr sub_FB6219                                          ; FB65DF  1e 37 fc
+	calr U8Rec16_SetField                                          ; FB65DF  1e 37 fc
 	ld xbc, (xiz-4)                                      ; FB65E2  ae fc 21
 	inc 2,XBC                                            ; FB65E5  e9 62
 	ld (xiz-10), xbc                                     ; FB65E7  be f6 61
@@ -94071,7 +94075,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB65F5  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB65F8  e2 d8 fc 60 21
 	push XBC                                             ; FB65FD  39
-	calr sub_FB6219                                          ; FB65FE  1e 18 fc
+	calr U8Rec16_SetField                                          ; FB65FE  1e 18 fc
 	ld XBC,XIX                                           ; FB6601  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6603  ae f6 81
 	ld XWA,(XBC)                                         ; FB6606  a1 20
@@ -94120,7 +94124,7 @@ sub_FB63D1:
 	pushw 0x08                                           ; FB665A  0b 08 00
 	ld xbc, (0x60fcd8:24)                               ; FB665D  e2 d8 fc 60 21
 	push XBC                                             ; FB6662  39
-	calr sub_FB6219                                          ; FB6663  1e b3 fb
+	calr U8Rec16_SetField                                          ; FB6663  1e b3 fb
 	ld BC,DE                                             ; FB6666  da 89
 	extz XBC                                             ; FB6668  e9 12
 	ld (xiz-4), xbc                                      ; FB666A  be fc 61
@@ -94133,7 +94137,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6679  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB667C  e2 d8 fc 60 21
 	push XBC                                             ; FB6681  39
-	calr sub_FB6219                                          ; FB6682  1e 94 fb
+	calr U8Rec16_SetField                                          ; FB6682  1e 94 fb
 	ld XBC,XIX                                           ; FB6685  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6687  ae f6 81
 	ld H,(XBC)                                           ; FB668A  81 26
@@ -94147,7 +94151,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6699  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB669C  e2 d8 fc 60 21
 	push XBC                                             ; FB66A1  39
-	calr sub_FB6219                                          ; FB66A2  1e 74 fb
+	calr U8Rec16_SetField                                          ; FB66A2  1e 74 fb
 	ld xbc, (xiz-4)                                      ; FB66A5  ae fc 21
 	inc 2,XBC                                            ; FB66A8  e9 62
 	ld (xiz-10), xbc                                     ; FB66AA  be f6 61
@@ -94160,7 +94164,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB66B8  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB66BB  e2 d8 fc 60 21
 	push XBC                                             ; FB66C0  39
-	calr sub_FB6219                                          ; FB66C1  1e 55 fb
+	calr U8Rec16_SetField                                          ; FB66C1  1e 55 fb
 	ld XBC,XIX                                           ; FB66C4  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB66C6  ae f6 81
 	ld XWA,(XBC)                                         ; FB66C9  a1 20
@@ -94209,7 +94213,7 @@ sub_FB63D1:
 	pushw 0x09                                           ; FB671D  0b 09 00
 	ld xbc, (0x60fcd8:24)                               ; FB6720  e2 d8 fc 60 21
 	push XBC                                             ; FB6725  39
-	calr sub_FB6219                                          ; FB6726  1e f0 fa
+	calr U8Rec16_SetField                                          ; FB6726  1e f0 fa
 	ld BC,DE                                             ; FB6729  da 89
 	extz XBC                                             ; FB672B  e9 12
 	ld (xiz-4), xbc                                      ; FB672D  be fc 61
@@ -94222,7 +94226,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB673C  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB673F  e2 d8 fc 60 21
 	push XBC                                             ; FB6744  39
-	calr sub_FB6219                                          ; FB6745  1e d1 fa
+	calr U8Rec16_SetField                                          ; FB6745  1e d1 fa
 	ld XBC,XIX                                           ; FB6748  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB674A  ae f6 81
 	ld H,(XBC)                                           ; FB674D  81 26
@@ -94236,7 +94240,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB675C  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB675F  e2 d8 fc 60 21
 	push XBC                                             ; FB6764  39
-	calr sub_FB6219                                          ; FB6765  1e b1 fa
+	calr U8Rec16_SetField                                          ; FB6765  1e b1 fa
 	ld xbc, (xiz-4)                                      ; FB6768  ae fc 21
 	inc 2,XBC                                            ; FB676B  e9 62
 	ld (xiz-10), xbc                                     ; FB676D  be f6 61
@@ -94249,7 +94253,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB677B  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB677E  e2 d8 fc 60 21
 	push XBC                                             ; FB6783  39
-	calr sub_FB6219                                          ; FB6784  1e 92 fa
+	calr U8Rec16_SetField                                          ; FB6784  1e 92 fa
 	ld XBC,XIX                                           ; FB6787  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6789  ae f6 81
 	ld XWA,(XBC)                                         ; FB678C  a1 20
@@ -94298,7 +94302,7 @@ sub_FB63D1:
 	pushw 0x0a                                           ; FB67E0  0b 0a 00
 	ld xbc, (0x60fcd8:24)                               ; FB67E3  e2 d8 fc 60 21
 	push XBC                                             ; FB67E8  39
-	calr sub_FB6219                                          ; FB67E9  1e 2d fa
+	calr U8Rec16_SetField                                          ; FB67E9  1e 2d fa
 	ld BC,DE                                             ; FB67EC  da 89
 	extz XBC                                             ; FB67EE  e9 12
 	ld (xiz-4), xbc                                      ; FB67F0  be fc 61
@@ -94311,7 +94315,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB67FF  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6802  e2 d8 fc 60 21
 	push XBC                                             ; FB6807  39
-	calr sub_FB6219                                          ; FB6808  1e 0e fa
+	calr U8Rec16_SetField                                          ; FB6808  1e 0e fa
 	ld XBC,XIX                                           ; FB680B  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB680D  ae f6 81
 	ld H,(XBC)                                           ; FB6810  81 26
@@ -94325,7 +94329,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB681F  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6822  e2 d8 fc 60 21
 	push XBC                                             ; FB6827  39
-	calr sub_FB6219                                          ; FB6828  1e ee f9
+	calr U8Rec16_SetField                                          ; FB6828  1e ee f9
 	ld xbc, (xiz-4)                                      ; FB682B  ae fc 21
 	inc 2,XBC                                            ; FB682E  e9 62
 	ld (xiz-10), xbc                                     ; FB6830  be f6 61
@@ -94338,7 +94342,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB683E  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6841  e2 d8 fc 60 21
 	push XBC                                             ; FB6846  39
-	calr sub_FB6219                                          ; FB6847  1e cf f9
+	calr U8Rec16_SetField                                          ; FB6847  1e cf f9
 	ld XBC,XIX                                           ; FB684A  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB684C  ae f6 81
 	ld XWA,(XBC)                                         ; FB684F  a1 20
@@ -94387,7 +94391,7 @@ sub_FB63D1:
 	pushw 0x0b                                           ; FB68A3  0b 0b 00
 	ld xbc, (0x60fcd8:24)                               ; FB68A6  e2 d8 fc 60 21
 	push XBC                                             ; FB68AB  39
-	calr sub_FB6219                                          ; FB68AC  1e 6a f9
+	calr U8Rec16_SetField                                          ; FB68AC  1e 6a f9
 	ld BC,DE                                             ; FB68AF  da 89
 	extz XBC                                             ; FB68B1  e9 12
 	ld (xiz-4), xbc                                      ; FB68B3  be fc 61
@@ -94400,7 +94404,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB68C2  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB68C5  e2 d8 fc 60 21
 	push XBC                                             ; FB68CA  39
-	calr sub_FB6219                                          ; FB68CB  1e 4b f9
+	calr U8Rec16_SetField                                          ; FB68CB  1e 4b f9
 	ld XBC,XIX                                           ; FB68CE  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB68D0  ae f6 81
 	ld H,(XBC)                                           ; FB68D3  81 26
@@ -94414,7 +94418,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB68E2  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB68E5  e2 d8 fc 60 21
 	push XBC                                             ; FB68EA  39
-	calr sub_FB6219                                          ; FB68EB  1e 2b f9
+	calr U8Rec16_SetField                                          ; FB68EB  1e 2b f9
 	ld xbc, (xiz-4)                                      ; FB68EE  ae fc 21
 	inc 2,XBC                                            ; FB68F1  e9 62
 	ld (xiz-10), xbc                                     ; FB68F3  be f6 61
@@ -94427,7 +94431,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB6901  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6904  e2 d8 fc 60 21
 	push XBC                                             ; FB6909  39
-	calr sub_FB6219                                          ; FB690A  1e 0c f9
+	calr U8Rec16_SetField                                          ; FB690A  1e 0c f9
 	ld XBC,XIX                                           ; FB690D  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB690F  ae f6 81
 	ld XWA,(XBC)                                         ; FB6912  a1 20
@@ -94476,7 +94480,7 @@ sub_FB63D1:
 	pushw 0x0c                                           ; FB6966  0b 0c 00
 	ld xbc, (0x60fcd8:24)                               ; FB6969  e2 d8 fc 60 21
 	push XBC                                             ; FB696E  39
-	calr sub_FB6219                                          ; FB696F  1e a7 f8
+	calr U8Rec16_SetField                                          ; FB696F  1e a7 f8
 	ld BC,DE                                             ; FB6972  da 89
 	extz XBC                                             ; FB6974  e9 12
 	ld (xiz-4), xbc                                      ; FB6976  be fc 61
@@ -94489,7 +94493,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6985  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6988  e2 d8 fc 60 21
 	push XBC                                             ; FB698D  39
-	calr sub_FB6219                                          ; FB698E  1e 88 f8
+	calr U8Rec16_SetField                                          ; FB698E  1e 88 f8
 	ld XBC,XIX                                           ; FB6991  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6993  ae f6 81
 	ld H,(XBC)                                           ; FB6996  81 26
@@ -94503,7 +94507,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB69A5  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB69A8  e2 d8 fc 60 21
 	push XBC                                             ; FB69AD  39
-	calr sub_FB6219                                          ; FB69AE  1e 68 f8
+	calr U8Rec16_SetField                                          ; FB69AE  1e 68 f8
 	ld xbc, (xiz-4)                                      ; FB69B1  ae fc 21
 	inc 2,XBC                                            ; FB69B4  e9 62
 	ld (xiz-10), xbc                                     ; FB69B6  be f6 61
@@ -94516,7 +94520,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB69C4  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB69C7  e2 d8 fc 60 21
 	push XBC                                             ; FB69CC  39
-	calr sub_FB6219                                          ; FB69CD  1e 49 f8
+	calr U8Rec16_SetField                                          ; FB69CD  1e 49 f8
 	ld XBC,XIX                                           ; FB69D0  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB69D2  ae f6 81
 	ld XWA,(XBC)                                         ; FB69D5  a1 20
@@ -94565,7 +94569,7 @@ sub_FB63D1:
 	pushw 0x0d                                           ; FB6A29  0b 0d 00
 	ld xbc, (0x60fcd8:24)                               ; FB6A2C  e2 d8 fc 60 21
 	push XBC                                             ; FB6A31  39
-	calr sub_FB6219                                          ; FB6A32  1e e4 f7
+	calr U8Rec16_SetField                                          ; FB6A32  1e e4 f7
 	ld BC,DE                                             ; FB6A35  da 89
 	extz XBC                                             ; FB6A37  e9 12
 	ld (xiz-4), xbc                                      ; FB6A39  be fc 61
@@ -94578,7 +94582,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6A48  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6A4B  e2 d8 fc 60 21
 	push XBC                                             ; FB6A50  39
-	calr sub_FB6219                                          ; FB6A51  1e c5 f7
+	calr U8Rec16_SetField                                          ; FB6A51  1e c5 f7
 	ld XBC,XIX                                           ; FB6A54  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6A56  ae f6 81
 	ld H,(XBC)                                           ; FB6A59  81 26
@@ -94592,7 +94596,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6A68  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6A6B  e2 d8 fc 60 21
 	push XBC                                             ; FB6A70  39
-	calr sub_FB6219                                          ; FB6A71  1e a5 f7
+	calr U8Rec16_SetField                                          ; FB6A71  1e a5 f7
 	ld xbc, (xiz-4)                                      ; FB6A74  ae fc 21
 	inc 2,XBC                                            ; FB6A77  e9 62
 	ld (xiz-10), xbc                                     ; FB6A79  be f6 61
@@ -94605,7 +94609,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB6A87  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6A8A  e2 d8 fc 60 21
 	push XBC                                             ; FB6A8F  39
-	calr sub_FB6219                                          ; FB6A90  1e 86 f7
+	calr U8Rec16_SetField                                          ; FB6A90  1e 86 f7
 	ld XBC,XIX                                           ; FB6A93  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6A95  ae f6 81
 	ld XWA,(XBC)                                         ; FB6A98  a1 20
@@ -94656,7 +94660,7 @@ sub_FB63D1:
 	pushw 0x0e                                           ; FB6AEF  0b 0e 00
 	ld xbc, (0x60fcd8:24)                               ; FB6AF2  e2 d8 fc 60 21
 	push XBC                                             ; FB6AF7  39
-	calr sub_FB6219                                          ; FB6AF8  1e 1e f7
+	calr U8Rec16_SetField                                          ; FB6AF8  1e 1e f7
 	ld BC,DE                                             ; FB6AFB  da 89
 	extz XBC                                             ; FB6AFD  e9 12
 	ld (xiz-4), xbc                                      ; FB6AFF  be fc 61
@@ -94669,7 +94673,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6B0E  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6B11  e2 d8 fc 60 21
 	push XBC                                             ; FB6B16  39
-	calr sub_FB6219                                          ; FB6B17  1e ff f6
+	calr U8Rec16_SetField                                          ; FB6B17  1e ff f6
 	ld XBC,XIX                                           ; FB6B1A  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6B1C  ae f6 81
 	ld H,(XBC)                                           ; FB6B1F  81 26
@@ -94683,7 +94687,7 @@ sub_FB63D1:
 	pushw 0x00                                           ; FB6B2E  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6B31  e2 d8 fc 60 21
 	push XBC                                             ; FB6B36  39
-	calr sub_FB6219                                          ; FB6B37  1e df f6
+	calr U8Rec16_SetField                                          ; FB6B37  1e df f6
 	ld xbc, (xiz-4)                                      ; FB6B3A  ae fc 21
 	inc 2,XBC                                            ; FB6B3D  e9 62
 	ld (xiz-10), xbc                                     ; FB6B3F  be f6 61
@@ -94696,7 +94700,7 @@ sub_FB63D1:
 	pushw 0x01                                           ; FB6B4D  0b 01 00
 	ld xbc, (0x60fcd8:24)                               ; FB6B50  e2 d8 fc 60 21
 	push XBC                                             ; FB6B55  39
-	calr sub_FB6219                                          ; FB6B56  1e c0 f6
+	calr U8Rec16_SetField                                          ; FB6B56  1e c0 f6
 	ld XBC,XIX                                           ; FB6B59  ec 89
 	m_add_rm MLD+r6, 0xf6, r1                            ; FB6B5B  ae f6 81
 	ld XWA,(XBC)                                         ; FB6B5E  a1 20
@@ -94711,7 +94715,7 @@ sub_FB63D1:
 .LFB6B6F:
 	ld xbc, (0x60fcd8:24)                               ; FB6B6F  e2 d8 fc 60 21
 	push XBC                                             ; FB6B74  39
-	calr sub_FB6219                                          ; FB6B75  1e a1 f6
+	calr U8Rec16_SetField                                          ; FB6B75  1e a1 f6
 	inc 8,XSP                                            ; FB6B78  ef 60
 	jr .LFB6B81                                          ; FB6B7A  68 05
 .LFB6B7C:
@@ -94729,14 +94733,14 @@ sub_FB6B87:
 	pushw 0x04                                           ; FB6B8C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6B8F  e2 d8 fc 60 21
 	push XBC                                             ; FB6B94  39
-	calr sub_FB62D3                                          ; FB6B95  1e 3b f7
+	calr U8Rec16_GetField                                          ; FB6B95  1e 3b f7
 	inc 6,XSP                                            ; FB6B98  ef 66
 	cp a, 0x00:i3                                          ; FB6B9A  c9 d8
 	jr nz, .LFB6BF2                                      ; FB6B9C  6e 54
 	pushw 0x00                                           ; FB6B9E  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6BA1  e2 d8 fc 60 21
 	push XBC                                             ; FB6BA6  39
-	calr sub_FB62D3                                          ; FB6BA7  1e 29 f7
+	calr U8Rec16_GetField                                          ; FB6BA7  1e 29 f7
 	extz WA                                              ; FB6BAA  d8 12
 	extz XWA                                             ; FB6BAC  e8 12
 	add XWA,0x00f4fe82                                   ; FB6BAE  e8 c8 82 fe f4 00
@@ -94769,7 +94773,7 @@ sub_FB6B87:
 	pushw 0x04                                           ; FB6BE4  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6BE7  e2 d8 fc 60 21
 	push XBC                                             ; FB6BEC  39
-	calr sub_FB6219                                          ; FB6BED  1e 29 f6
+	calr U8Rec16_SetField                                          ; FB6BED  1e 29 f6
 	inc 8,XSP                                            ; FB6BF0  ef 60
 .LFB6BF2:
 	pop XIX                                              ; FB6BF2  5c
@@ -94783,14 +94787,14 @@ sub_FB6BF4:
 	pushw 0x04                                           ; FB6C00  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6C03  e2 d8 fc 60 21
 	push XBC                                             ; FB6C08  39
-	calr sub_FB62D3                                          ; FB6C09  1e c7 f6
+	calr U8Rec16_GetField                                          ; FB6C09  1e c7 f6
 	inc 6,XSP                                            ; FB6C0C  ef 66
 	cp a, 0x00:i3                                          ; FB6C0E  c9 d8
 	jrl nz, .LFB6CF6                                     ; FB6C10  7e e3 00
 	pushw 0x00                                           ; FB6C13  0b 00 00
 	ld xbc, (0x60fcd8:24)                               ; FB6C16  e2 d8 fc 60 21
 	push XBC                                             ; FB6C1B  39
-	calr sub_FB62D3                                          ; FB6C1C  1e b4 f6
+	calr U8Rec16_GetField                                          ; FB6C1C  1e b4 f6
 	ld H,A                                               ; FB6C1F  c9 8e
 	inc 6,XSP                                            ; FB6C21  ef 66
 	cp A,0x11                                            ; FB6C23  c9 cf 11
@@ -94834,14 +94838,14 @@ sub_FB6BF4:
 	pushw 0x0c                                           ; FB6C76  0b 0c 00
 	ld xbc, (0x60fcd8:24)                               ; FB6C79  e2 d8 fc 60 21
 	push XBC                                             ; FB6C7E  39
-	calr sub_FB6219                                          ; FB6C7F  1e 97 f5
+	calr U8Rec16_SetField                                          ; FB6C7F  1e 97 f5
 	ld C,L                                               ; FB6C82  cf 8b
 	extz BC                                              ; FB6C84  d9 12
 	pushw bc                                             ; FB6C86  29
 	pushw 0x0d                                           ; FB6C87  0b 0d 00
 	ld xbc, (0x60fcd8:24)                               ; FB6C8A  e2 d8 fc 60 21
 	push XBC                                             ; FB6C8F  39
-	calr sub_FB6219                                          ; FB6C90  1e 86 f5
+	calr U8Rec16_SetField                                          ; FB6C90  1e 86 f5
 	ld C,H                                               ; FB6C93  ce 8b
 	extz BC                                              ; FB6C95  d9 12
 	inc 8,XSP                                            ; FB6C97  ef 60
@@ -94861,7 +94865,7 @@ sub_FB6BF4:
 	pushw 0x0c                                           ; FB6CB0  0b 0c 00
 	ld xbc, (0x60fcd8:24)                               ; FB6CB3  e2 d8 fc 60 21
 	push XBC                                             ; FB6CB8  39
-	calr sub_FB62D3                                          ; FB6CB9  1e 17 f6
+	calr U8Rec16_GetField                                          ; FB6CB9  1e 17 f6
 	inc 6,XSP                                            ; FB6CBC  ef 66
 	cp A,0xff                                            ; FB6CBE  c9 cf ff
 	jr nz, .LFB6CF6                                      ; FB6CC1  6e 33
@@ -94888,7 +94892,7 @@ sub_FB6BF4:
 .LFB6CEB:
 	ld xbc, (0x60fcd8:24)                               ; FB6CEB  e2 d8 fc 60 21
 	push XBC                                             ; FB6CF0  39
-	calr sub_FB6219                                          ; FB6CF1  1e 25 f5
+	calr U8Rec16_SetField                                          ; FB6CF1  1e 25 f5
 	inc 8,XSP                                            ; FB6CF4  ef 60
 .LFB6CF6:
 	pop XIX                                              ; FB6CF6  5c
@@ -94903,25 +94907,25 @@ sub_FB6CFC:
 	pushw 0x04                                           ; FB6D02  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6D05  e2 d8 fc 60 21
 	push XBC                                             ; FB6D0A  39
-	calr sub_FB62D3                                          ; FB6D0B  1e c5 f5
+	calr U8Rec16_GetField                                          ; FB6D0B  1e c5 f5
 	inc 6,XSP                                            ; FB6D0E  ef 66
 	cp a, 0x00:i3                                          ; FB6D10  c9 d8
 	jrl nz, .LFB6DB8                                     ; FB6D12  7e a3 00
 	pushw 0x0c                                           ; FB6D15  0b 0c 00
 	ld xbc, (0x60fcd8:24)                               ; FB6D18  e2 d8 fc 60 21
 	push XBC                                             ; FB6D1D  39
-	calr sub_FB62D3                                          ; FB6D1E  1e b2 f5
+	calr U8Rec16_GetField                                          ; FB6D1E  1e b2 f5
 	ld H,A                                               ; FB6D21  c9 8e
 	pushw 0x0d                                           ; FB6D23  0b 0d 00
 	ld xbc, (0x60fcd8:24)                               ; FB6D26  e2 d8 fc 60 21
 	push XBC                                             ; FB6D2B  39
-	calr sub_FB62D3                                          ; FB6D2C  1e a4 f5
+	calr U8Rec16_GetField                                          ; FB6D2C  1e a4 f5
 	ld L,A                                               ; FB6D2F  c9 8f
 	or L,H                                               ; FB6D31  ce e7
 	pushw 0x0e                                           ; FB6D33  0b 0e 00
 	ld xbc, (0x60fcd8:24)                               ; FB6D36  e2 d8 fc 60 21
 	push XBC                                             ; FB6D3B  39
-	calr sub_FB62D3                                          ; FB6D3C  1e 94 f5
+	calr U8Rec16_GetField                                          ; FB6D3C  1e 94 f5
 	or A,L                                               ; FB6D3F  cf e1
 	and A,0xff                                           ; FB6D41  c9 cc ff
 	add XSP,0x00000012                                   ; FB6D44  ef c8 12 00 00 00
@@ -94930,7 +94934,7 @@ sub_FB6CFC:
 	pushw 0x05                                           ; FB6D4F  0b 05 00
 	ld xbc, (0x60fcd8:24)                               ; FB6D52  e2 d8 fc 60 21
 	push XBC                                             ; FB6D57  39
-	calr sub_FB62D3                                          ; FB6D58  1e 78 f5
+	calr U8Rec16_GetField                                          ; FB6D58  1e 78 f5
 	ld H,A                                               ; FB6D5B  c9 8e
 	inc 6,XSP                                            ; FB6D5D  ef 66
 	cp A,0x7e                                            ; FB6D5F  c9 cf 7e
@@ -94966,7 +94970,7 @@ sub_FB6CFC:
 	pushw 0x04                                           ; FB6DAA  0b 04 00
 	ld xwa, (0x60fcd8:24)                               ; FB6DAD  e2 d8 fc 60 20
 	push XWA                                             ; FB6DB2  38
-	calr sub_FB6219                                          ; FB6DB3  1e 63 f4
+	calr U8Rec16_SetField                                          ; FB6DB3  1e 63 f4
 	inc 8,XSP                                            ; FB6DB6  ef 60
 .LFB6DB8:
 	pop XIX                                              ; FB6DB8  5c
@@ -94981,14 +94985,14 @@ sub_FB6DBD:
 	pushw 0x04                                           ; FB6DC5  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6DC8  e2 d8 fc 60 21
 	push XBC                                             ; FB6DCD  39
-	calr sub_FB62D3                                          ; FB6DCE  1e 02 f5
+	calr U8Rec16_GetField                                          ; FB6DCE  1e 02 f5
 	inc 6,XSP                                            ; FB6DD1  ef 66
 	cp a, 0x00:i3                                          ; FB6DD3  c9 d8
 	jrl nz, .LFB6E7A                                     ; FB6DD5  7e a2 00
 	pushw 0x05                                           ; FB6DD8  0b 05 00
 	ld xbc, (0x60fcd8:24)                               ; FB6DDB  e2 d8 fc 60 21
 	push XBC                                             ; FB6DE0  39
-	calr sub_FB62D3                                          ; FB6DE1  1e ef f4
+	calr U8Rec16_GetField                                          ; FB6DE1  1e ef f4
 	ld H,A                                               ; FB6DE4  c9 8e
 	inc 6,XSP                                            ; FB6DE6  ef 66
 	cp A,0x7e                                            ; FB6DE8  c9 cf 7e
@@ -95016,7 +95020,7 @@ sub_FB6DBD:
 	pushw 0x0f                                           ; FB6E16  0b 0f 00
 	ld xbc, (0x60fcd8:24)                               ; FB6E19  e2 d8 fc 60 21
 	push XBC                                             ; FB6E1E  39
-	calr sub_FB6219                                          ; FB6E1F  1e f7 f3
+	calr U8Rec16_SetField                                          ; FB6E1F  1e f7 f3
 	ld xix, (0x60fc80:24)                               ; FB6E22  e2 80 fc 60 24
 	add XIX,0x0000000f                                   ; FB6E27  ec c8 0f 00 00 00
 	ld xbc, (0x60fc80:24)                               ; FB6E2D  e2 80 fc 60 21
@@ -95052,7 +95056,7 @@ sub_FB6DBD:
 	pushw 0x04                                           ; FB6E6C  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB6E6F  e2 d8 fc 60 21
 	push XBC                                             ; FB6E74  39
-	calr sub_FB6219                                          ; FB6E75  1e a1 f3
+	calr U8Rec16_SetField                                          ; FB6E75  1e a1 f3
 	inc 8,XSP                                            ; FB6E78  ef 60
 .LFB6E7A:
 	pop XIX                                              ; FB6E7A  5c
@@ -95214,12 +95218,12 @@ sub_FB6FB2:
 	pushw 0x04                                           ; FB6FFE  0b 04 00
 	ld xbc, (0x60fce0:24)                               ; FB7001  e2 e0 fc 60 21
 	push XBC                                             ; FB7006  39
-	calr sub_FB6219                                          ; FB7007  1e 0f f2
+	calr U8Rec16_SetField                                          ; FB7007  1e 0f f2
 	pushw 0x20                                           ; FB700A  0b 20 00
 	pushw 0x04                                           ; FB700D  0b 04 00
 	ld XBC,(XIX)                                         ; FB7010  a4 21
 	push XBC                                             ; FB7012  39
-	calr sub_FB6219                                          ; FB7013  1e 03 f2
+	calr U8Rec16_SetField                                          ; FB7013  1e 03 f2
 	inc 8,XSP                                            ; FB7016  ef 60
 	inc 8,XSP                                            ; FB7018  ef 60
 .LFB701A:
@@ -95303,7 +95307,7 @@ sub_FB70AE:
 	pushw 0x0f                                           ; FB70D3  0b 0f 00
 	ld xbc, (0x60fce0:24)                               ; FB70D6  e2 e0 fc 60 21
 	push XBC                                             ; FB70DB  39
-	calr sub_FB6219                                          ; FB70DC  1e 3a f1
+	calr U8Rec16_SetField                                          ; FB70DC  1e 3a f1
 	inc 8,XSP                                            ; FB70DF  ef 60
 	inc 6,XSP                                            ; FB70E1  ef 66
 	unlk XIZ                                             ; FB70E3  ee 0d
@@ -95321,7 +95325,7 @@ sub_FB70E6:
 	pushw 0x0f                                           ; FB70FE  0b 0f 00
 	ld xbc, (0x60fce0:24)                               ; FB7101  e2 e0 fc 60 21
 	push XBC                                             ; FB7106  39
-	calr sub_FB6219                                          ; FB7107  1e 0f f1
+	calr U8Rec16_SetField                                          ; FB7107  1e 0f f1
 	inc 8,XSP                                            ; FB710A  ef 60
 	inc 6,XSP                                            ; FB710C  ef 66
 	unlk XIZ                                             ; FB710E  ee 0d
@@ -95573,7 +95577,7 @@ sub_FB72B5:
 	pushw 0x04                                           ; FB734F  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7352  e2 d8 fc 60 21
 	push XBC                                             ; FB7357  39
-	calr sub_FB6219                                          ; FB7358  1e be ee
+	calr U8Rec16_SetField                                          ; FB7358  1e be ee
 	inc 8,XSP                                            ; FB735B  ef 60
 	ldw wa, 0xffff                                       ; FB735D  30 ff ff
 .LFB7360:
@@ -95646,7 +95650,7 @@ sub_FB7365:
 	pushw 0x04                                           ; FB7404  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7407  e2 d8 fc 60 21
 	push XBC                                             ; FB740C  39
-	calr sub_FB6219                                          ; FB740D  1e 09 ee
+	calr U8Rec16_SetField                                          ; FB740D  1e 09 ee
 	inc 8,XSP                                            ; FB7410  ef 60
 	ldw wa, 0xffff                                       ; FB7412  30 ff ff
 .LFB7415:
@@ -95661,7 +95665,7 @@ sub_FB741A:
 	pushw 0x0c                                           ; FB7424  0b 0c 00
 	ld xbc, (0x60fcd8:24)                               ; FB7427  e2 d8 fc 60 21
 	push XBC                                             ; FB742C  39
-	calr sub_FB62D3                                          ; FB742D  1e a3 ee
+	calr U8Rec16_GetField                                          ; FB742D  1e a3 ee
 	extz WA                                              ; FB7430  d8 12
 	extz XWA                                             ; FB7432  e8 12
 	sll xwa, 0x0e                                        ; FB7434  e8 ee 0e
@@ -95669,7 +95673,7 @@ sub_FB741A:
 	pushw 0x0d                                           ; FB743A  0b 0d 00
 	ld xbc, (0x60fcd8:24)                               ; FB743D  e2 d8 fc 60 21
 	push XBC                                             ; FB7442  39
-	calr sub_FB62D3                                          ; FB7443  1e 8d ee
+	calr U8Rec16_GetField                                          ; FB7443  1e 8d ee
 	extz WA                                              ; FB7446  d8 12
 	extz XWA                                             ; FB7448  e8 12
 	sll xwa, 0x07                                        ; FB744A  e8 ee 07
@@ -95678,7 +95682,7 @@ sub_FB741A:
 	pushw 0x0e                                           ; FB7453  0b 0e 00
 	ld xbc, (0x60fcd8:24)                               ; FB7456  e2 d8 fc 60 21
 	push XBC                                             ; FB745B  39
-	calr sub_FB62D3                                          ; FB745C  1e 74 ee
+	calr U8Rec16_GetField                                          ; FB745C  1e 74 ee
 	extz WA                                              ; FB745F  d8 12
 	extz XWA                                             ; FB7461  e8 12
 	m_or_rm MLD+r6, 0xf8, r0                             ; FB7463  ae f8 e0
@@ -95994,7 +95998,7 @@ sub_FB775F:
 	pushw 0x04                                           ; FB7770  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7773  e2 d8 fc 60 21
 	push XBC                                             ; FB7778  39
-	calr sub_FB6219                                          ; FB7779  1e 9d ea
+	calr U8Rec16_SetField                                          ; FB7779  1e 9d ea
 	m_and_mi8 MB8, MIDI_RX_Flags, 0xd3                            ; FB777C  c0 9e 3c d3
 	inc 8,XSP                                            ; FB7780  ef 60
 .LFB7782:
@@ -96016,7 +96020,7 @@ sub_FB7785:
 	pushw 0x04                                           ; FB77A4  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB77A7  e2 d8 fc 60 21
 	push XBC                                             ; FB77AC  39
-	calr sub_FB6219                                          ; FB77AD  1e 69 ea
+	calr U8Rec16_SetField                                          ; FB77AD  1e 69 ea
 	inc 8,XSP                                            ; FB77B0  ef 60
 .LFB77B2:
 	popw hl                                              ; FB77B2  4b
@@ -96497,7 +96501,7 @@ sub_FB7BB9:
 	pushw 0x04                                           ; FB7BB9  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7BBC  e2 d8 fc 60 21
 	push XBC                                             ; FB7BC1  39
-	call sub_FB62D3                                      ; FB7BC2  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB7BC2  1d d3 62 fb
 	inc 6,XSP                                            ; FB7BC6  ef 66
 	cp a, 0x00:i3                                          ; FB7BC8  c9 d8
 	jr nz, .LFB7BDE                                      ; FB7BCA  6e 12
@@ -96551,7 +96555,7 @@ sub_FB7C57:
 	pushw 0x03                                           ; FB7C65  0b 03 00
 	ld xbc, (0x60fce0:24)                               ; FB7C68  e2 e0 fc 60 21
 	push XBC                                             ; FB7C6D  39
-	call sub_FB62D3                                      ; FB7C6E  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB7C6E  1d d3 62 fb
 	extz WA                                              ; FB7C72  d8 12
 	extz XWA                                             ; FB7C74  e8 12
 	add XWA,0x00f511b5                                   ; FB7C76  e8 c8 b5 11 f5 00
@@ -96566,7 +96570,7 @@ sub_FB7C57:
 	pushw 0x03                                           ; FB7C93  0b 03 00
 	ld xbc, (0x60fcd8:24)                               ; FB7C96  e2 d8 fc 60 21
 	push XBC                                             ; FB7C9B  39
-	call sub_FB62D3                                      ; FB7C9C  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB7C9C  1d d3 62 fb
 	extz WA                                              ; FB7CA0  d8 12
 	extz XWA                                             ; FB7CA2  e8 12
 	add XWA,0x00f511b5                                   ; FB7CA4  e8 c8 b5 11 f5 00
@@ -96707,7 +96711,7 @@ sub_FB7DFE:
 	pushw 0x04                                           ; FB7DFE  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7E01  e2 d8 fc 60 21
 	push XBC                                             ; FB7E06  39
-	call sub_FB62D3                                      ; FB7E07  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB7E07  1d d3 62 fb
 	extz WA                                              ; FB7E0B  d8 12
 	inc 6,XSP                                            ; FB7E0D  ef 66
 	cp wa, 0x00:i3                                         ; FB7E0F  d8 d8
@@ -96738,7 +96742,7 @@ sub_FB7E43:
 	pushw 0x04                                           ; FB7E43  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7E46  e2 d8 fc 60 21
 	push XBC                                             ; FB7E4B  39
-	call sub_FB62D3                                      ; FB7E4C  1d d3 62 fb
+	call U8Rec16_GetField                                      ; FB7E4C  1d d3 62 fb
 	extz WA                                              ; FB7E50  d8 12
 	extz XWA                                             ; FB7E52  e8 12
 	add XWA,AsciiRun_F511C7                              ; FB7E54  e8 c8 c7 11 f5 00

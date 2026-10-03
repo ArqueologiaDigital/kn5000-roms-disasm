@@ -26,7 +26,7 @@ WHERE THE SIGNAL IS
     never fetched anywhere in the bulk-dump code, only in the 0x2B/0x2C
     single-parameter handlers at 0xFB39xx-0xFB4Axx.
 
-  * ORDER.  Every data handler opens with `sub_FB62D3(3, (0x60FCDC))` --
+  * ORDER.  Every data handler opens with `U8Rec16_GetField(3, (0x60FCDC))` --
     parse-record field 3, the session step -- and compares it against one
     literal.  A mismatch stores an error status and the session ends.  The
     step a handler then WRITES is the index under which the same routine

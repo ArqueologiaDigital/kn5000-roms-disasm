@@ -8,7 +8,7 @@ QUESTION THIS ANSWERS
 THE CHAIN, AND WHERE EACH LINK IS READ
     (1) The SysEx engine keeps a parse record; its pointer is RAM
         (0x60FCD8) and *field 4* of that record is the status byte.
-        prom_a sub_FB6219 (0xFB6219) is the field SETTER and sub_FB62D3
+        prom_a U8Rec16_SetField (0xFB6219) is the field SETTER and U8Rec16_GetField
         (0xFB62D3) the GETTER; both are 16-way jump tables over offsets
         +0..+15 (`cp BC,0x000F / jrl ugt`, 0xFB622C / 0xFB62E2).
 

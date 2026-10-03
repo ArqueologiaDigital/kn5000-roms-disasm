@@ -92,7 +92,7 @@ for base, n, site in TABLES:
           "0x%06X" % (base + 4 * n))
     check("0x%06X: all %d entries point inside 0xFB2000-0xFBFFFF" % (base, n),
           all(0xFB2000 <= u32(base + 4 * k) < 0xFC0000 for k in range(n)))
-check("the 16 arms of JumpTable_FB6240 step by exactly 5 bytes, "
+check("the 16 arms of U8Rec16_SetField_Cases step by exactly 5 bytes, "
       "0xFB6280..0xFB62CB",
       [u32(0xFB6240 + 4 * k) for k in range(16)]
       == [0xFB6280 + 5 * k for k in range(16)])
@@ -269,7 +269,7 @@ check("no `call`/`jp 0x00FB248A` exists in prom_a or prom_b, which is why that "
       "routine has no label", _hits == [], str(["0x%06X" % h for h in _hits]))
 
 LABELS = {0xFB24EC: "Remote_E80000_Read32Blocks",
-          0xFB2081: "JumpTable_FB2081", 0xFB6240: "JumpTable_FB6240",
+          0xFB2081: "JumpTable_FB2081", 0xFB6240: "U8Rec16_SetField_Cases",
           0xFBD320: "JumpTable_FBD320",
           0xFB82A0: "RecordTables_FB82A0",
           0xFBA169: "MidiFile_Tables_FBA169"}

@@ -37999,7 +37999,7 @@ EffectDefaultParams:
 ;   `ldw bc,3 / mul XBC,(XIZ+8) / add XIX,this`; the writer refuses n > 0x48.
 ;   prom_a calls the two thunks at 0xFB3AFD and 0xFB4A41 with n taken from
 ;   IndexMap_F4FA9B + 1 (0xF4FA9C) -- the dense index that map gives the
-;   result of prom_a sub_FB62D3.
+;   result of prom_a U8Rec16_GetField.
 ; Layout, checked by python3 notes/promb-2026-09-25/dsp_effect_tables.py:
 ;   n = 0 entry 96 byte 0 bit 0; n = 1-23 block 97 bytes 0-22; n = 24-46
 ;   block 98 bytes 0-22 with 17-20 ABSENT (exactly the four bytes
@@ -107790,7 +107790,7 @@ MidiSysEx_Tail3Init:	.byte	0x08, 0x07, 0xf7	; F4FA76
 ; Evidence: the bands and the live count are re-derived by index_bands() and
 ;           checked in --selftest, last band included.
 ; ⚠ ANSWERED 2026-09-25 (lane promb): what the two index spaces are.  The input k is
-;   a SYSEX MESSAGE BYTE: both readers first call prom_a sub_FB62D3 for field 11
+;   a SYSEX MESSAGE BYTE: both readers first call prom_a U8Rec16_GetField for field 11
 ;   of the decode result at (0x60FCD8), the byte SysExDecodeTree_Root's walk
 ;   matched at level 6 -- the parameter byte of `.. gg pp` -- and the dense index
 ;   is an EFFECT PARAMETER NUMBER: 0xFB3AFD hands it to T_DspParam_WriteByNumber =
@@ -108194,7 +108194,7 @@ SysExMessageStrings_F4FEB4:
 ;   the next byte (sub_FB61B1; 0xFF ends the message), scans the current list
 ;   of 6-byte records for +0 == byte (+0 == 0xFE matches any byte, below the
 ;   top level), stores the byte in field 5+level of the result object at
-;   (0x60FCD8) (sub_FB6219), and then
+;   (0x60FCD8) (U8Rec16_SetField), and then
 ;     +1 == 0   descend: +2 is the next level's list;
 ;     +1 != 0   a LEAF: field 0 := +1, and the first two bytes of the record
 ;               +2 points at become fields 1 and 2;
