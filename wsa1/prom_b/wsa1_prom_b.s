@@ -1214,9 +1214,9 @@
 	.set	Var27E9_Set, 0xFD7B7B
 	.set	sub_FD7B89, 0xFD7B89
 	.set	sub_FD7BA5, 0xFD7BA5
-	.set	sub_FD7BC3, 0xFD7BC3
-	.set	sub_FD7BDE, 0xFD7BDE
-	.set	sub_FD7C01, 0xFD7C01
+	.set	PanelDial_SetButtonMode, 0xFD7BC3
+	.set	PanelDial_SetDirectionButton, 0xFD7BDE
+	.set	PanelDial_ActAsButton, 0xFD7C01
 	.set	ToneEdit_StepFromEvent, 0xFD7C2D
 	.set	sub_FD7C5A, 0xFD7C5A
 	.set	sub_FD7C83, 0xFD7C83
@@ -17995,7 +17995,7 @@ sub_F0A162:
 	pushw	135	; F0A1B7  push 0x0087
 	call	ToneEdit_CommitField	; F0A1BA  call 0xfd7435
 	pushw	2	; F0A1BE  push 0x0002
-	call	sub_FD7C01	; F0A1C1  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0A1C1  call 0xfd7c01
 	add	xsp, 30	; F0A1C5  add XSP,0x0000001e
 	pop	xix	; F0A1CB  pop XIX
 	popw	de	; F0A1CC  pop DE
@@ -18053,7 +18053,7 @@ sub_F0A1D1:
 	pushw	135	; F0A226  push 0x0087
 	call	ToneEdit_CommitField	; F0A229  call 0xfd7435
 	pushw	3	; F0A22D  push 0x0003
-	call	sub_FD7C01	; F0A230  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0A230  call 0xfd7c01
 	add	xsp, 30	; F0A234  add XSP,0x0000001e
 	pop	xix	; F0A23A  pop XIX
 	popw	de	; F0A23B  pop DE
@@ -18109,7 +18109,7 @@ sub_F0A240:
 	pushw	135	; F0A291  push 0x0087
 	call	ToneEdit_CommitField	; F0A294  call 0xfd7435
 	pushw	4	; F0A298  push 0x0004
-	call	sub_FD7C01	; F0A29B  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0A29B  call 0xfd7c01
 	add	xsp, 30	; F0A29F  add XSP,0x0000001e
 	pop	xix	; F0A2A5  pop XIX
 	popw	de	; F0A2A6  pop DE
@@ -18215,7 +18215,7 @@ sub_F0A2AB_Skip:
 	add	xsp, 24	; F0A38F  add XSP,0x00000018
 sub_F0A2AB_Join:
 	pushw	6	; F0A395  push 0x0006
-	call	sub_FD7C01	; F0A398  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0A398  call 0xfd7c01
 	popw	bc	; F0A39C  pop BC
 	pop	xix	; F0A39D  pop XIX
 	unlk XIZ	; F0A39E  unlk XIZ
@@ -20269,7 +20269,7 @@ sub_F0AE6B_Join:
 	pushw	154	; F0AE85  push 0x009a
 	call	ToneEdit_CommitField	; F0AE88  call 0xfd7435
 	pushw	1	; F0AE8C  push 0x0001
-	call	sub_FD7C01	; F0AE8F  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0AE8F  call 0xfd7c01
 	inc	8, xsp	; F0AE93  inc 0,XSP
 	inc	6, xsp	; F0AE95  inc 6,XSP
 sub_F0AE6B_Skip:
@@ -20405,7 +20405,7 @@ sub_F0AF36_Join:
 	pushw	154	; F0AF50  push 0x009a
 	call	ToneEdit_CommitField	; F0AF53  call 0xfd7435
 	pushw	2	; F0AF57  push 0x0002
-	call	sub_FD7C01	; F0AF5A  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0AF5A  call 0xfd7c01
 	inc	8, xsp	; F0AF5E  inc 0,XSP
 	inc	6, xsp	; F0AF60  inc 6,XSP
 sub_F0AF36_Skip:
@@ -20570,7 +20570,7 @@ sub_F0B011_Join2:
 	pushw	154	; F0B02B  push 0x009a
 	call	ToneEdit_CommitField	; F0B02E  call 0xfd7435
 	pushw	3	; F0B032  push 0x0003
-	call	sub_FD7C01	; F0B035  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B035  call 0xfd7c01
 	inc	8, xsp	; F0B039  inc 0,XSP
 	inc	6, xsp	; F0B03B  inc 6,XSP
 sub_F0B011_Skip:
@@ -20702,7 +20702,7 @@ sub_F0B0CF_Join:
 	pushw	154	; F0B0E9  push 0x009a
 	call	ToneEdit_CommitField	; F0B0EC  call 0xfd7435
 	pushw	4	; F0B0F0  push 0x0004
-	call	sub_FD7C01	; F0B0F3  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B0F3  call 0xfd7c01
 	inc	8, xsp	; F0B0F7  inc 0,XSP
 	inc	6, xsp	; F0B0F9  inc 6,XSP
 sub_F0B0CF_Skip:
@@ -20816,7 +20816,7 @@ sub_F0B179_Join:
 	pushw	154	; F0B193  push 0x009a
 	call	ToneEdit_CommitField	; F0B196  call 0xfd7435
 	pushw	5	; F0B19A  push 0x0005
-	call	sub_FD7C01	; F0B19D  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B19D  call 0xfd7c01
 	inc	8, xsp	; F0B1A1  inc 0,XSP
 	inc	6, xsp	; F0B1A3  inc 6,XSP
 sub_F0B179_Skip:
@@ -20877,7 +20877,7 @@ sub_F0B1A9_Skip:
 	pushw	154	; F0B212  push 0x009a
 	call	ToneEdit_CommitField	; F0B215  call 0xfd7435
 	pushw	6	; F0B219  push 0x0006
-	call	sub_FD7C01	; F0B21C  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B21C  call 0xfd7c01
 	inc	8, xsp	; F0B220  inc 0,XSP
 	inc	6, xsp	; F0B222  inc 6,XSP
 sub_F0B1A9_Join:
@@ -20982,7 +20982,7 @@ sub_F0B2B2:
 	pushw	154	; F0B2CC  push 0x009a
 	call	ToneEdit_CommitField	; F0B2CF  call 0xfd7435
 	pushw	7	; F0B2D3  push 0x0007
-	call	sub_FD7C01	; F0B2D6  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B2D6  call 0xfd7c01
 	inc	8, xsp	; F0B2DA  inc 0,XSP
 	inc	6, xsp	; F0B2DC  inc 6,XSP
 
@@ -21098,7 +21098,7 @@ sub_F0B36C:
 	pushw	154	; F0B386  push 0x009a
 	call	ToneEdit_CommitField	; F0B389  call 0xfd7435
 	pushw	8	; F0B38D  push 0x0008
-	call	sub_FD7C01	; F0B390  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0B390  call 0xfd7c01
 	inc	8, xsp	; F0B394  inc 0,XSP
 	inc	6, xsp	; F0B396  inc 6,XSP
 sub_F0B36C_Skip:
@@ -22007,15 +22007,15 @@ sub_F0B972_Resume:
 	pushw	159	; F0B980  push 0x009f
 	call	T_Dispatch_Code80_Bracketed	; F0B983  call 0xf41ed0
 	pushw	1	; F0B987  push 0x0001
-	call	sub_FD7BC3	; F0B98A  call 0xfd7bc3
+	call	PanelDial_SetButtonMode	; F0B98A  call 0xfd7bc3
 	pushw	0	; F0B98E  push 0x0000
 	pushw	8	; F0B991  push 0x0008
 	pushw	0	; F0B994  push 0x0000
-	call	sub_FD7BDE	; F0B997  call 0xfd7bde
+	call	PanelDial_SetDirectionButton	; F0B997  call 0xfd7bde
 	pushw	0	; F0B99B  push 0x0000
 	pushw	6	; F0B99E  push 0x0006
 	pushw	1	; F0B9A1  push 0x0001
-	call	sub_FD7BDE	; F0B9A4  call 0xfd7bde
+	call	PanelDial_SetDirectionButton	; F0B9A4  call 0xfd7bde
 	add	xsp, 40	; F0B9A8  add XSP,0x00000028
 	pop	xix	; F0B9AE  pop XIX
 	popw	hl	; F0B9AF  pop HL
@@ -23104,7 +23104,7 @@ sub_F0C245_Resume:
 	add	xsp, 40	; F0C27D  add XSP,0x00000028
 sub_F0BF04_Skip10:
 	pushw	1	; F0C283  push 0x0001
-	call	sub_FD7C01	; F0C286  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0C286  call 0xfd7c01
 	popw	bc	; F0C28A  pop BC
 sub_F0BF04_Skip11:
 	pop	xix	; F0C28B  pop XIX
@@ -23285,7 +23285,7 @@ sub_F0C291_Skip3:
 	inc	8, xsp	; F0C3EC  inc 0,XSP
 sub_F0C291_Join3:
 	pushw	2	; F0C3EE  push 0x0002
-	call	sub_FD7C01	; F0C3F1  call 0xfd7c01
+	call	PanelDial_ActAsButton	; F0C3F1  call 0xfd7c01
 	popw	bc	; F0C3F5  pop BC
 sub_F0C291_Skip4:
 	unlk XIZ	; F0C3F6  unlk XIZ

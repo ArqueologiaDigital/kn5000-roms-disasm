@@ -124732,7 +124732,7 @@ sub_FCFEA1:
 	pushw bc                                             ; FCFF30  29
 	call sub_FD62B4                                      ; FCFF31  1d b4 62 fd
 	pushw 0x02                                           ; FCFF35  0b 02 00
-	call sub_FD7C01                                      ; FCFF38  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FCFF38  1d 01 7c fd
 	add XSP,0x00000012                                   ; FCFF3C  ef c8 12 00 00 00
 .LFCFF42:
 	popw hl                                              ; FCFF42  4b
@@ -124788,7 +124788,7 @@ sub_FCFF46:
 	pushw bc                                             ; FCFFB7  29
 	call sub_FD62B4                                      ; FCFFB8  1d b4 62 fd
 	pushw 0x03                                           ; FCFFBC  0b 03 00
-	call sub_FD7C01                                      ; FCFFBF  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FCFFBF  1d 01 7c fd
 	inc 8,XSP                                            ; FCFFC3  ef 60
 	inc 2,XSP                                            ; FCFFC5  ef 62
 .LFCFFC7:
@@ -124857,7 +124857,7 @@ sub_FCFFCA:
 	pop XIY                                              ; FD005C  5d
 .LFD005D:
 	pushw 0x04                                           ; FD005D  0b 04 00
-	call sub_FD7C01                                      ; FD0060  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0060  1d 01 7c fd
 	popw bc                                              ; FD0064  49
 .LFD0065:
 	pop XIX                                              ; FD0065  5c
@@ -124916,7 +124916,7 @@ sub_FD006B:
 	pushw 0x80                                           ; FD00DB  0b 80 00
 	call ToneEdit_CommitField                                      ; FD00DE  1d 35 74 fd
 	pushw 0x05                                           ; FD00E2  0b 05 00
-	call sub_FD7C01                                      ; FD00E5  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD00E5  1d 01 7c fd
 	add XSP,0x00000020                                   ; FD00E9  ef c8 20 00 00 00
 .LFD00EF:
 	pop XIX                                              ; FD00EF  5c
@@ -124974,7 +124974,7 @@ sub_FD00F5:
 	pushw 0x80                                           ; FD0163  0b 80 00
 	call ToneEdit_CommitField                                      ; FD0166  1d 35 74 fd
 	pushw 0x06                                           ; FD016A  0b 06 00
-	call sub_FD7C01                                      ; FD016D  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD016D  1d 01 7c fd
 	add XSP,0x00000020                                   ; FD0171  ef c8 20 00 00 00
 .LFD0177:
 	pop XIX                                              ; FD0177  5c
@@ -125071,7 +125071,7 @@ sub_FD017D:
 	pushw 0x80                                           ; FD024D  0b 80 00
 	call T_Dispatch_Code80                               ; FD0250  1d d4 1e f4
 	pushw 0x07                                           ; FD0254  0b 07 00
-	call sub_FD7C01                                      ; FD0257  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0257  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD025B  ef c8 16 00 00 00
 .LFD0261:
 	pop XIX                                              ; FD0261  5c
@@ -125111,7 +125111,7 @@ sub_FD0267:
 	pushw 0x80                                           ; FD02B3  0b 80 00
 	call ToneEdit_CommitField                                      ; FD02B6  1d 35 74 fd
 	pushw 0x08                                           ; FD02BA  0b 08 00
-	call sub_FD7C01                                      ; FD02BD  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD02BD  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD02C1  ef c8 1a 00 00 00
 .LFD02C7:
 	pop XIX                                              ; FD02C7  5c
@@ -126276,7 +126276,7 @@ sub_FD0C58:
 	pushw bc                                             ; FD0CD7  29
 	call sub_FD62B4                                      ; FD0CD8  1d b4 62 fd
 	pushw 0x02                                           ; FD0CDC  0b 02 00
-	call sub_FD7C01                                      ; FD0CDF  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0CDF  1d 01 7c fd
 	add XSP,0x00000012                                   ; FD0CE3  ef c8 12 00 00 00
 .LFD0CE9:
 	popw hl                                              ; FD0CE9  4b
@@ -126326,7 +126326,7 @@ sub_FD0CED:
 	pushw bc                                             ; FD0D4E  29
 	call sub_FD62B4                                      ; FD0D4F  1d b4 62 fd
 	pushw 0x03                                           ; FD0D53  0b 03 00
-	call sub_FD7C01                                      ; FD0D56  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0D56  1d 01 7c fd
 	inc 8,XSP                                            ; FD0D5A  ef 60
 	inc 2,XSP                                            ; FD0D5C  ef 62
 .LFD0D5E:
@@ -126409,7 +126409,7 @@ sub_FD0D61:
 	pop XIY                                              ; FD0E0D  5d
 .LFD0E0E:
 	pushw 0x05                                           ; FD0E0E  0b 05 00
-	call sub_FD7C01                                      ; FD0E11  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0E11  1d 01 7c fd
 	popw bc                                              ; FD0E15  49
 	pop XIX                                              ; FD0E16  5c
 	popw de                                              ; FD0E17  4a
@@ -126485,7 +126485,7 @@ sub_FD0E49:
 	pushw 0x82                                           ; FD0EB1  0b 82 00
 	call ToneEdit_CommitField                                      ; FD0EB4  1d 35 74 fd
 	pushw 0x06                                           ; FD0EB8  0b 06 00
-	call sub_FD7C01                                      ; FD0EBB  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0EBB  1d 01 7c fd
 	add XSP,0x00000014                                   ; FD0EBF  ef c8 14 00 00 00
 	pop XIX                                              ; FD0EC5  5c
 	popw hl                                              ; FD0EC6  4b
@@ -126552,7 +126552,7 @@ sub_FD0ECA:
 	pushw 0x82                                           ; FD0F4E  0b 82 00
 	call ToneEdit_CommitField                                      ; FD0F51  1d 35 74 fd
 	pushw 0x07                                           ; FD0F55  0b 07 00
-	call sub_FD7C01                                      ; FD0F58  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD0F58  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD0F5C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD0F62  5c
 	popw de                                              ; FD0F63  4a
@@ -126776,7 +126776,7 @@ sub_FD1028:
 	pushw 0x83                                           ; FD1140  0b 83 00
 	call T_Dispatch_Code80                               ; FD1143  1d d4 1e f4
 	pushw 0x02                                           ; FD1147  0b 02 00
-	call sub_FD7C01                                      ; FD114A  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD114A  1d 01 7c fd
 	add XSP,0x0000002a                                   ; FD114E  ef c8 2a 00 00 00
 .LFD1154:
 	pop XIX                                              ; FD1154  5c
@@ -126828,7 +126828,7 @@ sub_FD1159:
 	pushw 0x83                                           ; FD11BD  0b 83 00
 	call ToneEdit_CommitField                                      ; FD11C0  1d 35 74 fd
 	pushw 0x04                                           ; FD11C4  0b 04 00
-	call sub_FD7C01                                      ; FD11C7  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD11C7  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD11CB  ef c8 1e 00 00 00
 .LFD11D1:
 	pop XIX                                              ; FD11D1  5c
@@ -126921,7 +126921,7 @@ sub_FD1221:
 	pushw 0x83                                           ; FD1297  0b 83 00
 	call T_Dispatch_Code80                               ; FD129A  1d d4 1e f4
 	pushw 0x03                                           ; FD129E  0b 03 00
-	call sub_FD7C01                                      ; FD12A1  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD12A1  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD12A5  ef c8 16 00 00 00
 .LFD12AB:
 	popw de                                              ; FD12AB  4a
@@ -127095,7 +127095,7 @@ sub_FD13C1:
 	add XSP,0x0000001e                                   ; FD1432  ef c8 1e 00 00 00
 .LFD1438:
 	pushw 0x03                                           ; FD1438  0b 03 00
-	call sub_FD7C01                                      ; FD143B  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD143B  1d 01 7c fd
 	popw bc                                              ; FD143F  49
 	unlk XIZ                                             ; FD1440  ee 0d
 	ret                                                  ; FD1442  0e
@@ -127164,7 +127164,7 @@ sub_FD1443:
 	add XSP,0x0000001e                                   ; FD14D9  ef c8 1e 00 00 00
 .LFD14DF:
 	pushw 0x04                                           ; FD14DF  0b 04 00
-	call sub_FD7C01                                      ; FD14E2  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD14E2  1d 01 7c fd
 	popw bc                                              ; FD14E6  49
 	pop XIX                                              ; FD14E7  5c
 	unlk XIZ                                             ; FD14E8  ee 0d
@@ -127234,7 +127234,7 @@ sub_FD14EB:
 	add XSP,0x0000001e                                   ; FD1581  ef c8 1e 00 00 00
 .LFD1587:
 	pushw 0x05                                           ; FD1587  0b 05 00
-	call sub_FD7C01                                      ; FD158A  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD158A  1d 01 7c fd
 	popw bc                                              ; FD158E  49
 	pop XIX                                              ; FD158F  5c
 	unlk XIZ                                             ; FD1590  ee 0d
@@ -127287,7 +127287,7 @@ sub_FD1593:
 	add XSP,0x0000001e                                   ; FD1604  ef c8 1e 00 00 00
 .LFD160A:
 	pushw 0x06                                           ; FD160A  0b 06 00
-	call sub_FD7C01                                      ; FD160D  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD160D  1d 01 7c fd
 	popw bc                                              ; FD1611  49
 	unlk XIZ                                             ; FD1612  ee 0d
 	ret                                                  ; FD1614  0e
@@ -127454,7 +127454,7 @@ sub_FD173D:
 	inc 6,XSP                                            ; FD1782  ef 66
 .LFD1784:
 	pushw 0x03                                           ; FD1784  0b 03 00
-	call sub_FD7C01                                      ; FD1787  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD1787  1d 01 7c fd
 	popw bc                                              ; FD178B  49
 	pop XIX                                              ; FD178C  5c
 	unlk XIZ                                             ; FD178D  ee 0d
@@ -127514,7 +127514,7 @@ sub_FD17B1:
 	inc 6,XSP                                            ; FD1819  ef 66
 .LFD181B:
 	pushw 0x04                                           ; FD181B  0b 04 00
-	call sub_FD7C01                                      ; FD181E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD181E  1d 01 7c fd
 	popw bc                                              ; FD1822  49
 	pop XIX                                              ; FD1823  5c
 	unlk XIZ                                             ; FD1824  ee 0d
@@ -127573,7 +127573,7 @@ sub_FD1827:
 	inc 6,XSP                                            ; FD18B0  ef 66
 .LFD18B2:
 	pushw 0x05                                           ; FD18B2  0b 05 00
-	call sub_FD7C01                                      ; FD18B5  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD18B5  1d 01 7c fd
 	popw bc                                              ; FD18B9  49
 	pop XIX                                              ; FD18BA  5c
 	unlk XIZ                                             ; FD18BB  ee 0d
@@ -127626,7 +127626,7 @@ sub_FD18BE:
 	inc 6,XSP                                            ; FD1937  ef 66
 .LFD1939:
 	pushw 0x06                                           ; FD1939  0b 06 00
-	call sub_FD7C01                                      ; FD193C  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD193C  1d 01 7c fd
 	popw bc                                              ; FD1940  49
 	pop XIX                                              ; FD1941  5c
 	unlk XIZ                                             ; FD1942  ee 0d
@@ -127855,7 +127855,7 @@ sub_FD1AA5:
 	pushw bc                                             ; FD1B2F  29
 	call sub_FD6316                                      ; FD1B30  1d 16 63 fd
 	pushw 0x02                                           ; FD1B34  0b 02 00
-	call sub_FD7C01                                      ; FD1B37  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD1B37  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD1B3B  ef c8 16 00 00 00
 .LFD1B41:
 	popw hl                                              ; FD1B41  4b
@@ -127913,7 +127913,7 @@ sub_FD1B45:
 	pushw bc                                             ; FD1BBC  29
 	call sub_FD6316                                      ; FD1BBD  1d 16 63 fd
 	pushw 0x03                                           ; FD1BC1  0b 03 00
-	call sub_FD7C01                                      ; FD1BC4  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD1BC4  1d 01 7c fd
 	inc 8,XSP                                            ; FD1BC8  ef 60
 	inc 6,XSP                                            ; FD1BCA  ef 66
 .LFD1BCC:
@@ -128294,7 +128294,7 @@ sub_FD1C35:
 	pushw 0x86                                           ; FD1F27  0b 86 00
 	call T_Dispatch_Code80                               ; FD1F2A  1d d4 1e f4
 	pushw 0x06                                           ; FD1F2E  0b 06 00
-	call sub_FD7C01                                      ; FD1F31  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD1F31  1d 01 7c fd
 	inc 6,XSP                                            ; FD1F35  ef 66
 .LFD1F37:
 	pop XIX                                              ; FD1F37  5c
@@ -129415,7 +129415,7 @@ sub_FD2903:
 	pushw 0x8b                                           ; FD2970  0b 8b 00
 	call ToneEdit_CommitField                                      ; FD2973  1d 35 74 fd
 	pushw 0x02                                           ; FD2977  0b 02 00
-	call sub_FD7C01                                      ; FD297A  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD297A  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD297E  ef c8 1e 00 00 00
 .LFD2984:
 	pop XIX                                              ; FD2984  5c
@@ -129496,7 +129496,7 @@ sub_FD298A:
 	pop XIY                                              ; FD2A2D  5d
 .LFD2A2E:
 	pushw 0x03                                           ; FD2A2E  0b 03 00
-	call sub_FD7C01                                      ; FD2A31  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2A31  1d 01 7c fd
 	popw bc                                              ; FD2A35  49
 	pop XIX                                              ; FD2A36  5c
 	popw de                                              ; FD2A37  4a
@@ -129564,7 +129564,7 @@ sub_FD2A3C:
 	pushw 0x8b                                           ; FD2ABE  0b 8b 00
 	call ToneEdit_CommitField                                      ; FD2AC1  1d 35 74 fd
 	pushw 0x04                                           ; FD2AC5  0b 04 00
-	call sub_FD7C01                                      ; FD2AC8  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2AC8  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2ACC  ef c8 1a 00 00 00
 	pop XIX                                              ; FD2AD2  5c
 	popw de                                              ; FD2AD3  4a
@@ -129633,7 +129633,7 @@ sub_FD2B23:
 	pushw 0x8b                                           ; FD2B5A  0b 8b 00
 	call ToneEdit_CommitField                                      ; FD2B5D  1d 35 74 fd
 	pushw 0x05                                           ; FD2B61  0b 05 00
-	call sub_FD7C01                                      ; FD2B64  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2B64  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2B68  ef c8 1a 00 00 00
 	pop XIX                                              ; FD2B6E  5c
 	popw de                                              ; FD2B6F  4a
@@ -129672,7 +129672,7 @@ sub_FD2B74:
 	pushw 0x8b                                           ; FD2BC0  0b 8b 00
 	call ToneEdit_CommitField                                      ; FD2BC3  1d 35 74 fd
 	pushw 0x07                                           ; FD2BC7  0b 07 00
-	call sub_FD7C01                                      ; FD2BCA  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2BCA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2BCE  ef c8 1a 00 00 00
 .LFD2BD4:
 	pop XIX                                              ; FD2BD4  5c
@@ -129710,7 +129710,7 @@ sub_FD2BD8:
 	pushw 0x8b                                           ; FD2C24  0b 8b 00
 	call ToneEdit_CommitField                                      ; FD2C27  1d 35 74 fd
 	pushw 0x08                                           ; FD2C2B  0b 08 00
-	call sub_FD7C01                                      ; FD2C2E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2C2E  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD2C32  ef c8 1a 00 00 00
 .LFD2C38:
 	pop XIX                                              ; FD2C38  5c
@@ -129898,7 +129898,7 @@ sub_FD2D5F:
 	inc 6,XSP                                            ; FD2DDC  ef 66
 .LFD2DDE:
 	pushw 0x03                                           ; FD2DDE  0b 03 00
-	call sub_FD7C01                                      ; FD2DE1  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2DE1  1d 01 7c fd
 	popw bc                                              ; FD2DE5  49
 	pop XIX                                              ; FD2DE6  5c
 	unlk XIZ                                             ; FD2DE7  ee 0d
@@ -129948,7 +129948,7 @@ sub_FD2DEA:
 	add XSP,0x0000001c                                   ; FD2E55  ef c8 1c 00 00 00
 .LFD2E5B:
 	pushw 0x04                                           ; FD2E5B  0b 04 00
-	call sub_FD7C01                                      ; FD2E5E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2E5E  1d 01 7c fd
 	popw bc                                              ; FD2E62  49
 	unlk XIZ                                             ; FD2E63  ee 0d
 	ret                                                  ; FD2E65  0e
@@ -130014,7 +130014,7 @@ sub_FD2E66:
 	add XSP,0x0000001c                                   ; FD2EF6  ef c8 1c 00 00 00
 .LFD2EFC:
 	pushw 0x05                                           ; FD2EFC  0b 05 00
-	call sub_FD7C01                                      ; FD2EFF  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2EFF  1d 01 7c fd
 	popw bc                                              ; FD2F03  49
 	pop XIX                                              ; FD2F04  5c
 	unlk XIZ                                             ; FD2F05  ee 0d
@@ -130064,7 +130064,7 @@ sub_FD2F08:
 	add XSP,0x0000001c                                   ; FD2F73  ef c8 1c 00 00 00
 .LFD2F79:
 	pushw 0x06                                           ; FD2F79  0b 06 00
-	call sub_FD7C01                                      ; FD2F7C  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD2F7C  1d 01 7c fd
 	popw bc                                              ; FD2F80  49
 	unlk XIZ                                             ; FD2F81  ee 0d
 	ret                                                  ; FD2F83  0e
@@ -130246,7 +130246,7 @@ sub_FD3072:
 	call ToneEdit_CommitField                                      ; FD30FA  1d 35 74 fd
 	call sub_FD89FA                                      ; FD30FE  1d fa 89 fd
 	pushw 0x01                                           ; FD3102  0b 01 00
-	call sub_FD7C01                                      ; FD3105  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3105  1d 01 7c fd
 	inc 8,XSP                                            ; FD3109  ef 60
 	inc 6,XSP                                            ; FD310B  ef 66
 	pop XIX                                              ; FD310D  5c
@@ -130317,7 +130317,7 @@ sub_FD3191:
 	call ToneEdit_CommitField                                      ; FD319A  1d 35 74 fd
 	call sub_FD89FA                                      ; FD319E  1d fa 89 fd
 	pushw 0x02                                           ; FD31A2  0b 02 00
-	call sub_FD7C01                                      ; FD31A5  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD31A5  1d 01 7c fd
 	inc 8,XSP                                            ; FD31A9  ef 60
 	inc 6,XSP                                            ; FD31AB  ef 66
 	pop XIX                                              ; FD31AD  5c
@@ -130387,7 +130387,7 @@ sub_FD31B2:
 	call ToneEdit_CommitField                                      ; FD323A  1d 35 74 fd
 	call sub_FD89FA                                      ; FD323E  1d fa 89 fd
 	pushw 0x03                                           ; FD3242  0b 03 00
-	call sub_FD7C01                                      ; FD3245  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3245  1d 01 7c fd
 	inc 8,XSP                                            ; FD3249  ef 60
 	inc 6,XSP                                            ; FD324B  ef 66
 	pop XIX                                              ; FD324D  5c
@@ -130457,7 +130457,7 @@ sub_FD3252:
 	call ToneEdit_CommitField                                      ; FD32DA  1d 35 74 fd
 	call sub_FD89FA                                      ; FD32DE  1d fa 89 fd
 	pushw 0x04                                           ; FD32E2  0b 04 00
-	call sub_FD7C01                                      ; FD32E5  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD32E5  1d 01 7c fd
 	inc 8,XSP                                            ; FD32E9  ef 60
 	inc 6,XSP                                            ; FD32EB  ef 66
 	pop XIX                                              ; FD32ED  5c
@@ -130537,7 +130537,7 @@ sub_FD32F2:
 	call ToneEdit_CommitField                                      ; FD3392  1d 35 74 fd
 	call sub_FD89FA                                      ; FD3396  1d fa 89 fd
 	pushw 0x05                                           ; FD339A  0b 05 00
-	call sub_FD7C01                                      ; FD339D  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD339D  1d 01 7c fd
 	inc 8,XSP                                            ; FD33A1  ef 60
 	inc 6,XSP                                            ; FD33A3  ef 66
 .LFD33A5:
@@ -130618,7 +130618,7 @@ sub_FD33AA:
 	call ToneEdit_CommitField                                      ; FD344E  1d 35 74 fd
 	call sub_FD89FA                                      ; FD3452  1d fa 89 fd
 	pushw 0x06                                           ; FD3456  0b 06 00
-	call sub_FD7C01                                      ; FD3459  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3459  1d 01 7c fd
 	inc 8,XSP                                            ; FD345D  ef 60
 	inc 6,XSP                                            ; FD345F  ef 66
 .LFD3461:
@@ -130695,7 +130695,7 @@ sub_FD3466:
 	call sub_FD89FA                                      ; FD350C  1d fa 89 fd
 .LFD3510:
 	pushw 0x07                                           ; FD3510  0b 07 00
-	call sub_FD7C01                                      ; FD3513  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3513  1d 01 7c fd
 	popw bc                                              ; FD3517  49
 	pop XIX                                              ; FD3518  5c
 	popw de                                              ; FD3519  4a
@@ -130745,7 +130745,7 @@ sub_FD351E:
 	pushw 0x8d                                           ; FD3586  0b 8d 00
 	call ToneEdit_CommitField                                      ; FD3589  1d 35 74 fd
 	pushw 0x08                                           ; FD358D  0b 08 00
-	call sub_FD7C01                                      ; FD3590  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3590  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3594  ef c8 1e 00 00 00
 .LFD359A:
 	pop XIX                                              ; FD359A  5c
@@ -130987,7 +130987,7 @@ sub_FD3729:
 	inc 8,XSP                                            ; FD37C5  ef 60
 .LFD37C7:
 	pushw 0x01                                           ; FD37C7  0b 01 00
-	call sub_FD7C01                                      ; FD37CA  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD37CA  1d 01 7c fd
 	popw bc                                              ; FD37CE  49
 	pop XIX                                              ; FD37CF  5c
 	unlk XIZ                                             ; FD37D0  ee 0d
@@ -131050,7 +131050,7 @@ sub_FD37D3:
 	inc 8,XSP                                            ; FD386F  ef 60
 .LFD3871:
 	pushw 0x02                                           ; FD3871  0b 02 00
-	call sub_FD7C01                                      ; FD3874  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3874  1d 01 7c fd
 	popw bc                                              ; FD3878  49
 	pop XIX                                              ; FD3879  5c
 	unlk XIZ                                             ; FD387A  ee 0d
@@ -131113,7 +131113,7 @@ sub_FD387D:
 	inc 8,XSP                                            ; FD3919  ef 60
 .LFD391B:
 	pushw 0x03                                           ; FD391B  0b 03 00
-	call sub_FD7C01                                      ; FD391E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD391E  1d 01 7c fd
 	popw bc                                              ; FD3922  49
 	pop XIX                                              ; FD3923  5c
 	unlk XIZ                                             ; FD3924  ee 0d
@@ -131165,7 +131165,7 @@ sub_FD3955:
 	add XSP,0x0000001c                                   ; FD3992  ef c8 1c 00 00 00
 .LFD3998:
 	pushw 0x04                                           ; FD3998  0b 04 00
-	call sub_FD7C01                                      ; FD399B  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD399B  1d 01 7c fd
 	popw bc                                              ; FD399F  49
 	unlk XIZ                                             ; FD39A0  ee 0d
 	ret                                                  ; FD39A2  0e
@@ -131231,7 +131231,7 @@ sub_FD39A3:
 	add XSP,0x0000001c                                   ; FD3A33  ef c8 1c 00 00 00
 .LFD3A39:
 	pushw 0x05                                           ; FD3A39  0b 05 00
-	call sub_FD7C01                                      ; FD3A3C  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3A3C  1d 01 7c fd
 sub_FD3A40:
 	popw bc                                              ; FD3A40  49
 	pop XIX                                              ; FD3A41  5c
@@ -131282,7 +131282,7 @@ sub_FD3A45:
 	add XSP,0x0000001c                                   ; FD3AB0  ef c8 1c 00 00 00
 .LFD3AB6:
 	pushw 0x06                                           ; FD3AB6  0b 06 00
-	call sub_FD7C01                                      ; FD3AB9  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3AB9  1d 01 7c fd
 	popw bc                                              ; FD3ABD  49
 	unlk XIZ                                             ; FD3ABE  ee 0d
 	ret                                                  ; FD3AC0  0e
@@ -131318,7 +131318,7 @@ sub_FD3AE1:
 	pushw 0x8e                                           ; FD3B09  0b 8e 00
 	call ToneEdit_CommitField                                      ; FD3B0C  1d 35 74 fd
 	pushw 0x07                                           ; FD3B10  0b 07 00
-	call sub_FD7C01                                      ; FD3B13  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3B13  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3B17  ef c8 1e 00 00 00
 	pop XIX                                              ; FD3B1D  5c
 	unlk XIZ                                             ; FD3B1E  ee 0d
@@ -131354,7 +131354,7 @@ sub_FD3B21:
 	pushw 0x8e                                           ; FD3B69  0b 8e 00
 	call ToneEdit_CommitField                                      ; FD3B6C  1d 35 74 fd
 	pushw 0x08                                           ; FD3B70  0b 08 00
-	call sub_FD7C01                                      ; FD3B73  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD3B73  1d 01 7c fd
 	add XSP,0x0000001e                                   ; FD3B77  ef c8 1e 00 00 00
 	pop XIX                                              ; FD3B7D  5c
 	unlk XIZ                                             ; FD3B7E  ee 0d
@@ -131979,7 +131979,7 @@ sub_FD4039:
 	pushw bc                                             ; FD40BE  29
 	call sub_FD6316                                      ; FD40BF  1d 16 63 fd
 	pushw 0x02                                           ; FD40C3  0b 02 00
-	call sub_FD7C01                                      ; FD40C6  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD40C6  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD40CA  ef c8 16 00 00 00
 .LFD40D0:
 	popw hl                                              ; FD40D0  4b
@@ -132031,7 +132031,7 @@ sub_FD40D4:
 	pushw bc                                             ; FD413B  29
 	call sub_FD6316                                      ; FD413C  1d 16 63 fd
 	pushw 0x03                                           ; FD4140  0b 03 00
-	call sub_FD7C01                                      ; FD4143  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4143  1d 01 7c fd
 	inc 8,XSP                                            ; FD4147  ef 60
 	inc 6,XSP                                            ; FD4149  ef 66
 .LFD414B:
@@ -132142,7 +132142,7 @@ ToneEditField_A0_ResonatorType:
 	pushw 0x01                                           ; FD4216  0b 01 00
 	call sub_FDA467                                      ; FD4219  1d 67 a4 fd
 	pushw 0x06                                           ; FD421D  0b 06 00
-	call sub_FD7C01                                      ; FD4220  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4220  1d 01 7c fd
 	pop XIY                                              ; FD4224  5d
 .LFD4225:
 	pop XIX                                              ; FD4225  5c
@@ -132583,7 +132583,7 @@ ToneEditField_A3_Position:
 	inc 8,XSP                                            ; FD45A0  ef 60
 .LFD45A2:
 	pushw 0x02                                           ; FD45A2  0b 02 00
-	call sub_FD7C01                                      ; FD45A5  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD45A5  1d 01 7c fd
 	popw bc                                              ; FD45A9  49
 	pop XIX                                              ; FD45AA  5c
 	popw de                                              ; FD45AB  4a
@@ -132650,7 +132650,7 @@ ToneEditField_A3_Depth:
 	pushw 0xc3                                           ; FD460E  0b c3 00
 	call ToneEdit_CommitField                                      ; FD4611  1d 35 74 fd
 	pushw 0x03                                           ; FD4615  0b 03 00
-	call sub_FD7C01                                      ; FD4618  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4618  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD461C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4622  5c
 	unlk XIZ                                             ; FD4623  ee 0d
@@ -132715,7 +132715,7 @@ ToneEditField_A3_Formant:
 	pushw 0xc3                                           ; FD4684  0b c3 00
 	call ToneEdit_CommitField                                      ; FD4687  1d 35 74 fd
 	pushw 0x04                                           ; FD468B  0b 04 00
-	call sub_FD7C01                                      ; FD468E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD468E  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4692  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4698  5c
 	unlk XIZ                                             ; FD4699  ee 0d
@@ -132781,7 +132781,7 @@ ToneEditField_A3_InteractionGain:
 	pushw 0xc3                                           ; FD46FA  0b c3 00
 	call ToneEdit_CommitField                                      ; FD46FD  1d 35 74 fd
 	pushw 0x06                                           ; FD4701  0b 06 00
-	call sub_FD7C01                                      ; FD4704  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4704  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4708  ef c8 1a 00 00 00
 	pop XIX                                              ; FD470E  5c
 	unlk XIZ                                             ; FD470F  ee 0d
@@ -132963,7 +132963,7 @@ ToneEditField_A4_Width:
 	pushw 0xc4                                           ; FD485E  0b c4 00
 	call ToneEdit_CommitField                                      ; FD4861  1d 35 74 fd
 	pushw 0x02                                           ; FD4865  0b 02 00
-	call sub_FD7C01                                      ; FD4868  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4868  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD486C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4872  5c
 	unlk XIZ                                             ; FD4873  ee 0d
@@ -133028,7 +133028,7 @@ ToneEditField_A4_Speed:
 	pushw 0xc4                                           ; FD48D4  0b c4 00
 	call ToneEdit_CommitField                                      ; FD48D7  1d 35 74 fd
 	pushw 0x03                                           ; FD48DB  0b 03 00
-	call sub_FD7C01                                      ; FD48DE  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD48DE  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD48E2  ef c8 1a 00 00 00
 	pop XIX                                              ; FD48E8  5c
 	unlk XIZ                                             ; FD48E9  ee 0d
@@ -133093,7 +133093,7 @@ ToneEditField_A4_SampleHold:
 	pushw 0xc4                                           ; FD494A  0b c4 00
 	call ToneEdit_CommitField                                      ; FD494D  1d 35 74 fd
 	pushw 0x04                                           ; FD4951  0b 04 00
-	call sub_FD7C01                                      ; FD4954  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4954  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD4958  ef c8 1a 00 00 00
 	pop XIX                                              ; FD495E  5c
 	unlk XIZ                                             ; FD495F  ee 0d
@@ -133158,7 +133158,7 @@ ToneEditField_A4_Touch:
 	pushw 0xc4                                           ; FD49C0  0b c4 00
 	call ToneEdit_CommitField                                      ; FD49C3  1d 35 74 fd
 	pushw 0x06                                           ; FD49C7  0b 06 00
-	call sub_FD7C01                                      ; FD49CA  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD49CA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD49CE  ef c8 1a 00 00 00
 	pop XIX                                              ; FD49D4  5c
 	unlk XIZ                                             ; FD49D5  ee 0d
@@ -133395,7 +133395,7 @@ ToneEditField_A5_Fitting:
 	add XSP,0x00000012                                   ; FD4B90  ef c8 12 00 00 00
 .LFD4B96:
 	pushw 0x02                                           ; FD4B96  0b 02 00
-	call sub_FD7C01                                      ; FD4B99  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4B99  1d 01 7c fd
 	popw bc                                              ; FD4B9D  49
 	pop XIX                                              ; FD4B9E  5c
 	popw de                                              ; FD4B9F  4a
@@ -133598,7 +133598,7 @@ sub_FD4CBB:
 	inc 8,XSP                                            ; FD4D29  ef 60
 .LFD4D2B:
 	pushw 0x03                                           ; FD4D2B  0b 03 00
-	call sub_FD7C01                                      ; FD4D2E  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4D2E  1d 01 7c fd
 	popw bc                                              ; FD4D32  49
 	pop XIX                                              ; FD4D33  5c
 	popw de                                              ; FD4D34  4a
@@ -133720,7 +133720,7 @@ ToneEditField_A5_KeyShift:
 	add XSP,0x00000012                                   ; FD4E06  ef c8 12 00 00 00
 .LFD4E0C:
 	pushw 0x04                                           ; FD4E0C  0b 04 00
-	call sub_FD7C01                                      ; FD4E0F  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4E0F  1d 01 7c fd
 	popw bc                                              ; FD4E13  49
 	pop XIX                                              ; FD4E14  5c
 	popw de                                              ; FD4E15  4a
@@ -133842,7 +133842,7 @@ ToneEditField_A5_Detune:
 	add XSP,0x00000012                                   ; FD4EE7  ef c8 12 00 00 00
 .LFD4EED:
 	pushw 0x05                                           ; FD4EED  0b 05 00
-	call sub_FD7C01                                      ; FD4EF0  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4EF0  1d 01 7c fd
 	popw bc                                              ; FD4EF4  49
 	pop XIX                                              ; FD4EF5  5c
 	popw de                                              ; FD4EF6  4a
@@ -133964,7 +133964,7 @@ ToneEditField_A5_ResoScale:
 	add XSP,0x00000012                                   ; FD4FC8  ef c8 12 00 00 00
 .LFD4FCE:
 	pushw 0x06                                           ; FD4FCE  0b 06 00
-	call sub_FD7C01                                      ; FD4FD1  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD4FD1  1d 01 7c fd
 	popw bc                                              ; FD4FD5  49
 	pop XIX                                              ; FD4FD6  5c
 	popw de                                              ; FD4FD7  4a
@@ -134276,7 +134276,7 @@ ToneEditField_A6_FittingTouchDepth:
 	add XSP,0x00000012                                   ; FD523E  ef c8 12 00 00 00
 .LFD5244:
 	pushw 0x02                                           ; FD5244  0b 02 00
-	call sub_FD7C01                                      ; FD5247  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5247  1d 01 7c fd
 	popw bc                                              ; FD524B  49
 	pop XIX                                              ; FD524C  5c
 	popw de                                              ; FD524D  4a
@@ -134398,7 +134398,7 @@ ToneEditField_A6_MutingTouchDepth:
 	add XSP,0x00000012                                   ; FD531F  ef c8 12 00 00 00
 .LFD5325:
 	pushw 0x03                                           ; FD5325  0b 03 00
-	call sub_FD7C01                                      ; FD5328  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5328  1d 01 7c fd
 	popw bc                                              ; FD532C  49
 	pop XIX                                              ; FD532D  5c
 	popw de                                              ; FD532E  4a
@@ -134481,7 +134481,7 @@ sub_FD5377:
 	pushw 0xc6                                           ; FD53B7  0b c6 00
 	call ToneEdit_CommitField                                      ; FD53BA  1d 35 74 fd
 	pushw 0x05                                           ; FD53BE  0b 05 00
-	call sub_FD7C01                                      ; FD53C1  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD53C1  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD53C5  ef c8 1a 00 00 00
 .LFD53CB:
 	pop XIX                                              ; FD53CB  5c
@@ -134564,7 +134564,7 @@ ToneEditField_A6_SubGain:
 	pushw 0xc6                                           ; FD5453  0b c6 00
 	call ToneEdit_CommitField                                      ; FD5456  1d 35 74 fd
 	pushw 0x06                                           ; FD545A  0b 06 00
-	call sub_FD7C01                                      ; FD545D  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD545D  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5461  ef c8 1a 00 00 00
 .LFD5467:
 	pop XIX                                              ; FD5467  5c
@@ -134819,7 +134819,7 @@ ToneEditField_A7_ResoMode:
 	add XSP,0x00000012                                   ; FD5641  ef c8 12 00 00 00
 .LFD5647:
 	pushw 0x02                                           ; FD5647  0b 02 00
-	call sub_FD7C01                                      ; FD564A  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD564A  1d 01 7c fd
 	popw bc                                              ; FD564E  49
 	pop XIX                                              ; FD564F  5c
 	popw de                                              ; FD5650  4a
@@ -134937,7 +134937,7 @@ ToneEditField_A7_MutingSlope:
 	add XSP,0x00000012                                   ; FD571E  ef c8 12 00 00 00
 .LFD5724:
 	pushw 0x03                                           ; FD5724  0b 03 00
-	call sub_FD7C01                                      ; FD5727  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5727  1d 01 7c fd
 	popw bc                                              ; FD572B  49
 .LFD572C:
 	pop XIX                                              ; FD572C  5c
@@ -135120,7 +135120,7 @@ ToneEditField_A7_KeyFollowLow:
 	add XSP,0x00000014                                   ; FD586F  ef c8 14 00 00 00
 .LFD5875:
 	pushw 0x04                                           ; FD5875  0b 04 00
-	call sub_FD7C01                                      ; FD5878  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5878  1d 01 7c fd
 	popw bc                                              ; FD587C  49
 .LFD587D:
 	pop XIX                                              ; FD587D  5c
@@ -135327,7 +135327,7 @@ ToneEditField_A7_KeyFollowBreak:
 	add XSP,0x00000014                                   ; FD59FA  ef c8 14 00 00 00
 .LFD5A00:
 	pushw 0x05                                           ; FD5A00  0b 05 00
-	call sub_FD7C01                                      ; FD5A03  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5A03  1d 01 7c fd
 	popw bc                                              ; FD5A07  49
 .LFD5A08:
 	pop XIX                                              ; FD5A08  5c
@@ -135510,7 +135510,7 @@ ToneEditField_A7_KeyFollowHigh:
 	add XSP,0x00000014                                   ; FD5B4B  ef c8 14 00 00 00
 .LFD5B51:
 	pushw 0x06                                           ; FD5B51  0b 06 00
-	call sub_FD7C01                                      ; FD5B54  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5B54  1d 01 7c fd
 	popw bc                                              ; FD5B58  49
 .LFD5B59:
 	pop XIX                                              ; FD5B59  5c
@@ -135675,7 +135675,7 @@ sub_FD5C63:
 	pushw 0xc8                                           ; FD5CA0  0b c8 00
 	call ToneEdit_CommitField                                      ; FD5CA3  1d 35 74 fd
 	pushw 0x02                                           ; FD5CA7  0b 02 00
-	call sub_FD7C01                                      ; FD5CAA  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5CAA  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5CAE  ef c8 1a 00 00 00
 	pop XIX                                              ; FD5CB4  5c
 	unlk XIZ                                             ; FD5CB5  ee 0d
@@ -135706,7 +135706,7 @@ sub_FD5CB8:
 	call Arr27A6_Set                                      ; FD5CEE  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5CF2  1e 11 01
 	pushw 0x03                                           ; FD5CF5  0b 03 00
-	call sub_FD7C01                                      ; FD5CF8  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5CF8  1d 01 7c fd
 	inc 6,XSP                                            ; FD5CFC  ef 66
 .LFD5CFE:
 	unlk XIZ                                             ; FD5CFE  ee 0d
@@ -135737,7 +135737,7 @@ sub_FD5D01:
 	pushw 0xc8                                           ; FD5D3E  0b c8 00
 	call ToneEdit_CommitField                                      ; FD5D41  1d 35 74 fd
 	pushw 0x04                                           ; FD5D45  0b 04 00
-	call sub_FD7C01                                      ; FD5D48  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5D48  1d 01 7c fd
 	add XSP,0x0000001a                                   ; FD5D4C  ef c8 1a 00 00 00
 	pop XIX                                              ; FD5D52  5c
 	unlk XIZ                                             ; FD5D53  ee 0d
@@ -135770,7 +135770,7 @@ sub_FD5D56:
 	call Arr27A6_Set                                      ; FD5D90  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5D94  1e 6f 00
 	pushw 0x05                                           ; FD5D97  0b 05 00
-	call sub_FD7C01                                      ; FD5D9A  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5D9A  1d 01 7c fd
 	inc 6,XSP                                            ; FD5D9E  ef 66
 .LFD5DA0:
 	unlk XIZ                                             ; FD5DA0  ee 0d
@@ -135813,7 +135813,7 @@ sub_FD5DA3:
 	call Arr27A6_Set                                      ; FD5DF3  1d 65 6c fd
 	calr sub_FD5E06                                      ; FD5DF7  1e 0c 00
 	pushw 0x06                                           ; FD5DFA  0b 06 00
-	call sub_FD7C01                                      ; FD5DFD  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD5DFD  1d 01 7c fd
 	inc 6,XSP                                            ; FD5E01  ef 66
 .LFD5E03:
 	unlk XIZ                                             ; FD5E03  ee 0d
@@ -136048,7 +136048,7 @@ sub_FD5F52:
 	ld C,L                                               ; FD602E  cf 8b
 	extz BC                                              ; FD6030  d9 12
 	pushw bc                                             ; FD6032  29
-	call sub_FD7C01                                      ; FD6033  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FD6033  1d 01 7c fd
 	add XSP,0x00000016                                   ; FD6037  ef c8 16 00 00 00
 .LFD603D:
 	pop XIX                                              ; FD603D  5c
@@ -139689,7 +139689,9 @@ sub_FD7BA5:
 .LFD7BC0:
 	unlk XIZ                                             ; FD7BC0  ee 0d
 	ret                                                  ; FD7BC2  0e
-sub_FD7BC3:
+; PanelDial_SetButtonMode(flag): flag != 0 sets bit 0 of UI_RequestBits (the dial acts as the
+;   buttons in PanelDial_UpButton / PanelDial_DownButton), flag == 0 clears it.
+PanelDial_SetButtonMode:
 	link XIZ,0x0000                                      ; FD7BC3  ee 0c 00 00
 	push XIX                                             ; FD7BC7  3c
 	lda xix, (UI_RequestBits:16)                                ; FD7BC8  f1 75 20 34
@@ -139703,7 +139705,9 @@ sub_FD7BC3:
 	pop XIX                                              ; FD7BDA  5c
 	unlk XIZ                                             ; FD7BDB  ee 0d
 	ret                                                  ; FD7BDD  0e
-sub_FD7BDE:
+; PanelDial_SetDirectionButton(which, code, bits): stores (code - 1) | bits into
+;   PanelDial_UpButton (which == 0) or PanelDial_DownButton.
+PanelDial_SetDirectionButton:
 	link XIZ,0x0000                                      ; FD7BDE  ee 0c 00 00
 	pushw hl                                             ; FD7BE2  2b
 	ld H,(XIZ+0x0a)                                      ; FD7BE3  8e 0a 26
@@ -139720,21 +139724,23 @@ sub_FD7BDE:
 	popw hl                                              ; FD7BFD  4b
 	unlk XIZ                                             ; FD7BFE  ee 0d
 	ret                                                  ; FD7C00  0e
-sub_FD7C01:
+; PanelDial_ActAsButton(code): the dial acts as button code - 1: PanelDial_SetButtonMode(1), up =
+;   code - 1, down = (code - 1) | 0x80 (the pair position).  121 calls in prom_a, 14 in prom_b.
+PanelDial_ActAsButton:
 	link XIZ,0x0000                                      ; FD7C01  ee 0c 00 00
 	pushw hl                                             ; FD7C05  2b
 	pushw 0x01                                           ; FD7C06  0b 01 00
-	calr sub_FD7BC3                                      ; FD7C09  1e b7 ff
+	calr PanelDial_SetButtonMode                                      ; FD7C09  1e b7 ff
 	pushw 0x00                                           ; FD7C0C  0b 00 00
 	ld HL,(XIZ+0x08)                                     ; FD7C0F  9e 08 23
 	extz HL                                              ; FD7C12  db 12
 	pushw hl                                             ; FD7C14  2b
 	pushw 0x00                                           ; FD7C15  0b 00 00
-	calr sub_FD7BDE                                      ; FD7C18  1e c3 ff
+	calr PanelDial_SetDirectionButton                                      ; FD7C18  1e c3 ff
 	pushw 0x80                                           ; FD7C1B  0b 80 00
 	pushw hl                                             ; FD7C1E  2b
 	pushw 0x01                                           ; FD7C1F  0b 01 00
-	calr sub_FD7BDE                                      ; FD7C22  1e b9 ff
+	calr PanelDial_SetDirectionButton                                      ; FD7C22  1e b9 ff
 	inc 8,XSP                                            ; FD7C25  ef 60
 	inc 6,XSP                                            ; FD7C27  ef 66
 	popw hl                                              ; FD7C29  4b
@@ -140084,7 +140090,7 @@ sub_FD7E66:
 	pushw 0x8a                                           ; FD7EC2  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD7EC5  1e 6d f5
 	pushw 0x03                                           ; FD7EC8  0b 03 00
-	calr sub_FD7C01                                      ; FD7ECB  1e 33 fd
+	calr PanelDial_ActAsButton                                      ; FD7ECB  1e 33 fd
 	add XSP,0x00000028                                   ; FD7ECE  ef c8 28 00 00 00
 	pop XIX                                              ; FD7ED4  5c
 	popw hl                                              ; FD7ED5  4b
@@ -140132,7 +140138,7 @@ sub_FD7ED9:
 	pushw 0x8a                                           ; FD7F35  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD7F38  1e fa f4
 	pushw 0x04                                           ; FD7F3B  0b 04 00
-	calr sub_FD7C01                                      ; FD7F3E  1e c0 fc
+	calr PanelDial_ActAsButton                                      ; FD7F3E  1e c0 fc
 	add XSP,0x00000028                                   ; FD7F41  ef c8 28 00 00 00
 	pop XIX                                              ; FD7F47  5c
 	popw hl                                              ; FD7F48  4b
@@ -140180,7 +140186,7 @@ sub_FD7F4C:
 	pushw 0x8a                                           ; FD7FA8  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD7FAB  1e 87 f4
 	pushw 0x05                                           ; FD7FAE  0b 05 00
-	calr sub_FD7C01                                      ; FD7FB1  1e 4d fc
+	calr PanelDial_ActAsButton                                      ; FD7FB1  1e 4d fc
 	add XSP,0x00000028                                   ; FD7FB4  ef c8 28 00 00 00
 	pop XIX                                              ; FD7FBA  5c
 	popw hl                                              ; FD7FBB  4b
@@ -140227,7 +140233,7 @@ sub_FD7FBF:
 	pushw 0x8a                                           ; FD8019  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD801C  1e 16 f4
 	pushw 0x06                                           ; FD801F  0b 06 00
-	calr sub_FD7C01                                      ; FD8022  1e dc fb
+	calr PanelDial_ActAsButton                                      ; FD8022  1e dc fb
 	add XSP,0x00000028                                   ; FD8025  ef c8 28 00 00 00
 	pop XIX                                              ; FD802B  5c
 	popw hl                                              ; FD802C  4b
@@ -140275,7 +140281,7 @@ sub_FD8030:
 	pushw 0x8a                                           ; FD808C  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD808F  1e a3 f3
 	pushw 0x07                                           ; FD8092  0b 07 00
-	calr sub_FD7C01                                      ; FD8095  1e 69 fb
+	calr PanelDial_ActAsButton                                      ; FD8095  1e 69 fb
 	add XSP,0x00000028                                   ; FD8098  ef c8 28 00 00 00
 	pop XIX                                              ; FD809E  5c
 	popw hl                                              ; FD809F  4b
@@ -140323,7 +140329,7 @@ sub_FD80A3:
 	pushw 0x8a                                           ; FD80FF  0b 8a 00
 	calr ToneEdit_CommitField                                      ; FD8102  1e 30 f3
 	pushw 0x08                                           ; FD8105  0b 08 00
-	calr sub_FD7C01                                      ; FD8108  1e f6 fa
+	calr PanelDial_ActAsButton                                      ; FD8108  1e f6 fa
 	add XSP,0x00000028                                   ; FD810B  ef c8 28 00 00 00
 	pop XIX                                              ; FD8111  5c
 	popw hl                                              ; FD8112  4b
@@ -140396,7 +140402,7 @@ sub_FD8155:
 	calr ToneEdit_CommitField                                      ; FD81B2  1e 80 f2
 	calr sub_FD8DAF                                      ; FD81B5  1e f7 0b
 	pushw 0x01                                           ; FD81B8  0b 01 00
-	calr sub_FD7C01                                      ; FD81BB  1e 43 fa
+	calr PanelDial_ActAsButton                                      ; FD81BB  1e 43 fa
 	add XSP,0x0000001e                                   ; FD81BE  ef c8 1e 00 00 00
 .LFD81C4:
 	pop XIX                                              ; FD81C4  5c
@@ -140442,7 +140448,7 @@ sub_FD81C8:
 	calr ToneEdit_CommitField                                      ; FD8225  1e 0d f2
 	calr sub_FD8DAF                                      ; FD8228  1e 84 0b
 	pushw 0x02                                           ; FD822B  0b 02 00
-	calr sub_FD7C01                                      ; FD822E  1e d0 f9
+	calr PanelDial_ActAsButton                                      ; FD822E  1e d0 f9
 	add XSP,0x0000001e                                   ; FD8231  ef c8 1e 00 00 00
 .LFD8237:
 	pop XIX                                              ; FD8237  5c
@@ -140507,7 +140513,7 @@ sub_FD823B:
 	calr ToneEdit_CommitField                                      ; FD82C1  1e 71 f1
 	calr sub_FD8DAF                                      ; FD82C4  1e e8 0a
 	pushw 0x03                                           ; FD82C7  0b 03 00
-	calr sub_FD7C01                                      ; FD82CA  1e 34 f9
+	calr PanelDial_ActAsButton                                      ; FD82CA  1e 34 f9
 	add XSP,0x00000014                                   ; FD82CD  ef c8 14 00 00 00
 	pop XIX                                              ; FD82D3  5c
 	popw hl                                              ; FD82D4  4b
@@ -140553,7 +140559,7 @@ sub_FD82D8:
 	calr ToneEdit_CommitField                                      ; FD8335  1e fd f0
 	calr sub_FD8DAF                                      ; FD8338  1e 74 0a
 	pushw 0x04                                           ; FD833B  0b 04 00
-	calr sub_FD7C01                                      ; FD833E  1e c0 f8
+	calr PanelDial_ActAsButton                                      ; FD833E  1e c0 f8
 	add XSP,0x0000001e                                   ; FD8341  ef c8 1e 00 00 00
 .LFD8347:
 	pop XIX                                              ; FD8347  5c
@@ -140618,7 +140624,7 @@ sub_FD834B:
 	calr ToneEdit_CommitField                                      ; FD83D1  1e 61 f0
 	calr sub_FD8DAF                                      ; FD83D4  1e d8 09
 	pushw 0x05                                           ; FD83D7  0b 05 00
-	calr sub_FD7C01                                      ; FD83DA  1e 24 f8
+	calr PanelDial_ActAsButton                                      ; FD83DA  1e 24 f8
 	add XSP,0x00000014                                   ; FD83DD  ef c8 14 00 00 00
 	pop XIX                                              ; FD83E3  5c
 	popw hl                                              ; FD83E4  4b
@@ -140665,7 +140671,7 @@ sub_FD83ED:
 	calr ToneEdit_CommitField                                      ; FD8445  1e ed ef
 	calr sub_FD8DAF                                      ; FD8448  1e 64 09
 	pushw 0x06                                           ; FD844B  0b 06 00
-	calr sub_FD7C01                                      ; FD844E  1e b0 f7
+	calr PanelDial_ActAsButton                                      ; FD844E  1e b0 f7
 	add XSP,0x0000001e                                   ; FD8451  ef c8 1e 00 00 00
 .LFD8457:
 	pop XIX                                              ; FD8457  5c
@@ -140731,7 +140737,7 @@ sub_FD8488:
 	calr ToneEdit_CommitField                                      ; FD84E1  1e 51 ef
 	calr sub_FD8DAF                                      ; FD84E4  1e c8 08
 	pushw 0x07                                           ; FD84E7  0b 07 00
-	calr sub_FD7C01                                      ; FD84EA  1e 14 f7
+	calr PanelDial_ActAsButton                                      ; FD84EA  1e 14 f7
 	add XSP,0x00000014                                   ; FD84ED  ef c8 14 00 00 00
 	pop XIX                                              ; FD84F3  5c
 	popw hl                                              ; FD84F4  4b
@@ -140796,7 +140802,7 @@ sub_FD84F8:
 	inc 8,XSP                                            ; FD858E  ef 60
 .LFD8590:
 	pushw 0x02                                           ; FD8590  0b 02 00
-	calr sub_FD7C01                                      ; FD8593  1e 6b f6
+	calr PanelDial_ActAsButton                                      ; FD8593  1e 6b f6
 	popw bc                                              ; FD8596  49
 sub_FD8597:
 	pop XIX                                              ; FD8597  5c
@@ -140861,7 +140867,7 @@ sub_FD859B:
 	inc 8,XSP                                            ; FD8631  ef 60
 .LFD8633:
 	pushw 0x03                                           ; FD8633  0b 03 00
-	calr sub_FD7C01                                      ; FD8636  1e c8 f5
+	calr PanelDial_ActAsButton                                      ; FD8636  1e c8 f5
 	popw bc                                              ; FD8639  49
 	pop XIX                                              ; FD863A  5c
 	unlk XIZ                                             ; FD863B  ee 0d
@@ -140926,7 +140932,7 @@ sub_FD869C:
 	inc 8,XSP                                            ; FD86D4  ef 60
 .LFD86D6:
 	pushw 0x04                                           ; FD86D6  0b 04 00
-	calr sub_FD7C01                                      ; FD86D9  1e 25 f5
+	calr PanelDial_ActAsButton                                      ; FD86D9  1e 25 f5
 	popw bc                                              ; FD86DC  49
 	pop XIX                                              ; FD86DD  5c
 	unlk XIZ                                             ; FD86DE  ee 0d
@@ -140969,7 +140975,7 @@ sub_FD86E1:
 	add XSP,0x0000001c                                   ; FD8737  ef c8 1c 00 00 00
 .LFD873D:
 	pushw 0x05                                           ; FD873D  0b 05 00
-	calr sub_FD7C01                                      ; FD8740  1e be f4
+	calr PanelDial_ActAsButton                                      ; FD8740  1e be f4
 	popw bc                                              ; FD8743  49
 	unlk XIZ                                             ; FD8744  ee 0d
 	ret                                                  ; FD8746  0e
@@ -141006,7 +141012,7 @@ sub_FD8789:
 	pushw 0x89                                           ; FD878F  0b 89 00
 	calr ToneEdit_CommitField                                      ; FD8792  1e a0 ec
 	pushw 0x07                                           ; FD8795  0b 07 00
-	calr sub_FD7C01                                      ; FD8798  1e 66 f4
+	calr PanelDial_ActAsButton                                      ; FD8798  1e 66 f4
 	add XSP,0x0000001e                                   ; FD879B  ef c8 1e 00 00 00
 	pop XIX                                              ; FD87A1  5c
 	unlk XIZ                                             ; FD87A2  ee 0d
@@ -141043,7 +141049,7 @@ sub_FD87A5:
 	pushw 0x89                                           ; FD87ED  0b 89 00
 	calr ToneEdit_CommitField                                      ; FD87F0  1e 42 ec
 	pushw 0x08                                           ; FD87F3  0b 08 00
-	calr sub_FD7C01                                      ; FD87F6  1e 08 f4
+	calr PanelDial_ActAsButton                                      ; FD87F6  1e 08 f4
 	add XSP,0x0000001e                                   ; FD87F9  ef c8 1e 00 00 00
 	pop XIX                                              ; FD87FF  5c
 	unlk XIZ                                             ; FD8800  ee 0d
@@ -141203,7 +141209,7 @@ sub_FD884C:
 	inc 8,XSP                                            ; FD8949  ef 60
 	inc 2,XSP                                            ; FD894B  ef 62
 	pushw 0x02                                           ; FD894D  0b 02 00
-	calr sub_FD7C01                                      ; FD8950  1e ae f2
+	calr PanelDial_ActAsButton                                      ; FD8950  1e ae f2
 	popw bc                                              ; FD8953  49
 .LFD8954:
 	pop XIX                                              ; FD8954  5c
@@ -141231,7 +141237,7 @@ sub_FD895A:
 	pushw bc                                             ; FD8980  29
 	calr sub_FD71B9                                      ; FD8981  1e 35 e8
 	pushw 0x04                                           ; FD8984  0b 04 00
-	calr sub_FD7C01                                      ; FD8987  1e 77 f2
+	calr PanelDial_ActAsButton                                      ; FD8987  1e 77 f2
 	add XSP,0x00000012                                   ; FD898A  ef c8 12 00 00 00
 	unlk XIZ                                             ; FD8990  ee 0d
 	ret                                                  ; FD8992  0e
@@ -141281,7 +141287,7 @@ sub_FD8993:
 	ld BC,DE                                             ; FD89EB  da 89
 	inc 4,BC                                             ; FD89ED  d9 64
 	pushw bc                                             ; FD89EF  29
-	calr sub_FD7C01                                      ; FD89F0  1e 0e f2
+	calr PanelDial_ActAsButton                                      ; FD89F0  1e 0e f2
 	inc 6,XSP                                            ; FD89F3  ef 66
 .LFD89F5:
 	popw de                                              ; FD89F5  4a
@@ -148741,7 +148747,7 @@ sub_FDC87E:
 	call Var27DA_Set                                      ; FDC93C  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDC940  1d 13 77 fd
 	pushw 0x03                                           ; FDC944  0b 03 00
-	call sub_FD7C01                                      ; FDC947  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FDC947  1d 01 7c fd
 	pushw 0x10                                           ; FDC94B  0b 10 00
 	call sub_FD6447                                      ; FDC94E  1d 47 64 fd
 .LFDC952:
@@ -149426,15 +149432,15 @@ sub_FDCF17:
 	pushw 0x9e                                           ; FDCF76  0b 9e 00
 	call T_Dispatch_Code80_Bracketed                     ; FDCF79  1d d0 1e f4
 	pushw 0x01                                           ; FDCF7D  0b 01 00
-	call sub_FD7BC3                                      ; FDCF80  1d c3 7b fd
+	call PanelDial_SetButtonMode                                      ; FDCF80  1d c3 7b fd
 	pushw 0x00                                           ; FDCF84  0b 00 00
 	pushw 0x0b                                           ; FDCF87  0b 0b 00
 	pushw 0x00                                           ; FDCF8A  0b 00 00
-	call sub_FD7BDE                                      ; FDCF8D  1d de 7b fd
+	call PanelDial_SetDirectionButton                                      ; FDCF8D  1d de 7b fd
 	pushw 0x00                                           ; FDCF91  0b 00 00
 	pushw 0x0c                                           ; FDCF94  0b 0c 00
 	pushw 0x01                                           ; FDCF97  0b 01 00
-	call sub_FD7BDE                                      ; FDCF9A  1d de 7b fd
+	call PanelDial_SetDirectionButton                                      ; FDCF9A  1d de 7b fd
 	pushw 0x00                                           ; FDCF9E  0b 00 00
 	call Var27DA_Set                                      ; FDCFA1  1d 05 77 fd
 	pushw 0x00                                           ; FDCFA5  0b 00 00
@@ -150336,7 +150342,7 @@ sub_FDD437:
 	call Var27DA_Set                                      ; FDD7D0  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDD7D4  1d 13 77 fd
 	pushw 0x06                                           ; FDD7D8  0b 06 00
-	call sub_FD7C01                                      ; FDD7DB  1d 01 7c fd
+	call PanelDial_ActAsButton                                      ; FDD7DB  1d 01 7c fd
 	pushw 0x01                                           ; FDD7DF  0b 01 00
 	call sub_FD69E0                                      ; FDD7E2  1d e0 69 fd
 	pushw 0x10                                           ; FDD7E6  0b 10 00
@@ -152446,7 +152452,7 @@ sub_FDE760:
 	ld BC,(XIZ+0x0a)                              ; FDE809  9e 0a 21
 	extz BC                                       ; FDE80C  d9 12
 	pushw bc                                      ; FDE80E  29
-	call sub_FD7C01                                 ; FDE80F  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDE80F  1d 01 7c fd
 	inc 8,XSP                                     ; FDE813  ef 60
 	inc 6,XSP                                     ; FDE815  ef 66
 	pop XIX                                       ; FDE817  5c
@@ -152523,7 +152529,7 @@ sub_FDE81C:
 	ld BC,(XIZ+0x0a)                              ; FDE8C5  9e 0a 21
 	extz BC                                       ; FDE8C8  d9 12
 	pushw bc                                      ; FDE8CA  29
-	call sub_FD7C01                                 ; FDE8CB  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDE8CB  1d 01 7c fd
 	inc 8,XSP                                     ; FDE8CF  ef 60
 	inc 6,XSP                                     ; FDE8D1  ef 66
 	pop XIX                                       ; FDE8D3  5c
@@ -152596,7 +152602,7 @@ sub_FDE8D8:
 	ld BC,(XIZ+0x0a)                              ; FDE975  9e 0a 21
 	extz BC                                       ; FDE978  d9 12
 	pushw bc                                      ; FDE97A  29
-	call sub_FD7C01                                 ; FDE97B  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDE97B  1d 01 7c fd
 	inc 8,XSP                                     ; FDE97F  ef 60
 	inc 6,XSP                                     ; FDE981  ef 66
 	pop XIX                                       ; FDE983  5c
@@ -152669,7 +152675,7 @@ sub_FDE988:
 	ld BC,(XIZ+0x0a)                              ; FDEA25  9e 0a 21
 	extz BC                                       ; FDEA28  d9 12
 	pushw bc                                      ; FDEA2A  29
-	call sub_FD7C01                                 ; FDEA2B  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDEA2B  1d 01 7c fd
 	inc 8,XSP                                     ; FDEA2F  ef 60
 	inc 6,XSP                                     ; FDEA31  ef 66
 	pop XIX                                       ; FDEA33  5c
@@ -152737,7 +152743,7 @@ sub_FDEA38:
 	call sub_FD9A7A                                 ; FDEAC1  1d 7a 9a fd
 .LFDEAC5:
 	pushw 0x06                                    ; FDEAC5  0b 06 00
-	call sub_FD7C01                                 ; FDEAC8  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDEAC8  1d 01 7c fd
 	popw bc                                       ; FDEACC  49
 	pop XIX                                       ; FDEACD  5c
 	popw hl                                       ; FDEACE  4b
@@ -152801,7 +152807,7 @@ sub_FDEAD2:
 	call sub_FD9A7A                                 ; FDEB5C  1d 7a 9a fd
 .LFDEB60:
 	pushw 0x07                                    ; FDEB60  0b 07 00
-	call sub_FD7C01                                 ; FDEB63  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDEB63  1d 01 7c fd
 	popw bc                                       ; FDEB67  49
 	pop XIX                                       ; FDEB68  5c
 	popw hl                                       ; FDEB69  4b
@@ -152865,7 +152871,7 @@ sub_FDEB6D:
 	call sub_FD9A7A                                 ; FDEBF7  1d 7a 9a fd
 .LFDEBFB:
 	pushw 0x08                                    ; FDEBFB  0b 08 00
-	call sub_FD7C01                                 ; FDEBFE  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDEBFE  1d 01 7c fd
 	popw bc                                       ; FDEC02  49
 	pop XIX                                       ; FDEC03  5c
 	popw hl                                       ; FDEC04  4b
@@ -153725,7 +153731,7 @@ sub_FDF27D:
 	call ToneEdit_CommitField                                 ; FDF30A  1d 35 74 fd
 	call sub_FD9B58                                 ; FDF30E  1d 58 9b fd
 	pushw 0x02                                    ; FDF312  0b 02 00
-	call sub_FD7C01                                 ; FDF315  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF315  1d 01 7c fd
 	inc 8,XSP                                     ; FDF319  ef 60
 	inc 6,XSP                                     ; FDF31B  ef 66
 	pop XIX                                       ; FDF31D  5c
@@ -153802,7 +153808,7 @@ sub_FDF33E:
 	call ToneEdit_CommitField                                 ; FDF3C8  1d 35 74 fd
 	call sub_FD9B58                                 ; FDF3CC  1d 58 9b fd
 	pushw 0x04                                    ; FDF3D0  0b 04 00
-	call sub_FD7C01                                 ; FDF3D3  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF3D3  1d 01 7c fd
 	inc 8,XSP                                     ; FDF3D7  ef 60
 	inc 6,XSP                                     ; FDF3D9  ef 66
 	pop XIX                                       ; FDF3DB  5c
@@ -153859,7 +153865,7 @@ sub_FDF3DF:
 	call ToneEdit_CommitField                                 ; FDF45A  1d 35 74 fd
 	call sub_FD9B58                                 ; FDF45E  1d 58 9b fd
 	pushw 0x05                                    ; FDF462  0b 05 00
-	call sub_FD7C01                                 ; FDF465  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF465  1d 01 7c fd
 	inc 8,XSP                                     ; FDF469  ef 60
 	inc 6,XSP                                     ; FDF46B  ef 66
 	pop XIX                                       ; FDF46D  5c
@@ -154277,7 +154283,7 @@ sub_FDF77F:
 	inc 6,XSP                                     ; FDF7FC  ef 66
 .LFDF7FE:
 	pushw 0x03                                    ; FDF7FE  0b 03 00
-	call sub_FD7C01                                 ; FDF801  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF801  1d 01 7c fd
 	popw bc                                       ; FDF805  49
 	pop XIX                                       ; FDF806  5c
 	unlk XIZ                                      ; FDF807  ee 0d
@@ -154327,7 +154333,7 @@ sub_FDF80A:
 	add XSP,0x0000001c                            ; FDF875  ef c8 1c 00 00 00
 .LFDF87B:
 	pushw 0x04                                    ; FDF87B  0b 04 00
-	call sub_FD7C01                                 ; FDF87E  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF87E  1d 01 7c fd
 	popw bc                                       ; FDF882  49
 	unlk XIZ                                      ; FDF883  ee 0d
 	ret                                           ; FDF885  0e
@@ -154393,7 +154399,7 @@ sub_FDF886:
 	add XSP,0x0000001c                            ; FDF916  ef c8 1c 00 00 00
 .LFDF91C:
 	pushw 0x05                                    ; FDF91C  0b 05 00
-	call sub_FD7C01                                 ; FDF91F  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF91F  1d 01 7c fd
 	popw bc                                       ; FDF923  49
 	pop XIX                                       ; FDF924  5c
 	unlk XIZ                                      ; FDF925  ee 0d
@@ -154443,7 +154449,7 @@ sub_FDF928:
 	add XSP,0x0000001c                            ; FDF993  ef c8 1c 00 00 00
 .LFDF999:
 	pushw 0x06                                    ; FDF999  0b 06 00
-	call sub_FD7C01                                 ; FDF99C  1d 01 7c fd
+	call PanelDial_ActAsButton                                 ; FDF99C  1d 01 7c fd
 	popw bc                                       ; FDF9A0  49
 	unlk XIZ                                      ; FDF9A1  ee 0d
 	ret                                           ; FDF9A3  0e
