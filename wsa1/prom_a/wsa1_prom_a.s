@@ -183557,7 +183557,7 @@ Paint_MidiFileDirectPlay:
 .LFF4463:
 	pushw 0x0b                                           ; FF4463  0b 0b 00
 	pushw 0x0c                                           ; FF4466  0b 0c 00
-	calr sub_FF712A                                      ; FF4469  1e be 2c
+	calr PanelDial_SetButtonPair                                      ; FF4469  1e be 2c
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF446C  1d 04 76 ff
 	pushw 0x02                                           ; FF4470  0b 02 00
 	lda xbc, (DL_F59517:24)                              ; FF4473  f2 17 95 f5 31
@@ -184133,7 +184133,7 @@ Paint_DiskL0adFile:
 .LFF47EB:
 	pushw 0x0b                                           ; FF47EB  0b 0b 00
 	pushw 0x0c                                           ; FF47EE  0b 0c 00
-	calr sub_FF712A                                      ; FF47F1  1e 36 29
+	calr PanelDial_SetButtonPair                                      ; FF47F1  1e 36 29
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF47F4  1d 80 2e f4
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF47F8  1d 04 76 ff
 	pushw 0x00                                           ; FF47FC  0b 00 00
@@ -184472,7 +184472,7 @@ LcdKeyRow1_DiskL0adFile:
 	ld (UI_ScreenItem:16), 0x00                                 ; FF4A5F  f1 20 27 00 00
 	pushw 0x0b                                           ; FF4A64  0b 0b 00
 	pushw 0x0c                                           ; FF4A67  0b 0c 00
-	calr sub_FF712A                                      ; FF4A6A  1e bd 26
+	calr PanelDial_SetButtonPair                                      ; FF4A6A  1e bd 26
 	lda xbc, (DL_F583E5:24)                              ; FF4A6D  f2 e5 83 f5 31
 	push XBC                                             ; FF4A72  39
 	call DLB_Array8_SaveRegs                                      ; FF4A73  1d 3f 76 ff
@@ -184548,7 +184548,7 @@ LcdKeyRow3_DiskL0adFile:
 	ld (UI_ScreenItem:16), 0x00                                 ; FF4AA8  f1 20 27 00 00
 	pushw 0x0b                                           ; FF4AAD  0b 0b 00
 	pushw 0x0c                                           ; FF4AB0  0b 0c 00
-	calr sub_FF712A                                      ; FF4AB3  1e 74 26
+	calr PanelDial_SetButtonPair                                      ; FF4AB3  1e 74 26
 	lda xbc, (DL_F583E5:24)                              ; FF4AB6  f2 e5 83 f5 31
 	push XBC                                             ; FF4ABB  39
 	call DLB_Array8_SaveRegs                                      ; FF4ABC  1d 3f 76 ff
@@ -184635,7 +184635,7 @@ LcdKeyRow4_DiskL0adFile:
 	lda xix, (0x2725:16)                                ; FF4AD1  f1 25 27 34
 	pushw 0x0b                                           ; FF4AD5  0b 0b 00
 	pushw 0x0c                                           ; FF4AD8  0b 0c 00
-	calr sub_FF712A                                      ; FF4ADB  1e 4c 26
+	calr PanelDial_SetButtonPair                                      ; FF4ADB  1e 4c 26
 	ld BC,(XIZ+0x08)                                     ; FF4ADE  9e 08 21
 	and BC,0x0080                                        ; FF4AE1  d9 cc 80 00
 	pop XIY                                              ; FF4AE5  5d
@@ -184707,7 +184707,7 @@ LcdKeyRow4_DiskL0adFile:
 .LFF4B95:
 	pushw 0x0c                                           ; FF4B95  0b 0c 00
 	pushw 0x0b                                           ; FF4B98  0b 0b 00
-	calr sub_FF712A                                      ; FF4B9B  1e 8c 25
+	calr PanelDial_SetButtonPair                                      ; FF4B9B  1e 8c 25
 	ld h, (0x272b:16)                                   ; FF4B9E  c1 2b 27 26
 	inc 0x01, (0x272b:16)                                ; FF4BA2  c1 2b 27 61
 	pop XIY                                              ; FF4BA6  5d
@@ -184851,7 +184851,7 @@ LcdKeyRow4_DiskL0adFile:
 	jr z, .LFF4D54                                       ; FF4D03  66 4f
 	pushw 0x0c                                           ; FF4D05  0b 0c 00
 	pushw 0x0b                                           ; FF4D08  0b 0b 00
-	calr sub_FF712A                                      ; FF4D0B  1e 1c 24
+	calr PanelDial_SetButtonPair                                      ; FF4D0B  1e 1c 24
 	pop XIY                                              ; FF4D0E  5d
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4D0F  c1 7a 20 3f 4c
 	jr z, .LFF4D33                                       ; FF4D14  66 1d
@@ -184968,7 +184968,7 @@ LcdKeyRow5_DiskL0adFile:
 	jrl nz, .LFF4F9F                                     ; FF4D6E  7e 2e 02
 	pushw 0x0b                                           ; FF4D71  0b 0b 00
 	pushw 0x0c                                           ; FF4D74  0b 0c 00
-	calr sub_FF712A                                      ; FF4D77  1e b0 23
+	calr PanelDial_SetButtonPair                                      ; FF4D77  1e b0 23
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF4D7A  f1 40 25 00 01
 	lda xbc, (DLTab_F58455:24)                           ; FF4D7F  f2 55 84 f5 31
 	push XBC                                             ; FF4D84  39
@@ -185037,7 +185037,7 @@ LcdKeyRow5_DiskL0adFile:
 .LFF4E29:
 	pushw 0x0c                                           ; FF4E29  0b 0c 00
 	pushw 0x0b                                           ; FF4E2C  0b 0b 00
-	calr sub_FF712A                                      ; FF4E2F  1e f8 22
+	calr PanelDial_SetButtonPair                                      ; FF4E2F  1e f8 22
 	ld h, (0x272b:16)                                   ; FF4E32  c1 2b 27 26
 	dec 0x01, (0x272b:16)                                ; FF4E36  c1 2b 27 69
 	pop XIY                                              ; FF4E3A  5d
@@ -185304,7 +185304,7 @@ Paint_MidiFileL0ad:
 .LFF5059:
 	pushw 0x0b                                           ; FF5059  0b 0b 00
 	pushw 0x0c                                           ; FF505C  0b 0c 00
-	calr sub_FF712A                                      ; FF505F  1e c8 20
+	calr PanelDial_SetButtonPair                                      ; FF505F  1e c8 20
 	calr sub_FF50E8                                      ; FF5062  1e 83 00
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5065  1d 04 76 ff
 	pushw 0x00                                           ; FF5069  0b 00 00
@@ -185977,7 +185977,7 @@ sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 .LFF54FE:
 	pushw 0x03                                           ; FF54FE  0b 03 00
 	pushw 0x04                                           ; FF5501  0b 04 00
-	calr sub_FF712A                                      ; FF5504  1e 23 1c
+	calr PanelDial_SetButtonPair                                      ; FF5504  1e 23 1c
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5507  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF550B  f1 29 27 43
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF550F  1d 04 76 ff
@@ -186001,7 +186001,7 @@ sub_FF5546:   ; entry: named by 1 `.long` operand, first at 0xFF3A04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5546  1d 80 2e f4
 	pushw 0x0b                                           ; FF554A  0b 0b 00
 	pushw 0x0c                                           ; FF554D  0b 0c 00
-	calr sub_FF712A                                      ; FF5550  1e d7 1b
+	calr PanelDial_SetButtonPair                                      ; FF5550  1e d7 1b
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5553  1d 04 76 ff
 	ld (0x2725:16), 0x00                                 ; FF5557  f1 25 27 00 00
 	ld (UI_ScreenItem:16), 0x00                                 ; FF555C  f1 20 27 00 00
@@ -186268,7 +186268,7 @@ PanelButtonDispatch_DiskSaveFile:
 sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 	pushw 0x03                                           ; FF5768  0b 03 00
 	pushw 0x04                                           ; FF576B  0b 04 00
-	calr sub_FF712A                                      ; FF576E  1e b9 19
+	calr PanelDial_SetButtonPair                                      ; FF576E  1e b9 19
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF5771  f1 40 25 00 01
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5776  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF577A  f1 29 27 43
@@ -186294,7 +186294,7 @@ sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 	pushw 0x03                                           ; FF57C0  0b 03 00
 	pushw 0x04                                           ; FF57C3  0b 04 00
-	calr sub_FF712A                                      ; FF57C6  1e 61 19
+	calr PanelDial_SetButtonPair                                      ; FF57C6  1e 61 19
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF57C9  f1 40 25 00 01
 	ld c, (NameEdit_CharIndex:16)                                   ; FF57CE  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF57D2  f1 29 27 43
@@ -186320,7 +186320,7 @@ sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 	pushw 0x03                                           ; FF5818  0b 03 00
 	pushw 0x04                                           ; FF581B  0b 04 00
-	calr sub_FF712A                                      ; FF581E  1e 09 19
+	calr PanelDial_SetButtonPair                                      ; FF581E  1e 09 19
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5821  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5825  f1 29 27 43
 	lda xbc, (0xf587a7:24)                               ; FF5829  f2 a7 87 f5 31
@@ -186341,7 +186341,7 @@ sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 sub_FF585C:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
 	pushw 0x03                                           ; FF585C  0b 03 00
 	pushw 0x04                                           ; FF585F  0b 04 00
-	calr sub_FF712A                                      ; FF5862  1e c5 18
+	calr PanelDial_SetButtonPair                                      ; FF5862  1e c5 18
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5865  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5869  f1 29 27 43
 	lda xbc, (0xf587a7:24)                               ; FF586D  f2 a7 87 f5 31
@@ -186367,7 +186367,7 @@ sub_FF58A0:   ; entry: named by 2 `.long` operands, first at 0xFF3A41
 	ld (0x2729:16), c                                   ; FF58A7  f1 29 27 43
 	pushw 0x03                                           ; FF58AB  0b 03 00
 	pushw 0x04                                           ; FF58AE  0b 04 00
-	calr sub_FF712A                                      ; FF58B1  1e 76 18
+	calr PanelDial_SetButtonPair                                      ; FF58B1  1e 76 18
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF58B4  f1 40 25 00 01
 	lda xbc, (CharPalette_F587B2:24)                     ; FF58B9  f2 b2 87 f5 31
 	push XBC                                             ; FF58BE  39
@@ -186661,7 +186661,7 @@ LcdKeyRow2_DiskSaveFile_Page1:
 	jr z, .LFF5A9C                                       ; FF5A74  66 26
 	pushw 0x0b                                           ; FF5A76  0b 0b 00
 	pushw 0x0c                                           ; FF5A79  0b 0c 00
-	calr sub_FF712A                                      ; FF5A7C  1e ab 16
+	calr PanelDial_SetButtonPair                                      ; FF5A7C  1e ab 16
 	lda xbc, (DL_F5843F:24)                              ; FF5A7F  f2 3f 84 f5 31
 	push XBC                                             ; FF5A84  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF5A85  1d 23 76 ff
@@ -187232,7 +187232,7 @@ sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	call T_F425F8                                        ; FF5CC8  1d f8 25 f4
 	pushw 0x03                                           ; FF5CCC  0b 03 00
 	pushw 0x04                                           ; FF5CCF  0b 04 00
-	calr sub_FF712A                                      ; FF5CD2  1e 55 14
+	calr PanelDial_SetButtonPair                                      ; FF5CD2  1e 55 14
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5CD5  1d 04 76 ff
 	pushw 0x00                                           ; FF5CD9  0b 00 00
 	lda xbc, (DL_F58A41:24)                              ; FF5CDC  f2 41 8a f5 31
@@ -187303,7 +187303,7 @@ sub_FF5D27:   ; entry: named by 1 `.long` operand, first at 0xFF3D2D
 	calr sub_FF50E8                                      ; FF5D91  1e 54 f3
 	pushw 0x0b                                           ; FF5D94  0b 0b 00
 	pushw 0x0c                                           ; FF5D97  0b 0c 00
-	calr sub_FF712A                                      ; FF5D9A  1e 8d 13
+	calr PanelDial_SetButtonPair                                      ; FF5D9A  1e 8d 13
 	pushw 0x00                                           ; FF5D9D  0b 00 00
 	pushw 0x08                                           ; FF5DA0  0b 08 00
 	calr sub_FF5118                                      ; FF5DA3  1e 72 f3
@@ -187494,7 +187494,7 @@ sub_FF5F1B:
 	pushw 0x03                                           ; FF5F2C  0b 03 00
 	pushw 0x04                                           ; FF5F2F  0b 04 00
 sub_FF5F32:
-	calr sub_FF712A                                      ; FF5F32  1e f5 11
+	calr PanelDial_SetButtonPair                                      ; FF5F32  1e f5 11
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF5F35  f1 40 25 00 01
 	lda xbc, (CharPalette_F587B2:24)                     ; FF5F3A  f2 b2 87 f5 31
 	push XBC                                             ; FF5F3F  39
@@ -187547,7 +187547,7 @@ sub_FF5FA0:
 	ld (0x2729:16), c                                   ; FF5FA8  f1 29 27 43
 	pushw 0x03                                           ; FF5FAC  0b 03 00
 	pushw 0x04                                           ; FF5FAF  0b 04 00
-	calr sub_FF712A                                      ; FF5FB2  1e 75 11
+	calr PanelDial_SetButtonPair                                      ; FF5FB2  1e 75 11
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF5FB5  f1 40 25 00 01
 	lda xbc, (CharPalette_F587B2:24)                     ; FF5FBA  f2 b2 87 f5 31
 	push XBC                                             ; FF5FBF  39
@@ -187573,7 +187573,7 @@ sub_FF5FFF:   ; entry: named by 2 `.long` operands, first at 0xFF3D51
 	push XHL                                             ; FF5FFF  3b
 	pushw 0x03                                           ; FF6000  0b 03 00
 	pushw 0x04                                           ; FF6003  0b 04 00
-	calr sub_FF712A                                      ; FF6006  1e 21 11
+	calr PanelDial_SetButtonPair                                      ; FF6006  1e 21 11
 	ld c, (NameEdit_CharIndex:16)                                   ; FF6009  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF600D  f1 29 27 43
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF6011  f1 40 25 00 01
@@ -187916,7 +187916,7 @@ LcdKeyRow4_MidiFileSave_Page1:
 	lda xix, (0x133e:16)                                ; FF61DD  f1 3e 13 34
 	pushw 0x0b                                           ; FF61E1  0b 0b 00
 	pushw 0x0c                                           ; FF61E4  0b 0c 00
-	calr sub_FF712A                                      ; FF61E7  1e 40 0f
+	calr PanelDial_SetButtonPair                                      ; FF61E7  1e 40 0f
 	ld BC,(XIZ+0x08)                                     ; FF61EA  9e 08 21
 	and BC,0x0080                                        ; FF61ED  d9 cc 80 00
 	pop XIY                                              ; FF61F1  5d
@@ -188030,7 +188030,7 @@ LcdKeyRow5_MidiFileSave_Page1:
 	lda xix, (0x133e:16)                                ; FF62B5  f1 3e 13 34
 	pushw 0x0b                                           ; FF62B9  0b 0b 00
 	pushw 0x0c                                           ; FF62BC  0b 0c 00
-	calr sub_FF712A                                      ; FF62BF  1e 68 0e
+	calr PanelDial_SetButtonPair                                      ; FF62BF  1e 68 0e
 	ld BC,(XIZ+0x08)                                     ; FF62C2  9e 08 21
 	and BC,0x0080                                        ; FF62C5  d9 cc 80 00
 	pop XIY                                              ; FF62C9  5d
@@ -188119,7 +188119,7 @@ sub_FF6388:
 	lda xix, (0x272e:16)                                ; FF638D  f1 2e 27 34
 	pushw 0x0b                                           ; FF6391  0b 0b 00
 	pushw 0x0c                                           ; FF6394  0b 0c 00
-	calr sub_FF712A                                      ; FF6397  1e 90 0d
+	calr PanelDial_SetButtonPair                                      ; FF6397  1e 90 0d
 	pop XIY                                              ; FF639A  5d
 	m_cp_mi8 MB16, 0x272d, 0x00                          ; FF639B  c1 2d 27 3f 00
 	jr nz, .LFF63B6                                      ; FF63A0  6e 14
@@ -188171,7 +188171,7 @@ sub_FF63FF:
 .LFF6404:
 	pushw 0x0b                                           ; FF6404  0b 0b 00
 	pushw 0x0c                                           ; FF6407  0b 0c 00
-	calr sub_FF712A                                      ; FF640A  1e 1d 0d
+	calr PanelDial_SetButtonPair                                      ; FF640A  1e 1d 0d
 	ld C,(XIX)                                           ; FF640D  84 23
 	add c, (0x272e:16)                                   ; FF640F  c1 2e 27 83
 	pop XIY                                              ; FF6413  5d
@@ -189131,7 +189131,7 @@ PanelButtonDispatch_L0adSingleS0und:
 sub_FF6906:   ; entry: named by 8 `.long` operands, first at 0xFF4049
 	pushw 0x80                                           ; FF6906  0b 80 00
 	pushw 0x00                                           ; FF6909  0b 00 00
-	calr sub_FF712A                                      ; FF690C  1e 1b 08
+	calr PanelDial_SetButtonPair                                      ; FF690C  1e 1b 08
 	call UI_ScreenItem_StepByDial                                      ; FF690F  1d 43 77 ff
 	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6913  1d 76 77 ff
 	lda xbc, (DL_F5910F:24)                              ; FF6917  f2 0f 91 f5 31
@@ -189145,7 +189145,7 @@ sub_FF6924:   ; entry: named by 2 `.long` operands, first at 0xFF40CD
 	lda xix, (0x2728:16)                                ; FF6929  f1 28 27 34
 	pushw 0x81                                           ; FF692D  0b 81 00
 	pushw 0x01                                           ; FF6930  0b 01 00
-	calr sub_FF712A                                      ; FF6933  1e f4 07
+	calr PanelDial_SetButtonPair                                      ; FF6933  1e f4 07
 	ld BC,(XIZ+0x08)                                     ; FF6936  9e 08 21
 	and BC,0x0080                                        ; FF6939  d9 cc 80 00
 	pop XIY                                              ; FF693D  5d
@@ -189209,7 +189209,7 @@ sub_FF69B9:   ; entry: named by 8 `.long` operands, first at 0xFF40D1
 .LFF69CF:
 	pushw 0x83                                           ; FF69CF  0b 83 00
 	pushw 0x02                                           ; FF69D2  0b 02 00
-	calr sub_FF712A                                      ; FF69D5  1e 52 07
+	calr PanelDial_SetButtonPair                                      ; FF69D5  1e 52 07
 	ld BC,(XIZ+0x08)                                     ; FF69D8  9e 08 21
 	and BC,0x0080                                        ; FF69DB  d9 cc 80 00
 	pop XIY                                              ; FF69DF  5d
@@ -189248,7 +189248,7 @@ sub_FF6A17:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
 	lda xix, (0x2736:16)                                ; FF6A1C  f1 36 27 34
 	pushw 0x84                                           ; FF6A20  0b 84 00
 	pushw 0x04                                           ; FF6A23  0b 04 00
-	calr sub_FF712A                                      ; FF6A26  1e 01 07
+	calr PanelDial_SetButtonPair                                      ; FF6A26  1e 01 07
 	ld BC,(XIZ+0x08)                                     ; FF6A29  9e 08 21
 	and BC,0x0080                                        ; FF6A2C  d9 cc 80 00
 	pop XIY                                              ; FF6A30  5d
@@ -189289,7 +189289,7 @@ sub_FF6A6C:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
 	jrl nz, .LFF6AFA                                     ; FF6A7A  7e 7d 00
 	pushw 0x06                                           ; FF6A7D  0b 06 00
 	pushw 0x86                                           ; FF6A80  0b 86 00
-	calr sub_FF712A                                      ; FF6A83  1e a4 06
+	calr PanelDial_SetButtonPair                                      ; FF6A83  1e a4 06
 	lda xbc, (DL_F5915B:24)                              ; FF6A86  f2 5b 91 f5 31
 	push XBC                                             ; FF6A8B  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF6A8C  1d 23 76 ff
@@ -189399,7 +189399,7 @@ sub_FF6B35:   ; entry: named by 2 `.long` operands, first at 0xFF404D
 	ld h, 0x00:opc                                          ; FF6B3F  26 00
 	pushw 0x81                                           ; FF6B41  0b 81 00
 	pushw 0x01                                           ; FF6B44  0b 01 00
-	calr sub_FF712A                                      ; FF6B47  1e e0 05
+	calr PanelDial_SetButtonPair                                      ; FF6B47  1e e0 05
 	ld BC,(XIZ+0x08)                                     ; FF6B4A  9e 08 21
 	and BC,0x0080                                        ; FF6B4D  d9 cc 80 00
 	pop XIY                                              ; FF6B51  5d
@@ -189471,7 +189471,7 @@ sub_FF6BD2:   ; entry: named by 4 `.long` operands, first at 0xFF4051
 .LFF6BE8:
 	pushw 0x82                                           ; FF6BE8  0b 82 00
 	pushw 0x02                                           ; FF6BEB  0b 02 00
-	calr sub_FF712A                                      ; FF6BEE  1e 39 05
+	calr PanelDial_SetButtonPair                                      ; FF6BEE  1e 39 05
 	ld BC,(XIZ+0x08)                                     ; FF6BF1  9e 08 21
 	and BC,0x0080                                        ; FF6BF4  d9 cc 80 00
 	pop XIY                                              ; FF6BF8  5d
@@ -189508,7 +189508,7 @@ sub_FF6C24:   ; entry: named by 2 `.long` operands, first at 0xFF4059
 	lda xix, (0x2736:16)                                ; FF6C2A  f1 36 27 34
 	pushw 0x84                                           ; FF6C2E  0b 84 00
 	pushw 0x04                                           ; FF6C31  0b 04 00
-	calr sub_FF712A                                      ; FF6C34  1e f3 04
+	calr PanelDial_SetButtonPair                                      ; FF6C34  1e f3 04
 	ld BC,(XIZ+0x08)                                     ; FF6C37  9e 08 21
 	and BC,0x0080                                        ; FF6C3A  d9 cc 80 00
 	pop XIY                                              ; FF6C3E  5d
@@ -189560,7 +189560,7 @@ sub_FF6C9E:   ; entry: named by 4 `.long` operands, first at 0xFF405D
 	lda xix, (0x2737:16)                                ; FF6CA3  f1 37 27 34
 	pushw 0x85                                           ; FF6CA7  0b 85 00
 	pushw 0x05                                           ; FF6CAA  0b 05 00
-	calr sub_FF712A                                      ; FF6CAD  1e 7a 04
+	calr PanelDial_SetButtonPair                                      ; FF6CAD  1e 7a 04
 	ld BC,(XIZ+0x08)                                     ; FF6CB0  9e 08 21
 	and BC,0x0080                                        ; FF6CB3  d9 cc 80 00
 	pop XIY                                              ; FF6CB7  5d
@@ -189613,7 +189613,7 @@ sub_FF6CF0:   ; entry: named by 4 `.long` operands, first at 0xFF4061
 	jr z, .LFF6D60                                       ; FF6D1B  66 43
 	pushw 0x06                                           ; FF6D1D  0b 06 00
 	pushw 0x86                                           ; FF6D20  0b 86 00
-	calr sub_FF712A                                      ; FF6D23  1e 04 04
+	calr PanelDial_SetButtonPair                                      ; FF6D23  1e 04 04
 	lda xbc, (DL_F591B1:24)                              ; FF6D26  f2 b1 91 f5 31
 	push XBC                                             ; FF6D2B  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF6D2C  1d 23 76 ff
@@ -189974,7 +189974,7 @@ sub_FF6F86:   ; entry: named by 4 `.long` operands, first at 0xFF4159
 	lda xix, (0x2735:16)                                ; FF6F8B  f1 35 27 34
 	pushw 0x82                                           ; FF6F8F  0b 82 00
 	pushw 0x02                                           ; FF6F92  0b 02 00
-	calr sub_FF712A                                      ; FF6F95  1e 92 01
+	calr PanelDial_SetButtonPair                                      ; FF6F95  1e 92 01
 	ld BC,(XIZ+0x08)                                     ; FF6F98  9e 08 21
 	and BC,0x0080                                        ; FF6F9B  d9 cc 80 00
 	pop XIY                                              ; FF6F9F  5d
@@ -190017,7 +190017,7 @@ sub_FF6FC0:   ; entry: named by 4 `.long` operands, first at 0xFF4169
 	jr z, .LFF702D                                       ; FF6FEB  66 40
 	pushw 0x06                                           ; FF6FED  0b 06 00
 	pushw 0x86                                           ; FF6FF0  0b 86 00
-	calr sub_FF712A                                      ; FF6FF3  1e 34 01
+	calr PanelDial_SetButtonPair                                      ; FF6FF3  1e 34 01
 	lda xbc, (DL_F591B1:24)                              ; FF6FF6  f2 b1 91 f5 31
 	push XBC                                             ; FF6FFB  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF6FFC  1d 23 76 ff
@@ -190209,7 +190209,9 @@ sub_FF70D8:
 	popw hl                                              ; FF7126  4b
 	unlk XIZ                                             ; FF7127  ee 0d
 	ret                                                  ; FF7129  0e
-sub_FF712A:
+; PanelDial_SetButtonPair(up, down): UI_RequestBits |= 0x09 (dial acts as buttons, redraw), PanelDial_UpButton = up,
+;   PanelDial_DownButton = down, (0x2666) = (0x266A) = 0xFFFF.  The explicit-pair form of PanelDial_ActAsButton.
+PanelDial_SetButtonPair:
 	link XIZ,0x0000                                      ; FF712A  ee 0c 00 00
 	push XIX                                             ; FF712E  3c
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FF712F  c1 75 20 3e 09
