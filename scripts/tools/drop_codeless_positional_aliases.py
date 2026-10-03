@@ -33,11 +33,17 @@ def main():
     pat = re.compile(r'(?<![\w.$])(%s)(?![\w$])' % "|".join(map(re.escape, sorted(al, key=len, reverse=True))))
     used = set()
     for f, L in txt.items():
+        if f.endswith((".c", ".h", ".ld")):
+            # C and link-script COMMENTS are comments too (2026-10-03: v7 kept 61 aliases whose
+            # only "use" was a `* xwa, Name_0x140` line inside a /* ... */ block)
+            body = re.sub(r'/\*.*?\*/', ' ', "\n".join(L), flags=re.S)
+            body = re.sub(r'//[^\n]*', ' ', body)
+            used |= set(m.group(1) for m in pat.finditer(body))
+            continue
         for l in L:
             if SET.match(l):
                 continue
-            code = l if f.endswith((".c", ".h", ".ld")) else l.split(";", 1)[0]
-            used |= set(m.group(1) for m in pat.finditer(code))
+            used |= set(m.group(1) for m in pat.finditer(l.split(";", 1)[0]))
     drop = al - used
     print("%s: %d positional aliases, %d used by nothing but comments -> %s" % (a.tree, len(al), len(drop), "deleted" if a.apply else "would delete"))
     if a.apply:

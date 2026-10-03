@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,641
+#   symbols .................. 51,639
 #   semantic names ........... 50,781 (98.3%)
-#   positional names ......... 860
+#   positional names ......... 858
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -6696,9 +6696,7 @@ Data_ParaLoadOptDispatch_Str_Fmt3d_3 00E7FD2E
 Data_ParaLoadOptDispatch_Str_Fmt3d_4 00E7FD34
 Data_InOutGridDispatch_CaseTable 00E7FD3A
 Data_InOutGridDispatch_CaseTable_2 00E7FD4C
-NakaInst_DIRECT_E7FCE4_0x68 00E7FD4C
 Data_InOutGridDispatch_CaseTable_3 00E7FD5E
-NakaInst_DIRECT_E7FCE4_0x7A 00E7FD5E
 InOutGridCheck_CaseTable 00E7FD70
 InOutGridCheck_CaseTable_Strings 00E7FD7E
 MainExcSend_ClampIndexToRange_Table 00E7FD84

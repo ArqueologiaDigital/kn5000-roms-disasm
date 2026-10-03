@@ -2087,7 +2087,7 @@ AcInOutGrid_ScrollDown_AltTable_Table:
 ; [naka_s_headers] AcInOutGrid_GetRowText_Str
 ; AcInOutGrid_GetRowText_Str -- NUL-terminated string(s), 186 bytes,
 ; used by AcInOutGrid_GetRowText (v10/v9 0xf75a12, v7 0xf7560e) (`ld
-; xwa, NakaInst_OFF_WidgetTbl2_0x112`).
+; xwa, AcInOutGrid_GetRowText_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; AcInOutGrid_GetRowText_Str[186].
@@ -2156,8 +2156,8 @@ NakaInst_OFF_E7FCA2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2
 ; [naka_s_headers] Data_InOutGridDispatch_PtrTable_2
 ; Data_InOutGridDispatch_PtrTable_2 -- 2 u32 addresses, read by
 ; Data_InOutGridDispatch (v10/v9 0xf75ade, v7 0xf756da) (`lda xbc,
-; (NakaInst_OFF_E7FCA2_0x6:24)`), Data_ParaLoadOptDispatch (v10/v9
-; 0xf75f68, v7 0xf75b64) (`lda xwa, (NakaInst_OFF_E7FCA2_0x6:24)`).
+; (Data_InOutGridDispatch_PtrTable_2:24)`), Data_ParaLoadOptDispatch (v10/v9
+; 0xf75f68, v7 0xf75b64) (`lda xwa, (Data_InOutGridDispatch_PtrTable_2:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; Data_InOutGridDispatch_PtrTable_2[2].
@@ -2247,7 +2247,7 @@ Data_InOutGridDispatch_CaseTable:
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_2
 ; Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
 ; `switch` in Data_InOutGridDispatch (v10/v9 0xf75ade, v7 0xf756da)
-; (`lda xix, (NakaInst_DIRECT_E7FCE4_0x68:24)`): 9 u16 case offsets from
+; (`lda xix, (Data_InOutGridDispatch_CaseTable_2:24)`): 9 u16 case offsets from
 ; 16210936.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -2414,7 +2414,7 @@ ParaLoadOpt_AudioFlagCheck_CaseTable:
 ; [naka_s_headers] ParaLoadOpt_AudioFlagCheck_B_CaseTable
 ; ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled
 ; `switch` in ParaLoadOpt_AudioFlagCheck_B (v10/v9 0xf76a52, v7
-; 0xf7664e) (`lda xix, (FileTransfer_BlankStatus_0x88:24)`): 13 u16 case
+; 0xf7664e) (`lda xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)`): 13 u16 case
 ; offsets from ParaLoadOpt_DispatchTable_B.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -2712,7 +2712,7 @@ NakaToggle_OnOff_Data:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table_2
 ; ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_Evt1C00017
-; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xbc, NakaToggle_OnOff_Data_0x4`).
+; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xbc, ComSetGridCheck_JumpTable_Table_2`).
 ; 4 bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -2734,7 +2734,7 @@ NakaInst_OFF_E80048:
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str
 ; ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
 ; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
-; xbc, NakaInst_OFF_E80048_0x2`).
+; xbc, ComSetGridCheck_JumpTable_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_JumpTable_Str[6].
@@ -2746,7 +2746,7 @@ SeMenu_ApplyPartEdit_AltStore_Data:	.incbin "includes/generated/naka_widget_tabl
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_2
 ; ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
 ; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
-; xwa, NakaInst_OFF_E80048_0x8`).
+; xwa, ComSetGridCheck_JumpTable_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_JumpTable_Str_2[10].
@@ -2778,7 +2778,7 @@ ComSetGridCheck_JumpTable_Str_3:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table_3
 ; ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_Evt1C00017
-; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xwa, NakaInst_NORMAL_0x14`). 2
+; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xwa, ComSetGridCheck_JumpTable_Table_3`). 2
 ; bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -2801,7 +2801,7 @@ SeMenu_ApplyPartEdit_AltStore_Data_2:	.incbin "includes/generated/naka_widget_ta
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_4
 ; ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
 ; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
-; xwa, NakaInst_GM_0x8`).
+; xwa, ComSetGridCheck_JumpTable_Str_4`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_JumpTable_Str_4[10].
@@ -2812,7 +2812,7 @@ ComSetGridCheck_JumpTable_Str_4:
 ; [naka_s_headers] ComSetGridCheck_ParamDisplay_Str
 ; ComSetGridCheck_ParamDisplay_Str -- NUL-terminated string(s), 6 bytes,
 ; used by ComSetGridCheck_ParamDisplay (v10/v9 0xf7823c, v7 0xf77e38)
-; (`ld xwa, NakaInst_GM_0x12`).
+; (`ld xwa, ComSetGridCheck_ParamDisplay_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_ParamDisplay_Str[6].
@@ -2823,7 +2823,7 @@ ComSetGridCheck_ParamDisplay_Str:
 ; [naka_s_headers] ComSetGridCheck_ParamDisplay_Str_2
 ; ComSetGridCheck_ParamDisplay_Str_2 -- NUL-terminated string(s), 6
 ; bytes, used by ComSetGridCheck_ParamDisplay (v10/v9 0xf7823c, v7
-; 0xf77e38) (`ld xwa, NakaInst_GM_0x18`).
+; 0xf77e38) (`ld xwa, ComSetGridCheck_ParamDisplay_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGridCheck_ParamDisplay_Str_2[6].
@@ -2845,7 +2845,7 @@ ComSetGrid_CopyStrAndDispatch_Str:
 ; [naka_s_headers] ComSetGrid_LookupByColumn_Str
 ; ComSetGrid_LookupByColumn_Str -- NUL-terminated string(s), 10 bytes,
 ; used by ComSetGrid_LookupByColumn (v10/v9 0xf7827d, v7 0xf77e79) (`ld
-; xwa, NakaInst_GM_0x28`).
+; xwa, ComSetGrid_LookupByColumn_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGrid_LookupByColumn_Str[10].
@@ -3214,7 +3214,7 @@ CtlMsgGridCheck_LocalInit:
 ; [naka_s_headers] CtlMsgGridCheck_JumpTable_Str
 ; CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
 ; used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
-; xbc, NakaInst_ON_E80168_0x270`).
+; xbc, CtlMsgGridCheck_JumpTable_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; CtlMsgGridCheck_JumpTable_Str[6].
@@ -3225,7 +3225,7 @@ CtlMsgGridCheck_JumpTable_Str:
 ; [naka_s_headers] CtlMsgGridCheck_JumpTable_Str_2
 ; CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
 ; used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
-; xbc, NakaInst_ON_E80168_0x276`).
+; xbc, CtlMsgGridCheck_JumpTable_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; CtlMsgGridCheck_JumpTable_Str_2[6].

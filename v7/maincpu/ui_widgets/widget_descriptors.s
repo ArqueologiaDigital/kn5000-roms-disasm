@@ -1169,7 +1169,7 @@ NoteEditBox_EventDispatch2_Table:
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Table_2
 ; NoteEditBox_EventDispatch2_Table_2 -- read by
 ; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xbc,
-; (NakaInst_NO_OPERATION_0x250:24)`). 24 bytes to the next object; the
+; (NoteEditBox_EventDispatch2_Table_2:24)`). 24 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1181,7 +1181,7 @@ NoteEditBox_EventDispatch2_Table_2:
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Table_3
 ; NoteEditBox_EventDispatch2_Table_3 -- read by
 ; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xbc,
-; (NakaInst_NO_OPERATION_0x268:24)`). 18 bytes to the next object; the
+; (NoteEditBox_EventDispatch2_Table_3:24)`). 18 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1540,7 +1540,7 @@ FmtStr_pct3d:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Str
 ; NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
 ; used by NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`ld
-; xwa, ExtDevice_ModeDispatch_Table_0x140`).
+; xwa, NoteEditBox_EventDispatch2_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditBox_EventDispatch2_Str[8].
@@ -1551,7 +1551,7 @@ NoteEditBox_EventDispatch2_Str_Fmt2d:	.incbin "includes/generated/naka_widget_de
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Str_2
 ; NoteEditBox_EventDispatch2_Str_2 -- NUL-terminated string(s), 4 bytes,
 ; used by NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`ld
-; xwa, ExtDevice_ModeDispatch_Table_0x148`).
+; xwa, NoteEditBox_EventDispatch2_Str_2`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditBox_EventDispatch2_Str_2[4].
@@ -1963,7 +1963,7 @@ SndParam_Dispatch_PtrTable_Strings:
 ; [naka_s_headers] SndParam_Dispatch_PtrTable_2
 ; SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
 ; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`lda xix,
-; (ExtDevice_ModeDispatch_Table_0x308:24)`).
+; (SndParam_Dispatch_PtrTable_2:24)`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; SndParam_Dispatch_PtrTable_2[2].
@@ -2561,7 +2561,7 @@ SqplyFunc_ParamFormatData_Str_12:
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_13
 ; SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
 ; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
-; xwa, ExtDevice_ModeDispatch_Table_0x604`).
+; xwa, SqplyFunc_ParamFormatData_Str_13`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_ParamFormatData_Str_13[6].
@@ -2583,7 +2583,7 @@ SqplyFunc_ParamFormatData_Str_14:
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_15
 ; SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
 ; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
-; xwa, ExtDevice_ModeDispatch_Table_0x610`).
+; xwa, SqplyFunc_ParamFormatData_Str_15`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_ParamFormatData_Str_15[6].
@@ -5305,7 +5305,7 @@ Tempo_AdjustEffect_Table:
 ; [naka_s_headers] Tempo_DisplayBPMReturn_LocalInit
 ; Tempo_DisplayBPMReturn_LocalInit -- initializer of a local array:
 ; Tempo_DisplayBPMReturn (v10/v9 0xf66779, v7 0xf66375) (`ld xiy,
-; Display_FontPalette_Table_0x5260`); `lda xix, (xsp + 6); ldw bc, 0x8;
+; Tempo_DisplayBPMReturn_LocalInit`); `lda xix, (xsp + 6); ldw bc, 0x8;
 ; ldirw` copies 16 bytes into the routine's stack frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5317,7 +5317,7 @@ Tempo_DisplayBPMReturn_LocalInit:
 ; [naka_s_headers] Tempo_RefreshDisplay5_Table
 ; Tempo_RefreshDisplay5_Table -- read by Tempo_RefreshDisplay5 (v10/v9
 ; 0xf66899, v7 0xf66495) (`lda xbc,
-; (Display_FontPalette_Table_0x5270:24)`). 80 bytes to the next
+; (Tempo_RefreshDisplay5_Table:24)`). 80 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -5645,7 +5645,7 @@ CstmCpTtlFunc_CaseTable:
 ; [naka_s_headers] MainCstmNameFunc_LocalInit
 ; MainCstmNameFunc_LocalInit -- initializer of a local array:
 ; MainCstmNameFunc (v10/v9 0xf695ca, v7 0xf691c6) (`ld xiy,
-; Display_FontPalette_Table_0x7168`); `lda xix, (xsp + 4); ldw bc, 0x3c;
+; MainCstmNameFunc_LocalInit`); `lda xix, (xsp + 4); ldw bc, 0x3c;
 ; ldirw` copies 120 bytes into the routine's stack frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5786,7 +5786,7 @@ NakaInst_DashDash:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndArgNmGet_PtrTable_2
 ; SndArgNmGet_PtrTable_2 -- 2 u32 addresses, read by SndArgNmGet (v10/v9
-; 0xf6a0bb, v7 0xf69cb7) (`ld xiy, NakaInst_DashDash_0x4`).
+; 0xf6a0bb, v7 0xf69cb7) (`ld xiy, SndArgNmGet_PtrTable_2`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; SndArgNmGet_PtrTable_2[2].

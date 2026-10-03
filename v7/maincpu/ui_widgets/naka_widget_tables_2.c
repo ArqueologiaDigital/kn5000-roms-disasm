@@ -1388,13 +1388,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SndParam_FormatAndDisplay_Str -- NUL-terminated string(s), 6 bytes,
      * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0xB0`).
+     * xwa, SndParam_FormatAndDisplay_Str`).
      * --------------------------------------------------------------------- */
     char SndParam_FormatAndDisplay_Str[6];
     /* ---------------------------------------------------------------------
      * SndParam_FormatAndDisplay_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0xB6`).
+     * xwa, SndParam_FormatAndDisplay_Str_2`).
      * --------------------------------------------------------------------- */
     char SndParam_FormatAndDisplay_Str_2[6];
     /* ---------------------------------------------------------------------
@@ -1406,7 +1406,7 @@ typedef struct __attribute__((packed)) {
     uint16_t FadeSetGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_Init_Table -- read by AcInOutGrid_Init (v10/v9 0xF757BC,
-     * v7 0xF753B8) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0xCA:24)`). 18 bytes
+     * v7 0xF753B8) (`lda xbc, (AcInOutGrid_Init_Table:24)`). 18 bytes
      * to the next object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_Init_Table[18];
@@ -1420,7 +1420,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcInOutGrid_ScrollUp_Dispatch_Table -- read by
      * AcInOutGrid_ScrollUp_Dispatch (v10/v9 0xF758AB, v7 0xF754A7) (`lda
-     * xbc, (NakaInst_OFF_WidgetTbl2_0xEE:24)`). 18 bytes to the next object;
+     * xbc, (AcInOutGrid_ScrollUp_Dispatch_Table:24)`). 18 bytes to the next object;
      * the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_ScrollUp_Dispatch_Table[18];
@@ -1434,7 +1434,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcInOutGrid_GetRowText_Str -- NUL-terminated string(s), 186 bytes,
      * used by AcInOutGrid_GetRowText (v10/v9 0xF75A12, v7 0xF7560E) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0x112`).
+     * xwa, AcInOutGrid_GetRowText_Str`).
      * --------------------------------------------------------------------- */
     char AcInOutGrid_GetRowText_Str[186];
     /* ---------------------------------------------------------------------
@@ -1459,9 +1459,9 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable -- 2 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
-     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * (Data_InOutGridDispatch_PtrTable:24)`), Data_ParaLoadOptDispatch (v10/v9
      * 0xF75F68, v7 0xF75B64) (`lda xwa,
-     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`).
+     * (Data_InOutGridDispatch_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -1473,8 +1473,8 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable_2 -- 2 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xbc,
-     * (NakaInst_OFF_E7FCA2_0x6:24)`), Data_ParaLoadOptDispatch (v10/v9
-     * 0xF75F68, v7 0xF75B64) (`lda xwa, (NakaInst_OFF_E7FCA2_0x6:24)`).
+     * (Data_InOutGridDispatch_PtrTable_2:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (Data_InOutGridDispatch_PtrTable_2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable_2[2];
     /* ---------------------------------------------------------------------
@@ -1486,8 +1486,8 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable_3 -- 3 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
-     * (ControlMode_Option_Table_0xA:24)`), Data_ParaLoadOptDispatch (v10/v9
-     * 0xF75F68, v7 0xF75B64) (`lda xwa, (ControlMode_Option_Table_0xA:24)`).
+     * (Data_InOutGridDispatch_PtrTable_3:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (Data_InOutGridDispatch_PtrTable_3:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable_3[3];
     /* ---------------------------------------------------------------------
@@ -1518,14 +1518,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
      * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
-     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x68:24)`): 9 u16 case offsets from
+     * (`lda xix, (Data_InOutGridDispatch_CaseTable_2:24)`): 9 u16 case offsets from
      * 16210936.
      * --------------------------------------------------------------------- */
     uint16_t Data_InOutGridDispatch_CaseTable_2[9];
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_CaseTable_3 -- jump table of a compiled
      * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
-     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)`): 9 u16 case offsets from
+     * (`lda xix, (Data_InOutGridDispatch_CaseTable_3:24)`): 9 u16 case offsets from
      * 16210732.
      * --------------------------------------------------------------------- */
     uint16_t Data_InOutGridDispatch_CaseTable_3[9];
@@ -1544,7 +1544,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MainExcSend_ClampIndexToRange_Table -- read by
      * MainExcSend_ClampIndexToRange (v10/v9 0xF7665C, v7 0xF76258) (`ld xwa,
-     * NakaInst_DIRECT_E7FCE4_0xA0`). 6 bytes to the next object; the layout
+     * MainExcSend_ClampIndexToRange_Table`). 6 bytes to the next object; the layout
      * beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t MainExcSend_ClampIndexToRange_Table[6];
@@ -1618,7 +1618,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled
      * `switch` in ParaLoadOpt_AudioFlagCheck_B (v10/v9 0xF76A52, v7
-     * 0xF7664E) (`lda xix, (FileTransfer_BlankStatus_0x88:24)`): 13 u16 case
+     * 0xF7664E) (`lda xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)`): 13 u16 case
      * offsets from ParaLoadOpt_DispatchTable_B.
      * --------------------------------------------------------------------- */
     uint16_t ParaLoadOpt_AudioFlagCheck_B_CaseTable[13];
@@ -1722,7 +1722,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcSendEditSw_EventD_Table -- read by AcSendEditSw_EventD (v10/v9
      * 0xF77E36, v7 0xF77A32) (`lda xwa,
-     * (UserMemory_FormatStrings_0xCE:24)`). 8 bytes to the next object; the
+     * (AcSendEditSw_EventD_Table:24)`). 8 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcSendEditSw_EventD_Table[8];
@@ -1777,7 +1777,7 @@ typedef struct __attribute__((packed)) {
     char NakaToggle_OnOff_Data[4];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_Evt1C00017
-     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, NakaToggle_OnOff_Data_0x4`).
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, ComSetGridCheck_JumpTable_Table_2`).
      * 4 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1790,13 +1790,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xbc, NakaInst_OFF_E80048_0x2`).
+     * xbc, ComSetGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_OFF_E80048_0x8`).
+     * xwa, ComSetGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_2[10];
     /* ---------------------------------------------------------------------
@@ -1808,12 +1808,12 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_NORMAL_0xA`).
+     * xwa, ComSetGridCheck_JumpTable_Str_3`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_3[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_Evt1C00017
-     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, NakaInst_NORMAL_0x14`). 2
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, ComSetGridCheck_JumpTable_Table_3`). 2
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1826,31 +1826,31 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_GM_0x8`).
+     * xwa, ComSetGridCheck_JumpTable_Str_4`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_4[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_ParamDisplay_Str -- NUL-terminated string(s), 6 bytes,
      * used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7 0xF77E38)
-     * (`ld xwa, NakaInst_GM_0x12`).
+     * (`ld xwa, ComSetGridCheck_ParamDisplay_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_ParamDisplay_Str[6];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_ParamDisplay_Str_2 -- NUL-terminated string(s), 6
      * bytes, used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7
-     * 0xF77E38) (`ld xwa, NakaInst_GM_0x18`).
+     * 0xF77E38) (`ld xwa, ComSetGridCheck_ParamDisplay_Str_2`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_ParamDisplay_Str_2[6];
     /* ---------------------------------------------------------------------
      * ComSetGrid_CopyStrAndDispatch_Str -- NUL-terminated string(s), 10
      * bytes, used by ComSetGrid_CopyStrAndDispatch (v10/v9 0xF78251, v7
-     * 0xF77E4D) (`ld xwa, NakaInst_GM_0x1E`).
+     * 0xF77E4D) (`ld xwa, ComSetGrid_CopyStrAndDispatch_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_CopyStrAndDispatch_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGrid_LookupByColumn_Str -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`ld
-     * xwa, NakaInst_GM_0x28`).
+     * xwa, ComSetGrid_LookupByColumn_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_LookupByColumn_Str[10];
     /* ---------------------------------------------------------------------
@@ -2028,13 +2028,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
      * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
-     * xbc, NakaInst_ON_E80168_0x270`).
+     * xbc, CtlMsgGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
-     * xbc, NakaInst_ON_E80168_0x276`).
+     * xbc, CtlMsgGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str_2[6];
     /* ---------------------------------------------------------------------

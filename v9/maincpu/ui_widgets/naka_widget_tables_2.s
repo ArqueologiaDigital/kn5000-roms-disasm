@@ -2247,7 +2247,7 @@ Data_InOutGridDispatch_CaseTable:
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_2
 ; Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
 ; `switch` in Data_InOutGridDispatch (v10/v9 0xf75ade, v7 0xf756da)
-; (`lda xix, (NakaInst_DIRECT_E7FCE4_0x68:24)`): 9 u16 case offsets from
+; (`lda xix, (Data_InOutGridDispatch_CaseTable_2:24)`): 9 u16 case offsets from
 ; 16210936.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t

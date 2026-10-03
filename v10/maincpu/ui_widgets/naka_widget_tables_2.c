@@ -1518,14 +1518,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
      * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
-     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x68:24)`): 9 u16 case offsets from
+     * (`lda xix, (Data_InOutGridDispatch_CaseTable_2:24)`): 9 u16 case offsets from
      * 16210936.
      * --------------------------------------------------------------------- */
     uint16_t Data_InOutGridDispatch_CaseTable_2[9];
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_CaseTable_3 -- jump table of a compiled
      * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
-     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)`): 9 u16 case offsets from
+     * (`lda xix, (Data_InOutGridDispatch_CaseTable_3:24)`): 9 u16 case offsets from
      * 16210732.
      * --------------------------------------------------------------------- */
     uint16_t Data_InOutGridDispatch_CaseTable_3[9];

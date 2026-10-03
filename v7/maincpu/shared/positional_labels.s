@@ -3,89 +3,15 @@
 	; CDlikeSwTtl_SendStartEvtArg1 / _0x6 are real routines now (demo/
 	; demo_seq_bridge.s); these two aliases remain only for ui/setwall_routines.s,
 	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
-	.set ControlMode_Option_Table_0xA, ControlMode_Option_Table + 10
 	.set Data_SaveLoadMenuTable_0x64, Data_SaveLoadMenuTable + 100
 	.set Data_UnknownBlock_0x23D, Data_UnknownBlock + 573
 	.set Data_UnknownBlock_0x6E, Data_UnknownBlock + 110
 	.set Demo_StyleRhythmData_0x57C, Demo_StyleRhythmData + 1404
-	.set Display_FontPalette_Table_0x524C, Display_FontPalette_Table + 21068
-	.set Display_FontPalette_Table_0x5260, Display_FontPalette_Table + 21088
-	.set Display_FontPalette_Table_0x5270, Display_FontPalette_Table + 21104
-	.set Display_FontPalette_Table_0x7168, Display_FontPalette_Table + 29032
-	.set ExtDevice_ModeDispatch_Table_0x140, ExtDevice_ModeDispatch_Table + 320
-	.set ExtDevice_ModeDispatch_Table_0x148, ExtDevice_ModeDispatch_Table + 328
-	.set ExtDevice_ModeDispatch_Table_0x14C, ExtDevice_ModeDispatch_Table + 332
-	.set ExtDevice_ModeDispatch_Table_0x19C, ExtDevice_ModeDispatch_Table + 412
-	.set ExtDevice_ModeDispatch_Table_0x1A2, ExtDevice_ModeDispatch_Table + 418
-	.set ExtDevice_ModeDispatch_Table_0x2B0, ExtDevice_ModeDispatch_Table + 688
-	.set ExtDevice_ModeDispatch_Table_0x2BA, ExtDevice_ModeDispatch_Table + 698
-	.set ExtDevice_ModeDispatch_Table_0x2CE, ExtDevice_ModeDispatch_Table + 718
-	.set ExtDevice_ModeDispatch_Table_0x2D8, ExtDevice_ModeDispatch_Table + 728
-	.set ExtDevice_ModeDispatch_Table_0x2F6, ExtDevice_ModeDispatch_Table + 758
-	.set ExtDevice_ModeDispatch_Table_0x308, ExtDevice_ModeDispatch_Table + 776
-	.set ExtDevice_ModeDispatch_Table_0x5C4, ExtDevice_ModeDispatch_Table + 1476
-	.set ExtDevice_ModeDispatch_Table_0x5C8, ExtDevice_ModeDispatch_Table + 1480
-	.set ExtDevice_ModeDispatch_Table_0x5CC, ExtDevice_ModeDispatch_Table + 1484
-	.set ExtDevice_ModeDispatch_Table_0x5D0, ExtDevice_ModeDispatch_Table + 1488
-	.set ExtDevice_ModeDispatch_Table_0x5D6, ExtDevice_ModeDispatch_Table + 1494
-	.set ExtDevice_ModeDispatch_Table_0x5DA, ExtDevice_ModeDispatch_Table + 1498
-	.set ExtDevice_ModeDispatch_Table_0x5E0, ExtDevice_ModeDispatch_Table + 1504
-	.set ExtDevice_ModeDispatch_Table_0x5E6, ExtDevice_ModeDispatch_Table + 1510
-	.set ExtDevice_ModeDispatch_Table_0x5EC, ExtDevice_ModeDispatch_Table + 1516
-	.set ExtDevice_ModeDispatch_Table_0x5F2, ExtDevice_ModeDispatch_Table + 1522
-	.set ExtDevice_ModeDispatch_Table_0x5F8, ExtDevice_ModeDispatch_Table + 1528
-	.set ExtDevice_ModeDispatch_Table_0x5FE, ExtDevice_ModeDispatch_Table + 1534
-	.set ExtDevice_ModeDispatch_Table_0x604, ExtDevice_ModeDispatch_Table + 1540
-	.set ExtDevice_ModeDispatch_Table_0x60A, ExtDevice_ModeDispatch_Table + 1546
-	.set ExtDevice_ModeDispatch_Table_0x610, ExtDevice_ModeDispatch_Table + 1552
-	.set FileTransfer_BlankStatus_0x88, FileTransfer_BlankStatus + 136
 	.set MSP_Default_SeqReserved_0x40, MSP_Default_SeqReserved + 64
 	.set MSP_Default_SoundReserved_0x30, MSP_Default_SoundReserved + 48
 	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
-	.set MedleyDisp_Blank_0xC, MedleyDisp_Blank + 12
 	.set MidiPkt_ArpConfigChain_Data_0x34C, MidiPkt_ArpConfigChain_Data + 844
-	.set NakaInst_DIRECT_E7FCE4_0x68, NakaInst_DIRECT_E7FCE4 + 104
-	.set NakaInst_DIRECT_E7FCE4_0x7A, NakaInst_DIRECT_E7FCE4 + 122
-	.set NakaInst_DIRECT_E7FCE4_0xA0, NakaInst_DIRECT_E7FCE4 + 160
-	.set NakaInst_DashDash_0x4, NakaInst_DashDash + 4
-	.set NakaInst_GM_0x12, NakaInst_GM + 18
-	.set NakaInst_GM_0x18, NakaInst_GM + 24
-	.set NakaInst_GM_0x1E, NakaInst_GM + 30
-	.set NakaInst_GM_0x28, NakaInst_GM + 40
-	.set NakaInst_GM_0x8, NakaInst_GM + 8
-	.set NakaInst_MEMORY_A_0x5E, NakaInst_MEMORY_A + 94
-	.set NakaInst_MEMORY_A_0xE, NakaInst_MEMORY_A + 14
-	.set NakaInst_NORMAL_0x14, NakaInst_NORMAL + 20
-	.set NakaInst_NORMAL_0xA, NakaInst_NORMAL + 10
-	.set NakaInst_NO_OPERATION_0x250, NakaInst_NO_OPERATION + 592
-	.set NakaInst_NO_OPERATION_0x268, NakaInst_NO_OPERATION + 616
-	.set NakaInst_OFF_E7FCA2_0x6, NakaInst_OFF_E7FCA2 + 6
-	.set NakaInst_OFF_E80048_0x2, NakaInst_OFF_E80048 + 2
-	.set NakaInst_OFF_E80048_0x8, NakaInst_OFF_E80048 + 8
-	.set NakaInst_OFF_WidgetTbl2_0x112, NakaInst_OFF_WidgetTbl2 + 274
-	.set NakaInst_OFF_WidgetTbl2_0x37E, NakaInst_OFF_WidgetTbl2 + 894
-	.set NakaInst_OFF_WidgetTbl2_0xB0, NakaInst_OFF_WidgetTbl2 + 176
-	.set NakaInst_OFF_WidgetTbl2_0xB6, NakaInst_OFF_WidgetTbl2 + 182
-	.set NakaInst_OFF_WidgetTbl2_0xCA, NakaInst_OFF_WidgetTbl2 + 202
-	.set NakaInst_OFF_WidgetTbl2_0xEE, NakaInst_OFF_WidgetTbl2 + 238
-	.set NakaInst_ON_E80168_0x270, NakaInst_ON_E80168 + 624
-	.set NakaInst_ON_E80168_0x276, NakaInst_ON_E80168 + 630
-	.set NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3F4, NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las + 1012
-	.set NakaToggle_OnOff_Data_0x4, NakaToggle_OnOff_Data + 4
-	.set NakaWidgetPtrTbl_SmfDp_0x1DA0, NakaWidgetPtrTbl_SmfDp + 7584
-	.set NakaWidgetPtrTbl_SmfDp_0x2070, NakaWidgetPtrTbl_SmfDp + 8304
-	.set NakaWidgetPtrTbl_SmfDp_0x221A, NakaWidgetPtrTbl_SmfDp + 8730
-	.set NakaWidgetPtrTbl_SmfDp_0x23E8, NakaWidgetPtrTbl_SmfDp + 9192
-	.set NakaWidgetPtrTbl_SmfDp_0x23F8, NakaWidgetPtrTbl_SmfDp + 9208
-	.set NakaWidgetPtrTbl_SmfDp_0x2408, NakaWidgetPtrTbl_SmfDp + 9224
-	.set NakaWidgetPtrTbl_SmfDp_0x2418, NakaWidgetPtrTbl_SmfDp + 9240
-	.set NakaWidgetPtrTbl_SmfDp_0x2460, NakaWidgetPtrTbl_SmfDp + 9312
-	.set NakaWidgetPtrTbl_SmfDp_0x2514, NakaWidgetPtrTbl_SmfDp + 9492
-	.set NakaWidgetPtrTbl_SmfDp_0x25C2, NakaWidgetPtrTbl_SmfDp + 9666
-	.set NakaWidgetPtrTbl_SmfDp_0x25F6, NakaWidgetPtrTbl_SmfDp + 9718
 	.set Naka_MainDispatch_Table_0xDC0, Naka_MainDispatch_Table + 3520
-	.set PlayModeStr_Pause_0x6, PlayModeStr_Pause + 6
-	.set PlayModeStr_Play_0x6, PlayModeStr_Play + 6
 	.set RegPreset_LoadVoiceData_0x14, RegPreset_LoadVoiceData + 20
 	.set RegPreset_LoadVoiceData_0x24, RegPreset_LoadVoiceData + 36
 	.set Scoop_SoundEditorData_0x127C, Scoop_SoundEditorData + 4732
@@ -98,6 +24,5 @@
 	.set TuningSystem_Handler_Table_0x1F3F, TuningSystem_Handler_Table + 7999
 	.set TuningSystem_Handler_Table_0x71F, TuningSystem_Handler_Table + 1823
 	.set TuningSystem_Handler_Table_0xDF, TuningSystem_Handler_Table + 223
-	.set UserMemory_FormatStrings_0xCE, UserMemory_FormatStrings + 206
 	.set VoiceSlot_ResolveIndex_0x2, VoiceSlot_ResolveIndex + 2
 	.set WidgetParam_Entry_018_0x26, WidgetParam_Entry_018 + 38

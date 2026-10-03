@@ -8,7 +8,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
   nowhere: ~394 such mentions per KN5000 maincpu tree.  For every `Base_0xN` in a comment that
   the linked ELF does not define, where Base IS defined: the address is Base + N, and when a
   column-0 label sits exactly there the mention becomes that label (symbolize_far_pointer_pushes
-  .pick).  Others are counted and left.  Comments only: no byte changes.
+  .pick).  Others are counted and left.  C / header comments (/* */, //) get the same rewrite
+  (2026-10-03).  Comments only: no byte changes.
 
 USAGE
   make all
@@ -64,6 +65,13 @@ def main():
                 l = l[:k] + POS.sub(fix, l[k:])
             out.append(l)
         t2 = "\n".join(out)
+        if a.apply and t2 != t:
+            open(f, "wb").write(t2.encode("latin-1"))
+    # C sources quote instructions in their comments too ("used by NoteEditBox_EventDispatch2 (`ld
+    # xwa, ExtDevice_ModeDispatch_Table_0x140`)"): the same rewrite inside /* */ and // spans
+    for f in sorted(glob.glob(os.path.join(REPO, src, "**", "*.[ch]"), recursive=True)):
+        t = open(f, "rb").read().decode("latin-1")
+        t2 = re.sub(r'/\*.*?\*/|//[^\n]*', lambda c: POS.sub(fix, c.group(0)), t, flags=re.S)
         if a.apply and t2 != t:
             open(f, "wb").write(t2.encode("latin-1"))
     print("%s: %s%s" % (a.tree, dict(st), "" if a.apply else " (dry run)"))

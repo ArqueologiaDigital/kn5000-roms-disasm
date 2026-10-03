@@ -1070,7 +1070,7 @@ GmOffSureLangCheck_PtrTable:
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable_2
 ; TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
 ; TrAsSureLangCheck (v10/v9 0xf2a9a3, v7 0xf2a979) (`lda xbc,
-; (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
+; (TrAsSureLangCheck_PtrTable_2:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsSureLangCheck_PtrTable_2[20].
@@ -1315,7 +1315,7 @@ TrAsGridChk_Part3_Start_Str_2:
 ; [naka_s_headers] TrAsGridChk_Part3_PushCmd_Str
 ; TrAsGridChk_Part3_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part3_PushCmd (v10/v9 0xf2c8cb, v7 0xf2c8a1) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x2408`).
+; xwa, TrAsGridChk_Part3_PushCmd_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_PushCmd_Str[4].
@@ -1359,7 +1359,7 @@ TrAsGridChk_Part3_UpDir_Str_2:
 ; [naka_s_headers] TrAsGridChk_Part3_UpPushCmd_Str
 ; TrAsGridChk_Part3_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part3_UpPushCmd (v10/v9 0xf2c930, v7 0xf2c906)
-; (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2418`).
+; (`ld xwa, TrAsGridChk_Part3_UpPushCmd_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpPushCmd_Str[4].
@@ -1430,7 +1430,7 @@ AcCurSongName_HandleEventF_Str_Blank22:	.incbin "includes/generated/naka_widget_
 ; [naka_s_headers] MuteChSel_Dispatch_PtrTable
 ; MuteChSel_Dispatch_PtrTable -- 16 u32 addresses, read by
 ; MuteChSel_Dispatch (v10/v9 0xf2cc54, v7 0xf2cc2a) (`ld xbc,
-; NakaWidgetPtrTbl_SmfDp_0x2460`).
+; MuteChSel_Dispatch_PtrTable`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; MuteChSel_Dispatch_PtrTable[16].
@@ -1464,7 +1464,7 @@ SmfMuteChSelFunc_CaseTable:
 ; [naka_s_headers] SqTrAsPsSong_Dispatch_PtrTable
 ; SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
 ; SqTrAsPsSong_Dispatch (v10/v9 0xf2ccb5, v7 0xf2cc8b) (`ld xbc,
-; NakaWidgetPtrTbl_SmfDp_0x2514`).
+; SqTrAsPsSong_Dispatch_PtrTable`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; SqTrAsPsSong_Dispatch_PtrTable[11].
@@ -1626,7 +1626,7 @@ PlayModeStr_Play:
 ; [naka_s_headers] DPPlayDsp_Dispatch_Str
 ; DPPlayDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
 ; DPPlayDsp_Dispatch (v10/v9 0xf2d161, v7 0xf2d137) (`ld xwa,
-; PlayModeStr_Play_0x6`).
+; DPPlayDsp_Dispatch_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char DPPlayDsp_Dispatch_Str[6].
 ; -----------------------------------------------------------------------------
@@ -1657,7 +1657,7 @@ PlayModeStr_Pause:
 ; [naka_s_headers] DPPauseDsp_Dispatch_Str
 ; DPPauseDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
 ; DPPauseDsp_Dispatch (v10/v9 0xf2d1d9, v7 0xf2d1af) (`ld xwa,
-; PlayModeStr_Pause_0x6`).
+; DPPauseDsp_Dispatch_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char DPPauseDsp_Dispatch_Str[6].
 ; -----------------------------------------------------------------------------

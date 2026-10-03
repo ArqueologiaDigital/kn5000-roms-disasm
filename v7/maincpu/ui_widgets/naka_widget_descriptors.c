@@ -522,14 +522,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Table_2 -- read by
      * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x250:24)`). 24 bytes to the next object; the
+     * (NoteEditBox_EventDispatch2_Table_2:24)`). 24 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditBox_EventDispatch2_Table_2[24];
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Table_3 -- read by
      * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x268:24)`). 18 bytes to the next object; the
+     * (NoteEditBox_EventDispatch2_Table_3:24)`). 18 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditBox_EventDispatch2_Table_3[18];
@@ -614,7 +614,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * HelpTtlFunc_LookupSlide_PtrTable -- 50 u32 addresses, read by
      * HelpTtlFunc_LookupSlide (v10/v9 0xF2E962, v7 0xF2E938) (`lda xix,
-     * (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3F4:24)`).
+     * (HelpTtlFunc_LookupSlide_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t HelpTtlFunc_LookupSlide_PtrTable[50];
     /* ---------------------------------------------------------------------
@@ -710,19 +710,19 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
      * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x140`).
+     * xwa, NoteEditBox_EventDispatch2_Str`).
      * --------------------------------------------------------------------- */
     char NoteEditBox_EventDispatch2_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x148`).
+     * xwa, NoteEditBox_EventDispatch2_Str_2`).
      * --------------------------------------------------------------------- */
     char NoteEditBox_EventDispatch2_Str_2[4];
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Str_3 -- NUL-terminated string(s), 8 bytes,
      * used by NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x14C`).
+     * xwa, NoteEditBox_EventDispatch2_Str_3`).
      * --------------------------------------------------------------------- */
     char NoteEditBox_EventDispatch2_Str_3[8];
     /* ---------------------------------------------------------------------
@@ -762,13 +762,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatTempoString_Str -- NUL-terminated string(s), 6 bytes,
      * used by NoteEdit_FormatTempoString (v10/v9 0xF2FAF2, v7 0xF2FAC8) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x19C`).
+     * xwa, NoteEdit_FormatTempoString_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatTempoString_Str[6];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatTempoString_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by NoteEdit_FormatTempoString (v10/v9 0xF2FAF2, v7 0xF2FAC8) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1A2`).
+     * xwa, NoteEdit_FormatTempoString_Str_2`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatTempoString_Str_2[6];
     /* ---------------------------------------------------------------------
@@ -912,31 +912,31 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SndParam_Dispatch_Str -- NUL-terminated string(s), 10 bytes, used by
      * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x2B0`).
+     * SndParam_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char SndParam_Dispatch_Str[10];
     /* ---------------------------------------------------------------------
      * SndParam_Dispatch_Str_2 -- NUL-terminated string(s), 20 bytes, used by
      * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x2BA`).
+     * SndParam_Dispatch_Str_2`).
      * --------------------------------------------------------------------- */
     char SndParam_Dispatch_Str_2[20];
     /* ---------------------------------------------------------------------
      * EntGridCheck_Handle4140_Str -- NUL-terminated string(s), 10 bytes,
      * used by EntGridCheck_Handle4140 (v10/v9 0xF30678, v7 0xF3064E) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x2CE`).
+     * xwa, EntGridCheck_Handle4140_Str`).
      * --------------------------------------------------------------------- */
     char EntGridCheck_Handle4140_Str[10];
     /* ---------------------------------------------------------------------
      * EntGridCheck_Handle4140_Str_2 -- NUL-terminated string(s), 30 bytes,
      * used by EntGridCheck_Handle4140 (v10/v9 0xF30678, v7 0xF3064E) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x2D8`).
+     * xwa, EntGridCheck_Handle4140_Str_2`).
      * --------------------------------------------------------------------- */
     char EntGridCheck_Handle4140_Str_2[30];
     /* ---------------------------------------------------------------------
      * SndParam_Dispatch_PtrTable -- 2 u32 ROM addresses (or 0), read by
      * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xix,
-     * (ExtDevice_ModeDispatch_Table_0x2F6:24)`).
+     * (SndParam_Dispatch_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t SndParam_Dispatch_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -949,7 +949,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
      * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xix,
-     * (ExtDevice_ModeDispatch_Table_0x308:24)`).
+     * (SndParam_Dispatch_PtrTable_2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t SndParam_Dispatch_PtrTable_2[2];
     /* ---------------------------------------------------------------------
@@ -1219,91 +1219,91 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str -- NUL-terminated string(s), 4 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5C4`).
+     * xwa, SqplyFunc_ParamFormatData_Str`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5C8`).
+     * xwa, SqplyFunc_ParamFormatData_Str_2`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_2[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_3 -- NUL-terminated string(s), 4 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5CC`).
+     * xwa, SqplyFunc_ParamFormatData_Str_3`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_3[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_4 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5D0`).
+     * xwa, SqplyFunc_ParamFormatData_Str_4`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_4[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_5 -- NUL-terminated string(s), 4 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5D6`).
+     * xwa, SqplyFunc_ParamFormatData_Str_5`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_5[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_6 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5DA`).
+     * xwa, SqplyFunc_ParamFormatData_Str_6`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_6[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_7 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5E0`).
+     * xwa, SqplyFunc_ParamFormatData_Str_7`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_7[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_8 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5E6`).
+     * xwa, SqplyFunc_ParamFormatData_Str_8`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_8[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_9 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5EC`).
+     * xwa, SqplyFunc_ParamFormatData_Str_9`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_9[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_10 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5F2`).
+     * xwa, SqplyFunc_ParamFormatData_Str_10`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_10[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_11 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5F8`).
+     * xwa, SqplyFunc_ParamFormatData_Str_11`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_11[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_12 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x5FE`).
+     * xwa, SqplyFunc_ParamFormatData_Str_12`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_12[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x604`).
+     * xwa, SqplyFunc_ParamFormatData_Str_13`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_13[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_14 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x60A`).
+     * xwa, SqplyFunc_ParamFormatData_Str_14`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_14[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
      * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x610`).
+     * xwa, SqplyFunc_ParamFormatData_Str_15`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_15[6];
     /* ---------------------------------------------------------------------
@@ -2953,21 +2953,21 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Tempo_AdjustEffect_Table -- read by Tempo_AdjustEffect (v10/v9
      * 0xF66346, v7 0xF65F42) (`lda xbc,
-     * (Display_FontPalette_Table_0x524C:24)`). 20 bytes to the next
+     * (Tempo_AdjustEffect_Table:24)`). 20 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Tempo_AdjustEffect_Table[20];
     /* ---------------------------------------------------------------------
      * Tempo_DisplayBPMReturn_LocalInit -- initializer of a local array:
      * Tempo_DisplayBPMReturn (v10/v9 0xF66779, v7 0xF66375) (`ld xiy,
-     * Display_FontPalette_Table_0x5260`); `lda xix, (xsp + 6); ldw bc, 0x8;
+     * Tempo_DisplayBPMReturn_LocalInit`); `lda xix, (xsp + 6); ldw bc, 0x8;
      * ldirw` copies 16 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t Tempo_DisplayBPMReturn_LocalInit[8];
     /* ---------------------------------------------------------------------
      * Tempo_RefreshDisplay5_Table -- read by Tempo_RefreshDisplay5 (v10/v9
      * 0xF66899, v7 0xF66495) (`lda xbc,
-     * (Display_FontPalette_Table_0x5270:24)`). 80 bytes to the next
+     * (Tempo_RefreshDisplay5_Table:24)`). 80 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Tempo_RefreshDisplay5_Table[80];
@@ -3175,7 +3175,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MainCstmNameFunc_LocalInit -- initializer of a local array:
      * MainCstmNameFunc (v10/v9 0xF695CA, v7 0xF691C6) (`ld xiy,
-     * Display_FontPalette_Table_0x7168`); `lda xix, (xsp + 4); ldw bc, 0x3c;
+     * MainCstmNameFunc_LocalInit`); `lda xix, (xsp + 4); ldw bc, 0x3c;
      * ldirw` copies 120 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t MainCstmNameFunc_LocalInit[60];
@@ -3202,14 +3202,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NakaInst_MEMORY_A -- " MEMORY-A ": entry 0 of MainCmpCpFunc_LocalInit
      * (MainCmpCpFunc (v10/v9 0xF6985D, v7 0xF69459)). The label also anchors
-     * the positional labels NakaInst_MEMORY_A_0xE .. _0x5E that the switch
+     * the positional labels MainCmpSetFunc_CaseTable .. _0x5E that the switch
      * tables below are reached through.
      * --------------------------------------------------------------------- */
     char NakaInst_MEMORY_A[14];
     /* ---------------------------------------------------------------------
      * MainCmpSetFunc_CaseTable -- jump table of a compiled `switch` in
      * MainCmpSetFunc (v10/v9 0xF699BC, v7 0xF695B8) (`add xhl,
-     * NakaInst_MEMORY_A_0xE`): 8 u16 case offsets from MainCmpSet_Dispatch.
+     * MainCmpSetFunc_CaseTable`): 8 u16 case offsets from MainCmpSet_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MainCmpSetFunc_CaseTable[8];
     /* ---------------------------------------------------------------------
@@ -3245,7 +3245,7 @@ typedef struct __attribute__((packed)) {
     uint16_t SndArgTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * SndArgNmGet_PtrTable -- 1 u32 addresses, read by SndArgNmGet (v10/v9
-     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, NakaInst_MEMORY_A_0x5E`).
+     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, SndArgNmGet_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t SndArgNmGet_PtrTable[1];
     /* ---------------------------------------------------------------------
@@ -3256,7 +3256,7 @@ typedef struct __attribute__((packed)) {
     char NakaInst_DashDash[4];
     /* ---------------------------------------------------------------------
      * SndArgNmGet_PtrTable_2 -- 2 u32 addresses, read by SndArgNmGet (v10/v9
-     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, NakaInst_DashDash_0x4`).
+     * 0xF6A0BB, v7 0xF69CB7) (`ld xiy, SndArgNmGet_PtrTable_2`).
      * --------------------------------------------------------------------- */
     uint32_t SndArgNmGet_PtrTable_2[2];
     /* ---------------------------------------------------------------------

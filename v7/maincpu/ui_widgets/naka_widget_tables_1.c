@@ -976,7 +976,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x1DA0:24)`).
+     * (TrAsSureLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
@@ -1029,7 +1029,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
+     * (TrAsSureLangCheck_PtrTable_2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsSureLangCheck_PtrTable_2[20];
     /* ---------------------------------------------------------------------
@@ -1047,7 +1047,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
      * TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x221A`).
+     * TrAsGridChk_Part1_SendAudio_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsGridChk_Part1_SendAudio_PtrTable[20];
     /* ---------------------------------------------------------------------
@@ -1111,7 +1111,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_PushCmd (v10/v9 0xF2C7E5, v7 0xF2C7BB) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x23E8`).
+     * xwa, TrAsGridChk_Part2_PushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_PushCmd_Str[4];
     /* ---------------------------------------------------------------------
@@ -1135,7 +1135,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_UpPushCmd (v10/v9 0xF2C84A, v7 0xF2C820)
-     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F8`).
+     * (`ld xwa, TrAsGridChk_Part2_UpPushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_UpPushCmd_Str[4];
     /* ---------------------------------------------------------------------
@@ -1159,7 +1159,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_PushCmd (v10/v9 0xF2C8CB, v7 0xF2C8A1) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x2408`).
+     * xwa, TrAsGridChk_Part3_PushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_PushCmd_Str[4];
     /* ---------------------------------------------------------------------
@@ -1183,7 +1183,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_UpPushCmd (v10/v9 0xF2C930, v7 0xF2C906)
-     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2418`).
+     * (`ld xwa, TrAsGridChk_Part3_UpPushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_UpPushCmd_Str[4];
     /* ---------------------------------------------------------------------
@@ -1223,7 +1223,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MuteChSel_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSel_Dispatch (v10/v9 0xF2CC54, v7 0xF2CC2A) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x2460`).
+     * MuteChSel_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t MuteChSel_Dispatch_PtrTable[16];
     /* ---------------------------------------------------------------------
@@ -1242,7 +1242,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
      * SqTrAsPsSong_Dispatch (v10/v9 0xF2CCB5, v7 0xF2CC8B) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x2514`).
+     * SqTrAsPsSong_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t SqTrAsPsSong_Dispatch_PtrTable[11];
     /* ---------------------------------------------------------------------
@@ -1261,7 +1261,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
      * 0xF2CCE8, v7 0xF2CCBE) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x25C2:24)`).
+     * (SqAftSetFunc_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t SqAftSetFunc_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -1279,7 +1279,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSet_Dispatch (v10/v9 0xF2CD84, v7 0xF2CD5A) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x25F6`).
+     * MuteChSet_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t MuteChSet_Dispatch_PtrTable[16];
     /* ---------------------------------------------------------------------
@@ -1316,7 +1316,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DemoMedDsp_Dispatch_Str -- NUL-terminated string(s), 12 bytes, used by
      * DemoMedDsp_Dispatch (v10/v9 0xF2D0E9, v7 0xF2D0BF) (`ld xwa,
-     * MedleyDisp_Blank_0xC`).
+     * DemoMedDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DemoMedDsp_Dispatch_Str[12];
     /* ---------------------------------------------------------------------
@@ -1334,7 +1334,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DPPlayDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
      * DPPlayDsp_Dispatch (v10/v9 0xF2D161, v7 0xF2D137) (`ld xwa,
-     * PlayModeStr_Play_0x6`).
+     * DPPlayDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DPPlayDsp_Dispatch_Str[6];
     /* ---------------------------------------------------------------------
@@ -1352,7 +1352,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DPPauseDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
      * DPPauseDsp_Dispatch (v10/v9 0xF2D1D9, v7 0xF2D1AF) (`ld xwa,
-     * PlayModeStr_Pause_0x6`).
+     * DPPauseDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DPPauseDsp_Dispatch_Str[6];
     /* ---------------------------------------------------------------------
