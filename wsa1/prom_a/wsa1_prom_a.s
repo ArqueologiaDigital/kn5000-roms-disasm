@@ -40871,7 +40871,6 @@ ScreenEnter_DebugMonitor:
 	ld c, (UI_ScreenFlags:16)                                   ; F959C8  c1 95 20 23
 	and C,0x10                                           ; F959CC  cb cc 10
 	jr nz, .LF959D9                                          ; F959CF  6e 08
-ScreenEnter_DebugMonitor__F959D1:
 	call LCD_BlankThenSetPanel2Layer                                      ; F959D1  1d 2b 4c f9
 	m_set 7, MD16, UI_RequestBits                                ; F959D5  f1 75 20 bf
 .LF959D9:
@@ -40928,7 +40927,6 @@ SoftKeyCol1_DebugMonitor:   ; entry: screen button-handler table
 	srl xiy, 16                                        ; F95A37  ed ef 00
 	and XIY,0x000000f0                                   ; F95A3A  ed cc f0 00 00 00
 	srl xiy, 0x04                                        ; F95A40  ed ef 04
-SoftKeyCol1_DebugMonitor__F95A43:
 	ld_erpb_rr c, 0xf4                                   ; F95A43  c7 f4 8b   ld C,IYL
 	ld (XIX),C                                           ; F95A46  b4 43
 	ld (XIX+0x01),H                                      ; F95A48  bc 01 46
@@ -41293,8 +41291,12 @@ ScreenObjF40130_ButtonHandlers:
 ;          at value - 0xED (scripts/tools/respell_stale_table.py, 2026-10-03),
 ;          which also retired four labels an earlier pass had put mid-routine
 ;          to spell them as this image's addresses (sub_F95AD1__F95B07 ...).
-;          Words 0..26 keep their spellings: at value - 0xED only the default
-;          and one handler resolve, three handler values do not.
+;          Words 0..26 are written the same way, word i against the first table's
+;          word i+5: + 0xED for the default and ExitKey; SoftKeyCol4/5/6_SineWaveCheckMode
+;          moved by 0x108/0x109/0x10A, consecutive in both builds (0x38 apart here, 0x39
+;          there).  Word 22 holds the old default where the live table has
+;          NumberPadKey_SineWaveCheckMode.  The two mid-routine labels an earlier pass had
+;          put at 0xF95A43 and 0xF959D1 to spell them are retired (2026-10-03).
 ; ★ This answers the old header's closing question about the third table
 ;          and the stray byte; that line is replaced, the rest of the old
 ;          header follows verbatim.
@@ -41332,33 +41334,33 @@ ScreenObjF40130_ButtonHandlers:
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_StaleCopy:
 	.byte 0x00                                       ; F95D95  top byte of copy word 4
-	.long SoftKeyCol1_DebugMonitor__F95A43                                 ; F95D96  [ 0]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95D9A  [ 1]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95D9E  [ 2]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DA2  [ 3]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DA6  [ 4]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DAA  [ 5]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DAE  [ 6]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DB2  [ 7]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DB6  [ 8]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DBA  [ 9]
-	.long ScreenButtonHandlers_SineWaveCheckMode+109                                 ; F95DBE  [10]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DC2  [11]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DC6  [12]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DCA  [13]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DCE  [14]
-	.long ScreenEnter_DebugMonitor__F959D1                                 ; F95DD2  [15]
-	.long 0x00f95a0a                                 ; F95DD6  [16]
-	.long SoftKeyCol1_DebugMonitor__F95A43                                 ; F95DDA  [17]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DDE  [18]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DE2  [19]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DE6  [20]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DEA  [21]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DEE  [22]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DF2  [23]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DF6  [24]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFA  [25]
-	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFE  [26]
+	.long SoftKeyCol6_SineWaveCheckMode + 0x10a                                  ; F95D96  [ 0]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95D9A  [ 1]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95D9E  [ 2]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DA2  [ 3]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DA6  [ 4]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DAA  [ 5]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DAE  [ 6]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DB2  [ 7]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DB6  [ 8]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DBA  [ 9]
+	.long ExitKey_SineWaveCheckModeAndDebugMonitor + 0xed                        ; F95DBE  [10]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DC2  [11]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DC6  [12]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DCA  [13]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DCE  [14]
+	.long SoftKeyCol4_SineWaveCheckMode + 0x108                                  ; F95DD2  [15]
+	.long SoftKeyCol5_SineWaveCheckMode + 0x109                                  ; F95DD6  [16]
+	.long SoftKeyCol6_SineWaveCheckMode + 0x10a                                  ; F95DDA  [17]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DDE  [18]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DE2  [19]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DE6  [20]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DEA  [21]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DEE  [22]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DF2  [23]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DF6  [24]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DFA  [25]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0 + 0xed                     ; F95DFE  [26]
 	.long SoftKeyCol1_DebugMonitor + 0xed                                 ; F95E02  [27]
 	.long SoftKeyCol2_DebugMonitor + 0xed                                 ; F95E06  [28]
 	.long SoftKeyCol3_DebugMonitor + 0xed                                 ; F95E0A  [29]
