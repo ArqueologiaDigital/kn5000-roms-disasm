@@ -2614,7 +2614,6 @@ AcLswBox_HandlePageUp:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
-SubCPU_ToneDispatch_Target1:
 	ld xwa, (xsp + 20)
 	call GetViewInstance
 	ld xwa, (xhl + 36)

@@ -12383,27 +12383,21 @@ SubCPU_ToneParamDisplay_Join:
 Str_PanKeyShiftTuning:
 	.byte 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
-	; Byte data, 80 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xix, SubCPU_ToneDispatch`
-	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3424:16)`
 SubCPU_ToneDispatch:
-	.byte	0xb6, 0xf9, 0x00
-	.long	0x00f9ea00
-	.long	SubCPU_ToneDispatch_Target1
-	.long	SubCPU_ToneDispatch_Target2
-	.long	0x00fa8600
-	.long	0x00faa000
-	.long	0x00faba00
-	.long	0x00fad400
-	.long	0x00fa1e00
-	.long	0x00fa3800
-	.long	0x00fa5200
-	.long	0x00fa0400
-	.long	0x00fb3c00
-	.byte	0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.long	0x00faeeff
-	.long	0x00fb0800
-	.long	SubCPU_ToneDispatch_Target14
-	.byte	0x00
+	; SubCPU_ToneDispatch -- 20 x u32: work-RAM parameter-block pointers
+	; (0x0000F9B6, 0x0000F9EA, ... stride 26 within each group) with 0xFFFFFFFF
+	; for an absent index, the same record shape as the MIDI CC record tables.
+	; EXTENT is not inferred from the values: SubCPU_ToneParamDisplay_Tbl is defined
+	; as this label + 80 in shared/positional_labels.s and is loaded as a BYTE
+	; table (`ld xiy, ..._0x50 / ld a, (xiy+hl)`), so 0xEFDB90 is where this
+	; table stops and a different one starts.
+	; Supersedes a v10_data_as_code_census.py note for 0xEFDB49-0xEFDB5C, which
+	; was this array carved 9 bytes in, and so at the wrong entry boundary.
+	.long 0x0000f9b6, 0x0000f9ea, 0x0000f9d0, 0x0000fa6c
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4
+	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa04
+	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
 	; Byte data, 4 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, SubCPU_ToneParamDisplay_Tbl`
 	; reader SubCPU_ToneParamDisplay: `ld xiy, SubCPU_ToneParamDisplay_Tbl` then `ld a, (xiy+hl)`
 SubCPU_ToneParamDisplay_Tbl:

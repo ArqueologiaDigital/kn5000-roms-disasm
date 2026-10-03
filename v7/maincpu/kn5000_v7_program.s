@@ -2057,7 +2057,6 @@ Voice_FactoryPresetData_Code_Skip2:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xde, xwa
-SubCPU_ToneDispatch_Target13:
 	sll	xde, 2
 	add	xde, xwa
 	sll	xde, 6
@@ -3848,117 +3847,6 @@ SubCPU_Send_Payload_Data:	.byte	0xff
 
 
 	.set NakaStr_CtrlParam9e9, ChordTypeStr_Flat13_Only + 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	.set SubCPU_ToneDispatch_0x54, 0xefdb6a
 
 
 

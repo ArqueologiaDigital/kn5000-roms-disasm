@@ -12409,30 +12409,26 @@ SubCPU_ToneParamDisplay_Join2:
 	; reader SubCPU_ToneParamDisplay: `ld xiy, Str_PanKeyShiftTuning` then `lda xiy, (xiy+wa)`
 Str_PanKeyShiftTuning:
 	.ascii	"PAN      :KEY SHIFT:TUNING   :BEND SENS:"
-	; Byte data, 80 B.  Read by SubCPU_ToneParamDisplay (0xEFD992): `ld XIX,SubCPU_ToneDispatch`
-	; indexed with stride 1 (`sla HL, 0x02`), index from `ld l, (0x0d60:16)`
 SubCPU_ToneDispatch:
-	.byte	0xb6, 0xf9, 0x00
-	.long	0x00f9ea00
-	.long	0x00f9d000
-	.long	SubCPU_ToneDispatch_Target2
-	.long	0x00fa8600
-	.long	SubCPU_ToneDispatch_Target4
-	.long	0x00faba00
-	.long	0x00fad400
-	.long	SubCPU_ToneDispatch_Target7
-	.long	SubCPU_ToneDispatch_Target8
-	.long	0x00fa5200
-	.long	0x00fa0400
-	.long	SubCPU_ToneDispatch_Target11
-	.byte	0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.long	SubCPU_ToneDispatch_Target12
-	.long	SubCPU_ToneDispatch_Target13
-	.long	SubCPU_ToneDispatch_Target14
-	.byte	0x00
+	; SubCPU_ToneDispatch -- 20 x u32: work-RAM parameter-block pointers
+	; (0x0000F9B6, 0x0000F9EA, ... stride 26 within each group) with 0xFFFFFFFF
+	; for an absent index, the same record shape as the MIDI CC record tables.
+	; EXTENT is not inferred from the values: SubCPU_ToneParamDisplay_Tbl is defined
+	; as this label + 80 in shared/positional_labels.s and is loaded as a BYTE
+	; table (`ld xiy, ..._0x50 / ld a, (xiy+hl)`), so 0xEFDB66 (v10, v9: 0xEFDB90) is where this
+	; table stops and a different one starts.
+	; Supersedes a v10_data_as_code_census.py note for 0xEFDB49-0xEFDB5C, which
+	; was this array carved 9 bytes in, and so at the wrong entry boundary.
+	.long 0x0000f9b6, 0x0000f9ea, 0x0000f9d0, 0x0000fa6c
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4
+	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa04
+	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
 SubCPU_ToneParamDisplay_Tbl:
-	ld	(9:8), 10:io
-	pushw	0xd7cf
+	.byte	0x08, 0x09, 0x0a, 0x0b
+	; Entry 1 of SubCPU_ToneParamRet (a code pointer the table holds).
+SubCPU_ToneParamRet_Target1:
+	xor	l, l
 	bit	7, w
 	jrl	nz, SubCPU_ToneParamDisplay_Skip5
 	ld	l, 3:opc
@@ -12556,7 +12552,7 @@ PerfMode_ParamHandler_11_Return:
 	; index bounded to 0..31 (`cp hl, 31` / `jrl ugt` skips larger values)
 SubCPU_ToneParamRet:
 	.long	UIDisp_DefaultInputHandler
-	.long	SubCPU_ToneDispatch_0x54
+	.long	SubCPU_ToneParamRet_Target1
 	.long	DefaultHandler_Ret
 	.long	SubCPU_ToneHandler_A
 	.long	DefaultHandler_Ret
@@ -12573,7 +12569,7 @@ SubCPU_ToneParamRet:
 	.long	ToneParam_Evt0F_BytecodeHandler
 	.long	DefaultHandler_Ret
 	.long	UIDisp_DefaultInputHandler
-	.long	SubCPU_ToneDispatch_0x54
+	.long	SubCPU_ToneParamRet_Target1
 	.long	DefaultHandler_Ret
 	.long	SubCPU_ToneHandler_A
 	.long	DefaultHandler_Ret

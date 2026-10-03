@@ -5707,7 +5707,6 @@ IvInterrupt_CheckActive:
 ReminderProc_Return:
 	pop xiz
 	inc 8, xsp
-SubCPU_ToneDispatch_Target7:
 	ret
 
 IvIntReminderProc:
@@ -8296,7 +8295,6 @@ AcTrkSw_Reset_DrawTrack:
 	ld	wa, (xbc+4)
 	sub	wa, (xbc)
 	exts	xwa
-SubCPU_ToneDispatch_Target8:
 	divs	wa, 2
 	ld	bc, (xbc)
 	add	bc, wa
@@ -13792,7 +13790,6 @@ EdgeDraw_BottomRight_Check:
 	calr IDCursorAdvance
 	ld bc, (xhl)
 	exts xbc
-SubCPU_ToneDispatch_Target2:
 	ld xwa, (xsp + 8)
 	ld (xwa), xbc
 
@@ -19434,7 +19431,6 @@ DrawRing_TryPost_Store:
 	minc4_16 ix, 0x7c
 	ld (xde - 4), ix
 	decw	4, (xde-2)
-SubCPU_ToneDispatch_Target4:
 	ld hl, ix
 	extz xhl
 	add xhl, xde

@@ -56,7 +56,6 @@ BitMapOut_PixelBlitLoop:
 	ld (xwa), iy
 	inc 1, xiz
 	inc 2, xbc
-SubCPU_ToneDispatch_Target11:
 	cp xiz, (xde)
 	jr c, BitMapOut_PixelBlitLoop
 

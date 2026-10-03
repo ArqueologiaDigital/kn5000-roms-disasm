@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,301
-#   semantic names ........... 50,373 (98.2%)
+#   symbols .................. 51,294
+#   semantic names ........... 50,366 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -17686,6 +17686,7 @@ SubCPU_ToneParamDisplay_Join2 00EFDAE0
 Str_PanKeyShiftTuning 00EFDAEE
 SubCPU_ToneDispatch 00EFDB16
 SubCPU_ToneParamDisplay_Tbl 00EFDB66
+SubCPU_ToneParamRet_Target1 00EFDB6A
 SubCPU_ToneParamDisplay_Skip5 00EFDB74
 SubCPU_ToneParamDisplay_Return 00EFDB97
 SubCPU_ToneHandler_A 00EFDB98
@@ -40763,7 +40764,6 @@ IvInterrupt_ReturnZero 00FA1DD7
 IvInterrupt_GetInterval 00FA1DDB
 IvInterrupt_CheckActive 00FA1DE9
 ReminderProc_Return 00FA1DFD
-SubCPU_ToneDispatch_Target7 00FA1E00
 IvIntReminderProc 00FA1E01
 IvIntReminder_GetInterval 00FA1E22
 IvIntCompleteProc 00FA1E2A
@@ -40964,7 +40964,6 @@ PsTextBoxProc 00FA3750
 AcTrkSw_Reset 00FA3775
 AcTrkSw_Reset_UpdateIndex 00FA37B4
 AcTrkSw_Reset_DrawTrack 00FA37BA
-SubCPU_ToneDispatch_Target8 00FA3800
 AcTrkSw_Select 00FA3839
 AcTrkSw_Select_Paint 00FA3896
 AcTrkSw_Select_CheckTrackNum 00FA38EF
@@ -41421,7 +41420,6 @@ RectY1Proc 00FA6BAC
 EdgeDraw_BottomRight 00FA6BE2
 EdgeDraw_BottomRight_Inner 00FA6BF2
 EdgeDraw_BottomRight_Check 00FA6BF6
-SubCPU_ToneDispatch_Target2 00FA6C00
 EdgeDraw_BottomRight_Draw 00FA6C05
 EdgeDraw_BottomRight_Done 00FA6C12
 EdgeDraw_BottomRight_Finish 00FA6C43
@@ -41976,7 +41974,6 @@ DrawRing_TryTake 00FA9FBE
 DrawRing_TryTake_Load 00FA9FCE
 DrawRing_TryPost 00FA9FDE
 DrawRing_TryPost_Store 00FA9FEE
-SubCPU_ToneDispatch_Target4 00FAA000
 DisplayCmd_Return 00FAA00F
 DrawQueue_Alloc_Prologue 00FAA01A
 DrawQueue_Alloc_FindSlot 00FAA02A
@@ -42534,7 +42531,6 @@ ChangePalette_QueuedPath 00FAEECB
 ChangePalette_Epilogue 00FAEEDF
 ChangePalette_QueueCallback 00FAEEE1
 ChangePalette_Impl 00FAEEE6
-SubCPU_ToneDispatch_Target12 00FAEEFF
 UIRender_IterateCallbacks 00FAEF09
 UIRender_RetStub1 00FAEF37
 UIRender_RetStub2 00FAEF38
@@ -42788,7 +42784,6 @@ Voice_FactoryPresetData_Code_Join6 00FB076E
 Voice_FactoryPresetData_Code_Skip15 00FB0793
 Voice_FactoryPresetData_Code_Loop 00FB07DE
 Voice_FactoryPresetData_Code_Skip2 00FB07EB
-SubCPU_ToneDispatch_Target13 00FB0800
 Voice_FactoryPresetData_Code_Skip3 00FB084D
 Voice_FactoryPresetData_Code_Skip4 00FB0881
 Voice_FactoryPresetData_Code_Skip5 00FB0886
@@ -42974,7 +42969,6 @@ ColorBlit_Variant_ByteData_Skip 00FB2149
 ColorBlit_Variant_ByteData_Skip2 00FB21B4
 GetFrameSPSize 00FB21E6
 GetCharHeight 00FB21FD
-SubCPU_ToneDispatch_Target14 00FB2200
 GetCharDescent 00FB220A
 GetCenteredDelta 00FB2217
 GetCenteredDelta_RetNeg1 00FB222B
@@ -43067,7 +43061,6 @@ VGA_ConfigExtSequencer_Alt 00FB36E0
 BitMapOut 00FB3B5A
 BitMapOut_PaletteLoadLoop 00FB3B7F
 BitMapOut_PixelBlitLoop 00FB3BE3
-SubCPU_ToneDispatch_Target11 00FB3C00
 BitMapOut_BlitComplete 00FB3C04
 BitMapOut_ByteData_RenderA 00FB3C09
 BitMapOut_ByteData_RenderA_Skip 00FB3C5E

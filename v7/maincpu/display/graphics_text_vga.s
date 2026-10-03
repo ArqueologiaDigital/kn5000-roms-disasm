@@ -1897,7 +1897,6 @@ GetFrameSPSize:
 ; Output: HL = character height in pixels
 GetCharHeight:
 	sll xwa, 4		; font_id * 16
-SubCPU_ToneDispatch_Target14:
 	add xwa, 0x945c00	; + table base
 	ld hl, (xwa + 2)	; height at offset +2
 	ret
