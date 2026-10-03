@@ -856,7 +856,7 @@ def structure():
                "(XBC)` -- the image-wide message-dispatch idiom, here through "
                "DispatchTable_F54248.")
         + wrap("Evidence: ",
-               "the byte-identical idiom appears at sub_F0F17C, sub_F4C4B5 and "
+               "the byte-identical idiom appears at sub_F0F17C, ScreenButton_CodeAD and "
                "0xF1233E in this same file, each with its own table; the only "
                "thing this file adds is WHICH table.  The name states the "
                "mechanism and the table, not a purpose.")))

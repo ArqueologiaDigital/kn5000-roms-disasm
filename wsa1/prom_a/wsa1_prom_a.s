@@ -48028,7 +48028,7 @@ IgnoredKeys_MidiMenu:   ; entry: named by 27 `.long` operands, first at 0xF99F96
 ;   0xB2
 ; Evidence: (0x2071)=0x80 (PanelScreen_ApplyRequestForced) with (0x2070)=0x7D, replaced by 0xB2 when (XIZ+8)==0. Row
 ;   1 of the menu draws "T0TAL M0DE" at x=5 (0x05A5) and "C0NFIGURE" at x=23 (0x05B7); screen 0x7D's Enter is
-;   Paint_MidiTotalMode, screen 0xB2 (object 0xF41868, Enter sub_FBC56B) is not yet named.
+;   Paint_MidiTotalMode, screen 0xB2 (object 0xF41868, Enter ScreenCodeB2_Handler) is not yet named.
 ; In: (XIZ+8) = 1 for the left-hand key (flag bit 7 set), 0 for the right-hand one.
 MidiMenu_RequestRow1Screen:
 	link XIZ,0x0000                                      ; F9A04B  ee 0c 00 00
@@ -59529,7 +59529,9 @@ TuneScale_LoadFields:
 	call T_DisplayListB_RunOne_Stack                     ; FA0682  1d 0c 2e f4
 	inc 8,XSP                                            ; FA0686  ef 60
 	ret                                                  ; FA0688  0e
-sub_FA0689:
+; ScreenCode64_Handler: the +0 ENTER method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
+;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41938 jumps here.
+ScreenCode64_Handler:
 	link XIZ,0xfffc                                      ; FA0689  ee 0c fc ff
 	pushw hl                                             ; FA068D  2b
 	push XIX                                             ; FA068E  3c
@@ -59629,7 +59631,9 @@ sub_FA0689:
 	ret                                                  ; FA07A0  0e
 T_F4193C_Nop:
 	ret                                                  ; FA07A1  0e
-sub_FA07A2:
+; ScreenButton_Code64: the +8 BUTTON method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
+;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41940 jumps here.
+ScreenButton_Code64:
 	link XIZ,0x0000                                      ; FA07A2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA07A6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA07A9  9e 08 04
@@ -60309,7 +60313,9 @@ sub_FA0DCC:
 	pop XIX                                              ; FA0DF0  5c
 	popw hl                                              ; FA0DF1  4b
 	ret                                                  ; FA0DF2  0e
-sub_FA0DF3:
+; ScreenCode65_Handler: the +0 ENTER method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41948 jumps here.
+ScreenCode65_Handler:
 	ld c, (UI_ScreenLatch:16)                                   ; FA0DF3  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0DF7  c1 7b 20 f3
 	jr z, .LFA0E07                                       ; FA0DFB  66 0a
@@ -60338,7 +60344,9 @@ sub_FA0DF3:
 	call T_Kernel_SemaSignal_StackArg                    ; FA0E46  1d c0 2d f4
 	inc 6,XSP                                            ; FA0E4A  ef 66
 	ret                                                  ; FA0E4C  0e
-sub_FA0E4D:
+; ScreenLeave_Code65: the +4 LEAVE method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F4194C jumps here.
+ScreenLeave_Code65:
 	link XIZ,0xfffc                                      ; FA0E4D  ee 0c fc ff
 sub_FA0E51:
 	push XIX                                             ; FA0E51  3c
@@ -60393,7 +60401,9 @@ sub_FA0E51:
 	pop XIX                                              ; FA0EE6  5c
 	unlk XIZ                                             ; FA0EE7  ee 0d
 	ret                                                  ; FA0EE9  0e
-sub_FA0EEA:
+; ScreenButton_Code65: the +8 BUTTON method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41950 jumps here.
+ScreenButton_Code65:
 	link XIZ,0x0000                                      ; FA0EEA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0EEE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA0EF1  9e 08 04
@@ -60808,7 +60818,9 @@ sub_FA10CD:
 	pop XBC                                              ; FA129A  59
 	pop XIX                                              ; FA129B  5c
 	ret                                                  ; FA129C  0e
-sub_FA129D:
+; ScreenCode6A_Handler: the +0 ENTER method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42670 jumps here.
+ScreenCode6A_Handler:
 	push XIX                                             ; FA129D  3c
 	lda xix, (UI_ScreenStage:16)                                ; FA129E  f1 7e 20 34
 	ld c, (UI_ScreenLatch:16)                                   ; FA12A2  c1 7a 20 23
@@ -60830,14 +60842,18 @@ sub_FA129D:
 .LFA12CC:
 	pop XIX                                              ; FA12CC  5c
 	ret                                                  ; FA12CD  0e
-sub_FA12CE:
+; ScreenLeave_Code6A: the +4 LEAVE method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42674 jumps here.
+ScreenLeave_Code6A:
 	ld c, (UI_ScreenLatch:16)                                   ; FA12CE  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA12D2  c1 7b 20 f3
 	jr z, .LFA12DC                                       ; FA12D6  66 04
 	call T_F425DC                                        ; FA12D8  1d dc 25 f4
 .LFA12DC:
 	ret                                                  ; FA12DC  0e
-sub_FA12DD:
+; ScreenButton_Code6A: the +8 BUTTON method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42678 jumps here.
+ScreenButton_Code6A:
 	link XIZ,0x0000                                      ; FA12DD  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA12E1  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA12E4  9e 08 04
@@ -102346,13 +102362,19 @@ sub_FBC22D:
 	inc 6,XSP                                            ; FBC566  ef 66
 	unlk XIZ                                             ; FBC568  ee 0d
 	ret                                                  ; FBC56A  0e
-sub_FBC56B:
+; ScreenCodeB2_Handler: the +0 ENTER method of the screen object for screen id 0xB2 -- PanelScreen_VtableTable entry 0xD2
+;   (ViewB entry 0xB2) points at the thunk triple starting at T_F41868, and slot T_F41868 jumps here.
+ScreenCodeB2_Handler:
 	calr sub_FBF2DE                                          ; FBC56B  1e 70 2d
 	ret                                                  ; FBC56E  0e
-sub_FBC56F:
+; ScreenLeave_CodeB2: the +4 LEAVE method of the screen object for screen id 0xB2 -- PanelScreen_VtableTable entry 0xD2
+;   (ViewB entry 0xB2) points at the thunk triple starting at T_F41868, and slot T_F4186C jumps here.
+ScreenLeave_CodeB2:
 	calr sub_FBF422                                          ; FBC56F  1e b0 2e
 	ret                                                  ; FBC572  0e
-sub_FBC573:
+; ScreenButton_CodeB2: the +8 BUTTON method of the screen object for screen id 0xB2 -- PanelScreen_VtableTable entry 0xD2
+;   (ViewB entry 0xB2) points at the thunk triple starting at T_F41868, and slot T_F41870 jumps here.
+ScreenButton_CodeB2:
 	link XIZ,0x0000                                      ; FBC573  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC577  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC57A  9e 08 04
@@ -102362,13 +102384,19 @@ sub_FBC573:
 	ret                                                  ; FBC583  0e
 T_F41874_Nop:
 	ret                                                  ; FBC584  0e
-sub_FBC585:
+; ScreenCode35_Handler: the +0 ENTER method of the screen object for screen id 0x35 -- PanelScreen_VtableTable entry 0x55
+;   (ViewB entry 0x35) points at the thunk triple starting at T_F41A28, and slot T_F41A28 jumps here.
+ScreenCode35_Handler:
 	calr sub_FBF2E2                                          ; FBC585  1e 5a 2d
 	ret                                                  ; FBC588  0e
-sub_FBC589:
+; ScreenLeave_Code35: the +4 LEAVE method of the screen object for screen id 0x35 -- PanelScreen_VtableTable entry 0x55
+;   (ViewB entry 0x35) points at the thunk triple starting at T_F41A28, and slot T_F41A2C jumps here.
+ScreenLeave_Code35:
 	calr sub_FBF426                                          ; FBC589  1e 9a 2e
 	ret                                                  ; FBC58C  0e
-sub_FBC58D:
+; ScreenButton_Code35: the +8 BUTTON method of the screen object for screen id 0x35 -- PanelScreen_VtableTable entry 0x55
+;   (ViewB entry 0x35) points at the thunk triple starting at T_F41A28, and slot T_F41A30 jumps here.
+ScreenButton_Code35:
 	link XIZ,0x0000                                      ; FBC58D  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC591  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC594  9e 08 04
@@ -102378,13 +102406,19 @@ sub_FBC58D:
 	ret                                                  ; FBC59D  0e
 T_F41A34_Nop:
 	ret                                                  ; FBC59E  0e
-sub_FBC59F:
+; ScreenCode36_Handler: the +0 ENTER method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A38 jumps here.
+ScreenCode36_Handler:
 	calr sub_FBF18B                                          ; FBC59F  1e e9 2b
 	ret                                                  ; FBC5A2  0e
-sub_FBC5A3:
+; ScreenLeave_Code36: the +4 LEAVE method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A3C jumps here.
+ScreenLeave_Code36:
 	calr sub_FBF1FF                                          ; FBC5A3  1e 59 2c
 	ret                                                  ; FBC5A6  0e
-sub_FBC5A7:
+; ScreenButton_Code36: the +8 BUTTON method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A40 jumps here.
+ScreenButton_Code36:
 	link XIZ,0x0000                                      ; FBC5A7  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5AB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5AE  9e 08 04
@@ -102402,7 +102436,9 @@ T_F41A90_Nop:
 	ret                                                  ; FBC5BB  0e
 T_F41A94_Nop:
 	ret                                                  ; FBC5BC  0e
-sub_FBC5BD:
+; ScreenCodeB3_Handler: the +0 ENTER method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
+;   (ViewB entry 0xB3) points at the thunk triple starting at T_F41878, and slot T_F41878 jumps here.
+ScreenCodeB3_Handler:
 	calr sub_FBFEB9                                          ; FBC5BD  1e f9 38
 	ret                                                  ; FBC5C0  0e
 ; ---------------------------------------------------------------------
@@ -102420,7 +102456,9 @@ sub_FBC5BD:
 Var2075_ClrBit7_Entry:
 	calr Var2075_ClrBit7                                          ; FBC5C1  1e 11 39
 	ret                                                  ; FBC5C4  0e
-sub_FBC5C5:
+; ScreenButton_CodeB3: the +8 BUTTON method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
+;   (ViewB entry 0xB3) points at the thunk triple starting at T_F41878, and slot T_F41880 jumps here.
+ScreenButton_CodeB3:
 	link XIZ,0x0000                                      ; FBC5C5  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5C9  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5CC  9e 08 04
@@ -102430,13 +102468,19 @@ sub_FBC5C5:
 	ret                                                  ; FBC5D5  0e
 T_F41884_Nop:
 	ret                                                  ; FBC5D6  0e
-sub_FBC5D7:
+; ScreenCodeB6_Handler: the +0 ENTER method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418A8 jumps here.
+ScreenCodeB6_Handler:
 	calr sub_FBFDC0                                          ; FBC5D7  1e e6 37
 	ret                                                  ; FBC5DA  0e
-sub_FBC5DB:
+; ScreenLeave_CodeB6: the +4 LEAVE method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418AC jumps here.
+ScreenLeave_CodeB6:
 	calr sub_FBFDD4                                          ; FBC5DB  1e f6 37
 	ret                                                  ; FBC5DE  0e
-sub_FBC5DF:
+; ScreenButton_CodeB6: the +8 BUTTON method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418B0 jumps here.
+ScreenButton_CodeB6:
 	link XIZ,0x0000                                      ; FBC5DF  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5E3  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5E6  9e 08 04
@@ -103015,7 +103059,9 @@ sub_FBCB31:
 	ld	(UI_PartIndex:16), (0x276d:16)             ; FBCB35  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBCB3B  1d 9c 2c f4
 	ret                                                  ; FBCB3F  0e
-sub_FBCB40:
+; ScreenCodeB0_Handler: the +0 ENTER method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
+;   (ViewB entry 0xB0) points at the thunk triple starting at T_F41848, and slot T_F41848 jumps here.
+ScreenCodeB0_Handler:
 	calr sub_FBCCB1                                      ; FBCB40  1e 6e 01
 	ld c, (UI_ScreenFlags:16)                                   ; FBCB43  c1 95 20 23
 	and C,0x10                                           ; FBCB47  cb cc 10
@@ -103040,7 +103086,9 @@ sub_FBCB40:
 	ret                                                  ; FBCB80  0e
 T_F4184C_Nop:
 	ret                                                  ; FBCB81  0e
-sub_FBCB82:
+; ScreenButton_CodeB0: the +8 BUTTON method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
+;   (ViewB entry 0xB0) points at the thunk triple starting at T_F41848, and slot T_F41850 jumps here.
+ScreenButton_CodeB0:
 	link XIZ,0x0000                                      ; FBCB82  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCB86  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCB89  9e 08 04
@@ -103289,19 +103337,29 @@ sub_FBCCB1:
 	popw hl                                              ; FBCDE8  4b
 	unlk XIZ                                             ; FBCDE9  ee 0d
 	ret                                                  ; FBCDEB  0e
-sub_FBCDEC:
-	calr sub_FBCDFC                                      ; FBCDEC  1e 0d 00
+; ScreenCodeB4_Handler: the +0 ENTER method of the screen object for screen id 0xB4 -- PanelScreen_VtableTable entry 0xD4
+;   (ViewB entry 0xB4) points at the thunk triple starting at T_F41888, and slot T_F41888 jumps here.
+ScreenCodeB4_Handler:
+	calr ScreenCodeB1_Handler                                      ; FBCDEC  1e 0d 00
 	ret                                                  ; FBCDEF  0e
-sub_FBCDF0:
-	calr sub_FBCDFC                                      ; FBCDF0  1e 09 00
+; ScreenCodeB5_Handler: the +0 ENTER method of the screen object for screen id 0xB5 -- PanelScreen_VtableTable entry 0xD5
+;   (ViewB entry 0xB5) points at the thunk triple starting at T_F41898, and slot T_F41898 jumps here.
+ScreenCodeB5_Handler:
+	calr ScreenCodeB1_Handler                                      ; FBCDF0  1e 09 00
 	ret                                                  ; FBCDF3  0e
-sub_FBCDF4:
-	calr sub_FBCDFC                                      ; FBCDF4  1e 05 00
+; ScreenCode37_Handler: the +0 ENTER method of the screen object for screen id 0x37 -- PanelScreen_VtableTable entry 0x57
+;   (ViewB entry 0x37) points at the thunk triple starting at T_F41A48, and slot T_F41A48 jumps here.
+ScreenCode37_Handler:
+	calr ScreenCodeB1_Handler                                      ; FBCDF4  1e 05 00
 	ret                                                  ; FBCDF7  0e
-sub_FBCDF8:
-	calr sub_FBCDFC                                      ; FBCDF8  1e 01 00
+; ScreenCode38_Handler: the +0 ENTER method of the screen object for screen id 0x38 -- PanelScreen_VtableTable entry 0x58
+;   (ViewB entry 0x38) points at the thunk triple starting at T_F41A58, and slot T_F41A58 jumps here.
+ScreenCode38_Handler:
+	calr ScreenCodeB1_Handler                                      ; FBCDF8  1e 01 00
 	ret                                                  ; FBCDFB  0e
-sub_FBCDFC:
+; ScreenCodeB1_Handler: the +0 ENTER method of the screen object for screen id 0xB1 -- PanelScreen_VtableTable entry 0xD1
+;   (ViewB entry 0xB1) points at the thunk triple starting at T_F41858, and slot T_F41858 jumps here.
+ScreenCodeB1_Handler:
 	push XIX                                             ; FBCDFC  3c
 	lda xix, (T_CallbackQueue_Post:24)                   ; FBCDFD  f2 84 2e f4 34
 	ld c, (UI_ScreenLatch:16)                                   ; FBCE02  c1 7a 20 23
@@ -103387,53 +103445,71 @@ sub_FBCDFC:
 	inc 6,XSP                                            ; FBCEE3  ef 66
 	pop XIX                                              ; FBCEE5  5c
 	ret                                                  ; FBCEE6  0e
-sub_FBCEE7:
+; ScreenLeave_CodeB4: the +4 LEAVE method of the screen object for screen id 0xB4 -- PanelScreen_VtableTable entry 0xD4
+;   (ViewB entry 0xB4) points at the thunk triple starting at T_F41888, and slot T_F4188C jumps here.
+ScreenLeave_CodeB4:
 	calr T_F4185C_Nop                                      ; FBCEE7  1e 0d 00
 	ret                                                  ; FBCEEA  0e
-sub_FBCEEB:
+; ScreenLeave_CodeB5: the +4 LEAVE method of the screen object for screen id 0xB5 -- PanelScreen_VtableTable entry 0xD5
+;   (ViewB entry 0xB5) points at the thunk triple starting at T_F41898, and slot T_F4189C jumps here.
+ScreenLeave_CodeB5:
 	calr T_F4185C_Nop                                      ; FBCEEB  1e 09 00
 	ret                                                  ; FBCEEE  0e
-sub_FBCEEF:
+; ScreenLeave_Code37: the +4 LEAVE method of the screen object for screen id 0x37 -- PanelScreen_VtableTable entry 0x57
+;   (ViewB entry 0x37) points at the thunk triple starting at T_F41A48, and slot T_F41A4C jumps here.
+ScreenLeave_Code37:
 	calr T_F4185C_Nop                                      ; FBCEEF  1e 05 00
 	ret                                                  ; FBCEF2  0e
-sub_FBCEF3:
+; ScreenLeave_Code38: the +4 LEAVE method of the screen object for screen id 0x38 -- PanelScreen_VtableTable entry 0x58
+;   (ViewB entry 0x38) points at the thunk triple starting at T_F41A58, and slot T_F41A5C jumps here.
+ScreenLeave_Code38:
 	calr T_F4185C_Nop                                      ; FBCEF3  1e 01 00
 	ret                                                  ; FBCEF6  0e
 T_F4185C_Nop:
 	ret                                                  ; FBCEF7  0e
-sub_FBCEF8:
+; ScreenButton_CodeB4: the +8 BUTTON method of the screen object for screen id 0xB4 -- PanelScreen_VtableTable entry 0xD4
+;   (ViewB entry 0xB4) points at the thunk triple starting at T_F41888, and slot T_F41890 jumps here.
+ScreenButton_CodeB4:
 	link XIZ,0x0000                                      ; FBCEF8  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCEFC  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCEFF  9e 08 04
-	calr sub_FBCF3C                                      ; FBCF02  1e 37 00
+	calr ScreenButton_CodeB1                                      ; FBCF02  1e 37 00
 	pop XBC                                              ; FBCF05  59
 	unlk XIZ                                             ; FBCF06  ee 0d
 	ret                                                  ; FBCF08  0e
-sub_FBCF09:
+; ScreenButton_CodeB5: the +8 BUTTON method of the screen object for screen id 0xB5 -- PanelScreen_VtableTable entry 0xD5
+;   (ViewB entry 0xB5) points at the thunk triple starting at T_F41898, and slot T_F418A0 jumps here.
+ScreenButton_CodeB5:
 	link XIZ,0x0000                                      ; FBCF09  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCF0D  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCF10  9e 08 04
-	calr sub_FBCF3C                                      ; FBCF13  1e 26 00
+	calr ScreenButton_CodeB1                                      ; FBCF13  1e 26 00
 	pop XBC                                              ; FBCF16  59
 	unlk XIZ                                             ; FBCF17  ee 0d
 	ret                                                  ; FBCF19  0e
-sub_FBCF1A:
+; ScreenButton_Code37: the +8 BUTTON method of the screen object for screen id 0x37 -- PanelScreen_VtableTable entry 0x57
+;   (ViewB entry 0x37) points at the thunk triple starting at T_F41A48, and slot T_F41A50 jumps here.
+ScreenButton_Code37:
 	link XIZ,0x0000                                      ; FBCF1A  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCF1E  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCF21  9e 08 04
-	calr sub_FBCF3C                                      ; FBCF24  1e 15 00
+	calr ScreenButton_CodeB1                                      ; FBCF24  1e 15 00
 	pop XBC                                              ; FBCF27  59
 	unlk XIZ                                             ; FBCF28  ee 0d
 	ret                                                  ; FBCF2A  0e
-sub_FBCF2B:
+; ScreenButton_Code38: the +8 BUTTON method of the screen object for screen id 0x38 -- PanelScreen_VtableTable entry 0x58
+;   (ViewB entry 0x38) points at the thunk triple starting at T_F41A58, and slot T_F41A60 jumps here.
+ScreenButton_Code38:
 	link XIZ,0x0000                                      ; FBCF2B  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCF2F  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCF32  9e 08 04
-	calr sub_FBCF3C                                      ; FBCF35  1e 04 00
+	calr ScreenButton_CodeB1                                      ; FBCF35  1e 04 00
 	pop XBC                                              ; FBCF38  59
 	unlk XIZ                                             ; FBCF39  ee 0d
 	ret                                                  ; FBCF3B  0e
-sub_FBCF3C:
+; ScreenButton_CodeB1: the +8 BUTTON method of the screen object for screen id 0xB1 -- PanelScreen_VtableTable entry 0xD1
+;   (ViewB entry 0xB1) points at the thunk triple starting at T_F41858, and slot T_F41860 jumps here.
+ScreenButton_CodeB1:
 	link XIZ,0x0000                                      ; FBCF3C  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCF40  c1 76 20 3f 16
 	jr nz, .LFBCF5A                                      ; FBCF45  6e 13
@@ -104757,7 +104833,9 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	popw hl                                              ; FBDB8D  4b
 	unlk XIZ                                             ; FBDB8E  ee 0d
 	ret                                                  ; FBDB90  0e
-sub_FBDB91:
+; ScreenCode3A_Handler: the +0 ENTER method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A78 jumps here.
+ScreenCode3A_Handler:
 	calr sub_FBDB95                                      ; FBDB91  1e 01 00
 	ret                                                  ; FBDB94  0e
 sub_FBDB95:
@@ -104887,7 +104965,9 @@ sub_FBDB95_Skip:
 	pop XIX                                              ; FBDD0A  5c
 	popw hl                                              ; FBDD0B  4b
 	ret                                                  ; FBDD0C  0e
-sub_FBDD0D:
+; ScreenLeave_Code3A: the +4 LEAVE method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A7C jumps here.
+ScreenLeave_Code3A:
 	calr sub_FBDD11                                      ; FBDD0D  1e 01 00
 	ret                                                  ; FBDD10  0e
 sub_FBDD11:
@@ -104940,7 +105020,9 @@ sub_FBDD11:
 	pop XIX                                              ; FBDD7D  5c
 	popw hl                                              ; FBDD7E  4b
 	ret                                                  ; FBDD7F  0e
-sub_FBDD80:
+; ScreenButton_Code3A: the +8 BUTTON method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A80 jumps here.
+ScreenButton_Code3A:
 	link XIZ,0x0000                                      ; FBDD80  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBDD84  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBDD87  9e 08 04
@@ -106923,7 +107005,9 @@ sub_FBEE83:
 	popw hl                                              ; FBEED5  4b
 	unlk XIZ                                             ; FBEED6  ee 0d
 	ret                                                  ; FBEED8  0e
-sub_FBEED9:
+; ScreenCode33_Handler: the +0 ENTER method of the screen object for screen id 0x33 -- PanelScreen_VtableTable entry 0x53
+;   (ViewB entry 0x33) points at the thunk triple starting at T_F41A08, and slot T_F41A08 jumps here.
+ScreenCode33_Handler:
 	m_set 7, MD16, UI_Request_Hi                                ; FBEED9  f1 71 20 bf
 	ld (UI_Request:16), 0x34                                 ; FBEEDD  f1 70 20 00 34
 	ret                                                  ; FBEEE2  0e
@@ -106933,12 +107017,16 @@ T_F41A10_Nop:
 	ret                                                  ; FBEEE4  0e
 T_F41A14_Nop:
 	ret                                                  ; FBEEE5  0e
-sub_FBEEE6:
+; ScreenCode39_Handler: the +0 ENTER method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
+;   (ViewB entry 0x39) points at the thunk triple starting at T_F41A68, and slot T_F41A68 jumps here.
+ScreenCode39_Handler:
 	call T_F42F4C                                        ; FBEEE6  1d 4c 2f f4
 	ret                                                  ; FBEEEA  0e
 T_F41A6C_Nop:
 	ret                                                  ; FBEEEB  0e
-sub_FBEEEC:
+; ScreenButton_Code39: the +8 BUTTON method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
+;   (ViewB entry 0x39) points at the thunk triple starting at T_F41A68, and slot T_F41A70 jumps here.
+ScreenButton_Code39:
 	link XIZ,0x0000                                      ; FBEEEC  ee 0c 00 00
 	pushw hl                                             ; FBEEF0  2b
 	ld HL,(XIZ+0x08)                                     ; FBEEF1  9e 08 23
@@ -108259,7 +108347,9 @@ sub_FBFA4D:
 	popw hl                                              ; FBFAAC  4b
 	unlk XIZ                                             ; FBFAAD  ee 0d
 	ret                                                  ; FBFAAF  0e
-sub_FBFAB0:
+; ScreenCode34_Handler: the +0 ENTER method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
+;   (ViewB entry 0x34) points at the thunk triple starting at T_F41A18, and slot T_F41A18 jumps here.
+ScreenCode34_Handler:
 	calr sub_FBCCB1                                          ; FBFAB0  1e fe d1
 	ld c, (UI_ScreenFlags:16)                                   ; FBFAB3  c1 95 20 23
 	and C,0x10                                           ; FBFAB7  cb cc 10
@@ -108284,7 +108374,9 @@ sub_FBFAB0:
 	ret                                                  ; FBFAF0  0e
 T_F41A1C_Nop:
 	ret                                                  ; FBFAF1  0e
-sub_FBFAF2:
+; ScreenButton_Code34: the +8 BUTTON method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
+;   (ViewB entry 0x34) points at the thunk triple starting at T_F41A18, and slot T_F41A20 jumps here.
+ScreenButton_Code34:
 	link XIZ,0x0000                                      ; FBFAF2  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBFAF6  c1 76 20 3f 16
 	jr nz, .LFBFB10                                      ; FBFAFB  6e 13
@@ -149162,7 +149254,7 @@ sub_FDBF5E:
 	unlk XIZ                                             ; FDC0DE  ee 0d
 	ret                                                  ; FDC0E0  0e
 ScreenCode9C_Handler:
-	calr sub_FDD02D                                      ; FDC0E1  1e 49 0f
+	calr ScreenCode9A_Handler                                      ; FDC0E1  1e 49 0f
 	pushw 0x10                                           ; FDC0E4  0b 10 00
 	call ToneMsg80_Id00                                      ; FDC0E7  1d 47 64 fd
 	popw bc                                              ; FDC0EB  49
@@ -150805,7 +150897,9 @@ ScreenCode9F_Handler:
 	popw hl                                              ; FDD029  4b
 	unlk XIZ                                             ; FDD02A  ee 0d
 	ret                                                  ; FDD02C  0e
-sub_FDD02D:
+; ScreenCode9A_Handler: the +0 ENTER method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
+;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D0 jumps here.
+ScreenCode9A_Handler:
 	link XIZ,0xfff0                                      ; FDD02D  ee 0c f0 ff
 	pushw hl                                             ; FDD031  2b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDD032  1d 80 2e f4
@@ -153019,7 +153113,9 @@ T_F4237C_Nop:
 	popw bc                                              ; FDE2E9  49
 	ret                                                  ; FDE2EA  0e
 	ret                                                  ; FDE2EB  0e
-sub_FDE2EC:
+; ScreenLeave_Code9A: the +4 LEAVE method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
+;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D4 jumps here.
+ScreenLeave_Code9A:
 	pushw 0x00                                           ; FDE2EC  0b 00 00
 	call Var27DA_Set                                      ; FDE2EF  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE2F3  1d 13 77 fd
@@ -153051,7 +153147,9 @@ ScreenLeave_CodeCB:
 	ret                                                  ; FDE322  0e
 T_F4233C_Nop:
 	ret                                                  ; FDE323  0e
-sub_FDE324:
+; ScreenLeave_CodeCC: the +4 LEAVE method of the screen object for screen id 0xCC -- PanelScreen_VtableTable entry 0xEC
+;   (ViewB entry 0xCC) points at the thunk triple starting at T_F42340, and slot T_F42344 jumps here.
+ScreenLeave_CodeCC:
 	pushw 0x00                                           ; FDE324  0b 00 00
 	call Var27DA_Set                                      ; FDE327  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE32B  1d 13 77 fd
@@ -153067,7 +153165,9 @@ ScreenLeave_CodeC0:
 	ret                                                  ; FDE33E  0e
 T_F41F78_Nop:
 	ret                                                  ; FDE33F  0e
-sub_FDE340:
+; ScreenLeave_CodeC1: the +4 LEAVE method of the screen object for screen id 0xC1 -- PanelScreen_VtableTable entry 0xE1
+;   (ViewB entry 0xC1) points at the thunk triple starting at T_F41F7C, and slot T_F41F80 jumps here.
+ScreenLeave_CodeC1:
 	pushw 0x00                                           ; FDE340  0b 00 00
 	call Var27DA_Set                                      ; FDE343  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE347  1d 13 77 fd
@@ -153075,7 +153175,9 @@ sub_FDE340:
 	ret                                                  ; FDE34C  0e
 T_F41F88_Nop:
 	ret                                                  ; FDE34D  0e
-sub_FDE34E:
+; ScreenLeave_CodeC2: the +4 LEAVE method of the screen object for screen id 0xC2 -- PanelScreen_VtableTable entry 0xE2
+;   (ViewB entry 0xC2) points at the thunk triple starting at T_F41F8C, and slot T_F41F90 jumps here.
+ScreenLeave_CodeC2:
 	pushw 0x00                                           ; FDE34E  0b 00 00
 	call Var27DA_Set                                      ; FDE351  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE355  1d 13 77 fd
@@ -153234,7 +153336,9 @@ ScreenLeave_CodeC8:
 	ret                                                  ; FDE3AE  0e
 T_F41FF8_Nop:
 	ret                                                  ; FDE3AF  0e
-sub_FDE3B0:
+; ScreenLeave_CodeCE: the +4 LEAVE method of the screen object for screen id 0xCE -- PanelScreen_VtableTable entry 0xEE
+;   (ViewB entry 0xCE) points at the thunk triple starting at T_F433E0, and slot T_F433E4 jumps here.
+ScreenLeave_CodeCE:
 	pushw 0x00                                           ; FDE3B0  0b 00 00
 	call Var27DA_Set                                      ; FDE3B3  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE3B7  1d 13 77 fd
@@ -173620,7 +173724,9 @@ BStore_CursorSlot_RestoreMark:
 	ld wa, (0x601f14:24)                                ; FE8C15  d2 14 1f 60 20
 	ld (BStore_CursorOffset:16), wa                                  ; FE8C1A  f1 5e 34 50
 	ret                                                  ; FE8C1E  0e
-sub_FE8C1F:
+; ScreenLeave_Code28: the +4 LEAVE method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
+;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F0 jumps here.
+ScreenLeave_Code28:
 	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FE8C29  c1 7a 20 3f 28
@@ -173629,7 +173735,9 @@ sub_FE8C1F:
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C33  c1 d4 34 3e 10
 .LFE8C38:
 	jr .LFE8C5D                                          ; FE8C38  68 23
-sub_FE8C3A:
+; ScreenLeave_Code25: the +4 LEAVE method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
+;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D0 jumps here.
+ScreenLeave_Code25:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x25                          ; FE8C3A  c1 7a 20 3f 25
 	jr z, .LFE8C49                                       ; FE8C3F  66 08
 	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C41  1e 53 00
@@ -174956,7 +175064,9 @@ sub_FE9A07:
 	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
 	ret                                                  ; FE9A32  0e
-sub_FE9A33:
+; ScreenButton_Code25: the +8 BUTTON method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
+;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D4 jumps here.
+ScreenButton_Code25:
 	cp HL,0x001f                                         ; FE9A33  db cf 1f 00
 	jr gt, .LFE9A49                                      ; FE9A37  6a 10
 	ld XIX,ScreenDispatch_FE9A4A                         ; FE9A39  44 4a 9a fe 00
@@ -175101,7 +175211,9 @@ sub_FE9B88:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
 	ret                                                  ; FE9B8B  0e
 ScreenDispatch_FE9A4A_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
 	ret                                                  ; FE9B8C  0e
-sub_FE9B8D:
+; ScreenButton_Code28: the +8 BUTTON method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
+;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F4 jumps here.
+ScreenButton_Code28:
 	cp HL,0x001f                                         ; FE9B8D  db cf 1f 00
 	jr gt, .LFE9BA3                                      ; FE9B91  6a 10
 	ld XIX,ScreenDispatch_FE9BA4                         ; FE9B93  44 a4 9b fe 00

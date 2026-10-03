@@ -37,12 +37,19 @@ QUESTION IT ANSWERS
       2 already named
      12 NAMED HERE -- table 0xF54248, the DRAWBAR screen
      19 REFUSED, screen unknown: tables 0xF135FD / 0xF1394F / 0xF4C38D are read
-        by sub_F0F17C / sub_F12334 / sub_F4C4B5, whose own headers say "Unknown:
+        by sub_F0F17C / sub_F12334 / ScreenButton_CodeAD, whose own headers say "Unknown:
         what the routine is FOR", and NO vtable slot in any of the four images
         points at their thunks (T_F42F50, T_F42F6C, T_F434E8). A control name
         with no screen would be <Control>_<address> -- FRAMED, not
         understanding, and the round-3 lesson is that converting without naming
         makes the tree WORSE on the goal metric.
+        ⚠ CORRECTED 2026-10-03 (notes/prom_ab_screen_vtable_methods.py): the third
+        reader, then sub_F4C4B5, IS a screen's BUTTON method.  PanelScreen_VtableTable
+        points at a thunk TRIPLE's first slot, never at its +8 slot, so a search for
+        a vtable word equal to T_F434E8 could only come back empty: ViewB entry 0xAD
+        points at T_F434E0, whose +8 slot is T_F434E8.  It is ScreenButton_CodeAD now,
+        so table 0xF4C38D belongs to screen 0xAD.  The other two readers' triples
+        (T_F42F48 / T_F42F64) are pointed at by no vtable word, so their refusal stands.
       3 REFUSED, no label at that address at all (mid-routine entries); one of
         them, 0xF4C4DD, additionally sits in SIX control slots at once, so even
         with a label the slot would not distinguish it.
@@ -143,6 +150,8 @@ sys.path.insert(0, HERE)
 
 import wave7_panel_button_codes as L1        # noqa: E402
 import wave7_panel_names_round11 as R11      # noqa: E402
+from prom_b_names_session_53b889a2 import RENAMES as _S53  # noqa: E402  2026-10-03 renames
+LATER = dict(_S53)   # a refusal a later pass renamed <Screen>_Button<k> (header still NOT NAMED)
 
 # ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
 # it is handed is the whole image: write_part() sees the master's
@@ -414,8 +423,9 @@ def refusal_header_for(addr, screen, slots, gap):
     if bs >= 0x11:
         gap = gap % (bs, bs - 0x11)
     out = [RULE]
-    out += wrap(None, "sub_%06X -- panel button slot %s of %s, NOT NAMED"
-                % (addr, ", ".join("0x%02X" % s for s in slots), screen),
+    out += wrap(None, "%s -- panel button slot %s of %s, NOT NAMED"
+                % (LATER.get("sub_%06X" % addr, "sub_%06X" % addr),
+                   ", ".join("0x%02X" % s for s in slots), screen),
                 first_prefix="; ")
     out += wrap("Unknown", gap)
     out += wrap("Evidence", "the table slot and the screen are re-read from the ROM, "
@@ -438,10 +448,11 @@ def refusal_header_for(addr, screen, slots, gap):
 #     -9 arm, leaving HL exactly as loaded at 0xF55023.  `--family2` prints the
 #     measurement and the refusal.
 # ---------------------------------------------------------------------------
-FAMILY2 = {0xF135FD: None, 0xF1394F: None, 0xF4C38D: None,
+FAMILY2 = {0xF135FD: None, 0xF1394F: None,
+           0xF4C38D: "ScreenCodeAD",     # 2026-10-03: its reader is ScreenButton_CodeAD (see the correction above)
            0xF54248: "DrawbarScreen"}
 FAMILY2_READER = {0xF135FD: ("sub_F0F17C", 0xF0F194), 0xF1394F: ("sub_F12334", 0xF12347),
-                  0xF4C38D: ("sub_F4C4B5", 0xF4C4C8),
+                  0xF4C38D: ("ScreenButton_CodeAD", 0xF4C4C8),
                   0xF54248: ("DrawbarScreen_Dispatch", 0xF5303D)}
 DEFAULT_THUNK = 0xF42C70
 SLOT_CONTROL = {}
@@ -664,7 +675,7 @@ def apply(dry=False):
 
     for addr, screen, slots, gap in refusals():
         li, cur = idx[addr]
-        want = "sub_%06X" % addr
+        want = LATER.get("sub_%06X" % addr, "sub_%06X" % addr)
         if cur != want:
             renames.append((cur, want))
             lines[li] = want + ":"
@@ -1113,8 +1124,8 @@ def selftest():
            any("SW%d" % R11.chain(bL, 2)[0][4] in x for x in blk))
         ck("C7 and states the slot", any("slot 0x%02X" % bL in x for x in blk))
     lastR = refusals()[-1]
-    ck("C8 the last refusal 0x%06X is sub_%06X" % (lastR[0], lastR[0]),
-       idx.get(lastR[0], (0, ""))[1] == "sub_%06X" % lastR[0])
+    ck("C8 the last refusal 0x%06X is sub_%06X (or the NOT-NAMED label a later pass declared)" % (lastR[0], lastR[0]),
+       idx.get(lastR[0], (0, ""))[1] == LATER.get("sub_%06X" % lastR[0], "sub_%06X" % lastR[0]))
 
     print("D. THE DEMOTION")
     ck("D1 0xF7E750 is sub_F7E750 again", idx.get(0xF7E750, (0, ""))[1] == "sub_F7E750")
@@ -1124,7 +1135,7 @@ def selftest():
        "the name MinusPlusKey_TrackAssignPresets," in text)
 
     print("D4. THE SECOND TABLE FAMILY  ★ its LAST element too")
-    f2 = family2_targets()
+    f2 = [x for x in family2_targets() if x[6] == 0xF54248]   # the DRAWBAR table (0xF4C38D's screen became known 2026-10-03)
     ck("D4a 14 DrawbarScreen control slots resolve to a labelled routine",
        len(f2) == 14, str(len(f2)))
     ck("D4a2 two of them were already named in round 11 and are untouched",

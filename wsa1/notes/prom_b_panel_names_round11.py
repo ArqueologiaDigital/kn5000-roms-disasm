@@ -978,7 +978,7 @@ HEADER_FIXES = [
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags""",
      """; Called from: thunk T_F42C74 (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
-;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), sub_F4C4B5 and
+;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CodeAD and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
 ;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags"""),

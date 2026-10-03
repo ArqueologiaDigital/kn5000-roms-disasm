@@ -896,18 +896,18 @@
 	.set	T_F4192C_Nop, 0xFA00E9
 	.set	Screen_TuneScale_Button, 0xFA00EA
 	.set	T_F41934_Nop, 0xFA0111
-	.set	sub_FA0689, 0xFA0689
+	.set	ScreenCode64_Handler, 0xFA0689
 	.set	T_F4193C_Nop, 0xFA07A1
-	.set	sub_FA07A2, 0xFA07A2
+	.set	ScreenButton_Code64, 0xFA07A2
 	.set	T_F41944_Nop, 0xFA07EA
 	.set	sub_FA0D10, 0xFA0D10
-	.set	sub_FA0DF3, 0xFA0DF3
-	.set	sub_FA0E4D, 0xFA0E4D
-	.set	sub_FA0EEA, 0xFA0EEA
+	.set	ScreenCode65_Handler, 0xFA0DF3
+	.set	ScreenLeave_Code65, 0xFA0E4D
+	.set	ScreenButton_Code65, 0xFA0EEA
 	.set	T_F41954_Nop, 0xFA0F11
-	.set	sub_FA129D, 0xFA129D
-	.set	sub_FA12CE, 0xFA12CE
-	.set	sub_FA12DD, 0xFA12DD
+	.set	ScreenCode6A_Handler, 0xFA129D
+	.set	ScreenLeave_Code6A, 0xFA12CE
+	.set	ScreenButton_Code6A, 0xFA12DD
 	.set	T_F4267C_Nop, 0xFA1304
 	.set	MIDI_EntryThunks, 0xFA5400
 	.set	MIDI_RX_ErrorReset, 0xFA5418
@@ -1106,63 +1106,63 @@
 	.set	sub_FBB800, 0xFBB800
 	.set	sub_FBB93C, 0xFBB93C
 	.set	sub_FBBCBC, 0xFBBCBC
-	.set	sub_FBC56B, 0xFBC56B
-	.set	sub_FBC56F, 0xFBC56F
-	.set	sub_FBC573, 0xFBC573
+	.set	ScreenCodeB2_Handler, 0xFBC56B
+	.set	ScreenLeave_CodeB2, 0xFBC56F
+	.set	ScreenButton_CodeB2, 0xFBC573
 	.set	T_F41874_Nop, 0xFBC584
-	.set	sub_FBC585, 0xFBC585
-	.set	sub_FBC589, 0xFBC589
-	.set	sub_FBC58D, 0xFBC58D
+	.set	ScreenCode35_Handler, 0xFBC585
+	.set	ScreenLeave_Code35, 0xFBC589
+	.set	ScreenButton_Code35, 0xFBC58D
 	.set	T_F41A34_Nop, 0xFBC59E
-	.set	sub_FBC59F, 0xFBC59F
-	.set	sub_FBC5A3, 0xFBC5A3
-	.set	sub_FBC5A7, 0xFBC5A7
+	.set	ScreenCode36_Handler, 0xFBC59F
+	.set	ScreenLeave_Code36, 0xFBC5A3
+	.set	ScreenButton_Code36, 0xFBC5A7
 	.set	T_F41A44_Nop, 0xFBC5B8
 	.set	T_F41A88_Nop, 0xFBC5B9
 	.set	T_F41A8C_Nop, 0xFBC5BA
 	.set	T_F41A90_Nop, 0xFBC5BB
 	.set	T_F41A94_Nop, 0xFBC5BC
-	.set	sub_FBC5BD, 0xFBC5BD
+	.set	ScreenCodeB3_Handler, 0xFBC5BD
 	.set	Var2075_ClrBit7_Entry, 0xFBC5C1
-	.set	sub_FBC5C5, 0xFBC5C5
+	.set	ScreenButton_CodeB3, 0xFBC5C5
 	.set	T_F41884_Nop, 0xFBC5D6
-	.set	sub_FBC5D7, 0xFBC5D7
-	.set	sub_FBC5DB, 0xFBC5DB
-	.set	sub_FBC5DF, 0xFBC5DF
+	.set	ScreenCodeB6_Handler, 0xFBC5D7
+	.set	ScreenLeave_CodeB6, 0xFBC5DB
+	.set	ScreenButton_CodeB6, 0xFBC5DF
 	.set	T_F418B4_Nop, 0xFBC5F0
 	.set	sub_FBC5F1, 0xFBC5F1
 	.set	sub_FBC64F, 0xFBC64F
 	.set	sub_FBCB06, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
-	.set	sub_FBCB40, 0xFBCB40
+	.set	ScreenCodeB0_Handler, 0xFBCB40
 	.set	T_F4184C_Nop, 0xFBCB81
-	.set	sub_FBCB82, 0xFBCB82
+	.set	ScreenButton_CodeB0, 0xFBCB82
 	.set	T_F41854_Nop, 0xFBCBA9
-	.set	sub_FBCDEC, 0xFBCDEC
-	.set	sub_FBCDF0, 0xFBCDF0
-	.set	sub_FBCDF4, 0xFBCDF4
-	.set	sub_FBCDF8, 0xFBCDF8
-	.set	sub_FBCDFC, 0xFBCDFC
-	.set	sub_FBCEE7, 0xFBCEE7
-	.set	sub_FBCEEB, 0xFBCEEB
-	.set	sub_FBCEEF, 0xFBCEEF
-	.set	sub_FBCEF3, 0xFBCEF3
+	.set	ScreenCodeB4_Handler, 0xFBCDEC
+	.set	ScreenCodeB5_Handler, 0xFBCDF0
+	.set	ScreenCode37_Handler, 0xFBCDF4
+	.set	ScreenCode38_Handler, 0xFBCDF8
+	.set	ScreenCodeB1_Handler, 0xFBCDFC
+	.set	ScreenLeave_CodeB4, 0xFBCEE7
+	.set	ScreenLeave_CodeB5, 0xFBCEEB
+	.set	ScreenLeave_Code37, 0xFBCEEF
+	.set	ScreenLeave_Code38, 0xFBCEF3
 	.set	T_F4185C_Nop, 0xFBCEF7
-	.set	sub_FBCEF8, 0xFBCEF8
-	.set	sub_FBCF09, 0xFBCF09
-	.set	sub_FBCF1A, 0xFBCF1A
-	.set	sub_FBCF2B, 0xFBCF2B
-	.set	sub_FBCF3C, 0xFBCF3C
+	.set	ScreenButton_CodeB4, 0xFBCEF8
+	.set	ScreenButton_CodeB5, 0xFBCF09
+	.set	ScreenButton_Code37, 0xFBCF1A
+	.set	ScreenButton_Code38, 0xFBCF2B
+	.set	ScreenButton_CodeB1, 0xFBCF3C
 	.set	T_F41894_Nop, 0xFBCF7D
 	.set	T_F418A4_Nop, 0xFBCF7E
 	.set	T_F41A54_Nop, 0xFBCF7F
 	.set	T_F41A64_Nop, 0xFBCF80
 	.set	T_F41864_Nop, 0xFBCF81
-	.set	sub_FBDB91, 0xFBDB91
+	.set	ScreenCode3A_Handler, 0xFBDB91
 	.set	sub_FBDB95, 0xFBDB95
-	.set	sub_FBDD0D, 0xFBDD0D
+	.set	ScreenLeave_Code3A, 0xFBDD0D
 	.set	sub_FBDD11, 0xFBDD11
-	.set	sub_FBDD80, 0xFBDD80
+	.set	ScreenButton_Code3A, 0xFBDD80
 	.set	sub_FBDD91, 0xFBDD91
 	.set	sub_FBDDD2, 0xFBDDD2
 	.set	T_F418C4_Nop, 0xFBDDD6
@@ -1170,21 +1170,21 @@
 	.set	sub_FBED02, 0xFBED02
 	.set	sub_FBEDBE, 0xFBEDBE
 	.set	sub_FBEE83, 0xFBEE83
-	.set	sub_FBEED9, 0xFBEED9
+	.set	ScreenCode33_Handler, 0xFBEED9
 	.set	T_F41A0C_Nop, 0xFBEEE3
 	.set	T_F41A10_Nop, 0xFBEEE4
 	.set	T_F41A14_Nop, 0xFBEEE5
-	.set	sub_FBEEE6, 0xFBEEE6
+	.set	ScreenCode39_Handler, 0xFBEEE6
 	.set	T_F41A6C_Nop, 0xFBEEEB
-	.set	sub_FBEEEC, 0xFBEEEC
+	.set	ScreenButton_Code39, 0xFBEEEC
 	.set	T_F41A74_Nop, 0xFBEF1B
 	.set	Screen_CombinationNaming_Enter, 0xFBEF1C
 	.set	Screen_CombinationNaming_Leave, 0xFBEF75
 	.set	Screen_CombinationNaming_Button, 0xFBEF76
 	.set	T_F41AA4_Nop, 0xFBEFB0
-	.set	sub_FBFAB0, 0xFBFAB0
+	.set	ScreenCode34_Handler, 0xFBFAB0
 	.set	T_F41A1C_Nop, 0xFBFAF1
-	.set	sub_FBFAF2, 0xFBFAF2
+	.set	ScreenButton_Code34, 0xFBFAF2
 	.set	T_F41A24_Nop, 0xFBFB33
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
 	.set	T_F40FF4_Nop, 0xFC018D
@@ -1592,7 +1592,7 @@
 	.set	ScreenCode86_Handler, 0xFDCB93
 	.set	ScreenCode9E_Handler, 0xFDCDE0
 	.set	ScreenCode9F_Handler, 0xFDCFEB
-	.set	sub_FDD02D, 0xFDD02D
+	.set	ScreenCode9A_Handler, 0xFDD02D
 	.set	ScreenCode9D_Handler, 0xFDD0D4
 	.set	ScreenCodeCA_Handler, 0xFDD272
 	.set	ScreenCodeCB_Handler, 0xFDD27F
@@ -1666,7 +1666,7 @@
 	.set	T_F4236C_Nop, 0xFDE2DB
 	.set	T_F42374_Nop, 0xFDE2DC
 	.set	T_F4237C_Nop, 0xFDE2DD
-	.set	sub_FDE2EC, 0xFDE2EC
+	.set	ScreenLeave_Code9A, 0xFDE2EC
 	.set	T_F433DC_Nop, 0xFDE2F9
 	.set	ScreenLeave_Code9D, 0xFDE2FA
 	.set	T_F4235C_Nop, 0xFDE307
@@ -1674,13 +1674,13 @@
 	.set	T_F4232C_Nop, 0xFDE315
 	.set	ScreenLeave_CodeCB, 0xFDE316
 	.set	T_F4233C_Nop, 0xFDE323
-	.set	sub_FDE324, 0xFDE324
+	.set	ScreenLeave_CodeCC, 0xFDE324
 	.set	T_F4234C_Nop, 0xFDE331
 	.set	ScreenLeave_CodeC0, 0xFDE332
 	.set	T_F41F78_Nop, 0xFDE33F
-	.set	sub_FDE340, 0xFDE340
+	.set	ScreenLeave_CodeC1, 0xFDE340
 	.set	T_F41F88_Nop, 0xFDE34D
-	.set	sub_FDE34E, 0xFDE34E
+	.set	ScreenLeave_CodeC2, 0xFDE34E
 	.set	T_F41F98_Nop, 0xFDE35B
 	.set	ToneEditPage_A3_Leave, 0xFDE35C
 	.set	T_F41FA8_Nop, 0xFDE369
@@ -1694,7 +1694,7 @@
 	.set	T_F41FE8_Nop, 0xFDE3A1
 	.set	ScreenLeave_CodeC8, 0xFDE3A2
 	.set	T_F41FF8_Nop, 0xFDE3AF
-	.set	sub_FDE3B0, 0xFDE3B0
+	.set	ScreenLeave_CodeCE, 0xFDE3B0
 	.set	T_F433EC_Nop, 0xFDE3BD
 	.set	ScreenButton_Code90, 0xFDE3BE
 	.set	ScreenButton_Code91, 0xFDE41E
@@ -1789,11 +1789,11 @@
 	.set	sub_FE8565, 0xFE8565
 	.set	EditScreen_EnterDrumEdit, 0xFE8868
 	.set	EditScreen_EnterNoteEdit, 0xFE88AA
-	.set	sub_FE8C1F, 0xFE8C1F
-	.set	sub_FE8C3A, 0xFE8C3A
+	.set	ScreenLeave_Code28, 0xFE8C1F
+	.set	ScreenLeave_Code25, 0xFE8C3A
 	.set	T_F402D8_Nop, 0xFE8CB3
-	.set	sub_FE9A33, 0xFE9A33
-	.set	sub_FE9B8D, 0xFE9B8D
+	.set	ScreenButton_Code25, 0xFE9A33
+	.set	ScreenButton_Code28, 0xFE9B8D
 	.set	sub_FF42B7, 0xFF42B7
 	.set	Var2134_SetBit1_3, 0xFF42C0
 	.set	sub_FF42C5, 0xFF42C5
@@ -20098,7 +20098,7 @@ T_F433E8_Nop:		; <- T_F433E8
 	ret	; F0AAB2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AAB3
+; ScreenButton_CodeCA
 ; Called from: T_F42328 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7905 0xFD6104 T_F42F50 0xFD60B9 0xFD6447
@@ -20108,7 +20108,9 @@ T_F433E8_Nop:		; <- T_F433E8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AAB3:		; <- T_F42328
+; ScreenButton_CodeCA: the +8 BUTTON method of the screen object for screen id 0xCA -- PanelScreen_VtableTable entry 0xEA
+;   (ViewB entry 0xCA) points at the thunk triple starting at T_F42320, and slot T_F42328 jumps here.
+ScreenButton_CodeCA:		; <- T_F42328
 	link XIZ,0xfffc	; F0AAB3  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAB7  lda XBC,XIZ+0xfe
 	push	xbc	; F0AABA  push XBC
@@ -88171,8 +88173,8 @@ T_ScreenLeave_NoteEditPartSelect:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a
 T_F402C4:	jp sub_FE8565  ; -> prom_a 0x68565
 T_ScreenLeave_NoteEditPartSelect_2:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402CC:	jp EditScreen_EnterNoteEdit  ; -> prom_a 0x688AA
-T_F402D0:	jp sub_FE8C3A  ; -> prom_a 0x68C3A
-T_F402D4:	jp sub_FE9A33  ; -> prom_a 0x69A33
+T_F402D0:	jp ScreenLeave_Code25  ; -> prom_a 0x68C3A
+T_F402D4:	jp ScreenButton_Code25  ; -> prom_a 0x69A33
 T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
 ; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
 ;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
@@ -88181,8 +88183,8 @@ T_ScreenLeave_DrumEditPartSelect:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a
 T_F402E4:	jp sub_FE8565  ; -> prom_a 0x68565
 T_ScreenLeave_DrumEditPartSelect_2:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402EC:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
-T_F402F0:	jp sub_FE8C1F  ; -> prom_a 0x68C1F
-T_F402F4:	jp sub_FE9B8D  ; -> prom_a 0x69B8D
+T_F402F0:	jp ScreenLeave_Code28  ; -> prom_a 0x68C1F
+T_F402F4:	jp ScreenButton_Code28  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
 T_F40300:	jp sub_FE833F  ; -> prom_a 0x6833F   x2
@@ -89095,33 +89097,33 @@ T_DrawValueGlyph_24x24:	jp DrawValueGlyph_24x24  ; F41834 (was T_F41834) -> prom
 	.fill 0x8, 1, 0x0E  ; 0xF41838: 8 x ret
 T_F41840:	jp sub_FBCB06  ; -> prom_a 0x3CB06
 T_F41844:	jp sub_FBCB31  ; -> prom_a 0x3CB31
-T_F41848:	jp sub_FBCB40  ; -> prom_a 0x3CB40
+T_F41848:	jp ScreenCodeB0_Handler  ; -> prom_a 0x3CB40
 T_F4184C:	jp T_F4184C_Nop  ; -> prom_a 0x3CB81
-T_F41850:	jp sub_FBCB82  ; -> prom_a 0x3CB82
+T_F41850:	jp ScreenButton_CodeB0  ; -> prom_a 0x3CB82
 T_F41854:	jp T_F41854_Nop  ; -> prom_a 0x3CBA9
-T_F41858:	jp sub_FBCDFC  ; -> prom_a 0x3CDFC
+T_F41858:	jp ScreenCodeB1_Handler  ; -> prom_a 0x3CDFC
 T_F4185C:	jp T_F4185C_Nop  ; -> prom_a 0x3CEF7
-T_F41860:	jp sub_FBCF3C  ; -> prom_a 0x3CF3C
+T_F41860:	jp ScreenButton_CodeB1  ; -> prom_a 0x3CF3C
 T_F41864:	jp T_F41864_Nop  ; -> prom_a 0x3CF81
-T_F41868:	jp sub_FBC56B  ; -> prom_a 0x3C56B
-T_F4186C:	jp sub_FBC56F  ; -> prom_a 0x3C56F
-T_F41870:	jp sub_FBC573  ; -> prom_a 0x3C573
+T_F41868:	jp ScreenCodeB2_Handler  ; -> prom_a 0x3C56B
+T_F4186C:	jp ScreenLeave_CodeB2  ; -> prom_a 0x3C56F
+T_F41870:	jp ScreenButton_CodeB2  ; -> prom_a 0x3C573
 T_F41874:	jp T_F41874_Nop  ; -> prom_a 0x3C584
-T_F41878:	jp sub_FBC5BD  ; -> prom_a 0x3C5BD
+T_F41878:	jp ScreenCodeB3_Handler  ; -> prom_a 0x3C5BD
 T_Var2075_ClrBit7_Entry:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
-T_F41880:	jp sub_FBC5C5  ; -> prom_a 0x3C5C5
+T_F41880:	jp ScreenButton_CodeB3  ; -> prom_a 0x3C5C5
 T_F41884:	jp T_F41884_Nop  ; -> prom_a 0x3C5D6
-T_F41888:	jp sub_FBCDEC  ; -> prom_a 0x3CDEC
-T_F4188C:	jp sub_FBCEE7  ; -> prom_a 0x3CEE7
-T_F41890:	jp sub_FBCEF8  ; -> prom_a 0x3CEF8
+T_F41888:	jp ScreenCodeB4_Handler  ; -> prom_a 0x3CDEC
+T_F4188C:	jp ScreenLeave_CodeB4  ; -> prom_a 0x3CEE7
+T_F41890:	jp ScreenButton_CodeB4  ; -> prom_a 0x3CEF8
 T_F41894:	jp T_F41894_Nop  ; -> prom_a 0x3CF7D
-T_F41898:	jp sub_FBCDF0  ; -> prom_a 0x3CDF0
-T_F4189C:	jp sub_FBCEEB  ; -> prom_a 0x3CEEB
-T_F418A0:	jp sub_FBCF09  ; -> prom_a 0x3CF09
+T_F41898:	jp ScreenCodeB5_Handler  ; -> prom_a 0x3CDF0
+T_F4189C:	jp ScreenLeave_CodeB5  ; -> prom_a 0x3CEEB
+T_F418A0:	jp ScreenButton_CodeB5  ; -> prom_a 0x3CF09
 T_F418A4:	jp T_F418A4_Nop  ; -> prom_a 0x3CF7E
-T_F418A8:	jp sub_FBC5D7  ; -> prom_a 0x3C5D7
-T_F418AC:	jp sub_FBC5DB  ; -> prom_a 0x3C5DB
-T_F418B0:	jp sub_FBC5DF  ; -> prom_a 0x3C5DF
+T_F418A8:	jp ScreenCodeB6_Handler  ; -> prom_a 0x3C5D7
+T_F418AC:	jp ScreenLeave_CodeB6  ; -> prom_a 0x3C5DB
+T_F418B0:	jp ScreenButton_CodeB6  ; -> prom_a 0x3C5DF
 T_F418B4:	jp T_F418B4_Nop  ; -> prom_a 0x3C5F0
 T_F418B8:	jp sub_FBDB95  ; -> prom_a 0x3DB95
 T_F418BC:	jp sub_FBDD11  ; -> prom_a 0x3DD11
@@ -89143,13 +89145,13 @@ T_Screen_TuneScale_Enter:	jp Screen_TuneScale_Enter  ; -> prom_a 0x20094
 T_F4192C:	jp T_F4192C_Nop  ; -> prom_a 0x200E9
 T_Screen_TuneScale_Button:	jp Screen_TuneScale_Button  ; -> prom_a 0x200EA
 T_F41934:	jp T_F41934_Nop  ; -> prom_a 0x20111
-T_F41938:	jp sub_FA0689  ; -> prom_a 0x20689
+T_F41938:	jp ScreenCode64_Handler  ; -> prom_a 0x20689
 T_F4193C:	jp T_F4193C_Nop  ; -> prom_a 0x207A1
-T_F41940:	jp sub_FA07A2  ; -> prom_a 0x207A2
+T_F41940:	jp ScreenButton_Code64  ; -> prom_a 0x207A2
 T_F41944:	jp T_F41944_Nop  ; -> prom_a 0x207EA
-T_F41948:	jp sub_FA0DF3  ; -> prom_a 0x20DF3
-T_F4194C:	jp sub_FA0E4D  ; -> prom_a 0x20E4D
-T_F41950:	jp sub_FA0EEA  ; -> prom_a 0x20EEA
+T_F41948:	jp ScreenCode65_Handler  ; -> prom_a 0x20DF3
+T_F4194C:	jp ScreenLeave_Code65  ; -> prom_a 0x20E4D
+T_F41950:	jp ScreenButton_Code65  ; -> prom_a 0x20EEA
 T_F41954:	jp T_F41954_Nop  ; -> prom_a 0x20F11
 T_Screen_MainOutEqualizer_Enter:	jp Screen_MainOutEqualizer_Enter  ; -> prom_a 0x1EF6C
 T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
@@ -89182,37 +89184,37 @@ T_F419C4:	jp T_F419C4_Nop  ; -> prom_a 0x1F034
 	.fill 0x38, 1, 0x0E  ; 0xF419C8: 56 x ret
 T_F41A00:	jp sub_FBECC3  ; -> prom_a 0x3ECC3
 T_F41A04:	jp sub_FBED02  ; -> prom_a 0x3ED02
-T_F41A08:	jp sub_FBEED9  ; -> prom_a 0x3EED9
+T_F41A08:	jp ScreenCode33_Handler  ; -> prom_a 0x3EED9
 T_F41A0C:	jp T_F41A0C_Nop  ; -> prom_a 0x3EEE3
 T_F41A10:	jp T_F41A10_Nop  ; -> prom_a 0x3EEE4
 T_F41A14:	jp T_F41A14_Nop  ; -> prom_a 0x3EEE5
-T_F41A18:	jp sub_FBFAB0  ; -> prom_a 0x3FAB0
+T_F41A18:	jp ScreenCode34_Handler  ; -> prom_a 0x3FAB0
 T_F41A1C:	jp T_F41A1C_Nop  ; -> prom_a 0x3FAF1
-T_F41A20:	jp sub_FBFAF2  ; -> prom_a 0x3FAF2
+T_F41A20:	jp ScreenButton_Code34  ; -> prom_a 0x3FAF2
 T_F41A24:	jp T_F41A24_Nop  ; -> prom_a 0x3FB33
-T_F41A28:	jp sub_FBC585  ; -> prom_a 0x3C585
-T_F41A2C:	jp sub_FBC589  ; -> prom_a 0x3C589
-T_F41A30:	jp sub_FBC58D  ; -> prom_a 0x3C58D
+T_F41A28:	jp ScreenCode35_Handler  ; -> prom_a 0x3C585
+T_F41A2C:	jp ScreenLeave_Code35  ; -> prom_a 0x3C589
+T_F41A30:	jp ScreenButton_Code35  ; -> prom_a 0x3C58D
 T_F41A34:	jp T_F41A34_Nop  ; -> prom_a 0x3C59E
-T_F41A38:	jp sub_FBC59F  ; -> prom_a 0x3C59F
-T_F41A3C:	jp sub_FBC5A3  ; -> prom_a 0x3C5A3
-T_F41A40:	jp sub_FBC5A7  ; -> prom_a 0x3C5A7
+T_F41A38:	jp ScreenCode36_Handler  ; -> prom_a 0x3C59F
+T_F41A3C:	jp ScreenLeave_Code36  ; -> prom_a 0x3C5A3
+T_F41A40:	jp ScreenButton_Code36  ; -> prom_a 0x3C5A7
 T_F41A44:	jp T_F41A44_Nop  ; -> prom_a 0x3C5B8
-T_F41A48:	jp sub_FBCDF4  ; -> prom_a 0x3CDF4
-T_F41A4C:	jp sub_FBCEEF  ; -> prom_a 0x3CEEF
-T_F41A50:	jp sub_FBCF1A  ; -> prom_a 0x3CF1A
+T_F41A48:	jp ScreenCode37_Handler  ; -> prom_a 0x3CDF4
+T_F41A4C:	jp ScreenLeave_Code37  ; -> prom_a 0x3CEEF
+T_F41A50:	jp ScreenButton_Code37  ; -> prom_a 0x3CF1A
 T_F41A54:	jp T_F41A54_Nop  ; -> prom_a 0x3CF7F
-T_F41A58:	jp sub_FBCDF8  ; -> prom_a 0x3CDF8
-T_F41A5C:	jp sub_FBCEF3  ; -> prom_a 0x3CEF3
-T_F41A60:	jp sub_FBCF2B  ; -> prom_a 0x3CF2B
+T_F41A58:	jp ScreenCode38_Handler  ; -> prom_a 0x3CDF8
+T_F41A5C:	jp ScreenLeave_Code38  ; -> prom_a 0x3CEF3
+T_F41A60:	jp ScreenButton_Code38  ; -> prom_a 0x3CF2B
 T_F41A64:	jp T_F41A64_Nop  ; -> prom_a 0x3CF80
-T_F41A68:	jp sub_FBEEE6  ; -> prom_a 0x3EEE6
+T_F41A68:	jp ScreenCode39_Handler  ; -> prom_a 0x3EEE6
 T_F41A6C:	jp T_F41A6C_Nop  ; -> prom_a 0x3EEEB
-T_F41A70:	jp sub_FBEEEC  ; -> prom_a 0x3EEEC
+T_F41A70:	jp ScreenButton_Code39  ; -> prom_a 0x3EEEC
 T_F41A74:	jp T_F41A74_Nop  ; -> prom_a 0x3EF1B
-T_F41A78:	jp sub_FBDB91  ; -> prom_a 0x3DB91
-T_F41A7C:	jp sub_FBDD0D  ; -> prom_a 0x3DD0D
-T_F41A80:	jp sub_FBDD80  ; -> prom_a 0x3DD80
+T_F41A78:	jp ScreenCode3A_Handler  ; -> prom_a 0x3DB91
+T_F41A7C:	jp ScreenLeave_Code3A  ; -> prom_a 0x3DD0D
+T_F41A80:	jp ScreenButton_Code3A  ; -> prom_a 0x3DD80
 T_F41A84:	jp sub_FBDDD2  ; -> prom_a 0x3DDD2
 T_F41A88:	jp T_F41A88_Nop  ; -> prom_a 0x3C5B9
 T_F41A8C:	jp T_F41A8C_Nop  ; -> prom_a 0x3C5BA
@@ -89674,11 +89676,11 @@ T_F41F70:	jp ScreenLeave_CodeC0  ; -> prom_a 0x5E332
 T_ToneEditPage_A0_KeyDispatch:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
 T_F41F78:	jp T_F41F78_Nop  ; -> prom_a 0x5E33F
 T_F41F7C:	jp T_F41F7C_Nop  ; -> prom_a 0x5D7F7
-T_F41F80:	jp sub_FDE340  ; -> prom_a 0x5E340
+T_F41F80:	jp ScreenLeave_CodeC1  ; -> prom_a 0x5E340
 T_F41F84:	jp T_F41F84_Nop  ; -> prom_a 0x53DF8
 T_F41F88:	jp T_F41F88_Nop  ; -> prom_a 0x5E34D
 T_F41F8C:	jp T_F41F8C_Nop  ; -> prom_a 0x5D7F8
-T_F41F90:	jp sub_FDE34E  ; -> prom_a 0x5E34E
+T_F41F90:	jp ScreenLeave_CodeC2  ; -> prom_a 0x5E34E
 T_F41F94:	jp T_F41F94_Nop  ; -> prom_a 0x53DF9
 T_F41F98:	jp T_F41F98_Nop  ; -> prom_a 0x5E35B
 T_ToneEditPage_A3_PositionParameter:	jp ToneEditPage_A3_PositionParameter  ; -> prom_a 0x5D7F9
@@ -89832,14 +89834,14 @@ T_F42280:	jp T_F42280_Nop  ; -> prom_a 0x7475B
 	.fill 0x9C, 1, 0x0E  ; 0xF42284: 156 x ret
 T_F42320:	jp ScreenCodeCA_Handler  ; -> prom_a 0x5D272
 T_F42324:	jp ScreenLeave_CodeCA  ; -> prom_a 0x5E308
-T_F42328:	jp sub_F0AAB3  ; -> prom_b 0x0AAB3
+T_F42328:	jp ScreenButton_CodeCA  ; -> prom_b 0x0AAB3
 T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
 T_F42330:	jp ScreenCodeCB_Handler  ; -> prom_a 0x5D27F
 T_F42334:	jp ScreenLeave_CodeCB  ; -> prom_a 0x5E316
 T_F42338:	jp ScreenButton_CodeCB  ; -> prom_b 0x0AAF9
 T_F4233C:	jp T_F4233C_Nop  ; -> prom_a 0x5E323
 T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
-T_F42344:	jp sub_FDE324  ; -> prom_a 0x5E324
+T_F42344:	jp ScreenLeave_CodeCC  ; -> prom_a 0x5E324
 T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
 T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
 T_F42350:	jp ScreenCode9D_Handler  ; -> prom_a 0x5D0D4
@@ -90003,9 +90005,9 @@ T_F42634:	jp sub_FE1C59  ; -> prom_a 0x61C59   x1
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
 T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
 	.fill 0x8, 1, 0x0E  ; 0xF42668: 8 x ret
-T_F42670:	jp sub_FA129D  ; -> prom_a 0x2129D
-T_F42674:	jp sub_FA12CE  ; -> prom_a 0x212CE
-T_F42678:	jp sub_FA12DD  ; -> prom_a 0x212DD
+T_F42670:	jp ScreenCode6A_Handler  ; -> prom_a 0x2129D
+T_F42674:	jp ScreenLeave_Code6A  ; -> prom_a 0x212CE
+T_F42678:	jp ScreenButton_Code6A  ; -> prom_a 0x212DD
 T_F4267C:	jp T_F4267C_Nop  ; -> prom_a 0x21304
 T_Screen_SoundGroupNaming_Enter:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
 T_Screen_SoundGroupNaming_Leave:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
@@ -90475,7 +90477,7 @@ T_Blink_Tick:	jp Blink_Tick  ; F42E2C (was T_F42E2C) -> prom_b 0x0E83A   x1
 T_Blink_GetState:	jp Blink_GetState  ; F42E30 (was T_F42E30) -> prom_b 0x0E835   x2
 	.fill 0xC, 1, 0x0E  ; 0xF42E34: 12 x ret
 T_F42E40:	.long RetStub_F53000	; ptr -> 0xF53000 (prom_b 0x53000)
-T_F42E44:	jp sub_F53025  ; -> prom_b 0x53025
+T_F42E44:	jp ScreenCodeA3_Handler  ; -> prom_b 0x53025
 T_F42E48:	jp T_F42E48_Nop  ; -> prom_b 0x53029
 ; Evidence: slot 0xF42E4C is `jp 0xF5302A`; prom_b 0xF5302A carries the label
 ;           DrawbarScreen_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -90798,9 +90800,9 @@ T_ScreenButton_SequencerMedley:	jp ScreenButton_SequencerMedley  ; F43158 (was T
 ; Evidence: slot 0xF4315C is `jp 0xF7D2B3`; prom_b 0xF7D2B3 carries the label
 ;           ScreenNull_SequencerMedley (graded CONTENT).  DERIVATIVE name.
 T_ScreenNull_SequencerMedley:	jp ScreenNull_SequencerMedley  ; F4315C (was T_F4315C) -> prom_b 0x7D2B3
-T_F43160:	jp sub_F7D2B4  ; -> prom_b 0x7D2B4
-T_F43164:	jp sub_F7D2B9  ; -> prom_b 0x7D2B9
-T_F43168:	jp sub_F7D2BE  ; -> prom_b 0x7D2BE
+T_F43160:	jp ScreenCode0E_Handler  ; -> prom_b 0x7D2B4
+T_F43164:	jp ScreenLeave_Code0E  ; -> prom_b 0x7D2B9
+T_F43168:	jp ScreenButton_Code0E  ; -> prom_b 0x7D2BE
 T_F4316C:	jp T_F4316C_Nop  ; -> prom_b 0x7D2C5
 ; Evidence: slot 0xF43170 is `jp 0xF7D28A`; prom_b 0xF7D28A carries the label
 ;           ScreenEnter_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
@@ -90860,9 +90862,9 @@ T_F431C0:	jp Veneer_F81D41  ; -> prom_b 0x7D00C   x5
 T_F431C4:	jp Veneer_F81C33  ; -> prom_b 0x7D00F   x2
 T_F431C8:	jp Veneer_F81C90  ; -> prom_b 0x7D012   x3
 T_F431CC:	jp Veneer_F81E7E  ; -> prom_b 0x7D015   x4
-T_F431D0:	jp sub_F7D2C6  ; -> prom_b 0x7D2C6
-T_F431D4:	jp sub_F7D2CB  ; -> prom_b 0x7D2CB
-T_F431D8:	jp sub_F7D2D0  ; -> prom_b 0x7D2D0
+T_F431D0:	jp ScreenCode15_Handler  ; -> prom_b 0x7D2C6
+T_F431D4:	jp ScreenLeave_Code15  ; -> prom_b 0x7D2CB
+T_F431D8:	jp ScreenButton_Code15  ; -> prom_b 0x7D2D0
 T_F431DC:	jp T_F431DC_Nop  ; -> prom_b 0x7D2D7
 	.fill 0xE0, 1, 0x0E  ; 0xF431E0: 224 x ret
 T_F432C0:	jp sub_F65000  ; -> prom_b 0x65000   x2
@@ -90895,12 +90897,12 @@ T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
 T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
 	.fill 0xC, 1, 0x0E  ; 0xF433C4: 12 x ret
-T_F433D0:	jp sub_FDD02D  ; -> prom_a 0x5D02D
-T_F433D4:	jp sub_FDE2EC  ; -> prom_a 0x5E2EC
+T_F433D0:	jp ScreenCode9A_Handler  ; -> prom_a 0x5D02D
+T_F433D4:	jp ScreenLeave_Code9A  ; -> prom_a 0x5E2EC
 T_F433D8:	jp ScreenButton_Code9A  ; -> prom_b 0x0AA10
 T_F433DC:	jp T_F433DC_Nop  ; -> prom_a 0x5E2F9
 T_F433E0:	jp T_F433E0_Nop  ; -> prom_a 0x5E151
-T_F433E4:	jp sub_FDE3B0  ; -> prom_a 0x5E3B0
+T_F433E4:	jp ScreenLeave_CodeCE  ; -> prom_a 0x5E3B0
 T_F433E8:	jp T_F433E8_Nop  ; -> prom_b 0x0AAB2
 T_F433EC:	jp T_F433EC_Nop  ; -> prom_a 0x5E3BD
 	.fill 0x10, 1, 0x0E  ; 0xF433F0: 16 x ret
@@ -90946,9 +90948,9 @@ T_F434CC:	jp T_F434CC_Nop  ; -> prom_a 0x1EF07
 T_SoundCopy_ReadExtGroupDrumFlag:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a 0x1FDC8
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
-T_F434E0:	jp sub_F4C46A  ; -> prom_b 0x4C46A
+T_F434E0:	jp ScreenCodeAD_Handler  ; -> prom_b 0x4C46A
 T_F434E4:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
-T_F434E8:	jp sub_F4C4B5  ; -> prom_b 0x4C4B5
+T_F434E8:	jp ScreenButton_CodeAD  ; -> prom_b 0x4C4B5
 T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
 T_F434F4:	jp sub_F4C42E  ; -> prom_b 0x4C42E
@@ -103694,13 +103696,13 @@ DispatchTable_F4C38D:
 	.long	sub_F4C4DD	; F4C3A5  [6] -> 0xF4C4DD
 	.long	T_F42C70	; F4C3A9  [7] -> default stub
 	.long	T_F42C70	; F4C3AD  [8] -> default stub
-	.long	sub_F4C588	; F4C3B1  [9] -> 0xF4C588
+	.long	LcdKeyRow2_ScreenCodeAD	; F4C3B1  [9] -> 0xF4C588
 	.long	T_F42C70	; F4C3B5  [10] -> default stub
 	.long	T_F42C70	; F4C3B9  [11] -> default stub
 	.long	T_F42C70	; F4C3BD  [12] -> default stub
 	.long	T_F42C70	; F4C3C1  [13] -> default stub
 	.long	T_F42C70	; F4C3C5  [14] -> default stub
-	.long	sub_F4C5A2	; F4C3C9  [15] -> 0xF4C5A2
+	.long	ExitKey_ScreenCodeAD	; F4C3C9  [15] -> 0xF4C5A2
 	.long	T_F42C70	; F4C3CD  [16] -> default stub
 	.long	T_F42C70	; F4C3D1  [17] -> default stub
 	.long	T_F42C70	; F4C3D5  [18] -> default stub
@@ -103804,7 +103806,7 @@ sub_F4C42E_Epilogue:
 	ret	; F4C469  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4C46A
+; ScreenCodeAD_Handler
 ; Called from: T_F434E0 (x0)
 ; Touches: (0x207C) (0x207D) (0x2095) (0x2870)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F4C684
@@ -103815,7 +103817,9 @@ sub_F4C42E_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4C46A:		; <- T_F434E0
+; ScreenCodeAD_Handler: the +0 ENTER method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
+;   (ViewB entry 0xAD) points at the thunk triple starting at T_F434E0, and slot T_F434E0 jumps here.
+ScreenCodeAD_Handler:		; <- T_F434E0
 	ld	c, (UI_ScreenId:16)	; F4C46A  ld C,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F4C46E  cp C,(0x207d)
 	jr	z, sub_F4C46A_Skip	; F4C472  jr Z,0xf4c479
@@ -103858,7 +103862,7 @@ UI_RequestBits_ClearBit7:		; <- T_F434E4
 	ret	; F4C4B4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4C4B5
+; ScreenButton_CodeAD
 ; Called from: T_F434E8 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelCode_ToSlotAndFlags
@@ -103869,7 +103873,9 @@ UI_RequestBits_ClearBit7:		; <- T_F434E4
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4C4B5:		; <- T_F434E8
+; ScreenButton_CodeAD: the +8 BUTTON method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
+;   (ViewB entry 0xAD) points at the thunk triple starting at T_F434E0, and slot T_F434E8 jumps here.
+ScreenButton_CodeAD:		; <- T_F434E8
 	link XIZ,0x0000	; F4C4B5  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F4C4B9  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F4C4BC  pushw (XIZ+0x08)
@@ -103980,7 +103986,53 @@ sub_F4C4DD_Epilogue:
 	pop	xix	; F4C585  pop XIX
 	popw	hl	; F4C586  pop HL
 	ret	; F4C587  ret
-sub_F4C588:
+; ---------------------------------------------------------------------
+; LcdKeyRow2_ScreenCodeAD -- row 2 of the five key pairs flanking the LCD, on
+;           the ScreenCodeAD screen
+; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
+;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
+;           {class 0xA9, code 0x09} -> delivered code 0x09; SW74 "LCD LEFT 2"
+;           (matrix segment 9 bit 1, wire 0xC9) ->
+;           PanelWireGroupMap_Variant2[0x69] = group 0x08 -> record 0xF8B723
+;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
+;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
+;           always, but THIS screen is dispatched by the OTHER family:
+;           ScreenButton_CodeAD calls PanelCode_ToSlotAndFlags (prom_b
+;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           XWA,0x00f4c38d` at 0xF4C4C8, so the index is the REMAPPED SLOT and
+;           this is slot 9 of the 23.
+; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
+;           one. The remap is the IDENTITY below 0x11: `cp (0x28B1),0x11 / jr
+;           C` at 0xF5505E skips the -0x11 arm and `cp (0x28B1),0x1a / jr C`
+;           at 0xF5507A skips the -9 arm, leaving HL as loaded at 0xF55023, so
+;           slot 0x09 IS code 0x09 here. Two names already in this table
+;           corroborate that independently: slot 15 is ExitKey_DrawbarScreen
+;           (code 0x0F) and slot 16 is PageKey_DrawbarScreen (code 0x10), both
+;           applied in round 11 from the consumer side alone.
+; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
+;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
+; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
+;           the SX-WSA1 (variant 1) feeds the same slot from SW74 LCD LEFT 2
+;           (segment 9 bit 1, fitted); SW82 [no legend: matrix position
+;           outside every diode list] (segment 10 bit 1, NOT fitted on this
+;           panel). The model strap is the RAM byte (0x00C4), latched from PB
+;           bit 0 by prom_a Variant_SetFromPB0 at 0xF82882; variant 2 is the
+;           SX-WSA1R (notes/wave7_panel_names_round11.py --variant, three
+;           independent measurements).
+; Evidence: the number in this name has a REFERENT OUTSIDE THE CODE and a ROM
+;           anchor: page I-4/I-5 draws a COLUMN OF FIVE keys down each side of
+;           the display, and rows 1-4 are graded LOCKED in
+;           notes/wave7_panel_button_codes.py --physical because prom_a
+;           sub_F954AA masks segment 3 with 0x0F and dispatches bits 0..3 four
+;           separate ways -- the four boxes page I-12 annotates (1)..(4) MAIN
+;           OUT / SUB OUT 1 / SUB OUT 2 / SUB OUT 3 for the Generator IC
+;           Outsel check. SW26 is row 2 of that column. The
+;           wire->group->record->code->slot chain above is re-derived from the
+;           ROM bytes by notes/prom_b_panel_names_round12.py --plan, which
+;           reads notes/wave7_panel_button_codes.py (layer 1) and
+;           notes/wave7_panel_event_index.py (layer 2).
+; ---------------------------------------------------------------------
+LcdKeyRow2_ScreenCodeAD:
 	ld	c, (PanelEvent_Flags:16)	; F4C588  ld C,(0x28b0)
 	and	c, 1	; F4C58C  and C,0x01
 	jr	nz, sub_F4C588_Return	; F4C58F  jr NZ,0xf4c5a1
@@ -103990,7 +104042,43 @@ sub_F4C588:
 	m_set 4, MD16, UI_Request_Hi	; F4C59D  set 4,(0x2071)
 sub_F4C588_Return:
 	ret	; F4C5A1  ret
-sub_F4C5A2:
+; ---------------------------------------------------------------------
+; ExitKey_ScreenCodeAD -- the EXIT key, on the ScreenCodeAD screen
+; Reached by: SW32 "EXIT" (matrix segment 3 bit 7, wire 0xC3) ->
+;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6BE
+;           {class 0xA9, code 0x0F} -> delivered code 0x0F. prom_a
+;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
+;           always, but THIS screen is dispatched by the OTHER family:
+;           ScreenButton_CodeAD calls PanelCode_ToSlotAndFlags (prom_b
+;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
+;           XWA,0x00f4c38d` at 0xF4C4C8, so the index is the REMAPPED SLOT and
+;           this is slot 15 of the 23.
+; Note:     ⚠ TWO TABLE FAMILIES, TWO INDEX RULES, and this is the 23-entry
+;           one. The remap is the IDENTITY below 0x11: `cp (0x28B1),0x11 / jr
+;           C` at 0xF5505E skips the -0x11 arm and `cp (0x28B1),0x1a / jr C`
+;           at 0xF5507A skips the -9 arm, leaving HL as loaded at 0xF55023, so
+;           slot 0x0F IS code 0x0F here. Two names already in this table
+;           corroborate that independently: slot 15 is ExitKey_DrawbarScreen
+;           (code 0x0F) and slot 16 is PageKey_DrawbarScreen (code 0x10), both
+;           applied in round 11 from the consumer side alone.
+; Note:     bit 7 of the delivered code picks THE SIDE OF THE DISPLAY: set =
+;           the CP2 column (SW73-77), clear = the CP1 column (SW25-29).
+; Variant:  ⚠ VARIANT 2 = the SX-WSA1R, and the chain above is variant 2's;
+;           the SX-WSA1 (variant 1) feeds the same slot from SW88 [no legend:
+;           matrix position outside every diode list] (segment 10 bit 7, NOT
+;           fitted on this panel). The model strap is the RAM byte (0x00C4),
+;           latched from PB bit 0 by prom_a Variant_SetFromPB0 at 0xF82882;
+;           variant 2 is the SX-WSA1R (notes/wave7_panel_names_round11.py
+;           --variant, three independent measurements).
+; Evidence: GRADE POSITION in notes/wave7_panel_button_codes.py --physical,
+;           with a consumer-side anchor: slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 screen tables. The
+;           wire->group->record->code->slot chain above is re-derived from the
+;           ROM bytes by notes/prom_b_panel_names_round12.py --plan, which
+;           reads notes/wave7_panel_button_codes.py (layer 1) and
+;           notes/wave7_panel_event_index.py (layer 2).
+; ---------------------------------------------------------------------
+ExitKey_ScreenCodeAD:
 	ld	c, (PanelEvent_Flags:16)	; F4C5A2  ld C,(0x28b0)
 	and	c, 1	; F4C5A6  and C,0x01
 	jr	nz, sub_F4C5A2_Return	; F4C5A9  jr NZ,0xf4c5c8
@@ -110406,7 +110494,7 @@ T_F42E58_Nop:		; <- T_F42E58, T_F42E5C
 	ret	; F53024  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53025
+; ScreenCodeA3_Handler
 ; Called from: thunk slot T_F42E44
 ; Evidence: 0xF53025 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -110414,7 +110502,9 @@ T_F42E58_Nop:		; <- T_F42E58, T_F42E5C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53025:		; <- T_F42E44
+; ScreenCodeA3_Handler: the +0 ENTER method of the screen object for screen id 0xA3 -- PanelScreen_VtableTable entry 0xC3
+;   (ViewB entry 0xA3) points at the thunk triple starting at T_F42E44, and slot T_F42E44 jumps here.
+ScreenCodeA3_Handler:		; <- T_F42E44
 	calr	sub_F53052	; F53025  calr 0xf53052
 	ret	; F53028  ret
 
@@ -110437,7 +110527,7 @@ T_F42E48_Nop:		; <- T_F42E48
 ;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
 ;               (XBC)` -- the image-wide message-dispatch idiom, here
 ;               through PanelButtonTable_DrawbarScreen.
-; Evidence: the byte-identical idiom appears at sub_F0F17C, sub_F4C4B5 and
+; Evidence: the byte-identical idiom appears at sub_F0F17C, ScreenButton_CodeAD and
 ;           0xF1233E in this same file, each with its own table; the only
 ;           thing this file adds is WHICH table.  The name states the
 ;           mechanism and the table, not a purpose.
@@ -114417,7 +114507,7 @@ Stub_Ret_F55018:
 ; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
 ; Called from: thunk T_PanelCode_ToSlotAndFlags (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
-;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), sub_F4C4B5 and
+;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CodeAD and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
 ;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags
@@ -191212,17 +191302,23 @@ ScreenNull_SequencerMedley:
 	ret	; F7D2B3  ret
 ; Evidence: the +0 word of screen object F43160, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86F79.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
-sub_F7D2B4:
+; ScreenCode0E_Handler: the +0 ENTER method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43160 jumps here.
+ScreenCode0E_Handler:
 	call	sub_F8101E	; F7D2B4  call 0xf8101e
 	ret	; F7D2B8  ret
 ; Evidence: the +4 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF81039` then `ret`.  [round7-entrypoints]
-sub_F7D2B9:
+; ScreenLeave_Code0E: the +4 LEAVE method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43164 jumps here.
+ScreenLeave_Code0E:
 	call	sub_F81039	; F7D2B9  call 0xf81039
 	ret	; F7D2BD  ret
 ; Evidence: the +8 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
-sub_F7D2BE:
+; ScreenButton_Code0E: the +8 BUTTON method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43168 jumps here.
+ScreenButton_Code0E:
 	ld	bc, hl	; F7D2BE  ld BC,HL
 	call	T_F42EC8	; F7D2C0  call 0xf42ec8
 	ret	; F7D2C4  ret
@@ -191232,17 +191328,23 @@ T_F4316C_Nop:
 	ret	; F7D2C5  ret
 ; Evidence: the +0 word of screen object F431D0, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86F95.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
-sub_F7D2C6:
+; ScreenCode15_Handler: the +0 ENTER method of the screen object for screen id 0x15 -- PanelScreen_VtableTable entry 0x35
+;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D0 jumps here.
+ScreenCode15_Handler:
 	call	sub_F8101E	; F7D2C6  call 0xf8101e
 	ret	; F7D2CA  ret
 ; Evidence: the +4 word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF81039` then `ret`.  [round7-entrypoints]
-sub_F7D2CB:
+; ScreenLeave_Code15: the +4 LEAVE method of the screen object for screen id 0x15 -- PanelScreen_VtableTable entry 0x35
+;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D4 jumps here.
+ScreenLeave_Code15:
 	call	sub_F81039	; F7D2CB  call 0xf81039
 	ret	; F7D2CF  ret
 ; Evidence: the +8 word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
-sub_F7D2D0:
+; ScreenButton_Code15: the +8 BUTTON method of the screen object for screen id 0x15 -- PanelScreen_VtableTable entry 0x35
+;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D8 jumps here.
+ScreenButton_Code15:
 	ld	bc, hl	; F7D2D0  ld BC,HL
 	call	T_F42EC8	; F7D2D2  call 0xf42ec8
 	ret	; F7D2D6  ret
@@ -197297,7 +197399,8 @@ ButtonTable_MeasureDelete_StageZero_Nop16:
 	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; MeasureDelete_StageZero_Button21 -- panel button slot 0x15 of MeasureDelete_StageZero, NOT NAMED
+; MeasureDelete_StageZero_Button21 -- panel button slot 0x15 of
+;           MeasureDelete_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -198042,7 +198145,8 @@ ButtonTable_MeasureErase_StageZero_Nop16:
 	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; MeasureErase_StageZero_Button21 -- panel button slot 0x15 of MeasureErase_StageZero, NOT NAMED
+; MeasureErase_StageZero_Button21 -- panel button slot 0x15 of
+;           MeasureErase_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -198861,7 +198965,8 @@ ButtonTable_Quantize_StageZero_Nop16:
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; Quantize_StageZero_Button21 -- panel button slot 0x15 of Quantize_StageZero, NOT NAMED
+; Quantize_StageZero_Button21 -- panel button slot 0x15 of Quantize_StageZero,
+;           NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -199601,7 +199706,8 @@ ButtonTable_Vel0cityChange_StageZero_Nop16:
 	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; Vel0cityChange_StageZero_Button21 -- panel button slot 0x15 of Vel0cityChange_StageZero, NOT NAMED
+; Vel0cityChange_StageZero_Button21 -- panel button slot 0x15 of
+;           Vel0cityChange_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
@@ -200370,7 +200476,8 @@ ButtonTable_Transp0se_StageZero_Nop16:
 	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
-; Transp0se_StageZero_Button21 -- panel button slot 0x15 of Transp0se_StageZero, NOT NAMED
+; Transp0se_StageZero_Button21 -- panel button slot 0x15 of
+;           Transp0se_StageZero, NOT NAMED
 ; Unknown:  NO NAME. This routine is registered ONLY at slot 0x15, which is
 ;           the VARIANT-1 already-held rewrite of base code 0x04 (`add
 ;           (XIX-1),0x11` at prom_a 0xF8AE7E/0xF8AEF1). The SX-WSA1R is
