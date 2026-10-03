@@ -1786,14 +1786,14 @@
 	.set	ShowScreen_NoteEditPartSelect, 0xFE836F
 	.set	ShowScreen_DrumEditPartSelect, 0xFE83A3
 	.set	ScreenLeave_NoteEditPartSelect, 0xFE8564
-	.set	sub_FE8565, 0xFE8565
+	.set	ScreenButton_EditPartSelect, 0xFE8565
 	.set	EditScreen_EnterDrumEdit, 0xFE8868
 	.set	EditScreen_EnterNoteEdit, 0xFE88AA
-	.set	ScreenLeave_Code28, 0xFE8C1F
-	.set	ScreenLeave_Code25, 0xFE8C3A
+	.set	ScreenLeave_DrumEdit, 0xFE8C1F
+	.set	ScreenLeave_NoteEdit, 0xFE8C3A
 	.set	T_F402D8_Nop, 0xFE8CB3
-	.set	ScreenButton_Code25, 0xFE9A33
-	.set	ScreenButton_Code28, 0xFE9B8D
+	.set	ScreenButton_NoteEdit, 0xFE9A33
+	.set	ScreenButton_DrumEdit, 0xFE9B8D
 	.set	sub_FF42B7, 0xFF42B7
 	.set	Var2134_SetBit1_3, 0xFF42C0
 	.set	sub_FF42C5, 0xFF42C5
@@ -88170,21 +88170,21 @@ T_F402B8:	jp T_F402B8_Nop  ; -> prom_a 0x6805F
 ;           ShowScreen_NoteEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_NoteEditPartSelect:	jp ShowScreen_NoteEditPartSelect  ; F402BC (was T_F402BC) -> prom_a 0x6836F
 T_ScreenLeave_NoteEditPartSelect:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
-T_F402C4:	jp sub_FE8565  ; -> prom_a 0x68565
+T_F402C4:	jp ScreenButton_EditPartSelect  ; -> prom_a 0x68565
 T_ScreenLeave_NoteEditPartSelect_2:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402CC:	jp EditScreen_EnterNoteEdit  ; -> prom_a 0x688AA
-T_F402D0:	jp ScreenLeave_Code25  ; -> prom_a 0x68C3A
-T_F402D4:	jp ScreenButton_Code25  ; -> prom_a 0x69A33
+T_F402D0:	jp ScreenLeave_NoteEdit  ; -> prom_a 0x68C3A
+T_F402D4:	jp ScreenButton_NoteEdit  ; -> prom_a 0x69A33
 T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
 ; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
 ;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_DrumEditPartSelect:	jp ShowScreen_DrumEditPartSelect  ; F402DC (was T_F402DC) -> prom_a 0x683A3
 T_ScreenLeave_DrumEditPartSelect:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
-T_F402E4:	jp sub_FE8565  ; -> prom_a 0x68565
+T_F402E4:	jp ScreenButton_EditPartSelect  ; -> prom_a 0x68565
 T_ScreenLeave_DrumEditPartSelect_2:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402EC:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
-T_F402F0:	jp ScreenLeave_Code28  ; -> prom_a 0x68C1F
-T_F402F4:	jp ScreenButton_Code28  ; -> prom_a 0x69B8D
+T_F402F0:	jp ScreenLeave_DrumEdit  ; -> prom_a 0x68C1F
+T_F402F4:	jp ScreenButton_DrumEdit  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
 T_F40300:	jp sub_FE833F  ; -> prom_a 0x6833F   x2

@@ -173053,10 +173053,10 @@ PartLabels_FE84F5:
 ; ---------------------------------------------------------------------
 ScreenLeave_NoteEditPartSelect:
 	ret                                                  ; FE8564  0e
-sub_FE8565:
+ScreenButton_EditPartSelect:
 	cp HL,0x001f                                         ; FE8565  db cf 1f 00
 	jr gt, .LFE857B                                      ; FE8569  6a 10
-	ld XIX,ScreenDispatch_FE857C                         ; FE856B  44 7c 85 fe 00
+	ld XIX,EditPartSelect_ButtonTable                         ; FE856B  44 7c 85 fe 00
 	sll hl, 0x02                                         ; FE8570  db ee 02
 	extz XHL                                             ; FE8573  eb 12
 	add XIX,XHL                                          ; FE8575  eb 84
@@ -173065,7 +173065,7 @@ sub_FE8565:
 .LFE857B:
 	ret                                                  ; FE857B  0e
 ; ---------------------------------------------------------------------
-; ScreenDispatch_FE857C -- 32 pointers, the same shape as 0xFE8077
+; EditPartSelect_ButtonTable -- 32 pointers, the same shape as 0xFE8077
 ; Read by: 0xFE8565 -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE857C / ...`,
 ;          instruction for instruction the same idiom.
 ; ENTRY COUNT 32 is the reader's bound `cp HL,0x001F`.
@@ -173073,15 +173073,15 @@ sub_FE8565:
 ;          the highest 0xFE8772.
 ; ---------------------------------------------------------------------
 
-ScreenDispatch_FE857C:
+EditPartSelect_ButtonTable:
 	.long sub_FE85FC__FE8621                                 ; FE857C  [  0]
-	.long sub_FE8649                                 ; FE8580  [  1]
-	.long sub_FE8671                                 ; FE8584  [  2]
-	.long sub_FE8699                                 ; FE8588  [  3]
-	.long sub_FE86C1                                 ; FE858C  [  4]
-	.long sub_FE86E9                                 ; FE8590  [  5]
-	.long sub_FE8711                                 ; FE8594  [  6]
-	.long sub_FE8739                                 ; FE8598  [  7]
+	.long SoftKeyCol2_EditPartSelect                                 ; FE8580  [  1]
+	.long SoftKeyCol3_EditPartSelect                                 ; FE8584  [  2]
+	.long SoftKeyCol4_EditPartSelect                                 ; FE8588  [  3]
+	.long SoftKeyCol5_EditPartSelect                                 ; FE858C  [  4]
+	.long SoftKeyCol6_EditPartSelect                                 ; FE8590  [  5]
+	.long SoftKeyCol7_EditPartSelect                                 ; FE8594  [  6]
+	.long SoftKeyCol8_EditPartSelect                                 ; FE8598  [  7]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE859C  [  8]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A0  [  9]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A4  [ 10]
@@ -173089,16 +173089,16 @@ ScreenDispatch_FE857C:
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85AC  [ 12]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B0  [ 13]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B4  [ 14]
-	.long sub_FE8762                                 ; FE85B8  [ 15]
+	.long ExitKey_EditPartSelect                                 ; FE85B8  [ 15]
 	.long ScreenDispatch_FE857C_Nop8                                 ; FE85BC  [ 16]
 	.long sub_FE85FC__FE8621                                 ; FE85C0  [ 17]
-	.long sub_FE8649                                 ; FE85C4  [ 18]
-	.long sub_FE8671                                 ; FE85C8  [ 19]
-	.long sub_FE8699                                 ; FE85CC  [ 20]
-	.long sub_FE86C1                                 ; FE85D0  [ 21]
-	.long sub_FE86E9                                 ; FE85D4  [ 22]
-	.long sub_FE8711                                 ; FE85D8  [ 23]
-	.long sub_FE8739                                 ; FE85DC  [ 24]
+	.long SoftKeyCol2_EditPartSelect                                 ; FE85C4  [ 18]
+	.long SoftKeyCol3_EditPartSelect                                 ; FE85C8  [ 19]
+	.long SoftKeyCol4_EditPartSelect                                 ; FE85CC  [ 20]
+	.long SoftKeyCol5_EditPartSelect                                 ; FE85D0  [ 21]
+	.long SoftKeyCol6_EditPartSelect                                 ; FE85D4  [ 22]
+	.long SoftKeyCol7_EditPartSelect                                 ; FE85D8  [ 23]
+	.long SoftKeyCol8_EditPartSelect                                 ; FE85DC  [ 24]
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E0  [ 25]
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E4  [ 26]
 	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E8  [ 27]
@@ -173151,7 +173151,8 @@ sub_FE85FC__FE8621:
 	call sub_FE8773                                      ; FE8644  1d 73 87 fe
 .LFE8648:
 	ret                                                  ; FE8648  0e
-sub_FE8649:   ; entry: named by 2 `.long` operands, first at 0xFE8580
+; SoftKeyCol2_EditPartSelect: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x01; EditPartSelect_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol2_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8580
 	bit 0x07,W                                           ; FE8649  c8 33 07
 	jr nz, .LFE8660                                      ; FE864C  6e 12
 	ldw bc, 0x01                                         ; FE864E  31 01 00
@@ -173172,7 +173173,8 @@ sub_FE8649:   ; entry: named by 2 `.long` operands, first at 0xFE8580
 	call sub_FE8773                                      ; FE866C  1d 73 87 fe
 .LFE8670:
 	ret                                                  ; FE8670  0e
-sub_FE8671:   ; entry: named by 2 `.long` operands, first at 0xFE8584
+; SoftKeyCol3_EditPartSelect: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x02; EditPartSelect_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8584
 	bit 0x07,W                                           ; FE8671  c8 33 07
 	jr nz, .LFE8688                                      ; FE8674  6e 12
 	ldw bc, 0x02                                         ; FE8676  31 02 00
@@ -173193,7 +173195,8 @@ sub_FE8671:   ; entry: named by 2 `.long` operands, first at 0xFE8584
 	call sub_FE8773                                      ; FE8694  1d 73 87 fe
 .LFE8698:
 	ret                                                  ; FE8698  0e
-sub_FE8699:   ; entry: named by 2 `.long` operands, first at 0xFE8588
+; SoftKeyCol4_EditPartSelect: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x03; EditPartSelect_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8588
 	bit 0x07,W                                           ; FE8699  c8 33 07
 	jr nz, .LFE86B0                                      ; FE869C  6e 12
 	ldw bc, 0x03                                         ; FE869E  31 03 00
@@ -173214,7 +173217,8 @@ sub_FE8699:   ; entry: named by 2 `.long` operands, first at 0xFE8588
 	call sub_FE8773                                      ; FE86BC  1d 73 87 fe
 .LFE86C0:
 	ret                                                  ; FE86C0  0e
-sub_FE86C1:   ; entry: named by 2 `.long` operands, first at 0xFE858C
+; SoftKeyCol5_EditPartSelect: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x04; EditPartSelect_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE858C
 	bit 0x07,W                                           ; FE86C1  c8 33 07
 	jr nz, .LFE86D8                                      ; FE86C4  6e 12
 	ldw bc, 0x04                                         ; FE86C6  31 04 00
@@ -173235,7 +173239,8 @@ sub_FE86C1:   ; entry: named by 2 `.long` operands, first at 0xFE858C
 	call sub_FE8773                                      ; FE86E4  1d 73 87 fe
 .LFE86E8:
 	ret                                                  ; FE86E8  0e
-sub_FE86E9:   ; entry: named by 2 `.long` operands, first at 0xFE8590
+; SoftKeyCol6_EditPartSelect: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x05; EditPartSelect_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol6_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8590
 	bit 0x07,W                                           ; FE86E9  c8 33 07
 	jr nz, .LFE8700                                      ; FE86EC  6e 12
 	ldw bc, 0x05                                         ; FE86EE  31 05 00
@@ -173256,7 +173261,8 @@ sub_FE86E9:   ; entry: named by 2 `.long` operands, first at 0xFE8590
 	call sub_FE8773                                      ; FE870C  1d 73 87 fe
 .LFE8710:
 	ret                                                  ; FE8710  0e
-sub_FE8711:   ; entry: named by 2 `.long` operands, first at 0xFE8594
+; SoftKeyCol7_EditPartSelect: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x06; EditPartSelect_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol7_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8594
 	bit 0x07,W                                           ; FE8711  c8 33 07
 	jr nz, .LFE8728                                      ; FE8714  6e 12
 	ldw bc, 0x06                                         ; FE8716  31 06 00
@@ -173277,7 +173283,8 @@ sub_FE8711:   ; entry: named by 2 `.long` operands, first at 0xFE8594
 	call sub_FE8773                                      ; FE8734  1d 73 87 fe
 .LFE8738:
 	ret                                                  ; FE8738  0e
-sub_FE8739:   ; entry: named by 2 `.long` operands, first at 0xFE8598
+; SoftKeyCol8_EditPartSelect: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; EditPartSelect_ButtonTable slot 0x07; EditPartSelect_ButtonTable slot 0x18.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol8_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xFE8598
 	bit 0x07,W                                           ; FE8739  c8 33 07
 	jr nz, .LFE8750                                      ; FE873C  6e 12
 	ldw bc, 0x07                                         ; FE873E  31 07 00
@@ -173300,7 +173307,8 @@ sub_FE8739:   ; entry: named by 2 `.long` operands, first at 0xFE8598
 	ret                                                  ; FE8760  0e
 ScreenDispatch_FE857C_Nop8:   ; entry: named by 8 `.long` operands, first at 0xFE859C
 	ret                                                  ; FE8761  0e
-sub_FE8762:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
+; ExitKey_EditPartSelect: the EXIT key; EditPartSelect_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
+ExitKey_EditPartSelect:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
 	bit 0x07,W                                           ; FE8762  c8 33 07
 	jr nz, .LFE876E                                      ; FE8765  6e 07
 	ldw (UI_Request:16), 0x801a                              ; FE8767  f1 70 20 02 1a 80
@@ -173724,9 +173732,9 @@ BStore_CursorSlot_RestoreMark:
 	ld wa, (0x601f14:24)                                ; FE8C15  d2 14 1f 60 20
 	ld (BStore_CursorOffset:16), wa                                  ; FE8C1A  f1 5e 34 50
 	ret                                                  ; FE8C1E  0e
-; ScreenLeave_Code28: the +4 LEAVE method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
+; ScreenLeave_DrumEdit: the +4 LEAVE method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
 ;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F0 jumps here.
-ScreenLeave_Code28:
+ScreenLeave_DrumEdit:
 	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FE8C29  c1 7a 20 3f 28
@@ -173735,9 +173743,9 @@ ScreenLeave_Code28:
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C33  c1 d4 34 3e 10
 .LFE8C38:
 	jr .LFE8C5D                                          ; FE8C38  68 23
-; ScreenLeave_Code25: the +4 LEAVE method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
+; ScreenLeave_NoteEdit: the +4 LEAVE method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
 ;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D0 jumps here.
-ScreenLeave_Code25:
+ScreenLeave_NoteEdit:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x25                          ; FE8C3A  c1 7a 20 3f 25
 	jr z, .LFE8C49                                       ; FE8C3F  66 08
 	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C41  1e 53 00
@@ -175064,12 +175072,12 @@ sub_FE9A07:
 	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
 	ret                                                  ; FE9A32  0e
-; ScreenButton_Code25: the +8 BUTTON method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
+; ScreenButton_NoteEdit: the +8 BUTTON method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
 ;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D4 jumps here.
-ScreenButton_Code25:
+ScreenButton_NoteEdit:
 	cp HL,0x001f                                         ; FE9A33  db cf 1f 00
 	jr gt, .LFE9A49                                      ; FE9A37  6a 10
-	ld XIX,ScreenDispatch_FE9A4A                         ; FE9A39  44 4a 9a fe 00
+	ld XIX,NoteEdit_ButtonTable                         ; FE9A39  44 4a 9a fe 00
 	sll hl, 0x02                                         ; FE9A3E  db ee 02
 	extz XHL                                             ; FE9A41  eb 12
 	add XIX,XHL                                          ; FE9A43  eb 84
@@ -175079,39 +175087,39 @@ sub_FE9A47:
 .LFE9A49:
 	ret                                                  ; FE9A49  0e
 ; ---------------------------------------------------------------------
-; ScreenDispatch_FE9A4A -- 32 pointers, bounded reader
+; NoteEdit_ButtonTable -- 32 pointers, bounded reader
 ; Read by: 0xFE9A33 -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE9A4A / ...`.
 ; ENTRY COUNT 32 is the reader's bound.
 ; Evidence: all 32 values are inside this module, the lowest 0xFE9ACA and
 ;          the highest 0xFE9B8C.
 ; ---------------------------------------------------------------------
 
-ScreenDispatch_FE9A4A:
-	.long sub_FE9ACA                                 ; FE9A4A  [  0]
-	.long sub_FE9AD8                                 ; FE9A4E  [  1]
-	.long sub_FE9AE6                                 ; FE9A52  [  2]
-	.long sub_FE9AF4                                 ; FE9A56  [  3]
-	.long sub_FE9B02                                 ; FE9A5A  [  4]
-	.long sub_FE9B10                                 ; FE9A5E  [  5]
-	.long sub_FE9B1E                                 ; FE9A62  [  6]
-	.long sub_FE9B2C                                 ; FE9A66  [  7]
-	.long sub_FE9B3A                                 ; FE9A6A  [  8]
-	.long sub_FE9B3E                                 ; FE9A6E  [  9]
-	.long sub_FE9B4C                                 ; FE9A72  [ 10]
-	.long sub_FE9B5A                                 ; FE9A76  [ 11]
+NoteEdit_ButtonTable:
+	.long SoftKeyCol1_NoteEdit                                 ; FE9A4A  [  0]
+	.long SoftKeyCol2_NoteEdit                                 ; FE9A4E  [  1]
+	.long SoftKeyCol3_NoteEdit                                 ; FE9A52  [  2]
+	.long SoftKeyCol4_NoteEdit                                 ; FE9A56  [  3]
+	.long SoftKeyCol5_NoteEdit                                 ; FE9A5A  [  4]
+	.long SoftKeyCol6_NoteEdit                                 ; FE9A5E  [  5]
+	.long SoftKeyCol7_NoteEdit                                 ; FE9A62  [  6]
+	.long SoftKeyCol8_NoteEdit                                 ; FE9A66  [  7]
+	.long LcdKeyRow1_NoteEdit                                 ; FE9A6A  [  8]
+	.long LcdKeyRow2_NoteEdit                                 ; FE9A6E  [  9]
+	.long LcdKeyRow3_NoteEdit                                 ; FE9A72  [ 10]
+	.long LcdKeyRow4_NoteEdit                                 ; FE9A76  [ 11]
 	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7A  [ 12]
 	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7E  [ 13]
 	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A82  [ 14]
-	.long sub_FE9B5F                                 ; FE9A86  [ 15]
+	.long ExitKey_NoteEdit                                 ; FE9A86  [ 15]
 	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A8A  [ 16]
-	.long sub_FE9B6C                                 ; FE9A8E  [ 17]
-	.long sub_FE9B70                                 ; FE9A92  [ 18]
-	.long sub_FE9B74                                 ; FE9A96  [ 19]
-	.long sub_FE9B78                                 ; FE9A9A  [ 20]
-	.long sub_FE9B7C                                 ; FE9A9E  [ 21]
-	.long sub_FE9B80                                 ; FE9AA2  [ 22]
-	.long sub_FE9B84                                 ; FE9AA6  [ 23]
-	.long sub_FE9B88                                 ; FE9AAA  [ 24]
+	.long NoteEdit_Button17                                 ; FE9A8E  [ 17]
+	.long NoteEdit_Button18                                 ; FE9A92  [ 18]
+	.long NoteEdit_Button19                                 ; FE9A96  [ 19]
+	.long NoteEdit_Button20                                 ; FE9A9A  [ 20]
+	.long NoteEdit_Button21                                 ; FE9A9E  [ 21]
+	.long NoteEdit_Button22                                 ; FE9AA2  [ 22]
+	.long NoteEdit_Button23                                 ; FE9AA6  [ 23]
+	.long NoteEdit_Button24                                 ; FE9AAA  [ 24]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AAE  [ 25]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB2  [ 26]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB6  [ 27]
@@ -175119,65 +175127,78 @@ ScreenDispatch_FE9A4A:
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9ABE  [ 29]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC2  [ 30]
 	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC6  [ 31]
-sub_FE9ACA:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
+; SoftKeyCol1_NoteEdit: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x00.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
 	ld (PanelDial_DownButton:16), 0x80                                 ; FE9ACF  f1 9b 20 00 80
 	calr sub_FE9CDA                                          ; FE9AD4  1e 03 02
 	ret                                                  ; FE9AD7  0e
-sub_FE9AD8:   ; entry: named by 1 `.long` operand, first at 0xFE9A4E
+; SoftKeyCol2_NoteEdit: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x01.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol2_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A4E
 	ld (PanelDial_UpButton:16), 0x01                                 ; FE9AD8  f1 9c 20 00 01
 	ld (PanelDial_DownButton:16), 0x81                                 ; FE9ADD  f1 9b 20 00 81
 	calr sub_FE9D92                                          ; FE9AE2  1e ad 02
 	ret                                                  ; FE9AE5  0e
-sub_FE9AE6:   ; entry: named by 1 `.long` operand, first at 0xFE9A52
+; SoftKeyCol3_NoteEdit: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x02.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A52
 	ld (PanelDial_UpButton:16), 0x02                                 ; FE9AE6  f1 9c 20 00 02
 	ld (PanelDial_DownButton:16), 0x82                                 ; FE9AEB  f1 9b 20 00 82
 	calr sub_FEA097                                          ; FE9AF0  1e a4 05
 	ret                                                  ; FE9AF3  0e
-sub_FE9AF4:   ; entry: named by 1 `.long` operand, first at 0xFE9A56
+; SoftKeyCol4_NoteEdit: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x03.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A56
 	ld (PanelDial_UpButton:16), 0x03                                 ; FE9AF4  f1 9c 20 00 03
 	ld (PanelDial_DownButton:16), 0x83                                 ; FE9AF9  f1 9b 20 00 83
 	calr sub_FEA14E                                          ; FE9AFE  1e 4d 06
 	ret                                                  ; FE9B01  0e
-sub_FE9B02:   ; entry: named by 1 `.long` operand, first at 0xFE9A5A
+; SoftKeyCol5_NoteEdit: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x04.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5A
 	ld (PanelDial_UpButton:16), 0x04                                 ; FE9B02  f1 9c 20 00 04
 	ld (PanelDial_DownButton:16), 0x84                                 ; FE9B07  f1 9b 20 00 84
 	calr sub_FEA1D5                                          ; FE9B0C  1e c6 06
 	ret                                                  ; FE9B0F  0e
-sub_FE9B10:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
+; SoftKeyCol6_NoteEdit: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x05.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol6_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
 	ld (PanelDial_UpButton:16), 0x05                                 ; FE9B10  f1 9c 20 00 05
 	ld (PanelDial_DownButton:16), 0x85                                 ; FE9B15  f1 9b 20 00 85
 	calr sub_FEA2A5                                          ; FE9B1A  1e 88 07
 	ret                                                  ; FE9B1D  0e
-sub_FE9B1E:   ; entry: named by 1 `.long` operand, first at 0xFE9A62
+; SoftKeyCol7_NoteEdit: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x06.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol7_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A62
 	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B1E  f1 9c 20 00 07
 	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B23  f1 9b 20 00 06
 	calr sub_FEA86F                                          ; FE9B28  1e 44 0d
 	ret                                                  ; FE9B2B  0e
-sub_FE9B2C:   ; entry: named by 1 `.long` operand, first at 0xFE9A66
+; SoftKeyCol8_NoteEdit: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x07.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol8_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A66
 	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B2C  f1 9c 20 00 07
 	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B31  f1 9b 20 00 06
 	calr sub_FEA36C                                          ; FE9B36  1e 33 08
 	ret                                                  ; FE9B39  0e
-sub_FE9B3A:   ; entry: named by 1 `.long` operand, first at 0xFE9A6A
+; LcdKeyRow1_NoteEdit: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A6A
 	calr sub_FEA97F                                          ; FE9B3A  1e 42 0e
 	ret                                                  ; FE9B3D  0e
-sub_FE9B3E:   ; entry: named by 1 `.long` operand, first at 0xFE9A6E
+; LcdKeyRow2_NoteEdit: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A6E
 	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B3E  f1 9c 20 00 09
 	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B43  f1 9b 20 00 0a
 	calr sub_FEA9A0                                          ; FE9B48  1e 55 0e
 	ret                                                  ; FE9B4B  0e
-sub_FE9B4C:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
+; LcdKeyRow3_NoteEdit: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
 	ld (PanelDial_UpButton:16), 0x09                                 ; FE9B4C  f1 9c 20 00 09
 	ld (PanelDial_DownButton:16), 0x0a                                 ; FE9B51  f1 9b 20 00 0a
 	calr sub_FEA9E0                                          ; FE9B56  1e 87 0e
 	ret                                                  ; FE9B59  0e
-sub_FE9B5A:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
+; LcdKeyRow4_NoteEdit: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
 	calr sub_FEAA20                                          ; FE9B5A  1e c3 0e
 	ret                                                  ; FE9B5D  0e
 ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
 	ret                                                  ; FE9B5E  0e
-sub_FE9B5F:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
+; ExitKey_NoteEdit: the EXIT key; NoteEdit_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
+ExitKey_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	bit 0x07,W                                           ; FE9B5F  c8 33 07
 	jr nz, .LFE9B68                                      ; FE9B62  6e 04
 	calr UI_GotoScreen24                                          ; FE9B64  1e 1f 0f
@@ -175185,38 +175206,54 @@ sub_FE9B5F:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 .LFE9B68:
 	calr sub_FE81D4_Nop                                          ; FE9B68  1e 7b e6
 	ret                                                  ; FE9B6B  0e
-sub_FE9B6C:   ; entry: named by 1 `.long` operand, first at 0xFE9A8E
+; NoteEdit_Button17 -- NoteEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
+;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button17:   ; entry: named by 1 `.long` operand, first at 0xFE9A8E
 	calr sub_FEAA94                                          ; FE9B6C  1e 25 0f
 	ret                                                  ; FE9B6F  0e
-sub_FE9B70:   ; entry: named by 1 `.long` operand, first at 0xFE9A92
+; NoteEdit_Button18 -- NoteEdit_ButtonTable slot 0x12, NOT NAMED: slot 0x12 is only the VARIANT-1 already-held rewrite of base code 0x01
+;   (SoftKeyCol2); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button18:   ; entry: named by 1 `.long` operand, first at 0xFE9A92
 	calr sub_FEAB0E                                          ; FE9B70  1e 9b 0f
 	ret                                                  ; FE9B73  0e
-sub_FE9B74:   ; entry: named by 1 `.long` operand, first at 0xFE9A96
+; NoteEdit_Button19 -- NoteEdit_ButtonTable slot 0x13, NOT NAMED: slot 0x13 is only the VARIANT-1 already-held rewrite of base code 0x02
+;   (SoftKeyCol3); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button19:   ; entry: named by 1 `.long` operand, first at 0xFE9A96
 	calr sub_FEAB30                                          ; FE9B74  1e b9 0f
 	ret                                                  ; FE9B77  0e
-sub_FE9B78:   ; entry: named by 1 `.long` operand, first at 0xFE9A9A
+; NoteEdit_Button20 -- NoteEdit_ButtonTable slot 0x14, NOT NAMED: slot 0x14 is only the VARIANT-1 already-held rewrite of base code 0x03
+;   (SoftKeyCol4); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9A9A
 	calr sub_FEABE9                                          ; FE9B78  1e 6e 10
 	ret                                                  ; FE9B7B  0e
-sub_FE9B7C:   ; entry: named by 1 `.long` operand, first at 0xFE9A9E
+; NoteEdit_Button21 -- NoteEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
+;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button21:   ; entry: named by 1 `.long` operand, first at 0xFE9A9E
 	calr sub_FEACB6                                          ; FE9B7C  1e 37 11
 	ret                                                  ; FE9B7F  0e
-sub_FE9B80:   ; entry: named by 1 `.long` operand, first at 0xFE9AA2
+; NoteEdit_Button22 -- NoteEdit_ButtonTable slot 0x16, NOT NAMED: slot 0x16 is only the VARIANT-1 already-held rewrite of base code 0x05
+;   (SoftKeyCol6); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button22:   ; entry: named by 1 `.long` operand, first at 0xFE9AA2
 	calr sub_FEADE1                                          ; FE9B80  1e 5e 12
 	ret                                                  ; FE9B83  0e
-sub_FE9B84:   ; entry: named by 1 `.long` operand, first at 0xFE9AA6
+; NoteEdit_Button23 -- NoteEdit_ButtonTable slot 0x17, NOT NAMED: slot 0x17 is only the VARIANT-1 already-held rewrite of base code 0x06
+;   (SoftKeyCol7); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button23:   ; entry: named by 1 `.long` operand, first at 0xFE9AA6
 	calr sub_FEAE58                                          ; FE9B84  1e d1 12
 	ret                                                  ; FE9B87  0e
-sub_FE9B88:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
+; NoteEdit_Button24 -- NoteEdit_ButtonTable slot 0x18, NOT NAMED: slot 0x18 is only the VARIANT-1 already-held rewrite of base code 0x07
+;   (SoftKeyCol8); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+NoteEdit_Button24:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
 	calr sub_FEADFB                                          ; FE9B88  1e 70 12
 	ret                                                  ; FE9B8B  0e
 ScreenDispatch_FE9A4A_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
 	ret                                                  ; FE9B8C  0e
-; ScreenButton_Code28: the +8 BUTTON method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
+; ScreenButton_DrumEdit: the +8 BUTTON method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
 ;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F4 jumps here.
-ScreenButton_Code28:
+ScreenButton_DrumEdit:
 	cp HL,0x001f                                         ; FE9B8D  db cf 1f 00
 	jr gt, .LFE9BA3                                      ; FE9B91  6a 10
-	ld XIX,ScreenDispatch_FE9BA4                         ; FE9B93  44 a4 9b fe 00
+	ld XIX,DrumEdit_ButtonTable                         ; FE9B93  44 a4 9b fe 00
 	sll hl, 0x02                                         ; FE9B98  db ee 02
 	extz XHL                                             ; FE9B9B  eb 12
 	add XIX,XHL                                          ; FE9B9D  eb 84
@@ -175225,38 +175262,38 @@ ScreenButton_Code28:
 .LFE9BA3:
 	ret                                                  ; FE9BA3  0e
 ; ---------------------------------------------------------------------
-; ScreenDispatch_FE9BA4 -- 32 pointers, bounded reader
+; DrumEdit_ButtonTable -- 32 pointers, bounded reader
 ; Read by: 0xFE9B8D -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE9BA4 / ...`.
 ; ENTRY COUNT 32 is the reader's bound.
 ; Evidence: all 32 values are inside this module, the lowest 0xFE9C24 and
 ;          the highest 0xFE9CD9.
 ; ---------------------------------------------------------------------
 
-ScreenDispatch_FE9BA4:
-	.long sub_FE9C24                                 ; FE9BA4  [  0]
-	.long sub_FE9C32                                 ; FE9BA8  [  1]
-	.long sub_FE9C40                                 ; FE9BAC  [  2]
-	.long sub_FE9C4E                                 ; FE9BB0  [  3]
-	.long sub_FE9C5C                                 ; FE9BB4  [  4]
-	.long sub_FE9C6A                                 ; FE9BB8  [  5]
-	.long sub_FE9C78                                 ; FE9BBC  [  6]
-	.long sub_FE9C86                                 ; FE9BC0  [  7]
-	.long sub_FE9C8A                                 ; FE9BC4  [  8]
-	.long sub_FE9C8E                                 ; FE9BC8  [  9]
-	.long sub_FE9C9C                                 ; FE9BCC  [ 10]
-	.long sub_FE9CAA                                 ; FE9BD0  [ 11]
+DrumEdit_ButtonTable:
+	.long SoftKeyCol1_DrumEdit                                 ; FE9BA4  [  0]
+	.long SoftKeyCol2_DrumEdit                                 ; FE9BA8  [  1]
+	.long SoftKeyCol3_DrumEdit                                 ; FE9BAC  [  2]
+	.long SoftKeyCol4_DrumEdit                                 ; FE9BB0  [  3]
+	.long SoftKeyCol5_DrumEdit                                 ; FE9BB4  [  4]
+	.long SoftKeyCol6_DrumEdit                                 ; FE9BB8  [  5]
+	.long SoftKeyCol7_DrumEdit                                 ; FE9BBC  [  6]
+	.long SoftKeyCol8_DrumEdit                                 ; FE9BC0  [  7]
+	.long LcdKeyRow1_DrumEdit                                 ; FE9BC4  [  8]
+	.long LcdKeyRow2_DrumEdit                                 ; FE9BC8  [  9]
+	.long LcdKeyRow3_DrumEdit                                 ; FE9BCC  [ 10]
+	.long LcdKeyRow4_DrumEdit                                 ; FE9BD0  [ 11]
 	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD4  [ 12]
 	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD8  [ 13]
 	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BDC  [ 14]
-	.long sub_FE9CAF                                 ; FE9BE0  [ 15]
+	.long ExitKey_DrumEdit                                 ; FE9BE0  [ 15]
 	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BE4  [ 16]
-	.long sub_FE9CBC                                 ; FE9BE8  [ 17]
-	.long sub_FE9CC0                                 ; FE9BEC  [ 18]
-	.long sub_FE9CC4                                 ; FE9BF0  [ 19]
-	.long sub_FE9CC8                                 ; FE9BF4  [ 20]
-	.long sub_FE9CCC                                 ; FE9BF8  [ 21]
-	.long sub_FE9CD0                                 ; FE9BFC  [ 22]
-	.long sub_FE9CD4                                 ; FE9C00  [ 23]
+	.long DrumEdit_Button17                                 ; FE9BE8  [ 17]
+	.long DrumEdit_Button18                                 ; FE9BEC  [ 18]
+	.long DrumEdit_Button19                                 ; FE9BF0  [ 19]
+	.long DrumEdit_Button20                                 ; FE9BF4  [ 20]
+	.long DrumEdit_Button21                                 ; FE9BF8  [ 21]
+	.long DrumEdit_Button22                                 ; FE9BFC  [ 22]
+	.long DrumEdit_Button23                                 ; FE9C00  [ 23]
 	.long ScreenDispatch_FE9BA4_Nop24                                 ; FE9C04  [ 24]
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C08  [ 25]
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C0C  [ 26]
@@ -175265,63 +175302,76 @@ ScreenDispatch_FE9BA4:
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C18  [ 29]
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C1C  [ 30]
 	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C20  [ 31]
-sub_FE9C24:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
+; SoftKeyCol1_DrumEdit: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x00.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol1_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
 	ld (PanelDial_DownButton:16), 0x80                                 ; FE9C29  f1 9b 20 00 80
 	calr sub_FE9CDA                                      ; FE9C2E  1e a9 00
 	ret                                                  ; FE9C31  0e
-sub_FE9C32:   ; entry: named by 1 `.long` operand, first at 0xFE9BA8
+; SoftKeyCol2_DrumEdit: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x01.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol2_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BA8
 	ld (PanelDial_UpButton:16), 0x01                                 ; FE9C32  f1 9c 20 00 01
 	ld (PanelDial_DownButton:16), 0x81                                 ; FE9C37  f1 9b 20 00 81
 	calr sub_FE9D92                                      ; FE9C3C  1e 53 01
 	ret                                                  ; FE9C3F  0e
-sub_FE9C40:   ; entry: named by 1 `.long` operand, first at 0xFE9BAC
+; SoftKeyCol3_DrumEdit: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x02.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BAC
 	ld (PanelDial_UpButton:16), 0x82                                 ; FE9C40  f1 9c 20 00 82
 	ld (PanelDial_DownButton:16), 0x02                                 ; FE9C45  f1 9b 20 00 02
 	calr sub_FEA097                                      ; FE9C4A  1e 4a 04
 	ret                                                  ; FE9C4D  0e
-sub_FE9C4E:   ; entry: named by 1 `.long` operand, first at 0xFE9BB0
+; SoftKeyCol4_DrumEdit: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x03.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB0
 	ld (PanelDial_UpButton:16), 0x03                                 ; FE9C4E  f1 9c 20 00 03
 	ld (PanelDial_DownButton:16), 0x83                                 ; FE9C53  f1 9b 20 00 83
 	calr sub_FEA14E                                      ; FE9C58  1e f3 04
 	ret                                                  ; FE9C5B  0e
-sub_FE9C5C:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
+; SoftKeyCol5_DrumEdit: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x04.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
 	ld (PanelDial_UpButton:16), 0x04                                 ; FE9C5C  f1 9c 20 00 04
 	ld (PanelDial_DownButton:16), 0x84                                 ; FE9C61  f1 9b 20 00 84
 	calr sub_FEA2A5                                      ; FE9C66  1e 3c 06
 	ret                                                  ; FE9C69  0e
-sub_FE9C6A:   ; entry: named by 1 `.long` operand, first at 0xFE9BB8
+; SoftKeyCol6_DrumEdit: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x05.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol6_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB8
 	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C6A  f1 9c 20 00 06
 	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C6F  f1 9b 20 00 05
 	calr sub_FEA86F                                      ; FE9C74  1e f8 0b
 	ret                                                  ; FE9C77  0e
-sub_FE9C78:   ; entry: named by 1 `.long` operand, first at 0xFE9BBC
+; SoftKeyCol7_DrumEdit: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x06.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol7_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BBC
 	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C78  f1 9c 20 00 06
 	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C7D  f1 9b 20 00 05
 	calr sub_FEA36C                                      ; FE9C82  1e e7 06
 	ret                                                  ; FE9C85  0e
-sub_FE9C86:   ; entry: named by 1 `.long` operand, first at 0xFE9BC0
+; SoftKeyCol8_DrumEdit: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x07.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol8_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC0
 	calr sub_FEAFFE                                      ; FE9C86  1e 75 13
 	ret                                                  ; FE9C89  0e
-sub_FE9C8A:   ; entry: named by 1 `.long` operand, first at 0xFE9BC4
+; LcdKeyRow1_DrumEdit: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow1_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC4
 	calr sub_FEAFD0                                      ; FE9C8A  1e 43 13
 	ret                                                  ; FE9C8D  0e
-sub_FE9C8E:   ; entry: named by 1 `.long` operand, first at 0xFE9BC8
+; LcdKeyRow2_DrumEdit: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC8
 	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C8E  f1 9c 20 00 0a
 	ld (PanelDial_DownButton:16), 0x09                                 ; FE9C93  f1 9b 20 00 09
 	calr sub_FEAF29                                      ; FE9C98  1e 8e 12
 	ret                                                  ; FE9C9B  0e
-sub_FE9C9C:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
+; LcdKeyRow3_DrumEdit: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
 	ld (PanelDial_UpButton:16), 0x0a                                 ; FE9C9C  f1 9c 20 00 0a
 	ld (PanelDial_DownButton:16), 0x09                                 ; FE9CA1  f1 9b 20 00 09
 	calr sub_FEAE9B                                      ; FE9CA6  1e f2 11
 	ret                                                  ; FE9CA9  0e
-sub_FE9CAA:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
+; LcdKeyRow4_DrumEdit: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); DrumEdit_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
 	calr sub_FEAA20                                      ; FE9CAA  1e 73 0d
 	ret                                                  ; FE9CAD  0e
 ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
 	ret                                                  ; FE9CAE  0e
-sub_FE9CAF:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
+; ExitKey_DrumEdit: the EXIT key; DrumEdit_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
+ExitKey_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	bit 0x07,W                                           ; FE9CAF  c8 33 07
 	jr nz, .LFE9CB8                                      ; FE9CB2  6e 04
 	calr UI_GotoScreen27                                      ; FE9CB4  1e d6 0d
@@ -175329,25 +175379,39 @@ sub_FE9CAF:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 .LFE9CB8:
 	calr sub_FE81D4_Nop                                          ; FE9CB8  1e 2b e5
 	ret                                                  ; FE9CBB  0e
-sub_FE9CBC:   ; entry: named by 1 `.long` operand, first at 0xFE9BE8
+; DrumEdit_Button17 -- DrumEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
+;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button17:   ; entry: named by 1 `.long` operand, first at 0xFE9BE8
 	calr sub_FEAA94                                      ; FE9CBC  1e d5 0d
 	ret                                                  ; FE9CBF  0e
-sub_FE9CC0:   ; entry: named by 1 `.long` operand, first at 0xFE9BEC
+; DrumEdit_Button18 -- DrumEdit_ButtonTable slot 0x12, NOT NAMED: slot 0x12 is only the VARIANT-1 already-held rewrite of base code 0x01
+;   (SoftKeyCol2); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button18:   ; entry: named by 1 `.long` operand, first at 0xFE9BEC
 	calr sub_FEAB0E                                      ; FE9CC0  1e 4b 0e
 	ret                                                  ; FE9CC3  0e
-sub_FE9CC4:   ; entry: named by 1 `.long` operand, first at 0xFE9BF0
+; DrumEdit_Button19 -- DrumEdit_ButtonTable slot 0x13, NOT NAMED: slot 0x13 is only the VARIANT-1 already-held rewrite of base code 0x02
+;   (SoftKeyCol3); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button19:   ; entry: named by 1 `.long` operand, first at 0xFE9BF0
 	calr sub_FEAB30                                      ; FE9CC4  1e 69 0e
 	ret                                                  ; FE9CC7  0e
-sub_FE9CC8:   ; entry: named by 1 `.long` operand, first at 0xFE9BF4
+; DrumEdit_Button20 -- DrumEdit_ButtonTable slot 0x14, NOT NAMED: slot 0x14 is only the VARIANT-1 already-held rewrite of base code 0x03
+;   (SoftKeyCol4); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9BF4
 	calr sub_FEABE9                                      ; FE9CC8  1e 1e 0f
 	ret                                                  ; FE9CCB  0e
-sub_FE9CCC:   ; entry: named by 1 `.long` operand, first at 0xFE9BF8
+; DrumEdit_Button21 -- DrumEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
+;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button21:   ; entry: named by 1 `.long` operand, first at 0xFE9BF8
 	calr sub_FEADE1                                      ; FE9CCC  1e 12 11
 	ret                                                  ; FE9CCF  0e
-sub_FE9CD0:   ; entry: named by 1 `.long` operand, first at 0xFE9BFC
+; DrumEdit_Button22 -- DrumEdit_ButtonTable slot 0x16, NOT NAMED: slot 0x16 is only the VARIANT-1 already-held rewrite of base code 0x05
+;   (SoftKeyCol6); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button22:   ; entry: named by 1 `.long` operand, first at 0xFE9BFC
 	calr sub_FEAE58                                      ; FE9CD0  1e 85 11
 	ret                                                  ; FE9CD3  0e
-sub_FE9CD4:   ; entry: named by 1 `.long` operand, first at 0xFE9C00
+; DrumEdit_Button23 -- DrumEdit_ButtonTable slot 0x17, NOT NAMED: slot 0x17 is only the VARIANT-1 already-held rewrite of base code 0x06
+;   (SoftKeyCol7); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
+DrumEdit_Button23:   ; entry: named by 1 `.long` operand, first at 0xFE9C00
 	calr sub_FEADFB                                      ; FE9CD4  1e 24 11
 	ret                                                  ; FE9CD7  0e
 ScreenDispatch_FE9BA4_Nop24:   ; entry: named by 1 `.long` operand, first at 0xFE9C04

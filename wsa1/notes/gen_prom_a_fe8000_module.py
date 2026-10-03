@@ -123,8 +123,8 @@ TABLES = [
      "; Unknown:  what P stands for.  \"Part\" is the obvious reading and is NOT\n"
      ";          claimed here -- nothing in either image spells the word next to\n"
      ";          this table.\n" + H),
-    (0xFE857C, 0xFE85FC, "long", "ScreenDispatch_FE857C", H +
-     "; ScreenDispatch_FE857C -- 32 pointers, the same shape as 0xFE8077\n"
+    (0xFE857C, 0xFE85FC, "long", "EditPartSelect_ButtonTable", H +
+     "; EditPartSelect_ButtonTable -- 32 pointers, the same shape as 0xFE8077\n"
      "; Read by: 0xFE8565 -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE857C / ...`,\n"
      ";          instruction for instruction the same idiom.\n"
      "; ENTRY COUNT 32 is the reader's bound `cp HL,0x001F`.\n"
@@ -162,14 +162,14 @@ TABLES = [
      ";          values are inside prom_a's 0xFE0000 half, the lowest\n"
      ";          0xFE933F and the highest 0xFEAFF1,\n"
      ";          and the byte at 0xFE932D starts a clean decode.\n" + H),
-    (0xFE9A4A, 0xFE9ACA, "long", "ScreenDispatch_FE9A4A", H +
-     "; ScreenDispatch_FE9A4A -- 32 pointers, bounded reader\n"
+    (0xFE9A4A, 0xFE9ACA, "long", "NoteEdit_ButtonTable", H +
+     "; NoteEdit_ButtonTable -- 32 pointers, bounded reader\n"
      "; Read by: 0xFE9A33 -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE9A4A / ...`.\n"
      "; ENTRY COUNT 32 is the reader's bound.\n"
      "; Evidence: all 32 values are inside this module, the lowest 0xFE9ACA and\n"
      ";          the highest 0xFE9B8C.\n" + H),
-    (0xFE9BA4, 0xFE9C24, "long", "ScreenDispatch_FE9BA4", H +
-     "; ScreenDispatch_FE9BA4 -- 32 pointers, bounded reader\n"
+    (0xFE9BA4, 0xFE9C24, "long", "DrumEdit_ButtonTable", H +
+     "; DrumEdit_ButtonTable -- 32 pointers, bounded reader\n"
      "; Read by: 0xFE9B8D -- `cp HL,0x001F / jr ugt / ld XIX,0x00FE9BA4 / ...`.\n"
      "; ENTRY COUNT 32 is the reader's bound.\n"
      "; Evidence: all 32 values are inside this module, the lowest 0xFE9C24 and\n"
