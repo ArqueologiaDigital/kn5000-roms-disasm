@@ -269,5 +269,15 @@
 	.equ DisplayHold_Flag,			0x267f	; bit 0: DISPLAY HOLD on -- SoftKeyCol7/8_GroupSoundDisplayHold
 	.equ CombinationMode_Page,		0x2687	; 0 page 1, 1 page 2 -- PageKey_C0mbinati0nM0de
 
+; ---- wsa1/notes/FINDINGS-prom_a-panel-io-state.md -- "panel LED, analog-control and held-key state"
+	.equ PanelLed_Shadow,			0x20d0	; 8 LED bytes as they should be -- PanelLed_Show*, PanelLed_SendChangedBytes
+	.equ PanelLed_Sent,			0x20f0	; the 8 LED bytes as last sent -- PanelLed_SendChangedBytes
+	.equ PanelWire_Phase,			0x2196	; poll phase 0..3 -- PanelWire_ThrottledPoll
+	.equ PanelWire_LastPollTick,		0x2197	; Tick_Count at the last producer poll (word) -- PanelWire_PollProducers
+	.equ PanelHeld_Pos0,			0x2252	; 32-bit set of the pair-position-0 keys held -- PanelAction_PairPos0_HeldMask
+	.equ PanelHeld_Pos1,			0x2256	; 32-bit set of the pair-position-1 keys held -- PanelAction_PairPos1_HeldMask
+	.equ AnalogScan_HystState,		0x28e0	; two hysteresis bytes per A/D channel 0-3 -- AnalogScan_AdChannel0..3
+	.equ AnalogScan_Cooked,			0x28ec	; six cooked controller values, bit 7 = changed: +0/+1 channels 4/5, +2..+5 A/D 0-3 -- AnalogScan_*, PanelGroupQueue_AppendFlaggedGroups
+
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number"
 	.equ Effect_Algorithm,			0x2796	; the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ... -- 0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24

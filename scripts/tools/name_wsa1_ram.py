@@ -11,7 +11,7 @@ QUESTION THIS ANSWERS / JOB IT DOES
   counter, the model-variant flag, the disk flags, the part index),
   and the memory operands and the macro address arguments that spell it become the name.
   Only memory operands `(N)` / `(N:8)` / `(N:16)` / `(N:24)`, the address argument of the m_* macros
-  (`MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24, N`), the last argument of the memory-to-memory macros
+  (`MB8|MW8|MD8|ML8|...|MD24|ML24, N`), the last argument of the memory-to-memory macros
   (m_ld_mm16 / m_ldw_mm16 / m_ld_m16m: the other 16-bit address) and 24-bit immediates (`ld XIY,0x006007db`: at that width
   only an address) change; a 16-bit immediate equal to the number may be a value, and data
   (`.byte` / `.short`) is left alone -- except the +0x02 field of an interpreter-B display-list
@@ -317,13 +317,27 @@ GROUPS = [
         0x267B: ("CombinationMode_DirtyPan", "parts whose PAN cell to redraw", "UiEvent_MarkPartRedrawBits"),
         0x267C: ("CombinationMode_DirtyVol", "parts whose VOL cell to redraw", "UiEvent_MarkPartRedrawBits"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-panel-io-state.md", "panel LED, analog-control and held-key state", {
+        0x20D0: ("PanelLed_Shadow", "8 LED bytes as they should be", "PanelLed_Show*, PanelLed_SendChangedBytes"),
+        0x20F0: ("PanelLed_Sent", "the 8 LED bytes as last sent", "PanelLed_SendChangedBytes"),
+        0x28E0: ("AnalogScan_HystState", "two hysteresis bytes per A/D channel 0-3", "AnalogScan_AdChannel0..3"),
+        0x28EC: ("AnalogScan_Cooked", "six cooked controller values, bit 7 = changed: +0/+1 channels 4/5, +2..+5 A/D 0-3", "AnalogScan_*, PanelGroupQueue_AppendFlaggedGroups"),
+        0x2252: ("PanelHeld_Pos0", "32-bit set of the pair-position-0 keys held", "PanelAction_PairPos0_HeldMask"),
+        0x2256: ("PanelHeld_Pos1", "32-bit set of the pair-position-1 keys held", "PanelAction_PairPos1_HeldMask"),
+        0x2196: ("PanelWire_Phase", "poll phase 0..3", "PanelWire_ThrottledPoll"),
+        0x2197: ("PanelWire_LastPollTick", "Tick_Count at the last producer poll (word)", "PanelWire_PollProducers"),
+        **{0x20D0 + k: ("PanelLed_Shadow+%d" % k, "", "") for k in range(1, 8)},
+        **{0x20F0 + k: ("PanelLed_Sent+%d" % k, "", "") for k in range(1, 8)},
+        **{0x28E0 + k: ("AnalogScan_HystState+%d" % k, "", "") for k in range(1, 8)},
+        **{0x28EC + k: ("AnalogScan_Cooked+%d" % k, "", "") for k in range(1, 6)},
+    }),
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`
-MAC = re.compile(r'\b(MB8|MW8|MD8|MB16|MW16|MD16|MB24|MW24|MD24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')
+MAC = re.compile(r'\b(MB8|MW8|MD8|ML8|MB16|MW16|MD16|ML16|MB24|MW24|MD24|ML24),(\s*)(0x[0-9a-fA-F]+|\d+)\b')   # ML: the 32-bit-operand prefix
 # an interpreter-B display-list record's +0x02 field is the 16-bit address of the RAM variable it
 # draws (wsa1/notes/FINDINGS-ui-display-list-interpreter-b.md): `.short 0x27A7\t; +0x02 source variable`
 SRCVAR = re.compile(r'^(\s*\.short\s+)(0x[0-9a-fA-F]+|\d+)(\s*;\s*\+0x02 source variable.*)$')
@@ -379,7 +393,7 @@ def main():
                     # common VALUE, so only in an address position: `(N...)` or the address argument
                     # of an 8/16/24-bit macro kind
                     addr_pos = code[:m.start()].rstrip().endswith("(") or \
-                        re.search(r'\bM[BWD](?:8|16|24),\s*$', code[:m.start()])
+                        re.search(r'\bM[BWDL](?:8|16|24),\s*$', code[:m.start()])
                     if v in NAMES and ((v >= 0x100 and "+" not in NAMES[v][0]) or addr_pos):
                         left += 1
                         print("%s:%d: %s" % (os.path.relpath(p, REPO), k + 1, code.strip()))

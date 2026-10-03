@@ -7494,7 +7494,7 @@ INTT1_Tick:
 	push XHL                                      ; F82D0C  3b
 	xor XHL,XHL                                   ; F82D0D  eb d3
 	inc 1,XHL                                     ; F82D0F  eb 61
-	m_add_mr ML8, 0x80, r3                        ; F82D11  e0 80 8b
+	m_add_mr ML8, Tick_Count, r3                        ; F82D11  e0 80 8b
 	incw 0x01, (Fdc_TickCount:24)                   ; F82D14  d2 00 5a 60 61
 	push SR                                       ; F82D19  02
 	ei 0x06                                       ; F82D1A  06 06
@@ -11996,10 +11996,10 @@ PanelButton_Accept:   ; entry: calr from 0xF865A4
 	ld XWA,PanelButton_InterlockMask32            ; F86696  40 9a 67 f8 00
 	add WA,BC                                     ; F8669B  d9 80
 	ld XDE,(XWA)                                  ; F8669D  a0 22
-	m_and_rm ML16, 0x2252, r2                     ; F8669F  e1 52 22 c2   and XDE,(0x2252)
+	m_and_rm ML16, PanelHeld_Pos0, r2                     ; F8669F  e1 52 22 c2   and XDE,(0x2252)
 	jr nz, .LF866AF                               ; F866A3  6e 0a
 	ld XDE,(XWA)                                  ; F866A5  a0 22
-	m_and_rm ML16, 0x2256, r2                     ; F866A7  e1 56 22 c2   and XDE,(0x2256)
+	m_and_rm ML16, PanelHeld_Pos1, r2                     ; F866A7  e1 56 22 c2   and XDE,(0x2256)
 	jr nz, .LF866AF                               ; F866AB  6e 02
 	jr .LF866B2                                   ; F866AD  68 03
 .LF866AF:
@@ -18293,12 +18293,12 @@ T_F40618_Nop:
 PanelWire_ThrottledPoll:
 	ld XIY,0x0000219b                                    ; F8A028  45 9b 21 00 00
 	incm8 0x01, (xiy)                                    ; F8A02D  85 61
-	ld XIY,0x00002196                                    ; F8A02F  45 96 21 00 00
+	ld XIY,PanelWire_Phase                                    ; F8A02F  45 96 21 00 00
 	incm8 0x01, (xiy)                                    ; F8A034  85 61
 	ld HL,(XIY)                                          ; F8A036  95 23
 	and HL,0x0003                                        ; F8A038  db cc 03 00
 	m_ld_rm MW8, Tick_Count, r0                                ; F8A03C  d0 80 20
-	ld bc, (0x2197:16)                                 ; F8A03F  d1 97 21 21
+	ld bc, (PanelWire_LastPollTick:16)                                 ; F8A03F  d1 97 21 21
 	sub WA,BC                                            ; F8A043  d9 a0
 	cp WA,0x0010                                         ; F8A045  d8 cf 10 00
 	jr c, .LF8A04F                                       ; F8A049  67 04
@@ -18334,7 +18334,7 @@ Dispatch_F8A05F:
 ; Evidence: (0x2197)=(0x80); unless (0x207A)=0xDB: PanelWireQueue_DrainToGroupQueue, AssignableSwitch_Poll, PanelGroupQueue_AppendFlaggedGroups.  Reached through Dispatch_F8A05F slots 0 and 2.
 PanelWire_PollProducers:   ; entry: named by 2 `.long` operands, first at 0xF8A05F
 	m_ld_rm MW8, Tick_Count, r0                                ; F8A070  d0 80 20
-	ld (0x2197:16), wa                                  ; F8A073  f1 97 21 50
+	ld (PanelWire_LastPollTick:16), wa                                  ; F8A073  f1 97 21 50
 	m_cp_mi8 MB16, UI_ScreenLatch, 0xdb                          ; F8A077  c1 7a 20 3f db
 	jr z, .LF8A087                                       ; F8A07C  66 09
 	calr PanelWireQueue_DrainToGroupQueue                                      ; F8A07E  1e 07 00
@@ -18658,62 +18658,62 @@ AssignableSwitch_PostChanges:
 PanelGroupQueue_AppendFlaggedGroups:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8A303  c0 c4 3f 02
 	jr z, .LF8A379                                           ; F8A307  66 70
-	ld a, (0x28ee:16)                                   ; F8A309  c1 ee 28 21
+	ld a, (AnalogScan_Cooked+2:16)                                   ; F8A309  c1 ee 28 21
 	bit 0x07,A                                           ; F8A30D  c9 33 07
 	jr z, .LF8A325                                           ; F8A310  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A312  c1 9a 21 3f 07
 	jr nc, .LF8A325                                          ; F8A317  6f 0c
-	m_and_mi8 MB16, 0x28ee, 0x7f                         ; F8A319  c1 ee 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked+2, 0x7f                         ; F8A319  c1 ee 28 3c 7f
 	ld e, 0x10:opc                                          ; F8A31E  25 10
 	ld w, 0x7f:opc                                          ; F8A320  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A322  1e 8d 00
 .LF8A325:
-	ld a, (0x28ef:16)                                   ; F8A325  c1 ef 28 21
+	ld a, (AnalogScan_Cooked+3:16)                                   ; F8A325  c1 ef 28 21
 	bit 0x07,A                                           ; F8A329  c9 33 07
 	jr z, .LF8A341                                           ; F8A32C  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A32E  c1 9a 21 3f 07
 	jr nc, .LF8A341                                          ; F8A333  6f 0c
-	m_and_mi8 MB16, 0x28ef, 0x7f                         ; F8A335  c1 ef 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked+3, 0x7f                         ; F8A335  c1 ef 28 3c 7f
 	ld e, 0x11:opc                                          ; F8A33A  25 11
 	ld w, 0x7f:opc                                          ; F8A33C  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A33E  1e 71 00
 .LF8A341:
-	ld a, (0x28f0:16)                                   ; F8A341  c1 f0 28 21
+	ld a, (AnalogScan_Cooked+4:16)                                   ; F8A341  c1 f0 28 21
 	bit 0x07,A                                           ; F8A345  c9 33 07
 	jr z, .LF8A35D                                           ; F8A348  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A34A  c1 9a 21 3f 07
 	jr nc, .LF8A35D                                          ; F8A34F  6f 0c
-	m_and_mi8 MB16, 0x28f0, 0x7f                         ; F8A351  c1 f0 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked+4, 0x7f                         ; F8A351  c1 f0 28 3c 7f
 	ld e, 0x12:opc                                          ; F8A356  25 12
 	ld w, 0x7f:opc                                          ; F8A358  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A35A  1e 55 00
 .LF8A35D:
-	ld a, (0x28f1:16)                                   ; F8A35D  c1 f1 28 21
+	ld a, (AnalogScan_Cooked+5:16)                                   ; F8A35D  c1 f1 28 21
 	bit 0x07,A                                           ; F8A361  c9 33 07
 	jr z, .LF8A379                                           ; F8A364  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A366  c1 9a 21 3f 07
 	jr nc, .LF8A379                                          ; F8A36B  6f 0c
-	m_and_mi8 MB16, 0x28f1, 0x7f                         ; F8A36D  c1 f1 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked+5, 0x7f                         ; F8A36D  c1 f1 28 3c 7f
 	ld e, 0x13:opc                                          ; F8A372  25 13
 	ld w, 0x7f:opc                                          ; F8A374  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A376  1e 39 00
 .LF8A379:
-	ld a, (0x28ec:16)                                   ; F8A379  c1 ec 28 21
+	ld a, (AnalogScan_Cooked:16)                                   ; F8A379  c1 ec 28 21
 	bit 0x07,A                                           ; F8A37D  c9 33 07
 	jr z, .LF8A395                                           ; F8A380  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A382  c1 9a 21 3f 07
 	jr nc, .LF8A395                                          ; F8A387  6f 0c
-	m_and_mi8 MB16, 0x28ec, 0x7f                         ; F8A389  c1 ec 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked, 0x7f                         ; F8A389  c1 ec 28 3c 7f
 	ld e, 0x14:opc                                          ; F8A38E  25 14
 	ld w, 0x7f:opc                                          ; F8A390  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A392  1e 1d 00
 .LF8A395:
-	ld a, (0x28ed:16)                                   ; F8A395  c1 ed 28 21
+	ld a, (AnalogScan_Cooked+1:16)                                   ; F8A395  c1 ed 28 21
 	bit 0x07,A                                           ; F8A399  c9 33 07
 	jr z, .LF8A3B1                                           ; F8A39C  66 13
 	m_cp_mi8 MB16, 0x219a, 0x07                          ; F8A39E  c1 9a 21 3f 07
 	jr nc, .LF8A3B1                                          ; F8A3A3  6f 0c
-	m_and_mi8 MB16, 0x28ed, 0x7f                         ; F8A3A5  c1 ed 28 3c 7f
+	m_and_mi8 MB16, AnalogScan_Cooked+1, 0x7f                         ; F8A3A5  c1 ed 28 3c 7f
 	ld e, 0x15:opc                                          ; F8A3AA  25 15
 	ld w, 0x7f:opc                                          ; F8A3AC  20 7f
 	calr PanelGroupQueue_Append                                            ; F8A3AE  1e 01 00
@@ -20290,7 +20290,7 @@ PanelAction_PairPos0_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld e, (xix-1)                                        ; F8AE6A  8c ff 25
 	inc 1,E                                              ; F8AE6D  cd 61
 	calr IndexToBitMask32                                          ; F8AE6F  1e 0b fb
-	ld xwa, (0x2252:16)                                 ; F8AE72  e1 52 22 20
+	ld xwa, (PanelHeld_Pos0:16)                                 ; F8AE72  e1 52 22 20
 	cp c, 0x00:i3                                          ; F8AE76  cb d8
 	jr z, .LF8AEA7                                           ; F8AE78  66 2d
 	and XWA,XDE                                          ; F8AE7A  ea c0
@@ -20302,8 +20302,8 @@ PanelAction_PairPos0_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld (xix-1), 0x19                                     ; F8AE8A  bc ff 00 19
 	ld XDE,0x02000000                                    ; F8AE8E  42 00 00 00 02
 .LF8AE93:
-	or	(0x2252:16), xde                     ; F8AE93  e1 52 22 ea
-	m_and_rm ML16, 0x2256, r2                            ; F8AE97  e1 56 22 c2
+	or	(PanelHeld_Pos0:16), xde                     ; F8AE93  e1 52 22 ea
+	m_and_rm ML16, PanelHeld_Pos1, r2                            ; F8AE97  e1 56 22 c2
 	jr z, .LF8AEA2                                           ; F8AE9B  66 05
 	ldw de, 0x0303                                       ; F8AE9D  32 03 03
 	jr .LF8AED7                                              ; F8AEA0  68 35
@@ -20326,7 +20326,7 @@ PanelAction_PairPos0_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld (xix-1), 0x19                                     ; F8AEC6  bc ff 00 19
 .LF8AECA:
 	xor XDE,0xffffffff                                   ; F8AECA  ea cd ff ff ff ff
-	and	(0x2252:16), xde                     ; F8AED0  e1 52 22 ca
+	and	(PanelHeld_Pos0:16), xde                     ; F8AED0  e1 52 22 ca
 	ldw de, 0x0100                                       ; F8AED4  32 00 01
 .LF8AED7:
 	jp PanelEvent_CommitValue                                        ; F8AED7  1b 0b a9 f8
@@ -20339,7 +20339,7 @@ PanelAction_PairPos1_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld e, (xix-1)                                        ; F8AEDD  8c ff 25
 	inc 1,E                                              ; F8AEE0  cd 61
 	calr IndexToBitMask32                                          ; F8AEE2  1e 98 fa
-	ld xwa, (0x2256:16)                                 ; F8AEE5  e1 56 22 20
+	ld xwa, (PanelHeld_Pos1:16)                                 ; F8AEE5  e1 56 22 20
 	cp c, 0x00:i3                                          ; F8AEE9  cb d8
 	jr z, .LF8AF1A                                           ; F8AEEB  66 2d
 	and XWA,XDE                                          ; F8AEED  ea c0
@@ -20351,8 +20351,8 @@ PanelAction_PairPos1_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld (xix-1), 0x19                                     ; F8AEFD  bc ff 00 19
 	ld XDE,0x02000000                                    ; F8AF01  42 00 00 00 02
 .LF8AF06:
-	or	(0x2256:16), xde                     ; F8AF06  e1 56 22 ea
-	m_and_rm ML16, 0x2252, r2                            ; F8AF0A  e1 52 22 c2
+	or	(PanelHeld_Pos1:16), xde                     ; F8AF06  e1 56 22 ea
+	m_and_rm ML16, PanelHeld_Pos0, r2                            ; F8AF0A  e1 52 22 c2
 	jr z, .LF8AF15                                           ; F8AF0E  66 05
 	ldw de, 0x0303                                       ; F8AF10  32 03 03
 	jr .LF8AF4A                                              ; F8AF13  68 35
@@ -20375,7 +20375,7 @@ PanelAction_PairPos1_HeldMaskAltCode:   ; entry: PanelGroupActionListPool
 	ld (xix-1), 0x19                                     ; F8AF39  bc ff 00 19
 .LF8AF3D:
 	xor XDE,0xffffffff                                   ; F8AF3D  ea cd ff ff ff ff
-	and	(0x2256:16), xde                     ; F8AF43  e1 56 22 ca
+	and	(PanelHeld_Pos1:16), xde                     ; F8AF43  e1 56 22 ca
 	ldw de, 0x0200                                       ; F8AF47  32 00 02
 .LF8AF4A:
 	jp PanelEvent_CommitValue                                        ; F8AF4A  1b 0b a9 f8
@@ -20391,8 +20391,8 @@ PanelAction_PairPos0_HeldMask:   ; entry: PanelGroupActionListPool
 	calr IndexToBitMask32                                          ; F8AF55  1e 25 fa
 	cp c, 0x00:i3                                          ; F8AF58  cb d8
 	jr z, .LF8AF70                                           ; F8AF5A  66 14
-	or	(0x2252:16), xde                     ; F8AF5C  e1 52 22 ea
-	m_and_rm ML16, 0x2256, r2                            ; F8AF60  e1 56 22 c2
+	or	(PanelHeld_Pos0:16), xde                     ; F8AF5C  e1 52 22 ea
+	m_and_rm ML16, PanelHeld_Pos1, r2                            ; F8AF60  e1 56 22 c2
 	jr z, .LF8AF6B                                           ; F8AF64  66 05
 	ldw de, 0x0303                                       ; F8AF66  32 03 03
 	jr .LF8AF7D                                              ; F8AF69  68 12
@@ -20401,7 +20401,7 @@ PanelAction_PairPos0_HeldMask:   ; entry: PanelGroupActionListPool
 	jr .LF8AF7D                                              ; F8AF6E  68 0d
 .LF8AF70:
 	xor XDE,0xffffffff                                   ; F8AF70  ea cd ff ff ff ff
-	and	(0x2252:16), xde                     ; F8AF76  e1 52 22 ca
+	and	(PanelHeld_Pos0:16), xde                     ; F8AF76  e1 52 22 ca
 	ldw de, 0x0100                                       ; F8AF7A  32 00 01
 .LF8AF7D:
 	jp PanelEvent_CommitValue                                        ; F8AF7D  1b 0b a9 f8
@@ -20416,8 +20416,8 @@ PanelAction_PairPos1_HeldMask:   ; entry: PanelGroupActionListPool
 	calr IndexToBitMask32                                          ; F8AF88  1e f2 f9
 	cp c, 0x00:i3                                          ; F8AF8B  cb d8
 	jr z, .LF8AFA3                                           ; F8AF8D  66 14
-	or	(0x2256:16), xde                     ; F8AF8F  e1 56 22 ea
-	m_and_rm ML16, 0x2252, r2                            ; F8AF93  e1 52 22 c2
+	or	(PanelHeld_Pos1:16), xde                     ; F8AF8F  e1 56 22 ea
+	m_and_rm ML16, PanelHeld_Pos0, r2                            ; F8AF93  e1 52 22 c2
 	jr z, .LF8AF9E                                           ; F8AF97  66 05
 	ldw de, 0x0303                                       ; F8AF99  32 03 03
 	jr .LF8AFB0                                              ; F8AF9C  68 12
@@ -20426,7 +20426,7 @@ PanelAction_PairPos1_HeldMask:   ; entry: PanelGroupActionListPool
 	jr .LF8AFB0                                              ; F8AFA1  68 0d
 .LF8AFA3:
 	xor XDE,0xffffffff                                   ; F8AFA3  ea cd ff ff ff ff
-	and	(0x2256:16), xde                     ; F8AFA9  e1 56 22 ca
+	and	(PanelHeld_Pos1:16), xde                     ; F8AFA9  e1 56 22 ca
 	ldw de, 0x0200                                       ; F8AFAD  32 00 02
 .LF8AFB0:
 	jp PanelEvent_CommitValue                                        ; F8AFB0  1b 0b a9 f8
@@ -22704,7 +22704,7 @@ DispatchTable_F8C2B2:
 PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8C2EC  c0 c4 3f 02
 	jr z, .LF8C314                                       ; F8C2F0  66 22
-	ld XIX,0x000020d0                                    ; F8C2F2  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                                    ; F8C2F2  44 d0 20 00 00
 	ld a, (UI_RequestBits:16)                                   ; F8C2F7  c1 75 20 21
 	and A,0x02                                           ; F8C2FB  c9 cc 02
 	xor A,(XIX+0x05)                                     ; F8C2FE  8c 05 d1
@@ -22716,7 +22716,7 @@ PanelLed_RequestIfBlinkEnableChanged:   ; entry: reachable-run entry
 .LF8C314:
 	m_bit 0, MD16, 0x216f                                ; F8C314  f1 6f 21 c8
 	jr nz, .LF8C337                                      ; F8C318  6e 1d
-	ld XIX,0x000020d0                                    ; F8C31A  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                                    ; F8C31A  44 d0 20 00 00
 	ld a, (UI_RequestBits:16)                                   ; F8C31F  c1 75 20 21
 	and A,0x02                                           ; F8C323  c9 cc 02
 	sla a, 0x02                                          ; F8C326  c9 ec 02
@@ -22784,7 +22784,7 @@ PanelLed_Refresh:   ; entry: prom_b routine directory
 	ld XIX,0x0000216f                                    ; F8C3EA  44 6f 21 00 00
 	bit 0,(XIX)                                          ; F8C3EF  b4 c8
 	jr z, .LF8C3FA                                       ; F8C3F1  66 07
-	m_xor_mi8 MB16, 0x20d6, 0x08                         ; F8C3F3  c1 d6 20 3d 08
+	m_xor_mi8 MB16, PanelLed_Shadow+6, 0x08                         ; F8C3F3  c1 d6 20 3d 08
 	res 0,(XIX)                                          ; F8C3F8  b4 b0
 .LF8C3FA:
 	ret                                                  ; F8C3FA  0e
@@ -22800,11 +22800,11 @@ PanelLed_ToggleActivityLed:   ; entry: prom_b routine directory
 	incm8 0x01, (xix)                                    ; F8C406  84 61
 	cp (XIX),0x01                                        ; F8C408  84 3f 01
 	jr c, .LF8C427                                       ; F8C40B  67 1a
-	ld XIY,0x000020d6                                    ; F8C40D  45 d6 20 00 00
+	ld XIY,PanelLed_Shadow+6                                    ; F8C40D  45 d6 20 00 00
 	ld w, 0x06:opc                                          ; F8C412  20 06
 	m_xor_mi8 MBI+r5, 0, 0x08                            ; F8C414  85 3d 08
 	ld A,(XIY)                                           ; F8C417  85 21
-	ld (0x20f6:16), a                                   ; F8C419  f1 f6 20 41
+	ld (PanelLed_Sent+6:16), a                                   ; F8C419  f1 f6 20 41
 	ld (XIX),0x00                                        ; F8C41D  b4 00 00
 	calr .LF8C84A                                          ; F8C420  1e 27 04
 	call T_SC1_TxFlush                                   ; F8C423  1d 08 0f f4
@@ -22848,8 +22848,8 @@ PanelLed_DispatchRequestBits:   ; entry: reachable-run entry
 ;   by PanelLed_Refresh.
 PanelLed_SendChangedBytes:
 	ld b, 0x08:opc                                          ; F8C456  22 08
-	ld XIY,0x000020d0                                    ; F8C458  45 d0 20 00 00
-	ld XIX,0x000020f0                                    ; F8C45D  44 f0 20 00 00
+	ld XIY,PanelLed_Shadow                                    ; F8C458  45 d0 20 00 00
+	ld XIX,PanelLed_Sent                                    ; F8C45D  44 f0 20 00 00
 .LF8C462:
 	ld A,(XIY)                                           ; F8C462  85 21
 	cp A,(XIX)                                           ; F8C464  84 f1
@@ -22885,7 +22885,7 @@ PanelLed_SendChangedBytes:
 PanelLed_ShowSoundSelect:   ; entry: DispatchTable_F8C2B2 id=0x0004
 	cp	(Variant_Flag:8), 0x02                       ; F8C485  c0 c4 3f 02
 	jr z, .LF8C4B7                                ; F8C489  66 2c
-	ld XIX,0x000020d0                             ; F8C48B  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C48B  44 d0 20 00 00
 	and (XIX+0x01),0x00                           ; F8C490  8c 01 3c 00
 	and8_imm_rid8 xix, 0x00, 0x00                 ; F8C494  8c 00 3c 00   and (XIX+0x00),0x00
 	bit	1, (UI_RequestBits:16)                       ; F8C498  f1 75 20 c9
@@ -22908,7 +22908,7 @@ BitmaskTable_F8C4B8:   ; 32 B, 16 words, read via (nibble<<1) index
 PanelLed_ShowBank:   ; entry: DispatchTable_F8C2B2 id=0x0040
 	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C4D8  c0 c4 3f 02
 	jr z, .LF8C53A                                    ; F8C4DC  66 5c
-	ld XIX,0x000020d0                             ; F8C4DE  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C4DE  44 d0 20 00 00
 	and (XIX+0x02),0x0f                           ; F8C4E3  8c 02 3c 0f
 	ld a, (SoundSel_Bank:16)                            ; F8C4E7  c1 6a 21 21
 	and A,0x3f                                    ; F8C4EB  c9 cc 3f
@@ -22951,7 +22951,7 @@ PanelLed_ShowBank:   ; entry: DispatchTable_F8C2B2 id=0x0040
 BucketTable_F8C536:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last entry
 	.byte 0x10, 0x20, 0x40, 0x40   ; F8C536
 .LF8C53A:   ; internal only -- reached by PanelLed_ShowBank's own jr z
-	ld XIX,0x000020d0                             ; F8C53A  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C53A  44 d0 20 00 00
 	and8_imm_rid8 xix, 0x00, 0xf0                 ; F8C53F  8c 00 3c f0   and (XIX+0x00),0xf0
 	ld a, (SoundSel_Bank:16)                            ; F8C543  c1 6a 21 21
 	and A,0x3f                                    ; F8C547  c9 cc 3f
@@ -22998,7 +22998,7 @@ BucketTable_F8C592:   ; 3 entries (index 0-2) + 1 pad byte duplicating the last 
 ;   assignment); A > 0x40 lights v1 (0x20D3) bit 6 / v2 (0x20D2) bit 0, A < 0x40 lights v1 (0x20D6) bit 0 / v2
 ;   (0x20D3) bit 0, 0x40 leaves both off.
 PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
-	ld XIX,0x000020d0                             ; F8C596  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C596  44 d0 20 00 00
 	cp	(Variant_Flag:8), 0x02                       ; F8C59B  c0 c4 3f 02
 	jr z, .LF8C5C2                                ; F8C59F  66 21
 	and (XIX+0x03),0xbf                           ; F8C5A1  8c 03 3c bf
@@ -23032,7 +23032,7 @@ PanelLed_ShowCtrl1Offset:   ; entry: DispatchTable_F8C2B2 id=0x0100
 ; Evidence: DispatchTable_F8C2B2 id 0x0800.  Same shape as PanelLed_ShowCtrl1Offset on (0x216D) (the (0x7F28)
 ;   assignment): above -> v1 (0x20D3) bit 7 / v2 (0x20D2) bit 1, below -> v1 (0x20D6) bit 1 / v2 (0x20D3) bit 1.
 PanelLed_ShowCtrl2Offset:   ; entry: DispatchTable_F8C2B2 id=0x0800
-	ld XIX,0x000020d0                             ; F8C5E3  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C5E3  44 d0 20 00 00
 	cp	(Variant_Flag:8), 0x02                       ; F8C5E8  c0 c4 3f 02
 	jr z, .LF8C60F                                ; F8C5EC  66 21
 	and (XIX+0x03),0x7f                           ; F8C5EE  8c 03 3c 7f
@@ -23068,12 +23068,12 @@ PanelLed_ShowCtrl2Offset:   ; entry: DispatchTable_F8C2B2 id=0x0800
 PanelLed_ClearCtrlOffsetLeds:   ; entry: reachable-run entry
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8C630  c0 c4 3f 02
 	jr z, .LF8C644                                       ; F8C634  66 0e
-	ld XIX,0x000020d0                                    ; F8C636  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                                    ; F8C636  44 d0 20 00 00
 	and (XIX+0x03),0x3f                                  ; F8C63B  8c 03 3c 3f
 	and (XIX+0x06),0xfc                                  ; F8C63F  8c 06 3c fc
 	ret                                                  ; F8C643  0e
 .LF8C644:
-	ld XIX,0x000020d0                                    ; F8C644  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                                    ; F8C644  44 d0 20 00 00
 	and (XIX+0x02),0xfc                                  ; F8C649  8c 02 3c fc
 	and (XIX+0x03),0xfc                                  ; F8C64D  8c 03 3c fc
 	ret                                                  ; F8C651  0e
@@ -23092,7 +23092,7 @@ PanelLed_ClearCtrlOffsetLeds:   ; entry: reachable-run entry
 PanelLed_ShowSixWaySelect:   ; entry: DispatchTable_F8C2B2 id=0x0080
 	cp	(Variant_Flag:8), 0x02                       ; F8C652  c0 c4 3f 02
 	jr z, .LF8C686                                ; F8C656  66 2e
-	ld XIX,0x000020d0                             ; F8C658  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C658  44 d0 20 00 00
 	and (XIX+0x03),0xc0                           ; F8C65D  8c 03 3c c0
 	ld XIY,PointerTable_F8C687                    ; F8C661  45 87 c6 f8 00
 	ld a, (UI_PartIndex:16)                            ; F8C666  c1 50 22 21
@@ -23125,7 +23125,7 @@ PointerTable_F8C687:   ; 128 B, 32 longs, +0x40 arithmetic progression, read via
 PanelLed_ShowModeMenu:   ; entry: DispatchTable_F8C2B2 id=0x0002
 	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C707  c0 c4 3f 02
 	jr z, RecordTable_F8C727_Code_Skip                                    ; F8C70B  66 39
-	ld XIX,0x000020d0                             ; F8C70D  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C70D  44 d0 20 00 00
 	and (XIX+0x02),0xf0                           ; F8C712  8c 02 3c f0
 	and (XIX+0x04),0xc0                           ; F8C716  8c 04 3c c0
 	ld a, (0x2076:16)                            ; F8C71A  c1 76 20 21
@@ -23135,7 +23135,7 @@ PanelLed_ShowModeMenu:   ; entry: DispatchTable_F8C2B2 id=0x0002
 RecordTable_F8C727:   ; 10 x [key,val_lo,val_hi] + 0xFF terminator, read by sub_F8C7F9's shared linear scan
 	.byte 0x01, 0x02, 0x01, 0x02, 0x02, 0x02, 0x17, 0x02, 0x04, 0x16, 0x02, 0x08, 0x09, 0x04, 0x01, 0x0a, 0x04, 0x02, 0x12, 0x04, 0x04, 0x15, 0x04, 0x08, 0x08, 0x04, 0x10, 0x03, 0x04, 0x20, 0xff   ; F8C727
 RecordTable_F8C727_Code_Skip:
-	ld XIX,0x000020d0                             ; F8C746  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C746  44 d0 20 00 00
 	and (XIX+0x01),0xf0                           ; F8C74B  8c 01 3c f0
 	and (XIX+0x04),0xfc                           ; F8C74F  8c 04 3c fc
 	and (XIX+0x05),0xfc                           ; F8C753  8c 05 3c fc
@@ -23151,14 +23151,14 @@ RecordTable_F8C764:   ; 8 x [key,val_lo,val_hi] + 0xFF terminator, read by sub_F
 PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	.byte 0xc0, 0xc4, 0x3f, 0x02                  ; F8C77D  c0 c4 3f 02
 	jr z, .LF8C798                                ; F8C781  66 15
-	ld XIX,0x000020d0                             ; F8C783  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C783  44 d0 20 00 00
 	and (XIX+0x05),0xfd                           ; F8C788  8c 05 3c fd
 	bit	1, (UI_RequestBits:16)                       ; F8C78C  f1 75 20 c9
 	jr z, .LF8C7AB                                ; F8C790  66 19
 	or (XIX+0x05),0x02                            ; F8C792  8c 05 3e 02
 	jr .LF8C7AB                                   ; F8C796  68 13
 .LF8C798:
-	ld XIX,0x000020d0                             ; F8C798  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C798  44 d0 20 00 00
 	and (XIX+0x06),0xf7                           ; F8C79D  8c 06 3c f7
 	bit	1, (UI_RequestBits:16)                       ; F8C7A1  f1 75 20 c9
 	jr z, .LF8C7AB                                ; F8C7A5  66 04
@@ -23167,14 +23167,14 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	ret                                           ; F8C7AB  0e
 	cp	(Variant_Flag:8), 0x02                       ; F8C7AC  c0 c4 3f 02
 	jr z, .LF8C7C7                                ; F8C7B0  66 15
-	ld XIX,0x000020d0                             ; F8C7B2  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C7B2  44 d0 20 00 00
 	and (XIX+0x07),0xfd                           ; F8C7B7  8c 07 3c fd
 	bit	0, (0x216e:16)                       ; F8C7BB  f1 6e 21 c8
 	jr z, .LF8C7DA                                ; F8C7BF  66 19
 	or (XIX+0x07),0x02                            ; F8C7C1  8c 07 3e 02
 	jr .LF8C7DA                                   ; F8C7C5  68 13
 .LF8C7C7:
-	ld XIX,0x000020d0                             ; F8C7C7  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C7C7  44 d0 20 00 00
 	and (XIX+0x06),0xfb                           ; F8C7CC  8c 06 3c fb
 	bit	0, (0x216e:16)                       ; F8C7D0  f1 6e 21 c8
 	jr z, .LF8C7DA                                ; F8C7D4  66 04
@@ -23185,7 +23185,7 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	jr z, .LF8C7F8                                ; F8C7DF  66 17
 	bit_dd8 0x02, 0x94                            ; F8C7E1  f0 94 ca
 	jr nz, .LF8C7F8                               ; F8C7E4  6e 12
-	ld XIX,0x000020d0                             ; F8C7E6  44 d0 20 00 00
+	ld XIX,PanelLed_Shadow                             ; F8C7E6  44 d0 20 00 00
 	and (XIX+0x04),0xbf                           ; F8C7EB  8c 04 3c bf
 	bit_dd8 0x02, 0x96                            ; F8C7EF  f0 96 ca
 	jr z, .LF8C7F8                                ; F8C7F2  66 04
@@ -23201,13 +23201,13 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	jr .LF8C7F9                                   ; F8C806  68 f1
 .LF8C808:
 	ld WA,(XIY+0x01)                              ; F8C808  9d 01 20
-	ld XIY,0x000020d0                             ; F8C80B  45 d0 20 00 00
+	ld XIY,PanelLed_Shadow                             ; F8C80B  45 d0 20 00 00
 	.byte 0xc3, 0x03, 0xf4, 0xe0, 0xe8            ; F8C810  c3 03 f4 e0 e8
 .LF8C815:
 	ret                                           ; F8C815  0e
-	ld XIY,0x000020d0                             ; F8C816  45 d0 20 00 00
+	ld XIY,PanelLed_Shadow                             ; F8C816  45 d0 20 00 00
 	ld	a, (xiy+w)                             ; F8C81B  c3 03 f4 e1 21
-	ld XIY,0x000020d0                             ; F8C820  45 d0 20 00 00
+	ld XIY,PanelLed_Shadow                             ; F8C820  45 d0 20 00 00
 	ex8 a, c                                      ; F8C825  cb b9
 	scf                                           ; F8C827  11
 	xorcf	a, (0x219b:16)                       ; F8C828  f1 9b 21 2a
@@ -23300,7 +23300,7 @@ T_F4066C_Nop:   ; entry: prom_b routine directory
 PanelLed_FlashTransportBeat:   ; entry: prom_b routine directory
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8C8C3  c0 c4 3f 02
 	jr z, .LF8C92F                                       ; F8C8C7  66 66
-	ld XIX,0x000020d4                                    ; F8C8C9  44 d4 20 00 00
+	ld XIX,PanelLed_Shadow+4                                    ; F8C8C9  44 d4 20 00 00
 	ld XIY,0x0000225a                                    ; F8C8CE  45 5a 22 00 00
 	ld wa, (0x3552:16)                                 ; F8C8D3  d1 52 35 20
 	cp WA,0x8002                                         ; F8C8D7  d8 cf 02 80
@@ -23630,19 +23630,19 @@ AnalogScan_All:
 AnalogScan_AdChannel0:
 	m_ld_rm MW8, 0x60, r0                                ; F8DC3E  d0 60 20
 	srl wa, 0x08                                         ; F8DC41  d8 ef 08
-	ld w, (0x28e0:16)                                   ; F8DC44  c1 e0 28 20
-	ld c, (0x28e1:16)                                   ; F8DC48  c1 e1 28 23
+	ld w, (AnalogScan_HystState:16)                                   ; F8DC44  c1 e0 28 20
+	ld c, (AnalogScan_HystState+1:16)                                   ; F8DC48  c1 e1 28 23
 	calr AnalogScan_Hysteresis                           ; F8DC4C  1e bb 00
-	ld (0x28e1:16), c                                   ; F8DC4F  f1 e1 28 43
+	ld (AnalogScan_HystState+1:16), c                                   ; F8DC4F  f1 e1 28 43
 	bit 0x03,C                                           ; F8DC53  cb 33 03
 	jr z, .LF8DC70                                       ; F8DC56  66 18
-	m_and_mi8 MB16, 0x28e1, 0xf7                         ; F8DC58  c1 e1 28 3c f7
-	ld (0x28e0:16), a                                   ; F8DC5D  f1 e0 28 41
+	m_and_mi8 MB16, AnalogScan_HystState+1, 0xf7                         ; F8DC58  c1 e1 28 3c f7
+	ld (AnalogScan_HystState:16), a                                   ; F8DC5D  f1 e0 28 41
 	ld w, 0x00:opc                                          ; F8DC61  20 00
 	call T_Ctrl_Normalise                                ; F8DC63  1d f0 05 f4
 	jr nc, .LF8DC70                                      ; F8DC67  6f 07
 	or A,0x80                                            ; F8DC69  c9 ce 80
-	ld (0x28ee:16), a                                   ; F8DC6C  f1 ee 28 41
+	ld (AnalogScan_Cooked+2:16), a                                   ; F8DC6C  f1 ee 28 41
 .LF8DC70:
 	ret                                                  ; F8DC70  0e
 ; AnalogScan_AdChannel1 -- scan A/D channel 1: deadband, normalise, latch the cooked value if it moved
@@ -23652,19 +23652,19 @@ AnalogScan_AdChannel0:
 AnalogScan_AdChannel1:
 	m_ld_rm MW8, 0x62, r0                                ; F8DC71  d0 62 20
 	srl wa, 0x08                                         ; F8DC74  d8 ef 08
-	ld w, (0x28e2:16)                                   ; F8DC77  c1 e2 28 20
-	ld c, (0x28e3:16)                                   ; F8DC7B  c1 e3 28 23
+	ld w, (AnalogScan_HystState+2:16)                                   ; F8DC77  c1 e2 28 20
+	ld c, (AnalogScan_HystState+3:16)                                   ; F8DC7B  c1 e3 28 23
 	calr AnalogScan_Hysteresis                           ; F8DC7F  1e 88 00
-	ld (0x28e3:16), c                                   ; F8DC82  f1 e3 28 43
+	ld (AnalogScan_HystState+3:16), c                                   ; F8DC82  f1 e3 28 43
 	bit 0x03,C                                           ; F8DC86  cb 33 03
 	jr z, .LF8DCA3                                       ; F8DC89  66 18
-	m_and_mi8 MB16, 0x28e3, 0xf7                         ; F8DC8B  c1 e3 28 3c f7
-	ld (0x28e2:16), a                                   ; F8DC90  f1 e2 28 41
+	m_and_mi8 MB16, AnalogScan_HystState+3, 0xf7                         ; F8DC8B  c1 e3 28 3c f7
+	ld (AnalogScan_HystState+2:16), a                                   ; F8DC90  f1 e2 28 41
 	ld w, 0x01:opc                                          ; F8DC94  20 01
 	call T_Ctrl_Normalise                                ; F8DC96  1d f0 05 f4
 	jr nc, .LF8DCA3                                      ; F8DC9A  6f 07
 	or A,0x80                                            ; F8DC9C  c9 ce 80
-	ld (0x28ef:16), a                                   ; F8DC9F  f1 ef 28 41
+	ld (AnalogScan_Cooked+3:16), a                                   ; F8DC9F  f1 ef 28 41
 .LF8DCA3:
 	ret                                                  ; F8DCA3  0e
 ; AnalogScan_AdChannel2 -- scan A/D channel 2: deadband, normalise, latch the cooked value if it moved
@@ -23674,19 +23674,19 @@ AnalogScan_AdChannel1:
 AnalogScan_AdChannel2:
 	m_ld_rm MW8, 0x64, r0                                ; F8DCA4  d0 64 20
 	srl wa, 0x08                                         ; F8DCA7  d8 ef 08
-	ld w, (0x28e4:16)                                   ; F8DCAA  c1 e4 28 20
-	ld c, (0x28e5:16)                                   ; F8DCAE  c1 e5 28 23
+	ld w, (AnalogScan_HystState+4:16)                                   ; F8DCAA  c1 e4 28 20
+	ld c, (AnalogScan_HystState+5:16)                                   ; F8DCAE  c1 e5 28 23
 	calr AnalogScan_Hysteresis                           ; F8DCB2  1e 55 00
-	ld (0x28e5:16), c                                   ; F8DCB5  f1 e5 28 43
+	ld (AnalogScan_HystState+5:16), c                                   ; F8DCB5  f1 e5 28 43
 	bit 0x03,C                                           ; F8DCB9  cb 33 03
 	jr z, .LF8DCD6                                       ; F8DCBC  66 18
-	m_and_mi8 MB16, 0x28e5, 0xf7                         ; F8DCBE  c1 e5 28 3c f7
-	ld (0x28e4:16), a                                   ; F8DCC3  f1 e4 28 41
+	m_and_mi8 MB16, AnalogScan_HystState+5, 0xf7                         ; F8DCBE  c1 e5 28 3c f7
+	ld (AnalogScan_HystState+4:16), a                                   ; F8DCC3  f1 e4 28 41
 	ld w, 0x02:opc                                          ; F8DCC7  20 02
 	call T_Ctrl_Normalise                                ; F8DCC9  1d f0 05 f4
 	jr nc, .LF8DCD6                                      ; F8DCCD  6f 07
 	or A,0x80                                            ; F8DCCF  c9 ce 80
-	ld (0x28f0:16), a                                   ; F8DCD2  f1 f0 28 41
+	ld (AnalogScan_Cooked+4:16), a                                   ; F8DCD2  f1 f0 28 41
 .LF8DCD6:
 	ret                                                  ; F8DCD6  0e
 ; AnalogScan_AdChannel3 -- scan A/D channel 3: deadband, normalise, latch the cooked value if it moved
@@ -23696,19 +23696,19 @@ AnalogScan_AdChannel2:
 AnalogScan_AdChannel3:
 	m_ld_rm MW8, 0x66, r0                                ; F8DCD7  d0 66 20
 	srl wa, 0x08                                         ; F8DCDA  d8 ef 08
-	ld w, (0x28e6:16)                                   ; F8DCDD  c1 e6 28 20
-	ld c, (0x28e7:16)                                   ; F8DCE1  c1 e7 28 23
+	ld w, (AnalogScan_HystState+6:16)                                   ; F8DCDD  c1 e6 28 20
+	ld c, (AnalogScan_HystState+7:16)                                   ; F8DCE1  c1 e7 28 23
 	calr AnalogScan_Hysteresis                           ; F8DCE5  1e 22 00
-	ld (0x28e7:16), c                                   ; F8DCE8  f1 e7 28 43
+	ld (AnalogScan_HystState+7:16), c                                   ; F8DCE8  f1 e7 28 43
 	bit 0x03,C                                           ; F8DCEC  cb 33 03
 	jr z, .LF8DD09                                       ; F8DCEF  66 18
-	m_and_mi8 MB16, 0x28e7, 0xf7                         ; F8DCF1  c1 e7 28 3c f7
-	ld (0x28e6:16), a                                   ; F8DCF6  f1 e6 28 41
+	m_and_mi8 MB16, AnalogScan_HystState+7, 0xf7                         ; F8DCF1  c1 e7 28 3c f7
+	ld (AnalogScan_HystState+6:16), a                                   ; F8DCF6  f1 e6 28 41
 	ld w, 0x03:opc                                          ; F8DCFA  20 03
 	call T_Ctrl_Normalise                                ; F8DCFC  1d f0 05 f4
 	jr nc, .LF8DD09                                      ; F8DD00  6f 07
 	or A,0x80                                            ; F8DD02  c9 ce 80
-	ld (0x28f1:16), a                                   ; F8DD05  f1 f1 28 41
+	ld (AnalogScan_Cooked+5:16), a                                   ; F8DD05  f1 f1 28 41
 .LF8DD09:
 	ret                                                  ; F8DD09  0e
 ; ---------------------------------------------------------------------
@@ -23788,7 +23788,7 @@ AnalogScan_RamChannel4:
 	call T_Ctrl_Normalise                                ; F8DD54  1d f0 05 f4
 	jr nc, .LF8DD61                                      ; F8DD58  6f 07
 	or A,0x80                                            ; F8DD5A  c9 ce 80
-	ld (0x28ec:16), a                                   ; F8DD5D  f1 ec 28 41
+	ld (AnalogScan_Cooked:16), a                                   ; F8DD5D  f1 ec 28 41
 .LF8DD61:
 	ret                                                  ; F8DD61  0e
 ; AnalogScan_RamChannel5 -- normalise the RAM-fed channel 5 at (0x600001) and latch it if it moved
@@ -23801,7 +23801,7 @@ AnalogScan_RamChannel5:
 	call T_Ctrl_Normalise                                ; F8DD69  1d f0 05 f4
 	jr nc, .LF8DD76                                      ; F8DD6D  6f 07
 	or A,0x80                                            ; F8DD6F  c9 ce 80
-	ld (0x28ed:16), a                                   ; F8DD72  f1 ed 28 41
+	ld (AnalogScan_Cooked+1:16), a                                   ; F8DD72  f1 ed 28 41
 .LF8DD76:
 	ret                                                  ; F8DD76  0e
 	ld XBC,0xc88dc90e                                    ; F8DD77  41 0e c9 8d c8
@@ -23841,7 +23841,7 @@ AnalogScan_RamChannel5:
 	call T_Ctrl_Normalise                                ; F8DDC3  1d f0 05 f4
 	jr nc, .LF8DDD0                                      ; F8DDC7  6f 07
 	or A,0x80                                            ; F8DDC9  c9 ce 80
-	ld (0x28ec:16), a                                   ; F8DDCC  f1 ec 28 41
+	ld (AnalogScan_Cooked:16), a                                   ; F8DDCC  f1 ec 28 41
 .LF8DDD0:
 	ret                                                  ; F8DDD0  0e
 	ld a, (0x600001:24)                                 ; F8DDD1  c2 01 00 60 21
@@ -23849,7 +23849,7 @@ AnalogScan_RamChannel5:
 	call T_Ctrl_Normalise                                ; F8DDD8  1d f0 05 f4
 	jr nc, .LF8DDE5                                      ; F8DDDC  6f 07
 	or A,0x80                                            ; F8DDDE  c9 ce 80
-	ld (0x28ed:16), a                                   ; F8DDE1  f1 ed 28 41
+	ld (AnalogScan_Cooked+1:16), a                                   ; F8DDE1  f1 ed 28 41
 .LF8DDE5:
 	ret                                                  ; F8DDE5  0e
 

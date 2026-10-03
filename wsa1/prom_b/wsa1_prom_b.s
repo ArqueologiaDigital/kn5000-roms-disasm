@@ -2822,23 +2822,23 @@ sub_F0095D_Epilogue:
 	popw	wa	; F00982  pop WA
 	ret	; F00983  ret
 sub_F00984:
-	m_or_mi8 MB16, 0x20d4, 0x40	; F00984  or (0x20d4),0x40
-	m_bit 7, MD16, 0x20d4	; F00989  bit 7,(0x20d4)
+	m_or_mi8 MB16, PanelLed_Shadow+4, 0x40	; F00984  or (0x20d4),0x40
+	m_bit 7, MD16, PanelLed_Shadow+4	; F00989  bit 7,(0x20d4)
 	jr	z, sub_F00984_Return	; F0098D  jr Z,0xf00994
-	m_and_mi8 MB16, 0x20d4, 0x7f	; F0098F  and (0x20d4),0x7f
+	m_and_mi8 MB16, PanelLed_Shadow+4, 0x7f	; F0098F  and (0x20d4),0x7f
 sub_F00984_Return:
 	ret	; F00994  ret
 sub_F00995:
-	m_bit 6, MD16, 0x20d4	; F00995  bit 6,(0x20d4)
+	m_bit 6, MD16, PanelLed_Shadow+4	; F00995  bit 6,(0x20d4)
 	jr	nz, sub_F00995_Skip	; F00999  jr NZ,0xf009a2
-	m_or_mi8 MB16, 0x20d4, 0x80	; F0099B  or (0x20d4),0x80
+	m_or_mi8 MB16, PanelLed_Shadow+4, 0x80	; F0099B  or (0x20d4),0x80
 	jr	sub_F00995_Return	; F009A0  jr T,0xf009a7
 sub_F00995_Skip:
-	m_and_mi8 MB16, 0x20d4, 0x7f	; F009A2  and (0x20d4),0x7f
+	m_and_mi8 MB16, PanelLed_Shadow+4, 0x7f	; F009A2  and (0x20d4),0x7f
 sub_F00995_Return:
 	ret	; F009A7  ret
 sub_F009A8:
-	m_and_mi8 MB16, 0x20d4, 0x3f	; F009A8  and (0x20d4),0x3f
+	m_and_mi8 MB16, PanelLed_Shadow+4, 0x3f	; F009A8  and (0x20d4),0x3f
 	ret	; F009AD  ret
 sub_F009AE:
 	ld	xix, (6311941:24)	; F009AE  ld XIX,(0x605005)
