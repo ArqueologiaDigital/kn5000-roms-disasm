@@ -57,7 +57,7 @@
 	.equ Blink_PostToRing,				0x28d3	; 0: draw inline; non-0: post to the ring buffer -- Blink_Command, from a stack-address test
 
 ; ---- wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md -- "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md"
-	.equ UI_Screen0E_SubScreen,			0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
+	.equ UI_StepRecord_SubScreen,			0x0ef5	; which sub-screen of screen 0x0E is showing -- FINDINGS-prom_b-for-the-mame-driver.md
 	.equ InputStream_Cursor,			0x1088	; cursor into the 1,024-byte input window at 0x60A700-0x60AAFF -- InputStream_Refill refills the window
 	.equ UI_Request,				0x2070	; 16-bit message code; high byte 0x80 = go to the screen id in the low byte -- the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code
 	.equ UI_Request_Hi,				0x2071	; UI_Request's high byte: 0x80 with a screen id -- panel-control-map.md: the screen-request pair

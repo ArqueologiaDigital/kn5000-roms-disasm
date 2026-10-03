@@ -4504,7 +4504,10 @@ ExitKey_StepRecordPartSelect:
 ;   0x1B, 0x1C, 0x1D, 0x1E, 0x1F.
 ButtonTable_StepRecordPartSelect_Nop16:
 	ret                                                  ; F8101D  0e
-sub_F8101E:
+; ScreenEnterBody_StepRecord: the body of STEP RECORD's +0 ENTER method -- restarts callback task 2,
+;   and runs prom_b 0xF6A9CA (T_F42EC0) between LCD_ScreenRedraw_Begin / _End.
+;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
+ScreenEnterBody_StepRecord:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F8101E  1d 80 2e f4
 	ldw (0x2666:16), 0xffff                              ; F81022  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F81028  f1 6a 26 02 ff ff
@@ -4512,7 +4515,9 @@ sub_F8101E:
 	call T_F42EC0                                        ; F81031  1d c0 2e f4
 	calr PromB_LCD_ScreenRedraw_End                                          ; F81035  1e af d2
 	ret                                                  ; F81038  0e
-sub_F81039:
+; ScreenLeaveBody_StepRecord: the body of STEP RECORD's +4 LEAVE method -- runs prom_b 0xF6AE4B (T_F42EC4).
+;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
+ScreenLeaveBody_StepRecord:
 	call T_F42EC4                                        ; F81039  1d c4 2e f4
 	ld a, (UI_ScreenLatch:16)                                   ; F8103D  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F81041  c1 7b 20 f1
@@ -5633,7 +5638,10 @@ SongStore_SeekBlock:
 	xor XHL,XHL                                          ; F81AC7  eb d3
 	pop XIY                                              ; F81AC9  5d
 	ret                                                  ; F81ACA  0e
-sub_F81ACB:
+; Paint_StepRecord: returns unless (UI_ScreenId) = 0x0E; draws "STEP RECORD:" / "TRACK:" (or
+;   "MASTER STEP RECORD" when (0x0E63) = 2) and the page list StepSelectAddrTable_F3D089 gives for
+;   UI_StepRecord_SubScreen (sub-screen 18: the MASTER TRACK CLEAR / TRACK CLR confirmation).
+Paint_StepRecord:
 	m_bit 0, MD16, 0x1071                                ; F81ACB  f1 71 10 c8
 	jrl nz, .LF81BCF                                     ; F81ACF  7e fd 00
 	m_cp_mi8 MB16, UI_ScreenId, 0x0e                          ; F81AD2  c1 7c 20 3f 0e
@@ -5641,7 +5649,7 @@ sub_F81ACB:
 	m_or_mi8 MB8, 0xc6, 0x01                             ; F81ADA  c0 c6 3e 01
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81ADE  f1 40 25 00 00
 	calr sub_F7E2ED                                          ; F81AE3  1e 07 c8
-	ld l, (UI_Screen0E_SubScreen:16)                                   ; F81AE6  c1 f5 0e 27
+	ld l, (UI_StepRecord_SubScreen:16)                                   ; F81AE6  c1 f5 0e 27
 	xor H,H                                              ; F81AEA  ce d6
 	cp L,0x12                                            ; F81AEC  cf cf 12
 	jr nz, .LF81B28                                      ; F81AEF  6e 37

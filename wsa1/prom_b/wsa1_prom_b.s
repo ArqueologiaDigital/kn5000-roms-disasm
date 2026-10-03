@@ -390,8 +390,8 @@
 	.set	ButtonTable_StepRecordPartSelect_Nop9, 0xF8100E
 	.set	ExitKey_StepRecordPartSelect, 0xF8100F
 	.set	ButtonTable_StepRecordPartSelect_Nop16, 0xF8101D
-	.set	sub_F8101E, 0xF8101E
-	.set	sub_F81039, 0xF81039
+	.set	ScreenEnterBody_StepRecord, 0xF8101E
+	.set	ScreenLeaveBody_StepRecord, 0xF81039
 	.set	Paint_SequencerMedley, 0xF81048
 	.set	ScreenLeaveBody_SequencerMedley, 0xF810F0
 	.set	ButtonTable_SequencerMedley_Nop0, 0xF81101
@@ -411,7 +411,7 @@
 	.set	NumberPadKey_SequencerMedley, 0xF81231
 	.set	ButtonTable_SequencerMedley_Nop28, 0xF81235
 	.set	SongStore_MeasureSongSize, 0xF819E9
-	.set	sub_F81ACB, 0xF81ACB
+	.set	Paint_StepRecord, 0xF81ACB
 	.set	Paint_StepRecordTrackClrMeas, 0xF81BD4
 	.set	sub_F81C15, 0xF81C15
 	.set	sub_F81C33, 0xF81C33
@@ -90518,9 +90518,9 @@ T_F42E90:	jp sub_FB9DA0  ; -> prom_a 0x39DA0   x2
 T_F42E94:	jp sub_FB9D2C  ; -> prom_a 0x39D2C   x3
 T_F42E98:	jp sub_FB9D43  ; -> prom_a 0x39D43   x2
 	.fill 0x24, 1, 0x0E  ; 0xF42E9C: 36 x ret
-T_F42EC0:	jp sub_F6A9CA  ; -> prom_b 0x6A9CA   x1
-T_F42EC4:	jp sub_F6AE4B  ; -> prom_b 0x6AE4B   x1
-T_F42EC8:	jp sub_F675CC  ; -> prom_b 0x675CC   x2
+T_F42EC0:	jp StepRecord_OnEnter  ; -> prom_b 0x6A9CA   x1
+T_F42EC4:	jp StepRecord_OnLeave  ; -> prom_b 0x6AE4B   x1
+T_F42EC8:	jp StepRecord_ButtonByTrackKind  ; -> prom_b 0x675CC   x2
 	ret  ; 0xF42ECC: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF42ECD: 3 x nop
 T_F42ED0:	jp sub_F68951  ; -> prom_b 0x68951   x1
@@ -90809,9 +90809,9 @@ T_ScreenButton_SequencerMedley:	jp ScreenButton_SequencerMedley  ; F43158 (was T
 ; Evidence: slot 0xF4315C is `jp 0xF7D2B3`; prom_b 0xF7D2B3 carries the label
 ;           ScreenNull_SequencerMedley (graded CONTENT).  DERIVATIVE name.
 T_ScreenNull_SequencerMedley:	jp ScreenNull_SequencerMedley  ; F4315C (was T_F4315C) -> prom_b 0x7D2B3
-T_F43160:	jp ScreenCode0E_Handler  ; -> prom_b 0x7D2B4
-T_F43164:	jp ScreenLeave_Code0E  ; -> prom_b 0x7D2B9
-T_F43168:	jp ScreenButton_Code0E  ; -> prom_b 0x7D2BE
+T_F43160:	jp ScreenEnter_StepRecord  ; -> prom_b 0x7D2B4
+T_F43164:	jp ScreenLeave_StepRecord  ; -> prom_b 0x7D2B9
+T_F43168:	jp ScreenButton_StepRecord  ; -> prom_b 0x7D2BE
 T_F4316C:	jp T_F4316C_Nop  ; -> prom_b 0x7D2C5
 ; Evidence: slot 0xF43170 is `jp 0xF7D28A`; prom_b 0xF7D28A carries the label
 ;           ScreenEnter_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
@@ -145460,15 +145460,15 @@ sub_F67481:
 sub_F67488:		; <- T_F42F00
 	call	sub_F6CC6E	; F67488  call 0xf6cc6e
 	ret	; F6748C  ret
-; SoftKeyCol7_Screen0E: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x06; Screen0ESub00_ButtonTable slot 0x17; Screen0ESub01_ButtonTable slot 0x06; Screen0ESub01_ButtonTable slot 0x17; Screen0ESub02_ButtonTable slot 0x06; Screen0ESub02_ButtonTable slot 0x17; Screen0ESub03_ButtonTable slot 0x06; Screen0ESub03_ButtonTable slot 0x17; Screen0ESub04_ButtonTable slot 0x06; Screen0ESub04_ButtonTable slot 0x17; Screen0ESub05_ButtonTable slot 0x06; Screen0ESub05_ButtonTable slot 0x17; Screen0ESub07_ButtonTable slot 0x06; Screen0ESub07_ButtonTable slot 0x17; Screen0ESub08_ButtonTable slot 0x06; Screen0ESub08_ButtonTable slot 0x17; Screen0ESub09_ButtonTable slot 0x06; Screen0ESub09_ButtonTable slot 0x17; Screen0ESub10_ButtonTable slot 0x06; Screen0ESub10_ButtonTable slot 0x17; Screen0ESub11_ButtonTable slot 0x06; Screen0ESub11_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol7_Screen0E:
+; SoftKeyCol7_StepRecord: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x06; StepRecordSub00_ButtonTable slot 0x17; StepRecordSub01_ButtonTable slot 0x06; StepRecordSub01_ButtonTable slot 0x17; StepRecordSub02_ButtonTable slot 0x06; StepRecordSub02_ButtonTable slot 0x17; StepRecordSub03_ButtonTable slot 0x06; StepRecordSub03_ButtonTable slot 0x17; StepRecordSub04_ButtonTable slot 0x06; StepRecordSub04_ButtonTable slot 0x17; StepRecordSub05_ButtonTable slot 0x06; StepRecordSub05_ButtonTable slot 0x17; StepRecordSub07_ButtonTable slot 0x06; StepRecordSub07_ButtonTable slot 0x17; StepRecordSub08_ButtonTable slot 0x06; StepRecordSub08_ButtonTable slot 0x17; StepRecordSub09_ButtonTable slot 0x06; StepRecordSub09_ButtonTable slot 0x17; StepRecordSub10_ButtonTable slot 0x06; StepRecordSub10_ButtonTable slot 0x17; StepRecordSub11_ButtonTable slot 0x06; StepRecordSub11_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol7_StepRecord:
 	ld	(4205:16), 0	; F6748D  ld (0x106d),0x00
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F67492  or (0x2075),0x08
 	ld	w, 1:opc	; F67497  ld W,0x01
 	calr	sub_F674AD	; F67499  calr 0xf674ad
 	ret	; F6749C  ret
-; SoftKeyCol8_Screen0E: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x07; Screen0ESub00_ButtonTable slot 0x18; Screen0ESub01_ButtonTable slot 0x07; Screen0ESub01_ButtonTable slot 0x18; Screen0ESub02_ButtonTable slot 0x07; Screen0ESub02_ButtonTable slot 0x18; Screen0ESub03_ButtonTable slot 0x07; Screen0ESub03_ButtonTable slot 0x18; Screen0ESub04_ButtonTable slot 0x07; Screen0ESub04_ButtonTable slot 0x18; Screen0ESub05_ButtonTable slot 0x07; Screen0ESub05_ButtonTable slot 0x18; Screen0ESub07_ButtonTable slot 0x07; Screen0ESub07_ButtonTable slot 0x18; Screen0ESub08_ButtonTable slot 0x07; Screen0ESub08_ButtonTable slot 0x18; Screen0ESub09_ButtonTable slot 0x07; Screen0ESub09_ButtonTable slot 0x18; Screen0ESub10_ButtonTable slot 0x07; Screen0ESub10_ButtonTable slot 0x18; Screen0ESub11_ButtonTable slot 0x07; Screen0ESub11_ButtonTable slot 0x18.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol8_Screen0E:
+; SoftKeyCol8_StepRecord: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x07; StepRecordSub00_ButtonTable slot 0x18; StepRecordSub01_ButtonTable slot 0x07; StepRecordSub01_ButtonTable slot 0x18; StepRecordSub02_ButtonTable slot 0x07; StepRecordSub02_ButtonTable slot 0x18; StepRecordSub03_ButtonTable slot 0x07; StepRecordSub03_ButtonTable slot 0x18; StepRecordSub04_ButtonTable slot 0x07; StepRecordSub04_ButtonTable slot 0x18; StepRecordSub05_ButtonTable slot 0x07; StepRecordSub05_ButtonTable slot 0x18; StepRecordSub07_ButtonTable slot 0x07; StepRecordSub07_ButtonTable slot 0x18; StepRecordSub08_ButtonTable slot 0x07; StepRecordSub08_ButtonTable slot 0x18; StepRecordSub09_ButtonTable slot 0x07; StepRecordSub09_ButtonTable slot 0x18; StepRecordSub10_ButtonTable slot 0x07; StepRecordSub10_ButtonTable slot 0x18; StepRecordSub11_ButtonTable slot 0x07; StepRecordSub11_ButtonTable slot 0x18.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol8_StepRecord:
 	ld	(4205:16), 0	; F6749D  ld (0x106d),0x00
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F674A2  or (0x2075),0x08
 	ld	w, 2:opc	; F674A7  ld W,0x02
@@ -145666,7 +145666,7 @@ DispatchTable_F674CE_Nop0:
 	ret	; F675CB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F675CC
+; StepRecord_ButtonByTrackKind
 ; Called from: T_F42EC8 (x2)
 ; Touches: (0x0D10) (0x0E63) (0x2092)
 ; Evidence: thunk slot T_F42EC8 holds `jp 0x00F675CC`, and 0xF675CC is an
@@ -145676,7 +145676,11 @@ DispatchTable_F674CE_Nop0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F675CC:		; <- T_F42EC8
+; StepRecord_ButtonByTrackKind: STEP RECORD's button handling (T_F42EC8, called by the +8 method with the
+;   panel code in BC, saved at (0x0D10)); selects by (0x0E63) & 3 from StepRecord_TrackKindButtonTable --
+;   (0x0E63) is 1 for a song track and 2 for the master track (Map_0E63_F6ACA7).
+;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
+StepRecord_ButtonByTrackKind:		; <- T_F42EC8
 	m_bit 0, MD16, UI_ScreenHoldState	; F675CC  bit 0,(0x2092)
 	jr	nz, sub_F675CC_Return	; F675D0  jr NZ,0xf675f2
 	ld	e, (3683:16)	; F675D2  ld E,(0x0e63)
@@ -145686,7 +145690,7 @@ sub_F675CC:		; <- T_F42EC8
 	ld	iy, de	; F675DE  ld IY,DE
 	ld	(3344:16), bc	; F675E0  ld (0x0d10),BC
 	push	xhl	; F675E4  push XHL
-	ld	xhl, DispatchTable_F675F3	; F675E5  ld XHL,0x00f675f3
+	ld	xhl, StepRecord_TrackKindButtonTable	; F675E5  ld XHL,0x00f675f3
 	mx_ld_rm MXL, ra_HL, ra_IY, 5	; F675EA  ld XIY,(XHL+IY)
 	pop	xhl	; F675EF  pop XHL
 	call	(xiy)	; F675F0  call T,XIY
@@ -145694,7 +145698,7 @@ sub_F675CC_Return:
 	ret	; F675F2  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F675F3 -- 4 32-bit pointers, every one of them an address in
+; StepRecord_TrackKindButtonTable -- 4 32-bit pointers, every one of them an address in
 ;                         0x00F60000-0x00F6FFFF.  0 of the 4 entries are the
 ;                         module's own do-nothing stub 0xF675CB (a single
 ;                         0x0E byte, `ret`), leaving 3 distinct other
@@ -145713,13 +145717,13 @@ sub_F675CC_Return:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F675F3:
-	.long	DispatchTable_F675F3_Nop0	; F675F3  [0] -> 0xF67603
-	.long	sub_F676B6	; F675F7  [1] -> 0xF676B6
-	.long	sub_F676B6	; F675FB  [2] -> 0xF676B6
-	.long	sub_F6776F	; F675FF  [3] -> 0xF6776F
+StepRecord_TrackKindButtonTable:
+	.long	StepRecord_TrackKindButtonTable_Nop0	; F675F3  [0] -> 0xF67603
+	.long	StepRecord_ButtonBySubScreen	; F675F7  [1] -> 0xF676B6
+	.long	StepRecord_ButtonBySubScreen	; F675FB  [2] -> 0xF676B6
+	.long	StepRecord_ButtonBySubScreen_Kind3	; F675FF  [3] -> 0xF6776F
 
-DispatchTable_F675F3_Nop0:
+StepRecord_TrackKindButtonTable_Nop0:
 	ret	; F67603  ret
 sub_F67604:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F67604  or (0x2075),0x08
@@ -145775,11 +145779,11 @@ DispatchTable_F67616:
 	.long	DispatchTable_F674CE_Nop0	; F67636  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6763A  [9] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6763E  [10] -> ret stub
-	.long	LcdKeyRow4_Screen0E	; F67642  [11] -> 0xF688F0
+	.long	LcdKeyRow4_StepRecord	; F67642  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F67646  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6764A  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6764E  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67652  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67652  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67656  [16] -> ret stub
 	.long	sub_F67604	; F6765A  [17] -> 0xF67604
 	.long	DispatchTable_F674CE_Nop0	; F6765E  [18] -> ret stub
@@ -145797,8 +145801,8 @@ DispatchTable_F67616:
 	.long	DispatchTable_F674CE_Nop0	; F6768E  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67692  [31] -> ret stub
 
-; ExitKey_Screen0E: the EXIT key; Screen0ESub00_ButtonTable slot 0x0F; Screen0ESub01_ButtonTable slot 0x0F; Screen0ESub02_ButtonTable slot 0x0F; Screen0ESub03_ButtonTable slot 0x0F; Screen0ESub04_ButtonTable slot 0x0F; Screen0ESub05_ButtonTable slot 0x0F; Screen0ESub07_ButtonTable slot 0x0F; Screen0ESub08_ButtonTable slot 0x0F; Screen0ESub09_ButtonTable slot 0x0F; Screen0ESub10_ButtonTable slot 0x0F; Screen0ESub11_ButtonTable slot 0x0F; Screen0ESub16_ButtonTable slot 0x0F; Screen0ESub17_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
-ExitKey_Screen0E:
+; ExitKey_StepRecord: the EXIT key; StepRecordSub00_ButtonTable slot 0x0F; StepRecordSub01_ButtonTable slot 0x0F; StepRecordSub02_ButtonTable slot 0x0F; StepRecordSub03_ButtonTable slot 0x0F; StepRecordSub04_ButtonTable slot 0x0F; StepRecordSub05_ButtonTable slot 0x0F; StepRecordSub07_ButtonTable slot 0x0F; StepRecordSub08_ButtonTable slot 0x0F; StepRecordSub09_ButtonTable slot 0x0F; StepRecordSub10_ButtonTable slot 0x0F; StepRecordSub11_ButtonTable slot 0x0F; StepRecordSub16_ButtonTable slot 0x0F; StepRecordSub17_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
+ExitKey_StepRecord:
 	bit	7, w	; F67696  bit 0x07,W
 	jr	nz, sub_F67696_Return	; F67699  jr NZ,0xf676b5
 	m_and_mi8 MB16, 0x3614, 0xfe	; F6769B  and (0x3614),0xfe
@@ -145810,18 +145814,19 @@ sub_F67696_Skip:
 	ldw	(UI_Request:16), 515	; F676AF  ld (0x2070),0x0203
 sub_F67696_Return:
 	ret	; F676B5  ret
-sub_F676B6:
+; StepRecord_ButtonBySubScreen: track kinds 1 and 2 -- calls StepRecord_SubScreenButtonTable[UI_StepRecord_SubScreen].
+StepRecord_ButtonBySubScreen:
 	m_and_mi8 MB16, 0x0ed5, 0xfe	; F676B6  and (0x0ed5),0xfe
-	ld	e, (UI_Screen0E_SubScreen:16)	; F676BB  ld E,(0x0ef5)
+	ld	e, (UI_StepRecord_SubScreen:16)	; F676BB  ld E,(0x0ef5)
 	xor	d, d	; F676BF  xor D,D
 	sla	de, 2	; F676C1  sla 0x02,DE
 	ld	iy, de	; F676C4  ld IY,DE
 	push	xhl	; F676C6  push XHL
-	ld	xhl, DispatchTable_F67723	; F676C7  ld XHL,0x00f67723
+	ld	xhl, StepRecord_SubScreenButtonTable	; F676C7  ld XHL,0x00f67723
 	mx_ld_rm MXL, ra_HL, ra_IY, 5	; F676CC  ld XIY,(XHL+IY)
 	pop	xhl	; F676D1  pop XHL
 	call	(xiy)	; F676D2  call T,XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x12	; F676D4  cp (0x0ef5),0x12
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x12	; F676D4  cp (0x0ef5),0x12
 	jr	z, sub_F676B6_Skip5	; F676D9  jr Z,0xf6771a
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F676DB  or (0x0ed5),0x01
 	ld	bc, (3344:16)	; F676E0  ld BC,(0x0d10)
@@ -145831,7 +145836,7 @@ sub_F676B6:
 sub_F676B6_Skip:
 	m_bit 0, MD16, 0x1071	; F676ED  bit 0,(0x1071)
 	jr	nz, sub_F676B6_Skip5	; F676F1  jr NZ,0xf6771a
-	ld	a, (UI_Screen0E_SubScreen:16)	; F676F3  ld A,(0x0ef5)
+	ld	a, (UI_StepRecord_SubScreen:16)	; F676F3  ld A,(0x0ef5)
 	cp	a, 0:i3	; F676F7  cp A,0
 	jr	nz, sub_F676B6_Skip2	; F676F9  jr NZ,0xf676ff
 	cp	bc, 6:i3	; F676FB  cp BC,6
@@ -145859,7 +145864,7 @@ sub_F676B6_Join:
 	ret	; F67722  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F67723 -- 19 32-bit pointers, every one of them an address
+; StepRecord_SubScreenButtonTable -- 19 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  6 of the 19 entries are
 ;                         the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 12 distinct
@@ -145878,41 +145883,43 @@ sub_F676B6_Join:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F67723:
-	.long	Screen0ESub00_ButtonDispatch	; F67723  [0] -> 0xF677D5
-	.long	Screen0ESub01_ButtonDispatch	; F67727  [1] -> 0xF678DE
-	.long	Screen0ESub02_ButtonDispatch	; F6772B  [2] -> 0xF679B9
-	.long	Screen0ESub03_ButtonDispatch	; F6772F  [3] -> 0xF67A53
-	.long	Screen0ESub04_ButtonDispatch	; F67733  [4] -> 0xF67AFA
-	.long	Screen0ESub05_ButtonDispatch	; F67737  [5] -> 0xF67B94
-	.long	Screen0ESub02_ButtonDispatch	; F6773B  [6] -> 0xF679B9
-	.long	Screen0ESub07_ButtonDispatch	; F6773F  [7] -> 0xF67C2E
-	.long	Screen0ESub08_ButtonDispatch	; F67743  [8] -> 0xF67CD5
-	.long	Screen0ESub09_ButtonDispatch	; F67747  [9] -> 0xF67DCF
-	.long	Screen0ESub10_ButtonDispatch	; F6774B  [10] -> 0xF67F7C
-	.long	Screen0ESub11_ButtonDispatch	; F6774F  [11] -> 0xF6CBD4
+StepRecord_SubScreenButtonTable:
+	.long	StepRecordSub00_ButtonDispatch	; F67723  [0] -> 0xF677D5
+	.long	StepRecordSub01_ButtonDispatch	; F67727  [1] -> 0xF678DE
+	.long	StepRecordSub02_ButtonDispatch	; F6772B  [2] -> 0xF679B9
+	.long	StepRecordSub03_ButtonDispatch	; F6772F  [3] -> 0xF67A53
+	.long	StepRecordSub04_ButtonDispatch	; F67733  [4] -> 0xF67AFA
+	.long	StepRecordSub05_ButtonDispatch	; F67737  [5] -> 0xF67B94
+	.long	StepRecordSub02_ButtonDispatch	; F6773B  [6] -> 0xF679B9
+	.long	StepRecordSub07_ButtonDispatch	; F6773F  [7] -> 0xF67C2E
+	.long	StepRecordSub08_ButtonDispatch	; F67743  [8] -> 0xF67CD5
+	.long	StepRecordSub09_ButtonDispatch	; F67747  [9] -> 0xF67DCF
+	.long	StepRecordSub10_ButtonDispatch	; F6774B  [10] -> 0xF67F7C
+	.long	StepRecordSub11_ButtonDispatch	; F6774F  [11] -> 0xF6CBD4
 	.long	DispatchTable_F674CE_Nop0	; F67753  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67757  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6775B  [14] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6775F  [15] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67763  [16] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67767  [17] -> ret stub
-	.long	Screen0ESub18_ButtonDispatch	; F6776B  [18] -> 0xF686DB
+	.long	StepRecordSub18_ButtonDispatch	; F6776B  [18] -> 0xF686DB
 
-sub_F6776F:
-	ld	e, (UI_Screen0E_SubScreen:16)	; F6776F  ld E,(0x0ef5)
+; StepRecord_ButtonBySubScreen_Kind3: track kind 3 -- StepRecord_SubScreenButtonTable_Kind3[UI_StepRecord_SubScreen].
+;   The one writer of (0x0E63), prom_b 0xF6ACA2, stores 1 or 2 (Map_0E63_F6ACA7), so kind 3 is not seen set.
+StepRecord_ButtonBySubScreen_Kind3:
+	ld	e, (UI_StepRecord_SubScreen:16)	; F6776F  ld E,(0x0ef5)
 	xor	d, d	; F67773  xor D,D
 	sla	de, 2	; F67775  sla 0x02,DE
 	ld	iy, de	; F67778  ld IY,DE
 	push	xhl	; F6777A  push XHL
-	ld	xhl, DispatchTable_F67789	; F6777B  ld XHL,0x00f67789
+	ld	xhl, StepRecord_SubScreenButtonTable_Kind3	; F6777B  ld XHL,0x00f67789
 	mx_ld_rm MXL, ra_HL, ra_IY, 5	; F67780  ld XIY,(XHL+IY)
 	pop	xhl	; F67785  pop XHL
 	call	(xiy)	; F67786  call T,XIY
 	ret	; F67788  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F67789 -- 19 32-bit pointers, every one of them an address
+; StepRecord_SubScreenButtonTable_Kind3 -- 19 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  12 of the 19 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 5 distinct other
@@ -145931,7 +145938,7 @@ sub_F6776F:
 ;           --null`).
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F67789:
+StepRecord_SubScreenButtonTable_Kind3:
 	.long	DispatchTable_F674CE_Nop0	; F67789  [0] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6778D  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67791  [2] -> ret stub
@@ -145948,19 +145955,19 @@ DispatchTable_F67789:
 	.long	sub_F67408	; F677BD  [13] -> 0xF67408
 	.long	sub_F67408	; F677C1  [14] -> 0xF67408
 	.long	sub_F67404	; F677C5  [15] -> 0xF67404
-	.long	Screen0ESub16_ButtonDispatch	; F677C9  [16] -> 0xF685A7
-	.long	Screen0ESub17_ButtonDispatch	; F677CD  [17] -> 0xF68641
-	.long	Screen0ESub18_ButtonDispatch	; F677D1  [18] -> 0xF686DB
+	.long	StepRecordSub16_ButtonDispatch	; F677C9  [16] -> 0xF685A7
+	.long	StepRecordSub17_ButtonDispatch	; F677CD  [17] -> 0xF68641
+	.long	StepRecordSub18_ButtonDispatch	; F677D1  [18] -> 0xF686DB
 
-; Screen0ESub00_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 0 -- DispatchTable_F67723/F67789
-;   entry 0 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub00_ButtonTable[code & 0x1F].
-Screen0ESub00_ButtonDispatch:
+; StepRecordSub00_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 0 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 0 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub00_ButtonTable[code & 0x1F].
+StepRecordSub00_ButtonDispatch:
 	ld	hl, bc	; F677D5  ld HL,BC
 	cp	hl, 31	; F677D7  cp HL,0x001f
 	jr	ugt, sub_F677D5_Return	; F677DB  jr UGT,0xf677ee
 	sla	hl, 2	; F677DD  sla 0x02,HL
 	push	xix	; F677E0  push XIX
-	ld	xix, Screen0ESub00_ButtonTable	; F677E1  ld XIX,0x00f677ef
+	ld	xix, StepRecordSub00_ButtonTable	; F677E1  ld XIX,0x00f677ef
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F677E6  ld XHL,(XIX+HL)
 	pop	xix	; F677EB  pop XIX
 	call	(xhl)	; F677EC  call T,XHL
@@ -145968,7 +145975,7 @@ sub_F677D5_Return:
 	ret	; F677EE  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub00_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub00_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  11 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 13 distinct
@@ -145999,32 +146006,32 @@ sub_F677D5_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub00_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F677EF  [0] -> 0xF678F8
-	.long	SoftKeyCol2_Screen0ESub00	; F677F3  [1] -> 0xF69867
-	.long	SoftKeyCol3_Screen0ESub00	; F677F7  [2] -> 0xF69AB0
-	.long	SoftKeyCol4_Screen0ESub00	; F677FB  [3] -> 0xF6786F
-	.long	SoftKeyCol5_Screen0ESub00	; F677FF  [4] -> 0xF6788C
-	.long	SoftKeyCol6_Screen0ESub00	; F67803  [5] -> 0xF678A9
-	.long	SoftKeyCol7_Screen0E	; F67807  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F6780B  [7] -> 0xF6749D
-	.long	LcdKeyRow1_Screen0E	; F6780F  [8] -> 0xF67D6F
+StepRecordSub00_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F677EF  [0] -> 0xF678F8
+	.long	SoftKeyCol2_StepRecordSub00	; F677F3  [1] -> 0xF69867
+	.long	SoftKeyCol3_StepRecordSub00	; F677F7  [2] -> 0xF69AB0
+	.long	SoftKeyCol4_StepRecordSub00	; F677FB  [3] -> 0xF6786F
+	.long	SoftKeyCol5_StepRecordSub00	; F677FF  [4] -> 0xF6788C
+	.long	SoftKeyCol6_StepRecordSub00	; F67803  [5] -> 0xF678A9
+	.long	SoftKeyCol7_StepRecord	; F67807  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F6780B  [7] -> 0xF6749D
+	.long	LcdKeyRow1_StepRecord	; F6780F  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F67813  [9] -> sub_F68F62
-	.long	LcdKeyRow3_Screen0E	; F67817  [10] -> 0xF6C8F8
-	.long	LcdKeyRow4_Screen0ESub00	; F6781B  [11] -> 0xF68DE1
+	.long	LcdKeyRow3_StepRecord	; F67817  [10] -> 0xF6C8F8
+	.long	LcdKeyRow4_StepRecordSub00	; F6781B  [11] -> 0xF68DE1
 	.long	DispatchTable_F674CE_Nop0	; F6781F  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67823  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67827  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F6782B  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F6782B  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F6782F  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67833  [17] -> 0xF678F8
-	.long	SoftKeyCol2_Screen0ESub00	; F67837  [18] -> 0xF69867
-	.long	SoftKeyCol3_Screen0ESub00	; F6783B  [19] -> 0xF69AB0
-	.long	SoftKeyCol4_Screen0ESub00	; F6783F  [20] -> 0xF6786F
-	.long	SoftKeyCol5_Screen0ESub00	; F67843  [21] -> 0xF6788C
-	.long	SoftKeyCol6_Screen0ESub00	; F67847  [22] -> 0xF678A9
-	.long	SoftKeyCol7_Screen0E	; F6784B  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F6784F  [24] -> 0xF6749D
+	.long	SoftKeyCol1_StepRecordSub00	; F67833  [17] -> 0xF678F8
+	.long	SoftKeyCol2_StepRecordSub00	; F67837  [18] -> 0xF69867
+	.long	SoftKeyCol3_StepRecordSub00	; F6783B  [19] -> 0xF69AB0
+	.long	SoftKeyCol4_StepRecordSub00	; F6783F  [20] -> 0xF6786F
+	.long	SoftKeyCol5_StepRecordSub00	; F67843  [21] -> 0xF6788C
+	.long	SoftKeyCol6_StepRecordSub00	; F67847  [22] -> 0xF678A9
+	.long	SoftKeyCol7_StepRecord	; F6784B  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F6784F  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67853  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67857  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6785B  [27] -> ret stub
@@ -146033,8 +146040,8 @@ Screen0ESub00_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67867  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6786B  [31] -> ret stub
 
-; SoftKeyCol4_Screen0ESub00: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x03; Screen0ESub00_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol4_Screen0ESub00:
+; SoftKeyCol4_StepRecordSub00: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x03; StepRecordSub00_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_StepRecordSub00:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6786F  or (0x2075),0x08
 	ld	a, (4780:16)	; F67874  ld A,(0x12ac)
 	ld	l, 1:opc	; F67878  ld L,0x01
@@ -146044,8 +146051,8 @@ SoftKeyCol4_Screen0ESub00:
 	call	sub_F6DBF9	; F67883  call 0xf6dbf9
 	call	T_F431B4	; F67887  call 0xf431b4
 	ret	; F6788B  ret
-; SoftKeyCol5_Screen0ESub00: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x04; Screen0ESub00_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol5_Screen0ESub00:
+; SoftKeyCol5_StepRecordSub00: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x04; StepRecordSub00_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_StepRecordSub00:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6788C  or (0x2075),0x08
 	ld	a, (4781:16)	; F67891  ld A,(0x12ad)
 	ld	l, 0:opc	; F67895  ld L,0x00
@@ -146055,8 +146062,8 @@ SoftKeyCol5_Screen0ESub00:
 	call	sub_F6DBF9	; F678A0  call 0xf6dbf9
 	call	T_F431B4	; F678A4  call 0xf431b4
 	ret	; F678A8  ret
-; SoftKeyCol6_Screen0ESub00: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x05; Screen0ESub00_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol6_Screen0ESub00:
+; SoftKeyCol6_StepRecordSub00: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x05; StepRecordSub00_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol6_StepRecordSub00:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F678A9  or (0x2075),0x08
 	ld	a, (4782:16)	; F678AE  ld A,(0x12ae)
 	ld	l, 0:opc	; F678B2  ld L,0x00
@@ -146071,7 +146078,7 @@ SoftKeyCol6_Screen0ESub00:
 ; sub_F678C6
 ; Called from: in-module: 0xF67400
 ; Touches: (0x2075)
-; Calls:   Screen0ESub00_SoftKeyCol1 0xF6D6DC T_F431B4
+; Calls:   StepRecordSub00_SoftKeyCol1 0xF6D6DC T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF678C6 is an instruction
 ;           boundary.  The name IS the address.
@@ -146093,24 +146100,24 @@ sub_F678C6_Skip:
 	ld	a, l	; F678DB  ld A,L
 sub_F678C6_Return:
 	ret	; F678DD  ret
-; Screen0ESub01_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 1 -- DispatchTable_F67723/F67789
-;   entry 1 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub01_ButtonTable[code & 0x1F].
-Screen0ESub01_ButtonDispatch:
+; StepRecordSub01_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 1 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 1 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub01_ButtonTable[code & 0x1F].
+StepRecordSub01_ButtonDispatch:
 	ld	hl, bc	; F678DE  ld HL,BC
 	cp	hl, 31	; F678E0  cp HL,0x001f
 	jr	ugt, sub_F678DE_Return	; F678E4  jr UGT,0xf678f7
 	sla	hl, 2	; F678E6  sla 0x02,HL
 	push	xix	; F678E9  push XIX
-	ld	xix, Screen0ESub01_ButtonTable	; F678EA  ld XIX,0x00f67939
+	ld	xix, StepRecordSub01_ButtonTable	; F678EA  ld XIX,0x00f67939
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F678EF  ld XHL,(XIX+HL)
 	pop	xix	; F678F4  pop XIX
 	call	(xhl)	; F678F5  call T,XHL
 sub_F678DE_Return:
 	ret	; F678F7  ret
-; SoftKeyCol1_Screen0ESub00: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x00; Screen0ESub00_ButtonTable slot 0x11; Screen0ESub01_ButtonTable slot 0x00; Screen0ESub01_ButtonTable slot 0x11; Screen0ESub02_ButtonTable slot 0x00; Screen0ESub02_ButtonTable slot 0x11; Screen0ESub03_ButtonTable slot 0x00; Screen0ESub03_ButtonTable slot 0x11; Screen0ESub04_ButtonTable slot 0x00; Screen0ESub04_ButtonTable slot 0x11; Screen0ESub05_ButtonTable slot 0x00; Screen0ESub05_ButtonTable slot 0x11; Screen0ESub07_ButtonTable slot 0x00; Screen0ESub07_ButtonTable slot 0x11; Screen0ESub08_ButtonTable slot 0x00; Screen0ESub08_ButtonTable slot 0x11; Screen0ESub09_ButtonTable slot 0x00; Screen0ESub09_ButtonTable slot 0x11; Screen0ESub10_ButtonTable slot 0x00; Screen0ESub10_ButtonTable slot 0x11; Screen0ESub11_ButtonTable slot 0x00; Screen0ESub11_ButtonTable slot 0x11.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol1_Screen0ESub00:
+; SoftKeyCol1_StepRecordSub00: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x00; StepRecordSub00_ButtonTable slot 0x11; StepRecordSub01_ButtonTable slot 0x00; StepRecordSub01_ButtonTable slot 0x11; StepRecordSub02_ButtonTable slot 0x00; StepRecordSub02_ButtonTable slot 0x11; StepRecordSub03_ButtonTable slot 0x00; StepRecordSub03_ButtonTable slot 0x11; StepRecordSub04_ButtonTable slot 0x00; StepRecordSub04_ButtonTable slot 0x11; StepRecordSub05_ButtonTable slot 0x00; StepRecordSub05_ButtonTable slot 0x11; StepRecordSub07_ButtonTable slot 0x00; StepRecordSub07_ButtonTable slot 0x11; StepRecordSub08_ButtonTable slot 0x00; StepRecordSub08_ButtonTable slot 0x11; StepRecordSub09_ButtonTable slot 0x00; StepRecordSub09_ButtonTable slot 0x11; StepRecordSub10_ButtonTable slot 0x00; StepRecordSub10_ButtonTable slot 0x11; StepRecordSub11_ButtonTable slot 0x00; StepRecordSub11_ButtonTable slot 0x11.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol1_StepRecordSub00:
 	m_bit 2, MD16, UI_RequestBits	; F678F8  bit 2,(0x2075)
-	jr	z, Screen0ESub00_SoftKeyCol1	; F678FC  jr Z,0xf6791e
+	jr	z, StepRecordSub00_SoftKeyCol1	; F678FC  jr Z,0xf6791e
 	ldw	bc, 10	; F678FE  ld BC,0x000a
 	push	xwa	; F67901  push XWA
 	push	xhl	; F67902  push XHL
@@ -146119,7 +146126,7 @@ SoftKeyCol1_Screen0ESub00:
 	push	xix	; F67905  push XIX
 	push	xiy	; F67906  push XIY
 	push	xiz	; F67907  push XIZ
-	calr	Screen0ESub00_SoftKeyCol1	; F67908  calr 0xf6791e
+	calr	StepRecordSub00_SoftKeyCol1	; F67908  calr 0xf6791e
 	pop	xiz	; F6790B  pop XIZ
 	pop	xiy	; F6790C  pop XIY
 	pop	xix	; F6790D  pop XIX
@@ -146133,7 +146140,7 @@ SoftKeyCol1_Screen0ESub00:
 	ret	; F6791D  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol1
+; StepRecordSub00_SoftKeyCol1
 ; Called from: in-module: 0xF67908
 ; Touches: (0x0DCE) (0x106D) (0x1071)
 ; Calls:   sub_F69442 sub_F6940B
@@ -146143,8 +146150,8 @@ SoftKeyCol1_Screen0ESub00:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol1: the SoftKeyCol1 action of Screen0ESub00 -- called only by SoftKeyCol1_Screen0ESub00.
-Screen0ESub00_SoftKeyCol1:
+; StepRecordSub00_SoftKeyCol1: the SoftKeyCol1 action of StepRecordSub00 -- called only by SoftKeyCol1_StepRecordSub00.
+StepRecordSub00_SoftKeyCol1:
 	m_or_mi8 MB16, 0x1071, 0x01	; F6791E  or (0x1071),0x01
 	ld	(4205:16), 1	; F67923  ld (0x106d),0x01
 	ld	(3534:16), w	; F67928  ld (0x0dce),W
@@ -146157,7 +146164,7 @@ sub_F6791E_Skip:
 	ret	; F67938  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub01_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub01_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  22 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146188,32 +146195,32 @@ sub_F6791E_Skip:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub01_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67939  [0] -> 0xF678F8
+StepRecordSub01_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67939  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F6793D  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67941  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67945  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67949  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6794D  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67951  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67955  [7] -> 0xF6749D
-	.long	LcdKeyRow1_Screen0E	; F67959  [8] -> 0xF67D6F
+	.long	SoftKeyCol7_StepRecord	; F67951  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67955  [7] -> 0xF6749D
+	.long	LcdKeyRow1_StepRecord	; F67959  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F6795D  [9] -> sub_F68F62
-	.long	LcdKeyRow3_Screen0E	; F67961  [10] -> 0xF6C8F8
+	.long	LcdKeyRow3_StepRecord	; F67961  [10] -> 0xF6C8F8
 	.long	DispatchTable_F674CE_Nop0	; F67965  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67969  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6796D  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67971  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67975  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67975  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67979  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F6797D  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F6797D  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67981  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67985  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67989  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6798D  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67991  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67995  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67999  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67995  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67999  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F6799D  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679A1  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679A5  [27] -> ret stub
@@ -146222,15 +146229,15 @@ Screen0ESub01_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F679B1  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679B5  [31] -> ret stub
 
-; Screen0ESub02_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 2 (also sub-screen 6) -- DispatchTable_F67723/F67789
-;   entry 2 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub02_ButtonTable[code & 0x1F].
-Screen0ESub02_ButtonDispatch:
+; StepRecordSub02_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 2 (also sub-screen 6) -- StepRecord_SubScreenButtonTable/F67789
+;   entry 2 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub02_ButtonTable[code & 0x1F].
+StepRecordSub02_ButtonDispatch:
 	ld	hl, bc	; F679B9  ld HL,BC
 	cp	hl, 31	; F679BB  cp HL,0x001f
 	jr	ugt, sub_F679B9_Return	; F679BF  jr UGT,0xf679d2
 	sla	hl, 2	; F679C1  sla 0x02,HL
 	push	xix	; F679C4  push XIX
-	ld	xix, Screen0ESub02_ButtonTable	; F679C5  ld XIX,0x00f679d3
+	ld	xix, StepRecordSub02_ButtonTable	; F679C5  ld XIX,0x00f679d3
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F679CA  ld XHL,(XIX+HL)
 	pop	xix	; F679CF  pop XIX
 	call	(xhl)	; F679D0  call T,XHL
@@ -146238,7 +146245,7 @@ sub_F679B9_Return:
 	ret	; F679D2  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub02_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub02_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  22 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146269,32 +146276,32 @@ sub_F679B9_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub02_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F679D3  [0] -> 0xF678F8
+StepRecordSub02_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F679D3  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F679D7  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679DB  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679DF  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679E3  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F679E7  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F679EB  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F679EF  [7] -> 0xF6749D
-	.long	LcdKeyRow1_Screen0E	; F679F3  [8] -> 0xF67D6F
+	.long	SoftKeyCol7_StepRecord	; F679EB  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F679EF  [7] -> 0xF6749D
+	.long	LcdKeyRow1_StepRecord	; F679F3  [8] -> 0xF67D6F
 	.long	DispatchTable_F674CE_Nop0	; F679F7  [9] -> ret stub
-	.long	LcdKeyRow3_Screen0ESub02	; F679FB  [10] -> LcdKeyRow3_Screen0ESub02
-	.long	LcdKeyRow4_Screen0ESub02	; F679FF  [11] -> LcdKeyRow4_Screen0ESub02
+	.long	LcdKeyRow3_StepRecordSub02	; F679FB  [10] -> LcdKeyRow3_StepRecordSub02
+	.long	LcdKeyRow4_StepRecordSub02	; F679FF  [11] -> LcdKeyRow4_StepRecordSub02
 	.long	DispatchTable_F674CE_Nop0	; F67A03  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A07  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A0B  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67A0F  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67A0F  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67A13  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67A17  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67A17  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67A1B  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A1F  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A23  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A27  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A2B  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67A2F  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67A33  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67A2F  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67A33  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67A37  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A3B  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A3F  [27] -> ret stub
@@ -146303,32 +146310,32 @@ Screen0ESub02_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67A4B  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A4F  [31] -> ret stub
 
-; Screen0ESub03_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 3 -- DispatchTable_F67723/F67789
-;   entry 3 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub03_ButtonTable[code & 0x1F].
-Screen0ESub03_ButtonDispatch:
+; StepRecordSub03_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 3 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 3 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub03_ButtonTable[code & 0x1F].
+StepRecordSub03_ButtonDispatch:
 	ld	hl, bc	; F67A53  ld HL,BC
 	cp	hl, 31	; F67A55  cp HL,0x001f
 	jr	ugt, sub_F67A53_Return	; F67A59  jr UGT,0xf67a6c
 	sla	hl, 2	; F67A5B  sla 0x02,HL
 	push	xix	; F67A5E  push XIX
-	ld	xix, Screen0ESub03_ButtonTable	; F67A5F  ld XIX,0x00f67a7a
+	ld	xix, StepRecordSub03_ButtonTable	; F67A5F  ld XIX,0x00f67a7a
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67A64  ld XHL,(XIX+HL)
 	pop	xix	; F67A69  pop XIX
 	call	(xhl)	; F67A6A  call T,XHL
 sub_F67A53_Return:
 	ret	; F67A6C  ret
-; SoftKeyCol5_Screen0ESub03: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub03_ButtonTable slot 0x04; Screen0ESub03_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol5_Screen0ESub03:
+; SoftKeyCol5_StepRecordSub03: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub03_ButtonTable slot 0x04; StepRecordSub03_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_StepRecordSub03:
 	bit	7, w	; F67A6D  bit 0x07,W
 	jr	nz, sub_F67A6D_Skip	; F67A70  jr NZ,0xf67a76
-	calr	Screen0ESub03_SoftKeyCol5	; F67A72  calr 0xf69a1e
+	calr	StepRecordSub03_SoftKeyCol5	; F67A72  calr 0xf69a1e
 	ret	; F67A75  ret
 sub_F67A6D_Skip:
 	calr	sub_F69A67	; F67A76  calr 0xf69a67
 	ret	; F67A79  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub03_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub03_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146359,32 +146366,32 @@ sub_F67A6D_Skip:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub03_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67A7A  [0] -> 0xF678F8
+StepRecordSub03_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67A7A  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67A7E  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A82  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67A86  [3] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub03	; F67A8A  [4] -> 0xF67A6D
+	.long	SoftKeyCol5_StepRecordSub03	; F67A8A  [4] -> 0xF67A6D
 	.long	DispatchTable_F674CE_Nop0	; F67A8E  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67A92  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67A96  [7] -> 0xF6749D
-	.long	LcdKeyRow1_Screen0E	; F67A9A  [8] -> 0xF67D6F
+	.long	SoftKeyCol7_StepRecord	; F67A92  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67A96  [7] -> 0xF6749D
+	.long	LcdKeyRow1_StepRecord	; F67A9A  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F67A9E  [9] -> sub_F68F62
 	.long	DispatchTable_F674CE_Nop0	; F67AA2  [10] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AA6  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AAA  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AAE  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AB2  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67AB6  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67AB6  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67ABA  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67ABE  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67ABE  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67AC2  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AC6  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67ACA  [20] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub03	; F67ACE  [21] -> 0xF67A6D
+	.long	SoftKeyCol5_StepRecordSub03	; F67ACE  [21] -> 0xF67A6D
 	.long	DispatchTable_F674CE_Nop0	; F67AD2  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67AD6  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67ADA  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67AD6  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67ADA  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67ADE  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AE2  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AE6  [27] -> ret stub
@@ -146393,15 +146400,15 @@ Screen0ESub03_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67AF2  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67AF6  [31] -> ret stub
 
-; Screen0ESub04_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 4 -- DispatchTable_F67723/F67789
-;   entry 4 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub04_ButtonTable[code & 0x1F].
-Screen0ESub04_ButtonDispatch:
+; StepRecordSub04_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 4 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 4 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub04_ButtonTable[code & 0x1F].
+StepRecordSub04_ButtonDispatch:
 	ld	hl, bc	; F67AFA  ld HL,BC
 	cp	hl, 31	; F67AFC  cp HL,0x001f
 	jr	ugt, sub_F67AFA_Return	; F67B00  jr UGT,0xf67b13
 	sla	hl, 2	; F67B02  sla 0x02,HL
 	push	xix	; F67B05  push XIX
-	ld	xix, Screen0ESub04_ButtonTable	; F67B06  ld XIX,0x00f67b14
+	ld	xix, StepRecordSub04_ButtonTable	; F67B06  ld XIX,0x00f67b14
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67B0B  ld XHL,(XIX+HL)
 	pop	xix	; F67B10  pop XIX
 	call	(xhl)	; F67B11  call T,XHL
@@ -146409,7 +146416,7 @@ sub_F67AFA_Return:
 	ret	; F67B13  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub04_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub04_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  24 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 5 distinct other
@@ -146440,15 +146447,15 @@ sub_F67AFA_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub04_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67B14  [0] -> 0xF678F8
+StepRecordSub04_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67B14  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67B18  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B1C  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B20  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B24  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B28  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67B2C  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67B30  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67B2C  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67B30  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67B34  [8] -> ret stub
 	.long	sub_F68F62	; F67B38  [9] -> sub_F68F62
 	.long	DispatchTable_F674CE_Nop0	; F67B3C  [10] -> ret stub
@@ -146456,16 +146463,16 @@ Screen0ESub04_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67B44  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B48  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B4C  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67B50  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67B50  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67B54  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67B58  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67B58  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67B5C  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B60  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B64  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B68  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B6C  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67B70  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67B74  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67B70  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67B74  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67B78  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B7C  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B80  [27] -> ret stub
@@ -146474,15 +146481,15 @@ Screen0ESub04_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67B8C  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67B90  [31] -> ret stub
 
-; Screen0ESub05_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 5 -- DispatchTable_F67723/F67789
-;   entry 5 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub05_ButtonTable[code & 0x1F].
-Screen0ESub05_ButtonDispatch:
+; StepRecordSub05_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 5 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 5 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub05_ButtonTable[code & 0x1F].
+StepRecordSub05_ButtonDispatch:
 	ld	hl, bc	; F67B94  ld HL,BC
 	cp	hl, 31	; F67B96  cp HL,0x001f
 	jr	ugt, sub_F67B94_Return	; F67B9A  jr UGT,0xf67bad
 	sla	hl, 2	; F67B9C  sla 0x02,HL
 	push	xix	; F67B9F  push XIX
-	ld	xix, Screen0ESub05_ButtonTable	; F67BA0  ld XIX,0x00f67bae
+	ld	xix, StepRecordSub05_ButtonTable	; F67BA0  ld XIX,0x00f67bae
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67BA5  ld XHL,(XIX+HL)
 	pop	xix	; F67BAA  pop XIX
 	call	(xhl)	; F67BAB  call T,XHL
@@ -146490,7 +146497,7 @@ sub_F67B94_Return:
 	ret	; F67BAD  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub05_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub05_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146521,32 +146528,32 @@ sub_F67B94_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub05_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67BAE  [0] -> 0xF678F8
+StepRecordSub05_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67BAE  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67BB2  [1] -> ret stub
-	.long	SoftKeyCol3_Screen0ESub05	; F67BB6  [2] -> 0xF6CD8C
+	.long	SoftKeyCol3_StepRecordSub05	; F67BB6  [2] -> 0xF6CD8C
 	.long	DispatchTable_F674CE_Nop0	; F67BBA  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67BBE  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67BC2  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67BC6  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67BCA  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67BC6  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67BCA  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67BCE  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67BD2  [9] -> ret stub
-	.long	LcdKeyRow3_Screen0ESub05	; F67BD6  [10] -> 0xF6CDAD
+	.long	LcdKeyRow3_StepRecordSub05	; F67BD6  [10] -> 0xF6CDAD
 	.long	sub_F6CD74_Skip2	; F67BDA  [11] -> 0xF6CDD0
 	.long	DispatchTable_F674CE_Nop0	; F67BDE  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67BE2  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67BE6  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67BEA  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67BEA  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67BEE  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67BF2  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67BF2  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67BF6  [18] -> ret stub
-	.long	SoftKeyCol3_Screen0ESub05	; F67BFA  [19] -> 0xF6CD8C
+	.long	SoftKeyCol3_StepRecordSub05	; F67BFA  [19] -> 0xF6CD8C
 	.long	DispatchTable_F674CE_Nop0	; F67BFE  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C02  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C06  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67C0A  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67C0E  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67C0A  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67C0E  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67C12  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C16  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C1A  [27] -> ret stub
@@ -146555,32 +146562,32 @@ Screen0ESub05_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67C26  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C2A  [31] -> ret stub
 
-; Screen0ESub07_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 7 -- DispatchTable_F67723/F67789
-;   entry 7 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub07_ButtonTable[code & 0x1F].
-Screen0ESub07_ButtonDispatch:
+; StepRecordSub07_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 7 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 7 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub07_ButtonTable[code & 0x1F].
+StepRecordSub07_ButtonDispatch:
 	ld	hl, bc	; F67C2E  ld HL,BC
 	cp	hl, 31	; F67C30  cp HL,0x001f
 	jr	ugt, sub_F67C2E_Return	; F67C34  jr UGT,0xf67c47
 	sla	hl, 2	; F67C36  sla 0x02,HL
 	push	xix	; F67C39  push XIX
-	ld	xix, Screen0ESub07_ButtonTable	; F67C3A  ld XIX,0x00f67c55
+	ld	xix, StepRecordSub07_ButtonTable	; F67C3A  ld XIX,0x00f67c55
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67C3F  ld XHL,(XIX+HL)
 	pop	xix	; F67C44  pop XIX
 	call	(xhl)	; F67C45  call T,XHL
 sub_F67C2E_Return:
 	ret	; F67C47  ret
-; SoftKeyCol4_Screen0E: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub07_ButtonTable slot 0x03; Screen0ESub07_ButtonTable slot 0x14; Screen0ESub17_ButtonTable slot 0x03; Screen0ESub17_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol4_Screen0E:
+; SoftKeyCol4_StepRecord: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub07_ButtonTable slot 0x03; StepRecordSub07_ButtonTable slot 0x14; StepRecordSub17_ButtonTable slot 0x03; StepRecordSub17_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_StepRecord:
 	bit	7, w	; F67C48  bit 0x07,W
 	jr	nz, sub_F67C48_Skip	; F67C4B  jr NZ,0xf67c51
-	calr	Screen0E_SoftKeyCol4	; F67C4D  calr 0xf69960
+	calr	StepRecord_SoftKeyCol4	; F67C4D  calr 0xf69960
 	ret	; F67C50  ret
 sub_F67C48_Skip:
 	calr	sub_F6997C	; F67C51  calr 0xf6997c
 	ret	; F67C54  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub07_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub07_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146611,32 +146618,32 @@ sub_F67C48_Skip:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub07_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67C55  [0] -> 0xF678F8
+StepRecordSub07_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67C55  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67C59  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C5D  [2] -> ret stub
-	.long	SoftKeyCol4_Screen0E	; F67C61  [3] -> 0xF67C48
+	.long	SoftKeyCol4_StepRecord	; F67C61  [3] -> 0xF67C48
 	.long	DispatchTable_F674CE_Nop0	; F67C65  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C69  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67C6D  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67C71  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67C6D  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67C71  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67C75  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C79  [9] -> ret stub
 	.long	sub_F68F62	; F67C7D  [10] -> sub_F68F62
-	.long	LcdKeyRow4_Screen0E	; F67C81  [11] -> 0xF688F0
+	.long	LcdKeyRow4_StepRecord	; F67C81  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F67C85  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C89  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67C8D  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67C91  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67C91  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67C95  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67C99  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67C99  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67C9D  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CA1  [19] -> ret stub
-	.long	SoftKeyCol4_Screen0E	; F67CA5  [20] -> 0xF67C48
+	.long	SoftKeyCol4_StepRecord	; F67CA5  [20] -> 0xF67C48
 	.long	DispatchTable_F674CE_Nop0	; F67CA9  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CAD  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67CB1  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67CB5  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67CB1  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67CB5  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67CB9  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CBD  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CC1  [27] -> ret stub
@@ -146645,15 +146652,15 @@ Screen0ESub07_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67CCD  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CD1  [31] -> ret stub
 
-; Screen0ESub08_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 8 -- DispatchTable_F67723/F67789
-;   entry 8 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub08_ButtonTable[code & 0x1F].
-Screen0ESub08_ButtonDispatch:
+; StepRecordSub08_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 8 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 8 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub08_ButtonTable[code & 0x1F].
+StepRecordSub08_ButtonDispatch:
 	ld	hl, bc	; F67CD5  ld HL,BC
 	cp	hl, 31	; F67CD7  cp HL,0x001f
 	jr	ugt, sub_F67CD5_Return	; F67CDB  jr UGT,0xf67cee
 	sla	hl, 2	; F67CDD  sla 0x02,HL
 	push	xix	; F67CE0  push XIX
-	ld	xix, Screen0ESub08_ButtonTable	; F67CE1  ld XIX,0x00f67cef
+	ld	xix, StepRecordSub08_ButtonTable	; F67CE1  ld XIX,0x00f67cef
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67CE6  ld XHL,(XIX+HL)
 	pop	xix	; F67CEB  pop XIX
 	call	(xhl)	; F67CEC  call T,XHL
@@ -146661,7 +146668,7 @@ sub_F67CD5_Return:
 	ret	; F67CEE  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub08_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub08_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -146692,32 +146699,32 @@ sub_F67CD5_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub08_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67CEF  [0] -> 0xF678F8
+StepRecordSub08_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67CEF  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67CF3  [1] -> ret stub
-	.long	SoftKeyCol3_Screen0ESub08	; F67CF7  [2] -> 0xF6CD3D
+	.long	SoftKeyCol3_StepRecordSub08	; F67CF7  [2] -> 0xF6CD3D
 	.long	DispatchTable_F674CE_Nop0	; F67CFB  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67CFF  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D03  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67D07  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67D0B  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67D07  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67D0B  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67D0F  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D13  [9] -> ret stub
 	.long	sub_F68F62	; F67D17  [10] -> sub_F68F62
-	.long	LcdKeyRow4_Screen0E	; F67D1B  [11] -> 0xF688F0
+	.long	LcdKeyRow4_StepRecord	; F67D1B  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F67D1F  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D23  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D27  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67D2B  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67D2B  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67D2F  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67D33  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67D33  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67D37  [18] -> ret stub
-	.long	SoftKeyCol3_Screen0ESub08	; F67D3B  [19] -> 0xF6CD3D
+	.long	SoftKeyCol3_StepRecordSub08	; F67D3B  [19] -> 0xF6CD3D
 	.long	DispatchTable_F674CE_Nop0	; F67D3F  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D43  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D47  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67D4B  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67D4F  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67D4B  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67D4F  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67D53  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D57  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D5B  [27] -> ret stub
@@ -146726,8 +146733,8 @@ Screen0ESub08_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67D67  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67D6B  [31] -> ret stub
 
-; LcdKeyRow1_Screen0E: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub00_ButtonTable slot 0x08; Screen0ESub01_ButtonTable slot 0x08; Screen0ESub02_ButtonTable slot 0x08; Screen0ESub03_ButtonTable slot 0x08; Screen0ESub10_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow1_Screen0E:
+; LcdKeyRow1_StepRecord: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub00_ButtonTable slot 0x08; StepRecordSub01_ButtonTable slot 0x08; StepRecordSub02_ButtonTable slot 0x08; StepRecordSub03_ButtonTable slot 0x08; StepRecordSub10_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow1_StepRecord:
 	bit	7, w	; F67D6F  bit 0x07,W
 	jrl	nz, sub_F67D6F_Return	; F67D72  jrl NZ,0xf67d8b
 	ld	a, (3683:16)	; F67D75  ld A,(0x0e63)
@@ -146789,17 +146796,17 @@ MsgLine_Volume:
 	ret	; F67DC5  ret
 ; MsgLine_Volume_Text -- the 9 characters MsgLine_Volume copies with `ldir` (BC = 9) to MsgLine_Text+11
 MsgLine_Volume_Text:	.ascii	"VOLUME = "	; F67DC6
-; Screen0ESub09_ButtonDispatch -- entry 9 of DispatchTable_F67723: dispatch HL (0..31) through Screen0ESub09_ButtonTable.  It was hidden
+; StepRecordSub09_ButtonDispatch -- entry 9 of StepRecord_SubScreenButtonTable: dispatch HL (0..31) through StepRecordSub09_ButtonTable.  It was hidden
 ;          by the text above decoded as code, which swallowed its first instruction.
-; Screen0ESub09_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 9 -- DispatchTable_F67723/F67789
-;   entry 9 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub09_ButtonTable[code & 0x1F].
-Screen0ESub09_ButtonDispatch:
+; StepRecordSub09_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 9 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 9 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub09_ButtonTable[code & 0x1F].
+StepRecordSub09_ButtonDispatch:
 	ld	hl, bc	; F67DCF  ld HL,BC
 	cp	hl, 31	; F67DD1  cp HL,0x001f
 	jr	ugt, sub_F67DCF_Return	; F67DD5  jr UGT,0xf67de8
 	sla	hl, 2	; F67DD7  sla 0x02,HL
 	push	xix	; F67DDA  push XIX
-	ld	xix, Screen0ESub09_ButtonTable	; F67DDB  ld XIX,0x00f67de9
+	ld	xix, StepRecordSub09_ButtonTable	; F67DDB  ld XIX,0x00f67de9
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67DE0  ld XHL,(XIX+HL)
 	pop	xix	; F67DE5  pop XIX
 	call	(xhl)	; F67DE6  call T,XHL
@@ -146807,7 +146814,7 @@ sub_F67DCF_Return:
 	ret	; F67DE8  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub09_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub09_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  23 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 5 distinct other
@@ -146838,15 +146845,15 @@ sub_F67DCF_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub09_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67DE9  [0] -> 0xF678F8
+StepRecordSub09_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67DE9  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67DED  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67DF1  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67DF5  [3] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub09	; F67DF9  [4] -> 0xF67E69
+	.long	SoftKeyCol5_StepRecordSub09	; F67DF9  [4] -> 0xF67E69
 	.long	DispatchTable_F674CE_Nop0	; F67DFD  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67E01  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67E05  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67E01  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67E05  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67E09  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E0D  [9] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E11  [10] -> ret stub
@@ -146854,16 +146861,16 @@ Screen0ESub09_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67E19  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E1D  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E21  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67E25  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67E25  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67E29  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67E2D  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67E2D  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67E31  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E35  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E39  [20] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub09	; F67E3D  [21] -> 0xF67E69
+	.long	SoftKeyCol5_StepRecordSub09	; F67E3D  [21] -> 0xF67E69
 	.long	DispatchTable_F674CE_Nop0	; F67E41  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67E45  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67E49  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67E45  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67E49  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67E4D  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E51  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E55  [27] -> ret stub
@@ -146872,8 +146879,8 @@ Screen0ESub09_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F67E61  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67E65  [31] -> ret stub
 
-; SoftKeyCol5_Screen0ESub09: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub09_ButtonTable slot 0x04; Screen0ESub09_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol5_Screen0ESub09:
+; SoftKeyCol5_StepRecordSub09: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub09_ButtonTable slot 0x04; StepRecordSub09_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_StepRecordSub09:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F67E69  or (0x2075),0x08
 	ld	a, (4113:16)	; F67E6E  ld A,(0x1011)
 	ld	l, 0:opc	; F67E72  ld L,0x00
@@ -147003,15 +147010,15 @@ sub_F67F68_Skip:
 	dec	1, a	; F67F79  dec 1,A
 sub_F67F68_Return:
 	ret	; F67F7B  ret
-; Screen0ESub10_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 10 -- DispatchTable_F67723/F67789
-;   entry 10 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub10_ButtonTable[code & 0x1F].
-Screen0ESub10_ButtonDispatch:
+; StepRecordSub10_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 10 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 10 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub10_ButtonTable[code & 0x1F].
+StepRecordSub10_ButtonDispatch:
 	ld	hl, bc	; F67F7C  ld HL,BC
 	cp	hl, 31	; F67F7E  cp HL,0x001f
 	jr	ugt, sub_F67F68_Return2	; F67F82  jr UGT,0xf67f95
 	sla	hl, 2	; F67F84  sla 0x02,HL
 	push	xix	; F67F87  push XIX
-	ld	xix, Screen0ESub10_ButtonTable	; F67F88  ld XIX,0x00f67f96
+	ld	xix, StepRecordSub10_ButtonTable	; F67F88  ld XIX,0x00f67f96
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F67F8D  ld XHL,(XIX+HL)
 	pop	xix	; F67F92  pop XIX
 	call	(xhl)	; F67F93  call T,XHL
@@ -147019,7 +147026,7 @@ sub_F67F68_Return2:
 	ret	; F67F95  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub10_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub10_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -147050,32 +147057,32 @@ sub_F67F68_Return2:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub10_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F67F96  [0] -> 0xF678F8
+StepRecordSub10_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F67F96  [0] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67F9A  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67F9E  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FA2  [3] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub10	; F67FA6  [4] -> 0xF68016
+	.long	SoftKeyCol5_StepRecordSub10	; F67FA6  [4] -> 0xF68016
 	.long	DispatchTable_F674CE_Nop0	; F67FAA  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67FAE  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67FB2  [7] -> 0xF6749D
-	.long	LcdKeyRow1_Screen0E	; F67FB6  [8] -> 0xF67D6F
+	.long	SoftKeyCol7_StepRecord	; F67FAE  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67FB2  [7] -> 0xF6749D
+	.long	LcdKeyRow1_StepRecord	; F67FB6  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F67FBA  [9] -> sub_F68F62
 	.long	DispatchTable_F674CE_Nop0	; F67FBE  [10] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FC2  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FC6  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FCA  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FCE  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F67FD2  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F67FD2  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67FD6  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F67FDA  [17] -> 0xF678F8
+	.long	SoftKeyCol1_StepRecordSub00	; F67FDA  [17] -> 0xF678F8
 	.long	DispatchTable_F674CE_Nop0	; F67FDE  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FE2  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FE6  [20] -> ret stub
-	.long	SoftKeyCol5_Screen0ESub10	; F67FEA  [21] -> 0xF68016
+	.long	SoftKeyCol5_StepRecordSub10	; F67FEA  [21] -> 0xF68016
 	.long	DispatchTable_F674CE_Nop0	; F67FEE  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F67FF2  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F67FF6  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F67FF2  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F67FF6  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F67FFA  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67FFE  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68002  [27] -> ret stub
@@ -147084,8 +147091,8 @@ Screen0ESub10_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F6800E  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68012  [31] -> ret stub
 
-; SoftKeyCol5_Screen0ESub10: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub10_ButtonTable slot 0x04; Screen0ESub10_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol5_Screen0ESub10:
+; SoftKeyCol5_StepRecordSub10: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub10_ButtonTable slot 0x04; StepRecordSub10_ButtonTable slot 0x15.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol5_StepRecordSub10:
 	ld	a, (4696:16)	; F68016  ld A,(0x1258)
 	cp	a, 188	; F6801A  cp A,0xbc
 	jrl	z, sub_F68016_Skip5	; F6801D  jrl Z,0xf680fc
@@ -147379,30 +147386,30 @@ sub_F68234_Return2:
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6828B:
-	.long	SoftKeyCol1_Screen0ESub16	; F6828B  [0] -> SoftKeyCol1_Screen0ESub16
+	.long	SoftKeyCol1_StepRecordSub16	; F6828B  [0] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F6828F  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68293  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68297  [3] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6829B  [4] -> ret stub
-	.long	SoftKeyCol6_Screen0ESub17	; F6829F  [5] -> 0xF6A1BB
-	.long	SoftKeyCol7_Screen0ESub17	; F682A3  [6] -> 0xF6A1B4
+	.long	SoftKeyCol6_StepRecordSub17	; F6829F  [5] -> 0xF6A1BB
+	.long	SoftKeyCol7_StepRecordSub17	; F682A3  [6] -> 0xF6A1B4
 	.long	DispatchTable_F674CE_Nop0	; F682A7  [7] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682AB  [8] -> ret stub
-	.long	LcdKeyRow2_Screen0ESub17	; F682AF  [9] -> 0xF68F5B
+	.long	LcdKeyRow2_StepRecordSub17	; F682AF  [9] -> 0xF68F5B
 	.long	DispatchTable_F674CE_Nop0	; F682B3  [10] -> ret stub
-	.long	LcdKeyRow4_Screen0E	; F682B7  [11] -> 0xF688F0
+	.long	LcdKeyRow4_StepRecord	; F682B7  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F682BB  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682BF  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682C3  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F682C7  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F682C7  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F682CB  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub16	; F682CF  [17] -> SoftKeyCol1_Screen0ESub16
+	.long	SoftKeyCol1_StepRecordSub16	; F682CF  [17] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F682D3  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682D7  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682DB  [20] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682DF  [21] -> ret stub
-	.long	SoftKeyCol6_Screen0ESub17	; F682E3  [22] -> 0xF6A1BB
-	.long	SoftKeyCol7_Screen0ESub17	; F682E7  [23] -> 0xF6A1B4
+	.long	SoftKeyCol6_StepRecordSub17	; F682E3  [22] -> 0xF6A1BB
+	.long	SoftKeyCol7_StepRecordSub17	; F682E7  [23] -> 0xF6A1B4
 	.long	DispatchTable_F674CE_Nop0	; F682EB  [24] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682EF  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F682F3  [26] -> ret stub
@@ -147414,18 +147421,18 @@ DispatchTable_F6828B:
 
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_Screen0ESub16
+; SoftKeyCol1_StepRecordSub16
 ; Called from: in-module: 0xF685A3
 ; Touches: (0x1002) (0x106D) (0x12B2)
-; Calls:   Screen0ESub16_SoftKeyCol1 sub_F6A1F1 sub_F683D4 T_F431C4 sub_F6833E
+; Calls:   StepRecordSub16_SoftKeyCol1 sub_F6A1F1 sub_F683D4 T_F431C4 sub_F6833E
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6830B is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_Screen0ESub16: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub16_ButtonTable slot 0x00; Screen0ESub16_ButtonTable slot 0x11; Screen0ESub17_ButtonTable slot 0x00; Screen0ESub17_ButtonTable slot 0x11.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol1_Screen0ESub16:
+; SoftKeyCol1_StepRecordSub16: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub16_ButtonTable slot 0x00; StepRecordSub16_ButtonTable slot 0x11; StepRecordSub17_ButtonTable slot 0x00; StepRecordSub17_ButtonTable slot 0x11.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol1_StepRecordSub16:
 	ld	(4205:16), 1	; F6830B  ld (0x106d),0x01
 	pushw	wa	; F68310  push WA
 	ld	wa, (4786:16)	; F68311  ld WA,(0x12b2)
@@ -147433,7 +147440,7 @@ SoftKeyCol1_Screen0ESub16:
 	popw	wa	; F68319  pop WA
 	bit	7, w	; F6831A  bit 0x07,W
 	jr	z, sub_F6830B_Skip	; F6831D  jr Z,0xf68324
-	calr	Screen0ESub16_SoftKeyCol1	; F6831F  calr 0xf6a1c2
+	calr	StepRecordSub16_SoftKeyCol1	; F6831F  calr 0xf6a1c2
 	jr	sub_F6830B_Join	; F68322  jr T,0xf68327
 sub_F6830B_Skip:
 	calr	sub_F6A1F1	; F68324  calr 0xf6a1f1
@@ -147811,7 +147818,7 @@ Text_FillSpaces30:
 ; sub_F6859F
 ; Called from: in-module: 0xF67408
 ; Touches: nothing with an absolute address
-; Calls:   SoftKeyCol1_Screen0ESub16
+; Calls:   SoftKeyCol1_StepRecordSub16
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6859F is an instruction
 ;           boundary.  The name IS the address.
@@ -147821,18 +147828,18 @@ Text_FillSpaces30:
 sub_F6859F:
 	cp	bc, 0:i3	; F6859F  cp BC,0
 	jr	nz, sub_F68590_Return	; F685A1  jr NZ,0xf685a6
-	calr	SoftKeyCol1_Screen0ESub16	; F685A3  calr 0xf6830b
+	calr	SoftKeyCol1_StepRecordSub16	; F685A3  calr 0xf6830b
 sub_F68590_Return:
 	ret	; F685A6  ret
-; Screen0ESub16_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 16 -- DispatchTable_F67723/F67789
-;   entry 16 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub16_ButtonTable[code & 0x1F].
-Screen0ESub16_ButtonDispatch:
+; StepRecordSub16_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 16 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 16 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub16_ButtonTable[code & 0x1F].
+StepRecordSub16_ButtonDispatch:
 	ld	hl, bc	; F685A7  ld HL,BC
 	cp	hl, 31	; F685A9  cp HL,0x001f
 	jr	ugt, sub_F68590_Return2	; F685AD  jr UGT,0xf685c0
 	sla	hl, 2	; F685AF  sla 0x02,HL
 	push	xix	; F685B2  push XIX
-	ld	xix, Screen0ESub16_ButtonTable	; F685B3  ld XIX,0x00f685c1
+	ld	xix, StepRecordSub16_ButtonTable	; F685B3  ld XIX,0x00f685c1
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F685B8  ld XHL,(XIX+HL)
 	pop	xix	; F685BD  pop XIX
 	call	(xhl)	; F685BE  call T,XHL
@@ -147840,7 +147847,7 @@ sub_F68590_Return2:
 	ret	; F685C0  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub16_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub16_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  27 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 4 distinct other
@@ -147871,8 +147878,8 @@ sub_F68590_Return2:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub16_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub16	; F685C1  [0] -> SoftKeyCol1_Screen0ESub16
+StepRecordSub16_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub16	; F685C1  [0] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F685C5  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685C9  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685CD  [3] -> ret stub
@@ -147881,15 +147888,15 @@ Screen0ESub16_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F685D9  [6] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685DD  [7] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685E1  [8] -> ret stub
-	.long	LcdKeyRow2_Screen0ESub16	; F685E5  [9] -> 0xF694D6
-	.long	LcdKeyRow3_Screen0ESub16	; F685E9  [10] -> 0xF694C4
+	.long	LcdKeyRow2_StepRecordSub16	; F685E5  [9] -> 0xF694D6
+	.long	LcdKeyRow3_StepRecordSub16	; F685E9  [10] -> 0xF694C4
 	.long	DispatchTable_F674CE_Nop0	; F685ED  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685F1  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685F5  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F685F9  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F685FD  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F685FD  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F68601  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub16	; F68605  [17] -> SoftKeyCol1_Screen0ESub16
+	.long	SoftKeyCol1_StepRecordSub16	; F68605  [17] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F68609  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6860D  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68611  [20] -> ret stub
@@ -147905,15 +147912,15 @@ Screen0ESub16_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F68639  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6863D  [31] -> ret stub
 
-; Screen0ESub17_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 17 -- DispatchTable_F67723/F67789
-;   entry 17 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub17_ButtonTable[code & 0x1F].
-Screen0ESub17_ButtonDispatch:
+; StepRecordSub17_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 17 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 17 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub17_ButtonTable[code & 0x1F].
+StepRecordSub17_ButtonDispatch:
 	ld	hl, bc	; F68641  ld HL,BC
 	cp	hl, 31	; F68643  cp HL,0x001f
 	jr	ugt, sub_F68641_Return	; F68647  jr UGT,0xf6865a
 	sla	hl, 2	; F68649  sla 0x02,HL
 	push	xix	; F6864C  push XIX
-	ld	xix, Screen0ESub17_ButtonTable	; F6864D  ld XIX,0x00f6865b
+	ld	xix, StepRecordSub17_ButtonTable	; F6864D  ld XIX,0x00f6865b
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F68652  ld XHL,(XIX+HL)
 	pop	xix	; F68657  pop XIX
 	call	(xhl)	; F68658  call T,XHL
@@ -147921,7 +147928,7 @@ sub_F68641_Return:
 	ret	; F6865A  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub17_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub17_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  21 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 7 distinct other
@@ -147952,31 +147959,31 @@ sub_F68641_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub17_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub16	; F6865B  [0] -> SoftKeyCol1_Screen0ESub16
+StepRecordSub17_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub16	; F6865B  [0] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F6865F  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68663  [2] -> ret stub
-	.long	SoftKeyCol4_Screen0E	; F68667  [3] -> 0xF67C48
+	.long	SoftKeyCol4_StepRecord	; F68667  [3] -> 0xF67C48
 	.long	DispatchTable_F674CE_Nop0	; F6866B  [4] -> ret stub
-	.long	SoftKeyCol6_Screen0ESub17	; F6866F  [5] -> 0xF6A1BB
-	.long	SoftKeyCol7_Screen0ESub17	; F68673  [6] -> 0xF6A1B4
+	.long	SoftKeyCol6_StepRecordSub17	; F6866F  [5] -> 0xF6A1BB
+	.long	SoftKeyCol7_StepRecordSub17	; F68673  [6] -> 0xF6A1B4
 	.long	DispatchTable_F674CE_Nop0	; F68677  [7] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6867B  [8] -> ret stub
-	.long	LcdKeyRow2_Screen0ESub17	; F6867F  [9] -> 0xF68F5B
+	.long	LcdKeyRow2_StepRecordSub17	; F6867F  [9] -> 0xF68F5B
 	.long	DispatchTable_F674CE_Nop0	; F68683  [10] -> ret stub
-	.long	LcdKeyRow4_Screen0E	; F68687  [11] -> 0xF688F0
+	.long	LcdKeyRow4_StepRecord	; F68687  [11] -> 0xF688F0
 	.long	DispatchTable_F674CE_Nop0	; F6868B  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6868F  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68693  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F68697  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F68697  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F6869B  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub16	; F6869F  [17] -> SoftKeyCol1_Screen0ESub16
+	.long	SoftKeyCol1_StepRecordSub16	; F6869F  [17] -> SoftKeyCol1_StepRecordSub16
 	.long	DispatchTable_F674CE_Nop0	; F686A3  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686A7  [19] -> ret stub
-	.long	SoftKeyCol4_Screen0E	; F686AB  [20] -> 0xF67C48
+	.long	SoftKeyCol4_StepRecord	; F686AB  [20] -> 0xF67C48
 	.long	DispatchTable_F674CE_Nop0	; F686AF  [21] -> ret stub
-	.long	SoftKeyCol6_Screen0ESub17	; F686B3  [22] -> 0xF6A1BB
-	.long	SoftKeyCol7_Screen0ESub17	; F686B7  [23] -> 0xF6A1B4
+	.long	SoftKeyCol6_StepRecordSub17	; F686B3  [22] -> 0xF6A1BB
+	.long	SoftKeyCol7_StepRecordSub17	; F686B7  [23] -> 0xF6A1B4
 	.long	DispatchTable_F674CE_Nop0	; F686BB  [24] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686BF  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686C3  [26] -> ret stub
@@ -147986,15 +147993,15 @@ Screen0ESub17_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F686D3  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686D7  [31] -> ret stub
 
-; Screen0ESub18_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 18 -- DispatchTable_F67723/F67789
-;   entry 18 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub18_ButtonTable[code & 0x1F].
-Screen0ESub18_ButtonDispatch:
+; StepRecordSub18_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 18 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 18 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub18_ButtonTable[code & 0x1F].
+StepRecordSub18_ButtonDispatch:
 	ld	hl, bc	; F686DB  ld HL,BC
 	cp	hl, 31	; F686DD  cp HL,0x001f
 	jr	ugt, sub_F686DB_Return	; F686E1  jr UGT,0xf686f4
 	sla	hl, 2	; F686E3  sla 0x02,HL
 	push	xix	; F686E6  push XIX
-	ld	xix, Screen0ESub18_ButtonTable	; F686E7  ld XIX,0x00f686f5
+	ld	xix, StepRecordSub18_ButtonTable	; F686E7  ld XIX,0x00f686f5
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F686EC  ld XHL,(XIX+HL)
 	pop	xix	; F686F1  pop XIX
 	call	(xhl)	; F686F2  call T,XHL
@@ -148002,7 +148009,7 @@ sub_F686DB_Return:
 	ret	; F686F4  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub18_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub18_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  30 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 2 distinct other
@@ -148033,7 +148040,7 @@ sub_F686DB_Return:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub18_ButtonTable:
+StepRecordSub18_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F686F5  [0] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686F9  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F686FD  [2] -> ret stub
@@ -148043,8 +148050,8 @@ Screen0ESub18_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F6870D  [6] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68711  [7] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68715  [8] -> ret stub
-	.long	LcdKeyRow2_Screen0ESub18	; F68719  [9] -> 0xF68775
-	.long	LcdKeyRow3_Screen0ESub18	; F6871D  [10] -> 0xF6877E
+	.long	LcdKeyRow2_StepRecordSub18	; F68719  [9] -> 0xF68775
+	.long	LcdKeyRow3_StepRecordSub18	; F6871D  [10] -> 0xF6877E
 	.long	DispatchTable_F674CE_Nop0	; F68721  [11] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68725  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68729  [13] -> ret stub
@@ -148067,18 +148074,18 @@ Screen0ESub18_ButtonTable:
 	.long	DispatchTable_F674CE_Nop0	; F6876D  [30] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F68771  [31] -> ret stub
 
-; LcdKeyRow2_Screen0ESub18: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub18_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow2_Screen0ESub18:
+; LcdKeyRow2_StepRecordSub18: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub18_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_StepRecordSub18:
 	bit	7, w	; F68775  bit 0x07,W
 	jr	nz, sub_F68775_Return	; F68778  jr NZ,0xf6877d
-	calr	Screen0ESub18_LcdKeyRow2	; F6877A  calr 0xf6890d
+	calr	StepRecordSub18_LcdKeyRow2	; F6877A  calr 0xf6890d
 sub_F68775_Return:
 	ret	; F6877D  ret
-; LcdKeyRow3_Screen0ESub18: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub18_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0ESub18:
+; LcdKeyRow3_StepRecordSub18: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub18_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecordSub18:
 	bit	7, w	; F6877E  bit 0x07,W
 	jr	nz, sub_F6877E_Return	; F68781  jr NZ,0xf68786
-	calr	Screen0ESub18_LcdKeyRow3	; F68783  calr 0xf68945
+	calr	StepRecordSub18_LcdKeyRow3	; F68783  calr 0xf68945
 sub_F6877E_Return:
 	ret	; F68786  ret
 
@@ -148103,7 +148110,7 @@ sub_F68787:		; <- T_F42EE0
 	jr	z, sub_F68787_Epilogue	; F6878F  jr Z,0xf687e7
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F68791  cp (0x0e63),0x00
 	jr	nz, sub_F68787_Epilogue	; F68796  jr NZ,0xf687e7
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x12	; F68798  cp (0x0ef5),0x12
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x12	; F68798  cp (0x0ef5),0x12
 	jr	z, sub_F68787_Epilogue	; F6879D  jr Z,0xf687e7
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x0b	; F6879F  cp (0x20b8),0x0b
 	jr	nz, sub_F68787_Skip2	; F687A4  jr NZ,0xf687dd
@@ -148294,26 +148301,26 @@ Map_20B9_20BA_F688E0:
 	.byte	0x00, 0x03, 0x02, 0x03	; F688E8  [8..11]
 	.byte	0x00, 0x00, 0x00, 0x00	; F688EC  [12..15]
 
-; LcdKeyRow4_Screen0E -- a routine start: five `.long` entries of this module's
+; LcdKeyRow4_StepRecord -- a routine start: five `.long` entries of this module's
 ;   dispatch tables name 0xF688F0 (0xF67642, 0xF67C81, 0xF67D1B, 0xF682B7,
 ;   0xF68687, each slot [11]); it follows the table above.  (Was labelled
-;   LcdKeyRow4_Screen0E by this lane's pointer pass, before the table
+;   LcdKeyRow4_StepRecord by this lane's pointer pass, before the table
 ;   was reframed.)
-; LcdKeyRow4_Screen0E: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub07_ButtonTable slot 0x0B; Screen0ESub08_ButtonTable slot 0x0B; Screen0ESub17_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow4_Screen0E:
+; LcdKeyRow4_StepRecord: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub07_ButtonTable slot 0x0B; StepRecordSub08_ButtonTable slot 0x0B; StepRecordSub17_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_StepRecord:
 	bit	7, w	; F688F0  bit 0x07,W
 	jr	nz, sub_F688F0_Return	; F688F3  jr NZ,0xf6890c
-	ld	xiy, UI_Screen0E_SubScreen	; F688F5  ld XIY,0x00000ef5
+	ld	xiy, UI_StepRecord_SubScreen	; F688F5  ld XIY,0x00000ef5
 	ld	a, (xiy)	; F688FA  ld A,(XIY)
 	ld	(3830:16), a	; F688FC  ld (0x0ef6),A
 	ld	(xiy), 18	; F68900  ld (XIY),0x12
 	ld	(3674:16), 0	; F68903  ld (0x0e5a),0x00
-	call	Screen0E_LcdKeyRow4	; F68908  call 0xf6da0d
+	call	StepRecord_LcdKeyRow4	; F68908  call 0xf6da0d
 sub_F688F0_Return:
 	ret	; F6890C  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub18_LcdKeyRow2
+; StepRecordSub18_LcdKeyRow2
 ; Called from: in-module: 0xF6877A
 ; Touches: (0x0C70) (0x0E4F) (0x0E69) (0x1008) (0x126B) (0x2070) (0x2075)
 ;          (0x20A9) (0x2880)
@@ -148324,8 +148331,8 @@ sub_F688F0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub18_LcdKeyRow2: the LcdKeyRow2 action of Screen0ESub18 -- called only by LcdKeyRow2_Screen0ESub18.
-Screen0ESub18_LcdKeyRow2:
+; StepRecordSub18_LcdKeyRow2: the LcdKeyRow2 action of StepRecordSub18 -- called only by LcdKeyRow2_StepRecordSub18.
+StepRecordSub18_LcdKeyRow2:
 	ld	a, (BStore_DirEntry:16)	; F6890D  ld A,(0x1008)
 	ld	(3184:16), a	; F68911  ld (0x0c70),A
 	call	T_F40A04	; F68915  call 0xf40a04
@@ -148341,7 +148348,7 @@ Screen0ESub18_LcdKeyRow2:
 	ret	; F68944  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub18_LcdKeyRow3
+; StepRecordSub18_LcdKeyRow3
 ; Called from: in-module: 0xF68783
 ; Touches: (0x0EF5) (0x0EF6)
 ; Calls:   sub_F6ABB6
@@ -148351,10 +148358,10 @@ Screen0ESub18_LcdKeyRow2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub18_LcdKeyRow3: the LcdKeyRow3 action of Screen0ESub18 -- called only by LcdKeyRow3_Screen0ESub18.
-Screen0ESub18_LcdKeyRow3:
+; StepRecordSub18_LcdKeyRow3: the LcdKeyRow3 action of StepRecordSub18 -- called only by LcdKeyRow3_StepRecordSub18.
+StepRecordSub18_LcdKeyRow3:
 	ld	a, (3830:16)	; F68945  ld A,(0x0ef6)
-	ld	(UI_Screen0E_SubScreen:16), a	; F68949  ld (0x0ef5),A
+	ld	(UI_StepRecord_SubScreen:16), a	; F68949  ld (0x0ef5),A
 	calr	sub_F6ABB6	; F6894D  calr 0xf6abb6
 	ret	; F68950  ret
 
@@ -148434,7 +148441,7 @@ sub_F689AD:
 	calr	sub_F6C507	; F689B2  calr 0xf6c507
 	cp	w, 0:i3	; F689B5  cp W,0
 	jr	nz, sub_F689AD_Return	; F689B7  jr NZ,0xf689de
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x12	; F689B9  cp (0x0ef5),0x12
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x12	; F689B9  cp (0x0ef5),0x12
 	jr	nz, sub_F689AD_Skip	; F689BE  jr NZ,0xf689c5
 	calr	sub_F6AD30	; F689C0  calr 0xf6ad30
 	jr	sub_F689AD_Return	; F689C3  jr T,0xf689de
@@ -149022,8 +149029,8 @@ sub_F68DBE:
 sub_F68DBE_Skip:
 	ld	a, 255:opc	; F68DDE  ld A,0xff
 	ret	; F68DE0  ret
-; LcdKeyRow4_Screen0ESub00: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub00_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow4_Screen0ESub00:
+; LcdKeyRow4_StepRecordSub00: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub00_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_StepRecordSub00:
 	bit	7, w	; F68DE1  bit 0x07,W
 	jr	nz, sub_F68DBE_Return	; F68DE4  jr NZ,0xf68e40
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F68DE6  cp (0x0e63),0x01
@@ -149260,8 +149267,8 @@ sub_F68F52:
 	popw	wa	; F68F56  pop WA
 	calr	sub_F6B9DF	; F68F57  calr 0xf6b9df
 	ret	; F68F5A  ret
-; LcdKeyRow2_Screen0ESub17: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub17_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow2_Screen0ESub17:
+; LcdKeyRow2_StepRecordSub17: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub17_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_StepRecordSub17:
 	calr	sub_F68F62	; F68F5B  calr 0xf68f62
 	calr	sub_F6833E	; F68F5E  calr 0xf6833e
 	ret	; F68F61  ret
@@ -150061,7 +150068,7 @@ sub_F69476:
 ; sub_F6948B
 ; Called from: in-module: 0xF69CD5 0xF69D3A
 ; Touches: (0x0ED1)
-; Calls:   sub_F6B8BD sub_F6B770 sub_F6B75E LcdKeyRow4_Screen0ESub02 Text_PutTRACK
+; Calls:   sub_F6B8BD sub_F6B770 sub_F6B75E LcdKeyRow4_StepRecordSub02 Text_PutTRACK
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6948B is an instruction
 ;           boundary.  The name IS the address.
@@ -150100,41 +150107,41 @@ sub_F6948B_Skip3:
 sub_F6948B_Epilogue:
 	popw	bc	; F694C2  pop BC
 	ret	; F694C3  ret
-; LcdKeyRow3_Screen0ESub16: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub16_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0ESub16:
+; LcdKeyRow3_StepRecordSub16: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub16_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecordSub16:
 	bit	7, w	; F694C4  bit 0x07,W
 	jr	nz, sub_F6948B_Return	; F694C7  jr NZ,0xf694cf
-	calr	LcdKeyRow4_Screen0ESub02	; F694C9  calr 0xf694d0
+	calr	LcdKeyRow4_StepRecordSub02	; F694C9  calr 0xf694d0
 	calr	Text_PutTRACK	; F694CC  calr 0xf69597
 sub_F6948B_Return:
 	ret	; F694CF  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_Screen0ESub02
+; LcdKeyRow4_StepRecordSub02
 ; Called from: in-module: 0xF694C9
 ; Touches: nothing with an absolute address
-; Calls:   LcdKeyRow3_Screen0ESub02
+; Calls:   LcdKeyRow3_StepRecordSub02
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF694D0 is an instruction
 ;           boundary.  The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_Screen0ESub02: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub02_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow4_Screen0ESub02:
+; LcdKeyRow4_StepRecordSub02: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub02_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_StepRecordSub02:
 	bit	7, w	; F694D0  bit 0x07,W
 	jr	z, sub_F694DF_Skip4	; F694D3  jr Z,0xf6950a
 	ret	; F694D5  ret
-; LcdKeyRow2_Screen0ESub16: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub16_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow2_Screen0ESub16:
+; LcdKeyRow2_StepRecordSub16: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub16_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_StepRecordSub16:
 	bit	7, w	; F694D6  bit 0x07,W
 	jr	nz, sub_F694D0_Return	; F694D9  jr NZ,0xf694de
-	calr	LcdKeyRow3_Screen0ESub02	; F694DB  calr 0xf694df
+	calr	LcdKeyRow3_StepRecordSub02	; F694DB  calr 0xf694df
 sub_F694D0_Return:
 	ret	; F694DE  ret
 
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_Screen0ESub02
+; LcdKeyRow3_StepRecordSub02
 ; Called from: in-module: 0xF694DB
 ; Touches: (0x0E50) (0x0E63) (0x0E8E) (0x0ED2) (0x0ED3) (0x0ED4) (0x0ED5)
 ; Calls:   sub_F693F6 sub_F6B387 sub_F6C43C
@@ -150144,8 +150151,8 @@ sub_F694D0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_Screen0ESub02: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub02_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0ESub02:
+; LcdKeyRow3_StepRecordSub02: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub02_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecordSub02:
 	bit	7, w	; F694DF  bit 0x07,W
 	jr	z, sub_F694DF_Skip	; F694E2  jr Z,0xf694e5
 	ret	; F694E4  ret
@@ -150211,15 +150218,15 @@ DispatchTable_F6953C:
 	.long	sub_F69560	; F69548  [3] -> 0xF69560
 
 sub_F6954C:
-	ld	(UI_Screen0E_SubScreen:16), 0	; F6954C  ld (0x0ef5),0x00
+	ld	(UI_StepRecord_SubScreen:16), 0	; F6954C  ld (0x0ef5),0x00
 	call	sub_F6D70C	; F69551  call 0xf6d70c
 	ret	; F69555  ret
 sub_F69556:
-	ld	(UI_Screen0E_SubScreen:16), 8	; F69556  ld (0x0ef5),0x08
+	ld	(UI_StepRecord_SubScreen:16), 8	; F69556  ld (0x0ef5),0x08
 	call	sub_F6D57A	; F6955B  call 0xf6d57a
 	ret	; F6955F  ret
 sub_F69560:
-	ld	(UI_Screen0E_SubScreen:16), 15	; F69560  ld (0x0ef5),0x0f
+	ld	(UI_StepRecord_SubScreen:16), 15	; F69560  ld (0x0ef5),0x0f
 	call	sub_F6D5B5	; F69565  call 0xf6d5b5
 	ld	(4800:16), 0	; F69569  ld (0x12c0),0x00
 	call	MsgLine_TransportState_Plus4	; F6956E  call 0xf6d608
@@ -150575,7 +150582,7 @@ sub_F69811:
 ; sub_F69814
 ; Called from: in-module: 0xF69462
 ; Touches: (0x0E4E) (0x0E53) (0x0E56) (0x0ECF) (0x0ED0)
-; Calls:   sub_F6740C sub_F6B770 sub_F6A20F Screen0ESub00_SoftKeyCol2 sub_F6987E
+; Calls:   sub_F6740C sub_F6B770 sub_F6A20F StepRecordSub00_SoftKeyCol2 sub_F6987E
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69814 is an instruction
 ;           boundary.  The name IS the address.
@@ -150623,11 +150630,11 @@ sub_F69814_Skip4:
 	ld	(3667:16), l	; F69862  ld (0x0e53),L
 sub_F69814_Return:
 	ret	; F69866  ret
-; SoftKeyCol2_Screen0ESub00: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x01; Screen0ESub00_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol2_Screen0ESub00:
+; SoftKeyCol2_StepRecordSub00: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x01; StepRecordSub00_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol2_StepRecordSub00:
 	bit	7, w	; F69867  bit 0x07,W
 	jr	nz, sub_F69814_Skip5	; F6986A  jr NZ,0xf69871
-	calr	Screen0ESub00_SoftKeyCol2	; F6986C  calr 0xf69875
+	calr	StepRecordSub00_SoftKeyCol2	; F6986C  calr 0xf69875
 	jr	sub_F69814_Return2	; F6986F  jr T,0xf69874
 sub_F69814_Skip5:
 	calr	sub_F6987E	; F69871  calr 0xf6987e
@@ -150635,7 +150642,7 @@ sub_F69814_Return2:
 	ret	; F69874  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol2
+; StepRecordSub00_SoftKeyCol2
 ; Called from: in-module: 0xF6986C
 ; Touches: (0x0EFA)
 ; Calls:   sub_F69887
@@ -150645,8 +150652,8 @@ sub_F69814_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol2: the SoftKeyCol2 action of Screen0ESub00 -- called only by SoftKeyCol2_Screen0ESub00.
-Screen0ESub00_SoftKeyCol2:
+; StepRecordSub00_SoftKeyCol2: the SoftKeyCol2 action of StepRecordSub00 -- called only by SoftKeyCol2_StepRecordSub00.
+StepRecordSub00_SoftKeyCol2:
 	ld	(3834:16), 1	; F69875  ld (0x0efa),0x01
 	calr	sub_F69887	; F6987A  calr 0xf69887
 	ret	; F6987D  ret
@@ -150796,7 +150803,7 @@ sub_F69938_Return:
 	ret	; F6995F  ret
 
 ; --------------------------------------------------------------------------
-; Screen0E_SoftKeyCol4
+; StepRecord_SoftKeyCol4
 ; Called from: in-module: 0xF67C4D
 ; Touches: (0x0EFB) (0x100A) (0x2075)
 ; Calls:   sub_F69998 0xF6D9AE T_F431B4
@@ -150806,8 +150813,8 @@ sub_F69938_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0E_SoftKeyCol4: the SoftKeyCol4 action of Screen0E -- called only by SoftKeyCol4_Screen0E.
-Screen0E_SoftKeyCol4:
+; StepRecord_SoftKeyCol4: the SoftKeyCol4 action of StepRecord -- called only by SoftKeyCol4_StepRecord.
+StepRecord_SoftKeyCol4:
 	ldw	(4106:16), 1	; F69960  ld (0x100a),0x0001
 	ld	(3835:16), 2	; F69966  ld (0x0efb),0x02
 	calr	sub_F69998	; F6996B  calr 0xf69998
@@ -150907,7 +150914,7 @@ sub_F69998_Return:
 	ret	; F69A1D  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub03_SoftKeyCol5
+; StepRecordSub03_SoftKeyCol5
 ; Called from: in-module: 0xF67A72
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
@@ -150917,8 +150924,8 @@ sub_F69998_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub03_SoftKeyCol5: the SoftKeyCol5 action of Screen0ESub03 -- called only by SoftKeyCol5_Screen0ESub03.
-Screen0ESub03_SoftKeyCol5:
+; StepRecordSub03_SoftKeyCol5: the SoftKeyCol5 action of StepRecordSub03 -- called only by SoftKeyCol5_StepRecordSub03.
+StepRecordSub03_SoftKeyCol5:
 	ld	(3834:16), 1	; F69A1E  ld (0x0efa),0x01
 	ld	(3835:16), 2	; F69A23  ld (0x0efb),0x02
 	calr	sub_F6B8BD	; F69A28  calr 0xf6b8bd
@@ -150953,7 +150960,7 @@ sub_F69A1E_Return:
 ; Called from: in-module: 0xF67A76
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
-;          Screen0ESub00_SoftKeyCol3 sub_F69AFF
+;          StepRecordSub00_SoftKeyCol3 sub_F69AFF
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A67 is an instruction
 ;           boundary.  The name IS the address.
@@ -150989,11 +150996,11 @@ sub_F69A67_Join:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F69AAA  or (0x2075),0x08
 sub_F69A67_Return:
 	ret	; F69AAF  ret
-; SoftKeyCol3_Screen0ESub00: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub00_ButtonTable slot 0x02; Screen0ESub00_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol3_Screen0ESub00:
+; SoftKeyCol3_StepRecordSub00: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub00_ButtonTable slot 0x02; StepRecordSub00_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_StepRecordSub00:
 	bit	7, w	; F69AB0  bit 0x07,W
 	jr	nz, sub_F69A67_Skip2	; F69AB3  jr NZ,0xf69aba
-	calr	Screen0ESub00_SoftKeyCol3	; F69AB5  calr 0xf69abe
+	calr	StepRecordSub00_SoftKeyCol3	; F69AB5  calr 0xf69abe
 	jr	sub_F69A67_Return2	; F69AB8  jr T,0xf69abd
 sub_F69A67_Skip2:
 	calr	sub_F69AFF	; F69ABA  calr 0xf69aff
@@ -151001,7 +151008,7 @@ sub_F69A67_Return2:
 	ret	; F69ABD  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol3
+; StepRecordSub00_SoftKeyCol3
 ; Called from: in-module: 0xF69AB5
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
 ; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
@@ -151011,8 +151018,8 @@ sub_F69A67_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub00_SoftKeyCol3: the SoftKeyCol3 action of Screen0ESub00 -- called only by SoftKeyCol3_Screen0ESub00.
-Screen0ESub00_SoftKeyCol3:
+; StepRecordSub00_SoftKeyCol3: the SoftKeyCol3 action of StepRecordSub00 -- called only by SoftKeyCol3_StepRecordSub00.
+StepRecordSub00_SoftKeyCol3:
 	ld	(3834:16), 1	; F69ABE  ld (0x0efa),0x01
 	ld	(3835:16), 3	; F69AC3  ld (0x0efb),0x03
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F69AC8  cp (0x0e63),0x01
@@ -151228,22 +151235,22 @@ DispatchTable_F69C24:
 
 sub_F69C34:
 	ld	(4783:16), 255	; F69C34  ld (0x12af),0xff
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x00	; F69C39  cp (0x0ef5),0x00
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x00	; F69C39  cp (0x0ef5),0x00
 	jr	nz, sub_F69C34_Skip	; F69C3E  jr NZ,0xf69c46
 	call	sub_F6D710	; F69C40  call 0xf6d710
 	jr	sub_F69C34_Return	; F69C44  jr T,0xf69c4f
 sub_F69C34_Skip:
-	ld	(UI_Screen0E_SubScreen:16), 0	; F69C46  ld (0x0ef5),0x00
+	ld	(UI_StepRecord_SubScreen:16), 0	; F69C46  ld (0x0ef5),0x00
 	call	sub_F6D70C	; F69C4B  call 0xf6d70c
 sub_F69C34_Return:
 	ret	; F69C4F  ret
 sub_F69C50:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x08	; F69C50  cp (0x0ef5),0x08
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x08	; F69C50  cp (0x0ef5),0x08
 	jr	nz, sub_F69C50_Skip	; F69C55  jr NZ,0xf69c5d
 	call	MsgLine_Blank	; F69C57  call 0xf6d57e
 	jr	sub_F69C50_Return	; F69C5B  jr T,0xf69c66
 sub_F69C50_Skip:
-	ld	(UI_Screen0E_SubScreen:16), 8	; F69C5D  ld (0x0ef5),0x08
+	ld	(UI_StepRecord_SubScreen:16), 8	; F69C5D  ld (0x0ef5),0x08
 	call	sub_F6D57A	; F69C62  call 0xf6d57a
 sub_F69C50_Return:
 	ret	; F69C66  ret
@@ -151252,9 +151259,9 @@ MsgLine_TransportState_Plus10_Call:
 	call	MsgLine_TransportState_Plus10	; F69C6C  call 0xf6d642
 	ret	; F69C70  ret
 sub_F69C71:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0f	; F69C71  cp (0x0ef5),0x0f
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0f	; F69C71  cp (0x0ef5),0x0f
 	jr	z, sub_F69C71_Skip	; F69C76  jr Z,0xf69c81
-	ld	(UI_Screen0E_SubScreen:16), 15	; F69C78  ld (0x0ef5),0x0f
+	ld	(UI_StepRecord_SubScreen:16), 15	; F69C78  ld (0x0ef5),0x0f
 	call	sub_F6D5B5	; F69C7D  call 0xf6d5b5
 sub_F69C71_Skip:
 	call	sub_F6D5BA	; F69C81  call 0xf6d5ba
@@ -151705,8 +151712,8 @@ sub_F69F5B_Return:
 ; Called from: in-module: 0xF67420
 ; Touches: (0x0C90) (0x0D4A) (0x0E58) (0x0E59) (0x0E5C) (0x0E63) (0x0F62)
 ;          (0x0F66) (0x0FD3) (0x0FD4) +4 more  |  0x603500
-; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877 Screen0ESub17_SoftKeyCol7
-;          sub_F6B1EA Screen0ESub17_SoftKeyCol6
+; Calls:   0xF6EC6A sub_F684FA T_BStore_StubTable 0xF6EC43 sub_F6C877 StepRecordSub17_SoftKeyCol7
+;          sub_F6B1EA StepRecordSub17_SoftKeyCol6
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A097 is an instruction
 ;           boundary.  The name IS the address.
@@ -151818,19 +151825,19 @@ sub_F69F5B_Join3:
 	calr	sub_F6C877	; F6A1B0  calr 0xf6c877
 sub_F69F5B_Return2:
 	ret	; F6A1B3  ret
-; SoftKeyCol7_Screen0ESub17: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub17_ButtonTable slot 0x06; Screen0ESub17_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol7_Screen0ESub17:
-	calr	Screen0ESub17_SoftKeyCol7	; F6A1B4  calr 0xf6b075
+; SoftKeyCol7_StepRecordSub17: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub17_ButtonTable slot 0x06; StepRecordSub17_ButtonTable slot 0x17.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol7_StepRecordSub17:
+	calr	StepRecordSub17_SoftKeyCol7	; F6A1B4  calr 0xf6b075
 	calr	sub_F6B1EA	; F6A1B7  calr 0xf6b1ea
 	ret	; F6A1BA  ret
-; SoftKeyCol6_Screen0ESub17: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub17_ButtonTable slot 0x05; Screen0ESub17_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol6_Screen0ESub17:
-	calr	Screen0ESub17_SoftKeyCol6	; F6A1BB  calr 0xf6b0c4
+; SoftKeyCol6_StepRecordSub17: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub17_ButtonTable slot 0x05; StepRecordSub17_ButtonTable slot 0x16.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol6_StepRecordSub17:
+	calr	StepRecordSub17_SoftKeyCol6	; F6A1BB  calr 0xf6b0c4
 	calr	sub_F6B1EA	; F6A1BE  calr 0xf6b1ea
 	ret	; F6A1C1  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub16_SoftKeyCol1
+; StepRecordSub16_SoftKeyCol1
 ; Called from: in-module: 0xF6831F
 ; Touches: (0x0E53) (0x0E58) (0x12C0) (0x2075)
 ; Calls:   sub_F6A20F sub_F6740C 0xF6D5BA sub_F6B8F1 0xF6D608
@@ -151840,8 +151847,8 @@ SoftKeyCol6_Screen0ESub17:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub16_SoftKeyCol1: the SoftKeyCol1 action of Screen0ESub16 -- called only by SoftKeyCol1_Screen0ESub16.
-Screen0ESub16_SoftKeyCol1:
+; StepRecordSub16_SoftKeyCol1: the SoftKeyCol1 action of StepRecordSub16 -- called only by SoftKeyCol1_StepRecordSub16.
+StepRecordSub16_SoftKeyCol1:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6A1C2  or (0x2075),0x08
 	calr	sub_F6A20F	; F6A1C7  calr 0xf6a20f
 sub_F6A1C2_Loop:
@@ -152397,7 +152404,7 @@ sub_F6A4D9_Skip2:
 	pop	xhl	; F6A5A0  pop XHL
 	ret	; F6A5A1  ret
 sub_F6A4D9_Skip3:
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6A5A2  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6A5A2  ld (0x0ef5),0x01
 	push	xwa	; F6A5A7  push XWA
 	push	xhl	; F6A5A8  push XHL
 	push	xbc	; F6A5A9  push XBC
@@ -152420,7 +152427,7 @@ sub_F6A4D9_Skip3:
 sub_F6A4D9_Skip4:
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F6A5C4  cp (0x0e63),0x02
 	jr	nz, sub_F6A4D9_Skip5	; F6A5C9  jr NZ,0xf6a5e5
-	ld	(UI_Screen0E_SubScreen:16), 12	; F6A5CB  ld (0x0ef5),0x0c
+	ld	(UI_StepRecord_SubScreen:16), 12	; F6A5CB  ld (0x0ef5),0x0c
 	push	xwa	; F6A5D0  push XWA
 	push	xhl	; F6A5D1  push XHL
 	push	xbc	; F6A5D2  push XBC
@@ -152438,7 +152445,7 @@ sub_F6A4D9_Skip4:
 	pop	xwa	; F6A5E1  pop XWA
 	jrl	sub_F6A4D9_Loop	; F6A5E2  jrl T,0xf6a56c
 sub_F6A4D9_Skip5:
-	ld	(UI_Screen0E_SubScreen:16), 4	; F6A5E5  ld (0x0ef5),0x04
+	ld	(UI_StepRecord_SubScreen:16), 4	; F6A5E5  ld (0x0ef5),0x04
 	push	xwa	; F6A5EA  push XWA
 	push	xhl	; F6A5EB  push XHL
 	push	xbc	; F6A5EC  push XBC
@@ -152490,7 +152497,7 @@ sub_F6A5FF:
 	ld	(4108:16), wa	; F6A63B  ld (0x100c),WA
 	m_or_mi8 MB16, 0x0e4e, 0x10	; F6A63F  or (0x0e4e),0x10
 	ld	(3796:16), 4	; F6A644  ld (0x0ed4),0x04
-	ld	xhl, UI_Screen0E_SubScreen	; F6A649  ld XHL,0x00000ef5
+	ld	xhl, UI_StepRecord_SubScreen	; F6A649  ld XHL,0x00000ef5
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6A64E  cp (0x0e63),0x03
 	jr	nz, sub_F6A5FF_Skip	; F6A653  jr NZ,0xf6a663
 	m_cp_mi8 MBI+r3, 0, 0x10	; F6A655  cp (XHL),0x10
@@ -152626,11 +152633,11 @@ DispatchTable_F6A6DB:
 	.long	MsgLine_TransportState_Plus4_Call	; F6A6E7  [3] -> 0xF6A6F5
 
 MsgLine_Rhythm_Call:
-	ld	(UI_Screen0E_SubScreen:16), 5	; F6A6EB  ld (0x0ef5),0x05
+	ld	(UI_StepRecord_SubScreen:16), 5	; F6A6EB  ld (0x0ef5),0x05
 	call	MsgLine_Rhythm	; F6A6F0  call 0xf6d4e4
 	ret	; F6A6F4  ret
 MsgLine_TransportState_Plus4_Call:
-	ld	(UI_Screen0E_SubScreen:16), 15	; F6A6F5  ld (0x0ef5),0x0f
+	ld	(UI_StepRecord_SubScreen:16), 15	; F6A6F5  ld (0x0ef5),0x0f
 	call	MsgLine_TransportState_Plus4	; F6A6FA  call 0xf6d608
 	ret	; F6A6FE  ret
 MsgLine_TransportState_Plus10_Call_2:
@@ -152668,12 +152675,12 @@ sub_F6A704_Skip:
 	call	T_SeqBufRing_Get	; F6A735  call 0xf41d84
 	ld	(3796:16), 3	; F6A739  ld (0x0ed4),0x03
 	ld	(4792:16), 2	; F6A73E  ld (0x12b8),0x02
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x02	; F6A743  cp (0x0ef5),0x02
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x02	; F6A743  cp (0x0ef5),0x02
 	jr	nz, sub_F6A704_Skip2	; F6A748  jr NZ,0xf6a750
 	call	MsgLine_Control	; F6A74A  call 0xf6d447
 	jr	sub_F6A704_Join	; F6A74E  jr T,0xf6a759
 sub_F6A704_Skip2:
-	ld	(UI_Screen0E_SubScreen:16), 2	; F6A750  ld (0x0ef5),0x02
+	ld	(UI_StepRecord_SubScreen:16), 2	; F6A750  ld (0x0ef5),0x02
 	call	sub_F6D443	; F6A755  call 0xf6d443
 sub_F6A704_Join:
 	ld	(3798:16), 0	; F6A759  ld (0x0ed6),0x00
@@ -152713,12 +152720,12 @@ sub_F6A75F_Skip:
 	call	T_SeqBufRing_Get	; F6A79B  call 0xf41d84
 	ld	(3796:16), 4	; F6A79F  ld (0x0ed4),0x04
 	ld	(4792:16), 1	; F6A7A4  ld (0x12b8),0x01
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x02	; F6A7A9  cp (0x0ef5),0x02
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x02	; F6A7A9  cp (0x0ef5),0x02
 	jr	nz, sub_F6A75F_Skip2	; F6A7AE  jr NZ,0xf6a7b6
 	call	MsgLine_Control	; F6A7B0  call 0xf6d447
 	jr	sub_F6A75F_Join	; F6A7B4  jr T,0xf6a7bf
 sub_F6A75F_Skip2:
-	ld	(UI_Screen0E_SubScreen:16), 2	; F6A7B6  ld (0x0ef5),0x02
+	ld	(UI_StepRecord_SubScreen:16), 2	; F6A7B6  ld (0x0ef5),0x02
 	call	sub_F6D443	; F6A7BB  call 0xf6d443
 sub_F6A75F_Join:
 	ld	(3798:16), 0	; F6A7BF  ld (0x0ed6),0x00
@@ -153068,7 +153075,7 @@ IndexMap_F6A9AA:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6A9CA
+; StepRecord_OnEnter
 ; Called from: T_F42EC0 (x1)
 ; Touches: (0x126B) (0x207A) (0x207B) (0x2880)
 ; Calls:   sub_F6A2FF
@@ -153079,7 +153086,8 @@ IndexMap_F6A9AA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6A9CA:		; <- T_F42EC0
+; StepRecord_OnEnter: the prom_b part of STEP RECORD's ENTER -- reached only from ScreenEnterBody_StepRecord, through T_F42EC0.
+StepRecord_OnEnter:		; <- T_F42EC0
 	ld	(4715:16), 0	; F6A9CA  ld (0x126b),0x00
 	ld	a, (UI_ScreenLatch:16)	; F6A9CF  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F6A9D3  cp A,(0x207b)
@@ -153624,7 +153632,7 @@ sub_F6AD40:
 	ld	a, (3683:16)	; F6AD45  ld A,(0x0e63)
 	and	a, 3	; F6AD49  and A,0x03
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6AD4C  ld A,(XHL+A)
-	ld	(UI_Screen0E_SubScreen:16), a	; F6AD51  ld (0x0ef5),A
+	ld	(UI_StepRecord_SubScreen:16), a	; F6AD51  ld (0x0ef5),A
 	ret	; F6AD55  ret
 ; --------------------------------------------------------------------------
 ; Map_0EF5_F6AD56 -- 0xF6AD56-0xF6AD59, 4 bytes: 0x00 0x00 0x08 0x0C.
@@ -153751,7 +153759,7 @@ sub_F6ADC2:
 	ret	; F6AE4A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6AE4B
+; StepRecord_OnLeave
 ; Called from: T_F42EC4 (x1)
 ; Touches: (0x0DC7) (0x0E4E) (0x0E4F) (0x0E50) (0x0E63) (0x0E64) (0x0E65)
 ;          (0x1008) (0x106E) (0x1071) +16 more
@@ -153764,7 +153772,8 @@ sub_F6ADC2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6AE4B:		; <- T_F42EC4
+; StepRecord_OnLeave: the prom_b part of STEP RECORD's LEAVE -- reached only from ScreenLeaveBody_StepRecord, through T_F42EC4.
+StepRecord_OnLeave:		; <- T_F42EC4
 	ld	(4775:16), 0	; F6AE4B  ld (0x12a7),0x00
 	call	sub_F6D6D6	; F6AE50  call 0xf6d6d6
 	ld	(3664:16), 255	; F6AE54  ld (0x0e50),0xff
@@ -154037,7 +154046,7 @@ sub_F6B039_Skip:
 	jr	sub_F6B039_Join	; F6B073  jr T,0xf6b05f
 
 ; --------------------------------------------------------------------------
-; Screen0ESub17_SoftKeyCol7
+; StepRecordSub17_SoftKeyCol7
 ; Called from: in-module: 0xF6A1B4
 ; Touches: (0x20A9)
 ; Calls:   sub_F6ABB6 sub_F6A2FC sub_F6B8F1 sub_F6C292 sub_F6B9DF sub_F6BA11
@@ -154048,8 +154057,8 @@ sub_F6B039_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub17_SoftKeyCol7: the SoftKeyCol7 action of Screen0ESub17 -- called only by SoftKeyCol7_Screen0ESub17.
-Screen0ESub17_SoftKeyCol7:
+; StepRecordSub17_SoftKeyCol7: the SoftKeyCol7 action of StepRecordSub17 -- called only by SoftKeyCol7_StepRecordSub17.
+StepRecordSub17_SoftKeyCol7:
 	ld	xhl, 3663	; F6B075  ld XHL,0x00000e4f
 	m_bit 3, MDI+r3, 0	; F6B07A  bit 3,(XHL)
 	jr	z, sub_F6B075_Skip	; F6B07C  jr Z,0xf6b085
@@ -154087,7 +154096,7 @@ sub_F6B075_Skip3:
 	jr	sub_F6B075_Join	; F6B0C2  jr T,0xf6b092
 
 ; --------------------------------------------------------------------------
-; Screen0ESub17_SoftKeyCol6
+; StepRecordSub17_SoftKeyCol6
 ; Called from: in-module: 0xF6A1BB
 ; Touches: (0x0E4F) (0x20A9)
 ; Calls:   sub_F6A2FC sub_F6C292 sub_F6B8BD sub_F6B76A sub_F6C2E5 sub_F6B9DF
@@ -154098,8 +154107,8 @@ sub_F6B075_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0ESub17_SoftKeyCol6: the SoftKeyCol6 action of Screen0ESub17 -- called only by SoftKeyCol6_Screen0ESub17.
-Screen0ESub17_SoftKeyCol6:
+; StepRecordSub17_SoftKeyCol6: the SoftKeyCol6 action of StepRecordSub17 -- called only by SoftKeyCol6_StepRecordSub17.
+StepRecordSub17_SoftKeyCol6:
 	m_res 7, MD16, 0x0e4f	; F6B0C4  res 7,(0x0e4f)
 	calr	sub_F6A2FC	; F6B0C8  calr 0xf6a2fc
 	cp	b, 22	; F6B0CB  cp B,0x16
@@ -155879,12 +155888,12 @@ sub_F6BC89_Skip4:
 	jrl	sub_F6BFF2_Join	; F6BD03  jrl T,0xf6c186
 sub_F6BC89_Loop:
 	ld	(4792:16), 0	; F6BD06  ld (0x12b8),0x00
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6BD0B  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6BD0B  cp (0x0ef5),0x01
 	jr	nz, sub_F6BC89_Skip5	; F6BD10  jr NZ,0xf6bd17
 	call	MsgLine_Control_Cleared	; F6BD12  call 0xf6d410
 	ret	; F6BD16  ret
 sub_F6BC89_Skip5:
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6BD17  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6BD17  ld (0x0ef5),0x01
 	call	sub_F67448	; F6BD1C  call 0xf67448
 	ret	; F6BD20  ret
 sub_F6BC89_Skip6:
@@ -155911,12 +155920,12 @@ sub_F6BC89_Join:
 	ld	(4784:16), a	; F6BD55  ld (0x12b0),A
 	calr	sub_F6B95F	; F6BD59  calr 0xf6b95f
 	ld	(4783:16), a	; F6BD5C  ld (0x12af),A
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x00	; F6BD60  cp (0x0ef5),0x00
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x00	; F6BD60  cp (0x0ef5),0x00
 	jr	nz, sub_F6BC89_Skip8	; F6BD65  jr NZ,0xf6bd6d
 	call	sub_F6D710	; F6BD67  call 0xf6d710
 	jr	sub_F6BC89_Return	; F6BD6B  jr T,0xf6bd76
 sub_F6BC89_Skip8:
-	ld	(UI_Screen0E_SubScreen:16), 0	; F6BD6D  ld (0x0ef5),0x00
+	ld	(UI_StepRecord_SubScreen:16), 0	; F6BD6D  ld (0x0ef5),0x00
 	call	sub_F6D70C	; F6BD72  call 0xf6d70c
 sub_F6BC89_Return:
 	ret	; F6BD76  ret
@@ -155945,7 +155954,7 @@ sub_F6BC89_Skip10:
 	ld	h, a	; F6BDAD  ld H,A
 	call	T_F40790	; F6BDAF  call 0xf40790
 	ld	(4802:16), h	; F6BDB3  ld (0x12c2),H
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6BDB7  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6BDB7  ld (0x0ef5),0x01
 	call	sub_F6D86B	; F6BDBC  call 0xf6d86b
 	ret	; F6BDC0  ret
 sub_F6BC89_Skip11:
@@ -155967,11 +155976,11 @@ sub_F6BC89_Skip13:
 	ld	(4111:16), a	; F6BDEA  ld (0x100f),A
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6BDEE  cp (0x0e63),0x03
 	jr	z, sub_F6BC89_Skip14	; F6BDF3  jr Z,0xf6bdff
-	ld	(UI_Screen0E_SubScreen:16), 4	; F6BDF5  ld (0x0ef5),0x04
+	ld	(UI_StepRecord_SubScreen:16), 4	; F6BDF5  ld (0x0ef5),0x04
 	call	sub_F6A4D9_Nop	; F6BDFA  call 0xf6d46c
 	ret	; F6BDFE  ret
 sub_F6BC89_Skip14:
-	ld	(UI_Screen0E_SubScreen:16), 12	; F6BDFF  ld (0x0ef5),0x0c
+	ld	(UI_StepRecord_SubScreen:16), 12	; F6BDFF  ld (0x0ef5),0x0c
 	call	sub_F6A4D9_Nop2	; F6BE04  call 0xf6d5f0
 	ret	; F6BE08  ret
 sub_F6BC89_Loop2:
@@ -156035,57 +156044,57 @@ sub_F6BC89_Skip16:
 sub_F6BC89_Skip17:
 	jrl	sub_F6BC89_Loop2	; F6BEA2  jrl T,0xf6be09
 sub_F6BC89_Skip18:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BEA5  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BEA5  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip19	; F6BEAA  jr Z,0xf6beb5
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BEAC  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BEAC  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BEB1  call 0xf431b0
 sub_F6BC89_Skip19:
 	call	MsgLine_PartHold	; F6BEB5  call 0xf6e7f3
 	ret	; F6BEB9  ret
 sub_F6BC89_Skip20:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BEBA  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BEBA  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip21	; F6BEBF  jr Z,0xf6beca
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BEC1  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BEC1  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BEC6  call 0xf431b0
 sub_F6BC89_Skip21:
 	call	MsgLine_PartModulation2	; F6BECA  call 0xf6e73a
 	ret	; F6BECE  ret
 sub_F6BC89_Skip22:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BECF  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BECF  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip23	; F6BED4  jr Z,0xf6bedf
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BED6  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BED6  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BEDB  call 0xf431b0
 sub_F6BC89_Skip23:
 	call	MsgLine_PartCtrlPedal	; F6BEDF  call 0xf6e797
 	ret	; F6BEE3  ret
 sub_F6BC89_Skip24:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BEE4  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BEE4  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip25	; F6BEE9  jr Z,0xf6bef4
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BEEB  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BEEB  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BEF0  call 0xf431b0
 sub_F6BC89_Skip25:
 	call	MsgLine_PartRtCreateX	; F6BEF4  call 0xf6e849
 	ret	; F6BEF8  ret
 sub_F6BC89_Skip26:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BEF9  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BEF9  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip27	; F6BEFE  jr Z,0xf6bf09
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BF00  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BF00  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BF05  call 0xf431b0
 sub_F6BC89_Skip27:
 	call	MsgLine_PartRtCreateY	; F6BF09  call 0xf6e8a6
 	ret	; F6BF0D  ret
 sub_F6BC89_Skip28:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BF0E  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BF0E  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip29	; F6BF13  jr Z,0xf6bf1e
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BF15  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BF15  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BF1A  call 0xf431b0
 sub_F6BC89_Skip29:
 	call	MsgLine_PartRtCtrlX	; F6BF1E  call 0xf6e903
 	ret	; F6BF22  ret
 sub_F6BC89_Skip30:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6BF23  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6BF23  cp (0x0ef5),0x0a
 	jr	z, sub_F6BC89_Skip31	; F6BF28  jr Z,0xf6bf33
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6BF2A  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6BF2A  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6BF2F  call 0xf431b0
 sub_F6BC89_Skip31:
 	call	MsgLine_PartRtCtrlY	; F6BF33  call 0xf6e95f
@@ -156197,25 +156206,25 @@ sub_F6BFF2_Skip2:
 	call	MsgLine_PartEffect_Veneer	; F6C00C  call 0xf67454
 	ret	; F6C010  ret
 sub_F6BFF2_Skip3:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6C011  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6C011  cp (0x0ef5),0x0a
 	jr	z, sub_F6BFF2_Skip4	; F6C016  jr Z,0xf6c021
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6C018  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6C018  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6C01D  call 0xf431b0
 sub_F6BFF2_Skip4:
 	call	MsgLine_PartEffect1	; F6C021  call 0xf6e212
 	ret	; F6C025  ret
 sub_F6BFF2_Skip5:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6C026  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6C026  cp (0x0ef5),0x0a
 	jr	z, sub_F6BFF2_Skip6	; F6C02B  jr Z,0xf6c036
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6C02D  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6C02D  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6C032  call 0xf431b0
 sub_F6BFF2_Skip6:
 	call	MsgLine_PartReverb	; F6C036  call 0xf6e2ba
 	ret	; F6C03A  ret
 sub_F6BFF2_Skip7:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6C03B  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6C03B  cp (0x0ef5),0x01
 	jr	z, sub_F6BFF2_Skip8	; F6C040  jr Z,0xf6c04b
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6C042  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6C042  ld (0x0ef5),0x01
 	call	T_F431B0	; F6C047  call 0xf431b0
 sub_F6BFF2_Skip8:
 	call	MsgLine_PartEffect2	; F6C04B  call 0xf6e261
@@ -156301,9 +156310,9 @@ sub_F6BFF2_Skip18:
 	jrl	sub_F6BC89_Loop	; F6C109  jrl T,0xf6bd06
 sub_F6BFF2_Skip19:
 	calr	sub_F6C230	; F6C10C  calr 0xf6c230
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x08	; F6C10F  cp (0x0ef5),0x08
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x08	; F6C10F  cp (0x0ef5),0x08
 	jr	z, sub_F6BFF2_Skip20	; F6C114  jr Z,0xf6c121
-	ld	(UI_Screen0E_SubScreen:16), 8	; F6C116  ld (0x0ef5),0x08
+	ld	(UI_StepRecord_SubScreen:16), 8	; F6C116  ld (0x0ef5),0x08
 	pushw	wa	; F6C11B  push WA
 	call	T_F431B0	; F6C11C  call 0xf431b0
 	popw	wa	; F6C120  pop WA
@@ -156330,11 +156339,11 @@ sub_F6BFF2_Skip22:
 	ld	(4108:16), wa	; F6C14A  ld (0x100c),WA
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6C14E  cp (0x0e63),0x03
 	jr	z, sub_F6BFF2_Skip23	; F6C153  jr Z,0xf6c15f
-	ld	(UI_Screen0E_SubScreen:16), 7	; F6C155  ld (0x0ef5),0x07
+	ld	(UI_StepRecord_SubScreen:16), 7	; F6C155  ld (0x0ef5),0x07
 	call	MsgLine_Tempo_Repaint	; F6C15A  call 0xf6d540
 	ret	; F6C15E  ret
 sub_F6BFF2_Skip23:
-	ld	(UI_Screen0E_SubScreen:16), 17	; F6C15F  ld (0x0ef5),0x11
+	ld	(UI_StepRecord_SubScreen:16), 17	; F6C15F  ld (0x0ef5),0x11
 	call	T_F431B0	; F6C164  call 0xf431b0
 	call	MsgLine_Tempo_F6D9CB	; F6C168  call 0xf6d9cb
 	ret	; F6C16C  ret
@@ -156367,24 +156376,24 @@ sub_F6BFF2_Skip27:
 	calr	sub_F6C230	; F6C1A0  calr 0xf6c230
 	ld	(4793:16), a	; F6C1A3  ld (0x12b9),A
 	ld	(4792:16), 5	; F6C1A7  ld (0x12b8),0x05
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x03	; F6C1AC  cp (0x0ef5),0x03
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C1AC  cp (0x0ef5),0x03
 	jr	nz, sub_F6BFF2_Skip28	; F6C1B1  jr NZ,0xf6c1b8
 	call	MsgLine_Control_Cleared	; F6C1B3  call 0xf6d410
 	ret	; F6C1B7  ret
 sub_F6BFF2_Skip28:
-	ld	(UI_Screen0E_SubScreen:16), 3	; F6C1B8  ld (0x0ef5),0x03
+	ld	(UI_StepRecord_SubScreen:16), 3	; F6C1B8  ld (0x0ef5),0x03
 	call	sub_F67448	; F6C1BD  call 0xf67448
 	ret	; F6C1C1  ret
 sub_F6BFF2_Skip29:
 	calr	sub_F6C230	; F6C1C2  calr 0xf6c230
 	ld	(4793:16), a	; F6C1C5  ld (0x12b9),A
 	ld	(4792:16), 2	; F6C1C9  ld (0x12b8),0x02
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x03	; F6C1CE  cp (0x0ef5),0x03
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C1CE  cp (0x0ef5),0x03
 	jr	nz, sub_F6BFF2_Skip30	; F6C1D3  jr NZ,0xf6c1da
 	call	MsgLine_Control_Cleared	; F6C1D5  call 0xf6d410
 	ret	; F6C1D9  ret
 sub_F6BFF2_Skip30:
-	ld	(UI_Screen0E_SubScreen:16), 3	; F6C1DA  ld (0x0ef5),0x03
+	ld	(UI_StepRecord_SubScreen:16), 3	; F6C1DA  ld (0x0ef5),0x03
 	call	sub_F67448	; F6C1DF  call 0xf67448
 	ret	; F6C1E3  ret
 sub_F6BFF2_Skip31:
@@ -156393,24 +156402,24 @@ sub_F6BFF2_Skip31:
 	ld	(4792:16), 1	; F6C1EB  ld (0x12b8),0x01
 	call	sub_F6B95F	; F6C1F0  call 0xf6b95f
 	ld	(4843:16), a	; F6C1F4  ld (0x12eb),A
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x03	; F6C1F8  cp (0x0ef5),0x03
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C1F8  cp (0x0ef5),0x03
 	jr	nz, sub_F6BFF2_Skip32	; F6C1FD  jr NZ,0xf6c204
 	call	MsgLine_Control_Cleared	; F6C1FF  call 0xf6d410
 	ret	; F6C203  ret
 sub_F6BFF2_Skip32:
-	ld	(UI_Screen0E_SubScreen:16), 3	; F6C204  ld (0x0ef5),0x03
+	ld	(UI_StepRecord_SubScreen:16), 3	; F6C204  ld (0x0ef5),0x03
 	call	sub_F67448	; F6C209  call 0xf67448
 	ret	; F6C20D  ret
 sub_F6BFF2_Skip33:
 	calr	sub_F6C230	; F6C20E  calr 0xf6c230
 	ld	(4793:16), a	; F6C211  ld (0x12b9),A
 	ld	(4792:16), 3	; F6C215  ld (0x12b8),0x03
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x03	; F6C21A  cp (0x0ef5),0x03
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x03	; F6C21A  cp (0x0ef5),0x03
 	jr	nz, sub_F6BFF2_Skip34	; F6C21F  jr NZ,0xf6c226
 	call	MsgLine_Control_Cleared	; F6C221  call 0xf6d410
 	ret	; F6C225  ret
 sub_F6BFF2_Skip34:
-	ld	(UI_Screen0E_SubScreen:16), 3	; F6C226  ld (0x0ef5),0x03
+	ld	(UI_StepRecord_SubScreen:16), 3	; F6C226  ld (0x0ef5),0x03
 	call	sub_F67448	; F6C22B  call 0xf67448
 	ret	; F6C22F  ret
 
@@ -156446,7 +156455,7 @@ sub_F6C237:
 	ld	a, (3683:16)	; F6C237  ld A,(0x0e63)
 	ld	xhl, Map_0EF5_F6C282	; F6C23B  ld XHL,0x00f6c282
 	mx8_ld_rm MXB, ra_HL, rb_A, 1	; F6C240  ld A,(XHL+A)
-	ld	(UI_Screen0E_SubScreen:16), a	; F6C245  ld (0x0ef5),A
+	ld	(UI_StepRecord_SubScreen:16), a	; F6C245  ld (0x0ef5),A
 	call	T_F431B0	; F6C249  call 0xf431b0
 	ld	l, (3683:16)	; F6C24D  ld L,(0x0e63)
 	and	hl, 3	; F6C251  and HL,0x0003
@@ -157488,8 +157497,8 @@ sub_F67440_Nop2:
 	ret	; F6C8F5  ret
 	ret	; F6C8F6  ret
 	ret	; F6C8F7  ret
-; LcdKeyRow3_Screen0E: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub00_ButtonTable slot 0x0A; Screen0ESub01_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0E:
+; LcdKeyRow3_StepRecord: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub00_ButtonTable slot 0x0A; StepRecordSub01_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecord:
 	push	xix	; F6C8F8  push XIX
 	push	xiy	; F6C8F9  push XIY
 	bit	7, w	; F6C8FA  bit 0x07,W
@@ -157504,7 +157513,7 @@ LcdKeyRow3_Screen0E:
 	xor	hl, hl	; F6C910  xor HL,HL
 	ld	l, (3676:16)	; F6C912  ld L,(0x0e5c)
 	dec	1, l	; F6C916  dec 1,L
-	ld	(UI_Screen0E_SubScreen:16), 11	; F6C918  ld (0x0ef5),0x0b
+	ld	(UI_StepRecord_SubScreen:16), 11	; F6C918  ld (0x0ef5),0x0b
 	call	T_F431B0	; F6C91D  call 0xf431b0
 	ld	(4844:16), 0	; F6C921  ld (0x12ec),0x00
 	call	sub_F6C984	; F6C926  call 0xf6c984
@@ -157747,13 +157756,13 @@ Map_12EC_F6CAE3:
 	.byte	0x08, 0x09, 0x0A, 0x0B	; F6CAE3  [0..3]
 
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_Screen0ESub11 -- named by `.long 0x00F6CAE7` at 0xF6CBF2 and 0xF6CC36 (entries
-;   [1] and [18] of Screen0ESub11_ButtonTable).  Until 2026-09-25 the source framed its
+; SoftKeyCol2_StepRecordSub11 -- named by `.long 0x00F6CAE7` at 0xF6CBF2 and 0xF6CC36 (entries
+;   [1] and [18] of StepRecordSub11_ButtonTable).  Until 2026-09-25 the source framed its
 ;   first instruction, `xor L,L`, inside a `push 0xd7cf`, so those two
 ;   pointers appeared to land mid-instruction.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_Screen0ESub11: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub11_ButtonTable slot 0x01; Screen0ESub11_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol2_Screen0ESub11:
+; SoftKeyCol2_StepRecordSub11: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub11_ButtonTable slot 0x01; StepRecordSub11_ButtonTable slot 0x12.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol2_StepRecordSub11:
 	xor	l, l	; F6CAE7  xor L,L
 	bit	7, w	; F6CAE9  bit 0x07,W
 	jr	nz, sub_F6CAE7_Skip	; F6CAEC  jr NZ,0xf6caf0
@@ -157771,8 +157780,8 @@ sub_F6CAE7_Skip:
 	call	sub_F6C935	; F6CB0E  call 0xf6c935
 sub_F6CAE7_Return:
 	ret	; F6CB12  ret
-; SoftKeyCol4_Screen0ESub11: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub11_ButtonTable slot 0x03; Screen0ESub11_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol4_Screen0ESub11:
+; SoftKeyCol4_StepRecordSub11: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub11_ButtonTable slot 0x03; StepRecordSub11_ButtonTable slot 0x14.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol4_StepRecordSub11:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6CB13  or (0x2075),0x08
 	ld	a, (4845:16)	; F6CB18  ld A,(0x12ed)
 	xor	l, l	; F6CB1C  xor L,L
@@ -157826,8 +157835,8 @@ sub_F6CB52_Skip:
 	ld	a, l	; F6CB6B  ld A,L
 sub_F6CB52_Return:
 	ret	; F6CB6D  ret
-; LcdKeyRow3_Screen0ESub11: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub11_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0ESub11:
+; LcdKeyRow3_StepRecordSub11: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub11_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecordSub11:
 	bit	7, w	; F6CB6E  bit 0x07,W
 	jr	z, sub_F6CB52_Skip2	; F6CB71  jr Z,0xf6cb74
 	ret	; F6CB73  ret
@@ -157869,15 +157878,15 @@ sub_F6CB52_Skip4:
 sub_F6CB52_Join:
 	m_res 2, MD16, 0x0e4f	; F6CBCF  res 2,(0x0e4f)
 	ret	; F6CBD3  ret
-; Screen0ESub11_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 11 -- DispatchTable_F67723/F67789
-;   entry 11 (indexed by UI_Screen0E_SubScreen); calls Screen0ESub11_ButtonTable[code & 0x1F].
-Screen0ESub11_ButtonDispatch:
+; StepRecordSub11_ButtonDispatch: the panel-button reader of screen 0x0E sub-screen 11 -- StepRecord_SubScreenButtonTable/F67789
+;   entry 11 (indexed by UI_StepRecord_SubScreen); calls StepRecordSub11_ButtonTable[code & 0x1F].
+StepRecordSub11_ButtonDispatch:
 	ld	hl, bc	; F6CBD4  ld HL,BC
 	cp	hl, 31	; F6CBD6  cp HL,0x001f
 	jr	ugt, sub_F6CB52_Return2	; F6CBDA  jr UGT,0xf6cbed
 	sla	hl, 2	; F6CBDC  sla 0x02,HL
 	push	xix	; F6CBDF  push XIX
-	ld	xix, Screen0ESub11_ButtonTable	; F6CBE0  ld XIX,0x00f6cbee
+	ld	xix, StepRecordSub11_ButtonTable	; F6CBE0  ld XIX,0x00f6cbee
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F6CBE5  ld XHL,(XIX+HL)
 	pop	xix	; F6CBEA  pop XIX
 	call	(xhl)	; F6CBEB  call T,XHL
@@ -157885,7 +157894,7 @@ sub_F6CB52_Return2:
 	ret	; F6CBED  ret
 
 ; --------------------------------------------------------------------------
-; Screen0ESub11_ButtonTable -- 32 32-bit pointers, every one of them an address
+; StepRecordSub11_ButtonTable -- 32 32-bit pointers, every one of them an address
 ;                         in 0x00F60000-0x00F6FFFF.  19 of the 32 entries
 ;                         are the module's own do-nothing stub 0xF675CB (a
 ;                         single 0x0E byte, `ret`), leaving 8 distinct other
@@ -157916,32 +157925,32 @@ sub_F6CB52_Return2:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-Screen0ESub11_ButtonTable:
-	.long	SoftKeyCol1_Screen0ESub00	; F6CBEE  [0] -> 0xF678F8
-	.long	SoftKeyCol2_Screen0ESub11	; F6CBF2  [1] -> 0xF6CAE7
+StepRecordSub11_ButtonTable:
+	.long	SoftKeyCol1_StepRecordSub00	; F6CBEE  [0] -> 0xF678F8
+	.long	SoftKeyCol2_StepRecordSub11	; F6CBF2  [1] -> 0xF6CAE7
 	.long	DispatchTable_F674CE_Nop0	; F6CBF6  [2] -> ret stub
-	.long	SoftKeyCol4_Screen0ESub11	; F6CBFA  [3] -> 0xF6CB13
+	.long	SoftKeyCol4_StepRecordSub11	; F6CBFA  [3] -> 0xF6CB13
 	.long	DispatchTable_F674CE_Nop0	; F6CBFE  [4] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC02  [5] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F6CC06  [6] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F6CC0A  [7] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F6CC06  [6] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F6CC0A  [7] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F6CC0E  [8] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC12  [9] -> ret stub
-	.long	LcdKeyRow3_Screen0ESub11	; F6CC16  [10] -> 0xF6CB6E
+	.long	LcdKeyRow3_StepRecordSub11	; F6CC16  [10] -> 0xF6CB6E
 	.long	sub_F6CB52_Arm	; F6CC1A  [11] -> 0xF6CB7E
 	.long	DispatchTable_F674CE_Nop0	; F6CC1E  [12] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC22  [13] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC26  [14] -> ret stub
-	.long	ExitKey_Screen0E	; F6CC2A  [15] -> 0xF67696
+	.long	ExitKey_StepRecord	; F6CC2A  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F6CC2E  [16] -> ret stub
-	.long	SoftKeyCol1_Screen0ESub00	; F6CC32  [17] -> 0xF678F8
-	.long	SoftKeyCol2_Screen0ESub11	; F6CC36  [18] -> 0xF6CAE7
+	.long	SoftKeyCol1_StepRecordSub00	; F6CC32  [17] -> 0xF678F8
+	.long	SoftKeyCol2_StepRecordSub11	; F6CC36  [18] -> 0xF6CAE7
 	.long	DispatchTable_F674CE_Nop0	; F6CC3A  [19] -> ret stub
-	.long	SoftKeyCol4_Screen0ESub11	; F6CC3E  [20] -> 0xF6CB13
+	.long	SoftKeyCol4_StepRecordSub11	; F6CC3E  [20] -> 0xF6CB13
 	.long	DispatchTable_F674CE_Nop0	; F6CC42  [21] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC46  [22] -> ret stub
-	.long	SoftKeyCol7_Screen0E	; F6CC4A  [23] -> 0xF6748D
-	.long	SoftKeyCol8_Screen0E	; F6CC4E  [24] -> 0xF6749D
+	.long	SoftKeyCol7_StepRecord	; F6CC4A  [23] -> 0xF6748D
+	.long	SoftKeyCol8_StepRecord	; F6CC4E  [24] -> 0xF6749D
 	.long	DispatchTable_F674CE_Nop0	; F6CC52  [25] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC56  [26] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6CC5A  [27] -> ret stub
@@ -157957,7 +157966,7 @@ Screen0ESub11_ButtonTable:
 ; Touches: (0x0D10) (0x0DC7) (0x0DCE) (0x0E4F) (0x0E53) (0x0E58) (0x0E63)
 ;          (0x0ED5) (0x0EF5) (0x1071) +5 more
 ; Calls:   T_F431B0 sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03 sub_F69CB4
-;          sub_F6A20F Screen0E_SoftKeyCol3 0xF6E706
+;          sub_F6A20F StepRecord_SoftKeyCol3 0xF6E706
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CC6E is an instruction
 ;           boundary.  The name IS the address.
@@ -158035,8 +158044,8 @@ sub_F6CC6E_Join2:
 	call	sub_F69CB4	; F6CD38  call 0xf69cb4
 sub_F6CC6E_Return:
 	ret	; F6CD3C  ret
-; SoftKeyCol3_Screen0ESub08: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub08_ButtonTable slot 0x02; Screen0ESub08_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol3_Screen0ESub08:
+; SoftKeyCol3_StepRecordSub08: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub08_ButtonTable slot 0x02; StepRecordSub08_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_StepRecordSub08:
 	push	xix	; F6CD3D  push XIX
 	push	xiy	; F6CD3E  push XIY
 	ld	a, (3683:16)	; F6CD3F  ld A,(0x0e63)
@@ -158047,12 +158056,12 @@ SoftKeyCol3_Screen0ESub08:
 	jr	nz, sub_F6CC6E_Epilogue	; F6CD4F  jr NZ,0xf6cd71
 	m_cp_mi8 MB16, 0x0e53, 0x00	; F6CD51  cp (0x0e53),0x00
 	jr	nz, sub_F6CC6E_Epilogue	; F6CD56  jr NZ,0xf6cd71
-	ld	(UI_Screen0E_SubScreen:16), 5	; F6CD58  ld (0x0ef5),0x05
+	ld	(UI_StepRecord_SubScreen:16), 5	; F6CD58  ld (0x0ef5),0x05
 	call	T_F431B0	; F6CD5D  call 0xf431b0
 	ld	a, (6304983:24)	; F6CD61  ld A,(0x6034d7)
 	dec	1, a	; F6CD66  dec 1,A
 	pushw	wa	; F6CD68  push WA
-	calr	Screen0E_SoftKeyCol3	; F6CD69  calr 0xf6cd74
+	calr	StepRecord_SoftKeyCol3	; F6CD69  calr 0xf6cd74
 	popw	wa	; F6CD6C  pop WA
 	call	MsgLine_TimeSignature	; F6CD6D  call 0xf6e706
 sub_F6CC6E_Epilogue:
@@ -158061,11 +158070,11 @@ sub_F6CC6E_Epilogue:
 	ret	; F6CD73  ret
 
 ; --------------------------------------------------------------------------
-; Screen0E_SoftKeyCol3
+; StepRecord_SoftKeyCol3
 ; Called from: in-module: 0xF6CD69 0xF6CDA9
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5) (0x12BA)
 ;          (0x2075)
-; Calls:   sub_F67F68 0xF6E706 Screen0E_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
+; Calls:   sub_F67F68 0xF6E706 StepRecord_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
 ;          sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CD74 is an instruction
@@ -158073,8 +158082,8 @@ sub_F6CC6E_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0E_SoftKeyCol3: the SoftKeyCol3 action of Screen0ESub05, Screen0ESub08 -- called only by SoftKeyCol3_Screen0ESub05, SoftKeyCol3_Screen0ESub08.
-Screen0E_SoftKeyCol3:
+; StepRecord_SoftKeyCol3: the SoftKeyCol3 action of StepRecordSub05, StepRecordSub08 -- called only by SoftKeyCol3_StepRecordSub05, SoftKeyCol3_StepRecordSub08.
+StepRecord_SoftKeyCol3:
 	push	xix	; F6CD74  push XIX
 	ld	xix, 4846	; F6CD75  ld XIX,0x000012ee
 	ld	(xix), 135	; F6CD7A  ld (XIX),0x87
@@ -158084,8 +158093,8 @@ Screen0E_SoftKeyCol3:
 	ld	(xix+1), a	; F6CD87  ld (XIX+0x01),A
 	pop	xix	; F6CD8A  pop XIX
 	ret	; F6CD8B  ret
-; SoftKeyCol3_Screen0ESub05: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; Screen0ESub05_ButtonTable slot 0x02; Screen0ESub05_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
-SoftKeyCol3_Screen0ESub05:
+; SoftKeyCol3_StepRecordSub05: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; StepRecordSub05_ButtonTable slot 0x02; StepRecordSub05_ButtonTable slot 0x13.  Slot -> control: wave7_panel_names_round11.CONTROL.
+SoftKeyCol3_StepRecordSub05:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F6CD8C  or (0x2075),0x08
 	push	xix	; F6CD91  push XIX
 	ld	xix, 4846	; F6CD92  ld XIX,0x000012ee
@@ -158097,10 +158106,10 @@ SoftKeyCol3_Screen0ESub05:
 	pushw	wa	; F6CDA3  push WA
 	call	MsgLine_TimeSignature	; F6CDA4  call 0xf6e706
 	popw	wa	; F6CDA8  pop WA
-	calr	Screen0E_SoftKeyCol3	; F6CDA9  calr 0xf6cd74
+	calr	StepRecord_SoftKeyCol3	; F6CDA9  calr 0xf6cd74
 	ret	; F6CDAC  ret
-; LcdKeyRow3_Screen0ESub05: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Screen0ESub05_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
-LcdKeyRow3_Screen0ESub05:
+; LcdKeyRow3_StepRecordSub05: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); StepRecordSub05_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_StepRecordSub05:
 	bit	7, w	; F6CDAD  bit 0x07,W
 	jr	z, sub_F6CD74_Skip	; F6CDB0  jr Z,0xf6cdb3
 	ret	; F6CDB2  ret
@@ -158178,9 +158187,9 @@ sub_F6CE26:
 	ld	a, (xiy+4)	; F6CE4E  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6CE51  ld (0x125a),A
 	push	xiy	; F6CE55  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6CE56  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6CE56  cp (0x0ef5),0x01
 	jr	z, sub_F6CE26_Skip	; F6CE5B  jr Z,0xf6ce66
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6CE5D  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6CE5D  ld (0x0ef5),0x01
 	call	T_F431B0	; F6CE62  call 0xf431b0
 sub_F6CE26_Skip:
 	call	MsgLine_PartModulation2	; F6CE66  call 0xf6e73a
@@ -158266,9 +158275,9 @@ sub_F6CED0:
 	ld	a, (xiy+4)	; F6CEF8  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6CEFB  ld (0x125a),A
 	push	xiy	; F6CEFF  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6CF00  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6CF00  cp (0x0ef5),0x01
 	jr	z, sub_F6CED0_Skip	; F6CF05  jr Z,0xf6cf10
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6CF07  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6CF07  ld (0x0ef5),0x01
 	call	T_F431B0	; F6CF0C  call 0xf431b0
 sub_F6CED0_Skip:
 	call	MsgLine_PartCtrlPedal	; F6CF10  call 0xf6e797
@@ -158354,9 +158363,9 @@ sub_F6CF7A:
 	ld	a, (xiy+4)	; F6CFA2  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6CFA5  ld (0x125a),A
 	push	xiy	; F6CFA9  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6CFAA  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6CFAA  cp (0x0ef5),0x01
 	jr	z, sub_F6CF7A_Skip	; F6CFAF  jr Z,0xf6cfba
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6CFB1  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6CFB1  ld (0x0ef5),0x01
 	call	T_F431B0	; F6CFB6  call 0xf431b0
 sub_F6CF7A_Skip:
 	call	MsgLine_PartHold	; F6CFBA  call 0xf6e7f3
@@ -158621,9 +158630,9 @@ sub_F6D024:
 	ld	a, (xiy+4)	; F6D04C  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D04F  ld (0x125a),A
 	push	xiy	; F6D053  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D054  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D054  cp (0x0ef5),0x01
 	jr	z, sub_F6D024_Skip	; F6D059  jr Z,0xf6d064
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D05B  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D05B  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D060  call 0xf431b0
 sub_F6D024_Skip:
 	call	MsgLine_PartRtCreateX	; F6D064  call 0xf6e849
@@ -158723,9 +158732,9 @@ sub_F6D0CE:
 	ld	a, (xiy+4)	; F6D0F6  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D0F9  ld (0x125a),A
 	push	xiy	; F6D0FD  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D0FE  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D0FE  cp (0x0ef5),0x01
 	jr	z, sub_F6D0CE_Skip	; F6D103  jr Z,0xf6d10e
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D105  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D105  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D10A  call 0xf431b0
 sub_F6D0CE_Skip:
 	call	MsgLine_PartRtCreateY	; F6D10E  call 0xf6e8a6
@@ -158825,9 +158834,9 @@ sub_F6D178:
 	ld	a, (xiy+4)	; F6D1A0  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D1A3  ld (0x125a),A
 	push	xiy	; F6D1A7  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D1A8  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D1A8  cp (0x0ef5),0x01
 	jr	z, sub_F6D178_Skip	; F6D1AD  jr Z,0xf6d1b8
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D1AF  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D1AF  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D1B4  call 0xf431b0
 sub_F6D178_Skip:
 	call	MsgLine_PartRtCtrlX	; F6D1B8  call 0xf6e903
@@ -158927,9 +158936,9 @@ sub_F6D222:
 	ld	a, (xiy+4)	; F6D24A  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D24D  ld (0x125a),A
 	push	xiy	; F6D251  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D252  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D252  cp (0x0ef5),0x01
 	jr	z, sub_F6D222_Skip	; F6D257  jr Z,0xf6d262
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D259  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D259  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D25E  call 0xf431b0
 sub_F6D222_Skip:
 	call	MsgLine_PartRtCtrlY	; F6D262  call 0xf6e95f
@@ -159030,9 +159039,9 @@ sub_F6D2CC:
 	ld	a, (xiy+4)	; F6D2F7  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D2FA  ld (0x125a),A
 	push	xiy	; F6D2FE  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D2FF  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D2FF  cp (0x0ef5),0x01
 	jr	z, sub_F6D2CC_Skip	; F6D304  jr Z,0xf6d30f
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D306  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D306  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D30B  call 0xf431b0
 sub_F6D2CC_Skip:
 	call	MsgLine_PartReverb	; F6D30F  call 0xf6e2ba
@@ -159128,9 +159137,9 @@ sub_F6D36C:
 	ld	a, (xiy+4)	; F6D397  ld A,(XIY+0x04)
 	ld	(4698:16), a	; F6D39A  ld (0x125a),A
 	push	xiy	; F6D39E  push XIY
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6D39F  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6D39F  cp (0x0ef5),0x01
 	jr	z, sub_F6D36C_Skip	; F6D3A4  jr Z,0xf6d3af
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6D3A6  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6D3A6  ld (0x0ef5),0x01
 	call	T_F431B0	; F6D3AB  call 0xf431b0
 sub_F6D36C_Skip:
 	call	MsgLine_PartEffect1	; F6D3AF  call 0xf6e212
@@ -160632,7 +160641,7 @@ MsgLine_Clear:
 	ret	; F6DA0C  ret
 
 ; --------------------------------------------------------------------------
-; Screen0E_LcdKeyRow4
+; StepRecord_LcdKeyRow4
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Calls:   T_F431B0
@@ -160649,8 +160658,8 @@ MsgLine_Clear:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Screen0E_LcdKeyRow4: the LcdKeyRow4 action of Screen0E -- called only by LcdKeyRow4_Screen0E.
-Screen0E_LcdKeyRow4:
+; StepRecord_LcdKeyRow4: the LcdKeyRow4 action of StepRecord -- called only by LcdKeyRow4_StepRecord.
+StepRecord_LcdKeyRow4:
 	call	T_F431B0	; F6DA0D  call 0xf431b0
 	ret	; F6DA11  ret
 
@@ -161087,7 +161096,7 @@ Text_4Tenunormstaccutt:
 ;   lane promb; was the last byte of Text_4Tenunormstaccuttd plus the first
 ;   113 bytes of a `.byte` block, Data_F6DD18, "Unknown: everything about it
 ;   except its bytes").
-; Called from: 0xF69902 (`call`, in sub_F69887), 0xF69AF1 (Screen0ESub00_SoftKeyCol3),
+; Called from: 0xF69902 (`call`, in sub_F69887), 0xF69AF1 (StepRecordSub00_SoftKeyCol3),
 ;          0xF69B32 (sub_F69AFF) and 0xF6D720 (`calr`, sub_F6D710).  Every
 ;          one of the four is followed by `call T_F431B4`, the message-line
 ;          painter (notes/FINDINGS-prom_b-message-line.md).
@@ -161224,9 +161233,9 @@ OctaveNames_Minus2To8:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartVolume:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6DDB7  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6DDB7  cp (0x0ef5),0x0a
 	jr	z, OctaveNames_Minus2To8_Code_Skip	; F6DDBC  jr Z,0xf6ddc7
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6DDBE  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6DDBE  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DDC3  call 0xf431b0
 OctaveNames_Minus2To8_Code_Skip:
 	calr	MsgLine_ClearTail	; F6DDC7  calr 0xf6d5f1
@@ -161330,9 +161339,9 @@ Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartPanpot:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6DEF7  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6DEF7  cp (0x0ef5),0x0a
 	jr	z, MsgLine_PartPanpot_Skip	; F6DEFC  jr Z,0xf6df07
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6DEFE  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6DEFE  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DF03  call 0xf431b0
 MsgLine_PartPanpot_Skip:
 	calr	MsgLine_ClearTail	; F6DF07  calr 0xf6d5f1
@@ -161413,9 +161422,9 @@ Data_F6DF50:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartKeyShift:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6DF57  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6DF57  cp (0x0ef5),0x0a
 	jr	z, MsgLine_PartKeyShift_Skip	; F6DF5C  jr Z,0xf6df67
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6DF5E  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6DF5E  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DF63  call 0xf431b0
 MsgLine_PartKeyShift_Skip:
 	calr	MsgLine_ClearTail	; F6DF67  calr 0xf6d5f1
@@ -161499,9 +161508,9 @@ Data_F6DFBA:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartTuning:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6DFC4  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6DFC4  cp (0x0ef5),0x0a
 	jr	z, MsgLine_PartTuning_Skip	; F6DFC9  jr Z,0xf6dfd4
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6DFCB  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6DFCB  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6DFD0  call 0xf431b0
 MsgLine_PartTuning_Skip:
 	calr	MsgLine_ClearTail	; F6DFD4  calr 0xf6d5f1
@@ -161585,9 +161594,9 @@ Data_F6E027:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartBendSens:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x0a	; F6E02E  cp (0x0ef5),0x0a
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x0a	; F6E02E  cp (0x0ef5),0x0a
 	jr	z, MsgLine_PartBendSens_Skip	; F6E033  jr Z,0xf6e03e
-	ld	(UI_Screen0E_SubScreen:16), 10	; F6E035  ld (0x0ef5),0x0a
+	ld	(UI_StepRecord_SubScreen:16), 10	; F6E035  ld (0x0ef5),0x0a
 	call	T_F431B0	; F6E03A  call 0xf431b0
 MsgLine_PartBendSens_Skip:
 	calr	MsgLine_ClearTail	; F6E03E  calr 0xf6d5f1
@@ -161668,9 +161677,9 @@ Data_F6E087:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartSustain:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E091  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E091  cp (0x0ef5),0x01
 	jr	z, MsgLine_PartSustain_Skip	; F6E096  jr Z,0xf6e0a1
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E098  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E098  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E09D  call 0xf431b0
 MsgLine_PartSustain_Skip:
 	calr	MsgLine_ClearTail	; F6E0A1  calr 0xf6d5f1
@@ -161760,9 +161769,9 @@ Data_F6E0EB:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartDspEffect:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E152  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E152  cp (0x0ef5),0x01
 	jr	z, MsgLine_PartDspEffect_Skip	; F6E157  jr Z,0xf6e162
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E159  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E159  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E15E  call 0xf431b0
 MsgLine_PartDspEffect_Skip:
 	calr	MsgLine_ClearTail	; F6E162  calr 0xf6d5f1
@@ -161840,9 +161849,9 @@ Data_F6E1A6:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartEffect:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E1B1  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E1B1  cp (0x0ef5),0x01
 	jr	z, MsgLine_PartEffect_Skip	; F6E1B6  jr Z,0xf6e1c1
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E1B8  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E1B8  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E1BD  call 0xf431b0
 MsgLine_PartEffect_Skip:
 	calr	MsgLine_ClearTail	; F6E1C1  calr 0xf6d5f1
@@ -162155,9 +162164,9 @@ Data_F6E2FF:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PanelMemory:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E306  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E306  cp (0x0ef5),0x01
 	jr	z, MsgLine_PanelMemory_Skip	; F6E30B  jr Z,0xf6e318
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E30D  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E30D  ld (0x0ef5),0x01
 	pushw	wa	; F6E312  push WA
 	call	T_F431B0	; F6E313  call 0xf431b0
 	popw	wa	; F6E317  pop WA
@@ -162338,9 +162347,9 @@ Data_F6E43E:
 ;          The name claims the twelve names it draws and nothing else.
 ; --------------------------------------------------------------------------
 MsgLine_NoteName:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E463  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E463  cp (0x0ef5),0x01
 	jr	z, MsgLine_NoteName_Skip	; F6E468  jr Z,0xf6e475
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E46A  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E46A  ld (0x0ef5),0x01
 	pushw	wa	; F6E46F  push WA
 	call	T_F431B0	; F6E470  call 0xf431b0
 	popw	wa	; F6E474  pop WA
@@ -162421,9 +162430,9 @@ Text_GAbABbBCDbDEbEFF:
 ; --------------------------------------------------------------------------
 MsgLine_AccompVolume:
 
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E4F2  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E4F2  cp (0x0ef5),0x01
 	jr	z, MsgLine_AccompVolume_Skip	; F6E4F7  jr Z,0xf6e506
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E4F9  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E4F9  ld (0x0ef5),0x01
 	pushw	wa	; F6E4FE  push WA
 	pushw	hl	; F6E4FF  push HL
 	call	T_F431B0	; F6E500  call 0xf431b0
@@ -162545,9 +162554,9 @@ sub_F6BFF2_Nop:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartTremolo:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E5A5  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E5A5  cp (0x0ef5),0x01
 	jr	z, MsgLine_PartTremolo_Skip	; F6E5AA  jr Z,0xf6e5b5
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E5AC  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E5AC  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E5B1  call 0xf431b0
 MsgLine_PartTremolo_Skip:
 	calr	MsgLine_ClearTail	; F6E5B5  calr 0xf6d5f1
@@ -162744,9 +162753,9 @@ sub_F67464_Nop:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_TotalReverb:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E62A  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E62A  cp (0x0ef5),0x01
 	jr	z, MsgLine_TotalReverb_Skip	; F6E62F  jr Z,0xf6e63a
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E631  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E631  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E636  call 0xf431b0
 MsgLine_TotalReverb_Skip:
 	calr	MsgLine_ClearTail	; F6E63A  calr 0xf6d5f1
@@ -162819,9 +162828,9 @@ Data_F6E66A:
 ;          on -- is called.
 ; --------------------------------------------------------------------------
 MsgLine_PartMellowNormalBright:
-	m_cp_mi8 MB16, UI_Screen0E_SubScreen, 0x01	; F6E678  cp (0x0ef5),0x01
+	m_cp_mi8 MB16, UI_StepRecord_SubScreen, 0x01	; F6E678  cp (0x0ef5),0x01
 	jr	z, MsgLine_PartMellowNormalBright_Skip	; F6E67D  jr Z,0xf6e688
-	ld	(UI_Screen0E_SubScreen:16), 1	; F6E67F  ld (0x0ef5),0x01
+	ld	(UI_StepRecord_SubScreen:16), 1	; F6E67F  ld (0x0ef5),0x01
 	call	T_F431B0	; F6E684  call 0xf431b0
 MsgLine_PartMellowNormalBright_Skip:
 	calr	MsgLine_ClearTail	; F6E688  calr 0xf6d5f1
@@ -190342,7 +190351,7 @@ sub_F7CE04_Return:
 ;           symbol of the other image (an absolute `.set`) only as a constant displacement.
 ; ---------------------------------------------------------------------
 StubBlock_F7D000:
-	jrl	sub_F81ACB - 0xF7D003	; F7D000  jrl T,0xf81acb
+	jrl	Paint_StepRecord - 0xF7D003	; F7D000  jrl T,0xf81acb
 ; Evidence: a 3-byte `jrl` long-branch veneer, slot of the 0xF7D000 veneer table;
 ;           destination prom_a 0xF81BD4.  Named for the destination only.  [round7-entrypoints]
 Veneer_Paint_StepRecordTrackClrMeas:
@@ -191396,23 +191405,23 @@ ScreenNull_SequencerMedley:
 	ret	; F7D2B3  ret
 ; Evidence: the +0 word of screen object F43160, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86F79.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
-; ScreenCode0E_Handler: the +0 ENTER method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+; ScreenEnter_StepRecord: the +0 ENTER method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
 ;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43160 jumps here.
-ScreenCode0E_Handler:
-	call	sub_F8101E	; F7D2B4  call 0xf8101e
+ScreenEnter_StepRecord:
+	call	ScreenEnterBody_StepRecord	; F7D2B4  call 0xf8101e
 	ret	; F7D2B8  ret
 ; Evidence: the +4 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF81039` then `ret`.  [round7-entrypoints]
-; ScreenLeave_Code0E: the +4 LEAVE method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+; ScreenLeave_StepRecord: the +4 LEAVE method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
 ;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43164 jumps here.
-ScreenLeave_Code0E:
-	call	sub_F81039	; F7D2B9  call 0xf81039
+ScreenLeave_StepRecord:
+	call	ScreenLeaveBody_StepRecord	; F7D2B9  call 0xf81039
 	ret	; F7D2BD  ret
 ; Evidence: the +8 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
-; ScreenButton_Code0E: the +8 BUTTON method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
+; ScreenButton_StepRecord: the +8 BUTTON method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
 ;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43168 jumps here.
-ScreenButton_Code0E:
+ScreenButton_StepRecord:
 	ld	bc, hl	; F7D2BE  ld BC,HL
 	call	T_F42EC8	; F7D2C0  call 0xf42ec8
 	ret	; F7D2C4  ret
@@ -191425,14 +191434,14 @@ T_F4316C_Nop:
 ; ScreenCode15_Handler: the +0 ENTER method of the screen object for screen id 0x15 -- PanelScreen_VtableTable entry 0x35
 ;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D0 jumps here.
 ScreenCode15_Handler:
-	call	sub_F8101E	; F7D2C6  call 0xf8101e
+	call	ScreenEnterBody_StepRecord	; F7D2C6  call 0xf8101e
 	ret	; F7D2CA  ret
 ; Evidence: the +4 word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF81039` then `ret`.  [round7-entrypoints]
 ; ScreenLeave_Code15: the +4 LEAVE method of the screen object for screen id 0x15 -- PanelScreen_VtableTable entry 0x35
 ;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D4 jumps here.
 ScreenLeave_Code15:
-	call	sub_F81039	; F7D2CB  call 0xf81039
+	call	ScreenLeaveBody_StepRecord	; F7D2CB  call 0xf81039
 	ret	; F7D2CF  ret
 ; Evidence: the +8 word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
@@ -193070,7 +193079,7 @@ ButtonTable_SequencerMedley:
 ; ★ THE FOUR SCREENS ROUND 7 LEFT UNNAMED STAY UNNAMED, and now the reason is
 ; exact: 0xF43040's Enter (0xF7E971, three instructions, here) draws no display
 ; list at all; 0xF43048's is prom_a sub_F80F3A and draws none; and 0xF43160
-; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a sub_F8101E -- so a rule that
+; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a ScreenEnterBody_StepRecord -- so a rule that
 ; names a screen after what its Enter draws cannot separate those two even in
 ; principle.  `--screens4` prints it from the ROM.
 ;

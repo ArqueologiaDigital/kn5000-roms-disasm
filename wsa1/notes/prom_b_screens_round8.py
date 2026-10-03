@@ -90,7 +90,7 @@ WHAT IS IN THE SPAN
               display-list calls, so there is no title to read.
     0xF43048  Enter -> prom_a 0xF80F3A (`sub_F80F3A`).  Zero display-list calls
               in its extent.
-    0xF43160  Enter -> prom_a 0xF8101E (`sub_F8101E`).  Zero display-list calls.
+    0xF43160  Enter -> prom_a 0xF8101E (`ScreenEnterBody_StepRecord`).  Zero display-list calls.
     0xF431D0  Enter -> prom_a 0xF8101E -- ★ THE SAME ROUTINE AS 0xF43160.
 
   ★★ So the title rule cannot separate 0xF43160 from 0xF431D0 even in principle:

@@ -361,7 +361,7 @@ def banner():
         "; exact: 0xF43040's Enter (0x%06X, three instructions, here) draws no display"
         % 0xF7E971,
         "; list at all; 0xF43048's is prom_a sub_F80F3A and draws none; and 0xF43160",
-        "; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a sub_F8101E -- so a rule that",
+        "; and 0xF431D0 SHARE ONE ENTER METHOD, prom_a ScreenEnterBody_StepRecord -- so a rule that",
         "; names a screen after what its Enter draws cannot separate those two even in",
         "; principle.  `--screens4` prints it from the ROM.",
         ";",

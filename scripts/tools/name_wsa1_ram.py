@@ -97,7 +97,7 @@ GROUPS = [
         0x28D3: ("Blink_PostToRing", "0: draw inline; non-0: post to the ring buffer", "Blink_Command, from a stack-address test"),
     }),
     ("wsa1/notes/FINDINGS-prom_b-for-the-mame-driver.md", "Related RAM the driver may want in a comment; with FINDINGS-prom_b-song-store.md and FINDINGS-prom_a-panel-control-map.md", {
-        0x0EF5: ("UI_Screen0E_SubScreen", "which sub-screen of screen 0x0E is showing", "FINDINGS-prom_b-for-the-mame-driver.md"),
+        0x0EF5: ("UI_StepRecord_SubScreen", "which sub-screen of screen 0x0E is showing", "FINDINGS-prom_b-for-the-mame-driver.md"),
         0x2070: ("UI_Request", "16-bit message code; high byte 0x80 = go to the screen id in the low byte", "the panel row handlers; song-store.md: `(0x2070)` takes a 16-bit message code"),
         0x2071: ("UI_Request_Hi", "UI_Request's high byte: 0x80 with a screen id", "panel-control-map.md: the screen-request pair"),
         0x2075: ("UI_RequestBits", "request bits, set by `or` and cleared by `and`; several owners (bit 1 = blink enable)", "song-store.md; field-blink.md"),
