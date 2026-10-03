@@ -160566,7 +160566,8 @@ sub_FE1CCC:
 sub_FE1CD0:
 	calr sub_FE0870                                          ; FE1CD0  1e 9d eb
 	ret                                                  ; FE1CD3  0e
-sub_FE1CD4:
+; Var2216_SetW145C_Call: calls Var2216_SetW145C and returns -- `calr Var2216_SetW145C / ret`.
+Var2216_SetW145C_Call:
 	calr Var2216_SetW145C                                          ; FE1CD4  1e e2 12
 	ret                                                  ; FE1CD7  0e
 sub_FE1CD8:
@@ -184985,7 +184986,8 @@ Var2134_SetBit1_3:
 sub_FF42C5:
 	calr sub_FF42B7                                      ; FF42C5  1e ef ff
 	ret                                                  ; FF42C8  0e
-sub_FF42C9:
+; Var2134_SetBit1_3_Call: calls Var2134_SetBit1_3 and returns -- `calr Var2134_SetBit1_3 / ret`.
+Var2134_SetBit1_3_Call:
 	calr Var2134_SetBit1_3                                      ; FF42C9  1e f4 ff
 	ret                                                  ; FF42CC  0e
 ; ---------------------------------------------------------------------

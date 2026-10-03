@@ -1752,7 +1752,7 @@
 	.set	sub_FE1CC8, 0xFE1CC8
 	.set	sub_FE1CCC, 0xFE1CCC
 	.set	sub_FE1CD0, 0xFE1CD0
-	.set	sub_FE1CD4, 0xFE1CD4
+	.set	Var2216_SetW145C_Call, 0xFE1CD4
 	.set	sub_FE1CD8, 0xFE1CD8
 	.set	sub_FE1CDC, 0xFE1CDC
 	.set	sub_FE1CE0, 0xFE1CE0
@@ -1797,7 +1797,7 @@
 	.set	sub_FF42B7, 0xFF42B7
 	.set	Var2134_SetBit1_3, 0xFF42C0
 	.set	sub_FF42C5, 0xFF42C5
-	.set	sub_FF42C9, 0xFF42C9
+	.set	Var2134_SetBit1_3_Call, 0xFF42C9
 	.set	Paint_DiskMenu, 0xFF42CD
 	.set	ScreenLeave_DiskMenu, 0xFF431B
 	.set	PanelButtonDispatch_DiskMenu, 0xFF431C
@@ -88440,7 +88440,7 @@ T_F40A70:	jp sub_F4566A  ; -> prom_b 0x4566A   x1
 T_F40A74:	jp sub_F4403F  ; -> prom_b 0x4403F
 T_F40A78:	jp sub_F4401B  ; -> prom_b 0x4401B   x1
 T_F40A7C:	jp sub_F4401E  ; -> prom_b 0x4401E   x1
-T_F40A80:	jp sub_F44021  ; -> prom_b 0x44021   x1
+T_F40A80:	jp Var34D1_SetBits20_Veneer  ; -> prom_b 0x44021   x1
 T_F40A84:	jp sub_F44024  ; -> prom_b 0x44024
 T_F40A88:	jp sub_F44027  ; -> prom_b 0x44027
 T_F40A8C:	jp sub_F44367  ; -> prom_b 0x44367   x1
@@ -89820,7 +89820,7 @@ T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
 T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
 T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
-T_F42260:	jp sub_FF42C9  ; -> prom_a 0x742C9
+T_F42260:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
 T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
 T_ScreenLeave_DiskMenu:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
 T_PanelButtonDispatch_DiskMenu:	jp PanelButtonDispatch_DiskMenu  ; -> prom_a 0x7431C
@@ -89987,7 +89987,7 @@ T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4  
 T_F425F4:	jp sub_FE1CC8  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
 T_F425FC:	jp sub_FE1CD0  ; -> prom_a 0x61CD0
-T_F42600:	jp sub_FE1CD4  ; -> prom_a 0x61CD4   x2
+T_F42600:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
 T_F42604:	jp sub_FE1CD8  ; -> prom_a 0x61CD8   x8
 T_F42608:	jp sub_FE1CDC  ; -> prom_a 0x61CDC   x1
 T_F4260C:	jp sub_FE1CE0  ; -> prom_a 0x61CE0   x1
@@ -90524,7 +90524,7 @@ T_F42EE8:	jp sub_F67434  ; -> prom_b 0x67434
 T_F42EEC:	jp T_F42EEC_Nop  ; -> prom_b 0x687EC
 T_F42EF0:	jp T_F42EF0_Nop  ; -> prom_b 0x6AB8E
 T_F42EF4:	jp sub_F6C625  ; -> prom_b 0x6C625
-T_F42EF8:	jp sub_F6747D  ; -> prom_b 0x6747D   x1
+T_F42EF8:	jp BStore_DirEntryOffsetX2_Call  ; -> prom_b 0x6747D   x1
 T_F42EFC:	jp sub_F67479  ; -> prom_b 0x67479   x2
 T_F42F00:	jp sub_F67488  ; -> prom_b 0x67488
 T_F42F04:	jp sub_F693F6  ; -> prom_b 0x693F6   x1
@@ -91054,7 +91054,7 @@ sub_F4401E:		; <- T_F40A7C
 	jrl	sub_F455CC	; F4401E  jrl T,0xf455cc
 
 ; --------------------------------------------------------------------------
-; sub_F44021
+; Var34D1_SetBits20_Veneer
 ; Called from: T_F40A80 (x1)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40A80 holds `jp 0x00F44021`, and 0xF44021 is an
@@ -91064,7 +91064,8 @@ sub_F4401E:		; <- T_F40A7C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44021:		; <- T_F40A80
+; Var34D1_SetBits20_Veneer: a jump to Var34D1_SetBits20 -- `jrl Var34D1_SetBits20`.
+Var34D1_SetBits20_Veneer:		; <- T_F40A80
 	jrl	Var34D1_SetBits20	; F44021  jrl T,0xf45fc4
 
 ; --------------------------------------------------------------------------
@@ -145389,7 +145390,7 @@ sub_F67479:		; <- T_F42EFC
 	ret	; F6747C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6747D
+; BStore_DirEntryOffsetX2_Call
 ; Called from: T_F42EF8 (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_DirEntryOffsetX2
@@ -145400,7 +145401,8 @@ sub_F67479:		; <- T_F42EFC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6747D:		; <- T_F42EF8
+; BStore_DirEntryOffsetX2_Call: calls BStore_DirEntryOffsetX2 and returns -- `calr BStore_DirEntryOffsetX2 / ret`.
+BStore_DirEntryOffsetX2_Call:		; <- T_F42EF8
 	calr	BStore_DirEntryOffsetX2	; F6747D  calr 0xf6bbd4
 	ret	; F67480  ret
 

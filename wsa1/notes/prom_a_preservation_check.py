@@ -1242,6 +1242,10 @@ RENAMES = {
     "sub_FE85FC__FE8621": "SoftKeyCol1_EditPartSelect",
     "sub_F94261__F94262": "ExitKey_PowerOnSplash",
     "sub_FD98BD": "FilterPage_DrawGraph",
+    "sub_FE1CD4": "Var2216_SetW145C_Call",
+    "sub_FF42C9": "Var2134_SetBit1_3_Call",
+    "sub_F44021": "Var34D1_SetBits20_Veneer",
+    "sub_F6747D": "BStore_DirEntryOffsetX2_Call",
 }
 
 
