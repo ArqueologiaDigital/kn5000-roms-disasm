@@ -124192,22 +124192,22 @@ sub_FCC573:
 ;          it is the zero word that ends all 38 tables of this shape framed below.
 ; ---------------------------------------------------------------------
 DispatchTable_FCF000:
-	.long sub_FCFE42                              ; FCF000  [  0]
-	.long sub_FCFEA1                              ; FCF004  [  1]
-	.long sub_FCFF46                              ; FCF008  [  2]
-	.long sub_FCFFCA                              ; FCF00C  [  3]
-	.long sub_FD006B                              ; FCF010  [  4]
-	.long sub_FD00F5                              ; FCF014  [  5]
-	.long sub_FD017D                              ; FCF018  [  6]
-	.long sub_FD0267                              ; FCF01C  [  7]
-	.long sub_FD02CB                              ; FCF020  [  8]
-	.long sub_FD0374                              ; FCF024  [  9]
-	.long sub_FD0409                              ; FCF028  [ 10]
-	.long sub_FD046F                              ; FCF02C  [ 11]
-	.long sub_FD04D5                              ; FCF030  [ 12]
+	.long SoftKeyCol1_ScreenCode80                              ; FCF000  [  0]
+	.long SoftKeyCol2_ScreenCode80                              ; FCF004  [  1]
+	.long SoftKeyCol3_ScreenCode80                              ; FCF008  [  2]
+	.long SoftKeyCol4_ScreenCode80                              ; FCF00C  [  3]
+	.long SoftKeyCol5_ScreenCode80                              ; FCF010  [  4]
+	.long SoftKeyCol6_ScreenCode80                              ; FCF014  [  5]
+	.long SoftKeyCol7_ScreenCode80                              ; FCF018  [  6]
+	.long SoftKeyCol8_ScreenCode80                              ; FCF01C  [  7]
+	.long LcdKeyRow1_ScreenCode80                              ; FCF020  [  8]
+	.long LcdKeyRow2_ScreenCode80                              ; FCF024  [  9]
+	.long LcdKeyRow3_ScreenCode80                              ; FCF028  [ 10]
+	.long LcdKeyRow4_ScreenCode80                              ; FCF02C  [ 11]
+	.long LcdKeyRow5_ScreenCode80                              ; FCF030  [ 12]
 	.long PanelOp_Nop                             ; FCF034  [ 13]
 	.long PanelOp_Nop                             ; FCF038  [ 14]
-	.long sub_FD0521                              ; FCF03C  [ 15]
+	.long ExitKey_ScreenCode80                              ; FCF03C  [ 15]
 	.long PanelOp_Nop                             ; FCF040  [ 16]
 
 ; ---------------------------------------------------------------------
@@ -124363,22 +124363,22 @@ IndexMap_FCF1E9:
 ; Read by: ScreenButton_Code8B at 0xFD277E.
 PanelOpTable_FCF21B:
 	.long PanelOp_Nop                             ; FCF21B  [ 0]
-	.long sub_FD2903                              ; FCF21F  [ 1]
-	.long sub_FD298A                              ; FCF223  [ 2]
-	.long sub_FD2A3C                              ; FCF227  [ 3]
-	.long sub_FD2AD8                              ; FCF22B  [ 4]
+	.long SoftKeyCol2_ScreenCode8B                              ; FCF21F  [ 1]
+	.long SoftKeyCol3_ScreenCode8B                              ; FCF223  [ 2]
+	.long SoftKeyCol4_ScreenCode8B                              ; FCF227  [ 3]
+	.long SoftKeyCol5_ScreenCode8B                              ; FCF22B  [ 4]
 	.long PanelOp_Nop                             ; FCF22F  [ 5]
-	.long sub_FD2B74                              ; FCF233  [ 6]
-	.long sub_FD2BD8                              ; FCF237  [ 7]
-	.long sub_FD2C3C                              ; FCF23B  [ 8]
-	.long sub_FD2C5A                              ; FCF23F  [ 9]
-	.long sub_FD2C76                              ; FCF243  [10]
-	.long sub_FD2CAE                              ; FCF247  [11]
-	.long sub_FD2CD9                              ; FCF24B  [12]
+	.long SoftKeyCol7_ScreenCode8B                              ; FCF233  [ 6]
+	.long SoftKeyCol8_ScreenCode8B                              ; FCF237  [ 7]
+	.long LcdKeyRow1_ScreenCode8B                              ; FCF23B  [ 8]
+	.long LcdKeyRow2_ScreenCode8B                              ; FCF23F  [ 9]
+	.long LcdKeyRow3_ScreenCode8B                              ; FCF243  [10]
+	.long LcdKeyRow4_ScreenCode8B                              ; FCF247  [11]
+	.long LcdKeyRow5_ScreenCode8B                              ; FCF24B  [12]
 	.long PanelOp_Nop                             ; FCF24F  [13]
 	.long PanelOp_Nop                             ; FCF253  [14]
-	.long sub_FD2D2B                              ; FCF257  [15]
-	.long sub_FD2D04                              ; FCF25B  [16]
+	.long ExitKey_ScreenCode8B                              ; FCF257  [15]
+	.long PageKey_ScreenCode8B                              ; FCF25B  [16]
 	.long 0x00000000                              ; FCF25F  [17] zero
 
 ; PanelOpTable_FCF263 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124408,23 +124408,23 @@ PanelOpTable_FCF263:
 ; panel operation 0..16; see the block header for the reader shape.
 ; Read by: ScreenButton_Code8D at 0xFD2826.
 PanelOpTable_FCF2AB:
-	.long sub_FD3072                              ; FCF2AB  [ 0]
-	.long sub_FD3112                              ; FCF2AF  [ 1]
-	.long sub_FD31B2                              ; FCF2B3  [ 2]
-	.long sub_FD3252                              ; FCF2B7  [ 3]
-	.long sub_FD32F2                              ; FCF2BB  [ 4]
-	.long sub_FD33AA                              ; FCF2BF  [ 5]
-	.long sub_FD3466                              ; FCF2C3  [ 6]
-	.long sub_FD351E                              ; FCF2C7  [ 7]
-	.long sub_FD359E                              ; FCF2CB  [ 8]
-	.long sub_FD35AF                              ; FCF2CF  [ 9]
-	.long sub_FD35DB                              ; FCF2D3  [10]
-	.long sub_FD3616                              ; FCF2D7  [11]
-	.long sub_FD3649                              ; FCF2DB  [12]
+	.long SoftKeyCol1_ScreenCode8D                              ; FCF2AB  [ 0]
+	.long SoftKeyCol2_ScreenCode8D                              ; FCF2AF  [ 1]
+	.long SoftKeyCol3_ScreenCode8D                              ; FCF2B3  [ 2]
+	.long SoftKeyCol4_ScreenCode8D                              ; FCF2B7  [ 3]
+	.long SoftKeyCol5_ScreenCode8D                              ; FCF2BB  [ 4]
+	.long SoftKeyCol6_ScreenCode8D                              ; FCF2BF  [ 5]
+	.long SoftKeyCol7_ScreenCode8D                              ; FCF2C3  [ 6]
+	.long SoftKeyCol8_ScreenCode8D                              ; FCF2C7  [ 7]
+	.long LcdKeyRow1_ScreenCode8D                              ; FCF2CB  [ 8]
+	.long LcdKeyRow2_ScreenCode8D                              ; FCF2CF  [ 9]
+	.long LcdKeyRow3_ScreenCode8D                              ; FCF2D3  [10]
+	.long LcdKeyRow4_ScreenCode8D                              ; FCF2D7  [11]
+	.long LcdKeyRow5_ScreenCode8D                              ; FCF2DB  [12]
 	.long PanelOp_Nop                             ; FCF2DF  [13]
 	.long PanelOp_Nop                             ; FCF2E3  [14]
-	.long sub_FD36F5                              ; FCF2E7  [15]
-	.long sub_FD36CE                              ; FCF2EB  [16]
+	.long ExitKey_ScreenCode8D                              ; FCF2E7  [15]
+	.long PageKey_ScreenCode8D                              ; FCF2EB  [16]
 	.long 0x00000000                              ; FCF2EF  [17] zero
 
 ; PanelOpTable_FCF2F3 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124455,21 +124455,21 @@ PanelOpTable_FCF2F3:
 ; Read by: ScreenButton_Code8F at 0xFD28DF.
 PanelOpTable_FCF33B:
 	.long PanelOp_Nop                             ; FCF33B  [ 0]
-	.long sub_FD3C6A                              ; FCF33F  [ 1]
-	.long sub_FD3C7F                              ; FCF343  [ 2]
-	.long sub_FD3C94                              ; FCF347  [ 3]
-	.long sub_FD3CA9                              ; FCF34B  [ 4]
-	.long sub_FD3CBE                              ; FCF34F  [ 5]
-	.long sub_FD3CD3                              ; FCF353  [ 6]
-	.long sub_FD3CE8                              ; FCF357  [ 7]
-	.long sub_FD3CFD                              ; FCF35B  [ 8]
-	.long sub_FD3D1B                              ; FCF35F  [ 9]
-	.long sub_FD3D3F                              ; FCF363  [10]
-	.long sub_FD3D57                              ; FCF367  [11]
-	.long sub_FD3D6F                              ; FCF36B  [12]
+	.long SoftKeyCol2_ScreenCode8F                              ; FCF33F  [ 1]
+	.long SoftKeyCol3_ScreenCode8F                              ; FCF343  [ 2]
+	.long SoftKeyCol4_ScreenCode8F                              ; FCF347  [ 3]
+	.long SoftKeyCol5_ScreenCode8F                              ; FCF34B  [ 4]
+	.long SoftKeyCol6_ScreenCode8F                              ; FCF34F  [ 5]
+	.long SoftKeyCol7_ScreenCode8F                              ; FCF353  [ 6]
+	.long SoftKeyCol8_ScreenCode8F                              ; FCF357  [ 7]
+	.long LcdKeyRow1_ScreenCode8F                              ; FCF35B  [ 8]
+	.long LcdKeyRow2_ScreenCode8F                              ; FCF35F  [ 9]
+	.long LcdKeyRow3_ScreenCode8F                              ; FCF363  [10]
+	.long LcdKeyRow4_ScreenCode8F                              ; FCF367  [11]
+	.long LcdKeyRow5_ScreenCode8F                              ; FCF36B  [12]
 	.long PanelOp_Nop                             ; FCF36F  [13]
 	.long PanelOp_Nop                             ; FCF373  [14]
-	.long sub_FD3D87                              ; FCF377  [15]
+	.long ExitKey_ScreenCode8F                              ; FCF377  [15]
 	.long PanelOp_Nop                             ; FCF37B  [16]
 	.long 0x00000000                              ; FCF37F  [17] zero
 
@@ -124569,46 +124569,46 @@ PanelOpTable_FCF45B:
 ; panel operation 0..16; see the block header for the reader shape.
 ; Read by: ScreenButton_Code90 at 0xFDE3F2.
 PanelOpTable_FCF4A3:
-	.long sub_FDE760                              ; FCF4A3  [ 0]
-	.long sub_FDE81C                              ; FCF4A7  [ 1]
-	.long sub_FDE8D8                              ; FCF4AB  [ 2]
-	.long sub_FDE988                              ; FCF4AF  [ 3]
+	.long SoftKeyCol1_ScreenCode90                              ; FCF4A3  [ 0]
+	.long SoftKeyCol2_ScreenCode90                              ; FCF4A7  [ 1]
+	.long SoftKeyCol3_ScreenCode90                              ; FCF4AB  [ 2]
+	.long SoftKeyCol4_ScreenCode90                              ; FCF4AF  [ 3]
 	.long PanelOp_Nop                             ; FCF4B3  [ 4]
-	.long sub_FDEA38                              ; FCF4B7  [ 5]
-	.long sub_FDEAD2                              ; FCF4BB  [ 6]
-	.long sub_FDEB6D                              ; FCF4BF  [ 7]
-	.long sub_FDEC08                              ; FCF4C3  [ 8]
-	.long sub_FDEC35                              ; FCF4C7  [ 9]
-	.long sub_FDEC59                              ; FCF4CB  [10]
-	.long sub_FDEC94                              ; FCF4CF  [11]
-	.long sub_FDECEE                              ; FCF4D3  [12]
+	.long SoftKeyCol6_ScreenCode90                              ; FCF4B7  [ 5]
+	.long SoftKeyCol7_ScreenCode90                              ; FCF4BB  [ 6]
+	.long SoftKeyCol8_ScreenCode90                              ; FCF4BF  [ 7]
+	.long LcdKeyRow1_ScreenCode90                              ; FCF4C3  [ 8]
+	.long LcdKeyRow2_ScreenCode90                              ; FCF4C7  [ 9]
+	.long LcdKeyRow3_ScreenCode90                              ; FCF4CB  [10]
+	.long LcdKeyRow4_ScreenCode90                              ; FCF4CF  [11]
+	.long LcdKeyRow5_ScreenCode90                              ; FCF4D3  [12]
 	.long PanelOp_Nop                             ; FCF4D7  [13]
 	.long PanelOp_Nop                             ; FCF4DB  [14]
-	.long sub_FDED48                              ; FCF4DF  [15]
-	.long sub_FDED21                              ; FCF4E3  [16]
+	.long ExitKey_ScreenCode90                              ; FCF4DF  [15]
+	.long PageKey_ScreenCode90                              ; FCF4E3  [16]
 	.long 0x00000000                              ; FCF4E7  [17] zero
 
 ; PanelOpTable_FCF4EB -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
 ; Read by: ScreenButton_Code91 at 0xFDE452.
 PanelOpTable_FCF4EB:
-	.long sub_FDED7C                              ; FCF4EB  [ 0]
-	.long sub_FDEDA0                              ; FCF4EF  [ 1]
-	.long sub_FDEDC4                              ; FCF4F3  [ 2]
-	.long sub_FDEDDC                              ; FCF4F7  [ 3]
+	.long SoftKeyCol1_ScreenCode91                              ; FCF4EB  [ 0]
+	.long SoftKeyCol2_ScreenCode91                              ; FCF4EF  [ 1]
+	.long SoftKeyCol3_ScreenCode91                              ; FCF4F3  [ 2]
+	.long SoftKeyCol4_ScreenCode91                              ; FCF4F7  [ 3]
 	.long PanelOp_Nop                             ; FCF4FB  [ 4]
-	.long sub_FDEDF4                              ; FCF4FF  [ 5]
-	.long sub_FDEE05                              ; FCF503  [ 6]
-	.long sub_FDEE16                              ; FCF507  [ 7]
-	.long sub_FDEE27                              ; FCF50B  [ 8]
-	.long sub_FDEE38                              ; FCF50F  [ 9]
-	.long sub_FDEE49                              ; FCF513  [10]
-	.long sub_FDEE5A                              ; FCF517  [11]
-	.long sub_FDEEB4                              ; FCF51B  [12]
+	.long SoftKeyCol6_ScreenCode91                              ; FCF4FF  [ 5]
+	.long SoftKeyCol7_ScreenCode91                              ; FCF503  [ 6]
+	.long SoftKeyCol8_ScreenCode91                              ; FCF507  [ 7]
+	.long LcdKeyRow1_ScreenCode91                              ; FCF50B  [ 8]
+	.long LcdKeyRow2_ScreenCode91                              ; FCF50F  [ 9]
+	.long LcdKeyRow3_ScreenCode91                              ; FCF513  [10]
+	.long LcdKeyRow4_ScreenCode91                              ; FCF517  [11]
+	.long LcdKeyRow5_ScreenCode91                              ; FCF51B  [12]
 	.long PanelOp_Nop                             ; FCF51F  [13]
 	.long PanelOp_Nop                             ; FCF523  [14]
-	.long sub_FDEEEC                              ; FCF527  [15]
-	.long sub_FDEEC5                              ; FCF52B  [16]
+	.long ExitKey_ScreenCode91                              ; FCF527  [15]
+	.long PageKey_ScreenCode91                              ; FCF52B  [16]
 	.long 0x00000000                              ; FCF52F  [17] zero
 
 ; PanelOpTable_FCF533 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124617,21 +124617,21 @@ PanelOpTable_FCF4EB:
 PanelOpTable_FCF533:
 	.long PanelOp_Nop                             ; FCF533  [ 0]
 	.long PanelOp_Nop                             ; FCF537  [ 1]
-	.long sub_FDEF20                              ; FCF53B  [ 2]
-	.long sub_FDEF44                              ; FCF53F  [ 3]
-	.long sub_FDEF68                              ; FCF543  [ 4]
-	.long sub_FDEF80                              ; FCF547  [ 5]
+	.long SoftKeyCol3_ScreenCode92                              ; FCF53B  [ 2]
+	.long SoftKeyCol4_ScreenCode92                              ; FCF53F  [ 3]
+	.long SoftKeyCol5_ScreenCode92                              ; FCF543  [ 4]
+	.long SoftKeyCol6_ScreenCode92                              ; FCF547  [ 5]
 	.long PanelOp_Nop                             ; FCF54B  [ 6]
 	.long PanelOp_Nop                             ; FCF54F  [ 7]
-	.long sub_FDEF98                              ; FCF553  [ 8]
-	.long sub_FDEFC5                              ; FCF557  [ 9]
-	.long sub_FDEFE9                              ; FCF55B  [10]
-	.long sub_FDF024                              ; FCF55F  [11]
-	.long sub_FDF07E                              ; FCF563  [12]
+	.long LcdKeyRow1_ScreenCode92                              ; FCF553  [ 8]
+	.long LcdKeyRow2_ScreenCode92                              ; FCF557  [ 9]
+	.long LcdKeyRow3_ScreenCode92                              ; FCF55B  [10]
+	.long LcdKeyRow4_ScreenCode92                              ; FCF55F  [11]
+	.long LcdKeyRow5_ScreenCode92                              ; FCF563  [12]
 	.long PanelOp_Nop                             ; FCF567  [13]
 	.long PanelOp_Nop                             ; FCF56B  [14]
-	.long sub_FDF0D8                              ; FCF56F  [15]
-	.long sub_FDF0B1                              ; FCF573  [16]
+	.long ExitKey_ScreenCode92                              ; FCF56F  [15]
+	.long PageKey_ScreenCode92                              ; FCF573  [16]
 	.long 0x00000000                              ; FCF577  [17] zero
 
 ; PanelOpTable_FCF57B -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124640,21 +124640,21 @@ PanelOpTable_FCF533:
 PanelOpTable_FCF57B:
 	.long PanelOp_Nop                             ; FCF57B  [ 0]
 	.long PanelOp_Nop                             ; FCF57F  [ 1]
-	.long sub_FDF10C                              ; FCF583  [ 2]
-	.long sub_FDF130                              ; FCF587  [ 3]
-	.long sub_FDF154                              ; FCF58B  [ 4]
-	.long sub_FDF16C                              ; FCF58F  [ 5]
+	.long SoftKeyCol3_ScreenCode93                              ; FCF583  [ 2]
+	.long SoftKeyCol4_ScreenCode93                              ; FCF587  [ 3]
+	.long SoftKeyCol5_ScreenCode93                              ; FCF58B  [ 4]
+	.long SoftKeyCol6_ScreenCode93                              ; FCF58F  [ 5]
 	.long PanelOp_Nop                             ; FCF593  [ 6]
 	.long PanelOp_Nop                             ; FCF597  [ 7]
-	.long sub_FDF184                              ; FCF59B  [ 8]
-	.long sub_FDF195                              ; FCF59F  [ 9]
-	.long sub_FDF1A6                              ; FCF5A3  [10]
-	.long sub_FDF1B7                              ; FCF5A7  [11]
-	.long sub_FDF211                              ; FCF5AB  [12]
+	.long LcdKeyRow1_ScreenCode93                              ; FCF59B  [ 8]
+	.long LcdKeyRow2_ScreenCode93                              ; FCF59F  [ 9]
+	.long LcdKeyRow3_ScreenCode93                              ; FCF5A3  [10]
+	.long LcdKeyRow4_ScreenCode93                              ; FCF5A7  [11]
+	.long LcdKeyRow5_ScreenCode93                              ; FCF5AB  [12]
 	.long PanelOp_Nop                             ; FCF5AF  [13]
 	.long PanelOp_Nop                             ; FCF5B3  [14]
-	.long sub_FDF249                              ; FCF5B7  [15]
-	.long sub_FDF222                              ; FCF5BB  [16]
+	.long ExitKey_ScreenCode93                              ; FCF5B7  [15]
+	.long PageKey_ScreenCode93                              ; FCF5BB  [16]
 	.long 0x00000000                              ; FCF5BF  [17] zero
 
 ; PanelOpTable_FCF5C3 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124662,22 +124662,22 @@ PanelOpTable_FCF57B:
 ; Read by: ScreenButton_Code94 at 0xFDE572.
 PanelOpTable_FCF5C3:
 	.long PanelOp_Nop                             ; FCF5C3  [ 0]
-	.long sub_FDF27D                              ; FCF5C7  [ 1]
-	.long sub_FDF322                              ; FCF5CB  [ 2]
-	.long sub_FDF33E                              ; FCF5CF  [ 3]
-	.long sub_FDF3DF                              ; FCF5D3  [ 4]
-	.long sub_FDF471                              ; FCF5D7  [ 5]
-	.long sub_FDF489                              ; FCF5DB  [ 6]
+	.long SoftKeyCol2_ScreenCode94                              ; FCF5C7  [ 1]
+	.long SoftKeyCol3_ScreenCode94                              ; FCF5CB  [ 2]
+	.long SoftKeyCol4_ScreenCode94                              ; FCF5CF  [ 3]
+	.long SoftKeyCol5_ScreenCode94                              ; FCF5D3  [ 4]
+	.long SoftKeyCol6_ScreenCode94                              ; FCF5D7  [ 5]
+	.long SoftKeyCol7_ScreenCode94                              ; FCF5DB  [ 6]
 	.long PanelOp_Nop                             ; FCF5DF  [ 7]
-	.long sub_FDF4A1                              ; FCF5E3  [ 8]
-	.long sub_FDF4CE                              ; FCF5E7  [ 9]
-	.long sub_FDF4F2                              ; FCF5EB  [10]
-	.long sub_FDF52D                              ; FCF5EF  [11]
-	.long sub_FDF57D                              ; FCF5F3  [12]
+	.long LcdKeyRow1_ScreenCode94                              ; FCF5E3  [ 8]
+	.long LcdKeyRow2_ScreenCode94                              ; FCF5E7  [ 9]
+	.long LcdKeyRow3_ScreenCode94                              ; FCF5EB  [10]
+	.long LcdKeyRow4_ScreenCode94                              ; FCF5EF  [11]
+	.long LcdKeyRow5_ScreenCode94                              ; FCF5F3  [12]
 	.long PanelOp_Nop                             ; FCF5F7  [13]
 	.long PanelOp_Nop                             ; FCF5FB  [14]
-	.long sub_FDF5D7                              ; FCF5FF  [15]
-	.long sub_FDF5B0                              ; FCF603  [16]
+	.long ExitKey_ScreenCode94                              ; FCF5FF  [15]
+	.long PageKey_ScreenCode94                              ; FCF603  [16]
 	.long 0x00000000                              ; FCF607  [17] zero
 
 ; PanelOpTable_FCF60B -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124692,15 +124692,15 @@ PanelOpTable_FCF60B:
 	.long PanelOp_Nop                             ; FCF61F  [ 5]
 	.long PanelOp_Nop                             ; FCF623  [ 6]
 	.long PanelOp_Nop                             ; FCF627  [ 7]
-	.long sub_FDF60B                              ; FCF62B  [ 8]
-	.long sub_FDF638                              ; FCF62F  [ 9]
-	.long sub_FDF65C                              ; FCF633  [10]
-	.long sub_FDF697                              ; FCF637  [11]
-	.long sub_FDF6F1                              ; FCF63B  [12]
+	.long LcdKeyRow1_ScreenCode95                              ; FCF62B  [ 8]
+	.long LcdKeyRow2_ScreenCode95                              ; FCF62F  [ 9]
+	.long LcdKeyRow3_ScreenCode95                              ; FCF633  [10]
+	.long LcdKeyRow4_ScreenCode95                              ; FCF637  [11]
+	.long LcdKeyRow5_ScreenCode95                              ; FCF63B  [12]
 	.long PanelOp_Nop                             ; FCF63F  [13]
 	.long PanelOp_Nop                             ; FCF643  [14]
-	.long sub_FDF74B                              ; FCF647  [15]
-	.long sub_FDF724                              ; FCF64B  [16]
+	.long ExitKey_ScreenCode95                              ; FCF647  [15]
+	.long PageKey_ScreenCode95                              ; FCF64B  [16]
 	.long 0x00000000                              ; FCF64F  [17] zero
 
 ; PanelOpTable_FCF653 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124709,44 +124709,44 @@ PanelOpTable_FCF60B:
 PanelOpTable_FCF653:
 	.long PanelOp_Nop                             ; FCF653  [ 0]
 	.long PanelOp_Nop                             ; FCF657  [ 1]
-	.long sub_FDF77F                              ; FCF65B  [ 2]
-	.long sub_FDF80A                              ; FCF65F  [ 3]
-	.long sub_FDF886                              ; FCF663  [ 4]
-	.long sub_FDF928                              ; FCF667  [ 5]
+	.long SoftKeyCol3_ScreenCode96                              ; FCF65B  [ 2]
+	.long SoftKeyCol4_ScreenCode96                              ; FCF65F  [ 3]
+	.long SoftKeyCol5_ScreenCode96                              ; FCF663  [ 4]
+	.long SoftKeyCol6_ScreenCode96                              ; FCF667  [ 5]
 	.long PanelOp_Nop                             ; FCF66B  [ 6]
 	.long PanelOp_Nop                             ; FCF66F  [ 7]
-	.long sub_FDF9A4                              ; FCF673  [ 8]
-	.long sub_FDF9C2                              ; FCF677  [ 9]
-	.long sub_FDF9E6                              ; FCF67B  [10]
-	.long sub_FDFA12                              ; FCF67F  [11]
-	.long sub_FDFA36                              ; FCF683  [12]
+	.long LcdKeyRow1_ScreenCode96                              ; FCF673  [ 8]
+	.long LcdKeyRow2_ScreenCode96                              ; FCF677  [ 9]
+	.long LcdKeyRow3_ScreenCode96                              ; FCF67B  [10]
+	.long LcdKeyRow4_ScreenCode96                              ; FCF67F  [11]
+	.long LcdKeyRow5_ScreenCode96                              ; FCF683  [12]
 	.long PanelOp_Nop                             ; FCF687  [13]
 	.long PanelOp_Nop                             ; FCF68B  [14]
-	.long sub_FDFA72                              ; FCF68F  [15]
-	.long sub_FDFA5A                              ; FCF693  [16]
+	.long ExitKey_ScreenCode96                              ; FCF68F  [15]
+	.long PageKey_ScreenCode96                              ; FCF693  [16]
 	.long 0x00000000                              ; FCF697  [17] zero
 
 ; PanelOpTable_FCF69B -- 17 handler addresses + the zero word (72 bytes), one per
 ; panel operation 0..16; see the block header for the reader shape.
 ; Read by: ScreenButton_Code97 at 0xFDE683.
 PanelOpTable_FCF69B:
-	.long sub_FDFA92                              ; FCF69B  [ 0]
-	.long sub_FDFAAB                              ; FCF69F  [ 1]
-	.long sub_FDFAC4                              ; FCF6A3  [ 2]
-	.long sub_FDFADD                              ; FCF6A7  [ 3]
-	.long sub_FDFAF6                              ; FCF6AB  [ 4]
-	.long sub_FDFB0F                              ; FCF6AF  [ 5]
-	.long sub_FDFB28                              ; FCF6B3  [ 6]
+	.long SoftKeyCol1_ScreenCode97                              ; FCF69B  [ 0]
+	.long SoftKeyCol2_ScreenCode97                              ; FCF69F  [ 1]
+	.long SoftKeyCol3_ScreenCode97                              ; FCF6A3  [ 2]
+	.long SoftKeyCol4_ScreenCode97                              ; FCF6A7  [ 3]
+	.long SoftKeyCol5_ScreenCode97                              ; FCF6AB  [ 4]
+	.long SoftKeyCol6_ScreenCode97                              ; FCF6AF  [ 5]
+	.long SoftKeyCol7_ScreenCode97                              ; FCF6B3  [ 6]
 	.long PanelOp_Nop                             ; FCF6B7  [ 7]
-	.long sub_FDFB41                              ; FCF6BB  [ 8]
-	.long sub_FDFB52                              ; FCF6BF  [ 9]
-	.long sub_FDFB7E                              ; FCF6C3  [10]
-	.long sub_FDFBAA                              ; FCF6C7  [11]
-	.long sub_FDFBD8                              ; FCF6CB  [12]
+	.long LcdKeyRow1_ScreenCode97                              ; FCF6BB  [ 8]
+	.long LcdKeyRow2_ScreenCode97                              ; FCF6BF  [ 9]
+	.long LcdKeyRow3_ScreenCode97                              ; FCF6C3  [10]
+	.long LcdKeyRow4_ScreenCode97                              ; FCF6C7  [11]
+	.long LcdKeyRow5_ScreenCode97                              ; FCF6CB  [12]
 	.long PanelOp_Nop                             ; FCF6CF  [13]
 	.long PanelOp_Nop                             ; FCF6D3  [14]
-	.long sub_FDFC1E                              ; FCF6D7  [15]
-	.long sub_FDFC06                              ; FCF6DB  [16]
+	.long ExitKey_ScreenCode97                              ; FCF6D7  [15]
+	.long PageKey_ScreenCode97                              ; FCF6DB  [16]
 	.long 0x00000000                              ; FCF6DF  [17] zero
 
 ; PanelOpTable_FCF6E3 -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124754,22 +124754,22 @@ PanelOpTable_FCF69B:
 ; Read by: ScreenButton_Code98 at 0xFDE6E3.
 PanelOpTable_FCF6E3:
 	.long PanelOp_Nop                             ; FCF6E3  [ 0]
-	.long sub_FDFC3E                              ; FCF6E7  [ 1]
-	.long sub_FDFC53                              ; FCF6EB  [ 2]
-	.long sub_FDFC68                              ; FCF6EF  [ 3]
-	.long sub_FDFC7D                              ; FCF6F3  [ 4]
+	.long SoftKeyCol2_ScreenCode98                              ; FCF6E7  [ 1]
+	.long SoftKeyCol3_ScreenCode98                              ; FCF6EB  [ 2]
+	.long SoftKeyCol4_ScreenCode98                              ; FCF6EF  [ 3]
+	.long SoftKeyCol5_ScreenCode98                              ; FCF6F3  [ 4]
 	.long PanelOp_Nop                             ; FCF6F7  [ 5]
-	.long sub_FDFC92                              ; FCF6FB  [ 6]
-	.long sub_FDFCA7                              ; FCF6FF  [ 7]
-	.long sub_FDFCBC                              ; FCF703  [ 8]
-	.long sub_FDFCCD                              ; FCF707  [ 9]
-	.long sub_FDFCF9                              ; FCF70B  [10]
-	.long sub_FDFD25                              ; FCF70F  [11]
-	.long sub_FDFD49                              ; FCF713  [12]
+	.long SoftKeyCol7_ScreenCode98                              ; FCF6FB  [ 6]
+	.long SoftKeyCol8_ScreenCode98                              ; FCF6FF  [ 7]
+	.long LcdKeyRow1_ScreenCode98                              ; FCF703  [ 8]
+	.long LcdKeyRow2_ScreenCode98                              ; FCF707  [ 9]
+	.long LcdKeyRow3_ScreenCode98                              ; FCF70B  [10]
+	.long LcdKeyRow4_ScreenCode98                              ; FCF70F  [11]
+	.long LcdKeyRow5_ScreenCode98                              ; FCF713  [12]
 	.long PanelOp_Nop                             ; FCF717  [13]
 	.long PanelOp_Nop                             ; FCF71B  [14]
-	.long sub_FDFD85                              ; FCF71F  [15]
-	.long sub_FDFD6D                              ; FCF723  [16]
+	.long ExitKey_ScreenCode98                              ; FCF71F  [15]
+	.long PageKey_ScreenCode98                              ; FCF723  [16]
 	.long 0x00000000                              ; FCF727  [17] zero
 
 ; PanelOpTable_FCF72B -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124800,22 +124800,22 @@ PanelOpTable_FCF72B:
 ; Read by: ScreenButton_CodeCD at 0xFD056A.
 PanelOpTable_FCF773:
 	.long PanelOp_Nop                             ; FCF773  [ 0]
-	.long sub_FD0602                              ; FCF777  [ 1]
+	.long SoftKeyCol2_ScreenCodeCD                              ; FCF777  [ 1]
 	.long PanelOp_Nop                             ; FCF77B  [ 2]
-	.long sub_FD062B                              ; FCF77F  [ 3]
-	.long sub_FD063D                              ; FCF783  [ 4]
-	.long sub_FD0652                              ; FCF787  [ 5]
-	.long sub_FD0667                              ; FCF78B  [ 6]
-	.long sub_FD068B                              ; FCF78F  [ 7]
+	.long SoftKeyCol4_ScreenCodeCD                              ; FCF77F  [ 3]
+	.long SoftKeyCol5_ScreenCodeCD                              ; FCF783  [ 4]
+	.long SoftKeyCol6_ScreenCodeCD                              ; FCF787  [ 5]
+	.long SoftKeyCol7_ScreenCodeCD                              ; FCF78B  [ 6]
+	.long SoftKeyCol8_ScreenCodeCD                              ; FCF78F  [ 7]
 	.long PanelOp_Nop                             ; FCF793  [ 8]
-	.long sub_FD06AF                              ; FCF797  [ 9]
-	.long sub_FD070B                              ; FCF79B  [10]
-	.long sub_FD0767                              ; FCF79F  [11]
+	.long LcdKeyRow2_ScreenCodeCD                              ; FCF797  [ 9]
+	.long LcdKeyRow3_ScreenCodeCD                              ; FCF79B  [10]
+	.long LcdKeyRow4_ScreenCodeCD                              ; FCF79F  [11]
 	.long PanelOp_Nop                             ; FCF7A3  [12]
 	.long PanelOp_Nop                             ; FCF7A7  [13]
 	.long PanelOp_Nop                             ; FCF7AB  [14]
-	.long sub_FD0857                              ; FCF7AF  [15]
-	.long sub_FD083F                              ; FCF7B3  [16]
+	.long ExitKey_ScreenCodeCD                              ; FCF7AF  [15]
+	.long PageKey_ScreenCodeCD                              ; FCF7B3  [16]
 	.long 0x00000000                              ; FCF7B7  [17] zero
 
 ; PanelOpTable_FCF7BB -- 17 handler addresses + the zero word (72 bytes), one per
@@ -124823,26 +124823,26 @@ PanelOpTable_FCF773:
 ; Read by: ScreenButton_Code9B at 0xFD05DE.
 PanelOpTable_FCF7BB:
 	.long PanelOp_Nop                             ; FCF7BB  [ 0]
-	.long sub_FD0883                              ; FCF7BF  [ 1]
+	.long SoftKeyCol2_ScreenCode9B                              ; FCF7BF  [ 1]
 	.long PanelOp_Nop                             ; FCF7C3  [ 2]
-	.long sub_FD08A3                              ; FCF7C7  [ 3]
-	.long sub_FD08B5                              ; FCF7CB  [ 4]
-	.long sub_FD08CA                              ; FCF7CF  [ 5]
-	.long sub_FD08DF                              ; FCF7D3  [ 6]
-	.long sub_FD0903                              ; FCF7D7  [ 7]
-	.long sub_FD0927                              ; FCF7DB  [ 8]
-	.long sub_FD095D                              ; FCF7DF  [ 9]
-	.long sub_FD099E                              ; FCF7E3  [10]
-	.long sub_FD09DF                              ; FCF7E7  [11]
-	.long sub_FD0A20                              ; FCF7EB  [12]
+	.long SoftKeyCol4_ScreenCode9B                              ; FCF7C7  [ 3]
+	.long SoftKeyCol5_ScreenCode9B                              ; FCF7CB  [ 4]
+	.long SoftKeyCol6_ScreenCode9B                              ; FCF7CF  [ 5]
+	.long SoftKeyCol7_ScreenCode9B                              ; FCF7D3  [ 6]
+	.long SoftKeyCol8_ScreenCode9B                              ; FCF7D7  [ 7]
+	.long LcdKeyRow1_ScreenCode9B                              ; FCF7DB  [ 8]
+	.long LcdKeyRow2_ScreenCode9B                              ; FCF7DF  [ 9]
+	.long LcdKeyRow3_ScreenCode9B                              ; FCF7E3  [10]
+	.long LcdKeyRow4_ScreenCode9B                              ; FCF7E7  [11]
+	.long LcdKeyRow5_ScreenCode9B                              ; FCF7EB  [12]
 	.long PanelOp_Nop                             ; FCF7EF  [13]
 	.long PanelOp_Nop                             ; FCF7F3  [14]
-	.long sub_FD0A79                              ; FCF7F7  [15]
-	.long sub_FD0A61                              ; FCF7FB  [16]
+	.long ExitKey_ScreenCode9B                              ; FCF7F7  [15]
+	.long PageKey_ScreenCode9B                              ; FCF7FB  [16]
 	.long 0x00000000                              ; FCF7FF  [17] zero
 
 ; BitMask_Bit0to7 -- 9 bytes: 1<<0 .. 1<<7, then 0x00.
-; Read by: sub_FD0767 at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
+; Read by: LcdKeyRow4_ScreenCodeCD at 0xFD07E5: `ld C,H / add XBC,0x00FCF803 / ld A,(XBC)` with
 ;          H forced into 0..5 just before (`cp H,6 / jr c` else H = 0), so
 ;          this reader uses entries 0-5 only.  Entries 6-8 (0x40, 0x80, 0x00)
 ;          complete the 8-bit ladder and a zero; no other reader is known.
@@ -124854,21 +124854,21 @@ BitMask_Bit0to7:
 ; Read by: ScreenButton_Code82 at 0xFD0AD2.
 PanelOpTable_FCF80C:
 	.long PanelOp_Nop                             ; FCF80C  [ 0]
-	.long sub_FD0C58                              ; FCF810  [ 1]
-	.long sub_FD0CED                              ; FCF814  [ 2]
+	.long SoftKeyCol2_ScreenCode82                              ; FCF810  [ 1]
+	.long SoftKeyCol3_ScreenCode82                              ; FCF814  [ 2]
 	.long PanelOp_Nop                             ; FCF818  [ 3]
-	.long sub_FD0D61                              ; FCF81C  [ 4]
-	.long sub_FD0E1C                              ; FCF820  [ 5]
-	.long sub_FD0ECA                              ; FCF824  [ 6]
+	.long SoftKeyCol5_ScreenCode82                              ; FCF81C  [ 4]
+	.long SoftKeyCol6_ScreenCode82                              ; FCF820  [ 5]
+	.long SoftKeyCol7_ScreenCode82                              ; FCF824  [ 6]
 	.long PanelOp_Nop                             ; FCF828  [ 7]
-	.long sub_FD0F68                              ; FCF82C  [ 8]
-	.long sub_FD0F79                              ; FCF830  [ 9]
-	.long sub_FD0FA2                              ; FCF834  [10]
-	.long sub_FD0FCB                              ; FCF838  [11]
-	.long sub_FD0FF4                              ; FCF83C  [12]
+	.long LcdKeyRow1_ScreenCode82                              ; FCF82C  [ 8]
+	.long LcdKeyRow2_ScreenCode82                              ; FCF830  [ 9]
+	.long LcdKeyRow3_ScreenCode82                              ; FCF834  [10]
+	.long LcdKeyRow4_ScreenCode82                              ; FCF838  [11]
+	.long LcdKeyRow5_ScreenCode82                              ; FCF83C  [12]
 	.long PanelOp_Nop                             ; FCF840  [13]
 	.long PanelOp_Nop                             ; FCF844  [14]
-	.long sub_FD1010                              ; FCF848  [15]
+	.long ExitKey_ScreenCode82                              ; FCF848  [15]
 	.long PanelOp_Nop                             ; FCF84C  [16]
 	.long 0x00000000                              ; FCF850  [17] zero
 
@@ -124877,21 +124877,21 @@ PanelOpTable_FCF80C:
 ; Read by: ScreenButton_Code83 at 0xFD0B23.
 PanelOpTable_FCF854:
 	.long PanelOp_Nop                             ; FCF854  [ 0]
-	.long sub_FD1028                              ; FCF858  [ 1]
-	.long sub_FD11D7                              ; FCF85C  [ 2]
-	.long sub_FD1159                              ; FCF860  [ 3]
+	.long SoftKeyCol2_ScreenCode83                              ; FCF858  [ 1]
+	.long SoftKeyCol3_ScreenCode83                              ; FCF85C  [ 2]
+	.long SoftKeyCol4_ScreenCode83                              ; FCF860  [ 3]
 	.long PanelOp_Nop                             ; FCF864  [ 4]
 	.long PanelOp_Nop                             ; FCF868  [ 5]
 	.long PanelOp_Nop                             ; FCF86C  [ 6]
 	.long PanelOp_Nop                             ; FCF870  [ 7]
-	.long sub_FD12B0                              ; FCF874  [ 8]
-	.long sub_FD12EC                              ; FCF878  [ 9]
-	.long sub_FD1315                              ; FCF87C  [10]
-	.long sub_FD133E                              ; FCF880  [11]
-	.long sub_FD1385                              ; FCF884  [12]
+	.long LcdKeyRow1_ScreenCode83                              ; FCF874  [ 8]
+	.long LcdKeyRow2_ScreenCode83                              ; FCF878  [ 9]
+	.long LcdKeyRow3_ScreenCode83                              ; FCF87C  [10]
+	.long LcdKeyRow4_ScreenCode83                              ; FCF880  [11]
+	.long LcdKeyRow5_ScreenCode83                              ; FCF884  [12]
 	.long PanelOp_Nop                             ; FCF888  [13]
 	.long PanelOp_Nop                             ; FCF88C  [14]
-	.long sub_FD13A1                              ; FCF890  [15]
+	.long ExitKey_ScreenCode83                              ; FCF890  [15]
 	.long PanelOp_Nop                             ; FCF894  [16]
 	.long 0x00000000                              ; FCF898  [17] zero
 
@@ -124901,20 +124901,20 @@ PanelOpTable_FCF854:
 PanelOpTable_FCF89C:
 	.long PanelOp_Nop                             ; FCF89C  [ 0]
 	.long PanelOp_Nop                             ; FCF8A0  [ 1]
-	.long sub_FD13C1                              ; FCF8A4  [ 2]
-	.long sub_FD1443                              ; FCF8A8  [ 3]
-	.long sub_FD14EB                              ; FCF8AC  [ 4]
-	.long sub_FD1593                              ; FCF8B0  [ 5]
+	.long SoftKeyCol3_ScreenCode84                              ; FCF8A4  [ 2]
+	.long SoftKeyCol4_ScreenCode84                              ; FCF8A8  [ 3]
+	.long SoftKeyCol5_ScreenCode84                              ; FCF8AC  [ 4]
+	.long SoftKeyCol6_ScreenCode84                              ; FCF8B0  [ 5]
 	.long PanelOp_Nop                             ; FCF8B4  [ 6]
 	.long PanelOp_Nop                             ; FCF8B8  [ 7]
-	.long sub_FD1615                              ; FCF8BC  [ 8]
-	.long sub_FD163E                              ; FCF8C0  [ 9]
-	.long sub_FD1662                              ; FCF8C4  [10]
-	.long sub_FD168E                              ; FCF8C8  [11]
-	.long sub_FD16C5                              ; FCF8CC  [12]
+	.long LcdKeyRow1_ScreenCode84                              ; FCF8BC  [ 8]
+	.long LcdKeyRow2_ScreenCode84                              ; FCF8C0  [ 9]
+	.long LcdKeyRow3_ScreenCode84                              ; FCF8C4  [10]
+	.long LcdKeyRow4_ScreenCode84                              ; FCF8C8  [11]
+	.long LcdKeyRow5_ScreenCode84                              ; FCF8CC  [12]
 	.long PanelOp_Nop                             ; FCF8D0  [13]
 	.long PanelOp_Nop                             ; FCF8D4  [14]
-	.long sub_FD16E9                              ; FCF8D8  [15]
+	.long ExitKey_ScreenCode84                              ; FCF8D8  [15]
 	.long PanelOp_Nop                             ; FCF8DC  [16]
 	.long 0x00000000                              ; FCF8E0  [17] zero
 
@@ -124924,20 +124924,20 @@ PanelOpTable_FCF89C:
 PanelOpTable_FCF8E4:
 	.long PanelOp_Nop                             ; FCF8E4  [ 0]
 	.long PanelOp_Nop                             ; FCF8E8  [ 1]
-	.long sub_FD1709                              ; FCF8EC  [ 2]
-	.long sub_FD1790                              ; FCF8F0  [ 3]
-	.long sub_FD1827                              ; FCF8F4  [ 4]
-	.long sub_FD18BE                              ; FCF8F8  [ 5]
+	.long SoftKeyCol3_ScreenCode85                              ; FCF8EC  [ 2]
+	.long SoftKeyCol4_ScreenCode85                              ; FCF8F0  [ 3]
+	.long SoftKeyCol5_ScreenCode85                              ; FCF8F4  [ 4]
+	.long SoftKeyCol6_ScreenCode85                              ; FCF8F8  [ 5]
 	.long PanelOp_Nop                             ; FCF8FC  [ 6]
 	.long PanelOp_Nop                             ; FCF900  [ 7]
-	.long sub_FD1945                              ; FCF904  [ 8]
-	.long sub_FD196E                              ; FCF908  [ 9]
-	.long sub_FD199A                              ; FCF90C  [10]
-	.long sub_FD19BE                              ; FCF910  [11]
-	.long sub_FD19F5                              ; FCF914  [12]
+	.long LcdKeyRow1_ScreenCode85                              ; FCF904  [ 8]
+	.long LcdKeyRow2_ScreenCode85                              ; FCF908  [ 9]
+	.long LcdKeyRow3_ScreenCode85                              ; FCF90C  [10]
+	.long LcdKeyRow4_ScreenCode85                              ; FCF910  [11]
+	.long LcdKeyRow5_ScreenCode85                              ; FCF914  [12]
 	.long PanelOp_Nop                             ; FCF918  [13]
 	.long PanelOp_Nop                             ; FCF91C  [14]
-	.long sub_FD1A19                              ; FCF920  [15]
+	.long ExitKey_ScreenCode85                              ; FCF920  [15]
 	.long PanelOp_Nop                             ; FCF924  [16]
 	.long 0x00000000                              ; FCF928  [17] zero
 
@@ -124946,21 +124946,21 @@ PanelOpTable_FCF8E4:
 ; Read by: ScreenButton_Code86 at 0xFD0C34.
 PanelOpTable_FCF92C:
 	.long PanelOp_Nop                             ; FCF92C  [ 0]
-	.long sub_FD1A9C                              ; FCF930  [ 1]
-	.long sub_FD1B45                              ; FCF934  [ 2]
+	.long SoftKeyCol2_ScreenCode86                              ; FCF930  [ 1]
+	.long SoftKeyCol3_ScreenCode86                              ; FCF934  [ 2]
 	.long PanelOp_Nop                             ; FCF938  [ 3]
 	.long PanelOp_Nop                             ; FCF93C  [ 4]
-	.long sub_FD1BCF                              ; FCF940  [ 5]
+	.long SoftKeyCol6_ScreenCode86                              ; FCF940  [ 5]
 	.long PanelOp_Nop                             ; FCF944  [ 6]
-	.long sub_FD1A39                              ; FCF948  [ 7]
-	.long sub_FD1F3D                              ; FCF94C  [ 8]
-	.long sub_FD1F5B                              ; FCF950  [ 9]
-	.long sub_FD1F7F                              ; FCF954  [10]
-	.long sub_FD1FAB                              ; FCF958  [11]
-	.long sub_FD1FD7                              ; FCF95C  [12]
+	.long SoftKeyCol8_ScreenCode86                              ; FCF948  [ 7]
+	.long LcdKeyRow1_ScreenCode86                              ; FCF94C  [ 8]
+	.long LcdKeyRow2_ScreenCode86                              ; FCF950  [ 9]
+	.long LcdKeyRow3_ScreenCode86                              ; FCF954  [10]
+	.long LcdKeyRow4_ScreenCode86                              ; FCF958  [11]
+	.long LcdKeyRow5_ScreenCode86                              ; FCF95C  [12]
 	.long PanelOp_Nop                             ; FCF960  [13]
 	.long PanelOp_Nop                             ; FCF964  [14]
-	.long sub_FD1FFB                              ; FCF968  [15]
+	.long ExitKey_ScreenCode86                              ; FCF968  [15]
 	.long PanelOp_Nop                             ; FCF96C  [16]
 	.long 0x00000000                              ; FCF970  [17] zero
 
@@ -125398,8 +125398,11 @@ ScreenButton_Code80:
 .LFCFE3F:
 	unlk XIZ                                             ; FCFE3F  ee 0d
 	ret                                                  ; FCFE41  0e
-; sub_FCFE42 -- a handler: an entry of DispatchTable_FCF000
-sub_FCFE42:
+; SoftKeyCol1_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol1_ScreenCode80: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 0 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode80:
 	link XIZ,0xfffc                                      ; FCFE42  ee 0c fc ff
 	pushw hl                                             ; FCFE46  2b
 	lda xbc, (xiz-2)                                     ; FCFE47  be fe 31
@@ -125442,8 +125445,11 @@ sub_FCFE42:
 	popw hl                                              ; FCFE9D  4b
 	unlk XIZ                                             ; FCFE9E  ee 0d
 	ret                                                  ; FCFEA0  0e
-; sub_FCFEA1 -- a handler: an entry of DispatchTable_FCF000
-sub_FCFEA1:
+; SoftKeyCol2_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol2_ScreenCode80: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 1 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode80:
 	link XIZ,0xfff6                                      ; FCFEA1  ee 0c f6 ff
 	pushw hl                                             ; FCFEA5  2b
 	lda xbc, (xiz-2)                                     ; FCFEA6  be fe 31
@@ -125510,8 +125516,11 @@ sub_FCFEA1:
 	popw hl                                              ; FCFF42  4b
 	unlk XIZ                                             ; FCFF43  ee 0d
 	ret                                                  ; FCFF45  0e
-; sub_FCFF46 -- a handler: an entry of DispatchTable_FCF000
-sub_FCFF46:
+; SoftKeyCol3_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol3_ScreenCode80: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 2 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode80:
 	link XIZ,0xfff8                                      ; FCFF46  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FCFF4A  be fe 31
 	push XBC                                             ; FCFF4D  39
@@ -125566,8 +125575,11 @@ sub_FCFF46:
 .LFCFFC7:
 	unlk XIZ                                             ; FCFFC7  ee 0d
 	ret                                                  ; FCFFC9  0e
-; sub_FCFFCA -- a handler: an entry of DispatchTable_FCF000
-sub_FCFFCA:
+; SoftKeyCol4_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol4_ScreenCode80: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 3 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode80:
 	link XIZ,0xffec                                      ; FCFFCA  ee 0c ec ff
 	pushw hl                                             ; FCFFCE  2b
 	pushw de                                             ; FCFFCF  2a
@@ -125637,8 +125649,11 @@ sub_FCFFCA:
 	popw hl                                              ; FD0067  4b
 	unlk XIZ                                             ; FD0068  ee 0d
 	ret                                                  ; FD006A  0e
-; sub_FD006B -- a handler: an entry of DispatchTable_FCF000
-sub_FD006B:
+; SoftKeyCol5_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol5_ScreenCode80: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 4 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode80:
 	link XIZ,0xffec                                      ; FD006B  ee 0c ec ff
 	pushw hl                                             ; FD006F  2b
 	pushw de                                             ; FD0070  2a
@@ -125696,8 +125711,11 @@ sub_FD006B:
 	popw hl                                              ; FD00F1  4b
 	unlk XIZ                                             ; FD00F2  ee 0d
 	ret                                                  ; FD00F4  0e
-; sub_FD00F5 -- a handler: an entry of DispatchTable_FCF000
-sub_FD00F5:
+; SoftKeyCol6_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol6_ScreenCode80: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 5 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode80:
 	link XIZ,0xffec                                      ; FD00F5  ee 0c ec ff
 	pushw hl                                             ; FD00F9  2b
 	pushw de                                             ; FD00FA  2a
@@ -125754,8 +125772,11 @@ sub_FD00F5:
 	popw hl                                              ; FD0179  4b
 	unlk XIZ                                             ; FD017A  ee 0d
 	ret                                                  ; FD017C  0e
-; sub_FD017D -- a handler: an entry of DispatchTable_FCF000
-sub_FD017D:
+; SoftKeyCol7_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol7_ScreenCode80: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 6 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode80:
 	link XIZ,0xfff8                                      ; FD017D  ee 0c f8 ff
 	pushw hl                                             ; FD0181  2b
 	pushw de                                             ; FD0182  2a
@@ -125851,8 +125872,11 @@ sub_FD017D:
 	popw hl                                              ; FD0263  4b
 	unlk XIZ                                             ; FD0264  ee 0d
 	ret                                                  ; FD0266  0e
-; sub_FD0267 -- a handler: an entry of DispatchTable_FCF000
-sub_FD0267:
+; SoftKeyCol8_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; SoftKeyCol8_ScreenCode80: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode80 -- ScreenCode80 op 7 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode80:
 	link XIZ,0xfff2                                      ; FD0267  ee 0c f2 ff
 	push XIX                                             ; FD026B  3c
 	lda xix, (xiz-14)                                    ; FD026C  be f2 34
@@ -125889,8 +125913,11 @@ sub_FD0267:
 	pop XIX                                              ; FD02C7  5c
 	unlk XIZ                                             ; FD02C8  ee 0d
 	ret                                                  ; FD02CA  0e
-; sub_FD02CB -- a handler: an entry of DispatchTable_FCF000
-sub_FD02CB:
+; LcdKeyRow1_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow1_ScreenCode80: LCD key row 1 (left or right) on ScreenCode80 -- ScreenCode80 op 8 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode80:
 	link XIZ,0xfff8                                      ; FD02CB  ee 0c f8 ff
 	pushw hl                                             ; FD02CF  2b
 	lda xbc, (xiz-2)                                     ; FD02D0  be fe 31
@@ -125965,8 +125992,11 @@ sub_FD02CB:
 	popw hl                                              ; FD0370  4b
 	unlk XIZ                                             ; FD0371  ee 0d
 	ret                                                  ; FD0373  0e
-; sub_FD0374 -- a handler: an entry of DispatchTable_FCF000
-sub_FD0374:
+; LcdKeyRow2_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow2_ScreenCode80: LCD key row 2 (left or right) on ScreenCode80 -- ScreenCode80 op 9 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode80:
 	link XIZ,0xfffa                                      ; FD0374  ee 0c fa ff
 	pushw hl                                             ; FD0378  2b
 	lda xbc, (xiz-2)                                     ; FD0379  be fe 31
@@ -126033,8 +126063,11 @@ sub_FD0374:
 	popw hl                                              ; FD0405  4b
 	unlk XIZ                                             ; FD0406  ee 0d
 	ret                                                  ; FD0408  0e
-; sub_FD0409 -- a handler: an entry of DispatchTable_FCF000
-sub_FD0409:
+; LcdKeyRow3_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow3_ScreenCode80: LCD key row 3 (left or right) on ScreenCode80 -- ScreenCode80 op 10 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode80:
 	link XIZ,0xfffc                                      ; FD0409  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD040D  be fe 31
 	push XBC                                             ; FD0410  39
@@ -126076,8 +126109,11 @@ sub_FD0409:
 .LFD046C:
 	unlk XIZ                                             ; FD046C  ee 0d
 	ret                                                  ; FD046E  0e
-; sub_FD046F -- a handler: an entry of DispatchTable_FCF000
-sub_FD046F:
+; LcdKeyRow4_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow4_ScreenCode80: LCD key row 4 (left or right) on ScreenCode80 -- ScreenCode80 op 11 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode80:
 	link XIZ,0xfffc                                      ; FD046F  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD0473  be fe 31
 	push XBC                                             ; FD0476  39
@@ -126119,8 +126155,11 @@ sub_FD046F:
 .LFD04D2:
 	unlk XIZ                                             ; FD04D2  ee 0d
 	ret                                                  ; FD04D4  0e
-; sub_FD04D5 -- a handler: an entry of DispatchTable_FCF000
-sub_FD04D5:
+; LcdKeyRow5_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; LcdKeyRow5_ScreenCode80: LCD key row 5 (left or right) on ScreenCode80 -- ScreenCode80 op 12 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode80:
 	link XIZ,0xfffe                                      ; FD04D5  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD04D9  be fe 31
 	push XBC                                             ; FD04DC  39
@@ -126155,8 +126194,11 @@ sub_FD04D5:
 .LFD051E:
 	unlk XIZ                                             ; FD051E  ee 0d
 	ret                                                  ; FD0520  0e
-; sub_FD0521 -- a handler: an entry of DispatchTable_FCF000
-sub_FD0521:
+; ExitKey_ScreenCode80 -- a handler: an entry of DispatchTable_FCF000
+; ExitKey_ScreenCode80: the EXIT key on ScreenCode80 -- ScreenCode80 op 15 (DispatchTable_FCF000).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode80:
 	link XIZ,0x0000                                      ; FD0521  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0525  8e 08 3f 00
 	jr nz, .LFD053A                                      ; FD0529  6e 0f
@@ -126253,8 +126295,11 @@ ScreenButton_Code9B:
 .LFD05FF:
 	unlk XIZ                                             ; FD05FF  ee 0d
 	ret                                                  ; FD0601  0e
-; sub_FD0602 -- a handler: an entry of PanelOpTable_FCF773
-sub_FD0602:
+; SoftKeyCol2_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol2_ScreenCodeCD: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 1 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCodeCD:
 	link XIZ,0x0000                                      ; FD0602  ee 0c 00 00
 	pushw 0x01                                           ; FD0606  0b 01 00
 	ld BC,(XIZ+0x08)                                     ; FD0609  9e 08 21
@@ -126270,8 +126315,11 @@ sub_FD0602:
 	inc 2,XSP                                            ; FD0626  ef 62
 	unlk XIZ                                             ; FD0628  ee 0d
 	ret                                                  ; FD062A  0e
-; sub_FD062B -- a handler: an entry of PanelOpTable_FCF773
-sub_FD062B:
+; SoftKeyCol4_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol4_ScreenCodeCD: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 3 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCodeCD:
 	link XIZ,0x0000                                      ; FD062B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD062F  9e 08 21
 	extz BC                                              ; FD0632  d9 12
@@ -126280,8 +126328,11 @@ sub_FD062B:
 	popw bc                                              ; FD0639  49
 	unlk XIZ                                             ; FD063A  ee 0d
 	ret                                                  ; FD063C  0e
-; sub_FD063D -- a handler: an entry of PanelOpTable_FCF773
-sub_FD063D:
+; SoftKeyCol5_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol5_ScreenCodeCD: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 4 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCodeCD:
 	link XIZ,0x0000                                      ; FD063D  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0641  9e 08 21
 	extz BC                                              ; FD0644  d9 12
@@ -126291,8 +126342,11 @@ sub_FD063D:
 	pop XBC                                              ; FD064E  59
 	unlk XIZ                                             ; FD064F  ee 0d
 	ret                                                  ; FD0651  0e
-; sub_FD0652 -- a handler: an entry of PanelOpTable_FCF773
-sub_FD0652:
+; SoftKeyCol6_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol6_ScreenCodeCD: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 5 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCodeCD:
 	link XIZ,0x0000                                      ; FD0652  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD0656  9e 08 21
 	extz BC                                              ; FD0659  d9 12
@@ -126302,8 +126356,11 @@ sub_FD0652:
 	pop XBC                                              ; FD0663  59
 	unlk XIZ                                             ; FD0664  ee 0d
 	ret                                                  ; FD0666  0e
-; sub_FD0667 -- a handler: an entry of PanelOpTable_FCF773
-sub_FD0667:
+; SoftKeyCol7_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol7_ScreenCodeCD: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 6 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCodeCD:
 	link XIZ,0xfffe                                      ; FD0667  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD066B  be fe 31
 	push XBC                                             ; FD066E  39
@@ -126320,8 +126377,11 @@ sub_FD0667:
 .LFD0688:
 	unlk XIZ                                             ; FD0688  ee 0d
 	ret                                                  ; FD068A  0e
-; sub_FD068B -- a handler: an entry of PanelOpTable_FCF773
-sub_FD068B:
+; SoftKeyCol8_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; SoftKeyCol8_ScreenCodeCD: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCodeCD -- ScreenCodeCD op 7 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCodeCD:
 	link XIZ,0xfffe                                      ; FD068B  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD068F  be fe 31
 	push XBC                                             ; FD0692  39
@@ -126338,8 +126398,11 @@ sub_FD068B:
 .LFD06AC:
 	unlk XIZ                                             ; FD06AC  ee 0d
 	ret                                                  ; FD06AE  0e
-; sub_FD06AF -- a handler: an entry of PanelOpTable_FCF773
-sub_FD06AF:
+; LcdKeyRow2_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow2_ScreenCodeCD: LCD key row 2 (left or right) on ScreenCodeCD -- ScreenCodeCD op 9 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCodeCD:
 	link XIZ,0xfffe                                      ; FD06AF  ee 0c fe ff
 	pushw hl                                             ; FD06B3  2b
 	lda xbc, (xiz-2)                                     ; FD06B4  be fe 31
@@ -126380,8 +126443,11 @@ sub_FD06AF:
 	popw hl                                              ; FD0707  4b
 	unlk XIZ                                             ; FD0708  ee 0d
 	ret                                                  ; FD070A  0e
-; sub_FD070B -- a handler: an entry of PanelOpTable_FCF773
-sub_FD070B:
+; LcdKeyRow3_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow3_ScreenCodeCD: LCD key row 3 (left or right) on ScreenCodeCD -- ScreenCodeCD op 10 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCodeCD:
 	link XIZ,0xfffe                                      ; FD070B  ee 0c fe ff
 	pushw hl                                             ; FD070F  2b
 	lda xbc, (xiz-2)                                     ; FD0710  be fe 31
@@ -126422,8 +126488,11 @@ sub_FD070B:
 	popw hl                                              ; FD0763  4b
 	unlk XIZ                                             ; FD0764  ee 0d
 	ret                                                  ; FD0766  0e
-; sub_FD0767 -- a handler: an entry of PanelOpTable_FCF773
-sub_FD0767:
+; LcdKeyRow4_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; LcdKeyRow4_ScreenCodeCD: LCD key row 4 (left or right) on ScreenCodeCD -- ScreenCodeCD op 11 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCodeCD:
 	link XIZ,0xfffc                                      ; FD0767  ee 0c fc ff
 	pushw hl                                             ; FD076B  2b
 	pushw de                                             ; FD076C  2a
@@ -126525,8 +126594,11 @@ sub_FD0767:
 	popw hl                                              ; FD083B  4b
 	unlk XIZ                                             ; FD083C  ee 0d
 	ret                                                  ; FD083E  0e
-; sub_FD083F -- a handler: an entry of PanelOpTable_FCF773
-sub_FD083F:
+; PageKey_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; PageKey_ScreenCodeCD: the PAGE pair (code 0x10) on ScreenCodeCD -- ScreenCodeCD op 16 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCodeCD:
 	link XIZ,0x0000                                      ; FD083F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0843  8e 08 3f 00
 	jr nz, .LFD0854                                      ; FD0847  6e 0b
@@ -126537,8 +126609,11 @@ sub_FD083F:
 .LFD0854:
 	unlk XIZ                                             ; FD0854  ee 0d
 	ret                                                  ; FD0856  0e
-; sub_FD0857 -- a handler: an entry of PanelOpTable_FCF773
-sub_FD0857:
+; ExitKey_ScreenCodeCD -- a handler: an entry of PanelOpTable_FCF773
+; ExitKey_ScreenCodeCD: the EXIT key on ScreenCodeCD -- ScreenCodeCD op 15 (PanelOpTable_FCF773).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCodeCD:
 	link XIZ,0xfffe                                      ; FD0857  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD085B  be fe 31
 	push XBC                                             ; FD085E  39
@@ -126559,8 +126634,11 @@ sub_FD0857:
 .LFD0880:
 	unlk XIZ                                             ; FD0880  ee 0d
 	ret                                                  ; FD0882  0e
-; sub_FD0883 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0883:
+; SoftKeyCol2_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol2_ScreenCode9B: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 1 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode9B:
 	link XIZ,0x0000                                      ; FD0883  ee 0c 00 00
 	pushw 0x02                                           ; FD0887  0b 02 00
 	ld BC,(XIZ+0x08)                                     ; FD088A  9e 08 21
@@ -126573,8 +126651,11 @@ sub_FD0883:
 	inc 8,XSP                                            ; FD089E  ef 60
 	unlk XIZ                                             ; FD08A0  ee 0d
 	ret                                                  ; FD08A2  0e
-; sub_FD08A3 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD08A3:
+; SoftKeyCol4_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol4_ScreenCode9B: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 3 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode9B:
 	link XIZ,0x0000                                      ; FD08A3  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08A7  9e 08 21
 	extz BC                                              ; FD08AA  d9 12
@@ -126583,8 +126664,11 @@ sub_FD08A3:
 	popw bc                                              ; FD08B1  49
 	unlk XIZ                                             ; FD08B2  ee 0d
 	ret                                                  ; FD08B4  0e
-; sub_FD08B5 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD08B5:
+; SoftKeyCol5_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol5_ScreenCode9B: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 4 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode9B:
 	link XIZ,0x0000                                      ; FD08B5  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08B9  9e 08 21
 	extz BC                                              ; FD08BC  d9 12
@@ -126594,8 +126678,11 @@ sub_FD08B5:
 	pop XBC                                              ; FD08C6  59
 	unlk XIZ                                             ; FD08C7  ee 0d
 	ret                                                  ; FD08C9  0e
-; sub_FD08CA -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD08CA:
+; SoftKeyCol6_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol6_ScreenCode9B: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 5 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode9B:
 	link XIZ,0x0000                                      ; FD08CA  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FD08CE  9e 08 21
 	extz BC                                              ; FD08D1  d9 12
@@ -126605,8 +126692,11 @@ sub_FD08CA:
 	pop XBC                                              ; FD08DB  59
 	unlk XIZ                                             ; FD08DC  ee 0d
 	ret                                                  ; FD08DE  0e
-; sub_FD08DF -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD08DF:
+; SoftKeyCol7_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol7_ScreenCode9B: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 6 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD08DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD08E3  be fe 31
 	push XBC                                             ; FD08E6  39
@@ -126623,8 +126713,11 @@ sub_FD08DF:
 .LFD0900:
 	unlk XIZ                                             ; FD0900  ee 0d
 	ret                                                  ; FD0902  0e
-; sub_FD0903 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0903:
+; SoftKeyCol8_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; SoftKeyCol8_ScreenCode9B: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode9B -- ScreenCode9B op 7 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD0903  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0907  be fe 31
 	push XBC                                             ; FD090A  39
@@ -126641,8 +126734,11 @@ sub_FD0903:
 .LFD0924:
 	unlk XIZ                                             ; FD0924  ee 0d
 	ret                                                  ; FD0926  0e
-; sub_FD0927 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0927:
+; LcdKeyRow1_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow1_ScreenCode9B: LCD key row 1 (left or right) on ScreenCode9B -- ScreenCode9B op 8 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD0927  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD092B  8e 08 3f 00
 	jr z, .LFD095A                                       ; FD092F  66 29
@@ -126663,8 +126759,11 @@ sub_FD0927:
 .LFD095A:
 	unlk XIZ                                             ; FD095A  ee 0d
 	ret                                                  ; FD095C  0e
-; sub_FD095D -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD095D:
+; LcdKeyRow2_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow2_ScreenCode9B: LCD key row 2 (left or right) on ScreenCode9B -- ScreenCode9B op 9 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD095D  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0961  be fe 31
 	push XBC                                             ; FD0964  39
@@ -126691,8 +126790,11 @@ sub_FD095D:
 .LFD099B:
 	unlk XIZ                                             ; FD099B  ee 0d
 	ret                                                  ; FD099D  0e
-; sub_FD099E -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD099E:
+; LcdKeyRow3_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow3_ScreenCode9B: LCD key row 3 (left or right) on ScreenCode9B -- ScreenCode9B op 10 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD099E  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09A2  be fe 31
 	push XBC                                             ; FD09A5  39
@@ -126719,8 +126821,11 @@ sub_FD099E:
 .LFD09DC:
 	unlk XIZ                                             ; FD09DC  ee 0d
 	ret                                                  ; FD09DE  0e
-; sub_FD09DF -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD09DF:
+; LcdKeyRow4_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow4_ScreenCode9B: LCD key row 4 (left or right) on ScreenCode9B -- ScreenCode9B op 11 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD09DF  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD09E3  be fe 31
 	push XBC                                             ; FD09E6  39
@@ -126747,8 +126852,11 @@ sub_FD09DF:
 .LFD0A1D:
 	unlk XIZ                                             ; FD0A1D  ee 0d
 	ret                                                  ; FD0A1F  0e
-; sub_FD0A20 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0A20:
+; LcdKeyRow5_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; LcdKeyRow5_ScreenCode9B: LCD key row 5 (left or right) on ScreenCode9B -- ScreenCode9B op 12 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD0A20  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A24  be fe 31
 	push XBC                                             ; FD0A27  39
@@ -126775,8 +126883,11 @@ sub_FD0A20:
 .LFD0A5E:
 	unlk XIZ                                             ; FD0A5E  ee 0d
 	ret                                                  ; FD0A60  0e
-; sub_FD0A61 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0A61:
+; PageKey_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; PageKey_ScreenCode9B: the PAGE pair (code 0x10) on ScreenCode9B -- ScreenCode9B op 16 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode9B:
 	link XIZ,0x0000                                      ; FD0A61  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0A65  8e 08 3f 00
 	jr z, .LFD0A76                                       ; FD0A69  66 0b
@@ -126787,8 +126898,11 @@ sub_FD0A61:
 .LFD0A76:
 	unlk XIZ                                             ; FD0A76  ee 0d
 	ret                                                  ; FD0A78  0e
-; sub_FD0A79 -- a handler: an entry of PanelOpTable_FCF7BB
-sub_FD0A79:
+; ExitKey_ScreenCode9B -- a handler: an entry of PanelOpTable_FCF7BB
+; ExitKey_ScreenCode9B: the EXIT key on ScreenCode9B -- ScreenCode9B op 15 (PanelOpTable_FCF7BB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode9B:
 	link XIZ,0xfffe                                      ; FD0A79  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD0A7D  be fe 31
 	push XBC                                             ; FD0A80  39
@@ -126992,8 +127106,11 @@ ScreenButton_Code86:
 .LFD0C55:
 	unlk XIZ                                             ; FD0C55  ee 0d
 	ret                                                  ; FD0C57  0e
-; sub_FD0C58 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0C58:
+; SoftKeyCol2_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol2_ScreenCode82: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 1 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode82:
 	link XIZ,0xfff8                                      ; FD0C58  ee 0c f8 ff
 	pushw hl                                             ; FD0C5C  2b
 	lda xbc, (xiz-2)                                     ; FD0C5D  be fe 31
@@ -127054,8 +127171,11 @@ sub_FD0C58:
 	popw hl                                              ; FD0CE9  4b
 	unlk XIZ                                             ; FD0CEA  ee 0d
 	ret                                                  ; FD0CEC  0e
-; sub_FD0CED -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0CED:
+; SoftKeyCol3_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol3_ScreenCode82: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 2 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode82:
 	link XIZ,0xfffa                                      ; FD0CED  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD0CF1  be fe 31
 	push XBC                                             ; FD0CF4  39
@@ -127104,8 +127224,11 @@ sub_FD0CED:
 .LFD0D5E:
 	unlk XIZ                                             ; FD0D5E  ee 0d
 	ret                                                  ; FD0D60  0e
-; sub_FD0D61 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0D61:
+; SoftKeyCol5_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol5_ScreenCode82: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 4 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode82:
 	link XIZ,0xffec                                      ; FD0D61  ee 0c ec ff
 	pushw hl                                             ; FD0D65  2b
 	pushw de                                             ; FD0D66  2a
@@ -127188,8 +127311,11 @@ sub_FD0D61:
 	popw hl                                              ; FD0E18  4b
 	unlk XIZ                                             ; FD0E19  ee 0d
 	ret                                                  ; FD0E1B  0e
-; sub_FD0E1C -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0E1C:
+; SoftKeyCol6_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol6_ScreenCode82: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 5 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode82:
 	link XIZ,0xffec                                      ; FD0E1C  ee 0c ec ff
 	pushw hl                                             ; FD0E20  2b
 	push XIX                                             ; FD0E21  3c
@@ -127263,8 +127389,11 @@ sub_FD0E49:
 	popw hl                                              ; FD0EC6  4b
 	unlk XIZ                                             ; FD0EC7  ee 0d
 	ret                                                  ; FD0EC9  0e
-; sub_FD0ECA -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0ECA:
+; SoftKeyCol7_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; SoftKeyCol7_ScreenCode82: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode82 -- ScreenCode82 op 6 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode82:
 	link XIZ,0xffec                                      ; FD0ECA  ee 0c ec ff
 	pushw hl                                             ; FD0ECE  2b
 	pushw de                                             ; FD0ECF  2a
@@ -127331,8 +127460,11 @@ sub_FD0ECA:
 	popw hl                                              ; FD0F64  4b
 	unlk XIZ                                             ; FD0F65  ee 0d
 	ret                                                  ; FD0F67  0e
-; sub_FD0F68 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0F68:
+; LcdKeyRow1_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow1_ScreenCode82: LCD key row 1 (left or right) on ScreenCode82 -- ScreenCode82 op 8 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode82:
 	link XIZ,0x0000                                      ; FD0F68  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F6C  8e 08 3f 00
 	jr z, .LFD0F76                                       ; FD0F70  66 04
@@ -127340,8 +127472,11 @@ sub_FD0F68:
 .LFD0F76:
 	unlk XIZ                                             ; FD0F76  ee 0d
 	ret                                                  ; FD0F78  0e
-; sub_FD0F79 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0F79:
+; LcdKeyRow2_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow2_ScreenCode82: LCD key row 2 (left or right) on ScreenCode82 -- ScreenCode82 op 9 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode82:
 	link XIZ,0x0000                                      ; FD0F79  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0F7D  8e 08 3f 00
 	jr nz, .LFD0F90                                      ; FD0F81  6e 0d
@@ -127359,8 +127494,11 @@ sub_FD0F79:
 .LFD0F9F:
 	unlk XIZ                                             ; FD0F9F  ee 0d
 	ret                                                  ; FD0FA1  0e
-; sub_FD0FA2 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0FA2:
+; LcdKeyRow3_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow3_ScreenCode82: LCD key row 3 (left or right) on ScreenCode82 -- ScreenCode82 op 10 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode82:
 	link XIZ,0x0000                                      ; FD0FA2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FA6  8e 08 3f 00
 	jr nz, .LFD0FB9                                      ; FD0FAA  6e 0d
@@ -127378,8 +127516,11 @@ sub_FD0FA2:
 .LFD0FC8:
 	unlk XIZ                                             ; FD0FC8  ee 0d
 	ret                                                  ; FD0FCA  0e
-; sub_FD0FCB -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0FCB:
+; LcdKeyRow4_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow4_ScreenCode82: LCD key row 4 (left or right) on ScreenCode82 -- ScreenCode82 op 11 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode82:
 	link XIZ,0x0000                                      ; FD0FCB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FCF  8e 08 3f 00
 	jr nz, .LFD0FE2                                      ; FD0FD3  6e 0d
@@ -127397,8 +127538,11 @@ sub_FD0FCB:
 .LFD0FF1:
 	unlk XIZ                                             ; FD0FF1  ee 0d
 	ret                                                  ; FD0FF3  0e
-; sub_FD0FF4 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD0FF4:
+; LcdKeyRow5_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; LcdKeyRow5_ScreenCode82: LCD key row 5 (left or right) on ScreenCode82 -- ScreenCode82 op 12 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode82:
 	link XIZ,0x0000                                      ; FD0FF4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD0FF8  8e 08 3f 00
 	jr z, .LFD100D                                       ; FD0FFC  66 0f
@@ -127410,8 +127554,11 @@ sub_FD0FF4:
 .LFD100D:
 	unlk XIZ                                             ; FD100D  ee 0d
 	ret                                                  ; FD100F  0e
-; sub_FD1010 -- a handler: an entry of PanelOpTable_FCF80C
-sub_FD1010:
+; ExitKey_ScreenCode82 -- a handler: an entry of PanelOpTable_FCF80C
+; ExitKey_ScreenCode82: the EXIT key on ScreenCode82 -- ScreenCode82 op 15 (PanelOpTable_FCF80C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode82:
 	link XIZ,0x0000                                      ; FD1010  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1014  8e 08 3f 00
 	jr nz, .LFD1025                                      ; FD1018  6e 0b
@@ -127422,8 +127569,11 @@ sub_FD1010:
 .LFD1025:
 	unlk XIZ                                             ; FD1025  ee 0d
 	ret                                                  ; FD1027  0e
-; sub_FD1028 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD1028:
+; SoftKeyCol2_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol2_ScreenCode83: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 1 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode83:
 	link XIZ,0xfff8                                      ; FD1028  ee 0c f8 ff
 	pushw hl                                             ; FD102C  2b
 	push XIX                                             ; FD102D  3c
@@ -127555,8 +127705,11 @@ sub_FD1028:
 	popw hl                                              ; FD1155  4b
 	unlk XIZ                                             ; FD1156  ee 0d
 	ret                                                  ; FD1158  0e
-; sub_FD1159 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD1159:
+; SoftKeyCol4_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol4_ScreenCode83: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 3 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode83:
 	link XIZ,0xfff0                                      ; FD1159  ee 0c f0 ff
 	pushw hl                                             ; FD115D  2b
 	pushw de                                             ; FD115E  2a
@@ -127608,8 +127761,11 @@ sub_FD1159:
 	popw hl                                              ; FD11D3  4b
 	unlk XIZ                                             ; FD11D4  ee 0d
 	ret                                                  ; FD11D6  0e
-; sub_FD11D7 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD11D7:
+; SoftKeyCol3_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; SoftKeyCol3_ScreenCode83: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode83 -- ScreenCode83 op 2 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode83:
 	link XIZ,0xfff8                                      ; FD11D7  ee 0c f8 ff
 	pushw hl                                             ; FD11DB  2b
 	pushw de                                             ; FD11DC  2a
@@ -127700,8 +127856,11 @@ sub_FD1221:
 	popw hl                                              ; FD12AC  4b
 	unlk XIZ                                             ; FD12AD  ee 0d
 	ret                                                  ; FD12AF  0e
-; sub_FD12B0 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD12B0:
+; LcdKeyRow1_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow1_ScreenCode83: LCD key row 1 (left or right) on ScreenCode83 -- ScreenCode83 op 8 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode83:
 	link XIZ,0xfffe                                      ; FD12B0  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD12B4  8e 08 3f 00
 	jr nz, .LFD12E5                                      ; FD12B8  6e 2b
@@ -127725,8 +127884,11 @@ sub_FD12B0:
 .LFD12E9:
 	unlk XIZ                                             ; FD12E9  ee 0d
 	ret                                                  ; FD12EB  0e
-; sub_FD12EC -- a handler: an entry of PanelOpTable_FCF854
-sub_FD12EC:
+; LcdKeyRow2_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow2_ScreenCode83: LCD key row 2 (left or right) on ScreenCode83 -- ScreenCode83 op 9 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode83:
 	link XIZ,0x0000                                      ; FD12EC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD12F0  8e 08 3f 00
 	jr nz, .LFD1303                                      ; FD12F4  6e 0d
@@ -127744,8 +127906,11 @@ sub_FD12EC:
 .LFD1312:
 	unlk XIZ                                             ; FD1312  ee 0d
 	ret                                                  ; FD1314  0e
-; sub_FD1315 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD1315:
+; LcdKeyRow3_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow3_ScreenCode83: LCD key row 3 (left or right) on ScreenCode83 -- ScreenCode83 op 10 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode83:
 	link XIZ,0x0000                                      ; FD1315  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1319  8e 08 3f 00
 	jr nz, .LFD132C                                      ; FD131D  6e 0d
@@ -127763,8 +127928,11 @@ sub_FD1315:
 .LFD133B:
 	unlk XIZ                                             ; FD133B  ee 0d
 	ret                                                  ; FD133D  0e
-; sub_FD133E -- a handler: an entry of PanelOpTable_FCF854
-sub_FD133E:
+; LcdKeyRow4_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow4_ScreenCode83: LCD key row 4 (left or right) on ScreenCode83 -- ScreenCode83 op 11 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode83:
 	link XIZ,0xfffe                                      ; FD133E  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD1342  8e 08 3f 00
 	jr nz, .LFD1373                                      ; FD1346  6e 2b
@@ -127792,8 +127960,11 @@ sub_FD133E:
 .LFD1382:
 	unlk XIZ                                             ; FD1382  ee 0d
 	ret                                                  ; FD1384  0e
-; sub_FD1385 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD1385:
+; LcdKeyRow5_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; LcdKeyRow5_ScreenCode83: LCD key row 5 (left or right) on ScreenCode83 -- ScreenCode83 op 12 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode83:
 	link XIZ,0x0000                                      ; FD1385  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1389  8e 08 3f 00
 	jr z, .LFD139E                                       ; FD138D  66 0f
@@ -127805,8 +127976,11 @@ sub_FD1385:
 .LFD139E:
 	unlk XIZ                                             ; FD139E  ee 0d
 	ret                                                  ; FD13A0  0e
-; sub_FD13A1 -- a handler: an entry of PanelOpTable_FCF854
-sub_FD13A1:
+; ExitKey_ScreenCode83 -- a handler: an entry of PanelOpTable_FCF854
+; ExitKey_ScreenCode83: the EXIT key on ScreenCode83 -- ScreenCode83 op 15 (PanelOpTable_FCF854).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode83:
 	link XIZ,0x0000                                      ; FD13A1  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD13A5  8e 08 3f 00
 	jr nz, .LFD13BE                                      ; FD13A9  6e 13
@@ -127819,8 +127993,11 @@ sub_FD13A1:
 .LFD13BE:
 	unlk XIZ                                             ; FD13BE  ee 0d
 	ret                                                  ; FD13C0  0e
-; sub_FD13C1 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD13C1:
+; SoftKeyCol3_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol3_ScreenCode84: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 2 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode84:
 	link XIZ,0xfffa                                      ; FD13C1  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD13C5  be fe 31
 	push XBC                                             ; FD13C8  39
@@ -127871,8 +128048,11 @@ sub_FD13C1:
 	popw bc                                              ; FD143F  49
 	unlk XIZ                                             ; FD1440  ee 0d
 	ret                                                  ; FD1442  0e
-; sub_FD1443 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD1443:
+; SoftKeyCol4_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol4_ScreenCode84: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 3 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode84:
 	link XIZ,0xfff8                                      ; FD1443  ee 0c f8 ff
 	push XIX                                             ; FD1447  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD1448  f2 7b 6c fd 34
@@ -127941,8 +128121,11 @@ sub_FD1443:
 	pop XIX                                              ; FD14E7  5c
 	unlk XIZ                                             ; FD14E8  ee 0d
 	ret                                                  ; FD14EA  0e
-; sub_FD14EB -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD14EB:
+; SoftKeyCol5_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol5_ScreenCode84: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 4 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode84:
 	link XIZ,0xfff8                                      ; FD14EB  ee 0c f8 ff
 	push XIX                                             ; FD14EF  3c
 	lda xix, (Arr27A6_Get:24)                            ; FD14F0  f2 7b 6c fd 34
@@ -128011,8 +128194,11 @@ sub_FD14EB:
 	pop XIX                                              ; FD158F  5c
 	unlk XIZ                                             ; FD1590  ee 0d
 	ret                                                  ; FD1592  0e
-; sub_FD1593 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD1593:
+; SoftKeyCol6_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; SoftKeyCol6_ScreenCode84: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode84 -- ScreenCode84 op 5 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode84:
 	link XIZ,0xfffa                                      ; FD1593  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD1597  be fe 31
 	push XBC                                             ; FD159A  39
@@ -128063,8 +128249,11 @@ sub_FD1593:
 	popw bc                                              ; FD1611  49
 	unlk XIZ                                             ; FD1612  ee 0d
 	ret                                                  ; FD1614  0e
-; sub_FD1615 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD1615:
+; LcdKeyRow1_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow1_ScreenCode84: LCD key row 1 (left or right) on ScreenCode84 -- ScreenCode84 op 8 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode84:
 	link XIZ,0x0000                                      ; FD1615  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1619  8e 08 3f 00
 	jr nz, .LFD1637                                      ; FD161D  6e 18
@@ -128081,8 +128270,11 @@ sub_FD1615:
 .LFD163B:
 	unlk XIZ                                             ; FD163B  ee 0d
 	ret                                                  ; FD163D  0e
-; sub_FD163E -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD163E:
+; LcdKeyRow2_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow2_ScreenCode84: LCD key row 2 (left or right) on ScreenCode84 -- ScreenCode84 op 9 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode84:
 	link XIZ,0x0000                                      ; FD163E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1642  8e 08 3f 00
 	jr z, .LFD165F                                       ; FD1646  66 17
@@ -128098,8 +128290,11 @@ sub_FD163E:
 .LFD165F:
 	unlk XIZ                                             ; FD165F  ee 0d
 	ret                                                  ; FD1661  0e
-; sub_FD1662 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD1662:
+; LcdKeyRow3_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow3_ScreenCode84: LCD key row 3 (left or right) on ScreenCode84 -- ScreenCode84 op 10 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode84:
 	link XIZ,0x0000                                      ; FD1662  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1666  8e 08 3f 00
 	jr nz, .LFD1674                                      ; FD166A  6e 08
@@ -128120,8 +128315,11 @@ sub_FD1662:
 .LFD168B:
 	unlk XIZ                                             ; FD168B  ee 0d
 	ret                                                  ; FD168D  0e
-; sub_FD168E -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD168E:
+; LcdKeyRow4_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow4_ScreenCode84: LCD key row 4 (left or right) on ScreenCode84 -- ScreenCode84 op 11 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode84:
 	link XIZ,0x0000                                      ; FD168E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1692  8e 08 3f 00
 	jr z, .LFD16AC                                       ; FD1696  66 14
@@ -128146,8 +128344,11 @@ sub_FD168E:
 .LFD16C2:
 	unlk XIZ                                             ; FD16C2  ee 0d
 	ret                                                  ; FD16C4  0e
-; sub_FD16C5 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD16C5:
+; LcdKeyRow5_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; LcdKeyRow5_ScreenCode84: LCD key row 5 (left or right) on ScreenCode84 -- ScreenCode84 op 12 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode84:
 	link XIZ,0x0000                                      ; FD16C5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16C9  8e 08 3f 00
 	jr z, .LFD16E6                                       ; FD16CD  66 17
@@ -128163,8 +128364,11 @@ sub_FD16C5:
 .LFD16E6:
 	unlk XIZ                                             ; FD16E6  ee 0d
 	ret                                                  ; FD16E8  0e
-; sub_FD16E9 -- a handler: an entry of PanelOpTable_FCF89C
-sub_FD16E9:
+; ExitKey_ScreenCode84 -- a handler: an entry of PanelOpTable_FCF89C
+; ExitKey_ScreenCode84: the EXIT key on ScreenCode84 -- ScreenCode84 op 15 (PanelOpTable_FCF89C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode84:
 	link XIZ,0x0000                                      ; FD16E9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD16ED  8e 08 3f 00
 	jr nz, .LFD1706                                      ; FD16F1  6e 13
@@ -128177,8 +128381,11 @@ sub_FD16E9:
 .LFD1706:
 	unlk XIZ                                             ; FD1706  ee 0d
 	ret                                                  ; FD1708  0e
-; sub_FD1709 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD1709:
+; SoftKeyCol3_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol3_ScreenCode85: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 2 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode85:
 	link XIZ,0xfff0                                      ; FD1709  ee 0c f0 ff
 	push XIX                                             ; FD170D  3c
 	lda xix, (xiz-16)                                    ; FD170E  be f0 34
@@ -128231,8 +128438,11 @@ sub_FD173D:
 	pop XIX                                              ; FD178C  5c
 	unlk XIZ                                             ; FD178D  ee 0d
 	ret                                                  ; FD178F  0e
-; sub_FD1790 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD1790:
+; SoftKeyCol4_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol4_ScreenCode85: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 3 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode85:
 	link XIZ,0xffee                                      ; FD1790  ee 0c ee ff
 	push XIX                                             ; FD1794  3c
 	lda xix, (xiz-18)                                    ; FD1795  be ee 34
@@ -128291,8 +128501,11 @@ sub_FD17B1:
 	pop XIX                                              ; FD1823  5c
 	unlk XIZ                                             ; FD1824  ee 0d
 	ret                                                  ; FD1826  0e
-; sub_FD1827 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD1827:
+; SoftKeyCol5_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol5_ScreenCode85: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 4 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode85:
 	link XIZ,0xffee                                      ; FD1827  ee 0c ee ff
 	push XIX                                             ; FD182B  3c
 	lda xix, (xiz-18)                                    ; FD182C  be ee 34
@@ -128350,8 +128563,11 @@ sub_FD1827:
 	pop XIX                                              ; FD18BA  5c
 	unlk XIZ                                             ; FD18BB  ee 0d
 	ret                                                  ; FD18BD  0e
-; sub_FD18BE -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD18BE:
+; SoftKeyCol6_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; SoftKeyCol6_ScreenCode85: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode85 -- ScreenCode85 op 5 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode85:
 	link XIZ,0xfff0                                      ; FD18BE  ee 0c f0 ff
 	push XIX                                             ; FD18C2  3c
 	lda xix, (xiz-16)                                    ; FD18C3  be f0 34
@@ -128403,8 +128619,11 @@ sub_FD18BE:
 	pop XIX                                              ; FD1941  5c
 	unlk XIZ                                             ; FD1942  ee 0d
 	ret                                                  ; FD1944  0e
-; sub_FD1945 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD1945:
+; LcdKeyRow1_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow1_ScreenCode85: LCD key row 1 (left or right) on ScreenCode85 -- ScreenCode85 op 8 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode85:
 	link XIZ,0x0000                                      ; FD1945  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1949  8e 08 3f 00
 	jr nz, .LFD1967                                      ; FD194D  6e 18
@@ -128421,8 +128640,11 @@ sub_FD1945:
 .LFD196B:
 	unlk XIZ                                             ; FD196B  ee 0d
 	ret                                                  ; FD196D  0e
-; sub_FD196E -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD196E:
+; LcdKeyRow2_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow2_ScreenCode85: LCD key row 2 (left or right) on ScreenCode85 -- ScreenCode85 op 9 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode85:
 	link XIZ,0x0000                                      ; FD196E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1972  8e 08 3f 00
 	jr nz, .LFD1980                                      ; FD1976  6e 08
@@ -128443,8 +128665,11 @@ sub_FD196E:
 .LFD1997:
 	unlk XIZ                                             ; FD1997  ee 0d
 	ret                                                  ; FD1999  0e
-; sub_FD199A -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD199A:
+; LcdKeyRow3_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow3_ScreenCode85: LCD key row 3 (left or right) on ScreenCode85 -- ScreenCode85 op 10 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode85:
 	link XIZ,0x0000                                      ; FD199A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD199E  8e 08 3f 00
 	jr z, .LFD19BB                                       ; FD19A2  66 17
@@ -128460,8 +128685,11 @@ sub_FD199A:
 .LFD19BB:
 	unlk XIZ                                             ; FD19BB  ee 0d
 	ret                                                  ; FD19BD  0e
-; sub_FD19BE -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD19BE:
+; LcdKeyRow4_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow4_ScreenCode85: LCD key row 4 (left or right) on ScreenCode85 -- ScreenCode85 op 11 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode85:
 	link XIZ,0x0000                                      ; FD19BE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19C2  8e 08 3f 00
 	jr z, .LFD19DC                                       ; FD19C6  66 14
@@ -128486,8 +128714,11 @@ sub_FD19BE:
 .LFD19F2:
 	unlk XIZ                                             ; FD19F2  ee 0d
 	ret                                                  ; FD19F4  0e
-; sub_FD19F5 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD19F5:
+; LcdKeyRow5_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; LcdKeyRow5_ScreenCode85: LCD key row 5 (left or right) on ScreenCode85 -- ScreenCode85 op 12 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode85:
 	link XIZ,0x0000                                      ; FD19F5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD19F9  8e 08 3f 00
 	jr z, .LFD1A16                                       ; FD19FD  66 17
@@ -128503,8 +128734,11 @@ sub_FD19F5:
 .LFD1A16:
 	unlk XIZ                                             ; FD1A16  ee 0d
 	ret                                                  ; FD1A18  0e
-; sub_FD1A19 -- a handler: an entry of PanelOpTable_FCF8E4
-sub_FD1A19:
+; ExitKey_ScreenCode85 -- a handler: an entry of PanelOpTable_FCF8E4
+; ExitKey_ScreenCode85: the EXIT key on ScreenCode85 -- ScreenCode85 op 15 (PanelOpTable_FCF8E4).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode85:
 	link XIZ,0x0000                                      ; FD1A19  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1A1D  8e 08 3f 00
 	jr nz, .LFD1A36                                      ; FD1A21  6e 13
@@ -128517,8 +128751,11 @@ sub_FD1A19:
 .LFD1A36:
 	unlk XIZ                                             ; FD1A36  ee 0d
 	ret                                                  ; FD1A38  0e
-; sub_FD1A39 -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1A39:
+; SoftKeyCol8_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol8_ScreenCode86: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 7 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode86:
 	link XIZ,0xfffc                                      ; FD1A39  ee 0c fc ff
 	pushw hl                                             ; FD1A3D  2b
 	ld H,(XIZ+0x08)                                      ; FD1A3E  8e 08 26
@@ -128561,8 +128798,11 @@ sub_FD1A39:
 	popw hl                                              ; FD1A98  4b
 	unlk XIZ                                             ; FD1A99  ee 0d
 	ret                                                  ; FD1A9B  0e
-; sub_FD1A9C -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1A9C:
+; SoftKeyCol2_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol2_ScreenCode86: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 1 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode86:
 	link XIZ,0xfff6                                      ; FD1A9C  ee 0c f6 ff
 	pushw hl                                             ; FD1AA0  2b
 	lda xbc, (xiz-2)                                     ; FD1AA1  be fe 31
@@ -128633,8 +128873,11 @@ sub_FD1AA5:
 	popw hl                                              ; FD1B41  4b
 	unlk XIZ                                             ; FD1B42  ee 0d
 	ret                                                  ; FD1B44  0e
-; sub_FD1B45 -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1B45:
+; SoftKeyCol3_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol3_ScreenCode86: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 2 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode86:
 	link XIZ,0xfff8                                      ; FD1B45  ee 0c f8 ff
 	lda xbc, (xiz-2)                                     ; FD1B49  be fe 31
 	push XBC                                             ; FD1B4C  39
@@ -128691,8 +128934,11 @@ sub_FD1B45:
 .LFD1BCC:
 	unlk XIZ                                             ; FD1BCC  ee 0d
 	ret                                                  ; FD1BCE  0e
-; sub_FD1BCF -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1BCF:
+; SoftKeyCol6_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; SoftKeyCol6_ScreenCode86: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode86 -- ScreenCode86 op 5 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode86:
 	link XIZ,0xffe0                                      ; FD1BCF  ee 0c e0 ff
 	pushw hl                                             ; FD1BD3  2b
 	pushw de                                             ; FD1BD4  2a
@@ -129074,8 +129320,11 @@ sub_FD1C35:
 	popw hl                                              ; FD1F39  4b
 	unlk XIZ                                             ; FD1F3A  ee 0d
 	ret                                                  ; FD1F3C  0e
-; sub_FD1F3D -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1F3D:
+; LcdKeyRow1_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow1_ScreenCode86: LCD key row 1 (left or right) on ScreenCode86 -- ScreenCode86 op 8 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1F3D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F41  8e 08 3f 00
 	jr nz, .LFD1F54                                      ; FD1F45  6e 0d
@@ -129089,8 +129338,11 @@ sub_FD1F3D:
 .LFD1F58:
 	unlk XIZ                                             ; FD1F58  ee 0d
 	ret                                                  ; FD1F5A  0e
-; sub_FD1F5B -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1F5B:
+; LcdKeyRow2_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow2_ScreenCode86: LCD key row 2 (left or right) on ScreenCode86 -- ScreenCode86 op 9 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1F5B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F5F  8e 08 3f 00
 	jr z, .LFD1F7C                                       ; FD1F63  66 17
@@ -129106,8 +129358,11 @@ sub_FD1F5B:
 .LFD1F7C:
 	unlk XIZ                                             ; FD1F7C  ee 0d
 	ret                                                  ; FD1F7E  0e
-; sub_FD1F7F -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1F7F:
+; LcdKeyRow3_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow3_ScreenCode86: LCD key row 3 (left or right) on ScreenCode86 -- ScreenCode86 op 10 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1F7F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1F83  8e 08 3f 00
 	jr nz, .LFD1F91                                      ; FD1F87  6e 08
@@ -129128,8 +129383,11 @@ sub_FD1F7F:
 .LFD1FA8:
 	unlk XIZ                                             ; FD1FA8  ee 0d
 	ret                                                  ; FD1FAA  0e
-; sub_FD1FAB -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1FAB:
+; LcdKeyRow4_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow4_ScreenCode86: LCD key row 4 (left or right) on ScreenCode86 -- ScreenCode86 op 11 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1FAB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FAF  8e 08 3f 00
 	jr nz, .LFD1FBD                                      ; FD1FB3  6e 08
@@ -129150,8 +129408,11 @@ sub_FD1FAB:
 .LFD1FD4:
 	unlk XIZ                                             ; FD1FD4  ee 0d
 	ret                                                  ; FD1FD6  0e
-; sub_FD1FD7 -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1FD7:
+; LcdKeyRow5_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; LcdKeyRow5_ScreenCode86: LCD key row 5 (left or right) on ScreenCode86 -- ScreenCode86 op 12 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1FD7  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FDB  8e 08 3f 00
 	jr z, .LFD1FF8                                       ; FD1FDF  66 17
@@ -129167,8 +129428,11 @@ sub_FD1FD7:
 .LFD1FF8:
 	unlk XIZ                                             ; FD1FF8  ee 0d
 	ret                                                  ; FD1FFA  0e
-; sub_FD1FFB -- a handler: an entry of PanelOpTable_FCF92C
-sub_FD1FFB:
+; ExitKey_ScreenCode86 -- a handler: an entry of PanelOpTable_FCF92C
+; ExitKey_ScreenCode86: the EXIT key on ScreenCode86 -- ScreenCode86 op 15 (PanelOpTable_FCF92C).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode86:
 	link XIZ,0x0000                                      ; FD1FFB  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD1FFF  8e 08 3f 00
 	jr nz, .LFD2010                                      ; FD2003  6e 0b
@@ -130137,8 +130401,11 @@ sub_FD28F8:
 .LFD2900:
 	unlk XIZ                                             ; FD2900  ee 0d
 	ret                                                  ; FD2902  0e
-; sub_FD2903 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2903:
+; SoftKeyCol2_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol2_ScreenCode8B: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 1 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode8B:
 	link XIZ,0xffec                                      ; FD2903  ee 0c ec ff
 	pushw hl                                             ; FD2907  2b
 	pushw de                                             ; FD2908  2a
@@ -130195,8 +130462,11 @@ sub_FD2903:
 	popw hl                                              ; FD2986  4b
 	unlk XIZ                                             ; FD2987  ee 0d
 	ret                                                  ; FD2989  0e
-; sub_FD298A -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD298A:
+; SoftKeyCol3_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol3_ScreenCode8B: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 2 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode8B:
 	link XIZ,0xffec                                      ; FD298A  ee 0c ec ff
 	pushw hl                                             ; FD298E  2b
 	pushw de                                             ; FD298F  2a
@@ -130275,8 +130545,11 @@ sub_FD298A:
 	popw hl                                              ; FD2A38  4b
 	unlk XIZ                                             ; FD2A39  ee 0d
 	ret                                                  ; FD2A3B  0e
-; sub_FD2A3C -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2A3C:
+; SoftKeyCol4_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol4_ScreenCode8B: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 3 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode8B:
 	link XIZ,0xffec                                      ; FD2A3C  ee 0c ec ff
 	pushw hl                                             ; FD2A40  2b
 	pushw de                                             ; FD2A41  2a
@@ -130343,8 +130616,11 @@ sub_FD2A3C:
 	popw hl                                              ; FD2AD4  4b
 	unlk XIZ                                             ; FD2AD5  ee 0d
 	ret                                                  ; FD2AD7  0e
-; sub_FD2AD8 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2AD8:
+; SoftKeyCol5_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol5_ScreenCode8B: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 4 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode8B:
 	link XIZ,0xffec                                      ; FD2AD8  ee 0c ec ff
 	pushw hl                                             ; FD2ADC  2b
 	pushw de                                             ; FD2ADD  2a
@@ -130412,8 +130688,11 @@ sub_FD2B23:
 	popw hl                                              ; FD2B70  4b
 	unlk XIZ                                             ; FD2B71  ee 0d
 	ret                                                  ; FD2B73  0e
-; sub_FD2B74 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2B74:
+; SoftKeyCol7_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol7_ScreenCode8B: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 6 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode8B:
 	link XIZ,0xfff2                                      ; FD2B74  ee 0c f2 ff
 	push XIX                                             ; FD2B78  3c
 	lda xix, (xiz-14)                                    ; FD2B79  be f2 34
@@ -130450,8 +130729,11 @@ sub_FD2B74:
 	pop XIX                                              ; FD2BD4  5c
 	unlk XIZ                                             ; FD2BD5  ee 0d
 	ret                                                  ; FD2BD7  0e
-; sub_FD2BD8 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2BD8:
+; SoftKeyCol8_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; SoftKeyCol8_ScreenCode8B: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8B -- ScreenCode8B op 7 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode8B:
 	link XIZ,0xfff2                                      ; FD2BD8  ee 0c f2 ff
 	push XIX                                             ; FD2BDC  3c
 	lda xix, (xiz-14)                                    ; FD2BDD  be f2 34
@@ -130488,8 +130770,11 @@ sub_FD2BD8:
 	pop XIX                                              ; FD2C38  5c
 	unlk XIZ                                             ; FD2C39  ee 0d
 	ret                                                  ; FD2C3B  0e
-; sub_FD2C3C -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2C3C:
+; LcdKeyRow1_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow1_ScreenCode8B: LCD key row 1 (left or right) on ScreenCode8B -- ScreenCode8B op 8 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode8B:
 	link XIZ,0x0000                                      ; FD2C3C  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C40  8e 08 3f 00
 	jr nz, .LFD2C53                                      ; FD2C44  6e 0d
@@ -130503,8 +130788,11 @@ sub_FD2C3C:
 .LFD2C57:
 	unlk XIZ                                             ; FD2C57  ee 0d
 	ret                                                  ; FD2C59  0e
-; sub_FD2C5A -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2C5A:
+; LcdKeyRow2_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow2_ScreenCode8B: LCD key row 2 (left or right) on ScreenCode8B -- ScreenCode8B op 9 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode8B:
 	link XIZ,0x0000                                      ; FD2C5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD2C5E  8e 08 3f 00
 	jr z, .LFD2C73                                       ; FD2C62  66 0f
@@ -130516,8 +130804,11 @@ sub_FD2C5A:
 .LFD2C73:
 	unlk XIZ                                             ; FD2C73  ee 0d
 	ret                                                  ; FD2C75  0e
-; sub_FD2C76 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2C76:
+; LcdKeyRow3_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow3_ScreenCode8B: LCD key row 3 (left or right) on ScreenCode8B -- ScreenCode8B op 10 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode8B:
 	link XIZ,0xfffe                                      ; FD2C76  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2C7A  be fe 31
 	push XBC                                             ; FD2C7D  39
@@ -130541,8 +130832,11 @@ sub_FD2C76:
 .LFD2CAB:
 	unlk XIZ                                             ; FD2CAB  ee 0d
 	ret                                                  ; FD2CAD  0e
-; sub_FD2CAE -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2CAE:
+; LcdKeyRow4_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow4_ScreenCode8B: LCD key row 4 (left or right) on ScreenCode8B -- ScreenCode8B op 11 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode8B:
 	link XIZ,0xfffe                                      ; FD2CAE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CB2  be fe 31
 	push XBC                                             ; FD2CB5  39
@@ -130560,8 +130854,11 @@ sub_FD2CAE:
 .LFD2CD6:
 	unlk XIZ                                             ; FD2CD6  ee 0d
 	ret                                                  ; FD2CD8  0e
-; sub_FD2CD9 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2CD9:
+; LcdKeyRow5_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; LcdKeyRow5_ScreenCode8B: LCD key row 5 (left or right) on ScreenCode8B -- ScreenCode8B op 12 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode8B:
 	link XIZ,0xfffe                                      ; FD2CD9  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2CDD  be fe 31
 	push XBC                                             ; FD2CE0  39
@@ -130579,8 +130876,11 @@ sub_FD2CD9:
 .LFD2D01:
 	unlk XIZ                                             ; FD2D01  ee 0d
 	ret                                                  ; FD2D03  0e
-; sub_FD2D04 -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2D04:
+; PageKey_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; PageKey_ScreenCode8B: the PAGE pair (code 0x10) on ScreenCode8B -- ScreenCode8B op 16 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode8B:
 	link XIZ,0xfffe                                      ; FD2D04  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD2D08  be fe 31
 	push XBC                                             ; FD2D0B  39
@@ -130597,8 +130897,11 @@ sub_FD2D04:
 .LFD2D28:
 	unlk XIZ                                             ; FD2D28  ee 0d
 	ret                                                  ; FD2D2A  0e
-; sub_FD2D2B -- a handler: an entry of PanelOpTable_FCF21B
-sub_FD2D2B:
+; ExitKey_ScreenCode8B -- a handler: an entry of PanelOpTable_FCF21B
+; ExitKey_ScreenCode8B: the EXIT key on ScreenCode8B -- ScreenCode8B op 15 (PanelOpTable_FCF21B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode8B:
 	link XIZ,0xfffe                                      ; FD2D2B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD2D2F  8e 08 3f 00
 	jr nz, .LFD2D5C                                      ; FD2D33  6e 27
@@ -130955,8 +131258,11 @@ sub_FD3052:
 .LFD306F:
 	unlk XIZ                                             ; FD306F  ee 0d
 	ret                                                  ; FD3071  0e
-; sub_FD3072 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3072:
+; SoftKeyCol1_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol1_ScreenCode8D: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 0 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD3072  ee 0c ec ff
 	pushw hl                                             ; FD3076  2b
 	push XIX                                             ; FD3077  3c
@@ -131025,8 +131331,11 @@ sub_FD3072:
 	popw hl                                              ; FD310E  4b
 	unlk XIZ                                             ; FD310F  ee 0d
 	ret                                                  ; FD3111  0e
-; sub_FD3112 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3112:
+; SoftKeyCol2_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol2_ScreenCode8D: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 1 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD3112  ee 0c ec ff
 	pushw hl                                             ; FD3116  2b
 	push XIX                                             ; FD3117  3c
@@ -131096,8 +131405,11 @@ sub_FD3191:
 	popw hl                                              ; FD31AE  4b
 	unlk XIZ                                             ; FD31AF  ee 0d
 	ret                                                  ; FD31B1  0e
-; sub_FD31B2 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD31B2:
+; SoftKeyCol3_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol3_ScreenCode8D: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 2 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD31B2  ee 0c ec ff
 	pushw hl                                             ; FD31B6  2b
 	push XIX                                             ; FD31B7  3c
@@ -131166,8 +131478,11 @@ sub_FD31B2:
 	popw hl                                              ; FD324E  4b
 	unlk XIZ                                             ; FD324F  ee 0d
 	ret                                                  ; FD3251  0e
-; sub_FD3252 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3252:
+; SoftKeyCol4_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol4_ScreenCode8D: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 3 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD3252  ee 0c ec ff
 	pushw hl                                             ; FD3256  2b
 	push XIX                                             ; FD3257  3c
@@ -131236,8 +131551,11 @@ sub_FD3252:
 	popw hl                                              ; FD32EE  4b
 	unlk XIZ                                             ; FD32EF  ee 0d
 	ret                                                  ; FD32F1  0e
-; sub_FD32F2 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD32F2:
+; SoftKeyCol5_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol5_ScreenCode8D: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 4 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode8D:
 	link XIZ,0xffea                                      ; FD32F2  ee 0c ea ff
 	pushw hl                                             ; FD32F6  2b
 	push XIX                                             ; FD32F7  3c
@@ -131317,8 +131635,11 @@ sub_FD32F2:
 	popw hl                                              ; FD33A6  4b
 	unlk XIZ                                             ; FD33A7  ee 0d
 	ret                                                  ; FD33A9  0e
-; sub_FD33AA -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD33AA:
+; SoftKeyCol6_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol6_ScreenCode8D: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 5 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode8D:
 	link XIZ,0xffea                                      ; FD33AA  ee 0c ea ff
 	pushw hl                                             ; FD33AE  2b
 	push XIX                                             ; FD33AF  3c
@@ -131398,8 +131719,11 @@ sub_FD33AA:
 	popw hl                                              ; FD3462  4b
 	unlk XIZ                                             ; FD3463  ee 0d
 	ret                                                  ; FD3465  0e
-; sub_FD3466 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3466:
+; SoftKeyCol7_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol7_ScreenCode8D: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 6 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD3466  ee 0c ec ff
 	pushw hl                                             ; FD346A  2b
 	pushw de                                             ; FD346B  2a
@@ -131474,8 +131798,11 @@ sub_FD3466:
 	popw hl                                              ; FD351A  4b
 	unlk XIZ                                             ; FD351B  ee 0d
 	ret                                                  ; FD351D  0e
-; sub_FD351E -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD351E:
+; SoftKeyCol8_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; SoftKeyCol8_ScreenCode8D: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8D -- ScreenCode8D op 7 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode8D:
 	link XIZ,0xffec                                      ; FD351E  ee 0c ec ff
 	push XIX                                             ; FD3522  3c
 	lda xix, (xiz-16)                                    ; FD3523  be f0 34
@@ -131523,8 +131850,11 @@ sub_FD351E:
 	pop XIX                                              ; FD359A  5c
 	unlk XIZ                                             ; FD359B  ee 0d
 	ret                                                  ; FD359D  0e
-; sub_FD359E -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD359E:
+; LcdKeyRow1_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow1_ScreenCode8D: LCD key row 1 (left or right) on ScreenCode8D -- ScreenCode8D op 8 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode8D:
 	link XIZ,0x0000                                      ; FD359E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35A2  8e 08 3f 00
 	jr z, .LFD35AC                                       ; FD35A6  66 04
@@ -131532,8 +131862,11 @@ sub_FD359E:
 .LFD35AC:
 	unlk XIZ                                             ; FD35AC  ee 0d
 	ret                                                  ; FD35AE  0e
-; sub_FD35AF -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD35AF:
+; LcdKeyRow2_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow2_ScreenCode8D: LCD key row 2 (left or right) on ScreenCode8D -- ScreenCode8D op 9 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode8D:
 	link XIZ,0x0000                                      ; FD35AF  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD35B3  8e 08 3f 00
 	jr nz, .LFD35C1                                      ; FD35B7  6e 08
@@ -131554,8 +131887,11 @@ sub_FD35AF:
 .LFD35D8:
 	unlk XIZ                                             ; FD35D8  ee 0d
 	ret                                                  ; FD35DA  0e
-; sub_FD35DB -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD35DB:
+; LcdKeyRow3_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow3_ScreenCode8D: LCD key row 3 (left or right) on ScreenCode8D -- ScreenCode8D op 10 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode8D:
 	link XIZ,0xfffe                                      ; FD35DB  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD35DF  be fe 31
 	push XBC                                             ; FD35E2  39
@@ -131582,8 +131918,11 @@ sub_FD35DB:
 .LFD3613:
 	unlk XIZ                                             ; FD3613  ee 0d
 	ret                                                  ; FD3615  0e
-; sub_FD3616 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3616:
+; LcdKeyRow4_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow4_ScreenCode8D: LCD key row 4 (left or right) on ScreenCode8D -- ScreenCode8D op 11 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode8D:
 	link XIZ,0xfffe                                      ; FD3616  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD361A  be fe 31
 	push XBC                                             ; FD361D  39
@@ -131605,8 +131944,11 @@ sub_FD3616:
 .LFD3646:
 	unlk XIZ                                             ; FD3646  ee 0d
 	ret                                                  ; FD3648  0e
-; sub_FD3649 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD3649:
+; LcdKeyRow5_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; LcdKeyRow5_ScreenCode8D: LCD key row 5 (left or right) on ScreenCode8D -- ScreenCode8D op 12 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode8D:
 	link XIZ,0xfffc                                      ; FD3649  ee 0c fc ff
 	lda xbc, (xiz-2)                                     ; FD364D  be fe 31
 	push XBC                                             ; FD3650  39
@@ -131659,8 +132001,11 @@ sub_FD3649:
 .LFD36CB:
 	unlk XIZ                                             ; FD36CB  ee 0d
 	ret                                                  ; FD36CD  0e
-; sub_FD36CE -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD36CE:
+; PageKey_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; PageKey_ScreenCode8D: the PAGE pair (code 0x10) on ScreenCode8D -- ScreenCode8D op 16 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode8D:
 	link XIZ,0xfffe                                      ; FD36CE  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD36D2  be fe 31
 	push XBC                                             ; FD36D5  39
@@ -131677,8 +132022,11 @@ sub_FD36CE:
 .LFD36F2:
 	unlk XIZ                                             ; FD36F2  ee 0d
 	ret                                                  ; FD36F4  0e
-; sub_FD36F5 -- a handler: an entry of PanelOpTable_FCF2AB
-sub_FD36F5:
+; ExitKey_ScreenCode8D -- a handler: an entry of PanelOpTable_FCF2AB
+; ExitKey_ScreenCode8D: the EXIT key on ScreenCode8D -- ScreenCode8D op 15 (PanelOpTable_FCF2AB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode8D:
 	link XIZ,0xfffe                                      ; FD36F5  ee 0c fe ff
 	cp (XIZ+0x08),0x00                                   ; FD36F9  8e 08 3f 00
 	jr nz, .LFD3726                                      ; FD36FD  6e 27
@@ -132244,8 +132592,11 @@ sub_FD3C4A:
 .LFD3C67:
 	unlk XIZ                                             ; FD3C67  ee 0d
 	ret                                                  ; FD3C69  0e
-; sub_FD3C6A -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3C6A:
+; SoftKeyCol2_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol2_ScreenCode8F: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 1 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3C6A  ee 0c 00 00
 	pushw 0x00                                           ; FD3C6E  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C71  9e 08 21
@@ -132255,8 +132606,11 @@ sub_FD3C6A:
 	pop XBC                                              ; FD3C7B  59
 	unlk XIZ                                             ; FD3C7C  ee 0d
 	ret                                                  ; FD3C7E  0e
-; sub_FD3C7F -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3C7F:
+; SoftKeyCol3_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol3_ScreenCode8F: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 2 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3C7F  ee 0c 00 00
 	pushw 0x00                                           ; FD3C83  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C86  9e 08 21
@@ -132266,7 +132620,10 @@ sub_FD3C7F:
 	pop XBC                                              ; FD3C90  59
 	unlk XIZ                                             ; FD3C91  ee 0d
 	ret                                                  ; FD3C93  0e
-sub_FD3C94:
+; SoftKeyCol4_ScreenCode8F: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 3 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3C94  ee 0c 00 00
 	pushw 0x00                                           ; FD3C98  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3C9B  9e 08 21
@@ -132276,8 +132633,11 @@ sub_FD3C94:
 	pop XBC                                              ; FD3CA5  59
 	unlk XIZ                                             ; FD3CA6  ee 0d
 	ret                                                  ; FD3CA8  0e
-; sub_FD3CA9 -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3CA9:
+; SoftKeyCol5_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol5_ScreenCode8F: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 4 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3CA9  ee 0c 00 00
 	pushw 0x00                                           ; FD3CAD  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CB0  9e 08 21
@@ -132287,8 +132647,11 @@ sub_FD3CA9:
 	pop XBC                                              ; FD3CBA  59
 	unlk XIZ                                             ; FD3CBB  ee 0d
 	ret                                                  ; FD3CBD  0e
-; sub_FD3CBE -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3CBE:
+; SoftKeyCol6_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol6_ScreenCode8F: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 5 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3CBE  ee 0c 00 00
 	pushw 0x00                                           ; FD3CC2  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CC5  9e 08 21
@@ -132298,8 +132661,11 @@ sub_FD3CBE:
 	pop XBC                                              ; FD3CCF  59
 	unlk XIZ                                             ; FD3CD0  ee 0d
 	ret                                                  ; FD3CD2  0e
-; sub_FD3CD3 -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3CD3:
+; SoftKeyCol7_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol7_ScreenCode8F: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 6 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3CD3  ee 0c 00 00
 	pushw 0x00                                           ; FD3CD7  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CDA  9e 08 21
@@ -132309,8 +132675,11 @@ sub_FD3CD3:
 	pop XBC                                              ; FD3CE4  59
 	unlk XIZ                                             ; FD3CE5  ee 0d
 	ret                                                  ; FD3CE7  0e
-; sub_FD3CE8 -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3CE8:
+; SoftKeyCol8_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; SoftKeyCol8_ScreenCode8F: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode8F -- ScreenCode8F op 7 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3CE8  ee 0c 00 00
 	pushw 0x00                                           ; FD3CEC  0b 00 00
 	ld BC,(XIZ+0x08)                                     ; FD3CEF  9e 08 21
@@ -132320,8 +132689,11 @@ sub_FD3CE8:
 	pop XBC                                              ; FD3CF9  59
 	unlk XIZ                                             ; FD3CFA  ee 0d
 	ret                                                  ; FD3CFC  0e
-; sub_FD3CFD -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3CFD:
+; LcdKeyRow1_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow1_ScreenCode8F: LCD key row 1 (left or right) on ScreenCode8F -- ScreenCode8F op 8 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3CFD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D01  8e 08 3f 00
 	jr nz, .LFD3D14                                      ; FD3D05  6e 0d
@@ -132335,8 +132707,11 @@ sub_FD3CFD:
 .LFD3D18:
 	unlk XIZ                                             ; FD3D18  ee 0d
 	ret                                                  ; FD3D1A  0e
-; sub_FD3D1B -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3D1B:
+; LcdKeyRow2_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow2_ScreenCode8F: LCD key row 2 (left or right) on ScreenCode8F -- ScreenCode8F op 9 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3D1B  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D1F  8e 08 3f 00
 	jr nz, .LFD3D31                                      ; FD3D23  6e 0c
@@ -132352,8 +132727,11 @@ sub_FD3D1B:
 	pop XIY                                              ; FD3D3B  5d
 	unlk XIZ                                             ; FD3D3C  ee 0d
 	ret                                                  ; FD3D3E  0e
-; sub_FD3D3F -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3D3F:
+; LcdKeyRow3_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow3_ScreenCode8F: LCD key row 3 (left or right) on ScreenCode8F -- ScreenCode8F op 10 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3D3F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D43  8e 08 3f 00
 	jr z, .LFD3D54                                       ; FD3D47  66 0b
@@ -132364,8 +132742,11 @@ sub_FD3D3F:
 .LFD3D54:
 	unlk XIZ                                             ; FD3D54  ee 0d
 	ret                                                  ; FD3D56  0e
-; sub_FD3D57 -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3D57:
+; LcdKeyRow4_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow4_ScreenCode8F: LCD key row 4 (left or right) on ScreenCode8F -- ScreenCode8F op 11 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3D57  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D5B  8e 08 3f 00
 	jr z, .LFD3D6C                                       ; FD3D5F  66 0b
@@ -132376,8 +132757,11 @@ sub_FD3D57:
 .LFD3D6C:
 	unlk XIZ                                             ; FD3D6C  ee 0d
 	ret                                                  ; FD3D6E  0e
-; sub_FD3D6F -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3D6F:
+; LcdKeyRow5_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; LcdKeyRow5_ScreenCode8F: LCD key row 5 (left or right) on ScreenCode8F -- ScreenCode8F op 12 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3D6F  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D73  8e 08 3f 00
 	jr z, .LFD3D84                                       ; FD3D77  66 0b
@@ -132388,8 +132772,11 @@ sub_FD3D6F:
 .LFD3D84:
 	unlk XIZ                                             ; FD3D84  ee 0d
 	ret                                                  ; FD3D86  0e
-; sub_FD3D87 -- a handler: an entry of PanelOpTable_FCF33B
-sub_FD3D87:
+; ExitKey_ScreenCode8F -- a handler: an entry of PanelOpTable_FCF33B
+; ExitKey_ScreenCode8F: the EXIT key on ScreenCode8F -- ScreenCode8F op 15 (PanelOpTable_FCF33B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode8F:
 	link XIZ,0x0000                                      ; FD3D87  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; FD3D8B  8e 08 3f 00
 	jr nz, .LFD3DA4                                      ; FD3D8F  6e 13
@@ -153205,7 +153592,10 @@ sub_FDE74C_Skip:
 ;
 ; Every label here is `sub_XXXXXX`/`.LXXXXXX`: an address, not a claim.
 ; =======================================================================
-sub_FDE760:
+; SoftKeyCol1_ScreenCode90: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 0 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode90:
 	link XIZ,0x0000                               ; FDE760  ee 0c 00 00
 	pushw 0x90                                    ; FDE764  0b 90 00
 	pushw 0x01                                    ; FDE767  0b 01 00
@@ -153281,8 +153671,11 @@ sub_FDE760:
 	popw hl                                       ; FDE818  4b
 	unlk XIZ                                      ; FDE819  ee 0d
 	ret                                           ; FDE81B  0e
-; sub_FDE81C -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDE81C:
+; SoftKeyCol2_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol2_ScreenCode90: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 1 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode90:
 	link XIZ,0x0000                               ; FDE81C  ee 0c 00 00
 	pushw 0x90                                    ; FDE820  0b 90 00
 	pushw 0x02                                    ; FDE823  0b 02 00
@@ -153358,8 +153751,11 @@ sub_FDE81C:
 	popw hl                                       ; FDE8D4  4b
 	unlk XIZ                                      ; FDE8D5  ee 0d
 	ret                                           ; FDE8D7  0e
-; sub_FDE8D8 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDE8D8:
+; SoftKeyCol3_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol3_ScreenCode90: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 2 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode90:
 	link XIZ,0x0000                               ; FDE8D8  ee 0c 00 00
 	pushw 0x90                                    ; FDE8DC  0b 90 00
 	pushw 0x03                                    ; FDE8DF  0b 03 00
@@ -153431,8 +153827,11 @@ sub_FDE8D8:
 	popw hl                                       ; FDE984  4b
 	unlk XIZ                                      ; FDE985  ee 0d
 	ret                                           ; FDE987  0e
-; sub_FDE988 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDE988:
+; SoftKeyCol4_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol4_ScreenCode90: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 3 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode90:
 	link XIZ,0x0000                               ; FDE988  ee 0c 00 00
 	pushw 0x90                                    ; FDE98C  0b 90 00
 	pushw 0x04                                    ; FDE98F  0b 04 00
@@ -153505,8 +153904,11 @@ sub_FDE988:
 	unlk XIZ                                      ; FDEA35  ee 0d
 	ret                                           ; FDEA37  0e
 .LFDEA38:
-; sub_FDEA38 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEA38:
+; SoftKeyCol6_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol6_ScreenCode90: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 5 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode90:
 	link XIZ,0xffec                               ; FDEA38  ee 0c ec ff
 	pushw hl                                      ; FDEA3C  2b
 	push XIX                                      ; FDEA3D  3c
@@ -153572,8 +153974,11 @@ sub_FDEA38:
 	unlk XIZ                                      ; FDEACF  ee 0d
 	ret                                           ; FDEAD1  0e
 .LFDEAD2:
-; sub_FDEAD2 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEAD2:
+; SoftKeyCol7_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol7_ScreenCode90: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 6 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode90:
 	link XIZ,0xffec                               ; FDEAD2  ee 0c ec ff
 	pushw hl                                      ; FDEAD6  2b
 	push XIX                                      ; FDEAD7  3c
@@ -153636,8 +154041,11 @@ sub_FDEAD2:
 	unlk XIZ                                      ; FDEB6A  ee 0d
 	ret                                           ; FDEB6C  0e
 .LFDEB6D:
-; sub_FDEB6D -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEB6D:
+; SoftKeyCol8_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; SoftKeyCol8_ScreenCode90: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode90 -- ScreenCode90 op 7 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode90:
 	link XIZ,0xffec                               ; FDEB6D  ee 0c ec ff
 	pushw hl                                      ; FDEB71  2b
 	push XIX                                      ; FDEB72  3c
@@ -153700,8 +154108,11 @@ sub_FDEB6D:
 	unlk XIZ                                      ; FDEC05  ee 0d
 	ret                                           ; FDEC07  0e
 .LFDEC08:
-; sub_FDEC08 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEC08:
+; LcdKeyRow1_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow1_ScreenCode90: LCD key row 1 (left or right) on ScreenCode90 -- ScreenCode90 op 8 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode90:
 	link XIZ,0xfffe                               ; FDEC08  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC0C  be fe 31
 	push XBC                                      ; FDEC0F  39
@@ -153722,8 +154133,11 @@ sub_FDEC08:
 	unlk XIZ                                      ; FDEC32  ee 0d
 	ret                                           ; FDEC34  0e
 .LFDEC35:
-; sub_FDEC35 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEC35:
+; LcdKeyRow2_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow2_ScreenCode90: LCD key row 2 (left or right) on ScreenCode90 -- ScreenCode90 op 9 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode90:
 	link XIZ,0x0000                               ; FDEC35  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEC39  8e 08 3f 00
 	jr z, .LFDEC56                                ; FDEC3D  66 17
@@ -153740,8 +154154,11 @@ sub_FDEC35:
 	unlk XIZ                                      ; FDEC56  ee 0d
 	ret                                           ; FDEC58  0e
 .LFDEC59:
-; sub_FDEC59 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEC59:
+; LcdKeyRow3_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow3_ScreenCode90: LCD key row 3 (left or right) on ScreenCode90 -- ScreenCode90 op 10 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode90:
 	link XIZ,0xfffe                               ; FDEC59  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEC5D  be fe 31
 	push XBC                                      ; FDEC60  39
@@ -153768,8 +154185,11 @@ sub_FDEC59:
 .LFDEC91:
 	unlk XIZ                                      ; FDEC91  ee 0d
 	ret                                           ; FDEC93  0e
-; sub_FDEC94 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDEC94:
+; LcdKeyRow4_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow4_ScreenCode90: LCD key row 4 (left or right) on ScreenCode90 -- ScreenCode90 op 11 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode90:
 	link XIZ,0xfffc                               ; FDEC94  ee 0c fc ff
 	pushw hl                                      ; FDEC98  2b
 	lda xbc, (xiz-2)                              ; FDEC99  be fe 31
@@ -153810,8 +154230,11 @@ sub_FDEC94:
 	unlk XIZ                                      ; FDECEB  ee 0d
 	ret                                           ; FDECED  0e
 .LFDECEE:
-; sub_FDECEE -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDECEE:
+; LcdKeyRow5_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; LcdKeyRow5_ScreenCode90: LCD key row 5 (left or right) on ScreenCode90 -- ScreenCode90 op 12 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode90:
 	link XIZ,0xfffe                               ; FDECEE  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDECF2  be fe 31
 	push XBC                                      ; FDECF5  39
@@ -153833,8 +154256,11 @@ sub_FDECEE:
 .LFDED1E:
 	unlk XIZ                                      ; FDED1E  ee 0d
 	ret                                           ; FDED20  0e
-; sub_FDED21 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDED21:
+; PageKey_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; PageKey_ScreenCode90: the PAGE pair (code 0x10) on ScreenCode90 -- ScreenCode90 op 16 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode90:
 	link XIZ,0xfffe                               ; FDED21  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDED25  be fe 31
 	push XBC                                      ; FDED28  39
@@ -153851,8 +154277,11 @@ sub_FDED21:
 .LFDED45:
 	unlk XIZ                                      ; FDED45  ee 0d
 	ret                                           ; FDED47  0e
-; sub_FDED48 -- a handler: an entry of PanelOpTable_FCF4A3
-sub_FDED48:
+; ExitKey_ScreenCode90 -- a handler: an entry of PanelOpTable_FCF4A3
+; ExitKey_ScreenCode90: the EXIT key on ScreenCode90 -- ScreenCode90 op 15 (PanelOpTable_FCF4A3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode90:
 	link XIZ,0xfffe                               ; FDED48  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDED4C  8e 08 3f 00
 	jr nz, .LFDED79                               ; FDED50  6e 27
@@ -153875,8 +154304,11 @@ sub_FDED48:
 .LFDED79:
 	unlk XIZ                                      ; FDED79  ee 0d
 	ret                                           ; FDED7B  0e
-; sub_FDED7C -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDED7C:
+; SoftKeyCol1_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol1_ScreenCode91: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 0 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode91:
 	link XIZ,0x0000                               ; FDED7C  ee 0c 00 00
 	pushw 0x91                                    ; FDED80  0b 91 00
 	pushw 0x01                                    ; FDED83  0b 01 00
@@ -153891,8 +154323,11 @@ sub_FDED7C:
 	inc 2,XSP                                     ; FDED9B  ef 62
 	unlk XIZ                                      ; FDED9D  ee 0d
 	ret                                           ; FDED9F  0e
-; sub_FDEDA0 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEDA0:
+; SoftKeyCol2_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol2_ScreenCode91: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 1 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode91:
 	link XIZ,0x0000                               ; FDEDA0  ee 0c 00 00
 	pushw 0x91                                    ; FDEDA4  0b 91 00
 	pushw 0x02                                    ; FDEDA7  0b 02 00
@@ -153907,8 +154342,11 @@ sub_FDEDA0:
 	inc 2,XSP                                     ; FDEDBF  ef 62
 	unlk XIZ                                      ; FDEDC1  ee 0d
 	ret                                           ; FDEDC3  0e
-; sub_FDEDC4 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEDC4:
+; SoftKeyCol3_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol3_ScreenCode91: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 2 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode91:
 	link XIZ,0x0000                               ; FDEDC4  ee 0c 00 00
 	pushw 0x91                                    ; FDEDC8  0b 91 00
 	pushw 0x03                                    ; FDEDCB  0b 03 00
@@ -153919,8 +154357,11 @@ sub_FDEDC4:
 	inc 6,XSP                                     ; FDEDD7  ef 66
 	unlk XIZ                                      ; FDEDD9  ee 0d
 	ret                                           ; FDEDDB  0e
-; sub_FDEDDC -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEDDC:
+; SoftKeyCol4_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol4_ScreenCode91: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 3 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode91:
 	link XIZ,0x0000                               ; FDEDDC  ee 0c 00 00
 	pushw 0x91                                    ; FDEDE0  0b 91 00
 	pushw 0x04                                    ; FDEDE3  0b 04 00
@@ -153931,8 +154372,11 @@ sub_FDEDDC:
 	inc 6,XSP                                     ; FDEDEF  ef 66
 	unlk XIZ                                      ; FDEDF1  ee 0d
 	ret                                           ; FDEDF3  0e
-; sub_FDEDF4 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEDF4:
+; SoftKeyCol6_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol6_ScreenCode91: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 5 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode91:
 	link XIZ,0x0000                               ; FDEDF4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEDF8  9e 08 21
 	extz BC                                       ; FDEDFB  d9 12
@@ -153941,8 +154385,11 @@ sub_FDEDF4:
 	popw bc                                       ; FDEE01  49
 	unlk XIZ                                      ; FDEE02  ee 0d
 	ret                                           ; FDEE04  0e
-; sub_FDEE05 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE05:
+; SoftKeyCol7_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol7_ScreenCode91: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 6 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode91:
 	link XIZ,0x0000                               ; FDEE05  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE09  9e 08 21
 	extz BC                                       ; FDEE0C  d9 12
@@ -153951,8 +154398,11 @@ sub_FDEE05:
 	popw bc                                       ; FDEE12  49
 	unlk XIZ                                      ; FDEE13  ee 0d
 	ret                                           ; FDEE15  0e
-; sub_FDEE16 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE16:
+; SoftKeyCol8_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; SoftKeyCol8_ScreenCode91: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode91 -- ScreenCode91 op 7 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode91:
 	link XIZ,0x0000                               ; FDEE16  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE1A  9e 08 21
 	extz BC                                       ; FDEE1D  d9 12
@@ -153961,8 +154411,11 @@ sub_FDEE16:
 	popw bc                                       ; FDEE23  49
 	unlk XIZ                                      ; FDEE24  ee 0d
 	ret                                           ; FDEE26  0e
-; sub_FDEE27 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE27:
+; LcdKeyRow1_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow1_ScreenCode91: LCD key row 1 (left or right) on ScreenCode91 -- ScreenCode91 op 8 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode91:
 	link XIZ,0x0000                               ; FDEE27  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE2B  9e 08 21
 	extz BC                                       ; FDEE2E  d9 12
@@ -153971,8 +154424,11 @@ sub_FDEE27:
 	popw bc                                       ; FDEE34  49
 	unlk XIZ                                      ; FDEE35  ee 0d
 	ret                                           ; FDEE37  0e
-; sub_FDEE38 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE38:
+; LcdKeyRow2_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow2_ScreenCode91: LCD key row 2 (left or right) on ScreenCode91 -- ScreenCode91 op 9 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode91:
 	link XIZ,0x0000                               ; FDEE38  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE3C  9e 08 21
 	extz BC                                       ; FDEE3F  d9 12
@@ -153981,8 +154437,11 @@ sub_FDEE38:
 	popw bc                                       ; FDEE45  49
 	unlk XIZ                                      ; FDEE46  ee 0d
 	ret                                           ; FDEE48  0e
-; sub_FDEE49 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE49:
+; LcdKeyRow3_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow3_ScreenCode91: LCD key row 3 (left or right) on ScreenCode91 -- ScreenCode91 op 10 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode91:
 	link XIZ,0x0000                               ; FDEE49  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEE4D  9e 08 21
 	extz BC                                       ; FDEE50  d9 12
@@ -153991,8 +154450,11 @@ sub_FDEE49:
 	popw bc                                       ; FDEE56  49
 	unlk XIZ                                      ; FDEE57  ee 0d
 	ret                                           ; FDEE59  0e
-; sub_FDEE5A -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEE5A:
+; LcdKeyRow4_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow4_ScreenCode91: LCD key row 4 (left or right) on ScreenCode91 -- ScreenCode91 op 11 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode91:
 	link XIZ,0xfffc                               ; FDEE5A  ee 0c fc ff
 	pushw hl                                      ; FDEE5E  2b
 	lda xbc, (xiz-2)                              ; FDEE5F  be fe 31
@@ -154032,8 +154494,11 @@ sub_FDEE5A:
 	popw hl                                       ; FDEEB0  4b
 	unlk XIZ                                      ; FDEEB1  ee 0d
 	ret                                           ; FDEEB3  0e
-; sub_FDEEB4 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEEB4:
+; LcdKeyRow5_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; LcdKeyRow5_ScreenCode91: LCD key row 5 (left or right) on ScreenCode91 -- ScreenCode91 op 12 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode91:
 	link XIZ,0x0000                               ; FDEEB4  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDEEB8  9e 08 21
 	extz BC                                       ; FDEEBB  d9 12
@@ -154042,8 +154507,11 @@ sub_FDEEB4:
 	popw bc                                       ; FDEEC1  49
 	unlk XIZ                                      ; FDEEC2  ee 0d
 	ret                                           ; FDEEC4  0e
-; sub_FDEEC5 -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEEC5:
+; PageKey_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; PageKey_ScreenCode91: the PAGE pair (code 0x10) on ScreenCode91 -- ScreenCode91 op 16 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode91:
 	link XIZ,0xfffe                               ; FDEEC5  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEEC9  be fe 31
 	push XBC                                      ; FDEECC  39
@@ -154060,8 +154528,11 @@ sub_FDEEC5:
 .LFDEEE9:
 	unlk XIZ                                      ; FDEEE9  ee 0d
 	ret                                           ; FDEEEB  0e
-; sub_FDEEEC -- a handler: an entry of PanelOpTable_FCF4EB
-sub_FDEEEC:
+; ExitKey_ScreenCode91 -- a handler: an entry of PanelOpTable_FCF4EB
+; ExitKey_ScreenCode91: the EXIT key on ScreenCode91 -- ScreenCode91 op 15 (PanelOpTable_FCF4EB).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode91:
 	link XIZ,0xfffe                               ; FDEEEC  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDEEF0  8e 08 3f 00
 	jr nz, .LFDEF1D                               ; FDEEF4  6e 27
@@ -154084,8 +154555,11 @@ sub_FDEEEC:
 .LFDEF1D:
 	unlk XIZ                                      ; FDEF1D  ee 0d
 	ret                                           ; FDEF1F  0e
-; sub_FDEF20 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEF20:
+; SoftKeyCol3_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol3_ScreenCode92: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 2 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode92:
 	link XIZ,0x0000                               ; FDEF20  ee 0c 00 00
 	pushw 0x92                                    ; FDEF24  0b 92 00
 	pushw 0x03                                    ; FDEF27  0b 03 00
@@ -154100,8 +154574,11 @@ sub_FDEF20:
 	inc 2,XSP                                     ; FDEF3F  ef 62
 	unlk XIZ                                      ; FDEF41  ee 0d
 	ret                                           ; FDEF43  0e
-; sub_FDEF44 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEF44:
+; SoftKeyCol4_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol4_ScreenCode92: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 3 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode92:
 	link XIZ,0x0000                               ; FDEF44  ee 0c 00 00
 	pushw 0x92                                    ; FDEF48  0b 92 00
 	pushw 0x04                                    ; FDEF4B  0b 04 00
@@ -154116,8 +154593,11 @@ sub_FDEF44:
 	inc 2,XSP                                     ; FDEF63  ef 62
 	unlk XIZ                                      ; FDEF65  ee 0d
 	ret                                           ; FDEF67  0e
-; sub_FDEF68 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEF68:
+; SoftKeyCol5_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol5_ScreenCode92: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 4 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode92:
 	link XIZ,0x0000                               ; FDEF68  ee 0c 00 00
 	pushw 0x92                                    ; FDEF6C  0b 92 00
 	pushw 0x05                                    ; FDEF6F  0b 05 00
@@ -154128,8 +154608,11 @@ sub_FDEF68:
 	inc 6,XSP                                     ; FDEF7B  ef 66
 	unlk XIZ                                      ; FDEF7D  ee 0d
 	ret                                           ; FDEF7F  0e
-; sub_FDEF80 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEF80:
+; SoftKeyCol6_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; SoftKeyCol6_ScreenCode92: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode92 -- ScreenCode92 op 5 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode92:
 	link XIZ,0x0000                               ; FDEF80  ee 0c 00 00
 	pushw 0x92                                    ; FDEF84  0b 92 00
 	pushw 0x06                                    ; FDEF87  0b 06 00
@@ -154141,8 +154624,11 @@ sub_FDEF80:
 	unlk XIZ                                      ; FDEF95  ee 0d
 	ret                                           ; FDEF97  0e
 .LFDEF98:
-; sub_FDEF98 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEF98:
+; LcdKeyRow1_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow1_ScreenCode92: LCD key row 1 (left or right) on ScreenCode92 -- ScreenCode92 op 8 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode92:
 	link XIZ,0xfffe                               ; FDEF98  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEF9C  be fe 31
 	push XBC                                      ; FDEF9F  39
@@ -154163,8 +154649,11 @@ sub_FDEF98:
 	unlk XIZ                                      ; FDEFC2  ee 0d
 	ret                                           ; FDEFC4  0e
 .LFDEFC5:
-; sub_FDEFC5 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEFC5:
+; LcdKeyRow2_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow2_ScreenCode92: LCD key row 2 (left or right) on ScreenCode92 -- ScreenCode92 op 9 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode92:
 	link XIZ,0x0000                               ; FDEFC5  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDEFC9  8e 08 3f 00
 	jr z, .LFDEFE6                                ; FDEFCD  66 17
@@ -154181,8 +154670,11 @@ sub_FDEFC5:
 	unlk XIZ                                      ; FDEFE6  ee 0d
 	ret                                           ; FDEFE8  0e
 .LFDEFE9:
-; sub_FDEFE9 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDEFE9:
+; LcdKeyRow3_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow3_ScreenCode92: LCD key row 3 (left or right) on ScreenCode92 -- ScreenCode92 op 10 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode92:
 	link XIZ,0xfffe                               ; FDEFE9  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDEFED  be fe 31
 	push XBC                                      ; FDEFF0  39
@@ -154209,8 +154701,11 @@ sub_FDEFE9:
 .LFDF021:
 	unlk XIZ                                      ; FDF021  ee 0d
 	ret                                           ; FDF023  0e
-; sub_FDF024 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDF024:
+; LcdKeyRow4_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow4_ScreenCode92: LCD key row 4 (left or right) on ScreenCode92 -- ScreenCode92 op 11 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode92:
 	link XIZ,0xfffc                               ; FDF024  ee 0c fc ff
 	pushw hl                                      ; FDF028  2b
 	lda xbc, (xiz-2)                              ; FDF029  be fe 31
@@ -154251,8 +154746,11 @@ sub_FDF024:
 	unlk XIZ                                      ; FDF07B  ee 0d
 	ret                                           ; FDF07D  0e
 .LFDF07E:
-; sub_FDF07E -- a handler: an entry of PanelOpTable_FCF533
-sub_FDF07E:
+; LcdKeyRow5_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; LcdKeyRow5_ScreenCode92: LCD key row 5 (left or right) on ScreenCode92 -- ScreenCode92 op 12 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode92:
 	link XIZ,0xfffe                               ; FDF07E  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF082  be fe 31
 	push XBC                                      ; FDF085  39
@@ -154274,8 +154772,11 @@ sub_FDF07E:
 .LFDF0AE:
 	unlk XIZ                                      ; FDF0AE  ee 0d
 	ret                                           ; FDF0B0  0e
-; sub_FDF0B1 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDF0B1:
+; PageKey_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; PageKey_ScreenCode92: the PAGE pair (code 0x10) on ScreenCode92 -- ScreenCode92 op 16 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode92:
 	link XIZ,0xfffe                               ; FDF0B1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF0B5  be fe 31
 	push XBC                                      ; FDF0B8  39
@@ -154292,8 +154793,11 @@ sub_FDF0B1:
 .LFDF0D5:
 	unlk XIZ                                      ; FDF0D5  ee 0d
 	ret                                           ; FDF0D7  0e
-; sub_FDF0D8 -- a handler: an entry of PanelOpTable_FCF533
-sub_FDF0D8:
+; ExitKey_ScreenCode92 -- a handler: an entry of PanelOpTable_FCF533
+; ExitKey_ScreenCode92: the EXIT key on ScreenCode92 -- ScreenCode92 op 15 (PanelOpTable_FCF533).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode92:
 	link XIZ,0xfffe                               ; FDF0D8  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF0DC  8e 08 3f 00
 	jr nz, .LFDF109                               ; FDF0E0  6e 27
@@ -154316,8 +154820,11 @@ sub_FDF0D8:
 .LFDF109:
 	unlk XIZ                                      ; FDF109  ee 0d
 	ret                                           ; FDF10B  0e
-; sub_FDF10C -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF10C:
+; SoftKeyCol3_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol3_ScreenCode93: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 2 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode93:
 	link XIZ,0x0000                               ; FDF10C  ee 0c 00 00
 	pushw 0x93                                    ; FDF110  0b 93 00
 	pushw 0x03                                    ; FDF113  0b 03 00
@@ -154332,8 +154839,11 @@ sub_FDF10C:
 	inc 2,XSP                                     ; FDF12B  ef 62
 	unlk XIZ                                      ; FDF12D  ee 0d
 	ret                                           ; FDF12F  0e
-; sub_FDF130 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF130:
+; SoftKeyCol4_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol4_ScreenCode93: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 3 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode93:
 	link XIZ,0x0000                               ; FDF130  ee 0c 00 00
 	pushw 0x93                                    ; FDF134  0b 93 00
 	pushw 0x04                                    ; FDF137  0b 04 00
@@ -154348,8 +154858,11 @@ sub_FDF130:
 	inc 2,XSP                                     ; FDF14F  ef 62
 	unlk XIZ                                      ; FDF151  ee 0d
 	ret                                           ; FDF153  0e
-; sub_FDF154 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF154:
+; SoftKeyCol5_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol5_ScreenCode93: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 4 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode93:
 	link XIZ,0x0000                               ; FDF154  ee 0c 00 00
 	pushw 0x93                                    ; FDF158  0b 93 00
 	pushw 0x05                                    ; FDF15B  0b 05 00
@@ -154360,8 +154873,11 @@ sub_FDF154:
 	inc 6,XSP                                     ; FDF167  ef 66
 	unlk XIZ                                      ; FDF169  ee 0d
 	ret                                           ; FDF16B  0e
-; sub_FDF16C -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF16C:
+; SoftKeyCol6_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; SoftKeyCol6_ScreenCode93: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode93 -- ScreenCode93 op 5 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode93:
 	link XIZ,0x0000                               ; FDF16C  ee 0c 00 00
 	pushw 0x93                                    ; FDF170  0b 93 00
 	pushw 0x06                                    ; FDF173  0b 06 00
@@ -154372,8 +154888,11 @@ sub_FDF16C:
 	inc 6,XSP                                     ; FDF17F  ef 66
 	unlk XIZ                                      ; FDF181  ee 0d
 	ret                                           ; FDF183  0e
-; sub_FDF184 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF184:
+; LcdKeyRow1_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow1_ScreenCode93: LCD key row 1 (left or right) on ScreenCode93 -- ScreenCode93 op 8 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode93:
 	link XIZ,0x0000                               ; FDF184  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF188  9e 08 21
 	extz BC                                       ; FDF18B  d9 12
@@ -154382,8 +154901,11 @@ sub_FDF184:
 	popw bc                                       ; FDF191  49
 	unlk XIZ                                      ; FDF192  ee 0d
 	ret                                           ; FDF194  0e
-; sub_FDF195 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF195:
+; LcdKeyRow2_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow2_ScreenCode93: LCD key row 2 (left or right) on ScreenCode93 -- ScreenCode93 op 9 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode93:
 	link XIZ,0x0000                               ; FDF195  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF199  9e 08 21
 	extz BC                                       ; FDF19C  d9 12
@@ -154392,8 +154914,11 @@ sub_FDF195:
 	popw bc                                       ; FDF1A2  49
 	unlk XIZ                                      ; FDF1A3  ee 0d
 	ret                                           ; FDF1A5  0e
-; sub_FDF1A6 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF1A6:
+; LcdKeyRow3_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow3_ScreenCode93: LCD key row 3 (left or right) on ScreenCode93 -- ScreenCode93 op 10 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode93:
 	link XIZ,0x0000                               ; FDF1A6  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF1AA  9e 08 21
 	extz BC                                       ; FDF1AD  d9 12
@@ -154402,8 +154927,11 @@ sub_FDF1A6:
 	popw bc                                       ; FDF1B3  49
 	unlk XIZ                                      ; FDF1B4  ee 0d
 	ret                                           ; FDF1B6  0e
-; sub_FDF1B7 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF1B7:
+; LcdKeyRow4_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow4_ScreenCode93: LCD key row 4 (left or right) on ScreenCode93 -- ScreenCode93 op 11 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode93:
 	link XIZ,0xfffc                               ; FDF1B7  ee 0c fc ff
 	pushw hl                                      ; FDF1BB  2b
 	lda xbc, (xiz-2)                              ; FDF1BC  be fe 31
@@ -154443,8 +154971,11 @@ sub_FDF1B7:
 	popw hl                                       ; FDF20D  4b
 	unlk XIZ                                      ; FDF20E  ee 0d
 	ret                                           ; FDF210  0e
-; sub_FDF211 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF211:
+; LcdKeyRow5_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; LcdKeyRow5_ScreenCode93: LCD key row 5 (left or right) on ScreenCode93 -- ScreenCode93 op 12 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode93:
 	link XIZ,0x0000                               ; FDF211  ee 0c 00 00
 	ld BC,(XIZ+0x08)                              ; FDF215  9e 08 21
 	extz BC                                       ; FDF218  d9 12
@@ -154453,8 +154984,11 @@ sub_FDF211:
 	popw bc                                       ; FDF21E  49
 	unlk XIZ                                      ; FDF21F  ee 0d
 	ret                                           ; FDF221  0e
-; sub_FDF222 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF222:
+; PageKey_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; PageKey_ScreenCode93: the PAGE pair (code 0x10) on ScreenCode93 -- ScreenCode93 op 16 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode93:
 	link XIZ,0xfffe                               ; FDF222  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF226  be fe 31
 	push XBC                                      ; FDF229  39
@@ -154471,8 +155005,11 @@ sub_FDF222:
 .LFDF246:
 	unlk XIZ                                      ; FDF246  ee 0d
 	ret                                           ; FDF248  0e
-; sub_FDF249 -- a handler: an entry of PanelOpTable_FCF57B
-sub_FDF249:
+; ExitKey_ScreenCode93 -- a handler: an entry of PanelOpTable_FCF57B
+; ExitKey_ScreenCode93: the EXIT key on ScreenCode93 -- ScreenCode93 op 15 (PanelOpTable_FCF57B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode93:
 	link XIZ,0xfffe                               ; FDF249  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF24D  8e 08 3f 00
 	jr nz, .LFDF27A                               ; FDF251  6e 27
@@ -154495,8 +155032,11 @@ sub_FDF249:
 .LFDF27A:
 	unlk XIZ                                      ; FDF27A  ee 0d
 	ret                                           ; FDF27C  0e
-; sub_FDF27D -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF27D:
+; SoftKeyCol2_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol2_ScreenCode94: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 1 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode94:
 	link XIZ,0xffea                               ; FDF27D  ee 0c ea ff
 	pushw hl                                      ; FDF281  2b
 	push XIX                                      ; FDF282  3c
@@ -154560,8 +155100,11 @@ sub_FDF27D:
 	popw hl                                       ; FDF31E  4b
 	unlk XIZ                                      ; FDF31F  ee 0d
 	ret                                           ; FDF321  0e
-; sub_FDF322 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF322:
+; SoftKeyCol3_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol3_ScreenCode94: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 2 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode94:
 	link XIZ,0x0000                               ; FDF322  ee 0c 00 00
 	pushw 0x94                                    ; FDF326  0b 94 00
 	pushw 0x03                                    ; FDF329  0b 03 00
@@ -154573,8 +155116,11 @@ sub_FDF322:
 	inc 6,XSP                                     ; FDF339  ef 66
 	unlk XIZ                                      ; FDF33B  ee 0d
 	ret                                           ; FDF33D  0e
-; sub_FDF33E -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF33E:
+; SoftKeyCol4_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol4_ScreenCode94: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 3 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode94:
 	link XIZ,0xffea                               ; FDF33E  ee 0c ea ff
 	push XIX                                      ; FDF342  3c
 	lda xix, (xiz-18)                             ; FDF343  be ee 34
@@ -154636,8 +155182,11 @@ sub_FDF33E:
 	pop XIX                                       ; FDF3DB  5c
 	unlk XIZ                                      ; FDF3DC  ee 0d
 	ret                                           ; FDF3DE  0e
-; sub_FDF3DF -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF3DF:
+; SoftKeyCol5_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol5_ScreenCode94: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 4 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode94:
 	link XIZ,0xffec                               ; FDF3DF  ee 0c ec ff
 	push XIX                                      ; FDF3E3  3c
 	lda xix, (xiz-16)                             ; FDF3E4  be f0 34
@@ -154693,8 +155242,11 @@ sub_FDF3DF:
 	pop XIX                                       ; FDF46D  5c
 	unlk XIZ                                      ; FDF46E  ee 0d
 	ret                                           ; FDF470  0e
-; sub_FDF471 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF471:
+; SoftKeyCol6_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol6_ScreenCode94: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 5 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode94:
 	link XIZ,0x0000                               ; FDF471  ee 0c 00 00
 	pushw 0x94                                    ; FDF475  0b 94 00
 	pushw 0x06                                    ; FDF478  0b 06 00
@@ -154705,8 +155257,11 @@ sub_FDF471:
 	inc 6,XSP                                     ; FDF484  ef 66
 	unlk XIZ                                      ; FDF486  ee 0d
 	ret                                           ; FDF488  0e
-; sub_FDF489 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF489:
+; SoftKeyCol7_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; SoftKeyCol7_ScreenCode94: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode94 -- ScreenCode94 op 6 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode94:
 	link XIZ,0x0000                               ; FDF489  ee 0c 00 00
 	pushw 0x94                                    ; FDF48D  0b 94 00
 	pushw 0x07                                    ; FDF490  0b 07 00
@@ -154717,8 +155272,11 @@ sub_FDF489:
 	inc 6,XSP                                     ; FDF49C  ef 66
 	unlk XIZ                                      ; FDF49E  ee 0d
 	ret                                           ; FDF4A0  0e
-; sub_FDF4A1 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF4A1:
+; LcdKeyRow1_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow1_ScreenCode94: LCD key row 1 (left or right) on ScreenCode94 -- ScreenCode94 op 8 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode94:
 	link XIZ,0xfffe                               ; FDF4A1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4A5  be fe 31
 	push XBC                                      ; FDF4A8  39
@@ -154738,8 +155296,11 @@ sub_FDF4A1:
 .LFDF4CB:
 	unlk XIZ                                      ; FDF4CB  ee 0d
 	ret                                           ; FDF4CD  0e
-; sub_FDF4CE -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF4CE:
+; LcdKeyRow2_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow2_ScreenCode94: LCD key row 2 (left or right) on ScreenCode94 -- ScreenCode94 op 9 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode94:
 	link XIZ,0x0000                               ; FDF4CE  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF4D2  8e 08 3f 00
 	jr z, .LFDF4EF                                ; FDF4D6  66 17
@@ -154755,8 +155316,11 @@ sub_FDF4CE:
 .LFDF4EF:
 	unlk XIZ                                      ; FDF4EF  ee 0d
 	ret                                           ; FDF4F1  0e
-; sub_FDF4F2 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF4F2:
+; LcdKeyRow3_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow3_ScreenCode94: LCD key row 3 (left or right) on ScreenCode94 -- ScreenCode94 op 10 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode94:
 	link XIZ,0xfffe                               ; FDF4F2  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF4F6  be fe 31
 	push XBC                                      ; FDF4F9  39
@@ -154783,8 +155347,11 @@ sub_FDF4F2:
 .LFDF52A:
 	unlk XIZ                                      ; FDF52A  ee 0d
 	ret                                           ; FDF52C  0e
-; sub_FDF52D -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF52D:
+; LcdKeyRow4_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow4_ScreenCode94: LCD key row 4 (left or right) on ScreenCode94 -- ScreenCode94 op 11 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode94:
 	link XIZ,0xfffc                               ; FDF52D  ee 0c fc ff
 	lda xbc, (xiz-2)                              ; FDF531  be fe 31
 	push XBC                                      ; FDF534  39
@@ -154819,8 +155386,11 @@ sub_FDF52D:
 .LFDF57A:
 	unlk XIZ                                      ; FDF57A  ee 0d
 	ret                                           ; FDF57C  0e
-; sub_FDF57D -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF57D:
+; LcdKeyRow5_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; LcdKeyRow5_ScreenCode94: LCD key row 5 (left or right) on ScreenCode94 -- ScreenCode94 op 12 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode94:
 	link XIZ,0xfffe                               ; FDF57D  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF581  be fe 31
 	push XBC                                      ; FDF584  39
@@ -154842,8 +155412,11 @@ sub_FDF57D:
 .LFDF5AD:
 	unlk XIZ                                      ; FDF5AD  ee 0d
 	ret                                           ; FDF5AF  0e
-; sub_FDF5B0 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF5B0:
+; PageKey_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; PageKey_ScreenCode94: the PAGE pair (code 0x10) on ScreenCode94 -- ScreenCode94 op 16 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode94:
 	link XIZ,0xfffe                               ; FDF5B0  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF5B4  be fe 31
 	push XBC                                      ; FDF5B7  39
@@ -154860,8 +155433,11 @@ sub_FDF5B0:
 .LFDF5D4:
 	unlk XIZ                                      ; FDF5D4  ee 0d
 	ret                                           ; FDF5D6  0e
-; sub_FDF5D7 -- a handler: an entry of PanelOpTable_FCF5C3
-sub_FDF5D7:
+; ExitKey_ScreenCode94 -- a handler: an entry of PanelOpTable_FCF5C3
+; ExitKey_ScreenCode94: the EXIT key on ScreenCode94 -- ScreenCode94 op 15 (PanelOpTable_FCF5C3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode94:
 	link XIZ,0xfffe                               ; FDF5D7  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF5DB  8e 08 3f 00
 	jr nz, .LFDF608                               ; FDF5DF  6e 27
@@ -154884,8 +155460,11 @@ sub_FDF5D7:
 .LFDF608:
 	unlk XIZ                                      ; FDF608  ee 0d
 	ret                                           ; FDF60A  0e
-; sub_FDF60B -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF60B:
+; LcdKeyRow1_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow1_ScreenCode95: LCD key row 1 (left or right) on ScreenCode95 -- ScreenCode95 op 8 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode95:
 	link XIZ,0xfffe                               ; FDF60B  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF60F  be fe 31
 	push XBC                                      ; FDF612  39
@@ -154905,8 +155484,11 @@ sub_FDF60B:
 .LFDF635:
 	unlk XIZ                                      ; FDF635  ee 0d
 	ret                                           ; FDF637  0e
-; sub_FDF638 -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF638:
+; LcdKeyRow2_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow2_ScreenCode95: LCD key row 2 (left or right) on ScreenCode95 -- ScreenCode95 op 9 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode95:
 	link XIZ,0x0000                               ; FDF638  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF63C  8e 08 3f 00
 	jr z, .LFDF659                                ; FDF640  66 17
@@ -154922,8 +155504,11 @@ sub_FDF638:
 .LFDF659:
 	unlk XIZ                                      ; FDF659  ee 0d
 	ret                                           ; FDF65B  0e
-; sub_FDF65C -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF65C:
+; LcdKeyRow3_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow3_ScreenCode95: LCD key row 3 (left or right) on ScreenCode95 -- ScreenCode95 op 10 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode95:
 	link XIZ,0xfffe                               ; FDF65C  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF660  be fe 31
 	push XBC                                      ; FDF663  39
@@ -154950,8 +155535,11 @@ sub_FDF65C:
 .LFDF694:
 	unlk XIZ                                      ; FDF694  ee 0d
 	ret                                           ; FDF696  0e
-; sub_FDF697 -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF697:
+; LcdKeyRow4_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow4_ScreenCode95: LCD key row 4 (left or right) on ScreenCode95 -- ScreenCode95 op 11 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode95:
 	link XIZ,0xfffc                               ; FDF697  ee 0c fc ff
 	pushw hl                                      ; FDF69B  2b
 	lda xbc, (xiz-2)                              ; FDF69C  be fe 31
@@ -154991,8 +155579,11 @@ sub_FDF697:
 	popw hl                                       ; FDF6ED  4b
 	unlk XIZ                                      ; FDF6EE  ee 0d
 	ret                                           ; FDF6F0  0e
-; sub_FDF6F1 -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF6F1:
+; LcdKeyRow5_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; LcdKeyRow5_ScreenCode95: LCD key row 5 (left or right) on ScreenCode95 -- ScreenCode95 op 12 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode95:
 	link XIZ,0xfffe                               ; FDF6F1  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF6F5  be fe 31
 	push XBC                                      ; FDF6F8  39
@@ -155014,8 +155605,11 @@ sub_FDF6F1:
 .LFDF721:
 	unlk XIZ                                      ; FDF721  ee 0d
 	ret                                           ; FDF723  0e
-; sub_FDF724 -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF724:
+; PageKey_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; PageKey_ScreenCode95: the PAGE pair (code 0x10) on ScreenCode95 -- ScreenCode95 op 16 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode95:
 	link XIZ,0xfffe                               ; FDF724  ee 0c fe ff
 	lda xbc, (xiz-2)                              ; FDF728  be fe 31
 	push XBC                                      ; FDF72B  39
@@ -155032,8 +155626,11 @@ sub_FDF724:
 .LFDF748:
 	unlk XIZ                                      ; FDF748  ee 0d
 	ret                                           ; FDF74A  0e
-; sub_FDF74B -- a handler: an entry of PanelOpTable_FCF60B
-sub_FDF74B:
+; ExitKey_ScreenCode95 -- a handler: an entry of PanelOpTable_FCF60B
+; ExitKey_ScreenCode95: the EXIT key on ScreenCode95 -- ScreenCode95 op 15 (PanelOpTable_FCF60B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode95:
 	link XIZ,0xfffe                               ; FDF74B  ee 0c fe ff
 	cp (XIZ+0x08),0x00                            ; FDF74F  8e 08 3f 00
 	jr nz, .LFDF77C                               ; FDF753  6e 27
@@ -155056,8 +155653,11 @@ sub_FDF74B:
 .LFDF77C:
 	unlk XIZ                                      ; FDF77C  ee 0d
 	ret                                           ; FDF77E  0e
-; sub_FDF77F -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF77F:
+; SoftKeyCol3_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol3_ScreenCode96: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 2 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode96:
 	link XIZ,0xfff0                               ; FDF77F  ee 0c f0 ff
 	push XIX                                      ; FDF783  3c
 	lda xix, (xiz-16)                             ; FDF784  be f0 34
@@ -155110,8 +155710,11 @@ sub_FDF77F:
 	pop XIX                                       ; FDF806  5c
 	unlk XIZ                                      ; FDF807  ee 0d
 	ret                                           ; FDF809  0e
-; sub_FDF80A -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF80A:
+; SoftKeyCol4_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol4_ScreenCode96: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 3 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode96:
 	link XIZ,0xfffa                               ; FDF80A  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF80E  be fe 31
 	push XBC                                      ; FDF811  39
@@ -155159,8 +155762,11 @@ sub_FDF80A:
 	popw bc                                       ; FDF882  49
 	unlk XIZ                                      ; FDF883  ee 0d
 	ret                                           ; FDF885  0e
-; sub_FDF886 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF886:
+; SoftKeyCol5_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol5_ScreenCode96: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 4 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode96:
 	link XIZ,0xfff8                               ; FDF886  ee 0c f8 ff
 	push XIX                                      ; FDF88A  3c
 	lda xix, (Arr27A6_Get:24)                     ; FDF88B  f2 7b 6c fd 34
@@ -155226,8 +155832,11 @@ sub_FDF886:
 	pop XIX                                       ; FDF924  5c
 	unlk XIZ                                      ; FDF925  ee 0d
 	ret                                           ; FDF927  0e
-; sub_FDF928 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF928:
+; SoftKeyCol6_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; SoftKeyCol6_ScreenCode96: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode96 -- ScreenCode96 op 5 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode96:
 	link XIZ,0xfffa                               ; FDF928  ee 0c fa ff
 	lda xbc, (xiz-2)                              ; FDF92C  be fe 31
 	push XBC                                      ; FDF92F  39
@@ -155275,8 +155884,11 @@ sub_FDF928:
 	popw bc                                       ; FDF9A0  49
 	unlk XIZ                                      ; FDF9A1  ee 0d
 	ret                                           ; FDF9A3  0e
-; sub_FDF9A4 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF9A4:
+; LcdKeyRow1_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow1_ScreenCode96: LCD key row 1 (left or right) on ScreenCode96 -- ScreenCode96 op 8 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode96:
 	link XIZ,0x0000                               ; FDF9A4  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9A8  8e 08 3f 00
 	jr nz, .LFDF9BB                               ; FDF9AC  6e 0d
@@ -155290,8 +155902,11 @@ sub_FDF9A4:
 .LFDF9BF:
 	unlk XIZ                                      ; FDF9BF  ee 0d
 	ret                                           ; FDF9C1  0e
-; sub_FDF9C2 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF9C2:
+; LcdKeyRow2_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow2_ScreenCode96: LCD key row 2 (left or right) on ScreenCode96 -- ScreenCode96 op 9 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode96:
 	link XIZ,0x0000                               ; FDF9C2  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9C6  8e 08 3f 00
 	jr z, .LFDF9E3                                ; FDF9CA  66 17
@@ -155307,8 +155922,11 @@ sub_FDF9C2:
 .LFDF9E3:
 	unlk XIZ                                      ; FDF9E3  ee 0d
 	ret                                           ; FDF9E5  0e
-; sub_FDF9E6 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDF9E6:
+; LcdKeyRow3_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow3_ScreenCode96: LCD key row 3 (left or right) on ScreenCode96 -- ScreenCode96 op 10 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode96:
 	link XIZ,0x0000                               ; FDF9E6  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDF9EA  8e 08 3f 00
 	jr nz, .LFDF9F8                               ; FDF9EE  6e 08
@@ -155329,8 +155947,11 @@ sub_FDF9E6:
 .LFDFA0F:
 	unlk XIZ                                      ; FDFA0F  ee 0d
 	ret                                           ; FDFA11  0e
-; sub_FDFA12 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDFA12:
+; LcdKeyRow4_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow4_ScreenCode96: LCD key row 4 (left or right) on ScreenCode96 -- ScreenCode96 op 11 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode96:
 	link XIZ,0x0000                               ; FDFA12  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA16  8e 08 3f 00
 	jr z, .LFDFA33                                ; FDFA1A  66 17
@@ -155346,8 +155967,11 @@ sub_FDFA12:
 .LFDFA33:
 	unlk XIZ                                      ; FDFA33  ee 0d
 	ret                                           ; FDFA35  0e
-; sub_FDFA36 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDFA36:
+; LcdKeyRow5_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; LcdKeyRow5_ScreenCode96: LCD key row 5 (left or right) on ScreenCode96 -- ScreenCode96 op 12 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode96:
 	link XIZ,0x0000                               ; FDFA36  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA3A  8e 08 3f 00
 	jr z, .LFDFA57                                ; FDFA3E  66 17
@@ -155363,8 +155987,11 @@ sub_FDFA36:
 .LFDFA57:
 	unlk XIZ                                      ; FDFA57  ee 0d
 	ret                                           ; FDFA59  0e
-; sub_FDFA5A -- a handler: an entry of PanelOpTable_FCF653
-sub_FDFA5A:
+; PageKey_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; PageKey_ScreenCode96: the PAGE pair (code 0x10) on ScreenCode96 -- ScreenCode96 op 16 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode96:
 	link XIZ,0x0000                               ; FDFA5A  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA5E  8e 08 3f 00
 	jr z, .LFDFA6F                                ; FDFA62  66 0b
@@ -155375,8 +156002,11 @@ sub_FDFA5A:
 .LFDFA6F:
 	unlk XIZ                                      ; FDFA6F  ee 0d
 	ret                                           ; FDFA71  0e
-; sub_FDFA72 -- a handler: an entry of PanelOpTable_FCF653
-sub_FDFA72:
+; ExitKey_ScreenCode96 -- a handler: an entry of PanelOpTable_FCF653
+; ExitKey_ScreenCode96: the EXIT key on ScreenCode96 -- ScreenCode96 op 15 (PanelOpTable_FCF653).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode96:
 	link XIZ,0x0000                               ; FDFA72  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFA76  8e 08 3f 00
 	jr nz, .LFDFA8F                               ; FDFA7A  6e 13
@@ -155389,8 +156019,11 @@ sub_FDFA72:
 .LFDFA8F:
 	unlk XIZ                                      ; FDFA8F  ee 0d
 	ret                                           ; FDFA91  0e
-; sub_FDFA92 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFA92:
+; SoftKeyCol1_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol1_ScreenCode97: SOFT KEY column 1 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 0 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol1_ScreenCode97:
 	link XIZ,0x0000                               ; FDFA92  ee 0c 00 00
 	pushw 0x00                                    ; FDFA96  0b 00 00
 	pushw 0x3f                                    ; FDFA99  0b 3f 00
@@ -155401,8 +156034,11 @@ sub_FDFA92:
 	inc 6,XSP                                     ; FDFAA6  ef 66
 	unlk XIZ                                      ; FDFAA8  ee 0d
 	ret                                           ; FDFAAA  0e
-; sub_FDFAAB -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFAAB:
+; SoftKeyCol2_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol2_ScreenCode97: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 1 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode97:
 	link XIZ,0x0000                               ; FDFAAB  ee 0c 00 00
 	pushw 0x00                                    ; FDFAAF  0b 00 00
 	pushw 0x40                                    ; FDFAB2  0b 40 00
@@ -155413,8 +156049,11 @@ sub_FDFAAB:
 	inc 6,XSP                                     ; FDFABF  ef 66
 	unlk XIZ                                      ; FDFAC1  ee 0d
 	ret                                           ; FDFAC3  0e
-; sub_FDFAC4 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFAC4:
+; SoftKeyCol3_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol3_ScreenCode97: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 2 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode97:
 	link XIZ,0x0000                               ; FDFAC4  ee 0c 00 00
 	pushw 0x41                                    ; FDFAC8  0b 41 00
 	pushw 0x3e                                    ; FDFACB  0b 3e 00
@@ -155425,8 +156064,11 @@ sub_FDFAC4:
 	inc 6,XSP                                     ; FDFAD8  ef 66
 	unlk XIZ                                      ; FDFADA  ee 0d
 	ret                                           ; FDFADC  0e
-; sub_FDFADD -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFADD:
+; SoftKeyCol4_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol4_ScreenCode97: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 3 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode97:
 	link XIZ,0x0000                               ; FDFADD  ee 0c 00 00
 	pushw 0x00                                    ; FDFAE1  0b 00 00
 	pushw 0x42                                    ; FDFAE4  0b 42 00
@@ -155437,8 +156079,11 @@ sub_FDFADD:
 	inc 6,XSP                                     ; FDFAF1  ef 66
 	unlk XIZ                                      ; FDFAF3  ee 0d
 	ret                                           ; FDFAF5  0e
-; sub_FDFAF6 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFAF6:
+; SoftKeyCol5_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol5_ScreenCode97: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 4 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode97:
 	link XIZ,0x0000                               ; FDFAF6  ee 0c 00 00
 	pushw 0x43                                    ; FDFAFA  0b 43 00
 	pushw 0x46                                    ; FDFAFD  0b 46 00
@@ -155449,8 +156094,11 @@ sub_FDFAF6:
 	inc 6,XSP                                     ; FDFB0A  ef 66
 	unlk XIZ                                      ; FDFB0C  ee 0d
 	ret                                           ; FDFB0E  0e
-; sub_FDFB0F -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFB0F:
+; SoftKeyCol6_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol6_ScreenCode97: SOFT KEY column 6 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 5 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol6_ScreenCode97:
 	link XIZ,0x0000                               ; FDFB0F  ee 0c 00 00
 	pushw 0x00                                    ; FDFB13  0b 00 00
 	pushw 0x44                                    ; FDFB16  0b 44 00
@@ -155461,8 +156109,11 @@ sub_FDFB0F:
 	inc 6,XSP                                     ; FDFB23  ef 66
 	unlk XIZ                                      ; FDFB25  ee 0d
 	ret                                           ; FDFB27  0e
-; sub_FDFB28 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFB28:
+; SoftKeyCol7_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; SoftKeyCol7_ScreenCode97: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode97 -- ScreenCode97 op 6 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode97:
 	link XIZ,0x0000                               ; FDFB28  ee 0c 00 00
 	pushw 0x45                                    ; FDFB2C  0b 45 00
 	pushw 0x3d                                    ; FDFB2F  0b 3d 00
@@ -155473,8 +156124,11 @@ sub_FDFB28:
 	inc 6,XSP                                     ; FDFB3C  ef 66
 	unlk XIZ                                      ; FDFB3E  ee 0d
 	ret                                           ; FDFB40  0e
-; sub_FDFB41 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFB41:
+; LcdKeyRow1_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow1_ScreenCode97: LCD key row 1 (left or right) on ScreenCode97 -- ScreenCode97 op 8 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode97:
 	link XIZ,0x0000                               ; FDFB41  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB45  8e 08 3f 00
 	jr z, .LFDFB4F                                ; FDFB49  66 04
@@ -155482,8 +156136,11 @@ sub_FDFB41:
 .LFDFB4F:
 	unlk XIZ                                      ; FDFB4F  ee 0d
 	ret                                           ; FDFB51  0e
-; sub_FDFB52 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFB52:
+; LcdKeyRow2_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow2_ScreenCode97: LCD key row 2 (left or right) on ScreenCode97 -- ScreenCode97 op 9 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode97:
 	link XIZ,0x0000                               ; FDFB52  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB56  8e 08 3f 00
 	jr nz, .LFDFB64                               ; FDFB5A  6e 08
@@ -155504,8 +156161,11 @@ sub_FDFB52:
 .LFDFB7B:
 	unlk XIZ                                      ; FDFB7B  ee 0d
 	ret                                           ; FDFB7D  0e
-; sub_FDFB7E -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFB7E:
+; LcdKeyRow3_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow3_ScreenCode97: LCD key row 3 (left or right) on ScreenCode97 -- ScreenCode97 op 10 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode97:
 	link XIZ,0x0000                               ; FDFB7E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFB82  8e 08 3f 00
 	jr nz, .LFDFB90                               ; FDFB86  6e 08
@@ -155526,8 +156186,11 @@ sub_FDFB7E:
 .LFDFBA7:
 	unlk XIZ                                      ; FDFBA7  ee 0d
 	ret                                           ; FDFBA9  0e
-; sub_FDFBAA -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFBAA:
+; LcdKeyRow4_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow4_ScreenCode97: LCD key row 4 (left or right) on ScreenCode97 -- ScreenCode97 op 11 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode97:
 	link XIZ,0x0000                               ; FDFBAA  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBAE  8e 08 3f 00
 	jr nz, .LFDFBBE                               ; FDFBB2  6e 0a
@@ -155548,8 +156211,11 @@ sub_FDFBAA:
 .LFDFBD5:
 	unlk XIZ                                      ; FDFBD5  ee 0d
 	ret                                           ; FDFBD7  0e
-; sub_FDFBD8 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFBD8:
+; LcdKeyRow5_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; LcdKeyRow5_ScreenCode97: LCD key row 5 (left or right) on ScreenCode97 -- ScreenCode97 op 12 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode97:
 	link XIZ,0x0000                               ; FDFBD8  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFBDC  8e 08 3f 00
 	jr nz, .LFDFBEC                               ; FDFBE0  6e 0a
@@ -155570,8 +156236,11 @@ sub_FDFBD8:
 .LFDFC03:
 	unlk XIZ                                      ; FDFC03  ee 0d
 	ret                                           ; FDFC05  0e
-; sub_FDFC06 -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFC06:
+; PageKey_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; PageKey_ScreenCode97: the PAGE pair (code 0x10) on ScreenCode97 -- ScreenCode97 op 16 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode97:
 	link XIZ,0x0000                               ; FDFC06  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC0A  8e 08 3f 00
 	jr nz, .LFDFC1B                               ; FDFC0E  6e 0b
@@ -155582,8 +156251,11 @@ sub_FDFC06:
 .LFDFC1B:
 	unlk XIZ                                      ; FDFC1B  ee 0d
 	ret                                           ; FDFC1D  0e
-; sub_FDFC1E -- a handler: an entry of PanelOpTable_FCF69B
-sub_FDFC1E:
+; ExitKey_ScreenCode97 -- a handler: an entry of PanelOpTable_FCF69B
+; ExitKey_ScreenCode97: the EXIT key on ScreenCode97 -- ScreenCode97 op 15 (PanelOpTable_FCF69B).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode97:
 	link XIZ,0x0000                               ; FDFC1E  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFC22  8e 08 3f 00
 	jr nz, .LFDFC3B                               ; FDFC26  6e 13
@@ -155596,8 +156268,11 @@ sub_FDFC1E:
 .LFDFC3B:
 	unlk XIZ                                      ; FDFC3B  ee 0d
 	ret                                           ; FDFC3D  0e
-; sub_FDFC3E -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFC3E:
+; SoftKeyCol2_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol2_ScreenCode98: SOFT KEY column 2 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 1 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol2_ScreenCode98:
 	link XIZ,0x0000                               ; FDFC3E  ee 0c 00 00
 	pushw 0x4a                                    ; FDFC42  0b 4a 00
 	ld BC,(XIZ+0x08)                              ; FDFC45  9e 08 21
@@ -155607,8 +156282,11 @@ sub_FDFC3E:
 	pop XBC                                       ; FDFC4F  59
 	unlk XIZ                                      ; FDFC50  ee 0d
 	ret                                           ; FDFC52  0e
-; sub_FDFC53 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFC53:
+; SoftKeyCol3_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol3_ScreenCode98: SOFT KEY column 3 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 2 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol3_ScreenCode98:
 	link XIZ,0x0000                               ; FDFC53  ee 0c 00 00
 	pushw 0x4b                                    ; FDFC57  0b 4b 00
 	ld BC,(XIZ+0x08)                              ; FDFC5A  9e 08 21
@@ -155618,8 +156296,11 @@ sub_FDFC53:
 	pop XBC                                       ; FDFC64  59
 	unlk XIZ                                      ; FDFC65  ee 0d
 	ret                                           ; FDFC67  0e
-; sub_FDFC68 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFC68:
+; SoftKeyCol4_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol4_ScreenCode98: SOFT KEY column 4 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 3 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol4_ScreenCode98:
 	link XIZ,0x0000                               ; FDFC68  ee 0c 00 00
 	pushw 0x4c                                    ; FDFC6C  0b 4c 00
 	ld BC,(XIZ+0x08)                              ; FDFC6F  9e 08 21
@@ -155629,8 +156310,11 @@ sub_FDFC68:
 	pop XBC                                       ; FDFC79  59
 	unlk XIZ                                      ; FDFC7A  ee 0d
 	ret                                           ; FDFC7C  0e
-; sub_FDFC7D -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFC7D:
+; SoftKeyCol5_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol5_ScreenCode98: SOFT KEY column 5 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 4 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol5_ScreenCode98:
 	link XIZ,0x0000                               ; FDFC7D  ee 0c 00 00
 	pushw 0x49                                    ; FDFC81  0b 49 00
 	ld BC,(XIZ+0x08)                              ; FDFC84  9e 08 21
@@ -155640,8 +156324,11 @@ sub_FDFC7D:
 	pop XBC                                       ; FDFC8E  59
 	unlk XIZ                                      ; FDFC8F  ee 0d
 	ret                                           ; FDFC91  0e
-; sub_FDFC92 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFC92:
+; SoftKeyCol7_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol7_ScreenCode98: SOFT KEY column 7 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 6 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol7_ScreenCode98:
 	link XIZ,0x0000                               ; FDFC92  ee 0c 00 00
 	pushw 0x47                                    ; FDFC96  0b 47 00
 	ld BC,(XIZ+0x08)                              ; FDFC99  9e 08 21
@@ -155651,8 +156338,11 @@ sub_FDFC92:
 	pop XBC                                       ; FDFCA3  59
 	unlk XIZ                                      ; FDFCA4  ee 0d
 	ret                                           ; FDFCA6  0e
-; sub_FDFCA7 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFCA7:
+; SoftKeyCol8_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; SoftKeyCol8_ScreenCode98: SOFT KEY column 8 (lower or upper; the flag carries which) on ScreenCode98 -- ScreenCode98 op 7 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+SoftKeyCol8_ScreenCode98:
 	link XIZ,0x0000                               ; FDFCA7  ee 0c 00 00
 	pushw 0x48                                    ; FDFCAB  0b 48 00
 	ld BC,(XIZ+0x08)                              ; FDFCAE  9e 08 21
@@ -155662,8 +156352,11 @@ sub_FDFCA7:
 	pop XBC                                       ; FDFCB8  59
 	unlk XIZ                                      ; FDFCB9  ee 0d
 	ret                                           ; FDFCBB  0e
-; sub_FDFCBC -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFCBC:
+; LcdKeyRow1_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow1_ScreenCode98: LCD key row 1 (left or right) on ScreenCode98 -- ScreenCode98 op 8 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow1_ScreenCode98:
 	link XIZ,0x0000                               ; FDFCBC  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCC0  8e 08 3f 00
 	jr z, .LFDFCCA                                ; FDFCC4  66 04
@@ -155671,8 +156364,11 @@ sub_FDFCBC:
 .LFDFCCA:
 	unlk XIZ                                      ; FDFCCA  ee 0d
 	ret                                           ; FDFCCC  0e
-; sub_FDFCCD -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFCCD:
+; LcdKeyRow2_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow2_ScreenCode98: LCD key row 2 (left or right) on ScreenCode98 -- ScreenCode98 op 9 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow2_ScreenCode98:
 	link XIZ,0x0000                               ; FDFCCD  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCD1  8e 08 3f 00
 	jr nz, .LFDFCDF                               ; FDFCD5  6e 08
@@ -155693,8 +156389,11 @@ sub_FDFCCD:
 .LFDFCF6:
 	unlk XIZ                                      ; FDFCF6  ee 0d
 	ret                                           ; FDFCF8  0e
-; sub_FDFCF9 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFCF9:
+; LcdKeyRow3_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow3_ScreenCode98: LCD key row 3 (left or right) on ScreenCode98 -- ScreenCode98 op 10 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow3_ScreenCode98:
 	link XIZ,0x0000                               ; FDFCF9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFCFD  8e 08 3f 00
 	jr nz, .LFDFD0B                               ; FDFD01  6e 08
@@ -155715,8 +156414,11 @@ sub_FDFCF9:
 .LFDFD22:
 	unlk XIZ                                      ; FDFD22  ee 0d
 	ret                                           ; FDFD24  0e
-; sub_FDFD25 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFD25:
+; LcdKeyRow4_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow4_ScreenCode98: LCD key row 4 (left or right) on ScreenCode98 -- ScreenCode98 op 11 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow4_ScreenCode98:
 	link XIZ,0x0000                               ; FDFD25  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD29  8e 08 3f 00
 	jr z, .LFDFD46                                ; FDFD2D  66 17
@@ -155732,8 +156434,11 @@ sub_FDFD25:
 .LFDFD46:
 	unlk XIZ                                      ; FDFD46  ee 0d
 	ret                                           ; FDFD48  0e
-; sub_FDFD49 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFD49:
+; LcdKeyRow5_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; LcdKeyRow5_ScreenCode98: LCD key row 5 (left or right) on ScreenCode98 -- ScreenCode98 op 12 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+LcdKeyRow5_ScreenCode98:
 	link XIZ,0x0000                               ; FDFD49  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD4D  8e 08 3f 00
 	jr z, .LFDFD6A                                ; FDFD51  66 17
@@ -155749,8 +156454,11 @@ sub_FDFD49:
 .LFDFD6A:
 	unlk XIZ                                      ; FDFD6A  ee 0d
 	ret                                           ; FDFD6C  0e
-; sub_FDFD6D -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFD6D:
+; PageKey_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; PageKey_ScreenCode98: the PAGE pair (code 0x10) on ScreenCode98 -- ScreenCode98 op 16 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+PageKey_ScreenCode98:
 	link XIZ,0x0000                               ; FDFD6D  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD71  8e 08 3f 00
 	jr z, .LFDFD82                                ; FDFD75  66 0b
@@ -155761,8 +156469,11 @@ sub_FDFD6D:
 .LFDFD82:
 	unlk XIZ                                      ; FDFD82  ee 0d
 	ret                                           ; FDFD84  0e
-; sub_FDFD85 -- a handler: an entry of PanelOpTable_FCF6E3
-sub_FDFD85:
+; ExitKey_ScreenCode98 -- a handler: an entry of PanelOpTable_FCF6E3
+; ExitKey_ScreenCode98: the EXIT key on ScreenCode98 -- ScreenCode98 op 15 (PanelOpTable_FCF6E3).
+;   op k of a PanelOpTable is panel event code k (PanelEvent_ToFieldIndex); the code -> control map is
+;   notes/prom_a_panel_control_map.py --map.
+ExitKey_ScreenCode98:
 	link XIZ,0x0000                               ; FDFD85  ee 0c 00 00
 	cp (XIZ+0x08),0x00                            ; FDFD89  8e 08 3f 00
 	jr nz, .LFDFDA2                               ; FDFD8D  6e 13
