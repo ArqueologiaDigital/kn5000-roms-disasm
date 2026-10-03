@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,294
-#   semantic names ........... 50,366 (98.2%)
+#   symbols .................. 51,297
+#   semantic names ........... 50,369 (98.2%)
 #   positional names ......... 928
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -49671,6 +49671,9 @@ VoiceSlot_CheckAndApply 00FE9B75
 VoiceSlot_CheckAndApply_DoCheckDis 00FE9B75
 VoiceSlot_CheckAndApply_Return 00FE9B79
 Chord_Tables 00FE9B7A
+ChordTables_NoteToPitchClass 00FE9B87
+ChordTables_TypeNoteCount 00FE9C0B
+ChordTables_TypeIntervals 00FE9C34
 ChordTables_Run15E 00FE9CD8
 ChordTables_PitchMask 00FE9D03
 VoiceSlot_CheckAndApply_LoadReg 00FE9D33

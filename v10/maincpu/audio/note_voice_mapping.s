@@ -15455,7 +15455,7 @@ VoiceSlot_StoreParams_OrBits:
 
 VoiceSlot_StoreParams_LoadReg:
 	ld l, (xiy + 5)
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	c, (xiz+l)
 	ldto_werp WA, 0x30
 	ld xiz, VoiceSlot_CheckAndApply_Data2
@@ -15507,7 +15507,7 @@ VoiceSlot_StoreParams_LoadReg4:
 	ld l, (xiy + 5)
 	cp l, (0xcee6:24)
 	jr z, VoiceSlot_StoreParams_Increment
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	l, (xiz+hl)
 	dec 1, hl
 	ld xiz, VoiceSlot_StoreParams_Data
@@ -15522,7 +15522,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	ld xiz, VoiceSlot_StoreParams_LoadReg5_Code
 	ld	a, (xiz+hl)
 	ld l, (0x00cee6:24)
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	and (0xcede:24), 127
 	and (0xcede:24), 239
@@ -15565,7 +15565,7 @@ ComputeNoteBitPositi_Prologue:
 	ld xiz, 0xcee6
 	ld	l, (xiz+iy)
 	sub l, w
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	a, (xiz+hl)
 	dec 1, a
 	ld c, 0xb:opc
@@ -15593,7 +15593,7 @@ ComputeNoteBitPositi_Data:
 	ld	w, (xiz+iy)
 	sub l, h
 	xor h, h
-	ld	xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld	xiz, ChordTables_NoteToPitchClass
 	ld	c, (xiz+hl)
 	dec 1, c
 	ldfr_berp a, 60
@@ -15683,7 +15683,7 @@ Voice_PitchCalcStep:
 	ld xiz, 0xcee6
 	ld	l, (xiz+hl)
 	add l, b
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	jr PitchCalc_Return
 
@@ -15816,7 +15816,7 @@ VoiceSlot_LoadResult_SetByte:
 	ld a, 0x1:opc
 	ld l, (0x00cee6:24)
 	xor h, h
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 
 VoiceSlot_LoadResult_Block2:
@@ -15831,7 +15831,7 @@ VoiceSlot_LoadResult_Data2:
 	dec	1, hl
 	ld	xiz, 0xcee6
 	ld	l, (xiz+hl)
-	ld	xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld	xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	or	(52958:24), 16
 	and	(52958:24), 127
@@ -16207,7 +16207,7 @@ NoteDisplay_LookupEntry:
 	ld xiz, 0xcee6
 	ld	l, (xiz+hl)
 	add l, w
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	dec 1, w
 	ld l, (0x00cee5:24)
@@ -16247,7 +16247,7 @@ NoteDisplay_FoundEntry:
 	ld xiz, 0xcee6
 	ld	l, (xiz+hl)
 	add l, w
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	jr NoteDisplay_StoreBoundsReturn
 
@@ -16289,7 +16289,7 @@ NoteDisplay_AlternateLookup:
 	ld l, (0x00cf34:24)
 	add l, w
 	xor h, h
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	w, (xiz+hl)
 	jr NoteDisplay_AltReturn
 
@@ -16349,7 +16349,7 @@ NoteDisplay_LookupFromCurrent:
 	ld	l, (xiz+hl)
 
 NoteDisplay_LookupFromTable:
-	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
+	ld xiz, ChordTables_NoteToPitchClass
 	ld	a, (xiz+hl)
 	cp (0xcee0:24), a
 	jr z, NoteDisplay_SameNote
@@ -16468,10 +16468,10 @@ InitPartAllocState_TestBit242:
 	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
-	ld xiz, InitPartAllocState_TestBit242_Data
+	ld xiz, ChordTables_TypeNoteCount
 	ld	a, (xiz+hl)
 	ld (0x00cee5:24), a
-	ld xiz, InitPartAllocState_TestBit242_Data_2
+	ld xiz, ChordTables_TypeIntervals
 	sla hl, 2
 	ld	bc, (xiz+hl)
 	inc 2, hl
@@ -16527,7 +16527,7 @@ InitPartAllocState_Block5:
 VoiceSlot_SetPitchParams:
 
 VoiceSlot_SetPitchParams_LoadReg:
-	ld xiz, VoiceSlot_CheckAndApply_Data
+	ld xiz, Chord_Tables
 	ld	w, (xiz+hl)
 	ld a, 0x40:opc
 	ldw (0x00cf77:24), 0x0001
@@ -16540,12 +16540,12 @@ VoiceSlot_SetPitchParams_TestBit24:
 	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
-	ld xiz, InitPartAllocState_TestBit242_Data
+	ld xiz, ChordTables_TypeNoteCount
 	ld	c, (xiz+hl)
 	ld (0x00cef1:24), c
 	inc 1, (0xcef1:24)
 	xor b, b
-	ld xiy, InitPartAllocState_TestBit242_Data_2
+	ld xiy, ChordTables_TypeIntervals
 	ld xix, 0xcef2
 	sla hl, 2
 	ld d, (0x00cee1:24)
@@ -16587,11 +16587,11 @@ VoiceSlot_IterateAlloc_Block:
 	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
-	ld xiz, InitPartAllocState_TestBit242_Data
+	ld xiz, ChordTables_TypeNoteCount
 	ld	c, (xiz+hl)
 	ld (0x00cef1:24), c
 	xor b, b
-	ld xiy, InitPartAllocState_TestBit242_Data_2
+	ld xiy, ChordTables_TypeIntervals
 	ld xix, 0xcef2
 	sla hl, 2
 	ld e, (0x00cee0:24)
@@ -16613,15 +16613,15 @@ VoiceSlot_IterateAlloc_Block2:
 	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
-	ld xiz, InitPartAllocState_TestBit242_Data
+	ld xiz, ChordTables_TypeNoteCount
 	ld	a, (xiz+hl)
 	ld (0x00cef1:24), a
-	ld xiz, InitPartAllocState_TestBit242_Data_2
+	ld xiz, ChordTables_TypeIntervals
 	sla hl, 2
 	ld	bc, (xiz+hl)
 	inc 2, hl
 	ld	de, (xiz+hl)
-	ld xiz, VoiceSlot_CheckAndApply_Data
+	ld xiz, Chord_Tables
 	ld l, (0x00cee0:24)
 	ld	l, (xiz+l)
 	add l, 0xc
@@ -16716,8 +16716,8 @@ VoiceSlot_CheckAndApply_Return:
 
 ; CHORD TABLES used by the fingered-chord code below, 441 bytes, five parts.
 ; Offsets are from this label; the readers load the part addresses, which are
-; named in shared/positional_labels.s as VoiceSlot_StoreParams_LoadReg_Data,
-; _0x91, _0xBA and _0x189 (v10/v9 addresses; the chord ROOT is RAM 0xCEE0,
+; labelled ChordTables_NoteToPitchClass (+0x0D), ChordTables_TypeNoteCount (+0x91),
+; ChordTables_TypeIntervals (+0xBA) and ChordTables_PitchMask (+0x189) (v10/v9 addresses; the chord ROOT is RAM 0xCEE0,
 ; the chord TYPE is RAM 0xCEDF, both counted from 1):
 ;   +0x000   1 B   0x00, never read (index 0 is not a root)
 ;   +0x001  12 B   ROOT -> BASS NOTE: note 0x24..0x2C, 0x21..0x23 (C2..G#2,
@@ -16745,12 +16745,12 @@ VoiceSlot_CheckAndApply_Return:
 ; Count 41 for the two chord-type parts: the note-count part fills exactly
 ; 0x91..0xB9 and the interval part 0xBA..0x15D before the 0x00..0x2A run;
 ; neither reader bounds the type.
-VoiceSlot_CheckAndApply_Data:
+Chord_Tables:
 	.byte 0x00
 	; index row
 	.byte 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x21, 0x22, 0x23
 	; 11 rows of 0x01..0x0c
-VoiceSlot_StoreParams_LoadReg_Data:
+ChordTables_NoteToPitchClass:
 	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
@@ -16763,7 +16763,7 @@ VoiceSlot_StoreParams_LoadReg_Data:
 	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c
 	; selector bytes
-InitPartAllocState_TestBit242_Data:
+ChordTables_TypeNoteCount:
 	.byte 0x03, 0x04, 0x04, 0x03, 0x03, 0x04, 0x04, 0x04
 	.byte 0x04, 0x04, 0x04, 0x04, 0x03, 0x04, 0x04, 0x04
 	.byte 0x04, 0x04, 0x04, 0x03, 0x04, 0x04, 0x03, 0x04
@@ -16771,7 +16771,7 @@ InitPartAllocState_TestBit242_Data:
 	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
 	.byte 0x04
 	; 4-byte records
-InitPartAllocState_TestBit242_Data_2:
+ChordTables_TypeIntervals:
 	.byte 0x00, 0x04, 0x07, 0x00
 	.byte 0x00, 0x04, 0x07, 0x0a
 	.byte 0x00, 0x04, 0x07, 0x0b
