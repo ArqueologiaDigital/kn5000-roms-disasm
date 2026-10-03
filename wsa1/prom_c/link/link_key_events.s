@@ -114,10 +114,10 @@
 ;          found in converted code); what CPU 1 does with channel 5.
 ; --------------------------------------------------------------------------
 KeyEvents_ToLink:
-	link32 0xEE, 0x0C, 0xDD, 0xFF          ; F98CB9  link XIZ,0xffdd   [llvm-mc cannot encode this]
+	link	xiz, 0xffdd          ; F98CB9  link XIZ,0xffdd   [llvm-mc cannot encode this]
 	pushw	hl                               ; F98CBD  push HL
 	push	xix                               ; F98CBE  push XIX
-	extpfx7 0xD2, 0xE1, 0xE2, 0x00, 0x3F, 0x00, 0x00 ; F98CBF  cp (0x00e2e1),0x0000   [llvm-mc cannot encode this]
+	cpw	(0x00e2e1:24), 0x0000 ; F98CBF  cp (0x00e2e1),0x0000   [llvm-mc cannot encode this]
 	jr le, KeyEvents_ToLink__F98CEA                       ; F98CC6  jr LE,0xf98cea
 KeyEvents_ToLink__F98CC8:
 	lda	xbc, (xiz-34)                      ; F98CC8  lda XBC,XIZ+0xde
@@ -210,7 +210,7 @@ KeyEvents_ToLink__F98D7C:
 KeyEvents_ToLink__F98D95:
 	pop	xix                                ; F98D95  pop XIX
 	popw	hl                                ; F98D96  pop HL
-	unlk32 xiz                             ; F98D97  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F98D97  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F98D99  ret
 
 ; --------------------------------------------------------------------------
@@ -262,7 +262,7 @@ KeyEvents_ToLink__F98D95:
 ; Unknown:  nothing further about the descriptor.
 ; --------------------------------------------------------------------------
 Link_Ch0_AppendToRing:
-	link32 0xEE, 0x0C, 0xFE, 0xFF          ; F98D9A  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link	xiz, 0xfffe          ; F98D9A  link XIZ,0xfffe   [llvm-mc cannot encode this]
 	pushw	hl                               ; F98D9E  push HL
 	ldw (xiz-2), 0x0000                    ; F98D9F  ld (XIZ+0xfe),0x0000   [llvm-mc cannot encode this]
 Link_Ch0_AppendToRing__F98DA4:
@@ -291,7 +291,7 @@ Link_Ch0_AppendToRing__F98DB5:
 	jr Link_Ch0_AppendToRing__F98DB0                           ; F98DE0  jr T,0xf98db0
 Link_Ch0_AppendToRing__F98DE2:
 	popw	hl                                ; F98DE2  pop HL
-	unlk32 xiz                             ; F98DE3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F98DE3  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F98DE5  ret
 
 ; --------------------------------------------------------------------------
@@ -342,7 +342,7 @@ Link_Ch0_AppendToRing__F98DE2:
 ; Unknown:  what any of the four blocks controls.
 ; --------------------------------------------------------------------------
 Link_Ch1_WriteParamBlock:
-	link32 0xEE, 0x0C, 0xF4, 0xFF          ; F98DE6  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link	xiz, 0xfff4          ; F98DE6  link XIZ,0xfff4   [llvm-mc cannot encode this]
 	pushw	hl                               ; F98DEA  push HL
 	push	xix                               ; F98DEB  push XIX
 	ld	xbc, (xiz+10)                       ; F98DEC  ld XBC,(XIZ+0x0a)
@@ -368,7 +368,7 @@ Link_Ch1_WriteParamBlock:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E1C  jrl T,0xf98fd1
 Link_Ch1_WriteParamBlock__F98E1F:
 	ld	c, (xiz-3)                          ; F98E1F  ld C,(XIZ+0xfd)
-	extpfx3 0x8E, 0xFE, 0x83               ; F98E22  add C,(XIZ+0xfe)   [llvm-mc cannot encode this]
+	add	c, (xiz-2)               ; F98E22  add C,(XIZ+0xfe)   [llvm-mc cannot encode this]
 	cp	c, 26                               ; F98E25  cp C,0x1a
 	jr ule, Link_Ch1_WriteParamBlock__F98E2D                      ; F98E28  jr ULE,0xf98e2d
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E2A  jrl T,0xf98fd1
@@ -551,7 +551,7 @@ Link_Ch1_CommandTable:
 Link_Ch1_WriteParamBlock__F98FD1:
 	pop	xix                                ; F98FD1  pop XIX
 	popw	hl                                ; F98FD2  pop HL
-	unlk32 xiz                             ; F98FD3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F98FD3  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F98FD5  ret
 
 ; --------------------------------------------------------------------------
@@ -577,7 +577,7 @@ Link_Ch1_WriteParamBlock__F98FD1:
 ; Unknown:  what 0xF992C6 does; what 0x00F328 selects.
 ; --------------------------------------------------------------------------
 Link_Ch2_ForwardBytes:
-	link32 0xEE, 0x0C, 0xFF, 0xFF          ; F98FD6  link XIZ,0xffff   [llvm-mc cannot encode this]
+	link	xiz, 0xffff          ; F98FD6  link XIZ,0xffff   [llvm-mc cannot encode this]
 	pushw	hl                               ; F98FDA  push HL
 Link_Ch2_ForwardBytes__F98FDB:
 	ld	h, (xiz+8)                          ; F98FDB  ld H,(XIZ+0x08)
@@ -608,7 +608,7 @@ Link_Ch2_ForwardBytes__F99015:
 	jr Link_Ch2_ForwardBytes__F98FDB                           ; F99015  jr T,0xf98fdb
 Link_Ch2_ForwardBytes__F99017:
 	popw	hl                                ; F99017  pop HL
-	unlk32 xiz                             ; F99018  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99018  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9901A  ret
 
 ; --------------------------------------------------------------------------
@@ -636,7 +636,7 @@ Link_Ch2_ForwardBytes__F99017:
 ; Unknown:  whether sub-selectors other than 0x80 and 0x90 are ever sent.
 ; --------------------------------------------------------------------------
 Link_Ch3_SetTouchControl:
-	link32 0xEE, 0x0C, 0xFE, 0xFF          ; F9901B  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link	xiz, 0xfffe          ; F9901B  link XIZ,0xfffe   [llvm-mc cannot encode this]
 	cp (xiz+8), 0x02                       ; F9901F  cp (XIZ+0x08),0x02   [llvm-mc cannot encode this]
 	jr nz, Link_Ch3_SetTouchControl__F99060                       ; F99023  jr NZ,0xf99060
 	ld	xbc, (xiz+10)                       ; F99025  ld XBC,(XIZ+0x0a)
@@ -667,5 +667,5 @@ Link_Ch3_SetTouchControl__F99051:
 	cp	bc, 0x90                            ; F9905A  cp BC,0x0090
 	jr z, Link_Ch3_SetTouchControl__F99041                        ; F9905E  jr Z,0xf99041
 Link_Ch3_SetTouchControl__F99060:
-	unlk32 xiz                             ; F99060  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99060  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99062  ret

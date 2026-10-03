@@ -807,7 +807,7 @@
 ;          why the channel is offset by +2.
 ; --------------------------------------------------------------------------
 Dev10C_ChanPlus2_SetRegs_09xx:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FB6E0A  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FB6E0A  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB6E0E  push HL
 	pushw	de                               ; FB6E0F  push DE
 	push	xix                               ; FB6E10  push XIX
@@ -856,7 +856,7 @@ Dev10C_ChanPlus2_SetRegs_09xx__FB6E86:
 	pop	xix                                ; FB6E86  pop XIX
 	popw	de                                ; FB6E87  pop DE
 	popw	hl                                ; FB6E88  pop HL
-	unlk32 xiz                             ; FB6E89  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB6E89  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB6E8B  ret
 
 ; --------------------------------------------------------------------------
@@ -878,7 +878,7 @@ Dev10C_ChanPlus2_SetRegs_09xx__FB6E86:
 ;          in place of `set`.
 ; --------------------------------------------------------------------------
 Dev10C_ChanMinus2_SetReg_0080_Bit15:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FB6E8C  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FB6E8C  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB6E90  push HL
 	pushw	de                               ; FB6E91  push DE
 	pushw	ix                               ; FB6E92  push IX
@@ -909,7 +909,7 @@ Dev10C_ChanMinus2_SetReg_0080_Bit15__FB6ED6:
 	popw	ix                                ; FB6ED6  pop IX
 	popw	de                                ; FB6ED7  pop DE
 	popw	hl                                ; FB6ED8  pop HL
-	unlk32 xiz                             ; FB6ED9  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB6ED9  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB6EDB  ret
 
 ; --------------------------------------------------------------------------
@@ -927,7 +927,7 @@ Dev10C_ChanMinus2_SetReg_0080_Bit15__FB6ED6:
 ; Unknown:  as above.
 ; --------------------------------------------------------------------------
 Dev10C_ChanMinus2_ClrReg_0080_Bit15:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FB6EDC  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FB6EDC  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB6EE0  push HL
 	pushw	de                               ; FB6EE1  push DE
 	pushw	ix                               ; FB6EE2  push IX
@@ -958,7 +958,7 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26:
 	popw	ix                                ; FB6F26  pop IX
 	popw	de                                ; FB6F27  pop DE
 	popw	hl                                ; FB6F28  pop HL
-	unlk32 xiz                             ; FB6F29  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB6F29  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB6F2B  ret
 
 ; --------------------------------------------------------------------------
@@ -1019,7 +1019,7 @@ Dev10C_ChanMinus2_ClrReg_0080_Bit15__FB6F26:
 ; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB6F2C:
-	link32 0xEE, 0x0C, 0xF2, 0xFF          ; FB6F2C  link XIZ,0xfff2   [llvm-mc cannot encode this]
+	link	xiz, 0xfff2          ; FB6F2C  link XIZ,0xfff2   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB6F30  push HL
 	pushw	de                               ; FB6F31  push DE
 	push	xix                               ; FB6F32  push XIX
@@ -1046,7 +1046,7 @@ sub_FB6F2C:
 	ld	bc, hl                              ; FB6F6F  ld BC,HL
 	res	15, bc                             ; FB6F71  res 0x0f,BC
 	lda	xwa, (0xD85B:24)                   ; FB6F74  lda XWA,0x00d85b
-	extpfx3 0xAE, 0xFC, 0x80               ; FB6F79  add XWA,(XIZ+0xfc)   [llvm-mc cannot encode this]
+	add	xwa, (xiz-4)               ; FB6F79  add XWA,(XIZ+0xfc)   [llvm-mc cannot encode this]
 	ld	(xwa), bc                           ; FB6F7C  ld (XWA),BC
 	jrl sub_FB6F2C__FB7010                          ; FB6F7E  jrl T,0xfb7010
 sub_FB6F2C__FB6F81:
@@ -1079,7 +1079,7 @@ sub_FB6F2C__FB6FAE:
 	mul	xbc, de                           ; FB6FB1  mul XBC,DE
 	inc	1, bc                              ; FB6FB3  inc 1,BC
 	extz	xbc                               ; FB6FB5  extz XBC
-	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3C, 0xFF, 0xFB ; FB6FB7  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
+	andw	(xbc+15311), 0xfbff ; FB6FB7  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
 	ldw	bc, 2                              ; FB6FBE  ld BC,0x0002
 	mul	xbc, de                           ; FB6FC1  mul XBC,DE
 	add	xbc, 0xE21D                        ; FB6FC3  add XBC,0x0000e21d
@@ -1114,7 +1114,7 @@ sub_FB6F2C__FB7010:
 	pop	xix                                ; FB7010  pop XIX
 	popw	de                                ; FB7011  pop DE
 	popw	hl                                ; FB7012  pop HL
-	unlk32 xiz                             ; FB7013  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB7013  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB7015  ret
 
 ; --------------------------------------------------------------------------
@@ -1130,7 +1130,7 @@ sub_FB6F2C__FB7010:
 ; Unknown:  as for the original -- what register block 0x0400 does.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanPitch_Reg0400_c:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; FB7016  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; FB7016  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB701A  push HL
 	push	xix                               ; FB701B  push XIX
 	ld	hl, (xiz+8)                         ; FB701C  ld HL,(XIZ+0x08)
@@ -1142,7 +1142,7 @@ Dev10C_SetChanPitch_Reg0400_c:
 	ld	(xix+2), wa                         ; FB7030  ld (XIX+0x02),WA
 	pop	xix                                ; FB7033  pop XIX
 	popw	hl                                ; FB7034  pop HL
-	unlk32 xiz                             ; FB7035  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB7035  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB7037  ret
 
 ; --------------------------------------------------------------------------
@@ -1163,7 +1163,7 @@ Dev10C_SetChanPitch_Reg0400_c:
 ;          Dev10C_WriteAllChanRegs stores the shadow with bit 15 CLEAR instead.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0080_ClrBit15:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; FB7038  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; FB7038  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB703C  push HL
 	pushw	de                               ; FB703D  push DE
 	push	xix                               ; FB703E  push XIX
@@ -1190,7 +1190,7 @@ Dev10C_SetChanReg_0080_ClrBit15:
 	pop	xix                                ; FB7078  pop XIX
 	popw	de                                ; FB7079  pop DE
 	popw	hl                                ; FB707A  pop HL
-	unlk32 xiz                             ; FB707B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB707B  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB707D  ret
 
 ; --------------------------------------------------------------------------
@@ -1230,7 +1230,7 @@ Dev10C_SetChanReg_0080_ClrBit15:
 ; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB707E:
-	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FB707E  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link	xiz, 0xfff8          ; FB707E  link XIZ,0xfff8   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB7082  push HL
 	pushw	de                               ; FB7083  push DE
 	push	xix                               ; FB7084  push XIX
@@ -1265,7 +1265,7 @@ sub_FB707E__FB70BA:
 	mul	xbc, hl                           ; FB70BD  mul XBC,HL
 	inc	1, bc                              ; FB70BF  inc 1,BC
 	extz	xbc                               ; FB70C1  extz XBC
-	extpfx7 0xD3, 0xE5, 0xCF, 0x3B, 0x3C, 0xFF, 0xFB ; FB70C3  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
+	andw	(xbc+15311), 0xfbff ; FB70C3  and (XBC+0x3bcf),0xfbff   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB70CA  push HL
 	calr Dev10C_ChanMinus2_ClrReg_0080_Bit15             ; FB70CB  calr 0xfb6edc
 	ld	de, hl                              ; FB70CE  ld DE,HL
@@ -1308,7 +1308,7 @@ sub_FB707E__FB70BA:
 	pop	xix                                ; FB7134  pop XIX
 	popw	de                                ; FB7135  pop DE
 	popw	hl                                ; FB7136  pop HL
-	unlk32 xiz                             ; FB7137  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB7137  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB7139  ret
 
 ; ============================================================================
@@ -1552,7 +1552,7 @@ sub_FB707E__FB70BA:
 ;          Dev104_WriteAllChanRegs writes ITS word 0 LAST.
 ; --------------------------------------------------------------------------
 Dev10C_WriteAllChanRegs:
-	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FB713A  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link	xiz, 0xfff8          ; FB713A  link XIZ,0xfff8   [llvm-mc cannot encode this]
 	pushw	hl                               ; FB713E  push HL
 	pushw	de                               ; FB713F  push DE
 	push	xix                               ; FB7140  push XIX
@@ -1648,7 +1648,7 @@ Dev10C_WriteAllChanRegs:
 	ld	xbc, (xiz-4)                        ; FB7231  ld XBC,(XIZ+0xfc)
 	ld	(xbc), hl                           ; FB7234  ld (XBC),HL
 	ld	xbc, (xiz-8)                        ; FB7236  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x00, 0x81         ; FB7239  ld (XBC),0x8100   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x8100         ; FB7239  ld (XBC),0x8100   [llvm-mc cannot encode this]
 	ld	bc, hl                              ; FB723D  ld BC,HL
 	add	bc, 0x840                          ; FB723F  add BC,0x0840
 	ld	xwa, (xiz-4)                        ; FB7243  ld XWA,(XIZ+0xfc)
@@ -1738,7 +1738,7 @@ Dev10C_WriteAllChanRegs:
 	pop	xix                                ; FB7326  pop XIX
 	popw	de                                ; FB7327  pop DE
 	popw	hl                                ; FB7328  pop HL
-	unlk32 xiz                             ; FB7329  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB7329  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB732B  ret
 
 ; --------------------------------------------------------------------------
@@ -1754,7 +1754,7 @@ Dev10C_WriteAllChanRegs:
 ; Unknown:  nothing about the routine.
 ; --------------------------------------------------------------------------
 Dev10C_WriteReg_c:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; FB732C  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; FB732C  link XIZ,0x0000   [llvm-mc cannot encode this]
 	push	xix                               ; FB7330  push XIX
 	ld	xix, 0x10C000                       ; FB7331  ld XIX,0x0010c000
 	ld	bc, (xiz+8)                         ; FB7336  ld BC,(XIZ+0x08)
@@ -1762,7 +1762,7 @@ Dev10C_WriteReg_c:
 	ld	bc, (xiz+10)                        ; FB733B  ld BC,(XIZ+0x0a)
 	ld	(xix+2), bc                         ; FB733E  ld (XIX+0x02),BC
 	pop	xix                                ; FB7341  pop XIX
-	unlk32 xiz                             ; FB7342  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FB7342  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FB7344  ret
 
 ; ==============================================================================
@@ -1874,7 +1874,7 @@ Dev10C_WriteReg_c:
 ;          search.  "Only located consumer", not "only consumer".
 ; --------------------------------------------------------------------------
 Dev10C_WriteSixChanRegs_FromD78A:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7345  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7345  link XIZ,0xfff8
 	pushw	hl                                   ; FB7349  push HL
 	pushw	de                                   ; FB734A  push DE
 	push	xix                                   ; FB734B  push XIX
@@ -1942,7 +1942,7 @@ Dev10C_WriteSixChanRegs_FromD78A:
 	pop	xix                                    ; FB73EA  pop XIX
 	popw	de                                    ; FB73EB  pop DE
 	popw	hl                                    ; FB73EC  pop HL
-	unlk32 xiz                                 ; FB73ED  unlk XIZ
+	unlk	xiz                                 ; FB73ED  unlk XIZ
 	ret                                        ; FB73EF  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0800_b -- 0xFB73F0..0xFB742B (60 bytes)
@@ -1963,7 +1963,7 @@ Dev10C_WriteSixChanRegs_FromD78A:
 ;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0800_b:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB73F0  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB73F0  link XIZ,0xfffc
 	pushw	hl                                   ; FB73F4  push HL
 	push	xix                                   ; FB73F5  push XIX
 	ld	hl, (xiz+8)                             ; FB73F6  ld HL,(XIZ+0x08)
@@ -1985,7 +1985,7 @@ Dev10C_SetChanReg_0840_0800_b:
 	ld	(xiy), wa                               ; FB7425  ld (XIY),WA
 	pop	xix                                    ; FB7427  pop XIX
 	popw	hl                                    ; FB7428  pop HL
-	unlk32 xiz                                 ; FB7429  unlk XIZ
+	unlk	xiz                                 ; FB7429  unlk XIZ
 	ret                                        ; FB742B  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_b -- 0xFB742C..0xFB744D (34 bytes)
@@ -2007,7 +2007,7 @@ Dev10C_SetChanReg_0840_0800_b:
 ;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB742C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB742C  link XIZ,0x0000
 	pushw	hl                                   ; FB7430  push HL
 	push	xix                                   ; FB7431  push XIX
 	ld	hl, (xiz+8)                             ; FB7432  ld HL,(XIZ+0x08)
@@ -2019,7 +2019,7 @@ Dev10C_SetChanReg_0840_b:
 	ld	(xix+2), wa                             ; FB7446  ld (XIX+0x02),WA
 	pop	xix                                    ; FB7449  pop XIX
 	popw	hl                                    ; FB744A  pop HL
-	unlk32 xiz                                 ; FB744B  unlk XIZ
+	unlk	xiz                                 ; FB744B  unlk XIZ
 	ret                                        ; FB744D  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0100_0140_b -- 0xFB744E..0xFB7489 (60 bytes)
@@ -2041,7 +2041,7 @@ Dev10C_SetChanReg_0840_b:
 ;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0100_0140_b:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB744E  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB744E  link XIZ,0xfffc
 	pushw	hl                                   ; FB7452  push HL
 	push	xix                                   ; FB7453  push XIX
 	ld	hl, (xiz+8)                             ; FB7454  ld HL,(XIZ+0x08)
@@ -2063,7 +2063,7 @@ Dev10C_SetChanReg_0100_0140_b:
 	ld	(xiy), wa                               ; FB7483  ld (XIY),WA
 	pop	xix                                    ; FB7485  pop XIX
 	popw	hl                                    ; FB7486  pop HL
-	unlk32 xiz                                 ; FB7487  unlk XIZ
+	unlk	xiz                                 ; FB7487  unlk XIZ
 	ret                                        ; FB7489  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0880_b -- 0xFB748A..0xFB74C5 (60 bytes)
@@ -2086,7 +2086,7 @@ Dev10C_SetChanReg_0100_0140_b:
 ;          So: registers (chan+0x0840) = staging->0x1A and (chan+0x0880) = staging->0x1C.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0880_b:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB748A  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB748A  link XIZ,0xfffc
 	pushw	hl                                   ; FB748E  push HL
 	push	xix                                   ; FB748F  push XIX
 	ld	hl, (xiz+8)                             ; FB7490  ld HL,(XIZ+0x08)
@@ -2108,7 +2108,7 @@ Dev10C_SetChanReg_0840_0880_b:
 	ld	(xiy), wa                               ; FB74BF  ld (XIY),WA
 	pop	xix                                    ; FB74C1  pop XIX
 	popw	hl                                    ; FB74C2  pop HL
-	unlk32 xiz                                 ; FB74C3  unlk XIZ
+	unlk	xiz                                 ; FB74C3  unlk XIZ
 	ret                                        ; FB74C5  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0880_From2E -- 0xFB74C6..0xFB7501 (60 bytes)
@@ -2133,7 +2133,7 @@ Dev10C_SetChanReg_0840_0880_b:
 ;          `python3 notes/prom_c_finish_round7.py --twins`.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0880_From2E:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB74C6  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB74C6  link XIZ,0xfffc
 	pushw	hl                                   ; FB74CA  push HL
 	push	xix                                   ; FB74CB  push XIX
 	ld	hl, (xiz+8)                             ; FB74CC  ld HL,(XIZ+0x08)
@@ -2155,7 +2155,7 @@ Dev10C_SetChanReg_0840_0880_From2E:
 	ld	(xiy), wa                               ; FB74FB  ld (XIY),WA
 	pop	xix                                    ; FB74FD  pop XIX
 	popw	hl                                    ; FB74FE  pop HL
-	unlk32 xiz                                 ; FB74FF  unlk XIZ
+	unlk	xiz                                 ; FB74FF  unlk XIZ
 	ret                                        ; FB7501  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0180_FromArg -- 0xFB7502..0xFB7520 (31 bytes)
@@ -2184,7 +2184,7 @@ Dev10C_SetChanReg_0840_0880_From2E:
 ;          notes/FINDINGS-prom_c-voice-readback.md establishes about it -- a magnitude
 ;          the firmware watches fall.  This accessor asserts nothing about that.
 Dev10C_SetChanReg_0180_FromArg:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7502  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7502  link XIZ,0x0000
 	pushw	hl                                   ; FB7506  push HL
 	push	xix                                   ; FB7507  push XIX
 	ld	hl, (xiz+8)                             ; FB7508  ld HL,(XIZ+0x08)
@@ -2195,7 +2195,7 @@ Dev10C_SetChanReg_0180_FromArg:
 	ld	(xix+2), bc                             ; FB7519  ld (XIX+0x02),BC
 	pop	xix                                    ; FB751C  pop XIX
 	popw	hl                                    ; FB751D  pop HL
-	unlk32 xiz                                 ; FB751E  unlk XIZ
+	unlk	xiz                                 ; FB751E  unlk XIZ
 	ret                                        ; FB7520  ret
 ; --------------------------------------------------------------------------
 ; sub_FB7521 -- 0xFB7521..0xFB762E (270 bytes)
@@ -2261,7 +2261,7 @@ Dev10C_SetChanReg_0180_FromArg:
 ; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB7521:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB7521  link XIZ,0xffec
+	link	xiz, 0xffec              ; FB7521  link XIZ,0xffec
 	push	xhl                                   ; FB7525  push XHL
 	pushw	de                                   ; FB7526  push DE
 	push	xix                                   ; FB7527  push XIX
@@ -2284,7 +2284,7 @@ sub_FB7521:
 	ld	xbc, (xiz-6)                            ; FB7556  ld XBC,(XIZ+0xfa)
 	ld	(xbc), de                               ; FB7559  ld (XBC),DE
 	ld	xbc, (xiz-12)                           ; FB755B  ld XBC,(XIZ+0xf4)
-	extpfx4 0xB1, 0x02, 0x00, 0x81             ; FB755E  ld (XBC),0x8100
+	ldw	(xbc), 0x8100             ; FB755E  ld (XBC),0x8100
 	ld	bc, de                                  ; FB7562  ld BC,DE
 	add	bc, 0x840                              ; FB7564  add BC,0x0840
 	ld	(xiz-14), bc                            ; FB7568  ld (XIZ+0xf2),BC
@@ -2321,28 +2321,28 @@ sub_FB7521:
 	ld	bc, (xix+4)                             ; FB75BA  ld BC,(XIX+0x04)
 	ld	(xiz-18), bc                            ; FB75BD  ld (XIZ+0xee),BC
 	ldw (xiz-20), 0x7FFF                       ; FB75C0  ld (XIZ+0xec),0x7fff
-	extpfx3 0x9E, 0xEC, 0xC1                   ; FB75C5  and BC,(XIZ+0xec)
+	and	bc, (xiz-20)                   ; FB75C5  and BC,(XIZ+0xec)
 	ld	xwa, (xiz-12)                           ; FB75C8  ld XWA,(XIZ+0xf4)
 	ld	(xwa), bc                               ; FB75CB  ld (XWA),BC
 	ld	xbc, (xiz-6)                            ; FB75CD  ld XBC,(XIZ+0xfa)
 	ld	wa, (xiz-16)                            ; FB75D0  ld WA,(XIZ+0xf0)
 	ld	(xbc), wa                               ; FB75D3  ld (XBC),WA
 	ld	bc, (xix+4)                             ; FB75D5  ld BC,(XIX+0x04)
-	extpfx3 0x9E, 0xEC, 0xC1                   ; FB75D8  and BC,(XIZ+0xec)
+	and	bc, (xiz-20)                   ; FB75D8  and BC,(XIZ+0xec)
 	ld	xwa, (xiz-12)                           ; FB75DB  ld XWA,(XIZ+0xf4)
 	ld	(xwa), bc                               ; FB75DE  ld (XWA),BC
 	ld	xbc, (xiz-6)                            ; FB75E0  ld XBC,(XIZ+0xfa)
 	ld	wa, (xiz-16)                            ; FB75E3  ld WA,(XIZ+0xf0)
 	ld	(xbc), wa                               ; FB75E6  ld (XBC),WA
 	ld	bc, (xix+4)                             ; FB75E8  ld BC,(XIX+0x04)
-	extpfx3 0x9E, 0xEC, 0xC1                   ; FB75EB  and BC,(XIZ+0xec)
+	and	bc, (xiz-20)                   ; FB75EB  and BC,(XIZ+0xec)
 	ld	xwa, (xiz-12)                           ; FB75EE  ld XWA,(XIZ+0xf4)
 	ld	(xwa), bc                               ; FB75F1  ld (XWA),BC
 	ld	xbc, (xiz-6)                            ; FB75F3  ld XBC,(XIZ+0xfa)
 	ld	wa, (xiz-16)                            ; FB75F6  ld WA,(XIZ+0xf0)
 	ld	(xbc), wa                               ; FB75F9  ld (XBC),WA
 	ld	bc, (xix+4)                             ; FB75FB  ld BC,(XIX+0x04)
-	extpfx3 0x9E, 0xEC, 0xC1                   ; FB75FE  and BC,(XIZ+0xec)
+	and	bc, (xiz-20)                   ; FB75FE  and BC,(XIZ+0xec)
 	ld	xwa, (xiz-12)                           ; FB7601  ld XWA,(XIZ+0xf4)
 	ld	(xwa), bc                               ; FB7604  ld (XWA),BC
 	ld	xbc, (xiz-6)                            ; FB7606  ld XBC,(XIZ+0xfa)
@@ -2352,7 +2352,7 @@ sub_FB7521:
 	ld	(xwa), bc                               ; FB7611  ld (XWA),BC
 	ld	bc, (xix+4)                             ; FB7613  ld BC,(XIX+0x04)
 	ld	hl, bc                                  ; FB7616  ld HL,BC
-	extpfx3 0x9E, 0xEC, 0xC3                   ; FB7618  and HL,(XIZ+0xec)
+	and	hl, (xiz-20)                   ; FB7618  and HL,(XIZ+0xec)
 	ldw	bc, 2                                  ; FB761B  ld BC,0x0002
 	mul	xbc, de                               ; FB761E  mul XBC,DE
 	add	xbc, 0xD85B                            ; FB7620  add XBC,0x0000d85b
@@ -2361,7 +2361,7 @@ sub_FB7521:
 	pop	xix                                    ; FB7629  pop XIX
 	popw	de                                    ; FB762A  pop DE
 	pop	xhl                                    ; FB762B  pop XHL
-	unlk32 xiz                                 ; FB762C  unlk XIZ
+	unlk	xiz                                 ; FB762C  unlk XIZ
 	ret                                        ; FB762E  ret
 ; --------------------------------------------------------------------------
 ; sub_FB762F -- 0xFB762F..0xFB7714 (230 bytes)
@@ -2407,7 +2407,7 @@ sub_FB7521:
 ; settle what it is FOR, and the label stays an address.  File header section 7.3.
 ; --------------------------------------------------------------------------
 sub_FB762F:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB762F  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FB762F  link XIZ,0xfff6
 	push	xhl                                   ; FB7633  push XHL
 	pushw	de                                   ; FB7634  push DE
 	pushw	ix                                   ; FB7635  push IX
@@ -2427,56 +2427,56 @@ sub_FB762F:
 	ld	xbc, (xiz-4)                            ; FB765B  ld XBC,(XIZ+0xfc)
 	ld	(xbc), de                               ; FB765E  ld (XBC),DE
 	ld	xbc, (xiz-8)                            ; FB7660  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x00, 0x81             ; FB7663  ld (XBC),0x8100
+	ldw	(xbc), 0x8100             ; FB7663  ld (XBC),0x8100
 	ld	ix, de                                  ; FB7667  ld IX,DE
 	add	ix, 0x840                              ; FB7669  add IX,0x0840
 	ld	xbc, (xiz-4)                            ; FB766D  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB7670  ld (XBC),IX
 	ldw (xiz-10), 0x003B                       ; FB7672  ld (XIZ+0xf6),0x003b
 	ld	bc, (xiz-10)                            ; FB7677  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB767A  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB767A  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB767F  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB7682  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB7684  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB7687  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB7689  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB768C  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB768C  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB7691  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB7694  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB7696  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB7699  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB769B  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB769E  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB769E  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB76A3  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB76A6  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB76A8  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB76AB  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB76AD  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB76B0  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB76B0  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB76B5  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB76B8  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB76BA  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB76BD  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB76BF  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB76C2  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB76C2  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB76C7  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB76CA  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB76CC  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB76CF  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB76D1  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB76D4  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB76D4  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB76D9  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB76DC  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB76DE  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB76E1  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB76E3  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB76E6  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB76E6  ld WA,(XHL+BC)
 	ld	xiy, (xiz-8)                            ; FB76EB  ld XIY,(XIZ+0xf8)
 	ld	(xiy), wa                               ; FB76EE  ld (XIY),WA
 	ld	xbc, (xiz-4)                            ; FB76F0  ld XBC,(XIZ+0xfc)
 	ld	(xbc), ix                               ; FB76F3  ld (XBC),IX
 	ld	bc, (xiz-10)                            ; FB76F5  ld BC,(XIZ+0xf6)
-	extpfx5 0xD3, 0x07, 0xEC, 0xE4, 0x20       ; FB76F8  ld WA,(XHL+BC)
+	ld	wa, (xhl+bc)       ; FB76F8  ld WA,(XHL+BC)
 	ld	xbc, (xiz-8)                            ; FB76FD  ld XBC,(XIZ+0xf8)
 	ld	(xbc), wa                               ; FB7700  ld (XBC),WA
 	ld	xbc, (xiz-4)                            ; FB7702  ld XBC,(XIZ+0xfc)
@@ -2487,7 +2487,7 @@ sub_FB762F:
 	popw	ix                                    ; FB770F  pop IX
 	popw	de                                    ; FB7710  pop DE
 	pop	xhl                                    ; FB7711  pop XHL
-	unlk32 xiz                                 ; FB7712  unlk XIZ
+	unlk	xiz                                 ; FB7712  unlk XIZ
 	ret                                        ; FB7714  ret
 
 ; ==============================================================================
@@ -2564,7 +2564,7 @@ sub_FB762F:
 ; Unknown:  what any of the thirteen do.
 ; --------------------------------------------------------------------------
 Dev10C_WriteGlobalRegs:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7715  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7715  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7719  2b                push HL
 	push	xix                                   ; FB771A  3c                push XIX
 	ld	xix, (xiz+8)                            ; FB771B  ae 08 24          ld XIX,(XIZ+0x08)
@@ -2638,7 +2638,7 @@ Dev10C_WriteGlobalRegs:
 	ld	(xwa), bc                               ; FB77E8  b0 51             ld (XWA),BC
 	pop	xix                                    ; FB77EA  5c                pop XIX
 	popw	hl                                    ; FB77EB  4b                pop HL
-	unlk32 xiz                                 ; FB77EC  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB77EC  ee 0d             unlk XIZ
 	ret                                        ; FB77EE  0e                ret
 ; --------------------------------------------------------------------------
 ; ★★ Dev104_WriteAllChanRegs -- the COMPLETE per-channel register map of the SECOND
@@ -2666,7 +2666,7 @@ Dev10C_WriteGlobalRegs:
 ;           nothing here establishes that.
 ; --------------------------------------------------------------------------
 Dev104_WriteAllChanRegs:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB77EF  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB77EF  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB77F3  2b                push HL
 	pushw	de                                   ; FB77F4  2a                push DE
 	push	xix                                   ; FB77F5  3c                push XIX
@@ -2809,7 +2809,7 @@ Dev104_WriteAllChanRegs:
 	pop	xix                                    ; FB7968  5c                pop XIX
 	popw	de                                    ; FB7969  4a                pop DE
 	popw	hl                                    ; FB796A  4b                pop HL
-	unlk32 xiz                                 ; FB796B  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB796B  ee 0d             unlk XIZ
 	ret                                        ; FB796D  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanRegs_01C0_0200_0240 -- register (chan+0) from struct field 0x00
@@ -2827,7 +2827,7 @@ Dev104_WriteAllChanRegs:
 ;          0xFB79AD chan+0x0200 <- 0x10, 0xFB79C0 chan+0x0240 <- 0x12.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_01C0_0200_0240:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB796E  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB796E  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7972  2b                push HL
 	pushw	de                                   ; FB7973  2a                push DE
 	push	xix                                   ; FB7974  3c                push XIX
@@ -2865,7 +2865,7 @@ Dev104_SetChanRegs_01C0_0200_0240:
 	pop	xix                                    ; FB79CA  5c                pop XIX
 	popw	de                                    ; FB79CB  4a                pop DE
 	popw	hl                                    ; FB79CC  4b                pop HL
-	unlk32 xiz                                 ; FB79CD  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB79CD  ee 0d             unlk XIZ
 	ret                                        ; FB79CF  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanRegs_0140_to_0240 -- register (chan+0) from struct field 0x00
@@ -2889,7 +2889,7 @@ Dev104_SetChanRegs_01C0_0200_0240:
 ;          writes.  Always pass the length to the `ret`.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_0140_to_0240:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB79D0  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB79D0  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB79D4  2b                push HL
 	pushw	de                                   ; FB79D5  2a                push DE
 	push	xix                                   ; FB79D6  3c                push XIX
@@ -2941,7 +2941,7 @@ Dev104_SetChanRegs_0140_to_0240:
 	pop	xix                                    ; FB7A52  5c                pop XIX
 	popw	de                                    ; FB7A53  4a                pop DE
 	popw	hl                                    ; FB7A54  4b                pop HL
-	unlk32 xiz                                 ; FB7A55  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7A55  ee 0d             unlk XIZ
 	ret                                        ; FB7A57  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_WriteChanReg0 -- register (chan + 0) of 0x00104000 = the first word of the
@@ -2959,7 +2959,7 @@ Dev104_SetChanRegs_0140_to_0240:
 ;          `ld wa,(xbc)` / `ld (xix+2),wa` -- field 0x00.
 ; --------------------------------------------------------------------------
 Dev104_WriteChanReg0:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7A58  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7A58  ee 0c 00 00       link XIZ,0x0000
 	push	xix                                   ; FB7A5C  3c                push XIX
 	ld	xix, DEV104_BASE                        ; FB7A5D  44 00 40 10 00    ld XIX,0x00104000
 	ld	bc, (xiz+8)                             ; FB7A62  9e 08 21          ld BC,(XIZ+0x08)
@@ -2968,7 +2968,7 @@ Dev104_WriteChanReg0:
 	ld	wa, (xbc)                               ; FB7A6A  91 20             ld WA,(XBC)
 	ld	(xix+2), wa                             ; FB7A6C  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7A6F  5c                pop XIX
-	unlk32 xiz                                 ; FB7A70  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7A70  ee 0d             unlk XIZ
 	ret                                        ; FB7A72  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanRegs_00C0_0100_0240 -- registers (chan+0x00C0), (chan+0x0100),
@@ -2989,7 +2989,7 @@ Dev104_WriteChanReg0:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_00C0_0100_0240:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7A73  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7A73  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7A77  2b                push HL
 	pushw	de                                   ; FB7A78  2a                push DE
 	push	xix                                   ; FB7A79  3c                push XIX
@@ -3022,7 +3022,7 @@ Dev104_SetChanRegs_00C0_0100_0240:
 	pop	xix                                    ; FB7AC3  5c                pop XIX
 	popw	de                                    ; FB7AC4  4a                pop DE
 	popw	hl                                    ; FB7AC5  4b                pop HL
-	unlk32 xiz                                 ; FB7AC6  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7AC6  ee 0d             unlk XIZ
 	ret                                        ; FB7AC8  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanRegs_00C0_0100 -- registers (chan+0x00C0), (chan+0x0100) from fields
@@ -3040,7 +3040,7 @@ Dev104_SetChanRegs_00C0_0100_0240:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_00C0_0100:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7AC9  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7AC9  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7ACD  2b                push HL
 	push	xix                                   ; FB7ACE  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7ACF  9e 08 23          ld HL,(XIZ+0x08)
@@ -3062,7 +3062,7 @@ Dev104_SetChanRegs_00C0_0100:
 	ld	(xiy), wa                               ; FB7AFE  b5 50             ld (XIY),WA
 	pop	xix                                    ; FB7B00  5c                pop XIX
 	popw	hl                                    ; FB7B01  4b                pop HL
-	unlk32 xiz                                 ; FB7B02  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7B02  ee 0d             unlk XIZ
 	ret                                        ; FB7B04  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanRegs_0140_0180 -- registers (chan+0x0140), (chan+0x0180) from fields
@@ -3080,7 +3080,7 @@ Dev104_SetChanRegs_00C0_0100:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanRegs_0140_0180:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7B05  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7B05  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7B09  2b                push HL
 	push	xix                                   ; FB7B0A  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7B0B  9e 08 23          ld HL,(XIZ+0x08)
@@ -3102,7 +3102,7 @@ Dev104_SetChanRegs_0140_0180:
 	ld	(xiy), wa                               ; FB7B3A  b5 50             ld (XIY),WA
 	pop	xix                                    ; FB7B3C  5c                pop XIX
 	popw	hl                                    ; FB7B3D  4b                pop HL
-	unlk32 xiz                                 ; FB7B3E  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7B3E  ee 0d             unlk XIZ
 	ret                                        ; FB7B40  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev104_SetChanReg_0280 -- register (chan+0x0280) from field 0x14.
@@ -3116,7 +3116,7 @@ Dev104_SetChanRegs_0140_0180:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev104_SetChanReg_0280:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7B41  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7B41  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7B45  2b                push HL
 	push	xix                                   ; FB7B46  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7B47  9e 08 23          ld HL,(XIZ+0x08)
@@ -3128,7 +3128,7 @@ Dev104_SetChanReg_0280:
 	ld	(xix+2), wa                             ; FB7B5B  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7B5E  5c                pop XIX
 	popw	hl                                    ; FB7B5F  4b                pop HL
-	unlk32 xiz                                 ; FB7B60  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7B60  ee 0d             unlk XIZ
 	ret                                        ; FB7B62  0e                ret
 
 
@@ -3217,7 +3217,7 @@ Dev104_SetChanReg_0280:
 ; Evidence: `add hl,0x0440` / `add bc,0x0480`; sources (xbc+16), (xbc+18).
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440_0480:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7B63  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7B63  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7B67  2b                push HL
 	push	xix                                   ; FB7B68  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7B69  9e 08 23          ld HL,(XIZ+0x08)
@@ -3239,7 +3239,7 @@ Dev10C_SetChanReg_0440_0480:
 	ld	(xiy), wa                               ; FB7B98  b5 50             ld (XIY),WA
 	pop	xix                                    ; FB7B9A  5c                pop XIX
 	popw	hl                                    ; FB7B9B  4b                pop HL
-	unlk32 xiz                                 ; FB7B9C  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7B9C  ee 0d             unlk XIZ
 	ret                                        ; FB7B9E  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0180_b -- register (chan+0x0180) = staging->0x0C.
@@ -3255,7 +3255,7 @@ Dev10C_SetChanReg_0440_0480:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0180_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7B9F  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7B9F  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7BA3  2b                push HL
 	push	xix                                   ; FB7BA4  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7BA5  9e 08 23          ld HL,(XIZ+0x08)
@@ -3267,7 +3267,7 @@ Dev10C_SetChanReg_0180_b:
 	ld	(xix+2), wa                             ; FB7BB9  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7BBC  5c                pop XIX
 	popw	hl                                    ; FB7BBD  4b                pop HL
-	unlk32 xiz                                 ; FB7BBE  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7BBE  ee 0d             unlk XIZ
 	ret                                        ; FB7BC0  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0440_b -- register (chan+0x0440) = staging->0x10.
@@ -3282,7 +3282,7 @@ Dev10C_SetChanReg_0180_b:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7BC1  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7BC1  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7BC5  2b                push HL
 	push	xix                                   ; FB7BC6  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7BC7  9e 08 23          ld HL,(XIZ+0x08)
@@ -3294,7 +3294,7 @@ Dev10C_SetChanReg_0440_b:
 	ld	(xix+2), wa                             ; FB7BDB  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7BDE  5c                pop XIX
 	popw	hl                                    ; FB7BDF  4b                pop HL
-	unlk32 xiz                                 ; FB7BE0  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7BE0  ee 0d             unlk XIZ
 	ret                                        ; FB7BE2  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0480 -- register (chan+0x0480) = staging->0x12.
@@ -3333,7 +3333,7 @@ Dev10C_SetChanReg_0440_b:
 ;   one the word is written to, and what the two mode bits mean.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0480:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7BE3  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7BE3  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7BE7  2b                push HL
 	push	xix                                   ; FB7BE8  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7BE9  9e 08 23          ld HL,(XIZ+0x08)
@@ -3345,7 +3345,7 @@ Dev10C_SetChanReg_0480:
 	ld	(xix+2), wa                             ; FB7BFD  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7C00  5c                pop XIX
 	popw	hl                                    ; FB7C01  4b                pop HL
-	unlk32 xiz                                 ; FB7C02  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7C02  ee 0d             unlk XIZ
 	ret                                        ; FB7C04  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_04C0_b -- register (chan+0x04C0) = staging->0x14.
@@ -3360,7 +3360,7 @@ Dev10C_SetChanReg_0480:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_04C0_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7C05  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7C05  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7C09  2b                push HL
 	push	xix                                   ; FB7C0A  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7C0B  9e 08 23          ld HL,(XIZ+0x08)
@@ -3372,7 +3372,7 @@ Dev10C_SetChanReg_04C0_b:
 	ld	(xix+2), wa                             ; FB7C1F  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7C22  5c                pop XIX
 	popw	hl                                    ; FB7C23  4b                pop HL
-	unlk32 xiz                                 ; FB7C24  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7C24  ee 0d             unlk XIZ
 	ret                                        ; FB7C26  0e                ret
 ; --------------------------------------------------------------------------
 ; ★ Dev10C_Slot2_WriteGateAndValue -- the routine that shows what BIT 15 of a gate
@@ -3395,7 +3395,7 @@ Dev10C_SetChanReg_04C0_b:
 ;   fit the shape and nothing here distinguishes them.
 ; --------------------------------------------------------------------------
 Dev10C_Slot2_WriteGateAndValue:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7C27  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7C27  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7C2B  2b                push HL
 	pushw	de                                   ; FB7C2C  2a                push DE
 	push	xix                                   ; FB7C2D  3c                push XIX
@@ -3434,7 +3434,7 @@ Dev10C_Slot2_WriteGateAndValue__FB7C56:
 	pop	xix                                    ; FB7C89  5c                pop XIX
 	popw	de                                    ; FB7C8A  4a                pop DE
 	popw	hl                                    ; FB7C8B  4b                pop HL
-	unlk32 xiz                                 ; FB7C8C  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7C8C  ee 0d             unlk XIZ
 	ret                                        ; FB7C8E  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0600_b -- register (chan+0x0600) = staging->0x40.
@@ -3449,7 +3449,7 @@ Dev10C_Slot2_WriteGateAndValue__FB7C56:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0600_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7C8F  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7C8F  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7C93  2b                push HL
 	push	xix                                   ; FB7C94  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7C95  9e 08 23          ld HL,(XIZ+0x08)
@@ -3461,7 +3461,7 @@ Dev10C_SetChanReg_0600_b:
 	ld	(xix+2), wa                             ; FB7CA9  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7CAC  5c                pop XIX
 	popw	hl                                    ; FB7CAD  4b                pop HL
-	unlk32 xiz                                 ; FB7CAE  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7CAE  ee 0d             unlk XIZ
 	ret                                        ; FB7CB0  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot2_StrobeGate -- the same pulse as Dev10C_Slot2_WriteGateAndValue without the
@@ -3479,7 +3479,7 @@ Dev10C_SetChanReg_0600_b:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot2_StrobeGate:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7CB1  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7CB1  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7CB5  2b                push HL
 	push	xix                                   ; FB7CB6  3c                push XIX
 	ld	xix, (xiz+10)                           ; FB7CB7  ae 0a 24          ld XIX,(XIZ+0x0a)
@@ -3506,7 +3506,7 @@ Dev10C_Slot2_StrobeGate__FB7CDD:
 	ld	(xwa+2), bc                             ; FB7CF7  b8 02 51          ld (XWA+0x02),BC
 	pop	xix                                    ; FB7CFA  5c                pop XIX
 	popw	hl                                    ; FB7CFB  4b                pop HL
-	unlk32 xiz                                 ; FB7CFC  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7CFC  ee 0d             unlk XIZ
 	ret                                        ; FB7CFE  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot2_WriteGate8100 -- register (chan+0x0580) = the CONSTANT 0x8100.
@@ -3516,7 +3516,7 @@ Dev10C_Slot2_StrobeGate__FB7CDD:
 ;   Nothing here says what either means.
 ; --------------------------------------------------------------------------
 Dev10C_Slot2_WriteGate8100:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7CFF  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7CFF  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7D03  2b                push HL
 	push	xix                                   ; FB7D04  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7D05  9e 08 23          ld HL,(XIZ+0x08)
@@ -3526,7 +3526,7 @@ Dev10C_Slot2_WriteGate8100:
 	ldw (xix+2), 0x8100                        ; FB7D13  bc 02 02 00 81    ld (XIX+0x02),0x8100
 	pop	xix                                    ; FB7D18  5c                pop XIX
 	popw	hl                                    ; FB7D19  4b                pop HL
-	unlk32 xiz                                 ; FB7D1A  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7D1A  ee 0d             unlk XIZ
 	ret                                        ; FB7D1C  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot3_WriteGateAndValue -- Dev10C_Slot2_WriteGateAndValue's shape on the THIRD
@@ -3545,7 +3545,7 @@ Dev10C_Slot2_WriteGate8100:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot3_WriteGateAndValue:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7D1D  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7D1D  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7D21  2b                push HL
 	pushw	de                                   ; FB7D22  2a                push DE
 	push	xix                                   ; FB7D23  3c                push XIX
@@ -3584,7 +3584,7 @@ Dev10C_Slot3_WriteGateAndValue__FB7D4C:
 	pop	xix                                    ; FB7D7F  5c                pop XIX
 	popw	de                                    ; FB7D80  4a                pop DE
 	popw	hl                                    ; FB7D81  4b                pop HL
-	unlk32 xiz                                 ; FB7D82  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7D82  ee 0d             unlk XIZ
 	ret                                        ; FB7D84  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0640 -- register (chan+0x0640) = staging->0x42.
@@ -3598,7 +3598,7 @@ Dev10C_Slot3_WriteGateAndValue__FB7D4C:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0640:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7D85  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7D85  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7D89  2b                push HL
 	push	xix                                   ; FB7D8A  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7D8B  9e 08 23          ld HL,(XIZ+0x08)
@@ -3610,7 +3610,7 @@ Dev10C_SetChanReg_0640:
 	ld	(xix+2), wa                             ; FB7D9F  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7DA2  5c                pop XIX
 	popw	hl                                    ; FB7DA3  4b                pop HL
-	unlk32 xiz                                 ; FB7DA4  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7DA4  ee 0d             unlk XIZ
 	ret                                        ; FB7DA6  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot3_StrobeGate -- slot 3's copy of Dev10C_Slot2_StrobeGate, on 0x05C0 / 0x3E.
@@ -3623,7 +3623,7 @@ Dev10C_SetChanReg_0640:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot3_StrobeGate:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7DA7  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7DA7  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7DAB  2b                push HL
 	push	xix                                   ; FB7DAC  3c                push XIX
 	ld	xix, (xiz+10)                           ; FB7DAD  ae 0a 24          ld XIX,(XIZ+0x0a)
@@ -3650,7 +3650,7 @@ Dev10C_Slot3_StrobeGate__FB7DD3:
 	ld	(xwa+2), bc                             ; FB7DED  b8 02 51          ld (XWA+0x02),BC
 	pop	xix                                    ; FB7DF0  5c                pop XIX
 	popw	hl                                    ; FB7DF1  4b                pop HL
-	unlk32 xiz                                 ; FB7DF2  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7DF2  ee 0d             unlk XIZ
 	ret                                        ; FB7DF4  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot3_WriteGate8100 -- register (chan+0x05C0) = 0x8100.
@@ -3666,7 +3666,7 @@ Dev10C_Slot3_StrobeGate__FB7DD3:
 ;          ⚠ What writing 0x8100 DOES is not established.
 ; --------------------------------------------------------------------------
 Dev10C_Slot3_WriteGate8100:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7DF5  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7DF5  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7DF9  2b                push HL
 	push	xix                                   ; FB7DFA  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7DFB  9e 08 23          ld HL,(XIZ+0x08)
@@ -3676,7 +3676,7 @@ Dev10C_Slot3_WriteGate8100:
 	ldw (xix+2), 0x8100                        ; FB7E09  bc 02 02 00 81    ld (XIX+0x02),0x8100
 	pop	xix                                    ; FB7E0E  5c                pop XIX
 	popw	hl                                    ; FB7E0F  4b                pop HL
-	unlk32 xiz                                 ; FB7E10  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7E10  ee 0d             unlk XIZ
 	ret                                        ; FB7E12  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1_WriteGateAndValue -- the FIRST slot's copy.  ⚠ Note that slot 1's
@@ -3696,7 +3696,7 @@ Dev10C_Slot3_WriteGate8100:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1_WriteGateAndValue:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7E13  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7E13  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7E17  2b                push HL
 	pushw	de                                   ; FB7E18  2a                push DE
 	push	xix                                   ; FB7E19  3c                push XIX
@@ -3735,7 +3735,7 @@ Dev10C_Slot1_WriteGateAndValue__FB7E42:
 	pop	xix                                    ; FB7E75  5c                pop XIX
 	popw	de                                    ; FB7E76  4a                pop DE
 	popw	hl                                    ; FB7E77  4b                pop HL
-	unlk32 xiz                                 ; FB7E78  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7E78  ee 0d             unlk XIZ
 	ret                                        ; FB7E7A  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_01C0_b -- register (chan+0x01C0) = staging->0x38.
@@ -3750,7 +3750,7 @@ Dev10C_Slot1_WriteGateAndValue__FB7E42:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7E7B  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7E7B  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7E7F  2b                push HL
 	push	xix                                   ; FB7E80  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7E81  9e 08 23          ld HL,(XIZ+0x08)
@@ -3762,7 +3762,7 @@ Dev10C_SetChanReg_01C0_b:
 	ld	(xix+2), wa                             ; FB7E95  bc 02 50          ld (XIX+0x02),WA
 	pop	xix                                    ; FB7E98  5c                pop XIX
 	popw	hl                                    ; FB7E99  4b                pop HL
-	unlk32 xiz                                 ; FB7E9A  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7E9A  ee 0d             unlk XIZ
 	ret                                        ; FB7E9C  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1_StrobeGate -- slot 1's copy of Dev10C_Slot2_StrobeGate, on 0x0540 / 0x3A.
@@ -3775,7 +3775,7 @@ Dev10C_SetChanReg_01C0_b:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1_StrobeGate:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB7E9D  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB7E9D  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB7EA1  2b                push HL
 	push	xix                                   ; FB7EA2  3c                push XIX
 	ld	xix, (xiz+10)                           ; FB7EA3  ae 0a 24          ld XIX,(XIZ+0x0a)
@@ -3802,14 +3802,14 @@ Dev10C_Slot1_StrobeGate__FB7EC9:
 	ld	(xwa+2), bc                             ; FB7EE3  b8 02 51          ld (XWA+0x02),BC
 	pop	xix                                    ; FB7EE6  5c                pop XIX
 	popw	hl                                    ; FB7EE7  4b                pop HL
-	unlk32 xiz                                 ; FB7EE8  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7EE8  ee 0d             unlk XIZ
 	ret                                        ; FB7EEA  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1_WriteGate8100 -- register (chan+0x0540) = 0x8100.
 ; Called from: 0xFA9CD6.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1_WriteGate8100:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7EEB  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7EEB  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7EEF  2b                push HL
 	push	xix                                   ; FB7EF0  3c                push XIX
 	ld	hl, (xiz+8)                             ; FB7EF1  9e 08 23          ld HL,(XIZ+0x08)
@@ -3819,7 +3819,7 @@ Dev10C_Slot1_WriteGate8100:
 	ldw (xix+2), 0x8100                        ; FB7EFF  bc 02 02 00 81    ld (XIX+0x02),0x8100
 	pop	xix                                    ; FB7F04  5c                pop XIX
 	popw	hl                                    ; FB7F05  4b                pop HL
-	unlk32 xiz                                 ; FB7F06  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7F06  ee 0d             unlk XIZ
 	ret                                        ; FB7F08  0e                ret
 ; --------------------------------------------------------------------------
 ; ★★ Dev10C_Slot1or3_WriteGateAndValue -- the routine that MAKES THE `chan >= 0x40`
@@ -3844,7 +3844,7 @@ Dev10C_Slot1_WriteGate8100:
 ;   channel COUNT is reading it wrong.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1or3_WriteGateAndValue:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB7F09  ee 0c f8 ff       link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB7F09  ee 0c f8 ff       link XIZ,0xfff8
 	pushw	hl                                   ; FB7F0D  2b                push HL
 	pushw	de                                   ; FB7F0E  2a                push DE
 	push	xix                                   ; FB7F0F  3c                push XIX
@@ -3918,7 +3918,7 @@ Dev10C_Slot1or3_WriteGateAndValue__FB7FC8:
 	pop	xix                                    ; FB7FC8  5c                pop XIX
 	popw	de                                    ; FB7FC9  4a                pop DE
 	popw	hl                                    ; FB7FCA  4b                pop HL
-	unlk32 xiz                                 ; FB7FCB  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB7FCB  ee 0d             unlk XIZ
 	ret                                        ; FB7FCD  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_01C0_or_0600_b -- the value half of the split alone.
@@ -3936,7 +3936,7 @@ Dev10C_Slot1or3_WriteGateAndValue__FB7FC8:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_or_0600_b:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB7FCE  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB7FCE  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB7FD2  2b                push HL
 	pushw	de                                   ; FB7FD3  2a                push DE
 	push	xix                                   ; FB7FD4  3c                push XIX
@@ -3963,7 +3963,7 @@ Dev10C_SetChanReg_01C0_or_0600_b__FB800C:
 	pop	xix                                    ; FB800C  5c                pop XIX
 	popw	de                                    ; FB800D  4a                pop DE
 	popw	hl                                    ; FB800E  4b                pop HL
-	unlk32 xiz                                 ; FB800F  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB800F  ee 0d             unlk XIZ
 	ret                                        ; FB8011  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1or3_StrobeGate -- the gate half of the split alone: the bit-15 pulse on
@@ -3979,7 +3979,7 @@ Dev10C_SetChanReg_01C0_or_0600_b__FB800C:
 ;          checks that these ten routines use no pair outside it.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1or3_StrobeGate:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB8012  ee 0c fc ff       link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB8012  ee 0c fc ff       link XIZ,0xfffc
 	pushw	hl                                   ; FB8016  2b                push HL
 	pushw	de                                   ; FB8017  2a                push DE
 	push	xix                                   ; FB8018  3c                push XIX
@@ -4035,7 +4035,7 @@ Dev10C_Slot1or3_StrobeGate__FB80A3:
 	pop	xix                                    ; FB80A3  5c                pop XIX
 	popw	de                                    ; FB80A4  4a                pop DE
 	popw	hl                                    ; FB80A5  4b                pop HL
-	unlk32 xiz                                 ; FB80A6  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB80A6  ee 0d             unlk XIZ
 	ret                                        ; FB80A8  0e                ret
 ; --------------------------------------------------------------------------
 ; Dev10C_Slot1or3_WriteGate8100 -- register (chan+0x0540) or (chan+0x0580) = 0x8100,
@@ -4045,7 +4045,7 @@ Dev10C_Slot1or3_StrobeGate__FB80A3:
 ;          `ldw (xbc+2),0x8100` is shared and sits after the join.
 ; --------------------------------------------------------------------------
 Dev10C_Slot1or3_WriteGate8100:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB80A9  ee 0c 00 00       link XIZ,0x0000
+	link	xiz, 0x0000              ; FB80A9  ee 0c 00 00       link XIZ,0x0000
 	pushw	hl                                   ; FB80AD  2b                push HL
 	pushw	de                                   ; FB80AE  2a                push DE
 	push	xix                                   ; FB80AF  3c                push XIX
@@ -4069,7 +4069,7 @@ Dev10C_Slot1or3_WriteGate8100__FB80D4:
 	pop	xix                                    ; FB80DB  5c                pop XIX
 	popw	de                                    ; FB80DC  4a                pop DE
 	popw	hl                                    ; FB80DD  4b                pop HL
-	unlk32 xiz                                 ; FB80DE  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB80DE  ee 0d             unlk XIZ
 	ret                                        ; FB80E0  0e                ret
 ; --------------------------------------------------------------------------
 ; ★★ Dev10C_ResetAllChannels -- the power-on sweep.  This is the single most useful
@@ -4141,7 +4141,7 @@ Dev10C_Slot1or3_WriteGate8100__FB80D4:
 ;   that coincidence would break.
 ; --------------------------------------------------------------------------
 Dev10C_ResetAllChannels:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB80E1  ee 0c f4 ff       link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FB80E1  ee 0c f4 ff       link XIZ,0xfff4
 	pushw	hl                                   ; FB80E5  2b                push HL
 	pushw	de                                   ; FB80E6  2a                push DE
 	push	xix                                   ; FB80E7  3c                push XIX
@@ -4201,7 +4201,7 @@ Dev10C_ResetAllChannels__FB8175:
 	ld	de, hl                                  ; FB817B  db 8a             ld DE,HL
 	pushw	de                                   ; FB817D  2a                push DE
 	calr Dev10C_WriteAllChanRegs                 ; FB817E  1e b9 ef          calr 0xfb713a
-	extpfx7 0xD2, 0x1F, 0xD9, 0x00, 0x3C, 0xFF, 0xC0 ; FB8181  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
+	andw	(0x00d91f:24), 0xc0ff ; FB8181  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
 	ld	ix, (0x00D91F:24)                        ; FB8188  d2 1f d9 00 24    ld IX,(0x00d91f)
 	ld	bc, de                                  ; FB818D  da 89             ld BC,DE
 	sll	bc, 8                                  ; FB818F  d9 ee 08          sll 0x08,BC
@@ -4259,17 +4259,17 @@ Dev10C_ResetAllChannels__FB81DB:
 	ldw (xbc), 0x7E00                          ; FB8211  b1 02 00 7e       ld (XBC),0x7e00
 	lda	xbc, (0x00D8DB:24)                       ; FB8215  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB821A  39                push XBC
-	extpfx3 0x9E, 0xF6, 0x04                   ; FB821B  9e f6 04          pushw (XIZ+0xf6)
+	pushw	(xiz-10)                   ; FB821B  9e f6 04          pushw (XIZ+0xf6)
 	calr Dev10C_Slot1_WriteGateAndValue                 ; FB821E  1e f2 fb          calr 0xfb7e13
 	lda	xbc, (0x00D8DB:24)                       ; FB8221  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8226  39                push XBC
-	extpfx3 0x9E, 0xF6, 0x04                   ; FB8227  9e f6 04          pushw (XIZ+0xf6)
+	pushw	(xiz-10)                   ; FB8227  9e f6 04          pushw (XIZ+0xf6)
 	calr Dev10C_Slot2_WriteGateAndValue                 ; FB822A  1e fa f9          calr 0xfb7c27
 	lda	xbc, (0x00D8DB:24)                       ; FB822D  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8232  39                push XBC
-	extpfx3 0x9E, 0xF6, 0x04                   ; FB8233  9e f6 04          pushw (XIZ+0xf6)
+	pushw	(xiz-10)                   ; FB8233  9e f6 04          pushw (XIZ+0xf6)
 	calr Dev10C_Slot3_WriteGateAndValue                 ; FB8236  1e e4 fa          calr 0xfb7d1d
-	extpfx7 0xD2, 0x1F, 0xD9, 0x00, 0x3C, 0xFF, 0xC0 ; FB8239  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
+	andw	(0x00d91f:24), 0xc0ff ; FB8239  d2 1f d9 00 3c ff c0 and (0x00d91f),0xc0ff
 	ld	bc, (0x00D91F:24)                        ; FB8240  d2 1f d9 00 21    ld BC,(0x00d91f)
 	res	2, bc                                  ; FB8245  d9 30 02          res 0x02,BC
 	ld	(xiz-12), bc                            ; FB8248  be f4 51          ld (XIZ+0xf4),BC
@@ -4277,11 +4277,11 @@ Dev10C_ResetAllChannels__FB81DB:
 	ld	bc, (xiz-10)                            ; FB8250  9e f6 21          ld BC,(XIZ+0xf6)
 	sll	bc, 8                                  ; FB8253  d9 ee 08          sll 0x08,BC
 	and	bc, 0x3F00                             ; FB8256  d9 cc 00 3f       and BC,0x3f00
-	extpfx3 0x9E, 0xF4, 0xE1                   ; FB825A  9e f4 e1          or BC,(XIZ+0xf4)
+	or	bc, (xiz-12)                   ; FB825A  9e f4 e1          or BC,(XIZ+0xf4)
 	ld	(0x00D91F:24), bc                        ; FB825D  f2 1f d9 00 51    ld (0x00d91f),BC
 	lda	xbc, (0x00D91F:24)                       ; FB8262  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB8267  39                push XBC
-	extpfx3 0x9E, 0xF6, 0x04                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)
+	pushw	(xiz-10)                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)
 	calr Dev104_WriteChanReg0                 ; FB826B  1e ea f7          calr 0xfb7a58
 	incw	1, (xiz-2)                            ; FB826E  9e fe 61          incw 1,(XIZ+0xfe)
 	inc	1, de                                  ; FB8271  da 61             inc 1,DE
@@ -4294,5 +4294,5 @@ Dev10C_ResetAllChannels__FB81DB:
 	pop	xix                                    ; FB8288  5c                pop XIX
 	popw	de                                    ; FB8289  4a                pop DE
 	popw	hl                                    ; FB828A  4b                pop HL
-	unlk32 xiz                                 ; FB828B  ee 0d             unlk XIZ
+	unlk	xiz                                 ; FB828B  ee 0d             unlk XIZ
 	ret                                        ; FB828D  0e                ret

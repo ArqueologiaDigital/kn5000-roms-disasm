@@ -183,7 +183,7 @@ EEPROM_WriteDisable__clock:
 ;          routines DO end with `res 5,(P6)`.
 ; --------------------------------------------------------------------------
 EEPROM_SendReadCommand:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FC8A29  link XIZ,0x0000
+	link	xiz, 0x0000              ; FC8A29  link XIZ,0x0000
 	pushw	hl                                   ; FC8A2D  push HL
 	pushw	de                                   ; FC8A2E  push DE
 	ld	de, (xiz+8)                             ; FC8A2F  ld DE,(XIZ+0x08)
@@ -209,7 +209,7 @@ EEPROM_SendReadCommand__clock:
 	jr nz, EEPROM_SendReadCommand__bit         ; FC8A5B  jr NZ,0xfc8a3b
 	popw	de                                    ; FC8A5D  pop DE
 	popw	hl                                    ; FC8A5E  pop HL
-	unlk32 xiz                                 ; FC8A5F  unlk XIZ
+	unlk	xiz                                 ; FC8A5F  unlk XIZ
 	ret                                        ; FC8A61  ret
 ; --------------------------------------------------------------------------
 ; EEPROM_WriteWord -- send WRITE (0x140 | address), 16 data bits, then wait out
@@ -230,7 +230,7 @@ EEPROM_SendReadCommand__clock:
 ;          available in these trees.
 ; --------------------------------------------------------------------------
 EEPROM_WriteWord:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FC8A62  link XIZ,0x0000
+	link	xiz, 0x0000              ; FC8A62  link XIZ,0x0000
 	pushw	hl                                   ; FC8A66  push HL
 	pushw	de                                   ; FC8A67  push DE
 	pushw	ix                                   ; FC8A68  push IX
@@ -288,7 +288,7 @@ EEPROM_WriteWord__wait_ready:
 	popw	ix                                    ; FC8AD4  pop IX
 	popw	de                                    ; FC8AD5  pop DE
 	popw	hl                                    ; FC8AD6  pop HL
-	unlk32 xiz                                 ; FC8AD7  unlk XIZ
+	unlk	xiz                                 ; FC8AD7  unlk XIZ
 	ret                                        ; FC8AD9  ret
 ; --------------------------------------------------------------------------
 ; EEPROM_ShiftIn16 -- clock in 16 data bits MSB-first, then drop CS.
@@ -364,7 +364,7 @@ EEPROM_ShiftIn16__clock_low:
 ;          image and does not write the sum or the magic.
 ; --------------------------------------------------------------------------
 EEPROM_LoadCalibration:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FC8B0B  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FC8B0B  link XIZ,0xfff8
 	pushw	hl                                   ; FC8B0F  push HL
 	pushw	de                                   ; FC8B10  push DE
 	push	xix                                   ; FC8B11  push XIX
@@ -379,13 +379,13 @@ EEPROM_LoadCalibration__word:
 	ld	(xiz-6), wa                             ; FC8B26  ld (XIZ+0xfa),WA
 	ld	(xiz-4), xix                            ; FC8B29  ld (XIZ+0xfc),XIX
 	lda	xbc, (0xE2A1:24)                       ; FC8B2C  lda XBC,0x00e2a1
-	extpfx3 0xAE, 0xFC, 0x81                   ; FC8B31  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FC8B31  add XBC,(XIZ+0xfc)
 	ld	(xbc), wa                               ; FC8B34  ld (XBC),WA
 	popw	bc                                    ; FC8B36  pop BC
 	ei	0                                       ; FC8B37  ei 0x00
 	ld	(xiz-8), xix                            ; FC8B39  ld (XIZ+0xf8),XIX
 	lda	xbc, (0xE2A1:24)                       ; FC8B3C  lda XBC,0x00e2a1
-	extpfx3 0xAE, 0xFC, 0x81                   ; FC8B41  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FC8B41  add XBC,(XIZ+0xfc)
 	ld	wa, (xbc)                               ; FC8B44  ld WA,(XBC)
 	add	de, wa                                 ; FC8B46  add DE,WA
 	ld	xix, (xiz-8)                            ; FC8B48  ld XIX,(XIZ+0xf8)
@@ -416,7 +416,7 @@ EEPROM_LoadCalibration__ret:
 	pop	xix                                    ; FC8B7C  pop XIX
 	popw	de                                    ; FC8B7D  pop DE
 	popw	hl                                    ; FC8B7E  pop HL
-	unlk32 xiz                                 ; FC8B7F  unlk XIZ
+	unlk	xiz                                 ; FC8B7F  unlk XIZ
 	ret                                        ; FC8B81  ret
 ; --------------------------------------------------------------------------
 ; EEPROM_WriteIndexPattern -- write word n with the value n, for n = 0..0x1E.

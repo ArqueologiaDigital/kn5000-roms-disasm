@@ -408,7 +408,7 @@
 ; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
 Format_HexByte:
-	link32 0xEE, 0x0C, 0xFF, 0xFF              ; F9A050  link XIZ,0xffff
+	link	xiz, 0xffff              ; F9A050  link XIZ,0xffff
 	pushw	hl                                   ; F9A054  push HL
 	ld	c, (xiz+8)                              ; F9A055  ld C,(XIZ+0x08)
 	srl	c, 4                                   ; F9A058  srl 0x04,C
@@ -453,7 +453,7 @@ Format_HexByte__F9A0A8:
 	ld	(xbc), h                                ; F9A0B3  ld (XBC),H
 Format_HexByte__F9A0B5:
 	popw	hl                                    ; F9A0B5  pop HL
-	unlk32 xiz                                 ; F9A0B6  unlk XIZ
+	unlk	xiz                                 ; F9A0B6  unlk XIZ
 	ret                                        ; F9A0B8  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_TraceCmd -- 0xF9A0B9..0xF9A0FC (68 bytes)
@@ -479,7 +479,7 @@ Format_HexByte__F9A0B5:
 ; Unknown:  what sets (0x00F35A).
 ; --------------------------------------------------------------------------
 P7Byte_TraceCmd:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; F9A0B9  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; F9A0B9  link XIZ,0xfff6
 	ld	(xiz-10), 10                            ; F9A0BD  ld (XIZ+0xf6),0x0a
 	ld	(xiz-9), 13                             ; F9A0C1  ld (XIZ+0xf7),0x0d
 	ld	(xiz-8), 91                             ; F9A0C5  ld (XIZ+0xf8),0x5b
@@ -491,7 +491,7 @@ P7Byte_TraceCmd:
 	inc	3, xbc                                 ; F9A0DC  inc 3,XBC
 	push	xbc                                   ; F9A0DE  push XBC
 	push	0                                     ; F9A0DF  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A0E1  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A0E1  push (XIZ+0x08)
 	calr Format_HexByte                 ; F9A0E4  calr 0xf9a050
 	inc	6, xsp                                 ; F9A0E7  inc 6,XSP
 	lda	xbc, (xiz-10)                          ; F9A0E9  lda XBC,XIZ+0xf6
@@ -501,7 +501,7 @@ P7Byte_TraceCmd:
 	pushw	10                                   ; F9A0F2  push 0x000a
 	call	Wait_Ticks_Yield                              ; F9A0F5  call 0xfa30f6
 	popw	bc                                    ; F9A0F9  pop BC
-	unlk32 xiz                                 ; F9A0FA  unlk XIZ
+	unlk	xiz                                 ; F9A0FA  unlk XIZ
 	ret                                        ; F9A0FC  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_TraceData -- 0xF9A0FD..0xF9A12A (46 bytes)
@@ -524,13 +524,13 @@ P7Byte_TraceCmd:
 ; Unknown:  what sets (0x00F35A).
 ; --------------------------------------------------------------------------
 P7Byte_TraceData:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9A0FD  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; F9A0FD  link XIZ,0xfffc
 	ld	(xiz-2), 32                             ; F9A101  ld (XIZ+0xfe),0x20
 	ld	(xiz-1), 0xFF                           ; F9A105  ld (XIZ+0xff),0xff
 	lda	xbc, (xiz-4)                           ; F9A109  lda XBC,XIZ+0xfc
 	push	xbc                                   ; F9A10C  push XBC
 	push	0                                     ; F9A10D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A10F  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A10F  push (XIZ+0x08)
 	calr Format_HexByte                 ; F9A112  calr 0xf9a050
 	inc	6, xsp                                 ; F9A115  inc 6,XSP
 	lda	xbc, (xiz-4)                           ; F9A117  lda XBC,XIZ+0xfc
@@ -540,7 +540,7 @@ P7Byte_TraceData:
 	pushw	10                                   ; F9A120  push 0x000a
 	call	Wait_Ticks_Yield                              ; F9A123  call 0xfa30f6
 	popw	bc                                    ; F9A127  pop BC
-	unlk32 xiz                                 ; F9A128  unlk XIZ
+	unlk	xiz                                 ; F9A128  unlk XIZ
 	ret                                        ; F9A12A  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_TraceArg -- 0xF9A12B..0xF9A162 (56 bytes)
@@ -563,7 +563,7 @@ P7Byte_TraceData:
 ; Unknown:  what sets (0x00F35A).
 ; --------------------------------------------------------------------------
 P7Byte_TraceArg:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; F9A12B  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; F9A12B  link XIZ,0xfffa
 	ld	(xiz-6), 91                             ; F9A12F  ld (XIZ+0xfa),0x5b
 	ld	(xiz-3), 93                             ; F9A133  ld (XIZ+0xfd),0x5d
 	ld	(xiz-2), 32                             ; F9A137  ld (XIZ+0xfe),0x20
@@ -572,7 +572,7 @@ P7Byte_TraceArg:
 	inc	1, xbc                                 ; F9A142  inc 1,XBC
 	push	xbc                                   ; F9A144  push XBC
 	push	0                                     ; F9A145  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A147  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A147  push (XIZ+0x08)
 	calr Format_HexByte                 ; F9A14A  calr 0xf9a050
 	inc	6, xsp                                 ; F9A14D  inc 6,XSP
 	lda	xbc, (xiz-6)                           ; F9A14F  lda XBC,XIZ+0xfa
@@ -582,7 +582,7 @@ P7Byte_TraceArg:
 	pushw	10                                   ; F9A158  push 0x000a
 	call	Wait_Ticks_Yield                              ; F9A15B  call 0xfa30f6
 	popw	bc                                    ; F9A15F  pop BC
-	unlk32 xiz                                 ; F9A160  unlk XIZ
+	unlk	xiz                                 ; F9A160  unlk XIZ
 	ret                                        ; F9A162  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_SendCmd -- 0xF9A163..0xF9A319 (439 bytes)
@@ -625,7 +625,7 @@ P7Byte_TraceArg:
 ;          in the machine is consistent and is NOT proof, and nothing here names a chip.
 ; --------------------------------------------------------------------------
 P7Byte_SendCmd:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9A163  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; F9A163  link XIZ,0xfff0
 	pushw	hl                                   ; F9A167  push HL
 	set_dd8	7, P2                              ; F9A168  set 7,(0x06)
 	set_dd8	5, P5                              ; F9A16B  set 5,(0x0d)
@@ -633,10 +633,10 @@ P7Byte_SendCmd:
 	set_dd8	3, P5                              ; F9A171  set 3,(0x0d)
 	set_dd8	6, PB                              ; F9A174  set 6,(0x1f)
 	set_dd8	5, PB                              ; F9A177  set 5,(0x1f)
-	extpfx7 0xD2, 0x5A, 0xF3, 0x00, 0x3F, 0x00, 0x00 ; F9A17A  cp (0x00f35a),0x0000
+	cpw	(0x00f35a:24), 0x0000 ; F9A17A  cp (0x00f35a),0x0000
 	jr z, P7Byte_SendCmd__F9A18C                   ; F9A181  jr Z,0xf9a18c
 	push	0                                     ; F9A183  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A185  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A185  push (XIZ+0x08)
 	calr P7Byte_TraceCmd                 ; F9A188  calr 0xf9a0b9
 	popw	bc                                    ; F9A18B  pop BC
 P7Byte_SendCmd__F9A18C:
@@ -648,7 +648,7 @@ P7Byte_SendCmd__F9A197:
 	res_dd8	4, P5                              ; F9A197  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A19A  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A19F:
-	ld_sd8b	c, 25                              ; F9A19F  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A19F  ld C,(0x19)
 	and	c, 8                                   ; F9A1A2  and C,0x08
 	srl	c, 3                                   ; F9A1A5  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A1A8  cp C,0
@@ -666,13 +666,13 @@ P7Byte_SendCmd__F9A1C5:
 	jr P7Byte_SendCmd__F9A19F                      ; F9A1C5  jr T,0xf9a19f
 P7Byte_SendCmd__F9A1C7:
 	set_dd8	4, P5                              ; F9A1C7  set 4,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A1CA  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A1CA  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A1CF  res 5,(0x1f)
 	res_dd8	3, P5                              ; F9A1D2  res 3,(0x0d)
 	res_dd8	4, P5                              ; F9A1D5  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A1D8  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A1DD:
-	ld_sd8b	c, 25                              ; F9A1DD  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A1DD  ld C,(0x19)
 	and	c, 8                                   ; F9A1E0  and C,0x08
 	srl	c, 3                                   ; F9A1E3  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A1E6  cp C,0
@@ -697,7 +697,7 @@ P7Byte_SendCmd__F9A211:
 	res_dd8	5, P5                              ; F9A211  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A214  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A219:
-	ld_sd8b	c, 25                              ; F9A219  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A219  ld C,(0x19)
 	and	c, 8                                   ; F9A21C  and C,0x08
 	srl	c, 3                                   ; F9A21F  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A222  cp C,0
@@ -715,13 +715,13 @@ P7Byte_SendCmd__F9A23F:
 	jr P7Byte_SendCmd__F9A219                      ; F9A23F  jr T,0xf9a219
 P7Byte_SendCmd__F9A241:
 	set_dd8	5, P5                              ; F9A241  set 5,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A244  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A244  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A249  res 5,(0x1f)
 	res_dd8	3, P5                              ; F9A24C  res 3,(0x0d)
 	res_dd8	5, P5                              ; F9A24F  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A252  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A257:
-	ld_sd8b	c, 25                              ; F9A257  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A257  ld C,(0x19)
 	and	c, 8                                   ; F9A25A  and C,0x08
 	srl	c, 3                                   ; F9A25D  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A260  cp C,0
@@ -746,7 +746,7 @@ P7Byte_SendCmd__F9A28B:
 	res_dd8	7, P2                              ; F9A28B  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A28E  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A293:
-	ld_sd8b	c, 25                              ; F9A293  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A293  ld C,(0x19)
 	and	c, 8                                   ; F9A296  and C,0x08
 	srl	c, 3                                   ; F9A299  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A29C  cp C,0
@@ -764,13 +764,13 @@ P7Byte_SendCmd__F9A2B9:
 	jr P7Byte_SendCmd__F9A293                      ; F9A2B9  jr T,0xf9a293
 P7Byte_SendCmd__F9A2BB:
 	set_dd8	7, P2                              ; F9A2BB  set 7,(0x06)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A2BE  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A2BE  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A2C3  res 5,(0x1f)
 	res_dd8	3, P5                              ; F9A2C6  res 3,(0x0d)
 	res_dd8	7, P2                              ; F9A2C9  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A2CC  ld (XIZ+0xfe),0x1f40
 P7Byte_SendCmd__F9A2D1:
-	ld_sd8b	c, 25                              ; F9A2D1  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A2D1  ld C,(0x19)
 	and	c, 8                                   ; F9A2D4  and C,0x08
 	srl	c, 3                                   ; F9A2D7  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A2DA  cp C,0
@@ -801,7 +801,7 @@ P7Byte_SendCmd__F9A304:
 	jrl z, P7Byte_SendCmd__F9A28B                  ; F9A313  jrl Z,0xf9a28b
 P7Byte_SendCmd__F9A316:
 	popw	hl                                    ; F9A316  pop HL
-	unlk32 xiz                                 ; F9A317  unlk XIZ
+	unlk	xiz                                 ; F9A317  unlk XIZ
 	ret                                        ; F9A319  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_SendData -- 0xF9A31A..0xF9A4AF (406 bytes)
@@ -855,13 +855,13 @@ P7Byte_SendCmd__F9A316:
 ; Unknown:  why the payload path needs two spellings at all.
 ; --------------------------------------------------------------------------
 P7Byte_SendData:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9A31A  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; F9A31A  link XIZ,0xfff0
 	pushw	hl                                   ; F9A31E  push HL
 	set_dd8	3, P5                              ; F9A31F  set 3,(0x0d)
-	extpfx7 0xD2, 0x5A, 0xF3, 0x00, 0x3F, 0x00, 0x00 ; F9A322  cp (0x00f35a),0x0000
+	cpw	(0x00f35a:24), 0x0000 ; F9A322  cp (0x00f35a),0x0000
 	jr z, P7Byte_SendData__F9A334                   ; F9A329  jr Z,0xf9a334
 	push	0                                     ; F9A32B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A32D  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A32D  push (XIZ+0x08)
 	calr P7Byte_TraceData                 ; F9A330  calr 0xf9a0fd
 	popw	bc                                    ; F9A333  pop BC
 P7Byte_SendData__F9A334:
@@ -873,7 +873,7 @@ P7Byte_SendData__F9A33F:
 	res_dd8	4, P5                              ; F9A33F  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A342  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A347:
-	ld_sd8b	c, 25                              ; F9A347  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A347  ld C,(0x19)
 	and	c, 8                                   ; F9A34A  and C,0x08
 	srl	c, 3                                   ; F9A34D  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A350  cp C,0
@@ -891,12 +891,12 @@ P7Byte_SendData__F9A36D:
 	jr P7Byte_SendData__F9A347                      ; F9A36D  jr T,0xf9a347
 P7Byte_SendData__F9A36F:
 	set_dd8	4, P5                              ; F9A36F  set 4,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A372  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A372  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A377  res 5,(0x1f)
 	res_dd8	4, P5                              ; F9A37A  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A37D  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A382:
-	ld_sd8b	c, 25                              ; F9A382  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A382  ld C,(0x19)
 	and	c, 8                                   ; F9A385  and C,0x08
 	srl	c, 3                                   ; F9A388  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A38B  cp C,0
@@ -920,7 +920,7 @@ P7Byte_SendData__F9A3B3:
 	res_dd8	5, P5                              ; F9A3B3  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A3B6  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A3BB:
-	ld_sd8b	c, 25                              ; F9A3BB  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A3BB  ld C,(0x19)
 	and	c, 8                                   ; F9A3BE  and C,0x08
 	srl	c, 3                                   ; F9A3C1  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A3C4  cp C,0
@@ -938,12 +938,12 @@ P7Byte_SendData__F9A3E1:
 	jr P7Byte_SendData__F9A3BB                      ; F9A3E1  jr T,0xf9a3bb
 P7Byte_SendData__F9A3E3:
 	set_dd8	5, P5                              ; F9A3E3  set 5,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A3E6  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A3E6  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A3EB  res 5,(0x1f)
 	res_dd8	5, P5                              ; F9A3EE  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A3F1  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A3F6:
-	ld_sd8b	c, 25                              ; F9A3F6  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A3F6  ld C,(0x19)
 	and	c, 8                                   ; F9A3F9  and C,0x08
 	srl	c, 3                                   ; F9A3FC  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A3FF  cp C,0
@@ -967,7 +967,7 @@ P7Byte_SendData__F9A427:
 	res_dd8	7, P2                              ; F9A427  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A42A  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A42F:
-	ld_sd8b	c, 25                              ; F9A42F  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A42F  ld C,(0x19)
 	and	c, 8                                   ; F9A432  and C,0x08
 	srl	c, 3                                   ; F9A435  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A438  cp C,0
@@ -985,12 +985,12 @@ P7Byte_SendData__F9A455:
 	jr P7Byte_SendData__F9A42F                      ; F9A455  jr T,0xf9a42f
 P7Byte_SendData__F9A457:
 	set_dd8	7, P2                              ; F9A457  set 7,(0x06)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A45A  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A45A  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A45F  res 5,(0x1f)
 	res_dd8	7, P2                              ; F9A462  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A465  ld (XIZ+0xfe),0x1f40
 P7Byte_SendData__F9A46A:
-	ld_sd8b	c, 25                              ; F9A46A  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A46A  ld C,(0x19)
 	and	c, 8                                   ; F9A46D  and C,0x08
 	srl	c, 3                                   ; F9A470  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A473  cp C,0
@@ -1020,7 +1020,7 @@ P7Byte_SendData__F9A49A:
 	jrl z, P7Byte_SendData__F9A427                  ; F9A4A9  jrl Z,0xf9a427
 P7Byte_SendData__F9A4AC:
 	popw	hl                                    ; F9A4AC  pop HL
-	unlk32 xiz                                 ; F9A4AD  unlk XIZ
+	unlk	xiz                                 ; F9A4AD  unlk XIZ
 	ret                                        ; F9A4AF  ret
 ; --------------------------------------------------------------------------
 ; P7Byte_SendArg -- 0xF9A4B0..0xF9A645 (406 bytes)
@@ -1047,13 +1047,13 @@ P7Byte_SendData__F9A4AC:
 ; Unknown:  as above.
 ; --------------------------------------------------------------------------
 P7Byte_SendArg:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9A4B0  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; F9A4B0  link XIZ,0xfff0
 	pushw	hl                                   ; F9A4B4  push HL
 	set_dd8	3, P5                              ; F9A4B5  set 3,(0x0d)
-	extpfx7 0xD2, 0x5A, 0xF3, 0x00, 0x3F, 0x00, 0x00 ; F9A4B8  cp (0x00f35a),0x0000
+	cpw	(0x00f35a:24), 0x0000 ; F9A4B8  cp (0x00f35a),0x0000
 	jr z, P7Byte_SendArg__F9A4CA                   ; F9A4BF  jr Z,0xf9a4ca
 	push	0                                     ; F9A4C1  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; F9A4C3  push (XIZ+0x08)
+	push	(xiz+8)                   ; F9A4C3  push (XIZ+0x08)
 	calr P7Byte_TraceArg                 ; F9A4C6  calr 0xf9a12b
 	popw	bc                                    ; F9A4C9  pop BC
 P7Byte_SendArg__F9A4CA:
@@ -1065,7 +1065,7 @@ P7Byte_SendArg__F9A4D5:
 	res_dd8	4, P5                              ; F9A4D5  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A4D8  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A4DD:
-	ld_sd8b	c, 25                              ; F9A4DD  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A4DD  ld C,(0x19)
 	and	c, 8                                   ; F9A4E0  and C,0x08
 	srl	c, 3                                   ; F9A4E3  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A4E6  cp C,0
@@ -1083,12 +1083,12 @@ P7Byte_SendArg__F9A503:
 	jr P7Byte_SendArg__F9A4DD                      ; F9A503  jr T,0xf9a4dd
 P7Byte_SendArg__F9A505:
 	set_dd8	4, P5                              ; F9A505  set 4,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A508  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A508  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A50D  res 5,(0x1f)
 	res_dd8	4, P5                              ; F9A510  res 4,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A513  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A518:
-	ld_sd8b	c, 25                              ; F9A518  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A518  ld C,(0x19)
 	and	c, 8                                   ; F9A51B  and C,0x08
 	srl	c, 3                                   ; F9A51E  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A521  cp C,0
@@ -1112,7 +1112,7 @@ P7Byte_SendArg__F9A549:
 	res_dd8	5, P5                              ; F9A549  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A54C  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A551:
-	ld_sd8b	c, 25                              ; F9A551  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A551  ld C,(0x19)
 	and	c, 8                                   ; F9A554  and C,0x08
 	srl	c, 3                                   ; F9A557  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A55A  cp C,0
@@ -1130,12 +1130,12 @@ P7Byte_SendArg__F9A577:
 	jr P7Byte_SendArg__F9A551                      ; F9A577  jr T,0xf9a551
 P7Byte_SendArg__F9A579:
 	set_dd8	5, P5                              ; F9A579  set 5,(0x0d)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A57C  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A57C  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A581  res 5,(0x1f)
 	res_dd8	5, P5                              ; F9A584  res 5,(0x0d)
 	ldw (xiz-2), 0x1F40                        ; F9A587  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A58C:
-	ld_sd8b	c, 25                              ; F9A58C  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A58C  ld C,(0x19)
 	and	c, 8                                   ; F9A58F  and C,0x08
 	srl	c, 3                                   ; F9A592  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A595  cp C,0
@@ -1159,7 +1159,7 @@ P7Byte_SendArg__F9A5BD:
 	res_dd8	7, P2                              ; F9A5BD  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A5C0  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A5C5:
-	ld_sd8b	c, 25                              ; F9A5C5  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A5C5  ld C,(0x19)
 	and	c, 8                                   ; F9A5C8  and C,0x08
 	srl	c, 3                                   ; F9A5CB  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A5CE  cp C,0
@@ -1177,12 +1177,12 @@ P7Byte_SendArg__F9A5EB:
 	jr P7Byte_SendArg__F9A5C5                      ; F9A5EB  jr T,0xf9a5c5
 P7Byte_SendArg__F9A5ED:
 	set_dd8	7, P2                              ; F9A5ED  set 7,(0x06)
-	extpfx5 0x8E, 0x08, 0x19, 0x13, 0x00       ; F9A5F0  ld (0x0013),(XIZ+0x08)
+	ld	(0x0013:16), (xiz+8)       ; F9A5F0  ld (0x0013),(XIZ+0x08)
 	res_dd8	5, PB                              ; F9A5F5  res 5,(0x1f)
 	res_dd8	7, P2                              ; F9A5F8  res 7,(0x06)
 	ldw (xiz-2), 0x1F40                        ; F9A5FB  ld (XIZ+0xfe),0x1f40
 P7Byte_SendArg__F9A600:
-	ld_sd8b	c, 25                              ; F9A600  ld C,(0x19)
+	ld	c, (0x19:8)                              ; F9A600  ld C,(0x19)
 	and	c, 8                                   ; F9A603  and C,0x08
 	srl	c, 3                                   ; F9A606  srl 0x03,C
 	cp	c, 0:i3                                   ; F9A609  cp C,0
@@ -1212,7 +1212,7 @@ P7Byte_SendArg__F9A630:
 	jrl z, P7Byte_SendArg__F9A5BD                  ; F9A63F  jrl Z,0xf9a5bd
 P7Byte_SendArg__F9A642:
 	popw	hl                                    ; F9A642  pop HL
-	unlk32 xiz                                 ; F9A643  unlk XIZ
+	unlk	xiz                                 ; F9A643  unlk XIZ
 	ret                                        ; F9A645  ret
 ; --------------------------------------------------------------------------
 ; P7Stream_Run -- 0xF9A646..0xF9A86A (549 bytes)
@@ -1279,13 +1279,13 @@ P7Byte_SendArg__F9A642:
 ;          have another consumer that has not been found.
 ; --------------------------------------------------------------------------
 P7Stream_Run:
-	link32 0xEE, 0x0C, 0xE2, 0xFF              ; F9A646  link XIZ,0xffe2
+	link	xiz, 0xffe2              ; F9A646  link XIZ,0xffe2
 	pushw	hl                                   ; F9A64A  push HL
 	push	xix                                   ; F9A64B  push XIX
 	ld	xbc, (xiz+14)                           ; F9A64C  ld XBC,(XIZ+0x0e)
 	ld	(xiz-4), xbc                            ; F9A64F  ld (XIZ+0xfc),XBC
 	ld	a, 6:opc                                   ; F9A652  ld A,0x06
-	extpfx3 0x8E, 0x0C, 0x41                   ; F9A654  mul WA,(XIZ+0x0c)
+	mul	wa, (xiz+12)                   ; F9A654  mul WA,(XIZ+0x0c)
 	extz	xwa                                   ; F9A657  extz XWA
 	dec	6, xwa                                 ; F9A659  dec 6,XWA
 	add	xbc, xwa                               ; F9A65B  add XBC,XWA
@@ -1357,7 +1357,7 @@ P7Stream_Run__F9A6C1:
 	jrl sub_F9AD65__F9AD84                     ; F9A702  jrl T,0xf9ad84
 P7Stream_Run__F9A705:
 	push	0                                     ; F9A705  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A707  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A707  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A70A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A70D  ld A,(XBC)
 	pushw	wa                                   ; F9A70F  push WA
@@ -1366,7 +1366,7 @@ P7Stream_Run__F9A705:
 	calr P7Byte_SendCmd                 ; F9A715  calr 0xf9a163
 	pop	xiy                                    ; F9A718  pop XIY
 	push	0                                     ; F9A719  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A71B  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A71B  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A71E  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A721  ld A,(XBC)
 	pushw	wa                                   ; F9A723  push WA
@@ -1375,7 +1375,7 @@ P7Stream_Run__F9A705:
 	calr P7Byte_SendArg                 ; F9A729  calr 0xf9a4b0
 	pop	xiy                                    ; F9A72C  pop XIY
 	push	0                                     ; F9A72D  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A72F  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A72F  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A732  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A735  ld A,(XBC)
 	pushw	wa                                   ; F9A737  push WA
@@ -1401,7 +1401,7 @@ P7Stream_Run__F9A75E:
 	cp	a, 0:i3                                   ; F9A763  cp A,0
 	jrl nz, P7Stream_Run__F9A7F2                 ; F9A765  jrl NZ,0xf9a7f2
 	push	0                                     ; F9A768  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A76A  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A76A  push (XIZ+0xfb)
 	ld	a, (xbc)                                ; F9A76D  ld A,(XBC)
 	pushw	wa                                   ; F9A76F  push WA
 	inc	1, xbc                                 ; F9A770  inc 1,XBC
@@ -1409,7 +1409,7 @@ P7Stream_Run__F9A75E:
 	calr P7Byte_SendData                 ; F9A775  calr 0xf9a31a
 	pop	xiy                                    ; F9A778  pop XIY
 	push	0                                     ; F9A779  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A77B  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A77B  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A77E  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A781  ld A,(XBC)
 	pushw	wa                                   ; F9A783  push WA
@@ -1427,18 +1427,18 @@ P7Stream_Run__F9A75E:
 	sll	wa, 4                                  ; F9A7A0  sll 0x04,WA
 	add	wa, hl                                 ; F9A7A3  add WA,HL
 	ld	(xiz-24), wa                            ; F9A7A5  ld (XIZ+0xe8),WA
-	extpfx3 0x9E, 0xF6, 0x80                   ; F9A7A8  add WA,(XIZ+0xf6)
+	add	wa, (xiz-10)                   ; F9A7A8  add WA,(XIZ+0xf6)
 	ld	(xiz-24), wa                            ; F9A7AB  ld (XIZ+0xe8),WA
 	pop	xiy                                    ; F9A7AE  pop XIY
 	push	0                                     ; F9A7AF  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A7B1  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A7B1  push (XIZ+0xfb)
 	srl	wa, 4                                  ; F9A7B4  srl 0x04,WA
 	and	wa, 0xFF                               ; F9A7B7  and WA,0x00ff
 	pushw	wa                                   ; F9A7BB  push WA
 	calr P7Byte_SendData                 ; F9A7BC  calr 0xf9a31a
 	pop	xiy                                    ; F9A7BF  pop XIY
 	push	0                                     ; F9A7C0  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A7C2  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A7C2  push (XIZ+0xfb)
 	ld	bc, (xiz-24)                            ; F9A7C5  ld BC,(XIZ+0xe8)
 	sll	bc, 4                                  ; F9A7C8  sll 0x04,BC
 	and	bc, 0xFF                               ; F9A7CB  and BC,0x00ff
@@ -1449,7 +1449,7 @@ P7Stream_Run__F9A75E:
 	add	(xiz-4), xbc                           ; F9A7D7  add (XIZ+0xfc),XBC
 	pop	xiy                                    ; F9A7DA  pop XIY
 	push	0                                     ; F9A7DB  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A7DD  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A7DD  push (XIZ+0xfb)
 	ld	xwa, (xiz-4)                            ; F9A7E0  ld XWA,(XIZ+0xfc)
 	ld	c, (xwa)                                ; F9A7E3  ld C,(XWA)
 	pushw	bc                                   ; F9A7E5  push BC
@@ -1464,7 +1464,7 @@ P7Stream_Run__F9A7F2:
 	cp	a, 10                                   ; F9A7F7  cp A,0x0a
 	jrl nz, P7Stream_Run__F9A861                 ; F9A7FA  jrl NZ,0xf9a861
 	push	0                                     ; F9A7FD  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A7FF  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A7FF  push (XIZ+0xfb)
 	ld	a, (xbc)                                ; F9A802  ld A,(XBC)
 	pushw	wa                                   ; F9A804  push WA
 	inc	1, xbc                                 ; F9A805  inc 1,XBC
@@ -1472,7 +1472,7 @@ P7Stream_Run__F9A7F2:
 	calr P7Byte_SendData                 ; F9A80A  calr 0xf9a31a
 	pop	xiy                                    ; F9A80D  pop XIY
 	push	0                                     ; F9A80E  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A810  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A810  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A813  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A816  ld A,(XBC)
 	pushw	wa                                   ; F9A818  push WA
@@ -1481,7 +1481,7 @@ P7Stream_Run__F9A7F2:
 	calr P7Byte_SendData                 ; F9A81E  calr 0xf9a31a
 	pop	xiy                                    ; F9A821  pop XIY
 	push	0                                     ; F9A822  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A824  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A824  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A827  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A82A  ld A,(XBC)
 	pushw	wa                                   ; F9A82C  push WA
@@ -1490,7 +1490,7 @@ P7Stream_Run__F9A7F2:
 	calr P7Byte_SendData                 ; F9A832  calr 0xf9a31a
 	pop	xiy                                    ; F9A835  pop XIY
 	push	0                                     ; F9A836  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A838  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A838  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A83B  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A83E  ld A,(XBC)
 	pushw	wa                                   ; F9A840  push WA
@@ -1499,7 +1499,7 @@ P7Stream_Run__F9A7F2:
 	calr P7Byte_SendData                 ; F9A846  calr 0xf9a31a
 	pop	xiy                                    ; F9A849  pop XIY
 	push	0                                     ; F9A84A  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A84C  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A84C  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A84F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A852  ld A,(XBC)
 	pushw	wa                                   ; F9A854  push WA
@@ -1510,7 +1510,7 @@ P7Stream_Run__F9A7F2:
 	jrl sub_F9A86B__F9A8FF                     ; F9A85E  jrl T,0xf9a8ff
 P7Stream_Run__F9A861:
 	push	0                                     ; F9A861  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A863  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A863  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A866  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A869  ld A,(XBC)
 ; --------------------------------------------------------------------------
@@ -1551,9 +1551,9 @@ sub_F9A86B:
 	calr P7Byte_SendData                 ; F9A871  calr 0xf9a31a
 	pop	xiy                                    ; F9A874  pop XIY
 	push	0                                     ; F9A875  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A877  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A877  push (XIZ+0xfb)
 	pushw	17                                   ; F9A87A  push 0x0011
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9A87D  pushw (XIZ+0xf0)
+	pushw	(xiz-16)                   ; F9A87D  pushw (XIZ+0xf0)
 	call	Shift16_ArithRight                              ; F9A880  call 0xfcaa2f
 	ld	hl, wa                                  ; F9A884  ld HL,WA
 	and	hl, 0x7F                               ; F9A886  and HL,0x007f
@@ -1565,7 +1565,7 @@ sub_F9A86B:
 	calr P7Byte_SendData                 ; F9A894  calr 0xf9a31a
 	pop	xiy                                    ; F9A897  pop XIY
 	push	0                                     ; F9A898  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A89A  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A89A  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9A89D  ld BC,(XIZ+0xf0)
 	sra	bc, 9                                  ; F9A8A0  sra 0x09,BC
 	ld	hl, bc                                  ; F9A8A3  ld HL,BC
@@ -1578,7 +1578,7 @@ sub_F9A86B:
 	calr P7Byte_SendData                 ; F9A8B4  calr 0xf9a31a
 	pop	xiy                                    ; F9A8B7  pop XIY
 	push	0                                     ; F9A8B8  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A8BA  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A8BA  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9A8BD  ld BC,(XIZ+0xf0)
 	sra	bc, 1                                  ; F9A8C0  sra 0x01,BC
 	ld	hl, bc                                  ; F9A8C3  ld HL,BC
@@ -1591,7 +1591,7 @@ sub_F9A86B:
 	calr P7Byte_SendData                 ; F9A8D4  calr 0xf9a31a
 	pop	xiy                                    ; F9A8D7  pop XIY
 	push	0                                     ; F9A8D8  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A8DA  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A8DA  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9A8DD  ld BC,(XIZ+0xf0)
 	sll	bc, 7                                  ; F9A8E0  sll 0x07,BC
 	ld	hl, bc                                  ; F9A8E3  ld HL,BC
@@ -1612,7 +1612,7 @@ sub_F9A86B__F9A902:
 	jrl sub_F9AD65__F9ADAD                     ; F9A902  jrl T,0xf9adad
 sub_F9A86B__F9A905:
 	push	0                                     ; F9A905  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A907  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A907  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A90A  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A90D  ld A,(XBC)
 	pushw	wa                                   ; F9A90F  push WA
@@ -1621,7 +1621,7 @@ sub_F9A86B__F9A905:
 	calr P7Byte_SendCmd                 ; F9A915  calr 0xf9a163
 	pop	xiy                                    ; F9A918  pop XIY
 	push	0                                     ; F9A919  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A91B  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A91B  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A91E  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A921  ld A,(XBC)
 	pushw	wa                                   ; F9A923  push WA
@@ -1630,7 +1630,7 @@ sub_F9A86B__F9A905:
 	calr P7Byte_SendArg                 ; F9A929  calr 0xf9a4b0
 	pop	xiy                                    ; F9A92C  pop XIY
 	push	0                                     ; F9A92D  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A92F  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A92F  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A932  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A935  ld A,(XBC)
 	pushw	wa                                   ; F9A937  push WA
@@ -1652,7 +1652,7 @@ sub_F9A86B__F9A959:
 	jr sub_F9A86B__F9A946                      ; F9A95C  jr T,0xf9a946
 sub_F9A86B__F9A95E:
 	push	0                                     ; F9A95E  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A960  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A960  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A963  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A966  ld A,(XBC)
 	pushw	wa                                   ; F9A968  push WA
@@ -1661,7 +1661,7 @@ sub_F9A86B__F9A95E:
 	calr P7Byte_SendData                 ; F9A96E  calr 0xf9a31a
 	pop	xiy                                    ; F9A971  pop XIY
 	push	0                                     ; F9A972  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A974  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A974  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A977  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A97A  ld A,(XBC)
 	pushw	wa                                   ; F9A97C  push WA
@@ -1679,18 +1679,18 @@ sub_F9A86B__F9A95E:
 	sll	wa, 4                                  ; F9A999  sll 0x04,WA
 	add	wa, hl                                 ; F9A99C  add WA,HL
 	ld	(xiz-24), wa                            ; F9A99E  ld (XIZ+0xe8),WA
-	extpfx3 0x9E, 0xF8, 0x80                   ; F9A9A1  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; F9A9A1  add WA,(XIZ+0xf8)
 	ld	(xiz-24), wa                            ; F9A9A4  ld (XIZ+0xe8),WA
 	pop	xiy                                    ; F9A9A7  pop XIY
 	push	0                                     ; F9A9A8  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A9AA  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A9AA  push (XIZ+0xfb)
 	srl	wa, 4                                  ; F9A9AD  srl 0x04,WA
 	and	wa, 0xFF                               ; F9A9B0  and WA,0x00ff
 	pushw	wa                                   ; F9A9B4  push WA
 	calr P7Byte_SendData                 ; F9A9B5  calr 0xf9a31a
 	pop	xiy                                    ; F9A9B8  pop XIY
 	push	0                                     ; F9A9B9  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A9BB  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A9BB  push (XIZ+0xfb)
 	ld	bc, (xiz-24)                            ; F9A9BE  ld BC,(XIZ+0xe8)
 	sll	bc, 4                                  ; F9A9C1  sll 0x04,BC
 	and	bc, 0xFF                               ; F9A9C4  and BC,0x00ff
@@ -1702,7 +1702,7 @@ sub_F9A86B__F9A95E:
 	add	(xiz-4), xbc                           ; F9A9D2  add (XIZ+0xfc),XBC
 	pop	xiy                                    ; F9A9D5  pop XIY
 	push	0                                     ; F9A9D6  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A9D8  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A9D8  push (XIZ+0xfb)
 	ld	xwa, (xiz-4)                            ; F9A9DB  ld XWA,(XIZ+0xfc)
 	ld	c, (xwa)                                ; F9A9DE  ld C,(XWA)
 	pushw	bc                                   ; F9A9E0  push BC
@@ -1715,7 +1715,7 @@ sub_F9A86B__F9A9ED:
 	jrl sub_F9AD65__F9ADAD                     ; F9A9ED  jrl T,0xf9adad
 sub_F9A86B__F9A9F0:
 	push	0                                     ; F9A9F0  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9A9F2  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9A9F2  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9A9F5  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9A9F8  ld A,(XBC)
 	pushw	wa                                   ; F9A9FA  push WA
@@ -1724,7 +1724,7 @@ sub_F9A86B__F9A9F0:
 	calr P7Byte_SendCmd                 ; F9AA00  calr 0xf9a163
 	pop	xiy                                    ; F9AA03  pop XIY
 	push	0                                     ; F9AA04  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA06  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA06  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AA09  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AA0C  ld A,(XBC)
 	pushw	wa                                   ; F9AA0E  push WA
@@ -1733,7 +1733,7 @@ sub_F9A86B__F9A9F0:
 	calr P7Byte_SendArg                 ; F9AA14  calr 0xf9a4b0
 	pop	xiy                                    ; F9AA17  pop XIY
 	push	0                                     ; F9AA18  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA1A  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA1A  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AA1D  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AA20  ld A,(XBC)
 	pushw	wa                                   ; F9AA22  push WA
@@ -1762,7 +1762,7 @@ sub_F9A86B__F9AA46:
 	cp	a, 0:i3                                   ; F9AA55  cp A,0
 	jr nz, sub_F9A86B__F9AA94                  ; F9AA57  jr NZ,0xf9aa94
 	push	0                                     ; F9AA59  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA5B  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA5B  push (XIZ+0xfb)
 	ld	a, (xbc)                                ; F9AA5E  ld A,(XBC)
 	pushw	wa                                   ; F9AA60  push WA
 	inc	1, xbc                                 ; F9AA61  inc 1,XBC
@@ -1770,7 +1770,7 @@ sub_F9A86B__F9AA46:
 	calr P7Byte_SendData                 ; F9AA66  calr 0xf9a31a
 	pop	xiy                                    ; F9AA69  pop XIY
 	push	0                                     ; F9AA6A  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA6C  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA6C  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AA6F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AA72  ld A,(XBC)
 	pushw	wa                                   ; F9AA74  push WA
@@ -1779,7 +1779,7 @@ sub_F9A86B__F9AA46:
 	calr P7Byte_SendData                 ; F9AA7A  calr 0xf9a31a
 	pop	xiy                                    ; F9AA7D  pop XIY
 	push	0                                     ; F9AA7E  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA80  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA80  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AA83  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AA86  ld A,(XBC)
 	pushw	wa                                   ; F9AA88  push WA
@@ -1790,7 +1790,7 @@ sub_F9A86B__F9AA46:
 	jr sub_F9A86B__F9AAF5                      ; F9AA92  jr T,0xf9aaf5
 sub_F9A86B__F9AA94:
 	push	0                                     ; F9AA94  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA96  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AA96  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9AA99  ld BC,(XIZ+0xf0)
 	sra	bc, 16                                 ; F9AA9C  sra 0x00,BC
 	ld	hl, bc                                  ; F9AA9F  ld HL,BC
@@ -1803,7 +1803,7 @@ sub_F9A86B__F9AA94:
 	calr P7Byte_SendData                 ; F9AAAF  calr 0xf9a31a
 	pop	xiy                                    ; F9AAB2  pop XIY
 	push	0                                     ; F9AAB3  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AAB5  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AAB5  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9AAB8  ld BC,(XIZ+0xf0)
 	sra	bc, 8                                  ; F9AABB  sra 0x08,BC
 	ld	hl, bc                                  ; F9AABE  ld HL,BC
@@ -1816,7 +1816,7 @@ sub_F9A86B__F9AA94:
 	calr P7Byte_SendData                 ; F9AACF  calr 0xf9a31a
 	pop	xiy                                    ; F9AAD2  pop XIY
 	push	0                                     ; F9AAD3  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AAD5  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AAD5  push (XIZ+0xfb)
 	ld	hl, (xiz-16)                            ; F9AAD8  ld HL,(XIZ+0xf0)
 	and	hl, 0xFF                               ; F9AADB  and HL,0x00ff
 	ld	xbc, (xiz-4)                            ; F9AADF  ld XBC,(XIZ+0xfc)
@@ -1835,7 +1835,7 @@ sub_F9A86B__F9AAF8:
 	jrl sub_F9AD65__F9ADAD                     ; F9AAF8  jrl T,0xf9adad
 sub_F9A86B__F9AAFB:
 	push	0                                     ; F9AAFB  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AAFD  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AAFD  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AB00  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AB03  ld A,(XBC)
 	pushw	wa                                   ; F9AB05  push WA
@@ -1852,7 +1852,7 @@ sub_F9A86B__F9AAFB:
 	sll	wa, 8                                  ; F9AB1F  sll 0x08,WA
 	add	wa, hl                                 ; F9AB22  add WA,HL
 	ld	(xiz-24), wa                            ; F9AB24  ld (XIZ+0xe8),WA
-	extpfx3 0x9E, 0xF2, 0x80                   ; F9AB27  add WA,(XIZ+0xf2)
+	add	wa, (xiz-14)                   ; F9AB27  add WA,(XIZ+0xf2)
 ; --------------------------------------------------------------------------
 ; sub_F9AB2A -- 0xF9AB2A..0xF9ACCD (420 bytes)
 ;
@@ -1888,7 +1888,7 @@ sub_F9AB2A:
 	call	Delay_CountdownArg_Z                              ; F9AB31  call 0xf98b39
 	popw	bc                                    ; F9AB35  pop BC
 	push	0                                     ; F9AB36  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AB38  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AB38  push (XIZ+0xfb)
 	ld	bc, (xiz-24)                            ; F9AB3B  ld BC,(XIZ+0xe8)
 	srl	bc, 8                                  ; F9AB3E  srl 0x08,BC
 	and	bc, 0xFF                               ; F9AB41  and BC,0x00ff
@@ -1896,7 +1896,7 @@ sub_F9AB2A:
 	calr P7Byte_SendArg                 ; F9AB46  calr 0xf9a4b0
 	pop	xiy                                    ; F9AB49  pop XIY
 	push	0                                     ; F9AB4A  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AB4C  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AB4C  push (XIZ+0xfb)
 	ld	bc, (xiz-24)                            ; F9AB4F  ld BC,(XIZ+0xe8)
 	and	bc, 0xFF                               ; F9AB52  and BC,0x00ff
 	pushw	bc                                   ; F9AB56  push BC
@@ -1917,7 +1917,7 @@ sub_F9AB2A__F9AB73:
 	jr sub_F9AB2A__F9AB67                      ; F9AB76  jr T,0xf9ab67
 sub_F9AB2A__F9AB78:
 	push	0                                     ; F9AB78  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AB7A  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AB7A  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AB7D  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AB80  ld A,(XBC)
 	pushw	wa                                   ; F9AB82  push WA
@@ -1930,7 +1930,7 @@ sub_F9AB2A__F9AB8E:
 	jrl sub_F9AD65__F9ADAD                     ; F9AB8E  jrl T,0xf9adad
 sub_F9AB2A__F9AB91:
 	push	0                                     ; F9AB91  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AB93  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AB93  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AB96  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AB99  ld A,(XBC)
 	pushw	wa                                   ; F9AB9B  push WA
@@ -1941,7 +1941,7 @@ sub_F9AB2A__F9AB91:
 	jrl sub_F9AD65__F9ADAD                     ; F9ABA5  jrl T,0xf9adad
 sub_F9AB2A__F9ABA8:
 	push	0                                     ; F9ABA8  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ABAA  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ABAA  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9ABAD  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9ABB0  ld A,(XBC)
 	pushw	wa                                   ; F9ABB2  push WA
@@ -1950,7 +1950,7 @@ sub_F9AB2A__F9ABA8:
 	calr P7Byte_SendCmd                 ; F9ABB8  calr 0xf9a163
 	pop	xiy                                    ; F9ABBB  pop XIY
 	push	0                                     ; F9ABBC  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ABBE  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ABBE  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9ABC1  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9ABC4  ld A,(XBC)
 	pushw	wa                                   ; F9ABC6  push WA
@@ -1959,7 +1959,7 @@ sub_F9AB2A__F9ABA8:
 	calr P7Byte_SendArg                 ; F9ABCC  calr 0xf9a4b0
 	pop	xiy                                    ; F9ABCF  pop XIY
 	push	0                                     ; F9ABD0  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ABD2  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ABD2  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9ABD5  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9ABD8  ld A,(XBC)
 	pushw	wa                                   ; F9ABDA  push WA
@@ -1985,7 +1985,7 @@ sub_F9AB2A__F9AC01:
 	cp	a, 8                                    ; F9AC06  cp A,0x08
 	jrl nz, sub_F9AB2A__F9AC9C                 ; F9AC09  jrl NZ,0xf9ac9c
 	push	0                                     ; F9AC0C  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC0E  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC0E  push (XIZ+0xfb)
 	ld	a, (xbc)                                ; F9AC11  ld A,(XBC)
 	pushw	wa                                   ; F9AC13  push WA
 	inc	1, xbc                                 ; F9AC14  inc 1,XBC
@@ -1993,7 +1993,7 @@ sub_F9AB2A__F9AC01:
 	calr P7Byte_SendData                 ; F9AC19  calr 0xf9a31a
 	pop	xiy                                    ; F9AC1C  pop XIY
 	push	0                                     ; F9AC1D  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC1F  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC1F  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AC22  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AC25  ld A,(XBC)
 	pushw	wa                                   ; F9AC27  push WA
@@ -2011,19 +2011,19 @@ sub_F9AB2A__F9AC01:
 	sll	wa, 4                                  ; F9AC44  sll 0x04,WA
 	add	wa, hl                                 ; F9AC47  add WA,HL
 	ld	(xiz-24), wa                            ; F9AC49  ld (XIZ+0xe8),WA
-	extpfx3 0x9E, 0xF4, 0x80                   ; F9AC4C  add WA,(XIZ+0xf4)
+	add	wa, (xiz-12)                   ; F9AC4C  add WA,(XIZ+0xf4)
 	and	wa, 0xFF                               ; F9AC4F  and WA,0x00ff
 	ld	(xiz-24), wa                            ; F9AC53  ld (XIZ+0xe8),WA
 	pop	xiy                                    ; F9AC56  pop XIY
 	push	0                                     ; F9AC57  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC59  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC59  push (XIZ+0xfb)
 	srl	wa, 4                                  ; F9AC5C  srl 0x04,WA
 	and	wa, 0xFF                               ; F9AC5F  and WA,0x00ff
 	pushw	wa                                   ; F9AC63  push WA
 	calr P7Byte_SendData                 ; F9AC64  calr 0xf9a31a
 	pop	xiy                                    ; F9AC67  pop XIY
 	push	0                                     ; F9AC68  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC6A  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC6A  push (XIZ+0xfb)
 	ld	bc, (xiz-24)                            ; F9AC6D  ld BC,(XIZ+0xe8)
 	sll	bc, 4                                  ; F9AC70  sll 0x04,BC
 	and	bc, 0xFF                               ; F9AC73  and BC,0x00ff
@@ -2035,7 +2035,7 @@ sub_F9AB2A__F9AC01:
 	add	(xiz-4), xbc                           ; F9AC81  add (XIZ+0xfc),XBC
 	pop	xiy                                    ; F9AC84  pop XIY
 	push	0                                     ; F9AC85  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC87  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC87  push (XIZ+0xfb)
 	ld	xwa, (xiz-4)                            ; F9AC8A  ld XWA,(XIZ+0xfc)
 	ld	c, (xwa)                                ; F9AC8D  ld C,(XWA)
 	pushw	bc                                   ; F9AC8F  push BC
@@ -2046,7 +2046,7 @@ sub_F9AB2A__F9AC01:
 	jrl sub_F9ACCE__F9AD3A                     ; F9AC99  jrl T,0xf9ad3a
 sub_F9AB2A__F9AC9C:
 	push	0                                     ; F9AC9C  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AC9E  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AC9E  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9ACA1  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9ACA4  ld A,(XBC)
 	pushw	wa                                   ; F9ACA6  push WA
@@ -2055,9 +2055,9 @@ sub_F9AB2A__F9AC9C:
 	calr P7Byte_SendData                 ; F9ACAC  calr 0xf9a31a
 	pop	xiy                                    ; F9ACAF  pop XIY
 	push	0                                     ; F9ACB0  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ACB2  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ACB2  push (XIZ+0xfb)
 	pushw	17                                   ; F9ACB5  push 0x0011
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9ACB8  pushw (XIZ+0xf0)
+	pushw	(xiz-16)                   ; F9ACB8  pushw (XIZ+0xf0)
 	call	Shift16_ArithRight                              ; F9ACBB  call 0xfcaa2f
 	ld	hl, wa                                  ; F9ACBF  ld HL,WA
 	and	hl, 0x7F                               ; F9ACC1  and HL,0x007f
@@ -2094,7 +2094,7 @@ sub_F9ACCE:
 	calr P7Byte_SendData                 ; F9ACCF  calr 0xf9a31a
 	pop	xiy                                    ; F9ACD2  pop XIY
 	push	0                                     ; F9ACD3  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ACD5  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ACD5  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9ACD8  ld BC,(XIZ+0xf0)
 	sra	bc, 9                                  ; F9ACDB  sra 0x09,BC
 	ld	hl, bc                                  ; F9ACDE  ld HL,BC
@@ -2107,7 +2107,7 @@ sub_F9ACCE:
 	calr P7Byte_SendData                 ; F9ACEF  calr 0xf9a31a
 	pop	xiy                                    ; F9ACF2  pop XIY
 	push	0                                     ; F9ACF3  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9ACF5  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9ACF5  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9ACF8  ld BC,(XIZ+0xf0)
 	sra	bc, 1                                  ; F9ACFB  sra 0x01,BC
 	ld	hl, bc                                  ; F9ACFE  ld HL,BC
@@ -2120,7 +2120,7 @@ sub_F9ACCE:
 	calr P7Byte_SendData                 ; F9AD0F  calr 0xf9a31a
 	pop	xiy                                    ; F9AD12  pop XIY
 	push	0                                     ; F9AD13  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AD15  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AD15  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9AD18  ld BC,(XIZ+0xf0)
 	sll	bc, 7                                  ; F9AD1B  sll 0x07,BC
 	ld	hl, bc                                  ; F9AD1E  ld HL,BC
@@ -2141,7 +2141,7 @@ sub_F9ACCE__F9AD3D:
 	jrl sub_F9AD65__F9ADAD                     ; F9AD3D  jrl T,0xf9adad
 sub_F9ACCE__F9AD40:
 	push	0                                     ; F9AD40  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AD42  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AD42  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AD45  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AD48  ld A,(XBC)
 	pushw	wa                                   ; F9AD4A  push WA
@@ -2188,7 +2188,7 @@ sub_F9AD65:
 	jr sub_F9ACCE__F9AD59                      ; F9AD68  jr T,0xf9ad59
 sub_F9AD65__F9AD6A:
 	push	0                                     ; F9AD6A  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F9AD6C  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F9AD6C  push (XIZ+0xfb)
 	ld	xbc, (xiz-4)                            ; F9AD6F  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; F9AD72  ld A,(XBC)
 	pushw	wa                                   ; F9AD74  push WA
@@ -2223,7 +2223,7 @@ sub_F9AD65__F9ADAD:
 sub_F9AD65__F9ADB0:
 	pop	xix                                    ; F9ADB0  pop XIX
 	popw	hl                                    ; F9ADB1  pop HL
-	unlk32 xiz                                 ; F9ADB2  unlk XIZ
+	unlk	xiz                                 ; F9ADB2  unlk XIZ
 	ret                                        ; F9ADB4  ret
 ; --------------------------------------------------------------------------
 ; P7Block_Run -- 0xF9ADB5..0xF9AEB5 (257 bytes)
@@ -2284,54 +2284,54 @@ sub_F9AD65__F9ADB0:
 ; Unknown:  what a block MEANS, and what the 0x60 argument selects.
 ; --------------------------------------------------------------------------
 P7Block_Run:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9ADB5  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; F9ADB5  link XIZ,0xfff0
 	push	xix                                   ; F9ADB9  push XIX
 	ldw	bc, 6                                  ; F9ADBA  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADBD  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9ADBD  muls XBC,(XIZ+0x1a)
 	dec	6, xbc                                 ; F9ADC0  dec 6,XBC
-	extpfx3 0xAE, 0x16, 0x81                   ; F9ADC2  add XBC,(XIZ+0x16)
+	add	xbc, (xiz+22)                   ; F9ADC2  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADC5  ld A,(XBC)
 	extz	wa                                    ; F9ADC7  extz WA
 	ld	(0x8614:24), wa                        ; F9ADC9  ld (0x008614),WA
 	ldw	bc, 6                                  ; F9ADCE  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADD1  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9ADD1  muls XBC,(XIZ+0x1a)
 	dec	5, xbc                                 ; F9ADD4  dec 5,XBC
-	extpfx3 0xAE, 0x16, 0x81                   ; F9ADD6  add XBC,(XIZ+0x16)
+	add	xbc, (xiz+22)                   ; F9ADD6  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADD9  ld A,(XBC)
 	extz	wa                                    ; F9ADDB  extz WA
 	ld	(0x8616:24), wa                        ; F9ADDD  ld (0x008616),WA
 	ldw	bc, 6                                  ; F9ADE2  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADE5  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9ADE5  muls XBC,(XIZ+0x1a)
 	dec	4, xbc                                 ; F9ADE8  dec 4,XBC
-	extpfx3 0xAE, 0x16, 0x81                   ; F9ADEA  add XBC,(XIZ+0x16)
+	add	xbc, (xiz+22)                   ; F9ADEA  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9ADED  ld A,(XBC)
 	extz	wa                                    ; F9ADEF  extz WA
 	ld	(0x8618:24), wa                        ; F9ADF1  ld (0x008618),WA
 	ldw	bc, 6                                  ; F9ADF6  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9ADF9  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9ADF9  muls XBC,(XIZ+0x1a)
 	dec	2, xbc                                 ; F9ADFC  dec 2,XBC
-	extpfx3 0xAE, 0x16, 0x81                   ; F9ADFE  add XBC,(XIZ+0x16)
+	add	xbc, (xiz+22)                   ; F9ADFE  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9AE01  ld A,(XBC)
 	extz	wa                                    ; F9AE03  extz WA
 	ld	(0x861A:24), wa                        ; F9AE05  ld (0x00861a),WA
 	and	wa, 0xFF                               ; F9AE0A  and WA,0x00ff
 	ld	(0x861A:24), wa                        ; F9AE0E  ld (0x00861a),WA
 	ldw	bc, 6                                  ; F9AE13  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9AE16  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9AE16  muls XBC,(XIZ+0x1a)
 	dec	1, xbc                                 ; F9AE19  dec 1,XBC
-	extpfx3 0xAE, 0x16, 0x81                   ; F9AE1B  add XBC,(XIZ+0x16)
+	add	xbc, (xiz+22)                   ; F9AE1B  add XBC,(XIZ+0x16)
 	ld	a, (xbc)                                ; F9AE1E  ld A,(XBC)
 	extz	wa                                    ; F9AE20  extz WA
 	ld	(0x861C:24), wa                        ; F9AE22  ld (0x00861c),WA
-	extpfx3 0x9E, 0x10, 0x04                   ; F9AE27  pushw (XIZ+0x10)
+	pushw	(xiz+16)                   ; F9AE27  pushw (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; F9AE2A  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; F9AE2D  push XBC
 	calr P7Block_Seek                 ; F9AE2E  calr 0xf9e140
 	ld	(xiz-8), xiy                            ; F9AE31  ld (XIZ+0xf8),XIY
 	inc	6, xsp                                 ; F9AE34  inc 6,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE36  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9AE36  cp (0x008612),0x0000
 	jr z, P7Block_Run__F9AE48                   ; F9AE3D  jr Z,0xf9ae48
-	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE3F  pushw (0x008612)
+	pushw	(0x008612:24)       ; F9AE3F  pushw (0x008612)
 	calr P7Block_ReportStatus                 ; F9AE44  calr 0xf9e1ac
 	popw	bc                                    ; F9AE47  pop BC
 P7Block_Run__F9AE48:
@@ -2364,9 +2364,9 @@ P7Block_Run__F9AE48:
 	ld	(xiz-8), xiy                            ; F9AE8A  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; F9AE8D  inc 0,XSP
 	inc	4, xsp                                 ; F9AE8F  inc 4,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9AE91  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9AE91  cp (0x008612),0x0000
 	jr z, P7Block_Run__F9AEA3                   ; F9AE98  jr Z,0xf9aea3
-	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9AE9A  pushw (0x008612)
+	pushw	(0x008612:24)       ; F9AE9A  pushw (0x008612)
 	calr P7Block_ReportStatus                 ; F9AE9F  calr 0xf9e1ac
 	popw	bc                                    ; F9AEA2  pop BC
 P7Block_Run__F9AEA3:
@@ -2378,7 +2378,7 @@ P7Block_Run__F9AEA3:
 	jr P7Block_Run__F9AE48                      ; F9AEB0  jr T,0xf9ae48
 P7Block_Run__F9AEB2:
 	pop	xix                                    ; F9AEB2  pop XIX
-	unlk32 xiz                                 ; F9AEB3  unlk XIZ
+	unlk	xiz                                 ; F9AEB3  unlk XIZ
 	ret                                        ; F9AEB5  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp0AddrValueScaled -- 0xF9AEB6..0xF9AFDB (294 bytes)
@@ -2419,7 +2419,7 @@ P7Block_Run__F9AEB2:
 ;          from the big computation blocks below, and nothing here reads their meaning.
 ; --------------------------------------------------------------------------
 P7Group_SendOp0AddrValueScaled:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9AEB6  link XIZ,0xffec
+	link	xiz, 0xffec              ; F9AEB6  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9AEBA  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEBF  push BC
 	pushw	0                                    ; F9AEC0  push 0x0000
@@ -2433,7 +2433,7 @@ P7Group_SendOp0AddrValueScaled:
 	pop	xiy                                    ; F9AED8  pop XIY
 	pushw	bc                                   ; F9AED9  push BC
 	ld	bc, (0x8616:24)                        ; F9AEDA  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9AEDF  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9AEDF  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9AEE2  sra 0x04,BC
 	and	bc, 15                                 ; F9AEE5  and BC,0x000f
 	add	bc, 16                                 ; F9AEE9  add BC,0x0010
@@ -2443,7 +2443,7 @@ P7Group_SendOp0AddrValueScaled:
 	pop	xiy                                    ; F9AEF6  pop XIY
 	pushw	bc                                   ; F9AEF7  push BC
 	ld	bc, (0x8616:24)                        ; F9AEF8  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9AEFD  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9AEFD  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9AF00  sll 0x04,BC
 	and	bc, 0xF0                               ; F9AF03  and BC,0x00f0
 	pushw	bc                                   ; F9AF07  push BC
@@ -2453,8 +2453,8 @@ P7Group_SendOp0AddrValueScaled:
 	pushw	bc                                   ; F9AF11  push BC
 	pushw	0                                    ; F9AF12  push 0x0000
 	calr P7Byte_SendData                 ; F9AF15  calr 0xf9a31a
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9AF18  pushw (XIZ+0x0c)
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9AF1B  pushw (XIZ+0x0a)
+	pushw	(xiz+12)                   ; F9AF18  pushw (XIZ+0x0c)
+	pushw	(xiz+10)                   ; F9AF1B  pushw (XIZ+0x0a)
 	lda	xiy, (xiz-12)                          ; F9AF1E  lda XIY,XIZ+0xf4
 	call	Float32_ToDouble                              ; F9AF21  call 0xfcaa50
 	ld	xbc, (xiz-8)                            ; F9AF25  ld XBC,(XIZ+0xf8)
@@ -2482,8 +2482,8 @@ P7Group_SendOp0AddrValueScaled:
 	pop	xiy                                    ; F9AF61  pop XIY
 	pushw	bc                                   ; F9AF62  push BC
 	pushw	25                                   ; F9AF63  push 0x0019
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9AF66  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9AF69  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9AF66  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9AF69  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9AF6C  call 0xfcab06
 	and	xiy, 0x7F                              ; F9AF70  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9AF76  ld C,IYL
@@ -2493,8 +2493,8 @@ P7Group_SendOp0AddrValueScaled:
 	pop	xiy                                    ; F9AF82  pop XIY
 	pushw	bc                                   ; F9AF83  push BC
 	pushw	17                                   ; F9AF84  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9AF87  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9AF8A  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9AF87  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9AF8A  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9AF8D  call 0xfcab06
 	and	xiy, 0xFF                              ; F9AF91  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9AF97  ld C,IYL
@@ -2520,7 +2520,7 @@ P7Group_SendOp0AddrValueScaled:
 	pushw	bc                                   ; F9AFD4  push BC
 	calr P7Byte_SendData                 ; F9AFD5  calr 0xf9a31a
 	pop	xbc                                    ; F9AFD8  pop XBC
-	unlk32 xiz                                 ; F9AFD9  unlk XIZ
+	unlk	xiz                                 ; F9AFD9  unlk XIZ
 	ret                                        ; F9AFDB  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp0AddrValue -- 0xF9AFDC..0xF9B0D0 (245 bytes)
@@ -2563,7 +2563,7 @@ P7Group_SendOp0AddrValueScaled:
 ;          a data record; nothing here says what the base means.
 ; --------------------------------------------------------------------------
 P7Group_SendOp0AddrValue:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9AFDC  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; F9AFDC  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9AFE0  ld C,(0x00861c)
 	pushw	bc                                   ; F9AFE5  push BC
 	pushw	0                                    ; F9AFE6  push 0x0000
@@ -2577,7 +2577,7 @@ P7Group_SendOp0AddrValue:
 	pop	xiy                                    ; F9AFFE  pop XIY
 	pushw	bc                                   ; F9AFFF  push BC
 	ld	bc, (0x8616:24)                        ; F9B000  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B005  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B005  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9B008  sra 0x04,BC
 	and	bc, 15                                 ; F9B00B  and BC,0x000f
 	add	bc, 16                                 ; F9B00F  add BC,0x0010
@@ -2587,7 +2587,7 @@ P7Group_SendOp0AddrValue:
 	pop	xiy                                    ; F9B01C  pop XIY
 	pushw	bc                                   ; F9B01D  push BC
 	ld	bc, (0x8616:24)                        ; F9B01E  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B023  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B023  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9B026  sll 0x04,BC
 	and	bc, 0xF0                               ; F9B029  and BC,0x00f0
 	pushw	bc                                   ; F9B02D  push BC
@@ -2597,8 +2597,8 @@ P7Group_SendOp0AddrValue:
 	pushw	bc                                   ; F9B037  push BC
 	pushw	0                                    ; F9B038  push 0x0000
 	calr P7Byte_SendData                 ; F9B03B  calr 0xf9a31a
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9B03E  pushw (XIZ+0x0c)
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B041  pushw (XIZ+0x0a)
+	pushw	(xiz+12)                   ; F9B03E  pushw (XIZ+0x0c)
+	pushw	(xiz+10)                   ; F9B041  pushw (XIZ+0x0a)
 	call	Float32_ToInt32                              ; F9B044  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B048  ld (XIZ+0xfc),XIY
 	ld	c, (0x861C:24)                         ; F9B04B  ld C,(0x00861c)
@@ -2610,8 +2610,8 @@ P7Group_SendOp0AddrValue:
 	pop	xiy                                    ; F9B05D  pop XIY
 	pushw	bc                                   ; F9B05E  push BC
 	pushw	17                                   ; F9B05F  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B062  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B065  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B062  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B065  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B068  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B06C  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B072  ld C,IYL
@@ -2646,7 +2646,7 @@ P7Group_SendOp0AddrValue:
 	pushw	bc                                   ; F9B0C9  push BC
 	calr P7Byte_SendData                 ; F9B0CA  calr 0xf9a31a
 	pop	xbc                                    ; F9B0CD  pop XBC
-	unlk32 xiz                                 ; F9B0CE  unlk XIZ
+	unlk	xiz                                 ; F9B0CE  unlk XIZ
 	ret                                        ; F9B0D0  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendValue -- 0xF9B0D1..0xF9B166 (150 bytes)
@@ -2690,9 +2690,9 @@ P7Group_SendOp0AddrValue:
 ; Unknown:  what the value SCALES, and what 0x0A and 0x15 mean to the device.
 ; --------------------------------------------------------------------------
 P7Group_SendValue:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B0D1  link XIZ,0xfffc
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B0D5  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; F9B0D8  pushw (XIZ+0x08)
+	link	xiz, 0xfffc              ; F9B0D1  link XIZ,0xfffc
+	pushw	(xiz+10)                   ; F9B0D5  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; F9B0D8  pushw (XIZ+0x08)
 	call	Float32_ToInt32                              ; F9B0DB  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B0DF  ld (XIZ+0xfc),XIY
 	ld	c, (0x861C:24)                         ; F9B0E2  ld C,(0x00861c)
@@ -2703,8 +2703,8 @@ P7Group_SendValue:
 	pop	xiy                                    ; F9B0F3  pop XIY
 	pushw	bc                                   ; F9B0F4  push BC
 	pushw	17                                   ; F9B0F5  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B0F8  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B0FB  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B0F8  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B0FB  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B0FE  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B102  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B108  ld C,IYL
@@ -2739,7 +2739,7 @@ P7Group_SendValue:
 	pushw	bc                                   ; F9B15F  push BC
 	calr P7Byte_SendData                 ; F9B160  calr 0xf9a31a
 	pop	xbc                                    ; F9B163  pop XBC
-	unlk32 xiz                                 ; F9B164  unlk XIZ
+	unlk	xiz                                 ; F9B164  unlk XIZ
 	ret                                        ; F9B166  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp1AddrValueScaled -- 0xF9B167..0xF9B28A (292 bytes)
@@ -2778,7 +2778,7 @@ P7Group_SendValue:
 ; Unknown:  as P7Group_SendOp1AddrValue.
 ; --------------------------------------------------------------------------
 P7Group_SendOp1AddrValueScaled:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B167  link XIZ,0xffec
+	link	xiz, 0xffec              ; F9B167  link XIZ,0xffec
 	ld	c, (0x861C:24)                         ; F9B16B  ld C,(0x00861c)
 	pushw	bc                                   ; F9B170  push BC
 	pushw	8                                    ; F9B171  push 0x0008
@@ -2792,7 +2792,7 @@ P7Group_SendOp1AddrValueScaled:
 	pop	xiy                                    ; F9B189  pop XIY
 	pushw	bc                                   ; F9B18A  push BC
 	ld	bc, (0x8614:24)                        ; F9B18B  ld BC,(0x008614)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B190  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B190  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9B193  sra 0x04,BC
 	and	bc, 15                                 ; F9B196  and BC,0x000f
 	pushw	bc                                   ; F9B19A  push BC
@@ -2801,7 +2801,7 @@ P7Group_SendOp1AddrValueScaled:
 	pop	xiy                                    ; F9B1A3  pop XIY
 	pushw	bc                                   ; F9B1A4  push BC
 	ld	bc, (0x8614:24)                        ; F9B1A5  ld BC,(0x008614)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B1AA  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B1AA  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9B1AD  sll 0x04,BC
 	and	bc, 0xF0                               ; F9B1B0  and BC,0x00f0
 	inc	8, bc                                  ; F9B1B4  inc 0,BC
@@ -2812,8 +2812,8 @@ P7Group_SendOp1AddrValueScaled:
 	pushw	bc                                   ; F9B1C0  push BC
 	pushw	33                                   ; F9B1C1  push 0x0021
 	calr P7Byte_SendData                 ; F9B1C4  calr 0xf9a31a
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9B1C7  pushw (XIZ+0x0c)
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B1CA  pushw (XIZ+0x0a)
+	pushw	(xiz+12)                   ; F9B1C7  pushw (XIZ+0x0c)
+	pushw	(xiz+10)                   ; F9B1CA  pushw (XIZ+0x0a)
 	lda	xiy, (xiz-12)                          ; F9B1CD  lda XIY,XIZ+0xf4
 	call	Float32_ToDouble                              ; F9B1D0  call 0xfcaa50
 	ld	xbc, (xiz-8)                            ; F9B1D4  ld XBC,(XIZ+0xf8)
@@ -2841,8 +2841,8 @@ P7Group_SendOp1AddrValueScaled:
 	pop	xiy                                    ; F9B210  pop XIY
 	pushw	bc                                   ; F9B211  push BC
 	pushw	25                                   ; F9B212  push 0x0019
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B215  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B218  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B215  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B218  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B21B  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B21F  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B225  ld C,IYL
@@ -2852,8 +2852,8 @@ P7Group_SendOp1AddrValueScaled:
 	pop	xiy                                    ; F9B231  pop XIY
 	pushw	bc                                   ; F9B232  push BC
 	pushw	17                                   ; F9B233  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B236  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B239  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B236  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B239  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B23C  call 0xfcab06
 	and	xiy, 0xFF                              ; F9B240  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B246  ld C,IYL
@@ -2879,7 +2879,7 @@ P7Group_SendOp1AddrValueScaled:
 	pushw	bc                                   ; F9B283  push BC
 	calr P7Byte_SendData                 ; F9B284  calr 0xf9a31a
 	pop	xbc                                    ; F9B287  pop XBC
-	unlk32 xiz                                 ; F9B288  unlk XIZ
+	unlk	xiz                                 ; F9B288  unlk XIZ
 	ret                                        ; F9B28A  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp1AddrValue -- 0xF9B28B..0xF9B2ED (99 bytes)
@@ -2924,7 +2924,7 @@ P7Group_SendOp1AddrValueScaled:
 ; Unknown:  what A addresses, and what 0x21 and 0x26 mean to the device.
 ; --------------------------------------------------------------------------
 P7Group_SendOp1AddrValue:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B28B  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; F9B28B  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B28F  ld C,(0x00861c)
 	pushw	bc                                   ; F9B294  push BC
 	pushw	8                                    ; F9B295  push 0x0008
@@ -2938,7 +2938,7 @@ P7Group_SendOp1AddrValue:
 	pop	xiy                                    ; F9B2AD  pop XIY
 	pushw	bc                                   ; F9B2AE  push BC
 	ld	bc, (0x8614:24)                        ; F9B2AF  ld BC,(0x008614)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B2B4  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B2B4  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9B2B7  sra 0x04,BC
 	and	bc, 15                                 ; F9B2BA  and BC,0x000f
 	pushw	bc                                   ; F9B2BE  push BC
@@ -2947,7 +2947,7 @@ P7Group_SendOp1AddrValue:
 	pop	xiy                                    ; F9B2C7  pop XIY
 	pushw	bc                                   ; F9B2C8  push BC
 	ld	bc, (0x8614:24)                        ; F9B2C9  ld BC,(0x008614)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B2CE  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B2CE  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9B2D1  sll 0x04,BC
 	and	bc, 0xF0                               ; F9B2D4  and BC,0x00f0
 	inc	8, bc                                  ; F9B2D8  inc 0,BC
@@ -2958,7 +2958,7 @@ P7Group_SendOp1AddrValue:
 	pushw	bc                                   ; F9B2E4  push BC
 	pushw	33                                   ; F9B2E5  push 0x0021
 	calr P7Byte_SendData                 ; F9B2E8  calr 0xf9a31a
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9B2EB  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; F9B2EB  pushw (XIZ+0x0c)
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp1AddrValue__F9B2EE -- 0xF9B2EE..0xF9B304 (23 bytes)
 ;
@@ -2982,7 +2982,7 @@ P7Group_SendOp1AddrValue:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 P7Group_SendOp1AddrValue__F9B2EE:
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B2EE  pushw (XIZ+0x0a)
+	pushw	(xiz+10)                   ; F9B2EE  pushw (XIZ+0x0a)
 	call	Float32_ToInt32                              ; F9B2F1  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B2F5  ld (XIZ+0xfc),XIY
 	ld	c, (0x861C:24)                         ; F9B2F8  ld C,(0x00861c)
@@ -3017,8 +3017,8 @@ P7Group_SendOp1AddrValue__F9B305:
 	pop	xiy                                    ; F9B30A  pop XIY
 	pushw	bc                                   ; F9B30B  push BC
 	pushw	17                                   ; F9B30C  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B30F  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B312  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B30F  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B312  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B315  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B319  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B31F  ld C,IYL
@@ -3076,7 +3076,7 @@ P7Group_SendOp1AddrValue__F9B32C:
 	pushw	bc                                   ; F9B376  push BC
 	calr P7Byte_SendData                 ; F9B377  calr 0xf9a31a
 	pop	xbc                                    ; F9B37A  pop XBC
-	unlk32 xiz                                 ; F9B37B  unlk XIZ
+	unlk	xiz                                 ; F9B37B  unlk XIZ
 	ret                                        ; F9B37D  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendValueScaled -- 0xF9B37E..0xF9B444 (199 bytes)
@@ -3120,9 +3120,9 @@ P7Group_SendOp1AddrValue__F9B32C:
 ; Unknown:  what 0x26 selects, and what the constant at 0xFCCA7A is in engineering units.
 ; --------------------------------------------------------------------------
 P7Group_SendValueScaled:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B37E  link XIZ,0xffec
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B382  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; F9B385  pushw (XIZ+0x08)
+	link	xiz, 0xffec              ; F9B37E  link XIZ,0xffec
+	pushw	(xiz+10)                   ; F9B382  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; F9B385  pushw (XIZ+0x08)
 	lda	xiy, (xiz-12)                          ; F9B388  lda XIY,XIZ+0xf4
 	call	Float32_ToDouble                              ; F9B38B  call 0xfcaa50
 	ld	xbc, (xiz-8)                            ; F9B38F  ld XBC,(XIZ+0xf8)
@@ -3149,8 +3149,8 @@ P7Group_SendValueScaled:
 	pop	xiy                                    ; F9B3CA  pop XIY
 	pushw	bc                                   ; F9B3CB  push BC
 	pushw	25                                   ; F9B3CC  push 0x0019
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B3CF  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B3D2  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B3CF  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B3D2  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B3D5  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B3D9  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B3DF  ld C,IYL
@@ -3160,8 +3160,8 @@ P7Group_SendValueScaled:
 	pop	xiy                                    ; F9B3EB  pop XIY
 	pushw	bc                                   ; F9B3EC  push BC
 	pushw	17                                   ; F9B3ED  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B3F0  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B3F3  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B3F0  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B3F3  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B3F6  call 0xfcab06
 	and	xiy, 0xFF                              ; F9B3FA  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B400  ld C,IYL
@@ -3187,7 +3187,7 @@ P7Group_SendValueScaled:
 	pushw	bc                                   ; F9B43D  push BC
 	calr P7Byte_SendData                 ; F9B43E  calr 0xf9a31a
 	pop	xbc                                    ; F9B441  pop XBC
-	unlk32 xiz                                 ; F9B442  unlk XIZ
+	unlk	xiz                                 ; F9B442  unlk XIZ
 	ret                                        ; F9B444  ret
 ; --------------------------------------------------------------------------
 ; P7Group_SendOp5AddrValue -- 0xF9B445..0xF9B54A (262 bytes)
@@ -3232,7 +3232,7 @@ P7Group_SendValueScaled:
 ;          the module where two of the six record bytes meet, and nothing explains it.
 ; --------------------------------------------------------------------------
 P7Group_SendOp5AddrValue:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B445  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; F9B445  link XIZ,0xfffc
 	ld	c, (0x861C:24)                         ; F9B449  ld C,(0x00861c)
 	pushw	bc                                   ; F9B44E  push BC
 	pushw	8                                    ; F9B44F  push 0x0008
@@ -3246,7 +3246,7 @@ P7Group_SendOp5AddrValue:
 	pop	xiy                                    ; F9B467  pop XIY
 	pushw	bc                                   ; F9B468  push BC
 	ld	bc, (0x8618:24)                        ; F9B469  ld BC,(0x008618)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B46E  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B46E  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9B471  sra 0x04,BC
 	and	bc, 15                                 ; F9B474  and BC,0x000f
 	pushw	bc                                   ; F9B478  push BC
@@ -3255,7 +3255,7 @@ P7Group_SendOp5AddrValue:
 	pop	xiy                                    ; F9B481  pop XIY
 	pushw	bc                                   ; F9B482  push BC
 	ld	bc, (0x8618:24)                        ; F9B483  ld BC,(0x008618)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9B488  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9B488  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9B48B  sll 0x04,BC
 	and	bc, 0xF0                               ; F9B48E  and BC,0x00f0
 	inc	8, bc                                  ; F9B492  inc 0,BC
@@ -3267,11 +3267,11 @@ P7Group_SendOp5AddrValue:
 	pushw	37                                   ; F9B49F  push 0x0025
 	calr P7Byte_SendData                 ; F9B4A2  calr 0xf9a31a
 	ldw	bc, 0x100                              ; F9B4A5  ld BC,0x0100
-	extpfx5 0xD2, 0x1A, 0x86, 0x00, 0x49       ; F9B4A8  muls XBC,(0x00861a)
+	muls	xbc, (0x00861a:24)       ; F9B4A8  muls XBC,(0x00861a)
 	push	xbc                                   ; F9B4AD  push XBC
 	call	Int32_ToFloat32                              ; F9B4AE  call 0xfcabc6
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9B4B2  pushw (XIZ+0x0c)
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9B4B5  pushw (XIZ+0x0a)
+	pushw	(xiz+12)                   ; F9B4B2  pushw (XIZ+0x0c)
+	pushw	(xiz+10)                   ; F9B4B5  pushw (XIZ+0x0a)
 	push	xiy                                   ; F9B4B8  push XIY
 	call	Float32_Add                              ; F9B4B9  call 0xfcac52
 	push	xiy                                   ; F9B4BD  push XIY
@@ -3286,8 +3286,8 @@ P7Group_SendOp5AddrValue:
 	pop	xiy                                    ; F9B4D7  pop XIY
 	pushw	bc                                   ; F9B4D8  push BC
 	pushw	17                                   ; F9B4D9  push 0x0011
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B4DC  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9B4DF  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9B4DC  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9B4DF  pushw (XIZ+0xfc)
 	call	Shift32_ArithRight                              ; F9B4E2  call 0xfcab06
 	and	xiy, 0x7F                              ; F9B4E6  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B4EC  ld C,IYL
@@ -3322,7 +3322,7 @@ P7Group_SendOp5AddrValue:
 	pushw	bc                                   ; F9B543  push BC
 	calr P7Byte_SendData                 ; F9B544  calr 0xf9a31a
 	pop	xbc                                    ; F9B547  pop XBC
-	unlk32 xiz                                 ; F9B548  unlk XIZ
+	unlk	xiz                                 ; F9B548  unlk XIZ
 	ret                                        ; F9B54A  ret
 ; --------------------------------------------------------------------------
 ; sub_F9B54B -- 0xF9B54B..0xF9B5A4 (90 bytes)
@@ -3356,7 +3356,7 @@ P7Group_SendOp5AddrValue:
 ; Unknown:  the tag alphabet, and which arm serves which tag.
 ; --------------------------------------------------------------------------
 sub_F9B54B:
-	link32 0xEE, 0x0C, 0x32, 0xFF              ; F9B54B  link XIZ,0xff32
+	link	xiz, 0xff32              ; F9B54B  link XIZ,0xff32
 	pushw	hl                                   ; F9B54F  push HL
 	push	xix                                   ; F9B550  push XIX
 sub_F9B54B__F9B551:
@@ -3377,7 +3377,7 @@ sub_F9B54B__F9B551:
 	inc	1, xbc                                 ; F9B575  inc 1,XBC
 	ld	(xiz+8), xbc                            ; F9B577  ld (XIZ+0x08),XBC
 	pushw	wa                                   ; F9B57A  push WA
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9B57B  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; F9B57B  pushw (XIZ+0xfe)
 	ld	xiy, (xiz+12)                           ; F9B57E  ld XIY,(XIZ+0x0c)
 	push	xiy                                   ; F9B581  push XIY
 	calr sub_F9E0B7                 ; F9B582  calr 0xf9e0b7
@@ -3385,14 +3385,14 @@ sub_F9B54B__F9B551:
 	extz	bc                                    ; F9B587  extz BC
 	ld	(xiz-6), bc                             ; F9B589  ld (XIZ+0xfa),BC
 	inc	8, xsp                                 ; F9B58C  inc 0,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9B58E  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9B58E  cp (0x008612),0x0000
 	jr z, sub_F9B54B__F9B59A                   ; F9B595  jr Z,0xf9b59a
 	jrl sub_F9BE3A__F9DFAF                     ; F9B597  jrl T,0xf9dfaf
 sub_F9B54B__F9B59A:
 	jrl sub_F9BE3A__F9DEF0                     ; F9B59A  jrl T,0xf9def0
 sub_F9B54B__F9B59D:
 	ld	xbc, 99                                 ; F9B59D  ld XBC,0x00000063
-	extpfx3 0xAE, 0x10, 0xA1                   ; F9B5A2  sub XBC,(XIZ+0x10)
+	sub	xbc, (xiz+16)                   ; F9B5A2  sub XBC,(XIZ+0x10)
 ; --------------------------------------------------------------------------
 ; sub_F9B5A5 -- 0xF9B5A5..0xF9B886 (738 bytes)
 ;
@@ -3473,7 +3473,7 @@ sub_F9B5A5:
 	inc	8, xsp                                 ; F9B64B  inc 0,XSP
 	inc	8, xsp                                 ; F9B64D  inc 0,XSP
 	push	xiy                                   ; F9B64F  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9B650  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9B650  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9B653  calr 0xf9b167
 	inc	6, xsp                                 ; F9B656  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9B658  jrl T,0xf9dfac
@@ -3547,7 +3547,7 @@ sub_F9B5A5__F9B71A:
 sub_F9B5A5__F9B72D:
 	ld	xbc, (xiz-18)                           ; F9B72D  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9B730  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9B731  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9B731  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9B734  calr 0xf9b167
 	inc	6, xsp                                 ; F9B737  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9B739  jrl T,0xf9dfac
@@ -4107,7 +4107,7 @@ sub_F9B887__F9BDB3:
 	add	(xiz+8), xbc                           ; F9BDB7  add (XIZ+0x08),XBC
 	ld	xwa, (xiz-18)                           ; F9BDBA  ld XWA,(XIZ+0xee)
 	push	xwa                                   ; F9BDBD  push XWA
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9BDBE  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9BDBE  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValueScaled                 ; F9BDC1  calr 0xf9aeb6
 	inc	6, xsp                                 ; F9BDC4  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9BDC6  jrl T,0xf9dfac
@@ -4118,12 +4118,12 @@ sub_F9B887__F9BDC9:
 	push	xwa                                   ; F9BDD0  push XWA
 	calr Stream_ReadU24BE                 ; F9BDD1  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; F9BDD4  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9BDD7  pushw (XIZ+0xe4)
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9BDDA  pushw (XIZ+0xe2)
+	pushw	(xiz-28)                   ; F9BDD7  pushw (XIZ+0xe4)
+	pushw	(xiz-30)                   ; F9BDDA  pushw (XIZ+0xe2)
 	call	Int32_ToFloat32                              ; F9BDDD  call 0xfcabc6
 	ld	xix, xiy                                ; F9BDE1  ld XIX,XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9BDE3  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9BDE6  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9BDE3  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9BDE6  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9BDE9  call 0xfcabc6
 	push	xix                                   ; F9BDED  push XIX
 	push	xiy                                   ; F9BDEE  push XIY
@@ -4149,7 +4149,7 @@ sub_F9B887__F9BDC9:
 	ld	(xiz-18), xiy                           ; F9BE2E  ld (XIZ+0xee),XIY
 	inc	8, xsp                                 ; F9BE31  inc 0,XSP
 	push	xiy                                   ; F9BE33  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9BE34  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9BE34  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValueScaled                 ; F9BE37  calr 0xf9aeb6
 ; --------------------------------------------------------------------------
 ; sub_F9BE3A -- 0xF9BE3A..0xF9DFB6 (8573 bytes)
@@ -4275,8 +4275,8 @@ sub_F9BE3A__F9BF0A:
 	pushw	54                                   ; F9BF34  push 0x0036
 	call	Int16_ToFloat32                              ; F9BF37  call 0xfcaf8b
 	push	xiy                                   ; F9BF3B  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9BF3C  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9BF41  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9BF3C  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9BF41  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9BF46  call 0xfcac52
 	push	xiy                                   ; F9BF4A  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9BF4B  lda XIY,XIZ+0xff6e
@@ -4313,8 +4313,8 @@ sub_F9BE3A__F9BF8A:
 	pushw	0x6F                                 ; F9BFAC  push 0x006f
 	call	Int16_ToFloat32                              ; F9BFAF  call 0xfcaf8b
 	push	xiy                                   ; F9BFB3  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9BFB4  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9BFB9  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9BFB4  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9BFB9  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9BFBE  call 0xfcac52
 	push	xiy                                   ; F9BFC2  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9BFC3  lda XIY,XIZ+0xff6e
@@ -4381,8 +4381,8 @@ sub_F9BE3A__F9C054:
 	pushw	20                                   ; F9C07C  push 0x0014
 	call	Int16_ToFloat32                              ; F9C07F  call 0xfcaf8b
 	push	xiy                                   ; F9C083  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C084  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C089  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C084  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C089  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9C08E  call 0xfcac52
 	push	xiy                                   ; F9C092  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C093  lda XIY,XIZ+0xff6e
@@ -4421,8 +4421,8 @@ sub_F9BE3A__F9C0D3:
 	pushw	0x78                                 ; F9C0FD  push 0x0078
 	call	Int16_ToFloat32                              ; F9C100  call 0xfcaf8b
 	push	xiy                                   ; F9C104  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C105  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C10A  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C105  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C10A  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9C10F  call 0xfcac52
 	push	xiy                                   ; F9C113  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C114  lda XIY,XIZ+0xff6e
@@ -4461,8 +4461,8 @@ sub_F9BE3A__F9C154:
 	pushw	0x4B0                                ; F9C17E  push 0x04b0
 	call	Int16_ToFloat32                              ; F9C181  call 0xfcaf8b
 	push	xiy                                   ; F9C185  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C186  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C18B  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C186  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C18B  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9C190  call 0xfcac52
 	push	xiy                                   ; F9C194  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C195  lda XIY,XIZ+0xff6e
@@ -4499,8 +4499,8 @@ sub_F9BE3A__F9C1D4:
 	pushw	0x2A30                               ; F9C1F6  push 0x2a30
 	call	Int16_ToFloat32                              ; F9C1F9  call 0xfcaf8b
 	push	xiy                                   ; F9C1FD  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C1FE  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C203  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C1FE  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C203  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9C208  call 0xfcac52
 	push	xiy                                   ; F9C20C  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C20D  lda XIY,XIZ+0xff6e
@@ -4524,7 +4524,7 @@ sub_F9BE3A__F9C1D4:
 sub_F9BE3A__F9C24A:
 	ld	xbc, (xiz-18)                           ; F9C24A  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9C24D  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C24E  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C24E  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9C251  calr 0xf9b167
 	inc	6, xsp                                 ; F9C254  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C256  jrl T,0xf9dfac
@@ -4560,14 +4560,14 @@ sub_F9BE3A__F9C259:
 	ld	(xiz-76), xbc                           ; F9C2A0  ld (XIZ+0xb4),XBC
 	ld	(xiz+16), xbc                           ; F9C2A3  ld (XIZ+0x10),XBC
 sub_F9BE3A__F9C2A6:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C2A6  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C2A9  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C2A6  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C2A9  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C2AC  call 0xfcabc6
 	ld	xix, xiy                                ; F9C2B0  ld XIX,XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9C2B2  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9C2B5  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9C2B8  pushw (XIZ+0xe8)
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9C2BB  pushw (XIZ+0xe6)
+	pushw	(xiz-20)                   ; F9C2B2  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9C2B5  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9C2B8  pushw (XIZ+0xe8)
+	pushw	(xiz-26)                   ; F9C2BB  pushw (XIZ+0xe6)
 	call	Float32_Subtract                              ; F9C2BE  call 0xfcb02b
 	push	xiy                                   ; F9C2C2  push XIY
 	push	xix                                   ; F9C2C3  push XIX
@@ -4585,8 +4585,8 @@ sub_F9BE3A__F9C2A6:
 	push	xbc                                   ; F9C2E9  push XBC
 	lda	xiy, (xiz-0x96)                        ; F9C2EA  lda XIY,XIZ+0xff6a
 	call	Double_Multiply                              ; F9C2EF  call 0xfca252
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9C2F3  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9C2F6  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9C2F3  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9C2F6  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0x9E)                        ; F9C2F9  lda XIY,XIZ+0xff62
 	call	Float32_ToDouble                              ; F9C2FE  call 0xfcaa50
 	ld	xbc, (xiz-0x92)                         ; F9C302  ld XBC,(XIZ+0xff6e)
@@ -4606,7 +4606,7 @@ sub_F9BE3A__F9C2A6:
 	call	Double_ToFloat32                              ; F9C32F  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9C333  ld (XIZ+0xee),XIY
 	push	xiy                                   ; F9C336  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C337  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C337  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9C33A  calr 0xf9b167
 	inc	6, xsp                                 ; F9C33D  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C33F  jrl T,0xf9dfac
@@ -4617,8 +4617,8 @@ sub_F9BE3A__F9C342:
 	push	xwa                                   ; F9C349  push XWA
 	calr Stream_ReadU24BE                 ; F9C34A  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; F9C34D  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C350  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C353  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C350  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C353  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x8E)                        ; F9C356  lda XIY,XIZ+0xff72
 	call	Int32_ToDouble                              ; F9C35B  call 0xfca6fd
 	ld	xbc, (xiz-0x8A)                         ; F9C35F  ld XBC,(XIZ+0xff76)
@@ -4644,8 +4644,8 @@ sub_F9BE3A__F9C342:
 	push	xbc                                   ; F9C3A3  push XBC
 	lda	xiy, (xiz-0xA6)                        ; F9C3A4  lda XIY,XIZ+0xff5a
 	call	Double_Divide                              ; F9C3A9  call 0xfca7a5
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9C3AD  pushw (XIZ+0xe4)
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9C3B0  pushw (XIZ+0xe2)
+	pushw	(xiz-28)                   ; F9C3AD  pushw (XIZ+0xe4)
+	pushw	(xiz-30)                   ; F9C3B0  pushw (XIZ+0xe2)
 	lda	xiy, (xiz-0xAE)                        ; F9C3B3  lda XIY,XIZ+0xff52
 	call	Int32_ToDouble                              ; F9C3B8  call 0xfca6fd
 	ld	xbc, (xiz-0xA2)                         ; F9C3BC  ld XBC,(XIZ+0xff5e)
@@ -4666,7 +4666,7 @@ sub_F9BE3A__F9C342:
 	ld	(xiz-18), xiy                           ; F9C3ED  ld (XIZ+0xee),XIY
 	inc	8, xsp                                 ; F9C3F0  inc 0,XSP
 	push	xiy                                   ; F9C3F2  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C3F3  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C3F3  pushw (XIZ+0xfa)
 	calr P7Group_SendOp5AddrValue                 ; F9C3F6  calr 0xf9b445
 	inc	6, xsp                                 ; F9C3F9  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C3FB  jrl T,0xf9dfac
@@ -4682,11 +4682,11 @@ sub_F9BE3A__F9C3FE:
 	push	xbc                                   ; F9C411  push XBC
 	calr Int32_ToFloat32_Q31                 ; F9C412  calr 0xf9e077
 	ld	(xiz-22), xiy                           ; F9C415  ld (XIZ+0xea),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C418  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C41B  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C418  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C41B  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C41E  call 0xfcabc6
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9C422  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9C425  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9C422  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9C425  pushw (XIZ+0xea)
 	push	xiy                                   ; F9C428  push XIY
 	call	Float32_Multiply                              ; F9C429  call 0xfcb005
 	ld	xix, xiy                                ; F9C42D  ld XIX,XIY
@@ -4698,7 +4698,7 @@ sub_F9BE3A__F9C3FE:
 	ld	(xiz-18), xiy                           ; F9C43C  ld (XIZ+0xee),XIY
 	pop	xbc                                    ; F9C43F  pop XBC
 	push	xiy                                   ; F9C440  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C441  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C441  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValueScaled                 ; F9C444  calr 0xf9aeb6
 	inc	6, xsp                                 ; F9C447  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C449  jrl T,0xf9dfac
@@ -4718,8 +4718,8 @@ sub_F9BE3A__F9C44C:
 	pushw	75                                   ; F9C471  push 0x004b
 	call	Int16_ToFloat32                              ; F9C474  call 0xfcaf8b
 	push	xiy                                   ; F9C478  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C479  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C47E  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C479  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C47E  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9C483  call 0xfcac52
 	push	xiy                                   ; F9C487  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C488  lda XIY,XIZ+0xff6e
@@ -4780,8 +4780,8 @@ sub_F9BE3A__F9C44C:
 	inc	8, xsp                                 ; F9C542  inc 0,XSP
 	jrl sub_F9BE3A__F9C638                     ; F9C544  jrl T,0xf9c638
 sub_F9BE3A__F9C547:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C547  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C54A  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C547  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C54A  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C54D  call 0xfcabc6
 	ld	xix, xiy                                ; F9C551  ld XIX,XIY
 	pushw	30                                   ; F9C553  push 0x001e
@@ -4793,8 +4793,8 @@ sub_F9BE3A__F9C547:
 	pushw	0x5C4                                ; F9C565  push 0x05c4
 	call	Int16_ToFloat32                              ; F9C568  call 0xfcaf8b
 	push	xiy                                   ; F9C56C  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C56D  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C572  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C56D  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C572  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9C577  call 0xfcb02b
 	push	xiy                                   ; F9C57B  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9C57C  lda XIY,XIZ+0xff6e
@@ -4856,7 +4856,7 @@ sub_F9BE3A__F9C547:
 sub_F9BE3A__F9C638:
 	ld	xbc, (xiz-18)                           ; F9C638  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9C63B  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C63C  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C63C  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9C63F  calr 0xf9b167
 	inc	6, xsp                                 ; F9C642  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C644  jrl T,0xf9dfac
@@ -4875,8 +4875,8 @@ sub_F9BE3A__F9C647:
 	ld	(xiz-0x8A), xiy                         ; F9C666  ld (XIZ+0xff76),XIY
 	pushw	0xFA0                                ; F9C66B  push 0x0fa0
 	call	Int16_ToFloat32                              ; F9C66E  call 0xfcaf8b
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C672  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C677  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C672  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C677  pushw (XIZ+0xff76)
 	push	xiy                                   ; F9C67C  push XIY
 	call	Float32_Subtract                              ; F9C67D  call 0xfcb02b
 	push	xiy                                   ; F9C681  push XIY
@@ -4906,25 +4906,25 @@ sub_F9BE3A__F9C68D:
 	pushw	42                                   ; F9C6C3  push 0x002a
 	call	Int16_ToFloat32                              ; F9C6C6  call 0xfcaf8b
 	push	xiy                                   ; F9C6CA  push XIY
-	extpfx5 0xD3, 0xF9, 0x74, 0xFF, 0x04       ; F9C6CB  pushw (XIZ+0xff74)
-	extpfx5 0xD3, 0xF9, 0x72, 0xFF, 0x04       ; F9C6D0  pushw (XIZ+0xff72)
+	pushw	(xiz-140)       ; F9C6CB  pushw (XIZ+0xff74)
+	pushw	(xiz-142)       ; F9C6D0  pushw (XIZ+0xff72)
 	call	Float32_Subtract                              ; F9C6D5  call 0xfcb02b
 	ld	(xiz-0x92), xiy                         ; F9C6D9  ld (XIZ+0xff6e),XIY
 	pushw	0x7BA                                ; F9C6DE  push 0x07ba
 	call	Int16_ToFloat32                              ; F9C6E1  call 0xfcaf8b
-	extpfx5 0xD3, 0xF9, 0x70, 0xFF, 0x04       ; F9C6E5  pushw (XIZ+0xff70)
-	extpfx5 0xD3, 0xF9, 0x6E, 0xFF, 0x04       ; F9C6EA  pushw (XIZ+0xff6e)
+	pushw	(xiz-144)       ; F9C6E5  pushw (XIZ+0xff70)
+	pushw	(xiz-146)       ; F9C6EA  pushw (XIZ+0xff6e)
 	push	xiy                                   ; F9C6EF  push XIY
 	call	Float32_Subtract                              ; F9C6F0  call 0xfcb02b
 	push	xiy                                   ; F9C6F4  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C6F5  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C6FA  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C6F5  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C6FA  pushw (XIZ+0xff76)
 	call	Float32_Divide                              ; F9C6FF  call 0xfcae60
 	ld	(xiz-18), xiy                           ; F9C703  ld (XIZ+0xee),XIY
 	jrl sub_F9BE3A__F9C797                     ; F9C706  jrl T,0xf9c797
 sub_F9BE3A__F9C709:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C709  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C70C  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C709  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C70C  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C70F  call 0xfcabc6
 	ld	xix, xiy                                ; F9C713  ld XIX,XIY
 	pushw	11                                   ; F9C715  push 0x000b
@@ -4936,8 +4936,8 @@ sub_F9BE3A__F9C709:
 	pushw	0x186                                ; F9C727  push 0x0186
 	call	Int16_ToFloat32                              ; F9C72A  call 0xfcaf8b
 	push	xiy                                   ; F9C72E  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C72F  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C734  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C72F  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C734  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9C739  call 0xfcb02b
 	ld	(xiz-0x8E), xiy                         ; F9C73D  ld (XIZ+0xff72),XIY
 	pushw	22                                   ; F9C742  push 0x0016
@@ -4949,25 +4949,25 @@ sub_F9BE3A__F9C709:
 	pushw	0x462                                ; F9C754  push 0x0462
 	call	Int16_ToFloat32                              ; F9C757  call 0xfcaf8b
 	push	xiy                                   ; F9C75B  push XIY
-	extpfx5 0xD3, 0xF9, 0x70, 0xFF, 0x04       ; F9C75C  pushw (XIZ+0xff70)
-	extpfx5 0xD3, 0xF9, 0x6E, 0xFF, 0x04       ; F9C761  pushw (XIZ+0xff6e)
+	pushw	(xiz-144)       ; F9C75C  pushw (XIZ+0xff70)
+	pushw	(xiz-146)       ; F9C761  pushw (XIZ+0xff6e)
 	call	Float32_Subtract                              ; F9C766  call 0xfcb02b
 	ld	(xiz-0x96), xiy                         ; F9C76A  ld (XIZ+0xff6a),XIY
 	pushw	0x1DEA                               ; F9C76F  push 0x1dea
 	call	Int16_ToFloat32                              ; F9C772  call 0xfcaf8b
-	extpfx5 0xD3, 0xF9, 0x6C, 0xFF, 0x04       ; F9C776  pushw (XIZ+0xff6c)
-	extpfx5 0xD3, 0xF9, 0x6A, 0xFF, 0x04       ; F9C77B  pushw (XIZ+0xff6a)
+	pushw	(xiz-148)       ; F9C776  pushw (XIZ+0xff6c)
+	pushw	(xiz-150)       ; F9C77B  pushw (XIZ+0xff6a)
 	push	xiy                                   ; F9C780  push XIY
 	call	Float32_Subtract                              ; F9C781  call 0xfcb02b
 	push	xiy                                   ; F9C785  push XIY
-	extpfx5 0xD3, 0xF9, 0x74, 0xFF, 0x04       ; F9C786  pushw (XIZ+0xff74)
-	extpfx5 0xD3, 0xF9, 0x72, 0xFF, 0x04       ; F9C78B  pushw (XIZ+0xff72)
+	pushw	(xiz-140)       ; F9C786  pushw (XIZ+0xff74)
+	pushw	(xiz-142)       ; F9C78B  pushw (XIZ+0xff72)
 	call	Float32_Divide                              ; F9C790  call 0xfcae60
 	ld	(xiz-18), xiy                           ; F9C794  ld (XIZ+0xee),XIY
 sub_F9BE3A__F9C797:
 	ld	xbc, (xiz-18)                           ; F9C797  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9C79A  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C79B  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C79B  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValueScaled                 ; F9C79E  calr 0xf9aeb6
 	inc	6, xsp                                 ; F9C7A1  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C7A3  jrl T,0xf9dfac
@@ -4995,14 +4995,14 @@ sub_F9BE3A__F9C7A6:
 	push	xbc                                   ; F9C7D4  push XBC
 	calr Int32_ToFloat32_Q31                 ; F9C7D5  calr 0xf9e077
 	ld	(xiz-26), xiy                           ; F9C7D8  ld (XIZ+0xe6),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C7DB  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C7DE  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C7DB  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C7DE  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C7E1  call 0xfcabc6
 	ld	xix, xiy                                ; F9C7E5  ld XIX,XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9C7E7  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9C7EA  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9C7ED  pushw (XIZ+0xe8)
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9C7F0  pushw (XIZ+0xe6)
+	pushw	(xiz-20)                   ; F9C7E7  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9C7EA  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9C7ED  pushw (XIZ+0xe8)
+	pushw	(xiz-26)                   ; F9C7F0  pushw (XIZ+0xe6)
 	call	Float32_Subtract                              ; F9C7F3  call 0xfcb02b
 	push	xiy                                   ; F9C7F7  push XIY
 	push	xix                                   ; F9C7F8  push XIX
@@ -5011,17 +5011,17 @@ sub_F9BE3A__F9C7A6:
 	pushw	99                                   ; F9C802  push 0x0063
 	call	Int16_ToFloat32                              ; F9C805  call 0xfcaf8b
 	push	xiy                                   ; F9C809  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C80A  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C80F  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C80A  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C80F  pushw (XIZ+0xff76)
 	call	Float32_Divide                              ; F9C814  call 0xfcae60
 	push	xiy                                   ; F9C818  push XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9C819  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9C81C  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9C819  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9C81C  pushw (XIZ+0xea)
 	call	Float32_Add                              ; F9C81F  call 0xfcac52
 	ld	(xiz-18), xiy                           ; F9C823  ld (XIZ+0xee),XIY
 	pop	xbc                                    ; F9C826  pop XBC
 	push	xiy                                   ; F9C827  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C828  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C828  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValueScaled                 ; F9C82B  calr 0xf9aeb6
 	inc	6, xsp                                 ; F9C82E  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C830  jrl T,0xf9dfac
@@ -5038,12 +5038,12 @@ sub_F9BE3A__F9C833:
 	push	xiy                                   ; F9C847  push XIY
 	calr Stream_ReadU24BE                 ; F9C848  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; F9C84B  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C84E  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C851  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C84E  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C851  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C854  call 0xfcabc6
 	ld	xix, xiy                                ; F9C858  ld XIX,XIY
 	ld	xbc, (xiz-34)                           ; F9C85A  ld XBC,(XIZ+0xde)
-	extpfx3 0xAE, 0xE2, 0xA1                   ; F9C85D  sub XBC,(XIZ+0xe2)
+	sub	xbc, (xiz-30)                   ; F9C85D  sub XBC,(XIZ+0xe2)
 	push	xbc                                   ; F9C860  push XBC
 	call	Int32_ToFloat32                              ; F9C861  call 0xfcabc6
 	push	xiy                                   ; F9C865  push XIY
@@ -5053,30 +5053,30 @@ sub_F9BE3A__F9C833:
 	pushw	99                                   ; F9C870  push 0x0063
 	call	Int16_ToFloat32                              ; F9C873  call 0xfcaf8b
 	push	xiy                                   ; F9C877  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9C878  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9C87D  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9C878  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9C87D  pushw (XIZ+0xff76)
 	call	Float32_Divide                              ; F9C882  call 0xfcae60
 	ld	(xiz-0x8E), xiy                         ; F9C886  ld (XIZ+0xff72),XIY
 	ldw	bc, 0x100                              ; F9C88B  ld BC,0x0100
-	extpfx5 0xD2, 0x1A, 0x86, 0x00, 0x49       ; F9C88E  muls XBC,(0x00861a)
-	extpfx3 0xAE, 0xE2, 0x81                   ; F9C893  add XBC,(XIZ+0xe2)
+	muls	xbc, (0x00861a:24)       ; F9C88E  muls XBC,(0x00861a)
+	add	xbc, (xiz-30)                   ; F9C893  add XBC,(XIZ+0xe2)
 	push	xbc                                   ; F9C896  push XBC
 	call	Int32_ToFloat32                              ; F9C897  call 0xfcabc6
-	extpfx5 0xD3, 0xF9, 0x74, 0xFF, 0x04       ; F9C89B  pushw (XIZ+0xff74)
-	extpfx5 0xD3, 0xF9, 0x72, 0xFF, 0x04       ; F9C8A0  pushw (XIZ+0xff72)
+	pushw	(xiz-140)       ; F9C89B  pushw (XIZ+0xff74)
+	pushw	(xiz-142)       ; F9C8A0  pushw (XIZ+0xff72)
 	push	xiy                                   ; F9C8A5  push XIY
 	call	Float32_Add                              ; F9C8A6  call 0xfcac52
 	ld	(xiz-0x92), xiy                         ; F9C8AA  ld (XIZ+0xff6e),XIY
 	pushw	0x100                                ; F9C8AF  push 0x0100
 	call	Int16_ToFloat32                              ; F9C8B2  call 0xfcaf8b
-	extpfx5 0xD3, 0xF9, 0x70, 0xFF, 0x04       ; F9C8B6  pushw (XIZ+0xff70)
-	extpfx5 0xD3, 0xF9, 0x6E, 0xFF, 0x04       ; F9C8BB  pushw (XIZ+0xff6e)
+	pushw	(xiz-144)       ; F9C8B6  pushw (XIZ+0xff70)
+	pushw	(xiz-146)       ; F9C8BB  pushw (XIZ+0xff6e)
 	push	xiy                                   ; F9C8C0  push XIY
 	call	Float32_Multiply                              ; F9C8C1  call 0xfcb005
 	ld	(xiz-18), xiy                           ; F9C8C5  ld (XIZ+0xee),XIY
 	inc	8, xsp                                 ; F9C8C8  inc 0,XSP
 	push	xiy                                   ; F9C8CA  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9C8CB  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9C8CB  pushw (XIZ+0xfa)
 	calr P7Group_SendOp0AddrValue                 ; F9C8CE  calr 0xf9afdc
 	inc	6, xsp                                 ; F9C8D1  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9C8D3  jrl T,0xf9dfac
@@ -5149,8 +5149,8 @@ sub_F9BE3A__F9C8D6:
 	inc	8, xsp                                 ; F9C9AB  inc 0,XSP
 	jrl sub_F9BE3A__F9CA80                     ; F9C9AD  jrl T,0xf9ca80
 sub_F9BE3A__F9C9B0:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9C9B0  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9C9B3  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9C9B0  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9C9B3  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9C9B6  call 0xfcabc6
 	push	xiy                                   ; F9C9BA  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9C9BB  lda XIY,XIZ+0xff72
@@ -5216,7 +5216,7 @@ sub_F9BE3A__F9C9B0:
 sub_F9BE3A__F9CA80:
 	ld	xbc, (xiz-18)                           ; F9CA80  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9CA83  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9CA84  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9CA84  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9CA87  calr 0xf9b167
 	inc	6, xsp                                 ; F9CA8A  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9CA8C  jrl T,0xf9dfac
@@ -5239,15 +5239,15 @@ sub_F9BE3A__F9CA8F:
 	push	xwa                                   ; F9CAB1  push XWA
 	calr Stream_ReadU24BE                 ; F9CAB2  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; F9CAB5  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; F9CAB8  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9CABB  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9CAB8  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9CABB  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9CABE  call 0xfcabc6
 	ld	xix, xiy                                ; F9CAC2  ld XIX,XIY
-	extpfx3 0x9E, 0xE0, 0x04                   ; F9CAC4  pushw (XIZ+0xe0)
-	extpfx3 0x9E, 0xDE, 0x04                   ; F9CAC7  pushw (XIZ+0xde)
+	pushw	(xiz-32)                   ; F9CAC4  pushw (XIZ+0xe0)
+	pushw	(xiz-34)                   ; F9CAC7  pushw (XIZ+0xde)
 	call	Int32_ToFloat32                              ; F9CACA  call 0xfcabc6
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9CACE  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9CAD1  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9CACE  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9CAD1  pushw (XIZ+0xea)
 	push	xiy                                   ; F9CAD4  push XIY
 	call	Float32_Subtract                              ; F9CAD5  call 0xfcb02b
 	push	xiy                                   ; F9CAD9  push XIY
@@ -5256,8 +5256,8 @@ sub_F9BE3A__F9CA8F:
 	push	xiy                                   ; F9CADF  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9CAE0  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9CAE5  call 0xfcaa50
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9CAE9  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9CAEC  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9CAE9  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9CAEC  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0x96)                        ; F9CAEF  lda XIY,XIZ+0xff6a
 	call	Float32_ToDouble                              ; F9CAF4  call 0xfcaa50
 	ld	xbc, (xiz-0x92)                         ; F9CAF8  ld XBC,(XIZ+0xff6e)
@@ -5333,7 +5333,7 @@ sub_F9BE3A__F9CA8F:
 	inc	8, xsp                                 ; F9CBDF  inc 0,XSP
 	inc	8, xsp                                 ; F9CBE1  inc 0,XSP
 	push	xiy                                   ; F9CBE3  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9CBE4  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9CBE4  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9CBE7  calr 0xf9b167
 	inc	6, xsp                                 ; F9CBEA  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9CBEC  jrl T,0xf9dfac
@@ -5353,8 +5353,8 @@ sub_F9BE3A__F9CBEF:
 	pushw	10                                   ; F9CC14  push 0x000a
 	call	Int16_ToFloat32                              ; F9CC17  call 0xfcaf8b
 	push	xiy                                   ; F9CC1B  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9CC1C  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9CC21  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9CC1C  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9CC21  pushw (XIZ+0xff76)
 	call	Float32_Add                              ; F9CC26  call 0xfcac52
 	push	xiy                                   ; F9CC2A  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9CC2B  lda XIY,XIZ+0xff6e
@@ -5405,8 +5405,8 @@ sub_F9BE3A__F9CC98:
 	pushw	50                                   ; F9CCBD  push 0x0032
 	call	Int16_ToFloat32                              ; F9CCC0  call 0xfcaf8b
 	push	xiy                                   ; F9CCC4  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9CCC5  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9CCCA  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9CCC5  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9CCCA  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9CCCF  call 0xfcb02b
 	push	xiy                                   ; F9CCD3  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9CCD4  lda XIY,XIZ+0xff6e
@@ -5457,8 +5457,8 @@ sub_F9BE3A__F9CD41:
 	pushw	0xC8                                 ; F9CD66  push 0x00c8
 	call	Int16_ToFloat32                              ; F9CD69  call 0xfcaf8b
 	push	xiy                                   ; F9CD6D  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9CD6E  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9CD73  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9CD6E  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9CD73  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9CD78  call 0xfcb02b
 	push	xiy                                   ; F9CD7C  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9CD7D  lda XIY,XIZ+0xff6e
@@ -5509,8 +5509,8 @@ sub_F9BE3A__F9CDEA:
 	pushw	0xBB8                                ; F9CE0F  push 0x0bb8
 	call	Int16_ToFloat32                              ; F9CE12  call 0xfcaf8b
 	push	xiy                                   ; F9CE16  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9CE17  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9CE1C  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9CE17  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9CE1C  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9CE21  call 0xfcb02b
 	push	xiy                                   ; F9CE25  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9CE26  lda XIY,XIZ+0xff6e
@@ -5546,8 +5546,8 @@ sub_F9BE3A__F9CDEA:
 	ld	(xiz-18), xiy                           ; F9CE8D  ld (XIZ+0xee),XIY
 	jrl sub_F9BE3A__F9CF32                     ; F9CE90  jrl T,0xf9cf32
 sub_F9BE3A__F9CE93:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9CE93  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9CE96  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9CE93  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9CE96  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9CE99  call 0xfcabc6
 	ld	xix, xiy                                ; F9CE9D  ld XIX,XIY
 	pushw	0x64                                 ; F9CE9F  push 0x0064
@@ -5559,8 +5559,8 @@ sub_F9BE3A__F9CE93:
 	pushw	0x1B58                               ; F9CEB1  push 0x1b58
 	call	Int16_ToFloat32                              ; F9CEB4  call 0xfcaf8b
 	push	xiy                                   ; F9CEB8  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9CEB9  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9CEBE  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9CEB9  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9CEBE  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9CEC3  call 0xfcb02b
 	push	xiy                                   ; F9CEC7  push XIY
 	lda	xiy, (xiz-0x92)                        ; F9CEC8  lda XIY,XIZ+0xff6e
@@ -5597,14 +5597,14 @@ sub_F9BE3A__F9CE93:
 sub_F9BE3A__F9CF32:
 	ld	xbc, (xiz-18)                           ; F9CF32  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9CF35  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9CF36  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9CF36  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValue                 ; F9CF39  calr 0xf9b28b
 	inc	6, xsp                                 ; F9CF3C  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9CF3E  jrl T,0xf9dfac
 sub_F9BE3A__F9CF41:
 	ld	xbc, (xiz+16)                           ; F9CF41  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; F9CF44  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9CF45  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9CF45  pushw (XIZ+0xfa)
 	ld	xwa, (xiz+8)                            ; F9CF48  ld XWA,(XIZ+0x08)
 	push	xwa                                   ; F9CF4B  push XWA
 	calr sub_F9E1ED                 ; F9CF4C  calr 0xf9e1ed
@@ -5642,8 +5642,8 @@ sub_F9BE3A__F9CF95:
 	ld	(xiz-88), xbc                           ; F9CF9F  ld (XIZ+0xa8),XBC
 	ld	(xiz-92), xbc                           ; F9CFA2  ld (XIZ+0xa4),XBC
 sub_F9BE3A__F9CFA5:
-	extpfx3 0x9E, 0xAA, 0x04                   ; F9CFA5  pushw (XIZ+0xaa)
-	extpfx3 0x9E, 0xA8, 0x04                   ; F9CFA8  pushw (XIZ+0xa8)
+	pushw	(xiz-86)                   ; F9CFA5  pushw (XIZ+0xaa)
+	pushw	(xiz-88)                   ; F9CFA8  pushw (XIZ+0xa8)
 	call	Int32_ToFloat32                              ; F9CFAB  call 0xfcabc6
 	push	xiy                                   ; F9CFAF  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9CFB0  lda XIY,XIZ+0xff72
@@ -5695,8 +5695,8 @@ sub_F9BE3A__F9D02C:
 	ld	(xiz-0x68), xbc                         ; F9D036  ld (XIZ+0x98),XBC
 	ld	(xiz-0x6C), xbc                         ; F9D039  ld (XIZ+0x94),XBC
 sub_F9BE3A__F9D03C:
-	extpfx3 0x9E, 0x9A, 0x04                   ; F9D03C  pushw (XIZ+0x9a)
-	extpfx3 0x9E, 0x98, 0x04                   ; F9D03F  pushw (XIZ+0x98)
+	pushw	(xiz-102)                   ; F9D03C  pushw (XIZ+0x9a)
+	pushw	(xiz-104)                   ; F9D03F  pushw (XIZ+0x98)
 	call	Int32_ToFloat32                              ; F9D042  call 0xfcabc6
 	push	xiy                                   ; F9D046  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D047  lda XIY,XIZ+0xff72
@@ -5768,8 +5768,8 @@ sub_F9BE3A__F9D105:
 	ld	(xiz-0x78), xbc                         ; F9D10F  ld (XIZ+0x88),XBC
 	ld	(xiz-0x7C), xbc                         ; F9D112  ld (XIZ+0x84),XBC
 sub_F9BE3A__F9D115:
-	extpfx3 0x9E, 0x8A, 0x04                   ; F9D115  pushw (XIZ+0x8a)
-	extpfx3 0x9E, 0x88, 0x04                   ; F9D118  pushw (XIZ+0x88)
+	pushw	(xiz-118)                   ; F9D115  pushw (XIZ+0x8a)
+	pushw	(xiz-120)                   ; F9D118  pushw (XIZ+0x88)
 	call	Int32_ToFloat32                              ; F9D11B  call 0xfcabc6
 	push	xiy                                   ; F9D11F  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D120  lda XIY,XIZ+0xff72
@@ -5825,8 +5825,8 @@ sub_F9BE3A__F9D1B2:
 	ld	(xiz-0x80), xbc                         ; F9D1BC  ld (XIZ+0x80),XBC
 	ld	(xiz-0x84), xbc                         ; F9D1BF  ld (XIZ+0xff7c),XBC
 sub_F9BE3A__F9D1C4:
-	extpfx3 0x9E, 0x82, 0x04                   ; F9D1C4  pushw (XIZ+0x82)
-	extpfx3 0x9E, 0x80, 0x04                   ; F9D1C7  pushw (XIZ+0x80)
+	pushw	(xiz-126)                   ; F9D1C4  pushw (XIZ+0x82)
+	pushw	(xiz-128)                   ; F9D1C7  pushw (XIZ+0x80)
 	call	Int32_ToFloat32                              ; F9D1CA  call 0xfcabc6
 	push	xiy                                   ; F9D1CE  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D1CF  lda XIY,XIZ+0xff72
@@ -5871,13 +5871,13 @@ sub_F9BE3A__F9D24E:
 	ld	xbc, (xiz+16)                           ; F9D24E  ld XBC,(XIZ+0x10)
 	cp	xbc, 0                                  ; F9D251  cp XBC,0x00000000
 	jr ge, sub_F9BE3A__F9D266                  ; F9D257  jr GE,0xf9d266
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D259  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D25C  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D259  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D25C  pushw (XIZ+0xea)
 	call	Float32_Negate                              ; F9D25F  call 0xfcb04a
 	ld	(xiz-22), xiy                           ; F9D263  ld (XIZ+0xea),XIY
 sub_F9BE3A__F9D266:
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D266  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D269  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D266  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D269  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0x8E)                        ; F9D26C  lda XIY,XIZ+0xff72
 	call	Float32_ToDouble                              ; F9D271  call 0xfcaa50
 	ld	xbc, (xiz-0x8A)                         ; F9D275  ld XBC,(XIZ+0xff76)
@@ -5929,7 +5929,7 @@ sub_F9BE3A__F9D266:
 	inc	8, xsp                                 ; F9D30C  inc 0,XSP
 	inc	8, xsp                                 ; F9D30E  inc 0,XSP
 	push	xiy                                   ; F9D310  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9D311  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9D311  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9D314  calr 0xf9b167
 	inc	6, xsp                                 ; F9D317  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9D319  jrl T,0xf9dfac
@@ -5992,7 +5992,7 @@ sub_F9BE3A__F9D31C:
 	push	xbc                                   ; F9D3D1  push XBC
 	call	Double_ToFloat32                              ; F9D3D2  call 0xfcadd6
 	ld	(xiz-58), xiy                           ; F9D3D6  ld (XIZ+0xc6),XIY
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9D3D9  pushw (XIZ+0xf8)
+	pushw	(xiz-8)                   ; F9D3D9  pushw (XIZ+0xf8)
 	call	Int16_ToFloat32                              ; F9D3DC  call 0xfcaf8b
 	push	xiy                                   ; F9D3E0  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9D3E1  lda XIY,XIZ+0xff72
@@ -6051,8 +6051,8 @@ sub_F9BE3A__F9D31C:
 	pushw	2                                    ; F9D48F  push 0x0002
 	call	Int16_ToFloat32                              ; F9D492  call 0xfcaf8b
 	push	xiy                                   ; F9D496  push XIY
-	extpfx3 0x9E, 0xC8, 0x04                   ; F9D497  pushw (XIZ+0xc8)
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9D49A  pushw (XIZ+0xc6)
+	pushw	(xiz-56)                   ; F9D497  pushw (XIZ+0xc8)
+	pushw	(xiz-58)                   ; F9D49A  pushw (XIZ+0xc6)
 	call	Float32_Subtract                              ; F9D49D  call 0xfcb02b
 	ld	xix, xiy                                ; F9D4A1  ld XIX,XIY
 	push	xiy                                   ; F9D4A3  push XIY
@@ -6062,48 +6062,48 @@ sub_F9BE3A__F9D31C:
 	pushw	1                                    ; F9D4AE  push 0x0001
 	call	Int16_ToFloat32                              ; F9D4B1  call 0xfcaf8b
 	push	xiy                                   ; F9D4B5  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9D4B6  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9D4BB  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9D4B6  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9D4BB  pushw (XIZ+0xff76)
 	call	Float32_Subtract                              ; F9D4C0  call 0xfcb02b
 	ld	(xiz-0x8E), xiy                         ; F9D4C4  ld (XIZ+0xff72),XIY
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9D4C9  pushw (XIZ+0xd4)
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9D4CC  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9D4CF  pushw (XIZ+0xd8)
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9D4D2  pushw (XIZ+0xd6)
+	pushw	(xiz-44)                   ; F9D4C9  pushw (XIZ+0xd4)
+	pushw	(xiz-46)                   ; F9D4CC  pushw (XIZ+0xd2)
+	pushw	(xiz-40)                   ; F9D4CF  pushw (XIZ+0xd8)
+	pushw	(xiz-42)                   ; F9D4D2  pushw (XIZ+0xd6)
 	call	Float32_Subtract                              ; F9D4D5  call 0xfcb02b
-	extpfx5 0xD3, 0xF9, 0x74, 0xFF, 0x04       ; F9D4D9  pushw (XIZ+0xff74)
-	extpfx5 0xD3, 0xF9, 0x72, 0xFF, 0x04       ; F9D4DE  pushw (XIZ+0xff72)
+	pushw	(xiz-140)       ; F9D4D9  pushw (XIZ+0xff74)
+	pushw	(xiz-142)       ; F9D4DE  pushw (XIZ+0xff72)
 	push	xiy                                   ; F9D4E3  push XIY
 	call	Float32_Divide                              ; F9D4E4  call 0xfcae60
 	ld	(xiz-50), xiy                           ; F9D4E8  ld (XIZ+0xce),XIY
 	pushw	3                                    ; F9D4EB  push 0x0003
 	call	Int16_ToFloat32                              ; F9D4EE  call 0xfcaf8b
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9D4F2  pushw (XIZ+0xd0)
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9D4F5  pushw (XIZ+0xce)
+	pushw	(xiz-48)                   ; F9D4F2  pushw (XIZ+0xd0)
+	pushw	(xiz-50)                   ; F9D4F5  pushw (XIZ+0xce)
 	push	xiy                                   ; F9D4F8  push XIY
 	call	Float32_Multiply                              ; F9D4F9  call 0xfcb005
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9D4FD  pushw (XIZ+0xd4)
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9D500  pushw (XIZ+0xd2)
+	pushw	(xiz-44)                   ; F9D4FD  pushw (XIZ+0xd4)
+	pushw	(xiz-46)                   ; F9D500  pushw (XIZ+0xd2)
 	push	xiy                                   ; F9D503  push XIY
 	call	Float32_Add                              ; F9D504  call 0xfcac52
 	ld	(xiz-54), xiy                           ; F9D508  ld (XIZ+0xca),XIY
 	pushw	4                                    ; F9D50B  push 0x0004
 	call	Int16_ToFloat32                              ; F9D50E  call 0xfcaf8b
 	push	xiy                                   ; F9D512  push XIY
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9D513  pushw (XIZ+0xd8)
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9D516  pushw (XIZ+0xd6)
+	pushw	(xiz-40)                   ; F9D513  pushw (XIZ+0xd8)
+	pushw	(xiz-42)                   ; F9D516  pushw (XIZ+0xd6)
 	call	Float32_Divide                              ; F9D519  call 0xfcae60
 	inc	8, xsp                                 ; F9D51D  inc 0,XSP
 	inc	8, xsp                                 ; F9D51F  inc 0,XSP
 	push	xiy                                   ; F9D521  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9D522  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9D522  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9D525  calr 0xf9b167
 	inc	6, xsp                                 ; F9D528  inc 6,XSP
 	ld	xbc, (xiz-58)                           ; F9D52A  ld XBC,(XIZ+0xc6)
 	push	xbc                                   ; F9D52D  push XBC
 	calr P7Group_SendValueScaled                 ; F9D52E  calr 0xf9b37e
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9D531  pushw (XIZ+0xd0)
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9D534  pushw (XIZ+0xce)
+	pushw	(xiz-48)                   ; F9D531  pushw (XIZ+0xd0)
+	pushw	(xiz-50)                   ; F9D534  pushw (XIZ+0xce)
 	call	Float32_Negate                              ; F9D537  call 0xfcb04a
 	ld	xix, xiy                                ; F9D53B  ld XIX,XIY
 	pushw	2                                    ; F9D53D  push 0x0002
@@ -6117,8 +6117,8 @@ sub_F9BE3A__F9D31C:
 	pushw	4                                    ; F9D54F  push 0x0004
 	call	Int16_ToFloat32                              ; F9D552  call 0xfcaf8b
 	push	xiy                                   ; F9D556  push XIY
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9D557  pushw (XIZ+0xd0)
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9D55A  pushw (XIZ+0xce)
+	pushw	(xiz-48)                   ; F9D557  pushw (XIZ+0xd0)
+	pushw	(xiz-50)                   ; F9D55A  pushw (XIZ+0xce)
 	call	Float32_Divide                              ; F9D55D  call 0xfcae60
 	pop	xbc                                    ; F9D561  pop XBC
 	push	xiy                                   ; F9D562  push XIY
@@ -6126,8 +6126,8 @@ sub_F9BE3A__F9D31C:
 	pushw	4                                    ; F9D566  push 0x0004
 	call	Int16_ToFloat32                              ; F9D569  call 0xfcaf8b
 	push	xiy                                   ; F9D56D  push XIY
-	extpfx3 0x9E, 0xCC, 0x04                   ; F9D56E  pushw (XIZ+0xcc)
-	extpfx3 0x9E, 0xCA, 0x04                   ; F9D571  pushw (XIZ+0xca)
+	pushw	(xiz-52)                   ; F9D56E  pushw (XIZ+0xcc)
+	pushw	(xiz-54)                   ; F9D571  pushw (XIZ+0xca)
 	call	Float32_Divide                              ; F9D574  call 0xfcae60
 	pop	xbc                                    ; F9D578  pop XBC
 	push	xiy                                   ; F9D579  push XIY
@@ -6164,10 +6164,10 @@ sub_F9BE3A__F9D581:
 	pushw	bc                                   ; F9D5BF  push BC
 	call	Int16_ToFloat32                              ; F9D5C0  call 0xfcaf8b
 	ld	xix, xiy                                ; F9D5C4  ld XIX,XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D5C6  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D5C9  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9D5CC  pushw (XIZ+0xe8)
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9D5CF  pushw (XIZ+0xe6)
+	pushw	(xiz-20)                   ; F9D5C6  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D5C9  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9D5CC  pushw (XIZ+0xe8)
+	pushw	(xiz-26)                   ; F9D5CF  pushw (XIZ+0xe6)
 	call	Float32_Subtract                              ; F9D5D2  call 0xfcb02b
 	push	xiy                                   ; F9D5D6  push XIY
 	push	xix                                   ; F9D5D7  push XIX
@@ -6176,17 +6176,17 @@ sub_F9BE3A__F9D581:
 	pushw	0xC6                                 ; F9D5E1  push 0x00c6
 	call	Int16_ToFloat32                              ; F9D5E4  call 0xfcaf8b
 	push	xiy                                   ; F9D5E8  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9D5E9  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9D5EE  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9D5E9  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9D5EE  pushw (XIZ+0xff76)
 	call	Float32_Divide                              ; F9D5F3  call 0xfcae60
 	push	xiy                                   ; F9D5F7  push XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D5F8  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D5FB  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D5F8  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D5FB  pushw (XIZ+0xea)
 	call	Float32_Add                              ; F9D5FE  call 0xfcac52
 	ld	(xiz-18), xiy                           ; F9D602  ld (XIZ+0xee),XIY
 	pop	xbc                                    ; F9D605  pop XBC
 	push	xiy                                   ; F9D606  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9D607  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9D607  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9D60A  calr 0xf9b167
 	inc	6, xsp                                 ; F9D60D  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9D60F  jrl T,0xf9dfac
@@ -6238,8 +6238,8 @@ sub_F9BE3A__F9D622:
 	push	xbc                                   ; F9D690  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D691  lda XIY,XIZ+0xff62
 	call	Double_Add                              ; F9D696  call 0xfca41f
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D69A  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D69D  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D69A  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D69D  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0xA6)                        ; F9D6A0  lda XIY,XIZ+0xff5a
 	call	Float32_ToDouble                              ; F9D6A5  call 0xfcaa50
 	ld	xbc, (xiz-0xA2)                         ; F9D6A9  ld XBC,(XIZ+0xff5e)
@@ -6328,8 +6328,8 @@ sub_F9BE3A__F9D75C:
 	push	xbc                                   ; F9D7B3  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D7B4  lda XIY,XIZ+0xff62
 	call	Double_Add                              ; F9D7B9  call 0xfca41f
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D7BD  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D7C0  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D7BD  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D7C0  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0xA6)                        ; F9D7C3  lda XIY,XIZ+0xff5a
 	call	Float32_ToDouble                              ; F9D7C8  call 0xfcaa50
 	ld	xbc, (xiz-0xA2)                         ; F9D7CC  ld XBC,(XIZ+0xff5e)
@@ -6417,8 +6417,8 @@ sub_F9BE3A__F9D87F:
 	push	xbc                                   ; F9D8D8  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D8D9  lda XIY,XIZ+0xff62
 	call	Double_Add                              ; F9D8DE  call 0xfca41f
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9D8E2  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9D8E5  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9D8E2  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9D8E5  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0xA6)                        ; F9D8E8  lda XIY,XIZ+0xff5a
 	call	Float32_ToDouble                              ; F9D8ED  call 0xfcaa50
 	ld	xbc, (xiz-0xA2)                         ; F9D8F1  ld XBC,(XIZ+0xff5e)
@@ -6506,8 +6506,8 @@ sub_F9BE3A__F9D9A4:
 	push	xbc                                   ; F9D9FD  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9D9FE  lda XIY,XIZ+0xff62
 	call	Double_Add                              ; F9DA03  call 0xfca41f
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9DA07  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9DA0A  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9DA07  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9DA0A  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0xA6)                        ; F9DA0D  lda XIY,XIZ+0xff5a
 	call	Float32_ToDouble                              ; F9DA12  call 0xfcaa50
 	ld	xbc, (xiz-0xA2)                         ; F9DA16  ld XBC,(XIZ+0xff5e)
@@ -6593,8 +6593,8 @@ sub_F9BE3A__F9DAC9:
 	push	xbc                                   ; F9DB19  push XBC
 	lda	xiy, (xiz-0x9E)                        ; F9DB1A  lda XIY,XIZ+0xff62
 	call	Double_Add                              ; F9DB1F  call 0xfca41f
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9DB23  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9DB26  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9DB23  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9DB26  pushw (XIZ+0xea)
 	lda	xiy, (xiz-0xA6)                        ; F9DB29  lda XIY,XIZ+0xff5a
 	call	Float32_ToDouble                              ; F9DB2E  call 0xfcaa50
 	ld	xbc, (xiz-0xA2)                         ; F9DB32  ld XBC,(XIZ+0xff5e)
@@ -6654,14 +6654,14 @@ sub_F9BE3A__F9DAC9:
 sub_F9BE3A__F9DBE2:
 	ld	xbc, (xiz-18)                           ; F9DBE2  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9DBE5  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DBE6  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DBE6  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9DBE9  calr 0xf9b167
 	inc	6, xsp                                 ; F9DBEC  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DBEE  jrl T,0xf9dfac
 sub_F9BE3A__F9DBF1:
 	ld	xbc, (xiz+16)                           ; F9DBF1  ld XBC,(XIZ+0x10)
 	push	xbc                                   ; F9DBF4  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DBF5  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DBF5  pushw (XIZ+0xfa)
 	ld	xwa, (xiz+8)                            ; F9DBF8  ld XWA,(XIZ+0x08)
 	push	xwa                                   ; F9DBFB  push XWA
 	calr sub_F9ECF1                 ; F9DBFC  calr 0xf9ecf1
@@ -6683,22 +6683,22 @@ sub_F9BE3A__F9DC09:
 	calr Stream_ReadU24BE                 ; F9DC1E  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; F9DC21  ld (XIZ+0x08),XIY
 	ld	xbc, (xiz-34)                           ; F9DC24  ld XBC,(XIZ+0xde)
-	extpfx3 0xAE, 0xE2, 0xA1                   ; F9DC27  sub XBC,(XIZ+0xe2)
-	extpfx3 0x9E, 0x12, 0x04                   ; F9DC2A  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9DC2D  pushw (XIZ+0x10)
+	sub	xbc, (xiz-30)                   ; F9DC27  sub XBC,(XIZ+0xe2)
+	pushw	(xiz+18)                   ; F9DC2A  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9DC2D  pushw (XIZ+0x10)
 	push	xbc                                   ; F9DC30  push XBC
 	call	Multiply32_Signed                              ; F9DC31  call 0xfcb0d3
 	pushw	0                                    ; F9DC35  push 0x0000
 	pushw	99                                   ; F9DC38  push 0x0063
 	push	xiy                                   ; F9DC3B  push XIY
 	call	Divide32_Signed                              ; F9DC3C  call 0xfcb141
-	extpfx3 0xAE, 0xE2, 0x85                   ; F9DC40  add XIY,(XIZ+0xe2)
+	add	xiy, (xiz-30)                   ; F9DC40  add XIY,(XIZ+0xe2)
 	push	xiy                                   ; F9DC43  push XIY
 	call	Int32_ToFloat32                              ; F9DC44  call 0xfcabc6
 	ld	(xiz-18), xiy                           ; F9DC48  ld (XIZ+0xee),XIY
 	inc	8, xsp                                 ; F9DC4B  inc 0,XSP
 	push	xiy                                   ; F9DC4D  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DC4E  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DC4E  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValue                 ; F9DC51  calr 0xf9b28b
 	inc	6, xsp                                 ; F9DC54  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DC56  jrl T,0xf9dfac
@@ -6710,7 +6710,7 @@ sub_F9BE3A__F9DC59:
 	inc	1, xbc                                 ; F9DC63  inc 1,XBC
 	ld	(xiz+8), xbc                            ; F9DC65  ld (XIZ+0x08),XBC
 	exts	xwa                                   ; F9DC68  exts XWA
-	extpfx3 0xAE, 0x10, 0xF0                   ; F9DC6A  cp XWA,(XIZ+0x10)
+	cp	xwa, (xiz+16)                   ; F9DC6A  cp XWA,(XIZ+0x10)
 	jr nz, sub_F9BE3A__F9DC84                  ; F9DC6D  jr NZ,0xf9dc84
 	ld	xwa, (F64_0p5+4:24)                     ; F9DC6F  ld XWA,(0xfcca5e)
 	push	xwa                                   ; F9DC74  push XWA
@@ -6726,7 +6726,7 @@ sub_F9BE3A__F9DC84:
 sub_F9BE3A__F9DC8E:
 	ld	xbc, (xiz-18)                           ; F9DC8E  ld XBC,(XIZ+0xee)
 	push	xbc                                   ; F9DC91  push XBC
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DC92  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DC92  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9DC95  calr 0xf9b167
 	inc	6, xsp                                 ; F9DC98  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DC9A  jrl T,0xf9dfac
@@ -6902,10 +6902,10 @@ sub_F9BE3A__F9DE13:
 	push	xbc                                   ; F9DE1C  push XBC
 	call	Int32_ToFloat32                              ; F9DE1D  call 0xfcabc6
 	ld	xix, xiy                                ; F9DE21  ld XIX,XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9DE23  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9DE26  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9DE29  pushw (XIZ+0xe8)
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9DE2C  pushw (XIZ+0xe6)
+	pushw	(xiz-20)                   ; F9DE23  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9DE26  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9DE29  pushw (XIZ+0xe8)
+	pushw	(xiz-26)                   ; F9DE2C  pushw (XIZ+0xe6)
 	call	Float32_Subtract                              ; F9DE2F  call 0xfcb02b
 	push	xiy                                   ; F9DE33  push XIY
 	push	xix                                   ; F9DE34  push XIX
@@ -6914,22 +6914,22 @@ sub_F9BE3A__F9DE13:
 	pushw	99                                   ; F9DE3E  push 0x0063
 	call	Int16_ToFloat32                              ; F9DE41  call 0xfcaf8b
 	push	xiy                                   ; F9DE45  push XIY
-	extpfx5 0xD3, 0xF9, 0x78, 0xFF, 0x04       ; F9DE46  pushw (XIZ+0xff78)
-	extpfx5 0xD3, 0xF9, 0x76, 0xFF, 0x04       ; F9DE4B  pushw (XIZ+0xff76)
+	pushw	(xiz-136)       ; F9DE46  pushw (XIZ+0xff78)
+	pushw	(xiz-138)       ; F9DE4B  pushw (XIZ+0xff76)
 	call	Float32_Divide                              ; F9DE50  call 0xfcae60
 	push	xiy                                   ; F9DE54  push XIY
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9DE55  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9DE58  pushw (XIZ+0xea)
+	pushw	(xiz-20)                   ; F9DE55  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; F9DE58  pushw (XIZ+0xea)
 	call	Float32_Add                              ; F9DE5B  call 0xfcac52
 	ld	(xiz-18), xiy                           ; F9DE5F  ld (XIZ+0xee),XIY
 	push	xiy                                   ; F9DE62  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DE63  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DE63  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9DE66  calr 0xf9b167
 	inc	6, xsp                                 ; F9DE69  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DE6B  jrl T,0xf9dfac
 sub_F9BE3A__F9DE6E:
-	extpfx3 0x9E, 0x12, 0x04                   ; F9DE6E  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; F9DE71  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; F9DE6E  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; F9DE71  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; F9DE74  call 0xfcabc6
 	push	xiy                                   ; F9DE78  push XIY
 	lda	xiy, (xiz-0x8E)                        ; F9DE79  lda XIY,XIZ+0xff72
@@ -6961,7 +6961,7 @@ sub_F9BE3A__F9DE6E:
 	call	Double_ToFloat32                              ; F9DED0  call 0xfcadd6
 	ld	(xiz-18), xiy                           ; F9DED4  ld (XIZ+0xee),XIY
 	push	xiy                                   ; F9DED7  push XIY
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9DED8  pushw (XIZ+0xfa)
+	pushw	(xiz-6)                   ; F9DED8  pushw (XIZ+0xfa)
 	calr P7Group_SendOp1AddrValue                 ; F9DEDB  calr 0xf9b28b
 	inc	6, xsp                                 ; F9DEDE  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DEE0  jrl T,0xf9dfac
@@ -7030,7 +7030,7 @@ sub_F9BE3A__F9DFAF:
 	ld	xiy, (xiz+8)                            ; F9DFAF  ld XIY,(XIZ+0x08)
 	pop	xix                                    ; F9DFB2  pop XIX
 	popw	hl                                    ; F9DFB3  pop HL
-	unlk32 xiz                                 ; F9DFB4  unlk XIZ
+	unlk	xiz                                 ; F9DFB4  unlk XIZ
 	ret                                        ; F9DFB6  ret
 ; --------------------------------------------------------------------------
 ; Stream_ReadU24BE_Shl8 -- 0xF9DFB7..0xF9E01F (105 bytes)
@@ -7086,7 +7086,7 @@ sub_F9BE3A__F9DFAF:
 ;          reading of the left-aligned form is PLAUSIBLE and is NOT asserted.
 ; --------------------------------------------------------------------------
 Stream_ReadU24BE_Shl8:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9DFB7  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; F9DFB7  link XIZ,0xfff4
 	ld	xbc, (xiz+8)                            ; F9DFBB  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9DFBE  ld A,(XBC)
 	extz	wa                                    ; F9DFC0  extz WA
@@ -7118,12 +7118,12 @@ Stream_ReadU24BE_Shl8:
 	ld	(xiz-12), xwa                           ; F9E008  ld (XIZ+0xf4),XWA
 	inc	1, xbc                                 ; F9E00B  inc 1,XBC
 	ld	(xiz+8), xbc                            ; F9E00D  ld (XIZ+0x08),XBC
-	extpfx3 0xAE, 0xF8, 0x85                   ; F9E010  add XIY,(XIZ+0xf8)
+	add	xiy, (xiz-8)                   ; F9E010  add XIY,(XIZ+0xf8)
 	add	xiy, xwa                               ; F9E013  add XIY,XWA
 	ld	xbc, (xiz+12)                           ; F9E015  ld XBC,(XIZ+0x0c)
 	ld	(xbc), xiy                              ; F9E018  ld (XBC),XIY
 	ld	xiy, (xiz+8)                            ; F9E01A  ld XIY,(XIZ+0x08)
-	unlk32 xiz                                 ; F9E01D  unlk XIZ
+	unlk	xiz                                 ; F9E01D  unlk XIZ
 	ret                                        ; F9E01F  ret
 ; --------------------------------------------------------------------------
 ; Stream_ReadU24BE -- 0xF9E020..0xF9E076 (87 bytes)
@@ -7173,7 +7173,7 @@ Stream_ReadU24BE_Shl8:
 ;          so would a reader that sign-extends later.
 ; --------------------------------------------------------------------------
 Stream_ReadU24BE:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9E020  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; F9E020  link XIZ,0xfff4
 	ld	xbc, (xiz+8)                            ; F9E024  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; F9E027  ld A,(XBC)
 	extz	wa                                    ; F9E029  extz WA
@@ -7199,12 +7199,12 @@ Stream_ReadU24BE:
 	inc	1, xbc                                 ; F9E05F  inc 1,XBC
 	ld	(xiz+8), xbc                            ; F9E061  ld (XIZ+0x08),XBC
 	ld	xiy, (xiz-4)                            ; F9E064  ld XIY,(XIZ+0xfc)
-	extpfx3 0xAE, 0xF8, 0x85                   ; F9E067  add XIY,(XIZ+0xf8)
+	add	xiy, (xiz-8)                   ; F9E067  add XIY,(XIZ+0xf8)
 	add	xiy, xwa                               ; F9E06A  add XIY,XWA
 	ld	xbc, (xiz+12)                           ; F9E06C  ld XBC,(XIZ+0x0c)
 	ld	(xbc), xiy                              ; F9E06F  ld (XBC),XIY
 	ld	xiy, (xiz+8)                            ; F9E071  ld XIY,(XIZ+0x08)
-	unlk32 xiz                                 ; F9E074  unlk XIZ
+	unlk	xiz                                 ; F9E074  unlk XIZ
 	ret                                        ; F9E076  ret
 ; --------------------------------------------------------------------------
 ; Int32_ToFloat32_Q31 -- 0xF9E077..0xF9E0B6 (64 bytes)
@@ -7246,10 +7246,10 @@ Stream_ReadU24BE:
 ;          nothing else.
 ; --------------------------------------------------------------------------
 Int32_ToFloat32_Q31:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9E077  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; F9E077  link XIZ,0xfffc
 	push	xix                                   ; F9E07B  push XIX
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9E07C  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; F9E07F  pushw (XIZ+0x08)
+	pushw	(xiz+10)                   ; F9E07C  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; F9E07F  pushw (XIZ+0x08)
 	call	Int32_ToFloat32                              ; F9E082  call 0xfcabc6
 	ld	xix, xiy                                ; F9E086  ld XIX,XIY
 	pushw	0                                    ; F9E088  push 0x0000
@@ -7263,12 +7263,12 @@ Int32_ToFloat32_Q31:
 	pushw	0                                    ; F9E09E  push 0x0000
 	call	Int32_ToFloat32                              ; F9E0A1  call 0xfcabc6
 	push	xiy                                   ; F9E0A5  push XIY
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9E0A6  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9E0A9  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9E0A6  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9E0A9  pushw (XIZ+0xfc)
 	call	Float32_Divide                              ; F9E0AC  call 0xfcae60
 	ld	(xiz-4), xiy                            ; F9E0B0  ld (XIZ+0xfc),XIY
 	pop	xix                                    ; F9E0B3  pop XIX
-	unlk32 xiz                                 ; F9E0B4  unlk XIZ
+	unlk	xiz                                 ; F9E0B4  unlk XIZ
 	ret                                        ; F9E0B6  ret
 ; --------------------------------------------------------------------------
 ; sub_F9E0B7 -- 0xF9E0B7..0xF9E13F (137 bytes)
@@ -7311,7 +7311,7 @@ Int32_ToFloat32_Q31:
 ; Unknown:  what a tag MEANS.  The tags are data, and no table in this ROM names them.
 ; --------------------------------------------------------------------------
 sub_F9E0B7:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; F9E0B7  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; F9E0B7  link XIZ,0xfffa
 	pushw	hl                                   ; F9E0BB  push HL
 	pushw	de                                   ; F9E0BC  push DE
 	push	xix                                   ; F9E0BD  push XIX
@@ -7340,7 +7340,7 @@ sub_F9E0B7__F9E0BE:
 	ld	xiy, (xiz+8)                            ; F9E0F3  ld XIY,(XIZ+0x08)
 	ld	c, (xiy)                                ; F9E0F6  ld C,(XIY)
 	extz	bc                                    ; F9E0F8  extz BC
-	extpfx3 0x9E, 0x0C, 0xF1                   ; F9E0FA  cp BC,(XIZ+0x0c)
+	cp	bc, (xiz+12)                   ; F9E0FA  cp BC,(XIZ+0x0c)
 	jr nz, sub_F9E0B7__F9E128                  ; F9E0FD  jr NZ,0xf9e128
 	ld	bc, (xiz+14)                            ; F9E0FF  ld BC,(XIZ+0x0e)
 	exts	xbc                                   ; F9E102  exts XBC
@@ -7370,7 +7370,7 @@ sub_F9E0B7__F9E137:
 	pop	xix                                    ; F9E13A  pop XIX
 	popw	de                                    ; F9E13B  pop DE
 	popw	hl                                    ; F9E13C  pop HL
-	unlk32 xiz                                 ; F9E13D  unlk XIZ
+	unlk	xiz                                 ; F9E13D  unlk XIZ
 	ret                                        ; F9E13F  ret
 ; --------------------------------------------------------------------------
 ; P7Block_Seek -- 0xF9E140..0xF9E1AB (108 bytes)
@@ -7415,7 +7415,7 @@ sub_F9E0B7__F9E137:
 ; Unknown:  what a block CONTAINS.  This routine measures one; it does not read it.
 ; --------------------------------------------------------------------------
 P7Block_Seek:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; F9E140  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; F9E140  link XIZ,0xfffe
 	pushw	hl                                   ; F9E144  push HL
 	pushw	de                                   ; F9E145  push DE
 P7Block_Seek__F9E146:
@@ -7457,7 +7457,7 @@ P7Block_Seek__F9E19D:
 P7Block_Seek__F9E1A7:
 	popw	de                                    ; F9E1A7  pop DE
 	popw	hl                                    ; F9E1A8  pop HL
-	unlk32 xiz                                 ; F9E1A9  unlk XIZ
+	unlk	xiz                                 ; F9E1A9  unlk XIZ
 	ret                                        ; F9E1AB  ret
 ; --------------------------------------------------------------------------
 ; P7Block_ReportStatus -- 0xF9E1AC..0xF9E1EC (65 bytes)
@@ -7496,7 +7496,7 @@ P7Block_Seek__F9E1A7:
 ; Unknown:  what statuses 1 and 5 are.  The two walkers below write only 0, 2, 3 and 4.
 ; --------------------------------------------------------------------------
 P7Block_ReportStatus:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; F9E1AC  link XIZ,0x0000
+	link	xiz, 0x0000              ; F9E1AC  link XIZ,0x0000
 	jr P7Block_ReportStatus__F9E1BE                      ; F9E1B0  jr T,0xf9e1be
 P7Block_ReportStatus__F9E1B2:
 	jr P7Block_ReportStatus__F9E1EA                      ; F9E1B2  jr T,0xf9e1ea
@@ -7535,7 +7535,7 @@ P7Block_ReportStatus_JumpTable_F9E1D6:
 	.long P7Block_ReportStatus__F9E1B8	; 0xF9E1E2  entry 3 -> 0xF9E1B8
 	.long P7Block_ReportStatus__F9E1BA	; 0xF9E1E6  entry 4 -> 0xF9E1BA
 P7Block_ReportStatus__F9E1EA:
-	unlk32 xiz                                 ; F9E1EA  unlk XIZ
+	unlk	xiz                                 ; F9E1EA  unlk XIZ
 	ret                                        ; F9E1EC  ret
 ; --------------------------------------------------------------------------
 ; sub_F9E1ED -- 0xF9E1ED..0xF9ECF0 (2820 bytes)
@@ -7565,7 +7565,7 @@ P7Block_ReportStatus__F9E1EA:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9E1ED:
-	link32 0xEE, 0x0C, 0x56, 0xFF              ; F9E1ED  link XIZ,0xff56
+	link	xiz, 0xff56              ; F9E1ED  link XIZ,0xff56
 	push	xix                                   ; F9E1F1  push XIX
 	ld	xiy, (xiz+14)                           ; F9E1F2  ld XIY,(XIZ+0x0e)
 	sra	xiy, 11                                ; F9E1F5  sra 0x0b,XIY
@@ -7630,8 +7630,8 @@ sub_F9E1ED__F9E222:
 	push	xwa                                   ; F9E2A6  push XWA
 	call	Double_ToFloat32                              ; F9E2A7  call 0xfcadd6
 	ld	(xiz-84), xiy                           ; F9E2AB  ld (XIZ+0xac),XIY
-	extpfx3 0x9E, 0xB6, 0x04                   ; F9E2AE  pushw (XIZ+0xb6)
-	extpfx3 0x9E, 0xB4, 0x04                   ; F9E2B1  pushw (XIZ+0xb4)
+	pushw	(xiz-74)                   ; F9E2AE  pushw (XIZ+0xb6)
+	pushw	(xiz-76)                   ; F9E2B1  pushw (XIZ+0xb4)
 	lda	xiy, (xiz-0x72)                        ; F9E2B4  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E2B7  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E2BB  ld XBC,(XIZ+0x92)
@@ -7656,22 +7656,22 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E2F0  push XBC
 	call	Double_ToFloat32                              ; F9E2F1  call 0xfcadd6
 	ld	(xiz-4), xiy                            ; F9E2F5  ld (XIZ+0xfc),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9E2F8  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9E2FB  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9E2F8  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9E2FB  pushw (XIZ+0xf4)
 	push	xiy                                   ; F9E2FE  push XIY
 	call	Float32_Divide                              ; F9E2FF  call 0xfcae60
 	ld	(xiz-60), xiy                           ; F9E303  ld (XIZ+0xc4),XIY
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9E306  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9E309  pushw (XIZ+0xfc)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9E30C  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9E30F  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9E306  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9E309  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9E30C  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9E30F  pushw (XIZ+0xfc)
 	call	Float32_Multiply                              ; F9E312  call 0xfcb005
 	ld	(xiz-68), xiy                           ; F9E316  ld (XIZ+0xbc),XIY
 	push	xiy                                   ; F9E319  push XIY
 	lda	xiy, (xiz-0x72)                        ; F9E31A  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E31D  call 0xfcaa50
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9E321  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9E324  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9E321  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9E324  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x7A)                        ; F9E327  lda XIY,XIZ+0x86
 	call	Float32_ToDouble                              ; F9E32A  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E32E  ld XBC,(XIZ+0x92)
@@ -7702,8 +7702,8 @@ sub_F9E1ED__F9E222:
 	ld	(xiz-16), xiy                           ; F9E376  ld (XIZ+0xf0),XIY
 	pushw	1                                    ; F9E379  push 0x0001
 	call	Int16_ToFloat32                              ; F9E37C  call 0xfcaf8b
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9E380  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9E383  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9E380  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9E383  pushw (XIZ+0xbc)
 	push	xiy                                   ; F9E386  push XIY
 	call	Float32_Subtract                              ; F9E387  call 0xfcb02b
 	push	xiy                                   ; F9E38B  push XIY
@@ -7725,8 +7725,8 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E3B5  push XBC
 	call	Double_ToFloat32                              ; F9E3B6  call 0xfcadd6
 	ld	(xiz-20), xiy                           ; F9E3BA  ld (XIZ+0xec),XIY
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9E3BD  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9E3C0  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9E3BD  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9E3C0  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x72)                        ; F9E3C3  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E3C6  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E3CA  ld XBC,(XIZ+0x92)
@@ -7739,8 +7739,8 @@ sub_F9E1ED__F9E222:
 	push	xbc                                   ; F9E3DD  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9E3DE  lda XIY,XIZ+0x86
 	call	Double_Subtract                              ; F9E3E1  call 0xfca626
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9E3E5  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9E3E8  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9E3E5  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9E3E8  pushw (XIZ+0xbc)
 	lda	xiy, (xiz-0x82)                        ; F9E3EB  lda XIY,XIZ+0xff7e
 	call	Float32_ToDouble                              ; F9E3F0  call 0xfcaa50
 	ld	xbc, (xiz-0x7E)                         ; F9E3F4  ld XBC,(XIZ+0x82)
@@ -7763,8 +7763,8 @@ sub_F9E1ED__F9E222:
 	call	Int16_ToFloat32                              ; F9E425  call 0xfcaf8b
 	inc	8, xsp                                 ; F9E429  inc 0,XSP
 	push	xiy                                   ; F9E42B  push XIY
-	extpfx3 0x9E, 0xB2, 0x04                   ; F9E42C  pushw (XIZ+0xb2)
-	extpfx3 0x9E, 0xB0, 0x04                   ; F9E42F  pushw (XIZ+0xb0)
+	pushw	(xiz-78)                   ; F9E42C  pushw (XIZ+0xb2)
+	pushw	(xiz-80)                   ; F9E42F  pushw (XIZ+0xb0)
 	call	Float32_Compare                              ; F9E432  call 0xfcb1bf
 	cp	wa, 2:i3                                  ; F9E436  cp WA,2
 	jr z, sub_F9E1ED__F9E442                   ; F9E438  jr Z,0xf9e442
@@ -7772,14 +7772,14 @@ sub_F9E1ED__F9E222:
 	ld	(xiz-94), xbc                           ; F9E43D  ld (XIZ+0xa2),XBC
 	jr sub_F9E1ED__F9E452                      ; F9E440  jr T,0xf9e452
 sub_F9E1ED__F9E442:
-	extpfx3 0x9E, 0xB2, 0x04                   ; F9E442  pushw (XIZ+0xb2)
-	extpfx3 0x9E, 0xB0, 0x04                   ; F9E445  pushw (XIZ+0xb0)
+	pushw	(xiz-78)                   ; F9E442  pushw (XIZ+0xb2)
+	pushw	(xiz-80)                   ; F9E445  pushw (XIZ+0xb0)
 	call	Float32_Negate                              ; F9E448  call 0xfcb04a
 	ld	(xiz-94), xiy                           ; F9E44C  ld (XIZ+0xa2),XIY
 	ld	(xiz-98), xiy                           ; F9E44F  ld (XIZ+0x9e),XIY
 sub_F9E1ED__F9E452:
-	extpfx3 0x9E, 0xA4, 0x04                   ; F9E452  pushw (XIZ+0xa4)
-	extpfx3 0x9E, 0xA2, 0x04                   ; F9E455  pushw (XIZ+0xa2)
+	pushw	(xiz-92)                   ; F9E452  pushw (XIZ+0xa4)
+	pushw	(xiz-94)                   ; F9E455  pushw (XIZ+0xa2)
 	lda	xiy, (xiz-0x72)                        ; F9E458  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E45B  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E45F  ld XBC,(XIZ+0x92)
@@ -7802,8 +7802,8 @@ sub_F9E1ED__F9E452:
 	push	xbc                                   ; F9E48D  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E48E  lda XIY,XIZ+0xff7e
 	call	Double_Pow                              ; F9E493  call 0xfc9576
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9E497  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9E49A  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9E497  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9E49A  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x8A)                        ; F9E49D  lda XIY,XIZ+0xff76
 	call	Float32_ToDouble                              ; F9E4A2  call 0xfcaa50
 	ld	xbc, (xiz-0x86)                         ; F9E4A6  ld XBC,(XIZ+0xff7a)
@@ -7816,8 +7816,8 @@ sub_F9E1ED__F9E452:
 	push	xbc                                   ; F9E4BB  push XBC
 	lda	xiy, (xiz-0x92)                        ; F9E4BC  lda XIY,XIZ+0xff6e
 	call	Double_Multiply                              ; F9E4C1  call 0xfca252
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9E4C5  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9E4C8  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9E4C5  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9E4C8  pushw (XIZ+0xbc)
 	lda	xiy, (xiz-0x9A)                        ; F9E4CB  lda XIY,XIZ+0xff66
 	call	Float32_ToDouble                              ; F9E4D0  call 0xfcaa50
 	ld	xbc, (xiz-0x96)                         ; F9E4D4  ld XBC,(XIZ+0xff6a)
@@ -7853,8 +7853,8 @@ sub_F9E1ED__F9E452:
 	inc	8, xsp                                 ; F9E536  inc 0,XSP
 	inc	8, xsp                                 ; F9E538  inc 0,XSP
 	push	xiy                                   ; F9E53A  push XIY
-	extpfx3 0x9E, 0xB2, 0x04                   ; F9E53B  pushw (XIZ+0xb2)
-	extpfx3 0x9E, 0xB0, 0x04                   ; F9E53E  pushw (XIZ+0xb0)
+	pushw	(xiz-78)                   ; F9E53B  pushw (XIZ+0xb2)
+	pushw	(xiz-80)                   ; F9E53E  pushw (XIZ+0xb0)
 	call	Float32_Compare                              ; F9E541  call 0xfcb1bf
 	cp	wa, 2:i3                                  ; F9E545  cp WA,2
 	jr z, sub_F9E1ED__F9E551                   ; F9E547  jr Z,0xf9e551
@@ -7862,14 +7862,14 @@ sub_F9E1ED__F9E452:
 	ld	(xiz-0x66), xbc                         ; F9E54C  ld (XIZ+0x9a),XBC
 	jr sub_F9E1ED__F9E561                      ; F9E54F  jr T,0xf9e561
 sub_F9E1ED__F9E551:
-	extpfx3 0x9E, 0xB2, 0x04                   ; F9E551  pushw (XIZ+0xb2)
-	extpfx3 0x9E, 0xB0, 0x04                   ; F9E554  pushw (XIZ+0xb0)
+	pushw	(xiz-78)                   ; F9E551  pushw (XIZ+0xb2)
+	pushw	(xiz-80)                   ; F9E554  pushw (XIZ+0xb0)
 	call	Float32_Negate                              ; F9E557  call 0xfcb04a
 	ld	(xiz-0x66), xiy                         ; F9E55B  ld (XIZ+0x9a),XIY
 	ld	(xiz-0x6A), xiy                         ; F9E55E  ld (XIZ+0x96),XIY
 sub_F9E1ED__F9E561:
-	extpfx3 0x9E, 0x9C, 0x04                   ; F9E561  pushw (XIZ+0x9c)
-	extpfx3 0x9E, 0x9A, 0x04                   ; F9E564  pushw (XIZ+0x9a)
+	pushw	(xiz-100)                   ; F9E561  pushw (XIZ+0x9c)
+	pushw	(xiz-102)                   ; F9E564  pushw (XIZ+0x9a)
 	lda	xiy, (xiz-0x72)                        ; F9E567  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E56A  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E56E  ld XBC,(XIZ+0x92)
@@ -7892,8 +7892,8 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E59C  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E59D  lda XIY,XIZ+0xff7e
 	call	Double_Pow                              ; F9E5A2  call 0xfc9576
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9E5A6  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9E5A9  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9E5A6  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9E5A9  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x8A)                        ; F9E5AC  lda XIY,XIZ+0xff76
 	call	Float32_ToDouble                              ; F9E5B1  call 0xfcaa50
 	ld	xbc, (xiz-0x86)                         ; F9E5B5  ld XBC,(XIZ+0xff7a)
@@ -7916,8 +7916,8 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E5EB  push XBC
 	lda	xiy, (xiz-0x9A)                        ; F9E5EC  lda XIY,XIZ+0xff66
 	call	Double_Subtract                              ; F9E5F1  call 0xfca626
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9E5F5  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9E5F8  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9E5F5  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9E5F8  pushw (XIZ+0xbc)
 	lda	xiy, (xiz-0xA2)                        ; F9E5FB  lda XIY,XIZ+0xff5e
 	call	Float32_ToDouble                              ; F9E600  call 0xfcaa50
 	ld	xbc, (xiz-0x9E)                         ; F9E604  ld XBC,(XIZ+0xff62)
@@ -7936,8 +7936,8 @@ sub_F9E1ED__F9E561:
 	push	xbc                                   ; F9E630  push XBC
 	call	Double_ToFloat32                              ; F9E631  call 0xfcadd6
 	ld	(xiz-36), xiy                           ; F9E635  ld (XIZ+0xdc),XIY
-	extpfx3 0x9E, 0xB2, 0x04                   ; F9E638  pushw (XIZ+0xb2)
-	extpfx3 0x9E, 0xB0, 0x04                   ; F9E63B  pushw (XIZ+0xb0)
+	pushw	(xiz-78)                   ; F9E638  pushw (XIZ+0xb2)
+	pushw	(xiz-80)                   ; F9E63B  pushw (XIZ+0xb0)
 	lda	xiy, (xiz-0x72)                        ; F9E63E  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E641  call 0xfcaa50
 	inc	8, xsp                                 ; F9E645  inc 0,XSP
@@ -7953,91 +7953,91 @@ sub_F9E1ED__F9E561:
 	call	Double_Compare                              ; F9E65D  call 0xfca121
 	cp	wa, 2:i3                                  ; F9E661  cp WA,2
 	jrl z, sub_F9E1ED__F9E6D2                  ; F9E663  jrl Z,0xf9e6d2
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E666  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E669  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E66C  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E66F  pushw (XIZ+0xe4)
+	pushw	(xiz-14)                   ; F9E666  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E669  pushw (XIZ+0xf0)
+	pushw	(xiz-26)                   ; F9E66C  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E66F  pushw (XIZ+0xe4)
 	call	Float32_Divide                              ; F9E672  call 0xfcae60
 	ld	(xiz-40), xiy                           ; F9E676  ld (XIZ+0xd8),XIY
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E679  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E67C  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9E67F  pushw (XIZ+0xe2)
-	extpfx3 0x9E, 0xE0, 0x04                   ; F9E682  pushw (XIZ+0xe0)
+	pushw	(xiz-14)                   ; F9E679  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E67C  pushw (XIZ+0xf0)
+	pushw	(xiz-30)                   ; F9E67F  pushw (XIZ+0xe2)
+	pushw	(xiz-32)                   ; F9E682  pushw (XIZ+0xe0)
 	call	Float32_Divide                              ; F9E685  call 0xfcae60
 	ld	(xiz-44), xiy                           ; F9E689  ld (XIZ+0xd4),XIY
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E68C  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E68F  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xDE, 0x04                   ; F9E692  pushw (XIZ+0xde)
-	extpfx3 0x9E, 0xDC, 0x04                   ; F9E695  pushw (XIZ+0xdc)
+	pushw	(xiz-14)                   ; F9E68C  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E68F  pushw (XIZ+0xf0)
+	pushw	(xiz-34)                   ; F9E692  pushw (XIZ+0xde)
+	pushw	(xiz-36)                   ; F9E695  pushw (XIZ+0xdc)
 	call	Float32_Divide                              ; F9E698  call 0xfcae60
 	ld	(xiz-48), xiy                           ; F9E69C  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xEE, 0x04                   ; F9E69F  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9E6A2  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; F9E69F  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; F9E6A2  pushw (XIZ+0xec)
 	call	Float32_Negate                              ; F9E6A5  call 0xfcb04a
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E6A9  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E6AC  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9E6A9  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E6AC  pushw (XIZ+0xf0)
 	push	xiy                                   ; F9E6AF  push XIY
 	call	Float32_Divide                              ; F9E6B0  call 0xfcae60
 	ld	(xiz-52), xiy                           ; F9E6B4  ld (XIZ+0xcc),XIY
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9E6B7  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9E6BA  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9E6B7  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9E6BA  pushw (XIZ+0xe8)
 	call	Float32_Negate                              ; F9E6BD  call 0xfcb04a
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E6C1  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E6C4  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9E6C1  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E6C4  pushw (XIZ+0xf0)
 	push	xiy                                   ; F9E6C7  push XIY
 	call	Float32_Divide                              ; F9E6C8  call 0xfcae60
 	ld	(xiz-56), xiy                           ; F9E6CC  ld (XIZ+0xc8),XIY
 	jrl sub_F9E1ED__F9E73B                     ; F9E6CF  jrl T,0xf9e73b
 sub_F9E1ED__F9E6D2:
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E6D2  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E6D5  pushw (XIZ+0xe4)
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9E6D8  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9E6DB  pushw (XIZ+0xf0)
+	pushw	(xiz-26)                   ; F9E6D2  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E6D5  pushw (XIZ+0xe4)
+	pushw	(xiz-14)                   ; F9E6D8  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9E6DB  pushw (XIZ+0xf0)
 	call	Float32_Divide                              ; F9E6DE  call 0xfcae60
 	ld	(xiz-40), xiy                           ; F9E6E2  ld (XIZ+0xd8),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E6E5  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E6E8  pushw (XIZ+0xe4)
-	extpfx3 0x9E, 0xEE, 0x04                   ; F9E6EB  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9E6EE  pushw (XIZ+0xec)
+	pushw	(xiz-26)                   ; F9E6E5  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E6E8  pushw (XIZ+0xe4)
+	pushw	(xiz-18)                   ; F9E6EB  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; F9E6EE  pushw (XIZ+0xec)
 	call	Float32_Divide                              ; F9E6F1  call 0xfcae60
 	ld	(xiz-44), xiy                           ; F9E6F5  ld (XIZ+0xd4),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E6F8  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E6FB  pushw (XIZ+0xe4)
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9E6FE  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9E701  pushw (XIZ+0xe8)
+	pushw	(xiz-26)                   ; F9E6F8  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E6FB  pushw (XIZ+0xe4)
+	pushw	(xiz-22)                   ; F9E6FE  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9E701  pushw (XIZ+0xe8)
 	call	Float32_Divide                              ; F9E704  call 0xfcae60
 	ld	(xiz-48), xiy                           ; F9E708  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9E70B  pushw (XIZ+0xe2)
-	extpfx3 0x9E, 0xE0, 0x04                   ; F9E70E  pushw (XIZ+0xe0)
+	pushw	(xiz-30)                   ; F9E70B  pushw (XIZ+0xe2)
+	pushw	(xiz-32)                   ; F9E70E  pushw (XIZ+0xe0)
 	call	Float32_Negate                              ; F9E711  call 0xfcb04a
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E715  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E718  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9E715  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E718  pushw (XIZ+0xe4)
 	push	xiy                                   ; F9E71B  push XIY
 	call	Float32_Divide                              ; F9E71C  call 0xfcae60
 	ld	(xiz-52), xiy                           ; F9E720  ld (XIZ+0xcc),XIY
-	extpfx3 0x9E, 0xDE, 0x04                   ; F9E723  pushw (XIZ+0xde)
-	extpfx3 0x9E, 0xDC, 0x04                   ; F9E726  pushw (XIZ+0xdc)
+	pushw	(xiz-34)                   ; F9E723  pushw (XIZ+0xde)
+	pushw	(xiz-36)                   ; F9E726  pushw (XIZ+0xdc)
 	call	Float32_Negate                              ; F9E729  call 0xfcb04a
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9E72D  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9E730  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9E72D  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9E730  pushw (XIZ+0xe4)
 	push	xiy                                   ; F9E733  push XIY
 	call	Float32_Divide                              ; F9E734  call 0xfcae60
 	ld	(xiz-56), xiy                           ; F9E738  ld (XIZ+0xc8),XIY
 sub_F9E1ED__F9E73B:
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9E73B  pushw (XIZ+0xd6)
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9E73E  pushw (XIZ+0xd4)
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9E741  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9E744  pushw (XIZ+0xd8)
+	pushw	(xiz-42)                   ; F9E73B  pushw (XIZ+0xd6)
+	pushw	(xiz-44)                   ; F9E73E  pushw (XIZ+0xd4)
+	pushw	(xiz-38)                   ; F9E741  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9E744  pushw (XIZ+0xd8)
 	call	Float32_Add                              ; F9E747  call 0xfcac52
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9E74B  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9E74E  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9E74B  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9E74E  pushw (XIZ+0xd0)
 	push	xiy                                   ; F9E751  push XIY
 	call	Float32_Add                              ; F9E752  call 0xfcac52
 	push	xiy                                   ; F9E756  push XIY
 	lda	xiy, (xiz-0x72)                        ; F9E757  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E75A  call 0xfcaa50
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9E75E  pushw (XIZ+0xce)
-	extpfx3 0x9E, 0xCC, 0x04                   ; F9E761  pushw (XIZ+0xcc)
+	pushw	(xiz-50)                   ; F9E75E  pushw (XIZ+0xce)
+	pushw	(xiz-52)                   ; F9E761  pushw (XIZ+0xcc)
 	lda	xiy, (xiz-0x7A)                        ; F9E764  lda XIY,XIZ+0x86
 	call	Float32_ToDouble                              ; F9E767  call 0xfcaa50
 	ld	xbc, (xiz-0x76)                         ; F9E76B  ld XBC,(XIZ+0x8a)
@@ -8050,8 +8050,8 @@ sub_F9E1ED__F9E73B:
 	push	xbc                                   ; F9E77E  push XBC
 	lda	xiy, (xiz-0x82)                        ; F9E77F  lda XIY,XIZ+0xff7e
 	call	Double_Subtract                              ; F9E784  call 0xfca626
-	extpfx3 0x9E, 0xCA, 0x04                   ; F9E788  pushw (XIZ+0xca)
-	extpfx3 0x9E, 0xC8, 0x04                   ; F9E78B  pushw (XIZ+0xc8)
+	pushw	(xiz-54)                   ; F9E788  pushw (XIZ+0xca)
+	pushw	(xiz-56)                   ; F9E78B  pushw (XIZ+0xc8)
 	lda	xiy, (xiz-0x8A)                        ; F9E78E  lda XIY,XIZ+0xff76
 	call	Float32_ToDouble                              ; F9E793  call 0xfcaa50
 	ld	xbc, (xiz-0x86)                         ; F9E797  ld XBC,(XIZ+0xff7a)
@@ -8101,32 +8101,32 @@ sub_F9E1ED__F9E73B:
 	call	Double_ToFloat32                              ; F9E816  call 0xfcadd6
 	ld	(xiz-88), xiy                           ; F9E81A  ld (XIZ+0xa8),XIY
 sub_F9E1ED__F9E81D:
-	extpfx3 0x9E, 0xAA, 0x04                   ; F9E81D  pushw (XIZ+0xaa)
-	extpfx3 0x9E, 0xA8, 0x04                   ; F9E820  pushw (XIZ+0xa8)
-	extpfx3 0x9E, 0xAE, 0x04                   ; F9E823  pushw (XIZ+0xae)
-	extpfx3 0x9E, 0xAC, 0x04                   ; F9E826  pushw (XIZ+0xac)
+	pushw	(xiz-86)                   ; F9E81D  pushw (XIZ+0xaa)
+	pushw	(xiz-88)                   ; F9E820  pushw (XIZ+0xa8)
+	pushw	(xiz-82)                   ; F9E823  pushw (XIZ+0xae)
+	pushw	(xiz-84)                   ; F9E826  pushw (XIZ+0xac)
 	call	Float32_Divide                              ; F9E829  call 0xfcae60
 	ld	(xiz-84), xiy                           ; F9E82D  ld (XIZ+0xac),XIY
-	extpfx3 0x9E, 0xAA, 0x04                   ; F9E830  pushw (XIZ+0xaa)
-	extpfx3 0x9E, 0xA8, 0x04                   ; F9E833  pushw (XIZ+0xa8)
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9E836  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9E839  pushw (XIZ+0xd8)
+	pushw	(xiz-86)                   ; F9E830  pushw (XIZ+0xaa)
+	pushw	(xiz-88)                   ; F9E833  pushw (XIZ+0xa8)
+	pushw	(xiz-38)                   ; F9E836  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9E839  pushw (XIZ+0xd8)
 	call	Float32_Multiply                              ; F9E83C  call 0xfcb005
 	ld	(xiz-40), xiy                           ; F9E840  ld (XIZ+0xd8),XIY
-	extpfx3 0x9E, 0xAA, 0x04                   ; F9E843  pushw (XIZ+0xaa)
-	extpfx3 0x9E, 0xA8, 0x04                   ; F9E846  pushw (XIZ+0xa8)
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9E849  pushw (XIZ+0xd6)
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9E84C  pushw (XIZ+0xd4)
+	pushw	(xiz-86)                   ; F9E843  pushw (XIZ+0xaa)
+	pushw	(xiz-88)                   ; F9E846  pushw (XIZ+0xa8)
+	pushw	(xiz-42)                   ; F9E849  pushw (XIZ+0xd6)
+	pushw	(xiz-44)                   ; F9E84C  pushw (XIZ+0xd4)
 	call	Float32_Multiply                              ; F9E84F  call 0xfcb005
 	ld	(xiz-44), xiy                           ; F9E853  ld (XIZ+0xd4),XIY
-	extpfx3 0x9E, 0xAA, 0x04                   ; F9E856  pushw (XIZ+0xaa)
-	extpfx3 0x9E, 0xA8, 0x04                   ; F9E859  pushw (XIZ+0xa8)
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9E85C  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9E85F  pushw (XIZ+0xd0)
+	pushw	(xiz-86)                   ; F9E856  pushw (XIZ+0xaa)
+	pushw	(xiz-88)                   ; F9E859  pushw (XIZ+0xa8)
+	pushw	(xiz-46)                   ; F9E85C  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9E85F  pushw (XIZ+0xd0)
 	call	Float32_Multiply                              ; F9E862  call 0xfcb005
 	ld	(xiz-48), xiy                           ; F9E866  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9E869  pushw (XIZ+0xd6)
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9E86C  pushw (XIZ+0xd4)
+	pushw	(xiz-42)                   ; F9E869  pushw (XIZ+0xd6)
+	pushw	(xiz-44)                   ; F9E86C  pushw (XIZ+0xd4)
 	lda	xiy, (xiz-0x72)                        ; F9E86F  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E872  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E876  ld XBC,(XIZ+0x92)
@@ -8145,10 +8145,10 @@ sub_F9E1ED__F9E81D:
 	push	xbc                                   ; F9E898  push XBC
 	call	Double_ToFloat32                              ; F9E899  call 0xfcadd6
 	push	xiy                                   ; F9E89D  push XIY
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9E89E  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; F9E89E  pushw (XIZ+0x0c)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9E8A1  calr 0xf9b167
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9E8A4  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9E8A7  pushw (XIZ+0xd8)
+	pushw	(xiz-38)                   ; F9E8A4  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9E8A7  pushw (XIZ+0xd8)
 	lda	xiy, (xiz-0x72)                        ; F9E8AA  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E8AD  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E8B1  ld XBC,(XIZ+0x92)
@@ -8169,8 +8169,8 @@ sub_F9E1ED__F9E81D:
 	inc	6, xsp                                 ; F9E8D8  inc 6,XSP
 	push	xiy                                   ; F9E8DA  push XIY
 	calr P7Group_SendValueScaled                 ; F9E8DB  calr 0xf9b37e
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9E8DE  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9E8E1  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9E8DE  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9E8E1  pushw (XIZ+0xd0)
 	lda	xiy, (xiz-0x72)                        ; F9E8E4  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E8E7  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E8EB  ld XBC,(XIZ+0x92)
@@ -8191,8 +8191,8 @@ sub_F9E1ED__F9E81D:
 	pop	xbc                                    ; F9E912  pop XBC
 	push	xiy                                   ; F9E913  push XIY
 	calr P7Group_SendValueScaled                 ; F9E914  calr 0xf9b37e
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9E917  pushw (XIZ+0xce)
-	extpfx3 0x9E, 0xCC, 0x04                   ; F9E91A  pushw (XIZ+0xcc)
+	pushw	(xiz-50)                   ; F9E917  pushw (XIZ+0xce)
+	pushw	(xiz-52)                   ; F9E91A  pushw (XIZ+0xcc)
 	lda	xiy, (xiz-0x72)                        ; F9E91D  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E920  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E924  ld XBC,(XIZ+0x92)
@@ -8217,8 +8217,8 @@ sub_F9E1ED__F9E81D:
 	ld	xbc, (xiz-56)                           ; F9E951  ld XBC,(XIZ+0xc8)
 	push	xbc                                   ; F9E954  push XBC
 	calr P7Group_SendValueScaled                 ; F9E955  calr 0xf9b37e
-	extpfx3 0x9E, 0xAE, 0x04                   ; F9E958  pushw (XIZ+0xae)
-	extpfx3 0x9E, 0xAC, 0x04                   ; F9E95B  pushw (XIZ+0xac)
+	pushw	(xiz-82)                   ; F9E958  pushw (XIZ+0xae)
+	pushw	(xiz-84)                   ; F9E95B  pushw (XIZ+0xac)
 	lda	xiy, (xiz-0x72)                        ; F9E95E  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E961  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E965  ld XBC,(XIZ+0x92)
@@ -8261,8 +8261,8 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9E9CD  push XBC
 	call	Double_ToFloat32                              ; F9E9CE  call 0xfcadd6
 	ld	(xiz-84), xiy                           ; F9E9D2  ld (XIZ+0xac),XIY
-	extpfx3 0x9E, 0xB6, 0x04                   ; F9E9D5  pushw (XIZ+0xb6)
-	extpfx3 0x9E, 0xB4, 0x04                   ; F9E9D8  pushw (XIZ+0xb4)
+	pushw	(xiz-74)                   ; F9E9D5  pushw (XIZ+0xb6)
+	pushw	(xiz-76)                   ; F9E9D8  pushw (XIZ+0xb4)
 	lda	xiy, (xiz-0x72)                        ; F9E9DB  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9E9DE  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9E9E2  ld XBC,(XIZ+0x92)
@@ -8287,22 +8287,22 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EA17  push XBC
 	call	Double_ToFloat32                              ; F9EA18  call 0xfcadd6
 	ld	(xiz-4), xiy                            ; F9EA1C  ld (XIZ+0xfc),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9EA1F  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9EA22  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9EA1F  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9EA22  pushw (XIZ+0xf4)
 	push	xiy                                   ; F9EA25  push XIY
 	call	Float32_Divide                              ; F9EA26  call 0xfcae60
 	ld	(xiz-60), xiy                           ; F9EA2A  ld (XIZ+0xc4),XIY
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9EA2D  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9EA30  pushw (XIZ+0xfc)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9EA33  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9EA36  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9EA2D  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9EA30  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9EA33  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9EA36  pushw (XIZ+0xfc)
 	call	Float32_Multiply                              ; F9EA39  call 0xfcb005
 	ld	(xiz-68), xiy                           ; F9EA3D  ld (XIZ+0xbc),XIY
 	push	xiy                                   ; F9EA40  push XIY
 	lda	xiy, (xiz-0x72)                        ; F9EA41  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EA44  call 0xfcaa50
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9EA48  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9EA4B  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9EA48  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9EA4B  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x7A)                        ; F9EA4E  lda XIY,XIZ+0x86
 	call	Float32_ToDouble                              ; F9EA51  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EA55  ld XBC,(XIZ+0x92)
@@ -8333,8 +8333,8 @@ sub_F9E1ED__F9E995:
 	ld	(xiz-16), xiy                           ; F9EA9D  ld (XIZ+0xf0),XIY
 	pushw	1                                    ; F9EAA0  push 0x0001
 	call	Int16_ToFloat32                              ; F9EAA3  call 0xfcaf8b
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9EAA7  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9EAAA  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9EAA7  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9EAAA  pushw (XIZ+0xbc)
 	push	xiy                                   ; F9EAAD  push XIY
 	call	Float32_Subtract                              ; F9EAAE  call 0xfcb02b
 	push	xiy                                   ; F9EAB2  push XIY
@@ -8356,8 +8356,8 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EADC  push XBC
 	call	Double_ToFloat32                              ; F9EADD  call 0xfcadd6
 	ld	(xiz-20), xiy                           ; F9EAE1  ld (XIZ+0xec),XIY
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9EAE4  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9EAE7  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; F9EAE4  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9EAE7  pushw (XIZ+0xc4)
 	lda	xiy, (xiz-0x72)                        ; F9EAEA  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EAED  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EAF1  ld XBC,(XIZ+0x92)
@@ -8370,8 +8370,8 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EB04  push XBC
 	lda	xiy, (xiz-0x7A)                        ; F9EB05  lda XIY,XIZ+0x86
 	call	Double_Subtract                              ; F9EB08  call 0xfca626
-	extpfx3 0x9E, 0xBE, 0x04                   ; F9EB0C  pushw (XIZ+0xbe)
-	extpfx3 0x9E, 0xBC, 0x04                   ; F9EB0F  pushw (XIZ+0xbc)
+	pushw	(xiz-66)                   ; F9EB0C  pushw (XIZ+0xbe)
+	pushw	(xiz-68)                   ; F9EB0F  pushw (XIZ+0xbc)
 	lda	xiy, (xiz-0x82)                        ; F9EB12  lda XIY,XIZ+0xff7e
 	call	Float32_ToDouble                              ; F9EB17  call 0xfcaa50
 	ld	xbc, (xiz-0x7E)                         ; F9EB1B  ld XBC,(XIZ+0x82)
@@ -8390,10 +8390,10 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EB41  push XBC
 	call	Double_ToFloat32                              ; F9EB42  call 0xfcadd6
 	ld	(xiz-24), xiy                           ; F9EB46  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9EB49  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9EB4C  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xC6, 0x04                   ; F9EB4F  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; F9EB52  pushw (XIZ+0xc4)
+	pushw	(xiz-14)                   ; F9EB49  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9EB4C  pushw (XIZ+0xf0)
+	pushw	(xiz-58)                   ; F9EB4F  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; F9EB52  pushw (XIZ+0xc4)
 	call	Float32_Divide                              ; F9EB55  call 0xfcae60
 	ld	(xiz-40), xiy                           ; F9EB59  ld (XIZ+0xd8),XIY
 	ld	xbc, (F64_0+4:24)                     ; F9EB5C  ld XBC,(0xfcca46)
@@ -8402,28 +8402,28 @@ sub_F9E1ED__F9E995:
 	push	xbc                                   ; F9EB67  push XBC
 	call	Double_ToFloat32                              ; F9EB68  call 0xfcadd6
 	ld	(xiz-44), xiy                           ; F9EB6C  ld (XIZ+0xd4),XIY
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9EB6F  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9EB72  pushw (XIZ+0xd8)
+	pushw	(xiz-38)                   ; F9EB6F  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9EB72  pushw (XIZ+0xd8)
 	call	Float32_Negate                              ; F9EB75  call 0xfcb04a
 	ld	(xiz-48), xiy                           ; F9EB79  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xEE, 0x04                   ; F9EB7C  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9EB7F  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; F9EB7C  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; F9EB7F  pushw (XIZ+0xec)
 	call	Float32_Negate                              ; F9EB82  call 0xfcb04a
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9EB86  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9EB89  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9EB86  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9EB89  pushw (XIZ+0xf0)
 	push	xiy                                   ; F9EB8C  push XIY
 	call	Float32_Divide                              ; F9EB8D  call 0xfcae60
 	ld	(xiz-52), xiy                           ; F9EB91  ld (XIZ+0xcc),XIY
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9EB94  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9EB97  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9EB94  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9EB97  pushw (XIZ+0xe8)
 	call	Float32_Negate                              ; F9EB9A  call 0xfcb04a
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9EB9E  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9EBA1  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9EB9E  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9EBA1  pushw (XIZ+0xf0)
 	push	xiy                                   ; F9EBA4  push XIY
 	call	Float32_Divide                              ; F9EBA5  call 0xfcae60
 	ld	(xiz-56), xiy                           ; F9EBA9  ld (XIZ+0xc8),XIY
-	extpfx3 0x9E, 0xD6, 0x04                   ; F9EBAC  pushw (XIZ+0xd6)
-	extpfx3 0x9E, 0xD4, 0x04                   ; F9EBAF  pushw (XIZ+0xd4)
+	pushw	(xiz-42)                   ; F9EBAC  pushw (XIZ+0xd6)
+	pushw	(xiz-44)                   ; F9EBAF  pushw (XIZ+0xd4)
 	lda	xiy, (xiz-0x72)                        ; F9EBB2  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EBB5  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EBB9  ld XBC,(XIZ+0x92)
@@ -8443,10 +8443,10 @@ sub_F9E1ED__F9E995:
 	call	Double_ToFloat32                              ; F9EBDC  call 0xfcadd6
 	inc	8, xsp                                 ; F9EBE0  inc 0,XSP
 	push	xiy                                   ; F9EBE2  push XIY
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9EBE3  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; F9EBE3  pushw (XIZ+0x0c)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9EBE6  calr 0xf9b167
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9EBE9  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9EBEC  pushw (XIZ+0xd8)
+	pushw	(xiz-38)                   ; F9EBE9  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9EBEC  pushw (XIZ+0xd8)
 	lda	xiy, (xiz-0x72)                        ; F9EBEF  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EBF2  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EBF6  ld XBC,(XIZ+0x92)
@@ -8467,8 +8467,8 @@ sub_F9E1ED__F9E995:
 	inc	6, xsp                                 ; F9EC1D  inc 6,XSP
 	push	xiy                                   ; F9EC1F  push XIY
 	calr P7Group_SendValueScaled                 ; F9EC20  calr 0xf9b37e
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9EC23  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9EC26  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9EC23  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9EC26  pushw (XIZ+0xd0)
 	lda	xiy, (xiz-0x72)                        ; F9EC29  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EC2C  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EC30  ld XBC,(XIZ+0x92)
@@ -8489,8 +8489,8 @@ sub_F9E1ED__F9E995:
 	pop	xbc                                    ; F9EC57  pop XBC
 	push	xiy                                   ; F9EC58  push XIY
 	calr P7Group_SendValueScaled                 ; F9EC59  calr 0xf9b37e
-	extpfx3 0x9E, 0xCE, 0x04                   ; F9EC5C  pushw (XIZ+0xce)
-	extpfx3 0x9E, 0xCC, 0x04                   ; F9EC5F  pushw (XIZ+0xcc)
+	pushw	(xiz-50)                   ; F9EC5C  pushw (XIZ+0xce)
+	pushw	(xiz-52)                   ; F9EC5F  pushw (XIZ+0xcc)
 	lda	xiy, (xiz-0x72)                        ; F9EC62  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9EC65  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9EC69  ld XBC,(XIZ+0x92)
@@ -8515,8 +8515,8 @@ sub_F9E1ED__F9E995:
 	ld	xbc, (xiz-56)                           ; F9EC96  ld XBC,(XIZ+0xc8)
 	push	xbc                                   ; F9EC99  push XBC
 	calr P7Group_SendValueScaled                 ; F9EC9A  calr 0xf9b37e
-	extpfx3 0x9E, 0xAE, 0x04                   ; F9EC9D  pushw (XIZ+0xae)
-	extpfx3 0x9E, 0xAC, 0x04                   ; F9ECA0  pushw (XIZ+0xac)
+	pushw	(xiz-82)                   ; F9EC9D  pushw (XIZ+0xae)
+	pushw	(xiz-84)                   ; F9ECA0  pushw (XIZ+0xac)
 	lda	xiy, (xiz-0x72)                        ; F9ECA3  lda XIY,XIZ+0x8e
 	call	Float32_ToDouble                              ; F9ECA6  call 0xfcaa50
 	ld	xbc, (xiz-0x6E)                         ; F9ECAA  ld XBC,(XIZ+0x92)
@@ -8551,7 +8551,7 @@ sub_F9E1ED__F9ECDB:
 sub_F9E1ED__F9ECEA:
 	ld	xiy, (xiz+8)                            ; F9ECEA  ld XIY,(XIZ+0x08)
 	pop	xix                                    ; F9ECED  pop XIX
-	unlk32 xiz                                 ; F9ECEE  unlk XIZ
+	unlk	xiz                                 ; F9ECEE  unlk XIZ
 	ret                                        ; F9ECF0  ret
 ; --------------------------------------------------------------------------
 ; sub_F9ECF1 -- 0xF9ECF1..0xF9F764 (2676 bytes)
@@ -8581,7 +8581,7 @@ sub_F9E1ED__F9ECEA:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9ECF1:
-	link32 0xEE, 0x0C, 0x8E, 0xFF              ; F9ECF1  link XIZ,0xff8e
+	link	xiz, 0xff8e              ; F9ECF1  link XIZ,0xff8e
 	push	xix                                   ; F9ECF5  push XIX
 	ld	xbc, (F64_0p51+4:24)                     ; F9ECF6  ld XBC,(0xfcc90e)
 	push	xbc                                   ; F9ECFB  push XBC
@@ -8640,8 +8640,8 @@ sub_F9ECF1__F9ED7A:
 	ld	xbc, (xiy)                              ; F9ED8F  ld XBC,(XIY)
 	ld	(xiz-12), xbc                           ; F9ED91  ld (XIZ+0xf4),XBC
 	ld	(xiz-8), xbc                            ; F9ED94  ld (XIZ+0xf8),XBC
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9ED97  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9ED9A  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9ED97  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9ED9A  pushw (XIZ+0xf0)
 	lda	xiy, (xiz-58)                          ; F9ED9D  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9EDA0  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9EDA4  ld XBC,(XIZ+0xca)
@@ -8670,8 +8670,8 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EDE1  push XBC
 	call	Double_ToFloat32                              ; F9EDE2  call 0xfcadd6
 	ld	(xiz-48), xiy                           ; F9EDE6  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9EDE9  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9EDEC  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9EDE9  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9EDEC  pushw (XIZ+0xf0)
 	lda	xiy, (xiz-58)                          ; F9EDEF  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9EDF2  call 0xfcaa50
 	inc	8, xsp                                 ; F9EDF6  inc 0,XSP
@@ -8687,8 +8687,8 @@ sub_F9ECF1__F9ED7A:
 	call	Double_Compare                              ; F9EE0E  call 0xfca121
 	cp	wa, 2:i3                                  ; F9EE12  cp WA,2
 	jrl z, sub_F9ECF1__F9EFA0                  ; F9EE14  jrl Z,0xf9efa0
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9EE17  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9EE1A  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9EE17  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9EE1A  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-58)                          ; F9EE1D  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9EE20  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9EE24  ld XBC,(XIZ+0xca)
@@ -8707,8 +8707,8 @@ sub_F9ECF1__F9ED7A:
 	push	xbc                                   ; F9EE46  push XBC
 	lda	xiy, (xiz-74)                          ; F9EE47  lda XIY,XIZ+0xb6
 	call	Double_Cos                              ; F9EE4A  call 0xfc8bb2
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9EE4E  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9EE51  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9EE4E  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9EE51  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-82)                          ; F9EE54  lda XIY,XIZ+0xae
 	call	Float32_ToDouble                              ; F9EE57  call 0xfcaa50
 	ld	xbc, (xiz-78)                           ; F9EE5B  ld XBC,(XIZ+0xb2)
@@ -8794,8 +8794,8 @@ sub_F9ECF1__F9ED7A:
 	call	Double_ToFloat32                              ; F9EF25  call 0xfcadd6
 	ld	(xiz-44), xiy                           ; F9EF29  ld (XIZ+0xd4),XIY
 	push	xiy                                   ; F9EF2C  push XIY
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9EF2D  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9EF30  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9EF2D  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9EF30  pushw (XIZ+0xd0)
 	call	Float32_Divide                              ; F9EF33  call 0xfcae60
 	push	xiy                                   ; F9EF37  push XIY
 	lda	xiy, (xiz-58)                          ; F9EF38  lda XIY,XIZ+0xc6
@@ -8839,8 +8839,8 @@ sub_F9ECF1__F9ED7A:
 	inc	8, xsp                                 ; F9EF9B  inc 0,XSP
 	jrl sub_F9ECF1__F9F0F2                     ; F9EF9D  jrl T,0xf9f0f2
 sub_F9ECF1__F9EFA0:
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9EFA0  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9EFA3  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9EFA0  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9EFA3  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-58)                          ; F9EFA6  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9EFA9  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9EFAD  ld XBC,(XIZ+0xca)
@@ -8859,8 +8859,8 @@ sub_F9ECF1__F9EFA0:
 	push	xbc                                   ; F9EFCF  push XBC
 	lda	xiy, (xiz-74)                          ; F9EFD0  lda XIY,XIZ+0xb6
 	call	Double_Cos                              ; F9EFD3  call 0xfc8bb2
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9EFD7  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9EFDA  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9EFD7  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9EFDA  pushw (XIZ+0xf8)
 	lda	xiy, (xiz-82)                          ; F9EFDD  lda XIY,XIZ+0xae
 	call	Float32_ToDouble                              ; F9EFE0  call 0xfcaa50
 	ld	xbc, (xiz-78)                           ; F9EFE4  ld XBC,(XIZ+0xb2)
@@ -8910,22 +8910,22 @@ sub_F9ECF1__F9EFA0:
 	call	Int16_ToFloat32                              ; F9F054  call 0xfcaf8b
 	ld	xix, xiy                                ; F9F058  ld XIX,XIY
 	push	xiy                                   ; F9F05A  push XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F05B  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F05E  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F05B  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F05E  pushw (XIZ+0xe4)
 	call	Float32_Add                              ; F9F061  call 0xfcac52
 	ld	(xiz-54), xiy                           ; F9F065  ld (XIZ+0xca),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F068  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F06B  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F068  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F06B  pushw (XIZ+0xe4)
 	push	xix                                   ; F9F06E  push XIX
 	call	Float32_Subtract                              ; F9F06F  call 0xfcb02b
-	extpfx3 0x9E, 0xCC, 0x04                   ; F9F073  pushw (XIZ+0xcc)
-	extpfx3 0x9E, 0xCA, 0x04                   ; F9F076  pushw (XIZ+0xca)
+	pushw	(xiz-52)                   ; F9F073  pushw (XIZ+0xcc)
+	pushw	(xiz-54)                   ; F9F076  pushw (XIZ+0xca)
 	push	xiy                                   ; F9F079  push XIY
 	call	Float32_Divide                              ; F9F07A  call 0xfcae60
 	ld	(xiz-44), xiy                           ; F9F07E  ld (XIZ+0xd4),XIY
 	push	xiy                                   ; F9F081  push XIY
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9F082  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9F085  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9F082  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9F085  pushw (XIZ+0xd0)
 	call	Float32_Divide                              ; F9F088  call 0xfcae60
 	push	xiy                                   ; F9F08C  push XIY
 	lda	xiy, (xiz-58)                          ; F9F08D  lda XIY,XIZ+0xc6
@@ -8968,8 +8968,8 @@ sub_F9ECF1__F9EFA0:
 	ld	(xiz-24), xiy                           ; F9F0ED  ld (XIZ+0xe8),XIY
 	inc	8, xsp                                 ; F9F0F0  inc 0,XSP
 sub_F9ECF1__F9F0F2:
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9F0F2  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9F0F5  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9F0F2  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9F0F5  pushw (XIZ+0xe8)
 	lda	xiy, (xiz-58)                          ; F9F0F8  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F0FB  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F0FF  ld XBC,(XIZ+0xca)
@@ -8982,8 +8982,8 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F112  push XBC
 	lda	xiy, (xiz-66)                          ; F9F113  lda XIY,XIZ+0xbe
 	call	Double_Subtract                              ; F9F116  call 0xfca626
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F11A  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F11D  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F11A  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F11D  pushw (XIZ+0xe4)
 	lda	xiy, (xiz-74)                          ; F9F120  lda XIY,XIZ+0xb6
 	call	Float32_ToDouble                              ; F9F123  call 0xfcaa50
 	ld	xbc, (xiz-70)                           ; F9F127  ld XBC,(XIZ+0xba)
@@ -9012,17 +9012,17 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F160  push XBC
 	call	Double_ToFloat32                              ; F9F161  call 0xfcadd6
 	ld	(xiz-32), xiy                           ; F9F165  ld (XIZ+0xe0),XIY
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9F168  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9F16B  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9F168  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9F16B  pushw (XIZ+0xe8)
 	push	xiy                                   ; F9F16E  push XIY
 	call	Float32_Multiply                              ; F9F16F  call 0xfcb005
 	ld	(xiz-36), xiy                           ; F9F173  ld (XIZ+0xdc),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F176  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F179  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F176  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F179  pushw (XIZ+0xe4)
 	call	Float32_Negate                              ; F9F17C  call 0xfcb04a
 	ld	(xiz-40), xiy                           ; F9F180  ld (XIZ+0xd8),XIY
-	extpfx3 0x9E, 0xDE, 0x04                   ; F9F183  pushw (XIZ+0xde)
-	extpfx3 0x9E, 0xDC, 0x04                   ; F9F186  pushw (XIZ+0xdc)
+	pushw	(xiz-34)                   ; F9F183  pushw (XIZ+0xde)
+	pushw	(xiz-36)                   ; F9F186  pushw (XIZ+0xdc)
 	lda	xiy, (xiz-58)                          ; F9F189  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F18C  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F190  ld XBC,(XIZ+0xca)
@@ -9041,10 +9041,10 @@ sub_F9ECF1__F9F0F2:
 	push	xbc                                   ; F9F1B2  push XBC
 	call	Double_ToFloat32                              ; F9F1B3  call 0xfcadd6
 	push	xiy                                   ; F9F1B7  push XIY
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9F1B8  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; F9F1B8  pushw (XIZ+0x0c)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9F1BB  calr 0xf9b167
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9F1BE  pushw (XIZ+0xe2)
-	extpfx3 0x9E, 0xE0, 0x04                   ; F9F1C1  pushw (XIZ+0xe0)
+	pushw	(xiz-30)                   ; F9F1BE  pushw (XIZ+0xe2)
+	pushw	(xiz-32)                   ; F9F1C1  pushw (XIZ+0xe0)
 	lda	xiy, (xiz-58)                          ; F9F1C4  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F1C7  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F1CB  ld XBC,(XIZ+0xca)
@@ -9065,8 +9065,8 @@ sub_F9ECF1__F9F0F2:
 	inc	6, xsp                                 ; F9F1F2  inc 6,XSP
 	push	xiy                                   ; F9F1F4  push XIY
 	calr P7Group_SendValueScaled                 ; F9F1F5  calr 0xf9b37e
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9F1F8  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9F1FB  pushw (XIZ+0xd8)
+	pushw	(xiz-38)                   ; F9F1F8  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9F1FB  pushw (XIZ+0xd8)
 	lda	xiy, (xiz-58)                          ; F9F1FE  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F201  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F205  ld XBC,(XIZ+0xca)
@@ -9098,8 +9098,8 @@ sub_F9ECF1__F9F235:
 	ld	xbc, (xiy)                              ; F9F24A  ld XBC,(XIY)
 	ld	(xiz-12), xbc                           ; F9F24C  ld (XIZ+0xf4),XBC
 	ld	(xiz-4), xbc                            ; F9F24F  ld (XIZ+0xfc),XBC
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9F252  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9F255  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9F252  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9F255  pushw (XIZ+0xf0)
 	lda	xiy, (xiz-58)                          ; F9F258  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F25B  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F25F  ld XBC,(XIZ+0xca)
@@ -9128,8 +9128,8 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F29C  push XBC
 	call	Double_ToFloat32                              ; F9F29D  call 0xfcadd6
 	ld	(xiz-48), xiy                           ; F9F2A1  ld (XIZ+0xd0),XIY
-	extpfx3 0x9E, 0xF2, 0x04                   ; F9F2A4  pushw (XIZ+0xf2)
-	extpfx3 0x9E, 0xF0, 0x04                   ; F9F2A7  pushw (XIZ+0xf0)
+	pushw	(xiz-14)                   ; F9F2A4  pushw (XIZ+0xf2)
+	pushw	(xiz-16)                   ; F9F2A7  pushw (XIZ+0xf0)
 	lda	xiy, (xiz-58)                          ; F9F2AA  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F2AD  call 0xfcaa50
 	inc	8, xsp                                 ; F9F2B1  inc 0,XSP
@@ -9145,8 +9145,8 @@ sub_F9ECF1__F9F235:
 	call	Double_Compare                              ; F9F2C9  call 0xfca121
 	cp	wa, 2:i3                                  ; F9F2CD  cp WA,2
 	jrl z, sub_F9ECF1__F9F45B                  ; F9F2CF  jrl Z,0xf9f45b
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9F2D2  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9F2D5  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9F2D2  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9F2D5  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-58)                          ; F9F2D8  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F2DB  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F2DF  ld XBC,(XIZ+0xca)
@@ -9165,8 +9165,8 @@ sub_F9ECF1__F9F235:
 	push	xbc                                   ; F9F301  push XBC
 	lda	xiy, (xiz-74)                          ; F9F302  lda XIY,XIZ+0xb6
 	call	Double_Cos                              ; F9F305  call 0xfc8bb2
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9F309  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9F30C  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9F309  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9F30C  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-82)                          ; F9F30F  lda XIY,XIZ+0xae
 	call	Float32_ToDouble                              ; F9F312  call 0xfcaa50
 	ld	xbc, (xiz-78)                           ; F9F316  ld XBC,(XIZ+0xb2)
@@ -9252,8 +9252,8 @@ sub_F9ECF1__F9F235:
 	call	Double_ToFloat32                              ; F9F3E0  call 0xfcadd6
 	ld	(xiz-44), xiy                           ; F9F3E4  ld (XIZ+0xd4),XIY
 	push	xiy                                   ; F9F3E7  push XIY
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9F3E8  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9F3EB  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9F3E8  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9F3EB  pushw (XIZ+0xd0)
 	call	Float32_Divide                              ; F9F3EE  call 0xfcae60
 	push	xiy                                   ; F9F3F2  push XIY
 	lda	xiy, (xiz-58)                          ; F9F3F3  lda XIY,XIZ+0xc6
@@ -9297,8 +9297,8 @@ sub_F9ECF1__F9F235:
 	inc	8, xsp                                 ; F9F456  inc 0,XSP
 	jrl sub_F9ECF1__F9F5E1                     ; F9F458  jrl T,0xf9f5e1
 sub_F9ECF1__F9F45B:
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9F45B  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9F45E  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9F45B  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9F45E  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-58)                          ; F9F461  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F464  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F468  ld XBC,(XIZ+0xca)
@@ -9317,8 +9317,8 @@ sub_F9ECF1__F9F45B:
 	push	xbc                                   ; F9F48A  push XBC
 	lda	xiy, (xiz-74)                          ; F9F48B  lda XIY,XIZ+0xb6
 	call	Double_Cos                              ; F9F48E  call 0xfc8bb2
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9F492  pushw (XIZ+0xfe)
-	extpfx3 0x9E, 0xFC, 0x04                   ; F9F495  pushw (XIZ+0xfc)
+	pushw	(xiz-2)                   ; F9F492  pushw (XIZ+0xfe)
+	pushw	(xiz-4)                   ; F9F495  pushw (XIZ+0xfc)
 	lda	xiy, (xiz-82)                          ; F9F498  lda XIY,XIZ+0xae
 	call	Float32_ToDouble                              ; F9F49B  call 0xfcaa50
 	ld	xbc, (xiz-78)                           ; F9F49F  ld XBC,(XIZ+0xb2)
@@ -9404,8 +9404,8 @@ sub_F9ECF1__F9F45B:
 	call	Double_ToFloat32                              ; F9F569  call 0xfcadd6
 	ld	(xiz-44), xiy                           ; F9F56D  ld (XIZ+0xd4),XIY
 	push	xiy                                   ; F9F570  push XIY
-	extpfx3 0x9E, 0xD2, 0x04                   ; F9F571  pushw (XIZ+0xd2)
-	extpfx3 0x9E, 0xD0, 0x04                   ; F9F574  pushw (XIZ+0xd0)
+	pushw	(xiz-46)                   ; F9F571  pushw (XIZ+0xd2)
+	pushw	(xiz-48)                   ; F9F574  pushw (XIZ+0xd0)
 	call	Float32_Divide                              ; F9F577  call 0xfcae60
 	push	xiy                                   ; F9F57B  push XIY
 	lda	xiy, (xiz-58)                          ; F9F57C  lda XIY,XIZ+0xc6
@@ -9448,8 +9448,8 @@ sub_F9ECF1__F9F45B:
 	ld	(xiz-24), xiy                           ; F9F5DC  ld (XIZ+0xe8),XIY
 	inc	8, xsp                                 ; F9F5DF  inc 0,XSP
 sub_F9ECF1__F9F5E1:
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F5E1  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F5E4  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F5E1  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F5E4  pushw (XIZ+0xe4)
 	lda	xiy, (xiz-58)                          ; F9F5E7  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F5EA  call 0xfcaa50
 	ld	xbc, (F64_1+4:24)                     ; F9F5EE  ld XBC,(0xfcc9d6)
@@ -9462,8 +9462,8 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F601  push XBC
 	lda	xiy, (xiz-66)                          ; F9F602  lda XIY,XIZ+0xbe
 	call	Double_Add                              ; F9F605  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; F9F609  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; F9F60C  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; F9F609  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; F9F60C  pushw (XIZ+0xec)
 	lda	xiy, (xiz-74)                          ; F9F60F  lda XIY,XIZ+0xb6
 	call	Float32_ToDouble                              ; F9F612  call 0xfcaa50
 	ld	xbc, (xiz-70)                           ; F9F616  ld XBC,(XIZ+0xba)
@@ -9476,8 +9476,8 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F625  push XBC
 	lda	xiy, (xiz-82)                          ; F9F626  lda XIY,XIZ+0xae
 	call	Double_Multiply                              ; F9F629  call 0xfca252
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9F62D  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9F630  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9F62D  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9F630  pushw (XIZ+0xe8)
 	lda	xiy, (xiz-90)                          ; F9F633  lda XIY,XIZ+0xa6
 	call	Float32_ToDouble                              ; F9F636  call 0xfcaa50
 	ld	xbc, (F64_1+4:24)                     ; F9F63A  ld XBC,(0xfcc9d6)
@@ -9506,17 +9506,17 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F673  push XBC
 	call	Double_ToFloat32                              ; F9F674  call 0xfcadd6
 	ld	(xiz-32), xiy                           ; F9F678  ld (XIZ+0xe0),XIY
-	extpfx3 0x9E, 0xEA, 0x04                   ; F9F67B  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; F9F67E  pushw (XIZ+0xe8)
+	pushw	(xiz-22)                   ; F9F67B  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; F9F67E  pushw (XIZ+0xe8)
 	push	xiy                                   ; F9F681  push XIY
 	call	Float32_Multiply                              ; F9F682  call 0xfcb005
 	ld	(xiz-36), xiy                           ; F9F686  ld (XIZ+0xdc),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; F9F689  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; F9F68C  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; F9F689  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; F9F68C  pushw (XIZ+0xe4)
 	call	Float32_Negate                              ; F9F68F  call 0xfcb04a
 	ld	(xiz-40), xiy                           ; F9F693  ld (XIZ+0xd8),XIY
-	extpfx3 0x9E, 0xDE, 0x04                   ; F9F696  pushw (XIZ+0xde)
-	extpfx3 0x9E, 0xDC, 0x04                   ; F9F699  pushw (XIZ+0xdc)
+	pushw	(xiz-34)                   ; F9F696  pushw (XIZ+0xde)
+	pushw	(xiz-36)                   ; F9F699  pushw (XIZ+0xdc)
 	lda	xiy, (xiz-58)                          ; F9F69C  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F69F  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F6A3  ld XBC,(XIZ+0xca)
@@ -9535,10 +9535,10 @@ sub_F9ECF1__F9F5E1:
 	push	xbc                                   ; F9F6C5  push XBC
 	call	Double_ToFloat32                              ; F9F6C6  call 0xfcadd6
 	push	xiy                                   ; F9F6CA  push XIY
-	extpfx3 0x9E, 0x0C, 0x04                   ; F9F6CB  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; F9F6CB  pushw (XIZ+0x0c)
 	calr P7Group_SendOp1AddrValueScaled                 ; F9F6CE  calr 0xf9b167
-	extpfx3 0x9E, 0xE2, 0x04                   ; F9F6D1  pushw (XIZ+0xe2)
-	extpfx3 0x9E, 0xE0, 0x04                   ; F9F6D4  pushw (XIZ+0xe0)
+	pushw	(xiz-30)                   ; F9F6D1  pushw (XIZ+0xe2)
+	pushw	(xiz-32)                   ; F9F6D4  pushw (XIZ+0xe0)
 	lda	xiy, (xiz-58)                          ; F9F6D7  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F6DA  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F6DE  ld XBC,(XIZ+0xca)
@@ -9559,8 +9559,8 @@ sub_F9ECF1__F9F5E1:
 	inc	6, xsp                                 ; F9F705  inc 6,XSP
 	push	xiy                                   ; F9F707  push XIY
 	calr P7Group_SendValueScaled                 ; F9F708  calr 0xf9b37e
-	extpfx3 0x9E, 0xDA, 0x04                   ; F9F70B  pushw (XIZ+0xda)
-	extpfx3 0x9E, 0xD8, 0x04                   ; F9F70E  pushw (XIZ+0xd8)
+	pushw	(xiz-38)                   ; F9F70B  pushw (XIZ+0xda)
+	pushw	(xiz-40)                   ; F9F70E  pushw (XIZ+0xd8)
 	lda	xiy, (xiz-58)                          ; F9F711  lda XIY,XIZ+0xc6
 	call	Float32_ToDouble                              ; F9F714  call 0xfcaa50
 	ld	xbc, (xiz-54)                           ; F9F718  ld XBC,(XIZ+0xca)
@@ -9596,7 +9596,7 @@ sub_F9ECF1__F9F751:
 sub_F9ECF1__F9F75E:
 	ld	xiy, (xiz+8)                            ; F9F75E  ld XIY,(XIZ+0x08)
 	pop	xix                                    ; F9F761  pop XIX
-	unlk32 xiz                                 ; F9F762  unlk XIZ
+	unlk	xiz                                 ; F9F762  unlk XIZ
 	ret                                        ; F9F764  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_SendValueTable -- 0xF9F765..0xF9F8E0 (380 bytes)
@@ -9653,7 +9653,7 @@ sub_F9ECF1__F9F75E:
 ;          0xFD28C7, and go out as ordinary value groups; nothing here names them.
 ; --------------------------------------------------------------------------
 P7Unit_SendValueTable:
-	link32 0xEE, 0x0C, 0x1C, 0xFF              ; F9F765  link XIZ,0xff1c
+	link	xiz, 0xff1c              ; F9F765  link XIZ,0xff1c
 	ld	bc, (xiz+8)                             ; F9F769  ld BC,(XIZ+0x08)
 	and	bc, 3                                  ; F9F76C  and BC,0x0003
 	ld	(xiz-0xE2), bc                          ; F9F770  ld (XIZ+0xff1e),BC
@@ -9741,14 +9741,14 @@ P7Unit_SendValueTable__F9F847:
 	push	xwa                                   ; F9F84E  push XWA
 	calr Stream_ReadU24BE                 ; F9F84F  calr 0xf9e020
 	ld	(xiz-24), xiy                           ; F9F852  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9F855  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9F858  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9F855  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9F858  pushw (XIZ+0xf4)
 	call	Int32_ToFloat32                              ; F9F85B  call 0xfcabc6
 	inc	8, xsp                                 ; F9F85F  inc 0,XSP
 	push	xiy                                   ; F9F861  push XIY
 	ld	bc, (xiz-4)                             ; F9F862  ld BC,(XIZ+0xfc)
 	sll	bc, 2                                  ; F9F865  sll 0x02,BC
-	extpfx3 0x9E, 0xF8, 0x81                   ; F9F868  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; F9F868  add BC,(XIZ+0xf8)
 	pushw	bc                                   ; F9F86B  push BC
 	calr P7Group_SendOp0AddrValue                 ; F9F86C  calr 0xf9afdc
 	inc	6, xsp                                 ; F9F86F  inc 6,XSP
@@ -9758,8 +9758,8 @@ P7Unit_SendValueTable__F9F847:
 	push	xwa                                   ; F9F878  push XWA
 	calr Stream_ReadU24BE                 ; F9F879  calr 0xf9e020
 	ld	(xiz-24), xiy                           ; F9F87C  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9F87F  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9F882  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9F87F  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9F882  pushw (XIZ+0xf4)
 	call	Int32_ToFloat32                              ; F9F885  call 0xfcabc6
 	inc	8, xsp                                 ; F9F889  inc 0,XSP
 	push	xiy                                   ; F9F88B  push XIY
@@ -9771,8 +9771,8 @@ P7Unit_SendValueTable__F9F847:
 	push	xwa                                   ; F9F897  push XWA
 	calr Stream_ReadU24BE                 ; F9F898  calr 0xf9e020
 	ld	(xiz-24), xiy                           ; F9F89B  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9F89E  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9F8A1  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9F89E  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9F8A1  pushw (XIZ+0xf4)
 	call	Int32_ToFloat32                              ; F9F8A4  call 0xfcabc6
 	inc	8, xsp                                 ; F9F8A8  inc 0,XSP
 	push	xiy                                   ; F9F8AA  push XIY
@@ -9784,8 +9784,8 @@ P7Unit_SendValueTable__F9F847:
 	push	xwa                                   ; F9F8B6  push XWA
 	calr Stream_ReadU24BE                 ; F9F8B7  calr 0xf9e020
 	ld	(xiz-24), xiy                           ; F9F8BA  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0xF6, 0x04                   ; F9F8BD  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF4, 0x04                   ; F9F8C0  pushw (XIZ+0xf4)
+	pushw	(xiz-10)                   ; F9F8BD  pushw (XIZ+0xf6)
+	pushw	(xiz-12)                   ; F9F8C0  pushw (XIZ+0xf4)
 	call	Int32_ToFloat32                              ; F9F8C3  call 0xfcabc6
 	inc	8, xsp                                 ; F9F8C7  inc 0,XSP
 	push	xiy                                   ; F9F8C9  push XIY
@@ -9798,7 +9798,7 @@ P7Unit_SendValueTable__F9F847:
 	pop	xiy                                    ; F9F8DA  pop XIY
 	jrl P7Unit_SendValueTable__F9F805                     ; F9F8DB  jrl T,0xf9f805
 P7Unit_SendValueTable__F9F8DE:
-	unlk32 xiz                                 ; F9F8DE  unlk XIZ
+	unlk	xiz                                 ; F9F8DE  unlk XIZ
 	ret                                        ; F9F8E0  ret
 ; --------------------------------------------------------------------------
 ; P7Stream_StageAndSend -- 0xF9F8E1..0xF9F9F9 (281 bytes)
@@ -9839,7 +9839,7 @@ P7Unit_SendValueTable__F9F8DE:
 ;          nothing here reads their meaning.
 ; --------------------------------------------------------------------------
 P7Stream_StageAndSend:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; F9F8E1  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; F9F8E1  link XIZ,0xfff0
 	ld	xbc, (xiz+12)                           ; F9F8E5  ld XBC,(XIZ+0x0c)
 	ld	(0x862E:24), xbc                       ; F9F8E8  ld (0x00862e),XBC
 	ld	xwa, (xiz+8)                            ; F9F8ED  ld XWA,(XIZ+0x08)
@@ -9853,7 +9853,7 @@ P7Stream_StageAndSend:
 	ld	bc, (xiz+16)                            ; F9F90D  ld BC,(XIZ+0x10)
 	ld	(0x8640:24), bc                        ; F9F910  ld (0x008640),BC
 	ldw	bc, 6                                  ; F9F915  ld BC,0x0006
-	extpfx3 0x9E, 0x1A, 0x49                   ; F9F918  muls XBC,(XIZ+0x1a)
+	muls	xbc, (xiz+26)                   ; F9F918  muls XBC,(XIZ+0x1a)
 	dec	6, xbc                                 ; F9F91B  dec 6,XBC
 	add	xiy, xbc                               ; F9F91D  add XIY,XBC
 	ld	(xiz-16), xiy                           ; F9F91F  ld (XIZ+0xf0),XIY
@@ -9886,21 +9886,21 @@ P7Stream_StageAndSend:
 	ld	(0x8642:24), bc                        ; F9F96B  ld (0x008642),BC
 	ld	xbc, (0x862E:24)                       ; F9F970  ld XBC,(0x00862e)
 	ld	(xiz-8), xbc                            ; F9F975  ld (XIZ+0xf8),XBC
-	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; F9F978  cp (0x008640),0x0063
+	cpw	(0x008640:24), 0x0063 ; F9F978  cp (0x008640),0x0063
 	jr z, P7Stream_StageAndSend__F9F98F                   ; F9F97F  jr Z,0xf9f98f
-	extpfx5 0xD2, 0x40, 0x86, 0x00, 0x04       ; F9F981  pushw (0x008640)
+	pushw	(0x008640:24)       ; F9F981  pushw (0x008640)
 	push	xbc                                   ; F9F986  push XBC
 	calr P7Block_Seek                 ; F9F987  calr 0xf9e140
 	ld	(xiz-8), xiy                            ; F9F98A  ld (XIZ+0xf8),XIY
 	inc	6, xsp                                 ; F9F98D  inc 6,XSP
 P7Stream_StageAndSend__F9F98F:
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F98F  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9F98F  cp (0x008612),0x0000
 	jr z, P7Stream_StageAndSend__F9F9A1                   ; F9F996  jr Z,0xf9f9a1
-	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F998  pushw (0x008612)
+	pushw	(0x008612:24)       ; F9F998  pushw (0x008612)
 	calr P7Block_ReportStatus                 ; F9F99D  calr 0xf9e1ac
 	popw	bc                                    ; F9F9A0  pop BC
 P7Stream_StageAndSend__F9F9A1:
-	extpfx7 0xD2, 0x42, 0x86, 0x00, 0x3F, 0x73, 0x00 ; F9F9A1  cp (0x008642),0x0073
+	cpw	(0x008642:24), 0x0073 ; F9F9A1  cp (0x008642),0x0073
 	jr nz, P7Stream_StageAndSend__F9F9D0                  ; F9F9A8  jr NZ,0xf9f9d0
 	ld	xbc, (0x8632:24)                       ; F9F9AA  ld XBC,(0x008632)
 	push	xbc                                   ; F9F9AF  push XBC
@@ -9909,9 +9909,9 @@ P7Stream_StageAndSend__F9F9A1:
 	calr sub_FA237C                 ; F9F9B4  calr 0xfa237c
 	ld	(xiz-8), xiy                            ; F9F9B7  ld (XIZ+0xf8),XIY
 	inc	8, xsp                                 ; F9F9BA  inc 0,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F9BC  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9F9BC  cp (0x008612),0x0000
 	jr z, P7Stream_StageAndSend__F9F9CE                   ; F9F9C3  jr Z,0xf9f9ce
-	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F9C5  pushw (0x008612)
+	pushw	(0x008612:24)       ; F9F9C5  pushw (0x008612)
 	calr P7Block_ReportStatus                 ; F9F9CA  calr 0xf9e1ac
 	popw	bc                                    ; F9F9CD  pop BC
 P7Stream_StageAndSend__F9F9CE:
@@ -9926,13 +9926,13 @@ P7Stream_StageAndSend__F9F9D0:
 	calr sub_FA000B                 ; F9F9DE  calr 0xfa000b
 	inc	8, xsp                                 ; F9F9E1  inc 0,XSP
 	inc	4, xsp                                 ; F9F9E3  inc 4,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; F9F9E5  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; F9F9E5  cp (0x008612),0x0000
 	jr z, P7Stream_StageAndSend__F9F9F7                   ; F9F9EC  jr Z,0xf9f9f7
-	extpfx5 0xD2, 0x12, 0x86, 0x00, 0x04       ; F9F9EE  pushw (0x008612)
+	pushw	(0x008612:24)       ; F9F9EE  pushw (0x008612)
 	calr P7Block_ReportStatus                 ; F9F9F3  calr 0xf9e1ac
 	popw	bc                                    ; F9F9F6  pop BC
 P7Stream_StageAndSend__F9F9F7:
-	unlk32 xiz                                 ; F9F9F7  unlk XIZ
+	unlk	xiz                                 ; F9F9F7  unlk XIZ
 	ret                                        ; F9F9F9  ret
 ; --------------------------------------------------------------------------
 ; sub_F9F9FA -- 0xF9F9FA..0xF9FBA8 (431 bytes)
@@ -9954,13 +9954,13 @@ P7Stream_StageAndSend__F9F9F7:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9F9FA:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9F9FA  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; F9F9FA  link XIZ,0xfff4
 	pushw	hl                                   ; F9F9FE  push HL
 	ldw (xiz-2), 0x0078                        ; F9F9FF  ld (XIZ+0xfe),0x0078
 	ld	xbc, (0x863A:24)                       ; F9FA04  ld XBC,(0x00863a)
 	ld	(xiz-10), xbc                           ; F9FA09  ld (XIZ+0xf6),XBC
-	extpfx5 0xD2, 0x3E, 0x86, 0x00, 0x04       ; F9FA0C  pushw (0x00863e)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9FA11  pushw (XIZ+0xfe)
+	pushw	(0x00863e:24)       ; F9FA0C  pushw (0x00863e)
+	pushw	(xiz-2)                   ; F9FA11  pushw (XIZ+0xfe)
 	push	xbc                                   ; F9FA14  push XBC
 	calr sub_F9E0B7                 ; F9FA15  calr 0xf9e0b7
 	ld	(xiz-10), xiy                           ; F9FA18  ld (XIZ+0xf6),XIY
@@ -9969,7 +9969,7 @@ sub_F9F9FA:
 	extz	bc                                    ; F9FA20  extz BC
 	ld	hl, bc                                  ; F9FA22  ld HL,BC
 	ldw	wa, 3                                  ; F9FA24  ld WA,0x0003
-	extpfx3 0x9E, 0x0A, 0x48                   ; F9FA27  muls XWA,(XIZ+0x0a)
+	muls	xwa, (xiz+10)                   ; F9FA27  muls XWA,(XIZ+0x0a)
 	add	bc, wa                                 ; F9FA2A  add BC,WA
 	ld	(xiz-12), bc                            ; F9FA2C  ld (XIZ+0xf4),BC
 	ld	a, (0x861C:24)                         ; F9FA2F  ld A,(0x00861c)
@@ -9990,7 +9990,7 @@ sub_F9F9FA:
 	incw	1, (xiz-12)                           ; F9FA55  incw 1,(XIZ+0xf4)
 	calr P7Byte_SendArg                 ; F9FA58  calr 0xf9a4b0
 	pop	xiy                                    ; F9FA5B  pop XIY
-	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; F9FA5C  cp (0x008640),0x0063
+	cpw	(0x008640:24), 0x0063 ; F9FA5C  cp (0x008640),0x0063
 	jr z, sub_F9F9FA__F9FAC2                   ; F9FA63  jr Z,0xf9fac2
 	ld	c, (0x861C:24)                         ; F9FA65  ld C,(0x00861c)
 	pushw	bc                                   ; F9FA6A  push BC
@@ -10005,7 +10005,7 @@ sub_F9F9FA:
 	pop	xiy                                    ; F9FA83  pop XIY
 	pushw	bc                                   ; F9FA84  push BC
 	ld	bc, (0x8616:24)                        ; F9FA85  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9FA8A  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9FA8A  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9FA8D  sra 0x04,BC
 	and	bc, 15                                 ; F9FA90  and BC,0x000f
 	pushw	bc                                   ; F9FA94  push BC
@@ -10014,7 +10014,7 @@ sub_F9F9FA:
 	pop	xiy                                    ; F9FA9D  pop XIY
 	pushw	bc                                   ; F9FA9E  push BC
 	ld	bc, (0x8616:24)                        ; F9FA9F  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9FAA4  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9FAA4  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9FAA7  sll 0x04,BC
 	and	bc, 0xF0                               ; F9FAAA  and BC,0x00f0
 	pushw	bc                                   ; F9FAAE  push BC
@@ -10118,7 +10118,7 @@ sub_F9F9FA__F9FB4D:
 	pop	xiy                                    ; F9FBA4  pop XIY
 sub_F9F9FA__F9FBA5:
 	popw	hl                                    ; F9FBA5  pop HL
-	unlk32 xiz                                 ; F9FBA6  unlk XIZ
+	unlk	xiz                                 ; F9FBA6  unlk XIZ
 	ret                                        ; F9FBA8  ret
 ; --------------------------------------------------------------------------
 ; sub_F9FBA9 -- 0xF9FBA9..0xF9FD0D (357 bytes)
@@ -10141,13 +10141,13 @@ sub_F9F9FA__F9FBA5:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9FBA9:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9FBA9  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; F9FBA9  link XIZ,0xfff4
 	pushw	hl                                   ; F9FBAD  push HL
 	ldw (xiz-2), 0x0078                        ; F9FBAE  ld (XIZ+0xfe),0x0078
 	ld	xbc, (0x863A:24)                       ; F9FBB3  ld XBC,(0x00863a)
 	ld	(xiz-10), xbc                           ; F9FBB8  ld (XIZ+0xf6),XBC
-	extpfx5 0xD2, 0x3E, 0x86, 0x00, 0x04       ; F9FBBB  pushw (0x00863e)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9FBC0  pushw (XIZ+0xfe)
+	pushw	(0x00863e:24)       ; F9FBBB  pushw (0x00863e)
+	pushw	(xiz-2)                   ; F9FBC0  pushw (XIZ+0xfe)
 	push	xbc                                   ; F9FBC3  push XBC
 	calr sub_F9E0B7                 ; F9FBC4  calr 0xf9e0b7
 	ld	(xiz-10), xiy                           ; F9FBC7  ld (XIZ+0xf6),XIY
@@ -10156,7 +10156,7 @@ sub_F9FBA9:
 	extz	bc                                    ; F9FBCF  extz BC
 	ld	hl, bc                                  ; F9FBD1  ld HL,BC
 	ldw	wa, 3                                  ; F9FBD3  ld WA,0x0003
-	extpfx3 0x9E, 0x0A, 0x48                   ; F9FBD6  muls XWA,(XIZ+0x0a)
+	muls	xwa, (xiz+10)                   ; F9FBD6  muls XWA,(XIZ+0x0a)
 	add	bc, wa                                 ; F9FBD9  add BC,WA
 	ld	(xiz-12), bc                            ; F9FBDB  ld (XIZ+0xf4),BC
 	ld	a, (0x861C:24)                         ; F9FBDE  ld A,(0x00861c)
@@ -10190,7 +10190,7 @@ sub_F9FBA9:
 	pop	xiy                                    ; F9FC29  pop XIY
 	pushw	bc                                   ; F9FC2A  push BC
 	ld	bc, (0x8614:24)                        ; F9FC2B  ld BC,(0x008614)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9FC30  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9FC30  add BC,(XIZ+0x08)
 	sra	bc, 4                                  ; F9FC33  sra 0x04,BC
 	and	bc, 15                                 ; F9FC36  and BC,0x000f
 	pushw	bc                                   ; F9FC3A  push BC
@@ -10199,7 +10199,7 @@ sub_F9FBA9:
 	pop	xiy                                    ; F9FC43  pop XIY
 	pushw	bc                                   ; F9FC44  push BC
 	ld	bc, (0x8616:24)                        ; F9FC45  ld BC,(0x008616)
-	extpfx3 0x9E, 0x08, 0x81                   ; F9FC4A  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; F9FC4A  add BC,(XIZ+0x08)
 	sll	bc, 4                                  ; F9FC4D  sll 0x04,BC
 	and	bc, 0xF0                               ; F9FC50  and BC,0x00f0
 	inc	8, bc                                  ; F9FC54  inc 0,BC
@@ -10276,7 +10276,7 @@ sub_F9FBA9__F9FCB2:
 	pop	xiy                                    ; F9FD09  pop XIY
 sub_F9FBA9__F9FD0A:
 	popw	hl                                    ; F9FD0A  pop HL
-	unlk32 xiz                                 ; F9FD0B  unlk XIZ
+	unlk	xiz                                 ; F9FD0B  unlk XIZ
 	ret                                        ; F9FD0D  ret
 ; --------------------------------------------------------------------------
 ; sub_F9FD0E -- 0xF9FD0E..0xF9FEA4 (407 bytes)
@@ -10301,12 +10301,12 @@ sub_F9FBA9__F9FD0A:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9FD0E:
-	link32 0xEE, 0x0C, 0xE4, 0xFF              ; F9FD0E  link XIZ,0xffe4
+	link	xiz, 0xffe4              ; F9FD0E  link XIZ,0xffe4
 	ldw (xiz-2), 0x0079                        ; F9FD12  ld (XIZ+0xfe),0x0079
 	ld	xbc, (0x863A:24)                       ; F9FD17  ld XBC,(0x00863a)
 	ld	(xiz-12), xbc                           ; F9FD1C  ld (XIZ+0xf4),XBC
-	extpfx5 0xD2, 0x3E, 0x86, 0x00, 0x04       ; F9FD1F  pushw (0x00863e)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9FD24  pushw (XIZ+0xfe)
+	pushw	(0x00863e:24)       ; F9FD1F  pushw (0x00863e)
+	pushw	(xiz-2)                   ; F9FD24  pushw (XIZ+0xfe)
 	push	xbc                                   ; F9FD27  push XBC
 	calr sub_F9E0B7                 ; F9FD28  calr 0xf9e0b7
 	ld	(xiz-12), xiy                           ; F9FD2B  ld (XIZ+0xf4),XIY
@@ -10314,7 +10314,7 @@ sub_F9FD0E:
 	extz	bc                                    ; F9FD30  extz BC
 	ld	(xiz-4), bc                             ; F9FD32  ld (XIZ+0xfc),BC
 	inc	8, xsp                                 ; F9FD35  inc 0,XSP
-	extpfx7 0xD2, 0x42, 0x86, 0x00, 0x3F, 0x64, 0x00 ; F9FD37  cp (0x008642),0x0064
+	cpw	(0x008642:24), 0x0064 ; F9FD37  cp (0x008642),0x0064
 	jr nz, sub_F9FD0E__F9FD59                  ; F9FD3E  jr NZ,0xf9fd59
 	jr sub_F9FD0E__F9FD4C                      ; F9FD40  jr T,0xf9fd4c
 sub_F9FD0E__F9FD42:
@@ -10376,8 +10376,8 @@ sub_F9FD0E__F9FD59:
 	pushw	bc                                   ; F9FDCD  push BC
 	pushw	0                                    ; F9FDCE  push 0x0000
 	calr P7Byte_SendData                 ; F9FDD1  calr 0xf9a31a
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9FDD4  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; F9FDD7  pushw (XIZ+0x08)
+	pushw	(xiz+10)                   ; F9FDD4  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; F9FDD7  pushw (XIZ+0x08)
 	lda	xiy, (xiz-20)                          ; F9FDDA  lda XIY,XIZ+0xec
 	call	Float32_ToDouble                              ; F9FDDD  call 0xfcaa50
 	ld	xbc, (xiz-16)                           ; F9FDE1  ld XBC,(XIZ+0xf0)
@@ -10405,8 +10405,8 @@ sub_F9FD0E__F9FD59:
 	pop	xiy                                    ; F9FE1D  pop XIY
 	pushw	bc                                   ; F9FE1E  push BC
 	pushw	25                                   ; F9FE1F  push 0x0019
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9FE22  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9FE25  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9FE22  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9FE25  pushw (XIZ+0xf8)
 	call	Shift32_ArithRight                              ; F9FE28  call 0xfcab06
 	and	xiy, 0x7F                              ; F9FE2C  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE32  ld C,IYL
@@ -10416,8 +10416,8 @@ sub_F9FD0E__F9FD59:
 	pop	xiy                                    ; F9FE3E  pop XIY
 	pushw	bc                                   ; F9FE3F  push BC
 	pushw	17                                   ; F9FE40  push 0x0011
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9FE43  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9FE46  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9FE43  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9FE46  pushw (XIZ+0xf8)
 	call	Shift32_ArithRight                              ; F9FE49  call 0xfcab06
 	and	xiy, 0xFF                              ; F9FE4D  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE53  ld C,IYL
@@ -10448,7 +10448,7 @@ sub_F9FD0E__F9FD59:
 	pushw	3                                    ; F9FE9B  push 0x0003
 	calr P7Byte_SendCmd                 ; F9FE9E  calr 0xf9a163
 	pop	xbc                                    ; F9FEA1  pop XBC
-	unlk32 xiz                                 ; F9FEA2  unlk XIZ
+	unlk	xiz                                 ; F9FEA2  unlk XIZ
 	ret                                        ; F9FEA4  ret
 ; --------------------------------------------------------------------------
 ; sub_F9FEA5 -- 0xF9FEA5..0xFA000A (358 bytes)
@@ -10471,12 +10471,12 @@ sub_F9FD0E__F9FD59:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9FEA5:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; F9FEA5  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; F9FEA5  link XIZ,0xfff4
 	ldw (xiz-2), 0x0079                        ; F9FEA9  ld (XIZ+0xfe),0x0079
 	ld	xbc, (0x863A:24)                       ; F9FEAE  ld XBC,(0x00863a)
 	ld	(xiz-12), xbc                           ; F9FEB3  ld (XIZ+0xf4),XBC
-	extpfx5 0xD2, 0x3E, 0x86, 0x00, 0x04       ; F9FEB6  pushw (0x00863e)
-	extpfx3 0x9E, 0xFE, 0x04                   ; F9FEBB  pushw (XIZ+0xfe)
+	pushw	(0x00863e:24)       ; F9FEB6  pushw (0x00863e)
+	pushw	(xiz-2)                   ; F9FEBB  pushw (XIZ+0xfe)
 	push	xbc                                   ; F9FEBE  push XBC
 	calr sub_F9E0B7                 ; F9FEBF  calr 0xf9e0b7
 	ld	(xiz-12), xiy                           ; F9FEC2  ld (XIZ+0xf4),XIY
@@ -10484,7 +10484,7 @@ sub_F9FEA5:
 	extz	bc                                    ; F9FEC7  extz BC
 	ld	(xiz-4), bc                             ; F9FEC9  ld (XIZ+0xfc),BC
 	inc	8, xsp                                 ; F9FECC  inc 0,XSP
-	extpfx7 0xD2, 0x42, 0x86, 0x00, 0x3F, 0x64, 0x00 ; F9FECE  cp (0x008642),0x0064
+	cpw	(0x008642:24), 0x0064 ; F9FECE  cp (0x008642),0x0064
 	jr nz, sub_F9FEA5__F9FEF0                  ; F9FED5  jr NZ,0xf9fef0
 	jr sub_F9FEA5__F9FEE3                      ; F9FED7  jr T,0xf9fee3
 sub_F9FEA5__F9FED9:
@@ -10546,8 +10546,8 @@ sub_F9FEA5__F9FEF0:
 	pushw	bc                                   ; F9FF64  push BC
 	pushw	0                                    ; F9FF65  push 0x0000
 	calr P7Byte_SendData                 ; F9FF68  calr 0xf9a31a
-	extpfx3 0x9E, 0x0A, 0x04                   ; F9FF6B  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; F9FF6E  pushw (XIZ+0x08)
+	pushw	(xiz+10)                   ; F9FF6B  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; F9FF6E  pushw (XIZ+0x08)
 	call	Float32_ToInt32                              ; F9FF71  call 0xfcab29
 	ld	(xiz-8), xiy                            ; F9FF75  ld (XIZ+0xf8),XIY
 	ld	c, (0x861C:24)                         ; F9FF78  ld C,(0x00861c)
@@ -10559,8 +10559,8 @@ sub_F9FEA5__F9FEF0:
 	pop	xiy                                    ; F9FF8A  pop XIY
 	pushw	bc                                   ; F9FF8B  push BC
 	pushw	17                                   ; F9FF8C  push 0x0011
-	extpfx3 0x9E, 0xFA, 0x04                   ; F9FF8F  pushw (XIZ+0xfa)
-	extpfx3 0x9E, 0xF8, 0x04                   ; F9FF92  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; F9FF8F  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; F9FF92  pushw (XIZ+0xf8)
 	call	Shift32_ArithRight                              ; F9FF95  call 0xfcab06
 	and	xiy, 0x7F                              ; F9FF99  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FF9F  ld C,IYL
@@ -10600,7 +10600,7 @@ sub_F9FEA5__F9FEF0:
 	pushw	3                                    ; FA0001  push 0x0003
 	calr P7Byte_SendCmd                 ; FA0004  calr 0xf9a163
 	pop	xbc                                    ; FA0007  pop XBC
-	unlk32 xiz                                 ; FA0008  unlk XIZ
+	unlk	xiz                                 ; FA0008  unlk XIZ
 	ret                                        ; FA000A  ret
 ; --------------------------------------------------------------------------
 ; sub_FA000B -- 0xFA000B..0xFA237B (9073 bytes)
@@ -10631,7 +10631,7 @@ sub_F9FEA5__F9FEF0:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA000B:
-	link32 0xEE, 0x0C, 0x40, 0xFF              ; FA000B  link XIZ,0xff40
+	link	xiz, 0xff40              ; FA000B  link XIZ,0xff40
 	push	xix                                   ; FA000F  push XIX
 	ld	xbc, (xiz+8)                            ; FA0010  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                                ; FA0013  ld A,(XBC)
@@ -10645,19 +10645,19 @@ sub_FA000B:
 	inc	1, xbc                                 ; FA0026  inc 1,XBC
 	ld	(xiz+8), xbc                            ; FA0028  ld (XIZ+0x08),XBC
 	pushw	wa                                   ; FA002B  push WA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA002C  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA002C  pushw (XIZ+0xfe)
 	ld	xiy, (xiz+12)                           ; FA002F  ld XIY,(XIZ+0x0c)
 	push	xiy                                   ; FA0032  push XIY
 	calr sub_F9E0B7                 ; FA0033  calr 0xf9e0b7
 	inc	8, xsp                                 ; FA0036  inc 0,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; FA0038  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; FA0038  cp (0x008612),0x0000
 	jr z, sub_FA000B__FA0044                   ; FA003F  jr Z,0xfa0044
 	jrl sub_FA000B__FA2378                     ; FA0041  jrl T,0xfa2378
 sub_FA000B__FA0044:
 	jrl sub_FA000B__FA22BE                     ; FA0044  jrl T,0xfa22be
 sub_FA000B__FA0047:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA0047  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA004A  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA0047  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA004A  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA004D  call 0xfcabc6
 	push	xiy                                   ; FA0051  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA0052  lda XIY,XIZ+0x90
@@ -11456,12 +11456,12 @@ sub_FA000B__FA0975:
 	push	xwa                                   ; FA097C  push XWA
 	calr Stream_ReadU24BE                 ; FA097D  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; FA0980  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0xE6, 0x04                   ; FA0983  pushw (XIZ+0xe6)
-	extpfx3 0x9E, 0xE4, 0x04                   ; FA0986  pushw (XIZ+0xe4)
+	pushw	(xiz-26)                   ; FA0983  pushw (XIZ+0xe6)
+	pushw	(xiz-28)                   ; FA0986  pushw (XIZ+0xe4)
 	call	Int32_ToFloat32                              ; FA0989  call 0xfcabc6
 	ld	xix, xiy                                ; FA098D  ld XIX,XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; FA098F  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA0992  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA098F  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA0992  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA0995  call 0xfcabc6
 	push	xix                                   ; FA0999  push XIX
 	push	xiy                                   ; FA099A  push XIY
@@ -11639,8 +11639,8 @@ sub_FA000B__FA0ACB:
 	ld	(xiz-16), xiy                           ; FA0B7D  ld (XIZ+0xf0),XIY
 	jrl sub_FA000B__FA0C31                     ; FA0B80  jrl T,0xfa0c31
 sub_FA000B__FA0B83:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA0B83  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA0B86  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA0B83  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA0B86  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA0B89  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0B8C  call 0xfca6fd
 	ld	xbc, (F64_89+4:24)                     ; FA0B90  ld XBC,(0xfcc9be)
@@ -11912,8 +11912,8 @@ sub_FA000B__FA0DE9:
 	ld	(xiz-16), xiy                           ; FA0E9B  ld (XIZ+0xf0),XIY
 	jrl sub_FA000B__FA0F4F                     ; FA0E9E  jrl T,0xfa0f4f
 sub_FA000B__FA0EA1:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA0EA1  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA0EA4  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA0EA1  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA0EA4  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA0EA7  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA0EAA  call 0xfca6fd
 	ld	xbc, (F64_88+4:24)                     ; FA0EAE  ld XBC,(0xfcc89a)
@@ -12000,14 +12000,14 @@ sub_FA000B__FA0F5A:
 	push	xbc                                   ; FA0F88  push XBC
 	calr Int32_ToFloat32_Q31                 ; FA0F89  calr 0xf9e077
 	ld	(xiz-24), xiy                           ; FA0F8C  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; FA0F8F  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA0F92  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA0F8F  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA0F92  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA0F95  call 0xfcabc6
 	ld	xix, xiy                                ; FA0F99  ld XIX,XIY
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA0F9B  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA0F9E  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; FA0FA1  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; FA0FA4  pushw (XIZ+0xe8)
+	pushw	(xiz-18)                   ; FA0F9B  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA0F9E  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; FA0FA1  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; FA0FA4  pushw (XIZ+0xe8)
 	call	Float32_Subtract                              ; FA0FA7  call 0xfcb02b
 	push	xiy                                   ; FA0FAB  push XIY
 	push	xix                                   ; FA0FAC  push XIX
@@ -12025,8 +12025,8 @@ sub_FA000B__FA0F5A:
 	push	xbc                                   ; FA0FCC  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA0FCD  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA0FD0  call 0xfca252
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA0FD4  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA0FD7  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA0FD4  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA0FD7  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x80)                        ; FA0FDA  lda XIY,XIZ+0x80
 	call	Float32_ToDouble                              ; FA0FDD  call 0xfcaa50
 	ld	xbc, (xiz-0x74)                         ; FA0FE1  ld XBC,(XIZ+0x8c)
@@ -12096,14 +12096,14 @@ sub_FA000B__FA1042:
 	push	xbc                                   ; FA1070  push XBC
 	calr Int32_ToFloat32_Q31                 ; FA1071  calr 0xf9e077
 	ld	(xiz-24), xiy                           ; FA1074  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; FA1077  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA107A  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA1077  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA107A  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA107D  call 0xfcabc6
 	ld	xix, xiy                                ; FA1081  ld XIX,XIY
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1083  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1086  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; FA1089  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; FA108C  pushw (XIZ+0xe8)
+	pushw	(xiz-18)                   ; FA1083  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1086  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; FA1089  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; FA108C  pushw (XIZ+0xe8)
 	call	Float32_Subtract                              ; FA108F  call 0xfcb02b
 	push	xiy                                   ; FA1093  push XIY
 	push	xix                                   ; FA1094  push XIX
@@ -12121,8 +12121,8 @@ sub_FA000B__FA1042:
 	push	xbc                                   ; FA10B4  push XBC
 	lda	xiy, (xiz-0x78)                        ; FA10B5  lda XIY,XIZ+0x88
 	call	Double_Multiply                              ; FA10B8  call 0xfca252
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA10BC  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA10BF  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA10BC  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA10BF  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x80)                        ; FA10C2  lda XIY,XIZ+0x80
 	call	Float32_ToDouble                              ; FA10C5  call 0xfcaa50
 	ld	xbc, (xiz-0x74)                         ; FA10C9  ld XBC,(XIZ+0x8c)
@@ -12230,8 +12230,8 @@ sub_FA000B__FA111E:
 	inc	8, xsp                                 ; FA11E1  inc 0,XSP
 	jrl sub_FA000B__FA12A4                     ; FA11E3  jrl T,0xfa12a4
 sub_FA000B__FA11E6:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA11E6  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA11E9  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA11E6  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA11E9  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA11EC  call 0xfcabc6
 	push	xiy                                   ; FA11F0  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA11F1  lda XIY,XIZ+0x90
@@ -12319,15 +12319,15 @@ sub_FA000B__FA12AF:
 	push	xwa                                   ; FA12D1  push XWA
 	calr Stream_ReadU24BE                 ; FA12D2  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; FA12D5  ld (XIZ+0x08),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; FA12D8  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA12DB  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA12D8  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA12DB  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA12DE  call 0xfcabc6
 	ld	xix, xiy                                ; FA12E2  ld XIX,XIY
-	extpfx3 0x9E, 0xE2, 0x04                   ; FA12E4  pushw (XIZ+0xe2)
-	extpfx3 0x9E, 0xE0, 0x04                   ; FA12E7  pushw (XIZ+0xe0)
+	pushw	(xiz-30)                   ; FA12E4  pushw (XIZ+0xe2)
+	pushw	(xiz-32)                   ; FA12E7  pushw (XIZ+0xe0)
 	call	Int32_ToFloat32                              ; FA12EA  call 0xfcabc6
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA12EE  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA12F1  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA12EE  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA12F1  pushw (XIZ+0xec)
 	push	xiy                                   ; FA12F4  push XIY
 	call	Float32_Subtract                              ; FA12F5  call 0xfcb02b
 	push	xiy                                   ; FA12F9  push XIY
@@ -12336,8 +12336,8 @@ sub_FA000B__FA12AF:
 	push	xiy                                   ; FA12FF  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA1300  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1303  call 0xfcaa50
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1307  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA130A  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1307  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA130A  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x78)                        ; FA130D  lda XIY,XIZ+0x88
 	call	Float32_ToDouble                              ; FA1310  call 0xfcaa50
 	ld	xbc, (xiz-0x74)                         ; FA1314  ld XBC,(XIZ+0x8c)
@@ -12668,8 +12668,8 @@ sub_FA000B__FA1618:
 	ld	(xiz-16), xiy                           ; FA16D6  ld (XIZ+0xf0),XIY
 	jrl sub_FA000B__FA1796                     ; FA16D9  jrl T,0xfa1796
 sub_FA000B__FA16DC:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA16DC  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA16DF  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA16DC  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA16DF  pushw (XIZ+0x10)
 	call	Int32_ToFloat32                              ; FA16E2  call 0xfcabc6
 	push	xiy                                   ; FA16E6  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA16E7  lda XIY,XIZ+0x90
@@ -12768,8 +12768,8 @@ sub_FA000B__FA17E0:
 	ld	(xiz-60), xbc                           ; FA17EA  ld (XIZ+0xc4),XBC
 	ld	(xiz-64), xbc                           ; FA17ED  ld (XIZ+0xc0),XBC
 sub_FA000B__FA17F0:
-	extpfx3 0x9E, 0xC6, 0x04                   ; FA17F0  pushw (XIZ+0xc6)
-	extpfx3 0x9E, 0xC4, 0x04                   ; FA17F3  pushw (XIZ+0xc4)
+	pushw	(xiz-58)                   ; FA17F0  pushw (XIZ+0xc6)
+	pushw	(xiz-60)                   ; FA17F3  pushw (XIZ+0xc4)
 	call	Int32_ToFloat32                              ; FA17F6  call 0xfcabc6
 	push	xiy                                   ; FA17FA  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA17FB  lda XIY,XIZ+0x90
@@ -12821,8 +12821,8 @@ sub_FA000B__FA186B:
 	ld	(xiz-76), xbc                           ; FA1875  ld (XIZ+0xb4),XBC
 	ld	(xiz-80), xbc                           ; FA1878  ld (XIZ+0xb0),XBC
 sub_FA000B__FA187B:
-	extpfx3 0x9E, 0xB6, 0x04                   ; FA187B  pushw (XIZ+0xb6)
-	extpfx3 0x9E, 0xB4, 0x04                   ; FA187E  pushw (XIZ+0xb4)
+	pushw	(xiz-74)                   ; FA187B  pushw (XIZ+0xb6)
+	pushw	(xiz-76)                   ; FA187E  pushw (XIZ+0xb4)
 	call	Int32_ToFloat32                              ; FA1881  call 0xfcabc6
 	push	xiy                                   ; FA1885  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA1886  lda XIY,XIZ+0x90
@@ -12894,8 +12894,8 @@ sub_FA000B__FA1932:
 	ld	(xiz-92), xbc                           ; FA193C  ld (XIZ+0xa4),XBC
 	ld	(xiz-96), xbc                           ; FA193F  ld (XIZ+0xa0),XBC
 sub_FA000B__FA1942:
-	extpfx3 0x9E, 0xA6, 0x04                   ; FA1942  pushw (XIZ+0xa6)
-	extpfx3 0x9E, 0xA4, 0x04                   ; FA1945  pushw (XIZ+0xa4)
+	pushw	(xiz-90)                   ; FA1942  pushw (XIZ+0xa6)
+	pushw	(xiz-92)                   ; FA1945  pushw (XIZ+0xa4)
 	call	Int32_ToFloat32                              ; FA1948  call 0xfcabc6
 	push	xiy                                   ; FA194C  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA194D  lda XIY,XIZ+0x90
@@ -12951,8 +12951,8 @@ sub_FA000B__FA19CD:
 	ld	(xiz-0x64), xbc                         ; FA19D7  ld (XIZ+0x9c),XBC
 	ld	(xiz-0x68), xbc                         ; FA19DA  ld (XIZ+0x98),XBC
 sub_FA000B__FA19DD:
-	extpfx3 0x9E, 0x9E, 0x04                   ; FA19DD  pushw (XIZ+0x9e)
-	extpfx3 0x9E, 0x9C, 0x04                   ; FA19E0  pushw (XIZ+0x9c)
+	pushw	(xiz-98)                   ; FA19DD  pushw (XIZ+0x9e)
+	pushw	(xiz-100)                   ; FA19E0  pushw (XIZ+0x9c)
 	call	Int32_ToFloat32                              ; FA19E3  call 0xfcabc6
 	push	xiy                                   ; FA19E7  push XIY
 	lda	xiy, (xiz-0x70)                        ; FA19E8  lda XIY,XIZ+0x90
@@ -12997,13 +12997,13 @@ sub_FA000B__FA1A55:
 	ld	xbc, (xiz+16)                           ; FA1A55  ld XBC,(XIZ+0x10)
 	cp	xbc, 0                                  ; FA1A58  cp XBC,0x00000000
 	jr ge, sub_FA000B__FA1A6D                  ; FA1A5E  jr GE,0xfa1a6d
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1A60  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1A63  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1A60  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1A63  pushw (XIZ+0xec)
 	call	Float32_Negate                              ; FA1A66  call 0xfcb04a
 	ld	(xiz-20), xiy                           ; FA1A6A  ld (XIZ+0xec),XIY
 sub_FA000B__FA1A6D:
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1A6D  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1A70  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1A6D  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1A70  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x70)                        ; FA1A73  lda XIY,XIZ+0x90
 	call	Float32_ToDouble                              ; FA1A76  call 0xfcaa50
 	ld	xbc, (xiz-0x6C)                         ; FA1A7A  ld XBC,(XIZ+0x94)
@@ -13087,8 +13087,8 @@ sub_FA000B__FA1B1C:
 	push	xbc                                   ; FA1B4A  push XBC
 	calr Int32_ToFloat32_Q31                 ; FA1B4B  calr 0xf9e077
 	ld	(xiz-24), xiy                           ; FA1B4E  ld (XIZ+0xe8),XIY
-	extpfx3 0x9E, 0x12, 0x04                   ; FA1B51  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA1B54  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA1B51  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA1B54  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA1B57  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA1B5A  call 0xfca6fd
 	ld	xbc, (F64_99+4:24)                     ; FA1B5E  ld XBC,(0xfcc9b6)
@@ -13107,10 +13107,10 @@ sub_FA000B__FA1B1C:
 	push	xbc                                   ; FA1B80  push XBC
 	call	Double_ToFloat32                              ; FA1B81  call 0xfcadd6
 	ld	xix, xiy                                ; FA1B85  ld XIX,XIY
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1B87  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1B8A  pushw (XIZ+0xec)
-	extpfx3 0x9E, 0xEA, 0x04                   ; FA1B8D  pushw (XIZ+0xea)
-	extpfx3 0x9E, 0xE8, 0x04                   ; FA1B90  pushw (XIZ+0xe8)
+	pushw	(xiz-18)                   ; FA1B87  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1B8A  pushw (XIZ+0xec)
+	pushw	(xiz-22)                   ; FA1B8D  pushw (XIZ+0xea)
+	pushw	(xiz-24)                   ; FA1B90  pushw (XIZ+0xe8)
 	call	Float32_Subtract                              ; FA1B93  call 0xfcb02b
 	push	xiy                                   ; FA1B97  push XIY
 	push	xix                                   ; FA1B98  push XIX
@@ -13128,8 +13128,8 @@ sub_FA000B__FA1B1C:
 	push	xbc                                   ; FA1BB8  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA1BB9  lda XIY,XIZ+0xff78
 	call	Double_Multiply                              ; FA1BBE  call 0xfca252
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1BC2  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1BC5  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1BC2  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1BC5  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x90)                        ; FA1BC8  lda XIY,XIZ+0xff70
 	call	Float32_ToDouble                              ; FA1BCD  call 0xfcaa50
 	ld	xbc, (xiz-0x84)                         ; FA1BD1  ld XBC,(XIZ+0xff7c)
@@ -13196,8 +13196,8 @@ sub_FA000B__FA1C11:
 	push	xbc                                   ; FA1C73  push XBC
 	lda	xiy, (xiz-0x80)                        ; FA1C74  lda XIY,XIZ+0x80
 	call	Double_Add                              ; FA1C77  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1C7B  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1C7E  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1C7B  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1C7E  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x88)                        ; FA1C81  lda XIY,XIZ+0xff78
 	call	Float32_ToDouble                              ; FA1C86  call 0xfcaa50
 	ld	xbc, (xiz-0x84)                         ; FA1C8A  ld XBC,(XIZ+0xff7c)
@@ -13300,8 +13300,8 @@ sub_FA000B__FA1D39:
 	push	xbc                                   ; FA1DB0  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1DB1  lda XIY,XIZ+0xff70
 	call	Double_Add                              ; FA1DB6  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1DBA  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1DBD  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1DBA  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1DBD  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x98)                        ; FA1DC0  lda XIY,XIZ+0xff68
 	call	Float32_ToDouble                              ; FA1DC5  call 0xfcaa50
 	ld	xbc, (xiz-0x94)                         ; FA1DC9  ld XBC,(XIZ+0xff6c)
@@ -13404,8 +13404,8 @@ sub_FA000B__FA1E7C:
 	push	xbc                                   ; FA1EF3  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA1EF4  lda XIY,XIZ+0xff70
 	call	Double_Add                              ; FA1EF9  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA1EFD  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA1F00  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA1EFD  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA1F00  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x98)                        ; FA1F03  lda XIY,XIZ+0xff68
 	call	Float32_ToDouble                              ; FA1F08  call 0xfcaa50
 	ld	xbc, (xiz-0x94)                         ; FA1F0C  ld XBC,(XIZ+0xff6c)
@@ -13508,8 +13508,8 @@ sub_FA000B__FA1FBF:
 	push	xbc                                   ; FA2036  push XBC
 	lda	xiy, (xiz-0x90)                        ; FA2037  lda XIY,XIZ+0xff70
 	call	Double_Add                              ; FA203C  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA2040  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA2043  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA2040  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA2043  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x98)                        ; FA2046  lda XIY,XIZ+0xff68
 	call	Float32_ToDouble                              ; FA204B  call 0xfcaa50
 	ld	xbc, (xiz-0x94)                         ; FA204F  ld XBC,(XIZ+0xff6c)
@@ -13568,8 +13568,8 @@ sub_FA000B__FA1FBF:
 	inc	8, xsp                                 ; FA20FD  inc 0,XSP
 	jrl sub_FA000B__FA221A                     ; FA20FF  jrl T,0xfa221a
 sub_FA000B__FA2102:
-	extpfx3 0x9E, 0x12, 0x04                   ; FA2102  pushw (XIZ+0x12)
-	extpfx3 0x9E, 0x10, 0x04                   ; FA2105  pushw (XIZ+0x10)
+	pushw	(xiz+18)                   ; FA2102  pushw (XIZ+0x12)
+	pushw	(xiz+16)                   ; FA2105  pushw (XIZ+0x10)
 	lda	xiy, (xiz-0x70)                        ; FA2108  lda XIY,XIZ+0x90
 	call	Int32_ToDouble                              ; FA210B  call 0xfca6fd
 	ld	xbc, (F64_76+4:24)                     ; FA210F  ld XBC,(0xfcc8da)
@@ -13600,8 +13600,8 @@ sub_FA000B__FA2102:
 	push	xbc                                   ; FA2151  push XBC
 	lda	xiy, (xiz-0x88)                        ; FA2152  lda XIY,XIZ+0xff78
 	call	Double_Add                              ; FA2157  call 0xfca41f
-	extpfx3 0x9E, 0xEE, 0x04                   ; FA215B  pushw (XIZ+0xee)
-	extpfx3 0x9E, 0xEC, 0x04                   ; FA215E  pushw (XIZ+0xec)
+	pushw	(xiz-18)                   ; FA215B  pushw (XIZ+0xee)
+	pushw	(xiz-20)                   ; FA215E  pushw (XIZ+0xec)
 	lda	xiy, (xiz-0x90)                        ; FA2161  lda XIY,XIZ+0xff70
 	call	Float32_ToDouble                              ; FA2166  call 0xfcaa50
 	ld	xbc, (xiz-0x8C)                         ; FA216A  ld XBC,(XIZ+0xff74)
@@ -13791,7 +13791,7 @@ sub_FA000B__FA22BE:
 	jrl sub_FA000B__FA22B1                     ; FA2375  jrl T,0xfa22b1
 sub_FA000B__FA2378:
 	pop	xix                                    ; FA2378  pop XIX
-	unlk32 xiz                                 ; FA2379  unlk XIZ
+	unlk	xiz                                 ; FA2379  unlk XIZ
 	ret                                        ; FA237B  ret
 ; --------------------------------------------------------------------------
 ; sub_FA237C -- 0xFA237C..0xFA2679 (766 bytes)
@@ -13814,7 +13814,7 @@ sub_FA000B__FA2378:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA237C:
-	link32 0xEE, 0x0C, 0xC4, 0xFF              ; FA237C  link XIZ,0xffc4
+	link	xiz, 0xffc4              ; FA237C  link XIZ,0xffc4
 	pushw	hl                                   ; FA2380  push HL
 	push	xix                                   ; FA2381  push XIX
 	ldw (xiz-16), 0x0000                       ; FA2382  ld (XIZ+0xf0),0x0000
@@ -13826,7 +13826,7 @@ sub_FA237C_Join:
 	incw	1, (xiz-16)                           ; FA2391  incw 1,(XIZ+0xf0)
 	jr sub_FA237C__FA2387                      ; FA2394  jr T,0xfa2387
 sub_FA237C__FA2396:
-	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; FA2396  cp (0x008640),0x0063
+	cpw	(0x008640:24), 0x0063 ; FA2396  cp (0x008640),0x0063
 	jrl z, sub_FA237C__FA2665                  ; FA239D  jrl Z,0xfa2665
 	ld	xix, (xiz+8)                            ; FA23A0  ld XIX,(XIZ+0x08)
 	ld	xbc, xix                                ; FA23A3  ld XBC,XIX
@@ -13845,13 +13845,13 @@ sub_FA237C__FA2396:
 	inc	1, xbc                                 ; FA23C3  inc 1,XBC
 	ld	(xiz+8), xbc                            ; FA23C5  ld (XIZ+0x08),XBC
 	pushw	wa                                   ; FA23C8  push WA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA23C9  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA23C9  pushw (XIZ+0xfe)
 	ld	xiy, (xiz+12)                           ; FA23CC  ld XIY,(XIZ+0x0c)
 	push	xiy                                   ; FA23CF  push XIY
 	calr sub_F9E0B7                 ; FA23D0  calr 0xf9e0b7
 	ld	(xiz-40), xiy                           ; FA23D3  ld (XIZ+0xd8),XIY
 	inc	8, xsp                                 ; FA23D6  inc 0,XSP
-	extpfx7 0xD2, 0x12, 0x86, 0x00, 0x3F, 0x00, 0x00 ; FA23D8  cp (0x008612),0x0000
+	cpw	(0x008612:24), 0x0000 ; FA23D8  cp (0x008612),0x0000
 	jr z, sub_FA237C__FA23E4                   ; FA23DF  jr Z,0xfa23e4
 	jrl sub_FA237C__FA2672                     ; FA23E1  jrl T,0xfa2672
 sub_FA237C__FA23E4:
@@ -13862,14 +13862,14 @@ sub_FA237C__FA23E4:
 sub_FA237C__FA23EE:
 	jrl sub_FA237C__FA25DF                     ; FA23EE  jrl T,0xfa25df
 sub_FA237C__FA23F1:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA23F1  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA23F4  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA23F1  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA23F4  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA23F7  calr 0xf9fba9
 	pop	xiy                                    ; FA23FA  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA23FB  jrl T,0xfa2663
 sub_FA237C__FA23FE:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA23FE  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2401  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA23FE  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2401  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA2404  calr 0xf9fba9
 	pop	xiy                                    ; FA2407  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2408  jrl T,0xfa2663
@@ -13877,8 +13877,8 @@ sub_FA237C__FA240B:
 	sub	xbc, xbc                               ; FA240B  sub XBC,XBC
 	inc	1, xbc                                 ; FA240D  inc 1,XBC
 	add	(xiz+8), xbc                           ; FA240F  add (XIZ+0x08),XBC
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2412  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2415  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2412  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2415  pushw (XIZ+0xfa)
 	calr sub_F9F9FA                 ; FA2418  calr 0xf9f9fa
 	pop	xiy                                    ; FA241B  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA241C  jrl T,0xfa2663
@@ -13890,8 +13890,8 @@ sub_FA237C__FA241F:
 	calr Stream_ReadU24BE                 ; FA2427  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; FA242A  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA242D  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA242F  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2432  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA242F  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2432  pushw (XIZ+0xfa)
 	calr sub_F9F9FA                 ; FA2435  calr 0xf9f9fa
 	pop	xiy                                    ; FA2438  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2439  jrl T,0xfa2663
@@ -13899,8 +13899,8 @@ sub_FA237C__FA243C:
 	sub	xbc, xbc                               ; FA243C  sub XBC,XBC
 	inc	1, xbc                                 ; FA243E  inc 1,XBC
 	add	(xiz+8), xbc                           ; FA2440  add (XIZ+0x08),XBC
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2443  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2446  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2443  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2446  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA2449  calr 0xf9fba9
 	pop	xiy                                    ; FA244C  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA244D  jrl T,0xfa2663
@@ -13918,8 +13918,8 @@ sub_FA237C__FA2450:
 	calr Stream_ReadU24BE_Shl8                 ; FA2465  calr 0xf9dfb7
 	ld	(xiz+8), xiy                            ; FA2468  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA246B  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA246D  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2470  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA246D  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2470  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA2473  calr 0xf9fba9
 	pop	xiy                                    ; FA2476  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2477  jrl T,0xfa2663
@@ -13959,8 +13959,8 @@ sub_FA237C__FA24A6:
 	calr Stream_ReadU24BE_Shl8                 ; FA24BB  calr 0xf9dfb7
 	ld	(xiz+8), xiy                            ; FA24BE  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA24C1  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA24C3  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA24C6  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA24C3  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA24C6  pushw (XIZ+0xfa)
 	calr sub_F9F9FA                 ; FA24C9  calr 0xf9f9fa
 	pop	xiy                                    ; FA24CC  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA24CD  jrl T,0xfa2663
@@ -13980,8 +13980,8 @@ sub_FA237C__FA24D0:
 	inc	8, xsp                                 ; FA24EB  inc 0,XSP
 	jrl sub_FA237C__FA2663                     ; FA24ED  jrl T,0xfa2663
 sub_FA237C__FA24F0:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA24F0  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA24F3  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA24F0  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA24F3  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA24F6  calr 0xf9fba9
 	pop	xiy                                    ; FA24F9  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA24FA  jrl T,0xfa2663
@@ -13999,22 +13999,22 @@ sub_FA237C__FA24FD:
 	calr Stream_ReadU24BE                 ; FA2512  calr 0xf9e020
 	ld	(xiz+8), xiy                            ; FA2515  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA2518  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA251A  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA251D  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA251A  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA251D  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA2520  calr 0xf9fba9
 	pop	xiy                                    ; FA2523  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2524  jrl T,0xfa2663
 sub_FA237C__FA2527:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2527  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA252A  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2527  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA252A  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA252D  calr 0xf9fba9
 	pop	xiy                                    ; FA2530  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2531  jrl T,0xfa2663
 sub_FA237C__FA2534:
 	jrl sub_FA237C__FA2663                     ; FA2534  jrl T,0xfa2663
 sub_FA237C__FA2537:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2537  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA253A  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2537  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA253A  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA253D  calr 0xf9fba9
 	pop	xiy                                    ; FA2540  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA2541  jrl T,0xfa2663
@@ -14034,8 +14034,8 @@ sub_FA237C__FA2547:
 	calr Stream_ReadU24BE_Shl8                 ; FA255C  calr 0xf9dfb7
 	ld	(xiz+8), xiy                            ; FA255F  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA2562  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2564  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2567  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2564  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2567  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA256A  calr 0xf9fba9
 	pop	xiy                                    ; FA256D  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA256E  jrl T,0xfa2663
@@ -14049,8 +14049,8 @@ sub_FA237C__FA2574:
 	calr Stream_ReadU24BE_Shl8                 ; FA257C  calr 0xf9dfb7
 	ld	(xiz+8), xiy                            ; FA257F  ld (XIZ+0x08),XIY
 	inc	8, xsp                                 ; FA2582  inc 0,XSP
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2584  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2587  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2584  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2587  pushw (XIZ+0xfa)
 	calr sub_F9FBA9                 ; FA258A  calr 0xf9fba9
 	pop	xiy                                    ; FA258D  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA258E  jrl T,0xfa2663
@@ -14078,8 +14078,8 @@ sub_FA237C__FA25B4:
 	jrl sub_FA237C__FA2663                     ; FA25BB  jrl T,0xfa2663
 sub_FA237C__FA25BE:
 	ldw	(0x8640:24), 99                       ; FA25BE  ld (0x008640),0x0063
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA25C5  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA25C8  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA25C5  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA25C8  pushw (XIZ+0xfa)
 	calr sub_F9F9FA                 ; FA25CB  calr 0xf9f9fa
 	pop	xiy                                    ; FA25CE  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA25CF  jrl T,0xfa2663
@@ -14135,8 +14135,8 @@ sub_FA237C_Join_JumpTable_FA25FB:
 sub_FA237C__FA2663:
 	jr sub_FA237C__FA266F                      ; FA2663  jr T,0xfa266f
 sub_FA237C__FA2665:
-	extpfx3 0x9E, 0xF0, 0x04                   ; FA2665  pushw (XIZ+0xf0)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA2668  pushw (XIZ+0xfa)
+	pushw	(xiz-16)                   ; FA2665  pushw (XIZ+0xf0)
+	pushw	(xiz-6)                   ; FA2668  pushw (XIZ+0xfa)
 	calr sub_F9F9FA                 ; FA266B  calr 0xf9f9fa
 	pop	xiy                                    ; FA266E  pop XIY
 sub_FA237C__FA266F:
@@ -14145,7 +14145,7 @@ sub_FA237C__FA2672:
 	ld	xiy, (xiz+8)                            ; FA2672  ld XIY,(XIZ+0x08)
 	pop	xix                                    ; FA2675  pop XIX
 	popw	hl                                    ; FA2676  pop HL
-	unlk32 xiz                                 ; FA2677  unlk XIZ
+	unlk	xiz                                 ; FA2677  unlk XIZ
 	ret                                        ; FA2679  ret
 ; --------------------------------------------------------------------------
 ; Rec8644_Store3Bytes_AndFlagChanged -- 0xFA267A..0xFA26CA (81 bytes)
@@ -14179,22 +14179,22 @@ sub_FA237C__FA2672:
 ;          and 0xFAF028 -- plus three inside PartRec_ResetToDefaults.
 ; --------------------------------------------------------------------------
 Rec8644_Store3Bytes_AndFlagChanged:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA267A  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA267A  link XIZ,0x0000
 	ld	c, 3:opc                                   ; FA267E  ld C,0x03
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2680  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2680  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2683  extz XBC
 	add	xbc, 0x8644                            ; FA2685  add XBC,0x00008644
 	ld	a, (xiz+10)                             ; FA268B  ld A,(XIZ+0x0a)
 	ld	(xbc), a                                ; FA268E  ld (XBC),A
 	ld	c, 3:opc                                   ; FA2690  ld C,0x03
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2692  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2692  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2695  extz XBC
 	inc	1, xbc                                 ; FA2697  inc 1,XBC
 	add	xbc, 0x8644                            ; FA2699  add XBC,0x00008644
 	ld	a, (xiz+12)                             ; FA269F  ld A,(XIZ+0x0c)
 	ld	(xbc), a                                ; FA26A2  ld (XBC),A
 	ld	c, 3:opc                                   ; FA26A4  ld C,0x03
-	extpfx3 0x8E, 0x08, 0x43                   ; FA26A6  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA26A6  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA26A9  extz XBC
 	inc	2, xbc                                 ; FA26AB  inc 2,XBC
 	add	xbc, 0x8644                            ; FA26AD  add XBC,0x00008644
@@ -14204,7 +14204,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 	ldw	(0xF2F1:24), 0                        ; FA26BA  ld (0x00f2f1),0x0000
 	set 5, (0x007ECC:24)                       ; FA26C1  set 5,(0x007ecc)
 	ei	0                                       ; FA26C6  ei 0x00
-	unlk32 xiz                                 ; FA26C8  unlk XIZ
+	unlk	xiz                                 ; FA26C8  unlk XIZ
 	ret                                        ; FA26CA  ret
 ; --------------------------------------------------------------------------
 ; sub_FA26CB -- 0xFA26CB..0xFA2783 (185 bytes)
@@ -14224,7 +14224,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA26CB:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FA26CB  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FA26CB  link XIZ,0xfff2
 	pushw	hl                                   ; FA26CF  push HL
 	push	xix                                   ; FA26D0  push XIX
 	ei	6                                       ; FA26D1  ei 0x06
@@ -14251,11 +14251,11 @@ sub_FA26CB__FA2711:
 	jr sub_FA26CB__FA2707                      ; FA2714  jr T,0xfa2707
 sub_FA26CB__FA2716:
 	ldw	bc, 3                                  ; FA2716  ld BC,0x0003
-	extpfx3 0x9E, 0xFE, 0x49                   ; FA2719  muls XBC,(XIZ+0xfe)
+	muls	xbc, (xiz-2)                   ; FA2719  muls XBC,(XIZ+0xfe)
 	add	xbc, 0x864D                            ; FA271C  add XBC,0x0000864d
 	ld	(xiz-6), xbc                            ; FA2722  ld (XIZ+0xfa),XBC
 	ldw	wa, 3                                  ; FA2725  ld WA,0x0003
-	extpfx3 0x9E, 0xFE, 0x48                   ; FA2728  muls XWA,(XIZ+0xfe)
+	muls	xwa, (xiz-2)                   ; FA2728  muls XWA,(XIZ+0xfe)
 	add	xwa, 0x8656                            ; FA272B  add XWA,0x00008656
 	ld	(xiz-10), xwa                           ; FA2731  ld (XIZ+0xf6),XWA
 	ld	h, (xwa)                                ; FA2734  ld H,(XWA)
@@ -14295,7 +14295,7 @@ sub_FA26CB__FA277D:
 sub_FA26CB__FA277F:
 	pop	xix                                    ; FA277F  pop XIX
 	popw	hl                                    ; FA2780  pop HL
-	unlk32 xiz                                 ; FA2781  unlk XIZ
+	unlk	xiz                                 ; FA2781  unlk XIZ
 	ret                                        ; FA2783  ret
 ; ==============================================================================
 ; 0xFA2784-0xFA5948 -- ★ THE PORT-P7 UNIT MODULE: three devices, their PROGRAMS,
@@ -14386,17 +14386,17 @@ sub_FA26CB__FA277F:
 ;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
 P7Unit_SendModulatedField:
-	link32 0xEE, 0x0C, 0xDC, 0xFF              ; FA2784  link XIZ,0xffdc
+	link	xiz, 0xffdc              ; FA2784  link XIZ,0xffdc
 	push	xix                                   ; FA2788  push XIX
 	ld	c, 26:opc                                  ; FA2789  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA278B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA278B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA278E  extz XBC
 	add	xbc, 24                                ; FA2790  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2796  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA279C  ld A,(XBC)
 	ld	(xiz-1), a                              ; FA279E  ld (XIZ+0xff),A
 	ld	c, 26:opc                                  ; FA27A1  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA27A3  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA27A3  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA27A6  extz XBC
 	add	xbc, 22                                ; FA27A8  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA27AE  add XBC,0x0000856e
@@ -14414,13 +14414,13 @@ P7Unit_SendModulatedField__FA27C1:
 	jr c, P7Unit_SendModulatedField__FA2807                   ; FA27D3  jr C,0xfa2807
 	ei	6                                       ; FA27D5  ei 0x06
 	ld	c, 26:opc                                  ; FA27D7  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA27D9  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA27D9  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA27DC  extz XBC
 	add	xbc, 15                                ; FA27DE  add XBC,0x0000000f
 	add	xbc, 0x856E                            ; FA27E4  add XBC,0x0000856e
 	ld	(xbc), 1                                ; FA27EA  ld (XBC),0x01
 	ld	c, 26:opc                                  ; FA27ED  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA27EF  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA27EF  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA27F2  extz XBC
 	add	xbc, 15                                ; FA27F4  add XBC,0x0000000f
 	add	xbc, 0x7E7E                            ; FA27FA  add XBC,0x00007e7e
@@ -14430,13 +14430,13 @@ P7Unit_SendModulatedField__FA27C1:
 P7Unit_SendModulatedField__FA2807:
 	ei	6                                       ; FA2807  ei 0x06
 	ld	c, 26:opc                                  ; FA2809  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA280B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA280B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA280E  extz XBC
 	add	xbc, 15                                ; FA2810  add XBC,0x0000000f
 	add	xbc, 0x856E                            ; FA2816  add XBC,0x0000856e
 	ld	(xbc), 0                                ; FA281C  ld (XBC),0x00
 	ld	c, 26:opc                                  ; FA281F  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2821  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2821  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2824  extz XBC
 	add	xbc, 15                                ; FA2826  add XBC,0x0000000f
 	add	xbc, 0x7E7E                            ; FA282C  add XBC,0x00007e7e
@@ -14444,46 +14444,46 @@ P7Unit_SendModulatedField__FA2807:
 	ei	0                                       ; FA2835  ei 0x00
 P7Unit_SendModulatedField__FA2837:
 	push	0                                     ; FA2837  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2839  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2839  push (XIZ+0x08)
 	calr P7Unit_EmitChangedParams                 ; FA283C  calr 0xfa3cd7
 	popw	bc                                    ; FA283F  pop BC
 	jrl P7Unit_SendModulatedField__FA294B                     ; FA2840  jrl T,0xfa294b
 P7Unit_SendModulatedField__FA2843:
 	ld	c, 4:opc                                   ; FA2843  ld C,0x04
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA2845  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA2845  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA2848  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA284A  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA2850  ld XBC,(XBC)
 	ld	(xiz-34), xbc                           ; FA2852  ld (XIZ+0xde),XBC
 	ld	a, 7:opc                                   ; FA2855  ld A,0x07
-	extpfx3 0x8E, 0xFE, 0x41                   ; FA2857  mul WA,(XIZ+0xfe)
+	mul	wa, (xiz-2)                   ; FA2857  mul WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA285A  extz XWA
 	inc	2, xwa                                 ; FA285C  inc 2,XWA
 	add	xbc, xwa                               ; FA285E  add XBC,XWA
 	ld	iy, (xbc)                               ; FA2860  ld IY,(XBC)
 	ld	(xiz-8), iy                             ; FA2862  ld (XIZ+0xf8),IY
 	ld	c, 7:opc                                   ; FA2865  ld C,0x07
-	extpfx3 0x8E, 0xFE, 0x43                   ; FA2867  mul BC,(XIZ+0xfe)
+	mul	bc, (xiz-2)                   ; FA2867  mul BC,(XIZ+0xfe)
 	extz	xbc                                   ; FA286A  extz XBC
-	extpfx3 0xAE, 0xDE, 0x81                   ; FA286C  add XBC,(XIZ+0xde)
+	add	xbc, (xiz-34)                   ; FA286C  add XBC,(XIZ+0xde)
 	ld	wa, (xbc)                               ; FA286F  ld WA,(XBC)
 	ld	(xiz-10), wa                            ; FA2871  ld (XIZ+0xf6),WA
 	ld	c, 7:opc                                   ; FA2874  ld C,0x07
-	extpfx3 0x8E, 0xFE, 0x43                   ; FA2876  mul BC,(XIZ+0xfe)
+	mul	bc, (xiz-2)                   ; FA2876  mul BC,(XIZ+0xfe)
 	extz	xbc                                   ; FA2879  extz XBC
 	inc	6, xbc                                 ; FA287B  inc 6,XBC
-	extpfx3 0xAE, 0xDE, 0x81                   ; FA287D  add XBC,(XIZ+0xde)
+	add	xbc, (xiz-34)                   ; FA287D  add XBC,(XIZ+0xde)
 	ld	a, (xbc)                                ; FA2880  ld A,(XBC)
 	ld	(xiz-3), a                              ; FA2882  ld (XIZ+0xfd),A
 	ld	c, 26:opc                                  ; FA2885  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2887  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2887  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA288A  extz XBC
 	ld	xix, xbc                                ; FA288C  ld XIX,XBC
 	ld	a, 7:opc                                   ; FA288E  ld A,0x07
-	extpfx3 0x8E, 0xFE, 0x41                   ; FA2890  mul WA,(XIZ+0xfe)
+	mul	wa, (xiz-2)                   ; FA2890  mul WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA2893  extz XWA
 	inc	4, xwa                                 ; FA2895  inc 4,XWA
-	extpfx3 0xAE, 0xDE, 0x80                   ; FA2897  add XWA,(XIZ+0xde)
+	add	xwa, (xiz-34)                   ; FA2897  add XWA,(XIZ+0xde)
 	ld	c, (xwa)                                ; FA289A  ld C,(XWA)
 	extz	bc                                    ; FA289C  extz BC
 	extz	xbc                                   ; FA289E  extz XBC
@@ -14492,10 +14492,10 @@ P7Unit_SendModulatedField__FA2843:
 	add	xbc, 0x856E                            ; FA28A4  add XBC,0x0000856e
 	ld	(xiz-30), xbc                           ; FA28AA  ld (XIZ+0xe2),XBC
 	ld	a, 7:opc                                   ; FA28AD  ld A,0x07
-	extpfx3 0x8E, 0xFE, 0x41                   ; FA28AF  mul WA,(XIZ+0xfe)
+	mul	wa, (xiz-2)                   ; FA28AF  mul WA,(XIZ+0xfe)
 	extz	xwa                                   ; FA28B2  extz XWA
 	inc	5, xwa                                 ; FA28B4  inc 5,XWA
-	extpfx3 0xAE, 0xDE, 0x80                   ; FA28B6  add XWA,(XIZ+0xde)
+	add	xwa, (xiz-34)                   ; FA28B6  add XWA,(XIZ+0xde)
 	ld	c, (xwa)                                ; FA28B9  ld C,(XWA)
 	extz	bc                                    ; FA28BB  extz BC
 	ld	(xiz-36), bc                            ; FA28BD  ld (XIZ+0xdc),BC
@@ -14539,30 +14539,30 @@ P7Unit_SendModulatedField__FA28F3:
 	jr z, P7Unit_SendModulatedField__FA28CE                   ; FA2912  jr Z,0xfa28ce
 P7Unit_SendModulatedField__FA2914:
 	push	0                                     ; FA2914  push 0x00
-	extpfx3 0x8E, 0x0E, 0x04                   ; FA2916  push (XIZ+0x0e)
+	push	(xiz+14)                   ; FA2916  push (XIZ+0x0e)
 	push	0                                     ; FA2919  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FA291B  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FA291B  push (XIZ+0x0c)
 	push	0                                     ; FA291E  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA2920  push (XIZ+0x0a)
-	extpfx3 0x9E, 0xF6, 0x04                   ; FA2923  pushw (XIZ+0xf6)
-	extpfx3 0x9E, 0xF8, 0x04                   ; FA2926  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xF4, 0x04                   ; FA2929  pushw (XIZ+0xf4)
+	push	(xiz+10)                   ; FA2920  push (XIZ+0x0a)
+	pushw	(xiz-10)                   ; FA2923  pushw (XIZ+0xf6)
+	pushw	(xiz-8)                   ; FA2926  pushw (XIZ+0xf8)
+	pushw	(xiz-12)                   ; FA2929  pushw (XIZ+0xf4)
 	calr P7Field_ModulateClamped                 ; FA292C  calr 0xfa294f
 	ld	(xiz-6), wa                             ; FA292F  ld (XIZ+0xfa),WA
 	inc	8, xsp                                 ; FA2932  inc 0,XSP
 	inc	4, xsp                                 ; FA2934  inc 4,XSP
 	push	0                                     ; FA2936  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FA2938  push (XIZ+0x10)
+	push	(xiz+16)                   ; FA2938  push (XIZ+0x10)
 	pushw	wa                                   ; FA293B  push WA
 	push	0                                     ; FA293C  push 0x00
-	extpfx3 0x8E, 0xFD, 0x04                   ; FA293E  push (XIZ+0xfd)
+	push	(xiz-3)                   ; FA293E  push (XIZ+0xfd)
 	push	0                                     ; FA2941  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2943  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2943  push (XIZ+0x08)
 	calr P7Unit_SendParamValue                 ; FA2946  calr 0xfa2d11
 	inc	8, xsp                                 ; FA2949  inc 0,XSP
 P7Unit_SendModulatedField__FA294B:
 	pop	xix                                    ; FA294B  pop XIX
-	unlk32 xiz                                 ; FA294C  unlk XIZ
+	unlk	xiz                                 ; FA294C  unlk XIZ
 	ret                                        ; FA294E  ret
 ; --------------------------------------------------------------------------
 ; P7Field_ModulateClamped -- 0xFA294F..0xFA2A18 (202 bytes)
@@ -14592,7 +14592,7 @@ P7Unit_SendModulatedField__FA294B:
 ;          (Corrected: this header said nothing here read the meaning of a field.)
 ; --------------------------------------------------------------------------
 P7Field_ModulateClamped:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FA294F  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FA294F  link XIZ,0xfff2
 	push	xix                                   ; FA2953  push XIX
 	ld	c, (xiz+16)                             ; FA2954  ld C,(XIZ+0x10)
 	and	c, 0                                   ; FA2957  and C,0x00
@@ -14616,8 +14616,8 @@ P7Field_ModulateClamped:
 	push	xwa                                   ; FA2984  push XWA
 	push	xbc                                   ; FA2985  push XBC
 	call	Multiply32_Signed                              ; FA2986  call 0xfcb0d3
-	extpfx3 0x9E, 0xFC, 0x04                   ; FA298A  pushw (XIZ+0xfc)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA298D  pushw (XIZ+0xfa)
+	pushw	(xiz-4)                   ; FA298A  pushw (XIZ+0xfc)
+	pushw	(xiz-6)                   ; FA298D  pushw (XIZ+0xfa)
 	push	xiy                                   ; FA2990  push XIY
 	call	Multiply32_Signed                              ; FA2991  call 0xfcb0d3
 	pushw	0                                    ; FA2995  push 0x0000
@@ -14648,8 +14648,8 @@ P7Field_ModulateClamped__FA29A7:
 	push	xwa                                   ; FA29D5  push XWA
 	push	xbc                                   ; FA29D6  push XBC
 	call	Multiply32_Signed                              ; FA29D7  call 0xfcb0d3
-	extpfx3 0x9E, 0xFC, 0x04                   ; FA29DB  pushw (XIZ+0xfc)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FA29DE  pushw (XIZ+0xfa)
+	pushw	(xiz-4)                   ; FA29DB  pushw (XIZ+0xfc)
+	pushw	(xiz-6)                   ; FA29DE  pushw (XIZ+0xfa)
 	push	xiy                                   ; FA29E1  push XIY
 	call	Multiply32_Signed                              ; FA29E2  call 0xfcb0d3
 	pushw	0                                    ; FA29E6  push 0x0000
@@ -14660,20 +14660,20 @@ P7Field_ModulateClamped__FA29A7:
 	ld	(xiz-2), iy                             ; FA29F3  ld (XIZ+0xfe),IY
 P7Field_ModulateClamped__FA29F6:
 	ld	bc, (xiz-2)                             ; FA29F6  ld BC,(XIZ+0xfe)
-	extpfx3 0x9E, 0x0A, 0xF1                   ; FA29F9  cp BC,(XIZ+0x0a)
+	cp	bc, (xiz+10)                   ; FA29F9  cp BC,(XIZ+0x0a)
 	jr le, P7Field_ModulateClamped__FA2A04                  ; FA29FC  jr LE,0xfa2a04
 	ld	wa, (xiz+10)                            ; FA29FE  ld WA,(XIZ+0x0a)
 	ld	(xiz-2), wa                             ; FA2A01  ld (XIZ+0xfe),WA
 P7Field_ModulateClamped__FA2A04:
 	ld	bc, (xiz-2)                             ; FA2A04  ld BC,(XIZ+0xfe)
-	extpfx3 0x9E, 0x0C, 0xF1                   ; FA2A07  cp BC,(XIZ+0x0c)
+	cp	bc, (xiz+12)                   ; FA2A07  cp BC,(XIZ+0x0c)
 	jr ge, P7Field_ModulateClamped__FA2A12                  ; FA2A0A  jr GE,0xfa2a12
 	ld	wa, (xiz+12)                            ; FA2A0C  ld WA,(XIZ+0x0c)
 	ld	(xiz-2), wa                             ; FA2A0F  ld (XIZ+0xfe),WA
 P7Field_ModulateClamped__FA2A12:
 	ld	wa, (xiz-2)                             ; FA2A12  ld WA,(XIZ+0xfe)
 	pop	xix                                    ; FA2A15  pop XIX
-	unlk32 xiz                                 ; FA2A16  unlk XIZ
+	unlk	xiz                                 ; FA2A16  unlk XIZ
 	ret                                        ; FA2A18  ret
 ; --------------------------------------------------------------------------
 ; sub_FA2A19 -- 0xFA2A19..0xFA2B08 (240 bytes)
@@ -14694,11 +14694,11 @@ P7Field_ModulateClamped__FA2A12:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA2A19:
-	link32 0xEE, 0x0C, 0xD6, 0xFF              ; FA2A19  link XIZ,0xffd6
+	link	xiz, 0xffd6              ; FA2A19  link XIZ,0xffd6
 	push	xix                                   ; FA2A1D  push XIX
 	ld	(xiz-9), 0                              ; FA2A1E  ld (XIZ+0xf7),0x00
 	ld	c, 26:opc                                  ; FA2A22  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2A24  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2A24  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2A27  extz XBC
 	add	xbc, 24                                ; FA2A29  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2A2F  add XBC,0x0000856e
@@ -14752,22 +14752,22 @@ sub_FA2A19__FA2A99:
 	ld	(xiz-10), 1                             ; FA2A99  ld (XIZ+0xf6),0x01
 sub_FA2A19__FA2A9D:
 	ld	c, 4:opc                                   ; FA2A9D  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2A9F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2A9F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2AA2  extz XBC
 	ld	xix, xbc                                ; FA2AA4  ld XIX,XBC
 	ld	a, 12:opc                                  ; FA2AA6  ld A,0x0c
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x41       ; FA2AA8  mul WA,(0x00f35d)
+	mul	wa, (0x00f35d:24)       ; FA2AA8  mul WA,(0x00f35d)
 	extz	xwa                                   ; FA2AAD  extz XWA
 	add	xwa, xbc                               ; FA2AAF  add XWA,XBC
 	add	xwa, 0xF383                            ; FA2AB1  add XWA,0x0000f383
 	ld	xbc, (xwa)                              ; FA2AB7  ld XBC,(XWA)
 	ld	(xiz-8), xbc                            ; FA2AB9  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2ABC  ld A,0x04
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2ABE  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2ABE  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2AC1  extz XWA
 	ld	xix, xwa                                ; FA2AC3  ld XIX,XWA
 	ld	c, 12:opc                                  ; FA2AC5  ld C,0x0c
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x43       ; FA2AC7  mul BC,(0x00f35d)
+	mul	bc, (0x00f35d:24)       ; FA2AC7  mul BC,(0x00f35d)
 	extz	xbc                                   ; FA2ACC  extz XBC
 	add	xbc, xwa                               ; FA2ACE  add XBC,XWA
 	add	xbc, 0xF39B                            ; FA2AD0  add XBC,0x0000f39b
@@ -14792,7 +14792,7 @@ sub_FA2A19__FA2A9D:
 	calr P7Block_Run                 ; FA2AFC  calr 0xf9adb5
 	add	xsp, 20                                ; FA2AFF  add XSP,0x00000014
 	pop	xix                                    ; FA2B05  pop XIX
-	unlk32 xiz                                 ; FA2B06  unlk XIZ
+	unlk	xiz                                 ; FA2B06  unlk XIZ
 	ret                                        ; FA2B08  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_SendFieldParamZero -- 0xFA2B09..0xFA2C5D (341 bytes)
@@ -14822,10 +14822,10 @@ sub_FA2A19__FA2A9D:
 ;          P7Unit_SendModulatedField with 0x0076 and 0x0064 (0xFA2BDB, 0xFA2BF3) contribute.
 ; --------------------------------------------------------------------------
 P7Unit_SendFieldParamZero:
-	link32 0xEE, 0x0C, 0xF3, 0xFF              ; FA2B09  link XIZ,0xfff3
+	link	xiz, 0xfff3              ; FA2B09  link XIZ,0xfff3
 	push	xix                                   ; FA2B0D  push XIX
 	ld	c, 26:opc                                  ; FA2B0E  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2B10  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2B10  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2B13  extz XBC
 	add	xbc, 24                                ; FA2B15  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2B1B  add XBC,0x0000856e
@@ -14836,7 +14836,7 @@ P7Unit_SendFieldParamZero:
 	jrl z, P7Unit_SendFieldParamZero__FA2C5A                  ; FA2B2C  jrl Z,0xfa2c5a
 P7Unit_SendFieldParamZero__FA2B2F:
 	ld	c, 26:opc                                  ; FA2B2F  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2B31  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2B31  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2B34  extz XBC
 	add	xbc, 24                                ; FA2B36  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2B3C  add XBC,0x0000856e
@@ -14848,7 +14848,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	xbc, (xwa)                              ; FA2B51  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2B53  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2B56  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2B58  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2B58  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2B5B  extz XWA
 	add	xwa, 24                                ; FA2B5D  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA2B63  add XWA,0x0000856e
@@ -14860,23 +14860,23 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	xbc, (xbc)                              ; FA2B78  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2B7A  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2B7D  ld A,0x04
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2B7F  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2B7F  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2B82  extz XWA
 	ld	xix, xwa                                ; FA2B84  ld XIX,XWA
 	ld	c, 12:opc                                  ; FA2B86  ld C,0x0c
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x43       ; FA2B88  mul BC,(0x00f35d)
+	mul	bc, (0x00f35d:24)       ; FA2B88  mul BC,(0x00f35d)
 	extz	xbc                                   ; FA2B8D  extz XBC
 	add	xbc, xwa                               ; FA2B8F  add XBC,XWA
 	add	xbc, 0xF36B                            ; FA2B91  add XBC,0x0000f36b
 	ld	xbc, (xbc)                              ; FA2B97  ld XBC,(XBC)
 	ld	(xiz-12), xbc                           ; FA2B99  ld (XIZ+0xf4),XBC
 	ld	a, 7:opc                                   ; FA2B9C  ld A,0x07
-	extpfx3 0x8E, 0x0A, 0x41                   ; FA2B9E  mul WA,(XIZ+0x0a)
+	mul	wa, (xiz+10)                   ; FA2B9E  mul WA,(XIZ+0x0a)
 	extz	xwa                                   ; FA2BA1  extz XWA
 	ld	xix, xwa                                ; FA2BA3  ld XIX,XWA
 	inc	6, xix                                 ; FA2BA5  inc 6,XIX
 	ld	a, 26:opc                                  ; FA2BA7  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2BA9  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2BA9  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2BAC  extz XWA
 	add	xwa, 24                                ; FA2BAE  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA2BB4  add XWA,0x0000856e
@@ -14890,7 +14890,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	ld	a, (xbc)                                ; FA2BCD  ld A,(XBC)
 	ld	(xiz-13), a                             ; FA2BCF  ld (XIZ+0xf3),A
 	push	0                                     ; FA2BD2  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2BD4  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2BD4  push (XIZ+0x08)
 	calr P7Unit_LoadProgramStreams                 ; FA2BD7  calr 0xfa2c5e
 	popw	bc                                    ; FA2BDA  pop BC
 	pushw	0x76                                 ; FA2BDB  push 0x0076
@@ -14898,7 +14898,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	0x80                                 ; FA2BE1  push 0x0080
 	pushw	64                                   ; FA2BE4  push 0x0040
 	push	0                                     ; FA2BE7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2BE9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2BE9  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA2BEC  calr 0xfa2784
 	inc	8, xsp                                 ; FA2BEF  inc 0,XSP
 	inc	2, xsp                                 ; FA2BF1  inc 2,XSP
@@ -14907,14 +14907,14 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	pushw	0x80                                 ; FA2BF9  push 0x0080
 	pushw	64                                   ; FA2BFC  push 0x0040
 	push	0                                     ; FA2BFF  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2C01  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2C01  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA2C04  calr 0xfa2784
 	inc	8, xsp                                 ; FA2C07  inc 0,XSP
 	inc	2, xsp                                 ; FA2C09  inc 2,XSP
 	push	0                                     ; FA2C0B  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA2C0D  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FA2C0D  push (XIZ+0x0a)
 	push	0                                     ; FA2C10  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA2C12  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA2C12  push (XIZ+0x08)
 	calr sub_FA2A19                 ; FA2C15  calr 0xfa2a19
 	ld	bc, (xiz+8)                             ; FA2C18  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA2C1B  extz BC
@@ -14946,7 +14946,7 @@ P7Unit_SendFieldParamZero__FA2B2F:
 	add	xsp, 28                                ; FA2C54  add XSP,0x0000001c
 P7Unit_SendFieldParamZero__FA2C5A:
 	pop	xix                                    ; FA2C5A  pop XIX
-	unlk32 xiz                                 ; FA2C5B  unlk XIZ
+	unlk	xiz                                 ; FA2C5B  unlk XIZ
 	ret                                        ; FA2C5D  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_LoadProgramStreams -- 0xFA2C5E..0xFA2D10 (179 bytes)
@@ -14978,10 +14978,10 @@ P7Unit_SendFieldParamZero__FA2C5A:
 ;          established anywhere in this tree.
 ; --------------------------------------------------------------------------
 P7Unit_LoadProgramStreams:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA2C5E  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FA2C5E  link XIZ,0xfff4
 	push	xix                                   ; FA2C62  push XIX
 	ld	c, 26:opc                                  ; FA2C63  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2C65  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2C65  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2C68  extz XBC
 	add	xbc, 24                                ; FA2C6A  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2C70  add XBC,0x0000856e
@@ -14993,7 +14993,7 @@ P7Unit_LoadProgramStreams:
 	ld	xbc, (xwa)                              ; FA2C85  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2C87  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2C8A  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2C8C  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2C8C  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2C8F  extz XWA
 	add	xwa, 24                                ; FA2C91  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA2C97  add XWA,0x0000856e
@@ -15005,11 +15005,11 @@ P7Unit_LoadProgramStreams:
 	ld	xbc, (xbc)                              ; FA2CAC  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2CAE  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2CB1  ld A,0x04
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2CB3  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2CB3  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2CB6  extz XWA
 	ld	xix, xwa                                ; FA2CB8  ld XIX,XWA
 	ld	c, 12:opc                                  ; FA2CBA  ld C,0x0c
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x43       ; FA2CBC  mul BC,(0x00f35d)
+	mul	bc, (0x00f35d:24)       ; FA2CBC  mul BC,(0x00f35d)
 	extz	xbc                                   ; FA2CC1  extz XBC
 	add	xbc, xwa                               ; FA2CC3  add XBC,XWA
 	add	xbc, 0xF36B                            ; FA2CC5  add XBC,0x0000f36b
@@ -15041,7 +15041,7 @@ P7Unit_LoadProgramStreams:
 	calr P7Stream_StageAndSend                 ; FA2D04  calr 0xf9f8e1
 	add	xsp, 28                                ; FA2D07  add XSP,0x0000001c
 	pop	xix                                    ; FA2D0D  pop XIX
-	unlk32 xiz                                 ; FA2D0E  unlk XIZ
+	unlk	xiz                                 ; FA2D0E  unlk XIZ
 	ret                                        ; FA2D10  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_SendParamValue -- 0xFA2D11..0xFA2DCC (188 bytes)
@@ -15071,10 +15071,10 @@ P7Unit_LoadProgramStreams:
 ;          it, but nothing here says what it scales.
 ; --------------------------------------------------------------------------
 P7Unit_SendParamValue:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA2D11  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FA2D11  link XIZ,0xfff4
 	push	xix                                   ; FA2D15  push XIX
 	ld	c, 26:opc                                  ; FA2D16  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA2D18  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA2D18  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA2D1B  extz XBC
 	add	xbc, 24                                ; FA2D1D  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA2D23  add XBC,0x0000856e
@@ -15086,7 +15086,7 @@ P7Unit_SendParamValue:
 	ld	xbc, (xwa)                              ; FA2D38  ld XBC,(XWA)
 	ld	(xiz-4), xbc                            ; FA2D3A  ld (XIZ+0xfc),XBC
 	ld	a, 26:opc                                  ; FA2D3D  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2D3F  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2D3F  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2D42  extz XWA
 	add	xwa, 24                                ; FA2D44  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA2D4A  add XWA,0x0000856e
@@ -15098,11 +15098,11 @@ P7Unit_SendParamValue:
 	ld	xbc, (xbc)                              ; FA2D5F  ld XBC,(XBC)
 	ld	(xiz-8), xbc                            ; FA2D61  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FA2D64  ld A,0x04
-	extpfx3 0x8E, 0x08, 0x41                   ; FA2D66  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA2D66  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA2D69  extz XWA
 	ld	xix, xwa                                ; FA2D6B  ld XIX,XWA
 	ld	c, 12:opc                                  ; FA2D6D  ld C,0x0c
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x43       ; FA2D6F  mul BC,(0x00f35d)
+	mul	bc, (0x00f35d:24)       ; FA2D6F  mul BC,(0x00f35d)
 	extz	xbc                                   ; FA2D74  extz XBC
 	add	xbc, xwa                               ; FA2D76  add XBC,XWA
 	add	xbc, 0xF36B                            ; FA2D78  add XBC,0x0000f36b
@@ -15139,7 +15139,7 @@ P7Unit_SendParamValue:
 	calr P7Stream_StageAndSend                 ; FA2DC0  calr 0xf9f8e1
 	add	xsp, 28                                ; FA2DC3  add XSP,0x0000001c
 	pop	xix                                    ; FA2DC9  pop XIX
-	unlk32 xiz                                 ; FA2DCA  unlk XIZ
+	unlk	xiz                                 ; FA2DCA  unlk XIZ
 	ret                                        ; FA2DCC  ret
 ; --------------------------------------------------------------------------
 ; P7Mixer_RequestGain -- 0xFA2DCD..0xFA2DEB (31 bytes)
@@ -15166,7 +15166,7 @@ P7Unit_SendParamValue:
 ;          nothing here says which signal the product scales.
 ; --------------------------------------------------------------------------
 P7Mixer_RequestGain:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA2DCD  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA2DCD  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FA2DD1  ld C,(XIZ+0x08)
 	ld	(0xF3B3:24), c                         ; FA2DD4  ld (0x00f3b3),C
 	ld	a, (xiz+10)                             ; FA2DD9  ld A,(XIZ+0x0a)
@@ -15174,7 +15174,7 @@ P7Mixer_RequestGain:
 	pushw	2                                    ; FA2DE1  push 0x0002
 	call	Kernel_SemaSignal_StackArg                              ; FA2DE4  call 0xf98510
 	popw	bc                                    ; FA2DE8  pop BC
-	unlk32 xiz                                 ; FA2DE9  unlk XIZ
+	unlk	xiz                                 ; FA2DE9  unlk XIZ
 	ret                                        ; FA2DEB  ret
 ; --------------------------------------------------------------------------
 ; P7Mixer_SendGainIfChanged -- 0xFA2DEC..0xFA2E2C (65 bytes)
@@ -15201,10 +15201,10 @@ P7Mixer_RequestGain:
 ; --------------------------------------------------------------------------
 P7Mixer_SendGainIfChanged:
 	ld	c, (0xF3B3:24)                         ; FA2DEC  ld C,(0x00f3b3)
-	extpfx5 0xC2, 0xB5, 0xF3, 0x00, 0xF3       ; FA2DF1  cp C,(0x00f3b5)
+	cp	c, (0x00f3b5:24)       ; FA2DF1  cp C,(0x00f3b5)
 	jr nz, P7Mixer_SendGainIfChanged__FA2E04                  ; FA2DF6  jr NZ,0xfa2e04
 	ld	a, (0xF3B4:24)                         ; FA2DF8  ld A,(0x00f3b4)
-	extpfx5 0xC2, 0xB6, 0xF3, 0x00, 0xF1       ; FA2DFD  cp A,(0x00f3b6)
+	cp	a, (0x00f3b6:24)       ; FA2DFD  cp A,(0x00f3b6)
 	jr z, P7Mixer_SendGainIfChanged__FA2E2C                   ; FA2E02  jr Z,0xfa2e2c
 P7Mixer_SendGainIfChanged__FA2E04:
 	ld	bc, (0xF3B4:24)                        ; FA2E04  ld BC,(0x00f3b4)
@@ -15250,12 +15250,12 @@ P7Mixer_SendGainIfChanged__FA2E2C:
 ;          device.
 ; --------------------------------------------------------------------------
 P7Mixer_SendGain:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FA2E2D  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FA2E2D  link XIZ,0xfff6
 	ldw (xiz-2), 0x00DB                        ; FA2E31  ld (XIZ+0xfe),0x00db
 	ldw (xiz-4), 0x00C3                        ; FA2E36  ld (XIZ+0xfc),0x00c3
 	ldw (xiz-6), 0x0160                        ; FA2E3B  ld (XIZ+0xfa),0x0160
-	extpfx3 0x9E, 0x0A, 0x04                   ; FA2E40  pushw (XIZ+0x0a)
-	extpfx3 0x9E, 0x08, 0x04                   ; FA2E43  pushw (XIZ+0x08)
+	pushw	(xiz+10)                   ; FA2E40  pushw (XIZ+0x0a)
+	pushw	(xiz+8)                   ; FA2E43  pushw (XIZ+0x08)
 	calr MixerGain_ProductOfCurves                 ; FA2E46  calr 0xfa30b8
 	ld	(xiz-10), xiy                           ; FA2E49  ld (XIZ+0xf6),XIY
 	ldw	(0x861C:24), 1                        ; FA2E4C  ld (0x00861c),0x0001
@@ -15320,8 +15320,8 @@ P7Mixer_SendGain:
 	pop	xiy                                    ; FA2EF7  pop XIY
 	pushw	bc                                   ; FA2EF8  push BC
 	pushw	25                                   ; FA2EF9  push 0x0019
-	extpfx3 0x9E, 0xF8, 0x04                   ; FA2EFC  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xF6, 0x04                   ; FA2EFF  pushw (XIZ+0xf6)
+	pushw	(xiz-8)                   ; FA2EFC  pushw (XIZ+0xf8)
+	pushw	(xiz-10)                   ; FA2EFF  pushw (XIZ+0xf6)
 	call	Shift32_ArithRight                              ; FA2F02  call 0xfcab06
 	and	xiy, 0x7F                              ; FA2F06  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F0C  ld C,IYL
@@ -15331,8 +15331,8 @@ P7Mixer_SendGain:
 	pop	xiy                                    ; FA2F19  pop XIY
 	pushw	bc                                   ; FA2F1A  push BC
 	pushw	17                                   ; FA2F1B  push 0x0011
-	extpfx3 0x9E, 0xF8, 0x04                   ; FA2F1E  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xF6, 0x04                   ; FA2F21  pushw (XIZ+0xf6)
+	pushw	(xiz-8)                   ; FA2F1E  pushw (XIZ+0xf8)
+	pushw	(xiz-10)                   ; FA2F21  pushw (XIZ+0xf6)
 	call	Shift32_ArithRight                              ; FA2F24  call 0xfcab06
 	and	xiy, 0xFF                              ; FA2F28  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F2E  ld C,IYL
@@ -15424,8 +15424,8 @@ P7Mixer_SendGain:
 	pop	xiy                                    ; FA302B  pop XIY
 	pushw	bc                                   ; FA302C  push BC
 	pushw	25                                   ; FA302D  push 0x0019
-	extpfx3 0x9E, 0xF8, 0x04                   ; FA3030  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xF6, 0x04                   ; FA3033  pushw (XIZ+0xf6)
+	pushw	(xiz-8)                   ; FA3030  pushw (XIZ+0xf8)
+	pushw	(xiz-10)                   ; FA3033  pushw (XIZ+0xf6)
 	call	Shift32_ArithRight                              ; FA3036  call 0xfcab06
 	and	xiy, 0x7F                              ; FA303A  and XIY,0x0000007f
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA3040  ld C,IYL
@@ -15435,8 +15435,8 @@ P7Mixer_SendGain:
 	pop	xiy                                    ; FA304D  pop XIY
 	pushw	bc                                   ; FA304E  push BC
 	pushw	17                                   ; FA304F  push 0x0011
-	extpfx3 0x9E, 0xF8, 0x04                   ; FA3052  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xF6, 0x04                   ; FA3055  pushw (XIZ+0xf6)
+	pushw	(xiz-8)                   ; FA3052  pushw (XIZ+0xf8)
+	pushw	(xiz-10)                   ; FA3055  pushw (XIZ+0xf6)
 	call	Shift32_ArithRight                              ; FA3058  call 0xfcab06
 	and	xiy, 0xFF                              ; FA305C  and XIY,0x000000ff
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA3062  ld C,IYL
@@ -15467,7 +15467,7 @@ P7Mixer_SendGain:
 	pushw	3                                    ; FA30AD  push 0x0003
 	call	P7Byte_SendCmd                              ; FA30B0  call 0xf9a163
 	pop	xbc                                    ; FA30B4  pop XBC
-	unlk32 xiz                                 ; FA30B5  unlk XIZ
+	unlk	xiz                                 ; FA30B5  unlk XIZ
 	ret                                        ; FA30B7  ret
 ; --------------------------------------------------------------------------
 ; MixerGain_ProductOfCurves -- 0xFA30B8..0xFA30F5 (62 bytes)
@@ -15495,18 +15495,18 @@ P7Mixer_SendGain:
 ;          by the product at 0xFA30EF and never read; why it is loaded is not known.
 ; --------------------------------------------------------------------------
 MixerGain_ProductOfCurves:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA30B8  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FA30B8  link XIZ,0xfffc
 	push	xix                                   ; FA30BC  push XIX
 	ld	xbc, 0x7FFFFF00                         ; FA30BD  ld XBC,0x7fffff00
 	ld	(xiz-4), xbc                            ; FA30C2  ld (XIZ+0xfc),XBC
 	ldw	wa, 4                                  ; FA30C5  ld WA,0x0004
-	extpfx3 0x9E, 0x0A, 0x48                   ; FA30C8  muls XWA,(XIZ+0x0a)
+	muls	xwa, (xiz+10)                   ; FA30C8  muls XWA,(XIZ+0x0a)
 	add	xwa, DSP_MixerGain_Curve_A                          ; FA30CB  add XWA,0x00fccd71
 	ld	xwa, (xwa)                              ; FA30D1  ld XWA,(XWA)
 	ld	xix, xwa                                ; FA30D3  ld XIX,XWA
 	sra	xix, 15                                ; FA30D5  sra 0x0f,XIX
 	ldw	wa, 4                                  ; FA30D8  ld WA,0x0004
-	extpfx3 0x9E, 0x08, 0x48                   ; FA30DB  muls XWA,(XIZ+0x08)
+	muls	xwa, (xiz+8)                   ; FA30DB  muls XWA,(XIZ+0x08)
 	add	xwa, DSP_MixerGain_Curve_B                          ; FA30DE  add XWA,0x00fccb71
 	ld	xwa, (xwa)                              ; FA30E4  ld XWA,(XWA)
 	sra	xwa, 16                                ; FA30E6  sra 0x00,XWA
@@ -15515,7 +15515,7 @@ MixerGain_ProductOfCurves:
 	call	Multiply32_Signed                              ; FA30EB  call 0xfcb0d3
 	ld	(xiz-4), xiy                            ; FA30EF  ld (XIZ+0xfc),XIY
 	pop	xix                                    ; FA30F2  pop XIX
-	unlk32 xiz                                 ; FA30F3  unlk XIZ
+	unlk	xiz                                 ; FA30F3  unlk XIZ
 	ret                                        ; FA30F5  ret
 ; --------------------------------------------------------------------------
 ; Wait_Ticks_Yield -- 0xFA30F6..0xFA3126 (49 bytes)
@@ -15542,7 +15542,7 @@ MixerGain_ProductOfCurves:
 ; Unknown:  why the argument is halved; every call site passes 10, so the wait is 5 ticks.
 ; --------------------------------------------------------------------------
 Wait_Ticks_Yield:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA30F6  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FA30F6  link XIZ,0xfffc
 	push	xix                                   ; FA30FA  push XIX
 	ld	xbc, (0xF2F3:24)                       ; FA30FB  ld XBC,(0x00f2f3)
 	ld	(xiz-4), xbc                            ; FA3100  ld (XIZ+0xfc),XBC
@@ -15552,7 +15552,7 @@ Wait_Ticks_Yield__FA3103:
 	extz	xbc                                   ; FA3109  extz XBC
 	ld	xix, xbc                                ; FA310B  ld XIX,XBC
 	ld	xwa, (0xF2F3:24)                       ; FA310D  ld XWA,(0x00f2f3)
-	extpfx3 0xAE, 0xFC, 0xA0                   ; FA3112  sub XWA,(XIZ+0xfc)
+	sub	xwa, (xiz-4)                   ; FA3112  sub XWA,(XIZ+0xfc)
 	cp	xwa, xbc                                ; FA3115  cp XWA,XBC
 	jr nc, Wait_Ticks_Yield__FA3123                  ; FA3117  jr NC,0xfa3123
 	pushw	2                                    ; FA3119  push 0x0002
@@ -15561,7 +15561,7 @@ Wait_Ticks_Yield__FA3103:
 	jr Wait_Ticks_Yield__FA3103                      ; FA3121  jr T,0xfa3103
 Wait_Ticks_Yield__FA3123:
 	pop	xix                                    ; FA3123  pop XIX
-	unlk32 xiz                                 ; FA3124  unlk XIZ
+	unlk	xiz                                 ; FA3124  unlk XIZ
 	ret                                        ; FA3126  ret
 ; --------------------------------------------------------------------------
 ; P7Units_BootLoadAndStartTask -- 0xFA3127..0xFA336A (580 bytes)
@@ -16064,9 +16064,9 @@ P7Units_ReloadFixedStreams__FA33FF:
 ; Unknown:  what the preamble stream contains.
 ; --------------------------------------------------------------------------
 P7Unit_SendPreambleOnce:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA35D5  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA35D5  link XIZ,0x0000
 	ld	c, 2:opc                                   ; FA35D9  ld C,0x02
-	extpfx3 0x8E, 0x08, 0x43                   ; FA35DB  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA35DB  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA35DE  extz XBC
 	add	xbc, 0xF354                            ; FA35E0  add XBC,0x0000f354
 	ld	bc, (xbc)                               ; FA35E6  ld BC,(XBC)
@@ -16086,17 +16086,17 @@ P7Unit_SendPreambleOnce:
 	pushw	20                                   ; FA3608  push 0x0014
 	calr Wait_Ticks_Yield                 ; FA360B  calr 0xfa30f6
 	ld	c, 2:opc                                   ; FA360E  ld C,0x02
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3610  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3610  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3613  extz XBC
 	add	xbc, 0xF354                            ; FA3615  add XBC,0x0000f354
-	extpfx4 0xB1, 0x02, 0xFF, 0xFF             ; FA361B  ld (XBC),0xffff
+	ldw	(xbc), 0xffff             ; FA361B  ld (XBC),0xffff
 	popw	bc                                    ; FA361F  pop BC
 P7Unit_SendPreambleOnce__FA3620:
 	push	0                                     ; FA3620  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3622  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3622  push (XIZ+0x08)
 	calr P7Unit_MarkParamsDirty                 ; FA3625  calr 0xfa4940
 	popw	bc                                    ; FA3628  pop BC
-	unlk32 xiz                                 ; FA3629  unlk XIZ
+	unlk	xiz                                 ; FA3629  unlk XIZ
 	ret                                        ; FA362B  ret
 ; --------------------------------------------------------------------------
 ; sub_FA362C -- 0xFA362C..0xFA3716 (235 bytes)
@@ -16116,7 +16116,7 @@ P7Unit_SendPreambleOnce__FA3620:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA362C:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA362C  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FA362C  link XIZ,0xfffa
 	ld	bc, (xiz+10)                            ; FA3630  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FA3633  extz BC
 	ld	(xiz-2), bc                             ; FA3635  ld (XIZ+0xfe),BC
@@ -16218,7 +16218,7 @@ sub_FA362C__FA3708:
 	cp	bc, 1:i3                                  ; FA3710  cp BC,1
 	jr z, sub_FA362C__FA36A2                   ; FA3712  jr Z,0xfa36a2
 sub_FA362C__FA3714:
-	unlk32 xiz                                 ; FA3714  unlk XIZ
+	unlk	xiz                                 ; FA3714  unlk XIZ
 	ret                                        ; FA3716  ret
 ; --------------------------------------------------------------------------
 ; sub_FA3717 -- 0xFA3717..0xFA3801 (235 bytes)
@@ -16238,7 +16238,7 @@ sub_FA362C__FA3714:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA3717:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FA3717  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FA3717  link XIZ,0xfffa
 	ld	bc, (xiz+10)                            ; FA371B  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FA371E  extz BC
 	ld	(xiz-2), bc                             ; FA3720  ld (XIZ+0xfe),BC
@@ -16340,7 +16340,7 @@ sub_FA3717__FA37F3:
 	cp	bc, 1:i3                                  ; FA37FB  cp BC,1
 	jr z, sub_FA3717__FA378D                   ; FA37FD  jr Z,0xfa378d
 sub_FA3717__FA37FF:
-	unlk32 xiz                                 ; FA37FF  unlk XIZ
+	unlk	xiz                                 ; FA37FF  unlk XIZ
 	ret                                        ; FA3801  ret
 ; --------------------------------------------------------------------------
 ; P7Units_ReloadForGroup -- 0xFA3802..0xFA3A3B (570 bytes)
@@ -16372,7 +16372,7 @@ sub_FA3717__FA37FF:
 ;          and nothing traced here says what 0xF361 represents.
 ; --------------------------------------------------------------------------
 P7Units_ReloadForGroup:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA3802  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FA3802  link XIZ,0xfffe
 	ld	bc, (xiz+8)                             ; FA3806  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3809  extz BC
 	ld	(xiz-2), bc                             ; FA380B  ld (XIZ+0xfe),BC
@@ -16564,7 +16564,7 @@ P7Units_ReloadForGroup__FA3A2C:
 	cp	bc, 1:i3                                  ; FA3A34  cp BC,1
 	jrl z, P7Units_ReloadForGroup__FA391F                  ; FA3A36  jrl Z,0xfa391f
 P7Units_ReloadForGroup__FA3A39:
-	unlk32 xiz                                 ; FA3A39  unlk XIZ
+	unlk	xiz                                 ; FA3A39  unlk XIZ
 	ret                                        ; FA3A3B  ret
 ; --------------------------------------------------------------------------
 ; sub_FA3A3C -- 0xFA3A3C..0xFA3CA5 (618 bytes)
@@ -16588,25 +16588,25 @@ P7Units_ReloadForGroup__FA3A39:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA3A3C:
-	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FA3A3C  link XIZ,0xffea
+	link	xiz, 0xffea              ; FA3A3C  link XIZ,0xffea
 	pushw	hl                                   ; FA3A40  push HL
 	push	xix                                   ; FA3A41  push XIX
 	push	0                                     ; FA3A42  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3A44  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3A44  push (XIZ+0x08)
 	calr P7Unit_LoadProgramStreams                 ; FA3A47  calr 0xfa2c5e
 	ld	c, 26:opc                                  ; FA3A4A  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3A4C  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3A4C  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3A4F  extz XBC
 	add	xbc, 22                                ; FA3A51  add XBC,0x00000016
 	add	xbc, 0x85BC                            ; FA3A57  add XBC,0x000085bc
 	ld	(xbc), 0xFF                             ; FA3A5D  ld (XBC),0xff
 	popw	bc                                    ; FA3A60  pop BC
 	push	0                                     ; FA3A61  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3A63  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3A63  push (XIZ+0x08)
 	calr P7Unit_SendPreambleOnce                 ; FA3A66  calr 0xfa35d5
 	popw	bc                                    ; FA3A69  pop BC
 	push	0                                     ; FA3A6A  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA3A6C  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FA3A6C  push (XIZ+0x0a)
 	ld	bc, (xiz+8)                             ; FA3A6F  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3A72  extz BC
 	inc	1, bc                                  ; FA3A74  inc 1,BC
@@ -16636,7 +16636,7 @@ sub_FA3A3C:
 	inc	8, xsp                                 ; FA3AAF  inc 0,XSP
 	inc	2, xsp                                 ; FA3AB1  inc 2,XSP
 	push	0                                     ; FA3AB3  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA3AB5  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FA3AB5  push (XIZ+0x0a)
 	ld	bc, (xiz+8)                             ; FA3AB8  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3ABB  extz BC
 	inc	1, bc                                  ; FA3ABD  inc 1,BC
@@ -16646,7 +16646,7 @@ sub_FA3A3C:
 	pushw	32                                   ; FA3AC4  push 0x0020
 	calr Wait_Ticks_Yield                 ; FA3AC7  calr 0xfa30f6
 	ld	c, 26:opc                                  ; FA3ACA  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3ACC  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3ACC  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3ACF  extz XBC
 	add	xbc, 24                                ; FA3AD1  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA3AD7  add XBC,0x0000856e
@@ -16658,7 +16658,7 @@ sub_FA3A3C:
 	ld	xbc, (xwa)                              ; FA3AF0  ld XBC,(XWA)
 	ld	(xiz-6), xbc                            ; FA3AF2  ld (XIZ+0xfa),XBC
 	ld	a, 26:opc                                  ; FA3AF5  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA3AF7  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA3AF7  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA3AFA  extz XWA
 	add	xwa, 24                                ; FA3AFC  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA3B02  add XWA,0x0000856e
@@ -16671,7 +16671,7 @@ sub_FA3A3C:
 	ld	xbc, (xbc)                              ; FA3B19  ld XBC,(XBC)
 	ld	(xiz-10), xbc                           ; FA3B1B  ld (XIZ+0xf6),XBC
 	ld	a, 26:opc                                  ; FA3B1E  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA3B20  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA3B20  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA3B23  extz XWA
 	add	xwa, 24                                ; FA3B25  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA3B2B  add XWA,0x0000856e
@@ -16684,7 +16684,7 @@ sub_FA3A3C:
 	ld	xbc, (xbc)                              ; FA3B46  ld XBC,(XBC)
 	ld	(xiz-14), xbc                           ; FA3B48  ld (XIZ+0xf2),XBC
 	ld	a, 26:opc                                  ; FA3B4B  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA3B4D  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA3B4D  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA3B50  extz XWA
 	add	xwa, 24                                ; FA3B52  add XWA,0x00000018
 	add	xwa, 0x856E                            ; FA3B58  add XWA,0x0000856e
@@ -16698,7 +16698,7 @@ sub_FA3A3C:
 	ld	(xiz-1), a                              ; FA3B75  ld (XIZ+0xff),A
 	popw	iy                                    ; FA3B78  pop IY
 	push	0                                     ; FA3B79  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA3B7B  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FA3B7B  push (XIZ+0x0a)
 	ld	bc, (xiz+8)                             ; FA3B7E  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3B81  extz BC
 	inc	1, bc                                  ; FA3B83  inc 1,BC
@@ -16726,7 +16726,7 @@ sub_FA3A3C:
 	push	xwa                                   ; FA3BB5  push XWA
 	call	P7Stream_Run                              ; FA3BB6  call 0xf9a646
 	ld	c, 26:opc                                  ; FA3BBA  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3BBC  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3BBC  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3BBF  extz XBC
 	add	xbc, 24                                ; FA3BC1  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA3BC7  add XBC,0x0000856e
@@ -16737,7 +16737,7 @@ sub_FA3A3C:
 	calr P7Unit_SelectStreamsForRecord                 ; FA3BD4  calr 0xfa4819
 	ld	(xiz-2), 0                              ; FA3BD7  ld (XIZ+0xfe),0x00
 	ld	c, 26:opc                                  ; FA3BDB  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3BDD  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3BDD  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3BE0  extz XBC
 	ld	xix, xbc                                ; FA3BE2  ld XIX,XBC
 	inc	1, xix                                 ; FA3BE4  inc 1,XIX
@@ -16757,7 +16757,7 @@ sub_FA3A3C__FA3C03:
 	jr sub_FA3A3C__FA3BFB                      ; FA3C06  jr T,0xfa3bfb
 sub_FA3A3C__FA3C08:
 	ld	c, (xiz-2)                              ; FA3C08  ld C,(XIZ+0xfe)
-	extpfx3 0x8E, 0xFF, 0xF3                   ; FA3C0B  cp C,(XIZ+0xff)
+	cp	c, (xiz-1)                   ; FA3C0B  cp C,(XIZ+0xff)
 	jr z, sub_FA3A3C__FA3C2B                   ; FA3C0E  jr Z,0xfa3c2b
 	ld	xbc, (xiz-22)                           ; FA3C10  ld XBC,(XIZ+0xea)
 	ld	a, (xbc)                                ; FA3C13  ld A,(XBC)
@@ -16784,7 +16784,7 @@ sub_FA3A3C__FA3C41:
 	jr sub_FA3A3C__FA3C03                      ; FA3C41  jr T,0xfa3c03
 sub_FA3A3C__FA3C43:
 	push	0                                     ; FA3C43  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3C45  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3C45  push (XIZ+0x08)
 	calr P7Unit_EmitChangedParams                 ; FA3C48  calr 0xfa3cd7
 	ld	(xiz-2), 0                              ; FA3C4B  ld (XIZ+0xfe),0x00
 	popw	bc                                    ; FA3C4F  pop BC
@@ -16797,7 +16797,7 @@ sub_FA3A3C__FA3C58:
 	jr sub_FA3A3C__FA3C50                      ; FA3C5B  jr T,0xfa3c50
 sub_FA3A3C__FA3C5D:
 	ld	c, 26:opc                                  ; FA3C5D  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3C5F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3C5F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3C62  extz XBC
 	ld	xix, xbc                                ; FA3C64  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA3C66  ld WA,(XIZ+0xfe)
@@ -16815,7 +16815,7 @@ sub_FA3A3C__FA3C5D:
 	jr sub_FA3A3C__FA3C58                      ; FA3C85  jr T,0xfa3c58
 sub_FA3A3C__FA3C87:
 	push	0                                     ; FA3C87  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FA3C89  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FA3C89  push (XIZ+0x0a)
 	ld	bc, (xiz+8)                             ; FA3C8C  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA3C8F  extz BC
 	inc	1, bc                                  ; FA3C91  inc 1,BC
@@ -16823,12 +16823,12 @@ sub_FA3A3C__FA3C87:
 	calr sub_FA3717                 ; FA3C94  calr 0xfa3717
 	pop	xiy                                    ; FA3C97  pop XIY
 	push	0                                     ; FA3C98  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3C9A  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3C9A  push (XIZ+0x08)
 	calr P7Unit_MarkParamsDirty                 ; FA3C9D  calr 0xfa4940
 	popw	bc                                    ; FA3CA0  pop BC
 	pop	xix                                    ; FA3CA1  pop XIX
 	popw	hl                                    ; FA3CA2  pop HL
-	unlk32 xiz                                 ; FA3CA3  unlk XIZ
+	unlk	xiz                                 ; FA3CA3  unlk XIZ
 	ret                                        ; FA3CA5  ret
 ; --------------------------------------------------------------------------
 ; Base36DigitToValue -- 0xFA3CA6..0xFA3CD6 (49 bytes)
@@ -16856,7 +16856,7 @@ sub_FA3A3C__FA3C87:
 ; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
 Base36DigitToValue:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA3CA6  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA3CA6  link XIZ,0x0000
 	cp (xiz+8), 0x61                           ; FA3CAA  cp (XIZ+0x08),0x61
 	jr c, Base36DigitToValue__FA3CBC                   ; FA3CAE  jr C,0xfa3cbc
 	ld	c, (xiz+8)                              ; FA3CB0  ld C,(XIZ+0x08)
@@ -16876,7 +16876,7 @@ Base36DigitToValue__FA3CBC:
 Base36DigitToValue__FA3CD2:
 	sub	a, a                                   ; FA3CD2  sub A,A
 Base36DigitToValue__FA3CD4:
-	unlk32 xiz                                 ; FA3CD4  unlk XIZ
+	unlk	xiz                                 ; FA3CD4  unlk XIZ
 	ret                                        ; FA3CD6  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_EmitChangedParams -- 0xFA3CD7..0xFA4818 (2882 bytes)
@@ -16922,11 +16922,11 @@ Base36DigitToValue__FA3CD4:
 ;          not decoded.)
 ; --------------------------------------------------------------------------
 P7Unit_EmitChangedParams:
-	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FA3CD7  link XIZ,0xffca
+	link	xiz, 0xffca              ; FA3CD7  link XIZ,0xffca
 	pushw	hl                                   ; FA3CDB  push HL
 	push	xix                                   ; FA3CDC  push XIX
 	ld	c, 26:opc                                  ; FA3CDD  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3CDF  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3CDF  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3CE2  extz XBC
 	add	xbc, 24                                ; FA3CE4  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA3CEA  add XBC,0x0000856e
@@ -16935,40 +16935,40 @@ P7Unit_EmitChangedParams:
 	pushw	wa                                   ; FA3CF5  push WA
 	calr P7Unit_SelectStreamsForRecord                 ; FA3CF6  calr 0xfa4819
 	ld	c, 25:opc                                  ; FA3CF9  ld C,0x19
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA3CFB  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA3CFB  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3CFE  extz XBC
 	inc	8, xbc                                 ; FA3D00  inc 0,XBC
 	add	xbc, PoolDir_Records                          ; FA3D02  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D08  ld XBC,(XBC)
 	ld	(xiz-10), xbc                           ; FA3D0A  ld (XIZ+0xf6),XBC
 	ld	a, 25:opc                                  ; FA3D0D  ld A,0x19
-	extpfx3 0x8E, 0xD9, 0x41                   ; FA3D0F  mul WA,(XIZ+0xd9)
+	mul	wa, (xiz-39)                   ; FA3D0F  mul WA,(XIZ+0xd9)
 	extz	xwa                                   ; FA3D12  extz XWA
 	add	xwa, PoolDir_Records                          ; FA3D14  add XWA,0x00fdbfd9
 	ld	xwa, (xwa)                              ; FA3D1A  ld XWA,(XWA)
 	ld	(xiz-6), xwa                            ; FA3D1C  ld (XIZ+0xfa),XWA
 	ld	c, 25:opc                                  ; FA3D1F  ld C,0x19
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA3D21  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA3D21  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3D24  extz XBC
 	add	xbc, 16                                ; FA3D26  add XBC,0x00000010
 	add	xbc, PoolDir_Records                          ; FA3D2C  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D32  ld XBC,(XBC)
 	ld	(xiz-22), xbc                           ; FA3D34  ld (XIZ+0xea),XBC
 	ld	c, 25:opc                                  ; FA3D37  ld C,0x19
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA3D39  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA3D39  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3D3C  extz XBC
 	add	xbc, 20                                ; FA3D3E  add XBC,0x00000014
 	add	xbc, PoolDir_Records                          ; FA3D44  add XBC,0x00fdbfd9
 	ld	xbc, (xbc)                              ; FA3D4A  ld XBC,(XBC)
 	ld	(xiz-26), xbc                           ; FA3D4C  ld (XIZ+0xe6),XBC
 	ld	c, 26:opc                                  ; FA3D4F  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3D51  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3D51  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3D54  extz XBC
 	inc	1, xbc                                 ; FA3D56  inc 1,XBC
 	add	xbc, 0x856E                            ; FA3D58  add XBC,0x0000856e
 	ld	(xiz-14), xbc                           ; FA3D5E  ld (XIZ+0xf2),XBC
 	ld	c, 26:opc                                  ; FA3D61  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3D63  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3D63  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3D66  extz XBC
 	inc	1, xbc                                 ; FA3D68  inc 1,XBC
 	add	xbc, 0x85BC                            ; FA3D6A  add XBC,0x000085bc
@@ -16996,7 +16996,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	cp	xwa, xbc                                ; FA3DA1  cp XWA,XBC
 	jrl z, P7Unit_EmitChangedParams__FA3E1C                  ; FA3DA3  jrl Z,0xfa3e1c
 	ld	c, 26:opc                                  ; FA3DA6  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA3DA8  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA3DA8  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA3DAB  extz XBC
 	add	xbc, 22                                ; FA3DAD  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA3DB3  add XBC,0x0000856e
@@ -17007,7 +17007,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	ld	xix, xbc                                ; FA3DC2  ld XIX,XBC
 	inc	6, xix                                 ; FA3DC4  inc 6,XIX
 	ld	c, 4:opc                                   ; FA3DC6  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA3DC8  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA3DC8  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3DCB  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA3DCD  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA3DD3  ld XBC,(XBC)
@@ -17020,7 +17020,7 @@ P7Unit_EmitChangedParams__FA3D7F:
 	pushw	0                                    ; FA3DE3  push 0x0000
 	pushw	0                                    ; FA3DE6  push 0x0000
 	push	0                                     ; FA3DE9  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA3DEB  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA3DEB  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA3DEE  calr 0xfa2784
 	inc	8, xsp                                 ; FA3DF1  inc 0,XSP
 	inc	2, xsp                                 ; FA3DF3  inc 2,XSP
@@ -17053,14 +17053,14 @@ P7Unit_EmitChangedParams__FA3E1C:
 	ld	a, (xbc)                                ; FA3E33  ld A,(XBC)
 	extz	wa                                    ; FA3E35  extz WA
 	extz	xwa                                   ; FA3E37  extz XWA
-	extpfx3 0xAE, 0xE2, 0x80                   ; FA3E39  add XWA,(XIZ+0xe2)
+	add	xwa, (xiz-30)                   ; FA3E39  add XWA,(XIZ+0xe2)
 	ld	(xiz-34), xwa                           ; FA3E3C  ld (XIZ+0xde),XWA
 	inc	1, xbc                                 ; FA3E3F  inc 1,XBC
 	ld	(xiz-14), xbc                           ; FA3E41  ld (XIZ+0xf2),XBC
 	ld	a, (xbc)                                ; FA3E44  ld A,(XBC)
 	extz	wa                                    ; FA3E46  extz WA
 	extz	xwa                                   ; FA3E48  extz XWA
-	extpfx3 0xAE, 0xE2, 0x80                   ; FA3E4A  add XWA,(XIZ+0xe2)
+	add	xwa, (xiz-30)                   ; FA3E4A  add XWA,(XIZ+0xe2)
 	ld	(xiz-38), xwa                           ; FA3E4D  ld (XIZ+0xda),XWA
 	inc	1, xbc                                 ; FA3E50  inc 1,XBC
 	ld	(xiz-14), xbc                           ; FA3E52  ld (XIZ+0xf2),XBC
@@ -17219,10 +17219,10 @@ P7Unit_EmitChangedParams__FA3FA8:
 	ld	(xiz-18), xwa                           ; FA3FCB  ld (XIZ+0xee),XWA
 P7Unit_EmitChangedParams__FA3FCE:
 	ld	xbc, (xiz-30)                           ; FA3FCE  ld XBC,(XIZ+0xe2)
-	extpfx3 0xAE, 0xDE, 0xF1                   ; FA3FD1  cp XBC,(XIZ+0xde)
+	cp	xbc, (xiz-34)                   ; FA3FD1  cp XBC,(XIZ+0xde)
 	jrl z, P7Unit_EmitChangedParams__FA4050                  ; FA3FD4  jrl Z,0xfa4050
 	ld	a, 26:opc                                  ; FA3FD7  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA3FD9  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA3FD9  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA3FDC  extz XWA
 	add	xwa, 22                                ; FA3FDE  add XWA,0x00000016
 	add	xwa, 0x856E                            ; FA3FE4  add XWA,0x0000856e
@@ -17233,7 +17233,7 @@ P7Unit_EmitChangedParams__FA3FCE:
 	ld	xix, xbc                                ; FA3FF3  ld XIX,XBC
 	inc	6, xix                                 ; FA3FF5  inc 6,XIX
 	ld	c, 4:opc                                   ; FA3FF7  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA3FF9  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA3FF9  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA3FFC  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA3FFE  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4004  ld XBC,(XBC)
@@ -17247,7 +17247,7 @@ P7Unit_EmitChangedParams__FA3FCE:
 	pushw	0                                    ; FA4017  push 0x0000
 	pushw	0                                    ; FA401A  push 0x0000
 	push	0                                     ; FA401D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA401F  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA401F  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA4022  calr 0xfa2784
 	inc	8, xsp                                 ; FA4025  inc 0,XSP
 	inc	2, xsp                                 ; FA4027  inc 2,XSP
@@ -17260,7 +17260,7 @@ P7Unit_EmitChangedParams__FA4029:
 	push	xbc                                   ; FA4036  push XBC
 	ld	xwa, (xiz-30)                           ; FA4037  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA403A  push XWA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA403B  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA403B  pushw (XIZ+0xfe)
 	ld	xiy, (xiz-10)                           ; FA403E  ld XIY,(XIZ+0xf6)
 	push	xiy                                   ; FA4041  push XIY
 	ld	xbc, (xiz-6)                            ; FA4042  ld XBC,(XIZ+0xfa)
@@ -17316,10 +17316,10 @@ P7Unit_EmitChangedParams__FA409A:
 	ld	(xiz-18), xwa                           ; FA40BD  ld (XIZ+0xee),XWA
 P7Unit_EmitChangedParams__FA40C0:
 	ld	xbc, (xiz-30)                           ; FA40C0  ld XBC,(XIZ+0xe2)
-	extpfx3 0xAE, 0xDE, 0xF1                   ; FA40C3  cp XBC,(XIZ+0xde)
+	cp	xbc, (xiz-34)                   ; FA40C3  cp XBC,(XIZ+0xde)
 	jrl z, P7Unit_EmitChangedParams__FA4142                  ; FA40C6  jrl Z,0xfa4142
 	ld	a, 26:opc                                  ; FA40C9  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA40CB  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA40CB  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA40CE  extz XWA
 	add	xwa, 22                                ; FA40D0  add XWA,0x00000016
 	add	xwa, 0x856E                            ; FA40D6  add XWA,0x0000856e
@@ -17330,7 +17330,7 @@ P7Unit_EmitChangedParams__FA40C0:
 	ld	xix, xbc                                ; FA40E5  ld XIX,XBC
 	inc	6, xix                                 ; FA40E7  inc 6,XIX
 	ld	c, 4:opc                                   ; FA40E9  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA40EB  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA40EB  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA40EE  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA40F0  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA40F6  ld XBC,(XBC)
@@ -17344,7 +17344,7 @@ P7Unit_EmitChangedParams__FA40C0:
 	pushw	0                                    ; FA4109  push 0x0000
 	pushw	0                                    ; FA410C  push 0x0000
 	push	0                                     ; FA410F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA4111  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA4111  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA4114  calr 0xfa2784
 	inc	8, xsp                                 ; FA4117  inc 0,XSP
 	inc	2, xsp                                 ; FA4119  inc 2,XSP
@@ -17357,7 +17357,7 @@ P7Unit_EmitChangedParams__FA411B:
 	push	xbc                                   ; FA4128  push XBC
 	ld	xwa, (xiz-30)                           ; FA4129  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA412C  push XWA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA412D  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA412D  pushw (XIZ+0xfe)
 	ld	xiy, (xiz-10)                           ; FA4130  ld XIY,(XIZ+0xf6)
 	push	xiy                                   ; FA4133  push XIY
 	ld	xbc, (xiz-6)                            ; FA4134  ld XBC,(XIZ+0xfa)
@@ -17388,7 +17388,7 @@ P7Unit_EmitChangedParams__FA4148:
 	extz	xbc                                   ; FA416F  extz XBC
 	ld	(xiz-30), xbc                           ; FA4171  ld (XIZ+0xe2),XBC
 	ld	c, 26:opc                                  ; FA4174  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4176  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4176  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4179  extz XBC
 	add	xbc, 22                                ; FA417B  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA4181  add XBC,0x0000856e
@@ -17399,7 +17399,7 @@ P7Unit_EmitChangedParams__FA4148:
 	ld	xix, xbc                                ; FA4190  ld XIX,XBC
 	inc	6, xix                                 ; FA4192  inc 6,XIX
 	ld	c, 4:opc                                   ; FA4194  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA4196  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA4196  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4199  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA419B  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA41A1  ld XBC,(XBC)
@@ -17412,7 +17412,7 @@ P7Unit_EmitChangedParams__FA4148:
 	pushw	0                                    ; FA41B1  push 0x0000
 	pushw	0                                    ; FA41B4  push 0x0000
 	push	0                                     ; FA41B7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA41B9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA41B9  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA41BC  calr 0xfa2784
 	inc	8, xsp                                 ; FA41BF  inc 0,XSP
 	inc	2, xsp                                 ; FA41C1  inc 2,XSP
@@ -17444,7 +17444,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	extz	xbc                                   ; FA41FD  extz XBC
 	ld	(xiz-30), xbc                           ; FA41FF  ld (XIZ+0xe2),XBC
 	ld	c, 26:opc                                  ; FA4202  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4204  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4204  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4207  extz XBC
 	add	xbc, 22                                ; FA4209  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA420F  add XBC,0x0000856e
@@ -17455,7 +17455,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	ld	xix, xbc                                ; FA421E  ld XIX,XBC
 	inc	6, xix                                 ; FA4220  inc 6,XIX
 	ld	c, 4:opc                                   ; FA4222  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA4224  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA4224  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4227  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4229  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA422F  ld XBC,(XBC)
@@ -17468,7 +17468,7 @@ P7Unit_EmitChangedParams__FA41EA:
 	pushw	0                                    ; FA423F  push 0x0000
 	pushw	0                                    ; FA4242  push 0x0000
 	push	0                                     ; FA4245  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA4247  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA4247  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA424A  calr 0xfa2784
 	inc	8, xsp                                 ; FA424D  inc 0,XSP
 	inc	2, xsp                                 ; FA424F  inc 2,XSP
@@ -17502,7 +17502,7 @@ P7Unit_EmitChangedParams__FA427B:
 	extz	xbc                                   ; FA428E  extz XBC
 	ld	(xiz-30), xbc                           ; FA4290  ld (XIZ+0xe2),XBC
 	ld	c, 26:opc                                  ; FA4293  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4295  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4295  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4298  extz XBC
 	add	xbc, 22                                ; FA429A  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA42A0  add XBC,0x0000856e
@@ -17513,7 +17513,7 @@ P7Unit_EmitChangedParams__FA427B:
 	ld	xix, xbc                                ; FA42AF  ld XIX,XBC
 	inc	6, xix                                 ; FA42B1  inc 6,XIX
 	ld	c, 4:opc                                   ; FA42B3  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA42B5  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA42B5  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA42B8  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA42BA  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA42C0  ld XBC,(XBC)
@@ -17526,7 +17526,7 @@ P7Unit_EmitChangedParams__FA427B:
 	pushw	0                                    ; FA42D0  push 0x0000
 	pushw	0                                    ; FA42D3  push 0x0000
 	push	0                                     ; FA42D6  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA42D8  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA42D8  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA42DB  calr 0xfa2784
 	inc	8, xsp                                 ; FA42DE  inc 0,XSP
 	inc	2, xsp                                 ; FA42E0  inc 2,XSP
@@ -17562,13 +17562,13 @@ P7Unit_EmitChangedParams__FA432A:
 	jrl P7Unit_EmitChangedParams__FA4814                     ; FA432A  jrl T,0xfa4814
 P7Unit_EmitChangedParams__FA432D:
 	ld	c, 26:opc                                  ; FA432D  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA432F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA432F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4332  extz XBC
 	add	xbc, 16                                ; FA4334  add XBC,0x00000010
 	add	xbc, 0x856E                            ; FA433A  add XBC,0x0000856e
 	ld	(xbc), 0                                ; FA4340  ld (XBC),0x00
 	ld	c, 26:opc                                  ; FA4343  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4345  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4345  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4348  extz XBC
 	ld	xix, xbc                                ; FA434A  ld XIX,XBC
 	add	xix, 15                                ; FA434C  add XIX,0x0000000f
@@ -17581,7 +17581,7 @@ P7Unit_EmitChangedParams__FA432D:
 	cp	a, h                                    ; FA4364  cp A,H
 	jrl z, P7Unit_EmitChangedParams__FA4479                  ; FA4366  jrl Z,0xfa4479
 	ld	c, 26:opc                                  ; FA4369  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA436B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA436B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA436E  extz XBC
 	ld	xix, xbc                                ; FA4370  ld XIX,XBC
 	inc	5, xix                                 ; FA4372  inc 5,XIX
@@ -17593,7 +17593,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA4385  add XBC,XIX
 	ld	(xbc), a                                ; FA4387  ld (XBC),A
 	ld	c, 26:opc                                  ; FA4389  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA438B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA438B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA438E  extz XBC
 	ld	xix, xbc                                ; FA4390  ld XIX,XBC
 	inc	6, xix                                 ; FA4392  inc 6,XIX
@@ -17605,7 +17605,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA43A5  add XBC,XIX
 	ld	(xbc), a                                ; FA43A7  ld (XBC),A
 	ld	c, 26:opc                                  ; FA43A9  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA43AB  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA43AB  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA43AE  extz XBC
 	ld	xix, xbc                                ; FA43B0  ld XIX,XBC
 	inc	7, xix                                 ; FA43B2  inc 7,XIX
@@ -17617,7 +17617,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA43C5  add XBC,XIX
 	ld	(xbc), a                                ; FA43C7  ld (XBC),A
 	ld	c, 26:opc                                  ; FA43C9  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA43CB  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA43CB  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA43CE  extz XBC
 	ld	xix, xbc                                ; FA43D0  ld XIX,XBC
 	inc	8, xix                                 ; FA43D2  inc 0,XIX
@@ -17629,7 +17629,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA43E5  add XBC,XIX
 	ld	(xbc), a                                ; FA43E7  ld (XBC),A
 	ld	c, 26:opc                                  ; FA43E9  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA43EB  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA43EB  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA43EE  extz XBC
 	ld	xix, xbc                                ; FA43F0  ld XIX,XBC
 	add	xix, 10                                ; FA43F2  add XIX,0x0000000a
@@ -17641,7 +17641,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA4409  add XBC,XIX
 	ld	(xbc), a                                ; FA440B  ld (XBC),A
 	ld	c, 26:opc                                  ; FA440D  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA440F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA440F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4412  extz XBC
 	ld	xix, xbc                                ; FA4414  ld XIX,XBC
 	add	xix, 11                                ; FA4416  add XIX,0x0000000b
@@ -17653,7 +17653,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA442D  add XBC,XIX
 	ld	(xbc), a                                ; FA442F  ld (XBC),A
 	ld	c, 26:opc                                  ; FA4431  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4433  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4433  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4436  extz XBC
 	ld	xix, xbc                                ; FA4438  ld XIX,XBC
 	add	xix, 12                                ; FA443A  add XIX,0x0000000c
@@ -17665,7 +17665,7 @@ P7Unit_EmitChangedParams__FA432D:
 	add	xbc, xix                               ; FA4451  add XBC,XIX
 	ld	(xbc), a                                ; FA4453  ld (XBC),A
 	ld	c, 26:opc                                  ; FA4455  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4457  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4457  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA445A  extz XBC
 	ld	xix, xbc                                ; FA445C  ld XIX,XBC
 	add	xix, 13                                ; FA445E  add XIX,0x0000000d
@@ -17687,7 +17687,7 @@ P7Unit_EmitChangedParams__FA4488:
 	jr P7Unit_EmitChangedParams__FA447E                      ; FA448B  jr T,0xfa447e
 P7Unit_EmitChangedParams__FA448D:
 	ld	c, 26:opc                                  ; FA448D  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA448F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA448F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4492  extz XBC
 	add	xbc, 15                                ; FA4494  add XBC,0x0000000f
 	add	xbc, 0x856E                            ; FA449A  add XBC,0x0000856e
@@ -17770,10 +17770,10 @@ P7Unit_EmitChangedParams__FA4538:
 	ld	(xiz-18), xiy                           ; FA455E  ld (XIZ+0xee),XIY
 P7Unit_EmitChangedParams__FA4561:
 	ld	xbc, (xiz-30)                           ; FA4561  ld XBC,(XIZ+0xe2)
-	extpfx3 0xAE, 0xDE, 0xF1                   ; FA4564  cp XBC,(XIZ+0xde)
+	cp	xbc, (xiz-34)                   ; FA4564  cp XBC,(XIZ+0xde)
 	jrl z, P7Unit_EmitChangedParams__FA45FD                  ; FA4567  jrl Z,0xfa45fd
 	ld	a, 26:opc                                  ; FA456A  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA456C  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA456C  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA456F  extz XWA
 	add	xwa, 22                                ; FA4571  add XWA,0x00000016
 	add	xwa, 0x856E                            ; FA4577  add XWA,0x0000856e
@@ -17784,7 +17784,7 @@ P7Unit_EmitChangedParams__FA4561:
 	ld	xix, xbc                                ; FA4586  ld XIX,XBC
 	inc	6, xix                                 ; FA4588  inc 6,XIX
 	ld	c, 4:opc                                   ; FA458A  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA458C  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA458C  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA458F  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4591  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4597  ld XBC,(XBC)
@@ -17794,7 +17794,7 @@ P7Unit_EmitChangedParams__FA4561:
 	cp	(xiz-2), wa                             ; FA459F  cp (XIZ+0xfe),WA
 	jr nz, P7Unit_EmitChangedParams__FA45D6                  ; FA45A2  jr NZ,0xfa45d6
 	ld	c, 26:opc                                  ; FA45A4  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA45A6  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA45A6  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA45A9  extz XBC
 	add	xbc, 22                                ; FA45AB  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA45B1  add XBC,0x0000856e
@@ -17806,7 +17806,7 @@ P7Unit_EmitChangedParams__FA4561:
 	pushw	0                                    ; FA45C4  push 0x0000
 	pushw	0                                    ; FA45C7  push 0x0000
 	push	0                                     ; FA45CA  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA45CC  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA45CC  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA45CF  calr 0xfa2784
 	inc	8, xsp                                 ; FA45D2  inc 0,XSP
 	inc	2, xsp                                 ; FA45D4  inc 2,XSP
@@ -17819,7 +17819,7 @@ P7Unit_EmitChangedParams__FA45D6:
 	push	xbc                                   ; FA45E3  push XBC
 	ld	xwa, (xiz-30)                           ; FA45E4  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA45E7  push XWA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA45E8  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA45E8  pushw (XIZ+0xfe)
 	ld	xiy, (xiz-10)                           ; FA45EB  ld XIY,(XIZ+0xf6)
 	push	xiy                                   ; FA45EE  push XIY
 	ld	xbc, (xiz-6)                            ; FA45EF  ld XBC,(XIZ+0xfa)
@@ -17973,7 +17973,7 @@ P7Unit_EmitChangedParams__FA4735:
 	jr P7Unit_EmitChangedParams__FA4711                      ; FA4753  jr T,0xfa4711
 P7Unit_EmitChangedParams__FA4755:
 	ld	xbc, (xiz-30)                           ; FA4755  ld XBC,(XIZ+0xe2)
-	extpfx3 0xAE, 0xDE, 0xF1                   ; FA4758  cp XBC,(XIZ+0xde)
+	cp	xbc, (xiz-34)                   ; FA4758  cp XBC,(XIZ+0xde)
 	jrl z, P7Unit_EmitChangedParams__FA47E6                  ; FA475B  jrl Z,0xfa47e6
 	ld	xwa, (xiz-26)                           ; FA475E  ld XWA,(XIZ+0xe6)
 	ld	c, (xwa)                                ; FA4761  ld C,(XWA)
@@ -17982,7 +17982,7 @@ P7Unit_EmitChangedParams__FA4755:
 	extz	wa                                    ; FA4767  extz WA
 	ld	(xiz-2), wa                             ; FA4769  ld (XIZ+0xfe),WA
 	ld	c, 26:opc                                  ; FA476C  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA476E  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA476E  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4771  extz XBC
 	add	xbc, 22                                ; FA4773  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA4779  add XBC,0x0000856e
@@ -17993,7 +17993,7 @@ P7Unit_EmitChangedParams__FA4755:
 	ld	xix, xbc                                ; FA4788  ld XIX,XBC
 	inc	6, xix                                 ; FA478A  inc 6,XIX
 	ld	c, 4:opc                                   ; FA478C  ld C,0x04
-	extpfx3 0x8E, 0xD9, 0x43                   ; FA478E  mul BC,(XIZ+0xd9)
+	mul	bc, (xiz-39)                   ; FA478E  mul BC,(XIZ+0xd9)
 	extz	xbc                                   ; FA4791  extz XBC
 	add	xbc, PoolDir_FieldRec_PtrTable                          ; FA4793  add XBC,0x00fdd1cb
 	ld	xbc, (xbc)                              ; FA4799  ld XBC,(XBC)
@@ -18008,7 +18008,7 @@ P7Unit_EmitChangedParams__FA4755:
 	pushw	0                                    ; FA47AD  push 0x0000
 	pushw	0                                    ; FA47B0  push 0x0000
 	push	0                                     ; FA47B3  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA47B5  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA47B5  push (XIZ+0x08)
 	calr P7Unit_SendModulatedField                 ; FA47B8  calr 0xfa2784
 	inc	8, xsp                                 ; FA47BB  inc 0,XSP
 	inc	2, xsp                                 ; FA47BD  inc 2,XSP
@@ -18021,7 +18021,7 @@ P7Unit_EmitChangedParams__FA47BF:
 	push	xbc                                   ; FA47CC  push XBC
 	ld	xwa, (xiz-30)                           ; FA47CD  ld XWA,(XIZ+0xe2)
 	push	xwa                                   ; FA47D0  push XWA
-	extpfx3 0x9E, 0xFE, 0x04                   ; FA47D1  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FA47D1  pushw (XIZ+0xfe)
 	ld	xiy, (xiz-10)                           ; FA47D4  ld XIY,(XIZ+0xf6)
 	push	xiy                                   ; FA47D7  push XIY
 	ld	xbc, (xiz-6)                            ; FA47D8  ld XBC,(XIZ+0xfa)
@@ -18048,7 +18048,7 @@ P7Unit_EmitChangedParams__FA47EB:
 P7Unit_EmitChangedParams__FA4814:
 	pop	xix                                    ; FA4814  pop XIX
 	popw	hl                                    ; FA4815  pop HL
-	unlk32 xiz                                 ; FA4816  unlk XIZ
+	unlk	xiz                                 ; FA4816  unlk XIZ
 	ret                                        ; FA4818  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_SelectStreamsForRecord -- 0xFA4819..0xFA493F (295 bytes)
@@ -18080,7 +18080,7 @@ P7Unit_EmitChangedParams__FA4814:
 ;          words 99 and 0x6C scale.  The streams keep their addresses for names.
 ; --------------------------------------------------------------------------
 P7Unit_SelectStreamsForRecord:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FA4819  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FA4819  link XIZ,0xfffe
 	ld	bc, (xiz+8)                             ; FA481D  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA4820  extz BC
 	ld	(xiz-2), bc                             ; FA4822  ld (XIZ+0xfe),BC
@@ -18152,7 +18152,7 @@ P7Unit_SelectStreamsForRecord__FA48FA:
 	jrl z, P7Unit_SelectStreamsForRecord__FA488F                  ; FA4938  jrl Z,0xfa488f
 	jr P7Unit_SelectStreamsForRecord__FA48C5                      ; FA493B  jr T,0xfa48c5
 P7Unit_SelectStreamsForRecord__FA493D:
-	unlk32 xiz                                 ; FA493D  unlk XIZ
+	unlk	xiz                                 ; FA493D  unlk XIZ
 	ret                                        ; FA493F  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_MarkParamsDirty -- 0xFA4940..0xFA4956 (23 bytes)
@@ -18175,13 +18175,13 @@ P7Unit_SelectStreamsForRecord__FA493D:
 ; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
 P7Unit_MarkParamsDirty:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA4940  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA4940  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FA4944  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FA4947  extz BC
 	extz	xbc                                   ; FA4949  extz XBC
 	add	xbc, 0x865F                            ; FA494B  add XBC,0x0000865f
 	ld	(xbc), 1                                ; FA4951  ld (XBC),0x01
-	unlk32 xiz                                 ; FA4954  unlk XIZ
+	unlk	xiz                                 ; FA4954  unlk XIZ
 	ret                                        ; FA4956  ret
 ; --------------------------------------------------------------------------
 ; P7Unit_FlushDirtyParams -- 0xFA4957..0xFA4A0C (182 bytes)
@@ -18211,7 +18211,7 @@ P7Unit_MarkParamsDirty:
 ; Unknown:  why that particular field is always re-sent.
 ; --------------------------------------------------------------------------
 P7Unit_FlushDirtyParams:
-	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FA4957  link XIZ,0xffff
+	link	xiz, 0xffff              ; FA4957  link XIZ,0xffff
 	pushw	hl                                   ; FA495B  push HL
 	push	xix                                   ; FA495C  push XIX
 	ld	bc, (xiz+8)                             ; FA495D  ld BC,(XIZ+0x08)
@@ -18222,7 +18222,7 @@ P7Unit_FlushDirtyParams:
 	cp	a, 1:i3                                   ; FA496C  cp A,1
 	jrl nz, P7Unit_FlushDirtyParams__FA4A08                 ; FA496E  jrl NZ,0xfa4a08
 	ld	c, 26:opc                                  ; FA4971  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4973  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4973  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4976  extz XBC
 	add	xbc, 24                                ; FA4978  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA497E  add XBC,0x0000856e
@@ -18234,7 +18234,7 @@ P7Unit_FlushDirtyParams:
 	ld	b, (xwa)                                ; FA4997  ld B,(XWA)
 	ld	(xiz-1), b                              ; FA4999  ld (XIZ+0xff),B
 	ld	a, 26:opc                                  ; FA499C  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA499E  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA499E  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA49A1  extz XWA
 	ld	xix, xwa                                ; FA49A3  ld XIX,XWA
 	extpfx3 0xC7, 0xF4, 0x9A                   ; FA49A5  ld IYL,B
@@ -18251,10 +18251,10 @@ P7Unit_FlushDirtyParams:
 	add	xwa, xix                               ; FA49C3  add XWA,XIX
 	ld	(xwa), c                                ; FA49C5  ld (XWA),C
 	push	0                                     ; FA49C7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA49C9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA49C9  push (XIZ+0x08)
 	calr P7Unit_EmitChangedParams                 ; FA49CC  calr 0xfa3cd7
 	ld	c, 26:opc                                  ; FA49CF  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA49D1  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA49D1  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA49D4  extz XBC
 	ld	xix, xbc                                ; FA49D6  ld XIX,XBC
 	ld	wa, (xiz-1)                             ; FA49D8  ld WA,(XIZ+0xff)
@@ -18278,7 +18278,7 @@ P7Unit_FlushDirtyParams:
 P7Unit_FlushDirtyParams__FA4A08:
 	pop	xix                                    ; FA4A08  pop XIX
 	popw	hl                                    ; FA4A09  pop HL
-	unlk32 xiz                                 ; FA4A0A  unlk XIZ
+	unlk	xiz                                 ; FA4A0A  unlk XIZ
 	ret                                        ; FA4A0C  ret
 ; --------------------------------------------------------------------------
 ; sub_FA4A0D -- 0xFA4A0D..0xFA4C5D (593 bytes)
@@ -18300,7 +18300,7 @@ P7Unit_FlushDirtyParams__FA4A08:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA4A0D:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FA4A0D  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FA4A0D  link XIZ,0xfff4
 	pushw	hl                                   ; FA4A11  push HL
 	cp (xiz+8), 0x00                           ; FA4A12  cp (XIZ+0x08),0x00
 	jr z, sub_FA4A0D__FA4A21                   ; FA4A16  jr Z,0xfa4a21
@@ -18309,14 +18309,14 @@ sub_FA4A0D:
 	jrl sub_FA4A0D__FA4C5A                     ; FA4A1E  jrl T,0xfa4c5a
 sub_FA4A0D__FA4A21:
 	ld	c, 26:opc                                  ; FA4A21  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4A23  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4A23  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4A26  extz XBC
 	add	xbc, 25                                ; FA4A28  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA4A2E  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA4A34  ld A,(XBC)
 	ld	(xiz-9), a                              ; FA4A36  ld (XIZ+0xf7),A
 	ld	c, 26:opc                                  ; FA4A39  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4A3B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4A3B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4A3E  extz XBC
 	add	xbc, 17                                ; FA4A40  add XBC,0x00000011
 	add	xbc, 0x856E                            ; FA4A46  add XBC,0x0000856e
@@ -18325,7 +18325,7 @@ sub_FA4A0D__FA4A21:
 	extz	bc                                    ; FA4A50  extz BC
 	ld	(xiz-4), bc                             ; FA4A52  ld (XIZ+0xfc),BC
 	ld	c, 26:opc                                  ; FA4A55  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4A57  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4A57  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4A5A  extz XBC
 	add	xbc, 18                                ; FA4A5C  add XBC,0x00000012
 	add	xbc, 0x856E                            ; FA4A62  add XBC,0x0000856e
@@ -18334,7 +18334,7 @@ sub_FA4A0D__FA4A21:
 	sll	wa, 8                                  ; FA4A6C  sll 0x08,WA
 	add	(xiz-4), wa                            ; FA4A6F  add (XIZ+0xfc),WA
 	ld	c, 26:opc                                  ; FA4A72  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4A74  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4A74  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4A77  extz XBC
 	add	xbc, 19                                ; FA4A79  add XBC,0x00000013
 	add	xbc, 0x856E                            ; FA4A7F  add XBC,0x0000856e
@@ -18342,7 +18342,7 @@ sub_FA4A0D__FA4A21:
 	extz	wa                                    ; FA4A87  extz WA
 	ld	(xiz-2), wa                             ; FA4A89  ld (XIZ+0xfe),WA
 	ld	c, 26:opc                                  ; FA4A8C  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4A8E  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4A8E  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4A91  extz XBC
 	add	xbc, 20                                ; FA4A93  add XBC,0x00000014
 	add	xbc, 0x856E                            ; FA4A99  add XBC,0x0000856e
@@ -18351,7 +18351,7 @@ sub_FA4A0D__FA4A21:
 	sll	wa, 8                                  ; FA4AA3  sll 0x08,WA
 	add	(xiz-2), wa                            ; FA4AA6  add (XIZ+0xfe),WA
 	ld	c, 26:opc                                  ; FA4AA9  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4AAB  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4AAB  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4AAE  extz XBC
 	add	xbc, 17                                ; FA4AB0  add XBC,0x00000011
 	add	xbc, 0x85BC                            ; FA4AB6  add XBC,0x000085bc
@@ -18359,7 +18359,7 @@ sub_FA4A0D__FA4A21:
 	extz	wa                                    ; FA4ABE  extz WA
 	ld	(xiz-8), wa                             ; FA4AC0  ld (XIZ+0xf8),WA
 	ld	c, 26:opc                                  ; FA4AC3  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4AC5  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4AC5  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4AC8  extz XBC
 	add	xbc, 18                                ; FA4ACA  add XBC,0x00000012
 	add	xbc, 0x85BC                            ; FA4AD0  add XBC,0x000085bc
@@ -18368,7 +18368,7 @@ sub_FA4A0D__FA4A21:
 	sll	wa, 8                                  ; FA4ADA  sll 0x08,WA
 	add	(xiz-8), wa                            ; FA4ADD  add (XIZ+0xf8),WA
 	ld	c, 26:opc                                  ; FA4AE0  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4AE2  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4AE2  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4AE5  extz XBC
 	add	xbc, 19                                ; FA4AE7  add XBC,0x00000013
 	add	xbc, 0x85BC                            ; FA4AED  add XBC,0x000085bc
@@ -18376,7 +18376,7 @@ sub_FA4A0D__FA4A21:
 	extz	wa                                    ; FA4AF5  extz WA
 	ld	(xiz-6), wa                             ; FA4AF7  ld (XIZ+0xfa),WA
 	ld	c, 26:opc                                  ; FA4AFA  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4AFC  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4AFC  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4AFF  extz XBC
 	add	xbc, 20                                ; FA4B01  add XBC,0x00000014
 	add	xbc, 0x85BC                            ; FA4B07  add XBC,0x000085bc
@@ -18506,7 +18506,7 @@ sub_FA4A0D__FA4C4D:
 	jrl z, sub_FA4A0D__FA4BB8                  ; FA4C57  jrl Z,0xfa4bb8
 sub_FA4A0D__FA4C5A:
 	popw	hl                                    ; FA4C5A  pop HL
-	unlk32 xiz                                 ; FA4C5B  unlk XIZ
+	unlk	xiz                                 ; FA4C5B  unlk XIZ
 	ret                                        ; FA4C5D  ret
 ; --------------------------------------------------------------------------
 ; sub_FA4C5E -- 0xFA4C5E..0xFA4CE4 (135 bytes)
@@ -18590,7 +18590,7 @@ sub_FA4C5E__FA4CD9:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA4CE5:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA4CE5  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FA4CE5  link XIZ,0xfffc
 	cp (xiz+8), 0x00                           ; FA4CE9  cp (XIZ+0x08),0x00
 	jr z, sub_FA4CE5__FA4CF8                   ; FA4CED  jr Z,0xfa4cf8
 	cp (xiz+8), 0x01                           ; FA4CEF  cp (XIZ+0x08),0x01
@@ -18598,7 +18598,7 @@ sub_FA4CE5:
 	jrl sub_FA4CE5__FA4E20                     ; FA4CF5  jrl T,0xfa4e20
 sub_FA4CE5__FA4CF8:
 	ld	c, 26:opc                                  ; FA4CF8  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4CFA  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4CFA  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4CFD  extz XBC
 	add	xbc, 25                                ; FA4CFF  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA4D05  add XBC,0x0000856e
@@ -18625,7 +18625,7 @@ sub_FA4CE5__FA4D3A:
 	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4D3D  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D42  push XBC
 	ld	a, 26:opc                                  ; FA4D43  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA4D45  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA4D45  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA4D48  extz XWA
 	add	xwa, 21                                ; FA4D4A  add XWA,0x00000015
 	add	xwa, 0x856E                            ; FA4D50  add XWA,0x0000856e
@@ -18649,7 +18649,7 @@ sub_FA4CE5__FA4D7C:
 	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4D87  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4D8C  push XBC
 	ld	a, 26:opc                                  ; FA4D8D  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA4D8F  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA4D8F  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA4D92  extz XWA
 	add	xwa, 21                                ; FA4D94  add XWA,0x00000015
 	add	xwa, 0x856E                            ; FA4D9A  add XWA,0x0000856e
@@ -18671,7 +18671,7 @@ sub_FA4CE5__FA4DC5:
 	lda	xbc, (P7Stream_Data_FD4B97:24)                     ; FA4DC8  lda XBC,0xfd4b97
 	push	xbc                                   ; FA4DCD  push XBC
 	ld	a, 26:opc                                  ; FA4DCE  ld A,0x1a
-	extpfx3 0x8E, 0x08, 0x41                   ; FA4DD0  mul WA,(XIZ+0x08)
+	mul	wa, (xiz+8)                   ; FA4DD0  mul WA,(XIZ+0x08)
 	extz	xwa                                   ; FA4DD3  extz XWA
 	add	xwa, 21                                ; FA4DD5  add XWA,0x00000015
 	add	xwa, 0x856E                            ; FA4DDB  add XWA,0x0000856e
@@ -18702,7 +18702,7 @@ sub_FA4CE5__FA4E13:
 	calr P7Unit_MarkParamsDirty                 ; FA4E1C  calr 0xfa4940
 	popw	bc                                    ; FA4E1F  pop BC
 sub_FA4CE5__FA4E20:
-	unlk32 xiz                                 ; FA4E20  unlk XIZ
+	unlk	xiz                                 ; FA4E20  unlk XIZ
 	ret                                        ; FA4E22  ret
 ; --------------------------------------------------------------------------
 ; sub_FA4E23 -- 0xFA4E23..0xFA4E96 (116 bytes)
@@ -18722,11 +18722,11 @@ sub_FA4CE5__FA4E20:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA4E23:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA4E23  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA4E23  link XIZ,0x0000
 	pushw	hl                                   ; FA4E27  push HL
 	push	xix                                   ; FA4E28  push XIX
 	ld	c, 26:opc                                  ; FA4E29  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4E2B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4E2B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4E2E  extz XBC
 	ld	xix, xbc                                ; FA4E30  ld XIX,XBC
 	add	xix, 22                                ; FA4E32  add XIX,0x00000016
@@ -18739,7 +18739,7 @@ sub_FA4E23:
 	cp	a, h                                    ; FA4E4A  cp A,H
 	jr z, sub_FA4E23__FA4E92                   ; FA4E4C  jr Z,0xfa4e92
 	ld	c, 26:opc                                  ; FA4E4E  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4E50  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4E50  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4E53  extz XBC
 	add	xbc, 22                                ; FA4E55  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA4E5B  add XBC,0x0000856e
@@ -18747,26 +18747,26 @@ sub_FA4E23:
 	cp	a, 0xFF                                 ; FA4E63  cp A,0xff
 	jr z, sub_FA4E23__FA4E89                   ; FA4E66  jr Z,0xfa4e89
 	ld	c, 26:opc                                  ; FA4E68  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4E6A  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4E6A  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4E6D  extz XBC
 	add	xbc, 22                                ; FA4E6F  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA4E75  add XBC,0x0000856e
 	ld	a, (xbc)                                ; FA4E7B  ld A,(XBC)
 	pushw	wa                                   ; FA4E7D  push WA
 	push	0                                     ; FA4E7E  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA4E80  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA4E80  push (XIZ+0x08)
 	calr P7Unit_SendFieldParamZero                 ; FA4E83  calr 0xfa2b09
 	pop	xiy                                    ; FA4E86  pop XIY
 	jr sub_FA4E23__FA4E92                      ; FA4E87  jr T,0xfa4e92
 sub_FA4E23__FA4E89:
 	push	0                                     ; FA4E89  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FA4E8B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FA4E8B  push (XIZ+0x08)
 	calr P7Unit_LoadProgramStreams                 ; FA4E8E  calr 0xfa2c5e
 	popw	bc                                    ; FA4E91  pop BC
 sub_FA4E23__FA4E92:
 	pop	xix                                    ; FA4E92  pop XIX
 	popw	hl                                    ; FA4E93  pop HL
-	unlk32 xiz                                 ; FA4E94  unlk XIZ
+	unlk	xiz                                 ; FA4E94  unlk XIZ
 	ret                                        ; FA4E96  ret
 ; --------------------------------------------------------------------------
 ; sub_FA4E97 -- 0xFA4E97..0xFA5176 (736 bytes)
@@ -18785,11 +18785,11 @@ sub_FA4E23__FA4E92:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FA4E97:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FA4E97  link XIZ,0x0000
+	link	xiz, 0x0000              ; FA4E97  link XIZ,0x0000
 	pushw	hl                                   ; FA4E9B  push HL
 	push	xix                                   ; FA4E9C  push XIX
 	ld	c, 26:opc                                  ; FA4E9D  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4E9F  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4E9F  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4EA2  extz XBC
 	add	xbc, 23                                ; FA4EA4  add XBC,0x00000017
 	add	xbc, 0x856E                            ; FA4EAA  add XBC,0x0000856e
@@ -18797,7 +18797,7 @@ sub_FA4E97:
 	cp	a, 0:i3                                   ; FA4EB2  cp A,0
 	jrl nz, sub_FA4E97__FA4FDE                 ; FA4EB4  jrl NZ,0xfa4fde
 	ld	c, 26:opc                                  ; FA4EB7  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4EB9  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4EB9  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4EBC  extz XBC
 	ld	xix, xbc                                ; FA4EBE  ld XIX,XBC
 	add	xix, 23                                ; FA4EC0  add XIX,0x00000017
@@ -18815,7 +18815,7 @@ sub_FA4E97:
 	add	xbc, 0x8662                            ; FA4EE4  add XBC,0x00008662
 	ld	h, (xbc)                                ; FA4EEA  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4EEC  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4EEE  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4EEE  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4EF1  extz XBC
 	add	xbc, 24                                ; FA4EF3  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA4EF9  add XBC,0x0000856e
@@ -18826,7 +18826,7 @@ sub_FA4E97:
 	add	xbc, 0x8665                            ; FA4F08  add XBC,0x00008665
 	ld	h, (xbc)                                ; FA4F0E  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4F10  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F12  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F12  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F15  extz XBC
 	inc	1, xbc                                 ; FA4F17  inc 1,XBC
 	add	xbc, 0x856E                            ; FA4F19  add XBC,0x0000856e
@@ -18837,54 +18837,54 @@ sub_FA4E97:
 	add	xbc, 0x8674                            ; FA4F28  add XBC,0x00008674
 	ld	h, (xbc)                                ; FA4F2E  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4F30  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F32  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F32  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F35  extz XBC
 	add	xbc, 22                                ; FA4F37  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA4F3D  add XBC,0x0000856e
 	ld	(xbc), h                                ; FA4F43  ld (XBC),H
 	ld	c, 4:opc                                   ; FA4F45  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F47  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F47  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F4A  extz XBC
 	add	xbc, 0x8668                            ; FA4F4C  add XBC,0x00008668
 	ld	h, (xbc)                                ; FA4F52  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4F54  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F56  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F56  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F59  extz XBC
 	add	xbc, 17                                ; FA4F5B  add XBC,0x00000011
 	add	xbc, 0x856E                            ; FA4F61  add XBC,0x0000856e
 	ld	(xbc), h                                ; FA4F67  ld (XBC),H
 	ld	c, 4:opc                                   ; FA4F69  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F6B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F6B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F6E  extz XBC
 	inc	1, xbc                                 ; FA4F70  inc 1,XBC
 	add	xbc, 0x8668                            ; FA4F72  add XBC,0x00008668
 	ld	h, (xbc)                                ; FA4F78  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4F7A  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F7C  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F7C  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F7F  extz XBC
 	add	xbc, 18                                ; FA4F81  add XBC,0x00000012
 	add	xbc, 0x856E                            ; FA4F87  add XBC,0x0000856e
 	ld	(xbc), h                                ; FA4F8D  ld (XBC),H
 	ld	c, 4:opc                                   ; FA4F8F  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4F91  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4F91  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4F94  extz XBC
 	inc	2, xbc                                 ; FA4F96  inc 2,XBC
 	add	xbc, 0x8668                            ; FA4F98  add XBC,0x00008668
 	ld	h, (xbc)                                ; FA4F9E  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4FA0  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4FA2  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4FA2  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4FA5  extz XBC
 	add	xbc, 19                                ; FA4FA7  add XBC,0x00000013
 	add	xbc, 0x856E                            ; FA4FAD  add XBC,0x0000856e
 	ld	(xbc), h                                ; FA4FB3  ld (XBC),H
 	ld	c, 4:opc                                   ; FA4FB5  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4FB7  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4FB7  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4FBA  extz XBC
 	inc	3, xbc                                 ; FA4FBC  inc 3,XBC
 	add	xbc, 0x8668                            ; FA4FBE  add XBC,0x00008668
 	ld	h, (xbc)                                ; FA4FC4  ld H,(XBC)
 	ld	c, 26:opc                                  ; FA4FC6  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4FC8  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4FC8  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4FCB  extz XBC
 	add	xbc, 20                                ; FA4FCD  add XBC,0x00000014
 	add	xbc, 0x856E                            ; FA4FD3  add XBC,0x0000856e
@@ -18893,7 +18893,7 @@ sub_FA4E97__FA4FDB:
 	jrl sub_FA4E97__FA5172                     ; FA4FDB  jrl T,0xfa5172
 sub_FA4E97__FA4FDE:
 	ld	c, 26:opc                                  ; FA4FDE  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA4FE0  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA4FE0  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA4FE3  extz XBC
 	add	xbc, 24                                ; FA4FE5  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA4FEB  add XBC,0x0000856e
@@ -18904,13 +18904,13 @@ sub_FA4E97__FA4FDE:
 	add	xbc, 0x8662                            ; FA4FFA  add XBC,0x00008662
 	ld	(xbc), h                                ; FA5000  ld (XBC),H
 	ld	c, 26:opc                                  ; FA5002  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA5004  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA5004  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA5007  extz XBC
 	add	xbc, 24                                ; FA5009  add XBC,0x00000018
 	add	xbc, 0x856E                            ; FA500F  add XBC,0x0000856e
 	ld	(xbc), 53                               ; FA5015  ld (XBC),0x35
 	ld	c, 26:opc                                  ; FA5018  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA501A  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA501A  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA501D  extz XBC
 	inc	1, xbc                                 ; FA501F  inc 1,XBC
 	add	xbc, 0x856E                            ; FA5021  add XBC,0x0000856e
@@ -18921,13 +18921,13 @@ sub_FA4E97__FA4FDE:
 	add	xbc, 0x8665                            ; FA5030  add XBC,0x00008665
 	ld	(xbc), h                                ; FA5036  ld (XBC),H
 	ld	c, 26:opc                                  ; FA5038  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA503A  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA503A  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA503D  extz XBC
 	inc	1, xbc                                 ; FA503F  inc 1,XBC
 	add	xbc, 0x856E                            ; FA5041  add XBC,0x0000856e
 	ld	(xbc), 84                               ; FA5047  ld (XBC),0x54
 	ld	c, 26:opc                                  ; FA504A  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA504C  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA504C  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA504F  extz XBC
 	add	xbc, 22                                ; FA5051  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA5057  add XBC,0x0000856e
@@ -18938,78 +18938,78 @@ sub_FA4E97__FA4FDE:
 	add	xbc, 0x8674                            ; FA5066  add XBC,0x00008674
 	ld	(xbc), h                                ; FA506C  ld (XBC),H
 	ld	c, 26:opc                                  ; FA506E  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA5070  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA5070  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA5073  extz XBC
 	add	xbc, 22                                ; FA5075  add XBC,0x00000016
 	add	xbc, 0x856E                            ; FA507B  add XBC,0x0000856e
 	ld	(xbc), 0xFF                             ; FA5081  ld (XBC),0xff
 	ld	c, 26:opc                                  ; FA5084  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA5086  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA5086  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA5089  extz XBC
 	add	xbc, 17                                ; FA508B  add XBC,0x00000011
 	add	xbc, 0x856E                            ; FA5091  add XBC,0x0000856e
 	ld	h, (xbc)                                ; FA5097  ld H,(XBC)
 	ld	c, 4:opc                                   ; FA5099  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA509B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA509B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA509E  extz XBC
 	add	xbc, 0x8668                            ; FA50A0  add XBC,0x00008668
 	ld	(xbc), h                                ; FA50A6  ld (XBC),H
 	ld	c, 26:opc                                  ; FA50A8  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA50AA  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA50AA  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA50AD  extz XBC
 	add	xbc, 18                                ; FA50AF  add XBC,0x00000012
 	add	xbc, 0x856E                            ; FA50B5  add XBC,0x0000856e
 	ld	h, (xbc)                                ; FA50BB  ld H,(XBC)
 	ld	c, 4:opc                                   ; FA50BD  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA50BF  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA50BF  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA50C2  extz XBC
 	inc	1, xbc                                 ; FA50C4  inc 1,XBC
 	add	xbc, 0x8668                            ; FA50C6  add XBC,0x00008668
 	ld	(xbc), h                                ; FA50CC  ld (XBC),H
 	ld	c, 26:opc                                  ; FA50CE  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA50D0  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA50D0  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA50D3  extz XBC
 	add	xbc, 19                                ; FA50D5  add XBC,0x00000013
 	add	xbc, 0x856E                            ; FA50DB  add XBC,0x0000856e
 	ld	h, (xbc)                                ; FA50E1  ld H,(XBC)
 	ld	c, 4:opc                                   ; FA50E3  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA50E5  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA50E5  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA50E8  extz XBC
 	inc	2, xbc                                 ; FA50EA  inc 2,XBC
 	add	xbc, 0x8668                            ; FA50EC  add XBC,0x00008668
 	ld	(xbc), h                                ; FA50F2  ld (XBC),H
 	ld	c, 26:opc                                  ; FA50F4  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA50F6  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA50F6  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA50F9  extz XBC
 	add	xbc, 20                                ; FA50FB  add XBC,0x00000014
 	add	xbc, 0x856E                            ; FA5101  add XBC,0x0000856e
 	ld	h, (xbc)                                ; FA5107  ld H,(XBC)
 	ld	c, 4:opc                                   ; FA5109  ld C,0x04
-	extpfx3 0x8E, 0x08, 0x43                   ; FA510B  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA510B  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA510E  extz XBC
 	inc	3, xbc                                 ; FA5110  inc 3,XBC
 	add	xbc, 0x8668                            ; FA5112  add XBC,0x00008668
 	ld	(xbc), h                                ; FA5118  ld (XBC),H
 	ld	c, 26:opc                                  ; FA511A  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA511C  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA511C  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA511F  extz XBC
 	add	xbc, 17                                ; FA5121  add XBC,0x00000011
 	add	xbc, 0x856E                            ; FA5127  add XBC,0x0000856e
 	ld	(xbc), 0xD8                             ; FA512D  ld (XBC),0xd8
 	ld	c, 26:opc                                  ; FA5130  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA5132  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA5132  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA5135  extz XBC
 	add	xbc, 18                                ; FA5137  add XBC,0x00000012
 	add	xbc, 0x856E                            ; FA513D  add XBC,0x0000856e
 	ld	(xbc), 2                                ; FA5143  ld (XBC),0x02
 	ld	c, 26:opc                                  ; FA5146  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA5148  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA5148  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA514B  extz XBC
 	add	xbc, 19                                ; FA514D  add XBC,0x00000013
 	add	xbc, 0x856E                            ; FA5153  add XBC,0x0000856e
 	ld	(xbc), 88                               ; FA5159  ld (XBC),0x58
 	ld	c, 26:opc                                  ; FA515C  ld C,0x1a
-	extpfx3 0x8E, 0x08, 0x43                   ; FA515E  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FA515E  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FA5161  extz XBC
 	add	xbc, 20                                ; FA5163  add XBC,0x00000014
 	add	xbc, 0x856E                            ; FA5169  add XBC,0x0000856e
@@ -19017,7 +19017,7 @@ sub_FA4E97__FA4FDE:
 sub_FA4E97__FA5172:
 	pop	xix                                    ; FA5172  pop XIX
 	popw	hl                                    ; FA5173  pop HL
-	unlk32 xiz                                 ; FA5174  unlk XIZ
+	unlk	xiz                                 ; FA5174  unlk XIZ
 	ret                                        ; FA5176  ret
 ; --------------------------------------------------------------------------
 ; P7Units_ServiceTask -- 0xFA5177..0xFA5534 (958 bytes)
@@ -19058,12 +19058,12 @@ sub_FA4E97__FA5172:
 ;          0xFA51FF select.
 ; --------------------------------------------------------------------------
 P7Units_ServiceTask:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA5177  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FA5177  link XIZ,0xfffc
 	pushw	hl                                   ; FA517B  push HL
 	push	xix                                   ; FA517C  push XIX
 	ld	(xiz-4), 0                              ; FA517D  ld (XIZ+0xfc),0x00
 	ld	c, 26:opc                                  ; FA5181  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA5183  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA5183  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5186  extz XBC
 	add	xbc, 25                                ; FA5188  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA518E  add XBC,0x0000856e
@@ -19071,7 +19071,7 @@ P7Units_ServiceTask:
 	cp	a, 0:i3                                   ; FA5196  cp A,0
 	jrl z, P7Units_ServiceTask__FA52A8                  ; FA5198  jrl Z,0xfa52a8
 	ld	c, 26:opc                                  ; FA519B  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA519D  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA519D  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA51A0  extz XBC
 	add	xbc, 25                                ; FA51A2  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA51A8  add XBC,0x0000856e
@@ -19087,7 +19087,7 @@ P7Units_ServiceTask__FA51C3:
 	jr P7Units_ServiceTask__FA51BA                      ; FA51C6  jr T,0xfa51ba
 P7Units_ServiceTask__FA51C8:
 	ld	c, 26:opc                                  ; FA51C8  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA51CA  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA51CA  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA51CD  extz XBC
 	ld	xix, xbc                                ; FA51CF  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA51D1  ld WA,(XIZ+0xfe)
@@ -19118,7 +19118,7 @@ P7Units_ServiceTask__FA5208:
 	jr P7Units_ServiceTask__FA51FF                      ; FA520B  jr T,0xfa51ff
 P7Units_ServiceTask__FA520D:
 	ld	c, 26:opc                                  ; FA520D  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA520F  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA520F  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5212  extz XBC
 	ld	xix, xbc                                ; FA5214  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA5216  ld WA,(XIZ+0xfe)
@@ -19140,7 +19140,7 @@ P7Units_ServiceTask__FA5241:
 	jr P7Units_ServiceTask__FA5208                      ; FA5241  jr T,0xfa5208
 P7Units_ServiceTask__FA5243:
 	ld	c, 26:opc                                  ; FA5243  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA5245  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA5245  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5248  extz XBC
 	ld	xix, xbc                                ; FA524A  ld XIX,XBC
 	add	xix, 21                                ; FA524C  add XIX,0x00000015
@@ -19157,10 +19157,10 @@ P7Units_ServiceTask__FA526C:
 	cp (xiz-3), 0x00                           ; FA526C  cp (XIZ+0xfd),0x00
 	jr z, P7Units_ServiceTask__FA52A8                   ; FA5270  jr Z,0xfa52a8
 	push	0                                     ; FA5272  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA5274  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA5274  push (XIZ+0xfc)
 	calr P7Unit_LoadProgramStreams                 ; FA5277  calr 0xfa2c5e
 	ld	c, 26:opc                                  ; FA527A  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA527C  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA527C  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA527F  extz XBC
 	ld	xix, xbc                                ; FA5281  ld XIX,XBC
 	add	xix, 22                                ; FA5283  add XIX,0x00000016
@@ -19173,13 +19173,13 @@ P7Units_ServiceTask__FA526C:
 	ld	(xbc), a                                ; FA529C  ld (XBC),A
 	popw	bc                                    ; FA529E  pop BC
 	push	0                                     ; FA529F  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA52A1  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA52A1  push (XIZ+0xfc)
 	calr P7Unit_SendPreambleOnce                 ; FA52A4  calr 0xfa35d5
 	popw	bc                                    ; FA52A7  pop BC
 P7Units_ServiceTask__FA52A8:
 	ld	(xiz-4), 1                              ; FA52A8  ld (XIZ+0xfc),0x01
 	ld	c, 26:opc                                  ; FA52AC  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA52AE  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA52AE  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA52B1  extz XBC
 	add	xbc, 25                                ; FA52B3  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA52B9  add XBC,0x0000856e
@@ -19187,7 +19187,7 @@ P7Units_ServiceTask__FA52A8:
 	cp	a, 0:i3                                   ; FA52C1  cp A,0
 	jrl z, P7Units_ServiceTask__FA53D3                  ; FA52C3  jrl Z,0xfa53d3
 	ld	c, 26:opc                                  ; FA52C6  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA52C8  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA52C8  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA52CB  extz XBC
 	add	xbc, 25                                ; FA52CD  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA52D3  add XBC,0x0000856e
@@ -19203,7 +19203,7 @@ P7Units_ServiceTask__FA52EE:
 	jr P7Units_ServiceTask__FA52E5                      ; FA52F1  jr T,0xfa52e5
 P7Units_ServiceTask__FA52F3:
 	ld	c, 26:opc                                  ; FA52F3  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA52F5  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA52F5  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA52F8  extz XBC
 	ld	xix, xbc                                ; FA52FA  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA52FC  ld WA,(XIZ+0xfe)
@@ -19234,7 +19234,7 @@ P7Units_ServiceTask__FA5333:
 	jr P7Units_ServiceTask__FA532A                      ; FA5336  jr T,0xfa532a
 P7Units_ServiceTask__FA5338:
 	ld	c, 26:opc                                  ; FA5338  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA533A  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA533A  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA533D  extz XBC
 	ld	xix, xbc                                ; FA533F  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA5341  ld WA,(XIZ+0xfe)
@@ -19256,7 +19256,7 @@ P7Units_ServiceTask__FA536C:
 	jr P7Units_ServiceTask__FA5333                      ; FA536C  jr T,0xfa5333
 P7Units_ServiceTask__FA536E:
 	ld	c, 26:opc                                  ; FA536E  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA5370  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA5370  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5373  extz XBC
 	ld	xix, xbc                                ; FA5375  ld XIX,XBC
 	add	xix, 21                                ; FA5377  add XIX,0x00000015
@@ -19273,10 +19273,10 @@ P7Units_ServiceTask__FA5397:
 	cp (xiz-3), 0x00                           ; FA5397  cp (XIZ+0xfd),0x00
 	jr z, P7Units_ServiceTask__FA53D3                   ; FA539B  jr Z,0xfa53d3
 	push	0                                     ; FA539D  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA539F  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA539F  push (XIZ+0xfc)
 	calr P7Unit_LoadProgramStreams                 ; FA53A2  calr 0xfa2c5e
 	ld	c, 26:opc                                  ; FA53A5  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA53A7  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA53A7  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA53AA  extz XBC
 	ld	xix, xbc                                ; FA53AC  ld XIX,XBC
 	add	xix, 22                                ; FA53AE  add XIX,0x00000016
@@ -19289,13 +19289,13 @@ P7Units_ServiceTask__FA5397:
 	ld	(xbc), a                                ; FA53C7  ld (XBC),A
 	popw	bc                                    ; FA53C9  pop BC
 	push	0                                     ; FA53CA  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA53CC  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA53CC  push (XIZ+0xfc)
 	calr P7Unit_SendPreambleOnce                 ; FA53CF  calr 0xfa35d5
 	popw	bc                                    ; FA53D2  pop BC
 P7Units_ServiceTask__FA53D3:
 	ld	(xiz-4), 2                              ; FA53D3  ld (XIZ+0xfc),0x02
 	ld	c, 26:opc                                  ; FA53D7  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA53D9  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA53D9  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA53DC  extz XBC
 	add	xbc, 25                                ; FA53DE  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA53E4  add XBC,0x0000856e
@@ -19303,7 +19303,7 @@ P7Units_ServiceTask__FA53D3:
 	cp	a, 0:i3                                   ; FA53EC  cp A,0
 	jrl z, P7Units_ServiceTask__FA54D5                  ; FA53EE  jrl Z,0xfa54d5
 	ld	c, 26:opc                                  ; FA53F1  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA53F3  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA53F3  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA53F6  extz XBC
 	add	xbc, 25                                ; FA53F8  add XBC,0x00000019
 	add	xbc, 0x856E                            ; FA53FE  add XBC,0x0000856e
@@ -19319,7 +19319,7 @@ P7Units_ServiceTask__FA5419:
 	jr P7Units_ServiceTask__FA5410                      ; FA541C  jr T,0xfa5410
 P7Units_ServiceTask__FA541E:
 	ld	c, 26:opc                                  ; FA541E  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA5420  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA5420  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5423  extz XBC
 	ld	xix, xbc                                ; FA5425  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA5427  ld WA,(XIZ+0xfe)
@@ -19350,7 +19350,7 @@ P7Units_ServiceTask__FA545E:
 	jr P7Units_ServiceTask__FA5455                      ; FA5461  jr T,0xfa5455
 P7Units_ServiceTask__FA5463:
 	ld	c, 26:opc                                  ; FA5463  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA5465  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA5465  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA5468  extz XBC
 	ld	xix, xbc                                ; FA546A  ld XIX,XBC
 	ld	wa, (xiz-2)                             ; FA546C  ld WA,(XIZ+0xfe)
@@ -19374,10 +19374,10 @@ P7Units_ServiceTask__FA5499:
 	cp (xiz-3), 0x00                           ; FA5499  cp (XIZ+0xfd),0x00
 	jr z, P7Units_ServiceTask__FA54D5                   ; FA549D  jr Z,0xfa54d5
 	push	0                                     ; FA549F  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA54A1  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA54A1  push (XIZ+0xfc)
 	calr P7Unit_LoadProgramStreams                 ; FA54A4  calr 0xfa2c5e
 	ld	c, 26:opc                                  ; FA54A7  ld C,0x1a
-	extpfx3 0x8E, 0xFC, 0x43                   ; FA54A9  mul BC,(XIZ+0xfc)
+	mul	bc, (xiz-4)                   ; FA54A9  mul BC,(XIZ+0xfc)
 	extz	xbc                                   ; FA54AC  extz XBC
 	ld	xix, xbc                                ; FA54AE  ld XIX,XBC
 	add	xix, 22                                ; FA54B0  add XIX,0x00000016
@@ -19390,13 +19390,13 @@ P7Units_ServiceTask__FA5499:
 	ld	(xbc), a                                ; FA54C9  ld (XBC),A
 	popw	bc                                    ; FA54CB  pop BC
 	push	0                                     ; FA54CC  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FA54CE  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FA54CE  push (XIZ+0xfc)
 	calr P7Unit_SendPreambleOnce                 ; FA54D1  calr 0xfa35d5
 	popw	bc                                    ; FA54D4  pop BC
 P7Units_ServiceTask__FA54D5:
 	pop	xix                                    ; FA54D5  pop XIX
 	popw	hl                                    ; FA54D6  pop HL
-	unlk32 xiz                                 ; FA54D7  unlk XIZ
+	unlk	xiz                                 ; FA54D7  unlk XIZ
 	ret                                        ; FA54D9  ret
 	ret                                        ; FA54DA  ret
 P7Units_ServiceTask__FA54DB:
@@ -19413,7 +19413,7 @@ P7Units_ServiceTask__FA54E3:
 P7Units_ServiceTask__FA54F1:
 	ei	6                                       ; FA54F1  ei 0x06
 	ld	c, (0xF35F:24)                         ; FA54F3  ld C,(0x00f35f)
-	extpfx5 0xC2, 0x60, 0xF3, 0x00, 0xF3       ; FA54F8  cp C,(0x00f360)
+	cp	c, (0x00f360:24)       ; FA54F8  cp C,(0x00f360)
 	jr z, P7Units_ServiceTask__FA5509                   ; FA54FD  jr Z,0xfa5509
 	ld	(0xF360:24), c                         ; FA54FF  ld (0x00f360),C
 	ei	0                                       ; FA5504  ei 0x00
@@ -19471,22 +19471,22 @@ P7Units_ServiceTask__FA552E:
 ;          this pass did not find the reader.
 ; --------------------------------------------------------------------------
 P7Units_ResolveProgramsAndReload:
-	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FA5535  link XIZ,0xffde
+	link	xiz, 0xffde              ; FA5535  link XIZ,0xffde
 	pushw	hl                                   ; FA5539  push HL
 	push	xix                                   ; FA553A  push XIX
 	ei	6                                       ; FA553B  ei 0x06
 	lda	xix, (0x856E:24)                       ; FA553D  lda XIX,0x00856e
 	lda	xiy, (0x7E7E:24)                       ; FA5542  lda XIY,0x007e7e
 	ldw	bc, 13                                 ; FA5547  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA554A  ldirw
+	ldirw                         ; FA554A  ldirw
 	lda	xix, (0x8588:24)                       ; FA554C  lda XIX,0x008588
 	lda	xiy, (0x7E98:24)                       ; FA5551  lda XIY,0x007e98
 	ldw	bc, 13                                 ; FA5556  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5559  ldirw
+	ldirw                         ; FA5559  ldirw
 	lda	xix, (0x85A2:24)                       ; FA555B  lda XIX,0x0085a2
 	lda	xiy, (0x7EB2:24)                       ; FA5560  lda XIY,0x007eb2
 	ldw	bc, 13                                 ; FA5565  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5568  ldirw
+	ldirw                         ; FA5568  ldirw
 	ld	a, (0x856E:24)                         ; FA556A  ld A,(0x00856e)
 	ld	(xiz-2), a                              ; FA556F  ld (XIZ+0xfe),A
 	cp	a, 0x7F                                 ; FA5572  cp A,0x7f
@@ -19635,7 +19635,7 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	ld	(0xF35D:24), 1                        ; FA571D  ld (0x00f35d),0x01
 P7Units_ResolveProgramsAndReload__FA5723:
 	ld	c, (0xF35D:24)                         ; FA5723  ld C,(0x00f35d)
-	extpfx5 0xC2, 0x5E, 0xF3, 0x00, 0xF3       ; FA5728  cp C,(0x00f35e)
+	cp	c, (0x00f35e:24)       ; FA5728  cp C,(0x00f35e)
 	jr z, P7Units_ResolveProgramsAndReload__FA5734                   ; FA572D  jr Z,0xfa5734
 	pushw	bc                                   ; FA572F  push BC
 	calr P7Units_ReloadForGroup                 ; FA5730  calr 0xfa3802
@@ -19645,7 +19645,7 @@ P7Units_ResolveProgramsAndReload__FA5734:
 	ld	(0xF35E:24), c                         ; FA5739  ld (0x00f35e),C
 	ld	(xiz-1), 1                              ; FA573E  ld (XIZ+0xff),0x01
 	ld	c, 26:opc                                  ; FA5742  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA5744  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA5744  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5747  extz XBC
 	ld	xix, xbc                                ; FA5749  ld XIX,XBC
 	add	xix, 24                                ; FA574B  add XIX,0x00000018
@@ -19658,19 +19658,19 @@ P7Units_ResolveProgramsAndReload__FA5734:
 	cp	a, h                                    ; FA5763  cp A,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5782                   ; FA5765  jr Z,0xfa5782
 	push	0                                     ; FA5767  push 0x00
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA5769  push (0x00f35d)
+	push	(0x00f35d:24)       ; FA5769  push (0x00f35d)
 	push	0                                     ; FA576E  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5770  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5770  push (XIZ+0xff)
 	calr sub_FA3A3C                 ; FA5773  calr 0xfa3a3c
 	pop	xiy                                    ; FA5776  pop XIY
 	push	0                                     ; FA5777  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5779  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5779  push (XIZ+0xff)
 	calr sub_FA4CE5                 ; FA577C  calr 0xfa4ce5
 	popw	bc                                    ; FA577F  pop BC
 	jr P7Units_ResolveProgramsAndReload__FA57B9                      ; FA5780  jr T,0xfa57b9
 P7Units_ResolveProgramsAndReload__FA5782:
 	ld	c, 26:opc                                  ; FA5782  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA5784  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA5784  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5787  extz XBC
 	ld	xix, xbc                                ; FA5789  ld XIX,XBC
 	add	xix, 21                                ; FA578B  add XIX,0x00000015
@@ -19683,20 +19683,20 @@ P7Units_ResolveProgramsAndReload__FA5782:
 	cp	a, h                                    ; FA57A3  cp A,H
 	jr z, P7Units_ResolveProgramsAndReload__FA57B0                   ; FA57A5  jr Z,0xfa57b0
 	push	0                                     ; FA57A7  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA57A9  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA57A9  push (XIZ+0xff)
 	calr sub_FA4CE5                 ; FA57AC  calr 0xfa4ce5
 	popw	bc                                    ; FA57AF  pop BC
 P7Units_ResolveProgramsAndReload__FA57B0:
 	push	0                                     ; FA57B0  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA57B2  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA57B2  push (XIZ+0xff)
 	calr P7Unit_EmitChangedParams                 ; FA57B5  calr 0xfa3cd7
 	popw	bc                                    ; FA57B8  pop BC
 P7Units_ResolveProgramsAndReload__FA57B9:
 	push	0                                     ; FA57B9  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA57BB  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA57BB  push (XIZ+0xff)
 	calr sub_FA4E23                 ; FA57BE  calr 0xfa4e23
 	ld	c, 26:opc                                  ; FA57C1  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA57C3  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA57C3  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA57C6  extz XBC
 	ld	xix, xbc                                ; FA57C8  ld XIX,XBC
 	push	xix                                   ; FA57CA  push XIX
@@ -19705,14 +19705,14 @@ P7Units_ResolveProgramsAndReload__FA57B9:
 	lda	xiy, (0x856E:24)                       ; FA57D2  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA57D7  add XIY,XBC
 	ldw	bc, 13                                 ; FA57D9  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA57DC  ldirw
+	ldirw                         ; FA57DC  ldirw
 	pop	xix                                    ; FA57DE  pop XIX
 	popw	wa                                    ; FA57DF  pop WA
 	pushw	1                                    ; FA57E0  push 0x0001
 	calr P7Unit_FlushDirtyParams                 ; FA57E3  calr 0xfa4957
 	ld	(xiz-1), 0                              ; FA57E6  ld (XIZ+0xff),0x00
 	ld	c, 26:opc                                  ; FA57EA  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA57EC  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA57EC  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA57EF  extz XBC
 	ld	xix, xbc                                ; FA57F1  ld XIX,XBC
 	add	xix, 24                                ; FA57F3  add XIX,0x00000018
@@ -19726,19 +19726,19 @@ P7Units_ResolveProgramsAndReload__FA57B9:
 	cp	a, h                                    ; FA580C  cp A,H
 	jr z, P7Units_ResolveProgramsAndReload__FA582B                   ; FA580E  jr Z,0xfa582b
 	push	0                                     ; FA5810  push 0x00
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA5812  push (0x00f35d)
+	push	(0x00f35d:24)       ; FA5812  push (0x00f35d)
 	push	0                                     ; FA5817  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5819  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5819  push (XIZ+0xff)
 	calr sub_FA3A3C                 ; FA581C  calr 0xfa3a3c
 	pop	xiy                                    ; FA581F  pop XIY
 	push	0                                     ; FA5820  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5822  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5822  push (XIZ+0xff)
 	calr sub_FA4CE5                 ; FA5825  calr 0xfa4ce5
 	popw	bc                                    ; FA5828  pop BC
 	jr P7Units_ResolveProgramsAndReload__FA5862                      ; FA5829  jr T,0xfa5862
 P7Units_ResolveProgramsAndReload__FA582B:
 	ld	c, 26:opc                                  ; FA582B  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA582D  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA582D  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5830  extz XBC
 	ld	xix, xbc                                ; FA5832  ld XIX,XBC
 	add	xix, 21                                ; FA5834  add XIX,0x00000015
@@ -19751,24 +19751,24 @@ P7Units_ResolveProgramsAndReload__FA582B:
 	cp	a, h                                    ; FA584C  cp A,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5859                   ; FA584E  jr Z,0xfa5859
 	push	0                                     ; FA5850  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5852  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5852  push (XIZ+0xff)
 	calr sub_FA4CE5                 ; FA5855  calr 0xfa4ce5
 	popw	bc                                    ; FA5858  pop BC
 P7Units_ResolveProgramsAndReload__FA5859:
 	push	0                                     ; FA5859  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA585B  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA585B  push (XIZ+0xff)
 	calr P7Unit_EmitChangedParams                 ; FA585E  calr 0xfa3cd7
 	popw	bc                                    ; FA5861  pop BC
 P7Units_ResolveProgramsAndReload__FA5862:
 	push	0                                     ; FA5862  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA5864  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA5864  push (XIZ+0xff)
 	calr sub_FA4A0D                 ; FA5867  calr 0xfa4a0d
 	popw	bc                                    ; FA586A  pop BC
 	push	0                                     ; FA586B  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA586D  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA586D  push (XIZ+0xff)
 	calr sub_FA4E23                 ; FA5870  calr 0xfa4e23
 	ld	c, 26:opc                                  ; FA5873  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA5875  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA5875  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA5878  extz XBC
 	ld	xix, xbc                                ; FA587A  ld XIX,XBC
 	push	xix                                   ; FA587C  push XIX
@@ -19777,14 +19777,14 @@ P7Units_ResolveProgramsAndReload__FA5862:
 	lda	xiy, (0x856E:24)                       ; FA5884  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA5889  add XIY,XBC
 	ldw	bc, 13                                 ; FA588B  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA588E  ldirw
+	ldirw                         ; FA588E  ldirw
 	pop	xix                                    ; FA5890  pop XIX
 	popw	wa                                    ; FA5891  pop WA
 	pushw	0                                    ; FA5892  push 0x0000
 	calr P7Unit_FlushDirtyParams                 ; FA5895  calr 0xfa4957
 	ld	(xiz-1), 2                              ; FA5898  ld (XIZ+0xff),0x02
 	ld	c, 26:opc                                  ; FA589C  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA589E  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA589E  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA58A1  extz XBC
 	ld	xix, xbc                                ; FA58A3  ld XIX,XBC
 	add	xix, 24                                ; FA58A5  add XIX,0x00000018
@@ -19798,27 +19798,27 @@ P7Units_ResolveProgramsAndReload__FA5862:
 	cp	a, h                                    ; FA58BE  cp A,H
 	jr z, P7Units_ResolveProgramsAndReload__FA58D4                   ; FA58C0  jr Z,0xfa58d4
 	push	0                                     ; FA58C2  push 0x00
-	extpfx5 0xC2, 0x5D, 0xF3, 0x00, 0x04       ; FA58C4  push (0x00f35d)
+	push	(0x00f35d:24)       ; FA58C4  push (0x00f35d)
 	push	0                                     ; FA58C9  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA58CB  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA58CB  push (XIZ+0xff)
 	calr sub_FA3A3C                 ; FA58CE  calr 0xfa3a3c
 	pop	xiy                                    ; FA58D1  pop XIY
 	jr P7Units_ResolveProgramsAndReload__FA58DD                      ; FA58D2  jr T,0xfa58dd
 P7Units_ResolveProgramsAndReload__FA58D4:
 	push	0                                     ; FA58D4  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA58D6  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA58D6  push (XIZ+0xff)
 	calr P7Unit_EmitChangedParams                 ; FA58D9  calr 0xfa3cd7
 	popw	bc                                    ; FA58DC  pop BC
 P7Units_ResolveProgramsAndReload__FA58DD:
 	push	0                                     ; FA58DD  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA58DF  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA58DF  push (XIZ+0xff)
 	calr sub_FA4A0D                 ; FA58E2  calr 0xfa4a0d
 	popw	bc                                    ; FA58E5  pop BC
 	push	0                                     ; FA58E6  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FA58E8  push (XIZ+0xff)
+	push	(xiz-1)                   ; FA58E8  push (XIZ+0xff)
 	calr sub_FA4E23                 ; FA58EB  calr 0xfa4e23
 	ld	c, 26:opc                                  ; FA58EE  ld C,0x1a
-	extpfx3 0x8E, 0xFF, 0x43                   ; FA58F0  mul BC,(XIZ+0xff)
+	mul	bc, (xiz-1)                   ; FA58F0  mul BC,(XIZ+0xff)
 	extz	xbc                                   ; FA58F3  extz XBC
 	ld	xix, xbc                                ; FA58F5  ld XIX,XBC
 	push	xix                                   ; FA58F7  push XIX
@@ -19827,7 +19827,7 @@ P7Units_ResolveProgramsAndReload__FA58DD:
 	lda	xiy, (0x856E:24)                       ; FA58FF  lda XIY,0x00856e
 	add	xiy, xbc                               ; FA5904  add XIY,XBC
 	ldw	bc, 13                                 ; FA5906  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5909  ldirw
+	ldirw                         ; FA5909  ldirw
 	pop	xix                                    ; FA590B  pop XIX
 	calr sub_FA4C5E                 ; FA590C  calr 0xfa4c5e
 	popw	bc                                    ; FA590F  pop BC
@@ -19836,17 +19836,17 @@ P7Units_ResolveProgramsAndReload__FA58DD:
 	lda	xix, (0x85BC:24)                       ; FA5916  lda XIX,0x0085bc
 	lda	xiy, (0x856E:24)                       ; FA591B  lda XIY,0x00856e
 	ldw	bc, 13                                 ; FA5920  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5923  ldirw
+	ldirw                         ; FA5923  ldirw
 	lda	xix, (0x85D6:24)                       ; FA5925  lda XIX,0x0085d6
 	lda	xiy, (0x8588:24)                       ; FA592A  lda XIY,0x008588
 	ldw	bc, 13                                 ; FA592F  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5932  ldirw
+	ldirw                         ; FA5932  ldirw
 	lda	xix, (0x85F0:24)                       ; FA5934  lda XIX,0x0085f0
 	lda	xiy, (0x85A2:24)                       ; FA5939  lda XIY,0x0085a2
 	ldw	bc, 13                                 ; FA593E  ld BC,0x000d
-	extpfx2 0x95, 0x11                         ; FA5941  ldirw
+	ldirw                         ; FA5941  ldirw
 	popw	bc                                    ; FA5943  pop BC
 	pop	xix                                    ; FA5944  pop XIX
 	popw	hl                                    ; FA5945  pop HL
-	unlk32 xiz                                 ; FA5946  unlk XIZ
+	unlk	xiz                                 ; FA5946  unlk XIZ
 	ret                                        ; FA5948  ret

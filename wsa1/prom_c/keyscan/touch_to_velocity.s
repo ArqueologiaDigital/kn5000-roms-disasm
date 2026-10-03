@@ -108,13 +108,13 @@
 ; Unknown:  which UI control feeds it.
 ; --------------------------------------------------------------------------
 ToneGen_SetVelCurveMode:
-	link32	0xEE, 0x0C, 0x00, 0x00
+	link	xiz, 0x0000
 	cp	(xiz+8), 0x09
 	jr	ugt, ToneGen_SetVelCurveMode__reject
 	ld	c, (xiz+8)
 	ld	(0x00F32A:24), c
 ToneGen_SetVelCurveMode__reject:
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 ; --------------------------------------------------------------------------
@@ -132,13 +132,13 @@ ToneGen_SetVelCurveMode__reject:
 ;          centre it is then given.
 ; --------------------------------------------------------------------------
 ToneGen_SetVelOffset:
-	link32	0xEE, 0x0C, 0x00, 0x00
+	link	xiz, 0x0000
 	cp	(xiz+8), 0x7F
 	jr	ugt, ToneGen_SetVelOffset__reject
 	ld	c, (xiz+8)
 	ld	(0x00F32B:24), c
 ToneGen_SetVelOffset__reject:
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 ; --------------------------------------------------------------------------
@@ -179,7 +179,7 @@ INT4_HANDLER:
 ;          trees, so the delay cannot be converted to microseconds.
 ; --------------------------------------------------------------------------
 Delay_CountdownArg:
-	link32	0xEE, 0x0C, 0xFE, 0xFF
+	link	xiz, 0xfffe
 	pushw	hl
 Delay_CountdownArg__loop:
 	ld	hl, (xiz+8)
@@ -192,7 +192,7 @@ Delay_CountdownArg__loop:
 	jr	Delay_CountdownArg__loop
 Delay_CountdownArg__done:
 	popw	hl
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 ; --------------------------------------------------------------------------
@@ -223,7 +223,7 @@ Delay_CountdownArg__done:
 ;          the shift is not established).
 ; --------------------------------------------------------------------------
 ToneGen_VelocityFromTouch:
-	link32	0xEE, 0x0C, 0xF2, 0xFF
+	link	xiz, 0xfff2
 	pushw	hl
 	pushw	de
 	push	xix
@@ -249,7 +249,7 @@ ToneGen_VelocityFromTouch:
 	div	c, 12
 	ld	(xiz-7), b
 	ld	a, 3:opc
-	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x41
+	mul	wa, (0x00f32a:24)
 	extz	xwa
 	ld	xix, xwa
 	add	xwa, ToneGen_VelCurve_ModeParams
@@ -271,7 +271,7 @@ ToneGen_VelocityFromTouch:
 	add	wa, de
 	muls	xbc, wa
 	exts	xbc
-	extpfx5	0xD2, 0xC7, 0xC5, 0xFC, 0x59
+	divs	xbc, (0xfcc5c7:24)
 	exts	xbc
 	ld	(xiz-14), xbc
 	ld	xwa, xix
@@ -289,7 +289,7 @@ ToneGen_VelocityFromTouch:
 	jr	ToneGen_VelocityFromTouch__pitchclass
 ToneGen_VelocityFromTouch__black_key:
 	ld	c, 3:opc
-	extpfx5	0xC2, 0x2A, 0xF3, 0x00, 0x43
+	mul	bc, (0x00f32a:24)
 	extz	xbc
 	inc	2, xbc
 	add	xbc, ToneGen_VelCurve_ModeParams
@@ -353,7 +353,7 @@ ToneGen_VelocityFromTouch__no_clip_hi:
 	ld	(xiz-6), xwa
 ToneGen_VelocityFromTouch__no_clip_lo:
 	lda	xbc, (ToneGen_Velocity_Output_Curve:24)
-	extpfx3	0xAE, 0xFA, 0x81
+	add	xbc, (xiz-6)
 	ld	a, (xbc)
 	ld	xbc, (xiz+16)
 	ld	(xbc), a
@@ -365,5 +365,5 @@ ToneGen_VelocityFromTouch__exit:
 	pop	xix
 	popw	de
 	popw	hl
-	unlk32	xiz
+	unlk	xiz
 	ret

@@ -134,7 +134,7 @@ RESET:
 	; registers.  As on CPU 1, this is a lower bound on the DRAM, not its
 	; size.
 	ld XBC,0x00008000
-	lda_dd8l XIX,0x80		; lda XIX,0x80
+	lda	xix, (0x80:8)		; lda XIX,0x80
 	xor WA,WA
 RESET__clear_dram:
 	ld (xix+), WA

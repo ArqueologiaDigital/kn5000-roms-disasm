@@ -98,13 +98,13 @@
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAD142:
-	link32 0xEE, 0x0C, 0xF1, 0xFF              ; FAD142  link XIZ,0xfff1
+	link	xiz, 0xfff1              ; FAD142  link XIZ,0xfff1
 	push	xhl                                   ; FAD146  push XHL
 	pushw	de                                   ; FAD147  push DE
 	push	xix                                   ; FAD148  push XIX
 	ld	(xiz-11), 0                             ; FAD149  ld (XIZ+0xf5),0x00
 	ld	bc, (xiz+14)                            ; FAD14D  ld BC,(XIZ+0x0e)
-	extpfx3 0x9E, 0x0C, 0xE1                   ; FAD150  or BC,(XIZ+0x0c)
+	or	bc, (xiz+12)                   ; FAD150  or BC,(XIZ+0x0c)
 	ld	(xiz-6), bc                             ; FAD153  ld (XIZ+0xfa),BC
 	ld	hl, (xiz+8)                             ; FAD156  ld HL,(XIZ+0x08)
 	extz	hl                                    ; FAD159  extz HL
@@ -124,12 +124,12 @@ sub_FAD142__FAD173:
 	lda	xbc, (BitMasks_EvenBits:24)                     ; FAD17A  lda XBC,0xfe1286
 	add	xbc, xix                               ; FAD17F  add XBC,XIX
 	ld	a, (xbc)                                ; FAD181  ld A,(XBC)
-	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD183  and A,(XIZ+0x0a)
+	and	a, (xiz+10)                   ; FAD183  and A,(XIZ+0x0a)
 	jr z, sub_FAD142__FAD1DA                   ; FAD186  jr Z,0xfad1da
 	lda	xbc, (BitMasks_OddBits:24)                     ; FAD188  lda XBC,0xfe128a
 	add	xbc, xix                               ; FAD18D  add XBC,XIX
 	ld	a, (xbc)                                ; FAD18F  ld A,(XBC)
-	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD191  and A,(XIZ+0x0a)
+	and	a, (xiz+10)                   ; FAD191  and A,(XIZ+0x0a)
 	ld	(xiz-13), a                             ; FAD194  ld (XIZ+0xf3),A
 	ld	(xiz-15), de                            ; FAD197  ld (XIZ+0xf1),DE
 	ld	hl, (xiz-10)                            ; FAD19A  ld HL,(XIZ+0xf6)
@@ -151,7 +151,7 @@ sub_FAD142__FAD1BF:
 	ld	(xiz-13), bc                            ; FAD1C4  ld (XIZ+0xf3),BC
 	extz	xhl                                   ; FAD1C7  extz XHL
 	ld	(xhl+0x1523), bc                        ; FAD1C9  ld (XHL+0x1523),BC
-	extpfx3 0x9E, 0x0C, 0xE1                   ; FAD1CE  or BC,(XIZ+0x0c)
+	or	bc, (xiz+12)                   ; FAD1CE  or BC,(XIZ+0x0c)
 	extz	xhl                                   ; FAD1D1  extz XHL
 	ld	(xhl+0x1523), bc                        ; FAD1D3  ld (XHL+0x1523),BC
 	jr sub_FAD142__FAD1EF                      ; FAD1D8  jr T,0xfad1ef
@@ -171,7 +171,7 @@ sub_FAD142__FAD1EF:
 	pop	xix                                    ; FAD1FD  pop XIX
 	popw	de                                    ; FAD1FE  pop DE
 	pop	xhl                                    ; FAD1FF  pop XHL
-	unlk32 xiz                                 ; FAD200  unlk XIZ
+	unlk	xiz                                 ; FAD200  unlk XIZ
 	ret                                        ; FAD202  ret
 ; --------------------------------------------------------------------------
 ; PartRec_SetOrClearParamBits_x4 -- 0xFAD203..0xFAD2D4 (210 bytes)
@@ -247,7 +247,7 @@ sub_FAD142__FAD1EF:
 ;          that record IS remains the open question the whole module hangs on.
 ; --------------------------------------------------------------------------
 PartRec_SetOrClearParamBits_x4:
-	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAD203  link XIZ,0xfff5
+	link	xiz, 0xfff5              ; FAD203  link XIZ,0xfff5
 	pushw	hl                                   ; FAD207  push HL
 	pushw	de                                   ; FAD208  push DE
 	push	xix                                   ; FAD209  push XIX
@@ -271,16 +271,16 @@ sub_FAD203__FAD22E:
 	ld	(xiz-6), xbc                            ; FAD235  ld (XIZ+0xfa),XBC
 	add	xbc, BitMasks_EvenBits                          ; FAD238  add XBC,0x00fe1286
 	ld	a, (xbc)                                ; FAD23E  ld A,(XBC)
-	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD240  and A,(XIZ+0x0a)
+	and	a, (xiz+10)                   ; FAD240  and A,(XIZ+0x0a)
 	jr z, sub_FAD203__FAD298                   ; FAD243  jr Z,0xfad298
 	lda	xbc, (BitMasks_OddBits:24)                     ; FAD245  lda XBC,0xfe128a
-	extpfx3 0xAE, 0xFA, 0x81                   ; FAD24A  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FAD24A  add XBC,(XIZ+0xfa)
 	ld	a, (xbc)                                ; FAD24D  ld A,(XBC)
-	extpfx3 0x8E, 0x0A, 0xC1                   ; FAD24F  and A,(XIZ+0x0a)
+	and	a, (xiz+10)                   ; FAD24F  and A,(XIZ+0x0a)
 	jr z, sub_FAD203__FAD280                   ; FAD252  jr Z,0xfad280
 	ld	(xiz-9), hl                             ; FAD254  ld (XIZ+0xf7),HL
 	ld	bc, ix                                  ; FAD257  ld BC,IX
-	extpfx3 0x9E, 0xF7, 0x81                   ; FAD259  add BC,(XIZ+0xf7)
+	add	bc, (xiz-9)                   ; FAD259  add BC,(XIZ+0xf7)
 	ld	(xiz-11), bc                            ; FAD25C  ld (XIZ+0xf5),BC
 	add	bc, 0xA2                               ; FAD25F  add BC,0x00a2
 	extz	xbc                                   ; FAD263  extz XBC
@@ -295,7 +295,7 @@ sub_FAD203__FAD22E:
 sub_FAD203__FAD280:
 	ld	(xiz-9), hl                             ; FAD280  ld (XIZ+0xf7),HL
 	ld	bc, ix                                  ; FAD283  ld BC,IX
-	extpfx3 0x9E, 0xF7, 0x81                   ; FAD285  add BC,(XIZ+0xf7)
+	add	bc, (xiz-9)                   ; FAD285  add BC,(XIZ+0xf7)
 	add	bc, 0xA2                               ; FAD288  add BC,0x00a2
 	extz	xbc                                   ; FAD28C  extz XBC
 	ld	wa, (xiz+12)                            ; FAD28E  ld WA,(XIZ+0x0c)
@@ -304,14 +304,14 @@ sub_FAD203__FAD280:
 sub_FAD203__FAD298:
 	ld	(xiz-9), hl                             ; FAD298  ld (XIZ+0xf7),HL
 	ld	bc, ix                                  ; FAD29B  ld BC,IX
-	extpfx3 0x9E, 0xF7, 0x81                   ; FAD29D  add BC,(XIZ+0xf7)
+	add	bc, (xiz-9)                   ; FAD29D  add BC,(XIZ+0xf7)
 	add	bc, 0xA2                               ; FAD2A0  add BC,0x00a2
 	extz	xbc                                   ; FAD2A4  extz XBC
 	and	(xbc+0x1523), de                       ; FAD2A6  and (XBC+0x1523),DE
 sub_FAD203__FAD2AB:
 	ld	(xiz-9), hl                             ; FAD2AB  ld (XIZ+0xf7),HL
 	ld	bc, ix                                  ; FAD2AE  ld BC,IX
-	extpfx3 0x9E, 0xF7, 0x81                   ; FAD2B0  add BC,(XIZ+0xf7)
+	add	bc, (xiz-9)                   ; FAD2B0  add BC,(XIZ+0xf7)
 	add	bc, 0xA4                               ; FAD2B3  add BC,0x00a4
 	extz	xbc                                   ; FAD2B7  extz XBC
 	ld	wa, (xiz-2)                             ; FAD2B9  ld WA,(XIZ+0xfe)
@@ -324,7 +324,7 @@ sub_FAD203__FAD2C1:
 	pop	xix                                    ; FAD2CF  pop XIX
 	popw	de                                    ; FAD2D0  pop DE
 	popw	hl                                    ; FAD2D1  pop HL
-	unlk32 xiz                                 ; FAD2D2  unlk XIZ
+	unlk	xiz                                 ; FAD2D2  unlk XIZ
 	ret                                        ; FAD2D4  ret
 ; --------------------------------------------------------------------------
 ; sub_FAD2D5 -- 0xFAD2D5..0xFAD37D (169 bytes)
@@ -346,7 +346,7 @@ sub_FAD203__FAD2C1:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAD2D5:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAD2D5  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAD2D5  link XIZ,0xfffc
 	push	xix                                   ; FAD2D9  push XIX
 	ld	xbc, (xiz+12)                           ; FAD2DA  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+1)                              ; FAD2DD  ld A,(XBC+0x01)
@@ -371,7 +371,7 @@ sub_FAD2D5__FAD2FD:
 	extpfx3 0xC7, 0xF4, 0x89                   ; FAD309  ld A,IYL
 	pushw	wa                                   ; FAD30C  push WA
 	push	0                                     ; FAD30D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAD30F  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAD30F  push (XIZ+0x08)
 	call	sub_FC7E10                              ; FAD312  call 0xfc7e10
 	ld	xbc, (xiz+12)                           ; FAD316  ld XBC,(XIZ+0x0c)
 	ld	a, (xbc+2)                              ; FAD319  ld A,(XBC+0x02)
@@ -415,7 +415,7 @@ sub_FAD2D5__FAD376:
 	ld	bc, ix                                  ; FAD376  ld BC,IX
 	ld	wa, bc                                  ; FAD378  ld WA,BC
 	pop	xix                                    ; FAD37A  pop XIX
-	unlk32 xiz                                 ; FAD37B  unlk XIZ
+	unlk	xiz                                 ; FAD37B  unlk XIZ
 	ret                                        ; FAD37D  ret
 ; --------------------------------------------------------------------------
 ; sub_FAD37E -- 0xFAD37E..0xFAD43D (192 bytes)
@@ -435,7 +435,7 @@ sub_FAD2D5__FAD376:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAD37E:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAD37E  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAD37E  link XIZ,0xfffc
 	push	xhl                                   ; FAD382  push XHL
 	pushw	de                                   ; FAD383  push DE
 	push	xix                                   ; FAD384  push XIX
@@ -456,7 +456,7 @@ sub_FAD37E__FAD3A6:
 	ld	d, 0:opc                                   ; FAD3A6  ld D,0x00
 sub_FAD37E__FAD3A8:
 	ld	c, 16:opc                                  ; FAD3A8  ld C,0x10
-	extpfx3 0x8E, 0x12, 0x43                   ; FAD3AA  mul BC,(XIZ+0x12)
+	mul	bc, (xiz+18)                   ; FAD3AA  mul BC,(XIZ+0x12)
 	ld	(xiz-2), bc                             ; FAD3AD  ld (XIZ+0xfe),BC
 	ld	wa, (xiz+8)                             ; FAD3B0  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAD3B3  extz WA
@@ -464,7 +464,7 @@ sub_FAD37E__FAD3A8:
 	add	wa, bc                                 ; FAD3B9  add WA,BC
 	ld	(xiz-4), wa                             ; FAD3BB  ld (XIZ+0xfc),WA
 	ld	c, 4:opc                                   ; FAD3BE  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAD3C0  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAD3C0  mul BC,(XIZ+0x10)
 	ld	hl, wa                                  ; FAD3C3  ld HL,WA
 	add	hl, bc                                 ; FAD3C5  add HL,BC
 	add	hl, 54                                 ; FAD3C7  add HL,0x0036
@@ -519,7 +519,7 @@ sub_FAD37E__FAD434:
 	pop	xix                                    ; FAD438  pop XIX
 	popw	de                                    ; FAD439  pop DE
 	pop	xhl                                    ; FAD43A  pop XHL
-	unlk32 xiz                                 ; FAD43B  unlk XIZ
+	unlk	xiz                                 ; FAD43B  unlk XIZ
 	ret                                        ; FAD43D  ret
 ; --------------------------------------------------------------------------
 ; sub_FAD43E -- 0xFAD43E..0xFAD4FD (192 bytes)
@@ -539,7 +539,7 @@ sub_FAD37E__FAD434:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAD43E:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAD43E  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAD43E  link XIZ,0xfffc
 	push	xhl                                   ; FAD442  push XHL
 	pushw	de                                   ; FAD443  push DE
 	push	xix                                   ; FAD444  push XIX
@@ -560,7 +560,7 @@ sub_FAD43E__FAD466:
 	ld	d, 0:opc                                   ; FAD466  ld D,0x00
 sub_FAD43E__FAD468:
 	ld	c, 16:opc                                  ; FAD468  ld C,0x10
-	extpfx3 0x8E, 0x12, 0x43                   ; FAD46A  mul BC,(XIZ+0x12)
+	mul	bc, (xiz+18)                   ; FAD46A  mul BC,(XIZ+0x12)
 	ld	(xiz-2), bc                             ; FAD46D  ld (XIZ+0xfe),BC
 	ld	wa, (xiz+8)                             ; FAD470  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAD473  extz WA
@@ -568,7 +568,7 @@ sub_FAD43E__FAD468:
 	add	wa, bc                                 ; FAD479  add WA,BC
 	ld	(xiz-4), wa                             ; FAD47B  ld (XIZ+0xfc),WA
 	ld	c, 4:opc                                   ; FAD47E  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAD480  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAD480  mul BC,(XIZ+0x10)
 	ld	hl, wa                                  ; FAD483  ld HL,WA
 	add	hl, bc                                 ; FAD485  add HL,BC
 	add	hl, 54                                 ; FAD487  add HL,0x0036
@@ -623,7 +623,7 @@ sub_FAD43E__FAD4F4:
 	pop	xix                                    ; FAD4F8  pop XIX
 	popw	de                                    ; FAD4F9  pop DE
 	pop	xhl                                    ; FAD4FA  pop XHL
-	unlk32 xiz                                 ; FAD4FB  unlk XIZ
+	unlk	xiz                                 ; FAD4FB  unlk XIZ
 	ret                                        ; FAD4FD  ret
 ; --------------------------------------------------------------------------
 ; Scale7Bit_ByDepth_UniOrBipolar_Shl2 -- 0xFAD4FE..0xFAD560 (99 bytes)
@@ -651,7 +651,7 @@ sub_FAD43E__FAD4F4:
 ;          the halves by 63 and 64, and the unipolar arm divides by 127.
 ; --------------------------------------------------------------------------
 Scale7Bit_ByDepth_UniOrBipolar_Shl2:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD4FE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD4FE  link XIZ,0x0000
 	pushw	hl                                   ; FAD502  push HL
 	ld	xbc, (xiz+10)                           ; FAD503  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD506  ld A,(XBC+0x01)
@@ -693,7 +693,7 @@ sub_FAD4FE__FAD54E:
 	ld	hl, wa                                  ; FAD558  ld HL,WA
 	sra	wa, 6                                  ; FAD55A  sra 0x06,WA
 	popw	hl                                    ; FAD55D  pop HL
-	unlk32 xiz                                 ; FAD55E  unlk XIZ
+	unlk	xiz                                 ; FAD55E  unlk XIZ
 	ret                                        ; FAD560  ret
 ; --------------------------------------------------------------------------
 ; Scale7Bit_ByDepth_UniOrBipolar_x25 -- 0xFAD561..0xFAD5C1 (97 bytes)
@@ -720,7 +720,7 @@ sub_FAD4FE__FAD54E:
 ; >> 6 (0xFAD5B2, 0xFAD5BB).  So 0..25, or about -25..+25, scaled by the depth byte.
 ; --------------------------------------------------------------------------
 Scale7Bit_ByDepth_UniOrBipolar_x25:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD561  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD561  link XIZ,0x0000
 	pushw	hl                                   ; FAD565  push HL
 	ld	xbc, (xiz+10)                           ; FAD566  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD569  ld A,(XBC+0x01)
@@ -760,7 +760,7 @@ Scale7Bit_ByDepth_UniOrBipolar_x25__FAD5AF:
 	ld	hl, wa                                  ; FAD5B9  ld HL,WA
 	sra	wa, 6                                  ; FAD5BB  sra 0x06,WA
 	popw	hl                                    ; FAD5BE  pop HL
-	unlk32 xiz                                 ; FAD5BF  unlk XIZ
+	unlk	xiz                                 ; FAD5BF  unlk XIZ
 	ret                                        ; FAD5C1  ret
 ; --------------------------------------------------------------------------
 ; Scale7Bit_ByDepth_UniOrBipolar -- 0xFAD5C2..0xFAD624 (99 bytes)
@@ -822,7 +822,7 @@ Scale7Bit_ByDepth_UniOrBipolar_x25__FAD5AF:
 ;          about the caller.
 ; --------------------------------------------------------------------------
 Scale7Bit_ByDepth_UniOrBipolar:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD5C2  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD5C2  link XIZ,0x0000
 	pushw	hl                                   ; FAD5C6  push HL
 	ld	xbc, (xiz+10)                           ; FAD5C7  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD5CA  ld A,(XBC+0x01)
@@ -864,7 +864,7 @@ Scale7Bit_ByDepth_UniOrBipolar__FAD612:
 	ld	hl, wa                                  ; FAD61C  ld HL,WA
 	sra	wa, 6                                  ; FAD61E  sra 0x06,WA
 	popw	hl                                    ; FAD621  pop HL
-	unlk32 xiz                                 ; FAD622  unlk XIZ
+	unlk	xiz                                 ; FAD622  unlk XIZ
 	ret                                        ; FAD624  ret
 ; --------------------------------------------------------------------------
 ; Scale7Bit_ByDepth_UniOrBipolar_Shl6 -- 0xFAD625..0xFAD687 (99 bytes)
@@ -886,7 +886,7 @@ Scale7Bit_ByDepth_UniOrBipolar__FAD612:
 ;          0x1000 = 64 << 6.  Output span -64..+64.
 ; --------------------------------------------------------------------------
 Scale7Bit_ByDepth_UniOrBipolar_Shl6:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD625  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD625  link XIZ,0x0000
 	pushw	hl                                   ; FAD629  push HL
 	ld	xbc, (xiz+10)                           ; FAD62A  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD62D  ld A,(XBC+0x01)
@@ -928,7 +928,7 @@ sub_FAD625__FAD675:
 	ld	hl, wa                                  ; FAD67F  ld HL,WA
 	sra	wa, 6                                  ; FAD681  sra 0x06,WA
 	popw	hl                                    ; FAD684  pop HL
-	unlk32 xiz                                 ; FAD685  unlk XIZ
+	unlk	xiz                                 ; FAD685  unlk XIZ
 	ret                                        ; FAD687  ret
 ; --------------------------------------------------------------------------
 ; Scale7Bit_ByDepth_UniOrBipolar_Shl7 -- 0xFAD688..0xFAD6EA (99 bytes)
@@ -956,7 +956,7 @@ sub_FAD625__FAD675:
 ;          asserts the count is 3.
 ; --------------------------------------------------------------------------
 Scale7Bit_ByDepth_UniOrBipolar_Shl7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD688  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD688  link XIZ,0x0000
 	pushw	hl                                   ; FAD68C  push HL
 	ld	xbc, (xiz+10)                           ; FAD68D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+1)                              ; FAD690  ld A,(XBC+0x01)
@@ -998,7 +998,7 @@ sub_FAD688__FAD6D8:
 	ld	hl, wa                                  ; FAD6E2  ld HL,WA
 	sra	wa, 6                                  ; FAD6E4  sra 0x06,WA
 	popw	hl                                    ; FAD6E7  pop HL
-	unlk32 xiz                                 ; FAD6E8  unlk XIZ
+	unlk	xiz                                 ; FAD6E8  unlk XIZ
 	ret                                        ; FAD6EA  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC07 -- 0xFAD6EB..0xFAD763 (121 bytes)
@@ -1030,7 +1030,7 @@ sub_FAD688__FAD6D8:
 ;          and stages the sum as 0x0010C000 register `chan + 0x0080`.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC07:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD6EB  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD6EB  link XIZ,0x0000
 	pushw	hl                                   ; FAD6EF  push HL
 	pushw	de                                   ; FAD6F0  push DE
 	push	xix                                   ; FAD6F1  push XIX
@@ -1075,12 +1075,12 @@ MidiCtrl_CC07__FAD74A:
 	add	bc, 11                                 ; FAD752  add BC,0x000b
 	extz	xbc                                   ; FAD756  extz XBC
 	add	bc, ix                                 ; FAD758  add BC,IX
-	extpfx4 0xB1, 0x02, 0x00, 0xFE             ; FAD75A  ld (XBC),0xfe00
+	ldw	(xbc), 0xfe00             ; FAD75A  ld (XBC),0xfe00
 MidiCtrl_CC07__FAD75E:
 	pop	xix                                    ; FAD75E  pop XIX
 	popw	de                                    ; FAD75F  pop DE
 	popw	hl                                    ; FAD760  pop HL
-	unlk32 xiz                                 ; FAD761  unlk XIZ
+	unlk	xiz                                 ; FAD761  unlk XIZ
 	ret                                        ; FAD763  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC10 -- 0xFAD764..0xFAD781 (30 bytes)
@@ -1105,7 +1105,7 @@ MidiCtrl_CC07__FAD75E:
 ;          byte that names the part-record offset (0x0D, 0x10, 0x11, 0x16, 0x19, 0x1A).
 ; --------------------------------------------------------------------------
 MidiCtrl_CC10:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD764  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD764  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD768  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD76B  extz BC
 	mul	bc, 0x12C                              ; FAD76D  mul BC,0x012c
@@ -1113,7 +1113,7 @@ MidiCtrl_CC10:
 	extz	xbc                                   ; FAD775  extz XBC
 	ld	a, (xiz+10)                             ; FAD777  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FAD77A  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FAD77F  unlk XIZ
+	unlk	xiz                                 ; FAD77F  unlk XIZ
 	ret                                        ; FAD781  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC11 -- 0xFAD782..0xFAD7FA (121 bytes)
@@ -1137,7 +1137,7 @@ MidiCtrl_CC10:
 ;          0xFAD7B3; `ld (XBC),DE` at 0xFAD7BF.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC11:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD782  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD782  link XIZ,0x0000
 	pushw	hl                                   ; FAD786  push HL
 	pushw	de                                   ; FAD787  push DE
 	push	xix                                   ; FAD788  push XIX
@@ -1182,12 +1182,12 @@ MidiCtrl_CC11__FAD7E1:
 	add	bc, 14                                 ; FAD7E9  add BC,0x000e
 	extz	xbc                                   ; FAD7ED  extz XBC
 	add	bc, ix                                 ; FAD7EF  add BC,IX
-	extpfx4 0xB1, 0x02, 0x00, 0xFE             ; FAD7F1  ld (XBC),0xfe00
+	ldw	(xbc), 0xfe00             ; FAD7F1  ld (XBC),0xfe00
 MidiCtrl_CC11__FAD7F5:
 	pop	xix                                    ; FAD7F5  pop XIX
 	popw	de                                    ; FAD7F6  pop DE
 	popw	hl                                    ; FAD7F7  pop HL
-	unlk32 xiz                                 ; FAD7F8  unlk XIZ
+	unlk	xiz                                 ; FAD7F8  unlk XIZ
 	ret                                        ; FAD7FA  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC64 -- 0xFAD7FB..0xFAD843 (73 bytes)
@@ -1214,7 +1214,7 @@ MidiCtrl_CC11__FAD7F5:
 ; Unknown:  what else reads part[+0x09] bit 0.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC64:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD7FB  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD7FB  link XIZ,0x0000
 	pushw	hl                                   ; FAD7FF  push HL
 	pushw	de                                   ; FAD800  push DE
 	push	xix                                   ; FAD801  push XIX
@@ -1226,7 +1226,7 @@ MidiCtrl_CC64:
 	add	bc, 9                                  ; FAD811  add BC,0x0009
 	ld	hl, bc                                  ; FAD815  ld HL,BC
 	extz	xix                                   ; FAD817  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x22       ; FAD819  ld DE,(XIX+BC)
+	ld	de, (xix+bc)       ; FAD819  ld DE,(XIX+BC)
 	cp (xiz+10), 0x40                          ; FAD81E  cp (XIZ+0x0a),0x40
 	jr c, MidiCtrl_CC64__FAD831                   ; FAD822  jr C,0xfad831
 	ld	wa, de                                  ; FAD824  ld WA,DE
@@ -1246,7 +1246,7 @@ MidiCtrl_CC64__FAD83E:
 	pop	xix                                    ; FAD83E  pop XIX
 	popw	de                                    ; FAD83F  pop DE
 	popw	hl                                    ; FAD840  pop HL
-	unlk32 xiz                                 ; FAD841  unlk XIZ
+	unlk	xiz                                 ; FAD841  unlk XIZ
 	ret                                        ; FAD843  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC91 -- 0xFAD844..0xFAD861 (30 bytes)
@@ -1270,7 +1270,7 @@ MidiCtrl_CC64__FAD83E:
 ;          now checks every citation of this shape in prom_c and prom_d.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC91:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD844  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD844  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD848  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD84B  extz BC
 	mul	bc, 0x12C                              ; FAD84D  mul BC,0x012c
@@ -1278,7 +1278,7 @@ MidiCtrl_CC91:
 	extz	xbc                                   ; FAD855  extz XBC
 	ld	a, (xiz+10)                             ; FAD857  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FAD85A  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FAD85F  unlk XIZ
+	unlk	xiz                                 ; FAD85F  unlk XIZ
 	ret                                        ; FAD861  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC93 -- 0xFAD862..0xFAD87F (30 bytes)
@@ -1300,7 +1300,7 @@ MidiCtrl_CC91:
 ;          this line used to cite 0xFAD86E, three bytes into the `mul`.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC93:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD862  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD862  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD866  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD869  extz BC
 	mul	bc, 0x12C                              ; FAD86B  mul BC,0x012c
@@ -1308,7 +1308,7 @@ MidiCtrl_CC93:
 	extz	xbc                                   ; FAD873  extz XBC
 	ld	a, (xiz+10)                             ; FAD875  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FAD878  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FAD87D  unlk XIZ
+	unlk	xiz                                 ; FAD87D  unlk XIZ
 	ret                                        ; FAD87F  ret
 ; --------------------------------------------------------------------------
 ; PartRec_Flags09_Bit14_SetOrClear -- 0xFAD880..0xFAD8C8 (73 bytes)
@@ -1338,7 +1338,7 @@ MidiCtrl_CC93:
 ;          field, which are operands, and claims nothing else.
 ; --------------------------------------------------------------------------
 PartRec_Flags09_Bit14_SetOrClear:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD880  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD880  link XIZ,0x0000
 	pushw	hl                                   ; FAD884  push HL
 	pushw	de                                   ; FAD885  push DE
 	push	xix                                   ; FAD886  push XIX
@@ -1350,7 +1350,7 @@ PartRec_Flags09_Bit14_SetOrClear:
 	add	bc, 9                                  ; FAD896  add BC,0x0009
 	ld	hl, bc                                  ; FAD89A  ld HL,BC
 	extz	xix                                   ; FAD89C  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x22       ; FAD89E  ld DE,(XIX+BC)
+	ld	de, (xix+bc)       ; FAD89E  ld DE,(XIX+BC)
 	cp (xiz+10), 0x00                          ; FAD8A3  cp (XIZ+0x0a),0x00
 	jr z, sub_FAD880__FAD8B6                   ; FAD8A7  jr Z,0xfad8b6
 	ld	wa, de                                  ; FAD8A9  ld WA,DE
@@ -1370,7 +1370,7 @@ sub_FAD880__FAD8C3:
 	pop	xix                                    ; FAD8C3  pop XIX
 	popw	de                                    ; FAD8C4  pop DE
 	popw	hl                                    ; FAD8C5  pop HL
-	unlk32 xiz                                 ; FAD8C6  unlk XIZ
+	unlk	xiz                                 ; FAD8C6  unlk XIZ
 	ret                                        ; FAD8C8  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int80 -- 0xFAD8C9..0xFAD8F0 (40 bytes)
@@ -1395,7 +1395,7 @@ sub_FAD880__FAD8C3:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int80:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD8C9  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD8C9  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD8CD  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD8D0  extz BC
 	mul	bc, 0x12C                              ; FAD8D2  mul BC,0x012c
@@ -1404,10 +1404,10 @@ MidiCtrl_Int80:
 	ld	a, (xiz+10)                             ; FAD8DC  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FAD8DF  ld (XBC+0x1523),A
 	push	0                                     ; FAD8E4  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAD8E6  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAD8E6  push (XIZ+0x08)
 	call	sub_FC81F8                              ; FAD8E9  call 0xfc81f8
 	popw	bc                                    ; FAD8ED  pop BC
-	unlk32 xiz                                 ; FAD8EE  unlk XIZ
+	unlk	xiz                                 ; FAD8EE  unlk XIZ
 	ret                                        ; FAD8F0  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int81_FineTune -- 0xFAD8F1..0xFAD91A (42 bytes)
@@ -1432,7 +1432,7 @@ MidiCtrl_Int80:
 ;          this control's full range, +/-0x100, is exactly +/-ONE SEMITONE.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int81_FineTune:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD8F1  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD8F1  link XIZ,0x0000
 	pushw	hl                                   ; FAD8F5  push HL
 	ld	bc, (xiz+10)                            ; FAD8F6  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAD8F9  extz BC
@@ -1446,7 +1446,7 @@ MidiCtrl_Int81_FineTune:
 	extz	xbc                                   ; FAD910  extz XBC
 	ld	(xbc+0x1523), hl                        ; FAD912  ld (XBC+0x1523),HL
 	popw	hl                                    ; FAD917  pop HL
-	unlk32 xiz                                 ; FAD918  unlk XIZ
+	unlk	xiz                                 ; FAD918  unlk XIZ
 	ret                                        ; FAD91A  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int82_Transpose -- 0xFAD91B..0xFAD93D (35 bytes)
@@ -1471,7 +1471,7 @@ MidiCtrl_Int81_FineTune:
 ;          +/-64 semitones.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int82_Transpose:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD91B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD91B  link XIZ,0x0000
 	pushw	hl                                   ; FAD91F  push HL
 	ld	h, (xiz+10)                             ; FAD920  ld H,(XIZ+0x0a)
 	sub	h, 64                                  ; FAD923  sub H,0x40
@@ -1482,7 +1482,7 @@ MidiCtrl_Int82_Transpose:
 	extz	xbc                                   ; FAD933  extz XBC
 	ld	(xbc+0x1523), h                         ; FAD935  ld (XBC+0x1523),H
 	popw	hl                                    ; FAD93A  pop HL
-	unlk32 xiz                                 ; FAD93B  unlk XIZ
+	unlk	xiz                                 ; FAD93B  unlk XIZ
 	ret                                        ; FAD93D  ret
 ; --------------------------------------------------------------------------
 ; PartRec_Flags09_Bit1_SetOrClear -- 0xFAD93E..0xFAD986 (73 bytes)
@@ -1512,7 +1512,7 @@ MidiCtrl_Int82_Transpose:
 ; Unknown:  what bit 1 of that word MEANS.
 ; --------------------------------------------------------------------------
 PartRec_Flags09_Bit1_SetOrClear:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD93E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD93E  link XIZ,0x0000
 	pushw	hl                                   ; FAD942  push HL
 	pushw	de                                   ; FAD943  push DE
 	push	xix                                   ; FAD944  push XIX
@@ -1524,7 +1524,7 @@ PartRec_Flags09_Bit1_SetOrClear:
 	add	bc, 9                                  ; FAD954  add BC,0x0009
 	ld	hl, bc                                  ; FAD958  ld HL,BC
 	extz	xix                                   ; FAD95A  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x22       ; FAD95C  ld DE,(XIX+BC)
+	ld	de, (xix+bc)       ; FAD95C  ld DE,(XIX+BC)
 	cp (xiz+10), 0x00                          ; FAD961  cp (XIZ+0x0a),0x00
 	jr z, sub_FAD93E__FAD974                   ; FAD965  jr Z,0xfad974
 	ld	wa, de                                  ; FAD967  ld WA,DE
@@ -1544,7 +1544,7 @@ sub_FAD93E__FAD981:
 	pop	xix                                    ; FAD981  pop XIX
 	popw	de                                    ; FAD982  pop DE
 	popw	hl                                    ; FAD983  pop HL
-	unlk32 xiz                                 ; FAD984  unlk XIZ
+	unlk	xiz                                 ; FAD984  unlk XIZ
 	ret                                        ; FAD986  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int95 -- 0xFAD987..0xFAD9CF (73 bytes)
@@ -1567,7 +1567,7 @@ sub_FAD93E__FAD981:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int95:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD987  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD987  link XIZ,0x0000
 	pushw	hl                                   ; FAD98B  push HL
 	pushw	de                                   ; FAD98C  push DE
 	push	xix                                   ; FAD98D  push XIX
@@ -1579,7 +1579,7 @@ MidiCtrl_Int95:
 	add	bc, 9                                  ; FAD99D  add BC,0x0009
 	ld	hl, bc                                  ; FAD9A1  ld HL,BC
 	extz	xix                                   ; FAD9A3  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x22       ; FAD9A5  ld DE,(XIX+BC)
+	ld	de, (xix+bc)       ; FAD9A5  ld DE,(XIX+BC)
 	cp (xiz+10), 0x00                          ; FAD9AA  cp (XIZ+0x0a),0x00
 	jr z, MidiCtrl_Int95__FAD9BD                   ; FAD9AE  jr Z,0xfad9bd
 	ld	wa, de                                  ; FAD9B0  ld WA,DE
@@ -1599,7 +1599,7 @@ MidiCtrl_Int95__FAD9CA:
 	pop	xix                                    ; FAD9CA  pop XIX
 	popw	de                                    ; FAD9CB  pop DE
 	popw	hl                                    ; FAD9CC  pop HL
-	unlk32 xiz                                 ; FAD9CD  unlk XIZ
+	unlk	xiz                                 ; FAD9CD  unlk XIZ
 	ret                                        ; FAD9CF  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int97 -- 0xFAD9D0..0xFAD9ED (30 bytes)
@@ -1623,7 +1623,7 @@ MidiCtrl_Int95__FAD9CA:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int97:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD9D0  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD9D0  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD9D4  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD9D7  extz BC
 	mul	bc, 0x12C                              ; FAD9D9  mul BC,0x012c
@@ -1631,7 +1631,7 @@ MidiCtrl_Int97:
 	extz	xbc                                   ; FAD9E1  extz XBC
 	ld	a, (xiz+10)                             ; FAD9E3  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FAD9E6  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FAD9EB  unlk XIZ
+	unlk	xiz                                 ; FAD9EB  unlk XIZ
 	ret                                        ; FAD9ED  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int99 -- 0xFAD9EE..0xFADA16 (41 bytes)
@@ -1656,7 +1656,7 @@ MidiCtrl_Int97:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int99:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD9EE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAD9EE  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FAD9F2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD9F5  extz BC
 	mul	bc, 0x12C                              ; FAD9F7  mul BC,0x012c
@@ -1666,10 +1666,10 @@ MidiCtrl_Int99:
 	ld	(xbc+0x1523), a                         ; FADA04  ld (XBC+0x1523),A
 	pushw	wa                                   ; FADA09  push WA
 	push	0                                     ; FADA0A  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FADA0C  push (XIZ+0x08)
+	push	(xiz+8)                   ; FADA0C  push (XIZ+0x08)
 	call	MidiCtrl_Int99_ApplyToSelectedPart                              ; FADA0F  call 0xfc280d
 	pop	xbc                                    ; FADA13  pop XBC
-	unlk32 xiz                                 ; FADA14  unlk XIZ
+	unlk	xiz                                 ; FADA14  unlk XIZ
 	ret                                        ; FADA16  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int9A -- 0xFADA17..0xFADA3F (41 bytes)
@@ -1694,7 +1694,7 @@ MidiCtrl_Int99:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int9A:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA17  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADA17  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FADA1B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FADA1E  extz BC
 	mul	bc, 0x12C                              ; FADA20  mul BC,0x012c
@@ -1704,10 +1704,10 @@ MidiCtrl_Int9A:
 	ld	(xbc+0x1523), a                         ; FADA2D  ld (XBC+0x1523),A
 	pushw	wa                                   ; FADA32  push WA
 	push	0                                     ; FADA33  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FADA35  push (XIZ+0x08)
+	push	(xiz+8)                   ; FADA35  push (XIZ+0x08)
 	call	MidiCtrl_Int9A_ApplyToSelectedPart                              ; FADA38  call 0xfc2861
 	pop	xbc                                    ; FADA3C  pop XBC
-	unlk32 xiz                                 ; FADA3D  unlk XIZ
+	unlk	xiz                                 ; FADA3D  unlk XIZ
 	ret                                        ; FADA3F  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int9B -- 0xFADA40..0xFADA5D (30 bytes)
@@ -1731,7 +1731,7 @@ MidiCtrl_Int9A:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int9B:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA40  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADA40  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FADA44  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FADA47  extz BC
 	mul	bc, 0x12C                              ; FADA49  mul BC,0x012c
@@ -1739,7 +1739,7 @@ MidiCtrl_Int9B:
 	extz	xbc                                   ; FADA51  extz XBC
 	ld	a, (xiz+10)                             ; FADA53  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FADA56  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FADA5B  unlk XIZ
+	unlk	xiz                                 ; FADA5B  unlk XIZ
 	ret                                        ; FADA5D  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_Int9C -- 0xFADA5E..0xFADA7B (30 bytes)
@@ -1763,7 +1763,7 @@ MidiCtrl_Int9B:
 ; Unknown:  what the field is FOR.
 ; --------------------------------------------------------------------------
 MidiCtrl_Int9C:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA5E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADA5E  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FADA62  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FADA65  extz BC
 	mul	bc, 0x12C                              ; FADA67  mul BC,0x012c
@@ -1771,7 +1771,7 @@ MidiCtrl_Int9C:
 	extz	xbc                                   ; FADA6F  extz XBC
 	ld	a, (xiz+10)                             ; FADA71  ld A,(XIZ+0x0a)
 	ld	(xbc+0x1523), a                         ; FADA74  ld (XBC+0x1523),A
-	unlk32 xiz                                 ; FADA79  unlk XIZ
+	unlk	xiz                                 ; FADA79  unlk XIZ
 	ret                                        ; FADA7B  ret
 
 ; ==============================================================================
@@ -1873,18 +1873,18 @@ MidiCtrl_Int9C:
 ;          does not define.
 ; --------------------------------------------------------------------------
 sub_FADA7C:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA7C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADA7C  link XIZ,0x0000
 	push	xix                                   ; FADA80  push XIX
 	lda	xix, (0x14FE:16)                      ; FADA81  lda XIX,0x14fe
 	cp (xiz+8), 0x01                           ; FADA85  cp (XIZ+0x08),0x01
 	jr nz, sub_FADA7C__FADA97                  ; FADA89  jr NZ,0xfada97
 	extz	xix                                   ; FADA8B  extz XIX
-	extpfx5 0x9C, 0x01, 0x3E, 0x01, 0x00       ; FADA8D  or (XIX+0x01),0x0001
+	orw	(xix+1), 0x0001       ; FADA8D  or (XIX+0x01),0x0001
 	pushw	1                                    ; FADA92  push 0x0001
 	jr sub_FADA7C__FADAA1                      ; FADA95  jr T,0xfadaa1
 sub_FADA7C__FADA97:
 	extz	xix                                   ; FADA97  extz XIX
-	extpfx5 0x9C, 0x01, 0x3C, 0xFE, 0xFF       ; FADA99  and (XIX+0x01),0xfffe
+	andw	(xix+1), 0xfffe       ; FADA99  and (XIX+0x01),0xfffe
 	pushw	0                                    ; FADA9E  push 0x0000
 sub_FADA7C__FADAA1:
 	call	VoiceSubsystem_Init                              ; FADAA1  call 0xfa664b
@@ -1892,7 +1892,7 @@ sub_FADA7C__FADAA1:
 	calr sub_FB029E                 ; FADAA9  calr 0xfb029e
 	popw	bc                                    ; FADAAC  pop BC
 	pop	xix                                    ; FADAAD  pop XIX
-	unlk32 xiz                                 ; FADAAE  unlk XIZ
+	unlk	xiz                                 ; FADAAE  unlk XIZ
 	ret                                        ; FADAB0  ret
 ; --------------------------------------------------------------------------
 ; P7Mixer_SetGainIndex1 -- 0xFADAB1..0xFADAC9 (25 bytes)
@@ -1923,7 +1923,7 @@ sub_FADA7C__FADAA1:
 ;          nothing in this routine closes it.
 ; --------------------------------------------------------------------------
 P7Mixer_SetGainIndex1:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAB1  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADAB1  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADAB5  ld C,(XIZ+0x08)
 	ld	(0x1501:16), c                         ; FADAB8  ld (0x1501),C
 	pushw	0x7F                                 ; FADABC  push 0x007f
@@ -1931,7 +1931,7 @@ P7Mixer_SetGainIndex1:
 	pushw	bc                                   ; FADAC1  push BC
 	call	P7Mixer_RequestGain                              ; FADAC2  call 0xfa2dcd
 	pop	xbc                                    ; FADAC6  pop XBC
-	unlk32 xiz                                 ; FADAC7  unlk XIZ
+	unlk	xiz                                 ; FADAC7  unlk XIZ
 	ret                                        ; FADAC9  ret
 ; --------------------------------------------------------------------------
 ; P7Mixer_SetGainIndex2 -- 0xFADACA..0xFADAE6 (29 bytes)
@@ -1960,7 +1960,7 @@ P7Mixer_SetGainIndex1:
 ; Unknown:  which signal the gain scales; see P7Mixer_RequestGain.
 ; --------------------------------------------------------------------------
 P7Mixer_SetGainIndex2:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADACA  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADACA  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADACE  ld C,(XIZ+0x08)
 	ld	(0x1502:16), c                         ; FADAD1  ld (0x1502),C
 	extz	bc                                    ; FADAD5  extz BC
@@ -1970,7 +1970,7 @@ P7Mixer_SetGainIndex2:
 	pushw	bc                                   ; FADADE  push BC
 	call	P7Mixer_RequestGain                              ; FADADF  call 0xfa2dcd
 	pop	xbc                                    ; FADAE3  pop XBC
-	unlk32 xiz                                 ; FADAE4  unlk XIZ
+	unlk	xiz                                 ; FADAE4  unlk XIZ
 	ret                                        ; FADAE6  ret
 ; --------------------------------------------------------------------------
 ; GlobalTune_StoreFineTune -- 0xFADAE7..0xFADAFB (21 bytes)
@@ -2002,13 +2002,13 @@ P7Mixer_SetGainIndex2:
 ;          above 0x7F is not established here; the byte-wide doubling would wrap.
 ; --------------------------------------------------------------------------
 GlobalTune_StoreFineTune:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAE7  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADAE7  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADAEB  ld C,(XIZ+0x08)
 	sub	c, 64                                  ; FADAEE  sub C,0x40
 	add	c, c                                   ; FADAF1  add C,C
 	exts	bc                                    ; FADAF3  exts BC
 	ld	(0x1503:16), bc                        ; FADAF5  ld (0x1503),BC
-	unlk32 xiz                                 ; FADAF9  unlk XIZ
+	unlk	xiz                                 ; FADAF9  unlk XIZ
 	ret                                        ; FADAFB  ret
 ; --------------------------------------------------------------------------
 ; GlobalTune_StoreTranspose -- 0xFADAFC..0xFADB0E (19 bytes)
@@ -2040,12 +2040,12 @@ GlobalTune_StoreFineTune:
 ; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
 GlobalTune_StoreTranspose:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADAFC  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADAFC  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FADB00  ld BC,(XIZ+0x08)
 	exts	bc                                    ; FADB03  exts BC
 	sll	bc, 8                                  ; FADB05  sll 0x08,BC
 	ld	(0x1505:16), bc                        ; FADB08  ld (0x1505),BC
-	unlk32 xiz                                 ; FADB0C  unlk XIZ
+	unlk	xiz                                 ; FADB0C  unlk XIZ
 	ret                                        ; FADB0E  ret
 ; --------------------------------------------------------------------------
 ; sub_FADB0F -- 0xFADB0F..0xFADB6F (97 bytes)
@@ -2078,7 +2078,7 @@ GlobalTune_StoreTranspose:
 ;          sub_FB0285.
 ; --------------------------------------------------------------------------
 sub_FADB0F:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB0F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADB0F  link XIZ,0x0000
 	pushw	hl                                   ; FADB13  push HL
 	push	xix                                   ; FADB14  push XIX
 	lda	xix, (0x14FE:16)                      ; FADB15  lda XIX,0x14fe
@@ -2115,11 +2115,11 @@ sub_FADB0F__FADB5F:
 	ld	(xix+1), hl                             ; FADB61  ld (XIX+0x01),HL
 sub_FADB0F__FADB64:
 	extz	xix                                   ; FADB64  extz XIX
-	extpfx5 0xBC, 0x1B, 0x02, 0x00, 0x00       ; FADB66  ld (XIX+0x1b),0x0000
+	ldw	(xix+27), 0x0000       ; FADB66  ld (XIX+0x1b),0x0000
 sub_FADB0F__FADB6B:
 	pop	xix                                    ; FADB6B  pop XIX
 	popw	hl                                    ; FADB6C  pop HL
-	unlk32 xiz                                 ; FADB6D  unlk XIZ
+	unlk	xiz                                 ; FADB6D  unlk XIZ
 	ret                                        ; FADB6F  ret
 ; --------------------------------------------------------------------------
 ; GlobalScale_StoreMode -- 0xFADB70..0xFADB7D (14 bytes)
@@ -2153,10 +2153,10 @@ sub_FADB0F__FADB6B:
 ; Unknown:  what the mode numbers are called on the panel.
 ; --------------------------------------------------------------------------
 GlobalScale_StoreMode:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB70  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADB70  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADB74  ld C,(XIZ+0x08)
 	ld	(0x150A:16), c                         ; FADB77  ld (0x150a),C
-	unlk32 xiz                                 ; FADB7B  unlk XIZ
+	unlk	xiz                                 ; FADB7B  unlk XIZ
 	ret                                        ; FADB7D  ret
 ; --------------------------------------------------------------------------
 ; VoiceDefaults_StoreFromPackedByte -- 0xFADB7E..0xFADBED (112 bytes)
@@ -2194,7 +2194,7 @@ GlobalScale_StoreMode:
 ;          holds -- it is indexed by v >> 4 and nothing else reads it.
 ; --------------------------------------------------------------------------
 VoiceDefaults_StoreFromPackedByte:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB7E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADB7E  link XIZ,0x0000
 	pushw	hl                                   ; FADB82  push HL
 	push	xix                                   ; FADB83  push XIX
 	lda	xix, (0x14FE:16)                      ; FADB84  lda XIX,0x14fe
@@ -2223,11 +2223,11 @@ VoiceDefaults_StoreFromPackedByte__FADBA0:
 	and	c, 4                                   ; FADBC0  and C,0x04
 	jr z, VoiceDefaults_StoreFromPackedByte__FADBCE                   ; FADBC3  jr Z,0xfadbce
 	extz	xix                                   ; FADBC5  extz XIX
-	extpfx5 0xBC, 0x21, 0x02, 0x00, 0x80       ; FADBC7  ld (XIX+0x21),0x8000
+	ldw	(xix+33), 0x8000       ; FADBC7  ld (XIX+0x21),0x8000
 	jr VoiceDefaults_StoreFromPackedByte__FADBD5                      ; FADBCC  jr T,0xfadbd5
 VoiceDefaults_StoreFromPackedByte__FADBCE:
 	extz	xix                                   ; FADBCE  extz XIX
-	extpfx5 0xBC, 0x21, 0x02, 0x00, 0xA0       ; FADBD0  ld (XIX+0x21),0xa000
+	ldw	(xix+33), 0xa000       ; FADBD0  ld (XIX+0x21),0xa000
 VoiceDefaults_StoreFromPackedByte__FADBD5:
 	ld	c, h                                    ; FADBD5  ld C,H
 	and	c, 3                                   ; FADBD7  and C,0x03
@@ -2239,7 +2239,7 @@ VoiceDefaults_StoreFromPackedByte__FADBD5:
 	ld	(xix+35), wa                            ; FADBE6  ld (XIX+0x23),WA
 	pop	xix                                    ; FADBE9  pop XIX
 	popw	hl                                    ; FADBEA  pop HL
-	unlk32 xiz                                 ; FADBEB  unlk XIZ
+	unlk	xiz                                 ; FADBEB  unlk XIZ
 	ret                                        ; FADBED  ret
 ; --------------------------------------------------------------------------
 ; sub_FADBEE -- 0xFADBEE..0xFADBFB (14 bytes)
@@ -2265,10 +2265,10 @@ VoiceDefaults_StoreFromPackedByte__FADBD5:
 ;          name stays an address.  (`python3 notes/prom_c_inventory_round8.py --record`)
 ; --------------------------------------------------------------------------
 sub_FADBEE:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBEE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADBEE  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADBF2  ld C,(XIZ+0x08)
 	ld	(0x1507:16), c                         ; FADBF5  ld (0x1507),C
-	unlk32 xiz                                 ; FADBF9  unlk XIZ
+	unlk	xiz                                 ; FADBF9  unlk XIZ
 	ret                                        ; FADBFB  ret
 ; --------------------------------------------------------------------------
 ; sub_FADBFC -- 0xFADBFC..0xFADC1E (35 bytes)
@@ -2294,20 +2294,20 @@ sub_FADBEE:
 ;          condition the hardware path never splits.
 ; --------------------------------------------------------------------------
 sub_FADBFC:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBFC  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADBFC  link XIZ,0x0000
 	push	xix                                   ; FADC00  push XIX
 	lda	xix, (0x14FE:16)                      ; FADC01  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADC05  cp (XIZ+0x08),0x00
 	jr z, sub_FADBFC__FADC14                   ; FADC09  jr Z,0xfadc14
 	extz	xix                                   ; FADC0B  extz XIX
-	extpfx5 0x9C, 0x01, 0x3E, 0x02, 0x00       ; FADC0D  or (XIX+0x01),0x0002
+	orw	(xix+1), 0x0002       ; FADC0D  or (XIX+0x01),0x0002
 	jr sub_FADBFC__FADC1B                      ; FADC12  jr T,0xfadc1b
 sub_FADBFC__FADC14:
 	extz	xix                                   ; FADC14  extz XIX
-	extpfx5 0x9C, 0x01, 0x3C, 0xFD, 0xFF       ; FADC16  and (XIX+0x01),0xfffd
+	andw	(xix+1), 0xfffd       ; FADC16  and (XIX+0x01),0xfffd
 sub_FADBFC__FADC1B:
 	pop	xix                                    ; FADC1B  pop XIX
-	unlk32 xiz                                 ; FADC1C  unlk XIZ
+	unlk	xiz                                 ; FADC1C  unlk XIZ
 	ret                                        ; FADC1E  ret
 ; --------------------------------------------------------------------------
 ; GlobalScale_StorePitchClassDetune -- 0xFADC1F..0xFADC3D (31 bytes)
@@ -2342,7 +2342,7 @@ sub_FADBFC__FADC1B:
 ; Unknown:  whether the panel calls this a scale, a temperament or a tuning table.
 ; --------------------------------------------------------------------------
 GlobalScale_StorePitchClassDetune:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC1F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADC1F  link XIZ,0x0000
 	pushw	hl                                   ; FADC23  push HL
 	ld	h, (xiz+10)                             ; FADC24  ld H,(XIZ+0x0a)
 	sub	h, 0x80                                ; FADC27  sub H,0x80
@@ -2352,7 +2352,7 @@ GlobalScale_StorePitchClassDetune:
 	extz	xbc                                   ; FADC33  extz XBC
 	ld	(xbc+0x14FE), h                         ; FADC35  ld (XBC+0x14fe),H
 	popw	hl                                    ; FADC3A  pop HL
-	unlk32 xiz                                 ; FADC3B  unlk XIZ
+	unlk	xiz                                 ; FADC3B  unlk XIZ
 	ret                                        ; FADC3D  ret
 ; --------------------------------------------------------------------------
 ; sub_FADC3E -- 0xFADC3E..0xFADC4B (14 bytes)
@@ -2374,10 +2374,10 @@ GlobalScale_StorePitchClassDetune:
 ;          this store, and no +0x0A among the offsets reached through the 0x14FE base.
 ; --------------------------------------------------------------------------
 sub_FADC3E:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC3E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADC3E  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FADC42  ld C,(XIZ+0x08)
 	ld	(0x1508:16), c                         ; FADC45  ld (0x1508),C
-	unlk32 xiz                                 ; FADC49  unlk XIZ
+	unlk	xiz                                 ; FADC49  unlk XIZ
 	ret                                        ; FADC4B  ret
 ; --------------------------------------------------------------------------
 ; GlobalScale_SelectGlobalOrPerTone -- 0xFADC4C..0xFADC6E (35 bytes)
@@ -2408,20 +2408,20 @@ sub_FADC3E:
 ; Unknown:  why v == 0 is the GLOBAL case rather than the other way round.
 ; --------------------------------------------------------------------------
 GlobalScale_SelectGlobalOrPerTone:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC4C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADC4C  link XIZ,0x0000
 	push	xix                                   ; FADC50  push XIX
 	lda	xix, (0x14FE:16)                      ; FADC51  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADC55  cp (XIZ+0x08),0x00
 	jr nz, GlobalScale_SelectGlobalOrPerTone__FADC64                  ; FADC59  jr NZ,0xfadc64
 	extz	xix                                   ; FADC5B  extz XIX
-	extpfx5 0x9C, 0x01, 0x3E, 0x00, 0x02       ; FADC5D  or (XIX+0x01),0x0200
+	orw	(xix+1), 0x0200       ; FADC5D  or (XIX+0x01),0x0200
 	jr GlobalScale_SelectGlobalOrPerTone__FADC6B                      ; FADC62  jr T,0xfadc6b
 GlobalScale_SelectGlobalOrPerTone__FADC64:
 	extz	xix                                   ; FADC64  extz XIX
-	extpfx5 0x9C, 0x01, 0x3C, 0xFF, 0xFD       ; FADC66  and (XIX+0x01),0xfdff
+	andw	(xix+1), 0xfdff       ; FADC66  and (XIX+0x01),0xfdff
 GlobalScale_SelectGlobalOrPerTone__FADC6B:
 	pop	xix                                    ; FADC6B  pop XIX
-	unlk32 xiz                                 ; FADC6C  unlk XIZ
+	unlk	xiz                                 ; FADC6C  unlk XIZ
 	ret                                        ; FADC6E  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_SetReg0201_FromNibblePair -- 0xFADC6F..0xFADCC2 (84 bytes)
@@ -2457,7 +2457,7 @@ GlobalScale_SelectGlobalOrPerTone__FADC6B:
 ;          its only caller.
 ; --------------------------------------------------------------------------
 Dev10C_SetReg0201_FromNibblePair:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC6F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADC6F  link XIZ,0x0000
 	pushw	hl                                   ; FADC73  push HL
 	pushw	de                                   ; FADC74  push DE
 	pushw	ix                                   ; FADC75  push IX
@@ -2495,7 +2495,7 @@ Dev10C_SetReg0201_FromNibblePair__FADCAB:
 	popw	ix                                    ; FADCBD  pop IX
 	popw	de                                    ; FADCBE  pop DE
 	popw	hl                                    ; FADCBF  pop HL
-	unlk32 xiz                                 ; FADCC0  unlk XIZ
+	unlk	xiz                                 ; FADCC0  unlk XIZ
 	ret                                        ; FADCC2  ret
 ; --------------------------------------------------------------------------
 ; Voice_RestagePitchReg0400_ForList -- 0xFADCC3..0xFADD28 (102 bytes)
@@ -2534,7 +2534,7 @@ Dev10C_SetReg0201_FromNibblePair__FADCAB:
 ;          of them route to _AB and one to _CD; nothing here says what the split means.
 ; --------------------------------------------------------------------------
 Voice_RestagePitchReg0400_ForList:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADCC3  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADCC3  link XIZ,0x0000
 	push	xhl                                   ; FADCC7  push XHL
 	pushw	de                                   ; FADCC8  push DE
 	push	xix                                   ; FADCC9  push XIX
@@ -2584,7 +2584,7 @@ Voice_RestagePitchReg0400_ForList__FADD23:
 	pop	xix                                    ; FADD23  pop XIX
 	popw	de                                    ; FADD24  pop DE
 	pop	xhl                                    ; FADD25  pop XHL
-	unlk32 xiz                                 ; FADD26  unlk XIZ
+	unlk	xiz                                 ; FADD26  unlk XIZ
 	ret                                        ; FADD28  ret
 ; --------------------------------------------------------------------------
 ; sub_FADD29 -- 0xFADD29..0xFADDC7 (159 bytes)
@@ -2606,7 +2606,7 @@ Voice_RestagePitchReg0400_ForList__FADD23:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FADD29:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FADD29  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FADD29  link XIZ,0xfffc
 	push	xhl                                   ; FADD2D  push XHL
 	pushw	de                                   ; FADD2E  push DE
 	push	xix                                   ; FADD2F  push XIX
@@ -2679,7 +2679,7 @@ sub_FADD29__FADDC2:
 	pop	xix                                    ; FADDC2  pop XIX
 	popw	de                                    ; FADDC3  pop DE
 	pop	xhl                                    ; FADDC4  pop XHL
-	unlk32 xiz                                 ; FADDC5  unlk XIZ
+	unlk	xiz                                 ; FADDC5  unlk XIZ
 	ret                                        ; FADDC7  ret
 ; --------------------------------------------------------------------------
 ; Voice_RestageReg0080_ForList -- 0xFADDC8..0xFADE2E (103 bytes)
@@ -2710,7 +2710,7 @@ sub_FADD29__FADDC2:
 ;          the class values select.  The name claims the register and no more.
 ; --------------------------------------------------------------------------
 Voice_RestageReg0080_ForList:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADDC8  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADDC8  link XIZ,0x0000
 	push	xhl                                   ; FADDCC  push XHL
 	pushw	de                                   ; FADDCD  push DE
 	push	xix                                   ; FADDCE  push XIX
@@ -2760,7 +2760,7 @@ Voice_RestageReg0080_ForList__FADE29:
 	pop	xix                                    ; FADE29  pop XIX
 	popw	de                                    ; FADE2A  pop DE
 	pop	xhl                                    ; FADE2B  pop XHL
-	unlk32 xiz                                 ; FADE2C  unlk XIZ
+	unlk	xiz                                 ; FADE2C  unlk XIZ
 	ret                                        ; FADE2E  ret
 ; --------------------------------------------------------------------------
 ; Evt2030_Param98Tech_Notify -- 0xFADE2F..0xFADEAB (125 bytes)
@@ -2792,7 +2792,7 @@ Voice_RestageReg0080_ForList__FADE29:
 ;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 Evt2030_Param98Tech_Notify:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADE2F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADE2F  link XIZ,0x0000
 	push	xhl                                   ; FADE33  push XHL
 	pushw	de                                   ; FADE34  push DE
 	push	xix                                   ; FADE35  push XIX
@@ -2848,7 +2848,7 @@ sub_FADE2F__FADEA6:
 	pop	xix                                    ; FADEA6  pop XIX
 	popw	de                                    ; FADEA7  pop DE
 	pop	xhl                                    ; FADEA8  pop XHL
-	unlk32 xiz                                 ; FADEA9  unlk XIZ
+	unlk	xiz                                 ; FADEA9  unlk XIZ
 	ret                                        ; FADEAB  ret
 ; --------------------------------------------------------------------------
 ; sub_FADEAC -- 0xFADEAC..0xFADFAC (257 bytes)
@@ -2873,7 +2873,7 @@ sub_FADE2F__FADEA6:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FADEAC:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FADEAC  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FADEAC  link XIZ,0xfffc
 	push	xhl                                   ; FADEB0  push XHL
 	pushw	de                                   ; FADEB1  push DE
 	push	xix                                   ; FADEB2  push XIX
@@ -2939,7 +2939,7 @@ sub_FADEAC__FADF12:
 	ld	c, (xix)                                ; FADF43  ld C,(XIX)
 	pushw	bc                                   ; FADF45  push BC
 	call	ChanRec_ClearHoldAndRelease                              ; FADF46  call 0xfa6ea5
-	extpfx5 0x9B, 0x01, 0x3C, 0xFF, 0xFE       ; FADF4A  and (XHL+0x01),0xfeff
+	andw	(xhl+1), 0xfeff       ; FADF4A  and (XHL+0x01),0xfeff
 	inc	8, xsp                                 ; FADF4F  inc 0,XSP
 	inc	4, xsp                                 ; FADF51  inc 4,XSP
 	jr sub_FADEAC__FADFA2                      ; FADF53  jr T,0xfadfa2
@@ -2987,7 +2987,7 @@ sub_FADEAC__FADFA7:
 	pop	xix                                    ; FADFA7  pop XIX
 	popw	de                                    ; FADFA8  pop DE
 	pop	xhl                                    ; FADFA9  pop XHL
-	unlk32 xiz                                 ; FADFAA  unlk XIZ
+	unlk	xiz                                 ; FADFAA  unlk XIZ
 	ret                                        ; FADFAC  ret
 ; --------------------------------------------------------------------------
 ; Voice_RestageRegs0100_0140_ForList -- 0xFADFAD..0xFAE012 (102 bytes)
@@ -3019,7 +3019,7 @@ sub_FADEAC__FADFA7:
 ;          SELECT.  The name claims the register group and nothing else.
 ; --------------------------------------------------------------------------
 Voice_RestageRegs0100_0140_ForList:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FADFAD  link XIZ,0x0000
+	link	xiz, 0x0000              ; FADFAD  link XIZ,0x0000
 	push	xhl                                   ; FADFB1  push XHL
 	pushw	de                                   ; FADFB2  push DE
 	push	xix                                   ; FADFB3  push XIX
@@ -3069,7 +3069,7 @@ Voice_RestageRegs0100_0140_ForList__FAE00D:
 	pop	xix                                    ; FAE00D  pop XIX
 	popw	de                                    ; FAE00E  pop DE
 	pop	xhl                                    ; FAE00F  pop XHL
-	unlk32 xiz                                 ; FAE010  unlk XIZ
+	unlk	xiz                                 ; FAE010  unlk XIZ
 	ret                                        ; FAE012  ret
 ; --------------------------------------------------------------------------
 ; sub_FAE013 -- 0xFAE013..0xFAE0A0 (142 bytes)
@@ -3101,7 +3101,7 @@ Voice_RestageRegs0100_0140_ForList__FAE00D:
 ;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 sub_FAE013:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE013  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAE013  link XIZ,0x0000
 	push	xhl                                   ; FAE017  push XHL
 	pushw	de                                   ; FAE018  push DE
 	push	xix                                   ; FAE019  push XIX
@@ -3167,7 +3167,7 @@ sub_FAE013__FAE09B:
 	pop	xix                                    ; FAE09B  pop XIX
 	popw	de                                    ; FAE09C  pop DE
 	pop	xhl                                    ; FAE09D  pop XHL
-	unlk32 xiz                                 ; FAE09E  unlk XIZ
+	unlk	xiz                                 ; FAE09E  unlk XIZ
 	ret                                        ; FAE0A0  ret
 ; --------------------------------------------------------------------------
 ; sub_FAE0A1 -- 0xFAE0A1..0xFAE108 (104 bytes)
@@ -3198,7 +3198,7 @@ sub_FAE013__FAE09B:
 ;          address, and this is the reason rather than a shrug.
 ; --------------------------------------------------------------------------
 sub_FAE0A1:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE0A1  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAE0A1  link XIZ,0x0000
 	push	xhl                                   ; FAE0A5  push XHL
 	pushw	de                                   ; FAE0A6  push DE
 	push	xix                                   ; FAE0A7  push XIX
@@ -3246,7 +3246,7 @@ sub_FAE0A1__FAE103:
 	pop	xix                                    ; FAE103  pop XIX
 	popw	de                                    ; FAE104  pop DE
 	pop	xhl                                    ; FAE105  pop XHL
-	unlk32 xiz                                 ; FAE106  unlk XIZ
+	unlk	xiz                                 ; FAE106  unlk XIZ
 	ret                                        ; FAE108  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_001D -- 0xFAE109..0xFAE15E (86 bytes)
@@ -3280,13 +3280,13 @@ sub_FAE0A1__FAE103:
 ;          call are re-read by notes/prom_c_finish_round7.py --selftest.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_001D:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE109  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAE109  link XIZ,0x0000
 	pushw	hl                                   ; FAE10D  push HL
 	pushw	de                                   ; FAE10E  push DE
 	ld	h, (xiz+8)                              ; FAE10F  ld H,(XIZ+0x08)
 	ld	xbc, (xiz+12)                           ; FAE112  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE115  push XBC
-	extpfx3 0x9E, 0x0A, 0x04                   ; FAE116  pushw (XIZ+0x0a)
+	pushw	(xiz+10)                   ; FAE116  pushw (XIZ+0x0a)
 	push	0                                     ; FAE119  push 0x00
 	push	h                                     ; FAE11B  push H
 	calr sub_FAD2D5                 ; FAE11D  calr 0xfad2d5
@@ -3313,7 +3313,7 @@ PartRec_ApplyParam_001D:
 	add	xsp, 22                                ; FAE154  add XSP,0x00000016
 	popw	de                                    ; FAE15A  pop DE
 	popw	hl                                    ; FAE15B  pop HL
-	unlk32 xiz                                 ; FAE15C  unlk XIZ
+	unlk	xiz                                 ; FAE15C  unlk XIZ
 	ret                                        ; FAE15E  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0021 -- 0xFAE15F..0xFAE1B1 (83 bytes)
@@ -3350,7 +3350,7 @@ PartRec_ApplyParam_001D:
 ;          read it as a change mask.  It is not.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0021:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAE15F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAE15F  link XIZ,0x0000
 	pushw	hl                                   ; FAE163  push HL
 	pushw	de                                   ; FAE164  push DE
 	ld	h, (xiz+8)                              ; FAE165  ld H,(XIZ+0x08)
@@ -3382,7 +3382,7 @@ PartRec_ApplyParam_0021:
 	add	xsp, 20                                ; FAE1A7  add XSP,0x00000014
 	popw	de                                    ; FAE1AD  pop DE
 	popw	hl                                    ; FAE1AE  pop HL
-	unlk32 xiz                                 ; FAE1AF  unlk XIZ
+	unlk	xiz                                 ; FAE1AF  unlk XIZ
 	ret                                        ; FAE1B1  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_001F -- 0xFAE1B2..0xFAE241 (144 bytes)
@@ -3420,7 +3420,7 @@ PartRec_ApplyParam_0021:
 ;          round's table read them as change masks.  They are not.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_001F:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE1B2  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FAE1B2  link XIZ,0xfffe
 	pushw	hl                                   ; FAE1B6  push HL
 	pushw	de                                   ; FAE1B7  push DE
 	push	xix                                   ; FAE1B8  push XIX
@@ -3483,7 +3483,7 @@ sub_FAE1B2__FAE237:
 	pop	xix                                    ; FAE23C  pop XIX
 	popw	de                                    ; FAE23D  pop DE
 	popw	hl                                    ; FAE23E  pop HL
-	unlk32 xiz                                 ; FAE23F  unlk XIZ
+	unlk	xiz                                 ; FAE23F  unlk XIZ
 	ret                                        ; FAE241  ret
 ; --------------------------------------------------------------------------
 ; Voice_RestageArm_BaseCurve_Shared -- 0xFAE242..0xFAE2C5 (132 bytes)
@@ -3517,7 +3517,7 @@ sub_FAE1B2__FAE237:
 ;          `python3 notes/prom_c_understanding_round6.py --names`.
 ; --------------------------------------------------------------------------
 Voice_RestageArm_BaseCurve_Shared:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE242  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FAE242  link XIZ,0xfffe
 	pushw	hl                                   ; FAE246  push HL
 	pushw	de                                   ; FAE247  push DE
 	pushw	ix                                   ; FAE248  push IX
@@ -3525,11 +3525,11 @@ Voice_RestageArm_BaseCurve_Shared:
 	ld	d, (xiz+8)                              ; FAE24C  ld D,(XIZ+0x08)
 	pushw	de                                   ; FAE24F  push DE
 	push	0                                     ; FAE250  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE252  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE252  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE255  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE258  push XBC
 	push	0                                     ; FAE259  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE25B  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE25B  push (XIZ+0x0a)
 	push	0                                     ; FAE25E  push 0x00
 	push	d                                     ; FAE260  push D
 	calr sub_FAD37E                 ; FAE262  calr 0xfad37e
@@ -3543,13 +3543,13 @@ Voice_RestageArm_BaseCurve_Shared:
 	add	wa, bc                                 ; FAE275  add WA,BC
 	ld	(xiz-2), wa                             ; FAE277  ld (XIZ+0xfe),WA
 	ld	c, 4:opc                                   ; FAE27A  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE27C  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE27C  mul BC,(XIZ+0x10)
 	add	wa, bc                                 ; FAE27F  add WA,BC
 	add	wa, 56                                 ; FAE281  add WA,0x0038
 	extz	xwa                                   ; FAE285  extz XWA
 	ld	(xwa+0x1523), l                         ; FAE287  ld (XWA+0x1523),L
 	push	0                                     ; FAE28C  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE28E  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE28E  push (XIZ+0x10)
 	pushw	de                                   ; FAE291  push DE
 	push	0                                     ; FAE292  push 0x00
 	push	d                                     ; FAE294  push D
@@ -3560,7 +3560,7 @@ Voice_RestageArm_BaseCurve_Shared__FAE2A2:
 	pushw	de                                   ; FAE2A2  push DE
 	ld	(xiz-2), h                              ; FAE2A3  ld (XIZ+0xfe),H
 	push	0                                     ; FAE2A6  push 0x00
-	extpfx3 0x8E, 0xFE, 0x04                   ; FAE2A8  push (XIZ+0xfe)
+	push	(xiz-2)                   ; FAE2A8  push (XIZ+0xfe)
 	push	0                                     ; FAE2AB  push 0x00
 	push	d                                     ; FAE2AD  push D
 	call	sub_FB53C5                              ; FAE2AF  call 0xfb53c5
@@ -3573,7 +3573,7 @@ Voice_RestageArm_BaseCurve_Shared__FAE2A2:
 	popw	ix                                    ; FAE2C0  pop IX
 	popw	de                                    ; FAE2C1  pop DE
 	popw	hl                                    ; FAE2C2  pop HL
-	unlk32 xiz                                 ; FAE2C3  unlk XIZ
+	unlk	xiz                                 ; FAE2C3  unlk XIZ
 	ret                                        ; FAE2C5  ret
 ; --------------------------------------------------------------------------
 ; Voice_RestageArm_ValueCurve_Shared -- 0xFAE2C6..0xFAE349 (132 bytes)
@@ -3597,7 +3597,7 @@ Voice_RestageArm_BaseCurve_Shared__FAE2A2:
 ;          the partition and for what it does NOT establish.
 ; --------------------------------------------------------------------------
 Voice_RestageArm_ValueCurve_Shared:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FAE2C6  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FAE2C6  link XIZ,0xfffe
 	pushw	hl                                   ; FAE2CA  push HL
 	pushw	de                                   ; FAE2CB  push DE
 	pushw	ix                                   ; FAE2CC  push IX
@@ -3605,11 +3605,11 @@ Voice_RestageArm_ValueCurve_Shared:
 	ld	d, (xiz+8)                              ; FAE2D0  ld D,(XIZ+0x08)
 	pushw	de                                   ; FAE2D3  push DE
 	push	0                                     ; FAE2D4  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE2D6  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE2D6  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE2D9  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE2DC  push XBC
 	push	0                                     ; FAE2DD  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE2DF  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE2DF  push (XIZ+0x0a)
 	push	0                                     ; FAE2E2  push 0x00
 	push	d                                     ; FAE2E4  push D
 	calr sub_FAD43E                 ; FAE2E6  calr 0xfad43e
@@ -3623,13 +3623,13 @@ Voice_RestageArm_ValueCurve_Shared:
 	add	wa, bc                                 ; FAE2F9  add WA,BC
 	ld	(xiz-2), wa                             ; FAE2FB  ld (XIZ+0xfe),WA
 	ld	c, 4:opc                                   ; FAE2FE  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE300  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE300  mul BC,(XIZ+0x10)
 	add	wa, bc                                 ; FAE303  add WA,BC
 	add	wa, 55                                 ; FAE305  add WA,0x0037
 	extz	xwa                                   ; FAE309  extz XWA
 	ld	(xwa+0x1523), l                         ; FAE30B  ld (XWA+0x1523),L
 	push	0                                     ; FAE310  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE312  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE312  push (XIZ+0x10)
 	pushw	de                                   ; FAE315  push DE
 	push	0                                     ; FAE316  push 0x00
 	push	d                                     ; FAE318  push D
@@ -3640,7 +3640,7 @@ Voice_RestageArm_ValueCurve_Shared__FAE326:
 	pushw	de                                   ; FAE326  push DE
 	ld	(xiz-2), h                              ; FAE327  ld (XIZ+0xfe),H
 	push	0                                     ; FAE32A  push 0x00
-	extpfx3 0x8E, 0xFE, 0x04                   ; FAE32C  push (XIZ+0xfe)
+	push	(xiz-2)                   ; FAE32C  push (XIZ+0xfe)
 	push	0                                     ; FAE32F  push 0x00
 	push	d                                     ; FAE331  push D
 	call	sub_FB53C5                              ; FAE333  call 0xfb53c5
@@ -3653,7 +3653,7 @@ Voice_RestageArm_ValueCurve_Shared__FAE326:
 	popw	ix                                    ; FAE344  pop IX
 	popw	de                                    ; FAE345  pop DE
 	popw	hl                                    ; FAE346  pop HL
-	unlk32 xiz                                 ; FAE347  unlk XIZ
+	unlk	xiz                                 ; FAE347  unlk XIZ
 	ret                                        ; FAE349  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg0440_BaseCurve_ForPart -- 0xFAE34A..0xFAE483 (314 bytes)
@@ -3687,12 +3687,12 @@ Voice_RestageArm_ValueCurve_Shared__FAE326:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg0440_BaseCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE34A  link XIZ,0xfff5
+	link	xiz, 0xfff5              ; FAE34A  link XIZ,0xfff5
 	pushw	hl                                   ; FAE34E  push HL
 	pushw	de                                   ; FAE34F  push DE
 	push	xix                                   ; FAE350  push XIX
 	ld	c, 4:opc                                   ; FAE351  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE353  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE353  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE356  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE358  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE35B  extz WA
@@ -3704,13 +3704,13 @@ Voice_Restage_Reg0440_BaseCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE36B  ld D,(XWA+0x1523)
 	pushw	0                                    ; FAE370  push 0x0000
 	push	0                                     ; FAE373  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE375  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE375  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE378  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE37B  push XBC
 	push	0                                     ; FAE37C  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE37E  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE37E  push (XIZ+0x0a)
 	push	0                                     ; FAE381  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE383  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE383  push (XIZ+0x08)
 	calr Voice_RestageArm_BaseCurve_Shared                 ; FAE386  calr 0xfae242
 	ld	(xiz-7), a                              ; FAE389  ld (XIZ+0xf9),A
 	inc	8, xsp                                 ; FAE38C  inc 0,XSP
@@ -3718,13 +3718,13 @@ Voice_Restage_Reg0440_BaseCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE390  cp D,0
 	jr nz, Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3DC                  ; FAE392  jr NZ,0xfae3dc
 	push	0                                     ; FAE394  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE396  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE396  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE399  call 0xfb3ce0
 	ld	(xiz-11), xiy                           ; FAE39D  ld (XIZ+0xf5),XIY
 	ld	bc, hl                                  ; FAE3A0  ld BC,HL
 	inc	4, bc                                  ; FAE3A2  inc 4,BC
 	extz	xbc                                   ; FAE3A4  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE3A6  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE3A6  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE3AD  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE3B0  ld XIX,XIY
 	inc	5, xix                                 ; FAE3B2  inc 5,XIX
@@ -3750,22 +3750,22 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3B5:
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE3DC:
 	pushw	32                                   ; FAE3DC  push 0x0020
 	push	0                                     ; FAE3DF  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE3E1  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE3E1  push (XIZ+0x10)
 	push	0                                     ; FAE3E4  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE3E6  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE3E6  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAE3E9  call 0xfa6110
 	ld	(xiz-6), iy                             ; FAE3ED  ld (XIZ+0xfa),IY
 	ldw	de, 0                                  ; FAE3F0  ld DE,0x0000
 	ldw	ix, 0x1523                             ; FAE3F3  ld IX,0x1523
 	ld	(xiz-4), hl                             ; FAE3F6  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FAE3F9  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FAE3FB  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FAE3FB  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE3FE  ld (XIZ+0xfe),BC
 	jrl Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47A                     ; FAE401  jrl T,0xfae47a
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404:
 	ld	bc, (xiz-6)                             ; FAE404  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE407  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE409  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAE409  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE40E  ld WA,HL
 	and	wa, 0xFF                               ; FAE410  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE414  cp WA,0x0080
@@ -3777,10 +3777,10 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404:
 	pushw	wa                                   ; FAE425  push WA
 	pushw	0                                    ; FAE426  push 0x0000
 	push	0                                     ; FAE429  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE42B  push (XIZ+0x10)
-	extpfx3 0x9E, 0xFE, 0x04                   ; FAE42E  pushw (XIZ+0xfe)
+	push	(xiz+16)                   ; FAE42B  push (XIZ+0x10)
+	pushw	(xiz-2)                   ; FAE42E  pushw (XIZ+0xfe)
 	push	0                                     ; FAE431  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE433  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE433  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAE436  call 0xfa981b
 	inc	8, xsp                                 ; FAE43A  inc 0,XSP
 	inc	2, xsp                                 ; FAE43C  inc 2,XSP
@@ -3789,7 +3789,7 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404:
 	ld	bc, (xiz-4)                             ; FAE444  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE447  inc 4,BC
 	extz	xbc                                   ; FAE449  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE44B  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE44B  or (XBC+0x1523),0x0008
 	ldw	(0xD79E:24), 0                        ; FAE452  ld (0x00d79e),0x0000
 	jr Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469                      ; FAE459  jr T,0xfae469
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B:
@@ -3813,7 +3813,7 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E:
 	pop	xix                                    ; FAE47E  pop XIX
 	popw	de                                    ; FAE47F  pop DE
 	popw	hl                                    ; FAE480  pop HL
-	unlk32 xiz                                 ; FAE481  unlk XIZ
+	unlk	xiz                                 ; FAE481  unlk XIZ
 	ret                                        ; FAE483  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg0440_ValueCurve_ForPart -- 0xFAE484..0xFAE5C6 (323 bytes)
@@ -3848,12 +3848,12 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE47E:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg0440_ValueCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE484  link XIZ,0xfff7
+	link	xiz, 0xfff7              ; FAE484  link XIZ,0xfff7
 	pushw	hl                                   ; FAE488  push HL
 	pushw	de                                   ; FAE489  push DE
 	push	xix                                   ; FAE48A  push XIX
 	ld	c, 4:opc                                   ; FAE48B  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE48D  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE48D  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE490  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE492  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE495  extz WA
@@ -3865,13 +3865,13 @@ Voice_Restage_Reg0440_ValueCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE4A5  ld D,(XWA+0x1523)
 	pushw	0                                    ; FAE4AA  push 0x0000
 	push	0                                     ; FAE4AD  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE4AF  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE4AF  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE4B2  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE4B5  push XBC
 	push	0                                     ; FAE4B6  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE4B8  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE4B8  push (XIZ+0x0a)
 	push	0                                     ; FAE4BB  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE4BD  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE4BD  push (XIZ+0x08)
 	calr Voice_RestageArm_ValueCurve_Shared                 ; FAE4C0  calr 0xfae2c6
 	ld	(xiz-5), a                              ; FAE4C3  ld (XIZ+0xfb),A
 	inc	8, xsp                                 ; FAE4C6  inc 0,XSP
@@ -3879,13 +3879,13 @@ Voice_Restage_Reg0440_ValueCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE4CA  cp D,0
 	jr nz, Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516                  ; FAE4CC  jr NZ,0xfae516
 	push	0                                     ; FAE4CE  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE4D0  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE4D0  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE4D3  call 0xfb3ce0
 	ld	(xiz-9), xiy                            ; FAE4D7  ld (XIZ+0xf7),XIY
 	ld	bc, hl                                  ; FAE4DA  ld BC,HL
 	inc	4, bc                                  ; FAE4DC  inc 4,BC
 	extz	xbc                                   ; FAE4DE  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE4E0  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE4E0  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE4E7  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE4EA  ld XIX,XIY
 	inc	5, xix                                 ; FAE4EC  inc 5,XIX
@@ -3911,9 +3911,9 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE4EF:
 Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516:
 	pushw	32                                   ; FAE516  push 0x0020
 	push	0                                     ; FAE519  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE51B  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE51B  push (XIZ+0x10)
 	push	0                                     ; FAE51E  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE520  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE520  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAE523  call 0xfa6110
 	ld	(xiz-4), iy                             ; FAE527  ld (XIZ+0xfc),IY
 	ldw	de, 0                                  ; FAE52A  ld DE,0x0000
@@ -3921,12 +3921,12 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE516:
 	ld	(xiz-7), bc                             ; FAE530  ld (XIZ+0xf9),BC
 	ld	(xiz-2), hl                             ; FAE533  ld (XIZ+0xfe),HL
 	ld	ix, bc                                  ; FAE536  ld IX,BC
-	extpfx3 0x9E, 0xFE, 0x84                   ; FAE538  add IX,(XIZ+0xfe)
+	add	ix, (xiz-2)                   ; FAE538  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAE53B  inc 6,XSP
 Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D:
 	ld	bc, (xiz-4)                             ; FAE53D  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAE540  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE542  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAE542  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE547  ld WA,HL
 	and	wa, 0xFF                               ; FAE549  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE54D  cp WA,0x0080
@@ -3937,10 +3937,10 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D:
 	pushw	wa                                   ; FAE55B  push WA
 	pushw	0                                    ; FAE55C  push 0x0000
 	push	0                                     ; FAE55F  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE561  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE561  push (XIZ+0x10)
 	pushw	ix                                   ; FAE564  push IX
 	push	0                                     ; FAE565  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE567  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE567  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAE56A  call 0xfa981b
 	inc	8, xsp                                 ; FAE56E  inc 0,XSP
 	inc	2, xsp                                 ; FAE570  inc 2,XSP
@@ -3949,7 +3949,7 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D:
 	ld	bc, (xiz-2)                             ; FAE578  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAE57B  inc 4,BC
 	extz	xbc                                   ; FAE57D  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE57F  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE57F  or (XBC+0x1523),0x0008
 	ldw	(0xD79E:24), 0                        ; FAE586  ld (0x00d79e),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAE58D  lda XBC,0x00d75e
 	push	xbc                                   ; FAE592  push XBC
@@ -3978,7 +3978,7 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1:
 	pop	xix                                    ; FAE5C1  pop XIX
 	popw	de                                    ; FAE5C2  pop DE
 	popw	hl                                    ; FAE5C3  pop HL
-	unlk32 xiz                                 ; FAE5C4  unlk XIZ
+	unlk	xiz                                 ; FAE5C4  unlk XIZ
 	ret                                        ; FAE5C6  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg0180_BaseCurve_ForPart -- 0xFAE5C7..0xFAE702 (316 bytes)
@@ -4012,12 +4012,12 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE5C1:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg0180_BaseCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE5C7  link XIZ,0xfff5
+	link	xiz, 0xfff5              ; FAE5C7  link XIZ,0xfff5
 	pushw	hl                                   ; FAE5CB  push HL
 	pushw	de                                   ; FAE5CC  push DE
 	push	xix                                   ; FAE5CD  push XIX
 	ld	c, 4:opc                                   ; FAE5CE  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE5D0  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE5D0  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE5D3  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE5D5  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE5D8  extz WA
@@ -4029,13 +4029,13 @@ Voice_Restage_Reg0180_BaseCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE5E8  ld D,(XWA+0x1523)
 	pushw	1                                    ; FAE5ED  push 0x0001
 	push	0                                     ; FAE5F0  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE5F2  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE5F2  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE5F5  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE5F8  push XBC
 	push	0                                     ; FAE5F9  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE5FB  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE5FB  push (XIZ+0x0a)
 	push	0                                     ; FAE5FE  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE600  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE600  push (XIZ+0x08)
 	calr Voice_RestageArm_BaseCurve_Shared                 ; FAE603  calr 0xfae242
 	ld	(xiz-7), a                              ; FAE606  ld (XIZ+0xf9),A
 	inc	8, xsp                                 ; FAE609  inc 0,XSP
@@ -4043,13 +4043,13 @@ Voice_Restage_Reg0180_BaseCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE60D  cp D,0
 	jr nz, Voice_Restage_Reg0180_BaseCurve_ForPart__FAE659                  ; FAE60F  jr NZ,0xfae659
 	push	0                                     ; FAE611  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE613  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE613  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE616  call 0xfb3ce0
 	ld	(xiz-11), xiy                           ; FAE61A  ld (XIZ+0xf5),XIY
 	ld	bc, hl                                  ; FAE61D  ld BC,HL
 	inc	4, bc                                  ; FAE61F  inc 4,BC
 	extz	xbc                                   ; FAE621  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE623  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE623  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE62A  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE62D  ld XIX,XIY
 	inc	5, xix                                 ; FAE62F  inc 5,XIX
@@ -4078,20 +4078,20 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE659:
 	set	2, c                                   ; FAE65F  set 0x02,C
 	pushw	bc                                   ; FAE662  push BC
 	push	0                                     ; FAE663  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE665  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE665  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAE668  call 0xfa6110
 	ld	(xiz-6), iy                             ; FAE66C  ld (XIZ+0xfa),IY
 	ldw	de, 0                                  ; FAE66F  ld DE,0x0000
 	ldw	ix, 0x1523                             ; FAE672  ld IX,0x1523
 	ld	(xiz-4), hl                             ; FAE675  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FAE678  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FAE67A  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FAE67A  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE67D  ld (XIZ+0xfe),BC
 	jrl Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6F9                     ; FAE680  jrl T,0xfae6f9
 Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683:
 	ld	bc, (xiz-6)                             ; FAE683  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE686  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE688  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAE688  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE68D  ld WA,HL
 	and	wa, 0xFF                               ; FAE68F  and WA,0x00ff
 	cp	wa, 64                                  ; FAE693  cp WA,0x0040
@@ -4103,10 +4103,10 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683:
 	pushw	wa                                   ; FAE6A4  push WA
 	pushw	1                                    ; FAE6A5  push 0x0001
 	push	0                                     ; FAE6A8  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE6AA  push (XIZ+0x10)
-	extpfx3 0x9E, 0xFE, 0x04                   ; FAE6AD  pushw (XIZ+0xfe)
+	push	(xiz+16)                   ; FAE6AA  push (XIZ+0x10)
+	pushw	(xiz-2)                   ; FAE6AD  pushw (XIZ+0xfe)
 	push	0                                     ; FAE6B0  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE6B2  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE6B2  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAE6B5  call 0xfa981b
 	inc	8, xsp                                 ; FAE6B9  inc 0,XSP
 	inc	2, xsp                                 ; FAE6BB  inc 2,XSP
@@ -4115,7 +4115,7 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683:
 	ld	bc, (xiz-4)                             ; FAE6C3  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE6C6  inc 4,BC
 	extz	xbc                                   ; FAE6C8  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE6CA  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE6CA  or (XBC+0x1523),0x0008
 	ldw	(0xD796:24), 0                        ; FAE6D1  ld (0x00d796),0x0000
 	jr Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8                      ; FAE6D8  jr T,0xfae6e8
 Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA:
@@ -4139,7 +4139,7 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD:
 	pop	xix                                    ; FAE6FD  pop XIX
 	popw	de                                    ; FAE6FE  pop DE
 	popw	hl                                    ; FAE6FF  pop HL
-	unlk32 xiz                                 ; FAE700  unlk XIZ
+	unlk	xiz                                 ; FAE700  unlk XIZ
 	ret                                        ; FAE702  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg0180_ValueCurve_ForPart -- 0xFAE703..0xFAE847 (325 bytes)
@@ -4174,12 +4174,12 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6FD:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg0180_ValueCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE703  link XIZ,0xfff7
+	link	xiz, 0xfff7              ; FAE703  link XIZ,0xfff7
 	pushw	hl                                   ; FAE707  push HL
 	pushw	de                                   ; FAE708  push DE
 	push	xix                                   ; FAE709  push XIX
 	ld	c, 4:opc                                   ; FAE70A  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE70C  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE70C  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE70F  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE711  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE714  extz WA
@@ -4191,13 +4191,13 @@ Voice_Restage_Reg0180_ValueCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE724  ld D,(XWA+0x1523)
 	pushw	1                                    ; FAE729  push 0x0001
 	push	0                                     ; FAE72C  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE72E  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE72E  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE731  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE734  push XBC
 	push	0                                     ; FAE735  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE737  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE737  push (XIZ+0x0a)
 	push	0                                     ; FAE73A  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE73C  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE73C  push (XIZ+0x08)
 	calr Voice_RestageArm_ValueCurve_Shared                 ; FAE73F  calr 0xfae2c6
 	ld	(xiz-5), a                              ; FAE742  ld (XIZ+0xfb),A
 	inc	8, xsp                                 ; FAE745  inc 0,XSP
@@ -4205,13 +4205,13 @@ Voice_Restage_Reg0180_ValueCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE749  cp D,0
 	jr nz, Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795                  ; FAE74B  jr NZ,0xfae795
 	push	0                                     ; FAE74D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE74F  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE74F  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE752  call 0xfb3ce0
 	ld	(xiz-9), xiy                            ; FAE756  ld (XIZ+0xf7),XIY
 	ld	bc, hl                                  ; FAE759  ld BC,HL
 	inc	4, bc                                  ; FAE75B  inc 4,BC
 	extz	xbc                                   ; FAE75D  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE75F  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE75F  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE766  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE769  ld XIX,XIY
 	inc	5, xix                                 ; FAE76B  inc 5,XIX
@@ -4240,7 +4240,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795:
 	set	2, c                                   ; FAE79B  set 0x02,C
 	pushw	bc                                   ; FAE79E  push BC
 	push	0                                     ; FAE79F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE7A1  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE7A1  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAE7A4  call 0xfa6110
 	ld	(xiz-4), iy                             ; FAE7A8  ld (XIZ+0xfc),IY
 	ldw	de, 0                                  ; FAE7AB  ld DE,0x0000
@@ -4248,12 +4248,12 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE795:
 	ld	(xiz-7), bc                             ; FAE7B1  ld (XIZ+0xf9),BC
 	ld	(xiz-2), hl                             ; FAE7B4  ld (XIZ+0xfe),HL
 	ld	ix, bc                                  ; FAE7B7  ld IX,BC
-	extpfx3 0x9E, 0xFE, 0x84                   ; FAE7B9  add IX,(XIZ+0xfe)
+	add	ix, (xiz-2)                   ; FAE7B9  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAE7BC  inc 6,XSP
 Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE:
 	ld	bc, (xiz-4)                             ; FAE7BE  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAE7C1  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE7C3  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAE7C3  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE7C8  ld WA,HL
 	and	wa, 0xFF                               ; FAE7CA  and WA,0x00ff
 	cp	wa, 64                                  ; FAE7CE  cp WA,0x0040
@@ -4264,10 +4264,10 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE:
 	pushw	wa                                   ; FAE7DC  push WA
 	pushw	1                                    ; FAE7DD  push 0x0001
 	push	0                                     ; FAE7E0  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE7E2  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE7E2  push (XIZ+0x10)
 	pushw	ix                                   ; FAE7E5  push IX
 	push	0                                     ; FAE7E6  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE7E8  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE7E8  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAE7EB  call 0xfa981b
 	inc	8, xsp                                 ; FAE7EF  inc 0,XSP
 	inc	2, xsp                                 ; FAE7F1  inc 2,XSP
@@ -4276,7 +4276,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE:
 	ld	bc, (xiz-2)                             ; FAE7F9  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAE7FC  inc 4,BC
 	extz	xbc                                   ; FAE7FE  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE800  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE800  or (XBC+0x1523),0x0008
 	ldw	(0xD796:24), 0                        ; FAE807  ld (0x00d796),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAE80E  lda XBC,0x00d75e
 	push	xbc                                   ; FAE813  push XBC
@@ -4305,7 +4305,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842:
 	pop	xix                                    ; FAE842  pop XIX
 	popw	de                                    ; FAE843  pop DE
 	popw	hl                                    ; FAE844  pop HL
-	unlk32 xiz                                 ; FAE845  unlk XIZ
+	unlk	xiz                                 ; FAE845  unlk XIZ
 	ret                                        ; FAE847  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg04C0_BaseCurve_ForPart -- 0xFAE848..0xFAE985 (318 bytes)
@@ -4339,12 +4339,12 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE842:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg04C0_BaseCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF5, 0xFF              ; FAE848  link XIZ,0xfff5
+	link	xiz, 0xfff5              ; FAE848  link XIZ,0xfff5
 	pushw	hl                                   ; FAE84C  push HL
 	pushw	de                                   ; FAE84D  push DE
 	push	xix                                   ; FAE84E  push XIX
 	ld	c, 4:opc                                   ; FAE84F  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE851  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE851  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE854  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE856  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE859  extz WA
@@ -4356,13 +4356,13 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE869  ld D,(XWA+0x1523)
 	pushw	2                                    ; FAE86E  push 0x0002
 	push	0                                     ; FAE871  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE873  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE873  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE876  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE879  push XBC
 	push	0                                     ; FAE87A  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE87C  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE87C  push (XIZ+0x0a)
 	push	0                                     ; FAE87F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE881  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE881  push (XIZ+0x08)
 	calr Voice_RestageArm_BaseCurve_Shared                 ; FAE884  calr 0xfae242
 	ld	(xiz-7), a                              ; FAE887  ld (XIZ+0xf9),A
 	inc	8, xsp                                 ; FAE88A  inc 0,XSP
@@ -4370,13 +4370,13 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE88E  cp D,0
 	jr nz, Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8DA                  ; FAE890  jr NZ,0xfae8da
 	push	0                                     ; FAE892  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE894  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE894  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE897  call 0xfb3ce0
 	ld	(xiz-11), xiy                           ; FAE89B  ld (XIZ+0xf5),XIY
 	ld	bc, hl                                  ; FAE89E  ld BC,HL
 	inc	4, bc                                  ; FAE8A0  inc 4,BC
 	extz	xbc                                   ; FAE8A2  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE8A4  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE8A4  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE8AB  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE8AE  ld XIX,XIY
 	inc	5, xix                                 ; FAE8B0  inc 5,XIX
@@ -4405,20 +4405,20 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE8DA:
 	set	3, c                                   ; FAE8E0  set 0x03,C
 	pushw	bc                                   ; FAE8E3  push BC
 	push	0                                     ; FAE8E4  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE8E6  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE8E6  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAE8E9  call 0xfa6110
 	ld	(xiz-6), iy                             ; FAE8ED  ld (XIZ+0xfa),IY
 	ldw	de, 0                                  ; FAE8F0  ld DE,0x0000
 	ldw	ix, 0x1523                             ; FAE8F3  ld IX,0x1523
 	ld	(xiz-4), hl                             ; FAE8F6  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FAE8F9  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FAE8FB  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FAE8FB  add BC,(XIZ+0xfc)
 	ld	(xiz-2), bc                             ; FAE8FE  ld (XIZ+0xfe),BC
 	jrl Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE97C                     ; FAE901  jrl T,0xfae97c
 Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904:
 	ld	bc, (xiz-6)                             ; FAE904  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FAE907  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAE909  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAE909  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAE90E  ld WA,HL
 	and	wa, 0xFF                               ; FAE910  and WA,0x00ff
 	cp	wa, 0x80                                ; FAE914  cp WA,0x0080
@@ -4430,10 +4430,10 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904:
 	pushw	wa                                   ; FAE925  push WA
 	pushw	2                                    ; FAE926  push 0x0002
 	push	0                                     ; FAE929  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE92B  push (XIZ+0x10)
-	extpfx3 0x9E, 0xFE, 0x04                   ; FAE92E  pushw (XIZ+0xfe)
+	push	(xiz+16)                   ; FAE92B  push (XIZ+0x10)
+	pushw	(xiz-2)                   ; FAE92E  pushw (XIZ+0xfe)
 	push	0                                     ; FAE931  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE933  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE933  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAE936  call 0xfa981b
 	inc	8, xsp                                 ; FAE93A  inc 0,XSP
 	inc	2, xsp                                 ; FAE93C  inc 2,XSP
@@ -4442,7 +4442,7 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904:
 	ld	bc, (xiz-4)                             ; FAE944  ld BC,(XIZ+0xfc)
 	inc	4, bc                                  ; FAE947  inc 4,BC
 	extz	xbc                                   ; FAE949  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE94B  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE94B  or (XBC+0x1523),0x0008
 	ldw	(0xD796:24), 0                        ; FAE952  ld (0x00d796),0x0000
 	ldw	(0xD7A0:24), 0                        ; FAE959  ld (0x00d7a0),0x0000
 	jr Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE96B                      ; FAE960  jr T,0xfae96b
@@ -4466,7 +4466,7 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980:
 	pop	xix                                    ; FAE980  pop XIX
 	popw	de                                    ; FAE981  pop DE
 	popw	hl                                    ; FAE982  pop HL
-	unlk32 xiz                                 ; FAE983  unlk XIZ
+	unlk	xiz                                 ; FAE983  unlk XIZ
 	ret                                        ; FAE985  ret
 ; --------------------------------------------------------------------------
 ; Voice_Restage_Reg04C0_ValueCurve_ForPart -- 0xFAE986..0xFAEACD (328 bytes)
@@ -4501,12 +4501,12 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE980:
 ;          for this arm means.
 ; --------------------------------------------------------------------------
 Voice_Restage_Reg04C0_ValueCurve_ForPart:
-	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FAE986  link XIZ,0xfff7
+	link	xiz, 0xfff7              ; FAE986  link XIZ,0xfff7
 	pushw	hl                                   ; FAE98A  push HL
 	pushw	de                                   ; FAE98B  push DE
 	push	xix                                   ; FAE98C  push XIX
 	ld	c, 4:opc                                   ; FAE98D  ld C,0x04
-	extpfx3 0x8E, 0x10, 0x43                   ; FAE98F  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FAE98F  mul BC,(XIZ+0x10)
 	ld	de, bc                                  ; FAE992  ld DE,BC
 	ld	wa, (xiz+8)                             ; FAE994  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FAE997  extz WA
@@ -4518,13 +4518,13 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart:
 	ld	d, (xwa+0x1523)                         ; FAE9A7  ld D,(XWA+0x1523)
 	pushw	2                                    ; FAE9AC  push 0x0002
 	push	0                                     ; FAE9AF  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAE9B1  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAE9B1  push (XIZ+0x10)
 	ld	xbc, (xiz+12)                           ; FAE9B4  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAE9B7  push XBC
 	push	0                                     ; FAE9B8  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAE9BA  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAE9BA  push (XIZ+0x0a)
 	push	0                                     ; FAE9BD  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE9BF  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE9BF  push (XIZ+0x08)
 	calr Voice_RestageArm_ValueCurve_Shared                 ; FAE9C2  calr 0xfae2c6
 	ld	(xiz-5), a                              ; FAE9C5  ld (XIZ+0xfb),A
 	inc	8, xsp                                 ; FAE9C8  inc 0,XSP
@@ -4532,13 +4532,13 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart:
 	cp	d, 0:i3                                   ; FAE9CC  cp D,0
 	jr nz, Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18                  ; FAE9CE  jr NZ,0xfaea18
 	push	0                                     ; FAE9D0  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAE9D2  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAE9D2  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAE9D5  call 0xfb3ce0
 	ld	(xiz-9), xiy                            ; FAE9D9  ld (XIZ+0xf7),XIY
 	ld	bc, hl                                  ; FAE9DC  ld BC,HL
 	inc	4, bc                                  ; FAE9DE  inc 4,BC
 	extz	xbc                                   ; FAE9E0  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE9E2  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAE9E2  or (XBC+0x1523),0x0008
 	ldw	de, 0x3BCF                             ; FAE9E9  ld DE,0x3bcf
 	ld	xix, xiy                                ; FAE9EC  ld XIX,XIY
 	inc	5, xix                                 ; FAE9EE  inc 5,XIX
@@ -4567,7 +4567,7 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18:
 	set	3, c                                   ; FAEA1E  set 0x03,C
 	pushw	bc                                   ; FAEA21  push BC
 	push	0                                     ; FAEA22  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEA24  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEA24  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAEA27  call 0xfa6110
 	ld	(xiz-4), iy                             ; FAEA2B  ld (XIZ+0xfc),IY
 	ldw	de, 0                                  ; FAEA2E  ld DE,0x0000
@@ -4575,12 +4575,12 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA18:
 	ld	(xiz-7), bc                             ; FAEA34  ld (XIZ+0xf9),BC
 	ld	(xiz-2), hl                             ; FAEA37  ld (XIZ+0xfe),HL
 	ld	ix, bc                                  ; FAEA3A  ld IX,BC
-	extpfx3 0x9E, 0xFE, 0x84                   ; FAEA3C  add IX,(XIZ+0xfe)
+	add	ix, (xiz-2)                   ; FAEA3C  add IX,(XIZ+0xfe)
 	inc	6, xsp                                 ; FAEA3F  inc 6,XSP
 Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41:
 	ld	bc, (xiz-4)                             ; FAEA41  ld BC,(XIZ+0xfc)
 	extz	xbc                                   ; FAEA44  extz XBC
-	extpfx5 0xD3, 0x07, 0xE4, 0xE8, 0x23       ; FAEA46  ld HL,(XBC+DE)
+	ld	hl, (xbc+de)       ; FAEA46  ld HL,(XBC+DE)
 	ld	wa, hl                                  ; FAEA4B  ld WA,HL
 	and	wa, 0xFF                               ; FAEA4D  and WA,0x00ff
 	cp	wa, 0x80                                ; FAEA51  cp WA,0x0080
@@ -4591,10 +4591,10 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41:
 	pushw	wa                                   ; FAEA60  push WA
 	pushw	2                                    ; FAEA61  push 0x0002
 	push	0                                     ; FAEA64  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FAEA66  push (XIZ+0x10)
+	push	(xiz+16)                   ; FAEA66  push (XIZ+0x10)
 	pushw	ix                                   ; FAEA69  push IX
 	push	0                                     ; FAEA6A  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEA6C  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEA6C  push (XIZ+0x08)
 	call	EnvRec_LoadSlot                              ; FAEA6F  call 0xfa981b
 	inc	8, xsp                                 ; FAEA73  inc 0,XSP
 	inc	2, xsp                                 ; FAEA75  inc 2,XSP
@@ -4603,7 +4603,7 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41:
 	ld	bc, (xiz-2)                             ; FAEA7D  ld BC,(XIZ+0xfe)
 	inc	4, bc                                  ; FAEA80  inc 4,BC
 	extz	xbc                                   ; FAEA82  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAEA84  or (XBC+0x1523),0x0008
+	orw	(xbc+5411), 0x0008 ; FAEA84  or (XBC+0x1523),0x0008
 	ldw	(0xD796:24), 0                        ; FAEA8B  ld (0x00d796),0x0000
 	ldw	(0xD7A0:24), 0                        ; FAEA92  ld (0x00d7a0),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAEA99  lda XBC,0x00d75e
@@ -4632,7 +4632,7 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 	pop	xix                                    ; FAEAC8  pop XIX
 	popw	de                                    ; FAEAC9  pop DE
 	popw	hl                                    ; FAEACA  pop HL
-	unlk32 xiz                                 ; FAEACB  unlk XIZ
+	unlk	xiz                                 ; FAEACB  unlk XIZ
 	ret                                        ; FAEACD  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0001 -- 0xFAEACE..0xFAEAF8 (43 bytes)
@@ -4657,12 +4657,12 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEAC8:
 ; as PartRec_ApplyParam_0023 and its siblings are.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0001:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEACE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEACE  link XIZ,0x0000
 	pushw	hl                                   ; FAEAD2  push HL
 	ld	xbc, (xiz+12)                           ; FAEAD3  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEAD6  push XBC
 	push	0                                     ; FAEAD7  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEAD9  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEAD9  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEADC  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEADF  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEAE1  ld XBC,(XIZ+0x0c)
@@ -4670,12 +4670,12 @@ PartRec_ApplyParam_0001:
 	pushw	wa                                   ; FAEAE6  push WA
 	pushw	hl                                   ; FAEAE7  push HL
 	push	0                                     ; FAEAE8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEAEA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEAEA  push (XIZ+0x08)
 	call	PartRec_SetFittingOffset_0001                              ; FAEAED  call 0xfc589e
 	inc	8, xsp                                 ; FAEAF1  inc 0,XSP
 	inc	4, xsp                                 ; FAEAF3  inc 4,XSP
 	popw	hl                                    ; FAEAF5  pop HL
-	unlk32 xiz                                 ; FAEAF6  unlk XIZ
+	unlk	xiz                                 ; FAEAF6  unlk XIZ
 	ret                                        ; FAEAF8  ret
 ; --------------------------------------------------------------------------
 ; sub_FAEAF9 -- 0xFAEAF9..0xFAEB64 (108 bytes)
@@ -4697,13 +4697,13 @@ PartRec_ApplyParam_0001:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAEAF9:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEAF9  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEAF9  link XIZ,0x0000
 	pushw	hl                                   ; FAEAFD  push HL
 	push	xix                                   ; FAEAFE  push XIX
 	ld	xbc, (xiz+12)                           ; FAEAFF  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEB02  push XBC
 	push	0                                     ; FAEB03  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEB05  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEB05  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar_Shl7                 ; FAEB08  calr 0xfad688
 	ld	hl, wa                                  ; FAEB0B  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEB0D  ld XBC,(XIZ+0x0c)
@@ -4711,10 +4711,10 @@ sub_FAEAF9:
 	pushw	wa                                   ; FAEB12  push WA
 	pushw	hl                                   ; FAEB13  push HL
 	push	0                                     ; FAEB14  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEB16  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEB16  push (XIZ+0x08)
 	call	PartRec_SetPositionOffset_0003                              ; FAEB19  call 0xfc59ef
 	push	0                                     ; FAEB1D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEB1F  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEB1F  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAEB22  call 0xfb3ce0
 	ld	xix, xiy                                ; FAEB26  ld XIX,XIY
 	inc	5, xiy                                 ; FAEB28  inc 5,XIY
@@ -4746,7 +4746,7 @@ sub_FAEAF9__FAEB5C:
 sub_FAEAF9__FAEB60:
 	pop	xix                                    ; FAEB60  pop XIX
 	popw	hl                                    ; FAEB61  pop HL
-	unlk32 xiz                                 ; FAEB62  unlk XIZ
+	unlk	xiz                                 ; FAEB62  unlk XIZ
 	ret                                        ; FAEB64  ret
 ; --------------------------------------------------------------------------
 ; sub_FAEB65 -- 0xFAEB65..0xFAEBD0 (108 bytes)
@@ -4768,13 +4768,13 @@ sub_FAEAF9__FAEB60:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAEB65:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEB65  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEB65  link XIZ,0x0000
 	pushw	hl                                   ; FAEB69  push HL
 	push	xix                                   ; FAEB6A  push XIX
 	ld	xbc, (xiz+12)                           ; FAEB6B  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEB6E  push XBC
 	push	0                                     ; FAEB6F  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEB71  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEB71  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEB74  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEB77  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEB79  ld XBC,(XIZ+0x0c)
@@ -4782,10 +4782,10 @@ sub_FAEB65:
 	pushw	wa                                   ; FAEB7E  push WA
 	pushw	hl                                   ; FAEB7F  push HL
 	push	0                                     ; FAEB80  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEB82  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEB82  push (XIZ+0x08)
 	call	PartRec_SetPositionOffset_0005                              ; FAEB85  call 0xfc5ba2
 	push	0                                     ; FAEB89  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEB8B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEB8B  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAEB8E  call 0xfb3ce0
 	ld	xix, xiy                                ; FAEB92  ld XIX,XIY
 	inc	5, xiy                                 ; FAEB94  inc 5,XIY
@@ -4817,7 +4817,7 @@ sub_FAEB65__FAEBC8:
 sub_FAEB65__FAEBCC:
 	pop	xix                                    ; FAEBCC  pop XIX
 	popw	hl                                    ; FAEBCD  pop HL
-	unlk32 xiz                                 ; FAEBCE  unlk XIZ
+	unlk	xiz                                 ; FAEBCE  unlk XIZ
 	ret                                        ; FAEBD0  ret
 ; --------------------------------------------------------------------------
 ; sub_FAEBD1 -- 0xFAEBD1..0xFAEC20 (80 bytes)
@@ -4838,13 +4838,13 @@ sub_FAEB65__FAEBCC:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAEBD1:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEBD1  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEBD1  link XIZ,0x0000
 	pushw	hl                                   ; FAEBD5  push HL
 	push	xix                                   ; FAEBD6  push XIX
 	ld	xbc, (xiz+12)                           ; FAEBD7  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEBDA  push XBC
 	push	0                                     ; FAEBDB  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEBDD  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEBDD  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAEBE0  calr 0xfad561
 	ld	hl, wa                                  ; FAEBE3  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEBE5  ld XBC,(XIZ+0x0c)
@@ -4852,10 +4852,10 @@ sub_FAEBD1:
 	pushw	wa                                   ; FAEBEA  push WA
 	pushw	hl                                   ; FAEBEB  push HL
 	push	0                                     ; FAEBEC  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEBEE  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEBEE  push (XIZ+0x08)
 	call	PartRec_SetMovementDepth_0007                              ; FAEBF1  call 0xfc5efb
 	push	0                                     ; FAEBF5  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEBF7  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEBF7  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAEBFA  call 0xfb3ce0
 	ld	xix, xiy                                ; FAEBFE  ld XIX,XIY
 	inc	5, xiy                                 ; FAEC00  inc 5,XIY
@@ -4875,7 +4875,7 @@ sub_FAEBD1__FAEC08:
 sub_FAEBD1__FAEC1C:
 	pop	xix                                    ; FAEC1C  pop XIX
 	popw	hl                                    ; FAEC1D  pop HL
-	unlk32 xiz                                 ; FAEC1E  unlk XIZ
+	unlk	xiz                                 ; FAEC1E  unlk XIZ
 	ret                                        ; FAEC20  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0009 -- 0xFAEC21..0xFAEC70 (80 bytes)
@@ -4900,13 +4900,13 @@ sub_FAEBD1__FAEC1C:
 ; Pack104_RefreshMovementRate_ForVoice (0xFAEC63).  Entry 32 (arm 0xFAF270).
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0009:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC21  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEC21  link XIZ,0x0000
 	pushw	hl                                   ; FAEC25  push HL
 	push	xix                                   ; FAEC26  push XIX
 	ld	xbc, (xiz+12)                           ; FAEC27  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEC2A  push XBC
 	push	0                                     ; FAEC2B  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEC2D  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEC2D  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAEC30  calr 0xfad561
 	ld	hl, wa                                  ; FAEC33  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEC35  ld XBC,(XIZ+0x0c)
@@ -4914,10 +4914,10 @@ PartRec_ApplyParam_0009:
 	pushw	wa                                   ; FAEC3A  push WA
 	pushw	hl                                   ; FAEC3B  push HL
 	push	0                                     ; FAEC3C  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEC3E  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEC3E  push (XIZ+0x08)
 	call	PartRec_SetMovementRate_0009                              ; FAEC41  call 0xfc6175
 	push	0                                     ; FAEC45  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEC47  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEC47  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAEC4A  call 0xfb3ce0
 	ld	xix, xiy                                ; FAEC4E  ld XIX,XIY
 	inc	5, xiy                                 ; FAEC50  inc 5,XIY
@@ -4937,7 +4937,7 @@ PartRec_ApplyParam_0009__FAEC58:
 PartRec_ApplyParam_0009__FAEC6C:
 	pop	xix                                    ; FAEC6C  pop XIX
 	popw	hl                                    ; FAEC6D  pop HL
-	unlk32 xiz                                 ; FAEC6E  unlk XIZ
+	unlk	xiz                                 ; FAEC6E  unlk XIZ
 	ret                                        ; FAEC70  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_000B -- 0xFAEC71..0xFAEC9B (43 bytes)
@@ -4960,12 +4960,12 @@ PartRec_ApplyParam_0009__FAEC6C:
 ; PartRec_SetMutingOffset_000B.  Entry 34 (arm 0xFAF27E).
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_000B:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC71  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEC71  link XIZ,0x0000
 	pushw	hl                                   ; FAEC75  push HL
 	ld	xbc, (xiz+12)                           ; FAEC76  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEC79  push XBC
 	push	0                                     ; FAEC7A  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEC7C  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEC7C  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEC7F  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEC82  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAEC84  ld XBC,(XIZ+0x0c)
@@ -4973,12 +4973,12 @@ PartRec_ApplyParam_000B:
 	pushw	wa                                   ; FAEC89  push WA
 	pushw	hl                                   ; FAEC8A  push HL
 	push	0                                     ; FAEC8B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEC8D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEC8D  push (XIZ+0x08)
 	call	PartRec_SetMutingOffset_000B                              ; FAEC90  call 0xfc63ec
 	inc	8, xsp                                 ; FAEC94  inc 0,XSP
 	inc	4, xsp                                 ; FAEC96  inc 4,XSP
 	popw	hl                                    ; FAEC98  pop HL
-	unlk32 xiz                                 ; FAEC99  unlk XIZ
+	unlk	xiz                                 ; FAEC99  unlk XIZ
 	ret                                        ; FAEC9B  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_000D -- 0xFAEC9C..0xFAECC6 (43 bytes)
@@ -5001,12 +5001,12 @@ PartRec_ApplyParam_000B:
 ; PartRec_SetTuningOffset_000D (0xFAECBB).  Entry 35 (arm 0xFAF28C).
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_000D:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEC9C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEC9C  link XIZ,0x0000
 	pushw	hl                                   ; FAECA0  push HL
 	ld	xbc, (xiz+12)                           ; FAECA1  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAECA4  push XBC
 	push	0                                     ; FAECA5  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAECA7  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAECA7  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAECAA  calr 0xfad5c2
 	ld	hl, wa                                  ; FAECAD  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAECAF  ld XBC,(XIZ+0x0c)
@@ -5014,12 +5014,12 @@ PartRec_ApplyParam_000D:
 	pushw	wa                                   ; FAECB4  push WA
 	pushw	hl                                   ; FAECB5  push HL
 	push	0                                     ; FAECB6  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAECB8  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAECB8  push (XIZ+0x08)
 	call	PartRec_SetTuningOffset_000D                              ; FAECBB  call 0xfc654f
 	inc	8, xsp                                 ; FAECBF  inc 0,XSP
 	inc	4, xsp                                 ; FAECC1  inc 4,XSP
 	popw	hl                                    ; FAECC3  pop HL
-	unlk32 xiz                                 ; FAECC4  unlk XIZ
+	unlk	xiz                                 ; FAECC4  unlk XIZ
 	ret                                        ; FAECC6  ret
 ; --------------------------------------------------------------------------
 ; sub_FAECC7 -- 0xFAECC7..0xFAED32 (108 bytes)
@@ -5041,13 +5041,13 @@ PartRec_ApplyParam_000D:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAECC7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAECC7  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAECC7  link XIZ,0x0000
 	pushw	hl                                   ; FAECCB  push HL
 	push	xix                                   ; FAECCC  push XIX
 	ld	xbc, (xiz+12)                           ; FAECCD  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAECD0  push XBC
 	push	0                                     ; FAECD1  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAECD3  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAECD3  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAECD6  calr 0xfad5c2
 	ld	hl, wa                                  ; FAECD9  ld HL,WA
 	ld	xbc, (xiz+12)                           ; FAECDB  ld XBC,(XIZ+0x0c)
@@ -5055,10 +5055,10 @@ sub_FAECC7:
 	pushw	wa                                   ; FAECE0  push WA
 	pushw	hl                                   ; FAECE1  push HL
 	push	0                                     ; FAECE2  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAECE4  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAECE4  push (XIZ+0x08)
 	call	PartRec_SetSubGainOffset_000F                              ; FAECE7  call 0xfc65ec
 	push	0                                     ; FAECEB  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAECED  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAECED  push (XIZ+0x08)
 	call	VoiceQuery_Tag00_Part                              ; FAECF0  call 0xfb3ce0
 	ld	xix, xiy                                ; FAECF4  ld XIX,XIY
 	inc	5, xiy                                 ; FAECF6  inc 5,XIY
@@ -5090,7 +5090,7 @@ sub_FAECC7__FAED2A:
 sub_FAECC7__FAED2E:
 	pop	xix                                    ; FAED2E  pop XIX
 	popw	hl                                    ; FAED2F  pop HL
-	unlk32 xiz                                 ; FAED30  unlk XIZ
+	unlk	xiz                                 ; FAED30  unlk XIZ
 	ret                                        ; FAED32  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0023 -- 0xFAED33..0xFAED75 (67 bytes)
@@ -5124,12 +5124,12 @@ sub_FAECC7__FAED2E:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0020 / 0x0020 = 1<<5.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0023:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAED33  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAED33  link XIZ,0x0000
 	pushw	hl                                   ; FAED37  push HL
 	ld	xbc, (xiz+12)                           ; FAED38  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAED3B  push XBC
 	push	0                                     ; FAED3C  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAED3E  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAED3E  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar_x25                 ; FAED41  calr 0xfad561
 	ld	hl, wa                                  ; FAED44  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAED46  ld BC,(XIZ+0x08)
@@ -5144,12 +5144,12 @@ PartRec_ApplyParam_0023:
 	ld	a, (xbc)                                ; FAED63  ld A,(XBC)
 	pushw	wa                                   ; FAED65  push WA
 	push	0                                     ; FAED66  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAED68  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAED68  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAED6B  calr 0xfad203
 	inc	8, xsp                                 ; FAED6E  inc 0,XSP
 	inc	6, xsp                                 ; FAED70  inc 6,XSP
 	popw	hl                                    ; FAED72  pop HL
-	unlk32 xiz                                 ; FAED73  unlk XIZ
+	unlk	xiz                                 ; FAED73  unlk XIZ
 	ret                                        ; FAED75  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0025 -- 0xFAED76..0xFAEDC3 (78 bytes)
@@ -5184,14 +5184,14 @@ PartRec_ApplyParam_0023:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0040 / 0x0040 = 1<<6.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0025:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAED76  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAED76  link XIZ,0x0000
 	pushw	hl                                   ; FAED7A  push HL
 	pushw	de                                   ; FAED7B  push DE
 	ld	h, (xiz+8)                              ; FAED7C  ld H,(XIZ+0x08)
 	ld	xbc, (xiz+12)                           ; FAED7F  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAED82  push XBC
 	push	0                                     ; FAED83  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAED85  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAED85  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAED88  calr 0xfad5c2
 	ld	de, wa                                  ; FAED8B  ld DE,WA
 	ld	c, h                                    ; FAED8D  ld C,H
@@ -5215,7 +5215,7 @@ PartRec_ApplyParam_0025:
 	inc	8, xsp                                 ; FAEDBD  inc 0,XSP
 	popw	de                                    ; FAEDBF  pop DE
 	popw	hl                                    ; FAEDC0  pop HL
-	unlk32 xiz                                 ; FAEDC1  unlk XIZ
+	unlk	xiz                                 ; FAEDC1  unlk XIZ
 	ret                                        ; FAEDC3  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0027 -- 0xFAEDC4..0xFAEE06 (67 bytes)
@@ -5249,12 +5249,12 @@ PartRec_ApplyParam_0025:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0080 / 0x0080 = 1<<7.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0027:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEDC4  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEDC4  link XIZ,0x0000
 	pushw	hl                                   ; FAEDC8  push HL
 	ld	xbc, (xiz+12)                           ; FAEDC9  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEDCC  push XBC
 	push	0                                     ; FAEDCD  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEDCF  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEDCF  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEDD2  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEDD5  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAEDD7  ld BC,(XIZ+0x08)
@@ -5269,12 +5269,12 @@ PartRec_ApplyParam_0027:
 	ld	a, (xbc)                                ; FAEDF4  ld A,(XBC)
 	pushw	wa                                   ; FAEDF6  push WA
 	push	0                                     ; FAEDF7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEDF9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEDF9  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAEDFC  calr 0xfad203
 	inc	8, xsp                                 ; FAEDFF  inc 0,XSP
 	inc	6, xsp                                 ; FAEE01  inc 6,XSP
 	popw	hl                                    ; FAEE03  pop HL
-	unlk32 xiz                                 ; FAEE04  unlk XIZ
+	unlk	xiz                                 ; FAEE04  unlk XIZ
 	ret                                        ; FAEE06  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0029 -- 0xFAEE07..0xFAEE49 (67 bytes)
@@ -5308,12 +5308,12 @@ PartRec_ApplyParam_0027:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0100 / 0x0100 = 1<<8.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0029:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE07  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEE07  link XIZ,0x0000
 	pushw	hl                                   ; FAEE0B  push HL
 	ld	xbc, (xiz+12)                           ; FAEE0C  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEE0F  push XBC
 	push	0                                     ; FAEE10  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEE12  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEE12  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEE15  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEE18  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAEE1A  ld BC,(XIZ+0x08)
@@ -5328,12 +5328,12 @@ PartRec_ApplyParam_0029:
 	ld	a, (xbc)                                ; FAEE37  ld A,(XBC)
 	pushw	wa                                   ; FAEE39  push WA
 	push	0                                     ; FAEE3A  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEE3C  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEE3C  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAEE3F  calr 0xfad203
 	inc	8, xsp                                 ; FAEE42  inc 0,XSP
 	inc	6, xsp                                 ; FAEE44  inc 6,XSP
 	popw	hl                                    ; FAEE46  pop HL
-	unlk32 xiz                                 ; FAEE47  unlk XIZ
+	unlk	xiz                                 ; FAEE47  unlk XIZ
 	ret                                        ; FAEE49  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_002B -- 0xFAEE4A..0xFAEE8C (67 bytes)
@@ -5367,12 +5367,12 @@ PartRec_ApplyParam_0029:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0200 / 0x0200 = 1<<9.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_002B:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE4A  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEE4A  link XIZ,0x0000
 	pushw	hl                                   ; FAEE4E  push HL
 	ld	xbc, (xiz+12)                           ; FAEE4F  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEE52  push XBC
 	push	0                                     ; FAEE53  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEE55  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEE55  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEE58  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEE5B  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAEE5D  ld BC,(XIZ+0x08)
@@ -5387,12 +5387,12 @@ PartRec_ApplyParam_002B:
 	ld	a, (xbc)                                ; FAEE7A  ld A,(XBC)
 	pushw	wa                                   ; FAEE7C  push WA
 	push	0                                     ; FAEE7D  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEE7F  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEE7F  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAEE82  calr 0xfad203
 	inc	8, xsp                                 ; FAEE85  inc 0,XSP
 	inc	6, xsp                                 ; FAEE87  inc 6,XSP
 	popw	hl                                    ; FAEE89  pop HL
-	unlk32 xiz                                 ; FAEE8A  unlk XIZ
+	unlk	xiz                                 ; FAEE8A  unlk XIZ
 	ret                                        ; FAEE8C  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_002D -- 0xFAEE8D..0xFAEECF (67 bytes)
@@ -5426,12 +5426,12 @@ PartRec_ApplyParam_002B:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0400 / 0x0400 = 1<<10.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_002D:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEE8D  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEE8D  link XIZ,0x0000
 	pushw	hl                                   ; FAEE91  push HL
 	ld	xbc, (xiz+12)                           ; FAEE92  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEE95  push XBC
 	push	0                                     ; FAEE96  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEE98  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEE98  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEE9B  calr 0xfad5c2
 	ld	hl, wa                                  ; FAEE9E  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAEEA0  ld BC,(XIZ+0x08)
@@ -5446,12 +5446,12 @@ PartRec_ApplyParam_002D:
 	ld	a, (xbc)                                ; FAEEBD  ld A,(XBC)
 	pushw	wa                                   ; FAEEBF  push WA
 	push	0                                     ; FAEEC0  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEEC2  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEEC2  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAEEC5  calr 0xfad203
 	inc	8, xsp                                 ; FAEEC8  inc 0,XSP
 	inc	6, xsp                                 ; FAEECA  inc 6,XSP
 	popw	hl                                    ; FAEECC  pop HL
-	unlk32 xiz                                 ; FAEECD  unlk XIZ
+	unlk	xiz                                 ; FAEECD  unlk XIZ
 	ret                                        ; FAEECF  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_002F -- 0xFAEED0..0xFAEF23 (84 bytes)
@@ -5486,14 +5486,14 @@ PartRec_ApplyParam_002D:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x0800 / 0x0800 = 1<<11.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_002F:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEED0  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEED0  link XIZ,0x0000
 	pushw	hl                                   ; FAEED4  push HL
 	pushw	de                                   ; FAEED5  push DE
 	ld	h, (xiz+8)                              ; FAEED6  ld H,(XIZ+0x08)
 	ld	xbc, (xiz+12)                           ; FAEED9  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEEDC  push XBC
 	push	0                                     ; FAEEDD  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEEDF  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEEDF  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEEE2  calr 0xfad5c2
 	ld	de, wa                                  ; FAEEE5  ld DE,WA
 	ld	c, h                                    ; FAEEE7  ld C,H
@@ -5518,7 +5518,7 @@ PartRec_ApplyParam_002F:
 	add	xsp, 20                                ; FAEF19  add XSP,0x00000014
 	popw	de                                    ; FAEF1F  pop DE
 	popw	hl                                    ; FAEF20  pop HL
-	unlk32 xiz                                 ; FAEF21  unlk XIZ
+	unlk	xiz                                 ; FAEF21  unlk XIZ
 	ret                                        ; FAEF23  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0031 -- 0xFAEF24..0xFAEF7E (91 bytes)
@@ -5553,7 +5553,7 @@ PartRec_ApplyParam_002F:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x1000 / 0x1000 = 1<<12.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0031:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEF24  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEF24  link XIZ,0x0000
 	pushw	hl                                   ; FAEF28  push HL
 	pushw	de                                   ; FAEF29  push DE
 	push	xix                                   ; FAEF2A  push XIX
@@ -5561,7 +5561,7 @@ PartRec_ApplyParam_0031:
 	ld	xbc, (xiz+12)                           ; FAEF2E  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEF31  push XBC
 	push	0                                     ; FAEF32  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEF34  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEF34  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar                 ; FAEF37  calr 0xfad5c2
 	ld	de, wa                                  ; FAEF3A  ld DE,WA
 	ld	c, h                                    ; FAEF3C  ld C,H
@@ -5589,7 +5589,7 @@ PartRec_ApplyParam_0031:
 	pop	xix                                    ; FAEF79  pop XIX
 	popw	de                                    ; FAEF7A  pop DE
 	popw	hl                                    ; FAEF7B  pop HL
-	unlk32 xiz                                 ; FAEF7C  unlk XIZ
+	unlk	xiz                                 ; FAEF7C  unlk XIZ
 	ret                                        ; FAEF7E  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ApplyParam_0033 -- 0xFAEF7F..0xFAEFC1 (67 bytes)
@@ -5623,12 +5623,12 @@ PartRec_ApplyParam_0031:
 ;          Change mask pushed to PartRec_SetOrClearParamBits_x4: 0x2000 / 0x2000 = 1<<13.
 ; --------------------------------------------------------------------------
 PartRec_ApplyParam_0033:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEF7F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEF7F  link XIZ,0x0000
 	pushw	hl                                   ; FAEF83  push HL
 	ld	xbc, (xiz+12)                           ; FAEF84  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FAEF87  push XBC
 	push	0                                     ; FAEF88  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAEF8A  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAEF8A  push (XIZ+0x0a)
 	calr Scale7Bit_ByDepth_UniOrBipolar_Shl2                 ; FAEF8D  calr 0xfad4fe
 	ld	hl, wa                                  ; FAEF90  ld HL,WA
 	ld	bc, (xiz+8)                             ; FAEF92  ld BC,(XIZ+0x08)
@@ -5643,12 +5643,12 @@ PartRec_ApplyParam_0033:
 	ld	a, (xbc)                                ; FAEFAF  ld A,(XBC)
 	pushw	wa                                   ; FAEFB1  push WA
 	push	0                                     ; FAEFB2  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAEFB4  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAEFB4  push (XIZ+0x08)
 	calr PartRec_SetOrClearParamBits_x4                 ; FAEFB7  calr 0xfad203
 	inc	8, xsp                                 ; FAEFBA  inc 0,XSP
 	inc	6, xsp                                 ; FAEFBC  inc 6,XSP
 	popw	hl                                    ; FAEFBE  pop HL
-	unlk32 xiz                                 ; FAEFBF  unlk XIZ
+	unlk	xiz                                 ; FAEFBF  unlk XIZ
 	ret                                        ; FAEFC1  ret
 ; --------------------------------------------------------------------------
 ; sub_FAEFC2 -- 0xFAEFC2..0xFAEFE6 (37 bytes)
@@ -5668,7 +5668,7 @@ PartRec_ApplyParam_0033:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAEFC2:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEFC2  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEFC2  link XIZ,0x0000
 	ld	xbc, (xiz+10)                           ; FAEFC6  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+2)                              ; FAEFC9  ld A,(XBC+0x02)
 	extz	wa                                    ; FAEFCC  extz WA
@@ -5682,7 +5682,7 @@ sub_FAEFC2:
 	pushw	0                                    ; FAEFDB  push 0x0000
 	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FAEFDE  call 0xfa267a
 	inc	8, xsp                                 ; FAEFE2  inc 0,XSP
-	unlk32 xiz                                 ; FAEFE4  unlk XIZ
+	unlk	xiz                                 ; FAEFE4  unlk XIZ
 	ret                                        ; FAEFE6  ret
 ; --------------------------------------------------------------------------
 ; sub_FAEFE7 -- 0xFAEFE7..0xFAF00B (37 bytes)
@@ -5702,7 +5702,7 @@ sub_FAEFC2:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAEFE7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAEFE7  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAEFE7  link XIZ,0x0000
 	ld	xbc, (xiz+10)                           ; FAEFEB  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+2)                              ; FAEFEE  ld A,(XBC+0x02)
 	extz	wa                                    ; FAEFF1  extz WA
@@ -5716,7 +5716,7 @@ sub_FAEFE7:
 	pushw	1                                    ; FAF000  push 0x0001
 	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FAF003  call 0xfa267a
 	inc	8, xsp                                 ; FAF007  inc 0,XSP
-	unlk32 xiz                                 ; FAF009  unlk XIZ
+	unlk	xiz                                 ; FAF009  unlk XIZ
 	ret                                        ; FAF00B  ret
 ; --------------------------------------------------------------------------
 ; sub_FAF00C -- 0xFAF00C..0xFAF030 (37 bytes)
@@ -5736,7 +5736,7 @@ sub_FAEFE7:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAF00C:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAF00C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAF00C  link XIZ,0x0000
 	ld	xbc, (xiz+10)                           ; FAF010  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc+2)                              ; FAF013  ld A,(XBC+0x02)
 	extz	wa                                    ; FAF016  extz WA
@@ -5750,7 +5750,7 @@ sub_FAF00C:
 	pushw	2                                    ; FAF025  push 0x0002
 	call	Rec8644_Store3Bytes_AndFlagChanged                              ; FAF028  call 0xfa267a
 	inc	8, xsp                                 ; FAF02C  inc 0,XSP
-	unlk32 xiz                                 ; FAF02E  unlk XIZ
+	unlk	xiz                                 ; FAF02E  unlk XIZ
 	ret                                        ; FAF030  ret
 ; --------------------------------------------------------------------------
 ; Voice_ApplyParamChange_Dispatch -- 0xFAF031..0xFAF33F (783 bytes)
@@ -5833,7 +5833,7 @@ sub_FAF00C:
 ;          instruction operand, and for nothing else.
 ; --------------------------------------------------------------------------
 Voice_ApplyParamChange_Dispatch:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAF031  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAF031  link XIZ,0x0000
 	pushw	hl                                   ; FAF035  push HL
 	pushw	de                                   ; FAF036  push DE
 	push	xix                                   ; FAF037  push XIX
@@ -6230,7 +6230,7 @@ Voice_ApplyParamChange_Dispatch__FAF33A:
 	pop	xix                                    ; FAF33A  pop XIX
 	popw	de                                    ; FAF33B  pop DE
 	popw	hl                                    ; FAF33C  pop HL
-	unlk32 xiz                                 ; FAF33D  unlk XIZ
+	unlk	xiz                                 ; FAF33D  unlk XIZ
 	ret                                        ; FAF33F  ret
 ; --------------------------------------------------------------------------
 ; PartRec_ResetSlotValues_ByTag -- 0xFAF340..0xFAF3CB (140 bytes)
@@ -6286,7 +6286,7 @@ Voice_ApplyParamChange_Dispatch__FAF33A:
 ;          arm 1 misses.
 ; --------------------------------------------------------------------------
 PartRec_ResetSlotValues_ByTag:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAF340  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAF340  link XIZ,0xfffc
 	pushw	hl                                   ; FAF344  push HL
 	pushw	de                                   ; FAF345  push DE
 	push	xix                                   ; FAF346  push XIX
@@ -6300,7 +6300,7 @@ PartRec_ResetSlotValues_ByTag__FAF358:
 	ld	xbc, (xiz+14)                           ; FAF358  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc+1)                              ; FAF35B  ld A,(XBC+0x01)
 	and	a, 63                                  ; FAF35E  and A,0x3f
-	extpfx3 0x8E, 0x0C, 0xF1                   ; FAF361  cp A,(XIZ+0x0c)
+	cp	a, (xiz+12)                   ; FAF361  cp A,(XIZ+0x0c)
 	jr nz, PartRec_ResetSlotValues_ByTag__FAF38A                  ; FAF364  jr NZ,0xfaf38a
 	ld	wa, (xiz+10)                            ; FAF366  ld WA,(XIZ+0x0a)
 	extz	wa                                    ; FAF369  extz WA
@@ -6308,7 +6308,7 @@ PartRec_ResetSlotValues_ByTag__FAF358:
 	jr z, PartRec_ResetSlotValues_ByTag__FAF38A                   ; FAF36D  jr Z,0xfaf38a
 	ld	(xiz-2), hl                             ; FAF36F  ld (XIZ+0xfe),HL
 	ld	wa, ix                                  ; FAF372  ld WA,IX
-	extpfx3 0x9E, 0xFE, 0x80                   ; FAF374  add WA,(XIZ+0xfe)
+	add	wa, (xiz-2)                   ; FAF374  add WA,(XIZ+0xfe)
 	add	wa, 0x76                               ; FAF377  add WA,0x0076
 	ld	(xiz-4), wa                             ; FAF37B  ld (XIZ+0xfc),WA
 	ldw	bc, 0x1523                             ; FAF37E  ld BC,0x1523
@@ -6320,7 +6320,7 @@ PartRec_ResetSlotValues_ByTag__FAF38A:
 	ld	xbc, (xiz+14)                           ; FAF38A  ld XBC,(XIZ+0x0e)
 	ld	a, (xbc+4)                              ; FAF38D  ld A,(XBC+0x04)
 	and	a, 63                                  ; FAF390  and A,0x3f
-	extpfx3 0x8E, 0x0C, 0xF1                   ; FAF393  cp A,(XIZ+0x0c)
+	cp	a, (xiz+12)                   ; FAF393  cp A,(XIZ+0x0c)
 	jr nz, PartRec_ResetSlotValues_ByTag__FAF3B5                  ; FAF396  jr NZ,0xfaf3b5
 	ld	wa, (xiz+10)                            ; FAF398  ld WA,(XIZ+0x0a)
 	extz	wa                                    ; FAF39B  extz WA
@@ -6328,7 +6328,7 @@ PartRec_ResetSlotValues_ByTag__FAF38A:
 	jr z, PartRec_ResetSlotValues_ByTag__FAF3B5                   ; FAF39F  jr Z,0xfaf3b5
 	ld	(xiz-2), hl                             ; FAF3A1  ld (XIZ+0xfe),HL
 	ld	wa, ix                                  ; FAF3A4  ld WA,IX
-	extpfx3 0x9E, 0xFE, 0x80                   ; FAF3A6  add WA,(XIZ+0xfe)
+	add	wa, (xiz-2)                   ; FAF3A6  add WA,(XIZ+0xfe)
 	add	wa, 0x77                               ; FAF3A9  add WA,0x0077
 	extz	xwa                                   ; FAF3AD  extz XWA
 	ld	(xwa+0x1523), 64                        ; FAF3AF  ld (XWA+0x1523),0x40
@@ -6343,7 +6343,7 @@ PartRec_ResetSlotValues_ByTag__FAF3B5:
 	pop	xix                                    ; FAF3C6  pop XIX
 	popw	de                                    ; FAF3C7  pop DE
 	popw	hl                                    ; FAF3C8  pop HL
-	unlk32 xiz                                 ; FAF3C9  unlk XIZ
+	unlk	xiz                                 ; FAF3C9  unlk XIZ
 	ret                                        ; FAF3CB  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC01 -- 0xFAF3CC..0xFAF4DC (273 bytes)
@@ -6368,7 +6368,7 @@ PartRec_ResetSlotValues_ByTag__FAF3B5:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC01:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FAF3CC  link XIZ,0xffec
+	link	xiz, 0xffec              ; FAF3CC  link XIZ,0xffec
 	pushw	hl                                   ; FAF3D0  push HL
 	push	xix                                   ; FAF3D1  push XIX
 	ld	l, (xiz+8)                              ; FAF3D2  ld L,(XIZ+0x08)
@@ -6445,7 +6445,7 @@ MidiCtrl_CC01__FAF48D:
 	ld	xbc, (xiz-16)                           ; FAF490  ld XBC,(XIZ+0xf0)
 	ld	(xiz-20), xbc                           ; FAF493  ld (XIZ+0xec),XBC
 	add	xbc, 20                                ; FAF496  add XBC,0x00000014
-	extpfx3 0xAE, 0xF4, 0x81                   ; FAF49C  add XBC,(XIZ+0xf4)
+	add	xbc, (xiz-12)                   ; FAF49C  add XBC,(XIZ+0xf4)
 	push	xbc                                   ; FAF49F  push XBC
 	ld	bc, (xiz+10)                            ; FAF4A0  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAF4A3  extz BC
@@ -6456,7 +6456,7 @@ MidiCtrl_CC01__FAF48D:
 	push	xbc                                   ; FAF4AD  push XBC
 	ld	xwa, (xiz-20)                           ; FAF4AE  ld XWA,(XIZ+0xec)
 	add	xwa, 21                                ; FAF4B1  add XWA,0x00000015
-	extpfx3 0xAE, 0xF4, 0x80                   ; FAF4B7  add XWA,(XIZ+0xf4)
+	add	xwa, (xiz-12)                   ; FAF4B7  add XWA,(XIZ+0xf4)
 	ld	c, (xwa)                                ; FAF4BA  ld C,(XWA)
 	and	c, 63                                  ; FAF4BC  and C,0x3f
 	pushw	bc                                   ; FAF4BF  push BC
@@ -6472,7 +6472,7 @@ MidiCtrl_CC01__FAF48D:
 MidiCtrl_CC01__FAF4D8:
 	pop	xix                                    ; FAF4D8  pop XIX
 	popw	hl                                    ; FAF4D9  pop HL
-	unlk32 xiz                                 ; FAF4DA  unlk XIZ
+	unlk	xiz                                 ; FAF4DA  unlk XIZ
 	ret                                        ; FAF4DC  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC02 -- 0xFAF4DD..0xFAF5ED (273 bytes)
@@ -6497,7 +6497,7 @@ MidiCtrl_CC01__FAF4D8:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC02:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FAF4DD  link XIZ,0xffec
+	link	xiz, 0xffec              ; FAF4DD  link XIZ,0xffec
 	pushw	hl                                   ; FAF4E1  push HL
 	push	xix                                   ; FAF4E2  push XIX
 	ld	l, (xiz+8)                              ; FAF4E3  ld L,(XIZ+0x08)
@@ -6574,7 +6574,7 @@ MidiCtrl_CC02__FAF59E:
 	ld	xbc, (xiz-16)                           ; FAF5A1  ld XBC,(XIZ+0xf0)
 	ld	(xiz-20), xbc                           ; FAF5A4  ld (XIZ+0xec),XBC
 	add	xbc, 26                                ; FAF5A7  add XBC,0x0000001a
-	extpfx3 0xAE, 0xF4, 0x81                   ; FAF5AD  add XBC,(XIZ+0xf4)
+	add	xbc, (xiz-12)                   ; FAF5AD  add XBC,(XIZ+0xf4)
 	push	xbc                                   ; FAF5B0  push XBC
 	ld	bc, (xiz+10)                            ; FAF5B1  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAF5B4  extz BC
@@ -6585,7 +6585,7 @@ MidiCtrl_CC02__FAF59E:
 	push	xbc                                   ; FAF5BE  push XBC
 	ld	xwa, (xiz-20)                           ; FAF5BF  ld XWA,(XIZ+0xec)
 	add	xwa, 27                                ; FAF5C2  add XWA,0x0000001b
-	extpfx3 0xAE, 0xF4, 0x80                   ; FAF5C8  add XWA,(XIZ+0xf4)
+	add	xwa, (xiz-12)                   ; FAF5C8  add XWA,(XIZ+0xf4)
 	ld	c, (xwa)                                ; FAF5CB  ld C,(XWA)
 	and	c, 63                                  ; FAF5CD  and C,0x3f
 	pushw	bc                                   ; FAF5D0  push BC
@@ -6601,7 +6601,7 @@ MidiCtrl_CC02__FAF59E:
 MidiCtrl_CC02__FAF5E9:
 	pop	xix                                    ; FAF5E9  pop XIX
 	popw	hl                                    ; FAF5EA  pop HL
-	unlk32 xiz                                 ; FAF5EB  unlk XIZ
+	unlk	xiz                                 ; FAF5EB  unlk XIZ
 	ret                                        ; FAF5ED  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC04 -- 0xFAF5EE..0xFAF6FB (270 bytes)
@@ -6626,7 +6626,7 @@ MidiCtrl_CC02__FAF5E9:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC04:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FAF5EE  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FAF5EE  link XIZ,0xfff2
 	pushw	hl                                   ; FAF5F2  push HL
 	pushw	de                                   ; FAF5F3  push DE
 	push	xix                                   ; FAF5F4  push XIX
@@ -6732,7 +6732,7 @@ MidiCtrl_CC04__FAF6F6:
 	pop	xix                                    ; FAF6F6  pop XIX
 	popw	de                                    ; FAF6F7  pop DE
 	popw	hl                                    ; FAF6F8  pop HL
-	unlk32 xiz                                 ; FAF6F9  unlk XIZ
+	unlk	xiz                                 ; FAF6F9  unlk XIZ
 	ret                                        ; FAF6FB  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC16 -- 0xFAF6FC..0xFAF872 (375 bytes)
@@ -6757,7 +6757,7 @@ MidiCtrl_CC04__FAF6F6:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC16:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FAF6FC  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FAF6FC  link XIZ,0xfff0
 	push	xhl                                   ; FAF700  push XHL
 	pushw	de                                   ; FAF701  push DE
 	push	xix                                   ; FAF702  push XIX
@@ -6782,7 +6782,7 @@ MidiCtrl_CC16__FAF729:
 	extz	xwa                                   ; FAF739  extz XWA
 	add	xwa, BitMasks_1shl0_to_5                          ; FAF73B  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAF741  ld W,(XWA)
-	extpfx3 0x8E, 0xF8, 0xC0                   ; FAF743  and W,(XIZ+0xf8)
+	and	w, (xiz-8)                   ; FAF743  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC16__FAF85F                  ; FAF746  jrl Z,0xfaf85f
 	extz	xhl                                   ; FAF749  extz XHL
 	ld	xwa, (xhl+0x1523)                       ; FAF74B  ld XWA,(XHL+0x1523)
@@ -6816,7 +6816,7 @@ MidiCtrl_CC16__FAF772:
 	extz	wa                                    ; FAF79F  extz WA
 	pushw	wa                                   ; FAF7A1  push WA
 	push	0                                     ; FAF7A2  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF7A4  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF7A4  push (XIZ+0x08)
 	calr Voice_ApplyParamChange_Dispatch                 ; FAF7A7  calr 0xfaf031
 	ld	bc, hl                                  ; FAF7AA  ld BC,HL
 	add	bc, de                                 ; FAF7AC  add BC,DE
@@ -6833,7 +6833,7 @@ MidiCtrl_CC16__FAF772:
 	push	xbc                                   ; FAF7CC  push XBC
 	ld	xbc, (xiz-14)                           ; FAF7CD  ld XBC,(XIZ+0xf2)
 	add	xbc, 50                                ; FAF7D0  add XBC,0x00000032
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAF7D6  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAF7D6  add XBC,(XIZ+0xf6)
 	ld	a, (xbc)                                ; FAF7D9  ld A,(XBC)
 	and	a, 63                                  ; FAF7DB  and A,0x3f
 	pushw	wa                                   ; FAF7DE  push WA
@@ -6856,7 +6856,7 @@ MidiCtrl_CC16__FAF7E2:
 	extz	wa                                    ; FAF80F  extz WA
 	pushw	wa                                   ; FAF811  push WA
 	push	0                                     ; FAF812  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF814  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF814  push (XIZ+0x08)
 	calr Voice_ApplyParamChange_Dispatch                 ; FAF817  calr 0xfaf031
 	ld	bc, hl                                  ; FAF81A  ld BC,HL
 	add	bc, de                                 ; FAF81C  add BC,DE
@@ -6873,7 +6873,7 @@ MidiCtrl_CC16__FAF7E2:
 	push	xbc                                   ; FAF83C  push XBC
 	ld	xbc, (xiz-14)                           ; FAF83D  ld XBC,(XIZ+0xf2)
 	add	xbc, 47                                ; FAF840  add XBC,0x0000002f
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAF846  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAF846  add XBC,(XIZ+0xf6)
 	ld	a, (xbc)                                ; FAF849  ld A,(XBC)
 	and	a, 63                                  ; FAF84B  and A,0x3f
 	pushw	wa                                   ; FAF84E  push WA
@@ -6881,7 +6881,7 @@ MidiCtrl_CC16__FAF84F:
 	ld	c, (xiz-6)                              ; FAF84F  ld C,(XIZ+0xfa)
 	pushw	bc                                   ; FAF852  push BC
 	push	0                                     ; FAF853  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF855  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF855  push (XIZ+0x08)
 	calr PartRec_ResetSlotValues_ByTag                 ; FAF858  calr 0xfaf340
 	inc	8, xsp                                 ; FAF85B  inc 0,XSP
 	inc	2, xsp                                 ; FAF85D  inc 2,XSP
@@ -6894,7 +6894,7 @@ MidiCtrl_CC16__FAF85F:
 	pop	xix                                    ; FAF86D  pop XIX
 	popw	de                                    ; FAF86E  pop DE
 	pop	xhl                                    ; FAF86F  pop XHL
-	unlk32 xiz                                 ; FAF870  unlk XIZ
+	unlk	xiz                                 ; FAF870  unlk XIZ
 	ret                                        ; FAF872  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC17 -- 0xFAF873..0xFAF9E5 (371 bytes)
@@ -6919,7 +6919,7 @@ MidiCtrl_CC16__FAF85F:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC17:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FAF873  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FAF873  link XIZ,0xfff2
 	push	xhl                                   ; FAF877  push XHL
 	pushw	de                                   ; FAF878  push DE
 	push	xix                                   ; FAF879  push XIX
@@ -6944,7 +6944,7 @@ MidiCtrl_CC17__FAF8A0:
 	extz	xwa                                   ; FAF8B0  extz XWA
 	add	xwa, BitMasks_1shl0_to_5                          ; FAF8B2  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAF8B8  ld W,(XWA)
-	extpfx3 0x8E, 0xF8, 0xC0                   ; FAF8BA  and W,(XIZ+0xf8)
+	and	w, (xiz-8)                   ; FAF8BA  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC17__FAF9D2                  ; FAF8BD  jrl Z,0xfaf9d2
 	extz	xhl                                   ; FAF8C0  extz XHL
 	ld	xwa, (xhl+0x1523)                       ; FAF8C2  ld XWA,(XHL+0x1523)
@@ -6978,7 +6978,7 @@ MidiCtrl_CC17__FAF8E9:
 	extz	wa                                    ; FAF916  extz WA
 	pushw	wa                                   ; FAF918  push WA
 	push	0                                     ; FAF919  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF91B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF91B  push (XIZ+0x08)
 	calr Voice_ApplyParamChange_Dispatch                 ; FAF91E  calr 0xfaf031
 	ld	bc, hl                                  ; FAF921  ld BC,HL
 	add	bc, de                                 ; FAF923  add BC,DE
@@ -6992,7 +6992,7 @@ MidiCtrl_CC17__FAF8E9:
 	push	xbc                                   ; FAF93E  push XBC
 	ld	xbc, (xiz-14)                           ; FAF93F  ld XBC,(XIZ+0xf2)
 	add	xbc, 53                                ; FAF942  add XBC,0x00000035
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAF948  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAF948  add XBC,(XIZ+0xf6)
 	ld	w, (xbc)                                ; FAF94B  ld W,(XBC)
 	and	w, 63                                  ; FAF94D  and W,0x3f
 	push	0                                     ; FAF950  push 0x00
@@ -7016,7 +7016,7 @@ MidiCtrl_CC17__FAF957:
 	extz	wa                                    ; FAF984  extz WA
 	pushw	wa                                   ; FAF986  push WA
 	push	0                                     ; FAF987  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF989  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF989  push (XIZ+0x08)
 	calr Voice_ApplyParamChange_Dispatch                 ; FAF98C  calr 0xfaf031
 	ld	bc, hl                                  ; FAF98F  ld BC,HL
 	add	bc, de                                 ; FAF991  add BC,DE
@@ -7030,7 +7030,7 @@ MidiCtrl_CC17__FAF957:
 	push	xbc                                   ; FAF9AC  push XBC
 	ld	xbc, (xiz-14)                           ; FAF9AD  ld XBC,(XIZ+0xf2)
 	add	xbc, 50                                ; FAF9B0  add XBC,0x00000032
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAF9B6  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAF9B6  add XBC,(XIZ+0xf6)
 	ld	w, (xbc)                                ; FAF9B9  ld W,(XBC)
 	and	w, 63                                  ; FAF9BB  and W,0x3f
 	push	0                                     ; FAF9BE  push 0x00
@@ -7039,7 +7039,7 @@ MidiCtrl_CC17__FAF9C2:
 	ld	c, (xiz-6)                              ; FAF9C2  ld C,(XIZ+0xfa)
 	pushw	bc                                   ; FAF9C5  push BC
 	push	0                                     ; FAF9C6  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAF9C8  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAF9C8  push (XIZ+0x08)
 	calr PartRec_ResetSlotValues_ByTag                 ; FAF9CB  calr 0xfaf340
 	inc	8, xsp                                 ; FAF9CE  inc 0,XSP
 	inc	2, xsp                                 ; FAF9D0  inc 2,XSP
@@ -7052,7 +7052,7 @@ MidiCtrl_CC17__FAF9D2:
 	pop	xix                                    ; FAF9E0  pop XIX
 	popw	de                                    ; FAF9E1  pop DE
 	pop	xhl                                    ; FAF9E2  pop XHL
-	unlk32 xiz                                 ; FAF9E3  unlk XIZ
+	unlk	xiz                                 ; FAF9E3  unlk XIZ
 	ret                                        ; FAF9E5  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC18 -- 0xFAF9E6..0xFAFAE8 (259 bytes)
@@ -7077,7 +7077,7 @@ MidiCtrl_CC17__FAF9D2:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC18:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FAF9E6  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FAF9E6  link XIZ,0xfff2
 	pushw	hl                                   ; FAF9EA  push HL
 	push	xde                                   ; FAF9EB  push XDE
 	push	xix                                   ; FAF9EC  push XIX
@@ -7100,7 +7100,7 @@ MidiCtrl_CC18__FAFA08:
 	extz	xwa                                   ; FAFA19  extz XWA
 	add	xwa, BitMasks_1shl0_to_5                          ; FAFA1B  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAFA21  ld W,(XWA)
-	extpfx3 0x8E, 0xF8, 0xC0                   ; FAFA23  and W,(XIZ+0xf8)
+	and	w, (xiz-8)                   ; FAFA23  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC18__FAFADA                  ; FAFA26  jrl Z,0xfafada
 	extz	xde                                   ; FAFA29  extz XDE
 	ld	xwa, (xde+0x1523)                       ; FAFA2B  ld XWA,(XDE+0x1523)
@@ -7137,7 +7137,7 @@ MidiCtrl_CC18__FAFA54:
 	push	xbc                                   ; FAFA82  push XBC
 	ld	xbc, (xiz-14)                           ; FAFA83  ld XBC,(XIZ+0xf2)
 	add	xbc, 50                                ; FAFA86  add XBC,0x00000032
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAFA8C  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAFA8C  add XBC,(XIZ+0xf6)
 	ld	a, (xbc)                                ; FAFA8F  ld A,(XBC)
 	and	a, 63                                  ; FAFA91  and A,0x3f
 	pushw	wa                                   ; FAFA94  push WA
@@ -7146,7 +7146,7 @@ MidiCtrl_CC18__FAFA97:
 	ld	(xiz-10), xix                           ; FAFA97  ld (XIZ+0xf6),XIX
 	ld	xbc, (xiz-10)                           ; FAFA9A  ld XBC,(XIZ+0xf6)
 	add	xbc, 46                                ; FAFA9D  add XBC,0x0000002e
-	extpfx3 0xAE, 0xFA, 0x81                   ; FAFAA3  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FAFAA3  add XBC,(XIZ+0xfa)
 	push	xbc                                   ; FAFAA6  push XBC
 	ld	bc, (xiz+10)                            ; FAFAA7  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAFAAA  extz BC
@@ -7159,7 +7159,7 @@ MidiCtrl_CC18__FAFA97:
 	push	xbc                                   ; FAFABC  push XBC
 	ld	xbc, (xiz-10)                           ; FAFABD  ld XBC,(XIZ+0xf6)
 	add	xbc, 47                                ; FAFAC0  add XBC,0x0000002f
-	extpfx3 0xAE, 0xFA, 0x81                   ; FAFAC6  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FAFAC6  add XBC,(XIZ+0xfa)
 	ld	a, (xbc)                                ; FAFAC9  ld A,(XBC)
 	and	a, 63                                  ; FAFACB  and A,0x3f
 	pushw	wa                                   ; FAFACE  push WA
@@ -7177,7 +7177,7 @@ MidiCtrl_CC18__FAFADA:
 	pop	xix                                    ; FAFAE3  pop XIX
 	pop	xde                                    ; FAFAE4  pop XDE
 	popw	hl                                    ; FAFAE5  pop HL
-	unlk32 xiz                                 ; FAFAE6  unlk XIZ
+	unlk	xiz                                 ; FAFAE6  unlk XIZ
 	ret                                        ; FAFAE8  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC19 -- 0xFAFAE9..0xFAFBEB (259 bytes)
@@ -7202,7 +7202,7 @@ MidiCtrl_CC18__FAFADA:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC19:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FAFAE9  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FAFAE9  link XIZ,0xfff2
 	pushw	hl                                   ; FAFAED  push HL
 	push	xde                                   ; FAFAEE  push XDE
 	push	xix                                   ; FAFAEF  push XIX
@@ -7225,7 +7225,7 @@ MidiCtrl_CC19__FAFB0B:
 	extz	xwa                                   ; FAFB1C  extz XWA
 	add	xwa, BitMasks_1shl0_to_5                          ; FAFB1E  add XWA,0x00fe1280
 	ld	w, (xwa)                                ; FAFB24  ld W,(XWA)
-	extpfx3 0x8E, 0xF8, 0xC0                   ; FAFB26  and W,(XIZ+0xf8)
+	and	w, (xiz-8)                   ; FAFB26  and W,(XIZ+0xf8)
 	jrl z, MidiCtrl_CC19__FAFBDD                  ; FAFB29  jrl Z,0xfafbdd
 	extz	xde                                   ; FAFB2C  extz XDE
 	ld	xwa, (xde+0x1523)                       ; FAFB2E  ld XWA,(XDE+0x1523)
@@ -7262,7 +7262,7 @@ MidiCtrl_CC19__FAFB57:
 	push	xbc                                   ; FAFB85  push XBC
 	ld	xbc, (xiz-14)                           ; FAFB86  ld XBC,(XIZ+0xf2)
 	add	xbc, 53                                ; FAFB89  add XBC,0x00000035
-	extpfx3 0xAE, 0xF6, 0x81                   ; FAFB8F  add XBC,(XIZ+0xf6)
+	add	xbc, (xiz-10)                   ; FAFB8F  add XBC,(XIZ+0xf6)
 	ld	a, (xbc)                                ; FAFB92  ld A,(XBC)
 	and	a, 63                                  ; FAFB94  and A,0x3f
 	pushw	wa                                   ; FAFB97  push WA
@@ -7271,7 +7271,7 @@ MidiCtrl_CC19__FAFB9A:
 	ld	(xiz-10), xix                           ; FAFB9A  ld (XIZ+0xf6),XIX
 	ld	xbc, (xiz-10)                           ; FAFB9D  ld XBC,(XIZ+0xf6)
 	add	xbc, 49                                ; FAFBA0  add XBC,0x00000031
-	extpfx3 0xAE, 0xFA, 0x81                   ; FAFBA6  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FAFBA6  add XBC,(XIZ+0xfa)
 	push	xbc                                   ; FAFBA9  push XBC
 	ld	bc, (xiz+10)                            ; FAFBAA  ld BC,(XIZ+0x0a)
 	extz	bc                                    ; FAFBAD  extz BC
@@ -7284,7 +7284,7 @@ MidiCtrl_CC19__FAFB9A:
 	push	xbc                                   ; FAFBBF  push XBC
 	ld	xbc, (xiz-10)                           ; FAFBC0  ld XBC,(XIZ+0xf6)
 	add	xbc, 50                                ; FAFBC3  add XBC,0x00000032
-	extpfx3 0xAE, 0xFA, 0x81                   ; FAFBC9  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FAFBC9  add XBC,(XIZ+0xfa)
 	ld	a, (xbc)                                ; FAFBCC  ld A,(XBC)
 	and	a, 63                                  ; FAFBCE  and A,0x3f
 	pushw	wa                                   ; FAFBD1  push WA
@@ -7302,7 +7302,7 @@ MidiCtrl_CC19__FAFBDD:
 	pop	xix                                    ; FAFBE6  pop XIX
 	pop	xde                                    ; FAFBE7  pop XDE
 	popw	hl                                    ; FAFBE8  pop HL
-	unlk32 xiz                                 ; FAFBE9  unlk XIZ
+	unlk	xiz                                 ; FAFBE9  unlk XIZ
 	ret                                        ; FAFBEB  ret
 ; --------------------------------------------------------------------------
 ; sub_FAFBEC -- 0xFAFBEC..0xFAFCE0 (245 bytes)
@@ -7327,7 +7327,7 @@ MidiCtrl_CC19__FAFBDD:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAFBEC:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FAFBEC  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FAFBEC  link XIZ,0xfffa
 	pushw	hl                                   ; FAFBF0  push HL
 	pushw	de                                   ; FAFBF1  push DE
 	pushw	ix                                   ; FAFBF2  push IX
@@ -7351,14 +7351,14 @@ sub_FAFBEC:
 	jrl sub_FAFBEC__FAFCDB                     ; FAFC25  jrl T,0xfafcdb
 sub_FAFBEC__FAFC28:
 	push	0                                     ; FAFC28  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAFC2A  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAFC2A  push (XIZ+0x0a)
 	pushw	de                                   ; FAFC2D  push DE
 	calr PartRec_Flags09_Bit14_SetOrClear                 ; FAFC2E  calr 0xfad880
 	pushw	1                                    ; FAFC31  push 0x0001
 	pushw	de                                   ; FAFC34  push DE
 	call	Part_StageDspAlgoParams                              ; FAFC35  call 0xfb5636
 	push	0                                     ; FAFC39  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FAFC3B  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FAFC3B  push (XIZ+0x0a)
 	pushw	de                                   ; FAFC3E  push DE
 	call	sub_FBB765                              ; FAFC3F  call 0xfbb765
 	pushw	de                                   ; FAFC43  push DE
@@ -7424,7 +7424,7 @@ sub_FAFBEC__FAFCDB:
 	popw	ix                                    ; FAFCDB  pop IX
 	popw	de                                    ; FAFCDC  pop DE
 	popw	hl                                    ; FAFCDD  pop HL
-	unlk32 xiz                                 ; FAFCDE  unlk XIZ
+	unlk	xiz                                 ; FAFCDE  unlk XIZ
 	ret                                        ; FAFCE0  ret
 ; --------------------------------------------------------------------------
 ; MidiCtrl_CC120 -- 0xFAFCE1..0xFAFDA4 (196 bytes)
@@ -7450,7 +7450,7 @@ sub_FAFBEC__FAFCDB:
 ; Unknown:  what the routine DOES with the value.
 ; --------------------------------------------------------------------------
 MidiCtrl_CC120:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FAFCE1  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FAFCE1  link XIZ,0xfff8
 	pushw	hl                                   ; FAFCE5  push HL
 	push	xix                                   ; FAFCE6  push XIX
 	ld	l, (xiz+8)                              ; FAFCE7  ld L,(XIZ+0x08)
@@ -7494,7 +7494,7 @@ MidiCtrl_CC120__FAFD3F:
 	ld	xwa, (xiz-8)                            ; FAFD47  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FAFD4A  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FAFD4C  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x00, 0xC3             ; FAFD4F  ld (XBC),0xc300
+	ldw	(xbc), 0xc300             ; FAFD4F  ld (XBC),0xc300
 	nop                                        ; FAFD53  nop
 	nop                                        ; FAFD54  nop
 	nop                                        ; FAFD55  nop
@@ -7506,7 +7506,7 @@ MidiCtrl_CC120__FAFD3F:
 	ld	xwa, (xiz-8)                            ; FAFD60  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FAFD63  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FAFD65  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x80, 0xC3             ; FAFD68  ld (XBC),0xc380
+	ldw	(xbc), 0xc380             ; FAFD68  ld (XBC),0xc380
 	jr MidiCtrl_CC120__FAFD9B                      ; FAFD6C  jr T,0xfafd9b
 MidiCtrl_CC120__FAFD6E:
 	ld	c, h                                    ; FAFD6E  ld C,H
@@ -7515,7 +7515,7 @@ MidiCtrl_CC120__FAFD6E:
 	ld	xwa, (xiz-8)                            ; FAFD76  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FAFD79  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FAFD7B  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x00, 0xA2             ; FAFD7E  ld (XBC),0xa200
+	ldw	(xbc), 0xa200             ; FAFD7E  ld (XBC),0xa200
 	nop                                        ; FAFD82  nop
 	nop                                        ; FAFD83  nop
 	nop                                        ; FAFD84  nop
@@ -7527,14 +7527,14 @@ MidiCtrl_CC120__FAFD6E:
 	ld	xwa, (xiz-8)                            ; FAFD8F  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FAFD92  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FAFD94  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x80, 0xA2             ; FAFD97  ld (XBC),0xa280
+	ldw	(xbc), 0xa280             ; FAFD97  ld (XBC),0xa280
 MidiCtrl_CC120__FAFD9B:
 	inc	1, xix                                 ; FAFD9B  inc 1,XIX
 	jrl MidiCtrl_CC120__FAFD0E                     ; FAFD9D  jrl T,0xfafd0e
 MidiCtrl_CC120__FAFDA0:
 	pop	xix                                    ; FAFDA0  pop XIX
 	popw	hl                                    ; FAFDA1  pop HL
-	unlk32 xiz                                 ; FAFDA2  unlk XIZ
+	unlk	xiz                                 ; FAFDA2  unlk XIZ
 	ret                                        ; FAFDA4  ret
 ; ============================================================================
 ; ★★ THE PART RECORD, AND THE CONTROLLERS THAT WRITE IT   (round 7, 2026-08-25)
@@ -7657,7 +7657,7 @@ MidiCtrl_CC120__FAFDA0:
 ; Unknown:  what any arm DOES beyond the field it writes; see each handler.
 ; --------------------------------------------------------------------------
 MidiCtrl_Dispatch:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAFDA5  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAFDA5  link XIZ,0x0000
 	push	xix                                   ; FAFDA9  push XIX
 	ld	xix, (xiz+8)                            ; FAFDAA  ld XIX,(XIZ+0x08)
 	ld	c, (xix+1)                              ; FAFDAD  ld C,(XIX+0x01)
@@ -7933,7 +7933,7 @@ MidiCtrl_Dispatch__FB000E:
 	pop	xiy                                    ; FB000E  pop XIY
 MidiCtrl_Dispatch__FB000F:
 	pop	xix                                    ; FB000F  pop XIX
-	unlk32 xiz                                 ; FB0010  unlk XIZ
+	unlk	xiz                                 ; FB0010  unlk XIZ
 	ret                                        ; FB0012  ret
 ; --------------------------------------------------------------------------
 ; sub_FB0013 -- 0xFB0013..0xFB0131 (287 bytes)
@@ -7952,7 +7952,7 @@ MidiCtrl_Dispatch__FB000F:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB0013:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FB0013  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FB0013  link XIZ,0xfff2
 	pushw	hl                                   ; FB0017  push HL
 	pushw	de                                   ; FB0018  push DE
 	push	xix                                   ; FB0019  push XIX
@@ -8064,7 +8064,7 @@ sub_FB0013__FB012C:
 	pop	xix                                    ; FB012C  pop XIX
 	popw	de                                    ; FB012D  pop DE
 	popw	hl                                    ; FB012E  pop HL
-	unlk32 xiz                                 ; FB012F  unlk XIZ
+	unlk	xiz                                 ; FB012F  unlk XIZ
 	ret                                        ; FB0131  ret
 ; --------------------------------------------------------------------------
 ; sub_FB0132 -- 0xFB0132..0xFB01FF (206 bytes)
@@ -8083,7 +8083,7 @@ sub_FB0013__FB012C:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB0132:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FB0132  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FB0132  link XIZ,0xfffe
 	pushw	hl                                   ; FB0136  push HL
 	pushw	de                                   ; FB0137  push DE
 	push	xix                                   ; FB0138  push XIX
@@ -8099,7 +8099,7 @@ sub_FB0132:
 	ld	a, (xbc+2)                              ; FB0152  ld A,(XBC+0x02)
 	extz	wa                                    ; FB0155  extz WA
 	ld	hl, wa                                  ; FB0157  ld HL,WA
-	extpfx3 0x9E, 0xFE, 0xE0                   ; FB0159  or WA,(XIZ+0xfe)
+	or	wa, (xiz-2)                   ; FB0159  or WA,(XIZ+0xfe)
 	ld	hl, wa                                  ; FB015C  ld HL,WA
 	set	15, wa                                 ; FB015E  set 0x0f,WA
 	ld	hl, wa                                  ; FB0161  ld HL,WA
@@ -8168,7 +8168,7 @@ sub_FB0132__FB01FA:
 	pop	xix                                    ; FB01FA  pop XIX
 	popw	de                                    ; FB01FB  pop DE
 	popw	hl                                    ; FB01FC  pop HL
-	unlk32 xiz                                 ; FB01FD  unlk XIZ
+	unlk	xiz                                 ; FB01FD  unlk XIZ
 	ret                                        ; FB01FF  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_QuiesceListedChans_0800_0840 -- 0xFB0200..0xFB026B (108 bytes)
@@ -8201,7 +8201,7 @@ sub_FB0132__FB01FA:
 ;          nothing here reads either register back or ties it to an audible effect.
 ; --------------------------------------------------------------------------
 Dev10C_QuiesceListedChans_0800_0840:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB0200  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB0200  link XIZ,0xfff8
 	pushw	hl                                   ; FB0204  push HL
 	push	xix                                   ; FB0205  push XIX
 	ld	h, 0:opc                                   ; FB0206  ld H,0x00
@@ -8231,7 +8231,7 @@ Dev10C_QuiesceListedChans_0800_0840__FB022F:
 	ld	xwa, (xiz-8)                            ; FB023E  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB0241  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FB0243  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x00, 0xFF             ; FB0246  ld (XBC),0xff00
+	ldw	(xbc), 0xff00             ; FB0246  ld (XBC),0xff00
 	nop                                        ; FB024A  nop
 	nop                                        ; FB024B  nop
 	nop                                        ; FB024C  nop
@@ -8243,13 +8243,13 @@ Dev10C_QuiesceListedChans_0800_0840__FB022F:
 	ld	xwa, (xiz-8)                            ; FB0257  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB025A  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FB025C  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x80, 0xFF             ; FB025F  ld (XBC),0xff80
+	ldw	(xbc), 0xff80             ; FB025F  ld (XBC),0xff80
 	inc	1, xix                                 ; FB0263  inc 1,XIX
 	jr Dev10C_QuiesceListedChans_0800_0840__FB022F                      ; FB0265  jr T,0xfb022f
 Dev10C_QuiesceListedChans_0800_0840__FB0267:
 	pop	xix                                    ; FB0267  pop XIX
 	popw	hl                                    ; FB0268  pop HL
-	unlk32 xiz                                 ; FB0269  unlk XIZ
+	unlk	xiz                                 ; FB0269  unlk XIZ
 	ret                                        ; FB026B  ret
 ; --------------------------------------------------------------------------
 ; GlobalTune_SetFineTune_AndRestageAll -- 0xFB026C..0xFB0284 (25 bytes)
@@ -8280,15 +8280,15 @@ Dev10C_QuiesceListedChans_0800_0840__FB0267:
 ; Unknown:  what tag 0x00 selects in VoiceQuery_Tag00_All.
 ; --------------------------------------------------------------------------
 GlobalTune_SetFineTune_AndRestageAll:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB026C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB026C  link XIZ,0x0000
 	push	0                                     ; FB0270  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB0272  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB0272  push (XIZ+0x08)
 	calr GlobalTune_StoreFineTune                 ; FB0275  calr 0xfadae7
 	call	VoiceQuery_Tag00_All                              ; FB0278  call 0xfb3d09
 	push	xiy                                   ; FB027C  push XIY
 	calr Voice_RestagePitchReg0400_ForList                 ; FB027D  calr 0xfadcc3
 	inc	6, xsp                                 ; FB0280  inc 6,XSP
-	unlk32 xiz                                 ; FB0282  unlk XIZ
+	unlk	xiz                                 ; FB0282  unlk XIZ
 	ret                                        ; FB0284  ret
 ; --------------------------------------------------------------------------
 ; sub_FB0285 -- 0xFB0285..0xFB029D (25 bytes)
@@ -8319,15 +8319,15 @@ GlobalTune_SetFineTune_AndRestageAll:
 ;          arm for it.  It is reached, if at all, through a register.
 ; --------------------------------------------------------------------------
 sub_FB0285:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0285  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB0285  link XIZ,0x0000
 	push	0                                     ; FB0289  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB028B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB028B  push (XIZ+0x08)
 	calr sub_FADB0F                 ; FB028E  calr 0xfadb0f
 	call	VoiceQuery_Tag00_All                              ; FB0291  call 0xfb3d09
 	push	xiy                                   ; FB0295  push XIY
 	calr Voice_RestagePitchReg0400_ForList                 ; FB0296  calr 0xfadcc3
 	inc	6, xsp                                 ; FB0299  inc 6,XSP
-	unlk32 xiz                                 ; FB029B  unlk XIZ
+	unlk	xiz                                 ; FB029B  unlk XIZ
 	ret                                        ; FB029D  ret
 ; --------------------------------------------------------------------------
 ; sub_FB029E -- 0xFB029E..0xFB0337 (154 bytes)
@@ -8349,7 +8349,7 @@ sub_FB0285:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB029E:
-	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FB029E  link XIZ,0xffff
+	link	xiz, 0xffff              ; FB029E  link XIZ,0xffff
 	push	xhl                                   ; FB02A2  push XHL
 	push	xde                                   ; FB02A3  push XDE
 	push	xix                                   ; FB02A4  push XIX
@@ -8359,10 +8359,10 @@ sub_FB029E:
 	ldw	de, 27                                 ; FB02AF  ld DE,0x001b
 sub_FB029E__FB02B2:
 	push	0                                     ; FB02B2  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB02B4  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB02B4  push (XIZ+0xff)
 	call	PartRec_ResetToDefaults                              ; FB02B7  call 0xfb6500
 	push	0                                     ; FB02BB  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB02BD  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB02BD  push (XIZ+0xff)
 	call	PartRec_Word0006_SetBit13                              ; FB02C0  call 0xfacc3f
 	extz	xhl                                   ; FB02C4  extz XHL
 	ld	c, (xhl+0x1523)                         ; FB02C6  ld C,(XHL+0x1523)
@@ -8371,7 +8371,7 @@ sub_FB029E__FB02B2:
 	ld	c, (xde+0x1523)                         ; FB02CE  ld C,(XDE+0x1523)
 	pushw	bc                                   ; FB02D3  push BC
 	push	0                                     ; FB02D4  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB02D6  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB02D6  push (XIZ+0xff)
 	call	Part_LoadToneRecordAndPointers                              ; FB02D9  call 0xfb47c4
 	extz	xix                                   ; FB02DD  extz XIX
 	ld	xbc, (xix+0x1523)                       ; FB02DF  ld XBC,(XIX+0x1523)
@@ -8391,12 +8391,12 @@ sub_FB029E__FB02B2:
 	jr sub_FB029E__FB031D                      ; FB0306  jr T,0xfb031d
 sub_FB029E__FB0308:
 	push	0                                     ; FB0308  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB030A  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB030A  push (XIZ+0xff)
 	call	Part_RestageVoiceParams_Melodic                              ; FB030D  call 0xfb6681
 	jr sub_FB029E__FB031C                      ; FB0311  jr T,0xfb031c
 sub_FB029E__FB0313:
 	push	0                                     ; FB0313  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB0315  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB0315  push (XIZ+0xff)
 	call	Part_RestageVoiceParams_Drawbar                              ; FB0318  call 0xfb68dd
 sub_FB029E__FB031C:
 	popw	bc                                    ; FB031C  pop BC
@@ -8410,7 +8410,7 @@ sub_FB029E__FB031D:
 	pop	xix                                    ; FB0332  pop XIX
 	pop	xde                                    ; FB0333  pop XDE
 	pop	xhl                                    ; FB0334  pop XHL
-	unlk32 xiz                                 ; FB0335  unlk XIZ
+	unlk	xiz                                 ; FB0335  unlk XIZ
 	ret                                        ; FB0337  ret
 ; --------------------------------------------------------------------------
 ; GlobalSetup_Dispatch -- 0xFB0338..0xFB0503 (460 bytes)
@@ -8459,7 +8459,7 @@ sub_FB029E__FB031D:
 ;          found none, so the naming lever is in prom_a's unconverted bytes.
 ; --------------------------------------------------------------------------
 GlobalSetup_Dispatch:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0338  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB0338  link XIZ,0x0000
 	push	xix                                   ; FB033C  push XIX
 	ld	xix, (xiz+8)                            ; FB033D  ld XIX,(XIZ+0x08)
 	ld	c, (xix+2)                              ; FB0340  ld C,(XIX+0x02)
@@ -8656,5 +8656,5 @@ GlobalSetup_Dispatch__FB04FF:
 	popw	bc                                    ; FB04FF  pop BC
 GlobalSetup_Dispatch__FB0500:
 	pop	xix                                    ; FB0500  pop XIX
-	unlk32 xiz                                 ; FB0501  unlk XIZ
+	unlk	xiz                                 ; FB0501  unlk XIZ
 	ret                                        ; FB0503  ret

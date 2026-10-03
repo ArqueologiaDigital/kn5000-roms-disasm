@@ -191,16 +191,16 @@
 ;          the eight base slots are indexed BY.  What is at expansion-board +0x10
 ;          beyond "a link, 0xFFFFFFFF means none".
 ExtBoard_ProbeAndInstallBases:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB0504  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB0504  link XIZ,0xfffc
 	pushw	hl                                   ; FB0508  push HL
 	pushw	de                                   ; FB0509  push DE
 	push	xix                                   ; FB050A  push XIX
 	bit_dd8	0, P9                              ; FB050B  bit 0,(0x19)
 	jr z, ExtBoard_ProbeAndInstallBases__FB0518 ; FB050E  jr Z,0xfb0518
-	extpfx6 0xD1, 0xFF, 0x14, 0x3C, 0xFB, 0xFF ; FB0510  and (0x14ff),0xfffb
+	andw	(0x14ff:16), 0xfffb ; FB0510  and (0x14ff),0xfffb
 	jr ExtBoard_ProbeAndInstallBases__FB051E   ; FB0516  jr T,0xfb051e
 ExtBoard_ProbeAndInstallBases__FB0518:
-	extpfx6 0xD1, 0xFF, 0x14, 0x3E, 0x04, 0x00 ; FB0518  or (0x14ff),0x0004
+	orw	(0x14ff:16), 0x0004 ; FB0518  or (0x14ff),0x0004
 ExtBoard_ProbeAndInstallBases__FB051E:
 	ld	xbc, 0xF00000                           ; FB051E  ld XBC,0x00f00000
 	ld	(0xD7ED:24), xbc                       ; FB0523  ld (0x00d7ed),XBC
@@ -225,7 +225,7 @@ ExtBoard_ProbeAndInstallBases__FB056C:
 	add	xbc, ExtBoard_Signature                          ; FB0573  add XBC,0x00fe129e
 	ld	d, (xbc)                                ; FB0579  ld D,(XBC)
 	ld	xbc, xix                                ; FB057B  ld XBC,XIX
-	extpfx3 0xAE, 0xFC, 0x81                   ; FB057D  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FB057D  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FB0580  ld A,(XBC)
 	cp	a, d                                    ; FB0582  cp A,D
 	jr nz, ExtBoard_ProbeAndInstallBases__FB058E ; FB0584  jr NZ,0xfb058e
@@ -263,7 +263,7 @@ ExtBoard_ProbeAndInstallBases__FB05CD:
 	pop	xix                                    ; FB05E6  pop XIX
 	popw	de                                    ; FB05E7  pop DE
 	popw	hl                                    ; FB05E8  pop HL
-	unlk32 xiz                                 ; FB05E9  unlk XIZ
+	unlk	xiz                                 ; FB05E9  unlk XIZ
 	ret                                        ; FB05EB  ret
 ; ------------------------------------------------------------------------------
 ; Toggle14FE_AndDispatch -- 0xFB05EC..0xFB0609 (30 bytes)
@@ -296,7 +296,7 @@ Toggle14FE_AndDispatch__FB05FD:
 	call	Dev10C_PollBankAndRetire                              ; FB05FD  call 0xfa68dc
 	call	sub_FACAB7                              ; FB0601  call 0xfacab7
 Toggle14FE_AndDispatch__FB0605:
-	extpfx3 0x84, 0x3D, 0xFF                   ; FB0605  xor (XIX),0xff
+	xor	(xix), 0xff                   ; FB0605  xor (XIX),0xff
 	pop	xix                                    ; FB0608  pop XIX
 	ret                                        ; FB0609  ret
 ; ------------------------------------------------------------------------------
@@ -385,7 +385,7 @@ Toggle14FE_AndDispatch__FB0605:
 ;          low nibble and on `cp DE,6`; both consume six bytes and both end at the
 ;          same `call 0xFC2600`, and what distinguishes them is not traced.
 MidiIn_ParseRingAndDispatch:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB060A  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FB060A  link XIZ,0xfff0
 	pushw	hl                                   ; FB060E  push HL
 	pushw	de                                   ; FB060F  push DE
 	push	xix                                   ; FB0610  push XIX
@@ -442,37 +442,37 @@ MidiIn_ParseRingAndDispatch__FB0682:
 	ld	(0xD7C8:24), a                         ; FB0699  ld (0x00d7c8),A
 	incw	1, (xix)                              ; FB069E  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06A0  ld BC,(XIX)
-	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06A2  and BC,(XIZ+0xf2)
+	and	bc, (xiz-14)                   ; FB06A2  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06A5  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB06A7  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB06A7  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06AA  ld A,(XBC)
 	ld	(0xD7C9:24), a                         ; FB06AC  ld (0x00d7c9),A
 	incw	1, (xix)                              ; FB06B1  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06B3  ld BC,(XIX)
-	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06B5  and BC,(XIZ+0xf2)
+	and	bc, (xiz-14)                   ; FB06B5  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06B8  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB06BA  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB06BA  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06BD  ld A,(XBC)
 	ld	(0xD7CA:24), a                         ; FB06BF  ld (0x00d7ca),A
 	incw	1, (xix)                              ; FB06C4  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06C6  ld BC,(XIX)
-	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06C8  and BC,(XIZ+0xf2)
+	and	bc, (xiz-14)                   ; FB06C8  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06CB  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB06CD  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB06CD  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06D0  ld A,(XBC)
 	ld	(0xD7CB:24), a                         ; FB06D2  ld (0x00d7cb),A
 	incw	1, (xix)                              ; FB06D7  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06D9  ld BC,(XIX)
-	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06DB  and BC,(XIZ+0xf2)
+	and	bc, (xiz-14)                   ; FB06DB  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06DE  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB06E0  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB06E0  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06E3  ld A,(XBC)
 	ld	(0xD7CC:24), a                         ; FB06E5  ld (0x00d7cc),A
 	incw	1, (xix)                              ; FB06EA  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06EC  ld BC,(XIX)
-	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06EE  and BC,(XIZ+0xf2)
+	and	bc, (xiz-14)                   ; FB06EE  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06F1  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB06F3  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB06F3  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06F6  ld A,(XBC)
 	ld	(0xD7CD:24), a                         ; FB06F8  ld (0x00d7cd),A
 	incw	1, (xix)                              ; FB06FD  incw 1,(XIX)
@@ -488,44 +488,44 @@ MidiIn_ParseRingAndDispatch__FB070F:
 	ld	bc, (xix)                               ; FB0714  ld BC,(XIX)
 	ld	(xiz-14), bc                            ; FB0716  ld (XIZ+0xf2),BC
 	ldw (xiz-16), 0x0FFF                       ; FB0719  ld (XIZ+0xf0),0x0fff
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB071E  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB071E  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0721  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0723  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0723  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0726  ld A,(XBC)
 	ld	(0xD7CE:24), a                         ; FB0728  ld (0x00d7ce),A
 	incw	1, (xix)                              ; FB072D  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB072F  ld BC,(XIX)
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0731  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB0731  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0734  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0736  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0736  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0739  ld A,(XBC)
 	ld	(0xD7CF:24), a                         ; FB073B  ld (0x00d7cf),A
 	incw	1, (xix)                              ; FB0740  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0742  ld BC,(XIX)
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0744  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB0744  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0747  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0749  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0749  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB074C  ld A,(XBC)
 	ld	(0xD7D0:24), a                         ; FB074E  ld (0x00d7d0),A
 	incw	1, (xix)                              ; FB0753  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0755  ld BC,(XIX)
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0757  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB0757  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB075A  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB075C  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB075C  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB075F  ld A,(XBC)
 	ld	(0xD7D1:24), a                         ; FB0761  ld (0x00d7d1),A
 	incw	1, (xix)                              ; FB0766  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0768  ld BC,(XIX)
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB076A  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB076A  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB076D  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB076F  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB076F  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0772  ld A,(XBC)
 	ld	(0xD7D2:24), a                         ; FB0774  ld (0x00d7d2),A
 	incw	1, (xix)                              ; FB0779  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB077B  ld BC,(XIX)
-	extpfx3 0x9E, 0xF0, 0xC1                   ; FB077D  and BC,(XIZ+0xf0)
+	and	bc, (xiz-16)                   ; FB077D  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0780  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0782  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0782  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0785  ld A,(XBC)
 	ld	(0xD7D3:24), a                         ; FB0787  ld (0x00d7d3),A
 	incw	1, (xix)                              ; FB078C  incw 1,(XIX)
@@ -547,21 +547,21 @@ MidiIn_ParseRingAndDispatch__FB07A3:
 	ld	bc, (xix)                               ; FB07AF  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07B1  and BC,0x0fff
 	exts	xbc                                   ; FB07B5  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB07B7  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB07B7  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07BA  ld A,(XBC)
 	ld	(0xD7D5:24), a                         ; FB07BC  ld (0x00d7d5),A
 	incw	1, (xix)                              ; FB07C1  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB07C3  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07C5  and BC,0x0fff
 	exts	xbc                                   ; FB07C9  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB07CB  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB07CB  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07CE  ld A,(XBC)
 	ld	(0xD7D6:24), a                         ; FB07D0  ld (0x00d7d6),A
 	incw	1, (xix)                              ; FB07D5  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB07D7  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07D9  and BC,0x0fff
 	exts	xbc                                   ; FB07DD  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB07DF  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB07DF  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07E2  ld A,(XBC)
 	ld	(0xD7D7:24), a                         ; FB07E4  ld (0x00d7d7),A
 	incw	1, (xix)                              ; FB07E9  incw 1,(XIX)
@@ -586,21 +586,21 @@ MidiIn_ParseRingAndDispatch__FB080E:
 	ld	bc, (xix)                               ; FB081A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB081C  and BC,0x0fff
 	exts	xbc                                   ; FB0820  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0822  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0822  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0825  ld A,(XBC)
 	ld	(0xD7D9:24), a                         ; FB0827  ld (0x00d7d9),A
 	incw	1, (xix)                              ; FB082C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB082E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0830  and BC,0x0fff
 	exts	xbc                                   ; FB0834  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0836  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0836  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0839  ld A,(XBC)
 	ld	(0xD7DA:24), a                         ; FB083B  ld (0x00d7da),A
 	incw	1, (xix)                              ; FB0840  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0842  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0844  and BC,0x0fff
 	exts	xbc                                   ; FB0848  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB084A  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB084A  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB084D  ld A,(XBC)
 	ld	(0xD7DB:24), a                         ; FB084F  ld (0x00d7db),A
 	incw	1, (xix)                              ; FB0854  incw 1,(XIX)
@@ -619,28 +619,28 @@ MidiIn_ParseRingAndDispatch__FB086A:
 	ld	bc, (xix)                               ; FB0876  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0878  and BC,0x0fff
 	exts	xbc                                   ; FB087C  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB087E  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB087E  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0881  ld A,(XBC)
 	ld	(0xD7DD:24), a                         ; FB0883  ld (0x00d7dd),A
 	incw	1, (xix)                              ; FB0888  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB088A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB088C  and BC,0x0fff
 	exts	xbc                                   ; FB0890  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0892  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0892  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0895  ld A,(XBC)
 	ld	(0xD7DE:24), a                         ; FB0897  ld (0x00d7de),A
 	incw	1, (xix)                              ; FB089C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB089E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08A0  and BC,0x0fff
 	exts	xbc                                   ; FB08A4  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB08A6  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB08A6  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08A9  ld A,(XBC)
 	ld	(0xD7DF:24), a                         ; FB08AB  ld (0x00d7df),A
 	incw	1, (xix)                              ; FB08B0  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB08B2  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08B4  and BC,0x0fff
 	exts	xbc                                   ; FB08B8  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB08BA  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB08BA  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08BD  ld A,(XBC)
 	ld	(0xD7E0:24), a                         ; FB08BF  ld (0x00d7e0),A
 	incw	1, (xix)                              ; FB08C4  incw 1,(XIX)
@@ -659,21 +659,21 @@ MidiIn_ParseRingAndDispatch__FB08DA:
 	ld	bc, (xix)                               ; FB08E6  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08E8  and BC,0x0fff
 	exts	xbc                                   ; FB08EC  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB08EE  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB08EE  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08F1  ld A,(XBC)
 	ld	(0xD7E2:24), a                         ; FB08F3  ld (0x00d7e2),A
 	incw	1, (xix)                              ; FB08F8  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB08FA  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08FC  and BC,0x0fff
 	exts	xbc                                   ; FB0900  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0902  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0902  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0905  ld A,(XBC)
 	ld	(0xD7E3:24), a                         ; FB0907  ld (0x00d7e3),A
 	incw	1, (xix)                              ; FB090C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB090E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0910  and BC,0x0fff
 	exts	xbc                                   ; FB0914  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0916  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0916  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0919  ld A,(XBC)
 	ld	(0xD7E4:24), a                         ; FB091B  ld (0x00d7e4),A
 	incw	1, (xix)                              ; FB0920  incw 1,(XIX)
@@ -692,21 +692,21 @@ MidiIn_ParseRingAndDispatch__FB0936:
 	ld	bc, (xix)                               ; FB0942  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0944  and BC,0x0fff
 	exts	xbc                                   ; FB0948  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB094A  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB094A  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB094D  ld A,(XBC)
 	ld	(0xD7E6:24), a                         ; FB094F  ld (0x00d7e6),A
 	incw	1, (xix)                              ; FB0954  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0956  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0958  and BC,0x0fff
 	exts	xbc                                   ; FB095C  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB095E  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB095E  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0961  ld A,(XBC)
 	ld	(0xD7E7:24), a                         ; FB0963  ld (0x00d7e7),A
 	incw	1, (xix)                              ; FB0968  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB096A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB096C  and BC,0x0fff
 	exts	xbc                                   ; FB0970  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB0972  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB0972  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0975  ld A,(XBC)
 	ld	(0xD7E8:24), a                         ; FB0977  ld (0x00d7e8),A
 	incw	1, (xix)                              ; FB097C  incw 1,(XIX)
@@ -725,21 +725,21 @@ MidiIn_ParseRingAndDispatch__FB0992:
 	ld	bc, (xix)                               ; FB099D  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB099F  and BC,0x0fff
 	exts	xbc                                   ; FB09A3  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB09A5  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB09A5  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09A8  ld A,(XBC)
 	ld	(0xD7EA:24), a                         ; FB09AA  ld (0x00d7ea),A
 	incw	1, (xix)                              ; FB09AF  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB09B1  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB09B3  and BC,0x0fff
 	exts	xbc                                   ; FB09B7  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB09B9  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB09B9  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09BC  ld A,(XBC)
 	ld	(0xD7EB:24), a                         ; FB09BE  ld (0x00d7eb),A
 	incw	1, (xix)                              ; FB09C3  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB09C5  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB09C7  and BC,0x0fff
 	exts	xbc                                   ; FB09CB  exts XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB09CD  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB09CD  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09D0  ld A,(XBC)
 	ld	(0xD7EC:24), a                         ; FB09D2  ld (0x00d7ec),A
 	incw	1, (xix)                              ; FB09D7  incw 1,(XIX)
@@ -769,7 +769,7 @@ MidiIn_ParseRingAndDispatch__FB0A07:
 	pop	xix                                    ; FB0A07  pop XIX
 	popw	de                                    ; FB0A08  pop DE
 	popw	hl                                    ; FB0A09  pop HL
-	unlk32 xiz                                 ; FB0A0A  unlk XIZ
+	unlk	xiz                                 ; FB0A0A  unlk XIZ
 	ret                                        ; FB0A0C  ret
 ; ------------------------------------------------------------------------------
 ; ★ MidiMsg_SendBootSequence -- 0xFB0A0D..0xFB0A8A (126 bytes)
@@ -858,7 +858,7 @@ MidiMsg_SendBootSequence:
 ;          "Reset" is the shape -- two registers driven to fixed values and a
 ;          record word cleared -- not a decoded meaning.
 Dev10C_ChanReset:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0A8B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB0A8B  link XIZ,0x0000
 	pushw	hl                                   ; FB0A8F  push HL
 	pushw	de                                   ; FB0A90  push DE
 	push	xix                                   ; FB0A91  push XIX
@@ -868,7 +868,7 @@ Dev10C_ChanReset:
 	add	de, 0xC0                               ; FB0A99  add DE,0x00c0
 	ld	xix, 0x10C000                           ; FB0A9D  ld XIX,0x0010c000
 	ld	(xix), de                               ; FB0AA2  ld (XIX),DE
-	extpfx5 0xBC, 0x02, 0x02, 0x00, 0x00       ; FB0AA4  ld (XIX+0x02),0x0000
+	ldw	(xix+2), 0x0000       ; FB0AA4  ld (XIX+0x02),0x0000
 	nop                                        ; FB0AA9  nop
 	nop                                        ; FB0AAA  nop
 	nop                                        ; FB0AAB  nop
@@ -876,16 +876,16 @@ Dev10C_ChanReset:
 	nop                                        ; FB0AAD  nop
 	ld	xix, 0x10C000                           ; FB0AAE  ld XIX,0x0010c000
 	ld	(xix), hl                               ; FB0AB3  ld (XIX),HL
-	extpfx5 0xBC, 0x02, 0x02, 0x00, 0x7E       ; FB0AB5  ld (XIX+0x02),0x7e00
+	ldw	(xix+2), 0x7e00       ; FB0AB5  ld (XIX+0x02),0x7e00
 	ld	c, 68:opc                                  ; FB0ABA  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB0ABC  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB0ABC  mul BC,(XIZ+0x08)
 	inc	1, bc                                  ; FB0ABF  inc 1,BC
 	extz	xbc                                   ; FB0AC1  extz XBC
-	extpfx7 0xF3, 0xE5, 0xCF, 0x3B, 0x02, 0x00, 0x00 ; FB0AC3  ld (XBC+0x3bcf),0x0000
+	ldw	(xbc+15311), 0x0000 ; FB0AC3  ld (XBC+0x3bcf),0x0000
 	pop	xix                                    ; FB0ACA  pop XIX
 	popw	de                                    ; FB0ACB  pop DE
 	popw	hl                                    ; FB0ACC  pop HL
-	unlk32 xiz                                 ; FB0ACD  unlk XIZ
+	unlk	xiz                                 ; FB0ACD  unlk XIZ
 	ret                                        ; FB0ACF  ret
 ; ------------------------------------------------------------------------------
 ; VoiceRegs_Stage_A -- 0xFB0AD0..0xFB0B94 (197 bytes)
@@ -927,11 +927,11 @@ Dev10C_ChanReset:
 ;          voice records.  See notes/FINDINGS-prom_c-dev10c-producers.md.
 ;          ⚠ "_A" is a label for "the variant part mode 0x00 uses", nothing more.
 VoiceRegs_Stage_A:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB0AD0  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB0AD0  link XIZ,0x0000
 	pushw	hl                                   ; FB0AD4  push HL
 	push	xde                                   ; FB0AD5  push XDE
 	ld	c, 68:opc                                  ; FB0AD6  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB0AD8  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB0AD8  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FB0ADB  ld HL,BC
 	ldw	wa, 0x3BCF                             ; FB0ADD  ld WA,0x3bcf
 	ld	de, wa                                  ; FB0AE0  ld DE,WA
@@ -1005,7 +1005,7 @@ VoiceRegs_Stage_A:
 	add	xsp, 66                                ; FB0B8A  add XSP,0x00000042
 	pop	xde                                    ; FB0B90  pop XDE
 	popw	hl                                    ; FB0B91  pop HL
-	unlk32 xiz                                 ; FB0B92  unlk XIZ
+	unlk	xiz                                 ; FB0B92  unlk XIZ
 	ret                                        ; FB0B94  ret
 ; ------------------------------------------------------------------------------
 ; sub_FB0B95 -- 0xFB0B95..0xFB0E4E (698 bytes)
@@ -1042,7 +1042,7 @@ VoiceRegs_Stage_A:
 ;          0xFA6BB5 and 0xFC376C.  One shared difference across four independent
 ;          pairs is a fact; what it MEANS is still not asserted.
 sub_FB0B95:
-	link32 0xEE, 0x0C, 0xD4, 0xFF              ; FB0B95  link XIZ,0xffd4
+	link	xiz, 0xffd4              ; FB0B95  link XIZ,0xffd4
 	push	xhl                                   ; FB0B99  push XHL
 	push	xde                                   ; FB0B9A  push XDE
 	push	xix                                   ; FB0B9B  push XIX
@@ -1062,7 +1062,7 @@ sub_FB0B95:
 	and	w, l                                   ; FB0BC3  and W,L
 	ld	(xiz-6), w                              ; FB0BC5  ld (XIZ+0xfa),W
 	lda	xiy, (Field2Bit_Shifts:24)                     ; FB0BC8  lda XIY,0xfe12b1
-	extpfx3 0xAE, 0xFC, 0x85                   ; FB0BCD  add XIY,(XIZ+0xfc)
+	add	xiy, (xiz-4)                   ; FB0BCD  add XIY,(XIZ+0xfc)
 	ld	a, (xiy)                                ; FB0BD0  ld A,(XIY)
 	pushw	wa                                   ; FB0BD2  push WA
 	push	0                                     ; FB0BD3  push 0x00
@@ -1074,7 +1074,7 @@ sub_FB0B95:
 	extz	xbc                                   ; FB0BE1  extz XBC
 	ld	de, (xbc+0x1523)                        ; FB0BE3  ld DE,(XBC+0x1523)
 	ld	c, 2:opc                                   ; FB0BE8  ld C,0x02
-	extpfx3 0x8E, 0x0E, 0x43                   ; FB0BEA  mul BC,(XIZ+0x0e)
+	mul	bc, (xiz+14)                   ; FB0BEA  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FB0BED  extz XBC
 	add	xbc, BitMask_Table_FDE695                          ; FB0BEF  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FB0BF5  ld BC,(XBC)
@@ -1096,7 +1096,7 @@ sub_FB0B95__FB0C14:
 	jrl ugt, sub_FB0B95__FB0E2E                ; FB0C16  jrl UGT,0xfb0e2e
 sub_FB0B95__FB0C19:
 	ld	c, 41:opc                                  ; FB0C19  ld C,0x29
-	extpfx3 0x8E, 0x10, 0x43                   ; FB0C1B  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FB0C1B  mul BC,(XIZ+0x10)
 	ld	(xiz-2), bc                             ; FB0C1E  ld (XIZ+0xfe),BC
 	ld	a, (xiz+12)                             ; FB0C21  ld A,(XIZ+0x0c)
 	ld	(xiz-4), a                              ; FB0C24  ld (XIZ+0xfc),A
@@ -1111,7 +1111,7 @@ sub_FB0B95__FB0C19:
 	ld	(xiz-12), xbc                           ; FB0C40  ld (XIZ+0xf4),XBC
 	push	xbc                                   ; FB0C43  push XBC
 	push	0                                     ; FB0C44  push 0x00
-	extpfx3 0x8E, 0x14, 0x04                   ; FB0C46  push (XIZ+0x14)
+	push	(xiz+20)                   ; FB0C46  push (XIZ+0x14)
 	call	VelSplit_LayerFromVelocity                              ; FB0C49  call 0xfa727d
 	ld	(xiz-14), a                             ; FB0C4D  ld (XIZ+0xf2),A
 	ld	bc, (xiz-8)                             ; FB0C50  ld BC,(XIZ+0xf8)
@@ -1120,8 +1120,8 @@ sub_FB0B95__FB0C19:
 	ld	xwa, (xbc+0x1523)                       ; FB0C59  ld XWA,(XBC+0x1523)
 	ld	(xiz-18), xwa                           ; FB0C5E  ld (XIZ+0xee),XWA
 	ld	c, 4:opc                                   ; FB0C61  ld C,0x04
-	extpfx3 0x8E, 0xF2, 0x43                   ; FB0C63  mul BC,(XIZ+0xf2)
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB0C66  add BC,(XIZ+0xf8)
+	mul	bc, (xiz-14)                   ; FB0C63  mul BC,(XIZ+0xf2)
+	add	bc, (xiz-8)                   ; FB0C66  add BC,(XIZ+0xf8)
 	add	bc, 0x90                               ; FB0C69  add BC,0x0090
 	extz	xbc                                   ; FB0C6D  extz XBC
 	ld	xiy, (xbc+0x1523)                       ; FB0C6F  ld XIY,(XBC+0x1523)
@@ -1129,15 +1129,15 @@ sub_FB0B95__FB0C19:
 	ld	c, (xiz+14)                             ; FB0C77  ld C,(XIZ+0x0e)
 	ld	(xiz-24), c                             ; FB0C7A  ld (XIZ+0xe8),C
 	mul	c, 41                                  ; FB0C7D  mul C,0x29
-	extpfx3 0x9E, 0xFA, 0x81                   ; FB0C80  add BC,(XIZ+0xfa)
+	add	bc, (xiz-6)                   ; FB0C80  add BC,(XIZ+0xfa)
 	add	bc, 0x88                               ; FB0C83  add BC,0x0088
 	ld	(xiz-26), bc                            ; FB0C87  ld (XIZ+0xe6),BC
 	ldw	bc, 0x1523                             ; FB0C8A  ld BC,0x1523
 	ld	(xiz-28), bc                            ; FB0C8D  ld (XIZ+0xe4),BC
 	ld	de, bc                                  ; FB0C90  ld DE,BC
-	extpfx3 0x9E, 0xE6, 0x82                   ; FB0C92  add DE,(XIZ+0xe6)
+	add	de, (xiz-26)                   ; FB0C92  add DE,(XIZ+0xe6)
 	ld	c, 68:opc                                  ; FB0C95  ld C,0x44
-	extpfx3 0x8E, 0xE8, 0x43                   ; FB0C97  mul BC,(XIZ+0xe8)
+	mul	bc, (xiz-24)                   ; FB0C97  mul BC,(XIZ+0xe8)
 	ld	(xiz-30), bc                            ; FB0C9A  ld (XIZ+0xe2),BC
 	ldw	hl, 0x5A53                             ; FB0C9D  ld HL,0x5a53
 	add	hl, bc                                 ; FB0CA0  add HL,BC
@@ -1158,7 +1158,7 @@ sub_FB0B95__FB0C19:
 	res	7, c                                   ; FB0CCA  res 0x07,C
 	ld	(xhl+12), c                             ; FB0CCD  ld (XHL+0x0c),C
 	ld	bc, (xiz-28)                            ; FB0CD0  ld BC,(XIZ+0xe4)
-	extpfx3 0x9E, 0xFA, 0x81                   ; FB0CD3  add BC,(XIZ+0xfa)
+	add	bc, (xiz-6)                   ; FB0CD3  add BC,(XIZ+0xfa)
 	ld	(xhl+35), bc                            ; FB0CD6  ld (XHL+0x23),BC
 	ld	bc, (xiz-6)                             ; FB0CD9  ld BC,(XIZ+0xfa)
 	extz	xbc                                   ; FB0CDC  extz XBC
@@ -1167,7 +1167,7 @@ sub_FB0B95__FB0C19:
 	ldw (xiz-36), 0x0013                       ; FB0CE6  ld (XIZ+0xdc),0x0013
 	ld	bc, hl                                  ; FB0CEB  ld BC,HL
 	extz	xbc                                   ; FB0CED  extz XBC
-	extpfx3 0x9E, 0xDC, 0x81                   ; FB0CEF  add BC,(XIZ+0xdc)
+	add	bc, (xiz-36)                   ; FB0CEF  add BC,(XIZ+0xdc)
 	ld	(xbc), xwa                              ; FB0CF2  ld (XBC),XWA
 	ld	xbc, (xiz-18)                           ; FB0CF4  ld XBC,(XIZ+0xee)
 	ld	(xhl+23), xbc                           ; FB0CF7  ld (XHL+0x17),XBC
@@ -1179,19 +1179,19 @@ sub_FB0B95__FB0C19:
 	pushw	hl                                   ; FB0D09  push HL
 	call	Voice_ComputePitch                              ; FB0D0A  call 0xfa7f28
 	push	0                                     ; FB0D0E  push 0x00
-	extpfx3 0x8E, 0xE8, 0x04                   ; FB0D10  push (XIZ+0xe8)
+	push	(xiz-24)                   ; FB0D10  push (XIZ+0xe8)
 	push	0                                     ; FB0D13  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FB0D15  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FB0D15  push (XIZ+0xfc)
 	call	Part_GetAlgoDescByte17                              ; FB0D18  call 0xfb6272
 	extz	wa                                    ; FB0D1C  extz WA
 	ld	(xhl+43), wa                            ; FB0D1E  ld (XHL+0x2b),WA
 	push	0                                     ; FB0D21  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FB0D23  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FB0D23  push (XIZ+0xfc)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB0D26  call 0xfb5d05
 	extz	wa                                    ; FB0D2A  extz WA
 	ld	(xhl+45), wa                            ; FB0D2C  ld (XHL+0x2d),WA
 	ld	bc, (xiz-36)                            ; FB0D2F  ld BC,(XIZ+0xdc)
-	extpfx5 0xE3, 0x07, 0xEC, 0xE4, 0x20       ; FB0D32  ld XWA,(XHL+BC)
+	ld	xwa, (xhl+bc)       ; FB0D32  ld XWA,(XHL+BC)
 	ld	c, (xwa+0xD1)                           ; FB0D37  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB0D3C  extz BC
 	extz	xbc                                   ; FB0D3E  extz XBC
@@ -1199,7 +1199,7 @@ sub_FB0B95__FB0C19:
 	ld	a, (xbc)                                ; FB0D46  ld A,(XBC)
 	ld	(xhl+49), a                             ; FB0D48  ld (XHL+0x31),A
 	ld	bc, (xiz-36)                            ; FB0D4B  ld BC,(XIZ+0xdc)
-	extpfx5 0xE3, 0x07, 0xEC, 0xE4, 0x20       ; FB0D4E  ld XWA,(XHL+BC)
+	ld	xwa, (xhl+bc)       ; FB0D4E  ld XWA,(XHL+BC)
 	ld	c, (xwa+0xD2)                           ; FB0D53  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB0D58  mul C,0x02
 	extz	xbc                                   ; FB0D5B  extz XBC
@@ -1207,7 +1207,7 @@ sub_FB0B95__FB0C19:
 	ld	bc, (xbc)                               ; FB0D63  ld BC,(XBC)
 	ld	(xhl+50), bc                            ; FB0D65  ld (XHL+0x32),BC
 	ld	bc, (xiz-36)                            ; FB0D68  ld BC,(XIZ+0xdc)
-	extpfx5 0xE3, 0x07, 0xEC, 0xE4, 0x20       ; FB0D6B  ld XWA,(XHL+BC)
+	ld	xwa, (xhl+bc)       ; FB0D6B  ld XWA,(XHL+BC)
 	ld	c, (xwa+0xD3)                           ; FB0D70  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB0D75  mul C,0x02
 	extz	xbc                                   ; FB0D78  extz XBC
@@ -1215,7 +1215,7 @@ sub_FB0B95__FB0C19:
 	ld	bc, (xbc)                               ; FB0D80  ld BC,(XBC)
 	ld	(xhl+54), bc                            ; FB0D82  ld (XHL+0x36),BC
 	ld	bc, (xiz-36)                            ; FB0D85  ld BC,(XIZ+0xdc)
-	extpfx5 0xE3, 0x07, 0xEC, 0xE4, 0x20       ; FB0D88  ld XWA,(XHL+BC)
+	ld	xwa, (xhl+bc)       ; FB0D88  ld XWA,(XHL+BC)
 	ld	c, (xwa+0xD4)                           ; FB0D8D  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB0D92  mul C,0x02
 	extz	xbc                                   ; FB0D95  extz XBC
@@ -1232,16 +1232,16 @@ sub_FB0B95__FB0C19:
 	ld	(xiz-42), a                             ; FB0DB7  ld (XIZ+0xd6),A
 	ld	xbc, (xiz-40)                           ; FB0DBA  ld XBC,(XIZ+0xd8)
 	inc	2, xbc                                 ; FB0DBD  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB0DBF  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB0DBF  add XBC,(XIZ+0x08)
 	ld	(xbc), a                                ; FB0DC2  ld (XBC),A
 	ld	bc, (xhl+6)                             ; FB0DC4  ld BC,(XHL+0x06)
 	pushw	bc                                   ; FB0DC7  push BC
 	ld	bc, (xhl+8)                             ; FB0DC8  ld BC,(XHL+0x08)
 	pushw	bc                                   ; FB0DCB  push BC
 	push	0                                     ; FB0DCC  push 0x00
-	extpfx3 0x8E, 0xE8, 0x04                   ; FB0DCE  push (XIZ+0xe8)
+	push	(xiz-24)                   ; FB0DCE  push (XIZ+0xe8)
 	push	0                                     ; FB0DD1  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04                   ; FB0DD3  push (XIZ+0xfc)
+	push	(xiz-4)                   ; FB0DD3  push (XIZ+0xfc)
 	call	sub_FC4B2E                              ; FB0DD6  call 0xfc4b2e
 	ld	(xiz-44), a                             ; FB0DDA  ld (XIZ+0xd4),A
 	ld	xix, (xiz-40)                           ; FB0DDD  ld XIX,(XIZ+0xd8)
@@ -1275,8 +1275,8 @@ sub_FB0B95__FB0E1D:
 	extz	bc                                    ; FB0E20  extz BC
 	extz	xbc                                   ; FB0E22  extz XBC
 	inc	6, xbc                                 ; FB0E24  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB0E26  add XBC,(XIZ+0x08)
-	extpfx3 0x81, 0x3E, 0x80                   ; FB0E29  or (XBC),0x80
+	add	xbc, (xiz+8)                   ; FB0E26  add XBC,(XIZ+0x08)
+	or	(xbc), 0x80                   ; FB0E29  or (XBC),0x80
 	jr sub_FB0B95__FB0E49                      ; FB0E2C  jr T,0xfb0e49
 sub_FB0B95__FB0E2E:
 	ld	ix, (xiz+14)                            ; FB0E2E  ld IX,(XIZ+0x0e)
@@ -1284,17 +1284,17 @@ sub_FB0B95__FB0E2E:
 	extz	xix                                   ; FB0E33  extz XIX
 	ld	xbc, xix                                ; FB0E35  ld XBC,XIX
 	inc	2, xbc                                 ; FB0E37  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB0E39  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB0E39  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB0E3C  ld (XBC),0x00
 	ld	xbc, xix                                ; FB0E3F  ld XBC,XIX
 	inc	6, xbc                                 ; FB0E41  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB0E43  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB0E43  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB0E46  ld (XBC),0x00
 sub_FB0B95__FB0E49:
 	pop	xix                                    ; FB0E49  pop XIX
 	pop	xde                                    ; FB0E4A  pop XDE
 	pop	xhl                                    ; FB0E4B  pop XHL
-	unlk32 xiz                                 ; FB0E4C  unlk XIZ
+	unlk	xiz                                 ; FB0E4C  unlk XIZ
 	ret                                        ; FB0E4E  ret
 ; ------------------------------------------------------------------------------
 ; VoiceParams_Compute_A -- 0xFB0E4F..0xFB1EBC (4206 bytes)
@@ -1325,7 +1325,7 @@ sub_FB0B95__FB0E49:
 ;          decodes; what is established is the ROUTINE'S PLACE in the chain, not
 ;          its formulae.
 VoiceParams_Compute_A:
-	link32 0xEE, 0x0C, 0xD8, 0xFF              ; FB0E4F  link XIZ,0xffd8
+	link	xiz, 0xffd8              ; FB0E4F  link XIZ,0xffd8
 	push	xhl                                   ; FB0E53  push XHL
 	push	xde                                   ; FB0E54  push XDE
 	push	xix                                   ; FB0E55  push XIX
@@ -1393,7 +1393,7 @@ VoiceParams_Compute_A__FB0ED5:
 	ld	(xiz-14), xiy                           ; FB0EF7  ld (XIZ+0xf2),XIY
 	push	xiy                                   ; FB0EFA  push XIY
 	push	0                                     ; FB0EFB  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB0EFD  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB0EFD  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB0F00  call 0xfa727d
 	ld	(xiz-16), a                             ; FB0F04  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB0F07  ld BC,IX
@@ -1402,8 +1402,8 @@ VoiceParams_Compute_A__FB0ED5:
 	ld	xwa, (xbc+0x1523)                       ; FB0F0F  ld XWA,(XBC+0x1523)
 	ld	(xiz-20), xwa                           ; FB0F14  ld (XIZ+0xec),XWA
 	ld	c, 4:opc                                   ; FB0F17  ld C,0x04
-	extpfx3 0x8E, 0xF0, 0x43                   ; FB0F19  mul BC,(XIZ+0xf0)
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB0F1C  add BC,(XIZ+0xf6)
+	mul	bc, (xiz-16)                   ; FB0F19  mul BC,(XIZ+0xf0)
+	add	bc, (xiz-10)                   ; FB0F1C  add BC,(XIZ+0xf6)
 	add	bc, 0x90                               ; FB0F1F  add BC,0x0090
 	extz	xbc                                   ; FB0F23  extz XBC
 	ld	xiy, (xbc+0x1523)                       ; FB0F25  ld XIY,(XBC+0x1523)
@@ -1414,7 +1414,7 @@ VoiceParams_Compute_A__FB0ED5:
 	ldw	bc, 0x1523                             ; FB0F36  ld BC,0x1523
 	ld	(xiz-28), bc                            ; FB0F39  ld (XIZ+0xe4),BC
 	ld	de, bc                                  ; FB0F3C  ld DE,BC
-	extpfx3 0x9E, 0xE6, 0x82                   ; FB0F3E  add DE,(XIZ+0xe6)
+	add	de, (xiz-26)                   ; FB0F3E  add DE,(XIZ+0xe6)
 	ldw	hl, 0x5A53                             ; FB0F41  ld HL,0x5a53
 	ld	w, (xiz-16)                             ; FB0F44  ld W,(XIZ+0xf0)
 	sll	w, 6                                   ; FB0F47  sll 0x06,W
@@ -1454,37 +1454,37 @@ VoiceParams_Compute_A__FB0ED5:
 	call	Voice_ComputePitch                              ; FB0FA5  call 0xfa7f28
 	pushw	0                                    ; FB0FA9  push 0x0000
 	push	0                                     ; FB0FAC  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB0FAE  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB0FAE  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB0FB1  call 0xfb6272
 	extz	wa                                    ; FB0FB5  extz WA
 	ld	(xhl+43), wa                            ; FB0FB7  ld (XHL+0x2b),WA
 	push	0                                     ; FB0FBA  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB0FBC  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB0FBC  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB0FBF  call 0xfb5d05
 	extz	wa                                    ; FB0FC3  extz WA
 	ld	(xhl+45), wa                            ; FB0FC5  ld (XHL+0x2d),WA
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FC8  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB0FC8  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD1)                           ; FB0FCD  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB0FD2  extz WA
 	extz	xwa                                   ; FB0FD4  extz XWA
 	add	xwa, Voice_SecondaryParam_Curve                          ; FB0FD6  add XWA,0x00fdf6c5
 	ld	c, (xwa)                                ; FB0FDC  ld C,(XWA)
 	ld	(xhl+49), c                             ; FB0FDE  ld (XHL+0x31),C
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FE1  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB0FE1  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD2)                           ; FB0FE6  ld A,(XBC+0x00d2)
 	mul	a, 2                                   ; FB0FEB  mul A,0x02
 	extz	xwa                                   ; FB0FEE  extz XWA
 	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB0FF0  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB0FF6  ld BC,(XWA)
 	ld	(xhl+50), bc                            ; FB0FF8  ld (XHL+0x32),BC
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB0FFB  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB0FFB  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD3)                           ; FB1000  ld A,(XBC+0x00d3)
 	mul	a, 2                                   ; FB1005  mul A,0x02
 	extz	xwa                                   ; FB1008  extz XWA
 	add	xwa, Voice_SecondaryParam_WordCurveB                          ; FB100A  add XWA,0x00fdf722
 	ld	bc, (xwa)                               ; FB1010  ld BC,(XWA)
 	ld	(xhl+54), bc                            ; FB1012  ld (XHL+0x36),BC
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB1015  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB1015  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD4)                           ; FB101A  ld A,(XBC+0x00d4)
 	mul	a, 2                                   ; FB101F  mul A,0x02
 	extz	xwa                                   ; FB1022  extz XWA
@@ -1503,7 +1503,7 @@ VoiceParams_Compute_A__FB0ED5:
 	pushw	bc                                   ; FB104A  push BC
 	pushw	0                                    ; FB104B  push 0x0000
 	push	0                                     ; FB104E  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1050  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1050  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB1053  call 0xfc4b2e
 	add	xsp, 22                                ; FB1057  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB105D  cp A,0
@@ -1529,7 +1529,7 @@ VoiceParams_Compute_A__FB1071:
 	jr z, VoiceParams_Compute_A__FB10A7        ; FB108E  jr Z,0xfb10a7
 VoiceParams_Compute_A__FB1090:
 	ld	xbc, (xiz+8)                            ; FB1090  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x06, 0x3E, 0x80             ; FB1093  or (XBC+0x06),0x80
+	or	(xbc+6), 0x80             ; FB1093  or (XBC+0x06),0x80
 	jr VoiceParams_Compute_A__FB10A7           ; FB1097  jr T,0xfb10a7
 VoiceParams_Compute_A__FB1099:
 	ld	xbc, (xiz+8)                            ; FB1099  ld XBC,(XIZ+0x08)
@@ -1580,7 +1580,7 @@ VoiceParams_Compute_A__FB10F4:
 	ld	(xiz-12), xwa                           ; FB110D  ld (XIZ+0xf4),XWA
 	push	xwa                                   ; FB1110  push XWA
 	push	0                                     ; FB1111  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB1113  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB1113  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB1116  call 0xfa727d
 	ld	(xiz-14), a                             ; FB111A  ld (XIZ+0xf2),A
 	ld	bc, ix                                  ; FB111D  ld BC,IX
@@ -1590,7 +1590,7 @@ VoiceParams_Compute_A__FB10F4:
 	ld	xwa, (xbc+0x1523)                       ; FB1128  ld XWA,(XBC+0x1523)
 	ld	(xiz-20), xwa                           ; FB112D  ld (XIZ+0xec),XWA
 	ld	c, 4:opc                                   ; FB1130  ld C,0x04
-	extpfx3 0x8E, 0xF2, 0x43                   ; FB1132  mul BC,(XIZ+0xf2)
+	mul	bc, (xiz-14)                   ; FB1132  mul BC,(XIZ+0xf2)
 	add	bc, ix                                 ; FB1135  add BC,IX
 	add	bc, 0x90                               ; FB1137  add BC,0x0090
 	extz	xbc                                   ; FB113B  extz XBC
@@ -1599,7 +1599,7 @@ VoiceParams_Compute_A__FB10F4:
 	ldw	bc, 0x1523                             ; FB1145  ld BC,0x1523
 	ld	(xiz-26), bc                            ; FB1148  ld (XIZ+0xe6),BC
 	ld	de, bc                                  ; FB114B  ld DE,BC
-	extpfx3 0x9E, 0xF0, 0x82                   ; FB114D  add DE,(XIZ+0xf0)
+	add	de, (xiz-16)                   ; FB114D  add DE,(XIZ+0xf0)
 	ldw	hl, 0x5A53                             ; FB1150  ld HL,0x5a53
 	ld	w, (xiz-14)                             ; FB1153  ld W,(XIZ+0xf2)
 	sll	w, 6                                   ; FB1156  sll 0x06,W
@@ -1639,37 +1639,37 @@ VoiceParams_Compute_A__FB10F4:
 	call	Voice_ComputePitch                              ; FB11B4  call 0xfa7f28
 	pushw	0                                    ; FB11B8  push 0x0000
 	push	0                                     ; FB11BB  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB11BD  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB11BD  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB11C0  call 0xfb6272
 	extz	wa                                    ; FB11C4  extz WA
 	ld	(xhl+43), wa                            ; FB11C6  ld (XHL+0x2b),WA
 	push	0                                     ; FB11C9  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB11CB  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB11CB  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB11CE  call 0xfb5d05
 	extz	wa                                    ; FB11D2  extz WA
 	ld	(xhl+45), wa                            ; FB11D4  ld (XHL+0x2d),WA
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB11D7  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB11D7  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD1)                           ; FB11DC  ld A,(XBC+0x00d1)
 	extz	wa                                    ; FB11E1  extz WA
 	extz	xwa                                   ; FB11E3  extz XWA
 	add	xwa, Voice_SecondaryParam_Curve                          ; FB11E5  add XWA,0x00fdf6c5
 	ld	c, (xwa)                                ; FB11EB  ld C,(XWA)
 	ld	(xhl+49), c                             ; FB11ED  ld (XHL+0x31),C
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB11F0  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB11F0  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD2)                           ; FB11F5  ld A,(XBC+0x00d2)
 	mul	a, 2                                   ; FB11FA  mul A,0x02
 	extz	xwa                                   ; FB11FD  extz XWA
 	add	xwa, Voice_SecondaryParam_WordCurveA                          ; FB11FF  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB1205  ld BC,(XWA)
 	ld	(xhl+50), bc                            ; FB1207  ld (XHL+0x32),BC
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB120A  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB120A  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD3)                           ; FB120F  ld A,(XBC+0x00d3)
 	mul	a, 2                                   ; FB1214  mul A,0x02
 	extz	xwa                                   ; FB1217  extz XWA
 	add	xwa, Voice_SecondaryParam_WordCurveB                          ; FB1219  add XWA,0x00fdf722
 	ld	bc, (xwa)                               ; FB121F  ld BC,(XWA)
 	ld	(xhl+54), bc                            ; FB1221  ld (XHL+0x36),BC
-	extpfx5 0xE3, 0x07, 0xEC, 0xF0, 0x21       ; FB1224  ld XBC,(XHL+IX)
+	ld	xbc, (xhl+ix)       ; FB1224  ld XBC,(XHL+IX)
 	ld	a, (xbc+0xD4)                           ; FB1229  ld A,(XBC+0x00d4)
 	mul	a, 2                                   ; FB122E  mul A,0x02
 	extz	xwa                                   ; FB1231  extz XWA
@@ -1688,7 +1688,7 @@ VoiceParams_Compute_A__FB10F4:
 	pushw	bc                                   ; FB1259  push BC
 	pushw	0                                    ; FB125A  push 0x0000
 	push	0                                     ; FB125D  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB125F  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB125F  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB1262  call 0xfc4b2e
 	add	xsp, 22                                ; FB1266  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB126C  cp A,0
@@ -1714,7 +1714,7 @@ VoiceParams_Compute_A__FB1280:
 	jr z, VoiceParams_Compute_A__FB12B6        ; FB129D  jr Z,0xfb12b6
 VoiceParams_Compute_A__FB129F:
 	ld	xbc, (xiz+8)                            ; FB129F  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x06, 0x3E, 0x80             ; FB12A2  or (XBC+0x06),0x80
+	or	(xbc+6), 0x80             ; FB12A2  or (XBC+0x06),0x80
 	jr VoiceParams_Compute_A__FB12B6           ; FB12A6  jr T,0xfb12b6
 VoiceParams_Compute_A__FB12A8:
 	ld	xbc, (xiz+8)                            ; FB12A8  ld XBC,(XIZ+0x08)
@@ -1773,7 +1773,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	(xiz-12), xwa                           ; FB1336  ld (XIZ+0xf4),XWA
 	push	xwa                                   ; FB1339  push XWA
 	push	0                                     ; FB133A  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB133C  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB133C  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB133F  call 0xfa727d
 	ld	(xiz-14), a                             ; FB1343  ld (XIZ+0xf2),A
 	ld	bc, ix                                  ; FB1346  ld BC,IX
@@ -1782,7 +1782,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	xwa, (xbc+0x1523)                       ; FB134E  ld XWA,(XBC+0x1523)
 	ld	(xiz-18), xwa                           ; FB1353  ld (XIZ+0xee),XWA
 	ld	c, 4:opc                                   ; FB1356  ld C,0x04
-	extpfx3 0x8E, 0xF2, 0x43                   ; FB1358  mul BC,(XIZ+0xf2)
+	mul	bc, (xiz-14)                   ; FB1358  mul BC,(XIZ+0xf2)
 	add	bc, ix                                 ; FB135B  add BC,IX
 	add	bc, 0x90                               ; FB135D  add BC,0x0090
 	extz	xbc                                   ; FB1361  extz XBC
@@ -1795,7 +1795,7 @@ VoiceParams_Compute_A__FB131D:
 	ldw	bc, 0x1523                             ; FB1378  ld BC,0x1523
 	ld	(xiz-26), bc                            ; FB137B  ld (XIZ+0xe6),BC
 	ld	de, bc                                  ; FB137E  ld DE,BC
-	extpfx3 0x9E, 0xE8, 0x82                   ; FB1380  add DE,(XIZ+0xe8)
+	add	de, (xiz-24)                   ; FB1380  add DE,(XIZ+0xe8)
 	ldw	bc, 0x5A53                             ; FB1383  ld BC,0x5a53
 	ld	(xiz-28), bc                            ; FB1386  ld (XIZ+0xe4),BC
 	ld	hl, bc                                  ; FB1389  ld HL,BC
@@ -1860,14 +1860,14 @@ VoiceParams_Compute_A__FB131D:
 	call	Voice_ComputePitch                              ; FB142A  call 0xfa7f28
 	pushw	1                                    ; FB142E  push 0x0001
 	push	0                                     ; FB1431  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1433  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1433  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB1436  call 0xfb6272
 	extz	wa                                    ; FB143A  extz WA
 	ld	bc, (xiz-28)                            ; FB143C  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB143F  extz XBC
 	ld	(xbc+0x6F), wa                          ; FB1441  ld (XBC+0x6f),WA
 	push	0                                     ; FB1444  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1446  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1446  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB1449  call 0xfb5d05
 	extz	wa                                    ; FB144D  extz WA
 	ld	bc, (xiz-28)                            ; FB144F  ld BC,(XIZ+0xe4)
@@ -1875,7 +1875,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	(xbc+0x71), wa                          ; FB1454  ld (XBC+0x71),WA
 	ld	bc, (xiz-28)                            ; FB1457  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB145A  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB145C  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB145C  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD1)                           ; FB1461  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1466  extz BC
 	extz	xbc                                   ; FB1468  extz XBC
@@ -1886,7 +1886,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	(xbc+0x75), a                           ; FB1477  ld (XBC+0x75),A
 	ld	bc, (xiz-28)                            ; FB147A  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB147D  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB147F  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB147F  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD2)                           ; FB1484  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1489  mul C,0x02
 	extz	xbc                                   ; FB148C  extz XBC
@@ -1897,7 +1897,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	(xwa+0x76), bc                          ; FB149B  ld (XWA+0x76),BC
 	ld	bc, (xiz-28)                            ; FB149E  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB14A1  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB14A3  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB14A3  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD3)                           ; FB14A8  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB14AD  mul C,0x02
 	extz	xbc                                   ; FB14B0  extz XBC
@@ -1908,7 +1908,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	(xwa+0x7A), bc                          ; FB14BF  ld (XWA+0x7a),BC
 	ld	bc, (xiz-28)                            ; FB14C2  ld BC,(XIZ+0xe4)
 	extz	xbc                                   ; FB14C5  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB14C7  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB14C7  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD4)                           ; FB14CC  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB14D1  mul C,0x02
 	extz	xbc                                   ; FB14D4  extz XBC
@@ -1931,7 +1931,7 @@ VoiceParams_Compute_A__FB131D:
 	pushw	wa                                   ; FB1506  push WA
 	pushw	1                                    ; FB1507  push 0x0001
 	push	0                                     ; FB150A  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB150C  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB150C  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB150F  call 0xfc4b2e
 	add	xsp, 22                                ; FB1513  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1519  cp A,0
@@ -1957,7 +1957,7 @@ VoiceParams_Compute_A__FB152D:
 	jr z, VoiceParams_Compute_A__FB1563        ; FB154A  jr Z,0xfb1563
 VoiceParams_Compute_A__FB154C:
 	ld	xbc, (xiz+8)                            ; FB154C  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x07, 0x3E, 0x80             ; FB154F  or (XBC+0x07),0x80
+	or	(xbc+7), 0x80             ; FB154F  or (XBC+0x07),0x80
 	jr VoiceParams_Compute_A__FB1563           ; FB1553  jr T,0xfb1563
 VoiceParams_Compute_A__FB1555:
 	ld	xbc, (xiz+8)                            ; FB1555  ld XBC,(XIZ+0x08)
@@ -2011,7 +2011,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	(xiz-14), xiy                           ; FB15D2  ld (XIZ+0xf2),XIY
 	push	xiy                                   ; FB15D5  push XIY
 	push	0                                     ; FB15D6  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB15D8  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB15D8  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB15DB  call 0xfa727d
 	ld	(xiz-16), a                             ; FB15DF  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB15E2  ld BC,IX
@@ -2020,8 +2020,8 @@ VoiceParams_Compute_A__FB15B0:
 	ld	xwa, (xbc+0x1523)                       ; FB15EA  ld XWA,(XBC+0x1523)
 	ld	(xiz-20), xwa                           ; FB15EF  ld (XIZ+0xec),XWA
 	ld	c, 4:opc                                   ; FB15F2  ld C,0x04
-	extpfx3 0x8E, 0xF0, 0x43                   ; FB15F4  mul BC,(XIZ+0xf0)
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB15F7  add BC,(XIZ+0xf6)
+	mul	bc, (xiz-16)                   ; FB15F4  mul BC,(XIZ+0xf0)
+	add	bc, (xiz-10)                   ; FB15F7  add BC,(XIZ+0xf6)
 	add	bc, 0x90                               ; FB15FA  add BC,0x0090
 	extz	xbc                                   ; FB15FE  extz XBC
 	ld	xiy, (xbc+0x1523)                       ; FB1600  ld XIY,(XBC+0x1523)
@@ -2032,7 +2032,7 @@ VoiceParams_Compute_A__FB15B0:
 	ldw	bc, 0x1523                             ; FB1612  ld BC,0x1523
 	ld	(xiz-28), bc                            ; FB1615  ld (XIZ+0xe4),BC
 	ld	de, bc                                  ; FB1618  ld DE,BC
-	extpfx3 0x9E, 0xE6, 0x82                   ; FB161A  add DE,(XIZ+0xe6)
+	add	de, (xiz-26)                   ; FB161A  add DE,(XIZ+0xe6)
 	ldw	bc, 0x5A53                             ; FB161D  ld BC,0x5a53
 	ld	(xiz-30), bc                            ; FB1620  ld (XIZ+0xe2),BC
 	ld	hl, bc                                  ; FB1623  ld HL,BC
@@ -2097,14 +2097,14 @@ VoiceParams_Compute_A__FB15B0:
 	call	Voice_ComputePitch                              ; FB16C4  call 0xfa7f28
 	pushw	1                                    ; FB16C8  push 0x0001
 	push	0                                     ; FB16CB  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB16CD  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB16CD  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB16D0  call 0xfb6272
 	extz	wa                                    ; FB16D4  extz WA
 	ld	bc, (xiz-30)                            ; FB16D6  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB16D9  extz XBC
 	ld	(xbc+0x6F), wa                          ; FB16DB  ld (XBC+0x6f),WA
 	push	0                                     ; FB16DE  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB16E0  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB16E0  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB16E3  call 0xfb5d05
 	extz	wa                                    ; FB16E7  extz WA
 	ld	bc, (xiz-30)                            ; FB16E9  ld BC,(XIZ+0xe2)
@@ -2112,7 +2112,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	(xbc+0x71), wa                          ; FB16EE  ld (XBC+0x71),WA
 	ld	bc, (xiz-30)                            ; FB16F1  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB16F4  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB16F6  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB16F6  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD1)                           ; FB16FB  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1700  extz BC
 	extz	xbc                                   ; FB1702  extz XBC
@@ -2123,7 +2123,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	(xbc+0x75), a                           ; FB1711  ld (XBC+0x75),A
 	ld	bc, (xiz-30)                            ; FB1714  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1717  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1719  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1719  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD2)                           ; FB171E  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1723  mul C,0x02
 	extz	xbc                                   ; FB1726  extz XBC
@@ -2134,7 +2134,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	(xwa+0x76), bc                          ; FB1735  ld (XWA+0x76),BC
 	ld	bc, (xiz-30)                            ; FB1738  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB173B  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB173D  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB173D  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD3)                           ; FB1742  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1747  mul C,0x02
 	extz	xbc                                   ; FB174A  extz XBC
@@ -2145,7 +2145,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	(xwa+0x7A), bc                          ; FB1759  ld (XWA+0x7a),BC
 	ld	bc, (xiz-30)                            ; FB175C  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB175F  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1761  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1761  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD4)                           ; FB1766  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB176B  mul C,0x02
 	extz	xbc                                   ; FB176E  extz XBC
@@ -2168,7 +2168,7 @@ VoiceParams_Compute_A__FB15B0:
 	pushw	wa                                   ; FB17A0  push WA
 	pushw	1                                    ; FB17A1  push 0x0001
 	push	0                                     ; FB17A4  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB17A6  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB17A6  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB17A9  call 0xfc4b2e
 	add	xsp, 22                                ; FB17AD  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB17B3  cp A,0
@@ -2194,7 +2194,7 @@ VoiceParams_Compute_A__FB17C7:
 	jr z, VoiceParams_Compute_A__FB17FD        ; FB17E4  jr Z,0xfb17fd
 VoiceParams_Compute_A__FB17E6:
 	ld	xbc, (xiz+8)                            ; FB17E6  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x07, 0x3E, 0x80             ; FB17E9  or (XBC+0x07),0x80
+	or	(xbc+7), 0x80             ; FB17E9  or (XBC+0x07),0x80
 	jr VoiceParams_Compute_A__FB17FD           ; FB17ED  jr T,0xfb17fd
 VoiceParams_Compute_A__FB17EF:
 	ld	xbc, (xiz+8)                            ; FB17EF  ld XBC,(XIZ+0x08)
@@ -2254,7 +2254,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	(xiz-14), xiy                           ; FB1880  ld (XIZ+0xf2),XIY
 	push	xiy                                   ; FB1883  push XIY
 	push	0                                     ; FB1884  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB1886  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB1886  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB1889  call 0xfa727d
 	ld	(xiz-16), a                             ; FB188D  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB1890  ld BC,IX
@@ -2263,8 +2263,8 @@ VoiceParams_Compute_A__FB185E:
 	ld	xwa, (xbc+0x1523)                       ; FB1898  ld XWA,(XBC+0x1523)
 	ld	(xiz-20), xwa                           ; FB189D  ld (XIZ+0xec),XWA
 	ld	c, 4:opc                                   ; FB18A0  ld C,0x04
-	extpfx3 0x8E, 0xF0, 0x43                   ; FB18A2  mul BC,(XIZ+0xf0)
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB18A5  add BC,(XIZ+0xf6)
+	mul	bc, (xiz-16)                   ; FB18A2  mul BC,(XIZ+0xf0)
+	add	bc, (xiz-10)                   ; FB18A5  add BC,(XIZ+0xf6)
 	add	bc, 0x90                               ; FB18A8  add BC,0x0090
 	extz	xbc                                   ; FB18AC  extz XBC
 	ld	xiy, (xbc+0x1523)                       ; FB18AE  ld XIY,(XBC+0x1523)
@@ -2275,7 +2275,7 @@ VoiceParams_Compute_A__FB185E:
 	ldw	bc, 0x1523                             ; FB18C0  ld BC,0x1523
 	ld	(xiz-28), bc                            ; FB18C3  ld (XIZ+0xe4),BC
 	ld	de, bc                                  ; FB18C6  ld DE,BC
-	extpfx3 0x9E, 0xE6, 0x82                   ; FB18C8  add DE,(XIZ+0xe6)
+	add	de, (xiz-26)                   ; FB18C8  add DE,(XIZ+0xe6)
 	ldw	bc, 0x5A53                             ; FB18CB  ld BC,0x5a53
 	ld	(xiz-30), bc                            ; FB18CE  ld (XIZ+0xe2),BC
 	ld	hl, bc                                  ; FB18D1  ld HL,BC
@@ -2340,14 +2340,14 @@ VoiceParams_Compute_A__FB185E:
 	call	Voice_ComputePitch                              ; FB1986  call 0xfa7f28
 	pushw	2                                    ; FB198A  push 0x0002
 	push	0                                     ; FB198D  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB198F  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB198F  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB1992  call 0xfb6272
 	extz	wa                                    ; FB1996  extz WA
 	ld	bc, (xiz-30)                            ; FB1998  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB199B  extz XBC
 	ld	(xbc+0xB3), wa                          ; FB199D  ld (XBC+0x00b3),WA
 	push	0                                     ; FB19A2  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB19A4  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB19A4  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB19A7  call 0xfb5d05
 	extz	wa                                    ; FB19AB  extz WA
 	ld	bc, (xiz-30)                            ; FB19AD  ld BC,(XIZ+0xe2)
@@ -2355,7 +2355,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	(xbc+0xB5), wa                          ; FB19B2  ld (XBC+0x00b5),WA
 	ld	bc, (xiz-30)                            ; FB19B7  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB19BA  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB19BC  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB19BC  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD1)                           ; FB19C1  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB19C6  extz BC
 	extz	xbc                                   ; FB19C8  extz XBC
@@ -2366,7 +2366,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	(xbc+0xB9), a                           ; FB19D7  ld (XBC+0x00b9),A
 	ld	bc, (xiz-30)                            ; FB19DC  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB19DF  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB19E1  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB19E1  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD2)                           ; FB19E6  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB19EB  mul C,0x02
 	extz	xbc                                   ; FB19EE  extz XBC
@@ -2377,7 +2377,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	(xwa+0xBA), bc                          ; FB19FD  ld (XWA+0x00ba),BC
 	ld	bc, (xiz-30)                            ; FB1A02  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1A05  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1A07  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1A07  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD3)                           ; FB1A0C  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1A11  mul C,0x02
 	extz	xbc                                   ; FB1A14  extz XBC
@@ -2388,7 +2388,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	(xwa+0xBE), bc                          ; FB1A23  ld (XWA+0x00be),BC
 	ld	bc, (xiz-30)                            ; FB1A28  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1A2B  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1A2D  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1A2D  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD4)                           ; FB1A32  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB1A37  mul C,0x02
 	extz	xbc                                   ; FB1A3A  extz XBC
@@ -2411,7 +2411,7 @@ VoiceParams_Compute_A__FB185E:
 	pushw	wa                                   ; FB1A72  push WA
 	pushw	2                                    ; FB1A73  push 0x0002
 	push	0                                     ; FB1A76  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1A78  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1A78  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB1A7B  call 0xfc4b2e
 	add	xsp, 22                                ; FB1A7F  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1A85  cp A,0
@@ -2437,7 +2437,7 @@ VoiceParams_Compute_A__FB1A99:
 	jr z, VoiceParams_Compute_A__FB1ACF        ; FB1AB6  jr Z,0xfb1acf
 VoiceParams_Compute_A__FB1AB8:
 	ld	xbc, (xiz+8)                            ; FB1AB8  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x08, 0x3E, 0x80             ; FB1ABB  or (XBC+0x08),0x80
+	or	(xbc+8), 0x80             ; FB1ABB  or (XBC+0x08),0x80
 	jr VoiceParams_Compute_A__FB1ACF           ; FB1ABF  jr T,0xfb1acf
 VoiceParams_Compute_A__FB1AC1:
 	ld	xbc, (xiz+8)                            ; FB1AC1  ld XBC,(XIZ+0x08)
@@ -2497,7 +2497,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	(xiz-14), xiy                           ; FB1B52  ld (XIZ+0xf2),XIY
 	push	xiy                                   ; FB1B55  push XIY
 	push	0                                     ; FB1B56  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB1B58  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB1B58  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity                              ; FB1B5B  call 0xfa727d
 	ld	(xiz-16), a                             ; FB1B5F  ld (XIZ+0xf0),A
 	ld	bc, ix                                  ; FB1B62  ld BC,IX
@@ -2506,8 +2506,8 @@ VoiceParams_Compute_A__FB1B30:
 	ld	xwa, (xbc+0x1523)                       ; FB1B6A  ld XWA,(XBC+0x1523)
 	ld	(xiz-20), xwa                           ; FB1B6F  ld (XIZ+0xec),XWA
 	ld	c, 4:opc                                   ; FB1B72  ld C,0x04
-	extpfx3 0x8E, 0xF0, 0x43                   ; FB1B74  mul BC,(XIZ+0xf0)
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB1B77  add BC,(XIZ+0xf6)
+	mul	bc, (xiz-16)                   ; FB1B74  mul BC,(XIZ+0xf0)
+	add	bc, (xiz-10)                   ; FB1B77  add BC,(XIZ+0xf6)
 	add	bc, 0x90                               ; FB1B7A  add BC,0x0090
 	extz	xbc                                   ; FB1B7E  extz XBC
 	ld	xiy, (xbc+0x1523)                       ; FB1B80  ld XIY,(XBC+0x1523)
@@ -2518,7 +2518,7 @@ VoiceParams_Compute_A__FB1B30:
 	ldw	bc, 0x1523                             ; FB1B92  ld BC,0x1523
 	ld	(xiz-28), bc                            ; FB1B95  ld (XIZ+0xe4),BC
 	ld	de, bc                                  ; FB1B98  ld DE,BC
-	extpfx3 0x9E, 0xE6, 0x82                   ; FB1B9A  add DE,(XIZ+0xe6)
+	add	de, (xiz-26)                   ; FB1B9A  add DE,(XIZ+0xe6)
 	ldw	bc, 0x5A53                             ; FB1B9D  ld BC,0x5a53
 	ld	(xiz-30), bc                            ; FB1BA0  ld (XIZ+0xe2),BC
 	ld	hl, bc                                  ; FB1BA3  ld HL,BC
@@ -2583,14 +2583,14 @@ VoiceParams_Compute_A__FB1B30:
 	call	Voice_ComputePitch                              ; FB1C58  call 0xfa7f28
 	pushw	3                                    ; FB1C5C  push 0x0003
 	push	0                                     ; FB1C5F  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1C61  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1C61  push (XIZ+0xf8)
 	call	Part_GetAlgoDescByte17                              ; FB1C64  call 0xfb6272
 	extz	wa                                    ; FB1C68  extz WA
 	ld	bc, (xiz-30)                            ; FB1C6A  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1C6D  extz XBC
 	ld	(xbc+0xF7), wa                          ; FB1C6F  ld (XBC+0x00f7),WA
 	push	0                                     ; FB1C74  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1C76  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1C76  push (XIZ+0xf8)
 	call	Part_GetSecondaryParam_AlgoType9                              ; FB1C79  call 0xfb5d05
 	extz	wa                                    ; FB1C7D  extz WA
 	ld	bc, (xiz-30)                            ; FB1C7F  ld BC,(XIZ+0xe2)
@@ -2598,7 +2598,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	(xbc+0xF9), wa                          ; FB1C84  ld (XBC+0x00f9),WA
 	ld	bc, (xiz-30)                            ; FB1C89  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1C8C  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1C8E  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1C8E  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD1)                           ; FB1C93  ld C,(XWA+0x00d1)
 	extz	bc                                    ; FB1C98  extz BC
 	extz	xbc                                   ; FB1C9A  extz XBC
@@ -2609,7 +2609,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	(xbc+0xFD), a                           ; FB1CA9  ld (XBC+0x00fd),A
 	ld	bc, (xiz-30)                            ; FB1CAE  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1CB1  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1CB3  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1CB3  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD2)                           ; FB1CB8  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB1CBD  mul C,0x02
 	extz	xbc                                   ; FB1CC0  extz XBC
@@ -2620,7 +2620,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	(xwa+0xFE), bc                          ; FB1CCF  ld (XWA+0x00fe),BC
 	ld	bc, (xiz-30)                            ; FB1CD4  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1CD7  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1CD9  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1CD9  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD3)                           ; FB1CDE  ld C,(XWA+0x00d3)
 	mul	c, 2                                   ; FB1CE3  mul C,0x02
 	extz	xbc                                   ; FB1CE6  extz XBC
@@ -2631,7 +2631,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	(xwa+0x102), bc                         ; FB1CF5  ld (XWA+0x0102),BC
 	ld	bc, (xiz-30)                            ; FB1CFA  ld BC,(XIZ+0xe2)
 	extz	xbc                                   ; FB1CFD  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xF0, 0x20       ; FB1CFF  ld XWA,(XBC+IX)
+	ld	xwa, (xbc+ix)       ; FB1CFF  ld XWA,(XBC+IX)
 	ld	c, (xwa+0xD4)                           ; FB1D04  ld C,(XWA+0x00d4)
 	mul	c, 2                                   ; FB1D09  mul C,0x02
 	extz	xbc                                   ; FB1D0C  extz XBC
@@ -2639,7 +2639,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	bc, (xbc)                               ; FB1D14  ld BC,(XBC)
 	ld	wa, (xiz-30)                            ; FB1D16  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1D19  extz XWA
-	extpfx5 0xF3, 0xE1, 0x00, 0x01, 0x51       ; FB1D1B  ld (XWA+0x0100),BC
+	ld	(xwa+256), bc       ; FB1D1B  ld (XWA+0x0100),BC
 	ld	c, (Table_FE12A9+3:24)                       ; FB1D20  ld C,(0xfe12ac)
 	set	7, c                                   ; FB1D25  set 0x07,C
 	ld	(xiz-40), c                             ; FB1D28  ld (XIZ+0xd8),C
@@ -2654,7 +2654,7 @@ VoiceParams_Compute_A__FB1B30:
 	pushw	wa                                   ; FB1D44  push WA
 	pushw	3                                    ; FB1D45  push 0x0003
 	push	0                                     ; FB1D48  push 0x00
-	extpfx3 0x8E, 0xF8, 0x04                   ; FB1D4A  push (XIZ+0xf8)
+	push	(xiz-8)                   ; FB1D4A  push (XIZ+0xf8)
 	call	sub_FC4B2E                              ; FB1D4D  call 0xfc4b2e
 	add	xsp, 22                                ; FB1D51  add XSP,0x00000016
 	cp	a, 0:i3                                   ; FB1D57  cp A,0
@@ -2680,7 +2680,7 @@ VoiceParams_Compute_A__FB1D6B:
 	jr z, VoiceParams_Compute_A__FB1DA1        ; FB1D88  jr Z,0xfb1da1
 VoiceParams_Compute_A__FB1D8A:
 	ld	xbc, (xiz+8)                            ; FB1D8A  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x09, 0x3E, 0x80             ; FB1D8D  or (XBC+0x09),0x80
+	or	(xbc+9), 0x80             ; FB1D8D  or (XBC+0x09),0x80
 	jr VoiceParams_Compute_A__FB1DA1           ; FB1D91  jr T,0xfb1da1
 VoiceParams_Compute_A__FB1D93:
 	ld	xbc, (xiz+8)                            ; FB1D93  ld XBC,(XIZ+0x08)
@@ -2698,7 +2698,7 @@ VoiceParams_Compute_A__FB1DA1:
 	pop	xiy                                    ; FB1DB8  pop XIY
 VoiceParams_Compute_A__FB1DB9:
 	ld	xbc, (xiz+8)                            ; FB1DB9  ld XBC,(XIZ+0x08)
-	extpfx3 0xAE, 0xFA, 0x81                   ; FB1DBC  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FB1DBC  add XBC,(XIZ+0xfa)
 	ld	h, (xbc)                                ; FB1DBF  ld H,(XBC)
 	cp	h, 64                                   ; FB1DC1  cp H,0x40
 	jrl nc, VoiceParams_Compute_A__FB1EA6      ; FB1DC4  jrl NC,0xfb1ea6
@@ -2713,7 +2713,7 @@ VoiceParams_Compute_A__FB1DB9:
 	push	xwa                                   ; FB1DDA  push XWA
 	ld	(xiz-10), ix                            ; FB1DDB  ld (XIZ+0xf6),IX
 	ldw	wa, 0x5A53                             ; FB1DDE  ld WA,0x5a53
-	extpfx3 0x9E, 0xF6, 0x80                   ; FB1DE1  add WA,(XIZ+0xf6)
+	add	wa, (xiz-10)                   ; FB1DE1  add WA,(XIZ+0xf6)
 	extz	xwa                                   ; FB1DE4  extz XWA
 	push	xwa                                   ; FB1DE6  push XWA
 	call	MemCopyWords                              ; FB1DE7  call 0xf9a038
@@ -2723,7 +2723,7 @@ VoiceParams_Compute_A__FB1DB9:
 	push	0                                     ; FB1DF5  push 0x00
 	push	d                                     ; FB1DF7  push D
 	push	0                                     ; FB1DF9  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB1DFB  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB1DFB  push (XIZ+0x0c)
 	call	PartSlot_SetRecordPtr_DF05                              ; FB1DFE  call 0xfc376c
 	ld	bc, (xiz-10)                            ; FB1E02  ld BC,(XIZ+0xf6)
 	add	bc, 43                                 ; FB1E05  add BC,0x002b
@@ -2796,7 +2796,7 @@ VoiceParams_Compute_A__FB1EA6:
 	pop	xix                                    ; FB1EB7  pop XIX
 	pop	xde                                    ; FB1EB8  pop XDE
 	pop	xhl                                    ; FB1EB9  pop XHL
-	unlk32 xiz                                 ; FB1EBA  unlk XIZ
+	unlk	xiz                                 ; FB1EBA  unlk XIZ
 	ret                                        ; FB1EBC  ret
 ; ------------------------------------------------------------------------------
 ; VoiceRegs_Stage_B -- 0xFB1EBD..0xFB1FB0 (244 bytes)
@@ -2819,7 +2819,7 @@ VoiceParams_Compute_A__FB1EA6:
 ; Unknown:  ⚠ what the six extra calls add.  ⚠ "_B" is a label for "the variant
 ;          part mode 0x40 uses".
 VoiceRegs_Stage_B:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB1EBD  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB1EBD  link XIZ,0x0000
 	pushw	hl                                   ; FB1EC1  push HL
 	push	xde                                   ; FB1EC2  push XDE
 	pushw	ix                                   ; FB1EC3  push IX
@@ -2920,7 +2920,7 @@ VoiceRegs_Stage_B__FB1F91:
 	popw	ix                                    ; FB1FAB  pop IX
 	pop	xde                                    ; FB1FAC  pop XDE
 	popw	hl                                    ; FB1FAD  pop HL
-	unlk32 xiz                                 ; FB1FAE  unlk XIZ
+	unlk	xiz                                 ; FB1FAE  unlk XIZ
 	ret                                        ; FB1FB0  ret
 ; ------------------------------------------------------------------------------
 ; sub_FB1FB1 -- 0xFB1FB1..0xFB2171 (449 bytes)
@@ -2933,7 +2933,7 @@ VoiceRegs_Stage_B__FB1F91:
 ;          {0xFA7F28, Shift8_LogicalRight} is a strict subset of that routine's
 ;          six (checker section 11).
 sub_FB1FB1:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB1FB1  link XIZ,0xffec
+	link	xiz, 0xffec              ; FB1FB1  link XIZ,0xffec
 	push	xhl                                   ; FB1FB5  push XHL
 	pushw	de                                   ; FB1FB6  push DE
 	push	xix                                   ; FB1FB7  push XIX
@@ -2953,7 +2953,7 @@ sub_FB1FB1:
 	and	w, e                                   ; FB1FDF  and W,E
 	ld	(xiz-14), w                             ; FB1FE1  ld (XIZ+0xf2),W
 	lda	xiy, (Field2Bit_Shifts:24)                     ; FB1FE4  lda XIY,0xfe12b1
-	extpfx3 0xAE, 0xF4, 0x85                   ; FB1FE9  add XIY,(XIZ+0xf4)
+	add	xiy, (xiz-12)                   ; FB1FE9  add XIY,(XIZ+0xf4)
 	ld	a, (xiy)                                ; FB1FEC  ld A,(XIY)
 	pushw	wa                                   ; FB1FEE  push WA
 	push	0                                     ; FB1FEF  push 0x00
@@ -2984,7 +2984,7 @@ sub_FB1FB1__FB2026:
 	jrl ugt, sub_FB1FB1__FB214E                ; FB2028  jrl UGT,0xfb214e
 sub_FB1FB1__FB202B:
 	ld	c, 41:opc                                  ; FB202B  ld C,0x29
-	extpfx3 0x8E, 0x10, 0x43                   ; FB202D  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FB202D  mul BC,(XIZ+0x10)
 	ld	(xiz-10), bc                            ; FB2030  ld (XIZ+0xf6),BC
 	ld	wa, (xiz+12)                            ; FB2033  ld WA,(XIZ+0x0c)
 	extz	wa                                    ; FB2036  extz WA
@@ -3008,22 +3008,22 @@ sub_FB1FB1__FB202B:
 	ld	(xiz-18), bc                            ; FB2070  ld (XIZ+0xee),BC
 	ld	wa, (xiz-16)                            ; FB2073  ld WA,(XIZ+0xf0)
 	extz	xbc                                   ; FB2076  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xE0, 0x20       ; FB2078  ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)       ; FB2078  ld XWA,(XBC+WA)
 	ld	xix, xwa                                ; FB207D  ld XIX,XWA
 	ld	de, bc                                  ; FB207F  ld DE,BC
-	extpfx3 0x9E, 0xF2, 0x82                   ; FB2081  add DE,(XIZ+0xf2)
+	add	de, (xiz-14)                   ; FB2081  add DE,(XIZ+0xf2)
 	ld	c, 68:opc                                  ; FB2084  ld C,0x44
-	extpfx3 0x8E, 0x10, 0x43                   ; FB2086  mul BC,(XIZ+0x10)
+	mul	bc, (xiz+16)                   ; FB2086  mul BC,(XIZ+0x10)
 	ld	(xiz-20), bc                            ; FB2089  ld (XIZ+0xec),BC
 	ldw	hl, 0x5A53                             ; FB208C  ld HL,0x5a53
 	add	hl, bc                                 ; FB208F  add HL,BC
 	extz	xhl                                   ; FB2091  extz XHL
-	extpfx5 0xBB, 0x01, 0x02, 0x08, 0x00       ; FB2093  ld (XHL+0x01),0x0008
+	ldw	(xhl+1), 0x0008       ; FB2093  ld (XHL+0x01),0x0008
 	ld	c, (xiz+20)                             ; FB2098  ld C,(XIZ+0x14)
 	and	c, 0x80                                ; FB209B  and C,0x80
 	jr z, sub_FB1FB1__FB20A7                   ; FB209E  jr Z,0xfb20a7
 	extz	xhl                                   ; FB20A0  extz XHL
-	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x08       ; FB20A2  or (XHL+0x01),0x0800
+	orw	(xhl+1), 0x0800       ; FB20A2  or (XHL+0x01),0x0800
 sub_FB1FB1__FB20A7:
 	extz	xhl                                   ; FB20A7  extz XHL
 	ld	c, (xiz+16)                             ; FB20A9  ld C,(XIZ+0x10)
@@ -3055,12 +3055,12 @@ sub_FB1FB1__FB20A7:
 	ld	(xhl+37), de                            ; FB20F7  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB20FA  push HL
 	call	Voice_ComputePitch                              ; FB20FB  call 0xfa7f28
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB20FF  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2104  ld (XHL+0x2d),0x00ff
+	ldw	(xhl+43), 0x0000       ; FB20FF  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x00ff       ; FB2104  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB2109  ld (XHL+0x31),0x00
-	extpfx5 0xBB, 0x32, 0x02, 0x00, 0x00       ; FB210D  ld (XHL+0x32),0x0000
-	extpfx5 0xBB, 0x36, 0x02, 0x00, 0x00       ; FB2112  ld (XHL+0x36),0x0000
-	extpfx5 0xBB, 0x34, 0x02, 0x00, 0x00       ; FB2117  ld (XHL+0x34),0x0000
+	ldw	(xhl+50), 0x0000       ; FB210D  ld (XHL+0x32),0x0000
+	ldw	(xhl+54), 0x0000       ; FB2112  ld (XHL+0x36),0x0000
+	ldw	(xhl+52), 0x0000       ; FB2117  ld (XHL+0x34),0x0000
 	ld	c, (xiz+22)                             ; FB211C  ld C,(XIZ+0x16)
 	set	7, c                                   ; FB211F  set 0x07,C
 	ld	(xiz-12), c                             ; FB2122  ld (XIZ+0xf4),C
@@ -3069,7 +3069,7 @@ sub_FB1FB1__FB20A7:
 	extz	xix                                   ; FB212A  extz XIX
 	ld	xbc, xix                                ; FB212C  ld XBC,XIX
 	inc	2, xbc                                 ; FB212E  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2130  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2130  add XBC,(XIZ+0x08)
 	ld	a, (xiz-12)                             ; FB2133  ld A,(XIZ+0xf4)
 	ld	(xbc), a                                ; FB2136  ld (XBC),A
 	ld	bc, (xhl+6)                             ; FB2138  ld BC,(XHL+0x06)
@@ -3078,7 +3078,7 @@ sub_FB1FB1__FB20A7:
 	jr ugt, sub_FB1FB1__FB215D                 ; FB2140  jr UGT,0xfb215d
 	ld	xbc, xix                                ; FB2142  ld XBC,XIX
 	inc	6, xbc                                 ; FB2144  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2146  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2146  add XBC,(XIZ+0x08)
 	ld	(xbc), 32                               ; FB2149  ld (XBC),0x20
 	jr sub_FB1FB1__FB216C                      ; FB214C  jr T,0xfb216c
 sub_FB1FB1__FB214E:
@@ -3086,20 +3086,20 @@ sub_FB1FB1__FB214E:
 	extz	bc                                    ; FB2151  extz BC
 	extz	xbc                                   ; FB2153  extz XBC
 	inc	2, xbc                                 ; FB2155  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2157  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2157  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB215A  ld (XBC),0x00
 sub_FB1FB1__FB215D:
 	ld	bc, (xiz+16)                            ; FB215D  ld BC,(XIZ+0x10)
 	extz	bc                                    ; FB2160  extz BC
 	extz	xbc                                   ; FB2162  extz XBC
 	inc	6, xbc                                 ; FB2164  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2166  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2166  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB2169  ld (XBC),0x00
 sub_FB1FB1__FB216C:
 	pop	xix                                    ; FB216C  pop XIX
 	popw	de                                    ; FB216D  pop DE
 	pop	xhl                                    ; FB216E  pop XHL
-	unlk32 xiz                                 ; FB216F  unlk XIZ
+	unlk	xiz                                 ; FB216F  unlk XIZ
 	ret                                        ; FB2171  ret
 ; ------------------------------------------------------------------------------
 ; VoiceParams_Compute_B -- 0xFB2172..0xFB27ED (1660 bytes)
@@ -3114,12 +3114,12 @@ sub_FB1FB1__FB216C:
 ;          and Shift8_LogicalRight.
 ; Unknown:  ⚠ the formulae, as for _A.
 VoiceParams_Compute_B:
-	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FB2172  link XIZ,0xffee
+	link	xiz, 0xffee              ; FB2172  link XIZ,0xffee
 	push	xhl                                   ; FB2176  push XHL
 	pushw	de                                   ; FB2177  push DE
 	push	xix                                   ; FB2178  push XIX
 	push	0                                     ; FB2179  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB217B  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB217B  push (XIZ+0x0c)
 	call	sub_FC382A                              ; FB217E  call 0xfc382a
 	ld	ix, (xiz+12)                            ; FB2182  ld IX,(XIZ+0x0c)
 	extz	ix                                    ; FB2185  extz IX
@@ -3191,18 +3191,18 @@ VoiceParams_Compute_B__FB21FB:
 	ld	(xiz-16), bc                            ; FB2236  ld (XIZ+0xf0),BC
 	ld	wa, (xiz-14)                            ; FB2239  ld WA,(XIZ+0xf2)
 	extz	xbc                                   ; FB223C  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xE0, 0x20       ; FB223E  ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)       ; FB223E  ld XWA,(XBC+WA)
 	ld	xix, xwa                                ; FB2243  ld XIX,XWA
 	ld	de, bc                                  ; FB2245  ld DE,BC
-	extpfx3 0x9E, 0xF4, 0x82                   ; FB2247  add DE,(XIZ+0xf4)
+	add	de, (xiz-12)                   ; FB2247  add DE,(XIZ+0xf4)
 	ldw	hl, 0x5A53                             ; FB224A  ld HL,0x5a53
 	extz	xhl                                   ; FB224D  extz XHL
-	extpfx5 0xBB, 0x01, 0x02, 0x08, 0x00       ; FB224F  ld (XHL+0x01),0x0008
+	ldw	(xhl+1), 0x0008       ; FB224F  ld (XHL+0x01),0x0008
 	ld	c, (xiz+16)                             ; FB2254  ld C,(XIZ+0x10)
 	and	c, 0x80                                ; FB2257  and C,0x80
 	jr z, VoiceParams_Compute_B__FB2263        ; FB225A  jr Z,0xfb2263
 	extz	xhl                                   ; FB225C  extz XHL
-	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x08       ; FB225E  or (XHL+0x01),0x0800
+	orw	(xhl+1), 0x0800       ; FB225E  or (XHL+0x01),0x0800
 VoiceParams_Compute_B__FB2263:
 	extz	xhl                                   ; FB2263  extz XHL
 	ld	(xhl+3), 0                              ; FB2265  ld (XHL+0x03),0x00
@@ -3233,12 +3233,12 @@ VoiceParams_Compute_B__FB2263:
 	ld	(xhl+37), de                            ; FB22B1  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB22B4  push HL
 	call	Voice_ComputePitch                              ; FB22B5  call 0xfa7f28
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB22B9  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB22BE  ld (XHL+0x2d),0x00ff
+	ldw	(xhl+43), 0x0000       ; FB22B9  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x00ff       ; FB22BE  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB22C3  ld (XHL+0x31),0x00
-	extpfx5 0xBB, 0x32, 0x02, 0x00, 0x00       ; FB22C7  ld (XHL+0x32),0x0000
-	extpfx5 0xBB, 0x36, 0x02, 0x00, 0x00       ; FB22CC  ld (XHL+0x36),0x0000
-	extpfx5 0xBB, 0x34, 0x02, 0x00, 0x00       ; FB22D1  ld (XHL+0x34),0x0000
+	ldw	(xhl+50), 0x0000       ; FB22C7  ld (XHL+0x32),0x0000
+	ldw	(xhl+54), 0x0000       ; FB22CC  ld (XHL+0x36),0x0000
+	ldw	(xhl+52), 0x0000       ; FB22D1  ld (XHL+0x34),0x0000
 	ld	xbc, (xiz+8)                            ; FB22D6  ld XBC,(XIZ+0x08)
 	ld	(xbc+2), 0x80                           ; FB22D9  ld (XBC+0x02),0x80
 	ld	bc, (xhl+6)                             ; FB22DD  ld BC,(XHL+0x06)
@@ -3315,23 +3315,23 @@ VoiceParams_Compute_B__FB235E:
 	ldw	bc, 0x1523                             ; FB239D  ld BC,0x1523
 	ld	(xiz-16), bc                            ; FB23A0  ld (XIZ+0xf0),BC
 	extz	xbc                                   ; FB23A3  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xE0, 0x20       ; FB23A5  ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)       ; FB23A5  ld XWA,(XBC+WA)
 	ld	xix, xwa                                ; FB23AA  ld XIX,XWA
 	ld	bc, (xiz-12)                            ; FB23AC  ld BC,(XIZ+0xf4)
 	add	bc, 0x88                               ; FB23AF  add BC,0x0088
 	ld	de, bc                                  ; FB23B3  ld DE,BC
-	extpfx3 0x9E, 0xF0, 0x82                   ; FB23B5  add DE,(XIZ+0xf0)
+	add	de, (xiz-16)                   ; FB23B5  add DE,(XIZ+0xf0)
 	ldw	bc, 0x5A53                             ; FB23B8  ld BC,0x5a53
 	ld	(xiz-18), bc                            ; FB23BB  ld (XIZ+0xee),BC
 	ld	hl, bc                                  ; FB23BE  ld HL,BC
 	add	hl, 68                                 ; FB23C0  add HL,0x0044
 	extz	xbc                                   ; FB23C4  extz XBC
-	extpfx5 0xB9, 0x45, 0x02, 0x08, 0x00       ; FB23C6  ld (XBC+0x45),0x0008
+	ldw	(xbc+69), 0x0008       ; FB23C6  ld (XBC+0x45),0x0008
 	ld	c, (xiz+16)                             ; FB23CB  ld C,(XIZ+0x10)
 	and	c, 0x80                                ; FB23CE  and C,0x80
 	jr z, VoiceParams_Compute_B__FB23DA        ; FB23D1  jr Z,0xfb23da
 	extz	xhl                                   ; FB23D3  extz XHL
-	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x08       ; FB23D5  or (XHL+0x01),0x0800
+	orw	(xhl+1), 0x0800       ; FB23D5  or (XHL+0x01),0x0800
 VoiceParams_Compute_B__FB23DA:
 	extz	xhl                                   ; FB23DA  extz XHL
 	ld	(xhl+3), 1                              ; FB23DC  ld (XHL+0x03),0x01
@@ -3362,12 +3362,12 @@ VoiceParams_Compute_B__FB23DA:
 	ld	(xhl+37), de                            ; FB2428  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB242B  push HL
 	call	Voice_ComputePitch                              ; FB242C  call 0xfa7f28
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB2430  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2435  ld (XHL+0x2d),0x00ff
+	ldw	(xhl+43), 0x0000       ; FB2430  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x00ff       ; FB2435  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB243A  ld (XHL+0x31),0x00
-	extpfx5 0xBB, 0x32, 0x02, 0x00, 0x00       ; FB243E  ld (XHL+0x32),0x0000
-	extpfx5 0xBB, 0x36, 0x02, 0x00, 0x00       ; FB2443  ld (XHL+0x36),0x0000
-	extpfx5 0xBB, 0x34, 0x02, 0x00, 0x00       ; FB2448  ld (XHL+0x34),0x0000
+	ldw	(xhl+50), 0x0000       ; FB243E  ld (XHL+0x32),0x0000
+	ldw	(xhl+54), 0x0000       ; FB2443  ld (XHL+0x36),0x0000
+	ldw	(xhl+52), 0x0000       ; FB2448  ld (XHL+0x34),0x0000
 	ld	xbc, (xiz+8)                            ; FB244D  ld XBC,(XIZ+0x08)
 	ld	(xbc+3), 0x81                           ; FB2450  ld (XBC+0x03),0x81
 	ld	bc, (xhl+6)                             ; FB2454  ld BC,(XHL+0x06)
@@ -3444,23 +3444,23 @@ VoiceParams_Compute_B__FB24D5:
 	ldw	bc, 0x1523                             ; FB2514  ld BC,0x1523
 	ld	(xiz-16), bc                            ; FB2517  ld (XIZ+0xf0),BC
 	extz	xbc                                   ; FB251A  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xE0, 0x20       ; FB251C  ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)       ; FB251C  ld XWA,(XBC+WA)
 	ld	xix, xwa                                ; FB2521  ld XIX,XWA
 	ld	bc, (xiz-12)                            ; FB2523  ld BC,(XIZ+0xf4)
 	add	bc, 0x88                               ; FB2526  add BC,0x0088
 	ld	de, bc                                  ; FB252A  ld DE,BC
-	extpfx3 0x9E, 0xF0, 0x82                   ; FB252C  add DE,(XIZ+0xf0)
+	add	de, (xiz-16)                   ; FB252C  add DE,(XIZ+0xf0)
 	ldw	bc, 0x5A53                             ; FB252F  ld BC,0x5a53
 	ld	(xiz-18), bc                            ; FB2532  ld (XIZ+0xee),BC
 	ld	hl, bc                                  ; FB2535  ld HL,BC
 	add	hl, 0x88                               ; FB2537  add HL,0x0088
 	extz	xbc                                   ; FB253B  extz XBC
-	extpfx7 0xF3, 0xE5, 0x89, 0x00, 0x02, 0x08, 0x00 ; FB253D  ld (XBC+0x0089),0x0008
+	ldw	(xbc+137), 0x0008 ; FB253D  ld (XBC+0x0089),0x0008
 	ld	c, (xiz+16)                             ; FB2544  ld C,(XIZ+0x10)
 	and	c, 0x80                                ; FB2547  and C,0x80
 	jr z, VoiceParams_Compute_B__FB2553        ; FB254A  jr Z,0xfb2553
 	extz	xhl                                   ; FB254C  extz XHL
-	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x08       ; FB254E  or (XHL+0x01),0x0800
+	orw	(xhl+1), 0x0800       ; FB254E  or (XHL+0x01),0x0800
 VoiceParams_Compute_B__FB2553:
 	extz	xhl                                   ; FB2553  extz XHL
 	ld	(xhl+3), 2                              ; FB2555  ld (XHL+0x03),0x02
@@ -3491,12 +3491,12 @@ VoiceParams_Compute_B__FB2553:
 	ld	(xhl+37), de                            ; FB25A1  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB25A4  push HL
 	call	Voice_ComputePitch                              ; FB25A5  call 0xfa7f28
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB25A9  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB25AE  ld (XHL+0x2d),0x00ff
+	ldw	(xhl+43), 0x0000       ; FB25A9  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x00ff       ; FB25AE  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB25B3  ld (XHL+0x31),0x00
-	extpfx5 0xBB, 0x32, 0x02, 0x00, 0x00       ; FB25B7  ld (XHL+0x32),0x0000
-	extpfx5 0xBB, 0x36, 0x02, 0x00, 0x00       ; FB25BC  ld (XHL+0x36),0x0000
-	extpfx5 0xBB, 0x34, 0x02, 0x00, 0x00       ; FB25C1  ld (XHL+0x34),0x0000
+	ldw	(xhl+50), 0x0000       ; FB25B7  ld (XHL+0x32),0x0000
+	ldw	(xhl+54), 0x0000       ; FB25BC  ld (XHL+0x36),0x0000
+	ldw	(xhl+52), 0x0000       ; FB25C1  ld (XHL+0x34),0x0000
 	ld	xbc, (xiz+8)                            ; FB25C6  ld XBC,(XIZ+0x08)
 	ld	(xbc+4), 0x81                           ; FB25C9  ld (XBC+0x04),0x81
 	ld	bc, (xhl+6)                             ; FB25CD  ld BC,(XHL+0x06)
@@ -3582,23 +3582,23 @@ VoiceParams_Compute_B__FB2667:
 	ldw	bc, 0x1523                             ; FB26A6  ld BC,0x1523
 	ld	(xiz-16), bc                            ; FB26A9  ld (XIZ+0xf0),BC
 	extz	xbc                                   ; FB26AC  extz XBC
-	extpfx5 0xE3, 0x07, 0xE4, 0xE0, 0x20       ; FB26AE  ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)       ; FB26AE  ld XWA,(XBC+WA)
 	ld	xix, xwa                                ; FB26B3  ld XIX,XWA
 	ld	bc, (xiz-12)                            ; FB26B5  ld BC,(XIZ+0xf4)
 	add	bc, 0x88                               ; FB26B8  add BC,0x0088
 	ld	de, bc                                  ; FB26BC  ld DE,BC
-	extpfx3 0x9E, 0xF0, 0x82                   ; FB26BE  add DE,(XIZ+0xf0)
+	add	de, (xiz-16)                   ; FB26BE  add DE,(XIZ+0xf0)
 	ldw	bc, 0x5A53                             ; FB26C1  ld BC,0x5a53
 	ld	(xiz-18), bc                            ; FB26C4  ld (XIZ+0xee),BC
 	ld	hl, bc                                  ; FB26C7  ld HL,BC
 	add	hl, 0xCC                               ; FB26C9  add HL,0x00cc
 	extz	xbc                                   ; FB26CD  extz XBC
-	extpfx7 0xF3, 0xE5, 0xCD, 0x00, 0x02, 0x08, 0x00 ; FB26CF  ld (XBC+0x00cd),0x0008
+	ldw	(xbc+205), 0x0008 ; FB26CF  ld (XBC+0x00cd),0x0008
 	ld	c, (xiz+16)                             ; FB26D6  ld C,(XIZ+0x10)
 	and	c, 0x80                                ; FB26D9  and C,0x80
 	jr z, VoiceParams_Compute_B__FB26E5        ; FB26DC  jr Z,0xfb26e5
 	extz	xhl                                   ; FB26DE  extz XHL
-	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x08       ; FB26E0  or (XHL+0x01),0x0800
+	orw	(xhl+1), 0x0800       ; FB26E0  or (XHL+0x01),0x0800
 VoiceParams_Compute_B__FB26E5:
 	extz	xhl                                   ; FB26E5  extz XHL
 	ld	(xhl+3), 3                              ; FB26E7  ld (XHL+0x03),0x03
@@ -3629,12 +3629,12 @@ VoiceParams_Compute_B__FB26E5:
 	ld	(xhl+37), de                            ; FB2733  ld (XHL+0x25),DE
 	pushw	hl                                   ; FB2736  push HL
 	call	Voice_ComputePitch                              ; FB2737  call 0xfa7f28
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB273B  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0xFF, 0x00       ; FB2740  ld (XHL+0x2d),0x00ff
+	ldw	(xhl+43), 0x0000       ; FB273B  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x00ff       ; FB2740  ld (XHL+0x2d),0x00ff
 	ld	(xhl+49), 0                             ; FB2745  ld (XHL+0x31),0x00
-	extpfx5 0xBB, 0x32, 0x02, 0x00, 0x00       ; FB2749  ld (XHL+0x32),0x0000
-	extpfx5 0xBB, 0x36, 0x02, 0x00, 0x00       ; FB274E  ld (XHL+0x36),0x0000
-	extpfx5 0xBB, 0x34, 0x02, 0x00, 0x00       ; FB2753  ld (XHL+0x34),0x0000
+	ldw	(xhl+50), 0x0000       ; FB2749  ld (XHL+0x32),0x0000
+	ldw	(xhl+54), 0x0000       ; FB274E  ld (XHL+0x36),0x0000
+	ldw	(xhl+52), 0x0000       ; FB2753  ld (XHL+0x34),0x0000
 	ld	xbc, (xiz+8)                            ; FB2758  ld XBC,(XIZ+0x08)
 	ld	(xbc+5), 0x83                           ; FB275B  ld (XBC+0x05),0x83
 	ld	bc, (xhl+6)                             ; FB275F  ld BC,(XHL+0x06)
@@ -3674,7 +3674,7 @@ VoiceParams_Compute_B__FB2793:
 	push	xwa                                   ; FB27B0  push XWA
 	ld	(xiz-12), de                            ; FB27B1  ld (XIZ+0xf4),DE
 	ldw	wa, 0x5A53                             ; FB27B4  ld WA,0x5a53
-	extpfx3 0x9E, 0xF4, 0x80                   ; FB27B7  add WA,(XIZ+0xf4)
+	add	wa, (xiz-12)                   ; FB27B7  add WA,(XIZ+0xf4)
 	extz	xwa                                   ; FB27BA  extz XWA
 	push	xwa                                   ; FB27BC  push XWA
 	call	MemCopyWords                              ; FB27BD  call 0xf9a038
@@ -3684,7 +3684,7 @@ VoiceParams_Compute_B__FB2793:
 	push	0                                     ; FB27CB  push 0x00
 	push	h                                     ; FB27CD  push H
 	push	0                                     ; FB27CF  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB27D1  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB27D1  push (XIZ+0x0c)
 	call	PartSlot_SetRecordPtr_DF05                              ; FB27D4  call 0xfc376c
 	inc	8, xsp                                 ; FB27D8  inc 0,XSP
 	inc	6, xsp                                 ; FB27DA  inc 6,XSP
@@ -3697,7 +3697,7 @@ VoiceParams_Compute_B__FB27DC:
 	pop	xix                                    ; FB27E8  pop XIX
 	popw	de                                    ; FB27E9  pop DE
 	pop	xhl                                    ; FB27EA  pop XHL
-	unlk32 xiz                                 ; FB27EB  unlk XIZ
+	unlk	xiz                                 ; FB27EB  unlk XIZ
 	ret                                        ; FB27ED  ret
 ; ------------------------------------------------------------------------------
 ; VoiceRegs_Stage_C -- 0xFB27EE..0xFB2899 (172 bytes)
@@ -3719,11 +3719,11 @@ VoiceParams_Compute_B__FB27DC:
 ;          `python3 notes/prom_c_voice_module_check.py` section 10.
 ; Unknown:  ⚠ the helpers.
 VoiceRegs_Stage_C:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB27EE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB27EE  link XIZ,0x0000
 	pushw	hl                                   ; FB27F2  push HL
 	push	xde                                   ; FB27F3  push XDE
 	ld	c, 68:opc                                  ; FB27F4  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB27F6  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB27F6  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FB27F9  ld HL,BC
 	ldw	wa, 0x3BCF                             ; FB27FB  ld WA,0x3bcf
 	ld	de, wa                                  ; FB27FE  ld DE,WA
@@ -3787,7 +3787,7 @@ VoiceRegs_Stage_C:
 	add	xsp, 56                                ; FB288F  add XSP,0x00000038
 	pop	xde                                    ; FB2895  pop XDE
 	popw	hl                                    ; FB2896  pop HL
-	unlk32 xiz                                 ; FB2897  unlk XIZ
+	unlk	xiz                                 ; FB2897  unlk XIZ
 	ret                                        ; FB2899  ret
 ; ------------------------------------------------------------------------------
 ; sub_FB289A -- 0xFB289A..0xFB2A97 (510 bytes)
@@ -3797,7 +3797,7 @@ VoiceRegs_Stage_C:
 ;          0xFC6803} is a strict subset of VoiceParams_Compute_C's ten, which
 ;          follows it immediately (checker section 11).
 sub_FB289A:
-	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FB289A  link XIZ,0xffe4
+	link	xiz, 0xffe4              ; FB289A  link XIZ,0xffe4
 	pushw	hl                                   ; FB289E  push HL
 	pushw	de                                   ; FB289F  push DE
 	push	xix                                   ; FB28A0  push XIX
@@ -3811,7 +3811,7 @@ sub_FB289A:
 	ld	xwa, (xbc+0x1523)                       ; FB28B3  ld XWA,(XBC+0x1523)
 	ld	(xiz-12), xwa                           ; FB28B8  ld (XIZ+0xf4),XWA
 	push	0                                     ; FB28BB  push 0x00
-	extpfx3 0x8E, 0x12, 0x04                   ; FB28BD  push (XIZ+0x12)
+	push	(xiz+18)                   ; FB28BD  push (XIZ+0x12)
 	push	xwa                                   ; FB28C0  push XWA
 	push	0                                     ; FB28C1  push 0x00
 	push	d                                     ; FB28C3  push D
@@ -3824,7 +3824,7 @@ sub_FB289A:
 	add	xiy, xbc                               ; FB28D8  add XIY,XBC
 	ld	(xiz-4), xiy                            ; FB28DA  ld (XIZ+0xfc),XIY
 	push	0                                     ; FB28DD  push 0x00
-	extpfx3 0x8E, 0x12, 0x04                   ; FB28DF  push (XIZ+0x12)
+	push	(xiz+18)                   ; FB28DF  push (XIZ+0x12)
 	ld	xbc, (xiz-8)                            ; FB28E2  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB28E5  push XBC
 	pushw	de                                   ; FB28E6  push DE
@@ -3835,13 +3835,13 @@ sub_FB289A:
 	ld	xbc, (xiz-8)                            ; FB28F1  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB28F4  ld A,(XBC+0x0d)
 	extz	wa                                    ; FB28F7  extz WA
-	extpfx3 0x9E, 0x0E, 0xC0                   ; FB28F9  and WA,(XIZ+0x0e)
+	and	wa, (xiz+14)                   ; FB28F9  and WA,(XIZ+0x0e)
 	add	xsp, 18                                ; FB28FC  add XSP,0x00000012
 	cp	wa, 0:i3                                  ; FB2902  cp WA,0
 	jrl z, sub_FB289A__FB2A65                  ; FB2904  jrl Z,0xfb2a65
 	push	xiy                                   ; FB2907  push XIY
 	push	0                                     ; FB2908  push 0x00
-	extpfx3 0x8E, 0x14, 0x04                   ; FB290A  push (XIZ+0x14)
+	push	(xiz+20)                   ; FB290A  push (XIZ+0x14)
 	call	VelSplit_LayerFromVelocity_b                              ; FB290D  call 0xfa72b3
 	ld	(xiz-10), a                             ; FB2911  ld (XIZ+0xf6),A
 	push	xix                                   ; FB2914  push XIX
@@ -3891,7 +3891,7 @@ sub_FB289A:
 	mul	bc, e                                ; FB2989  mul BC,E
 	add	bc, hl                                 ; FB298B  add BC,HL
 	add	bc, 0x88                               ; FB298D  add BC,0x0088
-	extpfx3 0x9E, 0xE8, 0x81                   ; FB2991  add BC,(XIZ+0xe8)
+	add	bc, (xiz-24)                   ; FB2991  add BC,(XIZ+0xe8)
 	ld	wa, (xiz-18)                            ; FB2994  ld WA,(XIZ+0xee)
 	extz	xwa                                   ; FB2997  extz XWA
 	ld	(xwa+37), bc                            ; FB2999  ld (XWA+0x25),BC
@@ -3910,26 +3910,26 @@ sub_FB289A:
 	extz	xbc                                   ; FB29BD  extz XBC
 	ld	xwa, (xiz-14)                           ; FB29BF  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB29C2  ld (XBC+0x1f),XWA
-	extpfx3 0x9E, 0xEE, 0x04                   ; FB29C5  pushw (XIZ+0xee)
+	pushw	(xiz-18)                   ; FB29C5  pushw (XIZ+0xee)
 	call	Voice_ComputePitch_FromToneRecord                              ; FB29C8  call 0xfa814c
 	ld	bc, (xiz-18)                            ; FB29CC  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29CF  extz XBC
-	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB29D1  ld (XBC+0x2b),0x0000
+	ldw	(xbc+43), 0x0000       ; FB29D1  ld (XBC+0x2b),0x0000
 	ld	bc, (xiz-18)                            ; FB29D6  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29D9  extz XBC
-	extpfx5 0xB9, 0x2D, 0x02, 0xFF, 0x00       ; FB29DB  ld (XBC+0x2d),0x00ff
+	ldw	(xbc+45), 0x00ff       ; FB29DB  ld (XBC+0x2d),0x00ff
 	ld	bc, (xiz-18)                            ; FB29E0  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29E3  extz XBC
 	ld	(xbc+49), 0                             ; FB29E5  ld (XBC+0x31),0x00
 	ld	bc, (xiz-18)                            ; FB29E9  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29EC  extz XBC
-	extpfx5 0xB9, 0x32, 0x02, 0x00, 0x00       ; FB29EE  ld (XBC+0x32),0x0000
+	ldw	(xbc+50), 0x0000       ; FB29EE  ld (XBC+0x32),0x0000
 	ld	bc, (xiz-18)                            ; FB29F3  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB29F6  extz XBC
-	extpfx5 0xB9, 0x36, 0x02, 0x00, 0x00       ; FB29F8  ld (XBC+0x36),0x0000
+	ldw	(xbc+54), 0x0000       ; FB29F8  ld (XBC+0x36),0x0000
 	ld	bc, (xiz-18)                            ; FB29FD  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB2A00  extz XBC
-	extpfx5 0xB9, 0x34, 0x02, 0x00, 0x00       ; FB2A02  ld (XBC+0x34),0x0000
+	ldw	(xbc+52), 0x0000       ; FB2A02  ld (XBC+0x34),0x0000
 	pushw	1                                    ; FB2A07  push 0x0001
 	push	xix                                   ; FB2A0A  push XIX
 	pushw	de                                   ; FB2A0B  push DE
@@ -3943,7 +3943,7 @@ sub_FB289A:
 	extz	xbc                                   ; FB2A1E  extz XBC
 	ld	(xiz-28), xbc                           ; FB2A20  ld (XIZ+0xe4),XBC
 	inc	2, xbc                                 ; FB2A23  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2A25  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2A25  add XBC,(XIZ+0x08)
 	ld	(xbc), h                                ; FB2A28  ld (XBC),H
 	ld	bc, (xiz-18)                            ; FB2A2A  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB2A2D  extz XBC
@@ -3976,11 +3976,11 @@ sub_FB289A__FB2A65:
 	extz	xbc                                   ; FB2A69  extz XBC
 	ld	(xiz-12), xbc                           ; FB2A6B  ld (XIZ+0xf4),XBC
 	inc	2, xbc                                 ; FB2A6E  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2A70  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2A70  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB2A73  ld (XBC),0x00
 	ld	xbc, (xiz-12)                           ; FB2A76  ld XBC,(XIZ+0xf4)
 	inc	6, xbc                                 ; FB2A79  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB2A7B  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB2A7B  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB2A7E  ld (XBC),0x00
 	pushw	0                                    ; FB2A81  push 0x0000
 	push	xix                                   ; FB2A84  push XIX
@@ -3994,7 +3994,7 @@ sub_FB289A__FB2A92:
 	pop	xix                                    ; FB2A92  pop XIX
 	popw	de                                    ; FB2A93  pop DE
 	popw	hl                                    ; FB2A94  pop HL
-	unlk32 xiz                                 ; FB2A95  unlk XIZ
+	unlk	xiz                                 ; FB2A95  unlk XIZ
 	ret                                        ; FB2A97  ret
 ; ------------------------------------------------------------------------------
 ; VoiceParams_Compute_C -- 0xFB2A98..0xFB2EB6 (1055 bytes)
@@ -4006,7 +4006,7 @@ sub_FB289A__FB2A92:
 ;          MemCopyWords (0xF9A038), 0xFA6BB5 and 0xFC376C.
 ; Unknown:  ⚠ the formulae.
 VoiceParams_Compute_C:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB2A98  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FB2A98  link XIZ,0xfff0
 	pushw	hl                                   ; FB2A9C  push HL
 	pushw	de                                   ; FB2A9D  push DE
 	push	xix                                   ; FB2A9E  push XIX
@@ -4028,21 +4028,21 @@ VoiceParams_Compute_C:
 	ld	xwa, (xbc+0x1523)                       ; FB2AC4  ld XWA,(XBC+0x1523)
 	ld	(xiz-14), xwa                           ; FB2AC9  ld (XIZ+0xf2),XWA
 	push	0                                     ; FB2ACC  push 0x00
-	extpfx3 0x8E, 0x0E, 0x04                   ; FB2ACE  push (XIZ+0x0e)
+	push	(xiz+14)                   ; FB2ACE  push (XIZ+0x0e)
 	push	xwa                                   ; FB2AD1  push XWA
 	push	0                                     ; FB2AD2  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2AD4  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2AD4  push (XIZ+0x0c)
 	call	Part_ResolveDrumInstrumentRecord                              ; FB2AD7  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FB2ADB  ld (XIZ+0xf8),XIY
 	add	xiy, 18                                ; FB2ADE  add XIY,0x00000012
 	ld	(xiz-4), xiy                            ; FB2AE4  ld (XIZ+0xfc),XIY
 	push	0                                     ; FB2AE7  push 0x00
-	extpfx3 0x8E, 0x0E, 0x04                   ; FB2AE9  push (XIZ+0x0e)
+	push	(xiz+14)                   ; FB2AE9  push (XIZ+0x0e)
 	ld	xbc, (xiz-8)                            ; FB2AEC  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB2AEF  push XBC
 	pushw	0                                    ; FB2AF0  push 0x0000
 	push	0                                     ; FB2AF3  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2AF5  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2AF5  push (XIZ+0x0c)
 	call	Part_GetPercWaveSelectRecord                              ; FB2AF8  call 0xfb456f
 	ld	xix, xiy                                ; FB2AFC  ld XIX,XIY
 	ld	xbc, (xiz-8)                            ; FB2AFE  ld XBC,(XIZ+0xf8)
@@ -4054,7 +4054,7 @@ VoiceParams_Compute_C:
 	jrl z, VoiceParams_Compute_C__FB2C4B       ; FB2B12  jrl Z,0xfb2c4b
 	push	xiy                                   ; FB2B15  push XIY
 	push	0                                     ; FB2B16  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB2B18  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB2B18  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity_b                              ; FB2B1B  call 0xfa72b3
 	ld	d, a                                    ; FB2B1F  ld D,A
 	push	xix                                   ; FB2B21  push XIX
@@ -4116,31 +4116,31 @@ VoiceParams_Compute_C:
 	extz	xbc                                   ; FB2BB5  extz XBC
 	ld	xwa, (xiz-12)                           ; FB2BB7  ld XWA,(XIZ+0xf4)
 	ld	(xbc+31), xwa                           ; FB2BBA  ld (XBC+0x1f),XWA
-	extpfx3 0x9E, 0xF2, 0x04                   ; FB2BBD  pushw (XIZ+0xf2)
+	pushw	(xiz-14)                   ; FB2BBD  pushw (XIZ+0xf2)
 	call	Voice_ComputePitch_FromToneRecord                              ; FB2BC0  call 0xfa814c
 	ld	bc, (xiz-14)                            ; FB2BC4  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BC7  extz XBC
-	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB2BC9  ld (XBC+0x2b),0x0000
+	ldw	(xbc+43), 0x0000       ; FB2BC9  ld (XBC+0x2b),0x0000
 	ld	bc, (xiz-14)                            ; FB2BCE  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BD1  extz XBC
-	extpfx5 0xB9, 0x2D, 0x02, 0xFF, 0x00       ; FB2BD3  ld (XBC+0x2d),0x00ff
+	ldw	(xbc+45), 0x00ff       ; FB2BD3  ld (XBC+0x2d),0x00ff
 	ld	bc, (xiz-14)                            ; FB2BD8  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BDB  extz XBC
 	ld	(xbc+49), 0                             ; FB2BDD  ld (XBC+0x31),0x00
 	ld	bc, (xiz-14)                            ; FB2BE1  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BE4  extz XBC
-	extpfx5 0xB9, 0x32, 0x02, 0x00, 0x00       ; FB2BE6  ld (XBC+0x32),0x0000
+	ldw	(xbc+50), 0x0000       ; FB2BE6  ld (XBC+0x32),0x0000
 	ld	bc, (xiz-14)                            ; FB2BEB  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BEE  extz XBC
-	extpfx5 0xB9, 0x36, 0x02, 0x00, 0x00       ; FB2BF0  ld (XBC+0x36),0x0000
+	ldw	(xbc+54), 0x0000       ; FB2BF0  ld (XBC+0x36),0x0000
 	ld	bc, (xiz-14)                            ; FB2BF5  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2BF8  extz XBC
-	extpfx5 0xB9, 0x34, 0x02, 0x00, 0x00       ; FB2BFA  ld (XBC+0x34),0x0000
+	ldw	(xbc+52), 0x0000       ; FB2BFA  ld (XBC+0x34),0x0000
 	pushw	1                                    ; FB2BFF  push 0x0001
 	push	xix                                   ; FB2C02  push XIX
 	pushw	0                                    ; FB2C03  push 0x0000
 	push	0                                     ; FB2C06  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C08  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2C08  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB2C0B  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB2C0F  ld XBC,(XIZ+0x08)
 	ld	(xbc+2), 0x80                           ; FB2C12  ld (XBC+0x02),0x80
@@ -4152,7 +4152,7 @@ VoiceParams_Compute_C:
 	pushw	wa                                   ; FB2C22  push WA
 	pushw	0                                    ; FB2C23  push 0x0000
 	push	0                                     ; FB2C26  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C28  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2C28  push (XIZ+0x0c)
 	call	sub_FC4B2E                              ; FB2C2B  call 0xfc4b2e
 	add	xsp, 32                                ; FB2C2F  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB2C35  cp A,0
@@ -4173,7 +4173,7 @@ VoiceParams_Compute_C__FB2C4B:
 	push	xix                                   ; FB2C5C  push XIX
 	pushw	0                                    ; FB2C5D  push 0x0000
 	push	0                                     ; FB2C60  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C62  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2C62  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB2C65  call 0xfc6803
 	inc	8, xsp                                 ; FB2C69  inc 0,XSP
 	inc	2, xsp                                 ; FB2C6B  inc 2,XSP
@@ -4186,21 +4186,21 @@ VoiceParams_Compute_C__FB2C6D:
 	ld	xwa, (xbc+0x1523)                       ; FB2C7A  ld XWA,(XBC+0x1523)
 	ld	(xiz-12), xwa                           ; FB2C7F  ld (XIZ+0xf4),XWA
 	push	0                                     ; FB2C82  push 0x00
-	extpfx3 0x8E, 0x0E, 0x04                   ; FB2C84  push (XIZ+0x0e)
+	push	(xiz+14)                   ; FB2C84  push (XIZ+0x0e)
 	push	xwa                                   ; FB2C87  push XWA
 	push	0                                     ; FB2C88  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2C8A  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2C8A  push (XIZ+0x0c)
 	call	Part_ResolveDrumInstrumentRecord                              ; FB2C8D  call 0xfb49eb
 	ld	(xiz-8), xiy                            ; FB2C91  ld (XIZ+0xf8),XIY
 	add	xiy, 41                                ; FB2C94  add XIY,0x00000029
 	ld	(xiz-4), xiy                            ; FB2C9A  ld (XIZ+0xfc),XIY
 	push	0                                     ; FB2C9D  push 0x00
-	extpfx3 0x8E, 0x0E, 0x04                   ; FB2C9F  push (XIZ+0x0e)
+	push	(xiz+14)                   ; FB2C9F  push (XIZ+0x0e)
 	ld	xbc, (xiz-8)                            ; FB2CA2  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB2CA5  push XBC
 	pushw	1                                    ; FB2CA6  push 0x0001
 	push	0                                     ; FB2CA9  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2CAB  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2CAB  push (XIZ+0x0c)
 	call	Part_GetPercWaveSelectRecord                              ; FB2CAE  call 0xfb456f
 	ld	xix, xiy                                ; FB2CB2  ld XIX,XIY
 	ld	xbc, (xiz-8)                            ; FB2CB4  ld XBC,(XIZ+0xf8)
@@ -4212,7 +4212,7 @@ VoiceParams_Compute_C__FB2C6D:
 	jrl z, VoiceParams_Compute_C__FB2E0B       ; FB2CC8  jrl Z,0xfb2e0b
 	push	xiy                                   ; FB2CCB  push XIY
 	push	0                                     ; FB2CCC  push 0x00
-	extpfx3 0x8E, 0x10, 0x04                   ; FB2CCE  push (XIZ+0x10)
+	push	(xiz+16)                   ; FB2CCE  push (XIZ+0x10)
 	call	VelSplit_LayerFromVelocity_b                              ; FB2CD1  call 0xfa72b3
 	ld	d, a                                    ; FB2CD5  ld D,A
 	push	xix                                   ; FB2CD7  push XIX
@@ -4277,31 +4277,31 @@ VoiceParams_Compute_C__FB2C6D:
 	extz	xbc                                   ; FB2D75  extz XBC
 	ld	xwa, (xiz-12)                           ; FB2D77  ld XWA,(XIZ+0xf4)
 	ld	(xbc+99), xwa                           ; FB2D7A  ld (XBC+0x63),XWA
-	extpfx3 0x9E, 0xF0, 0x04                   ; FB2D7D  pushw (XIZ+0xf0)
+	pushw	(xiz-16)                   ; FB2D7D  pushw (XIZ+0xf0)
 	call	Voice_ComputePitch_FromToneRecord                              ; FB2D80  call 0xfa814c
 	ld	bc, (xiz-14)                            ; FB2D84  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2D87  extz XBC
-	extpfx5 0xB9, 0x6F, 0x02, 0x00, 0x00       ; FB2D89  ld (XBC+0x6f),0x0000
+	ldw	(xbc+111), 0x0000       ; FB2D89  ld (XBC+0x6f),0x0000
 	ld	bc, (xiz-14)                            ; FB2D8E  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2D91  extz XBC
-	extpfx5 0xB9, 0x71, 0x02, 0xFF, 0x00       ; FB2D93  ld (XBC+0x71),0x00ff
+	ldw	(xbc+113), 0x00ff       ; FB2D93  ld (XBC+0x71),0x00ff
 	ld	bc, (xiz-14)                            ; FB2D98  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2D9B  extz XBC
 	ld	(xbc+0x75), 0                           ; FB2D9D  ld (XBC+0x75),0x00
 	ld	bc, (xiz-14)                            ; FB2DA1  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2DA4  extz XBC
-	extpfx5 0xB9, 0x76, 0x02, 0x00, 0x00       ; FB2DA6  ld (XBC+0x76),0x0000
+	ldw	(xbc+118), 0x0000       ; FB2DA6  ld (XBC+0x76),0x0000
 	ld	bc, (xiz-14)                            ; FB2DAB  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2DAE  extz XBC
-	extpfx5 0xB9, 0x7A, 0x02, 0x00, 0x00       ; FB2DB0  ld (XBC+0x7a),0x0000
+	ldw	(xbc+122), 0x0000       ; FB2DB0  ld (XBC+0x7a),0x0000
 	ld	bc, (xiz-14)                            ; FB2DB5  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB2DB8  extz XBC
-	extpfx5 0xB9, 0x78, 0x02, 0x00, 0x00       ; FB2DBA  ld (XBC+0x78),0x0000
+	ldw	(xbc+120), 0x0000       ; FB2DBA  ld (XBC+0x78),0x0000
 	pushw	1                                    ; FB2DBF  push 0x0001
 	push	xix                                   ; FB2DC2  push XIX
 	pushw	1                                    ; FB2DC3  push 0x0001
 	push	0                                     ; FB2DC6  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2DC8  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2DC8  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB2DCB  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB2DCF  ld XBC,(XIZ+0x08)
 	ld	(xbc+3), 0x81                           ; FB2DD2  ld (XBC+0x03),0x81
@@ -4313,7 +4313,7 @@ VoiceParams_Compute_C__FB2C6D:
 	pushw	wa                                   ; FB2DE2  push WA
 	pushw	1                                    ; FB2DE3  push 0x0001
 	push	0                                     ; FB2DE6  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2DE8  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2DE8  push (XIZ+0x0c)
 	call	sub_FC4B2E                              ; FB2DEB  call 0xfc4b2e
 	add	xsp, 32                                ; FB2DEF  add XSP,0x00000020
 	cp	a, 0:i3                                   ; FB2DF5  cp A,0
@@ -4334,7 +4334,7 @@ VoiceParams_Compute_C__FB2E0B:
 	push	xix                                   ; FB2E1C  push XIX
 	pushw	1                                    ; FB2E1D  push 0x0001
 	push	0                                     ; FB2E20  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2E22  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2E22  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB2E25  call 0xfc6803
 	inc	8, xsp                                 ; FB2E29  inc 0,XSP
 	inc	2, xsp                                 ; FB2E2B  inc 2,XSP
@@ -4370,7 +4370,7 @@ VoiceParams_Compute_C__FB2E5C:
 	push	xwa                                   ; FB2E79  push XWA
 	ld	(xiz-12), de                            ; FB2E7A  ld (XIZ+0xf4),DE
 	ldw	wa, 0x5A53                             ; FB2E7D  ld WA,0x5a53
-	extpfx3 0x9E, 0xF4, 0x80                   ; FB2E80  add WA,(XIZ+0xf4)
+	add	wa, (xiz-12)                   ; FB2E80  add WA,(XIZ+0xf4)
 	extz	xwa                                   ; FB2E83  extz XWA
 	push	xwa                                   ; FB2E85  push XWA
 	call	MemCopyWords                              ; FB2E86  call 0xf9a038
@@ -4380,7 +4380,7 @@ VoiceParams_Compute_C__FB2E5C:
 	push	0                                     ; FB2E94  push 0x00
 	push	h                                     ; FB2E96  push H
 	push	0                                     ; FB2E98  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB2E9A  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB2E9A  push (XIZ+0x0c)
 	call	PartSlot_SetRecordPtr_DF05                              ; FB2E9D  call 0xfc376c
 	inc	8, xsp                                 ; FB2EA1  inc 0,XSP
 	inc	6, xsp                                 ; FB2EA3  inc 6,XSP
@@ -4393,7 +4393,7 @@ VoiceParams_Compute_C__FB2EA5:
 	pop	xix                                    ; FB2EB1  pop XIX
 	popw	de                                    ; FB2EB2  pop DE
 	popw	hl                                    ; FB2EB3  pop HL
-	unlk32 xiz                                 ; FB2EB4  unlk XIZ
+	unlk	xiz                                 ; FB2EB4  unlk XIZ
 	ret                                        ; FB2EB6  ret
 ; ------------------------------------------------------------------------------
 ; VoiceRegs_Stage_D -- 0xFB2EB7..0xFB2F73 (189 bytes)
@@ -4408,11 +4408,11 @@ VoiceParams_Compute_C__FB2EA5:
 ;          both ways, and the C-only direction is EMPTY).
 ; Unknown:  ⚠ the helpers.
 VoiceRegs_Stage_D:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB2EB7  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB2EB7  link XIZ,0x0000
 	pushw	hl                                   ; FB2EBB  push HL
 	push	xde                                   ; FB2EBC  push XDE
 	ld	c, 68:opc                                  ; FB2EBD  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB2EBF  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB2EBF  mul BC,(XIZ+0x08)
 	ld	hl, bc                                  ; FB2EC2  ld HL,BC
 	ldw	wa, 0x3BCF                             ; FB2EC4  ld WA,0x3bcf
 	ld	de, wa                                  ; FB2EC7  ld DE,WA
@@ -4482,7 +4482,7 @@ VoiceRegs_Stage_D:
 	add	xsp, 62                                ; FB2F69  add XSP,0x0000003e
 	pop	xde                                    ; FB2F6F  pop XDE
 	popw	hl                                    ; FB2F70  pop HL
-	unlk32 xiz                                 ; FB2F71  unlk XIZ
+	unlk	xiz                                 ; FB2F71  unlk XIZ
 	ret                                        ; FB2F73  ret
 ; ------------------------------------------------------------------------------
 ; sub_FB2F74 -- 0xFB2F74..0xFB31AA (567 bytes)
@@ -4492,7 +4492,7 @@ VoiceRegs_Stage_D:
 ;          0xFC6803} is a strict subset of VoiceParams_Compute_D's ten (checker
 ;          section 11).
 sub_FB2F74:
-	link32 0xEE, 0x0C, 0xE0, 0xFF              ; FB2F74  link XIZ,0xffe0
+	link	xiz, 0xffe0              ; FB2F74  link XIZ,0xffe0
 	pushw	hl                                   ; FB2F78  push HL
 	pushw	de                                   ; FB2F79  push DE
 	push	xix                                   ; FB2F7A  push XIX
@@ -4533,17 +4533,17 @@ sub_FB2F74:
 	ld	(xiz-30), bc                            ; FB2FDB  ld (XIZ+0xe2),BC
 	ld	xwa, (xiz-28)                           ; FB2FDE  ld XWA,(XIZ+0xe4)
 	add	xwa, 0x99                              ; FB2FE1  add XWA,0x00000099
-	extpfx3 0xAE, 0xEA, 0x80                   ; FB2FE7  add XWA,(XIZ+0xea)
+	add	xwa, (xiz-22)                   ; FB2FE7  add XWA,(XIZ+0xea)
 	ld	c, (xwa)                                ; FB2FEA  ld C,(XWA)
 	extz	bc                                    ; FB2FEC  extz BC
 	ld	(xiz-32), bc                            ; FB2FEE  ld (XIZ+0xe0),BC
 	push	0                                     ; FB2FF1  push 0x00
-	extpfx3 0x8E, 0xE8, 0x04                   ; FB2FF3  push (XIZ+0xe8)
+	push	(xiz-24)                   ; FB2FF3  push (XIZ+0xe8)
 	ld	w, (xiz-18)                             ; FB2FF6  ld W,(XIZ+0xee)
 	push	0                                     ; FB2FF9  push 0x00
 	push	w                                     ; FB2FFB  push W
 	pushw	bc                                   ; FB2FFD  push BC
-	extpfx3 0x9E, 0xE2, 0x04                   ; FB2FFE  pushw (XIZ+0xe2)
+	pushw	(xiz-30)                   ; FB2FFE  pushw (XIZ+0xe2)
 	call	DrumKit_ResolveInstrumentRecord                              ; FB3001  call 0xfb48f7
 	ld	xix, xiy                                ; FB3005  ld XIX,XIY
 	ld	c, 23:opc                                  ; FB3007  ld C,0x17
@@ -4565,11 +4565,11 @@ sub_FB2F74:
 	jrl z, sub_FB2F74__FB3177                  ; FB3034  jrl Z,0xfb3177
 	ld	c, (xix+13)                             ; FB3037  ld C,(XIX+0x0d)
 	extz	bc                                    ; FB303A  extz BC
-	extpfx3 0x9E, 0x0E, 0xC1                   ; FB303C  and BC,(XIZ+0x0e)
+	and	bc, (xiz+14)                   ; FB303C  and BC,(XIZ+0x0e)
 	jrl z, sub_FB2F74__FB3177                  ; FB303F  jrl Z,0xfb3177
 	push	xiy                                   ; FB3042  push XIY
 	push	0                                     ; FB3043  push 0x00
-	extpfx3 0x8E, 0x14, 0x04                   ; FB3045  push (XIZ+0x14)
+	push	(xiz+20)                   ; FB3045  push (XIZ+0x14)
 	call	VelSplit_LayerFromVelocity_b                              ; FB3048  call 0xfa72b3
 	ld	(xiz-10), a                             ; FB304C  ld (XIZ+0xf6),A
 	ld	xbc, (xiz-4)                            ; FB304F  ld XBC,(XIZ+0xfc)
@@ -4630,26 +4630,26 @@ sub_FB2F74:
 	extz	xbc                                   ; FB30E3  extz XBC
 	ld	xwa, (xiz-14)                           ; FB30E5  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB30E8  ld (XBC+0x1f),XWA
-	extpfx3 0x9E, 0xEE, 0x04                   ; FB30EB  pushw (XIZ+0xee)
+	pushw	(xiz-18)                   ; FB30EB  pushw (XIZ+0xee)
 	call	sub_FC36BE                              ; FB30EE  call 0xfc36be
 	ld	bc, (xiz-18)                            ; FB30F2  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB30F5  extz XBC
-	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB30F7  ld (XBC+0x2b),0x0000
+	ldw	(xbc+43), 0x0000       ; FB30F7  ld (XBC+0x2b),0x0000
 	ld	bc, (xiz-18)                            ; FB30FC  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB30FF  extz XBC
-	extpfx5 0xB9, 0x2D, 0x02, 0xFF, 0x00       ; FB3101  ld (XBC+0x2d),0x00ff
+	ldw	(xbc+45), 0x00ff       ; FB3101  ld (XBC+0x2d),0x00ff
 	ld	bc, (xiz-18)                            ; FB3106  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB3109  extz XBC
 	ld	(xbc+49), 0                             ; FB310B  ld (XBC+0x31),0x00
 	ld	bc, (xiz-18)                            ; FB310F  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB3112  extz XBC
-	extpfx5 0xB9, 0x32, 0x02, 0x00, 0x00       ; FB3114  ld (XBC+0x32),0x0000
+	ldw	(xbc+50), 0x0000       ; FB3114  ld (XBC+0x32),0x0000
 	ld	bc, (xiz-18)                            ; FB3119  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB311C  extz XBC
-	extpfx5 0xB9, 0x36, 0x02, 0x00, 0x00       ; FB311E  ld (XBC+0x36),0x0000
+	ldw	(xbc+54), 0x0000       ; FB311E  ld (XBC+0x36),0x0000
 	ld	bc, (xiz-18)                            ; FB3123  ld BC,(XIZ+0xee)
 	extz	xbc                                   ; FB3126  extz XBC
-	extpfx5 0xB9, 0x34, 0x02, 0x00, 0x00       ; FB3128  ld (XBC+0x34),0x0000
+	ldw	(xbc+52), 0x0000       ; FB3128  ld (XBC+0x34),0x0000
 	ld	c, (xiz+22)                             ; FB312D  ld C,(XIZ+0x16)
 	set	7, c                                   ; FB3130  set 0x07,C
 	ld	(xiz-24), c                             ; FB3133  ld (XIZ+0xe8),C
@@ -4658,7 +4658,7 @@ sub_FB2F74:
 	extz	xbc                                   ; FB313A  extz XBC
 	ld	(xiz-28), xbc                           ; FB313C  ld (XIZ+0xe4),XBC
 	inc	2, xbc                                 ; FB313F  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB3141  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB3141  add XBC,(XIZ+0x08)
 	ld	a, (xiz-24)                             ; FB3144  ld A,(XIZ+0xe8)
 	ld	(xbc), a                                ; FB3147  ld (XBC),A
 	ld	bc, (xiz-18)                            ; FB3149  ld BC,(XIZ+0xee)
@@ -4687,11 +4687,11 @@ sub_FB2F74__FB3177:
 	extz	xbc                                   ; FB317B  extz XBC
 	ld	xix, xbc                                ; FB317D  ld XIX,XBC
 	inc	2, xbc                                 ; FB317F  inc 2,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB3181  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB3181  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB3184  ld (XBC),0x00
 	ld	xbc, xix                                ; FB3187  ld XBC,XIX
 	inc	6, xbc                                 ; FB3189  inc 6,XBC
-	extpfx3 0xAE, 0x08, 0x81                   ; FB318B  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB318B  add XBC,(XIZ+0x08)
 	ld	(xbc), 0                                ; FB318E  ld (XBC),0x00
 	pushw	0                                    ; FB3191  push 0x0000
 sub_FB2F74__FB3194:
@@ -4706,7 +4706,7 @@ sub_FB2F74__FB3194:
 	pop	xix                                    ; FB31A5  pop XIX
 	popw	de                                    ; FB31A6  pop DE
 	popw	hl                                    ; FB31A7  pop HL
-	unlk32 xiz                                 ; FB31A8  unlk XIZ
+	unlk	xiz                                 ; FB31A8  unlk XIZ
 	ret                                        ; FB31AA  ret
 ; ------------------------------------------------------------------------------
 ; VoiceParams_Compute_D -- 0xFB31AB..0xFB3633 (1161 bytes)
@@ -4718,7 +4718,7 @@ sub_FB2F74__FB3194:
 ;          0xFC376C.
 ; Unknown:  ⚠ the formulae.
 VoiceParams_Compute_D:
-	link32 0xEE, 0x0C, 0xE2, 0xFF              ; FB31AB  link XIZ,0xffe2
+	link	xiz, 0xffe2              ; FB31AB  link XIZ,0xffe2
 	pushw	hl                                   ; FB31AF  push HL
 	pushw	de                                   ; FB31B0  push DE
 	push	xix                                   ; FB31B1  push XIX
@@ -4766,17 +4766,17 @@ VoiceParams_Compute_D:
 	ld	(xiz-28), bc                            ; FB3225  ld (XIZ+0xe4),BC
 	ld	xwa, (xiz-26)                           ; FB3228  ld XWA,(XIZ+0xe6)
 	add	xwa, 0x99                              ; FB322B  add XWA,0x00000099
-	extpfx3 0xAE, 0xEC, 0x80                   ; FB3231  add XWA,(XIZ+0xec)
+	add	xwa, (xiz-20)                   ; FB3231  add XWA,(XIZ+0xec)
 	ld	c, (xwa)                                ; FB3234  ld C,(XWA)
 	extz	bc                                    ; FB3236  extz BC
 	ld	(xiz-30), bc                            ; FB3238  ld (XIZ+0xe2),BC
 	push	0                                     ; FB323B  push 0x00
-	extpfx3 0x8E, 0xEA, 0x04                   ; FB323D  push (XIZ+0xea)
+	push	(xiz-22)                   ; FB323D  push (XIZ+0xea)
 	ld	w, (xiz-16)                             ; FB3240  ld W,(XIZ+0xf0)
 	push	0                                     ; FB3243  push 0x00
 	push	w                                     ; FB3245  push W
 	pushw	bc                                   ; FB3247  push BC
-	extpfx3 0x9E, 0xE4, 0x04                   ; FB3248  pushw (XIZ+0xe4)
+	pushw	(xiz-28)                   ; FB3248  pushw (XIZ+0xe4)
 	call	DrumKit_ResolveInstrumentRecord                              ; FB324B  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FB324F  ld (XIZ+0xf8),XIY
 	add	xiy, 18                                ; FB3252  add XIY,0x00000012
@@ -4855,26 +4855,26 @@ VoiceParams_Compute_D:
 	extz	xbc                                   ; FB331C  extz XBC
 	ld	xwa, (xiz-14)                           ; FB331E  ld XWA,(XIZ+0xf2)
 	ld	(xbc+31), xwa                           ; FB3321  ld (XBC+0x1f),XWA
-	extpfx3 0x9E, 0xF0, 0x04                   ; FB3324  pushw (XIZ+0xf0)
+	pushw	(xiz-16)                   ; FB3324  pushw (XIZ+0xf0)
 	call	sub_FC36BE                              ; FB3327  call 0xfc36be
 	ld	bc, (xiz-16)                            ; FB332B  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB332E  extz XBC
-	extpfx5 0xB9, 0x2B, 0x02, 0x00, 0x00       ; FB3330  ld (XBC+0x2b),0x0000
+	ldw	(xbc+43), 0x0000       ; FB3330  ld (XBC+0x2b),0x0000
 	ld	bc, (xiz-16)                            ; FB3335  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB3338  extz XBC
-	extpfx5 0xB9, 0x2D, 0x02, 0xFF, 0x00       ; FB333A  ld (XBC+0x2d),0x00ff
+	ldw	(xbc+45), 0x00ff       ; FB333A  ld (XBC+0x2d),0x00ff
 	ld	bc, (xiz-16)                            ; FB333F  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB3342  extz XBC
 	ld	(xbc+49), 0                             ; FB3344  ld (XBC+0x31),0x00
 	ld	bc, (xiz-16)                            ; FB3348  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB334B  extz XBC
-	extpfx5 0xB9, 0x32, 0x02, 0x00, 0x00       ; FB334D  ld (XBC+0x32),0x0000
+	ldw	(xbc+50), 0x0000       ; FB334D  ld (XBC+0x32),0x0000
 	ld	bc, (xiz-16)                            ; FB3352  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB3355  extz XBC
-	extpfx5 0xB9, 0x36, 0x02, 0x00, 0x00       ; FB3357  ld (XBC+0x36),0x0000
+	ldw	(xbc+54), 0x0000       ; FB3357  ld (XBC+0x36),0x0000
 	ld	bc, (xiz-16)                            ; FB335C  ld BC,(XIZ+0xf0)
 	extz	xbc                                   ; FB335F  extz XBC
-	extpfx5 0xB9, 0x34, 0x02, 0x00, 0x00       ; FB3361  ld (XBC+0x34),0x0000
+	ldw	(xbc+52), 0x0000       ; FB3361  ld (XBC+0x34),0x0000
 	ld	xbc, (xiz+8)                            ; FB3366  ld XBC,(XIZ+0x08)
 	ld	(xbc+2), 0x83                           ; FB3369  ld (XBC+0x02),0x83
 	ld	bc, (xiz-16)                            ; FB336D  ld BC,(XIZ+0xf0)
@@ -4903,10 +4903,10 @@ VoiceParams_Compute_D__FB33A5:
 	push	xix                                   ; FB33A5  push XIX
 	pushw	0                                    ; FB33A6  push 0x0000
 	push	0                                     ; FB33A9  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB33AB  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB33AB  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB33AE  call 0xfc6803
 	ld	xbc, (xiz+8)                            ; FB33B2  ld XBC,(XIZ+0x08)
-	extpfx4 0x89, 0x06, 0x3E, 0x40             ; FB33B5  or (XBC+0x06),0x40
+	or	(xbc+6), 0x40             ; FB33B5  or (XBC+0x06),0x40
 	ld	xbc, (xiz+8)                            ; FB33B9  ld XBC,(XIZ+0x08)
 	ld	(xbc+3), 0                              ; FB33BC  ld (XBC+0x03),0x00
 	ld	xbc, (xiz+8)                            ; FB33C0  ld XBC,(XIZ+0x08)
@@ -4950,7 +4950,7 @@ VoiceParams_Compute_D__FB33CE:
 	ld	(xiz-26), bc                            ; FB342A  ld (XIZ+0xe6),BC
 	ld	xwa, (xiz-24)                           ; FB342D  ld XWA,(XIZ+0xe8)
 	add	xwa, 0x99                              ; FB3430  add XWA,0x00000099
-	extpfx3 0xAE, 0xEC, 0x80                   ; FB3436  add XWA,(XIZ+0xec)
+	add	xwa, (xiz-20)                   ; FB3436  add XWA,(XIZ+0xec)
 	ld	c, (xwa)                                ; FB3439  ld C,(XWA)
 	extz	bc                                    ; FB343B  extz BC
 	ld	(xiz-28), bc                            ; FB343D  ld (XIZ+0xe4),BC
@@ -4960,7 +4960,7 @@ VoiceParams_Compute_D__FB33CE:
 	push	0                                     ; FB3447  push 0x00
 	push	w                                     ; FB3449  push W
 	pushw	bc                                   ; FB344B  push BC
-	extpfx3 0x9E, 0xE6, 0x04                   ; FB344C  pushw (XIZ+0xe6)
+	pushw	(xiz-26)                   ; FB344C  pushw (XIZ+0xe6)
 	call	DrumKit_ResolveInstrumentRecord                              ; FB344F  call 0xfb48f7
 	ld	(xiz-8), xiy                            ; FB3453  ld (XIZ+0xf8),XIY
 	add	xiy, 41                                ; FB3456  add XIY,0x00000029
@@ -5037,26 +5037,26 @@ VoiceParams_Compute_D__FB33CE:
 	extz	xbc                                   ; FB351D  extz XBC
 	ld	xwa, (xiz-12)                           ; FB351F  ld XWA,(XIZ+0xf4)
 	ld	(xbc+99), xwa                           ; FB3522  ld (XBC+0x63),XWA
-	extpfx3 0x9E, 0xF0, 0x04                   ; FB3525  pushw (XIZ+0xf0)
+	pushw	(xiz-16)                   ; FB3525  pushw (XIZ+0xf0)
 	call	sub_FC36BE                              ; FB3528  call 0xfc36be
 	ld	bc, (xiz-14)                            ; FB352C  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB352F  extz XBC
-	extpfx5 0xB9, 0x6F, 0x02, 0x00, 0x00       ; FB3531  ld (XBC+0x6f),0x0000
+	ldw	(xbc+111), 0x0000       ; FB3531  ld (XBC+0x6f),0x0000
 	ld	bc, (xiz-14)                            ; FB3536  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB3539  extz XBC
-	extpfx5 0xB9, 0x71, 0x02, 0xFF, 0x00       ; FB353B  ld (XBC+0x71),0x00ff
+	ldw	(xbc+113), 0x00ff       ; FB353B  ld (XBC+0x71),0x00ff
 	ld	bc, (xiz-14)                            ; FB3540  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB3543  extz XBC
 	ld	(xbc+0x75), 0                           ; FB3545  ld (XBC+0x75),0x00
 	ld	bc, (xiz-14)                            ; FB3549  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB354C  extz XBC
-	extpfx5 0xB9, 0x76, 0x02, 0x00, 0x00       ; FB354E  ld (XBC+0x76),0x0000
+	ldw	(xbc+118), 0x0000       ; FB354E  ld (XBC+0x76),0x0000
 	ld	bc, (xiz-14)                            ; FB3553  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB3556  extz XBC
-	extpfx5 0xB9, 0x7A, 0x02, 0x00, 0x00       ; FB3558  ld (XBC+0x7a),0x0000
+	ldw	(xbc+122), 0x0000       ; FB3558  ld (XBC+0x7a),0x0000
 	ld	bc, (xiz-14)                            ; FB355D  ld BC,(XIZ+0xf2)
 	extz	xbc                                   ; FB3560  extz XBC
-	extpfx5 0xB9, 0x78, 0x02, 0x00, 0x00       ; FB3562  ld (XBC+0x78),0x0000
+	ldw	(xbc+120), 0x0000       ; FB3562  ld (XBC+0x78),0x0000
 	ld	xbc, (xiz+8)                            ; FB3567  ld XBC,(XIZ+0x08)
 	ld	(xbc+3), 0x83                           ; FB356A  ld (XBC+0x03),0x83
 	ld	bc, (xiz-14)                            ; FB356E  ld BC,(XIZ+0xf2)
@@ -5085,7 +5085,7 @@ VoiceParams_Compute_D__FB35A6:
 	push	xix                                   ; FB35A6  push XIX
 	pushw	1                                    ; FB35A7  push 0x0001
 	push	0                                     ; FB35AA  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB35AC  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB35AC  push (XIZ+0x0c)
 	call	Pack104_LoadElementWaveSelRec                              ; FB35AF  call 0xfc6803
 	inc	8, xsp                                 ; FB35B3  inc 0,XSP
 	inc	2, xsp                                 ; FB35B5  inc 2,XSP
@@ -5105,7 +5105,7 @@ VoiceParams_Compute_D__FB35B7:
 	extz	bc                                    ; FB35DD  extz BC
 	extz	xbc                                   ; FB35DF  extz XBC
 	add	xbc, 10                                ; FB35E1  add XBC,0x0000000a
-	extpfx3 0xAE, 0x08, 0x81                   ; FB35E7  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB35E7  add XBC,(XIZ+0x08)
 	ld	h, (xbc)                                ; FB35EA  ld H,(XBC)
 	pop	xiy                                    ; FB35EC  pop XIY
 	cp	h, 64                                   ; FB35ED  cp H,0x40
@@ -5131,7 +5131,7 @@ VoiceParams_Compute_D__FB35B7:
 	push	0                                     ; FB361D  push 0x00
 	push	h                                     ; FB361F  push H
 	push	0                                     ; FB3621  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB3623  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB3623  push (XIZ+0x0c)
 	call	PartSlot_SetRecordPtr_DF05                              ; FB3626  call 0xfc376c
 	inc	8, xsp                                 ; FB362A  inc 0,XSP
 	inc	6, xsp                                 ; FB362C  inc 6,XSP
@@ -5139,7 +5139,7 @@ VoiceParams_Compute_D__FB362E:
 	pop	xix                                    ; FB362E  pop XIX
 	popw	de                                    ; FB362F  pop DE
 	popw	hl                                    ; FB3630  pop HL
-	unlk32 xiz                                 ; FB3631  unlk XIZ
+	unlk	xiz                                 ; FB3631  unlk XIZ
 	ret                                        ; FB3633  ret
 ; ------------------------------------------------------------------------------
 ; MidiNote_OnTail -- 0xFB3634..0xFB3749 (278 bytes)
@@ -5162,7 +5162,7 @@ VoiceParams_Compute_D__FB362E:
 ;          checker section 12, because "twin" in this block means same length and
 ;          same call shape and never same code.
 MidiNote_OnTail:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB3634  link XIZ,0xffec
+	link	xiz, 0xffec              ; FB3634  link XIZ,0xffec
 	pushw	hl                                   ; FB3638  push HL
 	pushw	de                                   ; FB3639  push DE
 	push	xix                                   ; FB363A  push XIX
@@ -5187,19 +5187,19 @@ MidiNote_OnTail:
 	and	c, 0x80                                ; FB3673  and C,0x80
 	jrl nz, MidiNote_OnTail__FB3744            ; FB3676  jrl NZ,0xfb3744
 	push	0                                     ; FB3679  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB367B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB367B  push (XIZ+0x08)
 	call	PartRec_UpdateRepeatCounter                              ; FB367E  call 0xfa7e2c
 	push	0                                     ; FB3682  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB3684  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB3684  push (XIZ+0x0c)
 	push	0                                     ; FB3687  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB3689  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB3689  push (XIZ+0x0a)
 	push	0                                     ; FB368C  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB368E  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB368E  push (XIZ+0x08)
 	lda	xbc, (xiz-14)                          ; FB3691  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FB3694  push XBC
 	calr VoiceParams_Compute_D                 ; FB3695  calr 0xfb31ab
 	push	0                                     ; FB3698  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB369A  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB369A  push (XIZ+0x08)
 	call	Pack104_SetInputs_PartRecord                              ; FB369D  call 0xfc4bb6
 	ld	h, (xiz-4)                              ; FB36A1  ld H,(XIZ+0xfc)
 	inc	8, xsp                                 ; FB36A4  inc 0,XSP
@@ -5215,7 +5215,7 @@ MidiNote_OnTail:
 	ld	(xiz-20), xwa                           ; FB36C0  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FB36C3  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FB36C5  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FB36C8  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FB36C8  ld (XBC+0x02),0xff00
 	nop                                        ; FB36CD  nop
 	nop                                        ; FB36CE  nop
 	nop                                        ; FB36CF  nop
@@ -5228,7 +5228,7 @@ MidiNote_OnTail:
 	ld	(xiz-20), xwa                           ; FB36E0  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FB36E3  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FB36E5  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FB36E8  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FB36E8  ld (XBC+0x02),0xff80
 	push	xix                                   ; FB36ED  push XIX
 	push	0                                     ; FB36EE  push 0x00
 	push	h                                     ; FB36F0  push H
@@ -5270,7 +5270,7 @@ MidiNote_OnTail__FB3744:
 	pop	xix                                    ; FB3744  pop XIX
 	popw	de                                    ; FB3745  pop DE
 	popw	hl                                    ; FB3746  pop HL
-	unlk32 xiz                                 ; FB3747  unlk XIZ
+	unlk	xiz                                 ; FB3747  unlk XIZ
 	ret                                        ; FB3749  ret
 ; ------------------------------------------------------------------------------
 ; MidiNote_OffTail -- 0xFB374A..0xFB385F (278 bytes)
@@ -5284,7 +5284,7 @@ MidiNote_OnTail__FB3744:
 ;          its one caller and the arm it is in, nothing else.
 ; Unknown:  ⚠ as above.
 MidiNote_OffTail:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB374A  link XIZ,0xffec
+	link	xiz, 0xffec              ; FB374A  link XIZ,0xffec
 	pushw	hl                                   ; FB374E  push HL
 	pushw	de                                   ; FB374F  push DE
 	push	xix                                   ; FB3750  push XIX
@@ -5306,19 +5306,19 @@ MidiNote_OffTail:
 	and	wa, 7                                  ; FB377F  and WA,0x0007
 	jrl z, MidiNote_OffTail__FB385A            ; FB3783  jrl Z,0xfb385a
 	push	0                                     ; FB3786  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3788  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3788  push (XIZ+0x08)
 	call	PartRec_UpdateRepeatCounter                              ; FB378B  call 0xfa7e2c
 	push	0                                     ; FB378F  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB3791  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB3791  push (XIZ+0x0c)
 	push	0                                     ; FB3794  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB3796  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB3796  push (XIZ+0x0a)
 	push	0                                     ; FB3799  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB379B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB379B  push (XIZ+0x08)
 	lda	xbc, (xiz-14)                          ; FB379E  lda XBC,XIZ+0xf2
 	push	xbc                                   ; FB37A1  push XBC
 	calr VoiceParams_Compute_D                 ; FB37A2  calr 0xfb31ab
 	push	0                                     ; FB37A5  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB37A7  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB37A7  push (XIZ+0x08)
 	call	Pack104_SetInputs_PartRecord                              ; FB37AA  call 0xfc4bb6
 	ld	h, (xiz-3)                              ; FB37AE  ld H,(XIZ+0xfd)
 	inc	8, xsp                                 ; FB37B1  inc 0,XSP
@@ -5334,7 +5334,7 @@ MidiNote_OffTail:
 	ld	(xiz-20), xwa                           ; FB37CD  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FB37D0  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FB37D2  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FB37D5  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FB37D5  ld (XBC+0x02),0xff00
 	nop                                        ; FB37DA  nop
 	nop                                        ; FB37DB  nop
 	nop                                        ; FB37DC  nop
@@ -5347,7 +5347,7 @@ MidiNote_OffTail:
 	ld	(xiz-20), xwa                           ; FB37ED  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FB37F0  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FB37F2  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FB37F5  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FB37F5  ld (XBC+0x02),0xff80
 	push	xix                                   ; FB37FA  push XIX
 	push	0                                     ; FB37FB  push 0x00
 	push	h                                     ; FB37FD  push H
@@ -5393,7 +5393,7 @@ MidiNote_OffTail__FB385A:
 	pop	xix                                    ; FB385A  pop XIX
 	popw	de                                    ; FB385B  pop DE
 	popw	hl                                    ; FB385C  pop HL
-	unlk32 xiz                                 ; FB385D  unlk XIZ
+	unlk	xiz                                 ; FB385D  unlk XIZ
 	ret                                        ; FB385F  ret
 ; ------------------------------------------------------------------------------
 ; ★ MidiNote_OnByPartMode -- 0xFB3860..0xFB3C27 (968 bytes)
@@ -5430,7 +5430,7 @@ MidiNote_OffTail__FB385A:
 ;          inside this routine and was not traced.  ⚠ what the Z test at 0xFB3946
 ;          tests, i.e. what makes a voice take Stage_A rather than Stage_C.
 MidiNote_OnByPartMode:
-	link32 0xEE, 0x0C, 0xE8, 0xFF              ; FB3860  link XIZ,0xffe8
+	link	xiz, 0xffe8              ; FB3860  link XIZ,0xffe8
 	pushw	hl                                   ; FB3864  push HL
 	pushw	de                                   ; FB3865  push DE
 	push	xix                                   ; FB3866  push XIX
@@ -5453,19 +5453,19 @@ MidiNote_OnByPartMode:
 	jrl MidiNote_OnByPartMode__FB3C0E          ; FB3898  jrl T,0xfb3c0e
 MidiNote_OnByPartMode__FB389B:
 	push	0                                     ; FB389B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB389D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB389D  push (XIZ+0x08)
 	call	PartRec_UpdateRepeatCounter                              ; FB38A0  call 0xfa7e2c
 	push	0                                     ; FB38A4  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB38A6  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB38A6  push (XIZ+0x0c)
 	push	0                                     ; FB38A9  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB38AB  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB38AB  push (XIZ+0x0a)
 	push	0                                     ; FB38AE  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB38B0  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB38B0  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB38B3  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB38B6  push XBC
 	calr VoiceParams_Compute_A                 ; FB38B7  calr 0xfb0e4f
 	push	0                                     ; FB38BA  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB38BC  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB38BC  push (XIZ+0x08)
 	call	Pack104_SetInputs_PartRecord                              ; FB38BF  call 0xfc4bb6
 	ld	l, 0:opc                                   ; FB38C3  ld L,0x00
 	ld	xix, 0x10C000                           ; FB38C5  ld XIX,0x0010c000
@@ -5488,7 +5488,7 @@ MidiNote_OnByPartMode__FB38DD:
 	add	bc, 0x840                              ; FB38F0  add BC,0x0840
 	ld	(xix), bc                               ; FB38F4  ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB38F6  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x00, 0xFF             ; FB38F9  ld (XBC),0xff00
+	ldw	(xbc), 0xff00             ; FB38F9  ld (XBC),0xff00
 	nop                                        ; FB38FD  nop
 	nop                                        ; FB38FE  nop
 	nop                                        ; FB38FF  nop
@@ -5498,7 +5498,7 @@ MidiNote_OnByPartMode__FB38DD:
 	add	bc, 0x800                              ; FB3904  add BC,0x0800
 	ld	(xix), bc                               ; FB3908  ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB390A  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x80, 0xFF             ; FB390D  ld (XBC),0xff80
+	ldw	(xbc), 0xff80             ; FB390D  ld (XBC),0xff80
 	lda	xbc, (0xD7A2:24)                       ; FB3911  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3916  push XBC
 	push	0                                     ; FB3917  push 0x00
@@ -5593,19 +5593,19 @@ MidiNote_OnByPartMode__FB39DB:
 	jrl MidiNote_OnByPartMode__FB3C04          ; FB39E3  jrl T,0xfb3c04
 MidiNote_OnByPartMode__FB39E6:
 	push	0                                     ; FB39E6  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB39E8  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB39E8  push (XIZ+0x08)
 	call	PartRec_UpdateRepeatCounter                              ; FB39EB  call 0xfa7e2c
 	push	0                                     ; FB39EF  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB39F1  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB39F1  push (XIZ+0x0c)
 	push	0                                     ; FB39F4  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB39F6  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB39F6  push (XIZ+0x0a)
 	push	0                                     ; FB39F9  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB39FB  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB39FB  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB39FE  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB3A01  push XBC
 	calr VoiceParams_Compute_B                 ; FB3A02  calr 0xfb2172
 	push	0                                     ; FB3A05  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3A07  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3A07  push (XIZ+0x08)
 	call	Pack104_SetInputs_PartRecord                              ; FB3A0A  call 0xfc4bb6
 	ld	l, 0:opc                                   ; FB3A0E  ld L,0x00
 	ld	xix, 0x10C000                           ; FB3A10  ld XIX,0x0010c000
@@ -5628,7 +5628,7 @@ MidiNote_OnByPartMode__FB3A28:
 	add	bc, 0x840                              ; FB3A3B  add BC,0x0840
 	ld	(xix), bc                               ; FB3A3F  ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB3A41  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x00, 0xFF             ; FB3A44  ld (XBC),0xff00
+	ldw	(xbc), 0xff00             ; FB3A44  ld (XBC),0xff00
 	nop                                        ; FB3A48  nop
 	nop                                        ; FB3A49  nop
 	nop                                        ; FB3A4A  nop
@@ -5638,7 +5638,7 @@ MidiNote_OnByPartMode__FB3A28:
 	add	bc, 0x800                              ; FB3A4F  add BC,0x0800
 	ld	(xix), bc                               ; FB3A53  ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB3A55  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x80, 0xFF             ; FB3A58  ld (XBC),0xff80
+	ldw	(xbc), 0xff80             ; FB3A58  ld (XBC),0xff80
 	lda	xbc, (0xD7A2:24)                       ; FB3A5C  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3A61  push XBC
 	push	0                                     ; FB3A62  push 0x00
@@ -5704,16 +5704,16 @@ MidiNote_OnByPartMode__FB3AE3:
 	jrl MidiNote_OnByPartMode__FB3C04          ; FB3AEB  jrl T,0xfb3c04
 MidiNote_OnByPartMode__FB3AEE:
 	push	0                                     ; FB3AEE  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB3AF0  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB3AF0  push (XIZ+0x0c)
 	push	0                                     ; FB3AF3  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB3AF5  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB3AF5  push (XIZ+0x0a)
 	push	0                                     ; FB3AF8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3AFA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3AFA  push (XIZ+0x08)
 	lda	xbc, (xiz-24)                          ; FB3AFD  lda XBC,XIZ+0xe8
 	push	xbc                                   ; FB3B00  push XBC
 	calr VoiceParams_Compute_C                 ; FB3B01  calr 0xfb2a98
 	push	0                                     ; FB3B04  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3B06  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3B06  push (XIZ+0x08)
 	call	Pack104_SetInputs_PartRecord                              ; FB3B09  call 0xfc4bb6
 	ld	(xiz-9), 0                              ; FB3B0D  ld (XIZ+0xf7),0x00
 	ld	l, 0:opc                                   ; FB3B11  ld L,0x00
@@ -5735,7 +5735,7 @@ MidiNote_OnByPartMode__FB3B29:
 	push	0                                     ; FB3B3B  push 0x00
 	push	h                                     ; FB3B3D  push H
 	push	0                                     ; FB3B3F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3B41  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3B41  push (XIZ+0x08)
 	call	Dev10C_StageRegs_0800_0840_ForNoteOn                              ; FB3B44  call 0xfab818
 	ld	(xiz-9), 1                              ; FB3B48  ld (XIZ+0xf7),0x01
 	pop	xiy                                    ; FB3B4C  pop XIY
@@ -5747,7 +5747,7 @@ MidiNote_OnByPartMode__FB3B4D:
 	ld	xwa, (xiz-8)                            ; FB3B57  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB3B5A  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FB3B5C  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x00, 0xFF             ; FB3B5F  ld (XBC),0xff00
+	ldw	(xbc), 0xff00             ; FB3B5F  ld (XBC),0xff00
 	nop                                        ; FB3B63  nop
 	nop                                        ; FB3B64  nop
 	nop                                        ; FB3B65  nop
@@ -5758,7 +5758,7 @@ MidiNote_OnByPartMode__FB3B4D:
 	ld	xwa, (xiz-8)                            ; FB3B6E  ld XWA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB3B71  ld (XWA),BC
 	ld	xbc, (xiz-4)                            ; FB3B73  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x80, 0xFF             ; FB3B76  ld (XBC),0xff80
+	ldw	(xbc), 0xff80             ; FB3B76  ld (XBC),0xff80
 	lda	xbc, (0xD7A2:24)                       ; FB3B7A  lda XBC,0x00d7a2
 	push	xbc                                   ; FB3B7F  push XBC
 	push	0                                     ; FB3B80  push 0x00
@@ -5821,7 +5821,7 @@ MidiNote_OnByPartMode__FB3BFC:
 	jr nz, MidiNote_OnByPartMode__FB3BAE       ; FB3C02  jr NZ,0xfb3bae
 MidiNote_OnByPartMode__FB3C04:
 	push	0                                     ; FB3C04  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB3C06  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB3C06  push (XIZ+0x08)
 	call	PartRec_Word0006_ClearBit13                              ; FB3C09  call 0xfacc5a
 	popw	bc                                    ; FB3C0D  pop BC
 MidiNote_OnByPartMode__FB3C0E:
@@ -5830,11 +5830,11 @@ MidiNote_OnByPartMode__FB3C0E:
 	mul	bc, 0x12C                              ; FB3C13  mul BC,0x012c
 	inc	4, bc                                  ; FB3C17  inc 4,BC
 	extz	xbc                                   ; FB3C19  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3C, 0xF3, 0xFF ; FB3C1B  and (XBC+0x1523),0xfff3
+	andw	(xbc+5411), 0xfff3 ; FB3C1B  and (XBC+0x1523),0xfff3
 	pop	xix                                    ; FB3C22  pop XIX
 	popw	de                                    ; FB3C23  pop DE
 	popw	hl                                    ; FB3C24  pop HL
-	unlk32 xiz                                 ; FB3C25  unlk XIZ
+	unlk	xiz                                 ; FB3C25  unlk XIZ
 	ret                                        ; FB3C27  ret
 ; ------------------------------------------------------------------------------
 ; ★ THE SIX VoiceQuery_* ROUTINES -- 0xFB3C28..0xFB3D25
@@ -5875,7 +5875,7 @@ MidiNote_OnByPartMode__FB3C0E:
 ;          playing THIS note of THIS part.
 ; Inputs:  (XIZ+0x08) part, (XIZ+0x0a) note.   Outputs: XIY = 0x00D815.
 VoiceQuery_Tag80_PartNote:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C28  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3C28  link XIZ,0x0000
 	pushw	hl                                   ; FB3C2C  push HL
 	push	xix                                   ; FB3C2D  push XIX
 	lda	xix, (0xD815:24)                       ; FB3C2E  lda XIX,0x00d815
@@ -5889,14 +5889,14 @@ VoiceQuery_Tag80_PartNote:
 	or	bc, hl                                  ; FB3C45  or BC,HL
 	set	7, bc                                  ; FB3C47  set 0x07,BC
 	ld	(xix+1), bc                             ; FB3C4A  ld (XIX+0x01),BC
-	extpfx5 0xBC, 0x03, 0x02, 0x00, 0x00       ; FB3C4D  ld (XIX+0x03),0x0000
+	ldw	(xix+3), 0x0000       ; FB3C4D  ld (XIX+0x03),0x0000
 	push	xix                                   ; FB3C52  push XIX
 	call	VoiceQuery_Run                              ; FB3C53  call 0xfa6fe0
 	pop	xiy                                    ; FB3C57  pop XIY
 	ld	xiy, xix                                ; FB3C58  ld XIY,XIX
 	pop	xix                                    ; FB3C5A  pop XIX
 	popw	hl                                    ; FB3C5B  pop HL
-	unlk32 xiz                                 ; FB3C5C  unlk XIZ
+	unlk	xiz                                 ; FB3C5C  unlk XIZ
 	ret                                        ; FB3C5E  ret
 ; ------------------------------------------------------------------------------
 ; VoiceQuery_Tag80_Part -- 0xFB3C5F..0xFB3C8A (44 bytes)
@@ -5904,7 +5904,7 @@ VoiceQuery_Tag80_PartNote:
 ; Inputs:  (XIZ+0x08) part.   Outputs: XIY = 0x00D815.
 ; Evidence: see the family header above; tag 0x80, key (part<<8)|0x80, mask 0x007F.
 VoiceQuery_Tag80_Part:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C5F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3C5F  link XIZ,0x0000
 	push	xix                                   ; FB3C63  push XIX
 	lda	xix, (0xD815:24)                       ; FB3C64  lda XIX,0x00d815
 	ld	(xix), 0x80                             ; FB3C69  ld (XIX),0x80
@@ -5913,13 +5913,13 @@ VoiceQuery_Tag80_Part:
 	sll	bc, 8                                  ; FB3C71  sll 0x08,BC
 	set	7, bc                                  ; FB3C74  set 0x07,BC
 	ld	(xix+1), bc                             ; FB3C77  ld (XIX+0x01),BC
-	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3C7A  ld (XIX+0x03),0x007f
+	ldw	(xix+3), 0x007f       ; FB3C7A  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3C7F  push XIX
 	call	VoiceQuery_Run                              ; FB3C80  call 0xfa6fe0
 	pop	xiy                                    ; FB3C84  pop XIY
 	ld	xiy, xix                                ; FB3C85  ld XIY,XIX
 	pop	xix                                    ; FB3C87  pop XIX
-	unlk32 xiz                                 ; FB3C88  unlk XIZ
+	unlk	xiz                                 ; FB3C88  unlk XIZ
 	ret                                        ; FB3C8A  ret
 ; ------------------------------------------------------------------------------
 ; VoiceQuery_Tag40_Part -- 0xFB3C8B..0xFB3CB3 (41 bytes)
@@ -5929,7 +5929,7 @@ VoiceQuery_Tag80_Part:
 ; Evidence: the only one of the six with tag 0x40, and the only one that does NOT
 ;          force bit 7 of the key.
 VoiceQuery_Tag40_Part:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3C8B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3C8B  link XIZ,0x0000
 	push	xix                                   ; FB3C8F  push XIX
 	lda	xix, (0xD815:24)                       ; FB3C90  lda XIX,0x00d815
 	ld	(xix), 64                               ; FB3C95  ld (XIX),0x40
@@ -5937,13 +5937,13 @@ VoiceQuery_Tag40_Part:
 	extz	bc                                    ; FB3C9B  extz BC
 	sll	bc, 8                                  ; FB3C9D  sll 0x08,BC
 	ld	(xix+1), bc                             ; FB3CA0  ld (XIX+0x01),BC
-	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3CA3  ld (XIX+0x03),0x007f
+	ldw	(xix+3), 0x007f       ; FB3CA3  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3CA8  push XIX
 	call	VoiceQuery_Run                              ; FB3CA9  call 0xfa6fe0
 	pop	xiy                                    ; FB3CAD  pop XIY
 	ld	xiy, xix                                ; FB3CAE  ld XIY,XIX
 	pop	xix                                    ; FB3CB0  pop XIX
-	unlk32 xiz                                 ; FB3CB1  unlk XIZ
+	unlk	xiz                                 ; FB3CB1  unlk XIZ
 	ret                                        ; FB3CB3  ret
 ; ------------------------------------------------------------------------------
 ; VoiceQuery_Tag00_PartBit7 -- 0xFB3CB4..0xFB3CDF (44 bytes)
@@ -5952,7 +5952,7 @@ VoiceQuery_Tag40_Part:
 ; Evidence: tag 0x00, key (part<<8)|0x80 -- the bit-7 that gives it its name is
 ;          `set 0x07,BC` at 0xFB3CC9 -- mask 0x007F.
 VoiceQuery_Tag00_PartBit7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3CB4  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3CB4  link XIZ,0x0000
 	push	xix                                   ; FB3CB8  push XIX
 	lda	xix, (0xD815:24)                       ; FB3CB9  lda XIX,0x00d815
 	ld	(xix), 0                                ; FB3CBE  ld (XIX),0x00
@@ -5961,13 +5961,13 @@ VoiceQuery_Tag00_PartBit7:
 	sll	bc, 8                                  ; FB3CC6  sll 0x08,BC
 	set	7, bc                                  ; FB3CC9  set 0x07,BC
 	ld	(xix+1), bc                             ; FB3CCC  ld (XIX+0x01),BC
-	extpfx5 0xBC, 0x03, 0x02, 0x7F, 0x00       ; FB3CCF  ld (XIX+0x03),0x007f
+	ldw	(xix+3), 0x007f       ; FB3CCF  ld (XIX+0x03),0x007f
 	push	xix                                   ; FB3CD4  push XIX
 	call	VoiceQuery_Run                              ; FB3CD5  call 0xfa6fe0
 	pop	xiy                                    ; FB3CD9  pop XIY
 	ld	xiy, xix                                ; FB3CDA  ld XIY,XIX
 	pop	xix                                    ; FB3CDC  pop XIX
-	unlk32 xiz                                 ; FB3CDD  unlk XIZ
+	unlk	xiz                                 ; FB3CDD  unlk XIZ
 	ret                                        ; FB3CDF  ret
 ; ------------------------------------------------------------------------------
 ; VoiceQuery_Tag00_Part -- 0xFB3CE0..0xFB3D08 (41 bytes)
@@ -5979,7 +5979,7 @@ VoiceQuery_Tag00_PartBit7:
 ; Evidence: tag 0x00, key (part<<8) with no bit forced, mask 0x00FF -- the only
 ;          0x00FF of the six.
 VoiceQuery_Tag00_Part:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3CE0  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3CE0  link XIZ,0x0000
 	push	xix                                   ; FB3CE4  push XIX
 	lda	xix, (0xD815:24)                       ; FB3CE5  lda XIX,0x00d815
 	ld	(xix), 0                                ; FB3CEA  ld (XIX),0x00
@@ -5987,13 +5987,13 @@ VoiceQuery_Tag00_Part:
 	extz	bc                                    ; FB3CF0  extz BC
 	sll	bc, 8                                  ; FB3CF2  sll 0x08,BC
 	ld	(xix+1), bc                             ; FB3CF5  ld (XIX+0x01),BC
-	extpfx5 0xBC, 0x03, 0x02, 0xFF, 0x00       ; FB3CF8  ld (XIX+0x03),0x00ff
+	ldw	(xix+3), 0x00ff       ; FB3CF8  ld (XIX+0x03),0x00ff
 	push	xix                                   ; FB3CFD  push XIX
 	call	VoiceQuery_Run                              ; FB3CFE  call 0xfa6fe0
 	pop	xiy                                    ; FB3D02  pop XIY
 	ld	xiy, xix                                ; FB3D03  ld XIY,XIX
 	pop	xix                                    ; FB3D05  pop XIX
-	unlk32 xiz                                 ; FB3D06  unlk XIZ
+	unlk	xiz                                 ; FB3D06  unlk XIZ
 	ret                                        ; FB3D08  ret
 ; ------------------------------------------------------------------------------
 ; VoiceQuery_Tag00_All -- 0xFB3D09..0xFB3D25 (29 bytes)
@@ -6008,8 +6008,8 @@ VoiceQuery_Tag00_All:
 	push	xix                                   ; FB3D09  push XIX
 	lda	xix, (0xD815:24)                       ; FB3D0A  lda XIX,0x00d815
 	ld	(xix), 0                                ; FB3D0F  ld (XIX),0x00
-	extpfx5 0xBC, 0x01, 0x02, 0x00, 0x00       ; FB3D12  ld (XIX+0x01),0x0000
-	extpfx5 0xBC, 0x03, 0x02, 0xFF, 0x1F       ; FB3D17  ld (XIX+0x03),0x1fff
+	ldw	(xix+1), 0x0000       ; FB3D12  ld (XIX+0x01),0x0000
+	ldw	(xix+3), 0x1fff       ; FB3D17  ld (XIX+0x03),0x1fff
 	push	xix                                   ; FB3D1C  push XIX
 	call	VoiceQuery_Run                              ; FB3D1D  call 0xfa6fe0
 	pop	xiy                                    ; FB3D21  pop XIY
@@ -6050,7 +6050,7 @@ VoiceQuery_Tag00_All:
 ;          do.  ⚠ five of the six callers are outside this module, so the mode
 ;          suffix describes the selector, not a precondition they all satisfy.
 Voice_Retire_Mode20:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3D26  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3D26  link XIZ,0x0000
 	pushw	hl                                   ; FB3D2A  push HL
 	push	xde                                   ; FB3D2B  push XDE
 	pushw	ix                                   ; FB3D2C  push IX
@@ -6061,7 +6061,7 @@ Voice_Retire_Mode20:
 	ldw	de, 0x3BCF                             ; FB3D36  ld DE,0x3bcf
 	add	de, bc                                 ; FB3D39  add DE,BC
 	extz	xde                                   ; FB3D3B  extz XDE
-	extpfx4 0x8A, 0x05, 0x3C, 0x7F             ; FB3D3D  and (XDE+0x05),0x7f
+	and	(xde+5), 0x7f             ; FB3D3D  and (XDE+0x05),0x7f
 	ld	bc, (xde+1)                             ; FB3D41  ld BC,(XDE+0x01)
 	and	bc, 0x8000                             ; FB3D44  and BC,0x8000
 	jr nz, Voice_Retire_Mode20__FB3D5A         ; FB3D48  jr NZ,0xfb3d5a
@@ -6096,7 +6096,7 @@ Voice_Retire_Mode20__FB3D5A:
 	push	0                                     ; FB3D8B  push 0x00
 	push	h                                     ; FB3D8D  push H
 	call	ChanRec_ClearHoldAndRelease                              ; FB3D8F  call 0xfa6ea5
-	extpfx5 0x9A, 0x01, 0x3C, 0xFF, 0xFE       ; FB3D93  and (XDE+0x01),0xfeff
+	andw	(xde+1), 0xfeff       ; FB3D93  and (XDE+0x01),0xfeff
 	inc	8, xsp                                 ; FB3D98  inc 0,XSP
 	inc	4, xsp                                 ; FB3D9A  inc 4,XSP
 	jr Voice_Retire_Mode20__FB3DBB             ; FB3D9C  jr T,0xfb3dbb
@@ -6117,7 +6117,7 @@ Voice_Retire_Mode20__FB3DBB:
 	popw	ix                                    ; FB3DBB  pop IX
 	pop	xde                                    ; FB3DBC  pop XDE
 	popw	hl                                    ; FB3DBD  pop HL
-	unlk32 xiz                                 ; FB3DBE  unlk XIZ
+	unlk	xiz                                 ; FB3DBE  unlk XIZ
 	ret                                        ; FB3DC0  ret
 ; ------------------------------------------------------------------------------
 ; Voice_Retire_Mode08 -- 0xFB3DC1..0xFB3E4F (143 bytes)
@@ -6131,18 +6131,18 @@ Voice_Retire_Mode20__FB3DBB:
 ;          (record+3) == 3, and chooses 0xFAB9D8 or 0xFAB8CC on `cp C,3`.
 ; Unknown:  ⚠ as Voice_Retire_Mode20.
 Voice_Retire_Mode08:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FB3DC1  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FB3DC1  link XIZ,0xfffe
 	push	xhl                                   ; FB3DC5  push XHL
 	push	xde                                   ; FB3DC6  push XDE
 	pushw	ix                                   ; FB3DC7  push IX
 	ld	c, 68:opc                                  ; FB3DC8  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB3DCA  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB3DCA  mul BC,(XIZ+0x08)
 	ld	(xiz-2), bc                             ; FB3DCD  ld (XIZ+0xfe),BC
 	ldw	hl, 0x3BCF                             ; FB3DD0  ld HL,0x3bcf
 	add	hl, bc                                 ; FB3DD3  add HL,BC
 	extz	xhl                                   ; FB3DD5  extz XHL
 	ld	de, (xhl+35)                            ; FB3DD7  ld DE,(XHL+0x23)
-	extpfx4 0x8B, 0x05, 0x3C, 0x7F             ; FB3DDA  and (XHL+0x05),0x7f
+	and	(xhl+5), 0x7f             ; FB3DDA  and (XHL+0x05),0x7f
 	extz	xde                                   ; FB3DDE  extz XDE
 	ld	ix, (xde+9)                             ; FB3DE0  ld IX,(XDE+0x09)
 	ld	c, (xhl+3)                              ; FB3DE3  ld C,(XHL+0x03)
@@ -6194,7 +6194,7 @@ Voice_Retire_Mode08__FB3E45:
 	popw	ix                                    ; FB3E4A  pop IX
 	pop	xde                                    ; FB3E4B  pop XDE
 	pop	xhl                                    ; FB3E4C  pop XHL
-	unlk32 xiz                                 ; FB3E4D  unlk XIZ
+	unlk	xiz                                 ; FB3E4D  unlk XIZ
 	ret                                        ; FB3E4F  ret
 ; ------------------------------------------------------------------------------
 ; Voice_Retire_Mode10 -- 0xFB3E50..0xFB3E8A (59 bytes)
@@ -6207,16 +6207,16 @@ Voice_Retire_Mode08__FB3E45:
 ;          0x43 is the LAST byte of the 0x44-byte record.
 ; Unknown:  ⚠ as above.
 Voice_Retire_Mode10:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3E50  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3E50  link XIZ,0x0000
 	push	xhl                                   ; FB3E54  push XHL
 	pushw	de                                   ; FB3E55  push DE
 	ld	c, 68:opc                                  ; FB3E56  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FB3E58  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB3E58  mul BC,(XIZ+0x08)
 	ld	de, bc                                  ; FB3E5B  ld DE,BC
 	ldw	hl, 0x3BCF                             ; FB3E5D  ld HL,0x3bcf
 	add	hl, bc                                 ; FB3E60  add HL,BC
 	extz	xhl                                   ; FB3E62  extz XHL
-	extpfx4 0x8B, 0x05, 0x3C, 0x7F             ; FB3E64  and (XHL+0x05),0x7f
+	and	(xhl+5), 0x7f             ; FB3E64  and (XHL+0x05),0x7f
 	ld	c, (xhl+67)                             ; FB3E68  ld C,(XHL+0x43)
 	cp	c, 0:i3                                   ; FB3E6B  cp C,0
 	jr z, Voice_Retire_Mode10__FB3E86          ; FB3E6D  jr Z,0xfb3e86
@@ -6232,7 +6232,7 @@ Voice_Retire_Mode10:
 Voice_Retire_Mode10__FB3E86:
 	popw	de                                    ; FB3E86  pop DE
 	pop	xhl                                    ; FB3E87  pop XHL
-	unlk32 xiz                                 ; FB3E88  unlk XIZ
+	unlk	xiz                                 ; FB3E88  unlk XIZ
 	ret                                        ; FB3E8A  ret
 ; ------------------------------------------------------------------------------
 ; ★ VoiceList_RetireByMode -- 0xFB3E8B..0xFB3F35 (171 bytes)
@@ -6260,7 +6260,7 @@ Voice_Retire_Mode10__FB3E86:
 ;          values are read off the compares; nothing here says a fifth is
 ;          impossible, only that the code has no arm for one.
 VoiceList_RetireByMode:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FB3E8B  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FB3E8B  link XIZ,0xfffa
 	pushw	hl                                   ; FB3E8F  push HL
 	push	xde                                   ; FB3E90  push XDE
 	pushw	ix                                   ; FB3E91  push IX
@@ -6339,7 +6339,7 @@ VoiceList_RetireByMode__FB3F30:
 	popw	ix                                    ; FB3F30  pop IX
 	pop	xde                                    ; FB3F31  pop XDE
 	popw	hl                                    ; FB3F32  pop HL
-	unlk32 xiz                                 ; FB3F33  unlk XIZ
+	unlk	xiz                                 ; FB3F33  unlk XIZ
 	ret                                        ; FB3F35  ret
 ; ------------------------------------------------------------------------------
 ; ★★ MidiNote_Dispatch -- 0xFB3F36..0xFB3F9F (106 bytes)
@@ -6378,7 +6378,7 @@ VoiceList_RetireByMode__FB3F30:
 ;          byte [1] >= 0xF0 to a different handler and this routine drops
 ;          0x21-0xEF silently.
 MidiNote_Dispatch:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB3F36  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB3F36  link XIZ,0x0000
 	push	xix                                   ; FB3F3A  push XIX
 	ld	xix, (xiz+8)                            ; FB3F3B  ld XIX,(XIZ+0x08)
 	ld	c, (xix+1)                              ; FB3F3E  ld C,(XIX+0x01)
@@ -6427,7 +6427,7 @@ MidiNote_Dispatch__FB3F98:
 	inc	6, xsp                                 ; FB3F9A  inc 6,XSP
 MidiNote_Dispatch__FB3F9C:
 	pop	xix                                    ; FB3F9C  pop XIX
-	unlk32 xiz                                 ; FB3F9D  unlk XIZ
+	unlk	xiz                                 ; FB3F9D  unlk XIZ
 	ret                                        ; FB3F9F  ret
 ; ------------------------------------------------------------------------------
 ; ==============================================================================
@@ -6935,7 +6935,7 @@ MidiNote_Dispatch__FB3F9C:
 ; Unknown:  ⚠ what (0x151d) is -- it is read three times here and is the value
 ;          stored into both +6 and +8 of every record.  ⚠ what 0x2080 tags.
 VoiceRecords_InitFromAlloc:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB3FA0  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB3FA0  link XIZ,0xfffc
 	pushw	hl                                   ; FB3FA4  push HL
 	pushw	de                                   ; FB3FA5  push DE
 	push	xix                                   ; FB3FA6  push XIX
@@ -6969,7 +6969,7 @@ VoiceRecords_InitFromAlloc:
 	ld	(xix+8), bc                             ; FB3FF7  ld (XIX+0x08),BC
 	ld	bc, (0x151D:16)                       ; FB3FFA  ld BC,(0x151d)
 	ld	(xix+6), bc                             ; FB3FFE  ld (XIX+0x06),BC
-	extpfx5 0xBC, 0x01, 0x02, 0x01, 0x00       ; FB4001  ld (XIX+0x01),0x0001
+	ldw	(xix+1), 0x0001       ; FB4001  ld (XIX+0x01),0x0001
 	sub	xbc, xbc                               ; FB4006  sub XBC,XBC
 	ld	(xix+19), xbc                           ; FB4008  ld (XIX+0x13),XBC
 	sub	xbc, xbc                               ; FB400B  sub XBC,XBC
@@ -6989,17 +6989,17 @@ VoiceRecords_InitFromAlloc:
 	ld	a, (xbc)                                ; FB4034  ld A,(XBC)
 	ld	(xix), a                                ; FB4036  ld (XIX),A
 	ld	(xix+3), 0                              ; FB4038  ld (XIX+0x03),0x00
-	extpfx5 0xBC, 0x2B, 0x02, 0x00, 0x00       ; FB403C  ld (XIX+0x2b),0x0000
-	extpfx5 0xBC, 0x2D, 0x02, 0xFF, 0x00       ; FB4041  ld (XIX+0x2d),0x00ff
+	ldw	(xix+43), 0x0000       ; FB403C  ld (XIX+0x2b),0x0000
+	ldw	(xix+45), 0x00ff       ; FB4041  ld (XIX+0x2d),0x00ff
 	ld	(xix+49), 0                             ; FB4046  ld (XIX+0x31),0x00
-	extpfx5 0xBC, 0x32, 0x02, 0x00, 0x00       ; FB404A  ld (XIX+0x32),0x0000
-	extpfx5 0xBC, 0x36, 0x02, 0x00, 0x00       ; FB404F  ld (XIX+0x36),0x0000
-	extpfx5 0xBC, 0x34, 0x02, 0x00, 0x00       ; FB4054  ld (XIX+0x34),0x0000
+	ldw	(xix+50), 0x0000       ; FB404A  ld (XIX+0x32),0x0000
+	ldw	(xix+54), 0x0000       ; FB404F  ld (XIX+0x36),0x0000
+	ldw	(xix+52), 0x0000       ; FB4054  ld (XIX+0x34),0x0000
 VoiceRecords_InitFromAlloc__FB4059:
 	pop	xix                                    ; FB4059  pop XIX
 	popw	de                                    ; FB405A  pop DE
 	popw	hl                                    ; FB405B  pop HL
-	unlk32 xiz                                 ; FB405C  unlk XIZ
+	unlk	xiz                                 ; FB405C  unlk XIZ
 	ret                                        ; FB405E  ret
 
 ; ==============================================================================
@@ -7319,7 +7319,7 @@ VoiceRecords_InitFromAlloc__FB4059:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ToneRec_MapElementIndex_ByMask:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB405F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB405F  link XIZ,0x0000
 	pushw	hl                                   ; FB4063  push HL
 	pushw	de                                   ; FB4064  push DE
 	cp (xiz+8), 0x08                           ; FB4065  cp (XIZ+0x08),0x08
@@ -7334,7 +7334,7 @@ sub_FB405F__FB4077:
 	extz	xbc                                   ; FB407C  extz XBC
 	add	xbc, BitMask_Table_FDE695+8                          ; FB407E  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB4084  ld A,(XBC)
-	extpfx3 0x8E, 0x0C, 0xC1                   ; FB4086  and A,(XIZ+0x0c)
+	and	a, (xiz+12)                   ; FB4086  and A,(XIZ+0x0c)
 	jr z, sub_FB405F__FB40BB                   ; FB4089  jr Z,0xfb40bb
 	ld	l, 0:opc                                   ; FB408B  ld L,0x00
 	ld	h, 1:opc                                   ; FB408D  ld H,0x01
@@ -7351,7 +7351,7 @@ sub_FB405F__FB4096:
 	extz	xbc                                   ; FB40A2  extz XBC
 	add	xbc, BitMask_Table_FDE695+8                          ; FB40A4  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB40AA  ld A,(XBC)
-	extpfx3 0x8E, 0x0C, 0xC1                   ; FB40AC  and A,(XIZ+0x0c)
+	and	a, (xiz+12)                   ; FB40AC  and A,(XIZ+0x0c)
 	jr z, sub_FB405F__FB40B3                   ; FB40AF  jr Z,0xfb40b3
 	inc	1, l                                   ; FB40B1  inc 1,L
 sub_FB405F__FB40B3:
@@ -7368,7 +7368,7 @@ sub_FB405F__FB40BF:
 sub_FB405F__FB40C2:
 	popw	de                                    ; FB40C2  pop DE
 	popw	hl                                    ; FB40C3  pop HL
-	unlk32 xiz                                 ; FB40C4  unlk XIZ
+	unlk	xiz                                 ; FB40C4  unlk XIZ
 	ret                                        ; FB40C6  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB40C7 is now `ToneRec_CountElements_ByMask`.
@@ -7394,7 +7394,7 @@ sub_FB405F__FB40C2:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ToneRec_CountElements_ByMask:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB40C7  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB40C7  link XIZ,0x0000
 	pushw	hl                                   ; FB40CB  push HL
 	ld	l, 0:opc                                   ; FB40CC  ld L,0x00
 	cp (xiz+8), 0x08                           ; FB40CE  cp (XIZ+0x08),0x08
@@ -7409,7 +7409,7 @@ sub_FB40C7__FB40DC:
 	extz	xbc                                   ; FB40E0  extz XBC
 	add	xbc, BitMask_Table_FDE695+8                          ; FB40E2  add XBC,0x00fde69d
 	ld	a, (xbc)                                ; FB40E8  ld A,(XBC)
-	extpfx3 0x8E, 0x0A, 0xC1                   ; FB40EA  and A,(XIZ+0x0a)
+	and	a, (xiz+10)                   ; FB40EA  and A,(XIZ+0x0a)
 	jr z, sub_FB40C7__FB40F1                   ; FB40ED  jr Z,0xfb40f1
 	inc	1, l                                   ; FB40EF  inc 1,L
 sub_FB40C7__FB40F1:
@@ -7424,7 +7424,7 @@ sub_FB40C7__FB40FD:
 	ld	a, l                                    ; FB40FD  ld A,L
 sub_FB40C7__FB40FF:
 	popw	hl                                    ; FB40FF  pop HL
-	unlk32 xiz                                 ; FB4100  unlk XIZ
+	unlk	xiz                                 ; FB4100  unlk XIZ
 	ret                                        ; FB4102  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB4103 is now `ToneStage_RecordForBankSelector`.
@@ -7459,7 +7459,7 @@ sub_FB40C7__FB40FF:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ToneStage_RecordForBankSelector:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4103  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB4103  link XIZ,0x0000
 	push	xix                                   ; FB4107  push XIX
 	cp (xiz+8), 0x20                           ; FB4108  cp (XIZ+0x08),0x20
 	jr c, sub_FB4103__FB4117                   ; FB410C  jr C,0xfb4117
@@ -7472,7 +7472,7 @@ sub_FB4103__FB411C:
 	ld	xbc, xix                                ; FB411C  ld XBC,XIX
 	ld	xiy, xbc                                ; FB411E  ld XIY,XBC
 	pop	xix                                    ; FB4120  pop XIX
-	unlk32 xiz                                 ; FB4121  unlk XIZ
+	unlk	xiz                                 ; FB4121  unlk XIZ
 	ret                                        ; FB4123  ret
 ; --------------------------------------------------------------------------
 ; ToneDB_ResolveToneRecord -- 0xFB4124..0xFB42AF (396 bytes)
@@ -7517,7 +7517,7 @@ sub_FB4103__FB411C:
 ; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB4124`.
 ; --------------------------------------------------------------------------
 ToneDB_ResolveToneRecord:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB4124  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FB4124  link XIZ,0xfff4
 	pushw	hl                                   ; FB4128  push HL
 	pushw	de                                   ; FB4129  push DE
 	push	xix                                   ; FB412A  push XIX
@@ -7581,7 +7581,7 @@ ToneDB_ResolveToneRecord__FB418D:
 	ld	iy, hl                                  ; FB41D1  ld IY,HL
 	sll	iy, 2                                  ; FB41D3  sll 0x02,IY
 	extz	xiy                                   ; FB41D6  extz XIY
-	extpfx3 0xAE, 0xF4, 0x85                   ; FB41D8  add XIY,(XIZ+0xf4)
+	add	xiy, (xiz-12)                   ; FB41D8  add XIY,(XIZ+0xf4)
 	add	xiy, (0xD80D:24)                   ; FB41DB  add XIY,(0x00d80d)
 	ld	xwa, (xiy)                              ; FB41E0  ld XWA,(XIY)
 	add	xwa, (0xD80D:24)                   ; FB41E2  add XWA,(0x00d80d)
@@ -7646,7 +7646,7 @@ ToneDB_ResolveToneRecord__FB424A:
 	ld	iy, hl                                  ; FB428E  ld IY,HL
 	sll	iy, 2                                  ; FB4290  sll 0x02,IY
 	extz	xiy                                   ; FB4293  extz XIY
-	extpfx3 0xAE, 0xF4, 0x85                   ; FB4295  add XIY,(XIZ+0xf4)
+	add	xiy, (xiz-12)                   ; FB4295  add XIY,(XIZ+0xf4)
 	add	xiy, (0xD7ED:24)                   ; FB4298  add XIY,(0x00d7ed)
 	ld	xwa, (xiy)                              ; FB429D  ld XWA,(XIY)
 	add	xwa, (0xD7ED:24)                   ; FB429F  add XWA,(0x00d7ed)
@@ -7657,7 +7657,7 @@ ToneDB_ResolveToneRecord__FB42A6:
 	pop	xix                                    ; FB42AA  pop XIX
 	popw	de                                    ; FB42AB  pop DE
 	popw	hl                                    ; FB42AC  pop HL
-	unlk32 xiz                                 ; FB42AD  unlk XIZ
+	unlk	xiz                                 ; FB42AD  unlk XIZ
 	ret                                        ; FB42AF  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB42B0 is now `Part_ResolveToneRecord`.
@@ -7685,7 +7685,7 @@ ToneDB_ResolveToneRecord__FB42A6:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_ResolveToneRecord:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB42B0  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB42B0  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FB42B4  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB42B7  extz BC
 	mul	bc, 0x12C                              ; FB42B9  mul BC,0x012c
@@ -7700,12 +7700,12 @@ Part_ResolveToneRecord:
 	popw	bc                                    ; FB42D3  pop BC
 	jr sub_FB42B0__FB42E0                      ; FB42D4  jr T,0xfb42e0
 sub_FB42B0__FB42D6:
-	extpfx3 0x9E, 0x0C, 0x04                   ; FB42D6  pushw (XIZ+0x0c)
-	extpfx3 0x9E, 0x0A, 0x04                   ; FB42D9  pushw (XIZ+0x0a)
+	pushw	(xiz+12)                   ; FB42D6  pushw (XIZ+0x0c)
+	pushw	(xiz+10)                   ; FB42D9  pushw (XIZ+0x0a)
 	calr ToneDB_ResolveToneRecord                 ; FB42DC  calr 0xfb4124
 	pop	xbc                                    ; FB42DF  pop XBC
 sub_FB42B0__FB42E0:
-	unlk32 xiz                                 ; FB42E0  unlk XIZ
+	unlk	xiz                                 ; FB42E0  unlk XIZ
 	ret                                        ; FB42E2  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB42E3 is now `Part_GetElementBlock_Unpacked`.
@@ -7733,7 +7733,7 @@ sub_FB42B0__FB42E0:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetElementBlock_Unpacked:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB42E3  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB42E3  link XIZ,0xfffc
 	push	xix                                   ; FB42E7  push XIX
 	cpw (xiz+12), 0x0020                       ; FB42E8  cp (XIZ+0x0c),0x0020
 	jr c, sub_FB42E3__FB42F8                   ; FB42ED  jr C,0xfb42f8
@@ -7742,7 +7742,7 @@ Part_GetElementBlock_Unpacked:
 	jr sub_FB42E3__FB431C                      ; FB42F6  jr T,0xfb431c
 sub_FB42E3__FB42F8:
 	ld	c, 81:opc                                  ; FB42F8  ld C,0x51
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB42FA  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB42FA  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB42FD  extz XBC
 	add	xbc, 0xD9                              ; FB42FF  add XBC,0x000000d9
 	ld	(xiz-4), xbc                            ; FB4305  ld (XIZ+0xfc),XBC
@@ -7757,7 +7757,7 @@ sub_FB42E3__FB431C:
 	ld	xbc, xix                                ; FB431C  ld XBC,XIX
 	ld	xiy, xbc                                ; FB431E  ld XIY,XBC
 	pop	xix                                    ; FB4320  pop XIX
-	unlk32 xiz                                 ; FB4321  unlk XIZ
+	unlk	xiz                                 ; FB4321  unlk XIZ
 	ret                                        ; FB4323  ret
 ; --------------------------------------------------------------------------
 ; ToneRec_GetElementBlock -- 0xFB4324..0xFB4382 (95 bytes)
@@ -7791,7 +7791,7 @@ sub_FB42E3__FB431C:
 ; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB4324`.
 ; --------------------------------------------------------------------------
 ToneRec_GetElementBlock:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4324  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB4324  link XIZ,0x0000
 	pushw	hl                                   ; FB4328  push HL
 	push	xix                                   ; FB4329  push XIX
 	cpw (xiz+14), 0x0020                       ; FB432A  cp (XIZ+0x0e),0x0020
@@ -7804,7 +7804,7 @@ ToneRec_GetElementBlock__FB433A:
 	ld	a, (xbc+17)                             ; FB433D  ld A,(XBC+0x11)
 	pushw	wa                                   ; FB4340  push WA
 	push	0                                     ; FB4341  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB4343  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB4343  push (XIZ+0x0c)
 	ld	a, (xiz+14)                             ; FB4346  ld A,(XIZ+0x0e)
 	pushw	wa                                   ; FB4349  push WA
 	calr ToneRec_MapElementIndex_ByMask                 ; FB434A  calr 0xfb405f
@@ -7824,12 +7824,12 @@ ToneRec_GetElementBlock__FB436D:
 	mul	bc, h                                ; FB436F  mul BC,H
 	extz	xbc                                   ; FB4371  extz XBC
 	add	xbc, 0xD9                              ; FB4373  add XBC,0x000000d9
-	extpfx3 0xAE, 0x08, 0x81                   ; FB4379  add XBC,(XIZ+0x08)
+	add	xbc, (xiz+8)                   ; FB4379  add XBC,(XIZ+0x08)
 	ld	xiy, xbc                                ; FB437C  ld XIY,XBC
 ToneRec_GetElementBlock__FB437E:
 	pop	xix                                    ; FB437E  pop XIX
 	popw	hl                                    ; FB437F  pop HL
-	unlk32 xiz                                 ; FB4380  unlk XIZ
+	unlk	xiz                                 ; FB4380  unlk XIZ
 	ret                                        ; FB4382  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB4383 is now `Part_GetElementBlock`.
@@ -7856,7 +7856,7 @@ ToneRec_GetElementBlock__FB437E:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetElementBlock:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4383  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB4383  link XIZ,0x0000
 	push	xhl                                   ; FB4387  push XHL
 	pushw	de                                   ; FB4388  push DE
 	ld	bc, (xiz+8)                             ; FB4389  ld BC,(XIZ+0x08)
@@ -7868,12 +7868,12 @@ Part_GetElementBlock:
 	ld	wa, (xbc+0x1523)                        ; FB4398  ld WA,(XBC+0x1523)
 	ld	de, wa                                  ; FB439D  ld DE,WA
 	and	de, 1                                  ; FB439F  and DE,0x0001
-	extpfx3 0x9E, 0x0C, 0x04                   ; FB43A3  pushw (XIZ+0x0c)
+	pushw	(xiz+12)                   ; FB43A3  pushw (XIZ+0x0c)
 	push	0                                     ; FB43A6  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB43A8  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB43A8  push (XIZ+0x0a)
 	jr z, sub_FB4383__FB43B9                   ; FB43AB  jr Z,0xfb43b9
 	push	0                                     ; FB43AD  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB43AF  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB43AF  push (XIZ+0x08)
 	calr Part_GetElementBlock_Unpacked                 ; FB43B2  calr 0xfb42e3
 	inc	6, xsp                                 ; FB43B5  inc 6,XSP
 	jr sub_FB4383__FB43C6                      ; FB43B7  jr T,0xfb43c6
@@ -7886,7 +7886,7 @@ sub_FB4383__FB43B9:
 sub_FB4383__FB43C6:
 	popw	de                                    ; FB43C6  pop DE
 	pop	xhl                                    ; FB43C7  pop XHL
-	unlk32 xiz                                 ; FB43C8  unlk XIZ
+	unlk	xiz                                 ; FB43C8  unlk XIZ
 	ret                                        ; FB43CA  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB43CB is now `ToneRec_GetWaveSelectRecord`.
@@ -7925,16 +7925,16 @@ sub_FB4383__FB43C6:
 ;           borrowed from the slot would claim a twin the diff denies.
 ; --------------------------------------------------------------------------
 ToneRec_GetWaveSelectRecord:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB43CB  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB43CB  link XIZ,0xfffc
 	pushw	hl                                   ; FB43CF  push HL
 	push	xix                                   ; FB43D0  push XIX
 	ld	xix, (xiz+12)                           ; FB43D1  ld XIX,(XIZ+0x0c)
 	ld	c, (xix+17)                             ; FB43D4  ld C,(XIX+0x11)
 	pushw	bc                                   ; FB43D7  push BC
 	push	0                                     ; FB43D8  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB43DA  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB43DA  push (XIZ+0x0a)
 	push	0                                     ; FB43DD  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB43DF  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB43DF  push (XIZ+0x08)
 	calr ToneRec_MapElementIndex_ByMask                 ; FB43E2  calr 0xfb405f
 	ld	h, a                                    ; FB43E5  ld H,A
 	inc	6, xsp                                 ; FB43E7  inc 6,XSP
@@ -7952,7 +7952,7 @@ sub_FB43CB__FB440C:
 	ld	c, (xix+17)                             ; FB440C  ld C,(XIX+0x11)
 	pushw	bc                                   ; FB440F  push BC
 	push	0                                     ; FB4410  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB4412  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB4412  push (XIZ+0x08)
 	calr ToneRec_CountElements_ByMask                 ; FB4415  calr 0xfb40c7
 	extz	wa                                    ; FB4418  extz WA
 	pop	xiy                                    ; FB441A  pop XIY
@@ -8011,7 +8011,7 @@ sub_FB43CB__FB4485:
 sub_FB43CB__FB44A0:
 	pop	xix                                    ; FB44A0  pop XIX
 	popw	hl                                    ; FB44A1  pop HL
-	unlk32 xiz                                 ; FB44A2  unlk XIZ
+	unlk	xiz                                 ; FB44A2  unlk XIZ
 	ret                                        ; FB44A4  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB44A5 is now `ToneRec_GetWaveSelectRecord_ByBankSelector`.
@@ -8042,7 +8042,7 @@ sub_FB43CB__FB44A0:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ToneRec_GetWaveSelectRecord_ByBankSelector:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB44A5  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB44A5  link XIZ,0x0000
 	pushw	hl                                   ; FB44A9  push HL
 	push	xix                                   ; FB44AA  push XIX
 	ld	hl, (xiz+8)                             ; FB44AB  ld HL,(XIZ+0x08)
@@ -8053,7 +8053,7 @@ ToneRec_GetWaveSelectRecord_ByBankSelector:
 	ld	xix, (xiz+12)                           ; FB44BA  ld XIX,(XIZ+0x0c)
 	add	xix, 0xD9                              ; FB44BD  add XIX,0x000000d9
 	ld	c, 43:opc                                  ; FB44C3  ld C,0x2b
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB44C5  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB44C5  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB44C8  extz XBC
 	add	xbc, 0x144                             ; FB44CA  add XBC,0x00000144
 	add	xbc, xix                               ; FB44D0  add XBC,XIX
@@ -8063,7 +8063,7 @@ sub_FB44A5__FB44D6:
 	ld	xbc, (xiz+12)                           ; FB44D6  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FB44D9  push XBC
 	push	0                                     ; FB44DA  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB44DC  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB44DC  push (XIZ+0x0a)
 	ld	c, l                                    ; FB44DF  ld C,L
 	pushw	bc                                   ; FB44E1  push BC
 	calr ToneRec_GetWaveSelectRecord                 ; FB44E2  calr 0xfb43cb
@@ -8071,7 +8071,7 @@ sub_FB44A5__FB44D6:
 sub_FB44A5__FB44E7:
 	pop	xix                                    ; FB44E7  pop XIX
 	popw	hl                                    ; FB44E8  pop HL
-	unlk32 xiz                                 ; FB44E9  unlk XIZ
+	unlk	xiz                                 ; FB44E9  unlk XIZ
 	ret                                        ; FB44EB  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB44EC is now `Part_GetWaveSelectRecord`.
@@ -8100,7 +8100,7 @@ sub_FB44A5__FB44E7:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetWaveSelectRecord:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB44EC  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB44EC  link XIZ,0x0000
 	pushw	hl                                   ; FB44F0  push HL
 	push	xix                                   ; FB44F1  push XIX
 	lda	xix, (0x1523:16)                      ; FB44F2  lda XIX,0x1523
@@ -8110,11 +8110,11 @@ Part_GetWaveSelectRecord:
 	ld	hl, bc                                  ; FB44FF  ld HL,BC
 	inc	4, bc                                  ; FB4501  inc 4,BC
 	extz	xix                                   ; FB4503  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x20       ; FB4505  ld WA,(XIX+BC)
+	ld	wa, (xix+bc)       ; FB4505  ld WA,(XIX+BC)
 	and	wa, 1                                  ; FB450A  and WA,0x0001
 	jr z, sub_FB44EC__FB4527                   ; FB450E  jr Z,0xfb4527
 	ld	c, 43:opc                                  ; FB4510  ld C,0x2b
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB4512  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB4512  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB4515  extz XBC
 	add	xbc, 0x21D                             ; FB4517  add XBC,0x0000021d
 	add	xbc, 0x87D2                            ; FB451D  add XBC,0x000087d2
@@ -8122,13 +8122,13 @@ Part_GetWaveSelectRecord:
 	jr sub_FB44EC__FB4547                      ; FB4525  jr T,0xfb4547
 sub_FB44EC__FB4527:
 	extz	xix                                   ; FB4527  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xEC, 0x21       ; FB4529  ld XBC,(XIX+HL)
+	ld	xbc, (xix+hl)       ; FB4529  ld XBC,(XIX+HL)
 	push	xbc                                   ; FB452E  push XBC
 	push	0                                     ; FB452F  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB4531  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB4531  push (XIZ+0x0a)
 	ld	bc, hl                                  ; FB4534  ld BC,HL
 	add	bc, 28                                 ; FB4536  add BC,0x001c
-	extpfx5 0xC3, 0x07, 0xF0, 0xE4, 0x21       ; FB453A  ld A,(XIX+BC)
+	ld	a, (xix+bc)       ; FB453A  ld A,(XIX+BC)
 	extz	wa                                    ; FB453F  extz WA
 	pushw	wa                                   ; FB4541  push WA
 	calr ToneRec_GetWaveSelectRecord_ByBankSelector                 ; FB4542  calr 0xfb44a5
@@ -8136,7 +8136,7 @@ sub_FB44EC__FB4527:
 sub_FB44EC__FB4547:
 	pop	xix                                    ; FB4547  pop XIX
 	popw	hl                                    ; FB4548  pop HL
-	unlk32 xiz                                 ; FB4549  unlk XIZ
+	unlk	xiz                                 ; FB4549  unlk XIZ
 	ret                                        ; FB454B  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB454C is now `PercInst_GetWaveSelectRecord`.
@@ -8167,18 +8167,18 @@ sub_FB44EC__FB4547:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PercInst_GetWaveSelectRecord:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB454C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB454C  link XIZ,0x0000
 	push	xix                                   ; FB4550  push XIX
 	ld	xix, (xiz+10)                           ; FB4551  ld XIX,(XIZ+0x0a)
 	add	xix, 18                                ; FB4554  add XIX,0x00000012
 	ld	c, 43:opc                                  ; FB455A  ld C,0x2b
-	extpfx3 0x8E, 0x08, 0x43                   ; FB455C  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB455C  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FB455F  extz XBC
 	add	xbc, 46                                ; FB4561  add XBC,0x0000002e
 	add	xbc, xix                               ; FB4567  add XBC,XIX
 	ld	xiy, xbc                                ; FB4569  ld XIY,XBC
 	pop	xix                                    ; FB456B  pop XIX
-	unlk32 xiz                                 ; FB456C  unlk XIZ
+	unlk	xiz                                 ; FB456C  unlk XIZ
 	ret                                        ; FB456E  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB456F is now `Part_GetPercWaveSelectRecord`.
@@ -8208,7 +8208,7 @@ PercInst_GetWaveSelectRecord:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetPercWaveSelectRecord:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB456F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB456F  link XIZ,0x0000
 	push	xix                                   ; FB4573  push XIX
 	ld	bc, (xiz+8)                             ; FB4574  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB4577  extz BC
@@ -8219,11 +8219,11 @@ Part_GetPercWaveSelectRecord:
 	and	wa, 1                                  ; FB4586  and WA,0x0001
 	jr z, sub_FB456F__FB45AE                   ; FB458A  jr Z,0xfb45ae
 	ld	c, 43:opc                                  ; FB458C  ld C,0x2b
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB458E  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB458E  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB4591  extz XBC
 	ld	xix, xbc                                ; FB4593  ld XIX,XBC
 	ld	a, 0x96:opc                                ; FB4595  ld A,0x96
-	extpfx3 0x8E, 0x10, 0x41                   ; FB4597  mul WA,(XIZ+0x10)
+	mul	wa, (xiz+16)                   ; FB4597  mul WA,(XIZ+0x10)
 	extz	xwa                                   ; FB459A  extz XWA
 	add	xwa, xbc                               ; FB459C  add XWA,XBC
 	add	xwa, 0x4A1                             ; FB459E  add XWA,0x000004a1
@@ -8234,12 +8234,12 @@ sub_FB456F__FB45AE:
 	ld	xbc, (xiz+12)                           ; FB45AE  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FB45B1  push XBC
 	push	0                                     ; FB45B2  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB45B4  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB45B4  push (XIZ+0x0a)
 	calr PercInst_GetWaveSelectRecord                 ; FB45B7  calr 0xfb454c
 	inc	6, xsp                                 ; FB45BA  inc 6,XSP
 sub_FB456F__FB45BC:
 	pop	xix                                    ; FB45BC  pop XIX
-	unlk32 xiz                                 ; FB45BD  unlk XIZ
+	unlk	xiz                                 ; FB45BD  unlk XIZ
 	ret                                        ; FB45BF  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB45C0 is now `ToneDB_ResolveEnvDescriptor`.
@@ -8291,7 +8291,7 @@ sub_FB456F__FB45BC:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ToneDB_ResolveEnvDescriptor:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB45C0  link XIZ,0xffec
+	link	xiz, 0xffec              ; FB45C0  link XIZ,0xffec
 	pushw	hl                                   ; FB45C4  push HL
 	pushw	de                                   ; FB45C5  push DE
 	pushw	ix                                   ; FB45C6  push IX
@@ -8397,17 +8397,17 @@ sub_FB45C0__FB46D8:
 	sll	bc, 7                                  ; FB46DA  sll 0x07,BC
 	add	bc, hl                                 ; FB46DD  add BC,HL
 	mul	bc, 2                                  ; FB46DF  mul BC,0x0002
-	extpfx3 0xAE, 0xF2, 0x81                   ; FB46E3  add XBC,(XIZ+0xf2)
-	extpfx3 0xAE, 0xFA, 0x81                   ; FB46E6  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-14)                   ; FB46E3  add XBC,(XIZ+0xf2)
+	add	xbc, (xiz-6)                   ; FB46E6  add XBC,(XIZ+0xfa)
 	ld	wa, (xbc)                               ; FB46E9  ld WA,(XBC)
-	extpfx3 0x9E, 0xEC, 0x40                   ; FB46EB  mul XWA,(XIZ+0xec)
-	extpfx3 0xAE, 0xEE, 0x80                   ; FB46EE  add XWA,(XIZ+0xee)
-	extpfx3 0xAE, 0xFA, 0x80                   ; FB46F1  add XWA,(XIZ+0xfa)
+	mul	xwa, (xiz-20)                   ; FB46EB  mul XWA,(XIZ+0xec)
+	add	xwa, (xiz-18)                   ; FB46EE  add XWA,(XIZ+0xee)
+	add	xwa, (xiz-6)                   ; FB46F1  add XWA,(XIZ+0xfa)
 	ld	xiy, xwa                                ; FB46F4  ld XIY,XWA
 	popw	ix                                    ; FB46F6  pop IX
 	popw	de                                    ; FB46F7  pop DE
 	popw	hl                                    ; FB46F8  pop HL
-	unlk32 xiz                                 ; FB46F9  unlk XIZ
+	unlk	xiz                                 ; FB46F9  unlk XIZ
 	ret                                        ; FB46FB  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB46FC is now `PartElement_ResolveEnvDescriptor`.
@@ -8439,17 +8439,17 @@ sub_FB45C0__FB46D8:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartElement_ResolveEnvDescriptor:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB46FC  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB46FC  link XIZ,0xfff8
 	pushw	hl                                   ; FB4700  push HL
 	push	xix                                   ; FB4701  push XIX
 	ld	c, 2:opc                                   ; FB4702  ld C,0x02
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB4704  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB4704  mul BC,(XIZ+0x0c)
 	extz	xbc                                   ; FB4707  extz XBC
 	ld	xix, xbc                                ; FB4709  ld XIX,XBC
 	inc	3, xbc                                 ; FB470B  inc 3,XBC
 	ld	(xiz-4), xbc                            ; FB470D  ld (XIZ+0xfc),XBC
 	ld	a, 41:opc                                  ; FB4710  ld A,0x29
-	extpfx3 0x8E, 0x0A, 0x41                   ; FB4712  mul WA,(XIZ+0x0a)
+	mul	wa, (xiz+10)                   ; FB4712  mul WA,(XIZ+0x0a)
 	ld	hl, wa                                  ; FB4715  ld HL,WA
 	ld	iy, (xiz+8)                             ; FB4717  ld IY,(XIZ+0x08)
 	extz	iy                                    ; FB471A  extz IY
@@ -8463,7 +8463,7 @@ PartElement_ResolveEnvDescriptor:
 	ld	h, (xwa)                                ; FB4732  ld H,(XWA)
 	ld	xbc, xix                                ; FB4734  ld XBC,XIX
 	inc	4, xbc                                 ; FB4736  inc 4,XBC
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB4738  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB4738  add XBC,(XIZ+0xf8)
 	ld	w, (xbc)                                ; FB473B  ld W,(XBC)
 	push	0                                     ; FB473D  push 0x00
 	push	w                                     ; FB473F  push W
@@ -8473,7 +8473,7 @@ PartElement_ResolveEnvDescriptor:
 	pop	xbc                                    ; FB4748  pop XBC
 	pop	xix                                    ; FB4749  pop XIX
 	popw	hl                                    ; FB474A  pop HL
-	unlk32 xiz                                 ; FB474B  unlk XIZ
+	unlk	xiz                                 ; FB474B  unlk XIZ
 	ret                                        ; FB474D  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB474E is now `WaveSelRec_ResolveEnvDescriptor`.
@@ -8501,19 +8501,19 @@ PartElement_ResolveEnvDescriptor:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 WaveSelRec_ResolveEnvDescriptor:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB474E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB474E  link XIZ,0x0000
 	pushw	hl                                   ; FB4752  push HL
 	push	xix                                   ; FB4753  push XIX
 	ld	c, 2:opc                                   ; FB4754  ld C,0x02
-	extpfx3 0x8E, 0x08, 0x43                   ; FB4756  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FB4756  mul BC,(XIZ+0x08)
 	extz	xbc                                   ; FB4759  extz XBC
 	ld	xix, xbc                                ; FB475B  ld XIX,XBC
 	inc	3, xbc                                 ; FB475D  inc 3,XBC
-	extpfx3 0xAE, 0x0A, 0x81                   ; FB475F  add XBC,(XIZ+0x0a)
+	add	xbc, (xiz+10)                   ; FB475F  add XBC,(XIZ+0x0a)
 	ld	h, (xbc)                                ; FB4762  ld H,(XBC)
 	ld	xbc, xix                                ; FB4764  ld XBC,XIX
 	inc	4, xbc                                 ; FB4766  inc 4,XBC
-	extpfx3 0xAE, 0x0A, 0x81                   ; FB4768  add XBC,(XIZ+0x0a)
+	add	xbc, (xiz+10)                   ; FB4768  add XBC,(XIZ+0x0a)
 	ld	a, (xbc)                                ; FB476B  ld A,(XBC)
 	pushw	wa                                   ; FB476D  push WA
 	push	0                                     ; FB476E  push 0x00
@@ -8522,7 +8522,7 @@ WaveSelRec_ResolveEnvDescriptor:
 	pop	xbc                                    ; FB4775  pop XBC
 	pop	xix                                    ; FB4776  pop XIX
 	popw	hl                                    ; FB4777  pop HL
-	unlk32 xiz                                 ; FB4778  unlk XIZ
+	unlk	xiz                                 ; FB4778  unlk XIZ
 	ret                                        ; FB477A  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB477B is now `PartElement_SetEnvDescriptorPointer`.
@@ -8557,20 +8557,20 @@ WaveSelRec_ResolveEnvDescriptor:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartElement_SetEnvDescriptorPointer:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB477B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB477B  link XIZ,0x0000
 	pushw	hl                                   ; FB477F  push HL
 	pushw	de                                   ; FB4780  push DE
 	push	xix                                   ; FB4781  push XIX
 	push	0                                     ; FB4782  push 0x00
-	extpfx3 0x8E, 0x0C, 0x04                   ; FB4784  push (XIZ+0x0c)
+	push	(xiz+12)                   ; FB4784  push (XIZ+0x0c)
 	push	0                                     ; FB4787  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FB4789  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FB4789  push (XIZ+0x0a)
 	push	0                                     ; FB478C  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB478E  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB478E  push (XIZ+0x08)
 	calr PartElement_ResolveEnvDescriptor                 ; FB4791  calr 0xfb46fc
 	ld	xix, xiy                                ; FB4794  ld XIX,XIY
 	ld	c, 41:opc                                  ; FB4796  ld C,0x29
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB4798  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB4798  mul BC,(XIZ+0x0a)
 	ld	hl, bc                                  ; FB479B  ld HL,BC
 	ld	wa, (xiz+8)                             ; FB479D  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB47A0  extz WA
@@ -8578,7 +8578,7 @@ PartElement_SetEnvDescriptorPointer:
 	ld	de, wa                                  ; FB47A6  ld DE,WA
 	add	de, bc                                 ; FB47A8  add DE,BC
 	ld	c, 4:opc                                   ; FB47AA  ld C,0x04
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB47AC  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB47AC  mul BC,(XIZ+0x0c)
 	add	bc, de                                 ; FB47AF  add BC,DE
 	add	bc, 0x90                               ; FB47B1  add BC,0x0090
 	extz	xbc                                   ; FB47B5  extz XBC
@@ -8587,7 +8587,7 @@ PartElement_SetEnvDescriptorPointer:
 	pop	xix                                    ; FB47BE  pop XIX
 	popw	de                                    ; FB47BF  pop DE
 	popw	hl                                    ; FB47C0  pop HL
-	unlk32 xiz                                 ; FB47C1  unlk XIZ
+	unlk	xiz                                 ; FB47C1  unlk XIZ
 	ret                                        ; FB47C3  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB47C4 is now `Part_LoadToneRecordAndPointers`.
@@ -8630,7 +8630,7 @@ PartElement_SetEnvDescriptorPointer:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_LoadToneRecordAndPointers:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB47C4  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FB47C4  link XIZ,0xfff4
 	pushw	hl                                   ; FB47C8  push HL
 	pushw	de                                   ; FB47C9  push DE
 	push	xix                                   ; FB47CA  push XIX
@@ -8641,7 +8641,7 @@ Part_LoadToneRecordAndPointers:
 	extz	bc                                    ; FB47D4  extz BC
 	pushw	bc                                   ; FB47D6  push BC
 	push	0                                     ; FB47D7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB47D9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB47D9  push (XIZ+0x08)
 	calr Part_ResolveToneRecord                 ; FB47DC  calr 0xfb42b0
 	ld	xix, xiy                                ; FB47DF  ld XIX,XIY
 	ld	bc, (xiz+8)                             ; FB47E1  ld BC,(XIZ+0x08)
@@ -8677,12 +8677,12 @@ sub_FB47C4__FB4828:
 	push	0                                     ; FB482E  push 0x00
 	push	h                                     ; FB4830  push H
 	push	0                                     ; FB4832  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB4834  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB4834  push (XIZ+0x08)
 	calr Part_GetElementBlock                 ; FB4837  calr 0xfb4383
 	ld	(xiz-4), xiy                            ; FB483A  ld (XIZ+0xfc),XIY
 	ld	(xiz-6), de                             ; FB483D  ld (XIZ+0xfa),DE
 	ld	bc, ix                                  ; FB4840  ld BC,IX
-	extpfx3 0x9E, 0xFA, 0x81                   ; FB4842  add BC,(XIZ+0xfa)
+	add	bc, (xiz-6)                   ; FB4842  add BC,(XIZ+0xfa)
 	ld	(xiz-8), bc                             ; FB4845  ld (XIZ+0xf8),BC
 	add	bc, 0x88                               ; FB4848  add BC,0x0088
 	extz	xbc                                   ; FB484C  extz XBC
@@ -8690,7 +8690,7 @@ sub_FB47C4__FB4828:
 	push	0                                     ; FB4853  push 0x00
 	push	h                                     ; FB4855  push H
 	push	0                                     ; FB4857  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB4859  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB4859  push (XIZ+0x08)
 	calr Part_GetWaveSelectRecord                 ; FB485C  calr 0xfb44ec
 	ld	(xiz-12), xiy                           ; FB485F  ld (XIZ+0xf4),XIY
 	ld	bc, (xiz-8)                             ; FB4862  ld BC,(XIZ+0xf8)
@@ -8705,7 +8705,7 @@ sub_FB47C4__FB4876:
 	push	0                                     ; FB4877  push 0x00
 	push	h                                     ; FB4879  push H
 	push	0                                     ; FB487B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB487D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB487D  push (XIZ+0x08)
 	calr PartElement_SetEnvDescriptorPointer                 ; FB4880  calr 0xfb477b
 	inc	1, l                                   ; FB4883  inc 1,L
 	inc	6, xsp                                 ; FB4885  inc 6,XSP
@@ -8727,24 +8727,24 @@ sub_FB47C4__FB489E:
 	push	0                                     ; FB48A4  push 0x00
 	push	h                                     ; FB48A6  push H
 	push	0                                     ; FB48A8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB48AA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB48AA  push (XIZ+0x08)
 	calr Part_GetElementBlock                 ; FB48AD  calr 0xfb4383
 	ld	(xiz-4), xiy                            ; FB48B0  ld (XIZ+0xfc),XIY
 	ld	(xiz-6), de                             ; FB48B3  ld (XIZ+0xfa),DE
 	ld	bc, ix                                  ; FB48B6  ld BC,IX
-	extpfx3 0x9E, 0xFA, 0x81                   ; FB48B8  add BC,(XIZ+0xfa)
+	add	bc, (xiz-6)                   ; FB48B8  add BC,(XIZ+0xfa)
 	add	bc, 0x88                               ; FB48BB  add BC,0x0088
 	extz	xbc                                   ; FB48BF  extz XBC
 	ld	(xbc+0x1523), xiy                       ; FB48C1  ld (XBC+0x1523),XIY
 	push	0                                     ; FB48C6  push 0x00
 	push	h                                     ; FB48C8  push H
 	push	0                                     ; FB48CA  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB48CC  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB48CC  push (XIZ+0x08)
 	call	PartElement_SetWaveSelectPointer_ToRomDefault                              ; FB48CF  call 0xfc2930
 	push	0                                     ; FB48D3  push 0x00
 	push	h                                     ; FB48D5  push H
 	push	0                                     ; FB48D7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB48D9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB48D9  push (XIZ+0x08)
 	call	DrawbarPreset_GetDescriptor                              ; FB48DC  call 0xfc295b
 	ld	de, (xiz-6)                             ; FB48E0  ld DE,(XIZ+0xfa)
 	add	de, 41                                 ; FB48E3  add DE,0x0029
@@ -8757,7 +8757,7 @@ sub_FB47C4__FB48F1:
 	pop	xix                                    ; FB48F1  pop XIX
 	popw	de                                    ; FB48F2  pop DE
 	popw	hl                                    ; FB48F3  pop HL
-	unlk32 xiz                                 ; FB48F4  unlk XIZ
+	unlk	xiz                                 ; FB48F4  unlk XIZ
 	ret                                        ; FB48F6  ret
 ; --------------------------------------------------------------------------
 ; DrumKit_ResolveInstrumentRecord -- 0xFB48F7..0xFB49EA (244 bytes)
@@ -8790,7 +8790,7 @@ sub_FB47C4__FB48F1:
 ; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB48F7`.
 ; --------------------------------------------------------------------------
 DrumKit_ResolveInstrumentRecord:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FB48F7  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FB48F7  link XIZ,0xfff2
 	pushw	hl                                   ; FB48FB  push HL
 	pushw	de                                   ; FB48FC  push DE
 	push	xix                                   ; FB48FD  push XIX
@@ -8821,21 +8821,21 @@ DrumKit_ResolveInstrumentRecord__FB4931:
 	sll	bc, 7                                  ; FB4947  sll 0x07,BC
 	add	bc, de                                 ; FB494A  add BC,DE
 	mul	bc, 2                                  ; FB494C  mul BC,0x0002
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB4950  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB4950  add XBC,(XIZ+0xf8)
 	add	xbc, (0xD7ED:24)                   ; FB4953  add XBC,(0x00d7ed)
 	ld	wa, (xbc)                               ; FB4958  ld WA,(XBC)
 	mul	xiy, wa                               ; FB495A  mul XIY,WA
-	extpfx3 0xAE, 0xF4, 0x85                   ; FB495C  add XIY,(XIZ+0xf4)
+	add	xiy, (xiz-12)                   ; FB495C  add XIY,(XIZ+0xf4)
 	add	xiy, (0xD7ED:24)                   ; FB495F  add XIY,(0x00d7ed)
 	jrl DrumKit_ResolveInstrumentRecord__FB49E5                     ; FB4964  jrl T,0xfb49e5
 DrumKit_ResolveInstrumentRecord__FB4967:
 	ld	c, 0x96:opc                                ; FB4967  ld C,0x96
-	extpfx3 0x8E, 0x0E, 0x43                   ; FB4969  mul BC,(XIZ+0x0e)
+	mul	bc, (xiz+14)                   ; FB4969  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FB496C  extz XBC
 	add	xbc, 0xB468                            ; FB496E  add XBC,0x0000b468
 	ld	(xiz-8), xbc                            ; FB4974  ld (XIZ+0xf8),XBC
 	ld	a, 4:opc                                   ; FB4977  ld A,0x04
-	extpfx3 0x8E, 0x0C, 0x41                   ; FB4979  mul WA,(XIZ+0x0c)
+	mul	wa, (xiz+12)                   ; FB4979  mul WA,(XIZ+0x0c)
 	extz	xwa                                   ; FB497C  extz XWA
 	add	xwa, 0xD7F5                            ; FB497E  add XWA,0x0000d7f5
 	ld	xwa, (xwa)                              ; FB4984  ld XWA,(XWA)
@@ -8857,10 +8857,10 @@ DrumKit_ResolveInstrumentRecord__FB498C:
 	sll	bc, 7                                  ; FB49B0  sll 0x07,BC
 	add	bc, de                                 ; FB49B3  add BC,DE
 	mul	bc, 2                                  ; FB49B5  mul BC,0x0002
-	extpfx3 0xAE, 0xF8, 0x81                   ; FB49B9  add XBC,(XIZ+0xf8)
+	add	xbc, (xiz-8)                   ; FB49B9  add XBC,(XIZ+0xf8)
 	add	xbc, (0xD80D:24)                   ; FB49BC  add XBC,(0x00d80d)
 	ld	wa, (xbc)                               ; FB49C1  ld WA,(XBC)
-	extpfx3 0x9E, 0xF2, 0x40                   ; FB49C3  mul XWA,(XIZ+0xf2)
+	mul	xwa, (xiz-14)                   ; FB49C3  mul XWA,(XIZ+0xf2)
 	add	xiy, xwa                               ; FB49C6  add XIY,XWA
 	add	xiy, (0xD80D:24)                   ; FB49C8  add XIY,(0x00d80d)
 	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB49CD  jr T,0xfb49e5
@@ -8878,7 +8878,7 @@ DrumKit_ResolveInstrumentRecord__FB49E5:
 	pop	xix                                    ; FB49E5  pop XIX
 	popw	de                                    ; FB49E6  pop DE
 	popw	hl                                    ; FB49E7  pop HL
-	unlk32 xiz                                 ; FB49E8  unlk XIZ
+	unlk	xiz                                 ; FB49E8  unlk XIZ
 	ret                                        ; FB49EA  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB49EB is now `Part_ResolveDrumInstrumentRecord`.
@@ -8909,7 +8909,7 @@ DrumKit_ResolveInstrumentRecord__FB49E5:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_ResolveDrumInstrumentRecord:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB49EB  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FB49EB  link XIZ,0xfff6
 	pushw	hl                                   ; FB49EF  push HL
 	pushw	de                                   ; FB49F0  push DE
 	push	xix                                   ; FB49F1  push XIX
@@ -8921,7 +8921,7 @@ Part_ResolveDrumInstrumentRecord:
 	ld	hl, bc                                  ; FB4A02  ld HL,BC
 	inc	4, bc                                  ; FB4A04  inc 4,BC
 	extz	xix                                   ; FB4A06  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x20       ; FB4A08  ld WA,(XIX+BC)
+	ld	wa, (xix+bc)       ; FB4A08  ld WA,(XIX+BC)
 	and	wa, 1                                  ; FB4A0D  and WA,0x0001
 	jr z, sub_FB49EB__FB4A2A                   ; FB4A11  jr Z,0xfb4a2a
 	ld	c, 0x96:opc                                ; FB4A13  ld C,0x96
@@ -8937,45 +8937,45 @@ sub_FB49EB__FB4A2A:
 	extz	xbc                                   ; FB4A2E  extz XBC
 	ld	(xiz-4), xbc                            ; FB4A30  ld (XIZ+0xfc),XBC
 	add	xbc, 0x98                              ; FB4A33  add XBC,0x00000098
-	extpfx3 0xAE, 0x0A, 0x81                   ; FB4A39  add XBC,(XIZ+0x0a)
+	add	xbc, (xiz+10)                   ; FB4A39  add XBC,(XIZ+0x0a)
 	ld	a, (xbc)                                ; FB4A3C  ld A,(XBC)
 	extz	wa                                    ; FB4A3E  extz WA
 	ld	(xiz-6), wa                             ; FB4A40  ld (XIZ+0xfa),WA
 	ld	xbc, (xiz-4)                            ; FB4A43  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x99                              ; FB4A46  add XBC,0x00000099
-	extpfx3 0xAE, 0x0A, 0x81                   ; FB4A4C  add XBC,(XIZ+0x0a)
+	add	xbc, (xiz+10)                   ; FB4A4C  add XBC,(XIZ+0x0a)
 	ld	a, (xbc)                                ; FB4A4F  ld A,(XBC)
 	extz	wa                                    ; FB4A51  extz WA
 	ld	(xiz-8), wa                             ; FB4A53  ld (XIZ+0xf8),WA
 	ld	bc, hl                                  ; FB4A56  ld BC,HL
 	add	bc, 27                                 ; FB4A58  add BC,0x001b
 	extz	xix                                   ; FB4A5C  extz XIX
-	extpfx5 0xC3, 0x07, 0xF0, 0xE4, 0x23       ; FB4A5E  ld C,(XIX+BC)
+	ld	c, (xix+bc)       ; FB4A5E  ld C,(XIX+BC)
 	and	c, 1                                   ; FB4A63  and C,0x01
 	extz	bc                                    ; FB4A66  extz BC
 	ld	(xiz-10), bc                            ; FB4A68  ld (XIZ+0xf6),BC
 	ld	iy, hl                                  ; FB4A6B  ld IY,HL
 	add	iy, 28                                 ; FB4A6D  add IY,0x001c
-	extpfx5 0xC3, 0x07, 0xF0, 0xF4, 0x23       ; FB4A71  ld C,(XIX+IY)
+	ld	c, (xix+iy)       ; FB4A71  ld C,(XIX+IY)
 	extz	bc                                    ; FB4A76  extz BC
 	sub	bc, 40                                 ; FB4A78  sub BC,0x0028
 	add	bc, bc                                 ; FB4A7C  add BC,BC
 	and	bc, 2                                  ; FB4A7E  and BC,0x0002
 	ld	hl, bc                                  ; FB4A82  ld HL,BC
-	extpfx3 0x9E, 0xF6, 0xE3                   ; FB4A84  or HL,(XIZ+0xf6)
+	or	hl, (xiz-10)                   ; FB4A84  or HL,(XIZ+0xf6)
 	push	0                                     ; FB4A87  push 0x00
 	push	d                                     ; FB4A89  push D
 	ld	c, l                                    ; FB4A8B  ld C,L
 	pushw	bc                                   ; FB4A8D  push BC
-	extpfx3 0x9E, 0xF8, 0x04                   ; FB4A8E  pushw (XIZ+0xf8)
-	extpfx3 0x9E, 0xFA, 0x04                   ; FB4A91  pushw (XIZ+0xfa)
+	pushw	(xiz-8)                   ; FB4A8E  pushw (XIZ+0xf8)
+	pushw	(xiz-6)                   ; FB4A91  pushw (XIZ+0xfa)
 	calr DrumKit_ResolveInstrumentRecord                 ; FB4A94  calr 0xfb48f7
 	inc	8, xsp                                 ; FB4A97  inc 0,XSP
 sub_FB49EB__FB4A99:
 	pop	xix                                    ; FB4A99  pop XIX
 	popw	de                                    ; FB4A9A  pop DE
 	popw	hl                                    ; FB4A9B  pop HL
-	unlk32 xiz                                 ; FB4A9C  unlk XIZ
+	unlk	xiz                                 ; FB4A9C  unlk XIZ
 	ret                                        ; FB4A9E  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB4A9F is now `PartRec_RecomputeWord0006_FromToneRec`.
@@ -9012,7 +9012,7 @@ sub_FB49EB__FB4A99:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_RecomputeWord0006_FromToneRec:
-	link32 0xEE, 0x0C, 0xFB, 0xFF              ; FB4A9F  link XIZ,0xfffb
+	link	xiz, 0xfffb              ; FB4A9F  link XIZ,0xfffb
 	push	xhl                                   ; FB4AA3  push XHL
 	pushw	de                                   ; FB4AA4  push DE
 	push	xix                                   ; FB4AA5  push XIX
@@ -9033,7 +9033,7 @@ PartRec_RecomputeWord0006_FromToneRec:
 	ld	w, (xbc+17)                             ; FB4AD0  ld W,(XBC+0x11)
 	and	w, 1                                   ; FB4AD3  and W,0x01
 	jr z, sub_FB4A9F__FB4ADD                   ; FB4AD6  jr Z,0xfb4add
-	extpfx3 0xBE, 0xFE, 0xB8                   ; FB4AD8  set 0,(XIZ+0xfe)
+	set	0, (xiz-2)                   ; FB4AD8  set 0,(XIZ+0xfe)
 	jr sub_FB4A9F__FB4B49                      ; FB4ADB  jr T,0xfb4b49
 sub_FB4A9F__FB4ADD:
 	ld	bc, hl                                  ; FB4ADD  ld BC,HL
@@ -9077,7 +9077,7 @@ PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4B20:
 	.long sub_FB4A9F__FB4B44	; 0xFB4B3C  entry 7 -> 0xFB4B44
 	.long sub_FB4A9F__FB4B44	; 0xFB4B40  entry 8 -> 0xFB4B44
 sub_FB4A9F__FB4B44:
-	extpfx5 0x9E, 0xFE, 0x3E, 0x01, 0x40       ; FB4B44  or (XIZ+0xfe),0x4001
+	orw	(xiz-2), 0x4001       ; FB4B44  or (XIZ+0xfe),0x4001
 sub_FB4A9F__FB4B49:
 	ld	c, (xiz-3)                              ; FB4B49  ld C,(XIZ+0xfd)
 	and	c, 3                                   ; FB4B4C  and C,0x03
@@ -9111,7 +9111,7 @@ sub_FB4A9F__FB4B88:
 	ld	c, (xwa+17)                             ; FB4B9A  ld C,(XWA+0x11)
 	and	c, 4                                   ; FB4B9D  and C,0x04
 	jr z, sub_FB4A9F__FB4BA7                   ; FB4BA0  jr Z,0xfb4ba7
-	extpfx3 0xBE, 0xFE, 0xB9                   ; FB4BA2  set 1,(XIZ+0xfe)
+	set	1, (xiz-2)                   ; FB4BA2  set 1,(XIZ+0xfe)
 	jr sub_FB4A9F__FB4C13                      ; FB4BA5  jr T,0xfb4c13
 sub_FB4A9F__FB4BA7:
 	ld	bc, hl                                  ; FB4BA7  ld BC,HL
@@ -9155,7 +9155,7 @@ PartRec_RecomputeWord0006_FromToneRec_JumpTable_FB4BEA:
 	.long sub_FB4A9F__FB4C0E	; 0xFB4C06  entry 7 -> 0xFB4C0E
 	.long sub_FB4A9F__FB4C0E	; 0xFB4C0A  entry 8 -> 0xFB4C0E
 sub_FB4A9F__FB4C0E:
-	extpfx5 0x9E, 0xFE, 0x3E, 0x02, 0x80       ; FB4C0E  or (XIZ+0xfe),0x8002
+	orw	(xiz-2), 0x8002       ; FB4C0E  or (XIZ+0xfe),0x8002
 sub_FB4A9F__FB4C13:
 	ld	c, (xiz-3)                              ; FB4C13  ld C,(XIZ+0xfd)
 	and	c, 12                                  ; FB4C16  and C,0x0c
@@ -9188,7 +9188,7 @@ sub_FB4A9F__FB4C52:
 	ld	c, (xwa+17)                             ; FB4C62  ld C,(XWA+0x11)
 	and	c, 16                                  ; FB4C65  and C,0x10
 	jr z, sub_FB4A9F__FB4C6D                   ; FB4C68  jr Z,0xfb4c6d
-	extpfx3 0xBE, 0xFE, 0xBA                   ; FB4C6A  set 2,(XIZ+0xfe)
+	set	2, (xiz-2)                   ; FB4C6A  set 2,(XIZ+0xfe)
 sub_FB4A9F__FB4C6D:
 	ld	c, (xiz-3)                              ; FB4C6D  ld C,(XIZ+0xfd)
 	and	c, 48                                  ; FB4C70  and C,0x30
@@ -9221,7 +9221,7 @@ sub_FB4A9F__FB4CAC:
 	ld	c, (xwa+17)                             ; FB4CBC  ld C,(XWA+0x11)
 	and	c, 64                                  ; FB4CBF  and C,0x40
 	jr z, sub_FB4A9F__FB4CC7                   ; FB4CC2  jr Z,0xfb4cc7
-	extpfx3 0xBE, 0xFE, 0xBB                   ; FB4CC4  set 3,(XIZ+0xfe)
+	set	3, (xiz-2)                   ; FB4CC4  set 3,(XIZ+0xfe)
 sub_FB4A9F__FB4CC7:
 	ld	c, (xiz-3)                              ; FB4CC7  ld C,(XIZ+0xfd)
 	and	c, 0xC0                                ; FB4CCA  and C,0xc0
@@ -9256,7 +9256,7 @@ sub_FB4A9F__FB4D06:
 	pop	xix                                    ; FB4D1B  pop XIX
 	popw	de                                    ; FB4D1C  pop DE
 	pop	xhl                                    ; FB4D1D  pop XHL
-	unlk32 xiz                                 ; FB4D1E  unlk XIZ
+	unlk	xiz                                 ; FB4D1E  unlk XIZ
 	ret                                        ; FB4D20  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB4D21 is now `Clamp_0_to_007F`.
@@ -9281,7 +9281,7 @@ sub_FB4A9F__FB4D06:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Clamp_0_to_007F:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4D21  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB4D21  link XIZ,0x0000
 	pushw	hl                                   ; FB4D25  push HL
 	ld	hl, (xiz+8)                             ; FB4D26  ld HL,(XIZ+0x08)
 	cp	hl, 0x7F                                ; FB4D29  cp HL,0x007f
@@ -9297,7 +9297,7 @@ sub_FB4D21__FB4D3B:
 	exts	bc                                    ; FB4D3D  exts BC
 	ld	wa, bc                                  ; FB4D3F  ld WA,BC
 	popw	hl                                    ; FB4D41  pop HL
-	unlk32 xiz                                 ; FB4D42  unlk XIZ
+	unlk	xiz                                 ; FB4D42  unlk XIZ
 	ret                                        ; FB4D44  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB4D45` stays an address.
@@ -9335,7 +9335,7 @@ sub_FB4D21__FB4D3B:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB4D45:
-	link32 0xEE, 0x0C, 0xDE, 0xFF              ; FB4D45  link XIZ,0xffde
+	link	xiz, 0xffde              ; FB4D45  link XIZ,0xffde
 	pushw	hl                                   ; FB4D49  push HL
 	pushw	de                                   ; FB4D4A  push DE
 	push	xix                                   ; FB4D4B  push XIX
@@ -9475,7 +9475,7 @@ sub_FB4D45__FB4E99:
 	jr le, sub_FB4D45__FB4EBE                  ; FB4EB1  jr LE,0xfb4ebe
 	ld	xbc, xix                                ; FB4EB3  ld XBC,XIX
 	add	xbc, xiz                               ; FB4EB5  add XBC,XIZ
-	extpfx5 0xB9, 0xEC, 0x02, 0x7F, 0x00       ; FB4EB7  ld (XBC+0xec),0x007f
+	ldw	(xbc-20), 0x007f       ; FB4EB7  ld (XBC+0xec),0x007f
 	jr sub_FB4D45__FB4ED2                      ; FB4EBC  jr T,0xfb4ed2
 sub_FB4D45__FB4EBE:
 	ld	xbc, xix                                ; FB4EBE  ld XBC,XIX
@@ -9485,7 +9485,7 @@ sub_FB4D45__FB4EBE:
 	jr ge, sub_FB4D45__FB4ED2                  ; FB4EC7  jr GE,0xfb4ed2
 	ld	xbc, xix                                ; FB4EC9  ld XBC,XIX
 	add	xbc, xiz                               ; FB4ECB  add XBC,XIZ
-	extpfx5 0xB9, 0xEC, 0x02, 0x00, 0x00       ; FB4ECD  ld (XBC+0xec),0x0000
+	ldw	(xbc-20), 0x0000       ; FB4ECD  ld (XBC+0xec),0x0000
 sub_FB4D45__FB4ED2:
 	ld	xix, (xiz-6)                            ; FB4ED2  ld XIX,(XIZ+0xfa)
 	ld	(xiz-26), xix                           ; FB4ED5  ld (XIZ+0xe6),XIX
@@ -9496,7 +9496,7 @@ sub_FB4D45__FB4ED2:
 	ld	bc, (xiz-2)                             ; FB4EE3  ld BC,(XIZ+0xfe)
 	ld	(xiz-30), bc                            ; FB4EE6  ld (XIZ+0xe2),BC
 	extz	xbc                                   ; FB4EE9  extz XBC
-	extpfx3 0x9E, 0xF4, 0x81                   ; FB4EEB  add BC,(XIZ+0xf4)
+	add	bc, (xiz-12)                   ; FB4EEB  add BC,(XIZ+0xf4)
 	ld	(xbc), a                                ; FB4EEE  ld (XBC),A
 	ld	xbc, (xiz-26)                           ; FB4EF0  ld XBC,(XIZ+0xe6)
 	add	xbc, xiz                               ; FB4EF3  add XBC,XIZ
@@ -9505,7 +9505,7 @@ sub_FB4D45__FB4ED2:
 	ld	(xiz-34), de                            ; FB4EFB  ld (XIZ+0xde),DE
 	ld	bc, (xiz-12)                            ; FB4EFE  ld BC,(XIZ+0xf4)
 	extz	xbc                                   ; FB4F01  extz XBC
-	extpfx3 0x9E, 0xDE, 0x81                   ; FB4F03  add BC,(XIZ+0xde)
+	add	bc, (xiz-34)                   ; FB4F03  add BC,(XIZ+0xde)
 	ld	(xbc), a                                ; FB4F06  ld (XBC),A
 	ld	xbc, xix                                ; FB4F08  ld XBC,XIX
 	inc	2, xbc                                 ; FB4F0A  inc 2,XBC
@@ -9611,7 +9611,7 @@ sub_FB4D45__FB5019:
 	pop	xix                                    ; FB5019  pop XIX
 	popw	de                                    ; FB501A  pop DE
 	popw	hl                                    ; FB501B  pop HL
-	unlk32 xiz                                 ; FB501C  unlk XIZ
+	unlk	xiz                                 ; FB501C  unlk XIZ
 	ret                                        ; FB501E  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB501F` stays an address.
@@ -9644,12 +9644,12 @@ sub_FB4D45__FB5019:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB501F:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB501F  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB501F  link XIZ,0xfffc
 	pushw	hl                                   ; FB5023  push HL
 	pushw	de                                   ; FB5024  push DE
 	push	xix                                   ; FB5025  push XIX
 	ld	c, 16:opc                                  ; FB5026  ld C,0x10
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB5028  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB5028  mul BC,(XIZ+0x0a)
 	ld	hl, bc                                  ; FB502B  ld HL,BC
 	ld	wa, (xiz+8)                             ; FB502D  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB5030  extz WA
@@ -9657,7 +9657,7 @@ sub_FB501F:
 	ld	ix, wa                                  ; FB5036  ld IX,WA
 	add	ix, bc                                 ; FB5038  add IX,BC
 	ld	c, 4:opc                                   ; FB503A  ld C,0x04
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB503C  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB503C  mul BC,(XIZ+0x0c)
 	add	bc, ix                                 ; FB503F  add BC,IX
 	ld	hl, bc                                  ; FB5041  ld HL,BC
 	add	hl, 53                                 ; FB5043  add HL,0x0035
@@ -9665,7 +9665,7 @@ sub_FB501F:
 	add	bc, hl                                 ; FB504A  add BC,HL
 	ld	(xiz-2), bc                             ; FB504C  ld (XIZ+0xfe),BC
 	extz	xbc                                   ; FB504F  extz XBC
-	extpfx3 0x81, 0x3C, 0xFC                   ; FB5051  and (XBC),0xfc
+	and	(xbc), 0xfc                   ; FB5051  and (XBC),0xfc
 	ld	bc, (xiz-2)                             ; FB5054  ld BC,(XIZ+0xfe)
 	extz	xbc                                   ; FB5057  extz XBC
 	ld	a, (xbc+3)                              ; FB5059  ld A,(XBC+0x03)
@@ -9674,7 +9674,7 @@ sub_FB501F:
 	ld	a, (xbc+1)                              ; FB5060  ld A,(XBC+0x01)
 	and	a, 85                                  ; FB5063  and A,0x55
 	jr z, sub_FB501F__FB506E                   ; FB5066  jr Z,0xfb506e
-	extpfx3 0x81, 0x3E, 0x02                   ; FB5068  or (XBC),0x02
+	or	(xbc), 0x02                   ; FB5068  or (XBC),0x02
 	jrl sub_FB501F__FB50FD                     ; FB506B  jrl T,0xfb50fd
 sub_FB501F__FB506E:
 	ld	bc, (xiz+8)                             ; FB506E  ld BC,(XIZ+0x08)
@@ -9696,7 +9696,7 @@ sub_FB501F__FB507E:
 sub_FB501F__FB5091:
 	ld	(xiz-4), hl                             ; FB5091  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FB5094  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FB5096  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FB5096  add BC,(XIZ+0xfc)
 	add	bc, 0x88                               ; FB5099  add BC,0x0088
 	extz	xbc                                   ; FB509D  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB509F  ld XWA,(XBC+0x1523)
@@ -9705,7 +9705,7 @@ sub_FB501F__FB5091:
 sub_FB501F__FB50A9:
 	ld	(xiz-4), hl                             ; FB50A9  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FB50AC  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FB50AE  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FB50AE  add BC,(XIZ+0xfc)
 	add	bc, 0x88                               ; FB50B1  add BC,0x0088
 	extz	xbc                                   ; FB50B5  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB50B7  ld XWA,(XBC+0x1523)
@@ -9714,7 +9714,7 @@ sub_FB501F__FB50A9:
 sub_FB501F__FB50C1:
 	ld	(xiz-4), hl                             ; FB50C1  ld (XIZ+0xfc),HL
 	ld	bc, ix                                  ; FB50C4  ld BC,IX
-	extpfx3 0x9E, 0xFC, 0x81                   ; FB50C6  add BC,(XIZ+0xfc)
+	add	bc, (xiz-4)                   ; FB50C6  add BC,(XIZ+0xfc)
 	add	bc, 0x88                               ; FB50C9  add BC,0x0088
 	extz	xbc                                   ; FB50CD  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB50CF  ld XWA,(XBC+0x1523)
@@ -9726,11 +9726,11 @@ sub_FB501F__FB50D7:
 	ld	c, e                                    ; FB50DE  ld C,E
 	and	c, 0xC0                                ; FB50E0  and C,0xc0
 	srl	c, 6                                   ; FB50E3  srl 0x06,C
-	extpfx3 0x8E, 0x0C, 0xF3                   ; FB50E6  cp C,(XIZ+0x0c)
+	cp	c, (xiz+12)                   ; FB50E6  cp C,(XIZ+0x0c)
 	jr nz, sub_FB501F__FB50F3                  ; FB50E9  jr NZ,0xfb50f3
 	ld	bc, (xiz-2)                             ; FB50EB  ld BC,(XIZ+0xfe)
 	extz	xbc                                   ; FB50EE  extz XBC
-	extpfx3 0x81, 0x3E, 0x01                   ; FB50F0  or (XBC),0x01
+	or	(xbc), 0x01                   ; FB50F0  or (XBC),0x01
 sub_FB501F__FB50F3:
 	add	hl, 41                                 ; FB50F3  add HL,0x0029
 	dec	1, d                                   ; FB50F7  dec 1,D
@@ -9740,7 +9740,7 @@ sub_FB501F__FB50FD:
 	pop	xix                                    ; FB50FD  pop XIX
 	popw	de                                    ; FB50FE  pop DE
 	popw	hl                                    ; FB50FF  pop HL
-	unlk32 xiz                                 ; FB5100  unlk XIZ
+	unlk	xiz                                 ; FB5100  unlk XIZ
 	ret                                        ; FB5102  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB5103` stays an address.
@@ -9769,12 +9769,12 @@ sub_FB501F__FB50FD:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB5103:
-	link32 0xEE, 0x0C, 0xFE, 0xFF              ; FB5103  link XIZ,0xfffe
+	link	xiz, 0xfffe              ; FB5103  link XIZ,0xfffe
 	push	xhl                                   ; FB5107  push XHL
 	pushw	de                                   ; FB5108  push DE
 	pushw	ix                                   ; FB5109  push IX
 	ld	c, 16:opc                                  ; FB510A  ld C,0x10
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB510C  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB510C  mul BC,(XIZ+0x0a)
 	ld	de, bc                                  ; FB510F  ld DE,BC
 	ld	wa, (xiz+8)                             ; FB5111  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB5114  extz WA
@@ -9782,7 +9782,7 @@ sub_FB5103:
 	ld	ix, wa                                  ; FB511A  ld IX,WA
 	add	ix, bc                                 ; FB511C  add IX,BC
 	ld	c, 4:opc                                   ; FB511E  ld C,0x04
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB5120  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB5120  mul BC,(XIZ+0x0c)
 	add	bc, ix                                 ; FB5123  add BC,IX
 	ld	de, bc                                  ; FB5125  ld DE,BC
 	add	de, 53                                 ; FB5127  add DE,0x0035
@@ -9790,7 +9790,7 @@ sub_FB5103:
 	ld	bc, de                                  ; FB512E  ld BC,DE
 	add	hl, bc                                 ; FB5130  add HL,BC
 	extz	xhl                                   ; FB5132  extz XHL
-	extpfx3 0x83, 0x3C, 0xF3                   ; FB5134  and (XHL),0xf3
+	and	(xhl), 0xf3                   ; FB5134  and (XHL),0xf3
 	ld	c, (xhl+2)                              ; FB5137  ld C,(XHL+0x02)
 	cp	c, 0:i3                                   ; FB513A  cp C,0
 	jr z, sub_FB5103__FB514F                   ; FB513C  jr Z,0xfb514f
@@ -9799,7 +9799,7 @@ sub_FB5103:
 	and	c, 85                                  ; FB5143  and C,0x55
 	jr z, sub_FB5103__FB514F                   ; FB5146  jr Z,0xfb514f
 	extz	xhl                                   ; FB5148  extz XHL
-	extpfx3 0x83, 0x3E, 0x08                   ; FB514A  or (XHL),0x08
+	or	(xhl), 0x08                   ; FB514A  or (XHL),0x08
 	jr sub_FB5103__FB5196                      ; FB514D  jr T,0xfb5196
 sub_FB5103__FB514F:
 	ld	bc, (xiz+8)                             ; FB514F  ld BC,(XIZ+0x08)
@@ -9821,10 +9821,10 @@ sub_FB5103__FB5160:
 	ld	c, e                                    ; FB517A  ld C,E
 	and	c, 0xC0                                ; FB517C  and C,0xc0
 	srl	c, 6                                   ; FB517F  srl 0x06,C
-	extpfx3 0x8E, 0x0C, 0xF3                   ; FB5182  cp C,(XIZ+0x0c)
+	cp	c, (xiz+12)                   ; FB5182  cp C,(XIZ+0x0c)
 	jr nz, sub_FB5103__FB518C                  ; FB5185  jr NZ,0xfb518c
 	extz	xhl                                   ; FB5187  extz XHL
-	extpfx3 0x83, 0x3E, 0x04                   ; FB5189  or (XHL),0x04
+	or	(xhl), 0x04                   ; FB5189  or (XHL),0x04
 sub_FB5103__FB518C:
 	add	ix, 41                                 ; FB518C  add IX,0x0029
 	dec	1, d                                   ; FB5190  dec 1,D
@@ -9834,7 +9834,7 @@ sub_FB5103__FB5196:
 	popw	ix                                    ; FB5196  pop IX
 	popw	de                                    ; FB5197  pop DE
 	pop	xhl                                    ; FB5198  pop XHL
-	unlk32 xiz                                 ; FB5199  unlk XIZ
+	unlk	xiz                                 ; FB5199  unlk XIZ
 	ret                                        ; FB519B  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB519C` stays an address.
@@ -9866,7 +9866,7 @@ sub_FB5103__FB5196:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB519C:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FB519C  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FB519C  link XIZ,0xfffa
 	pushw	hl                                   ; FB51A0  push HL
 	pushw	de                                   ; FB51A1  push DE
 	pushw	ix                                   ; FB51A2  push IX
@@ -9886,7 +9886,7 @@ sub_FB519C:
 	and	a, h                                   ; FB51C8  and A,H
 	jrl z, sub_FB519C__FB529F                  ; FB51CA  jrl Z,0xfb529f
 	lda	xwa, (BitMask_Table_FDE695+16:24)                     ; FB51CD  lda XWA,0xfde6a5
-	extpfx3 0xAE, 0xFC, 0x80                   ; FB51D2  add XWA,(XIZ+0xfc)
+	add	xwa, (xiz-4)                   ; FB51D2  add XWA,(XIZ+0xfc)
 	ld	c, (xwa)                                ; FB51D5  ld C,(XWA)
 	and	c, h                                   ; FB51D7  and C,H
 	jr z, sub_FB519C__FB5240                   ; FB51D9  jr Z,0xfb5240
@@ -9984,7 +9984,7 @@ sub_FB519C__FB529F:
 	popw	ix                                    ; FB529F  pop IX
 	popw	de                                    ; FB52A0  pop DE
 	popw	hl                                    ; FB52A1  pop HL
-	unlk32 xiz                                 ; FB52A2  unlk XIZ
+	unlk	xiz                                 ; FB52A2  unlk XIZ
 	ret                                        ; FB52A4  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB52A5` stays an address.
@@ -10012,7 +10012,7 @@ sub_FB519C__FB529F:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB52A5:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB52A5  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB52A5  link XIZ,0x0000
 	pushw	hl                                   ; FB52A9  push HL
 	pushw	de                                   ; FB52AA  push DE
 	ld	l, (xiz+14)                             ; FB52AB  ld L,(XIZ+0x0e)
@@ -10033,10 +10033,10 @@ sub_FB52A5:
 	extz	bc                                    ; FB52D0  extz BC
 	ld	de, bc                                  ; FB52D2  ld DE,BC
 	ld	a, 2:opc                                   ; FB52D4  ld A,0x02
-	extpfx3 0x8E, 0x0A, 0x41                   ; FB52D6  mul WA,(XIZ+0x0a)
+	mul	wa, (xiz+10)                   ; FB52D6  mul WA,(XIZ+0x0a)
 	add	wa, 30                                 ; FB52D9  add WA,0x001e
 	extz	xwa                                   ; FB52DD  extz XWA
-	extpfx3 0x9E, 0x08, 0x80                   ; FB52DF  add WA,(XIZ+0x08)
+	add	wa, (xiz+8)                   ; FB52DF  add WA,(XIZ+0x08)
 	ld	(xwa), bc                               ; FB52E2  ld (XWA),BC
 	jr sub_FB52A5__FB52FF                      ; FB52E4  jr T,0xfb52ff
 sub_FB52A5__FB52E6:
@@ -10045,15 +10045,15 @@ sub_FB52A5__FB52E6:
 	extz	bc                                    ; FB52EB  extz BC
 	ld	de, bc                                  ; FB52ED  ld DE,BC
 	ld	a, 2:opc                                   ; FB52EF  ld A,0x02
-	extpfx3 0x8E, 0x0A, 0x41                   ; FB52F1  mul WA,(XIZ+0x0a)
+	mul	wa, (xiz+10)                   ; FB52F1  mul WA,(XIZ+0x0a)
 	add	wa, 30                                 ; FB52F4  add WA,0x001e
 	extz	xwa                                   ; FB52F8  extz XWA
-	extpfx3 0x9E, 0x08, 0x80                   ; FB52FA  add WA,(XIZ+0x08)
+	add	wa, (xiz+8)                   ; FB52FA  add WA,(XIZ+0x08)
 	ld	(xwa), bc                               ; FB52FD  ld (XWA),BC
 sub_FB52A5__FB52FF:
 	popw	de                                    ; FB52FF  pop DE
 	popw	hl                                    ; FB5300  pop HL
-	unlk32 xiz                                 ; FB5301  unlk XIZ
+	unlk	xiz                                 ; FB5301  unlk XIZ
 	ret                                        ; FB5303  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB5304` stays an address.
@@ -10079,7 +10079,7 @@ sub_FB52A5__FB52FF:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB5304:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5304  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5304  link XIZ,0x0000
 	pushw	hl                                   ; FB5308  push HL
 	pushw	de                                   ; FB5309  push DE
 	ld	l, (xiz+14)                             ; FB530A  ld L,(XIZ+0x0e)
@@ -10100,10 +10100,10 @@ sub_FB5304:
 	ld	de, bc                                  ; FB532E  ld DE,BC
 	or	de, 0xC000                              ; FB5330  or DE,0xc000
 	ld	c, 2:opc                                   ; FB5334  ld C,0x02
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB5336  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB5336  mul BC,(XIZ+0x0a)
 	add	bc, 30                                 ; FB5339  add BC,0x001e
 	extz	xbc                                   ; FB533D  extz XBC
-	extpfx3 0x9E, 0x08, 0x81                   ; FB533F  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; FB533F  add BC,(XIZ+0x08)
 	ld	(xbc), de                               ; FB5342  ld (XBC),DE
 	jr sub_FB5304__FB535F                      ; FB5344  jr T,0xfb535f
 sub_FB5304__FB5346:
@@ -10112,15 +10112,15 @@ sub_FB5304__FB5346:
 	ld	de, bc                                  ; FB534A  ld DE,BC
 	set	14, de                                 ; FB534C  set 0x0e,DE
 	ld	c, 2:opc                                   ; FB534F  ld C,0x02
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB5351  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB5351  mul BC,(XIZ+0x0a)
 	add	bc, 30                                 ; FB5354  add BC,0x001e
 	extz	xbc                                   ; FB5358  extz XBC
-	extpfx3 0x9E, 0x08, 0x81                   ; FB535A  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; FB535A  add BC,(XIZ+0x08)
 	ld	(xbc), de                               ; FB535D  ld (XBC),DE
 sub_FB5304__FB535F:
 	popw	de                                    ; FB535F  pop DE
 	popw	hl                                    ; FB5360  pop HL
-	unlk32 xiz                                 ; FB5361  unlk XIZ
+	unlk	xiz                                 ; FB5361  unlk XIZ
 	ret                                        ; FB5363  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB5364` stays an address.
@@ -10147,7 +10147,7 @@ sub_FB5304__FB535F:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB5364:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5364  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5364  link XIZ,0x0000
 	pushw	hl                                   ; FB5368  push HL
 	pushw	de                                   ; FB5369  push DE
 	ld	l, (xiz+14)                             ; FB536A  ld L,(XIZ+0x0e)
@@ -10168,10 +10168,10 @@ sub_FB5364:
 	ld	de, bc                                  ; FB538E  ld DE,BC
 	or	de, 0x3300                              ; FB5390  or DE,0x3300
 	ld	c, 2:opc                                   ; FB5394  ld C,0x02
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB5396  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB5396  mul BC,(XIZ+0x0a)
 	add	bc, 30                                 ; FB5399  add BC,0x001e
 	extz	xbc                                   ; FB539D  extz XBC
-	extpfx3 0x9E, 0x08, 0x81                   ; FB539F  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; FB539F  add BC,(XIZ+0x08)
 	ld	(xbc), de                               ; FB53A2  ld (XBC),DE
 	jr sub_FB5364__FB53C0                      ; FB53A4  jr T,0xfb53c0
 sub_FB5364__FB53A6:
@@ -10180,15 +10180,15 @@ sub_FB5364__FB53A6:
 	ld	de, bc                                  ; FB53AA  ld DE,BC
 	or	de, 0x1100                              ; FB53AC  or DE,0x1100
 	ld	c, 2:opc                                   ; FB53B0  ld C,0x02
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB53B2  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB53B2  mul BC,(XIZ+0x0a)
 	add	bc, 30                                 ; FB53B5  add BC,0x001e
 	extz	xbc                                   ; FB53B9  extz XBC
-	extpfx3 0x9E, 0x08, 0x81                   ; FB53BB  add BC,(XIZ+0x08)
+	add	bc, (xiz+8)                   ; FB53BB  add BC,(XIZ+0x08)
 	ld	(xbc), de                               ; FB53BE  ld (XBC),DE
 sub_FB5364__FB53C0:
 	popw	de                                    ; FB53C0  pop DE
 	popw	hl                                    ; FB53C1  pop HL
-	unlk32 xiz                                 ; FB53C2  unlk XIZ
+	unlk	xiz                                 ; FB53C2  unlk XIZ
 	ret                                        ; FB53C4  ret
 ; --------------------------------------------------------------------------
 ; ★ NOT NAMED (wave 18): `sub_FB53C5` stays an address.
@@ -10223,12 +10223,12 @@ sub_FB5364__FB53C0:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FB53C5:
-	link32 0xEE, 0x0C, 0xED, 0xFF              ; FB53C5  link XIZ,0xffed
+	link	xiz, 0xffed              ; FB53C5  link XIZ,0xffed
 	pushw	hl                                   ; FB53C9  push HL
 	pushw	de                                   ; FB53CA  push DE
 	push	xix                                   ; FB53CB  push XIX
 	ld	c, 41:opc                                  ; FB53CC  ld C,0x29
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB53CE  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB53CE  mul BC,(XIZ+0x0a)
 	ld	(xiz-19), bc                            ; FB53D1  ld (XIZ+0xed),BC
 	ld	wa, (xiz+8)                             ; FB53D4  ld WA,(XIZ+0x08)
 	extz	wa                                    ; FB53D7  extz WA
@@ -10241,16 +10241,16 @@ sub_FB53C5:
 	add	bc, ix                                 ; FB53EA  add BC,IX
 	ld	(xiz-16), bc                            ; FB53EC  ld (XIZ+0xf0),BC
 	ld	c, 2:opc                                   ; FB53EF  ld C,0x02
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB53F1  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB53F1  mul BC,(XIZ+0x0c)
 	ld	hl, bc                                  ; FB53F4  ld HL,BC
 	add	bc, 30                                 ; FB53F6  add BC,0x001e
 	ld	hl, bc                                  ; FB53FA  ld HL,BC
 	extz	xbc                                   ; FB53FC  extz XBC
-	extpfx3 0x9E, 0xF0, 0x81                   ; FB53FE  add BC,(XIZ+0xf0)
-	extpfx4 0xB1, 0x02, 0x00, 0x00             ; FB5401  ld (XBC),0x0000
+	add	bc, (xiz-16)                   ; FB53FE  add BC,(XIZ+0xf0)
+	ldw	(xbc), 0x0000             ; FB5401  ld (XBC),0x0000
 	ld	(xiz-17), 0                             ; FB5405  ld (XIZ+0xef),0x00
 	ld	c, 16:opc                                  ; FB5409  ld C,0x10
-	extpfx3 0x8E, 0x0C, 0x43                   ; FB540B  mul BC,(XIZ+0x0c)
+	mul	bc, (xiz+12)                   ; FB540B  mul BC,(XIZ+0x0c)
 	ld	(xiz-19), bc                            ; FB540E  ld (XIZ+0xed),BC
 	ld	(xiz-8), hl                             ; FB5411  ld (XIZ+0xf8),HL
 	add	bc, de                                 ; FB5414  add BC,DE
@@ -10259,7 +10259,7 @@ sub_FB53C5:
 	ldw (xiz-10), 0x0000                       ; FB541C  ld (XIZ+0xf6),0x0000
 sub_FB53C5__FB5421:
 	ld	bc, (xiz-12)                            ; FB5421  ld BC,(XIZ+0xf4)
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB5424  add BC,(XIZ+0xf6)
+	add	bc, (xiz-10)                   ; FB5424  add BC,(XIZ+0xf6)
 	ld	de, bc                                  ; FB5427  ld DE,BC
 	add	de, 53                                 ; FB5429  add DE,0x0035
 	ldw	ix, 0x1523                             ; FB542D  ld IX,0x1523
@@ -10283,7 +10283,7 @@ sub_FB53C5__FB5421:
 	and	a, l                                   ; FB545E  and A,L
 	jrl z, sub_FB53C5__FB550E                  ; FB5460  jrl Z,0xfb550e
 	lda	xbc, (BitMask_Table_FDE695+16:24)                     ; FB5463  lda XBC,0xfde6a5
-	extpfx3 0xAE, 0xFA, 0x81                   ; FB5468  add XBC,(XIZ+0xfa)
+	add	xbc, (xiz-6)                   ; FB5468  add XBC,(XIZ+0xfa)
 	ld	l, (xbc)                                ; FB546B  ld L,(XBC)
 	ld	bc, (xiz-2)                             ; FB546D  ld BC,(XIZ+0xfe)
 	extz	xbc                                   ; FB5470  extz XBC
@@ -10305,7 +10305,7 @@ sub_FB53C5__FB548D:
 	extz	bc                                    ; FB5492  extz BC
 	ld	wa, de                                  ; FB5494  ld WA,DE
 	extz	xwa                                   ; FB5496  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB5498  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB5498  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB549B  ld (XWA),BC
 	jrl sub_FB53C5__FB550E                     ; FB549D  jrl T,0xfb550e
 sub_FB53C5__FB54A0:
@@ -10314,7 +10314,7 @@ sub_FB53C5__FB54A0:
 	or	bc, 0xC000                              ; FB54A4  or BC,0xc000
 	ld	wa, de                                  ; FB54A8  ld WA,DE
 	extz	xwa                                   ; FB54AA  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB54AC  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB54AC  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB54AF  ld (XWA),BC
 	jr sub_FB53C5__FB550E                      ; FB54B1  jr T,0xfb550e
 sub_FB53C5__FB54B3:
@@ -10323,7 +10323,7 @@ sub_FB53C5__FB54B3:
 	or	bc, 0x3300                              ; FB54B7  or BC,0x3300
 	ld	wa, de                                  ; FB54BB  ld WA,DE
 	extz	xwa                                   ; FB54BD  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB54BF  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB54BF  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB54C2  ld (XWA),BC
 	jr sub_FB53C5__FB550E                      ; FB54C4  jr T,0xfb550e
 sub_FB53C5__FB54C6:
@@ -10342,7 +10342,7 @@ sub_FB53C5__FB54D9:
 	extz	bc                                    ; FB54DE  extz BC
 	ld	wa, de                                  ; FB54E0  ld WA,DE
 	extz	xwa                                   ; FB54E2  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB54E4  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB54E4  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB54E7  ld (XWA),BC
 	jr sub_FB53C5__FB550E                      ; FB54E9  jr T,0xfb550e
 sub_FB53C5__FB54EB:
@@ -10351,7 +10351,7 @@ sub_FB53C5__FB54EB:
 	set	14, bc                                 ; FB54EF  set 0x0e,BC
 	ld	wa, de                                  ; FB54F2  ld WA,DE
 	extz	xwa                                   ; FB54F4  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB54F6  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB54F6  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB54F9  ld (XWA),BC
 	jr sub_FB53C5__FB550E                      ; FB54FB  jr T,0xfb550e
 sub_FB53C5__FB54FD:
@@ -10360,7 +10360,7 @@ sub_FB53C5__FB54FD:
 	or	bc, 0x1100                              ; FB5501  or BC,0x1100
 	ld	wa, de                                  ; FB5505  ld WA,DE
 	extz	xwa                                   ; FB5507  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB5509  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB5509  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB550C  ld (XWA),BC
 sub_FB53C5__FB550E:
 	jrl sub_FB53C5__FB5623                     ; FB550E  jrl T,0xfb5623
@@ -10400,7 +10400,7 @@ sub_FB53C5__FB552E:
 	extz	wa                                    ; FB5560  extz WA
 	ld	bc, de                                  ; FB5562  ld BC,DE
 	extz	xbc                                   ; FB5564  extz XBC
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB5566  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB5566  add BC,(XIZ+0xf8)
 	ld	(xbc), wa                               ; FB5569  ld (XBC),WA
 	jr sub_FB53C5__FB557D                      ; FB556B  jr T,0xfb557d
 sub_FB53C5__FB556D:
@@ -10409,7 +10409,7 @@ sub_FB53C5__FB556D:
 	extz	bc                                    ; FB5572  extz BC
 	ld	wa, de                                  ; FB5574  ld WA,DE
 	extz	xwa                                   ; FB5576  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB5578  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB5578  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB557B  ld (XWA),BC
 sub_FB53C5__FB557D:
 	jrl sub_FB53C5__FB5623                     ; FB557D  jrl T,0xfb5623
@@ -10436,7 +10436,7 @@ sub_FB53C5__FB5580:
 	or	wa, 0xC000                              ; FB55B1  or WA,0xc000
 	ld	bc, de                                  ; FB55B5  ld BC,DE
 	extz	xbc                                   ; FB55B7  extz XBC
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB55B9  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB55B9  add BC,(XIZ+0xf8)
 	ld	(xbc), wa                               ; FB55BC  ld (XBC),WA
 	jr sub_FB53C5__FB55D0                      ; FB55BE  jr T,0xfb55d0
 sub_FB53C5__FB55C0:
@@ -10445,7 +10445,7 @@ sub_FB53C5__FB55C0:
 	set	14, bc                                 ; FB55C4  set 0x0e,BC
 	ld	wa, de                                  ; FB55C7  ld WA,DE
 	extz	xwa                                   ; FB55C9  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB55CB  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB55CB  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB55CE  ld (XWA),BC
 sub_FB53C5__FB55D0:
 	jr sub_FB53C5__FB5623                      ; FB55D0  jr T,0xfb5623
@@ -10472,7 +10472,7 @@ sub_FB53C5__FB55D2:
 	or	wa, 0x3300                              ; FB5603  or WA,0x3300
 	ld	bc, de                                  ; FB5607  ld BC,DE
 	extz	xbc                                   ; FB5609  extz XBC
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB560B  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB560B  add BC,(XIZ+0xf8)
 	ld	(xbc), wa                               ; FB560E  ld (XBC),WA
 	jr sub_FB53C5__FB5623                      ; FB5610  jr T,0xfb5623
 sub_FB53C5__FB5612:
@@ -10481,7 +10481,7 @@ sub_FB53C5__FB5612:
 	or	bc, 0x1100                              ; FB5616  or BC,0x1100
 	ld	wa, de                                  ; FB561A  ld WA,DE
 	extz	xwa                                   ; FB561C  extz XWA
-	extpfx3 0x9E, 0xF8, 0x80                   ; FB561E  add WA,(XIZ+0xf8)
+	add	wa, (xiz-8)                   ; FB561E  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB5621  ld (XWA),BC
 sub_FB53C5__FB5623:
 	incw	4, (xiz-10)                           ; FB5623  incw 4,(XIZ+0xf6)
@@ -10491,7 +10491,7 @@ sub_FB53C5__FB5623:
 	pop	xix                                    ; FB5630  pop XIX
 	popw	de                                    ; FB5631  pop DE
 	popw	hl                                    ; FB5632  pop HL
-	unlk32 xiz                                 ; FB5633  unlk XIZ
+	unlk	xiz                                 ; FB5633  unlk XIZ
 	ret                                        ; FB5635  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5636 is now `Part_StageDspAlgoParams`.
@@ -10526,7 +10526,7 @@ sub_FB53C5__FB5623:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_StageDspAlgoParams:
-	link32 0xEE, 0x0C, 0xFF, 0xFF              ; FB5636  link XIZ,0xffff
+	link	xiz, 0xffff              ; FB5636  link XIZ,0xffff
 	push	xhl                                   ; FB563A  push XHL
 	pushw	de                                   ; FB563B  push DE
 	push	xix                                   ; FB563C  push XIX
@@ -10544,7 +10544,7 @@ Part_StageDspAlgoParams:
 	ld	hl, de                                  ; FB565F  ld HL,DE
 	add	hl, 9                                  ; FB5661  add HL,0x0009
 	extz	xhl                                   ; FB5665  extz XHL
-	extpfx7 0xD3, 0xED, 0x23, 0x15, 0x3E, 0x00, 0x80 ; FB5667  or (XHL+0x1523),0x8000
+	orw	(xhl+5411), 0x8000 ; FB5667  or (XHL+0x1523),0x8000
 	cp (xiz+10), 0x00                          ; FB566E  cp (XIZ+0x0a),0x00
 	jrl nz, sub_FB5636__FB5717                 ; FB5672  jrl NZ,0xfb5717
 	extz	xhl                                   ; FB5675  extz XHL
@@ -10611,18 +10611,18 @@ sub_FB5636__FB5717:
 	ld	hl, de                                  ; FB5724  ld HL,DE
 	add	hl, 0x71                               ; FB5726  add HL,0x0071
 	extz	xhl                                   ; FB572A  extz XHL
-	extpfx6 0xC3, 0xED, 0x23, 0x15, 0x3C, 0x05 ; FB572C  and (XHL+0x1523),0x05
+	and	(xhl+5411), 0x05 ; FB572C  and (XHL+0x1523),0x05
 	cp	ix, 0:i3                                  ; FB5732  cp IX,0
 	jr z, sub_FB5636__FB573E                   ; FB5734  jr Z,0xfb573e
 	extz	xhl                                   ; FB5736  extz XHL
-	extpfx6 0xC3, 0xED, 0x23, 0x15, 0x3E, 0x02 ; FB5738  or (XHL+0x1523),0x02
+	or	(xhl+5411), 0x02 ; FB5738  or (XHL+0x1523),0x02
 sub_FB5636__FB573E:
 	ld	bc, (xiz+8)                             ; FB573E  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB5741  extz BC
 	mul	bc, 0x12C                              ; FB5743  mul BC,0x012c
 	inc	6, bc                                  ; FB5747  inc 6,BC
 	extz	xbc                                   ; FB5749  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3C, 0xFF, 0xFD ; FB574B  and (XBC+0x1523),0xfdff
+	andw	(xbc+5411), 0xfdff ; FB574B  and (XBC+0x1523),0xfdff
 	jrl sub_FB5636__FB5824                     ; FB5752  jrl T,0xfb5824
 sub_FB5636__FB5755:
 	ld	ix, de                                  ; FB5755  ld IX,DE
@@ -10667,7 +10667,7 @@ sub_FB5636__FB5755:
 	mul	bc, 0x12C                              ; FB57C0  mul BC,0x012c
 	inc	6, bc                                  ; FB57C4  inc 6,BC
 	extz	xbc                                   ; FB57C6  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x00, 0x02 ; FB57C8  or (XBC+0x1523),0x0200
+	orw	(xbc+5411), 0x0200 ; FB57C8  or (XBC+0x1523),0x0200
 	jr sub_FB5636__FB57F1                      ; FB57CF  jr T,0xfb57f1
 sub_FB5636__FB57D1:
 	ld	bc, hl                                  ; FB57D1  ld BC,HL
@@ -10680,7 +10680,7 @@ sub_FB5636__FB57DD:
 	mul	bc, 0x12C                              ; FB57E2  mul BC,0x012c
 	inc	6, bc                                  ; FB57E6  inc 6,BC
 	extz	xbc                                   ; FB57E8  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3C, 0xFF, 0xFD ; FB57EA  and (XBC+0x1523),0xfdff
+	andw	(xbc+5411), 0xfdff ; FB57EA  and (XBC+0x1523),0xfdff
 sub_FB5636__FB57F1:
 	ld	bc, (xiz+8)                             ; FB57F1  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB57F4  extz BC
@@ -10701,7 +10701,7 @@ sub_FB5636__FB5824:
 	pop	xix                                    ; FB5824  pop XIX
 	popw	de                                    ; FB5825  pop DE
 	pop	xhl                                    ; FB5826  pop XHL
-	unlk32 xiz                                 ; FB5827  unlk XIZ
+	unlk	xiz                                 ; FB5827  unlk XIZ
 	ret                                        ; FB5829  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB582A is now `PartRec_StageChanFreqWord_0065`.
@@ -10742,7 +10742,7 @@ sub_FB5636__FB5824:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_StageChanFreqWord_0065:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB582A  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB582A  link XIZ,0xfffc
 	pushw	hl                                   ; FB582E  push HL
 	pushw	de                                   ; FB582F  push DE
 	push	xix                                   ; FB5830  push XIX
@@ -10909,7 +10909,7 @@ sub_FB582A__FB59AF:
 	pop	xix                                    ; FB59CC  pop XIX
 	popw	de                                    ; FB59CD  pop DE
 	popw	hl                                    ; FB59CE  pop HL
-	unlk32 xiz                                 ; FB59CF  unlk XIZ
+	unlk	xiz                                 ; FB59CF  unlk XIZ
 	ret                                        ; FB59D1  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB59D2 is now `PartRec_StageChanFreqWord_0067`.
@@ -10943,7 +10943,7 @@ sub_FB582A__FB59AF:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_StageChanFreqWord_0067:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FB59D2  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FB59D2  link XIZ,0xfff8
 	pushw	hl                                   ; FB59D6  push HL
 	pushw	de                                   ; FB59D7  push DE
 	push	xix                                   ; FB59D8  push XIX
@@ -11099,7 +11099,7 @@ sub_FB59D2__FB5B33:
 	pop	xix                                    ; FB5B50  pop XIX
 	popw	de                                    ; FB5B51  pop DE
 	popw	hl                                    ; FB5B52  pop HL
-	unlk32 xiz                                 ; FB5B53  unlk XIZ
+	unlk	xiz                                 ; FB5B53  unlk XIZ
 	ret                                        ; FB5B55  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5B56 is now `Part_GetDspParam_00D2_Low6`.
@@ -11124,7 +11124,7 @@ sub_FB59D2__FB5B33:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetDspParam_00D2_Low6:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5B56  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5B56  link XIZ,0x0000
 	pushw	hl                                   ; FB5B5A  push HL
 	ldw	hl, 0                                  ; FB5B5B  ld HL,0x0000
 	ld	bc, (xiz+8)                             ; FB5B5E  ld BC,(XIZ+0x08)
@@ -11154,7 +11154,7 @@ sub_FB5B56__FB5BA2:
 	ld	c, l                                    ; FB5BA2  ld C,L
 	ld	a, c                                    ; FB5BA4  ld A,C
 	popw	hl                                    ; FB5BA6  pop HL
-	unlk32 xiz                                 ; FB5BA7  unlk XIZ
+	unlk	xiz                                 ; FB5BA7  unlk XIZ
 	ret                                        ; FB5BA9  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5BAA is now `PartRec_StageChanFreqWord_006D`.
@@ -11185,7 +11185,7 @@ sub_FB5B56__FB5BA2:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_StageChanFreqWord_006D:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5BAA  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB5BAA  link XIZ,0xfffc
 	pushw	hl                                   ; FB5BAE  push HL
 	pushw	de                                   ; FB5BAF  push DE
 	push	xix                                   ; FB5BB0  push XIX
@@ -11265,7 +11265,7 @@ sub_FB5BAA__FB5C5B:
 	pop	xix                                    ; FB5C71  pop XIX
 	popw	de                                    ; FB5C72  pop DE
 	popw	hl                                    ; FB5C73  pop HL
-	unlk32 xiz                                 ; FB5C74  unlk XIZ
+	unlk	xiz                                 ; FB5C74  unlk XIZ
 	ret                                        ; FB5C76  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5C77 is now `PartRec_StageChanFreqWord_006F`.
@@ -11292,7 +11292,7 @@ sub_FB5BAA__FB5C5B:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_StageChanFreqWord_006F:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5C77  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB5C77  link XIZ,0xfffc
 	pushw	hl                                   ; FB5C7B  push HL
 	pushw	de                                   ; FB5C7C  push DE
 	push	xix                                   ; FB5C7D  push XIX
@@ -11302,7 +11302,7 @@ PartRec_StageChanFreqWord_006F:
 	extz	bc                                    ; FB5C87  extz BC
 	mul	bc, 0x12C                              ; FB5C89  mul BC,0x012c
 	extz	xix                                   ; FB5C8D  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB5C8F  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB5C8F  ld XWA,(XIX+BC)
 	ld	h, (xwa+0xD0)                           ; FB5C94  ld H,(XWA+0x00d0)
 	and	h, 15                                  ; FB5C99  and H,0x0f
 	ld	c, h                                    ; FB5C9C  ld C,H
@@ -11323,7 +11323,7 @@ sub_FB5C77__FB5CAA:
 	extz	bc                                    ; FB5CBC  extz BC
 	mul	bc, 0x12C                              ; FB5CBE  mul BC,0x012c
 	extz	xix                                   ; FB5CC2  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB5CC4  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB5CC4  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD2)                           ; FB5CC9  ld C,(XWA+0x00d2)
 	mul	c, 2                                   ; FB5CCE  mul C,0x02
 	extz	xbc                                   ; FB5CD1  extz XBC
@@ -11349,7 +11349,7 @@ sub_FB5C77__FB5CEB:
 	pop	xix                                    ; FB5CFF  pop XIX
 	popw	de                                    ; FB5D00  pop DE
 	popw	hl                                    ; FB5D01  pop HL
-	unlk32 xiz                                 ; FB5D02  unlk XIZ
+	unlk	xiz                                 ; FB5D02  unlk XIZ
 	ret                                        ; FB5D04  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5D05 is now `Part_GetSecondaryParam_AlgoType9`.
@@ -11379,7 +11379,7 @@ sub_FB5C77__FB5CEB:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetSecondaryParam_AlgoType9:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5D05  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5D05  link XIZ,0x0000
 	push	xhl                                   ; FB5D09  push XHL
 	pushw	de                                   ; FB5D0A  push DE
 	push	xix                                   ; FB5D0B  push XIX
@@ -11407,7 +11407,7 @@ Part_GetSecondaryParam_AlgoType9:
 	ld	bc, hl                                  ; FB5D4F  ld BC,HL
 	add	bc, 9                                  ; FB5D51  add BC,0x0009
 	extz	xbc                                   ; FB5D55  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3C, 0xFF, 0xDF ; FB5D57  and (XBC+0x1523),0xdfff
+	andw	(xbc+5411), 0xdfff ; FB5D57  and (XBC+0x1523),0xdfff
 	jr sub_FB5D05__FB5D64                      ; FB5D5E  jr T,0xfb5d64
 sub_FB5D05__FB5D60:
 	ld	a, 0xFF:opc                                ; FB5D60  ld A,0xff
@@ -11418,7 +11418,7 @@ sub_FB5D05__FB5D66:
 	pop	xix                                    ; FB5D66  pop XIX
 	popw	de                                    ; FB5D67  pop DE
 	pop	xhl                                    ; FB5D68  pop XHL
-	unlk32 xiz                                 ; FB5D69  unlk XIZ
+	unlk	xiz                                 ; FB5D69  unlk XIZ
 	ret                                        ; FB5D6B  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5D6C is now `Part_GetDspParam_00D7`.
@@ -11445,7 +11445,7 @@ sub_FB5D05__FB5D66:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetDspParam_00D7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5D6C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5D6C  link XIZ,0x0000
 	push	xhl                                   ; FB5D70  push XHL
 	pushw	de                                   ; FB5D71  push DE
 	push	xix                                   ; FB5D72  push XIX
@@ -11500,7 +11500,7 @@ sub_FB5D6C__FB5DFA:
 	pop	xix                                    ; FB5DFA  pop XIX
 	popw	de                                    ; FB5DFB  pop DE
 	pop	xhl                                    ; FB5DFC  pop XHL
-	unlk32 xiz                                 ; FB5DFD  unlk XIZ
+	unlk	xiz                                 ; FB5DFD  unlk XIZ
 	ret                                        ; FB5DFF  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5E00 is now `Part_GetDspParam_00D8`.
@@ -11524,7 +11524,7 @@ sub_FB5D6C__FB5DFA:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetDspParam_00D8:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5E00  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5E00  link XIZ,0x0000
 	push	xhl                                   ; FB5E04  push XHL
 	pushw	de                                   ; FB5E05  push DE
 	ld	d, 0:opc                                   ; FB5E06  ld D,0x00
@@ -11546,7 +11546,7 @@ sub_FB5E00__FB5E32:
 sub_FB5E00__FB5E34:
 	popw	de                                    ; FB5E34  pop DE
 	pop	xhl                                    ; FB5E35  pop XHL
-	unlk32 xiz                                 ; FB5E36  unlk XIZ
+	unlk	xiz                                 ; FB5E36  unlk XIZ
 	ret                                        ; FB5E38  ret
 ; --------------------------------------------------------------------------
 ; Dev10C_ChanSelHighBits -- 0xFB5E39..0xFB5F90 (344 bytes)
@@ -11591,7 +11591,7 @@ sub_FB5E00__FB5E34:
 ;          disassembler.
 ; --------------------------------------------------------------------------
 Dev10C_ChanSelHighBits:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB5E39  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB5E39  link XIZ,0xfffc
 	pushw	hl                                   ; FB5E3D  push HL
 	pushw	de                                   ; FB5E3E  push DE
 	push	xix                                   ; FB5E3F  push XIX
@@ -11725,7 +11725,7 @@ Dev10C_ChanSelHighBits__FB5F8B:
 	pop	xix                                    ; FB5F8B  pop XIX
 	popw	de                                    ; FB5F8C  pop DE
 	popw	hl                                    ; FB5F8D  pop HL
-	unlk32 xiz                                 ; FB5F8E  unlk XIZ
+	unlk	xiz                                 ; FB5F8E  unlk XIZ
 	ret                                        ; FB5F90  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB5F91 is now `Voice_Reg0180ModeBits_FromAlgoDesc`.
@@ -11759,7 +11759,7 @@ Dev10C_ChanSelHighBits__FB5F8B:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Voice_Reg0180ModeBits_FromAlgoDesc:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB5F91  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB5F91  link XIZ,0x0000
 	pushw	hl                                   ; FB5F95  push HL
 	pushw	de                                   ; FB5F96  push DE
 	push	xix                                   ; FB5F97  push XIX
@@ -11780,7 +11780,7 @@ Voice_Reg0180ModeBits_FromAlgoDesc:
 	jr sub_FB5F91__FB6012                      ; FB5FBF  jr T,0xfb6012
 sub_FB5F91__FB5FC1:
 	ld	c, 5:opc                                   ; FB5FC1  ld C,0x05
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB5FC3  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB5FC3  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB5FC6  extz XBC
 	ld	xix, xbc                                ; FB5FC8  ld XIX,XBC
 	ld	a, 39:opc                                  ; FB5FCA  ld A,0x27
@@ -11815,7 +11815,7 @@ sub_FB5F91__FB6014:
 	pop	xix                                    ; FB6014  pop XIX
 	popw	de                                    ; FB6015  pop DE
 	popw	hl                                    ; FB6016  pop HL
-	unlk32 xiz                                 ; FB6017  unlk XIZ
+	unlk	xiz                                 ; FB6017  unlk XIZ
 	ret                                        ; FB6019  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB601A is now `Part_GetAlgoDescByte14`.
@@ -11841,7 +11841,7 @@ sub_FB5F91__FB6014:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetAlgoDescByte14:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB601A  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB601A  link XIZ,0xfffc
 	pushw	hl                                   ; FB601E  push HL
 	push	xix                                   ; FB601F  push XIX
 	ld	bc, (xiz+8)                             ; FB6020  ld BC,(XIZ+0x08)
@@ -11854,13 +11854,13 @@ Part_GetAlgoDescByte14:
 	ld	l, c                                    ; FB6037  ld L,C
 	and	l, 15                                  ; FB6039  and L,0x0f
 	ld	c, 5:opc                                   ; FB603C  ld C,0x05
-	extpfx3 0x8E, 0x0A, 0x43                   ; FB603E  mul BC,(XIZ+0x0a)
+	mul	bc, (xiz+10)                   ; FB603E  mul BC,(XIZ+0x0a)
 	extz	xbc                                   ; FB6041  extz XBC
 	ld	(xiz-4), xbc                            ; FB6043  ld (XIZ+0xfc),XBC
 	ld	c, 39:opc                                  ; FB6046  ld C,0x27
 	mul	bc, l                                ; FB6048  mul BC,L
 	extz	xbc                                   ; FB604A  extz XBC
-	extpfx3 0xAE, 0xFC, 0x81                   ; FB604C  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FB604C  add XBC,(XIZ+0xfc)
 	add	xbc, 20                                ; FB604F  add XBC,0x00000014
 	add	xbc, DSP_AlgoDescriptor_Records                          ; FB6055  add XBC,0x00fdf4f1
 	ld	h, (xbc)                                ; FB605B  ld H,(XBC)
@@ -11880,7 +11880,7 @@ sub_FB601A__FB6078:
 sub_FB601A__FB607A:
 	pop	xix                                    ; FB607A  pop XIX
 	popw	hl                                    ; FB607B  pop HL
-	unlk32 xiz                                 ; FB607C  unlk XIZ
+	unlk	xiz                                 ; FB607C  unlk XIZ
 	ret                                        ; FB607E  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB607F is now `Part_GetAlgoDescByte15`.
@@ -11907,7 +11907,7 @@ sub_FB601A__FB607A:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetAlgoDescByte15:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB607F  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB607F  link XIZ,0xfffc
 	pushw	hl                                   ; FB6083  push HL
 	pushw	de                                   ; FB6084  push DE
 	push	xix                                   ; FB6085  push XIX
@@ -11929,7 +11929,7 @@ Part_GetAlgoDescByte15:
 	ld	c, 39:opc                                  ; FB60B0  ld C,0x27
 	mul	bc, e                                ; FB60B2  mul BC,E
 	extz	xbc                                   ; FB60B4  extz XBC
-	extpfx3 0xAE, 0xFC, 0x81                   ; FB60B6  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FB60B6  add XBC,(XIZ+0xfc)
 	add	xbc, 21                                ; FB60B9  add XBC,0x00000015
 	add	xbc, DSP_AlgoDescriptor_Records                          ; FB60BF  add XBC,0x00fdf4f1
 	ld	h, (xbc)                                ; FB60C5  ld H,(XBC)
@@ -11997,7 +11997,7 @@ sub_FB607F__FB6152:
 	pop	xix                                    ; FB6152  pop XIX
 	popw	de                                    ; FB6153  pop DE
 	popw	hl                                    ; FB6154  pop HL
-	unlk32 xiz                                 ; FB6155  unlk XIZ
+	unlk	xiz                                 ; FB6155  unlk XIZ
 	ret                                        ; FB6157  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6158 is now `Part_GetAlgoDescByte16_Bias`.
@@ -12027,7 +12027,7 @@ sub_FB607F__FB6152:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetAlgoDescByte16_Bias:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6158  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB6158  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FB615C  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB615F  extz BC
 	mul	bc, 0x12C                              ; FB6161  mul BC,0x012c
@@ -12052,7 +12052,7 @@ sub_FB6158__FB6187:
 sub_FB6158__FB618B:
 	sub	a, a                                   ; FB618B  sub A,A
 sub_FB6158__FB618D:
-	unlk32 xiz                                 ; FB618D  unlk XIZ
+	unlk	xiz                                 ; FB618D  unlk XIZ
 	ret                                        ; FB618F  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6190 is now `Part_GetAlgoDescByte16`.
@@ -12080,7 +12080,7 @@ sub_FB6158__FB618D:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetAlgoDescByte16:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB6190  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB6190  link XIZ,0xfffc
 	pushw	hl                                   ; FB6194  push HL
 	pushw	de                                   ; FB6195  push DE
 	push	xix                                   ; FB6196  push XIX
@@ -12091,7 +12091,7 @@ Part_GetAlgoDescByte16:
 	extz	bc                                    ; FB61A3  extz BC
 	mul	bc, 0x12C                              ; FB61A5  mul BC,0x012c
 	extz	xix                                   ; FB61A9  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB61AB  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB61AB  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD0)                           ; FB61B0  ld C,(XWA+0x00d0)
 	ld	e, c                                    ; FB61B5  ld E,C
 	and	e, 15                                  ; FB61B7  and E,0x0f
@@ -12140,7 +12140,7 @@ sub_FB6190__FB6217:
 	extz	bc                                    ; FB621D  extz BC
 	mul	bc, 0x12C                              ; FB621F  mul BC,0x012c
 	extz	xix                                   ; FB6223  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6225  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6225  ld XWA,(XIX+BC)
 	ld	h, (xwa+0xD5)                           ; FB622A  ld H,(XWA+0x00d5)
 	ld	c, 0x64:opc                                ; FB622F  ld C,0x64
 	sub	h, c                                   ; FB6231  sub H,C
@@ -12166,7 +12166,7 @@ sub_FB6190__FB624B:
 	extz	bc                                    ; FB6251  extz BC
 	mul	bc, 0x12C                              ; FB6253  mul BC,0x012c
 	extz	xix                                   ; FB6257  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6259  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6259  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD4)                           ; FB625E  ld C,(XWA+0x00d4)
 	sub	c, 0x64                                ; FB6263  sub C,0x64
 	ld	a, c                                    ; FB6266  ld A,C
@@ -12177,7 +12177,7 @@ sub_FB6190__FB626C:
 	pop	xix                                    ; FB626C  pop XIX
 	popw	de                                    ; FB626D  pop DE
 	popw	hl                                    ; FB626E  pop HL
-	unlk32 xiz                                 ; FB626F  unlk XIZ
+	unlk	xiz                                 ; FB626F  unlk XIZ
 	ret                                        ; FB6271  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6272 is now `Part_GetAlgoDescByte17`.
@@ -12208,7 +12208,7 @@ sub_FB6190__FB626C:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_GetAlgoDescByte17:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FB6272  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FB6272  link XIZ,0xfff6
 	pushw	hl                                   ; FB6276  push HL
 	pushw	de                                   ; FB6277  push DE
 	push	xix                                   ; FB6278  push XIX
@@ -12221,11 +12221,11 @@ Part_GetAlgoDescByte17:
 	ld	hl, bc                                  ; FB628B  ld HL,BC
 	add	bc, 9                                  ; FB628D  add BC,0x0009
 	extz	xix                                   ; FB6291  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xE4, 0x20       ; FB6293  ld WA,(XIX+BC)
+	ld	wa, (xix+bc)       ; FB6293  ld WA,(XIX+BC)
 	and	wa, 0x8000                             ; FB6298  and WA,0x8000
 	jrl z, sub_FB6272__FB638E                  ; FB629C  jrl Z,0xfb638e
 	extz	xix                                   ; FB629F  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xEC, 0x21       ; FB62A1  ld XBC,(XIX+HL)
+	ld	xbc, (xix+hl)       ; FB62A1  ld XBC,(XIX+HL)
 	ld	(xiz-4), xbc                            ; FB62A6  ld (XIZ+0xfc),XBC
 	ld	a, (xbc+0xD0)                           ; FB62A9  ld A,(XBC+0x00d0)
 	and	a, 15                                  ; FB62AE  and A,0x0f
@@ -12235,7 +12235,7 @@ Part_GetAlgoDescByte17:
 	extz	xwa                                   ; FB62B8  extz XWA
 	ld	(xiz-10), xwa                           ; FB62BA  ld (XIZ+0xf6),XWA
 	ld	c, 39:opc                                  ; FB62BD  ld C,0x27
-	extpfx3 0x8E, 0xFA, 0x43                   ; FB62BF  mul BC,(XIZ+0xfa)
+	mul	bc, (xiz-6)                   ; FB62BF  mul BC,(XIZ+0xfa)
 	extz	xbc                                   ; FB62C2  extz XBC
 	add	xbc, xwa                               ; FB62C4  add XBC,XWA
 	add	xbc, 23                                ; FB62C6  add XBC,0x00000017
@@ -12275,7 +12275,7 @@ sub_FB6272__FB6313:
 	extz	bc                                    ; FB631A  extz BC
 	mul	bc, 0x12C                              ; FB631C  mul BC,0x012c
 	extz	xix                                   ; FB6320  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6322  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6322  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD4)                           ; FB6327  ld C,(XWA+0x00d4)
 	extz	bc                                    ; FB632C  extz BC
 	extz	xbc                                   ; FB632E  extz XBC
@@ -12289,7 +12289,7 @@ sub_FB6272__FB633A:
 	extz	bc                                    ; FB6340  extz BC
 	mul	bc, 0x12C                              ; FB6342  mul BC,0x012c
 	extz	xix                                   ; FB6346  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6348  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6348  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD6)                           ; FB634D  ld C,(XWA+0x00d6)
 	extz	bc                                    ; FB6352  extz BC
 	extz	xbc                                   ; FB6354  extz XBC
@@ -12312,7 +12312,7 @@ sub_FB6272__FB6378:
 	add	bc, 9                                  ; FB6380  add BC,0x0009
 	extz	xbc                                   ; FB6384  extz XBC
 	add	bc, ix                                 ; FB6386  add BC,IX
-	extpfx4 0x91, 0x3C, 0xFF, 0xDF             ; FB6388  and (XBC),0xdfff
+	andw	(xbc), 0xdfff             ; FB6388  and (XBC),0xdfff
 	jr sub_FB6272__FB6392                      ; FB638C  jr T,0xfb6392
 sub_FB6272__FB638E:
 	sub	a, a                                   ; FB638E  sub A,A
@@ -12323,7 +12323,7 @@ sub_FB6272__FB6394:
 	pop	xix                                    ; FB6394  pop XIX
 	popw	de                                    ; FB6395  pop DE
 	popw	hl                                    ; FB6396  pop HL
-	unlk32 xiz                                 ; FB6397  unlk XIZ
+	unlk	xiz                                 ; FB6397  unlk XIZ
 	ret                                        ; FB6399  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB639A is now `PartElement_StageAlgoDescBytes_0024`.
@@ -12357,7 +12357,7 @@ sub_FB6272__FB6394:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartElement_StageAlgoDescBytes_0024:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB639A  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FB639A  link XIZ,0xfff4
 	pushw	hl                                   ; FB639E  push HL
 	pushw	de                                   ; FB639F  push DE
 	push	xix                                   ; FB63A0  push XIX
@@ -12446,7 +12446,7 @@ sub_FB639A__FB6481:
 	pop	xix                                    ; FB6481  pop XIX
 	popw	de                                    ; FB6482  pop DE
 	popw	hl                                    ; FB6483  pop HL
-	unlk32 xiz                                 ; FB6484  unlk XIZ
+	unlk	xiz                                 ; FB6484  unlk XIZ
 	ret                                        ; FB6486  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6487 is now `PartRec_StageByte0075_FromDspParam00D7`.
@@ -12474,7 +12474,7 @@ sub_FB639A__FB6481:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_StageByte0075_FromDspParam00D7:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6487  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB6487  link XIZ,0x0000
 	pushw	hl                                   ; FB648B  push HL
 	ld	l, (xiz+8)                              ; FB648C  ld L,(XIZ+0x08)
 	ld	h, 0:opc                                   ; FB648F  ld H,0x00
@@ -12498,7 +12498,7 @@ sub_FB6487__FB64B1:
 	extz	xbc                                   ; FB64BD  extz XBC
 	ld	(xbc+0x1523), h                         ; FB64BF  ld (XBC+0x1523),H
 	popw	hl                                    ; FB64C4  pop HL
-	unlk32 xiz                                 ; FB64C5  unlk XIZ
+	unlk	xiz                                 ; FB64C5  unlk XIZ
 	ret                                        ; FB64C7  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB64C8 is now `PartRec_Word0004_ClearStagedSetBit2`.
@@ -12527,7 +12527,7 @@ sub_FB6487__FB64B1:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_Word0004_ClearStagedSetBit2:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB64C8  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB64C8  link XIZ,0x0000
 	pushw	hl                                   ; FB64CC  push HL
 	push	xix                                   ; FB64CD  push XIX
 	lda	xix, (0x1523:16)                      ; FB64CE  lda XIX,0x1523
@@ -12539,9 +12539,9 @@ PartRec_Word0004_ClearStagedSetBit2:
 	ld	bc, ix                                  ; FB64DF  ld BC,IX
 	extz	xbc                                   ; FB64E1  extz XBC
 	add	bc, hl                                 ; FB64E3  add BC,HL
-	extpfx4 0x91, 0x3C, 0xFC, 0xFF             ; FB64E5  and (XBC),0xfffc
+	andw	(xbc), 0xfffc             ; FB64E5  and (XBC),0xfffc
 	extz	xix                                   ; FB64E9  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x21       ; FB64EB  ld BC,(XIX+HL)
+	ld	bc, (xix+hl)       ; FB64EB  ld BC,(XIX+HL)
 	set	2, bc                                  ; FB64F0  set 0x02,BC
 	ld	wa, ix                                  ; FB64F3  ld WA,IX
 	extz	xwa                                   ; FB64F5  extz XWA
@@ -12549,7 +12549,7 @@ PartRec_Word0004_ClearStagedSetBit2:
 	ld	(xwa), bc                               ; FB64F9  ld (XWA),BC
 	pop	xix                                    ; FB64FB  pop XIX
 	popw	hl                                    ; FB64FC  pop HL
-	unlk32 xiz                                 ; FB64FD  unlk XIZ
+	unlk	xiz                                 ; FB64FD  unlk XIZ
 	ret                                        ; FB64FF  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6500 is now `PartRec_ResetToDefaults`.
@@ -12588,7 +12588,7 @@ PartRec_Word0004_ClearStagedSetBit2:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_ResetToDefaults:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB6500  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FB6500  link XIZ,0xfffc
 	push	xhl                                   ; FB6504  push XHL
 	pushw	de                                   ; FB6505  push DE
 	push	xix                                   ; FB6506  push XIX
@@ -12600,23 +12600,23 @@ PartRec_ResetToDefaults:
 	ldw	hl, 0x1523                             ; FB6514  ld HL,0x1523
 	add	hl, bc                                 ; FB6517  add HL,BC
 	extz	xhl                                   ; FB6519  extz XHL
-	extpfx5 0xBB, 0x1D, 0x02, 0x00, 0x00       ; FB651B  ld (XHL+0x1d),0x0000
+	ldw	(xhl+29), 0x0000       ; FB651B  ld (XHL+0x1d),0x0000
 	pushw	0                                    ; FB6520  push 0x0000
 	pushw	0                                    ; FB6523  push 0x0000
 	push	0                                     ; FB6526  push 0x00
 	push	d                                     ; FB6528  push D
 	call	sub_FC7E10                              ; FB652A  call 0xfc7e10
-	extpfx5 0xBB, 0x1F, 0x02, 0x00, 0x00       ; FB652E  ld (XHL+0x1f),0x0000
-	extpfx5 0xBB, 0x21, 0x02, 0x00, 0x00       ; FB6533  ld (XHL+0x21),0x0000
-	extpfx5 0xBB, 0x23, 0x02, 0x00, 0x00       ; FB6538  ld (XHL+0x23),0x0000
-	extpfx5 0xBB, 0x25, 0x02, 0x00, 0x00       ; FB653D  ld (XHL+0x25),0x0000
-	extpfx5 0xBB, 0x27, 0x02, 0x00, 0x00       ; FB6542  ld (XHL+0x27),0x0000
-	extpfx5 0xBB, 0x29, 0x02, 0x00, 0x00       ; FB6547  ld (XHL+0x29),0x0000
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FB654C  ld (XHL+0x2b),0x0000
-	extpfx5 0xBB, 0x2D, 0x02, 0x00, 0x00       ; FB6551  ld (XHL+0x2d),0x0000
-	extpfx5 0xBB, 0x2F, 0x02, 0x00, 0x00       ; FB6556  ld (XHL+0x2f),0x0000
-	extpfx5 0xBB, 0x31, 0x02, 0x00, 0x00       ; FB655B  ld (XHL+0x31),0x0000
-	extpfx5 0xBB, 0x33, 0x02, 0x00, 0x00       ; FB6560  ld (XHL+0x33),0x0000
+	ldw	(xhl+31), 0x0000       ; FB652E  ld (XHL+0x1f),0x0000
+	ldw	(xhl+33), 0x0000       ; FB6533  ld (XHL+0x21),0x0000
+	ldw	(xhl+35), 0x0000       ; FB6538  ld (XHL+0x23),0x0000
+	ldw	(xhl+37), 0x0000       ; FB653D  ld (XHL+0x25),0x0000
+	ldw	(xhl+39), 0x0000       ; FB6542  ld (XHL+0x27),0x0000
+	ldw	(xhl+41), 0x0000       ; FB6547  ld (XHL+0x29),0x0000
+	ldw	(xhl+43), 0x0000       ; FB654C  ld (XHL+0x2b),0x0000
+	ldw	(xhl+45), 0x0000       ; FB6551  ld (XHL+0x2d),0x0000
+	ldw	(xhl+47), 0x0000       ; FB6556  ld (XHL+0x2f),0x0000
+	ldw	(xhl+49), 0x0000       ; FB655B  ld (XHL+0x31),0x0000
+	ldw	(xhl+51), 0x0000       ; FB6560  ld (XHL+0x33),0x0000
 	pushw	0                                    ; FB6565  push 0x0000
 	pushw	0                                    ; FB6568  push 0x0000
 	pushw	0                                    ; FB656B  push 0x0000
@@ -12718,7 +12718,7 @@ sub_FB6500__FB6657:
 	pop	xix                                    ; FB667B  pop XIX
 	popw	de                                    ; FB667C  pop DE
 	pop	xhl                                    ; FB667D  pop XHL
-	unlk32 xiz                                 ; FB667E  unlk XIZ
+	unlk	xiz                                 ; FB667E  unlk XIZ
 	ret                                        ; FB6680  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6681 is now `Part_RestageVoiceParams_Melodic`.
@@ -12759,22 +12759,22 @@ sub_FB6500__FB6657:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_RestageVoiceParams_Melodic:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FB6681  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FB6681  link XIZ,0xfff0
 	push	xhl                                   ; FB6685  push XHL
 	pushw	de                                   ; FB6686  push DE
 	push	xix                                   ; FB6687  push XIX
 	pushw	0                                    ; FB6688  push 0x0000
 	push	0                                     ; FB668B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB668D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB668D  push (XIZ+0x08)
 	calr Part_StageDspAlgoParams                 ; FB6690  calr 0xfb5636
 	push	0                                     ; FB6693  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6695  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6695  push (XIZ+0x08)
 	calr PartRec_StageByte0075_FromDspParam00D7                 ; FB6698  calr 0xfb6487
 	push	0                                     ; FB669B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB669D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB669D  push (XIZ+0x08)
 	calr PartRec_RecomputeWord0006_FromToneRec                 ; FB66A0  calr 0xfb4a9f
 	push	0                                     ; FB66A3  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB66A5  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB66A5  push (XIZ+0x08)
 	calr sub_FB4D45                 ; FB66A8  calr 0xfb4d45
 	ld	bc, (xiz+8)                             ; FB66AB  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB66AE  extz BC
@@ -12789,22 +12789,22 @@ sub_FB6681__FB66C4:
 	ld	c, (xiz-9)                              ; FB66C4  ld C,(XIZ+0xf7)
 	ld	(xiz-4), c                              ; FB66C7  ld (XIZ+0xfc),C
 	ld	c, 16:opc                                  ; FB66CA  ld C,0x10
-	extpfx3 0x8E, 0xF7, 0x43                   ; FB66CC  mul BC,(XIZ+0xf7)
-	extpfx3 0x9E, 0xF4, 0x81                   ; FB66CF  add BC,(XIZ+0xf4)
+	mul	bc, (xiz-9)                   ; FB66CC  mul BC,(XIZ+0xf7)
+	add	bc, (xiz-12)                   ; FB66CF  add BC,(XIZ+0xf4)
 	ld	(xiz-8), bc                             ; FB66D2  ld (XIZ+0xf8),BC
 	ld	(xiz-5), 0                              ; FB66D5  ld (XIZ+0xfb),0x00
 sub_FB6681__FB66D9:
 	ld	c, (xiz-5)                              ; FB66D9  ld C,(XIZ+0xfb)
 	ld	(xiz-6), c                              ; FB66DC  ld (XIZ+0xfa),C
 	mul	c, 4                                   ; FB66DF  mul C,0x04
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB66E2  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB66E2  add BC,(XIZ+0xf8)
 	ld	de, bc                                  ; FB66E5  ld DE,BC
 	add	de, 53                                 ; FB66E7  add DE,0x0035
 	ldw	hl, 0x1523                             ; FB66EB  ld HL,0x1523
 	ld	bc, de                                  ; FB66EE  ld BC,DE
 	add	hl, bc                                 ; FB66F0  add HL,BC
 	extz	xhl                                   ; FB66F2  extz XHL
-	extpfx3 0x83, 0x3C, 0xF3                   ; FB66F4  and (XHL),0xf3
+	and	(xhl), 0xf3                   ; FB66F4  and (XHL),0xf3
 	ld	c, (xhl+2)                              ; FB66F7  ld C,(XHL+0x02)
 	cp	c, 0:i3                                   ; FB66FA  cp C,0
 	jr z, sub_FB6681__FB670F                   ; FB66FC  jr Z,0xfb670f
@@ -12813,7 +12813,7 @@ sub_FB6681__FB66D9:
 	and	c, 85                                  ; FB6703  and C,0x55
 	jr z, sub_FB6681__FB670F                   ; FB6706  jr Z,0xfb670f
 	extz	xhl                                   ; FB6708  extz XHL
-	extpfx3 0x83, 0x3E, 0x08                   ; FB670A  or (XHL),0x08
+	or	(xhl), 0x08                   ; FB670A  or (XHL),0x08
 	jr sub_FB6681__FB6751                      ; FB670D  jr T,0xfb6751
 sub_FB6681__FB670F:
 	ldw	de, 0                                  ; FB670F  ld DE,0x0000
@@ -12831,10 +12831,10 @@ sub_FB6681__FB6716:
 	ld	c, (xiz-1)                              ; FB6731  ld C,(XIZ+0xff)
 	and	c, 0xC0                                ; FB6734  and C,0xc0
 	srl	c, 6                                   ; FB6737  srl 0x06,C
-	extpfx3 0x8E, 0xFA, 0xF3                   ; FB673A  cp C,(XIZ+0xfa)
+	cp	c, (xiz-6)                   ; FB673A  cp C,(XIZ+0xfa)
 	jr nz, sub_FB6681__FB6744                  ; FB673D  jr NZ,0xfb6744
 	extz	xhl                                   ; FB673F  extz XHL
-	extpfx3 0x83, 0x3E, 0x04                   ; FB6741  or (XHL),0x04
+	or	(xhl), 0x04                   ; FB6741  or (XHL),0x04
 sub_FB6681__FB6744:
 	add	de, 41                                 ; FB6744  add DE,0x0029
 	decm8	1, (xiz-2)                           ; FB6748  dec 1,(XIZ+0xfe)
@@ -12844,14 +12844,14 @@ sub_FB6681__FB6751:
 	ld	c, (xiz-5)                              ; FB6751  ld C,(XIZ+0xfb)
 	ld	(xiz-3), c                              ; FB6754  ld (XIZ+0xfd),C
 	mul	c, 4                                   ; FB6757  mul C,0x04
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB675A  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB675A  add BC,(XIZ+0xf8)
 	ld	de, bc                                  ; FB675D  ld DE,BC
 	add	de, 53                                 ; FB675F  add DE,0x0035
 	ldw	hl, 0x1523                             ; FB6763  ld HL,0x1523
 	ld	bc, de                                  ; FB6766  ld BC,DE
 	add	hl, bc                                 ; FB6768  add HL,BC
 	extz	xhl                                   ; FB676A  extz XHL
-	extpfx3 0x83, 0x3C, 0xFC                   ; FB676C  and (XHL),0xfc
+	and	(xhl), 0xfc                   ; FB676C  and (XHL),0xfc
 	ld	c, (xhl+3)                              ; FB676F  ld C,(XHL+0x03)
 	cp	c, 0:i3                                   ; FB6772  cp C,0
 	jr z, sub_FB6681__FB6788                   ; FB6774  jr Z,0xfb6788
@@ -12860,7 +12860,7 @@ sub_FB6681__FB6751:
 	and	c, 85                                  ; FB677B  and C,0x55
 	jr z, sub_FB6681__FB6788                   ; FB677E  jr Z,0xfb6788
 	extz	xhl                                   ; FB6780  extz XHL
-	extpfx3 0x83, 0x3E, 0x02                   ; FB6782  or (XHL),0x02
+	or	(xhl), 0x02                   ; FB6782  or (XHL),0x02
 	jrl sub_FB6681__FB681A                     ; FB6785  jrl T,0xfb681a
 sub_FB6681__FB6788:
 	ldw	de, 0                                  ; FB6788  ld DE,0x0000
@@ -12878,7 +12878,7 @@ sub_FB6681__FB678F:
 sub_FB6681__FB67A2:
 	ld	(xiz-16), de                            ; FB67A2  ld (XIZ+0xf0),DE
 	ld	bc, ix                                  ; FB67A5  ld BC,IX
-	extpfx3 0x9E, 0xF0, 0x81                   ; FB67A7  add BC,(XIZ+0xf0)
+	add	bc, (xiz-16)                   ; FB67A7  add BC,(XIZ+0xf0)
 	add	bc, 0x88                               ; FB67AA  add BC,0x0088
 	extz	xbc                                   ; FB67AE  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB67B0  ld XWA,(XBC+0x1523)
@@ -12888,7 +12888,7 @@ sub_FB6681__FB67A2:
 sub_FB6681__FB67BD:
 	ld	(xiz-16), de                            ; FB67BD  ld (XIZ+0xf0),DE
 	ld	bc, ix                                  ; FB67C0  ld BC,IX
-	extpfx3 0x9E, 0xF0, 0x81                   ; FB67C2  add BC,(XIZ+0xf0)
+	add	bc, (xiz-16)                   ; FB67C2  add BC,(XIZ+0xf0)
 	add	bc, 0x88                               ; FB67C5  add BC,0x0088
 	extz	xbc                                   ; FB67C9  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB67CB  ld XWA,(XBC+0x1523)
@@ -12898,7 +12898,7 @@ sub_FB6681__FB67BD:
 sub_FB6681__FB67D8:
 	ld	(xiz-16), de                            ; FB67D8  ld (XIZ+0xf0),DE
 	ld	bc, ix                                  ; FB67DB  ld BC,IX
-	extpfx3 0x9E, 0xF0, 0x81                   ; FB67DD  add BC,(XIZ+0xf0)
+	add	bc, (xiz-16)                   ; FB67DD  add BC,(XIZ+0xf0)
 	add	bc, 0x88                               ; FB67E0  add BC,0x0088
 	extz	xbc                                   ; FB67E4  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB67E6  ld XWA,(XBC+0x1523)
@@ -12911,10 +12911,10 @@ sub_FB6681__FB67F1:
 	ld	c, (xiz-10)                             ; FB67F9  ld C,(XIZ+0xf6)
 	and	c, 0xC0                                ; FB67FC  and C,0xc0
 	srl	c, 6                                   ; FB67FF  srl 0x06,C
-	extpfx3 0x8E, 0xFD, 0xF3                   ; FB6802  cp C,(XIZ+0xfd)
+	cp	c, (xiz-3)                   ; FB6802  cp C,(XIZ+0xfd)
 	jr nz, sub_FB6681__FB680C                  ; FB6805  jr NZ,0xfb680c
 	extz	xhl                                   ; FB6807  extz XHL
-	extpfx3 0x83, 0x3E, 0x01                   ; FB6809  or (XHL),0x01
+	or	(xhl), 0x01                   ; FB6809  or (XHL),0x01
 sub_FB6681__FB680C:
 	add	de, 41                                 ; FB680C  add DE,0x0029
 	decm8	1, (xiz-1)                           ; FB6810  dec 1,(XIZ+0xff)
@@ -12927,11 +12927,11 @@ sub_FB6681__FB681A:
 	ld	h, 0:opc                                   ; FB6824  ld H,0x00
 sub_FB6681__FB6826:
 	push	0                                     ; FB6826  push 0x00
-	extpfx3 0x8E, 0xF7, 0x04                   ; FB6828  push (XIZ+0xf7)
+	push	(xiz-9)                   ; FB6828  push (XIZ+0xf7)
 	ld	l, h                                    ; FB682B  ld L,H
 	pushw	hl                                   ; FB682D  push HL
 	push	0                                     ; FB682E  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6830  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6830  push (XIZ+0x08)
 	calr sub_FB53C5                 ; FB6833  calr 0xfb53c5
 	ld	h, l                                    ; FB6836  ld H,L
 	inc	1, h                                   ; FB6838  inc 1,H
@@ -12942,7 +12942,7 @@ sub_FB6681__FB6826:
 	cp (xiz-9), 0x03                           ; FB6843  cp (XIZ+0xf7),0x03
 	jrl c, sub_FB6681__FB66C4                  ; FB6847  jrl C,0xfb66c4
 	push	0                                     ; FB684A  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB684C  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB684C  push (XIZ+0x08)
 	calr PartElement_StageAlgoDescBytes_0024                 ; FB684F  calr 0xfb639a
 	ldw	de, 0                                  ; FB6852  ld DE,0x0000
 	ld	bc, (xiz+8)                             ; FB6855  ld BC,(XIZ+0x08)
@@ -12978,7 +12978,7 @@ sub_FB6681__FB6891:
 	ld	c, e                                    ; FB68A2  ld C,E
 	pushw	bc                                   ; FB68A4  push BC
 	push	0                                     ; FB68A5  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68A7  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68A7  push (XIZ+0x08)
 	call	Pack104_LoadElementWaveSelRec                              ; FB68AA  call 0xfc6803
 	inc	2, xix                                 ; FB68AE  inc 2,XIX
 	add	hl, 41                                 ; FB68B0  add HL,0x0029
@@ -12989,16 +12989,16 @@ sub_FB6681__FB6891:
 	jr c, sub_FB6681__FB686F                   ; FB68BE  jr C,0xfb686f
 	pushw	1                                    ; FB68C0  push 0x0001
 	push	0                                     ; FB68C3  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68C5  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68C5  push (XIZ+0x08)
 	call	Pack104_DispatchByResoMode_ForPart                              ; FB68C8  call 0xfc7481
 	push	0                                     ; FB68CC  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68CE  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68CE  push (XIZ+0x08)
 	call	sub_FC81F8                              ; FB68D1  call 0xfc81f8
 	inc	6, xsp                                 ; FB68D5  inc 6,XSP
 	pop	xix                                    ; FB68D7  pop XIX
 	popw	de                                    ; FB68D8  pop DE
 	pop	xhl                                    ; FB68D9  pop XHL
-	unlk32 xiz                                 ; FB68DA  unlk XIZ
+	unlk	xiz                                 ; FB68DA  unlk XIZ
 	ret                                        ; FB68DC  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB68DD is now `Part_RestageVoiceParams_Drawbar`.
@@ -13037,22 +13037,22 @@ sub_FB6681__FB6891:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 Part_RestageVoiceParams_Drawbar:
-	link32 0xEE, 0x0C, 0xE9, 0xFF              ; FB68DD  link XIZ,0xffe9
+	link	xiz, 0xffe9              ; FB68DD  link XIZ,0xffe9
 	push	xhl                                   ; FB68E1  push XHL
 	pushw	de                                   ; FB68E2  push DE
 	push	xix                                   ; FB68E3  push XIX
 	pushw	0                                    ; FB68E4  push 0x0000
 	push	0                                     ; FB68E7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68E9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68E9  push (XIZ+0x08)
 	calr Part_StageDspAlgoParams                 ; FB68EC  calr 0xfb5636
 	push	0                                     ; FB68EF  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68F1  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68F1  push (XIZ+0x08)
 	calr PartRec_StageByte0075_FromDspParam00D7                 ; FB68F4  calr 0xfb6487
 	push	0                                     ; FB68F7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB68F9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB68F9  push (XIZ+0x08)
 	call	sub_FC2CD5                              ; FB68FC  call 0xfc2cd5
 	push	0                                     ; FB6900  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6902  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6902  push (XIZ+0x08)
 	calr sub_FB4D45                 ; FB6905  calr 0xfb4d45
 	ld	(xiz-21), 0                             ; FB6908  ld (XIZ+0xeb),0x00
 	ld	bc, (xiz+8)                             ; FB690C  ld BC,(XIZ+0x08)
@@ -13069,28 +13069,28 @@ sub_FB68DD__FB6926:
 	ld	c, (xiz-21)                             ; FB692A  ld C,(XIZ+0xeb)
 	ld	(xiz-5), c                              ; FB692D  ld (XIZ+0xfb),C
 	ld	c, 16:opc                                  ; FB6930  ld C,0x10
-	extpfx3 0x8E, 0xEB, 0x43                   ; FB6932  mul BC,(XIZ+0xeb)
+	mul	bc, (xiz-21)                   ; FB6932  mul BC,(XIZ+0xeb)
 	ld	hl, bc                                  ; FB6935  ld HL,BC
 	ld	de, (xiz-16)                            ; FB6937  ld DE,(XIZ+0xf0)
 	ld	(xiz-23), bc                            ; FB693A  ld (XIZ+0xe9),BC
 	ld	wa, (xiz-18)                            ; FB693D  ld WA,(XIZ+0xee)
 	add	wa, de                                 ; FB6940  add WA,DE
 	ld	(xiz-12), wa                            ; FB6942  ld (XIZ+0xf4),WA
-	extpfx3 0x9E, 0xEE, 0x81                   ; FB6945  add BC,(XIZ+0xee)
+	add	bc, (xiz-18)                   ; FB6945  add BC,(XIZ+0xee)
 	ld	(xiz-10), bc                            ; FB6948  ld (XIZ+0xf6),BC
 	ldw (xiz-8), 0x0000                        ; FB694B  ld (XIZ+0xf8),0x0000
 sub_FB68DD__FB6950:
 	ld	c, (xiz-13)                             ; FB6950  ld C,(XIZ+0xf3)
 	ld	(xiz-3), c                              ; FB6953  ld (XIZ+0xfd),C
 	ld	bc, (xiz-12)                            ; FB6956  ld BC,(XIZ+0xf4)
-	extpfx3 0x9E, 0xF8, 0x81                   ; FB6959  add BC,(XIZ+0xf8)
+	add	bc, (xiz-8)                   ; FB6959  add BC,(XIZ+0xf8)
 	ld	de, bc                                  ; FB695C  ld DE,BC
 	add	de, 53                                 ; FB695E  add DE,0x0035
 	ldw	hl, 0x1523                             ; FB6962  ld HL,0x1523
 	ld	bc, de                                  ; FB6965  ld BC,DE
 	add	hl, bc                                 ; FB6967  add HL,BC
 	extz	xhl                                   ; FB6969  extz XHL
-	extpfx3 0x83, 0x3C, 0xF3                   ; FB696B  and (XHL),0xf3
+	and	(xhl), 0xf3                   ; FB696B  and (XHL),0xf3
 	ld	c, (xhl+2)                              ; FB696E  ld C,(XHL+0x02)
 	cp	c, 0:i3                                   ; FB6971  cp C,0
 	jr z, sub_FB68DD__FB6986                   ; FB6973  jr Z,0xfb6986
@@ -13099,7 +13099,7 @@ sub_FB68DD__FB6950:
 	and	c, 85                                  ; FB697A  and C,0x55
 	jr z, sub_FB68DD__FB6986                   ; FB697D  jr Z,0xfb6986
 	extz	xhl                                   ; FB697F  extz XHL
-	extpfx3 0x83, 0x3E, 0x08                   ; FB6981  or (XHL),0x08
+	or	(xhl), 0x08                   ; FB6981  or (XHL),0x08
 	jr sub_FB68DD__FB69C8                      ; FB6984  jr T,0xfb69c8
 sub_FB68DD__FB6986:
 	ldw	de, 0                                  ; FB6986  ld DE,0x0000
@@ -13117,10 +13117,10 @@ sub_FB68DD__FB698D:
 	ld	c, (xiz-2)                              ; FB69A8  ld C,(XIZ+0xfe)
 	and	c, 0xC0                                ; FB69AB  and C,0xc0
 	srl	c, 6                                   ; FB69AE  srl 0x06,C
-	extpfx3 0x8E, 0xFD, 0xF3                   ; FB69B1  cp C,(XIZ+0xfd)
+	cp	c, (xiz-3)                   ; FB69B1  cp C,(XIZ+0xfd)
 	jr nz, sub_FB68DD__FB69BB                  ; FB69B4  jr NZ,0xfb69bb
 	extz	xhl                                   ; FB69B6  extz XHL
-	extpfx3 0x83, 0x3E, 0x04                   ; FB69B8  or (XHL),0x04
+	or	(xhl), 0x04                   ; FB69B8  or (XHL),0x04
 sub_FB68DD__FB69BB:
 	add	de, 41                                 ; FB69BB  add DE,0x0029
 	decm8	1, (xiz-1)                           ; FB69BF  dec 1,(XIZ+0xff)
@@ -13130,14 +13130,14 @@ sub_FB68DD__FB69C8:
 	ld	c, (xiz-13)                             ; FB69C8  ld C,(XIZ+0xf3)
 	ld	(xiz-4), c                              ; FB69CB  ld (XIZ+0xfc),C
 	mul	c, 4                                   ; FB69CE  mul C,0x04
-	extpfx3 0x9E, 0xF6, 0x81                   ; FB69D1  add BC,(XIZ+0xf6)
+	add	bc, (xiz-10)                   ; FB69D1  add BC,(XIZ+0xf6)
 	ld	de, bc                                  ; FB69D4  ld DE,BC
 	add	de, 53                                 ; FB69D6  add DE,0x0035
 	ldw	hl, 0x1523                             ; FB69DA  ld HL,0x1523
 	ld	bc, de                                  ; FB69DD  ld BC,DE
 	add	hl, bc                                 ; FB69DF  add HL,BC
 	extz	xhl                                   ; FB69E1  extz XHL
-	extpfx3 0x83, 0x3C, 0xFC                   ; FB69E3  and (XHL),0xfc
+	and	(xhl), 0xfc                   ; FB69E3  and (XHL),0xfc
 	ld	c, (xhl+3)                              ; FB69E6  ld C,(XHL+0x03)
 	cp	c, 0:i3                                   ; FB69E9  cp C,0
 	jr z, sub_FB68DD__FB69FF                   ; FB69EB  jr Z,0xfb69ff
@@ -13146,7 +13146,7 @@ sub_FB68DD__FB69C8:
 	and	c, 85                                  ; FB69F2  and C,0x55
 	jr z, sub_FB68DD__FB69FF                   ; FB69F5  jr Z,0xfb69ff
 	extz	xhl                                   ; FB69F7  extz XHL
-	extpfx3 0x83, 0x3E, 0x02                   ; FB69F9  or (XHL),0x02
+	or	(xhl), 0x02                   ; FB69F9  or (XHL),0x02
 	jrl sub_FB68DD__FB6A91                     ; FB69FC  jrl T,0xfb6a91
 sub_FB68DD__FB69FF:
 	ldw	de, 0                                  ; FB69FF  ld DE,0x0000
@@ -13164,7 +13164,7 @@ sub_FB68DD__FB6A06:
 sub_FB68DD__FB6A19:
 	ld	(xiz-23), de                            ; FB6A19  ld (XIZ+0xe9),DE
 	ld	bc, ix                                  ; FB6A1C  ld BC,IX
-	extpfx3 0x9E, 0xE9, 0x81                   ; FB6A1E  add BC,(XIZ+0xe9)
+	add	bc, (xiz-23)                   ; FB6A1E  add BC,(XIZ+0xe9)
 	add	bc, 0x88                               ; FB6A21  add BC,0x0088
 	extz	xbc                                   ; FB6A25  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB6A27  ld XWA,(XBC+0x1523)
@@ -13174,7 +13174,7 @@ sub_FB68DD__FB6A19:
 sub_FB68DD__FB6A34:
 	ld	(xiz-23), de                            ; FB6A34  ld (XIZ+0xe9),DE
 	ld	bc, ix                                  ; FB6A37  ld BC,IX
-	extpfx3 0x9E, 0xE9, 0x81                   ; FB6A39  add BC,(XIZ+0xe9)
+	add	bc, (xiz-23)                   ; FB6A39  add BC,(XIZ+0xe9)
 	add	bc, 0x88                               ; FB6A3C  add BC,0x0088
 	extz	xbc                                   ; FB6A40  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB6A42  ld XWA,(XBC+0x1523)
@@ -13184,7 +13184,7 @@ sub_FB68DD__FB6A34:
 sub_FB68DD__FB6A4F:
 	ld	(xiz-23), de                            ; FB6A4F  ld (XIZ+0xe9),DE
 	ld	bc, ix                                  ; FB6A52  ld BC,IX
-	extpfx3 0x9E, 0xE9, 0x81                   ; FB6A54  add BC,(XIZ+0xe9)
+	add	bc, (xiz-23)                   ; FB6A54  add BC,(XIZ+0xe9)
 	add	bc, 0x88                               ; FB6A57  add BC,0x0088
 	extz	xbc                                   ; FB6A5B  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB6A5D  ld XWA,(XBC+0x1523)
@@ -13197,10 +13197,10 @@ sub_FB68DD__FB6A68:
 	ld	c, (xiz-14)                             ; FB6A70  ld C,(XIZ+0xf2)
 	and	c, 0xC0                                ; FB6A73  and C,0xc0
 	srl	c, 6                                   ; FB6A76  srl 0x06,C
-	extpfx3 0x8E, 0xFC, 0xF3                   ; FB6A79  cp C,(XIZ+0xfc)
+	cp	c, (xiz-4)                   ; FB6A79  cp C,(XIZ+0xfc)
 	jr nz, sub_FB68DD__FB6A83                  ; FB6A7C  jr NZ,0xfb6a83
 	extz	xhl                                   ; FB6A7E  extz XHL
-	extpfx3 0x83, 0x3E, 0x01                   ; FB6A80  or (XHL),0x01
+	or	(xhl), 0x01                   ; FB6A80  or (XHL),0x01
 sub_FB68DD__FB6A83:
 	add	de, 41                                 ; FB6A83  add DE,0x0029
 	decm8	1, (xiz-1)                           ; FB6A87  dec 1,(XIZ+0xff)
@@ -13214,22 +13214,22 @@ sub_FB68DD__FB6A91:
 	ld	h, 0:opc                                   ; FB6A9E  ld H,0x00
 sub_FB68DD__FB6AA0:
 	push	0                                     ; FB6AA0  push 0x00
-	extpfx3 0x8E, 0xEB, 0x04                   ; FB6AA2  push (XIZ+0xeb)
+	push	(xiz-21)                   ; FB6AA2  push (XIZ+0xeb)
 	push	0                                     ; FB6AA5  push 0x00
 	push	h                                     ; FB6AA7  push H
 	push	0                                     ; FB6AA9  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6AAB  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6AAB  push (XIZ+0x08)
 	calr sub_FB53C5                 ; FB6AAE  calr 0xfb53c5
 	inc	1, h                                   ; FB6AB1  inc 1,H
 	inc	6, xsp                                 ; FB6AB3  inc 6,XSP
 	cp	h, 4:i3                                   ; FB6AB5  cp H,4
 	jr c, sub_FB68DD__FB6AA0                   ; FB6AB7  jr C,0xfb6aa0
-	extpfx5 0x9E, 0xF0, 0x38, 0x10, 0x00       ; FB6AB9  add (XIZ+0xf0),0x0010
+	addw	(xiz-16), 0x0010       ; FB6AB9  add (XIZ+0xf0),0x0010
 	incm8	1, (xiz-21)                          ; FB6ABE  inc 1,(XIZ+0xeb)
 	cp (xiz-21), 0x03                          ; FB6AC1  cp (XIZ+0xeb),0x03
 	jrl c, sub_FB68DD__FB6926                  ; FB6AC5  jrl C,0xfb6926
 	push	0                                     ; FB6AC8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6ACA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6ACA  push (XIZ+0x08)
 	calr PartElement_StageAlgoDescBytes_0024                 ; FB6ACD  calr 0xfb639a
 	ld	h, 0:opc                                   ; FB6AD0  ld H,0x00
 	ld	bc, (xiz+8)                             ; FB6AD2  ld BC,(XIZ+0x08)
@@ -13266,7 +13266,7 @@ sub_FB68DD__FB6B0F:
 	push	0                                     ; FB6B20  push 0x00
 	push	h                                     ; FB6B22  push H
 	push	0                                     ; FB6B24  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6B26  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6B26  push (XIZ+0x08)
 	call	Pack104_LoadElementWaveSelRec                              ; FB6B29  call 0xfc6803
 	inc	2, de                                  ; FB6B2D  inc 2,DE
 	add	ix, 41                                 ; FB6B2F  add IX,0x0029
@@ -13277,16 +13277,16 @@ sub_FB68DD__FB6B0F:
 	jr c, sub_FB68DD__FB6AEA                   ; FB6B3B  jr C,0xfb6aea
 	pushw	1                                    ; FB6B3D  push 0x0001
 	push	0                                     ; FB6B40  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6B42  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6B42  push (XIZ+0x08)
 	call	Pack104_DispatchByResoMode_ForPart                              ; FB6B45  call 0xfc7481
 	push	0                                     ; FB6B49  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FB6B4B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FB6B4B  push (XIZ+0x08)
 	call	sub_FC81F8                              ; FB6B4E  call 0xfc81f8
 	inc	6, xsp                                 ; FB6B52  inc 6,XSP
 	pop	xix                                    ; FB6B54  pop XIX
 	popw	de                                    ; FB6B55  pop DE
 	pop	xhl                                    ; FB6B56  pop XHL
-	unlk32 xiz                                 ; FB6B57  unlk XIZ
+	unlk	xiz                                 ; FB6B57  unlk XIZ
 	ret                                        ; FB6B59  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6B5A is now `ExtBoard_RemapBankSelector`.
@@ -13320,7 +13320,7 @@ sub_FB68DD__FB6B0F:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 ExtBoard_RemapBankSelector:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FB6B5A  link XIZ,0x0000
+	link	xiz, 0x0000              ; FB6B5A  link XIZ,0x0000
 	push	xix                                   ; FB6B5E  push XIX
 	cp (xiz+10), 0x10                          ; FB6B5F  cp (XIZ+0x0a),0x10
 	jr nz, sub_FB6B5A__FB6BA1                  ; FB6B63  jr NZ,0xfb6ba1
@@ -13352,7 +13352,7 @@ sub_FB6B5A__FB6BA1:
 	ld	a, (xiz+10)                             ; FB6BA1  ld A,(XIZ+0x0a)
 sub_FB6B5A__FB6BA4:
 	pop	xix                                    ; FB6BA4  pop XIX
-	unlk32 xiz                                 ; FB6BA5  unlk XIZ
+	unlk	xiz                                 ; FB6BA5  unlk XIZ
 	ret                                        ; FB6BA7  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 17): `MidiProgram_SelectToneForPart` is now `MidiProgram_SelectToneForPart`.
@@ -13386,7 +13386,7 @@ sub_FB6B5A__FB6BA4:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 MidiProgram_SelectToneForPart:
-	link32 0xEE, 0x0C, 0xF7, 0xFF              ; FB6BA8  link XIZ,0xfff7
+	link	xiz, 0xfff7              ; FB6BA8  link XIZ,0xfff7
 	pushw	hl                                   ; FB6BAC  push HL
 	pushw	de                                   ; FB6BAD  push DE
 	push	xix                                   ; FB6BAE  push XIX
@@ -13420,13 +13420,13 @@ MidiProgram_SelectToneForPart:
 	add	bc, ix                                 ; FB6BFB  add BC,IX
 	ld	(xbc), a                                ; FB6BFD  ld (XBC),A
 	push	0                                     ; FB6BFF  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C01  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6C01  push (XIZ+0xff)
 	calr PartRec_Word0004_ClearStagedSetBit2                 ; FB6C04  calr 0xfb64c8
 	push	0                                     ; FB6C07  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C09  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6C09  push (XIZ+0xff)
 	calr PartRec_ResetToDefaults                 ; FB6C0C  calr 0xfb6500
 	push	0                                     ; FB6C0F  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C11  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6C11  push (XIZ+0xff)
 	call	PartRec_Word0006_SetBit13                              ; FB6C14  call 0xfacc3f
 	ld	xbc, (xiz+8)                            ; FB6C18  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+3)                              ; FB6C1B  ld A,(XBC+0x03)
@@ -13434,17 +13434,17 @@ MidiProgram_SelectToneForPart:
 	ld	a, (xbc+2)                              ; FB6C1F  ld A,(XBC+0x02)
 	pushw	wa                                   ; FB6C22  push WA
 	push	0                                     ; FB6C23  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6C25  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6C25  push (XIZ+0xff)
 	calr Part_LoadToneRecordAndPointers                 ; FB6C28  calr 0xfb47c4
 	ld	bc, (xiz-5)                             ; FB6C2B  ld BC,(XIZ+0xfb)
 	extz	xix                                   ; FB6C2E  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6C30  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6C30  ld XWA,(XIX+BC)
 	ld	c, (xwa+0xD0)                           ; FB6C35  ld C,(XWA+0x00d0)
 	and	c, 0x80                                ; FB6C3A  and C,0x80
 	ld	(xiz-9), c                              ; FB6C3D  ld (XIZ+0xf7),C
 	ld	hl, (xiz-5)                             ; FB6C40  ld HL,(XIZ+0xfb)
 	add	hl, 9                                  ; FB6C43  add HL,0x0009
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FB6C47  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FB6C47  ld DE,(XIX+HL)
 	inc	8, xsp                                 ; FB6C4C  inc 0,XSP
 	inc	8, xsp                                 ; FB6C4E  inc 0,XSP
 	cp	c, 0:i3                                   ; FB6C50  cp C,0
@@ -13475,7 +13475,7 @@ sub_FB6BA8__FB6C82:
 	extz	bc                                    ; FB6C85  extz BC
 	mul	bc, 0x12C                              ; FB6C87  mul BC,0x012c
 	extz	xix                                   ; FB6C8B  extz XIX
-	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FB6C8D  ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)       ; FB6C8D  ld XWA,(XIX+BC)
 	ld	c, (xwa+16)                             ; FB6C92  ld C,(XWA+0x10)
 	and	c, 0xC0                                ; FB6C95  and C,0xc0
 	extz	bc                                    ; FB6C98  extz BC
@@ -13490,33 +13490,33 @@ sub_FB6BA8__FB6C82:
 	jr sub_FB6BA8__FB6CE8                      ; FB6CB0  jr T,0xfb6ce8
 sub_FB6BA8__FB6CB2:
 	push	0                                     ; FB6CB2  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CB4  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6CB4  push (XIZ+0xff)
 	calr Part_RestageVoiceParams_Melodic                 ; FB6CB7  calr 0xfb6681
 	popw	bc                                    ; FB6CBA  pop BC
 	jr sub_FB6BA8__FB6CE8                      ; FB6CBB  jr T,0xfb6ce8
 sub_FB6BA8__FB6CBD:
 	push	0                                     ; FB6CBD  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CBF  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6CBF  push (XIZ+0xff)
 	call	sub_FC28B5                              ; FB6CC2  call 0xfc28b5
 	push	0                                     ; FB6CC6  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CC8  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6CC8  push (XIZ+0xff)
 	calr Part_RestageVoiceParams_Drawbar                 ; FB6CCB  calr 0xfb68dd
 	pop	xiy                                    ; FB6CCE  pop XIY
 	jr sub_FB6BA8__FB6CE8                      ; FB6CCF  jr T,0xfb6ce8
 sub_FB6BA8__FB6CD1:
 	pushw	1                                    ; FB6CD1  push 0x0001
 	push	0                                     ; FB6CD4  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CD6  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6CD6  push (XIZ+0xff)
 	call	sub_FC7A1F                              ; FB6CD9  call 0xfc7a1f
 	push	0                                     ; FB6CDD  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04                   ; FB6CDF  push (XIZ+0xff)
+	push	(xiz-1)                   ; FB6CDF  push (XIZ+0xff)
 	call	sub_FC81F8                              ; FB6CE2  call 0xfc81f8
 	inc	6, xsp                                 ; FB6CE6  inc 6,XSP
 sub_FB6BA8__FB6CE8:
 	pop	xix                                    ; FB6CE8  pop XIX
 	popw	de                                    ; FB6CE9  pop DE
 	popw	hl                                    ; FB6CEA  pop HL
-	unlk32 xiz                                 ; FB6CEB  unlk XIZ
+	unlk	xiz                                 ; FB6CEB  unlk XIZ
 	ret                                        ; FB6CED  ret
 ; --------------------------------------------------------------------------
 ; ★ NAMED (wave 18): the routine at 0xFB6CEE is now `PartRec_InitAllParts`.
@@ -13547,7 +13547,7 @@ sub_FB6BA8__FB6CE8:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 PartRec_InitAllParts:
-	link32 0xEE, 0x0C, 0xEF, 0xFF              ; FB6CEE  link XIZ,0xffef
+	link	xiz, 0xffef              ; FB6CEE  link XIZ,0xffef
 	pushw	hl                                   ; FB6CF2  push HL
 	pushw	de                                   ; FB6CF3  push DE
 	push	xix                                   ; FB6CF4  push XIX
@@ -13564,7 +13564,7 @@ sub_FB6CEE__FB6CF9:
 sub_FB6CEE__FB6D13:
 	ld	(xiz-2), ix                             ; FB6D13  ld (XIZ+0xfe),IX
 	ld	bc, (xiz-10)                            ; FB6D16  ld BC,(XIZ+0xf6)
-	extpfx3 0x9E, 0xFA, 0x81                   ; FB6D19  add BC,(XIZ+0xfa)
+	add	bc, (xiz-6)                   ; FB6D19  add BC,(XIZ+0xfa)
 	ld	(xiz-13), bc                            ; FB6D1C  ld (XIZ+0xf3),BC
 	ldw	hl, 0                                  ; FB6D1F  ld HL,0x0000
 	ld	de, bc                                  ; FB6D22  ld DE,BC
@@ -13572,14 +13572,14 @@ sub_FB6CEE__FB6D13:
 sub_FB6CEE__FB6D28:
 	ld	bc, (xiz-6)                             ; FB6D28  ld BC,(XIZ+0xfa)
 	add	bc, hl                                 ; FB6D2B  add BC,HL
-	extpfx3 0x9E, 0xFE, 0x81                   ; FB6D2D  add BC,(XIZ+0xfe)
+	add	bc, (xiz-2)                   ; FB6D2D  add BC,(XIZ+0xfe)
 	add	bc, 53                                 ; FB6D30  add BC,0x0035
 	extz	xbc                                   ; FB6D34  extz XBC
 	ld	(xbc+0x1523), 0                         ; FB6D36  ld (XBC+0x1523),0x00
 	ld	(xiz-13), de                            ; FB6D3C  ld (XIZ+0xf3),DE
 	ld	bc, (xiz-13)                            ; FB6D3F  ld BC,(XIZ+0xf3)
 	extz	xbc                                   ; FB6D42  extz XBC
-	extpfx7 0xF3, 0xE5, 0x23, 0x15, 0x02, 0x00, 0x00 ; FB6D44  ld (XBC+0x1523),0x0000
+	ldw	(xbc+5411), 0x0000 ; FB6D44  ld (XBC+0x1523),0x0000
 	add	hl, 16                                 ; FB6D4B  add HL,0x0010
 	ld	de, bc                                  ; FB6D4F  ld DE,BC
 	inc	2, de                                  ; FB6D51  inc 2,DE
@@ -13592,7 +13592,7 @@ sub_FB6CEE__FB6D28:
 	cp (xiz-3), 0x00                           ; FB6D66  cp (XIZ+0xfd),0x00
 	jr nz, sub_FB6CEE__FB6D13                  ; FB6D6A  jr NZ,0xfb6d13
 	push	0                                     ; FB6D6C  push 0x00
-	extpfx3 0x8E, 0xF5, 0x04                   ; FB6D6E  push (XIZ+0xf5)
+	push	(xiz-11)                   ; FB6D6E  push (XIZ+0xf5)
 	calr PartRec_ResetToDefaults                 ; FB6D71  calr 0xfb6500
 	incm8	1, (xiz-11)                          ; FB6D74  inc 1,(XIZ+0xf5)
 	popw	bc                                    ; FB6D77  pop BC
@@ -13648,5 +13648,5 @@ sub_FB6CEE__FB6DBA:
 	pop	xix                                    ; FB6E04  pop XIX
 	popw	de                                    ; FB6E05  pop DE
 	popw	hl                                    ; FB6E06  pop HL
-	unlk32 xiz                                 ; FB6E07  unlk XIZ
+	unlk	xiz                                 ; FB6E07  unlk XIZ
 	ret                                        ; FB6E09  ret

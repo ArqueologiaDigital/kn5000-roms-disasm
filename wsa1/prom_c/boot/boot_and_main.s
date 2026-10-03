@@ -241,7 +241,7 @@ SoftTimer_RotateLevel2:
 ; --------------------------------------------------------------------------
 DSP_ChannelRefresh_Loop:
 	ei	0
-	link32	0xEE, 0x0C, 0xFC, 0xFF
+	link	xiz, 0xfffc
 DSP_ChannelRefresh_Loop__top:
 	pushw	0x0003
 	call	Kernel_SemaWait_StackArg
@@ -305,7 +305,7 @@ DSP_ChannelRefresh_Loop__top:
 ;          kernel block comment below for what MAME does and does not say.
 ; --------------------------------------------------------------------------
 INTT3_KernelTick:
-	extpfx3	0xC0, 0x90, 0x61
+	inc	1, (0x90:8)
 	jrl	IRQ_Epilogue
 
 ; ==============================================================================
@@ -464,7 +464,7 @@ ADC_Init:
 ;          nothing reads it.
 ; --------------------------------------------------------------------------
 Analog_ChangeDetect:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; F98A0B  link XIZ,0x0000
+	link	xiz, 0x0000              ; F98A0B  link XIZ,0x0000
 	push	xix                                   ; F98A0F  push XIX
 	pushw	de                                   ; F98A10  push DE
 	ld	a, (xiz+8)                              ; F98A11  ld A,(XIZ+0x08)
@@ -514,7 +514,7 @@ Analog_ChangeDetect__store:
 	ld	(xix), c                                ; F98A6E  ld (XIX),C
 	popw	de                                    ; F98A70  pop DE
 	pop	xix                                    ; F98A71  pop XIX
-	unlk32 xiz                                 ; F98A72  unlk XIZ
+	unlk	xiz                                 ; F98A72  unlk XIZ
 	ret                                        ; F98A74  ret
 ; --------------------------------------------------------------------------
 ; Analog_ScanAndReport -- poll both A/D inputs and send whatever changed.
@@ -551,7 +551,7 @@ Analog_ChangeDetect__store:
 ;          reused from C.
 ; --------------------------------------------------------------------------
 Analog_ScanAndReport:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; F98A75  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; F98A75  link XIZ,0xfffa
 	ldw	bc, 99                                 ; F98A79  ld BC,0x0063
 	exts	xbc                                   ; F98A7C  exts XBC
 	ld	a, (xbc)                                ; F98A7E  ld A,(XBC)
@@ -561,7 +561,7 @@ Analog_ScanAndReport:
 	lda	xwa, (0xE2E5:24)                       ; F98A89  lda XWA,0x00e2e5
 	push	xwa                                   ; F98A8E  push XWA
 	push	0                                     ; F98A8F  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F98A91  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F98A91  push (XIZ+0xfb)
 	calr Analog_ChangeDetect                 ; F98A94  calr 0xf98a0b
 	ld	(xiz-6), a                              ; F98A97  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98A9A  inc 0,XSP
@@ -589,7 +589,7 @@ Analog_ScanAndReport__chan2:
 	lda	xwa, (0xE2E7:24)                       ; F98ADB  lda XWA,0x00e2e7
 	push	xwa                                   ; F98AE0  push XWA
 	push	0                                     ; F98AE1  push 0x00
-	extpfx3 0x8E, 0xFB, 0x04                   ; F98AE3  push (XIZ+0xfb)
+	push	(xiz-5)                   ; F98AE3  push (XIZ+0xfb)
 	calr Analog_ChangeDetect                 ; F98AE6  calr 0xf98a0b
 	ld	(xiz-6), a                              ; F98AE9  ld (XIZ+0xfa),A
 	inc	8, xsp                                 ; F98AEC  inc 0,XSP
@@ -608,7 +608,7 @@ Analog_ScanAndReport__chan2:
 	calr Link_SendBuffer                 ; F98B18  calr 0xf98b20
 	inc	8, xsp                                 ; F98B1B  inc 0,XSP
 Analog_ScanAndReport__done:
-	unlk32 xiz                                 ; F98B1D  unlk XIZ
+	unlk	xiz                                 ; F98B1D  unlk XIZ
 	ret                                        ; F98B1F  ret
 
 
@@ -672,15 +672,15 @@ Analog_ScanAndReport__done:
 ;          make a small constant a CHANNEL -- offered as a lead, not a finding.
 ; --------------------------------------------------------------------------
 Link_SendBuffer:
-	link32	0xEE, 0x0C, 0x00, 0x00
+	link	xiz, 0x0000
 	ld	xbc, (xiz+12)
 	push	xbc
-	extpfx3	0x9E, 0x0A, 0x04
+	pushw	(xiz+10)
 	push	0x00
-	extpfx3	0x8E, 0x08, 0x04
+	push	(xiz+8)
 	call	Link_SendBlock
 	inc	8, xsp
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 
@@ -700,7 +700,7 @@ Link_SendBuffer:
 ; Unknown:  the time per pass; no cycle counts are available in these trees.
 ; --------------------------------------------------------------------------
 Delay_CountdownArg_Z:
-	link32	0xEE, 0x0C, 0xFE, 0xFF
+	link	xiz, 0xfffe
 	pushw	hl
 Delay_CountdownArg_Z__loop:
 	ld	hl, (xiz+8)
@@ -713,7 +713,7 @@ Delay_CountdownArg_Z__loop:
 	jr	Delay_CountdownArg_Z__loop
 Delay_CountdownArg_Z__done:
 	popw	hl
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 
@@ -734,7 +734,7 @@ Delay_CountdownArg_Z__done:
 ;          is NOT ESTABLISHED.
 ; --------------------------------------------------------------------------
 Serial0_SendByte_Blocking:
-	link32	0xEE, 0x0C, 0x00, 0x00
+	link	xiz, 0x0000
 	ldw	bc, SC0BUF
 	exts	xbc
 	ld	a, (xiz+8)
@@ -742,7 +742,7 @@ Serial0_SendByte_Blocking:
 	pushw	0x00C8
 	calr	Delay_CountdownArg_Z
 	popw	bc
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 
@@ -817,7 +817,7 @@ Timer3_Init:
 ;          (XIZ-56) are written and not read in this routine.
 ; --------------------------------------------------------------------------
 MAIN:
-	link32	0xEE, 0x0C, 0xC8, 0xFF
+	link	xiz, 0xffc8
 	call	ExtBoard_ProbeAndInstallBases
 	call	Flash_ProbeAndStoreDeviceId
 	call	EEPROM_PortInit
@@ -861,7 +861,7 @@ MAIN__midi_done:
 	jr	z, MAIN__bit4
 	lda	xbc, (xiz-42)
 	push	xbc
-	extpfx3	0x9E, 0xFE, 0x04
+	pushw	(xiz-2)
 	pushw	0x0006
 	call	Link_SendBlock
 	inc	8, xsp
@@ -923,5 +923,5 @@ MAIN__tail:
 	call	MIDI_Watchdogs_And_TransportSwitch
 	pop	xiy
 	jrl	MAIN__loop
-	unlk32	xiz
+	unlk	xiz
 	ret

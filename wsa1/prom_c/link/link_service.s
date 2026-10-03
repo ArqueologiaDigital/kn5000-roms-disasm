@@ -161,9 +161,9 @@ Link_ServiceTask:
 	push	xix                               ; F99E5F  push XIX
 	lda	xix, (0x8536:24)                   ; F99E60  lda XIX,0x008536
 	ei	6                                   ; F99E65  ei 0x06
-	extpfx5 0xF2, 0x2A, 0x85, 0x00, 0xCF   ; F99E67  bit 7,(0x00852a)   [llvm-mc cannot encode this]
+	bit	7, (0x00852a:24)   ; F99E67  bit 7,(0x00852a)   [llvm-mc cannot encode this]
 	jr z, Link_ServiceTask__F99E8E                        ; F99E6C  jr Z,0xf99e8e
-	extpfx5 0xF2, 0x2A, 0x85, 0x00, 0xB7   ; F99E6E  res 7,(0x00852a)   [llvm-mc cannot encode this]
+	res	7, (0x00852a:24)   ; F99E6E  res 7,(0x00852a)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99E73  ei 0x00
 	ld	xbc, (0x8524:24)                   ; F99E75  ld XBC,(0x008524)
 	push	xbc                               ; F99E7A  push XBC
@@ -177,9 +177,9 @@ Link_ServiceTask:
 Link_ServiceTask__F99E8E:
 	ei	0                                     ; F99E8E  ei 0x00
 	ei	6                                   ; F99E90  ei 0x06
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xCF   ; F99E92  bit 7,(0x00852c)   [llvm-mc cannot encode this]
+	bit	7, (0x00852c:24)   ; F99E92  bit 7,(0x00852c)   [llvm-mc cannot encode this]
 	jr z, Link_ServiceTask__F99EC9                        ; F99E97  jr Z,0xf99ec9
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB7   ; F99E99  res 7,(0x00852c)   [llvm-mc cannot encode this]
+	res	7, (0x00852c:24)   ; F99E99  res 7,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99E9E  ei 0x00
 	ld	(0x8537:24), 0                    ; F99EA0  ld (0x008537),0x00
 	ld	(0x8535:24), 0                    ; F99EA6  ld (0x008535),0x00
@@ -195,9 +195,9 @@ Link_ServiceTask__F99E8E:
 Link_ServiceTask__F99EC9:
 	ei	0                                     ; F99EC9  ei 0x00
 	ei	6                                   ; F99ECB  ei 0x06
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xCE   ; F99ECD  bit 6,(0x00852c)   [llvm-mc cannot encode this]
+	bit	6, (0x00852c:24)   ; F99ECD  bit 6,(0x00852c)   [llvm-mc cannot encode this]
 	jr z, Link_ServiceTask__F99F02                        ; F99ED2  jr Z,0xf99f02
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB6   ; F99ED4  res 6,(0x00852c)   [llvm-mc cannot encode this]
+	res	6, (0x00852c:24)   ; F99ED4  res 6,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99ED9  ei 0x00
 	call	Flash_ReadResetMode                          ; F99EDB  call 0xfc856c
 Link_ServiceTask__F99EDF:
@@ -216,9 +216,9 @@ Link_ServiceTask__F99EDF:
 Link_ServiceTask__F99F02:
 	ei	0                                     ; F99F02  ei 0x00
 	ei	6                                   ; F99F04  ei 0x06
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xCD   ; F99F06  bit 5,(0x00852c)   [llvm-mc cannot encode this]
+	bit	5, (0x00852c:24)   ; F99F06  bit 5,(0x00852c)   [llvm-mc cannot encode this]
 	jr z, Link_ServiceTask__F99F6C                        ; F99F0B  jr Z,0xf99f6c
-	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB5   ; F99F0D  res 5,(0x00852c)   [llvm-mc cannot encode this]
+	res	5, (0x00852c:24)   ; F99F0D  res 5,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99F12  ei 0x00
 	ld	c, (xix)                            ; F99F14  ld C,(XIX)
 	cp	c, 0:i3                               ; F99F16  cp C,0
@@ -239,7 +239,7 @@ Link_ServiceTask__F99F2D:
 	popw	bc                                ; F99F3C  pop BC
 Link_ServiceTask__F99F3D:
 	ld	c, (xix)                            ; F99F3D  ld C,(XIX)
-	extpfx5 0xC2, 0x35, 0x85, 0x00, 0xF3   ; F99F3F  cp C,(0x008535)   [llvm-mc cannot encode this]
+	cp	c, (0x008535:24)   ; F99F3F  cp C,(0x008535)   [llvm-mc cannot encode this]
 	jr c, Link_ServiceTask__F99F2D                        ; F99F44  jr C,0xf99f2d
 	jr Link_ServiceTask__F99F6C                           ; F99F46  jr T,0xf99f6c
 Link_ServiceTask__F99F48:
@@ -257,7 +257,7 @@ Link_ServiceTask__F99F59:
 	popw	bc                                ; F99F62  pop BC
 Link_ServiceTask__F99F63:
 	ld	c, (xix)                            ; F99F63  ld C,(XIX)
-	extpfx5 0xC2, 0x35, 0x85, 0x00, 0xF3   ; F99F65  cp C,(0x008535)   [llvm-mc cannot encode this]
+	cp	c, (0x008535:24)   ; F99F65  cp C,(0x008535)   [llvm-mc cannot encode this]
 	jr c, Link_ServiceTask__F99F59                        ; F99F6A  jr C,0xf99f59
 Link_ServiceTask__F99F6C:
 	ei	0                                     ; F99F6C  ei 0x00
@@ -277,7 +277,7 @@ Link_ServiceTask__F99F8C:
 Link_ServiceTask__F99F97:
 	ldw	(0xF32F:24), 0                    ; F99F97  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F9E:
-	extpfx7 0xD2, 0x2F, 0xF3, 0x00, 0x3F, 0x0A, 0x00 ; F99F9E  cp (0x00f32f),0x000a   [llvm-mc cannot encode this]
+	cpw	(0x00f32f:24), 0x000a ; F99F9E  cp (0x00f32f),0x000a   [llvm-mc cannot encode this]
 	jr ule, Link_ServiceTask__F99FBF                      ; F99FA5  jr ULE,0xf99fbf
 	ldw	(0xF32F:24), 0                    ; F99FA7  ld (0x00f32f),0x0000
 	ld	(DMA3V:8), 0:io                          ; F99FAE  ld (0x7f),0x00

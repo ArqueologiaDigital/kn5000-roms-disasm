@@ -357,7 +357,7 @@
 ;          block letter, and the check that says so names it explicitly.
 ; --------------------------------------------------------------------------
 Voice_RecomputeAllThreeBaseCurves:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FABE30  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FABE30  link XIZ,0xfff4
 	push	xhl                                   ; FABE34  push XHL
 	pushw	de                                   ; FABE35  push DE
 	pushw	ix                                   ; FABE36  push IX
@@ -406,7 +406,7 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 Voice_RecomputeAllThreeBaseCurves__FABEA4:
 	lda	xbc, (0xD75E:24)                       ; FABEA4  lda XBC,0x00d75e
 	push	xbc                                   ; FABEA9  push XBC
-	extpfx3 0x9E, 0xFE, 0x04                   ; FABEAA  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FABEAA  pushw (XIZ+0xfe)
 	call	Dev10C_SetChanReg_0600_b                              ; FABEAD  call 0xfb7c8f
 	inc	6, xsp                                 ; FABEB1  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FABEB3:
@@ -459,7 +459,7 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 Voice_RecomputeAllThreeBaseCurves__FABF31:
 	lda	xbc, (0xD75E:24)                       ; FABF31  lda XBC,0x00d75e
 	push	xbc                                   ; FABF36  push XBC
-	extpfx3 0x9E, 0xFE, 0x04                   ; FABF37  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FABF37  pushw (XIZ+0xfe)
 	call	Dev10C_SetChanReg_01C0_b                              ; FABF3A  call 0xfb7e7b
 	inc	6, xsp                                 ; FABF3E  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FABF40:
@@ -534,7 +534,7 @@ Voice_RecomputeAllThreeBaseCurves__FABFC8:
 Voice_RecomputeAllThreeBaseCurves__FABFFF:
 	lda	xbc, (0xD75E:24)                       ; FABFFF  lda XBC,0x00d75e
 	push	xbc                                   ; FAC004  push XBC
-	extpfx3 0x9E, 0xFE, 0x04                   ; FAC005  pushw (XIZ+0xfe)
+	pushw	(xiz-2)                   ; FAC005  pushw (XIZ+0xfe)
 	call	Dev10C_SetChanReg_01C0_or_0600_b                              ; FAC008  call 0xfb7fce
 	inc	6, xsp                                 ; FAC00C  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FAC00E:
@@ -546,7 +546,7 @@ Voice_RecomputeAllThreeBaseCurves__FAC00E:
 	popw	ix                                    ; FAC020  pop IX
 	popw	de                                    ; FAC021  pop DE
 	pop	xhl                                    ; FAC022  pop XHL
-	unlk32 xiz                                 ; FAC023  unlk XIZ
+	unlk	xiz                                 ; FAC023  unlk XIZ
 	ret                                        ; FAC025  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC026 -- 0xFAC026..0xFAC08C (103 bytes)
@@ -568,7 +568,7 @@ Voice_RecomputeAllThreeBaseCurves__FAC00E:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC026:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC026  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC026  link XIZ,0x0000
 	pushw	hl                                   ; FAC02A  push HL
 	push	xde                                   ; FAC02B  push XDE
 	ld	de, (xiz+8)                             ; FAC02C  ld DE,(XIZ+0x08)
@@ -613,7 +613,7 @@ sub_FAC026__FAC083:
 	ld	(xde+43), hl                            ; FAC085  ld (XDE+0x2b),HL
 	pop	xde                                    ; FAC088  pop XDE
 	popw	hl                                    ; FAC089  pop HL
-	unlk32 xiz                                 ; FAC08A  unlk XIZ
+	unlk	xiz                                 ; FAC08A  unlk XIZ
 	ret                                        ; FAC08C  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC08D -- 0xFAC08D..0xFAC2AD (545 bytes)
@@ -636,7 +636,7 @@ sub_FAC026__FAC083:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC08D:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FAC08D  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FAC08D  link XIZ,0xfff8
 	pushw	hl                                   ; FAC091  push HL
 	pushw	de                                   ; FAC092  push DE
 	push	xix                                   ; FAC093  push XIX
@@ -651,7 +651,7 @@ sub_FAC08D:
 	extz	xix                                   ; FAC0AA  extz XIX
 	ld	a, (xix+49)                             ; FAC0AC  ld A,(XIX+0x31)
 	extz	wa                                    ; FAC0AF  extz WA
-	extpfx3 0x9E, 0xFE, 0xE0                   ; FAC0B1  or WA,(XIZ+0xfe)
+	or	wa, (xiz-2)                   ; FAC0B1  or WA,(XIZ+0xfe)
 	xor	wa, 0x800                              ; FAC0B4  xor WA,0x0800
 	ld	(xiz-2), wa                             ; FAC0B8  ld (XIZ+0xfe),WA
 	and	wa, 0x800                              ; FAC0BB  and WA,0x0800
@@ -702,7 +702,7 @@ sub_FAC08D__FAC106:
 	ld	(xiz-6), xbc                            ; FAC12A  ld (XIZ+0xfa),XBC
 	ld	(xbc), de                               ; FAC12D  ld (XBC),DE
 	ld	xbc, (xiz-6)                            ; FAC12F  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FAC132  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FAC132  ld (XBC+0x02),0xff00
 	nop                                        ; FAC137  nop
 	nop                                        ; FAC138  nop
 	nop                                        ; FAC139  nop
@@ -717,7 +717,7 @@ sub_FAC08D__FAC106:
 	ld	(xiz-8), xwa                            ; FAC14E  ld (XIZ+0xf8),XWA
 	ld	(xwa), bc                               ; FAC151  ld (XWA),BC
 	ld	xbc, (xiz-8)                            ; FAC153  ld XBC,(XIZ+0xf8)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FAC156  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FAC156  ld (XBC+0x02),0xff80
 	ld	de, (xix+54)                            ; FAC15B  ld DE,(XIX+0x36)
 	cp	hl, de                                  ; FAC15E  cp HL,DE
 	jrl ge, sub_FAC08D__FAC232                 ; FAC160  jrl GE,0xfac232
@@ -737,7 +737,7 @@ sub_FAC08D__FAC174:
 	ld	(xiz-6), xbc                            ; FAC185  ld (XIZ+0xfa),XBC
 	ld	(xbc), hl                               ; FAC188  ld (XBC),HL
 	ld	xbc, (xiz-6)                            ; FAC18A  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FAC18D  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FAC18D  ld (XBC+0x02),0xff00
 	nop                                        ; FAC192  nop
 	nop                                        ; FAC193  nop
 	nop                                        ; FAC194  nop
@@ -752,7 +752,7 @@ sub_FAC08D__FAC174:
 	ld	(xiz-6), xbc                            ; FAC1A8  ld (XIZ+0xfa),XBC
 	ld	(xbc), hl                               ; FAC1AB  ld (XBC),HL
 	ld	xbc, (xiz-6)                            ; FAC1AD  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FAC1B0  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FAC1B0  ld (XBC+0x02),0xff80
 	pushw	ix                                   ; FAC1B5  push IX
 	ld	c, (xix)                                ; FAC1B6  ld C,(XIX)
 	extz	bc                                    ; FAC1B8  extz BC
@@ -769,14 +769,14 @@ sub_FAC08D__FAC1C1:
 	jr gt, sub_FAC08D__FAC1F1                  ; FAC1D1  jr GT,0xfac1f1
 sub_FAC08D__FAC1D3:
 	extz	xix                                   ; FAC1D3  extz XIX
-	extpfx5 0xBC, 0x2F, 0x02, 0x00, 0xFF       ; FAC1D5  ld (XIX+0x2f),0xff00
+	ldw	(xix+47), 0xff00       ; FAC1D5  ld (XIX+0x2f),0xff00
 	ld	c, (xix)                                ; FAC1DA  ld C,(XIX)
 	pushw	bc                                   ; FAC1DC  push BC
 	call	ChanRec_ClearHoldAndRelease                              ; FAC1DD  call 0xfa6ea5
 	ld	c, (xix)                                ; FAC1E1  ld C,(XIX)
 	pushw	bc                                   ; FAC1E3  push BC
 	call	Voice_Retire_Mode20                              ; FAC1E4  call 0xfb3d26
-	extpfx5 0x9E, 0xFE, 0x3C, 0xFF, 0x6F       ; FAC1E8  and (XIZ+0xfe),0x6fff
+	andw	(xiz-2), 0x6fff       ; FAC1E8  and (XIZ+0xfe),0x6fff
 sub_FAC08D__FAC1ED:
 	pop	xiy                                    ; FAC1ED  pop XIY
 	jrl sub_FAC08D__FAC2A0                     ; FAC1EE  jrl T,0xfac2a0
@@ -790,7 +790,7 @@ sub_FAC08D__FAC1F1:
 	ld	(xiz-6), xbc                            ; FAC202  ld (XIZ+0xfa),XBC
 	ld	(xbc), de                               ; FAC205  ld (XBC),DE
 	ld	xbc, (xiz-6)                            ; FAC207  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FAC20A  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FAC20A  ld (XBC+0x02),0xff00
 	nop                                        ; FAC20F  nop
 	nop                                        ; FAC210  nop
 	nop                                        ; FAC211  nop
@@ -805,7 +805,7 @@ sub_FAC08D__FAC1F1:
 	ld	(xiz-6), xbc                            ; FAC225  ld (XIZ+0xfa),XBC
 	ld	(xbc), de                               ; FAC228  ld (XBC),DE
 	ld	xbc, (xiz-6)                            ; FAC22A  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FAC22D  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FAC22D  ld (XBC+0x02),0xff80
 sub_FAC08D__FAC232:
 	extz	xix                                   ; FAC232  extz XIX
 	ld	(xix+47), hl                            ; FAC234  ld (XIX+0x2f),HL
@@ -836,7 +836,7 @@ sub_FAC08D__FAC258:
 	ld	(xiz-6), xbc                            ; FAC26D  ld (XIZ+0xfa),XBC
 	ld	(xbc), hl                               ; FAC270  ld (XBC),HL
 	ld	xbc, (xiz-6)                            ; FAC272  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xA2       ; FAC275  ld (XBC+0x02),0xa200
+	ldw	(xbc+2), 0xa200       ; FAC275  ld (XBC+0x02),0xa200
 	nop                                        ; FAC27A  nop
 	nop                                        ; FAC27B  nop
 	nop                                        ; FAC27C  nop
@@ -851,7 +851,7 @@ sub_FAC08D__FAC258:
 	ld	(xiz-6), xbc                            ; FAC290  ld (XIZ+0xfa),XBC
 	ld	(xbc), hl                               ; FAC293  ld (XBC),HL
 	ld	xbc, (xiz-6)                            ; FAC295  ld XBC,(XIZ+0xfa)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xA2       ; FAC298  ld (XBC+0x02),0xa280
+	ldw	(xbc+2), 0xa280       ; FAC298  ld (XBC+0x02),0xa280
 sub_FAC08D__FAC29D:
 	decm	1, (xiz-2)                            ; FAC29D  decw 1,(XIZ+0xfe)
 sub_FAC08D__FAC2A0:
@@ -861,7 +861,7 @@ sub_FAC08D__FAC2A0:
 	pop	xix                                    ; FAC2A8  pop XIX
 	popw	de                                    ; FAC2A9  pop DE
 	popw	hl                                    ; FAC2AA  pop HL
-	unlk32 xiz                                 ; FAC2AB  unlk XIZ
+	unlk	xiz                                 ; FAC2AB  unlk XIZ
 	ret                                        ; FAC2AD  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC2AE -- 0xFAC2AE..0xFAC34C (159 bytes)
@@ -881,28 +881,28 @@ sub_FAC08D__FAC2A0:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC2AE:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC2AE  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC2AE  link XIZ,0x0000
 	push	xix                                   ; FAC2B2  push XIX
 	lda	xix, (0xD75E:24)                       ; FAC2B3  lda XIX,0x00d75e
-	extpfx5 0xBC, 0x02, 0x02, 0x00, 0x00       ; FAC2B8  ld (XIX+0x02),0x0000
+	ldw	(xix+2), 0x0000       ; FAC2B8  ld (XIX+0x02),0x0000
 	ld	bc, (0x151D:16)                       ; FAC2BD  ld BC,(0x151d)
 	ld	(xix+14), bc                            ; FAC2C1  ld (XIX+0x0e),BC
-	extpfx5 0xBC, 0x20, 0x02, 0x00, 0x00       ; FAC2C4  ld (XIX+0x20),0x0000
-	extpfx5 0xBC, 0x22, 0x02, 0x00, 0x00       ; FAC2C9  ld (XIX+0x22),0x0000
-	extpfx5 0xBC, 0x24, 0x02, 0x00, 0x00       ; FAC2CE  ld (XIX+0x24),0x0000
-	extpfx5 0xBC, 0x08, 0x02, 0x7F, 0x01       ; FAC2D3  ld (XIX+0x08),0x017f
-	extpfx5 0xBC, 0x0A, 0x02, 0x7F, 0x7F       ; FAC2D8  ld (XIX+0x0a),0x7f7f
-	extpfx5 0xBC, 0x26, 0x02, 0x00, 0x00       ; FAC2DD  ld (XIX+0x26),0x0000
-	extpfx5 0xBC, 0x28, 0x02, 0x00, 0x00       ; FAC2E2  ld (XIX+0x28),0x0000
-	extpfx5 0xBC, 0x2A, 0x02, 0x00, 0x00       ; FAC2E7  ld (XIX+0x2a),0x0000
-	extpfx5 0xBC, 0x16, 0x02, 0x00, 0x00       ; FAC2EC  ld (XIX+0x16),0x0000
-	extpfx5 0xBC, 0x1E, 0x02, 0x00, 0x00       ; FAC2F1  ld (XIX+0x1e),0x0000
-	extpfx5 0xBC, 0x10, 0x02, 0x00, 0x00       ; FAC2F6  ld (XIX+0x10),0x0000
-	extpfx5 0xBC, 0x12, 0x02, 0x00, 0x00       ; FAC2FB  ld (XIX+0x12),0x0000
-	extpfx5 0xBC, 0x0C, 0x02, 0x40, 0x00       ; FAC300  ld (XIX+0x0c),0x0040
-	extpfx5 0xBC, 0x14, 0x02, 0x00, 0x00       ; FAC305  ld (XIX+0x14),0x0000
-	extpfx5 0xBC, 0x06, 0x02, 0x00, 0x00       ; FAC30A  ld (XIX+0x06),0x0000
-	extpfx5 0xBC, 0x18, 0x02, 0x7F, 0xFF       ; FAC30F  ld (XIX+0x18),0xff7f
+	ldw	(xix+32), 0x0000       ; FAC2C4  ld (XIX+0x20),0x0000
+	ldw	(xix+34), 0x0000       ; FAC2C9  ld (XIX+0x22),0x0000
+	ldw	(xix+36), 0x0000       ; FAC2CE  ld (XIX+0x24),0x0000
+	ldw	(xix+8), 0x017f       ; FAC2D3  ld (XIX+0x08),0x017f
+	ldw	(xix+10), 0x7f7f       ; FAC2D8  ld (XIX+0x0a),0x7f7f
+	ldw	(xix+38), 0x0000       ; FAC2DD  ld (XIX+0x26),0x0000
+	ldw	(xix+40), 0x0000       ; FAC2E2  ld (XIX+0x28),0x0000
+	ldw	(xix+42), 0x0000       ; FAC2E7  ld (XIX+0x2a),0x0000
+	ldw	(xix+22), 0x0000       ; FAC2EC  ld (XIX+0x16),0x0000
+	ldw	(xix+30), 0x0000       ; FAC2F1  ld (XIX+0x1e),0x0000
+	ldw	(xix+16), 0x0000       ; FAC2F6  ld (XIX+0x10),0x0000
+	ldw	(xix+18), 0x0000       ; FAC2FB  ld (XIX+0x12),0x0000
+	ldw	(xix+12), 0x0040       ; FAC300  ld (XIX+0x0c),0x0040
+	ldw	(xix+20), 0x0000       ; FAC305  ld (XIX+0x14),0x0000
+	ldw	(xix+6), 0x0000       ; FAC30A  ld (XIX+0x06),0x0000
+	ldw	(xix+24), 0xff7f       ; FAC30F  ld (XIX+0x18),0xff7f
 	ld	bc, (0x151F:16)                       ; FAC314  ld BC,(0x151f)
 	ld	(xix+26), bc                            ; FAC318  ld (XIX+0x1a),BC
 	ld	bc, (0x151F:16)                       ; FAC31B  ld BC,(0x151f)
@@ -914,12 +914,12 @@ sub_FAC2AE:
 	add	bc, bc                                 ; FAC332  add BC,BC
 	ld	(xix+4), bc                             ; FAC334  ld (XIX+0x04),BC
 	ld	c, 68:opc                                  ; FAC337  ld C,0x44
-	extpfx3 0x8E, 0x08, 0x43                   ; FAC339  mul BC,(XIZ+0x08)
+	mul	bc, (xiz+8)                   ; FAC339  mul BC,(XIZ+0x08)
 	add	bc, 41                                 ; FAC33C  add BC,0x0029
 	extz	xbc                                   ; FAC340  extz XBC
-	extpfx7 0xF3, 0xE5, 0xCF, 0x3B, 0x02, 0x00, 0xF0 ; FAC342  ld (XBC+0x3bcf),0xf000
+	ldw	(xbc+15311), 0xf000 ; FAC342  ld (XBC+0x3bcf),0xf000
 	pop	xix                                    ; FAC349  pop XIX
-	unlk32 xiz                                 ; FAC34A  unlk XIZ
+	unlk	xiz                                 ; FAC34A  unlk XIZ
 	ret                                        ; FAC34C  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC34D -- 0xFAC34D..0xFAC42B (223 bytes)
@@ -942,7 +942,7 @@ sub_FAC2AE:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC34D:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FAC34D  link XIZ,0xffec
+	link	xiz, 0xffec              ; FAC34D  link XIZ,0xffec
 	pushw	hl                                   ; FAC351  push HL
 	pushw	de                                   ; FAC352  push DE
 	push	xix                                   ; FAC353  push XIX
@@ -973,7 +973,7 @@ sub_FAC34D:
 	ld	(xiz-20), xwa                           ; FAC395  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FAC398  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FAC39A  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x00, 0xFF       ; FAC39D  ld (XBC+0x02),0xff00
+	ldw	(xbc+2), 0xff00       ; FAC39D  ld (XBC+0x02),0xff00
 	nop                                        ; FAC3A2  nop
 	nop                                        ; FAC3A3  nop
 	nop                                        ; FAC3A4  nop
@@ -986,7 +986,7 @@ sub_FAC34D:
 	ld	(xiz-20), xwa                           ; FAC3B5  ld (XIZ+0xec),XWA
 	ld	(xwa), bc                               ; FAC3B8  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FAC3BA  ld XBC,(XIZ+0xec)
-	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FAC3BD  ld (XBC+0x02),0xff80
+	ldw	(xbc+2), 0xff80       ; FAC3BD  ld (XBC+0x02),0xff80
 	lda	xbc, (0xD7A2:24)                       ; FAC3C2  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3C7  push XBC
 	push	0                                     ; FAC3C8  push 0x00
@@ -1027,7 +1027,7 @@ sub_FAC34D__FAC426:
 	pop	xix                                    ; FAC426  pop XIX
 	popw	de                                    ; FAC427  pop DE
 	popw	hl                                    ; FAC428  pop HL
-	unlk32 xiz                                 ; FAC429  unlk XIZ
+	unlk	xiz                                 ; FAC429  unlk XIZ
 	ret                                        ; FAC42B  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC42C -- 0xFAC42C..0xFAC525 (250 bytes)
@@ -1049,13 +1049,13 @@ sub_FAC34D__FAC426:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC42C:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAC42C  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAC42C  link XIZ,0xfffc
 	pushw	hl                                   ; FAC430  push HL
 	pushw	de                                   ; FAC431  push DE
 	push	xix                                   ; FAC432  push XIX
 	pushw	1                                    ; FAC433  push 0x0001
 	push	0                                     ; FAC436  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC438  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC438  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0067                              ; FAC43B  call 0xfb59d2
 	extz	xwa                                   ; FAC43F  extz XWA
 	ld	(xiz-4), xwa                            ; FAC441  ld (XIZ+0xfc),XWA
@@ -1077,7 +1077,7 @@ sub_FAC42C:
 	mul	bc, 0x12C                              ; FAC46D  mul BC,0x012c
 	add	bc, 0x6B                               ; FAC471  add BC,0x006b
 	extz	xbc                                   ; FAC475  extz XBC
-	extpfx7 0xF3, 0xE5, 0x23, 0x15, 0x02, 0x2C, 0x00 ; FAC477  ld (XBC+0x1523),0x002c
+	ldw	(xbc+5411), 0x002c ; FAC477  ld (XBC+0x1523),0x002c
 	jr sub_FAC42C__FAC49B                      ; FAC47E  jr T,0xfac49b
 sub_FAC42C__FAC480:
 	ld	hl, ix                                  ; FAC480  ld HL,IX
@@ -1091,7 +1091,7 @@ sub_FAC42C__FAC480:
 sub_FAC42C__FAC49B:
 	pushw	1                                    ; FAC49B  push 0x0001
 	push	0                                     ; FAC49E  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC4A0  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC4A0  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0065                              ; FAC4A3  call 0xfb582a
 	extz	xwa                                   ; FAC4A7  extz XWA
 	ld	(xiz-4), xwa                            ; FAC4A9  ld (XIZ+0xfc),XWA
@@ -1118,7 +1118,7 @@ sub_FAC42C__FAC49B:
 	pushw	0                                    ; FAC4E6  push 0x0000
 	pushw	13                                   ; FAC4E9  push 0x000d
 	push	0                                     ; FAC4EC  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC4EE  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC4EE  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC4F1  call 0xfa6110
 	ld	ix, iy                                  ; FAC4F5  ld IX,IY
 	ldw	hl, 0                                  ; FAC4F7  ld HL,0x0000
@@ -1126,7 +1126,7 @@ sub_FAC42C__FAC49B:
 	inc	2, xsp                                 ; FAC4FC  inc 2,XSP
 sub_FAC42C__FAC4FE:
 	extz	xix                                   ; FAC4FE  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC500  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC500  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC505  and DE,0x00ff
 	cp	de, 0x80                                ; FAC509  cp DE,0x0080
 	jr nc, sub_FAC42C__FAC520                  ; FAC50D  jr NC,0xfac520
@@ -1141,7 +1141,7 @@ sub_FAC42C__FAC520:
 	pop	xix                                    ; FAC520  pop XIX
 	popw	de                                    ; FAC521  pop DE
 	popw	hl                                    ; FAC522  pop HL
-	unlk32 xiz                                 ; FAC523  unlk XIZ
+	unlk	xiz                                 ; FAC523  unlk XIZ
 	ret                                        ; FAC525  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC526 -- 0xFAC526..0xFAC58E (105 bytes)
@@ -1162,24 +1162,24 @@ sub_FAC42C__FAC520:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC526:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC526  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC526  link XIZ,0x0000
 	pushw	hl                                   ; FAC52A  push HL
 	pushw	de                                   ; FAC52B  push DE
 	push	xix                                   ; FAC52C  push XIX
 	pushw	1                                    ; FAC52D  push 0x0001
 	push	0                                     ; FAC530  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC532  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC532  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0067                              ; FAC535  call 0xfb59d2
 	ld	(0xD79A:24), wa                        ; FAC539  ld (0x00d79a),WA
 	pushw	1                                    ; FAC53E  push 0x0001
 	push	0                                     ; FAC541  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC543  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC543  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0065                              ; FAC546  call 0xfb582a
 	ld	(0xD79E:24), wa                        ; FAC54A  ld (0x00d79e),WA
 	pushw	0                                    ; FAC54F  push 0x0000
 	pushw	13                                   ; FAC552  push 0x000d
 	push	0                                     ; FAC555  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC557  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC557  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC55A  call 0xfa6110
 	ld	ix, iy                                  ; FAC55E  ld IX,IY
 	ldw	hl, 0                                  ; FAC560  ld HL,0x0000
@@ -1187,7 +1187,7 @@ sub_FAC526:
 	inc	6, xsp                                 ; FAC565  inc 6,XSP
 sub_FAC526__FAC567:
 	extz	xix                                   ; FAC567  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC569  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC569  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC56E  and DE,0x00ff
 	cp	de, 0x80                                ; FAC572  cp DE,0x0080
 	jr nc, sub_FAC526__FAC589                  ; FAC576  jr NC,0xfac589
@@ -1202,7 +1202,7 @@ sub_FAC526__FAC589:
 	pop	xix                                    ; FAC589  pop XIX
 	popw	de                                    ; FAC58A  pop DE
 	popw	hl                                    ; FAC58B  pop HL
-	unlk32 xiz                                 ; FAC58C  unlk XIZ
+	unlk	xiz                                 ; FAC58C  unlk XIZ
 	ret                                        ; FAC58E  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC58F -- 0xFAC58F..0xFAC688 (250 bytes)
@@ -1224,13 +1224,13 @@ sub_FAC526__FAC589:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC58F:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAC58F  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAC58F  link XIZ,0xfffc
 	pushw	hl                                   ; FAC593  push HL
 	pushw	de                                   ; FAC594  push DE
 	push	xix                                   ; FAC595  push XIX
 	pushw	0                                    ; FAC596  push 0x0000
 	push	0                                     ; FAC599  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC59B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC59B  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0067                              ; FAC59E  call 0xfb59d2
 	extz	xwa                                   ; FAC5A2  extz XWA
 	ld	(xiz-4), xwa                            ; FAC5A4  ld (XIZ+0xfc),XWA
@@ -1252,7 +1252,7 @@ sub_FAC58F:
 	mul	bc, 0x12C                              ; FAC5D0  mul BC,0x012c
 	add	bc, 0x67                               ; FAC5D4  add BC,0x0067
 	extz	xbc                                   ; FAC5D8  extz XBC
-	extpfx7 0xF3, 0xE5, 0x23, 0x15, 0x02, 0x1C, 0x00 ; FAC5DA  ld (XBC+0x1523),0x001c
+	ldw	(xbc+5411), 0x001c ; FAC5DA  ld (XBC+0x1523),0x001c
 	jr sub_FAC58F__FAC5FE                      ; FAC5E1  jr T,0xfac5fe
 sub_FAC58F__FAC5E3:
 	ld	hl, ix                                  ; FAC5E3  ld HL,IX
@@ -1266,7 +1266,7 @@ sub_FAC58F__FAC5E3:
 sub_FAC58F__FAC5FE:
 	pushw	0                                    ; FAC5FE  push 0x0000
 	push	0                                     ; FAC601  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC603  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC603  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0065                              ; FAC606  call 0xfb582a
 	extz	xwa                                   ; FAC60A  extz XWA
 	ld	(xiz-4), xwa                            ; FAC60C  ld (XIZ+0xfc),XWA
@@ -1293,7 +1293,7 @@ sub_FAC58F__FAC5FE:
 	pushw	0                                    ; FAC649  push 0x0000
 	pushw	12                                   ; FAC64C  push 0x000c
 	push	0                                     ; FAC64F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC651  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC651  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC654  call 0xfa6110
 	ld	ix, iy                                  ; FAC658  ld IX,IY
 	ldw	hl, 0                                  ; FAC65A  ld HL,0x0000
@@ -1301,7 +1301,7 @@ sub_FAC58F__FAC5FE:
 	inc	2, xsp                                 ; FAC65F  inc 2,XSP
 sub_FAC58F__FAC661:
 	extz	xix                                   ; FAC661  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC663  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC663  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC668  and DE,0x00ff
 	cp	de, 0x80                                ; FAC66C  cp DE,0x0080
 	jr nc, sub_FAC58F__FAC683                  ; FAC670  jr NC,0xfac683
@@ -1316,7 +1316,7 @@ sub_FAC58F__FAC683:
 	pop	xix                                    ; FAC683  pop XIX
 	popw	de                                    ; FAC684  pop DE
 	popw	hl                                    ; FAC685  pop HL
-	unlk32 xiz                                 ; FAC686  unlk XIZ
+	unlk	xiz                                 ; FAC686  unlk XIZ
 	ret                                        ; FAC688  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC689 -- 0xFAC689..0xFAC6F1 (105 bytes)
@@ -1337,24 +1337,24 @@ sub_FAC58F__FAC683:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC689:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC689  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC689  link XIZ,0x0000
 	pushw	hl                                   ; FAC68D  push HL
 	pushw	de                                   ; FAC68E  push DE
 	push	xix                                   ; FAC68F  push XIX
 	pushw	0                                    ; FAC690  push 0x0000
 	push	0                                     ; FAC693  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC695  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC695  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0067                              ; FAC698  call 0xfb59d2
 	ld	(0xD79C:24), wa                        ; FAC69C  ld (0x00d79c),WA
 	pushw	0                                    ; FAC6A1  push 0x0000
 	push	0                                     ; FAC6A4  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC6A6  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC6A6  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0065                              ; FAC6A9  call 0xfb582a
 	ld	(0xD7A0:24), wa                        ; FAC6AD  ld (0x00d7a0),WA
 	pushw	0                                    ; FAC6B2  push 0x0000
 	pushw	12                                   ; FAC6B5  push 0x000c
 	push	0                                     ; FAC6B8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC6BA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC6BA  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC6BD  call 0xfa6110
 	ld	ix, iy                                  ; FAC6C1  ld IX,IY
 	ldw	hl, 0                                  ; FAC6C3  ld HL,0x0000
@@ -1362,7 +1362,7 @@ sub_FAC689:
 	inc	6, xsp                                 ; FAC6C8  inc 6,XSP
 sub_FAC689__FAC6CA:
 	extz	xix                                   ; FAC6CA  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC6CC  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC6CC  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC6D1  and DE,0x00ff
 	cp	de, 0x80                                ; FAC6D5  cp DE,0x0080
 	jr nc, sub_FAC689__FAC6EC                  ; FAC6D9  jr NC,0xfac6ec
@@ -1377,7 +1377,7 @@ sub_FAC689__FAC6EC:
 	pop	xix                                    ; FAC6EC  pop XIX
 	popw	de                                    ; FAC6ED  pop DE
 	popw	hl                                    ; FAC6EE  pop HL
-	unlk32 xiz                                 ; FAC6EF  unlk XIZ
+	unlk	xiz                                 ; FAC6EF  unlk XIZ
 	ret                                        ; FAC6F1  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC6F2 -- 0xFAC6F2..0xFAC79B (170 bytes)
@@ -1398,12 +1398,12 @@ sub_FAC689__FAC6EC:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC6F2:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAC6F2  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAC6F2  link XIZ,0xfffc
 	pushw	hl                                   ; FAC6F6  push HL
 	pushw	de                                   ; FAC6F7  push DE
 	push	xix                                   ; FAC6F8  push XIX
 	push	0                                     ; FAC6F9  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC6FB  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC6FB  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_006F                              ; FAC6FE  call 0xfb5c77
 	extz	xwa                                   ; FAC702  extz XWA
 	ld	(xiz-4), xwa                            ; FAC704  ld (XIZ+0xfc),XWA
@@ -1425,7 +1425,7 @@ sub_FAC6F2:
 	mul	bc, 0x12C                              ; FAC730  mul BC,0x012c
 	add	bc, 0x6F                               ; FAC734  add BC,0x006f
 	extz	xbc                                   ; FAC738  extz XBC
-	extpfx7 0xF3, 0xE5, 0x23, 0x15, 0x02, 0x1C, 0x00 ; FAC73A  ld (XBC+0x1523),0x001c
+	ldw	(xbc+5411), 0x001c ; FAC73A  ld (XBC+0x1523),0x001c
 	jr sub_FAC6F2__FAC75E                      ; FAC741  jr T,0xfac75e
 sub_FAC6F2__FAC743:
 	ld	hl, ix                                  ; FAC743  ld HL,IX
@@ -1440,14 +1440,14 @@ sub_FAC6F2__FAC75E:
 	pushw	0                                    ; FAC75E  push 0x0000
 	pushw	16                                   ; FAC761  push 0x0010
 	push	0                                     ; FAC764  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC766  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC766  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC769  call 0xfa6110
 	ld	ix, iy                                  ; FAC76D  ld IX,IY
 	ldw	hl, 0                                  ; FAC76F  ld HL,0x0000
 	jr sub_FAC6F2__FAC792                      ; FAC772  jr T,0xfac792
 sub_FAC6F2__FAC774:
 	extz	xix                                   ; FAC774  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC776  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC776  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC77B  and DE,0x00ff
 	cp	de, 64                                  ; FAC77F  cp DE,0x0040
 	jr nc, sub_FAC6F2__FAC796                  ; FAC783  jr NC,0xfac796
@@ -1463,7 +1463,7 @@ sub_FAC6F2__FAC796:
 	pop	xix                                    ; FAC796  pop XIX
 	popw	de                                    ; FAC797  pop DE
 	popw	hl                                    ; FAC798  pop HL
-	unlk32 xiz                                 ; FAC799  unlk XIZ
+	unlk	xiz                                 ; FAC799  unlk XIZ
 	ret                                        ; FAC79B  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC79C -- 0xFAC79C..0xFAC7EE (83 bytes)
@@ -1484,25 +1484,25 @@ sub_FAC6F2__FAC796:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC79C:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC79C  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC79C  link XIZ,0x0000
 	pushw	hl                                   ; FAC7A0  push HL
 	pushw	de                                   ; FAC7A1  push DE
 	push	xix                                   ; FAC7A2  push XIX
 	push	0                                     ; FAC7A3  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC7A5  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC7A5  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_006F                              ; FAC7A8  call 0xfb5c77
 	ld	(0xD798:24), wa                        ; FAC7AC  ld (0x00d798),WA
 	pushw	0                                    ; FAC7B1  push 0x0000
 	pushw	16                                   ; FAC7B4  push 0x0010
 	push	0                                     ; FAC7B7  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FAC7B9  push (XIZ+0x08)
+	push	(xiz+8)                   ; FAC7B9  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FAC7BC  call 0xfa6110
 	ld	ix, iy                                  ; FAC7C0  ld IX,IY
 	ldw	hl, 0                                  ; FAC7C2  ld HL,0x0000
 	inc	8, xsp                                 ; FAC7C5  inc 0,XSP
 sub_FAC79C__FAC7C7:
 	extz	xix                                   ; FAC7C7  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FAC7C9  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FAC7C9  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FAC7CE  and DE,0x00ff
 	cp	de, 64                                  ; FAC7D2  cp DE,0x0040
 	jr nc, sub_FAC79C__FAC7E9                  ; FAC7D6  jr NC,0xfac7e9
@@ -1517,7 +1517,7 @@ sub_FAC79C__FAC7E9:
 	pop	xix                                    ; FAC7E9  pop XIX
 	popw	de                                    ; FAC7EA  pop DE
 	popw	hl                                    ; FAC7EB  pop HL
-	unlk32 xiz                                 ; FAC7EC  unlk XIZ
+	unlk	xiz                                 ; FAC7EC  unlk XIZ
 	ret                                        ; FAC7EE  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC7EF -- 0xFAC7EF..0xFAC887 (153 bytes)
@@ -1539,7 +1539,7 @@ sub_FAC79C__FAC7E9:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC7EF:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC7EF  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC7EF  link XIZ,0x0000
 	pushw	hl                                   ; FAC7F3  push HL
 	push	xde                                   ; FAC7F4  push XDE
 	push	xix                                   ; FAC7F5  push XIX
@@ -1550,7 +1550,7 @@ sub_FAC7EF:
 	cp	h, 79                                   ; FAC801  cp H,0x4f
 	jr c, sub_FAC7EF__FAC813                   ; FAC804  jr C,0xfac813
 	extz	xde                                   ; FAC806  extz XDE
-	extpfx4 0x8A, 0x71, 0x3E, 0x08             ; FAC808  or (XDE+0x71),0x08
+	or	(xde+113), 0x08             ; FAC808  or (XDE+0x71),0x08
 	pushw	hl                                   ; FAC80C  push HL
 	calr sub_FAC526                 ; FAC80D  calr 0xfac526
 	popw	bc                                    ; FAC810  pop BC
@@ -1560,7 +1560,7 @@ sub_FAC7EF__FAC813:
 	inc	1, c                                   ; FAC815  inc 1,C
 	extz	xde                                   ; FAC817  extz XDE
 	ld	(xde+0x72), c                           ; FAC819  ld (XDE+0x72),C
-	extpfx4 0x8A, 0x71, 0x3C, 0xF7             ; FAC81C  and (XDE+0x71),0xf7
+	and	(xde+113), 0xf7             ; FAC81C  and (XDE+0x71),0xf7
 	ld	c, (xde+0x72)                           ; FAC820  ld C,(XDE+0x72)
 	extz	bc                                    ; FAC823  extz BC
 	extz	xbc                                   ; FAC825  extz XBC
@@ -1586,7 +1586,7 @@ sub_FAC7EF__FAC84A:
 	inc	1, c                                   ; FAC84C  inc 1,C
 	extz	xde                                   ; FAC84E  extz XDE
 	ld	(xde+0x73), c                           ; FAC850  ld (XDE+0x73),C
-	extpfx4 0x8A, 0x71, 0x3C, 0xF7             ; FAC853  and (XDE+0x71),0xf7
+	and	(xde+113), 0xf7             ; FAC853  and (XDE+0x71),0xf7
 	ld	c, (xde+0x73)                           ; FAC857  ld C,(XDE+0x73)
 	extz	bc                                    ; FAC85A  extz BC
 	div	c, 6                                   ; FAC85C  div C,0x06
@@ -1609,7 +1609,7 @@ sub_FAC7EF__FAC882:
 	pop	xix                                    ; FAC882  pop XIX
 	pop	xde                                    ; FAC883  pop XDE
 	popw	hl                                    ; FAC884  pop HL
-	unlk32 xiz                                 ; FAC885  unlk XIZ
+	unlk	xiz                                 ; FAC885  unlk XIZ
 	ret                                        ; FAC887  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC888 -- 0xFAC888..0xFAC90D (134 bytes)
@@ -1630,7 +1630,7 @@ sub_FAC7EF__FAC882:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC888:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAC888  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAC888  link XIZ,0xfffc
 	pushw	hl                                   ; FAC88C  push HL
 	push	xde                                   ; FAC88D  push XDE
 	push	xix                                   ; FAC88E  push XIX
@@ -1642,14 +1642,14 @@ sub_FAC888:
 	cp	h, 0:i3                                   ; FAC89F  cp H,0
 	jr nz, sub_FAC888__FAC8AB                  ; FAC8A1  jr NZ,0xfac8ab
 	extz	xde                                   ; FAC8A3  extz XDE
-	extpfx4 0x8A, 0x71, 0x3E, 0x10             ; FAC8A5  or (XDE+0x71),0x10
+	or	(xde+113), 0x10             ; FAC8A5  or (XDE+0x71),0x10
 	jr sub_FAC888__FAC8CC                      ; FAC8A9  jr T,0xfac8cc
 sub_FAC888__FAC8AB:
 	ld	c, h                                    ; FAC8AB  ld C,H
 	dec	1, c                                   ; FAC8AD  dec 1,C
 	extz	xde                                   ; FAC8AF  extz XDE
 	ld	(xde+0x72), c                           ; FAC8B1  ld (XDE+0x72),C
-	extpfx4 0x8A, 0x71, 0x3C, 0xEF             ; FAC8B4  and (XDE+0x71),0xef
+	and	(xde+113), 0xef             ; FAC8B4  and (XDE+0x71),0xef
 	ld	c, (xde+0x72)                           ; FAC8B8  ld C,(XDE+0x72)
 	srl	c, 1                                   ; FAC8BB  srl 0x01,C
 	extz	bc                                    ; FAC8BE  extz BC
@@ -1669,7 +1669,7 @@ sub_FAC888__FAC8CC:
 	dec	1, c                                   ; FAC8D7  dec 1,C
 	extz	xde                                   ; FAC8D9  extz XDE
 	ld	(xde+0x73), c                           ; FAC8DB  ld (XDE+0x73),C
-	extpfx4 0x8A, 0x71, 0x3C, 0xEF             ; FAC8DE  and (XDE+0x71),0xef
+	and	(xde+113), 0xef             ; FAC8DE  and (XDE+0x71),0xef
 	ld	c, (xde+0x73)                           ; FAC8E2  ld C,(XDE+0x73)
 	extz	bc                                    ; FAC8E5  extz BC
 	div	c, 5                                   ; FAC8E7  div C,0x05
@@ -1682,7 +1682,7 @@ sub_FAC888__FAC8CC:
 	pushw	hl                                   ; FAC8F6  push HL
 	calr sub_FAC58F                 ; FAC8F7  calr 0xfac58f
 	ld	xbc, xix                                ; FAC8FA  ld XBC,XIX
-	extpfx3 0xAE, 0xFC, 0x81                   ; FAC8FC  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FAC8FC  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAC8FF  ld A,(XBC)
 	pushw	wa                                   ; FAC901  push WA
 	pushw	hl                                   ; FAC902  push HL
@@ -1692,7 +1692,7 @@ sub_FAC888__FAC908:
 	pop	xix                                    ; FAC908  pop XIX
 	pop	xde                                    ; FAC909  pop XDE
 	popw	hl                                    ; FAC90A  pop HL
-	unlk32 xiz                                 ; FAC90B  unlk XIZ
+	unlk	xiz                                 ; FAC90B  unlk XIZ
 	ret                                        ; FAC90D  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC90E -- 0xFAC90E..0xFAC9A5 (152 bytes)
@@ -1713,14 +1713,14 @@ sub_FAC888__FAC908:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC90E:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC90E  link XIZ,0x0000
+	link	xiz, 0x0000              ; FAC90E  link XIZ,0x0000
 	pushw	hl                                   ; FAC912  push HL
 	pushw	de                                   ; FAC913  push DE
 	push	xix                                   ; FAC914  push XIX
 	ld	ix, (xiz+10)                            ; FAC915  ld IX,(XIZ+0x0a)
 	ld	d, (xiz+8)                              ; FAC918  ld D,(XIZ+0x08)
 	extz	xix                                   ; FAC91B  extz XIX
-	extpfx4 0x8C, 0x71, 0x3C, 0xE7             ; FAC91D  and (XIX+0x71),0xe7
+	and	(xix+113), 0xe7             ; FAC91D  and (XIX+0x71),0xe7
 	ld	c, (xix+0x72)                           ; FAC921  ld C,(XIX+0x72)
 	extz	bc                                    ; FAC924  extz BC
 	extz	xbc                                   ; FAC926  extz XBC
@@ -1777,7 +1777,7 @@ sub_FAC90E__FAC948:
 	pop	xix                                    ; FAC9A0  pop XIX
 	popw	de                                    ; FAC9A1  pop DE
 	popw	hl                                    ; FAC9A2  pop HL
-	unlk32 xiz                                 ; FAC9A3  unlk XIZ
+	unlk	xiz                                 ; FAC9A3  unlk XIZ
 	ret                                        ; FAC9A5  ret
 ; --------------------------------------------------------------------------
 ; sub_FAC9A6 -- 0xFAC9A6..0xFACA3F (154 bytes)
@@ -1798,14 +1798,14 @@ sub_FAC90E__FAC948:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FAC9A6:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FAC9A6  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FAC9A6  link XIZ,0xfffc
 	pushw	hl                                   ; FAC9AA  push HL
 	pushw	de                                   ; FAC9AB  push DE
 	push	xix                                   ; FAC9AC  push XIX
 	ld	ix, (xiz+10)                            ; FAC9AD  ld IX,(XIZ+0x0a)
 	ld	d, (xiz+8)                              ; FAC9B0  ld D,(XIZ+0x08)
 	extz	xix                                   ; FAC9B3  extz XIX
-	extpfx4 0x8C, 0x71, 0x3C, 0xE7             ; FAC9B5  and (XIX+0x71),0xe7
+	and	(xix+113), 0xe7             ; FAC9B5  and (XIX+0x71),0xe7
 	ld	c, (xix+0x72)                           ; FAC9B9  ld C,(XIX+0x72)
 	srl	c, 1                                   ; FAC9BC  srl 0x01,C
 	extz	bc                                    ; FAC9BF  extz BC
@@ -1828,7 +1828,7 @@ sub_FAC9A6__FAC9E6:
 	extz	xix                                   ; FAC9E6  extz XIX
 	ld	(xix+0x72), l                           ; FAC9E8  ld (XIX+0x72),L
 	lda	xbc, (Voice_ToneRampFilter_Curve:24)                     ; FAC9EB  lda XBC,0xfde47b
-	extpfx3 0xAE, 0xFC, 0x81                   ; FAC9F0  add XBC,(XIZ+0xfc)
+	add	xbc, (xiz-4)                   ; FAC9F0  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAC9F3  ld A,(XBC)
 	pushw	wa                                   ; FAC9F5  push WA
 	push	0                                     ; FAC9F6  push 0x00
@@ -1862,7 +1862,7 @@ sub_FAC9A6__FAC9E6:
 	pop	xix                                    ; FACA3A  pop XIX
 	popw	de                                    ; FACA3B  pop DE
 	popw	hl                                    ; FACA3C  pop HL
-	unlk32 xiz                                 ; FACA3D  unlk XIZ
+	unlk	xiz                                 ; FACA3D  unlk XIZ
 	ret                                        ; FACA3F  ret
 ; --------------------------------------------------------------------------
 ; sub_FACA40 -- 0xFACA40..0xFACAB6 (119 bytes)
@@ -1927,7 +1927,7 @@ sub_FACA40__FACA84:
 	ld	c, (xhl)                                ; FACA98  ld C,(XHL)
 	pushw	bc                                   ; FACA9A  push BC
 	call	Voice_Retire_Mode20                              ; FACA9B  call 0xfb3d26
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FACA9F  ld (XHL+0x2b),0x0000
+	ldw	(xhl+43), 0x0000       ; FACA9F  ld (XHL+0x2b),0x0000
 	pop	xiy                                    ; FACAA4  pop XIY
 sub_FACA40__FACAA5:
 	ld	c, (xix)                                ; FACAA5  ld C,(XIX)
@@ -1966,7 +1966,7 @@ sub_FACA40__FACAB3:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FACAB7:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACAB7  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FACAB7  link XIZ,0xfffc
 	push	xhl                                   ; FACABB  push XHL
 	pushw	de                                   ; FACABC  push DE
 	push	xix                                   ; FACABD  push XIX
@@ -2023,7 +2023,7 @@ sub_FACAB7__FACB1C:
 	ld	c, (xhl)                                ; FACB30  ld C,(XHL)
 	pushw	bc                                   ; FACB32  push BC
 	call	Voice_Retire_Mode20                              ; FACB33  call 0xfb3d26
-	extpfx5 0xBB, 0x2B, 0x02, 0x00, 0x00       ; FACB37  ld (XHL+0x2b),0x0000
+	ldw	(xhl+43), 0x0000       ; FACB37  ld (XHL+0x2b),0x0000
 	jr sub_FACAB7__FACB5E                      ; FACB3C  jr T,0xfacb5e
 sub_FACAB7__FACB3E:
 	extz	xhl                                   ; FACB3E  extz XHL
@@ -2037,7 +2037,7 @@ sub_FACAB7__FACB3E:
 	ld	c, (xhl)                                ; FACB52  ld C,(XHL)
 	pushw	bc                                   ; FACB54  push BC
 	call	Voice_Retire_Mode20                              ; FACB55  call 0xfb3d26
-	extpfx5 0xBB, 0x2D, 0x02, 0x00, 0x00       ; FACB59  ld (XHL+0x2d),0x0000
+	ldw	(xhl+45), 0x0000       ; FACB59  ld (XHL+0x2d),0x0000
 sub_FACAB7__FACB5E:
 	pop	xiy                                    ; FACB5E  pop XIY
 sub_FACAB7__FACB5F:
@@ -2103,7 +2103,7 @@ sub_FACAB7__FACBAB:
 	jr sub_FACAB7__FACC17                      ; FACBDF  jr T,0xfacc17
 sub_FACAB7__FACBE1:
 	extz	xhl                                   ; FACBE1  extz XHL
-	extpfx4 0x8B, 0x71, 0x3E, 0x04             ; FACBE3  or (XHL+0x71),0x04
+	or	(xhl+113), 0x04             ; FACBE3  or (XHL+0x71),0x04
 	pushw	hl                                   ; FACBE7  push HL
 	push	0                                     ; FACBE8  push 0x00
 	push	d                                     ; FACBEA  push D
@@ -2123,7 +2123,7 @@ sub_FACAB7__FACBF1:
 	jr sub_FACAB7__FACC17                      ; FACC07  jr T,0xfacc17
 sub_FACAB7__FACC09:
 	extz	xhl                                   ; FACC09  extz XHL
-	extpfx4 0x8B, 0x71, 0x3C, 0xFB             ; FACC0B  and (XHL+0x71),0xfb
+	and	(xhl+113), 0xfb             ; FACC0B  and (XHL+0x71),0xfb
 	pushw	hl                                   ; FACC0F  push HL
 	push	0                                     ; FACC10  push 0x00
 	push	d                                     ; FACC12  push D
@@ -2133,7 +2133,7 @@ sub_FACAB7__FACC17:
 sub_FACAB7__FACC18:
 	ld	hl, (xiz-2)                             ; FACC18  ld HL,(XIZ+0xfe)
 	extz	xhl                                   ; FACC1B  extz XHL
-	extpfx7 0xD3, 0xED, 0x23, 0x15, 0x3C, 0xFF, 0xDF ; FACC1D  and (XHL+0x1523),0xdfff
+	andw	(xhl+5411), 0xdfff ; FACC1D  and (XHL+0x1523),0xdfff
 	add	ix, 0x12C                              ; FACC24  add IX,0x012c
 	ld	bc, hl                                  ; FACC28  ld BC,HL
 	add	bc, 0x12C                              ; FACC2A  add BC,0x012c
@@ -2144,7 +2144,7 @@ sub_FACAB7__FACC18:
 	pop	xix                                    ; FACC39  pop XIX
 	popw	de                                    ; FACC3A  pop DE
 	pop	xhl                                    ; FACC3B  pop XHL
-	unlk32 xiz                                 ; FACC3C  unlk XIZ
+	unlk	xiz                                 ; FACC3C  unlk XIZ
 	ret                                        ; FACC3E  ret
 ; --------------------------------------------------------------------------
 ; PartRec_Word0006_SetBit13 -- 0xFACC3F..0xFACC59 (27 bytes)
@@ -2174,14 +2174,14 @@ sub_FACAB7__FACC18:
 ;          operation, both instruction operands, and claims nothing else.
 ; --------------------------------------------------------------------------
 PartRec_Word0006_SetBit13:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC3F  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACC3F  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FACC43  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FACC46  extz BC
 	mul	bc, 0x12C                              ; FACC48  mul BC,0x012c
 	inc	6, bc                                  ; FACC4C  inc 6,BC
 	extz	xbc                                   ; FACC4E  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x00, 0x20 ; FACC50  or (XBC+0x1523),0x2000
-	unlk32 xiz                                 ; FACC57  unlk XIZ
+	orw	(xbc+5411), 0x2000 ; FACC50  or (XBC+0x1523),0x2000
+	unlk	xiz                                 ; FACC57  unlk XIZ
 	ret                                        ; FACC59  ret
 ; --------------------------------------------------------------------------
 ; PartRec_Word0006_ClearBit13 -- 0xFACC5A..0xFACC74 (27 bytes)
@@ -2204,14 +2204,14 @@ PartRec_Word0006_SetBit13:
 ; Unknown:  what bit 13 of word +0x06 MEANS.
 ; --------------------------------------------------------------------------
 PartRec_Word0006_ClearBit13:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC5A  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACC5A  link XIZ,0x0000
 	ld	bc, (xiz+8)                             ; FACC5E  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FACC61  extz BC
 	mul	bc, 0x12C                              ; FACC63  mul BC,0x012c
 	inc	6, bc                                  ; FACC67  inc 6,BC
 	extz	xbc                                   ; FACC69  extz XBC
-	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3C, 0xFF, 0xDF ; FACC6B  and (XBC+0x1523),0xdfff
-	unlk32 xiz                                 ; FACC72  unlk XIZ
+	andw	(xbc+5411), 0xdfff ; FACC6B  and (XBC+0x1523),0xdfff
+	unlk	xiz                                 ; FACC72  unlk XIZ
 	ret                                        ; FACC74  ret
 ; --------------------------------------------------------------------------
 ; sub_FACC75 -- 0xFACC75..0xFACD1A (166 bytes)
@@ -2234,14 +2234,14 @@ PartRec_Word0006_ClearBit13:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FACC75:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACC75  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACC75  link XIZ,0x0000
 	pushw	hl                                   ; FACC79  push HL
 	pushw	de                                   ; FACC7A  push DE
 	push	xix                                   ; FACC7B  push XIX
 	push	0                                     ; FACC7C  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FACC7E  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FACC7E  push (XIZ+0x0a)
 	push	0                                     ; FACC81  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACC83  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACC83  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0065                              ; FACC86  call 0xfb582a
 	ld	hl, wa                                  ; FACC8A  ld HL,WA
 	pop	xiy                                    ; FACC8C  pop XIY
@@ -2253,14 +2253,14 @@ sub_FACC75:
 	or	c, 12                                   ; FACC9E  or C,0x0c
 	pushw	bc                                   ; FACCA1  push BC
 	push	0                                     ; FACCA2  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACCA4  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACCA4  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACCA7  call 0xfa6110
 	ld	ix, iy                                  ; FACCAB  ld IX,IY
 	ldw	hl, 0                                  ; FACCAD  ld HL,0x0000
 	jr sub_FACC75__FACCD0                      ; FACCB0  jr T,0xfaccd0
 sub_FACC75__FACCB2:
 	extz	xix                                   ; FACCB2  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACCB4  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACCB4  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACCB9  and DE,0x00ff
 	cp	de, 0x80                                ; FACCBD  cp DE,0x0080
 	jr nc, sub_FACC75__FACD15                  ; FACCC1  jr NC,0xfacd15
@@ -2279,14 +2279,14 @@ sub_FACC75__FACCD4:
 	or	c, 12                                   ; FACCDF  or C,0x0c
 	pushw	bc                                   ; FACCE2  push BC
 	push	0                                     ; FACCE3  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACCE5  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACCE5  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACCE8  call 0xfa6110
 	ld	ix, iy                                  ; FACCEC  ld IX,IY
 	ldw	hl, 0                                  ; FACCEE  ld HL,0x0000
 	jr sub_FACC75__FACD11                      ; FACCF1  jr T,0xfacd11
 sub_FACC75__FACCF3:
 	extz	xix                                   ; FACCF3  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACCF5  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACCF5  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACCFA  and DE,0x00ff
 	cp	de, 0x80                                ; FACCFE  cp DE,0x0080
 	jr nc, sub_FACC75__FACD15                  ; FACD02  jr NC,0xfacd15
@@ -2302,7 +2302,7 @@ sub_FACC75__FACD15:
 	pop	xix                                    ; FACD15  pop XIX
 	popw	de                                    ; FACD16  pop DE
 	popw	hl                                    ; FACD17  pop HL
-	unlk32 xiz                                 ; FACD18  unlk XIZ
+	unlk	xiz                                 ; FACD18  unlk XIZ
 	ret                                        ; FACD1A  ret
 ; --------------------------------------------------------------------------
 ; sub_FACD1B -- 0xFACD1B..0xFACDC0 (166 bytes)
@@ -2324,14 +2324,14 @@ sub_FACC75__FACD15:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FACD1B:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACD1B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACD1B  link XIZ,0x0000
 	pushw	hl                                   ; FACD1F  push HL
 	pushw	de                                   ; FACD20  push DE
 	push	xix                                   ; FACD21  push XIX
 	push	0                                     ; FACD22  push 0x00
-	extpfx3 0x8E, 0x0A, 0x04                   ; FACD24  push (XIZ+0x0a)
+	push	(xiz+10)                   ; FACD24  push (XIZ+0x0a)
 	push	0                                     ; FACD27  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACD29  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACD29  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_0067                              ; FACD2C  call 0xfb59d2
 	ld	hl, wa                                  ; FACD30  ld HL,WA
 	pop	xiy                                    ; FACD32  pop XIY
@@ -2343,14 +2343,14 @@ sub_FACD1B:
 	or	c, 12                                   ; FACD44  or C,0x0c
 	pushw	bc                                   ; FACD47  push BC
 	push	0                                     ; FACD48  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACD4A  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACD4A  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACD4D  call 0xfa6110
 	ld	ix, iy                                  ; FACD51  ld IX,IY
 	ldw	hl, 0                                  ; FACD53  ld HL,0x0000
 	jr sub_FACD1B__FACD76                      ; FACD56  jr T,0xfacd76
 sub_FACD1B__FACD58:
 	extz	xix                                   ; FACD58  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACD5A  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACD5A  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACD5F  and DE,0x00ff
 	cp	de, 0x80                                ; FACD63  cp DE,0x0080
 	jr nc, sub_FACD1B__FACDBB                  ; FACD67  jr NC,0xfacdbb
@@ -2369,14 +2369,14 @@ sub_FACD1B__FACD7A:
 	or	c, 12                                   ; FACD85  or C,0x0c
 	pushw	bc                                   ; FACD88  push BC
 	push	0                                     ; FACD89  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACD8B  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACD8B  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACD8E  call 0xfa6110
 	ld	ix, iy                                  ; FACD92  ld IX,IY
 	ldw	hl, 0                                  ; FACD94  ld HL,0x0000
 	jr sub_FACD1B__FACDB7                      ; FACD97  jr T,0xfacdb7
 sub_FACD1B__FACD99:
 	extz	xix                                   ; FACD99  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACD9B  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACD9B  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACDA0  and DE,0x00ff
 	cp	de, 0x80                                ; FACDA4  cp DE,0x0080
 	jr nc, sub_FACD1B__FACDBB                  ; FACDA8  jr NC,0xfacdbb
@@ -2392,7 +2392,7 @@ sub_FACD1B__FACDBB:
 	pop	xix                                    ; FACDBB  pop XIX
 	popw	de                                    ; FACDBC  pop DE
 	popw	hl                                    ; FACDBD  pop HL
-	unlk32 xiz                                 ; FACDBE  unlk XIZ
+	unlk	xiz                                 ; FACDBE  unlk XIZ
 	ret                                        ; FACDC0  ret
 ; --------------------------------------------------------------------------
 ; sub_FACDC1 -- 0xFACDC1..0xFACE13 (83 bytes)
@@ -2412,25 +2412,25 @@ sub_FACD1B__FACDBB:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FACDC1:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACDC1  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACDC1  link XIZ,0x0000
 	pushw	hl                                   ; FACDC5  push HL
 	pushw	de                                   ; FACDC6  push DE
 	push	xix                                   ; FACDC7  push XIX
 	push	0                                     ; FACDC8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACDCA  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACDCA  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_006D                              ; FACDCD  call 0xfb5baa
 	ld	(0xD796:24), wa                        ; FACDD1  ld (0x00d796),WA
 	pushw	0                                    ; FACDD6  push 0x0000
 	pushw	16                                   ; FACDD9  push 0x0010
 	push	0                                     ; FACDDC  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACDDE  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACDDE  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACDE1  call 0xfa6110
 	ld	ix, iy                                  ; FACDE5  ld IX,IY
 	ldw	hl, 0                                  ; FACDE7  ld HL,0x0000
 	inc	8, xsp                                 ; FACDEA  inc 0,XSP
 sub_FACDC1__FACDEC:
 	extz	xix                                   ; FACDEC  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACDEE  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACDEE  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACDF3  and DE,0x00ff
 	cp	de, 64                                  ; FACDF7  cp DE,0x0040
 	jr nc, sub_FACDC1__FACE0E                  ; FACDFB  jr NC,0xface0e
@@ -2445,7 +2445,7 @@ sub_FACDC1__FACE0E:
 	pop	xix                                    ; FACE0E  pop XIX
 	popw	de                                    ; FACE0F  pop DE
 	popw	hl                                    ; FACE10  pop HL
-	unlk32 xiz                                 ; FACE11  unlk XIZ
+	unlk	xiz                                 ; FACE11  unlk XIZ
 	ret                                        ; FACE13  ret
 ; --------------------------------------------------------------------------
 ; sub_FACE14 -- 0xFACE14..0xFACE66 (83 bytes)
@@ -2465,25 +2465,25 @@ sub_FACDC1__FACE0E:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FACE14:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACE14  link XIZ,0x0000
+	link	xiz, 0x0000              ; FACE14  link XIZ,0x0000
 	pushw	hl                                   ; FACE18  push HL
 	pushw	de                                   ; FACE19  push DE
 	push	xix                                   ; FACE1A  push XIX
 	push	0                                     ; FACE1B  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACE1D  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACE1D  push (XIZ+0x08)
 	call	PartRec_StageChanFreqWord_006F                              ; FACE20  call 0xfb5c77
 	ld	(0xD798:24), wa                        ; FACE24  ld (0x00d798),WA
 	pushw	0                                    ; FACE29  push 0x0000
 	pushw	16                                   ; FACE2C  push 0x0010
 	push	0                                     ; FACE2F  push 0x00
-	extpfx3 0x8E, 0x08, 0x04                   ; FACE31  push (XIZ+0x08)
+	push	(xiz+8)                   ; FACE31  push (XIZ+0x08)
 	call	VoiceSlots_ListSlotsOfPart                              ; FACE34  call 0xfa6110
 	ld	ix, iy                                  ; FACE38  ld IX,IY
 	ldw	hl, 0                                  ; FACE3A  ld HL,0x0000
 	inc	8, xsp                                 ; FACE3D  inc 0,XSP
 sub_FACE14__FACE3F:
 	extz	xix                                   ; FACE3F  extz XIX
-	extpfx5 0xD3, 0x07, 0xF0, 0xEC, 0x22       ; FACE41  ld DE,(XIX+HL)
+	ld	de, (xix+hl)       ; FACE41  ld DE,(XIX+HL)
 	and	de, 0xFF                               ; FACE46  and DE,0x00ff
 	cp	de, 64                                  ; FACE4A  cp DE,0x0040
 	jr nc, sub_FACE14__FACE61                  ; FACE4E  jr NC,0xface61
@@ -2498,7 +2498,7 @@ sub_FACE14__FACE61:
 	pop	xix                                    ; FACE61  pop XIX
 	popw	de                                    ; FACE62  pop DE
 	popw	hl                                    ; FACE63  pop HL
-	unlk32 xiz                                 ; FACE64  unlk XIZ
+	unlk	xiz                                 ; FACE64  unlk XIZ
 	ret                                        ; FACE66  ret
 
 	.include "prom_c/devices/dev10c_reg_writers.s"	; 0xFACE67-0xFAD141  the register writers for the device at 0x0010C000

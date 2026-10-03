@@ -91,7 +91,7 @@
 INTT1_HANDLER:
 	push	xbc
 	pushw	wa
-	link32	0xEE, 0x0C, 0xFE, 0xFF
+	link	xiz, 0xfffe
 	sub	xbc, xbc
 	inc	1, xbc
 	add	(0x00F2F3:24), xbc
@@ -150,7 +150,7 @@ INTT1_HANDLER__advance:
 INTT1_HANDLER__wrap:
 	ld	(0x00E2E3:24), 0x00
 INTT1_HANDLER__exit:
-	unlk32	xiz
+	unlk	xiz
 	popw	wa
 	pop	xbc
 	reti

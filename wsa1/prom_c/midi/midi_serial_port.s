@@ -55,19 +55,19 @@
 ;          interrupt-level registers (see the header of the SFR include).
 ; --------------------------------------------------------------------------
 Timer1_SetPeriodAndStart:
-	link32	0xEE, 0x0C, 0x00, 0x00
+	link	xiz, 0x0000
 	push	xix
 	ld	xbc, TRUN
-	extpfx3	0x81, 0x3C, 0xFD
+	and	(xbc), 0xfd
 	ld	xix, TREG1
 	ld	c, (xiz+8)
 	ld	(xix), c
 	ld	xbc, TRUN
-	extpfx3	0x81, 0x3E, 0x02
+	or	(xbc), 0x02
 	ld	xbc, INTET10
 	ld	(xbc), 0x33
 	pop	xix
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 
@@ -95,7 +95,7 @@ Timer1_SetPeriodAndStart:
 ;          the last thing this processor ever does.
 ; --------------------------------------------------------------------------
 Dev108000_Preload_80toBF:
-	link32	0xEE, 0x0C, 0xFF, 0xFF
+	link	xiz, 0xffff
 	pushw	hl
 	ld	(xiz-1), 0
 Dev108000_Preload_80toBF__test:
@@ -113,11 +113,11 @@ Dev108000_Preload_80toBF__body:
 	ld	xbc, 0x00108002
 	ld	(xbc), hl
 	ld	xbc, 0x00108000
-	extpfx4	0xB1, 0x02, 0x00, 0x80
+	ldw	(xbc), 0x8000
 	jr	Dev108000_Preload_80toBF__next
 Dev108000_Preload_80toBF__done:
 	popw	hl
-	unlk32	xiz
+	unlk	xiz
 	ret
 
 
@@ -329,7 +329,7 @@ MIDI_Rx_Dequeue:
 INTRX0_HANDLER:
 	push xbc
 	pushw wa
-	link32 0xEE, 0x0C, 0xFE, 0xFF
+	link	xiz, 0xfffe
 	push xwa
 	push xiy
 	ldmi16 (xiz-2), SC0CR
@@ -358,7 +358,7 @@ INTRX0_HANDLER__range_check:
 	jr INTRX0_HANDLER__exit
 INTRX0_HANDLER__enqueue:
 	push 0x00
-	extpfx3 0x8e, 0xff, 0x04
+	push	(xiz-1)
 	lda xbc, (0x00F2FB:24)
 	push xbc
 	calr Queue_Put
@@ -366,7 +366,7 @@ INTRX0_HANDLER__enqueue:
 INTRX0_HANDLER__exit:
 	pop xiy
 	pop xwa
-	unlk32 xiz
+	unlk	xiz
 	popw wa
 	pop xbc
 	reti
@@ -391,7 +391,7 @@ INTTX0_HANDLER:
 	push xbc
 	pushw wa
 	push xiy
-	link32 0xEE, 0x0C, 0xFE, 0xFF
+	link	xiz, 0xfffe
 	pushw hl
 	push xwa
 	lda xbc, (0x00F311:24)
@@ -414,7 +414,7 @@ INTTX0_HANDLER__empty:
 INTTX0_HANDLER__exit:
 	pop xwa
 	popw hl
-	unlk32 xiz
+	unlk	xiz
 	pop xiy
 	popw wa
 	pop xbc
@@ -520,7 +520,7 @@ INTTX0_HANDLER__exit:
 ;          is deliberate is not established.
 ; --------------------------------------------------------------------------
 MIDI_Tx_SendUntilFF:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F992A7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F992A7  link XIZ,0x0000   [llvm-mc cannot encode this]
 MIDI_Tx_SendUntilFF__F992AB:
 	ld	xbc, (xiz+8)                        ; F992AB  ld XBC,(XIZ+0x08)
 	ld	a, (xbc)                            ; F992AE  ld A,(XBC)
@@ -534,7 +534,7 @@ MIDI_Tx_SendUntilFF__F992AB:
 	popw	bc                                ; F992C0  pop BC
 	jr MIDI_Tx_SendUntilFF__F992AB                           ; F992C1  jr T,0xf992ab
 MIDI_Tx_SendUntilFF__F992C3:
-	unlk32 xiz                             ; F992C3  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F992C3  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F992C5  ret
 
 ; --------------------------------------------------------------------------
@@ -561,10 +561,10 @@ MIDI_Tx_SendUntilFF__F992C3:
 ; Unknown:  what the third value of 0x00F2F9 (0 -- its boot value) means.
 ; --------------------------------------------------------------------------
 MIDI_Tx_PutByte:
-	link32 0xEE, 0x0C, 0xFE, 0xFF          ; F992C6  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link	xiz, 0xfffe          ; F992C6  link XIZ,0xfffe   [llvm-mc cannot encode this]
 	push	sr                                ; F992CA  push SR
 	ei	6                                   ; F992CB  ei 0x06
-	extpfx7 0xD2, 0xF9, 0xF2, 0x00, 0x3F, 0x02, 0x00 ; F992CD  cp (0x00f2f9),0x0002   [llvm-mc cannot encode this]
+	cpw	(0x00f2f9:24), 0x0002 ; F992CD  cp (0x00f2f9),0x0002   [llvm-mc cannot encode this]
 	jr nz, MIDI_Tx_PutByte__F992F8                       ; F992D4  jr NZ,0xf992f8
 	ldw	bc, 80                             ; F992D6  ld BC,0x0050
 	exts	xbc                               ; F992D9  exts XBC
@@ -577,7 +577,7 @@ MIDI_Tx_PutByte:
 	jr MIDI_Tx_PutByte__F9930B                           ; F992F6  jr T,0xf9930b
 MIDI_Tx_PutByte__F992F8:
 	push	0                                 ; F992F8  push 0x00
-	extpfx3 0x8E, 0x08, 0x04               ; F992FA  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	push	(xiz+8)               ; F992FA  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	lda	xbc, (0xF311:24)                   ; F992FD  lda XBC,0x00f311
 	push	xbc                               ; F99302  push XBC
 	calr Queue_Put             ; F99303  calr 0xf9932e
@@ -589,7 +589,7 @@ MIDI_Tx_PutByte__F9930B:
 	jr nz, MIDI_Tx_PutByte__F9932B                       ; F99311  jr NZ,0xf9932b
 MIDI_Tx_PutByte__F99313:
 	push	0                                 ; F99313  push 0x00
-	extpfx3 0x8E, 0x08, 0x04               ; F99315  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	push	(xiz+8)               ; F99315  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	lda	xbc, (0xF311:24)                   ; F99318  lda XBC,0x00f311
 	push	xbc                               ; F9931D  push XBC
 	calr Queue_Put             ; F9931E  calr 0xf9932e
@@ -598,7 +598,7 @@ MIDI_Tx_PutByte__F99313:
 	jr nz, MIDI_Tx_PutByte__F9932B                       ; F99327  jr NZ,0xf9932b
 	jr MIDI_Tx_PutByte__F99313                           ; F99329  jr T,0xf99313
 MIDI_Tx_PutByte__F9932B:
-	unlk32 xiz                             ; F9932B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F9932B  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9932D  ret
 
 ; --------------------------------------------------------------------------
@@ -617,7 +617,7 @@ MIDI_Tx_PutByte__F9932B:
 ; Unknown:  nothing about the routine.
 ; --------------------------------------------------------------------------
 Queue_Put:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F9932E  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F9932E  link XIZ,0x0000   [llvm-mc cannot encode this]
 	push	xix                               ; F99332  push XIX
 	ld	xbc, (xiz+8)                        ; F99333  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc+20)                        ; F99336  ld WA,(XBC+0x14)
@@ -652,7 +652,7 @@ Queue_Put__F99375:
 	ld	wa, (xbc+20)                        ; F99378  ld WA,(XBC+0x14)
 Queue_Put__F9937B:
 	pop	xix                                ; F9937B  pop XIX
-	unlk32 xiz                             ; F9937C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F9937C  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9937E  ret
 
 ; --------------------------------------------------------------------------
@@ -678,7 +678,7 @@ Queue_Put__F9937B:
 ;          is the one MIDI_Tx_PutByte calls -- from inside its own `ei 6` region.
 ; --------------------------------------------------------------------------
 Queue_Put_IrqGuarded:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F9937F  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F9937F  link XIZ,0x0000   [llvm-mc cannot encode this]
 	push	xix                               ; F99383  push XIX
 	ld	xbc, (xiz+8)                        ; F99384  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc+20)                        ; F99387  ld WA,(XBC+0x14)
@@ -715,7 +715,7 @@ Queue_Put_IrqGuarded__F993CA:
 	ld	wa, (xbc+20)                        ; F993CD  ld WA,(XBC+0x14)
 Queue_Put_IrqGuarded__F993D0:
 	pop	xix                                ; F993D0  pop XIX
-	unlk32 xiz                             ; F993D1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F993D1  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F993D3  ret
 
 ; --------------------------------------------------------------------------
@@ -737,7 +737,7 @@ Queue_Put_IrqGuarded__F993D0:
 ; Unknown:  nothing about the routine.
 ; --------------------------------------------------------------------------
 Queue_Get_IrqGuarded:
-	link32 0xEE, 0x0C, 0xFF, 0xFF          ; F993D4  link XIZ,0xffff   [llvm-mc cannot encode this]
+	link	xiz, 0xffff          ; F993D4  link XIZ,0xffff   [llvm-mc cannot encode this]
 	push	xix                               ; F993D8  push XIX
 	ld	xbc, (xiz+8)                        ; F993D9  ld XBC,(XIZ+0x08)
 	ld	xwa, (xbc+12)                       ; F993DC  ld XWA,(XBC+0x0c)
@@ -778,7 +778,7 @@ Queue_Get_IrqGuarded__F9941A:
 	ld	wa, bc                              ; F99429  ld WA,BC
 Queue_Get_IrqGuarded__F9942B:
 	pop	xix                                ; F9942B  pop XIX
-	unlk32 xiz                             ; F9942C  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F9942C  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9942E  ret
 
 ; --------------------------------------------------------------------------
@@ -794,7 +794,7 @@ Queue_Get_IrqGuarded__F9942B:
 ; Unknown:  nothing.
 ; --------------------------------------------------------------------------
 Queue_Get:
-	link32 0xEE, 0x0C, 0xFF, 0xFF          ; F9942F  link XIZ,0xffff   [llvm-mc cannot encode this]
+	link	xiz, 0xffff          ; F9942F  link XIZ,0xffff   [llvm-mc cannot encode this]
 	push	xix                               ; F99433  push XIX
 	ld	xbc, (xiz+8)                        ; F99434  ld XBC,(XIZ+0x08)
 	ld	xwa, (xbc+12)                       ; F99437  ld XWA,(XBC+0x0c)
@@ -832,7 +832,7 @@ Queue_Get__F99475:
 	ld	wa, bc                              ; F99480  ld WA,BC
 Queue_Get__F99482:
 	pop	xix                                ; F99482  pop XIX
-	unlk32 xiz                             ; F99483  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99483  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99485  ret
 
 ; --------------------------------------------------------------------------
@@ -854,7 +854,7 @@ Queue_Get__F99482:
 ;          been found.
 ; --------------------------------------------------------------------------
 Queue_Peek_Cursor2:
-	link32 0xEE, 0x0C, 0xFF, 0xFF          ; F99486  link XIZ,0xffff   [llvm-mc cannot encode this]
+	link	xiz, 0xffff          ; F99486  link XIZ,0xffff   [llvm-mc cannot encode this]
 	push	xix                               ; F9948A  push XIX
 	ld	xbc, (xiz+8)                        ; F9948B  ld XBC,(XIZ+0x08)
 	ld	xwa, (xbc+12)                       ; F9948E  ld XWA,(XBC+0x0c)
@@ -891,7 +891,7 @@ Queue_Peek_Cursor2__F994CC:
 	ld	wa, bc                              ; F994D1  ld WA,BC
 Queue_Peek_Cursor2__F994D3:
 	pop	xix                                ; F994D3  pop XIX
-	unlk32 xiz                             ; F994D4  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F994D4  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F994D6  ret
 
 ; --------------------------------------------------------------------------
@@ -905,10 +905,10 @@ Queue_Peek_Cursor2__F994D3:
 ; Unknown:  nothing.
 ; --------------------------------------------------------------------------
 Queue_FreeSlots:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F994D7  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F994D7  link XIZ,0x0000   [llvm-mc cannot encode this]
 	ld	xbc, (xiz+8)                        ; F994DB  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc+20)                        ; F994DE  ld WA,(XBC+0x14)
-	unlk32 xiz                             ; F994E1  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F994E1  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F994E3  ret
 
 ; --------------------------------------------------------------------------
@@ -954,7 +954,7 @@ Queue_FreeSlots:
 ;   rule, but that is an argument from the standard, not from this ROM.
 ; --------------------------------------------------------------------------
 MIDI_Watchdogs_And_TransportSwitch:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; F994E4  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; F994E4  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	ld	xbc, (0xF2F3:24)                   ; F994E8  ld XBC,(0x00f2f3)
 	sub	xbc, (0x7ED2:24)                 ; F994ED  sub XBC,(0x007ed2)
 	ld	(xiz-4), xbc                        ; F994F2  ld (XIZ+0xfc),XBC
@@ -982,7 +982,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	inc	8, xsp                             ; F99541  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99543:
 	res_dd8	2, P8                          ; F99543  res 2,(0x18)
-	ld_sd8b	c, 24                          ; F99546  ld C,(0x18)
+	ld	c, (0x18:8)                          ; F99546  ld C,(0x18)
 	and	c, 4                               ; F99549  and C,0x04
 	srl	c, 2                               ; F9954C  srl 0x02,C
 	cp	c, 0:i3                               ; F9954F  cp C,0
@@ -1009,5 +1009,5 @@ MIDI_Watchdogs_And_TransportSwitch__F99575:
 	ld	(0xF328:24), 1                    ; F9958D  ld (0x00f328),0x01
 	inc	8, xsp                             ; F99593  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99595:
-	unlk32 xiz                             ; F99595  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99595  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99597  ret

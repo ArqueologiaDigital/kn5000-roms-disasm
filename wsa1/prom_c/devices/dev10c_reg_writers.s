@@ -335,7 +335,7 @@
 ;          number is kept in the name so the claim stays checkable against that finding.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanPitch_Reg0400:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACE67  ee 0c 00 00
+	link	xiz, 0x0000              ; FACE67  ee 0c 00 00
 	pushw hl                                   ; FACE6B  2b
 	push xix                                   ; FACE6C  3c
 	ld hl, (xiz+8)                             ; FACE6D  9e 08 23
@@ -347,7 +347,7 @@ Dev10C_SetChanPitch_Reg0400:
 	ld (xix+2), wa                             ; FACE81  bc 02 50
 	pop xix                                    ; FACE84  5c
 	popw hl                                    ; FACE85  4b
-	unlk32 xiz                                 ; FACE86  ee 0d
+	unlk	xiz                                 ; FACE86  ee 0d
 	ret                                        ; FACE88  0e
 ; --------------------------------------------------------------------------
 ; ★ Dev10C_WriteReg -- the RAW two-word primitive, and the routine that fixes the
@@ -369,7 +369,7 @@ Dev10C_SetChanPitch_Reg0400:
 ; Unknown:  what block 0 holds.
 ; --------------------------------------------------------------------------
 Dev10C_WriteReg:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACE89  ee 0c 00 00
+	link	xiz, 0x0000              ; FACE89  ee 0c 00 00
 	push xix                                   ; FACE8D  3c
 	ld xix, 0x0010C000                         ; FACE8E  44 00 c0 10 00
 	ld bc, (xiz+8)                             ; FACE93  9e 08 21
@@ -377,7 +377,7 @@ Dev10C_WriteReg:
 	ld bc, (xiz+10)                            ; FACE98  9e 0a 21
 	ld (xix+2), bc                             ; FACE9B  bc 02 51
 	pop xix                                    ; FACE9E  5c
-	unlk32 xiz                                 ; FACE9F  ee 0d
+	unlk	xiz                                 ; FACE9F  ee 0d
 	ret                                        ; FACEA1  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0880 -- registers (chan+0x0840) = staging->0x1A and
@@ -400,7 +400,7 @@ Dev10C_WriteReg:
 ;          NOT evidence.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0880:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACEA2  ee 0c fc ff
+	link	xiz, 0xfffc              ; FACEA2  ee 0c fc ff
 	pushw hl                                   ; FACEA6  2b
 	push xix                                   ; FACEA7  3c
 	ld hl, (xiz+8)                             ; FACEA8  9e 08 23
@@ -422,7 +422,7 @@ Dev10C_SetChanReg_0840_0880:
 	ld (xiy), wa                               ; FACED7  b5 50
 	pop xix                                    ; FACED9  5c
 	popw hl                                    ; FACEDA  4b
-	unlk32 xiz                                 ; FACEDB  ee 0d
+	unlk	xiz                                 ; FACEDB  ee 0d
 	ret                                        ; FACEDD  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0800 -- registers (chan+0x0840) = staging->0x2E and
@@ -458,7 +458,7 @@ Dev10C_SetChanReg_0840_0880:
 ;          above and the whole 68-byte image, word by word, out of the ROM.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0800:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACEDE  ee 0c fc ff
+	link	xiz, 0xfffc              ; FACEDE  ee 0c fc ff
 	pushw hl                                   ; FACEE2  2b
 	push xix                                   ; FACEE3  3c
 	ld hl, (xiz+8)                             ; FACEE4  9e 08 23
@@ -480,7 +480,7 @@ Dev10C_SetChanReg_0840_0800:
 	ld (xiy), wa                               ; FACF13  b5 50
 	pop xix                                    ; FACF15  5c
 	popw hl                                    ; FACF16  4b
-	unlk32 xiz                                 ; FACF17  ee 0d
+	unlk	xiz                                 ; FACF17  ee 0d
 	ret                                        ; FACF19  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840 -- register (chan + 0x0840) = staging->0x2E.
@@ -490,7 +490,7 @@ Dev10C_SetChanReg_0840_0800:
 ;          same source field.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACF1A  ee 0c 00 00
+	link	xiz, 0x0000              ; FACF1A  ee 0c 00 00
 	pushw hl                                   ; FACF1E  2b
 	push xix                                   ; FACF1F  3c
 	ld hl, (xiz+8)                             ; FACF20  9e 08 23
@@ -502,7 +502,7 @@ Dev10C_SetChanReg_0840:
 	ld (xix+2), wa                             ; FACF34  bc 02 50
 	pop xix                                    ; FACF37  5c
 	popw hl                                    ; FACF38  4b
-	unlk32 xiz                                 ; FACF39  ee 0d
+	unlk	xiz                                 ; FACF39  ee 0d
 	ret                                        ; FACF3B  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0100_0140 -- registers (chan+0x0100) = staging->0x08 and
@@ -512,7 +512,7 @@ Dev10C_SetChanReg_0840:
 ; Evidence: `add hl,0x0100` / `add bc,0x0140`; sources (xbc+8) and (xbc+10).
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0100_0140:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACF3C  ee 0c fc ff
+	link	xiz, 0xfffc              ; FACF3C  ee 0c fc ff
 	pushw hl                                   ; FACF40  2b
 	push xix                                   ; FACF41  3c
 	ld hl, (xiz+8)                             ; FACF42  9e 08 23
@@ -534,7 +534,7 @@ Dev10C_SetChanReg_0100_0140:
 	ld (xiy), wa                               ; FACF71  b5 50
 	pop xix                                    ; FACF73  5c
 	popw hl                                    ; FACF74  4b
-	unlk32 xiz                                 ; FACF75  ee 0d
+	unlk	xiz                                 ; FACF75  ee 0d
 	ret                                        ; FACF77  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0840_0880_dup -- ⚠ 60 bytes BYTE-IDENTICAL to
@@ -556,7 +556,7 @@ Dev10C_SetChanReg_0100_0140:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0840_0880_dup:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FACF78  ee 0c fc ff
+	link	xiz, 0xfffc              ; FACF78  ee 0c fc ff
 	pushw hl                                   ; FACF7C  2b
 	push xix                                   ; FACF7D  3c
 	ld hl, (xiz+8)                             ; FACF7E  9e 08 23
@@ -578,7 +578,7 @@ Dev10C_SetChanReg_0840_0880_dup:
 	ld (xiy), wa                               ; FACFAD  b5 50
 	pop xix                                    ; FACFAF  5c
 	popw hl                                    ; FACFB0  4b
-	unlk32 xiz                                 ; FACFB1  ee 0d
+	unlk	xiz                                 ; FACFB1  ee 0d
 	ret                                        ; FACFB3  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0180 -- register (chan + 0x0180) = staging->0x0C.
@@ -592,7 +592,7 @@ Dev10C_SetChanReg_0840_0880_dup:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0180:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFB4  ee 0c 00 00
+	link	xiz, 0x0000              ; FACFB4  ee 0c 00 00
 	pushw hl                                   ; FACFB8  2b
 	push xix                                   ; FACFB9  3c
 	ld hl, (xiz+8)                             ; FACFBA  9e 08 23
@@ -604,7 +604,7 @@ Dev10C_SetChanReg_0180:
 	ld (xix+2), wa                             ; FACFCE  bc 02 50
 	pop xix                                    ; FACFD1  5c
 	popw hl                                    ; FACFD2  4b
-	unlk32 xiz                                 ; FACFD3  ee 0d
+	unlk	xiz                                 ; FACFD3  ee 0d
 	ret                                        ; FACFD5  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0440 -- register (chan + 0x0440) = staging->0x10.
@@ -645,7 +645,7 @@ Dev10C_SetChanReg_0180:
 ;   one the word is written to, and what the two mode bits mean.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0440:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFD6  ee 0c 00 00
+	link	xiz, 0x0000              ; FACFD6  ee 0c 00 00
 	pushw hl                                   ; FACFDA  2b
 	push xix                                   ; FACFDB  3c
 	ld hl, (xiz+8)                             ; FACFDC  9e 08 23
@@ -657,7 +657,7 @@ Dev10C_SetChanReg_0440:
 	ld (xix+2), wa                             ; FACFF0  bc 02 50
 	pop xix                                    ; FACFF3  5c
 	popw hl                                    ; FACFF4  4b
-	unlk32 xiz                                 ; FACFF5  ee 0d
+	unlk	xiz                                 ; FACFF5  ee 0d
 	ret                                        ; FACFF7  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_04C0 -- register (chan + 0x04C0) = staging->0x14.
@@ -697,7 +697,7 @@ Dev10C_SetChanReg_0440:
 ;   whether the named channel differs from the one the word is written to.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_04C0:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FACFF8  ee 0c 00 00
+	link	xiz, 0x0000              ; FACFF8  ee 0c 00 00
 	pushw hl                                   ; FACFFC  2b
 	push xix                                   ; FACFFD  3c
 	ld hl, (xiz+8)                             ; FACFFE  9e 08 23
@@ -709,7 +709,7 @@ Dev10C_SetChanReg_04C0:
 	ld (xix+2), wa                             ; FAD012  bc 02 50
 	pop xix                                    ; FAD015  5c
 	popw hl                                    ; FAD016  4b
-	unlk32 xiz                                 ; FAD017  ee 0d
+	unlk	xiz                                 ; FAD017  ee 0d
 	ret                                        ; FAD019  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0600 -- register (chan + 0x0600) = staging->0x40.
@@ -723,7 +723,7 @@ Dev10C_SetChanReg_04C0:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0600:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD01A  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD01A  ee 0c 00 00
 	pushw hl                                   ; FAD01E  2b
 	push xix                                   ; FAD01F  3c
 	ld hl, (xiz+8)                             ; FAD020  9e 08 23
@@ -735,7 +735,7 @@ Dev10C_SetChanReg_0600:
 	ld (xix+2), wa                             ; FAD034  bc 02 50
 	pop xix                                    ; FAD037  5c
 	popw hl                                    ; FAD038  4b
-	unlk32 xiz                                 ; FAD039  ee 0d
+	unlk	xiz                                 ; FAD039  ee 0d
 	ret                                        ; FAD03B  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0580 -- register (chan + 0x0580) = staging->0x3C.
@@ -750,7 +750,7 @@ Dev10C_SetChanReg_0600:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0580:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD03C  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD03C  ee 0c 00 00
 	pushw hl                                   ; FAD040  2b
 	push xix                                   ; FAD041  3c
 	ld hl, (xiz+8)                             ; FAD042  9e 08 23
@@ -762,7 +762,7 @@ Dev10C_SetChanReg_0580:
 	ld (xix+2), wa                             ; FAD056  bc 02 50
 	pop xix                                    ; FAD059  5c
 	popw hl                                    ; FAD05A  4b
-	unlk32 xiz                                 ; FAD05B  ee 0d
+	unlk	xiz                                 ; FAD05B  ee 0d
 	ret                                        ; FAD05D  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_01C0 -- register (chan + 0x01C0) = staging->0x38.
@@ -776,7 +776,7 @@ Dev10C_SetChanReg_0580:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD05E  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD05E  ee 0c 00 00
 	pushw hl                                   ; FAD062  2b
 	push xix                                   ; FAD063  3c
 	ld hl, (xiz+8)                             ; FAD064  9e 08 23
@@ -788,7 +788,7 @@ Dev10C_SetChanReg_01C0:
 	ld (xix+2), wa                             ; FAD078  bc 02 50
 	pop xix                                    ; FAD07B  5c
 	popw hl                                    ; FAD07C  4b
-	unlk32 xiz                                 ; FAD07D  ee 0d
+	unlk	xiz                                 ; FAD07D  ee 0d
 	ret                                        ; FAD07F  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_SetChanReg_0540 -- register (chan + 0x0540) = staging->0x3A.
@@ -802,7 +802,7 @@ Dev10C_SetChanReg_01C0:
 ;          NAME against the bytes and reports the mismatch count.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0540:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD080  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD080  ee 0c 00 00
 	pushw hl                                   ; FAD084  2b
 	push xix                                   ; FAD085  3c
 	ld hl, (xiz+8)                             ; FAD086  9e 08 23
@@ -814,7 +814,7 @@ Dev10C_SetChanReg_0540:
 	ld (xix+2), wa                             ; FAD09A  bc 02 50
 	pop xix                                    ; FAD09D  5c
 	popw hl                                    ; FAD09E  4b
-	unlk32 xiz                                 ; FAD09F  ee 0d
+	unlk	xiz                                 ; FAD09F  ee 0d
 	ret                                        ; FAD0A1  0e
 ; --------------------------------------------------------------------------
 ; ★ Dev10C_SetChanReg_01C0_or_0600 -- the channel number is COMPARED AGAINST 0x40 and
@@ -854,7 +854,7 @@ Dev10C_SetChanReg_0540:
 ;   channel is the structure; "partial", "operator" and "envelope stage" all fit it.
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_01C0_or_0600:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD0A2  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD0A2  ee 0c 00 00
 	pushw hl                                   ; FAD0A6  2b
 	pushw de                                   ; FAD0A7  2a
 	push xix                                   ; FAD0A8  3c
@@ -881,7 +881,7 @@ Dev10C_SetChanReg_01C0_or_0600__done:
 	pop xix                                    ; FAD0E0  5c
 	popw de                                    ; FAD0E1  4a
 	popw hl                                    ; FAD0E2  4b
-	unlk32 xiz                                 ; FAD0E3  ee 0d
+	unlk	xiz                                 ; FAD0E3  ee 0d
 	ret                                        ; FAD0E5  0e
 ; --------------------------------------------------------------------------
 ; ★ Dev10C_SetChanReg_0540_or_0580 -- the same split, different pair:
@@ -896,7 +896,7 @@ Dev10C_SetChanReg_01C0_or_0600__done:
 ;          0xFAD03C but a DIFFERENT source field (0x3E, not 0x3C).
 ; --------------------------------------------------------------------------
 Dev10C_SetChanReg_0540_or_0580:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD0E6  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD0E6  ee 0c 00 00
 	pushw hl                                   ; FAD0EA  2b
 	pushw de                                   ; FAD0EB  2a
 	push xix                                   ; FAD0EC  3c
@@ -923,7 +923,7 @@ Dev10C_SetChanReg_0540_or_0580__done:
 	pop xix                                    ; FAD124  5c
 	popw de                                    ; FAD125  4a
 	popw hl                                    ; FAD126  4b
-	unlk32 xiz                                 ; FAD127  ee 0d
+	unlk	xiz                                 ; FAD127  ee 0d
 	ret                                        ; FAD129  0e
 ; --------------------------------------------------------------------------
 ; Dev10C_WriteReg_0201 -- register 0x0201 = the caller's word.  The only routine in
@@ -942,12 +942,12 @@ Dev10C_SetChanReg_0540_or_0580__done:
 ;          confirms it.
 ; --------------------------------------------------------------------------
 Dev10C_WriteReg_0201:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FAD12A  ee 0c 00 00
+	link	xiz, 0x0000              ; FAD12A  ee 0c 00 00
 	push xix                                   ; FAD12E  3c
 	ld xix, 0x0010C000                         ; FAD12F  44 00 c0 10 00
 	ldw (xix), 0x0201                          ; FAD134  b4 02 01 02
 	ld bc, (xiz+8)                             ; FAD138  9e 08 21
 	ld (xix+2), bc                             ; FAD13B  bc 02 51
 	pop xix                                    ; FAD13E  5c
-	unlk32 xiz                                 ; FAD13F  ee 0d
+	unlk	xiz                                 ; FAD13F  ee 0d
 	ret                                        ; FAD141  0e

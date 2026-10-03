@@ -178,7 +178,7 @@
 ; Unknown:  the meaning of status-word value 2; who reads 0x008517.
 ; --------------------------------------------------------------------------
 KeyScan_ReadEvent:
-	link32 0xEE, 0x0C, 0xFA, 0xFF          ; F9973D  link XIZ,0xfffa   [llvm-mc cannot encode this]
+	link	xiz, 0xfffa          ; F9973D  link XIZ,0xfffa   [llvm-mc cannot encode this]
 	cp (0x00F329:24), 0x00                 ; F99741  cp (0x00f329),0x00   [llvm-mc cannot encode this]
 	jr nz, KeyScan_ReadEvent__F99762                       ; F99747  jr NZ,0xf99762
 	ld	xbc, (0xF2F3:24)                   ; F99749  ld XBC,(0x00f2f3)
@@ -213,7 +213,7 @@ KeyScan_ReadEvent__F997A1:
 	ld	c, (xiz-1)                          ; F997A1  ld C,(XIZ+0xff)
 	and	c, 0x80                            ; F997A4  and C,0x80
 	jr z, KeyScan_ReadEvent__F997B6                        ; F997A7  jr Z,0xf997b6
-	extpfx6 0xC2, 0x17, 0x85, 0x00, 0x3E, 0x03 ; F997A9  or (0x008517),0x03   [llvm-mc cannot encode this]
+	or	(0x008517:24), 0x03 ; F997A9  or (0x008517),0x03   [llvm-mc cannot encode this]
 	ldw	wa, 0xFFFF                         ; F997AF  ld WA,0xffff
 	jr KeyScan_ReadEvent__F997F7                           ; F997B2  jr T,0xf997f7
 	jr KeyScan_ReadEvent__F997D5                           ; F997B4  jr T,0xf997d5
@@ -223,9 +223,9 @@ KeyScan_ReadEvent__F997B6:
 	ld	xwa, (xiz+8)                        ; F997BA  ld XWA,(XIZ+0x08)
 	push	xwa                               ; F997BD  push XWA
 	push	0                                 ; F997BE  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04               ; F997C0  push (XIZ+0xff)   [llvm-mc cannot encode this]
+	push	(xiz-1)               ; F997C0  push (XIZ+0xff)   [llvm-mc cannot encode this]
 	push	0                                 ; F997C3  push 0x00
-	extpfx3 0x8E, 0xFE, 0x04               ; F997C5  push (XIZ+0xfe)   [llvm-mc cannot encode this]
+	push	(xiz-2)               ; F997C5  push (XIZ+0xfe)   [llvm-mc cannot encode this]
 	calr ToneGen_VelocityFromTouch             ; F997C8  calr 0xf995df
 	ld	xbc, (xiz+12)                       ; F997CB  ld XBC,(XIZ+0x0c)
 	ld	(xbc), 0                            ; F997CE  ld (XBC),0x00
@@ -239,9 +239,9 @@ KeyScan_ReadEvent__F997D7:
 	ld	xwa, (xiz+8)                        ; F997DB  ld XWA,(XIZ+0x08)
 	push	xwa                               ; F997DE  push XWA
 	push	0                                 ; F997DF  push 0x00
-	extpfx3 0x8E, 0xFF, 0x04               ; F997E1  push (XIZ+0xff)   [llvm-mc cannot encode this]
+	push	(xiz-1)               ; F997E1  push (XIZ+0xff)   [llvm-mc cannot encode this]
 	push	0                                 ; F997E4  push 0x00
-	extpfx3 0x8E, 0xFE, 0x04               ; F997E6  push (XIZ+0xfe)   [llvm-mc cannot encode this]
+	push	(xiz-2)               ; F997E6  push (XIZ+0xfe)   [llvm-mc cannot encode this]
 	calr ToneGen_VelocityFromTouch             ; F997E9  calr 0xf995df
 	inc	8, xsp                             ; F997EC  inc 0,XSP
 	inc	4, xsp                             ; F997EE  inc 4,XSP
@@ -251,7 +251,7 @@ KeyScan_ReadEvent__F997F0:
 KeyScan_ReadEvent__F997F4:
 	ldw	wa, 0xFFFF                         ; F997F4  ld WA,0xffff
 KeyScan_ReadEvent__F997F7:
-	unlk32 xiz                             ; F997F7  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F997F7  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F997F9  ret
 
 ; --------------------------------------------------------------------------
@@ -292,7 +292,7 @@ KeyScan_ReadEvent__F997F7:
 ;          checksum or the magic, so a block it produced would fail this test.
 ; --------------------------------------------------------------------------
 NoteTrim_BuildFromCalibration:
-	link32 0xEE, 0x0C, 0xF9, 0xFF          ; F997FA  link XIZ,0xfff9   [llvm-mc cannot encode this]
+	link	xiz, 0xfff9          ; F997FA  link XIZ,0xfff9   [llvm-mc cannot encode this]
 	pushw	hl                               ; F997FE  push HL
 	calr KeyScan_InitKeyStateBitmap             ; F997FF  calr 0xf9988d
 	call	EEPROM_LoadCalibration                          ; F99802  call 0xfc8b0b
@@ -327,7 +327,7 @@ NoteTrim_BuildFromCalibration__F99844:
 NoteTrim_BuildFromCalibration__F99849:
 	ld	bc, (xiz-2)                         ; F99849  ld BC,(XIZ+0xfe)
 	exts	xbc                               ; F9984C  exts XBC
-	extpfx3 0xAE, 0xFA, 0x81               ; F9984E  add XBC,(XIZ+0xfa)   [llvm-mc cannot encode this]
+	add	xbc, (xiz-6)               ; F9984E  add XBC,(XIZ+0xfa)   [llvm-mc cannot encode this]
 	ld	a, (xbc)                            ; F99851  ld A,(XBC)
 	sub	a, 75                              ; F99853  sub A,0x4b
 	ld	(xiz-7), a                          ; F99856  ld (XIZ+0xf9),A
@@ -351,7 +351,7 @@ NoteTrim_BuildFromCalibration__F9986B:
 	jr NoteTrim_BuildFromCalibration__F99844                           ; F99887  jr T,0xf99844
 NoteTrim_BuildFromCalibration__F99889:
 	popw	hl                                ; F99889  pop HL
-	unlk32 xiz                             ; F9988A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F9988A  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9988C  ret
 
 ; --------------------------------------------------------------------------
@@ -398,7 +398,7 @@ NoteTrim_BuildFromCalibration__F99889:
 ;          its consumer has not been found.
 ; --------------------------------------------------------------------------
 KeyScan_InitKeyStateBitmap:
-	link32 0xEE, 0x0C, 0xF9, 0xFF          ; F9988D  link XIZ,0xfff9   [llvm-mc cannot encode this]
+	link	xiz, 0xfff9          ; F9988D  link XIZ,0xfff9   [llvm-mc cannot encode this]
 	pushw	hl                               ; F99891  push HL
 	ld	(xiz-7), 0                          ; F99892  ld (XIZ+0xf9),0x00
 KeyScan_InitKeyStateBitmap__F99896:
@@ -456,7 +456,7 @@ KeyScan_InitKeyStateBitmap__F998C6:
 	jr KeyScan_InitKeyStateBitmap__F99937                           ; F99917  jr T,0xf99937
 KeyScan_InitKeyStateBitmap__F99919:
 	push	0                                 ; F99919  push 0x00
-	extpfx3 0x8E, 0xFC, 0x04               ; F9991B  push (XIZ+0xfc)   [llvm-mc cannot encode this]
+	push	(xiz-4)               ; F9991B  push (XIZ+0xfc)   [llvm-mc cannot encode this]
 	pushw	1                                ; F9991E  push 0x0001
 	call	Shift16_Left                          ; F99921  call 0xfca0ba
 	cpl	a                                  ; F99925  cpl A
@@ -470,7 +470,7 @@ KeyScan_InitKeyStateBitmap__F99937:
 	jr KeyScan_InitKeyStateBitmap__F998C1                           ; F99937  jr T,0xf998c1
 KeyScan_InitKeyStateBitmap__F99939:
 	popw	hl                                ; F99939  pop HL
-	unlk32 xiz                             ; F9993A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F9993A  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F9993C  ret
 
 ; --------------------------------------------------------------------------
@@ -574,7 +574,7 @@ Link_Init:
 ; Unknown:  which channel numbers the four callers use.
 ; --------------------------------------------------------------------------
 Link_SendBlock:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F9997E  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F9997E  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; F99982  push HL
 	push	xix                               ; F99983  push XIX
 	ld	xix, (xiz+12)                       ; F99984  ld XIX,(XIZ+0x0c)
@@ -584,7 +584,7 @@ Link_SendBlock__F9998C:
 	push	xix                               ; F9998C  push XIX
 	pushw	32                               ; F9998D  push 0x0020
 	push	0                                 ; F99990  push 0x00
-	extpfx3 0x8E, 0x08, 0x04               ; F99992  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	push	(xiz+8)               ; F99992  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	calr Link_SendChunk             ; F99995  calr 0xf999be
 	add	xix, 32                            ; F99998  add XIX,0x00000020
 	ldw	bc, 32                             ; F9999E  ld BC,0x0020
@@ -597,12 +597,12 @@ Link_SendBlock__F999A5:
 	ld	c, l                                ; F999AC  ld C,L
 	pushw	bc                               ; F999AE  push BC
 	push	0                                 ; F999AF  push 0x00
-	extpfx3 0x8E, 0x08, 0x04               ; F999B1  push (XIZ+0x08)   [llvm-mc cannot encode this]
+	push	(xiz+8)               ; F999B1  push (XIZ+0x08)   [llvm-mc cannot encode this]
 	calr Link_SendChunk             ; F999B4  calr 0xf999be
 	inc	8, xsp                             ; F999B7  inc 0,XSP
 	pop	xix                                ; F999B9  pop XIX
 	popw	hl                                ; F999BA  pop HL
-	unlk32 xiz                             ; F999BB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F999BB  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F999BD  ret
 
 ; --------------------------------------------------------------------------
@@ -634,7 +634,7 @@ Link_SendBlock__F999A5:
 ;          established here.
 ; --------------------------------------------------------------------------
 Link_SendChunk:
-	link32 0xEE, 0x0C, 0xFE, 0xFF          ; F999BE  link XIZ,0xfffe   [llvm-mc cannot encode this]
+	link	xiz, 0xfffe          ; F999BE  link XIZ,0xfffe   [llvm-mc cannot encode this]
 	pushw	hl                               ; F999C2  push HL
 	pushw	de                               ; F999C3  push DE
 	pushw	ix                               ; F999C4  push IX
@@ -690,7 +690,7 @@ Link_SendChunk__F99A3A:
 	popw	ix                                ; F99A3A  pop IX
 	popw	de                                ; F99A3B  pop DE
 	popw	hl                                ; F99A3C  pop HL
-	unlk32 xiz                             ; F99A3D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99A3D  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99A3F  ret
 
 ; --------------------------------------------------------------------------
@@ -743,7 +743,7 @@ Link_SendChunk__F99A3A:
 ; Unknown:  what sends this; what else reads bit 7 of 0x00852B.
 ; --------------------------------------------------------------------------
 Link_SendCmdE2_MemRead:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F99A40  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F99A40  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; F99A44  push HL
 	pushw	de                               ; F99A45  push DE
 	push	xix                               ; F99A46  push XIX
@@ -794,7 +794,7 @@ Link_SendCmdE2_MemRead__F99ABD:
 	pop	xix                                ; F99ABD  pop XIX
 	popw	de                                ; F99ABE  pop DE
 	popw	hl                                ; F99ABF  pop HL
-	unlk32 xiz                             ; F99AC0  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99AC0  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99AC2  ret
 
 ; --------------------------------------------------------------------------
@@ -836,7 +836,7 @@ Link_SendCmdE2_MemRead__F99ABD:
 ;          delay here and not there.
 ; --------------------------------------------------------------------------
 Link_SendCmdByte:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F99AC3  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F99AC3  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; F99AC7  push HL
 	pushw	de                               ; F99AC8  push DE
 	ldw	hl, 0                              ; F99AC9  ld HL,0x0000
@@ -865,7 +865,7 @@ Link_SendCmdByte__F99AF9:
 Link_SendCmdByte__F99B08:
 	popw	de                                ; F99B08  pop DE
 	popw	hl                                ; F99B09  pop HL
-	unlk32 xiz                             ; F99B0A  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99B0A  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99B0C  ret
 
 ; --------------------------------------------------------------------------
@@ -922,7 +922,7 @@ Link_SendCmdByte__F99B08:
 ;          draft of this line contradicted its own header.)
 ; --------------------------------------------------------------------------
 Link_SendCmdE1:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; F99B0D  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; F99B0D  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; F99B11  push HL
 	pushw	de                               ; F99B12  push DE
 	push	xix                               ; F99B13  push XIX
@@ -991,5 +991,5 @@ Link_SendCmdE1__F99BB8:
 	pop	xix                                ; F99BB8  pop XIX
 	popw	de                                ; F99BB9  pop DE
 	popw	hl                                ; F99BBA  pop HL
-	unlk32 xiz                             ; F99BBB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; F99BBB  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; F99BBD  ret

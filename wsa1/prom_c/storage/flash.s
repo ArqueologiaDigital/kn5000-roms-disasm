@@ -151,20 +151,20 @@
 ;          nothing here decides between them.
 ; --------------------------------------------------------------------------
 Flash_ReadResetMode:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FC856C  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FC856C  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	push	xix                               ; FC8570  push XIX
 	ld	xix, 0xE80000                       ; FC8571  ld XIX,0x00e80000
 	ld	xbc, xix                            ; FC8576  ld XBC,XIX
 	add	xbc, 0xAAAA                        ; FC8578  add XBC,0x0000aaaa
 	ld	(xiz-4), xbc                        ; FC857E  ld (XIZ+0xfc),XBC
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC8581  ld (XBC),0x00aa   [llvm-mc cannot encode this]
-	extpfx7 0xF3, 0xF1, 0x54, 0x55, 0x02, 0x55, 0x00 ; FC8585  ld (XIX+0x5554),0x0055   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC8581  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xix+21844), 0x0055 ; FC8585  ld (XIX+0x5554),0x0055   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC858C  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0xF0, 0x00         ; FC858F  ld (XBC),0x00f0   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00f0         ; FC858F  ld (XBC),0x00f0   [llvm-mc cannot encode this]
 	ld	bc, (xix+0x3232)                    ; FC8593  ld BC,(XIX+0x3232)
 	ld	wa, bc                              ; FC8598  ld WA,BC
 	pop	xix                                ; FC859A  pop XIX
-	unlk32 xiz                             ; FC859B  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC859B  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC859D  ret
 ; --------------------------------------------------------------------------
 ; ★★ Flash_ReadDeviceId -- JEDEC autoselect: read the manufacturer and device
@@ -198,7 +198,7 @@ Flash_ReadResetMode:
 ;          above for what is and is not established from this image.
 ; --------------------------------------------------------------------------
 Flash_ReadDeviceId:
-	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FC859E  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link	xiz, 0xfff8          ; FC859E  link XIZ,0xfff8   [llvm-mc cannot encode this]
 	pushw	hl                               ; FC85A2  push HL
 	pushw	de                               ; FC85A3  push DE
 	pushw	ix                               ; FC85A4  push IX
@@ -207,11 +207,11 @@ Flash_ReadDeviceId:
 	ldw	ix, 0xFFFF                         ; FC85AD  ld IX,0xffff
 	add	xbc, 0xAAAA                        ; FC85B0  add XBC,0x0000aaaa
 	ld	(xiz-8), xbc                        ; FC85B6  ld (XIZ+0xf8),XBC
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC85B9  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC85B9  ld (XBC),0x00aa   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC85BD  ld XBC,(XIZ+0xfc)
-	extpfx7 0xF3, 0xE5, 0x54, 0x55, 0x02, 0x55, 0x00 ; FC85C0  ld (XBC+0x5554),0x0055   [llvm-mc cannot encode this]
+	ldw	(xbc+21844), 0x0055 ; FC85C0  ld (XBC+0x5554),0x0055   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-8)                        ; FC85C7  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x90, 0x00         ; FC85CA  ld (XBC),0x0090   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0090         ; FC85CA  ld (XBC),0x0090   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC85CE  ld XBC,(XIZ+0xfc)
 	ld	de, (xbc)                           ; FC85D1  ld DE,(XBC)
 	ld	(0xE29F:24), de                    ; FC85D3  ld (0x00e29f),DE
@@ -235,7 +235,7 @@ Flash_ReadDeviceId__FC85F6:
 	popw	ix                                ; FC85F8  pop IX
 	popw	de                                ; FC85F9  pop DE
 	popw	hl                                ; FC85FA  pop HL
-	unlk32 xiz                             ; FC85FB  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC85FB  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC85FD  ret
 ; --------------------------------------------------------------------------
 ; Flash_ChipErase -- erase the ENTIRE flash device.
@@ -252,27 +252,27 @@ Flash_ReadDeviceId__FC85F6:
 ;          what distinguishes chip erase from the 0x30 of Flash_SectorErase.
 ; --------------------------------------------------------------------------
 Flash_ChipErase:
-	link32 0xEE, 0x0C, 0xF8, 0xFF          ; FC85FE  link XIZ,0xfff8   [llvm-mc cannot encode this]
+	link	xiz, 0xfff8          ; FC85FE  link XIZ,0xfff8   [llvm-mc cannot encode this]
 	push	xix                               ; FC8602  push XIX
 	ld	xix, 0xE80000                       ; FC8603  ld XIX,0x00e80000
 	ld	xbc, xix                            ; FC8608  ld XBC,XIX
 	add	xbc, 0xAAAA                        ; FC860A  add XBC,0x0000aaaa
 	ld	(xiz-4), xbc                        ; FC8610  ld (XIZ+0xfc),XBC
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC8613  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC8613  ld (XBC),0x00aa   [llvm-mc cannot encode this]
 	ld	xbc, xix                            ; FC8617  ld XBC,XIX
 	add	xbc, 0x5554                        ; FC8619  add XBC,0x00005554
 	ld	(xiz-8), xbc                        ; FC861F  ld (XIZ+0xf8),XBC
-	extpfx4 0xB1, 0x02, 0x55, 0x00         ; FC8622  ld (XBC),0x0055   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0055         ; FC8622  ld (XBC),0x0055   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC8626  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x80, 0x00         ; FC8629  ld (XBC),0x0080   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0080         ; FC8629  ld (XBC),0x0080   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC862D  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC8630  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC8630  ld (XBC),0x00aa   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-8)                        ; FC8634  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x55, 0x00         ; FC8637  ld (XBC),0x0055   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0055         ; FC8637  ld (XBC),0x0055   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC863B  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x10, 0x00         ; FC863E  ld (XBC),0x0010   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0010         ; FC863E  ld (XBC),0x0010   [llvm-mc cannot encode this]
 	pop	xix                                ; FC8642  pop XIX
-	unlk32 xiz                             ; FC8643  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC8643  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC8645  ret
 ; --------------------------------------------------------------------------
 ; ★★ Flash_SectorErase -- erase one 64 KiB sector, splitting the BOOT BLOCK into
@@ -304,7 +304,7 @@ Flash_ChipErase:
 ;          claim that either combination ever occurs.
 ; --------------------------------------------------------------------------
 Flash_SectorErase:
-	link32 0xEE, 0x0C, 0xF4, 0xFF          ; FC8646  link XIZ,0xfff4   [llvm-mc cannot encode this]
+	link	xiz, 0xfff4          ; FC8646  link XIZ,0xfff4   [llvm-mc cannot encode this]
 	push	xix                               ; FC864A  push XIX
 	ld	xbc, 0xE80000                       ; FC864B  ld XBC,0x00e80000
 	ld	(xiz-4), xbc                        ; FC8650  ld (XIZ+0xfc),XBC
@@ -315,54 +315,54 @@ Flash_SectorErase:
 	ld	xbc, (xiz-4)                        ; FC865F  ld XBC,(XIZ+0xfc)
 	add	xbc, 0xAAAA                        ; FC8662  add XBC,0x0000aaaa
 	ld	(xiz-8), xbc                        ; FC8668  ld (XIZ+0xf8),XBC
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC866B  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC866B  ld (XBC),0x00aa   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC866F  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x5554                        ; FC8672  add XBC,0x00005554
 	ld	(xiz-12), xbc                       ; FC8678  ld (XIZ+0xf4),XBC
-	extpfx4 0xB1, 0x02, 0x55, 0x00         ; FC867B  ld (XBC),0x0055   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0055         ; FC867B  ld (XBC),0x0055   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-8)                        ; FC867F  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0x80, 0x00         ; FC8682  ld (XBC),0x0080   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0080         ; FC8682  ld (XBC),0x0080   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-8)                        ; FC8686  ld XBC,(XIZ+0xf8)
-	extpfx4 0xB1, 0x02, 0xAA, 0x00         ; FC8689  ld (XBC),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x00aa         ; FC8689  ld (XBC),0x00aa   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-12)                       ; FC868D  ld XBC,(XIZ+0xf4)
-	extpfx4 0xB1, 0x02, 0x55, 0x00         ; FC8690  ld (XBC),0x0055   [llvm-mc cannot encode this]
-	extpfx7 0xD2, 0x9D, 0xE2, 0x00, 0x3F, 0xAB, 0x22 ; FC8694  cp (0x00e29d),0x22ab   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0055         ; FC8690  ld (XBC),0x0055   [llvm-mc cannot encode this]
+	cpw	(0x00e29d:24), 0x22ab ; FC8694  cp (0x00e29d),0x22ab   [llvm-mc cannot encode this]
 	jr nz, Flash_SectorErase__FC86CF                       ; FC869B  jr NZ,0xfc86cf
 	cp	xix, 0xE80000                       ; FC869D  cp XIX,0x00e80000
 	jr nz, Flash_SectorErase__FC870D                       ; FC86A3  jr NZ,0xfc870d
 	ld	xbc, (xiz-4)                        ; FC86A5  ld XBC,(XIZ+0xfc)
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC86A8  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC86A8  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86AC  ld XBC,(XIZ+0xfc)
-	extpfx7 0xF3, 0xE5, 0x00, 0x40, 0x02, 0x30, 0x00 ; FC86AF  ld (XBC+0x4000),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc+16384), 0x0030 ; FC86AF  ld (XBC+0x4000),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86B6  ld XBC,(XIZ+0xfc)
-	extpfx7 0xF3, 0xE5, 0x00, 0x60, 0x02, 0x30, 0x00 ; FC86B9  ld (XBC+0x6000),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc+24576), 0x0030 ; FC86B9  ld (XBC+0x6000),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86C0  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x8000                        ; FC86C3  add XBC,0x00008000
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC86C9  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC86C9  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	jr Flash_SectorErase__FC8713                           ; FC86CD  jr T,0xfc8713
 Flash_SectorErase__FC86CF:
 	cp	xix, 0xEF0000                       ; FC86CF  cp XIX,0x00ef0000
 	jr nz, Flash_SectorErase__FC870D                       ; FC86D5  jr NZ,0xfc870d
 	ld	xbc, (xiz-4)                        ; FC86D7  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x70000                       ; FC86DA  add XBC,0x00070000
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC86E0  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC86E0  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86E4  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x78000                       ; FC86E7  add XBC,0x00078000
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC86ED  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC86ED  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86F1  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x7A000                       ; FC86F4  add XBC,0x0007a000
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC86FA  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC86FA  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC86FE  ld XBC,(XIZ+0xfc)
 	add	xbc, 0x7C000                       ; FC8701  add XBC,0x0007c000
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC8707  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC8707  ld (XBC),0x0030   [llvm-mc cannot encode this]
 	jr Flash_SectorErase__FC8713                           ; FC870B  jr T,0xfc8713
 Flash_SectorErase__FC870D:
 	ld	xbc, xix                            ; FC870D  ld XBC,XIX
-	extpfx4 0xB1, 0x02, 0x30, 0x00         ; FC870F  ld (XBC),0x0030   [llvm-mc cannot encode this]
+	ldw	(xbc), 0x0030         ; FC870F  ld (XBC),0x0030   [llvm-mc cannot encode this]
 Flash_SectorErase__FC8713:
 	ei	0                                     ; FC8713  ei 0x00
 	pop	xix                                ; FC8715  pop XIX
-	unlk32 xiz                             ; FC8716  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC8716  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC8718  ret
 ; --------------------------------------------------------------------------
 ; DSP_WriteChans0to3_FromE29D -- call DSP_ChannelRegs_Write8 for channels 0, 1, 2
@@ -455,7 +455,7 @@ sub_FC876B:
 ;          the sense Flash_SectorBlankCheck's return value has.
 ; --------------------------------------------------------------------------
 Flash_ReprogramSector:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; FC876C  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; FC876C  link XIZ,0x0000   [llvm-mc cannot encode this]
 	push	xix                               ; FC8770  push XIX
 	ld	xix, (xiz+8)                        ; FC8771  ld XIX,(XIZ+0x08)
 	calr Flash_ReadResetMode             ; FC8774  calr 0xfc856c
@@ -472,7 +472,7 @@ Flash_ReprogramSector__FC877C:
 	call	Flash_ProgramSectorFromBuffer                          ; FC8789  call 0xfc88f9
 	pop	xbc                                ; FC878D  pop XBC
 	pop	xix                                ; FC878E  pop XIX
-	unlk32 xiz                             ; FC878F  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC878F  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC8791  ret
 ; --------------------------------------------------------------------------
 ; Flash_WriteBlockIntoSector -- patch one block into the staging buffer, then
@@ -499,7 +499,7 @@ Flash_ReprogramSector__FC877C:
 ;          would write past it.  Stated as read.
 ; --------------------------------------------------------------------------
 Flash_WriteBlockIntoSector:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FC8792  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FC8792  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	pushw	hl                               ; FC8796  push HL
 	pushw	de                               ; FC8797  push DE
 	push	xix                               ; FC8798  push XIX
@@ -546,7 +546,7 @@ Flash_WriteBlockIntoSector__FC87E1:
 	pop	xix                                ; FC87F9  pop XIX
 	popw	de                                ; FC87FA  pop DE
 	popw	hl                                ; FC87FB  pop HL
-	unlk32 xiz                             ; FC87FC  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC87FC  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC87FE  ret
 ; --------------------------------------------------------------------------
 ; Flash_WriteTwoBlocksIntoSector -- Flash_WriteBlockIntoSector with a second
@@ -569,7 +569,7 @@ Flash_WriteBlockIntoSector__FC87E1:
 ;          correct, and nothing in the routine checks that.  Stated as read.
 ; --------------------------------------------------------------------------
 Flash_WriteTwoBlocksIntoSector:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FC87FF  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FC87FF  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	pushw	hl                               ; FC8803  push HL
 	pushw	de                               ; FC8804  push DE
 	push	xix                               ; FC8805  push XIX
@@ -638,7 +638,7 @@ Flash_WriteTwoBlocksIntoSector__FC8882:
 	pop	xix                                ; FC889A  pop XIX
 	popw	de                                ; FC889B  pop DE
 	popw	hl                                ; FC889C  pop HL
-	unlk32 xiz                             ; FC889D  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC889D  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC889F  ret
 ; --------------------------------------------------------------------------
 ; Flash_ProbeAndStoreDeviceId -- reset the flash, read its ID, remember it.
@@ -673,7 +673,7 @@ Flash_ProbeAndStoreDeviceId:
 ;          not flash-specific and its one caller is the pattern writer below.
 ; --------------------------------------------------------------------------
 MemFillWordRamp:
-	link32 0xEE, 0x0C, 0x00, 0x00          ; FC88AC  link XIZ,0x0000   [llvm-mc cannot encode this]
+	link	xiz, 0x0000          ; FC88AC  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl                               ; FC88B0  push HL
 	push	xix                               ; FC88B1  push XIX
 	ld	xix, (xiz+8)                        ; FC88B2  ld XIX,(XIZ+0x08)
@@ -684,11 +684,11 @@ MemFillWordRamp__FC88BA:
 	inc	2, xix                             ; FC88BC  inc 2,XIX
 	inc	1, hl                              ; FC88BE  inc 1,HL
 MemFillWordRamp__FC88C0:
-	extpfx3 0x9E, 0x0C, 0xF3               ; FC88C0  cp HL,(XIZ+0x0c)   [llvm-mc cannot encode this]
+	cp	hl, (xiz+12)               ; FC88C0  cp HL,(XIZ+0x0c)   [llvm-mc cannot encode this]
 	jr c, MemFillWordRamp__FC88BA                        ; FC88C3  jr C,0xfc88ba
 	pop	xix                                ; FC88C5  pop XIX
 	popw	hl                                ; FC88C6  pop HL
-	unlk32 xiz                             ; FC88C7  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC88C7  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC88C9  ret
 ; --------------------------------------------------------------------------
 ; Flash_WriteRampPattern_E81000 -- build a counting pattern in RAM and burn it to
@@ -710,7 +710,7 @@ MemFillWordRamp__FC88C0:
 ;          but nothing here calls it and nothing here verifies the result.
 ; --------------------------------------------------------------------------
 Flash_WriteRampPattern_E81000:
-	link32 0xEE, 0x0C, 0xFC, 0xFF          ; FC88CA  link XIZ,0xfffc   [llvm-mc cannot encode this]
+	link	xiz, 0xfffc          ; FC88CA  link XIZ,0xfffc   [llvm-mc cannot encode this]
 	push	xix                               ; FC88CE  push XIX
 	ldw	ix, 0xF000                         ; FC88CF  ld IX,0xf000
 	extz	xix                               ; FC88D2  extz XIX
@@ -728,7 +728,7 @@ Flash_WriteRampPattern_E81000:
 	inc	8, xsp                             ; FC88F1  inc 0,XSP
 	inc	8, xsp                             ; FC88F3  inc 0,XSP
 	pop	xix                                ; FC88F5  pop XIX
-	unlk32 xiz                             ; FC88F6  unlk XIZ   [llvm-mc cannot encode this]
+	unlk	xiz                             ; FC88F6  unlk XIZ   [llvm-mc cannot encode this]
 	ret                                    ; FC88F8  ret
 ; --------------------------------------------------------------------------
 ; ★ Flash_ProgramSectorFromBuffer -- burn the whole 64 KiB staging buffer into one
@@ -765,9 +765,9 @@ Flash_ProgramSectorFromBuffer:
 	cp	wa, 0xFFFF                          ; FC8914  cp WA,0xffff
 	jr z, Flash_ProgramSectorFromBuffer__FC8933                        ; FC8918  jr Z,0xfc8933
 	ei	6                                   ; FC891A  ei 0x06
-	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC891C  ld (XHL),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xhl), 0x00aa         ; FC891C  ld (XHL),0x00aa   [llvm-mc cannot encode this]
 	ldw	(0xE85554:24), 85                 ; FC8920  ld (0xe85554),0x0055
-	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC8927  ld (XHL),0x00a0   [llvm-mc cannot encode this]
+	ldw	(xhl), 0x00a0         ; FC8927  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC892B  ld (XIY),WA
 	ei	0                                     ; FC892D  ei 0x00
 Flash_ProgramSectorFromBuffer__FC892F:
@@ -827,9 +827,9 @@ Flash_ProgramSlice1K:
 	cp	wa, 0xFFFF                          ; FC8968  cp WA,0xffff
 	jr z, Flash_ProgramSlice1K__FC8987                        ; FC896C  jr Z,0xfc8987
 	ei	6                                   ; FC896E  ei 0x06
-	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC8970  ld (XHL),0x00aa   [llvm-mc cannot encode this]
+	ldw	(xhl), 0x00aa         ; FC8970  ld (XHL),0x00aa   [llvm-mc cannot encode this]
 	ldw	(0xE85554:24), 85                 ; FC8974  ld (0xe85554),0x0055
-	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC897B  ld (XHL),0x00a0   [llvm-mc cannot encode this]
+	ldw	(xhl), 0x00a0         ; FC897B  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC897F  ld (XIY),WA
 	ei	0                                     ; FC8981  ei 0x00
 Flash_ProgramSlice1K__FC8983:
@@ -910,6 +910,6 @@ Flash_ReadSectorToBuffer:
 	ld	xix, 0x10000                        ; FC89B3  ld XIX,0x00010000
 	and	xiy, 0xFF0000                      ; FC89B8  and XIY,0x00ff0000
 	ldw	bc, 0x8000                         ; FC89BE  ld BC,0x8000
-	extpfx2 0x95, 0x11                     ; FC89C1  ldirw   [llvm-mc cannot encode this]
+	ldirw                     ; FC89C1  ldirw   [llvm-mc cannot encode this]
 	pop	xix                                ; FC89C3  pop XIX
 	ret                                    ; FC89C4  ret

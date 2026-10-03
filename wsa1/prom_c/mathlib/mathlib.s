@@ -110,7 +110,7 @@
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Cos:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FC8BB2  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FC8BB2  link XIZ,0xfff0
 	push	xix                                   ; FC8BB6  push XIX
 	push	xiy                                   ; FC8BB7  push XIY
 	ld	xbc, (xiz+12)                           ; FC8BB8  ld XBC,(XIZ+0x0c)
@@ -170,7 +170,7 @@ Double_Cos__FC8C07:
 Double_Cos__FC8C40:
 	pop	xiy                                    ; FC8C40  pop XIY
 	pop	xix                                    ; FC8C41  pop XIX
-	unlk32 xiz                                 ; FC8C42  unlk XIZ
+	unlk	xiz                                 ; FC8C42  unlk XIZ
 	ret                                        ; FC8C44  ret
 ; --------------------------------------------------------------------------
 ; Double_Sin -- 0xFC8C45..0xFC8EE4 (672 bytes)
@@ -198,7 +198,7 @@ Double_Cos__FC8C40:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Sin:
-	link32 0xEE, 0x0C, 0xD0, 0xFF              ; FC8C45  link XIZ,0xffd0
+	link	xiz, 0xffd0              ; FC8C45  link XIZ,0xffd0
 	pushw	hl                                   ; FC8C49  push HL
 	push	xix                                   ; FC8C4A  push XIX
 	push	xiy                                   ; FC8C4B  push XIY
@@ -289,10 +289,10 @@ Double_Sin__FC8CDB:
 	lda	xbc, (xiz-8)                           ; FC8D24  lda XBC,XIZ+0xf8
 	push	xbc                                   ; FC8D27  push XBC
 	add	xbc, 8                                 ; FC8D28  add XBC,0x00000008
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC8D2E  pushw (-XBC)
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC8D31  pushw (-XBC)
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC8D34  pushw (-XBC)
-	extpfx2 0x91, 0x04                         ; FC8D37  pushw (XBC)
+	pushw	(-xbc)                   ; FC8D2E  pushw (-XBC)
+	pushw	(-xbc)                   ; FC8D31  pushw (-XBC)
+	pushw	(-xbc)                   ; FC8D34  pushw (-XBC)
+	pushw	(xbc)                         ; FC8D37  pushw (XBC)
 	ld	xwa, (F64_0p5_2+4:24)                     ; FC8D39  ld XWA,(0xfcb2aa)
 	push	xwa                                   ; FC8D3E  push XWA
 	ld	xwa, (F64_0p5_2:24)                     ; FC8D3F  ld XWA,(0xfcb2a6)
@@ -383,7 +383,7 @@ Double_Sin__FC8DDF:
 	lda	xix, (xiz-16)                          ; FC8E13  lda XIX,XIZ+0xf0
 	lda	xiy, (F64_2p7204790957888847em15:24)                     ; FC8E16  lda XIY,0xfcb2ce
 	ldw	bc, 4                                  ; FC8E1B  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC8E1E  ldirw
+	ldirw                         ; FC8E1E  ldirw
 	lda	xix, (F64_2p7204790957888847em15:24)                     ; FC8E20  lda XIX,0xfcb2ce
 	inc	8, xix                                 ; FC8E25  inc 0,XIX
 	ld	h, 7:opc                                   ; FC8E27  ld H,0x07
@@ -402,7 +402,7 @@ Double_Sin__FC8E29:
 	lda	xix, (xiz-32)                          ; FC8E41  lda XIX,XIZ+0xe0
 	ld	xiy, (xsp)                              ; FC8E44  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC8E46  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC8E49  ldirw
+	ldirw                         ; FC8E49  ldirw
 	pop	xix                                    ; FC8E4B  pop XIX
 	ld	xbc, (xiz-28)                           ; FC8E4C  ld XBC,(XIZ+0xe4)
 	push	xbc                                   ; FC8E4F  push XBC
@@ -473,7 +473,7 @@ Double_Sin__FC8EDF:
 	pop	xiy                                    ; FC8EDF  pop XIY
 	pop	xix                                    ; FC8EE0  pop XIX
 	popw	hl                                    ; FC8EE1  pop HL
-	unlk32 xiz                                 ; FC8EE2  unlk XIZ
+	unlk	xiz                                 ; FC8EE2  unlk XIZ
 	ret                                        ; FC8EE4  ret
 ; --------------------------------------------------------------------------
 ; sub_FC8EE5 -- 0xFC8EE5..0xFC913F (603 bytes)
@@ -494,7 +494,7 @@ Double_Sin__FC8EDF:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FC8EE5:
-	link32 0xEE, 0x0C, 0xE0, 0xFF              ; FC8EE5  link XIZ,0xffe0
+	link	xiz, 0xffe0              ; FC8EE5  link XIZ,0xffe0
 	pushw	hl                                   ; FC8EE9  push HL
 	pushw	de                                   ; FC8EEA  push DE
 	push	xix                                   ; FC8EEB  push XIX
@@ -502,11 +502,11 @@ sub_FC8EE5:
 	lda	xix, (xiz-12)                          ; FC8EED  lda XIX,XIZ+0xf4
 	lda	xiy, (xiz+8)                           ; FC8EF0  lda XIY,XIZ+0x08
 	ldw	bc, 4                                  ; FC8EF3  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC8EF6  ldirw
+	ldirw                         ; FC8EF6  ldirw
 	ld	xix, (xiz+16)                           ; FC8EF8  ld XIX,(XIZ+0x10)
 	lda	xiy, (xiz+8)                           ; FC8EFB  lda XIY,XIZ+0x08
 	ldw	bc, 4                                  ; FC8EFE  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC8F01  ldirw
+	ldirw                         ; FC8F01  ldirw
 	sub	xbc, xbc                               ; FC8F03  sub XBC,XBC
 	ld	(xiz-16), xbc                           ; FC8F05  ld (XIZ+0xf0),XBC
 	sub	xwa, xwa                               ; FC8F08  sub XWA,XWA
@@ -542,7 +542,7 @@ sub_FC8EE5__FC8F0F:
 	ld	(xiz-24), xwa                           ; FC8F4E  ld (XIZ+0xe8),XWA
 	ld	xbc, (xiz-20)                           ; FC8F51  ld XBC,(XIZ+0xec)
 	and	xbc, 0x7FFFFFFF                        ; FC8F54  and XBC,0x7fffffff
-	extpfx3 0xAE, 0xF0, 0xE1                   ; FC8F5A  or XBC,(XIZ+0xf0)
+	or	xbc, (xiz-16)                   ; FC8F5A  or XBC,(XIZ+0xf0)
 	jrl z, sub_FC8EE5__FC9054                  ; FC8F5D  jrl Z,0xfc9054
 	pushw	31                                   ; FC8F60  push 0x001f
 	push	xix                                   ; FC8F63  push XIX
@@ -560,7 +560,7 @@ sub_FC8EE5__FC8F0F:
 	ld	xix, (xiz+16)                           ; FC8F81  ld XIX,(XIZ+0x10)
 	lda	xiy, (F64_0p0_3:24)                     ; FC8F84  lda XIY,0xfcb30e
 	ldw	bc, 4                                  ; FC8F89  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC8F8C  ldirw
+	ldirw                         ; FC8F8C  ldirw
 	jrl sub_FC8EE5__FC9121                     ; FC8F8E  jrl T,0xfc9121
 sub_FC8EE5__FC8F91:
 	cp	hl, 0x432                               ; FC8F91  cp HL,0x0432
@@ -582,7 +582,7 @@ sub_FC8EE5__FC8F91:
 	and	xix, xiy                               ; FC8FBF  and XIX,XIY
 	sub	xbc, xbc                               ; FC8FC1  sub XBC,XBC
 	ld	(xiz-24), xbc                           ; FC8FC3  ld (XIZ+0xe8),XBC
-	extpfx3 0xAE, 0xEC, 0xC5                   ; FC8FC6  and XIY,(XIZ+0xec)
+	and	xiy, (xiz-20)                   ; FC8FC6  and XIY,(XIZ+0xec)
 	xor	(xiz-20), xiy                          ; FC8FC9  xor (XIZ+0xec),XIY
 	jr sub_FC8EE5__FC8FEC                      ; FC8FCC  jr T,0xfc8fec
 sub_FC8EE5__FC8FCE:
@@ -593,7 +593,7 @@ sub_FC8EE5__FC8FCE:
 	call	Shift32_Left                              ; FC8FD7  call 0xfca0fe
 	ld	(xiz-28), xiy                           ; FC8FDB  ld (XIZ+0xe4),XIY
 	and	(xiz-24), xiy                          ; FC8FDE  and (XIZ+0xe8),XIY
-	extpfx3 0xAE, 0xF0, 0xC5                   ; FC8FE1  and XIY,(XIZ+0xf0)
+	and	xiy, (xiz-16)                   ; FC8FE1  and XIY,(XIZ+0xf0)
 	xor	(xiz-16), xiy                          ; FC8FE4  xor (XIZ+0xf0),XIY
 	sub	xbc, xbc                               ; FC8FE7  sub XBC,XBC
 	ld	(xiz-20), xbc                           ; FC8FE9  ld (XIZ+0xec),XBC
@@ -609,7 +609,7 @@ sub_FC8EE5__FC8FF5:
 	ld	c, e                                    ; FC9001  ld C,E
 	exts	bc                                    ; FC9003  exts BC
 	exts	xbc                                   ; FC9005  exts XBC
-	extpfx3 0xAE, 0x10, 0x81                   ; FC9007  add XBC,(XIZ+0x10)
+	add	xbc, (xiz+16)                   ; FC9007  add XBC,(XIZ+0x10)
 	ld	a, (xiz-26)                             ; FC900A  ld A,(XIZ+0xe6)
 	ld	(xbc), a                                ; FC900D  ld (XBC),A
 	ld	xiy, (xiz-24)                           ; FC900F  ld XIY,(XIZ+0xe8)
@@ -620,7 +620,7 @@ sub_FC8EE5__FC8FF5:
 	ld	(xiz-28), c                             ; FC9020  ld (XIZ+0xe4),C
 	ld	xbc, (xiz-4)                            ; FC9023  ld XBC,(XIZ+0xfc)
 	ld	(xiz-32), xbc                           ; FC9026  ld (XIZ+0xe0),XBC
-	extpfx3 0xAE, 0x10, 0x81                   ; FC9029  add XBC,(XIZ+0x10)
+	add	xbc, (xiz+16)                   ; FC9029  add XBC,(XIZ+0x10)
 	ld	a, (xiz-28)                             ; FC902C  ld A,(XIZ+0xe4)
 	ld	(xbc), a                                ; FC902F  ld (XBC),A
 	ld	xiy, xix                                ; FC9031  ld XIY,XIX
@@ -718,7 +718,7 @@ sub_FC8EE5__FC9121:
 	lda	xix, (xiz-32)                          ; FC9121  lda XIX,XIZ+0xe0
 	lda	xiy, (xiz-12)                          ; FC9124  lda XIY,XIZ+0xf4
 	ldw	bc, 4                                  ; FC9127  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC912A  ldirw
+	ldirw                         ; FC912A  ldirw
 	ld	xiy, (xsp)                              ; FC912C  ld XIY,(XSP)
 	ld	xix, (xiz-32)                           ; FC912E  ld XIX,(XIZ+0xe0)
 	ld	(xiy+), xix                          ; FC9131  ld (XIY+),XIX
@@ -729,7 +729,7 @@ sub_FC8EE5__FC9139:
 	pop	xix                                    ; FC913A  pop XIX
 	popw	de                                    ; FC913B  pop DE
 	popw	hl                                    ; FC913C  pop HL
-	unlk32 xiz                                 ; FC913D  unlk XIZ
+	unlk	xiz                                 ; FC913D  unlk XIZ
 	ret                                        ; FC913F  ret
 ; --------------------------------------------------------------------------
 ; Double_Tan -- 0xFC9140..0xFC9575 (1078 bytes)
@@ -755,7 +755,7 @@ sub_FC8EE5__FC9139:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Tan:
-	link32 0xEE, 0x0C, 0xAE, 0xFF              ; FC9140  link XIZ,0xffae
+	link	xiz, 0xffae              ; FC9140  link XIZ,0xffae
 	pushw	hl                                   ; FC9144  push HL
 	pushw	de                                   ; FC9145  push DE
 	push	xix                                   ; FC9146  push XIX
@@ -963,10 +963,10 @@ Double_Tan__FC92FB:
 	lda	xbc, (xiz-18)                          ; FC9344  lda XBC,XIZ+0xee
 	push	xbc                                   ; FC9347  push XBC
 	add	xbc, 8                                 ; FC9348  add XBC,0x00000008
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC934E  pushw (-XBC)
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC9351  pushw (-XBC)
-	extpfx3 0xD4, 0xE5, 0x04                   ; FC9354  pushw (-XBC)
-	extpfx2 0x91, 0x04                         ; FC9357  pushw (XBC)
+	pushw	(-xbc)                   ; FC934E  pushw (-XBC)
+	pushw	(-xbc)                   ; FC9351  pushw (-XBC)
+	pushw	(-xbc)                   ; FC9354  pushw (-XBC)
+	pushw	(xbc)                         ; FC9357  pushw (XBC)
 	ld	xwa, (F64_0p5_3+4:24)                     ; FC9359  ld XWA,(0xfcb352)
 	push	xwa                                   ; FC935E  push XWA
 	ld	xwa, (F64_0p5_3:24)                     ; FC935F  ld XWA,(0xfcb34e)
@@ -1033,7 +1033,7 @@ Double_Tan__FC93E4:
 	lda	xix, (xiz-26)                          ; FC93FB  lda XIX,XIZ+0xe6
 	lda	xiy, (F64_neg1p7861707342254424em05:24)                     ; FC93FE  lda XIY,0xfcb376
 	ldw	bc, 4                                  ; FC9403  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9406  ldirw
+	ldirw                         ; FC9406  ldirw
 	lda	xix, (F64_neg1p7861707342254424em05:24)                     ; FC9408  lda XIX,0xfcb376
 	inc	8, xix                                 ; FC940D  inc 0,XIX
 	ld	h, 2:opc                                   ; FC940F  ld H,0x02
@@ -1052,7 +1052,7 @@ Double_Tan__FC9411:
 	lda	xix, (xiz-42)                          ; FC9429  lda XIX,XIZ+0xd6
 	ld	xiy, (xsp)                              ; FC942C  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC942E  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9431  ldirw
+	ldirw                         ; FC9431  ldirw
 	pop	xix                                    ; FC9433  pop XIX
 	ld	xbc, (xiz-38)                           ; FC9434  ld XBC,(XIZ+0xda)
 	push	xbc                                   ; FC9437  push XBC
@@ -1101,7 +1101,7 @@ Double_Tan__FC9411:
 	lda	xix, (xiz-26)                          ; FC9498  lda XIX,XIZ+0xe6
 	lda	xiy, (F64_4p981943399378651em07:24)                     ; FC949B  lda XIY,0xfcb38e
 	ldw	bc, 4                                  ; FC94A0  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC94A3  ldirw
+	ldirw                         ; FC94A3  ldirw
 	lda	xix, (F64_4p981943399378651em07:24)                     ; FC94A5  lda XIX,0xfcb38e
 	inc	8, xix                                 ; FC94AA  inc 0,XIX
 	ld	h, 4:opc                                   ; FC94AC  ld H,0x04
@@ -1120,7 +1120,7 @@ Double_Tan__FC94AE:
 	lda	xix, (xiz-42)                          ; FC94C6  lda XIX,XIZ+0xd6
 	ld	xiy, (xsp)                              ; FC94C9  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC94CB  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC94CE  ldirw
+	ldirw                         ; FC94CE  ldirw
 	pop	xix                                    ; FC94D0  pop XIX
 	ld	xbc, (xiz-38)                           ; FC94D1  ld XBC,(XIZ+0xda)
 	push	xbc                                   ; FC94D4  push XBC
@@ -1195,7 +1195,7 @@ Double_Tan__FC956F:
 	pop	xix                                    ; FC9570  pop XIX
 	popw	de                                    ; FC9571  pop DE
 	popw	hl                                    ; FC9572  pop HL
-	unlk32 xiz                                 ; FC9573  unlk XIZ
+	unlk	xiz                                 ; FC9573  unlk XIZ
 	ret                                        ; FC9575  ret
 ; --------------------------------------------------------------------------
 ; Double_Pow -- 0xFC9576..0xFC9843 (718 bytes)
@@ -1243,7 +1243,7 @@ Double_Tan__FC956F:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Pow:
-	link32 0xEE, 0x0C, 0xE8, 0xFF              ; FC9576  link XIZ,0xffe8
+	link	xiz, 0xffe8              ; FC9576  link XIZ,0xffe8
 	push	xix                                   ; FC957A  push XIX
 	push	xiy                                   ; FC957B  push XIY
 	ld	xbc, (F64_1p0_4+4:24)                     ; FC957C  ld XBC,(0xfcb3e2)
@@ -1540,7 +1540,7 @@ Double_Pow__FC9832:
 Double_Pow__FC983F:
 	pop	xiy                                    ; FC983F  pop XIY
 	pop	xix                                    ; FC9840  pop XIX
-	unlk32 xiz                                 ; FC9841  unlk XIZ
+	unlk	xiz                                 ; FC9841  unlk XIZ
 	ret                                        ; FC9843  ret
 ; --------------------------------------------------------------------------
 ; Double_Exp -- 0xFC9844..0xFC9ACA (647 bytes)
@@ -1566,7 +1566,7 @@ Double_Pow__FC983F:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Exp:
-	link32 0xEE, 0x0C, 0xCE, 0xFF              ; FC9844  link XIZ,0xffce
+	link	xiz, 0xffce              ; FC9844  link XIZ,0xffce
 	pushw	hl                                   ; FC9848  push HL
 	pushw	de                                   ; FC9849  push DE
 	push	xix                                   ; FC984A  push XIX
@@ -1794,7 +1794,7 @@ Double_Exp__FC9A68:
 	lda	xix, (xiz-18)                          ; FC9A7F  lda XIX,XIZ+0xee
 	lda	xiy, (F64_3p1555192765684645em05:24)                     ; FC9A82  lda XIY,0xfcb436
 	ldw	bc, 4                                  ; FC9A87  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9A8A  ldirw
+	ldirw                         ; FC9A8A  ldirw
 	lda	xix, (F64_3p1555192765684645em05:24)                     ; FC9A8C  lda XIX,0xfcb436
 	inc	8, xix                                 ; FC9A91  inc 0,XIX
 	ld	h, 2:opc                                   ; FC9A93  ld H,0x02
@@ -1813,7 +1813,7 @@ Double_Exp__FC9A95:
 	lda	xix, (xiz-34)                          ; FC9AAD  lda XIX,XIZ+0xde
 	ld	xiy, (xsp)                              ; FC9AB0  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC9AB2  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9AB5  ldirw
+	ldirw                         ; FC9AB5  ldirw
 	pop	xix                                    ; FC9AB7  pop XIX
 	ld	xbc, (xiz-30)                           ; FC9AB8  ld XBC,(XIZ+0xe2)
 	push	xbc                                   ; FC9ABB  push XBC
@@ -1864,7 +1864,7 @@ sub_FC9ACB:
 	lda	xix, (xiz-18)                          ; FC9AEE  lda XIX,XIZ+0xee
 	lda	xiy, (F64_7p510402839987004em07:24)                     ; FC9AF1  lda XIY,0xfcb44e
 	ldw	bc, 4                                  ; FC9AF6  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9AF9  ldirw
+	ldirw                         ; FC9AF9  ldirw
 	lda	xix, (F64_7p510402839987004em07:24)                     ; FC9AFB  lda XIX,0xfcb44e
 	inc	8, xix                                 ; FC9B00  inc 0,XIX
 	ld	h, 3:opc                                   ; FC9B02  ld H,0x03
@@ -1883,7 +1883,7 @@ sub_FC9ACB__FC9B04:
 	lda	xix, (xiz-34)                          ; FC9B1C  lda XIX,XIZ+0xde
 	ld	xiy, (xsp)                              ; FC9B1F  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC9B21  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9B24  ldirw
+	ldirw                         ; FC9B24  ldirw
 	pop	xix                                    ; FC9B26  pop XIX
 	ld	xbc, (xiz-30)                           ; FC9B27  ld XBC,(XIZ+0xe2)
 	push	xbc                                   ; FC9B2A  push XBC
@@ -1950,7 +1950,7 @@ sub_FC9ACB__FC9BB5:
 	pop	xix                                    ; FC9BB6  pop XIX
 	popw	de                                    ; FC9BB7  pop DE
 	popw	hl                                    ; FC9BB8  pop HL
-	unlk32 xiz                                 ; FC9BB9  unlk XIZ
+	unlk	xiz                                 ; FC9BB9  unlk XIZ
 	ret                                        ; FC9BBB  ret
 ; --------------------------------------------------------------------------
 ; sub_FC9BBC -- 0xFC9BBC..0xFC9CCC (273 bytes)
@@ -1971,7 +1971,7 @@ sub_FC9ACB__FC9BB5:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FC9BBC:
-	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC9BBC  link XIZ,0xffee
+	link	xiz, 0xffee              ; FC9BBC  link XIZ,0xffee
 	pushw	hl                                   ; FC9BC0  push HL
 	pushw	de                                   ; FC9BC1  push DE
 	push	xix                                   ; FC9BC2  push XIX
@@ -1995,7 +1995,7 @@ sub_FC9BBC__FC9BEC:
 	lda	xix, (xiz-10)                          ; FC9BEC  lda XIX,XIZ+0xf6
 	lda	xiy, (xiz+8)                           ; FC9BEF  lda XIY,XIZ+0x08
 	ldw	bc, 4                                  ; FC9BF2  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9BF5  ldirw
+	ldirw                         ; FC9BF5  ldirw
 	ld	a, (xiz-3)                              ; FC9BF7  ld A,(XIZ+0xfd)
 	extz	wa                                    ; FC9BFA  extz WA
 	ld	ix, wa                                  ; FC9BFC  ld IX,WA
@@ -2054,7 +2054,7 @@ sub_FC9BBC__FC9C74:
 	lda	xix, (xiz+8)                           ; FC9C89  lda XIX,XIZ+0x08
 	lda	xiy, (xiz-10)                          ; FC9C8C  lda XIY,XIZ+0xf6
 	ldw	bc, 4                                  ; FC9C8F  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9C92  ldirw
+	ldirw                         ; FC9C92  ldirw
 	cpw (xiz-2), 0x0000                        ; FC9C94  cp (XIZ+0xfe),0x0000
 	jr z, sub_FC9BBC__FC9CB9                   ; FC9C99  jr Z,0xfc9cb9
 	ld	xbc, (xiz+12)                           ; FC9C9B  ld XBC,(XIZ+0x0c)
@@ -2080,7 +2080,7 @@ sub_FC9BBC__FC9CC6:
 	pop	xix                                    ; FC9CC7  pop XIX
 	popw	de                                    ; FC9CC8  pop DE
 	popw	hl                                    ; FC9CC9  pop HL
-	unlk32 xiz                                 ; FC9CCA  unlk XIZ
+	unlk	xiz                                 ; FC9CCA  unlk XIZ
 	ret                                        ; FC9CCC  ret
 ; --------------------------------------------------------------------------
 ; Double_MakeInfinity -- 0xFC9CCD..0xFC9D11 (69 bytes)
@@ -2101,7 +2101,7 @@ sub_FC9BBC__FC9CC6:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_MakeInfinity:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FC9CCD  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FC9CCD  link XIZ,0xfff0
 	push	xix                                   ; FC9CD1  push XIX
 	push	xiy                                   ; FC9CD2  push XIY
 	lda	xix, (xiz-8)                           ; FC9CD3  lda XIX,XIZ+0xf8
@@ -2121,7 +2121,7 @@ Double_MakeInfinity__FC9CF4:
 	lda	xix, (xiz-16)                          ; FC9CF5  lda XIX,XIZ+0xf0
 	ld	xiy, (xsp)                              ; FC9CF8  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC9CFA  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9CFD  ldirw
+	ldirw                         ; FC9CFD  ldirw
 	pop	xix                                    ; FC9CFF  pop XIX
 	ld	xiy, (xsp)                              ; FC9D00  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC9D02  ld XIX,(XIZ+0xf0)
@@ -2130,7 +2130,7 @@ Double_MakeInfinity__FC9CF4:
 	ld	(xiy), xix                              ; FC9D0B  ld (XIY),XIX
 	pop	xiy                                    ; FC9D0D  pop XIY
 	pop	xix                                    ; FC9D0E  pop XIX
-	unlk32 xiz                                 ; FC9D0F  unlk XIZ
+	unlk	xiz                                 ; FC9D0F  unlk XIZ
 	ret                                        ; FC9D11  ret
 ; --------------------------------------------------------------------------
 ; Double_Log -- 0xFC9D12..0xFC9FA2 (657 bytes)
@@ -2156,7 +2156,7 @@ Double_MakeInfinity__FC9CF4:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Log:
-	link32 0xEE, 0x0C, 0xAE, 0xFF              ; FC9D12  link XIZ,0xffae
+	link	xiz, 0xffae              ; FC9D12  link XIZ,0xffae
 	pushw	hl                                   ; FC9D16  push HL
 	push	xix                                   ; FC9D17  push XIX
 	push	xiy                                   ; FC9D18  push XIY
@@ -2283,7 +2283,7 @@ Double_Log__FC9DD5:
 	lda	xix, (xiz-18)                          ; FC9E48  lda XIX,XIZ+0xee
 	lda	xiy, (F64_neg0p7895611288749126:24)                     ; FC9E4B  lda XIY,0xfcb4a6
 	ldw	bc, 4                                  ; FC9E50  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9E53  ldirw
+	ldirw                         ; FC9E53  ldirw
 	lda	xix, (F64_neg0p7895611288749126:24)                     ; FC9E55  lda XIX,0xfcb4a6
 	inc	8, xix                                 ; FC9E5A  inc 0,XIX
 	ld	h, 2:opc                                   ; FC9E5C  ld H,0x02
@@ -2302,7 +2302,7 @@ Double_Log__FC9E5E:
 	lda	xix, (xiz-42)                          ; FC9E76  lda XIX,XIZ+0xd6
 	ld	xiy, (xsp)                              ; FC9E79  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC9E7B  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9E7E  ldirw
+	ldirw                         ; FC9E7E  ldirw
 	pop	xix                                    ; FC9E80  pop XIX
 	ld	xbc, (xiz-38)                           ; FC9E81  ld XBC,(XIZ+0xda)
 	push	xbc                                   ; FC9E84  push XBC
@@ -2321,7 +2321,7 @@ Double_Log__FC9E5E:
 	lda	xix, (xiz-26)                          ; FC9EA0  lda XIX,XIZ+0xe6
 	lda	xiy, (F64_1p0_7:24)                     ; FC9EA3  lda XIY,0xfcb4be
 	ldw	bc, 4                                  ; FC9EA8  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9EAB  ldirw
+	ldirw                         ; FC9EAB  ldirw
 	lda	xix, (F64_1p0_7:24)                     ; FC9EAD  lda XIX,0xfcb4be
 	inc	8, xix                                 ; FC9EB2  inc 0,XIX
 	ld	h, 3:opc                                   ; FC9EB4  ld H,0x03
@@ -2340,7 +2340,7 @@ Double_Log__FC9EB6:
 	lda	xix, (xiz-42)                          ; FC9ECE  lda XIX,XIZ+0xd6
 	ld	xiy, (xsp)                              ; FC9ED1  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FC9ED3  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9ED6  ldirw
+	ldirw                         ; FC9ED6  ldirw
 	pop	xix                                    ; FC9ED8  pop XIX
 	ld	xbc, (xiz-38)                           ; FC9ED9  ld XBC,(XIZ+0xda)
 	push	xbc                                   ; FC9EDC  push XBC
@@ -2396,7 +2396,7 @@ Double_Log__FC9EB6:
 	push	xbc                                   ; FC9F4C  push XBC
 	lda	xiy, (xiz-58)                          ; FC9F4D  lda XIY,XIZ+0xc6
 	call	Double_Add                              ; FC9F50  call 0xfca41f
-	extpfx3 0x9E, 0xF6, 0x04                   ; FC9F54  pushw (XIZ+0xf6)
+	pushw	(xiz-10)                   ; FC9F54  pushw (XIZ+0xf6)
 	lda	xiy, (xiz-66)                          ; FC9F57  lda XIY,XIZ+0xbe
 	call	Int16_ToDouble                              ; FC9F5A  call 0xfca997
 	ld	xbc, (xiz-62)                           ; FC9F5E  ld XBC,(XIZ+0xc2)
@@ -2428,7 +2428,7 @@ Double_Log__FC9F9D:
 	pop	xiy                                    ; FC9F9D  pop XIY
 	pop	xix                                    ; FC9F9E  pop XIX
 	popw	hl                                    ; FC9F9F  pop HL
-	unlk32 xiz                                 ; FC9FA0  unlk XIZ
+	unlk	xiz                                 ; FC9FA0  unlk XIZ
 	ret                                        ; FC9FA2  ret
 ; --------------------------------------------------------------------------
 ; sub_FC9FA3 -- 0xFC9FA3..0xFCA084 (226 bytes)
@@ -2449,7 +2449,7 @@ Double_Log__FC9F9D:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_FC9FA3:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FC9FA3  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FC9FA3  link XIZ,0xfff0
 	pushw	hl                                   ; FC9FA7  push HL
 	pushw	de                                   ; FC9FA8  push DE
 	push	xix                                   ; FC9FA9  push XIX
@@ -2474,7 +2474,7 @@ sub_FC9FA3__FC9FCF:
 	lda	xix, (xiz-8)                           ; FC9FD0  lda XIX,XIZ+0xf8
 	lda	xiy, (xiz+8)                           ; FC9FD3  lda XIY,XIZ+0x08
 	ldw	bc, 4                                  ; FC9FD6  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FC9FD9  ldirw
+	ldirw                         ; FC9FD9  ldirw
 	pop	xix                                    ; FC9FDB  pop XIX
 	ld	a, (xiz-1)                              ; FC9FDC  ld A,(XIZ+0xff)
 	extz	wa                                    ; FC9FDF  extz WA
@@ -2492,7 +2492,7 @@ sub_FC9FA3__FC9FCF:
 	ld	de, bc                                  ; FC9FFB  ld DE,BC
 	jr nz, sub_FC9FA3__FCA01A                  ; FC9FFD  jr NZ,0xfca01a
 	ld	xwa, (xiz+16)                           ; FC9FFF  ld XWA,(XIZ+0x10)
-	extpfx4 0xB0, 0x02, 0x00, 0x00             ; FCA002  ld (XWA),0x0000
+	ldw	(xwa), 0x0000             ; FCA002  ld (XWA),0x0000
 	ld	xiy, (xsp)                              ; FCA006  ld XIY,(XSP)
 	ld	xix, (F64_0p0_9:24)                     ; FCA008  ld XIX,(0xfcb4de)
 	ld	(xiy+), xix                          ; FCA00D  ld (XIY+),XIX
@@ -2518,7 +2518,7 @@ sub_FC9FA3__FCA01A:
 	lda	xix, (xiz+8)                           ; FCA043  lda XIX,XIZ+0x08
 	lda	xiy, (xiz-8)                           ; FCA046  lda XIY,XIZ+0xf8
 	ldw	bc, 4                                  ; FCA049  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FCA04C  ldirw
+	ldirw                         ; FCA04C  ldirw
 	pop	xix                                    ; FCA04E  pop XIX
 	cp	ix, 0:i3                                  ; FCA04F  cp IX,0
 	jr z, sub_FC9FA3__FCA071                   ; FCA051  jr Z,0xfca071
@@ -2545,7 +2545,7 @@ sub_FC9FA3__FCA07E:
 	pop	xix                                    ; FCA07F  pop XIX
 	popw	de                                    ; FCA080  pop DE
 	popw	hl                                    ; FCA081  pop HL
-	unlk32 xiz                                 ; FCA082  unlk XIZ
+	unlk	xiz                                 ; FCA082  unlk XIZ
 	ret                                        ; FCA084  ret
 ; --------------------------------------------------------------------------
 ; Double_Abs -- 0xFCA085..0xFCA0B9 (53 bytes)
@@ -2566,21 +2566,21 @@ sub_FC9FA3__FCA07E:
 ;          Evidence asserted by notes/lanes/promcd-2026-09-25/mathlib_names.py.
 ; --------------------------------------------------------------------------
 Double_Abs:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FCA085  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FCA085  link XIZ,0xfff0
 	push	xix                                   ; FCA089  push XIX
 	push	xiy                                   ; FCA08A  push XIY
 	lda	xix, (xiz-8)                           ; FCA08B  lda XIX,XIZ+0xf8
 	push	xix                                   ; FCA08E  push XIX
 	lda	xiy, (xiz+8)                           ; FCA08F  lda XIY,XIZ+0x08
 	ldw	bc, 4                                  ; FCA092  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FCA095  ldirw
+	ldirw                         ; FCA095  ldirw
 	pop	xix                                    ; FCA097  pop XIX
-	extpfx4 0x8C, 0x07, 0x3C, 0x7F             ; FCA098  and (XIX+0x07),0x7f
+	and	(xix+7), 0x7f             ; FCA098  and (XIX+0x07),0x7f
 	push	xix                                   ; FCA09C  push XIX
 	lda	xix, (xiz-16)                          ; FCA09D  lda XIX,XIZ+0xf0
 	ld	xiy, (xsp)                              ; FCA0A0  ld XIY,(XSP)
 	ldw	bc, 4                                  ; FCA0A2  ld BC,0x0004
-	extpfx2 0x95, 0x11                         ; FCA0A5  ldirw
+	ldirw                         ; FCA0A5  ldirw
 	pop	xix                                    ; FCA0A7  pop XIX
 	ld	xiy, (xsp)                              ; FCA0A8  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FCA0AA  ld XIX,(XIZ+0xf0)
@@ -2589,7 +2589,7 @@ Double_Abs:
 	ld	(xiy), xix                              ; FCA0B3  ld (XIY),XIX
 	pop	xiy                                    ; FCA0B5  pop XIY
 	pop	xix                                    ; FCA0B6  pop XIX
-	unlk32 xiz                                 ; FCA0B7  unlk XIZ
+	unlk	xiz                                 ; FCA0B7  unlk XIZ
 	ret                                        ; FCA0B9  ret
 
 ; ==============================================================================
@@ -2820,7 +2820,7 @@ Shift32_Left__FCA11E:
 ;          2 but which is which was not traced here.
 ; --------------------------------------------------------------------------
 Double_Compare:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FCA121  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FCA121  link XIZ,0xfff6
 	push	xhl                                   ; FCA125  push XHL
 	push	xde                                   ; FCA126  push XDE
 	push	xix                                   ; FCA127  push XIX
@@ -2887,7 +2887,7 @@ Double_Compare__FCA1AE:
 	pop	xix                                    ; FCA1AE  pop XIX
 	pop	xde                                    ; FCA1AF  pop XDE
 	pop	xhl                                    ; FCA1B0  pop XHL
-	unlk32 xiz                                 ; FCA1B1  unlk XIZ
+	unlk	xiz                                 ; FCA1B1  unlk XIZ
 	retd	16                                    ; FCA1B3  retd 0x0010
 ; --------------------------------------------------------------------------
 ; Double_Negate -- flip a double's sign, except for zero.
@@ -2908,7 +2908,7 @@ Double_Compare__FCA1AE:
 ;          out through XIY, which is the module's 64-bit return convention.
 ; --------------------------------------------------------------------------
 Double_Negate:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCA1B6  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCA1B6  link XIZ,0x0000
 	push	xix                                   ; FCA1BA  push XIX
 	push	xiy                                   ; FCA1BB  push XIY
 	ld	xbc, (xiz+12)                           ; FCA1BC  ld XBC,(XIZ+0x0c)
@@ -2918,7 +2918,7 @@ Double_Negate:
 	call	Double_Classify                              ; FCA1C4  call 0xfca1e5
 	cp	wa, 0:i3                                  ; FCA1C8  cp WA,0
 	jr z, Double_Negate__FCA1D1                ; FCA1CA  jr Z,0xfca1d1
-	extpfx5 0x9E, 0x0E, 0x3D, 0x00, 0x80       ; FCA1CC  xor (XIZ+0x0e),0x8000
+	xorw	(xiz+14), 0x8000       ; FCA1CC  xor (XIZ+0x0e),0x8000
 Double_Negate__FCA1D1:
 	ld	xiy, (xsp)                              ; FCA1D1  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FCA1D3  ld XIX,(XIZ+0x08)
@@ -2927,7 +2927,7 @@ Double_Negate__FCA1D1:
 	ld	(xiy), xix                              ; FCA1DC  ld (XIY),XIX
 	pop	xiy                                    ; FCA1DE  pop XIY
 	pop	xix                                    ; FCA1DF  pop XIX
-	unlk32 xiz                                 ; FCA1E0  unlk XIZ
+	unlk	xiz                                 ; FCA1E0  unlk XIZ
 	retd	8                                     ; FCA1E2  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Double_Classify -- is this double zero, and if not, what sign?
@@ -2949,7 +2949,7 @@ Double_Negate__FCA1D1:
 ;          test against zero.
 ; --------------------------------------------------------------------------
 Double_Classify:
-	link32 0xEE, 0x0C, 0xFA, 0xFF              ; FCA1E5  link XIZ,0xfffa
+	link	xiz, 0xfffa              ; FCA1E5  link XIZ,0xfffa
 	push	xde                                   ; FCA1E9  push XDE
 	push	xix                                   ; FCA1EA  push XIX
 	ld	xix, (xiz+12)                           ; FCA1EB  ld XIX,(XIZ+0x0c)
@@ -3000,7 +3000,7 @@ Double_Classify__FCA249:
 Double_Classify__FCA24B:
 	pop	xix                                    ; FCA24B  pop XIX
 	pop	xde                                    ; FCA24C  pop XDE
-	unlk32 xiz                                 ; FCA24D  unlk XIZ
+	unlk	xiz                                 ; FCA24D  unlk XIZ
 	retd	8                                     ; FCA24F  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Double_Multiply -- a * b, both doubles.
@@ -3027,13 +3027,13 @@ Double_Classify__FCA24B:
 ;          `cp IX,0x07FF / jrl GT`, 0x7FF being the reserved double exponent.
 ; --------------------------------------------------------------------------
 Double_Multiply:
-	link32 0xEE, 0x0C, 0x68, 0xFF              ; FCA252  link XIZ,0xff68
+	link	xiz, 0xff68              ; FCA252  link XIZ,0xff68
 	pushw	de                                   ; FCA256  push DE
 	push	xhl                                   ; FCA257  push XHL
 	push	xix                                   ; FCA258  push XIX
 	push	xiy                                   ; FCA259  push XIY
 	ld	wa, (xiz+22)                            ; FCA25A  ld WA,(XIZ+0x16)
-	extpfx3 0x9E, 0x0E, 0xD0                   ; FCA25D  xor WA,(XIZ+0x0e)
+	xor	wa, (xiz+14)                   ; FCA25D  xor WA,(XIZ+0x0e)
 	and	wa, 0x8000                             ; FCA260  and WA,0x8000
 	ld	qix, wa                                 ; FCA264  ld QIX,WA
 	ld	ix, (xiz+22)                            ; FCA267  ld IX,(XIZ+0x16)
@@ -3061,83 +3061,83 @@ Double_Multiply:
 	cp	ix, 0x7FF                               ; FCA2AC  cp IX,0x07ff
 	jrl gt, Double_Multiply__FCA3A9            ; FCA2B0  jrl GT,0xfca3a9
 	ld	iy, (xiz+16)                            ; FCA2B3  ld IY,(XIZ+0x10)
-	extpfx3 0x9E, 0x08, 0x45                   ; FCA2B6  mul XIY,(XIZ+0x08)
+	mul	xiy, (xiz+8)                   ; FCA2B6  mul XIY,(XIZ+0x08)
 	ld	bc, qiy                                 ; FCA2B9  ld BC,QIY
 	ldw	wa, 0                                  ; FCA2BC  ld WA,0x0000
 	ldw	hl, 0                                  ; FCA2BF  ld HL,0x0000
 	ld	iy, (xiz+18)                            ; FCA2C2  ld IY,(XIZ+0x12)
-	extpfx3 0x9E, 0x08, 0x45                   ; FCA2C5  mul XIY,(XIZ+0x08)
+	mul	xiy, (xiz+8)                   ; FCA2C5  mul XIY,(XIZ+0x08)
 	add	bc, iy                                 ; FCA2C8  add BC,IY
 	adc	wa, qiy                                ; FCA2CA  adc WA,QIY
 	adc	hl, hl                                 ; FCA2CD  adc HL,HL
 	ld	iy, (xiz+16)                            ; FCA2CF  ld IY,(XIZ+0x10)
-	extpfx3 0x9E, 0x0A, 0x45                   ; FCA2D2  mul XIY,(XIZ+0x0a)
+	mul	xiy, (xiz+10)                   ; FCA2D2  mul XIY,(XIZ+0x0a)
 	add	bc, iy                                 ; FCA2D5  add BC,IY
 	adc	wa, qiy                                ; FCA2D7  adc WA,QIY
 	adc	hl, 0                                  ; FCA2DA  adc HL,0x0000
 	ld	iy, (xiz+18)                            ; FCA2DE  ld IY,(XIZ+0x12)
-	extpfx3 0x9E, 0x0A, 0x45                   ; FCA2E1  mul XIY,(XIZ+0x0a)
+	mul	xiy, (xiz+10)                   ; FCA2E1  mul XIY,(XIZ+0x0a)
 	add	wa, iy                                 ; FCA2E4  add WA,IY
 	adc	hl, qiy                                ; FCA2E6  adc HL,QIY
 	ldw	de, 0                                  ; FCA2E9  ld DE,0x0000
 	adc	de, de                                 ; FCA2EC  adc DE,DE
 	ld	iy, (xiz+16)                            ; FCA2EE  ld IY,(XIZ+0x10)
-	extpfx3 0x9E, 0x0C, 0x45                   ; FCA2F1  mul XIY,(XIZ+0x0c)
+	mul	xiy, (xiz+12)                   ; FCA2F1  mul XIY,(XIZ+0x0c)
 	add	wa, iy                                 ; FCA2F4  add WA,IY
 	adc	hl, qiy                                ; FCA2F6  adc HL,QIY
 	adc	de, 0                                  ; FCA2F9  adc DE,0x0000
 	ld	iy, (xiz+20)                            ; FCA2FD  ld IY,(XIZ+0x14)
-	extpfx3 0x9E, 0x08, 0x45                   ; FCA300  mul XIY,(XIZ+0x08)
+	mul	xiy, (xiz+8)                   ; FCA300  mul XIY,(XIZ+0x08)
 	add	wa, iy                                 ; FCA303  add WA,IY
 	adc	hl, qiy                                ; FCA305  adc HL,QIY
 	adc	de, 0                                  ; FCA308  adc DE,0x0000
 	ld	iy, (xiz+22)                            ; FCA30C  ld IY,(XIZ+0x16)
-	extpfx3 0x9E, 0x08, 0x45                   ; FCA30F  mul XIY,(XIZ+0x08)
+	mul	xiy, (xiz+8)                   ; FCA30F  mul XIY,(XIZ+0x08)
 	add	hl, iy                                 ; FCA312  add HL,IY
 	adc	de, qiy                                ; FCA314  adc DE,QIY
 	ldw	bc, 0                                  ; FCA317  ld BC,0x0000
 	adc	bc, bc                                 ; FCA31A  adc BC,BC
 	ld	iy, (xiz+20)                            ; FCA31C  ld IY,(XIZ+0x14)
-	extpfx3 0x9E, 0x0A, 0x45                   ; FCA31F  mul XIY,(XIZ+0x0a)
+	mul	xiy, (xiz+10)                   ; FCA31F  mul XIY,(XIZ+0x0a)
 	add	hl, iy                                 ; FCA322  add HL,IY
 	adc	de, qiy                                ; FCA324  adc DE,QIY
 	adc	bc, 0                                  ; FCA327  adc BC,0x0000
 	ld	iy, (xiz+18)                            ; FCA32B  ld IY,(XIZ+0x12)
-	extpfx3 0x9E, 0x0C, 0x45                   ; FCA32E  mul XIY,(XIZ+0x0c)
+	mul	xiy, (xiz+12)                   ; FCA32E  mul XIY,(XIZ+0x0c)
 	add	hl, iy                                 ; FCA331  add HL,IY
 	adc	de, qiy                                ; FCA333  adc DE,QIY
 	adc	bc, 0                                  ; FCA336  adc BC,0x0000
 	ld	iy, (xiz+16)                            ; FCA33A  ld IY,(XIZ+0x10)
-	extpfx3 0x9E, 0x0E, 0x45                   ; FCA33D  mul XIY,(XIZ+0x0e)
+	mul	xiy, (xiz+14)                   ; FCA33D  mul XIY,(XIZ+0x0e)
 	add	hl, iy                                 ; FCA340  add HL,IY
 	adc	de, qiy                                ; FCA342  adc DE,QIY
 	adc	bc, 0                                  ; FCA345  adc BC,0x0000
 	ld	iy, (xiz+18)                            ; FCA349  ld IY,(XIZ+0x12)
-	extpfx3 0x9E, 0x0E, 0x45                   ; FCA34C  mul XIY,(XIZ+0x0e)
+	mul	xiy, (xiz+14)                   ; FCA34C  mul XIY,(XIZ+0x0e)
 	add	de, iy                                 ; FCA34F  add DE,IY
 	adc	bc, qiy                                ; FCA351  adc BC,QIY
 	ldw	wa, 0                                  ; FCA354  ld WA,0x0000
 	adc	wa, wa                                 ; FCA357  adc WA,WA
 	ld	iy, (xiz+22)                            ; FCA359  ld IY,(XIZ+0x16)
-	extpfx3 0x9E, 0x0A, 0x45                   ; FCA35C  mul XIY,(XIZ+0x0a)
+	mul	xiy, (xiz+10)                   ; FCA35C  mul XIY,(XIZ+0x0a)
 	add	de, iy                                 ; FCA35F  add DE,IY
 	adc	bc, qiy                                ; FCA361  adc BC,QIY
 	adc	wa, 0                                  ; FCA364  adc WA,0x0000
 	ld	iy, (xiz+20)                            ; FCA368  ld IY,(XIZ+0x14)
-	extpfx3 0x9E, 0x0C, 0x45                   ; FCA36B  mul XIY,(XIZ+0x0c)
+	mul	xiy, (xiz+12)                   ; FCA36B  mul XIY,(XIZ+0x0c)
 	add	de, iy                                 ; FCA36E  add DE,IY
 	adc	bc, qiy                                ; FCA370  adc BC,QIY
 	adc	wa, 0                                  ; FCA373  adc WA,0x0000
 	ld	iy, (xiz+22)                            ; FCA377  ld IY,(XIZ+0x16)
-	extpfx3 0x9E, 0x0C, 0x45                   ; FCA37A  mul XIY,(XIZ+0x0c)
+	mul	xiy, (xiz+12)                   ; FCA37A  mul XIY,(XIZ+0x0c)
 	add	bc, iy                                 ; FCA37D  add BC,IY
 	adc	wa, qiy                                ; FCA37F  adc WA,QIY
 	ld	iy, (xiz+20)                            ; FCA382  ld IY,(XIZ+0x14)
-	extpfx3 0x9E, 0x0E, 0x45                   ; FCA385  mul XIY,(XIZ+0x0e)
+	mul	xiy, (xiz+14)                   ; FCA385  mul XIY,(XIZ+0x0e)
 	add	bc, iy                                 ; FCA388  add BC,IY
 	adc	wa, qiy                                ; FCA38A  adc WA,QIY
 	ld	iy, (xiz+22)                            ; FCA38D  ld IY,(XIZ+0x16)
-	extpfx3 0x9E, 0x0E, 0x45                   ; FCA390  mul XIY,(XIZ+0x0e)
+	mul	xiy, (xiz+14)                   ; FCA390  mul XIY,(XIZ+0x0e)
 	add	wa, iy                                 ; FCA393  add WA,IY
 	ld	qbc, wa                                 ; FCA395  ld QBC,WA
 	ld	qhl, de                                 ; FCA398  ld QHL,DE
@@ -3190,7 +3190,7 @@ Double_Multiply__FCA40F:
 	pop	xix                                    ; FCA417  pop XIX
 	pop	xhl                                    ; FCA418  pop XHL
 	popw	de                                    ; FCA419  pop DE
-	unlk32 xiz                                 ; FCA41A  unlk XIZ
+	unlk	xiz                                 ; FCA41A  unlk XIZ
 	retd	16                                    ; FCA41C  retd 0x0010
 ; --------------------------------------------------------------------------
 ; Double_Add -- a + b, both doubles.
@@ -3214,7 +3214,7 @@ Double_Multiply__FCA40F:
 ;          smaller operand before adding -- the classic add/subtract kernel.
 ; --------------------------------------------------------------------------
 Double_Add:
-	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FCA41F  link XIZ,0xffe4
+	link	xiz, 0xffe4              ; FCA41F  link XIZ,0xffe4
 	push	xhl                                   ; FCA423  push XHL
 	push	xde                                   ; FCA424  push XDE
 	push	xix                                   ; FCA425  push XIX
@@ -3417,7 +3417,7 @@ Double_Add__FCA616:
 	pop	xix                                    ; FCA61E  pop XIX
 	pop	xde                                    ; FCA61F  pop XDE
 	pop	xhl                                    ; FCA620  pop XHL
-	unlk32 xiz                                 ; FCA621  unlk XIZ
+	unlk	xiz                                 ; FCA621  unlk XIZ
 	retd	16                                    ; FCA623  retd 0x0010
 ; --------------------------------------------------------------------------
 ; Double_Subtract -- a - b, implemented as a + (-b).
@@ -3437,7 +3437,7 @@ Double_Add__FCA616:
 ;          its own XIY.
 ; --------------------------------------------------------------------------
 Double_Subtract:
-	link32 0xEE, 0x0C, 0xF0, 0xFF              ; FCA626  link XIZ,0xfff0
+	link	xiz, 0xfff0              ; FCA626  link XIZ,0xfff0
 	push	xix                                   ; FCA62A  push XIX
 	push	xiy                                   ; FCA62B  push XIY
 	ld	xix, (xiz+20)                           ; FCA62C  ld XIX,(XIZ+0x14)
@@ -3460,7 +3460,7 @@ Double_Subtract:
 	ld	(xiy), xix                              ; FCA658  ld (XIY),XIX
 	pop	xiy                                    ; FCA65A  pop XIY
 	pop	xix                                    ; FCA65B  pop XIX
-	unlk32 xiz                                 ; FCA65C  unlk XIZ
+	unlk	xiz                                 ; FCA65C  unlk XIZ
 	retd	16                                    ; FCA65E  retd 0x0010
 ; --------------------------------------------------------------------------
 ; Double_ToInt32 -- truncate a double to a 32-bit integer.
@@ -3482,7 +3482,7 @@ Double_Subtract:
 ;          0x80000000, i.e. on the 32-bit result.
 ; --------------------------------------------------------------------------
 Double_ToInt32:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FCA661  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FCA661  link XIZ,0xfff6
 	pushw	hl                                   ; FCA665  push HL
 	pushw	de                                   ; FCA666  push DE
 	push	xix                                   ; FCA667  push XIX
@@ -3553,7 +3553,7 @@ Double_ToInt32__FCA6F5:
 	pop	xix                                    ; FCA6F5  pop XIX
 	popw	de                                    ; FCA6F6  pop DE
 	popw	hl                                    ; FCA6F7  pop HL
-	unlk32 xiz                                 ; FCA6F8  unlk XIZ
+	unlk	xiz                                 ; FCA6F8  unlk XIZ
 	retd	8                                     ; FCA6FA  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Int32_ToDouble -- signed 32-bit integer to double.
@@ -3573,7 +3573,7 @@ Double_ToInt32__FCA6F5:
 ;          same way.
 ; --------------------------------------------------------------------------
 Int32_ToDouble:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FCA6FD  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FCA6FD  link XIZ,0xfff8
 	push	xix                                   ; FCA701  push XIX
 	push	xiy                                   ; FCA702  push XIY
 	ld	xiy, (xiz+8)                            ; FCA703  ld XIY,(XIZ+0x08)
@@ -3590,7 +3590,7 @@ Int32_ToDouble__FCA71D:
 	call	UInt32_ToDouble                              ; FCA721  call 0xfca746
 	cp	xix, 0                                  ; FCA725  cp XIX,0x00000000
 	jr z, Int32_ToDouble__FCA732               ; FCA72B  jr Z,0xfca732
-	extpfx5 0x9E, 0xFE, 0x3D, 0x00, 0x80       ; FCA72D  xor (XIZ+0xfe),0x8000
+	xorw	(xiz-2), 0x8000       ; FCA72D  xor (XIZ+0xfe),0x8000
 Int32_ToDouble__FCA732:
 	ld	xiy, (xsp)                              ; FCA732  ld XIY,(XSP)
 	ld	xix, (xiz-8)                            ; FCA734  ld XIX,(XIZ+0xf8)
@@ -3599,7 +3599,7 @@ Int32_ToDouble__FCA732:
 	ld	(xiy), xix                              ; FCA73D  ld (XIY),XIX
 	pop	xiy                                    ; FCA73F  pop XIY
 	pop	xix                                    ; FCA740  pop XIX
-	unlk32 xiz                                 ; FCA741  unlk XIZ
+	unlk	xiz                                 ; FCA741  unlk XIZ
 	retd	4                                     ; FCA743  retd 0x0004
 ; --------------------------------------------------------------------------
 ; UInt32_ToDouble -- unsigned 32-bit integer to double.
@@ -3615,7 +3615,7 @@ Int32_ToDouble__FCA732:
 ;          A zero input short-circuits to a zero result (`cp XIX,0 / jr Z`).
 ; --------------------------------------------------------------------------
 UInt32_ToDouble:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FCA746  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FCA746  link XIZ,0xfff4
 	push	xde                                   ; FCA74A  push XDE
 	push	xix                                   ; FCA74B  push XIX
 	push	xiy                                   ; FCA74C  push XIY
@@ -3655,7 +3655,7 @@ UInt32_ToDouble__FCA796:
 	pop	xiy                                    ; FCA79D  pop XIY
 	pop	xix                                    ; FCA79E  pop XIX
 	pop	xde                                    ; FCA79F  pop XDE
-	unlk32 xiz                                 ; FCA7A0  unlk XIZ
+	unlk	xiz                                 ; FCA7A0  unlk XIZ
 	retd	4                                     ; FCA7A2  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Double_Divide -- a / b, both doubles.
@@ -3677,21 +3677,21 @@ UInt32_ToDouble__FCA796:
 ;          restoring divider needs to keep 53 bits of quotient.
 ; --------------------------------------------------------------------------
 Double_Divide:
-	link32 0xEE, 0x0C, 0xDA, 0xFF              ; FCA7A5  link XIZ,0xffda
+	link	xiz, 0xffda              ; FCA7A5  link XIZ,0xffda
 	push	xhl                                   ; FCA7A9  push XHL
 	push	xde                                   ; FCA7AA  push XDE
 	push	xix                                   ; FCA7AB  push XIX
 	push	xiy                                   ; FCA7AC  push XIY
 	ld	bc, (xiz+14)                            ; FCA7AD  ld BC,(XIZ+0x0e)
-	extpfx3 0x9E, 0x16, 0xD1                   ; FCA7B0  xor BC,(XIZ+0x16)
+	xor	bc, (xiz+22)                   ; FCA7B0  xor BC,(XIZ+0x16)
 	and	bc, 0x8000                             ; FCA7B3  and BC,0x8000
 	ld	qbc, bc                                 ; FCA7B7  ld QBC,BC
-	extpfx5 0x9E, 0x0E, 0x3C, 0xFF, 0x7F       ; FCA7BA  and (XIZ+0x0e),0x7fff
-	extpfx5 0x9E, 0x16, 0x3C, 0xFF, 0x7F       ; FCA7BF  and (XIZ+0x16),0x7fff
+	andw	(xiz+14), 0x7fff       ; FCA7BA  and (XIZ+0x0e),0x7fff
+	andw	(xiz+22), 0x7fff       ; FCA7BF  and (XIZ+0x16),0x7fff
 	ld	wa, (xiz+14)                            ; FCA7C4  ld WA,(XIZ+0x0e)
 	and	wa, 0x7FF0                             ; FCA7C7  and WA,0x7ff0
 	xor	(xiz+14), wa                           ; FCA7CB  xor (XIZ+0x0e),WA
-	extpfx5 0x9E, 0x0E, 0x3E, 0x10, 0x00       ; FCA7CE  or (XIZ+0x0e),0x0010
+	orw	(xiz+14), 0x0010       ; FCA7CE  or (XIZ+0x0e),0x0010
 	sra	wa, 4                                  ; FCA7D3  sra 0x04,WA
 	cp	wa, 0:i3                                  ; FCA7D6  cp WA,0
 	jrl z, Double_Divide__FCA89F               ; FCA7D8  jrl Z,0xfca89f
@@ -3700,7 +3700,7 @@ Double_Divide:
 	ld	de, (xiz+22)                            ; FCA7E1  ld DE,(XIZ+0x16)
 	and	de, 0x7FF0                             ; FCA7E4  and DE,0x7ff0
 	xor	(xiz+22), de                           ; FCA7E8  xor (XIZ+0x16),DE
-	extpfx5 0x9E, 0x16, 0x3E, 0x10, 0x00       ; FCA7EB  or (XIZ+0x16),0x0010
+	orw	(xiz+22), 0x0010       ; FCA7EB  or (XIZ+0x16),0x0010
 	sra	de, 4                                  ; FCA7F0  sra 0x04,DE
 	cp	de, 0:i3                                  ; FCA7F3  cp DE,0
 	jr z, Double_Divide__FCA800                ; FCA7F5  jr Z,0xfca800
@@ -3725,23 +3725,23 @@ Double_Divide__FCA822:
 	sla	xiy, 1                                 ; FCA822  sla 0x01,XIY
 	rl	xix                                     ; FCA825  rl 0x01,XIX
 	ld	bc, qhl                                 ; FCA828  ld BC,QHL
-	extpfx3 0x9E, 0x16, 0xF1                   ; FCA82B  cp BC,(XIZ+0x16)
+	cp	bc, (xiz+22)                   ; FCA82B  cp BC,(XIZ+0x16)
 	jr ugt, Double_Divide__FCA848              ; FCA82E  jr UGT,0xfca848
 	jr c, Double_Divide__FCA85A                ; FCA830  jr C,0xfca85a
-	extpfx3 0x9E, 0x14, 0xF3                   ; FCA832  cp HL,(XIZ+0x14)
+	cp	hl, (xiz+20)                   ; FCA832  cp HL,(XIZ+0x14)
 	jr ugt, Double_Divide__FCA848              ; FCA835  jr UGT,0xfca848
 	jr c, Double_Divide__FCA85A                ; FCA837  jr C,0xfca85a
 	ld	bc, qde                                 ; FCA839  ld BC,QDE
-	extpfx3 0x9E, 0x12, 0xF1                   ; FCA83C  cp BC,(XIZ+0x12)
+	cp	bc, (xiz+18)                   ; FCA83C  cp BC,(XIZ+0x12)
 	jr ugt, Double_Divide__FCA848              ; FCA83F  jr UGT,0xfca848
 	jr c, Double_Divide__FCA85A                ; FCA841  jr C,0xfca85a
-	extpfx3 0x9E, 0x10, 0xF2                   ; FCA843  cp DE,(XIZ+0x10)
+	cp	de, (xiz+16)                   ; FCA843  cp DE,(XIZ+0x10)
 	jr c, Double_Divide__FCA85A                ; FCA846  jr C,0xfca85a
 Double_Divide__FCA848:
 	add	xiy, 1                                 ; FCA848  add XIY,0x00000001
 	adc	xix, 0                                 ; FCA84E  adc XIX,0x00000000
-	extpfx3 0xAE, 0x10, 0xA2                   ; FCA854  sub XDE,(XIZ+0x10)
-	extpfx3 0xAE, 0x14, 0xB3                   ; FCA857  sbc XHL,(XIZ+0x14)
+	sub	xde, (xiz+16)                   ; FCA854  sub XDE,(XIZ+0x10)
+	sbc	xhl, (xiz+20)                   ; FCA857  sbc XHL,(XIZ+0x14)
 Double_Divide__FCA85A:
 	sla	xde, 1                                 ; FCA85A  sla 0x01,XDE
 	rl	xhl                                     ; FCA85D  rl 0x01,XHL
@@ -3814,7 +3814,7 @@ Double_Divide__FCA8F3:
 	pop	xix                                    ; FCA8FB  pop XIX
 	pop	xde                                    ; FCA8FC  pop XDE
 	pop	xhl                                    ; FCA8FD  pop XHL
-	unlk32 xiz                                 ; FCA8FE  unlk XIZ
+	unlk	xiz                                 ; FCA8FE  unlk XIZ
 	retd	16                                    ; FCA900  retd 0x0010
 ; --------------------------------------------------------------------------
 ; Double_ToInt16 -- truncate a double to a 16-bit integer.
@@ -3828,7 +3828,7 @@ Double_Divide__FCA8F3:
 ;          widths.
 ; --------------------------------------------------------------------------
 Double_ToInt16:
-	link32 0xEE, 0x0C, 0xF6, 0xFF              ; FCA903  link XIZ,0xfff6
+	link	xiz, 0xfff6              ; FCA903  link XIZ,0xfff6
 	pushw	hl                                   ; FCA907  push HL
 	pushw	de                                   ; FCA908  push DE
 	push	xix                                   ; FCA909  push XIX
@@ -3898,7 +3898,7 @@ Double_ToInt16__FCA98F:
 	pop	xix                                    ; FCA98F  pop XIX
 	popw	de                                    ; FCA990  pop DE
 	popw	hl                                    ; FCA991  pop HL
-	unlk32 xiz                                 ; FCA992  unlk XIZ
+	unlk	xiz                                 ; FCA992  unlk XIZ
 	retd	8                                     ; FCA994  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Int16_ToDouble -- signed 16-bit integer to double.
@@ -3915,7 +3915,7 @@ Double_ToInt16__FCA98F:
 ;          UInt16_ToDouble, then `xor (XIZ-2),0x8000`.
 ; --------------------------------------------------------------------------
 Int16_ToDouble:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FCA997  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FCA997  link XIZ,0xfff8
 	pushw	de                                   ; FCA99B  push DE
 	push	xix                                   ; FCA99C  push XIX
 	push	xiy                                   ; FCA99D  push XIY
@@ -3930,7 +3930,7 @@ Int16_ToDouble__FCA9A9:
 	call	UInt16_ToDouble                              ; FCA9AD  call 0xfca9cf
 	cp	de, 0:i3                                  ; FCA9B1  cp DE,0
 	jr ge, Int16_ToDouble__FCA9BA              ; FCA9B3  jr GE,0xfca9ba
-	extpfx5 0x9E, 0xFE, 0x3D, 0x00, 0x80       ; FCA9B5  xor (XIZ+0xfe),0x8000
+	xorw	(xiz-2), 0x8000       ; FCA9B5  xor (XIZ+0xfe),0x8000
 Int16_ToDouble__FCA9BA:
 	ld	xiy, (xsp)                              ; FCA9BA  ld XIY,(XSP)
 	ld	xix, (xiz-8)                            ; FCA9BC  ld XIX,(XIZ+0xf8)
@@ -3940,7 +3940,7 @@ Int16_ToDouble__FCA9BA:
 	pop	xiy                                    ; FCA9C7  pop XIY
 	pop	xix                                    ; FCA9C8  pop XIX
 	popw	de                                    ; FCA9C9  pop DE
-	unlk32 xiz                                 ; FCA9CA  unlk XIZ
+	unlk	xiz                                 ; FCA9CA  unlk XIZ
 	retd	2                                     ; FCA9CC  retd 0x0002
 ; --------------------------------------------------------------------------
 ; UInt16_ToDouble -- unsigned 16-bit integer to double.
@@ -3952,7 +3952,7 @@ Int16_ToDouble__FCA9BA:
 ;          as UInt32_ToDouble.  Zero short-circuits.
 ; --------------------------------------------------------------------------
 UInt16_ToDouble:
-	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FCA9CF  link XIZ,0xfff4
+	link	xiz, 0xfff4              ; FCA9CF  link XIZ,0xfff4
 	push	xde                                   ; FCA9D3  push XDE
 	push	xix                                   ; FCA9D4  push XIX
 	push	xiy                                   ; FCA9D5  push XIY
@@ -3994,7 +3994,7 @@ UInt16_ToDouble__FCAA20:
 	pop	xiy                                    ; FCAA27  pop XIY
 	pop	xix                                    ; FCAA28  pop XIX
 	pop	xde                                    ; FCAA29  pop XDE
-	unlk32 xiz                                 ; FCAA2A  unlk XIZ
+	unlk	xiz                                 ; FCAA2A  unlk XIZ
 	retd	2                                     ; FCAA2C  retd 0x0002
 ; --------------------------------------------------------------------------
 ; Shift16_ArithRight -- 16-bit value >> count, sign-filling.
@@ -4045,7 +4045,7 @@ Shift16_ArithRight__FCAA4B:
 ;          module mixes them except Double_ToFloat32, the other direction.
 ; --------------------------------------------------------------------------
 Float32_ToDouble:
-	link32 0xEE, 0x0C, 0xEA, 0xFF              ; FCAA50  link XIZ,0xffea
+	link	xiz, 0xffea              ; FCAA50  link XIZ,0xffea
 	pushw	hl                                   ; FCAA54  push HL
 	push	xde                                   ; FCAA55  push XDE
 	push	xix                                   ; FCAA56  push XIX
@@ -4118,7 +4118,7 @@ Float32_ToDouble__FCAAF6:
 	pop	xix                                    ; FCAAFE  pop XIX
 	pop	xde                                    ; FCAAFF  pop XDE
 	popw	hl                                    ; FCAB00  pop HL
-	unlk32 xiz                                 ; FCAB01  unlk XIZ
+	unlk	xiz                                 ; FCAB01  unlk XIZ
 	retd	4                                     ; FCAB03  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Shift32_ArithRight -- 32-bit value >> count, sign-filling.
@@ -4171,7 +4171,7 @@ Shift32_ArithRight__FCAB26:
 ;          re-applied to the 32-bit result (0x80000000).
 ; --------------------------------------------------------------------------
 Float32_ToInt32:
-	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FCAB29  link XIZ,0xffec
+	link	xiz, 0xffec              ; FCAB29  link XIZ,0xffec
 	pushw	hl                                   ; FCAB2D  push HL
 	pushw	de                                   ; FCAB2E  push DE
 	push	xix                                   ; FCAB2F  push XIX
@@ -4242,7 +4242,7 @@ Float32_ToInt32__FCABBE:
 	pop	xix                                    ; FCABBE  pop XIX
 	popw	de                                    ; FCABBF  pop DE
 	popw	hl                                    ; FCABC0  pop HL
-	unlk32 xiz                                 ; FCABC1  unlk XIZ
+	unlk	xiz                                 ; FCABC1  unlk XIZ
 	retd	4                                     ; FCABC3  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Int32_ToFloat32 -- signed 32-bit integer to single.
@@ -4259,7 +4259,7 @@ Float32_ToInt32__FCABBE:
 ;          call UInt32_ToFloat32, then `or XIY,0x80000000` to set the sign.
 ; --------------------------------------------------------------------------
 Int32_ToFloat32:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCABC6  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FCABC6  link XIZ,0xfffc
 	push	xix                                   ; FCABCA  push XIX
 	ld	xiy, (xiz+8)                            ; FCABCB  ld XIY,(XIZ+0x08)
 	ld	xix, xiy                                ; FCABCE  ld XIX,XIY
@@ -4279,7 +4279,7 @@ Int32_ToFloat32__FCABF4:
 	or	xiy, 0x80000000                         ; FCABF4  or XIY,0x80000000
 Int32_ToFloat32__FCABFA:
 	pop	xix                                    ; FCABFA  pop XIX
-	unlk32 xiz                                 ; FCABFB  unlk XIZ
+	unlk	xiz                                 ; FCABFB  unlk XIZ
 	retd	4                                     ; FCABFD  retd 0x0004
 ; --------------------------------------------------------------------------
 ; UInt32_ToFloat32 -- unsigned 32-bit integer to single.
@@ -4293,7 +4293,7 @@ Int32_ToFloat32__FCABFA:
 ;          single precision.  Zero short-circuits to zero.
 ; --------------------------------------------------------------------------
 UInt32_ToFloat32:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCAC00  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FCAC00  link XIZ,0xfff2
 	pushw	de                                   ; FCAC04  push DE
 	push	xix                                   ; FCAC05  push XIX
 	ld	xiy, (xiz+8)                            ; FCAC06  ld XIY,(XIZ+0x08)
@@ -4328,7 +4328,7 @@ UInt32_ToFloat32__FCAC3C:
 UInt32_ToFloat32__FCAC4B:
 	pop	xix                                    ; FCAC4B  pop XIX
 	popw	de                                    ; FCAC4C  pop DE
-	unlk32 xiz                                 ; FCAC4D  unlk XIZ
+	unlk	xiz                                 ; FCAC4D  unlk XIZ
 	retd	4                                     ; FCAC4F  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Float32_Add -- a + b, both singles.
@@ -4351,7 +4351,7 @@ UInt32_ToFloat32__FCAC4B:
 ;          cannot affect the sum.
 ; --------------------------------------------------------------------------
 Float32_Add:
-	link32 0xEE, 0x0C, 0xD6, 0xFF              ; FCAC52  link XIZ,0xffd6
+	link	xiz, 0xffd6              ; FCAC52  link XIZ,0xffd6
 	push	xhl                                   ; FCAC56  push XHL
 	push	xde                                   ; FCAC57  push XDE
 	push	xix                                   ; FCAC58  push XIX
@@ -4514,7 +4514,7 @@ Float32_Add__FCADCE:
 	pop	xix                                    ; FCADCE  pop XIX
 	pop	xde                                    ; FCADCF  pop XDE
 	pop	xhl                                    ; FCADD0  pop XHL
-	unlk32 xiz                                 ; FCADD1  unlk XIZ
+	unlk	xiz                                 ; FCADD1  unlk XIZ
 	retd	8                                     ; FCADD3  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Double_ToFloat32 -- narrow a double to a single.
@@ -4535,7 +4535,7 @@ Float32_Add__FCADCE:
 ;          So it reads one format's fields and writes the other's.
 ; --------------------------------------------------------------------------
 Double_ToFloat32:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCADD6  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FCADD6  link XIZ,0xfff2
 	pushw	hl                                   ; FCADDA  push HL
 	pushw	de                                   ; FCADDB  push DE
 	push	xix                                   ; FCADDC  push XIX
@@ -4593,7 +4593,7 @@ Double_ToFloat32__FCAE58:
 	pop	xix                                    ; FCAE58  pop XIX
 	popw	de                                    ; FCAE59  pop DE
 	popw	hl                                    ; FCAE5A  pop HL
-	unlk32 xiz                                 ; FCAE5B  unlk XIZ
+	unlk	xiz                                 ; FCAE5B  unlk XIZ
 	retd	8                                     ; FCAE5D  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Float32_Divide -- a / b, both singles.  ★ Also the machine's float MULTIPLY.
@@ -4618,7 +4618,7 @@ Double_ToFloat32__FCAE58:
 ;          FIRST slot is the numerator.
 ; --------------------------------------------------------------------------
 Float32_Divide:
-	link32 0xEE, 0x0C, 0xCA, 0xFF              ; FCAE60  link XIZ,0xffca
+	link	xiz, 0xffca              ; FCAE60  link XIZ,0xffca
 	push	xhl                                   ; FCAE64  push XHL
 	pushw	de                                   ; FCAE65  push DE
 	push	xix                                   ; FCAE66  push XIX
@@ -4739,7 +4739,7 @@ Float32_Divide__FCAF83:
 	pop	xix                                    ; FCAF83  pop XIX
 	popw	de                                    ; FCAF84  pop DE
 	pop	xhl                                    ; FCAF85  pop XHL
-	unlk32 xiz                                 ; FCAF86  unlk XIZ
+	unlk	xiz                                 ; FCAF86  unlk XIZ
 	retd	8                                     ; FCAF88  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Int16_ToFloat32 -- signed 16-bit integer to single.
@@ -4755,7 +4755,7 @@ Float32_Divide__FCAF83:
 ; Evidence: the wrapper shape, calling UInt16_ToFloat32 and setting 0x80000000.
 ; --------------------------------------------------------------------------
 Int16_ToFloat32:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCAF8B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCAF8B  link XIZ,0x0000
 	pushw	de                                   ; FCAF8F  push DE
 	push	xix                                   ; FCAF90  push XIX
 	ld	bc, (xiz+8)                             ; FCAF91  ld BC,(XIZ+0x08)
@@ -4774,7 +4774,7 @@ Int16_ToFloat32__FCAFA7:
 Int16_ToFloat32__FCAFAD:
 	pop	xix                                    ; FCAFAD  pop XIX
 	popw	de                                    ; FCAFAE  pop DE
-	unlk32 xiz                                 ; FCAFAF  unlk XIZ
+	unlk	xiz                                 ; FCAFAF  unlk XIZ
 	retd	2                                     ; FCAFB1  retd 0x0002
 ; --------------------------------------------------------------------------
 ; UInt16_ToFloat32 -- unsigned 16-bit integer to single.
@@ -4786,7 +4786,7 @@ Int16_ToFloat32__FCAFAD:
 ;          precision hidden bit with 0x0080.
 ; --------------------------------------------------------------------------
 UInt16_ToFloat32:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCAFB4  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FCAFB4  link XIZ,0xfff2
 	pushw	de                                   ; FCAFB8  push DE
 	push	xix                                   ; FCAFB9  push XIX
 	sub	xiy, xiy                               ; FCAFBA  sub XIY,XIY
@@ -4822,7 +4822,7 @@ UInt16_ToFloat32__FCAFEF:
 UInt16_ToFloat32__FCAFFE:
 	pop	xix                                    ; FCAFFE  pop XIX
 	popw	de                                    ; FCAFFF  pop DE
-	unlk32 xiz                                 ; FCB000  unlk XIZ
+	unlk	xiz                                 ; FCB000  unlk XIZ
 	retd	2                                     ; FCB002  retd 0x0002
 ; --------------------------------------------------------------------------
 ; Float32_Multiply -- a * b, computed as a / (1 / b).
@@ -4852,7 +4852,7 @@ UInt16_ToFloat32__FCAFFE:
 ;          nothing here proves it.
 ; --------------------------------------------------------------------------
 Float32_Multiply:
-	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FCB005  link XIZ,0xfffc
+	link	xiz, 0xfffc              ; FCB005  link XIZ,0xfffc
 	ld	xbc, (Float32_One:24)                     ; FCB009  ld XBC,(0xfcb4e6)
 	ld	(xiz-4), xbc                            ; FCB00E  ld (XIZ+0xfc),XBC
 	ld	xbc, (xiz+12)                           ; FCB011  ld XBC,(XIZ+0x0c)
@@ -4864,7 +4864,7 @@ Float32_Multiply:
 	ld	xbc, (xiz+8)                            ; FCB01E  ld XBC,(XIZ+0x08)
 	push	xbc                                   ; FCB021  push XBC
 	call	Float32_Divide                              ; FCB022  call 0xfcae60
-	unlk32 xiz                                 ; FCB026  unlk XIZ
+	unlk	xiz                                 ; FCB026  unlk XIZ
 	retd	8                                     ; FCB028  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Float32_Subtract -- a - b, as a + (-b).
@@ -4881,7 +4881,7 @@ Float32_Multiply:
 ;          `call Float32_Add` with both pushed unchanged.  Nine instructions.
 ; --------------------------------------------------------------------------
 Float32_Subtract:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB02B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCB02B  link XIZ,0x0000
 	ld	xiy, (xiz+12)                           ; FCB02F  ld XIY,(XIZ+0x0c)
 	ld	wa, qiy                                 ; FCB032  ld WA,QIY
 	xor	wa, 0x8000                             ; FCB035  xor WA,0x8000
@@ -4890,7 +4890,7 @@ Float32_Subtract:
 	ld	xiy, (xiz+8)                            ; FCB03D  ld XIY,(XIZ+0x08)
 	push	xiy                                   ; FCB040  push XIY
 	call	Float32_Add                              ; FCB041  call 0xfcac52
-	unlk32 xiz                                 ; FCB045  unlk XIZ
+	unlk	xiz                                 ; FCB045  unlk XIZ
 	retd	8                                     ; FCB047  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Float32_Negate -- flip a single's sign, except for zero.
@@ -4908,7 +4908,7 @@ Float32_Subtract:
 ;          instruction, as Double_Negate over Double_Classify.
 ; --------------------------------------------------------------------------
 Float32_Negate:
-	link32 0xEE, 0x0C, 0xF8, 0xFF              ; FCB04A  link XIZ,0xfff8
+	link	xiz, 0xfff8              ; FCB04A  link XIZ,0xfff8
 	push	xix                                   ; FCB04E  push XIX
 	lda	xix, (xiz-4)                           ; FCB04F  lda XIX,XIZ+0xfc
 	ld	xbc, (xiz+8)                            ; FCB052  ld XBC,(XIZ+0x08)
@@ -4919,12 +4919,12 @@ Float32_Negate:
 	call	Float32_Classify                              ; FCB05E  call 0xfcb075
 	cp	wa, 0:i3                                  ; FCB062  cp WA,0
 	jr z, Float32_Negate__FCB06B               ; FCB064  jr Z,0xfcb06b
-	extpfx5 0x9C, 0x02, 0x3D, 0x00, 0x80       ; FCB066  xor (XIX+0x02),0x8000
+	xorw	(xix+2), 0x8000       ; FCB066  xor (XIX+0x02),0x8000
 Float32_Negate__FCB06B:
 	ld	xbc, (xix)                              ; FCB06B  ld XBC,(XIX)
 	ld	xiy, xbc                                ; FCB06D  ld XIY,XBC
 	pop	xix                                    ; FCB06F  pop XIX
-	unlk32 xiz                                 ; FCB070  unlk XIZ
+	unlk	xiz                                 ; FCB070  unlk XIZ
 	retd	4                                     ; FCB072  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Float32_Classify -- is this single zero, and if not, what sign?
@@ -4936,7 +4936,7 @@ Float32_Negate__FCB06B:
 ;          float32 twin of Double_Classify, with 0x7F80 where that one has 0x7FF0.
 ; --------------------------------------------------------------------------
 Float32_Classify:
-	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FCB075  link XIZ,0xfff2
+	link	xiz, 0xfff2              ; FCB075  link XIZ,0xfff2
 	pushw	de                                   ; FCB079  push DE
 	push	xix                                   ; FCB07A  push XIX
 	sub	wa, wa                                 ; FCB07B  sub WA,WA
@@ -4981,7 +4981,7 @@ Float32_Classify__FCB0CA:
 Float32_Classify__FCB0CC:
 	pop	xix                                    ; FCB0CC  pop XIX
 	popw	de                                    ; FCB0CD  pop DE
-	unlk32 xiz                                 ; FCB0CE  unlk XIZ
+	unlk	xiz                                 ; FCB0CE  unlk XIZ
 	retd	4                                     ; FCB0D0  retd 0x0004
 ; --------------------------------------------------------------------------
 ; Multiply32_Signed -- signed 32 x 32 multiply, low 32 bits.
@@ -5004,7 +5004,7 @@ Float32_Classify__FCB0CC:
 ;          operands are signed.  Recorded as observed; nothing here explains it.
 ; --------------------------------------------------------------------------
 Multiply32_Signed:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB0D3  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCB0D3  link XIZ,0x0000
 	push	d                                     ; FCB0D7  push D
 	push	xix                                   ; FCB0D9  push XIX
 	ld	d, 0:opc                                   ; FCB0DA  ld D,0x00
@@ -5035,7 +5035,7 @@ Multiply32_Signed__FCB101:
 Multiply32_Signed__FCB113:
 	pop	xix                                    ; FCB113  pop XIX
 	pop	d                                      ; FCB114  pop D
-	unlk32 xiz                                 ; FCB116  unlk XIZ
+	unlk	xiz                                 ; FCB116  unlk XIZ
 	retd	8                                     ; FCB118  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Multiply32 -- 32 x 32 multiply, low 32 bits, out of three 16 x 16 products.
@@ -5055,21 +5055,21 @@ Multiply32_Signed__FCB113:
 ;          truncated to 32 bits.
 ; --------------------------------------------------------------------------
 Multiply32:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB11B  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCB11B  link XIZ,0x0000
 	push	xix                                   ; FCB11F  push XIX
 	ld	a, 16:opc                                  ; FCB120  ld A,0x10
 	ld	iy, (xiz+8)                             ; FCB122  ld IY,(XIZ+0x08)
 	ld	ix, (xiz+12)                            ; FCB125  ld IX,(XIZ+0x0c)
 	mul	xiy, ix                               ; FCB128  mul XIY,IX
-	extpfx3 0x9E, 0x0A, 0x44                   ; FCB12A  mul XIX,(XIZ+0x0a)
+	mul	xix, (xiz+10)                   ; FCB12A  mul XIX,(XIZ+0x0a)
 	extpfx2 0xEC, 0xFE                         ; FCB12D  sll A,XIX
 	add	xiy, xix                               ; FCB12F  add XIY,XIX
 	ld	ix, (xiz+8)                             ; FCB131  ld IX,(XIZ+0x08)
-	extpfx3 0x9E, 0x0E, 0x44                   ; FCB134  mul XIX,(XIZ+0x0e)
+	mul	xix, (xiz+14)                   ; FCB134  mul XIX,(XIZ+0x0e)
 	extpfx2 0xEC, 0xFE                         ; FCB137  sll A,XIX
 	add	xiy, xix                               ; FCB139  add XIY,XIX
 	pop	xix                                    ; FCB13B  pop XIX
-	unlk32 xiz                                 ; FCB13C  unlk XIZ
+	unlk	xiz                                 ; FCB13C  unlk XIZ
 	retd	8                                     ; FCB13E  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Divide32_Signed -- signed 32 / 32 divide.
@@ -5088,7 +5088,7 @@ Multiply32:
 ;          Divide32 instead.  Here the sign handling is NOT redundant.
 ; --------------------------------------------------------------------------
 Divide32_Signed:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB141  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCB141  link XIZ,0x0000
 	push	d                                     ; FCB145  push D
 	push	xix                                   ; FCB147  push XIX
 	ld	d, 0:opc                                   ; FCB148  ld D,0x00
@@ -5119,7 +5119,7 @@ Divide32_Signed__FCB16F:
 Divide32_Signed__FCB181:
 	pop	xix                                    ; FCB181  pop XIX
 	pop	d                                      ; FCB182  pop D
-	unlk32 xiz                                 ; FCB184  unlk XIZ
+	unlk	xiz                                 ; FCB184  unlk XIZ
 	retd	8                                     ; FCB186  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Divide32 -- unsigned 32 / 32 restoring divide.
@@ -5135,7 +5135,7 @@ Divide32_Signed__FCB181:
 ;          restoring division and nothing else.
 ; --------------------------------------------------------------------------
 Divide32:
-	link32 0xEE, 0x0C, 0x00, 0x00              ; FCB189  link XIZ,0x0000
+	link	xiz, 0x0000              ; FCB189  link XIZ,0x0000
 	push	xix                                   ; FCB18D  push XIX
 	ld	b, 32:opc                                  ; FCB18E  ld B,0x20
 	sub	wa, wa                                 ; FCB190  sub WA,WA
@@ -5143,21 +5143,21 @@ Divide32:
 	sub	xix, xix                               ; FCB194  sub XIX,XIX
 Divide32__FCB196:
 	sll	xix, 1                                 ; FCB196  sll 0x01,XIX
-	extpfx3 0x9E, 0x08, 0x7E                   ; FCB199  sllw (XIZ+0x08)
+	sllw	(xiz+8)                   ; FCB199  sllw (XIZ+0x08)
 	extpfx3 0xD8, 0x24, 0x00                   ; FCB19C  stcf 0x00,WA
-	extpfx3 0x9E, 0x0A, 0x7E                   ; FCB19F  sllw (XIZ+0x0a)
+	sllw	(xiz+10)                   ; FCB19F  sllw (XIZ+0x0a)
 	extpfx3 0xDC, 0x24, 0x00                   ; FCB1A2  stcf 0x00,IX
 	add	(xiz+10), wa                           ; FCB1A5  add (XIZ+0x0a),WA
 	sll	xiy, 1                                 ; FCB1A8  sll 0x01,XIY
-	extpfx3 0xAE, 0x0C, 0xF4                   ; FCB1AB  cp XIX,(XIZ+0x0c)
+	cp	xix, (xiz+12)                   ; FCB1AB  cp XIX,(XIZ+0x0c)
 	jr c, Divide32__FCB1B5                     ; FCB1AE  jr C,0xfcb1b5
-	extpfx3 0xAE, 0x0C, 0xA4                   ; FCB1B0  sub XIX,(XIZ+0x0c)
+	sub	xix, (xiz+12)                   ; FCB1B0  sub XIX,(XIZ+0x0c)
 	inc	1, xiy                                 ; FCB1B3  inc 1,XIY
 Divide32__FCB1B5:
 	dec	1, b                                   ; FCB1B5  dec 1,B
 	jr nz, Divide32__FCB196                    ; FCB1B7  jr NZ,0xfcb196
 	pop	xix                                    ; FCB1B9  pop XIX
-	unlk32 xiz                                 ; FCB1BA  unlk XIZ
+	unlk	xiz                                 ; FCB1BA  unlk XIZ
 	retd	8                                     ; FCB1BC  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Float32_Compare -- order two singles.
@@ -5177,7 +5177,7 @@ Divide32__FCB1B5:
 ; Unknown:  the meaning of each returned code, as for Double_Compare.
 ; --------------------------------------------------------------------------
 Float32_Compare:
-	link32 0xEE, 0x0C, 0xE4, 0xFF              ; FCB1BF  link XIZ,0xffe4
+	link	xiz, 0xffe4              ; FCB1BF  link XIZ,0xffe4
 	pushw	de                                   ; FCB1C3  push DE
 	push	xix                                   ; FCB1C4  push XIX
 	sub	wa, wa                                 ; FCB1C5  sub WA,WA
@@ -5234,7 +5234,7 @@ Float32_Compare__FCB233:
 Float32_Compare__FCB235:
 	pop	xix                                    ; FCB235  pop XIX
 	popw	de                                    ; FCB236  pop DE
-	unlk32 xiz                                 ; FCB237  unlk XIZ
+	unlk	xiz                                 ; FCB237  unlk XIZ
 	retd	8                                     ; FCB239  retd 0x0008
 ; --------------------------------------------------------------------------
 ; Shift8_LogicalRight -- 8-bit value >> count, zero-filling.
