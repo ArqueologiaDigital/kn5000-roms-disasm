@@ -13634,7 +13634,7 @@ SoundFX_Handler_3:
 	extz	wa
 	muls	wa, 0xc
 	.set	VoiceMap_AllocateSlo_Block2, . + 4	; no instruction starts here: the name points 4 byte(s) into the one below
-	lda	xbc, (15636734:24)
+	lda	xbc, (Harmony_Offsets1_B:24)
 	; VoiceMap_AllocateSlo_Block2 is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceMap_AllocateSlo_Block2 is the code at 0xFE8300
 	exts	xwa
 	add	xwa, xbc
