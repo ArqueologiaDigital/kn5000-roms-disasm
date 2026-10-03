@@ -24564,7 +24564,7 @@ TimeSig_DisplayStrings_Code_Return12:
 	cp	l, 15
 	jr	nz, DrumVoice_NotifyEE_Skip5
 	push	xix
-	ld	xix, TimeSig_DisplayStrings_Code
+	ld	xix, TimeSig_StepUpTable15
 	ld	a, (xix+a)
 	pop	xix
 	jr	TimeSig_DisplayStrings_Code_Join2
@@ -24578,7 +24578,7 @@ TimeSig_DisplayStrings_Code_Skip4:
 	cp	l, 15
 	jr	nz, TimeSig_DisplayStrings_Code_Skip5
 	push	xix
-	ld	xix, TimeSig_DisplayStrings_0x227
+	ld	xix, TimeSig_StepDownTable15
 	ld	a, (xix+a)
 	pop	xix
 	jr	TimeSig_DisplayStrings_Code_Join2
@@ -24599,25 +24599,12 @@ TimeSig_DisplayStrings_Code_Join2:
 	and	h, 127
 	ld	(64603:16), h
 	ret
-TimeSig_DisplayStrings_Code:
-	max
-	max
-	max
-	max
-	ld	(P2:8), 8:io
-	ld	(P2:8), 8:io
-	ld	(P2:8), 0:io
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	max
-	max
-	max
-	max
+; Two 12-entry step tables for (0x342D) when AccVoice_GetChannelCount_Direct returns 15: the routine above
+; takes A := TimeSig_StepUpTable15[A] on an up step and A := TimeSig_StepDownTable15[A] on a down step
+; (bit 7 of W).  Were decoded as `max ... / ld (P2:8),8 ...` code; the second was the positional alias
+; TimeSig_DisplayStrings + 0x227.
+TimeSig_StepUpTable15:		.byte	4, 4, 4, 4, 8, 8, 8, 8, 8, 8, 8, 8
+TimeSig_StepDownTable15:	.byte	0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4
 TimeSig_DisplayStrings_Code_Sub:
 	ld	a, (64602:16)
 	and	a, 255

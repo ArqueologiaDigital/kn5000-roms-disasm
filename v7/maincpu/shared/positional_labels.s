@@ -7,4 +7,3 @@
 	.set MidiPkt_ArpConfigChain_Data_0x34C, MidiPkt_ArpConfigChain_Data + 844
 	.set Scoop_SoundEditorData_0x127C, Scoop_SoundEditorData + 4732
 	.set Scoop_SoundEditorData_0xEB, Scoop_SoundEditorData + 235
-	.set TimeSig_DisplayStrings_0x227, TimeSig_DisplayStrings + 551
