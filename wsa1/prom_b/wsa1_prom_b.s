@@ -200,6 +200,7 @@
 ;   longer a `.byte` no longer needs the excuse.  Every row still spelled
 ;   `.byte` keeps its marker.  Counted by notes/promb_macro_rewrite.py --census.
 ; ------------------------------------------------------------------------------
+	.include "include/tmp95c061_sfr.inc"
 	.include "include/tlcs900_mem_ops.inc"
 	.include "include/wsa1_ram.inc"
 
@@ -124636,20 +124637,20 @@ SC1_ConfigurePort:
 	ld	a, 1:opc	; F5A88C  ld A,0x01
 	and	a, 215	; F5A88E  and A,0xd7
 	ld	(SC1_P8FC_Shadow:16), a	; F5A891  ld (0x2a87),A
-	ld	(0x1b:8), a	; F5A895  ld (0x1b),A
+	ld	(P8FC:8), a	; F5A895  ld (0x1b),A
 	ld	a, 1:opc	; F5A898  ld A,0x01
 	or	a, 8	; F5A89A  or A,0x08
 	and	a, 199	; F5A89D  and A,0xc7
 	ld	(SC1_P8CR_Shadow:16), a	; F5A8A0  ld (0x2a86),A
-	ld	(0x1a:8), a	; F5A8A4  ld (0x1a),A
+	ld	(P8CR:8), a	; F5A8A4  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A8A7  and (0x18),0xdf
 	m_and_mi8 MB8, 0x58, 0xfd	; F5A8AB  and (0x58),0xfd
-	ld	(86:8), 0:io	; F5A8AF  ld (0x56),0x00
-	ld	(87:8), 34:io	; F5A8B2  ld (0x57),0x22
-	ld	(85:8), 1:io	; F5A8B5  ld (0x55),0x01
-	ld	(120:8), 255:io	; F5A8B8  ld (0x78),0xff
-	ld	(114:8), 143:io	; F5A8BB  ld (0x72),0x8f
-	ld	(72:8), 2:io	; F5A8BE  ld (0x48),0x02
+	ld	(SC1MOD:8), 0:io	; F5A8AF  ld (0x56),0x00
+	ld	(BR1CR:8), 34:io	; F5A8B2  ld (0x57),0x22
+	ld	(SC1CR:8), 1:io	; F5A8B5  ld (0x55),0x01
+	ld	(INTES1:8), 255:io	; F5A8B8  ld (0x78),0xff
+	ld	(INTE67:8), 143:io	; F5A8BB  ld (0x72),0x8f
+	ld	(T5MOD:8), 2:io	; F5A8BE  ld (0x48),0x02
 	m_or_mi8 MB16, SC1_BusyFlags, 0x08	; F5A8C1  or (0x2a82),0x08
 	ld	(SC1_RxBytesExpected:16), 0	; F5A8C6  ld (0x2a81),0x00
 	ld	(SC1_ConfigSelector:16), 2	; F5A8CB  ld (0x2a83),0x02
@@ -124686,8 +124687,8 @@ SC1_ConfigurePort:
 	calr	SC1_Spin500	; F5A93C  calr 0xf5aa56
 	calr	SC1_WaitTicks2	; F5A93F  calr 0xf5aa62
 	ei	6	; F5A942  ei 0x06
-	ld	(120:8), 85:io	; F5A944  ld (0x78),0x55
-	ld	(114:8), 133:io	; F5A947  ld (0x72),0x85
+	ld	(INTES1:8), 85:io	; F5A944  ld (0x78),0x55
+	ld	(INTE67:8), 133:io	; F5A947  ld (0x72),0x85
 	ldw	(SC1_RxReadIndex:16), 0	; F5A94A  ld (0x2a90),0x0000
 	ldw	(SC1_RxWriteIndex:16), 0	; F5A950  ld (0x2a92),0x0000
 	m_and_mi8 MB8, 0x56, 0xdf	; F5A956  and (0x56),0xdf
@@ -124712,13 +124713,13 @@ SC1_SendWord_Polled:
 	ld	(SC1_TxRing:16), wa	; F5A95D  ld (0x2ae4),WA
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5A961  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5A966  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5A96A  ld (0x1b),A
-	ld	(120:8), 255:io	; F5A96D  ld (0x78),0xff
-	ld	(114:8), 143:io	; F5A970  ld (0x72),0x8f
+	ld	(P8FC:8), a	; F5A96A  ld (0x1b),A
+	ld	(INTES1:8), 255:io	; F5A96D  ld (0x78),0xff
+	ld	(INTE67:8), 143:io	; F5A970  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x18, 0xdf	; F5A973  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5A977  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A97C  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5A980  ld (0x1a),A
+	ld	(P8CR:8), a	; F5A980  ld (0x1a),A
 	calr	SC1_Spin100	; F5A983  calr 0xf5aa4a
 	m_cp_mi8 MB16, SC1_ConfigSelector, 0x01	; F5A986  cp (0x2a83),0x01
 	jr	z, SC1_SendWord_Polled_Skip	; F5A98B  jr Z,0xf5a9a4
@@ -124732,39 +124733,39 @@ SC1_SendWord_Polled:
 SC1_SendWord_Polled_Skip:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5A9A4  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A9A9  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5A9AD  ld (0x1a),A
+	ld	(P8CR:8), a	; F5A9AD  ld (0x1a),A
 	calr	SC1_Spin100	; F5A9B0  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5A9B3  calr 0xf5aa4a
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5A9B6  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5A9BB  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5A9BF  ld (0x1b),A
+	ld	(P8FC:8), a	; F5A9BF  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5A9C2  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5A9C7  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5A9CB  ld (0x1a),A
+	ld	(P8CR:8), a	; F5A9CB  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5A9CE  and (0x55),0xfe
-	ld	(120:8), 255:io	; F5A9D2  ld (0x78),0xff
+	ld	(INTES1:8), 255:io	; F5A9D2  ld (0x78),0xff
 	ld	xiy, SC1_TxRing	; F5A9D5  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5A9DA  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5A9DE  ld A,(XIY)
 	incw	1, (SC1_TxReadIndex:16)	; F5A9E0  incw 1,(0x2ae0)
-	ld	(0x54:8), a	; F5A9E4  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5A9E4  ld (0x54),A
 	calr	SC1_Spin100	; F5A9E7  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5A9EA  calr 0xf5aa4a
 	ld	xiy, SC1_TxRing	; F5A9ED  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5A9F2  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5A9F6  ld A,(XIY)
 	incw	1, (SC1_TxReadIndex:16)	; F5A9F8  incw 1,(0x2ae0)
-	ld	(0x54:8), a	; F5A9FC  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5A9FC  ld (0x54),A
 	calr	SC1_Spin100	; F5A9FF  calr 0xf5aa4a
 	calr	SC1_Spin100	; F5AA02  calr 0xf5aa4a
 	m_or_mi8 MB8, 0x55, 0x01	; F5AA05  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AA09  and (0x55),0xfd
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AA0D  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AA12  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AA16  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AA16  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AA19  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AA1E  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AA22  ld (0x1b),A
+	ld	(P8FC:8), a	; F5AA22  ld (0x1b),A
 	ret	; F5AA25  ret
 ; ---------------------------------------------------------------------
 ; SC1_Spin2 / SC1_Spin6 / SC1_Spin10 / SC1_Spin100 / SC1_Spin500 -- busy waits
@@ -124993,9 +124994,9 @@ SC1_WaitTxDrain:
 	ld	(SC1_TxDrainRetries:16), 200	; F5AB74  ld (0x2a8b),0xc8
 SC1_WaitTxDrain_Join:
 	ei	6	; F5AB79  ei 0x06
-	bit	5, (0x18:8)	; F5AB7B  bit 5,(0x18)
+	bit	5, (P8:8)	; F5AB7B  bit 5,(0x18)
 	jr	z, SC1_WaitTxDrain_Loop	; F5AB7E  jr Z,0xf5ab95
-	bit	4, (0x1f:8)	; F5AB80  bit 4,(0x1f)
+	bit	4, (PB:8)	; F5AB80  bit 4,(0x1f)
 	jr	nz, SC1_WaitTxDrain_Loop	; F5AB83  jr NZ,0xf5ab95
 	m_bit 1, MD16, SC1_BusyFlags	; F5AB85  bit 1,(0x2a82)
 	jrl	nz, SC1_TxFlush_Exit	; F5AB89  jrl NZ,0xf5b05d
@@ -125038,19 +125039,19 @@ SC1_StartWordTx:
 	m_add_mi16 MW16, SC1_TxWriteIndex, 0x0002	; F5ABC6  add (0x2ae2),0x0002
 	m_or_mi8 MB16, SC1_BusyFlags, 0x02	; F5ABCC  or (0x2a82),0x02
 	ld	(SC1_State:16), 4	; F5ABD1  ld (0x2a80),0x04
-	ld	(114:8), 143:io	; F5ABD6  ld (0x72),0x8f
-	ld	(87:8), 40:io	; F5ABD9  ld (0x57),0x28
+	ld	(INTE67:8), 143:io	; F5ABD6  ld (0x72),0x8f
+	ld	(BR1CR:8), 40:io	; F5ABD9  ld (0x57),0x28
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5ABDC  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5ABE1  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5ABE5  ld (0x1b),A
+	ld	(P8FC:8), a	; F5ABE5  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5ABE8  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5ABEC  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ABF1  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5ABF5  ld (0x1a),A
+	ld	(P8CR:8), a	; F5ABF5  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5ABF8  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ABFC  and (0x55),0xfe
-	ld	(120:8), 80:io	; F5AC00  ld (0x78),0x50
-	ld	(0x54:8), a	; F5AC03  ld (0x54),A
+	ld	(INTES1:8), 80:io	; F5AC00  ld (0x78),0x50
+	ld	(SC1BUF:8), a	; F5AC03  ld (0x54),A
 	ei	0	; F5AC06  ei 0x00
 	nop	; F5AC08  nop
 	ret	; F5AC09  ret
@@ -125079,11 +125080,11 @@ INT6_SC1_PeerRequest:
 	jr	nz, SC1_StartWordTx_Skip	; F5AC10  jr NZ,0xf5ac3c
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AC12  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AC17  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AC1B  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AC1B  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AC1E  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AC22  and (0x55),0xfd
-	ld	(114:8), 133:io	; F5AC26  ld (0x72),0x85
-	ld	(120:8), 5:io	; F5AC29  ld (0x78),0x05
+	ld	(INTE67:8), 133:io	; F5AC26  ld (0x72),0x85
+	ld	(INTES1:8), 5:io	; F5AC29  ld (0x78),0x05
 	m_or_mi8 MB8, 0x56, 0x20	; F5AC2C  or (0x56),0x20
 	ld	(SC1_State:16), 32	; F5AC30  ld (0x2a80),0x20
 	m_or_mi8 MB16, SC1_BusyFlags, 0x01	; F5AC35  or (0x2a82),0x01
@@ -125370,70 +125371,70 @@ SC1_Irq_Exit_3b_Delayed:
 SC1_State04_TxByte1:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5ACE3  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ACE8  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5ACEC  ld (0x1a),A
-	ld	(87:8), 36:io	; F5ACEF  ld (0x57),0x24
-	ld	(114:8), 143:io	; F5ACF2  ld (0x72),0x8f
-	ld	(120:8), 80:io	; F5ACF5  ld (0x78),0x50
+	ld	(P8CR:8), a	; F5ACEC  ld (0x1a),A
+	ld	(BR1CR:8), 36:io	; F5ACEF  ld (0x57),0x24
+	ld	(INTE67:8), 143:io	; F5ACF2  ld (0x72),0x8f
+	ld	(INTES1:8), 80:io	; F5ACF5  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ACF8  and (0x55),0xfe
-	ld	(0x54:8), a	; F5ACFC  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5ACFC  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5ACFF  inc 4,(0x2a80)
 	mul	a, 1	; F5AD03  mul A,0x01
 	mul	a, 1	; F5AD06  mul A,0x01
-	bit	5, (0x18:8)	; F5AD09  bit 5,(0x18)
+	bit	5, (P8:8)	; F5AD09  bit 5,(0x18)
 	jr	nz, SC1_Irq_Exit_3	; F5AD0C  jr NZ,0xf5aca8
 	ld	(SC1_RxBytesExpected:16), 0	; F5AD0E  ld (0x2a81),0x00
 	ld	(SC1_State:16), 0	; F5AD13  ld (0x2a80),0x00
 	m_or_mi8 MB16, SC1_ErrorBits, 0x02	; F5AD18  or (0x2a84),0x02
-	ld	(114:8), 133:io	; F5AD1D  ld (0x72),0x85
-	ld	(120:8), 255:io	; F5AD20  ld (0x78),0xff
-	ld	(87:8), 36:io	; F5AD23  ld (0x57),0x24
+	ld	(INTE67:8), 133:io	; F5AD1D  ld (0x72),0x85
+	ld	(INTES1:8), 255:io	; F5AD20  ld (0x78),0xff
+	ld	(BR1CR:8), 36:io	; F5AD23  ld (0x57),0x24
 	m_and_mi8 MB16, SC1_BusyFlags, 0xfd	; F5AD26  and (0x2a82),0xfd
 	jrl	SC1_Irq_Exit_3	; F5AD2B  jrl T,0xf5aca8
 SC1_State0C:
 	calr	SC1_Spin10	; F5AD2E  calr 0xf5aa3e
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AD31  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AD36  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AD3A  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AD3A  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AD3D  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD42  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AD46  ld (0x1b),A
-	ld	(87:8), 36:io	; F5AD49  ld (0x57),0x24
-	ld	(120:8), 80:io	; F5AD4C  ld (0x78),0x50
+	ld	(P8FC:8), a	; F5AD46  ld (0x1b),A
+	ld	(BR1CR:8), 36:io	; F5AD49  ld (0x57),0x24
+	ld	(INTES1:8), 80:io	; F5AD4C  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD4F  and (0x55),0xfe
-	ld	(0x54:8), a	; F5AD53  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5AD53  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5AD56  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3	; F5AD5A  jrl T,0xf5aca8
 SC1_State14:
 	calr	SC1_Spin10	; F5AD5D  calr 0xf5aa3e
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xd7	; F5AD60  and (0x2a86),0xd7
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AD65  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AD69  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AD69  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xd7	; F5AD6C  and (0x2a87),0xd7
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD71  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AD75  ld (0x1b),A
-	ld	(87:8), 36:io	; F5AD78  ld (0x57),0x24
-	ld	(0x54:8), a	; F5AD7B  ld (0x54),A
-	ld	(114:8), 133:io	; F5AD7E  ld (0x72),0x85
-	ld	(120:8), 80:io	; F5AD81  ld (0x78),0x50
+	ld	(P8FC:8), a	; F5AD75  ld (0x1b),A
+	ld	(BR1CR:8), 36:io	; F5AD78  ld (0x57),0x24
+	ld	(SC1BUF:8), a	; F5AD7B  ld (0x54),A
+	ld	(INTE67:8), 133:io	; F5AD7E  ld (0x72),0x85
+	ld	(INTES1:8), 80:io	; F5AD81  ld (0x78),0x50
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AD84  and (0x55),0xfe
-	ld	(0x54:8), a	; F5AD88  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5AD88  ld (0x54),A
 	inc	4, (SC1_State:16)	; F5AD8B  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3	; F5AD8F  jrl T,0xf5aca8
 SC1_State08_TxFromRing:
-	ld	(87:8), 34:io	; F5AD92  ld (0x57),0x22
+	ld	(BR1CR:8), 34:io	; F5AD92  ld (0x57),0x22
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5AD95  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AD9A  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AD9E  ld (0x1b),A
+	ld	(P8FC:8), a	; F5AD9E  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5ADA1  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5ADA6  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5ADAA  ld (0x1a),A
+	ld	(P8CR:8), a	; F5ADAA  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5ADAD  and (0x55),0xfe
-	ld	(114:8), 133:io	; F5ADB1  ld (0x72),0x85
-	ld	(120:8), 80:io	; F5ADB4  ld (0x78),0x50
+	ld	(INTE67:8), 133:io	; F5ADB1  ld (0x72),0x85
+	ld	(INTES1:8), 80:io	; F5ADB4  ld (0x78),0x50
 	ld	xiy, SC1_TxRing	; F5ADB7  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5ADBC  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5ADC0  ld A,(XIY)
-	ld	(0x54:8), a	; F5ADC2  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5ADC2  ld (0x54),A
 	incw	1, (SC1_TxReadIndex:16)	; F5ADC5  incw 1,(0x2ae0)
 	m_cp_mi16 MW16, SC1_TxReadIndex, 0x003c	; F5ADC9  cp (0x2ae0),0x003c
 	jr	c, SC1_State08_TxFromRing_Skip	; F5ADCF  jr C,0xf5add7
@@ -125451,20 +125452,20 @@ SC1_State08_TxFromRing_Skip2:
 	inc	4, (SC1_State:16)	; F5ADF0  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3	; F5ADF4  jrl T,0xf5aca8
 SC1_State10_TxFromRing:
-	ld	(87:8), 34:io	; F5ADF7  ld (0x57),0x22
+	ld	(BR1CR:8), 34:io	; F5ADF7  ld (0x57),0x22
 	m_or_mi8 MB16, SC1_P8FC_Shadow, 0x28	; F5ADFA  or (0x2a87),0x28
 	ld	a, (SC1_P8FC_Shadow:16)	; F5ADFF  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AE03  ld (0x1b),A
+	ld	(P8FC:8), a	; F5AE03  ld (0x1b),A
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x28	; F5AE06  or (0x2a86),0x28
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AE0B  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AE0F  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AE0F  ld (0x1a),A
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE12  and (0x55),0xfe
-	ld	(114:8), 133:io	; F5AE16  ld (0x72),0x85
-	ld	(120:8), 80:io	; F5AE19  ld (0x78),0x50
+	ld	(INTE67:8), 133:io	; F5AE16  ld (0x72),0x85
+	ld	(INTES1:8), 80:io	; F5AE19  ld (0x78),0x50
 	ld	xiy, SC1_TxRing	; F5AE1C  ld XIY,0x00002ae4
 	m_add_rm MW16, SC1_TxReadIndex, 5	; F5AE21  add IY,(0x2ae0)
 	ld	a, (xiy)	; F5AE25  ld A,(XIY)
-	ld	(0x54:8), a	; F5AE27  ld (0x54),A
+	ld	(SC1BUF:8), a	; F5AE27  ld (0x54),A
 	incw	1, (SC1_TxReadIndex:16)	; F5AE2A  incw 1,(0x2ae0)
 	m_cp_mi16 MW16, SC1_TxReadIndex, 0x003c	; F5AE2E  cp (0x2ae0),0x003c
 	jr	c, SC1_State10_TxFromRing_Skip	; F5AE34  jr C,0xf5ae3c
@@ -125490,39 +125491,39 @@ SC1_State18_TxDone:
 	ld	(SC1_State:16), 4	; F5AE72  ld (0x2a80),0x04
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AE77  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AE7C  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AE80  ld (0x1b),A
+	ld	(P8FC:8), a	; F5AE80  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5AE83  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5AE87  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AE8C  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AE90  ld (0x1a),A
-	ld	(87:8), 40:io	; F5AE93  ld (0x57),0x28
-	ld	(114:8), 143:io	; F5AE96  ld (0x72),0x8f
+	ld	(P8CR:8), a	; F5AE90  ld (0x1a),A
+	ld	(BR1CR:8), 40:io	; F5AE93  ld (0x57),0x28
+	ld	(INTE67:8), 143:io	; F5AE96  ld (0x72),0x8f
 	m_and_mi8 MB8, 0x55, 0xfe	; F5AE99  and (0x55),0xfe
-	ld	(120:8), 80:io	; F5AE9D  ld (0x78),0x50
-	ld	(0x54:8), a	; F5AEA0  ld (0x54),A
+	ld	(INTES1:8), 80:io	; F5AE9D  ld (0x78),0x50
+	ld	(SC1BUF:8), a	; F5AEA0  ld (0x54),A
 	m_or_mi8 MB16, SC1_BusyFlags, 0x02	; F5AEA3  or (0x2a82),0x02
 	jrl	SC1_Irq_Exit_3	; F5AEA8  jrl T,0xf5aca8
 SC1_State18_TxDone_Skip:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xdf	; F5AEAB  and (0x2a86),0xdf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AEB0  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AEB4  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AEB4  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AEB7  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AEBC  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AEC0  ld (0x1b),A
-	ld	(114:8), 133:io	; F5AEC3  ld (0x72),0x85
-	ld	(120:8), 255:io	; F5AEC6  ld (0x78),0xff
-	ld	(87:8), 36:io	; F5AEC9  ld (0x57),0x24
+	ld	(P8FC:8), a	; F5AEC0  ld (0x1b),A
+	ld	(INTE67:8), 133:io	; F5AEC3  ld (0x72),0x85
+	ld	(INTES1:8), 255:io	; F5AEC6  ld (0x78),0xff
+	ld	(BR1CR:8), 36:io	; F5AEC9  ld (0x57),0x24
 	m_and_mi8 MB16, SC1_BusyFlags, 0xfd	; F5AECC  and (0x2a82),0xfd
 	jrl	SC1_Irq_Exit_3	; F5AED1  jrl T,0xf5aca8
 SC1_State20_RxFirstByte:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AED4  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AED9  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AEDD  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AEDD  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AEE0  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AEE4  and (0x55),0xfd
-	ld	(114:8), 133:io	; F5AEE8  ld (0x72),0x85
-	ld	(120:8), 5:io	; F5AEEB  ld (0x78),0x05
-	ld	a, (0x54:8)	; F5AEEE  ld A,(0x54)
+	ld	(INTE67:8), 133:io	; F5AEE8  ld (0x72),0x85
+	ld	(INTES1:8), 5:io	; F5AEEB  ld (0x78),0x05
+	ld	a, (SC1BUF:8)	; F5AEEE  ld A,(0x54)
 	ld	xiy, SC1_RxRing	; F5AEF1  ld XIY,0x00002a94
 	m_add_rm MW16, SC1_RxWriteIndex, 5	; F5AEF6  add IY,(0x2a92)
 	ld	(xiy), a	; F5AEFA  ld (XIY),A
@@ -125558,7 +125559,7 @@ SC1_State20_RxFirstByte_Skip3:
 	inc	4, (SC1_State:16)	; F5AF4A  inc 4,(0x2a80)
 	jrl	SC1_Irq_Exit_3b	; F5AF4E  jrl T,0xf5acd0
 SC1_State24_RxNextByte:
-	ld	a, (0x54:8)	; F5AF51  ld A,(0x54)
+	ld	a, (SC1BUF:8)	; F5AF51  ld A,(0x54)
 	ld	xiy, SC1_RxRing	; F5AF54  ld XIY,0x00002a94
 	m_add_rm MW16, SC1_RxWriteIndex, 5	; F5AF59  add IY,(0x2a92)
 	ld	(xiy), a	; F5AF5D  ld (XIY),A
@@ -125577,22 +125578,22 @@ SC1_State24_RxNextByte_Skip:
 	ld	(SC1_State:16), 0	; F5AF8C  ld (0x2a80),0x00
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AF91  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AF96  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AF9A  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AF9A  ld (0x1a),A
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5AF9D  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5AFA2  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5AFA6  ld (0x1b),A
-	ld	(114:8), 133:io	; F5AFA9  ld (0x72),0x85
-	ld	(120:8), 5:io	; F5AFAC  ld (0x78),0x05
+	ld	(P8FC:8), a	; F5AFA6  ld (0x1b),A
+	ld	(INTE67:8), 133:io	; F5AFA9  ld (0x72),0x85
+	ld	(INTES1:8), 5:io	; F5AFAC  ld (0x78),0x05
 	m_and_mi8 MB8, 0x56, 0xdf	; F5AFAF  and (0x56),0xdf
 	jrl	SC1_Irq_Exit_3b	; F5AFB3  jrl T,0xf5acd0
 SC1_State24_RxNextByte_Skip2:
 	m_and_mi8 MB16, SC1_P8CR_Shadow, 0xcf	; F5AFB6  and (0x2a86),0xcf
 	ld	a, (SC1_P8CR_Shadow:16)	; F5AFBB  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5AFBF  ld (0x1a),A
+	ld	(P8CR:8), a	; F5AFBF  ld (0x1a),A
 	m_or_mi8 MB8, 0x55, 0x01	; F5AFC2  or (0x55),0x01
 	m_and_mi8 MB8, 0x55, 0xfd	; F5AFC6  and (0x55),0xfd
-	ld	(114:8), 133:io	; F5AFCA  ld (0x72),0x85
-	ld	(120:8), 5:io	; F5AFCD  ld (0x78),0x05
+	ld	(INTE67:8), 133:io	; F5AFCA  ld (0x72),0x85
+	ld	(INTES1:8), 5:io	; F5AFCD  ld (0x78),0x05
 	jrl	SC1_Irq_Exit_3b	; F5AFD0  jrl T,0xf5acd0
 ; ---------------------------------------------------------------------
 ; SC1_State_Unexpected -- an INTRX1/INTTX1 arrived in a state that has no work
@@ -125623,8 +125624,8 @@ SC1_AbortToIdle:
 	m_and_mi8 MB16, SC1_BusyFlags, 0xfc	; F5AFDB  and (0x2a82),0xfc
 	m_or_mi8 MB16, SC1_ErrorBits, 0x04	; F5AFE0  or (0x2a84),0x04
 	m_and_mi8 MB8, 0x56, 0xdf	; F5AFE5  and (0x56),0xdf
-	ld	(120:8), 15:io	; F5AFE9  ld (0x78),0x0f
-	ld	(114:8), 143:io	; F5AFEC  ld (0x72),0x8f
+	ld	(INTES1:8), 15:io	; F5AFE9  ld (0x78),0x0f
+	ld	(INTE67:8), 143:io	; F5AFEC  ld (0x72),0x8f
 	jr	SC1_State_Unexpected_Return	; F5AFEF  jr T,0xf5aff1
 SC1_State_Unexpected_Return:
 	reti	; F5AFF1  reti
@@ -125644,9 +125645,9 @@ SC1_State_Unexpected_Return:
 SC1_TxFlush_Body:
 	calr	SC1_TxEncode	; F5AFF2  calr 0xf5b243
 	ei	6	; F5AFF5  ei 0x06
-	bit	5, (0x18:8)	; F5AFF7  bit 5,(0x18)
+	bit	5, (P8:8)	; F5AFF7  bit 5,(0x18)
 	jr	z, SC1_TxFlush_Exit	; F5AFFA  jr Z,0xf5b05d
-	bit	4, (0x1f:8)	; F5AFFC  bit 4,(0x1f)
+	bit	4, (PB:8)	; F5AFFC  bit 4,(0x1f)
 	jr	nz, SC1_TxFlush_Exit	; F5AFFF  jr NZ,0xf5b05d
 	m_bit 1, MD16, SC1_BusyFlags	; F5B001  bit 1,(0x2a82)
 	jr	nz, SC1_TxFlush_Exit	; F5B005  jr NZ,0xf5b05d
@@ -125664,19 +125665,19 @@ SC1_TxFlush_Body_Skip:
 	jr	c, SC1_TxFlush_Exit	; F5B021  jr C,0xf5b05d
 	m_or_mi8 MB16, SC1_BusyFlags, 0x02	; F5B023  or (0x2a82),0x02
 	ld	(SC1_State:16), 4	; F5B028  ld (0x2a80),0x04
-	ld	(114:8), 143:io	; F5B02D  ld (0x72),0x8f
-	ld	(87:8), 40:io	; F5B030  ld (0x57),0x28
+	ld	(INTE67:8), 143:io	; F5B02D  ld (0x72),0x8f
+	ld	(BR1CR:8), 40:io	; F5B030  ld (0x57),0x28
 	m_and_mi8 MB16, SC1_P8FC_Shadow, 0xdf	; F5B033  and (0x2a87),0xdf
 	ld	a, (SC1_P8FC_Shadow:16)	; F5B038  ld A,(0x2a87)
-	ld	(0x1b:8), a	; F5B03C  ld (0x1b),A
+	ld	(P8FC:8), a	; F5B03C  ld (0x1b),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5B03F  and (0x18),0xdf
 	m_or_mi8 MB16, SC1_P8CR_Shadow, 0x20	; F5B043  or (0x2a86),0x20
 	ld	a, (SC1_P8CR_Shadow:16)	; F5B048  ld A,(0x2a86)
-	ld	(0x1a:8), a	; F5B04C  ld (0x1a),A
+	ld	(P8CR:8), a	; F5B04C  ld (0x1a),A
 	m_and_mi8 MB8, 0x56, 0xdf	; F5B04F  and (0x56),0xdf
 	m_and_mi8 MB8, 0x55, 0xfe	; F5B053  and (0x55),0xfe
-	ld	(120:8), 80:io	; F5B057  ld (0x78),0x50
-	ld	(0x54:8), a	; F5B05A  ld (0x54),A
+	ld	(INTES1:8), 80:io	; F5B057  ld (0x78),0x50
+	ld	(SC1BUF:8), a	; F5B05A  ld (0x54),A
 ; ---------------------------------------------------------------------
 ; SC1_TxFlush_Exit -- `ei 0x00 / ret`, a SHARED epilogue
 ;
@@ -126278,14 +126279,14 @@ SC1_Entry_F40F24_Body_Ret_Return2:
 	ld	a, 0:opc	; F5B367  ld A,0x00
 	and	a, 215	; F5B369  and A,0xd7
 	ld	(SC1_P8FC_Shadow:16), a	; F5B36C  ld (0x2a87),A
-	ld	(0x1b:8), a	; F5B370  ld (0x1b),A
+	ld	(P8FC:8), a	; F5B370  ld (0x1b),A
 	ld	a, 0:opc	; F5B373  ld A,0x00
 	or	a, 8	; F5B375  or A,0x08
 	and	a, 223	; F5B378  and A,0xdf
 	ld	(SC1_P8CR_Shadow:16), a	; F5B37B  ld (0x2a86),A
-	ld	(0x1a:8), a	; F5B37F  ld (0x1a),A
+	ld	(P8CR:8), a	; F5B37F  ld (0x1a),A
 	m_and_mi8 MB8, 0x18, 0xdf	; F5B382  and (0x18),0xdf
-	ld	(87:8), 34:io	; F5B386  ld (0x57),0x22
+	ld	(BR1CR:8), 34:io	; F5B386  ld (0x57),0x22
 	ldw	(SC1_TxReadIndex:16), 0	; F5B389  ld (0x2ae0),0x0000
 	ldw	(SC1_TxWriteIndex:16), 0	; F5B38F  ld (0x2ae2),0x0000
 	calr	sub_F5B41E	; F5B395  calr 0xf5b41e
@@ -126309,8 +126310,8 @@ SC1_Entry_F40F24_Body_Ret_Return2:
 	calr	63191	; F5B3CD  calr 0xf5aaa7
 	calr	63188	; F5B3D0  calr 0xf5aaa7
 	ei	7	; F5B3D3  ei 0x07
-	ld	(120:8), 85:io	; F5B3D5  ld (0x78),0x55
-	ld	(114:8), 5:io	; F5B3D8  ld (0x72),0x05
+	ld	(INTES1:8), 85:io	; F5B3D5  ld (0x78),0x55
+	ld	(INTE67:8), 5:io	; F5B3D8  ld (0x72),0x05
 	ldw	(SC1_RxReadIndex:16), 0	; F5B3DB  ld (0x2a90),0x0000
 	ldw	(SC1_RxWriteIndex:16), 0	; F5B3E1  ld (0x2a92),0x0000
 	ld	xhl, SC1_InQueue	; F5B3E7  ld XHL,0x00002b40

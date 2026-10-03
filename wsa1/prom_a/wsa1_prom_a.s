@@ -4116,7 +4116,7 @@ Paint_SequencerMedley:
 	ld (DisplayListB_Stage+14:16), a                                   ; F810C7  f1 04 13 41
 	ld a, (Medley_Source:16)                                   ; F810CB  c1 0b 22 21
 	ld (DisplayListB_Stage+13:16), a                                   ; F810CF  f1 03 13 41
-	ld	a, (0x01:8)                                      ; F810D3  c0 01 21
+	ld	a, (P1:8)                                      ; F810D3  c0 01 21
 	ld (DisplayListB_Stage+15:16), a                                   ; F810D6  f1 05 13 41
 	ld XIY,DL_FirstS0ngLastS0ng                          ; F810DA  45 78 c7 f3 00
 	ld XIX,DL_F3C7AD                                     ; F810DF  44 ad c7 f3 00
@@ -6743,9 +6743,9 @@ RESET__clear_dram_hi:
 ; MainTask_Entry -- entry of CPU 1's first kernel task: power-on initialisation, then MainTask_Loop
 ; Evidence: EntryPoint_Records[0] is {0x00F4005C, 0x0060E800, 0x8800, 3} and slot T_MainTask_Entry is `jp MainTask_Entry` (prom_c's record 0 is MAIN).  Body: INTET10=0x30, INTE45=0x40, INTET54=0x03; T_CheckingDevice_RunSelfTest; PowerFail_VerifySavedBlocks; Variant_SetFromPB0; ModuleInit_RunPhase0; ExtBoard_Identify; ModuleInit_RunPhaseByChecksums; ModuleInit_RunPhase3; Irq_InitLevelsTC23; waits for (0x80)>=0x384; the three power-on chords; Kernel_StartTask(2); `jp MainTask_Loop`.
 MainTask_Entry:
-	ld (0x73:8), 0x30:io                                      ; F827C8  08 73 30
-	ld (0x71:8), 0x40:io                                      ; F827CB  08 71 40
-	ld (0x75:8), 0x03:io                                      ; F827CE  08 75 03
+	ld (INTET10:8), 0x30:io                                      ; F827C8  08 73 30
+	ld (INTE45:8), 0x40:io                                      ; F827CB  08 71 40
+	ld (INTET54:8), 0x03:io                                      ; F827CE  08 75 03
 	call T_CheckingDevice_RunSelfTest                                        ; F827D1  1d 44 01 f4
 	calr PowerFail_VerifySavedBlocks                                          ; F827D5  1e a8 04
 	calr Variant_SetFromPB0                              ; F827D8  1e a7 00
@@ -6756,7 +6756,7 @@ MainTask_Entry:
 	calr PowerOnChord_ClearRamAndReset                                            ; F827E5  1e e9 00
 	ei 0x00                                              ; F827E8  06 00
 	calr ExtBoard_Identify                               ; F827EA  1e a2 00
-	res	4, (0x13:8)                                   ; F827ED  f0 13 b4
+	res	4, (P7:8)                                   ; F827ED  f0 13 b4
 	calr ModuleInit_RunPhaseByChecksums                                          ; F827F0  1e b8 04
 	ei 0x00                                              ; F827F3  06 00
 	calr ExtBoard_Identify                               ; F827F5  1e 97 00
@@ -6767,7 +6767,7 @@ MainTask_Entry:
 .LF82804:
 	m_cp_mi16 MW8, Tick_Count, 0x0384                          ; F82804  d0 80 3f 84 03
 	jr c, .LF82804                                       ; F82809  67 f9
-	res	5, (0x13:8)                                   ; F8280B  f0 13 b5
+	res	5, (P7:8)                                   ; F8280B  f0 13 b5
 	calr PowerOnChord_ShowRevisionLeds                                          ; F8280E  1e 3b 01
 	ei 0x00                                              ; F82811  06 00
 	calr PowerOnChord_VersionScreen                                          ; F82813  1e ee 01
@@ -6778,7 +6778,7 @@ MainTask_Entry:
 	ld (XIX),A                                           ; F82823  b4 41
 	ld a, 0x02:opc                                          ; F82825  21 02
 	call T_Kernel_StartTask                              ; F82827  1d 6c 2d f4
-	set	3, (0x20:8)                                   ; F8282B  f0 20 bb
+	set	3, (TRUN:8)                                   ; F8282B  f0 20 bb
 	jp MainTask_Loop                                          ; F8282E  1b 28 20 f8
 ; ModuleInit_RunPhase0 -- run phase 0 (offset 0x00) of every module in ModuleInitDirectory_F82641
 ; Evidence: `ld A,0x00 / jr 0xF82846`, the walker that calls (vector + WA) for each of the 25 modules.  Callers: MainTask_Entry 0xF827DD, ModuleInit_Phase0Veneer.
@@ -6825,7 +6825,7 @@ ModuleInit_RunPhase3:
 ; Irq_InitLevelsTC23 -- write 0xDD to INTETC23
 ; Evidence: `ld (0x7A),0xDD / ret`; 0x7A is INTETC23 in include/tmp95c061_sfr.inc.  One caller, MainTask_Entry 0xF827FF.  The DSP_ChannelRegs_Write8 call at 0xF82874 after the `ret` is a separate unlabelled fragment.
 Irq_InitLevelsTC23:
-	ld (0x7a:8), 0xdd:io                                      ; F82870  08 7a dd
+	ld (INTETC23:8), 0xdd:io                                      ; F82870  08 7a dd
 	ret                                                  ; F82873  0e
 	ld XIY,Link_HandshakeTimeouts                                    ; F82874  45 db 07 60 00
 	push XIY                                             ; F82879  3d
@@ -6879,7 +6879,7 @@ Irq_InitLevelsTC23:
 ; ---------------------------------------------------------------------
 Variant_SetFromPB0:
 	ld a, 0x01:opc                                          ; F82882  21 01
-	bit	0, (0x1f:8)                                   ; F82884  f0 1f c8
+	bit	0, (PB:8)                                   ; F82884  f0 1f c8
 	jr nz, .LF8288B                                      ; F82887  6e 02
 	ld a, 0x02:opc                                          ; F82889  21 02
 .LF8288B:
@@ -7189,7 +7189,7 @@ VersionScreen_Show:
 	ld (XIX+0x12),WA                                     ; F82A9D  bc 12 50
 	ld (XIX+0x11),0x20                                   ; F82AA0  bc 11 00 20
 .LF82AA4:
-	res	5, (0x13:8)                                   ; F82AA4  f0 13 b5
+	res	5, (P7:8)                                   ; F82AA4  f0 13 b5
 	call T_F42E10                                        ; F82AA7  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F82AAB  f1 40 25 00 00
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F82AB0  f1 40 25 00 00
@@ -8048,8 +8048,8 @@ SeqBuf_AppendMarker__done:
 ;          `jp 0xF45D09`.
 ; ---------------------------------------------------------------------
 NMI_PowerFail_SaveAndHalt:
-	set	5, (0x13:8)                            ; F8306E  f0 13 bd
-	set	4, (0x13:8)                            ; F83071  f0 13 bc
+	set	5, (P7:8)                            ; F8306E  f0 13 bd
+	set	4, (P7:8)                            ; F83071  f0 13 bc
 	xor C,C                                       ; F83074  cb d3
 	ld a, 0x0c:opc                                   ; F83076  21 0c
 	swi 7                                         ; F83078  ff
@@ -8068,9 +8068,9 @@ NMI_PowerFail__stop:
 	ld (0x7fc7:16), a                            ; F830A2  f1 c7 7f 41
 	ld (0x7fca:16), wa                           ; F830A6  f1 ca 7f 50
 	ei 0x07                                       ; F830AA  06 07
-	ld (0x5b:8), 0x2d:io                               ; F830AC  08 5b 2d
+	ld (DMEMCR:8), 0x2d:io                               ; F830AC  08 5b 2d
 	nop                                           ; F830AF  00
-	set	5, (0x12:8)                            ; F830B0  f0 12 bd
+	set	5, (P6:8)                            ; F830B0  f0 12 bd
 NMI_PowerFail__halt:
 	halt                                          ; F830B3  05
 	jr NMI_PowerFail__halt                                   ; F830B4  68 fd
@@ -18524,7 +18524,7 @@ PanelWireGroupMap_Variant2:
 AssignableSwitch_Poll:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F8A209  c0 c4 3f 02
 	jr z, .LF8A249                                           ; F8A20D  66 3a
-	ld	a, (0x13:8)                                      ; F8A20F  c0 13 21
+	ld	a, (P7:8)                                      ; F8A20F  c0 13 21
 	ld W,A                                               ; F8A212  c9 88
 	and A,0x40                                           ; F8A214  c9 cc 40
 	srl a, 0x06                                          ; F8A217  c9 ef 06
@@ -23880,11 +23880,11 @@ AnalogScan_RamChannel5:
 ; ---------------------------------------------------------------------
 Link_Init_DmaAndTimer:
 	push XIX                                             ; F8E001  3c
-	res	2, (0x20:8)                                   ; F8E002  f0 20 b2
-	ld (0x28:8), 0x0e:io                                      ; F8E005  08 28 0e
-	ld (0x7a:8), 0x56:io                                      ; F8E008  08 7a 56
-	ld (0x70:8), 0x01:io                                      ; F8E00B  08 70 01
-	ld (0x26:8), 0x05:io                                      ; F8E00E  08 26 05
+	res	2, (TRUN:8)                                   ; F8E002  f0 20 b2
+	ld (T23MOD:8), 0x0e:io                                      ; F8E005  08 28 0e
+	ld (INTETC23:8), 0x56:io                                      ; F8E008  08 7a 56
+	ld (INTE0AD:8), 0x01:io                                      ; F8E00B  08 70 01
+	ld (TREG2:8), 0x05:io                                      ; F8E00E  08 26 05
 	pushw 0x08                                           ; F8E011  0b 08 00
 	ld XIX,0x007c0000                                    ; F8E014  44 00 00 7c 00
 	push XIX                                             ; F8E019  3c
@@ -23981,7 +23981,7 @@ Link_SendCountedBlock:
 	ldw de, 0x00                                         ; F8E082  32 00 00
 	popw bc                                              ; F8E085  49
 .LF8E086:
-	bit	3, (0x13:8)                                   ; F8E086  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E086  f0 13 cb
 	jr nz, .LF8E097                                      ; F8E089  6e 0c
 	ld IX,DE                                             ; F8E08B  da 8c
 	inc 1,DE                                             ; F8E08D  da 61
@@ -23989,7 +23989,7 @@ Link_SendCountedBlock:
 	jr ule, .LF8E086                                     ; F8E093  63 f1
 	jr .LF8E0F0                                          ; F8E095  68 59
 .LF8E097:
-	res	0, (0x13:8)                                   ; F8E097  f0 13 b0
+	res	0, (P7:8)                                   ; F8E097  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E09A  f2 d9 07 60 00 01
 	ld L,H                                               ; F8E0A0  ce 8f
 	dec 1,L                                              ; F8E0A2  cf 69
@@ -24002,24 +24002,24 @@ Link_SendCountedBlock:
 	ld (XBC),A                                           ; F8E0B7  b1 41
 	ldw de, 0x00                                         ; F8E0B9  32 00 00
 .LF8E0BC:
-	bit	3, (0x13:8)                                   ; F8E0BC  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E0BC  f0 13 cb
 	jr z, .LF8E0D0                                       ; F8E0BF  66 0f
 	ld IX,DE                                             ; F8E0C1  da 8c
 	inc 1,DE                                             ; F8E0C3  da 61
 	cp IX,0x4e20                                         ; F8E0C5  dc cf 20 4e
 	jr ule, .LF8E0BC                                     ; F8E0C9  63 f1
-	set	0, (0x13:8)                                   ; F8E0CB  f0 13 b8
+	set	0, (P7:8)                                   ; F8E0CB  f0 13 b8
 	jr .LF8E0F0                                          ; F8E0CE  68 20
 .LF8E0D0:
-	set	0, (0x13:8)                                   ; F8E0D0  f0 13 b8
+	set	0, (P7:8)                                   ; F8E0D0  f0 13 b8
 	ld C,H                                               ; F8E0D3  ce 8b
 	extz BC                                              ; F8E0D5  d9 12
 	pushw bc                                             ; F8E0D7  29
 	ld XBC,(XIZ+0x0c)                                    ; F8E0D8  ae 0c 21
 	push XBC                                             ; F8E0DB  39
 	call uDMA2_SetSource                                        ; F8E0DC  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E0E0  08 7e 12
-	set	2, (0x20:8)                                   ; F8E0E3  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E0E0  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E0E3  f0 20 ba
 	inc 6,XSP                                            ; F8E0E6  ef 66
 .LF8E0E8:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E0E8  c2 d9 07 60 3f 00
@@ -24075,22 +24075,22 @@ Link_SendCommandE2:
 .LF8E11A:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E11A  c2 d9 07 60 3f 00
 	jr nz, .LF8E10F                                      ; F8E120  6e ed
-	res	0, (0x13:8)                                   ; F8E122  f0 13 b0
+	res	0, (P7:8)                                   ; F8E122  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E125  f2 d9 07 60 00 01
 	ld XBC,0x007c0000                                    ; F8E12B  41 00 00 7c 00
 	ld (XBC),0xe2                                        ; F8E130  b1 00 e2
 	ldw hl, 0x00                                         ; F8E133  33 00 00
 .LF8E136:
-	bit	3, (0x13:8)                                   ; F8E136  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E136  f0 13 cb
 	jr z, .LF8E14A                                       ; F8E139  66 0f
 	ld DE,HL                                             ; F8E13B  db 8a
 	inc 1,HL                                             ; F8E13D  db 61
 	cp DE,0x4e20                                         ; F8E13F  da cf 20 4e
 	jr ule, .LF8E136                                     ; F8E143  63 f1
-	set	0, (0x13:8)                                   ; F8E145  f0 13 b8
+	set	0, (P7:8)                                   ; F8E145  f0 13 b8
 	jr .LF8E17B                                          ; F8E148  68 31
 .LF8E14A:
-	set	0, (0x13:8)                                   ; F8E14A  f0 13 b8
+	set	0, (P7:8)                                   ; F8E14A  f0 13 b8
 	ld XBC,(XIZ+0x08)                                    ; F8E14D  ae 08 21
 	ld (XIX),XBC                                         ; F8E150  b4 61
 	ld XBC,(XIZ+0x0e)                                    ; F8E152  ae 0e 21
@@ -24100,8 +24100,8 @@ Link_SendCommandE2:
 	pushw 0x0a                                           ; F8E15E  0b 0a 00
 	push XIX                                             ; F8E161  3c
 	call uDMA2_SetSource                                        ; F8E162  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E166  08 7e 12
-	set	2, (0x20:8)                                   ; F8E169  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E166  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E169  f0 20 ba
 	m_set 7, MD24, 0x00008a                              ; F8E16C  f2 8a 00 00 bf
 	inc 6,XSP                                            ; F8E171  ef 66
 .LF8E173:
@@ -24141,7 +24141,7 @@ Link_SendCommandAndLong:
 .LF8E197:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E197  c2 d9 07 60 3f 00
 	jr nz, .LF8E18C                                      ; F8E19D  6e ed
-	res	0, (0x13:8)                                   ; F8E19F  f0 13 b0
+	res	0, (P7:8)                                   ; F8E19F  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x01                             ; F8E1A2  f2 d9 07 60 00 01
 	ld D,(XIZ+0x0c)                                      ; F8E1A8  8e 0c 24
 	or D,0xe0                                            ; F8E1AB  cc ce e0
@@ -24149,24 +24149,24 @@ Link_SendCommandAndLong:
 	ld (XBC),D                                           ; F8E1B3  b1 44
 	ldw hl, 0x00                                         ; F8E1B5  33 00 00
 .LF8E1B8:
-	bit	3, (0x13:8)                                   ; F8E1B8  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E1B8  f0 13 cb
 	jr z, .LF8E1CC                                       ; F8E1BB  66 0f
 	ld DE,HL                                             ; F8E1BD  db 8a
 	inc 1,HL                                             ; F8E1BF  db 61
 	cp DE,0x4e20                                         ; F8E1C1  da cf 20 4e
 	jr ule, .LF8E1B8                                     ; F8E1C5  63 f1
-	set	0, (0x13:8)                                   ; F8E1C7  f0 13 b8
+	set	0, (P7:8)                                   ; F8E1C7  f0 13 b8
 	jr .LF8E1F9                                          ; F8E1CA  68 2d
 .LF8E1CC:
-	set	0, (0x13:8)                                   ; F8E1CC  f0 13 b8
+	set	0, (P7:8)                                   ; F8E1CC  f0 13 b8
 	ld XBC,(XIZ+0x08)                                    ; F8E1CF  ae 08 21
 	ld (0x60079d:24), xbc                               ; F8E1D2  f2 9d 07 60 61
 	pushw 0x04                                           ; F8E1D7  0b 04 00
 	lda xwa, (0x60079d:24)                               ; F8E1DA  f2 9d 07 60 30
 	push XWA                                             ; F8E1DF  38
 	call uDMA2_SetSource                                        ; F8E1E0  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E1E4  08 7e 12
-	set	2, (0x20:8)                                   ; F8E1E7  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E1E4  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E1E7  f0 20 ba
 	m_set 7, MD24, 0x00008a                              ; F8E1EA  f2 8a 00 00 bf
 	inc 6,XSP                                            ; F8E1EF  ef 66
 .LF8E1F1:
@@ -24250,9 +24250,9 @@ Link_SendCommand5_WaitDone:
 	m_sub_rm MWD+r6, 0xfe, r1                            ; F8E246  9e fe a1
 	cp BC,0x09c4                                         ; F8E249  d9 cf c4 09
 	jr le, .LF8E23C                                      ; F8E24D  62 ed
-	ld (0x7f:8), 0x00:io                                      ; F8E24F  08 7f 00
+	ld (DMA3V:8), 0x00:io                                      ; F8E24F  08 7f 00
 	ld (Link_CompletionSelector:24), 0x00                             ; F8E252  f2 da 07 60 00 00
-	set	1, (0x13:8)                                   ; F8E258  f0 13 b9
+	set	1, (P7:8)                                   ; F8E258  f0 13 b9
 	m_res 7, MD24, 0x00008a                              ; F8E25B  f2 8a 00 00 b7
 	inc 0x01, (Link_HandshakeTimeouts:24)                           ; F8E260  c2 db 07 60 61
 	ldw wa, 0xffff                                       ; F8E265  30 ff ff
@@ -24295,22 +24295,22 @@ Link_SendCommandE1:
 .LF8E28B:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E28B  c2 d9 07 60 3f 00
 	jr nz, .LF8E280                                      ; F8E291  6e ed
-	res	0, (0x13:8)                                   ; F8E293  f0 13 b0
+	res	0, (P7:8)                                   ; F8E293  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E296  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E29C  41 00 00 7c 00
 	ld (XBC),0xe1                                        ; F8E2A1  b1 00 e1
 	ldw hl, 0x00                                         ; F8E2A4  33 00 00
 .LF8E2A7:
-	bit	3, (0x13:8)                                   ; F8E2A7  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E2A7  f0 13 cb
 	jr z, .LF8E2BC                                       ; F8E2AA  66 10
 	ld DE,HL                                             ; F8E2AC  db 8a
 	inc 1,HL                                             ; F8E2AE  db 61
 	cp DE,0x4e20                                         ; F8E2B0  da cf 20 4e
 	jr ule, .LF8E2A7                                     ; F8E2B4  63 f1
-	set	0, (0x13:8)                                   ; F8E2B6  f0 13 b8
+	set	0, (P7:8)                                   ; F8E2B6  f0 13 b8
 	jrl .LF8E31A                                         ; F8E2B9  78 5e 00
 .LF8E2BC:
-	set	0, (0x13:8)                                   ; F8E2BC  f0 13 b8
+	set	0, (P7:8)                                   ; F8E2BC  f0 13 b8
 	ld XBC,(XIZ+0x08)                                    ; F8E2BF  ae 08 21
 	ld (XIX),XBC                                         ; F8E2C2  b4 61
 	ld XBC,(XIZ+0x0e)                                    ; F8E2C4  ae 0e 21
@@ -24323,8 +24323,8 @@ Link_SendCommandE1:
 	lda xbc, (Link_TxDest:24)                               ; F8E2DD  f2 a1 07 60 31
 	push XBC                                             ; F8E2E2  39
 	call uDMA2_SetSource                                        ; F8E2E3  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E2E7  08 7e 12
-	set	2, (0x20:8)                                   ; F8E2EA  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E2E7  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E2EA  f0 20 ba
 	inc 6,XSP                                            ; F8E2ED  ef 66
 .LF8E2EF:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E2EF  c2 d9 07 60 3f 01
@@ -24339,8 +24339,8 @@ Link_SendCommandE1:
 	ld XBC,(XIX)                                         ; F8E303  a4 21
 	push XBC                                             ; F8E305  39
 	call uDMA2_SetSource                                        ; F8E306  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E30A  08 7e 12
-	set	2, (0x20:8)                                   ; F8E30D  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E30A  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E30D  f0 20 ba
 	inc 6,XSP                                            ; F8E310  ef 66
 .LF8E312:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E312  c2 d9 07 60 3f 00
@@ -24380,22 +24380,22 @@ Link_SendCommandE4:
 .LF8E33C:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E33C  c2 d9 07 60 3f 00
 	jr nz, .LF8E331                                      ; F8E342  6e ed
-	res	0, (0x13:8)                                   ; F8E344  f0 13 b0
+	res	0, (P7:8)                                   ; F8E344  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E347  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E34D  41 00 00 7c 00
 	ld (XBC),0xe4                                        ; F8E352  b1 00 e4
 	ldw hl, 0x00                                         ; F8E355  33 00 00
 .LF8E358:
-	bit	3, (0x13:8)                                   ; F8E358  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E358  f0 13 cb
 	jr z, .LF8E36D                                       ; F8E35B  66 10
 	ld DE,HL                                             ; F8E35D  db 8a
 	inc 1,HL                                             ; F8E35F  db 61
 	cp DE,0x4e20                                         ; F8E361  da cf 20 4e
 	jr ule, .LF8E358                                     ; F8E365  63 f1
-	set	0, (0x13:8)                                   ; F8E367  f0 13 b8
+	set	0, (P7:8)                                   ; F8E367  f0 13 b8
 	jrl .LF8E3CB                                         ; F8E36A  78 5e 00
 .LF8E36D:
-	set	0, (0x13:8)                                   ; F8E36D  f0 13 b8
+	set	0, (P7:8)                                   ; F8E36D  f0 13 b8
 	ld XBC,(XIZ+0x08)                                    ; F8E370  ae 08 21
 	ld (XIX),XBC                                         ; F8E373  b4 61
 	ld XBC,(XIZ+0x0e)                                    ; F8E375  ae 0e 21
@@ -24408,8 +24408,8 @@ Link_SendCommandE4:
 	lda xbc, (0x6007a7:24)                               ; F8E38E  f2 a7 07 60 31
 	push XBC                                             ; F8E393  39
 	call uDMA2_SetSource                                        ; F8E394  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E398  08 7e 12
-	set	2, (0x20:8)                                   ; F8E39B  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E398  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E39B  f0 20 ba
 	inc 6,XSP                                            ; F8E39E  ef 66
 .LF8E3A0:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E3A0  c2 d9 07 60 3f 01
@@ -24424,8 +24424,8 @@ Link_SendCommandE4:
 	ld XBC,(XIX)                                         ; F8E3B4  a4 21
 	push XBC                                             ; F8E3B6  39
 	call uDMA2_SetSource                                        ; F8E3B7  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E3BB  08 7e 12
-	set	2, (0x20:8)                                   ; F8E3BE  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E3BB  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E3BE  f0 20 ba
 	inc 6,XSP                                            ; F8E3C1  ef 66
 .LF8E3C3:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E3C3  c2 d9 07 60 3f 00
@@ -24468,22 +24468,22 @@ Link_SendCommandE7:
 .LF8E3ED:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E3ED  c2 d9 07 60 3f 00
 	jr nz, .LF8E3E2                                      ; F8E3F3  6e ed
-	res	0, (0x13:8)                                   ; F8E3F5  f0 13 b0
+	res	0, (P7:8)                                   ; F8E3F5  f0 13 b0
 	ld (Link_TxBurstsLeft:24), 0x02                             ; F8E3F8  f2 d9 07 60 00 02
 	ld XBC,0x007c0000                                    ; F8E3FE  41 00 00 7c 00
 	ld (XBC),0xe7                                        ; F8E403  b1 00 e7
 	ldw hl, 0x00                                         ; F8E406  33 00 00
 .LF8E409:
-	bit	3, (0x13:8)                                   ; F8E409  f0 13 cb
+	bit	3, (P7:8)                                   ; F8E409  f0 13 cb
 	jr z, .LF8E41D                                       ; F8E40C  66 0f
 	ld DE,HL                                             ; F8E40E  db 8a
 	inc 1,HL                                             ; F8E410  db 61
 	cp DE,0x4e20                                         ; F8E412  da cf 20 4e
 	jr ule, .LF8E409                                     ; F8E416  63 f1
-	set	0, (0x13:8)                                   ; F8E418  f0 13 b8
+	set	0, (P7:8)                                   ; F8E418  f0 13 b8
 	jr .LF8E479                                          ; F8E41B  68 5c
 .LF8E41D:
-	set	0, (0x13:8)                                   ; F8E41D  f0 13 b8
+	set	0, (P7:8)                                   ; F8E41D  f0 13 b8
 	ld XBC,(XIZ+0x08)                                    ; F8E420  ae 08 21
 	ld (XIX),XBC                                         ; F8E423  b4 61
 	ld XBC,(XIZ+0x0c)                                    ; F8E425  ae 0c 21
@@ -24494,8 +24494,8 @@ Link_SendCommandE7:
 	lda xbc, (0x6007ad:24)                               ; F8E43C  f2 ad 07 60 31
 	push XBC                                             ; F8E441  39
 	call uDMA2_SetSource                                        ; F8E442  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E446  08 7e 12
-	set	2, (0x20:8)                                   ; F8E449  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E446  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E449  f0 20 ba
 	inc 6,XSP                                            ; F8E44C  ef 66
 .LF8E44E:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                        ; F8E44E  c2 d9 07 60 3f 01
@@ -24510,8 +24510,8 @@ Link_SendCommandE7:
 	ld XBC,(XIX)                                         ; F8E462  a4 21
 	push XBC                                             ; F8E464  39
 	call uDMA2_SetSource                                        ; F8E465  1d af e6 f8
-	ld (0x7e:8), 0x12:io                                      ; F8E469  08 7e 12
-	set	2, (0x20:8)                                   ; F8E46C  f0 20 ba
+	ld (DMA2V:8), 0x12:io                                      ; F8E469  08 7e 12
+	set	2, (TRUN:8)                                   ; F8E46C  f0 20 ba
 	inc 6,XSP                                            ; F8E46F  ef 66
 .LF8E471:
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x00                        ; F8E471  c2 d9 07 60 3f 00
@@ -24592,7 +24592,7 @@ INT0_LinkByte:
 	pushw hl                                      ; F8E482  2b
 	push XIX                                      ; F8E483  3c
 	lda xix, (uDMA3_SetDest:24)                   ; F8E484  f2 c9 e6 f8 34   XIX = uDMA3_SetDest, called four different ways below
-	bit	2, (0x13:8)                            ; F8E489  f0 13 ca   P7 bit 2 -- when set, take the interrupt and do nothing
+	bit	2, (P7:8)                            ; F8E489  f0 13 ca   P7 bit 2 -- when set, take the interrupt and do nothing
 	jrl nz, INT0_Link__return                              ; F8E48C  7e 98 00
 	ld XBC,0x007c0000                             ; F8E48F  41 00 00 7c 00   the inter-processor link port
 	ld H,(XBC)                                    ; F8E494  81 26   read the command byte
@@ -24615,8 +24615,8 @@ INT0_Cmd_E1:
 	push XIY                                      ; F8E4C7  3d
 	jp (xix)                                      ; F8E4C8  b4 d8
 .LF8E4CA:
-	ld (0x7f:8), 0x0a:io                               ; F8E4CA  08 7f 0a   DMA3V = 0x0A; 0x0A << 2 = 0x28 = INT0, so the DMA engine now
-	res	1, (0x13:8)                            ; F8E4CD  f0 13 b1   absorbs the rest of the message.  P7 bit 1 = the acknowledge line
+	ld (DMA3V:8), 0x0a:io                               ; F8E4CA  08 7f 0a   DMA3V = 0x0A; 0x0A << 2 = 0x28 = INT0, so the DMA engine now
+	res	1, (P7:8)                            ; F8E4CD  f0 13 b1   absorbs the rest of the message.  P7 bit 1 = the acknowledge line
 	jr INT0_Link__drop_args                                   ; F8E4D0  68 53
 INT0_Cmd_E2:
 	ld (Link_CompletionSelector:24), 0x03                      ; F8E4D2  f2 da 07 60 00 03
@@ -24627,8 +24627,8 @@ INT0_Cmd_E2:
 	push XIY                                      ; F8E4E6  3d
 	jp (xix)                                      ; F8E4E7  b4 d8
 .LF8E4E9:
-	ld (0x7f:8), 0x0a:io                               ; F8E4E9  08 7f 0a
-	res	1, (0x13:8)                            ; F8E4EC  f0 13 b1
+	ld (DMA3V:8), 0x0a:io                               ; F8E4E9  08 7f 0a
+	res	1, (P7:8)                            ; F8E4EC  f0 13 b1
 	jr INT0_Link__drop_args                                   ; F8E4EF  68 34
 INT0_Cmd_E6:
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E4F1  f2 da 07 60 00 00
@@ -24647,8 +24647,8 @@ INT0_Cmd_Other:
 	push XIY                                      ; F8E51C  3d
 	jp (xix)                                      ; F8E51D  b4 d8
 .LF8E51F:
-	ld (0x7f:8), 0x0a:io                               ; F8E51F  08 7f 0a
-	res	1, (0x13:8)                            ; F8E522  f0 13 b1
+	ld (DMA3V:8), 0x0a:io                               ; F8E51F  08 7f 0a
+	res	1, (P7:8)                            ; F8E522  f0 13 b1
 INT0_Link__drop_args:
 	inc 6,XSP                                     ; F8E525  ef 66   drop the three pushed arguments
 INT0_Link__return:
@@ -24681,7 +24681,7 @@ INT0_Link__return:
 ;          (0x6007D9) countdown is what the arming code at 0xF8E173 spins on.
 ; ---------------------------------------------------------------------
 INTTC2_uDMA2Done:
-	res	2, (0x20:8)                            ; F8E52D  f0 20 b2   TRUN bit 2 = stop timer 2, which is what triggers channel 2
+	res	2, (TRUN:8)                            ; F8E52D  f0 20 b2   TRUN bit 2 = stop timer 2, which is what triggers channel 2
 	m_cp_mi8 MB24, Link_TxBurstsLeft, 0x01                 ; F8E530  c2 d9 07 60 3f 01
 	jr nz, INTTC2_uDMA2Done__try2                               ; F8E536  6e 08
 	ld (Link_TxBurstsLeft:24), 0x00                      ; F8E538  f2 d9 07 60 00 00
@@ -24796,7 +24796,7 @@ INTTC3_Sel1_GeneralCmd:
 	jp (xbc)                                      ; F8E5A0  b1 d8
 INTTC3_Sel1__resume:
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E5A2  f2 da 07 60 00 00   the exchange is over
-	set	1, (0x13:8)                            ; F8E5A8  f0 13 b9   P7 bit 1 back to idle
+	set	1, (P7:8)                            ; F8E5A8  f0 13 b9   P7 bit 1 back to idle
 	jr INTTC3__drop_args                          ; F8E5AB  68 19
 
 ; --- selector 2: an 0xE1 header arrived, so arm the DMA for its payload ---
@@ -24822,7 +24822,7 @@ INTTC3__drop_args:
 INTTC3_Sel3_ReadRequest:
 	ld (0x600781:24), 0xff                      ; F8E5CA  f2 81 07 60 00 ff
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E5D0  f2 da 07 60 00 00
-	set	1, (0x13:8)                            ; F8E5D6  f0 13 b9   P7 bit 1 back to idle
+	set	1, (P7:8)                            ; F8E5D6  f0 13 b9   P7 bit 1 back to idle
 	m_set 7, MD24, Link_PendingFlags                       ; F8E5D9  f2 92 07 60 bf   "an 0xE2 is pending"
 	jr INTTC3__return                             ; F8E5DE  68 0e
 
@@ -24830,7 +24830,7 @@ INTTC3_Sel3_ReadRequest:
 INTTC3_Sel4_BlockDone:
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E5E0  f2 da 07 60 00 00
 	m_res 7, MD24, 0x00008a                       ; F8E5E6  f2 8a 00 00 b7   release Link_WaitBlockDone
-	set	1, (0x13:8)                            ; F8E5EB  f0 13 b9   P7 bit 1 back to idle
+	set	1, (P7:8)                            ; F8E5EB  f0 13 b9   P7 bit 1 back to idle
 INTTC3__return:
 	pop QWA                                       ; F8E5EE  d7 e2 05
 	pop XIY                                       ; F8E5F1  5d
@@ -24884,7 +24884,7 @@ Link_ServiceTask:
 	inc 2,XSP                                     ; F8E623  ef 62   +2 = the 10 argument bytes
 Link_ServiceTask__watchdog:
 	ei 0x00                                       ; F8E625  06 00
-	bit	1, (0x13:8)                            ; F8E627  f0 13 c9   P7 bit 1 set = nothing in flight
+	bit	1, (P7:8)                            ; F8E627  f0 13 c9   P7 bit 1 set = nothing in flight
 	jr nz, Link_ServiceTask__idle                 ; F8E62A  6e 1e
 	call uDMA3_GetCount                           ; F8E62C  1d da e6 f8   WA := DMAC3
 	cp (Link_LastDmaCount:24), wa                      ; F8E630  d2 df 07 60 f8   same as last pass?
@@ -24906,7 +24906,7 @@ Link_ServiceTask__check:
 	m_ld_mi16 MDI+r4, 0, 0x0000                   ; F8E656  b4 02 00 00   eleven equal samples: abort
 	ld (DMA3V:8), 0x00:io                              ; F8E65A  08 7f 00   un-point INT0 from the DMA engine
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E65D  f2 da 07 60 00 00
-	set	1, (0x13:8)                            ; F8E663  f0 13 b9   P7 bit 1 back to idle
+	set	1, (P7:8)                            ; F8E663  f0 13 b9   P7 bit 1 back to idle
 	inc 0x01, (Link_StallAborts:24)                    ; F8E666  c2 dc 07 60 61   error counter
 Link_ServiceTask__done:
 	pop XIX                                       ; F8E66B  5c
@@ -24952,7 +24952,7 @@ Link_WaitBlockDone__poll:
 	jr le, Link_WaitBlockDone__poll               ; F8E681  62 ee
 	ld (DMA3V:8), 0x00:io                              ; F8E683  08 7f 00
 	ld (Link_CompletionSelector:24), 0x00                      ; F8E686  f2 da 07 60 00 00
-	set	1, (0x13:8)                            ; F8E68C  f0 13 b9
+	set	1, (P7:8)                            ; F8E68C  f0 13 b9
 	m_res 7, MD24, 0x00008a                       ; F8E68F  f2 8a 00 00 b7
 	inc 0x01, (Link_BlockDoneTimeouts:24)                    ; F8E694  c2 e1 07 60 61   error counter
 	ldw wa, 0xffff                                ; F8E699  30 ff ff   timed out
@@ -39518,7 +39518,7 @@ Delay_SpinNestedLoops:
 ; else CheckingDevice_RamTest, CheckingDevice_FlashLedNibble(result), Delay_SpinNestedLoopsShort, CheckingDevice_RomIdTest, CheckingDevice_FlashLedNibble(result):
 ; the manual's "first 4 flashes RAM, latter 4 ROM" (notes/WSA1-EMULATION-DISASM-GAPS.md gap L, FINDINGS-prom_a-ui-screen-blocks.md 5).
 CheckingDevice_RunSelfTest:
-	ld	c, (0x0d:8)                                      ; F95137  c0 0d 23
+	ld	c, (P5:8)                                      ; F95137  c0 0d 23
 	and C,0x10                                           ; F9513A  cb cc 10
 	srl c, 0x04                                          ; F9513D  cb ef 04
 	and C,0x01                                           ; F95140  cb cc 01
@@ -39543,12 +39543,12 @@ CheckingDevice_FlashLedNibble:
 	pushw de                                             ; F9515D  2a
 	ld e, 0x04:opc                                          ; F9515E  25 04
 .LF95160:
-	ld	c, (0x0d:8)                                      ; F95160  c0 0d 23
+	ld	c, (P5:8)                                      ; F95160  c0 0d 23
 	and C,0x08                                           ; F95163  cb cc 08
 	srl c, 0x03                                          ; F95166  cb ef 03
 	res 0x00,C                                           ; F95169  cb 30 00
 	.byte 0xcb, 0x23, 0x00                               ; F9516C  cb 23 00   ldcf 0x00,C
-	stcf	3, (0x0d:8)                                  ; F9516F  f0 0d a3
+	stcf	3, (P5:8)                                  ; F9516F  f0 0d a3
 	ldw hl, 0x4000                                       ; F95172  33 00 40
 	ld C,(XIZ+0x08)                                      ; F95175  8e 08 23
 	and C,0x01                                           ; F95178  cb cc 01
@@ -39565,12 +39565,12 @@ CheckingDevice_FlashLedNibble:
 .LF9518C:
 	cp hl, 0x00:i3                                         ; F9518C  db d8
 	jr nz, .LF95182                                           ; F9518E  6e f2
-	ld	c, (0x0d:8)                                      ; F95190  c0 0d 23
+	ld	c, (P5:8)                                      ; F95190  c0 0d 23
 	and C,0x08                                           ; F95193  cb cc 08
 	srl c, 0x03                                          ; F95196  cb ef 03
 	set 0x00,C                                           ; F95199  cb 31 00
 	.byte 0xcb, 0x23, 0x00                               ; F9519C  cb 23 00   ldcf 0x00,C
-	stcf	3, (0x0d:8)                                  ; F9519F  f0 0d a3
+	stcf	3, (P5:8)                                  ; F9519F  f0 0d a3
 	ldw hl, 0x4000                                       ; F951A2  33 00 40
 .LF951A5:
 	ld d, 0x20:opc                                          ; F951A5  24 20
@@ -65772,7 +65772,7 @@ MIDI_TX_Ready:
 	call T_Ring601432_IsEmpty                     ; FA5489  1d fc 1d f4
 	and WA,WA                                     ; FA548D  d8 c0
 	jr nz, .LFA5494                               ; FA548F  6e 03
-	ld (0x77:8), 0xfd:io                               ; FA5491  08 77 fd   queue empty and nothing pending -> (0x77) = 0xFD
+	ld (INTES0:8), 0xfd:io                               ; FA5491  08 77 fd   queue empty and nothing pending -> (0x77) = 0xFD
 .LFA5494:
 	popw wa                                       ; FA5494  48
 	reti                                          ; FA5495  07
@@ -65967,7 +65967,7 @@ MIDI_Clock_SetTempo:
 .LFA5559:
 	ldw wa, 0x4735                                ; FA5559  30 35 47
 .LFA555C:
-	ld	(0x32:8), wa                              ; FA555C  f0 32 50
+	ld	(TREG5L:8), wa                              ; FA555C  f0 32 50
 	ld (0xa1:8), 0x00:io                               ; FA555F  08 a1 00
 MIDI_RT_NotClock:
 	ld	a, (0x95:8)                               ; FA5562  c0 95 21
@@ -66142,13 +66142,13 @@ MIDI_RT_ExternalOff:
 	ret                                           ; FA56B2  0e
 .LFA56B3:
 	set	1, (0xa0:8)                            ; FA56B3  f0 a0 b9
-	ld (0x77:8), 0xdd:io                               ; FA56B6  08 77 dd
+	ld (INTES0:8), 0xdd:io                               ; FA56B6  08 77 dd
 	jrl MIDI_RT_Start                                  ; FA56B9  78 4e ff
 .LFA56BC:
 	m_bit 0, MD16, 0x34bb                         ; FA56BC  f1 bb 34 c8
 	jr z, .LFA56CA                                ; FA56C0  66 08
 	set	2, (0xa0:8)                            ; FA56C2  f0 a0 ba
-	ld (0x77:8), 0xdd:io                               ; FA56C5  08 77 dd
+	ld (INTES0:8), 0xdd:io                               ; FA56C5  08 77 dd
 	jr MIDI_RT_Continue                                   ; FA56C8  68 9d
 .LFA56CA:
 	ret                                           ; FA56CA  0e
@@ -66700,15 +66700,15 @@ MIDI_Parser_ClearContext:
 ; ---------------------------------------------------------------------
 MIDI_UART_Configure:
 	ei 0x06                                       ; FA58F0  06 06   RAISE the mask: critical section
-	ld (0x52:8), 0x29:io                               ; FA58F2  08 52 29   SC0MOD = 8-bit UART, baud-rate generator
-	ld (0x51:8), 0x00:io                               ; FA58F5  08 51 00   SC0CR cleared
-	ld (0x53:8), 0x0e:io                               ; FA58F8  08 53 0e   BR0CR: divide by 896 -> 31250 baud at fc = 28 MHz
+	ld (SC0MOD:8), 0x29:io                               ; FA58F2  08 52 29   SC0MOD = 8-bit UART, baud-rate generator
+	ld (SC0CR:8), 0x00:io                               ; FA58F5  08 51 00   SC0CR cleared
+	ld (BR0CR:8), 0x0e:io                               ; FA58F8  08 53 0e   BR0CR: divide by 896 -> 31250 baud at fc = 28 MHz
 	m_cp_mi8 MB24, 0xfffff8, 0x24                 ; FA58FB  c2 f8 ff ff 3f 24   the byte here is 0x02 -- never equal
 	jr nz, .LFA5906                               ; FA5901  6e 03
-	ld (0x53:8), 0x0c:io                               ; FA5903  08 53 0c   divide by 768 -- NOT REACHED
+	ld (BR0CR:8), 0x0c:io                               ; FA5903  08 53 0c   divide by 768 -- NOT REACHED
 .LFA5906:
-	ld (0x77:8), 0x5d:io                               ; FA5906  08 77 5d
-	ld (0x50:8), 0xfe:io                               ; FA5909  08 50 fe   SC0BUF
+	ld (INTES0:8), 0x5d:io                               ; FA5906  08 77 5d
+	ld (SC0BUF:8), 0xfe:io                               ; FA5909  08 50 fe   SC0BUF
 	ei 0x00                                       ; FA590C  06 00   release the mask
 	ret                                           ; FA590E  0e
 
@@ -66735,7 +66735,7 @@ MIDI_PostSendWork:
 	ei 0x06                                       ; FA5910  06 06
 	m_cp_mi8 MB8, 0x89, 0xff                      ; FA5912  c0 89 3f ff
 	jr z, .LFA591D                                ; FA5916  66 05
-	ld (0x77:8), 0xdd:io                               ; FA5918  08 77 dd   the mailbox MIDI_TX_Ready also writes
+	ld (INTES0:8), 0xdd:io                               ; FA5918  08 77 dd   the mailbox MIDI_TX_Ready also writes
 	pop SR                                        ; FA591B  03
 	ret                                           ; FA591C  0e
 .LFA591D:
@@ -72081,7 +72081,7 @@ MidiOut_PostStagedMessage:   ; entry: call from 0xFA721E, 0xFA75D3, 0xFA75E1, 0x
 	jrl .LFA7CEB                                  ; FA7D70  78 78 ff
 .LFA7D73:
 	ld (XIZ),0x00                                 ; FA7D73  b6 00 00
-	ld (0x50:8), 0xf6:io                               ; FA7D76  08 50 f6   ld (0x50),0xf6
+	ld (SC0BUF:8), 0xf6:io                               ; FA7D76  08 50 f6   ld (0x50),0xf6
 	push XIZ                                      ; FA7D79  3e
 	ld XIZ,T_Ring601432_Init                      ; FA7D7A  46 00 1e f4 00
 	cp XIY,0x00f41df8                             ; FA7D7F  ed cf f8 1d f4 00
@@ -72162,10 +72162,10 @@ sub_FA7DCA:   ; entry: call from 0xFA7DA6
 	cp WA,0x05dc                                  ; FA7DD5  d8 cf dc 05
 	jr c, .LFA7E09                                ; FA7DD9  67 2e
 	ld (0x0920:16), de                           ; FA7DDB  f1 20 09 52   ld (0x0920),DE
-	res	2, (0x18:8)                            ; FA7DDF  f0 18 b2   res 2,(0x18)
+	res	2, (P8:8)                            ; FA7DDF  f0 18 b2   res 2,(0x18)
 	ld w, (0x0922:16)                            ; FA7DE2  c1 22 09 20   ld W,(0x0922)
 	m_res 0, MD16, 0x0922                         ; FA7DE6  f1 22 09 b0   res 0,(0x0922)
-	ld	a, (0x18:8)                               ; FA7DEA  c0 18 21   ld A,(0x18)
+	ld	a, (P8:8)                               ; FA7DEA  c0 18 21   ld A,(0x18)
 	bit 0x02,A                                    ; FA7DED  c9 33 02
 	jr nz, .LFA7DF6                               ; FA7DF0  6e 04
 	m_set 0, MD16, 0x0922                         ; FA7DF2  f1 22 09 b8   set 0,(0x0922)
@@ -75625,7 +75625,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	jr c, .LFAA38D                                       ; FAA389  67 02
 	inc 1,DE                                             ; FAA38B  da 61
 .LFAA38D:
-	ld	(0x32:8), de                                     ; FAA38D  f0 32 52
+	ld	(TREG5L:8), de                                     ; FAA38D  f0 32 52
 	m_bit 4, MD16, MidiCfg_ModeBits                                ; FAA390  f1 32 7f cc
 	jr nz, .LFAA3A1                                      ; FAA394  6e 0b
 	m_bit 4, MD24, 0x60f020                              ; FAA396  f2 20 f0 60 cc
@@ -76240,7 +76240,7 @@ sub_FAA742:
 	jr c, .LFAA78D                                       ; FAA789  67 02
 	inc 1,DE                                             ; FAA78B  da 61
 .LFAA78D:
-	ld	(0x32:8), de                                     ; FAA78D  f0 32 52
+	ld	(TREG5L:8), de                                     ; FAA78D  f0 32 52
 	m_bit 4, MD16, MidiCfg_ModeBits                                ; FAA790  f1 32 7f cc
 	jr nz, .LFAA7A1                                      ; FAA794  6e 0b
 	m_bit 4, MD24, 0x60f020                              ; FAA796  f2 20 f0 60 cc
@@ -81462,7 +81462,7 @@ OrdinalToBitMask6:
 	normal
 	push SR
 	max
-	ld (0x10:8), 0x20:io
+	ld (P5CR:8), 0x20:io
 ; ---------------------------------------------------------------------
 ; ParamShadow_FlushAll -- publish every shadow entry whose bit 7 is set,
 ;                           then clear the bit
@@ -156603,9 +156603,9 @@ sub_FE08BD:
 	push XIX                                             ; FE08BF  3c
 	lda xix, (0x1735:24)                                 ; FE08C0  f2 35 17 00 34
 	calr Disk_PortA3_ClearAndSettle                                          ; FE08C5  1e 21 10
-	set	2, (0x1f:8)                                   ; FE08C8  f0 1f ba
+	set	2, (PB:8)                                   ; FE08C8  f0 1f ba
 	calr Delay_150Ticks                                          ; FE08CB  1e 43 0b
-	res	2, (0x1f:8)                                   ; FE08CE  f0 1f b2
+	res	2, (PB:8)                                   ; FE08CE  f0 1f b2
 	m_res 6, MD16, Disk_Flags                                ; FE08D1  f1 e7 21 b6
 	ldw hl, 0x02                                         ; FE08D5  33 02 00
 .LFE08D8:
@@ -158302,7 +158302,7 @@ sub_FE1863:
 Disk_PortA3_ClearAndSettle:
 	pushw 0x05                                           ; FE18E9  0b 05 00
 	calr Delay_Ticks                                          ; FE18EC  1e 32 fb
-	res	3, (0x1e:8)                                   ; FE18EF  f0 1e b3
+	res	3, (PA:8)                                   ; FE18EF  f0 1e b3
 	calr Delay_150Ticks                                          ; FE18F2  1e 1c fb
 	popw bc                                              ; FE18F5  49
 	ret                                                  ; FE18F6  0e
@@ -158331,7 +158331,7 @@ Disk_PortA3_ClearAndSettle:
 ;          selects.  And the same one as above: what the pin is wired to.
 ; ---------------------------------------------------------------------
 Disk_PortA3_Release:
-	set	3, (0x1e:8)                                   ; FE18F7  f0 1e bb
+	set	3, (PA:8)                                   ; FE18F7  f0 1e bb
 	m_cp_mi8 MB16, PanelModeGroup, 0x0d                          ; FE18FA  c1 76 20 3f 0d
 	jr z, .LFE1906                                           ; FE18FF  66 05
 	ld (0x2244:16), 0xff                                 ; FE1901  f1 44 22 00 ff
@@ -160792,10 +160792,10 @@ sub_FE1CE4_Nop:
 	ret                                                  ; FE2F38  0e
 sub_FE2F39:
 	pushw hl                                             ; FE2F39  2b
-	set	2, (0x1f:8)                                   ; FE2F3A  f0 1f ba
+	set	2, (PB:8)                                   ; FE2F3A  f0 1f ba
 	pushw 0x02                                           ; FE2F3D  0b 02 00
 	calr Delay_Ticks                                          ; FE2F40  1e de e4
-	res	2, (0x1f:8)                                   ; FE2F43  f0 1f b2
+	res	2, (PB:8)                                   ; FE2F43  f0 1f b2
 	pushw 0x05                                           ; FE2F46  0b 05 00
 	calr Delay_Ticks                                          ; FE2F49  1e d5 e4
 	calr sub_FE2EF2                                          ; FE2F4C  1e a3 ff
@@ -164186,7 +164186,7 @@ Dev7E_WriteOneSector:
 	ldw hl, 0xfffe                                       ; FE4DEC  33 fe ff
 	jr .LFE4E4A                                              ; FE4DEF  68 59
 .LFE4DF1:
-	ld (0x68:8), 0x10:io                                      ; FE4DF1  08 68 10
+	ld (B0CS:8), 0x10:io                                      ; FE4DF1  08 68 10
 	ld iz, 0x00:i3                                         ; FE4DF4  de a8
 .LFE4DF6:
 	ld WA,IZ                                             ; FE4DF6  de 88
@@ -164207,7 +164207,7 @@ Dev7E_WriteOneSector:
 	inc 2,IZ                                             ; FE4E20  de 62
 	cp IZ,0x0200                                         ; FE4E22  de cf 00 02
 	jr lt, .LFE4DF6                                           ; FE4E26  61 ce
-	ld (0x68:8), 0x14:io                                      ; FE4E28  08 68 14
+	ld (B0CS:8), 0x14:io                                      ; FE4E28  08 68 14
 	calr Dev7E_WaitNotBusy                                          ; FE4E2B  1e f1 fe
 	cp hl, 0x00:i3                                         ; FE4E2E  db d8
 	jr z, .LFE4E37                                           ; FE4E30  66 05
@@ -164378,7 +164378,7 @@ Dev7E_ReadOneSector:
 	ldw hl, 0xfffe                                       ; FE4F61  33 fe ff
 	jr .LFE4FB0                                              ; FE4F64  68 4a
 .LFE4F66:
-	ld (0x68:8), 0x10:io                                      ; FE4F66  08 68 10
+	ld (B0CS:8), 0x10:io                                      ; FE4F66  08 68 10
 	ld QIZ,0                                             ; FE4F69  d7 fa a8
 .LFE4F6C:
 	pushw 0x00                                           ; FE4F6C  0b 00 00
@@ -164398,7 +164398,7 @@ Dev7E_ReadOneSector:
 	mx_st_mr8 MXD, ra_DE, ra_WA, r7                      ; FE4F94  f3 07 e8 e0 47
 	cpw qiz, 0x0200                                      ; FE4F99  d7 fa cf 00 02
 	jr lt, .LFE4F6C                                           ; FE4F9E  61 cc
-	ld (0x68:8), 0x14:io                                      ; FE4FA0  08 68 14
+	ld (B0CS:8), 0x14:io                                      ; FE4FA0  08 68 14
 	.byte 0xc7, 0xf8, 0x33, 0x00                         ; FE4FA3  c7 f8 33 00
 	jr z, .LFE4FAE                                           ; FE4FA7  66 05
 	ldw hl, 0xfffc                                       ; FE4FA9  33 fc ff
@@ -164529,7 +164529,7 @@ Dev7E_IdentifyDevice:
 	ldw hl, 0xfffe                                       ; FE5096  33 fe ff
 	jr .LFE50E7                                              ; FE5099  68 4c
 .LFE509B:
-	ld (0x68:8), 0x10:io                                      ; FE509B  08 68 10
+	ld (B0CS:8), 0x10:io                                      ; FE509B  08 68 10
 	ld iz, 0x00:i3                                         ; FE509E  de a8
 .LFE50A0:
 	pushw 0x00                                           ; FE50A0  0b 00 00
@@ -164551,7 +164551,7 @@ Dev7E_IdentifyDevice:
 	inc 2,IZ                                             ; FE50CD  de 62
 	cp IZ,0x0200                                         ; FE50CF  de cf 00 02
 	jr lt, .LFE50A0                                           ; FE50D3  61 cb
-	ld (0x68:8), 0x14:io                                      ; FE50D5  08 68 14
+	ld (B0CS:8), 0x14:io                                      ; FE50D5  08 68 14
 	calr Dev7E_ReadStatus                                          ; FE50D8  1e 26 fc
 	bit 0x00,L                                           ; FE50DB  cf 33 00
 	jr z, .LFE50E5                                           ; FE50DE  66 05
@@ -165869,17 +165869,17 @@ Fdc_ValidateHead:
 ;          and the read-modify-write is not enough to claim it.
 ; ---------------------------------------------------------------------
 PortB3_Pulse:
-	ld	a, (0x1f:8)                               ; FE594C  c0 1f 21   PB
+	ld	a, (PB:8)                               ; FE594C  c0 1f 21   PB
 	or A,0x08                                     ; FE594F  c9 ce 08
-	ld	(0x1f:8), a                               ; FE5952  f0 1f 41   bit 3 high
+	ld	(PB:8), a                               ; FE5952  f0 1f 41   bit 3 high
 	nop                                           ; FE5955  00
 	nop                                           ; FE5956  00
 	nop                                           ; FE5957  00
 	nop                                           ; FE5958  00
 	nop                                           ; FE5959  00
-	ld	a, (0x1f:8)                               ; FE595A  c0 1f 21
+	ld	a, (PB:8)                               ; FE595A  c0 1f 21
 	and A,0xf7                                    ; FE595D  c9 cc f7
-	ld	(0x1f:8), a                               ; FE5960  f0 1f 41   bit 3 low again
+	ld	(PB:8), a                               ; FE5960  f0 1f 41   bit 3 low again
 	ret                                           ; FE5963  0e
 
 ; ---------------------------------------------------------------------
@@ -165898,7 +165898,7 @@ PortB3_Pulse:
 uDMA0_ArmOnINT7__jrentry:
 	jr uDMA0_ArmOnINT7                            ; FE5964  68 00
 uDMA0_ArmOnINT7:
-	ld (0x7c:8), 0x0e:io                               ; FE5966  08 7c 0e   DMA0V; 0x0E << 2 = 0x38 = INT7
+	ld (DMA0V:8), 0x0e:io                               ; FE5966  08 7c 0e   DMA0V; 0x0E << 2 = 0x38 = INT7
 	ret                                           ; FE5969  0e
 
 ; ---------------------------------------------------------------------
@@ -166450,8 +166450,8 @@ Fdc_ClassifyResultStatus__unclassified:
 ; ---------------------------------------------------------------------
 Fdc_EnableInterrupts:
 .LFE5C03:
-	ld (0x71:8), 0x40:io                               ; FE5C03  08 71 40
-	ld (0x79:8), 0x05:io                               ; FE5C06  08 79 05
+	ld (INTE45:8), 0x40:io                               ; FE5C03  08 71 40
+	ld (INTETC01:8), 0x05:io                               ; FE5C06  08 79 05
 	ret                                           ; FE5C09  0e
 
 ; ---------------------------------------------------------------------
@@ -167919,9 +167919,9 @@ Fdc_Op6_PortA3_Off:
 	inc 2,XSP                                     ; FE6603  ef 62
 	jr .LFE661D                                   ; FE6605  68 16
 .LFE6607:
-	ld	a, (0x1e:8)                               ; FE6607  c0 1e 21
+	ld	a, (PA:8)                               ; FE6607  c0 1e 21
 	and A,0xf7                                    ; FE660A  c9 cc f7
-	ld	(0x1e:8), a                               ; FE660D  f0 1e 41
+	ld	(PA:8), a                               ; FE660D  f0 1e 41
 	ld iz, 0x01:i3                                  ; FE6610  de a9
 .LFE6612:
 	pushw 0x0a                                    ; FE6612  0b 0a 00
@@ -167954,9 +167954,9 @@ Fdc_Op7_PortA3_On:
 	jr nz, .LFE662B                               ; FE6626  6e 03
 	jrl Unit1_Op6_IssueCommandAndWaitReady_Join                                     ; FE6628  78 22 ee
 .LFE662B:
-	ld	a, (0x1e:8)                               ; FE662B  c0 1e 21
+	ld	a, (PA:8)                               ; FE662B  c0 1e 21
 	or A,0x08                                     ; FE662E  c9 ce 08
-	ld	(0x1e:8), a                               ; FE6631  f0 1e 41
+	ld	(PA:8), a                               ; FE6631  f0 1e 41
 	ret                                           ; FE6634  0e
 
 ; ---------------------------------------------------------------------

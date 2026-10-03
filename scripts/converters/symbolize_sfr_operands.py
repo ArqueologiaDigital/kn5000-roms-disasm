@@ -18,6 +18,8 @@ QUESTION THIS ANSWERS / WHAT IT DOES
 
 RUN
     python3 scripts/converters/symbolize_sfr_operands.py --tree v10/maincpu [--apply]
+    python3 scripts/converters/symbolize_sfr_operands.py --tree wsa1/prom_a \
+        --sfr ../include/tmp95c061_sfr.inc --max 0x7f [--apply]
     make gate-all
 """
 import argparse
@@ -44,6 +46,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tree", required=True)
     ap.add_argument("--sfr", default="shared/sfr_tmp94c241.s", help="relative to --tree")
+    ap.add_argument("--max", default="0xff", help="highest SFR address; WSA1's TMP95C061 needs 0x7f, "
+                    "because its include also defines MEM_XIX_PI2/PI4 = 0xF1/0xF2, which are not addresses")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     tree = os.path.join(ROOT, a.tree)
@@ -52,7 +56,8 @@ def main():
         m = re.match(r"\s*\.equ\s+(\w+)\s*,\s*(0x[0-9A-Fa-f]+|\d+)", ln)
         if m:
             names.setdefault(int(m.group(2), 0), []).append(m.group(1))
-    uniq = {v: n[0] for v, n in names.items() if len(n) == 1 and n[0].upper() not in RESERVED}
+    hi = int(a.max, 0)
+    uniq = {v: n[0] for v, n in names.items() if len(n) == 1 and n[0].upper() not in RESERVED and v <= hi}
     total, left = 0, 0
     for p in sorted(glob.glob(os.path.join(tree, "**", "*.s"), recursive=True)):
         L = open(p, "rb").read().decode("latin-1").split("\n")
