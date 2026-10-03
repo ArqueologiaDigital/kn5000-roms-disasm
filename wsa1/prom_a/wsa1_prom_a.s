@@ -46190,7 +46190,7 @@ PanelScreen_RequestRedrawIfFieldQueued:
 	nop                                                  ; F99817  00
 PanelScreen_RequestRedrawIfFieldQueued_Join:
 	calr PanelScreen_RequestRedrawIfFieldQueued_Nop                                      ; F99818  1e 05 00
-	call sub_F9B4A1                                      ; F9981B  1d a1 b4 f9
+	call MidiOutProgramChange_ResetState                                      ; F9981B  1d a1 b4 f9
 	ret                                                  ; F9981F  0e
 PanelScreen_RequestRedrawIfFieldQueued_Nop:
 	ret                                                  ; F99820  0e
@@ -46501,7 +46501,7 @@ ScreenButtonRow_GeneralMidi_Page0:
 ; ---------------------------------------------------------------------
 ; ScreenButtonRow_GeneralMidi_YesNo -- 32 handlers, GeneralMidiMode's YES/NO
 ;          page: row (0x2740) = 1 of ScreenButton_GeneralMidiMode_Entry, drawn
-;          as DL_GeneralMidiMidiYesNo; sub_F99E85, sub_F99ED1 and sub_F99EE4
+;          as DL_GeneralMidiMidiYesNo; LcdKeyRow3_GeneralMidiYesNo, LcdKeyRow4_GeneralMidiYesNo and ExitKey_GeneralMidiYesNo
 ;          in this row set (0x2740) back to 0 (check W3).
 ; (notes/proma-2026-09-25/gen_button_rows.py)
 ; ---------------------------------------------------------------------
@@ -46516,12 +46516,12 @@ ScreenButtonRow_GeneralMidi_YesNo:
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop7                                 ; F9998C  [ 71]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop8                                 ; F99990  [ 72]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop9                                 ; F99994  [ 73]
-	.long sub_F99E85                                 ; F99998  [ 74]
-	.long sub_F99ED1                                 ; F9999C  [ 75]
+	.long LcdKeyRow3_GeneralMidiYesNo                                 ; F99998  [ 74]
+	.long LcdKeyRow4_GeneralMidiYesNo                                 ; F9999C  [ 75]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop12                                 ; F999A0  [ 76]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop13                                 ; F999A4  [ 77]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop14                                 ; F999A8  [ 78]
-	.long sub_F99EE4                                 ; F999AC  [ 79]
+	.long ExitKey_GeneralMidiYesNo                                 ; F999AC  [ 79]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop16                                 ; F999B0  [ 80]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop17                                 ; F999B4  [ 81]
 	.long ScreenButtonRow_GeneralMidi_YesNo_Nop18                                 ; F999B8  [ 82]
@@ -47217,7 +47217,12 @@ ScreenButtonRow_GeneralMidi_YesNo_Nop8:   ; entry: named by 1 `.long` operand, f
 	ret                                                  ; F99E83  0e
 ScreenButtonRow_GeneralMidi_YesNo_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF99994
 	ret                                                  ; F99E84  0e
-sub_F99E85:   ; entry: named by 1 `.long` operand, first at 0xF99998
+; LcdKeyRow3_GeneralMidiYesNo -- YES on the GENERAL MIDI confirm page: commit the GM-mode choice, then leave
+; Evidence: ScreenButtonRow_GeneralMidi_YesNo [74] = page 1, code 0x0A (LCD row 3); " YES" is drawn at 0x11CA by the
+;   row-3 right arrow.  Right-hand key only (W bit 7 clear).  (0x2720) bit 2 -- Paint_GeneralMidiMode's copy of
+;   (0x7F4D) -- goes to (0x7F4D) bit 2 if it differs, posting {0x91,3,A,4} by T_Queue2C00_AppendRegs (as at
+;   0xF818C5); then (0x2740)=0, (0x2880)=0x23, (0x274C)|=4, and (0x2070)=0xAB/(0x2071)=0x40 requests screen 0xAB.
+LcdKeyRow3_GeneralMidiYesNo:   ; entry: named by 1 `.long` operand, first at 0xF99998
 	bit 0x07,W                                           ; F99E85  c8 33 07
 	jr nz, .LF99ED0                                      ; F99E88  6e 46
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F99E8A  c1 75 20 3c 6f
@@ -47245,7 +47250,11 @@ sub_F99E85:   ; entry: named by 1 `.long` operand, first at 0xF99998
 	ldw (UI_Request:16), 0x40ab                              ; F99ECA  f1 70 20 02 ab 40
 .LF99ED0:
 	ret                                                  ; F99ED0  0e
-sub_F99ED1:   ; entry: named by 1 `.long` operand, first at 0xF9999C
+; LcdKeyRow4_GeneralMidiYesNo -- NO on the GENERAL MIDI confirm page: back to page 0 without touching (0x7F4D)
+; Evidence: ScreenButtonRow_GeneralMidi_YesNo entry [75] = code 0x0B (LCD row 4); " NO" is drawn at 0x17E2 beside
+;   the row-4 right arrow (0x17BF).  Right-hand key only (W bit 7 clear): (0x2740)=0 selects the page-0 row, and
+;   (0x2071)=0x10 is bit 4, which PanelButton_Route (0xF86230) turns into the redraw bit of (0x2072).
+LcdKeyRow4_GeneralMidiYesNo:   ; entry: named by 1 `.long` operand, first at 0xF9999C
 	bit 0x07,W                                           ; F99ED1  c8 33 07
 	jr nz, .LF99EE0                                      ; F99ED4  6e 0a
 	ld (0x2740:16), 0x00                                 ; F99ED6  f1 40 27 00 00
@@ -47258,7 +47267,10 @@ ScreenButtonRow_GeneralMidi_YesNo_Nop13:   ; entry: named by 1 `.long` operand, 
 	ret                                                  ; F99EE2  0e
 ScreenButtonRow_GeneralMidi_YesNo_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF999A8
 	ret                                                  ; F99EE3  0e
-sub_F99EE4:   ; entry: named by 1 `.long` operand, first at 0xF999AC
+; ExitKey_GeneralMidiYesNo -- EXIT on the GENERAL MIDI confirm page: back to page 0, as NO does
+; Evidence: ScreenButtonRow_GeneralMidi_YesNo entry [79] = code 0x0F (EXIT); byte-for-byte the body of
+;   LcdKeyRow4_GeneralMidiYesNo: guard W bit 7 clear, (0x2740)=0, (0x2071)=0x10 (redraw).
+ExitKey_GeneralMidiYesNo:   ; entry: named by 1 `.long` operand, first at 0xF999AC
 	bit 0x07,W                                           ; F99EE4  c8 33 07
 	jr nz, .LF99EF3                                      ; F99EE7  6e 0a
 	ld (0x2740:16), 0x00                                 ; F99EE9  f1 40 27 00 00
@@ -47297,7 +47309,13 @@ ScreenButtonRow_GeneralMidi_YesNo_Nop30:   ; entry: named by 1 `.long` operand, 
 	ret                                                  ; F99F02  0e
 ScreenButtonRow_GeneralMidi_YesNo_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF999EC
 	ret                                                  ; F99F03  0e
-sub_F99F04:
+; PanelMode_MidiEnter -- Enter method of panel MODE 0x12 (MIDI): flag the mode change and run T_F415C8
+; Evidence: view-A entry 18 of PanelScreen_VtableTable (0xF86F09) -> object 0xF41640, +0 `jp 0xF99F04`, called by
+;   PanelScreen_CallEnter_A with the mode (0x2078).  PanelMode_ToScreenIdMap[0x12] = 0x70, Paint_MidiMenu's screen,
+;   and MidiSubmenu_ExitToMidiMenu requests mode 0x12.  Body: `set 1,(0x2134)` (the bit PanelState_ClearOnChange
+;   sets on a mode change), then T_F415C8 (sub_F9433A), XDE/XHL/XIX/XIZ kept -- the shape of mode 0x0A's Enter,
+;   0xF9FED1.
+PanelMode_MidiEnter:
 	m_set 1, MD16, 0x2134                                ; F99F04  f1 34 21 b9
 	push XDE                                             ; F99F08  3a
 	push XHL                                             ; F99F09  3b
@@ -47309,7 +47327,10 @@ sub_F99F04:
 	pop XHL                                              ; F99F12  5b
 	pop XDE                                              ; F99F13  5a
 	ret                                                  ; F99F14  0e
-sub_F99F15:
+; PanelMode_MidiLeave -- Leave method of panel MODE 0x12 (MIDI): only `set 1,(0x2134)`
+; Evidence: object 0xF41640's +4 slot T_F41644 is `jp 0xF99F15`; PanelScreen_CallLeave_A calls +4 with the mode that
+;   stopped being current.  Same body as mode 0x0A's Leave at 0xF9FEE2.
+PanelMode_MidiLeave:
 	m_set 1, MD16, 0x2134                                ; F99F15  f1 34 21 b9
 	ret                                                  ; F99F19  0e
 sub_F99F1A:
@@ -47318,27 +47339,13 @@ sub_F99F1A:
 sub_F99F1F:
 	m_set 1, MD16, 0x2134                                ; F99F1F  f1 34 21 b9
 	ret                                                  ; F99F23  0e
-; ---------------------------------------------------------------------
-; sub_F99F24 -- a screen painter this round REFUSED to name.
-;
-; It hands 2 display list(s) to the interpreter ON THE STACK.
-;     site 0xF99F37  list 0xF0C81F-0xF0C917 (248 B, leaves by jr)
-;        text: "MIDI"; "T0TAL M0DE"; "C0NFIGURE"; "PR0G"; "CHANGE"; "MIDI 0UT"; ...
-;     site 0xF99F45  list 0xF0C800-0xF0C8D5 (213 B, leaves by call)
-;        text: "INPUT&0UTPUT"; "FILTER#"; "MIDI"; "T0TAL M0DE"; "C0NFIGURE"; "PR0G"; ...
-; Evidence: the two 24-bit immediates of the 12-byte push idiom at
-;          the cited site; the record walk from <start> lands exactly
-;          on <end>; the text is the `.ascii` the interpreter draws.
-; NOT NAMED because its list is the MIDI menu's INDEX of thirteen captions
-;          (T0TAL M0DE, C0NFIGURE, PR0G CHANGE, MIDI 0UT, SYSEX BULK DUMP,
-;          GENERAL MIDI, REALTIME MESSAGE, INPUT&0UTPUT FILTER); no one of
-;          them names the routine, and naming it after any would claim a
-;          screen that another routine paints.
-;          A wrong name passes the byte gate forever, so this keeps
-;          sub_XXXXXX and states the gap.
-; Recorded by notes/prom_a_understanding_round7.py --apply.
-; ---------------------------------------------------------------------
-sub_F99F24:
+; Paint_MidiMenu -- ENTER method of screen 0x70, the MIDI menu: paints its index of MIDI sub-screens
+; Evidence: ViewB [112] (0xF87101) -> object 0xF41650, +0 `jp 0xF99F24`; PanelMode_ToScreenIdMap[0x12] = 0x70. Lists
+;   on the stack: site 0xF99F45 0xF0C800-0xF0C8D5 when (0xC4)==2 ("INPUT&0UTPUT" "FILTER" "MIDI" "T0TAL M0DE"
+;   "C0NFIGURE" "PR0G" "CHANGE" "MIDI 0UT" "SYSEX" ...), else site 0xF99F37 0xF0C81F-0xF0C917 (adds "REALTIME"). The
+;   title is op-0x1C "MIDI"; ScreenButton_MidiMenu's row keys request exactly the captioned screens. Named like
+;   Paint_DiskMenu, after the MENU -- round 7's refusal of a CAPTION name still holds.
+Paint_MidiMenu:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F99F24  1d 80 2e f4
 	call T_F42E10                                        ; F99F28  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F99F2C  f1 40 25 00 00
@@ -47363,7 +47370,12 @@ T_F41654_Nop:
 	ret                                                  ; F99F5C  0e
 T_F4165C_Nop:
 	ret                                                  ; F99F5D  0e
-sub_F99F5E:
+; ScreenButton_MidiMenu -- BUTTON method of screen 0x70 (the MIDI menu): dispatch the panel code via
+;   JumpTable_F99F96
+; Evidence: object 0xF41650's +8 slot T_F41658 is `jp 0xF99F5E` (PanelButton_Route calls +8).  H = 1 when bit 7 of
+;   the forwarded flag (XIZ+0x0A) is set (pair position 0, the left-hand LCD key) and is handed to the arm.
+; Live codes: 0x08-0x0B -> LcdKeyRow1..4_MidiMenu, 0x0F -> ExitKey_MidiMenu; the other 27 -> IgnoredKeys_MidiMenu.
+ScreenButton_MidiMenu:
 	link XIZ,0x0000                                      ; F99F5E  ee 0c 00 00
 	pushw hl                                             ; F99F62  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F99F63  9e 08 3f 1f 00
@@ -47396,7 +47408,7 @@ sub_F99F5E:
 ;          entry holds -- the table abuts its own first arm.  31 or 33 entries
 ;          break that.  Re-derived by notes/prom_a_jumptables.py.
 ; Evidence: the reader shape, the bound, and the abutment above.
-; Selector: the panel BUTTON CODE.  sub_F99F5E (0xF99F5E) is the +8
+; Selector: the panel BUTTON CODE.  ScreenButton_MidiMenu (0xF99F5E) is the +8
 ;          BUTTON method of PanelScreen_VtableTable entry 0x90 (prom_b
 ;          slot 0xF41658); PanelButton_Route calls it with the code in HL
 ;          and at (XIZ+8), and it indexes this table with it:
@@ -47408,72 +47420,98 @@ sub_F99F5E:
 ; Six distinct arms among the 32 slots.
 ; ---------------------------------------------------------------------
 JumpTable_F99F96:
-	.long sub_F9A044                                 ; F99F96  [  0]
-	.long sub_F9A044                                 ; F99F9A  [  1]
-	.long sub_F9A044                                 ; F99F9E  [  2]
-	.long sub_F9A044                                 ; F99FA2  [  3]
-	.long sub_F9A044                                 ; F99FA6  [  4]
-	.long sub_F9A044                                 ; F99FAA  [  5]
-	.long sub_F9A044                                 ; F99FAE  [  6]
-	.long sub_F9A044                                 ; F99FB2  [  7]
-	.long sub_F9A016                                 ; F99FB6  [  8]
-	.long sub_F9A01F                                 ; F99FBA  [  9]
-	.long sub_F9A028                                 ; F99FBE  [ 10]
-	.long sub_F9A031                                 ; F99FC2  [ 11]
-	.long sub_F9A044                                 ; F99FC6  [ 12]
-	.long sub_F9A044                                 ; F99FCA  [ 13]
-	.long sub_F9A044                                 ; F99FCE  [ 14]
-	.long sub_F9A03A                                 ; F99FD2  [ 15]
-	.long sub_F9A044                                 ; F99FD6  [ 16]
-	.long sub_F9A044                                 ; F99FDA  [ 17]
-	.long sub_F9A044                                 ; F99FDE  [ 18]
-	.long sub_F9A044                                 ; F99FE2  [ 19]
-	.long sub_F9A044                                 ; F99FE6  [ 20]
-	.long sub_F9A044                                 ; F99FEA  [ 21]
-	.long sub_F9A044                                 ; F99FEE  [ 22]
-	.long sub_F9A044                                 ; F99FF2  [ 23]
-	.long sub_F9A044                                 ; F99FF6  [ 24]
-	.long sub_F9A044                                 ; F99FFA  [ 25]
-	.long sub_F9A044                                 ; F99FFE  [ 26]
-	.long sub_F9A044                                 ; F9A002  [ 27]
-	.long sub_F9A044                                 ; F9A006  [ 28]
-	.long sub_F9A044                                 ; F9A00A  [ 29]
-	.long sub_F9A044                                 ; F9A00E  [ 30]
-	.long sub_F9A044                                 ; F9A012  [ 31]
-sub_F9A016:   ; entry: named by 1 `.long` operand, first at 0xF99FB6
+	.long IgnoredKeys_MidiMenu                                 ; F99F96  [  0]
+	.long IgnoredKeys_MidiMenu                                 ; F99F9A  [  1]
+	.long IgnoredKeys_MidiMenu                                 ; F99F9E  [  2]
+	.long IgnoredKeys_MidiMenu                                 ; F99FA2  [  3]
+	.long IgnoredKeys_MidiMenu                                 ; F99FA6  [  4]
+	.long IgnoredKeys_MidiMenu                                 ; F99FAA  [  5]
+	.long IgnoredKeys_MidiMenu                                 ; F99FAE  [  6]
+	.long IgnoredKeys_MidiMenu                                 ; F99FB2  [  7]
+	.long LcdKeyRow1_MidiMenu                                 ; F99FB6  [  8]
+	.long LcdKeyRow2_MidiMenu                                 ; F99FBA  [  9]
+	.long LcdKeyRow3_MidiMenu                                 ; F99FBE  [ 10]
+	.long LcdKeyRow4_MidiMenu                                 ; F99FC2  [ 11]
+	.long IgnoredKeys_MidiMenu                                 ; F99FC6  [ 12]
+	.long IgnoredKeys_MidiMenu                                 ; F99FCA  [ 13]
+	.long IgnoredKeys_MidiMenu                                 ; F99FCE  [ 14]
+	.long ExitKey_MidiMenu                                 ; F99FD2  [ 15]
+	.long IgnoredKeys_MidiMenu                                 ; F99FD6  [ 16]
+	.long IgnoredKeys_MidiMenu                                 ; F99FDA  [ 17]
+	.long IgnoredKeys_MidiMenu                                 ; F99FDE  [ 18]
+	.long IgnoredKeys_MidiMenu                                 ; F99FE2  [ 19]
+	.long IgnoredKeys_MidiMenu                                 ; F99FE6  [ 20]
+	.long IgnoredKeys_MidiMenu                                 ; F99FEA  [ 21]
+	.long IgnoredKeys_MidiMenu                                 ; F99FEE  [ 22]
+	.long IgnoredKeys_MidiMenu                                 ; F99FF2  [ 23]
+	.long IgnoredKeys_MidiMenu                                 ; F99FF6  [ 24]
+	.long IgnoredKeys_MidiMenu                                 ; F99FFA  [ 25]
+	.long IgnoredKeys_MidiMenu                                 ; F99FFE  [ 26]
+	.long IgnoredKeys_MidiMenu                                 ; F9A002  [ 27]
+	.long IgnoredKeys_MidiMenu                                 ; F9A006  [ 28]
+	.long IgnoredKeys_MidiMenu                                 ; F9A00A  [ 29]
+	.long IgnoredKeys_MidiMenu                                 ; F9A00E  [ 30]
+	.long IgnoredKeys_MidiMenu                                 ; F9A012  [ 31]
+; LcdKeyRow1_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x08 (LCD row 1):
+;   MidiMenu_RequestRow1Screen(H)
+; Evidence: JumpTable_F99F96 entry [8], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own
+;   `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.
+LcdKeyRow1_MidiMenu:   ; entry: named by 1 `.long` operand, first at 0xF99FB6
 	push 0x00                                            ; F9A016  09 00
 	push H                                               ; F9A018  ce 04
-	calr sub_F9A04B                                      ; F9A01A  1e 2e 00
+	calr MidiMenu_RequestRow1Screen                                      ; F9A01A  1e 2e 00
 	jr .LF9A041                                          ; F9A01D  68 22
-sub_F9A01F:   ; entry: named by 1 `.long` operand, first at 0xF99FBA
+; LcdKeyRow2_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x09 (LCD row 2):
+;   MidiMenu_RequestRow2Screen(H)
+; Evidence: JumpTable_F99F96 entry [9], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own
+;   `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.
+LcdKeyRow2_MidiMenu:   ; entry: named by 1 `.long` operand, first at 0xF99FBA
 	push 0x00                                            ; F9A01F  09 00
 	push H                                               ; F9A021  ce 04
-	calr sub_F9A067                                      ; F9A023  1e 41 00
+	calr MidiMenu_RequestRow2Screen                                      ; F9A023  1e 41 00
 	jr .LF9A041                                          ; F9A026  68 19
-sub_F9A028:   ; entry: named by 1 `.long` operand, first at 0xF99FBE
+; LcdKeyRow3_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0A (LCD row 3):
+;   MidiMenu_RequestRow3Screen(H)
+; Evidence: JumpTable_F99F96 entry [10], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own
+;   `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.
+LcdKeyRow3_MidiMenu:   ; entry: named by 1 `.long` operand, first at 0xF99FBE
 	push 0x00                                            ; F9A028  09 00
 	push H                                               ; F9A02A  ce 04
-	calr sub_F9A090                                      ; F9A02C  1e 61 00
+	calr MidiMenu_RequestRow3Screen                                      ; F9A02C  1e 61 00
 	jr .LF9A041                                          ; F9A02F  68 10
-sub_F9A031:   ; entry: named by 1 `.long` operand, first at 0xF99FC2
+; LcdKeyRow4_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0B (LCD row 4):
+;   MidiMenu_RequestRow4Screen(H)
+; Evidence: JumpTable_F99F96 entry [11], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own
+;   `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.
+LcdKeyRow4_MidiMenu:   ; entry: named by 1 `.long` operand, first at 0xF99FC2
 	push 0x00                                            ; F9A031  09 00
 	push H                                               ; F9A033  ce 04
-	calr sub_F9A0B9                                      ; F9A035  1e 81 00
+	calr MidiMenu_RequestRow4Screen                                      ; F9A035  1e 81 00
 	jr .LF9A041                                          ; F9A038  68 07
-sub_F9A03A:   ; entry: named by 1 `.long` operand, first at 0xF99FD2
+; ExitKey_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0F (EXIT): MidiMenu_ExitToPowerOnMode(H)
+; Evidence: JumpTable_F99F96 entry [15]; falls into ScreenButton_MidiMenu's shared epilogue at 0xF9A041.
+ExitKey_MidiMenu:   ; entry: named by 1 `.long` operand, first at 0xF99FD2
 	push 0x00                                            ; F9A03A  09 00
 	push H                                               ; F9A03C  ce 04
-	calr sub_F9A0D0                                      ; F9A03E  1e 8f 00
+	calr MidiMenu_ExitToPowerOnMode                                      ; F9A03E  1e 8f 00
 .LF9A041:
 	popw bc                                              ; F9A041  49
 	jr .LF9A047                                          ; F9A042  68 03
-sub_F9A044:   ; entry: named by 27 `.long` operands, first at 0xF99F96
-	calr sub_F9A044_Nop                                      ; F9A044  1e eb 00
+; IgnoredKeys_MidiMenu -- default arm of ScreenButton_MidiMenu: calls MidiScreen_NopKeyHandler and returns
+; Evidence: 27 of JumpTable_F99F96's 32 slots ([0]-[7], [12]-[14], [16]-[31]); continues at 0xF9A047, the epilogue.
+IgnoredKeys_MidiMenu:   ; entry: named by 27 `.long` operands, first at 0xF99F96
+	calr IgnoredKeys_MidiMenu_Nop                                      ; F9A044  1e eb 00
 .LF9A047:
 	popw hl                                              ; F9A047  4b
 	unlk XIZ                                             ; F9A048  ee 0d
 	ret                                                  ; F9A04A  0e
-sub_F9A04B:
+; MidiMenu_RequestRow1Screen -- MIDI menu LCD row 1: left key -> screen 0x7D (MIDI TOTAL MODE), right key -> screen
+;   0xB2
+; Evidence: (0x2071)=0x80 (PanelScreen_ApplyRequestForced) with (0x2070)=0x7D, replaced by 0xB2 when (XIZ+8)==0. Row
+;   1 of the menu draws "T0TAL M0DE" at x=5 (0x05A5) and "C0NFIGURE" at x=23 (0x05B7); screen 0x7D's Enter is
+;   Paint_MidiTotalMode, screen 0xB2 (object 0xF41868, Enter sub_FBC56B) is not yet named.
+; In: (XIZ+8) = 1 for the left-hand key (flag bit 7 set), 0 for the right-hand one.
+MidiMenu_RequestRow1Screen:
 	link XIZ,0x0000                                      ; F9A04B  ee 0c 00 00
 	ld (UI_Request_Hi:16), 0x80                                 ; F9A04F  f1 71 20 00 80
 	ld (UI_Request:16), 0x7d                                 ; F9A054  f1 70 20 00 7d
@@ -47483,7 +47521,12 @@ sub_F9A04B:
 .LF9A064:
 	unlk XIZ                                             ; F9A064  ee 0d
 	ret                                                  ; F9A066  0e
-sub_F9A067:
+; MidiMenu_RequestRow2Screen -- MIDI menu LCD row 2: right -> screen 0x7F (MIDI OUT PROGRAM CHANGE); left -> 0x7E
+;   (INPUT&OUTPUT FILTER) when (0xC4)==2, else 0x75 (REALTIME MESSAGES)
+; Evidence: (0x2071)=0x80; `ld (XIX),0x7f` / `0x7e` / `0x75` at 0xF9A07B / 0xF9A080 / 0xF9A089 behind `cp (0xc4),2`.
+;   Row-2 right of both lists reads "PR0G" "CHANGE" "MIDI 0UT"; row-2 left (0x0AA5) reads "INPUT&0UTPUT" "FILTER" in
+;   the variant-2 list and "REALTIME" "MESSAGE" in the other.
+MidiMenu_RequestRow2Screen:
 	link XIZ,0x0000                                      ; F9A067  ee 0c 00 00
 	push XIX                                             ; F9A06B  3c
 	lda xix, (UI_Request:16)                                ; F9A06C  f1 70 20 34
@@ -47501,7 +47544,11 @@ sub_F9A067:
 	pop XIX                                              ; F9A08C  5c
 	unlk XIZ                                             ; F9A08D  ee 0d
 	ret                                                  ; F9A08F  0e
-sub_F9A090:
+; MidiMenu_RequestRow3Screen -- MIDI menu LCD row 3: right -> screen 0x79 (SYSEX BULK DUMP); left -> 0x7E
+;   (INPUT&OUTPUT FILTER) only when (0xC4)!=2, nothing on variant 2
+; Evidence: (0x2071)=0x80 with (0x2070)=0x79 (ViewB[121] -> Paint_SysexBulkDump_Entry) or 0x7E; "SYSEX" "BULK DUMP"
+;   is drawn at row-3 right (0x10CF), and "INPUT&0UTPUT" "FILTER" at row-3 left (0x10BD) only in the variant-1 list.
+MidiMenu_RequestRow3Screen:
 	link XIZ,0x0000                                      ; F9A090  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9A094  8e 08 3f 00
 	jr nz, .LF9A0A6                                      ; F9A098  6e 0c
@@ -47516,7 +47563,10 @@ sub_F9A090:
 .LF9A0B6:
 	unlk XIZ                                             ; F9A0B6  ee 0d
 	ret                                                  ; F9A0B8  0e
-sub_F9A0B9:
+; MidiMenu_RequestRow4Screen -- MIDI menu LCD row 4: right key -> screen 0x7A (GENERAL MIDI); left key does nothing
+; Evidence: (0x2071)=0x80 / (0x2070)=0x7A only when (XIZ+8)==0; ViewB[122] -> Paint_GeneralMidiMode_Entry, and
+;   "GENERAL MIDI" is drawn at row-4 right (0x17FF) with the right-edge arrow at y=0x9B.
+MidiMenu_RequestRow4Screen:
 	link XIZ,0x0000                                      ; F9A0B9  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9A0BD  8e 08 3f 00
 	jr nz, .LF9A0CD                                      ; F9A0C1  6e 0a
@@ -47525,7 +47575,10 @@ sub_F9A0B9:
 .LF9A0CD:
 	unlk XIZ                                             ; F9A0CD  ee 0d
 	ret                                                  ; F9A0CF  0e
-sub_F9A0D0:
+; MidiMenu_ExitToPowerOnMode -- EXIT on the MIDI menu: request panel mode 1, the mode PanelState_Init starts in
+; Evidence: (0x2071)=0x02 -- the bit PanelScreen_ApplyModeChange consumes -- with (0x2070)=0x01, only when
+;   (XIZ+8)==0; PanelMode_Normalise maps 1 to 1 or 2 by the same (0x7F02) test PanelState_Init makes.
+MidiMenu_ExitToPowerOnMode:
 	link XIZ,0x0000                                      ; F9A0D0  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9A0D4  8e 08 3f 00
 	jr nz, .LF9A0E4                                      ; F9A0D8  6e 0a
@@ -47534,7 +47587,11 @@ sub_F9A0D0:
 .LF9A0E4:
 	unlk XIZ                                             ; F9A0E4  ee 0d
 	ret                                                  ; F9A0E6  0e
-sub_F9A0E7:
+; MidiSubmenu_ExitToMidiMenu -- EXIT on a MIDI sub-screen: request panel mode 0x12, i.e. back to the MIDI menu
+; Evidence: (0x2071)=0x02 / (0x2070)=0x12 when (XIZ+8)==0; PanelMode_ToScreenIdMap[0x12] = 0x70, Paint_MidiMenu's
+;   screen. Called from slot [15] (EXIT) of the MidiTotalMode (unlabelled arm 0xF9A327), MidiRealtimeMessages,
+;   MidiInputOutputFilter and MidiOutProgramChange handler tables.
+MidiSubmenu_ExitToMidiMenu:
 	link XIZ,0x0000                                      ; F9A0E7  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9A0EB  8e 08 3f 00
 	jr nz, .LF9A0FB                                      ; F9A0EF  6e 0a
@@ -47543,7 +47600,11 @@ sub_F9A0E7:
 .LF9A0FB:
 	unlk XIZ                                             ; F9A0FB  ee 0d
 	ret                                                  ; F9A0FD  0e
-sub_F9A0FE:
+; StepValue_IncDecClamped -- A = value+1 (dir==0) or value-1 (dir!=0), clamped to [min,max]
+; Evidence: `cp H,(XIZ+0x0a) / jr c` -> `inc 1,C`, else A = max; `cp H,(XIZ+0x0c) / jr ugt` -> `dec 1,C`, else A =
+;   min. 11 callers: every item and value stepper of the four MIDI sub-screens.
+; In: (XIZ+8) dir byte, (XIZ+0x0A) max, (XIZ+0x0C) min, (XIZ+0x0E) current value.  Out: A.
+StepValue_IncDecClamped:
 	link XIZ,0x0000                                      ; F9A0FE  ee 0c 00 00
 	pushw hl                                             ; F9A102  2b
 	ld H,(XIZ+0x0e)                                      ; F9A103  8e 0e 26
@@ -47571,9 +47632,13 @@ sub_F9A0FE:
 	popw hl                                              ; F9A12E  4b
 	unlk XIZ                                             ; F9A12F  ee 0d
 	ret                                                  ; F9A131  0e
-sub_F9A044_Nop:
+IgnoredKeys_MidiMenu_Nop:
 	ret                                                  ; F9A132  0e
-sub_F9A133:
+; ByteField_WriteMaskedIfChanged -- put `value` into the `mask` bits of a byte unless they already hold it
+; Evidence: `and C,H / cp C,(XIZ+0x0c) / jr z` -> A=1; otherwise `cpl` the mask, `and L,H`, `or C,L`, `ld (XIX),C`,
+;   `sub A,A`.
+; In: (XIZ+8) pointer, (XIZ+0x0C) value, (XIZ+0x0E) mask.  Out: A = 0 written, 1 unchanged.
+ByteField_WriteMaskedIfChanged:
 	link XIZ,0x0000                                      ; F9A133  ee 0c 00 00
 	pushw hl                                             ; F9A137  2b
 	push XIX                                             ; F9A138  3c
@@ -47600,7 +47665,11 @@ sub_F9A133:
 	popw hl                                              ; F9A161  4b
 	unlk XIZ                                             ; F9A162  ee 0d
 	ret                                                  ; F9A164  0e
-sub_F9A165:
+; ByteField_SetOrClearMask -- set (flag==1) or clear (otherwise) the mask bits of a byte; A=0 if it changed
+; Evidence: the `cp (XIZ+8),1` arm pushes the mask as the value, the other pushes 0, both to
+;   ByteField_WriteMaskedIfChanged. Callers: the eight MidiInputOutputFilter_Edit* routines.
+; In: (XIZ+8) flag, (XIZ+0x0A) pointer, (XIZ+0x0E) mask.
+ByteField_SetOrClearMask:
 	link XIZ,0x0000                                      ; F9A165  ee 0c 00 00
 	pushw hl                                             ; F9A169  2b
 	ld H,(XIZ+0x0e)                                      ; F9A16A  8e 0e 26
@@ -47612,7 +47681,7 @@ sub_F9A165:
 	push H                                               ; F9A179  ce 04
 	ld XBC,(XIZ+0x0a)                                    ; F9A17B  ae 0a 21
 	push XBC                                             ; F9A17E  39
-	calr sub_F9A133                                      ; F9A17F  1e b1 ff
+	calr ByteField_WriteMaskedIfChanged                                      ; F9A17F  1e b1 ff
 	inc 8,XSP                                            ; F9A182  ef 60
 	cp a, 0x00:i3                                          ; F9A184  c9 d8
 	jr nz, .LF9A1A2                                      ; F9A186  6e 1a
@@ -47623,7 +47692,7 @@ sub_F9A165:
 	pushw 0x00                                           ; F9A18E  0b 00 00
 	ld XBC,(XIZ+0x0a)                                    ; F9A191  ae 0a 21
 	push XBC                                             ; F9A194  39
-	calr sub_F9A133                                      ; F9A195  1e 9b ff
+	calr ByteField_WriteMaskedIfChanged                                      ; F9A195  1e 9b ff
 	inc 8,XSP                                            ; F9A198  ef 60
 	cp a, 0x00:i3                                          ; F9A19A  c9 d8
 	jr nz, .LF9A1A2                                      ; F9A19C  6e 04
@@ -47718,10 +47787,10 @@ Paint_MidiTotalMode:
 .LF9A234:
 	calr Draw_MultiSingleOmni                                          ; F9A234  1e e1 01
 	calr Draw_MultiSingle                                          ; F9A237  1e 01 02
-	calr sub_F9A461                                          ; F9A23A  1e 24 02
-	calr sub_F9A484                                          ; F9A23D  1e 44 02
+	calr MidiTotalMode_PaintSingleChannel                                          ; F9A23A  1e 24 02
+	calr MidiTotalMode_PaintLocalTotal                                          ; F9A23D  1e 44 02
 	calr Draw_NormalTechRemap                                          ; F9A240  1e 6d 02
-	calr sub_F9A4D3                                          ; F9A243  1e 8d 02
+	calr MidiTotalMode_PaintSingleChProgChange                                          ; F9A243  1e 8d 02
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9A246  f1 40 25 00 01
 	lda xbc, (DLTable_MultiSingleOmni:24)                ; F9A24B  f2 9f ca f0 31
 	push XBC                                             ; F9A250  39
@@ -47825,62 +47894,80 @@ ScreenButton_MidiTotalMode:
 ; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_MidiTotalMode:
-	.long sub_F9A330                                 ; F9A2A7  [  0]
-	.long sub_F9A330                                 ; F9A2AB  [  1]
-	.long sub_F9A330                                 ; F9A2AF  [  2]
-	.long sub_F9A330                                 ; F9A2B3  [  3]
-	.long sub_F9A339                                 ; F9A2B7  [  4]
-	.long sub_F9A339                                 ; F9A2BB  [  5]
-	.long sub_F9A339                                 ; F9A2BF  [  6]
-	.long sub_F9A339                                 ; F9A2C3  [  7]
-	.long sub_F9A343                                 ; F9A2C7  [  8]
-	.long sub_F9A343                                 ; F9A2CB  [  9]
-	.long sub_F9A343                                 ; F9A2CF  [ 10]
-	.long sub_F9A343                                 ; F9A2D3  [ 11]
-	.long sub_F9A343                                 ; F9A2D7  [ 12]
-	.long sub_F9A343                                 ; F9A2DB  [ 13]
-	.long sub_F9A343                                 ; F9A2DF  [ 14]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2A7  [  0]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2AB  [  1]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2AF  [  2]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2B3  [  3]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2B7  [  4]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2BB  [  5]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2BF  [  6]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2C3  [  7]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2C7  [  8]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2CB  [  9]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2CF  [ 10]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2D3  [ 11]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2D7  [ 12]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2DB  [ 13]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2DF  [ 14]
 	.long ScreenButtonHandlers_MidiTotalMode__F9A327                                 ; F9A2E3  [ 15]
-	.long sub_F9A343                                 ; F9A2E7  [ 16]
-	.long sub_F9A330                                 ; F9A2EB  [ 17]
-	.long sub_F9A330                                 ; F9A2EF  [ 18]
-	.long sub_F9A330                                 ; F9A2F3  [ 19]
-	.long sub_F9A330                                 ; F9A2F7  [ 20]
-	.long sub_F9A339                                 ; F9A2FB  [ 21]
-	.long sub_F9A339                                 ; F9A2FF  [ 22]
-	.long sub_F9A339                                 ; F9A303  [ 23]
-	.long sub_F9A339                                 ; F9A307  [ 24]
-	.long sub_F9A343                                 ; F9A30B  [ 25]
-	.long sub_F9A343                                 ; F9A30F  [ 26]
-	.long sub_F9A343                                 ; F9A313  [ 27]
-	.long sub_F9A343                                 ; F9A317  [ 28]
-	.long sub_F9A343                                 ; F9A31B  [ 29]
-	.long sub_F9A343                                 ; F9A31F  [ 30]
-	.long sub_F9A343                                 ; F9A323  [ 31]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A2E7  [ 16]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2EB  [ 17]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2EF  [ 18]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2F3  [ 19]
+	.long ItemKeys_MidiTotalMode                                 ; F9A2F7  [ 20]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2FB  [ 21]
+	.long ValueKeys_MidiTotalMode                                 ; F9A2FF  [ 22]
+	.long ValueKeys_MidiTotalMode                                 ; F9A303  [ 23]
+	.long ValueKeys_MidiTotalMode                                 ; F9A307  [ 24]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A30B  [ 25]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A30F  [ 26]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A313  [ 27]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A317  [ 28]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A31B  [ 29]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A31F  [ 30]
+	.long IgnoredKeys_MidiTotalMode                                 ; F9A323  [ 31]
 ScreenButtonHandlers_MidiTotalMode__F9A327:
 	push 0x00                                            ; F9A327  09 00
 	push H                                               ; F9A329  ce 04
-	calr sub_F9A0E7                                          ; F9A32B  1e b9 fd
+	calr MidiSubmenu_ExitToMidiMenu                                          ; F9A32B  1e b9 fd
 	jr .LF9A340                                          ; F9A32E  68 10
-sub_F9A330:   ; entry: named by 8 `.long` operands, first at 0xF9A2A7
+; ItemKeys_MidiTotalMode -- switch arm of ScreenButton_MidiTotalMode for codes 0x00-0x03 / 0x11-0x14:
+;   MidiTotalMode_StepItem(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiTotalMode; the screen draws "ITEM" (DL_F0C917) over these
+;   keys; the arm ends in the reader's epilogue (0xF9A340).  Named for its function, not for one control: 0x11-0x14
+;   are the variant-1 `+0x11` remap of 0x00-0x03.
+ItemKeys_MidiTotalMode:   ; entry: named by 8 `.long` operands, first at 0xF9A2A7
 	push 0x00                                            ; F9A330  09 00
 	push H                                               ; F9A332  ce 04
-	calr sub_F9A34A                                      ; F9A334  1e 13 00
+	calr MidiTotalMode_StepItem                                      ; F9A334  1e 13 00
 	jr .LF9A340                                          ; F9A337  68 07
-sub_F9A339:   ; entry: named by 8 `.long` operands, first at 0xF9A2B7
+; ValueKeys_MidiTotalMode -- switch arm of ScreenButton_MidiTotalMode for codes 0x04-0x07 / 0x15-0x18:
+;   MidiTotalMode_StepValue(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiTotalMode; DL_F0C917 draws "VALUE" over them;
+;   Paint_MidiTotalMode sets (0x209C)=0x04 / (0x209B)=0x84 and `set 0,(0x2075)`, so PanelEvent_Code21_Dial routes
+;   the dial here as code 4.
+ValueKeys_MidiTotalMode:   ; entry: named by 8 `.long` operands, first at 0xF9A2B7
 	push 0x00                                            ; F9A339  09 00
 	push H                                               ; F9A33B  ce 04
-	calr sub_F9A3A2                                      ; F9A33D  1e 62 00
+	calr MidiTotalMode_StepValue                                      ; F9A33D  1e 62 00
 .LF9A340:
 	popw bc                                              ; F9A340  49
 	jr .LF9A346                                          ; F9A341  68 03
-sub_F9A343:   ; entry: named by 15 `.long` operands, first at 0xF9A2C7
-	calr sub_F9A044_Nop                                          ; F9A343  1e ec fd
+; IgnoredKeys_MidiTotalMode -- default arm of ScreenButton_MidiTotalMode: MidiScreen_NopKeyHandler, then the
+;   epilogue
+; Evidence: 15 slots ([8]-[14], [16], [25]-[31]) of ScreenButtonHandlers_MidiTotalMode.
+IgnoredKeys_MidiTotalMode:   ; entry: named by 15 `.long` operands, first at 0xF9A2C7
+	calr IgnoredKeys_MidiMenu_Nop                                          ; F9A343  1e ec fd
 .LF9A346:
 	popw hl                                              ; F9A346  4b
 	unlk XIZ                                             ; F9A347  ee 0d
 	ret                                                  ; F9A349  0e
-sub_F9A34A:
+; MidiTotalMode_StepItem -- move the item cursor (0x2720) one row within 0..5, skipping row 3 (LOCAL TOTAL) on
+;   variant 2
+; Evidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 5, min 0) stored to (0x2720), repeated once when (0xC4)==2
+;   and the result is 3 -- the variant-2 list (0xF0C964-0xF0CA19) omits DL_LocalTotal.  Then `set 4,(0x2095)`, the
+;   bit Paint_MidiTotalMode tests to skip its static lists.
+MidiTotalMode_StepItem:
 	link XIZ,0x0000                                      ; F9A34A  ee 0c 00 00
 	pushw hl                                             ; F9A34E  2b
 	push XIX                                             ; F9A34F  3c
@@ -47900,7 +47987,7 @@ sub_F9A34A:
 	pushw 0x05                                           ; F9A36B  0b 05 00
 	push 0x00                                            ; F9A36E  09 00
 	push H                                               ; F9A370  ce 04
-	calr sub_F9A0FE                                          ; F9A372  1e 89 fd
+	calr StepValue_IncDecClamped                                          ; F9A372  1e 89 fd
 	ld (XIX),A                                           ; F9A375  b4 41
 	inc 8,XSP                                            ; F9A377  ef 60
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F9A379  c0 c4 3f 02
@@ -47914,7 +48001,7 @@ sub_F9A34A:
 	pushw 0x05                                           ; F9A38B  0b 05 00
 	push 0x00                                            ; F9A38E  09 00
 	push H                                               ; F9A390  ce 04
-	calr sub_F9A0FE                                          ; F9A392  1e 69 fd
+	calr StepValue_IncDecClamped                                          ; F9A392  1e 69 fd
 	ld (XIX),A                                           ; F9A395  b4 41
 	inc 8,XSP                                            ; F9A397  ef 60
 .LF9A399:
@@ -47923,7 +48010,10 @@ sub_F9A34A:
 	popw hl                                              ; F9A39E  4b
 	unlk XIZ                                             ; F9A39F  ee 0d
 	ret                                                  ; F9A3A1  0e
-sub_F9A3A2:
+; MidiTotalMode_StepValue -- step the value of the row under the cursor: JumpTable_F9A3C7[(0x2720)], rows 0..5
+; Evidence: `ld BC,(0x2720) / cp BC,5 / jr ugt / ... add XBC,JumpTable_F9A3C7 / jp (XBC)`; the six arms call
+;   MidiTotalMode_EditInputMode .. _EditSingleChProgChange in screen order.
+MidiTotalMode_StepValue:
 	link XIZ,0x0000                                      ; F9A3A2  ee 0c 00 00
 	pushw hl                                             ; F9A3A6  2b
 	ld H,(XIZ+0x08)                                      ; F9A3A7  8e 08 26
@@ -47949,41 +48039,60 @@ sub_F9A3A2:
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_F9A3C7:
-	.long sub_F9A3DF                                 ; F9A3C7  [  0]
-	.long sub_F9A3E8                                 ; F9A3CB  [  1]
-	.long sub_F9A3F1                                 ; F9A3CF  [  2]
-	.long sub_F9A3FA                                 ; F9A3D3  [  3]
-	.long sub_F9A403                                 ; F9A3D7  [  4]
-	.long sub_F9A40C                                 ; F9A3DB  [  5]
-sub_F9A3DF:   ; entry: named by 1 `.long` operand, first at 0xF9A3C7
+	.long MidiTotalMode_ValueCase_InputMode                                 ; F9A3C7  [  0]
+	.long MidiTotalMode_ValueCase_OutputMode                                 ; F9A3CB  [  1]
+	.long MidiTotalMode_ValueCase_SingleChannel                                 ; F9A3CF  [  2]
+	.long MidiTotalMode_ValueCase_LocalTotal                                 ; F9A3D3  [  3]
+	.long MidiTotalMode_ValueCase_ProgChangeMode                                 ; F9A3D7  [  4]
+	.long MidiTotalMode_ValueCase_SingleChProgChange                                 ; F9A3DB  [  5]
+; MidiTotalMode_ValueCase_InputMode -- case 0 of MidiTotalMode_StepValue: MidiTotalMode_EditInputMode(H)
+; Evidence: JumpTable_F9A3C7 entry [0]; row 0 of the screen is "MIDI INPUT MODE :" (IX 0x06E6); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_InputMode:   ; entry: named by 1 `.long` operand, first at 0xF9A3C7
 	push 0x00                                            ; F9A3DF  09 00
 	push H                                               ; F9A3E1  ce 04
-	calr sub_F9A4F9                                      ; F9A3E3  1e 13 01
+	calr MidiTotalMode_EditInputMode                                      ; F9A3E3  1e 13 01
 	jr .LF9A413                                          ; F9A3E6  68 2b
-sub_F9A3E8:   ; entry: named by 1 `.long` operand, first at 0xF9A3CB
+; MidiTotalMode_ValueCase_OutputMode -- case 1 of MidiTotalMode_StepValue: MidiTotalMode_EditOutputMode(H)
+; Evidence: JumpTable_F9A3C7 entry [1]; row 1 of the screen is "MIDI OUTPUT MODE:" (IX 0x0AA6); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_OutputMode:   ; entry: named by 1 `.long` operand, first at 0xF9A3CB
 	push 0x00                                            ; F9A3E8  09 00
 	push H                                               ; F9A3EA  ce 04
-	calr sub_F9A544                                      ; F9A3EC  1e 55 01
+	calr MidiTotalMode_EditOutputMode                                      ; F9A3EC  1e 55 01
 	jr .LF9A413                                          ; F9A3EF  68 22
-sub_F9A3F1:   ; entry: named by 1 `.long` operand, first at 0xF9A3CF
+; MidiTotalMode_ValueCase_SingleChannel -- case 2 of MidiTotalMode_StepValue: MidiTotalMode_EditSingleChannel(H)
+; Evidence: JumpTable_F9A3C7 entry [2]; row 2 of the screen is "SINGLE CHANNEL  :" (IX 0x0E66); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_SingleChannel:   ; entry: named by 1 `.long` operand, first at 0xF9A3CF
 	push 0x00                                            ; F9A3F1  09 00
 	push H                                               ; F9A3F3  ce 04
-	calr sub_F9A59A                                      ; F9A3F5  1e a2 01
+	calr MidiTotalMode_EditSingleChannel                                      ; F9A3F5  1e a2 01
 	jr .LF9A413                                          ; F9A3F8  68 19
-sub_F9A3FA:   ; entry: named by 1 `.long` operand, first at 0xF9A3D3
+; MidiTotalMode_ValueCase_LocalTotal -- case 3 of MidiTotalMode_StepValue: MidiTotalMode_EditLocalTotal(H)
+; Evidence: JumpTable_F9A3C7 entry [3]; row 3 of the screen is "LOCAL TOTAL     :" (IX 0x1226); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_LocalTotal:   ; entry: named by 1 `.long` operand, first at 0xF9A3D3
 	push 0x00                                            ; F9A3FA  09 00
 	push H                                               ; F9A3FC  ce 04
-	calr sub_F9A5E5                                      ; F9A3FE  1e e4 01
+	calr MidiTotalMode_EditLocalTotal                                      ; F9A3FE  1e e4 01
 	jr .LF9A413                                          ; F9A401  68 10
-sub_F9A403:   ; entry: named by 1 `.long` operand, first at 0xF9A3D7
+; MidiTotalMode_ValueCase_ProgChangeMode -- case 4 of MidiTotalMode_StepValue: MidiTotalMode_EditProgChangeMode(H)
+; Evidence: JumpTable_F9A3C7 entry [4]; row 4 of the screen is "PROG CHANGE MODE:" (IX 0x15E6); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_ProgChangeMode:   ; entry: named by 1 `.long` operand, first at 0xF9A3D7
 	push 0x00                                            ; F9A403  09 00
 	push H                                               ; F9A405  ce 04
-	calr sub_F9A62D                                      ; F9A407  1e 23 02
+	calr MidiTotalMode_EditProgChangeMode                                      ; F9A407  1e 23 02
 	jr .LF9A413                                          ; F9A40A  68 07
-sub_F9A40C:   ; entry: named by 1 `.long` operand, first at 0xF9A3DB
+; MidiTotalMode_ValueCase_SingleChProgChange -- case 5 of MidiTotalMode_StepValue:
+;   MidiTotalMode_EditSingleChProgChange(H)
+; Evidence: JumpTable_F9A3C7 entry [5]; row 5 of the screen is "SINGLE CH PROG CHANGE:" (IX 0x19A6); the arm ends in
+;   MidiTotalMode_StepValue's epilogue (0xF9A413).
+MidiTotalMode_ValueCase_SingleChProgChange:   ; entry: named by 1 `.long` operand, first at 0xF9A3DB
 	push 0x00                                            ; F9A40C  09 00
 	push H                                               ; F9A40E  ce 04
-	calr sub_F9A678                                      ; F9A410  1e 65 02
+	calr MidiTotalMode_EditSingleChProgChange                                      ; F9A410  1e 65 02
 .LF9A413:
 	popw bc                                              ; F9A413  49
 JumpTable_F9A3C7_Code_Skip:
@@ -48015,7 +48124,12 @@ Draw_MultiSingle:
 	call T_DisplayListB_Run_Stack                        ; F9A45A  1d 04 2e f4
 	inc 8,XSP                                            ; F9A45E  ef 60
 	ret                                                  ; F9A460  0e
-sub_F9A461:
+; MidiTotalMode_PaintSingleChannel -- draw the SINGLE CHANNEL value: (0x7F36) & 0x0F -> (0x2740), then DL_F0CA4D
+;   (DLTable_F0CABD, "1 - 1".."2 - 16")
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x0E78, the text row of "SINGLE CHANNEL  :" (IX
+;   0x0E66) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and
+;   MidiTotalMode_EditSingleChannel.
+MidiTotalMode_PaintSingleChannel:
 	ld c, (0x7f36:16)                                   ; F9A461  c1 36 7f 23
 	and C,0x0f                                           ; F9A465  cb cc 0f
 	ld (0x2740:16), c                                   ; F9A468  f1 40 27 43
@@ -48027,7 +48141,12 @@ sub_F9A461:
 	call T_DisplayListB_Run_Stack                        ; F9A47D  1d 04 2e f4
 	inc 8,XSP                                            ; F9A481  ef 60
 	ret                                                  ; F9A483  0e
-sub_F9A484:
+; MidiTotalMode_PaintLocalTotal -- draw the LOCAL TOTAL value: (0x7F36) bit 5 -> (0x2740) -> DL_F0CA5C (0 "ON", 1
+;   "OFF")
+; Evidence: DL_F0CA5C reads (0x2740) through DLTable_OnOff and draws at IX 0x1238, the row of "LOCAL TOTAL     : "
+;   (DL_LocalTotal, 0x1226).  Skipped when (0xC4)==2 -- only the variant-1 list draws DL_LocalTotal. Called by
+;   Paint_MidiTotalMode and MidiTotalMode_EditLocalTotal.
+MidiTotalMode_PaintLocalTotal:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F9A484  c0 c4 3f 02
 	jr z, .LF9A4AF                                       ; F9A488  66 25
 	ld c, (0x7f36:16)                                   ; F9A48A  c1 36 7f 23
@@ -48056,7 +48175,12 @@ Draw_NormalTechRemap:
 	call T_DisplayListB_Run_Stack                        ; F9A4CC  1d 04 2e f4
 	inc 8,XSP                                            ; F9A4D0  ef 60
 	ret                                                  ; F9A4D2  0e
-sub_F9A4D3:
+; MidiTotalMode_PaintSingleChProgChange -- draw the SINGLE CH PROG CHANGE value: (0x7F32) bit 3 -> (0x2740), then
+;   DL_F0CA7A (DLTable_SoundCombi: SOUND/COMBI)
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x19BD, the text row of "SINGLE CH PROG CHANGE:"
+;   (IX 0x19A6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and
+;   MidiTotalMode_EditSingleChProgChange.
+MidiTotalMode_PaintSingleChProgChange:
 	ld c, (0x7f32:16)                                   ; F9A4D3  c1 32 7f 23
 	and C,0x08                                           ; F9A4D7  cb cc 08
 	srl c, 0x03                                          ; F9A4DA  cb ef 03
@@ -48069,7 +48193,11 @@ sub_F9A4D3:
 	call T_DisplayListB_Run_Stack                        ; F9A4F2  1d 04 2e f4
 	inc 8,XSP                                            ; F9A4F6  ef 60
 	ret                                                  ; F9A4F8  0e
-sub_F9A4F9:
+; MidiTotalMode_EditInputMode -- change the MIDI INPUT MODE setting; if it changed, post it and repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=3, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintInputMode.
+; Field: (0x7F35) bits 0-3, stepped 0..2 (MULTI/SINGLE/OMNI).
+MidiTotalMode_EditInputMode:
 	link XIZ,0x0000                                      ; F9A4F9  ee 0c 00 00
 	pushw hl                                             ; F9A4FD  2b
 	push XIX                                             ; F9A4FE  3c
@@ -48083,7 +48211,7 @@ sub_F9A4F9:
 	pushw 0x02                                           ; F9A511  0b 02 00
 	push 0x00                                            ; F9A514  09 00
 	m_push MBD+r6, 0x08                                  ; F9A516  8e 08 04
-	calr sub_F9A0FE                                          ; F9A519  1e e2 fb
+	calr StepValue_IncDecClamped                                          ; F9A519  1e e2 fb
 	or (XIX),A                                           ; F9A51C  84 e9
 	ld H,(XIX)                                           ; F9A51E  84 26
 	and H,0x0f                                           ; F9A520  ce cc 0f
@@ -48103,7 +48231,11 @@ sub_F9A4F9:
 	popw hl                                              ; F9A540  4b
 	unlk XIZ                                             ; F9A541  ee 0d
 	ret                                                  ; F9A543  0e
-sub_F9A544:
+; MidiTotalMode_EditOutputMode -- change the MIDI OUTPUT MODE setting; if it changed, post it and repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0xF0, D=3, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintOutputMode.
+; Field: (0x7F35) bits 4-7, stepped 0..1 (MULTI/SINGLE).
+MidiTotalMode_EditOutputMode:
 	link XIZ,0x0000                                      ; F9A544  ee 0c 00 00
 	pushw hl                                             ; F9A548  2b
 	push XIX                                             ; F9A549  3c
@@ -48118,7 +48250,7 @@ sub_F9A544:
 	pushw 0x01                                           ; F9A55F  0b 01 00
 	push 0x00                                            ; F9A562  09 00
 	m_push MBD+r6, 0x08                                  ; F9A564  8e 08 04
-	calr sub_F9A0FE                                          ; F9A567  1e 94 fb
+	calr StepValue_IncDecClamped                                          ; F9A567  1e 94 fb
 	sll a, 0x04                                          ; F9A56A  c9 ee 04
 	or (XIX),A                                           ; F9A56D  84 e9
 	ld H,(XIX)                                           ; F9A56F  84 26
@@ -48141,7 +48273,11 @@ sub_F9A544:
 	popw hl                                              ; F9A596  4b
 	unlk XIZ                                             ; F9A597  ee 0d
 	ret                                                  ; F9A599  0e
-sub_F9A59A:
+; MidiTotalMode_EditSingleChannel -- change the SINGLE CHANNEL setting; if it changed, post it and repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=4, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChannel.
+; Field: (0x7F36) bits 0-3, stepped 0..15.
+MidiTotalMode_EditSingleChannel:
 	link XIZ,0x0000                                      ; F9A59A  ee 0c 00 00
 	pushw hl                                             ; F9A59E  2b
 	push XIX                                             ; F9A59F  3c
@@ -48155,7 +48291,7 @@ sub_F9A59A:
 	pushw 0x0f                                           ; F9A5B2  0b 0f 00
 	push 0x00                                            ; F9A5B5  09 00
 	m_push MBD+r6, 0x08                                  ; F9A5B7  8e 08 04
-	calr sub_F9A0FE                                          ; F9A5BA  1e 41 fb
+	calr StepValue_IncDecClamped                                          ; F9A5BA  1e 41 fb
 	or (XIX),A                                           ; F9A5BD  84 e9
 	ld H,(XIX)                                           ; F9A5BF  84 26
 	and H,0x0f                                           ; F9A5C1  ce cc 0f
@@ -48168,14 +48304,18 @@ sub_F9A59A:
 	pushw 0x04                                           ; F9A5D1  0b 04 00
 	pushw 0x80                                           ; F9A5D4  0b 80 00
 	call T_F41B18                                        ; F9A5D7  1d 18 1b f4
-	calr sub_F9A461                                      ; F9A5DB  1e 83 fe
+	calr MidiTotalMode_PaintSingleChannel                                      ; F9A5DB  1e 83 fe
 	inc 8,XSP                                            ; F9A5DE  ef 60
 .LF9A5E0:
 	pop XIX                                              ; F9A5E0  5c
 	popw hl                                              ; F9A5E1  4b
 	unlk XIZ                                             ; F9A5E2  ee 0d
 	ret                                                  ; F9A5E4  0e
-sub_F9A5E5:
+; MidiTotalMode_EditLocalTotal -- change the LOCAL TOTAL setting; if it changed, post it and repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x20, D=4, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintLocalTotal.
+; Field: (0x7F36) bit 5: (XIZ+8)==0 clears it ("ON"), otherwise sets it ("OFF").
+MidiTotalMode_EditLocalTotal:
 	link XIZ,0x0000                                      ; F9A5E5  ee 0c 00 00
 	pushw hl                                             ; F9A5E9  2b
 	push XIX                                             ; F9A5EA  3c
@@ -48202,14 +48342,18 @@ sub_F9A5E5:
 	pushw 0x04                                           ; F9A619  0b 04 00
 	pushw 0x80                                           ; F9A61C  0b 80 00
 	call T_F41B18                                        ; F9A61F  1d 18 1b f4
-	calr sub_F9A484                                      ; F9A623  1e 5e fe
+	calr MidiTotalMode_PaintLocalTotal                                      ; F9A623  1e 5e fe
 	inc 8,XSP                                            ; F9A626  ef 60
 .LF9A628:
 	pop XIX                                              ; F9A628  5c
 	popw hl                                              ; F9A629  4b
 	unlk XIZ                                             ; F9A62A  ee 0d
 	ret                                                  ; F9A62C  0e
-sub_F9A62D:
+; MidiTotalMode_EditProgChangeMode -- change the PROG CHANGE MODE setting; if it changed, post it and repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x03, D=0, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintProgChangeMode.
+; Field: (0x7F32) bits 0-1, stepped 0..1 (NORMAL/TECH; REMAP is not reachable here).
+MidiTotalMode_EditProgChangeMode:
 	link XIZ,0x0000                                      ; F9A62D  ee 0c 00 00
 	pushw hl                                             ; F9A631  2b
 	push XIX                                             ; F9A632  3c
@@ -48223,7 +48367,7 @@ sub_F9A62D:
 	pushw 0x01                                           ; F9A645  0b 01 00
 	push 0x00                                            ; F9A648  09 00
 	m_push MBD+r6, 0x08                                  ; F9A64A  8e 08 04
-	calr sub_F9A0FE                                          ; F9A64D  1e ae fa
+	calr StepValue_IncDecClamped                                          ; F9A64D  1e ae fa
 	or (XIX),A                                           ; F9A650  84 e9
 	ld H,(XIX)                                           ; F9A652  84 26
 	and H,0x03                                           ; F9A654  ce cc 03
@@ -48243,7 +48387,12 @@ sub_F9A62D:
 	popw hl                                              ; F9A674  4b
 	unlk XIZ                                             ; F9A675  ee 0d
 	ret                                                  ; F9A677  0e
-sub_F9A678:
+; MidiTotalMode_EditSingleChProgChange -- change the SINGLE CH PROG CHANGE setting; if it changed, post it and
+;   repaint
+; Evidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x08, D=0, A = new bits (D =
+;   the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChProgChange.
+; Field: (0x7F32) bit 3: (XIZ+8)==0 sets it (COMBI), otherwise clears it (SOUND).
+MidiTotalMode_EditSingleChProgChange:
 	link XIZ,0x0000                                      ; F9A678  ee 0c 00 00
 	pushw hl                                             ; F9A67C  2b
 	push XIX                                             ; F9A67D  3c
@@ -48270,7 +48419,7 @@ sub_F9A678:
 	pushw 0x00                                           ; F9A6AC  0b 00 00
 	pushw 0x80                                           ; F9A6AF  0b 80 00
 	call T_F41B18                                        ; F9A6B2  1d 18 1b f4
-	calr sub_F9A4D3                                      ; F9A6B6  1e 1a fe
+	calr MidiTotalMode_PaintSingleChProgChange                                      ; F9A6B6  1e 1a fe
 	inc 8,XSP                                            ; F9A6B9  ef 60
 .LF9A6BB:
 	pop XIX                                              ; F9A6BB  5c
@@ -48338,7 +48487,7 @@ Paint_MidiRealtimeMessages:
 	calr DisplayList_Run_Stack_Wrap                                      ; F9A716  1e 0b 00
 	jr .LF9A71E                                          ; F9A719  68 03
 .LF9A71B:
-	calr sub_F9A73C                                      ; F9A71B  1e 1e 00
+	calr MidiRealtimeMessages_PaintClockKeyGlyphs                                      ; F9A71B  1e 1e 00
 .LF9A71E:
 	call T_F42E14                                        ; F9A71E  1d 14 2e f4
 	pop XIX                                              ; F9A722  5c
@@ -48367,7 +48516,11 @@ DisplayList_Run_Stack_Wrap:
 	call T_DisplayList_Run_Stack                         ; F9A735  1d 00 2e f4
 	inc 8,XSP                                            ; F9A739  ef 60
 	ret                                                  ; F9A73B  0e
-sub_F9A73C:
+; MidiRealtimeMessages_PaintClockKeyGlyphs -- draw DL_F0CC75 in place of ON/OFF while CLOCK (item 1) is selected
+; Evidence: DL_F0CC75 puts glyph 0x8D at 0x0BDB and 0x8E at 0x117B, beside the row-2/row-3 right keys; called by
+;   Paint_MidiRealtimeMessages when (0x2720)!=0 and by MidiRealtimeMessages_SelectClock; (0x2540)=2 as in its
+;   sibling.
+MidiRealtimeMessages_PaintClockKeyGlyphs:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F9A73C  f1 40 25 00 02
 	lda xbc, (DL_OnOff:24)                               ; F9A741  f2 83 cc f0 31
 	push XBC                                             ; F9A746  39
@@ -48464,62 +48617,81 @@ ScreenButton_MidiRealtimeMessages:
 ; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_MidiRealtimeMessages:
-	.long sub_F9A833                                 ; F9A78E  [  0]
-	.long sub_F9A833                                 ; F9A792  [  1]
-	.long sub_F9A833                                 ; F9A796  [  2]
-	.long sub_F9A833                                 ; F9A79A  [  3]
-	.long sub_F9A833                                 ; F9A79E  [  4]
-	.long sub_F9A833                                 ; F9A7A2  [  5]
-	.long sub_F9A833                                 ; F9A7A6  [  6]
-	.long sub_F9A833                                 ; F9A7AA  [  7]
-	.long sub_F9A833                                 ; F9A7AE  [  8]
-	.long sub_F9A80E                                 ; F9A7B2  [  9]
-	.long sub_F9A817                                 ; F9A7B6  [ 10]
-	.long sub_F9A820                                 ; F9A7BA  [ 11]
-	.long sub_F9A833                                 ; F9A7BE  [ 12]
-	.long sub_F9A833                                 ; F9A7C2  [ 13]
-	.long sub_F9A833                                 ; F9A7C6  [ 14]
-	.long sub_F9A829                                 ; F9A7CA  [ 15]
-	.long sub_F9A833                                 ; F9A7CE  [ 16]
-	.long sub_F9A833                                 ; F9A7D2  [ 17]
-	.long sub_F9A833                                 ; F9A7D6  [ 18]
-	.long sub_F9A833                                 ; F9A7DA  [ 19]
-	.long sub_F9A833                                 ; F9A7DE  [ 20]
-	.long sub_F9A833                                 ; F9A7E2  [ 21]
-	.long sub_F9A833                                 ; F9A7E6  [ 22]
-	.long sub_F9A833                                 ; F9A7EA  [ 23]
-	.long sub_F9A833                                 ; F9A7EE  [ 24]
-	.long sub_F9A833                                 ; F9A7F2  [ 25]
-	.long sub_F9A833                                 ; F9A7F6  [ 26]
-	.long sub_F9A833                                 ; F9A7FA  [ 27]
-	.long sub_F9A833                                 ; F9A7FE  [ 28]
-	.long sub_F9A833                                 ; F9A802  [ 29]
-	.long sub_F9A833                                 ; F9A806  [ 30]
-	.long sub_F9A833                                 ; F9A80A  [ 31]
-sub_F9A80E:   ; entry: named by 1 `.long` operand, first at 0xF9A7B2
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A78E  [  0]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A792  [  1]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A796  [  2]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A79A  [  3]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A79E  [  4]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7A2  [  5]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7A6  [  6]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7AA  [  7]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7AE  [  8]
+	.long LcdKeyRow2_MidiRealtimeMessages                                 ; F9A7B2  [  9]
+	.long LcdKeyRow3_MidiRealtimeMessages                                 ; F9A7B6  [ 10]
+	.long LcdKeyRow4_MidiRealtimeMessages                                 ; F9A7BA  [ 11]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7BE  [ 12]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7C2  [ 13]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7C6  [ 14]
+	.long ExitKey_MidiRealtimeMessages                                 ; F9A7CA  [ 15]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7CE  [ 16]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7D2  [ 17]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7D6  [ 18]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7DA  [ 19]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7DE  [ 20]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7E2  [ 21]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7E6  [ 22]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7EA  [ 23]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7EE  [ 24]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7F2  [ 25]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7F6  [ 26]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7FA  [ 27]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A7FE  [ 28]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A802  [ 29]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A806  [ 30]
+	.long IgnoredKeys_MidiRealtimeMessages                                 ; F9A80A  [ 31]
+; LcdKeyRow2_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x09 (LCD row 2):
+;   MidiRealtimeMessages_SetOnOrSelectCommands(H)
+; Evidence: ScreenButtonHandlers_MidiRealtimeMessages entry [9], its only slot; ends in the reader's epilogue
+;   (0xF9A830).
+LcdKeyRow2_MidiRealtimeMessages:   ; entry: named by 1 `.long` operand, first at 0xF9A7B2
 	push 0x00                                            ; F9A80E  09 00
 	push H                                               ; F9A810  ce 04
 	calr Draw_RealtimeCommandsClock                                      ; F9A812  1e 25 00
 	jr .LF9A830                                          ; F9A815  68 19
-sub_F9A817:   ; entry: named by 1 `.long` operand, first at 0xF9A7B6
+; LcdKeyRow3_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0A (LCD row 3):
+;   MidiRealtimeMessages_SetOff(H)
+; Evidence: ScreenButtonHandlers_MidiRealtimeMessages entry [10], its only slot; ends in the reader's epilogue
+;   (0xF9A830).
+LcdKeyRow3_MidiRealtimeMessages:   ; entry: named by 1 `.long` operand, first at 0xF9A7B6
 	push 0x00                                            ; F9A817  09 00
 	push H                                               ; F9A819  ce 04
 	calr Draw_RealtimeCommandsClock_2                                      ; F9A81B  1e c6 00
 	jr .LF9A830                                          ; F9A81E  68 10
-sub_F9A820:   ; entry: named by 1 `.long` operand, first at 0xF9A7BA
+; LcdKeyRow4_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0B (LCD row 4):
+;   MidiRealtimeMessages_SelectClock(H)
+; Evidence: ScreenButtonHandlers_MidiRealtimeMessages entry [11], its only slot; ends in the reader's epilogue
+;   (0xF9A830).
+LcdKeyRow4_MidiRealtimeMessages:   ; entry: named by 1 `.long` operand, first at 0xF9A7BA
 	push 0x00                                            ; F9A820  09 00
 	push H                                               ; F9A822  ce 04
-	calr sub_F9A954                                      ; F9A824  1e 2d 01
+	calr MidiRealtimeMessages_SelectClock                                      ; F9A824  1e 2d 01
 	jr .LF9A830                                          ; F9A827  68 07
-sub_F9A829:   ; entry: named by 1 `.long` operand, first at 0xF9A7CA
+; ExitKey_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0F (EXIT):
+;   MidiSubmenu_ExitToMidiMenu(H)
+; Evidence: ScreenButtonHandlers_MidiRealtimeMessages entry [15], its only slot; ends in the reader's epilogue
+;   (0xF9A830).
+ExitKey_MidiRealtimeMessages:   ; entry: named by 1 `.long` operand, first at 0xF9A7CA
 	push 0x00                                            ; F9A829  09 00
 	push H                                               ; F9A82B  ce 04
-	calr sub_F9A0E7                                          ; F9A82D  1e b7 f8
+	calr MidiSubmenu_ExitToMidiMenu                                          ; F9A82D  1e b7 f8
 .LF9A830:
 	popw bc                                              ; F9A830  49
 	jr .LF9A836                                          ; F9A831  68 03
-sub_F9A833:   ; entry: named by 28 `.long` operands, first at 0xF9A78E
-	calr sub_F9A044_Nop                                          ; F9A833  1e fc f8
+; IgnoredKeys_MidiRealtimeMessages -- default arm of ScreenButton_MidiRealtimeMessages: MidiScreen_NopKeyHandler
+; Evidence: 28 slots of ScreenButtonHandlers_MidiRealtimeMessages ([0]-[8], [12]-[14], [16]-[31]); LCD row 1 is
+;   inert here.
+IgnoredKeys_MidiRealtimeMessages:   ; entry: named by 28 `.long` operands, first at 0xF9A78E
+	calr IgnoredKeys_MidiMenu_Nop                                          ; F9A833  1e fc f8
 .LF9A836:
 	popw hl                                              ; F9A836  4b
 	unlk XIZ                                             ; F9A837  ee 0d
@@ -48626,7 +48798,10 @@ Draw_RealtimeCommandsClock_2:
 	pop XIX                                              ; F9A950  5c
 	unlk XIZ                                             ; F9A951  ee 0d
 	ret                                                  ; F9A953  0e
-sub_F9A954:
+; MidiRealtimeMessages_SelectClock -- LCD row 4, left key: select the CLOCK item
+; Evidence: when (XIZ+8)!=0 and (0x2720)!=1: erase/draw the cursor box (DL_F0CCBA, DL_F0CCAF), (0x2720)=1, then
+;   MidiRealtimeMessages_PaintClockKeyGlyphs.  "CLOCK  :" carries the row-4 left arrow (0x1798).
+MidiRealtimeMessages_SelectClock:
 	link XIZ,0x0000                                      ; F9A954  ee 0c 00 00
 	cp (XIZ+0x08),0x00                                   ; F9A958  8e 08 3f 00
 	jr z, .LF9A995                                       ; F9A95C  66 37
@@ -48643,7 +48818,7 @@ sub_F9A954:
 	lda xwa, (DL_F0CCAF:24)                              ; F9A984  f2 af cc f0 30
 	push XWA                                             ; F9A989  38
 	call T_DisplayListB_Run_Stack                        ; F9A98A  1d 04 2e f4
-	calr sub_F9A73C                                          ; F9A98E  1e ab fd
+	calr MidiRealtimeMessages_PaintClockKeyGlyphs                                          ; F9A98E  1e ab fd
 	inc 8,XSP                                            ; F9A991  ef 60
 	inc 4,XSP                                            ; F9A993  ef 64
 .LF9A995:
@@ -48718,14 +48893,14 @@ Paint_MidiInputOutputFilter:
 	inc 8,XSP                                            ; F9AA0C  ef 60
 	inc 8,XSP                                            ; F9AA0E  ef 60
 .LF9AA10:
-	calr sub_F9ABEF                                          ; F9AA10  1e dc 01
-	calr sub_F9AC15                                          ; F9AA13  1e ff 01
-	calr sub_F9AC3B                                          ; F9AA16  1e 22 02
-	calr sub_F9AC61                                          ; F9AA19  1e 45 02
-	calr sub_F9AC87                                          ; F9AA1C  1e 68 02
-	calr sub_F9ACAA                                          ; F9AA1F  1e 88 02
-	calr sub_F9ACD0                                          ; F9AA22  1e ab 02
-	calr sub_F9ACF6                                          ; F9AA25  1e ce 02
+	calr MidiInputOutputFilter_PaintProgramChange                                          ; F9AA10  1e dc 01
+	calr MidiInputOutputFilter_PaintBankSelect                                          ; F9AA13  1e ff 01
+	calr MidiInputOutputFilter_PaintPitchBend                                          ; F9AA16  1e 22 02
+	calr MidiInputOutputFilter_PaintControlChange                                          ; F9AA19  1e 45 02
+	calr MidiInputOutputFilter_PaintResetAllCtrl                                          ; F9AA1C  1e 68 02
+	calr MidiInputOutputFilter_PaintChannelPressure                                          ; F9AA1F  1e 88 02
+	calr MidiInputOutputFilter_PaintSongSelect                                          ; F9AA22  1e ab 02
+	calr MidiInputOutputFilter_PaintExclusive                                          ; F9AA25  1e ce 02
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9AA28  f1 40 25 00 01
 	lda xbc, (DLTable_OffOn:24)                          ; F9AA2D  f2 75 ce f0 31
 	push XBC                                             ; F9AA32  39
@@ -48827,62 +49002,75 @@ ScreenButton_MidiInputOutputFilter:
 ; Evidence: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_MidiInputOutputFilter:
-	.long sub_F9AB12                                 ; F9AA89  [  0]
-	.long sub_F9AB12                                 ; F9AA8D  [  1]
-	.long sub_F9AB12                                 ; F9AA91  [  2]
-	.long sub_F9AB12                                 ; F9AA95  [  3]
-	.long sub_F9AB1B                                 ; F9AA99  [  4]
-	.long sub_F9AB1B                                 ; F9AA9D  [  5]
-	.long sub_F9AB1B                                 ; F9AAA1  [  6]
-	.long sub_F9AB1B                                 ; F9AAA5  [  7]
-	.long sub_F9AB25                                 ; F9AAA9  [  8]
-	.long sub_F9AB25                                 ; F9AAAD  [  9]
-	.long sub_F9AB25                                 ; F9AAB1  [ 10]
-	.long sub_F9AB25                                 ; F9AAB5  [ 11]
-	.long sub_F9AB25                                 ; F9AAB9  [ 12]
-	.long sub_F9AB25                                 ; F9AABD  [ 13]
-	.long sub_F9AB25                                 ; F9AAC1  [ 14]
-	.long sub_F9AB09                                 ; F9AAC5  [ 15]
-	.long sub_F9AB25                                 ; F9AAC9  [ 16]
-	.long sub_F9AB12                                 ; F9AACD  [ 17]
-	.long sub_F9AB12                                 ; F9AAD1  [ 18]
-	.long sub_F9AB12                                 ; F9AAD5  [ 19]
-	.long sub_F9AB12                                 ; F9AAD9  [ 20]
-	.long sub_F9AB1B                                 ; F9AADD  [ 21]
-	.long sub_F9AB1B                                 ; F9AAE1  [ 22]
-	.long sub_F9AB1B                                 ; F9AAE5  [ 23]
-	.long sub_F9AB1B                                 ; F9AAE9  [ 24]
-	.long sub_F9AB25                                 ; F9AAED  [ 25]
-	.long sub_F9AB25                                 ; F9AAF1  [ 26]
-	.long sub_F9AB25                                 ; F9AAF5  [ 27]
-	.long sub_F9AB25                                 ; F9AAF9  [ 28]
-	.long sub_F9AB25                                 ; F9AAFD  [ 29]
-	.long sub_F9AB25                                 ; F9AB01  [ 30]
-	.long sub_F9AB25                                 ; F9AB05  [ 31]
-sub_F9AB09:   ; entry: named by 1 `.long` operand, first at 0xF9AAC5
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AA89  [  0]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AA8D  [  1]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AA91  [  2]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AA95  [  3]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AA99  [  4]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AA9D  [  5]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AAA1  [  6]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AAA5  [  7]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAA9  [  8]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAAD  [  9]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAB1  [ 10]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAB5  [ 11]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAB9  [ 12]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AABD  [ 13]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAC1  [ 14]
+	.long ExitKey_MidiInputOutputFilter                                 ; F9AAC5  [ 15]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAC9  [ 16]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AACD  [ 17]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AAD1  [ 18]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AAD5  [ 19]
+	.long ItemKeys_MidiInputOutputFilter                                 ; F9AAD9  [ 20]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AADD  [ 21]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AAE1  [ 22]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AAE5  [ 23]
+	.long ValueKeys_MidiInputOutputFilter                                 ; F9AAE9  [ 24]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAED  [ 25]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAF1  [ 26]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAF5  [ 27]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAF9  [ 28]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AAFD  [ 29]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AB01  [ 30]
+	.long IgnoredKeys_MidiInputOutputFilter                                 ; F9AB05  [ 31]
+; ExitKey_MidiInputOutputFilter -- switch arm of ScreenButton_MidiInputOutputFilter for code 0x0F (EXIT):
+;   MidiSubmenu_ExitToMidiMenu(H)
+; Evidence: ScreenButtonHandlers_MidiInputOutputFilter entry [15]; ends in the reader's epilogue (0xF9AB22).
+ExitKey_MidiInputOutputFilter:   ; entry: named by 1 `.long` operand, first at 0xF9AAC5
 	push 0x00                                            ; F9AB09  09 00
 	push H                                               ; F9AB0B  ce 04
-	calr sub_F9A0E7                                          ; F9AB0D  1e d7 f5
+	calr MidiSubmenu_ExitToMidiMenu                                          ; F9AB0D  1e d7 f5
 	jr .LF9AB22                                          ; F9AB10  68 10
-sub_F9AB12:   ; entry: named by 8 `.long` operands, first at 0xF9AA89
+; ItemKeys_MidiInputOutputFilter -- switch arm for codes 0x00-0x03 / 0x11-0x14: MidiInputOutputFilter_StepItem(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiInputOutputFilter; the screen draws "ITEM" (DL_F0C917);
+;   Paint_MidiInputOutputFilter sets (0x209C)=0x80 / (0x209B)=0x00, so the dial reaches this arm as code 0.
+ItemKeys_MidiInputOutputFilter:   ; entry: named by 8 `.long` operands, first at 0xF9AA89
 	push 0x00                                            ; F9AB12  09 00
 	push H                                               ; F9AB14  ce 04
-	calr sub_F9AB2C                                      ; F9AB16  1e 13 00
+	calr MidiInputOutputFilter_StepItem                                      ; F9AB16  1e 13 00
 	jr .LF9AB22                                          ; F9AB19  68 07
-sub_F9AB1B:   ; entry: named by 8 `.long` operands, first at 0xF9AA99
+; ValueKeys_MidiInputOutputFilter -- switch arm for codes 0x04-0x07 / 0x15-0x18: MidiInputOutputFilter_StepValue(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiInputOutputFilter; DL_F0C917 draws "VALUE" over them.
+ValueKeys_MidiInputOutputFilter:   ; entry: named by 8 `.long` operands, first at 0xF9AA99
 	push 0x00                                            ; F9AB1B  09 00
 	push H                                               ; F9AB1D  ce 04
-	calr sub_F9AB62                                      ; F9AB1F  1e 40 00
+	calr MidiInputOutputFilter_StepValue                                      ; F9AB1F  1e 40 00
 .LF9AB22:
 	popw bc                                              ; F9AB22  49
 	jr .LF9AB28                                          ; F9AB23  68 03
-sub_F9AB25:   ; entry: named by 15 `.long` operands, first at 0xF9AAA9
-	calr sub_F9A044_Nop                                          ; F9AB25  1e 0a f6
+; IgnoredKeys_MidiInputOutputFilter -- default arm of ScreenButton_MidiInputOutputFilter: MidiScreen_NopKeyHandler
+; Evidence: 15 slots ([8]-[14], [16], [25]-[31]) of ScreenButtonHandlers_MidiInputOutputFilter.
+IgnoredKeys_MidiInputOutputFilter:   ; entry: named by 15 `.long` operands, first at 0xF9AAA9
+	calr IgnoredKeys_MidiMenu_Nop                                          ; F9AB25  1e 0a f6
 .LF9AB28:
 	popw hl                                              ; F9AB28  4b
 	unlk XIZ                                             ; F9AB29  ee 0d
 	ret                                                  ; F9AB2B  0e
-sub_F9AB2C:
+; MidiInputOutputFilter_StepItem -- move the item cursor (0x2720) one row within 0..7
+; Evidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 7, min 0) -> (0x2720); DL_F0CE5F boxes the row from
+;   DLTable_F0CE7B's eight entries; then `set 4,(0x2095)`.
+MidiInputOutputFilter_StepItem:
 	link XIZ,0x0000                                      ; F9AB2C  ee 0c 00 00
 	pushw hl                                             ; F9AB30  2b
 	ld H,(XIZ+0x08)                                      ; F9AB31  8e 08 26
@@ -48900,14 +49088,16 @@ sub_F9AB2C:
 	pushw 0x07                                           ; F9AB4A  0b 07 00
 	push 0x00                                            ; F9AB4D  09 00
 	push H                                               ; F9AB4F  ce 04
-	calr sub_F9A0FE                                          ; F9AB51  1e aa f5
+	calr StepValue_IncDecClamped                                          ; F9AB51  1e aa f5
 	ld (0x2720:16), a                                   ; F9AB54  f1 20 27 41
 	m_set 4, MD16, 0x2095                                ; F9AB58  f1 95 20 bc
 	inc 8,XSP                                            ; F9AB5C  ef 60
 	popw hl                                              ; F9AB5E  4b
 	unlk XIZ                                             ; F9AB5F  ee 0d
 	ret                                                  ; F9AB61  0e
-sub_F9AB62:
+; MidiInputOutputFilter_StepValue -- toggle the filter under the cursor: JumpTable_F9AB84[(0x2720)], rows 0..7
+; Evidence: `ld BC,(0x2720) / cp BC,7 / jrl ugt / ... add XBC,JumpTable_F9AB84 / jp (XBC)`.
+MidiInputOutputFilter_StepValue:
 	link XIZ,0x0000                                      ; F9AB62  ee 0c 00 00
 	pushw hl                                             ; F9AB66  2b
 	ld H,(XIZ+0x08)                                      ; F9AB67  8e 08 26
@@ -48930,60 +49120,96 @@ sub_F9AB62:
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_F9AB84:
-	.long sub_F9ABA4                                 ; F9AB84  [  0]
-	.long sub_F9ABAD                                 ; F9AB88  [  1]
-	.long sub_F9ABB6                                 ; F9AB8C  [  2]
-	.long sub_F9ABBF                                 ; F9AB90  [  3]
-	.long sub_F9ABC8                                 ; F9AB94  [  4]
-	.long sub_F9ABD1                                 ; F9AB98  [  5]
-	.long sub_F9ABDA                                 ; F9AB9C  [  6]
-	.long sub_F9ABE3                                 ; F9ABA0  [  7]
-sub_F9ABA4:   ; entry: named by 1 `.long` operand, first at 0xF9AB84
+	.long MidiInputOutputFilter_ValueCase_ProgramChange                                 ; F9AB84  [  0]
+	.long MidiInputOutputFilter_ValueCase_BankSelect                                 ; F9AB88  [  1]
+	.long MidiInputOutputFilter_ValueCase_PitchBend                                 ; F9AB8C  [  2]
+	.long MidiInputOutputFilter_ValueCase_ControlChange                                 ; F9AB90  [  3]
+	.long MidiInputOutputFilter_ValueCase_ResetAllCtrl                                 ; F9AB94  [  4]
+	.long MidiInputOutputFilter_ValueCase_ChannelPressure                                 ; F9AB98  [  5]
+	.long MidiInputOutputFilter_ValueCase_SongSelect                                 ; F9AB9C  [  6]
+	.long MidiInputOutputFilter_ValueCase_Exclusive                                 ; F9ABA0  [  7]
+; MidiInputOutputFilter_ValueCase_ProgramChange -- case 0 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditProgramChange(H)
+; Evidence: JumpTable_F9AB84 entry [0]; row 0 of DL_InputOutputFilterMidiPr0gramChange is "PR0GRAM CHANGE   :" (IX
+;   0x0739).
+MidiInputOutputFilter_ValueCase_ProgramChange:   ; entry: named by 1 `.long` operand, first at 0xF9AB84
 	push 0x00                                            ; F9ABA4  09 00
 	push H                                               ; F9ABA6  ce 04
-	calr sub_F9AD21                                      ; F9ABA8  1e 76 01
+	calr MidiInputOutputFilter_EditProgramChange                                      ; F9ABA8  1e 76 01
 	jr .LF9ABEA                                          ; F9ABAB  68 3d
-sub_F9ABAD:   ; entry: named by 1 `.long` operand, first at 0xF9AB88
+; MidiInputOutputFilter_ValueCase_BankSelect -- case 1 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditBankSelect(H)
+; Evidence: JumpTable_F9AB84 entry [1]; row 1 of DL_InputOutputFilterMidiPr0gramChange is "BANK SELECT      :" (IX
+;   0x0A09).
+MidiInputOutputFilter_ValueCase_BankSelect:   ; entry: named by 1 `.long` operand, first at 0xF9AB88
 	push 0x00                                            ; F9ABAD  09 00
 	push H                                               ; F9ABAF  ce 04
-	calr sub_F9AD69                                      ; F9ABB1  1e b5 01
+	calr MidiInputOutputFilter_EditBankSelect                                      ; F9ABB1  1e b5 01
 	jr .LF9ABEA                                          ; F9ABB4  68 34
-sub_F9ABB6:   ; entry: named by 1 `.long` operand, first at 0xF9AB8C
+; MidiInputOutputFilter_ValueCase_PitchBend -- case 2 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditPitchBend(H)
+; Evidence: JumpTable_F9AB84 entry [2]; row 2 of DL_InputOutputFilterMidiPr0gramChange is "PITCH BEND       :" (IX
+;   0x0CD9).
+MidiInputOutputFilter_ValueCase_PitchBend:   ; entry: named by 1 `.long` operand, first at 0xF9AB8C
 	push 0x00                                            ; F9ABB6  09 00
 	push H                                               ; F9ABB8  ce 04
-	calr sub_F9ADB1                                      ; F9ABBA  1e f4 01
+	calr MidiInputOutputFilter_EditPitchBend                                      ; F9ABBA  1e f4 01
 	jr .LF9ABEA                                          ; F9ABBD  68 2b
-sub_F9ABBF:   ; entry: named by 1 `.long` operand, first at 0xF9AB90
+; MidiInputOutputFilter_ValueCase_ControlChange -- case 3 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditControlChange(H)
+; Evidence: JumpTable_F9AB84 entry [3]; row 3 of DL_InputOutputFilterMidiPr0gramChange is "C0NTR0L CHANGE   :" (IX
+;   0x0FA9).
+MidiInputOutputFilter_ValueCase_ControlChange:   ; entry: named by 1 `.long` operand, first at 0xF9AB90
 	push 0x00                                            ; F9ABBF  09 00
 	push H                                               ; F9ABC1  ce 04
-	calr sub_F9ADF9                                      ; F9ABC3  1e 33 02
+	calr MidiInputOutputFilter_EditControlChange                                      ; F9ABC3  1e 33 02
 	jr .LF9ABEA                                          ; F9ABC6  68 22
-sub_F9ABC8:   ; entry: named by 1 `.long` operand, first at 0xF9AB94
+; MidiInputOutputFilter_ValueCase_ResetAllCtrl -- case 4 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditResetAllCtrl(H)
+; Evidence: JumpTable_F9AB84 entry [4]; row 4 of DL_InputOutputFilterMidiPr0gramChange is "RESET ALL CTRL" (IX
+;   0x1279).
+MidiInputOutputFilter_ValueCase_ResetAllCtrl:   ; entry: named by 1 `.long` operand, first at 0xF9AB94
 	push 0x00                                            ; F9ABC8  09 00
 	push H                                               ; F9ABCA  ce 04
-	calr sub_F9AE41                                      ; F9ABCC  1e 72 02
+	calr MidiInputOutputFilter_EditResetAllCtrl                                      ; F9ABCC  1e 72 02
 	jr .LF9ABEA                                          ; F9ABCF  68 19
-sub_F9ABD1:   ; entry: named by 1 `.long` operand, first at 0xF9AB98
+; MidiInputOutputFilter_ValueCase_ChannelPressure -- case 5 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditChannelPressure(H)
+; Evidence: JumpTable_F9AB84 entry [5]; row 5 of DL_InputOutputFilterMidiPr0gramChange is "CHANNEL PRESSURE :" (IX
+;   0x1549).
+MidiInputOutputFilter_ValueCase_ChannelPressure:   ; entry: named by 1 `.long` operand, first at 0xF9AB98
 	push 0x00                                            ; F9ABD1  09 00
 	push H                                               ; F9ABD3  ce 04
-	calr sub_F9AE89                                      ; F9ABD5  1e b1 02
+	calr MidiInputOutputFilter_EditChannelPressure                                      ; F9ABD5  1e b1 02
 	jr .LF9ABEA                                          ; F9ABD8  68 10
-sub_F9ABDA:   ; entry: named by 1 `.long` operand, first at 0xF9AB9C
+; MidiInputOutputFilter_ValueCase_SongSelect -- case 6 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditSongSelect(H)
+; Evidence: JumpTable_F9AB84 entry [6]; row 6 of DL_InputOutputFilterMidiPr0gramChange is "S0NG SELECT      :" (IX
+;   0x1819).
+MidiInputOutputFilter_ValueCase_SongSelect:   ; entry: named by 1 `.long` operand, first at 0xF9AB9C
 	push 0x00                                            ; F9ABDA  09 00
 	push H                                               ; F9ABDC  ce 04
-	calr sub_F9AED1                                      ; F9ABDE  1e f0 02
+	calr MidiInputOutputFilter_EditSongSelect                                      ; F9ABDE  1e f0 02
 	jr .LF9ABEA                                          ; F9ABE1  68 07
-sub_F9ABE3:   ; entry: named by 1 `.long` operand, first at 0xF9ABA0
+; MidiInputOutputFilter_ValueCase_Exclusive -- case 7 of MidiInputOutputFilter_StepValue:
+;   MidiInputOutputFilter_EditExclusive(H)
+; Evidence: JumpTable_F9AB84 entry [7]; row 7 of DL_InputOutputFilterMidiPr0gramChange is "EXCLUSIVE        :" (IX
+;   0x1AE9).
+MidiInputOutputFilter_ValueCase_Exclusive:   ; entry: named by 1 `.long` operand, first at 0xF9ABA0
 	push 0x00                                            ; F9ABE3  09 00
 	push H                                               ; F9ABE5  ce 04
-	calr sub_F9AF19                                      ; F9ABE7  1e 2f 03
+	calr MidiInputOutputFilter_EditExclusive                                      ; F9ABE7  1e 2f 03
 .LF9ABEA:
 	popw bc                                              ; F9ABEA  49
 JumpTable_F9AB84_Code_Skip:
 	popw hl                                              ; F9ABEB  4b
 	unlk XIZ                                             ; F9ABEC  ee 0d
 	ret                                                  ; F9ABEE  0e
-sub_F9ABEF:
+; MidiInputOutputFilter_PaintProgramChange -- draw the PR0GRAM CHANGE filter state: (0x7F39) bit 4 -> (0x2740) ->
+;   DL_F0CDE7 (DLTable_OffOn)
+; Evidence: DL_F0CDE7 reads (0x2740) and draws at IX 0x074C, the text row of "PR0GRAM CHANGE   :" (IX 0x0739);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditProgramChange.
+MidiInputOutputFilter_PaintProgramChange:
 	ld c, (0x7f39:16)                                   ; F9ABEF  c1 39 7f 23
 	and C,0x10                                           ; F9ABF3  cb cc 10
 	srl c, 0x04                                          ; F9ABF6  cb ef 04
@@ -48996,7 +49222,11 @@ sub_F9ABEF:
 	call T_DisplayListB_Run_Stack                        ; F9AC0E  1d 04 2e f4
 	inc 8,XSP                                            ; F9AC12  ef 60
 	ret                                                  ; F9AC14  0e
-sub_F9AC15:
+; MidiInputOutputFilter_PaintBankSelect -- draw the BANK SELECT filter state: (0x7F3A) bit 7 -> (0x2740) ->
+;   DL_F0CDF6 (DLTable_OffOn)
+; Evidence: DL_F0CDF6 reads (0x2740) and draws at IX 0x0A1C, the text row of "BANK SELECT      :" (IX 0x0A09);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditBankSelect.
+MidiInputOutputFilter_PaintBankSelect:
 	ld c, (0x7f3a:16)                                   ; F9AC15  c1 3a 7f 23
 	and C,0x80                                           ; F9AC19  cb cc 80
 	srl c, 0x07                                          ; F9AC1C  cb ef 07
@@ -49009,7 +49239,11 @@ sub_F9AC15:
 	call T_DisplayListB_Run_Stack                        ; F9AC34  1d 04 2e f4
 	inc 8,XSP                                            ; F9AC38  ef 60
 	ret                                                  ; F9AC3A  0e
-sub_F9AC3B:
+; MidiInputOutputFilter_PaintPitchBend -- draw the PITCH BEND filter state: (0x7F39) bit 6 -> (0x2740) -> DL_F0CE05
+;   (DLTable_OffOn)
+; Evidence: DL_F0CE05 reads (0x2740) and draws at IX 0x0CEC, the text row of "PITCH BEND       :" (IX 0x0CD9);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditPitchBend.
+MidiInputOutputFilter_PaintPitchBend:
 	ld c, (0x7f39:16)                                   ; F9AC3B  c1 39 7f 23
 	and C,0x40                                           ; F9AC3F  cb cc 40
 	srl c, 0x06                                          ; F9AC42  cb ef 06
@@ -49022,7 +49256,11 @@ sub_F9AC3B:
 	call T_DisplayListB_Run_Stack                        ; F9AC5A  1d 04 2e f4
 	inc 8,XSP                                            ; F9AC5E  ef 60
 	ret                                                  ; F9AC60  0e
-sub_F9AC61:
+; MidiInputOutputFilter_PaintControlChange -- draw the C0NTR0L CHANGE filter state: (0x7F39) bit 3 -> (0x2740) ->
+;   DL_F0CE14 (DLTable_OffOn)
+; Evidence: DL_F0CE14 reads (0x2740) and draws at IX 0x0FBC, the text row of "C0NTR0L CHANGE   :" (IX 0x0FA9);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditControlChange.
+MidiInputOutputFilter_PaintControlChange:
 	ld c, (0x7f39:16)                                   ; F9AC61  c1 39 7f 23
 	and C,0x08                                           ; F9AC65  cb cc 08
 	srl c, 0x03                                          ; F9AC68  cb ef 03
@@ -49035,7 +49273,11 @@ sub_F9AC61:
 	call T_DisplayListB_Run_Stack                        ; F9AC80  1d 04 2e f4
 	inc 8,XSP                                            ; F9AC84  ef 60
 	ret                                                  ; F9AC86  0e
-sub_F9AC87:
+; MidiInputOutputFilter_PaintResetAllCtrl -- draw the RESET ALL CTRL filter state: (0x7F3B) bit 0 -> (0x2740) ->
+;   DL_F0CE23 (DLTable_OffOn)
+; Evidence: DL_F0CE23 reads (0x2740) and draws at IX 0x128C, the text row of "RESET ALL CTRL" (IX 0x1279); called by
+;   Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditResetAllCtrl.
+MidiInputOutputFilter_PaintResetAllCtrl:
 	ld c, (0x7f3b:16)                                   ; F9AC87  c1 3b 7f 23
 	and C,0x01                                           ; F9AC8B  cb cc 01
 	ld (0x2740:16), c                                   ; F9AC8E  f1 40 27 43
@@ -49047,7 +49289,11 @@ sub_F9AC87:
 	call T_DisplayListB_Run_Stack                        ; F9ACA3  1d 04 2e f4
 	inc 8,XSP                                            ; F9ACA7  ef 60
 	ret                                                  ; F9ACA9  0e
-sub_F9ACAA:
+; MidiInputOutputFilter_PaintChannelPressure -- draw the CHANNEL PRESSURE filter state: (0x7F39) bit 5 -> (0x2740)
+;   -> DL_F0CE32 (DLTable_OffOn)
+; Evidence: DL_F0CE32 reads (0x2740) and draws at IX 0x155C, the text row of "CHANNEL PRESSURE :" (IX 0x1549);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditChannelPressure.
+MidiInputOutputFilter_PaintChannelPressure:
 	ld c, (0x7f39:16)                                   ; F9ACAA  c1 39 7f 23
 	and C,0x20                                           ; F9ACAE  cb cc 20
 	srl c, 0x05                                          ; F9ACB1  cb ef 05
@@ -49060,7 +49306,11 @@ sub_F9ACAA:
 	call T_DisplayListB_Run_Stack                        ; F9ACC9  1d 04 2e f4
 	inc 8,XSP                                            ; F9ACCD  ef 60
 	ret                                                  ; F9ACCF  0e
-sub_F9ACD0:
+; MidiInputOutputFilter_PaintSongSelect -- draw the S0NG SELECT filter state: (0x7F33) bit 3 -> (0x2740) ->
+;   DL_F0CE41 (DLTable_OffOn)
+; Evidence: DL_F0CE41 reads (0x2740) and draws at IX 0x182C, the text row of "S0NG SELECT      :" (IX 0x1819);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditSongSelect.
+MidiInputOutputFilter_PaintSongSelect:
 	ld c, (0x7f33:16)                                   ; F9ACD0  c1 33 7f 23
 	and C,0x08                                           ; F9ACD4  cb cc 08
 	srl c, 0x03                                          ; F9ACD7  cb ef 03
@@ -49073,7 +49323,11 @@ sub_F9ACD0:
 	call T_DisplayListB_Run_Stack                        ; F9ACEF  1d 04 2e f4
 	inc 8,XSP                                            ; F9ACF3  ef 60
 	ret                                                  ; F9ACF5  0e
-sub_F9ACF6:
+; MidiInputOutputFilter_PaintExclusive -- draw the EXCLUSIVE filter state: ON when (0x7F38) & 0x0F != 0 -> (0x2740)
+;   -> DL_F0CE50 (DLTable_OffOn)
+; Evidence: DL_F0CE50 reads (0x2740) and draws at IX 0x1AFC, the text row of "EXCLUSIVE        :" (IX 0x1AE9);
+;   called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditExclusive.
+MidiInputOutputFilter_PaintExclusive:
 	ld (0x2740:16), 0x01                                 ; F9ACF6  f1 40 27 00 01
 	ld c, (0x7f38:16)                                   ; F9ACFB  c1 38 7f 23
 	and C,0x0f                                           ; F9ACFF  cb cc 0f
@@ -49088,7 +49342,12 @@ sub_F9ACF6:
 	call T_DisplayListB_Run_Stack                        ; F9AD1A  1d 04 2e f4
 	inc 8,XSP                                            ; F9AD1E  ef 60
 	ret                                                  ; F9AD20  0e
-sub_F9AD21:
+; MidiInputOutputFilter_EditProgramChange -- set (key arg 0) or clear (0x7F39) bit 4, the PR0GRAM CHANGE filter;
+;   post and repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x10, D=7, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintProgramChange.  Reached through
+;   JumpTable_F9AB84[0].
+MidiInputOutputFilter_EditProgramChange:
 	link XIZ,0x0000                                      ; F9AD21  ee 0c 00 00
 	pushw hl                                             ; F9AD25  2b
 	ld H,(XIZ+0x08)                                      ; F9AD26  8e 08 26
@@ -49104,7 +49363,7 @@ sub_F9AD21:
 	push XBC                                             ; F9AD3A  39
 	push 0x00                                            ; F9AD3B  09 00
 	push H                                               ; F9AD3D  ce 04
-	calr sub_F9A165                                          ; F9AD3F  1e 23 f4
+	calr ByteField_SetOrClearMask                                          ; F9AD3F  1e 23 f4
 	inc 8,XSP                                            ; F9AD42  ef 60
 	cp a, 0x00:i3                                          ; F9AD44  c9 d8
 	jr nz, .LF9AD65                                      ; F9AD46  6e 1d
@@ -49116,13 +49375,17 @@ sub_F9AD21:
 	pushw 0x07                                           ; F9AD56  0b 07 00
 	pushw 0x80                                           ; F9AD59  0b 80 00
 	call T_F41B18                                        ; F9AD5C  1d 18 1b f4
-	calr sub_F9ABEF                                      ; F9AD60  1e 8c fe
+	calr MidiInputOutputFilter_PaintProgramChange                                      ; F9AD60  1e 8c fe
 	inc 8,XSP                                            ; F9AD63  ef 60
 .LF9AD65:
 	popw hl                                              ; F9AD65  4b
 	unlk XIZ                                             ; F9AD66  ee 0d
 	ret                                                  ; F9AD68  0e
-sub_F9AD69:
+; MidiInputOutputFilter_EditBankSelect -- set (key arg 0) or clear (0x7F3A) bit 7, the BANK SELECT filter; post and
+;   repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x80, D=8, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintBankSelect.  Reached through JumpTable_F9AB84[1].
+MidiInputOutputFilter_EditBankSelect:
 	link XIZ,0x0000                                      ; F9AD69  ee 0c 00 00
 	pushw hl                                             ; F9AD6D  2b
 	ld H,(XIZ+0x08)                                      ; F9AD6E  8e 08 26
@@ -49138,7 +49401,7 @@ sub_F9AD69:
 	push XBC                                             ; F9AD82  39
 	push 0x00                                            ; F9AD83  09 00
 	push H                                               ; F9AD85  ce 04
-	calr sub_F9A165                                          ; F9AD87  1e db f3
+	calr ByteField_SetOrClearMask                                          ; F9AD87  1e db f3
 	inc 8,XSP                                            ; F9AD8A  ef 60
 sub_F9AD8C:
 	cp a, 0x00:i3                                          ; F9AD8C  c9 d8
@@ -49151,13 +49414,17 @@ sub_F9AD8C:
 	pushw 0x08                                           ; F9AD9E  0b 08 00
 	pushw 0x80                                           ; F9ADA1  0b 80 00
 	call T_F41B18                                        ; F9ADA4  1d 18 1b f4
-	calr sub_F9AC15                                      ; F9ADA8  1e 6a fe
+	calr MidiInputOutputFilter_PaintBankSelect                                      ; F9ADA8  1e 6a fe
 	inc 8,XSP                                            ; F9ADAB  ef 60
 .LF9ADAD:
 	popw hl                                              ; F9ADAD  4b
 	unlk XIZ                                             ; F9ADAE  ee 0d
 	ret                                                  ; F9ADB0  0e
-sub_F9ADB1:
+; MidiInputOutputFilter_EditPitchBend -- set (key arg 0) or clear (0x7F39) bit 6, the PITCH BEND filter; post and
+;   repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x40, D=7, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintPitchBend.  Reached through JumpTable_F9AB84[2].
+MidiInputOutputFilter_EditPitchBend:
 	link XIZ,0x0000                                      ; F9ADB1  ee 0c 00 00
 	pushw hl                                             ; F9ADB5  2b
 	ld H,(XIZ+0x08)                                      ; F9ADB6  8e 08 26
@@ -49173,7 +49440,7 @@ sub_F9ADB1:
 	push XBC                                             ; F9ADCA  39
 	push 0x00                                            ; F9ADCB  09 00
 	push H                                               ; F9ADCD  ce 04
-	calr sub_F9A165                                          ; F9ADCF  1e 93 f3
+	calr ByteField_SetOrClearMask                                          ; F9ADCF  1e 93 f3
 	inc 8,XSP                                            ; F9ADD2  ef 60
 	cp a, 0x00:i3                                          ; F9ADD4  c9 d8
 	jr nz, .LF9ADF5                                      ; F9ADD6  6e 1d
@@ -49185,13 +49452,18 @@ sub_F9ADB1:
 	pushw 0x07                                           ; F9ADE6  0b 07 00
 	pushw 0x80                                           ; F9ADE9  0b 80 00
 	call T_F41B18                                        ; F9ADEC  1d 18 1b f4
-	calr sub_F9AC3B                                      ; F9ADF0  1e 48 fe
+	calr MidiInputOutputFilter_PaintPitchBend                                      ; F9ADF0  1e 48 fe
 	inc 8,XSP                                            ; F9ADF3  ef 60
 .LF9ADF5:
 	popw hl                                              ; F9ADF5  4b
 	unlk XIZ                                             ; F9ADF6  ee 0d
 	ret                                                  ; F9ADF8  0e
-sub_F9ADF9:
+; MidiInputOutputFilter_EditControlChange -- set (key arg 0) or clear (0x7F39) bit 3, the C0NTR0L CHANGE filter;
+;   post and repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=7, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintControlChange.  Reached through
+;   JumpTable_F9AB84[3].
+MidiInputOutputFilter_EditControlChange:
 	link XIZ,0x0000                                      ; F9ADF9  ee 0c 00 00
 	pushw hl                                             ; F9ADFD  2b
 	ld H,(XIZ+0x08)                                      ; F9ADFE  8e 08 26
@@ -49207,7 +49479,7 @@ sub_F9ADF9:
 	push XBC                                             ; F9AE12  39
 	push 0x00                                            ; F9AE13  09 00
 	push H                                               ; F9AE15  ce 04
-	calr sub_F9A165                                          ; F9AE17  1e 4b f3
+	calr ByteField_SetOrClearMask                                          ; F9AE17  1e 4b f3
 	inc 8,XSP                                            ; F9AE1A  ef 60
 	cp a, 0x00:i3                                          ; F9AE1C  c9 d8
 	jr nz, .LF9AE3D                                      ; F9AE1E  6e 1d
@@ -49219,13 +49491,18 @@ sub_F9ADF9:
 	pushw 0x07                                           ; F9AE2E  0b 07 00
 	pushw 0x80                                           ; F9AE31  0b 80 00
 	call T_F41B18                                        ; F9AE34  1d 18 1b f4
-	calr sub_F9AC61                                      ; F9AE38  1e 26 fe
+	calr MidiInputOutputFilter_PaintControlChange                                      ; F9AE38  1e 26 fe
 	inc 8,XSP                                            ; F9AE3B  ef 60
 .LF9AE3D:
 	popw hl                                              ; F9AE3D  4b
 	unlk XIZ                                             ; F9AE3E  ee 0d
 	ret                                                  ; F9AE40  0e
-sub_F9AE41:
+; MidiInputOutputFilter_EditResetAllCtrl -- set (key arg 0) or clear (0x7F3B) bit 0, the RESET ALL CTRL filter; post
+;   and repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x01, D=9, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintResetAllCtrl.  Reached through
+;   JumpTable_F9AB84[4].
+MidiInputOutputFilter_EditResetAllCtrl:
 	link XIZ,0x0000                                      ; F9AE41  ee 0c 00 00
 	pushw hl                                             ; F9AE45  2b
 	ld H,(XIZ+0x08)                                      ; F9AE46  8e 08 26
@@ -49241,7 +49518,7 @@ sub_F9AE41:
 	push XBC                                             ; F9AE5A  39
 	push 0x00                                            ; F9AE5B  09 00
 	push H                                               ; F9AE5D  ce 04
-	calr sub_F9A165                                          ; F9AE5F  1e 03 f3
+	calr ByteField_SetOrClearMask                                          ; F9AE5F  1e 03 f3
 	inc 8,XSP                                            ; F9AE62  ef 60
 	cp a, 0x00:i3                                          ; F9AE64  c9 d8
 	jr nz, .LF9AE85                                      ; F9AE66  6e 1d
@@ -49253,13 +49530,19 @@ sub_F9AE41:
 	pushw 0x09                                           ; F9AE76  0b 09 00
 	pushw 0x80                                           ; F9AE79  0b 80 00
 	call T_F41B18                                        ; F9AE7C  1d 18 1b f4
-	calr sub_F9AC87                                      ; F9AE80  1e 04 fe
+	calr MidiInputOutputFilter_PaintResetAllCtrl                                      ; F9AE80  1e 04 fe
 	inc 8,XSP                                            ; F9AE83  ef 60
 .LF9AE85:
 	popw hl                                              ; F9AE85  4b
 	unlk XIZ                                             ; F9AE86  ee 0d
 	ret                                                  ; F9AE88  0e
-sub_F9AE89:
+; MidiInputOutputFilter_EditChannelPressure -- set (key arg 0) or clear (0x7F39) bit 5, the CHANNEL PRESSURE filter;
+;   post and repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x20, D=7, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintChannelPressure.  Reached through
+;   JumpTable_F9AB84[5]. ⚠ the posted A is read from (0x7F3B) & 0x20 (`ld H,(0x7f3b)` at 0xF9AEB0) while the edit
+;   and D=7 name 0x7F39.
+MidiInputOutputFilter_EditChannelPressure:
 	link XIZ,0x0000                                      ; F9AE89  ee 0c 00 00
 	pushw hl                                             ; F9AE8D  2b
 	ld H,(XIZ+0x08)                                      ; F9AE8E  8e 08 26
@@ -49275,7 +49558,7 @@ sub_F9AE89:
 	push XBC                                             ; F9AEA2  39
 	push 0x00                                            ; F9AEA3  09 00
 	push H                                               ; F9AEA5  ce 04
-	calr sub_F9A165                                          ; F9AEA7  1e bb f2
+	calr ByteField_SetOrClearMask                                          ; F9AEA7  1e bb f2
 	inc 8,XSP                                            ; F9AEAA  ef 60
 	cp a, 0x00:i3                                          ; F9AEAC  c9 d8
 	jr nz, .LF9AECD                                      ; F9AEAE  6e 1d
@@ -49287,13 +49570,17 @@ sub_F9AE89:
 	pushw 0x07                                           ; F9AEBE  0b 07 00
 	pushw 0x80                                           ; F9AEC1  0b 80 00
 	call T_F41B18                                        ; F9AEC4  1d 18 1b f4
-	calr sub_F9ACAA                                      ; F9AEC8  1e df fd
+	calr MidiInputOutputFilter_PaintChannelPressure                                      ; F9AEC8  1e df fd
 	inc 8,XSP                                            ; F9AECB  ef 60
 .LF9AECD:
 	popw hl                                              ; F9AECD  4b
 	unlk XIZ                                             ; F9AECE  ee 0d
 	ret                                                  ; F9AED0  0e
-sub_F9AED1:
+; MidiInputOutputFilter_EditSongSelect -- set (key arg 0) or clear (0x7F33) bit 3, the S0NG SELECT filter; post and
+;   repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=1, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintSongSelect.  Reached through JumpTable_F9AB84[6].
+MidiInputOutputFilter_EditSongSelect:
 	link XIZ,0x0000                                      ; F9AED1  ee 0c 00 00
 	pushw hl                                             ; F9AED5  2b
 	ld H,(XIZ+0x08)                                      ; F9AED6  8e 08 26
@@ -49309,7 +49596,7 @@ sub_F9AED1:
 	push XBC                                             ; F9AEEA  39
 	push 0x00                                            ; F9AEEB  09 00
 	push H                                               ; F9AEED  ce 04
-	calr sub_F9A165                                          ; F9AEEF  1e 73 f2
+	calr ByteField_SetOrClearMask                                          ; F9AEEF  1e 73 f2
 	inc 8,XSP                                            ; F9AEF2  ef 60
 	cp a, 0x00:i3                                          ; F9AEF4  c9 d8
 	jr nz, .LF9AF15                                      ; F9AEF6  6e 1d
@@ -49321,13 +49608,18 @@ sub_F9AED1:
 	pushw 0x01                                           ; F9AF06  0b 01 00
 	pushw 0x80                                           ; F9AF09  0b 80 00
 	call T_F41B18                                        ; F9AF0C  1d 18 1b f4
-	calr sub_F9ACD0                                      ; F9AF10  1e bd fd
+	calr MidiInputOutputFilter_PaintSongSelect                                      ; F9AF10  1e bd fd
 	inc 8,XSP                                            ; F9AF13  ef 60
 .LF9AF15:
 	popw hl                                              ; F9AF15  4b
 	unlk XIZ                                             ; F9AF16  ee 0d
 	ret                                                  ; F9AF18  0e
-sub_F9AF19:
+; MidiInputOutputFilter_EditExclusive -- set (key arg 0) or clear (0x7F38) bits 0-3, the EXCLUSIVE filter; post and
+;   repaint if it changed
+; Evidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x0F, D=6, A =
+;   new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintExclusive.  Reached through JumpTable_F9AB84[7].
+;   The mask is the whole low nibble: all four bits are set or cleared together.
+MidiInputOutputFilter_EditExclusive:
 	link XIZ,0x0000                                      ; F9AF19  ee 0c 00 00
 	pushw hl                                             ; F9AF1D  2b
 	ld H,(XIZ+0x08)                                      ; F9AF1E  8e 08 26
@@ -49343,7 +49635,7 @@ sub_F9AF19:
 	push XBC                                             ; F9AF32  39
 	push 0x00                                            ; F9AF33  09 00
 	push H                                               ; F9AF35  ce 04
-	calr sub_F9A165                                          ; F9AF37  1e 2b f2
+	calr ByteField_SetOrClearMask                                          ; F9AF37  1e 2b f2
 	inc 8,XSP                                            ; F9AF3A  ef 60
 	cp a, 0x00:i3                                          ; F9AF3C  c9 d8
 	jr nz, .LF9AF5D                                      ; F9AF3E  6e 1d
@@ -49355,7 +49647,7 @@ sub_F9AF19:
 	pushw 0x06                                           ; F9AF4E  0b 06 00
 	pushw 0x80                                           ; F9AF51  0b 80 00
 	call T_F41B18                                        ; F9AF54  1d 18 1b f4
-	calr sub_F9ACF6                                      ; F9AF58  1e 9b fd
+	calr MidiInputOutputFilter_PaintExclusive                                      ; F9AF58  1e 9b fd
 	inc 8,XSP                                            ; F9AF5B  ef 60
 .LF9AF5D:
 	popw hl                                              ; F9AF5D  4b
@@ -49395,13 +49687,13 @@ Paint_MidiOutProgramChange:
 	link XIZ,0xffe9                                      ; F9AF61  ee 0c e9 ff
 	push XIX                                             ; F9AF65  3c
 	lda xix, (0x2741:16)                                ; F9AF66  f1 41 27 34
-	ld xbc, (sub_F9B652__F9B67F:24)                               ; F9AF6A  e2 7f b6 f9 21
+	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B67F:24)                               ; F9AF6A  e2 7f b6 f9 21
 	ld (xiz-8), xbc                                      ; F9AF6F  be f8 61
-	ld xbc, (sub_F9B652__F9B683:24)                               ; F9AF72  e2 83 b6 f9 21
+	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B683:24)                               ; F9AF72  e2 83 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9AF77  be fc 61
 	push XIX                                             ; F9AF7A  3c
 	ldw bc, 0x0b                                         ; F9AF7B  31 0b 00
-	lda xiy, (sub_F9B652__F9B687:24)                               ; F9AF7E  f2 87 b6 f9 35
+	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B687:24)                               ; F9AF7E  f2 87 b6 f9 35
 	lda xix, (xiz-19)                                    ; F9AF83  be ed 34
 	ldir85                                               ; F9AF86  85 11
 	pop XIX                                              ; F9AF88  5c
@@ -49454,11 +49746,11 @@ Paint_MidiOutProgramChange:
 	ld (XIX),0x00                                        ; F9B019  b4 00 00
 	pop XIY                                              ; F9B01C  5d
 .LF9B01D:
-	calr sub_F9B260                                          ; F9B01D  1e 40 02
-	calr sub_F9B280                                          ; F9B020  1e 5d 02
-	calr sub_F9B2A2                                          ; F9B023  1e 7c 02
-	calr sub_F9B2C2                                          ; F9B026  1e 99 02
-	calr sub_F9B2E2                                          ; F9B029  1e b6 02
+	calr MidiOutProgramChange_PaintMidiCh                                          ; F9B01D  1e 40 02
+	calr MidiOutProgramChange_PaintProgram                                          ; F9B020  1e 5d 02
+	calr MidiOutProgramChange_PaintBankMsb                                          ; F9B023  1e 7c 02
+	calr MidiOutProgramChange_PaintBankLsb                                          ; F9B026  1e 99 02
+	calr MidiOutProgramChange_PaintBankSelect                                          ; F9B029  1e b6 02
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F9B02C  f1 40 25 00 01
 	lda xbc, (Data_F0D061:24)                            ; F9B031  f2 61 d0 f0 31
 	push XBC                                             ; F9B036  39
@@ -49469,7 +49761,7 @@ Paint_MidiOutProgramChange:
 	ld (0x2721:16), c                                   ; F9B045  f1 21 27 43
 	push 0x00                                            ; F9B049  09 00
 	m_push MB16, 0x2720                                  ; F9B04B  c1 20 27 04
-	calr sub_F9B652                                          ; F9B04F  1e 00 06
+	calr MidiOutProgramChange_EnableBlinkForItem                                          ; F9B04F  1e 00 06
 	call T_F42E14                                        ; F9B052  1d 14 2e f4
 	inc 8,XSP                                            ; F9B056  ef 60
 	inc 2,XSP                                            ; F9B058  ef 62
@@ -49565,70 +49857,90 @@ ScreenButton_MidiOutProgramChange:
 ;          32-entry tables notes/prom_a_jumptables.py finds in the span.
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_MidiOutProgramChange:
-	.long sub_F9B12A                                 ; F9B098  [  0]
-	.long sub_F9B12A                                 ; F9B09C  [  1]
-	.long sub_F9B12A                                 ; F9B0A0  [  2]
-	.long sub_F9B12A                                 ; F9B0A4  [  3]
-	.long sub_F9B133                                 ; F9B0A8  [  4]
-	.long sub_F9B133                                 ; F9B0AC  [  5]
-	.long sub_F9B133                                 ; F9B0B0  [  6]
-	.long sub_F9B133                                 ; F9B0B4  [  7]
-	.long sub_F9B142                                 ; F9B0B8  [  8]
-	.long sub_F9B118                                 ; F9B0BC  [  9]
-	.long sub_F9B142                                 ; F9B0C0  [ 10]
-	.long sub_F9B142                                 ; F9B0C4  [ 11]
-	.long sub_F9B142                                 ; F9B0C8  [ 12]
-	.long sub_F9B142                                 ; F9B0CC  [ 13]
-	.long sub_F9B142                                 ; F9B0D0  [ 14]
-	.long sub_F9B121                                 ; F9B0D4  [ 15]
-	.long sub_F9B142                                 ; F9B0D8  [ 16]
-	.long sub_F9B12A                                 ; F9B0DC  [ 17]
-	.long sub_F9B12A                                 ; F9B0E0  [ 18]
-	.long sub_F9B12A                                 ; F9B0E4  [ 19]
-	.long sub_F9B12A                                 ; F9B0E8  [ 20]
-	.long sub_F9B133                                 ; F9B0EC  [ 21]
-	.long sub_F9B133                                 ; F9B0F0  [ 22]
-	.long sub_F9B133                                 ; F9B0F4  [ 23]
-	.long sub_F9B133                                 ; F9B0F8  [ 24]
-	.long sub_F9B142                                 ; F9B0FC  [ 25]
-	.long sub_F9B142                                 ; F9B100  [ 26]
-	.long sub_F9B13D                                 ; F9B104  [ 27]
-	.long sub_F9B142                                 ; F9B108  [ 28]
-	.long sub_F9B142                                 ; F9B10C  [ 29]
-	.long sub_F9B142                                 ; F9B110  [ 30]
-	.long sub_F9B142                                 ; F9B114  [ 31]
-sub_F9B118:   ; entry: named by 1 `.long` operand, first at 0xF9B0BC
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B098  [  0]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B09C  [  1]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0A0  [  2]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0A4  [  3]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0A8  [  4]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0AC  [  5]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0B0  [  6]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0B4  [  7]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0B8  [  8]
+	.long LcdKeyRow2_MidiOutProgramChange                                 ; F9B0BC  [  9]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0C0  [ 10]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0C4  [ 11]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0C8  [ 12]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0CC  [ 13]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0D0  [ 14]
+	.long ExitKey_MidiOutProgramChange                                 ; F9B0D4  [ 15]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0D8  [ 16]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0DC  [ 17]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0E0  [ 18]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0E4  [ 19]
+	.long ItemKeys_MidiOutProgramChange                                 ; F9B0E8  [ 20]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0EC  [ 21]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0F0  [ 22]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0F4  [ 23]
+	.long ValueKeys_MidiOutProgramChange                                 ; F9B0F8  [ 24]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B0FC  [ 25]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B100  [ 26]
+	.long NumberPadKey_MidiOutProgramChange                                 ; F9B104  [ 27]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B108  [ 28]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B10C  [ 29]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B110  [ 30]
+	.long IgnoredKeys_MidiOutProgramChange                                 ; F9B114  [ 31]
+; LcdKeyRow2_MidiOutProgramChange -- switch arm for code 0x09 (LCD row 2, "SEND"): MidiOutProgramChange_Send(H)
+; Evidence: ScreenButtonHandlers_MidiOutProgramChange entry [9], its only slot; "SEND" is drawn at 0x0BB2 beside the
+;   row-2 right arrow (0x0B8F); ends in the reader's epilogue (0xF9B13A).
+LcdKeyRow2_MidiOutProgramChange:   ; entry: named by 1 `.long` operand, first at 0xF9B0BC
 	push 0x00                                            ; F9B118  09 00
 	push H                                               ; F9B11A  ce 04
-	calr sub_F9B1D5                                      ; F9B11C  1e b6 00
+	calr MidiOutProgramChange_Send                                      ; F9B11C  1e b6 00
 	jr .LF9B13A                                          ; F9B11F  68 19
-sub_F9B121:   ; entry: named by 1 `.long` operand, first at 0xF9B0D4
+; ExitKey_MidiOutProgramChange -- switch arm for code 0x0F (EXIT): MidiSubmenu_ExitToMidiMenu(H)
+; Evidence: ScreenButtonHandlers_MidiOutProgramChange entry [15]; ends in the reader's epilogue (0xF9B13A).
+ExitKey_MidiOutProgramChange:   ; entry: named by 1 `.long` operand, first at 0xF9B0D4
 	push 0x00                                            ; F9B121  09 00
 	push H                                               ; F9B123  ce 04
-	calr sub_F9A0E7                                          ; F9B125  1e bf ef
+	calr MidiSubmenu_ExitToMidiMenu                                          ; F9B125  1e bf ef
 	jr .LF9B13A                                          ; F9B128  68 10
-sub_F9B12A:   ; entry: named by 8 `.long` operands, first at 0xF9B098
+; ItemKeys_MidiOutProgramChange -- switch arm for codes 0x00-0x03 / 0x11-0x14: MidiOutProgramChange_StepItem(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiOutProgramChange; the screen draws "ITEM" (DL_F0C917).
+ItemKeys_MidiOutProgramChange:   ; entry: named by 8 `.long` operands, first at 0xF9B098
 	push 0x00                                            ; F9B12A  09 00
 	push H                                               ; F9B12C  ce 04
-	calr sub_F9B149                                      ; F9B12E  1e 18 00
+	calr MidiOutProgramChange_StepItem                                      ; F9B12E  1e 18 00
 	jr .LF9B13A                                          ; F9B131  68 07
-sub_F9B133:   ; entry: named by 8 `.long` operands, first at 0xF9B0A8
+; ValueKeys_MidiOutProgramChange -- switch arm for codes 0x04-0x07 / 0x15-0x18: MidiOutProgramChange_StepValue(H)
+; Evidence: those 8 slots of ScreenButtonHandlers_MidiOutProgramChange; "VALUE" (DL_F0C917);
+;   Paint_MidiOutProgramChange sets (0x209C)=0x04 / (0x209B)=0x84, so the dial arrives here as code 4.
+ValueKeys_MidiOutProgramChange:   ; entry: named by 8 `.long` operands, first at 0xF9B0A8
 	push 0x00                                            ; F9B133  09 00
 	push H                                               ; F9B135  ce 04
-	calr sub_F9B18A                                      ; F9B137  1e 50 00
+	calr MidiOutProgramChange_StepValue                                      ; F9B137  1e 50 00
 .LF9B13A:
 	popw bc                                              ; F9B13A  49
 	jr .LF9B145                                          ; F9B13B  68 08
-sub_F9B13D:   ; entry: named by 1 `.long` operand, first at 0xF9B104
-	calr sub_F9B23A                                      ; F9B13D  1e fa 00
+; NumberPadKey_MidiOutProgramChange -- switch arm for code 0x1B (the number pad):
+;   MidiOutProgramChange_NumberPadEntry
+; Evidence: ScreenButtonHandlers_MidiOutProgramChange entry [27], its only slot (0x1B - 0x11 = slot [10] is ignored
+;   here); the callee parses the ASCII digit cells 0x2821-0x2823.  No argument is pushed; ends at 0xF9B145.
+NumberPadKey_MidiOutProgramChange:   ; entry: named by 1 `.long` operand, first at 0xF9B104
+	calr MidiOutProgramChange_NumberPadEntry                                      ; F9B13D  1e fa 00
 	jr .LF9B145                                          ; F9B140  68 03
-sub_F9B142:   ; entry: named by 13 `.long` operands, first at 0xF9B0B8
-	calr sub_F9A044_Nop                                          ; F9B142  1e ed ef
+; IgnoredKeys_MidiOutProgramChange -- default arm of ScreenButton_MidiOutProgramChange: MidiScreen_NopKeyHandler
+; Evidence: 13 slots ([8], [10]-[14], [16], [25], [26], [28]-[31]) of ScreenButtonHandlers_MidiOutProgramChange.
+IgnoredKeys_MidiOutProgramChange:   ; entry: named by 13 `.long` operands, first at 0xF9B0B8
+	calr IgnoredKeys_MidiMenu_Nop                                          ; F9B142  1e ed ef
 .LF9B145:
 	popw hl                                              ; F9B145  4b
 	unlk XIZ                                             ; F9B146  ee 0d
 	ret                                                  ; F9B148  0e
-sub_F9B149:
+; MidiOutProgramChange_StepItem -- move the item cursor (0x2720) within 0..3 and re-arm the field blink
+; Evidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 3, min 0) -> (0x2720), then
+;   MidiOutProgramChange_EnableBlinkForItem; rows: "MIDI CH", "PR0G CHANGE", "BANK MSB", "BANK LSB", boxed from
+;   DLBoxes_F0D061's four entries.
+MidiOutProgramChange_StepItem:
 	link XIZ,0x0000                                      ; F9B149  ee 0c 00 00
 	pushw hl                                             ; F9B14D  2b
 	ld H,(XIZ+0x08)                                      ; F9B14E  8e 08 26
@@ -49646,19 +49958,22 @@ sub_F9B149:
 	pushw 0x03                                           ; F9B167  0b 03 00
 	push 0x00                                            ; F9B16A  09 00
 	push H                                               ; F9B16C  ce 04
-	calr sub_F9A0FE                                          ; F9B16E  1e 8d ef
+	calr StepValue_IncDecClamped                                          ; F9B16E  1e 8d ef
 	ld H,A                                               ; F9B171  c9 8e
 	ld (0x2720:16), a                                   ; F9B173  f1 20 27 41
 	push 0x00                                            ; F9B177  09 00
 	push H                                               ; F9B179  ce 04
-	calr sub_F9B652                                      ; F9B17B  1e d4 04
+	calr MidiOutProgramChange_EnableBlinkForItem                                      ; F9B17B  1e d4 04
 	m_set 4, MD16, 0x2095                                ; F9B17E  f1 95 20 bc
 	inc 8,XSP                                            ; F9B182  ef 60
 	inc 2,XSP                                            ; F9B184  ef 62
 	popw hl                                              ; F9B186  4b
 	unlk XIZ                                             ; F9B187  ee 0d
 	ret                                                  ; F9B189  0e
-sub_F9B18A:
+; MidiOutProgramChange_StepValue -- step the field under the cursor: (0x2720) 0..3 -> Edit
+;   MidiCh/Program/BankMsb/BankLsb
+; Evidence: the `cp BC,0..3 / jr z` chain at 0xF9B19C-0xF9B1AA; sets bit 3 of (0x2075).
+MidiOutProgramChange_StepValue:
 	link XIZ,0x0000                                      ; F9B18A  ee 0c 00 00
 	pushw hl                                             ; F9B18E  2b
 	ld H,(XIZ+0x08)                                      ; F9B18F  8e 08 26
@@ -49677,37 +49992,41 @@ sub_F9B18A:
 .LF9B1AE:
 	push 0x00                                            ; F9B1AE  09 00
 	push H                                               ; F9B1B0  ce 04
-	calr sub_F9B399                                      ; F9B1B2  1e e4 01
+	calr MidiOutProgramChange_EditMidiCh                                      ; F9B1B2  1e e4 01
 	jr .LF9B1D0                                          ; F9B1B5  68 19
 .LF9B1B7:
 	push 0x00                                            ; F9B1B7  09 00
 	push H                                               ; F9B1B9  ce 04
-	calr sub_F9B3C7                                      ; F9B1BB  1e 09 02
+	calr MidiOutProgramChange_EditProgram                                      ; F9B1BB  1e 09 02
 	jr .LF9B1D0                                          ; F9B1BE  68 10
 .LF9B1C0:
 	push 0x00                                            ; F9B1C0  09 00
 	push H                                               ; F9B1C2  ce 04
-	calr sub_F9B3EF                                      ; F9B1C4  1e 28 02
+	calr MidiOutProgramChange_EditBankMsb                                      ; F9B1C4  1e 28 02
 	jr .LF9B1D0                                          ; F9B1C7  68 07
 .LF9B1C9:
 	push 0x00                                            ; F9B1C9  09 00
 	push H                                               ; F9B1CB  ce 04
-	calr sub_F9B43B                                      ; F9B1CD  1e 6b 02
+	calr MidiOutProgramChange_EditBankLsb                                      ; F9B1CD  1e 6b 02
 .LF9B1D0:
 	popw bc                                              ; F9B1D0  49
 .LF9B1D1:
 	popw hl                                              ; F9B1D1  4b
 	unlk XIZ                                             ; F9B1D2  ee 0d
 	ret                                                  ; F9B1D4  0e
-sub_F9B1D5:
+; MidiOutProgramChange_Send -- LCD row 2 right key ("SEND"): transmit Bank Select + Program Change from the fields
+; Evidence: (XIZ+8)==0 -> T_MIDI_SendBankAndProgram(ch/port (0x2746), program (0x2747), bank (0x274A) or 0xFFFF);
+;   then an op-03 box record (template 0xF9B692/0xF9B69A, box 0x10E,0x48-0x132,0x55 around "SEND") by
+;   T_DisplayListB_RunOne_Stack, (0x20AB)=2, (0x2741)=1 (Paint_MidiOutProgramChange then erases it), T_Blink_Stop.
+MidiOutProgramChange_Send:
 	link XIZ,0xffed                                      ; F9B1D5  ee 0c ed ff
 	push XIX                                             ; F9B1D9  3c
-	ld xbc, (sub_F9B652__F9B692:24)                               ; F9B1DA  e2 92 b6 f9 21
+	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B692:24)                               ; F9B1DA  e2 92 b6 f9 21
 	ld (xiz-8), xbc                                      ; F9B1DF  be f8 61
-	ld xbc, (sub_F9B652__F9B696:24)                               ; F9B1E2  e2 96 b6 f9 21
+	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B696:24)                               ; F9B1E2  e2 96 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9B1E7  be fc 61
 	ldw bc, 0x0b                                         ; F9B1EA  31 0b 00
-	lda xiy, (sub_F9B652__F9B69A:24)                               ; F9B1ED  f2 9a b6 f9 35
+	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B69A:24)                               ; F9B1ED  f2 9a b6 f9 35
 	lda xix, (xiz-19)                                    ; F9B1F2  be ed 34
 	ldir85                                               ; F9B1F5  85 11
 	lda xbc, (xiz-8)                                     ; F9B1F7  be f8 31
@@ -49733,7 +50052,10 @@ sub_F9B1D5:
 	pop XIX                                              ; F9B236  5c
 	unlk XIZ                                             ; F9B237  ee 0d
 	ret                                                  ; F9B239  0e
-sub_F9B23A:
+; MidiOutProgramChange_NumberPadEntry -- route a number-pad entry to the field under the cursor
+; Evidence: (0x2720)==1 -> MidiOutProgramChange_NumberPadProgram, 2 -> _NumberPadBankMsb, 3 -> _NumberPadBankLsb; 0
+;   (MIDI CH) is ignored.  Reached only from NumberPadKey_MidiOutProgramChange.
+MidiOutProgramChange_NumberPadEntry:
 	ld bc, (0x2720:16)                                 ; F9B23A  d1 20 27 21
 	extz BC                                              ; F9B23E  d9 12
 	cp bc, 0x00:i3                                         ; F9B240  d9 d8
@@ -49746,16 +50068,19 @@ sub_F9B23A:
 	jr z, .LF9B25C                                       ; F9B24E  66 0c
 	jr .LF9B25F                                          ; F9B250  68 0d
 .LF9B252:
-	calr sub_F9B4BC                                      ; F9B252  1e 67 02
+	calr MidiOutProgramChange_NumberPadProgram                                      ; F9B252  1e 67 02
 	jr .LF9B25F                                          ; F9B255  68 08
 .LF9B257:
-	calr sub_F9B51B                                      ; F9B257  1e c1 02
+	calr MidiOutProgramChange_NumberPadBankMsb                                      ; F9B257  1e c1 02
 	jr .LF9B25F                                          ; F9B25A  68 03
 .LF9B25C:
-	calr sub_F9B59E                                      ; F9B25C  1e 3f 03
+	calr MidiOutProgramChange_NumberPadBankLsb                                      ; F9B25C  1e 3f 03
 .LF9B25F:
 	ret                                                  ; F9B25F  0e
-sub_F9B260:
+; MidiOutProgramChange_PaintMidiCh -- draw the MIDI CH field: (0x2746) -> (0x2740) -> DL_F0CFF6 ("1 - 1".."2 - 16")
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x0836, the row of "MIDI CH     :" (IX 0x0828)
+;   in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.
+MidiOutProgramChange_PaintMidiCh:
 	ld c, (0x2746:16)                                   ; F9B260  c1 46 27 23
 	ld (0x2740:16), c                                   ; F9B264  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9B268  f1 40 25 00 00
@@ -49766,7 +50091,11 @@ sub_F9B260:
 	call T_DisplayListB_Run_Stack                        ; F9B279  1d 04 2e f4
 	inc 8,XSP                                            ; F9B27D  ef 60
 	ret                                                  ; F9B27F  0e
-sub_F9B280:
+; MidiOutProgramChange_PaintProgram -- draw the PR0G CHANGE field: (0x2747) + 1 -> (0x2740) -> DL_F0D005 (3-digit
+;   decimal)
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x0B06, the row of "PR0G CHANGE" (IX 0x0AF8) in
+;   DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.
+MidiOutProgramChange_PaintProgram:
 	ld c, (0x2747:16)                                   ; F9B280  c1 47 27 23
 	inc 1,C                                              ; F9B284  cb 61
 	ld (0x2740:16), c                                   ; F9B286  f1 40 27 43
@@ -49778,7 +50107,10 @@ sub_F9B280:
 	call T_DisplayListB_Run_Stack                        ; F9B29B  1d 04 2e f4
 	inc 8,XSP                                            ; F9B29F  ef 60
 	ret                                                  ; F9B2A1  0e
-sub_F9B2A2:
+; MidiOutProgramChange_PaintBankMsb -- draw the BANK MSB field: (0x2748) -> (0x2740) -> DL_F0D00F (3-digit decimal)
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x0DD6, the row of "BANK MSB    :" (IX 0x0DC8)
+;   in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.
+MidiOutProgramChange_PaintBankMsb:
 	ld c, (0x2748:16)                                   ; F9B2A2  c1 48 27 23
 	ld (0x2740:16), c                                   ; F9B2A6  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9B2AA  f1 40 25 00 00
@@ -49789,7 +50121,10 @@ sub_F9B2A2:
 	call T_DisplayListB_Run_Stack                        ; F9B2BB  1d 04 2e f4
 	inc 8,XSP                                            ; F9B2BF  ef 60
 	ret                                                  ; F9B2C1  0e
-sub_F9B2C2:
+; MidiOutProgramChange_PaintBankLsb -- draw the BANK LSB field: (0x2749) -> (0x2740) -> DL_F0D019 (3-digit decimal)
+; Evidence: the interpreter-B record reads (0x2740) and draws at IX 0x10A6, the row of "BANK LSB    ;" (IX 0x1098)
+;   in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.
+MidiOutProgramChange_PaintBankLsb:
 	ld c, (0x2749:16)                                   ; F9B2C2  c1 49 27 23
 	ld (0x2740:16), c                                   ; F9B2C6  f1 40 27 43
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9B2CA  f1 40 25 00 00
@@ -49800,25 +50135,12 @@ sub_F9B2C2:
 	call T_DisplayListB_Run_Stack                        ; F9B2DB  1d 04 2e f4
 	inc 8,XSP                                            ; F9B2DF  ef 60
 	ret                                                  ; F9B2E1  0e
-; ---------------------------------------------------------------------
-; sub_F9B2E2 -- a screen painter this round REFUSED to name.
-;
-; It hands 2 display list(s) to the interpreter ON THE STACK.
-;     site 0xF9B30B  list 0xF0D02D-0xF0D036 (9 B, leaves by call)
-;        text: ""
-;     site 0xF9B31B  list 0xF0D036-0xF0D04B (21 B, leaves by call)
-;        text: "---"; "OFF"; "OFF"
-; Evidence: the two 24-bit immediates of the 12-byte push idiom at
-;          the cited site; the record walk from <start> lands exactly
-;          on <end>; the text is the `.ascii` the interpreter draws.
-; NOT NAMED because the caption belongs to its SECOND list; its first
-;          draws `---`, so a name taken from the text would name the wrong
-;          list.
-;          A wrong name passes the byte gate forever, so this keeps
-;          sub_XXXXXX and states the gap.
-; Recorded by notes/prom_a_understanding_round7.py --apply.
-; ---------------------------------------------------------------------
-sub_F9B2E2:
+; MidiOutProgramChange_PaintBankSelect -- draw the "(BANK SEL#= )" readout of (0x274A), or the bank-OFF state
+; Evidence: (0x274A)==0xFFFF -> site 0xF9B30B 0xF0D02D-0xF0D036 (blanks at 0x1374) and site 0xF9B31B
+;   0xF0D036-0xF0D04B (DL_OffOff: "---" over BANK MSB, "OFF" over BANK LSB and BANK SEL#); otherwise five decimal
+;   digits (`divs BC,10`, `add L,0x30`) in a frame copy of the record at 0xF9B6A5, drawn at IX 0x1374 by
+;   T_DisplayListB_RunOne_Stack. Round 7 refused a caption name (its first list draws `---`); this names the field.
+MidiOutProgramChange_PaintBankSelect:
 	link XIZ,0xffe9                                      ; F9B2E2  ee 0c e9 ff
 	pushw hl                                             ; F9B2E6  2b
 	pushw de                                             ; F9B2E7  2a
@@ -49826,7 +50148,7 @@ sub_F9B2E2:
 	lda xix, (xiz-6)                                     ; F9B2E9  be fa 34
 	push XIX                                             ; F9B2EC  3c
 	ldw bc, 0x0f                                         ; F9B2ED  31 0f 00
-	lda xiy, (sub_F9B652__F9B6A5:24)                               ; F9B2F0  f2 a5 b6 f9 35
+	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B6A5:24)                               ; F9B2F0  f2 a5 b6 f9 35
 	lda xix, (xiz-21)                                    ; F9B2F5  be eb 34
 	ldir85                                               ; F9B2F8  85 11
 	pop XIX                                              ; F9B2FA  5c
@@ -49899,7 +50221,11 @@ sub_F9B2E2:
 	popw hl                                              ; F9B395  4b
 	unlk XIZ                                             ; F9B396  ee 0d
 	ret                                                  ; F9B398  0e
-sub_F9B399:
+; MidiOutProgramChange_EditMidiCh -- step MIDI CH (0x2746) within 0..31 and repaint it if it changed
+; Evidence: StepValue_IncDecClamped(dir=(XIZ+8), max 0x1F, min 0) -> (0x2746), then
+;   MidiOutProgramChange_PaintMidiCh; bits 0-3 are the channel and bit 4 the port in MIDI_SendBankAndProgram's first
+;   argument ("1 - n" / "2 - n").
+MidiOutProgramChange_EditMidiCh:
 	link XIZ,0x0000                                      ; F9B399  ee 0c 00 00
 	pushw hl                                             ; F9B39D  2b
 	ld h, (0x2746:16)                                   ; F9B39E  c1 46 27 26
@@ -49909,18 +50235,21 @@ sub_F9B399:
 	pushw 0x1f                                           ; F9B3A9  0b 1f 00
 	push 0x00                                            ; F9B3AC  09 00
 	m_push MBD+r6, 0x08                                  ; F9B3AE  8e 08 04
-	calr sub_F9A0FE                                          ; F9B3B1  1e 4a ed
+	calr StepValue_IncDecClamped                                          ; F9B3B1  1e 4a ed
 	ld L,A                                               ; F9B3B4  c9 8f
 	ld (0x2746:16), a                                   ; F9B3B6  f1 46 27 41
 	inc 8,XSP                                            ; F9B3BA  ef 60
 	cp H,L                                               ; F9B3BC  cf f6
 	jr z, .LF9B3C3                                       ; F9B3BE  66 03
-	calr sub_F9B260                                      ; F9B3C0  1e 9d fe
+	calr MidiOutProgramChange_PaintMidiCh                                      ; F9B3C0  1e 9d fe
 .LF9B3C3:
 	popw hl                                              ; F9B3C3  4b
 	unlk XIZ                                             ; F9B3C4  ee 0d
 	ret                                                  ; F9B3C6  0e
-sub_F9B3C7:
+; MidiOutProgramChange_EditProgram -- step the program number (0x2747) within 0..127 and repaint
+; Evidence: StepValue_IncDecClamped(dir=(XIZ+8), max 0x7F, min 0) -> (0x2747), T_Blink_Stop,
+;   MidiOutProgramChange_PaintProgram.
+MidiOutProgramChange_EditProgram:
 	link XIZ,0x0000                                      ; F9B3C7  ee 0c 00 00
 	push 0x00                                            ; F9B3CB  09 00
 	m_push MB16, 0x2747                                  ; F9B3CD  c1 47 27 04
@@ -49928,14 +50257,18 @@ sub_F9B3C7:
 	pushw 0x7f                                           ; F9B3D4  0b 7f 00
 	push 0x00                                            ; F9B3D7  09 00
 	m_push MBD+r6, 0x08                                  ; F9B3D9  8e 08 04
-	calr sub_F9A0FE                                          ; F9B3DC  1e 1f ed
+	calr StepValue_IncDecClamped                                          ; F9B3DC  1e 1f ed
 	ld (0x2747:16), a                                   ; F9B3DF  f1 47 27 41
 	call T_Blink_Stop                                    ; F9B3E3  1d 24 2e f4
-	calr sub_F9B280                                      ; F9B3E7  1e 96 fe
+	calr MidiOutProgramChange_PaintProgram                                      ; F9B3E7  1e 96 fe
 	inc 8,XSP                                            ; F9B3EA  ef 60
 	unlk XIZ                                             ; F9B3EC  ee 0d
 	ret                                                  ; F9B3EE  0e
-sub_F9B3EF:
+; MidiOutProgramChange_EditBankMsb -- step BANK MSB (0x2748) within 0..127 and rebuild the bank number; inert while
+;   bank is OFF
+; Evidence: returns at once when (0x274A)==0xFFFF; else StepValue_IncDecClamped -> (0x2748), (0x274A) = MSB<<7 +
+;   (0x2749), T_Blink_Stop, MidiOutProgramChange_PaintBankMsb and _PaintBankSelect.
+MidiOutProgramChange_EditBankMsb:
 	link XIZ,0x0000                                      ; F9B3EF  ee 0c 00 00
 	pushw hl                                             ; F9B3F3  2b
 	pushw de                                             ; F9B3F4  2a
@@ -49947,7 +50280,7 @@ sub_F9B3EF:
 	pushw 0x7f                                           ; F9B406  0b 7f 00
 	push 0x00                                            ; F9B409  09 00
 	m_push MBD+r6, 0x08                                  ; F9B40B  8e 08 04
-	calr sub_F9A0FE                                          ; F9B40E  1e ed ec
+	calr StepValue_IncDecClamped                                          ; F9B40E  1e ed ec
 	ld H,A                                               ; F9B411  c9 8e
 	ld (0x2748:16), a                                   ; F9B413  f1 48 27 41
 	ld de, (0x2749:16)                                 ; F9B417  d1 49 27 22
@@ -49958,15 +50291,20 @@ sub_F9B3EF:
 	add BC,DE                                            ; F9B424  da 81
 	ld (0x274a:16), bc                                  ; F9B426  f1 4a 27 51
 	call T_Blink_Stop                                    ; F9B42A  1d 24 2e f4
-	calr sub_F9B2A2                                      ; F9B42E  1e 71 fe
-	calr sub_F9B2E2                                      ; F9B431  1e ae fe
+	calr MidiOutProgramChange_PaintBankMsb                                      ; F9B42E  1e 71 fe
+	calr MidiOutProgramChange_PaintBankSelect                                      ; F9B431  1e ae fe
 	inc 8,XSP                                            ; F9B434  ef 60
 .LF9B436:
 	popw de                                              ; F9B436  4a
 	popw hl                                              ; F9B437  4b
 	unlk XIZ                                             ; F9B438  ee 0d
 	ret                                                  ; F9B43A  0e
-sub_F9B43B:
+; MidiOutProgramChange_EditBankLsb -- step BANK LSB (0x2749); below 0 turns the bank OFF, stepping up from OFF turns
+;   it on
+; Evidence: LSB==0 with dir 1 -> (0x274A)=0xFFFF; OFF with dir 0 -> no step, bank rebuilt at LSB 0; otherwise
+;   StepValue_IncDecClamped(max 0x7F) and (0x274A) = (0x2748)<<7 + LSB.  Then T_Blink_Stop and repaint MSB, LSB,
+;   BANK SEL#.
+MidiOutProgramChange_EditBankLsb:
 	link XIZ,0x0000                                      ; F9B43B  ee 0c 00 00
 	pushw hl                                             ; F9B43F  2b
 	push XIX                                             ; F9B440  3c
@@ -49991,7 +50329,7 @@ sub_F9B43B:
 	pushw 0x00                                           ; F9B46C  0b 00 00
 	pushw 0x7f                                           ; F9B46F  0b 7f 00
 	pushw hl                                             ; F9B472  2b
-	calr sub_F9A0FE                                          ; F9B473  1e 88 ec
+	calr StepValue_IncDecClamped                                          ; F9B473  1e 88 ec
 	ld (XIX),A                                           ; F9B476  b4 41
 	inc 8,XSP                                            ; F9B478  ef 60
 .LF9B47A:
@@ -50005,21 +50343,29 @@ sub_F9B43B:
 	ld (0x274a:16), bc                                  ; F9B48B  f1 4a 27 51
 .LF9B48F:
 	call T_Blink_Stop                                    ; F9B48F  1d 24 2e f4
-	calr sub_F9B2A2                                      ; F9B493  1e 0c fe
-	calr sub_F9B2C2                                      ; F9B496  1e 29 fe
-	calr sub_F9B2E2                                      ; F9B499  1e 46 fe
+	calr MidiOutProgramChange_PaintBankMsb                                      ; F9B493  1e 0c fe
+	calr MidiOutProgramChange_PaintBankLsb                                      ; F9B496  1e 29 fe
+	calr MidiOutProgramChange_PaintBankSelect                                      ; F9B499  1e 46 fe
 	pop XIX                                              ; F9B49C  5c
 	popw hl                                              ; F9B49D  4b
 	unlk XIZ                                             ; F9B49E  ee 0d
 	ret                                                  ; F9B4A0  0e
-sub_F9B4A1:
+; MidiOutProgramChange_ResetState -- channel, program, MSB, LSB = 0 and the bank number = 0xFFFF (OFF)
+; Evidence: stores to (0x2746)..(0x2749) and `ldw (0x274A),0xFFFF`, the fields MidiOutProgramChange_Send transmits;
+;   called only by sub_F99818, the target of the module-head `jp` at 0xF99800 that prom_b's `.long 0x00F99800`
+;   (0xF4176C) names.
+MidiOutProgramChange_ResetState:
 	ld (0x2746:16), 0x00                                 ; F9B4A1  f1 46 27 00 00
 	ld (0x2747:16), 0x00                                 ; F9B4A6  f1 47 27 00 00
 	ld (0x2748:16), 0x00                                 ; F9B4AB  f1 48 27 00 00
 	ld (0x2749:16), 0x00                                 ; F9B4B0  f1 49 27 00 00
 	ldw (0x274a:16), 0xffff                              ; F9B4B5  f1 4a 27 02 ff ff
 	ret                                                  ; F9B4BB  0e
-sub_F9B4BC:
+; MidiOutProgramChange_NumberPadProgram -- take a number-pad entry into PROG CHANGE
+; Evidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:
+;   1..128, stored as value-1 in (0x2747). Then T_Blink_Command(DL_F0D005) blinks the field; a blank last digit cell
+;   ((0x2823)==' ') only stops the blink.
+MidiOutProgramChange_NumberPadProgram:
 	pushw hl                                             ; F9B4BC  2b
 	ld c, (0x2823:16)                                   ; F9B4BD  c1 23 28 23
 	cp C,0x20                                            ; F9B4C1  cb cf 20
@@ -50037,7 +50383,7 @@ sub_F9B4BC:
 	pushw 0x01                                           ; F9B4E3  0b 01 00
 	pushw 0x80                                           ; F9B4E6  0b 80 00
 	pushw wa                                             ; F9B4E9  28
-	calr sub_F9B638                                      ; F9B4EA  1e 4b 01
+	calr Word_IsOutOfRange                                      ; F9B4EA  1e 4b 01
 	inc 6,XSP                                            ; F9B4ED  ef 66
 	cp a, 0x00:i3                                          ; F9B4EF  c9 d8
 	jr nz, .LF9B4FF                                      ; F9B4F1  6e 0c
@@ -50057,7 +50403,11 @@ sub_F9B4BC:
 .LF9B519:
 	popw hl                                              ; F9B519  4b
 	ret                                                  ; F9B51A  0e
-sub_F9B51B:
+; MidiOutProgramChange_NumberPadBankMsb -- take a number-pad entry into BANK MSB
+; Evidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:
+;   0..127 into (0x2748), only while the bank is not OFF; (0x274A) rebuilt and BANK SEL# repainted. Then
+;   T_Blink_Command(DL_F0D00F) blinks the field; a blank last digit cell ((0x2823)==' ') only stops the blink.
+MidiOutProgramChange_NumberPadBankMsb:
 	pushw hl                                             ; F9B51B  2b
 	pushw de                                             ; F9B51C  2a
 	push XIX                                             ; F9B51D  3c
@@ -50080,7 +50430,7 @@ sub_F9B51B:
 	pushw 0x00                                           ; F9B550  0b 00 00
 	pushw 0x7f                                           ; F9B553  0b 7f 00
 	pushw wa                                             ; F9B556  28
-	calr sub_F9B638                                      ; F9B557  1e de 00
+	calr Word_IsOutOfRange                                      ; F9B557  1e de 00
 	inc 6,XSP                                            ; F9B55A  ef 66
 	cp a, 0x00:i3                                          ; F9B55C  c9 d8
 	jr nz, .LF9B584                                      ; F9B55E  6e 24
@@ -50096,7 +50446,7 @@ sub_F9B51B:
 	sll bc, 0x07                                         ; F9B574  d9 ee 07
 	add BC,DE                                            ; F9B577  da 81
 	ld (0x274a:16), bc                                  ; F9B579  f1 4a 27 51
-	calr sub_F9B2E2                                      ; F9B57D  1e 62 fd
+	calr MidiOutProgramChange_PaintBankSelect                                      ; F9B57D  1e 62 fd
 .LF9B580:
 	call T_Blink_Stop                                    ; F9B580  1d 24 2e f4
 .LF9B584:
@@ -50112,7 +50462,11 @@ sub_F9B51B:
 	popw de                                              ; F9B59B  4a
 	popw hl                                              ; F9B59C  4b
 	ret                                                  ; F9B59D  0e
-sub_F9B59E:
+; MidiOutProgramChange_NumberPadBankLsb -- take a number-pad entry into BANK LSB
+; Evidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:
+;   0..127 into (0x2749); (0x274A) = (0x2748)<<7 + LSB (this turns an OFF bank on); MSB and BANK SEL# repainted.
+;   Then T_Blink_Command(DL_F0D019) blinks the field; a blank last digit cell ((0x2823)==' ') only stops the blink.
+MidiOutProgramChange_NumberPadBankLsb:
 	link XIZ,0xfffc                                      ; F9B59E  ee 0c fc ff
 	pushw hl                                             ; F9B5A2  2b
 	pushw de                                             ; F9B5A3  2a
@@ -50134,7 +50488,7 @@ sub_F9B59E:
 	pushw 0x00                                           ; F9B5D0  0b 00 00
 	pushw 0x7f                                           ; F9B5D3  0b 7f 00
 	pushw wa                                             ; F9B5D6  28
-	calr sub_F9B638                                      ; F9B5D7  1e 5e 00
+	calr Word_IsOutOfRange                                      ; F9B5D7  1e 5e 00
 	inc 6,XSP                                            ; F9B5DA  ef 66
 	cp a, 0x00:i3                                          ; F9B5DC  c9 d8
 	jr nz, .LF9B61C                                      ; F9B5DE  6e 3c
@@ -50158,8 +50512,8 @@ sub_F9B59E:
 	m_cp_rm MW16, 0x274a, r2                             ; F9B610  d1 4a 27 f2
 	jr z, .LF9B61C                                       ; F9B614  66 06
 .LF9B616:
-	calr sub_F9B2A2                                      ; F9B616  1e 89 fc
-	calr sub_F9B2E2                                      ; F9B619  1e c6 fc
+	calr MidiOutProgramChange_PaintBankMsb                                      ; F9B616  1e 89 fc
+	calr MidiOutProgramChange_PaintBankSelect                                      ; F9B619  1e c6 fc
 .LF9B61C:
 	ld C,(XIX)                                           ; F9B61C  84 23
 	ld (0x2740:16), c                                   ; F9B61E  f1 40 27 43
@@ -50174,7 +50528,10 @@ sub_F9B59E:
 	popw hl                                              ; F9B634  4b
 	unlk XIZ                                             ; F9B635  ee 0d
 	ret                                                  ; F9B637  0e
-sub_F9B638:
+; Word_IsOutOfRange -- A = 1 if a word is below min or above max, else 0
+; Evidence: `cp BC,(XIZ+0x0c) / jr c` and `cp BC,(XIZ+0x0a) / jr ugt` -> A=1; `sub A,A` otherwise.
+; In: (XIZ+8) value, (XIZ+0x0A) max, (XIZ+0x0C) min (callers push min, max, value).
+Word_IsOutOfRange:
 	link XIZ,0x0000                                      ; F9B638  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; F9B63C  9e 08 21
 	cp BC,(XIZ+0x0c)                                     ; F9B63F  9e 0c f1
@@ -50188,7 +50545,11 @@ sub_F9B638:
 .LF9B64F:
 	unlk XIZ                                             ; F9B64F  ee 0d
 	ret                                                  ; F9B651  0e
-sub_F9B652:
+; MidiOutProgramChange_EnableBlinkForItem -- stop the field blink, then allow blinking only for the numeric rows 1-3
+; Evidence: T_Blink_Stop, then T_Blink_SetEnable(1) for argument 1, 2 or 3 (PROG CHANGE, BANK MSB, BANK LSB -- the
+;   number-pad fields), else 0.  Called by Paint_MidiOutProgramChange and _StepItem with (0x2720). ⚠ It ends at
+;   0xF9B67E; 0xF9B67F-0xF9B6EA are DL-B record templates framed as code, not part of it.
+MidiOutProgramChange_EnableBlinkForItem:
 	link XIZ,0x0000                                      ; F9B652  ee 0c 00 00
 	pushw hl                                             ; F9B656  2b
 	ld H,(XIZ+0x08)                                      ; F9B657  8e 08 26
@@ -50211,30 +50572,30 @@ sub_F9B652:
 	popw hl                                              ; F9B67B  4b
 	unlk XIZ                                             ; F9B67C  ee 0d
 	ret                                                  ; F9B67E  0e
-sub_F9B652__F9B67F:
+MidiOutProgramChange_EnableBlinkForItem__F9B67F:
 	ret                                                  ; F9B67F  0e
 	normal                                               ; F9B680  01
 	popw wa                                              ; F9B681  48
 	nop                                                  ; F9B682  00
-sub_F9B652__F9B683:
+MidiOutProgramChange_EnableBlinkForItem__F9B683:
 	ldw de, 0x5501                                       ; F9B683  32 01 55
 	nop                                                  ; F9B686  00
-sub_F9B652__F9B687:
+MidiOutProgramChange_EnableBlinkForItem__F9B687:
 	ld (0x0b:8), 0x00:io                                      ; F9B687  08 0b 00
 	nop                                                  ; F9B68A  00
 	nop                                                  ; F9B68B  00
 	nop                                                  ; F9B68C  00
 	jp 0x000000                                          ; F9B68D  1b 00 00 00
 	nop                                                  ; F9B691  00
-sub_F9B652__F9B692:
+MidiOutProgramChange_EnableBlinkForItem__F9B692:
 	ret                                                  ; F9B692  0e
 	normal                                               ; F9B693  01
 	popw wa                                              ; F9B694  48
 	nop                                                  ; F9B695  00
-sub_F9B652__F9B696:
+MidiOutProgramChange_EnableBlinkForItem__F9B696:
 	ldw de, 0x5501                                       ; F9B696  32 01 55
 	nop                                                  ; F9B699  00
-sub_F9B652__F9B69A:
+MidiOutProgramChange_EnableBlinkForItem__F9B69A:
 	pop SR                                               ; F9B69A  03
 	pushw 0x00                                           ; F9B69B  0b 00 00
 	nop                                                  ; F9B69E  00
@@ -50244,7 +50605,7 @@ sub_F9B652__F9B69A:
 	nop                                                  ; F9B6A2  00
 	nop                                                  ; F9B6A3  00
 	nop                                                  ; F9B6A4  00
-sub_F9B652__F9B6A5:
+MidiOutProgramChange_EnableBlinkForItem__F9B6A5:
 	push SR                                              ; F9B6A5  02
 	retd 0x0000                                          ; F9B6A6  0f 00 00
 	nop                                                  ; F9B6A9  00

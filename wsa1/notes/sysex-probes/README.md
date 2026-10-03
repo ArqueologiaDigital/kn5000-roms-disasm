@@ -1089,7 +1089,7 @@ number `0x80` — and not a set of loose bytes.
 
 * **Row → RAM byte, three ways at once.**  Each row of the INPUT & OUTPUT
   FILTER page has an editor and a painter; the editor hands the generic field
-  editor `sub_F9A165` a (mask, address) pair and then commits through prom_b
+  editor `ByteField_SetOrClearMask` a (mask, address) pair and then commits through prom_b
   `0xF41B18` with the quadruple *(parameter number, byte offset, value, mask)*.
   The script reads all three out of the instruction bytes and asserts that the
   editor's address, the painter's address and `0x7F32 + offset` are the same

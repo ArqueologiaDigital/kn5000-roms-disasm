@@ -616,14 +616,14 @@
 	.set	Paint_Sending_Entry, 0xF9985B
 	.set	Paint_SystemExclusivePleaseWait_Entry, 0xF9985F
 	.set	T_F41738_Nop, 0xF99863
-	.set	sub_F99F04, 0xF99F04
-	.set	sub_F99F15, 0xF99F15
+	.set	PanelMode_MidiEnter, 0xF99F04
+	.set	PanelMode_MidiLeave, 0xF99F15
 	.set	sub_F99F1A, 0xF99F1A
 	.set	sub_F99F1F, 0xF99F1F
-	.set	sub_F99F24, 0xF99F24
+	.set	Paint_MidiMenu, 0xF99F24
 	.set	T_F41654_Nop, 0xF99F5C
 	.set	T_F4165C_Nop, 0xF99F5D
-	.set	sub_F99F5E, 0xF99F5E
+	.set	ScreenButton_MidiMenu, 0xF99F5E
 	.set	Paint_MidiTotalMode, 0xF9A1A8
 	.set	ScreenLeave_MidiTotalMode, 0xF9A26D
 	.set	T_F41748_Nop, 0xF9A26E
@@ -88371,13 +88371,13 @@ T_F41608:	jp T_F41608_Nop  ; -> prom_a 0x1904C
 T_F4160C:	jp ScreenButton_MessageScreen  ; -> prom_a 0x1904D
 T_F41610:	jp T_F41610_Nop  ; -> prom_a 0x19097
 	.fill 0x2C, 1, 0x0E  ; 0xF41614: 44 x ret
-T_F41640:	jp sub_F99F04  ; -> prom_a 0x19F04
-T_F41644:	jp sub_F99F15  ; -> prom_a 0x19F15
+T_F41640:	jp PanelMode_MidiEnter  ; -> prom_a 0x19F04
+T_F41644:	jp PanelMode_MidiLeave  ; -> prom_a 0x19F15
 T_F41648:	jp sub_F99F1A  ; -> prom_a 0x19F1A
 T_F4164C:	jp sub_F99F1F  ; -> prom_a 0x19F1F
-T_F41650:	jp sub_F99F24  ; -> prom_a 0x19F24
+T_F41650:	jp Paint_MidiMenu  ; -> prom_a 0x19F24
 T_F41654:	jp T_F41654_Nop  ; -> prom_a 0x19F5C
-T_F41658:	jp sub_F99F5E  ; -> prom_a 0x19F5E
+T_F41658:	jp ScreenButton_MidiMenu  ; -> prom_a 0x19F5E
 T_F4165C:	jp T_F4165C_Nop  ; -> prom_a 0x19F5D
 T_F41660:	jp T_F41660_Nop  ; -> prom_a 0x19821
 T_F41664:	jp T_F41660_Nop  ; -> prom_a 0x19821
