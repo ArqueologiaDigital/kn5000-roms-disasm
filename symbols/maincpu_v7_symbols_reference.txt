@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,302
-#   semantic names ........... 50,377 (98.2%)
+#   symbols .................. 51,311
+#   semantic names ........... 50,386 (98.2%)
 #   positional names ......... 925
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -30749,6 +30749,7 @@ AccPedal_SavePosition 00F59765
 AccPedal_EventReturn 00F59768
 AccPedal_RawHandler 00F59769
 AccPedal_RawHandler_Join 00F5976B
+AccPedal_EventDispatch_Return 00F5978E
 AccPedal_SustainHandler 00F59791
 AccPedal_Sustain_CallReset 00F597AA
 AccPedal_Sustain_CheckStyle 00F597CA
@@ -31135,6 +31136,7 @@ AccReplay_SendPedal_Dispatch 00F5AE00
 AccReplay_SendPedal_Return 00F5AE39
 AccReplay_SavedExpression 00F5AE3B
 AccReplay_SavedExpr_Return 00F5AEA8
+AccReplay_SendPedalType6_Return 00F5AEBF
 AccReplay_FullStop 00F5AEC2
 AccReplay_Stop_ClearPedals 00F5AEF4
 AccReplay_Stop_ResetPosition 00F5AF0C
@@ -31979,6 +31981,7 @@ AccPatch_ProcessMarker_Return 00F60690
 AccPatch_FetchSequence_Pad 00F60691
 AccPatch_SkipToMarker 00F60693
 AccPatch_SlotCopyDataBlock 00F6069D
+AccPatch_SkipToMarker_Loop2 00F6069F
 AccPatch_SkipToMarker_Loop 00F606B2
 AccPatch_InitSlotAndCopyData 00F606D7
 AccPatch_InitSlot_SameBlock 00F60711
@@ -32426,6 +32429,7 @@ ToneGen_Interp_OverflowCheck 00F62900
 ToneGen_Interp_OverflowDone 00F62907
 ToneGen_StepToNextBuffer 00F62909
 ToneGen_AdvanceBeatCounter 00F62924
+ToneGen_StepToNextBuffer_Return 00F6292F
 ToneGen_ReadBufferWithIndirection 00F62932
 ToneGen_AdvBeat_Return 00F62951
 ToneGen_ReadBufferWithIndirection_Pad 00F62953
@@ -32494,6 +32498,7 @@ AccPat_ShiftAndMask 00F62CD0
 AccPat_ShiftAndMask_Pad 00F62CDA
 AccPat_IndexToAddress 00F62CDC
 AccPat_InlineFunctions_DataBlock 00F62CEC
+AccPat_IndexToAddress_Sub2 00F62CEE
 AccPat_InlineFunctions_DataBlock_Code 00F62D21
 AccPat_IndexToAddress_Sub 00F62D45
 AccPat_DispatchNoteChange 00F62D4B
@@ -32511,6 +32516,7 @@ AccPatch_LoadDualVoiceParams 00F62E41
 AccPat_DualVoice_ClampIndex 00F62E4C
 AccPat_DualVoice_ClampIndex2 00F62E74
 AccPat_DualVoice_DataBlock 00F62EB4
+AccPatch_LoadDualVoiceParams_Skip2 00F62EC4
 AccPatch_LoadDualVoiceParams_Skip 00F62EEE
 AccPat_DualVoice_ReadParamsA 00F62F0E
 AccPat_DualVoice_ReadParamsA_Pad 00F62F36
@@ -32532,6 +32538,9 @@ ToneBank_CopyChunkWithSwap 00F630B4
 ToneBank_SwapCopy_Return 00F630C7
 ToneBank_SwapCopy_Pad 00F630CC
 ToneBank_SwapCopy_Pad_Code 00F630CD
+AccFill_ProcessDone_Helper_Join 00F630D2
+AccFill_ProcessDone_Helper_Skip 00F630E5
+AccFill_ProcessDone_Helper_Skip2 00F630EA
 RhythmROM_PatternDispatcher 00F630EF
 AccPat_CalcAccentVelocity_Body 00F63134
 RhythmROM_LoadAndInit 00F6317D

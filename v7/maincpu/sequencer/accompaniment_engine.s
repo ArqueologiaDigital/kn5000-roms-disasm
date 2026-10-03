@@ -6069,7 +6069,7 @@ AccPedal_RawHandler:
 AccPedal_RawHandler_Join:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 3:i3
-	jr	nz, 27
+	jr	nz, AccPedal_EventDispatch_Return
 	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, 7
 	ld	(13282:16), a
@@ -6077,6 +6077,7 @@ AccPedal_RawHandler_Join:
 	ld	(13283:16), a
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	ld	(13294:16), a
+AccPedal_EventDispatch_Return:
 	ret
 	nop
 	nop
@@ -8664,8 +8665,9 @@ AccReplay_SavedExpr_Return:
 	add	xwa, 14
 	ld	wa, (xwa)
 	cp	wa, 0:i3
-	jr	z, 4
+	jr	z, AccReplay_SendPedalType6_Return
 	call	AccDemo_InitDone
+AccReplay_SendPedalType6_Return:
 	ret
 	nop
 	nop
@@ -9971,7 +9973,7 @@ AccDir_Periodic_Ret:
 AccDir_JumpTable:
 	nop
 	nop
-	call	16104266
+	call	AccProcess_InlinedCode
 	ret
 AccProcess_Entry:
 	call AccProcess_TimerCompare
@@ -10393,13 +10395,13 @@ AccVoice_CopyFromROM_DataBlock:
 	nop
 	nop
 	pushw	hl
-	calr	64464
+	calr	AccVoice_Dispatch
 	popw	hl
 	ld	xix, 0:i3
 	ldw	bc, 8
 	ldirw
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_Data
-	jr	c, 5
+	jr	c, AccVoice_CopyFromROM_Join
 	ld	xiy, AccVoice_CopyFromROM_DataBlock_Data_2
 AccVoice_CopyFromROM_Join:
 	ld	wa, (xiy)
@@ -16782,18 +16784,19 @@ AccPatch_SkipToMarker:
 AccPatch_SlotCopyDataBlock:
 	nop
 	nop
+AccPatch_SkipToMarker_Loop2:
 	pushw	bc
 	call	TempoRingBuf_ReadByteToA
 	popw	bc
 	dec	1, bc
 	cp	bc, 0:i3
-	jr	nz, -12	; -> 0xF6069F
+	jr	nz, AccPatch_SkipToMarker_Loop2	; -> 0xF6069F
 	ret
 	ldw	(13684:16), 0
 AccPatch_SkipToMarker_Loop:
 	ld	xix, 13838
 	add	ix, (13684:16)
-	calr	664
+	calr	AccPatch_DispatchNoteToVoice
 	ld	wa, (13684:16)
 	add	wa, 6
 	ld	(13684:16), wa
@@ -20637,8 +20640,9 @@ ToneGen_AdvanceBeatCounter:
 	nop
 	inc	1, iy
 	cp	iy, bc
-	jr	ule, 3
+	jr	ule, ToneGen_StepToNextBuffer_Return
 	ld iy, (xhl+0:8)
+ToneGen_StepToNextBuffer_Return:
 	ret
 	nop
 	nop
@@ -21158,6 +21162,7 @@ AccPat_IndexToAddress:
 AccPat_InlineFunctions_DataBlock:
 	nop
 	nop
+AccPat_IndexToAddress_Sub2:
 	and	xhl, 0xffff
 	sla	xhl, 8
 	add	xhl, RHYTHM_PATTERN_BUF_B
@@ -21343,8 +21348,9 @@ AccPat_DualVoice_DataBlock:
 	ld	l, (13393:16)
 	and	l, 127
 	cp	l, 30
-	jr	c, 2
+	jr	c, AccPatch_LoadDualVoiceParams_Skip2
 	xor	l, l
+AccPatch_LoadDualVoiceParams_Skip2:
 	sla	l, 2
 	xor	h, h
 	ld	xix, RhythmTiming_OffsetTable
@@ -21579,15 +21585,18 @@ ToneBank_SwapCopy_Pad_Code:
 	nop
 	nop
 	ldw	de, 150
+AccFill_ProcessDone_Helper_Join:
 	cp	de, 340
-	jr	nc, 13
+	jr	nc, AccFill_ProcessDone_Helper_Skip
 	ld	hl, de
-	calr	-1007
+	calr	AccPat_IndexToAddress_Sub2
 	bit	7, (xhl)
-	jr	z, 9
+	jr	z, AccFill_ProcessDone_Helper_Skip2
 	inc	1, de
-	jr	-19
+	jr	AccFill_ProcessDone_Helper_Join
+AccFill_ProcessDone_Helper_Skip:
 	or	(0x3514:16), 1
+AccFill_ProcessDone_Helper_Skip2:
 	or	de, 32768
 	ret
 RhythmROM_PatternDispatcher:

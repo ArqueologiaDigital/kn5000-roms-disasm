@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,600
-#   semantic names ........... 50,762 (98.4%)
+#   symbols .................. 51,630
+#   semantic names ........... 50,792 (98.4%)
 #   positional names ......... 838
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -31001,6 +31001,7 @@ AccPedal_SavePosition 00F59B69
 AccPedal_EventReturn 00F59B6C
 AccPedal_RawHandler 00F59B6D
 AccPedal_RawHandler_Join 00F59B6F
+AccPedal_EventDispatch_Return 00F59B92
 AccPedal_SustainHandler 00F59B95
 AccPedal_Sustain_CallReset 00F59BAE
 AccPedal_Sustain_CheckStyle 00F59BCE
@@ -31387,6 +31388,7 @@ AccReplay_SendPedal_Dispatch 00F5B204
 AccReplay_SendPedal_Return 00F5B23D
 AccReplay_SavedExpression 00F5B23F
 AccReplay_SavedExpr_Return 00F5B2AC
+AccReplay_SendPedalType6_Return 00F5B2C3
 AccReplay_FullStop 00F5B2C6
 AccReplay_Stop_ClearPedals 00F5B2F8
 AccReplay_Stop_ResetPosition 00F5B310
@@ -32291,6 +32293,7 @@ AccPatch_ProcessMarker_Return 00F60A94
 AccPatch_FetchSequence_Pad 00F60A95
 AccPatch_SkipToMarker 00F60A97
 AccPatch_SlotCopyDataBlock 00F60AA1
+AccPatch_SkipToMarker_Loop2 00F60AA3
 AccPatch_SkipToMarker_Loop 00F60AB6
 AccPatch_InitSlotAndCopyData 00F60ADB
 AccPatch_InitSlot_SameBlock 00F60B15
@@ -32736,6 +32739,7 @@ ToneGen_Interp_OverflowCheck 00F62D04
 ToneGen_Interp_OverflowDone 00F62D0B
 ToneGen_StepToNextBuffer 00F62D0D
 ToneGen_AdvanceBeatCounter 00F62D28
+ToneGen_StepToNextBuffer_Return 00F62D33
 ToneGen_ReadBufferWithIndirection 00F62D36
 ToneGen_AdvBeat_Return 00F62D55
 ToneGen_ReadBufferWithIndirection_Pad 00F62D57
@@ -32804,6 +32808,7 @@ AccPat_ShiftAndMask 00F630D4
 AccPat_ShiftAndMask_Pad 00F630DE
 AccPat_IndexToAddress 00F630E0
 AccPat_InlineFunctions_DataBlock 00F630F0
+AccPat_IndexToAddress_Sub2 00F630F2
 AccPat_InlineFunctions_DataBlock_Code 00F63125
 AccPat_IndexToAddress_Sub 00F63149
 AccPat_DispatchNoteChange 00F6314F
@@ -32821,6 +32826,7 @@ AccPatch_LoadDualVoiceParams 00F63245
 AccPat_DualVoice_ClampIndex 00F63250
 AccPat_DualVoice_ClampIndex2 00F63278
 AccPat_DualVoice_DataBlock 00F632B8
+AccPatch_LoadDualVoiceParams_Skip2 00F632C8
 AccPatch_LoadDualVoiceParams_Skip 00F632F2
 AccPat_DualVoice_ReadParamsA 00F63312
 AccPat_DualVoice_ReadParamsA_Pad 00F6333A
@@ -32842,6 +32848,9 @@ ToneBank_CopyChunkWithSwap 00F634B8
 ToneBank_SwapCopy_Return 00F634CB
 ToneBank_SwapCopy_Pad 00F634D0
 ToneBank_SwapCopy_Pad_Code 00F634D1
+AccFill_ProcessDone_Helper_Join 00F634D6
+AccFill_ProcessDone_Helper_Skip 00F634E9
+AccFill_ProcessDone_Helper_Skip2 00F634EE
 RhythmROM_PatternDispatcher 00F634F3
 AccPat_CalcAccentVelocity_Body 00F63538
 RhythmROM_LoadAndInit 00F63581
@@ -32927,15 +32936,27 @@ AccFill_AdvanceAndCheck_Code 00F63EC8
 RhythmBuf_FillEmptyPattern 00F63EDC
 StyleConvert_ReloadParams 00F63F0A
 StyleConvert_Reload_Loop 00F63F18
+RhythmBuf_FillEmptyPattern_Skip 00F63F37
+RhythmBuf_FillEmptyPattern_Return 00F63F3F
 AccPat_CalcAccentVelocity 00F63F42
 StyleConvert_Reload_CheckEnd 00F63F5F
 StyleConvert_Reload_Return 00F63F69
 StyleConvert_Reload_Fallback 00F63F86
 StyleConvert_Reload_Done 00F63F8E
 StyleConvert_Reload_Fallback_Code2 00F63F8F
+AccPat_CalcAccentVelocity_Join2 00F63FA4
+AccPat_CalcAccentVelocity_Skip8 00F63FB9
+AccPat_CalcAccentVelocity_Skip9 00F63FBD
+AccPat_CalcAccentVelocity_Return 00F63FBF
 StyleConvert_Reload_Fallback_Code 00F63FC2
+AccPat_CalcAccentVelocity_Skip10 00F63FF0
+AccPat_CalcAccentVelocity_Skip11 00F63FF2
 AccPat_CalcAccentVelocity_Skip 00F64005
+AccPat_CalcAccentVelocity_Skip12 00F6400B
+AccPat_CalcAccentVelocity_Skip13 00F64014
 AccPat_CalcAccentVelocity_Join 00F64022
+AccPat_CalcAccentVelocity_Skip14 00F64055
+AccPat_CalcAccentVelocity_Skip15 00F64060
 AccPat_CalcAccentVelocity_Skip2 00F6409B
 AccPat_CalcAccentVelocity_Skip3 00F640B8
 AccPat_CalcAccentVelocity_Skip4 00F640D5
@@ -32943,6 +32964,7 @@ AccPat_CalcAccentVelocity_Skip5 00F640F2
 AccPat_CalcAccentVelocity_Skip6 00F6410F
 AccPat_CalcAccentVelocity_Skip7 00F6411A
 StyleConvert_Reload_Fallback_Join 00F6411C
+AccPat_CalcAccentVelocity_Join3 00F64129
 StyleConvert_Reload_Fallback_Return 00F64137
 AccWidget_DispatchTable 00F6413A
 AccWidget_Dispatch_Return 00F6414D
@@ -33084,6 +33106,9 @@ RhythmVariation_InlineCode_Code 00F650EA
 RhythmVariation_InlineCode_Sub 00F6510A
 RhythmVariation_InlineCode_Sub_Helper 00F65110
 RhythmVariation_InlineCode_Code2 00F65131
+RhythmVariation_InlineCode_Sub_Helper_Helper 00F65158
+RhythmVariation_InlineCode_Sub_Helper_Skip 00F65161
+RhythmVariation_InlineCode_Sub_Helper_Skip2 00F65178
 RhythmVariation_Select_Join 00F65188
 RhythmVariation_Select_Return 00F6518A
 RhythmVariation_Select_Helper2 00F65191
@@ -33184,6 +33209,8 @@ DrumVoice_Handler7_Data_4 00F656E8
 DrumVoice_Handler7_Code_Entry 00F65710
 DrumVoice_Handler7_Code_Entry_Data 00F6571F
 DrumVoice_Handler7_Code_Entry_Data_Code_Entry 00F6572B
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Skip 00F65755
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry_Code_Join 00F6575E
 DrumVoice_Handler7_Code_Return6 00F65770
 DrumVoice_Handler6_Helper 00F6577B
 DrumVoice_Handler7_Code_Skip2 00F657A7
@@ -33273,6 +33300,9 @@ TimeSig_DisplayStrings_Code_Return7 00F65E8E
 TimeSig_DisplayStrings_Code_Helper_Skip2 00F65ECD
 TimeSig_DisplayStrings_Helper 00F65ED5
 TimeSig_DisplayStrings_Code_Helper_Helper2 00F65F03
+TimeSig_DisplayStrings_Code_Helper_Helper2_Skip 00F65F32
+TimeSig_DisplayStrings_Code_Helper_Helper2_Join 00F65F34
+TimeSig_DisplayStrings_Code_Helper_Helper2_Skip2 00F65F36
 TimeSig_DisplayStrings_Code_Helper_Skip3 00F65F3E
 TimeSig_DisplayStrings_Code_Join6 00F65F40
 TimeSig_DisplayStrings_Code_Helper_Skip4 00F65F73
