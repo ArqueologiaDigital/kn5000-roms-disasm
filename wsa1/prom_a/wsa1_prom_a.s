@@ -49671,13 +49671,13 @@ Paint_MidiOutProgramChange:
 	link XIZ,0xffe9                                      ; F9AF61  ee 0c e9 ff
 	push XIX                                             ; F9AF65  3c
 	lda xix, (0x2741:16)                                ; F9AF66  f1 41 27 34
-	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B67F:24)                               ; F9AF6A  e2 7f b6 f9 21
+	ld xbc, (MidiOutPC_Paint_InitBox:24)                               ; F9AF6A  e2 7f b6 f9 21
 	ld (xiz-8), xbc                                      ; F9AF6F  be f8 61
-	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B683:24)                               ; F9AF72  e2 83 b6 f9 21
+	ld xbc, (MidiOutPC_Paint_InitBox+4:24)                               ; F9AF72  e2 83 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9AF77  be fc 61
 	push XIX                                             ; F9AF7A  3c
 	ldw bc, 0x0b                                         ; F9AF7B  31 0b 00
-	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B687:24)                               ; F9AF7E  f2 87 b6 f9 35
+	lda xiy, (MidiOutPC_Paint_InitRecord:24)                               ; F9AF7E  f2 87 b6 f9 35
 	lda xix, (xiz-19)                                    ; F9AF83  be ed 34
 	ldir85                                               ; F9AF86  85 11
 	pop XIX                                              ; F9AF88  5c
@@ -50005,12 +50005,12 @@ MidiOutProgramChange_StepValue:
 MidiOutProgramChange_Send:
 	link XIZ,0xffed                                      ; F9B1D5  ee 0c ed ff
 	push XIX                                             ; F9B1D9  3c
-	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B692:24)                               ; F9B1DA  e2 92 b6 f9 21
+	ld xbc, (MidiOutPC_Send_InitBox:24)                               ; F9B1DA  e2 92 b6 f9 21
 	ld (xiz-8), xbc                                      ; F9B1DF  be f8 61
-	ld xbc, (MidiOutProgramChange_EnableBlinkForItem__F9B696:24)                               ; F9B1E2  e2 96 b6 f9 21
+	ld xbc, (MidiOutPC_Send_InitBox+4:24)                               ; F9B1E2  e2 96 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9B1E7  be fc 61
 	ldw bc, 0x0b                                         ; F9B1EA  31 0b 00
-	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B69A:24)                               ; F9B1ED  f2 9a b6 f9 35
+	lda xiy, (MidiOutPC_Send_InitRecord:24)                               ; F9B1ED  f2 9a b6 f9 35
 	lda xix, (xiz-19)                                    ; F9B1F2  be ed 34
 	ldir85                                               ; F9B1F5  85 11
 	lda xbc, (xiz-8)                                     ; F9B1F7  be f8 31
@@ -50132,7 +50132,7 @@ MidiOutProgramChange_PaintBankSelect:
 	lda xix, (xiz-6)                                     ; F9B2E9  be fa 34
 	push XIX                                             ; F9B2EC  3c
 	ldw bc, 0x0f                                         ; F9B2ED  31 0f 00
-	lda xiy, (MidiOutProgramChange_EnableBlinkForItem__F9B6A5:24)                               ; F9B2F0  f2 a5 b6 f9 35
+	lda xiy, (MidiOutPC_BankSelect_InitRecord:24)                               ; F9B2F0  f2 a5 b6 f9 35
 	lda xix, (xiz-21)                                    ; F9B2F5  be eb 34
 	ldir85                                               ; F9B2F8  85 11
 	pop XIX                                              ; F9B2FA  5c
@@ -50556,89 +50556,28 @@ MidiOutProgramChange_EnableBlinkForItem:
 	popw hl                                              ; F9B67B  4b
 	unlk XIZ                                             ; F9B67C  ee 0d
 	ret                                                  ; F9B67E  0e
-MidiOutProgramChange_EnableBlinkForItem__F9B67F:
-	ret                                                  ; F9B67F  0e
-	normal                                               ; F9B680  01
-	popw wa                                              ; F9B681  48
-	nop                                                  ; F9B682  00
-MidiOutProgramChange_EnableBlinkForItem__F9B683:
-	ldw de, 0x5501                                       ; F9B683  32 01 55
-	nop                                                  ; F9B686  00
-MidiOutProgramChange_EnableBlinkForItem__F9B687:
-	ld (0x0b:8), 0x00:io                                      ; F9B687  08 0b 00
-	nop                                                  ; F9B68A  00
-	nop                                                  ; F9B68B  00
-	nop                                                  ; F9B68C  00
-	jp 0x000000                                          ; F9B68D  1b 00 00 00
-	nop                                                  ; F9B691  00
-MidiOutProgramChange_EnableBlinkForItem__F9B692:
-	ret                                                  ; F9B692  0e
-	normal                                               ; F9B693  01
-	popw wa                                              ; F9B694  48
-	nop                                                  ; F9B695  00
-MidiOutProgramChange_EnableBlinkForItem__F9B696:
-	ldw de, 0x5501                                       ; F9B696  32 01 55
-	nop                                                  ; F9B699  00
-MidiOutProgramChange_EnableBlinkForItem__F9B69A:
-	pop SR                                               ; F9B69A  03
-	pushw 0x00                                           ; F9B69B  0b 00 00
-	nop                                                  ; F9B69E  00
-	nop                                                  ; F9B69F  00
-	halt                                                 ; F9B6A0  05
-	nop                                                  ; F9B6A1  00
-	nop                                                  ; F9B6A2  00
-	nop                                                  ; F9B6A3  00
-	nop                                                  ; F9B6A4  00
-MidiOutProgramChange_EnableBlinkForItem__F9B6A5:
-	push SR                                              ; F9B6A5  02
-	retd 0x0000                                          ; F9B6A6  0f 00 00
-	nop                                                  ; F9B6A9  00
-	nop                                                  ; F9B6AA  00
-	ld w, 0x00:opc                                          ; F9B6AB  20 00
-	nop                                                  ; F9B6AD  00
-	nop                                                  ; F9B6AE  00
-	nop                                                  ; F9B6AF  00
-	halt                                                 ; F9B6B0  05
-	nop                                                  ; F9B6B1  00
-	jrl ov, 0x0e13                                       ; F9B6B2  74 13 0e
-	ret                                                  ; F9B6B5  0e
-	normal                                               ; F9B6B6  01
-	popw wa                                              ; F9B6B7  48
-	nop                                                  ; F9B6B8  00
-	ldw de, 0x5501                                       ; F9B6B9  32 01 55
-	nop                                                  ; F9B6BC  00
-	ld (0x0b:8), 0x00:io                                      ; F9B6BD  08 0b 00
-	nop                                                  ; F9B6C0  00
-	nop                                                  ; F9B6C1  00
-	nop                                                  ; F9B6C2  00
-	jp 0x000000                                          ; F9B6C3  1b 00 00 00
-	nop                                                  ; F9B6C7  00
-	ret                                                  ; F9B6C8  0e
-	normal                                               ; F9B6C9  01
-	popw wa                                              ; F9B6CA  48
-	nop                                                  ; F9B6CB  00
-	ldw de, 0x5501                                       ; F9B6CC  32 01 55
-	nop                                                  ; F9B6CF  00
-	pop SR                                               ; F9B6D0  03
-	pushw 0x00                                           ; F9B6D1  0b 00 00
-	nop                                                  ; F9B6D4  00
-	nop                                                  ; F9B6D5  00
-	halt                                                 ; F9B6D6  05
-	nop                                                  ; F9B6D7  00
-	nop                                                  ; F9B6D8  00
-	nop                                                  ; F9B6D9  00
-	nop                                                  ; F9B6DA  00
-	push SR                                              ; F9B6DB  02
-	retd 0x0000                                          ; F9B6DC  0f 00 00
-	nop                                                  ; F9B6DF  00
-	nop                                                  ; F9B6E0  00
-	ld w, 0x00:opc                                          ; F9B6E1  20 00
-	nop                                                  ; F9B6E3  00
-	nop                                                  ; F9B6E4  00
-	nop                                                  ; F9B6E5  00
-	halt                                                 ; F9B6E6  05
-	nop                                                  ; F9B6E7  00
-	ldw ix, 0x0e17                                       ; F9B6E8  34 17 0e
+; ---------------------------------------------------------------------
+; 0xF9B67F-0xF9B6B3 -- initial values the MIDI OUT program-change routines above copy into their stack frames,
+; the C compiler's initializers for local records; then an older copy of the same 53 bytes.  Was decoded as code.
+; The box is (270,72)-(306,85), the field MidiOutProgramChange_Send outlines around "SEND"; each routine reads it
+; as two longs, `ld xbc,(box)` and `ld xbc,(box+4)`.  The records are display-list interpreter-B records
+; (wsa1/notes/FINDINGS-ui-display-list-interpreter-b.md): op 08 and op 03 are 11 bytes with a long at +7, op 02
+; is 15 bytes with the draw position IX at +0x0D.  Each routine copies its record into its frame with `ldir`.
+; ---------------------------------------------------------------------
+MidiOutPC_Paint_InitBox:		.short	270, 72, 306, 85	; F9B67F
+MidiOutPC_Paint_InitRecord:		.byte	0x08, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00	; F9B687  op 08
+MidiOutPC_Send_InitBox:			.short	270, 72, 306, 85	; F9B692
+MidiOutPC_Send_InitRecord:		.byte	0x03, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00	; F9B69A  op 03
+MidiOutPC_BankSelect_InitRecord:	.byte	0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00	; F9B6A5  op 02
+					.short	0x1374	; F9B6B2  IX
+	.byte	0x0e	; F9B6B4  fill
+; An older copy of the 53 bytes above, which nothing references.  Only the op-02 record's IX differs:
+; 0x1734 here, 0x1374 in the live record.
+	.byte	0x0e, 0x01, 0x48, 0x00, 0x32, 0x01, 0x55, 0x00, 0x08, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x00	; F9B6B5
+	.byte	0x0e, 0x01, 0x48, 0x00, 0x32, 0x01, 0x55, 0x00, 0x03, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00	; F9B6C8
+	.byte	0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00	; F9B6DB
+	.short	0x1734	; F9B6E8
+	.byte	0x0e	; F9B6EA  first byte of the padding below
 
 ; 0xF9B6EB-0xF9BFFF -- 2325 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
