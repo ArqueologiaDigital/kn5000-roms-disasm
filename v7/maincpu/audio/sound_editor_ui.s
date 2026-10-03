@@ -7885,7 +7885,7 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	pop	xiy
 	.ascii "\\[ZYX^"
 	ret
-SeMenu_DisplayPartValue_Data_0x7F:
+SeMenu_ApplyPartEdit_AltStore_Helper:
 	push xiz
 	ld	xiz, xsp
 	push	xwa
@@ -8208,7 +8208,7 @@ SeMenu_PresetManager_Data_Helper2_Join:
 	pop	xbc
 	pop	xwa
 	ret
-SeMenu_ShowConfirmDialog_Data_0x1BF:
+SeMenu_ApplyPartEdit_AltStore_Helper3:
 	push	xiz
 	ld	xiz, xsp
 	push	xwa

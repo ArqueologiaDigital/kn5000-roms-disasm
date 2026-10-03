@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,297
-#   semantic names ........... 50,370 (98.2%)
-#   positional names ......... 927
+#   semantic names ........... 50,372 (98.2%)
+#   positional names ......... 925
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -19789,7 +19789,7 @@ SeMenu_DisplayPartValue_Data_Code_Join 00F0ED8D
 SeMenu_DisplayPartValue_Data_Code_Skip3 00F0EDA2
 SeMenu_DisplayPartValue_Data_Code_Skip4 00F0EDB4
 SeMenu_DisplayPartValue_Data_Code_Join2 00F0EDC0
-SeMenu_DisplayPartValue_Data_0x7F 00F0EDD2
+SeMenu_ApplyPartEdit_AltStore_Helper 00F0EDD2
 SeMenu_ApplyPartEdit_Helper16 00F0EE09
 SeMenu_ShowPopupDialog 00F0EE40
 SeMenu_ShowPopupDialog_Draw 00F0EE71
@@ -19802,7 +19802,7 @@ SeMenu_PresetManager_Data_Helper2 00F0F06A
 SeMenu_ShowConfirmDialog_Data_Code_Skip 00F0F090
 SeMenu_PresetManager_Data_Helper2_Skip 00F0F0D7
 SeMenu_PresetManager_Data_Helper2_Join 00F0F0F7
-SeMenu_ShowConfirmDialog_Data_0x1BF 00F0F11F
+SeMenu_ApplyPartEdit_AltStore_Helper3 00F0F11F
 SeMenu_CompareAndApply_Apply_Helper 00F0F156
 SeMenu_ShowConfirmDialog_Data_Code_Loop 00F0F166
 SeMenu_ShowConfirmDialog_Helper 00F0F291
