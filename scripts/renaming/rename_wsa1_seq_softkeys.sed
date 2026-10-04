@@ -1,0 +1,17 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bWrite3602_ThenNotify_F56142\b/SoftKeyCol1_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F56158\b/SoftKeyCol2_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F5616E\b/SoftKeyCol3_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F56184\b/SoftKeyCol4_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F5619A\b/SoftKeyCol5_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F561B0\b/SoftKeyCol6_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F561C6\b/SoftKeyCol7_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_ThenNotify_F561DC\b/SoftKeyCol8_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F561F2\b/SoftKeyCol1Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F5621C\b/SoftKeyCol2Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F56246\b/SoftKeyCol3Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F56270\b/SoftKeyCol4Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F5629A\b/SoftKeyCol5Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F562C4\b/SoftKeyCol6Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F562EE\b/SoftKeyCol7Held_SeqPlayAndRealtimeRecord/g
+s/\bWrite3602_IfBit2088_F56318\b/SoftKeyCol8Held_SeqPlayAndRealtimeRecord/g

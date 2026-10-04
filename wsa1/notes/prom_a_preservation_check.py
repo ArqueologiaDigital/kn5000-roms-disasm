@@ -3082,6 +3082,22 @@ RENAMES = {
     "sub_F7D018": "ModeEnter_Edit",
     "sub_FBCB06": "ModeEnter_CombiEditPart",
     "sub_FF42B7": "ModeEnter_SoundCopy",
+    "Write3602_ThenNotify_F56142": "SoftKeyCol1_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F56158": "SoftKeyCol2_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F5616E": "SoftKeyCol3_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F56184": "SoftKeyCol4_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F5619A": "SoftKeyCol5_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F561B0": "SoftKeyCol6_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F561C6": "SoftKeyCol7_SeqPlayAndRealtimeRecord",
+    "Write3602_ThenNotify_F561DC": "SoftKeyCol8_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F561F2": "SoftKeyCol1Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F5621C": "SoftKeyCol2Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F56246": "SoftKeyCol3Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F56270": "SoftKeyCol4Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F5629A": "SoftKeyCol5Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F562C4": "SoftKeyCol6Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F562EE": "SoftKeyCol7Held_SeqPlayAndRealtimeRecord",
+    "Write3602_IfBit2088_F56318": "SoftKeyCol8Held_SeqPlayAndRealtimeRecord",
 }
 
 

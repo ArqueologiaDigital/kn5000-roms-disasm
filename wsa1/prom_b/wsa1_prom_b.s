@@ -116719,14 +116719,14 @@ Fwd_F558AA:		; <- T_F40DFC
 ; ButtonTable_RealtimeRecordScreen: the 32-slot button table of RealtimeRecordScreen (view-B screen 0x06), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
 ButtonTable_RealtimeRecordScreen:
-	.long	Write3602_ThenNotify_F56142	; F558AE  [ 0] -> Write3602_ThenNotify_F56142
-	.long	Write3602_ThenNotify_F56158	; F558B2  [ 1] -> Write3602_ThenNotify_F56158
-	.long	Write3602_ThenNotify_F5616E	; F558B6  [ 2] -> Write3602_ThenNotify_F5616E
-	.long	Write3602_ThenNotify_F56184	; F558BA  [ 3] -> Write3602_ThenNotify_F56184
-	.long	Write3602_ThenNotify_F5619A	; F558BE  [ 4] -> Write3602_ThenNotify_F5619A
-	.long	Write3602_ThenNotify_F561B0	; F558C2  [ 5] -> Write3602_ThenNotify_F561B0
-	.long	Write3602_ThenNotify_F561C6	; F558C6  [ 6] -> Write3602_ThenNotify_F561C6
-	.long	Write3602_ThenNotify_F561DC	; F558CA  [ 7] -> Write3602_ThenNotify_F561DC
+	.long	SoftKeyCol1_SeqPlayAndRealtimeRecord	; F558AE  [ 0] -> SoftKeyCol1_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol2_SeqPlayAndRealtimeRecord	; F558B2  [ 1] -> SoftKeyCol2_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol3_SeqPlayAndRealtimeRecord	; F558B6  [ 2] -> SoftKeyCol3_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol4_SeqPlayAndRealtimeRecord	; F558BA  [ 3] -> SoftKeyCol4_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol5_SeqPlayAndRealtimeRecord	; F558BE  [ 4] -> SoftKeyCol5_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol6_SeqPlayAndRealtimeRecord	; F558C2  [ 5] -> SoftKeyCol6_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol7_SeqPlayAndRealtimeRecord	; F558C6  [ 6] -> SoftKeyCol7_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol8_SeqPlayAndRealtimeRecord	; F558CA  [ 7] -> SoftKeyCol8_SeqPlayAndRealtimeRecord
 	.long	LcdKeyRow1_RealtimeRecordScreen	; F558CE  [ 8] -> LcdKeyRow1_RealtimeRecordScreen
 	.long	LcdKeyRow2_RealtimeRecordScreen	; F558D2  [ 9] -> LcdKeyRow2_RealtimeRecordScreen
 	.long	LcdKeyRow3_RealtimeRecordScreen	; F558D6  [10] -> LcdKeyRow3_RealtimeRecordScreen
@@ -116736,14 +116736,14 @@ ButtonTable_RealtimeRecordScreen:
 	.long	Nop_Ret_F56510	; F558E6  [14] -> Nop_Ret_F56510
 	.long	ExitKey_RealtimeRecordScreen	; F558EA  [15] -> ExitKey_RealtimeRecordScreen
 	.long	Nop_Ret_F56524	; F558EE  [16] -> Nop_Ret_F56524
-	.long	Write3602_IfBit2088_F561F2	; F558F2  [17] -> Write3602_IfBit2088_F561F2
-	.long	Write3602_IfBit2088_F5621C	; F558F6  [18] -> Write3602_IfBit2088_F5621C
-	.long	Write3602_IfBit2088_F56246	; F558FA  [19] -> Write3602_IfBit2088_F56246
-	.long	Write3602_IfBit2088_F56270	; F558FE  [20] -> Write3602_IfBit2088_F56270
-	.long	Write3602_IfBit2088_F5629A	; F55902  [21] -> Write3602_IfBit2088_F5629A
-	.long	Write3602_IfBit2088_F562C4	; F55906  [22] -> Write3602_IfBit2088_F562C4
-	.long	Write3602_IfBit2088_F562EE	; F5590A  [23] -> Write3602_IfBit2088_F562EE
-	.long	Write3602_IfBit2088_F56318	; F5590E  [24] -> Write3602_IfBit2088_F56318
+	.long	SoftKeyCol1Held_SeqPlayAndRealtimeRecord	; F558F2  [17] -> SoftKeyCol1Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol2Held_SeqPlayAndRealtimeRecord	; F558F6  [18] -> SoftKeyCol2Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol3Held_SeqPlayAndRealtimeRecord	; F558FA  [19] -> SoftKeyCol3Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol4Held_SeqPlayAndRealtimeRecord	; F558FE  [20] -> SoftKeyCol4Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol5Held_SeqPlayAndRealtimeRecord	; F55902  [21] -> SoftKeyCol5Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol6Held_SeqPlayAndRealtimeRecord	; F55906  [22] -> SoftKeyCol6Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol7Held_SeqPlayAndRealtimeRecord	; F5590A  [23] -> SoftKeyCol7Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol8Held_SeqPlayAndRealtimeRecord	; F5590E  [24] -> SoftKeyCol8Held_SeqPlayAndRealtimeRecord
 	.long	Nop_Ret_F56524	; F55912  [25] -> Nop_Ret_F56524
 	.long	Nop_Ret_F56524	; F55916  [26] -> Nop_Ret_F56524
 	.long	Nop_Ret_F56524	; F5591A  [27] -> Nop_Ret_F56524
@@ -116898,14 +116898,14 @@ ButtonTable_CycleRecordScreen:
 ; ButtonTable_SeqPlayScreen: the 32-slot button table of SeqPlayScreen (view-B screen 0x12), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
 ButtonTable_SeqPlayScreen:
-	.long	Write3602_ThenNotify_F56142	; F55A2E  [ 0] -> Write3602_ThenNotify_F56142
-	.long	Write3602_ThenNotify_F56158	; F55A32  [ 1] -> Write3602_ThenNotify_F56158
-	.long	Write3602_ThenNotify_F5616E	; F55A36  [ 2] -> Write3602_ThenNotify_F5616E
-	.long	Write3602_ThenNotify_F56184	; F55A3A  [ 3] -> Write3602_ThenNotify_F56184
-	.long	Write3602_ThenNotify_F5619A	; F55A3E  [ 4] -> Write3602_ThenNotify_F5619A
-	.long	Write3602_ThenNotify_F561B0	; F55A42  [ 5] -> Write3602_ThenNotify_F561B0
-	.long	Write3602_ThenNotify_F561C6	; F55A46  [ 6] -> Write3602_ThenNotify_F561C6
-	.long	Write3602_ThenNotify_F561DC	; F55A4A  [ 7] -> Write3602_ThenNotify_F561DC
+	.long	SoftKeyCol1_SeqPlayAndRealtimeRecord	; F55A2E  [ 0] -> SoftKeyCol1_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol2_SeqPlayAndRealtimeRecord	; F55A32  [ 1] -> SoftKeyCol2_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol3_SeqPlayAndRealtimeRecord	; F55A36  [ 2] -> SoftKeyCol3_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol4_SeqPlayAndRealtimeRecord	; F55A3A  [ 3] -> SoftKeyCol4_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol5_SeqPlayAndRealtimeRecord	; F55A3E  [ 4] -> SoftKeyCol5_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol6_SeqPlayAndRealtimeRecord	; F55A42  [ 5] -> SoftKeyCol6_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol7_SeqPlayAndRealtimeRecord	; F55A46  [ 6] -> SoftKeyCol7_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol8_SeqPlayAndRealtimeRecord	; F55A4A  [ 7] -> SoftKeyCol8_SeqPlayAndRealtimeRecord
 	.long	LcdKeyRow1_SeqPlayScreen	; F55A4E  [ 8] -> LcdKeyRow1_SeqPlayScreen
 	.long	LcdKeyRow2_SeqPlayScreen	; F55A52  [ 9] -> LcdKeyRow2_SeqPlayScreen
 	.long	LcdKeyRow3_SeqPlayScreen	; F55A56  [10] -> LcdKeyRow3_SeqPlayScreen
@@ -116915,14 +116915,14 @@ ButtonTable_SeqPlayScreen:
 	.long	Nop_Ret_F56DD8	; F55A66  [14] -> Nop_Ret_F56DD8
 	.long	ExitKey_SeqPlayScreen	; F55A6A  [15] -> ExitKey_SeqPlayScreen
 	.long	Nop_Ret_F56DF0	; F55A6E  [16] -> Nop_Ret_F56DF0
-	.long	Write3602_IfBit2088_F561F2	; F55A72  [17] -> Write3602_IfBit2088_F561F2
-	.long	Write3602_IfBit2088_F5621C	; F55A76  [18] -> Write3602_IfBit2088_F5621C
-	.long	Write3602_IfBit2088_F56246	; F55A7A  [19] -> Write3602_IfBit2088_F56246
-	.long	Write3602_IfBit2088_F56270	; F55A7E  [20] -> Write3602_IfBit2088_F56270
-	.long	Write3602_IfBit2088_F5629A	; F55A82  [21] -> Write3602_IfBit2088_F5629A
-	.long	Write3602_IfBit2088_F562C4	; F55A86  [22] -> Write3602_IfBit2088_F562C4
-	.long	Write3602_IfBit2088_F562EE	; F55A8A  [23] -> Write3602_IfBit2088_F562EE
-	.long	Write3602_IfBit2088_F56318	; F55A8E  [24] -> Write3602_IfBit2088_F56318
+	.long	SoftKeyCol1Held_SeqPlayAndRealtimeRecord	; F55A72  [17] -> SoftKeyCol1Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol2Held_SeqPlayAndRealtimeRecord	; F55A76  [18] -> SoftKeyCol2Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol3Held_SeqPlayAndRealtimeRecord	; F55A7A  [19] -> SoftKeyCol3Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol4Held_SeqPlayAndRealtimeRecord	; F55A7E  [20] -> SoftKeyCol4Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol5Held_SeqPlayAndRealtimeRecord	; F55A82  [21] -> SoftKeyCol5Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol6Held_SeqPlayAndRealtimeRecord	; F55A86  [22] -> SoftKeyCol6Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol7Held_SeqPlayAndRealtimeRecord	; F55A8A  [23] -> SoftKeyCol7Held_SeqPlayAndRealtimeRecord
+	.long	SoftKeyCol8Held_SeqPlayAndRealtimeRecord	; F55A8E  [24] -> SoftKeyCol8Held_SeqPlayAndRealtimeRecord
 	.long	Nop_Ret_F56DF0	; F55A92  [25] -> Nop_Ret_F56DF0
 	.long	Nop_Ret_F56DF0	; F55A96  [26] -> Nop_Ret_F56DF0
 	.long	Nop_Ret_F56DF0	; F55A9A  [27] -> Nop_Ret_F56DF0
@@ -117697,7 +117697,7 @@ sub_F56129_Return:
 	ret	; F56141  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F56142
+; SoftKeyCol1_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[0], 0xF55A2E[0]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117714,7 +117714,9 @@ sub_F56129_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F56142:
+; SoftKeyCol1_SeqPlayAndRealtimeRecord: slot 0 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 0 for the column's upper switch, 8 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol1_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56142  bit 0x07,W
 	jr	nz, sub_F56129_Skip2	; F56145  jr NZ,0xf5614e
 	ld	(13826:16), 0	; F56147  ld (0x3602),0x00
@@ -117726,7 +117728,7 @@ sub_F56129_Join:
 	ret	; F56157  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F56158
+; SoftKeyCol2_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[1], 0xF55A2E[1]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117743,7 +117745,9 @@ sub_F56129_Join:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F56158:
+; SoftKeyCol2_SeqPlayAndRealtimeRecord: slot 1 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 1 for the column's upper switch, 9 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol2_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56158  bit 0x07,W
 	jr	nz, sub_F56129_Skip3	; F5615B  jr NZ,0xf56164
 	ld	(13826:16), 1	; F5615D  ld (0x3602),0x01
@@ -117755,7 +117759,7 @@ sub_F56129_Join2:
 	ret	; F5616D  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F5616E
+; SoftKeyCol3_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[2], 0xF55A2E[2]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117772,7 +117776,9 @@ sub_F56129_Join2:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F5616E:
+; SoftKeyCol3_SeqPlayAndRealtimeRecord: slot 2 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 2 for the column's upper switch, 10 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol3_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5616E  bit 0x07,W
 	jr	nz, sub_F56129_Skip4	; F56171  jr NZ,0xf5617a
 	ld	(13826:16), 2	; F56173  ld (0x3602),0x02
@@ -117784,7 +117790,7 @@ sub_F56129_Join3:
 	ret	; F56183  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F56184
+; SoftKeyCol4_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[3], 0xF55A2E[3]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117801,7 +117807,9 @@ sub_F56129_Join3:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F56184:
+; SoftKeyCol4_SeqPlayAndRealtimeRecord: slot 3 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 3 for the column's upper switch, 11 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol4_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56184  bit 0x07,W
 	jr	nz, sub_F56129_Skip5	; F56187  jr NZ,0xf56190
 	ld	(13826:16), 3	; F56189  ld (0x3602),0x03
@@ -117813,7 +117821,7 @@ sub_F56129_Join4:
 	ret	; F56199  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F5619A
+; SoftKeyCol5_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[4], 0xF55A2E[4]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117830,7 +117838,9 @@ sub_F56129_Join4:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F5619A:
+; SoftKeyCol5_SeqPlayAndRealtimeRecord: slot 4 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 4 for the column's upper switch, 12 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol5_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5619A  bit 0x07,W
 	jr	nz, sub_F56129_Skip6	; F5619D  jr NZ,0xf561a6
 	ld	(13826:16), 4	; F5619F  ld (0x3602),0x04
@@ -117842,7 +117852,7 @@ sub_F56129_Join5:
 	ret	; F561AF  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F561B0
+; SoftKeyCol6_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[5], 0xF55A2E[5]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117859,7 +117869,9 @@ sub_F56129_Join5:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F561B0:
+; SoftKeyCol6_SeqPlayAndRealtimeRecord: slot 5 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 5 for the column's upper switch, 13 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol6_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561B0  bit 0x07,W
 	jr	nz, sub_F56129_Skip7	; F561B3  jr NZ,0xf561bc
 	ld	(13826:16), 5	; F561B5  ld (0x3602),0x05
@@ -117871,7 +117883,7 @@ sub_F56129_Join6:
 	ret	; F561C5  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F561C6
+; SoftKeyCol7_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[6], 0xF55A2E[6]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117888,7 +117900,9 @@ sub_F56129_Join6:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F561C6:
+; SoftKeyCol7_SeqPlayAndRealtimeRecord: slot 6 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 6 for the column's upper switch, 14 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol7_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561C6  bit 0x07,W
 	jr	nz, sub_F56129_Skip8	; F561C9  jr NZ,0xf561d2
 	ld	(13826:16), 6	; F561CB  ld (0x3602),0x06
@@ -117900,7 +117914,7 @@ sub_F56129_Join7:
 	ret	; F561DB  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_ThenNotify_F561DC
+; SoftKeyCol8_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[7], 0xF55A2E[7]
 ; Touches: (0x3602)
 ; Calls:   T_F40CC4
@@ -117917,7 +117931,9 @@ sub_F56129_Join7:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_ThenNotify_F561DC:
+; SoftKeyCol8_SeqPlayAndRealtimeRecord: slot 7 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+;   (0x3602) = 7 for the column's upper switch, 15 for the lower (bit 7 of W), then T_F40CC4.
+SoftKeyCol8_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561DC  bit 0x07,W
 	jr	nz, sub_F56129_Skip9	; F561DF  jr NZ,0xf561e8
 	ld	(13826:16), 7	; F561E1  ld (0x3602),0x07
@@ -117929,7 +117945,7 @@ sub_F56129_Join8:
 	ret	; F561F1  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F561F2
+; SoftKeyCol1Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[17], 0xF55A2E[17]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -117945,7 +117961,9 @@ sub_F56129_Join8:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F561F2:
+; SoftKeyCol1Held_SeqPlayAndRealtimeRecord: slot 0x11 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 0 / 8 to (0x3602) and T_F40CC4.
+SoftKeyCol1Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F561F2  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F561F3  ld XBC,(0x2088)
 	and	xbc, 1	; F561F7  and XBC,0x00000001
@@ -117964,7 +117982,7 @@ sub_F56129_Epilogue:
 	ret	; F5621B  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F5621C
+; SoftKeyCol2Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[18], 0xF55A2E[18]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -117980,7 +117998,9 @@ sub_F56129_Epilogue:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F5621C:
+; SoftKeyCol2Held_SeqPlayAndRealtimeRecord: slot 0x12 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 1 / 9 to (0x3602) and T_F40CC4.
+SoftKeyCol2Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F5621C  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F5621D  ld XBC,(0x2088)
 	and	xbc, 2	; F56221  and XBC,0x00000002
@@ -117999,7 +118019,7 @@ sub_F56129_Epilogue2:
 	ret	; F56245  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F56246
+; SoftKeyCol3Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[19], 0xF55A2E[19]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118015,7 +118035,9 @@ sub_F56129_Epilogue2:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F56246:
+; SoftKeyCol3Held_SeqPlayAndRealtimeRecord: slot 0x13 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 2 / 10 to (0x3602) and T_F40CC4.
+SoftKeyCol3Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56246  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56247  ld XBC,(0x2088)
 	and	xbc, 4	; F5624B  and XBC,0x00000004
@@ -118034,7 +118056,7 @@ sub_F56129_Epilogue3:
 	ret	; F5626F  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F56270
+; SoftKeyCol4Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[20], 0xF55A2E[20]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118050,7 +118072,9 @@ sub_F56129_Epilogue3:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F56270:
+; SoftKeyCol4Held_SeqPlayAndRealtimeRecord: slot 0x14 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 3 / 11 to (0x3602) and T_F40CC4.
+SoftKeyCol4Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56270  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56271  ld XBC,(0x2088)
 	and	xbc, 8	; F56275  and XBC,0x00000008
@@ -118069,7 +118093,7 @@ sub_F56129_Epilogue4:
 	ret	; F56299  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F5629A
+; SoftKeyCol5Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[21], 0xF55A2E[21]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118085,7 +118109,9 @@ sub_F56129_Epilogue4:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F5629A:
+; SoftKeyCol5Held_SeqPlayAndRealtimeRecord: slot 0x15 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 4 / 12 to (0x3602) and T_F40CC4.
+SoftKeyCol5Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F5629A  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F5629B  ld XBC,(0x2088)
 	and	xbc, 16	; F5629F  and XBC,0x00000010
@@ -118104,7 +118130,7 @@ sub_F56129_Epilogue5:
 	ret	; F562C3  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F562C4
+; SoftKeyCol6Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[22], 0xF55A2E[22]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118120,7 +118146,9 @@ sub_F56129_Epilogue5:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F562C4:
+; SoftKeyCol6Held_SeqPlayAndRealtimeRecord: slot 0x16 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 5 / 13 to (0x3602) and T_F40CC4.
+SoftKeyCol6Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F562C4  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F562C5  ld XBC,(0x2088)
 	and	xbc, 32	; F562C9  and XBC,0x00000020
@@ -118139,7 +118167,7 @@ sub_F56129_Epilogue6:
 	ret	; F562ED  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F562EE
+; SoftKeyCol7Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[23], 0xF55A2E[23]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118155,7 +118183,9 @@ sub_F56129_Epilogue6:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F562EE:
+; SoftKeyCol7Held_SeqPlayAndRealtimeRecord: slot 0x17 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 6 / 14 to (0x3602) and T_F40CC4.
+SoftKeyCol7Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F562EE  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F562EF  ld XBC,(0x2088)
 	and	xbc, 64	; F562F3  and XBC,0x00000040
@@ -118174,7 +118204,7 @@ sub_F56129_Epilogue7:
 	ret	; F56317  ret
 
 ; --------------------------------------------------------------------------
-; Write3602_IfBit2088_F56318
+; SoftKeyCol8Held_SeqPlayAndRealtimeRecord
 ; Called from: table 0xF558AE[24], 0xF55A2E[24]
 ; Touches: (0x2088) (0x3602)
 ; Calls:   T_F40CC4
@@ -118190,7 +118220,9 @@ sub_F56129_Epilogue7:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Write3602_IfBit2088_F56318:
+; SoftKeyCol8Held_SeqPlayAndRealtimeRecord: slot 0x18 of the same two tables, the column's held form: unless
+;   PanelButton_HeldMask bit 0, the same store of 7 / 15 to (0x3602) and T_F40CC4.
+SoftKeyCol8Held_SeqPlayAndRealtimeRecord:
 	push	xbc	; F56318  push XBC
 	ld	xbc, (PanelButton_HeldMask:16)	; F56319  ld XBC,(0x2088)
 	and	xbc, 128	; F5631D  and XBC,0x00000080
