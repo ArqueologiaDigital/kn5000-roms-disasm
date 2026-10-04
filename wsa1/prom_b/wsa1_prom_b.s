@@ -1106,13 +1106,13 @@
 	.set	sub_FBB800, 0xFBB800
 	.set	sub_FBB93C, 0xFBB93C
 	.set	sub_FBBCBC, 0xFBBCBC
-	.set	ScreenCodeB2_Handler, 0xFBC56B
-	.set	ScreenLeave_CodeB2, 0xFBC56F
-	.set	ScreenButton_CodeB2, 0xFBC573
+	.set	ScreenEnter_CombiEditConfigure_B2, 0xFBC56B
+	.set	ScreenLeave_CombiEditConfigure_B2, 0xFBC56F
+	.set	ScreenButton_CombiEditConfigure_B2, 0xFBC573
 	.set	T_F41874_Nop, 0xFBC584
-	.set	ScreenCode35_Handler, 0xFBC585
-	.set	ScreenLeave_Code35, 0xFBC589
-	.set	ScreenButton_Code35, 0xFBC58D
+	.set	ScreenEnter_CombiEditConfigure_35, 0xFBC585
+	.set	ScreenLeave_CombiEditConfigure_35, 0xFBC589
+	.set	ScreenButton_CombiEditConfigure_35, 0xFBC58D
 	.set	T_F41A34_Nop, 0xFBC59E
 	.set	ScreenEnter_CombinationNaming, 0xFBC59F
 	.set	ScreenLeave_CombinationNaming, 0xFBC5A3
@@ -1138,21 +1138,21 @@
 	.set	T_F4184C_Nop, 0xFBCB81
 	.set	ScreenButton_CodeB0, 0xFBCB82
 	.set	T_F41854_Nop, 0xFBCBA9
-	.set	ScreenCodeB4_Handler, 0xFBCDEC
-	.set	ScreenCodeB5_Handler, 0xFBCDF0
-	.set	ScreenCode37_Handler, 0xFBCDF4
-	.set	ScreenCode38_Handler, 0xFBCDF8
-	.set	ScreenCodeB1_Handler, 0xFBCDFC
-	.set	ScreenLeave_CodeB4, 0xFBCEE7
-	.set	ScreenLeave_CodeB5, 0xFBCEEB
-	.set	ScreenLeave_Code37, 0xFBCEEF
-	.set	ScreenLeave_Code38, 0xFBCEF3
+	.set	ScreenEnter_CombiEditInternalSound_B4, 0xFBCDEC
+	.set	ScreenEnter_CombiEditInternalSound_B5, 0xFBCDF0
+	.set	ScreenEnter_CombiEditInternalSound_37, 0xFBCDF4
+	.set	ScreenEnter_CombiEditInternalSound_38, 0xFBCDF8
+	.set	ScreenEnter_CombiEditInternalSound, 0xFBCDFC
+	.set	ScreenLeave_CombiEditInternalSound_B4, 0xFBCEE7
+	.set	ScreenLeave_CombiEditInternalSound_B5, 0xFBCEEB
+	.set	ScreenLeave_CombiEditInternalSound_37, 0xFBCEEF
+	.set	ScreenLeave_CombiEditInternalSound_38, 0xFBCEF3
 	.set	T_F4185C_Nop, 0xFBCEF7
-	.set	ScreenButton_CodeB4, 0xFBCEF8
-	.set	ScreenButton_CodeB5, 0xFBCF09
-	.set	ScreenButton_Code37, 0xFBCF1A
-	.set	ScreenButton_Code38, 0xFBCF2B
-	.set	ScreenButton_CodeB1, 0xFBCF3C
+	.set	ScreenButton_CombiEditInternalSound_B4, 0xFBCEF8
+	.set	ScreenButton_CombiEditInternalSound_B5, 0xFBCF09
+	.set	ScreenButton_CombiEditInternalSound_37, 0xFBCF1A
+	.set	ScreenButton_CombiEditInternalSound_38, 0xFBCF2B
+	.set	ScreenButton_CombiEditInternalSound, 0xFBCF3C
 	.set	T_F41894_Nop, 0xFBCF7D
 	.set	T_F418A4_Nop, 0xFBCF7E
 	.set	T_F41A54_Nop, 0xFBCF7F
@@ -89313,25 +89313,25 @@ T_F41848:	jp ScreenCodeB0_Handler  ; -> prom_a 0x3CB40
 T_F4184C:	jp T_F4184C_Nop  ; -> prom_a 0x3CB81
 T_F41850:	jp ScreenButton_CodeB0  ; -> prom_a 0x3CB82
 T_F41854:	jp T_F41854_Nop  ; -> prom_a 0x3CBA9
-T_F41858:	jp ScreenCodeB1_Handler  ; -> prom_a 0x3CDFC
+T_F41858:	jp ScreenEnter_CombiEditInternalSound  ; -> prom_a 0x3CDFC
 T_F4185C:	jp T_F4185C_Nop  ; -> prom_a 0x3CEF7
-T_F41860:	jp ScreenButton_CodeB1  ; -> prom_a 0x3CF3C
+T_F41860:	jp ScreenButton_CombiEditInternalSound  ; -> prom_a 0x3CF3C
 T_F41864:	jp T_F41864_Nop  ; -> prom_a 0x3CF81
-T_F41868:	jp ScreenCodeB2_Handler  ; -> prom_a 0x3C56B
-T_F4186C:	jp ScreenLeave_CodeB2  ; -> prom_a 0x3C56F
-T_F41870:	jp ScreenButton_CodeB2  ; -> prom_a 0x3C573
+T_F41868:	jp ScreenEnter_CombiEditConfigure_B2  ; -> prom_a 0x3C56B
+T_F4186C:	jp ScreenLeave_CombiEditConfigure_B2  ; -> prom_a 0x3C56F
+T_F41870:	jp ScreenButton_CombiEditConfigure_B2  ; -> prom_a 0x3C573
 T_F41874:	jp T_F41874_Nop  ; -> prom_a 0x3C584
 T_F41878:	jp ScreenEnter_WriteProtectError  ; -> prom_a 0x3C5BD
 T_Var2075_ClrBit7_Entry:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
 T_F41880:	jp ScreenButton_WriteProtectError  ; -> prom_a 0x3C5C5
 T_F41884:	jp T_F41884_Nop  ; -> prom_a 0x3C5D6
-T_F41888:	jp ScreenCodeB4_Handler  ; -> prom_a 0x3CDEC
-T_F4188C:	jp ScreenLeave_CodeB4  ; -> prom_a 0x3CEE7
-T_F41890:	jp ScreenButton_CodeB4  ; -> prom_a 0x3CEF8
+T_F41888:	jp ScreenEnter_CombiEditInternalSound_B4  ; -> prom_a 0x3CDEC
+T_F4188C:	jp ScreenLeave_CombiEditInternalSound_B4  ; -> prom_a 0x3CEE7
+T_F41890:	jp ScreenButton_CombiEditInternalSound_B4  ; -> prom_a 0x3CEF8
 T_F41894:	jp T_F41894_Nop  ; -> prom_a 0x3CF7D
-T_F41898:	jp ScreenCodeB5_Handler  ; -> prom_a 0x3CDF0
-T_F4189C:	jp ScreenLeave_CodeB5  ; -> prom_a 0x3CEEB
-T_F418A0:	jp ScreenButton_CodeB5  ; -> prom_a 0x3CF09
+T_F41898:	jp ScreenEnter_CombiEditInternalSound_B5  ; -> prom_a 0x3CDF0
+T_F4189C:	jp ScreenLeave_CombiEditInternalSound_B5  ; -> prom_a 0x3CEEB
+T_F418A0:	jp ScreenButton_CombiEditInternalSound_B5  ; -> prom_a 0x3CF09
 T_F418A4:	jp T_F418A4_Nop  ; -> prom_a 0x3CF7E
 T_F418A8:	jp ScreenEnter_Effect2OutputConflict  ; -> prom_a 0x3C5D7
 T_F418AC:	jp ScreenLeave_Effect2OutputConflict  ; -> prom_a 0x3C5DB
@@ -89404,21 +89404,21 @@ T_F41A18:	jp ScreenCode34_Handler  ; -> prom_a 0x3FAB0
 T_F41A1C:	jp T_F41A1C_Nop  ; -> prom_a 0x3FAF1
 T_F41A20:	jp ScreenButton_Code34  ; -> prom_a 0x3FAF2
 T_F41A24:	jp T_F41A24_Nop  ; -> prom_a 0x3FB33
-T_F41A28:	jp ScreenCode35_Handler  ; -> prom_a 0x3C585
-T_F41A2C:	jp ScreenLeave_Code35  ; -> prom_a 0x3C589
-T_F41A30:	jp ScreenButton_Code35  ; -> prom_a 0x3C58D
+T_F41A28:	jp ScreenEnter_CombiEditConfigure_35  ; -> prom_a 0x3C585
+T_F41A2C:	jp ScreenLeave_CombiEditConfigure_35  ; -> prom_a 0x3C589
+T_F41A30:	jp ScreenButton_CombiEditConfigure_35  ; -> prom_a 0x3C58D
 T_F41A34:	jp T_F41A34_Nop  ; -> prom_a 0x3C59E
 T_F41A38:	jp ScreenEnter_CombinationNaming  ; -> prom_a 0x3C59F
 T_F41A3C:	jp ScreenLeave_CombinationNaming  ; -> prom_a 0x3C5A3
 T_F41A40:	jp ScreenButton_CombinationNaming  ; -> prom_a 0x3C5A7
 T_F41A44:	jp T_F41A44_Nop  ; -> prom_a 0x3C5B8
-T_F41A48:	jp ScreenCode37_Handler  ; -> prom_a 0x3CDF4
-T_F41A4C:	jp ScreenLeave_Code37  ; -> prom_a 0x3CEEF
-T_F41A50:	jp ScreenButton_Code37  ; -> prom_a 0x3CF1A
+T_F41A48:	jp ScreenEnter_CombiEditInternalSound_37  ; -> prom_a 0x3CDF4
+T_F41A4C:	jp ScreenLeave_CombiEditInternalSound_37  ; -> prom_a 0x3CEEF
+T_F41A50:	jp ScreenButton_CombiEditInternalSound_37  ; -> prom_a 0x3CF1A
 T_F41A54:	jp T_F41A54_Nop  ; -> prom_a 0x3CF7F
-T_F41A58:	jp ScreenCode38_Handler  ; -> prom_a 0x3CDF8
-T_F41A5C:	jp ScreenLeave_Code38  ; -> prom_a 0x3CEF3
-T_F41A60:	jp ScreenButton_Code38  ; -> prom_a 0x3CF2B
+T_F41A58:	jp ScreenEnter_CombiEditInternalSound_38  ; -> prom_a 0x3CDF8
+T_F41A5C:	jp ScreenLeave_CombiEditInternalSound_38  ; -> prom_a 0x3CEF3
+T_F41A60:	jp ScreenButton_CombiEditInternalSound_38  ; -> prom_a 0x3CF2B
 T_F41A64:	jp T_F41A64_Nop  ; -> prom_a 0x3CF80
 T_F41A68:	jp ScreenEnter_CombiEditDspEffect  ; -> prom_a 0x3EEE6
 T_F41A6C:	jp T_F41A6C_Nop  ; -> prom_a 0x3EEEB

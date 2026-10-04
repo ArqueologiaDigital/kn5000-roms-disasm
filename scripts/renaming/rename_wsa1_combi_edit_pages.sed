@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FBF2E2\b/ScreenEnterBody_CombiEditConfigure/g
+s/\bsub_FBF2DE\b/ScreenEnterBody_CombiEditConfigure_Call/g
+s/\bsub_FBF426\b/ScreenLeaveBody_CombiEditConfigure/g
+s/\bsub_FBF422\b/ScreenLeaveBody_CombiEditConfigure_Call/g
+s/\bsub_FBF453\b/ScreenButtonBody_CombiEditConfigure/g
+s/\bsub_FBF442\b/ScreenButtonBody_CombiEditConfigure_Call/g
+s/\bScreenCode35_Handler\b/ScreenEnter_CombiEditConfigure_35/g
+s/\bScreenLeave_Code35\b/ScreenLeave_CombiEditConfigure_35/g
+s/\bScreenButton_Code35\b/ScreenButton_CombiEditConfigure_35/g
+s/\bScreenCodeB2_Handler\b/ScreenEnter_CombiEditConfigure_B2/g
+s/\bScreenLeave_CodeB2\b/ScreenLeave_CombiEditConfigure_B2/g
+s/\bScreenButton_CodeB2\b/ScreenButton_CombiEditConfigure_B2/g
+s/\bScreenCodeB1_Handler\b/ScreenEnter_CombiEditInternalSound/g
+s/\bScreenButton_CodeB1\b/ScreenButton_CombiEditInternalSound/g
+s/\bScreenCode37_Handler\b/ScreenEnter_CombiEditInternalSound_37/g
+s/\bScreenLeave_Code37\b/ScreenLeave_CombiEditInternalSound_37/g
+s/\bScreenButton_Code37\b/ScreenButton_CombiEditInternalSound_37/g
+s/\bScreenCode38_Handler\b/ScreenEnter_CombiEditInternalSound_38/g
+s/\bScreenLeave_Code38\b/ScreenLeave_CombiEditInternalSound_38/g
+s/\bScreenButton_Code38\b/ScreenButton_CombiEditInternalSound_38/g
+s/\bScreenCodeB4_Handler\b/ScreenEnter_CombiEditInternalSound_B4/g
+s/\bScreenLeave_CodeB4\b/ScreenLeave_CombiEditInternalSound_B4/g
+s/\bScreenButton_CodeB4\b/ScreenButton_CombiEditInternalSound_B4/g
+s/\bScreenCodeB5_Handler\b/ScreenEnter_CombiEditInternalSound_B5/g
+s/\bScreenLeave_CodeB5\b/ScreenLeave_CombiEditInternalSound_B5/g
+s/\bScreenButton_CodeB5\b/ScreenButton_CombiEditInternalSound_B5/g
