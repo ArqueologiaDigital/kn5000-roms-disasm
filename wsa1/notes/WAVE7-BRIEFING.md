@@ -22,7 +22,7 @@ learned that a plan living outside the tree goes stale inside one commit.
 
 `HANDOFF-RESUME-HERE.md` names `0xFE8000-0xFEB330` and `0xFEF746-0xFF3800` as prom_a's
 next targets. **Both were converted by wave 6's later rounds**, after that paragraph was
-written: `sub_FE8000` is at `prom_a/wsa1_prom_a.s:125114`, `sub_FEF746` at `:132040`, and
+written: `EditScreen_Tick_Call` is at `prom_a/wsa1_prom_a.s:125114`, `sub_FEF746` at `:132040`, and
 the 838-byte effect-name table at `0xFF047F` is `.byte` data at `:133500`. No `.incbin`
 covers either range. Likewise prom_b's `0xF067A6-0xF0D79B` is now two spans, not one.
 

@@ -159,8 +159,8 @@ TABLES = [
      ";          a bound and is stated as such.\n"
      "; Evidence: all 12 values are inside this module, the lowest 0xFE8D9B and\n"
      ";          the highest 0xFE8E22.\n" + H),
-    (0xFE9311, 0xFE932D, "long", "ScreenDispatch_FE9311", H +
-     "; ScreenDispatch_FE9311 -- 7 pointers, indexed by (0x601F59)\n"
+    (0xFE9311, 0xFE932D, "long", "EditScreen_DeferredActions", H +
+     "; EditScreen_DeferredActions -- 7 pointers, indexed by (0x601F59)\n"
      "; Read by: 0xFE92FB -- the same idiom as 0xFE8D6B, with `sll XWA,2`.\n"
      "; ⚠ ENTRY COUNT 7 is the EXTENT.  There is no bound on (0x601F59) here\n"
      ";          either, and 7 is not a round number, so this is the weakest\n"

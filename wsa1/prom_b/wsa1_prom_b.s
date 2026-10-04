@@ -1933,7 +1933,7 @@
 	.set	sub_FE7927, 0xFE7927
 	.set	sub_FE7950, 0xFE7950
 	.set	sub_FE7A49, 0xFE7A49
-	.set	sub_FE8000, 0xFE8000
+	.set	EditScreen_Tick_Call, 0xFE8000
 	.set	sub_FE8005, 0xFE8005
 	.set	sub_FE8026, 0xFE8026
 	.set	ScreenLeave_DrumEditPartSelect, 0xFE8045
@@ -1944,7 +1944,7 @@
 	.set	sub_FE8116, 0xFE8116
 	.set	Paint_Sequencer, 0xFE812C
 	.set	ScreenLeave_Sequencer, 0xFE8165
-	.set	sub_FE82D7, 0xFE82D7
+	.set	EditScreen_Tick, 0xFE82D7
 	.set	EditScreen_BootPhase2And4, 0xFE833F
 	.set	ShowScreen_NoteEditPartSelect, 0xFE836F
 	.set	ShowScreen_DrumEditPartSelect, 0xFE83A3
@@ -88972,12 +88972,16 @@ T_EditScreen_EnterDrumEdit:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
 T_ScreenLeave_DrumEdit:	jp ScreenLeave_DrumEdit  ; -> prom_a 0x68C1F
 T_ScreenButton_DrumEdit:	jp ScreenButton_DrumEdit  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
-T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
+; Evidence: slot 0xF402FC is `jp 0xFE82D7`; prom_a 0xFE82D7 carries the label
+;           EditScreen_Tick (graded CONTENT).  DERIVATIVE name.
+T_EditScreen_Tick:	jp EditScreen_Tick  ; F402FC (was T_F402FC) -> prom_a 0x682D7
 ; Evidence: slot 0xF40300 is `jp 0xFE833F`; prom_a 0xFE833F carries the label
 ;           EditScreen_BootPhase2And4 (graded CONTENT).  DERIVATIVE name.
 T_EditScreen_BootPhase2And4:	jp EditScreen_BootPhase2And4  ; F40300 (was T_F40300) -> prom_a 0x6833F   x2
 T_F40304:	jp sub_FE8026  ; -> prom_a 0x68026   x2
-T_F40308:	jp sub_FE8000  ; -> prom_a 0x68000   x1
+; Evidence: slot 0xF40308 is `jp 0xFE8000`; prom_a 0xFE8000 carries the label
+;           EditScreen_Tick_Call (graded CONTENT).  DERIVATIVE name.
+T_EditScreen_Tick_Call:	jp EditScreen_Tick_Call  ; F40308 (was T_F40308) -> prom_a 0x68000   x1
 T_F4030C:	jp sub_FE8005  ; -> prom_a 0x68005   x1
 	.fill 0x2E0, 1, 0x0E  ; 0xF40310: 736 x ret
 ; Evidence: slot 0xF405F0 is `jp 0xF89800`; prom_a 0xF89800 carries the label

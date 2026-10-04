@@ -1497,11 +1497,45 @@ ROWS = [
      "clears the flag of the slot holding note (0x601F34); A = 0xFF when none does."),
     ("FE912B", "NoteEdit_AnyKeyHeld", "A = 0xFF when any of the 8 slots at 0x601F1C is flagged, else 0."),
     ("FE915D", "NoteEdit_EnterHeldNotes",
-     "DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (sub_FE91C0); NOTE EDIT: every slot with a note\n"
-     "through sub_FE91D2 then sub_FE9276, stopping on a BStore error (sub_FE8BD4)."),
+     "DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (NoteEdit_InsertNoteAndSync); NOTE EDIT: every slot with a note\n"
+     "through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (sub_FE8BD4)."),
     ("FE97DF", "EditScreen_AppendMissingBeatMarkers",
      "appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count\n"
      "sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored."),
+    # NOTE / DRUM EDIT: note insertion, the periodic tick and its deferred actions
+    ("FE91D2", "NoteEdit_InsertNoteEvent",
+     "NoteEdit_SeekInsertPoint, then the 6-byte event at 0x601F16 -- 0x90, EditCursor_TickInMeasure mod 0x60,\n"
+     "NoteEdit_InputNote, NoteEdit_InputVelocity, (0x601F49) mod 0x60, (0x601F49) / 0x60 -- inserted into chain\n"
+     "EditScreen_Part + 1 (EditScreen_SaveTrackCursor, BStore_AppendBytes, 6 bytes).  So (0x601F49) is the\n"
+     "length a new note gets."),
+    ("FE9223", "NoteEdit_SeekInsertPoint",
+     "from the measure's mark, steps over events and beat markers until the position passes\n"
+     "EditCursor_TickInMeasure, or to the end tag 0x82."),
+    ("FE9276", "EditCursor_SyncBeatAndTick",
+     "(0x601F07) = EditCursor_TickInMeasure mod 0x60, (0x601F05) = its beat + (0x601F0F), the measure's first beat."),
+    ("FE91C0", "NoteEdit_InsertNoteAndSync",
+     "NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, or sub_FE8BD4 on a BStore error.  Called by\n"
+     "DrumEdit_SoftKeyCol8 and NoteEdit_EnterHeldNotes."),
+    ("FE9290", "EditScreen_StepCursorAfterEntry",
+     "EditCursor_AdvanceToNextIncStep and EditScreen_ExtendChainToCursorBeat; inside the measure the fields are\n"
+     "redrawn, past its end sub_FE955D; EditScreen_CursorFlags bit 2 (extension failed) -> sub_FE8BD4."),
+    ("FEA64D", "EditScreen_ExtendChainToCursorBeat",
+     "appends beat markers (EditScreen_AppendBeatMarker) until the chain holds the cursor's beat; CursorFlags bit 2\n"
+     "is set when an append fails; the block-store cursor is restored."),
+    ("FE82D7", "EditScreen_Tick",
+     "T_EditScreen_Tick: NoteEdit_TakeKeyboardInput, then the two countdown timers (EditScreen_CountDownAction,\n"
+     "_RunDueAction, _CountDownAction2, _RunDueAction2), then T_F40A3C."),
+    ("FE92C1", "EditScreen_CountDownAction",
+     "(0x601F58) - 1 while bit 7 is set and it is above 0x80."),
+    ("FE92ED", "EditScreen_RunDueAction",
+     "when (0x601F58) has reached 0x80: it is cleared and EditScreen_DeferredActions[(0x601F59)] runs.  The note\n"
+     "steppers queue action 2 three ticks ahead (0x83 / 2), the DRUM EDIT scroll 5, the ruler scroll 4."),
+    ("FE92D7", "EditScreen_CountDownAction2", "the same countdown on (0x601F5A)."),
+    ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, sub_FE9738 (sub_FEA54F)."),
+    ("FE933F", "EditScreen_ReloadMeasureView",
+     "EditScreen_DeferredActions[0] and [6]: sub_FEA54F, the measure reopened (sub_FE8EA9, moving on through\n"
+     "sub_FE93CA), its beat table rebuilt (sub_FE8AE9), sub_FE938E, the event at the cursor selected\n"
+     "(EditScreen_SelectEventAtCursor), and every part of the screen redrawn."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

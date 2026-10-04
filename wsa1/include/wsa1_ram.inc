@@ -474,7 +474,11 @@
 	.equ NoteEdit_InputNote,			0x601f34	; the note of the key event being taken -- NoteEdit_TakeKeyboardInput
 	.equ NoteEdit_InputVelocity,			0x601f35	; its velocity (0 = released) -- NoteEdit_TakeKeyboardInput
 	.equ EditCursor_Note,				0x601f44	; the cursor's note row, 1..127; DRUM EDIT shows only events on it -- EditCursor_NoteUp / _Down / _Up6 / _Down6; DrumEdit_IsOtherNote
+	.equ EditField_NewNoteLength,			0x601f49	; the length a new note gets (word, in ticks) -- NoteEdit_InsertNoteEvent writes it into the event; EditField_Length* step it with no event selected
 	.equ NoteEdit_RulerPosition,			0x601f53	; the keyboard ruler's position, 0..9 -- NoteEdit_ScrollRulerToNote
+	.equ EditScreen_ActionTimer,			0x601f58	; 0x80 | ticks until EditScreen_DeferredActions[EditScreen_ActionIndex] runs; 0 = idle -- EditScreen_CountDownAction / _RunDueAction; the note steppers set 0x83
+	.equ EditScreen_ActionIndex,			0x601f59	; the deferred action to run -- EditScreen_RunDueAction
+	.equ EditScreen_ActionTimer2,			0x601f5a	; the second countdown (its action is sub_FE9738) -- EditScreen_CountDownAction2 / _RunDueAction2
 	.equ EditScreen_CursorFlags,			0x601f5b	; bit 0: a note-on is selected at the cursor (its velocity in EditField_EventVelocity); bits 1..4 are tested by the cursor moves, not read here -- EditScreen_SelectEventAtCursor sets / clears it; EditScreen_SoftKeyCol4 tests it
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"

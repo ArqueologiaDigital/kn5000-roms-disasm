@@ -4022,6 +4022,22 @@ RENAMES = {
     "sub_FE912B": "NoteEdit_AnyKeyHeld",
     "sub_FE915D": "NoteEdit_EnterHeldNotes",
     "sub_FE97DF": "EditScreen_AppendMissingBeatMarkers",
+    "sub_FE91D2": "NoteEdit_InsertNoteEvent",
+    "sub_FE9223": "NoteEdit_SeekInsertPoint",
+    "sub_FE9276": "EditCursor_SyncBeatAndTick",
+    "sub_FE91C0": "NoteEdit_InsertNoteAndSync",
+    "sub_FE9290": "EditScreen_StepCursorAfterEntry",
+    "sub_FEA64D": "EditScreen_ExtendChainToCursorBeat",
+    "sub_FE82D7": "EditScreen_Tick",
+    "sub_FE92C1": "EditScreen_CountDownAction",
+    "sub_FE92ED": "EditScreen_RunDueAction",
+    "sub_FE92D7": "EditScreen_CountDownAction2",
+    "sub_FE932D": "EditScreen_RunDueAction2",
+    "sub_FE933F": "EditScreen_ReloadMeasureView",
+    "T_F402FC": "T_EditScreen_Tick",
+    "sub_FE8000": "EditScreen_Tick_Call",
+    "T_F40308": "T_EditScreen_Tick_Call",
+    "ScreenDispatch_FE9311": "EditScreen_DeferredActions",
 }
 
 
