@@ -712,7 +712,7 @@ ROWS = [
      "its word at +5, saturating at 0x2FFF -- the largest note length (EditField_Length's limit)."),
     # prom_b: the part-record setters behind the SMF controller handlers (SmfPart_GetRecordPtr: XIY = the event channel's
     # 64-byte record at 0x6036A0 + SmfPart_RecordOffsets[channel]).
-    ("F7067F", "SmfPart_SetVolume", "SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and sub_F724A7)."),
+    ("F7067F", "SmfPart_SetVolume", "SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and SmfCC_Volume_MultiTrack)."),
     ("F709A3", "SmfPart_SetEffect3Depth",
      "SmfPart_GetRecordPtr, then record +7 = data byte 2, keeping its bit 7.  Called by SmfCC_Effect3Depth."),
     ("F709DA", "SmfPart_SetEffect4Depth", "record +8 the same way.  Called by SmfCC_Effect4Depth."),
@@ -1096,6 +1096,29 @@ ROWS = [
      "IY = min(IY, 1), zero-extended: every source track above 1 shares slot 1.  Followed by four unreferenced one-call stubs."),
     ("F72F20", "Smf_BusyDelay",
      "3072 x 960 empty djnz16 iterations.  Called by Smf_ReadFile and Smf_WriteFile."),
+    # prom_b 0xF72364-0xF726A2: the multi-track path's control-change handlers.  SmfEvent_ControlChange_MultiTrack indexes
+    # SmfCC_HandlersByNumber_MultiTrack by the CC number for CC < 16 -- its entries 2 and 4 are the shared SmfCC_Breath / SmfCC_Foot, CC 2 and 4 --
+    # and compares CC >= 16 one by one; each copy is named after its format-0 twin (MIDI 1.0 numbers).
+    ("F72364", "SmfCC_BankSelectMsb_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's SmfCC_HandlersByNumber_MultiTrack[0], CC 0 -- the multi-track copy of SmfCC_BankSelectMsb."),
+    ("F7237D", "SmfCC_Modulation_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's SmfCC_HandlersByNumber_MultiTrack[1], CC 1 -- the multi-track copy of SmfCC_Modulation."),
+    ("F723E1", "SmfCC_DataEntryMsb_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's SmfCC_HandlersByNumber_MultiTrack[6], CC 6 -- the multi-track copy of SmfCC_DataEntryMsb."),
+    ("F724A7", "SmfCC_Volume_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's SmfCC_HandlersByNumber_MultiTrack[7], CC 7 -- the multi-track copy of SmfCC_Volume."),
+    ("F724CB", "SmfCC_Pan_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's SmfCC_HandlersByNumber_MultiTrack[10], CC 10 -- the multi-track copy of SmfCC_Pan."),
+    ("F725D9", "SmfCC_BankSelectLsb_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's `cp A,32` arm, CC 32 -- the multi-track copy of SmfCC_BankSelectLsb."),
+    ("F7243B", "SmfCC_DataEntryLsb_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's `cp A,38` arm, CC 38 -- the multi-track copy of SmfCC_DataEntryLsb."),
+    ("F7263A", "SmfCC_Effect1Depth_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's `cp A,91` arm, CC 91 -- the multi-track copy of SmfCC_Effect1Depth."),
+    ("F7267E", "SmfCC_Effect3Depth_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's `cp A,93` arm, CC 93 -- the multi-track copy of SmfCC_Effect3Depth."),
+    ("F726A2", "SmfCC_Effect4Depth_MultiTrack",
+     "SmfEvent_ControlChange_MultiTrack's `cp A,94` arm, CC 94 -- the multi-track copy of SmfCC_Effect4Depth."),
 ]
 
 

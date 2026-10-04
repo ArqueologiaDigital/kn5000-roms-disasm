@@ -167987,7 +167987,7 @@ sub_F705F7_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SmfPart_SetVolume: SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and sub_F724A7).
+; SmfPart_SetVolume: SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and SmfCC_Volume_MultiTrack).
 SmfPart_SetVolume:
 	calr	SmfPart_GetRecordPtr	; F7067F  calr 0xf702b8
 	ld	a, (4306:16)	; F70682  ld A,(0x10d2)
@@ -171873,8 +171873,8 @@ sub_F721A3_Return:
 ; SmfEvent_ControlChange_MultiTrack
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 sub_F725D9
-;          sub_F7243B SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop sub_F7263A sub_F7267E
+; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb_MultiTrack
+;          SmfCC_DataEntryLsb_MultiTrack SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth_MultiTrack SmfCC_Effect3Depth_MultiTrack
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -171942,7 +171942,7 @@ sub_F7222D_Skip3:
 	sla	l, 2	; F722B6  sla 0x02,L
 	extz	xhl	; F722B9  extz XHL
 	push	xix	; F722BB  push XIX
-	ld	xix, DispatchTable_F72323	; F722BC  ld XIX,0x00f72323
+	ld	xix, SmfCC_HandlersByNumber_MultiTrack	; F722BC  ld XIX,0x00f72323
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F722C1  ld XHL,(XIX+HL)
 	pop	xix	; F722C6  pop XIX
 	call	(xhl)	; F722C7  call T,XHL
@@ -171960,10 +171960,10 @@ sub_F7222D_Skip7:
 	calr	SmfCC_GeneralPurpose4	; F722DA  calr 0xf719ea
 	jr	sub_F7222D_Return	; F722DD  jr T,0xf72322
 sub_F7222D_Skip8:
-	calr	sub_F725D9	; F722DF  calr 0xf725d9
+	calr	SmfCC_BankSelectLsb_MultiTrack	; F722DF  calr 0xf725d9
 	jr	sub_F7222D_Return	; F722E2  jr T,0xf72322
 sub_F7222D_Skip9:
-	calr	sub_F7243B	; F722E4  calr 0xf7243b
+	calr	SmfCC_DataEntryLsb_MultiTrack	; F722E4  calr 0xf7243b
 	jr	sub_F7222D_Return	; F722E7  jr T,0xf72322
 sub_F7222D_Skip10:
 	call	SmfCC_Sustain	; F722E9  call 0xf707e6
@@ -171975,13 +171975,13 @@ sub_F7222D_Skip12:
 	call	sub_F7039A_Nop	; F722F5  call 0xf7091d
 	jr	sub_F7222D_Return	; F722F9  jr T,0xf72322
 sub_F7222D_Skip13:
-	call	sub_F7263A	; F722FB  call 0xf7263a
+	call	SmfCC_Effect1Depth_MultiTrack	; F722FB  call 0xf7263a
 	jr	sub_F7222D_Return	; F722FF  jr T,0xf72322
 sub_F7222D_Skip14:
-	calr	sub_F7267E	; F72301  calr 0xf7267e
+	calr	SmfCC_Effect3Depth_MultiTrack	; F72301  calr 0xf7267e
 	jr	sub_F7222D_Return	; F72304  jr T,0xf72322
 sub_F7222D_Skip15:
-	calr	sub_F726A2	; F72306  calr 0xf726a2
+	calr	SmfCC_Effect4Depth_MultiTrack	; F72306  calr 0xf726a2
 	jr	sub_F7222D_Return	; F72309  jr T,0xf72322
 sub_F7222D_Skip16:
 	calr	SmfCC_DataIncrement	; F7230B  calr 0xf70a43
@@ -172001,7 +172001,7 @@ sub_F7222D_Return:
 	ret	; F72322  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F72323 -- 16 32-bit words, every one an address in
+; SmfCC_HandlersByNumber_MultiTrack -- 16 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  9
 ;                         distinct values.  notes/prom_b_f6d002_layout.py
 ;                         classes it TRANSFER.
@@ -172022,18 +172022,19 @@ sub_F7222D_Return:
 ;           (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F72323:
-	.long	sub_F72364	; F72323  [0] -> sub_F72364
-	.long	sub_F7237D	; F72327  [1] -> sub_F7237D
+; SmfCC_HandlersByNumber_MultiTrack: the multi-track path's CC 0..15 handlers, indexed by the CC number (entries 2 and 4 are the shared SmfCC_Breath / SmfCC_Foot).
+SmfCC_HandlersByNumber_MultiTrack:
+	.long	SmfCC_BankSelectMsb_MultiTrack	; F72323  [0] -> SmfCC_BankSelectMsb_MultiTrack
+	.long	SmfCC_Modulation_MultiTrack	; F72327  [1] -> SmfCC_Modulation_MultiTrack
 	.long	SmfCC_Breath	; F7232B  [2] -> SmfCC_Breath
 	.long	DispatchTable_F72323_Nop3	; F7232F  [3] -> DispatchTable_F72323_Nop3
 	.long	SmfCC_Foot	; F72333  [4] -> SmfCC_Foot
 	.long	DispatchTable_F72323_Nop3	; F72337  [5] -> DispatchTable_F72323_Nop3
-	.long	sub_F723E1	; F7233B  [6] -> sub_F723E1
-	.long	sub_F724A7	; F7233F  [7] -> sub_F724A7
+	.long	SmfCC_DataEntryMsb_MultiTrack	; F7233B  [6] -> SmfCC_DataEntryMsb_MultiTrack
+	.long	SmfCC_Volume_MultiTrack	; F7233F  [7] -> SmfCC_Volume_MultiTrack
 	.long	DispatchTable_F72323_Nop3	; F72343  [8] -> DispatchTable_F72323_Nop3
 	.long	DispatchTable_F72323_Nop3	; F72347  [9] -> DispatchTable_F72323_Nop3
-	.long	sub_F724CB	; F7234B  [10] -> sub_F724CB
+	.long	SmfCC_Pan_MultiTrack	; F7234B  [10] -> SmfCC_Pan_MultiTrack
 	.long	ByteMap_F72555 + 0x20	; F7234F  [11] -> 0xF72575
 	.long	DispatchTable_F72323_Nop3	; F72353  [12] -> DispatchTable_F72323_Nop3
 	.long	DispatchTable_F72323_Nop3	; F72357  [13] -> DispatchTable_F72323_Nop3
@@ -172060,7 +172061,7 @@ DispatchTable_F72323_Nop3:
 	ret	; F72363  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72364
+; SmfCC_BankSelectMsb_MultiTrack
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
@@ -172074,7 +172075,8 @@ DispatchTable_F72323_Nop3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72364:
+; SmfCC_BankSelectMsb_MultiTrack: SmfEvent_ControlChange_MultiTrack's DispatchTable_F72323[0], CC 0 -- the multi-track copy of SmfCC_BankSelectMsb.
+SmfCC_BankSelectMsb_MultiTrack:
 	ld	iy, (Smf_EventStatus:16)	; F72364  ld IY,(0x10d0)
 	and	iy, 15	; F72368  and IY,0x000f
 	ld	a, (4306:16)	; F7236C  ld A,(0x10d2)
@@ -172085,7 +172087,7 @@ sub_F72364:
 	ret	; F7237C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7237D
+; SmfCC_Modulation_MultiTrack
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
@@ -172100,7 +172102,8 @@ sub_F72364:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7237D:
+; SmfCC_Modulation_MultiTrack: SmfEvent_ControlChange_MultiTrack's DispatchTable_F72323[1], CC 1 -- the multi-track copy of SmfCC_Modulation.
+SmfCC_Modulation_MultiTrack:
 	ld	iy, (4530:16)	; F7237D  ld IY,(0x11b2)
 	calr	Smf_TrackToSlot	; F72381  calr 0xf728fe
 	and	iy, 15	; F72384  and IY,0x000f
@@ -172141,7 +172144,7 @@ sub_F7237D_Return:
 	ret	; F723E0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F723E1
+; SmfCC_DataEntryMsb_MultiTrack
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
@@ -172156,7 +172159,8 @@ sub_F7237D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F723E1:
+; SmfCC_DataEntryMsb_MultiTrack: SmfEvent_ControlChange_MultiTrack's DispatchTable_F72323[6], CC 6 -- the multi-track copy of SmfCC_DataEntryMsb.
+SmfCC_DataEntryMsb_MultiTrack:
 	ld	iy, (Smf_EventStatus:16)	; F723E1  ld IY,(0x10d0)
 	and	iy, 15	; F723E5  and IY,0x000f
 	push	xix	; F723E9  push XIX
@@ -172197,7 +172201,7 @@ sub_F723E1_Return:
 	ret	; F7243A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7243B
+; SmfCC_DataEntryLsb_MultiTrack
 ; Called from: in-module: 0xF722E4
 ; Touches: (0x10D0) (0x10D2)
 ; Calls:   sub_F705F7 sub_F70AE9
@@ -172209,7 +172213,8 @@ sub_F723E1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7243B:
+; SmfCC_DataEntryLsb_MultiTrack: SmfEvent_ControlChange_MultiTrack's `cp A,38` arm, CC 38 -- the multi-track copy of SmfCC_DataEntryLsb.
+SmfCC_DataEntryLsb_MultiTrack:
 	ld	iy, (Smf_EventStatus:16)	; F7243B  ld IY,(0x10d0)
 	and	iy, 15	; F7243F  and IY,0x000f
 	push	xix	; F72443  push XIX
@@ -172269,7 +172274,7 @@ Data_F72495:
 
 
 ; --------------------------------------------------------------------------
-; sub_F724A7
+; SmfCC_Volume_MultiTrack
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
@@ -172284,7 +172289,8 @@ Data_F72495:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F724A7:
+; SmfCC_Volume_MultiTrack: SmfEvent_ControlChange_MultiTrack's DispatchTable_F72323[7], CC 7 -- the multi-track copy of SmfCC_Volume.
+SmfCC_Volume_MultiTrack:
 	m_bit 0, MD16, 0x11b1	; F724A7  bit 0,(0x11b1)
 	jr	nz, sub_F724A7_Skip	; F724AB  jr NZ,0xf724b5
 	calr	SmfPart_SetVolume	; F724AD  calr 0xf7067f
@@ -172298,7 +172304,7 @@ sub_F724A7_Skip:
 	ret	; F724CA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F724CB
+; SmfCC_Pan_MultiTrack
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
@@ -172313,7 +172319,8 @@ sub_F724A7_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F724CB:
+; SmfCC_Pan_MultiTrack: SmfEvent_ControlChange_MultiTrack's DispatchTable_F72323[10], CC 10 -- the multi-track copy of SmfCC_Pan.
+SmfCC_Pan_MultiTrack:
 	ld	iy, (4530:16)	; F724CB  ld IY,(0x11b2)
 	calr	Smf_TrackToSlot	; F724CF  calr 0xf728fe
 	and	iy, 15	; F724D2  and IY,0x000f
@@ -172425,7 +172432,7 @@ Data_F72576:
 
 
 ; --------------------------------------------------------------------------
-; sub_F725D9
+; SmfCC_BankSelectLsb_MultiTrack
 ; Called from: in-module: 0xF722DF
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
 ; Calls:   sub_F725D9_Nop sub_F726C6
@@ -172437,7 +172444,8 @@ Data_F72576:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F725D9:
+; SmfCC_BankSelectLsb_MultiTrack: SmfEvent_ControlChange_MultiTrack's `cp A,32` arm, CC 32 -- the multi-track copy of SmfCC_BankSelectLsb.
+SmfCC_BankSelectLsb_MultiTrack:
 	ld	iy, (Smf_EventStatus:16)	; F725D9  ld IY,(0x10d0)
 	and	iy, 15	; F725DD  and IY,0x000f
 	ld	a, (4306:16)	; F725E1  ld A,(0x10d2)
@@ -172474,7 +172482,7 @@ sub_F725D9_Skip2:
 	ret	; F72639  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7263A
+; SmfCC_Effect1Depth_MultiTrack
 ; Called from: in-module: 0xF722FB
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
@@ -172488,7 +172496,8 @@ sub_F725D9_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7263A:
+; SmfCC_Effect1Depth_MultiTrack: SmfEvent_ControlChange_MultiTrack's `cp A,91` arm, CC 91 -- the multi-track copy of SmfCC_Effect1Depth.
+SmfCC_Effect1Depth_MultiTrack:
 	m_bit 0, MD16, 0x124b	; F7263A  bit 0,(0x124b)
 	jr	nz, sub_F7263A_Skip2	; F7263E  jr NZ,0xf7265a
 	ld	(4665:16), 255	; F72640  ld (0x1239),0xff
@@ -172512,7 +172521,7 @@ sub_F7263A_Skip3:
 	ret	; F7267D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7267E
+; SmfCC_Effect3Depth_MultiTrack
 ; Called from: in-module: 0xF72301
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
 ; Calls:   SmfPart_SetEffect3Depth sub_F726C6
@@ -172524,7 +172533,8 @@ sub_F7263A_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7267E:
+; SmfCC_Effect3Depth_MultiTrack: SmfEvent_ControlChange_MultiTrack's `cp A,93` arm, CC 93 -- the multi-track copy of SmfCC_Effect3Depth.
+SmfCC_Effect3Depth_MultiTrack:
 	m_bit 0, MD16, 0x11b1	; F7267E  bit 0,(0x11b1)
 	jr	nz, sub_F7267E_Skip	; F72682  jr NZ,0xf7268c
 	calr	SmfPart_SetEffect3Depth	; F72684  calr 0xf709a3
@@ -172538,7 +172548,7 @@ sub_F7267E_Skip:
 	ret	; F726A1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F726A2
+; SmfCC_Effect4Depth_MultiTrack
 ; Called from: in-module: 0xF72306
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
 ; Calls:   SmfPart_SetEffect4Depth sub_F726C6
@@ -172550,7 +172560,8 @@ sub_F7267E_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F726A2:
+; SmfCC_Effect4Depth_MultiTrack: SmfEvent_ControlChange_MultiTrack's `cp A,94` arm, CC 94 -- the multi-track copy of SmfCC_Effect4Depth.
+SmfCC_Effect4Depth_MultiTrack:
 	m_bit 0, MD16, 0x11b1	; F726A2  bit 0,(0x11b1)
 	jr	nz, sub_F726A2_Skip	; F726A6  jr NZ,0xf726b0
 	calr	SmfPart_SetEffect4Depth	; F726A8  calr 0xf709da
