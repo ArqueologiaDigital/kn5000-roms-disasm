@@ -491,6 +491,14 @@ ROWS = [
      "for the entry DiskFile_FindFirst/_FindNext left at 0x60A080: if a record among the twenty 16-byte records at\n"
      "0x60A480 starts with the same two name characters, sub_FE0F6B merges it; otherwise, unless the entry is deleted\n"
      "(0xE5) or a .MID file or the table is full (0x840), sub_FE10AA and its 11-byte name go to a new record at (0x222B)."),
+    ("FAA742", "Tempo_ApplyBpm",
+     "unless MidiCfg_ModeBits bit 2: the BPM in the low 9 bits of (0x7EE2), reset to 120 when outside 40..300,\n"
+     "to (0x60F800); TREG5 = 140,000,000 / (64 * BPM), rounded (FINDINGS-system-clock.md, lever B -- which quotes the\n"
+     "byte-identical stale copy at 0xFAA342); then SysExTx_Tempo through T_F408EC unless MidiCfg_ModeBits bit 4 or\n"
+     "(0x60F020) bit 4, which it clears.  18 call sites, among them List2030_Tempo_Apply and ParamModule_BootPhase1."),
+    ("F31852", "LCD_BlankThenSetPanel3Layer_Copy",
+     "byte for byte LCD_BlankThenSetPanel3Layer (prom_a 0xF99000): SWI 7 service 0x0C with C = 0, then 0x10.\n"
+     "wsa1_exact_copy_names.py refuses it only because prom_a has two names for that body; 36 call sites."),
 ]
 
 

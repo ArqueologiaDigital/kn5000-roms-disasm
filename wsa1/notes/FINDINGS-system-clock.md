@@ -68,6 +68,11 @@ beats-per-bar value at (0x605000) and the bar number at (0x605002).
 
 The tempo setter at 0xFAA350:
 
+> **2026-10-04:** 0xFAA350 is inside the STALE copy at 0xFAA000-0xFAA3FF (`ParamModule_PhaseVector_StaleCopy`,
+> nothing calls into it). The live setter is `Tempo_ApplyBpm` at 0xFAA742. Its 105 bytes are byte-identical to
+> 0xFAA342-0xFAA3AA, so every instruction below is at its address + 0x400 in the live copy
+> (`ld XDE,0x08583B00` at 0xFAA778). The BPM it reads is the low 9 bits of (0x7EE2).
+
     faa350: 9a 00 20        ld WA,(XDE+0x00)
     faa353: d8 cc ff 01     and WA,0x01FF
     faa357: d8 cf 28 00     cp WA,0x0028        ; BPM >= 40 ?

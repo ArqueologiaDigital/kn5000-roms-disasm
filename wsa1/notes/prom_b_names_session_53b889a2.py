@@ -2730,4 +2730,6 @@ RENAMES = [
     ("sub_F7F668", "Quantize_RedrawFields"),
     ("sub_F7F99C", "Vel0cityChange_RedrawFields"),
     ("sub_F7FCE6", "Transp0se_RedrawFields"),
+    ("sub_FAA742", "Tempo_ApplyBpm"),
+    ("sub_F31852", "LCD_BlankThenSetPanel3Layer_Copy"),
 ]

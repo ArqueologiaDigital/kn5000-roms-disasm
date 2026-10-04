@@ -152,7 +152,7 @@ references); `T_F417F4`, the second interpreter, is second (269).
 | `0x03` | draw bitmap: `IX` = position, `BC` = width in **bytes**, `HL` = height in rows, `XIY` = bitmap | three call sites where `BC × HL` is *exactly* the size of the contiguous data at `XIY` (1×16 at `0xF318EE`, 1×16 at `0xF318FE`, 5×15 = 75 at `0xF31952`) and the blocks abut with no slack |
 | `0x06` | draw characters: `XIY` = character table, `HL` = index, `BC` = count | `PrintHex32_XIY` passes the literal ASCII table `"0123456789ABCDEF"` at `0xF319E9` with `HL` = a nibble and `BC` = 1 |
 | `0x05` | consumes the four words `(0x2530)`,`(0x2532)`,`(0x2534)`,`(0x2536)` set immediately before | callers only; a rectangle is the obvious reading and is **not** asserted |
-| `0x0C`, `0x10` | exist, take `C` (0 or 7 seen) | `sub_F31852`, `LCD_ShowAllLayers_StackFrame_Copy` |
+| `0x0C`, `0x10` | exist, take `C` (0 or 7 seen) | `LCD_BlankThenSetPanel3Layer_Copy`, `LCD_ShowAllLayers_StackFrame_Copy` |
 
 ## The character set
 

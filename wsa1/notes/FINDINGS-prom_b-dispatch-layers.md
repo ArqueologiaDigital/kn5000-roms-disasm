@@ -33,7 +33,7 @@ targets (`T_F41ED0` x39, `T_F41ED4` x109):
 
 `Dispatch_Code80_Bracketed` (`0xF5B8B6`) wraps the call in `swi 7` function `0x0C`
 with `C = 0` plus function `0x10` before, and function `0x0C` with `C = 7` after —
-the same two services `sub_F31852`/`LCD_ShowAllLayers_StackFrame_Copy` issue inside the display-list
+the same two services `LCD_BlankThenSetPanel3Layer_Copy`/`LCD_ShowAllLayers_StackFrame_Copy` issue inside the display-list
 block. `Dispatch_Code80` (`0xF5B9B8`) takes an extra byte argument in `A` and
 sets bit 3 of `(0x2075)` afterwards instead.
 

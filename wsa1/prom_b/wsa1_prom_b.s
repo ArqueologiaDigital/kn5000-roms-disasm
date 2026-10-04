@@ -950,7 +950,7 @@
 	.set	T_F407E8_Nop, 0xFAA71D
 	.set	T_F407E4_Nop, 0xFAA71E
 	.set	sub_FAA71F, 0xFAA71F
-	.set	sub_FAA742, 0xFAA742
+	.set	Tempo_ApplyBpm, 0xFAA742
 	.set	T_F407A4_Nop, 0xFAA7AB
 	.set	sub_FAA967, 0xFAA967
 	.set	sub_FAAA8F, 0xFAAA8F
@@ -66380,7 +66380,7 @@ DisplayListB_RunOne_Stack:
 	ret	; F31851  ret
 
 ; ---------------------------------------------------------------------
-; sub_F31852 -- issues service 0x0C then service 0x10, both with C = 0
+; LCD_BlankThenSetPanel3Layer_Copy -- issues service 0x0C then service 0x10, both with C = 0
 ;
 ; Called from: not yet traced
 ; Inputs:  none (C is zeroed here)
@@ -66389,7 +66389,9 @@ DisplayListB_RunOne_Stack:
 ;          service 0x0C with C = 7, so C looks like a mode selector, but that is
 ;          an inference from two data points and is NOT asserted.
 ; ---------------------------------------------------------------------
-sub_F31852:
+; LCD_BlankThenSetPanel3Layer_Copy: byte for byte LCD_BlankThenSetPanel3Layer (prom_a 0xF99000): SWI 7 service 0x0C with C = 0, then 0x10.
+;   wsa1_exact_copy_names.py refuses it only because prom_a has two names for that body; 36 call sites.
+LCD_BlankThenSetPanel3Layer_Copy:
 	push	xiz	; F31852  push XIZ
 	push	xix	; F31853  push XIX
 	push	xhl	; F31854  push XHL
@@ -88497,7 +88499,7 @@ T_F40784:	jp sub_FABD33  ; -> prom_a 0x2BD33   x2
 	.fill 0x3, 1, 0x00  ; 0xF40789: 3 x nop
 T_F4078C:	jp sub_FAA418  ; -> prom_a 0x2A418   x2
 T_F40790:	jp sub_FAA43A  ; -> prom_a 0x2A43A   x6
-T_F40794:	jp sub_FAA742  ; -> prom_a 0x2A742   x13
+T_F40794:	jp Tempo_ApplyBpm  ; -> prom_a 0x2A742   x13
 T_ParamMsg_RefreshPartMasks:	jp ParamMsg_RefreshPartMasks  ; -> prom_a 0x2BFE2   x1
 T_F4079C:	jp sub_FAB643  ; -> prom_a 0x2B643
 T_F407A0:	jp T_F407A0_Nop  ; -> prom_a 0x2B5EA   x4
@@ -90666,7 +90668,7 @@ T_DisplayList_RunOne_Stack:	jp DisplayList_RunOne_Stack  ; F42E08 (was T_F42E08)
 ; Evidence: slot 0xF42E0C is `jp 0xF3183D`; prom_b 0xF3183D carries the label
 ;           DisplayListB_RunOne_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DisplayListB_RunOne_Stack:	jp DisplayListB_RunOne_Stack  ; F42E0C (was T_F42E0C) -> prom_b 0x3183D   x107
-T_F42E10:	jp sub_F31852  ; -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
+T_F42E10:	jp LCD_BlankThenSetPanel3Layer_Copy  ; -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
 T_LCD_ShowAllLayers_StackFrame_Copy:	jp LCD_ShowAllLayers_StackFrame_Copy  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
 T_F42E18:	jp sub_F31899  ; -> prom_b 0x31899   x9
 T_F42E1C:	jp sub_F3190E  ; -> prom_b 0x3190E   x1
@@ -127556,7 +127558,7 @@ Gfx_DrawLine_Dashed:		; <- T_Gfx_DrawLine_Dashed
 ;           `call 0xF5BF21` after; 0xF5BF18 is `ld C,0 / ld A,0x0C / swi 7 /
 ;           ld A,0x10 / swi 7` and 0xF5BF21 is `ld C,7 / ld A,0x0C / swi 7` --
 ;           the same services 0x0C (argument in C, 0 or 7 seen) and 0x10 that
-;           sub_F31852 and LCD_ShowAllLayers_StackFrame_Copy in the interpreter block issue.
+;           LCD_BlankThenSetPanel3Layer_Copy and LCD_ShowAllLayers_StackFrame_Copy in the interpreter block issue.
 ; Unknown:  what the selector enumerates; what services 0x0C and 0x10 do.
 ; ---------------------------------------------------------------------
 Dispatch_Code80_Bracketed:

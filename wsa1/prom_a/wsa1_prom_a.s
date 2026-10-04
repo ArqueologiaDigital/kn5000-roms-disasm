@@ -78230,7 +78230,11 @@ sub_FAA71F:
 .LFAA740:
 	popw de                                              ; FAA740  4a
 	ret                                                  ; FAA741  0e
-sub_FAA742:
+; Tempo_ApplyBpm: unless MidiCfg_ModeBits bit 2: the BPM in the low 9 bits of (0x7EE2), reset to 120 when outside 40..300,
+;   to (0x60F800); TREG5 = 140,000,000 / (64 * BPM), rounded (FINDINGS-system-clock.md, lever B -- which quotes the
+;   byte-identical stale copy at 0xFAA342); then SysExTx_Tempo through T_F408EC unless MidiCfg_ModeBits bit 4 or
+;   (0x60F020) bit 4, which it clears.  18 call sites, among them List2030_Tempo_Apply and ParamModule_BootPhase1.
+Tempo_ApplyBpm:
 	m_bit 2, MD16, MidiCfg_ModeBits                                ; FAA742  f1 32 7f ca
 	jr nz, .LFAA7AA                                      ; FAA746  6e 62
 	push XWA                                             ; FAA748  38
@@ -78385,7 +78389,7 @@ ParamModule_BootPhase2_MemoryLost:
 	pop XHL                                              ; FAA8AA  5b
 	pop XDE                                              ; FAA8AB  5a
 	calr sub_FAAAB5                                      ; FAA8AC  1e 06 02
-	call sub_FAA742                                      ; FAA8AF  1d 42 a7 fa
+	call Tempo_ApplyBpm                                      ; FAA8AF  1d 42 a7 fa
 	ld h, 0x00:opc                                          ; FAA8B3  26 00
 .LFAA8B5:
 	pushw 0x7f                                           ; FAA8B5  0b 7f 00
@@ -78437,7 +78441,7 @@ ParamModule_BootPhase1_MemoryIntact:
 	pop XHL                                              ; FAA907  5b
 	pop XDE                                              ; FAA908  5a
 	calr sub_FAAAB5                                      ; FAA909  1e a9 01
-	call sub_FAA742                                      ; FAA90C  1d 42 a7 fa
+	call Tempo_ApplyBpm                                      ; FAA90C  1d 42 a7 fa
 	m_set 5, MD24, 0x60f021                              ; FAA910  f2 21 f0 60 bd
 	ld h, 0x00:opc                                          ; FAA915  26 00
 .LFAA917:
@@ -78626,7 +78630,7 @@ sub_FAAA8F:
 	pop XHL                                              ; FAAAA7  5b
 	pop XDE                                              ; FAAAA8  5a
 	calr sub_FAAAB5                                      ; FAAAA9  1e 09 00
-	call sub_FAA742                                      ; FAAAAC  1d 42 a7 fa
+	call Tempo_ApplyBpm                                      ; FAAAAC  1d 42 a7 fa
 	ret                                                  ; FAAAB0  0e
 sub_FAAAB1:
 	calr sub_FAAAB5                                      ; FAAAB1  1e 01 00
@@ -79294,7 +79298,7 @@ sub_FAAF91:
 	m_set 5, MD24, 0x60f021                              ; FAB0C1  f2 21 f0 60 bd
 	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAB0C6  1e 52 fa
 	calr sub_FAAD19                                      ; FAB0C9  1e 4d fc
-	call sub_FAA742                                      ; FAB0CC  1d 42 a7 fa
+	call Tempo_ApplyBpm                                      ; FAB0CC  1d 42 a7 fa
 	lda xix, (0x7620:16)                                ; FAB0D0  f1 20 76 34
 	lda xbc, (0x7000:16)                                ; FAB0D4  f1 00 70 31
 	ld (xiz-16), xbc                                     ; FAB0D8  be f0 61
@@ -80494,7 +80498,7 @@ Dispatch_By_60F080_Nop68:   ; entry: named by 3 `.long` operands, first at 0xFAC
 Dispatch_By_60F080_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFACA0A
 	ret                                                  ; FABB60  0e
 ; List2030_Tempo_Dispatch -- 0x2030-list handler for parameter 0x7A, the tempo: class 0 goes to List2030_Tempo_Apply, any other class is ignored
-; Evidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr sub_FAB1D8.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value sub_FAA742 clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways.
+; Evidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr sub_FAB1D8.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value Tempo_ApplyBpm clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways.
 List2030_Tempo_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
 	calr sub_FAB1D8                                          ; FABB61  1e 74 f6
 	ld bc, (0x60f088:24)                                ; FABB64  d2 88 f0 60 21
@@ -80507,8 +80511,8 @@ List2030_Tempo_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACAD
 .LFABB74:
 	ret                                                  ; FABB74  0e
 ; List2030_Tempo_Apply -- store a new tempo into parameter 0x7A's record (RAM 0x7EE2) when it differs, queue both bytes to 0x2C00 and reprogram the tempo timer
-; Evidence: `lda XIX,0x7ee2` at 0xFABB76; compares (0x60F089)/(0x60F08A) with (XIX)/(XIX+1) at 0xFABB7C/0xFABB88 and returns when both match; otherwise stores both, stages {0x7A,0,rec[0],0xFF} and {0x7A,1,rec[1],0x01} (0xFABBA4-0xFABBC6) and calls sub_FAA742 at 0xFABBC9.
-; sub_FAA742 reads (0x7EE2)&0x1FF, clamps it to 40..300 (default 120) and writes 0x08583B00/(tempo*64) to TREG5 (`st_dd8w DE,0x32`; 0x32 = TREG5L in tmp95c061_sfr.inc) unless bit 2 of (0x7F32), the external-clock bit, is set.
+; Evidence: `lda XIX,0x7ee2` at 0xFABB76; compares (0x60F089)/(0x60F08A) with (XIX)/(XIX+1) at 0xFABB7C/0xFABB88 and returns when both match; otherwise stores both, stages {0x7A,0,rec[0],0xFF} and {0x7A,1,rec[1],0x01} (0xFABBA4-0xFABBC6) and calls Tempo_ApplyBpm at 0xFABBC9.
+; Tempo_ApplyBpm reads (0x7EE2)&0x1FF, clamps it to 40..300 (default 120) and writes 0x08583B00/(tempo*64) to TREG5 (`st_dd8w DE,0x32`; 0x32 = TREG5L in tmp95c061_sfr.inc) unless bit 2 of (0x7F32), the external-clock bit, is set.
 List2030_Tempo_Apply:
 	push XIX                                             ; FABB75  3c
 	lda xix, (0x7ee2:16)                                ; FABB76  f1 e2 7e 34
@@ -80535,7 +80539,7 @@ List2030_Tempo_Apply:
 	ld (0x60f082:24), c                                 ; FABBBB  f2 82 f0 60 43
 	ld (0x60f083:24), 0x01                             ; FABBC0  f2 83 f0 60 00 01
 	calr Queue2C00_AppendStagedIfPending                                          ; FABBC6  1e 42 f6
-	call sub_FAA742                                      ; FABBC9  1d 42 a7 fa
+	call Tempo_ApplyBpm                                      ; FABBC9  1d 42 a7 fa
 .LFABBCD:
 	pop XIX                                              ; FABBCD  5c
 	ret                                                  ; FABBCE  0e
@@ -86246,7 +86250,7 @@ SeqEvt_LookupParamType:
 .LFAF0FD:
 	ret
 ; SeqEvt_ApplyTempo -- playback of a 0x80 sequencer event: write its 9-bit tempo into parameter 0x7A's record (RAM 0x7EE2), reprogram the tempo timer and publish {0x7A, 0, tempo, 0xFF} when the slot's apply bit is set
-; Evidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE (entry 0 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); `cp (0x60f308),0x80`; `ld XIX,0x00007ee2 / and (XIX),0xfe00 / or (XIX),WA`; `call T_F40794` (sub_FAA742, the 40..300 BPM clamp that loads TREG5); `ldw (0x60f080),0x7a` + T_Queue2C00_PublishStagedIfPending.
+; Evidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE (entry 0 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); `cp (0x60f308),0x80`; `ld XIX,0x00007ee2 / and (XIX),0xfe00 / or (XIX),WA`; `call T_F40794` (Tempo_ApplyBpm, the 40..300 BPM clamp that loads TREG5); `ldw (0x60f080),0x7a` + T_Queue2C00_PublishStagedIfPending.
 ; The decode side of SeqBuf_PutTempoEvent.
 SeqEvt_ApplyTempo:   ; entry: pointer-table entry
 	m_cp_mi8 MB24, 0x60f308, 0x80
