@@ -1,0 +1,22 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FC0BDA\b/Msg0716_PartSetProgramLow/g
+s/\bsub_FC0BFD\b/Msg0716_PartSetProgramHigh/g
+s/\bsub_FC0C20\b/Msg0716_PartSetVolume/g
+s/\bsub_FC0C50\b/Msg0716_PartPostCC40_Sustain/g
+s/\bsub_FC0C8E\b/Msg0716_PartPostCC0A_Pan/g
+s/\bsub_FC0CC6\b/Msg0716_PartPostCtrlInt9C/g
+s/\bsub_FC0CE3\b/Msg0716_PartPostCtrlInt9A/g
+s/\bsub_FC0D12\b/Msg0716_ScaleTuningPostTypeAndSemitones/g
+s/\bsub_FC0D19\b/Msg0716_ScaleTuningPostChangedFields/g
+s/\bsub_FC0D2F\b/Msg0716_ScaleTuningPostSemitone/g
+s/\bsub_FC0E12\b/Msg0716_PostCC07_VolumePart20/g
+s/\bsub_FC0E21\b/Msg0716_RepostPart0Volume/g
+s/\bsub_FC0E36\b/Msg0716_RepostPart0Pan/g
+s/\bsub_FC1918\b/Msg0716_PartPostProgramChange/g
+s/\bsub_FC101E\b/Msg0716_PartPostCC78_AllSoundOff/g
+s/\bsub_FC0F4E\b/Msg0716_FlushPendingParts0to15/g
+s/\bsub_FC0F85\b/Msg0716_FlushPendingParts16to31/g
+s/\bsub_FC0E6B\b/Msg0716_FlushPending/g
+s/\bsub_FC0E56\b/Msg0716_FlushIfPending/g
+s/\bT_F40FB4\b/T_Msg0716_FlushIfPending/g
+s/\bT_F40FCC\b/T_Msg0716_FlushPending/g

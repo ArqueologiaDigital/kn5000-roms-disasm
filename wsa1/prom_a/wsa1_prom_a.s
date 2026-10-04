@@ -1349,7 +1349,7 @@
 	.set T_UiEventList_RunPassC,                                                        0x00F40F64
 	.set T_PanelHold_Tick,                                                              0x00F40F74
 	.set T_Msg0716_InitAllRecords_Entry,                                                                      0x00F40FB0
-	.set T_F40FB4,                                                                      0x00F40FB4
+	.set T_Msg0716_FlushIfPending,                                                                      0x00F40FB4
 	.set T_F40FD0,                                                                      0x00F40FD0
 	.set T_F40FDC,                                                                      0x00F40FDC
 	.set T_F40FEC,                                                                      0x00F40FEC
@@ -17346,7 +17346,7 @@ UiListB_Shared:
 ;          `cp (XIX),0xffff`.
 ; ---------------------------------------------------------------------
 UiEventPassB_TailList:
-	.long T_F40FB4                              ; F88E91  [0]   -> 0xF40FB4
+	.long T_Msg0716_FlushIfPending                              ; F88E91  [0]   -> 0xF40FB4
 	.long T_F411B4                              ; F88E95  [1]   -> 0xF411B4
 	.long T_PanelScreen_RequestRedrawIfFieldQueued                              ; F88E99  [2]   -> 0xF40290
 	.long T_MidiIn_ServiceDeferred              ; F88E9D  [3]   -> 0xF40758
@@ -111872,19 +111872,19 @@ Msg0716_DispatchIndex_Twin:
 ;          lengths are all checks there.
 ; ---------------------------------------------------------------------
 Msg0716_HandlerTables:
-	.long sub_FC0BDA                                 ; FC09CE  [  0]
-	.long sub_FC0BFD                                 ; FC09D2  [  1]
+	.long Msg0716_PartSetProgramLow                                 ; FC09CE  [  0]
+	.long Msg0716_PartSetProgramHigh                                 ; FC09D2  [  1]
 	.long Msg0716_HandlerTables_Nop2                                 ; FC09D6  [  2]
-	.long sub_FC0C20                                 ; FC09DA  [  3]
-	.long sub_FC0C50                                 ; FC09DE  [  4]
+	.long Msg0716_PartSetVolume                                 ; FC09DA  [  3]
+	.long Msg0716_PartPostCC40_Sustain                                 ; FC09DE  [  4]
 	.long Msg0716_PartPostCC5D_Effect3Depth                                 ; FC09E2  [  5]
 	.long Msg0716_PartPostCtrlInt9B                                 ; FC09E6  [  6]
 	.long Msg0716_PartPostCC5B_Effect1Depth                                 ; FC09EA  [  7]
-	.long sub_FC0C8E                                 ; FC09EE  [  8]
+	.long Msg0716_PartPostCC0A_Pan                                 ; FC09EE  [  8]
 	.long Msg0716_PartPostCtrlInt82                                 ; FC09F2  [  9]
 	.long Msg0716_PartPostCtrlInt81                                 ; FC09F6  [ 10]
 	.long Msg0716_PartPostCtrlInt80                                 ; FC09FA  [ 11]
-	.long sub_FC0CC6                                 ; FC09FE  [ 12]
+	.long Msg0716_PartPostCtrlInt9C                                 ; FC09FE  [ 12]
 	.long Msg0716_HandlerTables_Nop13                                 ; FC0A02  [ 13]
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A06  [ 14]
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A0A  [ 15]
@@ -111911,7 +111911,7 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A5E  [ 36]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A62  [ 37]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A66  [ 38]
-	.long sub_FC0CE3                                 ; FC0A6A  [ 39]
+	.long Msg0716_PartPostCtrlInt9A                                 ; FC0A6A  [ 39]
 	.long Msg0716_PartPostCtrlInt99                                 ; FC0A6E  [ 40]
 	.long Msg0716_HandlerTables_Nop41                                 ; FC0A72  [ 41]
 	.long Msg0716_SetPendingBit4                                 ; FC0A76  [ 42]
@@ -111920,20 +111920,20 @@ Msg0716_HandlerTables:
 	.long Msg0716_SetPendingBit4                                 ; FC0A82  [ 45]
 	.long Msg0716_PostSysEx50_B2_Call                                 ; FC0A86  [ 46]
 	.long Msg0716_HandlerTables_Nop47                                 ; FC0A8A  [ 47]
-	.long sub_FC0D12                                 ; FC0A8E  [ 48]
-	.long sub_FC0D19                                 ; FC0A92  [ 49]
-	.long sub_FC0D2F                                 ; FC0A96  [ 50]
-	.long sub_FC0D2F                                 ; FC0A9A  [ 51]
-	.long sub_FC0D2F                                 ; FC0A9E  [ 52]
-	.long sub_FC0D2F                                 ; FC0AA2  [ 53]
-	.long sub_FC0D2F                                 ; FC0AA6  [ 54]
-	.long sub_FC0D2F                                 ; FC0AAA  [ 55]
-	.long sub_FC0D2F                                 ; FC0AAE  [ 56]
-	.long sub_FC0D2F                                 ; FC0AB2  [ 57]
-	.long sub_FC0D2F                                 ; FC0AB6  [ 58]
-	.long sub_FC0D2F                                 ; FC0ABA  [ 59]
-	.long sub_FC0D2F                                 ; FC0ABE  [ 60]
-	.long sub_FC0D2F                                 ; FC0AC2  [ 61]
+	.long Msg0716_ScaleTuningPostTypeAndSemitones                                 ; FC0A8E  [ 48]
+	.long Msg0716_ScaleTuningPostChangedFields                                 ; FC0A92  [ 49]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0A96  [ 50]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0A9A  [ 51]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0A9E  [ 52]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AA2  [ 53]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AA6  [ 54]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AAA  [ 55]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AAE  [ 56]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AB2  [ 57]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AB6  [ 58]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0ABA  [ 59]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0ABE  [ 60]
+	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AC2  [ 61]
 	.long sub_FC0DC5                                 ; FC0AC6  [ 62]
 	.long Msg0716_HandlerTables_Nop63                                 ; FC0ACA  [ 63]
 	.long sub_FC0DD3                                 ; FC0ACE  [ 64]
@@ -111963,7 +111963,7 @@ Msg0716_HandlerTables:
 	.long Msg0716_SetPendingBit6IfHighNibble                                 ; FC0B2E  [ 88]
 	.long Msg0716_SetPendingBit5                                 ; FC0B32  [ 89]
 	.long Msg0716_SetPendingBit5_B                                 ; FC0B36  [ 90]
-	.long sub_FC0E12                                 ; FC0B3A  [ 91]
+	.long Msg0716_PostCC07_VolumePart20                                 ; FC0B3A  [ 91]
 	.long Msg0716_HandlerTables_Nop92                                 ; FC0B3E  [ 92]
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B42  [ 93]
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B46  [ 94]
@@ -111983,8 +111983,8 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B7E  [108]
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B82  [109]
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B86  [110]
-	.long sub_FC0E21                                 ; FC0B8A  [111]
-	.long sub_FC0E36                                 ; FC0B8E  [112]
+	.long Msg0716_RepostPart0Volume                                 ; FC0B8A  [111]
+	.long Msg0716_RepostPart0Pan                                 ; FC0B8E  [112]
 	.long Msg0716_PostSysEx50_80_Call                                 ; FC0B92  [113]
 	.long Msg0716_PostSysEx50_81_Call                                 ; FC0B96  [114]
 	.long Msg0716_HandlerTables_Nop115                                 ; FC0B9A  [115]
@@ -112003,7 +112003,10 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop115                                 ; FC0BCE  [128]
 	.long Msg0716_HandlerTables_Nop129                                 ; FC0BD2  [129]
 	.long Msg0716_HandlerTables_Nop130                                 ; FC0BD6  [130]
-sub_FC0BDA:   ; entry: named by 1 `.long` operand, first at 0xFC09CE
+; Msg0716_PartSetProgramLow: table 0 entry 0: the part's RAM slot +0 = UiEvent_Byte2; its bit ORed into (0x0700) (parts 0..15) or (0x0702)
+;   (16..31), and (0x070F) bit 0 set -- nothing is posted here.  The pending pass (Msg0716_FlushPending) later sends
+;   Msg0716_PartPostProgramChange, whose message carries the slot's +0..+1 word as the program number.
+Msg0716_PartSetProgramLow:   ; entry: named by 1 `.long` operand, first at 0xFC09CE
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC0BDA  ae 00 25
 	ld BC,(XIZ+0x04)                                     ; FC0BDD  9e 04 21
 	ld h, (UiEvent_Byte2:16)                                   ; FC0BE0  c1 b9 20 26
@@ -112017,7 +112020,8 @@ sub_FC0BDA:   ; entry: named by 1 `.long` operand, first at 0xFC09CE
 .LFC0BF7:
 	m_or_mi8 MB16, 0x070f, 0x01                          ; FC0BF7  c1 0f 07 3e 01
 	ret                                                  ; FC0BFC  0e
-sub_FC0BFD:   ; entry: named by 1 `.long` operand, first at 0xFC09D2
+; Msg0716_PartSetProgramHigh: table 0 entry 1: the same as Msg0716_PartSetProgramLow for slot +1, the program number's high byte.
+Msg0716_PartSetProgramHigh:   ; entry: named by 1 `.long` operand, first at 0xFC09D2
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC0BFD  ae 00 25
 	ld BC,(XIZ+0x04)                                     ; FC0C00  9e 04 21
 	ld h, (UiEvent_Byte2:16)                                   ; FC0C03  c1 b9 20 26
@@ -112033,7 +112037,9 @@ sub_FC0BFD:   ; entry: named by 1 `.long` operand, first at 0xFC09D2
 	ret                                                  ; FC0C1E  0e
 Msg0716_HandlerTables_Nop2:   ; entry: named by 1 `.long` operand, first at 0xFC09D6
 	ret                                                  ; FC0C1F  0e
-sub_FC0C20:   ; entry: named by 1 `.long` operand, first at 0xFC09DA
+; Msg0716_PartSetVolume: table 0 entry 3: the bits UiEvent_Byte3 selects of the slot's +6 are replaced by UiEvent_Byte2's, then +6 is
+;   posted as CC 7 (Msg0716_PostCC07_VolumeWithOffset for part 0, Msg0716_PostCC07_VolumeFromA otherwise).
+Msg0716_PartSetVolume:   ; entry: named by 1 `.long` operand, first at 0xFC09DA
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC0C20  ae 00 25
 	ld a, (UiEvent_Byte3:16)                                   ; FC0C23  c1 ba 20 21
 	xor A,0xff                                           ; FC0C27  c9 cd ff
@@ -112052,7 +112058,9 @@ sub_FC0C20:   ; entry: named by 1 `.long` operand, first at 0xFC09DA
 	calr Msg0716_PostCC07_VolumeFromA                                          ; FC0C4C  1e d9 08
 .LFC0C4F:
 	ret                                                  ; FC0C4F  0e
-sub_FC0C50:   ; entry: named by 1 `.long` operand, first at 0xFC09DE
+; Msg0716_PartPostCC40_Sustain: table 0 entry 4: when UiEvent_Byte3 bit 3 is set and bit 0 of byte +0x2C of the part's 64-byte record
+;   (Msg0716_GetRecordPtrByIndex) is set, Msg0716_PostCC40_Sustain for the part.
+Msg0716_PartPostCC40_Sustain:   ; entry: named by 1 `.long` operand, first at 0xFC09DE
 	m_bit 3, MD16, UiEvent_Byte3                                ; FC0C50  f1 ba 20 cb
 	jr z, .LFC0C6F                                       ; FC0C54  66 19
 	ld W,(XIZ+0x06)                                      ; FC0C56  8e 06 20
@@ -112086,7 +112094,8 @@ Msg0716_PartPostCC5B_Effect1Depth:   ; entry: named by 1 `.long` operand, first 
 	ld (XIX+0x01),A                                      ; FC0C87  bc 01 41
 	calr Msg0716_PostCC5B_Effect1Depth                                          ; FC0C8A  1e 01 09
 	ret                                                  ; FC0C8D  0e
-sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
+; Msg0716_PartPostCC0A_Pan: table 0 entry 8: CC 10 for the part -- Msg0716_PostCC0A_PanWithOffset(UiEvent_Byte2 & 0x7F) for part 0, else Msg0716_PostCC0A_Pan.
+Msg0716_PartPostCC0A_Pan:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	ld A,(XIZ+0x06)                                      ; FC0C8E  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C91  bc 01 41
 	cp a, 0x00:i3                                          ; FC0C94  c9 d8
@@ -112120,7 +112129,8 @@ Msg0716_PartPostCtrlInt80:   ; entry: named by 1 `.long` operand, first at 0xFC0
 	ld (XIX+0x01),A                                      ; FC0CBF  bc 01 41
 	calr Msg0716_PostCtrlInt80                                          ; FC0CC2  1e 80 09
 	ret                                                  ; FC0CC5  0e
-sub_FC0CC6:   ; entry: named by 1 `.long` operand, first at 0xFC09FE
+; Msg0716_PartPostCtrlInt9C: table 0 entry 12: when UiEvent_Byte3 bit 3 is set, Msg0716_PostCtrlInt9C for the part.
+Msg0716_PartPostCtrlInt9C:   ; entry: named by 1 `.long` operand, first at 0xFC09FE
 	m_bit 3, MD16, UiEvent_Byte3                                ; FC0CC6  f1 ba 20 cb
 	jr z, .LFC0CD5                                       ; FC0CCA  66 09
 	ld A,(XIZ+0x06)                                      ; FC0CCC  8e 06 21
@@ -112140,7 +112150,8 @@ Msg0716_PartPostCtrlInt9B_Copy:   ; entry: named by 2 `.long` operands, first at
 	ret                                                  ; FC0CE1  0e
 Msg0716_HandlerTables_Nop19:   ; entry: named by 20 `.long` operands, first at 0xFC0A1A
 	ret                                                  ; FC0CE2  0e
-sub_FC0CE3:   ; entry: named by 1 `.long` operand, first at 0xFC0A6A
+; Msg0716_PartPostCtrlInt9A: table 1 entry 25: stores the part and calls Msg0716_PostCtrlInt9A, then falls into the `ret` at 0xFC0CEC.
+Msg0716_PartPostCtrlInt9A:   ; entry: named by 1 `.long` operand, first at 0xFC0A6A
 	ld A,(XIZ+0x06)                                      ; FC0CE3  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CE6  bc 01 41
 	calr Msg0716_PostCtrlInt9A                                          ; FC0CE9  1e e8 09
@@ -112176,11 +112187,15 @@ Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FC0D0F  0e
 	ret                                                  ; FC0D10  0e
 	ret                                                  ; FC0D11  0e
-sub_FC0D12:   ; entry: named by 1 `.long` operand, first at 0xFC0A8E
+; Msg0716_ScaleTuningPostTypeAndSemitones: table 3 entry 0: Msg0716_PostSysEx50_86, then ScaleTuning_PostAllTwelveSemitones.  Table 3 is the scale-tuning
+;   page: its entries 2..13 are the twelve semitones (Msg0716_ScaleTuningPostSemitone).
+Msg0716_ScaleTuningPostTypeAndSemitones:   ; entry: named by 1 `.long` operand, first at 0xFC0A8E
 	calr Msg0716_PostSysEx50_86                                          ; FC0D12  1e b8 0a
 	calr ScaleTuning_PostAllTwelveSemitones                                      ; FC0D15  1e 29 00
 	ret                                                  ; FC0D18  0e
-sub_FC0D19:   ; entry: named by 1 `.long` operand, first at 0xFC0A92
+; Msg0716_ScaleTuningPostChangedFields: table 3 entry 1: UiEvent_Byte3 (the changed bits) low nibble -> ScaleTuning_PostAllTwelveSemitones; bit 7 ->
+;   Msg0716_PostSysEx50_B1.
+Msg0716_ScaleTuningPostChangedFields:   ; entry: named by 1 `.long` operand, first at 0xFC0A92
 	ld a, (UiEvent_Byte3:16)                                   ; FC0D19  c1 ba 20 21
 sub_FC0D1D:
 	and A,0x0f                                           ; FC0D1D  c9 cc 0f
@@ -112192,7 +112207,9 @@ sub_FC0D1D:
 	calr Msg0716_PostSysEx50_B1                                          ; FC0D2B  1e d7 0a
 .LFC0D2E:
 	ret                                                  ; FC0D2E  0e
-sub_FC0D2F:   ; entry: named by 12 `.long` operands, first at 0xFC0A96
+; Msg0716_ScaleTuningPostSemitone: table 3 entries 2..13: when the temperament (0x78A2) is 0x80, the user copy (ScaleTuning_PostAllTwelveSemitones' RAM arm),
+;   ScaleTuning_PostSemitoneFromUserRam(UiEvent_Byte1 - 2) -- semitone 0..11.
+Msg0716_ScaleTuningPostSemitone:   ; entry: named by 12 `.long` operands, first at 0xFC0A96
 	m_cp_mi8 MB16, 0x78a2, 0x80                          ; FC0D2F  c1 a2 78 3f 80
 	jr nz, .LFC0D40                                      ; FC0D34  6e 0a
 	ld a, (UiEvent_Byte1:16)                                   ; FC0D36  c1 b8 20 21
@@ -112361,7 +112378,8 @@ Msg0716_SetPendingBit5_B:   ; entry: named by 1 `.long` operand, first at 0xFC0B
 	m_set 5, MD16, 0x070e                                ; FC0E09  f1 0e 07 bd
 	m_set 0, MD16, 0x070f                                ; FC0E0D  f1 0f 07 b8
 	ret                                                  ; FC0E11  0e
-sub_FC0E12:   ; entry: named by 1 `.long` operand, first at 0xFC0B3A
+; Msg0716_PostCC07_VolumePart20: table 7 entry 3: Msg0716_PostCC07_Volume with part byte 0x20, one past the 32 parts.
+Msg0716_PostCC07_VolumePart20:   ; entry: named by 1 `.long` operand, first at 0xFC0B3A
 	ld XIX,0x00000716                                    ; FC0E12  44 16 07 00 00
 	ld (XIX+0x01),0x20                                   ; FC0E17  bc 01 00 20
 	calr Msg0716_PostCC07_Volume                                          ; FC0E1B  1e fd 06
@@ -112370,14 +112388,18 @@ Msg0716_HandlerTables_Nop92:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FC0E1F  0e
 Msg0716_HandlerTables_Nop93:   ; entry: named by 18 `.long` operands, first at 0xFC0B42
 	ret                                                  ; FC0E20  0e
-sub_FC0E21:   ; entry: named by 1 `.long` operand, first at 0xFC0B8A
+; Msg0716_RepostPart0Volume: table 8 entry 18: Msg0716_PostCC07_VolumeWithOffset for part 0 with (0x0606), part 0's slot +6 -- the value
+;   Msg0716_PartSetVolume keeps there.
+Msg0716_RepostPart0Volume:   ; entry: named by 1 `.long` operand, first at 0xFC0B8A
 	ld XIY,0x00000600                                    ; FC0E21  45 00 06 00 00
 	ld A,(XIY+0x06)                                      ; FC0E26  8d 06 21
 	ld XIX,0x00000716                                    ; FC0E29  44 16 07 00 00
 	ld (XIX+0x01),0x00                                   ; FC0E2E  bc 01 00 00
 	calr Msg0716_PostCC07_VolumeWithOffset                                          ; FC0E32  1e 10 07
 	ret                                                  ; FC0E35  0e
-sub_FC0E36:   ; entry: named by 1 `.long` operand, first at 0xFC0B8E
+; Msg0716_RepostPart0Pan: table 8 entry 19: Msg0716_PostCC0A_PanWithOffset for part 0 with (0x76AA) & 0x7F, byte +8 of part 0's 64-byte
+;   record 0x76A2.
+Msg0716_RepostPart0Pan:   ; entry: named by 1 `.long` operand, first at 0xFC0B8E
 	ld a, (0x76aa:16)                                   ; FC0E36  c1 aa 76 21
 	and A,0x7f                                           ; FC0E3A  c9 cc 7f
 	ld XIX,0x00000716                                    ; FC0E3D  44 16 07 00 00
@@ -112400,15 +112422,20 @@ Msg0716_HandlerTables_Nop130:   ; entry: named by 1 `.long` operand, first at 0x
 	ret                                                  ; FC0E54  0e
 sub_FC06CC_Nop:
 	ret                                                  ; FC0E55  0e
-sub_FC0E56:
+; Msg0716_FlushIfPending: when (0x070F) bit 0 is set -- the bit every Msg0716_PartSetProgram* sets -- Msg0716_FlushPending and clear it; then
+;   (0x60F021) bit 5 is cleared.
+Msg0716_FlushIfPending:
 	m_bit 0, MD16, 0x070f                                ; FC0E56  f1 0f 07 c8
 	jr z, .LFC0E64                                       ; FC0E5A  66 08
-	calr sub_FC0E6B                                      ; FC0E5C  1e 0c 00
+	calr Msg0716_FlushPending                                      ; FC0E5C  1e 0c 00
 	m_and_mi8 MB16, 0x070f, 0xfe                         ; FC0E5F  c1 0f 07 3c fe
 .LFC0E64:
 	m_and_mi8 MB24, 0x60f021, 0xdf                       ; FC0E64  c2 21 f0 60 3c df
 	ret                                                  ; FC0E6A  0e
-sub_FC0E6B:
+; Msg0716_FlushPending: the (0x070E) group posts when it is non-zero, then Msg0716_FlushPendingParts0to15 / 16to31 for a non-zero (0x0700) /
+;   (0x0702) (after clearing those parts from (0x0706) / (0x0708)), two conditional extras, and finally clears
+;   0x0700..0x070E.
+Msg0716_FlushPending:
 	m_cp_mi8 MB16, 0x070e, 0x00                          ; FC0E6B  c1 0e 07 3f 00
 	jr z, .LFC0E7B                                       ; FC0E70  66 09
 	calr sub_FC0FC5                                      ; FC0E72  1e 50 01
@@ -112420,14 +112447,14 @@ sub_FC0E6B:
 	ld wa, (0x0700:16)                                 ; FC0E83  d1 00 07 20
 	xor WA,0xffff                                        ; FC0E87  d8 cd ff ff
 	and	(0x0706:16), wa                      ; FC0E8B  d1 06 07 c8
-	calr sub_FC0F4E                                      ; FC0E8F  1e bc 00
+	calr Msg0716_FlushPendingParts0to15                                      ; FC0E8F  1e bc 00
 .LFC0E92:
 	m_cp_mi16 MW16, 0x0702, 0x0000                       ; FC0E92  d1 02 07 3f 00 00
 	jr z, .LFC0EA9                                       ; FC0E98  66 0f
 	ld wa, (0x0702:16)                                 ; FC0E9A  d1 02 07 20
 	xor WA,0xffff                                        ; FC0E9E  d8 cd ff ff
 	and	(0x0708:16), wa                      ; FC0EA2  d1 08 07 c8
-	calr sub_FC0F85                                      ; FC0EA6  1e dc 00
+	calr Msg0716_FlushPendingParts16to31                                      ; FC0EA6  1e dc 00
 .LFC0EA9:
 	m_bit 5, MD24, 0x60f021                              ; FC0EA9  f2 21 f0 60 cd
 	jr nz, .LFC0ED6                                      ; FC0EAE  6e 26
@@ -112481,7 +112508,8 @@ sub_FC0F02:
 	ldw (0x070c:16), 0x00                                ; FC0F42  f1 0c 07 02 00 00
 	ld (0x070e:16), 0x00                                 ; FC0F48  f1 0e 07 00 00
 	ret                                                  ; FC0F4D  0e
-sub_FC0F4E:
+; Msg0716_FlushPendingParts0to15: for each part 0..15 whose bit is set in (0x0700): Msg0716_PartPostCC78_AllSoundOff then Msg0716_PartPostProgramChange.
+Msg0716_FlushPendingParts0to15:
 	ld XIX,0x00000716                                    ; FC0F4E  44 16 07 00 00
 	ld XIZ,Msg0716_ObjectRecords                         ; FC0F53  46 90 08 fc 00
 	ld c, 0x00:opc                                          ; FC0F58  23 00
@@ -112494,8 +112522,8 @@ sub_FC0F4E:
 	.byte 0xd7, 0x3e, 0x2a                               ; FC0F67  d7 3e 2a   xorcf A,QHL3
 	ld_erpb_rr a, 0x3c                                   ; FC0F6A  c7 3c 89   ld A,RL3
 	jr c, .LFC0F75                                       ; FC0F6D  67 06
-	calr sub_FC101E                                      ; FC0F6F  1e ac 00
-	calr sub_FC1918                                          ; FC0F72  1e a3 09
+	calr Msg0716_PartPostCC78_AllSoundOff                                      ; FC0F6F  1e ac 00
+	calr Msg0716_PartPostProgramChange                                          ; FC0F72  1e a3 09
 .LFC0F75:
 	inc 1,C                                              ; FC0F75  cb 61
 	cp C,0x0f                                            ; FC0F77  cb cf 0f
@@ -112504,7 +112532,8 @@ sub_FC0F4E:
 	jr .LFC0F5E                                          ; FC0F82  68 da
 .LFC0F84:
 	ret                                                  ; FC0F84  0e
-sub_FC0F85:
+; Msg0716_FlushPendingParts16to31: the same over (0x0702) and parts 16..31 (Msg0716_ObjectRecords + 0x80).
+Msg0716_FlushPendingParts16to31:
 	ld XIX,0x00000716                                    ; FC0F85  44 16 07 00 00
 	ld XIZ,Msg0716_ObjectRecords+0x80                    ; FC0F8A  46 10 09 fc 00
 	ld c, 0x00:opc                                          ; FC0F8F  23 00
@@ -112517,8 +112546,8 @@ sub_FC0F85:
 	.byte 0xd7, 0x3e, 0x2a                               ; FC0F9E  d7 3e 2a   xorcf A,QHL3
 	ld_erpb_rr a, 0x3c                                   ; FC0FA1  c7 3c 89   ld A,RL3
 	jr c, .LFC0FAC                                       ; FC0FA4  67 06
-	calr sub_FC101E                                      ; FC0FA6  1e 75 00
-	calr sub_FC1918                                          ; FC0FA9  1e 6c 09
+	calr Msg0716_PartPostCC78_AllSoundOff                                      ; FC0FA6  1e 75 00
+	calr Msg0716_PartPostProgramChange                                          ; FC0FA9  1e 6c 09
 .LFC0FAC:
 	inc 1,C                                              ; FC0FAC  cb 61
 	cp C,0x0f                                            ; FC0FAE  cb cf 0f
@@ -112582,7 +112611,9 @@ sub_FC0FF3:
 	jr ule, .LFC100C                                     ; FC101B  63 ef
 .LFC101D:
 	ret                                                  ; FC101D  0e
-sub_FC101E:
+; Msg0716_PartPostCC78_AllSoundOff: unless (0x7F0B) bit 0, and -- when (0x070E) bit 5 or 6 is set -- only for parts above 7: Msg0716_PostCC78_AllSoundOff
+;   for the part.  Called by the pending-part loops before the program change.
+Msg0716_PartPostCC78_AllSoundOff:
 	m_bit 0, MD16, 0x7f0b                                ; FC101E  f1 0b 7f c8
 	jr nz, .LFC1041                                      ; FC1022  6e 1d
 	m_bit 5, MD16, 0x070e                                ; FC1024  f1 0e 07 cd
@@ -113665,7 +113696,9 @@ Msg0716_PostValueClamped:
 	ldw bc, 0x04                                         ; FC1911  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1914  1e 03 01
 	ret                                                  ; FC1917  0e
-sub_FC1918:
+; Msg0716_PartPostProgramChange: XIY = the part's RAM slot (object record +0), part byte = record +6, then Msg0716_PostProgramChange
+;   (C0 <part> <slot +0..+1> 00).  Called by the pending-part loops.
+Msg0716_PartPostProgramChange:
 	pushw bc                                             ; FC1918  29
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC1919  ae 00 25
 	ld A,(XIZ+0x06)                                      ; FC191C  8e 06 21

@@ -113,6 +113,20 @@ entries that only store the part and call one builder are `Msg0716_Part<builder>
 handler, the index (0x20B8), is still not established.
 
 
+**Program changes are deferred (2026-10-04).** An object record's +0..+3 is the address of the part's 8-byte RAM slot
+0x0600 + 8n (+0 = 8n, +1 = 0x06), and +4..+5 is its bit.
+
+- `Msg0716_PartSetProgramLow` / `_High` (table 0, entries 0 and 1) post nothing. They store UiEvent_Byte2 into the
+  slot's +0 / +1, OR the part's bit into (0x0700) (parts 0..15) or (0x0702) (parts 16..31), and set (0x070F) bit 0.
+- `Msg0716_FlushIfPending` (thunk `T_Msg0716_FlushIfPending`) sees that bit and runs `Msg0716_FlushPending`.
+- `Msg0716_FlushPending` sends, for every marked part, `Msg0716_PartPostCC78_AllSoundOff` and then
+  `Msg0716_PartPostProgramChange`. The second is `C0 <part> <slot +0..+1> 00`, a 16-bit program number.
+- So a part whose program is edited is silenced and re-programmed once per pass, however many bytes changed.
+- `Msg0716_PartSetVolume` keeps the part's volume in slot +6, which `Msg0716_RepostPart0Volume` re-sends for part 0.
+- Table 3 is the scale-tuning page: entry 0 is `Msg0716_ScaleTuningPostTypeAndSemitones`, entries 2..13 are the
+  twelve semitones (`Msg0716_ScaleTuningPostSemitone`). Evidence per routine: the rows of
+  `notes/prom_ab_read_names_2026_10_04.py`.
+
 What any handler does. The four strings — `Sound Name *****`, `Combi Name *****`,
 `Combi Group Name`, `EXT Silent Group` — are the only words in the module and
 **every one of them is a fallback**, loaded only when a pointer compares equal to

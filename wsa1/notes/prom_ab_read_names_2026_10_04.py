@@ -902,6 +902,60 @@ ROWS = [
      "group (0x2737)) up to T_SoundGroup_MaxMemberIndex_ByStack, Text_FF4291 after it."),
     ("FF7399", "L0adSingleC0mbination_DrawGroupCombinations",
      "the same over a combination group (T_CombiGroup_MaxMemberIndex_ByStack)."),
+    # prom_a 0xFC0BDA-0xFC1918: Msg0716_HandlerTables entries and the pending-part pass.  A part's object record (XIZ) holds
+    # at +0 the address of its 8-byte RAM slot 0x0600 + 8n and at +4 its bit 1 << (n mod 16) (FINDINGS-prom_a-msg0716-module.md).
+    ("FC0BDA", "Msg0716_PartSetProgramLow",
+     "table 0 entry 0: the part's RAM slot +0 = UiEvent_Byte2; its bit ORed into (0x0700) (parts 0..15) or (0x0702)\n"
+     "(16..31), and (0x070F) bit 0 set -- nothing is posted here.  The pending pass (Msg0716_FlushPending) later sends\n"
+     "Msg0716_PartPostProgramChange, whose message carries the slot's +0..+1 word as the program number."),
+    ("FC0BFD", "Msg0716_PartSetProgramHigh",
+     "table 0 entry 1: the same as Msg0716_PartSetProgramLow for slot +1, the program number's high byte."),
+    ("FC0C20", "Msg0716_PartSetVolume",
+     "table 0 entry 3: the bits UiEvent_Byte3 selects of the slot's +6 are replaced by UiEvent_Byte2's, then +6 is\n"
+     "posted as CC 7 (Msg0716_PostCC07_VolumeWithOffset for part 0, Msg0716_PostCC07_VolumeFromA otherwise)."),
+    ("FC0C50", "Msg0716_PartPostCC40_Sustain",
+     "table 0 entry 4: when UiEvent_Byte3 bit 3 is set and bit 0 of byte +0x2C of the part's 64-byte record\n"
+     "(Msg0716_GetRecordPtrByIndex) is set, Msg0716_PostCC40_Sustain for the part."),
+    ("FC0C8E", "Msg0716_PartPostCC0A_Pan",
+     "table 0 entry 8: CC 10 for the part -- Msg0716_PostCC0A_PanWithOffset(UiEvent_Byte2 & 0x7F) for part 0, else Msg0716_PostCC0A_Pan."),
+    ("FC0CC6", "Msg0716_PartPostCtrlInt9C",
+     "table 0 entry 12: when UiEvent_Byte3 bit 3 is set, Msg0716_PostCtrlInt9C for the part."),
+    ("FC0CE3", "Msg0716_PartPostCtrlInt9A",
+     "table 1 entry 25: stores the part and calls Msg0716_PostCtrlInt9A, then falls into the `ret` at 0xFC0CEC."),
+    ("FC0D12", "Msg0716_ScaleTuningPostTypeAndSemitones",
+     "table 3 entry 0: Msg0716_PostSysEx50_86, then ScaleTuning_PostAllTwelveSemitones.  Table 3 is the scale-tuning\n"
+     "page: its entries 2..13 are the twelve semitones (Msg0716_ScaleTuningPostSemitone)."),
+    ("FC0D19", "Msg0716_ScaleTuningPostChangedFields",
+     "table 3 entry 1: UiEvent_Byte3 (the changed bits) low nibble -> ScaleTuning_PostAllTwelveSemitones; bit 7 ->\n"
+     "Msg0716_PostSysEx50_B1."),
+    ("FC0D2F", "Msg0716_ScaleTuningPostSemitone",
+     "table 3 entries 2..13: when the temperament (0x78A2) is 0x80, the user copy (ScaleTuning_PostAllTwelveSemitones' RAM arm),\n"
+     "ScaleTuning_PostSemitoneFromUserRam(UiEvent_Byte1 - 2) -- semitone 0..11."),
+    ("FC0E12", "Msg0716_PostCC07_VolumePart20",
+     "table 7 entry 3: Msg0716_PostCC07_Volume with part byte 0x20, one past the 32 parts."),
+    ("FC0E21", "Msg0716_RepostPart0Volume",
+     "table 8 entry 18: Msg0716_PostCC07_VolumeWithOffset for part 0 with (0x0606), part 0's slot +6 -- the value\n"
+     "Msg0716_PartSetVolume keeps there."),
+    ("FC0E36", "Msg0716_RepostPart0Pan",
+     "table 8 entry 19: Msg0716_PostCC0A_PanWithOffset for part 0 with (0x76AA) & 0x7F, byte +8 of part 0's 64-byte\n"
+     "record 0x76A2."),
+    ("FC1918", "Msg0716_PartPostProgramChange",
+     "XIY = the part's RAM slot (object record +0), part byte = record +6, then Msg0716_PostProgramChange\n"
+     "(C0 <part> <slot +0..+1> 00).  Called by the pending-part loops."),
+    ("FC101E", "Msg0716_PartPostCC78_AllSoundOff",
+     "unless (0x7F0B) bit 0, and -- when (0x070E) bit 5 or 6 is set -- only for parts above 7: Msg0716_PostCC78_AllSoundOff\n"
+     "for the part.  Called by the pending-part loops before the program change."),
+    ("FC0F4E", "Msg0716_FlushPendingParts0to15",
+     "for each part 0..15 whose bit is set in (0x0700): Msg0716_PartPostCC78_AllSoundOff then Msg0716_PartPostProgramChange."),
+    ("FC0F85", "Msg0716_FlushPendingParts16to31",
+     "the same over (0x0702) and parts 16..31 (Msg0716_ObjectRecords + 0x80)."),
+    ("FC0E6B", "Msg0716_FlushPending",
+     "the (0x070E) group posts when it is non-zero, then Msg0716_FlushPendingParts0to15 / 16to31 for a non-zero (0x0700) /\n"
+     "(0x0702) (after clearing those parts from (0x0706) / (0x0708)), two conditional extras, and finally clears\n"
+     "0x0700..0x070E."),
+    ("FC0E56", "Msg0716_FlushIfPending",
+     "when (0x070F) bit 0 is set -- the bit every Msg0716_PartSetProgram* sets -- Msg0716_FlushPending and clear it; then\n"
+     "(0x60F021) bit 5 is cleared."),
 ]
 
 

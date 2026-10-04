@@ -1313,8 +1313,8 @@
 	.set	Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled, 0xFC0820
 	.set	Msg0716_EventPartPostCC02_BreathIfEnabled, 0xFC0845
 	.set	Msg0716_EventPartPostCC04_FootIfEnabled, 0xFC086A
-	.set	sub_FC0E56, 0xFC0E56
-	.set	sub_FC0E6B, 0xFC0E6B
+	.set	Msg0716_FlushIfPending, 0xFC0E56
+	.set	Msg0716_FlushPending, 0xFC0E6B
 	.set	T_F40FB8_Nop, 0xFC0FBD
 	.set	T_F40FBC_Nop, 0xFC0FBE
 	.set	T_F40FE4_Nop, 0xFC10DA
@@ -89234,7 +89234,7 @@ T_PanelEvent_Code03:	jp PanelEvent_Code03  ; F40F90 (was T_F40F90) -> prom_a 0x0
 T_PanelEvent_NoOp_T40F94:	jp PanelEvent_NoOp_T40F94  ; F40F94 (was T_F40F94) -> prom_a 0x06C5B
 	.fill 0x18, 1, 0x0E  ; 0xF40F98: 24 x ret
 T_Msg0716_InitAllRecords_Entry:	.long Msg0716_InitAllRecords_Entry	; ptr -> 0xFC0000 (prom_a 0x40000)
-T_F40FB4:	jp sub_FC0E56  ; -> prom_a 0x40E56
+T_Msg0716_FlushIfPending:	jp Msg0716_FlushIfPending  ; -> prom_a 0x40E56
 T_F40FB8:	jp T_F40FB8_Nop  ; -> prom_a 0x40FBD
 T_F40FBC:	jp T_F40FBC_Nop  ; -> prom_a 0x40FBE
 	ret  ; 0xF40FC0: 1 x ret
@@ -89242,7 +89242,7 @@ T_F40FBC:	jp T_F40FBC_Nop  ; -> prom_a 0x40FBE
 	ret  ; 0xF40FC4: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF40FC5: 3 x nop
 T_F40FC8:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
-T_F40FCC:	jp sub_FC0E6B  ; -> prom_a 0x40E6B
+T_Msg0716_FlushPending:	jp Msg0716_FlushPending  ; -> prom_a 0x40E6B
 T_F40FD0:	jp Msg0716_AllPartsResetBendAndModulation  ; -> prom_a 0x410DD   x2
 T_F40FD4:	jp Msg0716_AllPartsSustainOff  ; -> prom_a 0x410FA
 T_F40FD8:	jp T_F40FD8_Nop  ; -> prom_a 0x419DC
