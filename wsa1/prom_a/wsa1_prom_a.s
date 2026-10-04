@@ -162114,7 +162114,7 @@ DiskApi_CloseFile_Call:
 	ret                                                  ; FE1CB2  0e
 sub_FE1CB3:
 	m_push MW16, 0x2245                                  ; FE1CB3  d1 45 22 04
-	calr sub_FE26B8                                          ; FE1CB7  1e fe 09
+	calr DiskApi_CheckFreeSpace                                          ; FE1CB7  1e fe 09
 	ld (Disk_LastError:16), a                                   ; FE1CBA  f1 43 22 41
 	popw bc                                              ; FE1CBE  49
 	ret                                                  ; FE1CBF  0e
@@ -163301,7 +163301,10 @@ sub_FE2699:
 	calr sub_FE0941                                          ; FE26B3  1e 8b e2
 	pop XHL                                              ; FE26B6  5b
 	ret                                                  ; FE26B7  0e
-sub_FE26B8:
+; DiskApi_CheckFreeSpace: DiskFile_CountFreeSpace (A = 6 when it fails); A = 7 -- the code DiskApi_WriteFileFromWindow returns for a full disk
+;   -- when the size argument, in 16-byte units, rounded up to KB (>> 6, + 1), is not below the free space; else 0.
+;   SmfWrite's first-window path computes that argument from SmfOut_TrackLength + 22.
+DiskApi_CheckFreeSpace:
 	link XIZ,0x0000                                      ; FE26B8  ee 0c 00 00
 	pushw hl                                             ; FE26BC  2b
 	calr DiskFile_CountFreeSpace                                          ; FE26BD  1e f5 f3
@@ -163341,7 +163344,7 @@ sub_FE26E2:
 	add DE,WA                                            ; FE2702  d8 82
 	ld (0x173d:24), de                                  ; FE2704  f2 3d 17 00 52
 	pushw de                                             ; FE2709  2a
-	calr sub_FE26B8                                          ; FE270A  1e ab ff
+	calr DiskApi_CheckFreeSpace                                          ; FE270A  1e ab ff
 	ld H,A                                               ; FE270D  c9 8e
 	ld (0x1736:24), a                                   ; FE270F  f2 36 17 00 41
 	popw bc                                              ; FE2714  49
@@ -163597,7 +163600,7 @@ sub_FE2993:
 	ld (0x1736:24), 0x00                               ; FE2995  f2 36 17 00 00 00
 	ldw (0x173d:24), 0x4000                             ; FE299B  f2 3d 17 00 02 00 40
 	pushw 0x4000                                         ; FE29A2  0b 00 40
-	calr sub_FE26B8                                          ; FE29A5  1e 10 fd
+	calr DiskApi_CheckFreeSpace                                          ; FE29A5  1e 10 fd
 	ld H,A                                               ; FE29A8  c9 8e
 	ld (0x1736:24), a                                   ; FE29AA  f2 36 17 00 41
 	popw bc                                              ; FE29AF  49
@@ -163652,7 +163655,7 @@ sub_FE2A21:
 	push XIX                                             ; FE2A22  3c
 	ldw (0x173d:24), 0x1630                             ; FE2A23  f2 3d 17 00 02 30 16
 	pushw 0x1630                                         ; FE2A2A  0b 30 16
-	calr sub_FE26B8                                          ; FE2A2D  1e 88 fc
+	calr DiskApi_CheckFreeSpace                                          ; FE2A2D  1e 88 fc
 	ld H,A                                               ; FE2A30  c9 8e
 	ld (0x1736:24), a                                   ; FE2A32  f2 36 17 00 41
 	popw bc                                              ; FE2A37  49
@@ -163878,7 +163881,7 @@ sub_FE2C64:
 	add DE,WA                                            ; FE2C7D  d8 82
 	ld (0x173d:24), de                                  ; FE2C7F  f2 3d 17 00 52
 	pushw de                                             ; FE2C84  2a
-	calr sub_FE26B8                                          ; FE2C85  1e 30 fa
+	calr DiskApi_CheckFreeSpace                                          ; FE2C85  1e 30 fa
 	ld H,A                                               ; FE2C88  c9 8e
 	ld (0x1736:24), a                                   ; FE2C8A  f2 36 17 00 41
 	popw bc                                              ; FE2C8F  49

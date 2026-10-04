@@ -2516,4 +2516,5 @@ RENAMES = [
     ("T_F425B0", "T_DiskApi_DeleteFile_Call"),
     ("T_F425E4", "T_DiskApi_CloseFile_Call"),
     ("T_F42B74", "T_SequencerMedley_ClampSongRange_Call"),
+    ("sub_FE26B8", "DiskApi_CheckFreeSpace"),
 ]

@@ -212,6 +212,10 @@ ROWS = [
      "the directory's entry (T_DiskApi_ReadFileToWindow_Entry): DiskApi_ReadFileToWindow, A to Disk_LastError, and on screen latch 0x49 (0x360B) bit 0 cleared."),
     ("FE1C4D", "DiskApi_WriteFileFromWindow_Entry",
      "the directory's entry (T_DiskApi_WriteFileFromWindow_Entry): DiskApi_WriteFileFromWindow, A to Disk_LastError."),
+    ("FE26B8", "DiskApi_CheckFreeSpace",
+     "DiskFile_CountFreeSpace (A = 6 when it fails); A = 7 -- the code DiskApi_WriteFileFromWindow returns for a full disk\n"
+     "-- when the size argument, in 16-byte units, rounded up to KB (>> 6, + 1), is not below the free space; else 0.\n"
+     "SmfWrite's first-window path computes that argument from SmfOut_TrackLength + 22."),
 ]
 
 
