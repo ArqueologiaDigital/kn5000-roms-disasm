@@ -2886,6 +2886,13 @@ RENAMES = {
     "sub_F709A3": "SmfPart_SetEffect3Depth",
     "sub_F709DA": "SmfPart_SetEffect4Depth",
     "sub_F70A30": "SmfPart_SetEffect1Depth",
+    "PanelWire_EntryThunks_Join": "PanelWire_BootPhase0",
+    "SysExModule_EntryThunks_Join": "SysExModule_BootPhase0",
+    "sub_F8A6F3_Join": "PanelEvent_BootPhase0",
+    "PanelScreen_RequestRedrawIfFieldQueued_Join": "SysexBulkDump_BootPhase0",
+    "PanelDial_DrawValueDigits_Join": "DebugMonitor_BootPhase0",
+    "Data_F82000_Nop": "MainTask_PhaseVector_Ret",
+    "ScreenLeave_DrumEditPartSelect_Nop": "EditScreen_PhaseVector_Ret",
 }
 
 

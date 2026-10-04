@@ -6117,12 +6117,15 @@ Data_F82000:
 	.long 0x00000080                                 ; F82004  [  1]
 	.long 0x00000080                                 ; F82008  [  2]
 	.long 0x00000080                                 ; F8200C  [  3]
+; MainTask_PhaseVector: the boot phase vector of module 0 (MainTask_Loop's block) -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+MainTask_PhaseVector:
 	jp Ring_InitAllFourteen                                        ; F82010  1b d4 25 f8
-	jp Data_F82000_Nop                                        ; F82014  1b 2f 26 f8
+	jp MainTask_PhaseVector_Ret                                        ; F82014  1b 2f 26 f8
 	jp Var7FC1_Clear                                        ; F82018  1b 28 26 f8
-	jp Data_F82000_Nop                                        ; F8201C  1b 2f 26 f8
-	jp Data_F82000_Nop                                        ; F82020  1b 2f 26 f8
-	jp Data_F82000_Nop                                        ; F82024  1b 2f 26 f8
+	jp MainTask_PhaseVector_Ret                                        ; F8201C  1b 2f 26 f8
+	jp MainTask_PhaseVector_Ret                                        ; F82020  1b 2f 26 f8
+	jp MainTask_PhaseVector_Ret                                        ; F82024  1b 2f 26 f8
 ; MainTask_Loop -- CPU 1's main loop: poll the rota flags and rings for ever
 ; Evidence: ends with unconditional `jrl MainTask_Loop` (0xF821C5); entered by `jp` from MainTask_Entry (0xF8282E) and published as prom_b slot T_F40014.  `tset n,(0x88)` / `tset n,(0x98)` gate PanelHold_Tick, SC1_TxFlush, Link_ServiceTask, Blink_Tick (bit 7 at 0xF82182, FINDINGS-prom_b-field-blink.md) etc.; it services the MIDI-in rings (MidiIn_RoutePortA/B), MIDI_DrainQueue, PanelWire_Service, PanelEvent_Service, UiEventList_Publish.
 ; The four instructions at 0xF8202C-0xF8203A are jumped over by the `jr` at 0xF8202A.
@@ -6894,7 +6897,7 @@ Var7FC1_Clear:
 	ret                                                  ; F8262D  0e
 T_F4001C_Nop:
 	ret                                                  ; F8262E  0e
-Data_F82000_Nop:
+MainTask_PhaseVector_Ret:
 	ret                                                  ; F8262F  0e
 ; ModuleInit_Phase0Veneer -- directory-callable `calr ModuleInit_RunPhase0 / ret`
 ; Evidence: prom_b slot T_ModuleInit_Phase0Veneer is `jp ModuleInit_Phase0Veneer`.
@@ -18797,7 +18800,7 @@ Ctrl_SpanTable:
 ; PanelWire_EntryThunks -- the panel wire-to-group module's six-slot phase vector
 ; Evidence: ModuleInitDirectory_F82641[3] = T_PanelWire_EntryThunks, whose word is .long 0xF8A000; slot 0 (phase 0) is `jp PanelWire_ModuleReset`, slots 1-5 are `ret` + 3 pad bytes.  Same layout as MidiIn_EntryThunks.  Not a routine.
 PanelWire_EntryThunks:
-	jp PanelWire_EntryThunks_Join                                        ; F8A000  1b 18 a0 f8
+	jp PanelWire_BootPhase0                                        ; F8A000  1b 18 a0 f8
 	ret                                                  ; F8A004  0e
 	nop                                                  ; F8A005  00
 	nop                                                  ; F8A006  00
@@ -18818,7 +18821,9 @@ PanelWire_EntryThunks:
 	nop                                                  ; F8A015  00
 	nop                                                  ; F8A016  00
 	nop                                                  ; F8A017  00
-PanelWire_EntryThunks_Join:
+; PanelWire_BootPhase0: module 3's boot phase 0 handler, slot 0 of its vector PanelWire_EntryThunks: (0x2000) = 0xFF, (0x219A) = 0.
+;   It was labelled as a branch target of the vector (notes/prom_a_module_boot_phase_names.py).
+PanelWire_BootPhase0:
 	ld (0x2000:16), 0xff                                 ; F8A018  f1 00 20 00 ff
 	ld (0x219a:16), 0x00                                 ; F8A01D  f1 9a 21 00 00
 	ret                                                  ; F8A022  0e
@@ -19868,7 +19873,10 @@ sub_F8A6F3:
 	cp a, 0x00:i3                                          ; F8A7FA  c9 d8
 	jr nz, .LF8A811                                          ; F8A7FC  6e 13
 	ld A,E                                               ; F8A7FE  cd 89
-	jp sub_F8A6F3_Join                                        ; F8A800  1b 18 a8 f8
+; PanelEvent_PhaseVector: the boot phase vector of module 4 -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+PanelEvent_PhaseVector:
+	jp PanelEvent_BootPhase0                                        ; F8A800  1b 18 a8 f8
 	ret                                                  ; F8A804  0e
 	nop                                                  ; F8A805  00
 	nop                                                  ; F8A806  00
@@ -19890,7 +19898,8 @@ sub_F8A6F3:
 	nop                                                  ; F8A815  00
 	nop                                                  ; F8A816  00
 	nop                                                  ; F8A817  00
-sub_F8A6F3_Join:
+; PanelEvent_BootPhase0: module 4's boot phase 0 handler (vector 0xF8A800, the PanelEvent_* block): T_AsciiField_Clear.
+PanelEvent_BootPhase0:
 	call T_AsciiField_Clear                              ; F8A818  1d f8 32 f4
 	ret                                                  ; F8A81C  0e
 ; PanelEvent_Service -- expand the panel group queue into UI events, then post-process the event list
@@ -24114,6 +24123,9 @@ CallbackQueue_ResetAndRestartTask2:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 326, 1, 0x0E
 
+; AnalogScan_PhaseVector: the boot phase vector of module 6 -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+AnalogScan_PhaseVector:
 	jp AnalogScan_InitSoftChannels                       ; F8DC00  1b 18 dc f8
 	ret                                                  ; F8DC04  0e
 	nop                                                  ; F8DC05  00
@@ -39487,7 +39499,10 @@ PanelDial_DrawValueDigits:   ; entry: named by 1 `ld` operand, first at 0xF94609
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 1429, 1, 0x0E
 
-	jp PanelDial_DrawValueDigits_Join                                        ; F94C00  1b 18 4c f9
+; DebugMonitor_PhaseVector: the boot phase vector of module 17 -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+DebugMonitor_PhaseVector:
+	jp DebugMonitor_BootPhase0                                        ; F94C00  1b 18 4c f9
 	ret                                                  ; F94C04  0e
 	nop                                                  ; F94C05  00
 	nop                                                  ; F94C06  00
@@ -39508,7 +39523,9 @@ PanelDial_DrawValueDigits:   ; entry: named by 1 `ld` operand, first at 0xF94609
 	nop                                                  ; F94C15  00
 	nop                                                  ; F94C16  00
 	nop                                                  ; F94C17  00
-PanelDial_DrawValueDigits_Join:
+; DebugMonitor_BootPhase0: module 17's boot phase 0 handler (vector 0xF94C00, the Print_DebugMonitor / DebugMonitor_* block):
+;   (0x284F) = 0, (0x2846) = 0x2420.
+DebugMonitor_BootPhase0:
 	ld XWA,0x00000000                                    ; F94C18  40 00 00 00 00
 	ld (0x284f:16), xwa                                 ; F94C1D  f1 4f 28 60
 	ld XWA,0x00002420                                    ; F94C21  40 20 24 00 00
@@ -46704,7 +46721,10 @@ PanelScreen_RequestRedrawIfFieldQueued:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 929, 1, 0x0E
 
-	jp PanelScreen_RequestRedrawIfFieldQueued_Join                                        ; F99800  1b 18 98 f9
+; SysexBulkDump_PhaseVector: the boot phase vector of module 9 -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+SysexBulkDump_PhaseVector:
+	jp SysexBulkDump_BootPhase0                                        ; F99800  1b 18 98 f9
 	ret                                                  ; F99804  0e
 	nop                                                  ; F99805  00
 	nop                                                  ; F99806  00
@@ -46725,7 +46745,9 @@ PanelScreen_RequestRedrawIfFieldQueued:
 	nop                                                  ; F99815  00
 	nop                                                  ; F99816  00
 	nop                                                  ; F99817  00
-PanelScreen_RequestRedrawIfFieldQueued_Join:
+; SysexBulkDump_BootPhase0: module 9's boot phase 0 handler (vector 0xF99800, the block that publishes
+;   Paint_/ScreenLeave_/ScreenButton_SysexBulkDump_Entry): MidiOutProgramChange_ResetState.
+SysexBulkDump_BootPhase0:
 	calr PanelScreen_RequestRedrawIfFieldQueued_Nop                                      ; F99818  1e 05 00
 	call MidiOutProgramChange_ResetState                                      ; F9981B  1d a1 b4 f9
 	ret                                                  ; F9981F  0e
@@ -88426,7 +88448,7 @@ PatchList_RecordBytes2B_Ptr:
 ; Evidence: ModuleInitDirectory_F82641[10] = T_SysExModule_EntryThunks, which in prom_b is `.long 0xFB2000`; the walker at 0xF82846 adds the phase 0x00/04/08/0C/10 to that base and calls it -- the same slot idiom as MIDI_EntryThunks.
 ; The module 0xFB2000-0xFB8CA5 holds SysExDump_RunSendJob (0xFB2049), the SysEx decode-tree walker at 0xFB63FC and the status reporter 0xFB7DFE (notes/sysex-probes/README.md), as well as the remote-flash reader.
 SysExModule_EntryThunks:
-	jp SysExModule_EntryThunks_Join                                        ; FB2000  1b 18 20 fb
+	jp SysExModule_BootPhase0                                        ; FB2000  1b 18 20 fb
 	ret                                                  ; FB2004  0e
 	nop                                                  ; FB2005  00
 	nop                                                  ; FB2006  00
@@ -88444,7 +88466,8 @@ SysExModule_EntryThunks:
 	nop                                                  ; FB2015  00
 	nop                                                  ; FB2016  00
 	nop                                                  ; FB2017  00
-SysExModule_EntryThunks_Join:
+; SysExModule_BootPhase0: module 10's boot phase 0 handler, slot 0 of SysExModule_EntryThunks: call sub_FB818A.
+SysExModule_BootPhase0:
 	call sub_FB818A                                      ; FB2018  1d 8a 81 fb
 	ret                                                  ; FB201C  0e
 ; SysExModule_Phase3_GmNormalReset -- phase-3 boot slot of the SysEx module: `call ParamApply_ResetPairTablesIfGmNormal / ret`
@@ -174060,13 +174083,16 @@ sub_FE8040:
 ; ---------------------------------------------------------------------
 ScreenLeave_DrumEditPartSelect:
 	ret                                                  ; FE8045  0e
-	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8046  1b 5e 80 fe
-	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE804A  1b 5e 80 fe
+; EditScreen_PhaseVector: the boot phase vector of module 24, the NOTE / DRUM EDIT module -- ModuleInitDirectory_F82641 reaches it; the walker calls slot k (4 bytes)
+;   for boot phase k (notes/prom_a_module_boot_phase_names.py).  2026-10-04.
+EditScreen_PhaseVector:
+	jp EditScreen_PhaseVector_Ret                                        ; FE8046  1b 5e 80 fe
+	jp EditScreen_PhaseVector_Ret                                        ; FE804A  1b 5e 80 fe
 	jp EditScreen_BootPhase2And4                                        ; FE804E  1b 3f 83 fe
-	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8052  1b 5e 80 fe
+	jp EditScreen_PhaseVector_Ret                                        ; FE8052  1b 5e 80 fe
 	jp EditScreen_BootPhase2And4                                        ; FE8056  1b 3f 83 fe
-	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE805A  1b 5e 80 fe
-ScreenLeave_DrumEditPartSelect_Nop:
+	jp EditScreen_PhaseVector_Ret                                        ; FE805A  1b 5e 80 fe
+EditScreen_PhaseVector_Ret:
 	ret                                                  ; FE805E  0e
 T_F402B8_Nop:
 	ret                                                  ; FE805F  0e
