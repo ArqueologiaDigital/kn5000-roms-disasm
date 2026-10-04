@@ -2629,6 +2629,11 @@ RENAMES = {
     "Msg0716_Post_Trampoline_4": "Msg0716_PostCC78_AllSoundOff",
     "sub_FC06DF": "Msg0716_EventPartPostCC78_AllSoundOff",
     "sub_FC078A": "Msg0716_EventPartPostCC40_SustainFromValueIfEnabled",
+    "Msg0716_Post_Trampoline_Wrap": "Msg0716_PostCC0A_Pan",
+    "Msg0716_Post_Trampoline_Wrap_2": "Msg0716_PostSysEx50_B2",
+    "Msg0716_Post_Trampoline_Wrap_2_Call": "Msg0716_PostSysEx50_B2_Call",
+    "Msg0716_Post_Trampoline_Wrap_3": "Msg0716_PostPitchBendCenter",
+    "Msg0716_Post_Trampoline_Wrap_4": "Msg0716_PostCC01_ModulationZero",
 }
 
 

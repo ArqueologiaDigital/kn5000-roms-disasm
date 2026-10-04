@@ -111785,7 +111785,7 @@ Msg0716_HandlerTables:
 	.long Msg0716_SetPendingBit4                                 ; FC0A7A  [ 43]
 	.long Msg0716_SetPendingBit4                                 ; FC0A7E  [ 44]
 	.long Msg0716_SetPendingBit4                                 ; FC0A82  [ 45]
-	.long Msg0716_Post_Trampoline_Wrap_2_Call                                 ; FC0A86  [ 46]
+	.long Msg0716_PostSysEx50_B2_Call                                 ; FC0A86  [ 46]
 	.long Msg0716_HandlerTables_Nop47                                 ; FC0A8A  [ 47]
 	.long sub_FC0D12                                 ; FC0A8E  [ 48]
 	.long sub_FC0D19                                 ; FC0A92  [ 49]
@@ -111962,7 +111962,7 @@ sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	calr Msg0716_PostCC0A_PanWithOffset                                          ; FC0C9F  1e 7b 09
 	jr .LFC0CA7                                          ; FC0CA2  68 03
 .LFC0CA4:
-	calr Msg0716_Post_Trampoline_Wrap                                          ; FC0CA4  1e 61 09
+	calr Msg0716_PostCC0A_Pan                                          ; FC0CA4  1e 61 09
 .LFC0CA7:
 	ret                                                  ; FC0CA7  0e
 ; Msg0716_PartPostCtrlInt82: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
@@ -112029,8 +112029,8 @@ Msg0716_SetPendingBit4:   ; entry: named by 4 `.long` operands, first at 0xFC0A7
 	m_set 4, MD16, 0x070e                                ; FC0CFF  f1 0e 07 bc
 	m_set 0, MD16, 0x070f                                ; FC0D03  f1 0f 07 b8
 	ret                                                  ; FC0D07  0e
-Msg0716_Post_Trampoline_Wrap_2_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
-	calr Msg0716_Post_Trampoline_Wrap_2                                          ; FC0D08  1e 0b 0b
+Msg0716_PostSysEx50_B2_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
+	calr Msg0716_PostSysEx50_B2                                          ; FC0D08  1e 0b 0b
 	ret                                                  ; FC0D0B  0e
 Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xFC0A8A
 	ret                                                  ; FC0D0C  0e
@@ -112531,8 +112531,8 @@ sub_FC10DD:
 	ldw bc, 0x20                                         ; FC10E7  31 20 00
 .LFC10EA:
 	pushw bc                                             ; FC10EA  29
-	calr Msg0716_Post_Trampoline_Wrap_3                                          ; FC10EB  1e 57 08
-	calr Msg0716_Post_Trampoline_Wrap_4                                          ; FC10EE  1e 6c 08
+	calr Msg0716_PostPitchBendCenter                                          ; FC10EB  1e 57 08
+	calr Msg0716_PostCC01_ModulationZero                                          ; FC10EE  1e 6c 08
 	popw bc                                              ; FC10F1  49
 	add IZ,0x0008                                        ; FC10F2  de c8 08 00
 	djnz16 bc, .LFC10EA                                  ; FC10F6  d9 1c f1
@@ -113127,7 +113127,8 @@ Msg0716_PostCtrlInt97:
 	ld c, 0xff:opc                                          ; FC1602  23 ff
 	calr Msg0716_PostValueMasked                                      ; FC1604  1e c5 02
 	ret                                                  ; FC1607  0e
-Msg0716_Post_Trampoline_Wrap:
+; Msg0716_PostCC0A_Pan: B0 <part> 0A <UiEvent_Byte2>, controller 10 pan (was Msg0716_Post_Trampoline_Wrap, a positional name; 2026-10-04).
+Msg0716_PostCC0A_Pan:
 	ld (XIX),0xb0                                        ; FC1608  b4 00 b0
 	ld (XIX+0x02),0x0a                                   ; FC160B  bc 02 00 0a
 	ld a, (UiEvent_Byte2:16)                                   ; FC160F  c1 b9 20 21
@@ -113404,7 +113405,8 @@ Msg0716_PostSysEx50_B1:
 	ld c, 0x80:opc                                          ; FC1810  23 80
 	calr Msg0716_PostValueAsSwitch                                      ; FC1812  1e c7 00
 	ret                                                  ; FC1815  0e
-Msg0716_Post_Trampoline_Wrap_2:
+; Msg0716_PostSysEx50_B2: F0 50 B2 <(0x78B7)>, the Matsushita system-exclusive command 0xB2 (was Msg0716_Post_Trampoline_Wrap_2).
+Msg0716_PostSysEx50_B2:
 	ld (XIX),0xf0                                        ; FC1816  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC1819  bc 01 00 50
 	ld (XIX+0x02),0xb2                                   ; FC181D  bc 02 00 b2
@@ -113547,7 +113549,8 @@ Msg0716_PostProgramChange:
 	ret                                                  ; FC1942  0e
 	ret                                                  ; FC1943  0e
 	ret                                                  ; FC1944  0e
-Msg0716_Post_Trampoline_Wrap_3:
+; Msg0716_PostPitchBendCenter: E0 <part> 00 40 -- pitch bend to the centre value 0x2000 (was Msg0716_Post_Trampoline_Wrap_3).
+Msg0716_PostPitchBendCenter:
 	ld (XIX),0xe0                                        ; FC1945  b4 00 e0
 	ld A,(XIZ+0x06)                                      ; FC1948  8e 06 21
 	ld (XIX+0x01),A                                      ; FC194B  bc 01 41
@@ -113556,7 +113559,8 @@ Msg0716_Post_Trampoline_Wrap_3:
 	ldw bc, 0x04                                         ; FC1956  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1959  1e be 00
 	ret                                                  ; FC195C  0e
-Msg0716_Post_Trampoline_Wrap_4:
+; Msg0716_PostCC01_ModulationZero: B0 <part> 01 00, modulation to 0 (was Msg0716_Post_Trampoline_Wrap_4).
+Msg0716_PostCC01_ModulationZero:
 	ld (XIX),0xb0                                        ; FC195D  b4 00 b0
 	ld A,(XIZ+0x06)                                      ; FC1960  8e 06 21
 	ld (XIX+0x01),A                                      ; FC1963  bc 01 41
