@@ -121,6 +121,52 @@ ROWS = [
      "Disk_ReadSectors(1 sector at (0x605D3E) + arg, the root directory, into 0x605B12); HL = 0 or 0xFF."),
     ("FE4649", "Disk_WriteRootDirSector",
      "Disk_WriteSectors(1 sector at (0x605D3E) + arg from 0x605B12); HL = 0 or 0xFF."),
+    # prom_a Disk_CommandDispatch's handlers.  The command codes (decoded from its word-offset table at 0xFE6DFC, base
+    # 0xFE42B4) are MS-DOS INT 21h's FCB function numbers: 0x1A, whose handler stores the transfer-buffer pointer
+    # (0x605D2C), is DOS "Set Disk Transfer Address"; 0x14/0x15/0x17-0x19 (sequential read / write, rename ...) fall to
+    # the default case.  Each name below was checked against its body, not taken from the DOS table alone.
+    ("FE389E", "DiskCmd_OpenFile",
+     "command 0x0F (DOS 0Fh Open File, FCB).  DiskCmd_DeleteFile calls it to find each entry it deletes."),
+    ("FE395A", "DiskCmd_CloseFile",
+     "command 0x10 (DOS 10h Close File): writes the entry back (Disk_WriteRootDirSector) and the FAT (Fat_Store)."),
+    ("FE3A4C", "DiskCmd_FindFirst",
+     "command 0x11 (DOS 11h Search First): Disk_ReadRootDirSector and the entry matcher 0xFE45BF."),
+    ("FE3AF3", "DiskCmd_FindNext",
+     "command 0x12 (DOS 12h Search Next): resumes the root-directory scan at the saved index (0x605D2A) + 1, up to\n"
+     "(0x605D4E) - 1 entries."),
+    ("FE3CB1", "DiskCmd_DeleteFile",
+     "command 0x13 (DOS 13h Delete File): DiskCmd_OpenFile then 0xFE3C23; when Fat_NameHasWildcard, repeats until no\n"
+     "entry matches.  HL = 0xFF when the first one fails."),
+    ("FE3DB2", "DiskCmd_CreateFile",
+     "command 0x16 (DOS 16h Create File): a directory slot from 0xFE46DA (kept at the record's +0x18), Fat_Load, the first\n"
+     "free cluster from 2, Fat_SetEntry(cluster, 0xFFFF) -- a one-cluster chain."),
+    ("FE3E97", "DiskCmd_SetTransferAddress",
+     "command 0x1A (DOS 1Ah Set Disk Transfer Address): (0x605D2C) = the 32-bit argument, the buffer\n"
+     "Disk_ReadCluster / DiskCmd_ReadSectors use; HL = 0."),
+    ("FE3EA2", "DiskCmd_CheckMediaId",
+     "command 0x1B: reads sector 1 (the first FAT) into 0x606F9B and checks its leading media-ID bytes against the\n"
+     "format (0x605D36) 0..5 (DOS 1Bh reports the same byte).  HL = 0 for a match, 1 for read results 0x30 / 9 / 1,\n"
+     "else 0xFF."),
+    ("FE4BCC", "DiskCmd_CountFreeSpace",
+     "command 0x80: Fat_Load, then counts the clusters 0 .. (0x605D58) whose FAT entry is 0; returns the count scaled by\n"
+     "8 on FAT16 or by the format's factor from Table_FE6DBF+0x75."),
+    ("FE3F82", "DiskCmd_ReadSectors",
+     "command 0x81: Disk_ReadSectors(sector, count from the arguments, into the transfer buffer (0x605D2C))."),
+    ("FE3F99", "DiskCmd_WriteSectors",
+     "command 0x82: Disk_WriteSectors(sector, count, from the transfer buffer (0x605D2C))."),
+    ("FE3FB0", "DiskCmd_ReadFileBlock",
+     "command 0x83: the next block of an open file into the transfer buffer -- Disk_ReadCluster of the cluster the record\n"
+     "holds at +0x1C (0xFFFF: end, HL = 1), or for a record of type 1 the next 1 KB of the work buffer 0x606F9B."),
+    ("FE40B9", "DiskCmd_WriteFileBlock",
+     "command 0x84: the write counterpart -- Disk_WriteCluster / _WriteClusterFromWorkBuffer and Fat_SetEntry\n"
+     "(its callers' census: notes/prom_ab_read_names_2026_10_04.py rows above)."),
+    ("FE3C23", "Fat_DeleteFileAndFreeChain",
+     "marks the opened entry deleted (0xE5) and frees its cluster chain to the end marker (>= 0xFF8), with\n"
+     "Fat_GetEntry / Fat_SetEntry, Fat_Store and Disk_WriteRootDirSector."),
+    ("FE489E", "Fat_FindFreeClusterFrom",
+     "the first cluster IZ .. (0x605D58) - 1 whose FAT entry is 0; HL = 0 when none."),
+    ("FE48C7", "Fat_FindFreeClusterAfter",
+     "cluster + 1 when its entry is 0, else Fat_FindFreeClusterFrom(2); HL = 0 when none."),
 ]
 
 

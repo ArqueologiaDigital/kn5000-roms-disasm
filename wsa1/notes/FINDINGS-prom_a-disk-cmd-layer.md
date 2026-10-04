@@ -90,6 +90,20 @@ groups, and neither can be named honestly yet:
    jump table; each manipulates the 0x605Axx disk state and eventually reaches
    `Fdc_Request`, but nothing here ties a command index to a user-visible
    operation. Naming the dispatcher does not name what it dispatches.
+   **Superseded 2026-10-04.** The command codes ARE the tie. Decoded from the word-offset
+   table at 0xFE6DFC (base 0xFE42B4), the handled codes are 0x0F-0x13, 0x16, 0x1A, 0x1B and
+   0x80-0x85, and 0x14/0x15/0x17-0x19 fall to the default case. Those are MS-DOS INT 21h's FCB
+   function numbers. The anchor is 0x1A: its handler only stores the transfer-buffer pointer
+   (0x605D2C), which is DOS "Set Disk Transfer Address". Each name was then checked against
+   its body, and the evidence per routine is in `notes/prom_ab_read_names_2026_10_04.py`:
+   `DiskCmd_OpenFile` (0x0F), `_CloseFile` (0x10), `_FindFirst` / `_FindNext` (0x11/0x12),
+   `_DeleteFile` (0x13, repeats while the name has a wildcard), `_CreateFile` (0x16),
+   `_SetTransferAddress` (0x1A), `_CheckMediaId` (0x1B), and the extensions `_CountFreeSpace`
+   (0x80), `_ReadSectors` / `_WriteSectors` (0x81/0x82), `_ReadFileBlock` / `_WriteFileBlock`
+   (0x83/0x84). Under them is the FAT layer: `Fat_GetEntry` / `_SetEntry` (FAT12 and FAT16),
+   `Fat_Load` / `_Store`, `Fat_ClusterToSector`, `Fat_FindFreeClusterFrom` / `_After`,
+   `Fat_DeleteFileAndFreeChain`, and the cluster and root-directory sector readers and writers.
+   Still `sub_`: 0x85 (0xFE423E) and the code-0 case (0xFE370A).
 2. **File-system workers.** Compound routines (e.g. `sub_FE08BD` pulses Port B
    bit 2, clears/sets the ready flag `(0x21E7).6` from the result byte
    `(0x1735)`; `sub_FE1962` invokes dispatcher command 0 with a fixed argument)
