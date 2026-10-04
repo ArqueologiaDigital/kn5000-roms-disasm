@@ -1294,7 +1294,7 @@ def checks(verbose=True, layout=True):
     c("ENTRY the thunk slots that land in the span",
       (len(th), sorted("T_%06X" % s for v in th.values() for s in v)[:3],
        sorted("T_%06X" % s for v in th.values() for s in v)[-3:]),
-      (len(th), ["T_F40D90", "T_F40D94", "T_F40D98"],
+      (len(th), ["T_ModeEnter_SeqPlay_Fwd", "T_ModeLeave_SeqPlay_Fwd", "T_ModeEnter_RealtimeRecord_Fwd"],
        ["T_F42C9C", "T_F42CA0", "T_F42CA8"]), verbose)
     c("ENTRY every thunk target is an instruction boundary of this transcription",
       [hex(t) for t in th if t not in boundaries()], [], verbose)

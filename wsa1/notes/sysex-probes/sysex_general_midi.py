@@ -287,7 +287,7 @@ def main():
     #   who calls the builder: the sole handler of internal event class 0x91
     assert struct.unpack("<I", rd(a, CLASS91_LIST, 4))[0] == 0xF408F0
     assert struct.unpack("<I", rd(a, CLASS91_LIST + 4, 4))[0] == 0xFFFFFFFF
-    assert rd(b, 0xF408F0, 4) == bytes.fromhex("1b0a59fb"), "T_F408F0 -> 0xFB590A"
+    assert rd(b, 0xF408F0, 4) == bytes.fromhex("1b0a59fb"), "T_GmMode_HandleChange -> 0xFB590A"
     h = rd(a, 0xFB590A, 30)
     assert h[1:5] == bytes.fromhex("f1b92034"), h[1:5].hex()       # XIX = 0x20B9
     assert h[5:10] == bytes.fromhex("c1b820 3f03".replace(" ", "")), h[5:10].hex()

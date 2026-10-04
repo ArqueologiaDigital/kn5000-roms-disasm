@@ -21,7 +21,7 @@ WHY THIS BLOCK (round 3, chosen with the frontier tools, not by address order)
       from the ROM and also asserts that nothing else sits at exactly 13.
     * notes/prom_b_module_frontier.py ranks whole RUNS; this span holds nine of
       them (T_F40B40, T_F40BC0, T_F40C50, T_F40CB0, T_F40CE0, T_F40D60,
-      T_F414B0, T_F434E0 and, past the end of this block, T_F42E40).
+      T_F414B0, T_ScreenEnter_CreatorSelectController and, past the end of this block, T_F42E40).
     * Summed over the eight modules converted here that is 92 thunk slots -- the
       largest single-span slot count left in prom_b.
 
@@ -627,7 +627,7 @@ def block_bitmask(lab):
     out += wrap("; Read by: ", reader_line(rd[0]) +
                 "  It is the only site in either ROM that spells the address.")
     out += wrap("; Entry count: ",
-                "9, and the END is a thunk target: 0xF4C3F2 is T_F434E0's target, "
+                "9, and the END is a thunk target: 0xF4C3F2 is T_ScreenEnter_CreatorSelectController's target, "
                 "so the byte after this island is an entry point the hardware "
                 "uses.  The START is where ScreenButtonHandlers_CreatorSelectController's 23 pointers "
                 "stop.")

@@ -54,8 +54,8 @@ it, reusing the committed `scripts/analysis/prom_b_thunk_table.py` classifier so
 the slot counts still reproduce 1,976 `jp` / 26 `ptr` / 2,100 fill:
 
 * the table splits into **100 runs** of non-fill slots;
-* **24 of the 26 pointer slots open their run** (the exceptions are `T_F40140`
-  and `T_F4176C`);
+* **24 of the 26 pointer slots open their run** (the exceptions are `T_DebugMonitor_PhaseVector`
+  and `T_SysexBulkDump_PhaseVector`);
 * **60 of the 100 runs** have every target inside a single 4 KiB span.
 
 ⚠ That is a fact about addresses. It is *consistent* with one compilation unit

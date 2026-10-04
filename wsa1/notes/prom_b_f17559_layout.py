@@ -438,7 +438,7 @@ def table_bases():
 
 def desc_sites():
     """Addresses passed as the first stack argument of a parameter-descriptor
-    routine (`lda XBC,<obj> / push XBC / ... / call T_F42C78|90|94|98`)."""
+    routine (`lda XBC,<obj> / push XBC / ... / call T_EditValue_StepBitField|90|94|98`)."""
     out = {}
     for prom in ("a", "b"):
         ins = instructions(prom)

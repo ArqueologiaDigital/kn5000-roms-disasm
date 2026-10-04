@@ -2,7 +2,7 @@
 """How closely related are prom_b's two parameter-field editors?
 
 QUESTION ANSWERED
-  EditValue_StepBitField (thunk T_F42C78, x77) and IndexedParam_AdjustField at 0xF5535B
+  EditValue_StepBitField (thunk T_EditValue_StepBitField, x77) and IndexedParam_AdjustField at 0xF5535B
   (thunk T_F42C94, x23) look like the same routine.  Before 2026-08-25
   EditValue_StepBitField's header asserted that 0xF5535B "is the same routine with the two
   pointer arguments swapped".  That was written from a reading, not a
@@ -62,7 +62,7 @@ def main():
     check("and it is a frame displacement (0xFE = -2 vs 0xF9 = -7)",
           diffs and diffs[0][1] == 0xFE and diffs[0][2] == 0xF9)
     # thunks
-    check("T_F42C78 is `jp 0xF550A6`",
+    check("T_EditValue_StepBitField is `jp 0xF550A6`",
           R(0xF42C78, 4) == bytes([0x1B, 0xA6, 0x50, 0xF5]))
     check("T_F42C94 is `jp 0xF5535B`",
           R(0xF42C94, 4) == bytes([0x1B, 0x5B, 0x53, 0xF5]))

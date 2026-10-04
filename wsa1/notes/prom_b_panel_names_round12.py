@@ -39,15 +39,15 @@ QUESTION IT ANSWERS
      19 REFUSED, screen unknown: tables 0xF135FD / 0xF1394F / 0xF4C38D are read
         by ScreenButtonBody_DspEffect / ScreenButtonBody_MainOutEqualizer / ScreenButton_CreatorSelectController, whose own headers say "Unknown:
         what the routine is FOR", and NO vtable slot in any of the four images
-        points at their thunks (T_F42F50, T_F42F6C, T_F434E8). A control name
+        points at their thunks (T_ScreenButtonBody_DspEffect, T_ScreenButtonBody_MainOutEqualizer, T_ScreenButton_CreatorSelectController). A control name
         with no screen would be <Control>_<address> -- FRAMED, not
         understanding, and the round-3 lesson is that converting without naming
         makes the tree WORSE on the goal metric.
         ⚠ CORRECTED 2026-10-03 (notes/prom_ab_screen_vtable_methods.py): the third
         reader, then sub_F4C4B5, IS a screen's BUTTON method.  PanelScreen_VtableTable
         points at a thunk TRIPLE's first slot, never at its +8 slot, so a search for
-        a vtable word equal to T_F434E8 could only come back empty: ViewB entry 0xAD
-        points at T_F434E0, whose +8 slot is T_F434E8.  It is ScreenButton_CreatorSelectController now,
+        a vtable word equal to T_ScreenButton_CreatorSelectController could only come back empty: ViewB entry 0xAD
+        points at T_ScreenEnter_CreatorSelectController, whose +8 slot is T_ScreenButton_CreatorSelectController.  It is ScreenButton_CreatorSelectController now,
         so table 0xF4C38D belongs to screen 0xAD.  The other two readers' triples
         (T_DspEffect_GetSection / T_DspEffect_CopyAlgorithmDefaults_Fwd) are pointed at by no vtable word, so their refusal stands.
       3 REFUSED, no label at that address at all (mid-routine entries); one of
@@ -570,7 +570,7 @@ def family2():
         print("         0x%06X <- %-12s whose own header says \"Unknown: what the "
               "routine is FOR\"" % (t, FAMILY2_READER[t][0]))
     print("       and no vtable slot in any of the four images points at their thunks")
-    print("       (T_F42F50, T_F42F6C, T_F434E8), so the screen cannot be read off the")
+    print("       (T_ScreenButtonBody_DspEffect, T_ScreenButtonBody_MainOutEqualizer, T_ScreenButton_CreatorSelectController), so the screen cannot be read off the")
     print("       tree. <Control>_<address> would be a kind plus an address -- FRAMED,")
     print("       not understanding. Left sub_XXXXXX with this gap stated.")
     print("    %2d REFUSED, ONE ROUTINE IN SEVERAL CONTROL SLOTS: %s"

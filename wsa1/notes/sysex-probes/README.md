@@ -1162,7 +1162,7 @@ boundaries before it is believed.  That is the same trap
   GENERAL MIDI confirm handler (`0xF99E85`) and both receive handlers post the
   same record — number `0x91`, offset 3 — and `GmMode_HandleChange` consumes it and
   calls the emitter; that `GmMode_HandleChange` is the handler *for* number `0x91` is
-  read off a prom_b directory slot (`T_F408F0`) with no located caller.
+  read off a prom_b directory slot (`T_GmMode_HandleChange`) with no located caller.
 * **`(0x7F32)` bit 4**, a fifth condition the received tempo value must pass
   (`0xFB57FC`) before it reaches the tempo itself.  It is on no MIDI page.
 

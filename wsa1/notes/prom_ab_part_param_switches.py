@@ -23,7 +23,7 @@ QUESTION IT ANSWERS
             stepper of a MULTIPLE MESSAGES OUTPUT item.  It reads the item's byte at <offset> and the enable bit
             <bit> of byte 0x15, and folds them into an index 0..129 (enable bit set -> 0; byte bit 7 -> 1; else
             byte+2).  It steps that index within PartParamField_MidiMultipleMessagesOutputProgramChange's 0..129,
-            through T_F42C78, and writes it back the same way (0x15 gets <bit>, or the byte gets 0x80, or the byte
+            through T_EditValue_StepBitField, and writes it back the same way (0x15 gets <bit>, or the byte gets 0x80, or the byte
             gets index-2), posting both bytes to Queue2C00.  The <offset> is the SysEx offset of the item.
     MMO ENTER  `ld L,(XIZ+8) / lda XBC,<rec> / push / pushw HL / call T_IndexedParam_SetFieldFromAsciiEntry`, with a
             0..127 value record at the item's offset.
@@ -64,7 +64,7 @@ STUB = {0xFBBCA3: ("PartParam_StepIgnored", "PtrTable_F1AB13[12]: a bare `ret` -
 SHARED = {"PartParam_StepMultipleMessagesOutputItem": ("PartParam_StepMultipleMessagesOutputItem",
                          "PartParam_StepMultipleMessagesOutputItem(part, 0, offset, bit): the common stepper of a MULTIPLE\n"
                          "  MESSAGES OUTPUT item.  Index = 0 when bit <bit> of byte 0x15 is set, 1 when the byte at <offset> has bit\n"
-                         "  7, else byte+2; stepped within PartParamField_MidiMultipleMessagesOutputProgramChange's 0..129 (T_F42C78)\n"
+                         "  7, else byte+2; stepped within PartParamField_MidiMultipleMessagesOutputProgramChange's 0..129 (T_EditValue_StepBitField)\n"
                          "  and written back the same way, both bytes posted to Queue2C00 " + H)}
 
 

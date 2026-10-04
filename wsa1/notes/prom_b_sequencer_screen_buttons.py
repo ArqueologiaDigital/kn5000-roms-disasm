@@ -9,13 +9,13 @@ QUESTION IT ANSWERS
   passes.  Each veneer is the +8 BUTTON slot of a thunk triple in PanelScreen_VtableTable_ViewB.  The triple's +0
   ENTER posts the painter that names the screen, and the block's own StageValues routines already carry those
   names:
-      ViewB 0x06  T_F40DC0  enter posts Draw_RealtimeRecordSong...        RealtimeRecordScreen
-      ViewB 0x08  T_F40DD0  Draw_CycleRecordCurrentMeasure                CycleRecordScreen
-      ViewB 0x0C  T_F40E00  Draw_MetronomeBalance (DL_MetronomeBalance)   MetronomeBalanceScreen
-      ViewB 0x12  T_F40DA0  Draw_SequencerPlayS0ngCycleMeasure            SeqPlayScreen
-      ViewB 0x14  T_F40DB0  Draw_CyclePlayCurrentMeasureCycle             CyclePlayScreen
+      ViewB 0x06  T_ScreenEnter_RealtimeRecordScreen_Fwd  enter posts Draw_RealtimeRecordSong...        RealtimeRecordScreen
+      ViewB 0x08  T_ScreenEnter_CycleRecordScreen_Fwd  Draw_CycleRecordCurrentMeasure                CycleRecordScreen
+      ViewB 0x0C  T_ScreenEnter_MetronomeBalanceScreen_Fwd  Draw_MetronomeBalance (DL_MetronomeBalance)   MetronomeBalanceScreen
+      ViewB 0x12  T_ScreenEnter_SeqPlayScreen_Fwd  Draw_SequencerPlayS0ngCycleMeasure            SeqPlayScreen
+      ViewB 0x14  T_ScreenEnter_CyclePlayScreen_Fwd  Draw_CyclePlayCurrentMeasureCycle             CyclePlayScreen
       ViewB 0x26  T_F40DE0  Draw_CyclePlayCurrentMeasureEdit              CyclePlayEditScreen
-      ViewB 0x29  T_F40DF0  enter = Fwd_F57410 -> the 0x26 enter routine;
+      ViewB 0x29  T_ScreenEnter_CyclePlayEditScreen29_Fwd  enter = Fwd_F57410 -> the 0x26 enter routine;
                             leave the 0x26 leave routine; own button table CyclePlayEditScreen29
   Names: the table ButtonTable_<Screen> (prom_b's convention for the 32 other screens' tables); the veneer
   ScreenButton_<Screen>; the enter and leave routines ScreenEnter_ / ScreenLeave_<Screen> (their one-line

@@ -84,7 +84,7 @@ data. The numbers rank slots; they are not exact call counts.
 | `T_F42D88` | 98 | prom_a `0xF859AE` | `A` selects a 4-byte descriptor at `0x0338 + A*4` and a saturating byte counter at `0x035B + A`, under `ei 6`; an empty descriptor is self-referential. A kernel object operation — **which** one is not established. |
 | `T_F42DC0` | 98 | prom_a `0xF859AB` | the same routine entered 3 bytes earlier, which first does `ld A,(XSP+4)` — the stack-argument form |
 | `T_F42E24` | 85 | `0xF0E82B` | not identified |
-| `T_F42C78` | 77 | `0xF550A6` | reads a bit-field through an 8-byte descriptor and range-checks it. Converted. |
+| `T_EditValue_StepBitField` | 77 | `0xF550A6` | reads a bit-field through an 8-byte descriptor and range-checks it. Converted. |
 | `T_F431B4` | 57 | `0xF7D006` | the third slot of an eight-entry `jrl` long-branch veneer table at `0xF7D000`, into prom_a `0xF81C15`. Not converted. |
 | `T_F431B0` | 53 | `0xF7D000` | the first slot of that same veneer table, into prom_a `0xF81ACB` |
 | `T_F42C8C` | 45 | `0xF55321` | **`IndexedTable_GetPtr`** — pointer *n* of the `0x60F018` table. Converted. |

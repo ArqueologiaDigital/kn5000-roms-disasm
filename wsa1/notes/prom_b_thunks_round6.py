@@ -106,7 +106,20 @@ RUN
     python3 notes/prom_b_thunks_round6.py --apply    # rewrite prom_b/wsa1_prom_b.s
     python3 notes/prom_b_thunks_round6.py --selftest # 24 checks, incl. the LAST slot
 `--apply` is idempotent: a slot it has already renamed is skipped, and a second
-run rewrites nothing.  Run the gate afterwards:
+run rewrites nothing.
+
+⚠ 2026-10-04: DO NOT USE --apply ANY MORE.  It rewrites prom_b only.  That was safe while prom_a
+reached the slots by NUMBER; prom_a now names them in code (`call T_F40794`) through its `.set` block
+of prom_b names (scripts/converters/symbolize_wsa1_rom_addresses.py), so a prom_b-only rename would leave
+those equates naming a label that no longer exists.  Promote the slots named since then in two steps:
+    python3 notes/prom_b_thunks_round6.py --pending-args   # 'T_<addr>=T_<target>' for the WSA1 rename
+                                                           # helper, which renames in BOTH images
+    python3 notes/prom_b_thunks_round6.py --mark scripts/renaming/<the run's>.sed
+                                                           # then: the two-line evidence block and the
+                                                           # `(was T_<addr>)` marker, as --apply wrote them,
+                                                           # on exactly the slots that .sed renamed
+Same rules (CONTENT targets only, R2 / R3 still dropped); --mark is idempotent.  It takes the .sed
+because ~580 slots other passes renamed carry no marker, and a mark-everything run would claim them.  Run the gate afterwards:
     python3 scripts/analysis/assert_byte_identical.py
 """
 import collections
@@ -707,7 +720,61 @@ def show_stale_quiet():
     return bad
 
 
+def pending():
+    """{old: (new, slot, t, name)} for the promotable slots whose label is still `T_<address>`."""
+    keep, _drop, _rows = proposals()
+    have = set(LABEL.findall(open(SRCB).read(), re.M) if False else
+               (m.group(1) for ln in open(SRCB).read().split("\n") for m in [LABEL.match(ln)] if m))
+    out = {}
+    for slot, (new, t, name) in sorted(keep.items()):
+        old = "T_%06X" % slot
+        # a target that is itself a slot stub (`T_F400DC_Nop`) or still carries an address is FRAMED
+        # whatever grade() says: `T_T_F400DC_Nop` would be churn (R2)
+        if re.search(r'^T_|[0-9A-F]{6}', name):
+            continue
+        if old in have and new not in have:
+            out[old] = (new, slot, t, name)
+    return out
+
+
+def mark():
+    """Give each promoted slot line that lacks it the evidence block and marker --apply writes."""
+    keep, _drop, _rows = proposals()
+    sed = open(sys.argv[sys.argv.index("--mark") + 1]).read()
+    mine = set(re.findall(r'^s/\\bT_[0-9A-F]{6}\\b/(T_\w+)/g$', sed, re.M))
+    by_new = {new: (slot, t, name) for slot, (new, t, name) in keep.items() if new in mine}
+    raw = open(SRCB_MASTER, "rb").read().decode("latin-1").split("\n")
+    out, n = [], 0
+    for ln in raw:
+        m = SLOTDEF.match(ln)
+        if m and m.group(1) in by_new and not MARK.search(ln):
+            slot, t, name = by_new[m.group(1)]
+            body = ln[m.end(1) + 1:]
+            i = body.find(";")
+            head, tail = (body[:i], body[i + 1:].strip()) if i >= 0 else (body, "")
+            out.append("; Evidence: slot 0x%06X is `%s 0x%06X`; %s 0x%06X carries the label"
+                       % (slot, "jp" if m.group(3).startswith("jp") else "ptr", t,
+                          "prom_a" if t >= 0xF80000 else "prom_b", t))
+            out.append(";           %s (graded CONTENT).  DERIVATIVE name." % name)
+            out.append(m.group(1) + ":" + head + "; %06X (was T_%06X) %s" % (slot, slot, tail))
+            n += 1
+        else:
+            out.append(ln)
+    data = "\n".join(out).encode("latin-1")
+    with open(SRCB_MASTER + ".tmp", "wb") as fh:
+        fh.write(data)
+    os.replace(SRCB_MASTER + ".tmp", SRCB_MASTER)
+    print("marked %d slot lines" % n)
+    return 0
+
+
 def main():
+    if "--pending-args" in sys.argv:
+        for old, (new, _s, _t, _n) in pending().items():
+            print("%s=%s" % (old, new))
+        return 0
+    if "--mark" in sys.argv:
+        return mark()
     if "--selftest" in sys.argv:
         return selftest()
     if "--apply" in sys.argv:

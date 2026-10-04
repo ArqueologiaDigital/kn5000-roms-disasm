@@ -207,7 +207,7 @@ def main():
                 w = 2 if mw.group(1) == "short" else 4
                 n = len([x for x in mw.group(2).split(",") if x.strip()])
                 newstarts.update(range(int(m.group(1), 16), int(m.group(1), 16) + w * n))
-    kept = renamed = retitled = quoted = converted = deleted = symbolic = 0
+    kept = renamed = retitled = quoted = converted = deleted = symbolic = marked = 0
     missing = []
     for ln in old:
         if have[ln] > 0:
@@ -219,6 +219,16 @@ def main():
             have[r] -= 1
             renamed += 1
             continue
+        # a renamed thunk slot that also gained the `XXXXXX (was T_XXXXXX)` marker in its comment, exactly as
+        # notes/prom_b_thunks_round6.py --mark writes it (2026-10-04); nothing else on the line may differ
+        mt = re.match(r"^(T_([0-9A-F]{6})):", ln)
+        if mt and r != ln and ";" in r:
+            code, _sep, rest = r.partition(";")
+            want = code + "; %s (was %s) %s" % (mt.group(2), mt.group(1), rest.strip())
+            if have[want] > 0:
+                have[want] -= 1
+                marked += 1
+                continue
         if ln in titles and have[titles[ln]] > 0:
             have[titles[ln]] -= 1
             retitled += 1
@@ -291,6 +301,7 @@ def main():
     print(f"  stanza REPLACED, its text quoted verbatim in the replacement {quoted}")
     print(f"  `.incbin` line CONVERTED to assembly, or an instruction re-typed as .ascii/.byte (byte gate is the proof) {converted}")
     print(f"  number -> equate of the same value (symbolize_wsa1_rom_addresses.py) {symbolic}")
+    print(f"  renamed thunk slot that gained its `(was T_<addr>)` marker (prom_b_thunks_round6.py --mark) {marked}")
     print(f"  ADDED                  {added}")
     print(f"  UNACCOUNTED FOR        {deleted}")
     print(f"  labels lost (not renamed either): {len(lost)}  {lost[:8]}")

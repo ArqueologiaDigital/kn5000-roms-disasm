@@ -57,7 +57,7 @@ The Technics Reference Guide names SysEx parameter address 08 00 "INITIAL" and m
 receive-only (`sysex-probes/param_names.json`).
 
 - Its descriptor's setter (+0x14) is `SysExParam_SetInitial` (0xFB3E5A). It reads the value, refuses
-  7 and above, shows status 0x25, runs `T_F409AC`, and jumps through `SysExInitial_ItemTable`
+  7 and above, shows status 0x25, runs `T_Transport_StopAllRunning`, and jumps through `SysExInitial_ItemTable`
   (prom_b 0xF4FB1C, 7 entries).
 - Its reader (+0x18) is `SysExParam_ReceiveOnly`, a bare `ret`.
 

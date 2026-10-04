@@ -32,7 +32,7 @@ ROWS = [
      "screen 0x0E = STEP RECORD.  Called by all eight SoftKeyColN_StepRecordPartSelect."),
     ("F664D5", "StepRecordPartSelect_ResetOnEntry",
      "(0x3010) = (0x60341E); on a newly entered screen (latch changed): chosen part (0x0E5C) = 0, (0x2130) |= 0x100,\n"
-     "(0x2160) = 0xFFFF, (0x215E) = 0, (0x0C00) = 0, T_F409AC; then (0x34BB) |= 4.  Called by Paint_StepRecordPartSelect."),
+     "(0x2160) = 0xFFFF, (0x215E) = 0, (0x0C00) = 0, T_Transport_StopAllRunning; then (0x34BB) |= 4.  Called by Paint_StepRecordPartSelect."),
     ("F66081", "TrackAssign_ReturnToStageZero",
      "unless (0x95) bit 2: (0x0DC0) = 0, UI_ScreenStage = 0, UI_Request_Hi |= 0x10.  Called by ExitKey_ and\n"
      "LcdKeyRow3_TrackAssign_StageNonZero."),
@@ -429,7 +429,7 @@ ROWS = [
      "at interrupt level 6: the ring control block 0x600800's put index (+6) = its get index (+2) and the count (+8) =\n"
      "0x1FF -- the 0x200-byte TimedEvents_Ring emptied (the block's layout: TimedEventRing_* in prom_a)."),
     ("FE0207", "Transport_StopAllRunning_SaveRegs2",
-     "push XDE / XHL / XIX / XIZ, call T_F409AC (Transport_StopAllRunning), pop, ret.  The bytes after it to the next\n"
+     "push XDE / XHL / XIX / XIZ, call T_Transport_StopAllRunning (Transport_StopAllRunning), pop, ret.  The bytes after it to the next\n"
      "label are two more such wrappers that nothing calls."),
     # prom_a 0xFE1D52-0xFE2A21: DISK LOAD / DISK SAVE by content type.  (0x2725) is the content type: the
     # interpreter-B record at prom_b DL_F583F0 draws it from DLText_F585AD, twelve bytes per entry, which
@@ -495,7 +495,7 @@ ROWS = [
     ("FAA742", "Tempo_ApplyBpm",
      "unless MidiCfg_ModeBits bit 2: the BPM in the low 9 bits of (0x7EE2), reset to 120 when outside 40..300,\n"
      "to (0x60F800); TREG5 = 140,000,000 / (64 * BPM), rounded (FINDINGS-system-clock.md, lever B -- which quotes the\n"
-     "byte-identical stale copy at 0xFAA342); then SysExTx_Tempo through T_F408EC unless MidiCfg_ModeBits bit 4 or\n"
+     "byte-identical stale copy at 0xFAA342); then SysExTx_Tempo through T_SysExTx_Tempo unless MidiCfg_ModeBits bit 4 or\n"
      "(0x60F020) bit 4, which it clears.  18 call sites, among them List2030_Tempo_Apply and ParamModule_BootPhase1."),
     ("F31852", "LCD_BlankThenSetPanel3Layer_Copy",
      "byte for byte LCD_BlankThenSetPanel3Layer (prom_a 0xF99000): SWI 7 service 0x0C with C = 0, then 0x10.\n"
@@ -1136,7 +1136,7 @@ ROWS = [
      "Called three times by PartSound_StepBankGroupMember, which compares DE before and after to see whether the\n"
      "level could move."),
     ("FBBCBC", "PartParam_StepMainOut",
-     "PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_F42C78\n"
+     "PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_EditValue_StepBitField\n"
      "(EditValue_StepBitField) with PartParamField_MainOut.  If it moved, the new value is kept only when EFFECT2 is\n"
      "off (byte 6 of record E, bit 7 masked, is 0), SUB OUT (byte 4 of E+0x20) is 0, or the new value is 0.\n"
      "Otherwise it sets UI_Request_Hi bit 6 and UI_Request = 0xB6 instead.  So with EFFECT2 on, a part cannot\n"

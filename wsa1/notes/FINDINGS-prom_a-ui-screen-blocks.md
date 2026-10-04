@@ -165,7 +165,7 @@ Counting operands in the converted text of `0xF99021-0xFA1403`: the only address
 anywhere in `0x600000-0x7FFFFF` is `0x60A000`, the RAM staging buffer. Asserted
 (§3 of the checks) rather than eyeballed.
 
-What it does instead is draw: `T_F42C78` ×61, `T_F42E04` ×43, `T_F42E00` ×43,
+What it does instead is draw: `T_EditValue_StepBitField` ×61, `T_F42E04` ×43, `T_F42E00` ×43,
 `T_F42E0C` ×38, `T_F42E84` ×32, `T_F42E08` ×28, `T_F42DC0` ×26, `T_F42E80` ×25.
 `T_F42E00` → prom_b `0xF31800` and `T_F42E04` → `0xF31814` are the two
 display-list draw entries of `FINDINGS-ui-display-list.md`.

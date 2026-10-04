@@ -2,13 +2,13 @@
 
 The SYSTEM-menu screens of prom_a (`notes/lanes/wsa1-naming-r1-2026-10-02/`, pack prom_a-s06, read
 and applied 2026-10-03) keep their cursor and selection in RAM 0x2690-0x270F.  Each screen steps its
-values through `T_F42C78` (prom_b 0xF550A6: step a byte through a 9-byte descriptor, A = 1 when it
+values through `T_EditValue_StepBitField` (prom_b 0xF550A6: step a byte through a 9-byte descriptor, A = 1 when it
 changed) with `lda xwa,(var) / push` as the argument, so the stepping routine names the variable; the
 screen's display-list records read the same byte (`+0x02 source variable`).
 
 | address | name | holds | evidence (routine, prom_a) |
 |---|---|---|---|
-| 0x2690 | `TuneScale_ItemCursor` | TUNE & SCALE item, 0..4 in bits 0-2 (MASTER TUNE .. KEY SCALING SHIFT) | TuneScale_MoveItemCursor (T_F42C78, Descriptor9_FA1E49), TuneScale_AdjustSelectedItem (`and 7`, 5-entry table) |
+| 0x2690 | `TuneScale_ItemCursor` | TUNE & SCALE item, 0..4 in bits 0-2 (MASTER TUNE .. KEY SCALING SHIFT) | TuneScale_MoveItemCursor (T_EditValue_StepBitField, Descriptor9_FA1E49), TuneScale_AdjustSelectedItem (`and 7`, 5-entry table) |
 | 0x2691 | `TuneScale_MasterTuneIndex` | index into ByteTable79_FA1C5C, the MASTER TUNE value | TuneScale_StoreMasterTune, TuneScale_LoadFields |
 | 0x2692 | `TuneScale_KeyScalingIndex` | index into ByteTable16_FA1C4C, the key-scaling type | TuneScale_StoreKeyScalingType, TuneScale_KeyScalingCodeToIndex |
 | 0x2695 | `SoundGroupNaming_Bank` | bank 0..4 (ByteTable5_FA17CA: USER1/USER2/RE-MAP1-3) | SoundGroupNaming_AdjustBank, _LoadGroupNames |
