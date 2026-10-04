@@ -34,7 +34,7 @@ WHERE THE SIGNAL IS
       - 0xFB8177 puts the state back to 0 when the session ends.
 
   * WHAT REPLIES ONCE THE SESSION IS OPEN.  With bit 7 of (0x60FD40) set,
-    sub_FB28BE answers EVERY message from the parse record's status field:
+    SysExSession_AnswerByStatus answers EVERY message from the parse record's status field:
     0 -> `F0 50 23 7E F7` (0xF4FEB4), 0x16 -> `F0 50 2A 7E F7` (0xF4FECD),
     anything else -> `F0 50 24 7E F7` (0xF4FEB9).  So a `21` arriving with a
     session already open is answered -- with an acknowledgement that carries
@@ -191,7 +191,7 @@ print("  0xFB8177 puts the state back to 0 when the session ends")
 print()
 
 # --- 4. what an open session answers with --------------------------------
-# sub_FB28BE, gated on bit 7 of (0x60FD40)
+# SysExSession_AnswerByStatus, gated on bit 7 of (0x60FD40)
 assert a(0xFB28BF, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xCF]), "acknowledgement gate moved"
 assert a(0xFB28D2, 2) == bytes([0xCE, 0xD8]), "status==0 test moved"
 assert a(0xFB28D9, 5) == bytes([0xF2, 0xB4, 0xFE, 0xF4, 0x30]), "ACK template moved"
@@ -199,7 +199,7 @@ assert a(0xFB28E4, 3) == bytes([0xCE, 0xCF, 0x16]), "memory-full test moved"
 assert a(0xFB28E9, 5) == bytes([0xF2, 0xCD, 0xFE, 0xF4, 0x31]), "memory-full template moved"
 assert a(0xFB28F1, 5) == bytes([0xF2, 0xB9, 0xFE, 0xF4, 0x31]), "NAK template moved"
 ACKS = [(0x00, 0xF4FEB4), (0x16, 0xF4FECD), (None, 0xF4FEB9)]
-print("with a session open (bit 7 of (0x60FD40) set) sub_FB28BE answers EVERY message")
+print("with a session open (bit 7 of (0x60FD40) set) SysExSession_AnswerByStatus answers EVERY message")
 for status, tpl in ACKS:
     print("  status %-4s -> 0x%06X  %s"
           % ("0x%02X" % status if status is not None else "any", tpl, hexs(b(tpl, 5))))

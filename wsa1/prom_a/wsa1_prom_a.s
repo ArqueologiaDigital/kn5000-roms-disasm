@@ -88663,7 +88663,7 @@ SysExRx_ParseDispatch_Ring601646:
 .LFB21BF:
 	inc 6,XSP                                            ; FB21BF  ef 66
 .LFB21C1:
-	call sub_FB5197                                      ; FB21C1  1d 97 51 fb
+	call SysExRx_AnswerRefused2B2C                                      ; FB21C1  1d 97 51 fb
 	call SysEx_ResetSession                                      ; FB21C5  1d 56 81 fb
 	pop XIX                                              ; FB21C9  5c
 	ret                                                  ; FB21CA  0e
@@ -88780,7 +88780,7 @@ SysExRx_ParseDispatch_Ring601C6E:
 .LFB22BC:
 	inc 6,XSP                                            ; FB22BC  ef 66
 .LFB22BE:
-	call sub_FB5197                                      ; FB22BE  1d 97 51 fb
+	call SysExRx_AnswerRefused2B2C                                      ; FB22BE  1d 97 51 fb
 	call SysEx_ResetSession                                      ; FB22C2  1d 56 81 fb
 	pop XIX                                              ; FB22C6  5c
 	ret                                                  ; FB22C7  0e
@@ -89422,7 +89422,7 @@ SysExSession_Run:
 	res 4,(XIX)                                          ; FB2873  b4 b4
 	pop XIX                                              ; FB2875  5c
 	ret                                                  ; FB2876  0e
-; SysExSession_DispatchCommand: status 0 and command < 0x22: PtrTable_F4F916[command]; then sub_FB28BE, sub_FB7BB9, PanelLed_ToggleActivityLed_SaveRegs2.
+; SysExSession_DispatchCommand: status 0 and command < 0x22: PtrTable_F4F916[command]; then SysExSession_AnswerByStatus, sub_FB7BB9, PanelLed_ToggleActivityLed_SaveRegs2.
 SysExSession_DispatchCommand:
 	pushw hl                                             ; FB2877  2b
 	pushw 0x04                                           ; FB2878  0b 04 00
@@ -89446,13 +89446,15 @@ SysExSession_DispatchCommand:
 	push XIY                                             ; FB28AE  3d
 	jp (xwa)                                             ; FB28AF  b0 d8
 .LFB28B1:
-	calr sub_FB28BE                                      ; FB28B1  1e 0a 00
+	calr SysExSession_AnswerByStatus                                      ; FB28B1  1e 0a 00
 	call sub_FB7BB9                                      ; FB28B4  1d b9 7b fb
 	call PanelLed_ToggleActivityLed_SaveRegs2                                      ; FB28B8  1d fe 7a fb
 .LFB28BC:
 	popw hl                                              ; FB28BC  4b
 	ret                                                  ; FB28BD  0e
-sub_FB28BE:
+; SysExSession_AnswerByStatus: with a session open, answers every message from the parse status: 0 -> F0 50 23 7E F7, 0x16 -> F0 50 2A 7E F7,
+;   else F0 50 24 7E F7 (README: 'What an open session answers with').
+SysExSession_AnswerByStatus:
 	pushw hl                                             ; FB28BE  2b
 	m_bit 7, MD24, 0x60fd40                              ; FB28BF  f2 40 fd 60 cf
 	jr z, .LFB28FD                                       ; FB28C4  66 37
@@ -90650,7 +90652,8 @@ SysExSession_RecvBody_Sound:
 	popw hl                                              ; FB3351  4b
 	unlk XIZ                                             ; FB3352  ee 0d
 	ret                                                  ; FB3354  0e
-sub_FB3355:
+; SysExTx_Tempo: the tempo transmitter; bounds the value to 0x0028..0x012C like the receiver 0xFB33FE (README, tempo section).
+SysExTx_Tempo:
 	link XIZ,0xfffd                                      ; FB3355  ee 0c fd ff
 	push XIX                                             ; FB3359  3c
 	lda xix, (0x60f800:24)                               ; FB335A  f2 00 f8 60 34
@@ -91122,7 +91125,8 @@ SysExParam_Set_Area60:
 	unlk XIZ                                             ; FB3749  ee 0d
 	ret                                                  ; FB374B  0e
 	ret                                                  ; FB374C  0e
-sub_FB374D:
+; SysExParam_CheckValueWhiteList: walks the six-byte value records at 0xF51E58 and refuses a value not in them (README: the VALUE WHITE-LIST).
+SysExParam_CheckValueWhiteList:
 	link XIZ,0x0000                                      ; FB374D  ee 0c 00 00
 	push XIX                                             ; FB3751  3c
 .LFB3752:
@@ -91183,7 +91187,7 @@ sub_FB374D:
 	ld C,L                                               ; FB37D5  cf 8b
 	extz BC                                              ; FB37D7  d9 12
 	pushw bc                                             ; FB37D9  29
-	calr sub_FB374D                                      ; FB37DA  1e 70 ff
+	calr SysExParam_CheckValueWhiteList                                      ; FB37DA  1e 70 ff
 	inc 8,XSP                                            ; FB37DD  ef 60
 	cp WA,0xffff                                         ; FB37DF  d8 cf ff ff
 	jr z, .LFB3819                                       ; FB37E3  66 34
@@ -91343,7 +91347,7 @@ sub_FB38C3:
 	ld A,L                                               ; FB3944  cf 89
 	extz WA                                              ; FB3946  d8 12
 	pushw wa                                             ; FB3948  28
-	calr sub_FB374D                                      ; FB3949  1e 01 fe
+	calr SysExParam_CheckValueWhiteList                                      ; FB3949  1e 01 fe
 	inc 8,XSP                                            ; FB394C  ef 60
 	cp WA,0xffff                                         ; FB394E  d8 cf ff ff
 	jr z, .LFB399E                                       ; FB3952  66 4a
@@ -92690,7 +92694,7 @@ SysExParam_Request_Area60:
 	ld (xiz-4), xbc                                      ; FB4552  be fc 61
 	lda xbc, (xiz-8)                                     ; FB4555  be f8 31
 	push XBC                                             ; FB4558  39
-	calr sub_FB4D62                                      ; FB4559  1e 06 08
+	calr SysExTx_SendParamValue                                      ; FB4559  1e 06 08
 	pop XIY                                              ; FB455C  5d
 .LFB455D:
 	pop XIX                                              ; FB455D  5c
@@ -92719,7 +92723,7 @@ SysExParam_Request_Area60:
 	ld (xiz-8), xix                                      ; FB4595  be f8 64
 	lda xbc, (xiz-12)                                    ; FB4598  be f4 31
 	push XBC                                             ; FB459B  39
-	calr sub_FB4D62                                      ; FB459C  1e c3 07
+	calr SysExTx_SendParamValue                                      ; FB459C  1e c3 07
 	inc 8,XSP                                            ; FB459F  ef 60
 	pop XIX                                              ; FB45A1  5c
 	unlk XIZ                                             ; FB45A2  ee 0d
@@ -93297,7 +93301,7 @@ sub_FB4AA4:
 	ld (xiz-4), xbc                                      ; FB4B33  be fc 61
 	lda xbc, (xiz-8)                                     ; FB4B36  be f8 31
 	push XBC                                             ; FB4B39  39
-	calr sub_FB4D62                                      ; FB4B3A  1e 25 02
+	calr SysExTx_SendParamValue                                      ; FB4B3A  1e 25 02
 	pop XBC                                              ; FB4B3D  59
 	pop XIX                                              ; FB4B3E  5c
 	unlk XIZ                                             ; FB4B3F  ee 0d
@@ -93473,7 +93477,9 @@ SysExTx_StagedParam_Record98:
 	pop XIX                                              ; FB4CAA  5c
 	unlk XIZ                                             ; FB4CAB  ee 0d
 	ret                                                  ; FB4CAD  0e
-sub_FB4CAE:
+; SysExTx_GmSystemOnOff: transmits F0 7E 7F 09 01 F7 (GM System On) or 09 02 (Off), the literal at 0xF4FEE6 / 0xF4FEEC chosen by the record's
+;   byte +1 (README: 'The instrument transmits').
+SysExTx_GmSystemOnOff:
 	link XIZ,0xfff8                                      ; FB4CAE  ee 0c f8 ff
 	pushw hl                                             ; FB4CB2  2b
 	push XIX                                             ; FB4CB3  3c
@@ -93556,7 +93562,8 @@ sub_FB4D20:
 	unlk XIZ                                             ; FB4D5E  ee 0d
 	ret                                                  ; FB4D60  0e
 	ret                                                  ; FB4D61  0e
-sub_FB4D62:
+; SysExTx_SendParamValue: the family-2B transmitter: the descriptor's +0x18 method reads the instrument's value and calls it (README: 'Direction, three witnesses').
+SysExTx_SendParamValue:
 	link XIZ,0xfff5                                      ; FB4D62  ee 0c f5 ff
 	pushw hl                                             ; FB4D66  2b
 	push XIX                                             ; FB4D67  3c
@@ -94004,7 +94011,8 @@ SysExCmd_DumpRequestGate:
 	inc 8,XSP                                            ; FB5194  ef 60
 .LFB5196:
 	ret                                                  ; FB5196  0e
-sub_FB5197:
+; SysExRx_AnswerRefused2B2C: for a family 2B or 2C message that is refused: SysExTx_Append of F0 50 29 7E F7 (0xF4FEC8), sent on both ports.
+SysExRx_AnswerRefused2B2C:
 	pushw hl                                             ; FB5197  2b
 	pushw 0x04                                           ; FB5198  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB519B  e2 d8 fc 60 21
@@ -94748,7 +94756,9 @@ sub_FB5903:
 	calr sub_FB5774                                      ; FB5903  1e 6e fe
 	calr sub_FB5D34                                      ; FB5906  1e 2b 04
 	ret                                                  ; FB5909  0e
-sub_FB590A:
+; GmMode_HandleChange: the only handler of internal event class 0x91 (UiListA_Class91): for byte index 3 -- the GM setting at 0x7F4D, record
+;   0x91 payload byte 3 -- applies it (0xFB5F0F) and SysExTx_AnnounceGmMode, guarded against re-entry by (0x60F01F) bit 0.
+GmMode_HandleChange:
 	push XIX                                             ; FB590A  3c
 	lda xix, (UiEvent_Byte2:16)                                ; FB590B  f1 b9 20 34
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x03                          ; FB590F  c1 b8 20 3f 03
@@ -94780,7 +94790,7 @@ sub_FB590A:
 	ld C,(XIX)                                           ; FB594D  84 23
 	extz BC                                              ; FB594F  d9 12
 	pushw bc                                             ; FB5951  29
-	calr sub_FB5F2E                                      ; FB5952  1e d9 05
+	calr SysExTx_AnnounceGmMode                                      ; FB5952  1e d9 05
 	calr sub_FB5972                                      ; FB5955  1e 1a 00
 	m_res 0, MD24, 0x60f01f                              ; FB5958  f2 1f f0 60 b0
 	pop XIY                                              ; FB595D  5d
@@ -95442,7 +95452,8 @@ sub_FB5F0F:
 	popw hl                                              ; FB5F2A  4b
 	unlk XIZ                                             ; FB5F2B  ee 0d
 	ret                                                  ; FB5F2D  0e
-sub_FB5F2E:
+; SysExTx_AnnounceGmMode: unless (0x60F020) bit 7: the record {B0, 0x11 if the argument's bit 2 else 0x10, 00, 7F} to SysExTx_GmSystemOnOff.
+SysExTx_AnnounceGmMode:
 	link XIZ,0xfffc                                      ; FB5F2E  ee 0c fc ff
 	push XIX                                             ; FB5F32  3c
 	lda xix, (xiz-4)                                     ; FB5F33  be fc 34
@@ -95459,7 +95470,7 @@ sub_FB5F2E:
 	ld (XIX+0x01),0x10                                   ; FB5F57  bc 01 00 10
 .LFB5F5B:
 	push XIX                                             ; FB5F5B  3c
-	call sub_FB4CAE                                      ; FB5F5C  1d ae 4c fb
+	call SysExTx_GmSystemOnOff                                      ; FB5F5C  1d ae 4c fb
 	pop XIY                                              ; FB5F60  5d
 .LFB5F61:
 	pop XIX                                              ; FB5F61  5c

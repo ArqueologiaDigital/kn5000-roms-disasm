@@ -31,7 +31,7 @@ WHERE THE SIGNAL IS  (ROM addresses, prom_a @0xF80000, prom_b @0xF00000)
   * handler tables prom_b 0xF4F800 (interrupt ring), 0xF4F888 (foreground
     ring), 0xF4F916 (inside the bulk-transfer session loop).
   * the session loop prom_a 0xFB2820; the per-message step SysExSession_DispatchCommand;
-    the acknowledger sub_FB28BE.
+    the acknowledger SysExSession_AnswerByStatus.
   * the RECEIVE handlers: 0xFB28FF (cmd 0x07 = wire 0x21) and 0xFB291D
     (cmd 0x08 = wire 0x22).
   * the TRANSMIT side SysExDump_Handshake (0xFB2323), reached from the SEND-button
@@ -206,7 +206,7 @@ assert a(0xFB2971, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xB4]), "res 4 -- end se
 # acknowledger the session step runs right after every handler:
 assert a(0xFB28A9, 6) == bytes([0xF2, 0xB1, 0x28, 0xFB, 0x35, 0x3D]), "push 0xFB28B1"
 assert a(0xFB28AF, 2) == bytes([0xB0, 0xD8]), "jp (XWA) -- into the handler"
-assert a(0xFB28B1, 3) == bytes([0x1E, 0x0A, 0x00]), "calr sub_FB28BE after it"
+assert a(0xFB28B1, 3) == bytes([0x1E, 0x0A, 0x00]), "calr SysExSession_AnswerByStatus after it"
 assert a(0xFB28BF, 5) == bytes([0xF2, 0x40, 0xFD, 0x60, 0xCF]), "bit 7,(0x60FD40)?"
 assert a(0xFB28C4, 2) == bytes([0x66, 0x37]), "clear -> send NOTHING"
 ACK, NAK, FULL = 0xF4FEB4, 0xF4FEB9, 0xF4FECD
@@ -330,7 +330,7 @@ assert not any(0xFB3483 <= s < 0xFB5122 for s in SCREEN79), "a screen gate in th
 assert b(0xF4FEF2, 6) == bytes([0xF0, 0x50, 0x2C, 0x04, 0x00, 0x11])
 assert len(scan(A, A_BASE, (0xF4FEF2).to_bytes(3, "little"))) == 9
 
-# the same asymmetry appears in the ERROR reply.  sub_FB5197 runs at the tail
+# the same asymmetry appears in the ERROR reply.  SysExRx_AnswerRefused2B2C runs at the tail
 # of BOTH outer dispatchers; it answers a failed message ONLY when the family
 # byte in field 5 is 0x2B or 0x2C.  0x21 and 0x22 fall through in silence.
 assert a(0xFB21C1, 4) == bytes([0x1D, 0x97, 0x51, 0xFB]), "IRQ dispatcher tail"
@@ -413,7 +413,7 @@ print("  gate 1: screen (0x207A) must be 0x79                 (0xFB2826)")
 print("  gate 2: handshake state (0x60FD44) must be 1         (0xFB2923)")
 print("  then:   wire bytes 3,4,5 (the peer's model triple) -> 0x60FC94..96,")
 print("          bit 7 of (0x60FD40) goes up, state := 2, and the session")
-print("          step's acknowledger sub_FB28BE -- which had been silent --")
+print("          step's acknowledger SysExSession_AnswerByStatus -- which had been silent --")
 print("          sends %s"
       % " ".join("%02X" % x for x in b(ACK, 5)))
 print("  wrong state: status 0x18, session ends, and nothing is sent")
@@ -440,7 +440,7 @@ print("  parameter engine, compares the panel-mode byte.  Its reply is built fro
 print("  the `2C` template 0xF4FEF2, named by 9 instructions in that span, and the")
 print("  strap patch rewrites its MD too -- so a `2B` request IS an at-rest test")
 print("  of which model answered.")
-print("  Even a REFUSED 0x2B or 0x2C is answered: sub_FB5197, at the tail of")
+print("  Even a REFUSED 0x2B or 0x2C is answered: SysExRx_AnswerRefused2B2C, at the tail of")
 print("  both dispatchers, sends F0 50 29 7E F7 when the status is non-zero")
 print("  AND the family byte is 0x2B or 0x2C.  0x21 and 0x22 are never in that")
 print("  set, so a badly framed or ill-timed 21/22 is answered with silence.")

@@ -600,7 +600,7 @@ for lit in (GM_ON, GM_OFF):
              if s in BOUNDARY["a"]]
     assert len(named) == 1, "literal 0x%06X named %d times" % (lit, len(named))
     assert 0xFB4CAE <= named[0] < 0xFB4D1F, \
-        "literal 0x%06X is named outside sub_FB4CAE" % lit
+        "literal 0x%06X is named outside SysExTx_GmSystemOnOff" % lit
 assert a(0xFB4CBD, 3) == bytes([0xCE, 0xCF, 0x11]), "cp H,0x11 selects GM ON"
 assert a(0xFB4CCD, 3) == bytes([0xCE, 0xCF, 0x10]), "cp H,0x10 selects GM OFF"
 assert LIVE[0xB0] == 0x00FB4CAE

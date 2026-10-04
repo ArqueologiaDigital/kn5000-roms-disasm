@@ -295,6 +295,26 @@ ROWS = [
      "as EditField_StepInc with EditField_IncUp5 / _IncDown5."),
     ("FEACB6", "EditField_StepLength12",
      "repaint bit 3; unless (0x601F58) bit 7 with (0x601F59) not 3: W bit 7 clear -> EditField_LengthUp12, set -> _LengthDown12."),
+    # prom_a SysEx module: routines the committed probes already describe (notes/sysex-probes/README.md), named after them
+    ("FB4CAE", "SysExTx_GmSystemOnOff",
+     "transmits F0 7E 7F 09 01 F7 (GM System On) or 09 02 (Off), the literal at 0xF4FEE6 / 0xF4FEEC chosen by the record's\n"
+     "byte +1 (README: 'The instrument transmits')."),
+    ("FB5F2E", "SysExTx_AnnounceGmMode",
+     "unless (0x60F020) bit 7: the record {B0, 0x11 if the argument's bit 2 else 0x10, 00, 7F} to SysExTx_GmSystemOnOff."),
+    ("FB590A", "GmMode_HandleChange",
+     "the only handler of internal event class 0x91 (UiListA_Class91): for byte index 3 -- the GM setting at 0x7F4D, record\n"
+     "0x91 payload byte 3 -- applies it (0xFB5F0F) and SysExTx_AnnounceGmMode, guarded against re-entry by (0x60F01F) bit 0."),
+    ("FB3355", "SysExTx_Tempo",
+     "the tempo transmitter; bounds the value to 0x0028..0x012C like the receiver 0xFB33FE (README, tempo section)."),
+    ("FB5197", "SysExRx_AnswerRefused2B2C",
+     "for a family 2B or 2C message that is refused: SysExTx_Append of F0 50 29 7E F7 (0xF4FEC8), sent on both ports."),
+    ("FB28BE", "SysExSession_AnswerByStatus",
+     "with a session open, answers every message from the parse status: 0 -> F0 50 23 7E F7, 0x16 -> F0 50 2A 7E F7,\n"
+     "else F0 50 24 7E F7 (README: 'What an open session answers with')."),
+    ("FB374D", "SysExParam_CheckValueWhiteList",
+     "walks the six-byte value records at 0xF51E58 and refuses a value not in them (README: the VALUE WHITE-LIST)."),
+    ("FB4D62", "SysExTx_SendParamValue",
+     "the family-2B transmitter: the descriptor's +0x18 method reads the instrument's value and calls it (README: 'Direction, three witnesses')."),
 ]
 
 

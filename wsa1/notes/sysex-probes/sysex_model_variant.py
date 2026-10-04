@@ -233,7 +233,7 @@ for i in UNREAD:
 #   5: the `25` tempo message -- transmitter and receiver
 SEQ_TX = 0xFB258A            # inside SysExDump_SendSequencer, the SEQUENCER send routine
 SEQ_RX = (0xFB2E36, 0xFB2E7F, 0xFB2EC8)     # parts 1, 2, 3 data handlers
-TEMPO_TX = 0xFB3371          # inside sub_FB3355
+TEMPO_TX = 0xFB3371          # inside SysExTx_Tempo
 TEMPO_RX = 0xFB3403          # inside the 0x25 handler
 assert set(GATE_CALLS) == {SEQ_TX, TEMPO_TX, TEMPO_RX} | set(SEQ_RX)
 assert all(GATE_INDEX[s] == 3 for s in (SEQ_TX,) + SEQ_RX)

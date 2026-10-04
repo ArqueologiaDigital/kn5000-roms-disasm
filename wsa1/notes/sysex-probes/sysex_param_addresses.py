@@ -435,7 +435,7 @@ assert [ram_of(p) for p in sorted(SCALE12, key=lambda q: q.b8)] == \
 # ------------------------------------------------------- the value white-lists
 # desc+0x0E, for the three generic setters only, indexes a 6-byte record at
 # 0xF51E58: a 16-bit COUNT and a 32-bit pointer to that many legal byte values.
-# sub_FB374D walks the list and REFUSES a value that is not in it.
+# SysExParam_CheckValueWhiteList walks the list and REFUSES a value that is not in it.
 assert a_(0xFB37B2, 6) == bytes([0x23, 0x06, 0xCE, 0x43, 0xE9, 0x12]), \
     "the 6-byte stride at 0xFB37B2 moved"
 assert a_(0xFB37BB, 6) == bytes([0xE9, 0xC8, 0x58, 0x1E, 0xF5, 0x00]), \

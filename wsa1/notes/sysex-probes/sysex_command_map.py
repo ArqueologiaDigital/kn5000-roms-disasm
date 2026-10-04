@@ -297,7 +297,7 @@ print("`28` (end of dump) and `2A` (memory full) both decode to command 0x04,"
 
 # --- 10. the receive handshake state machine --------------------------------
 # (0x60FD44): 0 idle, 1 enquiry seen, 2 transfer started.  Only when it
-# reaches 2 does bit 7 of (0x60FD40) go up, and sub_FB28BE sends NO reply
+# reaches 2 does bit 7 of (0x60FD40) go up, and SysExSession_AnswerByStatus sends NO reply
 # until it is up.
 assert ra(0xFB28FF, 6) == bytes([0xC2, 0x44, 0xFD, 0x60, 0x3F, 0x00])  # ==0 ?
 assert ra(0xFB2907, 6) == bytes([0xF2, 0x44, 0xFD, 0x60, 0x00, 0x01])  # :=1

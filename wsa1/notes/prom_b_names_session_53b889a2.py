@@ -2605,4 +2605,12 @@ RENAMES = [
     ("sub_FEA2A5", "EditField_StepInc"),
     ("sub_FEADE1", "EditField_StepInc5"),
     ("sub_FEACB6", "EditField_StepLength12"),
+    ("sub_FB4CAE", "SysExTx_GmSystemOnOff"),
+    ("sub_FB5F2E", "SysExTx_AnnounceGmMode"),
+    ("sub_FB590A", "GmMode_HandleChange"),
+    ("sub_FB3355", "SysExTx_Tempo"),
+    ("sub_FB5197", "SysExRx_AnswerRefused2B2C"),
+    ("sub_FB28BE", "SysExSession_AnswerByStatus"),
+    ("sub_FB374D", "SysExParam_CheckValueWhiteList"),
+    ("sub_FB4D62", "SysExTx_SendParamValue"),
 ]

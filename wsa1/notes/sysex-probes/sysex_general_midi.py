@@ -31,17 +31,17 @@ WHAT IT ESTABLISHES (all of it recomputed from the instruction bytes)
      GM Off returns without doing any of it when the bit is already clear;
      GM On has no such guard and is acted on every time it arrives.
 
-  3. THE INSTRUMENT TRANSMITS.  `sub_FB5F2E` builds the 4-byte record
-     {0xB0, 0x11|0x10, 0x00, 0x7F} and hands it to `sub_FB4CAE`, which puts
+  3. THE INSTRUMENT TRANSMITS.  `SysExTx_AnnounceGmMode` builds the 4-byte record
+     {0xB0, 0x11|0x10, 0x00, 0x7F} and hands it to `SysExTx_GmSystemOnOff`, which puts
      the 6-byte literal at 0xF4FEE6 (GM System On) or 0xF4FEEC (GM System
-     Off) on the wire.  It is called from `sub_FB590A`, the sole handler of
+     Off) on the wire.  It is called from `GmMode_HandleChange`, the sole handler of
      internal event class 0x91 -- i.e. from every GM state change, whatever
      caused it.  It is NOT gated by the EXCLUSIVE transmit filter
      ((0x7F38) bit 3), which gates only the OTHER parameter-change
      transmitter, `SysExTx_EmitStagedParams`.
 
   4. ...except that a change that came FROM the wire is not echoed: the two
-     receive handlers set bit 7 of (0x60F020) and `sub_FB5F2E` returns at
+     receive handlers set bit 7 of (0x60F020) and `SysExTx_AnnounceGmMode` returns at
      once when that bit is set.  Bit 7 of that cell is SET at exactly two
      sites, READ at exactly one, and CLEARED NOWHERE in either CPU-1 image.
      RESET zeroes it (the 0x604000..0x610000 clear covers it), so the lock
@@ -275,7 +275,7 @@ def main():
     assert tx[29:33] == bytes.fromhex("bc010011"), tx[29:33].hex()     # +1 = 0x11
     assert tx[33:41] == bytes.fromhex("8e0823cbcc046e04"), tx[33:41].hex()
     assert tx[41:45] == bytes.fromhex("bc010010"), tx[41:45].hex()     # +1 = 0x10
-    assert rd(a, TX_BUILDER + 46, 4) == bytes.fromhex("1dae4cfb"), "call sub_FB4CAE"
+    assert rd(a, TX_BUILDER + 46, 4) == bytes.fromhex("1dae4cfb"), "call SysExTx_GmSystemOnOff"
     #   class 0xB0 of the parameter-change transmit table is the same emitter
     assert struct.unpack("<I", rd(b, TX_CLASS_TABLE + 4 * 0xB0, 4))[0] == TX_EMITTER
     #   the emitter picks the literal by the record's byte +1

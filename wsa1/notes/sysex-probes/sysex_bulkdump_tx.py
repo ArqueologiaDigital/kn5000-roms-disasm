@@ -94,12 +94,12 @@ def septets(triple):
 
 # addr, name, length, what the firmware site is
 TEMPLATES = [
-    (0xF4FEB4, "ACK (reply)",              5, "0xFB28D9 sub_FB28BE"),
-    (0xF4FEB9, "NAK (reply)",              5, "0xFB28F1 sub_FB28BE"),
+    (0xF4FEB4, "ACK (reply)",              5, "0xFB28D9 SysExSession_AnswerByStatus"),
+    (0xF4FEB9, "NAK (reply)",              5, "0xFB28F1 SysExSession_AnswerByStatus"),
     (0xF4FEBE, "end of category",          5, "0xFB279C SysExDump_SendCategoryDone"),
     (0xF4FEC3, "end of dump",              5, "0xFB27CD SysExDump_SendJobDone"),
     (0xF4FEC8, "abort / gave up",          5, "0xFB2812, 0xFB34AD, 0xFB3EBB, 0xFB51C9"),
-    (0xF4FECD, "memory-full reply",        5, "0xFB28E9 sub_FB28BE"),
+    (0xF4FECD, "memory-full reply",        5, "0xFB28E9 SysExSession_AnswerByStatus"),
     (0xF4FED2, "continuation header",      3, "0xFB7034 SysExTx_AppendContHeaderIfCont"),
     (0xF4FED5, "enquiry",                  7, "0xFB2334 SysExDump_Handshake"),
     (0xF4FEDC, "start transfer",           7, "0xFB23AD SysExDump_Handshake, 0xFB2910"),

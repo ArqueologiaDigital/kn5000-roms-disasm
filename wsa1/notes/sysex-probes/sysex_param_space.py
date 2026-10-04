@@ -40,7 +40,7 @@ WHERE THE SIGNAL IS  (all prom_a addresses unless said otherwise)
     SysExBuf_ReadNibblePair (0xFB77F3) -- that routine READS TWO BYTES off the message and
     returns `(b0<<4)|(b1&0x0F)`.  The cmd-0x1A (2B) arms reach descriptor+0x18,
     e.g. 0xFB4562, which READS THE INSTRUMENT (IndexedTable_GetByteOr0) and calls
-    sub_FB4D62, the transmitter.  Third witness: the length check at
+    SysExTx_SendParamValue, the transmitter.  Third witness: the length check at
     0xFB6D5F admits only families 0x7E/0x2D/0x2C -- 2B is not length-checked
     because it has no data.
   * COUNT TRIPLE, the case the trie does not spell out: 0xFB6CA6 catches

@@ -1064,7 +1064,7 @@
 	.set	SysExSession_AbortStep_Sequencer, 0xFB3287
 	.set	SysExSession_AbortStep_Combination, 0xFB328C
 	.set	SysExSession_RecvBody_Sound, 0xFB328D
-	.set	sub_FB3355, 0xFB3355
+	.set	SysExTx_Tempo, 0xFB3355
 	.set	SysExCmd_TempoReceive, 0xFB33FE
 	.set	SysExCmd_ThirdRegionWrite, 0xFB3483
 	.set	SysExCmd_ThirdRegionRequest, 0xFB3495
@@ -1076,7 +1076,7 @@
 	.set	SysExTx_StagedParam_Record60, 0xFB4C12
 	.set	SysExTx_StagedParam_Record70, 0xFB4C46
 	.set	SysExTx_StagedParam_Record98, 0xFB4C7A
-	.set	sub_FB4CAE, 0xFB4CAE
+	.set	SysExTx_GmSystemOnOff, 0xFB4CAE
 	.set	sub_FB50EE, 0xFB50EE
 	.set	SysExCmd_DumpRequest_SystemPartMidi, 0xFB5122
 	.set	SysExCmd_DumpRequest_Sound, 0xFB512C
@@ -1086,7 +1086,7 @@
 	.set	SysExCmd_GmSystemOn, 0xFB51E7
 	.set	SysExCmd_GmSystemOff, 0xFB520C
 	.set	sub_FB585E, 0xFB585E
-	.set	sub_FB590A, 0xFB590A
+	.set	GmMode_HandleChange, 0xFB590A
 	.set	sub_FB5EE9, 0xFB5EE9
 	.set	SysEx_Checksum, 0xFB7A90
 	.set	SysExTx_SendBytes, 0xFB7AC2
@@ -88546,8 +88546,8 @@ T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 T_SysExModule_EntryThunks:	.long SysExModule_EntryThunks	; ptr -> 0xFB2000 (prom_a 0x32000)
 T_SysExDump_RunSendJob:	jp SysExDump_RunSendJob  ; -> prom_a 0x32049   x1
 T_SysExRx_PollRing601646:	jp SysExRx_PollRing601646  ; -> prom_a 0x320CE   x1
-T_F408EC:	jp sub_FB3355  ; -> prom_a 0x33355   x2
-T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
+T_F408EC:	jp SysExTx_Tempo  ; -> prom_a 0x33355   x2
+T_F408F0:	jp GmMode_HandleChange  ; -> prom_a 0x3590A
 T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
 T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
@@ -108597,7 +108597,7 @@ SysExSession_AbortTable:
 	.long SysExSession_AbortStep_Combination                       ; F4FA72  [17]   -> prom_a 0xFB328C
 
 ; --------------------------------------------------------------------------
-; MidiSysEx_Tail3Init -- not a pointer: three bytes that prom_a's sub_FB3355 copies into its frame
+; MidiSysEx_Tail3Init -- not a pointer: three bytes that prom_a's SysExTx_Tempo copies into its frame
 ;          (`lda xiy,(this)` / `ldw bc,3` / `ldir`, 0xFB3360-0xFB336B), the C compiler's initializer for
 ;          a 3-byte local.  The routine overwrites the first two with computed values
 ;          (0xFB33CF, 0xFB33DA) and passes all three to SysExTx_Append, so the 0xF7 (MIDI
@@ -108862,7 +108862,7 @@ SysExTx_StagedParamHandlers:
 	.long SysExTx_StagedParam_Ignore                       ; F4FDEC  [173]   -> prom_a 0xFB4BDD
 	.long SysExTx_StagedParam_Ignore                       ; F4FDF0  [174]   -> prom_a 0xFB4BDD
 	.long SysExTx_StagedParam_Ignore                       ; F4FDF4  [175]   -> prom_a 0xFB4BDD
-	.long sub_FB4CAE                       ; F4FDF8  [176]   -> prom_a 0xFB4CAE
+	.long SysExTx_GmSystemOnOff                       ; F4FDF8  [176]   -> prom_a 0xFB4CAE
 	.long SysExTx_StagedParam_Ignore                       ; F4FDFC  [177]   -> prom_a 0xFB4BDD
 	.long SysExTx_StagedParam_Ignore                       ; F4FE00  [178]   -> prom_a 0xFB4BDD
 	.long SysExTx_StagedParam_Ignore                       ; F4FE04  [179]   -> prom_a 0xFB4BDD

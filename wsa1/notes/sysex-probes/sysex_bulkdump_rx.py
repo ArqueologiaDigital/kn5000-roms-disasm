@@ -203,7 +203,7 @@ assert a(0xFB7401, 3) == bytes([0x0B, 0x16, 0x00]), "unpacker full-status moved"
 assert b(0xF511C7 + 0x16) == bytes([0x0F]), "status 0x16 no longer maps to ERROR 21"
 assert b(0xF4FECD, 5) == bytes([0xF0, 0x50, 0x2A, 0x7E, 0xF7]), "full reply moved"
 print("  the same status is raised when the destination fills mid-message,")
-print("  and sub_FB28BE answers it with F0 50 2A 7E F7")
+print("  and SysExSession_AnswerByStatus answers it with F0 50 2A 7E F7")
 print()
 
 # --- 4. the collector ceiling --------------------------------------------

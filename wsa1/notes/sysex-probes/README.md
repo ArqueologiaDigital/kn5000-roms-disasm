@@ -319,7 +319,7 @@ at `0xF80000` for the menu table and the four job-code stores.
   `SysExBuf_ReadNibblePair`, which **reads two bytes off the message** and returns
   `(b0<<4)|(b1&0x0F)`. `+0x18` (cmd `0x1A`, family `2B`) reaches e.g.
   `0xFB4562`, which reads the *instrument* (`IndexedTable_GetByteOr0`) and calls
-  `sub_FB4D62`, the transmitter. And the length check at `0xFB6D5F` admits
+  `SysExTx_SendParamValue`, the transmitter. And the length check at `0xFB6D5F` admits
   only `0x7E`/`0x2D`/`0x2C` — `2B` is not length-checked because it carries
   no data.
 * **The count triple is always on the wire.** The trie spells it out only when
@@ -717,7 +717,7 @@ answer is a gate, a state and a template.
   the script asserts neither message sender is called in its body. Out of
   state it stores status `0x18`, `ERROR 42!`. `0xFB8177` returns the state
   to 0 when the session ends.
-* **What an open session answers with.** With that bit set, `sub_FB28BE`
+* **What an open session answers with.** With that bit set, `SysExSession_AnswerByStatus`
   answers *every* message from the parse record's status field: 0 →
   `F0 50 23 7E F7`, `0x16` → `F0 50 2A 7E F7`, anything else →
   `F0 50 24 7E F7`. None of the three carries a model byte.
@@ -959,17 +959,17 @@ Both load bases are asserted by content first: prom_b must hold
   instruction, and no `and` of that cell clears it. prom_b and prom_c never
   touch the cell. RESET zeroes it — the single `ld XBC,0x3000 /
   ld XIX,0x00604000` clear at `0xF827AF` covers `0x604000..0x610000`.
-* **★★ The instrument transmits.** `sub_FB5F2E` builds
-  `{0xB0, 0x11|0x10, 0x00, 0x7F}` and calls `sub_FB4CAE`, which selects the
+* **★★ The instrument transmits.** `SysExTx_AnnounceGmMode` builds
+  `{0xB0, 0x11|0x10, 0x00, 0x7F}` and calls `SysExTx_GmSystemOnOff`, which selects the
   6-byte literal at `0xF4FEE6` or `0xF4FEEC` by the record's byte +1. Index
   `0xB0` of the 192-entry class table `0xF4FB38` is the same emitter. The
-  builder is called from `sub_FB590A`, which `UiListA_Class91` (`0xF87B02`)
+  builder is called from `GmMode_HandleChange`, which `UiListA_Class91` (`0xF87B02`)
   names as the ONLY handler of internal event class `0x91` — the class the
   receive handlers, the panel toggle, the boot restore and the SMF loader
   all post — 20 sites in all, every one of them carrying the same record id
   `0x91` and byte index `0x03`. It is NOT gated by the EXCLUSIVE transmit
   filter (`(0x7F38)` bit 3), which guards only `SysExTx_EmitStagedParams`; it IS dropped
-  while `sub_FB590A` is already inside itself (bit 0 of `(0x60F01F)`,
+  while `GmMode_HandleChange` is already inside itself (bit 0 of `(0x60F01F)`,
   set at `0xFB5929` and cleared at `0xFB5958`).
 * **★★★ Where GM sits in a dump.** `SysExXfer_SetPart_SystemPart2` sizes SYSTEM,PART & MIDI
   part 2 from the constants `0x7620` and `0x7F7E`; the same two bound the
@@ -998,7 +998,7 @@ references to `0x7F4D`.
 2. **The two 6-byte literals sit just past the nine fixed messages** at
    `0xF4FEB4-0xF4FEE2`, inside the same run of template bytes. They are not
    part of that table and no template index reaches them; only
-   `sub_FB4CAE`'s two `lda` operands do.
+   `SysExTx_GmSystemOnOff`'s two `lda` operands do.
 3. A GM message arriving **while a bulk dump session is open** is not
    ignored — the in-session collector at `0xFB60EE` demands identifier
    `0x50`, raises status `0x02`, and `STATUS_MAP[2]` is the `ERROR 41!`
@@ -1077,7 +1077,7 @@ parts 0-7 at `0x76A2 + 0x40p` and parts 8-31 at `0x78E2 + 0x40(p-8)`, and
    `0xFB38E4` and `0xFB3882` it indexes six-byte records at `0xF51E58`; for
    `0xFB3B04` it indexes four-byte records at `0xF51E70`, and for `0xFB3D13`
    four-byte records at `0xF51E84`. Only the first family is a VALUE
-   WHITE-LIST, which `sub_FB374D` walks and which refuses a value that is not
+   WHITE-LIST, which `SysExParam_CheckValueWhiteList` walks and which refuses a value that is not
    in it.
 
 
@@ -1160,8 +1160,8 @@ boundaries before it is believed.  That is the same trap
   `res 7` anywhere; no block initialiser covering it was found either.
 * **The exact trigger of the transmitted General MIDI message.**  The panel's
   GENERAL MIDI confirm handler (`0xF99E85`) and both receive handlers post the
-  same record — number `0x91`, offset 3 — and `sub_FB590A` consumes it and
-  calls the emitter; that `sub_FB590A` is the handler *for* number `0x91` is
+  same record — number `0x91`, offset 3 — and `GmMode_HandleChange` consumes it and
+  calls the emitter; that `GmMode_HandleChange` is the handler *for* number `0x91` is
   read off a prom_b directory slot (`T_F408F0`) with no located caller.
 * **`(0x7F32)` bit 4**, a fifth condition the received tempo value must pass
   (`0xFB57FC`) before it reaches the tempo itself.  It is on no MIDI page.
