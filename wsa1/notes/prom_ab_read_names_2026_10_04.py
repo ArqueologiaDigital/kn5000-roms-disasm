@@ -1801,6 +1801,17 @@ ROWS = [
     ("FEABE9", "EditField_VelocityStepHeld",
      "Button20 -- the held SoftKeyCol4: with an event selected EditField_EventVelocityUp5 / _Down5; otherwise, in\n"
      "DRUM EDIT, EditField_NewNoteVelocityUp5 / _Down5."),
+    ("FE8830", "EditScreen_PartKitIsUserOrExt",
+     "the edited part's entry in 0x603422 selects a record (RecordPtrs_RAM76A2); A = 0 when its kit code (+1) is\n"
+     "0x28, 0x29 or 0x30 -- the User 1 / User 2 / Ext codes of KitCategoryLegend_SelectByKitCode -- else 0xFF.\n"
+     "Called by EditScreen_EnterDrumEdit."),
+    ("FE83DC", "EditPartSelect_DrawPartLabels",
+     "the 16 bytes at 0x603422 copied to DisplayListB_Stage, then DisplayList_FE8405 with PartLabels_FE84F5.  Called\n"
+     "by ShowScreen_NoteEditPartSelect / _DrumEditPartSelect."),
+    ("FE87DD", "EditPartSelect_SelectUiPart",
+     "(0x0DB5) bit 0 cleared; the first part set in the mask (0x1336) (up to 17) maps through 0x603422 and\n"
+     "IndexMap_FE87B8 to UI_PartIndex; (0x0DB5) bit 0 set; a Queue2E00 record (W 0xFF, DE 0x1090).  Called by\n"
+     "EditPartSelect_OpenEditor."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

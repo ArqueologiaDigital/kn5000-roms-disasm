@@ -237,7 +237,7 @@ NOTE EDIT text would show:
 96 ticks per beat is the KN5000's song-clock resolution as well (`SEQ_BEAT_TICK`,
 `../../technics-docs/hdae5000-filesystem.md`).  **Not established:** what (0x601F75) / (0x601F76)
 count (10 / 11 in note edit, 7 / 8 in drum edit; `EditCursor_NextBeat` multiplies (0x601F75) by 0x60, so it
-is a span in beats), what (0x601F49)-(0x601F51) hold, and what `sub_FE8830`'s track types 0x28 /
+is a span in beats), what (0x601F49)-(0x601F51) hold, and what `EditScreen_PartKitIsUserOrExt`'s track types 0x28 /
 0x29 / 0x30 mean when `EditScreen_EnterDrumEdit` checks them before entering drum edit.
 
 **The value fields (2026-10-04).** NOTE EDIT draws MEAS POS NOTE VEL LEN INC
@@ -290,6 +290,17 @@ step them pin each cell (`notes/prom_ab_read_names_2026_10_04.py`):
 - The selected event is highlighted on layer 1 (`EditScreen_DrawSelectedEventBar`).
 - The deferred actions are these redraws, with a re-selection (`EditScreen_DeferredReselectAndRedraw`)
   or a chain extension (`EditScreen_DeferredRedrawAndExtend`).
+
+**Held soft keys (2026-10-04).** In the 32-slot button tables, a held soft key arrives as code + 0x11:
+- slot 0x11 (held SoftKeyCol1) steps the measure by 10 (`EditCursor_MeasureStepHeld`);
+- 0x12 steps the tick by 5 (`EditCursor_TickStepHeld`);
+- 0x13 steps the note by 6 (`EditCursor_NoteStepHeld`);
+- 0x14 steps the velocity by 5 (`EditField_VelocityStepHeld`).
+The plain keys step by 1.
+
+**DRUM EDIT's entry check** (`EditScreen_PartKitIsUserOrExt`): the edited part's kit code must be 0x28, 0x29
+or 0x30, the User 1, User 2 and Ext codes that `KitCategoryLegend_SelectByKitCode` maps. This answers the
+"track types 0x28 / 0x29 / 0x30" question above, in part.
 
 (0x601F49) is the length cell the same routines step when (0x601F5B) bit 0 is clear. NOTE
 EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not established.

@@ -3964,4 +3964,7 @@ RENAMES = [
     ("sub_FEAA94", "EditCursor_MeasureStepHeld"),
     ("sub_FEAB0E", "EditCursor_TickStepHeld"),
     ("sub_FEABE9", "EditField_VelocityStepHeld"),
+    ("sub_FE8830", "EditScreen_PartKitIsUserOrExt"),
+    ("sub_FE83DC", "EditPartSelect_DrawPartLabels"),
+    ("sub_FE87DD", "EditPartSelect_SelectUiPart"),
 ]

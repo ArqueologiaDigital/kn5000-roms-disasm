@@ -176311,7 +176311,7 @@ ShowScreen_NoteEditPartSelect:
 	ld a, 0x10:opc                                          ; FE8382  21 10
 	swi 7                                                ; FE8384  ff
 	calr Paint_NoteEditPartSelect                                      ; FE8385  1e 0c 00
-	calr sub_FE83DC                                      ; FE8388  1e 51 00
+	calr EditPartSelect_DrawPartLabels                                      ; FE8388  1e 51 00
 	calr sub_FE827D                                          ; FE838B  1e ef fe
 	ld c, 0x07:opc                                          ; FE838E  23 07
 	ld a, 0x0c:opc                                          ; FE8390  21 0c
@@ -176369,7 +176369,7 @@ ShowScreen_DrumEditPartSelect:
 	ld a, 0x10:opc                                          ; FE83BB  21 10
 	swi 7                                                ; FE83BD  ff
 	calr Paint_DrumEditPartSelect                                      ; FE83BE  1e 0c 00
-	calr sub_FE83DC                                      ; FE83C1  1e 18 00
+	calr EditPartSelect_DrawPartLabels                                      ; FE83C1  1e 18 00
 	calr sub_FE828C                                          ; FE83C4  1e c5 fe
 	ld c, 0x07:opc                                          ; FE83C7  23 07
 	ld a, 0x0c:opc                                          ; FE83C9  21 0c
@@ -176402,7 +176402,7 @@ Paint_DrumEditPartSelect:
 	ld XIX,KeyboardRuler_Strip0                          ; FE83D2  44 e2 17 ff 00
 	call T_DisplayList_Run                               ; FE83D7  1d f0 17 f4
 	ret                                                  ; FE83DB  0e
-; sub_FE83DC -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditPartSelect_DrawPartLabels -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 14
 ; instructions to its first `ret`:
@@ -176418,7 +176418,9 @@ Paint_DrumEditPartSelect:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FE83DC:
+; EditPartSelect_DrawPartLabels: the 16 bytes at 0x603422 copied to DisplayListB_Stage, then DisplayList_FE8405 with PartLabels_FE84F5.  Called
+;   by ShowScreen_NoteEditPartSelect / _DrumEditPartSelect.
+EditPartSelect_DrawPartLabels:
 	ld XIY,0x00603422                                    ; FE83DC  45 22 34 60 00
 	ld XIX,DisplayListB_Stage                                    ; FE83E1  44 f6 12 00 00
 	ld c, 0x10:opc                                          ; FE83E6  23 10
@@ -176781,7 +176783,7 @@ ScreenDispatch_FE857C_Nop25:   ; entry: named by 7 `.long` operands, first at 0x
 	ret                                                  ; FE8772  0e
 ; EditPartSelect_OpenEditor(BC = part 1..16): (0x601F00) = part, (0x601F01) = the long for that part from the word table
 ;   after EditPartSelect_PartRefused_Always0; UI_Request = 0x8028 (DRUM EDIT, screen 0x28) when EditScreen_Mode bit 0 is set, else 0x8025
-;   (NOTE EDIT, screen 0x25); then sub_FE87DD.
+;   (NOTE EDIT, screen 0x25); then EditPartSelect_SelectUiPart.
 EditPartSelect_OpenEditor:
 	ld (EditScreen_Part:24), bc                                ; FE8773  f2 00 1f 60 51
 	ld XIX,EditPartSelect_PartBitMask                                    ; FE8778  44 ff 85 fe 00
@@ -176794,13 +176796,13 @@ EditPartSelect_OpenEditor:
 	ldw (UI_Request:16), 0x8028                              ; FE8792  f1 70 20 02 28 80
 	ld xwa, (0x1336:16)                                 ; FE8798  e1 36 13 20
 	ld (EditScreen_PartMask:24), xwa                               ; FE879C  f2 01 1f 60 60
-	calr sub_FE87DD                                            ; FE87A1  1e 39 00
+	calr EditPartSelect_SelectUiPart                                            ; FE87A1  1e 39 00
 	ret                                                  ; FE87A4  0e
 .LFE87A5:
 	ldw (UI_Request:16), 0x8025                              ; FE87A5  f1 70 20 02 25 80
 	ld xwa, (0x1336:16)                                 ; FE87AB  e1 36 13 20
 	ld (EditScreen_PartMask:24), xwa                               ; FE87AF  f2 01 1f 60 60
-	calr sub_FE87DD                                            ; FE87B4  1e 26 00
+	calr EditPartSelect_SelectUiPart                                            ; FE87B4  1e 26 00
 	ret                                                  ; FE87B7  0e
 ; ---------------------------------------------------------------------
 ; IndexMap_FE87B8 -- 37 bytes: 0x00..0x1F, then five 0x00
@@ -176819,7 +176821,10 @@ IndexMap_FE87B8:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f  ; FE87B8
 	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f  ; FE87C8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00                                        ; FE87D8
-sub_FE87DD:
+; EditPartSelect_SelectUiPart: (0x0DB5) bit 0 cleared; the first part set in the mask (0x1336) (up to 17) maps through 0x603422 and
+;   IndexMap_FE87B8 to UI_PartIndex; (0x0DB5) bit 0 set; a Queue2E00 record (W 0xFF, DE 0x1090).  Called by
+;   EditPartSelect_OpenEditor.
+EditPartSelect_SelectUiPart:
 	m_and_mi8 MB16, 0x0db5, 0xfe                         ; FE87DD  c1 b5 0d 3c fe
 	xor BC,BC                                            ; FE87E2  d9 d1
 	xor WA,WA                                            ; FE87E4  d8 d0
@@ -176831,7 +176836,7 @@ sub_FE87DD:
 	.byte 0xd7, 0x3e, 0x2a                               ; FE87F0  d7 3e 2a   xorcf A,QHL3
 	.byte 0xd7, 0x3e, 0x88                               ; FE87F3  d7 3e 88   ld WA,QHL3
 	jr c, .LFE87FA                                       ; FE87F6  67 02
-; (sub_FE87F8 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE87DD;
+; (sub_FE87F8 removed 2026-10-04: no code names it and the line above falls through into it -- part of EditPartSelect_SelectUiPart;
 ;  notes/prom_a_stray_label_removal.py)
 	jr .LFE8801                                          ; FE87F8  68 07
 .LFE87FA:
@@ -176854,7 +176859,10 @@ sub_FE87DD:
 	jr .LFE882F                                          ; FE882D  68 00
 .LFE882F:
 	ret                                                  ; FE882F  0e
-sub_FE8830:
+; EditScreen_PartKitIsUserOrExt: the edited part's entry in 0x603422 selects a record (RecordPtrs_RAM76A2); A = 0 when its kit code (+1) is
+;   0x28, 0x29 or 0x30 -- the User 1 / User 2 / Ext codes of KitCategoryLegend_SelectByKitCode -- else 0xFF.
+;   Called by EditScreen_EnterDrumEdit.
+EditScreen_PartKitIsUserOrExt:
 	ld XIX,0x00603422                                    ; FE8830  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FE8835  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FE883A  c3 03 f0 e0 21
@@ -176876,14 +176884,14 @@ sub_FE8830:
 .LFE8865:
 	ld a, 0xff:opc                                          ; FE8865  21 ff
 	ret                                                  ; FE8867  0e
-; EditScreen_EnterDrumEdit: unless refused by sub_FE8830, set EditScreen_Mode bit 0 (DRUM EDIT), (0x601F4D) = (0x601F51),
+; EditScreen_EnterDrumEdit: unless refused by EditScreen_PartKitIsUserOrExt, set EditScreen_Mode bit 0 (DRUM EDIT), (0x601F4D) = (0x601F51),
 ;   (0x601F49) = 10, (0x601F75) = 7, (0x601F76) = 8; then the shared tail.
 EditScreen_EnterDrumEdit:
 	m_bit 0, MD24, 0x601f77                              ; FE8868  f2 77 1f 60 c8
 	jr z, .LFE8871                                       ; FE886D  66 02
 	jr .LFE8882                                          ; FE886F  68 11
 .LFE8871:
-	calr sub_FE8830                                      ; FE8871  1e bc ff
+	calr EditScreen_PartKitIsUserOrExt                                      ; FE8871  1e bc ff
 	cp a, 0x00:i3                                          ; FE8874  c9 d8
 	jr nz, .LFE8882                                      ; FE8876  6e 0a
 	m_set 0, MD24, 0x601f77                              ; FE8878  f2 77 1f 60 b8

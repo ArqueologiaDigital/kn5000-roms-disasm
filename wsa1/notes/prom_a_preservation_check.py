@@ -3488,7 +3488,7 @@ RENAMES = {
     "sub_FE3B3A": "sub_FE3B30",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE6F89": "sub_FE6E84",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE8066": "ScreenButton_Sequencer",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FE87F8": "sub_FE87DD",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FE87F8": "EditPartSelect_SelectUiPart",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE9A47": "ScreenButton_NoteEdit",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FEAADB": "EditCursor_MeasurePlus10",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FF5F32": "sub_FF5F1B",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4141,6 +4141,9 @@ RENAMES = {
     "sub_FEAA94": "EditCursor_MeasureStepHeld",
     "sub_FEAB0E": "EditCursor_TickStepHeld",
     "sub_FEABE9": "EditField_VelocityStepHeld",
+    "sub_FE8830": "EditScreen_PartKitIsUserOrExt",
+    "sub_FE83DC": "EditPartSelect_DrawPartLabels",
+    "sub_FE87DD": "EditPartSelect_SelectUiPart",
 }
 
 
