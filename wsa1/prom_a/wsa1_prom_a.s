@@ -177034,8 +177034,8 @@ EditScreen_EnterNoteEdit:
 	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
 	calr BStore_CursorSlot_RestoreMark                                      ; FE8A5F  1e 96 01
 	calr DrumEdit_CursorNoteFromRow                                          ; FE8A62  1e 52 25
-	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
-	calr sub_FE8A9B                                      ; FE8A68  1e 30 00
+	calr EditPos_SeekShownNoteAtTickZero                                      ; FE8A65  1e 4c 02
+	calr EditPos_LoadTickIfShownNote                                      ; FE8A68  1e 30 00
 	calr EditScreen_SelectEventAtCursor                                          ; FE8A6B  1e a3 04
 	ldw (EditCursor_Beat:24), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
 	ld (EditCursor_Tick:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
@@ -177055,7 +177055,8 @@ EditScreen_EnterNoteEdit:
 	swi 7                                                ; FE8A96  ff
 	set	0, (0xc6:8)                                   ; FE8A97  f0 c6 b8
 	ret                                                  ; FE8A9A  0e
-sub_FE8A9B:
+; EditPos_LoadTickIfShownNote: EditPos_LoadEventTick when the event at the cursor is a note-on DrumEdit_IsOtherNote passes.
+EditPos_LoadTickIfShownNote:
 	call BStoreCursor_ReadByte                                        ; FE8A9B  1d 32 22 ff
 	and A,0xf0                                           ; FE8A9F  c9 cc f0
 	cp A,0x90                                            ; FE8AA2  c9 cf 90
@@ -177267,7 +177268,9 @@ sub_FE8CA7:
 	ret                                                  ; FE8CB2  0e
 T_F402D8_Nop:
 	ret                                                  ; FE8CB3  0e
-sub_FE8CB4:
+; EditPos_SeekShownNoteAtTickZero: within the beat (to the next 0x81 / 0x82), stops on the first note-on DrumEdit_IsOtherNote passes whose tick
+;   byte (+1) is 0, backed onto its tag; otherwise the cursor is restored.
+EditPos_SeekShownNoteAtTickZero:
 	calr BStore_CursorSlot_Save                                      ; FE8CB4  1e 37 00
 .LFE8CB7:
 	call BStoreCursor_ReadByte                                        ; FE8CB7  1d 32 22 ff
@@ -178017,8 +178020,8 @@ EditScreen_ReloadMeasureView:   ; entry: named by 2 `.long` operands, first at 0
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9368  c1 4a 0d 3f 00
 	jr nz, .LFE935B                                      ; FE936D  6e ec
 	calr DrumEdit_CursorNoteFromRow                                          ; FE936F  1e 45 1c
-	calr sub_FE8CB4                                          ; FE9372  1e 3f f9
-	calr sub_FE8A9B                                          ; FE9375  1e 23 f7
+	calr EditPos_SeekShownNoteAtTickZero                                          ; FE9372  1e 3f f9
+	calr EditPos_LoadTickIfShownNote                                          ; FE9375  1e 23 f7
 	calr EditScreen_SelectEventAtCursor                                          ; FE9378  1e 96 fb
 	calr EditScreen_EraseHeaderRow                                          ; FE937B  1e 36 64
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE937E  1e a5 65
@@ -178213,8 +178216,8 @@ EditScreen_WrapAndShowCursorMeasure:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9596  1e 5f f6
 	calr EditScreen_BuildBeatTable                                          ; FE9599  1e 4d f5
 	calr EditCursor_SeekToTick                                      ; FE959C  1e 48 03
-	calr sub_FE8CB4                                          ; FE959F  1e 12 f7
-	calr sub_FE8A9B                                          ; FE95A2  1e f6 f4
+	calr EditPos_SeekShownNoteAtTickZero                                          ; FE959F  1e 12 f7
+	calr EditPos_LoadTickIfShownNote                                          ; FE95A2  1e f6 f4
 	calr EditScreen_SelectEventAtCursor                                          ; FE95A5  1e 69 f9
 	calr EditScreen_EraseHeaderRow                                          ; FE95A8  1e 09 62
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE95AB  1e 78 63
@@ -179791,7 +179794,7 @@ EditScreen_CursorRight:
 ;   the move -- or the chain ends (bit 1).
 EditPos_SeekFirstNoteAfterOldCursor:
 	calr BStore_CursorSlot_RestoreMark                                          ; FEA449  1e ac e7
-	calr sub_FE8A9B                                          ; FEA44C  1e 4c e6
+	calr EditPos_LoadTickIfShownNote                                          ; FEA44C  1e 4c e6
 	call BStoreCursor_ReadByte                                        ; FEA44F  1d 32 22 ff
 	and A,0xf0                                           ; FEA453  c9 cc f0
 	cp A,0x90                                            ; FEA456  c9 cf 90
@@ -179838,7 +179841,7 @@ EditPos_SeekLastNoteBeforeOldCursor:
 	jr nz, .LFEA4D5                                      ; FEA4B2  6e 21
 .LFEA4B4:
 	calr BStore_CursorSlot_RestoreMark                                          ; FEA4B4  1e 41 e7
-	calr sub_FE8A9B                                          ; FEA4B7  1e e1 e5
+	calr EditPos_LoadTickIfShownNote                                          ; FEA4B7  1e e1 e5
 .LFEA4BA:
 	calr BStore_CursorSlot_Save                                          ; FEA4BA  1e 31 e8
 	calr EditPos_SeekNextShownNote                                      ; FEA4BD  1e 27 03
@@ -181054,13 +181057,13 @@ EditScreen_HighlightCursorRow:
 	ld a, 0x05:opc                                          ; FEB065  21 05
 	swi 7                                                ; FEB067  ff
 	ret                                                  ; FEB068  0e
-; DrumEdit_RedrawRowList: DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, sub_FEB280.
+; DrumEdit_RedrawRowList: DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, DrumEdit_DrawRowNames.
 DrumEdit_RedrawRowList:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEB069  f2 70 1f 60 c8
 	jr z, .LFEB079                                       ; FEB06E  66 09
 	calr EditScreen_EraseRowLabelArea                                          ; FEB070  1e 18 48
 	calr DrumEdit_DrawRowNotes                                      ; FEB073  1e 04 00
-	calr sub_FEB280                                          ; FEB076  1e 07 02
+	calr DrumEdit_DrawRowNames                                          ; FEB076  1e 07 02
 .LFEB079:
 	ret                                                  ; FEB079  0e
 ; DrumEdit_DrawRowNotes: layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by DrumEdit_RedrawRowList only when EditScreen_Mode
@@ -181454,7 +181457,7 @@ DrumEdit_DrawRowNote11:
 	add WA,0x000b                                        ; FEB25D  d8 c8 0b 00
 	ld (0x26b0:16), wa                                  ; FEB261  f1 b0 26 50
 	ld XIY,DisplayList_FEB274                            ; FEB265  45 74 b2 fe 00
-	ld XIX,sub_FEB280                                    ; FEB26A  44 80 b2 fe 00
+	ld XIX,DrumEdit_DrawRowNames                                    ; FEB26A  44 80 b2 fe 00
 	call T_DisplayListB_Run                              ; FEB26F  1d f4 17 f4
 	ret                                                  ; FEB273  0e
 
@@ -181463,17 +181466,20 @@ DrumEdit_DrawRowNote11:
 DisplayList_FEB274:
 	.byte 0x0A, 0x0C                               ; FEB274  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x99, 0x00, 0x03  ; FEB276
-sub_FEB280:
+; DrumEdit_DrawRowNames: DrumEdit_DrawRowName for rows 0..11.
+DrumEdit_DrawRowNames:
 	xor DE,DE                                            ; FEB280  da d2
 .LFEB282:
 	pushw de                                             ; FEB282  2a
-	calr sub_FEB290                                      ; FEB283  1e 0a 00
+	calr DrumEdit_DrawRowName                                      ; FEB283  1e 0a 00
 	popw de                                              ; FEB286  4a
 	inc 1,DE                                             ; FEB287  da 61
 	cp DE,0x000c                                         ; FEB289  da cf 0c 00
 	jr c, .LFEB282                                       ; FEB28D  67 f3
 	ret                                                  ; FEB28F  0e
-sub_FEB290:
+; DrumEdit_DrawRowName: (row DE) layer 0: note = DrumEdit_TopRowNote + row; T_F41040 with the part's kit (0x603422[EditScreen_Part])
+;   and the note; RecordNameSource_Select; 10 characters (SWI 7 0x17) at x 0x1A, y = row x 10 + 0x2B.
+DrumEdit_DrawRowName:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEB290  f1 40 25 00 00
 	ld hl, (DrumEdit_TopRowNote:24)                                ; FEB295  d2 71 1f 60 23
 	add HL,DE                                            ; FEB29A  da 83
@@ -181849,7 +181855,7 @@ DrumKitNameBlockPtrs:
 ; legend-to-index tie needs.
 ;
 ; ★ THE NAME READER pins the 10-byte width independently of the data.
-; sub_FEB290 (0xFEB290), called 12 times per redraw by sub_FEB280's loop over
+; DrumEdit_DrawRowName (0xFEB290), called 12 times per redraw by DrumEdit_DrawRowNames's loop over
 ; DE = 0..11 (one row per visible key), sets HL = (0x601F71)+DE with L then
 ; replaced by what call 0xF41040 returns for it (the index into the block),
 ; (0x2530) = x 0x1A, (0x2532) = y 10*DE+0x2B, calls
@@ -182000,7 +182006,7 @@ DrumKitNames:
 
 ; DrumKitNames_Block1 -- name block 1: 129 ten-character names, 119 non-blank.
 ; Read by: DrumKitNameBlockPtrs[123 programs (every one not listed under another block)] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block1:
 ; ---- name block 1, 0xFEBACE: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEBACE  [  1][  0]
@@ -182135,7 +182141,7 @@ DrumKitNames_Block1:
 
 ; DrumKitNames_Block2 -- name block 2: 129 ten-character names, 119 non-blank.
 ; Read by: DrumKitNameBlockPtrs[24, 26, 29] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block2:
 ; ---- name block 2, 0xFEBFD8: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEBFD8  [  2][  0]
@@ -182270,7 +182276,7 @@ DrumKitNames_Block2:
 
 ; DrumKitNames_Block3 -- name block 3: 129 ten-character names, 119 non-blank.
 ; Read by: DrumKitNameBlockPtrs[40] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block3:
 ; ---- name block 3, 0xFEC4E2: 10 of 129 names are blank ----
 	.ascii "          "                             ; FEC4E2  [  3][  0]
@@ -182405,7 +182411,7 @@ DrumKitNames_Block3:
 
 ; DrumKitNames_Block4 -- name block 4: 129 ten-character names, 88 non-blank.
 ; Read by: DrumKitNameBlockPtrs[112] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block4:
 ; ---- name block 4, 0xFEC9EC: 41 of 129 names are blank ----
 	.ascii "          "                             ; FEC9EC  [  4][  0]
@@ -182540,7 +182546,7 @@ DrumKitNames_Block4:
 
 ; DrumKitNames_Block5 -- name block 5: 129 ten-character names, 62 non-blank.
 ; Read by: DrumKitNameBlockPtrs[48] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block5:
 ; ---- name block 5, 0xFECEF6: 67 of 129 names are blank ----
 	.ascii "          "                             ; FECEF6  [  5][  0]
@@ -182675,7 +182681,7 @@ DrumKitNames_Block5:
 
 ; DrumKitNames_Block6 -- name block 6: 129 ten-character names, 57 non-blank.
 ; Read by: DrumKitNameBlockPtrs[120] -> RecordNameSource_Select's type-0x20
-;          arm (0xFEB30B) -> sub_FEB290, SWI7 svc 0x17 with BC=10, HL=note.
+;          arm (0xFEB30B) -> DrumEdit_DrawRowName, SWI7 svc 0x17 with BC=10, HL=note.
 DrumKitNames_Block6:
 ; ---- name block 6, 0xFED400: 72 of 129 names are blank ----
 	.ascii "          "                             ; FED400  [  6][  0]

@@ -4144,6 +4144,10 @@ RENAMES = {
     "sub_FE8830": "EditScreen_PartKitIsUserOrExt",
     "sub_FE83DC": "EditPartSelect_DrawPartLabels",
     "sub_FE87DD": "EditPartSelect_SelectUiPart",
+    "sub_FEB280": "DrumEdit_DrawRowNames",
+    "sub_FEB290": "DrumEdit_DrawRowName",
+    "sub_FE8CB4": "EditPos_SeekShownNoteAtTickZero",
+    "sub_FE8A9B": "EditPos_LoadTickIfShownNote",
 }
 
 

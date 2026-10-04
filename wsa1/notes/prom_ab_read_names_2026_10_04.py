@@ -1666,7 +1666,7 @@ ROWS = [
      "EditScreen_AuditionEvent, EditScreen_ActionTimer2 = 0x82.  Called by DrumEdit_SoftKeyCol8 after it enters a\n"
      "note."),
     ("FEB069", "DrumEdit_RedrawRowList",
-     "DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, sub_FEB280."),
+     "DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, DrumEdit_DrawRowNames."),
     ("FE9648", "EditScreen_ShowPreviousMeasure",
      "with EditCursor_Measure > 1: the view is rebuilt from the measure before (EditScreen_OpenCursorMeasure and\n"
      "EditScreen_BuildBeatTable with the measure lowered by one, then raised back), the cursor at beat 0 tick 0 of\n"
@@ -1812,6 +1812,15 @@ ROWS = [
      "(0x0DB5) bit 0 cleared; the first part set in the mask (0x1336) (up to 17) maps through 0x603422 and\n"
      "IndexMap_FE87B8 to UI_PartIndex; (0x0DB5) bit 0 set; a Queue2E00 record (W 0xFF, DE 0x1090).  Called by\n"
      "EditPartSelect_OpenEditor."),
+    ("FEB280", "DrumEdit_DrawRowNames", "DrumEdit_DrawRowName for rows 0..11."),
+    ("FEB290", "DrumEdit_DrawRowName",
+     "(row DE) layer 0: note = DrumEdit_TopRowNote + row; T_F41040 with the part's kit (0x603422[EditScreen_Part])\n"
+     "and the note; RecordNameSource_Select; 10 characters (SWI 7 0x17) at x 0x1A, y = row x 10 + 0x2B."),
+    ("FE8CB4", "EditPos_SeekShownNoteAtTickZero",
+     "within the beat (to the next 0x81 / 0x82), stops on the first note-on DrumEdit_IsOtherNote passes whose tick\n"
+     "byte (+1) is 0, backed onto its tag; otherwise the cursor is restored."),
+    ("FE8A9B", "EditPos_LoadTickIfShownNote",
+     "EditPos_LoadEventTick when the event at the cursor is a note-on DrumEdit_IsOtherNote passes."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
