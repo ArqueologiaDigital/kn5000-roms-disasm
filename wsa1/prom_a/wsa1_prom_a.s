@@ -177010,7 +177010,7 @@ EditScreen_EnterNoteEdit:
 	calr EditScreen_EndAudition                                          ; FE8A28  1e 24 1b
 	call T_SeqBufRing_Discard                                        ; FE8A2B  1d 10 0a f4
 	call T_TimedEventRing_Discard                                        ; FE8A2F  1d 14 0a f4
-	calr sub_FE9148                                          ; FE8A33  1e 12 07
+	calr NoteEdit_ClearHeldKeyNotes                                          ; FE8A33  1e 12 07
 	calr sub_FE8BE3                                      ; FE8A36  1e aa 01
 	calr EditScreen_OpenCursorMeasure                                          ; FE8A39  1e 6d 04
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE8A3C  c1 4a 0d 3f 00
@@ -177683,7 +177683,7 @@ NoteEdit_TakeKeyboardInput:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9098  c1 4a 0d 3f 00
 	jr nz, .LFE90AE                                      ; FE909D  6e 0f
 	calr EditScreen_StepCursorAfterEntry                                      ; FE909F  1e ee 01
-	calr sub_FE9148                                      ; FE90A2  1e a3 00
+	calr NoteEdit_ClearHeldKeyNotes                                      ; FE90A2  1e a3 00
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE90A5  1e 2a 67
 	calr EditScreen_DrawVisibleNotes                                          ; FE90A8  1e 14 6e
 	jrl .LFE9027                                         ; FE90AB  78 79 ff
@@ -177757,7 +177757,8 @@ NoteEdit_AnyKeyHeld:
 	djnz8 c, .LFE9132                                    ; FE9142  cb 1c ed
 	xor A,A                                              ; FE9145  c9 d1
 	ret                                                  ; FE9147  0e
-sub_FE9148:
+; NoteEdit_ClearHeldKeyNotes: the note byte of each of the 8 NoteEdit_HeldKeys slots = 0.
+NoteEdit_ClearHeldKeyNotes:
 	ld c, 0x08:opc                                          ; FE9148  23 08
 	ld XIX,0x00601f1d                                    ; FE914A  44 1d 1f 60 00
 	xor A,A                                              ; FE914F  c9 d1
@@ -177969,7 +177970,7 @@ EditScreen_RunDueAction:
 ; EditScreen_DeferredActions: the NOTE / DRUM EDIT deferred actions, run by EditScreen_RunDueAction when EditScreen_ActionTimer reaches 0x80 (notes/prom_ab_read_names_2026_10_04.py)
 EditScreen_DeferredActions:
 	.long EditScreen_ReloadMeasureView                                 ; FE9311  [  0]
-	.long sub_FE9711                                 ; FE9315  [  1]
+	.long EditScreen_DeferredInsertSelectedAtCursor                                 ; FE9315  [  1]
 	.long EditScreen_DeferredReselectAndRedraw                                 ; FE9319  [  2]
 	.long EditScreen_DeferredRedrawAndExtend                                 ; FE931D  [  3]
 	.long EditScreen_DeferredRedraw                                 ; FE9321  [  4]
@@ -178341,8 +178342,10 @@ EditScreen_SeekPartSavedCursor:
 	xor W,W                                              ; FE970A  c8 d0
 	ld (BStore_CursorOffset:16), wa                                  ; FE970C  f1 5e 34 50
 	ret                                                  ; FE9710  0e
-sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
-	calr sub_FE9762                                      ; FE9711  1e 4e 00
+; EditScreen_DeferredInsertSelectedAtCursor: EditScreen_DeferredActions[1], queued by EditScreen_QueueRelocateAfterMove: EditScreen_InsertSelectedEventAtCursor,
+;   the selection redone, the notes redrawn, EditCursor_TickInMeasure from the position, the cursor layer redrawn.
+EditScreen_DeferredInsertSelectedAtCursor:   ; entry: named by 1 `.long` operand, first at 0xFE9315
+	calr EditScreen_InsertSelectedEventAtCursor                                      ; FE9711  1e 4e 00
 	calr EditScreen_SelectEventAtCursor                                          ; FE9714  1e fa f7
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9717  1e b8 60
 	calr EditScreen_DrawVisibleNotes                                          ; FE971A  1e a2 67
@@ -178385,7 +178388,12 @@ EditScreen_DeferredRedraw:   ; entry: named by 1 `.long` operand, first at 0xFE9
 	calr EditScreen_DrawVisibleNotes                                          ; FE975B  1e 61 67
 	calr EditScreen_RedrawCursorLayer                                          ; FE975E  1e 29 66
 	ret                                                  ; FE9761  0e
-sub_FE9762:
+; EditScreen_InsertSelectedEventAtCursor: copies the selected event's bytes +2..+5 (note, velocity, length) to 0x601F18..0x601F1B, backs onto its tag,
+;   runs sub_FE9983 (EditScreen_SaveTrackCursor, BStore_DirEntry = part + 1, T_F42F04 -- whose effect is not read
+;   here), seeks the cursor's tick (EditCursor_SeekPastTick) and inserts 0x90, EditCursor_Tick and the four bytes
+;   into the part's chain (BStore_AppendBytes, 6), then EditScreen_AppendMissingBeatMarkers.  Called by
+;   EditCursor_NextBeat / _PrevBeat and deferred action 1 -- the selected note following the cursor.
+EditScreen_InsertSelectedEventAtCursor:
 	call BStoreCursor_Step                                        ; FE9762  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE9766  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE976A  1d 32 22 ff
@@ -178781,12 +178789,12 @@ ExitKey_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 ; NoteEdit_Button17 -- NoteEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
 ;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 NoteEdit_Button17:   ; entry: named by 1 `.long` operand, first at 0xFE9A8E
-	calr sub_FEAA94                                          ; FE9B6C  1e 25 0f
+	calr EditCursor_MeasureStepHeld                                          ; FE9B6C  1e 25 0f
 	ret                                                  ; FE9B6F  0e
 ; NoteEdit_Button18 -- NoteEdit_ButtonTable slot 0x12, NOT NAMED: slot 0x12 is only the VARIANT-1 already-held rewrite of base code 0x01
 ;   (SoftKeyCol2); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 NoteEdit_Button18:   ; entry: named by 1 `.long` operand, first at 0xFE9A92
-	calr sub_FEAB0E                                          ; FE9B70  1e 9b 0f
+	calr EditCursor_TickStepHeld                                          ; FE9B70  1e 9b 0f
 	ret                                                  ; FE9B73  0e
 ; NoteEdit_Button19 -- NoteEdit_ButtonTable slot 0x13, NOT NAMED: slot 0x13 is only the VARIANT-1 already-held rewrite of base code 0x02
 ;   (SoftKeyCol3); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -178796,7 +178804,7 @@ NoteEdit_Button19:   ; entry: named by 1 `.long` operand, first at 0xFE9A96
 ; NoteEdit_Button20 -- NoteEdit_ButtonTable slot 0x14, NOT NAMED: slot 0x14 is only the VARIANT-1 already-held rewrite of base code 0x03
 ;   (SoftKeyCol4); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 NoteEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9A9A
-	calr sub_FEABE9                                          ; FE9B78  1e 6e 10
+	calr EditField_VelocityStepHeld                                          ; FE9B78  1e 6e 10
 	ret                                                  ; FE9B7B  0e
 ; NoteEdit_Button21 -- NoteEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
 ;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -178954,12 +178962,12 @@ ExitKey_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 ; DrumEdit_Button17 -- DrumEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
 ;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 DrumEdit_Button17:   ; entry: named by 1 `.long` operand, first at 0xFE9BE8
-	calr sub_FEAA94                                      ; FE9CBC  1e d5 0d
+	calr EditCursor_MeasureStepHeld                                      ; FE9CBC  1e d5 0d
 	ret                                                  ; FE9CBF  0e
 ; DrumEdit_Button18 -- DrumEdit_ButtonTable slot 0x12, NOT NAMED: slot 0x12 is only the VARIANT-1 already-held rewrite of base code 0x01
 ;   (SoftKeyCol2); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 DrumEdit_Button18:   ; entry: named by 1 `.long` operand, first at 0xFE9BEC
-	calr sub_FEAB0E                                      ; FE9CC0  1e 4b 0e
+	calr EditCursor_TickStepHeld                                      ; FE9CC0  1e 4b 0e
 	ret                                                  ; FE9CC3  0e
 ; DrumEdit_Button19 -- DrumEdit_ButtonTable slot 0x13, NOT NAMED: slot 0x13 is only the VARIANT-1 already-held rewrite of base code 0x02
 ;   (SoftKeyCol3); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -178969,7 +178977,7 @@ DrumEdit_Button19:   ; entry: named by 1 `.long` operand, first at 0xFE9BF0
 ; DrumEdit_Button20 -- DrumEdit_ButtonTable slot 0x14, NOT NAMED: slot 0x14 is only the VARIANT-1 already-held rewrite of base code 0x03
 ;   (SoftKeyCol4); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 DrumEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9BF4
-	calr sub_FEABE9                                      ; FE9CC8  1e 1e 0f
+	calr EditField_VelocityStepHeld                                      ; FE9CC8  1e 1e 0f
 	ret                                                  ; FE9CCB  0e
 ; DrumEdit_Button21 -- DrumEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
 ;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -179128,7 +179136,7 @@ EditCursor_NextBeat:
 	ld (EditCursor_TickInMeasure:24), bc                                ; FE9E26  f2 54 1f 60 51
 	calr EditCursor_WrapAndRecompute                                          ; FE9E2B  1e 64 f6
 	ld (EditScreen_ActionTimer:24), 0x00                             ; FE9E2E  f2 58 1f 60 00 00
-	calr sub_FE9762                                          ; FE9E34  1e 2b f9
+	calr EditScreen_InsertSelectedEventAtCursor                                          ; FE9E34  1e 2b f9
 	calr EditScreen_ShowCursorMeasure                                          ; FE9E37  1e c1 f6
 	ret                                                  ; FE9E3A  0e
 .LFE9E3B:
@@ -179315,7 +179323,7 @@ EditCursor_PrevBeat:
 	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FE9FFD  d2 3f 1f 60 3f 01 00
 	jr z, .LFEA012                                       ; FEA004  66 0c
 	ld (EditScreen_ActionTimer:24), 0x00                             ; FEA006  f2 58 1f 60 00 00
-	calr sub_FE9762                                          ; FEA00C  1e 53 f7
+	calr EditScreen_InsertSelectedEventAtCursor                                          ; FEA00C  1e 53 f7
 	calr EditScreen_ShowPreviousMeasureAtTick                                          ; FEA00F  1e 82 f6
 .LFEA012:
 	ret                                                  ; FEA012  0e
@@ -180441,7 +180449,9 @@ UI_GotoNoteEditPartSelect:
 UI_GotoDrumEditPartSelect:
 	ldw (UI_Request:16), 0x8027                              ; FEAA8D  f1 70 20 02 27 80
 	ret                                                  ; FEAA93  0e
-sub_FEAA94:
+; EditCursor_MeasureStepHeld: NoteEdit_Button17 / DrumEdit_Button17 -- slot 0x11, the held variant of SoftKeyCol1 (code 0x00 + 0x11, as slot
+;   0x13 is of 0x02): EditCursor_MeasurePlus10 / _MeasureMinus10 by W bit 7, unless deferred action 0 is pending.
+EditCursor_MeasureStepHeld:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAA94  c1 75 20 3e 08
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FEAA99  f2 58 1f 60 cf
 	jr z, .LFEAAA9                                       ; FEAA9E  66 09
@@ -180493,7 +180503,8 @@ EditCursor_MeasureMinus10:
 .LFEAB0A:
 	calr sub_FE9CFC_Nop                                          ; FEAB0A  1e 32 d5
 	ret                                                  ; FEAB0D  0e
-sub_FEAB0E:
+; EditCursor_TickStepHeld: Button18 -- the held SoftKeyCol2: EditCursor_TickPlus5 / _TickMinus5, unless deferred action 1 is pending.
+EditCursor_TickStepHeld:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAB0E  c1 75 20 3e 08
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FEAB13  f2 58 1f 60 cf
 	jr z, .LFEAB23                                       ; FEAB18  66 09
@@ -180584,7 +180595,9 @@ EditCursor_NoteDown6:
 .LFEABE1:
 	ld (EditCursor_Note:24), 0x01                             ; FEABE1  f2 44 1f 60 00 01
 	jr .LFEABC1                                          ; FEABE7  68 d8
-sub_FEABE9:
+; EditField_VelocityStepHeld: Button20 -- the held SoftKeyCol4: with an event selected EditField_EventVelocityUp5 / _Down5; otherwise, in
+;   DRUM EDIT, EditField_NewNoteVelocityUp5 / _Down5.
+EditField_VelocityStepHeld:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEABE9  c1 75 20 3e 08
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FEABEE  f2 58 1f 60 cf
 	jr z, .LFEABF6                                       ; FEABF3  66 01

@@ -1783,6 +1783,24 @@ ROWS = [
      "_DrawNewNoteLength."),
     ("FEF88B", "EditScreen_EraseRowLabelArea",
      "layer 0, DisplayList_FEF89F: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws."),
+    ("FE9762", "EditScreen_InsertSelectedEventAtCursor",
+     "copies the selected event's bytes +2..+5 (note, velocity, length) to 0x601F18..0x601F1B, backs onto its tag,\n"
+     "runs sub_FE9983 (EditScreen_SaveTrackCursor, BStore_DirEntry = part + 1, T_F42F04 -- whose effect is not read\n"
+     "here), seeks the cursor's tick (EditCursor_SeekPastTick) and inserts 0x90, EditCursor_Tick and the four bytes\n"
+     "into the part's chain (BStore_AppendBytes, 6), then EditScreen_AppendMissingBeatMarkers.  Called by\n"
+     "EditCursor_NextBeat / _PrevBeat and deferred action 1 -- the selected note following the cursor."),
+    ("FE9711", "EditScreen_DeferredInsertSelectedAtCursor",
+     "EditScreen_DeferredActions[1], queued by EditScreen_QueueRelocateAfterMove: EditScreen_InsertSelectedEventAtCursor,\n"
+     "the selection redone, the notes redrawn, EditCursor_TickInMeasure from the position, the cursor layer redrawn."),
+    ("FE9148", "NoteEdit_ClearHeldKeyNotes", "the note byte of each of the 8 NoteEdit_HeldKeys slots = 0."),
+    ("FEAA94", "EditCursor_MeasureStepHeld",
+     "NoteEdit_Button17 / DrumEdit_Button17 -- slot 0x11, the held variant of SoftKeyCol1 (code 0x00 + 0x11, as slot\n"
+     "0x13 is of 0x02): EditCursor_MeasurePlus10 / _MeasureMinus10 by W bit 7, unless deferred action 0 is pending."),
+    ("FEAB0E", "EditCursor_TickStepHeld",
+     "Button18 -- the held SoftKeyCol2: EditCursor_TickPlus5 / _TickMinus5, unless deferred action 1 is pending."),
+    ("FEABE9", "EditField_VelocityStepHeld",
+     "Button20 -- the held SoftKeyCol4: with an event selected EditField_EventVelocityUp5 / _Down5; otherwise, in\n"
+     "DRUM EDIT, EditField_NewNoteVelocityUp5 / _Down5."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

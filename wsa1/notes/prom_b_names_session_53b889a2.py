@@ -3958,4 +3958,10 @@ RENAMES = [
     ("sub_FEF7B4", "EditScreen_EraseHeaderRow"),
     ("sub_FEF83B", "EditScreen_EraseLengthCell"),
     ("sub_FEF88B", "EditScreen_EraseRowLabelArea"),
+    ("sub_FE9762", "EditScreen_InsertSelectedEventAtCursor"),
+    ("sub_FE9711", "EditScreen_DeferredInsertSelectedAtCursor"),
+    ("sub_FE9148", "NoteEdit_ClearHeldKeyNotes"),
+    ("sub_FEAA94", "EditCursor_MeasureStepHeld"),
+    ("sub_FEAB0E", "EditCursor_TickStepHeld"),
+    ("sub_FEABE9", "EditField_VelocityStepHeld"),
 ]
