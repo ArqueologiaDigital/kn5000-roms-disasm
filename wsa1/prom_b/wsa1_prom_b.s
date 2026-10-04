@@ -90508,7 +90508,7 @@ T_F42C70:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 byte
 				; is 6 (notes/prom_b_default_slot_census.py).
 				; Which tables these are has not been traced.
 T_PanelCode_ToSlotAndFlags:	jp PanelCode_ToSlotAndFlags  ; -> prom_b 0x55019   x28
-T_F42C78:	jp sub_F550A6  ; -> prom_b 0x550A6   x77
+T_F42C78:	jp EditValue_StepBitField  ; -> prom_b 0x550A6   x77
 T_F42C7C:	jp sub_F5517B  ; -> prom_b 0x5517B   x8
 ; Evidence: slot 0xF42C80 is `jp 0xF55231`; prom_b 0xF55231 carries the label
 ;           Queue2C00_Append4, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -114798,7 +114798,7 @@ PanelCode_ToSlotAndFlags_Skip6:
 	ret	; F550A5  ret
 
 ; ---------------------------------------------------------------------
-; sub_F550A6 -- read a bit-field through an 8-byte descriptor and range-check it
+; EditValue_StepBitField -- read a bit-field through an 8-byte descriptor and range-check it
 ; Called from: thunk T_F42C78 (0xF42C78), 77 opcode-anchored references
 ; Inputs:  (XIZ+8) = 32-bit pointer to the source byte,
 ;          (XIZ+0x0C) = 32-bit pointer to an 8-byte descriptor
@@ -114825,7 +114825,10 @@ PanelCode_ToSlotAndFlags_Skip6:
 ;           converted routine is IndexedParam_AdjustField below.
 ; Unknown:  what the descriptor describes.
 ; ---------------------------------------------------------------------
-sub_F550A6:
+; EditValue_StepBitField: steps a bit-field of the byte at the first argument through the field record XIX: +1 mask, +2 shift, +3 maximum,
+;   +4 minimum, +5 / +6 step sizes (chosen by PanelEvent_Flags bit 2 / UI_RequestBits bit 2), +7 PanelEvent_Flags XOR;
+;   up when PanelEvent_Flags bit 0, else down, clamped, written back under the mask (77 call sites).
+EditValue_StepBitField:
 	link XIZ,0xfffe	; F550A6  link XIZ,0xfffe
 	pushw	hl	; F550AA  push HL
 	pushw	de	; F550AB  push DE
@@ -115245,7 +115248,7 @@ IndexedTable_GetByte:
 ;          (an upper bound that ranks slots; not a call count)
 ; Inputs:  (XIZ+0x08) = a 16-bit INDEX -- not a pointer;
 ;          (XIZ+0x0A) = 32-bit pointer to the 8-byte descriptor already
-;          documented on sub_F550A6 above:
+;          documented on EditValue_StepBitField above:
 ;              +0 byte offset into the object   +1 field mask
 ;              +2 right-shift count             +3 upper bound
 ;              +4 lower bound                   +5 step when (0x2075) bit 2
@@ -115258,7 +115261,7 @@ IndexedTable_GetByte:
 ; Evidence: the object is resolved, not passed: `push 0x00 / push (XIZ+0x08) /
 ;          calr 0xF55321` is IndexedTable_GetPtr, and descriptor +0 is then
 ;          added to the pointer it returns (`ld C,(XIX) / extz / add XIY,XBC`).
-;          The adjust core is BYTE-IDENTICAL to sub_F550A6's: 0xF553B1..0xF55414
+;          The adjust core is BYTE-IDENTICAL to EditValue_StepBitField's: 0xF553B1..0xF55414
 ;          equals 0xF550DB..0xF5513E in 99 of 100 bytes, the single difference
 ;          being a frame displacement at 0xF553E0 (0xF9 = -7) versus 0xF5510A
 ;          (0xFE = -2), which is just the two routines' different frame sizes.
@@ -115446,7 +115449,7 @@ IndexedTable_GetByte_Skip9:
 ;          reaches 0xF554B9, which clears them -- the same sense in which bit 0
 ;          clear means "up" and set means "down" for the numeric editor.
 ;          ⚠ Note the descriptor byte XORed into (0x28B0) here is +2
-;          (`ld C,(XIX+0x02)` at 0xF55488), NOT the +7 that sub_F550A6 and
+;          (`ld C,(XIX+0x02)` at 0xF55488), NOT the +7 that EditValue_StepBitField and
 ;          IndexedParam_AdjustField use.  Read from the bytes, not assumed.
 ; Notes:   the bit-3 (0x28B0) path calls List2030_Append4 TWICE, once with the
 ;          value D and once with 0x0000, and releases 16 bytes with two
@@ -115661,7 +115664,7 @@ IndexedTable_GetByte_Join7:
 ;           same two journals, chosen by the same bit, as
 ;           IndexedParam_AdjustField.  It returns A = 1.
 ; Unknown: what the descriptor describes, and so which parameter is being set.
-;          The already-converted sub_F550A6 and IndexedParam_AdjustField say
+;          The already-converted EditValue_StepBitField and IndexedParam_AdjustField say
 ;          the same and this file does not improve on them.  Also unknown:
 ;          what bit 6 of (0x28B0) selects -- when it is set the routine
 ;          instead pushes 0 or 1 and calls T_Blink_SetEnable, clears the bit
@@ -147489,7 +147492,7 @@ sub_F68016_Join:
 ; Called from: in-module: 0xF6807B 0xF68099 0xF680B6 0xF680F2 0xF68110
 ;              0xF6812E 0xF6814C 0xF6816A +5 more
 ; Touches: (0x0EFB) (0x125A)
-; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 sub_F6B8BD sub_F6B9DF sub_F6C2E5
+; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPosition sub_F6B9DF sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6820F is an instruction
 ;           boundary.  The name IS the address.
@@ -147505,7 +147508,7 @@ sub_F6820F:
 	ld	e, (3835:16)	; F6821B  ld E,(0x0efb)
 	xor	d, d	; F6821F  xor D,D
 	calr	sub_F6BA11	; F68221  calr 0xf6ba11
-	calr	sub_F6B8BD	; F68224  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68224  calr 0xf6b8bd
 	ld	w, (4698:16)	; F68227  ld W,(0x125a)
 	calr	sub_F6B9DF	; F6822B  calr 0xf6b9df
 	xor	a, a	; F6822E  xor A,A
@@ -147517,7 +147520,7 @@ sub_F6820F_Return:
 ; sub_F68234
 ; Called from: in-module: 0xF680D4
 ; Touches: (0x0EFB) (0x125A)
-; Calls:   sub_F6C43C sub_F6C292 sub_F6B8BD sub_F6B9DF sub_F6BA11 sub_F6C2E5
+; Calls:   sub_F6C43C sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B9DF sub_F6BA11 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68234 is an instruction
 ;           boundary.  The name IS the address.
@@ -147530,7 +147533,7 @@ sub_F68234:
 	jr	z, sub_F68234_Return	; F68239  jr Z,0xf68270
 	xor	a, a	; F6823B  xor A,A
 	calr	sub_F6C292	; F6823D  calr 0xf6c292
-	calr	sub_F6B8BD	; F68240  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68240  calr 0xf6b8bd
 	ld	w, (4698:16)	; F68243  ld W,(0x125a)
 	and	w, 128	; F68247  and W,0x80
 	rlc	w	; F6824A  rlc 0x01,W
@@ -147540,7 +147543,7 @@ sub_F68234:
 	ld	e, (3835:16)	; F68255  ld E,(0x0efb)
 	xor	d, d	; F68259  xor D,D
 	calr	sub_F6BA11	; F6825B  calr 0xf6ba11
-	calr	sub_F6B8BD	; F6825E  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6825E  calr 0xf6b8bd
 	ld	w, (4698:16)	; F68261  ld W,(0x125a)
 	and	w, 127	; F68265  and W,0x7f
 	calr	sub_F6B9DF	; F68268  calr 0xf6b9df
@@ -148691,7 +148694,7 @@ sub_F689E0_Return:
 ; sub_F689F5
 ; Called from: in-module: 0xF689A8
 ; Touches: (0x0EC2) (0x1008) (0x1071) (0x12A7) (0x34D4)  |  0x60080A
-; Calls:   T_F431C0 sub_F6B8BD sub_F6C292 T_TimedEventRing_Get sub_F6A304 sub_F6B96F
+; Calls:   T_F431C0 BStore_ReadByteAtSongPosition sub_F6C292 T_TimedEventRing_Get sub_F6A304 sub_F6B96F
 ;          sub_F6B9B9 T_TimedEventRing_Put sub_F6BA11 sub_F6B97B sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF689F5 is an instruction
@@ -148725,7 +148728,7 @@ sub_F689F5_Entry:
 	call	T_F431C0	; F68A30  call 0xf431c0
 sub_F689F5_Return:
 	ret	; F68A34  ret
-	calr	sub_F6B8BD	; F68A35  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68A35  calr 0xf6b8bd
 	cp	a, 144	; F68A38  cp A,0x90
 	jrl	nz, sub_F689F5_Join2	; F68A3B  jrl NZ,0xf68aca
 	m_or_mi8 MB16, 0x34d4, 0x40	; F68A3E  or (0x34d4),0x40
@@ -148799,7 +148802,7 @@ sub_F689F5_Join2:
 ; sub_F68AD0
 ; Called from: in-module: 0xF67544
 ; Touches: (0x1008) (0x106E) (0x34D4)  |  0x60080A
-; Calls:   sub_F6B8BD sub_F6A304 sub_F6C292 sub_F68B3A T_TimedEventRing_Put sub_F6C2E5
+; Calls:   BStore_ReadByteAtSongPosition sub_F6A304 sub_F6C292 sub_F68B3A T_TimedEventRing_Put sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68AD0 is an instruction
 ;           boundary.  The name IS the address.
@@ -148811,7 +148814,7 @@ sub_F68AD0:
 	m_bit 2, MDI+r3, 0	; F68AD5  bit 2,(XHL)
 	jr	z, sub_F68AD0_Return	; F68AD7  jr Z,0xf68b39
 	m_res 2, MDI+r3, 0	; F68AD9  res 2,(XHL)
-	calr	sub_F6B8BD	; F68ADB  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68ADB  calr 0xf6b8bd
 	and	a, 240	; F68ADE  and A,0xf0
 	cp	a, 144	; F68AE1  cp A,0x90
 	jr	nz, sub_F68AD0_Return	; F68AE4  jr NZ,0xf68b39
@@ -148929,7 +148932,7 @@ sub_F68B70_Skip:
 ; Called from: in-module: 0xF68B56 0xF68B67 0xF68B77 0xF68B88
 ; Touches: (0x0E44) (0x0E4E) (0x0E53) (0x0E56) (0x0E58) (0x0EC0) (0x0EC2)
 ;          (0x0ECD) (0x12B2)
-; Calls:   sub_F6A908 sub_F6C292 sub_F68DBE sub_F6B770 sub_F67481 sub_F6B8BD
+; Calls:   sub_F6A908 sub_F6C292 sub_F68DBE sub_F6B770 sub_F67481 BStore_ReadByteAtSongPosition
 ;          sub_F68D9D sub_F6A20F sub_F6B8F1 sub_F6C2E5 sub_F69C03 sub_F68D8A
 ;          +3 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -148968,7 +148971,7 @@ sub_F68B91_Skip2:
 	calr	sub_F67481	; F68BE0  calr 0xf67481
 	ret	; F68BE3  ret
 sub_F68B91_Skip3:
-	calr	sub_F6B8BD	; F68BE4  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68BE4  calr 0xf6b8bd
 	cp	a, 129	; F68BE7  cp A,0x81
 	jr	nz, sub_F68B91_Join	; F68BEA  jr NZ,0xf68bf0
 	inc	1, (3778:16)	; F68BEC  inc 1,(0x0ec2)
@@ -149001,7 +149004,7 @@ sub_F68B91_Skip7:
 	m_push MW16, 0x12b2	; F68C2F  pushw (0x12b2)
 	m_push MW16, 0x0e58	; F68C33  pushw (0x0e58)
 	calr	sub_F6B770	; F68C37  calr 0xf6b770
-	calr	sub_F6B8BD	; F68C3A  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68C3A  calr 0xf6b8bd
 	cp	a, 129	; F68C3D  cp A,0x81
 	jr	z, sub_F68B91_Skip8	; F68C40  jr Z,0xf68c56
 	calr	sub_F6B8F1	; F68C42  calr 0xf6b8f1
@@ -149114,7 +149117,7 @@ sub_F68B91_Skip13:
 	pop	xbc	; F68D19  pop XBC
 	pop	xhl	; F68D1A  pop XHL
 	pop	xwa	; F68D1B  pop XWA
-	calr	sub_F6B8BD	; F68D1C  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68D1C  calr 0xf6b8bd
 	cp	a, 129	; F68D1F  cp A,0x81
 	jr	z, sub_F68B91_Skip16	; F68D22  jr Z,0xf68d47
 	calr	sub_F68DBE	; F68D24  calr 0xf68dbe
@@ -149212,7 +149215,7 @@ sub_F68D9D_Join:
 ; sub_F68DBE
 ; Called from: in-module: 0xF68BA6 0xF68C0E 0xF68CDB 0xF68D24
 ; Touches: (0x0E4F) (0x0E63) (0x0ED5) (0x106D)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F6A7EB sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6A7EB sub_F6C43C StepLength_AddTo0E53 sub_F6A7C5
 ;          sub_F69811 sub_F69CB4 0xF6D6DC sub_F6741C sub_F69C03 T_F431B4 +1
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -149229,7 +149232,7 @@ sub_F68DBE:
 	push	xix	; F68DC2  push XIX
 	push	xiy	; F68DC3  push XIY
 	push	xiz	; F68DC4  push XIZ
-	calr	sub_F6B8BD	; F68DC5  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68DC5  calr 0xf6b8bd
 	cp	a, 129	; F68DC8  cp A,0x81
 	pop	xiz	; F68DCB  pop XIZ
 	pop	xiy	; F68DCC  pop XIY
@@ -149271,7 +149274,7 @@ sub_F68DBE_Join:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F68E0F  or (0x0ed5),0x01
 	calr	sub_F69CB4	; F68E14  calr 0xf69cb4
 	call	sub_F6D6DC	; F68E17  call 0xf6d6dc
-	calr	sub_F6B8BD	; F68E1B  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68E1B  calr 0xf6b8bd
 	cp	a, 129	; F68E1E  cp A,0x81
 	jr	z, sub_F68DBE_Skip3	; F68E21  jr Z,0xf68e35
 	cp	a, 130	; F68E23  cp A,0x82
@@ -149315,7 +149318,7 @@ sub_F68E48:
 ; sub_F68E4F
 ; Called from: in-module: 0xF67410
 ; Touches: (0x0E53) (0x0EC3) (0x0F02)
-; Calls:   sub_F6B8F1 sub_F6B657 sub_F6B8BD sub_F6C292 sub_F68F0A sub_F6C2E5
+; Calls:   sub_F6B8F1 sub_F6B657 BStore_ReadByteAtSongPosition sub_F6C292 sub_F68F0A sub_F6C2E5
 ;          sub_F68EB5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68E4F is an instruction
@@ -149332,7 +149335,7 @@ sub_F68E48_Loop:
 	jr	nz, sub_F68E48_Return	; F68E5D  jr NZ,0xf68e6f
 	ld	w, 6:opc	; F68E5F  ld W,0x06
 	calr	sub_F6B657	; F68E61  calr 0xf6b657
-	calr	sub_F6B8BD	; F68E64  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68E64  calr 0xf6b8bd
 	and	a, 240	; F68E67  and A,0xf0
 	cp	a, 144	; F68E6A  cp A,0x90
 	jr	z, sub_F68E48_Loop	; F68E6D  jr Z,0xf68e56
@@ -149348,7 +149351,7 @@ sub_F68E48_Return:
 sub_F68E48_Skip:
 	ld	(xiy), 1	; F68E86  ld (XIY),0x01
 sub_F68E48_Loop2:
-	calr	sub_F6B8BD	; F68E89  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F68E89  calr 0xf6b8bd
 	cp	a, 132	; F68E8C  cp A,0x84
 	jr	z, sub_F68E48_Join	; F68E8F  jr Z,0xf68ea5
 	cp	a, 130	; F68E91  cp A,0x82
@@ -149829,7 +149832,7 @@ sub_F69162_Join:
 ; sub_F69183
 ; Called from: in-module: 0xF690A4
 ; Touches: (0x0F51) (0x0F54)
-; Calls:   sub_F6C292 sub_F6B8BD sub_F6B75E sub_F6B770 sub_F69203 sub_F693F6
+; Calls:   sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B770 sub_F69203 sub_F693F6
 ;          sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69183 is an instruction
@@ -149841,7 +149844,7 @@ sub_F69183:
 	ld	a, 3:opc	; F69183  ld A,0x03
 	calr	sub_F6C292	; F69185  calr 0xf6c292
 sub_F69183_Loop:
-	calr	sub_F6B8BD	; F69188  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69188  calr 0xf6b8bd
 	cp	a, 129	; F6918B  cp A,0x81
 	jr	z, sub_F69183_Loop2	; F6918E  jr Z,0xf69198
 	calr	sub_F6B75E	; F69190  calr 0xf6b75e
@@ -149851,7 +149854,7 @@ sub_F69183_Loop2:
 	calr	sub_F6B770	; F69198  calr 0xf6b770
 	cp	w, 255	; F6919B  cp W,0xff
 	jr	z, sub_F69183_Skip3	; F6919E  jr Z,0xf691fb
-	calr	sub_F6B8BD	; F691A0  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F691A0  calr 0xf6b8bd
 	cp	a, 129	; F691A3  cp A,0x81
 	jr	z, sub_F69183_Skip3	; F691A6  jr Z,0xf691fb
 	calr	sub_F69203	; F691A8  calr 0xf69203
@@ -149865,7 +149868,7 @@ sub_F69183_Loop3:
 	calr	sub_F6B770	; F691BC  calr 0xf6b770
 	cp	w, 255	; F691BF  cp W,0xff
 	jr	z, sub_F69183_Skip	; F691C2  jr Z,0xf691e8
-	calr	sub_F6B8BD	; F691C4  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F691C4  calr 0xf6b8bd
 	cp	a, 129	; F691C7  cp A,0x81
 	jr	z, sub_F69183_Loop4	; F691CA  jr Z,0xf691d8
 	calr	sub_F69203	; F691CC  calr 0xf69203
@@ -149877,7 +149880,7 @@ sub_F69183_Loop4:
 	calr	sub_F6B75E	; F691D8  calr 0xf6b75e
 	cp	w, 255	; F691DB  cp W,0xff
 	jr	z, sub_F69183_Skip2	; F691DE  jr Z,0xf691ef
-	calr	sub_F6B8BD	; F691E0  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F691E0  calr 0xf6b8bd
 	cp	a, 129	; F691E3  cp A,0x81
 	jr	z, sub_F69183_Skip2	; F691E6  jr Z,0xf691ef
 sub_F69183_Skip:
@@ -149955,7 +149958,7 @@ sub_F6922B_Epilogue:
 ; sub_F69240
 ; Called from: in-module: 0xF6906D 0xF690ED 0xF69143
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   sub_F6C292 sub_F6B8BD sub_F6B75E sub_F6B257 sub_F6C2E5
+; Calls:   sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B257 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69240 is an instruction
 ;           boundary.  The name IS the address.
@@ -149976,7 +149979,7 @@ sub_F69240_Join:
 	xor	a, a	; F6924C  xor A,A
 	ld	(3925:16), a	; F6924E  ld (0x0f55),A
 sub_F69240_Loop:
-	calr	sub_F6B8BD	; F69252  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69252  calr 0xf6b8bd
 	cp	a, 129	; F69255  cp A,0x81
 	jr	nz, sub_F69240_Skip	; F69258  jr NZ,0xf69282
 	inc	1, (3925:16)	; F6925A  inc 1,(0x0f55)
@@ -150014,7 +150017,7 @@ sub_F69240_Skip2:
 ; sub_F6929C
 ; Called from: in-module: 0xF67414
 ; Touches: (0x0F52) (0x0F53) (0x0F55)
-; Calls:   sub_F6C292 sub_F6B8F1 sub_F6B8BD sub_F6B75E sub_F68E48 sub_F6C2E5
+; Calls:   sub_F6C292 sub_F6B8F1 BStore_ReadByteAtSongPosition sub_F6B75E sub_F68E48 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6929C is an instruction
 ;           boundary.  The name IS the address.
@@ -150038,7 +150041,7 @@ sub_F69240_Loop2:
 	calr	sub_F6B8F1	; F692AE  calr 0xf6b8f1
 	cp	a, 130	; F692B1  cp A,0x82
 	jr	z, sub_F69240_Skip5	; F692B4  jr Z,0xf6931a
-	calr	sub_F6B8BD	; F692B6  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F692B6  calr 0xf6b8bd
 	cp	a, 132	; F692B9  cp A,0x84
 	jr	z, sub_F69240_Skip5	; F692BC  jr Z,0xf6931a
 	cp	a, 129	; F692BE  cp A,0x81
@@ -150059,7 +150062,7 @@ sub_F69240_Skip3:
 	xor	b, b	; F692E7  xor B,B
 	ld	c, (3922:16)	; F692E9  ld C,(0x0f52)
 sub_F69240_Join3:
-	calr	sub_F6B8BD	; F692ED  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F692ED  calr 0xf6b8bd
 	cp	a, 130	; F692F0  cp A,0x82
 	jr	z, sub_F69240_Skip5	; F692F3  jr Z,0xf6931a
 	cp	a, 132	; F692F5  cp A,0x84
@@ -150097,7 +150100,7 @@ sub_F69240_Skip5:
 ; Called from: in-module: 0xF6AB74
 ; Touches: (0x0E63) (0x0E6A) (0x0F56) (0x0F58) (0x1008)  |  0x603422
 ;          0x603500
-; Calls:   BStore_DirEntryOffsetX2 sub_F6C4A5 sub_F6B8BD sub_F6B75E sub_F6B8F1
+; Calls:   BStore_DirEntryOffsetX2 sub_F6C4A5 BStore_ReadByteAtSongPosition sub_F6B75E sub_F6B8F1
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69327 is an instruction
 ;           boundary.  The name IS the address.
@@ -150154,7 +150157,7 @@ sub_F69240_Loop3:
 	pop	xhl	; F693B5  pop XHL
 	pop	xde	; F693B6  pop XDE
 sub_F69240_Loop4:
-	calr	sub_F6B8BD	; F693B7  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F693B7  calr 0xf6b8bd
 	cp	a, 129	; F693BA  cp A,0x81
 	jr	nz, sub_F69240_Skip6	; F693BD  jr NZ,0xf693c3
 	incw	1, (3926:16)	; F693BF  incw 1,(0x0f56)
@@ -150288,7 +150291,7 @@ sub_F69476:
 ; sub_F6948B
 ; Called from: in-module: 0xF69CD5 0xF69D3A
 ; Touches: (0x0ED1)
-; Calls:   sub_F6B8BD sub_F6B770 sub_F6B75E LcdKeyRow4_StepRecordSub02 Text_PutTRACK
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B770 sub_F6B75E LcdKeyRow4_StepRecordSub02 Text_PutTRACK
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6948B is an instruction
 ;           boundary.  The name IS the address.
@@ -150300,7 +150303,7 @@ sub_F6948B:
 	jr	z, sub_F6948B_Skip2	; F6948D  jr Z,0xf694bd
 sub_F6948B_Loop:
 	pushw	bc	; F6948F  push BC
-	calr	sub_F6B8BD	; F69490  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69490  calr 0xf6b8bd
 	cp	a, 130	; F69493  cp A,0x82
 	jr	z, sub_F6948B_Skip3	; F69496  jr Z,0xf694c0
 	cp	a, 132	; F69498  cp A,0x84
@@ -150314,7 +150317,7 @@ sub_F6948B_Skip:
 sub_F6948B_Join:
 	cp	w, 255	; F694AC  cp W,0xff
 	jr	z, sub_F6948B_Epilogue	; F694AF  jr Z,0xf694c2
-	calr	sub_F6B8BD	; F694B1  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F694B1  calr 0xf6b8bd
 	popw	bc	; F694B4  pop BC
 	cp	a, 129	; F694B5  cp A,0x81
 	jr	nz, sub_F6948B_Loop	; F694B8  jr NZ,0xf6948f
@@ -150452,7 +150455,7 @@ sub_F69560:
 	call	MsgLine_TransportState_Plus4	; F6956E  call 0xf6d608
 	ret	; F69572  ret
 sub_F69560_Skip:
-	calr	sub_F6B8BD	; F69573  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69573  calr 0xf6b8bd
 	cp	a, 129	; F69576  cp A,0x81
 	jr	z, sub_F69560_Skip2	; F69579  jr Z,0xf6958f
 	cp	a, 130	; F6957B  cp A,0x82
@@ -150497,7 +150500,7 @@ Text_PutTRACK:
 ; sub_F695B7
 ; Called from: in-module: 0xF67418
 ; Touches: (0x0E4E) (0x0E50) (0x0ED2) (0x0ED3) (0x0ED5)  |  0x600A14
-; Calls:   sub_F6B8BD sub_F6C4FC sub_F6C4DF sub_F6C507 sub_F69697 sub_F67424
+; Calls:   BStore_ReadByteAtSongPosition sub_F6C4FC sub_F6C4DF sub_F6C507 sub_F69697 sub_F67424
 ;          sub_F6A4D9 sub_F69692 sub_F6A5FF sub_F67428 sub_F6A674 sub_F6A704
 ;          +1 more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -150508,7 +150511,7 @@ Text_PutTRACK:
 ; --------------------------------------------------------------------------
 sub_F695B7:
 	m_or_mi8 MB16, 0x0ed5, 0x01	; F695B7  or (0x0ed5),0x01
-	calr	sub_F6B8BD	; F695BC  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F695BC  calr 0xf6b8bd
 	ld	w, a	; F695BF  ld W,A
 	and	w, 240	; F695C1  and W,0xf0
 	cp	w, 128	; F695C4  cp W,0x80
@@ -150899,7 +150902,7 @@ sub_F6987E:
 ; Called from: in-module: 0xF6987A 0xF69883
 ; Touches: (0x0E53) (0x0E63) (0x0EFA) (0x12B0) (0x2075) (0x7F4D)  |
 ;          0x603422
-; Calls:   sub_F6C43C sub_F6B8BD sub_F6B8F1 sub_F6C292 sub_F6BA11 sub_F69910
+; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6C292 sub_F6BA11 sub_F69910
 ;          sub_F69938 BStore_DirEntryOffsetX2 sub_F6B9DF sub_F6C2E5 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69887 is an instruction
@@ -150913,7 +150916,7 @@ sub_F69887:
 	jrl	z, sub_F69887_Return	; F6988C  jrl Z,0xf6990f
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F6988F  cp (0x0e63),0x01
 	jr	nz, sub_F69887_Return	; F69894  jr NZ,0xf6990f
-	calr	sub_F6B8BD	; F69896  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69896  calr 0xf6b8bd
 	and	a, 240	; F69899  and A,0xf0
 	cp	a, 144	; F6989C  cp A,0x90
 	jr	nz, sub_F69887_Return	; F6989F  jr NZ,0xf6990f
@@ -150924,7 +150927,7 @@ sub_F69887:
 	calr	sub_F6C292	; F698AC  calr 0xf6c292
 	ldw	de, 2	; F698AF  ld DE,0x0002
 	calr	sub_F6BA11	; F698B2  calr 0xf6ba11
-	calr	sub_F6B8BD	; F698B5  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F698B5  calr 0xf6b8bd
 	calr	sub_F69910	; F698B8  calr 0xf69910
 	ld	w, a	; F698BB  ld W,A
 	ld	l, w	; F698BD  ld L,W
@@ -151067,7 +151070,7 @@ sub_F6997C:
 ; sub_F69998
 ; Called from: in-module: 0xF6996B 0xF69987
 ; Touches: (0x0EFB) (0x100A) (0x100C)
-; Calls:   sub_F6C43C sub_F6B8BD sub_F6C292 sub_F6BA11 sub_F6B8F1 sub_F6B9DF
+; Calls:   sub_F6C43C BStore_ReadByteAtSongPosition sub_F6C292 sub_F6BA11 sub_F6B8F1 sub_F6B9DF
 ;          sub_F6B95F sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69998 is an instruction
@@ -151079,7 +151082,7 @@ sub_F69998:
 	calr	sub_F6C43C	; F69998  calr 0xf6c43c
 	cp	w, 0:i3	; F6999B  cp W,0
 	jrl	z, sub_F69998_Return	; F6999D  jrl Z,0xf69a1d
-	calr	sub_F6B8BD	; F699A0  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F699A0  calr 0xf6b8bd
 	and	a, 240	; F699A3  and A,0xf0
 	cp	a, 128	; F699A6  cp A,0x80
 	jr	nz, sub_F69998_Return	; F699A9  jr NZ,0xf69a1d
@@ -151088,7 +151091,7 @@ sub_F69998:
 	ld	e, (3835:16)	; F699B0  ld E,(0x0efb)
 	xor	d, d	; F699B4  xor D,D
 	calr	sub_F6BA11	; F699B6  calr 0xf6ba11
-	calr	sub_F6B8BD	; F699B9  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F699B9  calr 0xf6b8bd
 	ld	c, a	; F699BC  ld C,A
 	pushw	bc	; F699BE  push BC
 	calr	sub_F6B8F1	; F699BF  calr 0xf6b8f1
@@ -151137,7 +151140,7 @@ sub_F69998_Return:
 ; StepRecordSub03_SoftKeyCol5
 ; Called from: in-module: 0xF67A72
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A1E is an instruction
 ;           boundary.  The name IS the address.
@@ -151148,7 +151151,7 @@ sub_F69998_Return:
 StepRecordSub03_SoftKeyCol5:
 	ld	(3834:16), 1	; F69A1E  ld (0x0efa),0x01
 	ld	(3835:16), 2	; F69A23  ld (0x0efb),0x02
-	calr	sub_F6B8BD	; F69A28  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69A28  calr 0xf6b8bd
 	ld	l, a	; F69A2B  ld L,A
 	and	a, 240	; F69A2D  and A,0xf0
 	cp	a, 208	; F69A30  cp A,0xd0
@@ -151179,7 +151182,7 @@ sub_F69A1E_Return:
 ; sub_F69A67
 ; Called from: in-module: 0xF67A76
 ; Touches: (0x0E53) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B76 sub_F69B40 0xF6D890 T_F431B4
 ;          StepRecordSub00_SoftKeyCol3 sub_F69AFF
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69A67 is an instruction
@@ -151190,7 +151193,7 @@ sub_F69A1E_Return:
 sub_F69A67:
 	ld	(3834:16), 255	; F69A67  ld (0x0efa),0xff
 	ld	(3835:16), 2	; F69A6C  ld (0x0efb),0x02
-	calr	sub_F6B8BD	; F69A71  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69A71  calr 0xf6b8bd
 	ld	l, a	; F69A74  ld L,A
 	and	a, 240	; F69A76  and A,0xf0
 	cp	a, 208	; F69A79  cp A,0xd0
@@ -151231,7 +151234,7 @@ sub_F69A67_Return2:
 ; StepRecordSub00_SoftKeyCol3
 ; Called from: in-module: 0xF69AB5
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69ABE is an instruction
 ;           boundary.  The name IS the address.
@@ -151244,7 +151247,7 @@ StepRecordSub00_SoftKeyCol3:
 	ld	(3835:16), 3	; F69AC3  ld (0x0efb),0x03
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F69AC8  cp (0x0e63),0x01
 	jr	nz, sub_F69ABE_Return	; F69ACD  jr NZ,0xf69afe
-	calr	sub_F6B8BD	; F69ACF  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69ACF  calr 0xf6b8bd
 	and	a, 240	; F69AD2  and A,0xf0
 	cp	a, 144	; F69AD5  cp A,0x90
 	jr	nz, sub_F69ABE_Return	; F69AD8  jr NZ,0xf69afe
@@ -151266,7 +151269,7 @@ sub_F69ABE_Return:
 ; sub_F69AFF
 ; Called from: in-module: 0xF69ABA
 ; Touches: (0x0E53) (0x0E63) (0x0EF0) (0x0EFA) (0x0EFB) (0x2075)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F69B40 MsgLine_FormatNoteAndVelocity T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69AFF is an instruction
 ;           boundary.  The name IS the address.
@@ -151278,7 +151281,7 @@ sub_F69AFF:
 	ld	(3835:16), 3	; F69B04  ld (0x0efb),0x03
 	m_cp_mi8 MB16, 0x0e63, 0x01	; F69B09  cp (0x0e63),0x01
 	jr	nz, sub_F69AFF_Return	; F69B0E  jr NZ,0xf69b3f
-	calr	sub_F6B8BD	; F69B10  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69B10  calr 0xf6b8bd
 	and	a, 240	; F69B13  and A,0xf0
 	cp	a, 144	; F69B16  cp A,0x90
 	jr	nz, sub_F69AFF_Return	; F69B19  jr NZ,0xf69b3f
@@ -151300,7 +151303,7 @@ sub_F69AFF_Return:
 ; sub_F69B40
 ; Called from: in-module: 0xF69A56 0xF69A9F 0xF69AEE 0xF69B2F
 ; Touches: (0x0EF0) (0x0EFA) (0x0EFB)
-; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 sub_F6B8BD sub_F6B9DF sub_F6C2E5
+; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPosition sub_F6B9DF sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69B40 is an instruction
 ;           boundary.  The name IS the address.
@@ -151316,7 +151319,7 @@ sub_F69B40:
 	ld	e, (3835:16)	; F69B4C  ld E,(0x0efb)
 	xor	d, d	; F69B50  xor D,D
 	calr	sub_F6BA11	; F69B52  calr 0xf6ba11
-	calr	sub_F6B8BD	; F69B55  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69B55  calr 0xf6b8bd
 	ld	w, a	; F69B58  ld W,A
 	add	a, (3834:16)	; F69B5A  add A,(0x0efa)
 	bit	7, a	; F69B5E  bit 0x07,A
@@ -151336,7 +151339,7 @@ sub_F69B40_Return:
 ; sub_F69B76
 ; Called from: in-module: 0xF69A50 0xF69A99
 ; Touches: (0x0EFA) (0x0EFB) (0x12B9) (0x12EB)
-; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 sub_F6B8BD sub_F6B8F1 sub_F6B9DF
+; Calls:   sub_F6C43C sub_F6C292 sub_F6BA11 BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6B9DF
 ;          sub_F6B95F sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69B76 is an instruction
@@ -151353,7 +151356,7 @@ sub_F69B76:
 	ld	e, (3835:16)	; F69B83  ld E,(0x0efb)
 	xor	d, d	; F69B87  xor D,D
 	calr	sub_F6BA11	; F69B89  calr 0xf6ba11
-	calr	sub_F6B8BD	; F69B8C  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69B8C  calr 0xf6b8bd
 	ld	(4793:16), a	; F69B8F  ld (0x12b9),A
 	call	sub_F6B8F1	; F69B93  call 0xf6b8f1
 	ld	(4843:16), a	; F69B97  ld (0x12eb),A
@@ -151493,7 +151496,7 @@ sub_F69C71_Skip:
 ; sub_F69C8F
 ; Called from: in-module: 0xF6741C
 ; Touches: (0x0E5A)
-; Calls:   sub_F6C292 sub_F6743C sub_F6C2E5 sub_F6B8BD
+; Calls:   sub_F6C292 sub_F6743C sub_F6C2E5 BStore_ReadByteAtSongPosition
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69C8F is an instruction
 ;           boundary.  The name IS the address.
@@ -151506,7 +151509,7 @@ sub_F69C8F:
 	calr	sub_F6743C	; F69C94  calr 0xf6743c
 	xor	a, a	; F69C97  xor A,A
 	calr	sub_F6C2E5	; F69C99  calr 0xf6c2e5
-	calr	sub_F6B8BD	; F69C9C  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69C9C  calr 0xf6b8bd
 	ld	xhl, 3663	; F69C9F  ld XHL,0x00000e4f
 	and	a, 240	; F69CA4  and A,0xf0
 	cp	a, 144	; F69CA7  cp A,0x90
@@ -151523,7 +151526,7 @@ sub_F69C8F_Skip:
 ; Touches: (0x0ED1) (0x0ED5) (0x0EE9) (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF)
 ;          (0x0F60) (0x1008) (0x1071) +1 more
 ; Calls:   sub_F6A20F sub_F6C736 sub_F6C292 sub_F69D9E sub_F6948B sub_F6C3E5
-;          sub_F6B8BD sub_F6B75E sub_F69DBD 0xF6D6D6 0xF6D6DC sub_F6C2E5 +4
+;          BStore_ReadByteAtSongPosition sub_F6B75E sub_F69DBD 0xF6D6D6 0xF6D6DC sub_F6C2E5 +4
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69CB4 is an instruction
@@ -151549,17 +151552,17 @@ sub_F69CB4_Join:
 	calr	sub_F6C3E5	; F69CD8  calr 0xf6c3e5
 	cp	w, 0:i3	; F69CDB  cp W,0
 	jr	nz, sub_F69CB4_Skip	; F69CDD  jr NZ,0xf69ced
-	calr	sub_F6B8BD	; F69CDF  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69CDF  calr 0xf6b8bd
 	cp	a, 129	; F69CE2  cp A,0x81
 	jr	nz, sub_F69CB4_Join2	; F69CE5  jr NZ,0xf69d04
 	dec	1, (3817:16)	; F69CE7  dec 1,(0x0ee9)
 	jr	sub_F69CB4_Join2	; F69CEB  jr T,0xf69d04
 sub_F69CB4_Skip:
-	calr	sub_F6B8BD	; F69CED  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69CED  calr 0xf6b8bd
 	cp	a, 129	; F69CF0  cp A,0x81
 	jr	nz, sub_F69CB4_Join2	; F69CF3  jr NZ,0xf69d04
 	calr	sub_F6B75E	; F69CF5  calr 0xf6b75e
-	calr	sub_F6B8BD	; F69CF8  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69CF8  calr 0xf6b8bd
 	cp	a, 129	; F69CFB  cp A,0x81
 	jr	nz, sub_F69CB4_Join2	; F69CFE  jr NZ,0xf69d04
 	dec	1, (3817:16)	; F69D00  dec 1,(0x0ee9)
@@ -151646,7 +151649,7 @@ sub_F69D9E_Skip2:
 ; sub_F69DBD
 ; Called from: in-module: 0xF69D68
 ; Touches: (0x0EEA) (0x0EEC) (0x0EEE) (0x0EEF) (0x1008) (0x1075) (0x1076)
-; Calls:   sub_F6B8BD sub_F6B8F1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C sub_F6BC89
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 BStore_DirEntryOffsetX2 sub_F6B75E sub_F6C43C sub_F6BC89
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF69DBD is an instruction
 ;           boundary.  The name IS the address.
@@ -151680,7 +151683,7 @@ sub_F69DBD:
 	ld	(4213:16), a	; F69E07  ld (0x1075),A
 	ld	(4214:16), a	; F69E0B  ld (0x1076),A
 	add	xix, 4	; F69E0F  add XIX,0x00000004
-	calr	sub_F6B8BD	; F69E15  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69E15  calr 0xf6b8bd
 	cp	a, 129	; F69E18  cp A,0x81
 	jrl	nz, sub_F69DBD_Skip4	; F69E1B  jrl NZ,0xf69f05
 	ld	l, (BStore_DirEntry:16)	; F69E1E  ld L,(0x1008)
@@ -151770,7 +151773,7 @@ sub_F69DBD_Skip3:
 	ld	(4213:16), 2	; F69EFE  ld (0x1075),0x02
 	jr	sub_F69DBD_Epilogue	; F69F03  jr T,0xf69f59
 sub_F69DBD_Skip4:
-	calr	sub_F6B8BD	; F69F05  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F69F05  calr 0xf6b8bd
 	cp	w, 0:i3	; F69F08  cp W,0
 	jr	nz, sub_F69DBD_Epilogue	; F69F0A  jr NZ,0xf69f59
 	calr	sub_F6BC89	; F69F0C  calr 0xf6bc89
@@ -152164,7 +152167,7 @@ sub_F6A20F_Skip4:
 ; sub_F6A26C
 ; Called from: T_F42ED4 (x0)
 ; Touches: (0x0E4E) (0x0F11) (0x0F13) (0x126E)
-; Calls:   sub_F6C292 sub_F6B039 sub_F6B8BD sub_F6B75E BStore_DirEntryOffsetX2 sub_F6C2E5
+; Calls:   sub_F6C292 sub_F6B039 BStore_ReadByteAtSongPosition sub_F6B75E BStore_DirEntryOffsetX2 sub_F6C2E5
 ; Evidence: thunk slot T_F42ED4 holds `jp 0x00F6A26C`, and 0xF6A26C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -152189,7 +152192,7 @@ sub_F6A26C:		; <- T_F42ED4
 	xor	a, a	; F6A284  xor A,A
 	calr	sub_F6C292	; F6A286  calr 0xf6c292
 	calr	sub_F6B039	; F6A289  calr 0xf6b039
-	calr	sub_F6B8BD	; F6A28C  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6A28C  calr 0xf6b8bd
 	cp	a, 129	; F6A28F  cp A,0x81
 	jr	nz, sub_F6A20F_Skip6	; F6A292  jr NZ,0xf6a2c9
 	jr	sub_F6A20F_Join4	; F6A294  jr T,0xf6a2dc
@@ -152210,7 +152213,7 @@ sub_F6A20F_Join3:
 	m_cp_rm MB16, 0x0f13, 1	; F6A2C0  cp A,(0x0f13)
 	jr	nc, sub_F6A20F_Skip8	; F6A2C4  jr NC,0xf6a2e3
 sub_F6A20F_Skip5:
-	calr	sub_F6B8BD	; F6A2C6  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6A2C6  calr 0xf6b8bd
 sub_F6A20F_Skip6:
 	cp	a, 133	; F6A2C9  cp A,0x85
 	jr	z, sub_F6A20F_Skip7	; F6A2CC  jr Z,0xf6a2d5
@@ -153471,7 +153474,7 @@ sub_F6A9E3_Skip11:
 	jr	nz, sub_F6A9E3_Skip12	; F6AB64  jr NZ,0xf6ab69
 	calr	sub_F6ABB6	; F6AB66  calr 0xf6abb6
 sub_F6A9E3_Skip12:
-	calr	sub_F6B8BD	; F6AB69  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6AB69  calr 0xf6b8bd
 	cp	a, 144	; F6AB6C  cp A,0x90
 	jr	nz, sub_F6A9E3_Entry4_Skip	; F6AB6F  jr NZ,0xf6ab74
 	calr	sub_F6ABAE_Nop	; F6AB71  calr 0xf6abae
@@ -153634,7 +153637,7 @@ DispatchTable_F6ABD2_Nop0:
 ; sub_F6AC24
 ; Called from: in-module: 0xF6742C
 ; Touches: (0x0E53)
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F6B1DF sub_F69C03
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6B1DF sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AC24 is an instruction
 ;           boundary.  The name IS the address.
@@ -153642,7 +153645,7 @@ DispatchTable_F6ABD2_Nop0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6AC24:
-	calr	sub_F6B8BD	; F6AC24  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6AC24  calr 0xf6b8bd
 	cp	a, 132	; F6AC27  cp A,0x84
 	jr	z, sub_F6AC24_Skip	; F6AC2A  jr Z,0xf6ac48
 	cp	a, 130	; F6AC2C  cp A,0x82
@@ -154319,7 +154322,7 @@ sub_F6B075_Skip3:
 ; StepRecordSub17_SoftKeyCol6
 ; Called from: in-module: 0xF6A1BB
 ; Touches: (0x0E4F) (0x20A9)
-; Calls:   sub_F6A2FC sub_F6C292 sub_F6B8BD sub_F6B76A sub_F6C2E5 sub_F6B9DF
+; Calls:   sub_F6A2FC sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B76A sub_F6C2E5 sub_F6B9DF
 ;          sub_F6BA11 sub_F6B134 sub_F6B740
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B0C4 is an instruction
@@ -154338,14 +154341,14 @@ StepRecordSub17_SoftKeyCol6:
 sub_F6B0C4_Join:
 	xor	a, a	; F6B0D5  xor A,A
 	calr	sub_F6C292	; F6B0D7  calr 0xf6c292
-	calr	sub_F6B8BD	; F6B0DA  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B0DA  calr 0xf6b8bd
 	cp	a, 132	; F6B0DD  cp A,0x84
 	jr	z, sub_F6B0C4_Skip2	; F6B0E0  jr Z,0xf6b123
 sub_F6B0C4_Loop:
 	calr	sub_F6B76A	; F6B0E2  calr 0xf6b76a
 	cp	w, 255	; F6B0E5  cp W,0xff
 	jr	z, sub_F6B0C4_Skip2	; F6B0E8  jr Z,0xf6b123
-	calr	sub_F6B8BD	; F6B0EA  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B0EA  calr 0xf6b8bd
 	cp	a, 129	; F6B0ED  cp A,0x81
 	jr	z, sub_F6B0C4_Skip	; F6B0F0  jr Z,0xf6b0ff
 	and	a, 240	; F6B0F2  and A,0xf0
@@ -154657,7 +154660,7 @@ sub_F6B257:
 ; sub_F6B276
 ; Called from: in-module: 0xF6AF4A
 ; Touches:   |  0x60347E 0x6034A0
-; Calls:   sub_F6C4A5 BStore_DirEntryOffsetX2 sub_F6B8BD sub_F6B770 sub_F6C292 sub_F6B9DF
+; Calls:   sub_F6C4A5 BStore_DirEntryOffsetX2 BStore_ReadByteAtSongPosition sub_F6B770 sub_F6C292 sub_F6B9DF
 ;          sub_F6BA11 sub_F6C2E5 sub_F6B134
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B276 is an instruction
@@ -154686,7 +154689,7 @@ sub_F6B276:
 	mx_st_mr8 MXD, ra_IX, ra_IZ, 1	; F6B2B2  ld (XIX+IZ),A
 	pop	xix	; F6B2B7  pop XIX
 sub_F6B276_Join:
-	calr	sub_F6B8BD	; F6B2B8  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B2B8  calr 0xf6b8bd
 	cp	a, 132	; F6B2BB  cp A,0x84
 	jr	nz, sub_F6B276_Skip	; F6B2BE  jr NZ,0xf6b2ca
 	calr	sub_F6B770	; F6B2C0  calr 0xf6b770
@@ -155213,7 +155216,7 @@ sub_F6B657_Join3:
 ; sub_F6B740
 ; Called from: in-module: 0xF68ED5 0xF68F2A 0xF6B0BF 0xF6B12F 0xF6B762
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6B8F1 sub_F6B8BD sub_F67438
+; Calls:   sub_F6B8F1 BStore_ReadByteAtSongPosition sub_F67438
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B740 is an instruction
 ;           boundary.  The name IS the address.
@@ -155226,7 +155229,7 @@ sub_F6B740:
 	jr	z, sub_F6B740_Skip	; F6B746  jr Z,0xf6b75b
 	cp	a, 130	; F6B748  cp A,0x82
 	jr	z, sub_F6B740_Skip	; F6B74B  jr Z,0xf6b75b
-	calr	sub_F6B8BD	; F6B74D  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B74D  calr 0xf6b8bd
 	cp	a, 132	; F6B750  cp A,0x84
 	jr	z, sub_F6B740_Skip	; F6B753  jr Z,0xf6b75b
 	ld	w, 0:opc	; F6B755  ld W,0x00
@@ -155448,7 +155451,7 @@ sub_F6B8AD_Epilogue:
 	ret	; F6B8BC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B8BD
+; BStore_ReadByteAtSongPosition
 ; Called from: in-module: 0xF68224 0xF68240 0xF6825E 0xF68A35 0xF68ADB
 ;              0xF68BE4 0xF68C3A 0xF68D1C +59 more
 ; Touches: (0x126E)
@@ -155459,7 +155462,9 @@ sub_F6B8AD_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6B8BD:
+; BStore_ReadByteAtSongPosition: for directory entry IZ: the block word 0x3460[2 * entry] and the offset byte 0x3482[entry] (the per-song position
+;   0xF6AC4D initialises to 0xFFFF / 5); A = the byte there.
+BStore_ReadByteAtSongPosition:
 	calr	BStore_DirEntryOffsetX2	; F6B8BD  calr 0xf6bbd4
 	push	xde	; F6B8C0  push XDE
 	ld	xde, 13408	; F6B8C1  ld XDE,0x00003460
@@ -155561,7 +155566,7 @@ sub_F6B905_Skip2:
 ; Called from: in-module: 0xF68B3B 0xF68F53 0xF69209 0xF699FF 0xF69BF2
 ;              0xF6BD28 0xF6BD59 0xF6BD78 +16 more
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6B8BD sub_F6BA11
+; Calls:   BStore_ReadByteAtSongPosition sub_F6BA11
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B95F is an instruction
 ;           boundary.  The name IS the address.
@@ -155569,7 +155574,7 @@ sub_F6B905_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B95F:
-	calr	sub_F6B8BD	; F6B95F  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B95F  calr 0xf6b8bd
 	pushw	wa	; F6B962  push WA
 	ldw	de, 1	; F6B963  ld DE,0x0001
 	calr	sub_F6BA11	; F6B966  calr 0xf6ba11
@@ -155641,7 +155646,7 @@ sub_F6B97B:
 ; sub_F6B9B9
 ; Called from: in-module: 0xF68A70 0xF68A7A 0xF68A8A
 ; Touches: (0x0EC4)
-; Calls:   sub_F6B8BD sub_F6BA11
+; Calls:   BStore_ReadByteAtSongPosition sub_F6BA11
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B9B9 is an instruction
 ;           boundary.  The name IS the address.
@@ -155657,7 +155662,7 @@ sub_F6B9B9:
 	push	xix	; F6B9BF  push XIX
 	push	xiy	; F6B9C0  push XIY
 	push	xiz	; F6B9C1  push XIZ
-	calr	sub_F6B8BD	; F6B9C2  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6B9C2  calr 0xf6b8bd
 	ld	(3780:16), a	; F6B9C5  ld (0x0ec4),A
 	ld	w, d	; F6B9C9  ld W,D
 	ld	a, e	; F6B9CB  ld A,E
@@ -155961,7 +155966,7 @@ BStore_DirEntryOffsetX3:
 ; sub_F6BBFC
 ; Called from: in-module: 0xF6BCCA 0xF6C182
 ; Touches: (0x0E53) (0x0E60) (0x0E62)
-; Calls:   sub_F6B8BD sub_F6BA11 sub_F6B8F1 0xF6DA12 0xF6D642
+; Calls:   BStore_ReadByteAtSongPosition sub_F6BA11 sub_F6B8F1 0xF6DA12 0xF6D642
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6BBFC is an instruction
 ;           boundary.  The name IS the address.
@@ -155973,7 +155978,7 @@ sub_F6BBFC:
 	ld	(3682:16), a	; F6BBFE  ld (0x0e62),A
 	ld	(3680:16), wa	; F6BC02  ld (0x0e60),WA
 sub_F6BBFC_Join:
-	calr	sub_F6B8BD	; F6BC06  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6BC06  calr 0xf6b8bd
 	cp	a, 129	; F6BC09  cp A,0x81
 	jr	nz, sub_F6BBFC_Skip	; F6BC0C  jr NZ,0xf6bc1a
 	ldw	de, 1	; F6BC0E  ld DE,0x0001
@@ -156065,7 +156070,7 @@ sub_F6BC89_Skip2:
 ; Called from: in-module: 0xF6743C
 ; Touches: (0x0E53) (0x0E63) (0x0ECA) (0x0EF5) (0x100E) (0x100F) (0x1258)
 ;          (0x1259) (0x125A) (0x1264) +11 more  |  0x603422
-; Calls:   sub_F6B8BD sub_F6B8F1 sub_F6BBFC 0xF6D410 sub_F67448 sub_F6B95F
+; Calls:   BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6BBFC 0xF6D410 sub_F67448 sub_F6B95F
 ;          sub_F6C230 BStore_DirEntryOffsetX2 T_F413E4 0xF6D710 0xF6D70C T_F40790 +15
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -156077,7 +156082,7 @@ sub_F6BC89_Skip2:
 sub_F6BCB2:
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F6BCB2  cp (0x0e63),0x00
 	jr	nz, sub_F6BC89_Skip4	; F6BCB7  jr NZ,0xf6bcce
-	calr	sub_F6B8BD	; F6BCB9  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6BCB9  calr 0xf6b8bd
 	cp	a, 129	; F6BCBC  cp A,0x81
 	jr	z, sub_F6BC89_Skip3	; F6BCBF  jr Z,0xf6bcca
 	calr	sub_F6B8F1	; F6BCC1  calr 0xf6b8f1
@@ -156087,7 +156092,7 @@ sub_F6BC89_Skip3:
 	calr	sub_F6BBFC	; F6BCCA  calr 0xf6bbfc
 	ret	; F6BCCD  ret
 sub_F6BC89_Skip4:
-	calr	sub_F6B8BD	; F6BCCE  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6BCCE  calr 0xf6b8bd
 	ld	w, a	; F6BCD1  ld W,A
 	and	w, 6	; F6BCD3  and W,0x06
 	ld	(4110:16), w	; F6BCD6  ld (0x100e),W
@@ -156547,7 +156552,7 @@ sub_F6BFF2_Skip22:
 	calr	sub_F6C230	; F6C12E  calr 0xf6c230
 	ld	c, a	; F6C131  ld C,A
 	pushw	bc	; F6C133  push BC
-	calr	sub_F6B8BD	; F6C134  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C134  calr 0xf6b8bd
 	ld	l, a	; F6C137  ld L,A
 	rrc	a	; F6C139  rrc 0x01,A
 	and	a, 128	; F6C13C  and A,0x80
@@ -156997,7 +157002,7 @@ sub_F6C3E5_Skip2:
 ; Called from: in-module: 0xF6820F 0xF68234 0xF68B45 0xF68DF0 0xF6951A
 ;              0xF6975C 0xF69887 0xF69998 +5 more
 ; Touches: (0x1008)
-; Calls:   sub_F6B8BD sub_F6C292 sub_F6B95F sub_F6C2E5
+; Calls:   BStore_ReadByteAtSongPosition sub_F6C292 sub_F6B95F sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C43C is an instruction
 ;           boundary.  The name IS the address.
@@ -157006,7 +157011,7 @@ sub_F6C3E5_Skip2:
 ; --------------------------------------------------------------------------
 sub_F6C43C:
 	push	xhl	; F6C43C  push XHL
-	calr	sub_F6B8BD	; F6C43D  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C43D  calr 0xf6b8bd
 	cp	a, 132	; F6C440  cp A,0x84
 	jr	z, sub_F6C43C_Skip2	; F6C443  jr Z,0xf6c4a0
 	ld	a, 7:opc	; F6C445  ld A,0x07
@@ -157201,7 +157206,7 @@ sub_F67440_Nop:
 ; sub_F6C52A
 ; Called from: in-module: 0xF68F6E
 ; Touches: (0x0E63)
-; Calls:   sub_F6C5BA sub_F6922B sub_F67481 sub_F6C292 sub_F6B8BD sub_F6B75E
+; Calls:   sub_F6C5BA sub_F6922B sub_F67481 sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B75E
 ;          sub_F6B770 sub_F693F6 sub_F6C2E5
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C52A is an instruction
@@ -157230,7 +157235,7 @@ sub_F6C52A_Skip:
 	ld	a, 3:opc	; F6C54C  ld A,0x03
 	calr	sub_F6C292	; F6C54E  calr 0xf6c292
 sub_F6C52A_Loop2:
-	calr	sub_F6B8BD	; F6C551  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C551  calr 0xf6b8bd
 	cp	a, 129	; F6C554  cp A,0x81
 	jr	z, sub_F6C52A_Loop3	; F6C557  jr Z,0xf6c561
 	calr	sub_F6B75E	; F6C559  calr 0xf6b75e
@@ -157240,7 +157245,7 @@ sub_F6C52A_Loop3:
 	calr	sub_F6B770	; F6C561  calr 0xf6b770
 	cp	w, 255	; F6C564  cp W,0xff
 	jr	z, sub_F6C52A_Skip4	; F6C567  jr Z,0xf6c5b2
-	calr	sub_F6B8BD	; F6C569  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C569  calr 0xf6b8bd
 	cp	a, 129	; F6C56C  cp A,0x81
 	jr	z, sub_F6C52A_Skip4	; F6C56F  jr Z,0xf6c5b2
 	calr	sub_F6C5BA	; F6C571  calr 0xf6c5ba
@@ -157250,7 +157255,7 @@ sub_F6C52A_Loop4:
 	calr	sub_F6B770	; F6C578  calr 0xf6b770
 	cp	w, 255	; F6C57B  cp W,0xff
 	jr	z, sub_F6C52A_Skip2	; F6C57E  jr Z,0xf6c5a4
-	calr	sub_F6B8BD	; F6C580  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C580  calr 0xf6b8bd
 	cp	a, 129	; F6C583  cp A,0x81
 	jr	z, sub_F6C52A_Loop5	; F6C586  jr Z,0xf6c594
 	calr	sub_F6C5BA	; F6C588  calr 0xf6c5ba
@@ -157262,7 +157267,7 @@ sub_F6C52A_Loop5:
 	calr	sub_F6B75E	; F6C594  calr 0xf6b75e
 	cp	w, 255	; F6C597  cp W,0xff
 	jr	z, sub_F6C52A_Skip3	; F6C59A  jr Z,0xf6c5ae
-	calr	sub_F6B8BD	; F6C59C  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C59C  calr 0xf6b8bd
 	cp	a, 129	; F6C59F  cp A,0x81
 	jr	z, sub_F6C52A_Skip3	; F6C5A2  jr Z,0xf6c5ae
 sub_F6C52A_Skip2:
@@ -157339,7 +157344,7 @@ sub_F6C5BA_Join:
 ; sub_F6C625
 ; Called from: T_F42EF4 (x0)
 ; Touches: (0x0F11) (0x0F13) (0x1070) (0x126E)
-; Calls:   sub_F6C292 sub_F6B8BD sub_F6B770 sub_F6B75E sub_F6B039 BStore_DirEntryOffsetX2
+; Calls:   sub_F6C292 BStore_ReadByteAtSongPosition sub_F6B770 sub_F6B75E sub_F6B039 BStore_DirEntryOffsetX2
 ;          sub_F6C6DE sub_F6C2E5
 ; Evidence: thunk slot T_F42EF4 holds `jp 0x00F6C625`, and 0xF6C625 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -157364,14 +157369,14 @@ sub_F6C625:		; <- T_F42EF4
 	m_and_mi8 MB16, 0x1070, 0xfe	; F6C638  and (0x1070),0xfe
 	ld	a, 4:opc	; F6C63D  ld A,0x04
 	calr	sub_F6C292	; F6C63F  calr 0xf6c292
-	calr	sub_F6B8BD	; F6C642  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C642  calr 0xf6b8bd
 	cp	a, 129	; F6C645  cp A,0x81
 	jr	z, sub_F6C5BA_Skip2	; F6C648  jr Z,0xf6c65d
 sub_F6C5BA_Loop:
 	calr	sub_F6B770	; F6C64A  calr 0xf6b770
 	cp	w, 255	; F6C64D  cp W,0xff
 	jr	z, sub_F6C5BA_Skip2	; F6C650  jr Z,0xf6c65d
-	calr	sub_F6B8BD	; F6C652  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C652  calr 0xf6b8bd
 	cp	a, 129	; F6C655  cp A,0x81
 	jr	nz, sub_F6C5BA_Loop	; F6C658  jr NZ,0xf6c64a
 	calr	sub_F6B75E	; F6C65A  calr 0xf6b75e
@@ -157379,7 +157384,7 @@ sub_F6C5BA_Skip2:
 	xor	a, a	; F6C65D  xor A,A
 	calr	sub_F6C292	; F6C65F  calr 0xf6c292
 	calr	sub_F6B039	; F6C662  calr 0xf6b039
-	calr	sub_F6B8BD	; F6C665  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C665  calr 0xf6b8bd
 	cp	a, 129	; F6C668  cp A,0x81
 	jr	nz, sub_F6C5BA_Skip4	; F6C66B  jr NZ,0xf6c6a2
 	jr	sub_F6C5BA_Join2	; F6C66D  jr T,0xf6c6be
@@ -157400,7 +157405,7 @@ sub_F6C5BA_Loop2:
 	m_cp_rm MB16, 0x0f13, 1	; F6C699  cp A,(0x0f13)
 	jr	nc, sub_F6C5BA_Skip6	; F6C69D  jr NC,0xf6c6c5
 sub_F6C5BA_Skip3:
-	calr	sub_F6B8BD	; F6C69F  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6C69F  calr 0xf6b8bd
 sub_F6C5BA_Skip4:
 	and	a, 240	; F6C6A2  and A,0xf0
 	cp	a, 176	; F6C6A5  cp A,0xb0
@@ -158031,7 +158036,7 @@ sub_F6CB13_Join:
 ; StepRecordSub11_SoftKeyCol2
 ; Called from: in-module: 0xF6CAFE
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5)
-; Calls:   sub_F6B387 sub_F6C43C sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03
+; Calls:   sub_F6B387 sub_F6C43C BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CB52 is an instruction
 ;           boundary.  The name IS the address.
@@ -158084,7 +158089,7 @@ sub_F6CB52_Arm:
 	call	(xhl)	; F6CBAD  call T,XHL
 	ret	; F6CBAF  ret
 sub_F6CB52_Skip3:
-	calr	sub_F6B8BD	; F6CBB0  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6CBB0  calr 0xf6b8bd
 	cp	a, 129	; F6CBB3  cp A,0x81
 	jr	z, sub_F6CB52_Skip4	; F6CBB6  jr Z,0xf6cbcc
 	cp	a, 130	; F6CBB8  cp A,0x82
@@ -158186,7 +158191,7 @@ StepRecordSub11_ButtonTable:
 ; Called from: in-module: 0xF67488
 ; Touches: (0x0D10) (0x0DC7) (0x0DCE) (0x0E4F) (0x0E53) (0x0E58) (0x0E63)
 ;          (0x0ED5) (0x0EF5) (0x1071) +5 more
-; Calls:   T_F431B0 sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03 sub_F69CB4
+; Calls:   T_F431B0 BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03 sub_F69CB4
 ;          sub_F6A20F StepRecord_SoftKeyCol3 0xF6E706
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CC6E is an instruction
@@ -158223,7 +158228,7 @@ sub_F6CC6E_Skip2:
 	jr	z, sub_F6CC6E_Skip4	; F6CCB2  jr Z,0xf6ccf9
 	m_and_mi8 MB16, 0x1071, 0xfe	; F6CCB4  and (0x1071),0xfe
 	call	T_F431B0	; F6CCB9  call 0xf431b0
-	calr	sub_F6B8BD	; F6CCBD  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6CCBD  calr 0xf6b8bd
 	cp	a, 129	; F6CCC0  cp A,0x81
 	jr	z, sub_F6CC6E_Skip3	; F6CCC3  jr Z,0xf6ccde
 	cp	a, 130	; F6CCC5  cp A,0x82
@@ -158245,7 +158250,7 @@ sub_F6CC6E_Join:
 sub_F6CC6E_Skip4:
 	m_and_mi8 MB16, 0x1071, 0xfe	; F6CCF9  and (0x1071),0xfe
 	call	T_F431B0	; F6CCFE  call 0xf431b0
-	call	sub_F6B8BD	; F6CD02  call 0xf6b8bd
+	call	BStore_ReadByteAtSongPosition	; F6CD02  call 0xf6b8bd
 	cp	a, 129	; F6CD06  cp A,0x81
 	jr	z, sub_F6CC6E_Skip5	; F6CD09  jr Z,0xf6cd24
 	cp	a, 130	; F6CD0B  cp A,0x82
@@ -158296,7 +158301,7 @@ sub_F6CC6E_Epilogue:
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5) (0x12BA)
 ;          (0x2075)
 ; Calls:   sub_F67F68 0xF6E706 StepRecord_SoftKeyCol3 sub_F6908B sub_F6B387 sub_F6C43C
-;          sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03
+;          BStore_ReadByteAtSongPosition sub_F6B8F1 sub_F6741C sub_F69C03
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6CD74 is an instruction
 ;           boundary.  The name IS the address.
@@ -158363,7 +158368,7 @@ sub_F6CD74_Skip2:
 	call	(xhl)	; F6CDFF  call T,XHL
 	ret	; F6CE01  ret
 sub_F6CD74_Skip3:
-	calr	sub_F6B8BD	; F6CE02  calr 0xf6b8bd
+	calr	BStore_ReadByteAtSongPosition	; F6CE02  calr 0xf6b8bd
 	cp	a, 129	; F6CE05  cp A,0x81
 	jr	z, sub_F6CD74_Skip4	; F6CE08  jr Z,0xf6ce1e
 	cp	a, 130	; F6CE0A  cp A,0x82
@@ -165598,7 +165603,7 @@ sub_F6F9DE_Return:
 ; sub_F6FA70
 ; Called from: in-module: 0xF6F6AD 0xF72F9E
 ; Touches: (0x1238) (0x360E)
-; Calls:   sub_F7124E sub_F70FDA sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F71275
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -165627,7 +165632,7 @@ sub_F6FA70:
 	pushw	bc	; F6FA8C  push BC
 	push	xix	; F6FA8D  push XIX
 	push	xiy	; F6FA8E  push XIY
-	calr	sub_F70FDA	; F6FA8F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FA8F  calr 0xf70fda
 	pop	xiy	; F6FA92  pop XIY
 	pop	xix	; F6FA93  pop XIX
 	popw	bc	; F6FA94  pop BC
@@ -165669,7 +165674,7 @@ Data_F6FAB4:
 ; sub_F6FAB7
 ; Called from: in-module: 0xF6F71D
 ; Touches:   |  0x603500
-; Calls:   sub_F7124E sub_F70FE1 sub_F6FB16
+; Calls:   sub_F7124E BStore_PutByteAtCursor sub_F6FB16
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FAB7 is an instruction boundary of this
@@ -165694,7 +165699,7 @@ sub_F6FAB7_Loop:
 	pushw	hl	; F6FAD2  push HL
 	calr	sub_F7124E	; F6FAD3  calr 0xf7124e
 	ld	a, 130:opc	; F6FAD6  ld A,0x82
-	calr	sub_F70FE1	; F6FAD8  calr 0xf70fe1
+	calr	BStore_PutByteAtCursor	; F6FAD8  calr 0xf70fe1
 	calr	sub_F6FB16	; F6FADB  calr 0xf6fb16
 	popw	hl	; F6FADE  pop HL
 sub_F6FAB7_Skip:
@@ -165892,7 +165897,7 @@ sub_F6FB51_Return:
 ; Called from: in-module: 0xF6FBF7
 ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
 ;          (0x1238) (0x124A) (0x360C) +1 more
-; Calls:   InputStream_GetByte sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F71275
+; Calls:   InputStream_GetByte sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FC10 is an instruction boundary of this
@@ -165967,7 +165972,7 @@ sub_F6FC10_Skip4:
 	or	a, w	; F6FCBD  or A,W
 sub_F6FC10_Skip5:
 	pushw	bc	; F6FCBF  push BC
-	calr	sub_F70FDA	; F6FCC0  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FCC0  calr 0xf70fda
 	popw	bc	; F6FCC3  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FCC4  cp (0x1238),0x00
 	jrl	nz, sub_F6FC10_Return	; F6FCC9  jrl NZ,0xf6fd79
@@ -165993,7 +165998,7 @@ sub_F6FC10_Skip6:
 	popw	bc	; F6FD00  pop BC
 	pushw	bc	; F6FD01  push BC
 	push	xiy	; F6FD02  push XIY
-	calr	sub_F70FDA	; F6FD03  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FD03  calr 0xf70fda
 	pop	xiy	; F6FD06  pop XIY
 	popw	bc	; F6FD07  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FD08  cp (0x1238),0x00
@@ -166001,14 +166006,14 @@ sub_F6FC10_Skip6:
 	ld	a, c	; F6FD0F  ld A,C
 	pushw	bc	; F6FD11  push BC
 	push	xiy	; F6FD12  push XIY
-	calr	sub_F70FDA	; F6FD13  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FD13  calr 0xf70fda
 	pop	xiy	; F6FD16  pop XIY
 	popw	bc	; F6FD17  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FD18  cp (0x1238),0x00
 	jr	nz, sub_F6FC10_Return	; F6FD1D  jr NZ,0xf6fd79
 	ld	a, b	; F6FD1F  ld A,B
 	push	xiy	; F6FD21  push XIY
-	calr	sub_F70FDA	; F6FD22  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FD22  calr 0xf70fda
 	pop	xiy	; F6FD25  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FD26  cp (0x1238),0x00
 	jr	nz, sub_F6FC10_Return	; F6FD2B  jr NZ,0xf6fd79
@@ -166425,7 +166430,7 @@ sub_F6FF44_Return:
 ; sub_F6FFAE
 ; Called from: in-module: 0xF6FF8A
 ; Touches: (0x10D0) (0x10D1) (0x1238)
-; Calls:   sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FFAE is an instruction boundary of this
@@ -166441,7 +166446,7 @@ sub_F6FFAE:
 	push	xiy	; F6FFB8  push XIY
 	calr	sub_F7124E	; F6FFB9  calr 0xf7124e
 	ld	a, 208:opc	; F6FFBC  ld A,0xd0
-	calr	sub_F70FDA	; F6FFBE  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FFBE  calr 0xf70fda
 	pop	xiy	; F6FFC1  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FFC2  cp (0x1238),0x00
 	jr	nz, sub_F6FFAE_Return	; F6FFC7  jr NZ,0xf70007
@@ -166455,13 +166460,13 @@ sub_F6FFAE:
 	calr	sub_F7122F	; F6FFDC  calr 0xf7122f
 	pop	xiy	; F6FFDF  pop XIY
 	push	xiy	; F6FFE0  push XIY
-	calr	sub_F70FDA	; F6FFE1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FFE1  calr 0xf70fda
 	pop	xiy	; F6FFE4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FFE5  cp (0x1238),0x00
 	jr	nz, sub_F6FFAE_Return	; F6FFEA  jr NZ,0xf70007
 	ld	a, (4305:16)	; F6FFEC  ld A,(0x10d1)
 	push	xiy	; F6FFF0  push XIY
-	calr	sub_F70FDA	; F6FFF1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F6FFF1  calr 0xf70fda
 	pop	xiy	; F6FFF4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FFF5  cp (0x1238),0x00
 	jr	nz, sub_F6FFAE_Return	; F6FFFA  jr NZ,0xf70007
@@ -166475,7 +166480,7 @@ sub_F6FFAE_Return:
 ; sub_F70008
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F701F1 T_F41004 sub_F7124E sub_F70FDA sub_F7122F
+; Calls:   sub_F71417 sub_F701F1 T_F41004 sub_F7124E BStore_PutByteAndAdvance sub_F7122F
 ;          sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -166535,7 +166540,7 @@ sub_F70008_Skip3:
 	.byte 0xC8, 0xE8, 0x02	; F700A0  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F700A3  or A,W
 	push	xhl	; F700A5  push XHL
-	calr	sub_F70FDA	; F700A6  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F700A6  calr 0xf70fda
 	pop	xhl	; F700A9  pop XHL
 	pop	xiy	; F700AA  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700AB  cp (0x1238),0x00
@@ -166553,7 +166558,7 @@ sub_F70008_Skip3:
 	pop	xhl	; F700CB  pop XHL
 	push	xhl	; F700CC  push XHL
 	push	xiy	; F700CD  push XIY
-	calr	sub_F70FDA	; F700CE  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F700CE  calr 0xf70fda
 	pop	xiy	; F700D1  pop XIY
 	pop	xhl	; F700D2  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700D3  cp (0x1238),0x00
@@ -166564,7 +166569,7 @@ sub_F70008_Skip3:
 	pop	xix	; F700E6  pop XIX
 	push	xhl	; F700E7  push XHL
 	push	xiy	; F700E8  push XIY
-	calr	sub_F70FDA	; F700E9  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F700E9  calr 0xf70fda
 	pop	xiy	; F700EC  pop XIY
 	pop	xhl	; F700ED  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700EE  cp (0x1238),0x00
@@ -166572,7 +166577,7 @@ sub_F70008_Skip3:
 	xor	a, a	; F700F6  xor A,A
 	push	xhl	; F700F8  push XHL
 	push	xiy	; F700F9  push XIY
-	calr	sub_F70FDA	; F700FA  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F700FA  calr 0xf70fda
 	pop	xiy	; F700FD  pop XIY
 	pop	xhl	; F700FE  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700FF  cp (0x1238),0x00
@@ -166580,14 +166585,14 @@ sub_F70008_Skip3:
 	ld	a, (6352916:24)	; F70107  ld A,(0x60f014)
 	and	a, 127	; F7010C  and A,0x7f
 	push	xiy	; F7010F  push XIY
-	calr	sub_F70FDA	; F70110  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70110  calr 0xf70fda
 	pop	xiy	; F70113  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70114  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F70119  jrl NZ,0xf701f0
 	ld	a, (6352917:24)	; F7011C  ld A,(0x60f015)
 	and	a, 127	; F70121  and A,0x7f
 	push	xiy	; F70124  push XIY
-	calr	sub_F70FDA	; F70125  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70125  calr 0xf70fda
 	pop	xiy	; F70128  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70129  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F7012E  jrl NZ,0xf701f0
@@ -166601,7 +166606,7 @@ sub_F70008_Skip4:
 	ld	a, 192:opc	; F70143  ld A,0xc0
 	pop	xiy	; F70145  pop XIY
 	push	xiy	; F70146  push XIY
-	calr	sub_F70FDA	; F70147  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70147  calr 0xf70fda
 	pop	xiy	; F7014A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7014B  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F70150  jrl NZ,0xf701f0
@@ -166615,7 +166620,7 @@ sub_F70008_Skip4:
 	calr	sub_F7122F	; F70166  calr 0xf7122f
 	pop	xiy	; F70169  pop XIY
 	push	xiy	; F7016A  push XIY
-	calr	sub_F70FDA	; F7016B  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7016B  calr 0xf70fda
 	pop	xiy	; F7016E  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7016F  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F70174  jr NZ,0xf701f0
@@ -166624,19 +166629,19 @@ sub_F70008_Skip4:
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F7017C  ld A,(XIX+IY)
 	pop	xix	; F70181  pop XIX
 	push	xiy	; F70182  push XIY
-	calr	sub_F70FDA	; F70183  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70183  calr 0xf70fda
 	pop	xiy	; F70186  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70187  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F7018C  jr NZ,0xf701f0
 	ld	a, 0:opc	; F7018E  ld A,0x00
 	push	xiy	; F70190  push XIY
-	calr	sub_F70FDA	; F70191  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70191  calr 0xf70fda
 	pop	xiy	; F70194  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70195  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F7019A  jr NZ,0xf701f0
 	ld	a, (4305:16)	; F7019C  ld A,(0x10d1)
 	push	xiy	; F701A0  push XIY
-	calr	sub_F70FDA	; F701A1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F701A1  calr 0xf70fda
 	pop	xiy	; F701A4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701A5  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F701AA  jr NZ,0xf701f0
@@ -166651,7 +166656,7 @@ sub_F70008_Skip4:
 	and	w, 7	; F701C8  and W,0x07
 	sll	w, 3	; F701CB  sll 0x03,W
 	or	a, w	; F701CE  or A,W
-	call	sub_F70FDA	; F701D0  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F701D0  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701D4  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F701D9  jr NZ,0xf701f0
 	calr	sub_F7129A	; F701DB  calr 0xf7129a
@@ -166811,7 +166816,7 @@ Data_F702BA:
 ; sub_F70330
 ; Called from: in-module: 0xF6FFA5
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x1238)
-; Calls:   sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70330 is an instruction boundary of this
@@ -166827,7 +166832,7 @@ sub_F70330:
 	push	xiy	; F7033A  push XIY
 	calr	sub_F7124E	; F7033B  calr 0xf7124e
 	ld	a, 210:opc	; F7033E  ld A,0xd2
-	calr	sub_F70FDA	; F70340  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70340  calr 0xf70fda
 	pop	xiy	; F70343  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70344  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F70349  jr NZ,0xf70399
@@ -166841,19 +166846,19 @@ sub_F70330:
 	calr	sub_F7122F	; F7035E  calr 0xf7122f
 	pop	xiy	; F70361  pop XIY
 	push	xiy	; F70362  push XIY
-	calr	sub_F70FDA	; F70363  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70363  calr 0xf70fda
 	pop	xiy	; F70366  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70367  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F7036C  jr NZ,0xf70399
 	ld	a, (4305:16)	; F7036E  ld A,(0x10d1)
 	push	xiy	; F70372  push XIY
-	calr	sub_F70FDA	; F70373  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70373  calr 0xf70fda
 	pop	xiy	; F70376  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70377  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F7037C  jr NZ,0xf70399
 	ld	a, (4306:16)	; F7037E  ld A,(0x10d2)
 	push	xiy	; F70382  push XIY
-	calr	sub_F70FDA	; F70383  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70383  calr 0xf70fda
 	pop	xiy	; F70386  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70387  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F7038C  jr NZ,0xf70399
@@ -167082,7 +167087,7 @@ sub_F704CE:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167099,7 +167104,7 @@ sub_F704E7:
 	push	xiy	; F704EF  push XIY
 	calr	sub_F7124E	; F704F0  calr 0xf7124e
 	ld	a, 209:opc	; F704F3  ld A,0xd1
-	calr	sub_F70FDA	; F704F5  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F704F5  calr 0xf70fda
 	pop	xiy	; F704F8  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F704F9  cp (0x1238),0x00
 	jr	nz, sub_F704E7_Return	; F704FE  jr NZ,0xf7053e
@@ -167113,13 +167118,13 @@ sub_F704E7:
 	calr	sub_F7122F	; F70513  calr 0xf7122f
 	pop	xiy	; F70516  pop XIY
 	push	xiy	; F70517  push XIY
-	calr	sub_F70FDA	; F70518  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70518  calr 0xf70fda
 	pop	xiy	; F7051B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7051C  cp (0x1238),0x00
 	jr	nz, sub_F704E7_Return	; F70521  jr NZ,0xf7053e
 	ld	a, (4306:16)	; F70523  ld A,(0x10d2)
 	push	xiy	; F70527  push XIY
-	calr	sub_F70FDA	; F70528  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70528  calr 0xf70fda
 	pop	xiy	; F7052B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7052C  cp (0x1238),0x00
 	jr	nz, sub_F704E7_Return	; F70531  jr NZ,0xf7053e
@@ -167342,7 +167347,7 @@ sub_F7067F:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F71417 sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167370,7 +167375,7 @@ sub_F7067F_Skip2:
 	calr	sub_F7124E	; F706B3  calr 0xf7124e
 	push	xiy	; F706B6  push XIY
 	ld	a, 176:opc	; F706B7  ld A,0xb0
-	calr	sub_F70FDA	; F706B9  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F706B9  calr 0xf70fda
 	pop	xiy	; F706BC  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F706BD  cp (0x1238),0x00
 	jrl	nz, sub_F7067F_Return	; F706C2  jrl NZ,0xf70753
@@ -167384,7 +167389,7 @@ sub_F7067F_Skip2:
 	calr	sub_F7122F	; F706D8  calr 0xf7122f
 	pop	xiy	; F706DB  pop XIY
 	push	xiy	; F706DC  push XIY
-	calr	sub_F70FDA	; F706DD  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F706DD  calr 0xf70fda
 	pop	xiy	; F706E0  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F706E1  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F706E6  jr NZ,0xf70753
@@ -167402,25 +167407,25 @@ sub_F7067F_Skip2:
 sub_F7067F_Skip3:
 	pop	xix	; F7070F  pop XIX
 	push	xiy	; F70710  push XIY
-	calr	sub_F70FDA	; F70711  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70711  calr 0xf70fda
 	pop	xiy	; F70714  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70715  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F7071A  jr NZ,0xf70753
 	ld	a, 8:opc	; F7071C  ld A,0x08
 	push	xiy	; F7071E  push XIY
-	calr	sub_F70FDA	; F7071F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7071F  calr 0xf70fda
 	pop	xiy	; F70722  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70723  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F70728  jr NZ,0xf70753
 	ld	a, (4306:16)	; F7072A  ld A,(0x10d2)
 	push	xiy	; F7072E  push XIY
-	calr	sub_F70FDA	; F7072F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7072F  calr 0xf70fda
 	pop	xiy	; F70732  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70733  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F70738  jr NZ,0xf70753
 	ld	a, 127:opc	; F7073A  ld A,0x7f
 	push	xiy	; F7073C  push XIY
-	calr	sub_F70FDA	; F7073D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7073D  calr 0xf70fda
 	pop	xiy	; F70740  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70741  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F70746  jr NZ,0xf70753
@@ -167435,7 +167440,7 @@ sub_F7067F_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167453,7 +167458,7 @@ sub_F70754:
 	push	xiy	; F7075E  push XIY
 	calr	sub_F7124E	; F7075F  calr 0xf7124e
 	ld	a, 211:opc	; F70762  ld A,0xd3
-	calr	sub_F70FDA	; F70764  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70764  calr 0xf70fda
 	pop	xiy	; F70767  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70768  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return2	; F7076D  jr NZ,0xf707ad
@@ -167467,13 +167472,13 @@ sub_F70754:
 	calr	sub_F7122F	; F70782  calr 0xf7122f
 	pop	xiy	; F70785  pop XIY
 	push	xiy	; F70786  push XIY
-	calr	sub_F70FDA	; F70787  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70787  calr 0xf70fda
 	pop	xiy	; F7078A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7078B  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return2	; F70790  jr NZ,0xf707ad
 	ld	a, (4306:16)	; F70792  ld A,(0x10d2)
 	push	xiy	; F70796  push XIY
-	calr	sub_F70FDA	; F70797  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70797  calr 0xf70fda
 	pop	xiy	; F7079A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7079B  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return2	; F707A0  jr NZ,0xf707ad
@@ -167580,7 +167585,7 @@ sub_F725D9_Nop:
 ; Called from: in-module: 0xF70835
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238)
-; Calls:   sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7083B is an instruction boundary of this
@@ -167611,7 +167616,7 @@ sub_F7083B_Skip:
 	or	a, 4	; F7086C  or A,0x04
 	push	xiy	; F7086F  push XIY
 	pushw	bc	; F70870  push BC
-	call	sub_F70FDA	; F70871  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F70871  call 0xf70fda
 	popw	bc	; F70875  pop BC
 	pop	xiy	; F70876  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70877  cp (0x1238),0x00
@@ -167625,7 +167630,7 @@ sub_F7083B_Skip:
 	pushw	bc	; F70891  push BC
 	push	xiy	; F70892  push XIY
 	call	sub_F7122F	; F70893  call 0xf7122f
-	call	sub_F70FDA	; F70897  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F70897  call 0xf70fda
 	pop	xiy	; F7089B  pop XIY
 	popw	bc	; F7089C  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7089D  cp (0x1238),0x00
@@ -167633,7 +167638,7 @@ sub_F7083B_Skip:
 	ld	a, 181:opc	; F708A5  ld A,0xb5
 	and	a, 127	; F708A7  and A,0x7f
 	push	xiy	; F708AA  push XIY
-	call	sub_F70FDA	; F708AB  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F708AB  call 0xf70fda
 	pop	xiy	; F708AF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708B0  cp (0x1238),0x00
 	jrl	nz, sub_F7083B_Epilogue	; F708B5  jrl NZ,0xf7091b
@@ -167641,20 +167646,20 @@ sub_F7083B_Skip:
 	push	xiy	; F708B9  push XIY
 	ld	a, (4526:16)	; F708BA  ld A,(0x11ae)
 	push	xiy	; F708BE  push XIY
-	call	sub_F70FDA	; F708BF  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F708BF  call 0xf70fda
 	pop	xiy	; F708C3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708C4  cp (0x1238),0x00
 	jr	nz, sub_F7083B_Epilogue	; F708C9  jr NZ,0xf7091b
 	ld	a, (4527:16)	; F708CB  ld A,(0x11af)
 	and	a, 127	; F708CF  and A,0x7f
 	push	xiy	; F708D2  push XIY
-	call	sub_F70FDA	; F708D3  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F708D3  call 0xf70fda
 	pop	xiy	; F708D7  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708D8  cp (0x1238),0x00
 	jr	nz, sub_F7083B_Epilogue	; F708DD  jr NZ,0xf7091b
 	ld	a, (4528:16)	; F708DF  ld A,(0x11b0)
 	push	xiy	; F708E3  push XIY
-	call	sub_F70FDA	; F708E4  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F708E4  call 0xf70fda
 	pop	xiy	; F708E8  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708E9  cp (0x1238),0x00
 	jr	nz, sub_F7083B_Epilogue	; F708EE  jr NZ,0xf7091b
@@ -168053,7 +168058,7 @@ sub_F70AE9_Return:
 ; sub_F70B22
 ; Called from: in-module: 0xF70B1E
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AF) (0x11B2) (0x1238) (0x1239)
-; Calls:   sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70B22 is an instruction boundary of this
@@ -168087,7 +168092,7 @@ sub_F70B22_Skip:
 sub_F70B22_Skip2:
 	push	xiy	; F70B55  push XIY
 	pushw	bc	; F70B56  push BC
-	calr	sub_F70FDA	; F70B57  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70B57  calr 0xf70fda
 	popw	bc	; F70B5A  pop BC
 	pop	xiy	; F70B5B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70B5C  cp (0x1238),0x00
@@ -168101,7 +168106,7 @@ sub_F70B22_Skip2:
 	pushw	bc	; F70B76  push BC
 	push	xiy	; F70B77  push XIY
 	calr	sub_F7122F	; F70B78  calr 0xf7122f
-	calr	sub_F70FDA	; F70B7B  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70B7B  calr 0xf70fda
 	pop	xiy	; F70B7E  pop XIY
 	popw	bc	; F70B7F  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70B80  cp (0x1238),0x00
@@ -168127,7 +168132,7 @@ sub_F70B22_Skip4:
 sub_F70B22_Join:
 	pushw	bc	; F70BBF  push BC
 	push	xiy	; F70BC0  push XIY
-	calr	sub_F70FDA	; F70BC1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70BC1  calr 0xf70fda
 	pop	xiy	; F70BC4  pop XIY
 	popw	bc	; F70BC5  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BC6  cp (0x1238),0x00
@@ -168139,20 +168144,20 @@ sub_F70B22_Join:
 	mx8_ld_rm MXB, ra_DE, rb_C, 1	; F70BD6  ld A,(XDE+C)
 	pop	xde	; F70BDB  pop XDE
 	push	xiy	; F70BDC  push XIY
-	calr	sub_F70FDA	; F70BDD  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70BDD  calr 0xf70fda
 	pop	xiy	; F70BE0  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BE1  cp (0x1238),0x00
 	jrl	nz, sub_F70B22_Epilogue	; F70BE6  jrl NZ,0xf70c3a
 	ld	a, (4527:16)	; F70BE9  ld A,(0x11af)
 	and	a, 127	; F70BED  and A,0x7f
 	push	xiy	; F70BF0  push XIY
-	calr	sub_F70FDA	; F70BF1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70BF1  calr 0xf70fda
 	pop	xiy	; F70BF4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70BF5  cp (0x1238),0x00
 	jrl	nz, sub_F70B22_Epilogue	; F70BFA  jrl NZ,0xf70c3a
 	ld	a, 127:opc	; F70BFD  ld A,0x7f
 	push	xiy	; F70BFF  push XIY
-	calr	sub_F70FDA	; F70C00  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70C00  calr 0xf70fda
 	pop	xiy	; F70C03  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70C04  cp (0x1238),0x00
 	jrl	nz, sub_F70B22_Epilogue	; F70C09  jrl NZ,0xf70c3a
@@ -168485,7 +168490,7 @@ sub_F70DD6_Return:
 ; sub_F70E1D
 ; Called from: in-module: 0xF7067B 0xF7099F 0xF709D6 0xF70A2C
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x1238) (0x1239)
-; Calls:   sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70E1D is an instruction boundary of this
@@ -168508,7 +168513,7 @@ sub_F70E1D:
 	jr	z, sub_F70E1D_Skip	; F70E3A  jr Z,0xf70e3f
 	or	a, 1	; F70E3C  or A,0x01
 sub_F70E1D_Skip:
-	calr	sub_F70FDA	; F70E3F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70E3F  calr 0xf70fda
 	pop	xiy	; F70E42  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70E43  cp (0x1238),0x00
 	jrl	nz, sub_F70E1D_Return	; F70E48  jrl NZ,0xf70ed4
@@ -168522,7 +168527,7 @@ sub_F70E1D_Skip:
 	calr	sub_F7122F	; F70E5E  calr 0xf7122f
 	pop	xiy	; F70E61  pop XIY
 	push	xiy	; F70E62  push XIY
-	calr	sub_F70FDA	; F70E63  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70E63  calr 0xf70fda
 	pop	xiy	; F70E66  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70E67  cp (0x1238),0x00
 	jrl	nz, sub_F70E1D_Return	; F70E6C  jrl NZ,0xf70ed4
@@ -168535,27 +168540,27 @@ sub_F70E1D_Skip2:
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F70E81  ld A,(XIX+IY)
 	pop	xix	; F70E86  pop XIX
 	push	xiy	; F70E87  push XIY
-	calr	sub_F70FDA	; F70E88  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70E88  calr 0xf70fda
 	pop	xiy	; F70E8B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70E8C  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70E91  jr NZ,0xf70ed4
 	ld	a, (4526:16)	; F70E93  ld A,(0x11ae)
 	push	xiy	; F70E97  push XIY
-	calr	sub_F70FDA	; F70E98  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70E98  calr 0xf70fda
 	pop	xiy	; F70E9B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70E9C  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70EA1  jr NZ,0xf70ed4
 	ld	a, (4527:16)	; F70EA3  ld A,(0x11af)
 	and	a, 127	; F70EA7  and A,0x7f
 	push	xiy	; F70EAA  push XIY
-	calr	sub_F70FDA	; F70EAB  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70EAB  calr 0xf70fda
 	pop	xiy	; F70EAE  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70EAF  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70EB4  jr NZ,0xf70ed4
 	ld	a, (4528:16)	; F70EB6  ld A,(0x11b0)
 	and	a, 127	; F70EBA  and A,0x7f
 	push	xiy	; F70EBD  push XIY
-	calr	sub_F70FDA	; F70EBE  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70EBE  calr 0xf70fda
 	pop	xiy	; F70EC1  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70EC2  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70EC7  jr NZ,0xf70ed4
@@ -168570,7 +168575,7 @@ sub_F70E1D_Return:
 ; Called from: in-module: 0xF6FF96
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B1) (0x1238) (0x1239) (0x124B)
 ;          (0x2732) (0x345C) (0x345E)
-; Calls:   sub_F71417 sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F71417 sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70ED5 is an instruction boundary of this
@@ -168613,7 +168618,7 @@ sub_F70ED5_Skip3:
 	pop	xix	; F70F2B  pop XIX
 	ld	a, 144:opc	; F70F2C  ld A,0x90
 	push	xix	; F70F2E  push XIX
-	calr	sub_F70FDA	; F70F2F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70F2F  calr 0xf70fda
 	pop	xix	; F70F32  pop XIX
 	pop	xiy	; F70F33  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70F34  cp (0x1238),0x00
@@ -168629,7 +168634,7 @@ sub_F70ED5_Skip3:
 	pop	xiy	; F70F52  pop XIY
 	push	xiy	; F70F53  push XIY
 	push	xix	; F70F54  push XIX
-	calr	sub_F70FDA	; F70F55  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70F55  calr 0xf70fda
 	pop	xix	; F70F58  pop XIX
 	pop	xiy	; F70F59  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70F5A  cp (0x1238),0x00
@@ -168637,7 +168642,7 @@ sub_F70ED5_Skip3:
 	ld	a, (4305:16)	; F70F62  ld A,(0x10d1)
 	push	xiy	; F70F66  push XIY
 	push	xix	; F70F67  push XIX
-	calr	sub_F70FDA	; F70F68  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70F68  calr 0xf70fda
 	pop	xix	; F70F6B  pop XIX
 	pop	xiy	; F70F6C  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70F6D  cp (0x1238),0x00
@@ -168645,7 +168650,7 @@ sub_F70ED5_Skip3:
 	ld	a, (4306:16)	; F70F74  ld A,(0x10d2)
 	push	xiy	; F70F78  push XIY
 	push	xix	; F70F79  push XIX
-	calr	sub_F70FDA	; F70F7A  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70F7A  calr 0xf70fda
 	pop	xix	; F70F7D  pop XIX
 	pop	xiy	; F70F7E  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70F7F  cp (0x1238),0x00
@@ -168657,7 +168662,7 @@ sub_F70ED5_Skip3:
 	xor	a, a	; F70F94  xor A,A
 	push	xiy	; F70F96  push XIY
 	push	xix	; F70F97  push XIX
-	calr	sub_F70FDA	; F70F98  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70F98  calr 0xf70fda
 	pop	xix	; F70F9B  pop XIX
 	pop	xiy	; F70F9C  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70F9D  cp (0x1238),0x00
@@ -168665,7 +168670,7 @@ sub_F70ED5_Skip3:
 	xor	a, a	; F70FA4  xor A,A
 	push	xiy	; F70FA6  push XIY
 	push	xix	; F70FA7  push XIX
-	calr	sub_F70FDA	; F70FA8  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F70FA8  calr 0xf70fda
 	pop	xix	; F70FAB  pop XIX
 	pop	xiy	; F70FAC  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70FAD  cp (0x1238),0x00
@@ -168687,11 +168692,11 @@ sub_F70ED5_Return:
 	ret	; F70FD9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70FDA
+; BStore_PutByteAndAdvance
 ; Called from: in-module: 0xF6FA8F 0xF6FCC0 0xF6FD03 0xF6FD13 0xF6FD22
 ;              0xF6FFBE 0xF6FFE1 0xF6FFF1 +99 more
 ; Touches: nothing with an absolute address
-; Calls:   sub_F70FE1 sub_F70FF8
+; Calls:   BStore_PutByteAtCursor BStore_AdvanceCursorForWrite
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -168701,13 +168706,14 @@ sub_F70ED5_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70FDA:
-	calr	sub_F70FE1	; F70FDA  calr 0xf70fe1
-	calr	sub_F70FF8	; F70FDD  calr 0xf70ff8
+; BStore_PutByteAndAdvance: BStore_PutByteAtCursor then BStore_AdvanceCursorForWrite (107 call sites).
+BStore_PutByteAndAdvance:
+	calr	BStore_PutByteAtCursor	; F70FDA  calr 0xf70fe1
+	calr	BStore_AdvanceCursorForWrite	; F70FDD  calr 0xf70ff8
 	ret	; F70FE0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70FE1
+; BStore_PutByteAtCursor
 ; Called from: in-module: 0xF6FAD8 0xF70FDA 0xF728CD
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   SongStore_SeekBlock_Copy
@@ -168719,7 +168725,8 @@ sub_F70FDA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70FE1:
+; BStore_PutByteAtCursor: A to the block-store cursor: SongStore_SeekBlock_Copy(BStore_CursorBlock), then (BStore_CursorBlockAddr + BStore_CursorOffset) = A.
+BStore_PutByteAtCursor:
 	push	xhl	; F70FE1  push XHL
 	ld	hl, (BStore_CursorBlock:16)	; F70FE2  ld HL,(0x345c)
 	calr	SongStore_SeekBlock_Copy	; F70FE6  calr 0xf72f0a
@@ -168730,10 +168737,10 @@ sub_F70FE1:
 	ret	; F70FF7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70FF8
+; BStore_AdvanceCursorForWrite
 ; Called from: in-module: 0xF70FDD
 ; Touches: (0x1238) (0x345E)
-; Calls:   sub_F713E1
+; Calls:   BStore_ExtendChainAtCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70FF8 is an instruction boundary of this
@@ -168742,7 +168749,9 @@ sub_F70FE1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70FF8:
+; BStore_AdvanceCursorForWrite: BStore_CursorOffset + 1; at offset 255: no free block (BStore_FreeCount 0) -> (0x1238) = 0xFF, else
+;   BStore_ExtendChainAtCursor; (0x1238) = 0 on success.
+BStore_AdvanceCursorForWrite:
 	ld	wa, (BStore_CursorOffset:16)	; F70FF8  ld WA,(0x345e)
 	cp	wa, 255	; F70FFC  cp WA,0x00ff
 	jr	nz, sub_F70FF8_Skip2	; F71000  jr NZ,0xf71017
@@ -168751,7 +168760,7 @@ sub_F70FF8:
 	ld	(4664:16), 255	; F7100B  ld (0x1238),0xff
 	jr	sub_F70FF8_Return	; F71010  jr T,0xf71022
 sub_F70FF8_Skip:
-	calr	sub_F713E1	; F71012  calr 0xf713e1
+	calr	BStore_ExtendChainAtCursor	; F71012  calr 0xf713e1
 	jr	sub_F70FF8_Join	; F71015  jr T,0xf7101d
 sub_F70FF8_Skip2:
 	inc	1, wa	; F71017  inc 1,WA
@@ -169015,7 +169024,7 @@ sub_F710E7_Return:
 ; sub_F71203
 ; Called from: in-module: 0xF71153 0xF71187 0xF711BB 0xF711E8
 ; Touches: (0x1086) (0x11B1) (0x1238)
-; Calls:   sub_F7124E sub_F70FDA sub_F71275
+; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71203 is an instruction boundary of this
@@ -169033,7 +169042,7 @@ sub_F71203:
 	ld	a, 129:opc	; F7120E  ld A,0x81
 	pushw	bc	; F71210  push BC
 	push	xiy	; F71211  push XIY
-	calr	sub_F70FDA	; F71212  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71212  calr 0xf70fda
 	pop	xiy	; F71215  pop XIY
 	popw	bc	; F71216  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71217  cp (0x1238),0x00
@@ -169360,7 +169369,7 @@ InputStream_GetByte_Skip2:
 	ret	; F713E0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F713E1
+; BStore_ExtendChainAtCursor
 ; Called from: in-module: 0xF71012
 ; Touches: (0x126E) (0x345C) (0x345E)
 ; Calls:   T_F42884 SongStore_SeekBlock_Copy
@@ -169372,7 +169381,9 @@ InputStream_GetByte_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F713E1:
+; BStore_ExtendChainAtCursor: IX = a new block from T_F42884; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,
+;   its next = 0xFFFF; the cursor moves to it at offset 5 (the block header's length).
+BStore_ExtendChainAtCursor:
 	push	xix	; F713E1  push XIX
 	call	T_F42884	; F713E2  call 0xf42884
 	ld	wa, ix	; F713E6  ld WA,IX
@@ -170227,7 +170238,7 @@ sub_F719EA_Skip3:
 ;              0xF71A91
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238) (0x1381)
-; Calls:   sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71A95 is an instruction boundary of this
@@ -170261,7 +170272,7 @@ sub_F71A95_Skip:
 	or	a, w	; F71AD0  or A,W
 	push	xiy	; F71AD2  push XIY
 	pushw	bc	; F71AD3  push BC
-	call	sub_F70FDA	; F71AD4  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71AD4  call 0xf70fda
 	popw	bc	; F71AD8  pop BC
 	pop	xiy	; F71AD9  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71ADA  cp (0x1238),0x00
@@ -170275,7 +170286,7 @@ sub_F71A95_Skip:
 	pushw	bc	; F71AF4  push BC
 	push	xiy	; F71AF5  push XIY
 	call	sub_F7122F	; F71AF6  call 0xf7122f
-	call	sub_F70FDA	; F71AFA  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71AFA  call 0xf70fda
 	pop	xiy	; F71AFE  pop XIY
 	popw	bc	; F71AFF  pop BC
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B00  cp (0x1238),0x00
@@ -170283,7 +170294,7 @@ sub_F71A95_Skip:
 	ld	a, (4993:16)	; F71B08  ld A,(0x1381)
 	and	a, 127	; F71B0C  and A,0x7f
 	push	xiy	; F71B0F  push XIY
-	call	sub_F70FDA	; F71B10  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71B10  call 0xf70fda
 	pop	xiy	; F71B14  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B15  cp (0x1238),0x00
 	jrl	nz, sub_F71A95_Epilogue	; F71B1A  jrl NZ,0xf71b80
@@ -170291,20 +170302,20 @@ sub_F71A95_Skip:
 	push	xiy	; F71B1E  push XIY
 	ld	a, (4526:16)	; F71B1F  ld A,(0x11ae)
 	push	xiy	; F71B23  push XIY
-	call	sub_F70FDA	; F71B24  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71B24  call 0xf70fda
 	pop	xiy	; F71B28  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B29  cp (0x1238),0x00
 	jr	nz, sub_F71A95_Epilogue	; F71B2E  jr NZ,0xf71b80
 	ld	a, (4527:16)	; F71B30  ld A,(0x11af)
 	and	a, 127	; F71B34  and A,0x7f
 	push	xiy	; F71B37  push XIY
-	call	sub_F70FDA	; F71B38  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71B38  call 0xf70fda
 	pop	xiy	; F71B3C  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B3D  cp (0x1238),0x00
 	jr	nz, sub_F71A95_Epilogue	; F71B42  jr NZ,0xf71b80
 	ld	a, (4528:16)	; F71B44  ld A,(0x11b0)
 	push	xiy	; F71B48  push XIY
-	call	sub_F70FDA	; F71B49  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71B49  call 0xf70fda
 	pop	xiy	; F71B4D  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B4E  cp (0x1238),0x00
 	jr	nz, sub_F71A95_Epilogue	; F71B53  jr NZ,0xf71b80
@@ -170696,7 +170707,7 @@ sub_F71DB7_Return:
 ; sub_F71E21
 ; Called from: in-module: 0xF71DFD
 ; Touches: (0x10D0) (0x10D1) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 sub_F70FDA sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E21 is an instruction boundary of this
@@ -170716,7 +170727,7 @@ sub_F71E21:
 	and	w, 15	; F71E38  and W,0x0f
 	ld	a, 160:opc	; F71E3B  ld A,0xa0
 	or	a, w	; F71E3D  or A,W
-	calr	sub_F70FDA	; F71E3F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71E3F  calr 0xf70fda
 	pop	xiy	; F71E42  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71E43  cp (0x1238),0x00
 	jr	nz, sub_F71E21_Return	; F71E48  jr NZ,0xf71e88
@@ -170730,13 +170741,13 @@ sub_F71E21:
 	calr	sub_F7122F	; F71E5D  calr 0xf7122f
 	pop	xiy	; F71E60  pop XIY
 	push	xiy	; F71E61  push XIY
-	calr	sub_F70FDA	; F71E62  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71E62  calr 0xf70fda
 	pop	xiy	; F71E65  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71E66  cp (0x1238),0x00
 	jr	nz, sub_F71E21_Return	; F71E6B  jr NZ,0xf71e88
 	ld	a, (4305:16)	; F71E6D  ld A,(0x10d1)
 	push	xiy	; F71E71  push XIY
-	calr	sub_F70FDA	; F71E72  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71E72  calr 0xf70fda
 	pop	xiy	; F71E75  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71E76  cp (0x1238),0x00
 	jr	nz, sub_F71E21_Return	; F71E7B  jr NZ,0xf71e88
@@ -170751,7 +170762,7 @@ sub_F71E21_Return:
 ; Called from: in-module: 0xF71E1D
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   sub_F71417 sub_F728FE sub_F701F1 T_F41004 sub_F727C8 sub_F70FDA
+; Calls:   sub_F71417 sub_F728FE sub_F701F1 T_F41004 sub_F727C8 BStore_PutByteAndAdvance
 ;          sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -170817,7 +170828,7 @@ sub_F71E89_Skip3:
 	.byte 0xC8, 0xE8, 0x02	; F71F35  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F71F38  or A,W
 	push	xhl	; F71F3A  push XHL
-	calr	sub_F70FDA	; F71F3B  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71F3B  calr 0xf70fda
 	pop	xhl	; F71F3E  pop XHL
 	pop	xiy	; F71F3F  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F40  cp (0x1238),0x00
@@ -170835,7 +170846,7 @@ sub_F71E89_Skip3:
 	pop	xhl	; F71F60  pop XHL
 	push	xhl	; F71F61  push XHL
 	push	xiy	; F71F62  push XIY
-	calr	sub_F70FDA	; F71F63  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71F63  calr 0xf70fda
 	pop	xiy	; F71F66  pop XIY
 	pop	xhl	; F71F67  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F68  cp (0x1238),0x00
@@ -170844,7 +170855,7 @@ sub_F71E89_Skip3:
 	and	a, 15	; F71F74  and A,0x0f
 	push	xhl	; F71F77  push XHL
 	push	xiy	; F71F78  push XIY
-	calr	sub_F70FDA	; F71F79  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71F79  calr 0xf70fda
 	pop	xiy	; F71F7C  pop XIY
 	pop	xhl	; F71F7D  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F7E  cp (0x1238),0x00
@@ -170852,7 +170863,7 @@ sub_F71E89_Skip3:
 	xor	a, a	; F71F86  xor A,A
 	push	xhl	; F71F88  push XHL
 	push	xiy	; F71F89  push XIY
-	calr	sub_F70FDA	; F71F8A  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71F8A  calr 0xf70fda
 	pop	xiy	; F71F8D  pop XIY
 	pop	xhl	; F71F8E  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F8F  cp (0x1238),0x00
@@ -170860,14 +170871,14 @@ sub_F71E89_Skip3:
 	ld	a, (6352916:24)	; F71F97  ld A,(0x60f014)
 	and	a, 127	; F71F9C  and A,0x7f
 	push	xiy	; F71F9F  push XIY
-	calr	sub_F70FDA	; F71FA0  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71FA0  calr 0xf70fda
 	pop	xiy	; F71FA3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FA4  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FA9  jrl NZ,0xf7207c
 	ld	a, (6352917:24)	; F71FAC  ld A,(0x60f015)
 	and	a, 127	; F71FB1  and A,0x7f
 	push	xiy	; F71FB4  push XIY
-	call	sub_F70FDA	; F71FB5  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F71FB5  call 0xf70fda
 	pop	xiy	; F71FB9  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FBA  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FBF  jrl NZ,0xf7207c
@@ -170881,7 +170892,7 @@ sub_F71E89_Skip4:
 	ld	a, 192:opc	; F71FD4  ld A,0xc0
 	pop	xiy	; F71FD6  pop XIY
 	push	xiy	; F71FD7  push XIY
-	calr	sub_F70FDA	; F71FD8  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71FD8  calr 0xf70fda
 	pop	xiy	; F71FDB  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FDC  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FE1  jrl NZ,0xf7207c
@@ -170895,26 +170906,26 @@ sub_F71E89_Skip4:
 	calr	sub_F7122F	; F71FF7  calr 0xf7122f
 	pop	xiy	; F71FFA  pop XIY
 	push	xiy	; F71FFB  push XIY
-	calr	sub_F70FDA	; F71FFC  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F71FFC  calr 0xf70fda
 	pop	xiy	; F71FFF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72000  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72005  jr NZ,0xf7207c
 	ld	a, (4304:16)	; F72007  ld A,(0x10d0)
 	and	a, 15	; F7200B  and A,0x0f
 	push	xiy	; F7200E  push XIY
-	calr	sub_F70FDA	; F7200F  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7200F  calr 0xf70fda
 	pop	xiy	; F72012  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72013  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72018  jr NZ,0xf7207c
 	ld	a, 0:opc	; F7201A  ld A,0x00
 	push	xiy	; F7201C  push XIY
-	calr	sub_F70FDA	; F7201D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7201D  calr 0xf70fda
 	pop	xiy	; F72020  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72021  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72026  jr NZ,0xf7207c
 	ld	a, (4305:16)	; F72028  ld A,(0x10d1)
 	push	xiy	; F7202C  push XIY
-	calr	sub_F70FDA	; F7202D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7202D  calr 0xf70fda
 	pop	xiy	; F72030  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72031  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72036  jr NZ,0xf7207c
@@ -170929,7 +170940,7 @@ sub_F71E89_Skip4:
 	and	w, 7	; F72054  and W,0x07
 	sla	w, 3	; F72057  sla 0x03,W
 	or	a, w	; F7205A  or A,W
-	call	sub_F70FDA	; F7205C  call 0xf70fda
+	call	BStore_PutByteAndAdvance	; F7205C  call 0xf70fda
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72060  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72065  jr NZ,0xf7207c
 	calr	sub_F7129A	; F72067  calr 0xf7129a
@@ -171012,7 +171023,7 @@ sub_F7208D_Skip3:
 	ld	a, 144:opc	; F720EA  ld A,0x90
 	or	a, w	; F720EC  or A,W
 	push	xix	; F720EE  push XIX
-	calr	sub_F70FDA	; F720EF  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F720EF  calr 0xf70fda
 	pop	xix	; F720F2  pop XIX
 	pop	xiy	; F720F3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F720F4  cp (0x1238),0x00
@@ -171030,7 +171041,7 @@ sub_F7208D_Skip3:
 	pop	xiy	; F72114  pop XIY
 	push	xiy	; F72115  push XIY
 	push	xix	; F72116  push XIX
-	calr	sub_F70FDA	; F72117  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72117  calr 0xf70fda
 	pop	xix	; F7211A  pop XIX
 	pop	xiy	; F7211B  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7211C  cp (0x1238),0x00
@@ -171038,7 +171049,7 @@ sub_F7208D_Skip3:
 	ld	a, (4305:16)	; F72124  ld A,(0x10d1)
 	push	xiy	; F72128  push XIY
 	push	xix	; F72129  push XIX
-	calr	sub_F70FDA	; F7212A  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7212A  calr 0xf70fda
 	pop	xix	; F7212D  pop XIX
 	pop	xiy	; F7212E  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7212F  cp (0x1238),0x00
@@ -171050,7 +171061,7 @@ sub_F7208D_Skip3:
 sub_F7208D_Skip4:
 	push	xiy	; F72141  push XIY
 	push	xix	; F72142  push XIX
-	calr	sub_F70FDA	; F72143  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72143  calr 0xf70fda
 	pop	xix	; F72146  pop XIX
 	pop	xiy	; F72147  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72148  cp (0x1238),0x00
@@ -171063,7 +171074,7 @@ sub_F7208D_Skip4:
 	push	xiy	; F7215F  push XIY
 	push	xix	; F72160  push XIX
 	pushw	wa	; F72161  push WA
-	calr	sub_F70FDA	; F72162  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72162  calr 0xf70fda
 	popw	wa	; F72165  pop WA
 	pop	xix	; F72166  pop XIX
 	pop	xiy	; F72167  pop XIY
@@ -171071,7 +171082,7 @@ sub_F7208D_Skip4:
 	jr	nz, sub_F7208D_Return	; F7216D  jr NZ,0xf721a2
 	push	xiy	; F7216F  push XIY
 	push	xix	; F72170  push XIX
-	calr	sub_F70FDA	; F72171  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72171  calr 0xf70fda
 	pop	xix	; F72174  pop XIX
 	pop	xiy	; F72175  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72176  cp (0x1238),0x00
@@ -171378,7 +171389,7 @@ sub_F72364:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 sub_F70FDA sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -171399,7 +171410,7 @@ sub_F7237D:
 	and	w, 15	; F72390  and W,0x0f
 	ld	a, 208:opc	; F72393  ld A,0xd0
 	or	a, w	; F72395  or A,W
-	calr	sub_F70FDA	; F72397  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72397  calr 0xf70fda
 	pop	xiy	; F7239A  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7239B  cp (0x1238),0x00
 	jr	nz, sub_F7237D_Return	; F723A0  jr NZ,0xf723e0
@@ -171413,13 +171424,13 @@ sub_F7237D:
 	calr	sub_F7122F	; F723B5  calr 0xf7122f
 	pop	xiy	; F723B8  pop XIY
 	push	xiy	; F723B9  push XIY
-	calr	sub_F70FDA	; F723BA  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F723BA  calr 0xf70fda
 	pop	xiy	; F723BD  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F723BE  cp (0x1238),0x00
 	jr	nz, sub_F7237D_Return	; F723C3  jr NZ,0xf723e0
 	push	xiy	; F723C5  push XIY
 	ld	a, (4306:16)	; F723C6  ld A,(0x10d2)
-	calr	sub_F70FDA	; F723CA  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F723CA  calr 0xf70fda
 	pop	xiy	; F723CD  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F723CE  cp (0x1238),0x00
 	jr	nz, sub_F7237D_Return	; F723D3  jr NZ,0xf723e0
@@ -171591,7 +171602,7 @@ sub_F724A7_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 sub_F70FDA sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -171609,7 +171620,7 @@ sub_F724CB:
 	calr	sub_F727C8	; F724D6  calr 0xf727c8
 	push	xiy	; F724D9  push XIY
 	ld	a, 176:opc	; F724DA  ld A,0xb0
-	calr	sub_F70FDA	; F724DC  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F724DC  calr 0xf70fda
 	pop	xiy	; F724DF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F724E0  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F724E5  jr NZ,0xf72554
@@ -171623,32 +171634,32 @@ sub_F724CB:
 	calr	sub_F7122F	; F724FA  calr 0xf7122f
 	pop	xiy	; F724FD  pop XIY
 	push	xiy	; F724FE  push XIY
-	calr	sub_F70FDA	; F724FF  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F724FF  calr 0xf70fda
 	pop	xiy	; F72502  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72503  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72508  jr NZ,0xf72554
 	ld	a, (4304:16)	; F7250A  ld A,(0x10d0)
 	and	a, 15	; F7250E  and A,0x0f
 	push	xiy	; F72511  push XIY
-	calr	sub_F70FDA	; F72512  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72512  calr 0xf70fda
 	pop	xiy	; F72515  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72516  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F7251B  jr NZ,0xf72554
 	ld	a, 8:opc	; F7251D  ld A,0x08
 	push	xiy	; F7251F  push XIY
-	calr	sub_F70FDA	; F72520  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72520  calr 0xf70fda
 	pop	xiy	; F72523  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72524  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72529  jr NZ,0xf72554
 	ld	a, (4306:16)	; F7252B  ld A,(0x10d2)
 	push	xiy	; F7252F  push XIY
-	calr	sub_F70FDA	; F72530  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72530  calr 0xf70fda
 	pop	xiy	; F72533  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72534  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72539  jr NZ,0xf72554
 	ld	a, 127:opc	; F7253B  ld A,0x7f
 	push	xiy	; F7253D  push XIY
-	calr	sub_F70FDA	; F7253E  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7253E  calr 0xf70fda
 	pop	xiy	; F72541  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72542  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72547  jr NZ,0xf72554
@@ -171856,7 +171867,7 @@ sub_F726A2_Skip:
 ; sub_F726C6
 ; Called from: in-module: 0xF724C7 0xF72636 0xF7267A 0xF7269E 0xF726C2
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 sub_F70FDA sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726C6 is an instruction boundary of this
@@ -171872,7 +171883,7 @@ sub_F726C6:
 	push	xiy	; F726D1  push XIY
 	calr	sub_F727C8	; F726D2  calr 0xf727c8
 	ld	a, 176:opc	; F726D5  ld A,0xb0
-	calr	sub_F70FDA	; F726D7  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F726D7  calr 0xf70fda
 	pop	xiy	; F726DA  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F726DB  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F726E0  jr NZ,0xf72753
@@ -171886,32 +171897,32 @@ sub_F726C6:
 	calr	sub_F7122F	; F726F5  calr 0xf7122f
 	pop	xiy	; F726F8  pop XIY
 	push	xiy	; F726F9  push XIY
-	calr	sub_F70FDA	; F726FA  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F726FA  calr 0xf70fda
 	pop	xiy	; F726FD  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F726FE  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72703  jr NZ,0xf72753
 	ld	a, (4304:16)	; F72705  ld A,(0x10d0)
 	and	a, 15	; F72709  and A,0x0f
 	push	xiy	; F7270C  push XIY
-	calr	sub_F70FDA	; F7270D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7270D  calr 0xf70fda
 	pop	xiy	; F72710  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72711  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72716  jr NZ,0xf72753
 	ld	a, (4526:16)	; F72718  ld A,(0x11ae)
 	push	xiy	; F7271C  push XIY
-	calr	sub_F70FDA	; F7271D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7271D  calr 0xf70fda
 	pop	xiy	; F72720  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72721  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72726  jr NZ,0xf72753
 	ld	a, (4527:16)	; F72728  ld A,(0x11af)
 	push	xiy	; F7272C  push XIY
-	calr	sub_F70FDA	; F7272D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7272D  calr 0xf70fda
 	pop	xiy	; F72730  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72731  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72736  jr NZ,0xf72753
 	ld	a, (4528:16)	; F72738  ld A,(0x11b0)
 	push	xiy	; F7273C  push XIY
-	calr	sub_F70FDA	; F7273D  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7273D  calr 0xf70fda
 	pop	xiy	; F72740  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72741  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72746  jr NZ,0xf72753
@@ -171925,7 +171936,7 @@ sub_F726C6_Return:
 ; sub_F72754
 ; Called from: in-module: 0xF71E18
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 sub_F70FDA sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72754 is an instruction boundary of this
@@ -171944,7 +171955,7 @@ sub_F72754:
 	and	w, 15	; F72767  and W,0x0f
 	ld	a, 224:opc	; F7276A  ld A,0xe0
 	or	a, w	; F7276C  or A,W
-	calr	sub_F70FDA	; F7276E  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F7276E  calr 0xf70fda
 	pop	xiy	; F72771  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72772  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F72777  jr NZ,0xf727c7
@@ -171958,19 +171969,19 @@ sub_F72754:
 	calr	sub_F7122F	; F7278C  calr 0xf7122f
 	pop	xiy	; F7278F  pop XIY
 	push	xiy	; F72790  push XIY
-	calr	sub_F70FDA	; F72791  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F72791  calr 0xf70fda
 	pop	xiy	; F72794  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72795  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F7279A  jr NZ,0xf727c7
 	push	xiy	; F7279C  push XIY
 	ld	a, (4305:16)	; F7279D  ld A,(0x10d1)
-	calr	sub_F70FDA	; F727A1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F727A1  calr 0xf70fda
 	pop	xiy	; F727A4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F727A5  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F727AA  jr NZ,0xf727c7
 	push	xiy	; F727AC  push XIY
 	ld	a, (4306:16)	; F727AD  ld A,(0x10d2)
-	calr	sub_F70FDA	; F727B1  calr 0xf70fda
+	calr	BStore_PutByteAndAdvance	; F727B1  calr 0xf70fda
 	pop	xiy	; F727B4  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F727B5  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F727BA  jr NZ,0xf727c7
@@ -172100,7 +172111,7 @@ sub_F72822_Return:
 ; sub_F728A3
 ; Called from: in-module: 0xF71CE2
 ; Touches: (0x11B2)  |  0x603500
-; Calls:   sub_F728FE sub_F727C8 sub_F70FE1 sub_F728D5
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAtCursor sub_F728D5
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF728A3 is an instruction boundary of this
@@ -172126,7 +172137,7 @@ sub_F728A3:
 	push	xhl	; F728C7  push XHL
 	calr	sub_F727C8	; F728C8  calr 0xf727c8
 	ld	a, 130:opc	; F728CB  ld A,0x82
-	calr	sub_F70FE1	; F728CD  calr 0xf70fe1
+	calr	BStore_PutByteAtCursor	; F728CD  calr 0xf70fe1
 	calr	sub_F728D5	; F728D0  calr 0xf728d5
 	pop	xhl	; F728D3  pop XHL
 sub_F728A3_Return:
@@ -197663,7 +197674,7 @@ LcdKeyRow2_MeasureDelete_StageZero:
 	jr	z, ScreenLeaveBody_MeasureDelete_Return	; F7F067  jr Z,0xf7f087
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7F069  cp (0x0dd4),0x01
 	jr	z, ScreenLeaveBody_MeasureDelete_Return	; F7F06E  jr Z,0xf7f087
-	calr	sub_F7F245	; F7F070  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F070  calr 0xf7f245
 	call	T_MeasureDelete_SelectField1	; F7F073  call 0xf42964
 	ld	a, (3540:16)	; F7F077  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F07B  ld (0x12fb),A
@@ -197714,7 +197725,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip3	; F7F08B  jr Z,0xf7f0ab
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7F08D  cp (0x0dd4),0x02
 	jr	z, ScreenLeaveBody_MeasureDelete_Return2	; F7F092  jr Z,0xf7f0b2
-	calr	sub_F7F237	; F7F094  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F094  calr 0xf7f237
 	call	T_MeasureDelete_SelectField2	; F7F097  call 0xf42968
 	ld	a, (3540:16)	; F7F09B  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F09F  ld (0x12fb),A
@@ -197722,7 +197733,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	calr	sub_F7EFFA	; F7F0A6  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return2	; F7F0A9  jr T,0xf7f0b2
 ScreenLeaveBody_MeasureDelete_Skip3:
-	calr	sub_F7F245	; F7F0AB  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F0AB  calr 0xf7f245
 	call	T_MeasureDelete_LcdKeyRow3	; F7F0AE  call 0xf42978
 ScreenLeaveBody_MeasureDelete_Return2:
 	ret	; F7F0B2  ret
@@ -197768,7 +197779,7 @@ LcdKeyRow4_MeasureDelete_StageZero:
 	jr	z, ScreenLeaveBody_MeasureDelete_Return3	; F7F0B6  jr Z,0xf7f0d4
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7F0B8  cp (0x0dd4),0x03
 	jr	z, ScreenLeaveBody_MeasureDelete_Return3	; F7F0BD  jr Z,0xf7f0d4
-	calr	sub_F7F237	; F7F0BF  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F0BF  calr 0xf7f237
 	call	T_MeasureDelete_SelectField3	; F7F0C2  call 0xf4296c
 	ld	a, (3540:16)	; F7F0C6  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F0CA  ld (0x12fb),A
@@ -198144,7 +198155,8 @@ ButtonTable_MeasureDelete_StageNonZero_Nop16:
 
 ; Evidence: reached from calr from prom_b 0xF7F094; calr from prom_b
 ;           0xF7F0BF, and from nothing else the scans see.
-sub_F7F237:
+; Blink_EnableThenStop_Copy: byte-for-byte Blink_EnableThenStop: T_Blink_SetEnable(1), T_Blink_Stop.
+Blink_EnableThenStop_Copy:
 	pushw	1	; F7F237  push 0x0001
 	call	T_Blink_SetEnable	; F7F23A  call 0xf42e28
 	inc	2, xsp	; F7F23E  inc 2,XSP
@@ -198153,7 +198165,8 @@ sub_F7F237:
 
 ; Evidence: reached from calr from prom_b 0xF7F070; calr from prom_b
 ;           0xF7F0AB, and from nothing else the scans see.
-sub_F7F245:
+; Blink_DisableThenStop: T_Blink_SetEnable(0), T_Blink_Stop.
+Blink_DisableThenStop:
 	pushw	0	; F7F245  push 0x0000
 	call	T_Blink_SetEnable	; F7F248  call 0xf42e28
 	inc	2, xsp	; F7F24C  inc 2,XSP
@@ -198339,7 +198352,7 @@ LcdKeyRow1_MeasureErase_StageZero:
 	jr	z, ScreenLeaveBody_MeasureErase_Return	; F7F30B  jr Z,0xf7f329
 	m_cp_mi8 MB16, 0x0dbb, 0x01	; F7F30D  cp (0x0dbb),0x01
 	jr	z, ScreenLeaveBody_MeasureErase_Return	; F7F312  jr Z,0xf7f329
-	calr	sub_F7F245	; F7F314  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F314  calr 0xf7f245
 	call	T_MeasureErase_SelectField1	; F7F317  call 0xf42988
 	ld	a, (3515:16)	; F7F31B  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F31F  ld (0x12fc),A
@@ -198401,7 +198414,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	jr	z, sub_F7F32A_Skip	; F7F34D  jr Z,0xf7f36d
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7F34F  cp (0x0dbb),0x02
 	jr	z, sub_F7F32A_Return	; F7F354  jr Z,0xf7f374
-	calr	sub_F7F237	; F7F356  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F356  calr 0xf7f237
 	call	T_MeasureErase_SelectField2	; F7F359  call 0xf4298c
 	ld	a, (3515:16)	; F7F35D  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F361  ld (0x12fc),A
@@ -198409,7 +198422,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	calr	sub_F7F32A	; F7F368  calr 0xf7f32a
 	jr	sub_F7F32A_Return	; F7F36B  jr T,0xf7f374
 sub_F7F32A_Skip:
-	calr	sub_F7F245	; F7F36D  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F36D  calr 0xf7f245
 	call	T_MeasureErase_LcdKeyRow2	; F7F370  call 0xf429a0
 sub_F7F32A_Return:
 	ret	; F7F374  ret
@@ -198455,7 +198468,7 @@ LcdKeyRow3_MeasureErase_StageZero:
 	jr	z, sub_F7F32A_Return2	; F7F378  jr Z,0xf7f396
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7F37A  cp (0x0dbb),0x03
 	jr	z, sub_F7F32A_Return2	; F7F37F  jr Z,0xf7f396
-	calr	sub_F7F237	; F7F381  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F381  calr 0xf7f237
 	call	T_MeasureErase_SelectField3	; F7F384  call 0xf42990
 	ld	a, (3515:16)	; F7F388  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F38C  ld (0x12fc),A
@@ -198515,7 +198528,7 @@ LcdKeyRow4_MeasureErase_StageZero:
 	jr	z, sub_F7F397_Return	; F7F3B1  jr Z,0xf7f3cf
 	m_cp_mi8 MB16, 0x0dbb, 0x04	; F7F3B3  cp (0x0dbb),0x04
 	jr	z, sub_F7F397_Return	; F7F3B8  jr Z,0xf7f3cf
-	calr	sub_F7F245	; F7F3BA  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F3BA  calr 0xf7f245
 	call	T_MeasureErase_SelectField4	; F7F3BD  call 0xf42994
 	ld	a, (3515:16)	; F7F3C1  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F3C5  ld (0x12fc),A
@@ -199137,13 +199150,13 @@ LcdKeyRow1_Quantize_StageZero:
 	jr	z, ScreenLeaveBody_Quantize_Skip3	; F7F639  jr Z,0xf7f64b
 	m_cp_mi8 MB16, 0x0db9, 0x01	; F7F63B  cp (0x0db9),0x01
 	jr	z, ScreenLeaveBody_Quantize_Return	; F7F640  jr Z,0xf7f667
-	calr	sub_F7F245	; F7F642  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F642  calr 0xf7f245
 	call	T_Quantize_SelectField1	; F7F645  call 0xf42910
 	jr	ScreenLeaveBody_Quantize_Join2	; F7F649  jr T,0xf7f659
 ScreenLeaveBody_Quantize_Skip3:
 	m_cp_mi8 MB16, 0x0db9, 0x05	; F7F64B  cp (0x0db9),0x05
 	jr	z, ScreenLeaveBody_Quantize_Return	; F7F650  jr Z,0xf7f667
-	calr	sub_F7F245	; F7F652  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F652  calr 0xf7f245
 	call	T_Quantize_SelectField5	; F7F655  call 0xf42920
 ScreenLeaveBody_Quantize_Join2:
 	ld	a, (3513:16)	; F7F659  ld A,(0x0db9)
@@ -199206,13 +199219,13 @@ LcdKeyRow2_Quantize_StageZero:
 	jr	z, sub_F7F668_Skip	; F7F68B  jr Z,0xf7f69d
 	m_cp_mi8 MB16, 0x0db9, 0x02	; F7F68D  cp (0x0db9),0x02
 	jr	z, sub_F7F668_Return	; F7F692  jr Z,0xf7f6b9
-	calr	sub_F7F237	; F7F694  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F694  calr 0xf7f237
 	call	T_Quantize_SelectField2	; F7F697  call 0xf42914
 	jr	sub_F7F668_Join	; F7F69B  jr T,0xf7f6ab
 sub_F7F668_Skip:
 	m_cp_mi8 MB16, 0x0db9, 0x06	; F7F69D  cp (0x0db9),0x06
 	jr	z, sub_F7F668_Return	; F7F6A2  jr Z,0xf7f6b9
-	calr	sub_F7F245	; F7F6A4  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F6A4  calr 0xf7f245
 	call	T_Quantize_SelectField6	; F7F6A7  call 0xf42924
 sub_F7F668_Join:
 	ld	a, (3513:16)	; F7F6AB  ld A,(0x0db9)
@@ -199263,7 +199276,7 @@ LcdKeyRow3_Quantize_StageZero:
 	jr	z, sub_F7F668_Skip2	; F7F6BD  jr Z,0xf7f6dd
 	m_cp_mi8 MB16, 0x0db9, 0x03	; F7F6BF  cp (0x0db9),0x03
 	jr	z, sub_F7F668_Return2	; F7F6C4  jr Z,0xf7f6e4
-	calr	sub_F7F237	; F7F6C6  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F6C6  calr 0xf7f237
 	call	T_Quantize_SelectField3	; F7F6C9  call 0xf42918
 	ld	a, (3513:16)	; F7F6CD  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F6D1  ld (0x12fe),A
@@ -199271,7 +199284,7 @@ LcdKeyRow3_Quantize_StageZero:
 	calr	sub_F7F668	; F7F6D8  calr 0xf7f668
 	jr	sub_F7F668_Return2	; F7F6DB  jr T,0xf7f6e4
 sub_F7F668_Skip2:
-	calr	sub_F7F245	; F7F6DD  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F6DD  calr 0xf7f245
 	call	T_Quantize_LcdKeyRow3	; F7F6E0  call 0xf42930
 sub_F7F668_Return2:
 	ret	; F7F6E4  ret
@@ -199327,7 +199340,7 @@ LcdKeyRow4_Quantize_StageZero:
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F6FF  jr Z,0xf7f71d
 	m_cp_mi8 MB16, 0x0db9, 0x04	; F7F701  cp (0x0db9),0x04
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F706  jr Z,0xf7f71d
-	calr	sub_F7F245	; F7F708  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F708  calr 0xf7f245
 	call	T_Quantize_SelectField4	; F7F70B  call 0xf4291c
 	ld	a, (3513:16)	; F7F70F  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F713  ld (0x12fe),A
@@ -199907,7 +199920,7 @@ LcdKeyRow1_Vel0cityChange_StageZero:
 	jr	z, ScreenLeaveBody_Vel0cityChange_Return	; F7F985  jr Z,0xf7f99b
 	m_cp_mi8 MB16, 0x0db8, 0x01	; F7F987  cp (0x0db8),0x01
 	jr	z, ScreenLeaveBody_Vel0cityChange_Return	; F7F98C  jr Z,0xf7f99b
-	calr	sub_F7F245	; F7F98E  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F98E  calr 0xf7f245
 	call	T_Vel0cityChange_StageZero_LcdKeyRow1	; F7F991  call 0xf428e8
 	calr	sub_F7F9FB	; F7F995  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F998  calr 0xf7f99c
@@ -199967,13 +199980,13 @@ LcdKeyRow2_Vel0cityChange_StageZero:
 	jr	z, sub_F7F99C_Skip	; F7F9BF  jr Z,0xf7f9d7
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7F9C1  cp (0x0db8),0x02
 	jr	z, sub_F7F99C_Return	; F7F9C6  jr Z,0xf7f9de
-	calr	sub_F7F237	; F7F9C8  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F9C8  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow2	; F7F9CB  call 0xf428ec
 	calr	sub_F7F9FB	; F7F9CF  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F9D2  calr 0xf7f99c
 	jr	sub_F7F99C_Return	; F7F9D5  jr T,0xf7f9de
 sub_F7F99C_Skip:
-	calr	sub_F7F245	; F7F9D7  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7F9D7  calr 0xf7f245
 	call	T_Vel0cityChange_LcdKeyRow2	; F7F9DA  call 0xf42900
 sub_F7F99C_Return:
 	ret	; F7F9DE  ret
@@ -200019,7 +200032,7 @@ LcdKeyRow3_Vel0cityChange_StageZero:
 	jr	z, sub_F7F99C_Return2	; F7F9E2  jr Z,0xf7f9fa
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7F9E4  cp (0x0db8),0x03
 	jr	z, sub_F7F99C_Return2	; F7F9E9  jr Z,0xf7f9fa
-	calr	sub_F7F237	; F7F9EB  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7F9EB  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow3	; F7F9EE  call 0xf428f0
 	calr	sub_F7F9FB	; F7F9F2  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F9F5  calr 0xf7f99c
@@ -200079,7 +200092,7 @@ LcdKeyRow4_Vel0cityChange_StageZero:
 	jr	z, sub_F7F9FB_Return	; F7FA18  jr Z,0xf7fa30
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FA1A  cp (0x0db8),0x04
 	jr	z, sub_F7F9FB_Return	; F7FA1F  jr Z,0xf7fa30
-	calr	sub_F7F237	; F7FA21  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FA21  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow4	; F7FA24  call 0xf428f4
 	calr	sub_F7F9FB	; F7FA28  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7FA2B  calr 0xf7f99c
@@ -200519,10 +200532,10 @@ Paint_Transp0se:
 	jr	z, Paint_Transp0se_Skip	; F7FC28  jr Z,0xf7fc33
 	cp	a, 4:i3	; F7FC2A  cp A,4
 	jr	z, Paint_Transp0se_Skip	; F7FC2C  jr Z,0xf7fc33
-	calr	sub_F7F245	; F7FC2E  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7FC2E  calr 0xf7f245
 	jr	Paint_Transp0se_Join	; F7FC31  jr T,0xf7fc36
 Paint_Transp0se_Skip:
-	calr	sub_F7F237	; F7FC33  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FC33  calr 0xf7f237
 Paint_Transp0se_Join:
 	calr	LCD_ScreenRedraw_Begin	; F7FC36  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FC39  ld (0x2540),0x00
@@ -200680,7 +200693,7 @@ LcdKeyRow1_Transp0se_StageZero:
 	jr	z, ScreenLeaveBody_Transp0se_Return	; F7FCCF  jr Z,0xf7fce5
 	m_cp_mi8 MB16, 0x0df6, 0x01	; F7FCD1  cp (0x0df6),0x01
 	jr	z, ScreenLeaveBody_Transp0se_Return	; F7FCD6  jr Z,0xf7fce5
-	calr	sub_F7F245	; F7FCD8  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7FCD8  calr 0xf7f245
 	call	T_Transp0se_SelectField1	; F7FCDB  call 0xf42a40
 	calr	sub_F7FD45	; F7FCDF  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FCE2  calr 0xf7fce6
@@ -200740,13 +200753,13 @@ LcdKeyRow2_Transp0se_StageZero:
 	jr	z, sub_F7FCE6_Skip	; F7FD09  jr Z,0xf7fd21
 	m_cp_mi8 MB16, 0x0df6, 0x02	; F7FD0B  cp (0x0df6),0x02
 	jr	z, sub_F7FCE6_Return	; F7FD10  jr Z,0xf7fd28
-	calr	sub_F7F237	; F7FD12  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FD12  calr 0xf7f237
 	call	T_Transp0se_SelectField2	; F7FD15  call 0xf42a44
 	calr	sub_F7FD45	; F7FD19  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD1C  calr 0xf7fce6
 	jr	sub_F7FCE6_Return	; F7FD1F  jr T,0xf7fd28
 sub_F7FCE6_Skip:
-	calr	sub_F7F245	; F7FD21  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7FD21  calr 0xf7f245
 	call	T_Transp0se_LcdKeyRow2	; F7FD24  call 0xf42a58
 sub_F7FCE6_Return:
 	ret	; F7FD28  ret
@@ -200792,7 +200805,7 @@ LcdKeyRow3_Transp0se_StageZero:
 	jr	z, sub_F7FCE6_Return2	; F7FD2C  jr Z,0xf7fd44
 	m_cp_mi8 MB16, 0x0df6, 0x03	; F7FD2E  cp (0x0df6),0x03
 	jr	z, sub_F7FCE6_Return2	; F7FD33  jr Z,0xf7fd44
-	calr	sub_F7F237	; F7FD35  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FD35  calr 0xf7f237
 	call	T_Transp0se_SelectField3	; F7FD38  call 0xf42a48
 	calr	sub_F7FD45	; F7FD3C  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD3F  calr 0xf7fce6
@@ -200851,7 +200864,7 @@ LcdKeyRow4_Transp0se_StageZero:
 	jr	z, sub_F7FD45_Return	; F7FD5F  jr Z,0xf7fd77
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FD61  cp (0x0df6),0x04
 	jr	z, sub_F7FD45_Return	; F7FD66  jr Z,0xf7fd77
-	calr	sub_F7F237	; F7FD68  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FD68  calr 0xf7f237
 	call	T_Transp0se_SelectField4	; F7FD6B  call 0xf42a4c
 	calr	sub_F7FD45	; F7FD6F  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD72  calr 0xf7fce6
@@ -201285,10 +201298,10 @@ Paint_AdvanceDelay:
 	jr	z, Paint_AdvanceDelay_Skip	; F7FF57  jr Z,0xf7ff62
 	cp	a, 4:i3	; F7FF59  cp A,4
 	jr	z, Paint_AdvanceDelay_Skip	; F7FF5B  jr Z,0xf7ff62
-	calr	sub_F7F245	; F7FF5D  calr 0xf7f245
+	calr	Blink_DisableThenStop	; F7FF5D  calr 0xf7f245
 	jr	Paint_AdvanceDelay_Join	; F7FF60  jr T,0xf7ff65
 Paint_AdvanceDelay_Skip:
-	calr	sub_F7F237	; F7FF62  calr 0xf7f237
+	calr	Blink_EnableThenStop_Copy	; F7FF62  calr 0xf7f237
 Paint_AdvanceDelay_Join:
 	calr	LCD_ScreenRedraw_Begin	; F7FF65  calr 0xf7e2d9
 	ld	(LCD_CurrentLayer:16), 0	; F7FF68  ld (0x2540),0x00

@@ -573,7 +573,7 @@ re-read from the ROM.
 loop iterates faster than 10.17 Hz, which nothing in this tree measures.
 
 ## `prom_b_param_edit_pair.py`
-**"Is 0xF5535B really 'the same routine as sub_F550A6 with the pointer arguments
+**"Is 0xF5535B really 'the same routine as EditValue_StepBitField with the pointer arguments
 swapped'?"** No, and this script is why that sentence is no longer in the .s.
 It measures what the two DO share — a 100-byte adjust core, identical in 99 of
 100 bytes — and self-checks the three structural differences.

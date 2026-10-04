@@ -2567,6 +2567,14 @@ RENAMES = {
     "T_F425E4": "T_DiskApi_CloseFile_Call",
     "T_F42B74": "T_SequencerMedley_ClampSongRange_Call",
     "sub_FE26B8": "DiskApi_CheckFreeSpace",
+    "sub_F70FE1": "BStore_PutByteAtCursor",
+    "sub_F70FF8": "BStore_AdvanceCursorForWrite",
+    "sub_F70FDA": "BStore_PutByteAndAdvance",
+    "sub_F713E1": "BStore_ExtendChainAtCursor",
+    "sub_F6B8BD": "BStore_ReadByteAtSongPosition",
+    "sub_F550A6": "EditValue_StepBitField",
+    "sub_F7F237": "Blink_EnableThenStop_Copy",
+    "sub_F7F245": "Blink_DisableThenStop",
 }
 
 

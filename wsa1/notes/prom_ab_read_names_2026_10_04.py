@@ -216,6 +216,28 @@ ROWS = [
      "DiskFile_CountFreeSpace (A = 6 when it fails); A = 7 -- the code DiskApi_WriteFileFromWindow returns for a full disk\n"
      "-- when the size argument, in 16-byte units, rounded up to KB (>> 6, + 1), is not below the free space; else 0.\n"
      "SmfWrite's first-window path computes that argument from SmfOut_TrackLength + 22."),
+    # prom_b's most-called still-unnamed routines (call-site census, 2026-10-04)
+    ("F70FE1", "BStore_PutByteAtCursor",
+     "A to the block-store cursor: SongStore_SeekBlock_Copy(BStore_CursorBlock), then (BStore_CursorBlockAddr + BStore_CursorOffset) = A."),
+    ("F70FF8", "BStore_AdvanceCursorForWrite",
+     "BStore_CursorOffset + 1; at offset 255: no free block (BStore_FreeCount 0) -> (0x1238) = 0xFF, else\n"
+     "BStore_ExtendChainAtCursor; (0x1238) = 0 on success."),
+    ("F70FDA", "BStore_PutByteAndAdvance",
+     "BStore_PutByteAtCursor then BStore_AdvanceCursorForWrite (107 call sites)."),
+    ("F713E1", "BStore_ExtendChainAtCursor",
+     "IX = a new block from T_F42884; the cursor block's next link (+3) = it, its previous link (+1) = the cursor block,\n"
+     "its next = 0xFFFF; the cursor moves to it at offset 5 (the block header's length)."),
+    ("F6B8BD", "BStore_ReadByteAtSongPosition",
+     "for directory entry IZ: the block word 0x3460[2 * entry] and the offset byte 0x3482[entry] (the per-song position\n"
+     "0xF6AC4D initialises to 0xFFFF / 5); A = the byte there."),
+    ("F550A6", "EditValue_StepBitField",
+     "steps a bit-field of the byte at the first argument through the field record XIX: +1 mask, +2 shift, +3 maximum,\n"
+     "+4 minimum, +5 / +6 step sizes (chosen by PanelEvent_Flags bit 2 / UI_RequestBits bit 2), +7 PanelEvent_Flags XOR;\n"
+     "up when PanelEvent_Flags bit 0, else down, clamped, written back under the mask (77 call sites)."),
+    ("F7F237", "Blink_EnableThenStop_Copy",
+     "byte-for-byte Blink_EnableThenStop: T_Blink_SetEnable(1), T_Blink_Stop."),
+    ("F7F245", "Blink_DisableThenStop",
+     "T_Blink_SetEnable(0), T_Blink_Stop."),
 ]
 
 

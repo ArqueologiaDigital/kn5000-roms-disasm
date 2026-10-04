@@ -2239,7 +2239,7 @@ wsa1_prom_a:
 AdvanceDelay_SelectField1:
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, AdvanceDelay_SelectField1_Ret                                       ; F80005  66 12
-	calr sub_F7F245                                          ; F80007  1e 3b f2
+	calr Blink_DisableThenStop                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8000A  c1 75 20 3e 01
 	call T_AdvanceDelay_SelectField1                                        ; F8000F  1d 68 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80013  1e 70 00
@@ -2267,7 +2267,7 @@ LcdKeyRow2_AdvanceDelay_StageZero:
 	jr z, .LF80058                                       ; F8003D  66 19
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x02                          ; F8003F  c1 e5 0d 3f 02
 	jr z, .LF80058                                       ; F80044  66 12
-	calr sub_F7F237                                          ; F80046  1e ee f1
+	calr Blink_EnableThenStop_Copy                                          ; F80046  1e ee f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80049  c1 75 20 3e 01
 	call T_AdvanceDelay_SelectField2                                        ; F8004E  1d 6c 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80052  1e 31 00
@@ -2282,14 +2282,14 @@ LcdKeyRow3_AdvanceDelay_StageZero:
 	jr z, .LF80079                                       ; F8005C  66 1b
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x03                          ; F8005E  c1 e5 0d 3f 03
 	jr z, .LF80085                                       ; F80063  66 20
-	calr sub_F7F237                                          ; F80065  1e cf f1
+	calr Blink_EnableThenStop_Copy                                          ; F80065  1e cf f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80068  c1 75 20 3e 01
 	call T_AdvanceDelay_SelectField3                                        ; F8006D  1d 70 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80071  1e 12 00
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80074  1e a3 ff
 	jr .LF80085                                          ; F80077  68 0c
 .LF80079:
-	calr sub_F7F245                                          ; F80079  1e c9 f1
+	calr Blink_DisableThenStop                                          ; F80079  1e c9 f1
 	m_and_mi8 MB16, UI_RequestBits, 0xf6                         ; F8007C  c1 75 20 3c f6
 	call T_AdvanceDelay_LcdKeyRow3                                        ; F80081  1d 80 2a f4
 .LF80085:
@@ -2313,7 +2313,7 @@ LcdKeyRow4_AdvanceDelay_StageZero:
 	jr z, .LF800BD                                       ; F800A0  66 1b
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x04                          ; F800A2  c1 e5 0d 3f 04
 	jr z, .LF800BD                                       ; F800A7  66 14
-	calr sub_F7F237                                          ; F800A9  1e 8b f1
+	calr Blink_EnableThenStop_Copy                                          ; F800A9  1e 8b f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F800AC  c1 75 20 3e 01
 	call T_AdvanceDelay_SelectField4                                        ; F800B1  1d 74 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F800B5  1e ce ff
@@ -2895,10 +2895,10 @@ Paint_N0teChange:
 	jr z, .LF80478                                       ; F8046D  66 09
 	cp a, 0x05:i3                                          ; F8046F  c9 dd
 	jr z, .LF80478                                       ; F80471  66 05
-	calr sub_F7F245                                          ; F80473  1e cf ed
+	calr Blink_DisableThenStop                                          ; F80473  1e cf ed
 	jr .LF8047B                                          ; F80476  68 03
 .LF80478:
-	calr sub_F7F237                                          ; F80478  1e bc ed
+	calr Blink_EnableThenStop_Copy                                          ; F80478  1e bc ed
 .LF8047B:
 	calr PromB_LCD_ScreenRedraw_Begin                                          ; F8047B  1e 5b de
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F8047E  f1 40 25 00 00
@@ -2981,13 +2981,13 @@ LcdKeyRow2_N0teChange_StageZero:
 	jr z, .LF80534                                       ; F80522  66 10
 	m_cp_mi8 MB16, N0teChange_Field, 0x01                          ; F80524  c1 ed 0d 3f 01
 	jr z, .LF80548                                       ; F80529  66 1d
-	calr sub_F7F245                                          ; F8052B  1e 17 ed
+	calr Blink_DisableThenStop                                          ; F8052B  1e 17 ed
 	call T_N0teChange_SelectField1                                        ; F8052E  1d 90 2a f4
 	jr .LF80542                                          ; F80532  68 0e
 .LF80534:
 	m_cp_mi8 MB16, N0teChange_Field, 0x04                          ; F80534  c1 ed 0d 3f 04
 	jr z, .LF80548                                       ; F80539  66 0d
-	calr sub_F7F237                                          ; F8053B  1e f9 ec
+	calr Blink_EnableThenStop_Copy                                          ; F8053B  1e f9 ec
 	call T_N0teChange_SelectField4                                        ; F8053E  1d 9c 2a f4
 .LF80542:
 	calr N0teChange_DrawValues                                      ; F80542  1e 73 00
@@ -3014,13 +3014,13 @@ LcdKeyRow3_N0teChange_StageZero:
 	jr z, .LF8057E                                       ; F8056C  66 10
 	m_cp_mi8 MB16, N0teChange_Field, 0x02                          ; F8056E  c1 ed 0d 3f 02
 	jr z, .LF80594                                       ; F80573  66 1f
-	calr sub_F7F237                                          ; F80575  1e bf ec
+	calr Blink_EnableThenStop_Copy                                          ; F80575  1e bf ec
 	call T_N0teChange_SelectField2                                        ; F80578  1d 94 2a f4
 	jr .LF8058C                                          ; F8057C  68 0e
 .LF8057E:
 	m_cp_mi8 MB16, N0teChange_Field, 0x05                          ; F8057E  c1 ed 0d 3f 05
 	jr z, .LF80594                                       ; F80583  66 0f
-	calr sub_F7F237                                          ; F80585  1e af ec
+	calr Blink_EnableThenStop_Copy                                          ; F80585  1e af ec
 	call T_N0teChange_SelectField5                                        ; F80588  1d a0 2a f4
 .LF8058C:
 	calr N0teChange_DrawValues                                      ; F8058C  1e 29 00
@@ -3036,13 +3036,13 @@ LcdKeyRow4_N0teChange_StageZero:
 	jr z, .LF805B0                                       ; F80598  66 16
 	m_cp_mi8 MB16, N0teChange_Field, 0x03                          ; F8059A  c1 ed 0d 3f 03
 	jr z, .LF805B7                                       ; F8059F  66 16
-	calr sub_F7F237                                          ; F805A1  1e 93 ec
+	calr Blink_EnableThenStop_Copy                                          ; F805A1  1e 93 ec
 	call T_N0teChange_SelectField3                                        ; F805A4  1d 98 2a f4
 	calr N0teChange_DrawValues                                      ; F805A8  1e 0d 00
 	calr N0teChange_DrawFieldCursor                                      ; F805AB  1e 9b ff
 	jr .LF805B7                                          ; F805AE  68 07
 .LF805B0:
-	calr sub_F7F245                                          ; F805B0  1e 92 ec
+	calr Blink_DisableThenStop                                          ; F805B0  1e 92 ec
 	call T_N0teChange_LcdKeyRow4                                        ; F805B3  1d ac 2a f4
 .LF805B7:
 	ret                                                  ; F805B7  0e
@@ -3406,7 +3406,7 @@ ButtonTable_MeasureC0py_StageZero_Nop7:
 LcdKeyRow1_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F8084F  c8 33 07
 	jr nz, .LF8085B                                      ; F80852  6e 07
-	calr sub_F7F245                                          ; F80854  1e ee e9
+	calr Blink_DisableThenStop                                          ; F80854  1e ee e9
 	call T_MeasureC0py_LcdKeyRow1                                        ; F80857  1d 04 2a f4
 .LF8085B:
 	ret                                                  ; F8085B  0e
@@ -3418,13 +3418,13 @@ LcdKeyRow2_MeasureC0py_StageZero:
 	jr z, .LF80871                                       ; F8085F  66 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x01                          ; F80861  c1 bc 0d 3f 01
 	jr z, .LF80890                                       ; F80866  66 28
-	calr sub_F7F245                                          ; F80868  1e da e9
+	calr Blink_DisableThenStop                                          ; F80868  1e da e9
 	call T_MeasureC0py_SelectField1                                        ; F8086B  1d e0 29 f4
 	jr .LF8087F                                          ; F8086F  68 0e
 .LF80871:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x04                          ; F80871  c1 bc 0d 3f 04
 	jr z, .LF80890                                       ; F80876  66 18
-	calr sub_F7F245                                          ; F80878  1e ca e9
+	calr Blink_DisableThenStop                                          ; F80878  1e ca e9
 	call T_MeasureC0py_SelectField4                                        ; F8087B  1d ec 29 f4
 .LF8087F:
 	ld a, (MeasureC0py_Field:16)                                   ; F8087F  c1 bc 0d 21
@@ -3453,13 +3453,13 @@ LcdKeyRow3_MeasureC0py_StageZero:
 	jr nz, .LF808C6                                      ; F808B4  6e 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x05                          ; F808B6  c1 bc 0d 3f 05
 	jr z, .LF808E5                                       ; F808BB  66 28
-	calr sub_F7F237                                          ; F808BD  1e 77 e9
+	calr Blink_EnableThenStop_Copy                                          ; F808BD  1e 77 e9
 	call T_MeasureC0py_SelectField5                                        ; F808C0  1d f0 29 f4
 	jr .LF808D4                                          ; F808C4  68 0e
 .LF808C6:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x02                          ; F808C6  c1 bc 0d 3f 02
 	jr z, .LF808E5                                       ; F808CB  66 18
-	calr sub_F7F237                                          ; F808CD  1e 67 e9
+	calr Blink_EnableThenStop_Copy                                          ; F808CD  1e 67 e9
 	call T_MeasureC0py_SelectField2                                        ; F808D0  1d e4 29 f4
 .LF808D4:
 	ld a, (MeasureC0py_Field:16)                                   ; F808D4  c1 bc 0d 21
@@ -3477,13 +3477,13 @@ LcdKeyRow4_MeasureC0py_StageZero:
 	jr z, .LF808FB                                       ; F808E9  66 10
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x03                          ; F808EB  c1 bc 0d 3f 03
 	jr z, .LF8091A                                       ; F808F0  66 28
-	calr sub_F7F237                                          ; F808F2  1e 42 e9
+	calr Blink_EnableThenStop_Copy                                          ; F808F2  1e 42 e9
 	call T_MeasureC0py_SelectField3                                        ; F808F5  1d e8 29 f4
 	jr .LF80909                                          ; F808F9  68 0e
 .LF808FB:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x06                          ; F808FB  c1 bc 0d 3f 06
 	jr z, .LF8091A                                       ; F80900  66 18
-	calr sub_F7F245                                          ; F80902  1e 40 e9
+	calr Blink_DisableThenStop                                          ; F80902  1e 40 e9
 	call T_MeasureC0py_SelectField6                                        ; F80905  1d f4 29 f4
 .LF80909:
 	ld a, (MeasureC0py_Field:16)                                   ; F80909  c1 bc 0d 21
@@ -3875,7 +3875,7 @@ ButtonTable_MeasureInsert_StageZero_Nop7:
 LcdKeyRow1_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80BAC  c8 33 07
 	jr nz, .LF80BB8                                      ; F80BAF  6e 07
-	calr sub_F7F245                                          ; F80BB1  1e 91 e6
+	calr Blink_DisableThenStop                                          ; F80BB1  1e 91 e6
 	call T_MeasureInsert_LcdKeyRow1                                        ; F80BB4  1d d4 29 f4
 .LF80BB8:
 	ret                                                  ; F80BB8  0e
@@ -3887,13 +3887,13 @@ LcdKeyRow2_MeasureInsert_StageZero:
 	jr z, .LF80BCE                                       ; F80BBC  66 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x01                          ; F80BBE  c1 da 0d 3f 01
 	jr z, .LF80BED                                       ; F80BC3  66 28
-	calr sub_F7F245                                          ; F80BC5  1e 7d e6
+	calr Blink_DisableThenStop                                          ; F80BC5  1e 7d e6
 	call T_MeasureInsert_SelectField1                                        ; F80BC8  1d b0 29 f4
 	jr .LF80BDC                                          ; F80BCC  68 0e
 .LF80BCE:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x04                          ; F80BCE  c1 da 0d 3f 04
 	jr z, .LF80BED                                       ; F80BD3  66 18
-	calr sub_F7F245                                          ; F80BD5  1e 6d e6
+	calr Blink_DisableThenStop                                          ; F80BD5  1e 6d e6
 	call T_MeasureInsert_SelectField4                                        ; F80BD8  1d bc 29 f4
 .LF80BDC:
 	ld a, (MeasureInsert_Field:16)                                   ; F80BDC  c1 da 0d 21
@@ -3923,13 +3923,13 @@ LcdKeyRow3_MeasureInsert_StageZero:
 	jr nz, .LF80C23                                      ; F80C11  6e 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x05                          ; F80C13  c1 da 0d 3f 05
 	jr z, .LF80C42                                       ; F80C18  66 28
-	calr sub_F7F237                                          ; F80C1A  1e 1a e6
+	calr Blink_EnableThenStop_Copy                                          ; F80C1A  1e 1a e6
 	call T_MeasureInsert_SelectField5                                        ; F80C1D  1d c0 29 f4
 	jr .LF80C31                                          ; F80C21  68 0e
 .LF80C23:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x02                          ; F80C23  c1 da 0d 3f 02
 	jr z, .LF80C42                                       ; F80C28  66 18
-	calr sub_F7F237                                          ; F80C2A  1e 0a e6
+	calr Blink_EnableThenStop_Copy                                          ; F80C2A  1e 0a e6
 	call T_MeasureInsert_SelectField2                                        ; F80C2D  1d b4 29 f4
 .LF80C31:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C31  c1 da 0d 21
@@ -3947,13 +3947,13 @@ LcdKeyRow4_MeasureInsert_StageZero:
 	jr z, .LF80C58                                       ; F80C46  66 10
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x03                          ; F80C48  c1 da 0d 3f 03
 	jr z, .LF80C77                                       ; F80C4D  66 28
-	calr sub_F7F237                                          ; F80C4F  1e e5 e5
+	calr Blink_EnableThenStop_Copy                                          ; F80C4F  1e e5 e5
 	call T_MeasureInsert_SelectField3                                        ; F80C52  1d b8 29 f4
 	jr .LF80C66                                          ; F80C56  68 0e
 .LF80C58:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x06                          ; F80C58  c1 da 0d 3f 06
 	jr z, .LF80C77                                       ; F80C5D  66 18
-	calr sub_F7F245                                          ; F80C5F  1e e3 e5
+	calr Blink_DisableThenStop                                          ; F80C5F  1e e3 e5
 	call T_MeasureInsert_SelectField6                                        ; F80C62  1d c4 29 f4
 .LF80C66:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C66  c1 da 0d 21
@@ -4556,7 +4556,7 @@ Paint_SequencerMedley:
 	call T_SequencerMedley_SetSourceInternal                                        ; F81057  1d 18 2c f4
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F8105B  c1 c1 0d 3f 01
 	jr z, .LF81065                                       ; F81060  66 03
-	calr sub_F7F237                                          ; F81062  1e d2 e1
+	calr Blink_EnableThenStop_Copy                                          ; F81062  1e d2 e1
 .LF81065:
 	m_or_mi8 MB16, 0x2094, 0x40                          ; F81065  c1 94 20 3e 40
 	m_and_mi8 MB16, Medley_Playing, 0xfe                         ; F8106A  c1 c1 0d 3c fe
@@ -4699,7 +4699,7 @@ LcdKeyRow2_SequencerMedley:
 	jr nz, .LF811C8                                      ; F811A1  6e 25
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811A3  c1 c1 0d 3f 01
 	jr z, .LF811E1                                       ; F811A8  66 37
-	calr sub_F7F245                                          ; F811AA  1e 98 e0
+	calr Blink_DisableThenStop                                          ; F811AA  1e 98 e0
 	call T_SequencerMedley_LcdKeyRow2                                        ; F811AD  1d d4 2b f4
 	m_cp_mi8 MB16, UI_ScreenId, 0x13                          ; F811B1  c1 7c 20 3f 13
 	jr nz, .LF811E1                                      ; F811B6  6e 29
@@ -4713,7 +4713,7 @@ LcdKeyRow2_SequencerMedley:
 	jr z, .LF811E1                                       ; F811CD  66 12
 	m_cp_mi8 MB16, Medley_Field, 0x01                          ; F811CF  c1 0f 0c 3f 01
 	jr z, .LF811E1                                       ; F811D4  66 0b
-	calr sub_F7F237                                          ; F811D6  1e 5e e0
+	calr Blink_EnableThenStop_Copy                                          ; F811D6  1e 5e e0
 	call T_Medley_SelectField1                                        ; F811D9  1d 7c 2b f4
 	call SequencerMedley_DrawFieldBox                                      ; F811DD  1d e7 13 f8
 .LF811E1:
@@ -4728,7 +4728,7 @@ LcdKeyRow3_SequencerMedley:
 	jr nz, .LF811FE                                      ; F811EC  6e 10
 	bit	2, (0x95:8)                                   ; F811EE  f0 95 ca
 	jr z, .LF811FE                                       ; F811F1  66 0b
-	calr sub_F7F237                                          ; F811F3  1e 41 e0
+	calr Blink_EnableThenStop_Copy                                          ; F811F3  1e 41 e0
 	call T_SequencerMedley_StopPlayback                                        ; F811F6  1d d8 2b f4
 	call SequencerMedley_DrawPlayState                                      ; F811FA  1d 50 13 f8
 .LF811FE:
@@ -4746,7 +4746,7 @@ LcdKeyRow4_SequencerMedley:
 	jr z, .LF81223                                       ; F8120F  66 12
 	m_cp_mi8 MB16, Medley_Field, 0x02                          ; F81211  c1 0f 0c 3f 02
 	jr z, .LF81223                                       ; F81216  66 0b
-	calr sub_F7F237                                          ; F81218  1e 1c e0
+	calr Blink_EnableThenStop_Copy                                          ; F81218  1e 1c e0
 	call T_Medley_SelectField2                                        ; F8121B  1d 80 2b f4
 	call SequencerMedley_DrawFieldBox                                      ; F8121F  1d e7 13 f8
 .LF81223:
@@ -52578,7 +52578,7 @@ Screen_SoundGroupNaming_Button:
 T_F4268C_Nop:
 	ret                                                  ; F9CB7A  0e
 ; SoundGroupNaming_AdjustBank -- steps the SOUND GROUP NAMING bank selector (0x2695) one place and requests a screen refresh if it moved
-; Evidence: T_F42C78 (sub_F550A6, the descriptor-driven field adjuster) on (0x2695) with Descriptor9_FA1AA6 (mask 7, max 4); (0x2695) indexes ByteTable5_FA17CA {08,09,18,19,1A} and is drawn by record FA37EA as 'USER 1','USER 2','RE-MAP 1..3'.
+; Evidence: T_F42C78 (EditValue_StepBitField, the descriptor-driven field adjuster) on (0x2695) with Descriptor9_FA1AA6 (mask 7, max 4); (0x2695) indexes ByteTable5_FA17CA {08,09,18,19,1A} and is drawn by record FA37EA as 'USER 1','USER 2','RE-MAP 1..3'.
 ; Evidence: on A=1 `set 4,(0x2095)`, the bit the Enter methods test to repaint only the fields. Called from the HandlerTable23_FA176E soft-key handlers (0xF9CBA5...) in mode (0x2694)=0.
 SoundGroupNaming_AdjustBank:
 	lda xbc, (Descriptor9_FA1AA6:24)                     ; F9CB7B  f2 a6 1a fa 31

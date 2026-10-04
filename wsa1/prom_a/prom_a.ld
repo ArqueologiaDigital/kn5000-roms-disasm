@@ -70,5 +70,5 @@ PromB_LCD_ScreenRedraw_Begin = 0xF7E2D9;
 PromB_LCD_ScreenRedraw_End = 0xF7E2E7;
 sub_F7E2ED = 0xF7E2ED;
 sub_F7E354 = 0xF7E354;
-sub_F7F237 = 0xF7F237;
-sub_F7F245 = 0xF7F245;
+Blink_EnableThenStop_Copy = 0xF7F237;
+Blink_DisableThenStop = 0xF7F245;

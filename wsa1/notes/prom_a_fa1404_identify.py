@@ -468,7 +468,7 @@ def record_pointers(recs):
 # The parameter-edit primitives, and how many descriptor bytes each one READS.
 # Every depth here is a sentence in prom_b/wsa1_prom_b.s's own header for that
 # routine, which in turn cites the instruction that reads the highest offset.
-CONSUMERS = {0xF42C78: ("sub_F550A6", 8),               # +0..+7
+CONSUMERS = {0xF42C78: ("EditValue_StepBitField", 8),               # +0..+7
              0xF42C7C: ("sub_F5517B", 3),               # +0..+2
              0xF42C94: ("IndexedParam_AdjustField", 8),  # +0..+7
              0xF42C98: ("IndexedParam_SetBit", 3)}       # +0..+2

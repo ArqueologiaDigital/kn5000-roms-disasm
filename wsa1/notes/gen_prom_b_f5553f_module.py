@@ -71,7 +71,7 @@ WHAT THE SPAN IS
 ⚠ WHAT IS NOT KNOWN, AND IS NOT GUESSED
   What the 32 selectors are; what the byte at (0x36CE) that indexes the four
   5-entry tables enumerates; what the 8-byte descriptor at (XIZ+0x0A) describes
-  (the already-converted `sub_F550A6` and `IndexedParam_AdjustField` say the same
+  (the already-converted `EditValue_StepBitField` and `IndexedParam_AdjustField` say the same
   and this file does not improve on them).  So most routines here stay
   `sub_XXXXXX` WITH THE GAP STATED, which is this tree's rule.
 
@@ -288,7 +288,7 @@ EXTRA_TAIL = RING_TAIL
 
 NAMED_GAP = {
     0xF5553F: ("what the descriptor describes, and so which parameter is being "
-               "set.  The already-converted sub_F550A6 and IndexedParam_"
+               "set.  The already-converted EditValue_StepBitField and IndexedParam_"
                "AdjustField say the same and this file does not improve on them.  "
                "Also unknown: what bit 6 of (0x28B0) selects -- when it is set "
                "the routine instead pushes 0 or 1 and calls T_Blink_SetEnable, "

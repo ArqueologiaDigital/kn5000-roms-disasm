@@ -2,17 +2,17 @@
 """How closely related are prom_b's two parameter-field editors?
 
 QUESTION ANSWERED
-  sub_F550A6 (thunk T_F42C78, x77) and IndexedParam_AdjustField at 0xF5535B
+  EditValue_StepBitField (thunk T_F42C78, x77) and IndexedParam_AdjustField at 0xF5535B
   (thunk T_F42C94, x23) look like the same routine.  Before 2026-08-25
-  sub_F550A6's header asserted that 0xF5535B "is the same routine with the two
+  EditValue_StepBitField's header asserted that 0xF5535B "is the same routine with the two
   pointer arguments swapped".  That was written from a reading, not a
   measurement, and it is wrong in two ways this script pins down:
 
     * 0xF5535B's first argument is an INDEX, not a pointer.  It resolves the
       target through IndexedTable_GetPtr (0xF55321) and then adds descriptor +0.
-      sub_F550A6 is handed the target byte's address directly.
+      EditValue_StepBitField is handed the target byte's address directly.
     * 0xF5535B journals every change to one of the two appenders
-      (List2030_Append4 / Queue2C00_Append4).  sub_F550A6 journals nothing and
+      (List2030_Append4 / Queue2C00_Append4).  EditValue_StepBitField journals nothing and
       instead returns 1/0 to say whether the byte changed.
 
   What IS shared is the arithmetic, and this script measures exactly how much:
@@ -69,7 +69,7 @@ def main():
     check("T_F42C98 is `jp 0xF5547B`",
           R(0xF42C98, 4) == bytes([0x1B, 0x7B, 0x54, 0xF5]))
     # the structural difference
-    check("sub_F550A6 takes its descriptor from (XIZ+0x0C)  [ae 0c 24]",
+    check("EditValue_StepBitField takes its descriptor from (XIZ+0x0C)  [ae 0c 24]",
           R(0xF550AD, 3) == bytes([0xAE, 0x0C, 0x24]))
     check("0xF5535B takes its descriptor from (XIZ+0x0A)  [ae 0a 24]",
           R(0xF5535B + 7, 3) == bytes([0xAE, 0x0A, 0x24]))
@@ -79,11 +79,11 @@ def main():
           "Queue2C00_Append4 (0xF55231)",
           R(0xF55447, 3) == bytes([0x1E, 0x82, 0xFE])
           and R(0xF55470, 3) == bytes([0x1E, 0xBE, 0xFD]))
-    check("sub_F550A6 ends with `ret` at 0xF5517A", R(0xF5517A, 1) == b"\x0e")
+    check("EditValue_StepBitField ends with `ret` at 0xF5517A", R(0xF5517A, 1) == b"\x0e")
     check("0xF5535B ends with `ret` at 0xF5547A", R(0xF5547A, 1) == b"\x0e")
     check("0xF5547B ends with `ret` at 0xF5553E", R(0xF5553E, 1) == b"\x0e")
     print()
-    print("NOT CHECKED HERE: 'sub_F550A6 journals nothing'.  A raw byte scan")
+    print("NOT CHECKED HERE: 'EditValue_StepBitField journals nothing'.  A raw byte scan")
     print("  cannot tell an opcode from an operand, so a `1E`-not-present test")
     print("  would be a criterion that cannot fail.  That claim rests on the")
     print("  disassembly in prom_b/wsa1_prom_b.s, not on this script.")
