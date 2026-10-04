@@ -174579,7 +174579,7 @@ sub_FE833F:
 	ld (0x601f53:24), 0x05                             ; FE8354  f2 53 1f 60 00 05
 	ldw (0x601f71:24), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
 	ldw (0x601f73:24), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
-	ld (0x601f46:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
+	ld (EditField_Velocity:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
 	ret                                                  ; FE836E  0e
 ; ---------------------------------------------------------------------
 ; ShowScreen_NoteEditPartSelect -- blank, re-init the panel, run the NOTE EDIT part-select painter, show it
@@ -175188,7 +175188,7 @@ EditScreen_EnterDrumEdit:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FE8882  1d 80 2e f4
 	ldw (0x601f49:24), 0x0a                             ; FE8886  f2 49 1f 60 02 0a 00
 	ld wa, (0x601f51:24)                                ; FE888D  d2 51 1f 60 20
-	ld (0x601f4d:24), wa                                ; FE8892  f2 4d 1f 60 50
+	ld (EditField_Inc:24), wa                                ; FE8892  f2 4d 1f 60 50
 	m_set 0, MD24, EditScreen_Mode                              ; FE8897  f2 70 1f 60 b8
 	ld (0x601f75:24), 0x07                             ; FE889C  f2 75 1f 60 00 07
 	ld (0x601f76:24), 0x08                             ; FE88A2  f2 76 1f 60 00 08
@@ -175198,16 +175198,16 @@ EditScreen_EnterDrumEdit:
 EditScreen_EnterNoteEdit:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FE88AA  1d 80 2e f4
 	ld wa, (0x601f4f:24)                                ; FE88AE  d2 4f 1f 60 20
-	ld (0x601f4d:24), wa                                ; FE88B3  f2 4d 1f 60 50
+	ld (EditField_Inc:24), wa                                ; FE88B3  f2 4d 1f 60 50
 	ld wa, (0x601f4b:24)                                ; FE88B8  d2 4b 1f 60 20
 	ld (0x601f49:24), wa                                ; FE88BD  f2 49 1f 60 50
 	m_res 0, MD24, EditScreen_Mode                              ; FE88C2  f2 70 1f 60 b0
 	ld (0x601f75:24), 0x0a                             ; FE88C7  f2 75 1f 60 00 0a
 	ld (0x601f76:24), 0x0b                             ; FE88CD  f2 76 1f 60 00 0b
 .LFE88D3:
-	m_cp_mi16 MW24, 0x601f4d, 0x0000                     ; FE88D3  d2 4d 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditField_Inc, 0x0000                     ; FE88D3  d2 4d 1f 60 3f 00 00
 	jr nz, .LFE88E3                                      ; FE88DA  6e 07
-	ldw (0x601f4d:24), 0x30                             ; FE88DC  f2 4d 1f 60 02 30 00
+	ldw (EditField_Inc:24), 0x30                             ; FE88DC  f2 4d 1f 60 02 30 00
 .LFE88E3:
 	ld a, (UI_ScreenLatch:16)                                   ; FE88E3  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; FE88E7  c1 7b 20 f1
@@ -175495,7 +175495,7 @@ BStore_CursorSlot_RestoreMark:
 ; ScreenLeave_DrumEdit: the +4 LEAVE method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
 ;   (ViewB entry 0x28) points at the thunk triple starting at T_EditScreen_EnterDrumEdit, and slot T_ScreenLeave_DrumEdit jumps here.
 ScreenLeave_DrumEdit:
-	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FE8C1F  d2 4d 1f 60 20
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FE8C29  c1 7a 20 3f 28
 	jr z, .LFE8C38                                       ; FE8C2E  66 08
@@ -175511,7 +175511,7 @@ ScreenLeave_NoteEdit:
 	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C41  1e 53 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C44  c1 d4 34 3e 10
 .LFE8C49:
-	ld wa, (0x601f4d:24)                                ; FE8C49  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FE8C49  d2 4d 1f 60 20
 	ld (0x601f4f:24), wa                                ; FE8C4E  f2 4f 1f 60 50
 	ld wa, (0x601f49:24)                                ; FE8C53  d2 49 1f 60 20
 	ld (0x601f4b:24), wa                                ; FE8C58  f2 4b 1f 60 50
@@ -175840,7 +175840,7 @@ sub_FE8F11:
 	ld (0x601f44:24), a                                 ; FE8F4D  f2 44 1f 60 41
 	call BStoreCursor_Step                                        ; FE8F52  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE8F56  1d 32 22 ff
-	ld (0x601f45:24), a                                 ; FE8F5A  f2 45 1f 60 41
+	ld (EditField_Note:24), a                                 ; FE8F5A  f2 45 1f 60 41
 	call BStoreCursor_Step                                        ; FE8F5F  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE8F63  1d 32 22 ff
 	xor BC,BC                                            ; FE8F67  d9 d1
@@ -175853,7 +175853,7 @@ sub_FE8F11:
 	and A,0x7f                                           ; FE8F79  c9 cc 7f
 	mul A,0x60                                           ; FE8F7C  c9 08 60
 	add WA,BC                                            ; FE8F7F  d9 80
-	ld (0x601f47:24), wa                                ; FE8F81  f2 47 1f 60 50
+	ld (EditField_Length:24), wa                                ; FE8F81  f2 47 1f 60 50
 	calr BStoreCursor_SeekPrevTag                                          ; FE8F86  1e 62 f3
 	ld a, (0x601f44:24)                                 ; FE8F89  c2 44 1f 60 21
 	ld (0x601f6f:24), a                                 ; FE8F8E  f2 6f 1f 60 41
@@ -176826,13 +176826,13 @@ sub_FE99BF:
 	call BStoreCursor_Step                                        ; FE99D3  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE99D7  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE99DB  1d 04 22 ff
-	ld wa, (0x601f47:24)                                ; FE99DF  d2 47 1f 60 20
+	ld wa, (EditField_Length:24)                                ; FE99DF  d2 47 1f 60 20
 	div A,0x60                                           ; FE99E4  c9 0a 60
 	and W,0x7f                                           ; FE99E7  c8 cc 7f
 	ld A,W                                               ; FE99EA  c8 89
 	call BStoreCursor_WriteByte                                        ; FE99EC  1d 4d 22 ff
 	call BStoreCursor_Step                                        ; FE99F0  1d 04 22 ff
-	ld wa, (0x601f47:24)                                ; FE99F4  d2 47 1f 60 20
+	ld wa, (EditField_Length:24)                                ; FE99F4  d2 47 1f 60 20
 	div A,0x60                                           ; FE99F9  c9 0a 60
 	and A,0x7f                                           ; FE99FC  c9 cc 7f
 	call BStoreCursor_WriteByte                                        ; FE99FF  1d 4d 22 ff
@@ -176849,7 +176849,7 @@ sub_FE9A07:
 	call BStoreCursor_Step                                        ; FE9A17  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE9A1B  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE9A1F  1d 04 22 ff
-	ld a, (0x601f45:24)                                 ; FE9A23  c2 45 1f 60 21
+	ld a, (EditField_Note:24)                                 ; FE9A23  c2 45 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE9A28  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
@@ -176943,7 +176943,7 @@ SoftKeyCol5_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5A
 SoftKeyCol6_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
 	ld (PanelDial_UpButton:16), 0x05                                 ; FE9B10  f1 9c 20 00 05
 	ld (PanelDial_DownButton:16), 0x85                                 ; FE9B15  f1 9b 20 00 85
-	calr sub_FEA2A5                                          ; FE9B1A  1e 88 07
+	calr EditField_StepInc                                          ; FE9B1A  1e 88 07
 	ret                                                  ; FE9B1D  0e
 ; SoftKeyCol7_NoteEdit: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x06.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol7_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A62
@@ -177011,12 +177011,12 @@ NoteEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9A9A
 ; NoteEdit_Button21 -- NoteEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
 ;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 NoteEdit_Button21:   ; entry: named by 1 `.long` operand, first at 0xFE9A9E
-	calr sub_FEACB6                                          ; FE9B7C  1e 37 11
+	calr EditField_StepLength12                                          ; FE9B7C  1e 37 11
 	ret                                                  ; FE9B7F  0e
 ; NoteEdit_Button22 -- NoteEdit_ButtonTable slot 0x16, NOT NAMED: slot 0x16 is only the VARIANT-1 already-held rewrite of base code 0x05
 ;   (SoftKeyCol6); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 NoteEdit_Button22:   ; entry: named by 1 `.long` operand, first at 0xFE9AA2
-	calr sub_FEADE1                                          ; FE9B80  1e 5e 12
+	calr EditField_StepInc5                                          ; FE9B80  1e 5e 12
 	ret                                                  ; FE9B83  0e
 ; NoteEdit_Button23 -- NoteEdit_ButtonTable slot 0x17, NOT NAMED: slot 0x17 is only the VARIANT-1 already-held rewrite of base code 0x06
 ;   (SoftKeyCol7); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -177112,7 +177112,7 @@ SoftKeyCol4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB0
 SoftKeyCol5_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
 	ld (PanelDial_UpButton:16), 0x04                                 ; FE9C5C  f1 9c 20 00 04
 	ld (PanelDial_DownButton:16), 0x84                                 ; FE9C61  f1 9b 20 00 84
-	calr sub_FEA2A5                                      ; FE9C66  1e 3c 06
+	calr EditField_StepInc                                      ; FE9C66  1e 3c 06
 	ret                                                  ; FE9C69  0e
 ; SoftKeyCol6_DrumEdit: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x05.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol6_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB8
@@ -177184,7 +177184,7 @@ DrumEdit_Button20:   ; entry: named by 1 `.long` operand, first at 0xFE9BF4
 ; DrumEdit_Button21 -- DrumEdit_ButtonTable slot 0x15, NOT NAMED: slot 0x15 is only the VARIANT-1 already-held rewrite of base code 0x04
 ;   (SoftKeyCol5); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
 DrumEdit_Button21:   ; entry: named by 1 `.long` operand, first at 0xFE9BF8
-	calr sub_FEADE1                                      ; FE9CCC  1e 12 11
+	calr EditField_StepInc5                                      ; FE9CCC  1e 12 11
 	ret                                                  ; FE9CCF  0e
 ; DrumEdit_Button22 -- DrumEdit_ButtonTable slot 0x16, NOT NAMED: slot 0x16 is only the VARIANT-1 already-held rewrite of base code 0x05
 ;   (SoftKeyCol6); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -177651,51 +177651,55 @@ EditScreen_SoftKeyCol4:
 	jr z, .LFEA15A                                       ; FEA167  66 f1
 	bit 0x07,W                                           ; FEA169  c8 33 07
 	jr nz, .LFEA172                                      ; FEA16C  6e 04
-	calr sub_FEA1AF                                      ; FEA16E  1e 3e 00
+	calr EditField_VelocityUp                                      ; FEA16E  1e 3e 00
 	ret                                                  ; FEA171  0e
 .LFEA172:
-	calr sub_FEA1C2                                      ; FEA172  1e 4d 00
+	calr EditField_VelocityDown                                      ; FEA172  1e 4d 00
 	ret                                                  ; FEA175  0e
 .LFEA176:
 	bit 0x07,W                                           ; FEA176  c8 33 07
 	jr nz, .LFEA17F                                      ; FEA179  6e 04
-	calr sub_FEA183                                      ; FEA17B  1e 05 00
+	calr EditField_NoteUp                                      ; FEA17B  1e 05 00
 	ret                                                  ; FEA17E  0e
 .LFEA17F:
-	calr sub_FEA199                                      ; FEA17F  1e 17 00
+	calr EditField_NoteDown                                      ; FEA17F  1e 17 00
 	ret                                                  ; FEA182  0e
-sub_FEA183:
-	m_cp_mi8 MB24, 0x601f45, 0x7f                        ; FEA183  c2 45 1f 60 3f 7f
+; EditField_NoteUp: (0x601F45), the NOTE field, + 1 up to 0x7F; redraws (0xFF0B46, 0xFE9A07).  NOTE EDIT draws the fields MEAS POS NOTE VEL LEN INC (DisplayList_NoteEditTrackSong).
+EditField_NoteUp:
+	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEA183  c2 45 1f 60 3f 7f
 	jr c, .LFEA18C                                       ; FEA189  67 01
 	ret                                                  ; FEA18B  0e
 .LFEA18C:
-	m_add_mi8 MB24, 0x601f45, 0x01                       ; FEA18C  c2 45 1f 60 38 01
+	m_add_mi8 MB24, EditField_Note, 0x01                       ; FEA18C  c2 45 1f 60 38 01
 	calr sub_FF0B46                                          ; FEA192  1e b1 69
 	calr sub_FE9A07                                          ; FEA195  1e 6f f8
 	ret                                                  ; FEA198  0e
-sub_FEA199:
-	m_cp_mi8 MB24, 0x601f45, 0x01                        ; FEA199  c2 45 1f 60 3f 01
+; EditField_NoteDown: (0x601F45) - 1 down to 1; redraws.
+EditField_NoteDown:
+	m_cp_mi8 MB24, EditField_Note, 0x01                        ; FEA199  c2 45 1f 60 3f 01
 	jr nz, .LFEA1A2                                      ; FEA19F  6e 01
 	ret                                                  ; FEA1A1  0e
 .LFEA1A2:
-	sub	(0x601f45:24), 0x01                  ; FEA1A2  c2 45 1f 60 3a 01
+	sub	(EditField_Note:24), 0x01                  ; FEA1A2  c2 45 1f 60 3a 01
 	calr sub_FF0B46                                          ; FEA1A8  1e 9b 69
 	calr sub_FE9A07                                          ; FEA1AB  1e 59 f8
 	ret                                                  ; FEA1AE  0e
-sub_FEA1AF:
-	m_cp_mi8 MB24, 0x601f46, 0x7f                        ; FEA1AF  c2 46 1f 60 3f 7f
+; EditField_VelocityUp: (0x601F46), the VEL field (1..127, 100 by default from 0xFE833F), + 1 up to 0x7F; redraws (0xFF0B3A).
+EditField_VelocityUp:
+	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEA1AF  c2 46 1f 60 3f 7f
 	jr c, .LFEA1B8                                       ; FEA1B5  67 01
 	ret                                                  ; FEA1B7  0e
 .LFEA1B8:
-	m_add_mi8 MB24, 0x601f46, 0x01                       ; FEA1B8  c2 46 1f 60 38 01
+	m_add_mi8 MB24, EditField_Velocity, 0x01                       ; FEA1B8  c2 46 1f 60 38 01
 	calr sub_FF0B3A                                          ; FEA1BE  1e 79 69
 	ret                                                  ; FEA1C1  0e
-sub_FEA1C2:
-	m_cp_mi8 MB24, 0x601f46, 0x01                        ; FEA1C2  c2 46 1f 60 3f 01
+; EditField_VelocityDown: (0x601F46) - 1 down to 1; redraws.
+EditField_VelocityDown:
+	m_cp_mi8 MB24, EditField_Velocity, 0x01                        ; FEA1C2  c2 46 1f 60 3f 01
 	jr nz, .LFEA1CB                                      ; FEA1C8  6e 01
 	ret                                                  ; FEA1CA  0e
 .LFEA1CB:
-	sub	(0x601f46:24), 0x01                  ; FEA1CB  c2 46 1f 60 3a 01
+	sub	(EditField_Velocity:24), 0x01                  ; FEA1CB  c2 46 1f 60 3a 01
 	calr sub_FF0B3A                                          ; FEA1D1  1e 66 69
 	ret                                                  ; FEA1D4  0e
 ; NoteEdit_SoftKeyCol5: the SoftKeyCol5 action of NoteEdit -- called only by SoftKeyCol5_NoteEdit.
@@ -177709,21 +177713,22 @@ NoteEdit_SoftKeyCol5:
 .LFEA1EA:
 	bit 0x07,W                                           ; FEA1EA  c8 33 07
 	jr nz, .LFEA1F3                                      ; FEA1ED  6e 04
-	calr sub_FEA1F7                                      ; FEA1EF  1e 05 00
+	calr EditField_LengthUp                                      ; FEA1EF  1e 05 00
 	ret                                                  ; FEA1F2  0e
 .LFEA1F3:
-	calr sub_FEA23C                                      ; FEA1F3  1e 46 00
+	calr EditField_LengthDown                                      ; FEA1F3  1e 46 00
 	ret                                                  ; FEA1F6  0e
-sub_FEA1F7:
+; EditField_LengthUp: the LEN field + 1 up to 0x2FFF: (0x601F47), or (0x601F49) when (0x601F5B) bit 0 is clear; redraws.
+EditField_LengthUp:
 	m_bit 0, MD24, 0x601f5b                              ; FEA1F7  f2 5b 1f 60 c8
 	jr nz, .LFEA200                                      ; FEA1FC  6e 02
 	jr T,.LFEA227                                        ; FEA1FE  68 27
 .LFEA200:
-	m_cp_mi16 MW24, 0x601f47, 0x2fff                     ; FEA200  d2 47 1f 60 3f ff 2f
+	m_cp_mi16 MW24, EditField_Length, 0x2fff                     ; FEA200  d2 47 1f 60 3f ff 2f
 	jr c, .LFEA20A                                       ; FEA207  67 01
 	ret                                                  ; FEA209  0e
 .LFEA20A:
-	m_add_mi16 MW24, 0x601f47, 0x0001                    ; FEA20A  d2 47 1f 60 38 01 00
+	m_add_mi16 MW24, EditField_Length, 0x0001                    ; FEA20A  d2 47 1f 60 38 01 00
 	calr sub_FE99BF                                          ; FEA211  1e ab f7
 	calr sub_FF0BF1                                      ; FEA214  1e da 69
 	calr sub_FEA12D                                      ; FEA217  1e 13 ff
@@ -177738,21 +177743,22 @@ sub_FEA1F7:
 	m_add_mi16 MW24, 0x601f49, 0x0001                    ; FEA231  d2 49 1f 60 38 01 00
 	calr sub_FF0C12                                          ; FEA238  1e d7 69
 	ret                                                  ; FEA23B  0e
-sub_FEA23C:
+; EditField_LengthDown: the LEN field - 1 down to 1 (0 becomes 1); redraws.
+EditField_LengthDown:
 	m_bit 0, MD24, 0x601f5b                              ; FEA23C  f2 5b 1f 60 c8
 	jr nz, .LFEA245                                      ; FEA241  6e 02
 	jr .LFEA27E                                          ; FEA243  68 39
 .LFEA245:
-	m_cp_mi16 MW24, 0x601f47, 0x0000                     ; FEA245  d2 47 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditField_Length, 0x0000                     ; FEA245  d2 47 1f 60 3f 00 00
 	jr z, .LFEA258                                       ; FEA24C  66 0a
-	m_cp_mi16 MW24, 0x601f47, 0x0001                     ; FEA24E  d2 47 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditField_Length, 0x0001                     ; FEA24E  d2 47 1f 60 3f 01 00
 	jr ugt, .LFEA261                                     ; FEA255  6b 0a
 	ret                                                  ; FEA257  0e
 .LFEA258:
-	ldw (0x601f47:24), 0x01                             ; FEA258  f2 47 1f 60 02 01 00
+	ldw (EditField_Length:24), 0x01                             ; FEA258  f2 47 1f 60 02 01 00
 	jr .LFEA268                                          ; FEA25F  68 07
 .LFEA261:
-	subw	(0x601f47:24), 0x0001                ; FEA261  d2 47 1f 60 3a 01 00
+	subw	(EditField_Length:24), 0x0001                ; FEA261  d2 47 1f 60 3a 01 00
 .LFEA268:
 	calr sub_FE99BF                                          ; FEA268  1e 54 f7
 	calr sub_FF0BF1                                      ; FEA26B  1e 83 69
@@ -177774,7 +177780,8 @@ sub_FEA23C:
 .LFEA2A1:
 	calr sub_FF0C12                                          ; FEA2A1  1e 6e 69
 	ret                                                  ; FEA2A4  0e
-sub_FEA2A5:
+; EditField_StepInc: repaint bit 3; unless (0x601F58) bit 7: W bit 7 clear -> EditField_IncUp, set -> EditField_IncDown (the key's two halves).
+EditField_StepInc:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA2A5  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEA2AA  f2 58 1f 60 cf
 	jr z, .LFEA2B2                                       ; FEA2AF  66 01
@@ -177782,70 +177789,74 @@ sub_FEA2A5:
 .LFEA2B2:
 	bit 0x07,W                                           ; FEA2B2  c8 33 07
 	jr nz, .LFEA2BB                                      ; FEA2B5  6e 04
-	calr sub_FEA2BF                                      ; FEA2B7  1e 05 00
+	calr EditField_IncUp                                      ; FEA2B7  1e 05 00
 	ret                                                  ; FEA2BA  0e
 .LFEA2BB:
-	calr sub_FEA2D4                                      ; FEA2BB  1e 16 00
+	calr EditField_IncDown                                      ; FEA2BB  1e 16 00
 	ret                                                  ; FEA2BE  0e
-sub_FEA2BF:
-	m_cp_mi16 MW24, 0x601f4d, 0x0060                     ; FEA2BF  d2 4d 1f 60 3f 60 00
+; EditField_IncUp: (0x601F4D), the INC field (cursor step in ticks), + 1 up to 0x60; redraws (0xFF0D03).
+EditField_IncUp:
+	m_cp_mi16 MW24, EditField_Inc, 0x0060                     ; FEA2BF  d2 4d 1f 60 3f 60 00
 	jr c, .LFEA2C9                                       ; FEA2C6  67 01
 	ret                                                  ; FEA2C8  0e
 .LFEA2C9:
-	m_add_mi16 MW24, 0x601f4d, 0x0001                    ; FEA2C9  d2 4d 1f 60 38 01 00
+	m_add_mi16 MW24, EditField_Inc, 0x0001                    ; FEA2C9  d2 4d 1f 60 38 01 00
 	calr sub_FF0D03                                          ; FEA2D0  1e 30 6a
 	ret                                                  ; FEA2D3  0e
-sub_FEA2D4:
-	m_cp_mi16 MW24, 0x601f4d, 0x0000                     ; FEA2D4  d2 4d 1f 60 3f 00 00
+; EditField_IncDown: (0x601F4D) - 1 down to 1; at 0 it is reset to 0x30; redraws.
+EditField_IncDown:
+	m_cp_mi16 MW24, EditField_Inc, 0x0000                     ; FEA2D4  d2 4d 1f 60 3f 00 00
 	jr z, .LFEA2E7                                       ; FEA2DB  66 0a
-	m_cp_mi16 MW24, 0x601f4d, 0x0001                     ; FEA2DD  d2 4d 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditField_Inc, 0x0001                     ; FEA2DD  d2 4d 1f 60 3f 01 00
 	jr ugt, .LFEA2F2                                     ; FEA2E4  6b 0c
 	ret                                                  ; FEA2E6  0e
 .LFEA2E7:
-	ldw (0x601f4d:24), 0x30                             ; FEA2E7  f2 4d 1f 60 02 30 00
+	ldw (EditField_Inc:24), 0x30                             ; FEA2E7  f2 4d 1f 60 02 30 00
 	calr sub_FF0D03                                          ; FEA2EE  1e 12 6a
 	ret                                                  ; FEA2F1  0e
 .LFEA2F2:
-	subw	(0x601f4d:24), 0x0001                ; FEA2F2  d2 4d 1f 60 3a 01 00
+	subw	(EditField_Inc:24), 0x0001                ; FEA2F2  d2 4d 1f 60 3a 01 00
 	calr sub_FF0D03                                          ; FEA2F9  1e 07 6a
 	ret                                                  ; FEA2FC  0e
-sub_FEA2FD:
-	m_cp_mi16 MW24, 0x601f4d, 0x0060                     ; FEA2FD  d2 4d 1f 60 3f 60 00
+; EditField_IncUp5: (0x601F4D) + 5, clamped to 0x60; redraws.
+EditField_IncUp5:
+	m_cp_mi16 MW24, EditField_Inc, 0x0060                     ; FEA2FD  d2 4d 1f 60 3f 60 00
 	jr c, .LFEA307                                       ; FEA304  67 01
 	ret                                                  ; FEA306  0e
 .LFEA307:
-	m_add_mi16 MW24, 0x601f4d, 0x0005                    ; FEA307  d2 4d 1f 60 38 05 00
-	m_cp_mi16 MW24, 0x601f4d, 0x0060                     ; FEA30E  d2 4d 1f 60 3f 60 00
+	m_add_mi16 MW24, EditField_Inc, 0x0005                    ; FEA307  d2 4d 1f 60 38 05 00
+	m_cp_mi16 MW24, EditField_Inc, 0x0060                     ; FEA30E  d2 4d 1f 60 3f 60 00
 	jr c, .LFEA31E                                       ; FEA315  67 07
-	ldw (0x601f4d:24), 0x60                             ; FEA317  f2 4d 1f 60 02 60 00
+	ldw (EditField_Inc:24), 0x60                             ; FEA317  f2 4d 1f 60 02 60 00
 .LFEA31E:
 	calr sub_FF0D03                                          ; FEA31E  1e e2 69
 	ret                                                  ; FEA321  0e
-sub_FEA322:
-	m_cp_mi16 MW24, 0x601f4d, 0x0000                     ; FEA322  d2 4d 1f 60 3f 00 00
+; EditField_IncDown5: (0x601F4D) - 5, clamped; at 0 it is reset to 0x30; redraws.
+EditField_IncDown5:
+	m_cp_mi16 MW24, EditField_Inc, 0x0000                     ; FEA322  d2 4d 1f 60 3f 00 00
 	jr z, .LFEA335                                       ; FEA329  66 0a
-	m_cp_mi16 MW24, 0x601f4d, 0x0001                     ; FEA32B  d2 4d 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditField_Inc, 0x0001                     ; FEA32B  d2 4d 1f 60 3f 01 00
 	jr ugt, .LFEA340                                     ; FEA332  6b 0c
 	ret                                                  ; FEA334  0e
 .LFEA335:
-	ldw (0x601f4d:24), 0x30                             ; FEA335  f2 4d 1f 60 02 30 00
+	ldw (EditField_Inc:24), 0x30                             ; FEA335  f2 4d 1f 60 02 30 00
 	calr sub_FF0D03                                          ; FEA33C  1e c4 69
 	ret                                                  ; FEA33F  0e
 .LFEA340:
-	ld wa, (0x601f4d:24)                                ; FEA340  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FEA340  d2 4d 1f 60 20
 	sub WA,0x0005                                        ; FEA345  d8 ca 05 00
 	jr c, .LFEA363                                       ; FEA349  67 18
-	m_cp_mi16 MW24, 0x601f4d, 0x0000                     ; FEA34B  d2 4d 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditField_Inc, 0x0000                     ; FEA34B  d2 4d 1f 60 3f 00 00
 	jr z, .LFEA363                                       ; FEA352  66 0f
 	xor W,W                                              ; FEA354  c8 d0
-	ld (0x601f4d:24), wa                                ; FEA356  f2 4d 1f 60 50
+	ld (EditField_Inc:24), wa                                ; FEA356  f2 4d 1f 60 50
 	cp a, 0x00:i3                                          ; FEA35B  c9 d8
 	jr z, .LFEA363                                       ; FEA35D  66 04
 .LFEA35F:
 	calr sub_FF0D03                                          ; FEA35F  1e a1 69
 	ret                                                  ; FEA362  0e
 .LFEA363:
-	ldw (0x601f4d:24), 0x01                             ; FEA363  f2 4d 1f 60 02 01 00
+	ldw (EditField_Inc:24), 0x01                             ; FEA363  f2 4d 1f 60 02 01 00
 	jr .LFEA35F                                          ; FEA36A  68 f3
 sub_FEA36C:
 	m_bit 7, MD24, 0x601f58                              ; FEA36C  f2 58 1f 60 cf
@@ -178068,7 +178079,7 @@ sub_FEA566:
 	pushw wa                                             ; FEA590  28
 	call T_TimedEventRing_Put                                ; FEA591  1d 64 1d f4
 	inc 2,XSP                                            ; FEA595  ef 62
-	ld a, (0x601f45:24)                                 ; FEA597  c2 45 1f 60 21
+	ld a, (EditField_Note:24)                                 ; FEA597  c2 45 1f 60 21
 	pushw wa                                             ; FEA59C  28
 	call T_TimedEventRing_Put                                ; FEA59D  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5A1  ef 62
@@ -178218,7 +178229,7 @@ sub_FEA709:
 .LFEA70B:
 	m_cp_rm MW24, 0x601f54, r0                           ; FEA70B  d2 54 1f 60 f0
 	jr ugt, .LFEA719                                     ; FEA710  6b 07
-	add wa, (0x601f4d:24)                            ; FEA712  d2 4d 1f 60 80
+	add wa, (EditField_Inc:24)                            ; FEA712  d2 4d 1f 60 80
 	jr .LFEA70B                                          ; FEA717  68 f2
 .LFEA719:
 	ld (0x601f54:24), wa                                ; FEA719  f2 54 1f 60 50
@@ -178230,10 +178241,10 @@ sub_FEA71F:
 .LFEA72A:
 	m_cp_rm MW24, 0x601f54, r0                           ; FEA72A  d2 54 1f 60 f0
 	jr nc, .LFEA738                                      ; FEA72F  6f 07
-	add wa, (0x601f4d:24)                            ; FEA731  d2 4d 1f 60 80
+	add wa, (EditField_Inc:24)                            ; FEA731  d2 4d 1f 60 80
 	jr .LFEA72A                                          ; FEA736  68 f2
 .LFEA738:
-	sub wa, (0x601f4d:24)                            ; FEA738  d2 4d 1f 60 a0
+	sub wa, (EditField_Inc:24)                            ; FEA738  d2 4d 1f 60 a0
 	ld (0x601f54:24), wa                                ; FEA73D  f2 54 1f 60 50
 .LFEA742:
 	ret                                                  ; FEA742  0e
@@ -178712,80 +178723,85 @@ sub_FEABE9:
 	jr z, .LFEABF5                                       ; FEAC02  66 f1
 	bit 0x07,W                                           ; FEAC04  c8 33 07
 	jr nz, .LFEAC0D                                      ; FEAC07  6e 04
-	calr sub_FEAC1E                                      ; FEAC09  1e 12 00
+	calr EditField_VelocityUp5                                      ; FEAC09  1e 12 00
 	ret                                                  ; FEAC0C  0e
 .LFEAC0D:
-	calr sub_FEAC3F                                      ; FEAC0D  1e 2f 00
+	calr EditField_VelocityDown5                                      ; FEAC0D  1e 2f 00
 	ret                                                  ; FEAC10  0e
 .LFEAC11:
 	bit 0x07,W                                           ; FEAC11  c8 33 07
 	jr nz, .LFEAC1A                                      ; FEAC14  6e 04
-	calr sub_FEAC67                                      ; FEAC16  1e 4e 00
+	calr EditField_NoteUp5                                      ; FEAC16  1e 4e 00
 	ret                                                  ; FEAC19  0e
 .LFEAC1A:
-	calr sub_FEAC8B                                      ; FEAC1A  1e 6e 00
+	calr EditField_NoteDown5                                      ; FEAC1A  1e 6e 00
 	ret                                                  ; FEAC1D  0e
-sub_FEAC1E:
-	m_cp_mi8 MB24, 0x601f46, 0x7f                        ; FEAC1E  c2 46 1f 60 3f 7f
+; EditField_VelocityUp5: (0x601F46) + 5, clamped to 0x7F; redraws.
+EditField_VelocityUp5:
+	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEAC1E  c2 46 1f 60 3f 7f
 	jr c, .LFEAC27                                       ; FEAC24  67 01
 	ret                                                  ; FEAC26  0e
 .LFEAC27:
-	m_add_mi8 MB24, 0x601f46, 0x05                       ; FEAC27  c2 46 1f 60 38 05
-	m_cp_mi8 MB24, 0x601f46, 0x7f                        ; FEAC2D  c2 46 1f 60 3f 7f
+	m_add_mi8 MB24, EditField_Velocity, 0x05                       ; FEAC27  c2 46 1f 60 38 05
+	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEAC2D  c2 46 1f 60 3f 7f
 	jr ule, .LFEAC3B                                     ; FEAC33  63 06
-	ld (0x601f46:24), 0x7f                             ; FEAC35  f2 46 1f 60 00 7f
+	ld (EditField_Velocity:24), 0x7f                             ; FEAC35  f2 46 1f 60 00 7f
 .LFEAC3B:
 	calr sub_FF0B3A                                          ; FEAC3B  1e fc 5e
 	ret                                                  ; FEAC3E  0e
-sub_FEAC3F:
-	m_cp_mi8 MB24, 0x601f46, 0x01                        ; FEAC3F  c2 46 1f 60 3f 01
+; EditField_VelocityDown5: (0x601F46) - 5, clamped to 1; redraws.
+EditField_VelocityDown5:
+	m_cp_mi8 MB24, EditField_Velocity, 0x01                        ; FEAC3F  c2 46 1f 60 3f 01
 	jr nz, .LFEAC48                                      ; FEAC45  6e 01
 	ret                                                  ; FEAC47  0e
 .LFEAC48:
-	ld a, (0x601f46:24)                                 ; FEAC48  c2 46 1f 60 21
+	ld a, (EditField_Velocity:24)                                 ; FEAC48  c2 46 1f 60 21
 	sub A,0x05                                           ; FEAC4D  c9 ca 05
 	jr c, .LFEAC5F                                       ; FEAC50  67 0d
 	cp a, 0x01:i3                                          ; FEAC52  c9 d9
 	jr c, .LFEAC5F                                       ; FEAC54  67 09
-	ld (0x601f46:24), a                                 ; FEAC56  f2 46 1f 60 41
+	ld (EditField_Velocity:24), a                                 ; FEAC56  f2 46 1f 60 41
 .LFEAC5B:
 	calr sub_FF0B3A                                          ; FEAC5B  1e dc 5e
 	ret                                                  ; FEAC5E  0e
 .LFEAC5F:
-	ld (0x601f46:24), 0x01                             ; FEAC5F  f2 46 1f 60 00 01
+	ld (EditField_Velocity:24), 0x01                             ; FEAC5F  f2 46 1f 60 00 01
 	jr .LFEAC5B                                          ; FEAC65  68 f4
-sub_FEAC67:
-	m_cp_mi8 MB24, 0x601f45, 0x7f                        ; FEAC67  c2 45 1f 60 3f 7f
+; EditField_NoteUp5: (0x601F45) + 5, clamped to 0x7F; redraws.
+EditField_NoteUp5:
+	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEAC67  c2 45 1f 60 3f 7f
 	jr c, .LFEAC70                                       ; FEAC6D  67 01
 	ret                                                  ; FEAC6F  0e
 .LFEAC70:
-	m_add_mi8 MB24, 0x601f45, 0x05                       ; FEAC70  c2 45 1f 60 38 05
-	m_cp_mi8 MB24, 0x601f45, 0x7f                        ; FEAC76  c2 45 1f 60 3f 7f
+	m_add_mi8 MB24, EditField_Note, 0x05                       ; FEAC70  c2 45 1f 60 38 05
+	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEAC76  c2 45 1f 60 3f 7f
 	jr ule, .LFEAC84                                     ; FEAC7C  63 06
-	ld (0x601f45:24), 0x7f                             ; FEAC7E  f2 45 1f 60 00 7f
+	ld (EditField_Note:24), 0x7f                             ; FEAC7E  f2 45 1f 60 00 7f
 .LFEAC84:
 	calr sub_FF0B46                                          ; FEAC84  1e bf 5e
 	calr sub_FE9A07                                          ; FEAC87  1e 7d ed
 	ret                                                  ; FEAC8A  0e
-sub_FEAC8B:
-	m_cp_mi8 MB24, 0x601f45, 0x01                        ; FEAC8B  c2 45 1f 60 3f 01
+; EditField_NoteDown5: (0x601F45) - 5, clamped to 1; redraws.
+EditField_NoteDown5:
+	m_cp_mi8 MB24, EditField_Note, 0x01                        ; FEAC8B  c2 45 1f 60 3f 01
 	jr nz, .LFEAC94                                      ; FEAC91  6e 01
 	ret                                                  ; FEAC93  0e
 .LFEAC94:
-	ld a, (0x601f45:24)                                 ; FEAC94  c2 45 1f 60 21
+	ld a, (EditField_Note:24)                                 ; FEAC94  c2 45 1f 60 21
 	sub A,0x05                                           ; FEAC99  c9 ca 05
 	jr c, .LFEACAE                                       ; FEAC9C  67 10
 	cp a, 0x01:i3                                          ; FEAC9E  c9 d9
 	jr c, .LFEACAE                                       ; FEACA0  67 0c
-	ld (0x601f45:24), a                                 ; FEACA2  f2 45 1f 60 41
+	ld (EditField_Note:24), a                                 ; FEACA2  f2 45 1f 60 41
 .LFEACA7:
 	calr sub_FF0B46                                          ; FEACA7  1e 9c 5e
 	calr sub_FE9A07                                          ; FEACAA  1e 5a ed
 	ret                                                  ; FEACAD  0e
 .LFEACAE:
-	ld (0x601f45:24), 0x01                             ; FEACAE  f2 45 1f 60 00 01
+	ld (EditField_Note:24), 0x01                             ; FEACAE  f2 45 1f 60 00 01
 	jr .LFEACA7                                          ; FEACB4  68 f1
-sub_FEACB6:
+; EditField_StepLength12: repaint bit 3; unless (0x601F58) bit 7 with (0x601F59) not 3: W bit 7 clear -> EditField_LengthUp12, set -> _LengthDown12.
+EditField_StepLength12:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEACB6  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEACBB  f2 58 1f 60 cf
 	jr z, .LFEACCB                                       ; FEACC0  66 09
@@ -178795,24 +178811,25 @@ sub_FEACB6:
 .LFEACCB:
 	bit 0x07,W                                           ; FEACCB  c8 33 07
 	jr nz, .LFEACD4                                      ; FEACCE  6e 04
-	calr sub_FEACD8                                      ; FEACD0  1e 05 00
+	calr EditField_LengthUp12                                      ; FEACD0  1e 05 00
 	ret                                                  ; FEACD3  0e
 .LFEACD4:
-	calr sub_FEAD49                                      ; FEACD4  1e 72 00
+	calr EditField_LengthDown12                                      ; FEACD4  1e 72 00
 	ret                                                  ; FEACD7  0e
-sub_FEACD8:
+; EditField_LengthUp12: the LEN field + 12, clamped to 0x2FFF; redraws.
+EditField_LengthUp12:
 	m_bit 0, MD24, 0x601f5b                              ; FEACD8  f2 5b 1f 60 c8
 	jr nz, .LFEACE1                                      ; FEACDD  6e 02
 	jr .LFEAD18                                          ; FEACDF  68 37
 .LFEACE1:
-	m_cp_mi16 MW24, 0x601f47, 0x2fff                     ; FEACE1  d2 47 1f 60 3f ff 2f
+	m_cp_mi16 MW24, EditField_Length, 0x2fff                     ; FEACE1  d2 47 1f 60 3f ff 2f
 	jr c, .LFEACEB                                       ; FEACE8  67 01
 	ret                                                  ; FEACEA  0e
 .LFEACEB:
-	m_add_mi16 MW24, 0x601f47, 0x000c                    ; FEACEB  d2 47 1f 60 38 0c 00
-	m_cp_mi16 MW24, 0x601f47, 0x2fff                     ; FEACF2  d2 47 1f 60 3f ff 2f
+	m_add_mi16 MW24, EditField_Length, 0x000c                    ; FEACEB  d2 47 1f 60 38 0c 00
+	m_cp_mi16 MW24, EditField_Length, 0x2fff                     ; FEACF2  d2 47 1f 60 3f ff 2f
 	jr ule, .LFEAD02                                     ; FEACF9  63 07
-	ldw (0x601f47:24), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
+	ldw (EditField_Length:24), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
 .LFEAD02:
 	calr sub_FE99BF                                          ; FEAD02  1e ba ec
 	calr sub_FF0BF1                                      ; FEAD05  1e e9 5e
@@ -178834,28 +178851,29 @@ sub_FEACD8:
 	ld (0x601f58:24), 0x83                             ; FEAD3C  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEAD42  f2 59 1f 60 00 03
 	ret                                                  ; FEAD48  0e
-sub_FEAD49:
+; EditField_LengthDown12: the LEN field - 12, clamped to 1; redraws.
+EditField_LengthDown12:
 	m_bit 0, MD24, 0x601f5b                              ; FEAD49  f2 5b 1f 60 c8
 	jr nz, .LFEAD52                                      ; FEAD4E  6e 02
 	jr .LFEADA1                                          ; FEAD50  68 4f
 .LFEAD52:
-	m_cp_mi16 MW24, 0x601f47, 0x0000                     ; FEAD52  d2 47 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditField_Length, 0x0000                     ; FEAD52  d2 47 1f 60 3f 00 00
 	jr z, .LFEAD65                                       ; FEAD59  66 0a
-	m_cp_mi16 MW24, 0x601f47, 0x0001                     ; FEAD5B  d2 47 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditField_Length, 0x0001                     ; FEAD5B  d2 47 1f 60 3f 01 00
 	jr ugt, .LFEAD6E                                     ; FEAD62  6b 0a
 	ret                                                  ; FEAD64  0e
 .LFEAD65:
-	ldw (0x601f47:24), 0x01                             ; FEAD65  f2 47 1f 60 02 01 00
+	ldw (EditField_Length:24), 0x01                             ; FEAD65  f2 47 1f 60 02 01 00
 	jr .LFEAD82                                          ; FEAD6C  68 14
 .LFEAD6E:
-	ld wa, (0x601f47:24)                                ; FEAD6E  d2 47 1f 60 20
+	ld wa, (EditField_Length:24)                                ; FEAD6E  d2 47 1f 60 20
 	sub WA,0x000c                                        ; FEAD73  d8 ca 0c 00
 	jr c, .LFEAD65                                       ; FEAD77  67 ec
 	cp wa, 0x01:i3                                         ; FEAD79  d8 d9
 	jr c, .LFEAD65                                       ; FEAD7B  67 e8
-	ld (0x601f47:24), wa                                ; FEAD7D  f2 47 1f 60 50
+	ld (EditField_Length:24), wa                                ; FEAD7D  f2 47 1f 60 50
 .LFEAD82:
-	m_cp_mi16 MW24, 0x601f47, 0x0001                     ; FEAD82  d2 47 1f 60 3f 01 00
+	m_cp_mi16 MW24, EditField_Length, 0x0001                     ; FEAD82  d2 47 1f 60 3f 01 00
 	jr c, .LFEAD65                                       ; FEAD89  67 da
 	calr sub_FE99BF                                          ; FEAD8B  1e 31 ec
 	calr sub_FF0BF1                                      ; FEAD8E  1e 60 5e
@@ -178884,7 +178902,8 @@ sub_FEAD49:
 	ld (0x601f58:24), 0x83                             ; FEADD4  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x03                             ; FEADDA  f2 59 1f 60 00 03
 	ret                                                  ; FEADE0  0e
-sub_FEADE1:
+; EditField_StepInc5: as EditField_StepInc with EditField_IncUp5 / _IncDown5.
+EditField_StepInc5:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEADE1  c1 75 20 3e 08
 	m_bit 7, MD24, 0x601f58                              ; FEADE6  f2 58 1f 60 cf
 	jr z, .LFEADEE                                       ; FEADEB  66 01
@@ -178892,10 +178911,10 @@ sub_FEADE1:
 .LFEADEE:
 	bit 0x07,W                                           ; FEADEE  c8 33 07
 	jr nz, .LFEADF7                                      ; FEADF1  6e 04
-	calr sub_FEA2FD                                      ; FEADF3  1e 07 f5
+	calr EditField_IncUp5                                      ; FEADF3  1e 07 f5
 	ret                                                  ; FEADF6  0e
 .LFEADF7:
-	calr sub_FEA322                                      ; FEADF7  1e 28 f5
+	calr EditField_IncDown5                                      ; FEADF7  1e 28 f5
 	ret                                                  ; FEADFA  0e
 sub_FEADFB:
 	m_bit 7, MD24, 0x601f58                              ; FEADFB  f2 58 1f 60 cf
@@ -178904,12 +178923,12 @@ sub_FEADFB:
 .LFEAE03:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAE03  c1 75 20 3e 08
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAE08  c2 5b 1f 60 3c fe
-	ld wa, (0x601f4d:24)                                ; FEAE0E  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FEAE0E  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE13  28
-	ldw (0x601f4d:24), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
+	ldw (EditField_Inc:24), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
 	calr sub_FEA709                                      ; FEAE1B  1e eb f8
 	popw wa                                              ; FEAE1E  48
-	ld (0x601f4d:24), wa                                ; FEAE1F  f2 4d 1f 60 50
+	ld (EditField_Inc:24), wa                                ; FEAE1F  f2 4d 1f 60 50
 	ld c, (0x601f75:24)                                 ; FEAE24  c2 75 1f 60 23
 	mul C,0x60                                           ; FEAE29  cb 08 60
 	cp (0x601f54:24), bc                             ; FEAE2C  d2 54 1f 60 f9
@@ -178942,12 +178961,12 @@ sub_FEAE58:
 	calr sub_FE9648                                          ; FEAE74  1e d1 e7
 	ret                                                  ; FEAE77  0e
 .LFEAE78:
-	ld wa, (0x601f4d:24)                                ; FEAE78  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FEAE78  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE7D  28
-	ldw (0x601f4d:24), 0x60                             ; FEAE7E  f2 4d 1f 60 02 60 00
+	ldw (EditField_Inc:24), 0x60                             ; FEAE7E  f2 4d 1f 60 02 60 00
 	calr sub_FEA71F                                      ; FEAE85  1e 97 f8
 	popw wa                                              ; FEAE88  48
-	ld (0x601f4d:24), wa                                ; FEAE89  f2 4d 1f 60 50
+	ld (EditField_Inc:24), wa                                ; FEAE89  f2 4d 1f 60 50
 	calr sub_FEA743                                      ; FEAE8E  1e b2 f8
 	calr sub_FEF778                                          ; FEAE91  1e e4 48
 	calr sub_FEF8D6                                          ; FEAE94  1e 3f 4a
@@ -179089,9 +179108,9 @@ DrumEdit_SoftKeyCol8:
 	calr sub_FEAFB7                                      ; FEB004  1e b0 ff
 	ld a, (0x601f44:24)                                 ; FEB007  c2 44 1f 60 21
 	ld (0x601f34:24), a                                 ; FEB00C  f2 34 1f 60 41
-	ld a, (0x601f46:24)                                 ; FEB011  c2 46 1f 60 21
+	ld a, (EditField_Velocity:24)                                 ; FEB011  c2 46 1f 60 21
 	ld (0x601f35:24), a                                 ; FEB016  f2 35 1f 60 41
-	ld (0x601f45:24), a                                 ; FEB01B  f2 45 1f 60 41
+	ld (EditField_Note:24), a                                 ; FEB01B  f2 45 1f 60 41
 	calr sub_FEB033                                      ; FEB020  1e 10 00
 	calr sub_FE91C0                                          ; FEB023  1e 9a e1
 	calr sub_FEF859                                          ; FEB026  1e 30 48
@@ -183133,7 +183152,7 @@ sub_FF0243:
 	ldw (0x601f3b:24), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
 	jr .LFF0279                                          ; FF026D  68 0a
 .LFF026F:
-	ld wa, (0x601f47:24)                                ; FF026F  d2 47 1f 60 20
+	ld wa, (EditField_Length:24)                                ; FF026F  d2 47 1f 60 20
 	ld (0x601f3b:24), wa                                ; FF0274  f2 3b 1f 60 50
 .LFF0279:
 	calr sub_FF02D5                                      ; FF0279  1e 59 00
@@ -184152,7 +184171,7 @@ OctaveNames:
 	.byte 0x2d, 0x32, 0x2d, 0x31, 0x30, 0x20, 0x31, 0x20, 0x32, 0x20, 0x33, 0x20, 0x34, 0x20, 0x35, 0x20  ; FF0B22
 	.byte 0x36, 0x20, 0x37, 0x20, 0x38, 0x20, 0x39, 0x20                      ; FF0B32
 sub_FF0B3A:
-	ld a, (0x601f46:24)                                 ; FF0B3A  c2 46 1f 60 21
+	ld a, (EditField_Velocity:24)                                 ; FF0B3A  c2 46 1f 60 21
 	ld (0x601f19:24), a                                 ; FF0B3F  f2 19 1f 60 41
 	jr .LFF0B50                                          ; FF0B44  68 0a
 ; sub_FF0B46 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -184173,7 +184192,7 @@ sub_FF0B3A:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_FF0B46:
-	ld a, (0x601f45:24)                                 ; FF0B46  c2 45 1f 60 21
+	ld a, (EditField_Note:24)                                 ; FF0B46  c2 45 1f 60 21
 	ld (0x601f19:24), a                                 ; FF0B4B  f2 19 1f 60 41
 .LFF0B50:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0B50  f1 40 25 00 00
@@ -184235,7 +184254,7 @@ Str_v:	.ascii	"v"	; FF0BF0
 sub_FF0BF1:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0BF1  f1 40 25 00 00
 	calr sub_FEF83B                                          ; FF0BF6  1e 42 ec
-	ld wa, (0x601f47:24)                                ; FF0BF9  d2 47 1f 60 20
+	ld wa, (EditField_Length:24)                                ; FF0BF9  d2 47 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0BFE  f1 b0 26 50
 	m_cp_mi16 MW16, 0x26b0, 0x2710                       ; FF0C02  d1 b0 26 3f 10 27
 	jr nc, .LFF0C0E                                      ; FF0C08  6f 04
@@ -184354,7 +184373,7 @@ sub_FF0D03:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_FF0D17:
-	ld wa, (0x601f4d:24)                                ; FF0D17  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FF0D17  d2 4d 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0D1C  f1 b0 26 50
 	ld XIY,DisplayList_FF0D2F                            ; FF0D20  45 2f 0d ff 00
 	ld XIX,sub_FF0D3E                                    ; FF0D25  44 3e 0d ff 00
@@ -184383,7 +184402,7 @@ DisplayList_FF0D2F:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_FF0D3E:
-	ld wa, (0x601f4d:24)                                ; FF0D3E  d2 4d 1f 60 20
+	ld wa, (EditField_Inc:24)                                ; FF0D3E  d2 4d 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0D43  f1 b0 26 50
 	ld XIY,DisplayList_FF0D56                            ; FF0D47  45 56 0d ff 00
 	ld XIX,TickLabels                                    ; FF0D4C  44 65 0d ff 00

@@ -240,5 +240,19 @@ count (10 / 11 in note edit, 7 / 8 in drum edit; `EditCursor_NextBeat` multiplie
 is a span in beats), what (0x601F49)-(0x601F51) hold, and what `sub_FE8830`'s track types 0x28 /
 0x29 / 0x30 mean when `EditScreen_EnterDrumEdit` checks them before entering drum edit.
 
+**The value fields (2026-10-04).** NOTE EDIT draws MEAS POS NOTE VEL LEN INC
+(`DisplayList_NoteEditTrackSong`), and DRUM EDIT draws MEAS POS SND VEL INC. The routines that
+step them pin each cell (`notes/prom_ab_read_names_2026_10_04.py`):
+
+| address | width | field | range, step |
+|---|---|---|---|
+| 0x601F45 | byte | NOTE (SND) | 1..127, by 1 or 5 (`EditField_Note*`) |
+| 0x601F46 | byte | VEL | 1..127, by 1 or 5; 100 by default (`EditField_Velocity*`) |
+| 0x601F47 | word | LEN when (0x601F5B) bit 0 is set | 1..0x2FFF, by 1 or 12 (`EditField_Length*`) |
+| 0x601F4D | word | INC, the cursor step in ticks | 1..0x60, by 1 or 5; 0x30 by default (`EditField_Inc*`) |
+
+(0x601F49) is the length cell the same routines step when (0x601F5B) bit 0 is clear. NOTE
+EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not established.
+
 Census of every 0x601F00-0x601F7D operand with its form and routine:
 `python3 notes/wsa1_601f_census.py` (in the repository's wsa1/ directory).

@@ -1,0 +1,20 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FEA183\b/EditField_NoteUp/g
+s/\bsub_FEA199\b/EditField_NoteDown/g
+s/\bsub_FEAC67\b/EditField_NoteUp5/g
+s/\bsub_FEAC8B\b/EditField_NoteDown5/g
+s/\bsub_FEA1AF\b/EditField_VelocityUp/g
+s/\bsub_FEA1C2\b/EditField_VelocityDown/g
+s/\bsub_FEAC1E\b/EditField_VelocityUp5/g
+s/\bsub_FEAC3F\b/EditField_VelocityDown5/g
+s/\bsub_FEA1F7\b/EditField_LengthUp/g
+s/\bsub_FEA23C\b/EditField_LengthDown/g
+s/\bsub_FEACD8\b/EditField_LengthUp12/g
+s/\bsub_FEAD49\b/EditField_LengthDown12/g
+s/\bsub_FEA2BF\b/EditField_IncUp/g
+s/\bsub_FEA2D4\b/EditField_IncDown/g
+s/\bsub_FEA2FD\b/EditField_IncUp5/g
+s/\bsub_FEA322\b/EditField_IncDown5/g
+s/\bsub_FEA2A5\b/EditField_StepInc/g
+s/\bsub_FEADE1\b/EditField_StepInc5/g
+s/\bsub_FEACB6\b/EditField_StepLength12/g

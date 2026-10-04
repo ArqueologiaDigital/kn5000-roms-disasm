@@ -221,6 +221,10 @@ GROUPS = [
         0x601F3F: ("EditCursor_Measure", "the NOTE / DRUM EDIT cursor's measure, 1..999 (word)", "sub_FEAAB6 / sub_FEAAE0 clamp it; sub_FE9E04 carries the beat into it"),
         0x601F41: ("EditCursor_Beat", "the cursor's beat within the measure, from 0 (word)", "sub_FE9E04 wraps it at sub_FE9F23's beat count"),
         0x601F43: ("EditCursor_Tick", "the cursor's tick within the beat, 0..95", "sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F"),
+        0x601F45: ("EditField_Note", "the NOTE field (DRUM EDIT: SND), 1..127", "EditField_NoteUp / _Down / _Up5 / _Down5"),
+        0x601F46: ("EditField_Velocity", "the VEL field, 1..127, 100 by default", "EditField_VelocityUp / _Down / _Up5 / _Down5; 0xFE833F sets 100"),
+        0x601F47: ("EditField_Length", "the LEN field (word), 1..0x2FFF, when (0x601F5B) bit 0 is set", "EditField_LengthUp / _Down / _Up12 / _Down12"),
+        0x601F4D: ("EditField_Inc", "the INC field (word): the cursor step in ticks, 1..0x60, 0x30 by default", "EditField_IncUp / _Down / _Up5 / _Down5"),
         0x601F70: ("EditScreen_Mode", "bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A", "ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it"),
     }),
     ("wsa1/notes/FINDINGS-prom_a-panel-state-variables.md", "1. The mode / screen latches; 2. The dial's button pair", {
