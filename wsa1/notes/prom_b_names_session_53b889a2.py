@@ -2459,4 +2459,5 @@ RENAMES = [
     ("sub_FB916A", "SeqClock_ResetBeatAndTick"),
     ("sub_FB9B41", "MidiFileDirectPlay_InitOnEntry"),
     ("sub_FB9B73", "MidiFileDirectPlay_RestoreOnLeave"),
+    ("sub_F6609C", "SequencerMedley_ClampSongRange_Call"),
 ]

@@ -90448,7 +90448,7 @@ T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
 	.fill 0x2C, 1, 0x00  ; 0xF42AC0: 44 x nop
 	.fill 0x84, 1, 0x0E  ; 0xF42AEC: 132 x ret
 T_F42B70:	jp sub_F65C51  ; -> prom_b 0x65C51   x1
-T_F42B74:	jp sub_F6609C  ; -> prom_b 0x6609C
+T_F42B74:	jp SequencerMedley_ClampSongRange_Call  ; -> prom_b 0x6609C
 T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
 T_Medley_SelectField1:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
 T_Medley_SelectField2:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
@@ -143773,7 +143773,7 @@ sub_F66081_Skip:
 	ret	; F6609B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6609C
+; SequencerMedley_ClampSongRange_Call
 ; Called from: T_F42B74 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   SequencerMedley_ClampSongRange
@@ -143784,7 +143784,8 @@ sub_F66081_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6609C:		; <- T_F42B74
+; SequencerMedley_ClampSongRange_Call: calls SequencerMedley_ClampSongRange and returns -- `calr SequencerMedley_ClampSongRange / ret`.
+SequencerMedley_ClampSongRange_Call:		; <- T_F42B74
 	calr	SequencerMedley_ClampSongRange	; F6609C  calr 0xf660a0
 	ret	; F6609F  ret
 
