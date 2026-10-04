@@ -165116,7 +165116,7 @@ sub_FE389E:
 	ld IZ,HL                                             ; FE38A8  db 8e
 	cp IZ,0xffff                                         ; FE38AA  de cf ff ff
 	jr z, .LFE38B7                                           ; FE38AE  66 07
-	calr sub_FE48EF                                          ; FE38B0  1e 3c 10
+	calr Fat_Load                                          ; FE38B0  1e 3c 10
 	cp hl, 0x00:i3                                         ; FE38B3  db d8
 	jr z, .LFE38BD                                           ; FE38B5  66 06
 .LFE38B7:
@@ -165207,7 +165207,7 @@ sub_FE395A_Join:
 	ld XWA,(XSP+0x08)                                    ; FE399A  af 08 20
 	ld WA,(XWA+0x1c)                                     ; FE399D  98 1c 20
 	pushw wa                                             ; FE39A0  28
-	calr sub_FE47BE                                          ; FE39A1  1e 1a 0e
+	calr Fat_SetEntry                                          ; FE39A1  1e 1a 0e
 	inc 4,XSP                                            ; FE39A4  ef 64
 	ld XWA,(XSP+0x06)                                    ; FE39A6  af 06 20
 	decm 0x01, (xwa+0x1e)                                ; FE39A9  98 1e 69
@@ -165217,7 +165217,7 @@ sub_FE395A_Join:
 	jr .LFE39C0                                              ; FE39B4  68 0a
 .LFE39B6:
 	pushw bc                                             ; FE39B6  29
-	calr sub_FE4731                                          ; FE39B7  1e 77 0d
+	calr Fat_GetEntry                                          ; FE39B7  1e 77 0d
 	inc 2,XSP                                            ; FE39BA  ef 62
 	ld BC,HL                                             ; FE39BC  db 89
 	inc 1,IZ                                             ; FE39BE  de 61
@@ -165241,7 +165241,7 @@ sub_FE395A_Join:
 	ld WA,(XWA+0x1c)                                     ; FE39E5  98 1c 20
 	pushw wa                                             ; FE39E8  28
 .LFE39E9:
-	calr sub_FE47BE                                          ; FE39E9  1e d2 0d
+	calr Fat_SetEntry                                          ; FE39E9  1e d2 0d
 	ld XWA,(XSP+0x0a)                                    ; FE39EC  af 0a 20
 	ld HL,(XWA+0x18)                                     ; FE39EF  98 18 23
 	lda xde, (0x605d50:24)                               ; FE39F2  f2 50 5d 60 32
@@ -165264,7 +165264,7 @@ sub_FE395A_Join:
 	m_divs MWI+r2, 0, 3                                  ; FE3A27  92 5b
 	ld WA,HL                                             ; FE3A29  db 88
 	pushw wa                                             ; FE3A2B  28
-	calr sub_FE4649                                          ; FE3A2C  1e 1a 0c
+	calr Disk_WriteRootDirSector                                          ; FE3A2C  1e 1a 0c
 	inc 6,XSP                                            ; FE3A2F  ef 66
 	cp hl, 0x00:i3                                         ; FE3A31  db d8
 	jr z, .LFE3A3A                                           ; FE3A33  66 05
@@ -165276,7 +165276,7 @@ sub_FE395A_Join:
 	ld IZ,HL                                             ; FE3A3D  db 8e
 	cp iz, 0x00:i3                                         ; FE3A3F  de d8
 	jr nz, .LFE3A48                                          ; FE3A41  6e 05
-	calr sub_FE4A55                                          ; FE3A43  1e 0f 10
+	calr Fat_Store                                          ; FE3A43  1e 0f 10
 	jr .LFE3A4A                                              ; FE3A46  68 02
 .LFE3A48:
 	ld HL,IZ                                             ; FE3A48  de 8b
@@ -165295,7 +165295,7 @@ sub_FE3A4C:
 	jr .LFE3AD7                                              ; FE3A67  68 6e
 .LFE3A69:
 	m_push MWD+r7, 0x04                                  ; FE3A69  9f 04 04
-	calr sub_FE4621                                          ; FE3A6C  1e b2 0b
+	calr Disk_ReadRootDirSector                                          ; FE3A6C  1e b2 0b
 	inc 2,XSP                                            ; FE3A6F  ef 62
 	cp hl, 0x00:i3                                         ; FE3A71  db d8
 	jr nz, .LFE3AEB                                          ; FE3A73  6e 76
@@ -165374,7 +165374,7 @@ sub_FE3B30:
 	jr z, .LFE3B55                                           ; FE3B30  66 23
 sub_FE3B32:
 	m_push MWD+r7, 0x04                                  ; FE3B32  9f 04 04
-	calr sub_FE4621                                          ; FE3B35  1e e9 0a
+	calr Disk_ReadRootDirSector                                          ; FE3B35  1e e9 0a
 	inc 2,XSP                                            ; FE3B38  ef 62
 sub_FE3B3A:
 	lda xbc, (0x605d5e:24)                               ; FE3B3A  f2 5e 5d 60 31
@@ -165506,11 +165506,11 @@ sub_FE3C23:
 .LFE3C66:
 	ld WA,IZ                                             ; FE3C66  de 88
 	pushw wa                                             ; FE3C68  28
-	calr sub_FE4731                                          ; FE3C69  1e c5 0a
+	calr Fat_GetEntry                                          ; FE3C69  1e c5 0a
 	ld QIZ,HL                                            ; FE3C6C  d7 fa 9b
 	pushw 0x00                                           ; FE3C6F  0b 00 00
 	pushw iz                                             ; FE3C72  2e
-	calr sub_FE47BE                                          ; FE3C73  1e 48 0b
+	calr Fat_SetEntry                                          ; FE3C73  1e 48 0b
 	inc 6,XSP                                            ; FE3C76  ef 66
 	ld IZ,QIZ                                            ; FE3C78  d7 fa 8e
 	incw 0x01, (xsp+0x06)                                ; FE3C7B  9f 06 61
@@ -165526,7 +165526,7 @@ sub_FE3C23:
 	extz XIZ                                             ; FE3C97  ee 12
 	div xiz, bc                                         ; FE3C99  d9 56
 	pushw iz                                             ; FE3C9B  2e
-	calr sub_FE4649                                          ; FE3C9C  1e aa 09
+	calr Disk_WriteRootDirSector                                          ; FE3C9C  1e aa 09
 	inc 2,XSP                                            ; FE3C9F  ef 62
 	cp hl, 0x00:i3                                         ; FE3CA1  db d8
 	jr z, .LFE3CAA                                           ; FE3CA3  66 05
@@ -165534,7 +165534,7 @@ sub_FE3C23:
 	ldw hl, 0xff                                         ; FE3CA5  33 ff 00
 	jr .LFE3CAD                                              ; FE3CA8  68 03
 .LFE3CAA:
-	calr sub_FE4A55                                          ; FE3CAA  1e a8 0d
+	calr Fat_Store                                          ; FE3CAA  1e a8 0d
 .LFE3CAD:
 	pop XIZ                                              ; FE3CAD  5e
 	inc 4,XSP                                            ; FE3CAE  ef 64
@@ -165596,11 +165596,11 @@ sub_FE3CF4:
 .LFE3D1C:
 	ld WA,IZ                                             ; FE3D1C  de 88
 	pushw wa                                             ; FE3D1E  28
-	calr sub_FE4731                                          ; FE3D1F  1e 0f 0a
+	calr Fat_GetEntry                                          ; FE3D1F  1e 0f 0a
 	ld QIZ,HL                                            ; FE3D22  d7 fa 9b
 	pushw 0x00                                           ; FE3D25  0b 00 00
 	pushw iz                                             ; FE3D28  2e
-	calr sub_FE47BE                                          ; FE3D29  1e 92 0a
+	calr Fat_SetEntry                                          ; FE3D29  1e 92 0a
 	inc 6,XSP                                            ; FE3D2C  ef 66
 	ld IZ,QIZ                                            ; FE3D2E  d7 fa 8e
 	incw 0x01, (xsp+0x04)                                ; FE3D31  9f 04 61
@@ -165626,7 +165626,7 @@ sub_FE3D4D:
 	exts XWA                                             ; FE3D56  e8 13
 	m_divs MW24, 0x605d50, 0                             ; FE3D58  d2 50 5d 60 58
 	pushw wa                                             ; FE3D5D  28
-	calr sub_FE4621                                          ; FE3D5E  1e c0 08
+	calr Disk_ReadRootDirSector                                          ; FE3D5E  1e c0 08
 	inc 2,XSP                                            ; FE3D61  ef 62
 	cp hl, 0x00:i3                                         ; FE3D63  db d8
 	jr z, .LFE3D6C                                           ; FE3D65  66 05
@@ -165648,17 +165648,17 @@ sub_FE3D4D:
 	m_divs MWI+r2, 0, 6                                  ; FE3D8D  92 5e
 	ld WA,IZ                                             ; FE3D8F  de 88
 	pushw wa                                             ; FE3D91  28
-	calr sub_FE4649                                          ; FE3D92  1e b4 08
+	calr Disk_WriteRootDirSector                                          ; FE3D92  1e b4 08
 	pushw 0xffff                                         ; FE3D95  0b ff ff
 	ld XWA,(XSP+0x0c)                                    ; FE3D98  af 0c 20
 	ld WA,(XWA+0x1c)                                     ; FE3D9B  98 1c 20
 	pushw wa                                             ; FE3D9E  28
-	calr sub_FE47BE                                          ; FE3D9F  1e 1c 0a
+	calr Fat_SetEntry                                          ; FE3D9F  1e 1c 0a
 	ld XWA,(XSP+0x0e)                                    ; FE3DA2  af 0e 20
 	m_push MWD+r0, 0x1a                                  ; FE3DA5  98 1a 04
 	calr sub_FE3CF4                                          ; FE3DA8  1e 49 ff
 	inc 8,XSP                                            ; FE3DAB  ef 60
-	calr sub_FE4A55                                          ; FE3DAD  1e a5 0c
+	calr Fat_Store                                          ; FE3DAD  1e a5 0c
 .LFE3DB0:
 	pop XIZ                                              ; FE3DB0  5e
 	ret                                                  ; FE3DB1  0e
@@ -165672,7 +165672,7 @@ sub_FE3DB2:
 	ld XWA,(XSP+0x0c)                                    ; FE3DC3  af 0c 20
 	ld BC,(XSP+0x06)                                     ; FE3DC6  9f 06 21
 	ld (XWA+0x18),BC                                     ; FE3DC9  b8 18 51
-	calr sub_FE48EF                                          ; FE3DCC  1e 20 0b
+	calr Fat_Load                                          ; FE3DCC  1e 20 0b
 	cp hl, 0x00:i3                                         ; FE3DCF  db d8
 	jrl nz, .LFE3E8C                                         ; FE3DD1  7e b8 00
 	pushw 0x02                                           ; FE3DD4  0b 02 00
@@ -165683,7 +165683,7 @@ sub_FE3DB2:
 	jrl z, .LFE3E8C                                          ; FE3DE4  76 a5 00
 	pushw 0xffff                                         ; FE3DE7  0b ff ff
 	m_push MWD+r7, 0x06                                  ; FE3DEA  9f 06 04
-	calr sub_FE47BE                                          ; FE3DED  1e ce 09
+	calr Fat_SetEntry                                          ; FE3DED  1e ce 09
 	inc 4,XSP                                            ; FE3DF0  ef 64
 	ld XWA,(XSP+0x0c)                                    ; FE3DF2  af 0c 20
 	cp (XWA),0x01                                        ; FE3DF5  80 3f 01
@@ -165727,7 +165727,7 @@ sub_FE3DB2:
 	div xwa, bc                                         ; FE3E77  d9 50
 	ld (XSP+0x0c),WA                                     ; FE3E79  bf 0c 50
 	m_push MWD+r7, 0x0c                                  ; FE3E7C  9f 0c 04
-	calr sub_FE4649                                          ; FE3E7F  1e c7 07
+	calr Disk_WriteRootDirSector                                          ; FE3E7F  1e c7 07
 	add XSP,0x0000000a                                   ; FE3E82  ef c8 0a 00 00 00
 	cp hl, 0x00:i3                                         ; FE3E88  db d8
 	jr z, .LFE3E91                                           ; FE3E8A  66 05
@@ -165889,12 +165889,12 @@ sub_FE3FB0:
 	ld (0x607f9b:24), 0x00                             ; FE3FF6  f2 9b 7f 60 00 00
 	ld WA,(XBC)                                          ; FE3FFC  91 20
 	pushw wa                                             ; FE3FFE  28
-	calr sub_FE4548                                          ; FE3FFF  1e 46 05
+	calr Disk_ReadClusterToWorkBuffer                                          ; FE3FFF  1e 46 05
 	inc 2,XSP                                            ; FE4002  ef 62
 	jr .LFE400C                                              ; FE4004  68 06
 .LFE4006:
 	pushw wa                                             ; FE4006  28
-	calr sub_FE4512                                          ; FE4007  1e 08 05
+	calr Disk_ReadCluster                                          ; FE4007  1e 08 05
 	inc 2,XSP                                            ; FE400A  ef 62
 .LFE400C:
 	cp HL,0x00f1                                         ; FE400C  db cf f1 00
@@ -165905,7 +165905,7 @@ sub_FE3FB0:
 	cp hl, 0x00:i3                                         ; FE4018  db d8
 	jr nz, .LFE4098                                          ; FE401A  6e 7c
 	m_push MWD+r6, 0x1c                                  ; FE401C  9e 1c 04
-	calr sub_FE4731                                          ; FE401F  1e 0f 07
+	calr Fat_GetEntry                                          ; FE401F  1e 0f 07
 	inc 2,XSP                                            ; FE4022  ef 62
 	lda xde, (xiz+0x1c)                                  ; FE4024  be 1c 32
 	ld (XDE),HL                                          ; FE4027  b2 53
@@ -165945,7 +165945,7 @@ sub_FE3FB0:
 	ld WA,(XDE)                                          ; FE4087  92 20
 	ld (0x605d32:24), wa                                ; FE4089  f2 32 5d 60 50
 	pushw wa                                             ; FE408E  28
-	calr sub_FE4512                                          ; FE408F  1e 80 04
+	calr Disk_ReadCluster                                          ; FE408F  1e 80 04
 	inc 2,XSP                                            ; FE4092  ef 62
 	cp hl, 0x00:i3                                         ; FE4094  db d8
 	jr z, .LFE409D                                           ; FE4096  66 05
@@ -165954,7 +165954,7 @@ sub_FE3FB0:
 	jr .LFE40B7                                              ; FE409B  68 1a
 .LFE409D:
 	m_push MWD+r6, 0x1c                                  ; FE409D  9e 1c 04
-	calr sub_FE4731                                          ; FE40A0  1e 8e 06
+	calr Fat_GetEntry                                          ; FE40A0  1e 8e 06
 	inc 2,XSP                                            ; FE40A3  ef 62
 	ld (XIZ+0x1c),HL                                     ; FE40A5  be 1c 53
 	incw 0x01, (xiz+0x1e)                                ; FE40A8  9e 1e 61
@@ -166007,13 +166007,13 @@ sub_FE40B9:
 	push XWA                                             ; FE4125  38
 	calr sub_FE457E                                          ; FE4126  1e 55 04
 	m_push MW24, 0x605d34                                ; FE4129  d2 34 5d 60 04
-	calr sub_FE4563                                          ; FE412E  1e 32 04
+	calr Disk_WriteClusterFromWorkBuffer                                          ; FE412E  1e 32 04
 	lda xsp, (xsp+0x0c)                                  ; FE4131  bf 0c 37
 	ld (0x607f9c:24), 0x00                             ; FE4134  f2 9c 7f 60 00 00
 	jr .LFE4143                                              ; FE413A  68 07
 .LFE413C:
 	m_push MWI+r1, 0                                     ; FE413C  91 04
-	calr sub_FE452D                                          ; FE413E  1e ec 03
+	calr Disk_WriteCluster                                          ; FE413E  1e ec 03
 	inc 2,XSP                                            ; FE4141  ef 62
 .LFE4143:
 	cp hl, 0x00:i3                                         ; FE4143  db d8
@@ -166043,10 +166043,10 @@ sub_FE40B9:
 	ld XWA,(XSP+0x08)                                    ; FE4179  af 08 20
 	ld WA,(XWA+0x1c)                                     ; FE417C  98 1c 20
 	pushw wa                                             ; FE417F  28
-	calr sub_FE47BE                                          ; FE4180  1e 3b 06
+	calr Fat_SetEntry                                          ; FE4180  1e 3b 06
 	pushw 0xffff                                         ; FE4183  0b ff ff
 	pushw iz                                             ; FE4186  2e
-	calr sub_FE47BE                                          ; FE4187  1e 34 06
+	calr Fat_SetEntry                                          ; FE4187  1e 34 06
 	inc 8,XSP                                            ; FE418A  ef 60
 	ld XWA,(XSP+0x06)                                    ; FE418C  af 06 20
 	ld (XWA+0x1c),IZ                                     ; FE418F  b8 1c 56
@@ -166072,7 +166072,7 @@ sub_FE40B9:
 	add (0x605d2c:24), xwa                              ; FE41D2  e2 2c 5d 60 88
 	ld WA,(XBC)                                          ; FE41D7  91 20
 	pushw wa                                             ; FE41D9  28
-	calr sub_FE452D                                          ; FE41DA  1e 50 03
+	calr Disk_WriteCluster                                          ; FE41DA  1e 50 03
 	inc 2,XSP                                            ; FE41DD  ef 62
 	cp hl, 0x00:i3                                         ; FE41DF  db d8
 	jr nz, .LFE420C                                          ; FE41E1  6e 29
@@ -166103,10 +166103,10 @@ sub_FE40B9:
 	ld XWA,(XSP+0x08)                                    ; FE4216  af 08 20
 	ld WA,(XWA+0x1c)                                     ; FE4219  98 1c 20
 	pushw wa                                             ; FE421C  28
-	calr sub_FE47BE                                          ; FE421D  1e 9e 05
+	calr Fat_SetEntry                                          ; FE421D  1e 9e 05
 	pushw 0xffff                                         ; FE4220  0b ff ff
 	pushw iz                                             ; FE4223  2e
-	calr sub_FE47BE                                          ; FE4224  1e 97 05
+	calr Fat_SetEntry                                          ; FE4224  1e 97 05
 	inc 8,XSP                                            ; FE4227  ef 60
 	ld XWA,(XSP+0x06)                                    ; FE4229  af 06 20
 	ld (XWA+0x1c),IZ                                     ; FE422C  b8 1c 56
@@ -166129,7 +166129,7 @@ sub_FE423E:
 	calr sub_FE4B4B                                          ; FE4254  1e f4 08
 	cp hl, 0x00:i3                                         ; FE4257  db d8
 	jr nz, .LFE426D                                          ; FE4259  6e 12
-	calr sub_FE4A55                                          ; FE425B  1e f7 07
+	calr Fat_Store                                          ; FE425B  1e f7 07
 	ldw (0x605d6c:24), 0x00                             ; FE425E  f2 6c 5d 60 02 00 00
 	ldw (0x605d6e:24), 0x00                             ; FE4265  f2 6e 5d 60 02 00 00
 	ret                                                  ; FE426C  0e
@@ -166414,7 +166414,8 @@ Disk_WriteSectors:
 .LFE4480:
 	ld hl, 0x00:i3                                         ; FE4480  db a8
 	ret                                                  ; FE4482  0e
-sub_FE4483:
+; Fat_ClusterToSector: XHL = (0x605D40) + (cluster - 2) * (0x605D56), less one on FAT16 (drive record +2 = 1).
+Fat_ClusterToSector:
 	dec 2,XSP                                            ; FE4483  ef 6a
 	push XIZ                                             ; FE4485  3e
 	ld xwa, (0x605d22:24)                               ; FE4486  e2 22 5d 60 20
@@ -166442,11 +166443,11 @@ sub_FE44BD:
 	m_push MW24, 0x605d34                                ; FE44C2  d2 34 5d 60 04
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE44C7  98 02 3f 01 00
 	jr nz, .LFE44D4                                          ; FE44CC  6e 06
-	calr sub_FE4563                                            ; FE44CE  1e 92 00
+	calr Disk_WriteClusterFromWorkBuffer                                            ; FE44CE  1e 92 00
 	inc 2,XSP                                            ; FE44D1  ef 62
 	ret                                                  ; FE44D3  0e
 .LFE44D4:
-	calr sub_FE4483                                          ; FE44D4  1e ac ff
+	calr Fat_ClusterToSector                                          ; FE44D4  1e ac ff
 	pushw 0x60                                           ; FE44D7  0b 60 00
 	pushw 0x6f9b                                         ; FE44DA  0b 9b 6f
 	m_push MW24, 0x605d56                                ; FE44DD  d2 56 5d 60 04
@@ -166455,7 +166456,7 @@ sub_FE44BD:
 	lda xsp, (xsp+0x0c)                                  ; FE44E6  bf 0c 37
 	ret                                                  ; FE44E9  0e
 	m_push MWD+r7, 0x04                                  ; FE44EA  9f 04 04
-	calr sub_FE4483                                          ; FE44ED  1e 93 ff
+	calr Fat_ClusterToSector                                          ; FE44ED  1e 93 ff
 	ld XWA,XHL                                           ; FE44F0  eb 88
 	pushw 0x60                                           ; FE44F2  0b 60 00
 	pushw 0x6f9b                                         ; FE44F5  0b 9b 6f
@@ -166470,9 +166471,10 @@ sub_FE44BD:
 .LFE450F:
 	ld hl, 0x00:i3                                         ; FE450F  db a8
 	ret                                                  ; FE4511  0e
-sub_FE4512:
+; Disk_ReadCluster: Disk_ReadSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, the buffer (0x605D2C) points at).
+Disk_ReadCluster:
 	m_push MWD+r7, 0x04                                  ; FE4512  9f 04 04
-	calr sub_FE4483                                          ; FE4515  1e 6b ff
+	calr Fat_ClusterToSector                                          ; FE4515  1e 6b ff
 	ld xwa, (0x605d2c:24)                               ; FE4518  e2 2c 5d 60 20
 	push XWA                                             ; FE451D  38
 	m_push MW24, 0x605d56                                ; FE451E  d2 56 5d 60 04
@@ -166481,9 +166483,10 @@ sub_FE4512:
 	calr Disk_ReadSectors                                          ; FE4526  1e 05 ff
 	lda xsp, (xsp+0x0c)                                  ; FE4529  bf 0c 37
 	ret                                                  ; FE452C  0e
-sub_FE452D:
+; Disk_WriteCluster: Disk_WriteSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, from the buffer (0x605D2C) points at).
+Disk_WriteCluster:
 	m_push MWD+r7, 0x04                                  ; FE452D  9f 04 04
-	calr sub_FE4483                                          ; FE4530  1e 50 ff
+	calr Fat_ClusterToSector                                          ; FE4530  1e 50 ff
 	ld xwa, (0x605d2c:24)                               ; FE4533  e2 2c 5d 60 20
 	push XWA                                             ; FE4538  38
 	m_push MW24, 0x605d56                                ; FE4539  d2 56 5d 60 04
@@ -166492,9 +166495,10 @@ sub_FE452D:
 	calr Disk_WriteSectors                                          ; FE4541  1e 0e ff
 	lda xsp, (xsp+0x0c)                                  ; FE4544  bf 0c 37
 	ret                                                  ; FE4547  0e
-sub_FE4548:
+; Disk_ReadClusterToWorkBuffer: Disk_ReadSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, into 0x606F9B).
+Disk_ReadClusterToWorkBuffer:
 	m_push MWD+r7, 0x04                                  ; FE4548  9f 04 04
-	calr sub_FE4483                                          ; FE454B  1e 35 ff
+	calr Fat_ClusterToSector                                          ; FE454B  1e 35 ff
 	ld XWA,XHL                                           ; FE454E  eb 88
 	pushw 0x60                                           ; FE4550  0b 60 00
 	pushw 0x6f9b                                         ; FE4553  0b 9b 6f
@@ -166503,9 +166507,10 @@ sub_FE4548:
 	calr Disk_ReadSectors                                          ; FE455C  1e cf fe
 	lda xsp, (xsp+0x0c)                                  ; FE455F  bf 0c 37
 	ret                                                  ; FE4562  0e
-sub_FE4563:
+; Disk_WriteClusterFromWorkBuffer: Disk_WriteSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, from 0x606F9B).
+Disk_WriteClusterFromWorkBuffer:
 	m_push MWD+r7, 0x04                                  ; FE4563  9f 04 04
-	calr sub_FE4483                                          ; FE4566  1e 1a ff
+	calr Fat_ClusterToSector                                          ; FE4566  1e 1a ff
 	ld XWA,XHL                                           ; FE4569  eb 88
 	pushw 0x60                                           ; FE456B  0b 60 00
 	pushw 0x6f9b                                         ; FE456E  0b 9b 6f
@@ -166599,7 +166604,8 @@ Fat_CopyName11_B:
 	cp HL,0x000b                                         ; FE461A  db cf 0b 00
 	jr lt, .LFE4612                                           ; FE461E  61 f2
 	ret                                                  ; FE4620  0e
-sub_FE4621:
+; Disk_ReadRootDirSector: Disk_ReadSectors(1 sector at (0x605D3E) + arg, the root directory, into 0x605B12); HL = 0 or 0xFF.
+Disk_ReadRootDirSector:
 	ld WA,(XSP+0x04)                                     ; FE4621  9f 04 20
 	add wa, (0x605d3e:24)                            ; FE4624  d2 3e 5d 60 80
 	pushw 0x60                                           ; FE4629  0b 60 00
@@ -166616,7 +166622,8 @@ sub_FE4621:
 .LFE4646:
 	ld hl, 0x00:i3                                         ; FE4646  db a8
 	ret                                                  ; FE4648  0e
-sub_FE4649:
+; Disk_WriteRootDirSector: Disk_WriteSectors(1 sector at (0x605D3E) + arg from 0x605B12); HL = 0 or 0xFF.
+Disk_WriteRootDirSector:
 	ld WA,(XSP+0x04)                                     ; FE4649  9f 04 20
 	add wa, (0x605d3e:24)                            ; FE464C  d2 3e 5d 60 80
 	pushw 0x60                                           ; FE4651  0b 60 00
@@ -166645,7 +166652,7 @@ sub_FE4671:
 	jr .LFE46C9                                              ; FE4687  68 40
 .LFE4689:
 	push QIZ                                             ; FE4689  d7 fa 04
-	calr sub_FE4621                                          ; FE468C  1e 92 ff
+	calr Disk_ReadRootDirSector                                          ; FE468C  1e 92 ff
 	inc 2,XSP                                            ; FE468F  ef 62
 	cp hl, 0x00:i3                                         ; FE4691  db d8
 	jr nz, .LFE46D3                                          ; FE4693  6e 3e
@@ -166692,7 +166699,7 @@ sub_FE46DA:
 	jr .LFE471B                                              ; FE46E2  68 37
 .LFE46E4:
 	push QIZ                                             ; FE46E4  d7 fa 04
-	calr sub_FE4621                                          ; FE46E7  1e 37 ff
+	calr Disk_ReadRootDirSector                                          ; FE46E7  1e 37 ff
 	inc 2,XSP                                            ; FE46EA  ef 62
 	cp hl, 0x00:i3                                         ; FE46EC  db d8
 	jr nz, .LFE472C                                          ; FE46EE  6e 3c
@@ -166729,7 +166736,10 @@ sub_FE46DA:
 .LFE472F:
 	pop XIZ                                              ; FE472F  5e
 	ret                                                  ; FE4730  0e
-sub_FE4731:
+; Fat_GetEntry: HL = the FAT entry of cluster IZ.  FAT16: the word at 0x605D99 + 2 * (IZ - page * 256), loading page IZ >> 8 into
+;   the one-page cache (0x606F99) after Fat_Store of the old one; FAT12: the 12 bits at offset IZ + IZ / 2, the high
+;   nibble pair for odd IZ, 0xFFF returned as 0xFFFF.
+Fat_GetEntry:
 	push XIZ                                             ; FE4731  3e
 	ld IZ,(XSP+0x08)                                     ; FE4732  9f 08 26
 	ld xwa, (0x605d22:24)                               ; FE4735  e2 22 5d 60 20
@@ -166740,12 +166750,12 @@ sub_FE4731:
 	ld w, 0x00:opc                                          ; FE4745  20 00
 	m_cp_rm MW24, 0x606f99, r0                           ; FE4747  d2 99 6f 60 f0
 	jr z, .LFE475F                                           ; FE474C  66 11
-	calr sub_FE4A55                                          ; FE474E  1e 04 03
+	calr Fat_Store                                          ; FE474E  1e 04 03
 	ld WA,IZ                                             ; FE4751  de 88
 	ld A,W                                               ; FE4753  c8 89
 	ld w, 0x00:opc                                          ; FE4755  20 00
 	ld (0x606f99:24), wa                                ; FE4757  f2 99 6f 60 50
-	calr sub_FE48EF                                          ; FE475C  1e 90 01
+	calr Fat_Load                                          ; FE475C  1e 90 01
 .LFE475F:
 	ld wa, (0x606f99:24)                                ; FE475F  d2 99 6f 60 20
 	sla wa, 0x08                                         ; FE4764  d8 ec 08
@@ -166788,7 +166798,9 @@ sub_FE4731:
 .LFE47BC:
 	pop XIZ                                              ; FE47BC  5e
 	ret                                                  ; FE47BD  0e
-sub_FE47BE:
+; Fat_SetEntry: the FAT entry of cluster IZ = the word argument; clusters 0 and 1 refused ((0x605A05) = 0xFF, HL = 0xFF).  FAT16
+;   through the same page cache; FAT12 packs the 12 bits at IZ + IZ / 2, keeping the neighbour's nibble.
+Fat_SetEntry:
 	push XIZ                                             ; FE47BE  3e
 	ld IZ,(XSP+0x08)                                     ; FE47BF  9f 08 26
 	cp iz, 0x00:i3                                         ; FE47C2  de d8
@@ -166808,12 +166820,12 @@ sub_FE47BE:
 	divs WA,0x0100                                       ; FE47E6  d8 0b 00 01
 	m_cp_rm MW24, 0x606f99, r0                           ; FE47EA  d2 99 6f 60 f0
 	jr z, .LFE4804                                           ; FE47EF  66 13
-	calr sub_FE4A55                                          ; FE47F1  1e 61 02
+	calr Fat_Store                                          ; FE47F1  1e 61 02
 	ld WA,IZ                                             ; FE47F4  de 88
 	exts XWA                                             ; FE47F6  e8 13
 	divs WA,0x0100                                       ; FE47F8  d8 0b 00 01
 	ld (0x606f99:24), wa                                ; FE47FC  f2 99 6f 60 50
-	calr sub_FE48EF                                            ; FE4801  1e eb 00
+	calr Fat_Load                                            ; FE4801  1e eb 00
 .LFE4804:
 	m_cp_mi16 MW24, 0x606f99, 0xffff                     ; FE4804  d2 99 6f 60 3f ff ff
 	jr nz, .LFE4814                                          ; FE480B  6e 07
@@ -166883,7 +166895,7 @@ sub_FE489E:
 .LFE48A4:
 	ld WA,IZ                                             ; FE48A4  de 88
 	pushw wa                                             ; FE48A6  28
-	calr sub_FE4731                                          ; FE48A7  1e 87 fe
+	calr Fat_GetEntry                                          ; FE48A7  1e 87 fe
 	inc 2,XSP                                            ; FE48AA  ef 62
 	cp hl, 0x00:i3                                         ; FE48AC  db d8
 	jr nz, .LFE48B4                                          ; FE48AE  6e 04
@@ -166907,7 +166919,7 @@ sub_FE48C7:
 	ld WA,IZ                                             ; FE48CB  de 88
 	inc 1,WA                                             ; FE48CD  d8 61
 	pushw wa                                             ; FE48CF  28
-	calr sub_FE4731                                          ; FE48D0  1e 5e fe
+	calr Fat_GetEntry                                          ; FE48D0  1e 5e fe
 	inc 2,XSP                                            ; FE48D3  ef 62
 	cp hl, 0x00:i3                                         ; FE48D5  db d8
 	jr nz, .LFE48DF                                          ; FE48D7  6e 06
@@ -166924,7 +166936,9 @@ sub_FE48C7:
 .LFE48ED:
 	popw iz                                              ; FE48ED  4e
 	ret                                                  ; FE48EE  0e
-sub_FE48EF:
+; Fat_Load: FAT16: Disk_ReadSectors of one sector, FAT page (0x606F99) at (0x605D64) + page, into 0x605D99; FAT12: the whole
+;   FAT, its size by the media type (0x605D36) 0..5.
+Fat_Load:
 	dec 6,XSP                                            ; FE48EF  ef 6e
 	push XIZ                                             ; FE48F1  3e
 	ld xwa, (0x605d22:24)                               ; FE48F2  e2 22 5d 60 20
@@ -167052,7 +167066,9 @@ sub_FE48EF:
 	pop XIZ                                              ; FE4A51  5e
 	inc 6,XSP                                            ; FE4A52  ef 66
 	ret                                                  ; FE4A54  0e
-sub_FE4A55:
+; Fat_Store: writes the FAT buffer 0x605D99 back to BOTH copies: Disk_WriteSectors at (0x605D64) + page, then at (0x605D66) +
+;   page (FAT16: the cached page; nothing when (0x606F99) = 0xFFFF).
+Fat_Store:
 	pushw iz                                             ; FE4A55  2e
 	ld xwa, (0x605d22:24)                               ; FE4A56  e2 22 5d 60 20
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE4A5B  98 02 3f 01 00
@@ -167164,7 +167180,7 @@ sub_FE4B4B:
 .LFE4B7C:
 	ld WA,IZ                                             ; FE4B7C  de 88
 	pushw wa                                             ; FE4B7E  28
-	calr sub_FE4731                                          ; FE4B7F  1e af fb
+	calr Fat_GetEntry                                          ; FE4B7F  1e af fb
 	inc 2,XSP                                            ; FE4B82  ef 62
 	ld BC,HL                                             ; FE4B84  db 89
 	exts XBC                                             ; FE4B86  e9 13
@@ -167202,7 +167218,7 @@ sub_FE4B4B:
 sub_FE4BCC:
 	dec 6,XSP                                            ; FE4BCC  ef 6e
 	push XIZ                                             ; FE4BCE  3e
-	calr sub_FE48EF                                          ; FE4BCF  1e 1d fd
+	calr Fat_Load                                          ; FE4BCF  1e 1d fd
 	cp hl, 0x00:i3                                         ; FE4BD2  db d8
 	jr z, .LFE4BDC                                           ; FE4BD4  66 06
 	ldw hl, 0xffff                                       ; FE4BD6  33 ff ff
@@ -167235,7 +167251,7 @@ sub_FE4BCC:
 .LFE4C1B:
 	ld XWA,(XSP+0x04)                                    ; FE4C1B  af 04 20
 	pushw wa                                             ; FE4C1E  28
-	calr sub_FE4731                                          ; FE4C1F  1e 0f fb
+	calr Fat_GetEntry                                          ; FE4C1F  1e 0f fb
 	inc 2,XSP                                            ; FE4C22  ef 62
 	cp hl, 0x00:i3                                         ; FE4C24  db d8
 	jr nz, .LFE4C3E                                          ; FE4C26  6e 16

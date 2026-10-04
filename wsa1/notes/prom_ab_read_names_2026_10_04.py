@@ -90,6 +90,37 @@ ROWS = [
      "(0x605068) = 0; restores (0x60341E) from (0x605072); MidiFilePlay_Stop; (0x60505E) = 0; then 0xFB9C52 or, when\n"
      "(0x605144) bit 2, 0xFB9BA4 (which installs the 17-byte part map from MidiFile_Tables_FBA169 into 0x603422).\n"
      "Called by ScreenLeave_MidiFileDirectPlay."),
+    # prom_a 0xFE4400-0xFE4BFF: the FAT layer under Disk_ReadSectors / Disk_WriteSectors.  Geometry, set at
+    # 0xFE3356-0xFE336C and per floppy format at 0xFE33BE..: (0x605D64) = 1 = first FAT, (0x605D66) = 1 + sectors per FAT
+    # = second FAT, (0x605D3E) = 1 + 2 * sectors per FAT = root directory (7 / 19 / 5 / 11 on the floppy formats),
+    # (0x605D40) = data area, (0x605D56) = sectors per cluster; (0x605D22) points at the drive record, +2 = 1 on FAT16.
+    ("FE4731", "Fat_GetEntry",
+     "HL = the FAT entry of cluster IZ.  FAT16: the word at 0x605D99 + 2 * (IZ - page * 256), loading page IZ >> 8 into\n"
+     "the one-page cache (0x606F99) after Fat_Store of the old one; FAT12: the 12 bits at offset IZ + IZ / 2, the high\n"
+     "nibble pair for odd IZ, 0xFFF returned as 0xFFFF."),
+    ("FE47BE", "Fat_SetEntry",
+     "the FAT entry of cluster IZ = the word argument; clusters 0 and 1 refused ((0x605A05) = 0xFF, HL = 0xFF).  FAT16\n"
+     "through the same page cache; FAT12 packs the 12 bits at IZ + IZ / 2, keeping the neighbour's nibble."),
+    ("FE48EF", "Fat_Load",
+     "FAT16: Disk_ReadSectors of one sector, FAT page (0x606F99) at (0x605D64) + page, into 0x605D99; FAT12: the whole\n"
+     "FAT, its size by the media type (0x605D36) 0..5."),
+    ("FE4A55", "Fat_Store",
+     "writes the FAT buffer 0x605D99 back to BOTH copies: Disk_WriteSectors at (0x605D64) + page, then at (0x605D66) +\n"
+     "page (FAT16: the cached page; nothing when (0x606F99) = 0xFFFF)."),
+    ("FE4483", "Fat_ClusterToSector",
+     "XHL = (0x605D40) + (cluster - 2) * (0x605D56), less one on FAT16 (drive record +2 = 1)."),
+    ("FE4512", "Disk_ReadCluster",
+     "Disk_ReadSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, the buffer (0x605D2C) points at)."),
+    ("FE452D", "Disk_WriteCluster",
+     "Disk_WriteSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, from the buffer (0x605D2C) points at)."),
+    ("FE4548", "Disk_ReadClusterToWorkBuffer",
+     "Disk_ReadSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, into 0x606F9B)."),
+    ("FE4563", "Disk_WriteClusterFromWorkBuffer",
+     "Disk_WriteSectors(Fat_ClusterToSector(arg), (0x605D56) sectors, from 0x606F9B)."),
+    ("FE4621", "Disk_ReadRootDirSector",
+     "Disk_ReadSectors(1 sector at (0x605D3E) + arg, the root directory, into 0x605B12); HL = 0 or 0xFF."),
+    ("FE4649", "Disk_WriteRootDirSector",
+     "Disk_WriteSectors(1 sector at (0x605D3E) + arg from 0x605B12); HL = 0 or 0xFF."),
 ]
 
 
