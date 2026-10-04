@@ -475,6 +475,7 @@
 	.equ DiskSave_Password,				0x220f	; the entered password's two characters (0x220F, 0x2210) -- DiskSaveFile_Page3 / _Page4_LcdKeyRow1 copy them from DiskSave_PasswordEntry
 	.equ DiskSave_PasswordEntry,			0x22f0	; the password pages' 16-byte entry buffer -- ScreenEnter_DiskSaveFile_Page3 / _Page4 fill it from Text_FF3A18
 	.equ DiskSave_StoredPassword,			0x23ce	; the password the entry is checked against -- BStore_GetDiskBankPassword / _GetAnyBankPassword write it; DiskSave_ComparePassword reads it
+	.equ Disk_SelectedEntry,			0x2724	; the selected entry of the disk screens' directory listing (0x60A480 + 16 * n) -- DiskSave_IsSelectedFileNew, Disk_CopyEntry2724HeadToFileName_SaveRegs, Medley_AdvanceSong (38 routines)
 	.equ BStore_Password,				0x60341c	; workspace word +0x1C: the bank's two-character save password, 0 = none -- DiskSave_StorePasswordInWorkspace writes it; Smf_WriteFile refuses while it is set; BStore_ClearPasswordProtectedBanks
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: MIDI FILE DIRECT PLAY streams the file through a reader task and two buffers"

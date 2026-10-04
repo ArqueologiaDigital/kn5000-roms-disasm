@@ -270,7 +270,7 @@ holds its own at `0x61001C + n*0xC00`. The DISK SAVE FILE screen handles it as f
   status 0x11 and returns to page 1. A match shows status 0x12 and goes on to save.
 - The save itself (`DiskSaveFile_SaveOrConfirmOverwrite`) asks for confirmation on page 2 when the selected
   slot already holds a file (`DiskSave_IsSelectedFileNew`: its 8 listing bytes at `0x60A488 + 16*n` are not
-  all 0x80), unless an SMF write is in progress (`(0x21E8)` bit 7).
+  all 0x80; n is `Disk_SelectedEntry`, 0x2724, the listing entry 38 routines index with), unless an SMF write is in progress (`(0x21E8)` bit 7).
 - **SMF export is refused** for a bank with a password: `Smf_WriteFile` stops with status 9.
 
 **At boot the protected banks are erased.** `BStore_BootPhase3` calls

@@ -540,6 +540,8 @@ GROUPS = [
         0x2210: ("DiskSave_Password+1", "its second character", "as above"),
         0x22F0: ("DiskSave_PasswordEntry", "the password pages' 16-byte entry buffer",
                  "ScreenEnter_DiskSaveFile_Page3 / _Page4 fill it from Text_FF3A18"),
+        0x2724: ("Disk_SelectedEntry", "the selected entry of the disk screens' directory listing (0x60A480 + 16 * n)",
+                 "DiskSave_IsSelectedFileNew, Disk_CopyEntry2724HeadToFileName_SaveRegs, Medley_AdvanceSong (38 routines)"),
         0x23CE: ("DiskSave_StoredPassword", "the password the entry is checked against",
                  "BStore_GetDiskBankPassword / _GetAnyBankPassword write it; DiskSave_ComparePassword reads it"),
     }),

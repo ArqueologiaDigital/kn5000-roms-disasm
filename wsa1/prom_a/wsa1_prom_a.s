@@ -1783,13 +1783,13 @@
 	.set T_F425C8,                                                                      0x00F425C8
 	.set T_DiskSaveFile_Execute_Entry,                                                                      0x00F425CC
 	.set T_MidiFileSave_Page5_LcdKeyRow3,                                                                      0x00F425D0
-	.set T_F425D4,                                                                      0x00F425D4
-	.set T_F425D8,                                                                      0x00F425D8
+	.set T_NameEdit_MoveCursor_Call,                                                                      0x00F425D4
+	.set T_NameEdit_StepChar_Call,                                                                      0x00F425D8
 	.set T_F425DC,                                                                      0x00F425DC
 	.set T_DiskApi_CloseFile_Call,                                                                      0x00F425E4
 	.set T_F425E8,                                                                      0x00F425E8
 	.set T_DiskSaveFile_Page5_LcdKeyRow3,                                                                      0x00F425F4
-	.set T_F425F8,                                                                      0x00F425F8
+	.set T_NameEdit_SyncCharIndex_Call,                                                                      0x00F425F8
 	.set T_DiskSaveFile_SaveOrConfirmOverwrite_Call,                                                                      0x00F42608
 	.set T_DiskSaveFile_CheckPasswordThenSave_Call,                                                                      0x00F4260C
 	.set T_F42610,                                                                      0x00F42610
@@ -161553,7 +161553,7 @@ DiskSave_IsSelectedFileNew:
 	pushw hl                                             ; FE0874  2b
 	push XIX                                             ; FE0875  3c
 	ld c, 0x10:opc                                          ; FE0876  23 10
-	m_mul MB16, 0x2724, 3                                ; FE0878  c1 24 27 43
+	m_mul MB16, Disk_SelectedEntry, 3                                ; FE0878  c1 24 27 43
 	extz XBC                                             ; FE087C  e9 12
 	add XBC,0x00000480                                   ; FE087E  e9 c8 80 04 00 00
 	add XBC,0x0060a000                                   ; FE0884  e9 c8 00 a0 60 00
@@ -162838,13 +162838,13 @@ sub_FE144E:
 .LFE146F:
 	ld	h, (0xa3:8)                                      ; FE146F  c0 a3 26
 	res 0x07,H                                           ; FE1472  ce 30 07
-	ld (0x2724:16), h                                   ; FE1475  f1 24 27 46
+	ld (Disk_SelectedEntry:16), h                                   ; FE1475  f1 24 27 46
 	cp H,0x13                                            ; FE1479  ce cf 13
 	jr ule, .LFE1483                                         ; FE147C  63 05
-	ld (0x2724:16), 0x13                                 ; FE147E  f1 24 27 00 13
+	ld (Disk_SelectedEntry:16), 0x13                                 ; FE147E  f1 24 27 00 13
 .LFE1483:
 	ld c, 0x10:opc                                          ; FE1483  23 10
-	m_mul MB16, 0x2724, 3                                ; FE1485  c1 24 27 43
+	m_mul MB16, Disk_SelectedEntry, 3                                ; FE1485  c1 24 27 43
 	extz XBC                                             ; FE1489  e9 12
 	add XBC,0x00000480                                   ; FE148B  e9 c8 80 04 00 00
 	ld XIX,XBC                                           ; FE1491  e9 8c
@@ -162907,7 +162907,7 @@ sub_FE14E9:
 	ret                                                  ; FE1521  0e
 sub_FE1522:
 	push 0x00                                            ; FE1522  09 00
-	m_push MB16, 0x2724                                  ; FE1524  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FE1524  c1 24 27 04
 	calr sub_FE14E9                                          ; FE1528  1e be ff
 	popw bc                                              ; FE152B  49
 	ret                                                  ; FE152C  0e
@@ -162941,7 +162941,7 @@ sub_FE152E_Cases:
 	jrl z, .LFE15F1                                          ; FE156D  76 81 00
 	ld (0x2215:16), 0x00                                 ; FE1570  f1 15 22 00 00
 	ld c, (Medley_FirstSong:16)                                   ; FE1575  c1 08 22 23
-	ld (0x2724:16), c                                   ; FE1579  f1 24 27 43
+	ld (Disk_SelectedEntry:16), c                                   ; FE1579  f1 24 27 43
 .LFE157D:
 	ld (UI_StatusCode:16), 0x00                                 ; FE157D  f1 80 28 00 00
 	ld (Disk_SeqBank:16), 0x00                                 ; FE1582  f1 2b 27 00 00
@@ -162960,7 +162960,7 @@ sub_FE152E_Cases:
 	ld H,A                                               ; FE15AF  c9 8e
 	cp a, 0x00:i3                                          ; FE15B1  c9 d8
 	jr nz, .LFE15CE                                          ; FE15B3  6e 19
-	calr sub_FE15F4                                            ; FE15B5  1e 3c 00
+	calr Medley_LoadNextSongFromDisk                                            ; FE15B5  1e 3c 00
 	ld H,A                                               ; FE15B8  c9 8e
 	cp a, 0x00:i3                                          ; FE15BA  c9 d8
 	jr z, .LFE15C9                                           ; FE15BC  66 0b
@@ -162970,7 +162970,7 @@ sub_FE152E_Cases:
 	calr Delay_Ticks                                          ; FE15C5  1e 59 fe
 	pop XIY                                              ; FE15C8  5d
 .LFE15C9:
-	calr sub_FE169D                                            ; FE15C9  1e d1 00
+	calr Medley_CopySongNameForDisplay                                            ; FE15C9  1e d1 00
 	jr .LFE15DC                                              ; FE15CC  68 0e
 .LFE15CE:
 	push 0x00                                            ; FE15CE  09 00
@@ -162993,14 +162993,18 @@ sub_FE152E_Cases:
 	pop XIX                                              ; FE15F1  5c
 	popw hl                                              ; FE15F2  4b
 	ret                                                  ; FE15F3  0e
-sub_FE15F4:
+; Medley_LoadNextSongFromDisk: up to 20 tries ((0x2215)): Disk_ScanDirectory; when listing entry Disk_SelectedEntry (0x60A480 + 16 x n) is
+;   not empty (+8 is not 0x80), its 8-character name goes to Disk_FileName, status 0x0A, DiskLoad_ByContentType;
+;   Medley_AdvanceSong; a load that did not return 4 and left a song (0x60341E non-zero) ends it with 0.  Empty
+;   entries are skipped (Medley_AdvanceSong).  After 20: Disk_PortA3_Release, (0x34D0) bit 2 cleared, A = 4.
+Medley_LoadNextSongFromDisk:
 	link XIZ,0xfffc                                      ; FE15F4  ee 0c fc ff
 	push XHL                                             ; FE15F8  3b
 	push XIX                                             ; FE15F9  3c
 	lda xix, (0x2215:16)                                ; FE15FA  f1 15 22 34
 .LFE15FE:
 	ld c, 0x10:opc                                          ; FE15FE  23 10
-	m_mul MB16, 0x2724, 3                                ; FE1600  c1 24 27 43
+	m_mul MB16, Disk_SelectedEntry, 3                                ; FE1600  c1 24 27 43
 	extz XBC                                             ; FE1604  e9 12
 	add XBC,0x00000480                                   ; FE1606  e9 c8 80 04 00 00
 	add XBC,0x0060a000                                   ; FE160C  e9 c8 00 a0 60 00
@@ -163026,7 +163030,7 @@ sub_FE15F4:
 	calr sub_FE0250                                          ; FE1644  1e 09 ec
 	calr DiskLoad_ByContentType                                          ; FE1647  1e 08 07
 	ld H,A                                               ; FE164A  c9 8e
-	calr sub_FE16D6                                            ; FE164C  1e 87 00
+	calr Medley_AdvanceSong                                            ; FE164C  1e 87 00
 	popw bc                                              ; FE164F  49
 	cp h, 0x04:i3                                          ; FE1650  ce dc
 	jr z, .LFE1673                                           ; FE1652  66 1f
@@ -163046,7 +163050,7 @@ sub_FE15F4:
 	jr c, .LFE1696                                           ; FE167A  67 1a
 	jr .LFE168B                                              ; FE167C  68 0d
 .LFE167E:
-	calr sub_FE16D6                                            ; FE167E  1e 55 00
+	calr Medley_AdvanceSong                                            ; FE167E  1e 55 00
 	incm8 0x01, (xix)                                    ; FE1681  84 61
 	ld C,(XIX)                                           ; FE1683  84 23
 	cp C,0x14                                            ; FE1685  cb cf 14
@@ -163063,7 +163067,8 @@ sub_FE15F4:
 	pop XHL                                              ; FE1699  5b
 	unlk XIZ                                             ; FE169A  ee 0d
 	ret                                                  ; FE169C  0e
-sub_FE169D:
+; Medley_CopySongNameForDisplay: Disk_FileName[2..7] -> 0x0E38 (6 characters), then spaces to 11.
+Medley_CopySongNameForDisplay:
 	pushw hl                                             ; FE169D  2b
 	push XDE                                             ; FE169E  3a
 	push XIX                                             ; FE169F  3c
@@ -163092,9 +163097,11 @@ sub_FE169D:
 	pop XDE                                              ; FE16D3  5a
 	popw hl                                              ; FE16D4  4b
 	ret                                                  ; FE16D5  0e
-sub_FE16D6:
+; Medley_AdvanceSong: Medley_PlayingSong = Disk_SelectedEntry; Disk_SelectedEntry + 1, back to Medley_FirstSong past
+;   Medley_LastSong.
+Medley_AdvanceSong:
 	push XIX                                             ; FE16D6  3c
-	lda xix, (0x2724:16)                                ; FE16D7  f1 24 27 34
+	lda xix, (Disk_SelectedEntry:16)                                ; FE16D7  f1 24 27 34
 	ld C,(XIX)                                           ; FE16DB  84 23
 	ld (Medley_PlayingSong:16), c                                   ; FE16DD  f1 0a 22 43
 	incm8 0x01, (xix)                                    ; FE16E1  84 61
@@ -188983,7 +188990,7 @@ Paint_MidiFileDirectPlay:
 	jrl .LFF457A                                         ; FF4448  78 2f 01
 .LFF444B:
 	m_set 6, MD16, 0x2094                                ; FF444B  f1 94 20 be
-	ld (0x2724:16), 0x00                                 ; FF444F  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF444F  f1 24 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF4454  f1 2d 27 00 00
 	ld (0x272e:16), 0x00                                 ; FF4459  f1 2e 27 00 00
 	ld (0x2730:16), 0x00                                 ; FF445E  f1 30 27 00 00
@@ -189201,7 +189208,7 @@ LcdKeyRow1_MidiFileDirectPlay:
 	ld BC,(XIZ+0x08)                                     ; FF45C5  9e 08 21
 	and BC,0x0080                                        ; FF45C8  d9 cc 80 00
 	jr nz, .LFF45EC                                      ; FF45CC  6e 1e
-	ld bc, (0x2724:16)                                 ; FF45CE  d1 24 27 21
+	ld bc, (Disk_SelectedEntry:16)                                 ; FF45CE  d1 24 27 21
 	extz BC                                              ; FF45D2  d9 12
 	pushw bc                                             ; FF45D4  29
 	calr sub_FF475C                                      ; FF45D5  1e 84 01
@@ -189541,14 +189548,14 @@ Paint_DiskL0adFile:
 	m_cp_mi16 MW16, PanelHold_Index, 0x0007                       ; FF4795  d1 96 20 3f 07 00
 	jr nz, .LFF47B3                                      ; FF479B  6e 16
 	ldw (PanelHold_Index:16), 0x00                                ; FF479D  f1 96 20 02 00 00
-	inc 0x01, (0x2724:16)                                ; FF47A3  c1 24 27 61
-	m_cp_mi8 MB16, 0x2724, 0x13                          ; FF47A7  c1 24 27 3f 13
+	inc 0x01, (Disk_SelectedEntry:16)                                ; FF47A3  c1 24 27 61
+	m_cp_mi8 MB16, Disk_SelectedEntry, 0x13                          ; FF47A7  c1 24 27 3f 13
 	jr ule, .LFF47B3                                     ; FF47AC  63 05
-	ld (0x2724:16), 0x00                                 ; FF47AE  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF47AE  f1 24 27 00 00
 .LFF47B3:
-	m_cp_mi8 MB16, 0x2724, 0x13                          ; FF47B3  c1 24 27 3f 13
+	m_cp_mi8 MB16, Disk_SelectedEntry, 0x13                          ; FF47B3  c1 24 27 3f 13
 	jr ule, .LFF47BF                                     ; FF47B8  63 05
-	ld (0x2724:16), 0x00                                 ; FF47BA  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF47BA  f1 24 27 00 00
 .LFF47BF:
 	ld c, (UI_ScreenLatch:16)                                   ; FF47BF  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF47C3  c1 7b 20 f3
@@ -189660,7 +189667,7 @@ Paint_DiskL0adFile:
 sub_FF48F0:
 	pushw hl                                             ; FF48F0  2b
 	push 0x00                                            ; FF48F1  09 00
-	m_push MB16, 0x2724                                  ; FF48F3  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF48F3  c1 24 27 04
 	calr sub_FF490F                                      ; FF48F7  1e 15 00
 	inc 8,XIY                                            ; FF48FA  ed 60
 	push XIY                                             ; FF48FC  3d
@@ -189841,7 +189848,7 @@ LcdKeyRow1_DiskL0adFile:
 	and BC,0x0080                                        ; FF49CD  d9 cc 80 00
 	jrl nz, .LFF4A55                                     ; FF49D1  7e 81 00
 	push 0x00                                            ; FF49D4  09 00
-	m_push MB16, 0x2724                                  ; FF49D6  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF49D6  c1 24 27 04
 	calr sub_FF490F                                      ; FF49DA  1e 32 ff
 	inc 8,XIY                                            ; FF49DD  ed 60
 	push XIY                                             ; FF49DF  3d
@@ -190090,11 +190097,11 @@ LcdKeyRow4_DiskL0adFile:
 	jrl z, .LFF4BC9                                      ; FF4B11  76 b5 00
 	jrl .LFF4CED                                         ; FF4B14  78 d6 01
 .LFF4B17:
-	ld h, (0x2724:16)                                   ; FF4B17  c1 24 27 26
-	dec 0x01, (0x2724:16)                                ; FF4B1B  c1 24 27 69
+	ld h, (Disk_SelectedEntry:16)                                   ; FF4B17  c1 24 27 26
+	dec 0x01, (Disk_SelectedEntry:16)                                ; FF4B1B  c1 24 27 69
 	cp h, 0x00:i3                                          ; FF4B1F  ce d8
 	jr nz, .LFF4B28                                      ; FF4B21  6e 05
-	ld (0x2724:16), 0x00                                 ; FF4B23  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF4B23  f1 24 27 00 00
 .LFF4B28:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4B28  c1 7a 20 3f 47
 	jr nz, .LFF4B32                                      ; FF4B2D  6e 03
@@ -190202,7 +190209,7 @@ LcdKeyRow4_DiskL0adFile:
 	push XWA                                             ; FF4C3B  38
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF4C3C  1d d3 75 ff
 	push 0x00                                            ; FF4C40  09 00
-	m_push MB16, 0x2724                                  ; FF4C42  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF4C42  c1 24 27 04
 	calr sub_FF490F                                      ; FF4C46  1e c6 fc
 	inc 8,XIY                                            ; FF4C49  ed 60
 	push XIY                                             ; FF4C4B  3d
@@ -190292,7 +190299,7 @@ LcdKeyRow4_DiskL0adFile:
 	cp c, 0x01:i3                                          ; FF4D18  cb d9
 	jr nz, .LFF4D54                                      ; FF4D1A  6e 38
 	push 0x00                                            ; FF4D1C  09 00
-	m_push MB16, 0x2724                                  ; FF4D1E  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF4D1E  c1 24 27 04
 	calr sub_FF490F                                      ; FF4D22  1e ea fb
 	inc 8,XIY                                            ; FF4D25  ed 60
 	push XIY                                             ; FF4D27  3d
@@ -190420,11 +190427,11 @@ LcdKeyRow5_DiskL0adFile:
 	jrl z, .LFF4E5C                                      ; FF4DA4  76 b5 00
 	jrl .LFF4F83                                         ; FF4DA7  78 d9 01
 .LFF4DAA:
-	ld h, (0x2724:16)                                   ; FF4DAA  c1 24 27 26
-	inc 0x01, (0x2724:16)                                ; FF4DAE  c1 24 27 61
+	ld h, (Disk_SelectedEntry:16)                                   ; FF4DAA  c1 24 27 26
+	inc 0x01, (Disk_SelectedEntry:16)                                ; FF4DAE  c1 24 27 61
 	cp H,0x13                                            ; FF4DB2  ce cf 13
 	jr c, .LFF4DBC                                       ; FF4DB5  67 05
-	ld (0x2724:16), 0x13                                 ; FF4DB7  f1 24 27 00 13
+	ld (Disk_SelectedEntry:16), 0x13                                 ; FF4DB7  f1 24 27 00 13
 .LFF4DBC:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x47                          ; FF4DBC  c1 7a 20 3f 47
 	jr nz, .LFF4DC6                                      ; FF4DC1  6e 03
@@ -190537,7 +190544,7 @@ LcdKeyRow5_DiskL0adFile:
 	push XWA                                             ; FF4ED7  38
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF4ED8  1d d3 75 ff
 	push 0x00                                            ; FF4EDC  09 00
-	m_push MB16, 0x2724                                  ; FF4EDE  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF4EDE  c1 24 27 04
 	calr sub_FF490F                                      ; FF4EE2  1e 2a fa
 	inc 8,XIY                                            ; FF4EE5  ed 60
 	push XIY                                             ; FF4EE7  3d
@@ -190618,7 +190625,7 @@ LcdKeyRow5_DiskL0adFile:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x4c                          ; FF4F9F  c1 7a 20 3f 4c
 	jr z, .LFF4FBB                                       ; FF4FA4  66 15
 	push 0x00                                            ; FF4FA6  09 00
-	m_push MB16, 0x2724                                  ; FF4FA8  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF4FA8  c1 24 27 04
 	calr sub_FF490F                                      ; FF4FAC  1e 60 f9
 	inc 8,XIY                                            ; FF4FAF  ed 60
 	push XIY                                             ; FF4FB1  3d
@@ -190712,7 +190719,7 @@ Paint_MidiFileL0ad:
 	ld c, (UI_ScreenLatch:16)                                   ; FF5008  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF500C  c1 7b 20 f3
 	jr z, .LFF5043                                       ; FF5010  66 31
-	ld (0x2724:16), 0x00                                 ; FF5012  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF5012  f1 24 27 00 00
 	ld (0x2732:16), 0xff                                 ; FF5017  f1 32 27 00 ff
 	call T_F42594                                        ; FF501C  1d 94 25 f4
 	ld (XIX),0x00                                        ; FF5020  b4 00 00
@@ -190859,7 +190866,7 @@ sub_FF5118:
 	extz WA                                              ; FF51A2  d8 12
 	dec 1,WA                                             ; FF51A4  d8 69
 	ld (xiz-10), wa                                      ; FF51A6  be f6 50
-	ld iy, (0x2724:16)                                 ; FF51A9  d1 24 27 25
+	ld iy, (Disk_SelectedEntry:16)                                 ; FF51A9  d1 24 27 25
 	extz IY                                              ; FF51AD  dd 12
 	cp WA,IY                                             ; FF51AF  dd f0
 	jr nz, .LFF51C7                                      ; FF51B1  6e 14
@@ -190931,7 +190938,7 @@ ScreenLeave_MidiFileL0ad:
 	ld (0x272f:16), 0x00                                 ; FF521A  f1 2f 27 00 00
 	ld (0x272e:16), 0x00                                 ; FF521F  f1 2e 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5224  f1 2d 27 00 00
-	ld (0x2724:16), 0x00                                 ; FF5229  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF5229  f1 24 27 00 00
 .LFF522E:
 	ret                                                  ; FF522E  0e
 ; ---------------------------------------------------------------------
@@ -191017,7 +191024,7 @@ LcdKeyRow1_MidiFileL0ad:
 	jr .LFF52DD                                          ; FF527D  68 5e
 .LFF527F:
 	m_res 3, MD16, UI_RequestBits                                ; FF527F  f1 75 20 b3
-	ld bc, (0x2724:16)                                 ; FF5283  d1 24 27 21
+	ld bc, (Disk_SelectedEntry:16)                                 ; FF5283  d1 24 27 21
 	extz BC                                              ; FF5287  d9 12
 	pushw bc                                             ; FF5289  29
 	calr sub_FF475C                                      ; FF528A  1e cf f4
@@ -191405,10 +191412,10 @@ ScreenEnter_DiskSaveFile_Page0:   ; entry: named by 1 `.long` operand, first at 
 .LFF54E4:
 	ld (NameEdit_CursorPos:16), 0x03                                 ; FF54E4  f1 2d 22 00 03
 	ld (0x2721:16), 0x02                                 ; FF54E9  f1 21 27 00 02
-	call T_F425F8                                        ; FF54EE  1d f8 25 f4
-	m_cp_mi8 MB16, 0x2724, 0x13                          ; FF54F2  c1 24 27 3f 13
+	call T_NameEdit_SyncCharIndex_Call                                        ; FF54EE  1d f8 25 f4
+	m_cp_mi8 MB16, Disk_SelectedEntry, 0x13                          ; FF54F2  c1 24 27 3f 13
 	jr ule, .LFF54FE                                     ; FF54F7  63 05
-	ld (0x2724:16), 0x00                                 ; FF54F9  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF54F9  f1 24 27 00 00
 .LFF54FE:
 	pushw 0x03                                           ; FF54FE  0b 03 00
 	pushw 0x04                                           ; FF5501  0b 04 00
@@ -191725,7 +191732,7 @@ SoftKeyCol1_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at
 	push XWA                                             ; FF5789  38
 	call T_DisplayListB_Run_Stack                        ; FF578A  1d 04 2e f4
 	ld (0x272c:16), 0x81                                 ; FF578E  f1 2c 27 00 81
-	call T_F425D4                                        ; FF5793  1d d4 25 f4
+	call T_NameEdit_MoveCursor_Call                                        ; FF5793  1d d4 25 f4
 	ld c, (NameEdit_CursorPos:16)                                   ; FF5797  c1 2d 22 23
 	dec 1,C                                              ; FF579B  cb 69
 	ld (0x2721:16), c                                   ; FF579D  f1 21 27 43
@@ -191753,7 +191760,7 @@ SoftKeyCol2_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at
 	push XWA                                             ; FF57E1  38
 	call T_DisplayListB_Run_Stack                        ; FF57E2  1d 04 2e f4
 	ld (0x272c:16), 0x01                                 ; FF57E6  f1 2c 27 00 01
-	call T_F425D4                                        ; FF57EB  1d d4 25 f4
+	call T_NameEdit_MoveCursor_Call                                        ; FF57EB  1d d4 25 f4
 	ld c, (NameEdit_CursorPos:16)                                   ; FF57EF  c1 2d 22 23
 	dec 1,C                                              ; FF57F3  cb 69
 	ld (0x2721:16), c                                   ; FF57F5  f1 21 27 43
@@ -191778,7 +191785,7 @@ SoftKeyCol4_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at
 	push XBC                                             ; FF582E  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF582F  1d 23 76 ff
 	ld (0x272c:16), 0x81                                 ; FF5833  f1 2c 27 00 81
-	call T_F425D8                                        ; FF5838  1d d8 25 f4
+	call T_NameEdit_StepChar_Call                                        ; FF5838  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF583C  f1 40 25 00 00
 	call LCD_DrawDiskFileName6_SaveRegs                                      ; FF5841  1d 0f 77 ff
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5845  c1 f9 21 23
@@ -191801,7 +191808,7 @@ SoftKeyCol5_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at
 	push XBC                                             ; FF5872  39
 	call DLB_Array8_2_OnLayer1_SaveRegs                                      ; FF5873  1d 23 76 ff
 	ld (0x272c:16), 0x01                                 ; FF5877  f1 2c 27 00 01
-	call T_F425D8                                        ; FF587C  1d d8 25 f4
+	call T_NameEdit_StepChar_Call                                        ; FF587C  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF5880  f1 40 25 00 00
 	call LCD_DrawDiskFileName6_SaveRegs                                      ; FF5885  1d 0f 77 ff
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5889  c1 f9 21 23
@@ -192064,7 +192071,7 @@ DiskSaveFile_Page1_LcdKeyRow1:
 	ldw de, 0x00                                         ; FF5A30  32 00 00
 	ldw hl, 0x00                                         ; FF5A33  33 00 00
 	ld c, 0x10:opc                                          ; FF5A36  23 10
-	m_mul MB16, 0x2724, 3                                ; FF5A38  c1 24 27 43
+	m_mul MB16, Disk_SelectedEntry, 3                                ; FF5A38  c1 24 27 43
 	extz XBC                                             ; FF5A3C  e9 12
 	ld XIX,XBC                                           ; FF5A3E  e9 8c
 	add XBC,0x00000488                                   ; FF5A40  e9 c8 88 04 00 00
@@ -192684,12 +192691,12 @@ ScreenEnter_MidiFileSave_Page0:   ; entry: named by 1 `.long` operand, first at 
 	jr lt, .LFF5C9F                                      ; FF5CAD  61 f0
 .LFF5CAF:
 	ld (0x272e:16), 0x00                                 ; FF5CAF  f1 2e 27 00 00
-	ld (0x2724:16), 0x00                                 ; FF5CB4  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF5CB4  f1 24 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5CB9  f1 2d 27 00 00
 .LFF5CBE:
 	ld (NameEdit_CursorPos:16), 0x01                                 ; FF5CBE  f1 2d 22 00 01
 	ld (0x2721:16), 0x01                                 ; FF5CC3  f1 21 27 00 01
-	call T_F425F8                                        ; FF5CC8  1d f8 25 f4
+	call T_NameEdit_SyncCharIndex_Call                                        ; FF5CC8  1d f8 25 f4
 	pushw 0x03                                           ; FF5CCC  0b 03 00
 	pushw 0x04                                           ; FF5CCF  0b 04 00
 	calr PanelDial_SetButtonPair                                      ; FF5CD2  1e 55 14
@@ -192891,7 +192898,7 @@ ScreenLeave_MidiFileSave:
 	ld (0x272f:16), 0x00                                 ; FF5EBC  f1 2f 27 00 00
 	ld (0x272e:16), 0x00                                 ; FF5EC1  f1 2e 27 00 00
 	ld (0x272d:16), 0x00                                 ; FF5EC6  f1 2d 27 00 00
-	ld (0x2724:16), 0x00                                 ; FF5ECB  f1 24 27 00 00
+	ld (Disk_SelectedEntry:16), 0x00                                 ; FF5ECB  f1 24 27 00 00
 .LFF5ED0:
 	ret                                                  ; FF5ED0  0e
 ; ---------------------------------------------------------------------
@@ -192989,7 +192996,7 @@ sub_FF5F1B:
 .LFF5F68:
 	ld C,(XIX)                                           ; FF5F68  84 23
 	ld (0x2721:16), c                                   ; FF5F6A  f1 21 27 43
-	call T_F425F8                                        ; FF5F6E  1d f8 25 f4
+	call T_NameEdit_SyncCharIndex_Call                                        ; FF5F6E  1d f8 25 f4
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5F72  c1 f9 21 23
 	ld (0x2729:16), c                                   ; FF5F76  f1 29 27 43
 	lda xbc, (DL_F5879C:24)                              ; FF5F7A  f2 9c 87 f5 31
@@ -193032,7 +193039,7 @@ sub_FF5FA0:
 	call T_DisplayListB_Run_Stack                        ; FF5FC6  1d 04 2e f4
 	ld C,(XIZ+0x08)                                      ; FF5FCA  8e 08 23
 	ld (0x272c:16), c                                   ; FF5FCD  f1 2c 27 43
-	call T_F425D8                                        ; FF5FD1  1d d8 25 f4
+	call T_NameEdit_StepChar_Call                                        ; FF5FD1  1d d8 25 f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF5FD5  f1 40 25 00 00
 	call LCD_DrawDiskFileName8_SaveRegs                                      ; FF5FDA  1d 29 77 ff
 	ld c, (NameEdit_CharIndex:16)                                   ; FF5FDE  c1 f9 21 23
@@ -193258,7 +193265,7 @@ LcdKeyRow1_MidiFileSave_Page1:
 	lda xbc, (0x60a480:24)                               ; FF6140  f2 80 a4 60 31
 	ld (xiz-4), xbc                                      ; FF6145  be fc 61
 	ld a, 0x08:opc                                          ; FF6148  21 08
-	m_mul MB16, 0x2724, 1                                ; FF614A  c1 24 27 41
+	m_mul MB16, Disk_SelectedEntry, 1                                ; FF614A  c1 24 27 41
 	extz XWA                                             ; FF614E  e8 12
 	add XBC,XWA                                          ; FF6150  e8 81
 	ld A,(XBC)                                           ; FF6152  81 21
@@ -193616,7 +193623,7 @@ MidiFile_LcdKeyRow4:
 .LFF63BA:
 	ld C,(XIX)                                           ; FF63BA  84 23
 	add c, (0x272d:16)                                   ; FF63BC  c1 2d 27 83
-	ld (0x2724:16), c                                   ; FF63C0  f1 24 27 43
+	ld (Disk_SelectedEntry:16), c                                   ; FF63C0  f1 24 27 43
 	pop XIX                                              ; FF63C4  5c
 	unlk XIZ                                             ; FF63C5  ee 0d
 	ret                                                  ; FF63C7  0e
@@ -193680,7 +193687,7 @@ MidiFile_LcdKeyRow5:
 .LFF6442:
 	ld C,(XIX)                                           ; FF6442  84 23
 	add c, (0x272e:16)                                   ; FF6444  c1 2e 27 83
-	ld (0x2724:16), c                                   ; FF6448  f1 24 27 43
+	ld (Disk_SelectedEntry:16), c                                   ; FF6448  f1 24 27 43
 .LFF644C:
 	pop XIX                                              ; FF644C  5c
 	popw de                                              ; FF644D  4a
@@ -193804,7 +193811,7 @@ LcdKeyRow3_MidiFileSave_Page3:
 	lda xbc, (xiz-12)                                    ; FF64B4  be f4 31
 	push XBC                                             ; FF64B7  39
 	call MemCpy_C                                      ; FF64B8  1d b5 78 ff
-	ld bc, (0x2724:16)                                 ; FF64BC  d1 24 27 21
+	ld bc, (Disk_SelectedEntry:16)                                 ; FF64BC  d1 24 27 21
 	extz BC                                              ; FF64C0  d9 12
 	pushw bc                                             ; FF64C2  29
 	calr sub_FF475C                                      ; FF64C3  1e 96 e2
@@ -195645,7 +195652,7 @@ sub_FF7084:
 	pushw hl                                             ; FF7088  2b
 	push XIX                                             ; FF7089  3c
 	push 0x00                                            ; FF708A  09 00
-	m_push MB16, 0x2724                                  ; FF708C  c1 24 27 04
+	m_push MB16, Disk_SelectedEntry                                  ; FF708C  c1 24 27 04
 	calr sub_FF490F                                      ; FF7090  1e 7c d8
 	ld (xiz-4), xiy                                      ; FF7093  be fc 65
 	lda xix, (Disk_FileName:16)                                ; FF7096  f1 c8 21 34
@@ -196317,7 +196324,7 @@ UI_StatusCode_Is0or2or4:
 	nop                                                  ; FF75CB  00
 	ret                                                  ; FF75CC  0e
 .LFF75CD:
-	ld (0x2724:16), 0x14                                 ; FF75CD  f1 24 27 00 14
+	ld (Disk_SelectedEntry:16), 0x14                                 ; FF75CD  f1 24 27 00 14
 	ret                                                  ; FF75D2  0e
 ; DisplayList_RunOnLayer_SaveRegs(list, xix, layer): LCD_CurrentLayer = layer, then T_DisplayList_Run; C-callable, XIX/XHL/XDE kept.
 DisplayList_RunOnLayer_SaveRegs:
@@ -196755,7 +196762,7 @@ Disk_CopyEntry2724HeadToFileName_SaveRegs:
 	push XIX                                             ; FF7833  3c
 	push XHL                                             ; FF7834  3b
 	push XDE                                             ; FF7835  3a
-	ld a, (0x2724:16)                                   ; FF7836  c1 24 27 21
+	ld a, (Disk_SelectedEntry:16)                                   ; FF7836  c1 24 27 21
 	ldw bc, 0x01                                         ; FF783A  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF783D  1d 26 78 ff
 	pop XDE                                              ; FF7841  5a
@@ -196849,7 +196856,7 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	ld (DiskSave_Password:16), a                                   ; FF78D4  f1 0f 22 41
 	ld A,(XIX+0x01)                                      ; FF78D8  8c 01 21
 	ld (DiskSave_Password+1:16), a                                   ; FF78DB  f1 10 22 41
-	ld a, (0x2724:16)                                   ; FF78DF  c1 24 27 21
+	ld a, (Disk_SelectedEntry:16)                                   ; FF78DF  c1 24 27 21
 	ldw bc, 0x01                                         ; FF78E3  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF78E6  1d 26 78 ff
 	call T_DiskSaveFile_SaveOrConfirmOverwrite_Call                                        ; FF78EA  1d 08 26 f4
@@ -196868,7 +196875,7 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	m_push MWD+r4, 0x02                                  ; FF7901  9c 02 04
 	m_push MWD+r4, 0x04                                  ; FF7904  9c 04 04
 	m_push MWD+r4, 0x06                                  ; FF7907  9c 06 04
-	ld a, (0x2724:16)                                   ; FF790A  c1 24 27 21
+	ld a, (Disk_SelectedEntry:16)                                   ; FF790A  c1 24 27 21
 	ldw bc, 0x04                                         ; FF790E  31 04 00
 	call Disk_CopyDirEntryToFileName                                      ; FF7911  1d 26 78 ff
 	ld XIY,Disk_FileName                                    ; FF7915  45 c8 21 00 00
@@ -196968,7 +196975,7 @@ DiskSaveFile_Page4_LcdKeyRow1:
 	ld (DiskSave_Password:16), a                                   ; FF79BC  f1 0f 22 41
 	ld A,(XIX+0x01)                                      ; FF79C0  8c 01 21
 	ld (DiskSave_Password+1:16), a                                   ; FF79C3  f1 10 22 41
-	ld a, (0x2724:16)                                   ; FF79C7  c1 24 27 21
+	ld a, (Disk_SelectedEntry:16)                                   ; FF79C7  c1 24 27 21
 	ldw bc, 0x01                                         ; FF79CB  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF79CE  1d 26 78 ff
 	call T_DiskSaveFile_CheckPasswordThenSave_Call                                        ; FF79D2  1d 0c 26 f4

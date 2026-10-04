@@ -90974,8 +90974,12 @@ T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
 ;           DiskSaveFile_Execute_Entry (graded CONTENT).  DERIVATIVE name.
 T_DiskSaveFile_Execute_Entry:	jp DiskSaveFile_Execute_Entry  ; F425CC (was T_F425CC) -> prom_a 0x61C80   x3
 T_MidiFileSave_Page5_LcdKeyRow3:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
-T_F425D4:	jp NameEdit_MoveCursor_Call  ; -> prom_a 0x61C9F   x2
-T_F425D8:	jp NameEdit_StepChar_Call  ; -> prom_a 0x61CA3   x3
+; Evidence: slot 0xF425D4 is `jp 0xFE1C9F`; prom_a 0xFE1C9F carries the label
+;           NameEdit_MoveCursor_Call (graded CONTENT).  DERIVATIVE name.
+T_NameEdit_MoveCursor_Call:	jp NameEdit_MoveCursor_Call  ; F425D4 (was T_F425D4) -> prom_a 0x61C9F   x2
+; Evidence: slot 0xF425D8 is `jp 0xFE1CA3`; prom_a 0xFE1CA3 carries the label
+;           NameEdit_StepChar_Call (graded CONTENT).  DERIVATIVE name.
+T_NameEdit_StepChar_Call:	jp NameEdit_StepChar_Call  ; F425D8 (was T_F425D8) -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
 ; Evidence: slot 0xF425E0 is `jp 0xFE1CAB`; prom_a 0xFE1CAB carries the label
 ;           Disk_SaveFileName_Call (graded CONTENT).  DERIVATIVE name.
@@ -90987,7 +90991,9 @@ T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_Disk_ResetAndMountFloppy_Call:	jp Disk_ResetAndMountFloppy_Call  ; F425EC (was T_F425EC) -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
-T_F425F8:	jp NameEdit_SyncCharIndex_Call  ; -> prom_a 0x61CCC   x3
+; Evidence: slot 0xF425F8 is `jp 0xFE1CCC`; prom_a 0xFE1CCC carries the label
+;           NameEdit_SyncCharIndex_Call (graded CONTENT).  DERIVATIVE name.
+T_NameEdit_SyncCharIndex_Call:	jp NameEdit_SyncCharIndex_Call  ; F425F8 (was T_F425F8) -> prom_a 0x61CCC   x3
 ; Evidence: slot 0xF425FC is `jp 0xFE1CD0`; prom_a 0xFE1CD0 carries the label
 ;           DiskSave_IsSelectedFileNew_Call (graded CONTENT).  DERIVATIVE name.
 T_DiskSave_IsSelectedFileNew_Call:	jp DiskSave_IsSelectedFileNew_Call  ; F425FC (was T_F425FC) -> prom_a 0x61CD0
@@ -124232,7 +124238,7 @@ DL_F583E5:
 	.long DLTab_F58455	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 DL_F583F0:
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2724	; +0x02 source variable, 16-bit address
+	.short Disk_SelectedEntry	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x05	; +0x06 swi 7 function
@@ -124300,7 +124306,7 @@ DL_F5843F:
 ; --------------------------------------------------------------------------
 DL_F5844A:
 	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
-	.short 0x2724	; +0x02 source variable, 16-bit address
+	.short Disk_SelectedEntry	; +0x02 source variable, 16-bit address
 	.byte 0x3F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x1B	; +0x06 swi 7 function
@@ -176341,11 +176347,11 @@ Smf_WriteFile_Join:
 	calr	SmfWrite_RestoreFileName	; F7393C  calr 0xf7491f
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7393F  cp (0x2880),0x23
 	jrl	nz, Smf_WriteFile_Join9	; F73944  jrl NZ,0xf74790
-	ld	a, (10020:16)	; F73947  ld A,(0x2724)
+	ld	a, (Disk_SelectedEntry:16)	; F73947  ld A,(0x2724)
 	exts	wa	; F7394B  exts WA
 	m_cp_mi8 MB16, UI_ScreenPage, 0x02	; F7394D  cp (0x2229),0x02
 	jr	nz, Smf_WriteFile_Skip6	; F73952  jr NZ,0xf739a3
-	ld	a, (10020:16)	; F73954  ld A,(0x2724)
+	ld	a, (Disk_SelectedEntry:16)	; F73954  ld A,(0x2724)
 	exts	wa	; F73958  exts WA
 	ld	xiy, 6333568	; F7395A  ld XIY,0x0060a480
 	sla	wa, 3	; F7395F  sla 0x03,WA
@@ -177815,7 +177821,7 @@ sub_F74885:
 	push	xix	; F74886  push XIX
 	ld	xix, 6333568	; F74887  ld XIX,0x0060a480
 	xor	xwa, xwa	; F7488C  xor XWA,XWA
-	ld	a, (10020:16)	; F7488E  ld A,(0x2724)
+	ld	a, (Disk_SelectedEntry:16)	; F7488E  ld A,(0x2724)
 	sla	xwa, 3	; F74892  sla 0x03,XWA
 	add	xix, xwa	; F74895  add XIX,XWA
 	ld	c, 8:opc	; F74897  ld C,0x08
@@ -177866,7 +177872,7 @@ sub_F748AD_Loop2:
 	inc	1, l	; F748D4  inc 1,L
 	cp	l, 7:i3	; F748D6  cp L,7
 	jr	ule, sub_F748AD_Loop2	; F748D8  jr ULE,0xf748cb
-	ld	(10020:16), c	; F748DA  ld (0x2724),C
+	ld	(Disk_SelectedEntry:16), c	; F748DA  ld (0x2724),C
 	ld	w, 255:opc	; F748DE  ld W,0xff
 	jr	sub_F748AD_Epilogue	; F748E0  jr T,0xf748eb
 sub_F748AD_Skip:
@@ -178322,7 +178328,7 @@ sub_F74B3A_Epilogue:
 	push	xbc	; F74BBA  push XBC
 	calr	SmfWrite_SaveFileName	; F74BBB  calr 0xf7492f
 	ld	xiy, 6333568	; F74BBE  ld XIY,0x0060a480
-	ld	l, (10020:16)	; F74BC3  ld L,(0x2724)
+	ld	l, (Disk_SelectedEntry:16)	; F74BC3  ld L,(0x2724)
 	xor	h, h	; F74BC7  xor H,H
 	sla	hl, 3	; F74BC9  sla 0x03,HL
 	mx_lda32 MXD, ra_IY, ra_HL, 5	; F74BCC  lda XIY,XIY+HL
@@ -181382,7 +181388,7 @@ sub_F76836:
 	push	xix	; F76837  push XIX
 	ld	xix, 6333568	; F76838  ld XIX,0x0060a480
 	xor	xwa, xwa	; F7683D  xor XWA,XWA
-	ld	a, (10020:16)	; F7683F  ld A,(0x2724)
+	ld	a, (Disk_SelectedEntry:16)	; F7683F  ld A,(0x2724)
 	sla	xwa, 3	; F76843  sla 0x03,XWA
 	add	xix, xwa	; F76846  add XIX,XWA
 	ld	c, 8:opc	; F76848  ld C,0x08
@@ -181419,7 +181425,7 @@ sub_F76836_Loop2:
 	inc	1, l	; F76885  inc 1,L
 	cp	l, 7:i3	; F76887  cp L,7
 	jr	ule, sub_F76836_Loop2	; F76889  jr ULE,0xf7687c
-	ld	(10020:16), c	; F7688B  ld (0x2724),C
+	ld	(Disk_SelectedEntry:16), c	; F7688B  ld (0x2724),C
 	ld	w, 255:opc	; F7688F  ld W,0xff
 	jr	sub_F76836_Epilogue2	; F76891  jr T,0xf7689c
 sub_F76836_Skip2:
@@ -181801,7 +181807,7 @@ sub_F76ADF_Epilogue:
 	push	xbc	; F76B5F  push XBC
 	calr	SmfSize_SaveFileName	; F76B60  calr 0xf768e0
 	ld	xiy, 6333568	; F76B63  ld XIY,0x0060a480
-	ld	l, (10020:16)	; F76B68  ld L,(0x2724)
+	ld	l, (Disk_SelectedEntry:16)	; F76B68  ld L,(0x2724)
 	xor	h, h	; F76B6C  xor H,H
 	sla	hl, 3	; F76B6E  sla 0x03,HL
 	lda	xiy, (xiy+hl)	; F76B71  lda XIY,XIY+HL

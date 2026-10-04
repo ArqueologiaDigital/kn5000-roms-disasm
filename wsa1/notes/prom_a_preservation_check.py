@@ -3968,6 +3968,12 @@ RENAMES = {
     "sub_FE1C9F": "NameEdit_MoveCursor_Call",
     "sub_FE1CA3": "NameEdit_StepChar_Call",
     "sub_FE1CCC": "NameEdit_SyncCharIndex_Call",
+    "sub_FE15F4": "Medley_LoadNextSongFromDisk",
+    "sub_FE16D6": "Medley_AdvanceSong",
+    "sub_FE169D": "Medley_CopySongNameForDisplay",
+    "T_F425D4": "T_NameEdit_MoveCursor_Call",
+    "T_F425D8": "T_NameEdit_StepChar_Call",
+    "T_F425F8": "T_NameEdit_SyncCharIndex_Call",
 }
 
 

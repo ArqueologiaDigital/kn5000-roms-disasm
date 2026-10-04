@@ -1387,6 +1387,17 @@ ROWS = [
     ("FE1863", "NameEdit_StepChar",
      "SoftKeyCol4/5 on page 0 (through NameEdit_StepChar_Call): NameEdit_CharIndex -1 when (0x272C) bit 7 is set (not below 0),\n"
      "else +1 (not above 0x24); the character set[index] goes into Disk_FileName at the cursor."),
+    # the medley's floppy source (FINDINGS-prom_a-medley-and-name-edit-state.md names its RAM)
+    ("FE15F4", "Medley_LoadNextSongFromDisk",
+     "up to 20 tries ((0x2215)): Disk_ScanDirectory; when listing entry Disk_SelectedEntry (0x60A480 + 16 x n) is\n"
+     "not empty (+8 is not 0x80), its 8-character name goes to Disk_FileName, status 0x0A, DiskLoad_ByContentType;\n"
+     "Medley_AdvanceSong; a load that did not return 4 and left a song (0x60341E non-zero) ends it with 0.  Empty\n"
+     "entries are skipped (Medley_AdvanceSong).  After 20: Disk_PortA3_Release, (0x34D0) bit 2 cleared, A = 4."),
+    ("FE16D6", "Medley_AdvanceSong",
+     "Medley_PlayingSong = Disk_SelectedEntry; Disk_SelectedEntry + 1, back to Medley_FirstSong past\n"
+     "Medley_LastSong."),
+    ("FE169D", "Medley_CopySongNameForDisplay",
+     "Disk_FileName[2..7] -> 0x0E38 (6 characters), then spaces to 11."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
