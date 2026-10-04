@@ -1147,6 +1147,7 @@
 	.set	sub_FBB800, 0xFBB800
 	.set	sub_FBB93C, 0xFBB93C
 	.set	PartParam_RefuseNumberEntry, 0xFBBA83
+	.set	PartParam_StepSound, 0xFBBA8E
 	.set	PartParam_StepVolume, 0xFBBAA3
 	.set	PartParam_EnterVolume, 0xFBBABB
 	.set	PartParam_StepPanpot, 0xFBBAD3
@@ -1166,7 +1167,8 @@
 	.set	PartParam_StepMidiInSetting, 0xFBBC8B
 	.set	PartParam_StepIgnored, 0xFBBCA3
 	.set	PartParam_StepKeyScaling, 0xFBBCA4
-	.set	sub_FBBCBC, 0xFBBCBC
+	.set	PartParam_StepMainOut, 0xFBBCBC
+	.set	PartParam_StepSubOut, 0xFBBD4F
 	.set	PartParam_StepAssignMode, 0xFBBDF9
 	.set	PartParam_StepVelocityOffset, 0xFBBE11
 	.set	PartParam_EnterVelocityOffset, 0xFBBE29
@@ -50605,7 +50607,7 @@ Record_F1AAEC:
 ; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB88A
 ; --------------------------------------------------------------------------
 PtrTable_F1AB13:
-	.long 0x00FBBA8E                       ; F1AB13  [0]   -> prom_a 0xFBBA8E
+	.long PartParam_StepSound                       ; F1AB13  [0]   -> prom_a 0xFBBA8E
 	.long PartParam_StepVolume                       ; F1AB17  [1]   -> prom_a 0xFBBAA3
 	.long PartParam_StepPanpot                       ; F1AB1B  [2]   -> prom_a 0xFBBAD3
 	.long PartParam_StepKeyShift                       ; F1AB1F  [3]   -> prom_a 0xFBBAEB
@@ -50627,8 +50629,8 @@ PtrTable_F1AB13:
 ; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB8AA
 ; --------------------------------------------------------------------------
 PtrTable_F1AB4B:
-	.long sub_FBBCBC                       ; F1AB4B  [0]   -> prom_a 0xFBBCBC
-	.long 0x00FBBD4F                       ; F1AB4F  [1]   -> prom_a 0xFBBD4F
+	.long PartParam_StepMainOut                       ; F1AB4B  [0]   -> prom_a 0xFBBCBC
+	.long PartParam_StepSubOut                       ; F1AB4F  [1]   -> prom_a 0xFBBD4F
 	.long PartParam_StepAssignMode                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
 	.long PartParam_StepVelocityOffset                       ; F1AB57  [3]   -> prom_a 0xFBBE11
 	.long PartParam_StepBasicChannel                       ; F1AB5B  [4]   -> prom_a 0xFBBE41
@@ -108660,7 +108662,7 @@ DrawValueGlyph_Veneer:
 	ret	; F4F02D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4F02E
+; PartSound_StepBankGroupMember
 ; Called from: prom_a 0xFBBA9B `call 0xf4f02e`
 ; Touches: (0x60f018), (0x002760), (0x28b0), (0x60f01d), (0x002761),
 ;          (0x002762), (0x002763), (0x002764), (0x08e8), (0x08ec)
@@ -108668,7 +108670,15 @@ DrawValueGlyph_Veneer:
 ;           transcription, re-asserted on every emit.
 ; Unknown: what the routine is FOR.  A stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4F02E:
+; PartSound_StepBankGroupMember: loads part E's sound from its record -- +0x3D bank, +0x3B group, +0x3C member, SoundGroup_LoadSelectionFromPart's
+;   offsets -- into 0x2761 / 0x2762 / 0x2763 and steps it like an odometer, one step in the direction of
+;   PanelEvent_Flags bit 0 (set = down).  The member steps first (PartSound_StepIndexClamped, bounded by
+;   SoundGroup_MaxMemberIndex_Get); when it cannot move, the group; when that cannot move, the bank, through
+;   PartSound_BankOrder.  The levels below the one that moved restart at 0 when stepping up and at their
+;   maximum when stepping down (`bit 7,W` arms, 0xF4F155 / 0xF4F1DF).
+;   The result is posted for part E as two List2030_AppendRegs records, (bank, bank) and (group, member).
+;   Called by PartParam_StepSound.
+PartSound_StepBankGroupMember:
 	push	xiz	; F4F02E  push XIZ
 	ld	xiz, xsp	; F4F02F  ld XIZ,XSP
 	push	xix	; F4F031  push XIX
@@ -108712,7 +108722,7 @@ sub_F4F02E:
 	ld	de, hl	; F4F0AE  ld DE,HL
 	push	w	; F4F0B0  push W
 	pushw	hl	; F4F0B2  push HL
-	call	sub_F4F27E	; F4F0B3  call 0xf4f27e
+	call	PartSound_StepIndexClamped	; F4F0B3  call 0xf4f27e
 	popw	hl	; F4F0B7  pop HL
 	pop	w	; F4F0B8  pop W
 	cp	de, hl	; F4F0BA  cp DE,HL
@@ -108743,12 +108753,12 @@ sub_F4F02E_Join:
 	ld	hl, de	; F4F0FD  ld HL,DE
 	push	w	; F4F0FF  push W
 	pushw	hl	; F4F101  push HL
-	call	sub_F4F27E	; F4F102  call 0xf4f27e
+	call	PartSound_StepIndexClamped	; F4F102  call 0xf4f27e
 	popw	hl	; F4F106  pop HL
 	pop	w	; F4F107  pop W
 	cp	de, hl	; F4F109  cp DE,HL
 	jrl	nz, sub_F4F02E_Skip8	; F4F10B  jrl NZ,0xf4f1da
-	ld	xix, sub_F4F02E + 0x245	; F4F10E  ld XIX,0x00f4f273
+	ld	xix, PartSound_BankOrder	; F4F10E  ld XIX,0x00f4f273
 	ld	l, (10081:24)	; F4F113  ld L,(0x002761)
 	xor	de, de	; F4F118  xor DE,DE
 sub_F4F02E_Join2:
@@ -108762,7 +108772,7 @@ sub_F4F02E_Loop:
 	ldw	iy, 0	; F4F12A  ld IY,0x0000
 	push	w	; F4F12D  push W
 	pushw	hl	; F4F12F  push HL
-	call	sub_F4F27E	; F4F130  call 0xf4f27e
+	call	PartSound_StepIndexClamped	; F4F130  call 0xf4f27e
 	popw	hl	; F4F134  pop HL
 	pop	w	; F4F135  pop W
 	cp	de, hl	; F4F137  cp DE,HL
@@ -108772,7 +108782,7 @@ sub_F4F02E_Loop:
 	cp	e, 4:i3	; F4F142  cp E,4
 	jr	z, sub_F4F02E_Loop	; F4F144  jr Z,0xf4f125
 sub_F4F02E_Skip3:
-	ld	xix, sub_F4F02E + 0x245	; F4F146  ld XIX,0x00f4f273
+	ld	xix, PartSound_BankOrder	; F4F146  ld XIX,0x00f4f273
 	mx_ld_rm MXB, ra_IX, ra_DE, 1	; F4F14B  ld A,(XIX+DE)
 	ld	(10081:24), a	; F4F150  ld (0x002761),A
 	bit	7, w	; F4F155  bit 0x07,W
@@ -108865,10 +108875,14 @@ sub_F4F02E_Epilogue:
 	ret	; F4F272  ret
 
 ; --- 0xF4F273-0xF4F27D  data (11 bytes) ---
+; PartSound_BankOrder: the 11 bank codes in the order PartSound_StepBankGroupMember steps them: R1 0x00, R2 0x01, U1 0x08, U2 0x09,
+;   E1 0x10, RD 0x20, UD1 0x28, UD2 0x29, then the RE-MAP banks 0x18-0x1A (SoundSel_Bank's codes).  The stepper
+;   finds the current bank's index by a linear search of this table (0xF4F11A).
+PartSound_BankOrder:
 	.byte 0x00, 0x01, 0x08, 0x09, 0x10, 0x20, 0x28, 0x29, 0x18, 0x19, 0x1a   ; F4F273  ..... ()...
 
 ; --------------------------------------------------------------------------
-; sub_F4F27E
+; PartSound_StepIndexClamped
 ; Called from: call from 0xF4F0B3, 0xF4F102, 0xF4F130
 ; Evidence: 0xF4F27E is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -108876,13 +108890,17 @@ sub_F4F02E_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4F27E:
+; PartSound_StepIndexClamped: DE += PartSound_SignedStepTable[W'], where W' = W bits 0-2 (the size) plus W bit 7 moved to bit 3 (the sign;
+;   entries 8-15 are 0, -1 .. -7).  A result that goes negative becomes 0.  It is then clamped to IY..IX.
+;   Called three times by PartSound_StepBankGroupMember, which compares DE before and after to see whether the
+;   level could move.
+PartSound_StepIndexClamped:
 	ld	l, w	; F4F27E  ld L,W
 	and	l, 7	; F4F280  and L,0x07
 	and	w, 128	; F4F283  and W,0x80
 	srl	w, 4	; F4F286  srl 0x04,W
 	or	w, l	; F4F289  or W,L
-	ld	xhl, sub_F4F27E + 0x34	; F4F28B  ld XHL,0x00f4f2b2
+	ld	xhl, PartSound_SignedStepTable	; F4F28B  ld XHL,0x00f4f2b2
 	mx8_ld_rm MXB, ra_HL, rb_W, 7	; F4F290  ld L,(XHL+W)
 	exts	hl	; F4F295  exts HL
 	add	de, hl	; F4F297  add DE,HL
@@ -108903,6 +108921,8 @@ sub_F4F27E_Return:
 	ret	; F4F2B1  ret
 
 ; --- 0xF4F2B2-0xF4F2C1  data (16 bytes) ---
+; PartSound_SignedStepTable: 16 signed steps 0..7, then 0, -1 .. -7, indexed by PartSound_StepIndexClamped's W'.
+PartSound_SignedStepTable:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9   ; F4F2B2  ................
 	jp	sub_F4F27E_Join	; F4F2C2  jp 0xf4f2da
 	ret	; F4F2C6  ret
@@ -116013,6 +116033,9 @@ PanelCode_ToSlotAndFlags_Skip6:
 ; EditValue_StepBitField: steps a bit-field of the byte at the first argument through the field record XIX: +1 mask, +2 shift, +3 maximum,
 ;   +4 minimum, +5 / +6 step sizes (chosen by PanelEvent_Flags bit 2 / UI_RequestBits bit 2), +7 PanelEvent_Flags XOR;
 ;   up when PanelEvent_Flags bit 0, else down, clamped, written back under the mask (77 call sites).
+;   CORRECTED 2026-10-04: the other way round.  After the +7 XOR, bit 0 SET steps DOWN (`sub H,A`, bounded
+;   by +4, 0xF55116) and CLEAR steps UP (`add H,C`, bounded by +3, 0xF55136) -- the sense IndexedParam_SetBit's
+;   header gives (notes/prom_ab_read_names_2026_10_04.py, PartSound_StepIndexClamped).
 EditValue_StepBitField:
 	link XIZ,0xfffe	; F550A6  link XIZ,0xfffe
 	pushw	hl	; F550AA  push HL

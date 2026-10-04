@@ -2027,7 +2027,7 @@
 	.set T_F434F4,                                                                      0x00F434F4
 	.set sub_F4F000,                              0x00F4F000
 	.set DrawValueGlyph_Veneer,                   0x00F4F017
-	.set sub_F4F02E,                              0x00F4F02E
+	.set PartSound_StepBankGroupMember,                              0x00F4F02E
 	.set PtrTable_F4F800,                         0x00F4F800
 	.set PtrTable_F4F888,                         0x00F4F888
 	.set PtrTable_F4F916,                         0x00F4F916
@@ -103693,11 +103693,14 @@ PartParam_RefuseNumberEntry:
 	popw bc                                              ; FBBA8A  49
 	sub A,A                                              ; FBBA8B  c9 a1
 	ret                                                  ; FBBA8D  0e
+; PartParam_StepSound: PtrTable_F1AB13[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls
+;   PartSound_StepBankGroupMember(part).
+PartParam_StepSound:
 	link XIZ,0x0000                                      ; FBBA8E  ee 0c 00 00
 	m_set 3, MD16, UI_RequestBits                                ; FBBA92  f1 75 20 bb
 	push 0x00                                            ; FBBA96  09 00
 	m_push MBD+r6, 0x08                                  ; FBBA98  8e 08 04
-	call sub_F4F02E                                      ; FBBA9B  1d 2e f0 f4
+	call PartSound_StepBankGroupMember                                      ; FBBA9B  1d 2e f0 f4
 	popw bc                                              ; FBBA9F  49
 	unlk XIZ                                             ; FBBAA0  ee 0d
 	ret                                                  ; FBBAA2  0e
@@ -103951,7 +103954,12 @@ PartParam_StepKeyScaling:
 	inc 6,XSP                                            ; FBBCB7  ef 66
 	unlk XIZ                                             ; FBBCB9  ee 0d
 	ret                                                  ; FBBCBB  0e
-sub_FBBCBC:
+; PartParam_StepMainOut: PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_F42C78
+;   (EditValue_StepBitField) with PartParamField_MainOut.  If it moved, the new value is kept only when EFFECT2 is
+;   off (byte 6 of record E, bit 7 masked, is 0), SUB OUT (byte 4 of E+0x20) is 0, or the new value is 0.
+;   Otherwise it sets UI_Request_Hi bit 6 and UI_Request = 0xB6 instead.  So with EFFECT2 on, a part cannot
+;   go to MAIN and SUB OUT at once.  A kept value is written back and posted to Queue2C00 (E+0x20, offset 3).
+PartParam_StepMainOut:
 	link XIZ,0xffff                                      ; FBBCBC  ee 0c ff ff
 	pushw hl                                             ; FBBCC0  2b
 	push XIX                                             ; FBBCC1  3c
@@ -104015,6 +104023,10 @@ sub_FBBCBC:
 	popw hl                                              ; FBBD4B  4b
 	unlk XIZ                                             ; FBBD4C  ee 0d
 	ret                                                  ; FBBD4E  0e
+; PartParam_StepSubOut: PtrTable_F1AB4B[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN
+;   OUT (byte 3) instead of SUB OUT.  One difference: a step that lands on 1 is stepped again
+;   (`cp (XIZ-1),1 / jr nz` at 0xFBBD87), so the panel never selects SUB OUT 1.
+PartParam_StepSubOut:
 	link XIZ,0xffff                                      ; FBBD4F  ee 0c ff ff
 	pushw hl                                             ; FBBD53  2b
 	push XIX                                             ; FBBD54  3c

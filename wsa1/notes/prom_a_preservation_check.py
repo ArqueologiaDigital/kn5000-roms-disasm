@@ -3700,6 +3700,9 @@ RENAMES = {
     "Record_F1AE00": "PartParamField_MidiMultipleMessagesOutputReverbDepthValue",
     "Record_F1AE09": "PartParamField_MidiMultipleMessagesOutputChorusDepthValue",
     "sub_FBC22D": "PartParam_StepMultipleMessagesOutputItem",
+    "sub_F4F02E": "PartSound_StepBankGroupMember",
+    "sub_F4F27E": "PartSound_StepIndexClamped",
+    "sub_FBBCBC": "PartParam_StepMainOut",
 }
 
 

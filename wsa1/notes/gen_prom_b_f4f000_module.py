@@ -737,7 +737,7 @@ def structure():
       "          prom_a/wsa1_prom_a.s.",
       "Unknown: what the callee does.  Its target is unnamed, so naming the",
       "         veneer would be inventing a meaning the tree does not have.")
-    H(0xF4F02E, "sub_F4F02E",
+    H(0xF4F02E, "PartSound_StepBankGroupMember",
       *(wrap("Called from: ", namer_text(0xF4F02E))
         + wrap("Touches: ", touch_text(0xF4F02E, 0xF4F273))
         + wrap("Evidence: ",

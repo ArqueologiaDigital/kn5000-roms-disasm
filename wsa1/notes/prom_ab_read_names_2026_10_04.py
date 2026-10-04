@@ -10,6 +10,7 @@ QUESTION IT ANSWERS
 RUN
   python3 notes/prom_ab_read_names_2026_10_04.py          # the table
   python3 notes/prom_ab_read_names_2026_10_04.py --args   # 'old=new|header' for the rename helper
+  python3 notes/prom_ab_read_names_2026_10_04.py --place  # 'ADDR=Name|header' for the label placer (PLACED rows)
 """
 import os
 import re
@@ -1119,6 +1120,44 @@ ROWS = [
      "SmfEvent_ControlChange_MultiTrack's `cp A,93` arm, CC 93 -- the multi-track copy of SmfCC_Effect3Depth."),
     ("F726A2", "SmfCC_Effect4Depth_MultiTrack",
      "SmfEvent_ControlChange_MultiTrack's `cp A,94` arm, CC 94 -- the multi-track copy of SmfCC_Effect4Depth."),
+    # the part SOUND stepper and the MAIN OUT / SUB OUT steppers (PtrTable_F1AB13[0], PtrTable_F1AB4B[0] / [1])
+    ("F4F02E", "PartSound_StepBankGroupMember",
+     "loads part E's sound from its record -- +0x3D bank, +0x3B group, +0x3C member, SoundGroup_LoadSelectionFromPart's\n"
+     "offsets -- into 0x2761 / 0x2762 / 0x2763 and steps it like an odometer, one step in the direction of\n"
+     "PanelEvent_Flags bit 0 (set = down).  The member steps first (PartSound_StepIndexClamped, bounded by\n"
+     "SoundGroup_MaxMemberIndex_Get); when it cannot move, the group; when that cannot move, the bank, through\n"
+     "PartSound_BankOrder.  The levels below the one that moved restart at 0 when stepping up and at their\n"
+     "maximum when stepping down (`bit 7,W` arms, 0xF4F155 / 0xF4F1DF).\n"
+     "The result is posted for part E as two List2030_AppendRegs records, (bank, bank) and (group, member).\n"
+     "Called by PartParam_StepSound."),
+    ("F4F27E", "PartSound_StepIndexClamped",
+     "DE += PartSound_SignedStepTable[W'], where W' = W bits 0-2 (the size) plus W bit 7 moved to bit 3 (the sign;\n"
+     "entries 8-15 are 0, -1 .. -7).  A result that goes negative becomes 0.  It is then clamped to IY..IX.\n"
+     "Called three times by PartSound_StepBankGroupMember, which compares DE before and after to see whether the\n"
+     "level could move."),
+    ("FBBCBC", "PartParam_StepMainOut",
+     "PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_F42C78\n"
+     "(EditValue_StepBitField) with PartParamField_MainOut.  If it moved, the new value is kept only when EFFECT2 is\n"
+     "off (byte 6 of record E, bit 7 masked, is 0), SUB OUT (byte 4 of E+0x20) is 0, or the new value is 0.\n"
+     "Otherwise it sets UI_Request_Hi bit 6 and UI_Request = 0xB6 instead.  So with EFFECT2 on, a part cannot\n"
+     "go to MAIN and SUB OUT at once.  A kept value is written back and posted to Queue2C00 (E+0x20, offset 3)."),
+]
+
+# labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
+PLACED = [
+    ("FBBA8E", "PartParam_StepSound",
+     "PtrTable_F1AB13[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls\n"
+     "PartSound_StepBankGroupMember(part)."),
+    ("FBBD4F", "PartParam_StepSubOut",
+     "PtrTable_F1AB4B[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN\n"
+     "OUT (byte 3) instead of SUB OUT.  One difference: a step that lands on 1 is stepped again\n"
+     "(`cp (XIZ-1),1 / jr nz` at 0xFBBD87), so the panel never selects SUB OUT 1."),
+    ("F4F273", "PartSound_BankOrder",
+     "the 11 bank codes in the order PartSound_StepBankGroupMember steps them: R1 0x00, R2 0x01, U1 0x08, U2 0x09,\n"
+     "E1 0x10, RD 0x20, UD1 0x28, UD2 0x29, then the RE-MAP banks 0x18-0x1A (SoundSel_Bank's codes).  The stepper\n"
+     "finds the current bank's index by a linear search of this table (0xF4F11A)."),
+    ("F4F2B2", "PartSound_SignedStepTable",
+     "16 signed steps 0..7, then 0, -1 .. -7, indexed by PartSound_StepIndexClamped's W'."),
 ]
 
 
@@ -1126,6 +1165,11 @@ def main():
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     src = "".join(open(os.path.join(here, p), "rb").read().decode("latin-1")
                   for p in ("prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s"))
+    if "--place" in sys.argv:
+        for o, n, ev in PLACED:
+            if not re.search(r'^%s:' % n, src, re.M):
+                print("%s=%s|%s: %s" % (o, n, n, ev.replace("\n", "\\n  ")))
+        return
     for o, n, ev in ROWS:
         if "--args" in sys.argv:
             if not re.search(r'^sub_%s:' % o, src, re.M):
