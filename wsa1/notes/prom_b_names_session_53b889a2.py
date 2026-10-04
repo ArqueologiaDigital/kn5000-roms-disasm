@@ -3895,4 +3895,12 @@ RENAMES = [
     ("sub_FEA082", "EditScreen_QueueRelocateAfterMove"),
     ("sub_FEA84F", "EditPos_LoadEventTick"),
     ("sub_FE9E00", "EditScreen_QueueRelocateAfterMove_Call"),
+    ("sub_FEA7E7", "EditPos_SeekNextShownNote"),
+    ("sub_FEA79B", "EditCursor_SetMeasureFromView"),
+    ("sub_FEA743", "EditCursor_SplitViewTick"),
+    ("sub_FEA71F", "EditCursor_StepBackToIncGrid"),
+    ("sub_FEA449", "EditPos_SeekFirstNoteAfterOldCursor"),
+    ("sub_FEA47F", "EditPos_SeekLastNoteBeforeOldCursor"),
+    ("sub_FEA4DC", "EditCursor_LandOnNote"),
+    ("sub_FEA50C", "EditCursor_LandOnGrid"),
 ]

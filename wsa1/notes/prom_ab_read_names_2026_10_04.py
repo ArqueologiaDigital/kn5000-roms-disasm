@@ -1624,6 +1624,32 @@ ROWS = [
      "ticks later."),
     ("FEA84F", "EditPos_LoadEventTick",
      "EditPos_Tick = byte +1 of the event at the block-store cursor (the cursor is restored)."),
+    # NOTE / DRUM EDIT: the cursor moves (EditScreen_CursorRight / _CursorLeft)
+    ("FEA7E7", "EditPos_SeekNextShownNote",
+     "CursorFlags bits 1 and 4 cleared; steps to the next note-on that DrumEdit_IsOtherNote passes and loads its tick\n"
+     "(EditPos_LoadEventTick); EditPos_Beat + 1 at each 0x81; bit 1 set at the end tag (tick 0), bit 4 once the walk\n"
+     "has left the view (EditPos_Beat - EditMeasure_StartBeat >= EditMeasure_Beats)."),
+    ("FEA79B", "EditCursor_SetMeasureFromView",
+     "EditCursor_Measure = EditScreen_FirstMeasure + the measure starts (non-zero EditScreen_BeatTable entries)\n"
+     "among the columns up to the cursor's."),
+    ("FEA743", "EditCursor_SplitViewTick",
+     "from EditCursor_TickInMeasure: EditCursor_Beat = the columns since the last measure start, EditCursor_Tick =\n"
+     "the tick mod 0x60, then EditCursor_SetMeasureFromView."),
+    ("FEA71F", "EditCursor_StepBackToIncGrid",
+     "EditCursor_TickInMeasure = the largest multiple of EditField_Inc below it (unchanged at 0)."),
+    ("FEA449", "EditPos_SeekFirstNoteAfterOldCursor",
+     "from the measure's mark, EditPos_SeekNextShownNote until the position passes (0x601F56) -- the cursor before\n"
+     "the move -- or the chain ends (bit 1)."),
+    ("FEA47F", "EditPos_SeekLastNoteBeforeOldCursor",
+     "the last shown note before (0x601F56): walks from the mark saving the cursor at each note; CursorFlags bit 3\n"
+     "is set when there is none."),
+    ("FEA4DC", "EditCursor_LandOnNote",
+     "EditCursor_TickInMeasure = the note's position; past the view -> sub_FE955D; otherwise\n"
+     "EditCursor_SplitViewTick, EditScreen_SelectEventAtCursor, the fields and cursor redrawn,\n"
+     "EditScreen_AuditionEvent."),
+    ("FEA50C", "EditCursor_LandOnGrid",
+     "past the view -> sub_FE955D; otherwise the selection cleared (CursorFlags bit 0), the block-store cursor\n"
+     "restored, the cursor layer redrawn, EditCursor_SplitViewTick, the fields redrawn."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
