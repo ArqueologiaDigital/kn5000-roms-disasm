@@ -91832,6 +91832,10 @@ SysExParam_Set_Area60:
 	popw hl                                              ; FB3748  4b
 	unlk XIZ                                             ; FB3749  ee 0d
 	ret                                                  ; FB374B  0e
+; SysExParam_SetPlaceholder: a bare `ret`: the setter of the placeholder descriptor 0xF511F9, index 0 of every descriptor group.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetPlaceholder:
 	ret                                                  ; FB374C  0e
 ; SysExParam_CheckValueWhiteList: walks the six-byte value records at 0xF51E58 and refuses a value not in them (README: the VALUE WHITE-LIST).
 SysExParam_CheckValueWhiteList:
@@ -91856,6 +91860,10 @@ SysExParam_CheckValueWhiteList:
 	pop XIX                                              ; FB3774  5c
 	unlk XIZ                                             ; FB3775  ee 0d
 	ret                                                  ; FB3777  0e
+; SysExParam_SetCommonField: the generic COMMON setter: 41 parameters (MASTER TUNING, VELOCITY CURVE ...); fills the record from desc+6 / desc+7.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetCommonField:
 	link XIZ,0xfff4                                      ; FB3778  ee 0c f4 ff
 	pushw hl                                             ; FB377C  2b
 	pushw de                                             ; FB377D  2a
@@ -91926,6 +91934,10 @@ SysExParam_CheckValueWhiteList:
 	popw hl                                              ; FB381B  4b
 	unlk XIZ                                             ; FB381C  ee 0d
 	ret                                                  ; FB381E  0e
+; SysExParam_SetMainOutEqualizerFreq: setter of MAIN OUT EQUALIZER LOW-FREQ and HIGH-FREQ.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetMainOutEqualizerFreq:
 	link XIZ,0xfffa                                      ; FB381F  ee 0c fa ff
 	pushw hl                                             ; FB3823  2b
 	pushw de                                             ; FB3824  2a
@@ -91971,6 +91983,10 @@ SysExParam_CheckValueWhiteList:
 	popw hl                                              ; FB387E  4b
 	unlk XIZ                                             ; FB387F  ee 0d
 	ret                                                  ; FB3881  0e
+; SysExParam_SetMemoryProtect: setter of SOUND MEMORY PROTECT and COMBINATION MEMORY PROTECT (the pair setter: target from 0xF51E58).
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetMemoryProtect:
 	link XIZ,0xfffc                                      ; FB3882  ee 0c fc ff
 	pushw hl                                             ; FB3886  2b
 	push XIX                                             ; FB3887  3c
@@ -92016,6 +92032,10 @@ SysExParam_CheckValueWhiteList:
 	popw hl                                              ; FB38E0  4b
 	unlk XIZ                                             ; FB38E1  ee 0d
 	ret                                                  ; FB38E3  0e
+; SysExParam_SetPartField: the generic PART setter: 49 parameters (VOLUME, EFFECT1 SEND, REVERB SEND, PANPOT ...); fills the record from desc+6 / desc+7 and ORs the part in.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetPartField:
 	link XIZ,0xfff4                                      ; FB38E4  ee 0c f4 ff
 	pushw hl                                             ; FB38E8  2b
 	pushw de                                             ; FB38E9  2a
@@ -92096,6 +92116,10 @@ SysExParam_CheckValueWhiteList:
 	popw hl                                              ; FB39A0  4b
 	unlk XIZ                                             ; FB39A1  ee 0d
 	ret                                                  ; FB39A3  0e
+; SysExParam_SetProgramChangeAndBank: setter of PROGRAM CHANGE & BANK.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetProgramChangeAndBank:
 	link XIZ,0xfffa                                      ; FB39A4  ee 0c fa ff
 	pushw hl                                             ; FB39A8  2b
 	pushw de                                             ; FB39A9  2a
@@ -92205,6 +92229,10 @@ SysExParam_CheckValueWhiteList:
 	popw hl                                              ; FB3AC0  4b
 	unlk XIZ                                             ; FB3AC1  ee 0d
 	ret                                                  ; FB3AC3  0e
+; SysExParam_SetEffect1Type: setter of EFFECT1 TYPE.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetEffect1Type:
 	pushw hl                                             ; FB3AC4  2b
 	ld xbc, (0x60fc80:24)                               ; FB3AC5  e2 80 fc 60 21
 ; (sub_FB3ACA removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
@@ -92235,6 +92263,10 @@ SysExParam_CheckValueWhiteList:
 .LFB3B02:
 	popw hl                                              ; FB3B02  4b
 	ret                                                  ; FB3B03  0e
+; SysExParam_SetMidiMultipleMessagesOutput: setter of the five MIDI MULTIPLE MESSAGES OUTPUT parameters (PROGRAM CHANGE, VOLUME, PANPOT, REVERB DEPTH ...).
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetMidiMultipleMessagesOutput:
 	link XIZ,0xfffc                                      ; FB3B04  ee 0c fc ff
 	pushw hl                                             ; FB3B08  2b
 	pushw de                                             ; FB3B09  2a
@@ -92322,6 +92354,10 @@ sub_FB3B8C_Skip:
 	popw hl                                              ; FB3BCB  4b
 	unlk XIZ                                             ; FB3BCC  ee 0d
 	ret                                                  ; FB3BCE  0e
+; SysExParam_SetMidiMultipleMessagesOutputBankSelect: setter of MIDI MULTIPLE MESSAGES OUTPUT: BANK SELECT.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetMidiMultipleMessagesOutputBankSelect:
 	link XIZ,0xfffc                                      ; FB3BCF  ee 0c fc ff
 	pushw hl                                             ; FB3BD3  2b
 	pushw de                                             ; FB3BD4  2a
@@ -92452,6 +92488,10 @@ sub_FB3C34:
 	popw hl                                              ; FB3D0F  4b
 	unlk XIZ                                             ; FB3D10  ee 0d
 	ret                                                  ; FB3D12  0e
+; SysExParam_SetEffect2OnOff: setter of EFFECT2 ON/OFF.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetEffect2OnOff:
 	link XIZ,0xfffc                                      ; FB3D13  ee 0c fc ff
 	pushw hl                                             ; FB3D17  2b
 	push XIX                                             ; FB3D18  3c
@@ -92626,6 +92666,10 @@ sub_FB3C34:
 	popw de                                              ; FB3E57  4a
 	popw hl                                              ; FB3E58  4b
 	ret                                                  ; FB3E59  0e
+; SysExParam_SetInitial: setter of INITIAL (receive-only): value 0..6 picks the PtrTable_F4FB1C arm, after the status 0x25 message and T_F409AC.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetInitial:
 	pushw hl                                             ; FB3E5A  2b
 	ld xbc, (0x60fc80:24)                               ; FB3E5B  e2 80 fc 60 21
 	push XBC                                             ; FB3E60  39
@@ -92659,6 +92703,10 @@ sub_FB3C34:
 .LFB3EA1:
 	popw hl                                              ; FB3EA1  4b
 	ret                                                  ; FB3EA2  0e
+; SysExParam_SetSoundWriteRequest: setter of SOUND WRITE REQUEST (receive-only).
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetSoundWriteRequest:
 	ld xbc, (0x60fc80:24)                               ; FB3EA3  e2 80 fc 60 21
 	add XBC,0x0000000e                                   ; FB3EA8  e9 c8 0e 00 00 00
 	push XBC                                             ; FB3EAE  39
@@ -92766,6 +92814,10 @@ sub_FB3C34:
 	popw hl                                              ; FB3F99  4b
 	unlk XIZ                                             ; FB3F9A  ee 0d
 	ret                                                  ; FB3F9C  0e
+; SysExParam_SetCombinationNumberAndBank: setter of COMBINATION NUMBER and BANK.
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetCombinationNumberAndBank:
 	link XIZ,0xfffc                                      ; FB3F9D  ee 0c fc ff
 	pushw hl                                             ; FB3FA1  2b
 	push XIX                                             ; FB3FA2  3c
@@ -93019,6 +93071,10 @@ sub_FB3C34:
 	ret                                                  ; FB4220  0e
 	ret                                                  ; FB4221  0e
 	ret                                                  ; FB4222  0e
+; SysExParam_SetPlayModeRequest: setter of PLAY MODE REQUEST (receive-only).
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetPlayModeRequest:
 	link XIZ,0xfffc                                      ; FB4223  ee 0c fc ff
 	pushw hl                                             ; FB4227  2b
 	push XIX                                             ; FB4228  3c
@@ -93380,7 +93436,16 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB4502  4b
 	unlk XIZ                                             ; FB4503  ee 0d
 	ret                                                  ; FB4505  0e
+; SysExParam_ReceiveOnly: a bare `ret` as the +0x18 reader of INITIAL, PLAY MODE REQUEST, COMBINATION WRITE REQUEST and SOUND WRITE REQUEST -- the four
+;  parameters the Reference Guide marks receive-only: a request for them answers nothing.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_ReceiveOnly:
 	ret                                                  ; FB4506  0e
+; SysExParam_GetMemoryProtect: reader of SOUND / COMBINATION MEMORY PROTECT (target from 0xF51E58, as the pair setter).
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetMemoryProtect:
 	link XIZ,0xfff0                                      ; FB4507  ee 0c f0 ff
 	pushw hl                                             ; FB450B  2b
 	push XIX                                             ; FB450C  3c
@@ -93419,6 +93484,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB455E  4b
 	unlk XIZ                                             ; FB455F  ee 0d
 	ret                                                  ; FB4561  0e
+; SysExParam_GetCommonField: the COMMON reader for a 2B request: IndexedTable_GetByteOr0(desc+6, desc+7), then SysExTx_SendParamValue; 41 parameters.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetCommonField:
 	link XIZ,0xfff4                                      ; FB4562  ee 0c f4 ff
 	push XIX                                             ; FB4566  3c
 	ld XIX,(XIZ+0x08)                                    ; FB4567  ae 08 24
@@ -93446,6 +93515,10 @@ SysExParam_Request_Area60:
 	pop XIX                                              ; FB45A1  5c
 	unlk XIZ                                             ; FB45A2  ee 0d
 	ret                                                  ; FB45A4  0e
+; SysExParam_GetMainOutEqualizerFreq: reader of MAIN OUT EQUALIZER LOW-FREQ / HIGH-FREQ.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetMainOutEqualizerFreq:
 	link XIZ,0xfff2                                      ; FB45A5  ee 0c f2 ff
 	pushw hl                                             ; FB45A9  2b
 	pushw de                                             ; FB45AA  2a
@@ -93498,6 +93571,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB4616  4b
 	unlk XIZ                                             ; FB4617  ee 0d
 	ret                                                  ; FB4619  0e
+; SysExParam_GetCombinationNumberAndBank: reader of COMBINATION NUMBER and BANK.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetCombinationNumberAndBank:
 	link XIZ,0xfff4                                      ; FB461A  ee 0c f4 ff
 	push XIX                                             ; FB461E  3c
 	lda xix, (xiz-12)                                    ; FB461F  be f4 34
@@ -93548,6 +93625,10 @@ SysExParam_Request_Area60:
 	pop XIX                                              ; FB4694  5c
 	unlk XIZ                                             ; FB4695  ee 0d
 	ret                                                  ; FB4697  0e
+; SysExParam_GetPartField: the PART reader for a 2B request: 49 parameters, the ones SysExParam_SetPartField writes.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetPartField:
 	link XIZ,0xfff4                                      ; FB4698  ee 0c f4 ff
 	pushw hl                                             ; FB469C  2b
 	push XIX                                             ; FB469D  3c
@@ -93590,6 +93671,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB46FB  4b
 	unlk XIZ                                             ; FB46FC  ee 0d
 	ret                                                  ; FB46FE  0e
+; SysExParam_GetProgramChangeAndBank: reader of PROGRAM CHANGE & BANK.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetProgramChangeAndBank:
 	link XIZ,0xfff4                                      ; FB46FF  ee 0c f4 ff
 	pushw hl                                             ; FB4703  2b
 	push XIX                                             ; FB4704  3c
@@ -93623,6 +93708,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB474F  4b
 	unlk XIZ                                             ; FB4750  ee 0d
 	ret                                                  ; FB4752  0e
+; SysExParam_GetMidiMultipleMessagesOutput: reader of the five MIDI MULTIPLE MESSAGES OUTPUT parameters.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetMidiMultipleMessagesOutput:
 	link XIZ,0xfff2                                      ; FB4753  ee 0c f2 ff
 	pushw hl                                             ; FB4757  2b
 	pushw de                                             ; FB4758  2a
@@ -93721,6 +93810,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB4846  4b
 	unlk XIZ                                             ; FB4847  ee 0d
 	ret                                                  ; FB4849  0e
+; SysExParam_GetMidiMultipleMessagesOutputBankSelect: reader of MIDI MULTIPLE MESSAGES OUTPUT: BANK SELECT.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetMidiMultipleMessagesOutputBankSelect:
 	link XIZ,0xfff4                                      ; FB484A  ee 0c f4 ff
 	pushw hl                                             ; FB484E  2b
 	pushw de                                             ; FB484F  2a
@@ -93835,6 +93928,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB496A  4b
 	unlk XIZ                                             ; FB496B  ee 0d
 	ret                                                  ; FB496D  0e
+; SysExParam_GetEffect2OnOff: reader of EFFECT2 ON/OFF.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetEffect2OnOff:
 	link XIZ,0xfff0                                      ; FB496E  ee 0c f0 ff
 	pushw hl                                             ; FB4972  2b
 	pushw de                                             ; FB4973  2a
@@ -93900,6 +93997,10 @@ SysExParam_Request_Area60:
 	popw hl                                              ; FB49FB  4b
 	unlk XIZ                                             ; FB49FC  ee 0d
 	ret                                                  ; FB49FE  0e
+; SysExParam_GetEffect1Type: reader of EFFECT1 TYPE.
+;  Descriptor field: +0x18.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_GetEffect1Type:
 	link XIZ,0xfff6                                      ; FB49FF  ee 0c f6 ff
 	pushw hl                                             ; FB4A03  2b
 	push XIX                                             ; FB4A04  3c
@@ -94283,6 +94384,12 @@ sub_FB4D20:
 	popw hl                                              ; FB4D5D  4b
 	unlk XIZ                                             ; FB4D5E  ee 0d
 	ret                                                  ; FB4D60  0e
+; SysExParam_NoTransmitOnChange: a bare `ret` one byte before SysExTx_SendParamValue: the descriptor +0x10 method (called by the staged-parameter
+;  transmitter, SysExTx_StagedParam_*) of the 23 parameters that are NOT sent when they change; the other 86 have
+;  SysExTx_SendParamValue there.
+;  Descriptor field: +0x10.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_NoTransmitOnChange:
 	ret                                                  ; FB4D61  0e
 ; SysExTx_SendParamValue: the family-2B transmitter: the descriptor's +0x18 method reads the instrument's value and calls it (README: 'Direction, three witnesses').
 SysExTx_SendParamValue:
@@ -94809,6 +94916,10 @@ SysExCmd_GmSystemOff:
 	pop XIX                                              ; FB523E  5c
 	popw hl                                              ; FB523F  4b
 	ret                                                  ; FB5240  0e
+; SysExParam_SetCombinationWriteRequest: setter of COMBINATION WRITE REQUEST (receive-only).
+;  Descriptor field: +0x14.
+;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
+SysExParam_SetCombinationWriteRequest:
 	link XIZ,0xfff4                                      ; FB5241  ee 0c f4 ff
 	pushw hl                                             ; FB5245  2b
 	push XIX                                             ; FB5246  3c
