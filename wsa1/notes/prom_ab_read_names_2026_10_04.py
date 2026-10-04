@@ -315,6 +315,55 @@ ROWS = [
      "walks the six-byte value records at 0xF51E58 and refuses a value not in them (README: the VALUE WHITE-LIST)."),
     ("FB4D62", "SysExTx_SendParamValue",
      "the family-2B transmitter: the descriptor's +0x18 method reads the instrument's value and calls it (README: 'Direction, three witnesses')."),
+    # prom_a 0xFE3000-0xFE4BCB: under Disk_CommandDispatch.  The record DiskCmd_* take is an MS-DOS FCB:
+    # +1..+11 the 8.3 name, +0x10 the file size (4 bytes); +0x18 directory index, +0x1A first cluster,
+    # +0x1C last cluster sit in the FCB's DOS-reserved bytes.
+    ("FE45BF", "Fat_MatchDirEntryName",
+     "compares the 11-byte 8.3 name at arg 2 (a directory entry) with arg 1, byte by byte; a '?' (0x3F) on either\n"
+     "side matches anything; an entry whose first byte is 0xE5 (deleted) never matches.  HL = 0 on a match, else 0xFF."),
+    ("FE4671", "Fat_FindRootDirEntryByFcbName",
+     "for every root-directory sector (count (0x605D52)) read by Disk_ReadRootDirSector and every 32-byte entry in it\n"
+     "(count (0x605D50)), Fat_MatchDirEntryName against the FCB's name at arg + 1.  HL = the entry's index, or 0xFFFF.\n"
+     "Called by DiskCmd_OpenFile."),
+    ("FE46DA", "Fat_FindFreeRootDirEntry",
+     "the same walk, stopping at the first entry whose first byte is 0x00 (never used) or 0xE5 (deleted).  HL = its\n"
+     "index, or 0xFFFF.  Called by DiskCmd_CreateFile."),
+    ("FE457E", "Disk_CopyBytes",
+     "copies arg 3 (a word) bytes from the arg-2 pointer to the arg-1 pointer, one byte at a time.\n"
+     "Called by DiskCmd_ReadFileBlock and DiskCmd_WriteFileBlock (blocks of 0x400)."),
+    ("FE44BD", "Disk_WriteCurrentCluster",
+     "writes the work buffer 0x606F9B to cluster (0x605D34): through Disk_WriteClusterFromWorkBuffer when the drive\n"
+     "record ((0x605D22) + 2) is type 1, else inline the same Fat_ClusterToSector + Disk_WriteSectors of (0x605D56) sectors."),
+    ("FE4B4B", "Fat_FindCrossLinkedCluster",
+     "zeroes a byte per cluster at 0x60A002.., then for every cluster 2..0x3FF counts Fat_GetEntry's value (when it\n"
+     "is non-zero and below the end-of-chain mark 0xFF8, 0xFFF8 on type 1); returns the first cluster counted more\n"
+     "than once -- the target of two chains -- or 0."),
+    ("FE423E", "DiskCmd_StoreFatIfConsistent",
+     "Disk_CommandDispatch's code 0x85: on a type-1 drive returns 0; else Fat_FindCrossLinkedCluster, and only when it\n"
+     "finds none, Fat_Store and (0x605D6C) = (0x605D6E) = 0.  Returns the cross-linked cluster otherwise."),
+    ("FE4376", "Fcb_AddToFileSize",
+     "adds the word arg 2 to the 32-bit value at arg 1, carrying into the high word when the low word passes 0xFFFF\n"
+     "from 0xF000 up.  DiskCmd_WriteFileBlock passes FCB + 0x10, the file size, and 0x400 after each block."),
+    ("FE3CF4", "Fat_FreeChain",
+     "from the cluster arg 1 until the end-of-chain mark (0xFF8, 0xFFF8 on type 1): next = Fat_GetEntry, Fat_SetEntry\n"
+     "the cluster to 0, step to next.  HL = 0xFF if 65536 clusters pass (a loop), else 0."),
+    ("FE3D4D", "Fat_DiscardFcbFile",
+     "marks the FCB's directory entry (index FCB + 0x18) deleted (first byte 0xE5) and writes its sector, ends the\n"
+     "chain at FCB + 0x1C (Fat_SetEntry 0xFFFF), Fat_FreeChain from FCB + 0x1A, Fat_Store.  DiskCmd_WriteFileBlock\n"
+     "calls it when Fat_FindFreeClusterAfter finds no cluster -- the disk is full."),
+    ("FE30DD", "Disk_SetDriveGeometry",
+     "(0x605D36) = arg & 0x0F; on a type-1 drive reads Dev7E_IdentifyDevice's data at 0x606F9B (Fdc_SetError 0xFC on\n"
+     "failure) and takes the geometry from it; otherwise sets sectors per track (0x605D54: 9, 18 or 8), sectors per\n"
+     "cluster (0x605D56), root entries (0x605D4E) and the other 0x605D3E-0x605D6A parameters per format code."),
+    ("FE35F9", "Disk_DetectFloppyFormat",
+     "DiskCmd_CheckMediaId; failing that, reads sector 1 (the FAT's first sector) into 0x606F9B and reads the media\n"
+     "descriptor: 0xF9 -> 8, 0xF7 -> 0x0D (geometry 5); 0x00 FF FF -> probes sectors 0x12, 9 and 8 (18 per track -> 0x0B,\n"
+     "9 -> 8, 8 -> 0x0A).  0xFFFE when the read reports not ready, 0xFF when nothing fits."),
+    ("FE370A", "DiskCmd_MountDrive",
+     "Disk_CommandDispatch's code 0: stores the drive type (0x605D98), invalidates the cached clusters (0x605D32/34/5E =\n"
+     "0xFFFF), Disk_SetDriveGeometry, Fdc_Request op 10 (controller present) then op 0 (reset + identify media); on a\n"
+     "floppy, Disk_DetectFloppyFormat up to three times.  HL = its format code when it recognises the disk, 0 for a\n"
+     "type-1 drive or a passing DiskCmd_CheckMediaId, 1 no medium (0xFFFE, or status 0x30 / 0x31), 2 or 3 failure."),
 ]
 
 

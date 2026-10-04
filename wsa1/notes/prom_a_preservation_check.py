@@ -2676,6 +2676,20 @@ RENAMES = {
     "sub_FE0000_Nop": "Disk_PhaseVector_Ret",
     "sub_FE1C12": "Disk_BootPhase3",
     "sub_FE833F": "EditScreen_BootPhase2And4",
+    "sub_FAA000": "ParamModule_PhaseVector_StaleCopy",
+    "sub_FE45BF": "Fat_MatchDirEntryName",
+    "sub_FE4671": "Fat_FindRootDirEntryByFcbName",
+    "sub_FE46DA": "Fat_FindFreeRootDirEntry",
+    "sub_FE457E": "Disk_CopyBytes",
+    "sub_FE44BD": "Disk_WriteCurrentCluster",
+    "sub_FE4B4B": "Fat_FindCrossLinkedCluster",
+    "sub_FE423E": "DiskCmd_StoreFatIfConsistent",
+    "sub_FE4376": "Fcb_AddToFileSize",
+    "sub_FE3CF4": "Fat_FreeChain",
+    "sub_FE3D4D": "Fat_DiscardFcbFile",
+    "sub_FE30DD": "Disk_SetDriveGeometry",
+    "sub_FE35F9": "Disk_DetectFloppyFormat",
+    "sub_FE370A": "DiskCmd_MountDrive",
 }
 
 

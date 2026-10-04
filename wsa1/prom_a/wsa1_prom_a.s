@@ -77195,7 +77195,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; =====================================================================
 ; The stale vector: each slot holds the live slot's target (ParamModule_PhaseVector) minus how far that
 ; routine moved -- 0x400, the distance between the copies, for slots 0 and 2.
-sub_FAA000:
+ParamModule_PhaseVector_StaleCopy:
 	jp	ParamModule_BootPhase0 - 0x400                                ; FAA000  1b 2a a4 fa
 	jp	ParamModule_BootPhase1_MemoryIntact - 0x439                                ; FAA004  1b b7 a4 fa
 	jp	ParamModule_BootPhase2_MemoryLost - 0x400                                ; FAA008  1b 82 a4 fa
@@ -164649,7 +164649,10 @@ sub_FE30B6:   ; entry: named by 1 `ld` operand, first at 0xFE30AC
 Fdc_ServiceDataByte_Isr:
 	call Fdc_ServiceDataByte                                        ; FE30D8  1d f9 67 fe
 	reti                                                 ; FE30DC  07
-sub_FE30DD:
+; Disk_SetDriveGeometry: (0x605D36) = arg & 0x0F; on a type-1 drive reads Dev7E_IdentifyDevice's data at 0x606F9B (Fdc_SetError 0xFC on
+;   failure) and takes the geometry from it; otherwise sets sectors per track (0x605D54: 9, 18 or 8), sectors per
+;   cluster (0x605D56), root entries (0x605D4E) and the other 0x605D3E-0x605D6A parameters per format code.
+Disk_SetDriveGeometry:
 	lda xsp, (xsp-22)                                    ; FE30DD  bf ea 37
 	push XIZ                                             ; FE30E0  3e
 	ld BC,(XSP+0x1e)                                     ; FE30E1  9f 1e 21
@@ -165019,7 +165022,10 @@ sub_FE30DD:
 	pop XIZ                                              ; FE35F4  5e
 	lda xsp, (xsp+0x16)                                  ; FE35F5  bf 16 37
 	ret                                                  ; FE35F8  0e
-sub_FE35F9:
+; Disk_DetectFloppyFormat: DiskCmd_CheckMediaId; failing that, reads sector 1 (the FAT's first sector) into 0x606F9B and reads the media
+;   descriptor: 0xF9 -> 8, 0xF7 -> 0x0D (geometry 5); 0x00 FF FF -> probes sectors 0x12, 9 and 8 (18 per track -> 0x0B,
+;   9 -> 8, 8 -> 0x0A).  0xFFFE when the read reports not ready, 0xFF when nothing fits.
+Disk_DetectFloppyFormat:
 	pushw 0x00                                           ; FE35F9  0b 00 00
 	calr DiskCmd_CheckMediaId                                          ; FE35FC  1e a3 08
 	inc 2,XSP                                            ; FE35FF  ef 62
@@ -165029,7 +165035,7 @@ sub_FE35F9:
 	jr z, .LFE366F                                           ; FE3608  66 65
 	ldw (0x605d36:24), 0x00                             ; FE360A  f2 36 5d 60 02 00 00
 	pushw 0x00                                           ; FE3611  0b 00 00
-	calr sub_FE30DD                                          ; FE3614  1e c6 fa
+	calr Disk_SetDriveGeometry                                          ; FE3614  1e c6 fa
 	lda xbc, (0x605d22:24)                               ; FE3617  f2 22 5d 60 31
 	ld XWA,(XBC)                                         ; FE361C  a1 20
 	m_ld_mi16 MDI+r0, 0, 0x0000                          ; FE361E  b0 02 00 00
@@ -165113,14 +165119,18 @@ sub_FE35F9:
 .LFE36F3:
 	ldw (0x605d36:24), 0x05                             ; FE36F3  f2 36 5d 60 02 05 00
 	pushw 0x05                                           ; FE36FA  0b 05 00
-	calr sub_FE30DD                                          ; FE36FD  1e dd f9
+	calr Disk_SetDriveGeometry                                          ; FE36FD  1e dd f9
 	inc 2,XSP                                            ; FE3700  ef 62
 	ldw hl, 0x0d                                         ; FE3702  33 0d 00
 	ret                                                  ; FE3705  0e
 .LFE3706:
 	ldw hl, 0xff                                         ; FE3706  33 ff 00
 	ret                                                  ; FE3709  0e
-sub_FE370A:
+; DiskCmd_MountDrive: Disk_CommandDispatch's code 0: stores the drive type (0x605D98), invalidates the cached clusters (0x605D32/34/5E =
+;   0xFFFF), Disk_SetDriveGeometry, Fdc_Request op 10 (controller present) then op 0 (reset + identify media); on a
+;   floppy, Disk_DetectFloppyFormat up to three times.  HL = its format code when it recognises the disk, 0 for a
+;   type-1 drive or a passing DiskCmd_CheckMediaId, 1 no medium (0xFFFE, or status 0x30 / 0x31), 2 or 3 failure.
+DiskCmd_MountDrive:
 	dec 4,XSP                                            ; FE370A  ef 6c
 	push XIZ                                             ; FE370C  3e
 	ld A,(XSP+0x0e)                                      ; FE370D  8f 0e 21
@@ -165168,7 +165178,7 @@ sub_FE370A:
 	ldw (0x605d6c:24), 0x00                             ; FE379B  f2 6c 5d 60 02 00 00
 	ldw (0x605d6e:24), 0x00                             ; FE37A2  f2 6e 5d 60 02 00 00
 	pushw iz                                             ; FE37A9  2e
-	calr sub_FE30DD                                          ; FE37AA  1e 30 f9
+	calr Disk_SetDriveGeometry                                          ; FE37AA  1e 30 f9
 	ld xwa, (0x605d22:24)                               ; FE37AD  e2 22 5d 60 20
 	push XWA                                             ; FE37B2  38
 	call Fdc_Request                                        ; FE37B3  1d c7 66 fe
@@ -165206,7 +165216,7 @@ sub_FE370A:
 .LFE3807:
 	m_push MWD+r7, 0x06                                  ; FE3807  9f 06 04
 	pushw iz                                             ; FE380A  2e
-	calr sub_FE35F9                                          ; FE380B  1e eb fd
+	calr Disk_DetectFloppyFormat                                          ; FE380B  1e eb fd
 	inc 4,XSP                                            ; FE380E  ef 64
 	cp HL,0xfffe                                         ; FE3810  db cf fe ff
 	jr z, .LFE3886                                           ; FE3814  66 70
@@ -165265,7 +165275,7 @@ sub_FE370A:
 	pop XIZ                                              ; FE388C  5e
 	inc 4,XSP                                            ; FE388D  ef 64
 	ret                                                  ; FE388F  0e
-	calr sub_FE44BD                                          ; FE3890  1e 2a 0c
+	calr Disk_WriteCurrentCluster                                          ; FE3890  1e 2a 0c
 	cp hl, 0x00:i3                                         ; FE3893  db d8
 	jr z, .LFE389B                                           ; FE3895  66 04
 	ldw hl, 0xff                                         ; FE3897  33 ff 00
@@ -165278,7 +165288,7 @@ DiskCmd_OpenFile:
 	push XIZ                                             ; FE389E  3e
 	ld XWA,(XSP+0x08)                                    ; FE389F  af 08 20
 	push XWA                                             ; FE38A2  38
-	calr sub_FE4671                                          ; FE38A3  1e cb 0d
+	calr Fat_FindRootDirEntryByFcbName                                          ; FE38A3  1e cb 0d
 	inc 4,XSP                                            ; FE38A6  ef 64
 	ld IZ,HL                                             ; FE38A8  db 8e
 	cp IZ,0xffff                                         ; FE38AA  de cf ff ff
@@ -165401,7 +165411,7 @@ sub_FE395A_Join:
 	pushw bc                                             ; FE39D5  29
 	jr .LFE39E9                                              ; FE39D6  68 11
 .LFE39D8:
-	calr sub_FE44BD                                          ; FE39D8  1e e2 0a
+	calr Disk_WriteCurrentCluster                                          ; FE39D8  1e e2 0a
 	cp hl, 0x00:i3                                         ; FE39DB  db d8
 	jr nz, .LFE3A35                                          ; FE39DD  6e 56
 	pushw 0xffff                                         ; FE39DF  0b ff ff
@@ -165440,7 +165450,7 @@ sub_FE395A_Join:
 	ldw hl, 0xff                                         ; FE3A35  33 ff 00
 	jr .LFE3A4A                                              ; FE3A38  68 10
 .LFE3A3A:
-	calr sub_FE4B4B                                          ; FE3A3A  1e 0e 11
+	calr Fat_FindCrossLinkedCluster                                          ; FE3A3A  1e 0e 11
 	ld IZ,HL                                             ; FE3A3D  db 8e
 	cp iz, 0x00:i3                                         ; FE3A3F  de d8
 	jr nz, .LFE3A48                                          ; FE3A41  6e 05
@@ -165482,7 +165492,7 @@ DiskCmd_FindFirst:
 	push XIZ                                             ; FE3A96  3e
 	ld XWA,(XSP+0x0e)                                    ; FE3A97  af 0e 20
 	push XWA                                             ; FE3A9A  38
-	calr sub_FE45BF                                          ; FE3A9B  1e 21 0b
+	calr Fat_MatchDirEntryName                                          ; FE3A9B  1e 21 0b
 	inc 8,XSP                                            ; FE3A9E  ef 60
 	cp hl, 0x00:i3                                         ; FE3AA0  db d8
 	jr nz, .LFE3AC4                                          ; FE3AA2  6e 20
@@ -165577,7 +165587,7 @@ sub_FE3B3A:
 	push XIZ                                             ; FE3B81  3e
 	ld XWA,(XSP+0x0e)                                    ; FE3B82  af 0e 20
 	push XWA                                             ; FE3B85  38
-	calr sub_FE45BF                                          ; FE3B86  1e 36 0a
+	calr Fat_MatchDirEntryName                                          ; FE3B86  1e 36 0a
 	inc 8,XSP                                            ; FE3B89  ef 60
 	cp hl, 0x00:i3                                         ; FE3B8B  db d8
 	jr nz, .LFE3BA7                                          ; FE3B8D  6e 18
@@ -165754,7 +165764,9 @@ DiskCmd_DeleteFile:
 .LFE3CF2:
 	pop XIZ                                              ; FE3CF2  5e
 	ret                                                  ; FE3CF3  0e
-sub_FE3CF4:
+; Fat_FreeChain: from the cluster arg 1 until the end-of-chain mark (0xFF8, 0xFFF8 on type 1): next = Fat_GetEntry, Fat_SetEntry
+;   the cluster to 0, step to next.  HL = 0xFF if 65536 clusters pass (a loop), else 0.
+Fat_FreeChain:
 	dec 4,XSP                                            ; FE3CF4  ef 6c
 	push XIZ                                             ; FE3CF6  3e
 	ld IZ,(XSP+0x0c)                                     ; FE3CF7  9f 0c 26
@@ -165793,7 +165805,10 @@ sub_FE3CF4:
 	pop XIZ                                              ; FE3D49  5e
 	inc 4,XSP                                            ; FE3D4A  ef 64
 	ret                                                  ; FE3D4C  0e
-sub_FE3D4D:
+; Fat_DiscardFcbFile: marks the FCB's directory entry (index FCB + 0x18) deleted (first byte 0xE5) and writes its sector, ends the
+;   chain at FCB + 0x1C (Fat_SetEntry 0xFFFF), Fat_FreeChain from FCB + 0x1A, Fat_Store.  DiskCmd_WriteFileBlock
+;   calls it when Fat_FindFreeClusterAfter finds no cluster -- the disk is full.
+Fat_DiscardFcbFile:
 	push XIZ                                             ; FE3D4D  3e
 	ld XWA,(XSP+0x08)                                    ; FE3D4E  af 08 20
 	ld IZ,(XWA+0x18)                                     ; FE3D51  98 18 26
@@ -165831,7 +165846,7 @@ sub_FE3D4D:
 	calr Fat_SetEntry                                          ; FE3D9F  1e 1c 0a
 	ld XWA,(XSP+0x0e)                                    ; FE3DA2  af 0e 20
 	m_push MWD+r0, 0x1a                                  ; FE3DA5  98 1a 04
-	calr sub_FE3CF4                                          ; FE3DA8  1e 49 ff
+	calr Fat_FreeChain                                          ; FE3DA8  1e 49 ff
 	inc 8,XSP                                            ; FE3DAB  ef 60
 	calr Fat_Store                                          ; FE3DAD  1e a5 0c
 .LFE3DB0:
@@ -165842,7 +165857,7 @@ sub_FE3D4D:
 DiskCmd_CreateFile:
 	dec 4,XSP                                            ; FE3DB2  ef 6c
 	push XIZ                                             ; FE3DB4  3e
-	calr sub_FE46DA                                          ; FE3DB5  1e 22 09
+	calr Fat_FindFreeRootDirEntry                                          ; FE3DB5  1e 22 09
 	ld (XSP+0x06),HL                                     ; FE3DB8  bf 06 53
 	m_cp_mi16 MWD+r7, 0x06, 0xffff                       ; FE3DBB  9f 06 3f ff ff
 	jrl z, .LFE3E8C                                          ; FE3DC0  76 c9 00
@@ -166110,7 +166125,7 @@ DiskCmd_ReadFileBlock:
 	ld XWA,(XBC)                                         ; FE404D  a1 20
 	push XWA                                             ; FE404F  38
 .LFE4050:
-	calr sub_FE457E                                          ; FE4050  1e 2b 05
+	calr Disk_CopyBytes                                          ; FE4050  1e 2b 05
 	lda xsp, (xsp+0x0a)                                  ; FE4053  bf 0a 37
 	inc 0x01, (0x607f9b:24)                           ; FE4056  c2 9b 7f 60 61
 	jr .LFE40B5                                              ; FE405B  68 58
@@ -166177,13 +166192,13 @@ DiskCmd_WriteFileBlock:
 	sla bc, 0x0a                                         ; FE40F0  d9 ec 0a
 	mx_lda32 MXD, ra_DE, ra_BC, r0                       ; FE40F3  f3 07 e8 e4 30
 	push XWA                                             ; FE40F8  38
-	calr sub_FE457E                                          ; FE40F9  1e 82 04
+	calr Disk_CopyBytes                                          ; FE40F9  1e 82 04
 	inc 0x01, (0x607f9c:24)                           ; FE40FC  c2 9c 7f 60 61
 	pushw 0x0400                                         ; FE4101  0b 00 04
 	ld XWA,(XSP+0x12)                                    ; FE4104  af 12 20
 	lda xwa, (xwa+0x10)                                  ; FE4107  b8 10 30
 	push XWA                                             ; FE410A  38
-	calr sub_FE4376                                          ; FE410B  1e 68 02
+	calr Fcb_AddToFileSize                                          ; FE410B  1e 68 02
 	lda xsp, (xsp+0x10)                                  ; FE410E  bf 10 37
 	jrl .LFE423A                                           ; FE4111  78 26 01
 .LFE4114:
@@ -166193,7 +166208,7 @@ DiskCmd_WriteFileBlock:
 	push XWA                                             ; FE411F  38
 	lda xwa, (xde+0x0c00)                                ; FE4120  f3 e9 00 0c 30
 	push XWA                                             ; FE4125  38
-	calr sub_FE457E                                          ; FE4126  1e 55 04
+	calr Disk_CopyBytes                                          ; FE4126  1e 55 04
 	m_push MW24, 0x605d34                                ; FE4129  d2 34 5d 60 04
 	calr Disk_WriteClusterFromWorkBuffer                                          ; FE412E  1e 32 04
 	lda xsp, (xsp+0x0c)                                  ; FE4131  bf 0c 37
@@ -166210,7 +166225,7 @@ DiskCmd_WriteFileBlock:
 	ld XWA,(XSP+0x08)                                    ; FE414B  af 08 20
 	lda xwa, (xwa+0x10)                                  ; FE414E  b8 10 30
 	push XWA                                             ; FE4151  38
-	calr sub_FE4376                                          ; FE4152  1e 21 02
+	calr Fcb_AddToFileSize                                          ; FE4152  1e 21 02
 	ld XWA,(XSP+0x0c)                                    ; FE4155  af 0c 20
 	ld WA,(XWA+0x1c)                                     ; FE4158  98 1c 20
 	pushw wa                                             ; FE415B  28
@@ -166221,7 +166236,7 @@ DiskCmd_WriteFileBlock:
 	jr nz, .LFE4178                                          ; FE4165  6e 11
 	ld XWA,(XSP+0x06)                                    ; FE4167  af 06 20
 	push XWA                                             ; FE416A  38
-	calr sub_FE3D4D                                          ; FE416B  1e df fb
+	calr Fat_DiscardFcbFile                                          ; FE416B  1e df fb
 	inc 4,XSP                                            ; FE416E  ef 64
 	cp hl, 0x00:i3                                         ; FE4170  db d8
 	jrl nz, .LFE420C                                         ; FE4172  7e 97 00
@@ -166276,7 +166291,7 @@ DiskCmd_WriteFileBlock:
 	jr nz, .LFE4215                                          ; FE41FD  6e 16
 	ld XWA,(XSP+0x06)                                    ; FE41FF  af 06 20
 	push XWA                                             ; FE4202  38
-	calr sub_FE3D4D                                          ; FE4203  1e 47 fb
+	calr Fat_DiscardFcbFile                                          ; FE4203  1e 47 fb
 	inc 4,XSP                                            ; FE4206  ef 64
 	cp hl, 0x00:i3                                         ; FE4208  db d8
 	jr z, .LFE4211                                           ; FE420A  66 05
@@ -166306,7 +166321,9 @@ DiskCmd_WriteFileBlock:
 .LFE423C:
 	popw iz                                              ; FE423C  4e
 	ret                                                  ; FE423D  0e
-sub_FE423E:
+; DiskCmd_StoreFatIfConsistent: Disk_CommandDispatch's code 0x85: on a type-1 drive returns 0; else Fat_FindCrossLinkedCluster, and only when it
+;   finds none, Fat_Store and (0x605D6C) = (0x605D6E) = 0.  Returns the cross-linked cluster otherwise.
+DiskCmd_StoreFatIfConsistent:
 	ld xwa, (0x605d22:24)                               ; FE423E  e2 22 5d 60 20
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE4243  98 02 3f 01 00
 	jr nz, .LFE424D                                          ; FE4248  6e 03
@@ -166314,7 +166331,7 @@ sub_FE423E:
 	ret                                                  ; FE424C  0e
 .LFE424D:
 	ldw (0x605d6e:24), 0xffff                           ; FE424D  f2 6e 5d 60 02 ff ff
-	calr sub_FE4B4B                                          ; FE4254  1e f4 08
+	calr Fat_FindCrossLinkedCluster                                          ; FE4254  1e f4 08
 	cp hl, 0x00:i3                                         ; FE4257  db d8
 	jr nz, .LFE426D                                          ; FE4259  6e 12
 	calr Fat_Store                                          ; FE425B  1e f7 07
@@ -166372,7 +166389,7 @@ Disk_CommandDispatch:
 	pushw wa                                             ; FE42BF  28
 	ld WA,DE                                             ; FE42C0  da 88
 	pushw wa                                             ; FE42C2  28
-	calr sub_FE370A                                          ; FE42C3  1e 44 f4
+	calr DiskCmd_MountDrive                                          ; FE42C3  1e 44 f4
 	inc 4,XSP                                            ; FE42C6  ef 64
 	ld xwa, (0x605d22:24)                               ; FE42C8  e2 22 5d 60 20
 	m_ld_mi16 MDD+r0, 0x0a, 0x0001                       ; FE42CD  b8 0a 02 01 00
@@ -166431,7 +166448,7 @@ Disk_CommandDispatch:
 	calr DiskCmd_WriteFileBlock                                          ; FE433E  1e 78 fd
 	inc 4,XSP                                            ; FE4341  ef 64
 	jr .LFE434D                                              ; FE4343  68 08
-	calr sub_FE423E                                          ; FE4345  1e f6 fe
+	calr DiskCmd_StoreFatIfConsistent                                          ; FE4345  1e f6 fe
 	jr .LFE434D                                              ; FE4348  68 03
 .LFE434A:
 	ldw hl, 0xff                                         ; FE434A  33 ff 00
@@ -166457,7 +166474,9 @@ Disk_CommandDispatch:
 	jr lt, .LFE435F                                           ; FE4373  61 ea
 .LFE4375:
 	ret                                                  ; FE4375  0e
-sub_FE4376:
+; Fcb_AddToFileSize: adds the word arg 2 to the 32-bit value at arg 1, carrying into the high word when the low word passes 0xFFFF
+;   from 0xF000 up.  DiskCmd_WriteFileBlock passes FCB + 0x10, the file size, and 0x400 after each block.
+Fcb_AddToFileSize:
 	ld BC,(XSP+0x08)                                     ; FE4376  9f 08 21
 	ld XDE,(XSP+0x04)                                    ; FE4379  af 04 22
 	ld WA,(XDE)                                          ; FE437C  92 20
@@ -166626,7 +166645,9 @@ Fat_ClusterToSector:
 	pop XIZ                                              ; FE44B9  5e
 	inc 2,XSP                                            ; FE44BA  ef 62
 	ret                                                  ; FE44BC  0e
-sub_FE44BD:
+; Disk_WriteCurrentCluster: writes the work buffer 0x606F9B to cluster (0x605D34): through Disk_WriteClusterFromWorkBuffer when the drive
+;   record ((0x605D22) + 2) is type 1, else inline the same Fat_ClusterToSector + Disk_WriteSectors of (0x605D56) sectors.
+Disk_WriteCurrentCluster:
 	ld xwa, (0x605d22:24)                               ; FE44BD  e2 22 5d 60 20
 	m_push MW24, 0x605d34                                ; FE44C2  d2 34 5d 60 04
 	m_cp_mi16 MWD+r0, 0x02, 0x0001                       ; FE44C7  98 02 3f 01 00
@@ -166707,7 +166728,9 @@ Disk_WriteClusterFromWorkBuffer:
 	calr Disk_WriteSectors                                          ; FE4577  1e d8 fe
 	lda xsp, (xsp+0x0c)                                  ; FE457A  bf 0c 37
 	ret                                                  ; FE457D  0e
-sub_FE457E:
+; Disk_CopyBytes: copies arg 3 (a word) bytes from the arg-2 pointer to the arg-1 pointer, one byte at a time.
+;   Called by DiskCmd_ReadFileBlock and DiskCmd_WriteFileBlock (blocks of 0x400).
+Disk_CopyBytes:
 	ld iy, 0x00:i3                                         ; FE457E  dd a8
 	ld DE,(XSP+0x0c)                                     ; FE4580  9f 0c 22
 	cp de, 0x00:i3                                         ; FE4583  da d8
@@ -166740,7 +166763,9 @@ sub_FE457E:
 	jr lt, .LFE45A8                                           ; FE45BA  61 ec
 	ld hl, 0x00:i3                                         ; FE45BC  db a8
 	ret                                                  ; FE45BE  0e
-sub_FE45BF:
+; Fat_MatchDirEntryName: compares the 11-byte 8.3 name at arg 2 (a directory entry) with arg 1, byte by byte; a '?' (0x3F) on either
+;   side matches anything; an entry whose first byte is 0xE5 (deleted) never matches.  HL = 0 on a match, else 0xFF.
+Fat_MatchDirEntryName:
 	ld XBC,(XSP+0x08)                                    ; FE45BF  af 08 21
 	ld XDE,(XSP+0x04)                                    ; FE45C2  af 04 22
 	ld hl, 0x00:i3                                         ; FE45C5  db a8
@@ -166828,7 +166853,10 @@ Disk_WriteRootDirSector:
 .LFE466E:
 	ld hl, 0x00:i3                                         ; FE466E  db a8
 	ret                                                  ; FE4670  0e
-sub_FE4671:
+; Fat_FindRootDirEntryByFcbName: for every root-directory sector (count (0x605D52)) read by Disk_ReadRootDirSector and every 32-byte entry in it
+;   (count (0x605D50)), Fat_MatchDirEntryName against the FCB's name at arg + 1.  HL = the entry's index, or 0xFFFF.
+;   Called by DiskCmd_OpenFile.
+Fat_FindRootDirEntryByFcbName:
 	dec 6,XSP                                            ; FE4671  ef 6e
 	push XIZ                                             ; FE4673  3e
 	ld xwa, 0x01:i3                                      ; FE4674  e8 a9
@@ -166855,7 +166883,7 @@ sub_FE4671:
 	push XWA                                             ; FE46A7  38
 	ld XWA,(XSP+0x0a)                                    ; FE46A8  af 0a 20
 	push XWA                                             ; FE46AB  38
-	calr sub_FE45BF                                          ; FE46AC  1e 10 ff
+	calr Fat_MatchDirEntryName                                          ; FE46AC  1e 10 ff
 	inc 8,XSP                                            ; FE46AF  ef 60
 	cp hl, 0x00:i3                                         ; FE46B1  db d8
 	jr nz, .LFE46BA                                          ; FE46B3  6e 05
@@ -166878,7 +166906,9 @@ sub_FE4671:
 	pop XIZ                                              ; FE46D6  5e
 	inc 6,XSP                                            ; FE46D7  ef 66
 	ret                                                  ; FE46D9  0e
-sub_FE46DA:
+; Fat_FindFreeRootDirEntry: the same walk, stopping at the first entry whose first byte is 0x00 (never used) or 0xE5 (deleted).  HL = its
+;   index, or 0xFFFF.  Called by DiskCmd_CreateFile.
+Fat_FindFreeRootDirEntry:
 	push XIZ                                             ; FE46DA  3e
 	ld iz, 0x00:i3                                         ; FE46DB  de a8
 	jr .LFE4725                                              ; FE46DD  68 46
@@ -167349,7 +167379,10 @@ Fat_Store:
 .LFE4B49:
 	popw iz                                              ; FE4B49  4e
 	ret                                                  ; FE4B4A  0e
-sub_FE4B4B:
+; Fat_FindCrossLinkedCluster: zeroes a byte per cluster at 0x60A002.., then for every cluster 2..0x3FF counts Fat_GetEntry's value (when it
+;   is non-zero and below the end-of-chain mark 0xFF8, 0xFFF8 on type 1); returns the first cluster counted more
+;   than once -- the target of two chains -- or 0.
+Fat_FindCrossLinkedCluster:
 	dec 2,XSP                                            ; FE4B4B  ef 6a
 	push XIZ                                             ; FE4B4D  3e
 	ld xwa, (0x605d22:24)                               ; FE4B4E  e2 22 5d 60 20

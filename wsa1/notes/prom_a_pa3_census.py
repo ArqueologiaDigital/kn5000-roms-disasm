@@ -335,7 +335,7 @@ def main():
     if not quiet:
         print("\n=== does the routine that ASSERTS reach a disk request? ===")
         print("  sub_FE08BD -> sub_FE1962 -> T_F42D34 -> 0xFE3042 -> "
-              "Disk_CommandDispatch (sub_FE426E) -> sub_FE370A -> Fdc_Request(0xFE66C7)")
+              "Disk_CommandDispatch (sub_FE426E) -> DiskCmd_MountDrive -> Fdc_Request(0xFE66C7)")
     check("BFS from sub_FE08BD (an asserting routine) reaches Fdc_Request",
           path is not None)
 
