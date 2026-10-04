@@ -79433,7 +79433,9 @@ List2030_LoadRecord:
 	pop XDE                                              ; FAB1D5  5a
 	pop XHL                                              ; FAB1D6  5b
 	ret                                                  ; FAB1D7  0e
-sub_FAB1D8:
+; ParamRecord_LoadOldByte: (0x60F08B) = the current byte of the parameter record (ParamNumber_GetRecordPtr of (0x60F080)) at
+;   the class offset (0x60F088) -- the "old byte" the List2030 dispatchers compare against; nothing when there is no record.
+ParamRecord_LoadOldByte:
 	link XIZ,0xfffc                                      ; FAB1D8  ee 0c fc ff
 	push XIX                                             ; FAB1DC  3c
 	push 0x00                                            ; FAB1DD  09 00
@@ -80151,8 +80153,11 @@ List2030_TranslateToQueue2C00:
 	ld (0x60f01e:24), 0x7f                             ; FAB88C  f2 1e f0 60 00 7f
 	pop XIX                                              ; FAB892  5c
 	ret                                                  ; FAB893  0e
-sub_FAB894:   ; entry: named by 32 `.long` operands, first at 0xFAC8EA
-	calr sub_FAB1D8                                      ; FAB894  1e 41 f9
+; List2030_Part00to1F_Dispatch: the 0x2030-list handler for parameter numbers 0x00-0x1F (Dispatch_By_60F080 entries 0-31: the
+;   number is the part): dispatches again on the record's CLASS (0x60F088) through JumpTable_FAB8B4 -- the sibling of
+;   List2030_Part20to3F_Dispatch (Dispatch_By_60F080's own header).
+List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 0xFAC8EA
+	calr ParamRecord_LoadOldByte                                      ; FAB894  1e 41 f9
 	ld bc, (0x60f088:24)                                ; FAB897  d2 88 f0 60 21
 	extz BC                                              ; FAB89C  d9 12
 	extz XBC                                             ; FAB89E  e9 12
@@ -80461,10 +80466,10 @@ List2030_PartBendRange_Apply:
 	popw bc                                              ; FABAFB  49
 	ret                                                  ; FABAFC  0e
 ; List2030_Part20to3F_Dispatch -- 0x2030-list handler for parameter numbers 0x20-0x3F, the second 0x20-byte half of each part record: dispatch classes 0x18, 0x19, 0x1A
-; Evidence: Dispatch_By_60F080 entries 32-63 all hold it; ParamNumber_RecordPtrs[0x20+i] == [i] + 0x20 (that table's pin 3).  Body: calr sub_FAB1D8 (old byte -> (0x60F08B)), then `cp BC,0x18/0x19/0x1A` at 0xFABB07-0xFABB13 -> List2030_Field18_SetAllParts / List2030_PartField19_Apply / List2030_PartField1A_Apply; other classes do nothing.
+; Evidence: Dispatch_By_60F080 entries 32-63 all hold it; ParamNumber_RecordPtrs[0x20+i] == [i] + 0x20 (that table's pin 3).  Body: calr ParamRecord_LoadOldByte (old byte -> (0x60F08B)), then `cp BC,0x18/0x19/0x1A` at 0xFABB07-0xFABB13 -> List2030_Field18_SetAllParts / List2030_PartField19_Apply / List2030_PartField1A_Apply; other classes do nothing.
 ; Evt2030_Class20to3F accepts exactly the same three classes.
 List2030_Part20to3F_Dispatch:   ; entry: named by 32 `.long` operands, first at 0xFAC96A
-	calr sub_FAB1D8                                          ; FABAFD  1e d8 f6
+	calr ParamRecord_LoadOldByte                                          ; FABAFD  1e d8 f6
 	ld bc, (0x60f088:24)                                ; FABB00  d2 88 f0 60 21
 	extz BC                                              ; FABB05  d9 12
 	cp BC,0x0018                                         ; FABB07  d9 cf 18 00
@@ -80485,14 +80490,14 @@ List2030_Part20to3F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 .LFABB28:
 	ret                                                  ; FABB28  0e
 ; List2030_Field18_SetAllParts -- class 0x18 of a second-half part record: apply the record's bit 0 to byte 0x18 of ALL 32 second-half records (numbers 0x20-0x3F), queuing each change to 0x2C00
-; Evidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then sub_FAB1D8, ParamRecord_MergeFieldIfChanged with mask 0x0001 and Queue2C00_AppendStagedIfPending.
+; Evidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then ParamRecord_LoadOldByte, ParamRecord_MergeFieldIfChanged with mask 0x0001 and Queue2C00_AppendStagedIfPending.
 ; KeyValueList_A/B give key {0x20+i, 0x18} mask 0x01; ParamRecord_SetPartsField18Bit0 performs the same sweep from a stack argument.  Evt2030_Class20to3F's tail uses bit 0 of +0x18 to choose between fields +0x19 and +0x1A.
 List2030_Field18_SetAllParts:
 	pushw hl                                             ; FABB29  2b
 	ld h, 0x20:opc                                          ; FABB2A  26 20
 .LFABB2C:
 	ld (0x60f080:24), h                                 ; FABB2C  f2 80 f0 60 46
-	calr sub_FAB1D8                                          ; FABB31  1e a4 f6
+	calr ParamRecord_LoadOldByte                                          ; FABB31  1e a4 f6
 	pushw 0x01                                           ; FABB34  0b 01 00
 	calr ParamRecord_MergeFieldIfChanged                                          ; FABB37  1e fd f7
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB3A  1e ce f6
@@ -80525,9 +80530,9 @@ Dispatch_By_60F080_Nop68:   ; entry: named by 3 `.long` operands, first at 0xFAC
 Dispatch_By_60F080_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFACA0A
 	ret                                                  ; FABB60  0e
 ; List2030_Tempo_Dispatch -- 0x2030-list handler for parameter 0x7A, the tempo: class 0 goes to List2030_Tempo_Apply, any other class is ignored
-; Evidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr sub_FAB1D8.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value Tempo_ApplyBpm clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways.
+; Evidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr ParamRecord_LoadOldByte.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value Tempo_ApplyBpm clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways.
 List2030_Tempo_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
-	calr sub_FAB1D8                                          ; FABB61  1e 74 f6
+	calr ParamRecord_LoadOldByte                                          ; FABB61  1e 74 f6
 	ld bc, (0x60f088:24)                                ; FABB64  d2 88 f0 60 21
 	extz BC                                              ; FABB69  d9 12
 	cp bc, 0x00:i3                                         ; FABB6B  d9 d8
@@ -80585,9 +80590,9 @@ Dispatch_By_60F080_Nop114:   ; entry: named by 1 `.long` operand, first at 0xFAC
 T_F407F0_Nop:
 	ret                                                  ; FABBD6  0e
 ; List2030_Param98_Dispatch -- 0x2030-list handler for parameter 0x98: class 1 goes to List2030_Param98_ApplyProgram, other classes are ignored
-; Evidence: Dispatch_By_60F080[152] (0xFACB4A) is its only reference; `cp bc,1 / jr z` at 0xFABBE1 after calr sub_FAB1D8.  Parameter 0x98's record is RAM 0x7F02 (ParamNumber_RecordPtrs[152]).
+; Evidence: Dispatch_By_60F080[152] (0xFACB4A) is its only reference; `cp bc,1 / jr z` at 0xFABBE1 after calr ParamRecord_LoadOldByte.  Parameter 0x98's record is RAM 0x7F02 (ParamNumber_RecordPtrs[152]).
 List2030_Param98_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFACB4A
-	calr sub_FAB1D8                                          ; FABBD7  1e fe f5
+	calr ParamRecord_LoadOldByte                                          ; FABBD7  1e fe f5
 	ld bc, (0x60f088:24)                                ; FABBDA  d2 88 f0 60 21
 	extz BC                                              ; FABBDF  d9 12
 	cp bc, 0x01:i3                                         ; FABBE1  d9 d9
@@ -82146,7 +82151,7 @@ Gap_FAC8E6:
 ;          into (0x60F080).  So the index is that record's PARAMETER NUMBER,
 ;          the number space of Evt2030_ClassHandlers and
 ;          MidiOut_ParamNumberTable.  What the populated entries serve:
-;   0x00-0x1F  sub_FAB894 -- part parameters (number = the part); it
+;   0x00-0x1F  List2030_Part00to1F_Dispatch -- part parameters (number = the part); it
 ;              dispatches again on the record's CLASS, JumpTable_FAB8B4
 ;   0x20-0x3F  List2030_Part20to3F_Dispatch -- the other half of each part record
 ;              (ParamNumber_RecordPtrs, pin 3)
@@ -82161,38 +82166,38 @@ Gap_FAC8E6:
 ; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
 ; ---------------------------------------------------------------------
 Dispatch_By_60F080:
-	.long sub_FAB894                                 ; FAC8EA  [  0]
-	.long sub_FAB894                                 ; FAC8EE  [  1]
-	.long sub_FAB894                                 ; FAC8F2  [  2]
-	.long sub_FAB894                                 ; FAC8F6  [  3]
-	.long sub_FAB894                                 ; FAC8FA  [  4]
-	.long sub_FAB894                                 ; FAC8FE  [  5]
-	.long sub_FAB894                                 ; FAC902  [  6]
-	.long sub_FAB894                                 ; FAC906  [  7]
-	.long sub_FAB894                                 ; FAC90A  [  8]
-	.long sub_FAB894                                 ; FAC90E  [  9]
-	.long sub_FAB894                                 ; FAC912  [ 10]
-	.long sub_FAB894                                 ; FAC916  [ 11]
-	.long sub_FAB894                                 ; FAC91A  [ 12]
-	.long sub_FAB894                                 ; FAC91E  [ 13]
-	.long sub_FAB894                                 ; FAC922  [ 14]
-	.long sub_FAB894                                 ; FAC926  [ 15]
-	.long sub_FAB894                                 ; FAC92A  [ 16]
-	.long sub_FAB894                                 ; FAC92E  [ 17]
-	.long sub_FAB894                                 ; FAC932  [ 18]
-	.long sub_FAB894                                 ; FAC936  [ 19]
-	.long sub_FAB894                                 ; FAC93A  [ 20]
-	.long sub_FAB894                                 ; FAC93E  [ 21]
-	.long sub_FAB894                                 ; FAC942  [ 22]
-	.long sub_FAB894                                 ; FAC946  [ 23]
-	.long sub_FAB894                                 ; FAC94A  [ 24]
-	.long sub_FAB894                                 ; FAC94E  [ 25]
-	.long sub_FAB894                                 ; FAC952  [ 26]
-	.long sub_FAB894                                 ; FAC956  [ 27]
-	.long sub_FAB894                                 ; FAC95A  [ 28]
-	.long sub_FAB894                                 ; FAC95E  [ 29]
-	.long sub_FAB894                                 ; FAC962  [ 30]
-	.long sub_FAB894                                 ; FAC966  [ 31]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8EA  [  0]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8EE  [  1]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8F2  [  2]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8F6  [  3]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8FA  [  4]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC8FE  [  5]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC902  [  6]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC906  [  7]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC90A  [  8]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC90E  [  9]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC912  [ 10]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC916  [ 11]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC91A  [ 12]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC91E  [ 13]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC922  [ 14]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC926  [ 15]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC92A  [ 16]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC92E  [ 17]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC932  [ 18]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC936  [ 19]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC93A  [ 20]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC93E  [ 21]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC942  [ 22]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC946  [ 23]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC94A  [ 24]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC94E  [ 25]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC952  [ 26]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC956  [ 27]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC95A  [ 28]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC95E  [ 29]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC962  [ 30]
+	.long List2030_Part00to1F_Dispatch                                 ; FAC966  [ 31]
 	.long List2030_Part20to3F_Dispatch                                 ; FAC96A  [ 32]
 	.long List2030_Part20to3F_Dispatch                                 ; FAC96E  [ 33]
 	.long List2030_Part20to3F_Dispatch                                 ; FAC972  [ 34]

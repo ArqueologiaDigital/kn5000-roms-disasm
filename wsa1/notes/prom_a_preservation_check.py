@@ -3157,6 +3157,8 @@ RENAMES = {
     "sub_F377FA": "ClampArm408_0To128_MaskFFFF",
     "sub_F3780C": "ClampArm408_0To100_MaskFFFF",
     "sub_F3797B": "ClampArm408_0To49_Mask7F",
+    "sub_FAB894": "List2030_Part00to1F_Dispatch",
+    "sub_FAB1D8": "ParamRecord_LoadOldByte",
 }
 
 
