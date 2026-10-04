@@ -692,7 +692,7 @@ NAMES = [
      "two before service 0x05 fills (0x2530..0x2536).  This routine's own\n"
      "instructions never touch X0 or X1, so all IT contributes is four rows of\n"
      "height.  ⚠ Where the rectangle comes from is NOT established: the `calr`\n"
-     "at 0xFF01F2 resolves to sub_FF0092, which this round did not trace."),
+     "at 0xFF01F2 resolves to DrumEdit_EventMarkRect, which this round did not trace."),
     ("sub_FF76FE", "LCD_DrawText8x14_Layer0_SaveRegs",
      "draw the caller's 8x14 string on layer 0, preserving four registers",
      "`push WA/BC/XIY/XIX`, `ld (0x2540),0x00`, service 0x06, then the four pops.\n"
@@ -944,7 +944,7 @@ def mode_services():
     print("    EditScreen_HighlightCursorRow  its rectangle's Y is 10*(0x601F73)+0x2A -- a row INDEX")
     print("                whose meaning is not established, so `what it fills` is not")
     print("                sayable without naming that variable.")
-    print("    sub_FF0178  TWO service-0x05 fills bracketing two `calr` sites this round")
+    print("    DrumEdit_DrawSelectedMarkBrackets  TWO service-0x05 fills bracketing two `calr` sites this round")
     print("                did not trace; what the PAIR draws is not established, and one")
     print("                fill alone would be half the claim.")
     print("    EditScreen_DrawEventBar  its service 0x09 box is preceded by a branch on bit 0 of")

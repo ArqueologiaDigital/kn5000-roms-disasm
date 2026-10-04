@@ -1463,7 +1463,7 @@ ROWS = [
     ("FF0AB3", "NoteEdit_DrawCursorNoteName",
      "EditCursor_Note split by `div A,0x0C`: the octave through DisplayList_FF0AEA, the note through NoteNames."),
     ("FEA12D", "EditScreen_RedrawEditArea",
-     "with (0x601F58) bit 7: erase layer 1, sub_FF019D, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and\n"
+     "with (0x601F58) bit 7: erase layer 1, EditScreen_FillSelectedEventBar, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and\n"
      "redraw the events (EditScreen_DrawVisibleNotesExceptSelected) first."),
     ("FEAEBC", "DrumEdit_RowFollowNoteUp",
      "after EditCursor_Note + 1 in DRUM EDIT (unless (0x601F1C) bit 7): EditScreen_CursorRow + 1 below 11, with\n"
@@ -1556,10 +1556,10 @@ ROWS = [
      "A = the lowest, W = the highest note shown: DRUM EDIT DrumEdit_TopRowNote .. + 11; NOTE EDIT the word pair\n"
      "WordTable_FEFFDD[NoteEdit_RulerPosition]."),
     ("FEFFF3", "EditScreen_DrawEventBar",
-     "geometry from sub_FF0294, layer 0, the mode's shape (sub_FF0092 DRUM / sub_FF000E NOTE), SWI 7 service 9."),
+     "geometry from EditBar_LoadEventGeometry, layer 0, the mode's shape (DrumEdit_EventMarkRect DRUM / NoteEdit_EventBarRect NOTE), SWI 7 service 9."),
     ("FF00ED", "EditScreen_DrawSelectedEventBar",
-     "with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (sub_FF0178 /\n"
-     "sub_FF013F)."),
+     "with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (DrumEdit_DrawSelectedMarkBrackets /\n"
+     "NoteEdit_DrawSelectedBarInset)."),
     ("FEFDAC", "EditScreen_DrawCursorTickMarker",
      "layer 1: Glyph_FEFDE4 at x = EditCursor_TickInMeasure / 4 + 0x0D (NOTE) or 0x56 (DRUM), y = 0x22."),
     ("FEFEBF", "EditScreen_DrawVisibleNotes",
@@ -1681,6 +1681,36 @@ ROWS = [
     ("FE955D", "EditScreen_WrapAndShowCursorMeasure",
      "EditCursor_WrapAndRecompute, then EditScreen_ShowCursorMeasure's sequence.  Called when a move runs past\n"
      "the view."),
+    # NOTE / DRUM EDIT: the event bars
+    ("FF0294", "EditBar_LoadEventGeometry",
+     "for the note-on at the cursor: (0x601F38) = its tick in the view, (0x601F3A) = its row (EditBar_SetRowFromNote),\n"
+     "(0x601F3B) = its length (+5 & 0x7F) x 0x60 + (+4 & 0x7F), clipped (EditBar_ClipLengthToView)."),
+    ("FF02F5", "EditBar_SetRowFromNote",
+     "(note L, low A): DRUM EDIT row = 11 - (L - A), the list running top-down; NOTE EDIT row = L - A, + 4 at\n"
+     "NoteEdit_RulerPosition 0."),
+    ("FF02D5", "EditBar_ClipLengthToView",
+     "when (0x601F38) + the length passes EditMeasure_Beats x 0x60 - 1, (0x601F3B) = what is left to the view's end."),
+    ("FF000E", "NoteEdit_EventBarRect",
+     "LCD_X0 = (0x601F38) / 4 + 0x10, LCD_X1 = LCD_X0 + (0x601F3B) / 4, LCD_Y0 = CoordTable_FF0058[(0x601F3A)],\n"
+     "LCD_Y1 = LCD_Y0 + 3: a piano-roll bar as long as the note."),
+    ("FF0092", "DrumEdit_EventMarkRect",
+     "LCD_X0 = (0x601F38) / 4 + 0x59, two pixels wide, LCD_Y0 = CoordTable_FF00D1[(0x601F3A)], three high: a drum\n"
+     "hit mark."),
+    ("FF013F", "NoteEdit_DrawSelectedBarInset",
+     "NoteEdit_EventBarRect shrunk by a pixel on each side (bars under 2 pixels: their left edge only), SWI 7 5\n"
+     "(FillRect)."),
+    ("FF0178", "DrumEdit_DrawSelectedMarkBrackets",
+     "two fills, just above and just below DrumEdit_EventMarkRect."),
+    ("FF019D", "EditScreen_FillSelectedEventBar",
+     "with an event selected and its note in view: layer 1, its bar or mark filled (LCD_FillRect_Grown2Rows in\n"
+     "DRUM EDIT, NoteEdit_EventBarRect + FillRect in NOTE EDIT)."),
+    ("FF0243", "EditScreen_DrawSelectionAtCursor",
+     "with an event selected: its bar drawn at the CURSOR -- EditCursor_Note's row, EditCursor_TickInMeasure,\n"
+     "EditField_Length long (2 in DRUM EDIT) -- on layer 1: the selection following the cursor."),
+    ("FF0205", "EditScreen_RedrawAfterTickMove",
+     "EditCursor_Tick* moves: with a selection, the other notes redrawn and the selection drawn at the cursor\n"
+     "(EditScreen_DrawSelectionAtCursor while a deferred action is pending, else EditScreen_FillSelectedEventBar);\n"
+     "without, all notes and EditScreen_DrawSelectedEventBar."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

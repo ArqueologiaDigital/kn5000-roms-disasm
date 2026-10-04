@@ -179087,7 +179087,7 @@ EditCursor_TickPlus1:
 	m_add_mi8 MB24, EditCursor_Tick, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
 	calr EditScreen_DrawTick                                          ; FE9DC8  1e 87 6c
 	calr EditCursor_RecomputeAndRedraw                                      ; FE9DCB  1e ed 00
-	calr sub_FF0205                                          ; FE9DCE  1e 34 64
+	calr EditScreen_RedrawAfterTickMove                                          ; FE9DCE  1e 34 64
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9DD1  1e ae 02
 	ret                                                  ; FE9DD4  0e
 ; EditCursor_TickPlus5: EditCursor_Tick + 5, clamped to 0x5F; at 0x5F, EditCursor_NextBeat instead.
@@ -179106,7 +179106,7 @@ EditCursor_TickPlus5:
 .LFE9DF7:
 	calr EditScreen_DrawTick                                          ; FE9DF7  1e 58 6c
 	calr EditCursor_RecomputeAndRedraw                                      ; FE9DFA  1e be 00
-	calr sub_FF0205                                          ; FE9DFD  1e 05 64
+	calr EditScreen_RedrawAfterTickMove                                          ; FE9DFD  1e 05 64
 ; EditScreen_QueueRelocateAfterMove_Call: calls EditScreen_QueueRelocateAfterMove and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
 EditScreen_QueueRelocateAfterMove_Call:
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9E00  1e 7f 02
@@ -179268,7 +179268,7 @@ EditCursor_TickMinus1:
 	sub	(EditCursor_Tick:24), 0x01                  ; FE9F82  c2 43 1f 60 3a 01
 	calr EditScreen_DrawTick                                          ; FE9F88  1e c7 6a
 	calr EditCursor_RecomputeAndRedraw                                      ; FE9F8B  1e 2d ff
-	calr sub_FF0205                                          ; FE9F8E  1e 74 62
+	calr EditScreen_RedrawAfterTickMove                                          ; FE9F8E  1e 74 62
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9F91  1e ee 00
 	ret                                                  ; FE9F94  0e
 ; EditCursor_TickMinus5: EditCursor_Tick - 5, floored at 0 (EditCursor_PrevBeat at tick 0) -- the counterpart of EditCursor_TickPlus5.
@@ -179287,7 +179287,7 @@ EditCursor_TickMinus5:
 .LFE9FB2:
 	calr EditScreen_DrawTick                                          ; FE9FB2  1e 9d 6a
 	calr EditCursor_RecomputeAndRedraw                                      ; FE9FB5  1e 03 ff
-	calr sub_FF0205                                          ; FE9FB8  1e 4a 62
+	calr EditScreen_RedrawAfterTickMove                                          ; FE9FB8  1e 4a 62
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9FBB  1e c4 00
 	ret                                                  ; FE9FBE  0e
 .LFE9FBF:
@@ -179435,20 +179435,20 @@ EditCursor_NoteDown:
 	ld (EditScreen_ActionTimer:24), 0x83                             ; FEA120  f2 58 1f 60 00 83
 	ld (EditScreen_ActionIndex:24), 0x02                             ; FEA126  f2 59 1f 60 00 02
 	ret                                                  ; FEA12C  0e
-; EditScreen_RedrawEditArea: with (0x601F58) bit 7: erase layer 1, sub_FF019D, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and
+; EditScreen_RedrawEditArea: with (0x601F58) bit 7: erase layer 1, EditScreen_FillSelectedEventBar, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and
 ;   redraw the events (EditScreen_DrawVisibleNotesExceptSelected) first.
 EditScreen_RedrawEditArea:
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FEA12D  f2 58 1f 60 cf
 	jr z, .LFEA13E                                       ; FEA132  66 0a
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEA134  1e 22 57
-	calr sub_FF019D                                          ; FEA137  1e 63 60
+	calr EditScreen_FillSelectedEventBar                                          ; FEA137  1e 63 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA13A  1e 1c 5d
 	ret                                                  ; FEA13D  0e
 .LFEA13E:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEA13E  1e 91 56
 	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FEA141  1e e9 5d
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEA144  1e 12 57
-	calr sub_FF019D                                          ; FEA147  1e 53 60
+	calr EditScreen_FillSelectedEventBar                                          ; FEA147  1e 53 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA14A  1e 0c 5d
 	ret                                                  ; FEA14D  0e
 ; EditScreen_SoftKeyCol4: the SoftKeyCol4 action of DrumEdit, NoteEdit -- called only by SoftKeyCol4_DrumEdit, SoftKeyCol4_NoteEdit.
@@ -184848,34 +184848,36 @@ EditScreen_VisibleNoteRange:
 WordTable_FEFFDD:
 	.byte 0x01, 0x17, 0x09, 0x23, 0x15, 0x2f, 0x21, 0x3b, 0x2d, 0x47, 0x39, 0x53, 0x45, 0x5f, 0x51, 0x6b  ; FEFFDD
 	.byte 0x5d, 0x77, 0x69, 0x7f, 0x01, 0x01                                  ; FEFFED
-; EditScreen_DrawEventBar: geometry from sub_FF0294, layer 0, the mode's shape (sub_FF0092 DRUM / sub_FF000E NOTE), SWI 7 service 9.
+; EditScreen_DrawEventBar: geometry from EditBar_LoadEventGeometry, layer 0, the mode's shape (DrumEdit_EventMarkRect DRUM / NoteEdit_EventBarRect NOTE), SWI 7 service 9.
 EditScreen_DrawEventBar:
-	calr sub_FF0294                                          ; FEFFF3  1e 9e 02
+	calr EditBar_LoadEventGeometry                                          ; FEFFF3  1e 9e 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEFFF6  f1 40 25 00 00
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFFB  f2 70 1f 60 c8
 	jr z, .LFF0007                                       ; FF0000  66 05
-	calr sub_FF0092                                            ; FF0002  1e 8d 00
+	calr DrumEdit_EventMarkRect                                            ; FF0002  1e 8d 00
 	jr .LFF000A                                          ; FF0005  68 03
 .LFF0007:
-	calr sub_FF000E                                      ; FF0007  1e 04 00
+	calr NoteEdit_EventBarRect                                      ; FF0007  1e 04 00
 .LFF000A:
 	ld a, 0x09:opc                                          ; FF000A  21 09
 	swi 7                                                ; FF000C  ff
 	ret                                                  ; FF000D  0e
-sub_FF000E:
+; NoteEdit_EventBarRect: LCD_X0 = (0x601F38) / 4 + 0x10, LCD_X1 = LCD_X0 + (0x601F3B) / 4, LCD_Y0 = CoordTable_FF0058[(0x601F3A)],
+;   LCD_Y1 = LCD_Y0 + 3: a piano-roll bar as long as the note.
+NoteEdit_EventBarRect:
 	xor XWA,XWA                                          ; FF000E  e8 d0
-	ld wa, (0x601f38:24)                                ; FF0010  d2 38 1f 60 20
+	ld wa, (EditBar_Tick:24)                                ; FF0010  d2 38 1f 60 20
 	div WA,0x0004                                        ; FF0015  d8 0a 04 00
 	add WA,0x0010                                        ; FF0019  d8 c8 10 00
 	ld (LCD_X0:16), wa                                  ; FF001D  f1 30 25 50
 	xor XWA,XWA                                          ; FF0021  e8 d0
-	ld wa, (0x601f3b:24)                                ; FF0023  d2 3b 1f 60 20
+	ld wa, (EditBar_Length:24)                                ; FF0023  d2 3b 1f 60 20
 	div WA,0x0004                                        ; FF0028  d8 0a 04 00
 	m_add_rm MW16, LCD_X0, r0                            ; FF002C  d1 30 25 80
 	ld (LCD_X1:16), wa                                  ; FF0030  f1 34 25 50
 	ld XIX,CoordTable_FF0058                             ; FF0034  44 58 00 ff 00
 	xor XWA,XWA                                          ; FF0039  e8 d0
-	ld a, (0x601f3a:24)                                 ; FF003B  c2 3a 1f 60 21
+	ld a, (EditBar_Row:24)                                 ; FF003B  c2 3a 1f 60 21
 	sll wa, 0x01                                         ; FF0040  d8 ee 01
 	add XIX,XWA                                          ; FF0043  e8 84
 	ld WA,(XIX)                                          ; FF0045  94 20
@@ -184901,9 +184903,11 @@ CoordTable_FF0058:
 	.byte 0x7b, 0x00, 0x77, 0x00, 0x73, 0x00, 0x6f, 0x00, 0x6b, 0x00, 0x67, 0x00, 0x63, 0x00, 0x5b, 0x00  ; FF0068
 	.byte 0x57, 0x00, 0x53, 0x00, 0x4f, 0x00, 0x4b, 0x00, 0x43, 0x00, 0x3f, 0x00, 0x3b, 0x00, 0x37, 0x00  ; FF0078
 	.byte 0x33, 0x00, 0x2f, 0x00, 0x2b, 0x00, 0x00, 0x00, 0x00, 0x00          ; FF0088
-sub_FF0092:
+; DrumEdit_EventMarkRect: LCD_X0 = (0x601F38) / 4 + 0x59, two pixels wide, LCD_Y0 = CoordTable_FF00D1[(0x601F3A)], three high: a drum
+;   hit mark.
+DrumEdit_EventMarkRect:
 	xor XWA,XWA                                          ; FF0092  e8 d0
-	ld wa, (0x601f38:24)                                ; FF0094  d2 38 1f 60 20
+	ld wa, (EditBar_Tick:24)                                ; FF0094  d2 38 1f 60 20
 	div WA,0x0004                                        ; FF0099  d8 0a 04 00
 	add WA,0x0059                                        ; FF009D  d8 c8 59 00
 	ld (LCD_X0:16), wa                                  ; FF00A1  f1 30 25 50
@@ -184911,7 +184915,7 @@ sub_FF0092:
 	ld (LCD_X1:16), wa                                  ; FF00A9  f1 34 25 50
 	ld XIX,CoordTable_FF00D1                             ; FF00AD  44 d1 00 ff 00
 	xor XWA,XWA                                          ; FF00B2  e8 d0
-	ld a, (0x601f3a:24)                                 ; FF00B4  c2 3a 1f 60 21
+	ld a, (EditBar_Row:24)                                 ; FF00B4  c2 3a 1f 60 21
 	sll wa, 0x01                                         ; FF00B9  d8 ee 01
 	add XIX,XWA                                          ; FF00BC  e8 84
 	ld WA,(XIX)                                          ; FF00BE  94 20
@@ -184930,8 +184934,8 @@ sub_FF0092:
 CoordTable_FF00D1:
 	.byte 0x9b, 0x00, 0x91, 0x00, 0x87, 0x00, 0x7d, 0x00, 0x73, 0x00, 0x69, 0x00, 0x5f, 0x00, 0x55, 0x00  ; FF00D1
 	.byte 0x4b, 0x00, 0x41, 0x00, 0x37, 0x00, 0x2d, 0x00, 0x00, 0x00, 0x00, 0x00  ; FF00E1
-; EditScreen_DrawSelectedEventBar: with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (sub_FF0178 /
-;   sub_FF013F).
+; EditScreen_DrawSelectedEventBar: with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (DrumEdit_DrawSelectedMarkBrackets /
+;   NoteEdit_DrawSelectedBarInset).
 EditScreen_DrawSelectedEventBar:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF00ED  f2 5b 1f 60 c8
 	jr z, .LFF013E                                       ; FF00F2  66 4a
@@ -184955,20 +184959,22 @@ EditScreen_DrawSelectedEventBar:
 	jr c, .LFF013B                                       ; FF011E  67 1b
 	cp H,W                                               ; FF0120  c8 f6
 	jr ugt, .LFF013B                                     ; FF0122  6b 17
-	calr sub_FF0294                                      ; FF0124  1e 6d 01
+	calr EditBar_LoadEventGeometry                                      ; FF0124  1e 6d 01
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF0127  f1 40 25 00 01
 	m_bit 0, MD24, EditScreen_Mode                              ; FF012C  f2 70 1f 60 c8
 	jr z, .LFF0138                                       ; FF0131  66 05
-	calr sub_FF0178                                      ; FF0133  1e 42 00
+	calr DrumEdit_DrawSelectedMarkBrackets                                      ; FF0133  1e 42 00
 	jr .LFF013B                                          ; FF0136  68 03
 .LFF0138:
-	calr sub_FF013F                                      ; FF0138  1e 04 00
+	calr NoteEdit_DrawSelectedBarInset                                      ; FF0138  1e 04 00
 .LFF013B:
 	calr BStore_CursorSlot_Restore                                          ; FF013B  1e d7 8b
 .LFF013E:
 	ret                                                  ; FF013E  0e
-sub_FF013F:
-	calr sub_FF000E                                          ; FF013F  1e cc fe
+; NoteEdit_DrawSelectedBarInset: NoteEdit_EventBarRect shrunk by a pixel on each side (bars under 2 pixels: their left edge only), SWI 7 5
+;   (FillRect).
+NoteEdit_DrawSelectedBarInset:
+	calr NoteEdit_EventBarRect                                          ; FF013F  1e cc fe
 	ld wa, (LCD_X1:16)                                 ; FF0142  d1 34 25 20
 	m_sub_rm MW16, LCD_X0, r0                            ; FF0146  d1 30 25 a0
 	cp wa, 0x02:i3                                         ; FF014A  d8 da
@@ -184989,19 +184995,22 @@ sub_FF013F:
 	swi 7                                                ; FF0176  ff
 .LFF0177:
 	ret                                                  ; FF0177  0e
-sub_FF0178:
-	calr sub_FF0092                                          ; FF0178  1e 17 ff
+; DrumEdit_DrawSelectedMarkBrackets: two fills, just above and just below DrumEdit_EventMarkRect.
+DrumEdit_DrawSelectedMarkBrackets:
+	calr DrumEdit_EventMarkRect                                          ; FF0178  1e 17 ff
 	subw	(LCD_Y0:16), 0x0002                  ; FF017B  d1 32 25 3a 02 00
 	subw	(LCD_Y1:16), 0x0003                  ; FF0181  d1 36 25 3a 03 00
 	ld a, 0x05:opc                                          ; FF0187  21 05
 	swi 7                                                ; FF0189  ff
-	calr sub_FF0092                                          ; FF018A  1e 05 ff
+	calr DrumEdit_EventMarkRect                                          ; FF018A  1e 05 ff
 	m_add_mi16 MW16, LCD_Y0, 0x0003                      ; FF018D  d1 32 25 38 03 00
 	m_add_mi16 MW16, LCD_Y1, 0x0002                      ; FF0193  d1 36 25 38 02 00
 	ld a, 0x05:opc                                          ; FF0199  21 05
 	swi 7                                                ; FF019B  ff
 	ret                                                  ; FF019C  0e
-sub_FF019D:
+; EditScreen_FillSelectedEventBar: with an event selected and its note in view: layer 1, its bar or mark filled (LCD_FillRect_Grown2Rows in
+;   DRUM EDIT, NoteEdit_EventBarRect + FillRect in NOTE EDIT).
+EditScreen_FillSelectedEventBar:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF019D  f2 5b 1f 60 c8
 	jr z, .LFF01F1                                       ; FF01A2  66 4d
 	calr BStore_CursorSlot_Save                                          ; FF01A4  1e 47 8b
@@ -185024,14 +185033,14 @@ sub_FF019D:
 	jr c, .LFF01EE                                       ; FF01CE  67 1e
 	cp H,W                                               ; FF01D0  c8 f6
 	jr ugt, .LFF01EE                                     ; FF01D2  6b 1a
-	calr sub_FF0294                                      ; FF01D4  1e bd 00
+	calr EditBar_LoadEventGeometry                                      ; FF01D4  1e bd 00
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF01D7  f1 40 25 00 01
 	m_bit 0, MD24, EditScreen_Mode                              ; FF01DC  f2 70 1f 60 c8
 	jr z, .LFF01E8                                       ; FF01E1  66 05
 	calr LCD_FillRect_Grown2Rows                                      ; FF01E3  1e 0c 00
 	jr .LFF01EE                                          ; FF01E6  68 06
 .LFF01E8:
-	calr sub_FF000E                                          ; FF01E8  1e 23 fe
+	calr NoteEdit_EventBarRect                                          ; FF01E8  1e 23 fe
 	ld a, 0x05:opc                                          ; FF01EB  21 05
 	swi 7                                                ; FF01ED  ff
 .LFF01EE:
@@ -185041,25 +185050,28 @@ sub_FF019D:
 ; ---------------------------------------------------------------------
 ; LCD_FillRect_Grown2Rows -- grow the pending rectangle by two rows each way and fill it
 ;
-; Called from: prom_a sub_FF019D (`calr`) at 0xFF01E3
-;          prom_a sub_FF0243 (`calr`) at 0xFF0288
+; Called from: prom_a EditScreen_FillSelectedEventBar (`calr`) at 0xFF01E3
+;          prom_a EditScreen_DrawSelectionAtCursor (`calr`) at 0xFF0288
 ; Issues:  SWI7 service 0x05 at 0xFF0203 -- LCD_Svc_05_FillRect, fill the rectangle in (0x2530..0x2536)
 ; Evidence: `sub (0x2532),0x0002` and `add (0x2536),0x0002` move Y0 up and Y1 down by
 ;           two before service 0x05 fills (0x2530..0x2536).  This routine's own
 ;           instructions never touch X0 or X1, so all IT contributes is four rows of
 ;           height.  ⚠ Where the rectangle comes from is NOT established: the `calr`
-;           at 0xFF01F2 resolves to sub_FF0092, which this round did not trace.
+;           at 0xFF01F2 resolves to DrumEdit_EventMarkRect, which this round did not trace.
 ; Named by notes/prom_a_understanding_round6.py --apply; the byte gate
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
 LCD_FillRect_Grown2Rows:
-	calr sub_FF0092                                          ; FF01F2  1e 9d fe
+	calr DrumEdit_EventMarkRect                                          ; FF01F2  1e 9d fe
 	subw	(LCD_Y0:16), 0x0002                  ; FF01F5  d1 32 25 3a 02 00
 	m_add_mi16 MW16, LCD_Y1, 0x0002                      ; FF01FB  d1 36 25 38 02 00
 	ld a, 0x05:opc                                          ; FF0201  21 05
 	swi 7                                                ; FF0203  ff
 	ret                                                  ; FF0204  0e
-sub_FF0205:
+; EditScreen_RedrawAfterTickMove: EditCursor_Tick* moves: with a selection, the other notes redrawn and the selection drawn at the cursor
+;   (EditScreen_DrawSelectionAtCursor while a deferred action is pending, else EditScreen_FillSelectedEventBar);
+;   without, all notes and EditScreen_DrawSelectedEventBar.
+EditScreen_RedrawAfterTickMove:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF0205  f2 5b 1f 60 c8
 	jr z, .LFF0233                                       ; FF020A  66 27
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FF020C  f2 58 1f 60 cf
@@ -185067,14 +185079,14 @@ sub_FF0205:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FF0213  1e bc f5
 	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FF0216  1e 14 fd
 	calr EditScreen_EraseEditArea_Layer1                                          ; FF0219  1e 3d f6
-	calr sub_FF0243                                      ; FF021C  1e 24 00
+	calr EditScreen_DrawSelectionAtCursor                                      ; FF021C  1e 24 00
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF021F  1e 37 fc
 	ret                                                  ; FF0222  0e
 .LFF0223:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FF0223  1e ac f5
 	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FF0226  1e 04 fd
 	calr EditScreen_EraseEditArea_Layer1                                          ; FF0229  1e 2d f6
-	calr sub_FF019D                                      ; FF022C  1e 6e ff
+	calr EditScreen_FillSelectedEventBar                                      ; FF022C  1e 6e ff
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF022F  1e 27 fc
 	ret                                                  ; FF0232  0e
 .LFF0233:
@@ -185084,44 +185096,48 @@ sub_FF0205:
 	calr EditScreen_DrawSelectedEventBar                                      ; FF023C  1e ae fe
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF023F  1e 17 fc
 	ret                                                  ; FF0242  0e
-sub_FF0243:
+; EditScreen_DrawSelectionAtCursor: with an event selected: its bar drawn at the CURSOR -- EditCursor_Note's row, EditCursor_TickInMeasure,
+;   EditField_Length long (2 in DRUM EDIT) -- on layer 1: the selection following the cursor.
+EditScreen_DrawSelectionAtCursor:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF0243  f2 5b 1f 60 c8
 	jr z, .LFF0293                                       ; FF0248  66 49
 	calr EditScreen_VisibleNoteRange                                          ; FF024A  1e 67 fd
 	ld l, (EditCursor_Note:24)                                 ; FF024D  c2 44 1f 60 27
-	calr sub_FF02F5                                      ; FF0252  1e a0 00
+	calr EditBar_SetRowFromNote                                      ; FF0252  1e a0 00
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FF0255  d2 54 1f 60 20
-	ld (0x601f38:24), wa                                ; FF025A  f2 38 1f 60 50
+	ld (EditBar_Tick:24), wa                                ; FF025A  f2 38 1f 60 50
 	m_bit 0, MD24, EditScreen_Mode                              ; FF025F  f2 70 1f 60 c8
 	jr z, .LFF026F                                       ; FF0264  66 09
-	ldw (0x601f3b:24), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
+	ldw (EditBar_Length:24), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
 	jr .LFF0279                                          ; FF026D  68 0a
 .LFF026F:
 	ld wa, (EditField_Length:24)                                ; FF026F  d2 47 1f 60 20
-	ld (0x601f3b:24), wa                                ; FF0274  f2 3b 1f 60 50
+	ld (EditBar_Length:24), wa                                ; FF0274  f2 3b 1f 60 50
 .LFF0279:
-	calr sub_FF02D5                                      ; FF0279  1e 59 00
+	calr EditBar_ClipLengthToView                                      ; FF0279  1e 59 00
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF027C  f1 40 25 00 01
 	m_bit 0, MD24, EditScreen_Mode                              ; FF0281  f2 70 1f 60 c8
 	jr z, .LFF028D                                       ; FF0286  66 05
 	calr LCD_FillRect_Grown2Rows                                      ; FF0288  1e 67 ff
 	jr .LFF0293                                          ; FF028B  68 06
 .LFF028D:
-	calr sub_FF000E                                          ; FF028D  1e 7e fd
+	calr NoteEdit_EventBarRect                                          ; FF028D  1e 7e fd
 	ld a, 0x05:opc                                          ; FF0290  21 05
 	swi 7                                                ; FF0292  ff
 .LFF0293:
 	ret                                                  ; FF0293  0e
-sub_FF0294:
+; EditBar_LoadEventGeometry: for the note-on at the cursor: (0x601F38) = its tick in the view, (0x601F3A) = its row (EditBar_SetRowFromNote),
+;   (0x601F3B) = its length (+5 & 0x7F) x 0x60 + (+4 & 0x7F), clipped (EditBar_ClipLengthToView).
+EditBar_LoadEventGeometry:
 	calr EditScreen_PositionAndMeasureStartTicks                                          ; FF0294  1e 91 a3
 	sub XWA,XBC                                          ; FF0297  e9 a0
-	ld (0x601f38:24), wa                                ; FF0299  f2 38 1f 60 50
+	ld (EditBar_Tick:24), wa                                ; FF0299  f2 38 1f 60 50
 	calr BStoreCursor_ReadByte                                          ; FF029E  1e 91 1f
 	ld L,A                                               ; FF02A1  c9 8f
 	pushw hl                                             ; FF02A3  2b
 	calr EditScreen_VisibleNoteRange                                          ; FF02A4  1e 0d fd
 	popw hl                                              ; FF02A7  4b
-	calr sub_FF02F5                                      ; FF02A8  1e 4a 00
+	calr EditBar_SetRowFromNote                                      ; FF02A8  1e 4a 00
 	calr BStoreCursor_Step                                          ; FF02AB  1e 56 1f
 	calr BStoreCursor_Step                                          ; FF02AE  1e 53 1f
 	calr BStoreCursor_ReadByte                                          ; FF02B1  1e 7e 1f
@@ -185135,35 +185151,38 @@ sub_FF0294:
 	and A,0x7f                                           ; FF02C4  c9 cc 7f
 	mul A,0x60                                           ; FF02C7  c9 08 60
 	add WA,BC                                            ; FF02CA  d9 80
-	ld (0x601f3b:24), wa                                ; FF02CC  f2 3b 1f 60 50
-	calr sub_FF02D5                                      ; FF02D1  1e 01 00
+	ld (EditBar_Length:24), wa                                ; FF02CC  f2 3b 1f 60 50
+	calr EditBar_ClipLengthToView                                      ; FF02D1  1e 01 00
 	ret                                                  ; FF02D4  0e
-sub_FF02D5:
-	add wa, (0x601f38:24)                            ; FF02D5  d2 38 1f 60 80
+; EditBar_ClipLengthToView: when (0x601F38) + the length passes EditMeasure_Beats x 0x60 - 1, (0x601F3B) = what is left to the view's end.
+EditBar_ClipLengthToView:
+	add wa, (EditBar_Tick:24)                            ; FF02D5  d2 38 1f 60 80
 	ld c, (EditMeasure_Beats:24)                                 ; FF02DA  c2 75 1f 60 23
 	mul C,0x60                                           ; FF02DF  cb 08 60
 	dec 1,BC                                             ; FF02E2  d9 69
 	cp WA,BC                                             ; FF02E4  d9 f0
 	jr ule, .LFF02F4                                     ; FF02E6  63 0c
 	ld WA,BC                                             ; FF02E8  d9 88
-	sub wa, (0x601f38:24)                            ; FF02EA  d2 38 1f 60 a0
-	ld (0x601f3b:24), wa                                ; FF02EF  f2 3b 1f 60 50
+	sub wa, (EditBar_Tick:24)                            ; FF02EA  d2 38 1f 60 a0
+	ld (EditBar_Length:24), wa                                ; FF02EF  f2 3b 1f 60 50
 .LFF02F4:
 	ret                                                  ; FF02F4  0e
-sub_FF02F5:
+; EditBar_SetRowFromNote: (note L, low A): DRUM EDIT row = 11 - (L - A), the list running top-down; NOTE EDIT row = L - A, + 4 at
+;   NoteEdit_RulerPosition 0.
+EditBar_SetRowFromNote:
 	m_bit 0, MD24, EditScreen_Mode                              ; FF02F5  f2 70 1f 60 c8
 	jr z, .LFF0309                                       ; FF02FA  66 0d
 	sub L,A                                              ; FF02FC  c9 a7
 	ld h, 0x0b:opc                                          ; FF02FE  26 0b
 	sub H,L                                              ; FF0300  cf a6
-	ld (0x601f3a:24), h                                 ; FF0302  f2 3a 1f 60 46
+	ld (EditBar_Row:24), h                                 ; FF0302  f2 3a 1f 60 46
 	jr .LFF031E                                          ; FF0307  68 15
 .LFF0309:
 	sub L,A                                              ; FF0309  c9 a7
-	ld (0x601f3a:24), l                                 ; FF030B  f2 3a 1f 60 47
+	ld (EditBar_Row:24), l                                 ; FF030B  f2 3a 1f 60 47
 	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x00                        ; FF0310  c2 53 1f 60 3f 00
 	jr nz, .LFF031E                                      ; FF0316  6e 06
-	m_add_mi8 MB24, 0x601f3a, 0x04                       ; FF0318  c2 3a 1f 60 38 04
+	m_add_mi8 MB24, EditBar_Row, 0x04                       ; FF0318  c2 3a 1f 60 38 04
 .LFF031E:
 	ret                                                  ; FF031E  0e
 sub_FF031F:

@@ -4090,6 +4090,16 @@ RENAMES = {
     "sub_FE9694": "EditScreen_ShowPreviousMeasureAtTick",
     "sub_FE94FB": "EditScreen_ShowCursorMeasure",
     "sub_FE955D": "EditScreen_WrapAndShowCursorMeasure",
+    "sub_FF0294": "EditBar_LoadEventGeometry",
+    "sub_FF02F5": "EditBar_SetRowFromNote",
+    "sub_FF02D5": "EditBar_ClipLengthToView",
+    "sub_FF000E": "NoteEdit_EventBarRect",
+    "sub_FF0092": "DrumEdit_EventMarkRect",
+    "sub_FF013F": "NoteEdit_DrawSelectedBarInset",
+    "sub_FF0178": "DrumEdit_DrawSelectedMarkBrackets",
+    "sub_FF019D": "EditScreen_FillSelectedEventBar",
+    "sub_FF0243": "EditScreen_DrawSelectionAtCursor",
+    "sub_FF0205": "EditScreen_RedrawAfterTickMove",
 }
 
 

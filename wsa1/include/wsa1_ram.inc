@@ -479,6 +479,9 @@
 	.equ NoteEdit_HeldKeys,				0x601f1c	; 8 slots of {flag 0x80, note, velocity}: the keys held during entry (1 slot in DRUM EDIT) -- NoteEdit_HoldKey / _ReleaseKey / _AnyKeyHeld / _EnterHeldNotes
 	.equ NoteEdit_InputNote,			0x601f34	; the note of the key event being taken -- NoteEdit_TakeKeyboardInput
 	.equ NoteEdit_InputVelocity,			0x601f35	; its velocity (0 = released) -- NoteEdit_TakeKeyboardInput
+	.equ EditBar_Tick,				0x601f38	; the bar being drawn: its tick in the view (word) -- EditBar_LoadEventGeometry; NoteEdit_EventBarRect
+	.equ EditBar_Row,				0x601f3a	; its row -- EditBar_SetRowFromNote
+	.equ EditBar_Length,				0x601f3b	; its length in ticks (word), clipped to the view -- EditBar_LoadEventGeometry; EditBar_ClipLengthToView
 	.equ EditCursor_Note,				0x601f44	; the cursor's note row, 1..127; DRUM EDIT shows only events on it -- EditCursor_NoteUp / _Down / _Up6 / _Down6; DrumEdit_IsOtherNote
 	.equ EditField_NewNoteLength,			0x601f49	; the length a new note gets (word, in ticks) -- NoteEdit_InsertNoteEvent writes it into the event; EditField_Length* step it with no event selected
 	.equ NoteEdit_RulerPosition,			0x601f53	; the keyboard ruler's position, 0..9 -- NoteEdit_ScrollRulerToNote
