@@ -100210,10 +100210,10 @@ sub_FB92DC:
 sub_FB92EF:
 	pushw hl                                             ; FB92EF  2b
 	push XIX                                             ; FB92F0  3c
-	lda xix, (0x10d0:16)                                ; FB92F1  f1 d0 10 34
-	ld c, (0x10cc:16)                                   ; FB92F5  c1 cc 10 23
+	lda xix, (Smf_EventStatus:16)                                ; FB92F1  f1 d0 10 34
+	ld c, (Smf_RunningStatus:16)                                   ; FB92F5  c1 cc 10 23
 	ld (XIX),C                                           ; FB92F9  b4 43
-	ld h, (0x10cc:16)                                   ; FB92FB  c1 cc 10 26
+	ld h, (Smf_RunningStatus:16)                                   ; FB92FB  c1 cc 10 26
 	extz XIX                                             ; FB92FF  ec 12
 	ld c, (0x605056:24)                                 ; FB9301  c2 56 50 60 23
 	ld (XIX+0x01),C                                      ; FB9306  bc 01 43
@@ -100246,9 +100246,9 @@ sub_FB9345:
 	pushw de                                             ; FB934A  2a
 	pushw ix                                             ; FB934B  2c
 	ld c, (0x605056:24)                                 ; FB934C  c2 56 50 60 23
-	ld (0x10cc:16), c                                   ; FB9351  f1 cc 10 43
+	ld (Smf_RunningStatus:16), c                                   ; FB9351  f1 cc 10 43
 	ld a, (0x605056:24)                                 ; FB9355  c2 56 50 60 21
-	ld (0x10d0:16), a                                   ; FB935A  f1 d0 10 41
+	ld (Smf_EventStatus:16), a                                   ; FB935A  f1 d0 10 41
 	ld c, (0x605056:24)                                 ; FB935E  c2 56 50 60 23
 	and C,0xf0                                           ; FB9363  cb cc f0
 	extz BC                                              ; FB9366  d9 12
@@ -100282,7 +100282,7 @@ sub_FB9345:
 	ld bc, (xiz-4)                                       ; FB93B0  9e fc 21
 	extz XBC                                             ; FB93B3  e9 12
 	ld a, (xiz-2)                                        ; FB93B5  8e fe 21
-	ld (XBC+0x10d0),A                                    ; FB93B8  f3 e5 d0 10 41
+	ld (XBC+Smf_EventStatus),A                                    ; FB93B8  f3 e5 d0 10 41
 	ld HL,BC                                             ; FB93BD  d9 8b
 	inc 1,HL                                             ; FB93BF  db 61
 	inc 1,DE                                             ; FB93C1  da 61
@@ -100314,7 +100314,7 @@ sub_FB93D0:
 	ld BC,(XIX)                                          ; FB93EE  94 21
 	ld L,C                                               ; FB93F0  cb 8f
 	extz XDE                                             ; FB93F2  ea 12
-	ld (XDE+0x1193),C                                    ; FB93F4  f3 e9 93 11 43
+	ld (XDE+Smf_VlqBytes),C                                    ; FB93F4  f3 e9 93 11 43
 	and C,0x80                                           ; FB93F9  cb cc 80
 	jr z, .LFB9402                                       ; FB93FC  66 04
 	inc 1,H                                              ; FB93FE  ce 61
@@ -100351,7 +100351,7 @@ sub_FB9413:
 .LFB9436:
 	ret                                                  ; FB9436  0e
 sub_FB9437:
-	ld c, (0x1193:16)                                   ; FB9437  c1 93 11 23
+	ld c, (Smf_VlqBytes:16)                                   ; FB9437  c1 93 11 23
 	res 0x07,C                                           ; FB943B  cb 30 07
 	extz BC                                              ; FB943E  d9 12
 	extz XBC                                             ; FB9440  e9 12
@@ -100361,7 +100361,7 @@ sub_FB9448:
 	pushw hl                                             ; FB9448  2b
 	pushw de                                             ; FB9449  2a
 	push XIX                                             ; FB944A  3c
-	ld h, (0x1193:16)                                   ; FB944B  c1 93 11 26
+	ld h, (Smf_VlqBytes:16)                                   ; FB944B  c1 93 11 26
 	ld L,H                                               ; FB944F  ce 8f
 	res 0x07,L                                           ; FB9451  cf 30 07
 	ld c, (0x1194:16)                                   ; FB9454  c1 94 11 23
@@ -100395,7 +100395,7 @@ sub_FB9490:
 	pushw de                                             ; FB9495  2a
 	push XIX                                             ; FB9496  3c
 	lda xix, (0x60505f:24)                               ; FB9497  f2 5f 50 60 34
-	ld h, (0x1193:16)                                   ; FB949C  c1 93 11 26
+	ld h, (Smf_VlqBytes:16)                                   ; FB949C  c1 93 11 26
 	ld L,H                                               ; FB94A0  ce 8f
 	res 0x07,L                                           ; FB94A2  cf 30 07
 	ld d, (0x1194:16)                                   ; FB94A5  c1 94 11 24
@@ -100455,7 +100455,7 @@ sub_FB951B:
 	ld C,H                                               ; FB951E  ce 8b
 	extz BC                                              ; FB9520  d9 12
 	extz XBC                                             ; FB9522  e9 12
-	ld (XBC+0x1193),0x00                                 ; FB9524  f3 e5 93 11 00 00
+	ld (XBC+Smf_VlqBytes),0x00                                 ; FB9524  f3 e5 93 11 00 00
 	inc 1,H                                              ; FB952A  ce 61
 	cp h, 0x05:i3                                          ; FB952C  ce dd
 	jr ule, .LFB951E                                     ; FB952E  63 ee
@@ -100480,7 +100480,7 @@ sub_FB9532:
 	ld BC,(XIX)                                          ; FB9550  94 21
 	ld L,C                                               ; FB9552  cb 8f
 	extz XDE                                             ; FB9554  ea 12
-	ld (XDE+0x1193),C                                    ; FB9556  f3 e9 93 11 43
+	ld (XDE+Smf_VlqBytes),C                                    ; FB9556  f3 e9 93 11 43
 	and C,0x80                                           ; FB955B  cb cc 80
 	jr z, .LFB9564                                       ; FB955E  66 04
 	inc 1,H                                              ; FB9560  ce 61
@@ -100548,7 +100548,7 @@ sub_FB9599:
 sub_FB95D9:
 	pushw hl                                             ; FB95D9  2b
 	push XIX                                             ; FB95DA  3c
-	lda xix, (0x10d0:16)                                ; FB95DB  f1 d0 10 34
+	lda xix, (Smf_EventStatus:16)                                ; FB95DB  f1 d0 10 34
 	extz XIX                                             ; FB95DF  ec 12
 	ld C,(XIX+0x01)                                      ; FB95E1  8c 01 23
 	cp C,0x7f                                            ; FB95E4  cb cf 7f

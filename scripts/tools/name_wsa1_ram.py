@@ -393,6 +393,12 @@ GROUPS = [
         0x107C: ("Smf_Division", "the MThd division word, ticks per quarter note (0 and SMPTE refused)", "the MThd parser; Smf_TicksToPpq96"),
         0x1088: ("Smf_InputCursor", "the 32-bit cursor into the 0x60A700-0x60AAFF input window", "the byte fetch at 0xF7138F"),
     }),
+    ("wsa1/notes/prom_ab_read_names_2026_10_04.py", "prom_b 0xF6FD7A-0xF71369: the MIDI FILE loader's event layer", {
+        0x10CC: ("Smf_RunningStatus", "the last status byte read (MIDI running status)", "SmfEvent_ReadWithNewStatus / _ReadWithRunningStatus"),
+        0x10D0: ("Smf_EventStatus", "the event being stored: status; data bytes at +1 and +2", "SmfEvent_DispatchChannelMessage"),
+        0x1193: ("Smf_VlqBytes", "the raw bytes of a variable-length quantity", "Smf_ReadVlqBytes"),
+        0x1198: ("Smf_VlqValue", "its decoded 24-bit value (0x1198..0x119A)", "Smf_DecodeVlq"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),

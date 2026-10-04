@@ -165176,14 +165176,14 @@ Smf_ReadFile_Skip6:
 	jrl	nz, Smf_ReadFile_Join2	; F6F6B5  jrl NZ,0xf6f780
 	ld	(4529:16), 0	; F6F6B8  ld (0x11b1),0x00
 Smf_ReadFile_Loop:
-	calr	sub_F71369	; F6F6BD  calr 0xf71369
+	calr	Smf_ReadVlqBytes_Copy	; F6F6BD  calr 0xf71369
 	ld	w, (InputStream_Status:16)	; F6F6C0  ld W,(0x124a)
 	cp	w, 1:i3	; F6F6C4  cp W,1
 	jr	z, Smf_ReadFile_Skip7	; F6F6C6  jr Z,0xf6f6ce
 	cp	w, 253	; F6F6C8  cp W,0xfd
 	jrl	nz, Smf_ReadFile_Join3	; F6F6CB  jrl NZ,0xf6f7ad
 Smf_ReadFile_Skip7:
-	calr	sub_F6FE1B	; F6F6CE  calr 0xf6fe1b
+	calr	Smf_DecodeVlq	; F6F6CE  calr 0xf6fe1b
 	xor	xiy, xiy	; F6F6D1  xor XIY,XIY
 Smf_ReadFile_Loop2:
 	push	xiy	; F6F6D3  push XIY
@@ -165236,7 +165236,7 @@ Smf_ReadFile_Skip13:
 Smf_ReadFile_Skip14:
 	bit	7, a	; F6F747  bit 0x07,A
 	jr	z, Smf_ReadFile_Skip16	; F6F74A  jr Z,0xf6f766
-	calr	sub_F6FEFE	; F6F74C  calr 0xf6fefe
+	calr	SmfEvent_ReadWithNewStatus	; F6F74C  calr 0xf6fefe
 	ld	w, (InputStream_Status:16)	; F6F74F  ld W,(0x124a)
 	cp	w, 1:i3	; F6F753  cp W,1
 	jr	z, Smf_ReadFile_Skip15	; F6F755  jr Z,0xf6f75c
@@ -165247,7 +165247,7 @@ Smf_ReadFile_Skip15:
 	jr	nz, Smf_ReadFile_Join2	; F6F761  jr NZ,0xf6f780
 	jrl	Smf_ReadFile_Loop	; F6F763  jrl T,0xf6f6bd
 Smf_ReadFile_Skip16:
-	calr	sub_F6FEA1	; F6F766  calr 0xf6fea1
+	calr	SmfEvent_ReadWithRunningStatus	; F6F766  calr 0xf6fea1
 	ld	w, (InputStream_Status:16)	; F6F769  ld W,(0x124a)
 	cp	w, 1:i3	; F6F76D  cp W,1
 	jr	z, Smf_ReadFile_Skip17	; F6F76F  jr Z,0xf6f776
@@ -165829,7 +165829,7 @@ sub_F6FB38_Loop:
 ; sub_F6FB51
 ; Called from: in-module: 0xF6F6FB 0xF71CB4
 ; Touches: (0x10CB) (0x124A)
-; Calls:   InputStream_GetByte sub_F6FD7A sub_F6FD91 sub_F6FC10
+; Calls:   InputStream_GetByte Smf_ReadVlq sub_F6FD91 sub_F6FC10
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FB51 is an instruction boundary of this
@@ -165857,7 +165857,7 @@ sub_F6FB51_Skip:
 	jr	z, sub_F6FB51_Skip9	; F6FB77  jr Z,0xf6fbd7
 	cp	a, 88	; F6FB79  cp A,0x58
 	jrl	z, sub_F6FB51_Skip12	; F6FB7C  jrl Z,0xf6fbfc
-	calr	sub_F6FD7A	; F6FB7F  calr 0xf6fd7a
+	calr	Smf_ReadVlq	; F6FB7F  calr 0xf6fd7a
 	ld	w, (InputStream_Status:16)	; F6FB82  ld W,(0x124a)
 	cp	w, 1:i3	; F6FB86  cp W,1
 	jr	z, sub_F6FB51_Skip2	; F6FB88  jr Z,0xf6fb90
@@ -165867,7 +165867,7 @@ sub_F6FB51_Skip2:
 	calr	sub_F6FD91	; F6FB90  calr 0xf6fd91
 	jrl	sub_F6FB51_Return	; F6FB93  jrl T,0xf6fc0f
 sub_F6FB51_Skip3:
-	calr	sub_F6FD7A	; F6FB96  calr 0xf6fd7a
+	calr	Smf_ReadVlq	; F6FB96  calr 0xf6fd7a
 	ld	w, (InputStream_Status:16)	; F6FB99  ld W,(0x124a)
 	cp	w, 1:i3	; F6FB9D  cp W,1
 	jr	z, sub_F6FB51_Skip4	; F6FB9F  jr Z,0xf6fba6
@@ -165877,7 +165877,7 @@ sub_F6FB51_Skip4:
 	calr	sub_F6FD91	; F6FBA6  calr 0xf6fd91
 	jr	sub_F6FB51_Return	; F6FBA9  jr T,0xf6fc0f
 sub_F6FB51_Skip5:
-	calr	sub_F6FD7A	; F6FBAB  calr 0xf6fd7a
+	calr	Smf_ReadVlq	; F6FBAB  calr 0xf6fd7a
 	ld	w, (InputStream_Status:16)	; F6FBAE  ld W,(0x124a)
 	cp	w, 1:i3	; F6FBB2  cp W,1
 	jr	z, sub_F6FB51_Skip6	; F6FBB4  jr Z,0xf6fbbb
@@ -165914,7 +165914,7 @@ sub_F6FB51_Skip11:
 	calr	sub_F6FC10	; F6FBF7  calr 0xf6fc10
 	jr	sub_F6FB51_Return	; F6FBFA  jr T,0xf6fc0f
 sub_F6FB51_Skip12:
-	calr	sub_F6FD7A	; F6FBFC  calr 0xf6fd7a
+	calr	Smf_ReadVlq	; F6FBFC  calr 0xf6fd7a
 	ld	w, (InputStream_Status:16)	; F6FBFF  ld W,(0x124a)
 	cp	w, 1:i3	; F6FC03  cp W,1
 	jr	z, sub_F6FB51_Skip13	; F6FC05  jr Z,0xf6fc0c
@@ -166082,10 +166082,10 @@ sub_F6FC10_Return:
 	ret	; F6FD79  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FD7A
+; Smf_ReadVlq
 ; Called from: in-module: 0xF6FB7F 0xF6FB96 0xF6FBAB 0xF6FBFC 0xF71525
 ; Touches: (0x124A)
-; Calls:   sub_F6FDE4 sub_F6FDF5 sub_F6FE1B
+; Calls:   Smf_ClearVlqBytes Smf_ReadVlqBytes Smf_DecodeVlq
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FD7A is an instruction boundary of this
@@ -166094,16 +166094,17 @@ sub_F6FC10_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FD7A:
-	calr	sub_F6FDE4	; F6FD7A  calr 0xf6fde4
-	calr	sub_F6FDF5	; F6FD7D  calr 0xf6fdf5
+; Smf_ReadVlq: Smf_ClearVlqBytes, Smf_ReadVlqBytes, and on a good read Smf_DecodeVlq.
+Smf_ReadVlq:
+	calr	Smf_ClearVlqBytes	; F6FD7A  calr 0xf6fde4
+	calr	Smf_ReadVlqBytes	; F6FD7D  calr 0xf6fdf5
 	ld	w, (InputStream_Status:16)	; F6FD80  ld W,(0x124a)
 	cp	w, 1:i3	; F6FD84  cp W,1
 	jr	z, sub_F6FD7A_Skip	; F6FD86  jr Z,0xf6fd8d
 	cp	w, 253	; F6FD88  cp W,0xfd
 	jr	nz, sub_F6FD7A_Return	; F6FD8B  jr NZ,0xf6fd90
 sub_F6FD7A_Skip:
-	calr	sub_F6FE1B	; F6FD8D  calr 0xf6fe1b
+	calr	Smf_DecodeVlq	; F6FD8D  calr 0xf6fe1b
 sub_F6FD7A_Return:
 	ret	; F6FD90  ret
 
@@ -166123,7 +166124,7 @@ sub_F6FD7A_Return:
 sub_F6FD91:
 	ld	(InputStream_Status:16), 1	; F6FD91  ld (0x124a),0x01
 	ld	xix, (InputStream_Cursor:16)	; F6FD96  ld XIX,(0x1088)
-	add	xix, (4504:16)	; F6FD9A  add XIX,(0x1198)
+	add	xix, (Smf_VlqValue:16)	; F6FD9A  add XIX,(0x1198)
 	cp	xix, 6335231	; F6FD9E  cp XIX,0x0060aaff
 	jr	ule, sub_F6FD91_Skip2	; F6FDA4  jr ULE,0xf6fdda
 	push	xix	; F6FDA6  push XIX
@@ -166156,7 +166157,7 @@ sub_F6FD91_Skip2:
 	ret	; F6FDE3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FDE4
+; Smf_ClearVlqBytes
 ; Called from: in-module: 0xF6FD7A
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -166167,16 +166168,17 @@ sub_F6FD91_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FDE4:
+; Smf_ClearVlqBytes: the two words at 0x1193 (the raw bytes) = 0.
+Smf_ClearVlqBytes:
 	xor	wa, wa	; F6FDE4  xor WA,WA
-	ld	xix, 4499	; F6FDE6  ld XIX,0x00001193
+	ld	xix, Smf_VlqBytes	; F6FDE6  ld XIX,0x00001193
 	ldw	bc, 2	; F6FDEB  ld BC,0x0002
 	ld	(xix+), wa	; F6FDEE  ld (XIX+),WA
 	djnz16	bc, -6	; F6FDF1  djnz BC,0xf6fdee
 	ret	; F6FDF4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FDF5
+; Smf_ReadVlqBytes
 ; Called from: in-module: 0xF6FD7D
 ; Touches: (0x124A)
 ; Calls:   InputStream_GetByte
@@ -166188,8 +166190,9 @@ sub_F6FDE4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FDF5:
-	ld	xix, 4499	; F6FDF5  ld XIX,0x00001193
+; Smf_ReadVlqBytes: reads input bytes (InputStream_GetByte) to 0x1193 while bit 7 is set -- an SMF variable-length quantity; IX = its length.
+Smf_ReadVlqBytes:
+	ld	xix, Smf_VlqBytes	; F6FDF5  ld XIX,0x00001193
 sub_F6FDF5_Loop:
 	push	xix	; F6FDFA  push XIX
 	calr	InputStream_GetByte	; F6FDFB  calr 0xf7138f
@@ -166203,15 +166206,15 @@ sub_F6FDF5_Skip:
 	ld	(xix+), a	; F6FE0C  ld (XIX+),A
 	bit	7, a	; F6FE0F  bit 0x07,A
 	jr	nz, sub_F6FDF5_Loop	; F6FE12  jr NZ,0xf6fdfa
-	sub	xix, 4499	; F6FE14  sub XIX,0x00001193
+	sub	xix, Smf_VlqBytes	; F6FE14  sub XIX,0x00001193
 sub_F6FDF5_Return:
 	ret	; F6FE1A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FE1B
+; Smf_DecodeVlq
 ; Called from: in-module: 0xF6F6CE 0xF6FD8D 0xF71C87
 ; Touches: (0x1193) (0x1194) (0x1195) (0x1198) (0x1199) (0x119A)
-; Calls:   sub_F6FE96
+; Calls:   Smf_ClearVlqValue
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FE1B is an instruction boundary of this
@@ -166220,20 +166223,21 @@ sub_F6FDF5_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FE1B:
-	calr	sub_F6FE96	; F6FE1B  calr 0xf6fe96
+; Smf_DecodeVlq: packs IX = 1, 2 or 3 raw bytes' low 7 bits, most significant first, into the 24-bit value at 0x1198..0x119A.
+Smf_DecodeVlq:
+	calr	Smf_ClearVlqValue	; F6FE1B  calr 0xf6fe96
 	cp	ix, 1:i3	; F6FE1E  cp IX,1
 	jr	z, sub_F6FE1B_Skip	; F6FE20  jr Z,0xf6fe28
 	cp	ix, 2:i3	; F6FE22  cp IX,2
 	jr	z, sub_F6FE1B_Skip2	; F6FE24  jr Z,0xf6fe35
 	jr	sub_F6FE1B_Join	; F6FE26  jr T,0xf6fe5a
 sub_F6FE1B_Skip:
-	ld	a, (4499:16)	; F6FE28  ld A,(0x1193)
+	ld	a, (Smf_VlqBytes:16)	; F6FE28  ld A,(0x1193)
 	and	a, 127	; F6FE2C  and A,0x7f
-	ld	(4504:16), a	; F6FE2F  ld (0x1198),A
+	ld	(Smf_VlqValue:16), a	; F6FE2F  ld (0x1198),A
 	jr	sub_F6FE1B_Return	; F6FE33  jr T,0xf6fe95
 sub_F6FE1B_Skip2:
-	ld	a, (4499:16)	; F6FE35  ld A,(0x1193)
+	ld	a, (Smf_VlqBytes:16)	; F6FE35  ld A,(0x1193)
 	and	a, 127	; F6FE39  and A,0x7f
 	rrc	a	; F6FE3C  rrc 0x01,A
 	ld	w, a	; F6FE3F  ld W,A
@@ -166243,10 +166247,10 @@ sub_F6FE1B_Skip2:
 	and	l, 127	; F6FE4B  and L,0x7f
 	or	l, w	; F6FE4E  or L,W
 	ld	(4505:16), a	; F6FE50  ld (0x1199),A
-	ld	(4504:16), l	; F6FE54  ld (0x1198),L
+	ld	(Smf_VlqValue:16), l	; F6FE54  ld (0x1198),L
 	jr	sub_F6FE1B_Return	; F6FE58  jr T,0xf6fe95
 sub_F6FE1B_Join:
-	ld	a, (4499:16)	; F6FE5A  ld A,(0x1193)
+	ld	a, (Smf_VlqBytes:16)	; F6FE5A  ld A,(0x1193)
 	and	a, 127	; F6FE5E  and A,0x7f
 	.byte 0xC9, 0xE9, 0x02	; F6FE61  rrc 0x02,A   [llvm-mc cannot encode this]
 	ld	w, a	; F6FE64  ld W,A
@@ -166264,12 +166268,12 @@ sub_F6FE1B_Join:
 	or	c, h	; F6FE87  or C,H
 	ld	(4506:16), a	; F6FE89  ld (0x119a),A
 	ld	(4505:16), l	; F6FE8D  ld (0x1199),L
-	ld	(4504:16), c	; F6FE91  ld (0x1198),C
+	ld	(Smf_VlqValue:16), c	; F6FE91  ld (0x1198),C
 sub_F6FE1B_Return:
 	ret	; F6FE95  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FE96
+; Smf_ClearVlqValue
 ; Called from: in-module: 0xF6FE1B
 ; Touches: (0x1198) (0x119A)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -166280,17 +166284,18 @@ sub_F6FE1B_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FE96:
+; Smf_ClearVlqValue: the decoded value words (0x1198), (0x119A) = 0.
+Smf_ClearVlqValue:
 	xor	wa, wa	; F6FE96  xor WA,WA
-	ld	(4504:16), wa	; F6FE98  ld (0x1198),WA
+	ld	(Smf_VlqValue:16), wa	; F6FE98  ld (0x1198),WA
 	ld	(4506:16), wa	; F6FE9C  ld (0x119a),WA
 	ret	; F6FEA0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FEA1
+; SmfEvent_ReadWithRunningStatus
 ; Called from: in-module: 0xF6F766 0xF71D30
 ; Touches: (0x1078) (0x107A) (0x10CC) (0x124A)
-; Calls:   InputStream_GetByte sub_F71DB7 sub_F6FF44
+; Calls:   InputStream_GetByte sub_F71DB7 SmfEvent_DispatchChannelMessage
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FEA1 is an instruction boundary of this
@@ -166299,12 +166304,14 @@ sub_F6FE96:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FEA1:
+; SmfEvent_ReadWithRunningStatus: A is a data byte: the status is the running status (0x10CC); A and the remaining data bytes to 0x10D1..; then
+;   SmfEvent_DispatchChannelMessage for a format-0 or one-track file, sub_F71DB7 otherwise.
+SmfEvent_ReadWithRunningStatus:
 	ld	c, a	; F6FEA1  ld C,A
-	ld	a, (4300:16)	; F6FEA3  ld A,(0x10cc)
+	ld	a, (Smf_RunningStatus:16)	; F6FEA3  ld A,(0x10cc)
 	ld	l, a	; F6FEA7  ld L,A
 	and	l, 240	; F6FEA9  and L,0xf0
-	ld	xix, 4304	; F6FEAC  ld XIX,0x000010d0
+	ld	xix, Smf_EventStatus	; F6FEAC  ld XIX,0x000010d0
 	ld	(xix+), a	; F6FEB1  ld (XIX+),A
 	xor	h, h	; F6FEB4  xor H,H
 	ld	a, c	; F6FEB6  ld A,C
@@ -166340,15 +166347,15 @@ sub_F6FEA1_Skip3:
 	calr	sub_F71DB7	; F6FEF5  calr 0xf71db7
 	jr	sub_F6FEA1_Return	; F6FEF8  jr T,0xf6fefd
 sub_F6FEA1_Skip4:
-	calr	sub_F6FF44	; F6FEFA  calr 0xf6ff44
+	calr	SmfEvent_DispatchChannelMessage	; F6FEFA  calr 0xf6ff44
 sub_F6FEA1_Return:
 	ret	; F6FEFD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FEFE
+; SmfEvent_ReadWithNewStatus
 ; Called from: in-module: 0xF6F74C
 ; Touches: (0x10CC) (0x124A)
-; Calls:   InputStream_GetByte sub_F6FF44
+; Calls:   InputStream_GetByte SmfEvent_DispatchChannelMessage
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FEFE is an instruction boundary of this
@@ -166357,10 +166364,12 @@ sub_F6FEA1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FEFE:
-	ld	(4300:16), a	; F6FEFE  ld (0x10cc),A
+; SmfEvent_ReadWithNewStatus: A is a status byte: (0x10CC) = it (the running status), (0x10D0) = it, then one data byte for 0xCn / 0xDn and two
+;   otherwise to 0x10D1..; then SmfEvent_DispatchChannelMessage.
+SmfEvent_ReadWithNewStatus:
+	ld	(Smf_RunningStatus:16), a	; F6FEFE  ld (0x10cc),A
 	xor	bc, bc	; F6FF02  xor BC,BC
-	ld	xix, 4304	; F6FF04  ld XIX,0x000010d0
+	ld	xix, Smf_EventStatus	; F6FF04  ld XIX,0x000010d0
 	ld	(xix+), a	; F6FF09  ld (XIX+),A
 	inc	1, c	; F6FF0C  inc 1,C
 sub_F6FEFE_Loop:
@@ -166377,7 +166386,7 @@ sub_F6FEFE_Loop:
 sub_F6FEFE_Skip:
 	ld	(xix+), a	; F6FF22  ld (XIX+),A
 	inc	1, c	; F6FF25  inc 1,C
-	ld	a, (4300:16)	; F6FF27  ld A,(0x10cc)
+	ld	a, (Smf_RunningStatus:16)	; F6FF27  ld A,(0x10cc)
 	and	a, 240	; F6FF2B  and A,0xf0
 	ld	w, 2:opc	; F6FF2E  ld W,0x02
 	cp	a, 208	; F6FF30  cp A,0xd0
@@ -166389,15 +166398,15 @@ sub_F6FEFE_Skip2:
 sub_F6FEFE_Skip3:
 	cp	c, w	; F6FF3C  cp C,W
 	jr	ule, sub_F6FEFE_Loop	; F6FF3E  jr ULE,0xf6ff0e
-	calr	sub_F6FF44	; F6FF40  calr 0xf6ff44
+	calr	SmfEvent_DispatchChannelMessage	; F6FF40  calr 0xf6ff44
 sub_F6FEFE_Return:
 	ret	; F6FF43  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FF44
+; SmfEvent_DispatchChannelMessage
 ; Called from: in-module: 0xF6FEFA 0xF6FF40
 ; Touches: (0x10D0) (0x10D1)
-; Calls:   sub_F6FFAE sub_F70ED5 sub_F71023 sub_F7039A sub_F70330 sub_F70008
+; Calls:   SmfEvent_ChannelPressure SmfEvent_NoteOn SmfEvent_NoteOff SmfEvent_ControlChange SmfEvent_PitchBend SmfEvent_ProgramChange
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FF44 is an instruction boundary of this
@@ -166406,9 +166415,12 @@ sub_F6FEFE_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FF44:
-	ld	xix, 4304	; F6FF44  ld XIX,0x000010d0
-	ld	a, (4304:16)	; F6FF49  ld A,(0x10d0)
+; SmfEvent_DispatchChannelMessage: clamps both data bytes to 127 and dispatches on the status's high nibble: 0x90 with velocity > 0 SmfEvent_NoteOn,
+;   0x80 or velocity 0 SmfEvent_NoteOff, 0xB0 _ControlChange, 0xE0 _PitchBend, 0xC0 _ProgramChange, 0xD0 _ChannelPressure;
+;   0xA0 (polyphonic pressure) is dropped.
+SmfEvent_DispatchChannelMessage:
+	ld	xix, Smf_EventStatus	; F6FF44  ld XIX,0x000010d0
+	ld	a, (Smf_EventStatus:16)	; F6FF49  ld A,(0x10d0)
 	pushw	hl	; F6FF4D  push HL
 	ld	hl, (4305:16)	; F6FF4E  ld HL,(0x10d1)
 	cp	l, 127	; F6FF52  cp L,0x7f
@@ -166437,30 +166449,30 @@ sub_F6FF44_Skip2:
 	jr	z, sub_F6FF44_Skip3	; F6FF86  jr Z,0xf6ff8a
 	jr	sub_F6FF44_Return	; F6FF88  jr T,0xf6ffad
 sub_F6FF44_Skip3:
-	calr	sub_F6FFAE	; F6FF8A  calr 0xf6ffae
+	calr	SmfEvent_ChannelPressure	; F6FF8A  calr 0xf6ffae
 	jr	sub_F6FF44_Return	; F6FF8D  jr T,0xf6ffad
 sub_F6FF44_Skip4:
 	ld	w, (xix+2)	; F6FF8F  ld W,(XIX+0x02)
 	cp	w, 0:i3	; F6FF92  cp W,0
 	jr	z, sub_F6FF44_Skip5	; F6FF94  jr Z,0xf6ff9b
-	calr	sub_F70ED5	; F6FF96  calr 0xf70ed5
+	calr	SmfEvent_NoteOn	; F6FF96  calr 0xf70ed5
 	jr	sub_F6FF44_Return	; F6FF99  jr T,0xf6ffad
 sub_F6FF44_Skip5:
-	calr	sub_F71023	; F6FF9B  calr 0xf71023
+	calr	SmfEvent_NoteOff	; F6FF9B  calr 0xf71023
 	jr	sub_F6FF44_Return	; F6FF9E  jr T,0xf6ffad
 sub_F6FF44_Skip6:
-	calr	sub_F7039A	; F6FFA0  calr 0xf7039a
+	calr	SmfEvent_ControlChange	; F6FFA0  calr 0xf7039a
 	jr	sub_F6FF44_Return	; F6FFA3  jr T,0xf6ffad
 sub_F6FF44_Skip7:
-	calr	sub_F70330	; F6FFA5  calr 0xf70330
+	calr	SmfEvent_PitchBend	; F6FFA5  calr 0xf70330
 	jr	sub_F6FF44_Return	; F6FFA8  jr T,0xf6ffad
 sub_F6FF44_Skip8:
-	calr	sub_F70008	; F6FFAA  calr 0xf70008
+	calr	SmfEvent_ProgramChange	; F6FFAA  calr 0xf70008
 sub_F6FF44_Return:
 	ret	; F6FFAD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FFAE
+; SmfEvent_ChannelPressure
 ; Called from: in-module: 0xF6FF8A
 ; Touches: (0x10D0) (0x10D1) (0x1238)
 ; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
@@ -166472,8 +166484,10 @@ sub_F6FF44_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FFAE:
-	ld	iy, (4304:16)	; F6FFAE  ld IY,(0x10d0)
+; SmfEvent_ChannelPressure: the arm for status 0xDn: to the channel's track (TrackCursor_Load) song code 0xD0, the delta time
+;   (Smf_TicksToPpq96 of the track's word at 0x10D3) and the pressure; then TrackCursor_Save.
+SmfEvent_ChannelPressure:
+	ld	iy, (Smf_EventStatus:16)	; F6FFAE  ld IY,(0x10d0)
 	and	iy, 15	; F6FFB2  and IY,0x000f
 	extz	xiy	; F6FFB6  extz XIY
 	push	xiy	; F6FFB8  push XIY
@@ -166510,7 +166524,7 @@ sub_F6FFAE_Return:
 	ret	; F70007  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70008
+; SmfEvent_ProgramChange
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
 ; Calls:   sub_F71417 sub_F701F1 T_F41004 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
@@ -166523,7 +166537,8 @@ sub_F6FFAE_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70008:
+; SmfEvent_ProgramChange: the arm for status 0xCn.
+SmfEvent_ProgramChange:
 	m_bit 0, MD16, 0x124b	; F70008  bit 0,(0x124b)
 	jr	nz, sub_F70008_Skip2	; F7000C  jr NZ,0xf70027
 	ld	(4665:16), 255	; F7000E  ld (0x1239),0xff
@@ -166534,7 +166549,7 @@ sub_F70008_Skip:
 	ld	(4683:16), 1	; F7001F  ld (0x124b),0x01
 	calr	sub_F71417	; F70024  calr 0xf71417
 sub_F70008_Skip2:
-	ld	iy, (4304:16)	; F70027  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70027  ld IY,(0x10d0)
 	and	iy, 15	; F7002B  and IY,0x000f
 	extz	xiy	; F7002F  extz XIY
 sub_F70008_Loop:
@@ -166698,7 +166713,7 @@ sub_F70008_Skip4:
 	jr	sub_F70008_Return	; F701E6  jr T,0xf701f0
 
 ; --------------------------------------------------------------------------
-; UNREACHED CODE, not data (was `Data_F701E8`), part of sub_F70008:
+; UNREACHED CODE, not data (was `Data_F701E8`), part of SmfEvent_ProgramChange:
 ;   `cp (0x1239),0xFF / jrl Z,0xF70031` -- the same shape as 0xF72074; 0xF70031 is an
 ;   instruction start of this source.
 ;   Nothing in prom_b branches to, calls or spells 0xF701E8 (code_islands.py searches every
@@ -166732,7 +166747,7 @@ sub_F701F1:
 	push	xix	; F701FC  push XIX
 	push	xde	; F701FD  push XDE
 	xor	de, de	; F701FE  xor DE,DE
-	ld	e, (4304:16)	; F70200  ld E,(0x10d0)
+	ld	e, (Smf_EventStatus:16)	; F70200  ld E,(0x10d0)
 	and	e, 15	; F70204  and E,0x0f
 	ld	xix, 4260	; F70207  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_DE, 7	; F7020C  ld L,(XIX+DE)
@@ -166759,7 +166774,7 @@ sub_F701F1_Skip:
 	ld	a, (4305:16)	; F70257  ld A,(0x10d1)
 	ld	(xiy+2), a	; F7025B  ld (XIY+0x02),A
 	xor	h, h	; F7025E  xor H,H
-	ld	l, (4304:16)	; F70260  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F70260  ld L,(0x10d0)
 	and	l, 15	; F70264  and L,0x0f
 	push	xix	; F70267  push XIX
 	ld	xix, 4260	; F70268  ld XIX,0x000010a4
@@ -166846,7 +166861,7 @@ Data_F702BA:
 
 
 ; --------------------------------------------------------------------------
-; sub_F70330
+; SmfEvent_PitchBend
 ; Called from: in-module: 0xF6FFA5
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x1238)
 ; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
@@ -166858,8 +166873,9 @@ Data_F702BA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70330:
-	ld	iy, (4304:16)	; F70330  ld IY,(0x10d0)
+; SmfEvent_PitchBend: the arm for status 0xEn; it writes song code 0xD2 to the channel's track.
+SmfEvent_PitchBend:
+	ld	iy, (Smf_EventStatus:16)	; F70330  ld IY,(0x10d0)
 	and	iy, 15	; F70334  and IY,0x000f
 	extz	xiy	; F70338  extz XIY
 	push	xiy	; F7033A  push XIY
@@ -166902,7 +166918,7 @@ sub_F70330_Return:
 	ret	; F70399  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7039A
+; SmfEvent_ControlChange
 ; Called from: in-module: 0xF6FFA0
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   sub_F71417 sub_F7193F sub_F71978 sub_F719B1 sub_F719EA sub_F707AE
@@ -166916,7 +166932,8 @@ sub_F70330_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7039A:
+; SmfEvent_ControlChange: the arm for status 0xBn.
+SmfEvent_ControlChange:
 	m_bit 0, MD16, 0x124b	; F7039A  bit 0,(0x124b)
 	jr	nz, sub_F7039A_Skip2	; F7039E  jr NZ,0xf703b9
 	ld	(4665:16), 255	; F703A0  ld (0x1239),0xff
@@ -167106,7 +167123,7 @@ DispatchTable_F7048D_Nop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F704CE:
-	ld	iy, (4304:16)	; F704CE  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F704CE  ld IY,(0x10d0)
 	and	iy, 15	; F704D2  and IY,0x000f
 	ld	a, (4306:16)	; F704D6  ld A,(0x10d2)
 	push	xix	; F704DA  push XIX
@@ -167132,7 +167149,7 @@ sub_F704CE:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F704E7:
-	ld	iy, (4304:16)	; F704E7  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F704E7  ld IY,(0x10d0)
 	and	iy, 15	; F704EB  and IY,0x000f
 	push	xiy	; F704EF  push XIY
 	calr	TrackCursor_Load	; F704F0  calr 0xf7124e
@@ -167184,7 +167201,7 @@ sub_F704E7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7053F:
-	ld	iy, (4304:16)	; F7053F  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F7053F  ld IY,(0x10d0)
 	and	iy, 15	; F70543  and IY,0x000f
 	push	xix	; F70547  push XIX
 	ld	xix, 4568	; F70548  ld XIX,0x000011d8
@@ -167237,7 +167254,7 @@ sub_F7053F_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70599:
-	ld	iy, (4304:16)	; F70599  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70599  ld IY,(0x10d0)
 	and	iy, 15	; F7059D  and IY,0x000f
 	push	xix	; F705A1  push XIX
 	ld	xix, 4568	; F705A2  ld XIX,0x000011d8
@@ -167402,7 +167419,7 @@ sub_F7067F_Skip:
 	ld	(4683:16), 1	; F706A1  ld (0x124b),0x01
 	calr	sub_F71417	; F706A6  calr 0xf71417
 sub_F7067F_Skip2:
-	ld	iy, (4304:16)	; F706A9  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F706A9  ld IY,(0x10d0)
 	and	iy, 15	; F706AD  and IY,0x000f
 	extz	xiy	; F706B1  extz XIY
 	calr	TrackCursor_Load	; F706B3  calr 0xf7124e
@@ -167426,7 +167443,7 @@ sub_F7067F_Skip2:
 	pop	xiy	; F706E0  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F706E1  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F706E6  jr NZ,0xf70753
-	ld	l, (4304:16)	; F706E8  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F706E8  ld L,(0x10d0)
 	and	l, 15	; F706EC  and L,0x0f
 	xor	h, h	; F706EF  xor H,H
 	extz	xhl	; F706F1  extz XHL
@@ -167485,7 +167502,7 @@ sub_F7067F_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70754:
-	ld	iy, (4304:16)	; F70754  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70754  ld IY,(0x10d0)
 	and	iy, 15	; F70758  and IY,0x000f
 	extz	xiy	; F7075C  extz XIY
 	push	xiy	; F7075E  push XIY
@@ -167534,7 +167551,7 @@ sub_F7067F_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F707AE:
-	ld	iy, (4304:16)	; F707AE  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F707AE  ld IY,(0x10d0)
 	and	iy, 15	; F707B2  and IY,0x000f
 	extz	xiy	; F707B6  extz XIY
 	ld	a, (4306:16)	; F707B8  ld A,(0x10d2)
@@ -167582,7 +167599,7 @@ sub_F707E6_Skip:
 	calr	sub_F71417	; F70802  calr 0xf71417
 sub_F707E6_Skip2:
 	xor	h, h	; F70805  xor H,H
-	ld	l, (4304:16)	; F70807  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F70807  ld L,(0x10d0)
 	and	l, 15	; F7080B  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F7080E  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F70813  cp (0x1239),0xff
@@ -167631,7 +167648,7 @@ sub_F7083B:
 	push	xiy	; F7083B  push XIY
 	m_cp_mi8 MB16, 0x11ae, 0xff	; F7083C  cp (0x11ae),0xff
 	jrl	z, sub_F7083B_Epilogue	; F70841  jrl Z,0xf7091b
-	ld	iy, (4304:16)	; F70844  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70844  ld IY,(0x10d0)
 	and	iy, 15	; F70848  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F7084C  cp (0x1078),0x00
 	jr	z, sub_F7083B_Skip	; F70851  jr Z,0xf70862
@@ -167697,7 +167714,7 @@ sub_F7083B_Skip:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F708E9  cp (0x1238),0x00
 	jr	nz, sub_F7083B_Epilogue	; F708EE  jr NZ,0xf7091b
 	call	sub_F7129A	; F708F0  call 0xf7129a
-	ld	iy, (4304:16)	; F708F4  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F708F4  ld IY,(0x10d0)
 	and	iy, 15	; F708F8  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F708FC  cp (0x1078),0x00
 	jr	z, sub_F7083B_Skip2	; F70901  jr Z,0xf70912
@@ -167957,7 +167974,7 @@ sub_F70A30:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70A43:
-	ld	iy, (4304:16)	; F70A43  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70A43  ld IY,(0x10d0)
 	and	iy, 15	; F70A47  and IY,0x000f
 	push	xix	; F70A4B  push XIX
 	ld	xix, 4568	; F70A4C  ld XIX,0x000011d8
@@ -168004,7 +168021,7 @@ sub_F70A43_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70A97:
-	ld	iy, (4304:16)	; F70A97  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70A97  ld IY,(0x10d0)
 	and	iy, 15	; F70A9B  and IY,0x000f
 	push	xix	; F70A9F  push XIX
 	ld	xix, 4568	; F70AA0  ld XIX,0x000011d8
@@ -168066,7 +168083,7 @@ Data_F70AD7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70AE9:
-	ld	iy, (4304:16)	; F70AE9  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70AE9  ld IY,(0x10d0)
 	and	iy, 15	; F70AED  and IY,0x000f
 	push	xix	; F70AF1  push XIX
 	ld	xix, 4568	; F70AF2  ld XIX,0x000011d8
@@ -168146,7 +168163,7 @@ sub_F70B22_Skip2:
 	jrl	nz, sub_F70B22_Epilogue	; F70B85  jrl NZ,0xf70c3a
 	ld	l, c	; F70B88  ld L,C
 	xor	h, h	; F70B8A  xor H,H
-	ld	l, (4304:16)	; F70B8C  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F70B8C  ld L,(0x10d0)
 	and	l, 15	; F70B90  and L,0x0f
 	xor	h, h	; F70B93  xor H,H
 	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70B95  cp (0x1078),0x0000
@@ -168195,7 +168212,7 @@ sub_F70B22_Join:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70C04  cp (0x1238),0x00
 	jrl	nz, sub_F70B22_Epilogue	; F70C09  jrl NZ,0xf70c3a
 	calr	sub_F7129A	; F70C0C  calr 0xf7129a
-	ld	iy, (4304:16)	; F70C0F  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70C0F  ld IY,(0x10d0)
 	and	iy, 15	; F70C13  and IY,0x000f
 	extz	xiy	; F70C17  extz XIY
 	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70C19  cp (0x1078),0x0000
@@ -168315,7 +168332,7 @@ ByteMap_F70C5F:
 ; Unknown: what the nibble of (0x10D0) and the three tables it indexes are.
 ; --------------------------------------------------------------------------
 sub_F70C6F:
-	ld	c, (4304:16)	; F70C6F  ld C,(0x10d0)
+	ld	c, (Smf_EventStatus:16)	; F70C6F  ld C,(0x10d0)
 	and	c, 15	; F70C73  and C,0x0f
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F70C76  ld RL3,A
 	m_rd_ld_rr2x RWX, 0x3E, r2	; F70C79  ld QHL3,DE
@@ -168358,7 +168375,7 @@ sub_F70C6F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70CBA:
-	ld	iy, (4304:16)	; F70CBA  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70CBA  ld IY,(0x10d0)
 	and	iy, 15	; F70CBE  and IY,0x000f
 	ld	a, (4306:16)	; F70CC2  ld A,(0x10d2)
 	push	xix	; F70CC6  push XIX
@@ -168367,7 +168384,7 @@ sub_F70CBA:
 	pop	xix	; F70CD1  pop XIX
 	cp	a, 127	; F70CD2  cp A,0x7f
 	jr	z, sub_F70CBA_Skip2	; F70CD5  jr Z,0xf70d13
-	ld	c, (4304:16)	; F70CD7  ld C,(0x10d0)
+	ld	c, (Smf_EventStatus:16)	; F70CD7  ld C,(0x10d0)
 	and	c, 15	; F70CDB  and C,0x0f
 	ld	wa, (4532:16)	; F70CDE  ld WA,(0x11b4)
 	m_and_rm MW16, 0x11b6, 0	; F70CE2  and WA,(0x11b6)
@@ -168393,7 +168410,7 @@ sub_F70CBA_Skip:
 	cp	a, 255	; F70D0E  cp A,0xff
 	jr	nz, sub_F70CBA_Return	; F70D11  jr NZ,0xf70d41
 sub_F70CBA_Skip2:
-	ld	c, (4304:16)	; F70D13  ld C,(0x10d0)
+	ld	c, (Smf_EventStatus:16)	; F70D13  ld C,(0x10d0)
 	and	c, 15	; F70D17  and C,0x0f
 	xor	b, b	; F70D1A  xor B,B
 	ld	iy, bc	; F70D1C  ld IY,BC
@@ -168423,7 +168440,7 @@ sub_F70CBA_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70D42:
-	ld	iy, (4304:16)	; F70D42  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70D42  ld IY,(0x10d0)
 	and	iy, 15	; F70D46  and IY,0x000f
 	ld	a, (4306:16)	; F70D4A  ld A,(0x10d2)
 	push	xix	; F70D4E  push XIX
@@ -168432,7 +168449,7 @@ sub_F70D42:
 	pop	xix	; F70D59  pop XIX
 	cp	a, 127	; F70D5A  cp A,0x7f
 	jr	z, sub_F70D42_Skip2	; F70D5D  jr Z,0xf70da7
-	ld	c, (4304:16)	; F70D5F  ld C,(0x10d0)
+	ld	c, (Smf_EventStatus:16)	; F70D5F  ld C,(0x10d0)
 	and	c, 15	; F70D63  and C,0x0f
 	ld	wa, (4532:16)	; F70D66  ld WA,(0x11b4)
 	m_and_rm MW16, 0x11b6, 0	; F70D6A  and WA,(0x11b6)
@@ -168462,7 +168479,7 @@ sub_F70D42_Skip:
 	cp	a, 255	; F70DA2  cp A,0xff
 	jr	nz, sub_F70D42_Return	; F70DA5  jr NZ,0xf70dd5
 sub_F70D42_Skip2:
-	ld	c, (4304:16)	; F70DA7  ld C,(0x10d0)
+	ld	c, (Smf_EventStatus:16)	; F70DA7  ld C,(0x10d0)
 	and	c, 15	; F70DAB  and C,0x0f
 	xor	b, b	; F70DAE  xor B,B
 	ld	iy, bc	; F70DB0  ld IY,BC
@@ -168491,7 +168508,7 @@ sub_F70D42_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70DD6:
-	ld	iy, (4304:16)	; F70DD6  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70DD6  ld IY,(0x10d0)
 	and	iy, 15	; F70DDA  and IY,0x000f
 	push	xix	; F70DDE  push XIX
 	ld	xix, 4536	; F70DDF  ld XIX,0x000011b8
@@ -168533,7 +168550,7 @@ sub_F70DD6_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F70E1D:
-	ld	iy, (4304:16)	; F70E1D  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70E1D  ld IY,(0x10d0)
 	and	iy, 15	; F70E21  and IY,0x000f
 	extz	xiy	; F70E25  extz XIY
 	push	xiy	; F70E27  push XIY
@@ -168604,7 +168621,7 @@ sub_F70E1D_Return:
 	ret	; F70ED4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70ED5
+; SmfEvent_NoteOn
 ; Called from: in-module: 0xF6FF96
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B1) (0x1238) (0x1239) (0x124B)
 ;          (0x2732) (0x345C) (0x345E)
@@ -168617,7 +168634,8 @@ sub_F70E1D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70ED5:
+; SmfEvent_NoteOn: SmfEvent_DispatchChannelMessage's arm for status 0x9n with a non-zero velocity.
+SmfEvent_NoteOn:
 	ld	xiy, 12378	; F70ED5  ld XIY,0x0000305a
 sub_F70ED5_Loop:
 	m_bit 7, MDI+r5, 0	; F70EDA  bit 7,(XIY)
@@ -168642,7 +168660,7 @@ sub_F70ED5_Skip2:
 	ld	(4683:16), 1	; F70F14  ld (0x124b),0x01
 	calr	sub_F71417	; F70F19  calr 0xf71417
 sub_F70ED5_Skip3:
-	ld	iy, (4304:16)	; F70F1C  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F70F1C  ld IY,(0x10d0)
 	and	iy, 15	; F70F20  and IY,0x000f
 	extz	xiy	; F70F24  extz XIY
 	push	xiy	; F70F26  push XIY
@@ -168712,7 +168730,7 @@ sub_F70ED5_Skip3:
 	push	xix	; F70FB7  push XIX
 	calr	TrackCursor_Save	; F70FB8  calr 0xf71275
 	pop	xix	; F70FBB  pop XIX
-	ld	a, (4304:16)	; F70FBC  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F70FBC  ld A,(0x10d0)
 	and	a, 15	; F70FC0  and A,0x0f
 	or	a, 128	; F70FC3  or A,0x80
 	ld	(xix), a	; F70FC6  ld (XIX),A
@@ -168804,7 +168822,7 @@ sub_F70FF8_Return:
 	ret	; F71022  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71023
+; SmfEvent_NoteOff
 ; Called from: in-module: 0xF6FF9B
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
 ; Calls:   SongStore_SeekBlock_Copy sub_F710BA
@@ -168816,14 +168834,15 @@ sub_F70FF8_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71023:
+; SmfEvent_NoteOff: the arm for status 0x8n, and for 0x9n with velocity 0.
+SmfEvent_NoteOff:
 	ld	xiy, 12378	; F71023  ld XIY,0x0000305a
 sub_F71023_Loop:
 	m_bit 7, MDI+r5, 0	; F71028  bit 7,(XIY)
 	jrl	z, sub_F71023_Skip2	; F7102A  jrl Z,0xf710aa
 	ld	a, (xiy)	; F7102D  ld A,(XIY)
 	and	a, 15	; F7102F  and A,0x0f
-	ld	l, (4304:16)	; F71032  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F71032  ld L,(0x10d0)
 	and	l, 15	; F71036  and L,0x0f
 	cp	a, l	; F71039  cp A,L
 	jr	nz, sub_F71023_Skip2	; F7103B  jr NZ,0xf710aa
@@ -168927,7 +168946,7 @@ sub_F710E7:
 	mx_ld_rm MXW, ra_IX, ra_IY, 0	; F710F6  ld WA,(XIX+IY)
 	pop	xix	; F710FB  pop XIX
 	srl	iy, 1	; F710FC  srl 0x01,IY
-	ld	bc, (4504:16)	; F710FF  ld BC,(0x1198)
+	ld	bc, (Smf_VlqValue:16)	; F710FF  ld BC,(0x1198)
 	ld	e, (4506:16)	; F71103  ld E,(0x119a)
 	xor	d, d	; F71107  xor D,D
 	cp	de, 0:i3	; F71109  cp DE,0
@@ -169191,7 +169210,7 @@ TrackCursor_Save:
 ; --------------------------------------------------------------------------
 sub_F7129A:
 	pushw	bc	; F7129A  push BC
-	ld	iy, (4304:16)	; F7129B  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F7129B  ld IY,(0x10d0)
 	and	iy, 15	; F7129F  and IY,0x000f
 	ld	bc, iy	; F712A3  ld BC,IY
 	xor	b, b	; F712A5  xor B,B
@@ -169270,7 +169289,7 @@ sub_F712FB:
 	cp	wa, 96	; F712FF  cp WA,0x0060
 	jr	z, sub_F712FB_Skip2	; F71303  jr Z,0xf7135e
 	ld	e, (4506:16)	; F71305  ld E,(0x119a)
-	ld	wa, (4504:16)	; F71309  ld WA,(0x1198)
+	ld	wa, (Smf_VlqValue:16)	; F71309  ld WA,(0x1198)
 	cp	e, 0:i3	; F7130D  cp E,0
 	jr	z, sub_F712FB_Skip	; F7130F  jr Z,0xf71344
 	ldw	hl, 96	; F71311  ld HL,0x0060
@@ -169291,7 +169310,7 @@ sub_F712FB:
 	ld	de, qwa	; F7133F  ld DE,QWA
 	jr	sub_F712FB_Return	; F71342  jr T,0xf71368
 sub_F712FB_Skip:
-	ld	wa, (4504:16)	; F71344  ld WA,(0x1198)
+	ld	wa, (Smf_VlqValue:16)	; F71344  ld WA,(0x1198)
 	ldw	hl, 96	; F71348  ld HL,0x0060
 	mul	xwa, hl	; F7134B  mul XWA,HL
 	ld	de, qwa	; F7134D  ld DE,QWA
@@ -169303,12 +169322,12 @@ sub_F712FB_Skip:
 sub_F712FB_Skip2:
 	xor	de, de	; F7135E  xor DE,DE
 	ld	e, (4506:16)	; F71360  ld E,(0x119a)
-	ld	wa, (4504:16)	; F71364  ld WA,(0x1198)
+	ld	wa, (Smf_VlqValue:16)	; F71364  ld WA,(0x1198)
 sub_F712FB_Return:
 	ret	; F71368  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71369
+; Smf_ReadVlqBytes_Copy
 ; Called from: in-module: 0xF6F6BD 0xF71C6F
 ; Touches: (0x124A)
 ; Calls:   InputStream_GetByte
@@ -169320,8 +169339,9 @@ sub_F712FB_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71369:
-	ld	xix, 4499	; F71369  ld XIX,0x00001193
+; Smf_ReadVlqBytes_Copy: the same twelve instructions as Smf_ReadVlqBytes.
+Smf_ReadVlqBytes_Copy:
+	ld	xix, Smf_VlqBytes	; F71369  ld XIX,0x00001193
 sub_F71369_Loop:
 	push	xix	; F7136E  push XIX
 	calr	InputStream_GetByte	; F7136F  calr 0xf7138f
@@ -169335,7 +169355,7 @@ sub_F71369_Skip:
 	ld	(xix+), a	; F71380  ld (XIX+),A
 	bit	7, a	; F71383  bit 0x07,A
 	jr	nz, sub_F71369_Loop	; F71386  jr NZ,0xf7136e
-	sub	xix, 4499	; F71388  sub XIX,0x00001193
+	sub	xix, Smf_VlqBytes	; F71388  sub XIX,0x00001193
 sub_F71369_Return:
 	ret	; F7138E  ret
 
@@ -169588,7 +169608,7 @@ Data_F71512:
 ; Called from: in-module: 0xF6F733 0xF71CF1
 ; Touches: (0x1198) (0x11B1) (0x1239) (0x124A) (0x124B) (0x137B) (0x137C)
 ;          (0x137D) (0x137E)
-; Calls:   sub_F6FD7A InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange sub_F6FD91
+; Calls:   Smf_ReadVlq InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange sub_F6FD91
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71525 is an instruction boundary of this
@@ -169605,7 +169625,7 @@ Data_F71512:
 ;   notes/promb-2026-09-25/smf_sysex_param_change.py.
 ; --------------------------------------------------------------------------
 SmfEvent_SysEx:
-	calr	sub_F6FD7A	; F71525  calr 0xf6fd7a
+	calr	Smf_ReadVlq	; F71525  calr 0xf6fd7a
 	ld	w, (InputStream_Status:16)	; F71528  ld W,(0x124a)
 	cp	w, 1:i3	; F7152C  cp W,1
 	jr	z, SmfEvent_SysEx_Skip	; F7152E  jr Z,0xf71536
@@ -169616,9 +169636,9 @@ SmfEvent_SysEx_Skip:
 	jrl	nz, SmfEvent_SysEx_Skip3	; F7153A  jrl NZ,0xf715ad
 	m_bit 0, MD16, 0x11b1	; F7153D  bit 0,(0x11b1)
 	jrl	nz, SmfEvent_SysEx_Join2	; F71541  jrl NZ,0xf71693
-	m_cp_mi16 MW16, 0x1198, 0x0005	; F71544  cp (0x1198),0x0005
+	m_cp_mi16 MW16, Smf_VlqValue, 0x0005	; F71544  cp (0x1198),0x0005
 	jrl	nz, SmfEvent_SysEx_Skip3	; F7154A  jrl NZ,0xf715ad
-	ld	hl, (4504:16)	; F7154D  ld HL,(0x1198)
+	ld	hl, (Smf_VlqValue:16)	; F7154D  ld HL,(0x1198)
 	pushw	hl	; F71551  push HL
 	calr	InputStream_GetByte	; F71552  calr 0xf7138f
 	popw	hl	; F71555  pop HL
@@ -169654,12 +169674,12 @@ SmfEvent_SysEx_Skip2:
 	ld	(4665:16), 0	; F7159E  ld (0x1239),0x00
 	calr	sub_F71417	; F715A3  calr 0xf71417
 SmfEvent_SysEx_Loop:
-	ld	(4504:16), hl	; F715A6  ld (0x1198),HL
+	ld	(Smf_VlqValue:16), hl	; F715A6  ld (0x1198),HL
 	jrl	SmfEvent_SysEx_Join2	; F715AA  jrl T,0xf71693
 SmfEvent_SysEx_Skip3:
-	m_cp_mi16 MW16, 0x1198, 0x0010	; F715AD  cp (0x1198),0x0010
+	m_cp_mi16 MW16, Smf_VlqValue, 0x0010	; F715AD  cp (0x1198),0x0010
 	jrl	nz, SmfEvent_SysEx_Join2	; F715B3  jrl NZ,0xf71693
-	ld	hl, (4504:16)	; F715B6  ld HL,(0x1198)
+	ld	hl, (Smf_VlqValue:16)	; F715B6  ld HL,(0x1198)
 	pushw	hl	; F715BA  push HL
 	calr	InputStream_GetByte	; F715BB  calr 0xf7138f
 	popw	hl	; F715BE  pop HL
@@ -169758,7 +169778,7 @@ SmfEvent_SysEx_Join:
 	popw	hl	; F71685  pop HL
 	dec	1, hl	; F71686  dec 1,HL
 	ld	(4989:16), a	; F71688  ld (0x137d),A
-	ld	(4504:16), hl	; F7168C  ld (0x1198),HL
+	ld	(Smf_VlqValue:16), hl	; F7168C  ld (0x1198),HL
 	calr	SmfSysEx_ApplyParamChange	; F71690  calr 0xf71697
 SmfEvent_SysEx_Join2:
 	calr	sub_F6FD91	; F71693  calr 0xf6fd91
@@ -170093,7 +170113,7 @@ SmfSysEx_Addr11_Targets:
 ; --------------------------------------------------------------------------
 sub_F7193F:
 	xor	h, h	; F7193F  xor H,H
-	ld	l, (4304:16)	; F71941  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F71941  ld L,(0x10d0)
 	and	l, 15	; F71945  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F71948  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F7194D  cp (0x1239),0xff
@@ -170124,7 +170144,7 @@ sub_F7193F_Skip:
 ; --------------------------------------------------------------------------
 sub_F71978:
 	xor	h, h	; F71978  xor H,H
-	ld	l, (4304:16)	; F7197A  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F7197A  ld L,(0x10d0)
 	and	l, 15	; F7197E  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F71981  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71986  cp (0x1239),0xff
@@ -170155,7 +170175,7 @@ sub_F71978_Skip:
 ; --------------------------------------------------------------------------
 sub_F719B1:
 	xor	h, h	; F719B1  xor H,H
-	ld	l, (4304:16)	; F719B3  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F719B3  ld L,(0x10d0)
 	and	l, 15	; F719B7  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F719BA  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F719BF  cp (0x1239),0xff
@@ -170186,7 +170206,7 @@ sub_F719B1_Skip:
 ; --------------------------------------------------------------------------
 sub_F719EA:
 	xor	h, h	; F719EA  xor H,H
-	ld	l, (4304:16)	; F719EC  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F719EC  ld L,(0x10d0)
 	and	l, 15	; F719F0  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F719F3  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F719F8  cp (0x1239),0xff
@@ -170220,7 +170240,7 @@ sub_F719EA_Skip:
 ; --------------------------------------------------------------------------
 sub_F71A23:
 	xor	h, h	; F71A23  xor H,H
-	ld	l, (4304:16)	; F71A25  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F71A25  ld L,(0x10d0)
 	and	l, 15	; F71A29  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F71A2C  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71A31  cp (0x1239),0xff
@@ -170254,7 +170274,7 @@ sub_F719EA_Skip2:
 ; --------------------------------------------------------------------------
 sub_F71A5C:
 	xor	h, h	; F71A5C  xor H,H
-	ld	l, (4304:16)	; F71A5E  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F71A5E  ld L,(0x10d0)
 	and	l, 15	; F71A62  and L,0x0f
 	ld	xiy, ByteMap_F7091E	; F71A65  ld XIY,0x00f7091e
 	m_cp_mi8 MB16, 0x1239, 0xff	; F71A6A  cp (0x1239),0xff
@@ -170289,7 +170309,7 @@ sub_F71A95:
 	push	xiy	; F71A95  push XIY
 	m_cp_mi8 MB16, 0x11ae, 0xff	; F71A96  cp (0x11ae),0xff
 	jrl	z, sub_F71A95_Epilogue	; F71A9B  jrl Z,0xf71b80
-	ld	iy, (4304:16)	; F71A9E  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F71A9E  ld IY,(0x10d0)
 	and	iy, 15	; F71AA2  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F71AA6  cp (0x1078),0x00
 	jr	z, sub_F71A95_Skip	; F71AAB  jr Z,0xf71abc
@@ -170358,7 +170378,7 @@ sub_F71A95_Skip:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71B4E  cp (0x1238),0x00
 	jr	nz, sub_F71A95_Epilogue	; F71B53  jr NZ,0xf71b80
 	call	sub_F7129A	; F71B55  call 0xf7129a
-	ld	iy, (4304:16)	; F71B59  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F71B59  ld IY,(0x10d0)
 	and	iy, 15	; F71B5D  and IY,0x000f
 	m_cp_mi8 MB16, Smf_Format, 0x00	; F71B61  cp (0x1078),0x00
 	jr	z, sub_F71A95_Skip2	; F71B66  jr Z,0xf71b77
@@ -170445,8 +170465,8 @@ Data_F71BE6:
 ; sub_F71BEA
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
-; Calls:   InputStream_GetByte sub_F71369 sub_F6FE1B sub_F728FE sub_F710E7 sub_F712B6
-;          sub_F6FB51 sub_F728A3 SmfEvent_SysEx sub_F71D71 sub_F6FEA1
+; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq sub_F728FE sub_F710E7 sub_F712B6
+;          sub_F6FB51 sub_F728A3 SmfEvent_SysEx sub_F71D71 SmfEvent_ReadWithRunningStatus
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71BEA is an instruction boundary of this
@@ -170507,7 +170527,7 @@ sub_F71BEA_Loop:
 	ld	(4112:16), 255	; F71C67  ld (0x1010),0xff
 	jrl	sub_F71BEA_Return	; F71C6C  jrl T,0xf71d4e
 sub_F71BEA_Skip4:
-	calr	sub_F71369	; F71C6F  calr 0xf71369
+	calr	Smf_ReadVlqBytes_Copy	; F71C6F  calr 0xf71369
 	ld	w, (InputStream_Status:16)	; F71C72  ld W,(0x124a)
 	cp	w, 1:i3	; F71C76  cp W,1
 	jr	z, sub_F71BEA_Skip5	; F71C78  jr Z,0xf71c87
@@ -170516,7 +170536,7 @@ sub_F71BEA_Skip4:
 	ld	(4112:16), 255	; F71C7F  ld (0x1010),0xff
 	jrl	sub_F71BEA_Return	; F71C84  jrl T,0xf71d4e
 sub_F71BEA_Skip5:
-	calr	sub_F6FE1B	; F71C87  calr 0xf6fe1b
+	calr	Smf_DecodeVlq	; F71C87  calr 0xf6fe1b
 	ld	iy, (4530:16)	; F71C8A  ld IY,(0x11b2)
 	calr	sub_F728FE	; F71C8E  calr 0xf728fe
 	calr	sub_F710E7	; F71C91  calr 0xf710e7
@@ -170581,7 +170601,7 @@ sub_F71BEA_Join:
 	ld	(4112:16), 255	; F71D29  ld (0x1010),0xff
 	jr	sub_F71BEA_Return	; F71D2E  jr T,0xf71d4e
 sub_F71BEA_Skip13:
-	calr	sub_F6FEA1	; F71D30  calr 0xf6fea1
+	calr	SmfEvent_ReadWithRunningStatus	; F71D30  calr 0xf6fea1
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71D33  cp (0x1238),0x00
 	jr	nz, sub_F71BEA_Skip14	; F71D38  jr NZ,0xf71d49
 	ld	w, (InputStream_Status:16)	; F71D3A  ld W,(0x124a)
@@ -170622,7 +170642,7 @@ ClearRam10D3_34Bytes_Copy:
 	popw	wa	; F71D64  pop WA
 	ret	; F71D65  ret
 	xor	wa, wa	; F71D66  xor WA,WA
-	ld	(4504:16), wa	; F71D68  ld (0x1198),WA
+	ld	(Smf_VlqValue:16), wa	; F71D68  ld (0x1198),WA
 	ld	(4506:16), wa	; F71D6C  ld (0x119a),WA
 	ret	; F71D70  ret
 
@@ -170640,9 +170660,9 @@ ClearRam10D3_34Bytes_Copy:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F71D71:
-	ld	(4300:16), a	; F71D71  ld (0x10cc),A
+	ld	(Smf_RunningStatus:16), a	; F71D71  ld (0x10cc),A
 	xor	bc, bc	; F71D75  xor BC,BC
-	ld	xix, 4304	; F71D77  ld XIX,0x000010d0
+	ld	xix, Smf_EventStatus	; F71D77  ld XIX,0x000010d0
 	ld	(xix+), a	; F71D7C  ld (XIX+),A
 	inc	1, c	; F71D7F  inc 1,C
 sub_F71D71_Loop:
@@ -170659,7 +170679,7 @@ sub_F71D71_Loop:
 sub_F71D71_Skip:
 	ld	(xix+), a	; F71D95  ld (XIX+),A
 	inc	1, c	; F71D98  inc 1,C
-	ld	a, (4300:16)	; F71D9A  ld A,(0x10cc)
+	ld	a, (Smf_RunningStatus:16)	; F71D9A  ld A,(0x10cc)
 	and	a, 240	; F71D9E  and A,0xf0
 	ld	w, 2:opc	; F71DA1  ld W,0x02
 	cp	a, 208	; F71DA3  cp A,0xd0
@@ -170689,8 +170709,8 @@ sub_F71D71_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F71DB7:
-	ld	xix, 4304	; F71DB7  ld XIX,0x000010d0
-	ld	a, (4304:16)	; F71DBC  ld A,(0x10d0)
+	ld	xix, Smf_EventStatus	; F71DB7  ld XIX,0x000010d0
+	ld	a, (Smf_EventStatus:16)	; F71DBC  ld A,(0x10d0)
 	pushw	hl	; F71DC0  push HL
 	ld	hl, (4305:16)	; F71DC1  ld HL,(0x10d1)
 	cp	l, 127	; F71DC5  cp L,0x7f
@@ -170761,7 +170781,7 @@ sub_F71E21:
 	and	xiy, 15	; F71E2A  and XIY,0x0000000f
 	push	xiy	; F71E30  push XIY
 	calr	sub_F727C8	; F71E31  calr 0xf727c8
-	ld	w, (4304:16)	; F71E34  ld W,(0x10d0)
+	ld	w, (Smf_EventStatus:16)	; F71E34  ld W,(0x10d0)
 	and	w, 15	; F71E38  and W,0x0f
 	ld	a, 160:opc	; F71E3B  ld A,0xa0
 	or	a, w	; F71E3D  or A,W
@@ -170821,7 +170841,7 @@ sub_F71E89_Skip:
 	ld	(4683:16), 1	; F71EA0  ld (0x124b),0x01
 	call	sub_F71417	; F71EA5  call 0xf71417
 sub_F71E89_Skip2:
-	ld	iy, (4304:16)	; F71EA9  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F71EA9  ld IY,(0x10d0)
 	and	iy, 15	; F71EAD  and IY,0x000f
 sub_F71E89_Loop:
 	ld	iy, (4530:16)	; F71EB1  ld IY,(0x11b2)
@@ -170836,7 +170856,7 @@ sub_F71E89_Skip3:
 	jrl	z, sub_F71E89_Skip4	; F71ECF  jrl Z,0xf71fd0
 	push	xix	; F71ED2  push XIX
 	push	xiy	; F71ED3  push XIY
-	ld	iy, (4304:16)	; F71ED4  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F71ED4  ld IY,(0x10d0)
 	and	iy, 15	; F71ED8  and IY,0x000f
 	ld	xix, 4260	; F71EDC  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F71EE1  ld L,(XIX+IY)
@@ -170889,7 +170909,7 @@ sub_F71E89_Skip3:
 	pop	xhl	; F71F67  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F68  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71F6D  jrl NZ,0xf7207c
-	ld	a, (4304:16)	; F71F70  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F71F70  ld A,(0x10d0)
 	and	a, 15	; F71F74  and A,0x0f
 	push	xhl	; F71F77  push XHL
 	push	xiy	; F71F78  push XIY
@@ -170948,7 +170968,7 @@ sub_F71E89_Skip4:
 	pop	xiy	; F71FFF  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72000  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72005  jr NZ,0xf7207c
-	ld	a, (4304:16)	; F72007  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F72007  ld A,(0x10d0)
 	and	a, 15	; F7200B  and A,0x0f
 	push	xiy	; F7200E  push XIY
 	calr	BStore_PutByteAndAdvance	; F7200F  calr 0xf70fda
@@ -171056,7 +171076,7 @@ sub_F7208D_Skip3:
 	push	xix	; F720DE  push XIX
 	calr	sub_F727C8	; F720DF  calr 0xf727c8
 	pop	xix	; F720E2  pop XIX
-	ld	w, (4304:16)	; F720E3  ld W,(0x10d0)
+	ld	w, (Smf_EventStatus:16)	; F720E3  ld W,(0x10d0)
 	and	w, 15	; F720E7  and W,0x0f
 	ld	a, 144:opc	; F720EA  ld A,0x90
 	or	a, w	; F720EC  or A,W
@@ -171129,7 +171149,7 @@ sub_F7208D_Skip4:
 	push	xix	; F72180  push XIX
 	calr	sub_F727F6	; F72181  calr 0xf727f6
 	pop	xix	; F72184  pop XIX
-	ld	a, (4304:16)	; F72185  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F72185  ld A,(0x10d0)
 	and	a, 15	; F72189  and A,0x0f
 	or	a, 128	; F7218C  or A,0x80
 	ld	(xix), a	; F7218F  ld (XIX),A
@@ -171161,7 +171181,7 @@ sub_F721A3_Loop:
 	jr	z, sub_F721A3_Skip2	; F721AA  jr Z,0xf7221f
 	ld	a, (xiy)	; F721AC  ld A,(XIY)
 	and	a, 15	; F721AE  and A,0x0f
-	ld	l, (4304:16)	; F721B1  ld L,(0x10d0)
+	ld	l, (Smf_EventStatus:16)	; F721B1  ld L,(0x10d0)
 	and	l, 15	; F721B5  and L,0x0f
 	cp	a, l	; F721B8  cp A,L
 	jr	nz, sub_F721A3_Skip2	; F721BA  jr NZ,0xf7221f
@@ -171413,7 +171433,7 @@ DispatchTable_F72323_Nop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F72364:
-	ld	iy, (4304:16)	; F72364  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F72364  ld IY,(0x10d0)
 	and	iy, 15	; F72368  and IY,0x000f
 	ld	a, (4306:16)	; F7236C  ld A,(0x10d2)
 	push	xix	; F72370  push XIX
@@ -171444,7 +171464,7 @@ sub_F7237D:
 	and	iy, 15	; F72384  and IY,0x000f
 	push	xiy	; F72388  push XIY
 	calr	sub_F727C8	; F72389  calr 0xf727c8
-	ld	w, (4304:16)	; F7238C  ld W,(0x10d0)
+	ld	w, (Smf_EventStatus:16)	; F7238C  ld W,(0x10d0)
 	and	w, 15	; F72390  and W,0x0f
 	ld	a, 208:opc	; F72393  ld A,0xd0
 	or	a, w	; F72395  or A,W
@@ -171495,7 +171515,7 @@ sub_F7237D_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F723E1:
-	ld	iy, (4304:16)	; F723E1  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F723E1  ld IY,(0x10d0)
 	and	iy, 15	; F723E5  and IY,0x000f
 	push	xix	; F723E9  push XIX
 	ld	xix, 4568	; F723EA  ld XIX,0x000011d8
@@ -171548,7 +171568,7 @@ sub_F723E1_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7243B:
-	ld	iy, (4304:16)	; F7243B  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F7243B  ld IY,(0x10d0)
 	and	iy, 15	; F7243F  and IY,0x000f
 	push	xix	; F72443  push XIX
 	ld	xix, 4568	; F72444  ld XIX,0x000011d8
@@ -171676,7 +171696,7 @@ sub_F724CB:
 	pop	xiy	; F72502  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72503  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72508  jr NZ,0xf72554
-	ld	a, (4304:16)	; F7250A  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F7250A  ld A,(0x10d0)
 	and	a, 15	; F7250E  and A,0x0f
 	push	xiy	; F72511  push XIY
 	calr	BStore_PutByteAndAdvance	; F72512  calr 0xf70fda
@@ -171776,7 +171796,7 @@ Data_F72576:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F725D9:
-	ld	iy, (4304:16)	; F725D9  ld IY,(0x10d0)
+	ld	iy, (Smf_EventStatus:16)	; F725D9  ld IY,(0x10d0)
 	and	iy, 15	; F725DD  and IY,0x000f
 	ld	a, (4306:16)	; F725E1  ld A,(0x10d2)
 	push	xde	; F725E5  push XDE
@@ -171939,7 +171959,7 @@ sub_F726C6:
 	pop	xiy	; F726FD  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F726FE  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72703  jr NZ,0xf72753
-	ld	a, (4304:16)	; F72705  ld A,(0x10d0)
+	ld	a, (Smf_EventStatus:16)	; F72705  ld A,(0x10d0)
 	and	a, 15	; F72709  and A,0x0f
 	push	xiy	; F7270C  push XIY
 	calr	BStore_PutByteAndAdvance	; F7270D  calr 0xf70fda
@@ -171989,7 +172009,7 @@ sub_F72754:
 	and	iy, 15	; F7275B  and IY,0x000f
 	push	xiy	; F7275F  push XIY
 	calr	sub_F727C8	; F72760  calr 0xf727c8
-	ld	w, (4304:16)	; F72763  ld W,(0x10d0)
+	ld	w, (Smf_EventStatus:16)	; F72763  ld W,(0x10d0)
 	and	w, 15	; F72767  and W,0x0f
 	ld	a, 224:opc	; F7276A  ld A,0xe0
 	or	a, w	; F7276C  or A,W
@@ -173164,7 +173184,7 @@ sub_F72F5C_Loop:
 	call	sub_F6FA70	; F72F9E  call 0xf6fa70
 sub_F72F5C_Loop2:
 	calr	sub_F7339C	; F72FA2  calr 0xf7339c
-	ld	a, (4504:16)	; F72FA5  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F72FA5  ld A,(0x1198)
 	cp	a, 129	; F72FA9  cp A,0x81
 	jr	z, sub_F72F5C_Skip	; F72FAC  jr Z,0xf72fe0
 	cp	a, 130	; F72FAE  cp A,0x82
@@ -173208,9 +173228,9 @@ sub_F72F5C_Loop3:
 	calr	sub_F731FB	; F73004  calr 0xf731fb
 	jrl	sub_F72F5C_Join3	; F73007  jrl T,0xf731a2
 sub_F72F5C_Skip3:
-	ld	iy, (4504:16)	; F7300A  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F7300A  ld IY,(0x1198)
 	and	iy, 15	; F7300E  and IY,0x000f
-	m_and_mi8 MB16, 0x1198, 0xf0	; F73012  and (0x1198),0xf0
+	m_and_mi8 MB16, Smf_VlqValue, 0xf0	; F73012  and (0x1198),0xf0
 	pushw	iy	; F73017  push IY
 	calr	sub_F73440	; F73018  calr 0xf73440
 	ldw	bc, 6	; F7301B  ld BC,0x0006
@@ -173222,10 +173242,10 @@ sub_F72F5C_Skip3:
 sub_F72F5C_Skip4:
 	cp	hl, 3:i3	; F7302B  cp HL,3
 	jr	z, sub_F72F5C_Skip5	; F7302D  jr Z,0xf73053
-	ld	iy, (4504:16)	; F7302F  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F7302F  ld IY,(0x1198)
 	and	iy, 15	; F73033  and IY,0x000f
 	ldw	iy, 16	; F73037  ld IY,0x0010
-	ld	(4504:16), 128	; F7303A  ld (0x1198),0x80
+	ld	(Smf_VlqValue:16), 128	; F7303A  ld (0x1198),0x80
 	pushw	iy	; F7303F  push IY
 	calr	sub_F73440	; F73040  calr 0xf73440
 	ldw	bc, 4	; F73043  ld BC,0x0004
@@ -173235,9 +173255,9 @@ sub_F72F5C_Skip4:
 	calr	sub_F73469	; F7304D  calr 0xf73469
 	jrl	sub_F72F5C_Loop2	; F73050  jrl T,0xf72fa2
 sub_F72F5C_Skip5:
-	ld	iy, (4504:16)	; F73053  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F73053  ld IY,(0x1198)
 	and	iy, 15	; F73057  and IY,0x000f
-	ld	(4504:16), 208	; F7305B  ld (0x1198),0xd0
+	ld	(Smf_VlqValue:16), 208	; F7305B  ld (0x1198),0xd0
 	pushw	iy	; F73060  push IY
 	calr	sub_F73440	; F73061  calr 0xf73440
 	ldw	bc, 3	; F73064  ld BC,0x0003
@@ -173251,7 +173271,7 @@ sub_F72F5C_Skip6:
 	ld	l, (4506:16)	; F73076  ld L,(0x119a)
 	cp	l, 127	; F7307A  cp L,0x7f
 	jrl	z, sub_F72F5C_Loop2	; F7307D  jrl Z,0xf72fa2
-	ld	h, (4504:16)	; F73080  ld H,(0x1198)
+	ld	h, (Smf_VlqValue:16)	; F73080  ld H,(0x1198)
 	and	h, 4	; F73084  and H,0x04
 	sla	h, 5	; F73087  sla 0x05,H
 	or	l, h	; F7308A  or L,H
@@ -173326,9 +173346,9 @@ sub_F72F5C_Skip11:
 	calr	sub_F73469	; F73139  calr 0xf73469
 	jrl	sub_F72F5C_Loop2	; F7313C  jrl T,0xf72fa2
 sub_F72F5C_Skip12:
-	ld	iy, (4504:16)	; F7313F  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F7313F  ld IY,(0x1198)
 	and	iy, 15	; F73143  and IY,0x000f
-	ld	(4504:16), 209	; F73147  ld (0x1198),0xd1
+	ld	(Smf_VlqValue:16), 209	; F73147  ld (0x1198),0xd1
 	pushw	iy	; F7314C  push IY
 	calr	sub_F73440	; F7314D  calr 0xf73440
 	ldw	bc, 3	; F73150  ld BC,0x0003
@@ -173338,9 +173358,9 @@ sub_F72F5C_Skip12:
 	calr	sub_F73469	; F7315A  calr 0xf73469
 	jrl	sub_F72F5C_Loop2	; F7315D  jrl T,0xf72fa2
 sub_F72F5C_Skip13:
-	ld	iy, (4504:16)	; F73160  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F73160  ld IY,(0x1198)
 	and	iy, 15	; F73164  and IY,0x000f
-	ld	(4504:16), 210	; F73168  ld (0x1198),0xd2
+	ld	(Smf_VlqValue:16), 210	; F73168  ld (0x1198),0xd2
 	pushw	iy	; F7316D  push IY
 	calr	sub_F73440	; F7316E  calr 0xf73440
 	ldw	bc, 4	; F73171  ld BC,0x0004
@@ -173350,9 +173370,9 @@ sub_F72F5C_Skip13:
 	calr	sub_F73469	; F7317B  calr 0xf73469
 	jrl	sub_F72F5C_Loop2	; F7317E  jrl T,0xf72fa2
 sub_F72F5C_Skip14:
-	ld	iy, (4504:16)	; F73181  ld IY,(0x1198)
+	ld	iy, (Smf_VlqValue:16)	; F73181  ld IY,(0x1198)
 	and	iy, 15	; F73185  and IY,0x000f
-	ld	(4504:16), 211	; F73189  ld (0x1198),0xd3
+	ld	(Smf_VlqValue:16), 211	; F73189  ld (0x1198),0xd3
 	calr	sub_F73440	; F7318E  calr 0xf73440
 	pushw	iy	; F73191  push IY
 	ldw	bc, 3	; F73192  ld BC,0x0003
@@ -173542,7 +173562,7 @@ sub_F73261:
 	popw	bc	; F73269  pop BC
 	xor	ix, ix	; F7326A  xor IX,IX
 	push	xde	; F7326C  push XDE
-	ld	xde, 4504	; F7326D  ld XDE,0x00001198
+	ld	xde, Smf_VlqValue	; F7326D  ld XDE,0x00001198
 	mx_ld_rm MXB, ra_DE, ra_IX, 1	; F73272  ld A,(XDE+IX)
 	pop	xde	; F73277  pop XDE
 	pushw	bc	; F73278  push BC
@@ -173762,7 +173782,7 @@ sub_F7339C:
 	push	xix	; F733A5  push XIX
 	ld	xix, 6332416	; F733A6  ld XIX,0x0060a000
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F733AB  ld A,(XIX+IY)
-	ld	xix, 4504	; F733B0  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F733B0  ld XIX,0x00001198
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F733B5  ld (XIX+HL),A
 	pop	xix	; F733BA  pop XIX
 	cp	a, 130	; F733BB  cp A,0x82
@@ -173780,7 +173800,7 @@ sub_F7339C_Join:
 	bit	7, a	; F733D7  bit 0x07,A
 	jr	nz, sub_F7339C_Return	; F733DA  jr NZ,0xf733ea
 	push	xix	; F733DC  push XIX
-	ld	xix, 4504	; F733DD  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F733DD  ld XIX,0x00001198
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F733E2  ld (XIX+HL),A
 	pop	xix	; F733E7  pop XIX
 	jr	sub_F7339C_Join	; F733E8  jr T,0xf733c0
@@ -173960,7 +173980,7 @@ sub_F734C6:
 ; --------------------------------------------------------------------------
 sub_F734E8:
 	xor	wa, wa	; F734E8  xor WA,WA
-	ld	(4504:16), wa	; F734EA  ld (0x1198),WA
+	ld	(Smf_VlqValue:16), wa	; F734EA  ld (0x1198),WA
 	ld	(4506:16), wa	; F734EE  ld (0x119a),WA
 	ld	(4508:16), wa	; F734F2  ld (0x119c),WA
 	ld	(4510:16), a	; F734F6  ld (0x119e),A
@@ -174639,9 +174659,9 @@ Smf_WriteFile_Skip8:
 	ldw	bc, 8	; F73A61  ld BC,0x0008
 	ldir85	; F73A64  ldir
 	ld	(InputStream_Cursor:16), xix	; F73A66  ld (0x1088),XIX
-	ldw	(4499:16), 0	; F73A6A  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F73A6A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F73A70  ld (0x1195),0x00
-	ld	xiy, 4499	; F73A75  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F73A75  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F73A7A  ld XIX,(0x1088)
 Smf_WriteFile_Loop3:
 	ld	a, (xiy+)	; F73A7E  ld A,(XIY+)
@@ -175076,7 +175096,7 @@ Smf_WriteFile_Loop6:
 	jrl	z, Smf_WriteFile_Skip55	; F73F0B  jrl Z,0xf7473a
 Smf_WriteFile_Loop7:
 	push	xde	; F73F0E  push XDE
-	ld	xde, 4504	; F73F0F  ld XDE,0x00001198
+	ld	xde, Smf_VlqValue	; F73F0F  ld XDE,0x00001198
 	mx_st_mr8 MXD, ra_DE, ra_HL, 1	; F73F14  ld (XDE+HL),A
 	pop	xde	; F73F19  pop XDE
 	push	xhl	; F73F1A  push XHL
@@ -175086,7 +175106,7 @@ Smf_WriteFile_Loop7:
 	inc	1, hl	; F73F22  inc 1,HL
 	bit	7, a	; F73F24  bit 0x07,A
 	jr	z, Smf_WriteFile_Loop7	; F73F27  jr Z,0xf73f0e
-	ld	a, (4504:16)	; F73F29  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F73F29  ld A,(0x1198)
 	cp	a, 130	; F73F2D  cp A,0x82
 	jrl	z, Smf_WriteFile_Skip55	; F73F30  jrl Z,0xf7473a
 	cp	a, 129	; F73F33  cp A,0x81
@@ -175248,7 +175268,7 @@ Smf_WriteFile_Skip23:
 	m_cp_mi8 MB16, 0x1238, 0x03	; F740E1  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F740E6  jrl NZ,0xf747dc
 	pushw	hl	; F740E9  push HL
-	ld	a, (4504:16)	; F740EA  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F740EA  ld A,(0x1198)
 	ld	w, (4506:16)	; F740EE  ld W,(0x119a)
 	ld	l, (4507:16)	; F740F2  ld L,(0x119b)
 	calr	SmfWrite_WriteChannelEvent	; F740F6  calr 0xf74ac5
@@ -175259,7 +175279,7 @@ Smf_WriteFile_Skip23:
 	mx_lda32 MXD, ra_IX, ra_HL, 4	; F74107  lda XIX,XIX+HL
 	ld	a, 128:opc	; F7410C  ld A,0x80
 	ld	(xix+), a	; F7410E  ld (XIX+),A
-	ld	a, (4504:16)	; F74111  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F74111  ld A,(0x1198)
 	ld	(xix+), a	; F74115  ld (XIX+),A
 	ld	a, (4506:16)	; F74118  ld A,(0x119a)
 	ld	(xix+), a	; F7411C  ld (XIX+),A
@@ -175293,14 +175313,14 @@ Smf_WriteFile_Skip25:
 	jrl	nz, Smf_WriteFile_Join10	; F74169  jrl NZ,0xf747dc
 	m_cp_mi8 MB16, 0x1239, 0x00	; F7416C  cp (0x1239),0x00
 	jrl	z, Smf_WriteFile_Skip26	; F74171  jrl Z,0xf74223
-	ld	l, (4504:16)	; F74174  ld L,(0x1198)
+	ld	l, (Smf_VlqValue:16)	; F74174  ld L,(0x1198)
 	ld	h, l	; F74178  ld H,L
 	and	l, 1	; F7417A  and L,0x01
 	rrc	l	; F7417D  rrc 0x01,L
 	ld	a, (4508:16)	; F74180  ld A,(0x119c)
 	or	l, a	; F74184  or L,A
 	ld	(6352912:24), l	; F74186  ld (0x60f010),L
-	ld	l, (4504:16)	; F7418B  ld L,(0x1198)
+	ld	l, (Smf_VlqValue:16)	; F7418B  ld L,(0x1198)
 	and	l, 2	; F7418F  and L,0x02
 	.byte 0xCF, 0xE9, 0x02	; F74192  rrc 0x02,L   [llvm-mc cannot encode this]
 	ld	a, (4509:16)	; F74195  ld A,(0x119d)
@@ -175327,7 +175347,7 @@ Smf_WriteFile_Skip25:
 	popw	wa	; F741DC  pop WA
 	m_cp_mi8 MB16, 0x1238, 0x03	; F741DD  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F741E2  jrl NZ,0xf747dc
-	ldw	(4499:16), 0	; F741E5  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F741E5  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F741EB  ld (0x1195),0x00
 	ld	w, 32:opc	; F741F0  ld W,0x20
 	ld	l, (6352916:24)	; F741F2  ld L,(0x60f014)
@@ -175352,7 +175372,7 @@ Smf_WriteFile_Skip26:
 	calr	SmfWrite_WriteControlChange	; F7422F  calr 0xf74a66
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74232  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74237  jrl NZ,0xf747dc
-	ldw	(4499:16), 0	; F7423A  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F7423A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F74240  ld (0x1195),0x00
 	ld	w, 32:opc	; F74245  ld W,0x20
 	ld	l, (4509:16)	; F74247  ld L,(0x119d)
@@ -175378,7 +175398,7 @@ Smf_WriteFile_Skip27:
 	jrl	z, Smf_WriteFile_Skip54	; F74285  jrl Z,0xf74737
 	ld	l, (4507:16)	; F74288  ld L,(0x119b)
 	ld	a, (4506:16)	; F7428C  ld A,(0x119a)
-	ld	w, (4504:16)	; F74290  ld W,(0x1198)
+	ld	w, (Smf_VlqValue:16)	; F74290  ld W,(0x1198)
 	and	w, 4	; F74294  and W,0x04
 	sla	w, 5	; F74297  sla 0x05,W
 	or	a, w	; F7429A  or A,W
@@ -175621,7 +175641,7 @@ Smf_WriteFile_Skip37:
 	jrl	nz, Smf_WriteFile_Join10	; F74504  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F74507  ld W,0x64
 	ld	l, 1:opc	; F74509  ld L,0x01
-	ld	(4499:16), 0	; F7450B  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F7450B  ld (0x1193),0x00
 	pushw	wa	; F74510  push WA
 	calr	SmfWrite_WriteChannelEvent	; F74511  calr 0xf74ac5
 	popw	wa	; F74514  pop WA
@@ -175629,7 +175649,7 @@ Smf_WriteFile_Skip37:
 	jrl	nz, Smf_WriteFile_Join10	; F7451A  jrl NZ,0xf747dc
 	ld	w, 6:opc	; F7451D  ld W,0x06
 	ld	l, (4508:16)	; F7451F  ld L,(0x119c)
-	ld	h, (4504:16)	; F74523  ld H,(0x1198)
+	ld	h, (Smf_VlqValue:16)	; F74523  ld H,(0x1198)
 	and	h, 1	; F74527  and H,0x01
 	.byte 0xCE, 0xE9, 0x02	; F7452A  rrc 0x02,H   [llvm-mc cannot encode this]
 	srl	l, 1	; F7452D  srl 0x01,L
@@ -175677,7 +175697,7 @@ Smf_WriteFile_Skip39:
 	jrl	nz, Smf_WriteFile_Join10	; F74598  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F7459B  ld W,0x64
 	ld	l, 0:opc	; F7459D  ld L,0x00
-	ld	(4499:16), 0	; F7459F  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F7459F  ld (0x1193),0x00
 	pushw	wa	; F745A4  push WA
 	calr	SmfWrite_WriteChannelEvent	; F745A5  calr 0xf74ac5
 	popw	wa	; F745A8  pop WA
@@ -175724,7 +175744,7 @@ Smf_WriteFile_Skip41:
 	jrl	nz, Smf_WriteFile_Join10	; F74613  jrl NZ,0xf747dc
 	ld	w, 100:opc	; F74616  ld W,0x64
 	ld	l, 2:opc	; F74618  ld L,0x02
-	ld	(4499:16), 0	; F7461A  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F7461A  ld (0x1193),0x00
 	pushw	wa	; F7461F  push WA
 	calr	SmfWrite_WriteChannelEvent	; F74620  calr 0xf74ac5
 	popw	wa	; F74623  pop WA
@@ -176258,7 +176278,7 @@ SmfWrite_StageTempoFromBpm:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F749C5:
-	ld	xiy, 4499	; F749C5  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F749C5  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F749CA  ld XIX,(0x1088)
 sub_F749C5_Loop:
 	ld	a, (xiy+)	; F749CE  ld A,(XIY+)
@@ -176399,7 +176419,7 @@ sub_F74A74_Skip2:
 SmfWrite_WriteChannelEvent:
 	push	xiy	; F74AC5  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F74AC6  ld XIX,(0x1088)
-	ld	xiy, 4499	; F74ACA  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F74ACA  ld XIY,0x00001193
 	pushw	wa	; F74ACF  push WA
 sub_F74AC5_Loop:
 	ld	a, (xiy+)	; F74AD0  ld A,(XIY+)
@@ -176776,7 +176796,7 @@ sub_F74CF2_Skip2:
 ; --------------------------------------------------------------------------
 ; SmfWrite_EncodeVlq: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfWrite_EncodeVlq:
-	ldw	(4499:16), 0	; F74D99  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F74D99  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F74D9F  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F74DA5  cp (0x11ac),0x00
 	jr	nz, sub_F74D99_Skip	; F74DAA  jr NZ,0xf74dbd
@@ -176808,7 +176828,7 @@ sub_F74D99_Skip2:
 	sla	c, 2	; F74DFD  sla 0x02,C
 	or	c, h	; F74E00  or C,H
 	or	c, 128	; F74E02  or C,0x80
-	ld	(4499:16), c	; F74E05  ld (0x1193),C
+	ld	(Smf_VlqBytes:16), c	; F74E05  ld (0x1193),C
 	ld	(4500:16), l	; F74E09  ld (0x1194),L
 	ld	(4501:16), a	; F74E0D  ld (0x1195),A
 	jr	sub_F74D99_Return	; F74E11  jr T,0xf74e4b
@@ -176824,7 +176844,7 @@ sub_F74D99_Skip3:
 	or	l, w	; F74E2B  or L,W
 	or	l, 128	; F74E2D  or L,0x80
 	xor	c, c	; F74E30  xor C,C
-	ld	(4499:16), l	; F74E32  ld (0x1193),L
+	ld	(Smf_VlqBytes:16), l	; F74E32  ld (0x1193),L
 	ld	(4500:16), a	; F74E36  ld (0x1194),A
 	jr	sub_F74D99_Return	; F74E3A  jr T,0xf74e4b
 sub_F74D99_Skip4:
@@ -176832,7 +176852,7 @@ sub_F74D99_Skip4:
 	and	a, 127	; F74E40  and A,0x7f
 	xor	l, l	; F74E43  xor L,L
 	xor	c, c	; F74E45  xor C,C
-	ld	(4499:16), a	; F74E47  ld (0x1193),A
+	ld	(Smf_VlqBytes:16), a	; F74E47  ld (0x1193),A
 sub_F74D99_Return:
 	ret	; F74E4B  ret
 
@@ -176873,7 +176893,7 @@ SmfWrite_ClearDueList:
 ; --------------------------------------------------------------------------
 ; SmfWrite_ClearEventFields: copy A of prom_b's SMF writer (Smf_WriteFile's writing pass), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfWrite_ClearEventFields:
-	ld	xix, 4504	; F74E60  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F74E60  ld XIX,0x00001198
 	xor	wa, wa	; F74E65  xor WA,WA
 	ldw	bc, 4	; F74E67  ld BC,0x0004
 	ld	(xix+), wa	; F74E6A  ld (XIX+),WA
@@ -177454,9 +177474,9 @@ sub_F75685_Skip:
 	ldw	bc, 8	; F756F6  ld BC,0x0008
 	ldir85	; F756F9  ldir
 	ld	(InputStream_Cursor:16), xix	; F756FB  ld (0x1088),XIX
-	ldw	(4499:16), 0	; F756FF  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F756FF  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75705  ld (0x1195),0x00
-	ld	xiy, 4499	; F7570A  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F7570A  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F7570F  ld XIX,(0x1088)
 sub_F75685_Loop:
 	ld	a, (xiy+)	; F75713  ld A,(XIY+)
@@ -177839,7 +177859,7 @@ sub_F75685_Loop4:
 	jrl	z, sub_F75685_Skip42	; F75ADF  jrl Z,0xf76089
 sub_F75685_Loop5:
 	push	xde	; F75AE2  push XDE
-	ld	xde, 4504	; F75AE3  ld XDE,0x00001198
+	ld	xde, Smf_VlqValue	; F75AE3  ld XDE,0x00001198
 	mx_st_mr8 MXD, ra_DE, ra_HL, 1	; F75AE8  ld (XDE+HL),A
 	pop	xde	; F75AED  pop XDE
 	pushw	hl	; F75AEE  push HL
@@ -177849,7 +177869,7 @@ sub_F75685_Loop5:
 	inc	1, hl	; F75AF6  inc 1,HL
 	bit	7, a	; F75AF8  bit 0x07,A
 	jr	z, sub_F75685_Loop5	; F75AFB  jr Z,0xf75ae2
-	ld	a, (4504:16)	; F75AFD  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F75AFD  ld A,(0x1198)
 	cp	a, 130	; F75B01  cp A,0x82
 	jrl	z, sub_F75685_Skip42	; F75B04  jrl Z,0xf76089
 	cp	a, 129	; F75B07  cp A,0x81
@@ -177990,7 +178010,7 @@ sub_F75685_Skip16:
 	ld	c, (4505:16)	; F75C65  ld C,(0x1199)
 	calr	SmfSize_EncodeDeltaTime	; F75C69  calr 0xf76219
 	calr	SmfSize_AgePendingNoteOffs	; F75C6C  calr 0xf762df
-	ld	a, (4504:16)	; F75C6F  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F75C6F  ld A,(0x1198)
 	ld	w, (4506:16)	; F75C73  ld W,(0x119a)
 	ld	l, (4507:16)	; F75C77  ld L,(0x119b)
 	calr	SmfSize_WriteChannelEvent	; F75C7B  calr 0xf7626a
@@ -177999,7 +178019,7 @@ sub_F75685_Skip16:
 	mx_lda32 MXD, ra_IX, ra_HL, 4	; F75C84  lda XIX,XIX+HL
 	ld	a, 128:opc	; F75C89  ld A,0x80
 	ld	(xix+), a	; F75C8B  ld (XIX+),A
-	ld	a, (4504:16)	; F75C8E  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F75C8E  ld A,(0x1198)
 	ld	(xix+), a	; F75C92  ld (XIX+),A
 	ld	a, (4506:16)	; F75C95  ld A,(0x119a)
 	ld	(xix+), a	; F75C99  ld (XIX+),A
@@ -178031,7 +178051,7 @@ sub_F75685_Skip18:
 	popw	wa	; F75CE0  pop WA
 	m_cp_mi8 MB16, 0x1239, 0x00	; F75CE1  cp (0x1239),0x00
 	jrl	z, sub_F75685_Skip19	; F75CE6  jrl Z,0xf75d7f
-	ld	l, (4504:16)	; F75CE9  ld L,(0x1198)
+	ld	l, (Smf_VlqValue:16)	; F75CE9  ld L,(0x1198)
 	ld	h, l	; F75CED  ld H,L
 	and	l, 1	; F75CEF  and L,0x01
 	rrc	l	; F75CF2  rrc 0x01,L
@@ -178063,7 +178083,7 @@ sub_F75685_Skip18:
 	pushw	wa	; F75D4B  push WA
 	call	SmfSize_WriteChannelEvent	; F75D4C  call 0xf7626a
 	popw	wa	; F75D50  pop WA
-	ldw	(4499:16), 0	; F75D51  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F75D51  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D57  ld (0x1195),0x00
 	ld	w, 32:opc	; F75D5C  ld W,0x20
 	ld	l, (6352916:24)	; F75D5E  ld L,(0x60f014)
@@ -178082,7 +178102,7 @@ sub_F75685_Skip19:
 	and	l, 56	; F75D85  and L,0x38
 	srl	l, 3	; F75D88  srl 0x03,L
 	calr	SmfSize_WriteControlChange	; F75D8B  calr 0xf7620b
-	ldw	(4499:16), 0	; F75D8E  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F75D8E  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D94  ld (0x1195),0x00
 	ld	w, 32:opc	; F75D99  ld W,0x20
 	ld	l, (4509:16)	; F75D9B  ld L,(0x119d)
@@ -178105,7 +178125,7 @@ sub_F75685_Skip20:
 	jrl	z, sub_F75685_Skip41	; F75DCC  jrl Z,0xf76086
 	ld	l, (4507:16)	; F75DCF  ld L,(0x119b)
 	ld	a, (4506:16)	; F75DD3  ld A,(0x119a)
-	ld	w, (4504:16)	; F75DD7  ld W,(0x1198)
+	ld	w, (Smf_VlqValue:16)	; F75DD7  ld W,(0x1198)
 	and	w, 4	; F75DDB  and W,0x04
 	sla	w, 5	; F75DDE  sla 0x05,W
 	or	a, w	; F75DE1  or A,W
@@ -178220,13 +178240,13 @@ sub_F75685_Skip24:
 	popw	wa	; F75EF3  pop WA
 	ld	w, 100:opc	; F75EF4  ld W,0x64
 	ld	l, 1:opc	; F75EF6  ld L,0x01
-	ld	(4499:16), 0	; F75EF8  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F75EF8  ld (0x1193),0x00
 	pushw	wa	; F75EFD  push WA
 	calr	SmfSize_WriteChannelEvent	; F75EFE  calr 0xf7626a
 	popw	wa	; F75F01  pop WA
 	ld	w, 6:opc	; F75F02  ld W,0x06
 	ld	l, (4508:16)	; F75F04  ld L,(0x119c)
-	ld	h, (4504:16)	; F75F08  ld H,(0x1198)
+	ld	h, (Smf_VlqValue:16)	; F75F08  ld H,(0x1198)
 	and	h, 1	; F75F0C  and H,0x01
 	.byte 0xCE, 0xE9, 0x02	; F75F0F  rrc 0x02,H   [llvm-mc cannot encode this]
 	srl	l, 1	; F75F12  srl 0x01,L
@@ -178266,7 +178286,7 @@ sub_F75685_Skip26:
 	popw	wa	; F75F5F  pop WA
 	ld	w, 100:opc	; F75F60  ld W,0x64
 	ld	l, 0:opc	; F75F62  ld L,0x00
-	ld	(4499:16), 0	; F75F64  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F75F64  ld (0x1193),0x00
 	pushw	wa	; F75F69  push WA
 	calr	SmfSize_WriteChannelEvent	; F75F6A  calr 0xf7626a
 	popw	wa	; F75F6D  pop WA
@@ -178303,7 +178323,7 @@ sub_F75685_Skip28:
 	popw	wa	; F75FAF  pop WA
 	ld	w, 100:opc	; F75FB0  ld W,0x64
 	ld	l, 2:opc	; F75FB2  ld L,0x02
-	ld	(4499:16), 0	; F75FB4  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F75FB4  ld (0x1193),0x00
 	pushw	wa	; F75FB9  push WA
 	calr	SmfSize_WriteChannelEvent	; F75FBA  calr 0xf7626a
 	popw	wa	; F75FBD  pop WA
@@ -178590,7 +178610,7 @@ sub_F7615B_Skip:
 ; --------------------------------------------------------------------------
 ; SmfSize_WriteTempoEvent: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role WriteTempoEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSize_WriteTempoEvent:
-	ld	xiy, 4499	; F761A1  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F761A1  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F761A6  ld XIX,(0x1088)
 sub_F761A1_Loop:
 	ld	a, (xiy+)	; F761AA  ld A,(XIY+)
@@ -178712,7 +178732,7 @@ sub_F76219_Skip2:
 SmfSize_WriteChannelEvent:
 	push	xiy	; F7626A  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F7626B  ld XIX,(0x1088)
-	ld	xiy, 4499	; F7626F  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F7626F  ld XIY,0x00001193
 	pushw	wa	; F76274  push WA
 sub_F7626A_Loop:
 	ld	a, (xiy+)	; F76275  ld A,(XIY+)
@@ -178995,7 +179015,7 @@ sub_F763D7_Skip2:
 ; --------------------------------------------------------------------------
 ; SmfSize_EncodeVlq: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSize_EncodeVlq:
-	ldw	(4499:16), 0	; F7647A  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F7647A  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F76480  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F76486  cp (0x11ac),0x00
 	jr	nz, sub_F7647A_Skip	; F7648B  jr NZ,0xf7649e
@@ -179027,7 +179047,7 @@ sub_F7647A_Skip2:
 	sla	c, 2	; F764DE  sla 0x02,C
 	or	c, h	; F764E1  or C,H
 	or	c, 128	; F764E3  or C,0x80
-	ld	(4499:16), c	; F764E6  ld (0x1193),C
+	ld	(Smf_VlqBytes:16), c	; F764E6  ld (0x1193),C
 	ld	(4500:16), l	; F764EA  ld (0x1194),L
 	ld	(4501:16), a	; F764EE  ld (0x1195),A
 	jr	sub_F7647A_Return	; F764F2  jr T,0xf7652c
@@ -179043,7 +179063,7 @@ sub_F7647A_Skip3:
 	or	l, w	; F7650C  or L,W
 	or	l, 128	; F7650E  or L,0x80
 	xor	c, c	; F76511  xor C,C
-	ld	(4499:16), l	; F76513  ld (0x1193),L
+	ld	(Smf_VlqBytes:16), l	; F76513  ld (0x1193),L
 	ld	(4500:16), a	; F76517  ld (0x1194),A
 	jr	sub_F7647A_Return	; F7651B  jr T,0xf7652c
 sub_F7647A_Skip4:
@@ -179051,7 +179071,7 @@ sub_F7647A_Skip4:
 	and	a, 127	; F76521  and A,0x7f
 	xor	l, l	; F76524  xor L,L
 	xor	c, c	; F76526  xor C,C
-	ld	(4499:16), a	; F76528  ld (0x1193),A
+	ld	(Smf_VlqBytes:16), a	; F76528  ld (0x1193),A
 sub_F7647A_Return:
 	ret	; F7652C  ret
 
@@ -179092,7 +179112,7 @@ SmfSize_ClearDueList:
 ; --------------------------------------------------------------------------
 ; SmfSize_ClearEventFields: copy B of prom_b's SMF writer (the sizing pass Smf_WriteFile runs first), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSize_ClearEventFields:
-	ld	xix, 4504	; F76541  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F76541  ld XIX,0x00001198
 	xor	wa, wa	; F76546  xor WA,WA
 	ldw	bc, 4	; F76548  ld BC,0x0004
 	ld	(xix+), wa	; F7654B  ld (XIX+),WA
@@ -179776,7 +179796,7 @@ SmfWriteCopy_StageTempoFromBpm:
 	ld	(SmfOut_Tempo:16), wa	; F7696D  ld (0x108c),WA
 	ld	(SmfOut_Tempo+2:16), de	; F76971  ld (0x108e),DE
 	ret	; F76975  ret
-	ld	xiy, 4499	; F76976  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F76976  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F7697B  ld XIX,(0x1088)
 sub_F76953_Loop:
 	ld	a, (xiy+)	; F7697F  ld A,(XIY+)
@@ -179884,7 +179904,7 @@ sub_F76A25_Skip:
 SmfWriteCopy_WriteChannelEvent:
 	push	xiy	; F76A6A  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F76A6B  ld XIX,(0x1088)
-	ld	xiy, 4499	; F76A6F  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F76A6F  ld XIY,0x00001193
 	pushw	wa	; F76A74  push WA
 sub_F76A6A_Loop:
 	ld	a, (xiy+)	; F76A75  ld A,(XIY+)
@@ -180233,7 +180253,7 @@ sub_F76C97_Skip2:
 ; --------------------------------------------------------------------------
 ; SmfWriteCopy_EncodeVlq: copy C of prom_b's SMF writer (an unreferenced copy of A), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfWriteCopy_EncodeVlq:
-	ldw	(4499:16), 0	; F76D38  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F76D38  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F76D3E  ld (0x1195),0x0000
 	cp	(0x11ac:16), 0	; F76D44  cp (0x11ac),0x00
 	jr	nz, sub_F76D38_Entry	; F76D49  jr NZ,0xf76d5c
@@ -180265,7 +180285,7 @@ sub_F76D38_Skip:
 	sla	c, 2	; F76D9C  sla 0x02,C
 	or	c, h	; F76D9F  or C,H
 	or	c, 128	; F76DA1  or C,0x80
-	ld	(4499:16), c	; F76DA4  ld (0x1193),C
+	ld	(Smf_VlqBytes:16), c	; F76DA4  ld (0x1193),C
 	ld	(4500:16), l	; F76DA8  ld (0x1194),L
 	ld	(4501:16), a	; F76DAC  ld (0x1195),A
 	jr	sub_F76D38_Return	; F76DB0  jr T,0xf76dea
@@ -180281,7 +180301,7 @@ sub_F76D38_Skip2:
 	or	l, w	; F76DCA  or L,W
 	or	l, 128	; F76DCC  or L,0x80
 	xor	c, c	; F76DCF  xor C,C
-	ld	(4499:16), l	; F76DD1  ld (0x1193),L
+	ld	(Smf_VlqBytes:16), l	; F76DD1  ld (0x1193),L
 	ld	(4500:16), a	; F76DD5  ld (0x1194),A
 	jr	sub_F76D38_Return	; F76DD9  jr T,0xf76dea
 sub_F76D38_Skip3:
@@ -180289,7 +180309,7 @@ sub_F76D38_Skip3:
 	and	a, 127	; F76DDF  and A,0x7f
 	xor	l, l	; F76DE2  xor L,L
 	xor	c, c	; F76DE4  xor C,C
-	ld	(4499:16), a	; F76DE6  ld (0x1193),A
+	ld	(Smf_VlqBytes:16), a	; F76DE6  ld (0x1193),A
 sub_F76D38_Return:
 	ret	; F76DEA  ret
 
@@ -180311,7 +180331,7 @@ SmfWriteCopy_ClearDueList:
 	djnz16	bc, -6	; F76DFA  djnz BC,0xf76df7
 	pop	xix	; F76DFD  pop XIX
 	ret	; F76DFE  ret
-	ld	xix, 4504	; F76DFF  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F76DFF  ld XIX,0x00001198
 	xor	wa, wa	; F76E04  xor WA,WA
 	ldw	bc, 4	; F76E06  ld BC,0x0004
 	ld	(xix+), wa	; F76E09  ld (XIX+),WA
@@ -180430,9 +180450,9 @@ sub_F76E74_Skip:
 	ldw	bc, 8	; F76EE5  ld BC,0x0008
 	.byte 0x85, 0x11	; F76EE8  ldir   [llvm-mc cannot encode this]
 	ld	(InputStream_Cursor:16), xix	; F76EEA  ld (0x1088),XIX
-	ldw	(4499:16), 0	; F76EEE  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F76EEE  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F76EF4  ld (0x1195),0x00
-	ld	xiy, 4499	; F76EF9  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F76EF9  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F76EFE  ld XIX,(0x1088)
 sub_F76E74_Loop:
 	ld	a, (xiy+)	; F76F02  ld A,(XIY+)
@@ -180797,7 +180817,7 @@ sub_F76E74_Loop4:
 	jrl	z, sub_F76E74_Skip32	; F77298  jrl Z,0xf77800
 sub_F76E74_Loop5:
 	push	xde	; F7729B  push XDE
-	ld	xde, 4504	; F7729C  ld XDE,0x00001198
+	ld	xde, Smf_VlqValue	; F7729C  ld XDE,0x00001198
 	ld	(xde+hl), a	; F772A1  ld (XDE+HL),A
 	pop	xde	; F772A6  pop XDE
 	pushw	hl	; F772A7  push HL
@@ -180807,7 +180827,7 @@ sub_F76E74_Loop5:
 	inc	1, hl	; F772AF  inc 1,HL
 	bit	7, a	; F772B1  bit 0x07,A
 	jr	z, sub_F76E74_Loop5	; F772B4  jr Z,0xf7729b
-	ld	a, (4504:16)	; F772B6  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F772B6  ld A,(0x1198)
 	cp	a, 130	; F772BA  cp A,0x82
 	jrl	z, sub_F76E74_Skip32	; F772BD  jrl Z,0xf77800
 	cp	a, 129	; F772C0  cp A,0x81
@@ -180948,7 +180968,7 @@ sub_F76E74_Entry:
 	ld	c, (4505:16)	; F7741E  ld C,(0x1199)
 	calr	SmfSizeCopy_EncodeDeltaTime	; F77422  calr 0xf77990
 	calr	SmfSizeCopy_AgePendingNoteOffs	; F77425  calr 0xf77a4a
-	ld	a, (4504:16)	; F77428  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F77428  ld A,(0x1198)
 	ld	w, (4506:16)	; F7742C  ld W,(0x119a)
 	ld	l, (4507:16)	; F77430  ld L,(0x119b)
 	calr	SmfSizeCopy_WriteChannelEvent	; F77434  calr 0xf779d5
@@ -180957,7 +180977,7 @@ sub_F76E74_Entry:
 	lda	xix, (xix+hl)	; F7743D  lda XIX,XIX+HL
 	ld	a, 128:opc	; F77442  ld A,0x80
 	ld	(xix+), a	; F77444  ld (XIX+),A
-	ld	a, (4504:16)	; F77447  ld A,(0x1198)
+	ld	a, (Smf_VlqValue:16)	; F77447  ld A,(0x1198)
 	ld	(xix+), a	; F7744B  ld (XIX+),A
 	ld	a, (4506:16)	; F7744E  ld A,(0x119a)
 	ld	(xix+), a	; F77452  ld (XIX+),A
@@ -180989,7 +181009,7 @@ sub_F76E74_Skip15:
 	popw	wa	; F77499  pop WA
 	cp	(0x1239:16), 0	; F7749A  cp (0x1239),0x00
 	jrl	z, sub_F76E74_Skip16	; F7749F  jrl Z,0xf77538
-	ld	l, (4504:16)	; F774A2  ld L,(0x1198)
+	ld	l, (Smf_VlqValue:16)	; F774A2  ld L,(0x1198)
 	ld	h, l	; F774A6  ld H,L
 	and	l, 1	; F774A8  and L,0x01
 	rrc	l	; F774AB  rrc 0x01,L
@@ -181021,7 +181041,7 @@ sub_F76E74_Skip15:
 	pushw	wa	; F77504  push WA
 	call	SmfSizeCopy_WriteChannelEvent	; F77505  call 0xf779d5
 	popw	wa	; F77509  pop WA
-	ldw	(4499:16), 0	; F7750A  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F7750A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F77510  ld (0x1195),0x00
 	ld	w, 32:opc	; F77515  ld W,0x20
 	ld	l, (6352916:24)	; F77517  ld L,(0x60f014)
@@ -181040,7 +181060,7 @@ sub_F76E74_Skip16:
 	and	l, 56	; F7753E  and L,0x38
 	srl	l, 3	; F77541  srl 0x03,L
 	calr	SmfSizeCopy_WriteControlChange	; F77544  calr 0xf77982
-	ldw	(4499:16), 0	; F77547  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F77547  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F7754D  ld (0x1195),0x00
 	ld	w, 32:opc	; F77552  ld W,0x20
 	ld	l, (4509:16)	; F77554  ld L,(0x119d)
@@ -181063,7 +181083,7 @@ sub_F76E74_Skip17:
 	jrl	z, sub_F76E74_Skip31	; F77585  jrl Z,0xf777fd
 	ld	l, (4507:16)	; F77588  ld L,(0x119b)
 	ld	a, (4506:16)	; F7758C  ld A,(0x119a)
-	ld	w, (4504:16)	; F77590  ld W,(0x1198)
+	ld	w, (Smf_VlqValue:16)	; F77590  ld W,(0x1198)
 	and	w, 4	; F77594  and W,0x04
 	sla	w, 5	; F77597  sla 0x05,W
 	or	a, w	; F7759A  or A,W
@@ -181154,13 +181174,13 @@ sub_F76E74_Skip20:
 	popw	wa	; F7766A  pop WA
 	ld	w, 100:opc	; F7766B  ld W,0x64
 	ld	l, 1:opc	; F7766D  ld L,0x01
-	ld	(4499:16), 0	; F7766F  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F7766F  ld (0x1193),0x00
 	pushw	wa	; F77674  push WA
 	calr	SmfSizeCopy_WriteChannelEvent	; F77675  calr 0xf779d5
 	popw	wa	; F77678  pop WA
 	ld	w, 6:opc	; F77679  ld W,0x06
 	ld	l, (4508:16)	; F7767B  ld L,(0x119c)
-	ld	h, (4504:16)	; F7767F  ld H,(0x1198)
+	ld	h, (Smf_VlqValue:16)	; F7767F  ld H,(0x1198)
 	and	h, 1	; F77683  and H,0x01
 	.byte 0xCE, 0xE9, 0x02	; F77686  rrc 0x02,H   [llvm-mc cannot encode this]
 	srl	l, 1	; F77689  srl 0x01,L
@@ -181200,7 +181220,7 @@ sub_F76E74_Skip21:
 	popw	wa	; F776D6  pop WA
 	ld	w, 100:opc	; F776D7  ld W,0x64
 	ld	l, 0:opc	; F776D9  ld L,0x00
-	ld	(4499:16), 0	; F776DB  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F776DB  ld (0x1193),0x00
 	pushw	wa	; F776E0  push WA
 	calr	SmfSizeCopy_WriteChannelEvent	; F776E1  calr 0xf779d5
 	popw	wa	; F776E4  pop WA
@@ -181237,7 +181257,7 @@ sub_F76E74_Skip22:
 	popw	wa	; F77726  pop WA
 	ld	w, 100:opc	; F77727  ld W,0x64
 	ld	l, 2:opc	; F77729  ld L,0x02
-	ld	(4499:16), 0	; F7772B  ld (0x1193),0x00
+	ld	(Smf_VlqBytes:16), 0	; F7772B  ld (0x1193),0x00
 	pushw	wa	; F77730  push WA
 	calr	SmfSizeCopy_WriteChannelEvent	; F77731  calr 0xf779d5
 	popw	wa	; F77734  pop WA
@@ -181506,7 +181526,7 @@ sub_F778D2_Skip:
 ; --------------------------------------------------------------------------
 ; SmfSizeCopy_WriteTempoEvent: copy D of prom_b's SMF writer (an unreferenced copy of B), role WriteTempoEvent as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSizeCopy_WriteTempoEvent:
-	ld	xiy, 4499	; F77918  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F77918  ld XIY,0x00001193
 	ld	xix, (InputStream_Cursor:16)	; F7791D  ld XIX,(0x1088)
 sub_F77918_Loop:
 	ld	a, (xiy+)	; F77921  ld A,(XIY+)
@@ -181615,7 +181635,7 @@ sub_F77990_Skip:
 SmfSizeCopy_WriteChannelEvent:
 	push	xiy	; F779D5  push XIY
 	ld	xix, (InputStream_Cursor:16)	; F779D6  ld XIX,(0x1088)
-	ld	xiy, 4499	; F779DA  ld XIY,0x00001193
+	ld	xiy, Smf_VlqBytes	; F779DA  ld XIY,0x00001193
 	pushw	wa	; F779DF  push WA
 sub_F779D5_Loop:
 	ld	a, (xiy+)	; F779E0  ld A,(XIY+)
@@ -181882,7 +181902,7 @@ sub_F77B42_Skip2:
 ; --------------------------------------------------------------------------
 ; SmfSizeCopy_EncodeVlq: copy D of prom_b's SMF writer (an unreferenced copy of B), role EncodeVlq as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSizeCopy_EncodeVlq:
-	ldw	(4499:16), 0	; F77BDF  ld (0x1193),0x0000
+	ldw	(Smf_VlqBytes:16), 0	; F77BDF  ld (0x1193),0x0000
 	ldw	(4501:16), 0	; F77BE5  ld (0x1195),0x0000
 	m_cp_mi8 MB16, 0x11ac, 0x00	; F77BEB  cp (0x11ac),0x00
 	jr	nz, sub_F77BDF_Skip	; F77BF0  jr NZ,0xf77c03
@@ -181914,7 +181934,7 @@ sub_F77BDF_Skip2:
 	sla	c, 2	; F77C43  sla 0x02,C
 	or	c, h	; F77C46  or C,H
 	or	c, 128	; F77C48  or C,0x80
-	ld	(4499:16), c	; F77C4B  ld (0x1193),C
+	ld	(Smf_VlqBytes:16), c	; F77C4B  ld (0x1193),C
 	ld	(4500:16), l	; F77C4F  ld (0x1194),L
 	ld	(4501:16), a	; F77C53  ld (0x1195),A
 	jr	sub_F77BDF_Return	; F77C57  jr T,0xf77c91
@@ -181930,7 +181950,7 @@ sub_F77BDF_Skip3:
 	or	l, w	; F77C71  or L,W
 	or	l, 128	; F77C73  or L,0x80
 	xor	c, c	; F77C76  xor C,C
-	ld	(4499:16), l	; F77C78  ld (0x1193),L
+	ld	(Smf_VlqBytes:16), l	; F77C78  ld (0x1193),L
 	ld	(4500:16), a	; F77C7C  ld (0x1194),A
 	jr	sub_F77BDF_Return	; F77C80  jr T,0xf77c91
 sub_F77BDF_Skip4:
@@ -181938,7 +181958,7 @@ sub_F77BDF_Skip4:
 	and	a, 127	; F77C86  and A,0x7f
 	xor	l, l	; F77C89  xor L,L
 	xor	c, c	; F77C8B  xor C,C
-	ld	(4499:16), a	; F77C8D  ld (0x1193),A
+	ld	(Smf_VlqBytes:16), a	; F77C8D  ld (0x1193),A
 sub_F77BDF_Return:
 	ret	; F77C91  ret
 
@@ -181967,7 +181987,7 @@ SmfSizeCopy_ClearDueList:
 	ret	; F77CA5  ret
 ; SmfSizeCopy_ClearEventFields: copy D of prom_b's SMF writer (an unreferenced copy of B), role ClearEventFields as its docstring reads it from the body -- notes/prom_b_smf_writer_names.py
 SmfSizeCopy_ClearEventFields:
-	ld	xix, 4504	; F77CA6  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F77CA6  ld XIX,0x00001198
 	xor	wa, wa	; F77CAB  xor WA,WA
 	ldw	bc, 4	; F77CAD  ld BC,0x0004
 	ld	(xix+), wa	; F77CB0  ld (XIX+),WA
@@ -182183,7 +182203,7 @@ sub_F77DEF:
 	sla	c, 2	; F77E2A  sla 0x02,C
 	or	c, h	; F77E2D  or C,H
 	or	c, 128	; F77E2F  or C,0x80
-	ld	(4499:16), c	; F77E32  ld (0x1193),C
+	ld	(Smf_VlqBytes:16), c	; F77E32  ld (0x1193),C
 	ld	(4500:16), l	; F77E36  ld (0x1194),L
 	ld	(4501:16), a	; F77E3A  ld (0x1195),A
 	jr	sub_F77DEF_Return	; F77E3E  jr T,0xf77e78
@@ -182198,14 +182218,14 @@ sub_F77DEF:
 	or	l, w	; F77E58  or L,W
 	or	l, 128	; F77E5A  or L,0x80
 	xor	c, c	; F77E5D  xor C,C
-	ld	(4499:16), l	; F77E5F  ld (0x1193),L
+	ld	(Smf_VlqBytes:16), l	; F77E5F  ld (0x1193),L
 	ld	(4500:16), a	; F77E63  ld (0x1194),A
 	jr	sub_F77DEF_Return	; F77E67  jr T,0xf77e78
 	ld	a, (4522:16)	; F77E69  ld A,(0x11aa)
 	and	a, 127	; F77E6D  and A,0x7f
 	xor	l, l	; F77E70  xor L,L
 	xor	c, c	; F77E72  xor C,C
-	ld	(4499:16), a	; F77E74  ld (0x1193),A
+	ld	(Smf_VlqBytes:16), a	; F77E74  ld (0x1193),A
 sub_F77DEF_Return:
 	ret	; F77E78  ret
 	push	xix	; F77E79  push XIX
@@ -182216,7 +182236,7 @@ sub_F77DEF_Return:
 	djnz16	bc, -6	; F77E88  djnz BC,0xf77e85
 	pop	xix	; F77E8B  pop XIX
 	ret	; F77E8C  ret
-	ld	xix, 4504	; F77E8D  ld XIX,0x00001198
+	ld	xix, Smf_VlqValue	; F77E8D  ld XIX,0x00001198
 	xor	wa, wa	; F77E92  xor WA,WA
 	ldw	bc, 4	; F77E94  ld BC,0x0004
 	ld	(xix+), wa	; F77E97  ld (XIX+),WA

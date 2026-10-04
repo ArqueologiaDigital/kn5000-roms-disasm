@@ -617,6 +617,34 @@ ROWS = [
      "BStore_CursorBlock = word[IY] of the table at RAM 0x3460, BStore_CursorOffset = byte[IY] of the table at 0x3482:\n"
      "the block-store cursor of track IY."),
     ("F71275", "TrackCursor_Save", "the reverse: the BStore cursor into word[IY] at 0x3460 and byte[IY] at 0x3482."),
+    # prom_b 0xF6FD7A-0xF71369: the MIDI FILE loader's event layer.  RAM: 0x10CC running status, 0x10D0-0x10D2 the event
+    # (status, data 1, data 2), 0x1193 the raw variable-length bytes, 0x1198-0x119A their value (wsa1_ram.inc).
+    ("F6FDF5", "Smf_ReadVlqBytes",
+     "reads input bytes (InputStream_GetByte) to 0x1193 while bit 7 is set -- an SMF variable-length quantity; IX = its length."),
+    ("F71369", "Smf_ReadVlqBytes_Copy", "the same twelve instructions as Smf_ReadVlqBytes."),
+    ("F6FE96", "Smf_ClearVlqValue", "the decoded value words (0x1198), (0x119A) = 0."),
+    ("F6FDE4", "Smf_ClearVlqBytes", "the two words at 0x1193 (the raw bytes) = 0."),
+    ("F6FE1B", "Smf_DecodeVlq",
+     "packs IX = 1, 2 or 3 raw bytes' low 7 bits, most significant first, into the 24-bit value at 0x1198..0x119A."),
+    ("F6FD7A", "Smf_ReadVlq", "Smf_ClearVlqBytes, Smf_ReadVlqBytes, and on a good read Smf_DecodeVlq."),
+    ("F6FEFE", "SmfEvent_ReadWithNewStatus",
+     "A is a status byte: (0x10CC) = it (the running status), (0x10D0) = it, then one data byte for 0xCn / 0xDn and two\n"
+     "otherwise to 0x10D1..; then SmfEvent_DispatchChannelMessage."),
+    ("F6FEA1", "SmfEvent_ReadWithRunningStatus",
+     "A is a data byte: the status is the running status (0x10CC); A and the remaining data bytes to 0x10D1..; then\n"
+     "SmfEvent_DispatchChannelMessage for a format-0 or one-track file, sub_F71DB7 otherwise."),
+    ("F6FF44", "SmfEvent_DispatchChannelMessage",
+     "clamps both data bytes to 127 and dispatches on the status's high nibble: 0x90 with velocity > 0 SmfEvent_NoteOn,\n"
+     "0x80 or velocity 0 SmfEvent_NoteOff, 0xB0 _ControlChange, 0xE0 _PitchBend, 0xC0 _ProgramChange, 0xD0 _ChannelPressure;\n"
+     "0xA0 (polyphonic pressure) is dropped."),
+    ("F70ED5", "SmfEvent_NoteOn", "SmfEvent_DispatchChannelMessage's arm for status 0x9n with a non-zero velocity."),
+    ("F71023", "SmfEvent_NoteOff", "the arm for status 0x8n, and for 0x9n with velocity 0."),
+    ("F7039A", "SmfEvent_ControlChange", "the arm for status 0xBn."),
+    ("F70330", "SmfEvent_PitchBend", "the arm for status 0xEn; it writes song code 0xD2 to the channel's track."),
+    ("F70008", "SmfEvent_ProgramChange", "the arm for status 0xCn."),
+    ("F6FFAE", "SmfEvent_ChannelPressure",
+     "the arm for status 0xDn: to the channel's track (TrackCursor_Load) song code 0xD0, the delta time\n"
+     "(Smf_TicksToPpq96 of the track's word at 0x10D3) and the pressure; then TrackCursor_Save."),
 ]
 
 
