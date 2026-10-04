@@ -1410,7 +1410,7 @@ ROWS = [
      "T_CombiEdit_RunPendingRepaint's body: when (0x277D) is 1 and the screen is one of COMBINATION EDIT's (0x33-0x3A, 0xB0-0xB7), posts\n"
      "that page's repaint routine to the callback queue and signals semaphore 1; (0x277D) = 0."),
     ("FE984B", "EditCursor_SeekPastTick",
-     "opens the edited measure (sub_FE8EF3, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81\n"
+     "opens the edited measure (EditScreen_SeekCursorMeasure, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81\n"
      "markers up to EditCursor_Beat, then steps over every event whose tick is <= EditCursor_Tick (`jr ule`) and\n"
      "backs onto the tag; 0x601F05 += the beat, 0x601F07 = the tick.  Called by EditCursor_NextBeat."),
     ("FE98E7", "EditCursor_SeekToTick",
@@ -1533,8 +1533,8 @@ ROWS = [
     ("FE92D7", "EditScreen_CountDownAction2", "the same countdown on (0x601F5A)."),
     ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, EditScreen_EndAudition_Call (EditScreen_EndAudition)."),
     ("FE933F", "EditScreen_ReloadMeasureView",
-     "EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (sub_FE8EA9, moving on through\n"
-     "sub_FE93CA), its beat table rebuilt (sub_FE8AE9), sub_FE938E, the event at the cursor selected\n"
+     "EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (EditScreen_OpenCursorMeasure, moving on through\n"
+     "sub_FE93CA), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected\n"
      "(EditScreen_SelectEventAtCursor), and every part of the screen redrawn."),
     # NOTE / DRUM EDIT: audition, note-grid drawing, the deferred redraws
     ("FEA566", "EditScreen_AuditionEventNote",
@@ -1595,6 +1595,23 @@ ROWS = [
     ("FEA628", "EditScreen_PositionAndMeasureStartTicks",
      "XWA = (0x601F05) x 0x60 + (0x601F07), the walk position in ticks; XBC = (0x601F0F) x 0x60 + (0x601F11), the\n"
      "measure's start -- the callers subtract them to get the tick within the measure."),
+    # NOTE / DRUM EDIT: opening the cursor's measure
+    ("FE8EF3", "EditScreen_SeekCursorMeasure",
+     "(0x0C90) = EditCursor_Measure, sub_FE8F0C (T_F40A70), then T_F40C5C on chain EditScreen_Part + 1: prom_b's\n"
+     "seek to that measure, which returns IX = its first beat and IY = the offset."),
+    ("FE8EA9", "EditScreen_OpenCursorMeasure",
+     "EditScreen_SeekCursorMeasure; when it found the measure: EditMeasure_StartBeat = IX, EditMeasure_StartTick = 0,\n"
+     "and the mark (0x601F12) = BStore_CursorBlock, (0x601F14) = IY -- what BStore_CursorSlot_RestoreMark returns to."),
+    ("FE8ED3", "EditScreen_SeekCursorMeasureStart",
+     "EditScreen_SeekCursorMeasure; when found: EditPos_Beat = IX, EditPos_Tick = 0, BStore_CursorOffset = IY."),
+    ("FE8AE9", "EditScreen_BuildBeatTable",
+     "for the (0x601F76) measures from EditCursor_Measure, seeks each one (T_F40C5C) and fills the byte table at\n"
+     "0x601F5F that EditCursor_BeatsInMeasure reads; the cursor is saved and restored around it."),
+    ("FE95C8", "EditCursor_WrapPastMeasureEnd",
+     "with EditCursor_TickInMeasure past the measure: the next measure at beat 0 when the beat table's last entry\n"
+     "is set, else one beat more; EditCursor_Tick = TickInMeasure - EditMeasure_Beats x 0x60."),
+    ("FE9492", "EditCursor_WrapAndRecompute",
+     "EditCursor_WrapPastMeasureEnd, then EditCursor_TickInMeasure = EditCursor_Beat x 0x60 + EditCursor_Tick."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

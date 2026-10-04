@@ -3884,4 +3884,10 @@ RENAMES = [
     ("sub_FEA6D7", "EditScreen_CountBeatsInMeasure"),
     ("sub_FE960B", "EditScreen_SeekCursorBeat"),
     ("sub_FEA628", "EditScreen_PositionAndMeasureStartTicks"),
+    ("sub_FE8EF3", "EditScreen_SeekCursorMeasure"),
+    ("sub_FE8EA9", "EditScreen_OpenCursorMeasure"),
+    ("sub_FE8ED3", "EditScreen_SeekCursorMeasureStart"),
+    ("sub_FE8AE9", "EditScreen_BuildBeatTable"),
+    ("sub_FE95C8", "EditCursor_WrapPastMeasureEnd"),
+    ("sub_FE9492", "EditCursor_WrapAndRecompute"),
 ]

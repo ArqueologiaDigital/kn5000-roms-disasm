@@ -474,6 +474,8 @@
 	.equ EditPos_Tick,				0x601f07	; its tick within the beat -- EditCursor_SeekPastTick / _SeekToTick; EditCursor_SyncBeatAndTick
 	.equ EditMeasure_StartBeat,			0x601f0f	; the edited measure's first beat, absolute (word) -- sub_FE8EA9 sets it; BStore_CursorSlot_RestoreMark returns to it
 	.equ EditMeasure_StartTick,			0x601f11	; its tick (0) -- sub_FE8EA9
+	.equ EditMeasure_MarkBlock,			0x601f12	; the measure start's block-store block (word): the mark -- EditScreen_OpenCursorMeasure; BStore_CursorSlot_RestoreMark
+	.equ EditMeasure_MarkOffset,			0x601f14	; its offset (word) -- EditScreen_OpenCursorMeasure; BStore_CursorSlot_RestoreMark
 	.equ NoteEdit_HeldKeys,				0x601f1c	; 8 slots of {flag 0x80, note, velocity}: the keys held during entry (1 slot in DRUM EDIT) -- NoteEdit_HoldKey / _ReleaseKey / _AnyKeyHeld / _EnterHeldNotes
 	.equ NoteEdit_InputNote,			0x601f34	; the note of the key event being taken -- NoteEdit_TakeKeyboardInput
 	.equ NoteEdit_InputVelocity,			0x601f35	; its velocity (0 = released) -- NoteEdit_TakeKeyboardInput
@@ -484,6 +486,7 @@
 	.equ EditScreen_ActionIndex,			0x601f59	; the deferred action to run -- EditScreen_RunDueAction
 	.equ EditScreen_ActionTimer2,			0x601f5a	; the second countdown (its action is sub_FE9738) -- EditScreen_CountDownAction2 / _RunDueAction2
 	.equ EditScreen_CursorFlags,			0x601f5b	; bit 0: a note-on is selected at the cursor (its velocity in EditField_EventVelocity); bits 1..4 are tested by the cursor moves, not read here -- EditScreen_SelectEventAtCursor sets / clears it; EditScreen_SoftKeyCol4 tests it
+	.equ EditScreen_BeatTable,			0x601f5f	; per-measure bytes for the measures shown, from EditCursor_Measure -- EditScreen_BuildBeatTable fills it; EditCursor_BeatsInMeasure / _WrapPastMeasureEnd read it
 	.equ EditScreen_BeatCounter,			0x601f6c	; the walks' beat counter: markers counted, or still to append -- EditScreen_CountBeatMarkersToEnd / _CountBeatsInMeasure; EditScreen_AppendMissingBeatMarkers
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
