@@ -88733,7 +88733,7 @@ T_F40CB8:	jp T_F40CB8_Nop  ; -> prom_b 0x4E591
 T_F40CBC:	jp sub_F4E525  ; -> prom_b 0x4E525
 T_F40CC0:	jp sub_F4E1B2  ; -> prom_b 0x4E1B2   x1
 T_F40CC4:	jp sub_F4E56F  ; -> prom_b 0x4E56F   x24
-T_F40CC8:	jp sub_F4E592  ; -> prom_b 0x4E592   x1
+T_F40CC8:	jp RealtimeRecordScreen_LcdKeyRow2  ; -> prom_b 0x4E592   x1
 T_F40CCC:	jp sub_F4E30F  ; -> prom_b 0x4E30F   x2
 	.fill 0x10, 1, 0x0E  ; 0xF40CD0: 16 x ret
 T_F40CE0:	jp sub_F4EC00  ; -> prom_b 0x4EC00
@@ -88743,12 +88743,12 @@ T_F40CEC:	jp sub_F4EC56  ; -> prom_b 0x4EC56   x2
 T_F40CF0:	jp sub_F4EC8A  ; -> prom_b 0x4EC8A   x1
 T_F40CF4:	jp sub_F4EC9A  ; -> prom_b 0x4EC9A
 T_F40CF8:	jp sub_F4ECA9  ; -> prom_b 0x4ECA9   x1
-T_F40CFC:	jp sub_F4EE6F  ; -> prom_b 0x4EE6F   x2
+T_F40CFC:	jp RecordScreen_LcdKeyRow1  ; -> prom_b 0x4EE6F   x2
 T_F40D00:	jp sub_F4ED84  ; -> prom_b 0x4ED84   x4
 T_F40D04:	jp sub_F4EEAD  ; -> prom_b 0x4EEAD   x1
 T_F40D08:	jp sub_F4EEBC  ; -> prom_b 0x4EEBC
-T_F40D0C:	jp sub_F4EED9  ; -> prom_b 0x4EED9   x1
-T_F40D10:	jp sub_F4EEE6  ; -> prom_b 0x4EEE6   x1
+T_F40D0C:	jp SeqPlayScreen_LcdKeyRow1  ; -> prom_b 0x4EED9   x1
+T_F40D10:	jp SeqPlayScreen_LcdKeyRow2  ; -> prom_b 0x4EEE6   x1
 T_F40D14:	jp sub_F4ED0C  ; -> prom_b 0x4ED0C   x1
 T_F40D18:	jp sub_F4EEF3  ; -> prom_b 0x4EEF3   x2
 	.fill 0x44, 1, 0x0E  ; 0xF40D1C: 68 x ret
@@ -88761,36 +88761,36 @@ T_F40D90:	jp Fwd_F55808  ; -> prom_b 0x55808
 T_F40D94:	jp Fwd_F5580C  ; -> prom_b 0x5580C
 T_F40D98:	jp Fwd_F55800  ; -> prom_b 0x55800
 T_F40D9C:	jp Fwd_F55804  ; -> prom_b 0x55804
-T_F40DA0:	jp Fwd_F55856  ; -> prom_b 0x55856
-T_F40DA4:	jp Fwd_F5585A  ; -> prom_b 0x5585A
-T_F40DA8:	jp CallSelectorTable_F55A2E  ; -> prom_b 0x5585E
+T_F40DA0:	jp ScreenEnter_SeqPlayScreen_Fwd  ; -> prom_b 0x55856
+T_F40DA4:	jp ScreenLeave_SeqPlayScreen_Fwd  ; -> prom_b 0x5585A
+T_F40DA8:	jp ScreenButton_SeqPlayScreen  ; -> prom_b 0x5585E
 T_F40DAC:	jp Fwd_F55868  ; -> prom_b 0x55868
-T_F40DB0:	jp Fwd_F5586C  ; -> prom_b 0x5586C
-T_F40DB4:	jp Fwd_F55870  ; -> prom_b 0x55870
-T_F40DB8:	jp CallSelectorTable_F55AAE  ; -> prom_b 0x55874
+T_F40DB0:	jp ScreenEnter_CyclePlayScreen_Fwd  ; -> prom_b 0x5586C
+T_F40DB4:	jp ScreenLeave_CyclePlayScreen_Fwd  ; -> prom_b 0x55870
+T_F40DB8:	jp ScreenButton_CyclePlayScreen  ; -> prom_b 0x55874
 T_F40DBC:	jp Fwd_F5587E  ; -> prom_b 0x5587E
-T_F40DC0:	jp Fwd_F55810  ; -> prom_b 0x55810
-T_F40DC4:	jp Fwd_F55814  ; -> prom_b 0x55814
-T_F40DC8:	jp CallSelectorTable_F558AE  ; -> prom_b 0x55818
+T_F40DC0:	jp ScreenEnter_RealtimeRecordScreen_Fwd  ; -> prom_b 0x55810
+T_F40DC4:	jp ScreenLeave_RealtimeRecordScreen_Fwd  ; -> prom_b 0x55814
+T_F40DC8:	jp ScreenButton_RealtimeRecordScreen  ; -> prom_b 0x55818
 T_F40DCC:	jp Fwd_F55822  ; -> prom_b 0x55822
-T_F40DD0:	jp Fwd_F5583C  ; -> prom_b 0x5583C
-T_F40DD4:	jp Fwd_F55840  ; -> prom_b 0x55840
-T_F40DD8:	jp CallSelectorTable_F559AE  ; -> prom_b 0x55844
+T_F40DD0:	jp ScreenEnter_CycleRecordScreen_Fwd  ; -> prom_b 0x5583C
+T_F40DD4:	jp ScreenLeave_CycleRecordScreen_Fwd  ; -> prom_b 0x55840
+T_F40DD8:	jp ScreenButton_CycleRecordScreen  ; -> prom_b 0x55844
 T_F40DDC:	jp sub_F5584E  ; -> prom_b 0x5584E
-T_F40DE0:	jp Fwd_F55882  ; -> prom_b 0x55882
-T_F40DE4:	jp Fwd_F55886  ; -> prom_b 0x55886
-T_F40DE8:	jp CallSelectorTable_F55B2E  ; -> prom_b 0x5588A
+T_F40DE0:	jp ScreenEnter_CyclePlayEditScreen_Fwd  ; -> prom_b 0x55882
+T_F40DE4:	jp ScreenLeave_CyclePlayEditScreen_Fwd  ; -> prom_b 0x55886
+T_F40DE8:	jp ScreenButton_CyclePlayEditScreen  ; -> prom_b 0x5588A
 T_F40DEC:	jp Fwd_F55894  ; -> prom_b 0x55894
-T_F40DF0:	jp Fwd_F55898  ; -> prom_b 0x55898
-T_F40DF4:	jp Fwd_F5589C  ; -> prom_b 0x5589C
-T_F40DF8:	jp CallSelectorTable_F55BAE  ; -> prom_b 0x558A0
+T_F40DF0:	jp ScreenEnter_CyclePlayEditScreen29_Fwd  ; -> prom_b 0x55898
+T_F40DF4:	jp ScreenLeave_CyclePlayEditScreen29_Fwd  ; -> prom_b 0x5589C
+T_F40DF8:	jp ScreenButton_CyclePlayEditScreen29  ; -> prom_b 0x558A0
 T_F40DFC:	jp Fwd_F558AA  ; -> prom_b 0x558AA
-T_F40E00:	jp Fwd_F55826  ; -> prom_b 0x55826
-T_F40E04:	jp Fwd_F5582A  ; -> prom_b 0x5582A
-T_F40E08:	jp CallSelectorTable_F5592E  ; -> prom_b 0x5582E
+T_F40E00:	jp ScreenEnter_MetronomeBalanceScreen_Fwd  ; -> prom_b 0x55826
+T_F40E04:	jp ScreenLeave_MetronomeBalanceScreen_Fwd  ; -> prom_b 0x5582A
+T_F40E08:	jp ScreenButton_MetronomeBalanceScreen  ; -> prom_b 0x5582E
 T_F40E0C:	jp Fwd_F55838  ; -> prom_b 0x55838
 T_F40E10:	jp sub_F55D90  ; -> prom_b 0x55D90   x6
-T_F40E14:	jp Fwd_F55882  ; -> prom_b 0x55882
+T_F40E14:	jp ScreenEnter_CyclePlayEditScreen_Fwd  ; -> prom_b 0x55882
 T_F40E18:	jp sub_F56525  ; -> prom_b 0x56525   x2
 	.fill 0xB4, 1, 0x0E  ; 0xF40E1C: 180 x ret
 ; Evidence: slot 0xF40ED0 is `ptr 0xF57C00`; prom_b 0xF57C00 carries the label
@@ -107266,7 +107266,7 @@ T_F40CB8_Nop:		; <- T_F40CB8
 	ret	; F4E591  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4E592
+; RealtimeRecordScreen_LcdKeyRow2
 ; Called from: T_F40CC8 (x1)
 ; Touches: (0x3000) (0x3002) (0x3736)  |  0x000000
 ; Calls:   sub_F4E151
@@ -107277,7 +107277,8 @@ T_F40CB8_Nop:		; <- T_F40CB8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4E592:		; <- T_F40CC8
+; RealtimeRecordScreen_LcdKeyRow2: the LcdKeyRow2 action of RealtimeRecordScreen -- called only by LcdKeyRow2_RealtimeRecordScreen.
+RealtimeRecordScreen_LcdKeyRow2:		; <- T_F40CC8
 	ld	xwa, (12288:16)	; F4E592  ld XWA,(0x3000)
 	cp	xwa, 0	; F4E596  cp XWA,0x00000000
 	jr	z, sub_F4E545_Return3	; F4E59C  jr Z,0xf4e5db
@@ -107755,7 +107756,7 @@ sub_F4ED10_Return3:
 	ret	; F4EE6E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4EE6F
+; RecordScreen_LcdKeyRow1
 ; Called from: T_F40CFC (x2)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F4EE73
@@ -107766,7 +107767,8 @@ sub_F4ED10_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4EE6F:		; <- T_F40CFC
+; RecordScreen_LcdKeyRow1: the LcdKeyRow1 action of CycleRecordScreen, RealtimeRecordScreen -- called only by LcdKeyRow1_CycleRecordScreen, LcdKeyRow1_RealtimeRecordScreen.
+RecordScreen_LcdKeyRow1:		; <- T_F40CFC
 	calr	sub_F4EE73	; F4EE6F  calr 0xf4ee73
 	ret	; F4EE72  ret
 
@@ -107847,7 +107849,7 @@ sub_F4EE73_Return3:
 	ret	; F4EED8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4EED9
+; SeqPlayScreen_LcdKeyRow1
 ; Called from: T_F40D0C (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F4EDC6
@@ -107858,7 +107860,8 @@ sub_F4EE73_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4EED9:		; <- T_F40D0C
+; SeqPlayScreen_LcdKeyRow1: the LcdKeyRow1 action of SeqPlayScreen -- called only by LcdKeyRow1_SeqPlayScreen.
+SeqPlayScreen_LcdKeyRow1:		; <- T_F40D0C
 	cp	bc, 8	; F4EED9  cp BC,0x0008
 	jr	nz, sub_F4EE73_Return4	; F4EEDD  jr NZ,0xf4eee5
 	and	w, 247	; F4EEDF  and W,0xf7
@@ -107867,7 +107870,7 @@ sub_F4EE73_Return4:
 	ret	; F4EEE5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4EEE6
+; SeqPlayScreen_LcdKeyRow2
 ; Called from: T_F40D10 (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F4EDC6
@@ -107878,7 +107881,8 @@ sub_F4EE73_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4EEE6:		; <- T_F40D10
+; SeqPlayScreen_LcdKeyRow2: the LcdKeyRow2 action of SeqPlayScreen -- called only by LcdKeyRow2_SeqPlayScreen.
+SeqPlayScreen_LcdKeyRow2:		; <- T_F40D10
 	cp	bc, 9	; F4EEE6  cp BC,0x0009
 	jr	nz, sub_F4EEE6_Return	; F4EEEA  jr NZ,0xf4eef2
 	or	w, 8	; F4EEEC  or W,0x08
@@ -116140,10 +116144,10 @@ Fwd_F5580C:		; <- T_F40D94
 	ret	; F5580F  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55810
+; ScreenEnter_RealtimeRecordScreen_Fwd
 ; Called from: T_F40DC0 (0xF40DC0, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56058
+; Calls:   ScreenEnter_RealtimeRecordScreen
 ; Evidence: thunk slot T_F40DC0 holds `jp 0x00F55810`, and 0xF55810 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116154,15 +116158,15 @@ Fwd_F5580C:		; <- T_F40D94
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55810:		; <- T_F40DC0
-	calr	sub_F56058	; F55810  calr 0xf56058
+ScreenEnter_RealtimeRecordScreen_Fwd:		; <- T_F40DC0
+	calr	ScreenEnter_RealtimeRecordScreen	; F55810  calr 0xf56058
 	ret	; F55813  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55814
+; ScreenLeave_RealtimeRecordScreen_Fwd
 ; Called from: T_F40DC4 (0xF40DC4, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56129
+; Calls:   ScreenLeave_RealtimeRecordScreen
 ; Evidence: thunk slot T_F40DC4 holds `jp 0x00F55814`, and 0xF55814 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116173,12 +116177,12 @@ Fwd_F55810:		; <- T_F40DC0
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55814:		; <- T_F40DC4
-	calr	sub_F56129	; F55814  calr 0xf56129
+ScreenLeave_RealtimeRecordScreen_Fwd:		; <- T_F40DC4
+	calr	ScreenLeave_RealtimeRecordScreen	; F55814  calr 0xf56129
 	ret	; F55817  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F558AE
+; ScreenButton_RealtimeRecordScreen
 ; Called from: T_F40DC8 (0xF40DC8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116192,8 +116196,9 @@ Fwd_F55814:		; <- T_F40DC4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F558AE:		; <- T_F40DC8
-	ld	xix, SelectorRoutines_F558AE	; F55818  ld XIX,0x00f558ae
+; ScreenButton_RealtimeRecordScreen: the +8 BUTTON method of screen 0x06 -- ButtonTable_RealtimeRecordScreen entry HL.
+ScreenButton_RealtimeRecordScreen:		; <- T_F40DC8
+	ld	xix, ButtonTable_RealtimeRecordScreen	; F55818  ld XIX,0x00f558ae
 	call	T_PanelButton_CallTableEntry	; F5581D  call 0xf41b08
 	ret	; F55821  ret
 
@@ -116217,10 +116222,10 @@ Fwd_F55822:		; <- T_F40DCC
 	ret	; F55825  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55826
+; ScreenEnter_MetronomeBalanceScreen_Fwd
 ; Called from: T_F40E00 (0xF40E00, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5658C
+; Calls:   ScreenEnter_MetronomeBalanceScreen
 ; Evidence: thunk slot T_F40E00 holds `jp 0x00F55826`, and 0xF55826 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116231,12 +116236,12 @@ Fwd_F55822:		; <- T_F40DCC
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55826:		; <- T_F40E00
-	calr	sub_F5658C	; F55826  calr 0xf5658c
+ScreenEnter_MetronomeBalanceScreen_Fwd:		; <- T_F40E00
+	calr	ScreenEnter_MetronomeBalanceScreen	; F55826  calr 0xf5658c
 	ret	; F55829  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5582A
+; ScreenLeave_MetronomeBalanceScreen_Fwd
 ; Called from: T_F40E04 (0xF40E04, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   Nop_Ret_F56649
@@ -116250,12 +116255,12 @@ Fwd_F55826:		; <- T_F40E00
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5582A:		; <- T_F40E04
+ScreenLeave_MetronomeBalanceScreen_Fwd:		; <- T_F40E04
 	calr	Nop_Ret_F56649	; F5582A  calr 0xf56649
 	ret	; F5582D  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F5592E
+; ScreenButton_MetronomeBalanceScreen
 ; Called from: T_F40E08 (0xF40E08, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116269,8 +116274,9 @@ Fwd_F5582A:		; <- T_F40E04
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F5592E:		; <- T_F40E08
-	ld	xix, SelectorRoutines_F5592E	; F5582E  ld XIX,0x00f5592e
+; ScreenButton_MetronomeBalanceScreen: the +8 BUTTON method of screen 0x0C -- ButtonTable_MetronomeBalanceScreen entry HL.
+ScreenButton_MetronomeBalanceScreen:		; <- T_F40E08
+	ld	xix, ButtonTable_MetronomeBalanceScreen	; F5582E  ld XIX,0x00f5592e
 	call	T_PanelButton_CallTableEntry	; F55833  call 0xf41b08
 	ret	; F55837  ret
 
@@ -116294,10 +116300,10 @@ Fwd_F55838:		; <- T_F40E0C
 	ret	; F5583B  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5583C
+; ScreenEnter_CycleRecordScreen_Fwd
 ; Called from: T_F40DD0 (0xF40DD0, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5664A
+; Calls:   ScreenEnter_CycleRecordScreen
 ; Evidence: thunk slot T_F40DD0 holds `jp 0x00F5583C`, and 0xF5583C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116308,15 +116314,15 @@ Fwd_F55838:		; <- T_F40E0C
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5583C:		; <- T_F40DD0
-	calr	sub_F5664A	; F5583C  calr 0xf5664a
+ScreenEnter_CycleRecordScreen_Fwd:		; <- T_F40DD0
+	calr	ScreenEnter_CycleRecordScreen	; F5583C  calr 0xf5664a
 	ret	; F5583F  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55840
+; ScreenLeave_CycleRecordScreen_Fwd
 ; Called from: T_F40DD4 (0xF40DD4, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5670C
+; Calls:   ScreenLeave_CycleRecordScreen
 ; Evidence: thunk slot T_F40DD4 holds `jp 0x00F55840`, and 0xF55840 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116327,12 +116333,12 @@ Fwd_F5583C:		; <- T_F40DD0
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55840:		; <- T_F40DD4
-	calr	sub_F5670C	; F55840  calr 0xf5670c
+ScreenLeave_CycleRecordScreen_Fwd:		; <- T_F40DD4
+	calr	ScreenLeave_CycleRecordScreen	; F55840  calr 0xf5670c
 	ret	; F55843  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F559AE
+; ScreenButton_CycleRecordScreen
 ; Called from: T_F40DD8 (0xF40DD8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116346,8 +116352,9 @@ Fwd_F55840:		; <- T_F40DD4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F559AE:		; <- T_F40DD8
-	ld	xix, SelectorRoutines_F559AE	; F55844  ld XIX,0x00f559ae
+; ScreenButton_CycleRecordScreen: the +8 BUTTON method of screen 0x08 -- ButtonTable_CycleRecordScreen entry HL.
+ScreenButton_CycleRecordScreen:		; <- T_F40DD8
+	ld	xix, ButtonTable_CycleRecordScreen	; F55844  ld XIX,0x00f559ae
 	call	T_PanelButton_CallTableEntry	; F55849  call 0xf41b08
 	ret	; F5584D  ret
 
@@ -116371,10 +116378,10 @@ sub_F5584E:		; <- T_F40DDC
 	ret	; F55855  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55856
+; ScreenEnter_SeqPlayScreen_Fwd
 ; Called from: T_F40DA0 (0xF40DA0, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56B95
+; Calls:   ScreenEnter_SeqPlayScreen
 ; Evidence: thunk slot T_F40DA0 holds `jp 0x00F55856`, and 0xF55856 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116385,15 +116392,15 @@ sub_F5584E:		; <- T_F40DDC
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55856:		; <- T_F40DA0
-	calr	sub_F56B95	; F55856  calr 0xf56b95
+ScreenEnter_SeqPlayScreen_Fwd:		; <- T_F40DA0
+	calr	ScreenEnter_SeqPlayScreen	; F55856  calr 0xf56b95
 	ret	; F55859  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5585A
+; ScreenLeave_SeqPlayScreen_Fwd
 ; Called from: T_F40DA4 (0xF40DA4, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56C35
+; Calls:   ScreenLeave_SeqPlayScreen
 ; Evidence: thunk slot T_F40DA4 holds `jp 0x00F5585A`, and 0xF5585A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116404,12 +116411,12 @@ Fwd_F55856:		; <- T_F40DA0
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5585A:		; <- T_F40DA4
-	calr	sub_F56C35	; F5585A  calr 0xf56c35
+ScreenLeave_SeqPlayScreen_Fwd:		; <- T_F40DA4
+	calr	ScreenLeave_SeqPlayScreen	; F5585A  calr 0xf56c35
 	ret	; F5585D  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F55A2E
+; ScreenButton_SeqPlayScreen
 ; Called from: T_F40DA8 (0xF40DA8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116423,8 +116430,9 @@ Fwd_F5585A:		; <- T_F40DA4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F55A2E:		; <- T_F40DA8
-	ld	xix, SelectorRoutines_F55A2E	; F5585E  ld XIX,0x00f55a2e
+; ScreenButton_SeqPlayScreen: the +8 BUTTON method of screen 0x12 -- ButtonTable_SeqPlayScreen entry HL.
+ScreenButton_SeqPlayScreen:		; <- T_F40DA8
+	ld	xix, ButtonTable_SeqPlayScreen	; F5585E  ld XIX,0x00f55a2e
 	call	T_PanelButton_CallTableEntry	; F55863  call 0xf41b08
 	ret	; F55867  ret
 
@@ -116448,10 +116456,10 @@ Fwd_F55868:		; <- T_F40DAC
 	ret	; F5586B  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5586C
+; ScreenEnter_CyclePlayScreen_Fwd
 ; Called from: T_F40DB0 (0xF40DB0, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56DF1
+; Calls:   ScreenEnter_CyclePlayScreen
 ; Evidence: thunk slot T_F40DB0 holds `jp 0x00F5586C`, and 0xF5586C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116462,15 +116470,15 @@ Fwd_F55868:		; <- T_F40DAC
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5586C:		; <- T_F40DB0
-	calr	sub_F56DF1	; F5586C  calr 0xf56df1
+ScreenEnter_CyclePlayScreen_Fwd:		; <- T_F40DB0
+	calr	ScreenEnter_CyclePlayScreen	; F5586C  calr 0xf56df1
 	ret	; F5586F  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55870
+; ScreenLeave_CyclePlayScreen_Fwd
 ; Called from: T_F40DB4 (0xF40DB4, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56E99
+; Calls:   ScreenLeave_CyclePlayScreen
 ; Evidence: thunk slot T_F40DB4 holds `jp 0x00F55870`, and 0xF55870 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116481,12 +116489,12 @@ Fwd_F5586C:		; <- T_F40DB0
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55870:		; <- T_F40DB4
-	calr	sub_F56E99	; F55870  calr 0xf56e99
+ScreenLeave_CyclePlayScreen_Fwd:		; <- T_F40DB4
+	calr	ScreenLeave_CyclePlayScreen	; F55870  calr 0xf56e99
 	ret	; F55873  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F55AAE
+; ScreenButton_CyclePlayScreen
 ; Called from: T_F40DB8 (0xF40DB8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116500,8 +116508,9 @@ Fwd_F55870:		; <- T_F40DB4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F55AAE:		; <- T_F40DB8
-	ld	xix, SelectorRoutines_F55AAE	; F55874  ld XIX,0x00f55aae
+; ScreenButton_CyclePlayScreen: the +8 BUTTON method of screen 0x14 -- ButtonTable_CyclePlayScreen entry HL.
+ScreenButton_CyclePlayScreen:		; <- T_F40DB8
+	ld	xix, ButtonTable_CyclePlayScreen	; F55874  ld XIX,0x00f55aae
 	call	T_PanelButton_CallTableEntry	; F55879  call 0xf41b08
 	ret	; F5587D  ret
 
@@ -116525,10 +116534,10 @@ Fwd_F5587E:		; <- T_F40DBC
 	ret	; F55881  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55882
+; ScreenEnter_CyclePlayEditScreen_Fwd
 ; Called from: T_F40DE0 (0xF40DE0, x0), T_F40E14 (0xF40E14, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57286
+; Calls:   ScreenEnter_CyclePlayEditScreen
 ; Evidence: thunk slot T_F40DE0 holds `jp 0x00F55882`, and 0xF55882 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116539,15 +116548,15 @@ Fwd_F5587E:		; <- T_F40DBC
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55882:		; <- T_F40DE0, T_F40E14
-	calr	sub_F57286	; F55882  calr 0xf57286
+ScreenEnter_CyclePlayEditScreen_Fwd:		; <- T_F40DE0, T_F40E14
+	calr	ScreenEnter_CyclePlayEditScreen	; F55882  calr 0xf57286
 	ret	; F55885  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55886
+; ScreenLeave_CyclePlayEditScreen_Fwd
 ; Called from: T_F40DE4 (0xF40DE4, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57311
+; Calls:   ScreenLeave_CyclePlayEditScreen
 ; Evidence: thunk slot T_F40DE4 holds `jp 0x00F55886`, and 0xF55886 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116558,12 +116567,12 @@ Fwd_F55882:		; <- T_F40DE0, T_F40E14
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55886:		; <- T_F40DE4
-	calr	sub_F57311	; F55886  calr 0xf57311
+ScreenLeave_CyclePlayEditScreen_Fwd:		; <- T_F40DE4
+	calr	ScreenLeave_CyclePlayEditScreen	; F55886  calr 0xf57311
 	ret	; F55889  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F55B2E
+; ScreenButton_CyclePlayEditScreen
 ; Called from: T_F40DE8 (0xF40DE8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116577,8 +116586,9 @@ Fwd_F55886:		; <- T_F40DE4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F55B2E:		; <- T_F40DE8
-	ld	xix, SelectorRoutines_F55B2E	; F5588A  ld XIX,0x00f55b2e
+; ScreenButton_CyclePlayEditScreen: the +8 BUTTON method of screen 0x26 -- ButtonTable_CyclePlayEditScreen entry HL.
+ScreenButton_CyclePlayEditScreen:		; <- T_F40DE8
+	ld	xix, ButtonTable_CyclePlayEditScreen	; F5588A  ld XIX,0x00f55b2e
 	call	T_PanelButton_CallTableEntry	; F5588F  call 0xf41b08
 	ret	; F55893  ret
 
@@ -116602,7 +116612,7 @@ Fwd_F55894:		; <- T_F40DEC
 	ret	; F55897  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55898
+; ScreenEnter_CyclePlayEditScreen29_Fwd
 ; Called from: T_F40DF0 (0xF40DF0, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   Fwd_F57410
@@ -116616,12 +116626,14 @@ Fwd_F55894:		; <- T_F40DEC
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55898:		; <- T_F40DF0
+; ScreenEnter_CyclePlayEditScreen29_Fwd: the +0 ENTER slot of screen 0x29 -- forwards to Fwd_F57410, the routine screen 0x26
+;   (CyclePlayEditScreen) uses too.
+ScreenEnter_CyclePlayEditScreen29_Fwd:		; <- T_F40DF0
 	calr	Fwd_F57410	; F55898  calr 0xf57410
 	ret	; F5589B  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5589C
+; ScreenLeave_CyclePlayEditScreen29_Fwd
 ; Called from: T_F40DF4 (0xF40DF4, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   Fwd_F57414
@@ -116635,12 +116647,14 @@ Fwd_F55898:		; <- T_F40DF0
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5589C:		; <- T_F40DF4
+; ScreenLeave_CyclePlayEditScreen29_Fwd: the +4 LEAVE slot of screen 0x29 -- forwards to Fwd_F57414, the routine screen 0x26
+;   (CyclePlayEditScreen) uses too.
+ScreenLeave_CyclePlayEditScreen29_Fwd:		; <- T_F40DF4
 	calr	Fwd_F57414	; F5589C  calr 0xf57414
 	ret	; F5589F  ret
 
 ; --------------------------------------------------------------------------
-; CallSelectorTable_F55BAE
+; ScreenButton_CyclePlayEditScreen29
 ; Called from: T_F40DF8 (0xF40DF8, x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelButton_CallTableEntry
@@ -116654,8 +116668,9 @@ Fwd_F5589C:		; <- T_F40DF4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-CallSelectorTable_F55BAE:		; <- T_F40DF8
-	ld	xix, SelectorRoutines_F55BAE	; F558A0  ld XIX,0x00f55bae
+; ScreenButton_CyclePlayEditScreen29: the +8 BUTTON method of screen 0x29 -- ButtonTable_CyclePlayEditScreen29 entry HL.
+ScreenButton_CyclePlayEditScreen29:		; <- T_F40DF8
+	ld	xix, ButtonTable_CyclePlayEditScreen29	; F558A0  ld XIX,0x00f55bae
 	call	T_PanelButton_CallTableEntry	; F558A5  call 0xf41b08
 	ret	; F558A9  ret
 
@@ -116679,7 +116694,7 @@ Fwd_F558AA:		; <- T_F40DFC
 	ret	; F558AD  ret
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F558AE -- 32 32-bit routine pointers, table 0 of the seven
+; ButtonTable_RealtimeRecordScreen -- 32 32-bit routine pointers, table 0 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56142-0xF56524) and 22 of the 32 are
 ;                            distinct.
@@ -116701,7 +116716,9 @@ Fwd_F558AA:		; <- T_F40DFC
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F558AE:
+; ButtonTable_RealtimeRecordScreen: the 32-slot button table of RealtimeRecordScreen (view-B screen 0x06), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_RealtimeRecordScreen:
 	.long	Write3602_ThenNotify_F56142	; F558AE  [ 0] -> Write3602_ThenNotify_F56142
 	.long	Write3602_ThenNotify_F56158	; F558B2  [ 1] -> Write3602_ThenNotify_F56158
 	.long	Write3602_ThenNotify_F5616E	; F558B6  [ 2] -> Write3602_ThenNotify_F5616E
@@ -116710,14 +116727,14 @@ SelectorRoutines_F558AE:
 	.long	Write3602_ThenNotify_F561B0	; F558C2  [ 5] -> Write3602_ThenNotify_F561B0
 	.long	Write3602_ThenNotify_F561C6	; F558C6  [ 6] -> Write3602_ThenNotify_F561C6
 	.long	Write3602_ThenNotify_F561DC	; F558CA  [ 7] -> Write3602_ThenNotify_F561DC
-	.long	sub_F56342	; F558CE  [ 8] -> sub_F56342
-	.long	sub_F563DD	; F558D2  [ 9] -> sub_F563DD
-	.long	sub_F56474	; F558D6  [10] -> sub_F56474
+	.long	LcdKeyRow1_RealtimeRecordScreen	; F558CE  [ 8] -> LcdKeyRow1_RealtimeRecordScreen
+	.long	LcdKeyRow2_RealtimeRecordScreen	; F558D2  [ 9] -> LcdKeyRow2_RealtimeRecordScreen
+	.long	LcdKeyRow3_RealtimeRecordScreen	; F558D6  [10] -> LcdKeyRow3_RealtimeRecordScreen
 	.long	Nop_Ret_F56510	; F558DA  [11] -> Nop_Ret_F56510
 	.long	Nop_Ret_F56510	; F558DE  [12] -> Nop_Ret_F56510
 	.long	Nop_Ret_F56510	; F558E2  [13] -> Nop_Ret_F56510
 	.long	Nop_Ret_F56510	; F558E6  [14] -> Nop_Ret_F56510
-	.long	sub_F56511	; F558EA  [15] -> sub_F56511
+	.long	ExitKey_RealtimeRecordScreen	; F558EA  [15] -> ExitKey_RealtimeRecordScreen
 	.long	Nop_Ret_F56524	; F558EE  [16] -> Nop_Ret_F56524
 	.long	Write3602_IfBit2088_F561F2	; F558F2  [17] -> Write3602_IfBit2088_F561F2
 	.long	Write3602_IfBit2088_F5621C	; F558F6  [18] -> Write3602_IfBit2088_F5621C
@@ -116737,7 +116754,7 @@ SelectorRoutines_F558AE:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F5592E -- 32 32-bit routine pointers, table 1 of the seven
+; ButtonTable_MetronomeBalanceScreen -- 32 32-bit routine pointers, table 1 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF565BD-0xF56649) and 4 of the 32 are distinct.
 ; Read by: the veneer at 0xF5582E -- `ld XIX,0x00F5592E / call 0xF41B08 /
@@ -116758,7 +116775,9 @@ SelectorRoutines_F558AE:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F5592E:
+; ButtonTable_MetronomeBalanceScreen: the 32-slot button table of MetronomeBalanceScreen (view-B screen 0x0C), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_MetronomeBalanceScreen:
 	.long	Nop_Ret_F56649	; F5592E  [ 0] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55932  [ 1] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55936  [ 2] -> Nop_Ret_F56649
@@ -116770,11 +116789,11 @@ SelectorRoutines_F5592E:
 	.long	Nop_Ret_F56649	; F5594E  [ 8] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55952  [ 9] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55956  [10] -> Nop_Ret_F56649
-	.long	sub_F565BD	; F5595A  [11] -> sub_F565BD
-	.long	sub_F565FD	; F5595E  [12] -> sub_F565FD
+	.long	LcdKeyRow4_MetronomeBalanceScreen	; F5595A  [11] -> LcdKeyRow4_MetronomeBalanceScreen
+	.long	LcdKeyRow5_MetronomeBalanceScreen	; F5595E  [12] -> LcdKeyRow5_MetronomeBalanceScreen
 	.long	Nop_Ret_F56649	; F55962  [13] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55966  [14] -> Nop_Ret_F56649
-	.long	sub_F5663C	; F5596A  [15] -> sub_F5663C
+	.long	ExitKey_MetronomeBalanceScreen	; F5596A  [15] -> ExitKey_MetronomeBalanceScreen
 	.long	Nop_Ret_F56649	; F5596E  [16] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55972  [17] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55976  [18] -> Nop_Ret_F56649
@@ -116794,7 +116813,7 @@ SelectorRoutines_F5592E:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F559AE -- 32 32-bit routine pointers, table 2 of the seven
+; ButtonTable_CycleRecordScreen -- 32 32-bit routine pointers, table 2 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF5672A-0xF568AA) and 10 of the 32 are
 ;                            distinct.
@@ -116816,7 +116835,9 @@ SelectorRoutines_F5592E:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F559AE:
+; ButtonTable_CycleRecordScreen: the 32-slot button table of CycleRecordScreen (view-B screen 0x08), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_CycleRecordScreen:
 	.long	Nop_Ret_F5672A	; F559AE  [ 0] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559B2  [ 1] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559B6  [ 2] -> Nop_Ret_F5672A
@@ -116825,14 +116846,14 @@ SelectorRoutines_F559AE:
 	.long	Nop_Ret_F5672A	; F559C2  [ 5] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559C6  [ 6] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559CA  [ 7] -> Nop_Ret_F5672A
-	.long	sub_F5672B	; F559CE  [ 8] -> sub_F5672B
-	.long	sub_F56752	; F559D2  [ 9] -> sub_F56752
-	.long	sub_F5676B	; F559D6  [10] -> sub_F5676B
-	.long	sub_F56791	; F559DA  [11] -> sub_F56791
-	.long	sub_F5679B	; F559DE  [12] -> sub_F5679B
+	.long	LcdKeyRow1_CycleRecordScreen	; F559CE  [ 8] -> LcdKeyRow1_CycleRecordScreen
+	.long	LcdKeyRow2_CycleRecordScreen	; F559D2  [ 9] -> LcdKeyRow2_CycleRecordScreen
+	.long	LcdKeyRow3_CycleRecordScreen	; F559D6  [10] -> LcdKeyRow3_CycleRecordScreen
+	.long	LcdKeyRow4_CycleRecordScreen	; F559DA  [11] -> LcdKeyRow4_CycleRecordScreen
+	.long	LcdKeyRow5_CycleRecordScreen	; F559DE  [12] -> LcdKeyRow5_CycleRecordScreen
 	.long	Nop_Ret_F567C8	; F559E2  [13] -> Nop_Ret_F567C8
 	.long	Nop_Ret_F567C8	; F559E6  [14] -> Nop_Ret_F567C8
-	.long	sub_F567C9	; F559EA  [15] -> sub_F567C9
+	.long	ExitKey_CycleRecordScreen	; F559EA  [15] -> ExitKey_CycleRecordScreen
 	.long	Nop_Ret_F568AA	; F559EE  [16] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F559F2  [17] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F559F6  [18] -> Nop_Ret_F568AA
@@ -116852,7 +116873,7 @@ SelectorRoutines_F559AE:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F55A2E -- 32 32-bit routine pointers, table 3 of the seven
+; ButtonTable_SeqPlayScreen -- 32 32-bit routine pointers, table 3 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56142-0xF56DF0) and 22 of the 32 are
 ;                            distinct.
@@ -116874,7 +116895,9 @@ SelectorRoutines_F559AE:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F55A2E:
+; ButtonTable_SeqPlayScreen: the 32-slot button table of SeqPlayScreen (view-B screen 0x12), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_SeqPlayScreen:
 	.long	Write3602_ThenNotify_F56142	; F55A2E  [ 0] -> Write3602_ThenNotify_F56142
 	.long	Write3602_ThenNotify_F56158	; F55A32  [ 1] -> Write3602_ThenNotify_F56158
 	.long	Write3602_ThenNotify_F5616E	; F55A36  [ 2] -> Write3602_ThenNotify_F5616E
@@ -116883,14 +116906,14 @@ SelectorRoutines_F55A2E:
 	.long	Write3602_ThenNotify_F561B0	; F55A42  [ 5] -> Write3602_ThenNotify_F561B0
 	.long	Write3602_ThenNotify_F561C6	; F55A46  [ 6] -> Write3602_ThenNotify_F561C6
 	.long	Write3602_ThenNotify_F561DC	; F55A4A  [ 7] -> Write3602_ThenNotify_F561DC
-	.long	sub_F56C57	; F55A4E  [ 8] -> sub_F56C57
-	.long	sub_F56CD6	; F55A52  [ 9] -> sub_F56CD6
-	.long	sub_F56D1D	; F55A56  [10] -> sub_F56D1D
+	.long	LcdKeyRow1_SeqPlayScreen	; F55A4E  [ 8] -> LcdKeyRow1_SeqPlayScreen
+	.long	LcdKeyRow2_SeqPlayScreen	; F55A52  [ 9] -> LcdKeyRow2_SeqPlayScreen
+	.long	LcdKeyRow3_SeqPlayScreen	; F55A56  [10] -> LcdKeyRow3_SeqPlayScreen
 	.long	Nop_Ret_F56DD8	; F55A5A  [11] -> Nop_Ret_F56DD8
 	.long	Nop_Ret_F56DD8	; F55A5E  [12] -> Nop_Ret_F56DD8
 	.long	Nop_Ret_F56DD8	; F55A62  [13] -> Nop_Ret_F56DD8
 	.long	Nop_Ret_F56DD8	; F55A66  [14] -> Nop_Ret_F56DD8
-	.long	sub_F56DD9	; F55A6A  [15] -> sub_F56DD9
+	.long	ExitKey_SeqPlayScreen	; F55A6A  [15] -> ExitKey_SeqPlayScreen
 	.long	Nop_Ret_F56DF0	; F55A6E  [16] -> Nop_Ret_F56DF0
 	.long	Write3602_IfBit2088_F561F2	; F55A72  [17] -> Write3602_IfBit2088_F561F2
 	.long	Write3602_IfBit2088_F5621C	; F55A76  [18] -> Write3602_IfBit2088_F5621C
@@ -116910,7 +116933,7 @@ SelectorRoutines_F55A2E:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F55AAE -- 32 32-bit routine pointers, table 4 of the seven
+; ButtonTable_CyclePlayScreen -- 32 32-bit routine pointers, table 4 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56EB7-0xF56FD5) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF55874 -- `ld XIX,0x00F55AAE / call 0xF41B08 /
@@ -116931,7 +116954,9 @@ SelectorRoutines_F55A2E:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F55AAE:
+; ButtonTable_CyclePlayScreen: the 32-slot button table of CyclePlayScreen (view-B screen 0x14), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_CyclePlayScreen:
 	.long	Nop_Ret_F56EB7	; F55AAE  [ 0] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55AB2  [ 1] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55AB6  [ 2] -> Nop_Ret_F56EB7
@@ -116941,13 +116966,13 @@ SelectorRoutines_F55AAE:
 	.long	Nop_Ret_F56EB7	; F55AC6  [ 6] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55ACA  [ 7] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55ACE  [ 8] -> Nop_Ret_F56EB7
-	.long	sub_F56EB8	; F55AD2  [ 9] -> sub_F56EB8
-	.long	sub_F56EC6	; F55AD6  [10] -> sub_F56EC6
-	.long	sub_F56ED4	; F55ADA  [11] -> sub_F56ED4
-	.long	sub_F56EDE	; F55ADE  [12] -> sub_F56EDE
+	.long	LcdKeyRow2_CyclePlayScreen	; F55AD2  [ 9] -> LcdKeyRow2_CyclePlayScreen
+	.long	LcdKeyRow3_CyclePlayScreen	; F55AD6  [10] -> LcdKeyRow3_CyclePlayScreen
+	.long	LcdKeyRow4_CyclePlayScreen	; F55ADA  [11] -> LcdKeyRow4_CyclePlayScreen
+	.long	LcdKeyRow5_CyclePlayScreen	; F55ADE  [12] -> LcdKeyRow5_CyclePlayScreen
 	.long	Nop_Ret_F56EF3	; F55AE2  [13] -> Nop_Ret_F56EF3
 	.long	Nop_Ret_F56EF3	; F55AE6  [14] -> Nop_Ret_F56EF3
-	.long	sub_F56EF4	; F55AEA  [15] -> sub_F56EF4
+	.long	ExitKey_CyclePlayScreen	; F55AEA  [15] -> ExitKey_CyclePlayScreen
 	.long	Nop_Ret_F56FD5	; F55AEE  [16] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55AF2  [17] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55AF6  [18] -> Nop_Ret_F56FD5
@@ -116967,7 +116992,7 @@ SelectorRoutines_F55AAE:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F55B2E -- 32 32-bit routine pointers, table 5 of the seven
+; ButtonTable_CyclePlayEditScreen -- 32 32-bit routine pointers, table 5 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF57337-0xF57381) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF5588A -- `ld XIX,0x00F55B2E / call 0xF41B08 /
@@ -116988,7 +117013,9 @@ SelectorRoutines_F55AAE:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F55B2E:
+; ButtonTable_CyclePlayEditScreen: the 32-slot button table of CyclePlayEditScreen (view-B screen 0x26), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_CyclePlayEditScreen:
 	.long	Nop_Ret_F57337	; F55B2E  [ 0] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B32  [ 1] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B36  [ 2] -> Nop_Ret_F57337
@@ -116997,14 +117024,14 @@ SelectorRoutines_F55B2E:
 	.long	Nop_Ret_F57337	; F55B42  [ 5] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B46  [ 6] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B4A  [ 7] -> Nop_Ret_F57337
-	.long	sub_F57338	; F55B4E  [ 8] -> sub_F57338
-	.long	sub_F5734A	; F55B52  [ 9] -> sub_F5734A
-	.long	sub_F57358	; F55B56  [10] -> sub_F57358
-	.long	Fwd_F57366	; F55B5A  [11] -> Fwd_F57366
+	.long	LcdKeyRow1_CyclePlayEditScreen	; F55B4E  [ 8] -> LcdKeyRow1_CyclePlayEditScreen
+	.long	LcdKeyRow2_CyclePlayEditScreen	; F55B52  [ 9] -> LcdKeyRow2_CyclePlayEditScreen
+	.long	LcdKeyRow3_CyclePlayEditScreen	; F55B56  [10] -> LcdKeyRow3_CyclePlayEditScreen
+	.long	LcdKeyRow4_CyclePlayEditScreen	; F55B5A  [11] -> LcdKeyRow4_CyclePlayEditScreen
 	.long	Nop_Ret_F5736A	; F55B5E  [12] -> Nop_Ret_F5736A
 	.long	Nop_Ret_F5736A	; F55B62  [13] -> Nop_Ret_F5736A
 	.long	Nop_Ret_F5736A	; F55B66  [14] -> Nop_Ret_F5736A
-	.long	sub_F5736B	; F55B6A  [15] -> sub_F5736B
+	.long	ExitKey_CyclePlayEditScreen	; F55B6A  [15] -> ExitKey_CyclePlayEditScreen
 	.long	Nop_Ret_F57381	; F55B6E  [16] -> Nop_Ret_F57381
 	.long	Nop_Ret_F57381	; F55B72  [17] -> Nop_Ret_F57381
 	.long	Nop_Ret_F57381	; F55B76  [18] -> Nop_Ret_F57381
@@ -117024,7 +117051,7 @@ SelectorRoutines_F55B2E:
 
 
 ; --------------------------------------------------------------------------
-; SelectorRoutines_F55BAE -- 32 32-bit routine pointers, table 6 of the seven
+; ButtonTable_CyclePlayEditScreen29 -- 32 32-bit routine pointers, table 6 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF57418-0xF57432) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF558A0 -- `ld XIX,0x00F55BAE / call 0xF41B08 /
@@ -117045,7 +117072,9 @@ SelectorRoutines_F55B2E:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-SelectorRoutines_F55BAE:
+; ButtonTable_CyclePlayEditScreen29: the 32-slot button table of CyclePlayEditScreen29 (view-B screen 0x29), indexed by panel
+;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
+ButtonTable_CyclePlayEditScreen29:
 	.long	Nop_Ret_F57418	; F55BAE  [ 0] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BB2  [ 1] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BB6  [ 2] -> Nop_Ret_F57418
@@ -117054,14 +117083,14 @@ SelectorRoutines_F55BAE:
 	.long	Nop_Ret_F57418	; F55BC2  [ 5] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BC6  [ 6] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BCA  [ 7] -> Nop_Ret_F57418
-	.long	Fwd_F57419	; F55BCE  [ 8] -> Fwd_F57419
-	.long	Fwd_F5741D	; F55BD2  [ 9] -> Fwd_F5741D
-	.long	Fwd_F57421	; F55BD6  [10] -> Fwd_F57421
-	.long	Fwd_F57425	; F55BDA  [11] -> Fwd_F57425
+	.long	LcdKeyRow1_CyclePlayEditScreen29	; F55BCE  [ 8] -> LcdKeyRow1_CyclePlayEditScreen29
+	.long	LcdKeyRow2_CyclePlayEditScreen29	; F55BD2  [ 9] -> LcdKeyRow2_CyclePlayEditScreen29
+	.long	LcdKeyRow3_CyclePlayEditScreen29	; F55BD6  [10] -> LcdKeyRow3_CyclePlayEditScreen29
+	.long	LcdKeyRow4_CyclePlayEditScreen29	; F55BDA  [11] -> LcdKeyRow4_CyclePlayEditScreen29
 	.long	Nop_Ret_F57429	; F55BDE  [12] -> Nop_Ret_F57429
 	.long	Nop_Ret_F57429	; F55BE2  [13] -> Nop_Ret_F57429
 	.long	Nop_Ret_F57429	; F55BE6  [14] -> Nop_Ret_F57429
-	.long	Fwd_F5742A	; F55BEA  [15] -> Fwd_F5742A
+	.long	ExitKey_CyclePlayEditScreen29	; F55BEA  [15] -> ExitKey_CyclePlayEditScreen29
 	.long	Nop_Ret_F57432	; F55BEE  [16] -> Nop_Ret_F57432
 	.long	Nop_Ret_F57432	; F55BF2  [17] -> Nop_Ret_F57432
 	.long	Nop_Ret_F57432	; F55BF6  [18] -> Nop_Ret_F57432
@@ -117557,7 +117586,7 @@ sub_F5603C:
 	ret	; F56057  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56058
+; ScreenEnter_RealtimeRecordScreen
 ; Called from: in-module: 0xF55810
 ; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
 ;          (0x2250) (0x34D1) (0x34D9) +5 more
@@ -117569,7 +117598,8 @@ sub_F5603C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56058:
+; ScreenEnter_RealtimeRecordScreen: the +0 ENTER method of screen 0x06 (thunk T_F40DC0).  Its painter names the screen.
+ScreenEnter_RealtimeRecordScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56058  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5605C  cp A,(0x207b)
 	jr	nz, sub_F56058_Skip	; F56060  jr NZ,0xf56073
@@ -117642,7 +117672,7 @@ sub_F56058_Join:
 	ret	; F56128  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56129
+; ScreenLeave_RealtimeRecordScreen
 ; Called from: in-module: 0xF55814
 ; Touches: (0x2078) (0x207A) (0x207B) (0x20A9)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -117650,7 +117680,8 @@ sub_F56058_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56129:
+; ScreenLeave_RealtimeRecordScreen: the +4 LEAVE method of screen 0x06 (thunk T_F40DC4).
+ScreenLeave_RealtimeRecordScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56129  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5612D  cp A,(0x207b)
 	jr	nz, sub_F56129_Skip	; F56131  jr NZ,0xf56135
@@ -118175,7 +118206,7 @@ sub_F56129_Epilogue8:
 	ret	; F56341  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56342
+; LcdKeyRow1_RealtimeRecordScreen
 ; Called from: table 0xF558AE[8]
 ; Touches: (0x2070) (0x3000) (0x34D9) (0x360B) (0x3622) (0x3624) (0x36D6)
 ;          (0x7F32)
@@ -118186,7 +118217,8 @@ sub_F56129_Epilogue8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56342:
+; LcdKeyRow1_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[8] -- the LcdKeyRow1 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow1_RealtimeRecordScreen:
 	bit	7, w	; F56342  bit 0x07,W
 	jr	nz, sub_F56129_Skip20	; F56345  jr NZ,0xf56380
 	m_bit 0, MD16, 0x34d9	; F56347  bit 0,(0x34d9)
@@ -118241,7 +118273,7 @@ sub_F56129_Return2:
 	ret	; F563DC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F563DD
+; LcdKeyRow2_RealtimeRecordScreen
 ; Called from: table 0xF558AE[9]
 ; Touches: (0x2070) (0x3008) (0x300C) (0x34D9) (0x360B) (0x36C6) (0x36CA)
 ;          (0x36CE)
@@ -118253,7 +118285,8 @@ sub_F56129_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F563DD:
+; LcdKeyRow2_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[9] -- the LcdKeyRow2 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_RealtimeRecordScreen:
 	bit	7, w	; F563DD  bit 0x07,W
 	jr	nz, sub_F56129_Skip23	; F563E0  jr NZ,0xf5645c
 	bit	2, (TransportB_State:8)	; F563E2  bit 2,(0x96)
@@ -118308,20 +118341,21 @@ sub_F56129_Return3:
 	ret	; F56473  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56474
+; LcdKeyRow3_RealtimeRecordScreen
 ; Called from: table 0xF558AE[10]
 ; Touches: (0x2070) (0x2250) (0x3757) (0x3758)
-; Calls:   sub_F56492
+; Calls:   RealtimeRecordScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF558AE reads 0x00F56474, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56474 is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56474:
+; LcdKeyRow3_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[10] -- the LcdKeyRow3 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_RealtimeRecordScreen:
 	bit	7, w	; F56474  bit 0x07,W
 	jr	nz, sub_F56129_Skip26	; F56477  jr NZ,0xf5647e
-	calr	sub_F56492	; F56479  calr 0xf56492
+	calr	RealtimeRecordScreen_LcdKeyRow3	; F56479  calr 0xf56492
 	jr	sub_F56129_Return4	; F5647C  jr T,0xf56491
 sub_F56129_Skip26:
 	ld	a, (UI_PartIndex:16)	; F5647E  ld A,(0x2250)
@@ -118332,7 +118366,7 @@ sub_F56129_Return4:
 	ret	; F56491  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56492
+; RealtimeRecordScreen_LcdKeyRow3
 ; Called from: in-module: 0xF56479
 ; Touches: (0x0DE3) (0x1309) (0x2646) (0x3458) (0x34D9) (0x3752)
 ; Calls:   sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal T_F40CCC
@@ -118342,7 +118376,8 @@ sub_F56129_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56492:
+; RealtimeRecordScreen_LcdKeyRow3: the LcdKeyRow3 action of RealtimeRecordScreen -- called only by LcdKeyRow3_RealtimeRecordScreen.
+RealtimeRecordScreen_LcdKeyRow3:
 	bit	2, (TransportB_State:8)	; F56492  bit 2,(0x96)
 	jr	nz, sub_F56492_Return	; F56495  jr NZ,0xf5650f
 	m_bit 2, MD16, 0x34d9	; F56497  bit 2,(0x34d9)
@@ -118407,7 +118442,7 @@ Nop_Ret_F56510:
 	ret	; F56510  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56511
+; ExitKey_RealtimeRecordScreen
 ; Called from: table 0xF558AE[15]
 ; Touches: (0x2070)
 ; Evidence: entry [15] of the table at 0xF558AE reads 0x00F56511, that table
@@ -118416,7 +118451,8 @@ Nop_Ret_F56510:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56511:
+; ExitKey_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[15] -- the ExitKey handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_RealtimeRecordScreen:
 	bit	7, w	; F56511  bit 0x07,W
 	jr	nz, sub_F56492_Return2	; F56514  jr NZ,0xf56523
 	bit	2, (TransportB_State:8)	; F56516  bit 2,(0x96)
@@ -118507,7 +118543,7 @@ sub_F56579_Return:
 	ret	; F5658B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5658C
+; ScreenEnter_MetronomeBalanceScreen
 ; Called from: in-module: 0xF55826
 ; Touches: (0x3753) (0x7F05)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post
@@ -118517,7 +118553,8 @@ sub_F56579_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5658C:
+; ScreenEnter_MetronomeBalanceScreen: the +0 ENTER method of screen 0x0C (thunk T_F40E00).  Its painter names the screen.
+ScreenEnter_MetronomeBalanceScreen:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F5658C  call 0xf42e80
 	ld	a, (32517:16)	; F56590  ld A,(0x7f05)
 	ld	(14163:16), a	; F56594  ld (0x3753),A
@@ -118536,21 +118573,22 @@ sub_F5658C:
 	ret	; F565BC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F565BD
+; LcdKeyRow4_MetronomeBalanceScreen
 ; Called from: table 0xF5592E[11]
 ; Touches: (0x2075)
-; Calls:   sub_F565DF T_CallbackQueue_Post T_Kernel_SemaSignal
+; Calls:   MetronomeBalanceScreen_LcdKeyRow4 T_CallbackQueue_Post T_Kernel_SemaSignal
 ; Evidence: entry [11] of the table at 0xF5592E reads 0x00F565BD, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF565BD is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F565BD:
+; LcdKeyRow4_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[11] -- the LcdKeyRow4 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow4_MetronomeBalanceScreen:
 	bit	7, w	; F565BD  bit 0x07,W
 	jr	nz, sub_F5658C_Return	; F565C0  jr NZ,0xf565de
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F565C2  or (0x2075),0x08
-	calr	sub_F565DF	; F565C7  calr 0xf565df
+	calr	MetronomeBalanceScreen_LcdKeyRow4	; F565C7  calr 0xf565df
 	ld	xwa, sub_F55CC8	; F565CA  ld XWA,0x00f55cc8
 	push	xwa	; F565CF  push XWA
 	call	T_CallbackQueue_Post	; F565D0  call 0xf42e84
@@ -118562,7 +118600,7 @@ sub_F5658C_Return:
 	ret	; F565DE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F565DF
+; MetronomeBalanceScreen_LcdKeyRow4
 ; Called from: in-module: 0xF565C7
 ; Touches: (0x3753) (0x7F05)
 ; Calls:   T_Queue2E00_AppendRegs
@@ -118571,7 +118609,8 @@ sub_F5658C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F565DF:
+; MetronomeBalanceScreen_LcdKeyRow4: the LcdKeyRow4 action of MetronomeBalanceScreen -- called only by LcdKeyRow4_MetronomeBalanceScreen.
+MetronomeBalanceScreen_LcdKeyRow4:
 	ld	a, (32517:16)	; F565DF  ld A,(0x7f05)
 	cp	a, 127	; F565E3  cp A,0x7f
 	jr	nc, sub_F565DF_Return	; F565E6  jr NC,0xf565fc
@@ -118586,21 +118625,22 @@ sub_F565DF_Return:
 	ret	; F565FC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F565FD
+; LcdKeyRow5_MetronomeBalanceScreen
 ; Called from: table 0xF5592E[12]
 ; Touches: (0x2075)
-; Calls:   sub_F5661F T_CallbackQueue_Post T_Kernel_SemaSignal
+; Calls:   MetronomeBalanceScreen_LcdKeyRow5 T_CallbackQueue_Post T_Kernel_SemaSignal
 ; Evidence: entry [12] of the table at 0xF5592E reads 0x00F565FD, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF565FD is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F565FD:
+; LcdKeyRow5_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[12] -- the LcdKeyRow5 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow5_MetronomeBalanceScreen:
 	bit	7, w	; F565FD  bit 0x07,W
 	jr	nz, sub_F565DF_Return2	; F56600  jr NZ,0xf5661e
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F56602  or (0x2075),0x08
-	calr	sub_F5661F	; F56607  calr 0xf5661f
+	calr	MetronomeBalanceScreen_LcdKeyRow5	; F56607  calr 0xf5661f
 	ld	xwa, sub_F55CC8	; F5660A  ld XWA,0x00f55cc8
 	push	xwa	; F5660F  push XWA
 	call	T_CallbackQueue_Post	; F56610  call 0xf42e84
@@ -118612,7 +118652,7 @@ sub_F565DF_Return2:
 	ret	; F5661E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5661F
+; MetronomeBalanceScreen_LcdKeyRow5
 ; Called from: in-module: 0xF56607
 ; Touches: (0x3753) (0x7F05)
 ; Calls:   T_Queue2E00_AppendRegs
@@ -118621,7 +118661,8 @@ sub_F565DF_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5661F:
+; MetronomeBalanceScreen_LcdKeyRow5: the LcdKeyRow5 action of MetronomeBalanceScreen -- called only by LcdKeyRow5_MetronomeBalanceScreen.
+MetronomeBalanceScreen_LcdKeyRow5:
 	ld	a, (32517:16)	; F5661F  ld A,(0x7f05)
 	cp	a, 0:i3	; F56623  cp A,0
 	jr	ule, sub_F5661F_Return	; F56625  jr ULE,0xf5663b
@@ -118636,7 +118677,7 @@ sub_F5661F_Return:
 	ret	; F5663B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5663C
+; ExitKey_MetronomeBalanceScreen
 ; Called from: table 0xF5592E[15]
 ; Touches: (0x209A)
 ; Evidence: entry [15] of the table at 0xF5592E reads 0x00F5663C, that table
@@ -118645,7 +118686,8 @@ sub_F5661F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5663C:
+; ExitKey_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[15] -- the ExitKey handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_MetronomeBalanceScreen:
 	bit	7, w	; F5663C  bit 0x07,W
 	jr	nz, sub_F5661F_Return2	; F5663F  jr NZ,0xf56648
 	ld	(UI_ScreenHoldPending:16), 1	; F56641  ld (0x209a),0x01
@@ -118673,7 +118715,7 @@ Nop_Ret_F56649:
 	ret	; F56649  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5664A
+; ScreenEnter_CycleRecordScreen
 ; Called from: in-module: 0xF5583C
 ; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
 ;          (0x34D1) (0x34D9) (0x3614) +3 more
@@ -118685,7 +118727,8 @@ Nop_Ret_F56649:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5664A:
+; ScreenEnter_CycleRecordScreen: the +0 ENTER method of screen 0x08 (thunk T_F40DD0).  Its painter names the screen.
+ScreenEnter_CycleRecordScreen:
 	ld	a, (UI_ScreenLatch:16)	; F5664A  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5664E  cp A,(0x207b)
 	jr	nz, sub_F5664A_Skip	; F56652  jr NZ,0xf56664
@@ -118768,7 +118811,7 @@ sub_F566E0_Return:
 	ret	; F5670B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5670C
+; ScreenLeave_CycleRecordScreen
 ; Called from: in-module: 0xF55840
 ; Touches: (0x207A) (0x207B) (0x34BB) (0x3628)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -118776,7 +118819,8 @@ sub_F566E0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5670C:
+; ScreenLeave_CycleRecordScreen: the +4 LEAVE method of screen 0x08 (thunk T_F40DD4).
+ScreenLeave_CycleRecordScreen:
 	ld	a, (UI_ScreenLatch:16)	; F5670C  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56710  cp A,(0x207b)
 	jr	nz, sub_F5670C_Skip	; F56714  jr NZ,0xf56718
@@ -118809,7 +118853,7 @@ Nop_Ret_F5672A:
 	ret	; F5672A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5672B
+; LcdKeyRow1_CycleRecordScreen
 ; Called from: table 0xF559AE[8]
 ; Touches: (0x2095) (0x34D9) (0x7F32)
 ; Calls:   T_Blink_Stop T_F40CFC T_F42704
@@ -118819,7 +118863,8 @@ Nop_Ret_F5672A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5672B:
+; LcdKeyRow1_CycleRecordScreen: ButtonTable_CycleRecordScreen[8] -- the LcdKeyRow1 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow1_CycleRecordScreen:
 	bit	7, w	; F5672B  bit 0x07,W
 	jr	nz, sub_F5670C_Return2	; F5672E  jr NZ,0xf56751
 	m_bit 0, MD16, 0x34d9	; F56730  bit 0,(0x34d9)
@@ -118837,7 +118882,7 @@ sub_F5670C_Return2:
 	ret	; F56751  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56752
+; LcdKeyRow2_CycleRecordScreen
 ; Called from: table 0xF559AE[9]
 ; Touches: (0x34D9)
 ; Calls:   DispatchState36CE_F56925 Select36CE_F568AB
@@ -118847,7 +118892,8 @@ sub_F5670C_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56752:
+; LcdKeyRow2_CycleRecordScreen: ButtonTable_CycleRecordScreen[9] -- the LcdKeyRow2 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_CycleRecordScreen:
 	bit	7, w	; F56752  bit 0x07,W
 	jr	nz, sub_F5670C_Skip3	; F56755  jr NZ,0xf56767
 	bit	2, (TransportB_State:8)	; F56757  bit 2,(0x96)
@@ -118862,7 +118908,7 @@ sub_F5670C_Return3:
 	ret	; F5676A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5676B
+; LcdKeyRow3_CycleRecordScreen
 ; Called from: table 0xF559AE[10]
 ; Touches: (0x34D9) (0x36CE)
 ; Calls:   DispatchState36CE_F56A5F T_F40BE0 Select36CE_F568E9
@@ -118872,7 +118918,8 @@ sub_F5670C_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5676B:
+; LcdKeyRow3_CycleRecordScreen: ButtonTable_CycleRecordScreen[10] -- the LcdKeyRow3 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_CycleRecordScreen:
 	bit	7, w	; F5676B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip5	; F5676E  jr NZ,0xf5678d
 	bit	2, (TransportB_State:8)	; F56770  bit 2,(0x96)
@@ -118892,7 +118939,7 @@ sub_F5670C_Return4:
 	ret	; F56790  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56791
+; LcdKeyRow4_CycleRecordScreen
 ; Called from: table 0xF559AE[11]
 ; Touches: nothing with an absolute address
 ; Calls:   Select36CE_F56907
@@ -118902,7 +118949,8 @@ sub_F5670C_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56791:
+; LcdKeyRow4_CycleRecordScreen: ButtonTable_CycleRecordScreen[11] -- the LcdKeyRow4 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow4_CycleRecordScreen:
 	bit	7, w	; F56791  bit 0x07,W
 	jr	nz, sub_F5670C_Skip6	; F56794  jr NZ,0xf56797
 	ret	; F56796  ret
@@ -118911,7 +118959,7 @@ sub_F5670C_Skip6:
 	ret	; F5679A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5679B
+; LcdKeyRow5_CycleRecordScreen
 ; Called from: table 0xF559AE[12]
 ; Touches: (0x2070) (0x2095) (0x34D9) (0x3628)
 ; Calls:   T_Blink_Stop T_F40BFC
@@ -118921,7 +118969,8 @@ sub_F5670C_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5679B:
+; LcdKeyRow5_CycleRecordScreen: ButtonTable_CycleRecordScreen[12] -- the LcdKeyRow5 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow5_CycleRecordScreen:
 	bit	7, w	; F5679B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip7	; F5679E  jr NZ,0xf567af
 	m_cp_mi8 MB16, 0x3628, 0x00	; F567A0  cp (0x3628),0x00
@@ -118959,7 +119008,7 @@ Nop_Ret_F567C8:
 	ret	; F567C8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F567C9
+; ExitKey_CycleRecordScreen
 ; Called from: table 0xF559AE[15]
 ; Touches: (0x2070) (0x3628)
 ; Evidence: entry [15] of the table at 0xF559AE reads 0x00F567C9, that table
@@ -118968,7 +119017,8 @@ Nop_Ret_F567C8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F567C9:
+; ExitKey_CycleRecordScreen: ButtonTable_CycleRecordScreen[15] -- the ExitKey handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_CycleRecordScreen:
 	bit	7, w	; F567C9  bit 0x07,W
 	jr	nz, sub_F5670C_Return6	; F567CC  jr NZ,0xf567dd
 	m_cp_mi8 MB16, 0x3628, 0x00	; F567CE  cp (0x3628),0x00
@@ -119637,7 +119687,7 @@ sub_F56B67_Return:
 	ret	; F56B94  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56B95
+; ScreenEnter_SeqPlayScreen
 ; Called from: in-module: 0xF55856
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x2250) (0x2666)
 ;          (0x266A) (0x360B) (0x3757) +1 more
@@ -119649,7 +119699,8 @@ sub_F56B67_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56B95:
+; ScreenEnter_SeqPlayScreen: the +0 ENTER method of screen 0x12 (thunk T_F40DA0).  Its painter names the screen.
+ScreenEnter_SeqPlayScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56B95  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56B99  cp A,(0x207b)
 	jr	nz, sub_F56B95_Skip	; F56B9D  jr NZ,0xf56baf
@@ -119705,7 +119756,7 @@ sub_F56B95_Skip5:
 	ret	; F56C34  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56C35
+; ScreenLeave_SeqPlayScreen
 ; Called from: in-module: 0xF5585A
 ; Touches: (0x2078) (0x207A) (0x207B) (0x20A9)
 ; Calls:   T_F40D18
@@ -119714,7 +119765,8 @@ sub_F56B95_Skip5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56C35:
+; ScreenLeave_SeqPlayScreen: the +4 LEAVE method of screen 0x12 (thunk T_F40DA4).
+ScreenLeave_SeqPlayScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56C35  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56C39  cp A,(0x207b)
 	jr	nz, sub_F56C35_Skip	; F56C3D  jr NZ,0xf56c41
@@ -119731,7 +119783,7 @@ sub_F56C35_Return:
 	ret	; F56C56  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56C57
+; LcdKeyRow1_SeqPlayScreen
 ; Called from: table 0xF55A2E[8]
 ; Touches: (0x2070) (0x2075) (0x209B) (0x2647) (0x360B) (0x3627) (0x36C6)
 ;          (0x36CA) (0x3731)
@@ -119742,7 +119794,8 @@ sub_F56C35_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56C57:
+; LcdKeyRow1_SeqPlayScreen: ButtonTable_SeqPlayScreen[8] -- the LcdKeyRow1 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow1_SeqPlayScreen:
 	bit	7, w	; F56C57  bit 0x07,W
 	jr	nz, sub_F56C35_Skip4	; F56C5A  jr NZ,0xf56cb0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56C5C  and (0x2075),0xf6
@@ -119786,7 +119839,7 @@ sub_F56C35_Return2:
 	ret	; F56CD5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56CD6
+; LcdKeyRow2_SeqPlayScreen
 ; Called from: table 0xF55A2E[9]
 ; Touches: (0x2070) (0x2075) (0x209B) (0x3008) (0x300C)
 ; Calls:   T_F40D10 T_F42704 T_CallbackQueue_Post T_Kernel_SemaSignal
@@ -119796,7 +119849,8 @@ sub_F56C35_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56CD6:
+; LcdKeyRow2_SeqPlayScreen: ButtonTable_SeqPlayScreen[9] -- the LcdKeyRow2 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_SeqPlayScreen:
 	bit	7, w	; F56CD6  bit 0x07,W
 	jr	nz, sub_F56C35_Skip5	; F56CD9  jr NZ,0xf56cf7
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56CDB  and (0x2075),0xf6
@@ -119822,17 +119876,18 @@ sub_F56C35_Return3:
 	ret	; F56D1C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56D1D
+; LcdKeyRow3_SeqPlayScreen
 ; Called from: table 0xF55A2E[10]
 ; Touches: (0x2070) (0x2250) (0x360B) (0x3757) (0x3758)
-; Calls:   sub_F56D46
+; Calls:   SeqPlayScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF55A2E reads 0x00F56D1D, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56D1D is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56D1D:
+; LcdKeyRow3_SeqPlayScreen: ButtonTable_SeqPlayScreen[10] -- the LcdKeyRow3 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_SeqPlayScreen:
 	bit	7, w	; F56D1D  bit 0x07,W
 	jr	nz, sub_F56C35_Skip7	; F56D20  jr NZ,0xf56d32
 	bit	2, (TransportB_State:8)	; F56D22  bit 2,(0x96)
@@ -119840,7 +119895,7 @@ sub_F56D1D:
 	m_bit 0, MD16, 0x360b	; F56D27  bit 0,(0x360b)
 	jr	nz, sub_F56C35_Return4	; F56D2B  jr NZ,0xf56d45
 sub_F56C35_Skip6:
-	calr	sub_F56D46	; F56D2D  calr 0xf56d46
+	calr	SeqPlayScreen_LcdKeyRow3	; F56D2D  calr 0xf56d46
 	jr	sub_F56C35_Return4	; F56D30  jr T,0xf56d45
 sub_F56C35_Skip7:
 	ld	a, (UI_PartIndex:16)	; F56D32  ld A,(0x2250)
@@ -119851,7 +119906,7 @@ sub_F56C35_Return4:
 	ret	; F56D45  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56D46
+; SeqPlayScreen_LcdKeyRow3
 ; Called from: in-module: 0xF56D2D
 ; Touches: (0x360B) (0x3752)
 ; Calls:   sub_F56D7E sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal
@@ -119861,7 +119916,8 @@ sub_F56C35_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56D46:
+; SeqPlayScreen_LcdKeyRow3: the LcdKeyRow3 action of SeqPlayScreen -- called only by LcdKeyRow3_SeqPlayScreen.
+SeqPlayScreen_LcdKeyRow3:
 	m_cp_mi8 MB16, 0x3752, 0x01	; F56D46  cp (0x3752),0x01
 	jr	z, sub_F56D46_Skip	; F56D4B  jr Z,0xf56d52
 	calr	sub_F56D7E	; F56D4D  calr 0xf56d7e
@@ -119958,7 +120014,7 @@ Nop_Ret_F56DD8:
 	ret	; F56DD8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56DD9
+; ExitKey_SeqPlayScreen
 ; Called from: table 0xF55A2E[15]
 ; Touches: (0x2070)
 ; Calls:   T_F40D18
@@ -119968,7 +120024,8 @@ Nop_Ret_F56DD8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56DD9:
+; ExitKey_SeqPlayScreen: ButtonTable_SeqPlayScreen[15] -- the ExitKey handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_SeqPlayScreen:
 	bit	7, w	; F56DD9  bit 0x07,W
 	jr	nz, sub_F56DA8_Return2	; F56DDC  jr NZ,0xf56def
 	bit	2, (TransportB_State:8)	; F56DDE  bit 2,(0x96)
@@ -119999,7 +120056,7 @@ Nop_Ret_F56DF0:
 	ret	; F56DF0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56DF1
+; ScreenEnter_CyclePlayScreen
 ; Called from: in-module: 0xF5586C
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x361E) (0x3620)
 ;          (0x3627)
@@ -120010,7 +120067,8 @@ Nop_Ret_F56DF0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56DF1:
+; ScreenEnter_CyclePlayScreen: the +0 ENTER method of screen 0x14 (thunk T_F40DB0).  Its painter names the screen.
+ScreenEnter_CyclePlayScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56DF1  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56DF5  cp A,(0x207b)
 	jr	nz, sub_F56DF1_Skip	; F56DF9  jr NZ,0xf56e0b
@@ -120086,7 +120144,7 @@ sub_F56E66_Return:
 	ret	; F56E98  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56E99
+; ScreenLeave_CyclePlayScreen
 ; Called from: in-module: 0xF55870
 ; Touches: (0x207A) (0x207B) (0x34BB) (0x3628)
 ; Evidence: reached by a branch decoded in this transcription (the sites are
@@ -120094,7 +120152,8 @@ sub_F56E66_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56E99:
+; ScreenLeave_CyclePlayScreen: the +4 LEAVE method of screen 0x14 (thunk T_F40DB4).
+ScreenLeave_CyclePlayScreen:
 	ld	a, (UI_ScreenLatch:16)	; F56E99  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F56E9D  cp A,(0x207b)
 	jr	nz, sub_F56E99_Skip	; F56EA1  jr NZ,0xf56ea5
@@ -120127,68 +120186,71 @@ Nop_Ret_F56EB7:
 	ret	; F56EB7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56EB8
+; LcdKeyRow2_CyclePlayScreen
 ; Called from: table 0xF55AAE[9]
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F57050 sub_F56FD6
+; Calls:   DispatchState3627_F57050 CyclePlayScreen_LcdKeyRow2
 ; Evidence: entry [9] of the table at 0xF55AAE reads 0x00F56EB8, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF56EB8
 ;           is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56EB8:
+; LcdKeyRow2_CyclePlayScreen: ButtonTable_CyclePlayScreen[9] -- the LcdKeyRow2 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_CyclePlayScreen:
 	bit	7, w	; F56EB8  bit 0x07,W
 	jr	nz, sub_F56E99_Skip2	; F56EBB  jr NZ,0xf56ec2
 	calr	DispatchState3627_F57050	; F56EBD  calr 0xf57050
 	jr	sub_F56E99_Return2	; F56EC0  jr T,0xf56ec5
 sub_F56E99_Skip2:
-	calr	sub_F56FD6	; F56EC2  calr 0xf56fd6
+	calr	CyclePlayScreen_LcdKeyRow2	; F56EC2  calr 0xf56fd6
 sub_F56E99_Return2:
 	ret	; F56EC5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56EC6
+; LcdKeyRow3_CyclePlayScreen
 ; Called from: table 0xF55AAE[10]
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F5718C sub_F57014
+; Calls:   DispatchState3627_F5718C CyclePlayScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF55AAE reads 0x00F56EC6, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56EC6 is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56EC6:
+; LcdKeyRow3_CyclePlayScreen: ButtonTable_CyclePlayScreen[10] -- the LcdKeyRow3 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_CyclePlayScreen:
 	bit	7, w	; F56EC6  bit 0x07,W
 	jr	nz, sub_F56E99_Skip3	; F56EC9  jr NZ,0xf56ed0
 	calr	DispatchState3627_F5718C	; F56ECB  calr 0xf5718c
 	jr	sub_F56E99_Return3	; F56ECE  jr T,0xf56ed3
 sub_F56E99_Skip3:
-	calr	sub_F57014	; F56ED0  calr 0xf57014
+	calr	CyclePlayScreen_LcdKeyRow3	; F56ED0  calr 0xf57014
 sub_F56E99_Return3:
 	ret	; F56ED3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56ED4
+; LcdKeyRow4_CyclePlayScreen
 ; Called from: table 0xF55AAE[11]; in-module: 0xF57366
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57032
+; Calls:   CyclePlayScreen_LcdKeyRow4
 ; Evidence: entry [11] of the table at 0xF55AAE reads 0x00F56ED4, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF56ED4 is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56ED4:
+; LcdKeyRow4_CyclePlayScreen: ButtonTable_CyclePlayScreen[11] -- the LcdKeyRow4 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow4_CyclePlayScreen:
 	bit	7, w	; F56ED4  bit 0x07,W
 	jr	nz, sub_F56ED4_Skip	; F56ED7  jr NZ,0xf56eda
 	ret	; F56ED9  ret
 sub_F56ED4_Skip:
-	calr	sub_F57032	; F56EDA  calr 0xf57032
+	calr	CyclePlayScreen_LcdKeyRow4	; F56EDA  calr 0xf57032
 	ret	; F56EDD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56EDE
+; LcdKeyRow5_CyclePlayScreen
 ; Called from: table 0xF55AAE[12]
 ; Touches: (0x2070) (0x3628)
 ; Evidence: entry [12] of the table at 0xF55AAE reads 0x00F56EDE, that table
@@ -120197,7 +120259,8 @@ sub_F56ED4_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56EDE:
+; LcdKeyRow5_CyclePlayScreen: ButtonTable_CyclePlayScreen[12] -- the LcdKeyRow5 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow5_CyclePlayScreen:
 	bit	7, w	; F56EDE  bit 0x07,W
 	jr	nz, sub_F56ED4_Return	; F56EE1  jr NZ,0xf56ef2
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56EE3  cp (0x3628),0x00
@@ -120226,7 +120289,7 @@ Nop_Ret_F56EF3:
 	ret	; F56EF3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56EF4
+; ExitKey_CyclePlayScreen
 ; Called from: table 0xF55AAE[15]
 ; Touches: (0x2070) (0x3628)
 ; Evidence: entry [15] of the table at 0xF55AAE reads 0x00F56EF4, that table
@@ -120235,7 +120298,8 @@ Nop_Ret_F56EF3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56EF4:
+; ExitKey_CyclePlayScreen: ButtonTable_CyclePlayScreen[15] -- the ExitKey handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_CyclePlayScreen:
 	bit	7, w	; F56EF4  bit 0x07,W
 	jr	nz, sub_F56ED4_Return2	; F56EF7  jr NZ,0xf56f08
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56EF9  cp (0x3628),0x00
@@ -120379,7 +120443,7 @@ Nop_Ret_F56FD5:
 	ret	; F56FD5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56FD6
+; CyclePlayScreen_LcdKeyRow2
 ; Called from: in-module: 0xF56EC2
 ; Touches: (0x12F6) (0x2095) (0x2540) (0x3627) (0x3628) (0x3756)  |  0xF3501F
 ;          0xF3502A
@@ -120389,7 +120453,8 @@ Nop_Ret_F56FD5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56FD6:
+; CyclePlayScreen_LcdKeyRow2: the LcdKeyRow2 action of CyclePlayScreen -- called only by LcdKeyRow2_CyclePlayScreen.
+CyclePlayScreen_LcdKeyRow2:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56FD6  cp (0x3628),0x00
 	jr	nz, sub_F56FD6_Return	; F56FDB  jr NZ,0xf56ff3
 	ld	a, (13863:16)	; F56FDD  ld A,(0x3627)
@@ -120409,7 +120474,7 @@ sub_F56FD6_Return:
 	ret	; F57013  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57014
+; CyclePlayScreen_LcdKeyRow3
 ; Called from: in-module: 0xF56ED0 0xF57362
 ; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
 ; Calls:   T_Blink_Stop
@@ -120418,7 +120483,8 @@ sub_F56FD6_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57014:
+; CyclePlayScreen_LcdKeyRow3: the LcdKeyRow3 action of CyclePlayEditScreen, CyclePlayScreen -- called only by LcdKeyRow3_CyclePlayEditScreen, LcdKeyRow3_CyclePlayScreen.
+CyclePlayScreen_LcdKeyRow3:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57014  cp (0x3628),0x00
 	jr	nz, sub_F57014_Return	; F57019  jr NZ,0xf57031
 	ld	a, (13863:16)	; F5701B  ld A,(0x3627)
@@ -120430,7 +120496,7 @@ sub_F57014_Return:
 	ret	; F57031  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57032
+; CyclePlayScreen_LcdKeyRow4
 ; Called from: in-module: 0xF56EDA
 ; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
 ; Calls:   T_Blink_Stop
@@ -120439,7 +120505,8 @@ sub_F57014_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57032:
+; CyclePlayScreen_LcdKeyRow4: the LcdKeyRow4 action of CyclePlayScreen -- called only by LcdKeyRow4_CyclePlayScreen.
+CyclePlayScreen_LcdKeyRow4:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57032  cp (0x3628),0x00
 	jr	nz, sub_F57032_Return	; F57037  jr NZ,0xf5704f
 	ld	a, (13863:16)	; F57039  ld A,(0x3627)
@@ -120847,7 +120914,7 @@ sub_F5723B_Return:
 	ret	; F57285  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57286
+; ScreenEnter_CyclePlayEditScreen
 ; Called from: in-module: 0xF55882 0xF57410
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x360C) (0x361E)
 ;          (0x3620) (0x3626) (0x3627)
@@ -120858,7 +120925,8 @@ sub_F5723B_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57286:
+; ScreenEnter_CyclePlayEditScreen: the +0 ENTER method of screen 0x26 (thunk T_F40DE0).  Its painter names the screen.
+ScreenEnter_CyclePlayEditScreen:
 	ld	a, (UI_ScreenLatch:16)	; F57286  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F5728A  cp A,(0x207b)
 	jr	nz, sub_F57286_Skip	; F5728E  jr NZ,0xf572a0
@@ -120909,7 +120977,7 @@ sub_F57286_Skip6:
 	ret	; F57310  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57311
+; ScreenLeave_CyclePlayEditScreen
 ; Called from: in-module: 0xF55886 0xF57414
 ; Touches: (0x207A) (0x207B) (0x3628)
 ; Calls:   sub_F56579 T_F413C8 T_F41F18 T_F411B8
@@ -120918,7 +120986,8 @@ sub_F57286_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57311:
+; ScreenLeave_CyclePlayEditScreen: the +4 LEAVE method of screen 0x26 (thunk T_F40DE4).
+ScreenLeave_CyclePlayEditScreen:
 	ld	a, (UI_ScreenLatch:16)	; F57311  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F57315  cp A,(0x207b)
 	jr	nz, sub_F57311_Skip	; F57319  jr NZ,0xf5731d
@@ -120955,7 +121024,7 @@ Nop_Ret_F57337:
 	ret	; F57337  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57338
+; LcdKeyRow1_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[8]; in-module: 0xF57419
 ; Touches: (0x3628)
 ; Calls:   sub_F57382
@@ -120965,7 +121034,8 @@ Nop_Ret_F57337:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57338:
+; LcdKeyRow1_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow1_CyclePlayEditScreen:
 	bit	7, w	; F57338  bit 0x07,W
 	jr	nz, sub_F57338_Return	; F5733B  jr NZ,0xf57349
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5733D  cp (0x3628),0x00
@@ -120976,52 +121046,54 @@ sub_F57338_Return:
 	ret	; F57349  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5734A
+; LcdKeyRow2_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[9]; in-module: 0xF5741D
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F57050 sub_F5739C
+; Calls:   DispatchState3627_F57050 CyclePlayEditScreen_LcdKeyRow2
 ; Evidence: entry [9] of the table at 0xF55B2E reads 0x00F5734A, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5734A
 ;           is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5734A:
+; LcdKeyRow2_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_CyclePlayEditScreen:
 	bit	7, w	; F5734A  bit 0x07,W
 	jr	nz, sub_F5734A_Skip	; F5734D  jr NZ,0xf57354
 	calr	DispatchState3627_F57050	; F5734F  calr 0xf57050
 	jr	sub_F5734A_Return	; F57352  jr T,0xf57357
 sub_F5734A_Skip:
-	calr	sub_F5739C	; F57354  calr 0xf5739c
+	calr	CyclePlayEditScreen_LcdKeyRow2	; F57354  calr 0xf5739c
 sub_F5734A_Return:
 	ret	; F57357  ret
 
 ; --------------------------------------------------------------------------
-; sub_F57358
+; LcdKeyRow3_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[10]; in-module: 0xF57421
 ; Touches: nothing with an absolute address
-; Calls:   DispatchState3627_F5718C sub_F57014
+; Calls:   DispatchState3627_F5718C CyclePlayScreen_LcdKeyRow3
 ; Evidence: entry [10] of the table at 0xF55B2E reads 0x00F57358, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF57358 is an instruction boundary of this transcription.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F57358:
+; LcdKeyRow3_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_CyclePlayEditScreen:
 	bit	7, w	; F57358  bit 0x07,W
 	jr	nz, sub_F57358_Skip	; F5735B  jr NZ,0xf57362
 	calr	DispatchState3627_F5718C	; F5735D  calr 0xf5718c
 	jr	sub_F57358_Return	; F57360  jr T,0xf57365
 sub_F57358_Skip:
-	calr	sub_F57014	; F57362  calr 0xf57014
+	calr	CyclePlayScreen_LcdKeyRow3	; F57362  calr 0xf57014
 sub_F57358_Return:
 	ret	; F57365  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F57366
+; LcdKeyRow4_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[11]; in-module: 0xF57425
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56ED4
+; Calls:   LcdKeyRow4_CyclePlayScreen
 ; Evidence: entry [11] of the table at 0xF55B2E reads 0x00F57366, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF57366 is an instruction boundary of this transcription.
@@ -121032,8 +121104,9 @@ sub_F57358_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F57366:
-	calr	sub_F56ED4	; F57366  calr 0xf56ed4
+; LcdKeyRow4_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow4_CyclePlayEditScreen:
+	calr	LcdKeyRow4_CyclePlayScreen	; F57366  calr 0xf56ed4
 	ret	; F57369  ret
 
 ; --------------------------------------------------------------------------
@@ -121055,7 +121128,7 @@ Nop_Ret_F5736A:
 	ret	; F5736A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5736B
+; ExitKey_CyclePlayEditScreen
 ; Called from: table 0xF55B2E[15]; in-module: 0xF5742A
 ; Touches: (0x3628)
 ; Calls:   sub_F57382
@@ -121065,7 +121138,8 @@ Nop_Ret_F5736A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5736B:
+; ExitKey_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[15] -- the ExitKey handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_CyclePlayEditScreen:
 	bit	7, w	; F5736B  bit 0x07,W
 	jr	nz, sub_F5736B_Return	; F5736E  jr NZ,0xf5737c
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57370  cp (0x3628),0x00
@@ -121135,7 +121209,7 @@ sub_F57382_Return:
 	ret	; F5739B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5739C
+; CyclePlayEditScreen_LcdKeyRow2
 ; Called from: in-module: 0xF57354
 ; Touches: (0x2095) (0x3627) (0x3628) (0x3756)
 ; Calls:   T_Blink_Stop
@@ -121144,7 +121218,8 @@ sub_F57382_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5739C:
+; CyclePlayEditScreen_LcdKeyRow2: the LcdKeyRow2 action of CyclePlayEditScreen -- called only by LcdKeyRow2_CyclePlayEditScreen.
+CyclePlayEditScreen_LcdKeyRow2:
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5739C  cp (0x3628),0x00
 	jr	nz, sub_F5739C_Return	; F573A1  jr NZ,0xf573b9
 	ld	a, (13863:16)	; F573A3  ld A,(0x3627)
@@ -121224,7 +121299,7 @@ sub_F573D8_Return:
 ; Fwd_F57410
 ; Called from: in-module: 0xF55898
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57286
+; Calls:   ScreenEnter_CyclePlayEditScreen
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57410 is an instruction boundary.
 ; Shape:   `calr`/`call 0xF57286` then `ret` -- a one-instruction forwarder,
@@ -121235,14 +121310,14 @@ sub_F573D8_Return:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 Fwd_F57410:
-	calr	sub_F57286	; F57410  calr 0xf57286
+	calr	ScreenEnter_CyclePlayEditScreen	; F57410  calr 0xf57286
 	ret	; F57413  ret
 
 ; --------------------------------------------------------------------------
 ; Fwd_F57414
 ; Called from: in-module: 0xF5589C
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57311
+; Calls:   ScreenLeave_CyclePlayEditScreen
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57414 is an instruction boundary.
 ; Shape:   `calr`/`call 0xF57311` then `ret` -- a one-instruction forwarder,
@@ -121253,7 +121328,7 @@ Fwd_F57410:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 Fwd_F57414:
-	calr	sub_F57311	; F57414  calr 0xf57311
+	calr	ScreenLeave_CyclePlayEditScreen	; F57414  calr 0xf57311
 	ret	; F57417  ret
 
 ; --------------------------------------------------------------------------
@@ -121276,10 +121351,10 @@ Nop_Ret_F57418:
 	ret	; F57418  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F57419
+; LcdKeyRow1_CyclePlayEditScreen29
 ; Called from: table 0xF55BAE[8]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57338
+; Calls:   LcdKeyRow1_CyclePlayEditScreen
 ; Evidence: entry [8] of the table at 0xF55BAE reads 0x00F57419, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF57419
 ;           is an instruction boundary of this transcription.
@@ -121290,15 +121365,16 @@ Nop_Ret_F57418:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F57419:
-	calr	sub_F57338	; F57419  calr 0xf57338
+; LcdKeyRow1_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow1_CyclePlayEditScreen29:
+	calr	LcdKeyRow1_CyclePlayEditScreen	; F57419  calr 0xf57338
 	ret	; F5741C  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5741D
+; LcdKeyRow2_CyclePlayEditScreen29
 ; Called from: table 0xF55BAE[9]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5734A
+; Calls:   LcdKeyRow2_CyclePlayEditScreen
 ; Evidence: entry [9] of the table at 0xF55BAE reads 0x00F5741D, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF5741D
 ;           is an instruction boundary of this transcription.
@@ -121309,15 +121385,16 @@ Fwd_F57419:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5741D:
-	calr	sub_F5734A	; F5741D  calr 0xf5734a
+; LcdKeyRow2_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow2_CyclePlayEditScreen29:
+	calr	LcdKeyRow2_CyclePlayEditScreen	; F5741D  calr 0xf5734a
 	ret	; F57420  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F57421
+; LcdKeyRow3_CyclePlayEditScreen29
 ; Called from: table 0xF55BAE[10]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F57358
+; Calls:   LcdKeyRow3_CyclePlayEditScreen
 ; Evidence: entry [10] of the table at 0xF55BAE reads 0x00F57421, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF57421 is an instruction boundary of this transcription.
@@ -121328,15 +121405,16 @@ Fwd_F5741D:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F57421:
-	calr	sub_F57358	; F57421  calr 0xf57358
+; LcdKeyRow3_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow3_CyclePlayEditScreen29:
+	calr	LcdKeyRow3_CyclePlayEditScreen	; F57421  calr 0xf57358
 	ret	; F57424  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F57425
+; LcdKeyRow4_CyclePlayEditScreen29
 ; Called from: table 0xF55BAE[11]
 ; Touches: nothing with an absolute address
-; Calls:   Fwd_F57366
+; Calls:   LcdKeyRow4_CyclePlayEditScreen
 ; Evidence: entry [11] of the table at 0xF55BAE reads 0x00F57425, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF57425 is an instruction boundary of this transcription.
@@ -121347,8 +121425,9 @@ Fwd_F57421:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F57425:
-	calr	Fwd_F57366	; F57425  calr 0xf57366
+; LcdKeyRow4_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+LcdKeyRow4_CyclePlayEditScreen29:
+	calr	LcdKeyRow4_CyclePlayEditScreen	; F57425  calr 0xf57366
 	ret	; F57428  ret
 
 ; --------------------------------------------------------------------------
@@ -121370,10 +121449,10 @@ Nop_Ret_F57429:
 	ret	; F57429  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5742A
+; ExitKey_CyclePlayEditScreen29
 ; Called from: table 0xF55BAE[15]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5736B
+; Calls:   ExitKey_CyclePlayEditScreen
 ; Evidence: entry [15] of the table at 0xF55BAE reads 0x00F5742A, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5742A is an instruction boundary of this transcription.
@@ -121384,8 +121463,9 @@ Nop_Ret_F57429:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5742A:
-	calr	sub_F5736B	; F5742A  calr 0xf5736b
+; ExitKey_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[15] -- the ExitKey handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+ExitKey_CyclePlayEditScreen29:
+	calr	ExitKey_CyclePlayEditScreen	; F5742A  calr 0xf5736b
 	ret	; F5742D  ret
 
 ; --------------------------------------------------------------------------
