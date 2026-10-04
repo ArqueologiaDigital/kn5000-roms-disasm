@@ -572,6 +572,9 @@ GROUPS = [
                    "SongName_Draw6Chars / _StoreCharAtCursor / _ResetToUnderscores; Medley_LoadInternalSong copies it"),
     }),
     ("wsa1/notes/FINDINGS-prom_a-note-frames.md", "2. The frame", {
+        0x3820: ("NoteList_FreeCount", "3 bytes: each source's remaining notes, 16 at start (0 Ring601850, 1 MIDI IN, 2 timed events)", "NoteList_ApplyFrame; Ram3800_Img_QueueBudget"),
+        0x3823: ("NoteList_Heads", "three self-linked 13-byte heads, one per source; the free nodes are the 33-node ring at 0x384A", "NoteList_ApplyFrame / _MoveNode; Ram3800_Img_QueueHeads"),
+        0x602054: ("Part_VoiceMasks", "a 32-bit voice mask per part", "NoteList_ApplyFrame; NoteFrame_SelectForPart; Ram3800_InitAll"),
         0x603422: ("BStore_TrackToPart", "workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none",
                    "TimedEvents_ProcessRing maps a frame's channel through it; EditPartSelect_DrawPartLabels draws it"),
     }),

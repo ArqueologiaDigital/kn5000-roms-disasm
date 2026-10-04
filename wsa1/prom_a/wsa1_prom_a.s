@@ -120463,7 +120463,7 @@ Ram3800_InitAll:
 	and XBC,XBC                                          ; FC8053  e9 c1
 	jr z, .LFC8063                                       ; FC8055  66 0c
 	lda xiy, (Ram602054_DataImage:24)                    ; FC8057  f2 39 bf fc 35
-	lda xix, (0x602054:24)                               ; FC805C  f2 54 20 60 34
+	lda xix, (Part_VoiceMasks:24)                               ; FC805C  f2 54 20 60 34
 	ldir85                                               ; FC8061  85 11
 .LFC8063:
 	ld XBC,0x00000054                                    ; FC8063  41 54 00 00 00
@@ -120552,7 +120552,7 @@ T_F413F4_Nop:
 Ram3800_Start_Nop:
 	ret                                                  ; FC80E1  0e
 ; MidiInA_ProcessRing: T_MidiInA_ProcessRing: T_MidiInARing_ScanRewind, then MidiInA_GatherFrame in a loop; a 0x90 frame through the note stages
-;   (sub_FCB269, sub_FC9C1D, sub_FC9EA3 ...), a 0xB0 frame through the control-change path.
+;   (MidiFrame_ToNoteFrame, NoteList_ApplyFrame, NoteFrame_SelectForPart ...), a 0xB0 frame through the control-change path.
 MidiInA_ProcessRing:
 	link XIZ,0xfd2c                                      ; FC80E2  ee 0c 2c fd
 	pushw hl                                             ; FC80E6  2b
@@ -120597,12 +120597,12 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC814E  39
 	lda xwa, (xiz-302)                                   ; FC814F  f3 f9 d2 fe 30
 	push XWA                                             ; FC8154  38
-	call sub_FCB269                                      ; FC8155  1d 69 b2 fc
+	call MidiFrame_ToNoteFrame                                      ; FC8155  1d 69 b2 fc
 	lda xbc, (0x602200:24)                               ; FC8159  f2 00 22 60 31
 	push XBC                                             ; FC815E  39
 	lda xwa, (xiz-416)                                   ; FC815F  f3 f9 60 fe 30
 	push XWA                                             ; FC8164  38
-	call sub_FC9C1D                                      ; FC8165  1d 1d 9c fc
+	call NoteList_ApplyFrame                                      ; FC8165  1d 1d 9c fc
 	ld XIX,XIY                                           ; FC8169  ed 8c
 	ld d, 0x00:opc                                          ; FC816B  24 00
 	inc 8,XSP                                            ; FC816D  ef 60
@@ -120621,7 +120621,7 @@ MidiInA_ProcessRing:
 	push XWA                                             ; FC8190  38
 	lda xiy, (xiz-712)                                   ; FC8191  f3 f9 38 fd 35
 	push XIY                                             ; FC8196  3d
-	call sub_FC9EA3                                      ; FC8197  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC8197  1d a3 9e fc
 	inc 8,XSP                                            ; FC819B  ef 60
 	inc 6,XSP                                            ; FC819D  ef 66
 	cp a, 0x00:i3                                          ; FC819F  c9 d8
@@ -120751,7 +120751,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC82E9  39
 	lda xwa, (xiz-302)                                   ; FC82EA  f3 f9 d2 fe 30
 	push XWA                                             ; FC82EF  38
-	call sub_FCB269                                      ; FC82F0  1d 69 b2 fc
+	call MidiFrame_ToNoteFrame                                      ; FC82F0  1d 69 b2 fc
 	lda xbc, (xiz-416)                                   ; FC82F4  f3 f9 60 fe 31
 	push XBC                                             ; FC82F9  39
 	call sub_FC9E46                                      ; FC82FA  1d 46 9e fc
@@ -120775,7 +120775,7 @@ MidiInA_ProcessRing:
 	push XWA                                             ; FC8329  38
 	lda xiy, (xiz-712)                                   ; FC832A  f3 f9 38 fd 35
 	push XIY                                             ; FC832F  3d
-	call sub_FC9EA3                                      ; FC8330  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC8330  1d a3 9e fc
 	inc 8,XSP                                            ; FC8334  ef 60
 	inc 6,XSP                                            ; FC8336  ef 66
 	cp a, 0x00:i3                                          ; FC8338  c9 d8
@@ -120930,12 +120930,12 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC84B4  39
 	lda xwa, (xiz-302)                                   ; FC84B5  f3 f9 d2 fe 30
 	push XWA                                             ; FC84BA  38
-	call sub_FCB269                                      ; FC84BB  1d 69 b2 fc
+	call MidiFrame_ToNoteFrame                                      ; FC84BB  1d 69 b2 fc
 	lda xbc, (0x602200:24)                               ; FC84BF  f2 00 22 60 31
 	push XBC                                             ; FC84C4  39
 	lda xwa, (xiz-416)                                   ; FC84C5  f3 f9 60 fe 30
 	push XWA                                             ; FC84CA  38
-	call sub_FC9C1D                                      ; FC84CB  1d 1d 9c fc
+	call NoteList_ApplyFrame                                      ; FC84CB  1d 1d 9c fc
 	ld XIX,XIY                                           ; FC84CF  ed 8c
 	ld d, 0x00:opc                                          ; FC84D1  24 00
 	inc 8,XSP                                            ; FC84D3  ef 60
@@ -120954,7 +120954,7 @@ MidiInB_ProcessRing:
 	push XWA                                             ; FC84F6  38
 	lda xiy, (xiz-712)                                   ; FC84F7  f3 f9 38 fd 35
 	push XIY                                             ; FC84FC  3d
-	call sub_FC9EA3                                      ; FC84FD  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC84FD  1d a3 9e fc
 	inc 8,XSP                                            ; FC8501  ef 60
 	inc 6,XSP                                            ; FC8503  ef 66
 	cp a, 0x00:i3                                          ; FC8505  c9 d8
@@ -121084,7 +121084,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC864F  39
 	lda xwa, (xiz-302)                                   ; FC8650  f3 f9 d2 fe 30
 	push XWA                                             ; FC8655  38
-	call sub_FCB269                                      ; FC8656  1d 69 b2 fc
+	call MidiFrame_ToNoteFrame                                      ; FC8656  1d 69 b2 fc
 	lda xbc, (xiz-416)                                   ; FC865A  f3 f9 60 fe 31
 	push XBC                                             ; FC865F  39
 	call sub_FC9E46                                      ; FC8660  1d 46 9e fc
@@ -121108,7 +121108,7 @@ MidiInB_ProcessRing:
 	push XWA                                             ; FC868F  38
 	lda xiy, (xiz-712)                                   ; FC8690  f3 f9 38 fd 35
 	push XIY                                             ; FC8695  3d
-	call sub_FC9EA3                                      ; FC8696  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC8696  1d a3 9e fc
 	inc 8,XSP                                            ; FC869A  ef 60
 	inc 6,XSP                                            ; FC869C  ef 66
 	cp a, 0x00:i3                                          ; FC869E  c9 d8
@@ -121218,7 +121218,7 @@ MidiInB_ProcessRing:
 	popw hl                                              ; FC87AA  4b
 	unlk XIZ                                             ; FC87AB  ee 0d
 	ret                                                  ; FC87AD  0e
-; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through sub_FC9C1D, sub_FC9EA3, sub_FCAE76,
+; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,
 ;   sub_FC9F8B, sub_FCA6BB.
 Ring601850_ProcessNoteEvents:
 	link XIZ,0xfe3a                                      ; FC87AE  ee 0c 3a fe
@@ -121239,7 +121239,7 @@ Ring601850_ProcessNoteEvents:
 	push XBC                                             ; FC87D1  39
 	lda xwa, (xiz-126)                                   ; FC87D2  be 82 30
 	push XWA                                             ; FC87D5  38
-	call sub_FC9C1D                                      ; FC87D6  1d 1d 9c fc
+	call NoteList_ApplyFrame                                      ; FC87D6  1d 1d 9c fc
 	ld XIX,XIY                                           ; FC87DA  ed 8c
 	ld c, (xiz-126)                                      ; FC87DC  8e 82 23
 	inc 8,XSP                                            ; FC87DF  ef 60
@@ -121260,7 +121260,7 @@ Ring601850_ProcessNoteEvents:
 	push XWA                                             ; FC8804  38
 	lda xiy, (xiz-422)                                   ; FC8805  f3 f9 5a fe 35
 	push XIY                                             ; FC880A  3d
-	call sub_FC9EA3                                      ; FC880B  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC880B  1d a3 9e fc
 	inc 8,XSP                                            ; FC880F  ef 60
 	inc 6,XSP                                            ; FC8811  ef 66
 	cp a, 0x00:i3                                          ; FC8813  c9 d8
@@ -121594,7 +121594,7 @@ sub_FC8B36:
 	push XBC                                             ; FC8B58  39
 	lda xwa, (xiz-120)                                   ; FC8B59  be 88 30
 	push XWA                                             ; FC8B5C  38
-	call sub_FC9C1D                                      ; FC8B5D  1d 1d 9c fc
+	call NoteList_ApplyFrame                                      ; FC8B5D  1d 1d 9c fc
 	ld XIX,XIY                                           ; FC8B61  ed 8c
 	ld c, (xiz-120)                                      ; FC8B63  8e 88 23
 	inc 8,XSP                                            ; FC8B66  ef 60
@@ -121615,7 +121615,7 @@ sub_FC8B36:
 	push XWA                                             ; FC8B8F  38
 	lda xiy, (xiz-416)                                   ; FC8B90  f3 f9 60 fe 35
 	push XIY                                             ; FC8B95  3d
-	call sub_FC9EA3                                      ; FC8B96  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC8B96  1d a3 9e fc
 	inc 8,XSP                                            ; FC8B9A  ef 60
 	inc 6,XSP                                            ; FC8B9C  ef 66
 	cp a, 0x00:i3                                          ; FC8B9E  c9 d8
@@ -122038,7 +122038,7 @@ sub_FC8D45_Nop:
 	ld c, 0x04:opc                                          ; FC8F51  23 04
 	mul bc, h                                          ; FC8F53  ce 43
 	extz XBC                                             ; FC8F55  e9 12
-	add XBC,0x00602054                                   ; FC8F57  e9 c8 54 20 60 00
+	add XBC,Part_VoiceMasks                                   ; FC8F57  e9 c8 54 20 60 00
 	ld XBC,(XBC)                                         ; FC8F5D  a1 21
 	m_or_rm MLD+r6, 0xfc, r1                             ; FC8F5F  ae fc e1
 	ld XIY,XBC                                           ; FC8F62  e9 8d
@@ -122056,7 +122056,7 @@ sub_FC8D45_Nop:
 	ld A,(XBC+0x01)                                      ; FC8F74  89 01 21
 	mul A,0x0d                                           ; FC8F77  c9 08 0d
 	ld HL,WA                                             ; FC8F7A  d8 8b
-	ldw de, 0x3823                                       ; FC8F7C  32 23 38
+	ldw de, NoteList_Heads                                       ; FC8F7C  32 23 38
 	add DE,WA                                            ; FC8F7F  d8 82
 	ld XIX,XBC                                           ; FC8F81  e9 8c
 	inc 2,XBC                                            ; FC8F83  e9 62
@@ -123140,7 +123140,7 @@ sub_FC9933:
 	push XWA                                             ; FC9977  38
 	lda xiy, (xiz-410)                                   ; FC9978  f3 f9 66 fe 35
 	push XIY                                             ; FC997D  3d
-	call sub_FC9EA3                                      ; FC997E  1d a3 9e fc
+	call NoteFrame_SelectForPart                                      ; FC997E  1d a3 9e fc
 	inc 8,XSP                                            ; FC9982  ef 60
 	inc 6,XSP                                            ; FC9984  ef 66
 	cp a, 0x00:i3                                          ; FC9986  c9 d8
@@ -123383,7 +123383,12 @@ sub_FC9AA1:
 	popw hl                                              ; FC9C19  4b
 	unlk XIZ                                             ; FC9C1A  ee 0d
 	ret                                                  ; FC9C1C  0e
-sub_FC9C1D:
+; NoteList_ApplyFrame: (note frame, part block): for each entry -- velocity non-zero: a node from the free list (head 0x384A) when the
+;   source's count (0x3820 + source) is above 0, the voice mask from the part block (0x602054 table), byte +1 from
+;   Note_TransposeFoldOctaves, the node moved to the source's list (0x3823 + source x 13) and the entry copied into
+;   it; velocity 0: the source's node with the same note moved back to the free list, its count + 1, its voice mask
+;   ORed into the result; otherwise the entry = 0xFF, 0xFF.  XIY = the released voices.
+NoteList_ApplyFrame:
 	link XIZ,0xffe6                                      ; FC9C1D  ee 0c e6 ff
 	push XHL                                             ; FC9C21  3b
 	pushw de                                             ; FC9C22  2a
@@ -123393,7 +123398,7 @@ sub_FC9C1D:
 	ld a, 0x0d:opc                                          ; FC9C2A  21 0d
 	mul wa, e                                          ; FC9C2C  cd 41
 	ld IX,WA                                             ; FC9C2E  d8 8c
-	ldw bc, 0x3823                                       ; FC9C30  31 23 38
+	ldw bc, NoteList_Heads                                       ; FC9C30  31 23 38
 	ld (xiz-20), bc                                      ; FC9C33  be ec 51
 	add BC,WA                                            ; FC9C36  d8 81
 	ld (xiz-8), bc                                       ; FC9C38  be f8 51
@@ -123415,7 +123420,7 @@ sub_FC9C1D:
 	ld c, 0x04:opc                                          ; FC9C60  23 04
 	mul bc, h                                          ; FC9C62  ce 43
 	extz XBC                                             ; FC9C64  e9 12
-	add XBC,0x00602054                                   ; FC9C66  e9 c8 54 20 60 00
+	add XBC,Part_VoiceMasks                                   ; FC9C66  e9 c8 54 20 60 00
 	ld XBC,(XBC)                                         ; FC9C6C  a1 21
 	ld (xiz-14), xbc                                     ; FC9C6E  be f2 61
 .LFC9C71:
@@ -123446,7 +123451,7 @@ sub_FC9C1D:
 	extz BC                                              ; FC9CAC  d9 12
 	extz XBC                                             ; FC9CAE  e9 12
 	ld (xiz-6), xbc                                      ; FC9CB0  be fa 61
-	add XBC,0x00003820                                   ; FC9CB3  e9 c8 20 38 00 00
+	add XBC,NoteList_FreeCount                                   ; FC9CB3  e9 c8 20 38 00 00
 	ld A,(XBC)                                           ; FC9CB9  81 21
 	cp a, 0x00:i3                                          ; FC9CBB  c9 d8
 	jrl le, .LFC9D54                                     ; FC9CBD  72 94 00
@@ -123459,12 +123464,12 @@ sub_FC9C1D:
 	pushw wa                                             ; FC9CD0  28
 	ld A,(XIX)                                           ; FC9CD1  84 21
 	pushw wa                                             ; FC9CD3  28
-	calr sub_FCAD9B                                      ; FC9CD4  1e c4 10
+	calr Note_TransposeFoldOctaves                                      ; FC9CD4  1e c4 10
 	ld (XIX+0x01),A                                      ; FC9CD7  bc 01 41
 	m_push MWD+r6, 0xf8                                  ; FC9CDA  9e f8 04
 	pushw hl                                             ; FC9CDD  2b
-	calr sub_FC9D6E                                      ; FC9CDE  1e 8d 00
-	lda xbc, (0x3820:24)                                 ; FC9CE1  f2 20 38 00 31
+	calr NoteList_MoveNode                                      ; FC9CDE  1e 8d 00
+	lda xbc, (NoteList_FreeCount:24)                                 ; FC9CE1  f2 20 38 00 31
 	m_add_rm MLD+r6, 0xfa, r1                            ; FC9CE6  ae fa 81
 	decm8 0x01, (xbc)                                    ; FC9CE9  81 69
 	push XIX                                             ; FC9CEB  3c
@@ -123505,11 +123510,11 @@ sub_FC9C1D:
 	or (xiz-18), xbc                                     ; FC9D39  ae ee e9
 	m_push MWD+r6, 0xf6                                  ; FC9D3C  9e f6 04
 	pushw hl                                             ; FC9D3F  2b
-	calr sub_FC9D6E                                      ; FC9D40  1e 2b 00
+	calr NoteList_MoveNode                                      ; FC9D40  1e 2b 00
 	ld C,E                                               ; FC9D43  cd 8b
 	extz BC                                              ; FC9D45  d9 12
 	extz XBC                                             ; FC9D47  e9 12
-	add XBC,0x00003820                                   ; FC9D49  e9 c8 20 38 00 00
+	add XBC,NoteList_FreeCount                                   ; FC9D49  e9 c8 20 38 00 00
 	incm8 0x01, (xbc)                                    ; FC9D4F  81 61
 	pop XIY                                              ; FC9D51  5d
 	jr .LFC9D5B                                          ; FC9D52  68 07
@@ -123528,7 +123533,8 @@ sub_FC9C1D:
 	pop XHL                                              ; FC9D6A  5b
 	unlk XIZ                                             ; FC9D6B  ee 0d
 	ret                                                  ; FC9D6D  0e
-sub_FC9D6E:
+; NoteList_MoveNode: (node, head): unlinks the 13-byte node (previous +9, next +0x0B) and links it in after the head.
+NoteList_MoveNode:
 	link XIZ,0xfffa                                      ; FC9D6E  ee 0c fa ff
 	push XHL                                             ; FC9D72  3b
 	push XDE                                             ; FC9D73  3a
@@ -123586,7 +123592,7 @@ sub_FC9D6E:
 	ld C,(XWA+0x01)                                      ; FC9DF5  88 01 23
 	mul C,0x0d                                           ; FC9DF8  cb 08 0d
 	ld (xiz-6), bc                                       ; FC9DFB  be fa 51
-	ldw de, 0x3823                                       ; FC9DFE  32 23 38
+	ldw de, NoteList_Heads                                       ; FC9DFE  32 23 38
 	add DE,BC                                            ; FC9E01  d9 82
 	ld XIX,0x00000000                                    ; FC9E03  44 00 00 00 00
 	extz XDE                                             ; FC9E08  ea 12
@@ -123631,7 +123637,7 @@ sub_FC9E46:
 	ld A,(XBC+0x01)                                      ; FC9E55  89 01 21
 	mul A,0x0d                                           ; FC9E58  c9 08 0d
 	ld (xiz-6), wa                                       ; FC9E5B  be fa 50
-	ldw de, 0x3823                                       ; FC9E5E  32 23 38
+	ldw de, NoteList_Heads                                       ; FC9E5E  32 23 38
 	add DE,WA                                            ; FC9E61  d8 82
 	sub XWA,XWA                                          ; FC9E63  e8 a0
 	ld (xiz-4), xwa                                      ; FC9E65  be fc 60
@@ -123664,7 +123670,10 @@ sub_FC9E46:
 	pop XHL                                              ; FC9E9F  5b
 	unlk XIZ                                             ; FC9EA0  ee 0d
 	ret                                                  ; FC9EA2  0e
-sub_FC9EA3:
+; NoteFrame_SelectForPart: (out frame, note frame, part block, part): the entries whose voice mask overlaps 0x602054[part] and -- unless
+;   the block's +1 is not 0xFF -- whose note and velocity lie within the part's range record (6 bytes at
+;   +0x62 + part x 6: note low / high, velocity low / high) go to the out frame's +7 / +8; A = their count.
+NoteFrame_SelectForPart:
 	link XIZ,0xffee                                      ; FC9EA3  ee 0c ee ff
 	pushw hl                                             ; FC9EA7  2b
 	pushw de                                             ; FC9EA8  2a
@@ -123703,7 +123712,7 @@ sub_FC9EA3:
 	add XBC,XWA                                          ; FC9EFE  e8 81
 	ld XIY,(XBC)                                         ; FC9F00  a1 25
 	ld (xiz-18), xiy                                     ; FC9F02  be ee 65
-	lda xbc, (0x602054:24)                               ; FC9F05  f2 54 20 60 31
+	lda xbc, (Part_VoiceMasks:24)                               ; FC9F05  f2 54 20 60 31
 	m_add_rm MLD+r6, 0xf8, r1                            ; FC9F0A  ae f8 81
 	ld XWA,(XBC)                                         ; FC9F0D  a1 20
 	and XIY,XWA                                          ; FC9F0F  e8 c5
@@ -125251,7 +125260,8 @@ sub_FCAD7C:
 	pop XIX                                              ; FCAD97  5c
 	unlk XIZ                                             ; FCAD98  ee 0d
 	ret                                                  ; FCAD9A  0e
-sub_FCAD9B:
+; Note_TransposeFoldOctaves: (note L, shift H): L + (H - 0x40), then 12 off or on until it lies in 0..0x7F.
+Note_TransposeFoldOctaves:
 	link XIZ,0x0000                                      ; FCAD9B  ee 0c 00 00
 	pushw hl                                             ; FCAD9F  2b
 	ld L,(XIZ+0x08)                                      ; FCADA0  8e 08 27
@@ -125774,7 +125784,9 @@ sub_FCB1BB:
 	popw hl                                              ; FCB265  4b
 	unlk XIZ                                             ; FCB266  ee 0d
 	ret                                                  ; FCB268  0e
-sub_FCB269:
+; MidiFrame_ToNoteFrame: (MIDI frame, note frame): count, the source byte (MIDI frame +2: 1 for MIDI IN, 2 for timed events), and for
+;   each 9-byte entry a 7-byte one: +0 = its +7, +2 = its +8.
+MidiFrame_ToNoteFrame:
 	link XIZ,0xffec                                      ; FCB269  ee 0c ec ff
 	pushw hl                                             ; FCB26D  2b
 	pushw de                                             ; FCB26E  2a

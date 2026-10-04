@@ -32,9 +32,40 @@ of 0xFF means the ring is empty. The `Ring601850` gatherer takes up to 16 pairs.
 `TimedEvents_ProcessRing` maps a frame's channel to a part through `BStore_TrackToPart` (workspace +0x22,
 16 bytes, 0xFF = no part) before the voice stages.
 
-## 3. Not established yet
+## 3. The note lists (2026-10-04)
 
-- What the later stages (`sub_FC9C1D`, `sub_FC9EA3`, `sub_FC9F8B`, `sub_FCA6BB`, `sub_FCAE76`, `sub_FCB1BB`)
+`MidiFrame_ToNoteFrame` turns a MIDI frame into a **note frame**:
+- +0 is the count;
+- +1 is the **source**: 0 for `Ring601850`, 1 for MIDI IN (both ports), 2 for the timed-event ring. The
+  gatherers write it at the MIDI frame's +2.
+- Then come 7-byte entries from +2: note, a byte `Note_TransposeFoldOctaves` fills, velocity, and a 32-bit
+  voice mask.
+
+`NoteList_ApplyFrame` keeps the sounding notes in doubly linked lists of 13-byte nodes:
+- A node carries the 7-byte entry at +2, the previous link at +9 and the next link at +0x0B.
+- `NoteList_Heads` (0x3823) holds three self-linked heads, one per source.
+- The free nodes are the 33-node ring at 0x384A; nodes are taken after node 0x384A.
+- `NoteList_FreeCount` (0x3820..0x3822) counts each source's remaining notes. Its image starts each at 16,
+  so each source can hold 16 notes.
+- `Ram3800_DataImage`'s header lists this layout and says "NOT claimed: what a slot, a queue ... MEANS".
+  The queue, at least, is now established: one per note source.
+- A **note-on** takes a free node, when its source still has a count, and moves it to the source's list
+  (`NoteList_MoveNode`).
+- A **note-off** finds the source's node with the same note, returns it to the free list, and adds its
+  voice mask to the routine's result.
+- An entry that cannot be placed is marked 0xFF.
+
+`NoteFrame_SelectForPart` keeps, for one part, the entries:
+- whose voice mask overlaps the part's mask, `Part_VoiceMasks` (0x602054, 32 bits per part);
+- whose note and velocity lie inside the part's range record (6 bytes at +0x62 of the part block). These are
+  the KEY / VELOCITY LAYER limits.
+
+`Note_TransposeFoldOctaves` adds (shift - 0x40) to a note and folds the result back into 0..127 by
+octaves.
+
+## 4. Not established yet
+
+- What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `sub_FC9F8B`, `sub_FCA6BB`, `sub_FCAE76`, `sub_FCB1BB`)
   do with an entry.
 - What the state at 0x602200 / 0x6020D4 / 0x602492 / 0x602493 holds.
 - Three of the sinks are visible: the tone generator over the link (`T_Link_SendBlockIn32ByteChunks`), the

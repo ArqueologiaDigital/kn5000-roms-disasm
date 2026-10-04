@@ -1921,13 +1921,13 @@ ROWS = [
     # the note-frame processors (FINDINGS-prom_a-note-frames.md)
     ("FC80E2", "MidiInA_ProcessRing",
      "T_MidiInA_ProcessRing: T_MidiInARing_ScanRewind, then MidiInA_GatherFrame in a loop; a 0x90 frame through the note stages\n"
-     "(sub_FCB269, sub_FC9C1D, sub_FC9EA3 ...), a 0xB0 frame through the control-change path."),
+     "(MidiFrame_ToNoteFrame, NoteList_ApplyFrame, NoteFrame_SelectForPart ...), a 0xB0 frame through the control-change path."),
     ("FC8448", "MidiInB_ProcessRing", "the same for MIDI IN B (T_MidiInBRing_ScanRewind, MidiInB_GatherFrame)."),
     ("FC8960", "TimedEvents_ProcessRing",
      "T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a\n"
      "part through 0x603422 (0xFF = skip), then sub_FCB1BB, sub_FC9F8B, sub_FCA6BB; 0xB0 frames to the CC path."),
     ("FC87AE", "Ring601850_ProcessNoteEvents",
-     "T_F413B8: Ring601850_GatherFrame in a loop, each frame through sub_FC9C1D, sub_FC9EA3, sub_FCAE76,\n"
+     "T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,\n"
      "sub_FC9F8B, sub_FCA6BB."),
     ("FC915C", "MidiInA_GatherFrame",
      "(pending, frame): frame = {count, kind 0x90 / 0xB0, 1, channel, entries of 9 bytes from +7: note, velocity};\n"
@@ -1937,6 +1937,23 @@ ROWS = [
     ("FC9528", "TimedEvents_GatherFrame", "MidiInA_GatherFrame's shape over T_TimedEventRing_Scan."),
     ("FC9099", "Ring601850_GatherFrame",
      "up to 16 (note, velocity) pairs from T_Ring601850_Get into the frame's entries; the pending record as above."),
+    ("FCB269", "MidiFrame_ToNoteFrame",
+     "(MIDI frame, note frame): count, the source byte (MIDI frame +2: 1 for MIDI IN, 2 for timed events), and for\n"
+     "each 9-byte entry a 7-byte one: +0 = its +7, +2 = its +8."),
+    ("FCAD9B", "Note_TransposeFoldOctaves",
+     "(note L, shift H): L + (H - 0x40), then 12 off or on until it lies in 0..0x7F."),
+    ("FC9D6E", "NoteList_MoveNode",
+     "(node, head): unlinks the 13-byte node (previous +9, next +0x0B) and links it in after the head."),
+    ("FC9C1D", "NoteList_ApplyFrame",
+     "(note frame, part block): for each entry -- velocity non-zero: a node from the free list (head 0x384A) when the\n"
+     "source's count (0x3820 + source) is above 0, the voice mask from the part block (0x602054 table), byte +1 from\n"
+     "Note_TransposeFoldOctaves, the node moved to the source's list (0x3823 + source x 13) and the entry copied into\n"
+     "it; velocity 0: the source's node with the same note moved back to the free list, its count + 1, its voice mask\n"
+     "ORed into the result; otherwise the entry = 0xFF, 0xFF.  XIY = the released voices."),
+    ("FC9EA3", "NoteFrame_SelectForPart",
+     "(out frame, note frame, part block, part): the entries whose voice mask overlaps 0x602054[part] and -- unless\n"
+     "the block's +1 is not 0xFF -- whose note and velocity lie within the part's range record (6 bytes at\n"
+     "+0x62 + part x 6: note low / high, velocity low / high) go to the out frame's +7 / +8; A = their count."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

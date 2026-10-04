@@ -4207,6 +4207,11 @@ RENAMES = {
     "T_F413B4": "T_MidiInA_ProcessRing",
     "T_F413BC": "T_TimedEvents_ProcessRing",
     "T_F413F8": "T_MidiInB_ProcessRing",
+    "sub_FCB269": "MidiFrame_ToNoteFrame",
+    "sub_FCAD9B": "Note_TransposeFoldOctaves",
+    "sub_FC9D6E": "NoteList_MoveNode",
+    "sub_FC9C1D": "NoteList_ApplyFrame",
+    "sub_FC9EA3": "NoteFrame_SelectForPart",
 }
 
 
