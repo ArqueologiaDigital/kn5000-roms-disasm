@@ -3911,7 +3911,8 @@ MeasureInsert_DrawFieldCursor:
 	ld XIY,DL_F39551                                     ; F80BF6  45 51 95 f3 00
 	ld XIX,Data_F39559                                   ; F80BFB  44 59 95 f3 00
 	call T_DisplayList_Run                               ; F80C00  1d f0 17 f4
-sub_F80C04:
+; (sub_F80C04 removed 2026-10-04: no code names it and the line above falls through into it -- part of MeasureInsert_DrawFieldCursor;
+;  notes/prom_a_stray_label_removal.py)
 	ld XIY,0x00f3bf3d                                    ; F80C04  45 3d bf f3 00
 	call T_DLB_Handler_Array8                                        ; F80C09  1d 1c 18 f4
 	ret                                                  ; F80C0D  0e
@@ -5360,7 +5361,8 @@ S0ngSelectName_Leave:
 ; The label sub_F81812 one instruction in is unreferenced and part of this routine.
 S0ngSelectName_LoadSongFromBank:
 	ld wa, (BStore_FreeHead:24)                                ; F8180D  d2 b8 34 60 20
-sub_F81812:
+; (sub_F81812 removed 2026-10-04: no code names it and the line above falls through into it -- part of S0ngSelectName_LoadSongFromBank;
+;  notes/prom_a_stray_label_removal.py)
 	ld (0x0e2b:16), wa                                  ; F81812  f1 2b 0e 50
 	ld wa, (BStore_FreeCount:24)                                ; F81816  d2 ba 34 60 20
 	ld (0x0e2d:16), wa                                  ; F8181B  f1 2d 0e 50
@@ -6080,7 +6082,8 @@ sub_F81F1A:
 	ld a, (0x0f65:16)                                   ; F81F37  c1 65 0f 21
 	cp a, 0x00:i3                                          ; F81F3B  c9 d8
 	jr nz, .LF81F51                                      ; F81F3D  6e 12
-sub_F81F3F:
+; (sub_F81F3F removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_F81F1A;
+;  notes/prom_a_stray_label_removal.py)
 	jr .LF81F65                                          ; F81F3F  68 24
 .LF81F41:
 	add XIY,0x000000b4                                   ; F81F41  ed c8 b4 00 00 00
@@ -19752,7 +19755,8 @@ PanelOrdinalToEventValue_B_DeadCopy:
 	jr .LF8A71E                                              ; F8A6EE  68 2e
 .LF8A6F0:
 	cp W,0x18                                            ; F8A6F0  c8 cf 18
-sub_F8A6F3:
+; (sub_F8A6F3 removed 2026-10-04: no code names it and the line above falls through into it -- part of PanelOrdinalToEventValue_B_DeadCopy;
+;  notes/prom_a_stray_label_removal.py)
 	jr c, .LF8A6FE                                           ; F8A6F3  67 09
 	cp W,0x1a                                            ; F8A6F5  c8 cf 1a
 	jr ugt, .LF8A6FE                                         ; F8A6F8  6b 04
@@ -21334,7 +21338,8 @@ PanelAction_SelectPrevSound:
 	ld L,(XWA+0x06)                                      ; F8B25D  88 06 27
 	ld H,(XWA+0x07)                                      ; F8B260  88 07 26
 	cp h, 0x00:i3                                          ; F8B263  ce d8
-sub_F8B265:
+; (sub_F8B265 removed 2026-10-04: no code names it and the line above falls through into it -- part of PanelAction_SelectPrevSound;
+;  notes/prom_a_stray_label_removal.py)
 	jr ule, .LF8B26B                                         ; F8B265  63 04
 	dec 1,H                                              ; F8B267  ce 69
 	jr .LF8B27D                                              ; F8B269  68 12
@@ -22774,7 +22779,8 @@ PanelButton_CallPageTableEntry:
 	calr IndexToBitMask32_Copy                                      ; F8BE04  1e 2f 00
 	ld xbc, (0x2666:16)                                 ; F8BE07  e1 66 26 21
 	bit 0x07,W                                           ; F8BE0B  c8 33 07
-sub_F8BE0E:
+; (sub_F8BE0E removed 2026-10-04: no code names it and the line above falls through into it -- part of PanelButton_CallPageTableEntry;
+;  notes/prom_a_stray_label_removal.py)
 	jr z, .LF8BE14                                       ; F8BE0E  66 04
 	ld xbc, (0x266a:16)                                 ; F8BE10  e1 6a 26 21
 .LF8BE14:
@@ -32677,7 +32683,8 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	ld a, (0x0711:16)                                   ; F90ED0  c1 11 07 21
 	ld (UI_DrawScratch+1:16), a                                   ; F90ED4  f1 41 26 41
 	ld XIY,0x00f28468                                    ; F90ED8  45 68 84 f2 00
-sub_F90EDD:
+; (sub_F90EDD removed 2026-10-04: no code names it and the line above falls through into it -- part of Paint_SoundModeFields;
+;  notes/prom_a_stray_label_removal.py)
 	call T_DLB_Handler_StringTable2                      ; F90EDD  1d fc 17 f4
 	pop XIY                                              ; F90EE1  5d
 .LF90EE2:
@@ -33567,7 +33574,8 @@ InstallPainter_C0mbinati0nM0de:
 	call T_CallbackQueue_Post                            ; F91670  1d 84 2e f4
 	inc 4,XSP                                            ; F91674  ef 64
 	ld a, 0x01:opc                                          ; F91676  21 01
-sub_F91678:
+; (sub_F91678 removed 2026-10-04: no code names it and the line above falls through into it -- part of InstallPainter_C0mbinati0nM0de;
+;  notes/prom_a_stray_label_removal.py)
 	call T_Kernel_SemaSignal                             ; F91678  1d 88 2d f4
 ; sub_F91678_Join -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
 ;
@@ -39656,7 +39664,8 @@ DebugMonitor_PrintBlankLine:
 	pop XDE                                              ; F94CB6  5a
 	pop XHL                                              ; F94CB7  5b
 	pop XIX                                              ; F94CB8  5c
-sub_F94CB9:
+; (sub_F94CB9 removed 2026-10-04: no code names it and the line above falls through into it -- part of DebugMonitor_PrintBlankLine;
+;  notes/prom_a_stray_label_removal.py)
 	pop XIZ                                              ; F94CB9  5e
 	ret                                                  ; F94CBA  0e
 ; DebugMonitor_PrintHexDump -- print 16 hex-dump lines (128 bytes) starting at (0x2846)
@@ -42174,7 +42183,8 @@ ParamImage_QueuePartFieldChange:   ; entry: reachable-run entry
 ; it paints pointer tables as instructions and passes the byte gate doing it.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-sub_F961BD:   ; entry: reachable-run entry
+; (sub_F961BD removed 2026-10-04: no code names it and the line above falls through into it -- part of ParamImage_QueuePartFieldChange;
+;  notes/prom_a_stray_label_removal.py)  [was: entry: reachable-run entry]
 	mx_st_mr8 MXD, ra_IZ, ra_IX, r0                      ; F961BD  f3 07 f8 f0 40
 	inc 1,IX                                             ; F961C2  dc 61
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x7f                    ; F961C4  f3 07 f8 f0 00 7f
@@ -48718,7 +48728,8 @@ MidiTotalMode_PaintLocalTotal:
 	lda xbc, (DL_NormalTechRemap:24)                     ; F9A49D  f2 6b ca f0 31
 	push XBC                                             ; F9A4A2  39
 	lda xwa, (DL_F0CA5C:24)                              ; F9A4A3  f2 5c ca f0 30
-sub_F9A4A8:
+; (sub_F9A4A8 removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiTotalMode_PaintLocalTotal;
+;  notes/prom_a_stray_label_removal.py)
 	push XWA                                             ; F9A4A8  38
 	call T_DisplayListB_Run_Stack                        ; F9A4A9  1d 04 2e f4
 	inc 8,XSP                                            ; F9A4AD  ef 60
@@ -49964,7 +49975,8 @@ MidiInputOutputFilter_EditBankSelect:
 	push H                                               ; F9AD85  ce 04
 	calr ByteField_SetOrClearMask                                          ; F9AD87  1e db f3
 	inc 8,XSP                                            ; F9AD8A  ef 60
-sub_F9AD8C:
+; (sub_F9AD8C removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiInputOutputFilter_EditBankSelect;
+;  notes/prom_a_stray_label_removal.py)
 	cp a, 0x00:i3                                          ; F9AD8C  c9 d8
 	jr nz, .LF9ADAD                                      ; F9AD8E  6e 1d
 	ld h, (MidiFilter_BankSelect:16)                                   ; F9AD90  c1 3a 7f 26
@@ -51679,7 +51691,8 @@ T_F41974_Nop:
 	push XIX                                             ; F9C416  3c
 	ldw bc, 0x09                                         ; F9C417  31 09 00
 	lda xiy, (Descriptor9_FA1624:24)                     ; F9C41A  f2 24 16 fa 35
-sub_F9C41F:
+; (sub_F9C41F removed 2026-10-04: no code names it and the line above falls through into it -- part of Screen_ReMapEdit_Button;
+;  notes/prom_a_stray_label_removal.py)
 	lda xix, (xiz-9)                                     ; F9C41F  be f7 34
 	ldir85                                               ; F9C422  85 11
 	pop XIX                                              ; F9C424  5c
@@ -52657,7 +52670,8 @@ SoundGroupNaming_AdjustBank:
 .LF9CBF1:
 	ret                                                  ; F9CBF1  0e
 	ld bc, (0x2694:16)                                 ; F9CBF2  d1 94 26 21
-sub_F9CBF6:
+; (sub_F9CBF6 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundGroupNaming_AdjustBank;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; F9CBF6  d9 12
 	cp bc, 0x00:i3                                         ; F9CBF8  d9 d8
 	jr z, .LF9CC02                                       ; F9CBFA  66 06
@@ -52752,7 +52766,8 @@ SoundGroupNaming_AdjustGroup:
 	jr .LF9CCA5                                          ; F9CC9A  68 09
 .LF9CC9C:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC9C  1e 68 2e
-sub_F9CC9F:
+; (sub_F9CC9F removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundGroupNaming_AdjustGroup;
+;  notes/prom_a_stray_label_removal.py)
 	pushw wa                                             ; F9CC9F  28
 	call T_SoundEditNaming_SoftKeyCol8                                        ; F9CCA0  1d a0 2f f4
 	popw bc                                              ; F9CCA4  49
@@ -56570,7 +56585,8 @@ Screen_MemoryProtect_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; F9ED3A  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; F9ED3E  c1 7b 20 f3
 	jr z, .LF9ED49                                       ; F9ED42  66 05
-sub_F9ED44:
+; (sub_F9ED44 removed 2026-10-04: no code names it and the line above falls through into it -- part of Screen_MemoryProtect_Enter;
+;  notes/prom_a_stray_label_removal.py)
 	ld (0x26a6:16), 0x00                                 ; F9ED44  f1 a6 26 00 00
 .LF9ED49:
 	m_res 0, MD16, UI_RequestBits                                ; F9ED49  f1 75 20 b0
@@ -60398,7 +60414,8 @@ Screen_ControllerAssign_Enter:
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_ControllerAssign_Leave:
 	link XIZ,0xfffc                                      ; FA0E4D  ee 0c fc ff
-sub_FA0E51:
+; (sub_FA0E51 removed 2026-10-04: no code names it and the line above falls through into it -- part of Screen_ControllerAssign_Leave;
+;  notes/prom_a_stray_label_removal.py)
 	push XIX                                             ; FA0E51  3c
 	lda xix, (xiz-4)                                     ; FA0E52  be fc 34
 	ld xbc, (ByteTable4_FA1B7E:24)                               ; FA0E55  e2 7e 1b fa 21
@@ -61061,7 +61078,8 @@ T_F4267C_Nop:
 ; entries read by exactly that dispatch; JUMPTAB in the same tool gives the
 ; identical partition.  16021 -> 15924 bytes of this span remain undecided
 ; after this follow-up.
-sub_FA1404:   ; entry: reachable-run entry
+; (sub_FA1404 removed 2026-10-04: no code names it and the line above falls through into it -- part of Screen_Initial_Button;
+;  notes/prom_a_stray_label_removal.py)  [was: entry: reachable-run entry]
 	push XBC                                             ; FA1404  39
 	lda xwa, (DL_InitialUsingInitialSettingWill:24)                     ; FA1405  f2 b9 2f fa 30
 	push XWA                                             ; FA140A  38
@@ -78668,7 +78686,8 @@ sub_FAAAB5:
 	ld XWA,XIX                                           ; FAAAE1  ec 88
 	cp XWA,XBC                                           ; FAAAE3  e9 f0
 	jr nc, .LFAAB0E                                      ; FAAAE5  6f 27
-sub_FAAAE7:
+; (sub_FAAAE7 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAAAB5;
+;  notes/prom_a_stray_label_removal.py)
 	ld H,(XIX)                                           ; FAAAE7  84 26
 	cp H,0xff                                            ; FAAAE9  ce cf ff
 	jr nz, .LFAAAF2                                      ; FAAAEC  6e 04
@@ -78770,7 +78789,8 @@ sub_FAABB3:
 	ld (xiz-8), xbc                                      ; FAABBD  be f8 61
 	lda xix, (0x7620:16)                                ; FAABC0  f1 20 76 34
 	ldw wa, 0x78de                                       ; FAABC4  30 de 78
-sub_FAABC7:
+; (sub_FAABC7 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAABB3;
+;  notes/prom_a_stray_label_removal.py)
 	inc 2,WA                                             ; FAABC7  d8 62
 	extz XWA                                             ; FAABC9  e8 12
 	ld (xiz-4), xwa                                      ; FAABCB  be fc 60
@@ -78780,7 +78800,8 @@ sub_FAABC7:
 	jr ugt, .LFAABE9                                     ; FAABD3  6b 14
 	ld C,(XIX)                                           ; FAABD5  84 23
 	ld H,C                                               ; FAABD7  cb 8e
-sub_FAABD9:
+; (sub_FAABD9 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAABB3;
+;  notes/prom_a_stray_label_removal.py)
 	ld xbc, (xiz-8)                                      ; FAABD9  ae f8 21
 	ld (XBC),H                                           ; FAABDC  b1 46
 	sub XBC,XBC                                          ; FAABDE  e9 a1
@@ -79917,7 +79938,8 @@ sub_FAB643:
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x00                          ; FAB643  c1 b8 20 3f 00
 	jr nz, .LFAB656                                      ; FAB648  6e 0c
 	ld c, (UiEvent_Byte3:16)                                   ; FAB64A  c1 ba 20 23
-sub_FAB64E:
+; (sub_FAB64E removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAB643;
+;  notes/prom_a_stray_label_removal.py)
 	and C,0x03                                           ; FAB64E  cb cc 03
 	jr z, .LFAB656                                       ; FAB651  66 03
 	calr T_F407C4_Nop                                      ; FAB653  1e 01 00
@@ -80076,7 +80098,8 @@ sub_FAB7E6:
 	jr z, .LFAB81E                                       ; FAB7ED  66 2f
 	m_res 0, MD24, 0x60f0c6                              ; FAB7EF  f2 c6 f0 60 b0
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAB7F4  f2 ea cd fa 31
-sub_FAB7F9:
+; (sub_FAB7F9 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAB7E6;
+;  notes/prom_a_stray_label_removal.py)
 	ld (IndexedTable_Base:24), xbc                               ; FAB7F9  f2 18 f0 60 61
 	calr List2030_TranslateToQueue2C00                                      ; FAB7FE  1e 1e 00
 	push XDE                                             ; FAB801  3a
@@ -80179,7 +80202,8 @@ List2030_Part00to1F_Dispatch:   ; entry: named by 32 `.long` operands, first at 
 ; Evidence: `cp BC,0x000b` at 0xFAB8A0 then `sll 0x02,BC`, `add XBC,0x00FAB8B4`,
 ;          `ld XBC,(XBC)`, `jp T,XBC`.
 ; ---------------------------------------------------------------------
-sub_FAB8B0:
+; (sub_FAB8B0 removed 2026-10-04: no code names it and the line above falls through into it -- part of List2030_Part00to1F_Dispatch;
+;  notes/prom_a_stray_label_removal.py)
 	ld XBC,(XBC)                                         ; FAB8B0  a1 21
 	jp (xbc)                                             ; FAB8B2  b1 d8
 ; ---------------------------------------------------------------------
@@ -81903,7 +81927,8 @@ ParamMsg_ResyncParts_B3_CC0B_Expression:   ; entry: named by 1 `.long` operand, 
 	jr z, .LFAC755                                       ; FAC742  66 11
 	ld h, 0x7f:opc                                          ; FAC744  26 7f
 	ld (0x60f089:24), h                                 ; FAC746  f2 89 f0 60 46
-sub_FAC74B:
+; (sub_FAC74B removed 2026-10-04: no code names it and the line above falls through into it -- part of ParamMsg_ResyncParts_B3_CC0B_Expression;
+;  notes/prom_a_stray_label_removal.py)
 	ld (0x60f08a:24), h                                 ; FAC74B  f2 8a f0 60 46
 	push XIX                                             ; FAC750  3c
 	calr Queue2E00_FanOutToPartMask                                          ; FAC751  1e 60 f7
@@ -91337,7 +91362,8 @@ SysExParam_CheckValueWhiteList:
 	ld XBC,(XBC)                                         ; FB38BB  a1 21
 	ld (xiz-4), xbc                                      ; FB38BD  be fc 61
 	ld W,(XIX+0x08)                                      ; FB38C0  8c 08 20
-sub_FB38C3:
+; (sub_FB38C3 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	cpl W                                                ; FB38C3  c8 06
 	and (XBC),W                                          ; FB38C5  81 c8
 	ld xbc, (xiz-4)                                      ; FB38C7  ae fc 21
@@ -91423,7 +91449,8 @@ sub_FB38C3:
 	ld XBC,(XIZ+0x08)                                    ; FB398C  ae 08 21
 	ld A,(XBC+0x08)                                      ; FB398F  89 08 21
 	ld (XIX+0x03),A                                      ; FB3992  bc 03 41
-sub_FB3995:
+; (sub_FB3995 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	push XIX                                             ; FB3995  3c
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3996  1d 90 78 fb
 	inc 8,XSP                                            ; FB399A  ef 60
@@ -91466,7 +91493,8 @@ sub_FB3995:
 	inc 8,XSP                                            ; FB39F1  ef 60
 	cp HL,0x3fff                                         ; FB39F3  db cf ff 3f
 	jrl ugt, .LFB3ABE                                    ; FB39F7  7b c4 00
-sub_FB39FA:
+; (sub_FB39FA removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	ld BC,HL                                             ; FB39FA  db 89
 	srl bc, 0x04                                         ; FB39FC  d9 ef 04
 	and BC,0x003f                                        ; FB39FF  d9 cc 3f 00
@@ -91486,7 +91514,8 @@ sub_FB39FA:
 	ld e, (xiz-6)                                        ; FB3A28  8e fa 25
 	ld (XIX+0x02),E                                      ; FB3A2B  bc 02 45
 	ld (XIX+0x03),0x7f                                   ; FB3A2E  bc 03 00 7f
-sub_FB3A32:
+; (sub_FB3A32 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	push XIX                                             ; FB3A32  3c
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A33  1d 90 78 fb
 	ld (XIX),H                                           ; FB3A37  b4 46
@@ -91543,7 +91572,8 @@ sub_FB3A32:
 	ret                                                  ; FB3AC3  0e
 	pushw hl                                             ; FB3AC4  2b
 	ld xbc, (0x60fc80:24)                               ; FB3AC5  e2 80 fc 60 21
-sub_FB3ACA:
+; (sub_FB3ACA removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	push XBC                                             ; FB3ACA  39
 	call SysExBuf_ReadNibblePair                                      ; FB3ACB  1d f3 77 fb
 	ld L,A                                               ; FB3ACF  c9 8f
@@ -91598,7 +91628,8 @@ sub_FB3ACA:
 	pushw 0x0a                                           ; FB3B43  0b 0a 00
 	ld xiy, (0x60fcd8:24)                               ; FB3B46  e2 d8 fc 60 25
 	push XIY                                             ; FB3B4B  3d
-sub_FB3B4C:
+; (sub_FB3B4C removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	call U8Rec16_GetField                                      ; FB3B4C  1d d3 62 fb
 	ld D,A                                               ; FB3B50  c9 8c
 	sub D,0x20                                           ; FB3B52  cc ca 20
@@ -91612,7 +91643,8 @@ sub_FB3B4C:
 	ld (xiz-3), a                                        ; FB3B68  be fd 41
 	inc 6,XSP                                            ; FB3B6B  ef 66
 	cp L,0x81                                            ; FB3B6D  cf cf 81
-sub_FB3B70:
+; (sub_FB3B70 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	jr z, .LFB3B95                                       ; FB3B70  66 23
 	ld (xiz-2), l                                        ; FB3B72  be fe 47
 	ld XBC,(XIZ+0x08)                                    ; FB3B75  ae 08 21
@@ -91623,7 +91655,8 @@ sub_FB3B70:
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3B82  1d 90 78 fb
 	ld (xiz-4), h                                        ; FB3B86  be fc 46
 	ld C,(XIX+0x01)                                      ; FB3B89  8c 01 23
-sub_FB3B8C:
+; (sub_FB3B8C removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	ld (xiz-3), c                                        ; FB3B8C  be fd 43
 	ld (xiz-2), 0x00                                     ; FB3B8F  be fe 00 00
 	jr .LFB3BB9                                          ; FB3B93  68 24
@@ -91674,7 +91707,8 @@ sub_FB3B8C_Skip:
 	ld XBC,(XIZ+0x08)                                    ; FB3BFA  ae 08 21
 	ld A,(XBC+0x09)                                      ; FB3BFD  89 09 21
 	extz WA                                              ; FB3C00  d8 12
-sub_FB3C02:
+; (sub_FB3C02 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_CheckValueWhiteList;
+;  notes/prom_a_stray_label_removal.py)
 	inc 8,XSP                                            ; FB3C02  ef 60
 	cp WA,DE                                             ; FB3C04  da f0
 	jrl ugt, .LFB3D0D                                    ; FB3C06  7b 04 01
@@ -92527,7 +92561,8 @@ SysExParam_Request_Area08:
 	jr nc, .LFB43B1                                      ; FB437C  6f 33
 	mul A,0x04                                           ; FB437E  c9 08 04
 	extz XWA                                             ; FB4381  e8 12
-sub_FB4383:
+; (sub_FB4383 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_Request_Area08;
+;  notes/prom_a_stray_label_removal.py)
 	ld XIX,XWA                                           ; FB4383  e8 8c
 	add XWA,Pointer_F51F5A                               ; FB4385  e8 c8 5a 1f f5 00
 	ld XBC,(XWA)                                         ; FB438B  a0 21
@@ -93190,7 +93225,8 @@ SysExParam_Request_Area60:
 	mul bc, h                                          ; FB49A5  ce 43
 	extz XBC                                             ; FB49A7  e9 12
 	add XBC,Pointer_F51E84                               ; FB49A9  e9 c8 84 1e f5 00
-sub_FB49AF:
+; (sub_FB49AF removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_Request_Area60;
+;  notes/prom_a_stray_label_removal.py)
 	ld XBC,(XBC)                                         ; FB49AF  a1 21
 	ld (xiz-16), xbc                                     ; FB49B1  be f0 61
 	ld A,(XIX+0x07)                                      ; FB49B4  8c 07 21
@@ -93291,7 +93327,8 @@ sub_FB49AF:
 	pushw 0x03                                           ; FB4A9C  0b 03 00
 	push XIX                                             ; FB4A9F  3c
 	call SysExTx_Append                                      ; FB4AA0  1d 24 6f fb
-sub_FB4AA4:
+; (sub_FB4AA4 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExParam_Request_Area60;
+;  notes/prom_a_stray_label_removal.py)
 	call SysExTx_AppendChecksumF7                                      ; FB4AA4  1d 11 71 fb
 	ld xbc, (0x60fc88:24)                               ; FB4AA8  e2 88 fc 60 21
 	push XBC                                             ; FB4AAD  39
@@ -93407,7 +93444,8 @@ SysExTx_EmitStagedParams:
 	push XBC                                             ; FB4BBE  39
 	ld a, 0x04:opc                                          ; FB4BBF  21 04
 	mul wa, h                                          ; FB4BC1  ce 41
-sub_FB4BC3:
+; (sub_FB4BC3 removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExTx_EmitStagedParams;
+;  notes/prom_a_stray_label_removal.py)
 	extz XWA                                             ; FB4BC3  e8 12
 	add XWA,SysExTx_StagedParamHandlers                              ; FB4BC5  e8 c8 38 fb f4 00
 	ld XWA,(XWA)                                         ; FB4BCB  a0 20
@@ -93478,7 +93516,8 @@ SysExTx_StagedParam_Record60:
 	ret                                                  ; FB4C45  0e
 SysExTx_StagedParam_Record70:
 	link XIZ,0xfff8                                      ; FB4C46  ee 0c f8 ff
-sub_FB4C4A:
+; (sub_FB4C4A removed 2026-10-04: no code names it and the line above falls through into it -- part of SysExTx_StagedParam_Record70;
+;  notes/prom_a_stray_label_removal.py)
 	push XIX                                             ; FB4C4A  3c
 	lda xix, (xiz-8)                                     ; FB4C4B  be f8 34
 	lda xbc, (Pointer_F51E20:24)                         ; FB4C4E  f2 20 1e f5 31
@@ -97834,7 +97873,8 @@ StagedQueue_ReadRecord:
 	ld H,(XBC)                                           ; FB7286  81 26
 	ld (XIX),H                                           ; FB7288  b4 46
 	cp H,0xff                                            ; FB728A  ce cf ff
-sub_FB728D:
+; (sub_FB728D removed 2026-10-04: no code names it and the line above falls through into it -- part of StagedQueue_ReadRecord;
+;  notes/prom_a_stray_label_removal.py)
 	jr z, .LFB72AD                                       ; FB728D  66 1e
 	ld XBC,(XIZ+0x08)                                    ; FB728F  ae 08 21
 	ld A,(XBC)                                           ; FB7292  81 21
@@ -98828,7 +98868,8 @@ sub_FB7B0B:
 	ld (0x60f807:24), 0x00                             ; FB7B2D  f2 07 f8 60 00 00
 	ld (0x60f808:24), 0x00                             ; FB7B33  f2 08 f8 60 00 00
 	ld (0x60f809:24), 0x00                             ; FB7B39  f2 09 f8 60 00 00
-sub_FB7B3F:
+; (sub_FB7B3F removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FB7B0B;
+;  notes/prom_a_stray_label_removal.py)
 	ld (0x60f80a:24), 0x00                             ; FB7B3F  f2 0a f8 60 00 00
 	ld (0x60f80b:24), 0x00                             ; FB7B45  f2 0b f8 60 00 00
 	ld (0x60f80c:24), 0x00                             ; FB7B4B  f2 0c f8 60 00 00
@@ -99135,7 +99176,8 @@ sub_FB7E6C:
 	jr z, .LFB7E88                                       ; FB7E78  66 0e
 	push XDE                                             ; FB7E7A  3a
 	push XHL                                             ; FB7E7B  3b
-sub_FB7E7C:
+; (sub_FB7E7C removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FB7E6C;
+;  notes/prom_a_stray_label_removal.py)
 	push XIX                                             ; FB7E7C  3c
 	push XIZ                                             ; FB7E7D  3e
 	call T_Paint_Sending_Entry                                        ; FB7E7E  1d 30 17 f4
@@ -100097,7 +100139,8 @@ MidiFilePlay_Stop:
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB91E4  1e 7a 0c
 	calr sub_FB9E69                                      ; FB91E7  1e 7f 0c
 	call Msg0716_AllPartsResetBendAndModulation_SaveRegs                                      ; FB91EA  1d 60 90 fb
-sub_FB91EE:
+; (sub_FB91EE removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiFilePlay_Stop;
+;  notes/prom_a_stray_label_removal.py)
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB91EE  1e ab 00
 	call Transport_StopAllRunning_SaveRegs                                      ; FB91F1  1d 46 90 fb
 	ld	d, (TransportB_State:8)                                      ; FB91F5  c0 96 24
@@ -100491,7 +100534,8 @@ sub_FB9490:
 	ld D,E                                               ; FB94D4  cd 8c
 	sll d, 0x07                                          ; FB94D6  cc ee 07
 	ld E,B                                               ; FB94D9  ca 8d
-sub_FB94DB:
+; (sub_FB94DB removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FB9490;
+;  notes/prom_a_stray_label_removal.py)
 	or E,L                                               ; FB94DB  cf e5
 	ld L,C                                               ; FB94DD  cb 8f
 	or L,D                                               ; FB94DF  cc e7
@@ -108015,7 +108059,8 @@ sub_FBE92B:
 	ei 0x06                                              ; FBE97A  06 06
 	ld e, (0x2775:16)                                   ; FBE97C  c1 75 27 25
 	ld (0x2775:16), 0x00                                 ; FBE980  f1 75 27 00 00
-sub_FBE985:
+; (sub_FBE985 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FBE92B;
+;  notes/prom_a_stray_label_removal.py)
 	ei 0x00                                              ; FBE985  06 00
 	ld d, 0x01:opc                                          ; FBE987  24 01
 	ld l, (0x2765:16)                                   ; FBE989  c1 65 27 27
@@ -110096,7 +110141,8 @@ T_F41A24_Nop:
 	cp a, 0x01:i3                                          ; FBFB82  c9 d9
 	jr nz, .LFBFB99                                      ; FBFB84  6e 13
 	call T_F42C9C                                        ; FBFB86  1d 9c 2c f4
-sub_FBFB8A:
+; (sub_FBFB8A removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_CombiEditMenu;
+;  notes/prom_a_stray_label_removal.py)
 	ld	(0x2765:16), (UI_PartIndex:16)             ; FBFB8A  c1 50 22 19 65 27
 	m_set 4, MD16, UI_ScreenFlags                                ; FBFB90  f1 95 20 bc
 	jr .LFBFB99                                          ; FBFB94  68 03
@@ -110366,7 +110412,8 @@ Var277E_Set02:
 	ret                                                  ; FBFDF6  0e
 ScreenButtonBody_Effect2OutputConflict:
 	link XIZ,0x0000                                      ; FBFDF7  ee 0c 00 00
-sub_FBFDFB:
+; (sub_FBFDFB removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButtonBody_Effect2OutputConflict;
+;  notes/prom_a_stray_label_removal.py)
 	m_push MWD+r6, 0x0a                                  ; FBFDFB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBFDFE  9e 08 04
 	call T_PanelCode_ToSlotAndFlags                                        ; FBFE01  1d 74 2c f4
@@ -110386,7 +110433,8 @@ sub_FBFDFB:
 	and C,0x01                                           ; FBFE23  cb cc 01
 	jr nz, .LFBFE41                                      ; FBFE26  6e 19
 	ld c, (UI_ScreenHoldState:16)                                   ; FBFE28  c1 92 20 23
-sub_FBFE2C:
+; (sub_FBFE2C removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButtonBody_Effect2OutputConflict;
+;  notes/prom_a_stray_label_removal.py)
 	and C,0x01                                           ; FBFE2C  cb cc 01
 	jr z, .LFBFE38                                       ; FBFE2F  66 07
 	ld (UI_ScreenHoldPending:16), 0x01                                 ; FBFE31  f1 9a 20 00 01
@@ -111800,7 +111848,8 @@ Msg0716_DispatchIndex:
 	jr ugt, .LFC09AE                                     ; FC0996  6b 16
 	m_and_mi8 MB16, 0x070f, 0xfd                         ; FC0998  c1 0f 07 3c fd
 	ld XIX,0x00000716                                    ; FC099D  44 16 07 00 00
-sub_FC09A2:
+; (sub_FC09A2 removed 2026-10-04: no code names it and the line above falls through into it -- part of Msg0716_DispatchIndex;
+;  notes/prom_a_stray_label_removal.py)
 	xor H,H                                              ; FC09A2  ce d6
 	sla hl, 0x02                                         ; FC09A4  db ec 02
 	mx_ld_rm MXL, ra_IY, ra_HL, r0                       ; FC09A7  e3 07 f4 ec 20
@@ -112155,7 +112204,8 @@ Msg0716_PartPostCtrlInt9A:   ; entry: named by 1 `.long` operand, first at 0xFC0
 	ld A,(XIZ+0x06)                                      ; FC0CE3  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CE6  bc 01 41
 	calr Msg0716_PostCtrlInt9A                                          ; FC0CE9  1e e8 09
-sub_FC0CEC:
+; (sub_FC0CEC removed 2026-10-04: no code names it and the line above falls through into it -- part of Msg0716_PartPostCtrlInt9A;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FC0CEC  0e
 ; Msg0716_PartPostCtrlInt99: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
 ;   Msg0716_PostCtrlInt99 (notes/prom_a_msg0716_message_names.py).
@@ -112197,7 +112247,8 @@ Msg0716_ScaleTuningPostTypeAndSemitones:   ; entry: named by 1 `.long` operand, 
 ;   Msg0716_PostSysEx50_B1.
 Msg0716_ScaleTuningPostChangedFields:   ; entry: named by 1 `.long` operand, first at 0xFC0A92
 	ld a, (UiEvent_Byte3:16)                                   ; FC0D19  c1 ba 20 21
-sub_FC0D1D:
+; (sub_FC0D1D removed 2026-10-04: no code names it and the line above falls through into it -- part of Msg0716_ScaleTuningPostChangedFields;
+;  notes/prom_a_stray_label_removal.py)
 	and A,0x0f                                           ; FC0D1D  c9 cc 0f
 	jr z, .LFC0D25                                       ; FC0D20  66 03
 	calr ScaleTuning_PostAllTwelveSemitones                                      ; FC0D22  1e 1c 00
@@ -113527,7 +113578,8 @@ Msg0716_PostSysEx50_81:
 	ld (XIX+0x02),0x81                                   ; FC1792  bc 02 00 81
 	ld c, 0xff:opc                                          ; FC1796  23 ff
 	calr Msg0716_PostValueMasked                                      ; FC1798  1e 31 01
-sub_FC179B:
+; (sub_FC179B removed 2026-10-04: no code names it and the line above falls through into it -- part of Msg0716_PostSysEx50_81;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FC179B  0e
 ; Msg0716_PostSysEx50_80: posts F0 50 80 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
 ;   command 0x80, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
@@ -115387,7 +115439,8 @@ sub_FC25A8:
 	jr z, .LFC25EA                                       ; FC25B6  66 32
 	ld w, (0x7f4e:16)                                   ; FC25B8  c1 4e 7f 20
 	and W,0xff                                           ; FC25BC  c8 cc ff
-sub_FC25BF:
+; (sub_FC25BF removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC25A8;
+;  notes/prom_a_stray_label_removal.py)
 	cp W,0x40                                            ; FC25BF  c8 cf 40
 	jr z, .LFC25D0                                       ; FC25C2  66 0c
 	cp W,0x41                                            ; FC25C4  c8 cf 41
@@ -118046,7 +118099,8 @@ sub_FC5CDA:
 	ld (XBC),A                                           ; FC5D01  b1 41
 	ld xbc, (xiz-4)                                      ; FC5D03  ae fc 21
 	inc 1,XBC                                            ; FC5D06  e9 61
-sub_FC5D08:
+; (sub_FC5D08 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5CDA;
+;  notes/prom_a_stray_label_removal.py)
 	add XBC,XIX                                          ; FC5D08  ec 81
 	ld A,(XIZ+0x0a)                                      ; FC5D0A  8e 0a 21
 	ld (XBC),A                                           ; FC5D0D  b1 41
@@ -118095,7 +118149,8 @@ sub_FC5D30:
 	ld c, (0x602893:24)                                 ; FC5D7C  c2 93 28 60 23
 	and C,0xc0                                           ; FC5D81  cb cc c0
 	srl c, 0x06                                          ; FC5D84  cb ef 06
-sub_FC5D87:
+; (sub_FC5D87 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5D30;
+;  notes/prom_a_stray_label_removal.py)
 	cp c, 0x01:i3                                          ; FC5D87  cb d9
 	jr nz, .LFC5D96                                      ; FC5D89  6e 0b
 	ld C,L                                               ; FC5D8B  cf 8b
@@ -118388,7 +118443,8 @@ sub_FC5FAC:
 	push D                                               ; FC604A  cc 04
 	push 0x00                                            ; FC604C  09 00
 	push H                                               ; FC604E  ce 04
-sub_FC6050:
+; (sub_FC6050 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5FAC;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x04                                           ; FC6050  0b 04 00
 	calr sub_FC5CDA                                      ; FC6053  1e 84 fc
 	inc 8,XSP                                            ; FC6056  ef 60
@@ -118616,7 +118672,8 @@ sub_FC61A6:
 	ld XBC,(XBC)                                         ; FC6264  a1 21
 	ld XIX,XBC                                           ; FC6266  e9 8c
 	m_and_rm MLD+r6, 0xf2, r1                            ; FC6268  ae f2 c1
-sub_FC626B:
+; (sub_FC626B removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC61A6;
+;  notes/prom_a_stray_label_removal.py)
 	jr nz, .LFC6286                                      ; FC626B  6e 19
 .LFC626D:
 	lda xbc, (0x602200:24)                               ; FC626D  f2 00 22 60 31
@@ -123381,7 +123438,8 @@ sub_FCA738:
 	inc 7,XWA                                            ; FCA7BA  e8 67
 	add XBC,XWA                                          ; FCA7BC  e8 81
 	ld (xiz-8), xbc                                      ; FCA7BE  be f8 61
-sub_FCA7C1:
+; (sub_FCA7C1 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FCA738;
+;  notes/prom_a_stray_label_removal.py)
 	ld xwa, (xiz-4)                                      ; FCA7C1  ae fc 20
 	cp XWA,XBC                                           ; FCA7C4  e9 f0
 	jrl nc, .LFCA878                                     ; FCA7C6  7f af 00
@@ -129272,7 +129330,8 @@ SoftKeyCol6_SoundEditModelingToneTemplate:
 	inc 8,XSP                                            ; FD0E41  ef 60
 	inc 2,XSP                                            ; FD0E43  ef 62
 	m_cp_mi8 MBD+r6, 0xfc, 0x00                          ; FD0E45  8e fc 3f 00
-sub_FD0E49:
+; (sub_FD0E49 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol6_SoundEditModelingToneTemplate;
+;  notes/prom_a_stray_label_removal.py)
 	jr z, .LFD0E61                                       ; FD0E49  66 16
 	sub XBC,XBC                                          ; FD0E4B  e9 a1
 	ld (xiz-20), xbc                                     ; FD0E4D  be ec 61
@@ -129734,7 +129793,8 @@ SoftKeyCol3_SoundEditToneLayerPanning:
 	pushw wa                                             ; FD121A  28
 	call Arr27A6_Get                                      ; FD121B  1d 7b 6c fd
 	inc 8,XSP                                            ; FD121F  ef 60
-sub_FD1221:
+; (sub_FD1221 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol3_SoundEditToneLayerPanning;
+;  notes/prom_a_stray_label_removal.py)
 	inc 8,XSP                                            ; FD1221  ef 60
 	cp l, 0x00:i3                                          ; FD1223  cf d8
 	jr nz, .LFD1240                                      ; FD1225  6e 19
@@ -130342,7 +130402,8 @@ SoftKeyCol3_SoundEditToneLayerVelocityLayer:
 	ld (XIX+0x07),0x00                                   ; FD1733  bc 07 00 00
 	ld c, (xiz-2)                                        ; FD1737  8e fe 23
 	ld (XIX+0x08),C                                      ; FD173A  bc 08 43
-sub_FD173D:
+; (sub_FD173D removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol3_SoundEditToneLayerVelocityLayer;
+;  notes/prom_a_stray_label_removal.py)
 	ld (XIX+0x09),0x00                                   ; FD173D  bc 09 00 00
 	ld XBC,XIX                                           ; FD1741  ec 89
 	add XBC,0x0000000a                                   ; FD1743  e9 c8 0a 00 00 00
@@ -130393,7 +130454,8 @@ SoftKeyCol4_SoundEditToneLayerVelocityLayer:
 	pushw 0x03                                           ; FD17A7  0b 03 00
 	call Arr27A6_Get                                      ; FD17AA  1d 7b 6c fd
 	m_res 7, MDD+r6, 0xfe                                ; FD17AE  be fe b7
-sub_FD17B1:
+; (sub_FD17B1 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol4_SoundEditToneLayerVelocityLayer;
+;  notes/prom_a_stray_label_removal.py)
 	m_res 7, MDD+r6, 0xfc                                ; FD17B1  be fc b7
 	lda xbc, (xiz-6)                                     ; FD17B4  be fa 31
 	push XBC                                             ; FD17B7  39
@@ -130745,7 +130807,8 @@ SoftKeyCol2_SoundEditModelingDriverWaveform:
 	pushw hl                                             ; FD1AA0  2b
 	lda xbc, (xiz-2)                                     ; FD1AA1  be fe 31
 	push XBC                                             ; FD1AA4  39
-sub_FD1AA5:
+; (sub_FD1AA5 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol2_SoundEditModelingDriverWaveform;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x00                                           ; FD1AA5  0b 00 00
 	call Arr27A6_Get                                      ; FD1AA8  1d 7b 6c fd
 	lda xbc, (xiz-4)                                     ; FD1AAC  be fc 31
@@ -130917,7 +130980,8 @@ SoftKeyCol6_SoundEditModelingDriverWaveform:
 	lda xbc, (xiz-28)                                    ; FD1C2F  be e4 31
 	inc 6,XBC                                            ; FD1C32  e9 66
 	push XBC                                             ; FD1C34  39
-sub_FD1C35:
+; (sub_FD1C35 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol6_SoundEditModelingDriverWaveform;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x06                                           ; FD1C35  0b 06 00
 	call Arr27A6_Get                                      ; FD1C38  1d 7b 6c fd
 	lda xbc, (xiz-28)                                    ; FD1C3C  be e4 31
@@ -131576,7 +131640,8 @@ sub_FD2014:
 	cp C,0x30                                            ; FD21E1  cb cf 30
 	jr nz, .LFD21EB                                      ; FD21E4  6e 05
 	pushw 0x00                                           ; FD21E6  0b 00 00
-sub_FD21E9:
+; (sub_FD21E9 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FD2014;
+;  notes/prom_a_stray_label_removal.py)
 	jr .LFD21FF                                          ; FD21E9  68 14
 .LFD21EB:
 	ld h, (0x2336:16)                                   ; FD21EB  c1 36 23 26
@@ -132332,7 +132397,8 @@ ScreenButton_SoundEditAmpLfo:
 	popw bc                                              ; FD28F3  49
 	cp a, 0x00:i3                                          ; FD28F4  c9 d8
 	jr nz, .LFD2900                                      ; FD28F6  6e 08
-sub_FD28F8:
+; (sub_FD28F8 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_SoundEditAmpLfo;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x10                                           ; FD28F8  0b 10 00
 	call ToneMsg80_Id00                                      ; FD28FB  1d 47 64 fd
 	popw bc                                              ; FD28FF  49
@@ -132593,7 +132659,8 @@ SoftKeyCol5_SoundEditAmpLevel1:
 	push XIX                                             ; FD2B1E  3c
 	ld C,L                                               ; FD2B1F  cf 8b
 	extz BC                                              ; FD2B21  d9 12
-sub_FD2B23:
+; (sub_FD2B23 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol5_SoundEditAmpLevel1;
+;  notes/prom_a_stray_label_removal.py)
 	ld DE,BC                                             ; FD2B23  d9 8a
 	pushw bc                                             ; FD2B25  29
 	call Arr27A6_Get                                      ; FD2B26  1d 7b 6c fd
@@ -133185,7 +133252,8 @@ LcdKeyRow5_SoundEditAmpLevel2:
 	cp (XIZ+0x08),0x00                                   ; FD301A  8e 08 3f 00
 	jr z, .LFD3037                                       ; FD301E  66 17
 	pushw 0x04                                           ; FD3020  0b 04 00
-sub_FD3023:
+; (sub_FD3023 removed 2026-10-04: no code names it and the line above falls through into it -- part of LcdKeyRow5_SoundEditAmpLevel2;
+;  notes/prom_a_stray_label_removal.py)
 	call Var27A3_ChangeSlot                                      ; FD3023  1d ae 74 fd
 	popw bc                                              ; FD3027  49
 	cp a, 0x00:i3                                          ; FD3028  c9 d8
@@ -133360,7 +133428,8 @@ SoftKeyCol2_SoundEditAmpEnvelope1:
 	pushw bc                                             ; FD318B  29
 	ld bc, (xiz-2)                                       ; FD318C  9e fe 21
 	extz BC                                              ; FD318F  d9 12
-sub_FD3191:
+; (sub_FD3191 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol2_SoundEditAmpEnvelope1;
+;  notes/prom_a_stray_label_removal.py)
 	pushw bc                                             ; FD3191  29
 	ld C,L                                               ; FD3192  cf 8b
 	extz BC                                              ; FD3194  d9 12
@@ -134225,7 +134294,8 @@ SoftKeyCol3_SoundEditAmpEnvelope2:
 SoftKeyCol4_SoundEditAmpEnvelope2:
 	link XIZ,0xfffa                                      ; FD3927  ee 0c fa ff
 	lda xbc, (xiz-2)                                     ; FD392B  be fe 31
-sub_FD392E:
+; (sub_FD392E removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol4_SoundEditAmpEnvelope2;
+;  notes/prom_a_stray_label_removal.py)
 	push XBC                                             ; FD392E  39
 	pushw 0x02                                           ; FD392F  0b 02 00
 	call Arr27A6_Get                                      ; FD3932  1d 7b 6c fd
@@ -134242,7 +134312,8 @@ sub_FD392E:
 	inc 8,XSP                                            ; FD394F  ef 60
 	inc 6,XSP                                            ; FD3951  ef 66
 	cp a, 0x01:i3                                          ; FD3953  c9 d9
-sub_FD3955:
+; (sub_FD3955 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol4_SoundEditAmpEnvelope2;
+;  notes/prom_a_stray_label_removal.py)
 	jr nz, .LFD3998                                      ; FD3955  6e 41
 	lda xbc, (xiz-4)                                     ; FD3957  be fc 31
 	push XBC                                             ; FD395A  39
@@ -134338,7 +134409,8 @@ SoftKeyCol5_SoundEditAmpEnvelope2:
 .LFD3A39:
 	pushw 0x05                                           ; FD3A39  0b 05 00
 	call PanelDial_ActAsButton                                      ; FD3A3C  1d 01 7c fd
-sub_FD3A40:
+; (sub_FD3A40 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol5_SoundEditAmpEnvelope2;
+;  notes/prom_a_stray_label_removal.py)
 	popw bc                                              ; FD3A40  49
 	pop XIX                                              ; FD3A41  5c
 	unlk XIZ                                             ; FD3A42  ee 0d
@@ -134411,7 +134483,8 @@ SoftKeyCol7_SoundEditAmpEnvelope2:
 	call Arr27A6_Get                                      ; FD3AD5  1d 7b 6c fd
 	ld (XIX+0x06),0xff                                   ; FD3AD9  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD3ADD  bc 07 00 00
-sub_FD3AE1:
+; (sub_FD3AE1 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol7_SoundEditAmpEnvelope2;
+;  notes/prom_a_stray_label_removal.py)
 	ld (XIX+0x08),0x32                                   ; FD3AE1  bc 08 00 32
 	ld (XIX+0x09),0xce                                   ; FD3AE5  bc 09 00 ce
 	ld XBC,XIX                                           ; FD3AE9  ec 89
@@ -135074,7 +135147,8 @@ ToneEditPage_A0_Op0:
 	cp h, 0x00:i3                                          ; FD4006  ce d8
 	jr z, .LFD4035                                       ; FD4008  66 2b
 	pushw 0x00                                           ; FD400A  0b 00 00
-sub_FD400D:
+; (sub_FD400D removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditPage_A0_Op0;
+;  notes/prom_a_stray_label_removal.py)
 	jr .LFD4016                                          ; FD400D  68 07
 .LFD400F:
 	cp h, 0x00:i3                                          ; FD400F  ce d8
@@ -135403,7 +135477,8 @@ ToneEditField_A0_Group:
 	extz BC                                              ; FD429F  d9 12
 	extz XBC                                             ; FD42A1  e9 12
 	ld XIX,XBC                                           ; FD42A3  e9 8c
-sub_FD42A5:
+; (sub_FD42A5 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditField_A0_Group;
+;  notes/prom_a_stray_label_removal.py)
 	add XBC,XIZ                                          ; FD42A5  ee 81
 	add XBC,0xfffffff6                                   ; FD42A7  e9 c8 f6 ff ff ff
 	push XBC                                             ; FD42AD  39
@@ -135894,7 +135969,8 @@ ToneEditField_A3_Formant:
 	add XSP,0x0000001a                                   ; FD4692  ef c8 1a 00 00 00
 	pop XIX                                              ; FD4698  5c
 	unlk XIZ                                             ; FD4699  ee 0d
-sub_FD469B:
+; (sub_FD469B removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditField_A3_Formant;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FD469B  0e
 ; ---------------------------------------------------------------------
 ; ToneEditField_A3_InteractionGain -- the tone editor's P0SITI0N PARAMETER page's INTERACTION GAIN editor.
@@ -136720,7 +136796,8 @@ ToneEditField_A5_Muting:
 	push XIX                                             ; FD4CB5  3c
 	ld hl, (xiz-7)                                       ; FD4CB6  9e f9 23
 	extz HL                                              ; FD4CB9  db 12
-sub_FD4CBB:
+; (sub_FD4CBB removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditField_A5_Muting;
+;  notes/prom_a_stray_label_removal.py)
 	pushw hl                                             ; FD4CBB  2b
 	call Arr27A6_Get                                      ; FD4CBC  1d 7b 6c fd
 	push XIX                                             ; FD4CC0  3c
@@ -137630,7 +137707,8 @@ ToneEditField_A6_SubGainTouchDepth:
 	push XBC                                             ; FD536F  39
 	pushw 0x0f                                           ; FD5370  0b 0f 00
 	call Arr27A6_Get                                      ; FD5373  1d 7b 6c fd
-sub_FD5377:
+; (sub_FD5377 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditField_A6_SubGainTouchDepth;
+;  notes/prom_a_stray_label_removal.py)
 	inc 6,XSP                                            ; FD5377  ef 66
 	m_cp_mi8 MBD+r6, 0xfe, 0x01                          ; FD5379  8e fe 3f 01
 	jr z, .LFD53CB                                       ; FD537D  66 4c
@@ -139758,7 +139836,8 @@ ToneMsg80_Id10:
 	push XIX                                             ; FD63CC  3c
 	calr ToneMsg_Send                                      ; FD63CD  1e 62 fd
 	inc 8,XSP                                            ; FD63D0  ef 60
-sub_FD63D2:
+; (sub_FD63D2 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneMsg80_Id10;
+;  notes/prom_a_stray_label_removal.py)
 	pop XIX                                              ; FD63D2  5c
 	popw hl                                              ; FD63D3  4b
 	unlk XIZ                                             ; FD63D4  ee 0d
@@ -142118,7 +142197,8 @@ sub_FD759A:
 	calr U8_ShiftLeft                                          ; FD761F  1e 72 f6
 	ld L,A                                               ; FD7622  c9 8f
 	cpl A                                                ; FD7624  c9 06
-sub_FD7626:
+; (sub_FD7626 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FD759A;
+;  notes/prom_a_stray_label_removal.py)
 	and (xiz-6), a                                       ; FD7626  8e fa c9
 	pushw de                                             ; FD7629  2a
 	ld C,H                                               ; FD762A  ce 8b
@@ -143872,7 +143952,8 @@ SoundEditEnvelope1_SoftKeyCol5:
 SoundEditEnvelope1_SoftKeyCol6:
 	link XIZ,0xfff0                                      ; FD83E8  ee 0c f0 ff
 	push XIX                                             ; FD83EC  3c
-sub_FD83ED:
+; (sub_FD83ED removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditEnvelope1_SoftKeyCol6;
+;  notes/prom_a_stray_label_removal.py)
 	lda xix, (xiz-16)                                    ; FD83ED  be f0 34
 	lda xbc, (xiz-2)                                     ; FD83F0  be fe 31
 	push XBC                                             ; FD83F3  39
@@ -143937,7 +144018,8 @@ SoundEditEnvelope1_SoftKeyCol7:
 	push XIX                                             ; FD8481  3c
 	pushw 0x01                                           ; FD8482  0b 01 00
 	calr Arr27A6_Get                                          ; FD8485  1e f3 e7
-sub_FD8488:
+; (sub_FD8488 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditEnvelope1_SoftKeyCol7;
+;  notes/prom_a_stray_label_removal.py)
 	ld (XIX+0x06),0xff                                   ; FD8488  bc 06 00 ff
 	ld (XIX+0x07),0x00                                   ; FD848C  bc 07 00 00
 	ld (XIX+0x08),0x32                                   ; FD8490  bc 08 00 32
@@ -144045,7 +144127,8 @@ SoundEditEnvelope2_SoftKeyCol2:
 	pushw 0x02                                           ; FD8590  0b 02 00
 	calr PanelDial_ActAsButton                                      ; FD8593  1e 6b f6
 	popw bc                                              ; FD8596  49
-sub_FD8597:
+; (sub_FD8597 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditEnvelope2_SoftKeyCol2;
+;  notes/prom_a_stray_label_removal.py)
 	pop XIX                                              ; FD8597  5c
 	unlk XIZ                                             ; FD8598  ee 0d
 	ret                                                  ; FD859A  0e
@@ -144153,7 +144236,8 @@ SoundEditEnvelope2_SoftKeyCol4:
 	ld bc, (xiz-4)                                       ; FD8696  9e fc 21
 	extz BC                                              ; FD8699  d9 12
 	pushw bc                                             ; FD869B  29
-sub_FD869C:
+; (sub_FD869C removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditEnvelope2_SoftKeyCol4;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x0a                                           ; FD869C  0b 0a 00
 	calr Arr27A6_Set                                          ; FD869F  1e c3 e5
 	pushw 0x01                                           ; FD86A2  0b 01 00
@@ -144250,7 +144334,8 @@ SoundEditEnvelope2_SoftKeyCol7:
 	extz BC                                              ; FD8783  d9 12
 	pushw bc                                             ; FD8785  29
 	ld bc, (xiz-2)                                       ; FD8786  9e fe 21
-sub_FD8789:
+; (sub_FD8789 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditEnvelope2_SoftKeyCol7;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FD8789  d9 12
 	pushw bc                                             ; FD878B  29
 	pushw 0x00                                           ; FD878C  0b 00 00
@@ -144335,7 +144420,8 @@ SoundEditController_SoftKeyCol2:
 	push XBC                                             ; FD8847  39
 	ld A,D                                               ; FD8848  cc 89
 	extz WA                                              ; FD884A  d8 12
-sub_FD884C:
+; (sub_FD884C removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditController_SoftKeyCol2;
+;  notes/prom_a_stray_label_removal.py)
 	pushw wa                                             ; FD884C  28
 	calr Arr27A6_Get                                          ; FD884D  1e 2b e4
 	ld h, (xiz-4)                                        ; FD8850  8e fc 26
@@ -144667,7 +144753,8 @@ SoundEditAmpEnvelope_DrawGraph:
 	ld IX,BC                                             ; FD8B20  d9 8c
 	ld a, (xiz-6)                                        ; FD8B22  8e fa 21
 	extz WA                                              ; FD8B25  d8 12
-sub_FD8B27:
+; (sub_FD8B27 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditAmpEnvelope_DrawGraph;
+;  notes/prom_a_stray_label_removal.py)
 	ld HL,WA                                             ; FD8B27  d8 8b
 	m_cp_rm MWD+r6, 0xf2, r1                             ; FD8B29  9e f2 f1
 	jr c, .LFD8B37                                       ; FD8B2C  67 09
@@ -144682,7 +144769,8 @@ sub_FD8B27:
 	ld HL,BC                                             ; FD8B3E  d9 8b
 .LFD8B40:
 	ld c, (xiz-6)                                        ; FD8B40  8e fa 23
-sub_FD8B43:
+; (sub_FD8B43 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundEditAmpEnvelope_DrawGraph;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FD8B43  d9 12
 	ldw wa, 0x64                                         ; FD8B45  30 64 00
 	sub WA,BC                                            ; FD8B48  d9 a0
@@ -147319,7 +147407,8 @@ sub_FDA160:
 .LFDA189:
 	ld XBC,(XIZ+0x08)                                    ; FDA189  ae 08 21
 	push XBC                                             ; FDA18C  39
-sub_FDA18D:
+; (sub_FDA18D removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDA160;
+;  notes/prom_a_stray_label_removal.py)
 	calr Var27FC_Get                                      ; FDA18D  1e b2 ff
 .LFDA190:
 	pop XIY                                              ; FDA190  5d
@@ -147437,7 +147526,8 @@ sub_FDA252:
 .LFDA27E:
 	lda xbc, (xiz-6)                                     ; FDA27E  be fa 31
 	push XBC                                             ; FDA281  39
-sub_FDA282:
+; (sub_FDA282 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDA252;
+;  notes/prom_a_stray_label_removal.py)
 	lda xiy, (.LFDA28A:24)                               ; FDA282  f2 8a a2 fd 35
 	push XIY                                             ; FDA287  3d
 	jp (xix)                                             ; FDA288  b4 d8
@@ -147728,7 +147818,8 @@ Arr2800_Set1:
 	ld A,(XIZ+0x0a)                                      ; FDA499  8e 0a 21
 	ld (XBC+0x2800),A                                    ; FDA49C  f3 e5 00 28 41
 	unlk XIZ                                             ; FDA4A1  ee 0d
-sub_FDA4A3:
+; (sub_FDA4A3 removed 2026-10-04: no code names it and the line above falls through into it -- part of Arr2800_Set1;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FDA4A3  0e
 ; ---------------------------------------------------------------------
 ; Arr2800_Get1 -- *(u8 *)arg2 = ((u8 *)0x2800)[arg1 - 1]
@@ -147965,7 +148056,8 @@ sub_FDA5D4:
 	push XBC                                             ; FDA5EE  39
 	ld (xiz-14), de                                      ; FDA5EF  be f2 52
 	m_push MWD+r6, 0xf2                                  ; FDA5F2  9e f2 04
-sub_FDA5F5:
+; (sub_FDA5F5 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDA5D4;
+;  notes/prom_a_stray_label_removal.py)
 	calr Arr27A6_Get                                          ; FDA5F5  1e 83 c6
 	ld XBC,XIX                                           ; FDA5F8  ec 89
 	m_add_rm MLD+r6, 0xf4, r1                            ; FDA5FA  ae f4 81
@@ -148117,7 +148209,8 @@ sub_FDA70D:
 	jr .LFDA738                                          ; FDA715  68 21
 .LFDA717:
 	ld C,H                                               ; FDA717  ce 8b
-sub_FDA719:
+; (sub_FDA719 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDA70D;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FDA719  d9 12
 	ld DE,BC                                             ; FDA71B  d9 8a
 	ld WA,(XIZ+0x0a)                                     ; FDA71D  9e 0a 20
@@ -148440,7 +148533,8 @@ Var280E_GetW:
 	ld wa, (0x280e:16)                                 ; FDA8C3  d1 0e 28 20
 	ld (XBC),WA                                          ; FDA8C7  b1 50
 	unlk XIZ                                             ; FDA8C9  ee 0d
-sub_FDA8CB:
+; (sub_FDA8CB removed 2026-10-04: no code names it and the line above falls through into it -- part of Var280E_GetW;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FDA8CB  0e
 ; ---------------------------------------------------------------------
 ; Var2810_Set -- (0x2810) = (u8)arg1
@@ -148645,7 +148739,8 @@ sub_FDA911:
 	pushw 0x00                                           ; FDAA49  0b 00 00
 	calr ToneMsg_SendParam                                          ; FDAA4C  1e 1b b7
 	ld hl, (xiz-42)                                      ; FDAA4F  9e d6 23
-sub_FDAA52:
+; (sub_FDAA52 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDA911;
+;  notes/prom_a_stray_label_removal.py)
 	inc 1,HL                                             ; FDAA52  db 61
 	inc 1,D                                              ; FDAA54  cc 61
 	inc 8,XSP                                            ; FDAA56  ef 60
@@ -149815,7 +149910,8 @@ ScreenEnter_SoundEditPitchEnvelope2:
 	jr .LFDB523                                          ; FDB4AB  68 76
 .LFDB4AD:
 	lda xbc, (xiz-6)                                     ; FDB4AD  be fa 31
-sub_FDB4B0:
+; (sub_FDB4B0 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditPitchEnvelope2;
+;  notes/prom_a_stray_label_removal.py)
 	push XBC                                             ; FDB4B0  39
 	call Var27DB_Get                                      ; FDB4B1  1d 34 77 fd
 	push XIX                                             ; FDB4B5  3c
@@ -150501,7 +150597,8 @@ sub_FDBA8B:
 	jr c, .LFDBAB0                                       ; FDBADF  67 cf
 	pop XIX                                              ; FDBAE1  5c
 	popw de                                              ; FDBAE2  4a
-sub_FDBAE3:
+; (sub_FDBAE3 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDBA8B;
+;  notes/prom_a_stray_label_removal.py)
 	popw hl                                              ; FDBAE3  4b
 	unlk XIZ                                             ; FDBAE4  ee 0d
 	ret                                                  ; FDBAE6  0e
@@ -150972,7 +151069,8 @@ ScreenEnter_SoundEditControllerPage2:
 	ld d, 0x04:opc                                          ; FDBF59  24 04
 .LFDBF5B:
 	pushw 0x9b                                           ; FDBF5B  0b 9b 00
-sub_FDBF5E:
+; (sub_FDBF5E removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditControllerPage2;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x01                                           ; FDBF5E  0b 01 00
 	ld (xiz-18), hl                                      ; FDBF61  be ee 53
 	m_push MWD+r6, 0xee                                  ; FDBF64  9e ee 04
@@ -151287,7 +151385,8 @@ sub_FDC22F:
 	pushw de                                             ; FDC234  2a
 	push XIX                                             ; FDC235  3c
 	lda xbc, (xiz-2)                                     ; FDC236  be fe 31
-sub_FDC239:
+; (sub_FDC239 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDC22F;
+;  notes/prom_a_stray_label_removal.py)
 	push XBC                                             ; FDC239  39
 	call Var27A3_GetValidSlot                                      ; FDC23A  1d 4d 6b fd
 	ld h, 0x00:opc                                          ; FDC23E  26 00
@@ -151314,7 +151413,8 @@ sub_FDC239:
 	cp h, 0x06:i3                                          ; FDC271  ce de
 	jr c, .LFDC241                                       ; FDC273  67 cc
 	pop XIX                                              ; FDC275  5c
-sub_FDC276:
+; (sub_FDC276 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDC22F;
+;  notes/prom_a_stray_label_removal.py)
 	popw de                                              ; FDC276  4a
 	popw hl                                              ; FDC277  4b
 	unlk XIZ                                             ; FDC278  ee 0d
@@ -151476,7 +151576,8 @@ ScreenEnter_SoundEditFilterEnvelope1:
 	pushw de                                             ; FDC40A  2a
 	pushw ix                                             ; FDC40B  2c
 	call T_CallbackQueue_ResetAndRestartTask2            ; FDC40C  1d 80 2e f4
-sub_FDC410:
+; (sub_FDC410 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditFilterEnvelope1;
+;  notes/prom_a_stray_label_removal.py)
 	lda xbc, (xiz-2)                                     ; FDC410  be fe 31
 	push XBC                                             ; FDC413  39
 	call Var27DA_Get                                      ; FDC414  1d f5 76 fd
@@ -152131,7 +152232,8 @@ sub_FDC9C4:
 	ld HL,DE                                             ; FDCA47  da 8b
 	inc 4,HL                                             ; FDCA49  db 64
 	incm8 0x01, (xiz-5)                                  ; FDCA4B  8e fb 61
-sub_FDCA4E:
+; (sub_FDCA4E removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDC9C4;
+;  notes/prom_a_stray_label_removal.py)
 	inc 6,XSP                                            ; FDCA4E  ef 66
 	m_cp_mi8 MBD+r6, 0xfb, 0x04                          ; FDCA50  8e fb 3f 04
 	jr ule, .LFDCA37                                     ; FDCA54  63 e1
@@ -152588,7 +152690,8 @@ ScreenEnter_SoundEditMemoryWrite:
 sub_FDCE74:
 	pushw 0x01                                           ; FDCE74  0b 01 00
 	call sub_FD60F2                                      ; FDCE77  1d f2 60 fd
-sub_FDCE7B:
+; (sub_FDCE7B removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDCE74;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x00                                           ; FDCE7B  0b 00 00
 	call Var27FE_Set                                      ; FDCE7E  1d 41 a3 fd
 	pushw 0x00                                           ; FDCE82  0b 00 00
@@ -152619,7 +152722,8 @@ sub_FDCE7B:
 	jr nz, .LFDCED1                                      ; FDCEC6  6e 09
 	pushw 0x03                                           ; FDCEC8  0b 03 00
 	call ToneMsg85_SendParam                                      ; FDCECB  1d d7 63 fd
-sub_FDCECF:
+; (sub_FDCECF removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDCE74;
+;  notes/prom_a_stray_label_removal.py)
 	jr .LFDCED8                                          ; FDCECF  68 07
 .LFDCED1:
 	pushw 0x00                                           ; FDCED1  0b 00 00
@@ -152659,7 +152763,8 @@ sub_FDCECF:
 	jr c, .LFDCEED                                       ; FDCF11  67 da
 	pushw 0x10                                           ; FDCF13  0b 10 00
 	push XIX                                             ; FDCF16  3c
-sub_FDCF17:
+; (sub_FDCF17 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDCE74;
+;  notes/prom_a_stray_label_removal.py)
 	pushw 0x01                                           ; FDCF17  0b 01 00
 	call sub_FD77B3                                      ; FDCF1A  1d b3 77 fd
 	lda xbc, (xiz-8)                                     ; FDCF1E  be f8 31
@@ -152728,7 +152833,8 @@ sub_FDCF17:
 	pushw 0x04                                           ; FDCFC1  0b 04 00
 	call Arr27A6_Set                                      ; FDCFC4  1d 65 6c fd
 	ld bc, (xiz-12)                                      ; FDCFC8  9e f4 21
-sub_FDCFCB:
+; (sub_FDCFCB removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FDCE74;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FDCFCB  d9 12
 	pushw bc                                             ; FDCFCD  29
 	pushw 0x05                                           ; FDCFCE  0b 05 00
@@ -152908,7 +153014,8 @@ ScreenEnter_SoundEditCopy:
 	jp (xix)                                             ; FDD163  b4 d8
 .LFDD165:
 	ld bc, (xiz-8)                                       ; FDD165  9e f8 21
-sub_FDD168:
+; (sub_FDD168 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditCopy;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FDD168  d9 12
 	pushw bc                                             ; FDD16A  29
 	pushw 0x0b                                           ; FDD16B  0b 0b 00
@@ -153199,7 +153306,8 @@ ScreenEnter_SoundEditDrumMenu:
 	inc 8,XSP                                            ; FDD41B  ef 60
 .LFDD41D:
 	pushw 0x00                                           ; FDD41D  0b 00 00
-sub_FDD420:
+; (sub_FDD420 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditDrumMenu;
+;  notes/prom_a_stray_label_removal.py)
 	call Var27DA_Set                                      ; FDD420  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDD424  1d 13 77 fd
 	pushw 0x10                                           ; FDD428  0b 10 00
@@ -154227,7 +154335,8 @@ ToneEditPage_A6_TouchDepth:
 	ld bc, (xiz-6)                                       ; FDDCB3  9e fa 21
 	extz BC                                              ; FDDCB6  d9 12
 	pushw bc                                             ; FDDCB8  29
-sub_FDDCB9:
+; (sub_FDDCB9 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditPage_A6_TouchDepth;
+;  notes/prom_a_stray_label_removal.py)
 	call ToneMsg80_SendParam                                      ; FDDCB9  1d cf 61 fd
 	ld hl, (xiz-28)                                      ; FDDCBD  9e e4 23
 	inc 1,HL                                             ; FDDCC0  db 61
@@ -154495,7 +154604,8 @@ ToneEditPage_A7_ResoModeKeyFollow:
 	inc 4,XSP                                            ; FDDEF3  ef 64
 	m_cp_mi8 MBD+r6, 0xfe, 0x00                          ; FDDEF5  8e fe 3f 00
 	jr nz, .LFDDF06                                      ; FDDEF9  6e 0b
-sub_FDDEFB:
+; (sub_FDDEFB removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditPage_A7_ResoModeKeyFollow;
+;  notes/prom_a_stray_label_removal.py)
 	call Var27DB_Increment                                      ; FDDEFB  1d 19 77 fd
 	cp A,0x0a                                            ; FDDEFF  c9 cf 0a
 	jr ugt, .LFDDF0E                                     ; FDDF02  6b 0a
@@ -154605,7 +154715,8 @@ ToneEditPage_A8_SerialParallel:
 	pushw 0x00                                           ; FDDFFC  0b 00 00
 	call Arr27A6_Get                                      ; FDDFFF  1d 7b 6c fd
 	ld c, (xiz-12)                                       ; FDE003  8e f4 23
-sub_FDE006:
+; (sub_FDE006 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditPage_A8_SerialParallel;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FDE006  d9 12
 	pushw bc                                             ; FDE008  29
 	pushw 0x08                                           ; FDE009  0b 08 00
@@ -154713,7 +154824,8 @@ sub_FDE006:
 	call Var7634_GetViaH                                      ; FDE0EC  1d be a4 fd
 	m_and_mi8 MBD+r6, 0xec, 0x01                         ; FDE0F0  8e ec 3c 01
 	ld bc, (xiz-20)                                      ; FDE0F4  9e ec 21
-sub_FDE0F7:
+; (sub_FDE0F7 removed 2026-10-04: no code names it and the line above falls through into it -- part of ToneEditPage_A8_SerialParallel;
+;  notes/prom_a_stray_label_removal.py)
 	extz BC                                              ; FDE0F7  d9 12
 	pushw bc                                             ; FDE0F9  29
 	pushw 0x04                                           ; FDE0FA  0b 04 00
@@ -155370,7 +155482,8 @@ ScreenButton_SoundEditFilterHpf24:
 .LFDE522:
 	pushw 0x00                                           ; FDE522  0b 00 00
 	call LCD_SetPanelDarkFlag                                      ; FDE525  1d 5b ac fd
-sub_FDE529:
+; (sub_FDE529 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_SoundEditFilterHpf24;
+;  notes/prom_a_stray_label_removal.py)
 	call PanelScreen_RequestPending                                      ; FDE529  1d b9 60 fd
 	inc 6,XSP                                            ; FDE52D  ef 66
 	cp a, 0x00:i3                                          ; FDE52F  c9 d8
@@ -159077,7 +159190,8 @@ Disk_FormatSelectedMedia_Veneer:
 	ret                                                  ; FE0045  0e
 sub_FE0046:
 	push XDE                                             ; FE0046  3a
-sub_FE0047:
+; (sub_FE0047 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE0046;
+;  notes/prom_a_stray_label_removal.py)
 	push XHL                                             ; FE0047  3b
 	push XIX                                             ; FE0048  3c
 	push XIZ                                             ; FE0049  3e
@@ -160162,7 +160276,8 @@ sub_FE0785:
 	sll hl, 0x08                                         ; FE07C7  db ee 08
 	ld bc, (0x220f:16)                                 ; FE07CA  d1 0f 22 21
 	extz BC                                              ; FE07CE  d9 12
-sub_FE07D0:
+; (sub_FE07D0 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE0785;
+;  notes/prom_a_stray_label_removal.py)
 	or BC,HL                                             ; FE07D0  db e1
 	m_cp_mr MW16, 0x23ce, r1                             ; FE07D2  d1 ce 23 f9
 	jr z, .LFE07DC                                           ; FE07D6  66 04
@@ -161511,7 +161626,8 @@ sub_FE144E:
 	push XIX                                             ; FE144F  3c
 	ld	c, (TransportC_State:8)                                      ; FE1450  c0 95 23
 	and C,0x04                                           ; FE1453  cb cc 04
-sub_FE1456:
+; (sub_FE1456 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE144E;
+;  notes/prom_a_stray_label_removal.py)
 	jrl nz, .LFE14CC                                         ; FE1456  7e 73 00
 	ld	c, (0xa3:8)                                      ; FE1459  c0 a3 23
 	and C,0x80                                           ; FE145C  cb cc 80
@@ -162660,7 +162776,8 @@ DiskLoad_ByContentType:
 	ld C,(XIX)                                           ; FE1DF3  84 23
 	cp c, 0x05:i3                                          ; FE1DF5  cb dd
 	jr nz, .LFE1DFE                                          ; FE1DF7  6e 05
-sub_FE1DF9:
+; (sub_FE1DF9 removed 2026-10-04: no code names it and the line above falls through into it -- part of DiskLoad_ByContentType;
+;  notes/prom_a_stray_label_removal.py)
 	calr DiskLoad_MidiSetting                                            ; FE1DF9  1e f5 00
 	jr .LFE1E26                                              ; FE1DFC  68 28
 .LFE1DFE:
@@ -163947,7 +164064,8 @@ DiskSave_CopyWordsToBuffer:
 	sub XBC,XBC                                          ; FE296A  e9 a1
 	inc 2,XBC                                            ; FE296C  e9 62
 	add (xiz-8), xbc                                     ; FE296E  ae f8 89
-sub_FE2971:
+; (sub_FE2971 removed 2026-10-04: no code names it and the line above falls through into it -- part of DiskSave_CopyWordsToBuffer;
+;  notes/prom_a_stray_label_removal.py)
 	m_add_rm MLD+r6, 0xf4, r1                            ; FE2971  ae f4 81
 	ld (xiz-4), xbc                                      ; FE2974  be fc 61
 	inc 1,XIX                                            ; FE2977  ec 61
@@ -165795,11 +165913,13 @@ DiskCmd_FindNext:
 	m_cp_rm MW24, 0x605d5e, r0                           ; FE3B2B  d2 5e 5d 60 f0
 sub_FE3B30:
 	jr z, .LFE3B55                                           ; FE3B30  66 23
-sub_FE3B32:
+; (sub_FE3B32 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE3B30;
+;  notes/prom_a_stray_label_removal.py)
 	m_push MWD+r7, 0x04                                  ; FE3B32  9f 04 04
 	calr Disk_ReadRootDirSector                                          ; FE3B35  1e e9 0a
 	inc 2,XSP                                            ; FE3B38  ef 62
-sub_FE3B3A:
+; (sub_FE3B3A removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE3B30;
+;  notes/prom_a_stray_label_removal.py)
 	lda xbc, (0x605d5e:24)                               ; FE3B3A  f2 5e 5d 60 31
 	cp hl, 0x00:i3                                         ; FE3B3F  db d8
 	jr z, .LFE3B49                                           ; FE3B41  66 06
@@ -172994,7 +173114,8 @@ sub_FE6E84:
 	extz XIX                                             ; FE6F81  ec 12
 	ld E,(XIX+0x01)                                      ; FE6F83  8c 01 25
 	ld B,(XIX+0x03)                                      ; FE6F86  8c 03 22
-sub_FE6F89:
+; (sub_FE6F89 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE6E84;
+;  notes/prom_a_stray_label_removal.py)
 	ld (xiz-4), b                                        ; FE6F89  be fc 42
 	calr sub_FE6F89_Nop                                          ; FE6F8C  1e 3f 02
 	ldw bc, 0x76a0                                       ; FE6F8F  31 a0 76
@@ -174257,7 +174378,8 @@ T_F402B8_Nop:
 ScreenButton_Sequencer:
 	cp HL,0x001f                                         ; FE8060  db cf 1f 00
 	jr gt, .LFE8076                                      ; FE8064  6a 10
-sub_FE8066:
+; (sub_FE8066 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_Sequencer;
+;  notes/prom_a_stray_label_removal.py)
 	ld XIX,Sequencer_ButtonTable                         ; FE8066  44 77 80 fe 00
 	sll hl, 0x02                                         ; FE806B  db ee 02
 	extz XHL                                             ; FE806E  eb 12
@@ -175438,7 +175560,8 @@ sub_FE87DD:
 	.byte 0xd7, 0x3e, 0x2a                               ; FE87F0  d7 3e 2a   xorcf A,QHL3
 	.byte 0xd7, 0x3e, 0x88                               ; FE87F3  d7 3e 88   ld WA,QHL3
 	jr c, .LFE87FA                                       ; FE87F6  67 02
-sub_FE87F8:
+; (sub_FE87F8 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE87DD;
+;  notes/prom_a_stray_label_removal.py)
 	jr .LFE8801                                          ; FE87F8  68 07
 .LFE87FA:
 	inc 1,C                                              ; FE87FA  cb 61
@@ -177175,7 +177298,8 @@ ScreenButton_NoteEdit:
 	extz XHL                                             ; FE9A41  eb 12
 	add XIX,XHL                                          ; FE9A43  eb 84
 	ld XIX,(XIX)                                         ; FE9A45  a4 24
-sub_FE9A47:
+; (sub_FE9A47 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenButton_NoteEdit;
+;  notes/prom_a_stray_label_removal.py)
 	call (xix)                                           ; FE9A47  b4 e8
 .LFE9A49:
 	ret                                                  ; FE9A49  0e
@@ -178928,7 +179052,8 @@ EditCursor_MeasurePlus10:
 	ldw (EditCursor_Measure:24), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
 .LFEAAD8:
 	calr EditCursor_MeasureChanged                                      ; FEAAD8  1e 53 f2
-sub_FEAADB:
+; (sub_FEAADB removed 2026-10-04: no code names it and the line above falls through into it -- part of EditCursor_MeasurePlus10;
+;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FEAADB  0e
 .LFEAADC:
 	calr sub_FE9CFC_Nop                                          ; FEAADC  1e 60 d5
@@ -191582,7 +191707,8 @@ sub_FF5F1B:
 	ld (0x2729:16), c                                   ; FF5F28  f1 29 27 43
 	pushw 0x03                                           ; FF5F2C  0b 03 00
 	pushw 0x04                                           ; FF5F2F  0b 04 00
-sub_FF5F32:
+; (sub_FF5F32 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FF5F1B;
+;  notes/prom_a_stray_label_removal.py)
 	calr PanelDial_SetButtonPair                                      ; FF5F32  1e f5 11
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FF5F35  f1 40 25 00 01
 	lda xbc, (CharPalette_F587B2:24)                     ; FF5F3A  f2 b2 87 f5 31
@@ -191630,7 +191756,8 @@ SoftKeyCol4_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at
 ;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
 SoftKeyCol5_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D49
 	pushw 0x01                                           ; FF5F98  0b 01 00
-sub_FF5F9B:
+; (sub_FF5F9B removed 2026-10-04: no code names it and the line above falls through into it -- part of SoftKeyCol5_MidiFileSave_Page0;
+;  notes/prom_a_stray_label_removal.py)
 	calr sub_FF5FA0                                      ; FF5F9B  1e 02 00
 	popw bc                                              ; FF5F9E  49
 	ret                                                  ; FF5F9F  0e
@@ -192262,7 +192389,8 @@ MidiFile_LcdKeyRow5:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FF63F3  c1 7a 20 3f 4e
 	jr nz, .LFF6404                                      ; FF63F8  6e 0a
 	ld c, (0x60a480:24)                                 ; FF63FA  c2 80 a4 60 23
-sub_FF63FF:
+; (sub_FF63FF removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiFile_LcdKeyRow5;
+;  notes/prom_a_stray_label_removal.py)
 	cp C,0x20                                            ; FF63FF  cb cf 20
 	jr z, .LFF644C                                       ; FF6402  66 48
 .LFF6404:

@@ -72,6 +72,8 @@ one `bit 0,A` and one `and A,1`.
 Two loads are not followed by a test in the census, and neither is an exception:
 
 - in `sub_FBFE2C`, the `and C,0x01` comes one line later, after that routine's label;
+  (2026-10-04: that label was a stray -- nothing referenced it and the load falls into it -- and
+  notes/prom_a_stray_label_removal.py removed it, so the load and its test are now one routine's two lines)
 - the other is `PanelState_UpdateScreenHoldState`'s own read-modify-write.
 
 Among the readers:
