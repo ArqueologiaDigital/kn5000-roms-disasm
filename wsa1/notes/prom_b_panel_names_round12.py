@@ -37,7 +37,7 @@ QUESTION IT ANSWERS
       2 already named
      12 NAMED HERE -- table 0xF54248, the DRAWBAR screen
      19 REFUSED, screen unknown: tables 0xF135FD / 0xF1394F / 0xF4C38D are read
-        by sub_F0F17C / sub_F12334 / ScreenButton_CreatorSelectController, whose own headers say "Unknown:
+        by ScreenButtonBody_DspEffect / sub_F12334 / ScreenButton_CreatorSelectController, whose own headers say "Unknown:
         what the routine is FOR", and NO vtable slot in any of the four images
         points at their thunks (T_F42F50, T_F42F6C, T_F434E8). A control name
         with no screen would be <Control>_<address> -- FRAMED, not
@@ -451,7 +451,7 @@ def refusal_header_for(addr, screen, slots, gap):
 FAMILY2 = {0xF135FD: None, 0xF1394F: None,
            0xF4C38D: "ScreenCodeAD",     # 2026-10-03: its reader is ScreenButton_CreatorSelectController (see the correction above)
            0xF54248: "DrawbarScreen"}
-FAMILY2_READER = {0xF135FD: ("sub_F0F17C", 0xF0F194), 0xF1394F: ("sub_F12334", 0xF12347),
+FAMILY2_READER = {0xF135FD: ("ScreenButtonBody_DspEffect", 0xF0F194), 0xF1394F: ("sub_F12334", 0xF12347),
                   0xF4C38D: ("ScreenButton_CreatorSelectController", 0xF4C4C8),
                   0xF54248: ("DrawbarScreen_Dispatch", 0xF5303D)}
 DEFAULT_THUNK = 0xF42C70

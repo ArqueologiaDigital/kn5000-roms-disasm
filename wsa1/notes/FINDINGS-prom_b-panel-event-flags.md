@@ -30,7 +30,7 @@ back:
 | `xor (0x28B0),C` / `xor (0x28B0),A` | 6 | IndexedParam_* and IndexedTable_*: XOR a descriptor byte into the flags |
 | bits 3, 4, 5, 6, 7 tests | 3, 3, 1, 1, 1 | IndexedTable_GetByte_*, IndexedParam_* |
 | `set 6` / `res 6` / `xor 0x01` | 1 / 1 / 1 | sub_FBD0EE, IndexedTable_GetByte_Join8, sub_FBF453_Nop |
-| `ld H,(0x28B0)` (the test follows later) | 7 | T_F418C4_Nop, sub_F0F59F, sub_F0F620, sub_F0F686 |
+| `ld H,(0x28B0)` (the test follows later) | 7 | T_F418C4_Nop, LcdKeyRow2_DspEffect, LcdKeyRow3_DspEffect, LcdKeyRow4_DspEffect |
 
 The rows add up to the census total of 153.
 

@@ -28683,7 +28683,7 @@ sub_F0F0FF_Epilogue:
 	ret	; F0F104  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F105
+; ScreenEnterBody_DspEffect
 ; Called from: T_F42F4C (x3)
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2790) (0x2797) (0x2798)
 ; Calls:   sub_F0F018
@@ -28695,7 +28695,10 @@ sub_F0F0FF_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F105:		; <- T_F42F4C
+; ScreenEnterBody_DspEffect: the enter code of the DSP EFFECT screens (T_F42F4C) -- Screen_DspEffect_Enter (0x66),
+;   ScreenEnter_CombiEditDspEffect (0x39) and ScreenEnter_SoundEditDspEffect (0xCA) all call it.  On a new screen it resets
+;   (0x2798) and clamps Effect_BlockIndex to 2, then dispatches on (0x2790) through DispatchTable_F0F152.
+ScreenEnterBody_DspEffect:		; <- T_F42F4C
 	push	xix	; F0F105  push XIX
 	lda	xix, (10129:16)	; F0F106  lda XIX,0x2791
 	ld	c, (UI_ScreenLatch:16)	; F0F10A  ld C,(0x207a)
@@ -28820,7 +28823,7 @@ sub_F0F174_Join:
 	ret	; F0F17B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F17C
+; ScreenButtonBody_DspEffect
 ; Called from: T_F42F50 (x3)
 ; Touches: (0x2076)
 ; Calls:   T_PanelCode_ToSlotAndFlags sub_F1245A
@@ -28832,7 +28835,9 @@ sub_F0F174_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F17C:		; <- T_F42F50
+; ScreenButtonBody_DspEffect: the button code of the DSP EFFECT screens (T_F42F50), called by
+;   Screen_DspEffect_Button, ScreenButton_CombiEditDspEffect and ScreenButton_SoundEditDspEffect.
+ScreenButtonBody_DspEffect:		; <- T_F42F50
 	link XIZ,0x0000	; F0F17C  link XIZ,0x0000
 	push	xix	; F0F180  push XIX
 	lda	xix, (10129:16)	; F0F181  lda XIX,0x2791
@@ -28861,7 +28866,7 @@ sub_F0F17C_Skip:
 	ret	; F0F1BD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F1BE
+; ExitKey_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790) (0x28B0)
@@ -28875,7 +28880,9 @@ sub_F0F17C_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F1BE:
+; ExitKey_DspEffect: slot 15 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the ExitKey handler (notes/prom_ab_slot23_button_names.py).
+ExitKey_DspEffect:
 	pushw	hl	; F0F1BE  push HL
 	push	xix	; F0F1BF  push XIX
 	lda	xix, (UI_Request_Hi:16)	; F0F1C0  lda XIX,0x2071
@@ -29042,7 +29049,7 @@ sub_F0F277_Epilogue:
 	ret	; F0F280  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F281
+; SoftKeyCol1_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29056,7 +29063,9 @@ sub_F0F277_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F281:
+; SoftKeyCol1_DspEffect: slot 0 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol1 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol1_DspEffect:
 	ld	bc, (10128:16)	; F0F281  ld BC,(0x2790)
 	extz	bc	; F0F285  extz BC
 	extz	xbc	; F0F287  extz XBC
@@ -29166,7 +29175,7 @@ DispatchTable_F0F29A_Nop4:
 	ret	; F0F2DE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F2DF
+; SoftKeyCol2_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29180,7 +29189,9 @@ DispatchTable_F0F29A_Nop4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F2DF:
+; SoftKeyCol2_DspEffect: slot 1 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol2 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol2_DspEffect:
 	ld	bc, (10128:16)	; F0F2DF  ld BC,(0x2790)
 	extz	bc	; F0F2E3  extz BC
 	extz	xbc	; F0F2E5  extz XBC
@@ -29286,7 +29297,7 @@ DispatchTable_F0F2F8_Nop0:
 	ret	; F0F32D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F32E
+; SoftKeyCol3_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29300,7 +29311,9 @@ DispatchTable_F0F2F8_Nop0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F32E:
+; SoftKeyCol3_DspEffect: slot 2 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol3 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol3_DspEffect:
 	ld	bc, (10128:16)	; F0F32E  ld BC,(0x2790)
 	extz	bc	; F0F332  extz BC
 	extz	xbc	; F0F334  extz XBC
@@ -29419,7 +29432,7 @@ sub_F0F37C_Return:
 	ret	; F0F394  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F395
+; SoftKeyCol4_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29433,7 +29446,9 @@ sub_F0F37C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F395:
+; SoftKeyCol4_DspEffect: slot 3 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol4 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol4_DspEffect:
 	ld	bc, (10128:16)	; F0F395  ld BC,(0x2790)
 	extz	bc	; F0F399  extz BC
 	extz	xbc	; F0F39B  extz XBC
@@ -29541,7 +29556,7 @@ DispatchTable_F0F3AE_Nop4:
 	ret	; F0F3EB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F3EC
+; SoftKeyCol5_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29555,7 +29570,9 @@ DispatchTable_F0F3AE_Nop4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F3EC:
+; SoftKeyCol5_DspEffect: slot 4 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol5 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol5_DspEffect:
 	push	xix	; F0F3EC  push XIX
 	lda	xix, (10129:16)	; F0F3ED  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F3F1  ld BC,(0x2790)
@@ -29665,7 +29682,7 @@ sub_F0F441:
 	ret	; F0F442  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F443
+; SoftKeyCol6_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29679,7 +29696,9 @@ sub_F0F441:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F443:
+; SoftKeyCol6_DspEffect: slot 5 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol6 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol6_DspEffect:
 	push	xix	; F0F443  push XIX
 	lda	xix, (10129:16)	; F0F444  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F448  ld BC,(0x2790)
@@ -29796,7 +29815,7 @@ sub_F0F48D_Epilogue:
 	ret	; F0F4A5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F4A6
+; SoftKeyCol7_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29810,7 +29829,9 @@ sub_F0F48D_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F4A6:
+; SoftKeyCol7_DspEffect: slot 6 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol7 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol7_DspEffect:
 	push	xix	; F0F4A6  push XIX
 	lda	xix, (10129:16)	; F0F4A7  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F4AB  ld BC,(0x2790)
@@ -29919,7 +29940,7 @@ sub_F0F4FB:
 	ret	; F0F4FC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F4FD
+; SoftKeyCol8_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -29933,7 +29954,9 @@ sub_F0F4FB:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F4FD:
+; SoftKeyCol8_DspEffect: slot 7 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol8 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol8_DspEffect:
 	ld	bc, (10128:16)	; F0F4FD  ld BC,(0x2790)
 	extz	bc	; F0F501  extz BC
 	extz	xbc	; F0F503  extz XBC
@@ -30014,7 +30037,7 @@ DispatchTable_F0F516_Nop0:
 	ret	; F0F535  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F536
+; LcdKeyRow1_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790) (0x28B0)
@@ -30028,7 +30051,9 @@ DispatchTable_F0F516_Nop0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F536:
+; LcdKeyRow1_DspEffect: slot 8 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow1 handler (notes/prom_ab_slot23_button_names.py).
+LcdKeyRow1_DspEffect:
 	ld	c, (PanelEvent_Flags:16)	; F0F536  ld C,(0x28b0)
 	and	c, 1	; F0F53A  and C,0x01
 	jr	z, sub_F0F579_Skip	; F0F53D  jr Z,0xf0f59b
@@ -30148,7 +30173,7 @@ DispatchTable_F0F558_Nop4:
 	ret	; F0F59E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F59F
+; LcdKeyRow2_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790) (0x28B0)
@@ -30162,7 +30187,9 @@ DispatchTable_F0F558_Nop4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F59F:
+; LcdKeyRow2_DspEffect: slot 9 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow2 handler (notes/prom_ab_slot23_button_names.py).
+LcdKeyRow2_DspEffect:
 	pushw	hl	; F0F59F  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F5A0  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F5A4  ld BC,(0x2790)
@@ -30343,7 +30370,7 @@ sub_F0F61E:
 	ret	; F0F61F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F620
+; LcdKeyRow3_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790) (0x28B0)
@@ -30357,7 +30384,9 @@ sub_F0F61E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F620:
+; LcdKeyRow3_DspEffect: slot 10 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow3 handler (notes/prom_ab_slot23_button_names.py).
+LcdKeyRow3_DspEffect:
 	pushw	hl	; F0F620  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F621  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F625  ld BC,(0x2790)
@@ -30491,7 +30520,7 @@ sub_F0F684:
 	ret	; F0F685  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F686
+; LcdKeyRow4_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790) (0x28B0)
@@ -30505,7 +30534,9 @@ sub_F0F684:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F686:
+; LcdKeyRow4_DspEffect: slot 11 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow4 handler (notes/prom_ab_slot23_button_names.py).
+LcdKeyRow4_DspEffect:
 	pushw	hl	; F0F686  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F687  ld H,(0x28b0)
 	ld	bc, (10128:16)	; F0F68B  ld BC,(0x2790)
@@ -30641,7 +30672,7 @@ sub_F0F6ED:
 	ret	; F0F6EE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F6EF
+; LcdKeyRow5_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2790)
@@ -30655,7 +30686,9 @@ sub_F0F6ED:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F6EF:
+; LcdKeyRow5_DspEffect: slot 12 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow5 handler (notes/prom_ab_slot23_button_names.py).
+LcdKeyRow5_DspEffect:
 	ld	bc, (10128:16)	; F0F6EF  ld BC,(0x2790)
 	extz	bc	; F0F6F3  extz BC
 	extz	xbc	; F0F6F5  extz XBC
@@ -38530,22 +38563,22 @@ EffectPage_BlockIndex:
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
 DispatchTable_F135FD:
-	.long	sub_F0F281	; F135FD  [0] -> sub_F0F281
-	.long	sub_F0F2DF	; F13601  [1] -> sub_F0F2DF
-	.long	sub_F0F32E	; F13605  [2] -> sub_F0F32E
-	.long	sub_F0F395	; F13609  [3] -> sub_F0F395
-	.long	sub_F0F3EC	; F1360D  [4] -> sub_F0F3EC
-	.long	sub_F0F443	; F13611  [5] -> sub_F0F443
-	.long	sub_F0F4A6	; F13615  [6] -> sub_F0F4A6
-	.long	sub_F0F4FD	; F13619  [7] -> sub_F0F4FD
-	.long	sub_F0F536	; F1361D  [8] -> sub_F0F536
-	.long	sub_F0F59F	; F13621  [9] -> sub_F0F59F
-	.long	sub_F0F620	; F13625  [10] -> sub_F0F620
-	.long	sub_F0F686	; F13629  [11] -> sub_F0F686
-	.long	sub_F0F6EF	; F1362D  [12] -> sub_F0F6EF
+	.long	SoftKeyCol1_DspEffect	; F135FD  [0] -> SoftKeyCol1_DspEffect
+	.long	SoftKeyCol2_DspEffect	; F13601  [1] -> SoftKeyCol2_DspEffect
+	.long	SoftKeyCol3_DspEffect	; F13605  [2] -> SoftKeyCol3_DspEffect
+	.long	SoftKeyCol4_DspEffect	; F13609  [3] -> SoftKeyCol4_DspEffect
+	.long	SoftKeyCol5_DspEffect	; F1360D  [4] -> SoftKeyCol5_DspEffect
+	.long	SoftKeyCol6_DspEffect	; F13611  [5] -> SoftKeyCol6_DspEffect
+	.long	SoftKeyCol7_DspEffect	; F13615  [6] -> SoftKeyCol7_DspEffect
+	.long	SoftKeyCol8_DspEffect	; F13619  [7] -> SoftKeyCol8_DspEffect
+	.long	LcdKeyRow1_DspEffect	; F1361D  [8] -> LcdKeyRow1_DspEffect
+	.long	LcdKeyRow2_DspEffect	; F13621  [9] -> LcdKeyRow2_DspEffect
+	.long	LcdKeyRow3_DspEffect	; F13625  [10] -> LcdKeyRow3_DspEffect
+	.long	LcdKeyRow4_DspEffect	; F13629  [11] -> LcdKeyRow4_DspEffect
+	.long	LcdKeyRow5_DspEffect	; F1362D  [12] -> LcdKeyRow5_DspEffect
 	.long	T_F42C70	; F13631  [13] -> 0xF42C70
 	.long	T_F42C70	; F13635  [14] -> 0xF42C70
-	.long	sub_F0F1BE	; F13639  [15] -> sub_F0F1BE
+	.long	ExitKey_DspEffect	; F13639  [15] -> ExitKey_DspEffect
 	.long	T_F42C70	; F1363D  [16] -> 0xF42C70
 	.long	T_F42C70	; F13641  [17] -> 0xF42C70
 	.long	T_F42C70	; F13645  [18] -> 0xF42C70
@@ -90744,8 +90777,8 @@ T_F42F04:	jp sub_F693F6  ; -> prom_b 0x693F6   x1
 T_F42F40:	jp sub_F0F018  ; -> prom_b 0x0F018
 T_F42F44:	jp sub_F0F02B  ; -> prom_b 0x0F02B
 T_F42F48:	jp sub_F0F042  ; -> prom_b 0x0F042
-T_F42F4C:	jp sub_F0F105  ; -> prom_b 0x0F105   x3
-T_F42F50:	jp sub_F0F17C  ; -> prom_b 0x0F17C   x3
+T_F42F4C:	jp ScreenEnterBody_DspEffect  ; -> prom_b 0x0F105   x3
+T_F42F50:	jp ScreenButtonBody_DspEffect  ; -> prom_b 0x0F17C   x3
 T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061
 T_F42F58:	jp sub_F114DA  ; -> prom_b 0x114DA   x8
 T_F42F5C:	jp sub_F1156B  ; -> prom_b 0x1156B   x4
@@ -110766,7 +110799,7 @@ T_F42E48_Nop:		; <- T_F42E48
 ;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
 ;               (XBC)` -- the image-wide message-dispatch idiom, here
 ;               through PanelButtonTable_DrawbarScreen.
-; Evidence: the byte-identical idiom appears at sub_F0F17C, ScreenButton_CreatorSelectController and
+; Evidence: the byte-identical idiom appears at ScreenButtonBody_DspEffect, ScreenButton_CreatorSelectController and
 ;           0xF1233E in this same file, each with its own table; the only
 ;           thing this file adds is WHICH table.  The name states the
 ;           mechanism and the table, not a purpose.
@@ -114765,7 +114798,7 @@ Stub_Ret_F55018:
 ; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
 ; Called from: thunk T_PanelCode_ToSlotAndFlags (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
-;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CreatorSelectController and
+;              ScreenButtonBody_DspEffect (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CreatorSelectController and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
 ;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags

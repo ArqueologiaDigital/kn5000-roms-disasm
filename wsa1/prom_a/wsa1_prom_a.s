@@ -58900,7 +58900,7 @@ TuneScale_KeyScalingCodeToIndex:
 	popw hl                                              ; FA0077  4b
 	unlk XIZ                                             ; FA0078  ee 0d
 	ret                                                  ; FA007A  0e
-; Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> sub_F0F105)
+; Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> ScreenEnterBody_DspEffect)
 ; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.
 ; Evidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DL_TestSystemTuneScaleInitial (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05).
 Screen_DspEffect_Enter:
@@ -58908,7 +58908,7 @@ Screen_DspEffect_Enter:
 	ret                                                  ; FA007F  0e
 T_F419AC_Nop:
 	ret                                                  ; FA0080  0e
-; Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b sub_F0F17C (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD
+; Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b ScreenButtonBody_DspEffect (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD
 ; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DL_TestSystemTuneScaleInitial (pos 0x1E05, column 5).
 Screen_DspEffect_Button:
 	link XIZ,0x0000                                      ; FA0081  ee 0c 00 00
