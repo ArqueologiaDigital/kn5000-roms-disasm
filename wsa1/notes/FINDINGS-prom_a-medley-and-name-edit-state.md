@@ -42,3 +42,21 @@ From round-1 pack prom_a-s00 (read and applied 2026-10-03; evidence lines in
 The zero-for-O spelling follows the routines (the ROM's own text reads N0TE, C0PY, S0NG).  Not named:
 ADVANCE/DELAY's three values (0x0DE8 / 0x0DEA / 0x0DEC -- which is which is not read here) and MEASURE
 COPY / INSERT's 0x0C18 / 0x0C1A / 0x0C32 / 0x0DDE.
+
+## 4. How the medley plays (2026-10-04)
+
+`Medley_Start` / `Medley_Stop` / `Medley_Next` (directory slots `T_Medley_Start` / `T_Medley_Stop` / `T_Medley_Next`) dispatch
+on `Medley_Source`.
+- **INT** (internal songs).
+  - `Medley_LoadInternalSong` scans the banks from `Medley_PlayingSong` to `Medley_LastSong`, wrapping to
+    `Medley_FirstSong`, for one whose bank copy has an in-use directory entry.
+  - It makes that bank `BStore_CurrentBank`, loads it, and copies its 6-character song name
+    (`BStore_SongName`, workspace +0xCA) into `Medley_DisplayName` (0x0E38).
+  - It sets `Medley_Countdown` (0x22D0) to 10.
+  - `Medley_Tick` counts it down: at 5 the song starts, and at 0 the transports start from zero.
+  - When the song ends, `Medley_AdvanceInternalSong` (`T_Medley_AdvanceInternalSong`) moves on.
+  - With no song in the range, the screen shows status 0x2F and stops.
+- **FD + MIDI FILE.** `Medley_StartMidiFile` mounts the disk, finds the next listed file from
+  `Medley_PlayingSong`, and plays it. `Medley_Tick` moves to the next file when the countdown runs out.
+  `Medley_ScheduleNextMidiFile` (`T_Medley_ScheduleNextMidiFile`) sets the countdown again. The floppy-song loader
+  `Medley_LoadNextSongFromDisk` is described with the disk module.

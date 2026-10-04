@@ -245,7 +245,7 @@ structure.**
 ## 5. Also converted, and deliberately NOT named
 
 **0xFE7800-0xFE7FB1** (1,969 bytes) is a separate module, published through
-directory slots `T_F43020`-`T_F43034`. It walks 0x0C00-byte records at RAM
+directory slots `T_Medley_Tick`-`T_Medley_Next`. It walks 0x0C00-byte records at RAM
 0x610100 looking for a byte with bit 7 set, and its three entry points each
 branch on `(0x220B)` being 0 or 1 with a second test on `(0x0E35)`. Every routine
 in it is `sub_XXXXXX`. It is converted because it is contiguous with the format

@@ -563,6 +563,14 @@ GROUPS = [
         0x601F44: ("EditCursor_Note", "the cursor's note row, 1..127; DRUM EDIT shows only events on it",
                    "EditCursor_NoteUp / _Down / _Up6 / _Down6; DrumEdit_IsOtherNote"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-medley-and-name-edit-state.md", "4. How the medley plays (2026-10-04)", {
+        0x22D0: ("Medley_Countdown", "ticks until the medley's next step: 10 after a song is set up; INT starts at 5, MIDI files move on at 0",
+                 "Medley_LoadInternalSong / _SkipToNextMidiFile / _ScheduleNextMidiFile set it; Medley_Tick counts it"),
+        0x0E38: ("Medley_DisplayName", "the 11 characters the medley shows for the song now playing",
+                 "Medley_LoadInternalSong / _StartMidiFile / _CopySongNameForDisplay; Name11At0E38_Blank"),
+        0x6034CA: ("BStore_SongName", "workspace +0xCA: the bank's 6-character song name",
+                   "SongName_Draw6Chars / _StoreCharAtCursor / _ResetToUnderscores; Medley_LoadInternalSong copies it"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ", {
         0x272B: ("Disk_SeqBank", "the sequencer bank 0..9 a disk load goes into / a save comes from",
                  "LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank"),

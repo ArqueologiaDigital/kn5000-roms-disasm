@@ -494,6 +494,11 @@
 	.equ EditScreen_BeatTable,			0x601f5f	; one byte per beat column shown: the measure's 1-based ordinal (from EditScreen_FirstMeasure) at its first column, 0 at its other beats -- EditScreen_BuildBeatTable fills it; EditCursor_BeatsInMeasure / _WrapPastMeasureEnd read it
 	.equ EditScreen_BeatCounter,			0x601f6c	; the walks' beat counter: markers counted, or still to append -- EditScreen_CountBeatMarkersToEnd / _CountBeatsInMeasure; EditScreen_AppendMissingBeatMarkers
 
+; ---- wsa1/notes/FINDINGS-prom_a-medley-and-name-edit-state.md -- "4. How the medley plays (2026-10-04)"
+	.equ Medley_DisplayName,			0x0e38	; the 11 characters the medley shows for the song now playing -- Medley_LoadInternalSong / _StartMidiFile / _CopySongNameForDisplay; Name11At0E38_Blank
+	.equ Medley_Countdown,				0x22d0	; ticks until the medley's next step: 10 after a song is set up; INT starts at 5, MIDI files move on at 0 -- Medley_LoadInternalSong / _SkipToNextMidiFile / _ScheduleNextMidiFile set it; Medley_Tick counts it
+	.equ BStore_SongName,				0x6034ca	; workspace +0xCA: the bank's 6-character song name -- SongName_Draw6Chars / _StoreCharAtCursor / _ResetToUnderscores; Medley_LoadInternalSong copies it
+
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
 	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank
 

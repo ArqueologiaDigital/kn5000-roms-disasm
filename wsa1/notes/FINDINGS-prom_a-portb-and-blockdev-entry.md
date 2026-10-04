@@ -84,10 +84,10 @@ are the UI's way in:
 | `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
 | `T_Var2216_SetW145C_Call` | 0xFE1CD4 | 2 |
 | `T_F42604` | 0xFE1CD8 | 8 |
-| `T_F43024` | 0xFE7927 | 1: 0xF44AA3 |
-| `T_F4302C` | 0xFE7800 | 1: 0xF661BF |
-| `T_F43030` | 0xFE782C | 1: 0xF6622A |
-| `T_F43034` | 0xFE7848 | 1: 0xF66480 |
+| `T_Medley_AdvanceInternalSong` | 0xFE7927 | 1: 0xF44AA3 |
+| `T_Medley_Start` | 0xFE7800 | 1: 0xF661BF |
+| `T_Medley_Stop` | 0xFE782C | 1: 0xF6622A |
+| `T_Medley_Next` | 0xFE7848 | 1: 0xF66480 |
 
 The script prints every site; the table above abbreviates the long rows.
 

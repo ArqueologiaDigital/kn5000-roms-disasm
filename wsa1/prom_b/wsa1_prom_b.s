@@ -1927,12 +1927,12 @@
 	.set	Disk_CommandDispatch_SaveRegs_Entry, 0xFE3014
 	.set	Fdc_Request_SaveRegs_Entry, 0xFE3018
 	.set	Disk_FormatSelectedMedia, 0xFE7200
-	.set	sub_FE7800, 0xFE7800
-	.set	sub_FE782C, 0xFE782C
-	.set	sub_FE7848, 0xFE7848
-	.set	sub_FE7927, 0xFE7927
-	.set	sub_FE7950, 0xFE7950
-	.set	sub_FE7A49, 0xFE7A49
+	.set	Medley_Start, 0xFE7800
+	.set	Medley_Stop, 0xFE782C
+	.set	Medley_Next, 0xFE7848
+	.set	Medley_AdvanceInternalSong, 0xFE7927
+	.set	Medley_Tick, 0xFE7950
+	.set	Medley_ScheduleNextMidiFile, 0xFE7A49
 	.set	EditScreen_Tick_Call, 0xFE8000
 	.set	sub_FE8005, 0xFE8005
 	.set	sub_FE8026, 0xFE8026
@@ -91663,12 +91663,24 @@ T_DL_VelocityLayer:	jp DL_VelocityLayer + 0x62  ; -> prom_b 0x19FEB
 T_F42FFC:	jp RecordArray_F1A037 + 0x78  ; -> prom_b 0x1A0AF
 T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8:	jp DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 + 0x8  ; -> prom_b 0x1A0C7
 	.fill 0x1C, 1, 0x0E  ; 0xF43004: 28 x ret
-T_F43020:	jp sub_FE7950  ; -> prom_a 0x67950   x1
-T_F43024:	jp sub_FE7927  ; -> prom_a 0x67927   x1
-T_F43028:	jp sub_FE7A49  ; -> prom_a 0x67A49   x1
-T_F4302C:	jp sub_FE7800  ; -> prom_a 0x67800   x1
-T_F43030:	jp sub_FE782C  ; -> prom_a 0x6782C   x1
-T_F43034:	jp sub_FE7848  ; -> prom_a 0x67848   x1
+; Evidence: slot 0xF43020 is `jp 0xFE7950`; prom_a 0xFE7950 carries the label
+;           Medley_Tick (graded CONTENT).  DERIVATIVE name.
+T_Medley_Tick:	jp Medley_Tick  ; F43020 (was T_F43020) -> prom_a 0x67950   x1
+; Evidence: slot 0xF43024 is `jp 0xFE7927`; prom_a 0xFE7927 carries the label
+;           Medley_AdvanceInternalSong (graded CONTENT).  DERIVATIVE name.
+T_Medley_AdvanceInternalSong:	jp Medley_AdvanceInternalSong  ; F43024 (was T_F43024) -> prom_a 0x67927   x1
+; Evidence: slot 0xF43028 is `jp 0xFE7A49`; prom_a 0xFE7A49 carries the label
+;           Medley_ScheduleNextMidiFile (graded CONTENT).  DERIVATIVE name.
+T_Medley_ScheduleNextMidiFile:	jp Medley_ScheduleNextMidiFile  ; F43028 (was T_F43028) -> prom_a 0x67A49   x1
+; Evidence: slot 0xF4302C is `jp 0xFE7800`; prom_a 0xFE7800 carries the label
+;           Medley_Start (graded CONTENT).  DERIVATIVE name.
+T_Medley_Start:	jp Medley_Start  ; F4302C (was T_F4302C) -> prom_a 0x67800   x1
+; Evidence: slot 0xF43030 is `jp 0xFE782C`; prom_a 0xFE782C carries the label
+;           Medley_Stop (graded CONTENT).  DERIVATIVE name.
+T_Medley_Stop:	jp Medley_Stop  ; F43030 (was T_F43030) -> prom_a 0x6782C   x1
+; Evidence: slot 0xF43034 is `jp 0xFE7848`; prom_a 0xFE7848 carries the label
+;           Medley_Next (graded CONTENT).  DERIVATIVE name.
+T_Medley_Next:	jp Medley_Next  ; F43034 (was T_F43034) -> prom_a 0x67848   x1
 	.fill 0x8, 1, 0x0E  ; 0xF43038: 8 x ret
 ; Evidence: slot 0xF43040 is `jp 0xF7D018`; prom_b 0xF7D018 carries the label
 ;           ModeEnter_Edit (graded CONTENT).  DERIVATIVE name.
@@ -92679,7 +92691,7 @@ sub_F442C4:
 	push	xiy	; F442C5  push XIY
 	pushw	bc	; F442C6  push BC
 	ldw	bc, 3	; F442C7  ld BC,0x0003
-	ld	xix, 6304970	; F442CA  ld XIX,0x006034ca
+	ld	xix, BStore_SongName	; F442CA  ld XIX,0x006034ca
 	ld	xiy, WorkspaceDefaults + 0x71	; F442CF  ld XIY,0x00f460e5
 	ldirw	; F442D4  ldirw
 	popw	bc	; F442D6  pop BC
@@ -93561,7 +93573,7 @@ sub_F44964_Join:
 ; Called from: in-module: 0xF44A37
 ; Touches: (0x0E35) (0x0E36) (0x220B) (0x2215) (0x3008) (0x345A) (0x34BB)
 ;          (0x34D0) (0x34D4)  |  0x000000
-; Calls:   sub_F44B2D sub_F44C15 sub_F44C51 sub_F44CEA T_F4257C T_F43024
+; Calls:   sub_F44B2D sub_F44C15 sub_F44C51 sub_F44CEA T_F4257C T_Medley_AdvanceInternalSong
 ;          T_Transport_StopAllRunning
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44A3B is an instruction boundary.
@@ -93603,7 +93615,7 @@ sub_F44A3B_Skip3:
 	m_bit 2, MD16, 0x34d4	; F44A98  bit 2,(0x34d4)
 	jr	z, sub_F44A3B_Return	; F44A9C  jr Z,0xf44ad9
 	m_and_mi8 MB16, 0x34d4, 0xfb	; F44A9E  and (0x34d4),0xfb
-	call	T_F43024	; F44AA3  call 0xf43024
+	call	T_Medley_AdvanceInternalSong	; F44AA3  call 0xf43024
 	m_bit 2, MD16, 0x34d0	; F44AA7  bit 2,(0x34d0)
 	jr	z, sub_F44A3B_Return	; F44AAB  jr Z,0xf44ad9
 	call	T_Transport_StopAllRunning	; F44AAD  call 0xf409ac
@@ -123139,7 +123151,7 @@ SeqPlayScreen_StageValues:
 	ld	(UI_DrawScratch+11:16), a	; F57480  ld (0x264b),A
 	ldw	bc, 3	; F57484  ld BC,0x0003
 	ld	xix, UI_DrawScratch+12	; F57487  ld XIX,0x0000264c
-	ld	xiy, 6304970	; F5748C  ld XIY,0x006034ca
+	ld	xiy, BStore_SongName	; F5748C  ld XIY,0x006034ca
 	ldirw	; F57491  ldirw
 	popw	bc	; F57493  pop BC
 	popw	wa	; F57494  pop WA
@@ -145559,7 +145571,7 @@ SequencerMedley_InitOnEntry:		; <- T_SequencerMedley_InitOnEntry
 	ld	(3656:16), a	; F660FB  ld (0x0e48),A
 	xor	a, a	; F660FF  xor A,A
 	ld	(Medley_Playing:16), a	; F66101  ld (0x0dc1),A
-	ld	(8912:16), a	; F66105  ld (0x22d0),A
+	ld	(Medley_Countdown:16), a	; F66105  ld (0x22d0),A
 	m_or_mi16 MW24, 0x605068, 0x8000	; F66109  or (0x605068),0x8000
 	call	BStore_LoadBankDirectory	; F66110  call 0xf66123
 	call	T_F42410	; F66114  call 0xf42410
@@ -145618,7 +145630,7 @@ SequencerMedley_OnLeave:		; <- T_SequencerMedley_OnLeave
 	call	SequencerMedley_StopPlayback	; F66155  call 0xf66201
 	call	T_Disk_PortA3_Release_Entry	; F66159  call 0xf425f0
 	m_and_mi8 MB16, 0x34d0, 0xfb	; F6615D  and (0x34d0),0xfb
-	ld	(8912:16), 0	; F66162  ld (0x22d0),0x00
+	ld	(Medley_Countdown:16), 0	; F66162  ld (0x22d0),0x00
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F66167  and (0x34bb),0xfb
 	ldw	(6312040:24), 0	; F6616C  ld (0x605068),0x0000
 	m_bit 2, MD16, 0x0e48	; F66173  bit 2,(0x0e48)
@@ -145638,7 +145650,7 @@ sub_F66123_Return:
 ; SequencerMedley_LcdKeyRow2
 ; Called from: T_SequencerMedley_LcdKeyRow2 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x2075) (0x220B) (0x2880)
-; Calls:   T_F4302C T_F42E94 T_F4257C Blink_EnableThenStop
+; Calls:   T_Medley_Start T_F42E94 T_F4257C Blink_EnableThenStop
 ; Evidence: thunk slot T_SequencerMedley_LcdKeyRow2 holds `jp 0x00F66191`, and 0xF66191 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145662,7 +145674,7 @@ SequencerMedley_LcdKeyRow2:		; <- T_SequencerMedley_LcdKeyRow2
 sub_F66123_Skip2:
 	ld	(UI_StatusCode:16), 35	; F661B5  ld (0x2880),0x23
 	ld	(Medley_Playing:16), 1	; F661BA  ld (0x0dc1),0x01
-	call	T_F4302C	; F661BF  call 0xf4302c
+	call	T_Medley_Start	; F661BF  call 0xf4302c
 	call	T_F42E94	; F661C3  call 0xf42e94
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F661C7  cp (0x2880),0x04
 	jr	ugt, sub_F66123_Join2	; F661CC  jr UGT,0xf661e3
@@ -145703,7 +145715,7 @@ Blink_EnableThenStop:
 ; SequencerMedley_StopPlayback
 ; Called from: T_SequencerMedley_StopPlayback (x1); in-module: 0xF66155
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x0E48) (0x220B) (0x22D0)
-; Calls:   T_F43030 T_F42E98 T_F4257C
+; Calls:   T_Medley_Stop T_F42E98 T_F4257C
 ; Evidence: thunk slot T_SequencerMedley_StopPlayback holds `jp 0x00F66201`, and 0xF66201 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145711,7 +145723,7 @@ Blink_EnableThenStop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; SequencerMedley_StopPlayback: when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_F43030 and, unless
+; SequencerMedley_StopPlayback: when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_Medley_Stop and, unless
 ;   (0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_F4257C.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave.
 SequencerMedley_StopPlayback:		; <- T_SequencerMedley_StopPlayback
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66201  cp (0x0dc1),0x01
@@ -145726,8 +145738,8 @@ SequencerMedley_StopPlayback:		; <- T_SequencerMedley_StopPlayback
 	jr	nz, sub_F66201_Skip3	; F6621E  jr NZ,0xf6623c
 sub_F66201_Skip:
 	ld	(Medley_Playing:16), 0	; F66220  ld (0x0dc1),0x00
-	ld	(8912:16), 0	; F66225  ld (0x22d0),0x00
-	call	T_F43030	; F6622A  call 0xf43030
+	ld	(Medley_Countdown:16), 0	; F66225  ld (0x22d0),0x00
+	call	T_Medley_Stop	; F6622A  call 0xf43030
 	m_bit 2, MD16, 0x0e48	; F6622E  bit 2,(0x0e48)
 	jr	z, sub_F66201_Skip2	; F66232  jr Z,0xf66236
 	jr	sub_F66201_Return	; F66234  jr T,0xf66245
@@ -146128,7 +146140,7 @@ sub_F662F7_Return4:
 ; SequencerMedley_LcdKeyRow4
 ; Called from: T_SequencerMedley_LcdKeyRow4 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x220B) (0x22D0) (0x2880)
-; Calls:   T_F43034 T_F42E94 T_F4257C
+; Calls:   T_Medley_Next T_F42E94 T_F4257C
 ; Evidence: thunk slot T_SequencerMedley_LcdKeyRow4 holds `jp 0x00F6645A`, and 0xF6645A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -146148,10 +146160,10 @@ SequencerMedley_LcdKeyRow4:		; <- T_SequencerMedley_LcdKeyRow4
 	m_cp_mi8 MB16, Medley_FileType, 0x01	; F6646D  cp (0x0e35),0x01
 	jr	nz, sub_F662F7_Skip15	; F66472  jr NZ,0xf66498
 sub_F662F7_Skip14:
-	m_cp_mi8 MB16, 0x22d0, 0x00	; F66474  cp (0x22d0),0x00
+	m_cp_mi8 MB16, Medley_Countdown, 0x00	; F66474  cp (0x22d0),0x00
 	jr	nz, sub_F662F7_Return5	; F66479  jr NZ,0xf664ad
 	ld	(UI_StatusCode:16), 35	; F6647B  ld (0x2880),0x23
-	call	T_F43034	; F66480  call 0xf43034
+	call	T_Medley_Next	; F66480  call 0xf43034
 	call	T_F42E94	; F66484  call 0xf42e94
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F66488  cp (0x2880),0x04
 	jr	ugt, sub_F662F7_Join2	; F6648D  jr UGT,0xf664a1

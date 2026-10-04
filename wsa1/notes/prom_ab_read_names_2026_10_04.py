@@ -45,7 +45,7 @@ ROWS = [
     ("F661F3", "Blink_EnableThenStop",
      "T_Blink_SetEnable(1) then T_Blink_Stop."),
     ("F66201", "SequencerMedley_StopPlayback",
-     "when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_F43030 and, unless\n"
+     "when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_Medley_Stop and, unless\n"
      "(0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_F4257C.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave."),
     ("F6625C", "SequencerMedley_StepFieldUp",
      "clears bit 7 of W, then SequencerMedley_StepFirstSong (Medley_Field 1) or _StepLastSong (2): the step goes UP."),
@@ -764,24 +764,24 @@ ROWS = [
     ("FB58CC", "GmMode_ResetToDefaults",
      "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the\n"
      "GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further\n"
-     "resets.  Called by sub_FB5972 (GmMode_HandleChange's) and sub_FB585E."),
+     "resets.  Called by GmMode_ApplyChange (GmMode_HandleChange's) and sub_FB585E."),
     # prom_a 0xFB5D64-0xFB5E2C: per-controller resets.  Each stores a parameter number to (0x60F080), loops (0x60F081) over the
     # parts 0..31 with (0x60F082) / (0x60F083) fixed, and publishes each through T_Queue2C00_PublishStagedDrainPassB.  The
     # numbers are Dispatch_By_60F080's ParamMsg_Bx controllers.
     ("FB5D64", "GmReset_AllPartsPitchBend",
-     "parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by sub_FB5972\n"
+     "parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by GmMode_ApplyChange\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
     ("FB5DC8", "GmReset_AllPartsModulation",
-     "parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
     ("FB5DFA", "GmReset_AllPartsExpression",
-     "parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by sub_FB5972\n"
+     "parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by GmMode_ApplyChange\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
     ("FB5D96", "GmReset_AllPartsChannelPressure",
-     "parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
     ("FB5E2C", "GmReset_AllPartsHold",
-     "parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
     # prom_b 0xF1156B-0xF11C2F: sanitizing a DSP effect block (records 0x61..0x63)
     ("F1156B", "DspEffect_SanitizeBlock",
@@ -1877,6 +1877,47 @@ ROWS = [
     ("FB9E3F", "SmfPlay_StartPlayback",
      "clock reset, flags in (0x34D9) / (0x34BB) cleared, (0x605148) = 1, Transport_StartCAndB, repaint."),
     ("FB9E69", "SmfPlay_ClearEventTimes", "(0x605044) = 0, (0x605048) = 0."),
+    # GM mode (prom_a 0xFB5000)
+    ("FB5972", "GmMode_ApplyChange",
+     "GmMode_HandleChange's body: the parameter image snapshot; entering GM (UiEvent_Byte2 bit 2): sub_FB567E,\n"
+     "GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_F42574; leaving: sub_FB5903, sub_FB568D; then the image\n"
+     "re-sanitised and published, the tempo re-applied, and every part's pitch bend, channel pressure,\n"
+     "modulation, expression and hold reset (GmReset_AllParts*), with GmReset_AllPartsParamB7 / _ParamB6."),
+    ("FB5E5E", "GmReset_AllPartsParamB7",
+     "parameter 0xB7 with (0x60F082) = 0, (0x60F083) = 0x7F, for parts 0..31 (Queue2C00_PublishStagedDrainPassB) --\n"
+     "GmReset_AllPartsExpression's shape.  The parameter dispatch table maps 0xB7 to Dispatch_By_60F080_Nop64."),
+    ("FB5E90", "GmReset_AllPartsParamB6", "the same with parameter 0xB6 (also Dispatch_By_60F080_Nop64 in the table)."),
+    # the medley player (FINDINGS-prom_a-medley-and-name-edit-state.md section 4)
+    ("FE7800", "Medley_Start",
+     "T_Medley_Start: INT -> Medley_PlayingSong = Medley_FirstSong, Medley_LoadInternalSong; FD + MIDI FILE -> the same\n"
+     "start, Medley_StartMidiFile."),
+    ("FE782C", "Medley_Stop", "T_Medley_Stop: INT -> Medley_StopInternal; FD + MIDI FILE -> Medley_StopMidiFile."),
+    ("FE7848", "Medley_Next", "T_Medley_Next: INT -> Medley_SkipToNextInternalSong; FD + MIDI FILE -> Medley_SkipToNextMidiFile."),
+    ("FE7864", "Medley_LoadInternalSong",
+     "from Medley_PlayingSong to Medley_LastSong (then from Medley_FirstSong once more), the first bank whose copy\n"
+     "(0x610100 + bank x 0xC00) has an in-use directory entry: Medley_PlayingSong = BStore_CurrentBank = it,\n"
+     "T_F4282C, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:\n"
+     "UI_StatusCode 0x2F, request 0x40AB, Medley_Playing = 0."),
+    ("FE78FB", "Medley_StopInternal",
+     "T_Transport_StopAllRunning, (0x34D0) bit 2 cleared, Name11At0E38_Blank."),
+    ("FE7908", "Medley_SkipToNextInternalSong",
+     "Medley_StopInternal, Medley_PlayingSong + 1 (past Medley_LastSong: from Medley_FirstSong), Medley_LoadInternalSong."),
+    ("FE7927", "Medley_AdvanceInternalSong",
+     "T_Medley_AdvanceInternalSong, called by the sequencer at a song's end: when an INT medley plays ((0x34D0) bit 2), the next song as\n"
+     "in Medley_SkipToNextInternalSong, without stopping first."),
+    ("FE7950", "Medley_Tick",
+     "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_F40304 (the\n"
+     "transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile."),
+    ("FE79B7", "Medley_StartMidiFile",
+     "(0x34D0) |= 4, T_F42614 (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
+     "(0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_F42E90.  None: Medley_StopMidiFile,\n"
+     "status 3."),
+    ("FE7A30", "Medley_StopMidiFile",
+     "(0x34D0) bit 2 cleared, Disk_BlankFileNameBase, T_F42E90, Name11At0E38_Blank."),
+    ("FE7A40", "Medley_SkipToNextMidiFile", "Medley_StopMidiFile, then (0x22D0) = 10 so Medley_Tick starts the next file."),
+    ("FE7A49", "Medley_ScheduleNextMidiFile",
+     "T_Medley_ScheduleNextMidiFile: with an FD MIDI-file medley playing, (0x22D0) = 10."),
+    ("FE7A73", "Disk_BlankFileNameBase", "Disk_FileName[0..7] = eight spaces."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

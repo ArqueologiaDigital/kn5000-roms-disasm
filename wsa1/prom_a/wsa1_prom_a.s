@@ -1964,8 +1964,8 @@
 	.set T_SoundEditNaming_LcdKeyRow1,                                                                      0x00F42FA4
 	.set T_SoundEditNaming_LcdKeyRow2,                                                                      0x00F42FA8
 	.set T_F42FAC,                                                                      0x00F42FAC
-	.set T_F43020,                                                                      0x00F43020
-	.set T_F43028,                                                                      0x00F43028
+	.set T_Medley_Tick,                                                                      0x00F43020
+	.set T_Medley_ScheduleNextMidiFile,                                                                      0x00F43028
 	.set T_ModeEnter_Edit,                                                                      0x00F43040
 	.set T_ModeEnter_StepRecord,                                                                      0x00F43048
 	.set T_ScreenEnter_Edit,                                                            0x00F43050
@@ -5184,7 +5184,7 @@ S0ngSelectName_CharNext:
 SongName_Draw6Chars:
 	ldw hl, 0x00                                         ; F8165E  33 00 00
 	ldw bc, 0x06                                         ; F81661  31 06 00
-	ld XIY,0x006034ca                                    ; F81664  45 ca 34 60 00
+	ld XIY,BStore_SongName                                    ; F81664  45 ca 34 60 00
 	ldw ix, 0x0998                                       ; F81669  34 98 09
 	ld a, 0x08:opc                                          ; F8166C  21 08
 	swi 7                                                ; F8166E  ff
@@ -5292,7 +5292,7 @@ SongName_StoreCharAtCursor:
 	add XIX,XDE                                          ; F81746  ea 84
 	add XIX,0x000000ca                                   ; F81748  ec c8 ca 00 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F8174E  f3 07 f0 ec 41
-	ld XIX,0x006034ca                                    ; F81753  44 ca 34 60 00
+	ld XIX,BStore_SongName                                    ; F81753  44 ca 34 60 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F81758  f3 07 f0 ec 41
 	ld XIX,DisplayListB_Stage                                    ; F8175D  44 f6 12 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; F81762  f3 07 f0 ec 41
@@ -5329,7 +5329,7 @@ S0ngSelectName_PrepareValues:
 	ld xwa, (0x360c:16)                                 ; F817AC  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; F817B0  f2 1e 34 60 60
 .LF817B5:
-	ld XIY,0x006034ca                                    ; F817B5  45 ca 34 60 00
+	ld XIY,BStore_SongName                                    ; F817B5  45 ca 34 60 00
 	ld XIX,DisplayListB_Stage                                    ; F817BA  44 f6 12 00 00
 	ldw bc, 0x06                                         ; F817BF  31 06 00
 	ldir85                                               ; F817C2  85 11
@@ -5397,7 +5397,7 @@ S0ngSelectName_LoadSongFromBank:
 	ld (NameEdit_CursorPos:16), a                                   ; F81879  f1 2d 22 41
 	ld (DisplayListB_Stage+11:16), a                                   ; F8187D  f1 01 13 41
 	ld XIX,DisplayListB_Stage                                    ; F81881  44 f6 12 00 00
-	ld XIY,0x006034ca                                    ; F81886  45 ca 34 60 00
+	ld XIY,BStore_SongName                                    ; F81886  45 ca 34 60 00
 	ldw bc, 0x06                                         ; F8188B  31 06 00
 	ldir85                                               ; F8188E  85 11
 	call SongName_CharIndexAtCursor                                      ; F81890  1d 88 16 f8
@@ -5442,7 +5442,7 @@ S0ngSelectName_LoadSongFromBank:
 ;          is blind to this name, --verify reads it back.
 ; ---------------------------------------------------------------------
 SongName_ResetToUnderscores:
-	ld XIX,0x006034ca                                    ; F818EA  44 ca 34 60 00
+	ld XIX,BStore_SongName                                    ; F818EA  44 ca 34 60 00
 	ld XIY,sub_F81948                                    ; F818EF  45 48 19 f8 00
 	ldw bc, 0x06                                         ; F818F4  31 06 00
 	ldir85                                               ; F818F7  85 11
@@ -6260,7 +6260,7 @@ MainTask_Loop:
 	jr nz, .LF82175                                      ; F82163  6e 10
 	call T_Link_ServiceTask                              ; F82165  1d d8 0e f4
 	call T_EditScreen_Tick_Call                                        ; F82169  1d 08 03 f4
-	call T_F43020                                        ; F8216D  1d 20 30 f4
+	call T_Medley_Tick                                        ; F8216D  1d 20 30 f4
 	call T_F425C4                                        ; F82171  1d c4 25 f4
 .LF82175:
 	tset	6, (0x88:8)                                  ; F82175  f0 88 ae
@@ -95599,7 +95599,7 @@ sub_FB585E:
 	ret                                                  ; FB58CB  0e
 ; GmMode_ResetToDefaults: the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the
 ;   GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further
-;   resets.  Called by sub_FB5972 (GmMode_HandleChange's) and sub_FB585E.
+;   resets.  Called by GmMode_ApplyChange (GmMode_HandleChange's) and sub_FB585E.
 GmMode_ResetToDefaults:
 	calr sub_FB556D                                      ; FB58CC  1e 9e fc
 	calr sub_FB5A17                                      ; FB58CF  1e 45 01
@@ -95659,7 +95659,7 @@ GmMode_HandleChange:
 	extz BC                                              ; FB594F  d9 12
 	pushw bc                                             ; FB5951  29
 	calr SysExTx_AnnounceGmMode                                      ; FB5952  1e d9 05
-	calr sub_FB5972                                      ; FB5955  1e 1a 00
+	calr GmMode_ApplyChange                                      ; FB5955  1e 1a 00
 	m_res 0, MD24, 0x60f01f                              ; FB5958  f2 1f f0 60 b0
 	pop XIY                                              ; FB595D  5d
 	jr .LFB5970                                          ; FB595E  68 10
@@ -95673,7 +95673,11 @@ GmMode_HandleChange:
 .LFB5970:
 	pop XIX                                              ; FB5970  5c
 	ret                                                  ; FB5971  0e
-sub_FB5972:
+; GmMode_ApplyChange: GmMode_HandleChange's body: the parameter image snapshot; entering GM (UiEvent_Byte2 bit 2): sub_FB567E,
+;   GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_F42574; leaving: sub_FB5903, sub_FB568D; then the image
+;   re-sanitised and published, the tempo re-applied, and every part's pitch bend, channel pressure,
+;   modulation, expression and hold reset (GmReset_AllParts*), with GmReset_AllPartsParamB7 / _ParamB6.
+GmMode_ApplyChange:
 	push XDE                                             ; FB5972  3a
 	push XHL                                             ; FB5973  3b
 	push XIX                                             ; FB5974  3c
@@ -95724,8 +95728,8 @@ sub_FB5972:
 	calr GmReset_AllPartsModulation                                      ; FB59EB  1e da 03
 	calr GmReset_AllPartsExpression                                      ; FB59EE  1e 09 04
 	calr GmReset_AllPartsHold                                      ; FB59F1  1e 38 04
-	calr sub_FB5E5E                                      ; FB59F4  1e 67 04
-	calr sub_FB5E90                                      ; FB59F7  1e 96 04
+	calr GmReset_AllPartsParamB7                                      ; FB59F4  1e 67 04
+	calr GmReset_AllPartsParamB6                                      ; FB59F7  1e 96 04
 	calr sub_FB5972_Nop                                      ; FB59FA  1e c5 04
 	calr sub_FB5EC3                                      ; FB59FD  1e c3 04
 	ret                                                  ; FB5A00  0e
@@ -96117,7 +96121,7 @@ sub_FB5D38:
 	pop XIX                                              ; FB5D60  5c
 	unlk XIZ                                             ; FB5D61  ee 0d
 	ret                                                  ; FB5D63  0e
-; GmReset_AllPartsPitchBend: parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by sub_FB5972
+; GmReset_AllPartsPitchBend: parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by GmMode_ApplyChange
 ;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
 GmReset_AllPartsPitchBend:
 	push XIX                                             ; FB5D64  3c
@@ -96142,7 +96146,7 @@ GmReset_AllPartsPitchBend:
 	jr ule, .LFB5D79                                     ; FB5D92  63 e5
 	pop XIX                                              ; FB5D94  5c
 	ret                                                  ; FB5D95  0e
-; GmReset_AllPartsChannelPressure: parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+; GmReset_AllPartsChannelPressure: parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange
 ;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
 GmReset_AllPartsChannelPressure:
 	push XIX                                             ; FB5D96  3c
@@ -96167,7 +96171,7 @@ GmReset_AllPartsChannelPressure:
 	jr ule, .LFB5DAB                                     ; FB5DC4  63 e5
 	pop XIX                                              ; FB5DC6  5c
 	ret                                                  ; FB5DC7  0e
-; GmReset_AllPartsModulation: parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+; GmReset_AllPartsModulation: parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange
 ;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
 GmReset_AllPartsModulation:
 	push XIX                                             ; FB5DC8  3c
@@ -96192,7 +96196,7 @@ GmReset_AllPartsModulation:
 	jr ule, .LFB5DDD                                     ; FB5DF6  63 e5
 	pop XIX                                              ; FB5DF8  5c
 	ret                                                  ; FB5DF9  0e
-; GmReset_AllPartsExpression: parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by sub_FB5972
+; GmReset_AllPartsExpression: parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by GmMode_ApplyChange
 ;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
 GmReset_AllPartsExpression:
 	push XIX                                             ; FB5DFA  3c
@@ -96217,7 +96221,7 @@ GmReset_AllPartsExpression:
 	jr ule, .LFB5E0F                                     ; FB5E28  63 e5
 	pop XIX                                              ; FB5E2A  5c
 	ret                                                  ; FB5E2B  0e
-; GmReset_AllPartsHold: parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+; GmReset_AllPartsHold: parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by GmMode_ApplyChange
 ;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
 GmReset_AllPartsHold:
 	push XIX                                             ; FB5E2C  3c
@@ -96242,7 +96246,9 @@ GmReset_AllPartsHold:
 	jr ule, .LFB5E41                                     ; FB5E5A  63 e5
 	pop XIX                                              ; FB5E5C  5c
 	ret                                                  ; FB5E5D  0e
-sub_FB5E5E:
+; GmReset_AllPartsParamB7: parameter 0xB7 with (0x60F082) = 0, (0x60F083) = 0x7F, for parts 0..31 (Queue2C00_PublishStagedDrainPassB) --
+;   GmReset_AllPartsExpression's shape.  The parameter dispatch table maps 0xB7 to Dispatch_By_60F080_Nop64.
+GmReset_AllPartsParamB7:
 	push XIX                                             ; FB5E5E  3c
 	lda xix, (0x60f081:24)                               ; FB5E5F  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb7                             ; FB5E64  f2 80 f0 60 00 b7
@@ -96265,7 +96271,8 @@ sub_FB5E5E:
 	jr ule, .LFB5E73                                     ; FB5E8C  63 e5
 	pop XIX                                              ; FB5E8E  5c
 	ret                                                  ; FB5E8F  0e
-sub_FB5E90:
+; GmReset_AllPartsParamB6: the same with parameter 0xB6 (also Dispatch_By_60F080_Nop64 in the table).
+GmReset_AllPartsParamB6:
 	push XIX                                             ; FB5E90  3c
 	lda xix, (0x60f081:24)                               ; FB5E91  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb6                             ; FB5E96  f2 80 f0 60 00 b6
@@ -100748,7 +100755,7 @@ sub_FB906D:
 	push XIZ                                             ; FB906E  3e
 	push XHL                                             ; FB906F  3b
 	push XDE                                             ; FB9070  3a
-	call T_F43028                                        ; FB9071  1d 28 30 f4
+	call T_Medley_ScheduleNextMidiFile                                        ; FB9071  1d 28 30 f4
 	pop XDE                                              ; FB9075  5a
 	pop XHL                                              ; FB9076  5b
 	pop XIZ                                              ; FB9077  5e
@@ -163123,7 +163130,7 @@ Medley_CopySongNameForDisplay:
 	extz XIX                                             ; FE16A8  ec 12
 	ld C,(XIX+Disk_FileName)                                    ; FE16AA  c3 f1 c8 21 23
 	extz XDE                                             ; FE16AF  ea 12
-	ld (XDE+0x0e38),C                                    ; FE16B1  f3 e9 38 0e 43
+	ld (XDE+Medley_DisplayName),C                                    ; FE16B1  f3 e9 38 0e 43
 	ld HL,IX                                             ; FE16B6  dc 8b
 	inc 1,HL                                             ; FE16B8  db 61
 	inc 1,DE                                             ; FE16BA  da 61
@@ -163132,7 +163139,7 @@ Medley_CopySongNameForDisplay:
 	jr .LFE16CC                                              ; FE16C0  68 0a
 .LFE16C2:
 	extz XDE                                             ; FE16C2  ea 12
-	ld (XDE+0x0e38),0x20                                 ; FE16C4  f3 e9 38 0e 00 20
+	ld (XDE+Medley_DisplayName),0x20                                 ; FE16C4  f3 e9 38 0e 00 20
 	inc 1,DE                                             ; FE16CA  da 61
 .LFE16CC:
 	cp DE,0x000b                                         ; FE16CC  da cf 0b 00
@@ -175288,13 +175295,15 @@ FatId_Floppy1440K:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 205, 1, 0x0E
 
-sub_FE7800:
+; Medley_Start: T_Medley_Start: INT -> Medley_PlayingSong = Medley_FirstSong, Medley_LoadInternalSong; FD + MIDI FILE -> the same
+;   start, Medley_StartMidiFile.
+Medley_Start:
 	ld a, (Medley_Source:16)                                   ; FE7800  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7804  c9 d8
 	jr nz, .LFE7815                                      ; FE7806  6e 0d
 	ld a, (Medley_FirstSong:16)                                   ; FE7808  c1 08 22 21
 	ld (Medley_PlayingSong:16), a                                   ; FE780C  f1 0a 22 41
-	calr sub_FE7864                                      ; FE7810  1e 51 00
+	calr Medley_LoadInternalSong                                      ; FE7810  1e 51 00
 	jr .LFE782B                                          ; FE7813  68 16
 .LFE7815:
 	cp a, 0x01:i3                                          ; FE7815  c9 d9
@@ -175303,38 +175312,44 @@ sub_FE7800:
 	jr nz, .LFE782B                                      ; FE781E  6e 0b
 	ld a, (Medley_FirstSong:16)                                   ; FE7820  c1 08 22 21
 	ld (Medley_PlayingSong:16), a                                   ; FE7824  f1 0a 22 41
-	calr sub_FE79B7                                      ; FE7828  1e 8c 01
+	calr Medley_StartMidiFile                                      ; FE7828  1e 8c 01
 .LFE782B:
 	ret                                                  ; FE782B  0e
-sub_FE782C:
+; Medley_Stop: T_Medley_Stop: INT -> Medley_StopInternal; FD + MIDI FILE -> Medley_StopMidiFile.
+Medley_Stop:
 	ld a, (Medley_Source:16)                                   ; FE782C  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE7830  c9 d8
 	jr nz, .LFE7839                                      ; FE7832  6e 05
-	calr sub_FE78FB                                      ; FE7834  1e c4 00
+	calr Medley_StopInternal                                      ; FE7834  1e c4 00
 	jr .LFE7847                                          ; FE7837  68 0e
 .LFE7839:
 	cp a, 0x01:i3                                          ; FE7839  c9 d9
 	jr nz, .LFE7847                                      ; FE783B  6e 0a
 	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE783D  c1 35 0e 3f 01
 	jr nz, .LFE7847                                      ; FE7842  6e 03
-	calr sub_FE7A30                                      ; FE7844  1e e9 01
+	calr Medley_StopMidiFile                                      ; FE7844  1e e9 01
 .LFE7847:
 	ret                                                  ; FE7847  0e
-sub_FE7848:
+; Medley_Next: T_Medley_Next: INT -> Medley_SkipToNextInternalSong; FD + MIDI FILE -> Medley_SkipToNextMidiFile.
+Medley_Next:
 	ld a, (Medley_Source:16)                                   ; FE7848  c1 0b 22 21
 	cp a, 0x00:i3                                          ; FE784C  c9 d8
 	jr nz, .LFE7855                                      ; FE784E  6e 05
-	calr sub_FE7908                                      ; FE7850  1e b5 00
+	calr Medley_SkipToNextInternalSong                                      ; FE7850  1e b5 00
 	jr .LFE7863                                          ; FE7853  68 0e
 .LFE7855:
 	cp a, 0x01:i3                                          ; FE7855  c9 d9
 	jr nz, .LFE7863                                      ; FE7857  6e 0a
 	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7859  c1 35 0e 3f 01
 	jr nz, .LFE7863                                      ; FE785E  6e 03
-	calr sub_FE7A40                                      ; FE7860  1e dd 01
+	calr Medley_SkipToNextMidiFile                                      ; FE7860  1e dd 01
 .LFE7863:
 	ret                                                  ; FE7863  0e
-sub_FE7864:
+; Medley_LoadInternalSong: from Medley_PlayingSong to Medley_LastSong (then from Medley_FirstSong once more), the first bank whose copy
+;   (0x610100 + bank x 0xC00) has an in-use directory entry: Medley_PlayingSong = BStore_CurrentBank = it,
+;   T_F4282C, (0x34D0) |= 4, its 6-character name (0x6034CA) to 0x0E38 + 5 blanks, (0x22D0) = 10.  None in range:
+;   UI_StatusCode 0x2F, request 0x40AB, Medley_Playing = 0.
+Medley_LoadInternalSong:
 	ld a, (Medley_PlayingSong:16)                                   ; FE7864  c1 0a 22 21
 	m_cp_rm MB16, Medley_LastSong, r1                             ; FE7868  c1 09 22 f1
 	jrl ugt, .LFE78FA                                    ; FE786C  7b 8b 00
@@ -175378,8 +175393,8 @@ sub_FE7864:
 	ld (BStore_CurrentBank:16), a                                   ; FE78CF  f1 0a 36 41
 	call T_F4282C                                        ; FE78D3  1d 2c 28 f4
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE78D7  c1 d0 34 3e 04
-	ld XIY,0x006034ca                                    ; FE78DC  45 ca 34 60 00
-	ld XIX,0x00000e38                                    ; FE78E1  44 38 0e 00 00
+	ld XIY,BStore_SongName                                    ; FE78DC  45 ca 34 60 00
+	ld XIX,Medley_DisplayName                                    ; FE78E1  44 38 0e 00 00
 	ldw bc, 0x03                                         ; FE78E6  31 03 00
 	ldirw                                                ; FE78E9  95 11
 	ld a, 0x20:opc                                          ; FE78EB  21 20
@@ -175387,16 +175402,18 @@ sub_FE7864:
 .LFE78EF:
 	ld (xix+), a                                    ; FE78EF  f5 f0 41
 	djnz8 b, .LFE78EF                                    ; FE78F2  ca 1c fa
-	ld (0x22d0:16), 0x0a                                 ; FE78F5  f1 d0 22 00 0a
+	ld (Medley_Countdown:16), 0x0a                                 ; FE78F5  f1 d0 22 00 0a
 .LFE78FA:
 	ret                                                  ; FE78FA  0e
-sub_FE78FB:
+; Medley_StopInternal: T_Transport_StopAllRunning, (0x34D0) bit 2 cleared, Name11At0E38_Blank.
+Medley_StopInternal:
 	call T_Transport_StopAllRunning                                        ; FE78FB  1d ac 09 f4
 	m_and_mi8 MB16, 0x34d0, 0xfb                         ; FE78FF  c1 d0 34 3c fb
 	calr Name11At0E38_Blank                                      ; FE7904  1e 5c 01
 	ret                                                  ; FE7907  0e
-sub_FE7908:
-	calr sub_FE78FB                                      ; FE7908  1e f0 ff
+; Medley_SkipToNextInternalSong: Medley_StopInternal, Medley_PlayingSong + 1 (past Medley_LastSong: from Medley_FirstSong), Medley_LoadInternalSong.
+Medley_SkipToNextInternalSong:
+	calr Medley_StopInternal                                      ; FE7908  1e f0 ff
 	ld a, (Medley_PlayingSong:16)                                   ; FE790B  c1 0a 22 21
 	m_cp_rm MB16, Medley_LastSong, r1                             ; FE790F  c1 09 22 f1
 	jr c, .LFE791F                                       ; FE7913  67 0a
@@ -175405,9 +175422,11 @@ sub_FE7908:
 	ld (Medley_PlayingSong:16), a                                   ; FE791B  f1 0a 22 41
 .LFE791F:
 	inc 0x01, (Medley_PlayingSong:16)                                ; FE791F  c1 0a 22 61
-	calr sub_FE7864                                      ; FE7923  1e 3e ff
+	calr Medley_LoadInternalSong                                      ; FE7923  1e 3e ff
 	ret                                                  ; FE7926  0e
-sub_FE7927:
+; Medley_AdvanceInternalSong: T_Medley_AdvanceInternalSong, called by the sequencer at a song's end: when an INT medley plays ((0x34D0) bit 2), the next song as
+;   in Medley_SkipToNextInternalSong, without stopping first.
+Medley_AdvanceInternalSong:
 	m_cp_mi8 MB16, Medley_Source, 0x00                          ; FE7927  c1 0b 22 3f 00
 	jr nz, .LFE794F                                      ; FE792C  6e 21
 	m_bit 2, MD16, 0x34d0                                ; FE792E  f1 d0 34 ca
@@ -175420,11 +175439,13 @@ sub_FE7927:
 	ld (Medley_PlayingSong:16), a                                   ; FE7944  f1 0a 22 41
 .LFE7948:
 	inc 0x01, (Medley_PlayingSong:16)                                ; FE7948  c1 0a 22 61
-	calr sub_FE7864                                      ; FE794C  1e 15 ff
+	calr Medley_LoadInternalSong                                      ; FE794C  1e 15 ff
 .LFE794F:
 	ret                                                  ; FE794F  0e
-sub_FE7950:
-	ld w, (0x22d0:16)                                   ; FE7950  c1 d0 22 20
+; Medley_Tick: T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_F40304 (the
+;   transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile.
+Medley_Tick:
+	ld w, (Medley_Countdown:16)                                   ; FE7950  c1 d0 22 20
 	cp w, 0x00:i3                                          ; FE7954  c8 d8
 	jr z, .LFE79B6                                       ; FE7956  66 5e
 	dec 1,W                                              ; FE7958  c8 69
@@ -175457,7 +175478,7 @@ sub_FE7950:
 	ld (Medley_PlayingSong:16), a                                   ; FE79A1  f1 0a 22 41
 .LFE79A5:
 	pushw wa                                             ; FE79A5  28
-	calr sub_FE79B7                                      ; FE79A6  1e 0e 00
+	calr Medley_StartMidiFile                                      ; FE79A6  1e 0e 00
 	popw wa                                              ; FE79A9  48
 	jr .LFE79B2                                          ; FE79AA  68 06
 .LFE79AC:
@@ -175465,10 +175486,13 @@ sub_FE7950:
 	call T_F40304                                        ; FE79AD  1d 04 03 f4
 	popw wa                                              ; FE79B1  48
 .LFE79B2:
-	ld (0x22d0:16), w                                   ; FE79B2  f1 d0 22 40
+	ld (Medley_Countdown:16), w                                   ; FE79B2  f1 d0 22 40
 .LFE79B6:
 	ret                                                  ; FE79B6  0e
-sub_FE79B7:
+; Medley_StartMidiFile: (0x34D0) |= 4, T_F42614 (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry
+;   (0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_F42E90.  None: Medley_StopMidiFile,
+;   status 3.
+Medley_StartMidiFile:
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE79B7  c1 d0 34 3e 04
 	call T_F42614                                        ; FE79BC  1d 14 26 f4
 .LFE79C0:
@@ -175488,7 +175512,7 @@ sub_FE79B7:
 	ld (Medley_PlayingSong:16), c                                   ; FE79E9  f1 0a 22 43
 	jr .LFE79C0                                          ; FE79ED  68 d1
 .LFE79EF:
-	calr sub_FE7A30                                      ; FE79EF  1e 3e 00
+	calr Medley_StopMidiFile                                      ; FE79EF  1e 3e 00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10                          ; FE79F2  c1 71 20 3e 10
 	m_and_mi8 MB16, Medley_Playing, 0xfe                         ; FE79F7  c1 c1 0d 3c fe
 	ld (UI_StatusCode:16), 0x03                                 ; FE79FC  f1 80 28 00 03
@@ -175500,7 +175524,7 @@ sub_FE79B7:
 	ldw bc, 0x04                                         ; FE7A10  31 04 00
 	ldirw                                                ; FE7A13  95 11
 	ld XIY,XWA                                           ; FE7A15  e8 8d
-	ld XIX,0x00000e38                                    ; FE7A17  44 38 0e 00 00
+	ld XIX,Medley_DisplayName                                    ; FE7A17  44 38 0e 00 00
 	ldw bc, 0x04                                         ; FE7A1C  31 04 00
 	ldirw                                                ; FE7A1F  95 11
 	ld a, 0x20:opc                                          ; FE7A21  21 20
@@ -175511,36 +175535,40 @@ sub_FE79B7:
 	call T_F42E90                                        ; FE7A2B  1d 90 2e f4
 .LFE7A2F:
 	ret                                                  ; FE7A2F  0e
-sub_FE7A30:
+; Medley_StopMidiFile: (0x34D0) bit 2 cleared, Disk_BlankFileNameBase, T_F42E90, Name11At0E38_Blank.
+Medley_StopMidiFile:
 	m_and_mi8 MB16, 0x34d0, 0xfb                         ; FE7A30  c1 d0 34 3c fb
-	calr sub_FE7A73                                      ; FE7A35  1e 3b 00
+	calr Disk_BlankFileNameBase                                      ; FE7A35  1e 3b 00
 	call T_F42E90                                        ; FE7A38  1d 90 2e f4
 	calr Name11At0E38_Blank                                      ; FE7A3C  1e 24 00
 	ret                                                  ; FE7A3F  0e
-sub_FE7A40:
-	calr sub_FE7A30                                      ; FE7A40  1e ed ff
-	ld (0x22d0:16), 0x0a                                 ; FE7A43  f1 d0 22 00 0a
+; Medley_SkipToNextMidiFile: Medley_StopMidiFile, then (0x22D0) = 10 so Medley_Tick starts the next file.
+Medley_SkipToNextMidiFile:
+	calr Medley_StopMidiFile                                      ; FE7A40  1e ed ff
+	ld (Medley_Countdown:16), 0x0a                                 ; FE7A43  f1 d0 22 00 0a
 	ret                                                  ; FE7A48  0e
-sub_FE7A49:
+; Medley_ScheduleNextMidiFile: T_Medley_ScheduleNextMidiFile: with an FD MIDI-file medley playing, (0x22D0) = 10.
+Medley_ScheduleNextMidiFile:
 	m_cp_mi8 MB16, Medley_Source, 0x01                          ; FE7A49  c1 0b 22 3f 01
 	jr nz, .LFE7A62                                      ; FE7A4E  6e 12
 	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; FE7A50  c1 35 0e 3f 01
 	jr nz, .LFE7A62                                      ; FE7A55  6e 0b
 	m_bit 2, MD16, 0x34d0                                ; FE7A57  f1 d0 34 ca
 	jr z, .LFE7A62                                       ; FE7A5B  66 05
-	ld (0x22d0:16), 0x0a                                 ; FE7A5D  f1 d0 22 00 0a
+	ld (Medley_Countdown:16), 0x0a                                 ; FE7A5D  f1 d0 22 00 0a
 .LFE7A62:
 	ret                                                  ; FE7A62  0e
 ; Name11At0E38_Blank: fill the 11 bytes at RAM 0x0E38 with spaces.
 Name11At0E38_Blank:
-	ld XIX,0x00000e38                                    ; FE7A63  44 38 0e 00 00
+	ld XIX,Medley_DisplayName                                    ; FE7A63  44 38 0e 00 00
 	ld a, 0x20:opc                                          ; FE7A68  21 20
 	ld b, 0x0b:opc                                          ; FE7A6A  22 0b
 .LFE7A6C:
 	ld (xix+), a                                    ; FE7A6C  f5 f0 41
 	djnz8 b, .LFE7A6C                                    ; FE7A6F  ca 1c fa
 	ret                                                  ; FE7A72  0e
-sub_FE7A73:
+; Disk_BlankFileNameBase: Disk_FileName[0..7] = eight spaces.
+Disk_BlankFileNameBase:
 	ld XIX,Disk_FileName                                    ; FE7A73  44 c8 21 00 00
 	ld XWA,0x20202020                                    ; FE7A78  40 20 20 20 20
 	ld b, 0x02:opc                                          ; FE7A7D  22 02
@@ -175552,7 +175580,7 @@ sub_FE7A73:
 ; 0xFE7A86-0xFE7FB0 -- 1,323 bytes of 0x00 after this module's last `ret`
 ;
 ; Was framed as 1,323 `nop` instructions.  It is not code: the byte before
-; it is the `ret` of sub_FE7A73, no label lies inside it, no branch in this
+; it is the `ret` of Disk_BlankFileNameBase, no label lies inside it, no branch in this
 ; source reaches it, and no 32-bit immediate or `.long` in prom_a or prom_b
 ; (hex or decimal) names an address in it.  It runs up to the module's 0x0E
 ; pad at 0xFE7FB1.  Checked byte by byte: notes/proma-2026-09-25/
@@ -191381,7 +191409,7 @@ LcdKeyRow1_MidiFileL0ad:
 	ld C,H                                               ; FF52BB  ce 8b
 	exts BC                                              ; FF52BD  d9 13
 	exts XBC                                             ; FF52BF  e9 13
-	add XBC,0x006034ca                                   ; FF52C1  e9 c8 ca 34 60 00
+	add XBC,BStore_SongName                                   ; FF52C1  e9 c8 ca 34 60 00
 	ld (XBC),0x5f                                        ; FF52C7  b1 00 5f
 	inc 1,H                                              ; FF52CA  ce 61
 	cp h, 0x06:i3                                          ; FF52CC  ce de
