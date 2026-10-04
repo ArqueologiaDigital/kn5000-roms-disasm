@@ -2775,6 +2775,11 @@ RENAMES = {
     "sub_F7CCCA": "AdvanceDelay_ReturnToStageZero",
     "OldCopy_sub_F7ABDC": "OldCopy_TrackClear_ReturnToStageZero",
     "OldCopy_sub_F7ADF5": "OldCopy_TrackMerge_ReturnToStageZero",
+    "sub_F7EFFA": "MeasureDelete_RedrawFields",
+    "sub_F7F32A": "MeasureErase_RedrawFields",
+    "sub_F7F668": "Quantize_RedrawFields",
+    "sub_F7F99C": "Vel0cityChange_RedrawFields",
+    "sub_F7FCE6": "Transp0se_RedrawFields",
 }
 
 

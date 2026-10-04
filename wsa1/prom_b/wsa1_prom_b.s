@@ -197572,7 +197572,9 @@ Paint_MeasureDelete_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F082; calr from prom_b
 ;           0xF7F0A6, and from nothing else the scans see.
-sub_F7EFFA:
+; MeasureDelete_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
+;   T_DLB_Handler_Array8 -- ld xiy, DL_LastMeasure + 0x23 (notes/prom_ab_stage_zero_names.py).
+MeasureDelete_RedrawFields:
 	calr	sub_F7E39F_Nop	; F7EFFA  calr 0xf7e2d8
 	ld	(LCD_CurrentLayer:16), 1	; F7EFFD  ld (0x2540),0x01
 	ld	xiy, DL_F39551	; F7F002  ld XIY,0x00f39551
@@ -197726,7 +197728,7 @@ LcdKeyRow2_MeasureDelete_StageZero:
 	ld	a, (3540:16)	; F7F077  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F07B  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F07F  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F082  calr 0xf7effa
+	calr	MeasureDelete_RedrawFields	; F7F082  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return	; F7F085  jr T,0xf7f087
 ScreenLeaveBody_MeasureDelete_Return:
 	ret	; F7F087  ret
@@ -197777,7 +197779,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	ld	a, (3540:16)	; F7F09B  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F09F  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0A3  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F0A6  calr 0xf7effa
+	calr	MeasureDelete_RedrawFields	; F7F0A6  calr 0xf7effa
 	jr	ScreenLeaveBody_MeasureDelete_Return2	; F7F0A9  jr T,0xf7f0b2
 ScreenLeaveBody_MeasureDelete_Skip3:
 	calr	Blink_DisableThenStop	; F7F0AB  calr 0xf7f245
@@ -197831,7 +197833,7 @@ LcdKeyRow4_MeasureDelete_StageZero:
 	ld	a, (3540:16)	; F7F0C6  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F0CA  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0CE  calr 0xf7f01a
-	calr	sub_F7EFFA	; F7F0D1  calr 0xf7effa
+	calr	MeasureDelete_RedrawFields	; F7F0D1  calr 0xf7effa
 ScreenLeaveBody_MeasureDelete_Return3:
 	ret	; F7F0D4  ret
 ButtonTable_MeasureDelete_StageZero_Nop12:
@@ -198404,13 +198406,15 @@ LcdKeyRow1_MeasureErase_StageZero:
 	ld	a, (3515:16)	; F7F31B  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F31F  ld (0x12fc),A
 	calr	sub_F7F397	; F7F323  calr 0xf7f397
-	calr	sub_F7F32A	; F7F326  calr 0xf7f32a
+	calr	MeasureErase_RedrawFields	; F7F326  calr 0xf7f32a
 ScreenLeaveBody_MeasureErase_Return:
 	ret	; F7F329  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F326; calr from prom_b
 ;           0xF7F368, and from nothing else the scans see.
-sub_F7F32A:
+; MeasureErase_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
+;   T_DLB_Handler_Array8 -- ld xiy, DL_F3A9DA + 0x32 (notes/prom_ab_stage_zero_names.py).
+MeasureErase_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F32A  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7F32F  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F332  ld XIY,0x00f39551
@@ -198466,7 +198470,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	ld	a, (3515:16)	; F7F35D  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F361  ld (0x12fc),A
 	calr	sub_F7F397	; F7F365  calr 0xf7f397
-	calr	sub_F7F32A	; F7F368  calr 0xf7f32a
+	calr	MeasureErase_RedrawFields	; F7F368  calr 0xf7f32a
 	jr	sub_F7F32A_Return	; F7F36B  jr T,0xf7f374
 sub_F7F32A_Skip:
 	calr	Blink_DisableThenStop	; F7F36D  calr 0xf7f245
@@ -198520,7 +198524,7 @@ LcdKeyRow3_MeasureErase_StageZero:
 	ld	a, (3515:16)	; F7F388  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F38C  ld (0x12fc),A
 	calr	sub_F7F397	; F7F390  calr 0xf7f397
-	calr	sub_F7F32A	; F7F393  calr 0xf7f32a
+	calr	MeasureErase_RedrawFields	; F7F393  calr 0xf7f32a
 sub_F7F32A_Return2:
 	ret	; F7F396  ret
 
@@ -198580,7 +198584,7 @@ LcdKeyRow4_MeasureErase_StageZero:
 	ld	a, (3515:16)	; F7F3C1  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F3C5  ld (0x12fc),A
 	calr	sub_F7F397	; F7F3C9  calr 0xf7f397
-	calr	sub_F7F32A	; F7F3CC  calr 0xf7f32a
+	calr	MeasureErase_RedrawFields	; F7F3CC  calr 0xf7f32a
 sub_F7F397_Return:
 	ret	; F7F3CF  ret
 ButtonTable_MeasureErase_StageZero_Nop12:
@@ -199209,13 +199213,15 @@ ScreenLeaveBody_Quantize_Join2:
 	ld	a, (3513:16)	; F7F659  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F65D  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F661  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F664  calr 0xf7f668
+	calr	Quantize_RedrawFields	; F7F664  calr 0xf7f668
 ScreenLeaveBody_Quantize_Return:
 	ret	; F7F667  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F664; calr from prom_b
 ;           0xF7F6B6, and from nothing else the scans see.
-sub_F7F668:
+; Quantize_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
+;   T_DLB_Handler_Array8 -- ld xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47 (notes/prom_ab_stage_zero_names.py).
+Quantize_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F668  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7F66D  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F670  ld XIY,0x00f39551
@@ -199278,7 +199284,7 @@ sub_F7F668_Join:
 	ld	a, (3513:16)	; F7F6AB  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F6AF  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6B3  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F6B6  calr 0xf7f668
+	calr	Quantize_RedrawFields	; F7F6B6  calr 0xf7f668
 sub_F7F668_Return:
 	ret	; F7F6B9  ret
 
@@ -199328,7 +199334,7 @@ LcdKeyRow3_Quantize_StageZero:
 	ld	a, (3513:16)	; F7F6CD  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F6D1  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6D5  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F6D8  calr 0xf7f668
+	calr	Quantize_RedrawFields	; F7F6D8  calr 0xf7f668
 	jr	sub_F7F668_Return2	; F7F6DB  jr T,0xf7f6e4
 sub_F7F668_Skip2:
 	calr	Blink_DisableThenStop	; F7F6DD  calr 0xf7f245
@@ -199392,7 +199398,7 @@ LcdKeyRow4_Quantize_StageZero:
 	ld	a, (3513:16)	; F7F70F  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F713  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F717  calr 0xf7f6e5
-	calr	sub_F7F668	; F7F71A  calr 0xf7f668
+	calr	Quantize_RedrawFields	; F7F71A  calr 0xf7f668
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return:
 	ret	; F7F71D  ret
 ButtonTable_Quantize_StageZero_Nop12:
@@ -199970,13 +199976,15 @@ LcdKeyRow1_Vel0cityChange_StageZero:
 	calr	Blink_DisableThenStop	; F7F98E  calr 0xf7f245
 	call	T_Vel0cityChange_StageZero_LcdKeyRow1	; F7F991  call 0xf428e8
 	calr	sub_F7F9FB	; F7F995  calr 0xf7f9fb
-	calr	sub_F7F99C	; F7F998  calr 0xf7f99c
+	calr	Vel0cityChange_RedrawFields	; F7F998  calr 0xf7f99c
 ScreenLeaveBody_Vel0cityChange_Return:
 	ret	; F7F99B  ret
 
 ; Evidence: reached from calr from prom_b 0xF7F998; calr from prom_b
 ;           0xF7F9D2, and from nothing else the scans see.
-sub_F7F99C:
+; Vel0cityChange_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
+;   T_DLB_Handler_Array8 -- ld xiy, DL_F3AB3B + 0x2E (notes/prom_ab_stage_zero_names.py).
+Vel0cityChange_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7F99C  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7F9A1  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F9A4  ld XIY,0x00f39551
@@ -200030,7 +200038,7 @@ LcdKeyRow2_Vel0cityChange_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7F9C8  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow2	; F7F9CB  call 0xf428ec
 	calr	sub_F7F9FB	; F7F9CF  calr 0xf7f9fb
-	calr	sub_F7F99C	; F7F9D2  calr 0xf7f99c
+	calr	Vel0cityChange_RedrawFields	; F7F9D2  calr 0xf7f99c
 	jr	sub_F7F99C_Return	; F7F9D5  jr T,0xf7f9de
 sub_F7F99C_Skip:
 	calr	Blink_DisableThenStop	; F7F9D7  calr 0xf7f245
@@ -200082,7 +200090,7 @@ LcdKeyRow3_Vel0cityChange_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7F9EB  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow3	; F7F9EE  call 0xf428f0
 	calr	sub_F7F9FB	; F7F9F2  calr 0xf7f9fb
-	calr	sub_F7F99C	; F7F9F5  calr 0xf7f99c
+	calr	Vel0cityChange_RedrawFields	; F7F9F5  calr 0xf7f99c
 	jr	sub_F7F99C_Return2	; F7F9F8  jr T,0xf7f9fa
 sub_F7F99C_Return2:
 	ret	; F7F9FA  ret
@@ -200142,7 +200150,7 @@ LcdKeyRow4_Vel0cityChange_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7FA21  calr 0xf7f237
 	call	T_Vel0cityChange_StageZero_LcdKeyRow4	; F7FA24  call 0xf428f4
 	calr	sub_F7F9FB	; F7FA28  calr 0xf7f9fb
-	calr	sub_F7F99C	; F7FA2B  calr 0xf7f99c
+	calr	Vel0cityChange_RedrawFields	; F7FA2B  calr 0xf7f99c
 	jr	sub_F7F9FB_Return	; F7FA2E  jr T,0xf7fa30
 sub_F7F9FB_Return:
 	ret	; F7FA30  ret
@@ -200743,13 +200751,15 @@ LcdKeyRow1_Transp0se_StageZero:
 	calr	Blink_DisableThenStop	; F7FCD8  calr 0xf7f245
 	call	T_Transp0se_SelectField1	; F7FCDB  call 0xf42a40
 	calr	sub_F7FD45	; F7FCDF  calr 0xf7fd45
-	calr	sub_F7FCE6	; F7FCE2  calr 0xf7fce6
+	calr	Transp0se_RedrawFields	; F7FCE2  calr 0xf7fce6
 ScreenLeaveBody_Transp0se_Return:
 	ret	; F7FCE5  ret
 
 ; Evidence: reached from calr from prom_b 0xF7FCE2; calr from prom_b
 ;           0xF7FD1C, and from nothing else the scans see.
-sub_F7FCE6:
+; Transp0se_RedrawFields: clears the value area (DL_F39551) and redraws the page's fields with
+;   T_DLB_Handler_Array8 -- ld xiy, DL_F3B1E3 + 0x2E (notes/prom_ab_stage_zero_names.py).
+Transp0se_RedrawFields:
 	ld	(LCD_CurrentLayer:16), 1	; F7FCE6  ld (0x2540),0x01
 	calr	sub_F7E39F_Nop	; F7FCEB  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7FCEE  ld XIY,0x00f39551
@@ -200803,7 +200813,7 @@ LcdKeyRow2_Transp0se_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7FD12  calr 0xf7f237
 	call	T_Transp0se_SelectField2	; F7FD15  call 0xf42a44
 	calr	sub_F7FD45	; F7FD19  calr 0xf7fd45
-	calr	sub_F7FCE6	; F7FD1C  calr 0xf7fce6
+	calr	Transp0se_RedrawFields	; F7FD1C  calr 0xf7fce6
 	jr	sub_F7FCE6_Return	; F7FD1F  jr T,0xf7fd28
 sub_F7FCE6_Skip:
 	calr	Blink_DisableThenStop	; F7FD21  calr 0xf7f245
@@ -200855,7 +200865,7 @@ LcdKeyRow3_Transp0se_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7FD35  calr 0xf7f237
 	call	T_Transp0se_SelectField3	; F7FD38  call 0xf42a48
 	calr	sub_F7FD45	; F7FD3C  calr 0xf7fd45
-	calr	sub_F7FCE6	; F7FD3F  calr 0xf7fce6
+	calr	Transp0se_RedrawFields	; F7FD3F  calr 0xf7fce6
 	jr	sub_F7FCE6_Return2	; F7FD42  jr T,0xf7fd44
 sub_F7FCE6_Return2:
 	ret	; F7FD44  ret
@@ -200914,7 +200924,7 @@ LcdKeyRow4_Transp0se_StageZero:
 	calr	Blink_EnableThenStop_Copy	; F7FD68  calr 0xf7f237
 	call	T_Transp0se_SelectField4	; F7FD6B  call 0xf42a4c
 	calr	sub_F7FD45	; F7FD6F  calr 0xf7fd45
-	calr	sub_F7FCE6	; F7FD72  calr 0xf7fce6
+	calr	Transp0se_RedrawFields	; F7FD72  calr 0xf7fce6
 	jr	sub_F7FD45_Return	; F7FD75  jr T,0xf7fd77
 sub_F7FD45_Return:
 	ret	; F7FD77  ret

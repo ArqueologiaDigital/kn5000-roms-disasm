@@ -17,6 +17,13 @@ QUESTION IT ANSWERS
   (the handlers of a two-stage screen carry the stage they serve; the routine is the screen's).  REFUSED: a caller that is not a key
   handler, an empty group, a name taken.
 
+  SECOND RULE (2026-10-04), the same callers test: a routine whose whole body is
+      LCD_CurrentLayer = 1 / [calr a bare-ret routine] / T_DisplayList_Run(DL_F39551, ...) /
+      T_DLB_Handler_Array8(<the page's interpreter-B list>) / ret
+  clears the value area (DL_F39551 is one interpreter-A op 0x0E record, rows 0x28..0xF0) and redraws the page's
+  fields from its own list.  The LcdKeyRow1-4 handlers of the sequencer job pages call it after selecting a
+  field.  Named <Group>_RedrawFields.
+
 RUN
   python3 notes/prom_ab_stage_zero_names.py          # the plan and the refusals
   python3 notes/prom_ab_stage_zero_names.py --args   # 'old=new|header' for the rename helper
@@ -46,11 +53,40 @@ def bodies():
             yield n, [x for x in b if x and not re.match(r'^[A-Za-z_.][\w$.]*:', x)]
 
 
+g_screens = {}
+
+
+def group_of(n, cs, refused):
+    """The callers' screen group, or None (with the refusal recorded)."""
+    callers = cs.get(n, set())
+    ms = [re.match(r'^%s_(\w+)$' % KA.CTRL, c or "") or re.match(r'^(\w+?)_%s$' % KA.CTRL, c or "") for c in callers]
+    if not callers or not all(ms):
+        refused.append((n, "callers %s" % sorted(c or "?" for c in callers)))
+        return None
+    screens = sorted({(m.group(2) if m.re.pattern.startswith('^' + KA.CTRL) else m.group(1)) for m in ms})
+    g = re.sub(r'_Stage(Non)?Zero$', '', KA.group(screens))   # the stage is what the routine changes
+    if not g:
+        refused.append((n, "no common group for %s" % screens))
+        return None
+    g_screens[n] = screens
+    return g
+
+
 def plan():
     cs = KA.callers()
     rows, refused = [], []
     for n, b in bodies():
         t = " | ".join(b)
+        if re.match(r'^ld \(LCD_CurrentLayer:16\), 1 \| (?:calr \w+_Nop\d* \| )?ld xiy, DL_F39551 \| ld xix, Data_F39559 \| '
+                    r'call T_DisplayList_Run \| ld xiy, DL_\w+(?: \+ 0x[0-9a-fA-F]+)? \| call T_DLB_Handler_Array8 \| ret$', t) or \
+           re.match(r'^(?:calr \w+_Nop\d* \| )?ld \(LCD_CurrentLayer:16\), 1 \| (?:calr \w+_Nop\d* \| )?ld xiy, DL_F39551 \| ld xix, Data_F39559 \| '
+                    r'call T_DisplayList_Run \| ld xiy, DL_\w+(?: \+ 0x[0-9a-fA-F]+)? \| call T_DLB_Handler_Array8 \| ret$', t):
+            g = group_of(n, cs, refused)
+            if g:
+                new = g + "_RedrawFields"
+                rows.append((n, new, "%s: clears the value area (DL_F39551) and redraws the page's fields with\\n"
+                             "  T_DLB_Handler_Array8 -- %s (notes/prom_ab_stage_zero_names.py)." % (new, t.split(" | ")[-3])))
+            continue
         if not (re.search(r'ld \(UI_ScreenStage:16\), 0\b', t) and re.search(r'UI_Request_Hi, 0x10\b', t)):
             continue
         # a last `jr <X>_Return<n>` is a tail jump to another routine's bare `ret`
@@ -58,16 +94,11 @@ def plan():
         if re.search(r'\b(call|calr|jp|jrl)\b', t, re.I) or not last_ok or len(b) > 14:
             refused.append((n, "not the plain shape (%d instructions)" % len(b)))
             continue
-        callers = cs.get(n, set())
-        ms = [re.match(r'^%s_(\w+)$' % KA.CTRL, c or "") or re.match(r'^(\w+?)_%s$' % KA.CTRL, c or "") for c in callers]
-        if not callers or not all(ms):
-            refused.append((n, "callers %s" % sorted(c or "?" for c in callers)))
-            continue
-        screens = sorted({(m.group(2) if m.re.pattern.startswith('^' + KA.CTRL) else m.group(1)) for m in ms})
-        g = re.sub(r'_Stage(Non)?Zero$', '', KA.group(screens))   # the stage is what the routine changes
+        g = group_of(n, cs, refused)
         if not g:
-            refused.append((n, "no common group for %s" % screens))
             continue
+        screens = g_screens[n]
+        callers = cs.get(n, set())
         new = g + "_ReturnToStageZero"
         rows.append((n, new, "%s: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of %s;\\n"
                      "  called by %s (notes/prom_ab_stage_zero_names.py)." % (new, ", ".join(screens), ", ".join(sorted(callers)))))
