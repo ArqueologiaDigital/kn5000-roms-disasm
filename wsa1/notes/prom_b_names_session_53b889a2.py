@@ -3879,4 +3879,9 @@ RENAMES = [
     ("sub_FE975B", "EditScreen_DeferredRedraw"),
     ("sub_FE973C", "EditScreen_DeferredRedrawAndExtend"),
     ("sub_FE9738", "EditScreen_EndAudition_Call"),
+    ("sub_FE96E3", "EditScreen_SeekPartSavedCursor"),
+    ("sub_FEA6B4", "EditScreen_CountBeatMarkersToEnd"),
+    ("sub_FEA6D7", "EditScreen_CountBeatsInMeasure"),
+    ("sub_FE960B", "EditScreen_SeekCursorBeat"),
+    ("sub_FEA628", "EditScreen_PositionAndMeasureStartTicks"),
 ]

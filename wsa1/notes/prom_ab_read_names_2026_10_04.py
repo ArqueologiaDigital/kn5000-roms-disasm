@@ -1479,7 +1479,7 @@ ROWS = [
      "(below 100 with a leading blank, otherwise with Str_v)."),
     ("FF0B3A", "EditScreen_DrawNewNoteVelocity", "(0x601F19) = (0x601F46), then the same tail -- the same cell."),
     ("FE8F11", "EditScreen_SelectEventAtCursor",
-     "(0x601F5B) bit 0 = 0; when the event at the cursor sits on EditCursor_TickInMeasure (sub_FEA628) and is a\n"
+     "(0x601F5B) bit 0 = 0; when the event at the cursor sits on EditCursor_TickInMeasure (EditScreen_PositionAndMeasureStartTicks) and is a\n"
      "note-on that DrumEdit_IsOtherNote passes: bit 0 = 1, EditCursor_Note = +2, (0x601F45) = +3, EditField_Length =\n"
      "(+5 & 0x7F) x 0x60 + (+4 & 0x7F), (0x601F6F) = the note, NoteEdit_ScrollRulerToNote."),
     ("FE8F97", "NoteEdit_ScrollRulerToNote",
@@ -1581,6 +1581,20 @@ ROWS = [
     ("FE973C", "EditScreen_DeferredRedrawAndExtend",
      "EditScreen_DeferredActions[3]: redraw; with an event selected, EditScreen_AppendMissingBeatMarkers first\n"
      "(sub_FE8BD4 on a BStore error)."),
+    # NOTE / DRUM EDIT: walking the part's chain (positions in beats and ticks)
+    ("FE96E3", "EditScreen_SeekPartSavedCursor",
+     "BStore_CursorBlock = word 0x60347E[EditScreen_Part], BStore_CursorOffset = byte 0x6034A0[EditScreen_Part]: the\n"
+     "part's saved cursor (the workspace pair BStore_OpenChainAtSavedCursor checks)."),
+    ("FEA6B4", "EditScreen_CountBeatMarkersToEnd",
+     "(0x601F6C) = the number of 0x81 beat markers from the cursor to the chain's end tag 0x82."),
+    ("FEA6D7", "EditScreen_CountBeatsInMeasure",
+     "from the measure's mark, (0x601F6C) = the 0x81 markers counted until it passes EditMeasure_Beats or the\n"
+     "end tag."),
+    ("FE960B", "EditScreen_SeekCursorBeat",
+     "steps over EditCursor_Beat beat markers from the cursor; BStore_ErrorCode = 0xFF when the end tag comes first."),
+    ("FEA628", "EditScreen_PositionAndMeasureStartTicks",
+     "XWA = (0x601F05) x 0x60 + (0x601F07), the walk position in ticks; XBC = (0x601F0F) x 0x60 + (0x601F11), the\n"
+     "measure's start -- the callers subtract them to get the tick within the measure."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

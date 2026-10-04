@@ -470,6 +470,10 @@
 ; ---- wsa1/notes/FINDINGS-prom_a-screen-module.md -- "8. The NOTE / DRUM EDIT state in work DRAM -- the edited part and the note row"
 	.equ EditScreen_Part,				0x601f00	; the part being edited, the EDIT PART SELECT soft key's index; its chain is entry part + 1 -- EditPartSelect_OpenEditor stores it; EditScreen_SaveTrackCursor indexes 0x3460 / 0x3482 with it
 	.equ EditScreen_PartMask,			0x601f01	; the edited part's bit (EditPartSelect_PartBitMask[part]) -- EditPartSelect_OpenEditor
+	.equ EditPos_Beat,				0x601f05	; the absolute beat of the event under the block-store cursor (word); every walk keeps it -- EditScreen_DrawVisibleNotes +1 per 0x81; BStore_CursorSlot_Save / _Restore keep it with the cursor
+	.equ EditPos_Tick,				0x601f07	; its tick within the beat -- EditCursor_SeekPastTick / _SeekToTick; EditCursor_SyncBeatAndTick
+	.equ EditMeasure_StartBeat,			0x601f0f	; the edited measure's first beat, absolute (word) -- sub_FE8EA9 sets it; BStore_CursorSlot_RestoreMark returns to it
+	.equ EditMeasure_StartTick,			0x601f11	; its tick (0) -- sub_FE8EA9
 	.equ NoteEdit_HeldKeys,				0x601f1c	; 8 slots of {flag 0x80, note, velocity}: the keys held during entry (1 slot in DRUM EDIT) -- NoteEdit_HoldKey / _ReleaseKey / _AnyKeyHeld / _EnterHeldNotes
 	.equ NoteEdit_InputNote,			0x601f34	; the note of the key event being taken -- NoteEdit_TakeKeyboardInput
 	.equ NoteEdit_InputVelocity,			0x601f35	; its velocity (0 = released) -- NoteEdit_TakeKeyboardInput
@@ -480,6 +484,7 @@
 	.equ EditScreen_ActionIndex,			0x601f59	; the deferred action to run -- EditScreen_RunDueAction
 	.equ EditScreen_ActionTimer2,			0x601f5a	; the second countdown (its action is sub_FE9738) -- EditScreen_CountDownAction2 / _RunDueAction2
 	.equ EditScreen_CursorFlags,			0x601f5b	; bit 0: a note-on is selected at the cursor (its velocity in EditField_EventVelocity); bits 1..4 are tested by the cursor moves, not read here -- EditScreen_SelectEventAtCursor sets / clears it; EditScreen_SoftKeyCol4 tests it
+	.equ EditScreen_BeatCounter,			0x601f6c	; the walks' beat counter: markers counted, or still to append -- EditScreen_CountBeatMarkersToEnd / _CountBeatsInMeasure; EditScreen_AppendMissingBeatMarkers
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
 	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank
