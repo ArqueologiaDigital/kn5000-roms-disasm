@@ -98912,7 +98912,7 @@ DiskFile_CheckSignature_Join7:
 DiskFile_CheckSignature_Join8:
 	push	0	; F48E97  push 0x00
 	push	h	; F48E99  push H
-	m_cp_mi8 MB16, 0x2229, 0x01	; F48E9B  cp (0x2229),0x01
+	m_cp_mi8 MB16, UI_ScreenPage, 0x01	; F48E9B  cp (0x2229),0x01
 	jr	nz, DiskFile_CheckSignature_Skip14	; F48EA0  jr NZ,0xf48ead
 	push	0	; F48EA2  push 0x00
 	m_push MB16, 0x2737	; F48EA4  push (0x2737)
@@ -98942,7 +98942,7 @@ DiskFile_CheckSignature_Skip15:
 	ld	c, h	; F48EDB  ld C,H
 	sll	c, 3	; F48EDD  sll 0x03,C
 	ld	h, c	; F48EE0  ld H,C
-	m_cp_mi8 MB16, 0x2229, 0x01	; F48EE2  cp (0x2229),0x01
+	m_cp_mi8 MB16, UI_ScreenPage, 0x01	; F48EE2  cp (0x2229),0x01
 	jr	nz, DiskFile_CheckSignature_Skip16	; F48EE7  jr NZ,0xf48eef
 	ld	l, c	; F48EE9  ld L,C
 	inc	7, h	; F48EEB  inc 7,H
@@ -99190,7 +99190,7 @@ sub_F49033_Loop:
 	sub	(xiz+8), xwa	; F4907F  sub (XIZ+0x08),XWA
 	m_cp_mi8 MB16, UI_ScreenId, 0x54	; F49082  cp (0x207c),0x54
 	jrl	nz, sub_F49033_Skip8	; F49087  jrl NZ,0xf492bd
-	m_cp_mi8 MB16, 0x2229, 0x01	; F4908A  cp (0x2229),0x01
+	m_cp_mi8 MB16, UI_ScreenPage, 0x01	; F4908A  cp (0x2229),0x01
 	jrl	nz, sub_F49033_Skip5	; F4908F  jrl NZ,0xf4920c
 	ld	iy, (10024:16)	; F49092  ld IY,(0x2728)
 	extz	iy	; F49096  extz IY
@@ -99393,7 +99393,7 @@ sub_F49033_Join4:
 	m_ld_mi16 MDD+r1, 0x04, 0x4c98	; F492B5  ld (XBC+0x04),0x4c98
 	jrl	sub_F49033_Join5	; F492BA  jrl T,0xf493f4
 sub_F49033_Skip8:
-	m_cp_mi8 MB16, 0x2229, 0x01	; F492BD  cp (0x2229),0x01
+	m_cp_mi8 MB16, UI_ScreenPage, 0x01	; F492BD  cp (0x2229),0x01
 	jrl	nz, sub_F49033_Skip10	; F492C2  jrl NZ,0xf493aa
 	ld	xbc, 15466496	; F492C5  ld XBC,0x00ec0000
 	ld	(xiz-8), xbc	; F492CA  ld (XIZ+0xf8),XBC
@@ -175088,7 +175088,7 @@ Smf_WriteFile_Skip4:
 	ld	(UI_StatusCode:16), 47	; F738D8  ld (0x2880),0x2f
 	jrl	Smf_WriteFile_Join8	; F738DD  jrl T,0xf7478e
 Smf_WriteFile_Skip5:
-	m_cp_mi8 MB16, 0x2229, 0x02	; F738E0  cp (0x2229),0x02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02	; F738E0  cp (0x2229),0x02
 	jr	z, Smf_WriteFile_Join	; F738E5  jr Z,0xf738fa
 	calr	sub_F748AD	; F738E7  calr 0xf748ad
 	cp	w, 0:i3	; F738EA  cp W,0
@@ -175115,17 +175115,17 @@ Smf_WriteFile_Join:
 	ldw	bc, 11	; F73924  ld BC,0x000b
 	ldir85	; F73927  ldir
 	ld	(Disk_ContentType:16), 1	; F73929  ld (0x2725),0x01
-	ld	l, (8745:16)	; F7392E  ld L,(0x2229)
+	ld	l, (UI_ScreenPage:16)	; F7392E  ld L,(0x2229)
 	pushw	hl	; F73932  push HL
 	call	T_F425CC	; F73933  call 0xf425cc
 	popw	hl	; F73937  pop HL
-	ld	(8745:16), l	; F73938  ld (0x2229),L
+	ld	(UI_ScreenPage:16), l	; F73938  ld (0x2229),L
 	calr	SmfWrite_RestoreFileName	; F7393C  calr 0xf7491f
 	m_cp_mi8 MB16, UI_StatusCode, 0x23	; F7393F  cp (0x2880),0x23
 	jrl	nz, Smf_WriteFile_Join9	; F73944  jrl NZ,0xf74790
 	ld	a, (10020:16)	; F73947  ld A,(0x2724)
 	exts	wa	; F7394B  exts WA
-	m_cp_mi8 MB16, 0x2229, 0x02	; F7394D  cp (0x2229),0x02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02	; F7394D  cp (0x2229),0x02
 	jr	nz, Smf_WriteFile_Skip6	; F73952  jr NZ,0xf739a3
 	ld	a, (10020:16)	; F73954  ld A,(0x2724)
 	exts	wa	; F73958  exts WA
@@ -176433,7 +176433,7 @@ Smf_WriteFile_Skip56:
 	ld	(UI_StatusCode:16), 35	; F74778  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F7477D  call 0xf41600
 	calr	sub_F72F20	; F74781  calr 0xf72f20
-	ld	(8745:16), 0	; F74784  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F74784  ld (0x2229),0x00
 	m_or_mi8 MB16, 0x34d4, 0x10	; F74789  or (0x34d4),0x10
 Smf_WriteFile_Join8:
 	jr	Smf_WriteFile_Join11	; F7478E  jr T,0xf747fa
@@ -176454,12 +176454,12 @@ Smf_WriteFile_Join9:
 	ld	(UI_StatusCode:16), l	; F747BF  ld (0x2880),L
 Smf_WriteFile_Skip57:
 	calr	SmfWrite_RestoreFileName	; F747C3  calr 0xf7491f
-	ld	(8745:16), 0	; F747C6  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F747C6  ld (0x2229),0x00
 	jr	Smf_WriteFile_Join11	; F747CB  jr T,0xf747fa
 Smf_WriteFile_Loop9:
 	calr	sub_F748F0	; F747CD  calr 0xf748f0
 	ld	(UI_StatusCode:16), 30	; F747D0  ld (0x2880),0x1e
-	ld	(8745:16), 0	; F747D5  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F747D5  ld (0x2229),0x00
 	jr	Smf_WriteFile_Join11	; F747DA  jr T,0xf747fa
 Smf_WriteFile_Join10:
 	m_cp_mi8 MB16, 0x1238, 0x07	; F747DC  cp (0x1238),0x07
@@ -176472,7 +176472,7 @@ Smf_WriteFile_Join10:
 	ld	(UI_StatusCode:16), l	; F747EF  ld (0x2880),L
 	jr	Smf_WriteFile_Join11	; F747F3  jr T,0xf747fa
 Smf_WriteFile_Skip58:
-	ld	(8745:16), 2	; F747F5  ld (0x2229),0x02
+	ld	(UI_ScreenPage:16), 2	; F747F5  ld (0x2229),0x02
 Smf_WriteFile_Join11:
 	m_and_mi8 MB16, 0x21e8, 0x7f	; F747FA  and (0x21e8),0x7f
 	popw	wa	; F747FF  pop WA
@@ -180012,7 +180012,7 @@ sub_F7669D_Code_Skip3:
 	ld	(UI_StatusCode:16), 35	; F76729  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F7672E  call 0xf41600
 	calr	SmfExport_ParamSysExTemplates + 0xDC	; F76732  calr 0xf750ab  (lands inside record 11 at +11; see SmfExport_ParamSysExTemplates)
-	ld	(8745:16), 0	; F76735  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F76735  ld (0x2229),0x00
 	or	(0x34d4:16), 16	; F7673A  or (0x34d4),0x10
 	jr	sub_F7669D_Code_Entry2	; F7673F  jr T,0xf767ab
 	cp	(UI_StatusCode:16), 2	; F76741  cp (0x2880),0x02
@@ -180031,12 +180031,12 @@ sub_F7669D_Code_Skip3:
 	ld	(UI_StatusCode:16), l	; F76770  ld (0x2880),L
 sub_F7669D_Code_Skip4:
 	calr	SmfSize_RestoreFileName	; F76774  calr 0xf768d0
-	ld	(8745:16), 0	; F76777  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F76777  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7677C  jr T,0xf767ab
 sub_F7669D_Code_Loop:
 	calr	sub_F768A1	; F7677E  calr 0xf768a1
 	ld	(UI_StatusCode:16), 30	; F76781  ld (0x2880),0x1e
-	ld	(8745:16), 0	; F76786  ld (0x2229),0x00
+	ld	(UI_ScreenPage:16), 0	; F76786  ld (0x2229),0x00
 	jr	sub_F7669D_Code_Entry2	; F7678B  jr T,0xf767ab
 sub_F7669D_Code_Entry:
 	cp	(0x1238:16), 7	; F7678D  cp (0x1238),0x07
@@ -180048,7 +180048,7 @@ sub_F7669D_Code_Entry:
 	popw	hl	; F7679F  pop HL
 	ld	(UI_StatusCode:16), l	; F767A0  ld (0x2880),L
 	jr	sub_F7669D_Code_Entry2	; F767A4  jr T,0xf767ab
-	ld	(8745:16), 2	; F767A6  ld (0x2229),0x02
+	ld	(UI_ScreenPage:16), 2	; F767A6  ld (0x2229),0x02
 sub_F7669D_Code_Entry2:
 	and	(0x21e8:16), 127	; F767AB  and (0x21e8),0x7f
 	popw	wa	; F767B0  pop WA

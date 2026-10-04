@@ -67149,7 +67149,7 @@ DisplayList_FA4EAB:
 	.byte 0x1b, 0x0a, 0x15, 0x00, 0x22, 0x00, 0x24, 0x01, 0xb7, 0x00          ; FA4EAB
 	ldw (xbc+0x04), 0x4c98                               ; FA4EB5  b9 04 02 98 4c
 	jrl .LFA4FF4                                         ; FA4EBA  78 37 01
-	cp	(0x2229:16), 0x01                    ; FA4EBD  c1 29 22 3f 01
+	cp	(UI_ScreenPage:16), 0x01                    ; FA4EBD  c1 29 22 3f 01
 	jrl nz, .LFA4FAA                                     ; FA4EC2  7e e5 00
 	ld XBC,0x00ec0000                                    ; FA4EC5  41 00 00 ec 00
 	ld (xiz-8), xbc                                      ; FA4ECA  be f8 61
@@ -67387,7 +67387,7 @@ DisplayList_FA4EAB:
 	ld XBC,(XIZ+0x08)                                    ; FA5145  ae 08 21
 	ldw (xbc+0x04), 0x4c98                               ; FA5148  b9 04 02 98 4c
 	jrl .LFA5287                                         ; FA514D  78 37 01
-	cp	(0x2229:16), 0x01                    ; FA5150  c1 29 22 3f 01
+	cp	(UI_ScreenPage:16), 0x01                    ; FA5150  c1 29 22 3f 01
 	jrl nz, .LFA523D                                     ; FA5155  7e e5 00
 	ld XBC,0x00ec0000                                    ; FA5158  41 00 00 ec 00
 	ld (xiz-8), xbc                                      ; FA515D  be f8 61
@@ -159892,7 +159892,7 @@ Disk_MountAndScanDirectory_LeaveOnError:
 	m_push MB24, 0x001735                                ; FE0581  c2 35 17 00 04
 	calr Disk_ShowMountError                                          ; FE0586  1e e7 03
 	calr Disk_PortA3_Release                                          ; FE0589  1e 6b 13
-	ld (0x2229:16), 0x00                                 ; FE058C  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FE058C  f1 29 22 00 00
 	ld (UI_Request_Hi:16), 0x10                                 ; FE0591  f1 71 20 00 10
 	popw bc                                              ; FE0596  49
 .LFE0597:
@@ -159974,7 +159974,7 @@ sub_FE05EC:
 	calr sub_FE1907                                          ; FE0631  1e d3 12
 	pushw 0x01f4                                         ; FE0634  0b f4 01
 	calr Delay_Ticks                                          ; FE0637  1e e7 0d
-	ld (0x2229:16), 0x01                                 ; FE063A  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FE063A  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FE063F  f1 71 20 00 10
 	pop XIY                                              ; FE0644  5d
 .LFE0645:
@@ -159994,7 +159994,7 @@ sub_FE0648:
 	calr sub_FE066C                                            ; FE065D  1e 0c 00
 	jr .LFE0667                                              ; FE0660  68 05
 .LFE0662:
-	ld (0x2229:16), 0x02                                 ; FE0662  f1 29 22 00 02
+	ld (UI_ScreenPage:16), 0x02                                 ; FE0662  f1 29 22 00 02
 .LFE0667:
 	m_set 4, MD16, UI_Request_Hi                                ; FE0667  f1 71 20 bc
 .LFE066B:
@@ -160044,7 +160044,7 @@ sub_FE066C:
 	jr .LFE06E7                                              ; FE06D7  68 0e
 .LFE06D9:
 	ld (0x21fa:16), 0x00                                 ; FE06D9  f1 fa 21 00 00
-	ld (0x2229:16), 0x00                                 ; FE06DE  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FE06DE  f1 29 22 00 00
 	m_set 4, MD16, UI_Request_Hi                                ; FE06E3  f1 71 20 bc
 .LFE06E7:
 	pop XIX                                              ; FE06E7  5c
@@ -160183,7 +160183,7 @@ sub_FE07E0:
 	calr sub_FE1907                                          ; FE07ED  1e 17 11
 	pushw 0x01f4                                         ; FE07F0  0b f4 01
 	calr Delay_Ticks                                          ; FE07F3  1e 2b 0c
-	ld (0x2229:16), 0x01                                 ; FE07F6  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FE07F6  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FE07FB  f1 71 20 00 10
 	pop XIY                                              ; FE0800  5d
 	jr .LFE0810                                              ; FE0801  68 0d
@@ -160237,7 +160237,7 @@ sub_FE0811:
 sub_FE085B:
 	ld (0x222a:16), 0xfa                                 ; FE085B  f1 2a 22 00 fa
 	ld (NameEdit_CursorPos:16), 0x00                                 ; FE0860  f1 2d 22 00 00
-	ld (0x2229:16), 0x04                                 ; FE0865  f1 29 22 00 04
+	ld (UI_ScreenPage:16), 0x04                                 ; FE0865  f1 29 22 00 04
 	ld (UI_Request_Hi:16), 0x10                                 ; FE086A  f1 71 20 00 10
 	ret                                                  ; FE086F  0e
 sub_FE0870:
@@ -161228,7 +161228,7 @@ Disk_MountAndScanMidiFiles:
 	calr Disk_ShowMountError                                          ; FE1202  1e 6b f7
 	pushw 0x05dc                                         ; FE1205  0b dc 05
 	calr Delay_Ticks                                          ; FE1208  1e 16 02
-	ld (0x2229:16), 0x00                                 ; FE120B  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FE120B  f1 29 22 00 00
 	ld (UI_StatusCode:16), 0x02                                 ; FE1210  f1 80 28 00 02
 	pop XIY                                              ; FE1215  5d
 .LFE1216:
@@ -162422,7 +162422,7 @@ sub_FE1C79:
 	ret                                                  ; FE1C7F  0e
 sub_FE1C80:
 	ld (UI_StatusCode:16), 0x05                                 ; FE1C80  f1 80 28 00 05
-	m_cp_mi8 MB16, 0x2229, 0x02                          ; FE1C85  c1 29 22 3f 02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02                          ; FE1C85  c1 29 22 3f 02
 	jr z, .LFE1C91                                           ; FE1C8A  66 05
 	calr sub_FE05EC                                          ; FE1C8C  1e 5d e9
 	jr .LFE1C94                                              ; FE1C8F  68 03
@@ -163617,7 +163617,7 @@ sub_FE2610:
 	popw hl                                              ; FE2640  4b
 	ret                                                  ; FE2641  0e
 sub_FE2642:
-	ld (0x2229:16), 0x00                                 ; FE2642  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FE2642  f1 29 22 00 00
 	m_set 4, MD16, UI_Request_Hi                                ; FE2647  f1 71 20 bc
 	ret                                                  ; FE264B  0e
 sub_FE264C:
@@ -163642,7 +163642,7 @@ sub_FE2667:
 	pushw 0x19                                           ; FE267F  0b 19 00
 	calr StatusMsg_ShowByIndex                                          ; FE2682  1e b3 f1
 	calr Delay_500Ticks                                          ; FE2685  1e 91 ed
-	ld (0x2229:16), 0x00                                 ; FE2688  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FE2688  f1 29 22 00 00
 	m_set 4, MD16, UI_Request_Hi                                ; FE268D  f1 71 20 bc
 	popw bc                                              ; FE2691  49
 	jr .LFE2697                                              ; FE2692  68 03
@@ -164544,7 +164544,7 @@ sub_FE2EF9:
 	dec 0x01, (0x222a:16)                                ; FE2F10  c1 2a 22 69
 	m_cp_mi8 MB16, 0x222a, 0x00                          ; FE2F14  c1 2a 22 3f 00
 	jr nz, .LFE2F25                                          ; FE2F19  6e 0a
-	ld (0x2229:16), 0x01                                 ; FE2F1B  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FE2F1B  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FE2F20  f1 71 20 00 10
 .LFE2F25:
 	ld C,(XIX)                                           ; FE2F25  84 23
@@ -186326,7 +186326,7 @@ Dispatch_FF3980:
 	.long DispatchMatrix_NoAction                                 ; FF39F8  [ 30]
 	.long DispatchMatrix_NoAction                                 ; FF39FC  [ 31]
 ; ---------------------------------------------------------------------
-; Dispatch_FF3A00 -- SIX handler pointers, indexed by the page byte (0x2229)
+; ScreenEnterPages_DiskSaveFile -- SIX handler pointers, indexed by the page byte (0x2229)
 ;
 ; Read by: 0xFF548A.  ENTRY COUNT 6, from `cp (0x2229),0x06 / jr NC` at
 ;          0xFF548A itself -- and the six entries are all distinct, which the
@@ -186337,13 +186337,15 @@ Dispatch_FF3980:
 ; Evidence: this table is indexed by the PAGE and not by the control -- the
 ;          reader multiplies (0x2229) by 4 and nothing else.
 ; ---------------------------------------------------------------------
-Dispatch_FF3A00:
-	.long sub_FF54AA                                 ; FF3A00  [  0]
-	.long sub_FF5546                                 ; FF3A04  [  1]
-	.long sub_FF55BE                                 ; FF3A08  [  2]
-	.long sub_FF5621                                 ; FF3A0C  [  3]
-	.long sub_FF566B                                 ; FF3A10  [  4]
-	.long sub_FF56C0                                 ; FF3A14  [  5]
+; ScreenEnterPages_DiskSaveFile: PageDispatch_DiskSaveFile's per-page ENTER table, indexed by UI_ScreenPage (0..5)
+;   (notes/prom_a_page_enter_names.py).
+ScreenEnterPages_DiskSaveFile:
+	.long ScreenEnter_DiskSaveFile_Page0                                 ; FF3A00  [  0]
+	.long ScreenEnter_DiskSaveFile_Page1                                 ; FF3A04  [  1]
+	.long ScreenEnter_DiskSaveFile_Page2                                 ; FF3A08  [  2]
+	.long ScreenEnter_DiskSaveFile_Page3                                 ; FF3A0C  [  3]
+	.long ScreenEnter_DiskSaveFile_Page4                                 ; FF3A10  [  4]
+	.long ScreenEnter_DiskSaveFile_Page5                                 ; FF3A14  [  5]
 ; ---------------------------------------------------------------------
 ; Text_FF3A18 -- 17 bytes: "??" then 14 spaces then a NUL
 ;
@@ -186598,17 +186600,19 @@ Dispatch_FF3A29:
 	.long DispatchMatrix_NoAction                                 ; FF3D21  [190]
 	.long DispatchMatrix_NoAction                                 ; FF3D25  [191]
 ; ---------------------------------------------------------------------
-; Dispatch_FF3D29 -- FOUR handler pointers, indexed by the page byte (0x2229)
+; ScreenEnterPages_MidiFileSave -- FOUR handler pointers, indexed by the page byte (0x2229)
 ;
 ; Read by: 0xFF5C3E.  ENTRY COUNT 4, from `cp (0x2229),0x03 / jr UGT` --
 ;          note UGT, not NC: this bound admits 3, so it is four entries and not
 ;          three.  All four are distinct.
 ; ---------------------------------------------------------------------
-Dispatch_FF3D29:
-	.long sub_FF5C5E                                 ; FF3D29  [  0]
-	.long sub_FF5D27                                 ; FF3D2D  [  1]
-	.long sub_FF5DE8                                 ; FF3D31  [  2]
-	.long sub_FF5E4B                                 ; FF3D35  [  3]
+; ScreenEnterPages_MidiFileSave: PageDispatch_MidiFileSave's per-page ENTER table, indexed by UI_ScreenPage (0..3)
+;   (notes/prom_a_page_enter_names.py).
+ScreenEnterPages_MidiFileSave:
+	.long ScreenEnter_MidiFileSave_Page0                                 ; FF3D29  [  0]
+	.long ScreenEnter_MidiFileSave_Page1                                 ; FF3D2D  [  1]
+	.long ScreenEnter_MidiFileSave_Page2                                 ; FF3D31  [  2]
+	.long ScreenEnter_MidiFileSave_Page3                                 ; FF3D35  [  3]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3D39 -- a 6 x 32 handler MATRIX with THREE readers
 ;
@@ -186868,12 +186872,14 @@ Dispatch_FF3D39:
 Table_FF4039:
 	.byte 0x08, 0x00, 0x09, 0x00, 0x28, 0x00, 0x29, 0x00                      ; FF4039
 ; ---------------------------------------------------------------------
-; Dispatch_FF4041 -- TWO handler pointers, indexed by the page byte (0x2229)
+; ScreenEnterPages_L0adSingleS0und -- TWO handler pointers, indexed by the page byte (0x2229)
 ; Read by: 0xFF672D.  ENTRY COUNT 2, from `cp (0x2229),0x02 / jr NC`.
 ; ---------------------------------------------------------------------
-Dispatch_FF4041:
-	.long sub_FF674D                                 ; FF4041  [  0]
-	.long sub_FF6835                                 ; FF4045  [  1]
+; ScreenEnterPages_L0adSingleS0und: PageDispatch_L0adSingleS0und's per-page ENTER table, indexed by UI_ScreenPage (0..1)
+;   (notes/prom_a_page_enter_names.py).
+ScreenEnterPages_L0adSingleS0und:
+	.long ScreenEnter_L0adSingleS0und_Page0                                 ; FF4041  [  0]
+	.long ScreenEnter_L0adSingleS0und_Page1                                 ; FF4045  [  1]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF4049 -- a 2 x 32 handler matrix: page by control index
 ;
@@ -186881,7 +186887,7 @@ Dispatch_FF4041:
 ;          matrix readers do but carries NO bound of its own.
 ; ★ ENTRY COUNT 64 rests on two things and both are named: the extent between
 ;          this base and the next reader-named base (0xFF4149) is 256 bytes =
-;          64 entries; and the sibling table Dispatch_FF4041, which is indexed
+;          64 entries; and the sibling table ScreenEnterPages_L0adSingleS0und, which is indexed
 ;          by the SAME page byte, is bounded at 2 by its own reader -- so two
 ;          rows is what the page byte can address.
 ; ---------------------------------------------------------------------
@@ -186984,17 +186990,19 @@ Dispatch_FF4049:
 	.long DispatchMatrix_NoAction                                 ; FF4141  [ 62]
 	.long DispatchMatrix_NoAction                                 ; FF4145  [ 63]
 ; ---------------------------------------------------------------------
-; Dispatch_FF4149 -- TWO handler pointers, indexed by the page byte (0x2229)
+; ScreenEnterPages_L0adSingleC0mbination -- TWO handler pointers, indexed by the page byte (0x2229)
 ; Read by: 0xFF6DB7.  ENTRY COUNT 2, from `cp (0x2229),0x02 / jr NC`.
 ; ---------------------------------------------------------------------
-Dispatch_FF4149:
-	.long sub_FF6DD7                                 ; FF4149  [  0]
-	.long sub_FF6E95                                 ; FF414D  [  1]
+; ScreenEnterPages_L0adSingleC0mbination: PageDispatch_L0adSingleC0mbination's per-page ENTER table, indexed by UI_ScreenPage (0..1)
+;   (notes/prom_a_page_enter_names.py).
+ScreenEnterPages_L0adSingleC0mbination:
+	.long ScreenEnter_L0adSingleC0mbination_Page0                                 ; FF4149  [  0]
+	.long ScreenEnter_L0adSingleC0mbination_Page1                                 ; FF414D  [  1]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF4151 -- a 2 x 32 handler matrix.  Read by 0xFF6F21, and the entry
 ; count rests on the same two things as Dispatch_FF4049's: the 256-byte extent
 ; to the next reader-named base, and the bound of 2 that its sibling
-; Dispatch_FF4149 carries on the same page byte.
+; ScreenEnterPages_L0adSingleC0mbination carries on the same page byte.
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
 ; ★ CONTROL LEGEND, added 2026-08-31. The header above ends "⚠ Not one entry
@@ -189317,7 +189325,7 @@ T_F423AC_Nop:
 ; ---------------------------------------------------------------------
 Paint_MidiFileL0ad:
 	push XIX                                             ; FF4FFA  3c
-	lda xix, (0x2229:16)                                ; FF4FFB  f1 29 22 34
+	lda xix, (UI_ScreenPage:16)                                ; FF4FFB  f1 29 22 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF4FFF  1d 80 2e f4
 	ld (0x21fa:16), 0x00                                 ; FF5003  f1 fa 21 00 00
 	ld c, (UI_ScreenLatch:16)                                   ; FF5008  c1 7a 20 23
@@ -189960,7 +189968,7 @@ ExitKey_MidiFileL0ad:
 T_F4240C_Nop:
 	ret                                                  ; FF5489  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_DiskSaveFile -- run Dispatch_FF3A00's entry for the CURRENT
+; PageDispatch_DiskSaveFile -- run ScreenEnterPages_DiskSaveFile's entry for the CURRENT
 ;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
@@ -189978,19 +189986,21 @@ T_F4240C_Nop:
 ; Was `sub_FF548A`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
 PageDispatch_DiskSaveFile:
-	m_cp_mi8 MB16, 0x2229, 0x06                          ; FF548A  c1 29 22 3f 06
+	m_cp_mi8 MB16, UI_ScreenPage, 0x06                          ; FF548A  c1 29 22 3f 06
 	jr nc, .LFF54A9                                      ; FF548F  6f 18
 	ld c, 0x04:opc                                          ; FF5491  23 04
-	m_mul MB16, 0x2229, 3                                ; FF5493  c1 29 22 43
+	m_mul MB16, UI_ScreenPage, 3                                ; FF5493  c1 29 22 43
 	extz XBC                                             ; FF5497  e9 12
-	add XBC,Dispatch_FF3A00                              ; FF5499  e9 c8 00 3a ff 00
+	add XBC,ScreenEnterPages_DiskSaveFile                              ; FF5499  e9 c8 00 3a ff 00
 	ld XBC,(XBC)                                         ; FF549F  a1 21
 	lda xiy, (.LFF54A9:24)                               ; FF54A1  f2 a9 54 ff 35
 	push XIY                                             ; FF54A6  3d
 	jp (xbc)                                             ; FF54A7  b1 d8
 .LFF54A9:
 	ret                                                  ; FF54A9  0e
-sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
+; ScreenEnter_DiskSaveFile_Page0: ScreenEnterPages_DiskSaveFile[0] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 0 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page0:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	push XHL                                             ; FF54AA  3b
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF54AB  1d 80 2e f4
 	ld c, (UI_ScreenLatch:16)                                   ; FF54AF  c1 7a 20 23
@@ -190041,7 +190051,9 @@ sub_FF54AA:   ; entry: named by 1 `.long` operand, first at 0xFF3A00
 	add XSP,0x00000016                                   ; FF553E  ef c8 16 00 00 00
 	pop XHL                                              ; FF5544  5b
 	ret                                                  ; FF5545  0e
-sub_FF5546:   ; entry: named by 1 `.long` operand, first at 0xFF3A04
+; ScreenEnter_DiskSaveFile_Page1: ScreenEnterPages_DiskSaveFile[1] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 1 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page1:   ; entry: named by 1 `.long` operand, first at 0xFF3A04
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5546  1d 80 2e f4
 	pushw 0x0b                                           ; FF554A  0b 0b 00
 	pushw 0x0c                                           ; FF554D  0b 0c 00
@@ -190113,7 +190125,9 @@ Paint_DiskSaveFile:
 	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF55B3  1d 15 76 ff
 	add XSP,0x0000001c                                   ; FF55B7  ef c8 1c 00 00 00
 	ret                                                  ; FF55BD  0e
-sub_FF55BE:   ; entry: named by 1 `.long` operand, first at 0xFF3A08
+; ScreenEnter_DiskSaveFile_Page2: ScreenEnterPages_DiskSaveFile[2] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 2 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page2:   ; entry: named by 1 `.long` operand, first at 0xFF3A08
 	push XIX                                             ; FF55BE  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF55BF  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF55C4  1d 80 2e f4
@@ -190150,7 +190164,9 @@ sub_FF55BE:   ; entry: named by 1 `.long` operand, first at 0xFF3A08
 	add XSP,0x0000001e                                   ; FF5619  ef c8 1e 00 00 00
 	pop XIX                                              ; FF561F  5c
 	ret                                                  ; FF5620  0e
-sub_FF5621:   ; entry: named by 1 `.long` operand, first at 0xFF3A0C
+; ScreenEnter_DiskSaveFile_Page3: ScreenEnterPages_DiskSaveFile[3] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 3 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page3:   ; entry: named by 1 `.long` operand, first at 0xFF3A0C
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5621  1d 80 2e f4
 	pushw 0x10                                           ; FF5625  0b 10 00
 	lda xbc, (Text_FF3A18:24)                            ; FF5628  f2 18 3a ff 31
@@ -190174,7 +190190,9 @@ sub_FF5621:   ; entry: named by 1 `.long` operand, first at 0xFF3A0C
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF5660  1d d3 75 ff
 	add XSP,0x00000020                                   ; FF5664  ef c8 20 00 00 00
 	ret                                                  ; FF566A  0e
-sub_FF566B:   ; entry: named by 1 `.long` operand, first at 0xFF3A10
+; ScreenEnter_DiskSaveFile_Page4: ScreenEnterPages_DiskSaveFile[4] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 4 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page4:   ; entry: named by 1 `.long` operand, first at 0xFF3A10
 	push XIX                                             ; FF566B  3c
 	lda xix, (0x22f0:16)                                ; FF566C  f1 f0 22 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5670  1d 80 2e f4
@@ -190203,7 +190221,9 @@ sub_FF566B:   ; entry: named by 1 `.long` operand, first at 0xFF3A10
 	add XSP,0x00000020                                   ; FF56B8  ef c8 20 00 00 00
 	pop XIX                                              ; FF56BE  5c
 	ret                                                  ; FF56BF  0e
-sub_FF56C0:   ; entry: named by 1 `.long` operand, first at 0xFF3A14
+; ScreenEnter_DiskSaveFile_Page5: ScreenEnterPages_DiskSaveFile[5] -- what PageDispatch_DiskSaveFile, the ENTER method of the DiskSaveFile screen, runs
+;   when UI_ScreenPage is 5 (notes/prom_a_page_enter_names.py).
+ScreenEnter_DiskSaveFile_Page5:   ; entry: named by 1 `.long` operand, first at 0xFF3A14
 	push XIX                                             ; FF56C0  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF56C1  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF56C6  1d 80 2e f4
@@ -190290,10 +190310,10 @@ PanelButtonDispatch_DiskSaveFile:
 	ld H,(XIZ+0x08)                                      ; FF5733  8e 08 26
 	cp H,0x20                                            ; FF5736  ce cf 20
 	jr nc, .LFF5764                                      ; FF5739  6f 29
-	m_cp_mi8 MB16, 0x2229, 0x06                          ; FF573B  c1 29 22 3f 06
+	m_cp_mi8 MB16, UI_ScreenPage, 0x06                          ; FF573B  c1 29 22 3f 06
 	jr nc, .LFF5764                                      ; FF5740  6f 22
 	m_push MWD+r6, 0x0a                                  ; FF5742  9e 0a 04
-	ld c, (0x2229:16)                                   ; FF5745  c1 29 22 23
+	ld c, (UI_ScreenPage:16)                                   ; FF5745  c1 29 22 23
 	sll c, 0x05                                          ; FF5749  cb ee 05
 	add C,H                                              ; FF574C  ce 83
 	mul C,0x04                                           ; FF574E  cb 08 04
@@ -190488,7 +190508,7 @@ LcdKeyRow1_DiskSaveFile_Page0:
 	and BC,0x0080                                        ; FF5920  d9 cc 80 00
 	jr nz, .LFF5951                                      ; FF5924  6e 2b
 	m_res 3, MD16, UI_RequestBits                                ; FF5926  f1 75 20 b3
-	ld (0x2229:16), 0x01                                 ; FF592A  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF592A  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF592F  f1 71 20 00 10
 	m_res 0, MD16, 0x2726                                ; FF5934  f1 26 27 b0
 	call T_F42594                                        ; FF5938  1d 94 25 f4
@@ -190531,7 +190551,7 @@ LcdKeyRow4_DiskSaveFile_Page0:
 	and BC,0x0080                                        ; FF595B  d9 cc 80 00
 	jr nz, .LFF5988                                      ; FF595F  6e 27
 	m_set 0, MD16, 0x2726                                ; FF5961  f1 26 27 b8
-	ld (0x2229:16), 0x01                                 ; FF5965  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF5965  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF596A  f1 71 20 00 10
 	call T_F42594                                        ; FF596F  1d 94 25 f4
 	call T_F425B8                                        ; FF5973  1d b8 25 f4
@@ -190590,7 +190610,7 @@ SoftKeyCol4_DiskSaveFile_Page1:   ; entry: named by 2 `.long` operands, first at
 	jr ule, .LFF59E7                                     ; FF59B9  63 2c
 	m_cp_mi16 MW24, 0x60341c, 0x0000                     ; FF59BB  d2 1c 34 60 3f 00 00
 	jr nz, .LFF59D0                                      ; FF59C2  6e 0c
-	ld (0x2229:16), 0x03                                 ; FF59C4  f1 29 22 00 03
+	ld (UI_ScreenPage:16), 0x03                                 ; FF59C4  f1 29 22 00 03
 	ld (UI_Request_Hi:16), 0x10                                 ; FF59C9  f1 71 20 00 10
 	jr .LFF59E7                                          ; FF59CE  68 17
 .LFF59D0:
@@ -190650,7 +190670,7 @@ LcdKeyRow1_DiskSaveFile_Page1:
 	calr DiskSaveFile_Page1_LcdKeyRow1                                      ; FF5A1A  1e 10 00
 	cp wa, 0x00:i3                                         ; FF5A1D  d8 d8
 	jr z, .LFF5A2A                                       ; FF5A1F  66 09
-	ld (0x2229:16), 0x05                                 ; FF5A21  f1 29 22 00 05
+	ld (UI_ScreenPage:16), 0x05                                 ; FF5A21  f1 29 22 00 05
 	m_set 4, MD16, UI_Request_Hi                                ; FF5A26  f1 71 20 bc
 .LFF5A2A:
 	unlk XIZ                                             ; FF5A2A  ee 0d
@@ -190930,7 +190950,7 @@ LcdKeyRow4_DiskSaveFile_Page2:
 	ld BC,(XIZ+0x08)                                     ; FF5B08  9e 08 21
 	and BC,0x0080                                        ; FF5B0B  d9 cc 80 00
 	jr nz, .LFF5B1B                                      ; FF5B0F  6e 0a
-	ld (0x2229:16), 0x01                                 ; FF5B11  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF5B11  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF5B16  f1 71 20 00 10
 .LFF5B1B:
 	unlk XIZ                                             ; FF5B1B  ee 0d
@@ -191142,7 +191162,7 @@ LcdKeyRow3_DiskSaveFile_Page5:
 	call MemCpy_C                                      ; FF5BE6  1d b5 78 ff
 	call sub_FF7959                                      ; FF5BEA  1d 59 79 ff
 	m_res 0, MD16, 0x2726                                ; FF5BEE  f1 26 27 b0
-	ld (0x2229:16), 0x00                                 ; FF5BF2  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF5BF2  f1 29 22 00 00
 	ld (UI_Request:16), 0x40                                 ; FF5BF7  f1 70 20 00 40
 	ld (UI_Request_Hi:16), 0x80                                 ; FF5BFC  f1 71 20 00 80
 	add XSP,0x00000014                                   ; FF5C01  ef c8 14 00 00 00
@@ -191179,7 +191199,7 @@ LcdKeyRow4_DiskSaveFile_Page5:
 	ld BC,(XIZ+0x08)                                     ; FF5C0E  9e 08 21
 	and BC,0x0080                                        ; FF5C11  d9 cc 80 00
 	jr nz, .LFF5C20                                      ; FF5C15  6e 09
-	ld (0x2229:16), 0x01                                 ; FF5C17  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF5C17  f1 29 22 00 01
 	m_set 4, MD16, UI_Request_Hi                                ; FF5C1C  f1 71 20 bc
 .LFF5C20:
 	unlk XIZ                                             ; FF5C20  ee 0d
@@ -191221,7 +191241,7 @@ ExitKey_DiskSaveFile_Page5:
 T_F423BC_Nop:
 	ret                                                  ; FF5C3D  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_MidiFileSave -- run Dispatch_FF3D29's entry for the CURRENT
+; PageDispatch_MidiFileSave -- run ScreenEnterPages_MidiFileSave's entry for the CURRENT
 ;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
@@ -191239,19 +191259,21 @@ T_F423BC_Nop:
 ; Was `sub_FF5C3E`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
 PageDispatch_MidiFileSave:
-	m_cp_mi8 MB16, 0x2229, 0x03                          ; FF5C3E  c1 29 22 3f 03
+	m_cp_mi8 MB16, UI_ScreenPage, 0x03                          ; FF5C3E  c1 29 22 3f 03
 	jr ugt, .LFF5C5D                                     ; FF5C43  6b 18
 	ld c, 0x04:opc                                          ; FF5C45  23 04
-	m_mul MB16, 0x2229, 3                                ; FF5C47  c1 29 22 43
+	m_mul MB16, UI_ScreenPage, 3                                ; FF5C47  c1 29 22 43
 	extz XBC                                             ; FF5C4B  e9 12
-	add XBC,Dispatch_FF3D29                              ; FF5C4D  e9 c8 29 3d ff 00
+	add XBC,ScreenEnterPages_MidiFileSave                              ; FF5C4D  e9 c8 29 3d ff 00
 	ld XBC,(XBC)                                         ; FF5C53  a1 21
 	lda xiy, (.LFF5C5D:24)                               ; FF5C55  f2 5d 5c ff 35
 	push XIY                                             ; FF5C5A  3d
 	jp (xbc)                                             ; FF5C5B  b1 d8
 .LFF5C5D:
 	ret                                                  ; FF5C5D  0e
-sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
+; ScreenEnter_MidiFileSave_Page0: ScreenEnterPages_MidiFileSave[0] -- what PageDispatch_MidiFileSave, the ENTER method of the MidiFileSave screen, runs
+;   when UI_ScreenPage is 0 (notes/prom_a_page_enter_names.py).
+ScreenEnter_MidiFileSave_Page0:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	push XHL                                             ; FF5C5E  3b
 	ld (0x21fa:16), 0x00                                 ; FF5C5F  f1 fa 21 00 00
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5C64  1d 80 2e f4
@@ -191315,7 +191337,9 @@ sub_FF5C5E:   ; entry: named by 1 `.long` operand, first at 0xFF3D29
 	add XSP,0x00000020                                   ; FF5D1F  ef c8 20 00 00 00
 	pop XHL                                              ; FF5D25  5b
 	ret                                                  ; FF5D26  0e
-sub_FF5D27:   ; entry: named by 1 `.long` operand, first at 0xFF3D2D
+; ScreenEnter_MidiFileSave_Page1: ScreenEnterPages_MidiFileSave[1] -- what PageDispatch_MidiFileSave, the ENTER method of the MidiFileSave screen, runs
+;   when UI_ScreenPage is 1 (notes/prom_a_page_enter_names.py).
+ScreenEnter_MidiFileSave_Page1:   ; entry: named by 1 `.long` operand, first at 0xFF3D2D
 	push XIX                                             ; FF5D27  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF5D28  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5D2D  1d 80 2e f4
@@ -191384,7 +191408,9 @@ sub_FF5D27:   ; entry: named by 1 `.long` operand, first at 0xFF3D2D
 	add XSP,0x00000036                                   ; FF5DE0  ef c8 36 00 00 00
 	pop XIX                                              ; FF5DE6  5c
 	ret                                                  ; FF5DE7  0e
-sub_FF5DE8:   ; entry: named by 1 `.long` operand, first at 0xFF3D31
+; ScreenEnter_MidiFileSave_Page2: ScreenEnterPages_MidiFileSave[2] -- what PageDispatch_MidiFileSave, the ENTER method of the MidiFileSave screen, runs
+;   when UI_ScreenPage is 2 (notes/prom_a_page_enter_names.py).
+ScreenEnter_MidiFileSave_Page2:   ; entry: named by 1 `.long` operand, first at 0xFF3D31
 	push XIX                                             ; FF5DE8  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF5DE9  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5DEE  1d 80 2e f4
@@ -191421,7 +191447,9 @@ sub_FF5DE8:   ; entry: named by 1 `.long` operand, first at 0xFF3D31
 	add XSP,0x0000001e                                   ; FF5E43  ef c8 1e 00 00 00
 	pop XIX                                              ; FF5E49  5c
 	ret                                                  ; FF5E4A  0e
-sub_FF5E4B:   ; entry: named by 1 `.long` operand, first at 0xFF3D35
+; ScreenEnter_MidiFileSave_Page3: ScreenEnterPages_MidiFileSave[3] -- what PageDispatch_MidiFileSave, the ENTER method of the MidiFileSave screen, runs
+;   when UI_ScreenPage is 3 (notes/prom_a_page_enter_names.py).
+ScreenEnter_MidiFileSave_Page3:   ; entry: named by 1 `.long` operand, first at 0xFF3D35
 	push XIX                                             ; FF5E4B  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF5E4C  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5E51  1d 80 2e f4
@@ -191513,10 +191541,10 @@ PanelButtonDispatch_MidiFileSave:
 	ld H,(XIZ+0x08)                                      ; FF5ED6  8e 08 26
 	cp H,0x20                                            ; FF5ED9  ce cf 20
 	jr nc, .LFF5F07                                      ; FF5EDC  6f 29
-	m_cp_mi8 MB16, 0x2229, 0x05                          ; FF5EDE  c1 29 22 3f 05
+	m_cp_mi8 MB16, UI_ScreenPage, 0x05                          ; FF5EDE  c1 29 22 3f 05
 	jr nc, .LFF5F07                                      ; FF5EE3  6f 22
 	m_push MWD+r6, 0x0a                                  ; FF5EE5  9e 0a 04
-	ld c, (0x2229:16)                                   ; FF5EE8  c1 29 22 23
+	ld c, (UI_ScreenPage:16)                                   ; FF5EE8  c1 29 22 23
 	sll c, 0x05                                          ; FF5EEC  cb ee 05
 	add C,H                                              ; FF5EEF  ce 83
 	mul C,0x04                                           ; FF5EF1  cb 08 04
@@ -191703,7 +191731,7 @@ LcdKeyRow1_MidiFileSave_Page0:
 	and BC,0x0080                                        ; FF6075  d9 cc 80 00
 	jr nz, .LFF60A6                                      ; FF6079  6e 2b
 	m_res 3, MD16, UI_RequestBits                                ; FF607B  f1 75 20 b3
-	ld (0x2229:16), 0x01                                 ; FF607F  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF607F  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF6084  f1 71 20 00 10
 	m_res 0, MD16, 0x2726                                ; FF6089  f1 26 27 b0
 	call T_F42594                                        ; FF608D  1d 94 25 f4
@@ -191746,7 +191774,7 @@ LcdKeyRow4_MidiFileSave_Page0:
 	and BC,0x0080                                        ; FF60B0  d9 cc 80 00
 	jr nz, .LFF60DD                                      ; FF60B4  6e 27
 	m_set 0, MD16, 0x2726                                ; FF60B6  f1 26 27 b8
-	ld (0x2229:16), 0x01                                 ; FF60BA  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF60BA  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF60BF  f1 71 20 00 10
 	call T_F42594                                        ; FF60C4  1d 94 25 f4
 	call T_F42614                                        ; FF60C8  1d 14 26 f4
@@ -191831,11 +191859,11 @@ LcdKeyRow1_MidiFileSave_Page1:
 	and C,0x01                                           ; FF6110  cb cc 01
 	jr nz, .LFF6140                                      ; FF6113  6e 2b
 	call T_F43384                                        ; FF6115  1d 84 33 f4
-	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF6119  c1 29 22 3f 02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02                          ; FF6119  c1 29 22 3f 02
 	jr z, .LFF615E                                       ; FF611E  66 3e
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; FF6120  c1 80 28 3f 23
 	jr nz, .LFF6136                                      ; FF6125  6e 0f
-	ld (0x2229:16), 0x00                                 ; FF6127  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF6127  f1 29 22 00 00
 	ld (UI_Request:16), 0x01                                 ; FF612C  f1 70 20 00 01
 	ld (XIX),0x02                                        ; FF6131  b4 00 02
 	jr .LFF617E                                          ; FF6134  68 48
@@ -191853,7 +191881,7 @@ LcdKeyRow1_MidiFileSave_Page1:
 	ld A,(XBC)                                           ; FF6152  81 21
 	cp A,0x20                                            ; FF6154  c9 cf 20
 	jr z, .LFF617E                                       ; FF6157  66 25
-	ld (0x2229:16), 0x03                                 ; FF6159  f1 29 22 00 03
+	ld (UI_ScreenPage:16), 0x03                                 ; FF6159  f1 29 22 00 03
 .LFF615E:
 	m_or_mi8 MBI+r4, 0, 0x10                             ; FF615E  84 3e 10
 	jr .LFF617E                                          ; FF6161  68 1b
@@ -192310,7 +192338,7 @@ LcdKeyRow3_MidiFileSave_Page2:
 	call T_F43384                                        ; FF6464  1d 84 33 f4
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; FF6468  c1 80 28 3f 23
 	jr nz, .LFF6479                                      ; FF646D  6e 0a
-	ld (0x2229:16), 0x00                                 ; FF646F  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF646F  f1 29 22 00 00
 	m_or_mi8 MBI+r4, 0, 0x10                             ; FF6474  84 3e 10
 	jr .LFF6481                                          ; FF6477  68 08
 .LFF6479:
@@ -192350,7 +192378,7 @@ LcdKeyRow4_MidiFileSave_Page2:
 	ld BC,(XIZ+0x08)                                     ; FF6489  9e 08 21
 	and BC,0x0080                                        ; FF648C  d9 cc 80 00
 	jr nz, .LFF649B                                      ; FF6490  6e 09
-	ld (0x2229:16), 0x01                                 ; FF6492  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF6492  f1 29 22 00 01
 	m_set 4, MD16, UI_Request_Hi                                ; FF6497  f1 71 20 bc
 .LFF649B:
 	unlk XIZ                                             ; FF649B  ee 0d
@@ -192443,7 +192471,7 @@ LcdKeyRow4_MidiFileSave_Page3:
 	ld BC,(XIZ+0x08)                                     ; FF64FC  9e 08 21
 	and BC,0x0080                                        ; FF64FF  d9 cc 80 00
 	jr nz, .LFF650E                                      ; FF6503  6e 09
-	ld (0x2229:16), 0x01                                 ; FF6505  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF6505  f1 29 22 00 01
 	m_set 4, MD16, UI_Request_Hi                                ; FF650A  f1 71 20 bc
 .LFF650E:
 	unlk XIZ                                             ; FF650E  ee 0d
@@ -192971,7 +192999,7 @@ ExitKey_MidiFileSave_Page5:
 T_F423FC_Nop:
 	ret                                                  ; FF672C  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_L0adSingleS0und -- run Dispatch_FF4041's entry for the CURRENT
+; PageDispatch_L0adSingleS0und -- run ScreenEnterPages_L0adSingleS0und's entry for the CURRENT
 ;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
@@ -192989,19 +193017,21 @@ T_F423FC_Nop:
 ; Was `sub_FF672D`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
 PageDispatch_L0adSingleS0und:
-	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF672D  c1 29 22 3f 02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02                          ; FF672D  c1 29 22 3f 02
 	jr nc, .LFF674C                                      ; FF6732  6f 18
 	ld c, 0x04:opc                                          ; FF6734  23 04
-	m_mul MB16, 0x2229, 3                                ; FF6736  c1 29 22 43
+	m_mul MB16, UI_ScreenPage, 3                                ; FF6736  c1 29 22 43
 	extz XBC                                             ; FF673A  e9 12
-	add XBC,Dispatch_FF4041                              ; FF673C  e9 c8 41 40 ff 00
+	add XBC,ScreenEnterPages_L0adSingleS0und                              ; FF673C  e9 c8 41 40 ff 00
 	ld XBC,(XBC)                                         ; FF6742  a1 21
 	lda xiy, (.LFF674C:24)                               ; FF6744  f2 4c 67 ff 35
 	push XIY                                             ; FF6749  3d
 	jp (xbc)                                             ; FF674A  b1 d8
 .LFF674C:
 	ret                                                  ; FF674C  0e
-sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
+; ScreenEnter_L0adSingleS0und_Page0: ScreenEnterPages_L0adSingleS0und[0] -- what PageDispatch_L0adSingleS0und, the ENTER method of the L0adSingleS0und screen, runs
+;   when UI_ScreenPage is 0 (notes/prom_a_page_enter_names.py).
+ScreenEnter_L0adSingleS0und_Page0:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	pushw hl                                             ; FF674D  2b
 	push XIX                                             ; FF674E  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF674F  f2 d3 75 ff 34
@@ -193082,7 +193112,9 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	pop XIX                                              ; FF6832  5c
 	popw hl                                              ; FF6833  4b
 	ret                                                  ; FF6834  0e
-sub_FF6835:   ; entry: named by 1 `.long` operand, first at 0xFF4045
+; ScreenEnter_L0adSingleS0und_Page1: ScreenEnterPages_L0adSingleS0und[1] -- what PageDispatch_L0adSingleS0und, the ENTER method of the L0adSingleS0und screen, runs
+;   when UI_ScreenPage is 1 (notes/prom_a_page_enter_names.py).
+ScreenEnter_L0adSingleS0und_Page1:   ; entry: named by 1 `.long` operand, first at 0xFF4045
 	push XIX                                             ; FF6835  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF6836  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF683B  1d 80 2e f4
@@ -193182,7 +193214,7 @@ PanelButtonDispatch_L0adSingleS0und:
 	pushw hl                                             ; FF68DC  2b
 	ld H,(XIZ+0x08)                                      ; FF68DD  8e 08 26
 	m_push MWD+r6, 0x0a                                  ; FF68E0  9e 0a 04
-	ld c, (0x2229:16)                                   ; FF68E3  c1 29 22 23
+	ld c, (UI_ScreenPage:16)                                   ; FF68E3  c1 29 22 23
 	sll c, 0x05                                          ; FF68E7  cb ee 05
 	add C,H                                              ; FF68EA  ce 83
 	mul C,0x04                                           ; FF68EC  cb 08 04
@@ -193455,7 +193487,7 @@ LcdKeyRow1_L0adSingleS0und_Page1:
 	and BC,0x0080                                        ; FF6B05  d9 cc 80 00
 	jr nz, .LFF6B17                                      ; FF6B09  6e 0c
 	ld (UI_Request_Hi:16), 0x10                                 ; FF6B0B  f1 71 20 00 10
-	ld (0x2229:16), 0x00                                 ; FF6B10  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF6B10  f1 29 22 00 00
 	jr .LFF6B32                                          ; FF6B15  68 1b
 .LFF6B17:
 	pushw 0x00                                           ; FF6B17  0b 00 00
@@ -193764,7 +193796,7 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 	and BC,0x0080                                        ; FF6D6C  d9 cc 80 00
 	jr nz, .LFF6D7E                                      ; FF6D70  6e 0c
 	ld (UI_Request_Hi:16), 0x10                                 ; FF6D72  f1 71 20 00 10
-	ld (0x2229:16), 0x01                                 ; FF6D77  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF6D77  f1 29 22 00 01
 	jr .LFF6D99                                          ; FF6D7C  68 1b
 .LFF6D7E:
 	pushw 0x00                                           ; FF6D7E  0b 00 00
@@ -193816,7 +193848,7 @@ ExitKey_L0adSingleS0und_Pages0_1:
 T_F423EC_Nop:
 	ret                                                  ; FF6DB6  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_L0adSingleC0mbination -- run Dispatch_FF4149's entry for the
+; PageDispatch_L0adSingleC0mbination -- run ScreenEnterPages_L0adSingleC0mbination's entry for the
 ;          CURRENT PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
@@ -193834,19 +193866,21 @@ T_F423EC_Nop:
 ; Was `sub_FF6DB7`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
 PageDispatch_L0adSingleC0mbination:
-	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF6DB7  c1 29 22 3f 02
+	m_cp_mi8 MB16, UI_ScreenPage, 0x02                          ; FF6DB7  c1 29 22 3f 02
 	jr nc, .LFF6DD6                                      ; FF6DBC  6f 18
 	ld c, 0x04:opc                                          ; FF6DBE  23 04
-	m_mul MB16, 0x2229, 3                                ; FF6DC0  c1 29 22 43
+	m_mul MB16, UI_ScreenPage, 3                                ; FF6DC0  c1 29 22 43
 	extz XBC                                             ; FF6DC4  e9 12
-	add XBC,Dispatch_FF4149                              ; FF6DC6  e9 c8 49 41 ff 00
+	add XBC,ScreenEnterPages_L0adSingleC0mbination                              ; FF6DC6  e9 c8 49 41 ff 00
 	ld XBC,(XBC)                                         ; FF6DCC  a1 21
 	lda xiy, (.LFF6DD6:24)                               ; FF6DCE  f2 d6 6d ff 35
 	push XIY                                             ; FF6DD3  3d
 	jp (xbc)                                             ; FF6DD4  b1 d8
 .LFF6DD6:
 	ret                                                  ; FF6DD6  0e
-sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
+; ScreenEnter_L0adSingleC0mbination_Page0: ScreenEnterPages_L0adSingleC0mbination[0] -- what PageDispatch_L0adSingleC0mbination, the ENTER method of the L0adSingleC0mbination screen, runs
+;   when UI_ScreenPage is 0 (notes/prom_a_page_enter_names.py).
+ScreenEnter_L0adSingleC0mbination_Page0:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	push XIX                                             ; FF6DD7  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF6DD8  f2 d3 75 ff 34
 	ld (0x21fa:16), 0x00                                 ; FF6DDD  f1 fa 21 00 00
@@ -193910,7 +193944,9 @@ sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	add XSP,0x0000002c                                   ; FF6E8D  ef c8 2c 00 00 00
 	pop XIX                                              ; FF6E93  5c
 	ret                                                  ; FF6E94  0e
-sub_FF6E95:   ; entry: named by 1 `.long` operand, first at 0xFF414D
+; ScreenEnter_L0adSingleC0mbination_Page1: ScreenEnterPages_L0adSingleC0mbination[1] -- what PageDispatch_L0adSingleC0mbination, the ENTER method of the L0adSingleC0mbination screen, runs
+;   when UI_ScreenPage is 1 (notes/prom_a_page_enter_names.py).
+ScreenEnter_L0adSingleC0mbination_Page1:   ; entry: named by 1 `.long` operand, first at 0xFF414D
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF6E95  1d 80 2e f4
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF6E99  1d 04 76 ff
 	ld (0x2736:16), 0x00                                 ; FF6E9D  f1 36 27 00 00
@@ -193996,7 +194032,7 @@ PanelButtonDispatch_L0adSingleC0mbination:
 	pushw hl                                             ; FF6F25  2b
 	ld H,(XIZ+0x08)                                      ; FF6F26  8e 08 26
 	m_push MWD+r6, 0x0a                                  ; FF6F29  9e 0a 04
-	ld c, (0x2229:16)                                   ; FF6F2C  c1 29 22 23
+	ld c, (UI_ScreenPage:16)                                   ; FF6F2C  c1 29 22 23
 	sll c, 0x05                                          ; FF6F30  cb ee 05
 	add C,H                                              ; FF6F33  ce 83
 	mul C,0x04                                           ; FF6F35  cb 08 04
@@ -194042,7 +194078,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page1:
 	and BC,0x0080                                        ; FF6F56  d9 cc 80 00
 	jr nz, .LFF6F68                                      ; FF6F5A  6e 0c
 	ld (UI_Request_Hi:16), 0x10                                 ; FF6F5C  f1 71 20 00 10
-	ld (0x2229:16), 0x00                                 ; FF6F61  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF6F61  f1 29 22 00 00
 	jr .LFF6F83                                          ; FF6F66  68 1b
 .LFF6F68:
 	pushw 0x01                                           ; FF6F68  0b 01 00
@@ -194169,7 +194205,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 	and BC,0x0080                                        ; FF7039  d9 cc 80 00
 	jr nz, .LFF704B                                      ; FF703D  6e 0c
 	ld (UI_Request_Hi:16), 0x10                                 ; FF703F  f1 71 20 00 10
-	ld (0x2229:16), 0x01                                 ; FF7044  f1 29 22 00 01
+	ld (UI_ScreenPage:16), 0x01                                 ; FF7044  f1 29 22 00 01
 	jr .LFF7066                                          ; FF7049  68 1b
 .LFF704B:
 	pushw 0x01                                           ; FF704B  0b 01 00
@@ -195512,7 +195548,7 @@ sub_FF796C:
 	jr z, .LFF7987                                       ; FF7978  66 0d
 	call T_F425DC                                        ; FF797A  1d dc 25 f4
 	m_res 6, MD16, 0x2094                                ; FF797E  f1 94 20 b6
-	ld (0x2229:16), 0x00                                 ; FF7982  f1 29 22 00 00
+	ld (UI_ScreenPage:16), 0x00                                 ; FF7982  f1 29 22 00 00
 .LFF7987:
 	pop XDE                                              ; FF7987  5a
 	pop XHL                                              ; FF7988  5b

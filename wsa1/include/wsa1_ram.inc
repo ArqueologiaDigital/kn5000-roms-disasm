@@ -460,3 +460,6 @@
 ; ---- wsa1/notes/FINDINGS-image-files.md -- "9. The small-icon origin, RAM 0x2350 / 0x2352, and the four drawers that use it (2026-10-04)"
 	.equ IconOrigin_X,				0x2350	; X of the small icon being drawn (keyboard, touch-curve thumbnail) -- KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it
 	.equ IconOrigin_Y,				0x2352	; Y of the small icon being drawn -- KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it
+
+; ---- wsa1/notes/FINDINGS-prom_a-dispatch-matrix-and-drum-names.md -- "1. 0xFF3800-0xFF7C65 -- a UI screen module with fourteen dispatch tables"
+	.equ UI_ScreenPage,				0x2229	; the page of a multi-page screen (DiskSaveFile 0..5, MidiFileSave 0..3, L0adSingle* 0..1) -- the PageDispatch_* ENTER readers index ScreenEnterPages_* by it; the 32-slot control tables add 32 * it

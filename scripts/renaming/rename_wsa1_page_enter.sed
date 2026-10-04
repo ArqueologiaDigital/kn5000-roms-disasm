@@ -1,0 +1,19 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bDispatch_FF3A00\b/ScreenEnterPages_DiskSaveFile/g
+s/\bsub_FF54AA\b/ScreenEnter_DiskSaveFile_Page0/g
+s/\bsub_FF5546\b/ScreenEnter_DiskSaveFile_Page1/g
+s/\bsub_FF55BE\b/ScreenEnter_DiskSaveFile_Page2/g
+s/\bsub_FF5621\b/ScreenEnter_DiskSaveFile_Page3/g
+s/\bsub_FF566B\b/ScreenEnter_DiskSaveFile_Page4/g
+s/\bsub_FF56C0\b/ScreenEnter_DiskSaveFile_Page5/g
+s/\bDispatch_FF3D29\b/ScreenEnterPages_MidiFileSave/g
+s/\bsub_FF5C5E\b/ScreenEnter_MidiFileSave_Page0/g
+s/\bsub_FF5D27\b/ScreenEnter_MidiFileSave_Page1/g
+s/\bsub_FF5DE8\b/ScreenEnter_MidiFileSave_Page2/g
+s/\bsub_FF5E4B\b/ScreenEnter_MidiFileSave_Page3/g
+s/\bDispatch_FF4041\b/ScreenEnterPages_L0adSingleS0und/g
+s/\bsub_FF674D\b/ScreenEnter_L0adSingleS0und_Page0/g
+s/\bsub_FF6835\b/ScreenEnter_L0adSingleS0und_Page1/g
+s/\bDispatch_FF4149\b/ScreenEnterPages_L0adSingleC0mbination/g
+s/\bsub_FF6DD7\b/ScreenEnter_L0adSingleC0mbination_Page0/g
+s/\bsub_FF6E95\b/ScreenEnter_L0adSingleC0mbination_Page1/g

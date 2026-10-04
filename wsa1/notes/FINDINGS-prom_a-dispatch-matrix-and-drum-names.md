@@ -72,7 +72,7 @@ were wrong the tiling would not close. `prom_a_uiscreen_checks.py` §1 walks it.
 
 Three things worth keeping:
 
-* **`jr UGT` at 0xFF5C43 admits 3**, so `Dispatch_FF3D29` has FOUR entries, not
+* **`jr UGT` at 0xFF5C43 admits 3**, so `ScreenEnterPages_MidiFileSave` has FOUR entries, not
   three. A `jr NC` in the same place would have meant three. The four entries are
   all distinct, which corroborates it.
 * **0xFF3F39 and 0xFF3FB9 are not separate tables** — they are rows 4 and 5 of

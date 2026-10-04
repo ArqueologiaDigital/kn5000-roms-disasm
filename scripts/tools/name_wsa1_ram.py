@@ -518,6 +518,10 @@ GROUPS = [
         0x2350: ("IconOrigin_X", "X of the small icon being drawn (keyboard, touch-curve thumbnail)", "KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it"),
         0x2352: ("IconOrigin_Y", "Y of the small icon being drawn", "KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-dispatch-matrix-and-drum-names.md", "1. 0xFF3800-0xFF7C65 -- a UI screen module with fourteen dispatch tables", {
+        0x2229: ("UI_ScreenPage", "the page of a multi-page screen (DiskSaveFile 0..5, MidiFileSave 0..3, L0adSingle* 0..1)",
+                 "the PageDispatch_* ENTER readers index ScreenEnterPages_* by it; the 32-slot control tables add 32 * it"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`
@@ -592,6 +596,11 @@ def main():
     ap.add_argument("--check", action="store_true",
                     help="list code lines that still spell a named address as a number; exit 1 if any")
     a = ap.parse_args()
+    if a.apply:
+        # the include is latin-1: encode it BEFORE any source is rewritten, so a non-latin-1 character in a
+        # group's title or text stops the run here instead of leaving sources that name an undefined symbol
+        # (2026-10-04: an em dash in a section title did exactly that, and the build failed)
+        inc_bytes = inc_text().encode("latin-1")
     if a.check:
         left = 0
         for f in SOURCES:
@@ -684,7 +693,7 @@ def main():
         total += n
     print("%d operands%s" % (total, "" if a.apply else " (dry run)"))
     if a.apply:
-        _write(os.path.join(REPO, INC), inc_text().encode("latin-1"))
+        _write(os.path.join(REPO, INC), inc_bytes)
     return 0
 
 
