@@ -3466,10 +3466,10 @@ RENAMES = {
     "sub_FDC276": "sub_FDC22F",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDC410": "ScreenEnter_SoundEditFilterEnvelope1",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDCA4E": "sub_FDC9C4",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FDCE7B": "sub_FDCE74",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FDCECF": "sub_FDCE74",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FDCF17": "sub_FDCE74",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FDCFCB": "sub_FDCE74",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FDCE7B": "ScreenEnter_SoundEditMemoryWrite_Skip",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FDCECF": "ScreenEnter_SoundEditMemoryWrite_Skip",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FDCF17": "ScreenEnter_SoundEditMemoryWrite_Skip",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FDCFCB": "ScreenEnter_SoundEditMemoryWrite_Skip",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDD168": "ScreenEnter_SoundEditCopy",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDD420": "ScreenEnter_SoundEditDrumMenu",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDDCB9": "ToneEditPage_A6_TouchDepth",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -3492,6 +3492,8 @@ RENAMES = {
     "sub_FF5F32": "sub_FF5F1B",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FF5F9B": "SoftKeyCol5_MidiFileSave_Page0",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FF63FF": "MidiFile_LcdKeyRow5",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FBFBB7": "LcdKeyRow3_CombiEditMenu_Skip",
+    "sub_FDCE74": "ScreenEnter_SoundEditMemoryWrite_Skip",
 }
 
 

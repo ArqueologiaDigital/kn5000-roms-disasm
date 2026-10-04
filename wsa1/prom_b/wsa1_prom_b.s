@@ -419,6 +419,7 @@
 	.set	sub_F81D41, 0xF81D41
 	.set	sub_F81E7C_Nop, 0xF81E7C
 	.set	sub_F81E7E, 0xF81E7E
+	.set	MainTask_PhaseVector, 0xF82010
 	.set	MainTask_Loop, 0xF82028
 	.set	Queue2C00_DrainPassAB, 0xF823AC
 	.set	Queue2C00_DrainPassB, 0xF823C8
@@ -621,6 +622,7 @@
 	.set	PanelWire_EntryThunks, 0xF8A000
 	.set	PanelWire_Service, 0xF8A023
 	.set	T_F40618_Nop, 0xF8A027
+	.set	PanelEvent_PhaseVector, 0xF8A800
 	.set	PanelEvent_Service, 0xF8A81D
 	.set	FixedEventList_AppendStackArgs, 0xF8BC00
 	.set	EventQueue_AppendStackArgs, 0xF8BC04
@@ -656,6 +658,7 @@
 	.set	Task2_CallbackDispatcher, 0xF8DA00
 	.set	CallbackQueue_Post, 0xF8DA16
 	.set	CallbackQueue_ResetAndRestartTask2, 0xF8DA83
+	.set	AnalogScan_PhaseVector, 0xF8DC00
 	.set	AnalogScan_All, 0xF8DC25
 	.set	Link_Init_DmaAndTimer, 0xF8E001
 	.set	Link_SendBlockIn32ByteChunks, 0xF8E02C
@@ -715,6 +718,7 @@
 	.set	LCD_BlitValueBar, 0xF9458C
 	.set	UiEventClass7A_QueueDialValueRedraw, 0xF945F4
 	.set	PanelDial_QueueValueRedraw_Entry, 0xF94600
+	.set	DebugMonitor_PhaseVector, 0xF94C00
 	.set	CheckingDevice_RunSelfTest, 0xF95137
 	.set	TestMode_SelectFromPowerOnKeys, 0xF952FC
 	.set	TestMode_Tick, 0xF95444
@@ -783,6 +787,7 @@
 	.set	T_F41610_Nop, 0xF99097
 	.set	MessageScreen_Paint, 0xF99098
 	.set	PanelScreen_RequestRedrawIfFieldQueued, 0xF99400
+	.set	SysexBulkDump_PhaseVector, 0xF99800
 	.set	T_F41660_Nop, 0xF99821
 	.set	T_F416E0_Nop, 0xF99822
 	.set	T_F416F0_Nop, 0xF99823
@@ -1138,6 +1143,10 @@
 	.set	T_F4184C_Nop, 0xFBCB81
 	.set	ScreenButton_CombiEditPartMenu, 0xFBCB82
 	.set	T_F41854_Nop, 0xFBCBA9
+	.set	LcdKeyRow3_CombiEditPartMenu, 0xFBCC3D
+	.set	LcdKeyRow4_CombiEditPartMenu, 0xFBCC64
+	.set	LcdKeyRow5_CombiEditPartMenu, 0xFBCC8B
+	.set	ExitKey_CombiEditPartMenu, 0xFBCC9E
 	.set	ScreenEnter_CombiEditInternalSound_B4, 0xFBCDEC
 	.set	ScreenEnter_CombiEditInternalSound_B5, 0xFBCDF0
 	.set	ScreenEnter_CombiEditInternalSound_37, 0xFBCDF4
@@ -1158,6 +1167,11 @@
 	.set	T_F41A54_Nop, 0xFBCF7F
 	.set	T_F41A64_Nop, 0xFBCF80
 	.set	T_F41864_Nop, 0xFBCF81
+	.set	SoftKeyCols1to4_CombiEditInternalSound, 0xFBCF82
+	.set	SoftKeyCols5to8_CombiEditInternalSound, 0xFBCFD1
+	.set	ExitKey_CombiEditInternalSound, 0xFBD016
+	.set	PageKey_CombiEditInternalSound, 0xFBD044
+	.set	NumberPadKey_CombiEditInternalSound, 0xFBD0A4
 	.set	ScreenEnter_CombiEditMixer, 0xFBDB91
 	.set	ScreenEnterBody_CombiEditMixer, 0xFBDB95
 	.set	ScreenLeave_CombiEditMixer, 0xFBDD0D
@@ -1166,6 +1180,14 @@
 	.set	ScreenButtonBody_CombiEditMixer, 0xFBDD91
 	.set	sub_FBDDD2, 0xFBDDD2
 	.set	T_F418C4_Nop, 0xFBDDD6
+	.set	SoftKeyCols1to8_CombiEditMixer, 0xFBDDD7
+	.set	LcdKeyRow1_CombiEditMixer, 0xFBDDF9
+	.set	LcdKeyRow2_CombiEditMixer, 0xFBDE6B
+	.set	LcdKeyRow3_CombiEditMixer, 0xFBDECC
+	.set	LcdKeyRow4_CombiEditMixer, 0xFBDF26
+	.set	LcdKeyRow5_CombiEditMixer, 0xFBDF86
+	.set	ExitKey_CombiEditMixer, 0xFBDFCC
+	.set	PageKey_CombiEditMixer, 0xFBE038
 	.set	sub_FBECC3, 0xFBECC3
 	.set	sub_FBED02, 0xFBED02
 	.set	CompareKey_CombiEdit, 0xFBEDBE
@@ -1182,10 +1204,34 @@
 	.set	Screen_CombinationNaming_Leave, 0xFBEF75
 	.set	Screen_CombinationNaming_Button, 0xFBEF76
 	.set	T_F41AA4_Nop, 0xFBEFB0
+	.set	LcdKeyRow1_CombinationNaming, 0xFBEFB1
+	.set	LcdKeyRow3_CombinationNaming, 0xFBEFD2
+	.set	LcdKeyRow4_CombinationNaming, 0xFBEFE6
+	.set	LcdKeyRow5_CombinationNaming, 0xFBEFFA
+	.set	ExitKey_CombinationNaming, 0xFBF00D
+	.set	SoftKeyCol2_CombiEditConfigure, 0xFBF499
+	.set	SoftKeyCol4_CombiEditConfigure, 0xFBF50F
+	.set	SoftKeyCol5_CombiEditConfigure, 0xFBF53A
+	.set	SoftKeyCol6_CombiEditConfigure, 0xFBF582
+	.set	SoftKeyCol7_CombiEditConfigure, 0xFBF5CA
+	.set	LcdKeyRow1_CombiEditConfigure, 0xFBF5F5
+	.set	LcdKeyRow2_CombiEditConfigure, 0xFBF609
+	.set	LcdKeyRow3_CombiEditConfigure, 0xFBF62F
+	.set	LcdKeyRow4_CombiEditConfigure, 0xFBF655
+	.set	ExitKey_CombiEditConfigure, 0xFBF67B
 	.set	ScreenEnter_CombiEditMenu, 0xFBFAB0
 	.set	T_F41A1C_Nop, 0xFBFAF1
 	.set	ScreenButton_CombiEditMenu, 0xFBFAF2
 	.set	T_F41A24_Nop, 0xFBFB33
+	.set	LcdKeyRow1_CombiEditMenu, 0xFBFB34
+	.set	LcdKeyRow2_CombiEditMenu, 0xFBFB68
+	.set	LcdKeyRow3_CombiEditMenu, 0xFBFB9A
+	.set	LcdKeyRow4_CombiEditMenu, 0xFBFBC1
+	.set	LcdKeyRow5_CombiEditMenu, 0xFBFBE8
+	.set	ExitKey_CombiEditMenu, 0xFBFC0F
+	.set	SoftKeyCol1_CombiEditMenu, 0xFBFC53
+	.set	ExitKey_Effect2OutputConflict, 0xFBFE1F
+	.set	LcdKeyRow3_WriteProtectError, 0xFBFF02
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
 	.set	T_F40FF4_Nop, 0xFC018D
 	.set	SoundRemap_ResetToDefault, 0xFC01B1
@@ -1775,6 +1821,7 @@
 	.set	sub_FE8005, 0xFE8005
 	.set	sub_FE8026, 0xFE8026
 	.set	ScreenLeave_DrumEditPartSelect, 0xFE8045
+	.set	EditScreen_PhaseVector, 0xFE8046
 	.set	T_F402B8_Nop, 0xFE805F
 	.set	ScreenButton_Sequencer, 0xFE8060
 	.set	ModeEnter_Sequencer, 0xFE810B
@@ -51165,12 +51212,12 @@ PtrTable_F1AEB5:
 	.long T_F42C70                       ; F1AED1  [7]   -> prom_b 0xF42C70
 	.long 0x00FBCBAA                       ; F1AED5  [8]   -> prom_a 0xFBCBAA
 	.long 0x00FBCBF1                       ; F1AED9  [9]   -> prom_a 0xFBCBF1
-	.long 0x00FBCC3D                       ; F1AEDD  [10]   -> prom_a 0xFBCC3D
-	.long 0x00FBCC64                       ; F1AEE1  [11]   -> prom_a 0xFBCC64
-	.long 0x00FBCC8B                       ; F1AEE5  [12]   -> prom_a 0xFBCC8B
+	.long LcdKeyRow3_CombiEditPartMenu                       ; F1AEDD  [10]   -> prom_a 0xFBCC3D
+	.long LcdKeyRow4_CombiEditPartMenu                       ; F1AEE1  [11]   -> prom_a 0xFBCC64
+	.long LcdKeyRow5_CombiEditPartMenu                       ; F1AEE5  [12]   -> prom_a 0xFBCC8B
 	.long T_F42C70                       ; F1AEE9  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AEED  [14]   -> prom_b 0xF42C70
-	.long 0x00FBCC9E                       ; F1AEF1  [15]   -> prom_a 0xFBCC9E
+	.long ExitKey_CombiEditPartMenu                       ; F1AEF1  [15]   -> prom_a 0xFBCC9E
 	.long T_F42C70                       ; F1AEF5  [16]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AEF9  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AEFD  [18]   -> prom_b 0xF42C70
@@ -51186,14 +51233,14 @@ PtrTable_F1AEB5:
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBCF69
 ; --------------------------------------------------------------------------
 PtrTable_F1AF11:
-	.long 0x00FBCF82                       ; F1AF11  [0]   -> prom_a 0xFBCF82
-	.long 0x00FBCF82                       ; F1AF15  [1]   -> prom_a 0xFBCF82
-	.long 0x00FBCF82                       ; F1AF19  [2]   -> prom_a 0xFBCF82
-	.long 0x00FBCF82                       ; F1AF1D  [3]   -> prom_a 0xFBCF82
-	.long 0x00FBCFD1                       ; F1AF21  [4]   -> prom_a 0xFBCFD1
-	.long 0x00FBCFD1                       ; F1AF25  [5]   -> prom_a 0xFBCFD1
-	.long 0x00FBCFD1                       ; F1AF29  [6]   -> prom_a 0xFBCFD1
-	.long 0x00FBCFD1                       ; F1AF2D  [7]   -> prom_a 0xFBCFD1
+	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF11  [0]   -> prom_a 0xFBCF82
+	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF15  [1]   -> prom_a 0xFBCF82
+	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF19  [2]   -> prom_a 0xFBCF82
+	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF1D  [3]   -> prom_a 0xFBCF82
+	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF21  [4]   -> prom_a 0xFBCFD1
+	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF25  [5]   -> prom_a 0xFBCFD1
+	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF29  [6]   -> prom_a 0xFBCFD1
+	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF2D  [7]   -> prom_a 0xFBCFD1
 	.long 0x00FBCBAA                       ; F1AF31  [8]   -> prom_a 0xFBCBAA
 	.long 0x00FBCBF1                       ; F1AF35  [9]   -> prom_a 0xFBCBF1
 	.long T_F42C70                       ; F1AF39  [10]   -> prom_b 0xF42C70
@@ -51201,10 +51248,10 @@ PtrTable_F1AF11:
 	.long T_F42C70                       ; F1AF41  [12]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AF45  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AF49  [14]   -> prom_b 0xF42C70
-	.long 0x00FBD016                       ; F1AF4D  [15]   -> prom_a 0xFBD016
-	.long 0x00FBD044                       ; F1AF51  [16]   -> prom_a 0xFBD044
+	.long ExitKey_CombiEditInternalSound                       ; F1AF4D  [15]   -> prom_a 0xFBD016
+	.long PageKey_CombiEditInternalSound                       ; F1AF51  [16]   -> prom_a 0xFBD044
 	.long T_F42C70                       ; F1AF55  [17]   -> prom_b 0xF42C70
-	.long 0x00FBD0A4                       ; F1AF59  [18]   -> prom_a 0xFBD0A4
+	.long NumberPadKey_CombiEditInternalSound                       ; F1AF59  [18]   -> prom_a 0xFBD0A4
 	.long T_F42C70                       ; F1AF5D  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AF61  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1AF65  [21]   -> prom_a 0xFBEDBE
@@ -51300,23 +51347,23 @@ PtrTable_F1AFBD:
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBDDBE
 ; --------------------------------------------------------------------------
 PtrTable_F1AFD5:
-	.long 0x00FBDDD7                       ; F1AFD5  [0]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFD9  [1]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFDD  [2]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFE1  [3]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFE5  [4]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFE9  [5]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFED  [6]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDD7                       ; F1AFF1  [7]   -> prom_a 0xFBDDD7
-	.long 0x00FBDDF9                       ; F1AFF5  [8]   -> prom_a 0xFBDDF9
-	.long 0x00FBDE6B                       ; F1AFF9  [9]   -> prom_a 0xFBDE6B
-	.long 0x00FBDECC                       ; F1AFFD  [10]   -> prom_a 0xFBDECC
-	.long 0x00FBDF26                       ; F1B001  [11]   -> prom_a 0xFBDF26
-	.long 0x00FBDF86                       ; F1B005  [12]   -> prom_a 0xFBDF86
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFD5  [0]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFD9  [1]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFDD  [2]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFE1  [3]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFE5  [4]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFE9  [5]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFED  [6]   -> prom_a 0xFBDDD7
+	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFF1  [7]   -> prom_a 0xFBDDD7
+	.long LcdKeyRow1_CombiEditMixer                       ; F1AFF5  [8]   -> prom_a 0xFBDDF9
+	.long LcdKeyRow2_CombiEditMixer                       ; F1AFF9  [9]   -> prom_a 0xFBDE6B
+	.long LcdKeyRow3_CombiEditMixer                       ; F1AFFD  [10]   -> prom_a 0xFBDECC
+	.long LcdKeyRow4_CombiEditMixer                       ; F1B001  [11]   -> prom_a 0xFBDF26
+	.long LcdKeyRow5_CombiEditMixer                       ; F1B005  [12]   -> prom_a 0xFBDF86
 	.long T_F42C70                       ; F1B009  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B00D  [14]   -> prom_b 0xF42C70
-	.long 0x00FBDFCC                       ; F1B011  [15]   -> prom_a 0xFBDFCC
-	.long 0x00FBE038                       ; F1B015  [16]   -> prom_a 0xFBE038
+	.long ExitKey_CombiEditMixer                       ; F1B011  [15]   -> prom_a 0xFBDFCC
+	.long PageKey_CombiEditMixer                       ; F1B015  [16]   -> prom_a 0xFBE038
 	.long T_F42C70                       ; F1B019  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B01D  [18]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B021  [19]   -> prom_b 0xF42C70
@@ -51527,14 +51574,14 @@ PtrTable_F1B14B:
 	.long T_F42C70                       ; F1B15F  [5]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B163  [6]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B167  [7]   -> prom_b 0xF42C70
-	.long 0x00FBEFB1                       ; F1B16B  [8]   -> prom_a 0xFBEFB1
+	.long LcdKeyRow1_CombinationNaming                       ; F1B16B  [8]   -> prom_a 0xFBEFB1
 	.long T_F42C70                       ; F1B16F  [9]   -> prom_b 0xF42C70
-	.long 0x00FBEFD2                       ; F1B173  [10]   -> prom_a 0xFBEFD2
-	.long 0x00FBEFE6                       ; F1B177  [11]   -> prom_a 0xFBEFE6
-	.long 0x00FBEFFA                       ; F1B17B  [12]   -> prom_a 0xFBEFFA
+	.long LcdKeyRow3_CombinationNaming                       ; F1B173  [10]   -> prom_a 0xFBEFD2
+	.long LcdKeyRow4_CombinationNaming                       ; F1B177  [11]   -> prom_a 0xFBEFE6
+	.long LcdKeyRow5_CombinationNaming                       ; F1B17B  [12]   -> prom_a 0xFBEFFA
 	.long T_F42C70                       ; F1B17F  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B183  [14]   -> prom_b 0xF42C70
-	.long 0x00FBF00D                       ; F1B187  [15]   -> prom_a 0xFBF00D
+	.long ExitKey_CombinationNaming                       ; F1B187  [15]   -> prom_a 0xFBF00D
 	.long T_F42C70                       ; F1B18B  [16]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B18F  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B193  [18]   -> prom_b 0xF42C70
@@ -51614,21 +51661,21 @@ IndexMap_F1B230:
 ; --------------------------------------------------------------------------
 PtrTable_F1B239:
 	.long T_F42C70                       ; F1B239  [0]   -> prom_b 0xF42C70
-	.long 0x00FBF499                       ; F1B23D  [1]   -> prom_a 0xFBF499
+	.long SoftKeyCol2_CombiEditConfigure                       ; F1B23D  [1]   -> prom_a 0xFBF499
 	.long T_F42C70                       ; F1B241  [2]   -> prom_b 0xF42C70
-	.long 0x00FBF50F                       ; F1B245  [3]   -> prom_a 0xFBF50F
-	.long 0x00FBF53A                       ; F1B249  [4]   -> prom_a 0xFBF53A
-	.long 0x00FBF582                       ; F1B24D  [5]   -> prom_a 0xFBF582
-	.long 0x00FBF5CA                       ; F1B251  [6]   -> prom_a 0xFBF5CA
+	.long SoftKeyCol4_CombiEditConfigure                       ; F1B245  [3]   -> prom_a 0xFBF50F
+	.long SoftKeyCol5_CombiEditConfigure                       ; F1B249  [4]   -> prom_a 0xFBF53A
+	.long SoftKeyCol6_CombiEditConfigure                       ; F1B24D  [5]   -> prom_a 0xFBF582
+	.long SoftKeyCol7_CombiEditConfigure                       ; F1B251  [6]   -> prom_a 0xFBF5CA
 	.long T_F42C70                       ; F1B255  [7]   -> prom_b 0xF42C70
-	.long 0x00FBF5F5                       ; F1B259  [8]   -> prom_a 0xFBF5F5
-	.long 0x00FBF609                       ; F1B25D  [9]   -> prom_a 0xFBF609
-	.long 0x00FBF62F                       ; F1B261  [10]   -> prom_a 0xFBF62F
-	.long 0x00FBF655                       ; F1B265  [11]   -> prom_a 0xFBF655
+	.long LcdKeyRow1_CombiEditConfigure                       ; F1B259  [8]   -> prom_a 0xFBF5F5
+	.long LcdKeyRow2_CombiEditConfigure                       ; F1B25D  [9]   -> prom_a 0xFBF609
+	.long LcdKeyRow3_CombiEditConfigure                       ; F1B261  [10]   -> prom_a 0xFBF62F
+	.long LcdKeyRow4_CombiEditConfigure                       ; F1B265  [11]   -> prom_a 0xFBF655
 	.long T_F42C70                       ; F1B269  [12]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B26D  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B271  [14]   -> prom_b 0xF42C70
-	.long 0x00FBF67B                       ; F1B275  [15]   -> prom_a 0xFBF67B
+	.long ExitKey_CombiEditConfigure                       ; F1B275  [15]   -> prom_a 0xFBF67B
 	.long T_F42C70                       ; F1B279  [16]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B27D  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B281  [18]   -> prom_b 0xF42C70
@@ -51644,7 +51691,7 @@ PtrTable_F1B239:
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFB1F
 ; --------------------------------------------------------------------------
 PtrTable_F1B295:
-	.long 0x00FBFC53                       ; F1B295  [0]   -> prom_a 0xFBFC53
+	.long SoftKeyCol1_CombiEditMenu                       ; F1B295  [0]   -> prom_a 0xFBFC53
 	.long T_F42C70                       ; F1B299  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B29D  [2]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2A1  [3]   -> prom_b 0xF42C70
@@ -51652,14 +51699,14 @@ PtrTable_F1B295:
 	.long T_F42C70                       ; F1B2A9  [5]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2AD  [6]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2B1  [7]   -> prom_b 0xF42C70
-	.long 0x00FBFB34                       ; F1B2B5  [8]   -> prom_a 0xFBFB34
-	.long 0x00FBFB68                       ; F1B2B9  [9]   -> prom_a 0xFBFB68
-	.long 0x00FBFB9A                       ; F1B2BD  [10]   -> prom_a 0xFBFB9A
-	.long 0x00FBFBC1                       ; F1B2C1  [11]   -> prom_a 0xFBFBC1
-	.long 0x00FBFBE8                       ; F1B2C5  [12]   -> prom_a 0xFBFBE8
+	.long LcdKeyRow1_CombiEditMenu                       ; F1B2B5  [8]   -> prom_a 0xFBFB34
+	.long LcdKeyRow2_CombiEditMenu                       ; F1B2B9  [9]   -> prom_a 0xFBFB68
+	.long LcdKeyRow3_CombiEditMenu                       ; F1B2BD  [10]   -> prom_a 0xFBFB9A
+	.long LcdKeyRow4_CombiEditMenu                       ; F1B2C1  [11]   -> prom_a 0xFBFBC1
+	.long LcdKeyRow5_CombiEditMenu                       ; F1B2C5  [12]   -> prom_a 0xFBFBE8
 	.long T_F42C70                       ; F1B2C9  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2CD  [14]   -> prom_b 0xF42C70
-	.long 0x00FBFC0F                       ; F1B2D1  [15]   -> prom_a 0xFBFC0F
+	.long ExitKey_CombiEditMenu                       ; F1B2D1  [15]   -> prom_a 0xFBFC0F
 	.long T_F42C70                       ; F1B2D5  [16]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2D9  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2DD  [18]   -> prom_b 0xF42C70
@@ -51690,7 +51737,7 @@ PtrTable_F1B2F1:
 	.long T_F42C70                       ; F1B321  [12]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B325  [13]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B329  [14]   -> prom_b 0xF42C70
-	.long 0x00FBFE1F                       ; F1B32D  [15]   -> prom_a 0xFBFE1F
+	.long ExitKey_Effect2OutputConflict                       ; F1B32D  [15]   -> prom_a 0xFBFE1F
 	.long T_F42C70                       ; F1B331  [16]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B335  [17]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B339  [18]   -> prom_b 0xF42C70
@@ -51716,7 +51763,7 @@ PtrTable_F1B34D:
 	.long T_F42C70                       ; F1B369  [7]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B36D  [8]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B371  [9]   -> prom_b 0xF42C70
-	.long 0x00FBFF02                       ; F1B375  [10]   -> prom_a 0xFBFF02
+	.long LcdKeyRow3_WriteProtectError                       ; F1B375  [10]   -> prom_a 0xFBFF02
 	.long 0x00FBFF19                       ; F1B379  [11]   -> prom_a 0xFBFF19
 	.long T_F42C70                       ; F1B37D  [12]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B381  [13]   -> prom_b 0xF42C70
@@ -88556,7 +88603,7 @@ Default_Record93:
 ; them; and what any individual routine does beyond the few named below.
 ;
 
-T_F40000:	.long 0x00F82010	; ptr -> 0xF82010 (prom_a 0x02010)
+T_F40000:	.long MainTask_PhaseVector	; ptr -> 0xF82010 (prom_a 0x02010)
 ; Evidence: slot 0xF40004 is `jp 0xF83171`; prom_a 0xF83171 carries the label
 ;           Dev7F_WriteSlot8_Slot0, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Dev7F_WriteSlot8_Slot0:	jp Dev7F_WriteSlot8_Slot0  ; F40004 (was T_F40004) -> prom_a 0x03171   x7
@@ -88644,7 +88691,7 @@ T_ScreenEnter_DebugMonitor:	jp ScreenEnter_DebugMonitor  ; -> prom_a 0x159C8
 T_F40134:	jp T_F40134_Nop  ; -> prom_a 0x159E1
 T_ScreenButton_DebugMonitor:	jp ScreenButton_DebugMonitor  ; -> prom_a 0x159E2
 T_F4013C:	jp T_F4013C_Nop  ; -> prom_a 0x15C14
-T_F40140:	.long 0x00F94C00	; ptr -> 0xF94C00 (prom_a 0x14C00)
+T_F40140:	.long DebugMonitor_PhaseVector	; ptr -> 0xF94C00 (prom_a 0x14C00)
 T_CheckingDevice_RunSelfTest:	jp CheckingDevice_RunSelfTest  ; -> prom_a 0x15137   x1
 T_TestMode_SelectFromPowerOnKeys:	jp TestMode_SelectFromPowerOnKeys  ; -> prom_a 0x152FC   x1
 T_TestMode_Tick:	jp TestMode_Tick  ; -> prom_a 0x15444   x1
@@ -88688,7 +88735,7 @@ T_ParamImage_SnapshotCombinationAndParts_Entry:	jp ParamImage_SnapshotCombinatio
 	.fill 0x30, 1, 0x0E  ; 0xF40260: 48 x ret
 T_PanelScreen_RequestRedrawIfFieldQueued:	jp PanelScreen_RequestRedrawIfFieldQueued  ; -> prom_a 0x19400
 	.fill 0xC, 1, 0x0E  ; 0xF40294: 12 x ret
-T_F402A0:	.long 0x00FE8046	; ptr -> 0xFE8046 (prom_a 0x68046)
+T_F402A0:	.long EditScreen_PhaseVector	; ptr -> 0xFE8046 (prom_a 0x68046)
 T_F402A4:	jp ModeEnter_Sequencer  ; -> prom_a 0x6810B
 T_F402A8:	jp sub_FE8116  ; -> prom_a 0x68116
 ; Evidence: slot 0xF402AC is `jp 0xFE812C`; prom_a 0xFE812C carries the label
@@ -88734,7 +88781,7 @@ T_PanelWire_EntryThunks:	.long PanelWire_EntryThunks	; ptr -> 0xF8A000 (prom_a 0
 T_PanelWire_Service:	jp PanelWire_Service  ; -> prom_a 0x0A023   x1
 T_F40618:	jp T_F40618_Nop  ; -> prom_a 0x0A027
 	.fill 0x14, 1, 0x0E  ; 0xF4061C: 20 x ret
-T_F40630:	.long 0x00F8A800	; ptr -> 0xF8A800 (prom_a 0x0A800)
+T_F40630:	.long PanelEvent_PhaseVector	; ptr -> 0xF8A800 (prom_a 0x0A800)
 T_PanelEvent_Service:	jp PanelEvent_Service  ; -> prom_a 0x0A81D   x1
 	.fill 0x28, 1, 0x0E  ; 0xF40638: 40 x ret
 T_PanelLed_PhaseVector:	.long PanelLed_PhaseVector	; ptr -> 0xF8C000 (prom_a 0x0C000)
@@ -89579,7 +89626,7 @@ T_Paint_MidiOutProgramChange:	jp Paint_MidiOutProgramChange  ; F4175C (was T_F41
 T_ScreenLeave_MidiOutProgramChange:	jp ScreenLeave_MidiOutProgramChange  ; -> prom_a 0x1B05E
 T_ScreenButton_MidiOutProgramChange:	jp ScreenButton_MidiOutProgramChange  ; -> prom_a 0x1B060
 T_F41768:	jp T_F41768_Nop  ; -> prom_a 0x1B05F
-T_F4176C:	.long 0x00F99800	; ptr -> 0xF99800 (prom_a 0x19800)
+T_F4176C:	.long SysexBulkDump_PhaseVector	; ptr -> 0xF99800 (prom_a 0x19800)
 	.fill 0x80, 1, 0x0E  ; 0xF41770: 128 x ret
 ; --- the two display-list interpreters.  These are the two busiest slots in the
 ;     whole table; both targets are converted below at 0xF31800.
@@ -89770,7 +89817,7 @@ T_FixedEventList_AppendStackArgs:	jp FixedEventList_AppendStackArgs  ; -> prom_a
 T_EventQueue_AppendStackArgs:	jp EventQueue_AppendStackArgs  ; -> prom_a 0x0BC04   x12
 T_PendingEventQueue_AppendStackArgs:	jp PendingEventQueue_AppendStackArgs  ; -> prom_a 0x0BC08   x34
 	.fill 0x14, 1, 0x0E  ; 0xF41B1C: 20 x ret
-T_F41B30:	.long 0x00F8DC00	; ptr -> 0xF8DC00 (prom_a 0x0DC00)
+T_F41B30:	.long AnalogScan_PhaseVector	; ptr -> 0xF8DC00 (prom_a 0x0DC00)
 ; Evidence: slot 0xF41B34 is `jp 0xF8DC25`; prom_a 0xF8DC25 carries the label
 ;           AnalogScan_All, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_AnalogScan_All:	jp AnalogScan_All  ; F41B34 (was T_F41B34) -> prom_a 0x0DC25   x1

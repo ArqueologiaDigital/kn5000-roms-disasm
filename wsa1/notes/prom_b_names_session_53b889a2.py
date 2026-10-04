@@ -3314,4 +3314,6 @@ RENAMES = [
     ("Dispatch_FF4149", "ScreenEnterPages_L0adSingleC0mbination"),
     ("sub_FF6DD7", "ScreenEnter_L0adSingleC0mbination_Page0"),
     ("sub_FF6E95", "ScreenEnter_L0adSingleC0mbination_Page1"),
+    ("sub_FBFBB7", "LcdKeyRow3_CombiEditMenu_Skip"),
+    ("sub_FDCE74", "ScreenEnter_SoundEditMemoryWrite_Skip"),
 ]
