@@ -1075,6 +1075,16 @@
 	.set	SysExCmd_ThirdRegionWrite, 0xFB3483
 	.set	SysExCmd_ThirdRegionRequest, 0xFB3495
 	.set	SysExCmd_ParamWrite, 0xFB34CA
+	.set	SysExParam_SetPlaceholder, 0xFB374C
+	.set	SysExParam_SetCommonField, 0xFB3778
+	.set	SysExParam_SetMainOutEqualizerFreq, 0xFB381F
+	.set	SysExParam_SetMemoryProtect, 0xFB3882
+	.set	SysExParam_SetPartField, 0xFB38E4
+	.set	SysExParam_SetProgramChangeAndBank, 0xFB39A4
+	.set	SysExParam_SetEffect1Type, 0xFB3AC4
+	.set	SysExParam_SetMidiMultipleMessagesOutput, 0xFB3B04
+	.set	SysExParam_SetMidiMultipleMessagesOutputBankSelect, 0xFB3BCF
+	.set	SysExParam_SetEffect2OnOff, 0xFB3D13
 	.set	SysExInitial_Total, 0xFB3DBC
 	.set	SysExInitial_PartSetting, 0xFB3DCD
 	.set	SysExInitial_System, 0xFB3DD2
@@ -1082,7 +1092,22 @@
 	.set	SysExInitial_ReMap, 0xFB3E02
 	.set	SysExInitial_DrumsMap, 0xFB3E22
 	.set	SysExInitial_Sequencer, 0xFB3E3E
+	.set	SysExParam_SetInitial, 0xFB3E5A
+	.set	SysExParam_SetSoundWriteRequest, 0xFB3EA3
+	.set	SysExParam_SetCombinationNumberAndBank, 0xFB3F9D
+	.set	SysExParam_SetPlayModeRequest, 0xFB4223
 	.set	SysExParam_Request_DispatchGroup, 0xFB42AB
+	.set	SysExParam_ReceiveOnly, 0xFB4506
+	.set	SysExParam_GetMemoryProtect, 0xFB4507
+	.set	SysExParam_GetCommonField, 0xFB4562
+	.set	SysExParam_GetMainOutEqualizerFreq, 0xFB45A5
+	.set	SysExParam_GetCombinationNumberAndBank, 0xFB461A
+	.set	SysExParam_GetPartField, 0xFB4698
+	.set	SysExParam_GetProgramChangeAndBank, 0xFB46FF
+	.set	SysExParam_GetMidiMultipleMessagesOutput, 0xFB4753
+	.set	SysExParam_GetMidiMultipleMessagesOutputBankSelect, 0xFB484A
+	.set	SysExParam_GetEffect2OnOff, 0xFB496E
+	.set	SysExParam_GetEffect1Type, 0xFB49FF
 	.set	SysExTx_EmitStagedParams, 0xFB4B7D
 	.set	SysExTx_StagedParam_Ignore, 0xFB4BDD
 	.set	SysExTx_StagedParam_Record48, 0xFB4BDE
@@ -1090,6 +1115,8 @@
 	.set	SysExTx_StagedParam_Record70, 0xFB4C46
 	.set	SysExTx_StagedParam_Record98, 0xFB4C7A
 	.set	SysExTx_GmSystemOnOff, 0xFB4CAE
+	.set	SysExParam_NoTransmitOnChange, 0xFB4D61
+	.set	SysExTx_SendParamValue, 0xFB4D62
 	.set	sub_FB50EE, 0xFB50EE
 	.set	SysExCmd_DumpRequest_SystemPartMidi, 0xFB5122
 	.set	SysExCmd_DumpRequest_Sound, 0xFB512C
@@ -1098,6 +1125,7 @@
 	.set	SysExCmd_DumpRequest_Combination, 0xFB514A
 	.set	SysExCmd_GmSystemOn, 0xFB51E7
 	.set	SysExCmd_GmSystemOff, 0xFB520C
+	.set	SysExParam_SetCombinationWriteRequest, 0xFB5241
 	.set	sub_FB585E, 0xFB585E
 	.set	GmMode_HandleChange, 0xFB590A
 	.set	sub_FB5EE9, 0xFB5EE9
@@ -110334,229 +110362,786 @@ SysExStatus_MessageIdMap:
 ; Unknown: what the 16 parameter bytes mean, and why the first 28 bytes of
 ;          the segment (0xF511DD-0xF511F8) are in front of the first record.
 ; --------------------------------------------------------------------------
+; 2026-10-04: LAID OUT as the 109 descriptors the twelve descriptor tables name, each labelled after its parameter
+;   (notes/prom_b_sysex_param_descriptors.py); the bytes are unchanged and re-checked against the ROM.
 RecordArray_F511DD:
 	.byte 0x0f, 0x21, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x20, 0x20, 0x21, 0x00, 0x00, 0x00, 0x00   ; F511DD  .! !!!!!!  !....
 	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; F511ED  ............
+; SysExParamDesc_Placeholder: the placeholder descriptor, index 0 of every descriptor table (setter SysExParam_SetPlaceholder)
+SysExParamDesc_Placeholder:
+;   area 00 adr 10 00  size 00 00 01  rec B0 off 01 mask 7F  range 0..127
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x01, 0xb0, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x00, 0xff, 0x00   ; F511F9  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x4c, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51209  aM..L7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51209  +0x10 transmit-on-change
+	.long SysExParam_SetPlaceholder	; F5120D  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51211  +0x18 reader (2B request)
+; SysExParamDesc_SoundMemoryProtect: SOUND MEMORY PROTECT -- SysEx address 00 00 00 (Technics Reference Guide)
+SysExParamDesc_SoundMemoryProtect:
+;   area 00 adr 00 00  size 00 00 01  rec 00 off 00 mask 01  range 0..1
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00   ; F51215  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x82, 0x38, 0xfb, 0x00, 0x07, 0x45, 0xfb, 0x00   ; F51225  aM...8...E..
+	.long SysExParam_NoTransmitOnChange	; F51225  +0x10 transmit-on-change
+	.long SysExParam_SetMemoryProtect	; F51229  +0x14 setter (2C)
+	.long SysExParam_GetMemoryProtect	; F5122D  +0x18 reader (2B request)
+; SysExParamDesc_CombinationMemoryProtect: COMBINATION MEMORY PROTECT -- SysEx address 00 00 01 (Technics Reference Guide)
+SysExParamDesc_CombinationMemoryProtect:
+;   area 00 adr 00 01  size 00 00 01  rec 00 off 00 mask 02  range 0..1
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00   ; F51231  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x82, 0x38, 0xfb, 0x00, 0x07, 0x45, 0xfb, 0x00   ; F51241  aM...8...E..
+	.long SysExParam_NoTransmitOnChange	; F51241  +0x10 transmit-on-change
+	.long SysExParam_SetMemoryProtect	; F51245  +0x14 setter (2C)
+	.long SysExParam_GetMemoryProtect	; F51249  +0x18 reader (2B request)
+; SysExParamDesc_MasterTuning: MASTER TUNING -- SysEx address 00 00 08 (Technics Reference Guide)
+SysExParamDesc_MasterTuning:
+;   area 00 adr 00 08  size 00 00 01  rec 91 off 00 mask FF  range 48..192
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x01, 0x91, 0x00, 0xff, 0x30, 0xc0, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5124D  .........0......
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5125D  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F5125D  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51261  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51265  +0x18 reader (2B request)
+; SysExParamDesc_VelocityCurve: VELOCITY CURVE -- SysEx address 00 00 10 (Technics Reference Guide)
+SysExParamDesc_VelocityCurve:
+;   area 00 adr 00 10  size 00 00 01  rec 93 off 00 mask 0F  range 0..9
 	.byte 0x00, 0x00, 0x10, 0x00, 0x00, 0x01, 0x93, 0x00, 0x0f, 0x00, 0x09, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51269  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51279  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51279  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5127D  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51281  +0x18 reader (2B request)
+; SysExParamDesc_VelocityOffset_0011: VELOCITY OFFSET -- SysEx address 00 00 11 (Technics Reference Guide)
+SysExParamDesc_VelocityOffset_0011:
+;   area 00 adr 00 11  size 00 00 01  rec 93 off 02 mask 7F  range 0..127
 	.byte 0x00, 0x00, 0x11, 0x00, 0x00, 0x01, 0x93, 0x02, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51285  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51295  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51295  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51299  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5129D  +0x18 reader (2B request)
+; SysExParamDesc_AfterTouchCurve: AFTER TOUCH CURVE -- SysEx address 00 00 12 (Technics Reference Guide)
+SysExParamDesc_AfterTouchCurve:
+;   area 00 adr 00 12  size 00 00 01  rec 93 off 05 mask FF  range 0..10
 	.byte 0x00, 0x00, 0x12, 0x00, 0x00, 0x01, 0x93, 0x05, 0xff, 0x00, 0x0a, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512A1  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F512B1  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F512B1  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F512B5  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F512B9  +0x18 reader (2B request)
+; SysExParamDesc_AfterTouchThreshold: AFTER TOUCH THRESHOLD -- SysEx address 00 00 13 (Technics Reference Guide)
+SysExParamDesc_AfterTouchThreshold:
+;   area 00 adr 00 13  size 00 00 01  rec 93 off 06 mask 7F  range 0..127
 	.byte 0x00, 0x00, 0x13, 0x00, 0x00, 0x01, 0x93, 0x06, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512BD  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F512CD  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F512CD  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F512D1  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F512D5  +0x18 reader (2B request)
+; SysExParamDesc_DrumsMapSelect: DRUMS MAP SELECT -- SysEx address 00 00 20 (Technics Reference Guide)
+SysExParamDesc_DrumsMapSelect:
+;   area 00 adr 00 20  size 00 00 01  rec 91 off 04 mask FF  range 0..66
 	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x01, 0x91, 0x04, 0xff, 0x00, 0x42, 0x00, 0x01, 0x00, 0x00, 0x00   ; F512D9  .. .......B.....
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0x00, 0x40, 0x41, 0x42   ; F512E9  aM..x7..bE...@AB
+	.long SysExParam_NoTransmitOnChange	; F512E9  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F512ED  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F512F1  +0x18 reader (2B request)
+	.byte 0x00, 0x40, 0x41, 0x42   ; F512F5  .@AB
+; SysExParamDesc_DataLoadFilterEffectAndOutput: DATA LOAD FILTER: EFFECT & OUTPUT -- SysEx address 00 00 30 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterEffectAndOutput:
+;   area 00 adr 00 30  size 00 00 01  rec 7A off 02 mask 0F  range 0..2
 	.byte 0x00, 0x00, 0x30, 0x00, 0x00, 0x01, 0x7a, 0x02, 0x0f, 0x00, 0x02, 0x00, 0x01, 0x00, 0xff, 0x00   ; F512F9  ..0...z.........
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51309  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51309  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5130D  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51311  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterRealTimeCreator16: DATA LOAD FILTER: REAL-TIME CREATOR 1-6 -- SysEx address 00 00 31 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterRealTimeCreator16:
+;   area 00 adr 00 31  size 00 00 01  rec 7A off 02 mask F0  range 0..2
 	.byte 0x00, 0x00, 0x31, 0x00, 0x00, 0x01, 0x7a, 0x02, 0xf0, 0x00, 0x02, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51315  ..1...z.........
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51325  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51325  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51329  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5132D  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterCombinationOctave: DATA LOAD FILTER: COMBINATION OCTAVE -- SysEx address 00 00 32 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterCombinationOctave:
+;   area 00 adr 00 32  size 00 00 01  rec 98 off 05 mask 04  range 0..1
 	.byte 0x00, 0x00, 0x32, 0x00, 0x00, 0x01, 0x98, 0x05, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0xff   ; F51331  ..2.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51341  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51341  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51345  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51349  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterMidiSetting: DATA LOAD FILTER: MIDI SETTING -- SysEx address 00 00 33 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterMidiSetting:
+;   area 00 adr 00 33  size 00 00 01  rec 98 off 05 mask 02  range 0..1
 	.byte 0x00, 0x00, 0x33, 0x00, 0x00, 0x01, 0x98, 0x05, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0xff   ; F5134D  ..3.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5135D  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F5135D  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51361  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51365  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterKeyAndVelocityLayer: DATA LOAD FILTER: KEY & VELOCITY LAYER -- SysEx address 00 00 34 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterKeyAndVelocityLayer:
+;   area 00 adr 00 34  size 00 00 01  rec 98 off 05 mask 01  range 0..1
 	.byte 0x00, 0x00, 0x34, 0x00, 0x00, 0x01, 0x98, 0x05, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0xff   ; F51369  ..4.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51379  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51379  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5137D  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51381  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterMainOutEqualizer: DATA LOAD FILTER: MAIN OUT EQUALIZER -- SysEx address 00 00 35 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterMainOutEqualizer:
+;   area 00 adr 00 35  size 00 00 01  rec 98 off 05 mask 08  range 0..1
 	.byte 0x00, 0x00, 0x35, 0x00, 0x00, 0x01, 0x98, 0x05, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0xff   ; F51385  ..5.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51395  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51395  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51399  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5139D  +0x18 reader (2B request)
+; SysExParamDesc_DataLoadFilterKeyScaling: DATA LOAD FILTER: KEY SCALING -- SysEx address 00 00 36 (Technics Reference Guide)
+SysExParamDesc_DataLoadFilterKeyScaling:
+;   area 00 adr 00 36  size 00 00 01  rec 98 off 05 mask 10  range 0..1
 	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x01, 0x98, 0x05, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0xff   ; F513A1  ..6.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F513B1  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F513B1  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F513B5  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F513B9  +0x18 reader (2B request)
+; SysExParamDesc_CombinationNumberAndBank: COMBINATION NUMBER and BANK -- SysEx address 00 00 40 (Technics Reference Guide)
+SysExParamDesc_CombinationNumberAndBank:
+;   area 00 adr 00 40  size 00 00 02  rec 98 off 01 mask 7F  range 0..127
 	.byte 0x00, 0x00, 0x40, 0x00, 0x00, 0x02, 0x98, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F513BD  ..@.............
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x9d, 0x3f, 0xfb, 0x00, 0x1a, 0x46, 0xfb, 0x00   ; F513CD  aM...?...F..
+	.long SysExParam_NoTransmitOnChange	; F513CD  +0x10 transmit-on-change
+	.long SysExParam_SetCombinationNumberAndBank	; F513D1  +0x14 setter (2C)
+	.long SysExParam_GetCombinationNumberAndBank	; F513D5  +0x18 reader (2B request)
+; SysExParamDesc_MidiInputMode: MIDI INPUT MODE -- SysEx address 00 01 00 (Technics Reference Guide)
+SysExParamDesc_MidiInputMode:
+;   area 00 adr 01 00  size 00 00 01  rec 80 off 03 mask 0F  range 0..2
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x80, 0x03, 0x0f, 0x00, 0x02, 0x00, 0x01, 0x00, 0xff, 0x00   ; F513D9  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F513E9  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F513E9  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F513ED  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F513F1  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputMode: MIDI OUTPUT MODE -- SysEx address 00 01 01 (Technics Reference Guide)
+SysExParamDesc_MidiOutputMode:
+;   area 00 adr 01 01  size 00 00 01  rec 80 off 03 mask F0  range 0..1
 	.byte 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x80, 0x03, 0xf0, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F513F5  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51405  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51405  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51409  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5140D  +0x18 reader (2B request)
+; SysExParamDesc_SingleChannel: SINGLE CHANNEL -- SysEx address 00 01 02 (Technics Reference Guide)
+SysExParamDesc_SingleChannel:
+;   area 00 adr 01 02  size 00 00 01  rec 80 off 04 mask 1F  range 0..15
 	.byte 0x00, 0x01, 0x02, 0x00, 0x00, 0x01, 0x80, 0x04, 0x1f, 0x00, 0x0f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51411  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51421  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51421  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51425  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51429  +0x18 reader (2B request)
+; SysExParamDesc_LocalTotal: LOCAL TOTAL -- SysEx address 00 01 03 (Technics Reference Guide)
+SysExParamDesc_LocalTotal:
+;   area 00 adr 01 03  size 00 00 01  rec 80 off 04 mask 20  range 0..1
 	.byte 0x00, 0x01, 0x03, 0x00, 0x00, 0x01, 0x80, 0x04, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0xff   ; F5142D  ........ .......
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5143D  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F5143D  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51441  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51445  +0x18 reader (2B request)
+; SysExParamDesc_ProgramChangeMode: PROGRAM CHANGE MODE -- SysEx address 00 01 04 (Technics Reference Guide)
+SysExParamDesc_ProgramChangeMode:
+;   area 00 adr 01 04  size 00 00 01  rec 80 off 00 mask 03  range 0..1
 	.byte 0x00, 0x01, 0x04, 0x00, 0x00, 0x01, 0x80, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51449  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51459  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51459  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5145D  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51461  +0x18 reader (2B request)
+; SysExParamDesc_SingleChannelProgramChange: SINGLE CHANNEL PROGRAM CHANGE -- SysEx address 00 01 05 (Technics Reference Guide)
+SysExParamDesc_SingleChannelProgramChange:
+;   area 00 adr 01 05  size 00 00 01  rec 80 off 00 mask 08  range 0..1
 	.byte 0x00, 0x01, 0x05, 0x00, 0x00, 0x01, 0x80, 0x00, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51465  ................
-	.byte 0x61, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51475  aM..x7..bE..
+	.long SysExParam_NoTransmitOnChange	; F51475  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51479  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5147D  +0x18 reader (2B request)
+; SysExParamDesc_Initial: INITIAL -- SysEx address 00 08 00 (Technics Reference Guide)
+SysExParamDesc_Initial:
+;   area 00 adr 08 00  size 00 00 01  rec 00 off 00 mask 00  range 0..6
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51481  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x5a, 0x3e, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F51491  bM..Z>...E..
+	.long SysExTx_SendParamValue	; F51491  +0x10 transmit-on-change
+	.long SysExParam_SetInitial	; F51495  +0x14 setter (2C)
+	.long SysExParam_ReceiveOnly	; F51499  +0x18 reader (2B request)
+; SysExParamDesc_PlayModeRequest: PLAY MODE REQUEST -- SysEx address 00 08 08 (Technics Reference Guide)
+SysExParamDesc_PlayModeRequest:
+;   area 00 adr 08 08  size 00 00 01  rec 98 off 00 mask F0  range 0..1
 	.byte 0x00, 0x08, 0x08, 0x00, 0x00, 0x01, 0x98, 0x00, 0xf0, 0x00, 0x01, 0x04, 0x01, 0x00, 0x00, 0x00   ; F5149D  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x23, 0x42, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514AD  bM..#B...E..
+	.long SysExTx_SendParamValue	; F514AD  +0x10 transmit-on-change
+	.long SysExParam_SetPlayModeRequest	; F514B1  +0x14 setter (2C)
+	.long SysExParam_ReceiveOnly	; F514B5  +0x18 reader (2B request)
 	.byte 0x01, 0x02   ; F514B9  ..
+; SysExParamDesc_CombinationWriteRequest: COMBINATION WRITE REQUEST -- SysEx address 00 08 10 (Technics Reference Guide)
+SysExParamDesc_CombinationWriteRequest:
+;   area 00 adr 08 10  size 00 00 01  rec 00 off 00 mask 00  range 0..127
 	.byte 0x00, 0x08, 0x10, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514BB  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x41, 0x52, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514CB  bM..AR...E..
+	.long SysExTx_SendParamValue	; F514CB  +0x10 transmit-on-change
+	.long SysExParam_SetCombinationWriteRequest	; F514CF  +0x14 setter (2C)
+	.long SysExParam_ReceiveOnly	; F514D3  +0x18 reader (2B request)
+; SysExParamDesc_SoundWriteRequest: SOUND WRITE REQUEST -- SysEx address 00 08 11 (Technics Reference Guide)
+SysExParamDesc_SoundWriteRequest:
+;   area 00 adr 08 11  size 00 00 03  rec 00 off 00 mask 00  range 0..1
 	.byte 0x00, 0x08, 0x11, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514D7  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xa3, 0x3e, 0xfb, 0x00, 0x06, 0x45, 0xfb, 0x00   ; F514E7  bM...>...E..
+	.long SysExTx_SendParamValue	; F514E7  +0x10 transmit-on-change
+	.long SysExParam_SetSoundWriteRequest	; F514EB  +0x14 setter (2C)
+	.long SysExParam_ReceiveOnly	; F514EF  +0x18 reader (2B request)
+; SysExParamDesc_KeyTranspose: KEY TRANSPOSE -- SysEx address 00 10 00 (Technics Reference Guide)
+SysExParamDesc_KeyTranspose:
+;   area 00 adr 10 00  size 00 00 01  rec 79 off 00 mask 7F  range 28..100
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x01, 0x79, 0x00, 0x7f, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F514F3  ......y...d.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51503  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51503  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51507  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5150B  +0x18 reader (2B request)
+; SysExParamDesc_KeyScalingMode: KEY SCALING MODE -- SysEx address 00 10 10 (Technics Reference Guide)
+SysExParamDesc_KeyScalingMode:
+;   area 00 adr 10 10  size 00 00 01  rec 92 off 01 mask 80  range 0..1
 	.byte 0x00, 0x10, 0x10, 0x00, 0x00, 0x01, 0x92, 0x01, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F5150F  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5151F  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5151F  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51523  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51527  +0x18 reader (2B request)
+; SysExParamDesc_TotalKeyScaling: TOTAL KEY SCALING -- SysEx address 00 10 11 (Technics Reference Guide)
+SysExParamDesc_TotalKeyScaling:
+;   area 00 adr 10 11  size 00 00 01  rec 92 off 00 mask FF  range 0..128
 	.byte 0x00, 0x10, 0x11, 0x00, 0x00, 0x01, 0x92, 0x00, 0xff, 0x00, 0x80, 0x00, 0x01, 0x00, 0x02, 0x00   ; F5152B  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0x00, 0x40, 0x41, 0x42   ; F5153B  bM..x7..bE...@AB
+	.long SysExTx_SendParamValue	; F5153B  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5153F  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51543  +0x18 reader (2B request)
+	.byte 0x00, 0x40, 0x41, 0x42   ; F51547  .@AB
 	.byte 0x03, 0x04, 0x06, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80   ; F5154B  ...........
+; SysExParamDesc_KeyScalingShift: KEY SCALING SHIFT -- SysEx address 00 10 12 (Technics Reference Guide)
+SysExParamDesc_KeyScalingShift:
+;   area 00 adr 10 12  size 00 00 01  rec 92 off 01 mask 0F  range 0..11
 	.byte 0x00, 0x10, 0x12, 0x00, 0x00, 0x01, 0x92, 0x01, 0x0f, 0x00, 0x0b, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51556  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51566  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51566  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5156A  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5156E  +0x18 reader (2B request)
+; SysExParamDesc_CkeyDetuneSetting: Ckey DETUNE SETTING -- SysEx address 00 10 13 (Technics Reference Guide)
+SysExParamDesc_CkeyDetuneSetting:
+;   area 00 adr 10 13  size 00 00 01  rec 92 off 02 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x13, 0x00, 0x00, 0x01, 0x92, 0x02, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51572  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51582  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51582  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51586  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5158A  +0x18 reader (2B request)
+; SysExParamDesc_DbkeyDetuneSetting: Dbkey DETUNE SETTING -- SysEx address 00 10 14 (Technics Reference Guide)
+SysExParamDesc_DbkeyDetuneSetting:
+;   area 00 adr 10 14  size 00 00 01  rec 92 off 03 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x14, 0x00, 0x00, 0x01, 0x92, 0x03, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5158E  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5159E  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5159E  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F515A2  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F515A6  +0x18 reader (2B request)
+; SysExParamDesc_DkeyDetuneSetting: Dkey DETUNE SETTING -- SysEx address 00 10 15 (Technics Reference Guide)
+SysExParamDesc_DkeyDetuneSetting:
+;   area 00 adr 10 15  size 00 00 01  rec 92 off 04 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x15, 0x00, 0x00, 0x01, 0x92, 0x04, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515AA  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515BA  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F515BA  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F515BE  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F515C2  +0x18 reader (2B request)
+; SysExParamDesc_EbkeyDetuneSetting: Ebkey DETUNE SETTING -- SysEx address 00 10 16 (Technics Reference Guide)
+SysExParamDesc_EbkeyDetuneSetting:
+;   area 00 adr 10 16  size 00 00 01  rec 92 off 05 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x16, 0x00, 0x00, 0x01, 0x92, 0x05, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515C6  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515D6  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F515D6  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F515DA  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F515DE  +0x18 reader (2B request)
+; SysExParamDesc_EkeyDetuneSetting: Ekey DETUNE SETTING -- SysEx address 00 10 17 (Technics Reference Guide)
+SysExParamDesc_EkeyDetuneSetting:
+;   area 00 adr 10 17  size 00 00 01  rec 92 off 06 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x17, 0x00, 0x00, 0x01, 0x92, 0x06, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515E2  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F515F2  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F515F2  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F515F6  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F515FA  +0x18 reader (2B request)
+; SysExParamDesc_FkeyDetuneSetting: Fkey DETUNE SETTING -- SysEx address 00 10 18 (Technics Reference Guide)
+SysExParamDesc_FkeyDetuneSetting:
+;   area 00 adr 10 18  size 00 00 01  rec 92 off 07 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x18, 0x00, 0x00, 0x01, 0x92, 0x07, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F515FE  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5160E  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5160E  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51612  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51616  +0x18 reader (2B request)
+; SysExParamDesc_GbkeyDetuneSetting: Gbkey DETUNE SETTING -- SysEx address 00 10 19 (Technics Reference Guide)
+SysExParamDesc_GbkeyDetuneSetting:
+;   area 00 adr 10 19  size 00 00 01  rec 92 off 08 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x19, 0x00, 0x00, 0x01, 0x92, 0x08, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5161A  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5162A  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5162A  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5162E  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51632  +0x18 reader (2B request)
+; SysExParamDesc_GkeyDetuneSetting: Gkey DETUNE SETTING -- SysEx address 00 10 1A (Technics Reference Guide)
+SysExParamDesc_GkeyDetuneSetting:
+;   area 00 adr 10 1A  size 00 00 01  rec 92 off 09 mask FF  range 0..255
 	.byte 0x00, 0x10, 0x1a, 0x00, 0x00, 0x01, 0x92, 0x09, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51636  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51646  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51646  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5164A  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5164E  +0x18 reader (2B request)
+; SysExParamDesc_AbkeyDetuneSetting: Abkey DETUNE SETTING -- SysEx address 00 10 1B (Technics Reference Guide)
+SysExParamDesc_AbkeyDetuneSetting:
+;   area 00 adr 10 1B  size 00 00 01  rec 92 off 0A mask FF  range 0..255
 	.byte 0x00, 0x10, 0x1b, 0x00, 0x00, 0x01, 0x92, 0x0a, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51652  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51662  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51662  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51666  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5166A  +0x18 reader (2B request)
+; SysExParamDesc_AkeyDetuneSetting: Akey DETUNE SETTING -- SysEx address 00 10 1C (Technics Reference Guide)
+SysExParamDesc_AkeyDetuneSetting:
+;   area 00 adr 10 1C  size 00 00 01  rec 92 off 0B mask FF  range 0..255
 	.byte 0x00, 0x10, 0x1c, 0x00, 0x00, 0x01, 0x92, 0x0b, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5166E  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5167E  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5167E  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51682  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51686  +0x18 reader (2B request)
+; SysExParamDesc_BbkeyDetuneSetting: Bbkey DETUNE SETTING -- SysEx address 00 10 1D (Technics Reference Guide)
+SysExParamDesc_BbkeyDetuneSetting:
+;   area 00 adr 10 1D  size 00 00 01  rec 92 off 0C mask FF  range 0..255
 	.byte 0x00, 0x10, 0x1d, 0x00, 0x00, 0x01, 0x92, 0x0c, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5168A  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5169A  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5169A  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5169E  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F516A2  +0x18 reader (2B request)
+; SysExParamDesc_BkeyDetuneSetting: Bkey DETUNE SETTING -- SysEx address 00 10 1E (Technics Reference Guide)
+SysExParamDesc_BkeyDetuneSetting:
+;   area 00 adr 10 1E  size 00 00 01  rec 92 off 0D mask FF  range 0..255
 	.byte 0x00, 0x10, 0x1e, 0x00, 0x00, 0x01, 0x92, 0x0d, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F516A6  ................
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F516B6  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F516B6  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F516BA  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F516BE  +0x18 reader (2B request)
+; SysExParamDesc_MainOutEqualizerLowFreq: MAIN OUT EQUALIZER LOW-FREQ -- SysEx address 00 10 20 (Technics Reference Guide)
+SysExParamDesc_MainOutEqualizerLowFreq:
+;   area 00 adr 10 20  size 00 00 01  rec 79 off 01 mask 1F  range 0..17
 	.byte 0x00, 0x10, 0x20, 0x00, 0x00, 0x01, 0x79, 0x01, 0x1f, 0x00, 0x11, 0x06, 0x01, 0x00, 0xff, 0x00   ; F516C2  .. ...y.........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x1f, 0x38, 0xfb, 0x00, 0xa5, 0x45, 0xfb, 0x00   ; F516D2  bM...8...E..
+	.long SysExTx_SendParamValue	; F516D2  +0x10 transmit-on-change
+	.long SysExParam_SetMainOutEqualizerFreq	; F516D6  +0x14 setter (2C)
+	.long SysExParam_GetMainOutEqualizerFreq	; F516DA  +0x18 reader (2B request)
+; SysExParamDesc_MainOutEqualizerLowGain: MAIN OUT EQUALIZER LOW-GAIN -- SysEx address 00 10 21 (Technics Reference Guide)
+SysExParamDesc_MainOutEqualizerLowGain:
+;   area 00 adr 10 21  size 00 00 01  rec 79 off 01 mask 3F  range 0..48
 	.byte 0x00, 0x10, 0x21, 0x00, 0x00, 0x01, 0x79, 0x01, 0x3f, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F516DE  ..!...y.?.0.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F516EE  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F516EE  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F516F2  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F516F6  +0x18 reader (2B request)
+; SysExParamDesc_MainOutEqualizerHighFreq: MAIN OUT EQUALIZER HIGH-FREQ -- SysEx address 00 10 22 (Technics Reference Guide)
+SysExParamDesc_MainOutEqualizerHighFreq:
+;   area 00 adr 10 22  size 00 00 01  rec 79 off 03 mask 1F  range 17..26
 	.byte 0x00, 0x10, 0x22, 0x00, 0x00, 0x01, 0x79, 0x03, 0x1f, 0x11, 0x1a, 0x06, 0x01, 0x00, 0xff, 0x00   ; F516FA  .."...y.........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x1f, 0x38, 0xfb, 0x00, 0xa5, 0x45, 0xfb, 0x00   ; F5170A  bM...8...E..
+	.long SysExTx_SendParamValue	; F5170A  +0x10 transmit-on-change
+	.long SysExParam_SetMainOutEqualizerFreq	; F5170E  +0x14 setter (2C)
+	.long SysExParam_GetMainOutEqualizerFreq	; F51712  +0x18 reader (2B request)
+; SysExParamDesc_MainOutEqualizerHighGain: MAIN OUT EQUALIZER HIGH-GAIN -- SysEx address 00 10 23 (Technics Reference Guide)
+SysExParamDesc_MainOutEqualizerHighGain:
+;   area 00 adr 10 23  size 00 00 01  rec 79 off 03 mask 3F  range 0..48
 	.byte 0x00, 0x10, 0x23, 0x00, 0x00, 0x01, 0x79, 0x03, 0x3f, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51716  ..#...y.?.0.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51726  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51726  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5172A  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5172E  +0x18 reader (2B request)
+; SysExParamDesc_EffectCommonAlgorithm: EFFECT COMMON ALGORITHM -- SysEx address 00 11 00 (Technics Reference Guide)
+SysExParamDesc_EffectCommonAlgorithm:
+;   area 00 adr 11 00  size 00 00 01  rec 60 off 00 mask 01  range 0..1
 	.byte 0x00, 0x11, 0x00, 0x00, 0x00, 0x01, 0x60, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51732  ......`.........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F51742  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F51742  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51746  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F5174A  +0x18 reader (2B request)
+; SysExParamDesc_Effect1OutputSelect: EFFECT1 OUTPUT SELECT -- SysEx address 00 11 01 (Technics Reference Guide)
+SysExParamDesc_Effect1OutputSelect:
+;   area 00 adr 11 01  size 00 00 01  rec 79 off 05 mask 0F  range 1..4
 	.byte 0x00, 0x11, 0x01, 0x00, 0x00, 0x01, 0x79, 0x05, 0x0f, 0x01, 0x04, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5174E  ......y.........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5175E  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5175E  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51762  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51766  +0x18 reader (2B request)
+; SysExParamDesc_Effect2OutputSelect: EFFECT2 OUTPUT SELECT -- SysEx address 00 11 02 (Technics Reference Guide)
+SysExParamDesc_Effect2OutputSelect:
+;   area 00 adr 11 02  size 00 00 01  rec 79 off 05 mask F0  range 1..4
 	.byte 0x00, 0x11, 0x02, 0x00, 0x00, 0x01, 0x79, 0x05, 0xf0, 0x01, 0x04, 0x04, 0x01, 0x00, 0xff, 0x00   ; F5176A  ......y.........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00   ; F5177A  bM..x7..bE..
+	.long SysExTx_SendParamValue	; F5177A  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F5177E  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51782  +0x18 reader (2B request)
+; SysExParamDesc_Effect1Type: EFFECT1 TYPE -- SysEx address 00 11 20 (Technics Reference Guide)
+SysExParamDesc_Effect1Type:
+;   area 00 adr 11 20  size 00 00 01  rec 00 off 00 mask 00  range 0..0
 	.byte 0x00, 0x11, 0x20, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51786  .. .............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xc4, 0x3a, 0xfb, 0x00, 0xff, 0x49, 0xfb, 0x00   ; F51796  bM...:...I..
+	.long SysExTx_SendParamValue	; F51796  +0x10 transmit-on-change
+	.long SysExParam_SetEffect1Type	; F5179A  +0x14 setter (2C)
+	.long SysExParam_GetEffect1Type	; F5179E  +0x18 reader (2B request)
+; SysExParamDesc_ProgramChangeAndBank: PROGRAM CHANGE & BANK -- SysEx address 00 20 00 (Technics Reference Guide)
+SysExParamDesc_ProgramChangeAndBank:
+;   area 00 adr 20 00  size 00 00 03  rec 00 off 00 mask FF  range 0..127
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0xff, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517A2  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xa4, 0x39, 0xfb, 0x00, 0xff, 0x46, 0xfb, 0x00   ; F517B2  bM...9...F..
+	.long SysExTx_SendParamValue	; F517B2  +0x10 transmit-on-change
+	.long SysExParam_SetProgramChangeAndBank	; F517B6  +0x14 setter (2C)
+	.long SysExParam_GetProgramChangeAndBank	; F517BA  +0x18 reader (2B request)
+; SysExParamDesc_Volume: VOLUME -- SysEx address 00 20 03 (Technics Reference Guide)
+SysExParamDesc_Volume:
+;   area 00 adr 20 03  size 00 00 01  rec 00 off 03 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x03, 0x00, 0x00, 0x01, 0x00, 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517BE  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F517CE  bM...8...F..
+	.long SysExTx_SendParamValue	; F517CE  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F517D2  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F517D6  +0x18 reader (2B request)
+; SysExParamDesc_Effect1Send: EFFECT1 SEND -- SysEx address 00 20 04 (Technics Reference Guide)
+SysExParamDesc_Effect1Send:
+;   area 00 adr 20 04  size 00 00 01  rec 00 off 05 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x04, 0x00, 0x00, 0x01, 0x00, 0x05, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F517DA  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F517EA  bM...8...F..
+	.long SysExTx_SendParamValue	; F517EA  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F517EE  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F517F2  +0x18 reader (2B request)
+; SysExParamDesc_Effect2OnOff: EFFECT2 ON/OFF -- SysEx address 00 20 05 (Technics Reference Guide)
+SysExParamDesc_Effect2OnOff:
+;   area 00 adr 20 05  size 00 00 01  rec 00 off 06 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x05, 0x00, 0x00, 0x01, 0x00, 0x06, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0x00, 0x00   ; F517F6  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x13, 0x3d, 0xfb, 0x00, 0x6e, 0x49, 0xfb, 0x00, 0x00, 0x7f   ; F51806  bM...=..nI....
+	.long SysExTx_SendParamValue	; F51806  +0x10 transmit-on-change
+	.long SysExParam_SetEffect2OnOff	; F5180A  +0x14 setter (2C)
+	.long SysExParam_GetEffect2OnOff	; F5180E  +0x18 reader (2B request)
+	.byte 0x00, 0x7f   ; F51812  ..
+; SysExParamDesc_ReverbSend: REVERB SEND -- SysEx address 00 20 06 (Technics Reference Guide)
+SysExParamDesc_ReverbSend:
+;   area 00 adr 20 06  size 00 00 01  rec 00 off 07 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x06, 0x00, 0x00, 0x01, 0x00, 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51814  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51824  bM...8...F..
+	.long SysExTx_SendParamValue	; F51824  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51828  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F5182C  +0x18 reader (2B request)
+; SysExParamDesc_Panpot: PANPOT -- SysEx address 00 20 07 (Technics Reference Guide)
+SysExParamDesc_Panpot:
+;   area 00 adr 20 07  size 00 00 01  rec 00 off 08 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x07, 0x00, 0x00, 0x01, 0x00, 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51830  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51840  bM...8...F..
+	.long SysExTx_SendParamValue	; F51840  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51844  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51848  +0x18 reader (2B request)
+; SysExParamDesc_KeyShift: KEY SHIFT -- SysEx address 00 20 08 (Technics Reference Guide)
+SysExParamDesc_KeyShift:
+;   area 00 adr 20 08  size 00 00 01  rec 00 off 09 mask 7F  range 28..100
 	.byte 0x00, 0x20, 0x08, 0x00, 0x00, 0x01, 0x00, 0x09, 0x7f, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5184C  . ........d.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F5185C  bM...8...F..
+	.long SysExTx_SendParamValue	; F5185C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51860  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51864  +0x18 reader (2B request)
+; SysExParamDesc_FineTune: FINE TUNE -- SysEx address 00 20 09 (Technics Reference Guide)
+SysExParamDesc_FineTune:
+;   area 00 adr 20 09  size 00 00 01  rec 00 off 0A mask FF  range 0..255
 	.byte 0x00, 0x20, 0x09, 0x00, 0x00, 0x01, 0x00, 0x0a, 0xff, 0x00, 0xff, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51868  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51878  bM...8...F..
+	.long SysExTx_SendParamValue	; F51878  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F5187C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51880  +0x18 reader (2B request)
+; SysExParamDesc_PitchBendRange: PITCH BEND RANGE -- SysEx address 00 20 0A (Technics Reference Guide)
+SysExParamDesc_PitchBendRange:
+;   area 00 adr 20 0A  size 00 00 01  rec 00 off 0B mask 7F  range 0..12
 	.byte 0x00, 0x20, 0x0a, 0x00, 0x00, 0x01, 0x00, 0x0b, 0x7f, 0x00, 0x0c, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51884  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51894  bM...8...F..
+	.long SysExTx_SendParamValue	; F51894  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51898  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F5189C  +0x18 reader (2B request)
+; SysExParamDesc_AssignMode: ASSIGN MODE -- SysEx address 00 20 10 (Technics Reference Guide)
+SysExParamDesc_AssignMode:
+;   area 00 adr 20 10  size 00 00 01  rec 20 off 06 mask 0F  range 0..1
 	.byte 0x00, 0x20, 0x10, 0x00, 0x00, 0x01, 0x20, 0x06, 0x0f, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518A0  . .... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518B0  bM...8...F..
+	.long SysExTx_SendParamValue	; F518B0  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F518B4  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F518B8  +0x18 reader (2B request)
+; SysExParamDesc_KeyScaling: KEY SCALING -- SysEx address 00 20 14 (Technics Reference Guide)
+SysExParamDesc_KeyScaling:
+;   area 00 adr 20 14  size 00 00 01  rec 00 off 0C mask 08  range 0..1
 	.byte 0x00, 0x20, 0x14, 0x00, 0x00, 0x01, 0x00, 0x0c, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F518BC  . ..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518CC  bM...8...F..
+	.long SysExTx_SendParamValue	; F518CC  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F518D0  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F518D4  +0x18 reader (2B request)
+; SysExParamDesc_VelocityOffset_2020: VELOCITY OFFSET -- SysEx address 00 20 20 (Technics Reference Guide)
+SysExParamDesc_VelocityOffset_2020:
+;   area 00 adr 20 20  size 00 00 01  rec 20 off 05 mask FF  range 0..48
 	.byte 0x00, 0x20, 0x20, 0x00, 0x00, 0x01, 0x20, 0x05, 0xff, 0x00, 0x30, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518D8  .  ... ...0.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F518E8  bM...8...F..
+	.long SysExTx_SendParamValue	; F518E8  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F518EC  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F518F0  +0x18 reader (2B request)
+; SysExParamDesc_KeyLayerLow: KEY LAYER LOW -- SysEx address 00 20 28 (Technics Reference Guide)
+SysExParamDesc_KeyLayerLow:
+;   area 00 adr 20 28  size 00 00 01  rec 20 off 07 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x28, 0x00, 0x00, 0x01, 0x20, 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F518F4  . (... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51904  bM...8...F..
+	.long SysExTx_SendParamValue	; F51904  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51908  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F5190C  +0x18 reader (2B request)
+; SysExParamDesc_KeyLayerHigh: KEY LAYER HIGH -- SysEx address 00 20 29 (Technics Reference Guide)
+SysExParamDesc_KeyLayerHigh:
+;   area 00 adr 20 29  size 00 00 01  rec 20 off 08 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x29, 0x00, 0x00, 0x01, 0x20, 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51910  . )... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51920  bM...8...F..
+	.long SysExTx_SendParamValue	; F51920  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51924  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51928  +0x18 reader (2B request)
+; SysExParamDesc_VelocityLayerLow: VELOCITY LAYER LOW -- SysEx address 00 20 2A (Technics Reference Guide)
+SysExParamDesc_VelocityLayerLow:
+;   area 00 adr 20 2A  size 00 00 01  rec 20 off 09 mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x2a, 0x00, 0x00, 0x01, 0x20, 0x09, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F5192C  . *... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F5193C  bM...8...F..
+	.long SysExTx_SendParamValue	; F5193C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51940  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51944  +0x18 reader (2B request)
+; SysExParamDesc_VelocityLayerHigh: VELOCITY LAYER HIGH -- SysEx address 00 20 2B (Technics Reference Guide)
+SysExParamDesc_VelocityLayerHigh:
+;   area 00 adr 20 2B  size 00 00 01  rec 20 off 0A mask 7F  range 0..127
 	.byte 0x00, 0x20, 0x2b, 0x00, 0x00, 0x01, 0x20, 0x0a, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51948  . +... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51958  bM...8...F..
+	.long SysExTx_SendParamValue	; F51958  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F5195C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51960  +0x18 reader (2B request)
+; SysExParamDesc_MainOut: MAIN OUT -- SysEx address 00 20 30 (Technics Reference Guide)
+SysExParamDesc_MainOut:
+;   area 00 adr 20 30  size 00 00 01  rec 20 off 03 mask FF  range 0..1
 	.byte 0x00, 0x20, 0x30, 0x00, 0x00, 0x01, 0x20, 0x03, 0xff, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51964  . 0... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51974  bM...8...F..
+	.long SysExTx_SendParamValue	; F51974  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51978  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F5197C  +0x18 reader (2B request)
+; SysExParamDesc_SubOut: SUB OUT -- SysEx address 00 20 31 (Technics Reference Guide)
+SysExParamDesc_SubOut:
+;   area 00 adr 20 31  size 00 00 01  rec 20 off 04 mask FF  range 0..4
 	.byte 0x00, 0x20, 0x31, 0x00, 0x00, 0x01, 0x20, 0x04, 0xff, 0x00, 0x04, 0x00, 0x01, 0x00, 0x03, 0x00   ; F51980  . 1... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00, 0x00, 0x02, 0x03, 0x04   ; F51990  bM...8...F......
+	.long SysExTx_SendParamValue	; F51990  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51994  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51998  +0x18 reader (2B request)
+	.byte 0x00, 0x02, 0x03, 0x04   ; F5199C  ....
+; SysExParamDesc_LocalControl: LOCAL CONTROL -- SysEx address 00 20 40 (Technics Reference Guide)
+SysExParamDesc_LocalControl:
+;   area 00 adr 20 40  size 00 00 01  rec 00 off 0D mask 20  range 0..1
 	.byte 0x00, 0x20, 0x40, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F519A0  . @..... .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519B0  bM...8...F..
+	.long SysExTx_SendParamValue	; F519B0  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F519B4  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F519B8  +0x18 reader (2B request)
+; SysExParamDesc_BasicChannel: BASIC CHANNEL -- SysEx address 00 20 41 (Technics Reference Guide)
+SysExParamDesc_BasicChannel:
+;   area 00 adr 20 41  size 00 00 01  rec 00 off 0D mask 1F  range 0..31
 	.byte 0x00, 0x20, 0x41, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F519BC  . A.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519CC  bM...8...F..
+	.long SysExTx_SendParamValue	; F519CC  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F519D0  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F519D4  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutSetting: MIDI OUT SETTING -- SysEx address 00 20 42 (Technics Reference Guide)
+SysExParamDesc_MidiOutSetting:
+;   area 00 adr 20 42  size 00 00 01  rec 00 off 0D mask 40  range 0..1
 	.byte 0x00, 0x20, 0x42, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F519D8  . B.....@.......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F519E8  bM...8...F..
+	.long SysExTx_SendParamValue	; F519E8  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F519EC  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F519F0  +0x18 reader (2B request)
+; SysExParamDesc_MidiInSetting: MIDI IN SETTING -- SysEx address 00 20 43 (Technics Reference Guide)
+SysExParamDesc_MidiInSetting:
+;   area 00 adr 20 43  size 00 00 01  rec 00 off 0D mask 80  range 0..1
 	.byte 0x00, 0x20, 0x43, 0x00, 0x00, 0x01, 0x00, 0x0d, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F519F4  . C.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A04  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A04  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A08  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A0C  +0x18 reader (2B request)
+; SysExParamDesc_MidiInputFilterProgramChange: MIDI INPUT FILTER: PROGRAM CHANGE -- SysEx address 00 20 48 (Technics Reference Guide)
+SysExParamDesc_MidiInputFilterProgramChange:
+;   area 00 adr 20 48  size 00 00 01  rec 20 off 0F mask 10  range 0..1
 	.byte 0x00, 0x20, 0x48, 0x00, 0x00, 0x01, 0x20, 0x0f, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51A10  . H... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A20  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A20  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A24  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A28  +0x18 reader (2B request)
+; SysExParamDesc_MidiInputFilterBankSelect: MIDI INPUT FILTER: BANK SELECT -- SysEx address 00 20 49 (Technics Reference Guide)
+SysExParamDesc_MidiInputFilterBankSelect:
+;   area 00 adr 20 49  size 00 00 01  rec 20 off 10 mask 80  range 0..1
 	.byte 0x00, 0x20, 0x49, 0x00, 0x00, 0x01, 0x20, 0x10, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F51A2C  . I... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A3C  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A3C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A40  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A44  +0x18 reader (2B request)
+; SysExParamDesc_MidiInputFilterVolume: MIDI INPUT FILTER: VOLUME -- SysEx address 00 20 4A (Technics Reference Guide)
+SysExParamDesc_MidiInputFilterVolume:
+;   area 00 adr 20 4A  size 00 00 01  rec 20 off 10 mask 04  range 0..1
 	.byte 0x00, 0x20, 0x4a, 0x00, 0x00, 0x01, 0x20, 0x10, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51A48  . J... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A58  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A58  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A5C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A60  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterProgramChange: MIDI OUTPUT FILTER: PROGRAM CHANGE -- SysEx address 00 20 50 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterProgramChange:
+;   area 00 adr 20 50  size 00 00 01  rec 20 off 13 mask 10  range 0..1
 	.byte 0x00, 0x20, 0x50, 0x00, 0x00, 0x01, 0x20, 0x13, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51A64  . P... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A74  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A74  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A78  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A7C  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterBankSelect: MIDI OUTPUT FILTER: BANK SELECT -- SysEx address 00 20 51 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterBankSelect:
+;   area 00 adr 20 51  size 00 00 01  rec 20 off 14 mask 80  range 0..1
 	.byte 0x00, 0x20, 0x51, 0x00, 0x00, 0x01, 0x20, 0x14, 0x80, 0x00, 0x01, 0x07, 0x01, 0x00, 0xff, 0x00   ; F51A80  . Q... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51A90  bM...8...F..
+	.long SysExTx_SendParamValue	; F51A90  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51A94  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51A98  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterVolume: MIDI OUTPUT FILTER: VOLUME -- SysEx address 00 20 52 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterVolume:
+;   area 00 adr 20 52  size 00 00 01  rec 20 off 14 mask 04  range 0..1
 	.byte 0x00, 0x20, 0x52, 0x00, 0x00, 0x01, 0x20, 0x14, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51A9C  . R... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AAC  bM...8...F..
+	.long SysExTx_SendParamValue	; F51AAC  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51AB0  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51AB4  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterPanpot: MIDI OUTPUT FILTER: PANPOT -- SysEx address 00 20 53 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterPanpot:
+;   area 00 adr 20 53  size 00 00 01  rec 20 off 14 mask 10  range 0..1
 	.byte 0x00, 0x20, 0x53, 0x00, 0x00, 0x01, 0x20, 0x14, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51AB8  . S... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AC8  bM...8...F..
+	.long SysExTx_SendParamValue	; F51AC8  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51ACC  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51AD0  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterEffectDepth: MIDI OUTPUT FILTER: EFFECT DEPTH -- SysEx address 00 20 54 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterEffectDepth:
+;   area 00 adr 20 54  size 00 00 01  rec 20 off 14 mask 20  range 0..1
 	.byte 0x00, 0x20, 0x54, 0x00, 0x00, 0x01, 0x20, 0x14, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51AD4  . T... . .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51AE4  bM...8...F..
+	.long SysExTx_SendParamValue	; F51AE4  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51AE8  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51AEC  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterPitchBend: MIDI OUTPUT FILTER: PITCH BEND -- SysEx address 00 20 55 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterPitchBend:
+;   area 00 adr 20 55  size 00 00 01  rec 20 off 13 mask 40  range 0..1
 	.byte 0x00, 0x20, 0x55, 0x00, 0x00, 0x01, 0x20, 0x13, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F51AF0  . U... .@.......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B00  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B00  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B04  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B08  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterModulation1: MIDI OUTPUT FILTER: MODULATION1 -- SysEx address 00 20 56 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterModulation1:
+;   area 00 adr 20 56  size 00 00 01  rec 20 off 14 mask 02  range 0..1
 	.byte 0x00, 0x20, 0x56, 0x00, 0x00, 0x01, 0x20, 0x14, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51B0C  . V... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B1C  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B1C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B20  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B24  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterModulation2: MIDI OUTPUT FILTER: MODULATION2 -- SysEx address 00 20 57 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterModulation2:
+;   area 00 adr 20 57  size 00 00 01  rec 20 off 16 mask 10  range 0..1
 	.byte 0x00, 0x20, 0x57, 0x00, 0x00, 0x01, 0x20, 0x16, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51B28  . W... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B38  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B38  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B3C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B40  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterRealTimeCreatorX: MIDI OUTPUT FILTER: REAL-TIME CREATOR-X -- SysEx address 00 20 58 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterRealTimeCreatorX:
+;   area 00 adr 20 58  size 00 00 01  rec 20 off 16 mask 01  range 0..1
 	.byte 0x00, 0x20, 0x58, 0x00, 0x00, 0x01, 0x20, 0x16, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51B44  . X... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B54  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B54  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B58  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B5C  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterRealTimeCreatorY: MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y -- SysEx address 00 20 59 (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterRealTimeCreatorY:
+;   area 00 adr 20 59  size 00 00 01  rec 20 off 16 mask 02  range 0..1
 	.byte 0x00, 0x20, 0x59, 0x00, 0x00, 0x01, 0x20, 0x16, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51B60  . Y... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B70  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B70  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B74  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B78  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterRealTimeControllerX: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X -- SysEx address 00 20 5A (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterRealTimeControllerX:
+;   area 00 adr 20 5A  size 00 00 01  rec 20 off 16 mask 04  range 0..1
 	.byte 0x00, 0x20, 0x5a, 0x00, 0x00, 0x01, 0x20, 0x16, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51B7C  . Z... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51B8C  bM...8...F..
+	.long SysExTx_SendParamValue	; F51B8C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51B90  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51B94  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterRealTimeControllerY: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y -- SysEx address 00 20 5B (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterRealTimeControllerY:
+;   area 00 adr 20 5B  size 00 00 01  rec 20 off 16 mask 08  range 0..1
 	.byte 0x00, 0x20, 0x5b, 0x00, 0x00, 0x01, 0x20, 0x16, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51B98  . [... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BA8  bM...8...F..
+	.long SysExTx_SendParamValue	; F51BA8  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51BAC  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51BB0  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterHold1: MIDI OUTPUT FILTER: HOLD1 -- SysEx address 00 20 5C (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterHold1:
+;   area 00 adr 20 5C  size 00 00 01  rec 20 off 14 mask 01  range 0..1
 	.byte 0x00, 0x20, 0x5c, 0x00, 0x00, 0x01, 0x20, 0x14, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51BB4  . \... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BC4  bM...8...F..
+	.long SysExTx_SendParamValue	; F51BC4  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51BC8  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51BCC  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterControlPedal: MIDI OUTPUT FILTER: CONTROL PEDAL -- SysEx address 00 20 5D (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterControlPedal:
+;   area 00 adr 20 5D  size 00 00 01  rec 20 off 16 mask 20  range 0..1
 	.byte 0x00, 0x20, 0x5d, 0x00, 0x00, 0x01, 0x20, 0x16, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51BD0  . ]... . .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BE0  bM...8...F..
+	.long SysExTx_SendParamValue	; F51BE0  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51BE4  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51BE8  +0x18 reader (2B request)
+; SysExParamDesc_MidiOutputFilterAfterTouch: MIDI OUTPUT FILTER: AFTER TOUCH -- SysEx address 00 20 5E (Technics Reference Guide)
+SysExParamDesc_MidiOutputFilterAfterTouch:
+;   area 00 adr 20 5E  size 00 00 01  rec 20 off 13 mask 20  range 0..1
 	.byte 0x00, 0x20, 0x5e, 0x00, 0x00, 0x01, 0x20, 0x13, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51BEC  . ^... . .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51BFC  bM...8...F..
+	.long SysExTx_SendParamValue	; F51BFC  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51C00  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51C04  +0x18 reader (2B request)
+; SysExParamDesc_MidiMultipleMessagesOutputProgramChange: MIDI MULTIPLE MESSAGES OUTPUT: PROGRAM CHANGE -- SysEx address 00 20 60 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputProgramChange:
+;   area 00 adr 20 60  size 00 00 01  rec 00 off 0E mask FF  range 0..129
 	.byte 0x00, 0x20, 0x60, 0x00, 0x00, 0x01, 0x00, 0x0e, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x00, 0x00   ; F51C08  . `.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x01, 0x01   ; F51C18  bM...;..SG......
+	.long SysExTx_SendParamValue	; F51C18  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutput	; F51C1C  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutput	; F51C20  +0x18 reader (2B request)
+	.byte 0x00, 0x15, 0x01, 0x01   ; F51C24  ....
+; SysExParamDesc_MidiMultipleMessagesOutputBankSelect: MIDI MULTIPLE MESSAGES OUTPUT: BANK SELECT -- SysEx address 00 20 61 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputBankSelect:
+;   area 00 adr 20 61  size 00 00 02  rec 00 off 0F mask FF  range 0..129
 	.byte 0x00, 0x20, 0x61, 0x00, 0x00, 0x02, 0x00, 0x0f, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51C28  . a.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xcf, 0x3b, 0xfb, 0x00, 0x4a, 0x48, 0xfb, 0x00   ; F51C38  bM...;..JH..
+	.long SysExTx_SendParamValue	; F51C38  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutputBankSelect	; F51C3C  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutputBankSelect	; F51C40  +0x18 reader (2B request)
+; SysExParamDesc_MidiMultipleMessagesOutputVolume: MIDI MULTIPLE MESSAGES OUTPUT: VOLUME -- SysEx address 00 20 63 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputVolume:
+;   area 00 adr 20 63  size 00 00 01  rec 00 off 11 mask FF  range 0..129
 	.byte 0x00, 0x20, 0x63, 0x00, 0x00, 0x01, 0x00, 0x11, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x01, 0x00   ; F51C44  . c.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x02, 0x02   ; F51C54  bM...;..SG......
+	.long SysExTx_SendParamValue	; F51C54  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutput	; F51C58  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutput	; F51C5C  +0x18 reader (2B request)
+	.byte 0x00, 0x15, 0x02, 0x02   ; F51C60  ....
+; SysExParamDesc_MidiMultipleMessagesOutputPanpot: MIDI MULTIPLE MESSAGES OUTPUT: PANPOT -- SysEx address 00 20 64 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputPanpot:
+;   area 00 adr 20 64  size 00 00 01  rec 00 off 12 mask FF  range 0..129
 	.byte 0x00, 0x20, 0x64, 0x00, 0x00, 0x01, 0x00, 0x12, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x02, 0x00   ; F51C64  . d.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x04, 0x04   ; F51C74  bM...;..SG......
+	.long SysExTx_SendParamValue	; F51C74  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutput	; F51C78  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutput	; F51C7C  +0x18 reader (2B request)
+	.byte 0x00, 0x15, 0x04, 0x04   ; F51C80  ....
+; SysExParamDesc_MidiMultipleMessagesOutputReverbDepth: MIDI MULTIPLE MESSAGES OUTPUT: REVERB DEPTH -- SysEx address 00 20 65 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputReverbDepth:
+;   area 00 adr 20 65  size 00 00 01  rec 00 off 14 mask FF  range 0..129
 	.byte 0x00, 0x20, 0x65, 0x00, 0x00, 0x01, 0x00, 0x14, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x03, 0x00   ; F51C84  . e.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x10, 0x10   ; F51C94  bM...;..SG......
+	.long SysExTx_SendParamValue	; F51C94  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutput	; F51C98  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutput	; F51C9C  +0x18 reader (2B request)
+	.byte 0x00, 0x15, 0x10, 0x10   ; F51CA0  ....
+; SysExParamDesc_MidiMultipleMessagesOutputChorusDepth: MIDI MULTIPLE MESSAGES OUTPUT: CHORUS DEPTH -- SysEx address 00 20 66 (Technics Reference Guide)
+SysExParamDesc_MidiMultipleMessagesOutputChorusDepth:
+;   area 00 adr 20 66  size 00 00 01  rec 00 off 13 mask FF  range 0..129
 	.byte 0x00, 0x20, 0x66, 0x00, 0x00, 0x01, 0x00, 0x13, 0xff, 0x00, 0x81, 0x00, 0x01, 0x00, 0x04, 0x00   ; F51CA4  . f.............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x04, 0x3b, 0xfb, 0x00, 0x53, 0x47, 0xfb, 0x00, 0x00, 0x15, 0x08, 0x08   ; F51CB4  bM...;..SG......
+	.long SysExTx_SendParamValue	; F51CB4  +0x10 transmit-on-change
+	.long SysExParam_SetMidiMultipleMessagesOutput	; F51CB8  +0x14 setter (2C)
+	.long SysExParam_GetMidiMultipleMessagesOutput	; F51CBC  +0x18 reader (2B request)
+	.byte 0x00, 0x15, 0x08, 0x08   ; F51CC0  ....
+; SysExParamDesc_MidiOutKeyTranspose: MIDI OUT KEY TRANSPOSE -- SysEx address 00 20 68 (Technics Reference Guide)
+SysExParamDesc_MidiOutKeyTranspose:
+;   area 00 adr 20 68  size 00 00 01  rec 20 off 17 mask FF  range 28..100
 	.byte 0x00, 0x20, 0x68, 0x00, 0x00, 0x01, 0x20, 0x17, 0xff, 0x1c, 0x64, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51CC4  . h... ...d.....
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51CD4  bM...8...F..
+	.long SysExTx_SendParamValue	; F51CD4  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51CD8  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51CDC  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterPitchBend: CONTROLLER INTERNAL FILTER: PITCH BEND -- SysEx address 00 20 70 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterPitchBend:
+;   area 00 adr 20 70  size 00 00 01  rec 20 off 0B mask 40  range 0..1
 	.byte 0x00, 0x20, 0x70, 0x00, 0x00, 0x01, 0x20, 0x0b, 0x40, 0x00, 0x01, 0x06, 0x01, 0x00, 0xff, 0x00   ; F51CE0  . p... .@.......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51CF0  bM...8...F..
+	.long SysExTx_SendParamValue	; F51CF0  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51CF4  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51CF8  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterModulation1: CONTROLLER INTERNAL FILTER: MODULATION1 -- SysEx address 00 20 71 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterModulation1:
+;   area 00 adr 20 71  size 00 00 01  rec 20 off 0C mask 02  range 0..1
 	.byte 0x00, 0x20, 0x71, 0x00, 0x00, 0x01, 0x20, 0x0c, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51CFC  . q... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D0C  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D0C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D10  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51D14  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterModulation2: CONTROLLER INTERNAL FILTER: MODULATION2 -- SysEx address 00 20 72 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterModulation2:
+;   area 00 adr 20 72  size 00 00 01  rec 20 off 0E mask 10  range 0..1
 	.byte 0x00, 0x20, 0x72, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x10, 0x00, 0x01, 0x04, 0x01, 0x00, 0xff, 0x00   ; F51D18  . r... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D28  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D28  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D2C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51D30  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterRealTimeCreatorX: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X -- SysEx address 00 20 73 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterRealTimeCreatorX:
+;   area 00 adr 20 73  size 00 00 01  rec 20 off 0E mask 01  range 0..1
 	.byte 0x00, 0x20, 0x73, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51D34  . s... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D44  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D44  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D48  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51D4C  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterRealTimeCreatorY: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y -- SysEx address 00 20 74 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterRealTimeCreatorY:
+;   area 00 adr 20 74  size 00 00 01  rec 20 off 0E mask 02  range 0..1
 	.byte 0x00, 0x20, 0x74, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x02, 0x00, 0x01, 0x01, 0x01, 0x00, 0xff, 0x00   ; F51D50  . t... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D60  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D60  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D64  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51D68  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterRealTimeControllerX: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X -- SysEx address 00 20 75 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterRealTimeControllerX:
+;   area 00 adr 20 75  size 00 00 01  rec 20 off 0E mask 04  range 0..1
 	.byte 0x00, 0x20, 0x75, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x04, 0x00, 0x01, 0x02, 0x01, 0x00, 0xff, 0x00   ; F51D6C  . u... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D7C  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D7C  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D80  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51D84  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterRealTimeControllerY: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y -- SysEx address 00 20 76 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterRealTimeControllerY:
+;   area 00 adr 20 76  size 00 00 01  rec 20 off 0E mask 08  range 0..1
 	.byte 0x00, 0x20, 0x76, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x08, 0x00, 0x01, 0x03, 0x01, 0x00, 0xff, 0x00   ; F51D88  . v... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51D98  bM...8...F..
+	.long SysExTx_SendParamValue	; F51D98  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51D9C  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51DA0  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterHold1: CONTROLLER INTERNAL FILTER: HOLD1 -- SysEx address 00 20 77 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterHold1:
+;   area 00 adr 20 77  size 00 00 01  rec 20 off 0C mask 01  range 0..1
 	.byte 0x00, 0x20, 0x77, 0x00, 0x00, 0x01, 0x20, 0x0c, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51DA4  . w... .........
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DB4  bM...8...F..
+	.long SysExTx_SendParamValue	; F51DB4  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51DB8  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51DBC  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterControlPedal: CONTROLLER INTERNAL FILTER: CONTROL PEDAL -- SysEx address 00 20 78 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterControlPedal:
+;   area 00 adr 20 78  size 00 00 01  rec 20 off 0E mask 20  range 0..1
 	.byte 0x00, 0x20, 0x78, 0x00, 0x00, 0x01, 0x20, 0x0e, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51DC0  . x... . .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DD0  bM...8...F..
+	.long SysExTx_SendParamValue	; F51DD0  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51DD4  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51DD8  +0x18 reader (2B request)
+; SysExParamDesc_ControllerInternalFilterAfterTouch: CONTROLLER INTERNAL FILTER: AFTER TOUCH -- SysEx address 00 20 79 (Technics Reference Guide)
+SysExParamDesc_ControllerInternalFilterAfterTouch:
+;   area 00 adr 20 79  size 00 00 01  rec 20 off 0B mask 20  range 0..1
 	.byte 0x00, 0x20, 0x79, 0x00, 0x00, 0x01, 0x20, 0x0b, 0x20, 0x00, 0x01, 0x05, 0x01, 0x00, 0xff, 0x00   ; F51DDC  . y... . .......
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0xe4, 0x38, 0xfb, 0x00, 0x98, 0x46, 0xfb, 0x00   ; F51DEC  bM...8...F..
+	.long SysExTx_SendParamValue	; F51DEC  +0x10 transmit-on-change
+	.long SysExParam_SetPartField	; F51DF0  +0x14 setter (2C)
+	.long SysExParam_GetPartField	; F51DF4  +0x18 reader (2B request)
+; SysExParamDesc_MetronomeVolume: METRONOME VOLUME -- SysEx address 00 60 00 (Technics Reference Guide)
+SysExParamDesc_MetronomeVolume:
+;   area 00 adr 60 00  size 00 00 01  rec 98 off 03 mask 7F  range 0..127
 	.byte 0x00, 0x60, 0x00, 0x00, 0x00, 0x01, 0x98, 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00   ; F51DF8  .`..............
-	.byte 0x62, 0x4d, 0xfb, 0x00, 0x78, 0x37, 0xfb, 0x00, 0x62, 0x45, 0xfb, 0x00, 0xf9, 0x11, 0xf5, 0x00   ; F51E08  bM..x7..bE......
+	.long SysExTx_SendParamValue	; F51E08  +0x10 transmit-on-change
+	.long SysExParam_SetCommonField	; F51E0C  +0x14 setter (2C)
+	.long SysExParam_GetCommonField	; F51E10  +0x18 reader (2B request)
+	.byte 0xf9, 0x11, 0xf5, 0x00   ; F51E14  ....
 	.byte 0xf9, 0x11, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00   ; F51E18  ........
 
 ; --- 0xF51E20-0xF51E2B  ptrtab (12 bytes) ---
@@ -110573,7 +111158,7 @@ RecordArray_F511DD:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E20:
-	.long RecordArray_F511DD + 0x1C                       ; F51E20  [0]   -> 0xF511F9
+	.long SysExParamDesc_Placeholder                       ; F51E20  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51E24 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -110587,7 +111172,7 @@ Pointer_F51E20:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E24:
-	.long RecordArray_F511DD + 0x1C                       ; F51E24  [0]   -> 0xF511F9
+	.long SysExParamDesc_Placeholder                       ; F51E24  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51E28 -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -110601,7 +111186,7 @@ Pointer_F51E24:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51E28:
-	.long RecordArray_F511DD + 0x1C                       ; F51E28  [0]   -> 0xF511F9
+	.long SysExParamDesc_Placeholder                       ; F51E28  [0]   -> 0xF511F9
 
 ; --- 0xF51E2C-0xF51E6B  data (64 bytes) ---
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf9, 0x11, 0xf5, 0x00, 0x38, 0x7f, 0x00, 0x00, 0x08, 0x08, 0x38, 0x7f   ; F51E2C  ........8.....8.
@@ -110705,29 +111290,29 @@ RecordIndex_F51E8A:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51E8E:
-	.long RecordArray_F511DD + 0x1C                       ; F51E8E  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x38                       ; F51E92  [1]   -> 0xF51215
-	.long RecordArray_F511DD + 0x54                       ; F51E96  [2]   -> 0xF51231
-	.long RecordArray_F511DD + 0x70                       ; F51E9A  [3]   -> 0xF5124D
-	.long RecordArray_F511DD + 0x8C                       ; F51E9E  [4]   -> 0xF51269
-	.long RecordArray_F511DD + 0xA8                       ; F51EA2  [5]   -> 0xF51285
-	.long RecordArray_F511DD + 0xC4                       ; F51EA6  [6]   -> 0xF512A1
-	.long RecordArray_F511DD + 0xE0                       ; F51EAA  [7]   -> 0xF512BD
-	.long RecordArray_F511DD + 0xFC                       ; F51EAE  [8]   -> 0xF512D9
-	.long RecordArray_F511DD + 0x11C                       ; F51EB2  [9]   -> 0xF512F9
-	.long RecordArray_F511DD + 0x138                       ; F51EB6  [10]   -> 0xF51315
-	.long RecordArray_F511DD + 0x154                       ; F51EBA  [11]   -> 0xF51331
-	.long RecordArray_F511DD + 0x170                       ; F51EBE  [12]   -> 0xF5134D
-	.long RecordArray_F511DD + 0x18C                       ; F51EC2  [13]   -> 0xF51369
-	.long RecordArray_F511DD + 0x1A8                       ; F51EC6  [14]   -> 0xF51385
-	.long RecordArray_F511DD + 0x1C4                       ; F51ECA  [15]   -> 0xF513A1
-	.long RecordArray_F511DD + 0x1E0                       ; F51ECE  [16]   -> 0xF513BD
-	.long RecordArray_F511DD + 0x1FC                       ; F51ED2  [17]   -> 0xF513D9
-	.long RecordArray_F511DD + 0x218                       ; F51ED6  [18]   -> 0xF513F5
-	.long RecordArray_F511DD + 0x234                       ; F51EDA  [19]   -> 0xF51411
-	.long RecordArray_F511DD + 0x250                       ; F51EDE  [20]   -> 0xF5142D
-	.long RecordArray_F511DD + 0x26C                       ; F51EE2  [21]   -> 0xF51449
-	.long RecordArray_F511DD + 0x288                       ; F51EE6  [22]   -> 0xF51465
+	.long SysExParamDesc_Placeholder                       ; F51E8E  [0]   -> 0xF511F9
+	.long SysExParamDesc_SoundMemoryProtect                       ; F51E92  [1]   -> 0xF51215
+	.long SysExParamDesc_CombinationMemoryProtect                       ; F51E96  [2]   -> 0xF51231
+	.long SysExParamDesc_MasterTuning                       ; F51E9A  [3]   -> 0xF5124D
+	.long SysExParamDesc_VelocityCurve                       ; F51E9E  [4]   -> 0xF51269
+	.long SysExParamDesc_VelocityOffset_0011                       ; F51EA2  [5]   -> 0xF51285
+	.long SysExParamDesc_AfterTouchCurve                       ; F51EA6  [6]   -> 0xF512A1
+	.long SysExParamDesc_AfterTouchThreshold                       ; F51EAA  [7]   -> 0xF512BD
+	.long SysExParamDesc_DrumsMapSelect                       ; F51EAE  [8]   -> 0xF512D9
+	.long SysExParamDesc_DataLoadFilterEffectAndOutput                       ; F51EB2  [9]   -> 0xF512F9
+	.long SysExParamDesc_DataLoadFilterRealTimeCreator16                       ; F51EB6  [10]   -> 0xF51315
+	.long SysExParamDesc_DataLoadFilterCombinationOctave                       ; F51EBA  [11]   -> 0xF51331
+	.long SysExParamDesc_DataLoadFilterMidiSetting                       ; F51EBE  [12]   -> 0xF5134D
+	.long SysExParamDesc_DataLoadFilterKeyAndVelocityLayer                       ; F51EC2  [13]   -> 0xF51369
+	.long SysExParamDesc_DataLoadFilterMainOutEqualizer                       ; F51EC6  [14]   -> 0xF51385
+	.long SysExParamDesc_DataLoadFilterKeyScaling                       ; F51ECA  [15]   -> 0xF513A1
+	.long SysExParamDesc_CombinationNumberAndBank                       ; F51ECE  [16]   -> 0xF513BD
+	.long SysExParamDesc_MidiInputMode                       ; F51ED2  [17]   -> 0xF513D9
+	.long SysExParamDesc_MidiOutputMode                       ; F51ED6  [18]   -> 0xF513F5
+	.long SysExParamDesc_SingleChannel                       ; F51EDA  [19]   -> 0xF51411
+	.long SysExParamDesc_LocalTotal                       ; F51EDE  [20]   -> 0xF5142D
+	.long SysExParamDesc_ProgramChangeMode                       ; F51EE2  [21]   -> 0xF51449
+	.long SysExParamDesc_SingleChannelProgramChange                       ; F51EE6  [22]   -> 0xF51465
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51EEA -- 23 32-bit pointers, 0 into prom_a and 23 into prom_b
@@ -110742,29 +111327,29 @@ PtrTable_F51E8E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51EEA:
-	.long RecordArray_F511DD + 0x1C                       ; F51EEA  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x38                       ; F51EEE  [1]   -> 0xF51215
-	.long RecordArray_F511DD + 0x54                       ; F51EF2  [2]   -> 0xF51231
-	.long RecordArray_F511DD + 0x70                       ; F51EF6  [3]   -> 0xF5124D
-	.long RecordArray_F511DD + 0x8C                       ; F51EFA  [4]   -> 0xF51269
-	.long RecordArray_F511DD + 0xA8                       ; F51EFE  [5]   -> 0xF51285
-	.long RecordArray_F511DD + 0xC4                       ; F51F02  [6]   -> 0xF512A1
-	.long RecordArray_F511DD + 0xE0                       ; F51F06  [7]   -> 0xF512BD
-	.long RecordArray_F511DD + 0xFC                       ; F51F0A  [8]   -> 0xF512D9
-	.long RecordArray_F511DD + 0x11C                       ; F51F0E  [9]   -> 0xF512F9
-	.long RecordArray_F511DD + 0x138                       ; F51F12  [10]   -> 0xF51315
-	.long RecordArray_F511DD + 0x154                       ; F51F16  [11]   -> 0xF51331
-	.long RecordArray_F511DD + 0x170                       ; F51F1A  [12]   -> 0xF5134D
-	.long RecordArray_F511DD + 0x18C                       ; F51F1E  [13]   -> 0xF51369
-	.long RecordArray_F511DD + 0x1A8                       ; F51F22  [14]   -> 0xF51385
-	.long RecordArray_F511DD + 0x1C4                       ; F51F26  [15]   -> 0xF513A1
-	.long RecordArray_F511DD + 0x1E0                       ; F51F2A  [16]   -> 0xF513BD
-	.long RecordArray_F511DD + 0x1FC                       ; F51F2E  [17]   -> 0xF513D9
-	.long RecordArray_F511DD + 0x218                       ; F51F32  [18]   -> 0xF513F5
-	.long RecordArray_F511DD + 0x234                       ; F51F36  [19]   -> 0xF51411
-	.long RecordArray_F511DD + 0x250                       ; F51F3A  [20]   -> 0xF5142D
-	.long RecordArray_F511DD + 0x26C                       ; F51F3E  [21]   -> 0xF51449
-	.long RecordArray_F511DD + 0x288                       ; F51F42  [22]   -> 0xF51465
+	.long SysExParamDesc_Placeholder                       ; F51EEA  [0]   -> 0xF511F9
+	.long SysExParamDesc_SoundMemoryProtect                       ; F51EEE  [1]   -> 0xF51215
+	.long SysExParamDesc_CombinationMemoryProtect                       ; F51EF2  [2]   -> 0xF51231
+	.long SysExParamDesc_MasterTuning                       ; F51EF6  [3]   -> 0xF5124D
+	.long SysExParamDesc_VelocityCurve                       ; F51EFA  [4]   -> 0xF51269
+	.long SysExParamDesc_VelocityOffset_0011                       ; F51EFE  [5]   -> 0xF51285
+	.long SysExParamDesc_AfterTouchCurve                       ; F51F02  [6]   -> 0xF512A1
+	.long SysExParamDesc_AfterTouchThreshold                       ; F51F06  [7]   -> 0xF512BD
+	.long SysExParamDesc_DrumsMapSelect                       ; F51F0A  [8]   -> 0xF512D9
+	.long SysExParamDesc_DataLoadFilterEffectAndOutput                       ; F51F0E  [9]   -> 0xF512F9
+	.long SysExParamDesc_DataLoadFilterRealTimeCreator16                       ; F51F12  [10]   -> 0xF51315
+	.long SysExParamDesc_DataLoadFilterCombinationOctave                       ; F51F16  [11]   -> 0xF51331
+	.long SysExParamDesc_DataLoadFilterMidiSetting                       ; F51F1A  [12]   -> 0xF5134D
+	.long SysExParamDesc_DataLoadFilterKeyAndVelocityLayer                       ; F51F1E  [13]   -> 0xF51369
+	.long SysExParamDesc_DataLoadFilterMainOutEqualizer                       ; F51F22  [14]   -> 0xF51385
+	.long SysExParamDesc_DataLoadFilterKeyScaling                       ; F51F26  [15]   -> 0xF513A1
+	.long SysExParamDesc_CombinationNumberAndBank                       ; F51F2A  [16]   -> 0xF513BD
+	.long SysExParamDesc_MidiInputMode                       ; F51F2E  [17]   -> 0xF513D9
+	.long SysExParamDesc_MidiOutputMode                       ; F51F32  [18]   -> 0xF513F5
+	.long SysExParamDesc_SingleChannel                       ; F51F36  [19]   -> 0xF51411
+	.long SysExParamDesc_LocalTotal                       ; F51F3A  [20]   -> 0xF5142D
+	.long SysExParamDesc_ProgramChangeMode                       ; F51F3E  [21]   -> 0xF51449
+	.long SysExParamDesc_SingleChannelProgramChange                       ; F51F42  [22]   -> 0xF51465
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51F46 -- 5 32-bit pointers, 0 into prom_a and 5 into prom_b
@@ -110779,11 +111364,11 @@ PtrTable_F51EEA:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51F46:
-	.long RecordArray_F511DD + 0x1C                       ; F51F46  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x2A4                       ; F51F4A  [1]   -> 0xF51481
-	.long RecordArray_F511DD + 0x2C0                       ; F51F4E  [2]   -> 0xF5149D
-	.long RecordArray_F511DD + 0x2DE                       ; F51F52  [3]   -> 0xF514BB
-	.long RecordArray_F511DD + 0x2FA                       ; F51F56  [4]   -> 0xF514D7
+	.long SysExParamDesc_Placeholder                       ; F51F46  [0]   -> 0xF511F9
+	.long SysExParamDesc_Initial                       ; F51F4A  [1]   -> 0xF51481
+	.long SysExParamDesc_PlayModeRequest                       ; F51F4E  [2]   -> 0xF5149D
+	.long SysExParamDesc_CombinationWriteRequest                       ; F51F52  [3]   -> 0xF514BB
+	.long SysExParamDesc_SoundWriteRequest                       ; F51F56  [4]   -> 0xF514D7
 
 ; --------------------------------------------------------------------------
 ; Pointer_F51F5A -- 1 32-bit pointer, 0 into prom_a and 1 into prom_b
@@ -110798,7 +111383,7 @@ PtrTable_F51F46:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 Pointer_F51F5A:
-	.long RecordArray_F511DD + 0x1C                       ; F51F5A  [0]   -> 0xF511F9
+	.long SysExParamDesc_Placeholder                       ; F51F5A  [0]   -> 0xF511F9
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51F5E -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
@@ -110813,31 +111398,31 @@ Pointer_F51F5A:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51F5E:
-	.long RecordArray_F511DD + 0x1C                       ; F51F5E  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x316                       ; F51F62  [1]   -> 0xF514F3
-	.long RecordArray_F511DD + 0x332                       ; F51F66  [2]   -> 0xF5150F
-	.long RecordArray_F511DD + 0x34E                       ; F51F6A  [3]   -> 0xF5152B
-	.long RecordArray_F511DD + 0x379                       ; F51F6E  [4]   -> 0xF51556
-	.long RecordArray_F511DD + 0x395                       ; F51F72  [5]   -> 0xF51572
-	.long RecordArray_F511DD + 0x3B1                       ; F51F76  [6]   -> 0xF5158E
-	.long RecordArray_F511DD + 0x3CD                       ; F51F7A  [7]   -> 0xF515AA
-	.long RecordArray_F511DD + 0x3E9                       ; F51F7E  [8]   -> 0xF515C6
-	.long RecordArray_F511DD + 0x405                       ; F51F82  [9]   -> 0xF515E2
-	.long RecordArray_F511DD + 0x421                       ; F51F86  [10]   -> 0xF515FE
-	.long RecordArray_F511DD + 0x43D                       ; F51F8A  [11]   -> 0xF5161A
-	.long RecordArray_F511DD + 0x459                       ; F51F8E  [12]   -> 0xF51636
-	.long RecordArray_F511DD + 0x475                       ; F51F92  [13]   -> 0xF51652
-	.long RecordArray_F511DD + 0x491                       ; F51F96  [14]   -> 0xF5166E
-	.long RecordArray_F511DD + 0x4AD                       ; F51F9A  [15]   -> 0xF5168A
-	.long RecordArray_F511DD + 0x4C9                       ; F51F9E  [16]   -> 0xF516A6
-	.long RecordArray_F511DD + 0x4E5                       ; F51FA2  [17]   -> 0xF516C2
-	.long RecordArray_F511DD + 0x501                       ; F51FA6  [18]   -> 0xF516DE
-	.long RecordArray_F511DD + 0x51D                       ; F51FAA  [19]   -> 0xF516FA
-	.long RecordArray_F511DD + 0x539                       ; F51FAE  [20]   -> 0xF51716
-	.long RecordArray_F511DD + 0x555                       ; F51FB2  [21]   -> 0xF51732
-	.long RecordArray_F511DD + 0x571                       ; F51FB6  [22]   -> 0xF5174E
-	.long RecordArray_F511DD + 0x58D                       ; F51FBA  [23]   -> 0xF5176A
-	.long RecordArray_F511DD + 0x5A9                       ; F51FBE  [24]   -> 0xF51786
+	.long SysExParamDesc_Placeholder                       ; F51F5E  [0]   -> 0xF511F9
+	.long SysExParamDesc_KeyTranspose                       ; F51F62  [1]   -> 0xF514F3
+	.long SysExParamDesc_KeyScalingMode                       ; F51F66  [2]   -> 0xF5150F
+	.long SysExParamDesc_TotalKeyScaling                       ; F51F6A  [3]   -> 0xF5152B
+	.long SysExParamDesc_KeyScalingShift                       ; F51F6E  [4]   -> 0xF51556
+	.long SysExParamDesc_CkeyDetuneSetting                       ; F51F72  [5]   -> 0xF51572
+	.long SysExParamDesc_DbkeyDetuneSetting                       ; F51F76  [6]   -> 0xF5158E
+	.long SysExParamDesc_DkeyDetuneSetting                       ; F51F7A  [7]   -> 0xF515AA
+	.long SysExParamDesc_EbkeyDetuneSetting                       ; F51F7E  [8]   -> 0xF515C6
+	.long SysExParamDesc_EkeyDetuneSetting                       ; F51F82  [9]   -> 0xF515E2
+	.long SysExParamDesc_FkeyDetuneSetting                       ; F51F86  [10]   -> 0xF515FE
+	.long SysExParamDesc_GbkeyDetuneSetting                       ; F51F8A  [11]   -> 0xF5161A
+	.long SysExParamDesc_GkeyDetuneSetting                       ; F51F8E  [12]   -> 0xF51636
+	.long SysExParamDesc_AbkeyDetuneSetting                       ; F51F92  [13]   -> 0xF51652
+	.long SysExParamDesc_AkeyDetuneSetting                       ; F51F96  [14]   -> 0xF5166E
+	.long SysExParamDesc_BbkeyDetuneSetting                       ; F51F9A  [15]   -> 0xF5168A
+	.long SysExParamDesc_BkeyDetuneSetting                       ; F51F9E  [16]   -> 0xF516A6
+	.long SysExParamDesc_MainOutEqualizerLowFreq                       ; F51FA2  [17]   -> 0xF516C2
+	.long SysExParamDesc_MainOutEqualizerLowGain                       ; F51FA6  [18]   -> 0xF516DE
+	.long SysExParamDesc_MainOutEqualizerHighFreq                       ; F51FAA  [19]   -> 0xF516FA
+	.long SysExParamDesc_MainOutEqualizerHighGain                       ; F51FAE  [20]   -> 0xF51716
+	.long SysExParamDesc_EffectCommonAlgorithm                       ; F51FB2  [21]   -> 0xF51732
+	.long SysExParamDesc_Effect1OutputSelect                       ; F51FB6  [22]   -> 0xF5174E
+	.long SysExParamDesc_Effect2OutputSelect                       ; F51FBA  [23]   -> 0xF5176A
+	.long SysExParamDesc_Effect1Type                       ; F51FBE  [24]   -> 0xF51786
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F51FC2 -- 25 32-bit pointers, 0 into prom_a and 25 into prom_b
@@ -110852,31 +111437,31 @@ PtrTable_F51F5E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F51FC2:
-	.long RecordArray_F511DD + 0x1C                       ; F51FC2  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x316                       ; F51FC6  [1]   -> 0xF514F3
-	.long RecordArray_F511DD + 0x332                       ; F51FCA  [2]   -> 0xF5150F
-	.long RecordArray_F511DD + 0x34E                       ; F51FCE  [3]   -> 0xF5152B
-	.long RecordArray_F511DD + 0x379                       ; F51FD2  [4]   -> 0xF51556
-	.long RecordArray_F511DD + 0x395                       ; F51FD6  [5]   -> 0xF51572
-	.long RecordArray_F511DD + 0x3B1                       ; F51FDA  [6]   -> 0xF5158E
-	.long RecordArray_F511DD + 0x3CD                       ; F51FDE  [7]   -> 0xF515AA
-	.long RecordArray_F511DD + 0x3E9                       ; F51FE2  [8]   -> 0xF515C6
-	.long RecordArray_F511DD + 0x405                       ; F51FE6  [9]   -> 0xF515E2
-	.long RecordArray_F511DD + 0x421                       ; F51FEA  [10]   -> 0xF515FE
-	.long RecordArray_F511DD + 0x43D                       ; F51FEE  [11]   -> 0xF5161A
-	.long RecordArray_F511DD + 0x459                       ; F51FF2  [12]   -> 0xF51636
-	.long RecordArray_F511DD + 0x475                       ; F51FF6  [13]   -> 0xF51652
-	.long RecordArray_F511DD + 0x491                       ; F51FFA  [14]   -> 0xF5166E
-	.long RecordArray_F511DD + 0x4AD                       ; F51FFE  [15]   -> 0xF5168A
-	.long RecordArray_F511DD + 0x4C9                       ; F52002  [16]   -> 0xF516A6
-	.long RecordArray_F511DD + 0x4E5                       ; F52006  [17]   -> 0xF516C2
-	.long RecordArray_F511DD + 0x501                       ; F5200A  [18]   -> 0xF516DE
-	.long RecordArray_F511DD + 0x51D                       ; F5200E  [19]   -> 0xF516FA
-	.long RecordArray_F511DD + 0x539                       ; F52012  [20]   -> 0xF51716
-	.long RecordArray_F511DD + 0x555                       ; F52016  [21]   -> 0xF51732
-	.long RecordArray_F511DD + 0x571                       ; F5201A  [22]   -> 0xF5174E
-	.long RecordArray_F511DD + 0x58D                       ; F5201E  [23]   -> 0xF5176A
-	.long RecordArray_F511DD + 0x5A9                       ; F52022  [24]   -> 0xF51786
+	.long SysExParamDesc_Placeholder                       ; F51FC2  [0]   -> 0xF511F9
+	.long SysExParamDesc_KeyTranspose                       ; F51FC6  [1]   -> 0xF514F3
+	.long SysExParamDesc_KeyScalingMode                       ; F51FCA  [2]   -> 0xF5150F
+	.long SysExParamDesc_TotalKeyScaling                       ; F51FCE  [3]   -> 0xF5152B
+	.long SysExParamDesc_KeyScalingShift                       ; F51FD2  [4]   -> 0xF51556
+	.long SysExParamDesc_CkeyDetuneSetting                       ; F51FD6  [5]   -> 0xF51572
+	.long SysExParamDesc_DbkeyDetuneSetting                       ; F51FDA  [6]   -> 0xF5158E
+	.long SysExParamDesc_DkeyDetuneSetting                       ; F51FDE  [7]   -> 0xF515AA
+	.long SysExParamDesc_EbkeyDetuneSetting                       ; F51FE2  [8]   -> 0xF515C6
+	.long SysExParamDesc_EkeyDetuneSetting                       ; F51FE6  [9]   -> 0xF515E2
+	.long SysExParamDesc_FkeyDetuneSetting                       ; F51FEA  [10]   -> 0xF515FE
+	.long SysExParamDesc_GbkeyDetuneSetting                       ; F51FEE  [11]   -> 0xF5161A
+	.long SysExParamDesc_GkeyDetuneSetting                       ; F51FF2  [12]   -> 0xF51636
+	.long SysExParamDesc_AbkeyDetuneSetting                       ; F51FF6  [13]   -> 0xF51652
+	.long SysExParamDesc_AkeyDetuneSetting                       ; F51FFA  [14]   -> 0xF5166E
+	.long SysExParamDesc_BbkeyDetuneSetting                       ; F51FFE  [15]   -> 0xF5168A
+	.long SysExParamDesc_BkeyDetuneSetting                       ; F52002  [16]   -> 0xF516A6
+	.long SysExParamDesc_MainOutEqualizerLowFreq                       ; F52006  [17]   -> 0xF516C2
+	.long SysExParamDesc_MainOutEqualizerLowGain                       ; F5200A  [18]   -> 0xF516DE
+	.long SysExParamDesc_MainOutEqualizerHighFreq                       ; F5200E  [19]   -> 0xF516FA
+	.long SysExParamDesc_MainOutEqualizerHighGain                       ; F52012  [20]   -> 0xF51716
+	.long SysExParamDesc_EffectCommonAlgorithm                       ; F52016  [21]   -> 0xF51732
+	.long SysExParamDesc_Effect1OutputSelect                       ; F5201A  [22]   -> 0xF5174E
+	.long SysExParamDesc_Effect2OutputSelect                       ; F5201E  [23]   -> 0xF5176A
+	.long SysExParamDesc_Effect1Type                       ; F52022  [24]   -> 0xF51786
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52026 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
@@ -110891,25 +111476,25 @@ PtrTable_F51FC2:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52026:
-	.long RecordArray_F511DD + 0x1C                       ; F52026  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x5C5                       ; F5202A  [1]   -> 0xF517A2
-	.long RecordArray_F511DD + 0x5E1                       ; F5202E  [2]   -> 0xF517BE
-	.long RecordArray_F511DD + 0x5FD                       ; F52032  [3]   -> 0xF517DA
-	.long RecordArray_F511DD + 0x619                       ; F52036  [4]   -> 0xF517F6
-	.long RecordArray_F511DD + 0x637                       ; F5203A  [5]   -> 0xF51814
-	.long RecordArray_F511DD + 0x653                       ; F5203E  [6]   -> 0xF51830
-	.long RecordArray_F511DD + 0x66F                       ; F52042  [7]   -> 0xF5184C
-	.long RecordArray_F511DD + 0x68B                       ; F52046  [8]   -> 0xF51868
-	.long RecordArray_F511DD + 0x6A7                       ; F5204A  [9]   -> 0xF51884
-	.long RecordArray_F511DD + 0x6C3                       ; F5204E  [10]   -> 0xF518A0
-	.long RecordArray_F511DD + 0x6DF                       ; F52052  [11]   -> 0xF518BC
-	.long RecordArray_F511DD + 0x6FB                       ; F52056  [12]   -> 0xF518D8
-	.long RecordArray_F511DD + 0x717                       ; F5205A  [13]   -> 0xF518F4
-	.long RecordArray_F511DD + 0x733                       ; F5205E  [14]   -> 0xF51910
-	.long RecordArray_F511DD + 0x74F                       ; F52062  [15]   -> 0xF5192C
-	.long RecordArray_F511DD + 0x76B                       ; F52066  [16]   -> 0xF51948
-	.long RecordArray_F511DD + 0x787                       ; F5206A  [17]   -> 0xF51964
-	.long RecordArray_F511DD + 0x7A3                       ; F5206E  [18]   -> 0xF51980
+	.long SysExParamDesc_Placeholder                       ; F52026  [0]   -> 0xF511F9
+	.long SysExParamDesc_ProgramChangeAndBank                       ; F5202A  [1]   -> 0xF517A2
+	.long SysExParamDesc_Volume                       ; F5202E  [2]   -> 0xF517BE
+	.long SysExParamDesc_Effect1Send                       ; F52032  [3]   -> 0xF517DA
+	.long SysExParamDesc_Effect2OnOff                       ; F52036  [4]   -> 0xF517F6
+	.long SysExParamDesc_ReverbSend                       ; F5203A  [5]   -> 0xF51814
+	.long SysExParamDesc_Panpot                       ; F5203E  [6]   -> 0xF51830
+	.long SysExParamDesc_KeyShift                       ; F52042  [7]   -> 0xF5184C
+	.long SysExParamDesc_FineTune                       ; F52046  [8]   -> 0xF51868
+	.long SysExParamDesc_PitchBendRange                       ; F5204A  [9]   -> 0xF51884
+	.long SysExParamDesc_AssignMode                       ; F5204E  [10]   -> 0xF518A0
+	.long SysExParamDesc_KeyScaling                       ; F52052  [11]   -> 0xF518BC
+	.long SysExParamDesc_VelocityOffset_2020                       ; F52056  [12]   -> 0xF518D8
+	.long SysExParamDesc_KeyLayerLow                       ; F5205A  [13]   -> 0xF518F4
+	.long SysExParamDesc_KeyLayerHigh                       ; F5205E  [14]   -> 0xF51910
+	.long SysExParamDesc_VelocityLayerLow                       ; F52062  [15]   -> 0xF5192C
+	.long SysExParamDesc_VelocityLayerHigh                       ; F52066  [16]   -> 0xF51948
+	.long SysExParamDesc_MainOut                       ; F5206A  [17]   -> 0xF51964
+	.long SysExParamDesc_SubOut                       ; F5206E  [18]   -> 0xF51980
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52072 -- 19 32-bit pointers, 0 into prom_a and 19 into prom_b
@@ -110924,25 +111509,25 @@ PtrTable_F52026:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52072:
-	.long RecordArray_F511DD + 0x1C                       ; F52072  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x5C5                       ; F52076  [1]   -> 0xF517A2
-	.long RecordArray_F511DD + 0x5E1                       ; F5207A  [2]   -> 0xF517BE
-	.long RecordArray_F511DD + 0x5FD                       ; F5207E  [3]   -> 0xF517DA
-	.long RecordArray_F511DD + 0x619                       ; F52082  [4]   -> 0xF517F6
-	.long RecordArray_F511DD + 0x637                       ; F52086  [5]   -> 0xF51814
-	.long RecordArray_F511DD + 0x653                       ; F5208A  [6]   -> 0xF51830
-	.long RecordArray_F511DD + 0x66F                       ; F5208E  [7]   -> 0xF5184C
-	.long RecordArray_F511DD + 0x68B                       ; F52092  [8]   -> 0xF51868
-	.long RecordArray_F511DD + 0x6A7                       ; F52096  [9]   -> 0xF51884
-	.long RecordArray_F511DD + 0x6C3                       ; F5209A  [10]   -> 0xF518A0
-	.long RecordArray_F511DD + 0x6DF                       ; F5209E  [11]   -> 0xF518BC
-	.long RecordArray_F511DD + 0x6FB                       ; F520A2  [12]   -> 0xF518D8
-	.long RecordArray_F511DD + 0x717                       ; F520A6  [13]   -> 0xF518F4
-	.long RecordArray_F511DD + 0x733                       ; F520AA  [14]   -> 0xF51910
-	.long RecordArray_F511DD + 0x74F                       ; F520AE  [15]   -> 0xF5192C
-	.long RecordArray_F511DD + 0x76B                       ; F520B2  [16]   -> 0xF51948
-	.long RecordArray_F511DD + 0x787                       ; F520B6  [17]   -> 0xF51964
-	.long RecordArray_F511DD + 0x7A3                       ; F520BA  [18]   -> 0xF51980
+	.long SysExParamDesc_Placeholder                       ; F52072  [0]   -> 0xF511F9
+	.long SysExParamDesc_ProgramChangeAndBank                       ; F52076  [1]   -> 0xF517A2
+	.long SysExParamDesc_Volume                       ; F5207A  [2]   -> 0xF517BE
+	.long SysExParamDesc_Effect1Send                       ; F5207E  [3]   -> 0xF517DA
+	.long SysExParamDesc_Effect2OnOff                       ; F52082  [4]   -> 0xF517F6
+	.long SysExParamDesc_ReverbSend                       ; F52086  [5]   -> 0xF51814
+	.long SysExParamDesc_Panpot                       ; F5208A  [6]   -> 0xF51830
+	.long SysExParamDesc_KeyShift                       ; F5208E  [7]   -> 0xF5184C
+	.long SysExParamDesc_FineTune                       ; F52092  [8]   -> 0xF51868
+	.long SysExParamDesc_PitchBendRange                       ; F52096  [9]   -> 0xF51884
+	.long SysExParamDesc_AssignMode                       ; F5209A  [10]   -> 0xF518A0
+	.long SysExParamDesc_KeyScaling                       ; F5209E  [11]   -> 0xF518BC
+	.long SysExParamDesc_VelocityOffset_2020                       ; F520A2  [12]   -> 0xF518D8
+	.long SysExParamDesc_KeyLayerLow                       ; F520A6  [13]   -> 0xF518F4
+	.long SysExParamDesc_KeyLayerHigh                       ; F520AA  [14]   -> 0xF51910
+	.long SysExParamDesc_VelocityLayerLow                       ; F520AE  [15]   -> 0xF5192C
+	.long SysExParamDesc_VelocityLayerHigh                       ; F520B2  [16]   -> 0xF51948
+	.long SysExParamDesc_MainOut                       ; F520B6  [17]   -> 0xF51964
+	.long SysExParamDesc_SubOut                       ; F520BA  [18]   -> 0xF51980
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F520BE -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
@@ -110957,46 +111542,46 @@ PtrTable_F52072:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F520BE:
-	.long RecordArray_F511DD + 0x1C                       ; F520BE  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x7C3                       ; F520C2  [1]   -> 0xF519A0
-	.long RecordArray_F511DD + 0x7DF                       ; F520C6  [2]   -> 0xF519BC
-	.long RecordArray_F511DD + 0x7FB                       ; F520CA  [3]   -> 0xF519D8
-	.long RecordArray_F511DD + 0x817                       ; F520CE  [4]   -> 0xF519F4
-	.long RecordArray_F511DD + 0x833                       ; F520D2  [5]   -> 0xF51A10
-	.long RecordArray_F511DD + 0x84F                       ; F520D6  [6]   -> 0xF51A2C
-	.long RecordArray_F511DD + 0x86B                       ; F520DA  [7]   -> 0xF51A48
-	.long RecordArray_F511DD + 0x887                       ; F520DE  [8]   -> 0xF51A64
-	.long RecordArray_F511DD + 0x8A3                       ; F520E2  [9]   -> 0xF51A80
-	.long RecordArray_F511DD + 0x8BF                       ; F520E6  [10]   -> 0xF51A9C
-	.long RecordArray_F511DD + 0x8DB                       ; F520EA  [11]   -> 0xF51AB8
-	.long RecordArray_F511DD + 0x8F7                       ; F520EE  [12]   -> 0xF51AD4
-	.long RecordArray_F511DD + 0x913                       ; F520F2  [13]   -> 0xF51AF0
-	.long RecordArray_F511DD + 0x92F                       ; F520F6  [14]   -> 0xF51B0C
-	.long RecordArray_F511DD + 0x94B                       ; F520FA  [15]   -> 0xF51B28
-	.long RecordArray_F511DD + 0x967                       ; F520FE  [16]   -> 0xF51B44
-	.long RecordArray_F511DD + 0x983                       ; F52102  [17]   -> 0xF51B60
-	.long RecordArray_F511DD + 0x99F                       ; F52106  [18]   -> 0xF51B7C
-	.long RecordArray_F511DD + 0x9BB                       ; F5210A  [19]   -> 0xF51B98
-	.long RecordArray_F511DD + 0x9D7                       ; F5210E  [20]   -> 0xF51BB4
-	.long RecordArray_F511DD + 0x9F3                       ; F52112  [21]   -> 0xF51BD0
-	.long RecordArray_F511DD + 0xA0F                       ; F52116  [22]   -> 0xF51BEC
-	.long RecordArray_F511DD + 0xA2B                       ; F5211A  [23]   -> 0xF51C08
-	.long RecordArray_F511DD + 0xA4B                       ; F5211E  [24]   -> 0xF51C28
-	.long RecordArray_F511DD + 0xA67                       ; F52122  [25]   -> 0xF51C44
-	.long RecordArray_F511DD + 0xA87                       ; F52126  [26]   -> 0xF51C64
-	.long RecordArray_F511DD + 0xAA7                       ; F5212A  [27]   -> 0xF51C84
-	.long RecordArray_F511DD + 0xAC7                       ; F5212E  [28]   -> 0xF51CA4
-	.long RecordArray_F511DD + 0xAE7                       ; F52132  [29]   -> 0xF51CC4
-	.long RecordArray_F511DD + 0xB03                       ; F52136  [30]   -> 0xF51CE0
-	.long RecordArray_F511DD + 0xB1F                       ; F5213A  [31]   -> 0xF51CFC
-	.long RecordArray_F511DD + 0xB3B                       ; F5213E  [32]   -> 0xF51D18
-	.long RecordArray_F511DD + 0xB57                       ; F52142  [33]   -> 0xF51D34
-	.long RecordArray_F511DD + 0xB73                       ; F52146  [34]   -> 0xF51D50
-	.long RecordArray_F511DD + 0xB8F                       ; F5214A  [35]   -> 0xF51D6C
-	.long RecordArray_F511DD + 0xBAB                       ; F5214E  [36]   -> 0xF51D88
-	.long RecordArray_F511DD + 0xBC7                       ; F52152  [37]   -> 0xF51DA4
-	.long RecordArray_F511DD + 0xBE3                       ; F52156  [38]   -> 0xF51DC0
-	.long RecordArray_F511DD + 0xBFF                       ; F5215A  [39]   -> 0xF51DDC
+	.long SysExParamDesc_Placeholder                       ; F520BE  [0]   -> 0xF511F9
+	.long SysExParamDesc_LocalControl                       ; F520C2  [1]   -> 0xF519A0
+	.long SysExParamDesc_BasicChannel                       ; F520C6  [2]   -> 0xF519BC
+	.long SysExParamDesc_MidiOutSetting                       ; F520CA  [3]   -> 0xF519D8
+	.long SysExParamDesc_MidiInSetting                       ; F520CE  [4]   -> 0xF519F4
+	.long SysExParamDesc_MidiInputFilterProgramChange                       ; F520D2  [5]   -> 0xF51A10
+	.long SysExParamDesc_MidiInputFilterBankSelect                       ; F520D6  [6]   -> 0xF51A2C
+	.long SysExParamDesc_MidiInputFilterVolume                       ; F520DA  [7]   -> 0xF51A48
+	.long SysExParamDesc_MidiOutputFilterProgramChange                       ; F520DE  [8]   -> 0xF51A64
+	.long SysExParamDesc_MidiOutputFilterBankSelect                       ; F520E2  [9]   -> 0xF51A80
+	.long SysExParamDesc_MidiOutputFilterVolume                       ; F520E6  [10]   -> 0xF51A9C
+	.long SysExParamDesc_MidiOutputFilterPanpot                       ; F520EA  [11]   -> 0xF51AB8
+	.long SysExParamDesc_MidiOutputFilterEffectDepth                       ; F520EE  [12]   -> 0xF51AD4
+	.long SysExParamDesc_MidiOutputFilterPitchBend                       ; F520F2  [13]   -> 0xF51AF0
+	.long SysExParamDesc_MidiOutputFilterModulation1                       ; F520F6  [14]   -> 0xF51B0C
+	.long SysExParamDesc_MidiOutputFilterModulation2                       ; F520FA  [15]   -> 0xF51B28
+	.long SysExParamDesc_MidiOutputFilterRealTimeCreatorX                       ; F520FE  [16]   -> 0xF51B44
+	.long SysExParamDesc_MidiOutputFilterRealTimeCreatorY                       ; F52102  [17]   -> 0xF51B60
+	.long SysExParamDesc_MidiOutputFilterRealTimeControllerX                       ; F52106  [18]   -> 0xF51B7C
+	.long SysExParamDesc_MidiOutputFilterRealTimeControllerY                       ; F5210A  [19]   -> 0xF51B98
+	.long SysExParamDesc_MidiOutputFilterHold1                       ; F5210E  [20]   -> 0xF51BB4
+	.long SysExParamDesc_MidiOutputFilterControlPedal                       ; F52112  [21]   -> 0xF51BD0
+	.long SysExParamDesc_MidiOutputFilterAfterTouch                       ; F52116  [22]   -> 0xF51BEC
+	.long SysExParamDesc_MidiMultipleMessagesOutputProgramChange                       ; F5211A  [23]   -> 0xF51C08
+	.long SysExParamDesc_MidiMultipleMessagesOutputBankSelect                       ; F5211E  [24]   -> 0xF51C28
+	.long SysExParamDesc_MidiMultipleMessagesOutputVolume                       ; F52122  [25]   -> 0xF51C44
+	.long SysExParamDesc_MidiMultipleMessagesOutputPanpot                       ; F52126  [26]   -> 0xF51C64
+	.long SysExParamDesc_MidiMultipleMessagesOutputReverbDepth                       ; F5212A  [27]   -> 0xF51C84
+	.long SysExParamDesc_MidiMultipleMessagesOutputChorusDepth                       ; F5212E  [28]   -> 0xF51CA4
+	.long SysExParamDesc_MidiOutKeyTranspose                       ; F52132  [29]   -> 0xF51CC4
+	.long SysExParamDesc_ControllerInternalFilterPitchBend                       ; F52136  [30]   -> 0xF51CE0
+	.long SysExParamDesc_ControllerInternalFilterModulation1                       ; F5213A  [31]   -> 0xF51CFC
+	.long SysExParamDesc_ControllerInternalFilterModulation2                       ; F5213E  [32]   -> 0xF51D18
+	.long SysExParamDesc_ControllerInternalFilterRealTimeCreatorX                       ; F52142  [33]   -> 0xF51D34
+	.long SysExParamDesc_ControllerInternalFilterRealTimeCreatorY                       ; F52146  [34]   -> 0xF51D50
+	.long SysExParamDesc_ControllerInternalFilterRealTimeControllerX                       ; F5214A  [35]   -> 0xF51D6C
+	.long SysExParamDesc_ControllerInternalFilterRealTimeControllerY                       ; F5214E  [36]   -> 0xF51D88
+	.long SysExParamDesc_ControllerInternalFilterHold1                       ; F52152  [37]   -> 0xF51DA4
+	.long SysExParamDesc_ControllerInternalFilterControlPedal                       ; F52156  [38]   -> 0xF51DC0
+	.long SysExParamDesc_ControllerInternalFilterAfterTouch                       ; F5215A  [39]   -> 0xF51DDC
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F5215E -- 40 32-bit pointers, 0 into prom_a and 40 into prom_b
@@ -111011,46 +111596,46 @@ PtrTable_F520BE:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F5215E:
-	.long RecordArray_F511DD + 0x1C                       ; F5215E  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0x7C3                       ; F52162  [1]   -> 0xF519A0
-	.long RecordArray_F511DD + 0x7DF                       ; F52166  [2]   -> 0xF519BC
-	.long RecordArray_F511DD + 0x7FB                       ; F5216A  [3]   -> 0xF519D8
-	.long RecordArray_F511DD + 0x817                       ; F5216E  [4]   -> 0xF519F4
-	.long RecordArray_F511DD + 0x833                       ; F52172  [5]   -> 0xF51A10
-	.long RecordArray_F511DD + 0x84F                       ; F52176  [6]   -> 0xF51A2C
-	.long RecordArray_F511DD + 0x86B                       ; F5217A  [7]   -> 0xF51A48
-	.long RecordArray_F511DD + 0x887                       ; F5217E  [8]   -> 0xF51A64
-	.long RecordArray_F511DD + 0x8A3                       ; F52182  [9]   -> 0xF51A80
-	.long RecordArray_F511DD + 0x8BF                       ; F52186  [10]   -> 0xF51A9C
-	.long RecordArray_F511DD + 0x8DB                       ; F5218A  [11]   -> 0xF51AB8
-	.long RecordArray_F511DD + 0x8F7                       ; F5218E  [12]   -> 0xF51AD4
-	.long RecordArray_F511DD + 0x913                       ; F52192  [13]   -> 0xF51AF0
-	.long RecordArray_F511DD + 0x92F                       ; F52196  [14]   -> 0xF51B0C
-	.long RecordArray_F511DD + 0x94B                       ; F5219A  [15]   -> 0xF51B28
-	.long RecordArray_F511DD + 0x967                       ; F5219E  [16]   -> 0xF51B44
-	.long RecordArray_F511DD + 0x983                       ; F521A2  [17]   -> 0xF51B60
-	.long RecordArray_F511DD + 0x99F                       ; F521A6  [18]   -> 0xF51B7C
-	.long RecordArray_F511DD + 0x9BB                       ; F521AA  [19]   -> 0xF51B98
-	.long RecordArray_F511DD + 0x9D7                       ; F521AE  [20]   -> 0xF51BB4
-	.long RecordArray_F511DD + 0x9F3                       ; F521B2  [21]   -> 0xF51BD0
-	.long RecordArray_F511DD + 0xA0F                       ; F521B6  [22]   -> 0xF51BEC
-	.long RecordArray_F511DD + 0xA2B                       ; F521BA  [23]   -> 0xF51C08
-	.long RecordArray_F511DD + 0xA4B                       ; F521BE  [24]   -> 0xF51C28
-	.long RecordArray_F511DD + 0xA67                       ; F521C2  [25]   -> 0xF51C44
-	.long RecordArray_F511DD + 0xA87                       ; F521C6  [26]   -> 0xF51C64
-	.long RecordArray_F511DD + 0xAA7                       ; F521CA  [27]   -> 0xF51C84
-	.long RecordArray_F511DD + 0xAC7                       ; F521CE  [28]   -> 0xF51CA4
-	.long RecordArray_F511DD + 0xAE7                       ; F521D2  [29]   -> 0xF51CC4
-	.long RecordArray_F511DD + 0xB03                       ; F521D6  [30]   -> 0xF51CE0
-	.long RecordArray_F511DD + 0xB1F                       ; F521DA  [31]   -> 0xF51CFC
-	.long RecordArray_F511DD + 0xB3B                       ; F521DE  [32]   -> 0xF51D18
-	.long RecordArray_F511DD + 0xB57                       ; F521E2  [33]   -> 0xF51D34
-	.long RecordArray_F511DD + 0xB73                       ; F521E6  [34]   -> 0xF51D50
-	.long RecordArray_F511DD + 0xB8F                       ; F521EA  [35]   -> 0xF51D6C
-	.long RecordArray_F511DD + 0xBAB                       ; F521EE  [36]   -> 0xF51D88
-	.long RecordArray_F511DD + 0xBC7                       ; F521F2  [37]   -> 0xF51DA4
-	.long RecordArray_F511DD + 0xBE3                       ; F521F6  [38]   -> 0xF51DC0
-	.long RecordArray_F511DD + 0xBFF                       ; F521FA  [39]   -> 0xF51DDC
+	.long SysExParamDesc_Placeholder                       ; F5215E  [0]   -> 0xF511F9
+	.long SysExParamDesc_LocalControl                       ; F52162  [1]   -> 0xF519A0
+	.long SysExParamDesc_BasicChannel                       ; F52166  [2]   -> 0xF519BC
+	.long SysExParamDesc_MidiOutSetting                       ; F5216A  [3]   -> 0xF519D8
+	.long SysExParamDesc_MidiInSetting                       ; F5216E  [4]   -> 0xF519F4
+	.long SysExParamDesc_MidiInputFilterProgramChange                       ; F52172  [5]   -> 0xF51A10
+	.long SysExParamDesc_MidiInputFilterBankSelect                       ; F52176  [6]   -> 0xF51A2C
+	.long SysExParamDesc_MidiInputFilterVolume                       ; F5217A  [7]   -> 0xF51A48
+	.long SysExParamDesc_MidiOutputFilterProgramChange                       ; F5217E  [8]   -> 0xF51A64
+	.long SysExParamDesc_MidiOutputFilterBankSelect                       ; F52182  [9]   -> 0xF51A80
+	.long SysExParamDesc_MidiOutputFilterVolume                       ; F52186  [10]   -> 0xF51A9C
+	.long SysExParamDesc_MidiOutputFilterPanpot                       ; F5218A  [11]   -> 0xF51AB8
+	.long SysExParamDesc_MidiOutputFilterEffectDepth                       ; F5218E  [12]   -> 0xF51AD4
+	.long SysExParamDesc_MidiOutputFilterPitchBend                       ; F52192  [13]   -> 0xF51AF0
+	.long SysExParamDesc_MidiOutputFilterModulation1                       ; F52196  [14]   -> 0xF51B0C
+	.long SysExParamDesc_MidiOutputFilterModulation2                       ; F5219A  [15]   -> 0xF51B28
+	.long SysExParamDesc_MidiOutputFilterRealTimeCreatorX                       ; F5219E  [16]   -> 0xF51B44
+	.long SysExParamDesc_MidiOutputFilterRealTimeCreatorY                       ; F521A2  [17]   -> 0xF51B60
+	.long SysExParamDesc_MidiOutputFilterRealTimeControllerX                       ; F521A6  [18]   -> 0xF51B7C
+	.long SysExParamDesc_MidiOutputFilterRealTimeControllerY                       ; F521AA  [19]   -> 0xF51B98
+	.long SysExParamDesc_MidiOutputFilterHold1                       ; F521AE  [20]   -> 0xF51BB4
+	.long SysExParamDesc_MidiOutputFilterControlPedal                       ; F521B2  [21]   -> 0xF51BD0
+	.long SysExParamDesc_MidiOutputFilterAfterTouch                       ; F521B6  [22]   -> 0xF51BEC
+	.long SysExParamDesc_MidiMultipleMessagesOutputProgramChange                       ; F521BA  [23]   -> 0xF51C08
+	.long SysExParamDesc_MidiMultipleMessagesOutputBankSelect                       ; F521BE  [24]   -> 0xF51C28
+	.long SysExParamDesc_MidiMultipleMessagesOutputVolume                       ; F521C2  [25]   -> 0xF51C44
+	.long SysExParamDesc_MidiMultipleMessagesOutputPanpot                       ; F521C6  [26]   -> 0xF51C64
+	.long SysExParamDesc_MidiMultipleMessagesOutputReverbDepth                       ; F521CA  [27]   -> 0xF51C84
+	.long SysExParamDesc_MidiMultipleMessagesOutputChorusDepth                       ; F521CE  [28]   -> 0xF51CA4
+	.long SysExParamDesc_MidiOutKeyTranspose                       ; F521D2  [29]   -> 0xF51CC4
+	.long SysExParamDesc_ControllerInternalFilterPitchBend                       ; F521D6  [30]   -> 0xF51CE0
+	.long SysExParamDesc_ControllerInternalFilterModulation1                       ; F521DA  [31]   -> 0xF51CFC
+	.long SysExParamDesc_ControllerInternalFilterModulation2                       ; F521DE  [32]   -> 0xF51D18
+	.long SysExParamDesc_ControllerInternalFilterRealTimeCreatorX                       ; F521E2  [33]   -> 0xF51D34
+	.long SysExParamDesc_ControllerInternalFilterRealTimeCreatorY                       ; F521E6  [34]   -> 0xF51D50
+	.long SysExParamDesc_ControllerInternalFilterRealTimeControllerX                       ; F521EA  [35]   -> 0xF51D6C
+	.long SysExParamDesc_ControllerInternalFilterRealTimeControllerY                       ; F521EE  [36]   -> 0xF51D88
+	.long SysExParamDesc_ControllerInternalFilterHold1                       ; F521F2  [37]   -> 0xF51DA4
+	.long SysExParamDesc_ControllerInternalFilterControlPedal                       ; F521F6  [38]   -> 0xF51DC0
+	.long SysExParamDesc_ControllerInternalFilterAfterTouch                       ; F521FA  [39]   -> 0xF51DDC
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F521FE -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
@@ -111065,8 +111650,8 @@ PtrTable_F5215E:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F521FE:
-	.long RecordArray_F511DD + 0x1C                       ; F521FE  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0xC1B                       ; F52202  [1]   -> 0xF51DF8
+	.long SysExParamDesc_Placeholder                       ; F521FE  [0]   -> 0xF511F9
+	.long SysExParamDesc_MetronomeVolume                       ; F52202  [1]   -> 0xF51DF8
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F52206 -- 2 32-bit pointers, 0 into prom_a and 2 into prom_b
@@ -111081,8 +111666,8 @@ PtrTable_F521FE:
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
 PtrTable_F52206:
-	.long RecordArray_F511DD + 0x1C                       ; F52206  [0]   -> 0xF511F9
-	.long RecordArray_F511DD + 0xC1B                       ; F5220A  [1]   -> 0xF51DF8
+	.long SysExParamDesc_Placeholder                       ; F52206  [0]   -> 0xF511F9
+	.long SysExParamDesc_MetronomeVolume                       ; F5220A  [1]   -> 0xF51DF8
 
 ; --- 0xF5220E-0xF52FFF  fill (3570 bytes) ---
 	.fill	3570, 1, 0x0E	; asserted a single value
