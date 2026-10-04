@@ -11,6 +11,7 @@ RUN
   python3 notes/prom_ab_read_names_2026_10_04.py          # the table
   python3 notes/prom_ab_read_names_2026_10_04.py --args   # 'old=new|header' for the rename helper
   python3 notes/prom_ab_read_names_2026_10_04.py --place  # 'ADDR=Name|header' for the label placer (PLACED rows)
+  python3 notes/prom_ab_read_names_2026_10_04.py --relabel  # 'old=new|header' for labels that had a name (RELABEL rows)
 """
 import os
 import re
@@ -1993,16 +1994,16 @@ ROWS = [
     ("FC54C6", "NoteRouting_RebuildForSong",
      "T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then\n"
      "block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,\n"
-     "NoteRouting_RebuildOutputs."),
+     "NoteRouting_CommitChanges."),
     ("FC5518", "NoteRouting_Rebuild",
      "T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without\n"
      "sub_FC61A6, the per-mode builder called with 1."),
     ("FC5566", "NoteRouting_SetSoloAndRebuild",
      "T_NoteRouting_SetSoloAndRebuild: (0x602498) bit 5 = the argument (LcdKeyRow1_C0mbinati0nM0de_Page2 -- the SOLO key --,\n"
      "ScreenLeaveBody_C0mbinati0nM0de, CombiEdit_CompareOn), then the rebuild with 0."),
-    ("FC5C7C", "NoteRouting_RebuildOutputs",
-     "by (0x4C04): bits 0xA0 sub_FC5D30, 0xC0 sub_FC5F19, 0x20 sub_FC5FAC and sub_FC6065, 0x40 sub_FC610F; then\n"
-     "T_F413D4, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0."),
+    ("FC5C7C", "NoteRouting_CommitChanges",
+     "by (0x4C04): bits 0xA0 NoteRouting_QueueMidiInChanges, 0xC0 NoteRouting_QueueTrackChanges, 0x20 NoteRouting_QueueMidiOutSchemeChange and NoteRouting_QueuePartTransmitChanges, 0x40 NoteRouting_QueueTrackPartChanges; then\n"
+     "T_NoteRouting_ApplyQueuedChanges, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0."),
     ("FC6153", "NoteRouting_UpdateActivePartMask",
      "(0x4C06) = BitMask32_Table_FC64C6[block +1], or block +0 when +1 is 0xFF; when it changed,\n"
      "T_ParamMsg_RefreshPartMasks."),
@@ -2010,7 +2011,7 @@ ROWS = [
     ("FC5B26", "NoteRouting_KeyboardToSelectedPart",
      "the default builder (modes 0-2, 4, 8, 10-12, 14-16, 18, 19, 22: SOUND, COMBINATION, SEQ PLAY, SYSTEM, MIDI ...):\n"
      "block +1 = the part UI_PartIndex selects (Bytes_00_to_1F_x3_FC65C6 + 0x40); with block +0x298 bit 4 and a part\n"
-     "below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_RebuildFlags |= 3."),
+     "below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_ChangeFlags |= 3."),
     ("FC5B8A", "NoteRouting_BuildForSequencerModes",
      "modes 3, 5, 6, 7 (Sequencer, Realtime Record, Step Record, Edit): with NoteRouting_Mode bit 6, block +1 =\n"
      "(0x4C20) and flag bit 1; otherwise NoteRouting_KeyboardToSelectedPart."),
@@ -2021,6 +2022,97 @@ ROWS = [
      "mode 13: NoteRouting_Mode |= 4, then NoteRouting_KeyboardToSelectedPart."),
     ("FC5C4C", "NoteRouting_BuildForSoundCopy", "modes 20 / 21 (SoundCopy): NoteRouting_KeyboardToSelectedPart."),
     ("FC5C5C", "NoteRouting_BuildForModes23To27", "modes 23-27: NoteRouting_KeyboardToSelectedPart."),
+    # the note-routing change queue (FINDINGS-prom_a-note-frames.md section 7)
+    ("FC5CDA", "NoteRouting_QueueChange",
+     "(kind, a, b, c): appends the 4-byte record kind / a / b / c to NoteRouting_ChangeQueue (0x602A02) and counts it in\n"
+     "NoteRouting_ChangeCount (0x602A00); when the count is already above 0x7F the queue is applied first (T_NoteRouting_ApplyQueuedChanges).\n"
+     "Its callers compare NoteRouting with NoteRouting_Previous."),
+    ("FC8D49", "NoteRouting_ApplyQueuedChanges",
+     "T_NoteRouting_ApplyQueuedChanges: for each record of NoteRouting_ChangeQueue (NoteRouting_ChangeCount of them), the kind 0..8 through\n"
+     "NoteChange_HandlerTable with (record +1, +2, +3) -- a kind above 8 is skipped; then the count = 0."),
+    ("FC8DD6", "NoteChange_CasePartReceive",
+     "NoteChange_HandlerTable[0]: NoteChange_ReleasePartReceivedNotes(record +1, +2, +3)."),
+    ("FC8DE6", "NoteChange_Case1Unused",
+     "NoteChange_HandlerTable[1]: calls a bare ret (NoteChange_Kind1_Nop).  None of the queuers read queues kind 1."),
+    ("FC8DF5", "NoteChange_CaseTrackMidiOut",
+     "NoteChange_HandlerTable[2]: NoteChange_ReleaseTrackMidiOutNotes(record +1, +2, +3)."),
+    ("FC8E04", "NoteChange_CaseTrackPart",
+     "NoteChange_HandlerTable[3]: NoteChange_ReleaseTrackNotesOfOldPart(record +1, +2, +3)."),
+    ("FC8E13", "NoteChange_CasePartToneGen",
+     "NoteChange_HandlerTable[4]: calls a bare ret (NoteChange_PartToneGen_Nop).  Kind 4 is queued only by\n"
+     "NoteRouting_QueueToneGenPartChanges, which nothing calls."),
+    ("FC8E22", "NoteChange_CasePartTransmit",
+     "NoteChange_HandlerTable[5]: NoteChange_ReleasePartTransmittedNotes(record +1, +2, +3)."),
+    ("FC8E31", "NoteChange_CaseTrackPartRecord",
+     "NoteChange_HandlerTable[6]: NoteChange_ReleaseRecordedNotesOfOldPart(record +1, +2, +3)."),
+    ("FC8E40", "NoteChange_CaseMidiInMode",
+     "NoteChange_HandlerTable[7]: NoteChange_ReleaseMidiInChannelNotes(record +1, +2, +3)."),
+    ("FC8E4F", "NoteChange_CaseMidiOutScheme",
+     "NoteChange_HandlerTable[8]: NoteChange_ReleaseOldMidiOutScheme(record +1, +2, +3)."),
+    ("FC9727", "NoteChange_ReleasePartReceivedNotes",
+     "kind 0 (part, new channel, old channel), queued when a part's MIDI channel (block +0x22) or its receive bit (bit 6\n"
+     "of its MIDI record, +0x152) changed: unless the old channel or the part is 0xFF, the part's notes from MIDI IN\n"
+     "(source 1) on the old channel become note-offs (PartNotes_BuildReleaseFrame, all three outputs) and go to the tone\n"
+     "generator / MIDI OUT / record buffer as its result selects."),
+    ("FC97F1", "NoteChange_ReleaseTrackMidiOutNotes",
+     "kind 2 (track, new channel, old channel), queued when a track's MIDI OUT channel (block +0x52) changed: unless\n"
+     "the old one is 0xFF, the track's notes (source 2, channel key = the track) on its part (BStore_TrackToPart) get\n"
+     "MIDI OUT note-offs (PartNotes_BuildReleaseFrame with mask 2, PartFrame_SendToMidiOut)."),
+    ("FC9796", "NoteChange_ReleaseTrackNotesOfOldPart",
+     "kind 3 (track, new part, old part), queued when the part a track feeds (block +0x42, low 5 bits) changed: the\n"
+     "track's notes (source 2, channel key = the track) on the OLD part are released (mask 7) and the note-offs go to\n"
+     "the tone generator and MIDI OUT."),
+    ("FC9854", "NoteChange_ReleasePartTransmittedNotes",
+     "kind 5 (part, new channel, old channel), queued when a part's MIDI channel (+0x22) or its transmit bit (bit 5 of\n"
+     "its MIDI record) changed: unless the old channel or the part is 0xFF, the part's note-list notes -- sources 0 and 1,\n"
+     "whose channel key is the part itself (NoteFrame_SelectForPart writes it) -- get MIDI OUT note-offs (mask 2)."),
+    ("FC98E7", "NoteChange_ReleaseRecordedNotesOfOldPart",
+     "kind 6 (track, new part, old part), queued when the part a track feeds changed: the old part's notes from any\n"
+     "source (frame source 0xFF) whose channel key is the old part get note-offs in the record buffer only (mask 4,\n"
+     "PartFrame_RecordToSeqBuf)."),
+    ("FC9933", "NoteChange_ReleaseMidiInChannelNotes",
+     "kind 7 (path, 0xFF, channel), queued when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or\n"
+     "NoteRouting_ListChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,\n"
+     "source 1) is released through each part as NoteRouting_Previous routed it (NoteFrame_SelectForPart,\n"
+     "NoteRouting_ForPartFromMidiIn, PartNotes_ApplyFrame; the three outputs, MIDI OUT unless +0x293 bit 5).  Path 0:\n"
+     "each part that received on the channel (previous block: +0x22 = channel, record bit 6) releases its MIDI IN notes\n"
+     "on it (PartNotes_BuildReleaseFrame; tone generator and record buffer)."),
+    ("FC9AA1", "NoteChange_ReleaseOldMidiOutScheme",
+     "kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_ListChannel\n"
+     "changed while it stays set.  When source 0's note list holds notes: with 0 (MIDI OUT was per part) each part's\n"
+     "source-0 notes get MIDI OUT note-offs; with 1 (MIDI OUT carried source 0 on the one channel) the note list's\n"
+     "note-offs go out on the old channel (PartFrame_SendToMidiOut).  With 0, each part's source-1 notes then get MIDI\n"
+     "OUT note-offs too, when source 1's list holds notes."),
+    ("FC5D30", "NoteRouting_QueueMidiInChanges",
+     "(NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_ListChannel\n"
+     "changed, a kind-7 record per channel whose MIDI IN path changes (1 = it took the note-list path before, 0 = the\n"
+     "per-channel path); then for each of the 32 parts kind 0 (part, new, old) when its channel (+0x22) changed, or\n"
+     "kind 0 (part, 0xFF, channel) when its receive bit (record +0x152 bit 6) changed."),
+    ("FC5F19", "NoteRouting_QueueTrackChanges",
+     "(NoteRouting_ChangeFlags bit 6 or 7): for each of the 16 tracks, kind 2 (track, new, old) when its MIDI OUT\n"
+     "channel (+0x52, low 5 bits) changed and kind 3 (track, new, old) when its part (+0x42, low 5 bits) changed."),
+    ("FC5FAC", "NoteRouting_QueueMidiOutSchemeChange",
+     "(bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_ListChannel) when NoteRouting_MidiFlags bit 5\n"
+     "changed, or when the channel changed while bit 5 is set."),
+    ("FC6065", "NoteRouting_QueuePartTransmitChanges",
+     "(bit 5): for each of the 32 parts, kind 5 (part, new, old) when its channel (+0x22) changed, or kind 5\n"
+     "(part, 0xFF, channel) when its transmit bit (record +0x152 bit 5) changed."),
+    ("FC610F", "NoteRouting_QueueTrackPartChanges",
+     "(bit 6): for each of the 16 tracks, kind 6 (track, new, old) when its part (+0x42, low 5 bits) changed."),
+    ("FCA475", "PartNotes_BuildReleaseFrame",
+     "(frame with a source at +2 -- 0xFF any -- and a channel key at +3, outputs mask, part): each of the part's notes\n"
+     "(PartNoteList_Heads) from that source with that key goes into the frame as a note-off (velocity 0) and is marked\n"
+     "released (0xFF) on each output of the mask it still sounds on -- node +5 tone generator, +8 MIDI OUT, +0x0A\n"
+     "record; a node released on all three returns to the pool and to the part's PartNote_Budget.  A = the outputs the\n"
+     "frame must go to (bit 0 / 1 / 2)."),
+    ("FCAFC9", "NoteRouting_ForPartFromMidiIn",
+     "(out, routing block, part): NoteRouting_ForPart's tone-generator and recording-track outputs, but MIDI OUT (the\n"
+     "+0x22 channel with the port and record-bit-5 tests) only when Variant_Flag is 2, NoteRouting_MidiFlags bit 5 is\n"
+     "clear and the MIDI IN mode is 1.  The MIDI IN processors use it for notes on the note-list path."),
+    ("FCB126", "NoteRouting_ForReceivingPart",
+     "(out, routing block, part): the tone-generator output (+0x02 and its +0x92 record, without the bit-5 test) and the\n"
+     "recording track; MIDI OUT always 0xFF.  The MIDI IN processors' per-channel path: each part whose +0x22 is the\n"
+     "frame's channel and whose record has bit 6 receives the frame."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2038,6 +2130,29 @@ PLACED = [
      "finds the current bank's index by a linear search of this table (0xF4F11A)."),
     ("F4F2B2", "PartSound_SignedStepTable",
      "16 signed steps 0..7, then 0, -1 .. -7, indexed by PartSound_StepIndexClamped's W'."),
+    ("FC6027", "NoteRouting_QueueToneGenPartChanges",
+     "for each of the 32 parts, kind 4 (part, new, old) when its tone-generator part (block +0x02) changed.  Nothing\n"
+     "calls it: neither ROM holds 27 60 FC (a 24-bit pointer, call or jp to it) and no prom_a calr reaches it.  Kind 4's\n"
+     "handler is a bare ret (NoteChange_PartToneGen_Nop)."),
+]
+
+
+# labels that already had a name, renamed -- python3 notes/prom_ab_read_names_2026_10_04.py --relabel
+# (address, new name, header or "").  The old name is found at the address, so this file never quotes it.
+RELABEL = [
+    ("FC5C7C", "NoteRouting_CommitChanges",
+     "CORRECTED 2026-10-04 (was NoteRouting_RebuildOutputs): it rebuilds no outputs.  The NoteRouting_Queue* routines compare the block with\n"
+     "NoteRouting_Previous and queue one note-release record per difference (NoteChange_HandlerTable's kinds), the\n"
+     "queue is applied (T_NoteRouting_ApplyQueuedChanges = NoteRouting_ApplyQueuedChanges), then the block becomes the previous one and\n"
+     "NoteRouting_ChangeFlags (0x4C04) is cleared."),
+    ("FC8DB2", "NoteChange_HandlerTable",
+     "NoteChange_HandlerTable: the nine note-change kinds of NoteRouting_ChangeQueue, read by\n"
+     "NoteRouting_ApplyQueuedChanges -- notes/FINDINGS-prom_a-note-frames.md section 7."),
+    ("FC8D64", "NoteRouting_ApplyQueuedChanges_Loop", ""),
+    ("FC8E5E", "NoteRouting_ApplyQueuedChanges_Skip", ""),
+    ("FC8E6E", "NoteRouting_ApplyQueuedChanges_Return", ""),
+    ("FC9726", "NoteChange_Kind1_Nop", ""),
+    ("FC9853", "NoteChange_PartToneGen_Nop", ""),
 ]
 
 
@@ -2045,14 +2160,34 @@ def main():
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     src = "".join(open(os.path.join(here, p), "rb").read().decode("latin-1")
                   for p in ("prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s"))
+    labels = set(re.findall(r'^([A-Za-z_][\w$]*):', src, re.M))   # one pass: a regex per row took a minute
+    if "--relabel" in sys.argv:
+        L = src.split("\n")
+        at = {}
+        for i, l in enumerate(L):
+            m = re.match(r'^([A-Za-z_][\w$]*):', l)
+            if not m:
+                continue
+            for x in L[i + 1:i + 6]:
+                a = re.search(r';\s*(F[0-9A-F]{5})\b', x)
+                if a and x.split(";")[0].strip() and not re.match(r'^[\w.$]+:', x):
+                    at.setdefault(a.group(1), []).append(m.group(1))
+                    break
+        for o, n, hdr in RELABEL:
+            if n in at.get(o, []):
+                continue                          # applied already
+            cur = at.get(o, [])
+            assert len(cur) == 1, "%s: labels %s" % (o, cur)
+            print("%s=%s%s" % (cur[0], n, ("|" + hdr.replace("\n", "\\n  ")) if hdr else ""))
+        return
     if "--place" in sys.argv:
         for o, n, ev in PLACED:
-            if not re.search(r'^%s:' % n, src, re.M):
+            if n not in labels:
                 print("%s=%s|%s: %s" % (o, n, n, ev.replace("\n", "\\n  ")))
         return
     for o, n, ev in ROWS:
         if "--args" in sys.argv:
-            if not re.search(r'^sub_%s:' % o, src, re.M):
+            if "sub_" + o not in labels:
                 continue                          # applied already
             print("sub_%s=%s|%s: %s" % (o, n, n, ev.replace("\n", "\\n  ")))
         else:

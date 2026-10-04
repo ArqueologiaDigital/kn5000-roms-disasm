@@ -504,12 +504,18 @@
 	.equ NoteList_FreeCount,			0x3820	; 3 bytes: each source's remaining notes, 16 at start (0 Ring601850, 1 MIDI IN, 2 timed events) -- NoteList_ApplyFrame; Ram3800_Img_QueueBudget
 	.equ NoteList_Heads,				0x3823	; three self-linked 13-byte heads, one per source; the free nodes are the 33-node ring at 0x384A -- NoteList_ApplyFrame / _MoveNode; Ram3800_Img_QueueHeads
 	.equ PartNoteList_Heads,			0x39f7	; 32 self-linked 15-byte heads, one per part; the 129-node pool follows at 0x3BD7 -- PartNotes_ApplyFrame; PartNoteList_MoveNode
-	.equ NoteRouting_RebuildFlags,			0x4c04	; word: which output tables NoteRouting_RebuildOutputs rebuilds (bits 5..7) -- NoteRouting_RebuildOutputs
+	.equ NoteRouting_ChangeFlags,			0x4c04	; word: what the routing builders changed since the last commit; bit 5 (the MIDI settings), 6 and 7 (the tracks) choose the differences NoteRouting_CommitChanges queues (FINDINGS section 7) -- the builders OR bits in; NoteRouting_CommitChanges reads and clears it
 	.equ NoteRouting_ActivePartMask,		0x4c06	; 32-bit: the parts the routing makes active -- NoteRouting_UpdateActivePartMask
 	.equ Part_VoiceMasks,				0x602054	; a 32-bit voice mask per part -- NoteList_ApplyFrame; NoteFrame_SelectForPart; Ram3800_InitAll
-	.equ NoteRouting,				0x602200	; the routing block: part -> tone-generator part / MIDI OUT channel, track -> part, the ranges and output records (FINDINGS section 5) -- NoteRouting_ForPart / _ForTrack; every note processor passes it
+	.equ NoteRouting,				0x602200	; the routing block: part -> tone-generator part / MIDI channel, track -> part, the ranges and output records (FINDINGS sections 5 and 7) -- NoteRouting_ForPart / _ForTrack; every note processor passes it
+	.equ NoteRouting_ListChannel,			0x602492	; block +0x292: the channel (0..31) whose MIDI IN takes the note-list path in MIDI IN mode 1, and on which MIDI OUT carries the source-0 notes while NoteRouting_MidiFlags bit 5 is set -- MidiInA_ProcessRing; Ring601850_ProcessNoteEvents; NoteRouting_QueueMidiInChanges
+	.equ NoteRouting_MidiFlags,			0x602493	; block +0x293: bit 3 MIDI OUT port B allowed, bit 4 port A, bit 5 MIDI OUT carries the source-0 notes on NoteRouting_ListChannel instead of per part, bits 6-7 the MIDI IN mode (0 per channel, 1 NoteRouting_ListChannel on the note-list path, 2 every channel on it) -- NoteRouting_ForPart; MidiInA_ProcessRing; Ring601850_ProcessNoteEvents; NoteRouting_QueueMidiInChanges
 	.equ NoteRouting_Mode,				0x602498	; word: bit 5 solo, bit 6 every tone-generator output on, bit 7 recording -- NoteRouting_SetSoloAndRebuild; NoteRouting_ForPart
-	.equ NoteRouting_Previous,			0x602600	; the block as the last rebuild left it (0x29A bytes); the output rebuilders read it -- NoteRouting_RebuildOutputs copies it at the end
+	.equ NoteRouting_Previous,			0x602600	; the block as the last commit left it (0x29A bytes); the NoteRouting_Queue* routines compare the block with it -- NoteRouting_CommitChanges copies it at the end
+	.equ NoteRouting_PreviousListChannel,		0x602892	; NoteRouting_Previous +0x292: NoteRouting_ListChannel as the last commit left it -- NoteRouting_QueueMidiInChanges / _QueueMidiOutSchemeChange
+	.equ NoteRouting_PreviousMidiFlags,		0x602893	; NoteRouting_Previous +0x293: NoteRouting_MidiFlags as the last commit left it -- NoteRouting_QueueMidiInChanges
+	.equ NoteRouting_ChangeCount,			0x602a00	; word: the records in NoteRouting_ChangeQueue -- NoteRouting_QueueChange; NoteRouting_ApplyQueuedChanges and NoteRouting_CommitChanges zero it
+	.equ NoteRouting_ChangeQueue,			0x602a02	; 4-byte note-change records -- kind, then three arguments (FINDINGS section 7); 50 fit before 0x602ACA -- NoteRouting_QueueChange; NoteRouting_ApplyQueuedChanges
 	.equ BStore_TrackToPart,			0x603422	; workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none -- TimedEvents_ProcessRing maps a frame's channel through it; EditPartSelect_DrawPartLabels draws it
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"

@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FC5CDA\b/NoteRouting_QueueChange/g
+s/\bsub_FC8D49\b/NoteRouting_ApplyQueuedChanges/g
+s/\bsub_FC8DD6\b/NoteChange_CasePartReceive/g
+s/\bsub_FC8DE6\b/NoteChange_Case1Unused/g
+s/\bsub_FC8DF5\b/NoteChange_CaseTrackMidiOut/g
+s/\bsub_FC8E04\b/NoteChange_CaseTrackPart/g
+s/\bsub_FC8E13\b/NoteChange_CasePartToneGen/g
+s/\bsub_FC8E22\b/NoteChange_CasePartTransmit/g
+s/\bsub_FC8E31\b/NoteChange_CaseTrackPartRecord/g
+s/\bsub_FC8E40\b/NoteChange_CaseMidiInMode/g
+s/\bsub_FC8E4F\b/NoteChange_CaseMidiOutScheme/g
+s/\bsub_FC9727\b/NoteChange_ReleasePartReceivedNotes/g
+s/\bsub_FC97F1\b/NoteChange_ReleaseTrackMidiOutNotes/g
+s/\bsub_FC9796\b/NoteChange_ReleaseTrackNotesOfOldPart/g
+s/\bsub_FC9854\b/NoteChange_ReleasePartTransmittedNotes/g
+s/\bsub_FC98E7\b/NoteChange_ReleaseRecordedNotesOfOldPart/g
+s/\bsub_FC9933\b/NoteChange_ReleaseMidiInChannelNotes/g
+s/\bsub_FC9AA1\b/NoteChange_ReleaseOldMidiOutScheme/g
+s/\bsub_FC5D30\b/NoteRouting_QueueMidiInChanges/g
+s/\bsub_FC5F19\b/NoteRouting_QueueTrackChanges/g
+s/\bsub_FC5FAC\b/NoteRouting_QueueMidiOutSchemeChange/g
+s/\bsub_FC6065\b/NoteRouting_QueuePartTransmitChanges/g
+s/\bsub_FC610F\b/NoteRouting_QueueTrackPartChanges/g
+s/\bsub_FCA475\b/PartNotes_BuildReleaseFrame/g
+s/\bsub_FCAFC9\b/NoteRouting_ForPartFromMidiIn/g
+s/\bsub_FCB126\b/NoteRouting_ForReceivingPart/g

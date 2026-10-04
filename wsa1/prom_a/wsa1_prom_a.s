@@ -1483,7 +1483,7 @@
 	.set T_F413C8,                                                                      0x00F413C8
 	.set T_F413CC,                                                                      0x00F413CC
 	.set T_Ram3800_InitDataImage,                                                       0x00F413D0
-	.set T_F413D4,                                                                      0x00F413D4
+	.set T_NoteRouting_ApplyQueuedChanges,                                                                      0x00F413D4
 	.set T_F413DC,                                                                      0x00F413DC
 	.set T_F413E0,                                                                      0x00F413E0
 	.set T_MidiInB_ProcessRing,                                                                      0x00F413F8
@@ -118423,7 +118423,7 @@ sub_FC5420:
 sub_FC546A:
 	link XIZ,0xfffc                                      ; FC546A  ee 0c fc ff
 	push XIX                                             ; FC546E  3c
-	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC546F  d1 04 4c 21
+	ld bc, (NoteRouting_ChangeFlags:16)                                 ; FC546F  d1 04 4c 21
 	and BC,0x8000                                        ; FC5473  d9 cc 00 80
 	jr z, .LFC54C2                                       ; FC5477  66 49
 	m_res 7, MD16, 0x4c01                                ; FC5479  f1 01 4c b7
@@ -118447,7 +118447,7 @@ sub_FC546A:
 .LFC54B5:
 	call NoteRouting_UpdateActivePartMask                                      ; FC54B5  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC54B9  1d a5 61 fc
-	call NoteRouting_RebuildOutputs                                      ; FC54BD  1d 7c 5c fc
+	call NoteRouting_CommitChanges                                      ; FC54BD  1d 7c 5c fc
 	popw bc                                              ; FC54C1  49
 .LFC54C2:
 	pop XIX                                              ; FC54C2  5c
@@ -118455,7 +118455,7 @@ sub_FC546A:
 	ret                                                  ; FC54C5  0e
 ; NoteRouting_RebuildForSong: T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then
 ;   block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,
-;   NoteRouting_RebuildOutputs.
+;   NoteRouting_CommitChanges.
 NoteRouting_RebuildForSong:
 	link XIZ,0xfffc                                      ; FC54C6  ee 0c fc ff
 	push XIX                                             ; FC54CA  3c
@@ -118480,7 +118480,7 @@ NoteRouting_RebuildForSong:
 .LFC5507:
 	call NoteRouting_UpdateActivePartMask                                      ; FC5507  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC550B  1d a5 61 fc
-	call NoteRouting_RebuildOutputs                                      ; FC550F  1d 7c 5c fc
+	call NoteRouting_CommitChanges                                      ; FC550F  1d 7c 5c fc
 	popw bc                                              ; FC5513  49
 .LFC5514:
 	pop XIX                                              ; FC5514  5c
@@ -118511,7 +118511,7 @@ NoteRouting_Rebuild:
 .LFC5555:
 	call NoteRouting_UpdateActivePartMask                                      ; FC5555  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC5559  1d a5 61 fc
-	call NoteRouting_RebuildOutputs                                      ; FC555D  1d 7c 5c fc
+	call NoteRouting_CommitChanges                                      ; FC555D  1d 7c 5c fc
 	popw bc                                              ; FC5561  49
 .LFC5562:
 	pop XIX                                              ; FC5562  5c
@@ -118549,7 +118549,7 @@ NoteRouting_SetSoloAndRebuild:
 .LFC55B9:
 	call NoteRouting_UpdateActivePartMask                                      ; FC55B9  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC55BD  1d a5 61 fc
-	call NoteRouting_RebuildOutputs                                      ; FC55C1  1d 7c 5c fc
+	call NoteRouting_CommitChanges                                      ; FC55C1  1d 7c 5c fc
 	popw bc                                              ; FC55C5  49
 .LFC55C6:
 	pop XIX                                              ; FC55C6  5c
@@ -118644,7 +118644,7 @@ sub_FC55CA:
 	add XWA,NoteRouting                                   ; FC56C4  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC56CA  b0 61
 	ld BC,DE                                             ; FC56CC  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC56CE  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC56CE  d1 04 4c e9
 	inc 6,XSP                                            ; FC56D2  ef 66
 .LFC56D4:
 	ld c, (UiEvent_Byte3:16)                                   ; FC56D4  c1 ba 20 23
@@ -118685,7 +118685,7 @@ sub_FC55CA:
 	ld A,(XBC)                                           ; FC5739  81 21
 	or (0x4c21:24), a                                 ; FC573B  c2 21 4c 00 e9
 .LFC5740:
-	orw	(NoteRouting_RebuildFlags:16), 0x8004                  ; FC5740  d1 04 4c 3e 04 80
+	orw	(NoteRouting_ChangeFlags:16), 0x8004                  ; FC5740  d1 04 4c 3e 04 80
 .LFC5746:
 	ld c, (UiEvent_Byte3:16)                                   ; FC5746  c1 ba 20 23
 	and C,0x40                                           ; FC574A  cb cc 40
@@ -118726,7 +118726,7 @@ sub_FC55CA:
 	or (0x4c22:24), a                                 ; FC57AD  c2 22 4c 00 e9
 .LFC57B2:
 	ld BC,DE                                             ; FC57B2  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC57B4  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC57B4  d1 04 4c e9
 .LFC57B8:
 	ld c, (UiEvent_Byte3:16)                                   ; FC57B8  c1 ba 20 23
 	and C,0x80                                           ; FC57BC  cb cc 80
@@ -118746,7 +118746,7 @@ sub_FC55CA:
 	set 6,(XIX)                                          ; FC57E2  b4 be
 .LFC57E4:
 	ld BC,DE                                             ; FC57E4  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC57E6  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC57E6  d1 04 4c e9
 .LFC57EA:
 	pop XIX                                              ; FC57EA  5c
 	popw de                                              ; FC57EB  4a
@@ -119002,7 +119002,7 @@ sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	set 7,(XIX+0x0293)                                   ; FC5A3C  f3 f1 93 02 bf
 .LFC5A41:
 	ld BC,DE                                             ; FC5A41  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A43  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC5A43  d1 04 4c e9
 .LFC5A47:
 	ld C,H                                               ; FC5A47  ce 8b
 	and C,0xf0                                           ; FC5A49  cb cc f0
@@ -119022,7 +119022,7 @@ sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	set 5,(XIX+0x0293)                                   ; FC5A6A  f3 f1 93 02 bd
 .LFC5A6F:
 	ld BC,DE                                             ; FC5A6F  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A71  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC5A71  d1 04 4c e9
 	jr .LFC5AC6                                          ; FC5A75  68 4f
 sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 	ld C,H                                               ; FC5A77  ce 8b
@@ -119032,7 +119032,7 @@ sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 	and C,0x1f                                           ; FC5A80  cb cc 1f
 	ld (XIX+0x0292),C                                    ; FC5A83  f3 f1 92 02 43
 	ld BC,DE                                             ; FC5A88  da 89
-	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A8A  d1 04 4c e9
+	or	(NoteRouting_ChangeFlags:16), bc                      ; FC5A8A  d1 04 4c e9
 .LFC5A8E:
 	ld C,H                                               ; FC5A8E  ce 8b
 	and C,0xe0                                           ; FC5A90  cb cc e0
@@ -119052,10 +119052,10 @@ sub_FC5AAE:   ; entry: named by 1 `.long` operand, first at 0xFC59FF
 	ld C,L                                               ; FC5AB5  cf 8b
 	and C,0x80                                           ; FC5AB7  cb cc 80
 	jr z, .LFC5AC2                                       ; FC5ABA  66 06
-	m_set 3, MD16, NoteRouting_RebuildFlags                                ; FC5ABC  f1 04 4c bb
+	m_set 3, MD16, NoteRouting_ChangeFlags                                ; FC5ABC  f1 04 4c bb
 	jr .LFC5AC6                                          ; FC5AC0  68 04
 .LFC5AC2:
-	m_res 3, MD16, NoteRouting_RebuildFlags                                ; FC5AC2  f1 04 4c b3
+	m_res 3, MD16, NoteRouting_ChangeFlags                                ; FC5AC2  f1 04 4c b3
 .LFC5AC6:
 	pop XIX                                              ; FC5AC6  5c
 	popw de                                              ; FC5AC7  4a
@@ -119067,7 +119067,7 @@ T_F411DC_Nop:
 	ret                                                  ; FC5ACB  0e
 sub_FC5ACC:
 	push XIX                                             ; FC5ACC  3c
-	lda xix, (NoteRouting_RebuildFlags:16)                                ; FC5ACD  f1 04 4c 34
+	lda xix, (NoteRouting_ChangeFlags:16)                                ; FC5ACD  f1 04 4c 34
 	ld bc, (UiEvent_Byte1:16)                                 ; FC5AD1  d1 b8 20 21
 	extz BC                                              ; FC5AD5  d9 12
 	cp BC,0x0010                                         ; FC5AD7  d9 cf 10 00
@@ -119080,10 +119080,10 @@ sub_FC5ACC:
 	ld c, (UiEvent_Byte2:16)                                   ; FC5AE8  c1 b9 20 23
 	and C,0x01                                           ; FC5AEC  cb cc 01
 	jr z, .LFC5AF8                                       ; FC5AEF  66 07
-	m_res 4, MD24, 0x602493                              ; FC5AF1  f2 93 24 60 b4
+	m_res 4, MD24, NoteRouting_MidiFlags                              ; FC5AF1  f2 93 24 60 b4
 	jr .LFC5AFD                                          ; FC5AF6  68 05
 .LFC5AF8:
-	m_set 4, MD24, 0x602493                              ; FC5AF8  f2 93 24 60 bc
+	m_set 4, MD24, NoteRouting_MidiFlags                              ; FC5AF8  f2 93 24 60 bc
 .LFC5AFD:
 	orw	(xix), 0x8000                        ; FC5AFD  94 3e 00 80
 .LFC5B01:
@@ -119093,10 +119093,10 @@ sub_FC5ACC:
 	ld c, (UiEvent_Byte2:16)                                   ; FC5B0A  c1 b9 20 23
 	and C,0x02                                           ; FC5B0E  cb cc 02
 	jr z, .LFC5B1A                                       ; FC5B11  66 07
-	m_res 3, MD24, 0x602493                              ; FC5B13  f2 93 24 60 b3
+	m_res 3, MD24, NoteRouting_MidiFlags                              ; FC5B13  f2 93 24 60 b3
 	jr .LFC5B1F                                          ; FC5B18  68 05
 .LFC5B1A:
-	m_set 3, MD24, 0x602493                              ; FC5B1A  f2 93 24 60 bb
+	m_set 3, MD24, NoteRouting_MidiFlags                              ; FC5B1A  f2 93 24 60 bb
 .LFC5B1F:
 	orw	(xix), 0x8000                        ; FC5B1F  94 3e 00 80
 .LFC5B23:
@@ -119106,7 +119106,7 @@ T_F411E4_Nop:
 	ret                                                  ; FC5B25  0e
 ; NoteRouting_KeyboardToSelectedPart: the default builder (modes 0-2, 4, 8, 10-12, 14-16, 18, 19, 22: SOUND, COMBINATION, SEQ PLAY, SYSTEM, MIDI ...):
 ;   block +1 = the part UI_PartIndex selects (Bytes_00_to_1F_x3_FC65C6 + 0x40); with block +0x298 bit 4 and a part
-;   below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_RebuildFlags |= 3.
+;   below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_ChangeFlags |= 3.
 NoteRouting_KeyboardToSelectedPart:
 	pushw hl                                             ; FC5B26  2b
 	pushw de                                             ; FC5B27  2a
@@ -119143,7 +119143,7 @@ NoteRouting_KeyboardToSelectedPart:
 	ld A,(XBC)                                           ; FC5B7B  81 21
 	ld (XIX+0x01),A                                      ; FC5B7D  bc 01 41
 .LFC5B80:
-	orw	(NoteRouting_RebuildFlags:16), 0x0003                  ; FC5B80  d1 04 4c 3e 03 00
+	orw	(NoteRouting_ChangeFlags:16), 0x0003                  ; FC5B80  d1 04 4c 3e 03 00
 	pop XIX                                              ; FC5B86  5c
 	popw de                                              ; FC5B87  4a
 	popw hl                                              ; FC5B88  4b
@@ -119157,7 +119157,7 @@ NoteRouting_BuildForSequencerModes:   ; entry: named by 4 `.long` operands, firs
 	jr z, .LFC5BA9                                       ; FC5B97  66 10
 	ld c, (0x4c20:24)                                   ; FC5B99  c2 20 4c 00 23
 	ld (0x602201:24), c                                 ; FC5B9E  f2 01 22 60 43
-	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5BA3  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_ChangeFlags                                ; FC5BA3  f1 04 4c b9
 	jr .LFC5BB2                                          ; FC5BA7  68 09
 .LFC5BA9:
 	push 0x00                                            ; FC5BA9  09 00
@@ -119195,7 +119195,7 @@ NoteRouting_BuildForCombiEditPart:   ; entry: named by 1 `.long` operand, first 
 	ld (0x602201:24), h                                 ; FC5BEF  f2 01 22 60 46
 	cp H,0xff                                            ; FC5BF4  ce cf ff
 	jr z, .LFC5BFF                                       ; FC5BF7  66 06
-	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5BF9  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_ChangeFlags                                ; FC5BF9  f1 04 4c b9
 	jr .LFC5C08                                          ; FC5BFD  68 09
 .LFC5BFF:
 	push 0x00                                            ; FC5BFF  09 00
@@ -119221,7 +119221,7 @@ NoteRouting_BuildForCombiEditPart:   ; entry: named by 1 `.long` operand, first 
 	ld (0x602201:24), h                                 ; FC5C2F  f2 01 22 60 46
 	cp H,0xff                                            ; FC5C34  ce cf ff
 	jr z, .LFC5C3F                                       ; FC5C37  66 06
-	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5C39  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_ChangeFlags                                ; FC5C39  f1 04 4c b9
 	jr .LFC5C48                                          ; FC5C3D  68 09
 .LFC5C3F:
 	push 0x00                                            ; FC5C3F  09 00
@@ -119258,38 +119258,42 @@ NoteRouting_BuildForModes23To27:   ; entry: named by 5 `.long` operands, first a
 	popw bc                                              ; FC5C78  49
 	unlk XIZ                                             ; FC5C79  ee 0d
 	ret                                                  ; FC5C7B  0e
-; NoteRouting_RebuildOutputs: by (0x4C04): bits 0xA0 sub_FC5D30, 0xC0 sub_FC5F19, 0x20 sub_FC5FAC and sub_FC6065, 0x40 sub_FC610F; then
-;   T_F413D4, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0.
-NoteRouting_RebuildOutputs:
+; NoteRouting_CommitChanges: by (0x4C04): bits 0xA0 NoteRouting_QueueMidiInChanges, 0xC0 NoteRouting_QueueTrackChanges, 0x20 NoteRouting_QueueMidiOutSchemeChange and NoteRouting_QueuePartTransmitChanges, 0x40 NoteRouting_QueueTrackPartChanges; then
+;   T_NoteRouting_ApplyQueuedChanges, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0.
+; CORRECTED 2026-10-04 (was NoteRouting_RebuildOutputs): it rebuilds no outputs.  The NoteRouting_Queue* routines compare the block with
+;   NoteRouting_Previous and queue one note-release record per difference (NoteChange_HandlerTable's kinds), the
+;   queue is applied (T_NoteRouting_ApplyQueuedChanges = NoteRouting_ApplyQueuedChanges), then the block becomes the previous one and
+;   NoteRouting_ChangeFlags (0x4C04) is cleared.
+NoteRouting_CommitChanges:
 	push XIX                                             ; FC5C7C  3c
-	lda xix, (NoteRouting_RebuildFlags:16)                                ; FC5C7D  f1 04 4c 34
-	ldw (0x602a00:24), 0x00                             ; FC5C81  f2 00 2a 60 02 00 00
+	lda xix, (NoteRouting_ChangeFlags:16)                                ; FC5C7D  f1 04 4c 34
+	ldw (NoteRouting_ChangeCount:24), 0x00                             ; FC5C81  f2 00 2a 60 02 00 00
 	ld BC,(XIX)                                          ; FC5C88  94 21
 	and BC,0x00a0                                        ; FC5C8A  d9 cc a0 00
 	jr z, .LFC5C93                                       ; FC5C8E  66 03
-	calr sub_FC5D30                                      ; FC5C90  1e 9d 00
+	calr NoteRouting_QueueMidiInChanges                                      ; FC5C90  1e 9d 00
 .LFC5C93:
 	ld BC,(XIX)                                          ; FC5C93  94 21
 	and BC,0x00c0                                        ; FC5C95  d9 cc c0 00
 	jr z, .LFC5C9E                                       ; FC5C99  66 03
-	calr sub_FC5F19                                      ; FC5C9B  1e 7b 02
+	calr NoteRouting_QueueTrackChanges                                      ; FC5C9B  1e 7b 02
 .LFC5C9E:
 	ld BC,(XIX)                                          ; FC5C9E  94 21
 	and BC,0x0020                                        ; FC5CA0  d9 cc 20 00
 	jr z, .LFC5CA9                                       ; FC5CA4  66 03
-	calr sub_FC5FAC                                      ; FC5CA6  1e 03 03
+	calr NoteRouting_QueueMidiOutSchemeChange                                      ; FC5CA6  1e 03 03
 .LFC5CA9:
 	ld BC,(XIX)                                          ; FC5CA9  94 21
 	and BC,0x0020                                        ; FC5CAB  d9 cc 20 00
 	jr z, .LFC5CB4                                       ; FC5CAF  66 03
-	calr sub_FC6065                                      ; FC5CB1  1e b1 03
+	calr NoteRouting_QueuePartTransmitChanges                                      ; FC5CB1  1e b1 03
 .LFC5CB4:
 	ld BC,(XIX)                                          ; FC5CB4  94 21
 	and BC,0x0040                                        ; FC5CB6  d9 cc 40 00
 	jr z, .LFC5CBF                                       ; FC5CBA  66 03
-	calr sub_FC610F                                      ; FC5CBC  1e 50 04
+	calr NoteRouting_QueueTrackPartChanges                                      ; FC5CBC  1e 50 04
 .LFC5CBF:
-	call T_F413D4                                        ; FC5CBF  1d d4 13 f4
+	call T_NoteRouting_ApplyQueuedChanges                                        ; FC5CBF  1d d4 13 f4
 	push XIX                                             ; FC5CC3  3c
 	ldw bc, 0x014d                                       ; FC5CC4  31 4d 01
 	lda xiy, (NoteRouting:24)                               ; FC5CC7  f2 00 22 60 35
@@ -119299,23 +119303,26 @@ NoteRouting_RebuildOutputs:
 	m_ld_mi16 MDI+r4, 0, 0x0000                          ; FC5CD4  b4 02 00 00
 	pop XIX                                              ; FC5CD8  5c
 	ret                                                  ; FC5CD9  0e
-sub_FC5CDA:
+; NoteRouting_QueueChange: (kind, a, b, c): appends the 4-byte record kind / a / b / c to NoteRouting_ChangeQueue (0x602A02) and counts it in
+;   NoteRouting_ChangeCount (0x602A00); when the count is already above 0x7F the queue is applied first (T_NoteRouting_ApplyQueuedChanges).
+;   Its callers compare NoteRouting with NoteRouting_Previous.
+NoteRouting_QueueChange:
 	link XIZ,0xfffc                                      ; FC5CDA  ee 0c fc ff
 	push XIX                                             ; FC5CDE  3c
-	lda xix, (0x602a02:24)                               ; FC5CDF  f2 02 2a 60 34
-	m_cp_mi16 MW24, 0x602a00, 0x007f                     ; FC5CE4  d2 00 2a 60 3f 7f 00
+	lda xix, (NoteRouting_ChangeQueue:24)                               ; FC5CDF  f2 02 2a 60 34
+	m_cp_mi16 MW24, NoteRouting_ChangeCount, 0x007f                     ; FC5CE4  d2 00 2a 60 3f 7f 00
 	jr ule, .LFC5CF1                                     ; FC5CEB  63 04
-	call T_F413D4                                        ; FC5CED  1d d4 13 f4
+	call T_NoteRouting_ApplyQueuedChanges                                        ; FC5CED  1d d4 13 f4
 .LFC5CF1:
 	ldw bc, 0x04                                         ; FC5CF1  31 04 00
-	m_mul MW24, 0x602a00, 1                              ; FC5CF4  d2 00 2a 60 41
+	m_mul MW24, NoteRouting_ChangeCount, 1                              ; FC5CF4  d2 00 2a 60 41
 	ld (xiz-4), xbc                                      ; FC5CF9  be fc 61
 	add XBC,XIX                                          ; FC5CFC  ec 81
 	ld A,(XIZ+0x08)                                      ; FC5CFE  8e 08 21
 	ld (XBC),A                                           ; FC5D01  b1 41
 	ld xbc, (xiz-4)                                      ; FC5D03  ae fc 21
 	inc 1,XBC                                            ; FC5D06  e9 61
-; (sub_FC5D08 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5CDA;
+; (sub_FC5D08 removed 2026-10-04: no code names it and the line above falls through into it -- part of NoteRouting_QueueChange;
 ;  notes/prom_a_stray_label_removal.py)
 	add XBC,XIX                                          ; FC5D08  ec 81
 	ld A,(XIZ+0x0a)                                      ; FC5D0A  8e 0a 21
@@ -119330,42 +119337,46 @@ sub_FC5CDA:
 	add XBC,XIX                                          ; FC5D20  ec 81
 	ld A,(XIZ+0x0e)                                      ; FC5D22  8e 0e 21
 	ld (XBC),A                                           ; FC5D25  b1 41
-	incw 0x01, (0x602a00:24)                          ; FC5D27  d2 00 2a 60 61
+	incw 0x01, (NoteRouting_ChangeCount:24)                          ; FC5D27  d2 00 2a 60 61
 	pop XIX                                              ; FC5D2C  5c
 	unlk XIZ                                             ; FC5D2D  ee 0d
 	ret                                                  ; FC5D2F  0e
-sub_FC5D30:
+; NoteRouting_QueueMidiInChanges: (NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_ListChannel
+;   changed, a kind-7 record per channel whose MIDI IN path changes (1 = it took the note-list path before, 0 = the
+;   per-channel path); then for each of the 32 parts kind 0 (part, new, old) when its channel (+0x22) changed, or
+;   kind 0 (part, 0xFF, channel) when its receive bit (record +0x152 bit 6) changed.
+NoteRouting_QueueMidiInChanges:
 	link XIZ,0xfff4                                      ; FC5D30  ee 0c f4 ff
 	pushw hl                                             ; FC5D34  2b
 	pushw de                                             ; FC5D35  2a
 	push XIX                                             ; FC5D36  3c
-	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC5D37  d1 04 4c 21
+	ld bc, (NoteRouting_ChangeFlags:16)                                 ; FC5D37  d1 04 4c 21
 	and BC,0x0020                                        ; FC5D3B  d9 cc 20 00
 	jrl z, .LFC5F13                                      ; FC5D3F  76 d1 01
-	ld c, (0x602893:24)                                 ; FC5D42  c2 93 28 60 23
+	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5D42  c2 93 28 60 23
 	and C,0xc0                                           ; FC5D47  cb cc c0
 	srl c, 0x06                                          ; FC5D4A  cb ef 06
 	ld H,C                                               ; FC5D4D  cb 8e
-	ld a, (0x602493:24)                                 ; FC5D4F  c2 93 24 60 21
+	ld a, (NoteRouting_MidiFlags:24)                                 ; FC5D4F  c2 93 24 60 21
 	and A,0xc0                                           ; FC5D54  c9 cc c0
 	srl a, 0x06                                          ; FC5D57  c9 ef 06
 	cp A,C                                               ; FC5D5A  cb f1
 	jrl z, .LFC5E33                                      ; FC5D5C  76 d4 00
-	ld c, (0x602493:24)                                 ; FC5D5F  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC5D5F  c2 93 24 60 23
 	and C,0xc0                                           ; FC5D64  cb cc c0
 	srl c, 0x06                                          ; FC5D67  cb ef 06
 	cp c, 0x02:i3                                          ; FC5D6A  cb da
 	jr nz, .LFC5DB2                                      ; FC5D6C  6e 44
 	ldw hl, 0x00                                         ; FC5D6E  33 00 00
 .LFC5D71:
-	ld c, (0x602892:24)                                 ; FC5D71  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5D71  c2 92 28 60 23
 	extz BC                                              ; FC5D76  d9 12
 	cp BC,HL                                             ; FC5D78  db f1
 	jr nz, .LFC5D96                                      ; FC5D7A  6e 1a
-	ld c, (0x602893:24)                                 ; FC5D7C  c2 93 28 60 23
+	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5D7C  c2 93 28 60 23
 	and C,0xc0                                           ; FC5D81  cb cc c0
 	srl c, 0x06                                          ; FC5D84  cb ef 06
-; (sub_FC5D87 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5D30;
+; (sub_FC5D87 removed 2026-10-04: no code names it and the line above falls through into it -- part of NoteRouting_QueueMidiInChanges;
 ;  notes/prom_a_stray_label_removal.py)
 	cp c, 0x01:i3                                          ; FC5D87  cb d9
 	jr nz, .LFC5D96                                      ; FC5D89  6e 0b
@@ -119381,14 +119392,14 @@ sub_FC5D30:
 	pushw 0x00                                           ; FC5D9C  0b 00 00
 .LFC5D9F:
 	pushw 0x07                                           ; FC5D9F  0b 07 00
-	calr sub_FC5CDA                                      ; FC5DA2  1e 35 ff
+	calr NoteRouting_QueueChange                                      ; FC5DA2  1e 35 ff
 	inc 1,HL                                             ; FC5DA5  db 61
 	inc 8,XSP                                            ; FC5DA7  ef 60
 	cp HL,0x0020                                         ; FC5DA9  db cf 20 00
 	jr c, .LFC5D71                                       ; FC5DAD  67 c2
 	jrl .LFC5E33                                         ; FC5DAF  78 81 00
 .LFC5DB2:
-	ld c, (0x602893:24)                                 ; FC5DB2  c2 93 28 60 23
+	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5DB2  c2 93 28 60 23
 	and C,0xc0                                           ; FC5DB7  cb cc c0
 	srl c, 0x06                                          ; FC5DBA  cb ef 06
 	cp c, 0x02:i3                                          ; FC5DBD  cb da
@@ -119400,7 +119411,7 @@ sub_FC5D30:
 	pushw 0xff                                           ; FC5DC6  0b ff 00
 	pushw 0x01                                           ; FC5DC9  0b 01 00
 	pushw 0x07                                           ; FC5DCC  0b 07 00
-	calr sub_FC5CDA                                      ; FC5DCF  1e 08 ff
+	calr NoteRouting_QueueChange                                      ; FC5DCF  1e 08 ff
 	ld H,L                                               ; FC5DD2  cf 8e
 	inc 1,H                                              ; FC5DD4  ce 61
 	inc 8,XSP                                            ; FC5DD6  ef 60
@@ -119408,42 +119419,42 @@ sub_FC5D30:
 	jr c, .LFC5DC3                                       ; FC5DDB  67 e6
 	jr .LFC5E33                                          ; FC5DDD  68 54
 .LFC5DDF:
-	ld c, (0x602493:24)                                 ; FC5DDF  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC5DDF  c2 93 24 60 23
 	and C,0xc0                                           ; FC5DE4  cb cc c0
 	srl c, 0x06                                          ; FC5DE7  cb ef 06
 	cp c, 0x01:i3                                          ; FC5DEA  cb d9
 	jr nz, .LFC5E06                                      ; FC5DEC  6e 18
-	ld c, (0x602893:24)                                 ; FC5DEE  c2 93 28 60 23
+	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5DEE  c2 93 28 60 23
 	and C,0xc0                                           ; FC5DF3  cb cc c0
 	jr nz, .LFC5E06                                      ; FC5DF6  6e 0e
-	ld c, (0x602892:24)                                 ; FC5DF8  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5DF8  c2 92 28 60 23
 	pushw bc                                             ; FC5DFD  29
 	pushw 0xff                                           ; FC5DFE  0b ff 00
 	pushw 0x00                                           ; FC5E01  0b 00 00
 	jr .LFC5E2B                                          ; FC5E04  68 25
 .LFC5E06:
-	ld c, (0x602493:24)                                 ; FC5E06  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC5E06  c2 93 24 60 23
 	and C,0xc0                                           ; FC5E0B  cb cc c0
 	jr nz, .LFC5E33                                      ; FC5E0E  6e 23
-	ld c, (0x602893:24)                                 ; FC5E10  c2 93 28 60 23
+	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5E10  c2 93 28 60 23
 	and C,0xc0                                           ; FC5E15  cb cc c0
 	srl c, 0x06                                          ; FC5E18  cb ef 06
 	cp c, 0x01:i3                                          ; FC5E1B  cb d9
 	jr nz, .LFC5E33                                      ; FC5E1D  6e 14
-	ld c, (0x602892:24)                                 ; FC5E1F  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5E1F  c2 92 28 60 23
 	pushw bc                                             ; FC5E24  29
 	pushw 0xff                                           ; FC5E25  0b ff 00
 	pushw 0x01                                           ; FC5E28  0b 01 00
 .LFC5E2B:
 	pushw 0x07                                           ; FC5E2B  0b 07 00
-	calr sub_FC5CDA                                      ; FC5E2E  1e a9 fe
+	calr NoteRouting_QueueChange                                      ; FC5E2E  1e a9 fe
 	inc 8,XSP                                            ; FC5E31  ef 60
 .LFC5E33:
-	ld h, (0x602892:24)                                 ; FC5E33  c2 92 28 60 26
-	ld c, (0x602492:24)                                 ; FC5E38  c2 92 24 60 23
+	ld h, (NoteRouting_PreviousListChannel:24)                                 ; FC5E33  c2 92 28 60 26
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC5E38  c2 92 24 60 23
 	cp C,H                                               ; FC5E3D  ce f3
 	jr z, .LFC5E76                                       ; FC5E3F  66 35
-	ld c, (0x602493:24)                                 ; FC5E41  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC5E41  c2 93 24 60 23
 	and C,0xc0                                           ; FC5E46  cb cc c0
 	srl c, 0x06                                          ; FC5E49  cb ef 06
 	cp c, 0x01:i3                                          ; FC5E4C  cb d9
@@ -119453,13 +119464,13 @@ sub_FC5D30:
 	pushw 0xff                                           ; FC5E54  0b ff 00
 	pushw 0x01                                           ; FC5E57  0b 01 00
 	pushw 0x07                                           ; FC5E5A  0b 07 00
-	calr sub_FC5CDA                                      ; FC5E5D  1e 7a fe
-	ld c, (0x602492:24)                                 ; FC5E60  c2 92 24 60 23
+	calr NoteRouting_QueueChange                                      ; FC5E5D  1e 7a fe
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC5E60  c2 92 24 60 23
 	pushw bc                                             ; FC5E65  29
 	pushw 0xff                                           ; FC5E66  0b ff 00
 	pushw 0x00                                           ; FC5E69  0b 00 00
 	pushw 0x07                                           ; FC5E6C  0b 07 00
-	calr sub_FC5CDA                                      ; FC5E6F  1e 68 fe
+	calr NoteRouting_QueueChange                                      ; FC5E6F  1e 68 fe
 	inc 8,XSP                                            ; FC5E72  ef 60
 	inc 8,XSP                                            ; FC5E74  ef 60
 .LFC5E76:
@@ -119513,7 +119524,7 @@ sub_FC5D30:
 	push 0x00                                            ; FC5EF5  09 00
 	push H                                               ; FC5EF7  ce 04
 	pushw 0x00                                           ; FC5EF9  0b 00 00
-	calr sub_FC5CDA                                      ; FC5EFC  1e db fd
+	calr NoteRouting_QueueChange                                      ; FC5EFC  1e db fd
 	inc 8,XSP                                            ; FC5EFF  ef 60
 .LFC5F01:
 	inc 1,XIX                                            ; FC5F01  ec 61
@@ -119528,12 +119539,14 @@ sub_FC5D30:
 	popw hl                                              ; FC5F15  4b
 	unlk XIZ                                             ; FC5F16  ee 0d
 	ret                                                  ; FC5F18  0e
-sub_FC5F19:
+; NoteRouting_QueueTrackChanges: (NoteRouting_ChangeFlags bit 6 or 7): for each of the 16 tracks, kind 2 (track, new, old) when its MIDI OUT
+;   channel (+0x52, low 5 bits) changed and kind 3 (track, new, old) when its part (+0x42, low 5 bits) changed.
+NoteRouting_QueueTrackChanges:
 	link XIZ,0xfffc                                      ; FC5F19  ee 0c fc ff
 	pushw hl                                             ; FC5F1D  2b
 	pushw de                                             ; FC5F1E  2a
 	push XIX                                             ; FC5F1F  3c
-	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC5F20  d1 04 4c 21
+	ld bc, (NoteRouting_ChangeFlags:16)                                 ; FC5F20  d1 04 4c 21
 	and BC,0x00c0                                        ; FC5F24  d9 cc c0 00
 	jrl z, .LFC5FA6                                      ; FC5F28  76 7b 00
 	ld XBC,0x00000052                                    ; FC5F2B  41 52 00 00 00
@@ -119557,7 +119570,7 @@ sub_FC5F19:
 	push 0x00                                            ; FC5F5D  09 00
 	push D                                               ; FC5F5F  cc 04
 	pushw 0x02                                           ; FC5F61  0b 02 00
-	calr sub_FC5CDA                                      ; FC5F64  1e 73 fd
+	calr NoteRouting_QueueChange                                      ; FC5F64  1e 73 fd
 	inc 8,XSP                                            ; FC5F67  ef 60
 .LFC5F69:
 	lda xbc, (NoteRouting_Previous:24)                               ; FC5F69  f2 00 26 60 31
@@ -119576,7 +119589,7 @@ sub_FC5F19:
 	push 0x00                                            ; FC5F8A  09 00
 	push D                                               ; FC5F8C  cc 04
 	pushw 0x03                                           ; FC5F8E  0b 03 00
-	calr sub_FC5CDA                                      ; FC5F91  1e 46 fd
+	calr NoteRouting_QueueChange                                      ; FC5F91  1e 46 fd
 	inc 8,XSP                                            ; FC5F94  ef 60
 .LFC5F96:
 	sub XBC,XBC                                          ; FC5F96  e9 a1
@@ -119592,7 +119605,9 @@ sub_FC5F19:
 	popw hl                                              ; FC5FA8  4b
 	unlk XIZ                                             ; FC5FA9  ee 0d
 	ret                                                  ; FC5FAB  0e
-sub_FC5FAC:
+; NoteRouting_QueueMidiOutSchemeChange: (bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_ListChannel) when NoteRouting_MidiFlags bit 5
+;   changed, or when the channel changed while bit 5 is set.
+NoteRouting_QueueMidiOutSchemeChange:
 	pushw hl                                             ; FC5FAC  2b
 	push XIX                                             ; FC5FAD  3c
 	lda xix, (NoteRouting_Previous:24)                               ; FC5FAE  f2 00 26 60 34
@@ -119600,12 +119615,12 @@ sub_FC5FAC:
 	and C,0x20                                           ; FC5FB8  cb cc 20
 	srl c, 0x05                                          ; FC5FBB  cb ef 05
 	ld H,C                                               ; FC5FBE  cb 8e
-	ld a, (0x602493:24)                                 ; FC5FC0  c2 93 24 60 21
+	ld a, (NoteRouting_MidiFlags:24)                                 ; FC5FC0  c2 93 24 60 21
 	and A,0x20                                           ; FC5FC5  c9 cc 20
 	srl a, 0x05                                          ; FC5FC8  c9 ef 05
 	cp A,C                                               ; FC5FCB  cb f1
 	jr z, .LFC5FFB                                       ; FC5FCD  66 2c
-	m_bit 5, MD24, 0x602493                              ; FC5FCF  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC5FCF  f2 93 24 60 cd
 	jr z, .LFC5FEB                                       ; FC5FD4  66 15
 	bit 5,(XIX+0x0293)                                   ; FC5FD6  f3 f1 93 02 cd
 	jr nz, .LFC5FEB                                      ; FC5FDB  6e 0e
@@ -119615,14 +119630,14 @@ sub_FC5FAC:
 	pushw 0x00                                           ; FC5FE6  0b 00 00
 	jr .LFC601C                                          ; FC5FE9  68 31
 .LFC5FEB:
-	m_bit 5, MD24, 0x602493                              ; FC5FEB  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC5FEB  f2 93 24 60 cd
 	jr nz, .LFC6024                                      ; FC5FF0  6e 32
 	bit 5,(XIX+0x0293)                                   ; FC5FF2  f3 f1 93 02 cd
 	jr z, .LFC6024                                       ; FC5FF7  66 2b
 	jr .LFC6010                                          ; FC5FF9  68 15
 .LFC5FFB:
 	ld H,(XIX+0x0292)                                    ; FC5FFB  c3 f1 92 02 26
-	ld c, (0x602492:24)                                 ; FC6000  c2 92 24 60 23
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC6000  c2 92 24 60 23
 	cp C,H                                               ; FC6005  ce f3
 	jr z, .LFC6024                                       ; FC6007  66 1b
 	bit 5,(XIX+0x0293)                                   ; FC6009  f3 f1 93 02 cd
@@ -119634,12 +119649,16 @@ sub_FC5FAC:
 	pushw 0x01                                           ; FC6019  0b 01 00
 .LFC601C:
 	pushw 0x08                                           ; FC601C  0b 08 00
-	calr sub_FC5CDA                                      ; FC601F  1e b8 fc
+	calr NoteRouting_QueueChange                                      ; FC601F  1e b8 fc
 	inc 8,XSP                                            ; FC6022  ef 60
 .LFC6024:
 	pop XIX                                              ; FC6024  5c
 	popw hl                                              ; FC6025  4b
 	ret                                                  ; FC6026  0e
+; NoteRouting_QueueToneGenPartChanges: for each of the 32 parts, kind 4 (part, new, old) when its tone-generator part (block +0x02) changed.  Nothing
+;   calls it: neither ROM holds 27 60 FC (a 24-bit pointer, call or jp to it) and no prom_a calr reaches it.  Kind 4's
+;   handler is a bare ret (NoteChange_PartToneGen_Nop).
+NoteRouting_QueueToneGenPartChanges:
 	pushw hl                                             ; FC6027  2b
 	pushw de                                             ; FC6028  2a
 	push XIX                                             ; FC6029  3c
@@ -119659,10 +119678,10 @@ sub_FC5FAC:
 	push D                                               ; FC604A  cc 04
 	push 0x00                                            ; FC604C  09 00
 	push H                                               ; FC604E  ce 04
-; (sub_FC6050 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC5FAC;
+; (sub_FC6050 removed 2026-10-04: no code names it and the line above falls through into it -- part of NoteRouting_QueueMidiOutSchemeChange;
 ;  notes/prom_a_stray_label_removal.py)
 	pushw 0x04                                           ; FC6050  0b 04 00
-	calr sub_FC5CDA                                      ; FC6053  1e 84 fc
+	calr NoteRouting_QueueChange                                      ; FC6053  1e 84 fc
 	inc 8,XSP                                            ; FC6056  ef 60
 .LFC6058:
 	inc 1,XIX                                            ; FC6058  ec 61
@@ -119673,7 +119692,9 @@ sub_FC5FAC:
 	popw de                                              ; FC6062  4a
 	popw hl                                              ; FC6063  4b
 	ret                                                  ; FC6064  0e
-sub_FC6065:
+; NoteRouting_QueuePartTransmitChanges: (bit 5): for each of the 32 parts, kind 5 (part, new, old) when its channel (+0x22) changed, or kind 5
+;   (part, 0xFF, channel) when its transmit bit (record +0x152 bit 5) changed.
+NoteRouting_QueuePartTransmitChanges:
 	link XIZ,0xfff4                                      ; FC6065  ee 0c f4 ff
 	pushw hl                                             ; FC6069  2b
 	pushw de                                             ; FC606A  2a
@@ -119728,7 +119749,7 @@ sub_FC6065:
 	push 0x00                                            ; FC60EB  09 00
 	push H                                               ; FC60ED  ce 04
 	pushw 0x05                                           ; FC60EF  0b 05 00
-	calr sub_FC5CDA                                      ; FC60F2  1e e5 fb
+	calr NoteRouting_QueueChange                                      ; FC60F2  1e e5 fb
 	inc 8,XSP                                            ; FC60F5  ef 60
 .LFC60F7:
 	inc 1,XIX                                            ; FC60F7  ec 61
@@ -119742,7 +119763,8 @@ sub_FC6065:
 	popw hl                                              ; FC610B  4b
 	unlk XIZ                                             ; FC610C  ee 0d
 	ret                                                  ; FC610E  0e
-sub_FC610F:
+; NoteRouting_QueueTrackPartChanges: (bit 6): for each of the 16 tracks, kind 6 (track, new, old) when its part (+0x42, low 5 bits) changed.
+NoteRouting_QueueTrackPartChanges:
 	pushw hl                                             ; FC610F  2b
 	pushw de                                             ; FC6110  2a
 	push XIX                                             ; FC6111  3c
@@ -119765,7 +119787,7 @@ sub_FC610F:
 	push 0x00                                            ; FC613A  09 00
 	push H                                               ; FC613C  ce 04
 	pushw 0x06                                           ; FC613E  0b 06 00
-	calr sub_FC5CDA                                      ; FC6141  1e 96 fb
+	calr NoteRouting_QueueChange                                      ; FC6141  1e 96 fb
 	inc 8,XSP                                            ; FC6144  ef 60
 .LFC6146:
 	inc 1,XIX                                            ; FC6146  ec 61
@@ -119972,7 +119994,7 @@ sub_FC61A6:
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC633E  ae f6 81
 	ld (XBC),A                                           ; FC6341  b1 41
 .LFC6343:
-	orw	(NoteRouting_RebuildFlags:16), 0x00c0                  ; FC6343  d1 04 4c 3e c0 00
+	orw	(NoteRouting_ChangeFlags:16), 0x00c0                  ; FC6343  d1 04 4c 3e c0 00
 	inc 4,DE                                             ; FC6349  da 64
 	sub XBC,XBC                                          ; FC634B  e9 a1
 	inc 1,XBC                                            ; FC634D  e9 61
@@ -120072,10 +120094,10 @@ sub_FC6393:
 	inc 1,H                                              ; FC6474  ce 61
 	cp H,0x20                                            ; FC6476  ce cf 20
 	jrl c, .LFC63AA                                      ; FC6479  77 2e ff
-	m_and_mi8 MB24, 0x602493, 0x1f                       ; FC647C  c2 93 24 60 3c 1f
-	ld (0x602492:24), 0x00                             ; FC6482  f2 92 24 60 00 00
-	m_set 3, MD24, 0x602493                              ; FC6488  f2 93 24 60 bb
-	m_set 4, MD24, 0x602493                              ; FC648D  f2 93 24 60 bc
+	m_and_mi8 MB24, NoteRouting_MidiFlags, 0x1f                       ; FC647C  c2 93 24 60 3c 1f
+	ld (NoteRouting_ListChannel:24), 0x00                             ; FC6482  f2 92 24 60 00 00
+	m_set 3, MD24, NoteRouting_MidiFlags                              ; FC6488  f2 93 24 60 bb
+	m_set 4, MD24, NoteRouting_MidiFlags                              ; FC648D  f2 93 24 60 bc
 	sub XBC,XBC                                          ; FC6492  e9 a1
 	ld (0x602494:24), xbc                               ; FC6494  f2 94 24 60 61
 	ldw (NoteRouting_Mode:24), 0x00                             ; FC6499  f2 98 24 60 02 00 00
@@ -120599,17 +120621,17 @@ MidiInA_ProcessRing:
 	jrl z, .LFC82B7                                      ; FC8117  76 9d 01
 	jr .LFC80F1                                          ; FC811A  68 d5
 .LFC811C:
-	ld c, (0x602493:24)                                 ; FC811C  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC811C  c2 93 24 60 23
 	and C,0xc0                                           ; FC8121  cb cc c0
 	srl c, 0x06                                          ; FC8124  cb ef 06
 	cp c, 0x01:i3                                          ; FC8127  cb d9
 	jr nz, .LFC8139                                      ; FC8129  6e 0e
 	ld h, (xiz-299)                                      ; FC812B  c3 f9 d5 fe 26
-	ld c, (0x602492:24)                                 ; FC8130  c2 92 24 60 23
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC8130  c2 92 24 60 23
 	cp C,H                                               ; FC8135  ce f3
 	jr z, .LFC8149                                       ; FC8137  66 10
 .LFC8139:
-	ld c, (0x602493:24)                                 ; FC8139  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC8139  c2 93 24 60 23
 	and C,0xc0                                           ; FC813E  cb cc c0
 	srl c, 0x06                                          ; FC8141  cb ef 06
 	cp c, 0x02:i3                                          ; FC8144  cb da
@@ -120654,7 +120676,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC81AC  39
 	lda xwa, (xiz-724)                                   ; FC81AD  f3 f9 2c fd 30
 	push XWA                                             ; FC81B2  38
-	call sub_FCAFC9                                      ; FC81B3  1d c9 af fc
+	call NoteRouting_ForPartFromMidiIn                                      ; FC81B3  1d c9 af fc
 	push 0x00                                            ; FC81B7  09 00
 	push D                                               ; FC81B9  cc 04
 	lda xbc, (xiz-724)                                   ; FC81BB  f3 f9 2c fd 31
@@ -120675,7 +120697,7 @@ MidiInA_ProcessRing:
 	ld C,E                                               ; FC81E5  cd 8b
 	and C,0x02                                           ; FC81E7  cb cc 02
 	jr z, .LFC81FE                                       ; FC81EA  66 12
-	m_bit 5, MD24, 0x602493                              ; FC81EC  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC81EC  f2 93 24 60 cd
 	jr nz, .LFC81FE                                      ; FC81F1  6e 0b
 	lda xbc, (xiz-712)                                   ; FC81F3  f3 f9 38 fd 31
 	push XBC                                             ; FC81F8  39
@@ -120720,7 +120742,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC825B  39
 	lda xwa, (xiz-724)                                   ; FC825C  f3 f9 2c fd 30
 	push XWA                                             ; FC8261  38
-	call sub_FCB126                                      ; FC8262  1d 26 b1 fc
+	call NoteRouting_ForReceivingPart                                      ; FC8262  1d 26 b1 fc
 	push 0x00                                            ; FC8266  09 00
 	push D                                               ; FC8268  cc 04
 	lda xbc, (xiz-724)                                   ; FC826A  f3 f9 2c fd 31
@@ -120753,17 +120775,17 @@ MidiInA_ProcessRing:
 	jrl c, .LFC822C                                      ; FC82B1  77 78 ff
 	jrl .LFC80F1                                         ; FC82B4  78 3a fe
 .LFC82B7:
-	ld c, (0x602493:24)                                 ; FC82B7  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC82B7  c2 93 24 60 23
 	and C,0xc0                                           ; FC82BC  cb cc c0
 	srl c, 0x06                                          ; FC82BF  cb ef 06
 	cp c, 0x01:i3                                          ; FC82C2  cb d9
 	jr nz, .LFC82D4                                      ; FC82C4  6e 0e
 	ld h, (xiz-299)                                      ; FC82C6  c3 f9 d5 fe 26
-	ld c, (0x602492:24)                                 ; FC82CB  c2 92 24 60 23
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC82CB  c2 92 24 60 23
 	cp C,H                                               ; FC82D0  ce f3
 	jr z, .LFC82E4                                       ; FC82D2  66 10
 .LFC82D4:
-	ld c, (0x602493:24)                                 ; FC82D4  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC82D4  c2 93 24 60 23
 	and C,0xc0                                           ; FC82D9  cb cc c0
 	srl c, 0x06                                          ; FC82DC  cb ef 06
 	cp c, 0x02:i3                                          ; FC82DF  cb da
@@ -120808,7 +120830,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC8345  39
 	lda xwa, (xiz-724)                                   ; FC8346  f3 f9 2c fd 30
 	push XWA                                             ; FC834B  38
-	call sub_FCAFC9                                      ; FC834C  1d c9 af fc
+	call NoteRouting_ForPartFromMidiIn                                      ; FC834C  1d c9 af fc
 	push 0x00                                            ; FC8350  09 00
 	push D                                               ; FC8352  cc 04
 	lda xbc, (xiz-724)                                   ; FC8354  f3 f9 2c fd 31
@@ -120829,7 +120851,7 @@ MidiInA_ProcessRing:
 	ld C,E                                               ; FC837E  cd 8b
 	and C,0x02                                           ; FC8380  cb cc 02
 	jr z, .LFC8397                                       ; FC8383  66 12
-	m_bit 5, MD24, 0x602493                              ; FC8385  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC8385  f2 93 24 60 cd
 	jr nz, .LFC8397                                      ; FC838A  6e 0b
 	lda xbc, (xiz-712)                                   ; FC838C  f3 f9 38 fd 31
 	push XBC                                             ; FC8391  39
@@ -120874,7 +120896,7 @@ MidiInA_ProcessRing:
 	pushw 0x07                                           ; FC83F5  0b 07 00
 	lda xbc, (xiz-302)                                   ; FC83F8  f3 f9 d2 fe 31
 	push XBC                                             ; FC83FD  39
-	call sub_FCA475                                      ; FC83FE  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC83FE  1d 75 a4 fc
 	ld E,A                                               ; FC8402  c9 8d
 	inc 8,XSP                                            ; FC8404  ef 60
 	cp a, 0x00:i3                                          ; FC8406  c9 d8
@@ -120932,17 +120954,17 @@ MidiInB_ProcessRing:
 	jrl z, .LFC861D                                      ; FC847D  76 9d 01
 	jr .LFC8457                                          ; FC8480  68 d5
 .LFC8482:
-	ld c, (0x602493:24)                                 ; FC8482  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC8482  c2 93 24 60 23
 	and C,0xc0                                           ; FC8487  cb cc c0
 	srl c, 0x06                                          ; FC848A  cb ef 06
 	cp c, 0x01:i3                                          ; FC848D  cb d9
 	jr nz, .LFC849F                                      ; FC848F  6e 0e
 	ld h, (xiz-299)                                      ; FC8491  c3 f9 d5 fe 26
-	ld c, (0x602492:24)                                 ; FC8496  c2 92 24 60 23
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC8496  c2 92 24 60 23
 	cp C,H                                               ; FC849B  ce f3
 	jr z, .LFC84AF                                       ; FC849D  66 10
 .LFC849F:
-	ld c, (0x602493:24)                                 ; FC849F  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC849F  c2 93 24 60 23
 	and C,0xc0                                           ; FC84A4  cb cc c0
 	srl c, 0x06                                          ; FC84A7  cb ef 06
 	cp c, 0x02:i3                                          ; FC84AA  cb da
@@ -120987,7 +121009,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC8512  39
 	lda xwa, (xiz-724)                                   ; FC8513  f3 f9 2c fd 30
 	push XWA                                             ; FC8518  38
-	call sub_FCAFC9                                      ; FC8519  1d c9 af fc
+	call NoteRouting_ForPartFromMidiIn                                      ; FC8519  1d c9 af fc
 	push 0x00                                            ; FC851D  09 00
 	push D                                               ; FC851F  cc 04
 	lda xbc, (xiz-724)                                   ; FC8521  f3 f9 2c fd 31
@@ -121008,7 +121030,7 @@ MidiInB_ProcessRing:
 	ld C,E                                               ; FC854B  cd 8b
 	and C,0x02                                           ; FC854D  cb cc 02
 	jr z, .LFC8564                                       ; FC8550  66 12
-	m_bit 5, MD24, 0x602493                              ; FC8552  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC8552  f2 93 24 60 cd
 	jr nz, .LFC8564                                      ; FC8557  6e 0b
 	lda xbc, (xiz-712)                                   ; FC8559  f3 f9 38 fd 31
 	push XBC                                             ; FC855E  39
@@ -121053,7 +121075,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC85C1  39
 	lda xwa, (xiz-724)                                   ; FC85C2  f3 f9 2c fd 30
 	push XWA                                             ; FC85C7  38
-	call sub_FCB126                                      ; FC85C8  1d 26 b1 fc
+	call NoteRouting_ForReceivingPart                                      ; FC85C8  1d 26 b1 fc
 	push 0x00                                            ; FC85CC  09 00
 	push D                                               ; FC85CE  cc 04
 	lda xbc, (xiz-724)                                   ; FC85D0  f3 f9 2c fd 31
@@ -121086,17 +121108,17 @@ MidiInB_ProcessRing:
 	jrl c, .LFC8592                                      ; FC8617  77 78 ff
 	jrl .LFC8457                                         ; FC861A  78 3a fe
 .LFC861D:
-	ld c, (0x602493:24)                                 ; FC861D  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC861D  c2 93 24 60 23
 	and C,0xc0                                           ; FC8622  cb cc c0
 	srl c, 0x06                                          ; FC8625  cb ef 06
 	cp c, 0x01:i3                                          ; FC8628  cb d9
 	jr nz, .LFC863A                                      ; FC862A  6e 0e
 	ld h, (xiz-299)                                      ; FC862C  c3 f9 d5 fe 26
-	ld c, (0x602492:24)                                 ; FC8631  c2 92 24 60 23
+	ld c, (NoteRouting_ListChannel:24)                                 ; FC8631  c2 92 24 60 23
 	cp C,H                                               ; FC8636  ce f3
 	jr z, .LFC864A                                       ; FC8638  66 10
 .LFC863A:
-	ld c, (0x602493:24)                                 ; FC863A  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC863A  c2 93 24 60 23
 	and C,0xc0                                           ; FC863F  cb cc c0
 	srl c, 0x06                                          ; FC8642  cb ef 06
 	cp c, 0x02:i3                                          ; FC8645  cb da
@@ -121141,7 +121163,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC86AB  39
 	lda xwa, (xiz-724)                                   ; FC86AC  f3 f9 2c fd 30
 	push XWA                                             ; FC86B1  38
-	call sub_FCAFC9                                      ; FC86B2  1d c9 af fc
+	call NoteRouting_ForPartFromMidiIn                                      ; FC86B2  1d c9 af fc
 	push 0x00                                            ; FC86B6  09 00
 	push D                                               ; FC86B8  cc 04
 	lda xbc, (xiz-724)                                   ; FC86BA  f3 f9 2c fd 31
@@ -121162,7 +121184,7 @@ MidiInB_ProcessRing:
 	ld C,E                                               ; FC86E4  cd 8b
 	and C,0x02                                           ; FC86E6  cb cc 02
 	jr z, .LFC86FD                                       ; FC86E9  66 12
-	m_bit 5, MD24, 0x602493                              ; FC86EB  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC86EB  f2 93 24 60 cd
 	jr nz, .LFC86FD                                      ; FC86F0  6e 0b
 	lda xbc, (xiz-712)                                   ; FC86F2  f3 f9 38 fd 31
 	push XBC                                             ; FC86F7  39
@@ -121207,7 +121229,7 @@ MidiInB_ProcessRing:
 	pushw 0x07                                           ; FC875B  0b 07 00
 	lda xbc, (xiz-302)                                   ; FC875E  f3 f9 d2 fe 31
 	push XBC                                             ; FC8763  39
-	call sub_FCA475                                      ; FC8764  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC8764  1d 75 a4 fc
 	ld E,A                                               ; FC8768  c9 8d
 	inc 8,XSP                                            ; FC876A  ef 60
 	cp a, 0x00:i3                                          ; FC876C  c9 d8
@@ -121314,7 +121336,7 @@ Ring601850_ProcessNoteEvents:
 	ld C,L                                               ; FC8859  cf 8b
 	and C,0x02                                           ; FC885B  cb cc 02
 	jr z, .LFC8872                                       ; FC885E  66 12
-	m_bit 5, MD24, 0x602493                              ; FC8860  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC8860  f2 93 24 60 cd
 	jr nz, .LFC8872                                      ; FC8865  6e 0b
 	lda xbc, (xiz-422)                                   ; FC8867  f3 f9 5a fe 31
 	push XBC                                             ; FC886C  39
@@ -121336,14 +121358,14 @@ Ring601850_ProcessNoteEvents:
 	cp H,0x20                                            ; FC888D  ce cf 20
 	jrl c, .LFC87E7                                      ; FC8890  77 54 ff
 .LFC8893:
-	m_bit 5, MD24, 0x602493                              ; FC8893  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC8893  f2 93 24 60 cd
 	jrl z, .LFC87B9                                      ; FC8898  76 1e ff
 	ld c, (xiz-126)                                      ; FC889B  8e 82 23
 	ld (xiz-422), c                                      ; FC889E  f3 f9 5a fe 43
 	ldw hl, 0x00                                         ; FC88A3  33 00 00
 	ld c, (xiz-126)                                      ; FC88A6  8e 82 23
 	ld (xiz-436), c                                      ; FC88A9  f3 f9 4c fe 43
-	ld a, (0x602492:24)                                 ; FC88AE  c2 92 24 60 21
+	ld a, (NoteRouting_ListChannel:24)                                 ; FC88AE  c2 92 24 60 21
 	ld (xiz-1), a                                        ; FC88B3  be ff 41
 	extz BC                                              ; FC88B6  d9 12
 	ld DE,BC                                             ; FC88B8  d9 8a
@@ -121480,7 +121502,7 @@ TimedEvents_ProcessRing:
 	push H                                               ; FC8A17  ce 04
 	pushw 0x07                                           ; FC8A19  0b 07 00
 	push XIX                                             ; FC8A1C  3c
-	call sub_FCA475                                      ; FC8A1D  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC8A1D  1d 75 a4 fc
 	ld H,A                                               ; FC8A21  c9 8e
 	and A,0x01                                           ; FC8A23  c9 cc 01
 	inc 8,XSP                                            ; FC8A26  ef 60
@@ -121513,7 +121535,7 @@ TimedEvents_ProcessRing:
 	push H                                               ; FC8A5E  ce 04
 	pushw 0x07                                           ; FC8A60  0b 07 00
 	push XIX                                             ; FC8A63  3c
-	call sub_FCA475                                      ; FC8A64  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC8A64  1d 75 a4 fc
 	ld H,A                                               ; FC8A68  c9 8e
 	and A,0x01                                           ; FC8A6A  c9 cc 01
 	inc 8,XSP                                            ; FC8A6D  ef 60
@@ -121567,7 +121589,7 @@ sub_FC8A8D:
 	pushw 0x07                                           ; FC8AE2  0b 07 00
 	lda xbc, (xiz-296)                                   ; FC8AE5  f3 f9 d8 fe 31
 	push XBC                                             ; FC8AEA  39
-	call sub_FCA475                                      ; FC8AEB  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC8AEB  1d 75 a4 fc
 	ld D,A                                               ; FC8AEF  c9 8c
 	and A,0x01                                           ; FC8AF1  c9 cc 01
 	inc 8,XSP                                            ; FC8AF4  ef 60
@@ -121689,7 +121711,7 @@ sub_FC8B36:
 	m_cp_mi8 MBD+r6, 0xfb, 0x20                          ; FC8C14  8e fb 3f 20
 	jrl c, .LFC8B71                                      ; FC8C18  77 56 ff
 .LFC8C1B:
-	ld c, (0x602493:24)                                 ; FC8C1B  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FC8C1B  c2 93 24 60 23
 	and C,0xc0                                           ; FC8C20  cb cc c0
 	srl c, 0x06                                          ; FC8C23  cb ef 06
 	cp c, 0x01:i3                                          ; FC8C26  cb d9
@@ -121774,7 +121796,7 @@ sub_FC8CE0:
 	push H                                               ; FC8D12  ce 04
 	pushw 0x07                                           ; FC8D14  0b 07 00
 	push XIX                                             ; FC8D17  3c
-	call sub_FCA475                                      ; FC8D18  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC8D18  1d 75 a4 fc
 	ld H,A                                               ; FC8D1C  c9 8e
 	and A,0x01                                           ; FC8D1E  c9 cc 01
 	inc 8,XSP                                            ; FC8D21  ef 60
@@ -121802,43 +121824,45 @@ sub_FC8CE0:
 sub_FC8D45:
 	calr sub_FC8D45_Nop                                          ; FC8D45  1e b6 01
 	ret                                                  ; FC8D48  0e
-sub_FC8D49:
+; NoteRouting_ApplyQueuedChanges: T_NoteRouting_ApplyQueuedChanges: for each record of NoteRouting_ChangeQueue (NoteRouting_ChangeCount of them), the kind 0..8 through
+;   NoteChange_HandlerTable with (record +1, +2, +3) -- a kind above 8 is skipped; then the count = 0.
+NoteRouting_ApplyQueuedChanges:
 	link XIZ,0xfffa                                      ; FC8D49  ee 0c fa ff
 	pushw hl                                             ; FC8D4D  2b
 	pushw de                                             ; FC8D4E  2a
 	push XIX                                             ; FC8D4F  3c
 	m_ld_mi16 MDD+r6, 0xfe, 0x0000                       ; FC8D50  be fe 02 00 00
-	m_cp_mi16 MW24, 0x602a00, 0x0000                     ; FC8D55  d2 00 2a 60 3f 00 00
-	jrl ule, JumpTable_FC8DB2_Code_Skip2                                      ; FC8D5C  73 0f 01
+	m_cp_mi16 MW24, NoteRouting_ChangeCount, 0x0000                     ; FC8D55  d2 00 2a 60 3f 00 00
+	jrl ule, NoteRouting_ApplyQueuedChanges_Return                                      ; FC8D5C  73 0f 01
 	ld XIX,0x00000000                                    ; FC8D5F  44 00 00 00 00
-sub_FC80E1_Loop:
+NoteRouting_ApplyQueuedChanges_Loop:
 	ld (xiz-6), xix                                      ; FC8D64  be fa 64
-	lda xbc, (0x602a02:24)                               ; FC8D67  f2 02 2a 60 31
+	lda xbc, (NoteRouting_ChangeQueue:24)                               ; FC8D67  f2 02 2a 60 31
 	m_add_rm MLD+r6, 0xfa, r1                            ; FC8D6C  ae fa 81
 	ld E,(XBC)                                           ; FC8D6F  81 25
 	ld xbc, (xiz-6)                                      ; FC8D71  ae fa 21
 	inc 1,XBC                                            ; FC8D74  e9 61
-	add XBC,0x00602a02                                   ; FC8D76  e9 c8 02 2a 60 00
+	add XBC,NoteRouting_ChangeQueue                                   ; FC8D76  e9 c8 02 2a 60 00
 	ld H,(XBC)                                           ; FC8D7C  81 26
 	ld xbc, (xiz-6)                                      ; FC8D7E  ae fa 21
 	inc 2,XBC                                            ; FC8D81  e9 62
-	add XBC,0x00602a02                                   ; FC8D83  e9 c8 02 2a 60 00
+	add XBC,NoteRouting_ChangeQueue                                   ; FC8D83  e9 c8 02 2a 60 00
 	ld L,(XBC)                                           ; FC8D89  81 27
 	ld xbc, (xiz-6)                                      ; FC8D8B  ae fa 21
 	inc 3,XBC                                            ; FC8D8E  e9 63
-	add XBC,0x00602a02                                   ; FC8D90  e9 c8 02 2a 60 00
+	add XBC,NoteRouting_ChangeQueue                                   ; FC8D90  e9 c8 02 2a 60 00
 	ld D,(XBC)                                           ; FC8D96  81 24
 	ld C,E                                               ; FC8D98  cd 8b
 	extz BC                                              ; FC8D9A  d9 12
 	extz XBC                                             ; FC8D9C  e9 12
 	cp BC,0x0008                                         ; FC8D9E  d9 cf 08 00
-	jrl ugt, JumpTable_FC8DB2_Code_Skip                                        ; FC8DA2  7b b9 00
+	jrl ugt, NoteRouting_ApplyQueuedChanges_Skip                                        ; FC8DA2  7b b9 00
 	sll bc, 0x02                                         ; FC8DA5  d9 ee 02
-	add XBC,JumpTable_FC8DB2                             ; FC8DA8  e9 c8 b2 8d fc 00
+	add XBC,NoteChange_HandlerTable                             ; FC8DA8  e9 c8 b2 8d fc 00
 	ld XBC,(XBC)                                         ; FC8DAE  a1 21
 	jp (xbc)                                             ; FC8DB0  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FC8DB2 -- 9 entries, read by the computed jump at 0xFC8DA8
+; NoteChange_HandlerTable -- 9 entries, read by the computed jump at 0xFC8DA8
 ;
 ; ENTRY COUNT = 9, taken from the READER's own bound and not by eye:
 ;   0xFC8D9E  cp BC,0x0008        indices 0..8
@@ -121855,97 +121879,109 @@ sub_FC80E1_Loop:
 ;          notes/prom_a_fc8000_module_check.py.
 ; Unknown: what the nine arms select.
 ; ---------------------------------------------------------------------
-JumpTable_FC8DB2:
-	.long sub_FC8DD6                                 ; FC8DB2  [  0]
-	.long sub_FC8DE6                                 ; FC8DB6  [  1]
-	.long sub_FC8DF5                                 ; FC8DBA  [  2]
-	.long sub_FC8E04                                 ; FC8DBE  [  3]
-	.long sub_FC8E13                                 ; FC8DC2  [  4]
-	.long sub_FC8E22                                 ; FC8DC6  [  5]
-	.long sub_FC8E31                                 ; FC8DCA  [  6]
-	.long sub_FC8E40                                 ; FC8DCE  [  7]
-	.long sub_FC8E4F                                 ; FC8DD2  [  8]
-sub_FC8DD6:   ; entry: named by 1 `.long` operand, first at 0xFC8DB2
+; NoteChange_HandlerTable: the nine note-change kinds of NoteRouting_ChangeQueue, read by
+;   NoteRouting_ApplyQueuedChanges -- notes/FINDINGS-prom_a-note-frames.md section 7.
+NoteChange_HandlerTable:
+	.long NoteChange_CasePartReceive                                 ; FC8DB2  [  0]
+	.long NoteChange_Case1Unused                                 ; FC8DB6  [  1]
+	.long NoteChange_CaseTrackMidiOut                                 ; FC8DBA  [  2]
+	.long NoteChange_CaseTrackPart                                 ; FC8DBE  [  3]
+	.long NoteChange_CasePartToneGen                                 ; FC8DC2  [  4]
+	.long NoteChange_CasePartTransmit                                 ; FC8DC6  [  5]
+	.long NoteChange_CaseTrackPartRecord                                 ; FC8DCA  [  6]
+	.long NoteChange_CaseMidiInMode                                 ; FC8DCE  [  7]
+	.long NoteChange_CaseMidiOutScheme                                 ; FC8DD2  [  8]
+; NoteChange_CasePartReceive: NoteChange_HandlerTable[0]: NoteChange_ReleasePartReceivedNotes(record +1, +2, +3).
+NoteChange_CasePartReceive:   ; entry: named by 1 `.long` operand, first at 0xFC8DB2
 	push 0x00                                            ; FC8DD6  09 00
 	push D                                               ; FC8DD8  cc 04
 	pushw hl                                             ; FC8DDA  2b
 	push 0x00                                            ; FC8DDB  09 00
 	push H                                               ; FC8DDD  ce 04
-	call sub_FC9727                                      ; FC8DDF  1d 27 97 fc
+	call NoteChange_ReleasePartReceivedNotes                                      ; FC8DDF  1d 27 97 fc
 	jrl .LFC8E5C                                         ; FC8DE3  78 76 00
-sub_FC8DE6:   ; entry: named by 1 `.long` operand, first at 0xFC8DB6
+; NoteChange_Case1Unused: NoteChange_HandlerTable[1]: calls a bare ret (NoteChange_Kind1_Nop).  None of the queuers read queues kind 1.
+NoteChange_Case1Unused:   ; entry: named by 1 `.long` operand, first at 0xFC8DB6
 	push 0x00                                            ; FC8DE6  09 00
 	push D                                               ; FC8DE8  cc 04
 	pushw hl                                             ; FC8DEA  2b
 	push 0x00                                            ; FC8DEB  09 00
 	push H                                               ; FC8DED  ce 04
-	call sub_FC8DE6_Nop                                      ; FC8DEF  1d 26 97 fc
+	call NoteChange_Kind1_Nop                                      ; FC8DEF  1d 26 97 fc
 	jr .LFC8E5C                                          ; FC8DF3  68 67
-sub_FC8DF5:   ; entry: named by 1 `.long` operand, first at 0xFC8DBA
+; NoteChange_CaseTrackMidiOut: NoteChange_HandlerTable[2]: NoteChange_ReleaseTrackMidiOutNotes(record +1, +2, +3).
+NoteChange_CaseTrackMidiOut:   ; entry: named by 1 `.long` operand, first at 0xFC8DBA
 	push 0x00                                            ; FC8DF5  09 00
 	push D                                               ; FC8DF7  cc 04
 	pushw hl                                             ; FC8DF9  2b
 	push 0x00                                            ; FC8DFA  09 00
 	push H                                               ; FC8DFC  ce 04
-	call sub_FC97F1                                      ; FC8DFE  1d f1 97 fc
+	call NoteChange_ReleaseTrackMidiOutNotes                                      ; FC8DFE  1d f1 97 fc
 	jr .LFC8E5C                                          ; FC8E02  68 58
-sub_FC8E04:   ; entry: named by 1 `.long` operand, first at 0xFC8DBE
+; NoteChange_CaseTrackPart: NoteChange_HandlerTable[3]: NoteChange_ReleaseTrackNotesOfOldPart(record +1, +2, +3).
+NoteChange_CaseTrackPart:   ; entry: named by 1 `.long` operand, first at 0xFC8DBE
 	push 0x00                                            ; FC8E04  09 00
 	push D                                               ; FC8E06  cc 04
 	pushw hl                                             ; FC8E08  2b
 	push 0x00                                            ; FC8E09  09 00
 	push H                                               ; FC8E0B  ce 04
-	call sub_FC9796                                      ; FC8E0D  1d 96 97 fc
+	call NoteChange_ReleaseTrackNotesOfOldPart                                      ; FC8E0D  1d 96 97 fc
 	jr .LFC8E5C                                          ; FC8E11  68 49
-sub_FC8E13:   ; entry: named by 1 `.long` operand, first at 0xFC8DC2
+; NoteChange_CasePartToneGen: NoteChange_HandlerTable[4]: calls a bare ret (NoteChange_PartToneGen_Nop).  Kind 4 is queued only by
+;   NoteRouting_QueueToneGenPartChanges, which nothing calls.
+NoteChange_CasePartToneGen:   ; entry: named by 1 `.long` operand, first at 0xFC8DC2
 	push 0x00                                            ; FC8E13  09 00
 	push D                                               ; FC8E15  cc 04
 	pushw hl                                             ; FC8E17  2b
 	push 0x00                                            ; FC8E18  09 00
 	push H                                               ; FC8E1A  ce 04
-	call sub_FC8E13_Nop                                      ; FC8E1C  1d 53 98 fc
+	call NoteChange_PartToneGen_Nop                                      ; FC8E1C  1d 53 98 fc
 	jr .LFC8E5C                                          ; FC8E20  68 3a
-sub_FC8E22:   ; entry: named by 1 `.long` operand, first at 0xFC8DC6
+; NoteChange_CasePartTransmit: NoteChange_HandlerTable[5]: NoteChange_ReleasePartTransmittedNotes(record +1, +2, +3).
+NoteChange_CasePartTransmit:   ; entry: named by 1 `.long` operand, first at 0xFC8DC6
 	push 0x00                                            ; FC8E22  09 00
 	push D                                               ; FC8E24  cc 04
 	pushw hl                                             ; FC8E26  2b
 	push 0x00                                            ; FC8E27  09 00
 	push H                                               ; FC8E29  ce 04
-	call sub_FC9854                                      ; FC8E2B  1d 54 98 fc
+	call NoteChange_ReleasePartTransmittedNotes                                      ; FC8E2B  1d 54 98 fc
 	jr .LFC8E5C                                          ; FC8E2F  68 2b
-sub_FC8E31:   ; entry: named by 1 `.long` operand, first at 0xFC8DCA
+; NoteChange_CaseTrackPartRecord: NoteChange_HandlerTable[6]: NoteChange_ReleaseRecordedNotesOfOldPart(record +1, +2, +3).
+NoteChange_CaseTrackPartRecord:   ; entry: named by 1 `.long` operand, first at 0xFC8DCA
 	push 0x00                                            ; FC8E31  09 00
 	push D                                               ; FC8E33  cc 04
 	pushw hl                                             ; FC8E35  2b
 	push 0x00                                            ; FC8E36  09 00
 	push H                                               ; FC8E38  ce 04
-	call sub_FC98E7                                      ; FC8E3A  1d e7 98 fc
+	call NoteChange_ReleaseRecordedNotesOfOldPart                                      ; FC8E3A  1d e7 98 fc
 	jr .LFC8E5C                                          ; FC8E3E  68 1c
-sub_FC8E40:   ; entry: named by 1 `.long` operand, first at 0xFC8DCE
+; NoteChange_CaseMidiInMode: NoteChange_HandlerTable[7]: NoteChange_ReleaseMidiInChannelNotes(record +1, +2, +3).
+NoteChange_CaseMidiInMode:   ; entry: named by 1 `.long` operand, first at 0xFC8DCE
 	push 0x00                                            ; FC8E40  09 00
 	push D                                               ; FC8E42  cc 04
 	pushw hl                                             ; FC8E44  2b
 	push 0x00                                            ; FC8E45  09 00
 	push H                                               ; FC8E47  ce 04
-	call sub_FC9933                                      ; FC8E49  1d 33 99 fc
+	call NoteChange_ReleaseMidiInChannelNotes                                      ; FC8E49  1d 33 99 fc
 	jr .LFC8E5C                                          ; FC8E4D  68 0d
-sub_FC8E4F:   ; entry: named by 1 `.long` operand, first at 0xFC8DD2
+; NoteChange_CaseMidiOutScheme: NoteChange_HandlerTable[8]: NoteChange_ReleaseOldMidiOutScheme(record +1, +2, +3).
+NoteChange_CaseMidiOutScheme:   ; entry: named by 1 `.long` operand, first at 0xFC8DD2
 	push 0x00                                            ; FC8E4F  09 00
 	push D                                               ; FC8E51  cc 04
 	pushw hl                                             ; FC8E53  2b
 	push 0x00                                            ; FC8E54  09 00
 	push H                                               ; FC8E56  ce 04
-	call sub_FC9AA1                                      ; FC8E58  1d a1 9a fc
+	call NoteChange_ReleaseOldMidiOutScheme                                      ; FC8E58  1d a1 9a fc
 .LFC8E5C:
 	inc 6,XSP                                            ; FC8E5C  ef 66
-JumpTable_FC8DB2_Code_Skip:
+NoteRouting_ApplyQueuedChanges_Skip:
 	inc 4,XIX                                            ; FC8E5E  ec 64
 	incw 0x01, (xiz-2)                                   ; FC8E60  9e fe 61
 	ld bc, (xiz-2)                                       ; FC8E63  9e fe 21
-	m_cp_rm MW24, 0x602a00, r1                           ; FC8E66  d2 00 2a 60 f1
-	jrl c, sub_FC80E1_Loop                                          ; FC8E6B  77 f6 fe
-JumpTable_FC8DB2_Code_Skip2:
-	ldw (0x602a00:24), 0x00                             ; FC8E6E  f2 00 2a 60 02 00 00
+	m_cp_rm MW24, NoteRouting_ChangeCount, r1                           ; FC8E66  d2 00 2a 60 f1
+	jrl c, NoteRouting_ApplyQueuedChanges_Loop                                          ; FC8E6B  77 f6 fe
+NoteRouting_ApplyQueuedChanges_Return:
+	ldw (NoteRouting_ChangeCount:24), 0x00                             ; FC8E6E  f2 00 2a 60 02 00 00
 	pop XIX                                              ; FC8E75  5c
 	popw de                                              ; FC8E76  4a
 	popw hl                                              ; FC8E77  4b
@@ -122887,9 +122923,13 @@ TimedEvents_GatherFrame:
 	popw hl                                              ; FC9722  4b
 	unlk XIZ                                             ; FC9723  ee 0d
 	ret                                                  ; FC9725  0e
-sub_FC8DE6_Nop:
+NoteChange_Kind1_Nop:
 	ret                                                  ; FC9726  0e
-sub_FC9727:
+; NoteChange_ReleasePartReceivedNotes: kind 0 (part, new channel, old channel), queued when a part's MIDI channel (block +0x22) or its receive bit (bit 6
+;   of its MIDI record, +0x152) changed: unless the old channel or the part is 0xFF, the part's notes from MIDI IN
+;   (source 1) on the old channel become note-offs (PartNotes_BuildReleaseFrame, all three outputs) and go to the tone
+;   generator / MIDI OUT / record buffer as its result selects.
+NoteChange_ReleasePartReceivedNotes:
 	link XIZ,0xfed8                                      ; FC9727  ee 0c d8 fe
 	pushw hl                                             ; FC972B  2b
 	push XIX                                             ; FC972C  3c
@@ -122914,7 +122954,7 @@ sub_FC9727:
 	m_push MBD+r6, 0x08                                  ; FC975D  8e 08 04
 	pushw 0x07                                           ; FC9760  0b 07 00
 	push XIX                                             ; FC9763  3c
-	call sub_FCA475                                      ; FC9764  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC9764  1d 75 a4 fc
 	ld H,A                                               ; FC9768  c9 8e
 	and A,0x01                                           ; FC976A  c9 cc 01
 	inc 8,XSP                                            ; FC976D  ef 60
@@ -122941,7 +122981,10 @@ sub_FC9727:
 	popw hl                                              ; FC9792  4b
 	unlk XIZ                                             ; FC9793  ee 0d
 	ret                                                  ; FC9795  0e
-sub_FC9796:
+; NoteChange_ReleaseTrackNotesOfOldPart: kind 3 (track, new part, old part), queued when the part a track feeds (block +0x42, low 5 bits) changed: the
+;   track's notes (source 2, channel key = the track) on the OLD part are released (mask 7) and the note-offs go to
+;   the tone generator and MIDI OUT.
+NoteChange_ReleaseTrackNotesOfOldPart:
 	link XIZ,0xfed8                                      ; FC9796  ee 0c d8 fe
 	pushw hl                                             ; FC979A  2b
 	push XIX                                             ; FC979B  3c
@@ -122964,7 +123007,7 @@ sub_FC9796:
 	pushw hl                                             ; FC97C7  2b
 	pushw 0x07                                           ; FC97C8  0b 07 00
 	push XIX                                             ; FC97CB  3c
-	call sub_FCA475                                      ; FC97CC  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC97CC  1d 75 a4 fc
 	ld H,A                                               ; FC97D0  c9 8e
 	and A,0x01                                           ; FC97D2  c9 cc 01
 	inc 8,XSP                                            ; FC97D5  ef 60
@@ -122984,7 +123027,10 @@ sub_FC9796:
 	popw hl                                              ; FC97ED  4b
 	unlk XIZ                                             ; FC97EE  ee 0d
 	ret                                                  ; FC97F0  0e
-sub_FC97F1:
+; NoteChange_ReleaseTrackMidiOutNotes: kind 2 (track, new channel, old channel), queued when a track's MIDI OUT channel (block +0x52) changed: unless
+;   the old one is 0xFF, the track's notes (source 2, channel key = the track) on its part (BStore_TrackToPart) get
+;   MIDI OUT note-offs (PartNotes_BuildReleaseFrame with mask 2, PartFrame_SendToMidiOut).
+NoteChange_ReleaseTrackMidiOutNotes:
 	link XIZ,0xfed8                                      ; FC97F1  ee 0c d8 fe
 	pushw hl                                             ; FC97F5  2b
 	push XIX                                             ; FC97F6  3c
@@ -123014,7 +123060,7 @@ sub_FC97F1:
 	push H                                               ; FC9837  ce 04
 	pushw 0x02                                           ; FC9839  0b 02 00
 	push XIX                                             ; FC983C  3c
-	call sub_FCA475                                      ; FC983D  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC983D  1d 75 a4 fc
 	and A,0x02                                           ; FC9841  c9 cc 02
 	inc 8,XSP                                            ; FC9844  ef 60
 	jr z, .LFC984E                                       ; FC9846  66 06
@@ -123026,9 +123072,12 @@ sub_FC97F1:
 	popw hl                                              ; FC984F  4b
 	unlk XIZ                                             ; FC9850  ee 0d
 	ret                                                  ; FC9852  0e
-sub_FC8E13_Nop:
+NoteChange_PartToneGen_Nop:
 	ret                                                  ; FC9853  0e
-sub_FC9854:
+; NoteChange_ReleasePartTransmittedNotes: kind 5 (part, new channel, old channel), queued when a part's MIDI channel (+0x22) or its transmit bit (bit 5 of
+;   its MIDI record) changed: unless the old channel or the part is 0xFF, the part's note-list notes -- sources 0 and 1,
+;   whose channel key is the part itself (NoteFrame_SelectForPart writes it) -- get MIDI OUT note-offs (mask 2).
+NoteChange_ReleasePartTransmittedNotes:
 	link XIZ,0xfed8                                      ; FC9854  ee 0c d8 fe
 	pushw hl                                             ; FC9858  2b
 	pushw de                                             ; FC9859  2a
@@ -123056,7 +123105,7 @@ sub_FC9854:
 	push H                                               ; FC988E  ce 04
 	pushw 0x02                                           ; FC9890  0b 02 00
 	push XIX                                             ; FC9893  3c
-	call sub_FCA475                                      ; FC9894  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC9894  1d 75 a4 fc
 	and A,0x02                                           ; FC9898  c9 cc 02
 	inc 8,XSP                                            ; FC989B  ef 60
 	jr z, .LFC98A5                                       ; FC989D  66 06
@@ -123083,7 +123132,7 @@ sub_FC9854:
 	push H                                               ; FC98CA  ce 04
 	pushw 0x02                                           ; FC98CC  0b 02 00
 	push XIX                                             ; FC98CF  3c
-	call sub_FCA475                                      ; FC98D0  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC98D0  1d 75 a4 fc
 	and A,0x02                                           ; FC98D4  c9 cc 02
 	inc 8,XSP                                            ; FC98D7  ef 60
 	jr z, .LFC98E1                                       ; FC98D9  66 06
@@ -123096,7 +123145,10 @@ sub_FC9854:
 	popw hl                                              ; FC98E3  4b
 	unlk XIZ                                             ; FC98E4  ee 0d
 	ret                                                  ; FC98E6  0e
-sub_FC98E7:
+; NoteChange_ReleaseRecordedNotesOfOldPart: kind 6 (track, new part, old part), queued when the part a track feeds changed: the old part's notes from any
+;   source (frame source 0xFF) whose channel key is the old part get note-offs in the record buffer only (mask 4,
+;   PartFrame_RecordToSeqBuf).
+NoteChange_ReleaseRecordedNotesOfOldPart:
 	link XIZ,0xfed8                                      ; FC98E7  ee 0c d8 fe
 	pushw hl                                             ; FC98EB  2b
 	push XIX                                             ; FC98EC  3c
@@ -123119,7 +123171,7 @@ sub_FC98E7:
 	push H                                               ; FC9917  ce 04
 	pushw 0x04                                           ; FC9919  0b 04 00
 	push XIX                                             ; FC991C  3c
-	call sub_FCA475                                      ; FC991D  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC991D  1d 75 a4 fc
 	and A,0x04                                           ; FC9921  c9 cc 04
 	inc 8,XSP                                            ; FC9924  ef 60
 	jr z, .LFC992E                                       ; FC9926  66 06
@@ -123131,7 +123183,13 @@ sub_FC98E7:
 	popw hl                                              ; FC992F  4b
 	unlk XIZ                                             ; FC9930  ee 0d
 	ret                                                  ; FC9932  0e
-sub_FC9933:
+; NoteChange_ReleaseMidiInChannelNotes: kind 7 (path, 0xFF, channel), queued when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or
+;   NoteRouting_ListChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,
+;   source 1) is released through each part as NoteRouting_Previous routed it (NoteFrame_SelectForPart,
+;   NoteRouting_ForPartFromMidiIn, PartNotes_ApplyFrame; the three outputs, MIDI OUT unless +0x293 bit 5).  Path 0:
+;   each part that received on the channel (previous block: +0x22 = channel, record bit 6) releases its MIDI IN notes
+;   on it (PartNotes_BuildReleaseFrame; tone generator and record buffer).
+NoteChange_ReleaseMidiInChannelNotes:
 	link XIZ,0xfe5a                                      ; FC9933  ee 0c 5a fe
 	pushw hl                                             ; FC9937  2b
 	pushw de                                             ; FC9938  2a
@@ -123173,7 +123231,7 @@ sub_FC9933:
 	push XBC                                             ; FC9993  39
 	lda xwa, (xiz-422)                                   ; FC9994  f3 f9 5a fe 30
 	push XWA                                             ; FC9999  38
-	call sub_FCAFC9                                      ; FC999A  1d c9 af fc
+	call NoteRouting_ForPartFromMidiIn                                      ; FC999A  1d c9 af fc
 	push 0x00                                            ; FC999E  09 00
 	push H                                               ; FC99A0  ce 04
 	lda xbc, (xiz-422)                                   ; FC99A2  f3 f9 5a fe 31
@@ -123194,7 +123252,7 @@ sub_FC9933:
 	ld C,L                                               ; FC99CC  cf 8b
 	and C,0x02                                           ; FC99CE  cb cc 02
 	jr z, .LFC99E5                                       ; FC99D1  66 12
-	m_bit 5, MD24, 0x602493                              ; FC99D3  f2 93 24 60 cd
+	m_bit 5, MD24, NoteRouting_MidiFlags                              ; FC99D3  f2 93 24 60 cd
 	jr nz, .LFC99E5                                      ; FC99D8  6e 0b
 	lda xbc, (xiz-410)                                   ; FC99DA  f3 f9 66 fe 31
 	push XBC                                             ; FC99DF  39
@@ -123243,7 +123301,7 @@ sub_FC9933:
 	pushw 0x07                                           ; FC9A57  0b 07 00
 	lda xbc, (xiz-410)                                   ; FC9A5A  f3 f9 66 fe 31
 	push XBC                                             ; FC9A5F  39
-	call sub_FCA475                                      ; FC9A60  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC9A60  1d 75 a4 fc
 	ld L,A                                               ; FC9A64  c9 8f
 	inc 8,XSP                                            ; FC9A66  ef 60
 	cp a, 0x00:i3                                          ; FC9A68  c9 d8
@@ -123274,7 +123332,12 @@ sub_FC9933:
 	popw hl                                              ; FC9A9D  4b
 	unlk XIZ                                             ; FC9A9E  ee 0d
 	ret                                                  ; FC9AA0  0e
-sub_FC9AA1:
+; NoteChange_ReleaseOldMidiOutScheme: kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_ListChannel
+;   changed while it stays set.  When source 0's note list holds notes: with 0 (MIDI OUT was per part) each part's
+;   source-0 notes get MIDI OUT note-offs; with 1 (MIDI OUT carried source 0 on the one channel) the note list's
+;   note-offs go out on the old channel (PartFrame_SendToMidiOut).  With 0, each part's source-1 notes then get MIDI
+;   OUT note-offs too, when source 1's list holds notes.
+NoteChange_ReleaseOldMidiOutScheme:
 	link XIZ,0xfe4e                                      ; FC9AA1  ee 0c 4e fe
 	pushw hl                                             ; FC9AA5  2b
 	pushw de                                             ; FC9AA6  2a
@@ -123299,7 +123362,7 @@ sub_FC9AA1:
 	pushw 0x02                                           ; FC9ADC  0b 02 00
 	lda xbc, (xiz-414)                                   ; FC9ADF  f3 f9 62 fe 31
 	push XBC                                             ; FC9AE4  39
-	call sub_FCA475                                      ; FC9AE5  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC9AE5  1d 75 a4 fc
 	and A,0x02                                           ; FC9AE9  c9 cc 02
 	inc 8,XSP                                            ; FC9AEC  ef 60
 	jr z, .LFC9AFB                                       ; FC9AEE  66 0b
@@ -123386,7 +123449,7 @@ sub_FC9AA1:
 	pushw 0x02                                           ; FC9BEC  0b 02 00
 	lda xbc, (xiz-414)                                   ; FC9BEF  f3 f9 62 fe 31
 	push XBC                                             ; FC9BF4  39
-	call sub_FCA475                                      ; FC9BF5  1d 75 a4 fc
+	call PartNotes_BuildReleaseFrame                                      ; FC9BF5  1d 75 a4 fc
 	and A,0x02                                           ; FC9BF9  c9 cc 02
 	inc 8,XSP                                            ; FC9BFC  ef 60
 	jr Z,.LFC9C0B                                        ; FC9BFE  66 0b
@@ -124338,7 +124401,12 @@ sub_FCA276:
 	popw hl                                              ; FCA471  4b
 	unlk XIZ                                             ; FCA472  ee 0d
 	ret                                                  ; FCA474  0e
-sub_FCA475:
+; PartNotes_BuildReleaseFrame: (frame with a source at +2 -- 0xFF any -- and a channel key at +3, outputs mask, part): each of the part's notes
+;   (PartNoteList_Heads) from that source with that key goes into the frame as a note-off (velocity 0) and is marked
+;   released (0xFF) on each output of the mask it still sounds on -- node +5 tone generator, +8 MIDI OUT, +0x0A
+;   record; a node released on all three returns to the pool and to the part's PartNote_Budget.  A = the outputs the
+;   frame must go to (bit 0 / 1 / 2).
+PartNotes_BuildReleaseFrame:
 	link XIZ,0xffee                                      ; FCA475  ee 0c ee ff
 	pushw hl                                             ; FCA479  2b
 	pushw de                                             ; FCA47A  2a
@@ -124657,17 +124725,17 @@ sub_FCA738:
 	jr z, .LFCA79C                                       ; FCA76C  66 2e
 	cp l, 0x01:i3                                          ; FCA76E  cf d9
 	jr nz, .LFCA79E                                      ; FCA770  6e 2c
-	ld a, (0x602493:24)                                 ; FCA772  c2 93 24 60 21
+	ld a, (NoteRouting_MidiFlags:24)                                 ; FCA772  c2 93 24 60 21
 	and A,0xc0                                           ; FCA777  c9 cc c0
 	srl a, 0x06                                          ; FCA77A  c9 ef 06
 	cp a, 0x01:i3                                          ; FCA77D  c9 d9
 	jr nz, .LFCA78D                                      ; FCA77F  6e 0c
 	ld L,(XBC+0x03)                                      ; FCA781  89 03 27
-	ld a, (0x602492:24)                                 ; FCA784  c2 92 24 60 21
+	ld a, (NoteRouting_ListChannel:24)                                 ; FCA784  c2 92 24 60 21
 	cp A,L                                               ; FCA789  cf f1
 	jr z, .LFCA79C                                       ; FCA78B  66 0f
 .LFCA78D:
-	ld c, (0x602493:24)                                 ; FCA78D  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FCA78D  c2 93 24 60 23
 	and C,0xc0                                           ; FCA792  cb cc c0
 	srl c, 0x06                                          ; FCA795  cb ef 06
 	cp c, 0x02:i3                                          ; FCA798  cb da
@@ -124830,17 +124898,17 @@ sub_FCA8D4:
 	jr z, .LFCA952                                       ; FCA922  66 2e
 	cp h, 0x01:i3                                          ; FCA924  ce d9
 	jr nz, .LFCA95B                                      ; FCA926  6e 33
-	ld a, (0x602493:24)                                 ; FCA928  c2 93 24 60 21
+	ld a, (NoteRouting_MidiFlags:24)                                 ; FCA928  c2 93 24 60 21
 	and A,0xc0                                           ; FCA92D  c9 cc c0
 	srl a, 0x06                                          ; FCA930  c9 ef 06
 	cp a, 0x01:i3                                          ; FCA933  c9 d9
 	jr nz, .LFCA943                                      ; FCA935  6e 0c
 	ld H,(XBC+0x03)                                      ; FCA937  89 03 26
-	ld a, (0x602492:24)                                 ; FCA93A  c2 92 24 60 21
+	ld a, (NoteRouting_ListChannel:24)                                 ; FCA93A  c2 92 24 60 21
 	cp A,H                                               ; FCA93F  ce f1
 	jr z, .LFCA952                                       ; FCA941  66 0f
 .LFCA943:
-	ld c, (0x602493:24)                                 ; FCA943  c2 93 24 60 23
+	ld c, (NoteRouting_MidiFlags:24)                                 ; FCA943  c2 93 24 60 23
 	and C,0xc0                                           ; FCA948  cb cc c0
 	srl c, 0x06                                          ; FCA94B  cb ef 06
 	cp c, 0x02:i3                                          ; FCA94E  cb da
@@ -125558,7 +125626,10 @@ NoteRouting_ForPart:
 	popw hl                                              ; FCAFC5  4b
 	unlk XIZ                                             ; FCAFC6  ee 0d
 	ret                                                  ; FCAFC8  0e
-sub_FCAFC9:
+; NoteRouting_ForPartFromMidiIn: (out, routing block, part): NoteRouting_ForPart's tone-generator and recording-track outputs, but MIDI OUT (the
+;   +0x22 channel with the port and record-bit-5 tests) only when Variant_Flag is 2, NoteRouting_MidiFlags bit 5 is
+;   clear and the MIDI IN mode is 1.  The MIDI IN processors use it for notes on the note-list path.
+NoteRouting_ForPartFromMidiIn:
 	link XIZ,0x0000                                      ; FCAFC9  ee 0c 00 00
 	pushw hl                                             ; FCAFCD  2b
 	pushw de                                             ; FCAFCE  2a
@@ -125698,7 +125769,10 @@ sub_FCAFC9:
 	popw hl                                              ; FCB122  4b
 	unlk XIZ                                             ; FCB123  ee 0d
 	ret                                                  ; FCB125  0e
-sub_FCB126:
+; NoteRouting_ForReceivingPart: (out, routing block, part): the tone-generator output (+0x02 and its +0x92 record, without the bit-5 test) and the
+;   recording track; MIDI OUT always 0xFF.  The MIDI IN processors' per-channel path: each part whose +0x22 is the
+;   frame's channel and whose record has bit 6 receives the frame.
+NoteRouting_ForReceivingPart:
 	link XIZ,0x0000                                      ; FCB126  ee 0c 00 00
 	pushw hl                                             ; FCB12A  2b
 	pushw de                                             ; FCB12B  2a
@@ -125986,7 +126060,7 @@ sub_FCB2F0:
 ;   RAM 0x3800  32 x u8, all 24    a per-SLOT budget.  0xFC9FFE `add XIY,
 ;               0x00003800 / ld C,(XIY) / cp c,0 / jrl le` skips when it is
 ;               <= 0; 0xFCA0CE `decm8 0x01,(xbc)` spends one; five more `add
-;               XBC,0x00003800` in PartNotes_ApplyFrame/sub_FCA276/sub_FCA475.
+;               XBC,0x00003800` in PartNotes_ApplyFrame/sub_FCA276/PartNotes_BuildReleaseFrame.
 ;   RAM 0x3820   3 x u8, all 16    the same per QUEUE (0xFC9CB3, 0xFC9D49).
 ;   RAM 0x3823   3 x 13-byte QUEUE HEADS.  0xFC8F7C `ldw DE,0x3823 / add
 ;               DE,13*k`.  Node layout: +0..+8 payload (+2 a key byte and

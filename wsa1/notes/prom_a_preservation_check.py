@@ -47,6 +47,7 @@ LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):')
 # that asked it would forgive every loss the moment the work was done.  A
 # declaration has to survive the thing it declares.
 RENAMES = {
+    "NoteRouting_RebuildFlags": "NoteRouting_ChangeFlags",   # 2026-10-04: RAM equate renamed (the builders' change bits, not outputs)
     "EditField_Note": "EditField_EventVelocity",   # 2026-10-04: RAM equate corrected (0x601F45 is the event velocity)
     "EditField_Velocity": "EditField_NewNoteVelocity",   # 2026-10-04: RAM equate renamed with it
     "sub_F95765": "ScreenLeave_GateArrayCheck",
@@ -3419,9 +3420,9 @@ RENAMES = {
     "sub_FC0D1D": "Msg0716_ScaleTuningPostChangedFields",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FC179B": "Msg0716_PostSysEx50_81",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FC25BF": "sub_FC25A8",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FC5D08": "sub_FC5CDA",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FC5D87": "sub_FC5D30",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FC6050": "sub_FC5FAC",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FC5D08": "NoteRouting_QueueChange",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FC5D87": "NoteRouting_QueueMidiInChanges",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FC6050": "NoteRouting_QueueMidiOutSchemeChange",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FC626B": "sub_FC61A6",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FCA7C1": "sub_FCA738",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FD0E49": "SoftKeyCol6_SoundEditModelingToneTemplate",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4226,7 +4227,7 @@ RENAMES = {
     "sub_FC54C6": "NoteRouting_RebuildForSong",
     "sub_FC5518": "NoteRouting_Rebuild",
     "sub_FC5566": "NoteRouting_SetSoloAndRebuild",
-    "sub_FC5C7C": "NoteRouting_RebuildOutputs",
+    "sub_FC5C7C": "NoteRouting_CommitChanges",
     "sub_FC6153": "NoteRouting_UpdateActivePartMask",
     "T_F411B8": "T_NoteRouting_RebuildForSong",
     "T_F411BC": "T_NoteRouting_Rebuild",
@@ -4239,6 +4240,40 @@ RENAMES = {
     "sub_FC5C4C": "NoteRouting_BuildForSoundCopy",
     "sub_FC5C5C": "NoteRouting_BuildForModes23To27",
     "Dispatch32_FC6546": "NoteRouting_BuildByPanelMode",
+    "sub_FC5CDA": "NoteRouting_QueueChange",
+    "sub_FC8D49": "NoteRouting_ApplyQueuedChanges",
+    "sub_FC8DD6": "NoteChange_CasePartReceive",
+    "sub_FC8DE6": "NoteChange_Case1Unused",
+    "sub_FC8DF5": "NoteChange_CaseTrackMidiOut",
+    "sub_FC8E04": "NoteChange_CaseTrackPart",
+    "sub_FC8E13": "NoteChange_CasePartToneGen",
+    "sub_FC8E22": "NoteChange_CasePartTransmit",
+    "sub_FC8E31": "NoteChange_CaseTrackPartRecord",
+    "sub_FC8E40": "NoteChange_CaseMidiInMode",
+    "sub_FC8E4F": "NoteChange_CaseMidiOutScheme",
+    "sub_FC9727": "NoteChange_ReleasePartReceivedNotes",
+    "sub_FC97F1": "NoteChange_ReleaseTrackMidiOutNotes",
+    "sub_FC9796": "NoteChange_ReleaseTrackNotesOfOldPart",
+    "sub_FC9854": "NoteChange_ReleasePartTransmittedNotes",
+    "sub_FC98E7": "NoteChange_ReleaseRecordedNotesOfOldPart",
+    "sub_FC9933": "NoteChange_ReleaseMidiInChannelNotes",
+    "sub_FC9AA1": "NoteChange_ReleaseOldMidiOutScheme",
+    "sub_FC5D30": "NoteRouting_QueueMidiInChanges",
+    "sub_FC5F19": "NoteRouting_QueueTrackChanges",
+    "sub_FC5FAC": "NoteRouting_QueueMidiOutSchemeChange",
+    "sub_FC6065": "NoteRouting_QueuePartTransmitChanges",
+    "sub_FC610F": "NoteRouting_QueueTrackPartChanges",
+    "sub_FCA475": "PartNotes_BuildReleaseFrame",
+    "sub_FCAFC9": "NoteRouting_ForPartFromMidiIn",
+    "sub_FCB126": "NoteRouting_ForReceivingPart",
+    "NoteRouting_RebuildOutputs": "NoteRouting_CommitChanges",
+    "JumpTable_FC8DB2": "NoteChange_HandlerTable",
+    "sub_FC80E1_Loop": "NoteRouting_ApplyQueuedChanges_Loop",
+    "JumpTable_FC8DB2_Code_Skip": "NoteRouting_ApplyQueuedChanges_Skip",
+    "JumpTable_FC8DB2_Code_Skip2": "NoteRouting_ApplyQueuedChanges_Return",
+    "sub_FC8DE6_Nop": "NoteChange_Kind1_Nop",
+    "sub_FC8E13_Nop": "NoteChange_PartToneGen_Nop",
+    "T_F413D4": "T_NoteRouting_ApplyQueuedChanges",
 }
 
 

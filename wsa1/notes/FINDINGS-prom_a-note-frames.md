@@ -100,6 +100,22 @@ why a DRUM EDIT row audition sounds the row's drum.
 | +0x293 | bit 3 MIDI OUT port B allowed, bit 4 port A, bit 5 no tone-generator output |
 | +0x298 | bit 9 (word): no tone-generator output |
 
+**Corrected 2026-10-04 (section 7).** Three rows of this table were wrong:
+- "+0x22 + part | the part's MIDI OUT channel". It is the part's MIDI channel in both directions. MIDI OUT
+  sends on it while the part's record has bit 5. The MIDI IN processors' per-channel path receives on it while the
+  record has bit 6 (`MidiInA_ProcessRing` at 0xFC8222).
+- "+0x152 + 10 x part | the MIDI OUT record of the part (bit 5: on)". It is the part's MIDI record: bit 5
+  transmit, bit 6 receive.
+- "+0x293 | ... bit 5 no tone-generator output". Bit 5 turns the per-part MIDI OUT off
+  (`NoteRouting_ForPart` 0xFCAEEE sets out+1 = 0xFF). Instead, `Ring601850_ProcessNoteEvents` (0xFC8893) sends
+  source 0's notes on the single channel +0x292. Bits 6-7 are the MIDI IN mode. +0x292 and +0x293 are now
+  `NoteRouting_ListChannel` and `NoteRouting_MidiFlags`.
+
+Step 4 below also said `NoteRouting_RebuildOutputs` "rebuilds the output tables `NoteRouting_RebuildFlags`
+(0x4C04) selects" and that "the output rebuilders read that previous copy". There are no output tables. The
+routine queues and applies note releases (section 7). It is now `NoteRouting_CommitChanges`, and 0x4C04 is
+`NoteRouting_ChangeFlags`.
+
 A missing output points at the default record 0x602ACA.
 
 **Rebuilding it.** Three entry points rebuild the block:
@@ -114,15 +130,77 @@ Each entry point:
 2. runs the per-mode builder `NoteRouting_BuildByPanelMode[PanelMode]`;
 3. refreshes `NoteRouting_ActivePartMask` (0x4C06), which is `BitMask32_Table_FC64C6[+1]`, or the +0 byte
    when +1 is 0xFF; the part masks are re-sent when it changes;
-4. runs `NoteRouting_RebuildOutputs`, which rebuilds the output tables `NoteRouting_RebuildFlags` (0x4C04)
-   selects and copies the block to `NoteRouting_Previous`
-   (0x602600). The output rebuilders read that previous copy.
+4. runs `NoteRouting_CommitChanges`. It releases the notes whose routing changed (section 7), then copies
+   the block to `NoteRouting_Previous` (0x602600) and clears `NoteRouting_ChangeFlags` (0x4C04).
 
 ## 6. Not established yet
 
 - What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `PartNotes_ApplyFrame`, `PartFrame_SendToToneGen`, `NoteRouting_ForPart`, `NoteRouting_ForTrack`)
   do with an entry.
-- What the state at 0x602200 / 0x6020D4 / 0x602492 / 0x602493 holds.
+- What the state at 0x602200 / 0x6020D4 / 0x602492 / 0x602493 holds. (0x602492 / 0x602493: section 7.)
 - Three of the sinks are visible: the tone generator over the link (`T_Link_SendBlockIn32ByteChunks`), the
   MIDI OUT rings 0x601432 / 0x60153C (`PartFrame_SendToMidiOut`), and the sequencer's record buffer (`PartFrame_RecordToSeqBuf` puts
   5-byte 0x90 events on `SeqBufRing` with `Seq_BeatTick`).
+
+## 7. Releasing the notes a routing change orphans (2026-10-04)
+
+A rebuild can move a part to another channel, a track to another part, or MIDI IN to another path.
+`NoteRouting_CommitChanges` (0xFC5C7C) sends note-offs for the notes still sounding on the old route. The
+evident purpose, not verified on hardware, is that their own note-offs will now arrive by the new route.
+
+1. It zeroes `NoteRouting_ChangeCount` (0x602A00).
+2. It runs the differs that `NoteRouting_ChangeFlags` selects. Each one compares the block with
+   `NoteRouting_Previous` and queues a 4-byte record (kind, a, b, c) for each difference through
+   `NoteRouting_QueueChange` into `NoteRouting_ChangeQueue` (0x602A02).
+3. It applies the queue (`T_NoteRouting_ApplyQueuedChanges`).
+4. It copies the block to the previous one and clears the flags.
+
+`NoteRouting_ApplyQueuedChanges` dispatches each record's kind through `NoteChange_HandlerTable` (0xFC8DB2,
+nine entries) with (a, b, c). Handlers 0, 2, 3, 5 and 6 do nothing when the old value c is 0xFF. Every handler
+except 1 and 4 (bare rets) builds note-offs with `PartNotes_BuildReleaseFrame` or `NoteList_BuildReleaseAllFrame`
+and sends them.
+
+| kind | queued by (flag bit) | record | handler: what gets note-offs |
+|---|---|---|---|
+| 0 | `NoteRouting_QueueMidiInChanges` (5) | part, new / 0xFF, old channel | `NoteChange_ReleasePartReceivedNotes`: the part's MIDI IN notes on the old channel; all three outputs |
+| 1 | none found | | a bare ret |
+| 2 | `NoteRouting_QueueTrackChanges` (6 or 7) | track, new, old MIDI OUT channel (+0x52) | `NoteChange_ReleaseTrackMidiOutNotes`: the track's notes on its part; MIDI OUT only |
+| 3 | `NoteRouting_QueueTrackChanges` (6 or 7) | track, new, old part (+0x42) | `NoteChange_ReleaseTrackNotesOfOldPart`: the track's notes on the old part; tone generator and MIDI OUT |
+| 4 | `NoteRouting_QueueToneGenPartChanges` (never called) | part, new, old tone-generator part (+0x02) | a bare ret |
+| 5 | `NoteRouting_QueuePartTransmitChanges` (5) | part, new / 0xFF, old channel | `NoteChange_ReleasePartTransmittedNotes`: the part's note-list notes (sources 0 and 1); MIDI OUT only |
+| 6 | `NoteRouting_QueueTrackPartChanges` (6) | track, new, old part | `NoteChange_ReleaseRecordedNotesOfOldPart`: the old part's note-list notes; record buffer only |
+| 7 | `NoteRouting_QueueMidiInChanges` (5) | path, 0xFF, channel | `NoteChange_ReleaseMidiInChannelNotes`: path 1, MIDI IN's note-list notes through each part as the previous block routed them; path 0, each part that received on the channel |
+| 8 | `NoteRouting_QueueMidiOutSchemeChange` (5) | old bit 5, 0xFF, old channel | `NoteChange_ReleaseOldMidiOutScheme`: source 0's notes, per part (0) or on the old channel (1) |
+
+**Two MIDI IN paths.** `MidiInA_ProcessRing` and `MidiInB_ProcessRing` handle a note frame in one of two ways.
+`NoteRouting_MidiFlags` bits 6-7 (the MIDI IN mode) and `NoteRouting_ListChannel` choose which:
+- The **note-list path** is the one `Ring601850`'s notes take. It runs `NoteList_ApplyFrame`, then
+  `NoteFrame_SelectForPart` by voice mask and range, then `NoteRouting_ForPartFromMidiIn`. Mode 2 sends every
+  channel this way. Mode 1 sends only the channel `NoteRouting_ListChannel`.
+- The **per-channel path** handles the other channels. Every part whose +0x22 is the frame's channel and whose
+  record has bit 6 gets the frame. Its outputs come from `NoteRouting_ForReceivingPart`: the tone generator and
+  the record buffer, never MIDI OUT.
+
+**Channel keys.** A part note node keeps the source and a channel key at +0 / +1:
+- `NoteFrame_SelectForPart` writes the part's own number as the key, for the note-list path.
+- The per-channel path keeps the MIDI channel.
+- Timed events keep the track.
+
+`PartNotes_BuildReleaseFrame` matches on (source, key), and source 0xFF matches any source. That is how
+kinds 5 and 6 find a part's note-list notes and kinds 2 and 3 find a track's notes.
+
+**Two MIDI OUT schemes.** `NoteRouting_MidiFlags` bit 5 chooses:
+- Clear: each part sends on its own +0x22 channel while its record has bit 5.
+- Set: per-part MIDI OUT is off. `Ring601850_ProcessNoteEvents` sends source 0's notes on `NoteRouting_ListChannel`.
+
+`NoteRouting_ForPartFromMidiIn` gives MIDI IN's note-list notes a MIDI OUT output only when `Variant_Flag` is 2,
+bit 5 is clear and the mode is 1.
+
+Not established:
+- What `Ring601850` carries. Its producer has not been read.
+- Whether a commit can queue more than 50 records. 0x602A02 + 50 x 4 = 0x602ACA, which is the default output
+  record. `NoteRouting_QueueChange` flushes only above 0x7F records. `NoteRouting_QueueMidiInChanges` alone can
+  queue 32 kind-7 records plus 32 kind-0 records.
+- Who sets each `NoteRouting_ChangeFlags` bit. The immediate writes set bits 0, 1, 2, 3, 6, 7 and 15:
+  0xFC5740 `orw 0x8004`, 0xFC5B80 `orw 0x0003`, 0xFC5ABC and 0xFC5BA3 `set`, 0xFC6343 `orw 0x00C0`. Six more
+  `or` writes take their bits from BC.

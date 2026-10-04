@@ -1583,7 +1583,7 @@
 	.set	sub_FC8B36, 0xFC8B36
 	.set	sub_FC8CE0, 0xFC8CE0
 	.set	sub_FC8D45, 0xFC8D45
-	.set	sub_FC8D49, 0xFC8D49
+	.set	NoteRouting_ApplyQueuedChanges, 0xFC8D49
 	.set	sub_FC8E7B, 0xFC8E7B
 	.set	sub_FC8FD7, 0xFC8FD7
 	.set	sub_FC9016, 0xFC9016
@@ -89777,7 +89777,9 @@ T_F413CC:	jp sub_FC8D45  ; -> prom_a 0x48D45   x1
 ; Evidence: slot 0xF413D0 is `jp 0xFC807D`; prom_a 0xFC807D carries the label
 ;           Ram3800_InitDataImage, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Ram3800_InitDataImage:	jp Ram3800_InitDataImage  ; F413D0 (was T_F413D0) -> prom_a 0x4807D   x1
-T_F413D4:	jp sub_FC8D49  ; -> prom_a 0x48D49   x2
+; Evidence: slot 0xF413D4 is `jp 0xFC8D49`; prom_a 0xFC8D49 carries the label
+;           NoteRouting_ApplyQueuedChanges (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_ApplyQueuedChanges:	jp NoteRouting_ApplyQueuedChanges  ; F413D4 (was T_F413D4) -> prom_a 0x48D49   x2
 T_F413D8:	jp sub_FCB2F0  ; -> prom_a 0x4B2F0   x1
 T_F413DC:	jp sub_FCAD7C  ; -> prom_a 0x4AD7C   x2
 T_F413E0:	jp sub_FC8E7B  ; -> prom_a 0x48E7B   x2

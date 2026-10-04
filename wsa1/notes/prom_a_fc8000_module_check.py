@@ -197,7 +197,7 @@ def sec_ptrtable():
 
 # =========================================================================== 5
 def sec_jumptable():
-    print("5  JumpTable_FC8DB2 -- 9 entries, count from the reader")
+    print("5  NoteChange_HandlerTable -- 9 entries, count from the reader")
     check("the reader's bound", text_at(0xFC8D9E), "cp BC,0x0008")
     check("...and its out-of-range jump", text_at(0xFC8DA2), "jrl UGT,0xfc8e5e")
     check("...4 bytes per entry", text_at(0xFC8DA5), "sll 0x02,BC")
