@@ -1812,7 +1812,7 @@
 	.set T_F42828,                                                                      0x00F42828
 	.set T_F4282C,                                                                      0x00F4282C
 	.set T_BStore_AppendBytes_Veneer,                                                   0x00F42894
-	.set T_F429A8,                                                                      0x00F429A8
+	.set T_MeasureInsert_InitFields,                                                                      0x00F429A8
 	.set T_MeasureInsert_OnLeave,                                                                      0x00F429AC
 	.set T_MeasureInsert_SelectField1,                                                                      0x00F429B0
 	.set T_MeasureInsert_SelectField2,                                                                      0x00F429B4
@@ -1820,11 +1820,11 @@
 	.set T_MeasureInsert_SelectField4,                                                                      0x00F429BC
 	.set T_MeasureInsert_SelectField5,                                                                      0x00F429C0
 	.set T_MeasureInsert_SelectField6,                                                                      0x00F429C4
-	.set T_F429C8,                                                                      0x00F429C8
-	.set T_F429CC,                                                                      0x00F429CC
+	.set T_MeasureInsert_StepFieldUp,                                                                      0x00F429C8
+	.set T_MeasureInsert_StepFieldDown,                                                                      0x00F429CC
 	.set T_F429D0,                                                                      0x00F429D0
 	.set T_MeasureInsert_LcdKeyRow1,                                                                      0x00F429D4
-	.set T_F429D8,                                                                      0x00F429D8
+	.set T_MeasureC0py_InitFields,                                                                      0x00F429D8
 	.set T_MeasureC0py_OnLeave,                                                                      0x00F429DC
 	.set T_MeasureC0py_SelectField1,                                                                      0x00F429E0
 	.set T_MeasureC0py_SelectField2,                                                                      0x00F429E4
@@ -1832,8 +1832,8 @@
 	.set T_MeasureC0py_SelectField4,                                                                      0x00F429EC
 	.set T_MeasureC0py_SelectField5,                                                                      0x00F429F0
 	.set T_MeasureC0py_SelectField6,                                                                      0x00F429F4
-	.set T_F429F8,                                                                      0x00F429F8
-	.set T_F429FC,                                                                      0x00F429FC
+	.set T_MeasureC0py_StepFieldUp,                                                                      0x00F429F8
+	.set T_MeasureC0py_StepFieldDown,                                                                      0x00F429FC
 	.set T_F42A00,                                                                      0x00F42A00
 	.set T_MeasureC0py_LcdKeyRow1,                                                                      0x00F42A04
 	.set T_F42A08,                                                                      0x00F42A08
@@ -1851,8 +1851,8 @@
 	.set T_AdvanceDelay_SelectField2,                                                                      0x00F42A6C
 	.set T_AdvanceDelay_SelectField3,                                                                      0x00F42A70
 	.set T_AdvanceDelay_SelectField4,                                                                      0x00F42A74
-	.set T_F42A78,                                                                      0x00F42A78
-	.set T_F42A7C,                                                                      0x00F42A7C
+	.set T_AdvanceDelay_StepFieldUp,                                                                      0x00F42A78
+	.set T_AdvanceDelay_StepFieldDown,                                                                      0x00F42A7C
 	.set T_AdvanceDelay_LcdKeyRow3,                                                                      0x00F42A80
 	.set T_F42A84,                                                                      0x00F42A84
 	.set T_F42A88,                                                                      0x00F42A88
@@ -2357,10 +2357,10 @@ AdvanceDelay_StageZero_Button21:
 	ld (0x0e18:16), 0x04                                 ; F800DF  f1 18 0e 00 04
 	bit 0x07,W                                           ; F800E4  c8 33 07
 	jr z, .LF800EF                                       ; F800E7  66 06
-	call T_F42A7C                                        ; F800E9  1d 7c 2a f4
+	call T_AdvanceDelay_StepFieldDown                                        ; F800E9  1d 7c 2a f4
 	jr .LF800F3                                          ; F800ED  68 04
 .LF800EF:
-	call T_F42A78                                        ; F800EF  1d 78 2a f4
+	call T_AdvanceDelay_StepFieldUp                                        ; F800EF  1d 78 2a f4
 .LF800F3:
 	calr AdvanceDelay_DrawValues                                      ; F800F3  1e 90 ff
 	ret                                                  ; F800F6  0e
@@ -3314,7 +3314,7 @@ Paint_MeasureC0py:
 	call T_CallbackQueue_ResetAndRestartTask2                                        ; F8076C  1d 80 2e f4
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00                          ; F80770  c1 7e 20 3f 00
 	jr nz, .LF80792                                      ; F80775  6e 1b
-	call T_F429D8                                        ; F80777  1d d8 29 f4
+	call T_MeasureC0py_InitFields                                        ; F80777  1d d8 29 f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8077B  c1 75 20 3e 01
 	ldw (PanelDial_DownButton:16), 0x0484                              ; F80780  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80786  f1 66 26 02 ff ff
@@ -3381,10 +3381,10 @@ SoftKeyCol5_MeasureC0py_StageZero:
 	ld (0x0e18:16), 0x01                                 ; F80821  f1 18 0e 00 01
 	bit 0x07,W                                           ; F80826  c8 33 07
 	jr z, .LF80831                                       ; F80829  66 06
-	call T_F429FC                                        ; F8082B  1d fc 29 f4
+	call T_MeasureC0py_StepFieldDown                                        ; F8082B  1d fc 29 f4
 	jr .LF80835                                          ; F8082F  68 04
 .LF80831:
-	call T_F429F8                                        ; F80831  1d f8 29 f4
+	call T_MeasureC0py_StepFieldUp                                        ; F80831  1d f8 29 f4
 .LF80835:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80835  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F8083A  1e 9b da
@@ -3529,10 +3529,10 @@ MeasureC0py_StageZero_Button21:
 	ld (0x0e18:16), 0x04                                 ; F8093C  f1 18 0e 00 04
 	bit 0x07,W                                           ; F80941  c8 33 07
 	jr z, .LF8094C                                       ; F80944  66 06
-	call T_F429FC                                        ; F80946  1d fc 29 f4
+	call T_MeasureC0py_StepFieldDown                                        ; F80946  1d fc 29 f4
 	jr .LF80950                                          ; F8094A  68 04
 .LF8094C:
-	call T_F429F8                                        ; F8094C  1d f8 29 f4
+	call T_MeasureC0py_StepFieldUp                                        ; F8094C  1d f8 29 f4
 .LF80950:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80950  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F80955  1e 80 d9
@@ -3783,7 +3783,7 @@ Paint_MeasureInsert:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80AC9  1d 80 2e f4
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00                          ; F80ACD  c1 7e 20 3f 00
 	jr nz, .LF80AEF                                      ; F80AD2  6e 1b
-	call T_F429A8                                        ; F80AD4  1d a8 29 f4
+	call T_MeasureInsert_InitFields                                        ; F80AD4  1d a8 29 f4
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80AD8  c1 75 20 3e 01
 	ldw (PanelDial_DownButton:16), 0x0484                              ; F80ADD  f1 9b 20 02 84 04
 	ldw (0x2666:16), 0xffff                              ; F80AE3  f1 66 26 02 ff ff
@@ -3850,10 +3850,10 @@ SoftKeyCol5_MeasureInsert_StageZero:
 	ld (0x0e18:16), 0x01                                 ; F80B7E  f1 18 0e 00 01
 	bit 0x07,W                                           ; F80B83  c8 33 07
 	jr z, .LF80B8E                                       ; F80B86  66 06
-	call T_F429CC                                        ; F80B88  1d cc 29 f4
+	call T_MeasureInsert_StepFieldDown                                        ; F80B88  1d cc 29 f4
 	jr .LF80B92                                          ; F80B8C  68 04
 .LF80B8E:
-	call T_F429C8                                        ; F80B8E  1d c8 29 f4
+	call T_MeasureInsert_StepFieldUp                                        ; F80B8E  1d c8 29 f4
 .LF80B92:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80B92  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F80B97  1e 3e d7
@@ -4000,10 +4000,10 @@ MeasureInsert_StageZero_Button21:
 	ld (0x0e18:16), 0x04                                 ; F80C99  f1 18 0e 00 04
 	bit 0x07,W                                           ; F80C9E  c8 33 07
 	jr z, .LF80CA9                                       ; F80CA1  66 06
-	call T_F429CC                                        ; F80CA3  1d cc 29 f4
+	call T_MeasureInsert_StepFieldDown                                        ; F80CA3  1d cc 29 f4
 	jr .LF80CAD                                          ; F80CA7  68 04
 .LF80CA9:
-	call T_F429C8                                        ; F80CA9  1d c8 29 f4
+	call T_MeasureInsert_StepFieldUp                                        ; F80CA9  1d c8 29 f4
 .LF80CAD:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F80CAD  f1 40 25 00 00
 	calr sub_F7E39F_Nop                                          ; F80CB2  1e 23 d6

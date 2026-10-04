@@ -90740,17 +90740,17 @@ T_F428D0:	jp sub_F7AB9C  ; -> prom_b 0x7AB9C   x1
 T_TrackClear_OnLeave:	jp TrackClear_OnLeave  ; -> prom_b 0x7ABB9   x1
 T_F428D8:	jp TrackClear_ReturnToStageZero  ; -> prom_b 0x7ABDC   x2
 T_TrackClear_LcdKeyRow2:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
-T_F428E0:	jp sub_F7BCFD  ; -> prom_b 0x7BCFD   x1
+T_Vel0cityChange_InitFields:	jp Vel0cityChange_InitFields  ; -> prom_b 0x7BCFD   x1
 T_Vel0cityChange_OnLeave:	jp Vel0cityChange_OnLeave  ; -> prom_b 0x7BD24   x1
 T_Vel0cityChange_StageZero_LcdKeyRow1:	jp Vel0cityChange_StageZero_LcdKeyRow1  ; -> prom_b 0x7BD30   x1
 T_Vel0cityChange_StageZero_LcdKeyRow2:	jp Vel0cityChange_StageZero_LcdKeyRow2  ; -> prom_b 0x7BD40   x1
 T_Vel0cityChange_StageZero_LcdKeyRow3:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
 T_Vel0cityChange_StageZero_LcdKeyRow4:	jp Vel0cityChange_StageZero_LcdKeyRow4  ; -> prom_b 0x7BD6A   x1
-T_F428F8:	jp sub_F7BD7F  ; -> prom_b 0x7BD7F   x4
-T_F428FC:	jp sub_F7BDD4  ; -> prom_b 0x7BDD4   x2
+T_Vel0cityChange_StepFieldUp:	jp Vel0cityChange_StepFieldUp  ; -> prom_b 0x7BD7F   x4
+T_Vel0cityChange_StepFieldDown:	jp Vel0cityChange_StepFieldDown  ; -> prom_b 0x7BDD4   x2
 T_Vel0cityChange_LcdKeyRow2:	jp Vel0cityChange_LcdKeyRow2  ; -> prom_b 0x7BEF4   x2
-T_F42904:	jp sub_F7BDC0  ; -> prom_b 0x7BDC0
-T_F42908:	jp sub_F7BFEA  ; -> prom_b 0x7BFEA   x1
+T_Vel0cityChange_ReturnToStageZero:	jp Vel0cityChange_ReturnToStageZero  ; -> prom_b 0x7BDC0
+T_Quantize_InitFields:	jp Quantize_InitFields  ; -> prom_b 0x7BFEA   x1
 T_Quantize_OnLeave:	jp Quantize_OnLeave  ; -> prom_b 0x7C0AF   x1
 T_Quantize_SelectField1:	jp Quantize_SelectField1  ; -> prom_b 0x7C0BB   x1
 T_Quantize_SelectField2:	jp Quantize_SelectField2  ; -> prom_b 0x7C0C6   x1
@@ -90758,10 +90758,10 @@ T_Quantize_SelectField3:	jp Quantize_SelectField3  ; -> prom_b 0x7C0D6   x1
 T_Quantize_SelectField4:	jp Quantize_SelectField4  ; -> prom_b 0x7C0E6   x1
 T_Quantize_SelectField5:	jp Quantize_SelectField5  ; -> prom_b 0x7C310   x1
 T_Quantize_SelectField6:	jp Quantize_SelectField6  ; -> prom_b 0x7C31B   x1
-T_F42928:	jp sub_F7C0F1  ; -> prom_b 0x7C0F1   x4
-T_F4292C:	jp sub_F7C17D  ; -> prom_b 0x7C17D   x2
+T_Quantize_StepFieldUp:	jp Quantize_StepFieldUp  ; -> prom_b 0x7C0F1   x4
+T_Quantize_StepFieldDown:	jp Quantize_StepFieldDown  ; -> prom_b 0x7C17D   x2
 T_Quantize_LcdKeyRow3:	jp Quantize_LcdKeyRow3  ; -> prom_b 0x7C326   x2
-T_F42934:	jp sub_F7C13E  ; -> prom_b 0x7C13E
+T_Quantize_ReturnToStageZero:	jp Quantize_ReturnToStageZero  ; -> prom_b 0x7C13E
 T_F42938:	jp sub_F7AC9D  ; -> prom_b 0x7AC9D   x1
 T_TrackMerge_OnLeave:	jp TrackMerge_OnLeave  ; -> prom_b 0x7ACA6   x1
 T_TrackMerge_SelectField1:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
@@ -90771,26 +90771,26 @@ T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
 T_TrackMerge_StageZero_SoftKeyCol5:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp TrackMerge_ReturnToStageZero  ; -> prom_b 0x7ADF5   x2
 T_TrackMerge_LcdKeyRow2:	jp TrackMerge_LcdKeyRow2  ; -> prom_b 0x7AE0C   x2
-T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
+T_MeasureDelete_InitFields:	jp MeasureDelete_InitFields  ; -> prom_b 0x7B000   x1
 T_MeasureDelete_OnLeave:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
 T_MeasureDelete_SelectField1:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
 T_MeasureDelete_SelectField2:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
 T_MeasureDelete_SelectField3:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
-T_F42970:	jp sub_F7B045  ; -> prom_b 0x7B045   x4
-T_F42974:	jp sub_F7B08B  ; -> prom_b 0x7B08B   x2
+T_MeasureDelete_StepFieldUp:	jp MeasureDelete_StepFieldUp  ; -> prom_b 0x7B045   x4
+T_MeasureDelete_StepFieldDown:	jp MeasureDelete_StepFieldDown  ; -> prom_b 0x7B08B   x2
 T_MeasureDelete_LcdKeyRow3:	jp MeasureDelete_LcdKeyRow3  ; -> prom_b 0x7B162   x2
-T_F4297C:	jp sub_F7B07A  ; -> prom_b 0x7B07A
-T_F42980:	jp sub_F7B22C  ; -> prom_b 0x7B22C   x1
+T_MeasureDelete_ReturnToStageZero:	jp MeasureDelete_ReturnToStageZero  ; -> prom_b 0x7B07A
+T_MeasureErase_InitFields:	jp MeasureErase_InitFields  ; -> prom_b 0x7B22C   x1
 T_MeasureErase_OnLeave:	jp MeasureErase_OnLeave  ; -> prom_b 0x7B23A   x1
 T_MeasureErase_SelectField1:	jp MeasureErase_SelectField1  ; -> prom_b 0x7B246   x1
 T_MeasureErase_SelectField2:	jp MeasureErase_SelectField2  ; -> prom_b 0x7B251   x1
 T_MeasureErase_SelectField3:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
 T_MeasureErase_SelectField4:	jp MeasureErase_SelectField4  ; -> prom_b 0x7B271   x1
-T_F42998:	jp sub_F7B27C  ; -> prom_b 0x7B27C   x4
-T_F4299C:	jp sub_F7B2CE  ; -> prom_b 0x7B2CE   x2
+T_MeasureErase_StepFieldUp:	jp MeasureErase_StepFieldUp  ; -> prom_b 0x7B27C   x4
+T_MeasureErase_StepFieldDown:	jp MeasureErase_StepFieldDown  ; -> prom_b 0x7B2CE   x2
 T_MeasureErase_LcdKeyRow2:	jp MeasureErase_LcdKeyRow2  ; -> prom_b 0x7B3E0   x2
-T_F429A4:	jp sub_F7B2BD  ; -> prom_b 0x7B2BD
-T_F429A8:	jp sub_F7B4BF  ; -> prom_b 0x7B4BF   x1
+T_MeasureErase_ReturnToStageZero:	jp MeasureErase_ReturnToStageZero  ; -> prom_b 0x7B2BD
+T_MeasureInsert_InitFields:	jp MeasureInsert_InitFields  ; -> prom_b 0x7B4BF   x1
 T_MeasureInsert_OnLeave:	jp MeasureInsert_OnLeave  ; -> prom_b 0x7B4CD   x1
 T_MeasureInsert_SelectField1:	jp MeasureInsert_SelectField1  ; -> prom_b 0x7B4EC   x1
 T_MeasureInsert_SelectField2:	jp MeasureInsert_SelectField2  ; -> prom_b 0x7B4F7   x1
@@ -90798,11 +90798,11 @@ T_MeasureInsert_SelectField3:	jp MeasureInsert_SelectField3  ; -> prom_b 0x7B507
 T_MeasureInsert_SelectField4:	jp MeasureInsert_SelectField4  ; -> prom_b 0x7B517   x1
 T_MeasureInsert_SelectField5:	jp MeasureInsert_SelectField5  ; -> prom_b 0x7B522   x1
 T_MeasureInsert_SelectField6:	jp MeasureInsert_SelectField6  ; -> prom_b 0x7B532   x1
-T_F429C8:	jp sub_F7B53D  ; -> prom_b 0x7B53D   x2
-T_F429CC:	jp sub_F7B58C  ; -> prom_b 0x7B58C   x2
+T_MeasureInsert_StepFieldUp:	jp MeasureInsert_StepFieldUp  ; -> prom_b 0x7B53D   x2
+T_MeasureInsert_StepFieldDown:	jp MeasureInsert_StepFieldDown  ; -> prom_b 0x7B58C   x2
 T_F429D0:	jp MeasureInsert_ReturnToStageZero  ; -> prom_b 0x7B761   x2
 T_MeasureInsert_LcdKeyRow1:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
-T_F429D8:	jp sub_F7B8DC  ; -> prom_b 0x7B8DC   x1
+T_MeasureC0py_InitFields:	jp MeasureC0py_InitFields  ; -> prom_b 0x7B8DC   x1
 T_MeasureC0py_OnLeave:	jp MeasureC0py_OnLeave  ; -> prom_b 0x7B8EA   x1
 T_MeasureC0py_SelectField1:	jp MeasureC0py_SelectField1  ; -> prom_b 0x7B909   x1
 T_MeasureC0py_SelectField2:	jp MeasureC0py_SelectField2  ; -> prom_b 0x7B914   x1
@@ -90810,8 +90810,8 @@ T_MeasureC0py_SelectField3:	jp MeasureC0py_SelectField3  ; -> prom_b 0x7B924   x
 T_MeasureC0py_SelectField4:	jp MeasureC0py_SelectField4  ; -> prom_b 0x7B934   x1
 T_MeasureC0py_SelectField5:	jp MeasureC0py_SelectField5  ; -> prom_b 0x7B93F   x1
 T_MeasureC0py_SelectField6:	jp MeasureC0py_SelectField6  ; -> prom_b 0x7B94F   x1
-T_F429F8:	jp sub_F7B95A  ; -> prom_b 0x7B95A   x2
-T_F429FC:	jp sub_F7B9AB  ; -> prom_b 0x7B9AB   x2
+T_MeasureC0py_StepFieldUp:	jp MeasureC0py_StepFieldUp  ; -> prom_b 0x7B95A   x2
+T_MeasureC0py_StepFieldDown:	jp MeasureC0py_StepFieldDown  ; -> prom_b 0x7B9AB   x2
 T_F42A00:	jp MeasureC0py_ReturnToStageZero  ; -> prom_b 0x7BB82   x2
 T_MeasureC0py_LcdKeyRow1:	jp MeasureC0py_LcdKeyRow1  ; -> prom_b 0x7BB92   x2
 T_F42A08:	jp sub_F7C3B2  ; -> prom_b 0x7C3B2   x1
@@ -90836,14 +90836,14 @@ T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
 T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
 T_Transp0se_LcdKeyRow2:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
 T_F42A5C:	jp Transp0se_ReturnToStageZero  ; -> prom_b 0x7C843   x2
-T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
+T_AdvanceDelay_InitFields:	jp AdvanceDelay_InitFields  ; -> prom_b 0x7CAD2   x1
 T_AdvanceDelay_OnLeave:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
 T_AdvanceDelay_SelectField1:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
 T_AdvanceDelay_SelectField2:	jp AdvanceDelay_SelectField2  ; -> prom_b 0x7CB29   x1
 T_AdvanceDelay_SelectField3:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
 T_AdvanceDelay_SelectField4:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F   x1
-T_F42A78:	jp sub_F7CB4A  ; -> prom_b 0x7CB4A   x2
-T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
+T_AdvanceDelay_StepFieldUp:	jp AdvanceDelay_StepFieldUp  ; -> prom_b 0x7CB4A   x2
+T_AdvanceDelay_StepFieldDown:	jp AdvanceDelay_StepFieldDown  ; -> prom_b 0x7CB90   x2
 T_AdvanceDelay_LcdKeyRow3:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
 T_F42A84:	jp AdvanceDelay_ReturnToStageZero  ; -> prom_b 0x7CCCA   x2
 T_F42A88:	jp sub_F7C853  ; -> prom_b 0x7C853   x1
@@ -186122,19 +186122,20 @@ sub_F7AFD8:
 	ret	; F7AFFF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B000
-; Called from: T_F4295C (x1)
+; MeasureDelete_InitFields
+; Called from: T_MeasureDelete_InitFields (x1)
 ; Touches: (0x0DD4) (0x12FB)
-; Calls:   sub_F7B1D1
-; Evidence: thunk slot T_F4295C holds `jp 0x00F7B000`, and 0xF7B000 is an
+; Calls:   MeasureDelete_LoadSavedFields
+; Evidence: thunk slot T_MeasureDelete_InitFields holds `jp 0x00F7B000`, and 0xF7B000 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B000:		; <- T_F4295C
-	calr	sub_F7B1D1	; F7B000  calr 0xf7b1d1
+; MeasureDelete_InitFields: Paint_MeasureDelete's stage-0 init: MeasureDelete_LoadSavedFields, field cursor (0x0DD4) = 1 (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_InitFields:		; <- T_MeasureDelete_InitFields
+	calr	MeasureDelete_LoadSavedFields	; F7B000  calr 0xf7b1d1
 	ld	(3540:16), 1	; F7B003  ld (0x0dd4),0x01
 	ld	(DisplayListB_Stage+5:16), 1	; F7B008  ld (0x12fb),0x01
 	ret	; F7B00D  ret
@@ -186223,104 +186224,109 @@ MeasureDelete_SelectField3:		; <- T_MeasureDelete_SelectField3
 	ret	; F7B044  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B045
-; Called from: T_F42970 (x4)
+; MeasureDelete_StepFieldUp
+; Called from: T_MeasureDelete_StepFieldUp (x4)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DD4) (0x207E)
-; Calls:   sub_F7B0B7 sub_F7B0F2 sub_F7B128
-; Evidence: thunk slot T_F42970 holds `jp 0x00F7B045`, and 0xF7B045 is an
+; Calls:   MeasureDelete_StepTrack MeasureDelete_StepFirstMeasure MeasureDelete_StepLastMeasure
+; Evidence: thunk slot T_MeasureDelete_StepFieldUp holds `jp 0x00F7B045`, and 0xF7B045 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B045:		; <- T_F42970
+; MeasureDelete_StepFieldUp: at stage 1 leaves through MeasureDelete_ReturnToStageZero; else (0x0C4E) = W, (0x0C4F) = 0 (up) and
+;   steps field (0x0DD4) (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_StepFieldUp:		; <- T_MeasureDelete_StepFieldUp
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B045  cp (0x207e),0x01
 	jr	nz, sub_F7AFD8_Skip	; F7B04A  jr NZ,0xf7b04e
-	jr	sub_F7B07A	; F7B04C  jr T,0xf7b07a
+	jr	MeasureDelete_ReturnToStageZero	; F7B04C  jr T,0xf7b07a
 sub_F7AFD8_Skip:
 	ld	(3150:16), w	; F7B04E  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7B052  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7B057  cp (0x0dd4),0x01
 	jr	nz, sub_F7AFD8_Skip2	; F7B05C  jr NZ,0xf7b063
-	calr	sub_F7B0B7	; F7B05E  calr 0xf7b0b7
+	calr	MeasureDelete_StepTrack	; F7B05E  calr 0xf7b0b7
 	jr	sub_F7AFD8_Return2	; F7B061  jr T,0xf7b079
 sub_F7AFD8_Skip2:
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7B063  cp (0x0dd4),0x02
 	jr	nz, sub_F7AFD8_Skip3	; F7B068  jr NZ,0xf7b06f
-	calr	sub_F7B0F2	; F7B06A  calr 0xf7b0f2
+	calr	MeasureDelete_StepFirstMeasure	; F7B06A  calr 0xf7b0f2
 	jr	sub_F7AFD8_Return2	; F7B06D  jr T,0xf7b079
 sub_F7AFD8_Skip3:
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7B06F  cp (0x0dd4),0x03
 	jr	nz, sub_F7AFD8_Return2	; F7B074  jr NZ,0xf7b079
-	calr	sub_F7B128	; F7B076  calr 0xf7b128
+	calr	MeasureDelete_StepLastMeasure	; F7B076  calr 0xf7b128
 sub_F7AFD8_Return2:
 	ret	; F7B079  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B07A
-; Called from: T_F4297C (x0)
+; MeasureDelete_ReturnToStageZero
+; Called from: T_MeasureDelete_ReturnToStageZero (x0)
 ; Touches: (0x2071) (0x2075) (0x207E)
-; Evidence: thunk slot T_F4297C holds `jp 0x00F7B07A`, and 0xF7B07A is an
+; Evidence: thunk slot T_MeasureDelete_ReturnToStageZero holds `jp 0x00F7B07A`, and 0xF7B07A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B07A:		; <- T_F4297C
+; MeasureDelete_ReturnToStageZero: UI_ScreenStage = 0, UI_Request_Hi |= 0x10 (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_ReturnToStageZero:		; <- T_MeasureDelete_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B07A  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7B07F  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B084  or (0x2071),0x10
 	jr	sub_F7AFD8_Return2	; F7B089  jr T,0xf7b079
 
 ; --------------------------------------------------------------------------
-; sub_F7B08B
-; Called from: T_F42974 (x2)
+; MeasureDelete_StepFieldDown
+; Called from: T_MeasureDelete_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DD4)
-; Calls:   sub_F7B0B7 sub_F7B0F2 sub_F7B128
-; Evidence: thunk slot T_F42974 holds `jp 0x00F7B08B`, and 0xF7B08B is an
+; Calls:   MeasureDelete_StepTrack MeasureDelete_StepFirstMeasure MeasureDelete_StepLastMeasure
+; Evidence: thunk slot T_MeasureDelete_StepFieldDown holds `jp 0x00F7B08B`, and 0xF7B08B is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B08B:		; <- T_F42974
+; MeasureDelete_StepFieldDown: (0x0C4E) = W, (0x0C4F) = 0x80 (down), steps field (0x0DD4) (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_StepFieldDown:		; <- T_MeasureDelete_StepFieldDown
 	ld	(3150:16), w	; F7B08B  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7B08F  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7B094  cp (0x0dd4),0x01
 	jr	nz, sub_F7AFD8_Skip4	; F7B099  jr NZ,0xf7b0a0
-	calr	sub_F7B0B7	; F7B09B  calr 0xf7b0b7
+	calr	MeasureDelete_StepTrack	; F7B09B  calr 0xf7b0b7
 	jr	sub_F7AFD8_Return3	; F7B09E  jr T,0xf7b0b6
 sub_F7AFD8_Skip4:
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7B0A0  cp (0x0dd4),0x02
 	jr	nz, sub_F7AFD8_Skip5	; F7B0A5  jr NZ,0xf7b0ac
-	calr	sub_F7B0F2	; F7B0A7  calr 0xf7b0f2
+	calr	MeasureDelete_StepFirstMeasure	; F7B0A7  calr 0xf7b0f2
 	jr	sub_F7AFD8_Return3	; F7B0AA  jr T,0xf7b0b6
 sub_F7AFD8_Skip5:
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7B0AC  cp (0x0dd4),0x03
 	jr	nz, sub_F7AFD8_Return3	; F7B0B1  jr NZ,0xf7b0b6
-	calr	sub_F7B128	; F7B0B3  calr 0xf7b128
+	calr	MeasureDelete_StepLastMeasure	; F7B0B3  calr 0xf7b128
 sub_F7AFD8_Return3:
 	ret	; F7B0B6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B0B7
+; MeasureDelete_StepTrack
 ; Called from: in-module: 0xF7B05E 0xF7B09B
 ; Touches: (0x0C13) (0x0C35) (0x0DD5) (0x12F6)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B0B7 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B0B7:
+; MeasureDelete_StepTrack: field 1 of the page (Track, FirstMeasure, LastMeasure), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_StepTrack:
 	ld	a, (3091:16)	; F7B0B7  ld A,(0x0c13)
 	ld	l, 1:opc	; F7B0BB  ld L,0x01
 	ld	h, 18:opc	; F7B0BD  ld H,0x12
-	calr	sub_F7CD30	; F7B0BF  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7B0BF  calr 0xf7cd30
 	cp	a, 18	; F7B0C2  cp A,0x12
 	jr	z, sub_F7B0B7_Skip	; F7B0C5  jr Z,0xf7b0db
 	ld	(3091:16), a	; F7B0C7  ld (0x0c13),A
@@ -186338,19 +186344,20 @@ sub_F7B0B7_Join:
 	ret	; F7B0F1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B0F2
+; MeasureDelete_StepFirstMeasure
 ; Called from: in-module: 0xF7B06A 0xF7B0A7
 ; Touches: (0x0C18) (0x0DD6) (0x0DD8) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B0F2 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B0F2:
+; MeasureDelete_StepFirstMeasure: field 2 of the page (Track, FirstMeasure, LastMeasure), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_StepFirstMeasure:
 	ld	wa, (3096:16)	; F7B0F2  ld WA,(0x0c18)
-	calr	sub_F7CD5F	; F7B0F6  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B0F6  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7B0F9  ld (0x0c18),WA
 	ld	(6304861:24), wa	; F7B0FD  ld (0x60345d),WA
 	m_cp_rm MW16, 0x0dd8, 0	; F7B102  cp WA,(0x0dd8)
@@ -186367,19 +186374,20 @@ sub_F7B0F2_Skip:
 	ret	; F7B127  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B128
+; MeasureDelete_StepLastMeasure
 ; Called from: in-module: 0xF7B076 0xF7B0B3
 ; Touches: (0x0C18) (0x0DD6) (0x0DD8) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B128 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B128:
+; MeasureDelete_StepLastMeasure: field 3 of the page (Track, FirstMeasure, LastMeasure), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_StepLastMeasure:
 	ld	wa, (3544:16)	; F7B128  ld WA,(0x0dd8)
-	calr	sub_F7CD5F	; F7B12C  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B12C  calr 0xf7cd5f
 	ld	(3544:16), wa	; F7B12F  ld (0x0dd8),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7B133  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0dd6, 0	; F7B137  cp WA,(0x0dd6)
@@ -186446,7 +186454,7 @@ sub_F7B128_Return:
 	ret	; F7B1D0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B1D1
+; MeasureDelete_LoadSavedFields
 ; Called from: in-module: 0xF7B000
 ; Touches: (0x0C13) (0x0C18) (0x0C1C) (0x0C35) (0x0DD5) (0x0DD6) (0x0DD8)
 ;          (0x12F6) (0x12F7) (0x12F9)
@@ -186456,7 +186464,8 @@ sub_F7B128_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B1D1:
+; MeasureDelete_LoadSavedFields: copies the job's saved fields from battery RAM 0x6034xx into the working cells (notes/prom_b_seqjob_field_names.py)
+MeasureDelete_LoadSavedFields:
 	ld	a, (6304860:24)	; F7B1D1  ld A,(0x60345c)
 	ld	(3091:16), a	; F7B1D6  ld (0x0c13),A
 	ld	(3541:16), a	; F7B1DA  ld (0x0dd5),A
@@ -186483,19 +186492,20 @@ sub_F7B1D1_Return:
 	ret	; F7B22B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B22C
-; Called from: T_F42980 (x1)
+; MeasureErase_InitFields
+; Called from: T_MeasureErase_InitFields (x1)
 ; Touches: (0x0DBB) (0x12FC)
-; Calls:   sub_F7B457
-; Evidence: thunk slot T_F42980 holds `jp 0x00F7B22C`, and 0xF7B22C is an
+; Calls:   MeasureErase_LoadSavedFields
+; Evidence: thunk slot T_MeasureErase_InitFields holds `jp 0x00F7B22C`, and 0xF7B22C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B22C:		; <- T_F42980
-	calr	sub_F7B457	; F7B22C  calr 0xf7b457
+; MeasureErase_InitFields: Paint_MeasureErase's stage-0 init: MeasureErase_LoadSavedFields, field cursor (0x0DBB) = 1 (notes/prom_b_seqjob_field_names.py)
+MeasureErase_InitFields:		; <- T_MeasureErase_InitFields
+	calr	MeasureErase_LoadSavedFields	; F7B22C  calr 0xf7b457
 	ld	(3515:16), 1	; F7B22F  ld (0x0dbb),0x01
 	ld	(DisplayListB_Stage+6:16), 1	; F7B234  ld (0x12fc),0x01
 	ret	; F7B239  ret
@@ -186604,114 +186614,119 @@ MeasureErase_SelectField4:		; <- T_MeasureErase_SelectField4
 	ret	; F7B27B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B27C
-; Called from: T_F42998 (x4)
+; MeasureErase_StepFieldUp
+; Called from: T_MeasureErase_StepFieldUp (x4)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBB) (0x207E)
-; Calls:   sub_F7B306 sub_F7B341 sub_F7B377 sub_F7B3B1
-; Evidence: thunk slot T_F42998 holds `jp 0x00F7B27C`, and 0xF7B27C is an
+; Calls:   MeasureErase_StepTrack MeasureErase_StepFirstMeasure MeasureErase_StepLastMeasure MeasureErase_StepEraseData
+; Evidence: thunk slot T_MeasureErase_StepFieldUp holds `jp 0x00F7B27C`, and 0xF7B27C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B27C:		; <- T_F42998
+; MeasureErase_StepFieldUp: at stage 1 leaves through MeasureErase_ReturnToStageZero; else (0x0C4E) = W, (0x0C4F) = 0 (up) and
+;   steps field (0x0DBB) (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepFieldUp:		; <- T_MeasureErase_StepFieldUp
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B27C  cp (0x207e),0x01
 	jr	nz, sub_F7B1D1_Skip	; F7B281  jr NZ,0xf7b285
-	jr	sub_F7B2BD	; F7B283  jr T,0xf7b2bd
+	jr	MeasureErase_ReturnToStageZero	; F7B283  jr T,0xf7b2bd
 sub_F7B1D1_Skip:
 	ld	(3150:16), w	; F7B285  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7B289  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, 0x0dbb, 0x01	; F7B28E  cp (0x0dbb),0x01
 	jr	nz, sub_F7B1D1_Skip2	; F7B293  jr NZ,0xf7b29a
-	calr	sub_F7B306	; F7B295  calr 0xf7b306
+	calr	MeasureErase_StepTrack	; F7B295  calr 0xf7b306
 	jr	sub_F7B1D1_Return3	; F7B298  jr T,0xf7b2bc
 sub_F7B1D1_Skip2:
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7B29A  cp (0x0dbb),0x02
 	jr	nz, sub_F7B1D1_Skip3	; F7B29F  jr NZ,0xf7b2a6
-	calr	sub_F7B341	; F7B2A1  calr 0xf7b341
+	calr	MeasureErase_StepFirstMeasure	; F7B2A1  calr 0xf7b341
 	jr	sub_F7B1D1_Return3	; F7B2A4  jr T,0xf7b2bc
 sub_F7B1D1_Skip3:
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7B2A6  cp (0x0dbb),0x03
 	jr	nz, sub_F7B1D1_Skip4	; F7B2AB  jr NZ,0xf7b2b2
-	calr	sub_F7B377	; F7B2AD  calr 0xf7b377
+	calr	MeasureErase_StepLastMeasure	; F7B2AD  calr 0xf7b377
 	jr	sub_F7B1D1_Return3	; F7B2B0  jr T,0xf7b2bc
 sub_F7B1D1_Skip4:
 	m_cp_mi8 MB16, 0x0dbb, 0x04	; F7B2B2  cp (0x0dbb),0x04
 	jr	nz, sub_F7B1D1_Return3	; F7B2B7  jr NZ,0xf7b2bc
-	calr	sub_F7B3B1	; F7B2B9  calr 0xf7b3b1
+	calr	MeasureErase_StepEraseData	; F7B2B9  calr 0xf7b3b1
 sub_F7B1D1_Return3:
 	ret	; F7B2BC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B2BD
-; Called from: T_F429A4 (x0)
+; MeasureErase_ReturnToStageZero
+; Called from: T_MeasureErase_ReturnToStageZero (x0)
 ; Touches: (0x2071) (0x2075) (0x207E)
-; Evidence: thunk slot T_F429A4 holds `jp 0x00F7B2BD`, and 0xF7B2BD is an
+; Evidence: thunk slot T_MeasureErase_ReturnToStageZero holds `jp 0x00F7B2BD`, and 0xF7B2BD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B2BD:		; <- T_F429A4
+; MeasureErase_ReturnToStageZero: UI_ScreenStage = 0, UI_Request_Hi |= 0x10 (notes/prom_b_seqjob_field_names.py)
+MeasureErase_ReturnToStageZero:		; <- T_MeasureErase_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B2BD  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7B2C2  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B2C7  or (0x2071),0x10
 	jr	sub_F7B1D1_Return3	; F7B2CC  jr T,0xf7b2bc
 
 ; --------------------------------------------------------------------------
-; sub_F7B2CE
-; Called from: T_F4299C (x2)
+; MeasureErase_StepFieldDown
+; Called from: T_MeasureErase_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBB)
-; Calls:   sub_F7B306 sub_F7B341 sub_F7B377 sub_F7B3B1
-; Evidence: thunk slot T_F4299C holds `jp 0x00F7B2CE`, and 0xF7B2CE is an
+; Calls:   MeasureErase_StepTrack MeasureErase_StepFirstMeasure MeasureErase_StepLastMeasure MeasureErase_StepEraseData
+; Evidence: thunk slot T_MeasureErase_StepFieldDown holds `jp 0x00F7B2CE`, and 0xF7B2CE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B2CE:		; <- T_F4299C
+; MeasureErase_StepFieldDown: (0x0C4E) = W, (0x0C4F) = 0x80 (down), steps field (0x0DBB) (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepFieldDown:		; <- T_MeasureErase_StepFieldDown
 	ld	(3150:16), w	; F7B2CE  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7B2D2  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, 0x0dbb, 0x01	; F7B2D7  cp (0x0dbb),0x01
 	jr	nz, sub_F7B1D1_Skip5	; F7B2DC  jr NZ,0xf7b2e3
-	calr	sub_F7B306	; F7B2DE  calr 0xf7b306
+	calr	MeasureErase_StepTrack	; F7B2DE  calr 0xf7b306
 	jr	sub_F7B1D1_Return4	; F7B2E1  jr T,0xf7b305
 sub_F7B1D1_Skip5:
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7B2E3  cp (0x0dbb),0x02
 	jr	nz, sub_F7B1D1_Skip6	; F7B2E8  jr NZ,0xf7b2ef
-	calr	sub_F7B341	; F7B2EA  calr 0xf7b341
+	calr	MeasureErase_StepFirstMeasure	; F7B2EA  calr 0xf7b341
 	jr	sub_F7B1D1_Return4	; F7B2ED  jr T,0xf7b305
 sub_F7B1D1_Skip6:
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7B2EF  cp (0x0dbb),0x03
 	jr	nz, sub_F7B1D1_Skip7	; F7B2F4  jr NZ,0xf7b2fb
-	calr	sub_F7B377	; F7B2F6  calr 0xf7b377
+	calr	MeasureErase_StepLastMeasure	; F7B2F6  calr 0xf7b377
 	jr	sub_F7B1D1_Return4	; F7B2F9  jr T,0xf7b305
 sub_F7B1D1_Skip7:
 	m_cp_mi8 MB16, 0x0dbb, 0x04	; F7B2FB  cp (0x0dbb),0x04
 	jr	nz, sub_F7B1D1_Return4	; F7B300  jr NZ,0xf7b305
-	calr	sub_F7B3B1	; F7B302  calr 0xf7b3b1
+	calr	MeasureErase_StepEraseData	; F7B302  calr 0xf7b3b1
 sub_F7B1D1_Return4:
 	ret	; F7B305  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B306
+; MeasureErase_StepTrack
 ; Called from: in-module: 0xF7B295 0xF7B2DE
 ; Touches: (0x0C13) (0x0C2E) (0x0C35) (0x12F6)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B306 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B306:
+; MeasureErase_StepTrack: field 1 of the page (Track, FirstMeasure, LastMeasure, EraseData), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepTrack:
 	ld	a, (3091:16)	; F7B306  ld A,(0x0c13)
 	ld	l, 1:opc	; F7B30A  ld L,0x01
 	ld	h, 18:opc	; F7B30C  ld H,0x12
-	calr	sub_F7CD30	; F7B30E  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7B30E  calr 0xf7cd30
 	cp	a, 18	; F7B311  cp A,0x12
 	jr	z, sub_F7B306_Skip	; F7B314  jr Z,0xf7b32a
 	ld	(3091:16), a	; F7B316  ld (0x0c13),A
@@ -186729,19 +186744,20 @@ sub_F7B306_Join:
 	ret	; F7B340  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B341
+; MeasureErase_StepFirstMeasure
 ; Called from: in-module: 0xF7B2A1 0xF7B2EA
 ; Touches: (0x0C18) (0x0C2A) (0x0C2C) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B341 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B341:
+; MeasureErase_StepFirstMeasure: field 2 of the page (Track, FirstMeasure, LastMeasure, EraseData), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepFirstMeasure:
 	ld	wa, (3096:16)	; F7B341  ld WA,(0x0c18)
-	calr	sub_F7CD5F	; F7B345  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B345  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7B348  ld (0x0c18),WA
 	ld	(6304866:24), wa	; F7B34C  ld (0x603462),WA
 	m_cp_rm MW16, 0x0c2c, 0	; F7B351  cp WA,(0x0c2c)
@@ -186758,19 +186774,20 @@ sub_F7B341_Skip:
 	ret	; F7B376  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B377
+; MeasureErase_StepLastMeasure
 ; Called from: in-module: 0xF7B2AD 0xF7B2F6
 ; Touches: (0x0C18) (0x0C2A) (0x0C2C) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B377 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B377:
+; MeasureErase_StepLastMeasure: field 3 of the page (Track, FirstMeasure, LastMeasure, EraseData), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepLastMeasure:
 	ld	wa, (3116:16)	; F7B377  ld WA,(0x0c2c)
-	calr	sub_F7CD5F	; F7B37B  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B37B  calr 0xf7cd5f
 	ld	(3116:16), wa	; F7B37E  ld (0x0c2c),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7B382  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c2a, 0	; F7B386  cp WA,(0x0c2a)
@@ -186788,7 +186805,7 @@ sub_F7B377_Skip:
 	ret	; F7B3B0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B3B1
+; MeasureErase_StepEraseData
 ; Called from: in-module: 0xF7B2B9 0xF7B302
 ; Touches: (0x0C16) (0x0C4F) (0x12FB)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -186797,7 +186814,8 @@ sub_F7B377_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B3B1:
+; MeasureErase_StepEraseData: field 4 of the page (Track, FirstMeasure, LastMeasure, EraseData), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+MeasureErase_StepEraseData:
 	ld	a, (3094:16)	; F7B3B1  ld A,(0x0c16)
 	ld	l, 0:opc	; F7B3B5  ld L,0x00
 	ld	h, 2:opc	; F7B3B7  ld H,0x02
@@ -186872,7 +186890,7 @@ sub_F7B3B1_Return:
 	ret	; F7B456  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B457
+; MeasureErase_LoadSavedFields
 ; Called from: in-module: 0xF7B22C
 ; Touches: (0x0C13) (0x0C16) (0x0C18) (0x0C1C) (0x0C2A) (0x0C2C) (0x0C2E)
 ;          (0x0C35) (0x12F6) (0x12F7) +2 more
@@ -186882,7 +186900,8 @@ sub_F7B3B1_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B457:
+; MeasureErase_LoadSavedFields: copies the job's saved fields from battery RAM 0x6034xx into the working cells (notes/prom_b_seqjob_field_names.py)
+MeasureErase_LoadSavedFields:
 	ld	a, (6304865:24)	; F7B457  ld A,(0x603461)
 	ld	(3091:16), a	; F7B45C  ld (0x0c13),A
 	ld	(3118:16), a	; F7B460  ld (0x0c2e),A
@@ -186912,19 +186931,20 @@ sub_F7B457_Return:
 	ret	; F7B4BE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B4BF
-; Called from: T_F429A8 (x1)
+; MeasureInsert_InitFields
+; Called from: T_MeasureInsert_InitFields (x1)
 ; Touches: (0x0DDA) (0x12FF)
-; Calls:   sub_F7B852
-; Evidence: thunk slot T_F429A8 holds `jp 0x00F7B4BF`, and 0xF7B4BF is an
+; Calls:   MeasureInsert_LoadSavedFields
+; Evidence: thunk slot T_MeasureInsert_InitFields holds `jp 0x00F7B4BF`, and 0xF7B4BF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B4BF:		; <- T_F429A8
-	calr	sub_F7B852	; F7B4BF  calr 0xf7b852
+; MeasureInsert_InitFields: Paint_MeasureInsert's stage-0 init (thunk T_MeasureInsert_InitFields): MeasureInsert_LoadSavedFields, MeasureInsert_Field = 1.  MEASURE INSERT: FROM TRACK / FIRST MEASURE / LAST MEASURE | TO TRACK / START MEASURE / REPEAT
+MeasureInsert_InitFields:		; <- T_MeasureInsert_InitFields
+	calr	MeasureInsert_LoadSavedFields	; F7B4BF  calr 0xf7b852
 	ld	a, 1:opc	; F7B4C2  ld A,0x01
 	ld	(MeasureInsert_Field:16), a	; F7B4C4  ld (0x0dda),A
 	ld	(DisplayListB_Stage+9:16), a	; F7B4C8  ld (0x12ff),A
@@ -187068,63 +187088,65 @@ MeasureInsert_SelectField6:		; <- T_MeasureInsert_SelectField6
 	ret	; F7B53C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B53D
-; Called from: T_F429C8 (x2)
+; MeasureInsert_StepFieldUp
+; Called from: T_MeasureInsert_StepFieldUp (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DDA)
-; Calls:   sub_F7B5F5 sub_F7B65E sub_F7B694 sub_F7B6CE sub_F7B737 sub_F7B74C
-; Evidence: thunk slot T_F429C8 holds `jp 0x00F7B53D`, and 0xF7B53D is an
+; Calls:   MeasureInsert_StepFromTrack MeasureInsert_StepFirstMeasure MeasureInsert_StepLastMeasure MeasureInsert_StepToTrack MeasureInsert_StepStartMeasure MeasureInsert_StepRepeat
+; Evidence: thunk slot T_MeasureInsert_StepFieldUp holds `jp 0x00F7B53D`, and 0xF7B53D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B53D:		; <- T_F429C8
+; MeasureInsert_StepFieldUp: (0x0C4E) = W, (0x0C4F) = 0 (up), then field MeasureInsert_Field 1..6 -> MeasureInsert_StepFromTrack / MeasureInsert_StepFirstMeasure / MeasureInsert_StepLastMeasure / MeasureInsert_StepToTrack / MeasureInsert_StepStartMeasure / MeasureInsert_StepRepeat.  (field order: the page text, checked against each stepper's helper; notes/prom_b_seqjob_field_names.py for the pattern)
+MeasureInsert_StepFieldUp:		; <- T_MeasureInsert_StepFieldUp
 	ld	(3150:16), w	; F7B53D  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7B541  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x01	; F7B546  cp (0x0dda),0x01
 	jr	nz, sub_F7B457_Skip	; F7B54B  jr NZ,0xf7b552
-	calr	sub_F7B5F5	; F7B54D  calr 0xf7b5f5
+	calr	MeasureInsert_StepFromTrack	; F7B54D  calr 0xf7b5f5
 	jr	sub_F7B457_Return3	; F7B550  jr T,0xf7b58b
 sub_F7B457_Skip:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x02	; F7B552  cp (0x0dda),0x02
 	jr	nz, sub_F7B457_Skip2	; F7B557  jr NZ,0xf7b55e
-	calr	sub_F7B65E	; F7B559  calr 0xf7b65e
+	calr	MeasureInsert_StepFirstMeasure	; F7B559  calr 0xf7b65e
 	jr	sub_F7B457_Return3	; F7B55C  jr T,0xf7b58b
 sub_F7B457_Skip2:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x03	; F7B55E  cp (0x0dda),0x03
 	jr	nz, sub_F7B457_Skip3	; F7B563  jr NZ,0xf7b56a
-	calr	sub_F7B694	; F7B565  calr 0xf7b694
+	calr	MeasureInsert_StepLastMeasure	; F7B565  calr 0xf7b694
 	jr	sub_F7B457_Return3	; F7B568  jr T,0xf7b58b
 sub_F7B457_Skip3:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x04	; F7B56A  cp (0x0dda),0x04
 	jr	nz, sub_F7B457_Skip4	; F7B56F  jr NZ,0xf7b576
-	calr	sub_F7B6CE	; F7B571  calr 0xf7b6ce
+	calr	MeasureInsert_StepToTrack	; F7B571  calr 0xf7b6ce
 	jr	sub_F7B457_Return3	; F7B574  jr T,0xf7b58b
 sub_F7B457_Skip4:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x05	; F7B576  cp (0x0dda),0x05
 	jr	nz, sub_F7B457_Skip5	; F7B57B  jr NZ,0xf7b580
-	calr	sub_F7B737	; F7B57D  calr 0xf7b737
+	calr	MeasureInsert_StepStartMeasure	; F7B57D  calr 0xf7b737
 sub_F7B457_Skip5:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x06	; F7B580  cp (0x0dda),0x06
 	jr	nz, sub_F7B457_Return3	; F7B585  jr NZ,0xf7b58b
-	call	sub_F7B74C	; F7B587  call 0xf7b74c
+	call	MeasureInsert_StepRepeat	; F7B587  call 0xf7b74c
 sub_F7B457_Return3:
 	ret	; F7B58B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B58C
-; Called from: T_F429CC (x2)
+; MeasureInsert_StepFieldDown
+; Called from: T_MeasureInsert_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DDA) (0x2071) (0x2075) (0x207E)
-; Calls:   sub_F7B5F5 sub_F7B65E sub_F7B694 sub_F7B6CE sub_F7B737 sub_F7B74C
-; Evidence: thunk slot T_F429CC holds `jp 0x00F7B58C`, and 0xF7B58C is an
+; Calls:   MeasureInsert_StepFromTrack MeasureInsert_StepFirstMeasure MeasureInsert_StepLastMeasure MeasureInsert_StepToTrack MeasureInsert_StepStartMeasure MeasureInsert_StepRepeat
+; Evidence: thunk slot T_MeasureInsert_StepFieldDown holds `jp 0x00F7B58C`, and 0xF7B58C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B58C:		; <- T_F429CC
+; MeasureInsert_StepFieldDown: the same with (0x0C4F) = 0x80 (down).
+MeasureInsert_StepFieldDown:		; <- T_MeasureInsert_StepFieldDown
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B58C  cp (0x207e),0x01
 	jr	nz, sub_F7B457_Skip6	; F7B591  jr NZ,0xf7b595
 	jr	sub_F7B457_Join	; F7B593  jr T,0xf7b5e4
@@ -187133,31 +187155,31 @@ sub_F7B457_Skip6:
 	ld	(3151:16), 128	; F7B599  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x01	; F7B59E  cp (0x0dda),0x01
 	jr	nz, sub_F7B457_Skip7	; F7B5A3  jr NZ,0xf7b5aa
-	calr	sub_F7B5F5	; F7B5A5  calr 0xf7b5f5
+	calr	MeasureInsert_StepFromTrack	; F7B5A5  calr 0xf7b5f5
 	jr	sub_F7B457_Return4	; F7B5A8  jr T,0xf7b5e3
 sub_F7B457_Skip7:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x02	; F7B5AA  cp (0x0dda),0x02
 	jr	nz, sub_F7B457_Skip8	; F7B5AF  jr NZ,0xf7b5b6
-	calr	sub_F7B65E	; F7B5B1  calr 0xf7b65e
+	calr	MeasureInsert_StepFirstMeasure	; F7B5B1  calr 0xf7b65e
 	jr	sub_F7B457_Return4	; F7B5B4  jr T,0xf7b5e3
 sub_F7B457_Skip8:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x03	; F7B5B6  cp (0x0dda),0x03
 	jr	nz, sub_F7B457_Skip9	; F7B5BB  jr NZ,0xf7b5c2
-	calr	sub_F7B694	; F7B5BD  calr 0xf7b694
+	calr	MeasureInsert_StepLastMeasure	; F7B5BD  calr 0xf7b694
 	jr	sub_F7B457_Return4	; F7B5C0  jr T,0xf7b5e3
 sub_F7B457_Skip9:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x04	; F7B5C2  cp (0x0dda),0x04
 	jr	nz, sub_F7B457_Skip10	; F7B5C7  jr NZ,0xf7b5ce
-	calr	sub_F7B6CE	; F7B5C9  calr 0xf7b6ce
+	calr	MeasureInsert_StepToTrack	; F7B5C9  calr 0xf7b6ce
 	jr	sub_F7B457_Return4	; F7B5CC  jr T,0xf7b5e3
 sub_F7B457_Skip10:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x05	; F7B5CE  cp (0x0dda),0x05
 	jr	nz, sub_F7B457_Skip11	; F7B5D3  jr NZ,0xf7b5d8
-	calr	sub_F7B737	; F7B5D5  calr 0xf7b737
+	calr	MeasureInsert_StepStartMeasure	; F7B5D5  calr 0xf7b737
 sub_F7B457_Skip11:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x06	; F7B5D8  cp (0x0dda),0x06
 	jr	nz, sub_F7B457_Return4	; F7B5DD  jr NZ,0xf7b5e3
-	call	sub_F7B74C	; F7B5DF  call 0xf7b74c
+	call	MeasureInsert_StepRepeat	; F7B5DF  call 0xf7b74c
 sub_F7B457_Return4:
 	ret	; F7B5E3  ret
 sub_F7B457_Join:
@@ -187167,21 +187189,22 @@ sub_F7B457_Join:
 	jr	sub_F7B457_Return4	; F7B5F3  jr T,0xf7b5e3
 
 ; --------------------------------------------------------------------------
-; sub_F7B5F5
+; MeasureInsert_StepFromTrack
 ; Called from: in-module: 0xF7B54D 0xF7B5A5
 ; Touches: (0x0C13) (0x0C14) (0x0C35) (0x0DDB) (0x0DE0) (0x12F6) (0x12FB)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B5F5 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B5F5:
+; MeasureInsert_StepFromTrack: field 1 of the page; steps with SeqJob_StepTrack.
+MeasureInsert_StepFromTrack:
 	ld	a, (3091:16)	; F7B5F5  ld A,(0x0c13)
 	ld	l, 1:opc	; F7B5F9  ld L,0x01
 	ld	h, 18:opc	; F7B5FB  ld H,0x12
-	calr	sub_F7CD30	; F7B5FD  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7B5FD  calr 0xf7cd30
 	cp	a, 18	; F7B600  cp A,0x12
 	jr	z, sub_F7B5F5_Skip2	; F7B603  jr Z,0xf7b636
 	m_bit 2, MD16, 0x0c35	; F7B605  bit 2,(0x0c35)
@@ -187212,19 +187235,20 @@ sub_F7B5F5_Return:
 	ret	; F7B65D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B65E
+; MeasureInsert_StepFirstMeasure
 ; Called from: in-module: 0xF7B559 0xF7B5B1
 ; Touches: (0x0C18) (0x0DDC) (0x0DDE) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B65E is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B65E:
+; MeasureInsert_StepFirstMeasure: field 2 of the page; steps with SeqJob_StepMeasure.
+MeasureInsert_StepFirstMeasure:
 	ld	wa, (3096:16)	; F7B65E  ld WA,(0x0c18)
-	calr	sub_F7CD5F	; F7B662  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B662  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7B665  ld (0x0c18),WA
 	ld	(6304872:24), wa	; F7B669  ld (0x603468),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7B66E  ld (0x12f7),WA
@@ -187241,19 +187265,20 @@ sub_F7B65E_Skip:
 	ret	; F7B693  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B694
+; MeasureInsert_StepLastMeasure
 ; Called from: in-module: 0xF7B565 0xF7B5BD
 ; Touches: (0x0C18) (0x0DDC) (0x0DDE) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B694 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B694:
+; MeasureInsert_StepLastMeasure: field 3 of the page; steps with SeqJob_StepMeasure.
+MeasureInsert_StepLastMeasure:
 	ld	wa, (3550:16)	; F7B694  ld WA,(0x0dde)
-	calr	sub_F7CD5F	; F7B698  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B698  calr 0xf7cd5f
 	ld	(3550:16), wa	; F7B69B  ld (0x0dde),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7B69F  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0ddc, 0	; F7B6A3  cp WA,(0x0ddc)
@@ -187271,21 +187296,22 @@ sub_F7B694_Skip:
 	ret	; F7B6CD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B6CE
+; MeasureInsert_StepToTrack
 ; Called from: in-module: 0xF7B571 0xF7B5C9
 ; Touches: (0x0C13) (0x0C14) (0x0C35) (0x0DDB) (0x0DE0) (0x12F6) (0x12FB)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B6CE is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B6CE:
+; MeasureInsert_StepToTrack: field 4 of the page; steps with SeqJob_StepTrack.
+MeasureInsert_StepToTrack:
 	ld	a, (3092:16)	; F7B6CE  ld A,(0x0c14)
 	ld	l, 1:opc	; F7B6D2  ld L,0x01
 	ld	h, 18:opc	; F7B6D4  ld H,0x12
-	calr	sub_F7CD30	; F7B6D6  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7B6D6  calr 0xf7cd30
 	cp	a, 18	; F7B6D9  cp A,0x12
 	jr	z, sub_F7B6CE_Skip2	; F7B6DC  jr Z,0xf7b70f
 	m_bit 2, MD16, 0x0c35	; F7B6DE  bit 2,(0x0c35)
@@ -187316,26 +187342,27 @@ sub_F7B6CE_Return:
 	ret	; F7B736  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B737
+; MeasureInsert_StepStartMeasure
 ; Called from: in-module: 0xF7B57D 0xF7B5D5
 ; Touches: (0x0C1A) (0x12FC)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7B737 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B737:
+; MeasureInsert_StepStartMeasure: field 5 of the page; steps with SeqJob_StepMeasure.
+MeasureInsert_StepStartMeasure:
 	ld	wa, (3098:16)	; F7B737  ld WA,(0x0c1a)
-	calr	sub_F7CD5F	; F7B73B  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7B73B  calr 0xf7cd5f
 	ld	(3098:16), wa	; F7B73E  ld (0x0c1a),WA
 	ld	(6304877:24), wa	; F7B742  ld (0x60346d),WA
 	ld	(DisplayListB_Stage+6:16), wa	; F7B747  ld (0x12fc),WA
 	ret	; F7B74B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B74C
+; MeasureInsert_StepRepeat
 ; Called from: in-module: 0xF7B587 0xF7B5DF
 ; Touches: (0x0E17) (0x12FE)
 ; Calls:   sub_F7CCDB
@@ -187345,7 +187372,8 @@ sub_F7B737:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B74C:
+; MeasureInsert_StepRepeat: field 6 of the page; steps with sub_F7CCDB, 0..127.
+MeasureInsert_StepRepeat:
 	ld	a, (3607:16)	; F7B74C  ld A,(0x0e17)
 	ld	l, 0:opc	; F7B750  ld L,0x00
 	ld	h, 127:opc	; F7B752  ld H,0x7f
@@ -187462,7 +187490,7 @@ sub_F7B74C_Return:
 	ret	; F7B851  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B852
+; MeasureInsert_LoadSavedFields
 ; Called from: in-module: 0xF7B4BF
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C35) (0x0DDB)
 ;          (0x0DDC) (0x0DDE) (0x0DE0) +7 more
@@ -187472,7 +187500,8 @@ sub_F7B74C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B852:
+; MeasureInsert_LoadSavedFields: copies the job's saved fields from battery RAM 0x6034xx into the working cells and the display stage.
+MeasureInsert_LoadSavedFields:
 	ld	a, (6304871:24)	; F7B852  ld A,(0x603467)
 	cp	a, 127	; F7B857  cp A,0x7f
 	jr	nz, sub_F7B852_Skip	; F7B85A  jr NZ,0xf7b860
@@ -187512,19 +187541,20 @@ sub_F7B852_Return:
 	ret	; F7B8DB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B8DC
-; Called from: T_F429D8 (x1)
+; MeasureC0py_InitFields
+; Called from: T_MeasureC0py_InitFields (x1)
 ; Touches: (0x0DBC) (0x12FF)
-; Calls:   sub_F7BC73
-; Evidence: thunk slot T_F429D8 holds `jp 0x00F7B8DC`, and 0xF7B8DC is an
+; Calls:   MeasureC0py_LoadSavedFields
+; Evidence: thunk slot T_MeasureC0py_InitFields holds `jp 0x00F7B8DC`, and 0xF7B8DC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B8DC:		; <- T_F429D8
-	calr	sub_F7BC73	; F7B8DC  calr 0xf7bc73
+; MeasureC0py_InitFields: Paint_MeasureC0py's stage-0 init (thunk T_MeasureC0py_InitFields): MeasureC0py_LoadSavedFields, MeasureC0py_Field = 1.  MEASURE C0PY: the same six fields
+MeasureC0py_InitFields:		; <- T_MeasureC0py_InitFields
+	calr	MeasureC0py_LoadSavedFields	; F7B8DC  calr 0xf7bc73
 	ld	a, 1:opc	; F7B8DF  ld A,0x01
 	ld	(MeasureC0py_Field:16), a	; F7B8E1  ld (0x0dbc),A
 	ld	(DisplayListB_Stage+9:16), a	; F7B8E5  ld (0x12ff),A
@@ -187668,64 +187698,66 @@ MeasureC0py_SelectField6:		; <- T_MeasureC0py_SelectField6
 	ret	; F7B959  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B95A
-; Called from: T_F429F8 (x2)
+; MeasureC0py_StepFieldUp
+; Called from: T_MeasureC0py_StepFieldUp (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBC)
-; Calls:   sub_F7BA16 sub_F7BA7F sub_F7BAB5 sub_F7BAEF sub_F7BB58 sub_F7BB6D
-; Evidence: thunk slot T_F429F8 holds `jp 0x00F7B95A`, and 0xF7B95A is an
+; Calls:   MeasureC0py_StepFromTrack MeasureC0py_StepFirstMeasure MeasureC0py_StepLastMeasure MeasureC0py_StepToTrack MeasureC0py_StepStartMeasure MeasureC0py_StepRepeat
+; Evidence: thunk slot T_MeasureC0py_StepFieldUp holds `jp 0x00F7B95A`, and 0xF7B95A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B95A:		; <- T_F429F8
+; MeasureC0py_StepFieldUp: (0x0C4E) = W, (0x0C4F) = 0 (up), then field MeasureC0py_Field 1..6 -> MeasureC0py_StepFromTrack / MeasureC0py_StepFirstMeasure / MeasureC0py_StepLastMeasure / MeasureC0py_StepToTrack / MeasureC0py_StepStartMeasure / MeasureC0py_StepRepeat.  (field order: the page text, checked against each stepper's helper; notes/prom_b_seqjob_field_names.py for the pattern)
+MeasureC0py_StepFieldUp:		; <- T_MeasureC0py_StepFieldUp
 	ld	(3150:16), w	; F7B95A  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7B95E  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x01	; F7B963  cp (0x0dbc),0x01
 	jr	nz, sub_F7B852_Skip2	; F7B968  jr NZ,0xf7b96f
-	calr	sub_F7BA16	; F7B96A  calr 0xf7ba16
+	calr	MeasureC0py_StepFromTrack	; F7B96A  calr 0xf7ba16
 	jr	sub_F7B852_Return3	; F7B96D  jr T,0xf7b9aa
 sub_F7B852_Skip2:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x02	; F7B96F  cp (0x0dbc),0x02
 	jr	nz, sub_F7B852_Skip3	; F7B974  jr NZ,0xf7b97b
-	calr	sub_F7BA7F	; F7B976  calr 0xf7ba7f
+	calr	MeasureC0py_StepFirstMeasure	; F7B976  calr 0xf7ba7f
 	jr	sub_F7B852_Return3	; F7B979  jr T,0xf7b9aa
 sub_F7B852_Skip3:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x03	; F7B97B  cp (0x0dbc),0x03
 	jr	nz, sub_F7B852_Skip4	; F7B980  jr NZ,0xf7b987
-	calr	sub_F7BAB5	; F7B982  calr 0xf7bab5
+	calr	MeasureC0py_StepLastMeasure	; F7B982  calr 0xf7bab5
 	jr	sub_F7B852_Return3	; F7B985  jr T,0xf7b9aa
 sub_F7B852_Skip4:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x04	; F7B987  cp (0x0dbc),0x04
 	jr	nz, sub_F7B852_Skip5	; F7B98C  jr NZ,0xf7b993
-	calr	sub_F7BAEF	; F7B98E  calr 0xf7baef
+	calr	MeasureC0py_StepToTrack	; F7B98E  calr 0xf7baef
 	jr	sub_F7B852_Return3	; F7B991  jr T,0xf7b9aa
 sub_F7B852_Skip5:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x05	; F7B993  cp (0x0dbc),0x05
 	jr	nz, sub_F7B852_Skip6	; F7B998  jr NZ,0xf7b99f
-	calr	sub_F7BB58	; F7B99A  calr 0xf7bb58
+	calr	MeasureC0py_StepStartMeasure	; F7B99A  calr 0xf7bb58
 	jr	sub_F7B852_Return3	; F7B99D  jr T,0xf7b9aa
 sub_F7B852_Skip6:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x06	; F7B99F  cp (0x0dbc),0x06
 	jr	nz, sub_F7B852_Return3	; F7B9A4  jr NZ,0xf7b9aa
-	call	sub_F7BB6D	; F7B9A6  call 0xf7bb6d
+	call	MeasureC0py_StepRepeat	; F7B9A6  call 0xf7bb6d
 sub_F7B852_Return3:
 	ret	; F7B9AA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B9AB
-; Called from: T_F429FC (x2)
+; MeasureC0py_StepFieldDown
+; Called from: T_MeasureC0py_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBC) (0x2071) (0x2075) (0x207E)
-; Calls:   sub_F7BA16 sub_F7BA7F sub_F7BAB5 sub_F7BAEF sub_F7BB58 sub_F7BB6D
-; Evidence: thunk slot T_F429FC holds `jp 0x00F7B9AB`, and 0xF7B9AB is an
+; Calls:   MeasureC0py_StepFromTrack MeasureC0py_StepFirstMeasure MeasureC0py_StepLastMeasure MeasureC0py_StepToTrack MeasureC0py_StepStartMeasure MeasureC0py_StepRepeat
+; Evidence: thunk slot T_MeasureC0py_StepFieldDown holds `jp 0x00F7B9AB`, and 0xF7B9AB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B9AB:		; <- T_F429FC
+; MeasureC0py_StepFieldDown: the same with (0x0C4F) = 0x80 (down).
+MeasureC0py_StepFieldDown:		; <- T_MeasureC0py_StepFieldDown
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B9AB  cp (0x207e),0x01
 	jr	nz, sub_F7B852_Skip7	; F7B9B0  jr NZ,0xf7b9b4
 	jr	sub_F7B852_Join	; F7B9B2  jr T,0xf7ba05
@@ -187734,32 +187766,32 @@ sub_F7B852_Skip7:
 	ld	(3151:16), 128	; F7B9B8  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x01	; F7B9BD  cp (0x0dbc),0x01
 	jr	nz, sub_F7B852_Skip8	; F7B9C2  jr NZ,0xf7b9c9
-	calr	sub_F7BA16	; F7B9C4  calr 0xf7ba16
+	calr	MeasureC0py_StepFromTrack	; F7B9C4  calr 0xf7ba16
 	jr	sub_F7B852_Return4	; F7B9C7  jr T,0xf7ba04
 sub_F7B852_Skip8:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x02	; F7B9C9  cp (0x0dbc),0x02
 	jr	nz, sub_F7B852_Skip9	; F7B9CE  jr NZ,0xf7b9d5
-	calr	sub_F7BA7F	; F7B9D0  calr 0xf7ba7f
+	calr	MeasureC0py_StepFirstMeasure	; F7B9D0  calr 0xf7ba7f
 	jr	sub_F7B852_Return4	; F7B9D3  jr T,0xf7ba04
 sub_F7B852_Skip9:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x03	; F7B9D5  cp (0x0dbc),0x03
 	jr	nz, sub_F7B852_Skip10	; F7B9DA  jr NZ,0xf7b9e1
-	calr	sub_F7BAB5	; F7B9DC  calr 0xf7bab5
+	calr	MeasureC0py_StepLastMeasure	; F7B9DC  calr 0xf7bab5
 	jr	sub_F7B852_Return4	; F7B9DF  jr T,0xf7ba04
 sub_F7B852_Skip10:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x04	; F7B9E1  cp (0x0dbc),0x04
 	jr	nz, sub_F7B852_Skip11	; F7B9E6  jr NZ,0xf7b9ed
-	calr	sub_F7BAEF	; F7B9E8  calr 0xf7baef
+	calr	MeasureC0py_StepToTrack	; F7B9E8  calr 0xf7baef
 	jr	sub_F7B852_Return4	; F7B9EB  jr T,0xf7ba04
 sub_F7B852_Skip11:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x05	; F7B9ED  cp (0x0dbc),0x05
 	jr	nz, sub_F7B852_Skip12	; F7B9F2  jr NZ,0xf7b9f9
-	calr	sub_F7BB58	; F7B9F4  calr 0xf7bb58
+	calr	MeasureC0py_StepStartMeasure	; F7B9F4  calr 0xf7bb58
 	jr	sub_F7B852_Return4	; F7B9F7  jr T,0xf7ba04
 sub_F7B852_Skip12:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x06	; F7B9F9  cp (0x0dbc),0x06
 	jr	nz, sub_F7B852_Return4	; F7B9FE  jr NZ,0xf7ba04
-	call	sub_F7BB6D	; F7BA00  call 0xf7bb6d
+	call	MeasureC0py_StepRepeat	; F7BA00  call 0xf7bb6d
 sub_F7B852_Return4:
 	ret	; F7BA04  ret
 sub_F7B852_Join:
@@ -187769,21 +187801,22 @@ sub_F7B852_Join:
 	jr	sub_F7B852_Return4	; F7BA14  jr T,0xf7ba04
 
 ; --------------------------------------------------------------------------
-; sub_F7BA16
+; MeasureC0py_StepFromTrack
 ; Called from: in-module: 0xF7B96A 0xF7B9C4
 ; Touches: (0x0C13) (0x0C14) (0x0C2F) (0x0C34) (0x0C35) (0x12F6) (0x12FB)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BA16 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BA16:
+; MeasureC0py_StepFromTrack: field 1 of the page; steps with SeqJob_StepTrack.
+MeasureC0py_StepFromTrack:
 	ld	a, (3091:16)	; F7BA16  ld A,(0x0c13)
 	ld	l, 1:opc	; F7BA1A  ld L,0x01
 	ld	h, 18:opc	; F7BA1C  ld H,0x12
-	calr	sub_F7CD30	; F7BA1E  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7BA1E  calr 0xf7cd30
 	cp	a, 18	; F7BA21  cp A,0x12
 	jr	z, sub_F7BA16_Skip2	; F7BA24  jr Z,0xf7ba57
 	m_bit 3, MD16, 0x0c35	; F7BA26  bit 3,(0x0c35)
@@ -187814,19 +187847,20 @@ sub_F7BA16_Return:
 	ret	; F7BA7E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BA7F
+; MeasureC0py_StepFirstMeasure
 ; Called from: in-module: 0xF7B976 0xF7B9D0
 ; Touches: (0x0C18) (0x0C30) (0x0C32) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BA7F is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BA7F:
+; MeasureC0py_StepFirstMeasure: field 2 of the page; steps with SeqJob_StepMeasure.
+MeasureC0py_StepFirstMeasure:
 	ld	wa, (3096:16)	; F7BA7F  ld WA,(0x0c18)
-	calr	sub_F7CD5F	; F7BA83  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7BA83  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7BA86  ld (0x0c18),WA
 	ld	(6304880:24), wa	; F7BA8A  ld (0x603470),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7BA8F  ld (0x12f7),WA
@@ -187843,19 +187877,20 @@ sub_F7BA7F_Skip:
 	ret	; F7BAB4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BAB5
+; MeasureC0py_StepLastMeasure
 ; Called from: in-module: 0xF7B982 0xF7B9DC
 ; Touches: (0x0C18) (0x0C30) (0x0C32) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BAB5 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BAB5:
+; MeasureC0py_StepLastMeasure: field 3 of the page; steps with SeqJob_StepMeasure.
+MeasureC0py_StepLastMeasure:
 	ld	wa, (3122:16)	; F7BAB5  ld WA,(0x0c32)
-	calr	sub_F7CD5F	; F7BAB9  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7BAB9  calr 0xf7cd5f
 	ld	(3122:16), wa	; F7BABC  ld (0x0c32),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7BAC0  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c30, 0	; F7BAC4  cp WA,(0x0c30)
@@ -187873,21 +187908,22 @@ sub_F7BAB5_Skip:
 	ret	; F7BAEE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BAEF
+; MeasureC0py_StepToTrack
 ; Called from: in-module: 0xF7B98E 0xF7B9E8
 ; Touches: (0x0C13) (0x0C14) (0x0C2F) (0x0C34) (0x0C35) (0x12F6) (0x12FB)
-; Calls:   sub_F7CD30
+; Calls:   SeqJob_StepTrack
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BAEF is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BAEF:
+; MeasureC0py_StepToTrack: field 4 of the page; steps with SeqJob_StepTrack.
+MeasureC0py_StepToTrack:
 	ld	a, (3092:16)	; F7BAEF  ld A,(0x0c14)
 	ld	l, 1:opc	; F7BAF3  ld L,0x01
 	ld	h, 18:opc	; F7BAF5  ld H,0x12
-	calr	sub_F7CD30	; F7BAF7  calr 0xf7cd30
+	calr	SeqJob_StepTrack	; F7BAF7  calr 0xf7cd30
 	cp	a, 18	; F7BAFA  cp A,0x12
 	jr	z, sub_F7BAEF_Skip2	; F7BAFD  jr Z,0xf7bb30
 	m_bit 3, MD16, 0x0c35	; F7BAFF  bit 3,(0x0c35)
@@ -187918,26 +187954,27 @@ sub_F7BAEF_Return:
 	ret	; F7BB57  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BB58
+; MeasureC0py_StepStartMeasure
 ; Called from: in-module: 0xF7B99A 0xF7B9F4
 ; Touches: (0x0C1A) (0x12FC)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BB58 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BB58:
+; MeasureC0py_StepStartMeasure: field 5 of the page; steps with SeqJob_StepMeasure.
+MeasureC0py_StepStartMeasure:
 	ld	wa, (3098:16)	; F7BB58  ld WA,(0x0c1a)
-	calr	sub_F7CD5F	; F7BB5C  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7BB5C  calr 0xf7cd5f
 	ld	(3098:16), wa	; F7BB5F  ld (0x0c1a),WA
 	ld	(6304885:24), wa	; F7BB63  ld (0x603475),WA
 	ld	(DisplayListB_Stage+6:16), wa	; F7BB68  ld (0x12fc),WA
 	ret	; F7BB6C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BB6D
+; MeasureC0py_StepRepeat
 ; Called from: in-module: 0xF7B9A6 0xF7BA00
 ; Touches: (0x0E16) (0x12FE)
 ; Calls:   sub_F7CCDB
@@ -187947,7 +187984,8 @@ sub_F7BB58:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BB6D:
+; MeasureC0py_StepRepeat: field 6 of the page; steps with sub_F7CCDB, 0..127.
+MeasureC0py_StepRepeat:
 	ld	a, (3606:16)	; F7BB6D  ld A,(0x0e16)
 	ld	l, 0:opc	; F7BB71  ld L,0x00
 	ld	h, 127:opc	; F7BB73  ld H,0x7f
@@ -188064,7 +188102,7 @@ sub_F7BB6D_Return:
 	ret	; F7BC72  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BC73
+; MeasureC0py_LoadSavedFields
 ; Called from: in-module: 0xF7B8DC
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C2F) (0x0C30)
 ;          (0x0C32) (0x0C34) (0x0C35) +7 more
@@ -188074,7 +188112,8 @@ sub_F7BB6D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BC73:
+; MeasureC0py_LoadSavedFields: copies the job's saved fields from battery RAM 0x6034xx into the working cells and the display stage.
+MeasureC0py_LoadSavedFields:
 	ld	a, (6304879:24)	; F7BC73  ld A,(0x60346f)
 	cp	a, 127	; F7BC78  cp A,0x7f
 	jr	nz, sub_F7BC73_Skip	; F7BC7B  jr NZ,0xf7bc81
@@ -188114,19 +188153,20 @@ sub_F7BC73_Return:
 	ret	; F7BCFC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BCFD
-; Called from: T_F428E0 (x1)
+; Vel0cityChange_InitFields
+; Called from: T_Vel0cityChange_InitFields (x1)
 ; Touches: (0x0C16) (0x0C1E) (0x0C24) (0x0DB8) (0x12FB) (0x12FC)
-; Calls:   sub_F7BF74
-; Evidence: thunk slot T_F428E0 holds `jp 0x00F7BCFD`, and 0xF7BCFD is an
+; Calls:   Vel0cityChange_LoadSavedFields
+; Evidence: thunk slot T_Vel0cityChange_InitFields holds `jp 0x00F7BCFD`, and 0xF7BCFD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BCFD:		; <- T_F428E0
-	calr	sub_F7BF74	; F7BCFD  calr 0xf7bf74
+; Vel0cityChange_InitFields: Paint_Vel0cityChange's stage-0 init: Vel0cityChange_LoadSavedFields, field cursor (0x0db8) = 1 (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_InitFields:		; <- T_Vel0cityChange_InitFields
+	calr	Vel0cityChange_LoadSavedFields	; F7BCFD  calr 0xf7bf74
 	ld	(3094:16), 0	; F7BD00  ld (0x0c16),0x00
 	ld	(6304950:24), 0	; F7BD05  ld (0x6034b6),0x00
 	xor	wa, wa	; F7BD0B  xor WA,WA
@@ -188234,116 +188274,121 @@ Vel0cityChange_StageZero_LcdKeyRow4:		; <- T_Vel0cityChange_StageZero_LcdKeyRow4
 	ret	; F7BD7E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BD7F
-; Called from: T_F428F8 (x4)
+; Vel0cityChange_StepFieldUp
+; Called from: T_Vel0cityChange_StepFieldUp (x4)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DB8) (0x207E)
-; Calls:   sub_F7BE0C sub_F7BE43 sub_F7BE79 sub_F7BEB3
-; Evidence: thunk slot T_F428F8 holds `jp 0x00F7BD7F`, and 0xF7BD7F is an
+; Calls:   Vel0cityChange_StepTrack Vel0cityChange_StepFirstMeasure Vel0cityChange_StepLastMeasure Vel0cityChange_StepVelocity
+; Evidence: thunk slot T_Vel0cityChange_StepFieldUp holds `jp 0x00F7BD7F`, and 0xF7BD7F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BD7F:		; <- T_F428F8
+; Vel0cityChange_StepFieldUp: at stage 1 leaves through Vel0cityChange_ReturnToStageZero; else (0x0C4E) = W, (0x0C4F) = 0 (up) and
+;   steps field (0x0db8) (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepFieldUp:		; <- T_Vel0cityChange_StepFieldUp
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BD7F  cp (0x207e),0x01
 	jr	nz, sub_F7BC73_Skip2	; F7BD84  jr NZ,0xf7bd88
-	jr	sub_F7BDC0	; F7BD86  jr T,0xf7bdc0
+	jr	Vel0cityChange_ReturnToStageZero	; F7BD86  jr T,0xf7bdc0
 sub_F7BC73_Skip2:
 	ld	(3150:16), w	; F7BD88  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7BD8C  ld (0x0c4f),0x00
 	m_cp_mi8 MB16, 0x0db8, 0x01	; F7BD91  cp (0x0db8),0x01
 	jr	nz, sub_F7BC73_Skip3	; F7BD96  jr NZ,0xf7bd9d
-	calr	sub_F7BE0C	; F7BD98  calr 0xf7be0c
+	calr	Vel0cityChange_StepTrack	; F7BD98  calr 0xf7be0c
 	jr	sub_F7BC73_Return3	; F7BD9B  jr T,0xf7bdbf
 sub_F7BC73_Skip3:
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7BD9D  cp (0x0db8),0x02
 	jr	nz, sub_F7BC73_Skip4	; F7BDA2  jr NZ,0xf7bda9
-	calr	sub_F7BE43	; F7BDA4  calr 0xf7be43
+	calr	Vel0cityChange_StepFirstMeasure	; F7BDA4  calr 0xf7be43
 	jr	sub_F7BC73_Return3	; F7BDA7  jr T,0xf7bdbf
 sub_F7BC73_Skip4:
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7BDA9  cp (0x0db8),0x03
 	jr	nz, sub_F7BC73_Skip5	; F7BDAE  jr NZ,0xf7bdb5
-	calr	sub_F7BE79	; F7BDB0  calr 0xf7be79
+	calr	Vel0cityChange_StepLastMeasure	; F7BDB0  calr 0xf7be79
 	jr	sub_F7BC73_Return3	; F7BDB3  jr T,0xf7bdbf
 sub_F7BC73_Skip5:
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7BDB5  cp (0x0db8),0x04
 	jr	nz, sub_F7BC73_Return3	; F7BDBA  jr NZ,0xf7bdbf
-	calr	sub_F7BEB3	; F7BDBC  calr 0xf7beb3
+	calr	Vel0cityChange_StepVelocity	; F7BDBC  calr 0xf7beb3
 sub_F7BC73_Return3:
 	ret	; F7BDBF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BDC0
-; Called from: T_F42904 (x0)
+; Vel0cityChange_ReturnToStageZero
+; Called from: T_Vel0cityChange_ReturnToStageZero (x0)
 ; Touches: (0x2071) (0x2075) (0x207E)
-; Calls:   sub_F7BF74
-; Evidence: thunk slot T_F42904 holds `jp 0x00F7BDC0`, and 0xF7BDC0 is an
+; Calls:   Vel0cityChange_LoadSavedFields
+; Evidence: thunk slot T_Vel0cityChange_ReturnToStageZero holds `jp 0x00F7BDC0`, and 0xF7BDC0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BDC0:		; <- T_F42904
+; Vel0cityChange_ReturnToStageZero: UI_ScreenStage = 0, UI_Request_Hi |= 0x10 (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_ReturnToStageZero:		; <- T_Vel0cityChange_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BDC0  and (0x2075),0xf6
-	calr	sub_F7BF74	; F7BDC5  calr 0xf7bf74
+	calr	Vel0cityChange_LoadSavedFields	; F7BDC5  calr 0xf7bf74
 	ld	(UI_ScreenStage:16), 0	; F7BDC8  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BDCD  or (0x2071),0x10
 	jr	sub_F7BC73_Return3	; F7BDD2  jr T,0xf7bdbf
 
 ; --------------------------------------------------------------------------
-; sub_F7BDD4
-; Called from: T_F428FC (x2)
+; Vel0cityChange_StepFieldDown
+; Called from: T_Vel0cityChange_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DB8)
-; Calls:   sub_F7BE0C sub_F7BE43 sub_F7BE79 sub_F7BEB3
-; Evidence: thunk slot T_F428FC holds `jp 0x00F7BDD4`, and 0xF7BDD4 is an
+; Calls:   Vel0cityChange_StepTrack Vel0cityChange_StepFirstMeasure Vel0cityChange_StepLastMeasure Vel0cityChange_StepVelocity
+; Evidence: thunk slot T_Vel0cityChange_StepFieldDown holds `jp 0x00F7BDD4`, and 0xF7BDD4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BDD4:		; <- T_F428FC
+; Vel0cityChange_StepFieldDown: (0x0C4E) = W, (0x0C4F) = 0x80 (down), steps field (0x0db8) (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepFieldDown:		; <- T_Vel0cityChange_StepFieldDown
 	ld	(3150:16), w	; F7BDD4  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7BDD8  ld (0x0c4f),0x80
 	m_cp_mi8 MB16, 0x0db8, 0x01	; F7BDDD  cp (0x0db8),0x01
 	jr	nz, sub_F7BC73_Skip6	; F7BDE2  jr NZ,0xf7bde9
-	calr	sub_F7BE0C	; F7BDE4  calr 0xf7be0c
+	calr	Vel0cityChange_StepTrack	; F7BDE4  calr 0xf7be0c
 	jr	sub_F7BC73_Return4	; F7BDE7  jr T,0xf7be0b
 sub_F7BC73_Skip6:
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7BDE9  cp (0x0db8),0x02
 	jr	nz, sub_F7BC73_Skip7	; F7BDEE  jr NZ,0xf7bdf5
-	calr	sub_F7BE43	; F7BDF0  calr 0xf7be43
+	calr	Vel0cityChange_StepFirstMeasure	; F7BDF0  calr 0xf7be43
 	jr	sub_F7BC73_Return4	; F7BDF3  jr T,0xf7be0b
 sub_F7BC73_Skip7:
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7BDF5  cp (0x0db8),0x03
 	jr	nz, sub_F7BC73_Skip8	; F7BDFA  jr NZ,0xf7be01
-	calr	sub_F7BE79	; F7BDFC  calr 0xf7be79
+	calr	Vel0cityChange_StepLastMeasure	; F7BDFC  calr 0xf7be79
 	jr	sub_F7BC73_Return4	; F7BDFF  jr T,0xf7be0b
 sub_F7BC73_Skip8:
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7BE01  cp (0x0db8),0x04
 	jr	nz, sub_F7BC73_Return4	; F7BE06  jr NZ,0xf7be0b
-	calr	sub_F7BEB3	; F7BE08  calr 0xf7beb3
+	calr	Vel0cityChange_StepVelocity	; F7BE08  calr 0xf7beb3
 sub_F7BC73_Return4:
 	ret	; F7BE0B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BE0C
+; Vel0cityChange_StepTrack
 ; Called from: in-module: 0xF7BD98 0xF7BDE4
 ; Touches: (0x0C13) (0x0C35) (0x12F6)
-; Calls:   sub_F7CD01
+; Calls:   SeqJob_StepTrack17
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BE0C is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BE0C:
+; Vel0cityChange_StepTrack: field 1 of the page (Track, FirstMeasure, LastMeasure, Velocity), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepTrack:
 	ld	a, (3091:16)	; F7BE0C  ld A,(0x0c13)
 	ld	l, 1:opc	; F7BE10  ld L,0x01
 	ld	h, 17:opc	; F7BE12  ld H,0x11
-	calr	sub_F7CD01	; F7BE14  calr 0xf7cd01
+	calr	SeqJob_StepTrack17	; F7BE14  calr 0xf7cd01
 	cp	a, 17	; F7BE17  cp A,0x11
 	jr	z, sub_F7BE0C_Skip	; F7BE1A  jr Z,0xf7be30
 	ld	(3091:16), a	; F7BE1C  ld (0x0c13),A
@@ -188360,19 +188405,20 @@ sub_F7BE0C_Return:
 	ret	; F7BE42  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BE43
+; Vel0cityChange_StepFirstMeasure
 ; Called from: in-module: 0xF7BDA4 0xF7BDF0
 ; Touches: (0x0C18) (0x0C20) (0x0C22) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BE43 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BE43:
+; Vel0cityChange_StepFirstMeasure: field 2 of the page (Track, FirstMeasure, LastMeasure, Velocity), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepFirstMeasure:
 	ld	wa, (3096:16)	; F7BE43  ld WA,(0x0c18)
-	calr	sub_F7CD5F	; F7BE47  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7BE47  calr 0xf7cd5f
 	ld	(3096:16), wa	; F7BE4A  ld (0x0c18),WA
 	ld	(6304946:24), wa	; F7BE4E  ld (0x6034b2),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7BE53  ld (0x12f7),WA
@@ -188389,19 +188435,20 @@ sub_F7BE43_Skip:
 	ret	; F7BE78  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BE79
+; Vel0cityChange_StepLastMeasure
 ; Called from: in-module: 0xF7BDB0 0xF7BDFC
 ; Touches: (0x0C18) (0x0C20) (0x0C22) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7BE79 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BE79:
+; Vel0cityChange_StepLastMeasure: field 3 of the page (Track, FirstMeasure, LastMeasure, Velocity), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepLastMeasure:
 	ld	wa, (3106:16)	; F7BE79  ld WA,(0x0c22)
-	calr	sub_F7CD5F	; F7BE7D  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7BE7D  calr 0xf7cd5f
 	ld	(3106:16), wa	; F7BE80  ld (0x0c22),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7BE84  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0c20, 0	; F7BE88  cp WA,(0x0c20)
@@ -188419,7 +188466,7 @@ sub_F7BE79_Skip:
 	ret	; F7BEB2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BEB3
+; Vel0cityChange_StepVelocity
 ; Called from: in-module: 0xF7BDBC 0xF7BE08
 ; Touches: (0x0C1E) (0x0C24) (0x0C4F) (0x12FB) (0x2075)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -188428,7 +188475,8 @@ sub_F7BE79_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BEB3:
+; Vel0cityChange_StepVelocity: field 4 of the page (Track, FirstMeasure, LastMeasure, Velocity), stepped in the direction (0x0C4F) holds (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_StepVelocity:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7BEB3  or (0x2075),0x09
 	ld	a, (3102:16)	; F7BEB8  ld A,(0x0c1e)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7BEBC  cp (0x0c4f),0x80
@@ -188511,7 +188559,7 @@ sub_F7BEB3_Return2:
 	ret	; F7BF73  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BF74
+; Vel0cityChange_LoadSavedFields
 ; Called from: in-module: 0xF7BCFD 0xF7BDC5
 ; Touches: (0x0C13) (0x0C16) (0x0C18) (0x0C1C) (0x0C1E) (0x0C1F) (0x0C20)
 ;          (0x0C22) (0x0C24) (0x0C35) +3 more
@@ -188521,7 +188569,8 @@ sub_F7BEB3_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BF74:
+; Vel0cityChange_LoadSavedFields: copies the job's saved fields from battery RAM 0x6034xx into the working cells (notes/prom_b_seqjob_field_names.py)
+Vel0cityChange_LoadSavedFields:
 	ld	a, (6304945:24)	; F7BF74  ld A,(0x6034b1)
 	ld	(3091:16), a	; F7BF79  ld (0x0c13),A
 	ld	(DisplayListB_Stage:16), a	; F7BF7D  ld (0x12f6),A
@@ -188554,18 +188603,19 @@ sub_F7BF74_Return:
 	ret	; F7BFE9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BFEA
-; Called from: T_F42908 (x1)
+; Quantize_InitFields
+; Called from: T_Quantize_InitFields (x1)
 ; Touches: (0x0C25) (0x0C26) (0x0C28) (0x0C35) (0x0C36) (0x0C37) (0x0C3A)
 ;          (0x0C4A) (0x0DB9) (0x0E04) +15 more
-; Evidence: thunk slot T_F42908 holds `jp 0x00F7BFEA`, and 0xF7BFEA is an
+; Evidence: thunk slot T_Quantize_InitFields holds `jp 0x00F7BFEA`, and 0xF7BFEA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BFEA:		; <- T_F42908
+; Quantize_InitFields: Paint_Quantize's stage-0 init (thunk T_Quantize_InitFields): copies the saved fields from battery RAM 0x603477.. into the working cells.
+Quantize_InitFields:		; <- T_Quantize_InitFields
 	ld	a, (UI_ScreenLatch_Previous:16)	; F7BFEA  ld A,(0x207b)
 	m_cp_rm MB16, UI_ScreenLatch, 1	; F7BFEE  cp A,(0x207a)
 	jr	z, sub_F7BF74_Skip	; F7BFF2  jr Z,0xf7bffd
@@ -188726,69 +188776,71 @@ Quantize_SelectField4:		; <- T_Quantize_SelectField4
 	ret	; F7C0F0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C0F1
-; Called from: T_F42928 (x4)
+; Quantize_StepFieldUp
+; Called from: T_Quantize_StepFieldUp (x4)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DB9) (0x207E)
-; Calls:   sub_F7C1C1 sub_F7C20B sub_F7C242 sub_F7C27C sub_F7C2AB sub_F7C2D3
-; Evidence: thunk slot T_F42928 holds `jp 0x00F7C0F1`, and 0xF7C0F1 is an
+; Calls:   Quantize_StepTrack Quantize_StepFirstMeasure Quantize_StepLastMeasure Quantize_StepValue Quantize_StepStrength Quantize_StepWindow
+; Evidence: thunk slot T_Quantize_StepFieldUp holds `jp 0x00F7C0F1`, and 0xF7C0F1 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C0F1:		; <- T_F42928
+; Quantize_StepFieldUp: at stage 1 leaves through Quantize_ReturnToStageZero; else (0x0C4F) = 0 (up) and field (0x0DB9) 1..6 -> Quantize_StepTrack / _StepFirstMeasure / _StepLastMeasure / _StepValue / _StepStrength / _StepWindow.  (field order: the page text, checked against each stepper's helper; notes/prom_b_seqjob_field_names.py for the pattern)
+Quantize_StepFieldUp:		; <- T_Quantize_StepFieldUp
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C0F1  cp (0x207e),0x01
 	jr	nz, sub_F7BF74_Skip4	; F7C0F6  jr NZ,0xf7c0fa
-	jr	sub_F7C13E	; F7C0F8  jr T,0xf7c13e
+	jr	Quantize_ReturnToStageZero	; F7C0F8  jr T,0xf7c13e
 sub_F7BF74_Skip4:
 	ld	(3150:16), w	; F7C0FA  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7C0FE  ld (0x0c4f),0x00
 	ld	a, (3513:16)	; F7C103  ld A,(0x0db9)
 	cp	a, 1:i3	; F7C107  cp A,1
 	jr	nz, sub_F7BF74_Skip5	; F7C109  jr NZ,0xf7c110
-	calr	sub_F7C1C1	; F7C10B  calr 0xf7c1c1
+	calr	Quantize_StepTrack	; F7C10B  calr 0xf7c1c1
 	jr	sub_F7BF74_Return4	; F7C10E  jr T,0xf7c13d
 sub_F7BF74_Skip5:
 	cp	a, 2:i3	; F7C110  cp A,2
 	jr	nz, sub_F7BF74_Skip6	; F7C112  jr NZ,0xf7c119
-	calr	sub_F7C20B	; F7C114  calr 0xf7c20b
+	calr	Quantize_StepFirstMeasure	; F7C114  calr 0xf7c20b
 	jr	sub_F7BF74_Return4	; F7C117  jr T,0xf7c13d
 sub_F7BF74_Skip6:
 	cp	a, 3:i3	; F7C119  cp A,3
 	jr	nz, sub_F7BF74_Skip7	; F7C11B  jr NZ,0xf7c122
-	calr	sub_F7C242	; F7C11D  calr 0xf7c242
+	calr	Quantize_StepLastMeasure	; F7C11D  calr 0xf7c242
 	jr	sub_F7BF74_Return4	; F7C120  jr T,0xf7c13d
 sub_F7BF74_Skip7:
 	cp	a, 4:i3	; F7C122  cp A,4
 	jr	nz, sub_F7BF74_Skip8	; F7C124  jr NZ,0xf7c12b
-	calr	sub_F7C27C	; F7C126  calr 0xf7c27c
+	calr	Quantize_StepValue	; F7C126  calr 0xf7c27c
 	jr	sub_F7BF74_Return4	; F7C129  jr T,0xf7c13d
 sub_F7BF74_Skip8:
 	cp	a, 5:i3	; F7C12B  cp A,5
 	jr	nz, sub_F7BF74_Skip9	; F7C12D  jr NZ,0xf7c135
-	call	sub_F7C2AB	; F7C12F  call 0xf7c2ab
+	call	Quantize_StepStrength	; F7C12F  call 0xf7c2ab
 	jr	sub_F7BF74_Return4	; F7C133  jr T,0xf7c13d
 sub_F7BF74_Skip9:
 	cp	a, 6:i3	; F7C135  cp A,6
 	jr	nz, sub_F7BF74_Return4	; F7C137  jr NZ,0xf7c13d
-	call	sub_F7C2D3	; F7C139  call 0xf7c2d3
+	call	Quantize_StepWindow	; F7C139  call 0xf7c2d3
 sub_F7BF74_Return4:
 	ret	; F7C13D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C13E
-; Called from: T_F42934 (x0)
+; Quantize_ReturnToStageZero
+; Called from: T_Quantize_ReturnToStageZero (x0)
 ; Touches: (0x0C25) (0x0C26) (0x0C36) (0x0C37) (0x0C3A) (0x0C4A) (0x2071)
 ;          (0x2075) (0x207E)
-; Evidence: thunk slot T_F42934 holds `jp 0x00F7C13E`, and 0xF7C13E is an
+; Evidence: thunk slot T_Quantize_ReturnToStageZero holds `jp 0x00F7C13E`, and 0xF7C13E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C13E:		; <- T_F42934
+; Quantize_ReturnToStageZero: writes the track / measure cells back to battery RAM 0x603477.., then UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- the stage-1 exit of Quantize_StepFieldUp.
+Quantize_ReturnToStageZero:		; <- T_Quantize_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C13E  and (0x2075),0xf6
 	ld	a, (3126:16)	; F7C143  ld A,(0x0c36)
 	ld	(6304887:24), a	; F7C147  ld (0x603477),A
@@ -188806,69 +188858,71 @@ sub_F7C13E:		; <- T_F42934
 	jr	sub_F7BF74_Return4	; F7C17B  jr T,0xf7c13d
 
 ; --------------------------------------------------------------------------
-; sub_F7C17D
-; Called from: T_F4292C (x2)
+; Quantize_StepFieldDown
+; Called from: T_Quantize_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DB9)
-; Calls:   sub_F7C1C1 sub_F7C20B sub_F7C242 sub_F7C27C sub_F7C2AB sub_F7C2D3
-; Evidence: thunk slot T_F4292C holds `jp 0x00F7C17D`, and 0xF7C17D is an
+; Calls:   Quantize_StepTrack Quantize_StepFirstMeasure Quantize_StepLastMeasure Quantize_StepValue Quantize_StepStrength Quantize_StepWindow
+; Evidence: thunk slot T_Quantize_StepFieldDown holds `jp 0x00F7C17D`, and 0xF7C17D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C17D:		; <- T_F4292C
+; Quantize_StepFieldDown: the same with (0x0C4F) = 0x80 (down).
+Quantize_StepFieldDown:		; <- T_Quantize_StepFieldDown
 	ld	(3150:16), w	; F7C17D  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7C181  ld (0x0c4f),0x80
 	ld	a, (3513:16)	; F7C186  ld A,(0x0db9)
 	cp	a, 1:i3	; F7C18A  cp A,1
 	jr	nz, sub_F7BF74_Skip10	; F7C18C  jr NZ,0xf7c193
-	calr	sub_F7C1C1	; F7C18E  calr 0xf7c1c1
+	calr	Quantize_StepTrack	; F7C18E  calr 0xf7c1c1
 	jr	sub_F7BF74_Return5	; F7C191  jr T,0xf7c1c0
 sub_F7BF74_Skip10:
 	cp	a, 2:i3	; F7C193  cp A,2
 	jr	nz, sub_F7BF74_Skip11	; F7C195  jr NZ,0xf7c19c
-	calr	sub_F7C20B	; F7C197  calr 0xf7c20b
+	calr	Quantize_StepFirstMeasure	; F7C197  calr 0xf7c20b
 	jr	sub_F7BF74_Return5	; F7C19A  jr T,0xf7c1c0
 sub_F7BF74_Skip11:
 	cp	a, 3:i3	; F7C19C  cp A,3
 	jr	nz, sub_F7BF74_Skip12	; F7C19E  jr NZ,0xf7c1a5
-	calr	sub_F7C242	; F7C1A0  calr 0xf7c242
+	calr	Quantize_StepLastMeasure	; F7C1A0  calr 0xf7c242
 	jr	sub_F7BF74_Return5	; F7C1A3  jr T,0xf7c1c0
 sub_F7BF74_Skip12:
 	cp	a, 4:i3	; F7C1A5  cp A,4
 	jr	nz, sub_F7BF74_Skip13	; F7C1A7  jr NZ,0xf7c1ae
-	calr	sub_F7C27C	; F7C1A9  calr 0xf7c27c
+	calr	Quantize_StepValue	; F7C1A9  calr 0xf7c27c
 	jr	sub_F7BF74_Return5	; F7C1AC  jr T,0xf7c1c0
 sub_F7BF74_Skip13:
 	cp	a, 5:i3	; F7C1AE  cp A,5
 	jr	nz, sub_F7BF74_Skip14	; F7C1B0  jr NZ,0xf7c1b8
-	call	sub_F7C2AB	; F7C1B2  call 0xf7c2ab
+	call	Quantize_StepStrength	; F7C1B2  call 0xf7c2ab
 	jr	sub_F7BF74_Return5	; F7C1B6  jr T,0xf7c1c0
 sub_F7BF74_Skip14:
 	cp	a, 6:i3	; F7C1B8  cp A,6
 	jr	nz, sub_F7BF74_Return5	; F7C1BA  jr NZ,0xf7c1c0
-	call	sub_F7C2D3	; F7C1BC  call 0xf7c2d3
+	call	Quantize_StepWindow	; F7C1BC  call 0xf7c2d3
 sub_F7BF74_Return5:
 	ret	; F7C1C0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C1C1
+; Quantize_StepTrack
 ; Called from: in-module: 0xF7C10B 0xF7C18E
 ; Touches: (0x0C25) (0x0C35) (0x0C36) (0x12F6)
-; Calls:   sub_F7CD01
+; Calls:   SeqJob_StepTrack17
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7C1C1 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C1C1:
+; Quantize_StepTrack: field 1: SeqJob_StepTrack17.
+Quantize_StepTrack:
 	ld	a, (6304887:24)	; F7C1C1  ld A,(0x603477)
 	inc	1, a	; F7C1C6  inc 1,A
 	ld	l, 1:opc	; F7C1C8  ld L,0x01
 	ld	h, 17:opc	; F7C1CA  ld H,0x11
-	calr	sub_F7CD01	; F7C1CC  calr 0xf7cd01
+	calr	SeqJob_StepTrack17	; F7C1CC  calr 0xf7cd01
 	cp	a, 17	; F7C1CF  cp A,0x11
 	jr	z, sub_F7C1C1_Skip	; F7C1D2  jr Z,0xf7c1f0
 	dec	1, a	; F7C1D4  dec 1,A
@@ -188891,19 +188945,20 @@ sub_F7C1C1_Return:
 	ret	; F7C20A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C20B
+; Quantize_StepFirstMeasure
 ; Called from: in-module: 0xF7C114 0xF7C197
 ; Touches: (0x0C26) (0x0C28) (0x0C4A) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7C20B is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C20B:
+; Quantize_StepFirstMeasure: field 2: SeqJob_StepMeasure, stage +1.
+Quantize_StepFirstMeasure:
 	ld	wa, (6304888:24)	; F7C20B  ld WA,(0x603478)
-	calr	sub_F7CD5F	; F7C210  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C210  calr 0xf7cd5f
 	ld	(6304888:24), wa	; F7C213  ld (0x603478),WA
 	ld	(3146:16), wa	; F7C218  ld (0x0c4a),WA
 	m_cp_rm MW16, 0x0c28, 0	; F7C21C  cp WA,(0x0c28)
@@ -188920,19 +188975,20 @@ sub_F7C20B_Skip:
 	ret	; F7C241  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C242
+; Quantize_StepLastMeasure
 ; Called from: in-module: 0xF7C11D 0xF7C1A0
 ; Touches: (0x0C26) (0x0C28) (0x0C4A) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF7C242 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C242:
+; Quantize_StepLastMeasure: field 3: SeqJob_StepMeasure, stage +3.
+Quantize_StepLastMeasure:
 	ld	wa, (3112:16)	; F7C242  ld WA,(0x0c28)
-	calr	sub_F7CD5F	; F7C246  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C246  calr 0xf7cd5f
 	ld	(3112:16), wa	; F7C249  ld (0x0c28),WA
 	m_cp_rm MW16, 0x0c26, 0	; F7C24D  cp WA,(0x0c26)
 	jr	nc, sub_F7C242_Skip	; F7C251  jr NC,0xf7c264
@@ -188950,7 +189006,7 @@ sub_F7C242_Skip:
 	ret	; F7C27B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C27C
+; Quantize_StepValue
 ; Called from: in-module: 0xF7C126 0xF7C1A9
 ; Touches: (0x0C37) (0x0C4F) (0x12FB)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -188959,7 +189015,8 @@ sub_F7C242_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C27C:
+; Quantize_StepValue: field 4: (0x0C37) 0..6, stage +5 -- the VALUE caption's string-table readout in DL_TrackValueFirstMeasureLastMeasureStrengthWindow.
+Quantize_StepValue:
 	ld	a, (3127:16)	; F7C27C  ld A,(0x0c37)
 	ld	l, 0:opc	; F7C280  ld L,0x00
 	ld	h, 6:opc	; F7C282  ld H,0x06
@@ -188983,7 +189040,7 @@ sub_F7C27C_Join:
 	ret	; F7C2AA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C2AB
+; Quantize_StepStrength
 ; Called from: in-module: 0xF7C12F 0xF7C1B2
 ; Touches: (0x0C4F) (0x0E04) (0x12FC)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -188992,7 +189049,8 @@ sub_F7C27C_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C2AB:
+; Quantize_StepStrength: field 5: (0x0E04) 0..100, stage +6 -- the STRENGTH caption's unsigned readout.
+Quantize_StepStrength:
 	xor	l, l	; F7C2AB  xor L,L
 	ld	h, 100:opc	; F7C2AD  ld H,0x64
 	ld	a, (3588:16)	; F7C2AF  ld A,(0x0e04)
@@ -189013,7 +189071,7 @@ sub_F7C2AB_Join:
 	ret	; F7C2D2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C2D3
+; Quantize_StepWindow
 ; Called from: in-module: 0xF7C139 0xF7C1BC
 ; Touches: (0x0C4F) (0x0E05)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -189022,7 +189080,8 @@ sub_F7C2AB_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C2D3:
+; Quantize_StepWindow: field 6: (0x0E05) -100..100 -- the WINDOW caption's SIGNED readout (stage +7).
+Quantize_StepWindow:
 	ld	a, (3589:16)	; F7C2D3  ld A,(0x0e05)
 	ld	l, 156:opc	; F7C2D7  ld L,0x9c
 	ld	h, 100:opc	; F7C2D9  ld H,0x64
@@ -189920,7 +189979,7 @@ SongStore_DispatchA_2:
 ; Called from: dispatch entry SongStore_DispatchA_1[1],
 ;              SongStore_DispatchA_2[1]
 ; Touches: (0x0DF7) (0x12F6) (0x2075)
-; Calls:   sub_F7CD01
+; Calls:   SeqJob_StepTrack17
 ; Evidence: 0xF7C743 is stored as entry 1 of SongStore_DispatchA_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -189933,7 +189992,7 @@ SongStore_DispatchA_Case1:
 	ld	a, (3575:16)	; F7C748  ld A,(0x0df7)
 	ld	l, 1:opc	; F7C74C  ld L,0x01
 	ld	h, 17:opc	; F7C74E  ld H,0x11
-	calr	sub_F7CD01	; F7C750  calr 0xf7cd01
+	calr	SeqJob_StepTrack17	; F7C750  calr 0xf7cd01
 	ld	(3575:16), a	; F7C753  ld (0x0df7),A
 	ld	(DisplayListB_Stage:16), a	; F7C757  ld (0x12f6),A
 	ret	; F7C75B  ret
@@ -189943,7 +190002,7 @@ SongStore_DispatchA_Case1:
 ; Called from: dispatch entry SongStore_DispatchA_1[2],
 ;              SongStore_DispatchA_2[2]
 ; Touches: (0x0DF8) (0x0DFA) (0x0E00) (0x0E08) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7C75C is stored as entry 2 of SongStore_DispatchA_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -189953,7 +190012,7 @@ SongStore_DispatchA_Case1:
 ; --------------------------------------------------------------------------
 SongStore_DispatchA_Case2:
 	ld	wa, (3576:16)	; F7C75C  ld WA,(0x0df8)
-	calr	sub_F7CD5F	; F7C760  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C760  calr 0xf7cd5f
 	ld	(3576:16), wa	; F7C763  ld (0x0df8),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7C767  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dfa, 0	; F7C76B  cp WA,(0x0dfa)
@@ -189973,7 +190032,7 @@ sub_F7C75C_Skip:
 ; Called from: dispatch entry SongStore_DispatchA_1[3],
 ;              SongStore_DispatchA_2[3]
 ; Touches: (0x0DF8) (0x0DFA) (0x0E00) (0x0E08) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7C78C is stored as entry 3 of SongStore_DispatchA_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -189983,7 +190042,7 @@ sub_F7C75C_Skip:
 ; --------------------------------------------------------------------------
 SongStore_DispatchA_Case3:
 	ld	wa, (3578:16)	; F7C78C  ld WA,(0x0dfa)
-	calr	sub_F7CD5F	; F7C790  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C790  calr 0xf7cd5f
 	ld	(3578:16), wa	; F7C793  ld (0x0dfa),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7C797  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0df8, 0	; F7C79B  cp WA,(0x0df8)
@@ -190407,7 +190466,7 @@ SongStore_DispatchB_2:
 ; Called from: dispatch entry SongStore_DispatchB_1[1],
 ;              SongStore_DispatchB_2[1]
 ; Touches: (0x0DEE) (0x12F6) (0x2075)
-; Calls:   sub_F7CD01
+; Calls:   SeqJob_StepTrack17
 ; Evidence: 0xF7C9B0 is stored as entry 1 of SongStore_DispatchB_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190420,7 +190479,7 @@ SongStore_DispatchB_Case1:
 	ld	a, (3566:16)	; F7C9B5  ld A,(0x0dee)
 	ld	l, 1:opc	; F7C9B9  ld L,0x01
 	ld	h, 17:opc	; F7C9BB  ld H,0x11
-	calr	sub_F7CD01	; F7C9BD  calr 0xf7cd01
+	calr	SeqJob_StepTrack17	; F7C9BD  calr 0xf7cd01
 	ld	(3566:16), a	; F7C9C0  ld (0x0dee),A
 	ld	(DisplayListB_Stage:16), a	; F7C9C4  ld (0x12f6),A
 	ret	; F7C9C8  ret
@@ -190430,7 +190489,7 @@ SongStore_DispatchB_Case1:
 ; Called from: dispatch entry SongStore_DispatchB_1[2],
 ;              SongStore_DispatchB_2[2]
 ; Touches: (0x0DF0) (0x0DF2) (0x129E) (0x12FC) (0x12FF)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7C9C9 is stored as entry 2 of SongStore_DispatchB_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190440,7 +190499,7 @@ SongStore_DispatchB_Case1:
 ; --------------------------------------------------------------------------
 SongStore_DispatchB_Case2:
 	ld	wa, (N0teChange_FromMeasure:16)	; F7C9C9  ld WA,(0x0df0)
-	calr	sub_F7CD5F	; F7C9CD  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C9CD  calr 0xf7cd5f
 	ld	(N0teChange_FromMeasure:16), wa	; F7C9D0  ld (0x0df0),WA
 	ld	(DisplayListB_Stage+6:16), wa	; F7C9D4  ld (0x12fc),WA
 	m_cp_rm MW16, N0teChange_ToMeasure, 0	; F7C9D8  cp WA,(0x0df2)
@@ -190459,7 +190518,7 @@ sub_F7C9C9_Skip:
 ; Called from: dispatch entry SongStore_DispatchB_1[3],
 ;              SongStore_DispatchB_2[3]
 ; Touches: (0x0DF0) (0x0DF2) (0x129E) (0x12FC) (0x12FF)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7C9F5 is stored as entry 3 of SongStore_DispatchB_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190469,7 +190528,7 @@ sub_F7C9C9_Skip:
 ; --------------------------------------------------------------------------
 SongStore_DispatchB_Case3:
 	ld	wa, (N0teChange_ToMeasure:16)	; F7C9F5  ld WA,(0x0df2)
-	calr	sub_F7CD5F	; F7C9F9  calr 0xf7cd5f
+	calr	SeqJob_StepMeasure	; F7C9F9  calr 0xf7cd5f
 	ld	(N0teChange_ToMeasure:16), wa	; F7C9FC  ld (0x0df2),WA
 	ld	(DisplayListB_Stage+9:16), wa	; F7CA00  ld (0x12ff),WA
 	m_cp_rm MW16, N0teChange_FromMeasure, 0	; F7CA04  cp WA,(0x0df0)
@@ -190599,18 +190658,19 @@ N0teChange_ReturnToStageZero:		; <- T_F42AB0
 	ret	; F7CAD1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CAD2
-; Called from: T_F42A60 (x1)
+; AdvanceDelay_InitFields
+; Called from: T_AdvanceDelay_InitFields (x1)
 ; Touches: (0x0DE5) (0x0DE6) (0x0DE8) (0x0DEA) (0x0DEC) (0x0E06) (0x12F6)
 ;          (0x12F7) (0x12F9) (0x12FB) +2 more
-; Evidence: thunk slot T_F42A60 holds `jp 0x00F7CAD2`, and 0xF7CAD2 is an
+; Evidence: thunk slot T_AdvanceDelay_InitFields holds `jp 0x00F7CAD2`, and 0xF7CAD2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CAD2:		; <- T_F42A60
+; AdvanceDelay_InitFields: Paint_AdvanceDelay's init (thunk T_AdvanceDelay_InitFields): unless the previous screen was 0x2C, copies the working cells to the display stage and sets AdvanceDelay_Field = 1.
+AdvanceDelay_InitFields:		; <- T_AdvanceDelay_InitFields
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x2c	; F7CAD2  cp (0x207b),0x2c
 	jr	z, sub_F7CAD2_Return	; F7CAD7  jr Z,0xf7cb11
 	ld	a, (3558:16)	; F7CAD9  ld A,(0x0de6)
@@ -190737,17 +190797,18 @@ AdvanceDelay_SelectField4:		; <- T_AdvanceDelay_SelectField4
 	ret	; F7CB49  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CB4A
-; Called from: T_F42A78 (x2)
+; AdvanceDelay_StepFieldUp
+; Called from: T_AdvanceDelay_StepFieldUp (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DE5) (0x2075)
-; Evidence: thunk slot T_F42A78 holds `jp 0x00F7CB4A`, and 0xF7CB4A is an
+; Evidence: thunk slot T_AdvanceDelay_StepFieldUp holds `jp 0x00F7CB4A`, and 0xF7CB4A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CB4A:		; <- T_F42A78
+; AdvanceDelay_StepFieldUp: (0x0C4E) = W, (0x0C4F) = 0 (up), then field AdvanceDelay_Field 1..4 through the SongStore_DispatchC_1 table.
+AdvanceDelay_StepFieldUp:		; <- T_AdvanceDelay_StepFieldUp
 	ld	(3150:16), w	; F7CB4A  ld (0x0c4e),W
 	ld	(3151:16), 0	; F7CB4E  ld (0x0c4f),0x00
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CB53  or (0x2075),0x09
@@ -190800,17 +190861,18 @@ SongStore_DispatchC_1:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7CB90
-; Called from: T_F42A7C (x2)
+; AdvanceDelay_StepFieldDown
+; Called from: T_AdvanceDelay_StepFieldDown (x2)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DE5) (0x2075)
-; Evidence: thunk slot T_F42A7C holds `jp 0x00F7CB90`, and 0xF7CB90 is an
+; Evidence: thunk slot T_AdvanceDelay_StepFieldDown holds `jp 0x00F7CB90`, and 0xF7CB90 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CB90:		; <- T_F42A7C
+; AdvanceDelay_StepFieldDown: the same with (0x0C4F) = 0x80 (down).
+AdvanceDelay_StepFieldDown:		; <- T_AdvanceDelay_StepFieldDown
 	ld	(3150:16), w	; F7CB90  ld (0x0c4e),W
 	ld	(3151:16), 128	; F7CB94  ld (0x0c4f),0x80
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CB99  or (0x2075),0x09
@@ -190870,7 +190932,7 @@ SongStore_DispatchC_2:
 ; Called from: dispatch entry SongStore_DispatchC_1[1],
 ;              SongStore_DispatchC_2[1]
 ; Touches: (0x0DE6) (0x12F6) (0x2075)
-; Calls:   sub_F7CD01
+; Calls:   SeqJob_StepTrack17
 ; Evidence: 0xF7CBE1 is stored as entry 1 of SongStore_DispatchC_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190883,7 +190945,7 @@ SongStore_DispatchC_Case1:
 	ld	a, (3558:16)	; F7CBE6  ld A,(0x0de6)
 	ld	l, 1:opc	; F7CBEA  ld L,0x01
 	ld	h, 17:opc	; F7CBEC  ld H,0x11
-	calr	sub_F7CD01	; F7CBEE  calr 0xf7cd01
+	calr	SeqJob_StepTrack17	; F7CBEE  calr 0xf7cd01
 	ld	(3558:16), a	; F7CBF1  ld (0x0de6),A
 	ld	(DisplayListB_Stage:16), a	; F7CBF5  ld (0x12f6),A
 	ret	; F7CBF9  ret
@@ -190893,7 +190955,7 @@ SongStore_DispatchC_Case1:
 ; Called from: dispatch entry SongStore_DispatchC_1[2],
 ;              SongStore_DispatchC_2[2]
 ; Touches: (0x0DE8) (0x0DEA) (0x0E06) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7CBFA is stored as entry 2 of SongStore_DispatchC_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190903,7 +190965,7 @@ SongStore_DispatchC_Case1:
 ; --------------------------------------------------------------------------
 SongStore_DispatchC_Case2:
 	ld	wa, (3560:16)	; F7CBFA  ld WA,(0x0de8)
-	call	sub_F7CD5F	; F7CBFE  call 0xf7cd5f
+	call	SeqJob_StepMeasure	; F7CBFE  call 0xf7cd5f
 	ld	(3560:16), wa	; F7CC02  ld (0x0de8),WA
 	ld	(DisplayListB_Stage+1:16), wa	; F7CC06  ld (0x12f7),WA
 	m_cp_rm MW16, 0x0dea, 0	; F7CC0A  cp WA,(0x0dea)
@@ -190922,7 +190984,7 @@ sub_F7CBFA_Skip:
 ; Called from: dispatch entry SongStore_DispatchC_1[3],
 ;              SongStore_DispatchC_2[3]
 ; Touches: (0x0DE8) (0x0DEA) (0x0E06) (0x12F7) (0x12F9)
-; Calls:   sub_F7CD5F
+; Calls:   SeqJob_StepMeasure
 ; Evidence: 0xF7CC27 is stored as entry 3 of SongStore_DispatchC_1, a table
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -190932,7 +190994,7 @@ sub_F7CBFA_Skip:
 ; --------------------------------------------------------------------------
 SongStore_DispatchC_Case3:
 	ld	wa, (3562:16)	; F7CC27  ld WA,(0x0dea)
-	call	sub_F7CD5F	; F7CC2B  call 0xf7cd5f
+	call	SeqJob_StepMeasure	; F7CC2B  call 0xf7cd5f
 	ld	(3562:16), wa	; F7CC2F  ld (0x0dea),WA
 	ld	(DisplayListB_Stage+3:16), wa	; F7CC33  ld (0x12f9),WA
 	m_cp_rm MW16, 0x0de8, 0	; F7CC37  cp WA,(0x0de8)
@@ -191073,7 +191135,7 @@ sub_F7CCDB_Return:
 	ret	; F7CD00  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CD01
+; SeqJob_StepTrack17
 ; Called from: in-module: 0xF7BE14 0xF7C1CC 0xF7C750 0xF7C9BD 0xF7CBEE
 ; Touches: (0x0C4E) (0x0C4F)
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -191082,7 +191144,10 @@ sub_F7CCDB_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CD01:
+; SeqJob_StepTrack17: A +- 1 by (0x0C4F); up: past 17 -> H, down: below L -> L.  The TRACK helper of VEL0CITY CHANGE
+;   and the SongStore dispatchers.  SeqJob_StepTrack's UP path is THIS code: its `jr NZ` at 0xF7CD3B jumps to 0xF7CD10, so
+;   SeqJob_StepTrack's own `cp A,18` copy (0xF7CD3F-0xF7CD4F) never runs (notes/prom_b_seqjob_field_names.py)
+SeqJob_StepTrack17:
 	ld	c, (3150:16)	; F7CD01  ld C,(0x0c4e)
 	ld	c, 1:opc	; F7CD05  ld C,0x01
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7CD07  cp (0x0c4f),0x80
@@ -191111,7 +191176,7 @@ sub_F7CD01_Return:
 	ret	; F7CD2F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CD30
+; SeqJob_StepTrack
 ; Called from: in-module: 0xF7B0BF 0xF7B30E 0xF7B5FD 0xF7B6D6 0xF7BA1E
 ;              0xF7BAF7
 ; Touches: (0x0C4E) (0x0C4F)
@@ -191121,7 +191186,8 @@ sub_F7CD01_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CD30:
+; SeqJob_StepTrack: A +- 1 by (0x0C4F) (0x80 = down), bounded L..18 -- the TRACK field of every EDIT job (notes/prom_b_seqjob_field_names.py)
+SeqJob_StepTrack:
 	ld	c, (3150:16)	; F7CD30  ld C,(0x0c4e)
 	ld	c, 1:opc	; F7CD34  ld C,0x01
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7CD36  cp (0x0c4f),0x80
@@ -191147,7 +191213,7 @@ sub_F7CD30_Return:
 	ret	; F7CD5E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CD5F
+; SeqJob_StepMeasure
 ; Called from: in-module: 0xF7B0F6 0xF7B12C 0xF7B345 0xF7B37B 0xF7B662
 ;              0xF7B698 0xF7B73B 0xF7BA83 +12 more
 ; Touches: (0x0C4E) (0x0C4F) (0x0E18) (0x2075)
@@ -191157,7 +191223,8 @@ sub_F7CD30_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CD5F:
+; SeqJob_StepMeasure: WA +- SongStore_StepSizeTable[(0x0E18)] by (0x0C4F), clamped 1..999 -- the MEASURE fields (notes/prom_b_seqjob_field_names.py)
+SeqJob_StepMeasure:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7CD5F  or (0x2075),0x09
 	ld	l, (3150:16)	; F7CD64  ld L,(0x0c4e)
 	ld	l, (3608:16)	; F7CD68  ld L,(0x0e18)
@@ -198195,7 +198262,7 @@ Paint_MeasureDelete:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7EF7C  call 0xf42e80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EF80  cp (0x207e),0x00
 	jr	nz, Paint_MeasureDelete_Skip	; F7EF85  jr NZ,0xf7efa2
-	call	T_F4295C	; F7EF87  call 0xf4295c
+	call	T_MeasureDelete_InitFields	; F7EF87  call 0xf4295c
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7EF8B  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 1156	; F7EF90  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7EF96  ld (0x2666),0xffff
@@ -198324,10 +198391,10 @@ ScreenLeaveBody_MeasureDelete_Skip:
 	ld	(3608:16), 1	; F7F049  ld (0x0e18),0x01
 	bit	7, w	; F7F04E  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip2	; F7F051  jr Z,0xf7f059
-	call	T_F42974	; F7F053  call 0xf42974
+	call	T_MeasureDelete_StepFieldDown	; F7F053  call 0xf42974
 	jr	ScreenLeaveBody_MeasureDelete_Join	; F7F057  jr T,0xf7f05d
 ScreenLeaveBody_MeasureDelete_Skip2:
-	call	T_F42970	; F7F059  call 0xf42970
+	call	T_MeasureDelete_StepFieldUp	; F7F059  call 0xf42970
 ScreenLeaveBody_MeasureDelete_Join:
 	calr	Draw_LastMeasure	; F7F05D  calr 0xf7f01a
 	ret	; F7F060  ret
@@ -198557,10 +198624,10 @@ ScreenLeaveBody_MeasureDelete_Skip5:
 	ld	(3608:16), 4	; F7F0F6  ld (0x0e18),0x04
 	bit	7, w	; F7F0FB  bit 0x07,W
 	jr	z, ScreenLeaveBody_MeasureDelete_Skip6	; F7F0FE  jr Z,0xf7f106
-	call	T_F42974	; F7F100  call 0xf42974
+	call	T_MeasureDelete_StepFieldDown	; F7F100  call 0xf42974
 	jr	ScreenLeaveBody_MeasureDelete_Join2	; F7F104  jr T,0xf7f10a
 ScreenLeaveBody_MeasureDelete_Skip6:
-	call	T_F42970	; F7F106  call 0xf42970
+	call	T_MeasureDelete_StepFieldUp	; F7F106  call 0xf42970
 ScreenLeaveBody_MeasureDelete_Join2:
 	calr	Draw_LastMeasure	; F7F10A  calr 0xf7f01a
 	ret	; F7F10D  ret
@@ -198818,7 +198885,7 @@ LcdKeyRow3_MeasureDelete_StageNonZero_Return:
 LcdKeyRow4_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F21D  bit 0x07,W
 	jr	nz, LcdKeyRow4_MeasureDelete_StageNonZero_Return	; F7F220  jr NZ,0xf7f228
-	call	T_F42970	; F7F222  call 0xf42970
+	call	T_MeasureDelete_StepFieldUp	; F7F222  call 0xf42970
 	jr	LcdKeyRow4_MeasureDelete_StageNonZero_Return	; F7F226  jr T,0xf7f228
 LcdKeyRow4_MeasureDelete_StageNonZero_Return:
 	ret	; F7F228  ret
@@ -198852,7 +198919,7 @@ ButtonTable_MeasureDelete_StageNonZero_Nop14:
 ExitKey_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F22C  bit 0x07,W
 	jr	nz, ExitKey_MeasureDelete_StageNonZero_Return	; F7F22F  jr NZ,0xf7f235
-	call	T_F42970	; F7F231  call 0xf42970
+	call	T_MeasureDelete_StepFieldUp	; F7F231  call 0xf42970
 ExitKey_MeasureDelete_StageNonZero_Return:
 	ret	; F7F235  ret
 ButtonTable_MeasureDelete_StageNonZero_Nop16:
@@ -198897,7 +198964,7 @@ Paint_MeasureErase:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F254  call 0xf42e80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F258  cp (0x207e),0x00
 	jr	nz, Paint_MeasureErase_Skip	; F7F25D  jr NZ,0xf7f27a
-	call	T_F42980	; F7F25F  call 0xf42980
+	call	T_MeasureErase_InitFields	; F7F25F  call 0xf42980
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7F263  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 1156	; F7F268  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F26E  ld (0x2666),0xffff
@@ -199002,10 +199069,10 @@ ScreenLeaveBody_MeasureErase_Skip:
 	ld	(3608:16), 1	; F7F2ED  ld (0x0e18),0x01
 	bit	7, w	; F7F2F2  bit 0x07,W
 	jr	nz, ScreenLeaveBody_MeasureErase_Skip2	; F7F2F5  jr NZ,0xf7f2fd
-	call	T_F42998	; F7F2F7  call 0xf42998
+	call	T_MeasureErase_StepFieldUp	; F7F2F7  call 0xf42998
 	jr	ScreenLeaveBody_MeasureErase_Join	; F7F2FB  jr T,0xf7f301
 ScreenLeaveBody_MeasureErase_Skip2:
-	call	T_F4299C	; F7F2FD  call 0xf4299c
+	call	T_MeasureErase_StepFieldDown	; F7F2FD  call 0xf4299c
 ScreenLeaveBody_MeasureErase_Join:
 	calr	sub_F7F397	; F7F301  calr 0xf7f397
 	ret	; F7F304  ret
@@ -199308,10 +199375,10 @@ sub_F7F397_Skip2:
 	ld	(3608:16), 4	; F7F3F1  ld (0x0e18),0x04
 	bit	7, w	; F7F3F6  bit 0x07,W
 	jr	nz, sub_F7F397_Skip3	; F7F3F9  jr NZ,0xf7f401
-	call	T_F42998	; F7F3FB  call 0xf42998
+	call	T_MeasureErase_StepFieldUp	; F7F3FB  call 0xf42998
 	jr	sub_F7F397_Join	; F7F3FF  jr T,0xf7f405
 sub_F7F397_Skip3:
-	call	T_F4299C	; F7F401  call 0xf4299c
+	call	T_MeasureErase_StepFieldDown	; F7F401  call 0xf4299c
 sub_F7F397_Join:
 	calr	sub_F7F397	; F7F405  calr 0xf7f397
 	ret	; F7F408  ret
@@ -199446,7 +199513,7 @@ sub_F7F397_Return3:
 LcdKeyRow3_MeasureErase_StageNonZero:
 	bit	7, w	; F7F427  bit 0x07,W
 	jr	nz, sub_F7F397_Return4	; F7F42A  jr NZ,0xf7f430
-	call	T_F42998	; F7F42C  call 0xf42998
+	call	T_MeasureErase_StepFieldUp	; F7F42C  call 0xf42998
 sub_F7F397_Return4:
 	ret	; F7F430  ret
 ButtonTable_MeasureErase_StageNonZero_Nop11:
@@ -199481,7 +199548,7 @@ ButtonTable_MeasureErase_StageNonZero_Nop14:
 ExitKey_MeasureErase_StageNonZero:
 	bit	7, w	; F7F435  bit 0x07,W
 	jr	nz, sub_F7F397_Return5	; F7F438  jr NZ,0xf7f43e
-	call	T_F42998	; F7F43A  call 0xf42998
+	call	T_MeasureErase_StepFieldUp	; F7F43A  call 0xf42998
 sub_F7F397_Return5:
 	ret	; F7F43E  ret
 ButtonTable_MeasureErase_StageNonZero_Nop16:
@@ -199697,7 +199764,7 @@ Paint_Quantize:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F582  call 0xf42e80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F586  cp (0x207e),0x00
 	jr	nz, Paint_Quantize_Skip	; F7F58B  jr NZ,0xf7f5a8
-	call	T_F42908	; F7F58D  call 0xf42908
+	call	T_Quantize_InitFields	; F7F58D  call 0xf42908
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F591  or (0x2075),0x01
 	ldw	(PanelDial_DownButton:16), 1156	; F7F596  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F59C  ld (0x2666),0xffff
@@ -199802,10 +199869,10 @@ ScreenLeaveBody_Quantize_Skip:
 	ld	(3608:16), 1	; F7F61B  ld (0x0e18),0x01
 	bit	7, w	; F7F620  bit 0x07,W
 	jr	z, ScreenLeaveBody_Quantize_Skip2	; F7F623  jr Z,0xf7f62b
-	call	T_F4292C	; F7F625  call 0xf4292c
+	call	T_Quantize_StepFieldDown	; F7F625  call 0xf4292c
 	jr	ScreenLeaveBody_Quantize_Join	; F7F629  jr T,0xf7f62f
 ScreenLeaveBody_Quantize_Skip2:
-	call	T_F42928	; F7F62B  call 0xf42928
+	call	T_Quantize_StepFieldUp	; F7F62B  call 0xf42928
 ScreenLeaveBody_Quantize_Join:
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F62F  calr 0xf7f6e5
 	ret	; F7F632  ret
@@ -200131,10 +200198,10 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip3:
 	ld	(3608:16), 4	; F7F75D  ld (0x0e18),0x04
 	bit	7, w	; F7F762  bit 0x07,W
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip4	; F7F765  jr Z,0xf7f76d
-	call	T_F4292C	; F7F767  call 0xf4292c
+	call	T_Quantize_StepFieldDown	; F7F767  call 0xf4292c
 	jr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Join	; F7F76B  jr T,0xf7f771
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip4:
-	call	T_F42928	; F7F76D  call 0xf42928
+	call	T_Quantize_StepFieldUp	; F7F76D  call 0xf42928
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Join:
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F771  calr 0xf7f6e5
 	ret	; F7F774  ret
@@ -200269,7 +200336,7 @@ Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 LcdKeyRow4_Quantize_StageNonZero:
 	bit	7, w	; F7F793  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return4	; F7F796  jr NZ,0xf7f79c
-	call	T_F42928	; F7F798  call 0xf42928
+	call	T_Quantize_StepFieldUp	; F7F798  call 0xf42928
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return4:
 	ret	; F7F79C  ret
 ButtonTable_Quantize_StageNonZero_Nop12:
@@ -200302,7 +200369,7 @@ ButtonTable_Quantize_StageNonZero_Nop14:
 ExitKey_Quantize_StageNonZero:
 	bit	7, w	; F7F7A0  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return5	; F7F7A3  jr NZ,0xf7f7a9
-	call	T_F42928	; F7F7A5  call 0xf42928
+	call	T_Quantize_StepFieldUp	; F7F7A5  call 0xf42928
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return5:
 	ret	; F7F7A9  ret
 ButtonTable_Quantize_StageNonZero_Nop16:
@@ -200453,7 +200520,7 @@ Paint_Vel0cityChange:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7F8A9  call 0xf42e80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7F8AD  cp (0x207e),0x00
 	jr	nz, Paint_Vel0cityChange_Skip	; F7F8B2  jr NZ,0xf7f8cf
-	call	T_F428E0	; F7F8B4  call 0xf428e0
+	call	T_Vel0cityChange_InitFields	; F7F8B4  call 0xf428e0
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7F8B8  or (0x2075),0x01
 	ldw	(PanelDial_DownButton:16), 1156	; F7F8BD  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7F8C3  ld (0x2666),0xffff
@@ -200574,10 +200641,10 @@ ScreenLeaveBody_Vel0cityChange_Skip:
 	ld	(3608:16), 1	; F7F967  ld (0x0e18),0x01
 	bit	7, w	; F7F96C  bit 0x07,W
 	jr	z, ScreenLeaveBody_Vel0cityChange_Skip2	; F7F96F  jr Z,0xf7f977
-	call	T_F428FC	; F7F971  call 0xf428fc
+	call	T_Vel0cityChange_StepFieldDown	; F7F971  call 0xf428fc
 	jr	ScreenLeaveBody_Vel0cityChange_Join	; F7F975  jr T,0xf7f97b
 ScreenLeaveBody_Vel0cityChange_Skip2:
-	call	T_F428F8	; F7F977  call 0xf428f8
+	call	T_Vel0cityChange_StepFieldUp	; F7F977  call 0xf428f8
 ScreenLeaveBody_Vel0cityChange_Join:
 	calr	sub_F7F9FB	; F7F97B  calr 0xf7f9fb
 	ret	; F7F97E  ret
@@ -200875,10 +200942,10 @@ sub_F7F9FB_Skip2:
 	ld	(3608:16), 4	; F7FA52  ld (0x0e18),0x04
 	bit	7, w	; F7FA57  bit 0x07,W
 	jr	z, sub_F7F9FB_Skip3	; F7FA5A  jr Z,0xf7fa62
-	call	T_F428FC	; F7FA5C  call 0xf428fc
+	call	T_Vel0cityChange_StepFieldDown	; F7FA5C  call 0xf428fc
 	jr	sub_F7F9FB_Join	; F7FA60  jr T,0xf7fa66
 sub_F7F9FB_Skip3:
-	call	T_F428F8	; F7FA62  call 0xf428f8
+	call	T_Vel0cityChange_StepFieldUp	; F7FA62  call 0xf428f8
 sub_F7F9FB_Join:
 	calr	sub_F7F9FB	; F7FA66  calr 0xf7f9fb
 	ret	; F7FA69  ret
@@ -201013,7 +201080,7 @@ sub_F7F9FB_Return3:
 LcdKeyRow3_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA88  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return4	; F7FA8B  jr NZ,0xf7fa91
-	call	T_F428F8	; F7FA8D  call 0xf428f8
+	call	T_Vel0cityChange_StepFieldUp	; F7FA8D  call 0xf428f8
 sub_F7F9FB_Return4:
 	ret	; F7FA91  ret
 ButtonTable_Vel0cityChange_StageNonZero_Nop11:
@@ -201048,7 +201115,7 @@ ButtonTable_Vel0cityChange_StageNonZero_Nop14:
 ExitKey_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA96  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return5	; F7FA99  jr NZ,0xf7fa9f
-	call	T_F428F8	; F7FA9B  call 0xf428f8
+	call	T_Vel0cityChange_StepFieldUp	; F7FA9B  call 0xf428f8
 sub_F7F9FB_Return5:
 	ret	; F7FA9F  ret
 ButtonTable_Vel0cityChange_StageNonZero_Nop16:
@@ -201999,7 +202066,7 @@ Paint_AdvanceDelay:
 	call	T_CallbackQueue_ResetAndRestartTask2	; F7FF27  call 0xf42e80
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7FF2B  cp (0x207e),0x00
 	jr	nz, Paint_AdvanceDelay_Join	; F7FF30  jr NZ,0xf7ff65
-	call	T_F42A60	; F7FF32  call 0xf42a60
+	call	T_AdvanceDelay_InitFields	; F7FF32  call 0xf42a60
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7FF36  or (0x2075),0x01
 	ldw	(PanelDial_DownButton:16), 1156	; F7FF3B  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ldw	(9830:16), 65535	; F7FF41  ld (0x2666),0xffff
@@ -202117,10 +202184,10 @@ SoftKeyCol5_AdvanceDelay_StageZero_Skip:
 	ld	(3608:16), 1	; F7FFE0  ld (0x0e18),0x01
 	bit	7, w	; F7FFE5  bit 0x07,W
 	jr	z, SoftKeyCol5_AdvanceDelay_StageZero_Skip2	; F7FFE8  jr Z,0xf7fff0
-	call	T_F42A7C	; F7FFEA  call 0xf42a7c
+	call	T_AdvanceDelay_StepFieldDown	; F7FFEA  call 0xf42a7c
 	jr	SoftKeyCol5_AdvanceDelay_StageZero_Skip3	; F7FFEE  jr T,0xf7fff4
 SoftKeyCol5_AdvanceDelay_StageZero_Skip2:
-	call	T_F42A78	; F7FFF0  call 0xf42a78
+	call	T_AdvanceDelay_StepFieldUp	; F7FFF0  call 0xf42a78
 SoftKeyCol5_AdvanceDelay_StageZero_Skip3:
 	calr	AdvanceDelay_DrawValues - 0xF7FFF7	; F7FFF4  calr 0xf80086
 	ret	; F7FFF7  ret
