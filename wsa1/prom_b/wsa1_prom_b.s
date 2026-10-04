@@ -660,6 +660,7 @@
 	.set	CallbackQueue_ResetAndRestartTask2, 0xF8DA83
 	.set	AnalogScan_PhaseVector, 0xF8DC00
 	.set	AnalogScan_All, 0xF8DC25
+	.set	LinkSelector1_NoAction, 0xF8E000
 	.set	Link_Init_DmaAndTimer, 0xF8E001
 	.set	Link_SendBlockIn32ByteChunks, 0xF8E02C
 	.set	Link_SendCommandE2, 0xF8E0FE
@@ -122662,12 +122663,12 @@ Zero9:
 LinkSelector1_Table:
 	.long	Ring60480A_PutBlock_Ldir	; [0] -> 0xF57C3F
 	.long	Ring608A0A_PutBlock_Ldir	; [1] -> 0xF57C2D
-	.long	0x00F8E000	; [2] -> 0xF8E000
+	.long	LinkSelector1_NoAction	; [2] -> 0xF8E000
 	.long	Ring601B64_PutBlock_Ldir	; [3] -> 0xF57C50
 	.long	Ring60000C_PutBlock_Ldir	; [4] -> 0xF57C61
 	.long	Ring601850_PutBlock_Drop1In3	; [5] -> 0xF57C97
 	.long	Ring60195A_PutBlock_Ldir	; [6] -> 0xF57C72
-	.long	0x00F8E000	; [7] -> 0xF8E000
+	.long	LinkSelector1_NoAction	; [7] -> 0xF8E000
 
 ; --- 0xF57D6F-0xF57FFF: 657 bytes of 0x0E pad ---
 	.fill	657, 1, 0x0E

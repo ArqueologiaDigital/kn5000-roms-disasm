@@ -24421,7 +24421,16 @@ AnalogScan_RamChannel5:
 ; 0xF8DDE6-0xF8E000 -- 539 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
-	.fill 539, 1, 0x0E
+; 2026-10-04: split 538 + 1.  The last pad byte, 0xF8E000, is the target of prom_b LinkSelector1_Table
+;   entries [2] and [7] (the link's selector-1 dispatch, indexed by a command's top three bits): those two
+;   selectors land on this `ret` and do nothing.  It is labelled so the table can name it.
+
+; 0xF8DDE6-0xF8DFFF -- 538 bytes of 0x0E (RET), the pad above less its last byte (LinkSelector1_NoAction).
+	.fill 538, 1, 0x0E
+; LinkSelector1_NoAction: the bare `ret` (a padding byte) that LinkSelector1_Table [2] and [7] name -- link selectors 2 and 7
+;   have no handler.
+LinkSelector1_NoAction:
+	ret                                                  ; F8E000  0e
 
 ; ---------------------------------------------------------------------
 ; Link_Init_DmaAndTimer -- points micro-DMA channel 2's DESTINATION and channel 3's
