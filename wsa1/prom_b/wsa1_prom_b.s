@@ -165105,28 +165105,28 @@ Smf_ReadFile_Skip2:
 	djnz16	bc, -8	; F6F5DB  djnz BC,0xf6f5d6
 	ld	(4217:16), a	; F6F5DE  ld (0x1079),A
 	calr	InputStream_GetByte	; F6F5E2  calr 0xf7138f
-	ld	(4216:16), a	; F6F5E5  ld (0x1078),A
+	ld	(Smf_Format:16), a	; F6F5E5  ld (0x1078),A
 	calr	InputStream_GetByte	; F6F5E9  calr 0xf7138f
 	ld	(4219:16), a	; F6F5EC  ld (0x107b),A
 	calr	InputStream_GetByte	; F6F5F0  calr 0xf7138f
-	ld	(4218:16), a	; F6F5F3  ld (0x107a),A
+	ld	(Smf_TrackCount:16), a	; F6F5F3  ld (0x107a),A
 	calr	InputStream_GetByte	; F6F5F7  calr 0xf7138f
 	ld	(4221:16), a	; F6F5FA  ld (0x107d),A
 	bit	7, a	; F6F5FE  bit 0x07,A
 	jrl	nz, Smf_ReadFile_Skip18	; F6F601  jrl NZ,0xf6f7d8
 	calr	InputStream_GetByte	; F6F604  calr 0xf7138f
-	ld	(4220:16), a	; F6F607  ld (0x107c),A
-	m_cp_mi16 MW16, 0x107c, 0x0000	; F6F60B  cp (0x107c),0x0000
+	ld	(Smf_Division:16), a	; F6F607  ld (0x107c),A
+	m_cp_mi16 MW16, Smf_Division, 0x0000	; F6F60B  cp (0x107c),0x0000
 	jr	nz, Smf_ReadFile_Skip3	; F6F611  jr NZ,0xf6f61b
 	ld	(UI_StatusCode:16), 48	; F6F613  ld (0x2880),0x30
 	jrl	Smf_ReadFile_Join4	; F6F618  jrl T,0xf6f7dd
 Smf_ReadFile_Skip3:
 	calr	ClearRam10D3_34Bytes	; F6F61B  calr 0xf6f9c7
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6F61E  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6F61E  cp (0x1078),0x0000
 	jr	z, Smf_ReadFile_Skip4	; F6F624  jr Z,0xf6f655
-	m_cp_mi16 MW16, 0x1078, 0x0001	; F6F626  cp (0x1078),0x0001
+	m_cp_mi16 MW16, Smf_Format, 0x0001	; F6F626  cp (0x1078),0x0001
 	jrl	nz, Smf_ReadFile_Skip18	; F6F62C  jrl NZ,0xf6f7d8
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6F62F  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6F62F  cp (0x107a),0x0001
 	jr	z, Smf_ReadFile_Skip4	; F6F635  jr Z,0xf6f655
 	calr	sub_F71B82	; F6F637  calr 0xf71b82
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6F63A  cp (0x1238),0x00
@@ -165636,7 +165636,7 @@ sub_F6F9DE_Return:
 ; sub_F6FA70
 ; Called from: in-module: 0xF6F6AD 0xF72F9E
 ; Touches: (0x1238) (0x360E)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance TrackCursor_Save
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -165657,7 +165657,7 @@ sub_F6FA70:
 	xor	xiy, xiy	; F6FA77  xor XIY,XIY
 	ldw	iy, 16	; F6FA79  ld IY,0x0010
 	push	xiy	; F6FA7C  push XIY
-	calr	sub_F7124E	; F6FA7D  calr 0xf7124e
+	calr	TrackCursor_Load	; F6FA7D  calr 0xf7124e
 	pop	xiy	; F6FA80  pop XIY
 	ldw	bc, 3	; F6FA81  ld BC,0x0003
 	ld	xix, Data_F6FAB4	; F6FA84  ld XIX,0x00f6fab4
@@ -165673,7 +165673,7 @@ sub_F6FA70:
 	jr	nz, sub_F6FA70_Epilogue	; F6FA9A  jr NZ,0xf6faac
 	djnz16	bc, -22	; F6FA9C  djnz BC,0xf6fa89
 	m_or_mi8 MB16, 0x360e, 0x01	; F6FA9F  or (0x360e),0x01
-	calr	sub_F71275	; F6FAA4  calr 0xf71275
+	calr	TrackCursor_Save	; F6FAA4  calr 0xf71275
 	ld	(4664:16), 0	; F6FAA7  ld (0x1238),0x00
 sub_F6FA70_Epilogue:
 	pop	xiz	; F6FAAC  pop XIZ
@@ -165707,7 +165707,7 @@ Data_F6FAB4:
 ; sub_F6FAB7
 ; Called from: in-module: 0xF6F71D
 ; Touches:   |  0x603500
-; Calls:   sub_F7124E BStore_PutByteAtCursor sub_F6FB16
+; Calls:   TrackCursor_Load BStore_PutByteAtCursor sub_F6FB16
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FAB7 is an instruction boundary of this
@@ -165730,7 +165730,7 @@ sub_F6FAB7_Loop:
 	jr	z, sub_F6FAB7_Skip	; F6FACE  jr Z,0xf6fadf
 	ld	iy, hl	; F6FAD0  ld IY,HL
 	pushw	hl	; F6FAD2  push HL
-	calr	sub_F7124E	; F6FAD3  calr 0xf7124e
+	calr	TrackCursor_Load	; F6FAD3  calr 0xf7124e
 	ld	a, 130:opc	; F6FAD6  ld A,0x82
 	calr	BStore_PutByteAtCursor	; F6FAD8  calr 0xf70fe1
 	calr	sub_F6FB16	; F6FADB  calr 0xf6fb16
@@ -165930,7 +165930,7 @@ sub_F6FB51_Return:
 ; Called from: in-module: 0xF6FBF7
 ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
 ;          (0x1238) (0x124A) (0x360C) +1 more
-; Calls:   InputStream_GetByte sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F71275
+; Calls:   InputStream_GetByte sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FC10 is an instruction boundary of this
@@ -165983,22 +165983,22 @@ sub_F6FC10_Join:
 	sla	h, 1	; F6FC7D  sla 0x01,H
 	or	w, h	; F6FC80  or W,H
 	ld	xiy, 16	; F6FC82  ld XIY,0x00000010
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6FC87  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6FC87  cp (0x1078),0x0000
 	jr	z, sub_F6FC10_Skip4	; F6FC8D  jr Z,0xf6fca0
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6FC8F  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FC8F  cp (0x107a),0x0001
 	jr	z, sub_F6FC10_Skip4	; F6FC95  jr Z,0xf6fca0
 	ld	iy, (4530:16)	; F6FC97  ld IY,(0x11b2)
 	extz	xiy	; F6FC9B  extz XIY
 	calr	sub_F70C3F	; F6FC9D  calr 0xf70c3f
 sub_F6FC10_Skip4:
 	pushw	wa	; F6FCA0  push WA
-	calr	sub_F7124E	; F6FCA1  calr 0xf7124e
+	calr	TrackCursor_Load	; F6FCA1  calr 0xf7124e
 	popw	wa	; F6FCA4  pop WA
 	ld	bc, wa	; F6FCA5  ld BC,WA
 	ld	a, 128:opc	; F6FCA7  ld A,0x80
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6FCA9  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6FCA9  cp (0x1078),0x0000
 	jr	z, sub_F6FC10_Skip5	; F6FCAF  jr Z,0xf6fcbf
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6FCB1  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FCB1  cp (0x107a),0x0001
 	jr	z, sub_F6FC10_Skip5	; F6FCB7  jr Z,0xf6fcbf
 	ld	a, 160:opc	; F6FCB9  ld A,0xa0
 	ld	w, 7:opc	; F6FCBB  ld W,0x07
@@ -166010,9 +166010,9 @@ sub_F6FC10_Skip5:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FCC4  cp (0x1238),0x00
 	jrl	nz, sub_F6FC10_Return	; F6FCC9  jrl NZ,0xf6fd79
 	ldw	iy, 16	; F6FCCC  ld IY,0x0010
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6FCCF  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6FCCF  cp (0x1078),0x0000
 	jr	z, sub_F6FC10_Skip6	; F6FCD5  jr Z,0xf6fce8
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6FCD7  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FCD7  cp (0x107a),0x0001
 	jr	z, sub_F6FC10_Skip6	; F6FCDD  jr Z,0xf6fce8
 	ld	iy, (4530:16)	; F6FCDF  ld IY,(0x11b2)
 	extz	xiy	; F6FCE3  extz XIY
@@ -166026,7 +166026,7 @@ sub_F6FC10_Skip6:
 	srl	iy, 1	; F6FCF7  srl 0x01,IY
 	pushw	bc	; F6FCFA  push BC
 	push	xiy	; F6FCFB  push XIY
-	calr	sub_F7122F	; F6FCFC  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F6FCFC  calr 0xf7122f
 	pop	xiy	; F6FCFF  pop XIY
 	popw	bc	; F6FD00  pop BC
 	pushw	bc	; F6FD01  push BC
@@ -166051,9 +166051,9 @@ sub_F6FC10_Skip6:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FD26  cp (0x1238),0x00
 	jr	nz, sub_F6FC10_Return	; F6FD2B  jr NZ,0xf6fd79
 	ld	xiy, 16	; F6FD2D  ld XIY,0x00000010
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6FD32  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6FD32  cp (0x1078),0x0000
 	jr	z, sub_F6FC10_Skip7	; F6FD38  jr Z,0xf6fd4b
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6FD3A  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FD3A  cp (0x107a),0x0001
 	jr	z, sub_F6FC10_Skip7	; F6FD40  jr Z,0xf6fd4b
 	ld	iy, (4530:16)	; F6FD42  ld IY,(0x11b2)
 	extz	xiy	; F6FD46  extz XIY
@@ -166076,7 +166076,7 @@ sub_F6FC10_Skip8:
 sub_F6FC10_Skip9:
 	ld	(13836:16), de	; F6FD6D  ld (0x360c),DE
 sub_F6FC10_Join2:
-	calr	sub_F71275	; F6FD71  calr 0xf71275
+	calr	TrackCursor_Save	; F6FD71  calr 0xf71275
 	ld	(4664:16), 0	; F6FD74  ld (0x1238),0x00
 sub_F6FC10_Return:
 	ret	; F6FD79  ret
@@ -166333,9 +166333,9 @@ sub_F6FEA1_Skip2:
 	jr	nz, sub_F6FEA1_Return	; F6FEE1  jr NZ,0xf6fefd
 	jr	sub_F6FEA1_Loop	; F6FEE3  jr T,0xf6feb8
 sub_F6FEA1_Skip3:
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F6FEE5  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F6FEE5  cp (0x1078),0x0000
 	jr	z, sub_F6FEA1_Skip4	; F6FEEB  jr Z,0xf6fefa
-	m_cp_mi16 MW16, 0x107a, 0x0001	; F6FEED  cp (0x107a),0x0001
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FEED  cp (0x107a),0x0001
 	jr	z, sub_F6FEA1_Skip4	; F6FEF3  jr Z,0xf6fefa
 	calr	sub_F71DB7	; F6FEF5  calr 0xf71db7
 	jr	sub_F6FEA1_Return	; F6FEF8  jr T,0xf6fefd
@@ -166463,7 +166463,7 @@ sub_F6FF44_Return:
 ; sub_F6FFAE
 ; Called from: in-module: 0xF6FF8A
 ; Touches: (0x10D0) (0x10D1) (0x1238)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FFAE is an instruction boundary of this
@@ -166477,7 +166477,7 @@ sub_F6FFAE:
 	and	iy, 15	; F6FFB2  and IY,0x000f
 	extz	xiy	; F6FFB6  extz XIY
 	push	xiy	; F6FFB8  push XIY
-	calr	sub_F7124E	; F6FFB9  calr 0xf7124e
+	calr	TrackCursor_Load	; F6FFB9  calr 0xf7124e
 	ld	a, 208:opc	; F6FFBC  ld A,0xd0
 	calr	BStore_PutByteAndAdvance	; F6FFBE  calr 0xf70fda
 	pop	xiy	; F6FFC1  pop XIY
@@ -166490,7 +166490,7 @@ sub_F6FFAE:
 	pop	xix	; F6FFD7  pop XIX
 	srl	xiy, 1	; F6FFD8  srl 0x01,XIY
 	push	xiy	; F6FFDB  push XIY
-	calr	sub_F7122F	; F6FFDC  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F6FFDC  calr 0xf7122f
 	pop	xiy	; F6FFDF  pop XIY
 	push	xiy	; F6FFE0  push XIY
 	calr	BStore_PutByteAndAdvance	; F6FFE1  calr 0xf70fda
@@ -166504,7 +166504,7 @@ sub_F6FFAE:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FFF5  cp (0x1238),0x00
 	jr	nz, sub_F6FFAE_Return	; F6FFFA  jr NZ,0xf70007
 	calr	sub_F7129A	; F6FFFC  calr 0xf7129a
-	calr	sub_F71275	; F6FFFF  calr 0xf71275
+	calr	TrackCursor_Save	; F6FFFF  calr 0xf71275
 	ld	(4664:16), 0	; F70002  ld (0x1238),0x00
 sub_F6FFAE_Return:
 	ret	; F70007  ret
@@ -166513,8 +166513,8 @@ sub_F6FFAE_Return:
 ; sub_F70008
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F701F1 T_F41004 sub_F7124E BStore_PutByteAndAdvance sub_F7122F
-;          sub_F7129A sub_F71275
+; Calls:   sub_F71417 sub_F701F1 T_F41004 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
+;          sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70008 is an instruction boundary of this
@@ -166561,7 +166561,7 @@ sub_F70008_Skip3:
 	call	T_F41004	; F7007F  call 0xf41004
 	push	xiy	; F70083  push XIY
 	push	xhl	; F70084  push XHL
-	calr	sub_F7124E	; F70085  calr 0xf7124e
+	calr	TrackCursor_Load	; F70085  calr 0xf7124e
 	pop	xhl	; F70088  pop XHL
 	ld	a, 192:opc	; F70089  ld A,0xc0
 	ld	w, (6352916:24)	; F7008B  ld W,(0x60f014)
@@ -166586,7 +166586,7 @@ sub_F70008_Skip3:
 	srl	xiy, 1	; F700C2  srl 0x01,XIY
 	push	xhl	; F700C5  push XHL
 	push	xiy	; F700C6  push XIY
-	calr	sub_F7122F	; F700C7  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F700C7  calr 0xf7122f
 	pop	xiy	; F700CA  pop XIY
 	pop	xhl	; F700CB  pop XHL
 	push	xhl	; F700CC  push XHL
@@ -166630,12 +166630,12 @@ sub_F70008_Skip3:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70129  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F7012E  jrl NZ,0xf701f0
 	calr	sub_F7129A	; F70131  calr 0xf7129a
-	calr	sub_F71275	; F70134  calr 0xf71275
+	calr	TrackCursor_Save	; F70134  calr 0xf71275
 	ld	(4664:16), 0	; F70137  ld (0x1238),0x00
 	jrl	sub_F70008_Return	; F7013C  jrl T,0xf701f0
 sub_F70008_Skip4:
 	push	xiy	; F7013F  push XIY
-	calr	sub_F7124E	; F70140  calr 0xf7124e
+	calr	TrackCursor_Load	; F70140  calr 0xf7124e
 	ld	a, 192:opc	; F70143  ld A,0xc0
 	pop	xiy	; F70145  pop XIY
 	push	xiy	; F70146  push XIY
@@ -166650,7 +166650,7 @@ sub_F70008_Skip4:
 	pop	xix	; F70161  pop XIX
 	srl	xiy, 1	; F70162  srl 0x01,XIY
 	push	xiy	; F70165  push XIY
-	calr	sub_F7122F	; F70166  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70166  calr 0xf7122f
 	pop	xiy	; F70169  pop XIY
 	push	xiy	; F7016A  push XIY
 	calr	BStore_PutByteAndAdvance	; F7016B  calr 0xf70fda
@@ -166693,7 +166693,7 @@ sub_F70008_Skip4:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F701D4  cp (0x1238),0x00
 	jr	nz, sub_F70008_Return	; F701D9  jr NZ,0xf701f0
 	calr	sub_F7129A	; F701DB  calr 0xf7129a
-	calr	sub_F71275	; F701DE  calr 0xf71275
+	calr	TrackCursor_Save	; F701DE  calr 0xf71275
 	ld	(4664:16), 0	; F701E1  ld (0x1238),0x00
 	jr	sub_F70008_Return	; F701E6  jr T,0xf701f0
 
@@ -166849,7 +166849,7 @@ Data_F702BA:
 ; sub_F70330
 ; Called from: in-module: 0xF6FFA5
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x1238)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70330 is an instruction boundary of this
@@ -166863,7 +166863,7 @@ sub_F70330:
 	and	iy, 15	; F70334  and IY,0x000f
 	extz	xiy	; F70338  extz XIY
 	push	xiy	; F7033A  push XIY
-	calr	sub_F7124E	; F7033B  calr 0xf7124e
+	calr	TrackCursor_Load	; F7033B  calr 0xf7124e
 	ld	a, 210:opc	; F7033E  ld A,0xd2
 	calr	BStore_PutByteAndAdvance	; F70340  calr 0xf70fda
 	pop	xiy	; F70343  pop XIY
@@ -166876,7 +166876,7 @@ sub_F70330:
 	pop	xix	; F70359  pop XIX
 	srl	xiy, 1	; F7035A  srl 0x01,XIY
 	push	xiy	; F7035D  push XIY
-	calr	sub_F7122F	; F7035E  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F7035E  calr 0xf7122f
 	pop	xiy	; F70361  pop XIY
 	push	xiy	; F70362  push XIY
 	calr	BStore_PutByteAndAdvance	; F70363  calr 0xf70fda
@@ -166896,7 +166896,7 @@ sub_F70330:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70387  cp (0x1238),0x00
 	jr	nz, sub_F70330_Return	; F7038C  jr NZ,0xf70399
 	calr	sub_F7129A	; F7038E  calr 0xf7129a
-	calr	sub_F71275	; F70391  calr 0xf71275
+	calr	TrackCursor_Save	; F70391  calr 0xf71275
 	ld	(4664:16), 0	; F70394  ld (0x1238),0x00
 sub_F70330_Return:
 	ret	; F70399  ret
@@ -167120,7 +167120,7 @@ sub_F704CE:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167135,7 +167135,7 @@ sub_F704E7:
 	ld	iy, (4304:16)	; F704E7  ld IY,(0x10d0)
 	and	iy, 15	; F704EB  and IY,0x000f
 	push	xiy	; F704EF  push XIY
-	calr	sub_F7124E	; F704F0  calr 0xf7124e
+	calr	TrackCursor_Load	; F704F0  calr 0xf7124e
 	ld	a, 209:opc	; F704F3  ld A,0xd1
 	calr	BStore_PutByteAndAdvance	; F704F5  calr 0xf70fda
 	pop	xiy	; F704F8  pop XIY
@@ -167148,7 +167148,7 @@ sub_F704E7:
 	pop	xix	; F7050E  pop XIX
 	srl	xiy, 1	; F7050F  srl 0x01,XIY
 	push	xiy	; F70512  push XIY
-	calr	sub_F7122F	; F70513  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70513  calr 0xf7122f
 	pop	xiy	; F70516  pop XIY
 	push	xiy	; F70517  push XIY
 	calr	BStore_PutByteAndAdvance	; F70518  calr 0xf70fda
@@ -167162,7 +167162,7 @@ sub_F704E7:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7052C  cp (0x1238),0x00
 	jr	nz, sub_F704E7_Return	; F70531  jr NZ,0xf7053e
 	calr	sub_F7129A	; F70533  calr 0xf7129a
-	calr	sub_F71275	; F70536  calr 0xf71275
+	calr	TrackCursor_Save	; F70536  calr 0xf71275
 	ld	(4664:16), 0	; F70539  ld (0x1238),0x00
 sub_F704E7_Return:
 	ret	; F7053E  ret
@@ -167380,7 +167380,7 @@ sub_F7067F:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F71417 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167405,7 +167405,7 @@ sub_F7067F_Skip2:
 	ld	iy, (4304:16)	; F706A9  ld IY,(0x10d0)
 	and	iy, 15	; F706AD  and IY,0x000f
 	extz	xiy	; F706B1  extz XIY
-	calr	sub_F7124E	; F706B3  calr 0xf7124e
+	calr	TrackCursor_Load	; F706B3  calr 0xf7124e
 	push	xiy	; F706B6  push XIY
 	ld	a, 176:opc	; F706B7  ld A,0xb0
 	calr	BStore_PutByteAndAdvance	; F706B9  calr 0xf70fda
@@ -167419,7 +167419,7 @@ sub_F7067F_Skip2:
 	pop	xix	; F706D3  pop XIX
 	srl	xiy, 1	; F706D4  srl 0x01,XIY
 	push	xiy	; F706D7  push XIY
-	calr	sub_F7122F	; F706D8  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F706D8  calr 0xf7122f
 	pop	xiy	; F706DB  pop XIY
 	push	xiy	; F706DC  push XIY
 	calr	BStore_PutByteAndAdvance	; F706DD  calr 0xf70fda
@@ -167463,7 +167463,7 @@ sub_F7067F_Skip3:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70741  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return	; F70746  jr NZ,0xf70753
 	calr	sub_F7129A	; F70748  calr 0xf7129a
-	calr	sub_F71275	; F7074B  calr 0xf71275
+	calr	TrackCursor_Save	; F7074B  calr 0xf71275
 	ld	(4664:16), 0	; F7074E  ld (0x1238),0x00
 sub_F7067F_Return:
 	ret	; F70753  ret
@@ -167473,7 +167473,7 @@ sub_F7067F_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167489,7 +167489,7 @@ sub_F70754:
 	and	iy, 15	; F70758  and IY,0x000f
 	extz	xiy	; F7075C  extz XIY
 	push	xiy	; F7075E  push XIY
-	calr	sub_F7124E	; F7075F  calr 0xf7124e
+	calr	TrackCursor_Load	; F7075F  calr 0xf7124e
 	ld	a, 211:opc	; F70762  ld A,0xd3
 	calr	BStore_PutByteAndAdvance	; F70764  calr 0xf70fda
 	pop	xiy	; F70767  pop XIY
@@ -167502,7 +167502,7 @@ sub_F70754:
 	pop	xix	; F7077D  pop XIX
 	srl	xiy, 1	; F7077E  srl 0x01,XIY
 	push	xiy	; F70781  push XIY
-	calr	sub_F7122F	; F70782  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70782  calr 0xf7122f
 	pop	xiy	; F70785  pop XIY
 	push	xiy	; F70786  push XIY
 	calr	BStore_PutByteAndAdvance	; F70787  calr 0xf70fda
@@ -167516,7 +167516,7 @@ sub_F70754:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F7079B  cp (0x1238),0x00
 	jr	nz, sub_F7067F_Return2	; F707A0  jr NZ,0xf707ad
 	calr	sub_F7129A	; F707A2  calr 0xf7129a
-	calr	sub_F71275	; F707A5  calr 0xf71275
+	calr	TrackCursor_Save	; F707A5  calr 0xf71275
 	ld	(4664:16), 0	; F707A8  ld (0x1238),0x00
 sub_F7067F_Return2:
 	ret	; F707AD  ret
@@ -167618,7 +167618,7 @@ sub_F725D9_Nop:
 ; Called from: in-module: 0xF70835
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238)
-; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7083B is an instruction boundary of this
@@ -167633,16 +167633,16 @@ sub_F7083B:
 	jrl	z, sub_F7083B_Epilogue	; F70841  jrl Z,0xf7091b
 	ld	iy, (4304:16)	; F70844  ld IY,(0x10d0)
 	and	iy, 15	; F70848  and IY,0x000f
-	m_cp_mi8 MB16, 0x1078, 0x00	; F7084C  cp (0x1078),0x00
+	m_cp_mi8 MB16, Smf_Format, 0x00	; F7084C  cp (0x1078),0x00
 	jr	z, sub_F7083B_Skip	; F70851  jr Z,0xf70862
-	m_cp_mi8 MB16, 0x107a, 0x02	; F70853  cp (0x107a),0x02
+	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70853  cp (0x107a),0x02
 	jr	lt, sub_F7083B_Skip	; F70858  jr LT,0xf70862
 	ld	iy, (4530:16)	; F7085A  ld IY,(0x11b2)
 	call	sub_F70C3F	; F7085E  call 0xf70c3f
 sub_F7083B_Skip:
 	push	xiy	; F70862  push XIY
 	pushw	bc	; F70863  push BC
-	call	sub_F7124E	; F70864  call 0xf7124e
+	call	TrackCursor_Load	; F70864  call 0xf7124e
 	popw	bc	; F70868  pop BC
 	pop	xiy	; F70869  pop XIY
 	ld	a, 176:opc	; F7086A  ld A,0xb0
@@ -167662,7 +167662,7 @@ sub_F7083B_Skip:
 	sra	iy, 1	; F7088E  sra 0x01,IY
 	pushw	bc	; F70891  push BC
 	push	xiy	; F70892  push XIY
-	call	sub_F7122F	; F70893  call 0xf7122f
+	call	Smf_TicksToPpq96	; F70893  call 0xf7122f
 	call	BStore_PutByteAndAdvance	; F70897  call 0xf70fda
 	pop	xiy	; F7089B  pop XIY
 	popw	bc	; F7089C  pop BC
@@ -167699,14 +167699,14 @@ sub_F7083B_Skip:
 	call	sub_F7129A	; F708F0  call 0xf7129a
 	ld	iy, (4304:16)	; F708F4  ld IY,(0x10d0)
 	and	iy, 15	; F708F8  and IY,0x000f
-	m_cp_mi8 MB16, 0x1078, 0x00	; F708FC  cp (0x1078),0x00
+	m_cp_mi8 MB16, Smf_Format, 0x00	; F708FC  cp (0x1078),0x00
 	jr	z, sub_F7083B_Skip2	; F70901  jr Z,0xf70912
-	m_cp_mi8 MB16, 0x107a, 0x02	; F70903  cp (0x107a),0x02
+	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F70903  cp (0x107a),0x02
 	jr	lt, sub_F7083B_Skip2	; F70908  jr LT,0xf70912
 	ld	iy, (4530:16)	; F7090A  ld IY,(0x11b2)
 	call	sub_F70C3F	; F7090E  call 0xf70c3f
 sub_F7083B_Skip2:
-	call	sub_F71275	; F70912  call 0xf71275
+	call	TrackCursor_Save	; F70912  call 0xf71275
 	ld	(4664:16), 0	; F70916  ld (0x1238),0x00
 sub_F7083B_Epilogue:
 	pop	xiy	; F7091B  pop XIY
@@ -168091,7 +168091,7 @@ sub_F70AE9_Return:
 ; sub_F70B22
 ; Called from: in-module: 0xF70B1E
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AF) (0x11B2) (0x1238) (0x1239)
-; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70B22 is an instruction boundary of this
@@ -168102,9 +168102,9 @@ sub_F70AE9_Return:
 ; --------------------------------------------------------------------------
 sub_F70B22:
 	push	xiy	; F70B22  push XIY
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F70B23  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70B23  cp (0x1078),0x0000
 	jr	z, sub_F70B22_Skip	; F70B29  jr Z,0xf70b3c
-	m_cp_mi16 MW16, 0x107a, 0x0002	; F70B2B  cp (0x107a),0x0002
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70B2B  cp (0x107a),0x0002
 	jr	c, sub_F70B22_Skip	; F70B31  jr C,0xf70b3c
 	ld	iy, (4530:16)	; F70B33  ld IY,(0x11b2)
 	extz	xiy	; F70B37  extz XIY
@@ -168112,7 +168112,7 @@ sub_F70B22:
 sub_F70B22_Skip:
 	push	xiy	; F70B3C  push XIY
 	pushw	bc	; F70B3D  push BC
-	calr	sub_F7124E	; F70B3E  calr 0xf7124e
+	calr	TrackCursor_Load	; F70B3E  calr 0xf7124e
 	popw	bc	; F70B41  pop BC
 	pop	xiy	; F70B42  pop XIY
 	ld	a, 176:opc	; F70B43  ld A,0xb0
@@ -168138,7 +168138,7 @@ sub_F70B22_Skip2:
 	srl	xiy, 1	; F70B73  srl 0x01,XIY
 	pushw	bc	; F70B76  push BC
 	push	xiy	; F70B77  push XIY
-	calr	sub_F7122F	; F70B78  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70B78  calr 0xf7122f
 	calr	BStore_PutByteAndAdvance	; F70B7B  calr 0xf70fda
 	pop	xiy	; F70B7E  pop XIY
 	popw	bc	; F70B7F  pop BC
@@ -168149,9 +168149,9 @@ sub_F70B22_Skip2:
 	ld	l, (4304:16)	; F70B8C  ld L,(0x10d0)
 	and	l, 15	; F70B90  and L,0x0f
 	xor	h, h	; F70B93  xor H,H
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F70B95  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70B95  cp (0x1078),0x0000
 	jr	z, sub_F70B22_Skip3	; F70B9B  jr Z,0xf70ba9
-	m_cp_mi16 MW16, 0x107a, 0x0002	; F70B9D  cp (0x107a),0x0002
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70B9D  cp (0x107a),0x0002
 	jr	c, sub_F70B22_Skip3	; F70BA3  jr C,0xf70ba9
 	ld	a, l	; F70BA5  ld A,L
 	jr	sub_F70B22_Join	; F70BA7  jr T,0xf70bbf
@@ -168198,15 +168198,15 @@ sub_F70B22_Join:
 	ld	iy, (4304:16)	; F70C0F  ld IY,(0x10d0)
 	and	iy, 15	; F70C13  and IY,0x000f
 	extz	xiy	; F70C17  extz XIY
-	m_cp_mi16 MW16, 0x1078, 0x0000	; F70C19  cp (0x1078),0x0000
+	m_cp_mi16 MW16, Smf_Format, 0x0000	; F70C19  cp (0x1078),0x0000
 	jr	z, sub_F70B22_Skip5	; F70C1F  jr Z,0xf70c32
-	m_cp_mi16 MW16, 0x107a, 0x0002	; F70C21  cp (0x107a),0x0002
+	m_cp_mi16 MW16, Smf_TrackCount, 0x0002	; F70C21  cp (0x107a),0x0002
 	jr	c, sub_F70B22_Skip5	; F70C27  jr C,0xf70c32
 	ld	iy, (4530:16)	; F70C29  ld IY,(0x11b2)
 	extz	xiy	; F70C2D  extz XIY
 	calr	sub_F70C3F	; F70C2F  calr 0xf70c3f
 sub_F70B22_Skip5:
-	calr	sub_F71275	; F70C32  calr 0xf71275
+	calr	TrackCursor_Save	; F70C32  calr 0xf71275
 	ld	(4664:16), 0	; F70C35  ld (0x1238),0x00
 sub_F70B22_Epilogue:
 	pop	xiy	; F70C3A  pop XIY
@@ -168523,7 +168523,7 @@ sub_F70DD6_Return:
 ; sub_F70E1D
 ; Called from: in-module: 0xF7067B 0xF7099F 0xF709D6 0xF70A2C
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x1238) (0x1239)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70E1D is an instruction boundary of this
@@ -168537,7 +168537,7 @@ sub_F70E1D:
 	and	iy, 15	; F70E21  and IY,0x000f
 	extz	xiy	; F70E25  extz XIY
 	push	xiy	; F70E27  push XIY
-	calr	sub_F7124E	; F70E28  calr 0xf7124e
+	calr	TrackCursor_Load	; F70E28  calr 0xf7124e
 	ld	a, 176:opc	; F70E2B  ld A,0xb0
 	m_bit 7, MD16, 0x11b0	; F70E2D  bit 7,(0x11b0)
 	jr	z, sub_F70E1D_Skip	; F70E31  jr Z,0xf70e3f
@@ -168557,7 +168557,7 @@ sub_F70E1D_Skip:
 	pop	xix	; F70E59  pop XIX
 	srl	xiy, 1	; F70E5A  srl 0x01,XIY
 	push	xiy	; F70E5D  push XIY
-	calr	sub_F7122F	; F70E5E  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70E5E  calr 0xf7122f
 	pop	xiy	; F70E61  pop XIY
 	push	xiy	; F70E62  push XIY
 	calr	BStore_PutByteAndAdvance	; F70E63  calr 0xf70fda
@@ -168598,7 +168598,7 @@ sub_F70E1D_Skip2:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70EC2  cp (0x1238),0x00
 	jr	nz, sub_F70E1D_Return	; F70EC7  jr NZ,0xf70ed4
 	calr	sub_F7129A	; F70EC9  calr 0xf7129a
-	calr	sub_F71275	; F70ECC  calr 0xf71275
+	calr	TrackCursor_Save	; F70ECC  calr 0xf71275
 	ld	(4664:16), 0	; F70ECF  ld (0x1238),0x00
 sub_F70E1D_Return:
 	ret	; F70ED4  ret
@@ -168608,7 +168608,7 @@ sub_F70E1D_Return:
 ; Called from: in-module: 0xF6FF96
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B1) (0x1238) (0x1239) (0x124B)
 ;          (0x2732) (0x345C) (0x345E)
-; Calls:   sub_F71417 sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F71417 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70ED5 is an instruction boundary of this
@@ -168647,7 +168647,7 @@ sub_F70ED5_Skip3:
 	extz	xiy	; F70F24  extz XIY
 	push	xiy	; F70F26  push XIY
 	push	xix	; F70F27  push XIX
-	calr	sub_F7124E	; F70F28  calr 0xf7124e
+	calr	TrackCursor_Load	; F70F28  calr 0xf7124e
 	pop	xix	; F70F2B  pop XIX
 	ld	a, 144:opc	; F70F2C  ld A,0x90
 	push	xix	; F70F2E  push XIX
@@ -168663,7 +168663,7 @@ sub_F70ED5_Skip3:
 	pop	xix	; F70F4A  pop XIX
 	srl	xiy, 1	; F70F4B  srl 0x01,XIY
 	push	xiy	; F70F4E  push XIY
-	calr	sub_F7122F	; F70F4F  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F70F4F  calr 0xf7122f
 	pop	xiy	; F70F52  pop XIY
 	push	xiy	; F70F53  push XIY
 	push	xix	; F70F54  push XIX
@@ -168710,7 +168710,7 @@ sub_F70ED5_Skip3:
 	jr	nz, sub_F70ED5_Return	; F70FB2  jr NZ,0xf70fd9
 	calr	sub_F7129A	; F70FB4  calr 0xf7129a
 	push	xix	; F70FB7  push XIX
-	calr	sub_F71275	; F70FB8  calr 0xf71275
+	calr	TrackCursor_Save	; F70FB8  calr 0xf71275
 	pop	xix	; F70FBB  pop XIX
 	ld	a, (4304:16)	; F70FBC  ld A,(0x10d0)
 	and	a, 15	; F70FC0  and A,0x0f
@@ -168934,7 +168934,7 @@ sub_F710E7:
 	jrl	z, sub_F710E7_Skip4	; F7110B  jrl Z,0xf711a1
 	pushw	wa	; F7110E  push WA
 	xor	wa, wa	; F7110F  xor WA,WA
-	ld	hl, (4220:16)	; F71111  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F71111  ld HL,(0x107c)
 	ld	qwa, de	; F71115  ld QWA,DE
 	div	xwa, hl	; F71118  div XWA,HL
 	ld	de, qwa	; F7111A  ld DE,QWA
@@ -168952,7 +168952,7 @@ sub_F710E7:
 	pushw	wa	; F71126  push WA
 	ld	wa, de	; F71127  ld WA,DE
 	ldw	de, 1	; F71129  ld DE,0x0001
-	ld	hl, (4220:16)	; F7112C  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F7112C  ld HL,(0x107c)
 	ld	qwa, de	; F71130  ld QWA,DE
 	div	xwa, hl	; F71133  div XWA,HL
 	ld	de, qwa	; F71135  ld DE,QWA
@@ -168982,7 +168982,7 @@ sub_F710E7_Skip:
 	srl	xiy, 1	; F71168  srl 0x01,XIY
 	jrl	sub_F710E7_Return	; F7116B  jrl T,0xf71202
 sub_F710E7_Skip2:
-	m_cp_rm MW16, 0x107c, 0	; F7116E  cp WA,(0x107c)
+	m_cp_rm MW16, Smf_Division, 0	; F7116E  cp WA,(0x107c)
 	jr	c, sub_F710E7_Skip3	; F71172  jr C,0xf71184
 	xor	de, de	; F71174  xor DE,DE
 	ld	qwa, de	; F71176  ld QWA,DE
@@ -169009,7 +169009,7 @@ sub_F710E7_Skip4:
 	add	wa, bc	; F711A1  add WA,BC
 	jr	nov, sub_F710E7_Skip5	; F711A3  jr PO/NOV,0xf711cf
 	ldw	de, 1	; F711A5  ld DE,0x0001
-	ld	hl, (4220:16)	; F711A8  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F711A8  ld HL,(0x107c)
 	ld	qwa, de	; F711AC  ld QWA,DE
 	div	xwa, hl	; F711AF  div XWA,HL
 	ld	de, qwa	; F711B1  ld DE,QWA
@@ -169027,7 +169027,7 @@ sub_F710E7_Skip4:
 	pop	xix	; F711CC  pop XIX
 	jr	sub_F710E7_Return	; F711CD  jr T,0xf71202
 sub_F710E7_Skip5:
-	ld	hl, (4220:16)	; F711CF  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F711CF  ld HL,(0x107c)
 	cp	wa, hl	; F711D3  cp WA,HL
 	jr	c, sub_F710E7_Skip6	; F711D5  jr C,0xf711f0
 	xor	de, de	; F711D7  xor DE,DE
@@ -169057,7 +169057,7 @@ sub_F710E7_Return:
 ; sub_F71203
 ; Called from: in-module: 0xF71153 0xF71187 0xF711BB 0xF711E8
 ; Touches: (0x1086) (0x11B1) (0x1238)
-; Calls:   sub_F7124E BStore_PutByteAndAdvance sub_F71275
+; Calls:   TrackCursor_Load BStore_PutByteAndAdvance TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71203 is an instruction boundary of this
@@ -169068,7 +169068,7 @@ sub_F710E7_Return:
 ; --------------------------------------------------------------------------
 sub_F71203:
 	push	xiy	; F71203  push XIY
-	calr	sub_F7124E	; F71204  calr 0xf7124e
+	calr	TrackCursor_Load	; F71204  calr 0xf7124e
 	pop	xiy	; F71207  pop XIY
 	ld	bc, (4230:16)	; F71208  ld BC,(0x1086)
 	ld	a, 129:opc	; F7120C  ld A,0x81
@@ -169081,14 +169081,14 @@ sub_F71203:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71217  cp (0x1238),0x00
 	jr	nz, sub_F71203_Return	; F7121C  jr NZ,0xf7122e
 	djnz16	bc, -19	; F7121E  djnz BC,0xf7120e
-	calr	sub_F71275	; F71221  calr 0xf71275
+	calr	TrackCursor_Save	; F71221  calr 0xf71275
 	m_or_mi8 MB16, 0x11b1, 0x01	; F71224  or (0x11b1),0x01
 	ld	(4664:16), 0	; F71229  ld (0x1238),0x00
 sub_F71203_Return:
 	ret	; F7122E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7122F
+; Smf_TicksToPpq96
 ; Called from: in-module: 0xF6FCFC 0xF6FFDC 0xF700C7 0xF70166 0xF7035E
 ;              0xF70513 0xF706D8 0xF70782 +13 more
 ; Touches: (0x107C)
@@ -169101,14 +169101,16 @@ sub_F71203_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7122F:
-	ld	hl, (4220:16)	; F7122F  ld HL,(0x107c)
+; Smf_TicksToPpq96: unless Smf_Division is 96: XWA = XWA * 96 / Smf_Division -- a delta time in the file's ticks per quarter note
+;   rescaled to the sequencer's 96 per beat (INTTR4_SequencerTick's resolution).
+Smf_TicksToPpq96:
+	ld	hl, (Smf_Division:16)	; F7122F  ld HL,(0x107c)
 	cp	hl, 96	; F71233  cp HL,0x0060
 	jr	z, sub_F7122F_Return	; F71237  jr Z,0xf7124d
 	ldw	hl, 96	; F71239  ld HL,0x0060
 	mul	xwa, hl	; F7123C  mul XWA,HL
 	ld	de, qwa	; F7123E  ld DE,QWA
-	ld	hl, (4220:16)	; F71241  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F71241  ld HL,(0x107c)
 	ld	qwa, de	; F71245  ld QWA,DE
 	div	xwa, hl	; F71248  div XWA,HL
 	ld	de, qwa	; F7124A  ld DE,QWA
@@ -169116,7 +169118,7 @@ sub_F7122F_Return:
 	ret	; F7124D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7124E
+; TrackCursor_Load
 ; Called from: in-module: 0xF6FA7D 0xF6FAD3 0xF6FCA1 0xF6FFB9 0xF70085
 ;              0xF70140 0xF7033B 0xF704F0 +8 more
 ; Touches: (0x345C) (0x345E)
@@ -169129,7 +169131,9 @@ sub_F7122F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7124E:
+; TrackCursor_Load: BStore_CursorBlock = word[IY] of the table at RAM 0x3460, BStore_CursorOffset = byte[IY] of the table at 0x3482:
+;   the block-store cursor of track IY.
+TrackCursor_Load:
 	push	xde	; F7124E  push XDE
 	sla	xiy, 1	; F7124F  sla 0x01,XIY
 	ld	xde, 13408	; F71252  ld XDE,0x00003460
@@ -169144,7 +169148,7 @@ sub_F7124E:
 	ret	; F71274  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71275
+; TrackCursor_Save
 ; Called from: in-module: 0xF6FAA4 0xF6FD71 0xF6FFFF 0xF70134 0xF701DE
 ;              0xF70391 0xF70536 0xF7074B +7 more
 ; Touches: (0x345C) (0x345E)
@@ -169157,7 +169161,8 @@ sub_F7124E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71275:
+; TrackCursor_Save: the reverse: the BStore cursor into word[IY] at 0x3460 and byte[IY] at 0x3482.
+TrackCursor_Save:
 	push	xix	; F71275  push XIX
 	ld	wa, (BStore_CursorBlock:16)	; F71276  ld WA,(0x345c)
 	sla	iy, 1	; F7127A  sla 0x01,IY
@@ -169261,7 +169266,7 @@ sub_F712B6_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F712FB:
-	ld	wa, (4220:16)	; F712FB  ld WA,(0x107c)
+	ld	wa, (Smf_Division:16)	; F712FB  ld WA,(0x107c)
 	cp	wa, 96	; F712FF  cp WA,0x0060
 	jr	z, sub_F712FB_Skip2	; F71303  jr Z,0xf7135e
 	ld	e, (4506:16)	; F71305  ld E,(0x119a)
@@ -169280,7 +169285,7 @@ sub_F712FB:
 	m_add_rm MW16, 0x1252, 0	; F7132C  add WA,(0x1252)
 	ld	de, wa	; F71330  ld DE,WA
 	ld	wa, (4688:16)	; F71332  ld WA,(0x1250)
-	ld	hl, (4220:16)	; F71336  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F71336  ld HL,(0x107c)
 	ld	qwa, de	; F7133A  ld QWA,DE
 	div	xwa, hl	; F7133D  div XWA,HL
 	ld	de, qwa	; F7133F  ld DE,QWA
@@ -169290,7 +169295,7 @@ sub_F712FB_Skip:
 	ldw	hl, 96	; F71348  ld HL,0x0060
 	mul	xwa, hl	; F7134B  mul XWA,HL
 	ld	de, qwa	; F7134D  ld DE,QWA
-	ld	hl, (4220:16)	; F71350  ld HL,(0x107c)
+	ld	hl, (Smf_Division:16)	; F71350  ld HL,(0x107c)
 	ld	qwa, de	; F71354  ld QWA,DE
 	div	xwa, hl	; F71357  div XWA,HL
 	ld	de, qwa	; F71359  ld DE,QWA
@@ -170271,7 +170276,7 @@ sub_F719EA_Skip3:
 ;              0xF71A91
 ; Touches: (0x1078) (0x107A) (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2)
 ;          (0x1238) (0x1381)
-; Calls:   sub_F70C3F sub_F7124E BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F71275
+; Calls:   sub_F70C3F TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71A95 is an instruction boundary of this
@@ -170286,16 +170291,16 @@ sub_F71A95:
 	jrl	z, sub_F71A95_Epilogue	; F71A9B  jrl Z,0xf71b80
 	ld	iy, (4304:16)	; F71A9E  ld IY,(0x10d0)
 	and	iy, 15	; F71AA2  and IY,0x000f
-	m_cp_mi8 MB16, 0x1078, 0x00	; F71AA6  cp (0x1078),0x00
+	m_cp_mi8 MB16, Smf_Format, 0x00	; F71AA6  cp (0x1078),0x00
 	jr	z, sub_F71A95_Skip	; F71AAB  jr Z,0xf71abc
-	m_cp_mi8 MB16, 0x107a, 0x02	; F71AAD  cp (0x107a),0x02
+	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F71AAD  cp (0x107a),0x02
 	jr	lt, sub_F71A95_Skip	; F71AB2  jr LT,0xf71abc
 	ld	iy, (4530:16)	; F71AB4  ld IY,(0x11b2)
 	call	sub_F70C3F	; F71AB8  call 0xf70c3f
 sub_F71A95_Skip:
 	push	xiy	; F71ABC  push XIY
 	pushw	bc	; F71ABD  push BC
-	call	sub_F7124E	; F71ABE  call 0xf7124e
+	call	TrackCursor_Load	; F71ABE  call 0xf7124e
 	popw	bc	; F71AC2  pop BC
 	pop	xiy	; F71AC3  pop XIY
 	ld	a, 176:opc	; F71AC4  ld A,0xb0
@@ -170318,7 +170323,7 @@ sub_F71A95_Skip:
 	sra	iy, 1	; F71AF1  sra 0x01,IY
 	pushw	bc	; F71AF4  push BC
 	push	xiy	; F71AF5  push XIY
-	call	sub_F7122F	; F71AF6  call 0xf7122f
+	call	Smf_TicksToPpq96	; F71AF6  call 0xf7122f
 	call	BStore_PutByteAndAdvance	; F71AFA  call 0xf70fda
 	pop	xiy	; F71AFE  pop XIY
 	popw	bc	; F71AFF  pop BC
@@ -170355,14 +170360,14 @@ sub_F71A95_Skip:
 	call	sub_F7129A	; F71B55  call 0xf7129a
 	ld	iy, (4304:16)	; F71B59  ld IY,(0x10d0)
 	and	iy, 15	; F71B5D  and IY,0x000f
-	m_cp_mi8 MB16, 0x1078, 0x00	; F71B61  cp (0x1078),0x00
+	m_cp_mi8 MB16, Smf_Format, 0x00	; F71B61  cp (0x1078),0x00
 	jr	z, sub_F71A95_Skip2	; F71B66  jr Z,0xf71b77
-	m_cp_mi8 MB16, 0x107a, 0x02	; F71B68  cp (0x107a),0x02
+	m_cp_mi8 MB16, Smf_TrackCount, 0x02	; F71B68  cp (0x107a),0x02
 	jr	lt, sub_F71A95_Skip2	; F71B6D  jr LT,0xf71b77
 	ld	iy, (4530:16)	; F71B6F  ld IY,(0x11b2)
 	call	sub_F70C3F	; F71B73  call 0xf70c3f
 sub_F71A95_Skip2:
-	call	sub_F71275	; F71B77  call 0xf71275
+	call	TrackCursor_Save	; F71B77  call 0xf71275
 	ld	(4664:16), 0	; F71B7B  ld (0x1238),0x00
 sub_F71A95_Epilogue:
 	pop	xiy	; F71B80  pop XIY
@@ -170407,7 +170412,7 @@ sub_F71B82_Skip:
 	calr	sub_F729D9	; F71BC4  calr 0xf729d9
 	incw	1, (4530:16)	; F71BC7  incw 1,(0x11b2)
 	ld	wa, (4530:16)	; F71BCB  ld WA,(0x11b2)
-	m_cp_rm MW16, 0x107a, 0	; F71BCF  cp WA,(0x107a)
+	m_cp_rm MW16, Smf_TrackCount, 0	; F71BCF  cp WA,(0x107a)
 	jr	c, sub_F71B82_Loop	; F71BD3  jr C,0xf71ba3
 	calr	InputStream_RefillDone	; F71BD5  calr 0xf765de
 	m_cp_mi8 MB16, 0x1010, 0x00	; F71BD8  cp (0x1010),0x00
@@ -170740,7 +170745,7 @@ sub_F71DB7_Return:
 ; sub_F71E21
 ; Called from: in-module: 0xF71DFD
 ; Touches: (0x10D0) (0x10D1) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E21 is an instruction boundary of this
@@ -170771,7 +170776,7 @@ sub_F71E21:
 	pop	xix	; F71E58  pop XIX
 	srl	xiy, 1	; F71E59  srl 0x01,XIY
 	push	xiy	; F71E5C  push XIY
-	calr	sub_F7122F	; F71E5D  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F71E5D  calr 0xf7122f
 	pop	xiy	; F71E60  pop XIY
 	push	xiy	; F71E61  push XIY
 	calr	BStore_PutByteAndAdvance	; F71E62  calr 0xf70fda
@@ -170796,7 +170801,7 @@ sub_F71E21_Return:
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
 ; Calls:   sub_F71417 sub_F728FE sub_F701F1 T_F41004 sub_F727C8 BStore_PutByteAndAdvance
-;          sub_F7122F sub_F7129A sub_F727F6
+;          Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E89 is an instruction boundary of this
@@ -170874,7 +170879,7 @@ sub_F71E89_Skip3:
 	srl	iy, 1	; F71F57  srl 0x01,IY
 	push	xhl	; F71F5A  push XHL
 	push	xiy	; F71F5B  push XIY
-	calr	sub_F7122F	; F71F5C  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F71F5C  calr 0xf7122f
 	pop	xiy	; F71F5F  pop XIY
 	pop	xhl	; F71F60  pop XHL
 	push	xhl	; F71F61  push XHL
@@ -170936,7 +170941,7 @@ sub_F71E89_Skip4:
 	pop	xix	; F71FF2  pop XIX
 	srl	iy, 1	; F71FF3  srl 0x01,IY
 	push	xiy	; F71FF6  push XIY
-	calr	sub_F7122F	; F71FF7  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F71FF7  calr 0xf7122f
 	pop	xiy	; F71FFA  pop XIY
 	push	xiy	; F71FFB  push XIY
 	calr	BStore_PutByteAndAdvance	; F71FFC  calr 0xf70fda
@@ -171069,7 +171074,7 @@ sub_F7208D_Skip3:
 	srl	xiy, 1	; F7210B  srl 0x01,XIY
 	push	xiy	; F7210E  push XIY
 	push	xix	; F7210F  push XIX
-	calr	sub_F7122F	; F72110  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F72110  calr 0xf7122f
 	pop	xix	; F72113  pop XIX
 	pop	xiy	; F72114  pop XIY
 	push	xiy	; F72115  push XIY
@@ -171422,7 +171427,7 @@ sub_F72364:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -171454,7 +171459,7 @@ sub_F7237D:
 	pop	xix	; F723B0  pop XIX
 	srl	iy, 1	; F723B1  srl 0x01,IY
 	push	xiy	; F723B4  push XIY
-	calr	sub_F7122F	; F723B5  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F723B5  calr 0xf7122f
 	pop	xiy	; F723B8  pop XIY
 	push	xiy	; F723B9  push XIY
 	calr	BStore_PutByteAndAdvance	; F723BA  calr 0xf70fda
@@ -171635,7 +171640,7 @@ sub_F724A7_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -171664,7 +171669,7 @@ sub_F724CB:
 	pop	xix	; F724F5  pop XIX
 	srl	iy, 1	; F724F6  srl 0x01,IY
 	push	xiy	; F724F9  push XIY
-	calr	sub_F7122F	; F724FA  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F724FA  calr 0xf7122f
 	pop	xiy	; F724FD  pop XIY
 	push	xiy	; F724FE  push XIY
 	calr	BStore_PutByteAndAdvance	; F724FF  calr 0xf70fda
@@ -171900,7 +171905,7 @@ sub_F726A2_Skip:
 ; sub_F726C6
 ; Called from: in-module: 0xF724C7 0xF72636 0xF7267A 0xF7269E 0xF726C2
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726C6 is an instruction boundary of this
@@ -171927,7 +171932,7 @@ sub_F726C6:
 	pop	xix	; F726F0  pop XIX
 	srl	iy, 1	; F726F1  srl 0x01,IY
 	push	xiy	; F726F4  push XIY
-	calr	sub_F7122F	; F726F5  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F726F5  calr 0xf7122f
 	pop	xiy	; F726F8  pop XIY
 	push	xiy	; F726F9  push XIY
 	calr	BStore_PutByteAndAdvance	; F726FA  calr 0xf70fda
@@ -171969,7 +171974,7 @@ sub_F726C6_Return:
 ; sub_F72754
 ; Called from: in-module: 0xF71E18
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance sub_F7122F sub_F7129A sub_F727F6
+; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72754 is an instruction boundary of this
@@ -171999,7 +172004,7 @@ sub_F72754:
 	pop	xix	; F72787  pop XIX
 	srl	xiy, 1	; F72788  srl 0x01,XIY
 	push	xiy	; F7278B  push XIY
-	calr	sub_F7122F	; F7278C  calr 0xf7122f
+	calr	Smf_TicksToPpq96	; F7278C  calr 0xf7122f
 	pop	xiy	; F7278F  pop XIY
 	push	xiy	; F72790  push XIY
 	calr	BStore_PutByteAndAdvance	; F72791  calr 0xf70fda

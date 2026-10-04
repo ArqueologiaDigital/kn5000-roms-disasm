@@ -606,6 +606,17 @@ ROWS = [
     ("FC10DD", "Msg0716_AllPartsResetBendAndModulation",
      "for the 32 object records: Msg0716_PostPitchBendCenter and Msg0716_PostCC01_ModulationZero.  Called by Msg0716_AllPartsResetBendAndModulation_Call\n"
      "and Msg0716_AllPartsResetBendAndModulation_SaveRegs."),
+    ("FEA709", "EditCursor_AdvanceToNextIncStep",
+     "EditCursor_TickInMeasure = the first multiple of EditField_Inc above it (adds EditField_Inc from 0 until it passes).\n"
+     "The first step of EditScreen_CursorRight."),
+    # prom_b 0xF7122F-0xF71299: the MIDI FILE loader's helpers (the SMF header fields: notes/prom_b_smf_reader.py)
+    ("F7122F", "Smf_TicksToPpq96",
+     "unless Smf_Division is 96: XWA = XWA * 96 / Smf_Division -- a delta time in the file's ticks per quarter note\n"
+     "rescaled to the sequencer's 96 per beat (INTTR4_SequencerTick's resolution)."),
+    ("F7124E", "TrackCursor_Load",
+     "BStore_CursorBlock = word[IY] of the table at RAM 0x3460, BStore_CursorOffset = byte[IY] of the table at 0x3482:\n"
+     "the block-store cursor of track IY."),
+    ("F71275", "TrackCursor_Save", "the reverse: the BStore cursor into word[IY] at 0x3460 and byte[IY] at 0x3482."),
 ]
 
 

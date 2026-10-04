@@ -176296,7 +176296,7 @@ sub_FE9276:
 	ld (0x601f05:24), wa                                ; FE928A  f2 05 1f 60 50
 	ret                                                  ; FE928F  0e
 sub_FE9290:
-	calr sub_FEA709                                          ; FE9290  1e 76 14
+	calr EditCursor_AdvanceToNextIncStep                                          ; FE9290  1e 76 14
 	calr sub_FEA64D                                          ; FE9293  1e b7 13
 	m_bit 2, MD24, 0x601f5b                              ; FE9296  f2 5b 1f 60 ca
 	jr nz, .LFE92BD                                      ; FE929B  6e 20
@@ -178026,7 +178026,7 @@ EditScreen_CursorRight:
 	calr BStore_CursorSlot_Save                                          ; FEA379  1e 72 e9
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA37C  d2 54 1f 60 20
 	ld (0x601f56:24), wa                                ; FEA381  f2 56 1f 60 50
-	calr sub_FEA709                                      ; FEA386  1e 80 03
+	calr EditCursor_AdvanceToNextIncStep                                      ; FEA386  1e 80 03
 	ld c, (EditMeasure_Beats:24)                                 ; FEA389  c2 75 1f 60 23
 	mul C,0x60                                           ; FEA38E  cb 08 60
 	cp (EditCursor_TickInMeasure:24), bc                             ; FEA391  d2 54 1f 60 f9
@@ -178383,7 +178383,9 @@ sub_FEA6D7:
 	jr ule, .LFEA6EF                                     ; FEA706  63 e7
 .LFEA708:
 	ret                                                  ; FEA708  0e
-sub_FEA709:
+; EditCursor_AdvanceToNextIncStep: EditCursor_TickInMeasure = the first multiple of EditField_Inc above it (adds EditField_Inc from 0 until it passes).
+;   The first step of EditScreen_CursorRight.
+EditCursor_AdvanceToNextIncStep:
 	xor WA,WA                                            ; FEA709  d8 d0
 .LFEA70B:
 	m_cp_rm MW24, EditCursor_TickInMeasure, r0                           ; FEA70B  d2 54 1f 60 f0
@@ -179086,7 +179088,7 @@ sub_FEADFB:
 	ld wa, (EditField_Inc:24)                                ; FEAE0E  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE13  28
 	ldw (EditField_Inc:24), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
-	calr sub_FEA709                                      ; FEAE1B  1e eb f8
+	calr EditCursor_AdvanceToNextIncStep                                      ; FEAE1B  1e eb f8
 	popw wa                                              ; FEAE1E  48
 	ld (EditField_Inc:24), wa                                ; FEAE1F  f2 4d 1f 60 50
 	ld c, (EditMeasure_Beats:24)                                 ; FEAE24  c2 75 1f 60 23

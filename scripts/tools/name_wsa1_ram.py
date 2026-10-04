@@ -387,6 +387,12 @@ GROUPS = [
         0x5860: ("CombiRemap_Ram", "the COMBI RE-MAP block, 0x650 bytes", "DiskLoad_CombiRemap / DiskSave_CombiRemap; CombiRemap_ResetToDefault"),
         0x5EB0: ("DrumMap_Ram", "the DRUM MAP block, 0x1D0 bytes", "DiskLoad_DrumMap / DiskSave_DrumMap; DrumMap_ResetToDefault"),
     }),
+    ("wsa1/notes/prom_b_smf_reader.py", "WHAT IS ESTABLISHED, 2 and 4: the SMF header fields and the input cursor", {
+        0x1078: ("Smf_Format", "the MThd format word (stored low byte first; 0 or 1 accepted)", "the MThd parser at 0xF6F5xx"),
+        0x107A: ("Smf_TrackCount", "the MThd ntrks word", "the MThd parser"),
+        0x107C: ("Smf_Division", "the MThd division word, ticks per quarter note (0 and SMPTE refused)", "the MThd parser; Smf_TicksToPpq96"),
+        0x1088: ("Smf_InputCursor", "the 32-bit cursor into the 0x60A700-0x60AAFF input window", "the byte fetch at 0xF7138F"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),

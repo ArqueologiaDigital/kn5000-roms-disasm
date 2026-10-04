@@ -2831,6 +2831,10 @@ RENAMES = {
     "sub_FB9060": "Msg0716_AllPartsResetBendAndModulation_SaveRegs",
     "sub_FC0197": "DrumMap_ResetToDefault_Call",
     "sub_FC0CED": "Msg0716_PartPostCtrlInt99",
+    "sub_FEA709": "EditCursor_AdvanceToNextIncStep",
+    "sub_F7122F": "Smf_TicksToPpq96",
+    "sub_F7124E": "TrackCursor_Load",
+    "sub_F71275": "TrackCursor_Save",
 }
 
 
