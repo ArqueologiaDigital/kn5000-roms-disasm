@@ -3178,6 +3178,8 @@ RENAMES = {
     "sub_F56F09": "NumberPadKey_CyclePlayScreen",
     "sub_F67604": "SoftKeyCol1_StepRecord",
     "sub_FBEDBE": "CompareKey_CombiEdit",
+    "sub_FBED77": "CombiEdit_CompareOff",
+    "sub_FBED94": "CombiEdit_CompareOn",
 }
 
 

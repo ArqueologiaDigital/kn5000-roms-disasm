@@ -399,6 +399,9 @@ GROUPS = [
         0x1193: ("Smf_VlqBytes", "the raw bytes of a variable-length quantity", "Smf_ReadVlqBytes"),
         0x1198: ("Smf_VlqValue", "its decoded 24-bit value (0x1198..0x119A)", "Smf_DecodeVlq"),
     }),
+    ("wsa1/notes/prom_ab_read_names_2026_10_04.py", "CompareKey_CombiEdit / CombiEdit_CompareOn / _CompareOff (2026-10-04)", {
+        0x277F: ("CombiEdit_Comparing", "1 while COMBINATION EDIT compares (the COMPARE key toggles it)", "CombiEdit_CompareOn sets it, CombiEdit_CompareOff clears it"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),

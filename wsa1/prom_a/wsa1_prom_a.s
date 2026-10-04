@@ -105155,7 +105155,7 @@ ScreenButton_CombiEditInternalSound:
 	link XIZ,0x0000                                      ; FBCF3C  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCF40  c1 76 20 3f 16
 	jr nz, .LFBCF5A                                      ; FBCF45  6e 13
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBCF47  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBCF47  c1 7f 27 3f 01
 	jr nz, .LFBCF5A                                      ; FBCF4C  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBCF4E  9e 08 3f 1e 00
 	jr nz, .LFBCF7A                                      ; FBCF53  6e 25
@@ -106678,7 +106678,7 @@ ScreenButtonBody_CombiEditMixer:
 	link XIZ,0x0000                                      ; FBDD91  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDD95  c1 76 20 3f 16
 	jr nz, .LFBDDAF                                      ; FBDD9A  6e 13
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBDD9C  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBDD9C  c1 7f 27 3f 01
 	jr nz, .LFBDDAF                                      ; FBDDA1  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBDDA3  9e 08 3f 1e 00
 	jr nz, .LFBDDCF                                      ; FBDDA8  6e 25
@@ -108449,7 +108449,7 @@ sub_FBED02:
 	pushw 0x00                                           ; FBED10  0b 00 00
 	call T_F411EC                                        ; FBED13  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBED17  f1 6f 27 00 00
-	calr sub_FBED77                                      ; FBED1C  1e 58 00
+	calr CombiEdit_CompareOff                                      ; FBED1C  1e 58 00
 	popw bc                                              ; FBED1F  49
 	ret                                                  ; FBED20  0e
 sub_FBED21:
@@ -108457,7 +108457,7 @@ sub_FBED21:
 	pushw hl                                             ; FBED25  2b
 	pushw de                                             ; FBED26  2a
 	push XIX                                             ; FBED27  3c
-	ld (0x277f:16), 0x00                                 ; FBED28  f1 7f 27 00 00
+	ld (CombiEdit_Comparing:16), 0x00                                 ; FBED28  f1 7f 27 00 00
 	ld (0x216e:16), 0x00                                 ; FBED2D  f1 6e 21 00 00
 	m_set 2, MD16, 0x213b                                ; FBED32  f1 3b 21 ba
 	lda xbc, (0x7620:16)                                ; FBED36  f1 20 76 31
@@ -108490,20 +108490,23 @@ sub_FBED21:
 	popw hl                                              ; FBED73  4b
 	unlk XIZ                                             ; FBED74  ee 0d
 	ret                                                  ; FBED76  0e
-sub_FBED77:
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBED77  c1 7f 27 3f 01
+; CombiEdit_CompareOff: when (0x277F) is 1: (0x277F) = 0, (0x216E) = 0, (0x213B) bit 2, sub_FBEDD5, a repaint.  CompareKey_CombiEdit
+;   calls it in COMBINATION EDIT (PanelModeGroup 0x16) while comparing.
+CombiEdit_CompareOff:
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBED77  c1 7f 27 3f 01
 	jr nz, .LFBED93                                      ; FBED7C  6e 15
-	ld (0x277f:16), 0x00                                 ; FBED7E  f1 7f 27 00 00
+	ld (CombiEdit_Comparing:16), 0x00                                 ; FBED7E  f1 7f 27 00 00
 	ld (0x216e:16), 0x00                                 ; FBED83  f1 6e 21 00 00
 	m_set 2, MD16, 0x213b                                ; FBED88  f1 3b 21 ba
 	calr sub_FBEDD5                                      ; FBED8C  1e 46 00
 	m_set 4, MD16, UI_ScreenFlags                                ; FBED8F  f1 95 20 bc
 .LFBED93:
 	ret                                                  ; FBED93  0e
-sub_FBED94:
-	m_cp_mi8 MB16, 0x277f, 0x00                          ; FBED94  c1 7f 27 3f 00
+; CombiEdit_CompareOn: when (0x277F) is 0: (0x277F) = 1, (0x216E) = 1, (0x213B) bit 2, sub_FBEDD5, T_F411EC(0), (0x276F) = 0, a repaint.
+CombiEdit_CompareOn:
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x00                          ; FBED94  c1 7f 27 3f 00
 	jr nz, .LFBEDBD                                      ; FBED99  6e 22
-	ld (0x277f:16), 0x01                                 ; FBED9B  f1 7f 27 00 01
+	ld (CombiEdit_Comparing:16), 0x01                                 ; FBED9B  f1 7f 27 00 01
 	ld (0x216e:16), 0x01                                 ; FBEDA0  f1 6e 21 00 01
 	m_set 2, MD16, 0x213b                                ; FBEDA5  f1 3b 21 ba
 	calr sub_FBEDD5                                      ; FBEDA9  1e 29 00
@@ -108520,12 +108523,12 @@ sub_FBED94:
 CompareKey_CombiEdit:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEDBE  c1 76 20 3f 16
 	jr nz, .LFBEDD4                                      ; FBEDC3  6e 0f
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEDC5  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEDC5  c1 7f 27 3f 01
 	jr nz, .LFBEDD1                                      ; FBEDCA  6e 05
-	calr sub_FBED77                                      ; FBEDCC  1e a8 ff
+	calr CombiEdit_CompareOff                                      ; FBEDCC  1e a8 ff
 	jr .LFBEDD4                                          ; FBEDCF  68 03
 .LFBEDD1:
-	calr sub_FBED94                                      ; FBEDD1  1e c0 ff
+	calr CombiEdit_CompareOn                                      ; FBEDD1  1e c0 ff
 .LFBEDD4:
 	ret                                                  ; FBEDD4  0e
 sub_FBEDD5:
@@ -108548,7 +108551,7 @@ sub_FBEDD5:
 	lda xwa, (0x1d00:16)                                ; FBEDF3  f1 00 1d 30
 	ld (xiz-8), xwa                                      ; FBEDF7  be f8 60
 	ldw de, 0x00                                         ; FBEDFA  32 00 00
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEDFD  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEDFD  c1 7f 27 3f 01
 	jr nz, .LFBEE43                                      ; FBEE02  6e 3f
 	ldw bc, 0x7620                                       ; FBEE04  31 20 76
 	ld (xiz-10), bc                                      ; FBEE07  be f6 51
@@ -108620,7 +108623,7 @@ sub_FBEE83:
 	push XIX                                             ; FBEE89  3c
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEE8A  c1 76 20 3f 16
 	jr nz, .LFBEED3                                      ; FBEE8F  6e 42
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEE91  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEE91  c1 7f 27 3f 01
 	jr nz, .LFBEED3                                      ; FBEE96  6e 3b
 	lda xbc, (0x7620:16)                                ; FBEE98  f1 20 76 31
 	ld (xiz-4), xbc                                      ; FBEE9C  be fc 61
@@ -108682,7 +108685,7 @@ ScreenButton_CombiEditDspEffect:
 	link XIZ,0x0000                                      ; FBEEEC  ee 0c 00 00
 	pushw hl                                             ; FBEEF0  2b
 	ld HL,(XIZ+0x08)                                     ; FBEEF1  9e 08 23
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEEF4  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEEF4  c1 7f 27 3f 01
 	jr nz, .LFBEF03                                      ; FBEEF9  6e 08
 	cp HL,0x001e                                         ; FBEEFB  db cf 1e 00
 	jr nz, .LFBEF17                                      ; FBEEFF  6e 16
@@ -108805,7 +108808,7 @@ Screen_CombinationNaming_Leave:
 ; ---------------------------------------------------------------------
 Screen_CombinationNaming_Button:
 	link XIZ,0x0000                                      ; FBEF76  ee 0c 00 00
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEF7A  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEF7A  c1 7f 27 3f 01
 	jr nz, .LFBEF8D                                      ; FBEF7F  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBEF81  9e 08 3f 1e 00
 	jr nz, .LFBEFAD                                      ; FBEF86  6e 25
@@ -109040,7 +109043,7 @@ ScreenEnterBody_CombinationNaming:
 	link XIZ,0xfffc                                      ; FBF18B  ee 0c fc ff
 	pushw hl                                             ; FBF18F  2b
 	push XIX                                             ; FBF190  3c
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBF191  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBF191  c1 7f 27 3f 01
 	jr nz, .LFBF1BE                                      ; FBF196  6e 26
 	lda xbc, (0x22f0:16)                                ; FBF198  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF19C  be fc 61
@@ -109121,7 +109124,7 @@ ScreenButtonBody_CombinationNaming:
 	ld HL,(XIZ+0x08)                                     ; FBF23B  9e 08 23
 	cp HL,0x001f                                         ; FBF23E  db cf 1f 00
 	jr ugt, .LFBF26F                                     ; FBF242  6b 2b
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBF244  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBF244  c1 7f 27 3f 01
 	jr nz, .LFBF256                                      ; FBF249  6e 0b
 	cp HL,0x001e                                         ; FBF24B  db cf 1e 00
 	jr nz, .LFBF26F                                      ; FBF24F  6e 1e
@@ -109346,7 +109349,7 @@ ScreenButtonBody_CombiEditConfigure:
 	link XIZ,0x0000                                      ; FBF453  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF457  c1 76 20 3f 16
 	jr nz, .LFBF471                                      ; FBF45C  6e 13
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBF45E  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBF45E  c1 7f 27 3f 01
 	jr nz, .LFBF471                                      ; FBF463  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBF465  9e 08 3f 1e 00
 	jr nz, .LFBF491                                      ; FBF46A  6e 25
@@ -110037,7 +110040,7 @@ ScreenButton_CombiEditMenu:
 	link XIZ,0x0000                                      ; FBFAF2  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBFAF6  c1 76 20 3f 16
 	jr nz, .LFBFB10                                      ; FBFAFB  6e 13
-	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBFAFD  c1 7f 27 3f 01
+	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBFAFD  c1 7f 27 3f 01
 	jr nz, .LFBFB10                                      ; FBFB02  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBFB04  9e 08 3f 1e 00
 	jr nz, .LFBFB30                                      ; FBFB09  6e 25

@@ -345,6 +345,9 @@
 	.equ Smf_VlqBytes,				0x1193	; the raw bytes of a variable-length quantity -- Smf_ReadVlqBytes
 	.equ Smf_VlqValue,				0x1198	; its decoded 24-bit value (0x1198..0x119A) -- Smf_DecodeVlq
 
+; ---- wsa1/notes/prom_ab_read_names_2026_10_04.py -- "CompareKey_CombiEdit / CombiEdit_CompareOn / _CompareOff (2026-10-04)"
+	.equ CombiEdit_Comparing,			0x277f	; 1 while COMBINATION EDIT compares (the COMPARE key toggles it) -- CombiEdit_CompareOn sets it, CombiEdit_CompareOff clears it
+
 ; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "2. The MIDI-in rings"
 	.equ MidiIn_PortARing,				0x600c1e	; MIDI port A's received-byte ring (0x400) -- MidiIn_PumpPortA, MidiIn_RoutePortA
 	.equ MidiIn_PortBRing,				0x601028	; MIDI port B's received-byte ring (0x400) -- MidiIn_PumpPortB, MidiIn_RoutePortB
