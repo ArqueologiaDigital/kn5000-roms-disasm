@@ -499,6 +499,18 @@ ROWS = [
     ("F31852", "LCD_BlankThenSetPanel3Layer_Copy",
      "byte for byte LCD_BlankThenSetPanel3Layer (prom_a 0xF99000): SWI 7 service 0x0C with C = 0, then 0x10.\n"
      "wsa1_exact_copy_names.py refuses it only because prom_a has two names for that body; 36 call sites."),
+    # prom_a 0xFEF7D2-0xFEF86C: an interpreter-A record's opcode IS the SWI 7 service it calls (FINDINGS-ui-display-list.md:
+    # the bound 0x24 is one past the last service), so op 0x1B with four words is LCD_Svc_1B_EraseRect (x0, y0, x1, y1).
+    ("FEF7E6", "NoteEdit_EraseEditArea",
+     "runs DisplayList_FEF7F5, one op-0x1B record: LCD_Svc_1B_EraseRect (0x10, 0x29)-(0x102, 0xAE)."),
+    ("FEF7E1", "NoteEdit_EraseEditArea_Layer0", "LCD_CurrentLayer = 0, then falls into NoteEdit_EraseEditArea."),
+    ("FEF804", "DrumEdit_EraseEditArea",
+     "runs DisplayList_FEF813: LCD_Svc_1B_EraseRect (0x58, 0x29)-(0x102, 0xAE): NOTE EDIT's area from x = 0x58."),
+    ("FEF7FF", "DrumEdit_EraseEditArea_Layer0", "LCD_CurrentLayer = 0, then falls into DrumEdit_EraseEditArea."),
+    ("FEF7D2", "EditScreen_EraseEditArea_Layer0",
+     "EditScreen_Mode bit 0 (DRUM EDIT) -> DrumEdit_EraseEditArea_Layer0, else NoteEdit_EraseEditArea_Layer0.  22 call sites."),
+    ("FEF859", "EditScreen_EraseEditArea_Layer1",
+     "LCD_CurrentLayer = 1, then by EditScreen_Mode bit 0 DrumEdit_ or NoteEdit_EraseEditArea."),
 ]
 
 

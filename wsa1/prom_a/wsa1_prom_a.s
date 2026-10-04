@@ -176021,8 +176021,8 @@ sub_FE8F97:
 	calr NoteEdit_DrawKeyboardRuler                                          ; FE8FC4  1e 75 fd
 	ld (0x601f58:24), 0x81                             ; FE8FC7  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FE8FCD  f2 59 1f 60 00 04
-	calr sub_FEF7D2                                          ; FE8FD3  1e fc 67
-	calr sub_FEF859                                          ; FE8FD6  1e 80 68
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE8FD3  1e fc 67
+	calr EditScreen_EraseEditArea_Layer1                                          ; FE8FD6  1e 80 68
 	calr sub_FEFEBF                                          ; FE8FD9  1e e3 6e
 .LFE8FDC:
 	ret                                                  ; FE8FDC  0e
@@ -176090,7 +176090,7 @@ sub_FE8FFD:
 	jr .LFE9027                                          ; FE907A  68 ab
 .LFE907C:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FE907C  c2 5b 1f 60 3c fe
-	calr sub_FEF859                                          ; FE9082  1e d4 67
+	calr EditScreen_EraseEditArea_Layer1                                          ; FE9082  1e d4 67
 	ld a, (0x601f34:24)                                 ; FE9085  c2 34 1f 60 21
 	ld (0x601f6f:24), a                                 ; FE908A  f2 6f 1f 60 41
 	calr sub_FE8F97                                      ; FE908F  1e 05 ff
@@ -176100,7 +176100,7 @@ sub_FE8FFD:
 	jr nz, .LFE90AE                                      ; FE909D  6e 0f
 	calr sub_FE9290                                      ; FE909F  1e ee 01
 	calr sub_FE9148                                      ; FE90A2  1e a3 00
-	calr sub_FEF7D2                                          ; FE90A5  1e 2a 67
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE90A5  1e 2a 67
 	calr sub_FEFEBF                                          ; FE90A8  1e 14 6e
 	jrl .LFE9027                                         ; FE90AB  78 79 ff
 .LFE90AE:
@@ -176553,7 +176553,7 @@ sub_FE94FB:
 	calr sub_FEF7B4                                          ; FE953D  1e 74 62
 	calr sub_FEF926                                          ; FE9540  1e e3 63
 	calr sub_FEFD8A                                          ; FE9543  1e 44 68
-	calr sub_FEF7D2                                          ; FE9546  1e 89 62
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE9546  1e 89 62
 	calr sub_FEFEBF                                          ; FE9549  1e 73 69
 	calr sub_FEF778                                          ; FE954C  1e 29 62
 	calr sub_FEF8D6                                          ; FE954F  1e 84 63
@@ -176594,7 +176594,7 @@ sub_FE955D:
 	calr sub_FEF7B4                                          ; FE95A8  1e 09 62
 	calr sub_FEF926                                          ; FE95AB  1e 78 63
 	calr sub_FEFD8A                                          ; FE95AE  1e d9 67
-	calr sub_FEF7D2                                          ; FE95B1  1e 1e 62
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE95B1  1e 1e 62
 	calr sub_FEFEBF                                          ; FE95B4  1e 08 69
 	calr sub_FEF778                                          ; FE95B7  1e be 61
 	calr sub_FEF8D6                                          ; FE95BA  1e 19 63
@@ -176669,7 +176669,7 @@ sub_FE9648:
 	calr sub_FEF7B4                                          ; FE967E  1e 33 61
 	calr sub_FEF926                                          ; FE9681  1e a2 62
 	calr sub_FEFD8A                                          ; FE9684  1e 03 67
-	calr sub_FEF7D2                                          ; FE9687  1e 48 61
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE9687  1e 48 61
 	calr sub_FEFEBF                                          ; FE968A  1e 32 68
 	calr sub_FEF778                                          ; FE968D  1e e8 60
 	calr sub_FEF8D6                                          ; FE9690  1e 43 62
@@ -176694,7 +176694,7 @@ sub_FE9694:
 	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
 	calr sub_FEF926                                          ; FE96D0  1e 53 62
 	calr sub_FEFD8A                                          ; FE96D3  1e b4 66
-	calr sub_FEF7D2                                          ; FE96D6  1e f9 60
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE96D6  1e f9 60
 	calr sub_FEFEBF                                          ; FE96D9  1e e3 67
 	calr sub_FEF778                                          ; FE96DC  1e 99 60
 	calr sub_FEF8D6                                          ; FE96DF  1e f4 61
@@ -176718,7 +176718,7 @@ sub_FE96E3:
 sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FE9762                                      ; FE9711  1e 4e 00
 	calr sub_FE8F11                                          ; FE9714  1e fa f7
-	calr sub_FEF7D2                                          ; FE9717  1e b8 60
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE9717  1e b8 60
 	calr sub_FEFEBF                                          ; FE971A  1e a2 67
 	calr sub_FEA628                                          ; FE971D  1e 08 0f
 	sub XWA,XBC                                          ; FE9720  e9 a0
@@ -176727,7 +176727,7 @@ sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	ret                                                  ; FE972A  0e
 sub_FE972B:   ; entry: named by 1 `.long` operand, first at 0xFE9319
 	calr sub_FE8F11                                          ; FE972B  1e e3 f7
-	calr sub_FEF7D2                                          ; FE972E  1e a1 60
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE972E  1e a1 60
 	calr sub_FEFEBF                                          ; FE9731  1e 8b 67
 	calr sub_FEFD8A                                          ; FE9734  1e 53 66
 	ret                                                  ; FE9737  0e
@@ -176735,7 +176735,7 @@ sub_FE9738:
 	calr sub_FEA54F                                          ; FE9738  1e 14 0e
 	ret                                                  ; FE973B  0e
 sub_FE973C:   ; entry: named by 1 `.long` operand, first at 0xFE931D
-	calr sub_FEF7D2                                          ; FE973C  1e 93 60
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE973C  1e 93 60
 	calr sub_FEFEBF                                          ; FE973F  1e 7d 67
 	m_bit 0, MD24, 0x601f5b                              ; FE9742  f2 5b 1f 60 c8
 	jr z, .LFE9753                                       ; FE9747  66 0a
@@ -177385,8 +177385,8 @@ sub_FE9D2E:
 	calr sub_FEF796                                          ; FE9D34  1e 5f 5a
 	ldw (0x601f54:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D3E  1e 73 5a
-	calr sub_FEF7D2                                          ; FE9D41  1e 8e 5a
-	calr sub_FEF859                                          ; FE9D44  1e 12 5b
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D41  1e 8e 5a
+	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D44  1e 12 5b
 	xor WA,WA                                            ; FE9D47  d8 d0
 	ld (EditCursor_Beat:24), wa                                ; FE9D49  f2 41 1f 60 50
 	ld (EditCursor_Tick:24), a                                 ; FE9D4E  f2 43 1f 60 41
@@ -177399,8 +177399,8 @@ sub_FE9D60:
 	calr sub_FEF796                                          ; FE9D66  1e 2d 5a
 	ldw (0x601f54:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D70  1e 41 5a
-	calr sub_FEF7D2                                          ; FE9D73  1e 5c 5a
-	calr sub_FEF859                                          ; FE9D76  1e e0 5a
+	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D73  1e 5c 5a
+	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D76  1e e0 5a
 	xor WA,WA                                            ; FE9D79  d8 d0
 	ld (EditCursor_Beat:24), wa                                ; FE9D7B  f2 41 1f 60 50
 	ld (EditCursor_Tick:24), a                                 ; FE9D80  f2 43 1f 60 41
@@ -177769,14 +177769,14 @@ sub_FEA0FE:
 sub_FEA12D:
 	m_bit 7, MD24, 0x601f58                              ; FEA12D  f2 58 1f 60 cf
 	jr z, .LFEA13E                                       ; FEA132  66 0a
-	calr sub_FEF859                                          ; FEA134  1e 22 57
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEA134  1e 22 57
 	calr sub_FF019D                                          ; FEA137  1e 63 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA13A  1e 1c 5d
 	ret                                                  ; FEA13D  0e
 .LFEA13E:
-	calr sub_FEF7D2                                          ; FEA13E  1e 91 56
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEA13E  1e 91 56
 	calr sub_FEFF2D                                          ; FEA141  1e e9 5d
-	calr sub_FEF859                                          ; FEA144  1e 12 57
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEA144  1e 12 57
 	calr sub_FF019D                                          ; FEA147  1e 53 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA14A  1e 0c 5d
 	ret                                                  ; FEA14D  0e
@@ -178640,8 +178640,8 @@ NoteEdit_LcdKeyRow2:
 	calr NoteEdit_DrawKeyboardRuler                                          ; FEA9C9  1e 70 e3
 	ld (0x601f58:24), 0x81                             ; FEA9CC  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEA9D2  f2 59 1f 60 00 04
-	calr sub_FEF7D2                                          ; FEA9D8  1e f7 4d
-	calr sub_FEF859                                          ; FEA9DB  1e 7b 4e
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEA9D8  1e f7 4d
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEA9DB  1e 7b 4e
 	ret                                                  ; FEA9DE  0e
 .LFEA9DF:
 	ret                                                  ; FEA9DF  0e
@@ -178664,8 +178664,8 @@ NoteEdit_LcdKeyRow3:
 	calr NoteEdit_DrawKeyboardRuler                                          ; FEAA09  1e 30 e3
 	ld (0x601f58:24), 0x81                             ; FEAA0C  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEAA12  f2 59 1f 60 00 04
-	calr sub_FEF7D2                                          ; FEAA18  1e b7 4d
-	calr sub_FEF859                                          ; FEAA1B  1e 3b 4e
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEAA18  1e b7 4d
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEAA1B  1e 3b 4e
 	ret                                                  ; FEAA1E  0e
 .LFEAA1F:
 	ret                                                  ; FEAA1F  0e
@@ -178700,7 +178700,7 @@ EditScreen_LcdKeyRow4:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAA5F  c2 5b 1f 60 3c fe
 	calr sub_FEF778                                          ; FEAA65  1e 10 4d
 	calr sub_FEF8D6                                          ; FEAA68  1e 6b 4e
-	calr sub_FEF7D2                                          ; FEAA6B  1e 64 4d
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEAA6B  1e 64 4d
 	calr sub_FEFEBF                                          ; FEAA6E  1e 4e 54
 	calr sub_FEFD8A                                          ; FEAA71  1e 16 53
 	ret                                                  ; FEAA74  0e
@@ -179138,7 +179138,7 @@ sub_FEAEBC:
 	calr sub_FEAFB7                                      ; FEAED6  1e de 00
 	calr sub_FEF86D                                          ; FEAED9  1e 91 49
 	calr sub_FEB03D                                      ; FEAEDC  1e 5e 01
-	calr sub_FEF859                                          ; FEAEDF  1e 77 49
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEAEDF  1e 77 49
 	calr sub_FEF778                                          ; FEAEE2  1e 93 48
 	calr sub_FEF8D6                                          ; FEAEE5  1e ee 49
 	calr sub_FEFD8A                                          ; FEAEE8  1e 9f 4e
@@ -179153,8 +179153,8 @@ sub_FEAEBC:
 	ld (0x601f59:24), 0x05                             ; FEAF06  f2 59 1f 60 00 05
 	calr sub_FEAFB7                                      ; FEAF0C  1e a8 00
 	calr sub_FEB069                                      ; FEAF0F  1e 57 01
-	calr sub_FEF7D2                                          ; FEAF12  1e bd 48
-	calr sub_FEF859                                          ; FEAF15  1e 41 49
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEAF12  1e bd 48
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF15  1e 41 49
 	calr sub_FEF778                                          ; FEAF18  1e 5d 48
 	calr sub_FEF8D6                                          ; FEAF1B  1e b8 49
 	calr sub_FEFD8A                                          ; FEAF1E  1e 69 4e
@@ -179187,7 +179187,7 @@ sub_FEAF4A:
 	calr sub_FEAFB7                                      ; FEAF64  1e 50 00
 	calr sub_FEF86D                                          ; FEAF67  1e 03 49
 	calr sub_FEB03D                                      ; FEAF6A  1e d0 00
-	calr sub_FEF859                                          ; FEAF6D  1e e9 48
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF6D  1e e9 48
 	calr sub_FEF778                                          ; FEAF70  1e 05 48
 	calr sub_FEF8D6                                          ; FEAF73  1e 60 49
 	calr sub_FEFD8A                                          ; FEAF76  1e 11 4e
@@ -179202,8 +179202,8 @@ sub_FEAF4A:
 	ld (0x601f59:24), 0x05                             ; FEAF94  f2 59 1f 60 00 05
 	calr sub_FEAFB7                                      ; FEAF9A  1e 1a 00
 	calr sub_FEB069                                      ; FEAF9D  1e c9 00
-	calr sub_FEF7D2                                          ; FEAFA0  1e 2f 48
-	calr sub_FEF859                                          ; FEAFA3  1e b3 48
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEAFA0  1e 2f 48
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEAFA3  1e b3 48
 	calr sub_FEF778                                          ; FEAFA6  1e cf 47
 	calr sub_FEF8D6                                          ; FEAFA9  1e 2a 49
 	calr sub_FEFD8A                                          ; FEAFAC  1e db 4d
@@ -179241,7 +179241,7 @@ DrumEdit_LcdKeyRow1:
 	ret                                                  ; FEAFF0  0e
 sub_FEAFF1:   ; entry: named by 1 `.long` operand, first at 0xFE9325
 	calr sub_FE8F11                                          ; FEAFF1  1e 1d df
-	calr sub_FEF7D2                                          ; FEAFF4  1e db 47
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEAFF4  1e db 47
 	calr sub_FEFEBF                                          ; FEAFF7  1e c5 4e
 	calr sub_FEFD8A                                          ; FEAFFA  1e 8d 4d
 	ret                                                  ; FEAFFD  0e
@@ -179256,9 +179256,9 @@ DrumEdit_SoftKeyCol8:
 	ld (EditField_Note:24), a                                 ; FEB01B  f2 45 1f 60 41
 	calr sub_FEB033                                      ; FEB020  1e 10 00
 	calr sub_FE91C0                                          ; FEB023  1e 9a e1
-	calr sub_FEF859                                          ; FEB026  1e 30 48
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEB026  1e 30 48
 	calr sub_FE9290                                          ; FEB029  1e 64 e2
-	calr sub_FEF7D2                                          ; FEB02C  1e a3 47
+	calr EditScreen_EraseEditArea_Layer0                                          ; FEB02C  1e a3 47
 	calr sub_FEFEBF                                          ; FEB02F  1e 8d 4e
 	ret                                                  ; FEB032  0e
 sub_FEB033:
@@ -182019,7 +182019,7 @@ DisplayList_FEF7AA:
 sub_FEF7B4:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF7B4  f1 40 25 00 00
 	ld XIY,DisplayList_FEF7C8                            ; FEF7B9  45 c8 f7 fe 00
-	ld XIX,sub_FEF7D2                                    ; FEF7BE  44 d2 f7 fe 00
+	ld XIX,EditScreen_EraseEditArea_Layer0                                    ; FEF7BE  44 d2 f7 fe 00
 	call T_DisplayList_Run                               ; FEF7C3  1d f0 17 f4
 	ret                                                  ; FEF7C7  0e
 
@@ -182028,17 +182028,19 @@ sub_FEF7B4:
 DisplayList_FEF7C8:
 	.byte 0x1B, 0x0A                               ; FEF7C8  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x14, 0x00, 0x08, 0x01, 0x1F, 0x00  ; FEF7CA
-sub_FEF7D2:
+; EditScreen_EraseEditArea_Layer0: EditScreen_Mode bit 0 (DRUM EDIT) -> DrumEdit_EraseEditArea_Layer0, else NoteEdit_EraseEditArea_Layer0.  22 call sites.
+EditScreen_EraseEditArea_Layer0:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEF7D2  f2 70 1f 60 c8
 	jr z, .LFEF7DD                                       ; FEF7D7  66 04
-	calr sub_FEF7FF                                            ; FEF7D9  1e 23 00
+	calr DrumEdit_EraseEditArea_Layer0                                            ; FEF7D9  1e 23 00
 	ret                                                  ; FEF7DC  0e
 .LFEF7DD:
-	calr sub_FEF7E1                                      ; FEF7DD  1e 01 00
+	calr NoteEdit_EraseEditArea_Layer0                                      ; FEF7DD  1e 01 00
 	ret                                                  ; FEF7E0  0e
-sub_FEF7E1:
+; NoteEdit_EraseEditArea_Layer0: LCD_CurrentLayer = 0, then falls into NoteEdit_EraseEditArea.
+NoteEdit_EraseEditArea_Layer0:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF7E1  f1 40 25 00 00
-; sub_FEF7E6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; NoteEdit_EraseEditArea -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 4
 ; instructions to its first `ret`:
@@ -182054,9 +182056,10 @@ sub_FEF7E1:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF7E6:
+; NoteEdit_EraseEditArea: runs DisplayList_FEF7F5, one op-0x1B record: LCD_Svc_1B_EraseRect (0x10, 0x29)-(0x102, 0xAE).
+NoteEdit_EraseEditArea:
 	ld XIY,DisplayList_FEF7F5                            ; FEF7E6  45 f5 f7 fe 00
-	ld XIX,sub_FEF7FF                                    ; FEF7EB  44 ff f7 fe 00
+	ld XIX,DrumEdit_EraseEditArea_Layer0                                    ; FEF7EB  44 ff f7 fe 00
 	call T_DisplayList_Run                               ; FEF7F0  1d f0 17 f4
 	ret                                                  ; FEF7F4  0e
 
@@ -182065,9 +182068,10 @@ sub_FEF7E6:
 DisplayList_FEF7F5:
 	.byte 0x1B, 0x0A                               ; FEF7F5  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x10, 0x00, 0x29, 0x00, 0x02, 0x01, 0xAE, 0x00  ; FEF7F7
-sub_FEF7FF:
+; DrumEdit_EraseEditArea_Layer0: LCD_CurrentLayer = 0, then falls into DrumEdit_EraseEditArea.
+DrumEdit_EraseEditArea_Layer0:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF7FF  f1 40 25 00 00
-; sub_FEF804 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_EraseEditArea -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 4
 ; instructions to its first `ret`:
@@ -182083,7 +182087,9 @@ sub_FEF7FF:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF804:
+; DrumEdit_EraseEditArea: runs DisplayList_FEF813: LCD_Svc_1B_EraseRect (0x58, 0x29)-(0x102, 0xAE): NOTE EDIT's area
+;   from x = 0x58.
+DrumEdit_EraseEditArea:
 	ld XIY,DisplayList_FEF813                                    ; FEF804  45 13 f8 fe 00
 	ld XIX,sub_FEF81D                                    ; FEF809  44 1d f8 fe 00
 	call T_DisplayList_Run                               ; FEF80E  1d f0 17 f4
@@ -182141,7 +182147,7 @@ DisplayList_FEF831:
 sub_FEF83B:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF83B  f1 40 25 00 00
 	ld XIY,DisplayList_FEF84F                                    ; FEF840  45 4f f8 fe 00
-	ld XIX,sub_FEF859                                    ; FEF845  44 59 f8 fe 00
+	ld XIX,EditScreen_EraseEditArea_Layer1                                    ; FEF845  44 59 f8 fe 00
 	call T_DisplayList_Run                               ; FEF84A  1d f0 17 f4
 	ret                                                  ; FEF84E  0e
 
@@ -182150,14 +182156,15 @@ sub_FEF83B:
 DisplayList_FEF84F:
 	.byte 0x1B, 0x0A                               ; FEF84F  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0xA0, 0x00, 0xB2, 0x00, 0xC8, 0x00, 0xC0, 0x00  ; FEF851
-sub_FEF859:
+; EditScreen_EraseEditArea_Layer1: LCD_CurrentLayer = 1, then by EditScreen_Mode bit 0 DrumEdit_ or NoteEdit_EraseEditArea.
+EditScreen_EraseEditArea_Layer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF859  f1 40 25 00 01
 	m_bit 0, MD24, EditScreen_Mode                              ; FEF85E  f2 70 1f 60 c8
 	jr z, .LFEF869                                       ; FEF863  66 04
-	calr sub_FEF804                                          ; FEF865  1e 9c ff
+	calr DrumEdit_EraseEditArea                                          ; FEF865  1e 9c ff
 	ret                                                  ; FEF868  0e
 .LFEF869:
-	calr sub_FEF7E6                                          ; FEF869  1e 7a ff
+	calr NoteEdit_EraseEditArea                                          ; FEF869  1e 7a ff
 	ret                                                  ; FEF86C  0e
 ; sub_FEF86D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -182770,7 +182777,7 @@ sub_FEFD8A:
 	cp (0x601f54:24), bc                             ; FEFD92  d2 54 1f 60 f9
 	jr nc, .LFEFDAB                                      ; FEFD97  6f 12
 	calr sub_FEF796                                          ; FEFD99  1e fa f9
-	calr sub_FEF859                                          ; FEFD9C  1e ba fa
+	calr EditScreen_EraseEditArea_Layer1                                          ; FEFD9C  1e ba fa
 	calr sub_FF00ED                                          ; FEFD9F  1e 4b 03
 	calr sub_FEFDAC                                      ; FEFDA2  1e 07 00
 	calr LCD_DrawVRuleLeft_OrNothing                                            ; FEFDA5  1e b1 00
@@ -183262,23 +183269,23 @@ sub_FF0205:
 	jr z, .LFF0233                                       ; FF020A  66 27
 	m_bit 7, MD24, 0x601f58                              ; FF020C  f2 58 1f 60 cf
 	jr z, .LFF0223                                       ; FF0211  66 10
-	calr sub_FEF7D2                                          ; FF0213  1e bc f5
+	calr EditScreen_EraseEditArea_Layer0                                          ; FF0213  1e bc f5
 	calr sub_FEFF2D                                          ; FF0216  1e 14 fd
-	calr sub_FEF859                                          ; FF0219  1e 3d f6
+	calr EditScreen_EraseEditArea_Layer1                                          ; FF0219  1e 3d f6
 	calr sub_FF0243                                      ; FF021C  1e 24 00
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF021F  1e 37 fc
 	ret                                                  ; FF0222  0e
 .LFF0223:
-	calr sub_FEF7D2                                          ; FF0223  1e ac f5
+	calr EditScreen_EraseEditArea_Layer0                                          ; FF0223  1e ac f5
 	calr sub_FEFF2D                                          ; FF0226  1e 04 fd
-	calr sub_FEF859                                          ; FF0229  1e 2d f6
+	calr EditScreen_EraseEditArea_Layer1                                          ; FF0229  1e 2d f6
 	calr sub_FF019D                                      ; FF022C  1e 6e ff
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF022F  1e 27 fc
 	ret                                                  ; FF0232  0e
 .LFF0233:
-	calr sub_FEF7D2                                          ; FF0233  1e 9c f5
+	calr EditScreen_EraseEditArea_Layer0                                          ; FF0233  1e 9c f5
 	calr sub_FEFEBF                                          ; FF0236  1e 86 fc
-	calr sub_FEF859                                          ; FF0239  1e 1d f6
+	calr EditScreen_EraseEditArea_Layer1                                          ; FF0239  1e 1d f6
 	calr sub_FF00ED                                      ; FF023C  1e ae fe
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF023F  1e 17 fc
 	ret                                                  ; FF0242  0e

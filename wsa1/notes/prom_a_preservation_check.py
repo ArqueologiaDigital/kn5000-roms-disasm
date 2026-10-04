@@ -2782,6 +2782,12 @@ RENAMES = {
     "sub_F7FCE6": "Transp0se_RedrawFields",
     "sub_FAA742": "Tempo_ApplyBpm",
     "sub_F31852": "LCD_BlankThenSetPanel3Layer_Copy",
+    "sub_FEF7E6": "NoteEdit_EraseEditArea",
+    "sub_FEF7E1": "NoteEdit_EraseEditArea_Layer0",
+    "sub_FEF804": "DrumEdit_EraseEditArea",
+    "sub_FEF7FF": "DrumEdit_EraseEditArea_Layer0",
+    "sub_FEF7D2": "EditScreen_EraseEditArea_Layer0",
+    "sub_FEF859": "EditScreen_EraseEditArea_Layer1",
 }
 
 
