@@ -1,0 +1,8 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bButtonTable_RealtimeRecordScreen\b/ScreenButtons_RealtimeRecordScreen/g
+s/\bButtonTable_MetronomeBalanceScreen\b/ScreenButtons_MetronomeBalanceScreen/g
+s/\bButtonTable_CycleRecordScreen\b/ScreenButtons_CycleRecordScreen/g
+s/\bButtonTable_SeqPlayScreen\b/ScreenButtons_SeqPlayScreen/g
+s/\bButtonTable_CyclePlayScreen\b/ScreenButtons_CyclePlayScreen/g
+s/\bButtonTable_CyclePlayEditScreen\b/ScreenButtons_CyclePlayEditScreen/g
+s/\bButtonTable_CyclePlayEditScreen29\b/ScreenButtons_CyclePlayEditScreen29/g

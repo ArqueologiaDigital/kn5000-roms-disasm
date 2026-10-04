@@ -21,7 +21,8 @@ QUESTION IT ANSWERS
   ScreenButton_<Screen>; the enter and leave routines ScreenEnter_ / ScreenLeave_<Screen> (their one-line
   forwarders Fwd_* get the same name + _Fwd).  An entry at slot k gets <Control>_<Screen> from the CONTROL
   map (notes/wave7_panel_names_round11.py: slots 0-7 SoftKeyCol1-8, 8-12 LcdKeyRow1-5, 0x0F ExitKey, 0x10 PageKey)
-  when it is framed (sub_ / _FXXXXX) and sits in no other table.  REFUSED: slots 0x11-0x18 (the variant-1
+  when it is framed (sub_ / _FXXXXX) and sits in no other table.  The tables are ScreenButtons_<Screen>, not ButtonTable_<Screen>:
+  notes/prom_b_panel_names_round12.py finds ITS 32 tables by scanning ButtonTable_* labels in file order (2026-10-04).  REFUSED: slots 0x11-0x18 (the variant-1
   already-held forms, refused the same way by round 11), a routine in two tables, a bare `ret` stub, and a
   name that is already taken.
 
@@ -80,11 +81,11 @@ def plan():
             where[e].add(b)
     for b, (screen, vid, tri) in sorted(SCREENS.items()):
         lab, ents = tabs[b]
-        rows.append((lab, "ButtonTable_" + screen, "ButtonTable_%s: the 32-slot button table of %s (view-B screen 0x%02X), indexed by panel\\n"
+        rows.append((lab, "ScreenButtons_" + screen, "ScreenButtons_%s: the 32-slot button table of %s (view-B screen 0x%02X), indexed by panel\\n"
                      "  button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py)." % (screen, screen, vid)))
         enter, leave, button = thunk(tri), thunk(tri + 4), thunk(tri + 8)
         if button and button.startswith("CallSelectorTable_"):
-            rows.append((button, "ScreenButton_" + screen, "ScreenButton_%s: the +8 BUTTON method of screen 0x%02X -- ButtonTable_%s entry HL." % (screen, vid, screen)))
+            rows.append((button, "ScreenButton_" + screen, "ScreenButton_%s: the +8 BUTTON method of screen 0x%02X -- ScreenButtons_%s entry HL." % (screen, vid, screen)))
         for kind, f in (("Enter", enter), ("Leave", leave)):
             if not f or not f.startswith("Fwd_"):
                 continue
@@ -109,7 +110,7 @@ def plan():
             if body_first(e) == "ret":
                 refused.append((e, "a bare ret"))
                 continue
-            rows.append((e, "%s_%s" % (CONTROL[k], screen), "%s_%s: ButtonTable_%s[%d] -- the %s handler of %s (notes/prom_b_sequencer_screen_buttons.py)." % (
+            rows.append((e, "%s_%s" % (CONTROL[k], screen), "%s_%s: ScreenButtons_%s[%d] -- the %s handler of %s (notes/prom_b_sequencer_screen_buttons.py)." % (
                 CONTROL[k], screen, screen, k, CONTROL[k], screen)))
     return rows, refused
 

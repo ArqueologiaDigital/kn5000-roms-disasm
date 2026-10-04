@@ -36562,7 +36562,7 @@ sub_F1195A_Skip39:
 	ret	; F122C4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F122C5
+; ScreenEnterBody_MainOutEqualizer
 ; Called from: T_F42F68 (x1)
 ; Touches: (0x2075) (0x207C) (0x207D) (0x209B) (0x209C) (0x2797)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg
@@ -36574,7 +36574,8 @@ sub_F1195A_Skip39:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F122C5:		; <- T_F42F68
+; ScreenEnterBody_MainOutEqualizer: the enter code of MAIN OUT EQUALIZER (T_F42F68, called only by Screen_MainOutEqualizer_Enter).
+ScreenEnterBody_MainOutEqualizer:		; <- T_F42F68
 	push	xix	; F122C5  push XIX
 	lda	xix, (10137:16)	; F122C6  lda XIX,0x2799
 	ld	c, (UI_ScreenId:16)	; F122CA  ld C,(0x207c)
@@ -36616,7 +36617,7 @@ sub_F1195A_Epilogue:
 	ret	; F12333  ret
 
 ; --------------------------------------------------------------------------
-; sub_F12334
+; ScreenButtonBody_MainOutEqualizer
 ; Called from: T_F42F6C (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelCode_ToSlotAndFlags
@@ -36628,14 +36629,16 @@ sub_F1195A_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F12334:		; <- T_F42F6C
+; ScreenButtonBody_MainOutEqualizer: the button code of MAIN OUT EQUALIZER (T_F42F6C, called only by
+;   Screen_MainOutEqualizer_Button): T_PanelCode_ToSlotAndFlags, then DispatchTable_F1394F[slot].
+ScreenButtonBody_MainOutEqualizer:		; <- T_F42F6C
 	link XIZ,0x0000	; F12334  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F12338  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F1233B  pushw (XIZ+0x08)
 	call	T_PanelCode_ToSlotAndFlags	; F1233E  call 0xf42c74
 	mul	a, 4	; F12342  mul A,0x04
 	extz	xwa	; F12345  extz XWA
-	add	xwa, DispatchTable_F1394F	; F12347  add XWA,0x00f1394f
+	add	xwa, ButtonTable23_MainOutEqualizer	; F12347  add XWA,0x00f1394f
 	ld	xbc, (xwa)	; F1234D  ld XBC,(XWA)
 	lda	xiy, (sub_F12334_Resume:24)	; F1234F  lda XIY,0xf12357
 	push	xiy	; F12354  push XIY
@@ -36646,7 +36649,7 @@ sub_F12334_Resume:
 	ret	; F1235A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1235B
+; ExitKey_MainOutEqualizer
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2070) (0x2071) (0x28B0)
@@ -36660,7 +36663,9 @@ sub_F12334_Resume:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1235B:
+; ExitKey_MainOutEqualizer: slot 15 of ButtonTable23_MainOutEqualizer, the 23-slot button table ScreenButtonBody_MainOutEqualizer dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the ExitKey handler (notes/prom_ab_slot23_button_names.py).
+ExitKey_MainOutEqualizer:
 	ld	c, (PanelEvent_Flags:16)	; F1235B  ld C,(0x28b0)
 	and	c, 1	; F1235F  and C,0x01
 	jr	nz, sub_F1195A_Return	; F12362  jr NZ,0xf1236d
@@ -36670,7 +36675,7 @@ sub_F1195A_Return:
 	ret	; F1236D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1236E
+; SoftKeyCol2_MainOutEqualizer
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
@@ -36685,7 +36690,9 @@ sub_F1195A_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1236E:
+; SoftKeyCol2_MainOutEqualizer: slot 1 of ButtonTable23_MainOutEqualizer, the 23-slot button table ScreenButtonBody_MainOutEqualizer dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol2 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol2_MainOutEqualizer:
 	pushw	1	; F1236E  push 0x0001
 	pushw	0	; F12371  push 0x0000
 	calr	sub_F10252	; F12374  calr 0xf10252
@@ -36695,7 +36702,7 @@ sub_F1236E:
 	ret	; F12382  ret
 
 ; --------------------------------------------------------------------------
-; sub_F12383
+; SoftKeyCol3_MainOutEqualizer
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
@@ -36710,7 +36717,9 @@ sub_F1236E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F12383:
+; SoftKeyCol3_MainOutEqualizer: slot 2 of ButtonTable23_MainOutEqualizer, the 23-slot button table ScreenButtonBody_MainOutEqualizer dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol3 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol3_MainOutEqualizer:
 	pushw	1	; F12383  push 0x0001
 	pushw	0	; F12386  push 0x0000
 	calr	sub_F103AB	; F12389  calr 0xf103ab
@@ -36720,7 +36729,7 @@ sub_F12383:
 	ret	; F12397  ret
 
 ; --------------------------------------------------------------------------
-; sub_F12398
+; SoftKeyCol5_MainOutEqualizer
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
@@ -36735,7 +36744,9 @@ sub_F12383:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F12398:
+; SoftKeyCol5_MainOutEqualizer: slot 4 of ButtonTable23_MainOutEqualizer, the 23-slot button table ScreenButtonBody_MainOutEqualizer dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol5 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol5_MainOutEqualizer:
 	pushw	3	; F12398  push 0x0003
 	pushw	1	; F1239B  push 0x0001
 	calr	sub_F10252	; F1239E  calr 0xf10252
@@ -36745,7 +36756,7 @@ sub_F12398:
 	ret	; F123AC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F123AD
+; SoftKeyCol6_MainOutEqualizer
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2540) (0x2799)
@@ -36761,7 +36772,9 @@ sub_F12398:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F123AD:
+; SoftKeyCol6_MainOutEqualizer: slot 5 of ButtonTable23_MainOutEqualizer, the 23-slot button table ScreenButtonBody_MainOutEqualizer dispatches through
+;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol6 handler (notes/prom_ab_slot23_button_names.py).
+SoftKeyCol6_MainOutEqualizer:
 	pushw	3	; F123AD  push 0x0003
 	pushw	1	; F123B0  push 0x0001
 	calr	sub_F103AB	; F123B3  calr 0xf103ab
@@ -38883,7 +38896,7 @@ EffectParamNumberMap:
 
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F1394F -- 23 32-bit words, every one an address in
+; ButtonTable23_MainOutEqualizer -- 23 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  6
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -38915,13 +38928,14 @@ EffectParamNumberMap:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F1394F:
+; ButtonTable23_MainOutEqualizer: MAIN OUT EQUALIZER's 23-slot button table, indexed by T_PanelCode_ToSlotAndFlags's slot.
+ButtonTable23_MainOutEqualizer:
 	.long	T_F42C70	; F1394F  [0] -> 0xF42C70
-	.long	sub_F1236E	; F13953  [1] -> sub_F1236E
-	.long	sub_F12383	; F13957  [2] -> sub_F12383
+	.long	SoftKeyCol2_MainOutEqualizer	; F13953  [1] -> SoftKeyCol2_MainOutEqualizer
+	.long	SoftKeyCol3_MainOutEqualizer	; F13957  [2] -> SoftKeyCol3_MainOutEqualizer
 	.long	T_F42C70	; F1395B  [3] -> 0xF42C70
-	.long	sub_F12398	; F1395F  [4] -> sub_F12398
-	.long	sub_F123AD	; F13963  [5] -> sub_F123AD
+	.long	SoftKeyCol5_MainOutEqualizer	; F1395F  [4] -> SoftKeyCol5_MainOutEqualizer
+	.long	SoftKeyCol6_MainOutEqualizer	; F13963  [5] -> SoftKeyCol6_MainOutEqualizer
 	.long	T_F42C70	; F13967  [6] -> 0xF42C70
 	.long	T_F42C70	; F1396B  [7] -> 0xF42C70
 	.long	T_F42C70	; F1396F  [8] -> 0xF42C70
@@ -38931,7 +38945,7 @@ DispatchTable_F1394F:
 	.long	T_F42C70	; F1397F  [12] -> 0xF42C70
 	.long	T_F42C70	; F13983  [13] -> 0xF42C70
 	.long	T_F42C70	; F13987  [14] -> 0xF42C70
-	.long	sub_F1235B	; F1398B  [15] -> sub_F1235B
+	.long	ExitKey_MainOutEqualizer	; F1398B  [15] -> ExitKey_MainOutEqualizer
 	.long	T_F42C70	; F1398F  [16] -> 0xF42C70
 	.long	T_F42C70	; F13993  [17] -> 0xF42C70
 	.long	T_F42C70	; F13997  [18] -> 0xF42C70
@@ -90784,8 +90798,8 @@ T_F42F58:	jp sub_F114DA  ; -> prom_b 0x114DA   x8
 T_F42F5C:	jp sub_F1156B  ; -> prom_b 0x1156B   x4
 T_DspEffect_SetAlgorithm:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
 T_F42F64:	jp sub_F11556  ; -> prom_b 0x11556
-T_F42F68:	jp sub_F122C5  ; -> prom_b 0x122C5   x1
-T_F42F6C:	jp sub_F12334  ; -> prom_b 0x12334   x1
+T_F42F68:	jp ScreenEnterBody_MainOutEqualizer  ; -> prom_b 0x122C5   x1
+T_F42F6C:	jp ScreenButtonBody_MainOutEqualizer  ; -> prom_b 0x12334   x1
 	.fill 0x10, 1, 0x0E  ; 0xF42F70: 16 x ret
 T_F42F80:	jp sub_F0B91C  ; -> prom_b 0x0B91C   x6
 T_SoundEditNaming_SoftKeyCol1:	jp SoundEditNaming_SoftKeyCol1  ; -> prom_b 0x0B9B3   x3
@@ -114798,7 +114812,7 @@ Stub_Ret_F55018:
 ; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
 ; Called from: thunk T_PanelCode_ToSlotAndFlags (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
-;              ScreenButtonBody_DspEffect (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CreatorSelectController and
+;              ScreenButtonBody_DspEffect (0xF0F194), ScreenButtonBody_MainOutEqualizer (0xF12347), ScreenButton_CreatorSelectController and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
 ;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags
@@ -116229,9 +116243,9 @@ ScreenLeave_RealtimeRecordScreen_Fwd:		; <- T_F40DC4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_RealtimeRecordScreen: the +8 BUTTON method of screen 0x06 -- ButtonTable_RealtimeRecordScreen entry HL.
+; ScreenButton_RealtimeRecordScreen: the +8 BUTTON method of screen 0x06 -- ScreenButtons_RealtimeRecordScreen entry HL.
 ScreenButton_RealtimeRecordScreen:		; <- T_F40DC8
-	ld	xix, ButtonTable_RealtimeRecordScreen	; F55818  ld XIX,0x00f558ae
+	ld	xix, ScreenButtons_RealtimeRecordScreen	; F55818  ld XIX,0x00f558ae
 	call	T_PanelButton_CallTableEntry	; F5581D  call 0xf41b08
 	ret	; F55821  ret
 
@@ -116307,9 +116321,9 @@ ScreenLeave_MetronomeBalanceScreen_Fwd:		; <- T_F40E04
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_MetronomeBalanceScreen: the +8 BUTTON method of screen 0x0C -- ButtonTable_MetronomeBalanceScreen entry HL.
+; ScreenButton_MetronomeBalanceScreen: the +8 BUTTON method of screen 0x0C -- ScreenButtons_MetronomeBalanceScreen entry HL.
 ScreenButton_MetronomeBalanceScreen:		; <- T_F40E08
-	ld	xix, ButtonTable_MetronomeBalanceScreen	; F5582E  ld XIX,0x00f5592e
+	ld	xix, ScreenButtons_MetronomeBalanceScreen	; F5582E  ld XIX,0x00f5592e
 	call	T_PanelButton_CallTableEntry	; F55833  call 0xf41b08
 	ret	; F55837  ret
 
@@ -116385,9 +116399,9 @@ ScreenLeave_CycleRecordScreen_Fwd:		; <- T_F40DD4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_CycleRecordScreen: the +8 BUTTON method of screen 0x08 -- ButtonTable_CycleRecordScreen entry HL.
+; ScreenButton_CycleRecordScreen: the +8 BUTTON method of screen 0x08 -- ScreenButtons_CycleRecordScreen entry HL.
 ScreenButton_CycleRecordScreen:		; <- T_F40DD8
-	ld	xix, ButtonTable_CycleRecordScreen	; F55844  ld XIX,0x00f559ae
+	ld	xix, ScreenButtons_CycleRecordScreen	; F55844  ld XIX,0x00f559ae
 	call	T_PanelButton_CallTableEntry	; F55849  call 0xf41b08
 	ret	; F5584D  ret
 
@@ -116463,9 +116477,9 @@ ScreenLeave_SeqPlayScreen_Fwd:		; <- T_F40DA4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_SeqPlayScreen: the +8 BUTTON method of screen 0x12 -- ButtonTable_SeqPlayScreen entry HL.
+; ScreenButton_SeqPlayScreen: the +8 BUTTON method of screen 0x12 -- ScreenButtons_SeqPlayScreen entry HL.
 ScreenButton_SeqPlayScreen:		; <- T_F40DA8
-	ld	xix, ButtonTable_SeqPlayScreen	; F5585E  ld XIX,0x00f55a2e
+	ld	xix, ScreenButtons_SeqPlayScreen	; F5585E  ld XIX,0x00f55a2e
 	call	T_PanelButton_CallTableEntry	; F55863  call 0xf41b08
 	ret	; F55867  ret
 
@@ -116541,9 +116555,9 @@ ScreenLeave_CyclePlayScreen_Fwd:		; <- T_F40DB4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_CyclePlayScreen: the +8 BUTTON method of screen 0x14 -- ButtonTable_CyclePlayScreen entry HL.
+; ScreenButton_CyclePlayScreen: the +8 BUTTON method of screen 0x14 -- ScreenButtons_CyclePlayScreen entry HL.
 ScreenButton_CyclePlayScreen:		; <- T_F40DB8
-	ld	xix, ButtonTable_CyclePlayScreen	; F55874  ld XIX,0x00f55aae
+	ld	xix, ScreenButtons_CyclePlayScreen	; F55874  ld XIX,0x00f55aae
 	call	T_PanelButton_CallTableEntry	; F55879  call 0xf41b08
 	ret	; F5587D  ret
 
@@ -116619,9 +116633,9 @@ ScreenLeave_CyclePlayEditScreen_Fwd:		; <- T_F40DE4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_CyclePlayEditScreen: the +8 BUTTON method of screen 0x26 -- ButtonTable_CyclePlayEditScreen entry HL.
+; ScreenButton_CyclePlayEditScreen: the +8 BUTTON method of screen 0x26 -- ScreenButtons_CyclePlayEditScreen entry HL.
 ScreenButton_CyclePlayEditScreen:		; <- T_F40DE8
-	ld	xix, ButtonTable_CyclePlayEditScreen	; F5588A  ld XIX,0x00f55b2e
+	ld	xix, ScreenButtons_CyclePlayEditScreen	; F5588A  ld XIX,0x00f55b2e
 	call	T_PanelButton_CallTableEntry	; F5588F  call 0xf41b08
 	ret	; F55893  ret
 
@@ -116701,9 +116715,9 @@ ScreenLeave_CyclePlayEditScreen29_Fwd:		; <- T_F40DF4
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ScreenButton_CyclePlayEditScreen29: the +8 BUTTON method of screen 0x29 -- ButtonTable_CyclePlayEditScreen29 entry HL.
+; ScreenButton_CyclePlayEditScreen29: the +8 BUTTON method of screen 0x29 -- ScreenButtons_CyclePlayEditScreen29 entry HL.
 ScreenButton_CyclePlayEditScreen29:		; <- T_F40DF8
-	ld	xix, ButtonTable_CyclePlayEditScreen29	; F558A0  ld XIX,0x00f55bae
+	ld	xix, ScreenButtons_CyclePlayEditScreen29	; F558A0  ld XIX,0x00f55bae
 	call	T_PanelButton_CallTableEntry	; F558A5  call 0xf41b08
 	ret	; F558A9  ret
 
@@ -116727,7 +116741,7 @@ Fwd_F558AA:		; <- T_F40DFC
 	ret	; F558AD  ret
 
 ; --------------------------------------------------------------------------
-; ButtonTable_RealtimeRecordScreen -- 32 32-bit routine pointers, table 0 of the seven
+; ScreenButtons_RealtimeRecordScreen -- 32 32-bit routine pointers, table 0 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56142-0xF56524) and 22 of the 32 are
 ;                            distinct.
@@ -116749,9 +116763,9 @@ Fwd_F558AA:		; <- T_F40DFC
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_RealtimeRecordScreen: the 32-slot button table of RealtimeRecordScreen (view-B screen 0x06), indexed by panel
+; ScreenButtons_RealtimeRecordScreen: the 32-slot button table of RealtimeRecordScreen (view-B screen 0x06), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_RealtimeRecordScreen:
+ScreenButtons_RealtimeRecordScreen:
 	.long	SoftKeyCol1_SeqPlayAndRealtimeRecord	; F558AE  [ 0] -> SoftKeyCol1_SeqPlayAndRealtimeRecord
 	.long	SoftKeyCol2_SeqPlayAndRealtimeRecord	; F558B2  [ 1] -> SoftKeyCol2_SeqPlayAndRealtimeRecord
 	.long	SoftKeyCol3_SeqPlayAndRealtimeRecord	; F558B6  [ 2] -> SoftKeyCol3_SeqPlayAndRealtimeRecord
@@ -116787,7 +116801,7 @@ ButtonTable_RealtimeRecordScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_MetronomeBalanceScreen -- 32 32-bit routine pointers, table 1 of the seven
+; ScreenButtons_MetronomeBalanceScreen -- 32 32-bit routine pointers, table 1 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF565BD-0xF56649) and 4 of the 32 are distinct.
 ; Read by: the veneer at 0xF5582E -- `ld XIX,0x00F5592E / call 0xF41B08 /
@@ -116808,9 +116822,9 @@ ButtonTable_RealtimeRecordScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_MetronomeBalanceScreen: the 32-slot button table of MetronomeBalanceScreen (view-B screen 0x0C), indexed by panel
+; ScreenButtons_MetronomeBalanceScreen: the 32-slot button table of MetronomeBalanceScreen (view-B screen 0x0C), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_MetronomeBalanceScreen:
+ScreenButtons_MetronomeBalanceScreen:
 	.long	Nop_Ret_F56649	; F5592E  [ 0] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55932  [ 1] -> Nop_Ret_F56649
 	.long	Nop_Ret_F56649	; F55936  [ 2] -> Nop_Ret_F56649
@@ -116846,7 +116860,7 @@ ButtonTable_MetronomeBalanceScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_CycleRecordScreen -- 32 32-bit routine pointers, table 2 of the seven
+; ScreenButtons_CycleRecordScreen -- 32 32-bit routine pointers, table 2 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF5672A-0xF568AA) and 10 of the 32 are
 ;                            distinct.
@@ -116868,9 +116882,9 @@ ButtonTable_MetronomeBalanceScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_CycleRecordScreen: the 32-slot button table of CycleRecordScreen (view-B screen 0x08), indexed by panel
+; ScreenButtons_CycleRecordScreen: the 32-slot button table of CycleRecordScreen (view-B screen 0x08), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_CycleRecordScreen:
+ScreenButtons_CycleRecordScreen:
 	.long	Nop_Ret_F5672A	; F559AE  [ 0] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559B2  [ 1] -> Nop_Ret_F5672A
 	.long	Nop_Ret_F5672A	; F559B6  [ 2] -> Nop_Ret_F5672A
@@ -116906,7 +116920,7 @@ ButtonTable_CycleRecordScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_SeqPlayScreen -- 32 32-bit routine pointers, table 3 of the seven
+; ScreenButtons_SeqPlayScreen -- 32 32-bit routine pointers, table 3 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56142-0xF56DF0) and 22 of the 32 are
 ;                            distinct.
@@ -116928,9 +116942,9 @@ ButtonTable_CycleRecordScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_SeqPlayScreen: the 32-slot button table of SeqPlayScreen (view-B screen 0x12), indexed by panel
+; ScreenButtons_SeqPlayScreen: the 32-slot button table of SeqPlayScreen (view-B screen 0x12), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_SeqPlayScreen:
+ScreenButtons_SeqPlayScreen:
 	.long	SoftKeyCol1_SeqPlayAndRealtimeRecord	; F55A2E  [ 0] -> SoftKeyCol1_SeqPlayAndRealtimeRecord
 	.long	SoftKeyCol2_SeqPlayAndRealtimeRecord	; F55A32  [ 1] -> SoftKeyCol2_SeqPlayAndRealtimeRecord
 	.long	SoftKeyCol3_SeqPlayAndRealtimeRecord	; F55A36  [ 2] -> SoftKeyCol3_SeqPlayAndRealtimeRecord
@@ -116966,7 +116980,7 @@ ButtonTable_SeqPlayScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayScreen -- 32 32-bit routine pointers, table 4 of the seven
+; ScreenButtons_CyclePlayScreen -- 32 32-bit routine pointers, table 4 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF56EB7-0xF56FD5) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF55874 -- `ld XIX,0x00F55AAE / call 0xF41B08 /
@@ -116987,9 +117001,9 @@ ButtonTable_SeqPlayScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayScreen: the 32-slot button table of CyclePlayScreen (view-B screen 0x14), indexed by panel
+; ScreenButtons_CyclePlayScreen: the 32-slot button table of CyclePlayScreen (view-B screen 0x14), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_CyclePlayScreen:
+ScreenButtons_CyclePlayScreen:
 	.long	Nop_Ret_F56EB7	; F55AAE  [ 0] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55AB2  [ 1] -> Nop_Ret_F56EB7
 	.long	Nop_Ret_F56EB7	; F55AB6  [ 2] -> Nop_Ret_F56EB7
@@ -117025,7 +117039,7 @@ ButtonTable_CyclePlayScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayEditScreen -- 32 32-bit routine pointers, table 5 of the seven
+; ScreenButtons_CyclePlayEditScreen -- 32 32-bit routine pointers, table 5 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF57337-0xF57381) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF5588A -- `ld XIX,0x00F55B2E / call 0xF41B08 /
@@ -117046,9 +117060,9 @@ ButtonTable_CyclePlayScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayEditScreen: the 32-slot button table of CyclePlayEditScreen (view-B screen 0x26), indexed by panel
+; ScreenButtons_CyclePlayEditScreen: the 32-slot button table of CyclePlayEditScreen (view-B screen 0x26), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_CyclePlayEditScreen:
+ScreenButtons_CyclePlayEditScreen:
 	.long	Nop_Ret_F57337	; F55B2E  [ 0] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B32  [ 1] -> Nop_Ret_F57337
 	.long	Nop_Ret_F57337	; F55B36  [ 2] -> Nop_Ret_F57337
@@ -117084,7 +117098,7 @@ ButtonTable_CyclePlayEditScreen:
 
 
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayEditScreen29 -- 32 32-bit routine pointers, table 6 of the seven
+; ScreenButtons_CyclePlayEditScreen29 -- 32 32-bit routine pointers, table 6 of the seven
 ;                            in this bank.  All 32 land inside this span
 ;                            (0xF57418-0xF57432) and 9 of the 32 are distinct.
 ; Read by: the veneer at 0xF558A0 -- `ld XIX,0x00F55BAE / call 0xF41B08 /
@@ -117105,9 +117119,9 @@ ButtonTable_CyclePlayEditScreen:
 ;          same `cp HL,0x1F` that bounds Bit32MaskTable, which is a fact about
 ;          the BOUND and not a claim that the two enumerate the same things.
 ; --------------------------------------------------------------------------
-; ButtonTable_CyclePlayEditScreen29: the 32-slot button table of CyclePlayEditScreen29 (view-B screen 0x29), indexed by panel
+; ScreenButtons_CyclePlayEditScreen29: the 32-slot button table of CyclePlayEditScreen29 (view-B screen 0x29), indexed by panel
 ;   button code through T_PanelButton_CallTableEntry (notes/prom_b_sequencer_screen_buttons.py).
-ButtonTable_CyclePlayEditScreen29:
+ScreenButtons_CyclePlayEditScreen29:
 	.long	Nop_Ret_F57418	; F55BAE  [ 0] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BB2  [ 1] -> Nop_Ret_F57418
 	.long	Nop_Ret_F57418	; F55BB6  [ 2] -> Nop_Ret_F57418
@@ -117747,7 +117761,7 @@ sub_F56129_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol1_SeqPlayAndRealtimeRecord: slot 0 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol1_SeqPlayAndRealtimeRecord: slot 0 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 0 for the column's upper switch, 8 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol1_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56142  bit 0x07,W
@@ -117778,7 +117792,7 @@ sub_F56129_Join:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol2_SeqPlayAndRealtimeRecord: slot 1 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol2_SeqPlayAndRealtimeRecord: slot 1 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 1 for the column's upper switch, 9 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol2_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56158  bit 0x07,W
@@ -117809,7 +117823,7 @@ sub_F56129_Join2:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol3_SeqPlayAndRealtimeRecord: slot 2 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol3_SeqPlayAndRealtimeRecord: slot 2 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 2 for the column's upper switch, 10 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol3_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5616E  bit 0x07,W
@@ -117840,7 +117854,7 @@ sub_F56129_Join3:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol4_SeqPlayAndRealtimeRecord: slot 3 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol4_SeqPlayAndRealtimeRecord: slot 3 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 3 for the column's upper switch, 11 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol4_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F56184  bit 0x07,W
@@ -117871,7 +117885,7 @@ sub_F56129_Join4:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol5_SeqPlayAndRealtimeRecord: slot 4 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol5_SeqPlayAndRealtimeRecord: slot 4 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 4 for the column's upper switch, 12 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol5_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F5619A  bit 0x07,W
@@ -117902,7 +117916,7 @@ sub_F56129_Join5:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol6_SeqPlayAndRealtimeRecord: slot 5 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol6_SeqPlayAndRealtimeRecord: slot 5 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 5 for the column's upper switch, 13 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol6_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561B0  bit 0x07,W
@@ -117933,7 +117947,7 @@ sub_F56129_Join6:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol7_SeqPlayAndRealtimeRecord: slot 6 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol7_SeqPlayAndRealtimeRecord: slot 6 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 6 for the column's upper switch, 14 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol7_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561C6  bit 0x07,W
@@ -117964,7 +117978,7 @@ sub_F56129_Join7:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; SoftKeyCol8_SeqPlayAndRealtimeRecord: slot 7 of ButtonTable_SeqPlayScreen and ButtonTable_RealtimeRecordScreen:
+; SoftKeyCol8_SeqPlayAndRealtimeRecord: slot 7 of ScreenButtons_SeqPlayScreen and ScreenButtons_RealtimeRecordScreen:
 ;   (0x3602) = 7 for the column's upper switch, 15 for the lower (bit 7 of W), then T_F40CC4.
 SoftKeyCol8_SeqPlayAndRealtimeRecord:
 	bit	7, w	; F561DC  bit 0x07,W
@@ -118285,7 +118299,7 @@ sub_F56129_Epilogue8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[8] -- the LcdKeyRow1 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow1_RealtimeRecordScreen: ScreenButtons_RealtimeRecordScreen[8] -- the LcdKeyRow1 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow1_RealtimeRecordScreen:
 	bit	7, w	; F56342  bit 0x07,W
 	jr	nz, sub_F56129_Skip20	; F56345  jr NZ,0xf56380
@@ -118353,7 +118367,7 @@ sub_F56129_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[9] -- the LcdKeyRow2 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_RealtimeRecordScreen: ScreenButtons_RealtimeRecordScreen[9] -- the LcdKeyRow2 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_RealtimeRecordScreen:
 	bit	7, w	; F563DD  bit 0x07,W
 	jr	nz, sub_F56129_Skip23	; F563E0  jr NZ,0xf5645c
@@ -118419,7 +118433,7 @@ sub_F56129_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[10] -- the LcdKeyRow3 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_RealtimeRecordScreen: ScreenButtons_RealtimeRecordScreen[10] -- the LcdKeyRow3 handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_RealtimeRecordScreen:
 	bit	7, w	; F56474  bit 0x07,W
 	jr	nz, sub_F56129_Skip26	; F56477  jr NZ,0xf5647e
@@ -118519,7 +118533,7 @@ Nop_Ret_F56510:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_RealtimeRecordScreen: ButtonTable_RealtimeRecordScreen[15] -- the ExitKey handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_RealtimeRecordScreen: ScreenButtons_RealtimeRecordScreen[15] -- the ExitKey handler of RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_RealtimeRecordScreen:
 	bit	7, w	; F56511  bit 0x07,W
 	jr	nz, sub_F56492_Return2	; F56514  jr NZ,0xf56523
@@ -118651,7 +118665,7 @@ ScreenEnter_MetronomeBalanceScreen:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[11] -- the LcdKeyRow4 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow4_MetronomeBalanceScreen: ScreenButtons_MetronomeBalanceScreen[11] -- the LcdKeyRow4 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow4_MetronomeBalanceScreen:
 	bit	7, w	; F565BD  bit 0x07,W
 	jr	nz, sub_F5658C_Return	; F565C0  jr NZ,0xf565de
@@ -118703,7 +118717,7 @@ sub_F565DF_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[12] -- the LcdKeyRow5 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow5_MetronomeBalanceScreen: ScreenButtons_MetronomeBalanceScreen[12] -- the LcdKeyRow5 handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow5_MetronomeBalanceScreen:
 	bit	7, w	; F565FD  bit 0x07,W
 	jr	nz, sub_F565DF_Return2	; F56600  jr NZ,0xf5661e
@@ -118754,7 +118768,7 @@ sub_F5661F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_MetronomeBalanceScreen: ButtonTable_MetronomeBalanceScreen[15] -- the ExitKey handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_MetronomeBalanceScreen: ScreenButtons_MetronomeBalanceScreen[15] -- the ExitKey handler of MetronomeBalanceScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_MetronomeBalanceScreen:
 	bit	7, w	; F5663C  bit 0x07,W
 	jr	nz, sub_F5661F_Return2	; F5663F  jr NZ,0xf56648
@@ -118931,7 +118945,7 @@ Nop_Ret_F5672A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_CycleRecordScreen: ButtonTable_CycleRecordScreen[8] -- the LcdKeyRow1 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow1_CycleRecordScreen: ScreenButtons_CycleRecordScreen[8] -- the LcdKeyRow1 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow1_CycleRecordScreen:
 	bit	7, w	; F5672B  bit 0x07,W
 	jr	nz, sub_F5670C_Return2	; F5672E  jr NZ,0xf56751
@@ -118960,7 +118974,7 @@ sub_F5670C_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_CycleRecordScreen: ButtonTable_CycleRecordScreen[9] -- the LcdKeyRow2 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_CycleRecordScreen: ScreenButtons_CycleRecordScreen[9] -- the LcdKeyRow2 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_CycleRecordScreen:
 	bit	7, w	; F56752  bit 0x07,W
 	jr	nz, sub_F5670C_Skip3	; F56755  jr NZ,0xf56767
@@ -118986,7 +119000,7 @@ sub_F5670C_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_CycleRecordScreen: ButtonTable_CycleRecordScreen[10] -- the LcdKeyRow3 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_CycleRecordScreen: ScreenButtons_CycleRecordScreen[10] -- the LcdKeyRow3 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_CycleRecordScreen:
 	bit	7, w	; F5676B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip5	; F5676E  jr NZ,0xf5678d
@@ -119017,7 +119031,7 @@ sub_F5670C_Return4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_CycleRecordScreen: ButtonTable_CycleRecordScreen[11] -- the LcdKeyRow4 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow4_CycleRecordScreen: ScreenButtons_CycleRecordScreen[11] -- the LcdKeyRow4 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow4_CycleRecordScreen:
 	bit	7, w	; F56791  bit 0x07,W
 	jr	nz, sub_F5670C_Skip6	; F56794  jr NZ,0xf56797
@@ -119037,7 +119051,7 @@ sub_F5670C_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_CycleRecordScreen: ButtonTable_CycleRecordScreen[12] -- the LcdKeyRow5 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow5_CycleRecordScreen: ScreenButtons_CycleRecordScreen[12] -- the LcdKeyRow5 handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow5_CycleRecordScreen:
 	bit	7, w	; F5679B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip7	; F5679E  jr NZ,0xf567af
@@ -119085,7 +119099,7 @@ Nop_Ret_F567C8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_CycleRecordScreen: ButtonTable_CycleRecordScreen[15] -- the ExitKey handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_CycleRecordScreen: ScreenButtons_CycleRecordScreen[15] -- the ExitKey handler of CycleRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_CycleRecordScreen:
 	bit	7, w	; F567C9  bit 0x07,W
 	jr	nz, sub_F5670C_Return6	; F567CC  jr NZ,0xf567dd
@@ -119865,7 +119879,7 @@ sub_F56C35_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_SeqPlayScreen: ButtonTable_SeqPlayScreen[8] -- the LcdKeyRow1 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow1_SeqPlayScreen: ScreenButtons_SeqPlayScreen[8] -- the LcdKeyRow1 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow1_SeqPlayScreen:
 	bit	7, w	; F56C57  bit 0x07,W
 	jr	nz, sub_F56C35_Skip4	; F56C5A  jr NZ,0xf56cb0
@@ -119920,7 +119934,7 @@ sub_F56C35_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_SeqPlayScreen: ButtonTable_SeqPlayScreen[9] -- the LcdKeyRow2 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_SeqPlayScreen: ScreenButtons_SeqPlayScreen[9] -- the LcdKeyRow2 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_SeqPlayScreen:
 	bit	7, w	; F56CD6  bit 0x07,W
 	jr	nz, sub_F56C35_Skip5	; F56CD9  jr NZ,0xf56cf7
@@ -119957,7 +119971,7 @@ sub_F56C35_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_SeqPlayScreen: ButtonTable_SeqPlayScreen[10] -- the LcdKeyRow3 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_SeqPlayScreen: ScreenButtons_SeqPlayScreen[10] -- the LcdKeyRow3 handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_SeqPlayScreen:
 	bit	7, w	; F56D1D  bit 0x07,W
 	jr	nz, sub_F56C35_Skip7	; F56D20  jr NZ,0xf56d32
@@ -120095,7 +120109,7 @@ Nop_Ret_F56DD8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_SeqPlayScreen: ButtonTable_SeqPlayScreen[15] -- the ExitKey handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_SeqPlayScreen: ScreenButtons_SeqPlayScreen[15] -- the ExitKey handler of SeqPlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_SeqPlayScreen:
 	bit	7, w	; F56DD9  bit 0x07,W
 	jr	nz, sub_F56DA8_Return2	; F56DDC  jr NZ,0xf56def
@@ -120267,7 +120281,7 @@ Nop_Ret_F56EB7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_CyclePlayScreen: ButtonTable_CyclePlayScreen[9] -- the LcdKeyRow2 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_CyclePlayScreen: ScreenButtons_CyclePlayScreen[9] -- the LcdKeyRow2 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_CyclePlayScreen:
 	bit	7, w	; F56EB8  bit 0x07,W
 	jr	nz, sub_F56E99_Skip2	; F56EBB  jr NZ,0xf56ec2
@@ -120289,7 +120303,7 @@ sub_F56E99_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_CyclePlayScreen: ButtonTable_CyclePlayScreen[10] -- the LcdKeyRow3 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_CyclePlayScreen: ScreenButtons_CyclePlayScreen[10] -- the LcdKeyRow3 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_CyclePlayScreen:
 	bit	7, w	; F56EC6  bit 0x07,W
 	jr	nz, sub_F56E99_Skip3	; F56EC9  jr NZ,0xf56ed0
@@ -120311,7 +120325,7 @@ sub_F56E99_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_CyclePlayScreen: ButtonTable_CyclePlayScreen[11] -- the LcdKeyRow4 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow4_CyclePlayScreen: ScreenButtons_CyclePlayScreen[11] -- the LcdKeyRow4 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow4_CyclePlayScreen:
 	bit	7, w	; F56ED4  bit 0x07,W
 	jr	nz, sub_F56ED4_Skip	; F56ED7  jr NZ,0xf56eda
@@ -120330,7 +120344,7 @@ sub_F56ED4_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow5_CyclePlayScreen: ButtonTable_CyclePlayScreen[12] -- the LcdKeyRow5 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow5_CyclePlayScreen: ScreenButtons_CyclePlayScreen[12] -- the LcdKeyRow5 handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow5_CyclePlayScreen:
 	bit	7, w	; F56EDE  bit 0x07,W
 	jr	nz, sub_F56ED4_Return	; F56EE1  jr NZ,0xf56ef2
@@ -120369,7 +120383,7 @@ Nop_Ret_F56EF3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_CyclePlayScreen: ButtonTable_CyclePlayScreen[15] -- the ExitKey handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_CyclePlayScreen: ScreenButtons_CyclePlayScreen[15] -- the ExitKey handler of CyclePlayScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_CyclePlayScreen:
 	bit	7, w	; F56EF4  bit 0x07,W
 	jr	nz, sub_F56ED4_Return2	; F56EF7  jr NZ,0xf56f08
@@ -121105,7 +121119,7 @@ Nop_Ret_F57337:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow1_CyclePlayEditScreen: ScreenButtons_CyclePlayEditScreen[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow1_CyclePlayEditScreen:
 	bit	7, w	; F57338  bit 0x07,W
 	jr	nz, sub_F57338_Return	; F5733B  jr NZ,0xf57349
@@ -121127,7 +121141,7 @@ sub_F57338_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_CyclePlayEditScreen: ScreenButtons_CyclePlayEditScreen[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_CyclePlayEditScreen:
 	bit	7, w	; F5734A  bit 0x07,W
 	jr	nz, sub_F5734A_Skip	; F5734D  jr NZ,0xf57354
@@ -121149,7 +121163,7 @@ sub_F5734A_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_CyclePlayEditScreen: ScreenButtons_CyclePlayEditScreen[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_CyclePlayEditScreen:
 	bit	7, w	; F57358  bit 0x07,W
 	jr	nz, sub_F57358_Skip	; F5735B  jr NZ,0xf57362
@@ -121175,7 +121189,7 @@ sub_F57358_Return:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow4_CyclePlayEditScreen: ScreenButtons_CyclePlayEditScreen[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow4_CyclePlayEditScreen:
 	calr	LcdKeyRow4_CyclePlayScreen	; F57366  calr 0xf56ed4
 	ret	; F57369  ret
@@ -121209,7 +121223,7 @@ Nop_Ret_F5736A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ExitKey_CyclePlayEditScreen: ButtonTable_CyclePlayEditScreen[15] -- the ExitKey handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_CyclePlayEditScreen: ScreenButtons_CyclePlayEditScreen[15] -- the ExitKey handler of CyclePlayEditScreen (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_CyclePlayEditScreen:
 	bit	7, w	; F5736B  bit 0x07,W
 	jr	nz, sub_F5736B_Return	; F5736E  jr NZ,0xf5737c
@@ -121436,7 +121450,7 @@ Nop_Ret_F57418:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; LcdKeyRow1_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow1_CyclePlayEditScreen29: ScreenButtons_CyclePlayEditScreen29[8] -- the LcdKeyRow1 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow1_CyclePlayEditScreen29:
 	calr	LcdKeyRow1_CyclePlayEditScreen	; F57419  calr 0xf57338
 	ret	; F5741C  ret
@@ -121456,7 +121470,7 @@ LcdKeyRow1_CyclePlayEditScreen29:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; LcdKeyRow2_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow2_CyclePlayEditScreen29: ScreenButtons_CyclePlayEditScreen29[9] -- the LcdKeyRow2 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow2_CyclePlayEditScreen29:
 	calr	LcdKeyRow2_CyclePlayEditScreen	; F5741D  calr 0xf5734a
 	ret	; F57420  ret
@@ -121476,7 +121490,7 @@ LcdKeyRow2_CyclePlayEditScreen29:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; LcdKeyRow3_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow3_CyclePlayEditScreen29: ScreenButtons_CyclePlayEditScreen29[10] -- the LcdKeyRow3 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow3_CyclePlayEditScreen29:
 	calr	LcdKeyRow3_CyclePlayEditScreen	; F57421  calr 0xf57358
 	ret	; F57424  ret
@@ -121496,7 +121510,7 @@ LcdKeyRow3_CyclePlayEditScreen29:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; LcdKeyRow4_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+; LcdKeyRow4_CyclePlayEditScreen29: ScreenButtons_CyclePlayEditScreen29[11] -- the LcdKeyRow4 handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
 LcdKeyRow4_CyclePlayEditScreen29:
 	calr	LcdKeyRow4_CyclePlayEditScreen	; F57425  calr 0xf57366
 	ret	; F57428  ret
@@ -121534,7 +121548,7 @@ Nop_Ret_F57429:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-; ExitKey_CyclePlayEditScreen29: ButtonTable_CyclePlayEditScreen29[15] -- the ExitKey handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
+; ExitKey_CyclePlayEditScreen29: ScreenButtons_CyclePlayEditScreen29[15] -- the ExitKey handler of CyclePlayEditScreen29 (notes/prom_b_sequencer_screen_buttons.py).
 ExitKey_CyclePlayEditScreen29:
 	calr	ExitKey_CyclePlayEditScreen	; F5742A  calr 0xf5736b
 	ret	; F5742D  ret

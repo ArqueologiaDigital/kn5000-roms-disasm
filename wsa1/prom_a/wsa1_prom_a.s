@@ -56800,15 +56800,15 @@ T_F434CC_Nop:
 	call T_DisplayListB_RunOne_Stack                     ; F9EF66  1d 0c 2e f4
 	pop XBC                                              ; F9EF6A  59
 	ret                                                  ; F9EF6B  0e
-; Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> sub_F122C5)
+; Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> ScreenEnterBody_MainOutEqualizer)
 ; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.
-; Evidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DL_TestSystemTuneScaleInitial is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+; Evidence: ScreenEnterBody_MainOutEqualizer posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DL_TestSystemTuneScaleInitial is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Enter:
 	call T_F42F68                                        ; F9EF6C  1d 68 2f f4
 	ret                                                  ; F9EF70  0e
 T_F4195C_Nop:
 	ret                                                  ; F9EF71  0e
-; Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b sub_F12334 (T_F42F6C), which maps them with T_F42C74 and dispatches through DispatchTable_F1394F
+; Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b ScreenButtonBody_MainOutEqualizer (T_F42F6C), which maps them with T_F42C74 and dispatches through ButtonTable23_MainOutEqualizer
 ; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DL_TestSystemTuneScaleInitial is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Button:
 	link XIZ,0x0000                                      ; F9EF72  ee 0c 00 00
