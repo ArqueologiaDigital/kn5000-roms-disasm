@@ -176,6 +176,32 @@ this note. What it does give the driver lane is the *screen*: a save/load file
 field is 6 + 4 cells wide, and its extension comes from a nine-entry table
 whose tenth row is blank.
 
+### 2026-10-04: the extensions a WSA1 disk DOES carry -- read from the load and save code
+
+The retraction above withdrew a file-name claim that had been read off a screen field.
+The disk code itself does state the extensions. `prom_a`'s `DiskLoad_ByContentType` /
+`DiskSave_ByContentType` dispatch on `Disk_ContentType` (0x2725), the byte this module's
+record `DL_F583F0` draws from `DLText_F585AD`. Each per-type routine writes three bytes to
+`Disk_FileName+8..10`, the extension field of the 8.3 name that `DiskCmd_OpenFile` matches
+against the FAT root directory:
+
+| content type | extension(s) | load | save | notes |
+|---|---|---|---|---|
+| 1 SEQUENCER | (through prom_b `T_F41EF8`) | `DiskLoad_Sequencer` | `DiskSave_Sequencer` | not read here |
+| 2 COMBINATION | `CMB` | `DiskLoad_Combination` | `DiskSave_Combination` | tag `WSA1`; 0x16300 bytes to 0xEC0000 |
+| 3 SOUND | `TM ` | `DiskLoad_Sound` | `DiskSave_Sound` | tag `WSA SOUND RAM S0`; 0x40000 bytes to 0xE80000 |
+| 4 PANEL | `LSW` and `SLS` | `DiskLoad_PanelLswFile` + `_PanelSlsFile` | `DiskSave_Panel*` | `SLS` = 0x600 bytes of RAM 0x7000 |
+| 5 MIDI SETTING | `MDS` | `DiskLoad_MidiSetting` | `DiskSave_MidiSetting` | |
+| 6 SOUND RE-MAP | `SRM` | `DiskLoad_SoundRemap` | `DiskSave_SoundRemap` | to / from RAM 0x5210 |
+| 7 COMBI RE-MAP | `CRM` | `DiskLoad_CombiRemap` | `DiskSave_CombiRemap` | to / from RAM 0x5860 |
+| 8 DRUM MAP | `DRM` | `DiskLoad_DrumMap` | `DiskSave_DrumMap` | 0x1D0 bytes, RAM 0x5EB0 |
+| 0 ALL | every one of the above | | | |
+
+So the `.ALL .SEQ .CMB .SND .PNL ...` strings at `0xF58625` are display text. Only
+`CMB`, `MDS` and the three `?RM` coincide with a real extension. The base name is
+whatever `Disk_FileName+0..7` holds, which is the name editor's field. Every routine
+cited here has its evidence in `notes/prom_ab_read_names_2026_10_04.py`.
+
 ### `L0AD` is not a typo in this note
 
 Many of these labels spell capital **O** with character code **0x30**, the digit
