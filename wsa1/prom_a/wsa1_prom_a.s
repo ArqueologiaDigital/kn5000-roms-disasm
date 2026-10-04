@@ -104687,9 +104687,11 @@ sub_FBCB31:
 	ld	(UI_PartIndex:16), (0x276d:16)             ; FBCB35  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBCB3B  1d 9c 2c f4
 	ret                                                  ; FBCB3F  0e
-; ScreenCodeB0_Handler: the +0 ENTER method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
+; ScreenEnter_CombiEditPartMenu: the +0 ENTER method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
 ;   (ViewB entry 0xB0) points at the thunk triple starting at T_F41848, and slot T_F41848 jumps here.
-ScreenCodeB0_Handler:
+; ScreenEnter_CombiEditPartMenu: screen 0xB0's +0 ENTER.  Its painter runs DL_InternalSound_F18A1D .. DL_CopyFromSoundPlay:
+;   "PART", "INTERNAL SOUND", "CONFIGURE", "MIDI OUTPUT" / "FILTER", "MIXER", "DSP EFFECT" -- the per-part menu.
+ScreenEnter_CombiEditPartMenu:
 	calr sub_FBCCB1                                      ; FBCB40  1e 6e 01
 	ld c, (UI_ScreenFlags:16)                                   ; FBCB43  c1 95 20 23
 	and C,0x10                                           ; FBCB47  cb cc 10
@@ -104714,9 +104716,9 @@ ScreenCodeB0_Handler:
 	ret                                                  ; FBCB80  0e
 T_F4184C_Nop:
 	ret                                                  ; FBCB81  0e
-; ScreenButton_CodeB0: the +8 BUTTON method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
+; ScreenButton_CombiEditPartMenu: the +8 BUTTON method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
 ;   (ViewB entry 0xB0) points at the thunk triple starting at T_F41848, and slot T_F41850 jumps here.
-ScreenButton_CodeB0:
+ScreenButton_CombiEditPartMenu:
 	link XIZ,0x0000                                      ; FBCB82  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBCB86  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBCB89  9e 08 04
@@ -108638,9 +108640,11 @@ sub_FBEE83:
 	popw hl                                              ; FBEED5  4b
 	unlk XIZ                                             ; FBEED6  ee 0d
 	ret                                                  ; FBEED8  0e
-; ScreenCode33_Handler: the +0 ENTER method of the screen object for screen id 0x33 -- PanelScreen_VtableTable entry 0x53
+; ScreenEnter_CombiEditMenuRedirect: the +0 ENTER method of the screen object for screen id 0x33 -- PanelScreen_VtableTable entry 0x53
 ;   (ViewB entry 0x33) points at the thunk triple starting at T_F41A08, and slot T_F41A08 jumps here.
-ScreenCode33_Handler:
+; ScreenEnter_CombiEditMenuRedirect: screen 0x33's +0 ENTER -- requests screen 0x34, ScreenEnter_CombiEditMenu
+;   (UI_Request = 0x34 with UI_Request_Hi bit 7).
+ScreenEnter_CombiEditMenuRedirect:
 	m_set 7, MD16, UI_Request_Hi                                ; FBEED9  f1 71 20 bf
 	ld (UI_Request:16), 0x34                                 ; FBEEDD  f1 70 20 00 34
 	ret                                                  ; FBEEE2  0e
@@ -109986,9 +109990,11 @@ sub_FBFA4D:
 	popw hl                                              ; FBFAAC  4b
 	unlk XIZ                                             ; FBFAAD  ee 0d
 	ret                                                  ; FBFAAF  0e
-; ScreenCode34_Handler: the +0 ENTER method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
+; ScreenEnter_CombiEditMenu: the +0 ENTER method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
 ;   (ViewB entry 0x34) points at the thunk triple starting at T_F41A18, and slot T_F41A18 jumps here.
-ScreenCode34_Handler:
+; ScreenEnter_CombiEditMenu: screen 0x34's +0 ENTER.  Its painter runs DL_CopyFromSoundPlay .. DL_Part_F18BBA: "C0MBINATI0N EDIT",
+;   "INTERNAL", "CONFIGURE", "MIDI", "MIXER", "DSP EFFECT", "SOUND WRITE", "COPY FROM SOUND PLAY" -- the COMBINATION EDIT menu.
+ScreenEnter_CombiEditMenu:
 	calr sub_FBCCB1                                          ; FBFAB0  1e fe d1
 	ld c, (UI_ScreenFlags:16)                                   ; FBFAB3  c1 95 20 23
 	and C,0x10                                           ; FBFAB7  cb cc 10
@@ -110013,9 +110019,9 @@ ScreenCode34_Handler:
 	ret                                                  ; FBFAF0  0e
 T_F41A1C_Nop:
 	ret                                                  ; FBFAF1  0e
-; ScreenButton_Code34: the +8 BUTTON method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
+; ScreenButton_CombiEditMenu: the +8 BUTTON method of the screen object for screen id 0x34 -- PanelScreen_VtableTable entry 0x54
 ;   (ViewB entry 0x34) points at the thunk triple starting at T_F41A18, and slot T_F41A20 jumps here.
-ScreenButton_Code34:
+ScreenButton_CombiEditMenu:
 	link XIZ,0x0000                                      ; FBFAF2  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBFAF6  c1 76 20 3f 16
 	jr nz, .LFBFB10                                      ; FBFAFB  6e 13

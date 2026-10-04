@@ -1134,9 +1134,9 @@
 	.set	sub_FBC64F, 0xFBC64F
 	.set	sub_FBCB06, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
-	.set	ScreenCodeB0_Handler, 0xFBCB40
+	.set	ScreenEnter_CombiEditPartMenu, 0xFBCB40
 	.set	T_F4184C_Nop, 0xFBCB81
-	.set	ScreenButton_CodeB0, 0xFBCB82
+	.set	ScreenButton_CombiEditPartMenu, 0xFBCB82
 	.set	T_F41854_Nop, 0xFBCBA9
 	.set	ScreenEnter_CombiEditInternalSound_B4, 0xFBCDEC
 	.set	ScreenEnter_CombiEditInternalSound_B5, 0xFBCDF0
@@ -1170,7 +1170,7 @@
 	.set	sub_FBED02, 0xFBED02
 	.set	sub_FBEDBE, 0xFBEDBE
 	.set	sub_FBEE83, 0xFBEE83
-	.set	ScreenCode33_Handler, 0xFBEED9
+	.set	ScreenEnter_CombiEditMenuRedirect, 0xFBEED9
 	.set	T_F41A0C_Nop, 0xFBEEE3
 	.set	T_F41A10_Nop, 0xFBEEE4
 	.set	T_F41A14_Nop, 0xFBEEE5
@@ -1182,9 +1182,9 @@
 	.set	Screen_CombinationNaming_Leave, 0xFBEF75
 	.set	Screen_CombinationNaming_Button, 0xFBEF76
 	.set	T_F41AA4_Nop, 0xFBEFB0
-	.set	ScreenCode34_Handler, 0xFBFAB0
+	.set	ScreenEnter_CombiEditMenu, 0xFBFAB0
 	.set	T_F41A1C_Nop, 0xFBFAF1
-	.set	ScreenButton_Code34, 0xFBFAF2
+	.set	ScreenButton_CombiEditMenu, 0xFBFAF2
 	.set	T_F41A24_Nop, 0xFBFB33
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
 	.set	T_F40FF4_Nop, 0xFC018D
@@ -89309,9 +89309,9 @@ T_DrawValueGlyph_24x24:	jp DrawValueGlyph_24x24  ; F41834 (was T_F41834) -> prom
 	.fill 0x8, 1, 0x0E  ; 0xF41838: 8 x ret
 T_F41840:	jp sub_FBCB06  ; -> prom_a 0x3CB06
 T_F41844:	jp sub_FBCB31  ; -> prom_a 0x3CB31
-T_F41848:	jp ScreenCodeB0_Handler  ; -> prom_a 0x3CB40
+T_F41848:	jp ScreenEnter_CombiEditPartMenu  ; -> prom_a 0x3CB40
 T_F4184C:	jp T_F4184C_Nop  ; -> prom_a 0x3CB81
-T_F41850:	jp ScreenButton_CodeB0  ; -> prom_a 0x3CB82
+T_F41850:	jp ScreenButton_CombiEditPartMenu  ; -> prom_a 0x3CB82
 T_F41854:	jp T_F41854_Nop  ; -> prom_a 0x3CBA9
 T_F41858:	jp ScreenEnter_CombiEditInternalSound  ; -> prom_a 0x3CDFC
 T_F4185C:	jp T_F4185C_Nop  ; -> prom_a 0x3CEF7
@@ -89396,13 +89396,13 @@ T_F419C4:	jp T_F419C4_Nop  ; -> prom_a 0x1F034
 	.fill 0x38, 1, 0x0E  ; 0xF419C8: 56 x ret
 T_F41A00:	jp sub_FBECC3  ; -> prom_a 0x3ECC3
 T_F41A04:	jp sub_FBED02  ; -> prom_a 0x3ED02
-T_F41A08:	jp ScreenCode33_Handler  ; -> prom_a 0x3EED9
+T_F41A08:	jp ScreenEnter_CombiEditMenuRedirect  ; -> prom_a 0x3EED9
 T_F41A0C:	jp T_F41A0C_Nop  ; -> prom_a 0x3EEE3
 T_F41A10:	jp T_F41A10_Nop  ; -> prom_a 0x3EEE4
 T_F41A14:	jp T_F41A14_Nop  ; -> prom_a 0x3EEE5
-T_F41A18:	jp ScreenCode34_Handler  ; -> prom_a 0x3FAB0
+T_F41A18:	jp ScreenEnter_CombiEditMenu  ; -> prom_a 0x3FAB0
 T_F41A1C:	jp T_F41A1C_Nop  ; -> prom_a 0x3FAF1
-T_F41A20:	jp ScreenButton_Code34  ; -> prom_a 0x3FAF2
+T_F41A20:	jp ScreenButton_CombiEditMenu  ; -> prom_a 0x3FAF2
 T_F41A24:	jp T_F41A24_Nop  ; -> prom_a 0x3FB33
 T_F41A28:	jp ScreenEnter_CombiEditConfigure_35  ; -> prom_a 0x3C585
 T_F41A2C:	jp ScreenLeave_CombiEditConfigure_35  ; -> prom_a 0x3C589
