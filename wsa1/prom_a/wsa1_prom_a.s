@@ -1790,8 +1790,8 @@
 	.set T_F425E8,                                                                      0x00F425E8
 	.set T_DiskSaveFile_Page5_LcdKeyRow3,                                                                      0x00F425F4
 	.set T_F425F8,                                                                      0x00F425F8
-	.set T_F42608,                                                                      0x00F42608
-	.set T_F4260C,                                                                      0x00F4260C
+	.set T_DiskSaveFile_SaveOrConfirmOverwrite_Call,                                                                      0x00F42608
+	.set T_DiskSaveFile_CheckPasswordThenSave_Call,                                                                      0x00F4260C
 	.set T_F42610,                                                                      0x00F42610
 	.set T_F42614,                                                                      0x00F42614
 	.set T_F42618,                                                                      0x00F42618
@@ -161457,7 +161457,7 @@ DiskSave_ComparePassword:
 .LFE07DE:
 	popw hl                                              ; FE07DE  4b
 	ret                                                  ; FE07DF  0e
-; DiskSaveFile_CheckPasswordThenSave: the directory entry T_F4260C's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,
+; DiskSaveFile_CheckPasswordThenSave: the directory entry T_DiskSaveFile_CheckPasswordThenSave_Call's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,
 ;   delay, page 1; match -> status 0x12, Delay_500Ticks, DiskSaveFile_SaveOrConfirmOverwrite.
 DiskSaveFile_CheckPasswordThenSave:
 	calr DiskSave_ComparePassword                                          ; FE07E0  1e a2 ff
@@ -164004,39 +164004,39 @@ DiskLoad_ReadFileIntoWindow:
 	calr DiskApi_ReadFileToWindow                                          ; FE1E37  1e 09 ed
 	pop XIX                                              ; FE1E3A  5c
 	ret                                                  ; FE1E3B  0e
-; DiskLoad_PanelLswFile: content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by sub_FE2DDD
-;   (0x10 when it refuses), read again and applied by sub_FE1EC3 + DiskLoad_ApplyPanelImage.
+; DiskLoad_PanelLswFile: content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by DiskLoad_CheckLswHeader
+;   (0x10 when it refuses), read again and applied by DiskLoad_RestoreRam7FC0 + DiskLoad_ApplyPanelImage.
 DiskLoad_PanelLswFile:
 	pushw hl                                             ; FE1E3C  2b
 	push XIX                                             ; FE1E3D  3c
 	lda xix, (Disk_FileName:16)                                ; FE1E3E  f1 c8 21 34
 	calr ParamImage_SnapshotAll_SaveRegs                                          ; FE1E42  1e 28 e2
-	calr sub_FE1E93                                            ; FE1E45  1e 4b 00
+	calr DiskLoad_SaveRam7FC0                                            ; FE1E45  1e 4b 00
 	extz XIX                                             ; FE1E48  ec 12
 	ld (XIX+0x08),0x4c                                   ; FE1E4A  bc 08 00 4c
 	ld (XIX+0x09),0x53                                   ; FE1E4E  bc 09 00 53
 	ld (XIX+0x0a),0x57                                   ; FE1E52  bc 0a 00 57
-	calr sub_FE2D09                                          ; FE1E56  1e b0 0e
-	calr sub_FE2D5E                                          ; FE1E59  1e 02 0f
+	calr Disk_SetWindowStartToFileBuffer                                          ; FE1E56  1e b0 0e
+	calr Disk_SetWindowLengthToKilobyte                                          ; FE1E59  1e 02 0f
 	calr DiskLoad_ReadFileIntoWindow                                          ; FE1E5C  1e ca ff
 	ld H,A                                               ; FE1E5F  c9 8e
 	cp a, 0x01:i3                                          ; FE1E61  c9 d9
 	jr nz, .LFE1E8E                                          ; FE1E63  6e 29
-	calr sub_FE2DDD                                          ; FE1E65  1e 75 0f
+	calr DiskLoad_CheckLswHeader                                          ; FE1E65  1e 75 0f
 	cp a, 0x00:i3                                          ; FE1E68  c9 d8
 	jr nz, .LFE1E70                                          ; FE1E6A  6e 04
 	ld a, 0x10:opc                                          ; FE1E6C  21 10
 	jr .LFE1E90                                              ; FE1E6E  68 20
 .LFE1E70:
-	calr sub_FE2CF5                                          ; FE1E70  1e 82 0e
-	calr sub_FE2DBC                                          ; FE1E73  1e 46 0f
-	calr sub_FE2D7C                                          ; FE1E76  1e 03 0f
+	calr Disk_SetWindowStartToPanelImage                                          ; FE1E70  1e 82 0e
+	calr Disk_SetPanelImageLength                                          ; FE1E73  1e 46 0f
+	calr Disk_SetWindowEndToPanelImageEnd                                          ; FE1E76  1e 03 0f
 	m_res 5, MD16, Disk_Flags                                ; FE1E79  f1 e7 21 b5
 	calr DiskApi_ReadFileToWindow                                          ; FE1E7D  1e c3 ec
 	ld H,A                                               ; FE1E80  c9 8e
 	cp a, 0x01:i3                                          ; FE1E82  c9 d9
 	jr nz, .LFE1E8E                                          ; FE1E84  6e 08
-	calr sub_FE1EC3                                            ; FE1E86  1e 3a 00
+	calr DiskLoad_RestoreRam7FC0                                            ; FE1E86  1e 3a 00
 	calr DiskLoad_ApplyPanelImage                                          ; FE1E89  1e 73 01
 	jr .LFE1E90                                              ; FE1E8C  68 02
 .LFE1E8E:
@@ -164045,7 +164045,9 @@ DiskLoad_PanelLswFile:
 	pop XIX                                              ; FE1E90  5c
 	popw hl                                              ; FE1E91  4b
 	ret                                                  ; FE1E92  0e
-sub_FE1E93:
+; DiskLoad_SaveRam7FC0: copies the 32 bytes at RAM 0x7FC0 to 0x1713, before DiskLoad_PanelLswFile reads the 0xA00-byte image
+;   0x7600-0x7FFF over them.
+DiskLoad_SaveRam7FC0:
 	link XIZ,0xfffc                                      ; FE1E93  ee 0c fc ff
 	pushw hl                                             ; FE1E97  2b
 	push XIX                                             ; FE1E98  3c
@@ -164069,7 +164071,8 @@ sub_FE1E93:
 	popw hl                                              ; FE1EBF  4b
 	unlk XIZ                                             ; FE1EC0  ee 0d
 	ret                                                  ; FE1EC2  0e
-sub_FE1EC3:
+; DiskLoad_RestoreRam7FC0: copies them back from 0x1713 after the image is read, so the LSW file never sets 0x7FC0-0x7FDF.
+DiskLoad_RestoreRam7FC0:
 	link XIZ,0xfffc                                      ; FE1EC3  ee 0c fc ff
 	pushw hl                                             ; FE1EC7  2b
 	push XIX                                             ; FE1EC8  3c
@@ -164103,7 +164106,7 @@ DiskLoad_MidiSetting:
 	ld (Disk_FileName+8:16), 0x4d                                 ; FE1F02  f1 d0 21 00 4d
 	ld (Disk_FileName+9:16), 0x44                                 ; FE1F07  f1 d1 21 00 44
 	ld (Disk_FileName+10:16), 0x53                                 ; FE1F0C  f1 d2 21 00 53
-	calr sub_FE2D09                                          ; FE1F11  1e f5 0d
+	calr Disk_SetWindowStartToFileBuffer                                          ; FE1F11  1e f5 0d
 	calr DiskLoad_ReadFileIntoWindow                                          ; FE1F14  1e 12 ff
 	ld H,A                                               ; FE1F17  c9 8e
 	cp a, 0x01:i3                                          ; FE1F19  c9 d9
@@ -164115,11 +164118,11 @@ DiskLoad_MidiSetting:
 	pushw 0x09                                           ; FE1F26  0b 09 00
 	ld (xiz-2), ix                                       ; FE1F29  be fe 54
 	m_push MWD+r6, 0xfe                                  ; FE1F2C  9e fe 04
-	calr sub_FE1FAB                                            ; FE1F2F  1e 79 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F2F  1e 79 00
 	pushw 0x09                                           ; FE1F32  0b 09 00
 	ld (xiz-4), de                                       ; FE1F35  be fc 52
 	m_push MWD+r6, 0xfc                                  ; FE1F38  9e fc 04
-	calr sub_FE1FAB                                            ; FE1F3B  1e 6d 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F3B  1e 6d 00
 	ld ix, (xiz-2)                                       ; FE1F3E  9e fe 24
 	add IX,0x0040                                        ; FE1F41  dc c8 40 00
 	ld de, (xiz-4)                                       ; FE1F45  9e fc 22
@@ -164135,11 +164138,11 @@ DiskLoad_MidiSetting:
 	pushw 0x09                                           ; FE1F5C  0b 09 00
 	ld (xiz-2), de                                       ; FE1F5F  be fe 52
 	m_push MWD+r6, 0xfe                                  ; FE1F62  9e fe 04
-	calr sub_FE1FAB                                            ; FE1F65  1e 43 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F65  1e 43 00
 	pushw 0x09                                           ; FE1F68  0b 09 00
 	ld (xiz-4), ix                                       ; FE1F6B  be fc 54
 	m_push MWD+r6, 0xfc                                  ; FE1F6E  9e fc 04
-	calr sub_FE1FAB                                            ; FE1F71  1e 37 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F71  1e 37 00
 	ld de, (xiz-2)                                       ; FE1F74  9e fe 22
 	add DE,0x0040                                        ; FE1F77  da c8 40 00
 	ld ix, (xiz-4)                                       ; FE1F7B  9e fc 24
@@ -164150,10 +164153,10 @@ DiskLoad_MidiSetting:
 	jr nz, .LFE1F5C                                           ; FE1F88  6e d2
 	pushw 0x0b                                           ; FE1F8A  0b 0b 00
 	pushw MidiCfg_ModeBits                                         ; FE1F8D  0b 32 7f
-	calr sub_FE1FAB                                            ; FE1F90  1e 18 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F90  1e 18 00
 	pushw 0x01                                           ; FE1F93  0b 01 00
 	pushw 0x7f4d                                         ; FE1F96  0b 4d 7f
-	calr sub_FE1FAB                                            ; FE1F99  1e 0f 00
+	calr DiskLoad_CopyFromFileBuffer                                            ; FE1F99  1e 0f 00
 	calr DiskLoad_ApplyPanelImage                                            ; FE1F9C  1e 60 00
 	inc 8,XSP                                            ; FE1F9F  ef 60
 	jr .LFE1FA5                                              ; FE1FA1  68 02
@@ -164165,7 +164168,9 @@ DiskLoad_MidiSetting:
 	popw hl                                              ; FE1FA7  4b
 	unlk XIZ                                             ; FE1FA8  ee 0d
 	ret                                                  ; FE1FAA  0e
-sub_FE1FAB:
+; DiskLoad_CopyFromFileBuffer: (dst, n): copies n bytes from the file buffer 0x60A080 at its read cursor (0x1733) to dst and advances the
+;   cursor.  DiskLoad_MidiSetting pulls the MDS fields out with it.
+DiskLoad_CopyFromFileBuffer:
 	link XIZ,0xfff4                                      ; FE1FAB  ee 0c f4 ff
 	pushw hl                                             ; FE1FAF  2b
 	push XIX                                             ; FE1FB0  3c
@@ -164224,7 +164229,7 @@ DiskLoad_ApplyPanelImage:
 	pop XIX                                              ; FE202D  5c
 	ret                                                  ; FE202E  0e
 ; DiskLoad_Sound: content type 3: extension 'TM ', DiskLoad_ReadFileIntoWindow, DiskLoad_CheckSoundRamTag ('WSA SOUND RAM S0'),
-;   then sub_FE20E1 moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg.
+;   then DiskLoad_StreamFileToLinkRam moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg.
 DiskLoad_Sound:
 	pushw hl                                             ; FE202F  2b
 	push XIX                                             ; FE2030  3c
@@ -164233,7 +164238,7 @@ DiskLoad_Sound:
 	ld (XIX+0x08),0x54                                   ; FE2037  bc 08 00 54
 	ld (XIX+0x09),0x4d                                   ; FE203B  bc 09 00 4d
 	ld (XIX+0x0a),0x20                                   ; FE203F  bc 0a 00 20
-	calr sub_FE2CFF                                          ; FE2043  1e b9 0c
+	calr Disk_SetWindowStartToStaging                                          ; FE2043  1e b9 0c
 	calr DiskLoad_ReadFileIntoWindow                                          ; FE2046  1e e0 fd
 	ld H,A                                               ; FE2049  c9 8e
 	cp a, 0x01:i3                                          ; FE204B  c9 d9
@@ -164249,7 +164254,7 @@ DiskLoad_Sound:
 	ld XWA,0x00e80000                                    ; FE2060  40 00 00 e8 00
 	push XWA                                             ; FE2065  38
 	pushw 0x0100                                         ; FE2066  0b 00 01
-	calr sub_FE20E1                                            ; FE2069  1e 75 00
+	calr DiskLoad_StreamFileToLinkRam                                            ; FE2069  1e 75 00
 	ld H,A                                               ; FE206C  c9 8e
 	inc 8,XSP                                            ; FE206E  ef 60
 	inc 2,XSP                                            ; FE2070  ef 62
@@ -164272,7 +164277,7 @@ DiskLoad_Sound:
 	pop XIX                                              ; FE208F  5c
 	popw hl                                              ; FE2090  4b
 	ret                                                  ; FE2091  0e
-; DiskLoad_Combination: content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), sub_FE20E1 moves 0x16300 bytes to 0xEC0000
+; DiskLoad_Combination: content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), DiskLoad_StreamFileToLinkRam moves 0x16300 bytes to 0xEC0000
 ;   in 0x58-byte blocks, T_Queue2E00_PostParam98Fields.
 DiskLoad_Combination:
 	pushw hl                                             ; FE2092  2b
@@ -164282,8 +164287,8 @@ DiskLoad_Combination:
 	ld (XIX+0x08),0x43                                   ; FE209A  bc 08 00 43
 	ld (XIX+0x09),0x4d                                   ; FE209E  bc 09 00 4d
 	ld (XIX+0x0a),0x42                                   ; FE20A2  bc 0a 00 42
-	calr sub_FE2D09                                          ; FE20A6  1e 60 0c
-	calr sub_FE2D5E                                          ; FE20A9  1e b2 0c
+	calr Disk_SetWindowStartToFileBuffer                                          ; FE20A6  1e 60 0c
+	calr Disk_SetWindowLengthToKilobyte                                          ; FE20A9  1e b2 0c
 	calr DiskLoad_ReadFileIntoWindow                                          ; FE20AC  1e 7a fd
 	ld H,A                                               ; FE20AF  c9 8e
 	cp a, 0x01:i3                                          ; FE20B1  c9 d9
@@ -164299,7 +164304,7 @@ DiskLoad_Combination:
 	ld XWA,0x00ec0000                                    ; FE20C6  40 00 00 ec 00
 	push XWA                                             ; FE20CB  38
 	pushw 0x58                                           ; FE20CC  0b 58 00
-	calr sub_FE20E1                                            ; FE20CF  1e 0f 00
+	calr DiskLoad_StreamFileToLinkRam                                            ; FE20CF  1e 0f 00
 	ld H,A                                               ; FE20D2  c9 8e
 	call T_Queue2E00_PostParam98Fields                                        ; FE20D4  1d 54 34 f4
 	inc 8,XSP                                            ; FE20D8  ef 60
@@ -164310,7 +164315,10 @@ DiskLoad_Combination:
 	pop XIX                                              ; FE20DE  5c
 	popw hl                                              ; FE20DF  4b
 	ret                                                  ; FE20E0  0e
-sub_FE20E1:
+; DiskLoad_StreamFileToLinkRam: (count, link address): the load twin -- reads the open file 0x400 bytes at a time
+;   (DiskLoad_ReadKilobyteToWindowSlot) and sends every 0x2C00 to link RAM at the address
+;   (T_Link_SendCommandE4).  Called by DiskLoad_Sound / DiskLoad_Combination.
+DiskLoad_StreamFileToLinkRam:
 	link XIZ,0xffea                                      ; FE20E1  ee 0c ea ff
 	pushw hl                                             ; FE20E5  2b
 	pushw de                                             ; FE20E6  2a
@@ -164340,7 +164348,7 @@ sub_FE20E1:
 	jr .LFE2141                                              ; FE212A  68 15
 .LFE212C:
 	m_push MWD+r6, 0xfc                                  ; FE212C  9e fc 04
-	calr sub_FE22EF                                          ; FE212F  1e bd 01
+	calr DiskLoad_ReadKilobyteToWindowSlot                                          ; FE212F  1e bd 01
 	ld (xiz-1), a                                        ; FE2132  be ff 41
 	popw bc                                              ; FE2135  49
 	cp a, 0x01:i3                                          ; FE2136  c9 d9
@@ -164368,7 +164376,7 @@ sub_FE20E1:
 	jr nz, .LFE21B8                                          ; FE2173  6e 43
 .LFE2175:
 	m_push MWD+r6, 0xfc                                  ; FE2175  9e fc 04
-	calr sub_FE22EF                                          ; FE2178  1e 74 01
+	calr DiskLoad_ReadKilobyteToWindowSlot                                          ; FE2178  1e 74 01
 	ld (xiz-1), a                                        ; FE217B  be ff 41
 	popw bc                                              ; FE217E  49
 	cp a, 0x01:i3                                          ; FE217F  c9 d9
@@ -164439,7 +164447,7 @@ sub_FE20E1:
 	jr .LFE2279                                              ; FE2233  68 44
 .LFE2235:
 	m_push MWD+r6, 0xfc                                  ; FE2235  9e fc 04
-	calr sub_FE22EF                                            ; FE2238  1e b4 00
+	calr DiskLoad_ReadKilobyteToWindowSlot                                            ; FE2238  1e b4 00
 	ld (xiz-1), a                                        ; FE223B  be ff 41
 	popw bc                                              ; FE223E  49
 	cp a, 0x01:i3                                          ; FE223F  c9 d9
@@ -164470,7 +164478,7 @@ sub_FE20E1:
 	jr .LFE22A3                                              ; FE2282  68 1f
 .LFE2284:
 	m_push MWD+r6, 0xfc                                  ; FE2284  9e fc 04
-	calr sub_FE22EF                                            ; FE2287  1e 65 00
+	calr DiskLoad_ReadKilobyteToWindowSlot                                            ; FE2287  1e 65 00
 	ld (xiz-1), a                                        ; FE228A  be ff 41
 	popw bc                                              ; FE228D  49
 	cp a, 0x01:i3                                          ; FE228E  c9 d9
@@ -164520,7 +164528,9 @@ sub_FE20E1:
 	popw hl                                              ; FE22EB  4b
 	unlk XIZ                                             ; FE22EC  ee 0d
 	ret                                                  ; FE22EE  0e
-sub_FE22EF:
+; DiskLoad_ReadKilobyteToWindowSlot: (n): DiskCmd 0x1A (set transfer address) to Disk_WindowStart + n x 0x400, then DiskApi_ReadFileToWindow;
+;   returns its result, with 0xFD (end of file) read as 1.
+DiskLoad_ReadKilobyteToWindowSlot:
 	link XIZ,0x0000                                      ; FE22EF  ee 0c 00 00
 	pushw hl                                             ; FE22F3  2b
 	push XIX                                             ; FE22F4  3c
@@ -165006,7 +165016,7 @@ DiskSave_PanelLswFile:
 	push XIX                                             ; FE26E4  3c
 	lda xix, (Disk_FileName:16)                                ; FE26E5  f1 c8 21 34
 	calr Var220D_SetW4157                                          ; FE26E9  1e 06 08
-	calr sub_FE2DBC                                          ; FE26EC  1e cd 06
+	calr Disk_SetPanelImageLength                                          ; FE26EC  1e cd 06
 	ld c, (0x760a:16)                                   ; FE26EF  c1 0a 76 23
 	extz BC                                              ; FE26F3  d9 12
 	ld HL,BC                                             ; FE26F5  d9 8b
@@ -165029,8 +165039,8 @@ DiskSave_PanelLswFile:
 	ld (XIX+0x08),0x4c                                   ; FE271D  bc 08 00 4c
 	ld (XIX+0x09),0x53                                   ; FE2721  bc 09 00 53
 	ld (XIX+0x0a),0x57                                   ; FE2725  bc 0a 00 57
-	calr sub_FE2CF5                                          ; FE2729  1e c9 05
-	calr sub_FE2D7C                                          ; FE272C  1e 4d 06
+	calr Disk_SetWindowStartToPanelImage                                          ; FE2729  1e c9 05
+	calr Disk_SetWindowEndToPanelImageEnd                                          ; FE272C  1e 4d 06
 	calr DiskSave_WriteWindowToFile                                          ; FE272F  1e 4e 02
 .LFE2732:
 	pop XIX                                              ; FE2732  5c
@@ -165112,8 +165122,8 @@ DiskSave_MidiSetting:
 	ld (Disk_FileName+8:16), 0x4d                                 ; FE27EF  f1 d0 21 00 4d
 	ld (Disk_FileName+9:16), 0x44                                 ; FE27F4  f1 d1 21 00 44
 	ld (Disk_FileName+10:16), 0x53                                 ; FE27F9  f1 d2 21 00 53
-	calr sub_FE2D09                                          ; FE27FE  1e 08 05
-	calr sub_FE2D5E                                          ; FE2801  1e 5a 05
+	calr Disk_SetWindowStartToFileBuffer                                          ; FE27FE  1e 08 05
+	calr Disk_SetWindowLengthToKilobyte                                          ; FE2801  1e 5a 05
 	calr DiskSave_WriteWindowToFile                                          ; FE2804  1e 79 01
 	inc 8,XSP                                            ; FE2807  ef 60
 	pop XIX                                              ; FE2809  5c
@@ -165295,8 +165305,8 @@ DiskSave_Sound:
 	ld (Disk_FileName+8:16), 0x54                                 ; FE29BA  f1 d0 21 00 54
 	ld (Disk_FileName+9:16), 0x4d                                 ; FE29BF  f1 d1 21 00 4d
 	ld (Disk_FileName+10:16), 0x20                                 ; FE29C4  f1 d2 21 00 20
-	calr sub_FE2CFF                                          ; FE29C9  1e 33 03
-	calr sub_FE2D4F                                          ; FE29CC  1e 80 03
+	calr Disk_SetWindowStartToStaging                                          ; FE29C9  1e 33 03
+	calr Disk_SetWindowLengthToLinkChunk                                          ; FE29CC  1e 80 03
 	ld XBC,0x00e80000                                    ; FE29CF  41 00 00 e8 00
 	ld (0x1747:24), xbc                                 ; FE29D4  f2 47 17 00 61
 	ld xwa, (Disk_WindowStart:16)                                 ; FE29D9  e1 d3 21 20
@@ -165324,7 +165334,7 @@ DiskSave_Sound:
 	jr .LFE2A1C                                              ; FE2A11  68 09
 .LFE2A13:
 	pushw 0x00                                           ; FE2A13  0b 00 00
-	calr sub_FE2AA9                                            ; FE2A16  1e 90 00
+	calr DiskSave_StreamLinkRamToFile                                            ; FE2A16  1e 90 00
 	popw bc                                              ; FE2A19  49
 	jr .LFE2A1E                                              ; FE2A1A  68 02
 .LFE2A1C:
@@ -165351,8 +165361,8 @@ DiskSave_Combination:
 	ld (Disk_FileName+8:16), 0x43                                 ; FE2A42  f1 d0 21 00 43
 	ld (Disk_FileName+9:16), 0x4d                                 ; FE2A47  f1 d1 21 00 4d
 	ld (Disk_FileName+10:16), 0x42                                 ; FE2A4C  f1 d2 21 00 42
-	calr sub_FE2CFF                                          ; FE2A51  1e ab 02
-	calr sub_FE2D4F                                          ; FE2A54  1e f8 02
+	calr Disk_SetWindowStartToStaging                                          ; FE2A51  1e ab 02
+	calr Disk_SetWindowLengthToLinkChunk                                          ; FE2A54  1e f8 02
 	ld XBC,0x00ec0000                                    ; FE2A57  41 00 00 ec 00
 	ld (0x1747:24), xbc                                 ; FE2A5C  f2 47 17 00 61
 	ld xwa, (Disk_WindowStart:16)                                 ; FE2A61  e1 d3 21 20
@@ -165380,7 +165390,7 @@ DiskSave_Combination:
 	jr .LFE2AA4                                              ; FE2A99  68 09
 .LFE2A9B:
 	pushw 0x01                                           ; FE2A9B  0b 01 00
-	calr sub_FE2AA9                                            ; FE2A9E  1e 08 00
+	calr DiskSave_StreamLinkRamToFile                                            ; FE2A9E  1e 08 00
 	popw bc                                              ; FE2AA1  49
 	jr .LFE2AA6                                              ; FE2AA2  68 02
 .LFE2AA4:
@@ -165389,7 +165399,13 @@ DiskSave_Combination:
 	pop XIX                                              ; FE2AA6  5c
 	popw hl                                              ; FE2AA7  4b
 	ret                                                  ; FE2AA8  0e
-sub_FE2AA9:
+; DiskSave_StreamLinkRamToFile: (0 = SOUND: link RAM 0xE80000, 0x17 x 0x2C00 + 0xC00 = 0x40000 bytes; 1 = COMBINATION: 0xEC0000, 8 x 0x2C00 +
+;   0x300 = 0x16300): after the first chunk its caller wrote, each further 0x2C00 bytes come over the link into the
+;   staging window
+;   (T_Link_SendCommandE2) and go to the open file 0x400 at a time -- DiskCmd 0x1A (set transfer address) at
+;   window + n x 0x400, then DiskApi_WriteFileFromWindow with Disk_Flags bit 1; a failed write deletes the file
+;   (DiskFile_Delete).  Called by DiskSave_Sound / DiskSave_Combination.
+DiskSave_StreamLinkRamToFile:
 	link XIZ,0xffe6                                      ; FE2AA9  ee 0c e6 ff
 	pushw hl                                             ; FE2AAD  2b
 	pushw de                                             ; FE2AAE  2a
@@ -165614,15 +165630,19 @@ Disk_SaveSqfFromStaging:
 	calr DiskApi_WriteFileFromWindow                                          ; FE2CF0  1e a6 dd
 	pop XIX                                              ; FE2CF3  5c
 	ret                                                  ; FE2CF4  0e
-sub_FE2CF5:
+; Disk_SetWindowStartToPanelImage: Disk_WindowStart = 0x7600, the panel image the LSW file holds.
+Disk_SetWindowStartToPanelImage:
 	ld XBC,0x00007600                                    ; FE2CF5  41 00 76 00 00
 	ld (Disk_WindowStart:16), xbc                                 ; FE2CFA  f1 d3 21 61
 	ret                                                  ; FE2CFE  0e
-sub_FE2CFF:
+; Disk_SetWindowStartToStaging: Disk_WindowStart = 0x609400 (DiskSave_Sound / _Combination, DiskLoad_Sound).
+Disk_SetWindowStartToStaging:
 	ld XBC,0x00609400                                    ; FE2CFF  41 00 94 60 00
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D04  f1 d3 21 61
 	ret                                                  ; FE2D08  0e
-sub_FE2D09:
+; Disk_SetWindowStartToFileBuffer: Disk_WindowStart = 0x60A080, where DiskLoad_MidiSetting / _Combination / _PanelLswFile read a file and
+;   DiskSave_MidiSetting builds one.
+Disk_SetWindowStartToFileBuffer:
 	lda xbc, (0x60a080:24)                               ; FE2D09  f2 80 a0 60 31
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D0E  f1 d3 21 61
 	ret                                                  ; FE2D12  0e
@@ -165653,12 +165673,14 @@ Disk_SetWindowStartToWorkspace:
 	add xwa, (Disk_WindowStart:16)                                ; FE2D46  e1 d3 21 80
 	ld (Disk_WindowEnd:16), xwa                                 ; FE2D4A  f1 d7 21 60
 	ret                                                  ; FE2D4E  0e
-sub_FE2D4F:
+; Disk_SetWindowLengthToLinkChunk: Disk_WindowEnd = Disk_WindowStart + 0x2C00, one link transfer (11 x 0x400).
+Disk_SetWindowLengthToLinkChunk:
 	ld xbc, (Disk_WindowStart:16)                                 ; FE2D4F  e1 d3 21 21
 	add XBC,0x00002c00                                   ; FE2D53  e9 c8 00 2c 00 00
 	ld (Disk_WindowEnd:16), xbc                                 ; FE2D59  f1 d7 21 61
 	ret                                                  ; FE2D5D  0e
-sub_FE2D5E:
+; Disk_SetWindowLengthToKilobyte: Disk_WindowEnd = Disk_WindowStart + 0x400.
+Disk_SetWindowLengthToKilobyte:
 	ld xbc, (Disk_WindowStart:16)                                 ; FE2D5E  e1 d3 21 21
 	add XBC,0x00000400                                   ; FE2D62  e9 c8 00 04 00 00
 	ld (Disk_WindowEnd:16), xbc                                 ; FE2D68  f1 d7 21 61
@@ -165667,7 +165689,8 @@ sub_FE2D5E:
 	add XBC,0x000007d0                                   ; FE2D71  e9 c8 d0 07 00 00
 	ld (Disk_WindowEnd:16), xbc                                 ; FE2D77  f1 d7 21 61
 	ret                                                  ; FE2D7B  0e
-sub_FE2D7C:
+; Disk_SetWindowEndToPanelImageEnd: Disk_WindowEnd = 0x7600 + (0x760A) x 16.
+Disk_SetWindowEndToPanelImageEnd:
 	ldw bc, 0x760a                                       ; FE2D7C  31 0a 76
 	exts XBC                                             ; FE2D7F  e9 13
 	ld WA,(XBC)                                          ; FE2D81  91 20
@@ -165696,7 +165719,8 @@ Disk_SetWindowEndToHeapPlusSeqLength:
 	add xwa, (BStore_HeapBase:16)                                ; FE2DB3  e1 04 36 80
 	ld (Disk_WindowEnd:16), xwa                                 ; FE2DB7  f1 d7 21 60
 	ret                                                  ; FE2DBB  0e
-sub_FE2DBC:
+; Disk_SetPanelImageLength: (0x760A) = 0xA0: the panel image is 0xA00 bytes, 0x7600-0x7FFF.
+Disk_SetPanelImageLength:
 	ldw bc, 0x760a                                       ; FE2DBC  31 0a 76
 	exts XBC                                             ; FE2DBF  e9 13
 	m_ld_mi16 MDI+r1, 0, 0x00a0                          ; FE2DC1  b1 02 a0 00
@@ -165712,7 +165736,9 @@ Disk_SetSeqLengthFromWorkspace:
 	exts XBC                                             ; FE2DD6  e9 13
 	m_ld_mi16 MDI+r1, 0, 0x4d80                          ; FE2DD8  b1 02 80 4d
 	ret                                                  ; FE2DDC  0e
-sub_FE2DDD:
+; DiskLoad_CheckLswHeader: A = 1 when the file buffer's bytes +4 / +5 (0x60A084 / 0x60A085) are 'W' 'A', else 0 -- DiskLoad_PanelLswFile
+;   refuses the file with 0x10 on 0.
+DiskLoad_CheckLswHeader:
 	ld c, (0x60a084:24)                                 ; FE2DDD  c2 84 a0 60 23
 	cp C,0x57                                            ; FE2DE2  cb cf 57
 	jr nz, .LFE2DF5                                          ; FE2DE5  6e 0e
@@ -174376,7 +174402,7 @@ sub_FE6E84:
 ; through the single 24-bit pointer to it that prom_a holds (prom_b holds none).
 ; ---------------------------------------------------------------------
 ; LinkMsg_AfterSoundRamLoad -- six bytes Link_SendAfterSoundRamLoadMsg sends with T_Link_SendBlockIn32ByteChunks
-;          from the disk load at 0xFE202F, once DiskLoad_CheckSoundRamTag has accepted the file and sub_FE20E1
+;          from the disk load at 0xFE202F, once DiskLoad_CheckSoundRamTag has accepted the file and DiskLoad_StreamFileToLinkRam
 ;          (passed 0x40000, 0xE80000 and 0x100) has returned 1.  prom_b's Table_F48C00 holds the same six after
 ;          "WSA SOUND RAM S0" and "WSA1".  What link command 0x88 does is not established.
 LinkMsg_AfterSoundRamLoad:	.byte	0x88, 0x00, 0x18, 0x00, 0x00, 0x00	; FE7000
@@ -196800,7 +196826,7 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	ld a, (0x2724:16)                                   ; FF78DF  c1 24 27 21
 	ldw bc, 0x01                                         ; FF78E3  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF78E6  1d 26 78 ff
-	call T_F42608                                        ; FF78EA  1d 08 26 f4
+	call T_DiskSaveFile_SaveOrConfirmOverwrite_Call                                        ; FF78EA  1d 08 26 f4
 	pop XDE                                              ; FF78EE  5a
 	pop XHL                                              ; FF78EF  5b
 	pop XIX                                              ; FF78F0  5c
@@ -196919,7 +196945,7 @@ DiskSaveFile_Page4_LcdKeyRow1:
 	ld a, (0x2724:16)                                   ; FF79C7  c1 24 27 21
 	ldw bc, 0x01                                         ; FF79CB  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF79CE  1d 26 78 ff
-	call T_F4260C                                        ; FF79D2  1d 0c 26 f4
+	call T_DiskSaveFile_CheckPasswordThenSave_Call                                        ; FF79D2  1d 0c 26 f4
 	pop XDE                                              ; FF79D6  5a
 	pop XHL                                              ; FF79D7  5b
 	pop XIX                                              ; FF79D8  5c

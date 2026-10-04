@@ -447,9 +447,9 @@ ROWS = [
     ("FE2CBF", "DiskSave_Sequencer", "content type 1: SeqFile_Save_SaveRegs; result (0x23CB)."),
     ("FE202F", "DiskLoad_Sound",
      "content type 3: extension 'TM ', DiskLoad_ReadFileIntoWindow, DiskLoad_CheckSoundRamTag ('WSA SOUND RAM S0'),\n"
-     "then sub_FE20E1 moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg."),
+     "then DiskLoad_StreamFileToLinkRam moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg."),
     ("FE2092", "DiskLoad_Combination",
-     "content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), sub_FE20E1 moves 0x16300 bytes to 0xEC0000\n"
+     "content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), DiskLoad_StreamFileToLinkRam moves 0x16300 bytes to 0xEC0000\n"
      "in 0x58-byte blocks, T_Queue2E00_PostParam98Fields."),
     ("FE1EF1", "DiskLoad_MidiSetting", "content type 5: extension 'MDS', read into the window, then copied out in 9-byte pieces."),
     ("FE23BD", "DiskLoad_SoundRemap", "content type 6: extension 'S' + 'RM', DiskLoad_ReadRemapFile, 0x230 (0x650 for a '1' file) bytes to 0x5210."),
@@ -460,8 +460,8 @@ ROWS = [
     ("FE24BE", "DiskLoad_CopyBufferWords", "copies arg-2 bytes (as words) from the buffer 0x60A700 to the arg-1 address."),
     ("FE292D", "DiskSave_CopyWordsToBuffer", "the reverse: arg-2 bytes (as words) from the arg-1 address to the buffer 0x60A700."),
     ("FE1E3C", "DiskLoad_PanelLswFile",
-     "content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by sub_FE2DDD\n"
-     "(0x10 when it refuses), read again and applied by sub_FE1EC3 + DiskLoad_ApplyPanelImage."),
+     "content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by DiskLoad_CheckLswHeader\n"
+     "(0x10 when it refuses), read again and applied by DiskLoad_RestoreRam7FC0 + DiskLoad_ApplyPanelImage."),
     ("FE2430", "DiskLoad_PanelSlsFile",
      "content type 4, second file: extension 'SLS', into the window 0x60A700..+0x800, 0x600 bytes copied to 0x7000."),
     ("FE26E2", "DiskSave_PanelLswFile",
@@ -1292,7 +1292,7 @@ ROWS = [
      "the 8 bytes at 0x60A488 + 16 x (0x2724) -- the selected listing slot -- all 0x80: Disk_LastError = 0,\n"
      "A = 0; any other byte: 0xFE (a file is there)."),
     ("FE07E0", "DiskSaveFile_CheckPasswordThenSave",
-     "the directory entry T_F4260C's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,\n"
+     "the directory entry T_DiskSaveFile_CheckPasswordThenSave_Call's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,\n"
      "delay, page 1; match -> status 0x12, Delay_500Ticks, DiskSaveFile_SaveOrConfirmOverwrite."),
     ("FE0785", "DiskSave_ComparePassword",
      "the entered (0x2210) << 8 | (0x220F) against (0x23CE) -- bank Disk_SeqBank's password for SEQUENCER\n"
@@ -1317,6 +1317,44 @@ ROWS = [
     ("F60B0C", "SongClear_ClearCurrentBank",
      "SongClear_ClearBank with (0x0E02) = BStore_CurrentBank, the old value restored.  Thunk T_SongClear_ClearCurrentBank, called by\n"
      "BStore_ClearPasswordProtectedBanks and by SeqFile_Load on its target bank."),
+    # the disk module's chunked transfers and window setters (FINDINGS-prom_b-disk-and-file-menus.md table)
+    ("FE2AA9", "DiskSave_StreamLinkRamToFile",
+     "(0 = SOUND: link RAM 0xE80000, 0x17 x 0x2C00 + 0xC00 = 0x40000 bytes; 1 = COMBINATION: 0xEC0000, 8 x 0x2C00 +\n"
+     "0x300 = 0x16300): after the first chunk its caller wrote, each further 0x2C00 bytes come over the link into the\n"
+     "staging window\n"
+     "(T_Link_SendCommandE2) and go to the open file 0x400 at a time -- DiskCmd 0x1A (set transfer address) at\n"
+     "window + n x 0x400, then DiskApi_WriteFileFromWindow with Disk_Flags bit 1; a failed write deletes the file\n"
+     "(DiskFile_Delete).  Called by DiskSave_Sound / DiskSave_Combination."),
+    ("FE20E1", "DiskLoad_StreamFileToLinkRam",
+     "(count, link address): the load twin -- reads the open file 0x400 bytes at a time\n"
+     "(DiskLoad_ReadKilobyteToWindowSlot) and sends every 0x2C00 to link RAM at the address\n"
+     "(T_Link_SendCommandE4).  Called by DiskLoad_Sound / DiskLoad_Combination."),
+    ("FE22EF", "DiskLoad_ReadKilobyteToWindowSlot",
+     "(n): DiskCmd 0x1A (set transfer address) to Disk_WindowStart + n x 0x400, then DiskApi_ReadFileToWindow;\n"
+     "returns its result, with 0xFD (end of file) read as 1."),
+    ("FE2CFF", "Disk_SetWindowStartToStaging",
+     "Disk_WindowStart = 0x609400 (DiskSave_Sound / _Combination, DiskLoad_Sound)."),
+    ("FE2D4F", "Disk_SetWindowLengthToLinkChunk",
+     "Disk_WindowEnd = Disk_WindowStart + 0x2C00, one link transfer (11 x 0x400)."),
+    ("FE2D5E", "Disk_SetWindowLengthToKilobyte",
+     "Disk_WindowEnd = Disk_WindowStart + 0x400."),
+    ("FE2D09", "Disk_SetWindowStartToFileBuffer",
+     "Disk_WindowStart = 0x60A080, where DiskLoad_MidiSetting / _Combination / _PanelLswFile read a file and\n"
+     "DiskSave_MidiSetting builds one."),
+    ("FE2CF5", "Disk_SetWindowStartToPanelImage", "Disk_WindowStart = 0x7600, the panel image the LSW file holds."),
+    ("FE2D7C", "Disk_SetWindowEndToPanelImageEnd", "Disk_WindowEnd = 0x7600 + (0x760A) x 16."),
+    ("FE2DBC", "Disk_SetPanelImageLength", "(0x760A) = 0xA0: the panel image is 0xA00 bytes, 0x7600-0x7FFF."),
+    ("FE1FAB", "DiskLoad_CopyFromFileBuffer",
+     "(dst, n): copies n bytes from the file buffer 0x60A080 at its read cursor (0x1733) to dst and advances the\n"
+     "cursor.  DiskLoad_MidiSetting pulls the MDS fields out with it."),
+    ("FE1E93", "DiskLoad_SaveRam7FC0",
+     "copies the 32 bytes at RAM 0x7FC0 to 0x1713, before DiskLoad_PanelLswFile reads the 0xA00-byte image\n"
+     "0x7600-0x7FFF over them."),
+    ("FE1EC3", "DiskLoad_RestoreRam7FC0",
+     "copies them back from 0x1713 after the image is read, so the LSW file never sets 0x7FC0-0x7FDF."),
+    ("FE2DDD", "DiskLoad_CheckLswHeader",
+     "A = 1 when the file buffer's bytes +4 / +5 (0x60A084 / 0x60A085) are 'W' 'A', else 0 -- DiskLoad_PanelLswFile\n"
+     "refuses the file with 0x10 on 0."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

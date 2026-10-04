@@ -90988,11 +90988,17 @@ T_Disk_ResetAndMountFloppy_Call:	jp Disk_ResetAndMountFloppy_Call  ; F425EC (was
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
-T_F425FC:	jp DiskSave_IsSelectedFileNew_Call  ; -> prom_a 0x61CD0
+; Evidence: slot 0xF425FC is `jp 0xFE1CD0`; prom_a 0xFE1CD0 carries the label
+;           DiskSave_IsSelectedFileNew_Call (graded CONTENT).  DERIVATIVE name.
+T_DiskSave_IsSelectedFileNew_Call:	jp DiskSave_IsSelectedFileNew_Call  ; F425FC (was T_F425FC) -> prom_a 0x61CD0
 T_Var2216_SetW145C_Call:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
 T_F42604:	jp sub_FE1CD8  ; -> prom_a 0x61CD8   x8
-T_F42608:	jp DiskSaveFile_SaveOrConfirmOverwrite_Call  ; -> prom_a 0x61CDC   x1
-T_F4260C:	jp DiskSaveFile_CheckPasswordThenSave_Call  ; -> prom_a 0x61CE0   x1
+; Evidence: slot 0xF42608 is `jp 0xFE1CDC`; prom_a 0xFE1CDC carries the label
+;           DiskSaveFile_SaveOrConfirmOverwrite_Call (graded CONTENT).  DERIVATIVE name.
+T_DiskSaveFile_SaveOrConfirmOverwrite_Call:	jp DiskSaveFile_SaveOrConfirmOverwrite_Call  ; F42608 (was T_F42608) -> prom_a 0x61CDC   x1
+; Evidence: slot 0xF4260C is `jp 0xFE1CE0`; prom_a 0xFE1CE0 carries the label
+;           DiskSaveFile_CheckPasswordThenSave_Call (graded CONTENT).  DERIVATIVE name.
+T_DiskSaveFile_CheckPasswordThenSave_Call:	jp DiskSaveFile_CheckPasswordThenSave_Call  ; F4260C (was T_F4260C) -> prom_a 0x61CE0   x1
 T_F42610:	jp sub_FE1CE4  ; -> prom_a 0x61CE4   x1
 T_F42614:	jp sub_FE1C0B  ; -> prom_a 0x61C0B   x5
 T_F42618:	jp sub_FE04BE  ; -> prom_a 0x604BE   x2
