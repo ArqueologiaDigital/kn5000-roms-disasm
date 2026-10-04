@@ -80207,40 +80207,54 @@ JumpTable_FAB8B4:
 	.long sub_FAB8E4                                 ; FAB8B4  [  0]
 	.long .LFAB914                                   ; FAB8B8  [  1]
 	.long .LFAB914                                   ; FAB8BC  [  2]
-	.long sub_FAB8E9                                 ; FAB8C0  [  3]
+	.long List2030_PartVolume_Apply_Call                                 ; FAB8C0  [  3]
 	.long sub_FAB8EE                                 ; FAB8C4  [  4]
-	.long sub_FAB8F3                                 ; FAB8C8  [  5]
-	.long sub_FAB8F8                                 ; FAB8CC  [  6]
-	.long sub_FAB8FD                                 ; FAB8D0  [  7]
-	.long sub_FAB902                                 ; FAB8D4  [  8]
-	.long sub_FAB907                                 ; FAB8D8  [  9]
-	.long sub_FAB90C                                 ; FAB8DC  [ 10]
+	.long List2030_PartEffect3Depth_Apply_Call                                 ; FAB8C8  [  5]
+	.long List2030_PartEffect4Depth_Apply_Call                                 ; FAB8CC  [  6]
+	.long List2030_PartEffect1Depth_Apply_Call                                 ; FAB8D0  [  7]
+	.long List2030_PartPan_Apply_Call                                 ; FAB8D4  [  8]
+	.long List2030_PartCoarseTune_Apply_Call                                 ; FAB8D8  [  9]
+	.long List2030_PartFineTune_Apply_Call                                 ; FAB8DC  [ 10]
 	.long List2030_PartBendRange_Apply_Call                                 ; FAB8E0  [ 11]
 sub_FAB8E4:   ; entry: JumpTable_FAB8B4[0], class 0
 	calr sub_FAB915                                      ; FAB8E4  1e 2e 00
 	jr .LFAB914                                          ; FAB8E7  68 2b
-sub_FAB8E9:   ; entry: named by 1 `.long` operand, first at 0xFAB8C0
+; List2030_PartVolume_Apply_Call: JumpTable_FAB8B4[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartVolume_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8C0
 	calr List2030_PartVolume_Apply                                      ; FAB8E9  1e 11 01
 	jr .LFAB914                                          ; FAB8EC  68 26
 sub_FAB8EE:   ; entry: named by 1 `.long` operand, first at 0xFAB8C4
 	calr sub_FABA08                                      ; FAB8EE  1e 17 01
 	jr .LFAB914                                          ; FAB8F1  68 21
-sub_FAB8F3:   ; entry: named by 1 `.long` operand, first at 0xFAB8C8
+; List2030_PartEffect3Depth_Apply_Call: JumpTable_FAB8B4[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartEffect3Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8C8
 	calr List2030_PartEffect3Depth_Apply                                      ; FAB8F3  1e ba 01
 	jr .LFAB914                                          ; FAB8F6  68 1c
-sub_FAB8F8:   ; entry: named by 1 `.long` operand, first at 0xFAB8CC
+; List2030_PartEffect4Depth_Apply_Call: JumpTable_FAB8B4[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartEffect4Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8CC
 	calr List2030_PartEffect4Depth_Apply                                      ; FAB8F8  1e c0 01
 	jr .LFAB914                                          ; FAB8FB  68 17
-sub_FAB8FD:   ; entry: named by 1 `.long` operand, first at 0xFAB8D0
+; List2030_PartEffect1Depth_Apply_Call: JumpTable_FAB8B4[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartEffect1Depth_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D0
 	calr List2030_PartEffect1Depth_Apply                                      ; FAB8FD  1e c6 01
 	jr .LFAB914                                          ; FAB900  68 12
-sub_FAB902:   ; entry: named by 1 `.long` operand, first at 0xFAB8D4
+; List2030_PartPan_Apply_Call: JumpTable_FAB8B4[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartPan_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D4
 	calr List2030_PartPan_Apply                                      ; FAB902  1e cc 01
 	jr .LFAB914                                          ; FAB905  68 0d
-sub_FAB907:   ; entry: named by 1 `.long` operand, first at 0xFAB8D8
+; List2030_PartCoarseTune_Apply_Call: JumpTable_FAB8B4[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartCoarseTune_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8D8
 	calr List2030_PartCoarseTune_Apply                                      ; FAB907  1e d2 01
 	jr .LFAB914                                          ; FAB90A  68 08
-sub_FAB90C:   ; entry: named by 1 `.long` operand, first at 0xFAB8DC
+; List2030_PartFineTune_Apply_Call: JumpTable_FAB8B4[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's
+;   List2030_PartBendRange_Apply_Call.
+List2030_PartFineTune_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8DC
 	calr List2030_PartFineTune_Apply                                      ; FAB90C  1e d8 01
 	jr .LFAB914                                          ; FAB90F  68 03
 List2030_PartBendRange_Apply_Call:   ; entry: named by 1 `.long` operand, first at 0xFAB8E0
@@ -94726,7 +94740,7 @@ sub_FB585E:
 	pop XDE                                              ; FB5873  5a
 	cp (XIZ+0x08),0x00                                   ; FB5874  8e 08 3f 00
 	jr z, .LFB587F                                       ; FB5878  66 05
-	calr sub_FB58CC                                      ; FB587A  1e 4f 00
+	calr GmMode_ResetToDefaults                                      ; FB587A  1e 4f 00
 	jr .LFB5882                                          ; FB587D  68 03
 .LFB587F:
 	calr sub_FB5903                                      ; FB587F  1e 81 00
@@ -94761,20 +94775,23 @@ sub_FB585E:
 	pop XIX                                              ; FB58C8  5c
 	unlk XIZ                                             ; FB58C9  ee 0d
 	ret                                                  ; FB58CB  0e
-sub_FB58CC:
+; GmMode_ResetToDefaults: the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the
+;   GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further
+;   resets.  Called by sub_FB5972 (GmMode_HandleChange's) and sub_FB585E.
+GmMode_ResetToDefaults:
 	calr sub_FB556D                                      ; FB58CC  1e 9e fc
 	calr sub_FB5A17                                      ; FB58CF  1e 45 01
 	calr sub_FB56D3                                      ; FB58D2  1e fe fd
-	calr sub_FB5B6A                                      ; FB58D5  1e 92 02
+	calr GmReset_PartVolume                                      ; FB58D5  1e 92 02
 	calr sub_FB58CC_Nop                                      ; FB58D8  1e bb 02
-	calr sub_FB5B97                                      ; FB58DB  1e b9 02
+	calr GmReset_PartEffect3Depth                                      ; FB58DB  1e b9 02
 	calr sub_FB5BC3                                      ; FB58DE  1e e2 02
-	calr sub_FB5BEF                                      ; FB58E1  1e 0b 03
-	calr sub_FB5C1B                                      ; FB58E4  1e 34 03
-	calr sub_FB5C47                                      ; FB58E7  1e 5d 03
-	calr sub_FB5C73                                      ; FB58EA  1e 86 03
-	calr sub_FB5C9F                                      ; FB58ED  1e af 03
-	calr sub_FB5CCB                                      ; FB58F0  1e d8 03
+	calr GmReset_PartEffect4Depth                                      ; FB58E1  1e 0b 03
+	calr GmReset_PartEffect1Depth                                      ; FB58E4  1e 34 03
+	calr GmReset_PartPan                                      ; FB58E7  1e 5d 03
+	calr GmReset_PartCoarseTune                                      ; FB58EA  1e 86 03
+	calr GmReset_PartFineTune                                      ; FB58ED  1e af 03
+	calr GmReset_PartBendRange                                      ; FB58F0  1e d8 03
 	calr sub_FB5CF7                                      ; FB58F3  1e 01 04
 	calr sub_FB58CC_Nop2                                      ; FB58F6  1e 08 04
 	calr sub_FB5D02                                      ; FB58F9  1e 06 04
@@ -94849,7 +94866,7 @@ sub_FB5972:
 	and C,0x04                                           ; FB5986  cb cc 04
 	jr z, .LFB59A0                                       ; FB5989  66 15
 	calr sub_FB567E                                      ; FB598B  1e f0 fc
-	calr sub_FB58CC                                      ; FB598E  1e 3b ff
+	calr GmMode_ResetToDefaults                                      ; FB598E  1e 3b ff
 	ld c, (0x124c:16)                                   ; FB5991  c1 4c 12 23
 	and C,0x01                                           ; FB5995  cb cc 01
 	jr nz, .LFB59A6                                      ; FB5998  6e 0c
@@ -95017,7 +95034,9 @@ sub_FB5A17:
 	popw hl                                              ; FB5B66  4b
 	unlk XIZ                                             ; FB5B67  ee 0d
 	ret                                                  ; FB5B69  0e
-sub_FB5B6A:
+; GmReset_PartVolume: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 3, 100 (0x64), mask 0x7F} -- every part's Volume set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartVolume:
 	link XIZ,0xfffc                                      ; FB5B6A  ee 0c fc ff
 	push XIX                                             ; FB5B6E  3c
 	lda xix, (xiz-4)                                     ; FB5B6F  be fc 34
@@ -95040,7 +95059,9 @@ sub_FB5B6A:
 	ret                                                  ; FB5B95  0e
 sub_FB58CC_Nop:
 	ret                                                  ; FB5B96  0e
-sub_FB5B97:
+; GmReset_PartEffect3Depth: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 5, 0, mask 0x7F} -- every part's Effect3Depth set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartEffect3Depth:
 	link XIZ,0xfffc                                      ; FB5B97  ee 0c fc ff
 	push XIX                                             ; FB5B9B  3c
 	lda xix, (xiz-4)                                     ; FB5B9C  be fc 34
@@ -95082,7 +95103,9 @@ sub_FB5BC3:
 	pop XIX                                              ; FB5BEB  5c
 	unlk XIZ                                             ; FB5BEC  ee 0d
 	ret                                                  ; FB5BEE  0e
-sub_FB5BEF:
+; GmReset_PartEffect4Depth: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 6, 0, mask 0x7F} -- every part's Effect4Depth set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartEffect4Depth:
 	link XIZ,0xfffc                                      ; FB5BEF  ee 0c fc ff
 	push XIX                                             ; FB5BF3  3c
 	lda xix, (xiz-4)                                     ; FB5BF4  be fc 34
@@ -95103,7 +95126,9 @@ sub_FB5BEF:
 	pop XIX                                              ; FB5C17  5c
 	unlk XIZ                                             ; FB5C18  ee 0d
 	ret                                                  ; FB5C1A  0e
-sub_FB5C1B:
+; GmReset_PartEffect1Depth: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 7, 90 (0x5A), mask 0x7F} -- every part's Effect1Depth set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartEffect1Depth:
 	link XIZ,0xfffc                                      ; FB5C1B  ee 0c fc ff
 	push XIX                                             ; FB5C1F  3c
 	lda xix, (xiz-4)                                     ; FB5C20  be fc 34
@@ -95124,7 +95149,9 @@ sub_FB5C1B:
 	pop XIX                                              ; FB5C43  5c
 	unlk XIZ                                             ; FB5C44  ee 0d
 	ret                                                  ; FB5C46  0e
-sub_FB5C47:
+; GmReset_PartPan: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 8, 64 (0x40), centre, mask 0x7F} -- every part's Pan set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartPan:
 	link XIZ,0xfffc                                      ; FB5C47  ee 0c fc ff
 	push XIX                                             ; FB5C4B  3c
 	lda xix, (xiz-4)                                     ; FB5C4C  be fc 34
@@ -95145,7 +95172,9 @@ sub_FB5C47:
 	pop XIX                                              ; FB5C6F  5c
 	unlk XIZ                                             ; FB5C70  ee 0d
 	ret                                                  ; FB5C72  0e
-sub_FB5C73:
+; GmReset_PartCoarseTune: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 9, 64 (0x40), centre} -- every part's CoarseTune set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartCoarseTune:
 	link XIZ,0xfffc                                      ; FB5C73  ee 0c fc ff
 	push XIX                                             ; FB5C77  3c
 	lda xix, (xiz-4)                                     ; FB5C78  be fc 34
@@ -95166,7 +95195,9 @@ sub_FB5C73:
 	pop XIX                                              ; FB5C9B  5c
 	unlk XIZ                                             ; FB5C9C  ee 0d
 	ret                                                  ; FB5C9E  0e
-sub_FB5C9F:
+; GmReset_PartFineTune: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 10, 128 (0x80), centre, mask 0xFF} -- every part's FineTune set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartFineTune:
 	link XIZ,0xfffc                                      ; FB5C9F  ee 0c fc ff
 	push XIX                                             ; FB5CA3  3c
 	lda xix, (xiz-4)                                     ; FB5CA4  be fc 34
@@ -95187,7 +95218,9 @@ sub_FB5C9F:
 	pop XIX                                              ; FB5CC7  5c
 	unlk XIZ                                             ; FB5CC8  ee 0d
 	ret                                                  ; FB5CCA  0e
-sub_FB5CCB:
+; GmReset_PartBendRange: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 11, 2, mask 0x7F} -- every part's BendRange set to the
+;   GM default.  One step of GmMode_ResetToDefaults.
+GmReset_PartBendRange:
 	link XIZ,0xfffc                                      ; FB5CCB  ee 0c fc ff
 	push XIX                                             ; FB5CCF  3c
 	lda xix, (xiz-4)                                     ; FB5CD0  be fc 34

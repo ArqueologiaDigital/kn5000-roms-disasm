@@ -88622,7 +88622,7 @@ T_F40A00:	jp T_F40C70  ; -> prom_b 0x40C70   x3
 T_F40A04:	jp T_F40C74  ; -> prom_b 0x40C74   x8
 T_Var34D1_SetBits20:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
 T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
-T_F40A10:	jp sub_F45975  ; -> prom_b 0x45975   x2
+T_F40A10:	jp SeqBufRing_Discard  ; -> prom_b 0x45975   x2
 T_F40A14:	jp TimedEventRing_Discard  ; -> prom_b 0x45B0A   x8
 T_F40A18:	jp sub_F455A0  ; -> prom_b 0x455A0   x2
 T_F40A1C:	jp sub_F44367  ; -> prom_b 0x44367   x15
@@ -91320,7 +91320,7 @@ sub_F44027:		; <- T_F40A88
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4402A:		; <- T_F40A60
-	jrl	sub_F45975	; F4402A  jrl T,0xf45975
+	jrl	SeqBufRing_Discard	; F4402A  jrl T,0xf45975
 
 ; --------------------------------------------------------------------------
 ; sub_F4402D
@@ -91517,7 +91517,7 @@ sub_F440A0_Loop:
 ; BStore_BootPhase3
 ; Called from: T_F4400C (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
-; Calls:   TimedEventRing_Discard sub_F45975 sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
+; Calls:   TimedEventRing_Discard SeqBufRing_Discard sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
 ;          sub_F44505 T_F411B8 sub_F44143 sub_F441AB T_F40300 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_F4400C holds `jp 0x00F440C4`, and 0xF440C4 is an
@@ -91535,7 +91535,7 @@ BStore_BootPhase3:		; <- T_F4400C
 	xor	xwa, xwa	; F440CA  xor XWA,XWA
 	ld	(6304798:24), xwa	; F440CC  ld (0x60341e),XWA
 	calr	TimedEventRing_Discard	; F440D1  calr 0xf45b0a
-	calr	sub_F45975	; F440D4  calr 0xf45975
+	calr	SeqBufRing_Discard	; F440D4  calr 0xf45975
 sub_F440A0_Skip:
 	ldw	(13650:16), 1	; F440D7  ld (0x3552),0x0001
 	ld	xwa, (6304798:24)	; F440DD  ld XWA,(0x60341e)
@@ -93633,7 +93633,7 @@ sub_F45119_Loop3:
 ; Called from: T_F409D0 (x4)
 ; Touches: (0x3008) (0x3456) (0x3458) (0x34BB) (0x34D4) (0x34D9) (0x3552)
 ;          (0x360B) (0x36D4)  |  0x000000
-; Calls:   sub_F45263 sub_F45FE5 TimedEventRing_Discard T_F411B8 sub_F45975 T_F42574
+; Calls:   sub_F45263 sub_F45FE5 TimedEventRing_Discard T_F411B8 SeqBufRing_Discard T_F42574
 ; Evidence: thunk slot T_F409D0 holds `jp 0x00F451E6`, and 0xF451E6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93675,7 +93675,7 @@ sub_F45119_Skip6:
 	calr	TimedEventRing_Discard	; F45254  calr 0xf45b0a
 sub_F45119_Join2:
 	call	T_F411B8	; F45257  call 0xf411b8
-	calr	sub_F45975	; F4525B  calr 0xf45975
+	calr	SeqBufRing_Discard	; F4525B  calr 0xf45975
 	call	T_F42574	; F4525E  call 0xf42574
 	ret	; F45262  ret
 
@@ -94727,7 +94727,7 @@ sub_F45942:
 	ret	; F45974  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45975
+; SeqBufRing_Discard
 ; Called from: T_F40A10 (x2); in-module: 0xF440D4 0xF4525B
 ; Touches:   |  0x600A0A
 ; Evidence: thunk slot T_F40A10 holds `jp 0x00F45975`, and 0xF45975 is an
@@ -94737,7 +94737,9 @@ sub_F45942:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45975:		; <- T_F40A10
+; SeqBufRing_Discard: at interrupt level 6: the control block 0x600A0A of SeqBuf_Ring (0x600A14) gets its +2 index = its +6 index and its
+;   +8 count = 0x1FF -- the 0x200-byte sequencer ring emptied, the same three stores as TimedEventRing_Discard.
+SeqBufRing_Discard:		; <- T_F40A10
 	ei	6	; F45975  ei 0x06
 	ld	xhl, 6294026	; F45977  ld XHL,0x00600a0a
 	ld	wa, (xhl+6)	; F4597C  ld WA,(XHL+0x06)

@@ -717,6 +717,53 @@ ROWS = [
      "SmfPart_GetRecordPtr, then record +7 = data byte 2, keeping its bit 7.  Called by SmfCC_Effect3Depth."),
     ("F709DA", "SmfPart_SetEffect4Depth", "record +8 the same way.  Called by SmfCC_Effect4Depth."),
     ("F70A30", "SmfPart_SetEffect1Depth", "record +9 the same way.  Called by SmfCC_Effect1Depth."),
+    ("F45975", "SeqBufRing_Discard",
+     "at interrupt level 6: the control block 0x600A0A of SeqBuf_Ring (0x600A14) gets its +2 index = its +6 index and its\n"
+     "+8 count = 0x1FF -- the 0x200-byte sequencer ring emptied, the same three stores as TimedEventRing_Discard."),
+    # prom_a: the part-record field setters.  List2030_Part*_Apply's headers fix the record bytes: 3 volume, 5 / 6 / 7 effect
+    # 3 / 4 / 1 depth, 8 pan, 9 coarse tune, 0x0A fine tune (8-bit), 0x0B bend range (MidiOut_ParamClassTable's classes).
+    ("FAB8E9", "List2030_PartVolume_Apply_Call", "JumpTable_FAB8B4[3]: `calr List2030_PartVolume_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB8F3", "List2030_PartEffect3Depth_Apply_Call", "JumpTable_FAB8B4[5]: `calr List2030_PartEffect3Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB8F8", "List2030_PartEffect4Depth_Apply_Call", "JumpTable_FAB8B4[6]: `calr List2030_PartEffect4Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB8FD", "List2030_PartEffect1Depth_Apply_Call", "JumpTable_FAB8B4[7]: `calr List2030_PartEffect1Depth_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB902", "List2030_PartPan_Apply_Call", "JumpTable_FAB8B4[8]: `calr List2030_PartPan_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB907", "List2030_PartCoarseTune_Apply_Call", "JumpTable_FAB8B4[9]: `calr List2030_PartCoarseTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FAB90C", "List2030_PartFineTune_Apply_Call", "JumpTable_FAB8B4[10]: `calr List2030_PartFineTune_Apply / jr` to the table's shared `ret` -- the shape of class 11's\n"
+     "List2030_PartBendRange_Apply_Call."),
+    ("FB5B6A", "GmReset_PartVolume",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 3, 100 (0x64), mask 0x7F} -- every part's Volume set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5B97", "GmReset_PartEffect3Depth",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 5, 0, mask 0x7F} -- every part's Effect3Depth set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5BEF", "GmReset_PartEffect4Depth",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 6, 0, mask 0x7F} -- every part's Effect4Depth set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5C1B", "GmReset_PartEffect1Depth",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 7, 90 (0x5A), mask 0x7F} -- every part's Effect1Depth set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5C47", "GmReset_PartPan",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 8, 64 (0x40), centre, mask 0x7F} -- every part's Pan set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5C73", "GmReset_PartCoarseTune",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 9, 64 (0x40), centre} -- every part's CoarseTune set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5C9F", "GmReset_PartFineTune",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 10, 128 (0x80), centre, mask 0xFF} -- every part's FineTune set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB5CCB", "GmReset_PartBendRange",
+     "for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 11, 2, mask 0x7F} -- every part's BendRange set to the\n"
+     "GM default.  One step of GmMode_ResetToDefaults."),
+    ("FB58CC", "GmMode_ResetToDefaults",
+     "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the\n"
+     "GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further\n"
+     "resets.  Called by sub_FB5972 (GmMode_HandleChange's) and sub_FB585E."),
 ]
 
 
