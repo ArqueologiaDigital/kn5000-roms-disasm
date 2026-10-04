@@ -1298,13 +1298,13 @@
 	.set	T_F41174_Nop, 0xFC06DC
 	.set	T_F41178_Nop, 0xFC06DD
 	.set	T_F4117C_Nop, 0xFC06DE
-	.set	sub_FC06DF, 0xFC06DF
+	.set	Msg0716_EventPartPostCC78_AllSoundOff, 0xFC06DF
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17, 0xFC06F4
 	.set	sub_FC06FF, 0xFC06FF
 	.set	Msg0716_EventPartPostCC01_ModulationIfEnabled, 0xFC0724
 	.set	Msg0716_EventPartPostCC0B_Expression, 0xFC0749
 	.set	sub_FC075E, 0xFC075E
-	.set	sub_FC078A, 0xFC078A
+	.set	Msg0716_EventPartPostCC40_SustainFromValueIfEnabled, 0xFC078A
 	.set	T_F42508_Nop, 0xFC07AF
 	.set	T_F4250C_Nop, 0xFC07B0
 	.set	Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled, 0xFC07B1
@@ -89010,7 +89010,7 @@ T_F41170:	jp T_F41170_Nop  ; -> prom_a 0x406DB
 T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
 T_F41178:	jp T_F41178_Nop  ; -> prom_a 0x406DD
 T_F4117C:	jp T_F4117C_Nop  ; -> prom_a 0x406DE
-T_F41180:	jp sub_FC06DF  ; -> prom_a 0x406DF
+T_F41180:	jp Msg0716_EventPartPostCC78_AllSoundOff  ; -> prom_a 0x406DF
 ; T_F41184, T_F4118C and T_F41190-T_F41198 jump into the middle of prom_a instructions: 0xFC0427 is the third byte
 ; of `ld XIY,Msg0716_HandlerTables` at 0xFC0425, 0xFC043D the second byte of the `calr` at 0xFC043C, 0xFC0452-0xFC0454
 ; the last three bytes of `ld XIZ,...` at 0xFC0450.  No `call`/`jp` in either image names these five slots: stale
@@ -90129,7 +90129,7 @@ T_F424F4:	jp sub_FC06FF  ; -> prom_a 0x406FF
 T_F424F8:	jp Msg0716_EventPartPostCC01_ModulationIfEnabled  ; -> prom_a 0x40724
 T_F424FC:	jp Msg0716_EventPartPostCC0B_Expression  ; -> prom_a 0x40749
 T_F42500:	jp sub_FC075E  ; -> prom_a 0x4075E
-T_F42504:	jp sub_FC078A  ; -> prom_a 0x4078A
+T_F42504:	jp Msg0716_EventPartPostCC40_SustainFromValueIfEnabled  ; -> prom_a 0x4078A
 T_F42508:	jp T_F42508_Nop  ; -> prom_a 0x407AF
 T_F4250C:	jp T_F4250C_Nop  ; -> prom_a 0x407B0
 T_F42510:	jp Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled  ; -> prom_a 0x407B1

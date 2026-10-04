@@ -111408,13 +111408,15 @@ T_F41178_Nop:
 	ret                                                  ; FC06DD  0e
 T_F4117C_Nop:
 	ret                                                  ; FC06DE  0e
-sub_FC06DF:
+; Msg0716_EventPartPostCC78_AllSoundOff: for the part UiEvent_Byte1 (< 0x20), byte 1 = it and Msg0716_PostCC78_AllSoundOff
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC78_AllSoundOff:
 	ld XIX,0x00000716                                    ; FC06DF  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC06E4  c1 b8 20 27
 	cp L,0x20                                            ; FC06E8  cf cf 20
 	jr nc, .LFC06F3                                      ; FC06EB  6f 06
 	ld (XIX+0x01),L                                      ; FC06ED  bc 01 47
-	calr Msg0716_Post_Trampoline_4                                          ; FC06F0  1e fb 0f
+	calr Msg0716_PostCC78_AllSoundOff                                          ; FC06F0  1e fb 0f
 .LFC06F3:
 	ret                                                  ; FC06F3  0e
 Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:
@@ -111433,7 +111435,7 @@ sub_FC06FF:
 	bit 6,(XIY+0x0b)                                     ; FC0718  bd 0b ce
 	jr z, .LFC0723                                       ; FC071B  66 06
 	ld (XIX+0x01),L                                      ; FC071D  bc 01 47
-	calr sub_FC170D                                          ; FC0720  1e ea 0f
+	calr Msg0716_PostPitchBend                                          ; FC0720  1e ea 0f
 .LFC0723:
 	ret                                                  ; FC0723  0e
 ; Msg0716_EventPartPostCC01_ModulationIfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 1 of its record's +0x2c (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC01_Modulation
@@ -111479,7 +111481,9 @@ sub_FC075E:
 	calr Msg0716_PostChannelPressure                                          ; FC0786  1e 77 0f
 .LFC0789:
 	ret                                                  ; FC0789  0e
-sub_FC078A:
+; Msg0716_EventPartPostCC40_SustainFromValueIfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 0 of its record's +0x2c (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC40_SustainFromValue
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC40_SustainFromValueIfEnabled:
 	ld XIX,0x00000716                                    ; FC078A  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC078F  c1 b8 20 27
 	cp L,0x20                                            ; FC0793  cf cf 20
@@ -111490,7 +111494,7 @@ sub_FC078A:
 	bit 0,(XIY+0x0c)                                     ; FC07A3  bd 0c c8
 	jr z, .LFC07AE                                       ; FC07A6  66 06
 	ld (XIX+0x01),L                                      ; FC07A8  bc 01 47
-	calr sub_FC15C5                                          ; FC07AB  1e 17 0e
+	calr Msg0716_PostCC40_SustainFromValue                                          ; FC07AB  1e 17 0e
 .LFC07AE:
 	ret                                                  ; FC07AE  0e
 T_F42508_Nop:
@@ -111909,10 +111913,10 @@ sub_FC0C20:   ; entry: named by 1 `.long` operand, first at 0xFC09DA
 	ld A,(XIY+0x06)                                      ; FC0C3E  8d 06 21
 	cp (XIZ+0x06),0x00                                   ; FC0C41  8e 06 3f 00
 	jr nz, .LFC0C4C                                      ; FC0C45  6e 05
-	calr sub_FC1545                                          ; FC0C47  1e fb 08
+	calr Msg0716_PostCC07_VolumeWithOffset                                          ; FC0C47  1e fb 08
 	jr .LFC0C4F                                          ; FC0C4A  68 03
 .LFC0C4C:
-	calr sub_FC1528                                          ; FC0C4C  1e d9 08
+	calr Msg0716_PostCC07_VolumeFromA                                          ; FC0C4C  1e d9 08
 .LFC0C4F:
 	ret                                                  ; FC0C4F  0e
 sub_FC0C50:   ; entry: named by 1 `.long` operand, first at 0xFC09DE
@@ -111939,7 +111943,7 @@ Msg0716_PartPostCC5D_Effect3Depth:   ; entry: named by 1 `.long` operand, first 
 sub_FC0C7A:   ; entry: named by 1 `.long` operand, first at 0xFC09E6
 	ld A,(XIZ+0x06)                                      ; FC0C7A  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C7D  bc 01 41
-	calr sub_FC1726                                          ; FC0C80  1e a3 0a
+	calr Msg0716_PostCtrlInt9B                                          ; FC0C80  1e a3 0a
 	ret                                                  ; FC0C83  0e
 ; Msg0716_PartPostCC5B_Effect1Depth: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
 ;   Msg0716_PostCC5B_Effect1Depth (notes/prom_a_msg0716_message_names.py).
@@ -111955,7 +111959,7 @@ sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	jr nz, .LFC0CA4                                      ; FC0C96  6e 0c
 	ld a, (UiEvent_Byte2:16)                                   ; FC0C98  c1 b9 20 21
 	and A,0x7f                                           ; FC0C9C  c9 cc 7f
-	calr sub_FC161D                                          ; FC0C9F  1e 7b 09
+	calr Msg0716_PostCC0A_PanWithOffset                                          ; FC0C9F  1e 7b 09
 	jr .LFC0CA7                                          ; FC0CA2  68 03
 .LFC0CA4:
 	calr Msg0716_Post_Trampoline_Wrap                                          ; FC0CA4  1e 61 09
@@ -111987,7 +111991,7 @@ sub_FC0CC6:   ; entry: named by 1 `.long` operand, first at 0xFC09FE
 	jr z, .LFC0CD5                                       ; FC0CCA  66 09
 	ld A,(XIZ+0x06)                                      ; FC0CCC  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CCF  bc 01 41
-	calr sub_FC159C                                          ; FC0CD2  1e c7 08
+	calr Msg0716_PostCtrlInt9C                                          ; FC0CD2  1e c7 08
 .LFC0CD5:
 	ret                                                  ; FC0CD5  0e
 Msg0716_HandlerTables_Nop13:   ; entry: named by 1 `.long` operand, first at 0xFC0A02
@@ -111997,7 +112001,7 @@ Msg0716_HandlerTables_Nop14:   ; entry: named by 3 `.long` operands, first at 0x
 sub_FC0CD8:   ; entry: named by 2 `.long` operands, first at 0xFC0A12
 	ld A,(XIZ+0x06)                                      ; FC0CD8  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CDB  bc 01 41
-	calr sub_FC1726                                          ; FC0CDE  1e 45 0a
+	calr Msg0716_PostCtrlInt9B                                          ; FC0CDE  1e 45 0a
 	ret                                                  ; FC0CE1  0e
 Msg0716_HandlerTables_Nop19:   ; entry: named by 20 `.long` operands, first at 0xFC0A1A
 	ret                                                  ; FC0CE2  0e
@@ -112233,14 +112237,14 @@ sub_FC0E21:   ; entry: named by 1 `.long` operand, first at 0xFC0B8A
 	ld A,(XIY+0x06)                                      ; FC0E26  8d 06 21
 	ld XIX,0x00000716                                    ; FC0E29  44 16 07 00 00
 	ld (XIX+0x01),0x00                                   ; FC0E2E  bc 01 00 00
-	calr sub_FC1545                                          ; FC0E32  1e 10 07
+	calr Msg0716_PostCC07_VolumeWithOffset                                          ; FC0E32  1e 10 07
 	ret                                                  ; FC0E35  0e
 sub_FC0E36:   ; entry: named by 1 `.long` operand, first at 0xFC0B8E
 	ld a, (0x76aa:16)                                   ; FC0E36  c1 aa 76 21
 	and A,0x7f                                           ; FC0E3A  c9 cc 7f
 	ld XIX,0x00000716                                    ; FC0E3D  44 16 07 00 00
 	ld (XIX+0x01),0x00                                   ; FC0E42  bc 01 00 00
-	calr sub_FC161D                                          ; FC0E46  1e d4 07
+	calr Msg0716_PostCC0A_PanWithOffset                                          ; FC0E46  1e d4 07
 	ret                                                  ; FC0E49  0e
 sub_FC0E4A:   ; entry: named by 1 `.long` operand, first at 0xFC0B92
 	calr Msg0716_PostSysEx50_80                                          ; FC0E4A  1e 4f 09
@@ -112430,7 +112434,7 @@ sub_FC0FF3:
 	ld (XIX+0x01),C                                      ; FC100C  bc 01 43
 	pushw bc                                             ; FC100F  29
 	push XIX                                             ; FC1010  3c
-	calr Msg0716_Post_Trampoline_4                                          ; FC1011  1e da 06
+	calr Msg0716_PostCC78_AllSoundOff                                          ; FC1011  1e da 06
 	pop XIX                                              ; FC1014  5c
 	popw bc                                              ; FC1015  49
 	add C,0x01                                           ; FC1016  cb c8 01
@@ -112452,7 +112456,7 @@ sub_FC101E:
 	ld A,(XIZ+0x06)                                      ; FC1036  8e 06 21
 	ld (XIX+0x01),A                                      ; FC1039  bc 01 41
 	pushw bc                                             ; FC103C  29
-	calr Msg0716_Post_Trampoline_4                                          ; FC103D  1e ae 06
+	calr Msg0716_PostCC78_AllSoundOff                                          ; FC103D  1e ae 06
 	popw bc                                              ; FC1040  49
 .LFC1041:
 	ret                                                  ; FC1041  0e
@@ -113016,7 +113020,8 @@ Msg0716_PostCC07_Volume:
 	ld c, 0x7f:opc                                          ; FC1522  23 7f
 	calr Msg0716_PostValueMasked                                      ; FC1524  1e a5 03
 	ret                                                  ; FC1527  0e
-sub_FC1528:
+; Msg0716_PostCC07_VolumeFromA: B0 <part> 07 <A AND 0x7F>, or 0 when A bit 7 is set.
+Msg0716_PostCC07_VolumeFromA:
 	ld (XIX),0xb0                                        ; FC1528  b4 00 b0
 	ld (XIX+0x02),0x07                                   ; FC152B  bc 02 00 07
 	ld (XIX+0x03),0x00                                   ; FC152F  bc 03 00 00
@@ -113028,7 +113033,8 @@ sub_FC1528:
 	ldw bc, 0x04                                         ; FC153E  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1541  1e d6 04
 	ret                                                  ; FC1544  0e
-sub_FC1545:
+; Msg0716_PostCC07_VolumeWithOffset: B0 <part> 07 <A + (0x0710)>, clamped to 0..0x7F (0x7F when it overflows and (0x7F4D) bit 2); A bit 7 set = value 0.
+Msg0716_PostCC07_VolumeWithOffset:
 	ld (XIX),0xb0                                        ; FC1545  b4 00 b0
 	ld (XIX+0x02),0x07                                   ; FC1548  bc 02 00 07
 	ld (XIX+0x03),0x00                                   ; FC154C  bc 03 00 00
@@ -113070,7 +113076,8 @@ Msg0716_PostCC5B_Effect1Depth:
 	calr Msg0716_PostValueMasked                                      ; FC1597  1e 32 03
 	ret                                                  ; FC159A  0e
 	ret                                                  ; FC159B  0e
-sub_FC159C:
+; Msg0716_PostCtrlInt9C: B0 <part> 9C <0x7F if UiEvent_Byte2 bit 3 else 0>: the receiver's extension controller 0x9C as a switch.
+Msg0716_PostCtrlInt9C:
 	ld (XIX),0xb0                                        ; FC159C  b4 00 b0
 	ld (XIX+0x02),0x9c                                   ; FC159F  bc 02 00 9c
 	ld (XIX+0x03),0x00                                   ; FC15A3  bc 03 00 00
@@ -113089,7 +113096,8 @@ Msg0716_PostCC40_Sustain:
 	ld c, 0x08:opc                                          ; FC15BF  23 08
 	calr Msg0716_PostValueAsSwitch                                      ; FC15C1  1e 18 03
 	ret                                                  ; FC15C4  0e
-sub_FC15C5:
+; Msg0716_PostCC40_SustainFromValue: B0 <part> 40 <0x7F if UiEvent_Byte2 >= 0x40 else 0> -- MIDI's sustain threshold.
+Msg0716_PostCC40_SustainFromValue:
 	ld (XIX),0xb0                                        ; FC15C5  b4 00 b0
 	ld (XIX+0x02),0x40                                   ; FC15C8  bc 02 00 40
 	ld a, 0x00:opc                                          ; FC15CC  21 00
@@ -113127,7 +113135,8 @@ Msg0716_Post_Trampoline_Wrap:
 	ldw bc, 0x04                                         ; FC1616  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1619  1e fe 03
 	ret                                                  ; FC161C  0e
-sub_FC161D:
+; Msg0716_PostCC0A_PanWithOffset: B0 <part> 0A <A + (0x0711) - 0x40>, clamped to 0..0x7F (controller 10, pan, which the receiver handles).
+Msg0716_PostCC0A_PanWithOffset:
 	ld (XIX),0xb0                                        ; FC161D  b4 00 b0
 	ld (XIX+0x02),0x0a                                   ; FC1620  bc 02 00 0a
 	ld w, (0x0711:16)                                   ; FC1624  c1 11 07 20
@@ -113250,7 +113259,9 @@ Msg0716_PostCtrlInt99:
 	ld c, 0xff:opc                                          ; FC16E8  23 ff
 	calr Msg0716_PostValueMasked                                      ; FC16EA  1e df 01
 	ret                                                  ; FC16ED  0e
-Msg0716_Post_Trampoline_4:
+; Msg0716_PostCC78_AllSoundOff: B0 <part> 78 00, controller 120 All Sound Off, which the receiver handles as MidiCtrl_CC120
+;   (it was Msg0716_Post_Trampoline_4, a name for its position; 2026-10-04).
+Msg0716_PostCC78_AllSoundOff:
 	ld (XIX),0xb0                                        ; FC16EE  b4 00 b0
 	ld (XIX+0x02),0x78                                   ; FC16F1  bc 02 00 78
 	ld (XIX+0x03),0x00                                   ; FC16F5  bc 03 00 00
@@ -113265,7 +113276,8 @@ Msg0716_PostChannelPressure:
 	ld c, 0xff:opc                                          ; FC1707  23 ff
 	calr Msg0716_PostValueMasked                                      ; FC1709  1e c0 01
 	ret                                                  ; FC170C  0e
-sub_FC170D:
+; Msg0716_PostPitchBend: E0 <part> <UiEvent_Byte2> <UiEvent_Byte3>, four bytes: MIDI pitch bend, LSB then MSB.
+Msg0716_PostPitchBend:
 	ld (XIX),0xe0                                        ; FC170D  b4 00 e0
 	ld a, (UiEvent_Byte2:16)                                   ; FC1710  c1 b9 20 21
 	ld (XIX+0x02),A                                      ; FC1714  bc 02 41
@@ -113275,7 +113287,8 @@ sub_FC170D:
 	calr Msg0716_Post_Trampoline                         ; FC1721  1e f6 02
 	ret                                                  ; FC1724  0e
 	ret                                                  ; FC1725  0e
-sub_FC1726:
+; Msg0716_PostCtrlInt9B: B0 <part> 9B <value from the part's record (Msg0716_RecordPtrTable[(XIZ+6)] and 0x76C2 + its offset)>.
+Msg0716_PostCtrlInt9B:
 	ld (XIX),0xb0                                        ; FC1726  b4 00 b0
 	ld (XIX+0x02),0x9b                                   ; FC1729  bc 02 00 9b
 	push XIY                                             ; FC172D  3d
@@ -113428,7 +113441,7 @@ sub_FC1859:
 	ld A,(XIY+0x03)                                      ; FC1863  8d 03 21
 	ld XIX,0x00000716                                    ; FC1866  44 16 07 00 00
 	ld (XIX+0x01),W                                      ; FC186B  bc 01 40
-	calr sub_FC1528                                      ; FC186E  1e b7 fc
+	calr Msg0716_PostCC07_VolumeFromA                                      ; FC186E  1e b7 fc
 	cp W,0x1f                                            ; FC1871  c8 cf 1f
 	jr nc, .LFC187B                                      ; FC1874  6f 05
 	add W,0x01                                           ; FC1876  c8 c8 01
@@ -113512,10 +113525,11 @@ sub_FC1918:
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC1919  ae 00 25
 	ld A,(XIZ+0x06)                                      ; FC191C  8e 06 21
 	ld (XIX+0x01),A                                      ; FC191F  bc 01 41
-	calr sub_FC1927                                      ; FC1922  1e 02 00
+	calr Msg0716_PostProgramChange                                      ; FC1922  1e 02 00
 	popw bc                                              ; FC1925  49
 	ret                                                  ; FC1926  0e
-sub_FC1927:
+; Msg0716_PostProgramChange: C0 <part> <word from (XIY)> 00, five bytes: a program change carrying a 16-bit program number.
+Msg0716_PostProgramChange:
 	ld (XIX),0xc0                                        ; FC1927  b4 00 c0
 	m_ld_rm MWD+r5, 0x00, r0                             ; FC192A  9d 00 20
 	ld (XIX+0x02),WA                                     ; FC192D  bc 02 50

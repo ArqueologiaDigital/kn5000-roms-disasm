@@ -238,6 +238,24 @@ ROWS = [
      "byte-for-byte Blink_EnableThenStop: T_Blink_SetEnable(1), T_Blink_Stop."),
     ("F7F245", "Blink_DisableThenStop",
      "T_Blink_SetEnable(0), T_Blink_Stop."),
+    # prom_a Msg0716 builders of other shapes (notes/prom_a_msg0716_message_names.py has the message format and the
+    # receiver, prom_c MidiCtrl_Dispatch, that reads byte 2 as the MIDI controller number)
+    ("FC1545", "Msg0716_PostCC07_VolumeWithOffset",
+     "B0 <part> 07 <A + (0x0710)>, clamped to 0..0x7F (0x7F when it overflows and (0x7F4D) bit 2); A bit 7 set = value 0."),
+    ("FC1528", "Msg0716_PostCC07_VolumeFromA",
+     "B0 <part> 07 <A AND 0x7F>, or 0 when A bit 7 is set."),
+    ("FC15C5", "Msg0716_PostCC40_SustainFromValue",
+     "B0 <part> 40 <0x7F if UiEvent_Byte2 >= 0x40 else 0> -- MIDI's sustain threshold."),
+    ("FC161D", "Msg0716_PostCC0A_PanWithOffset",
+     "B0 <part> 0A <A + (0x0711) - 0x40>, clamped to 0..0x7F (controller 10, pan, which the receiver handles)."),
+    ("FC159C", "Msg0716_PostCtrlInt9C",
+     "B0 <part> 9C <0x7F if UiEvent_Byte2 bit 3 else 0>: the receiver's extension controller 0x9C as a switch."),
+    ("FC1726", "Msg0716_PostCtrlInt9B",
+     "B0 <part> 9B <value from the part's record (Msg0716_RecordPtrTable[(XIZ+6)] and 0x76C2 + its offset)>."),
+    ("FC170D", "Msg0716_PostPitchBend",
+     "E0 <part> <UiEvent_Byte2> <UiEvent_Byte3>, four bytes: MIDI pitch bend, LSB then MSB."),
+    ("FC1927", "Msg0716_PostProgramChange",
+     "C0 <part> <word from (XIY)> 00, five bytes: a program change carrying a 16-bit program number."),
 ]
 
 
