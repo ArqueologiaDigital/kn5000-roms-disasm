@@ -1158,12 +1158,12 @@
 	.set	T_F41A54_Nop, 0xFBCF7F
 	.set	T_F41A64_Nop, 0xFBCF80
 	.set	T_F41864_Nop, 0xFBCF81
-	.set	ScreenCode3A_Handler, 0xFBDB91
-	.set	sub_FBDB95, 0xFBDB95
-	.set	ScreenLeave_Code3A, 0xFBDD0D
-	.set	sub_FBDD11, 0xFBDD11
-	.set	ScreenButton_Code3A, 0xFBDD80
-	.set	sub_FBDD91, 0xFBDD91
+	.set	ScreenEnter_CombiEditMixer, 0xFBDB91
+	.set	ScreenEnterBody_CombiEditMixer, 0xFBDB95
+	.set	ScreenLeave_CombiEditMixer, 0xFBDD0D
+	.set	ScreenLeaveBody_CombiEditMixer, 0xFBDD11
+	.set	ScreenButton_CombiEditMixer, 0xFBDD80
+	.set	ScreenButtonBody_CombiEditMixer, 0xFBDD91
 	.set	sub_FBDDD2, 0xFBDDD2
 	.set	T_F418C4_Nop, 0xFBDDD6
 	.set	sub_FBECC3, 0xFBECC3
@@ -89337,9 +89337,9 @@ T_F418A8:	jp ScreenEnter_Effect2OutputConflict  ; -> prom_a 0x3C5D7
 T_F418AC:	jp ScreenLeave_Effect2OutputConflict  ; -> prom_a 0x3C5DB
 T_F418B0:	jp ScreenButton_Effect2OutputConflict  ; -> prom_a 0x3C5DF
 T_F418B4:	jp T_F418B4_Nop  ; -> prom_a 0x3C5F0
-T_F418B8:	jp sub_FBDB95  ; -> prom_a 0x3DB95
-T_F418BC:	jp sub_FBDD11  ; -> prom_a 0x3DD11
-T_F418C0:	jp sub_FBDD91  ; -> prom_a 0x3DD91
+T_F418B8:	jp ScreenEnterBody_CombiEditMixer  ; -> prom_a 0x3DB95
+T_F418BC:	jp ScreenLeaveBody_CombiEditMixer  ; -> prom_a 0x3DD11
+T_F418C0:	jp ScreenButtonBody_CombiEditMixer  ; -> prom_a 0x3DD91
 T_F418C4:	jp T_F418C4_Nop  ; -> prom_a 0x3DDD6
 T_F418C8:	jp sub_FBC5F1  ; -> prom_a 0x3C5F1
 T_F418CC:	jp sub_FBC64F  ; -> prom_a 0x3C64F
@@ -89424,9 +89424,9 @@ T_F41A68:	jp ScreenEnter_CombiEditDspEffect  ; -> prom_a 0x3EEE6
 T_F41A6C:	jp T_F41A6C_Nop  ; -> prom_a 0x3EEEB
 T_F41A70:	jp ScreenButton_CombiEditDspEffect  ; -> prom_a 0x3EEEC
 T_F41A74:	jp T_F41A74_Nop  ; -> prom_a 0x3EF1B
-T_F41A78:	jp ScreenCode3A_Handler  ; -> prom_a 0x3DB91
-T_F41A7C:	jp ScreenLeave_Code3A  ; -> prom_a 0x3DD0D
-T_F41A80:	jp ScreenButton_Code3A  ; -> prom_a 0x3DD80
+T_F41A78:	jp ScreenEnter_CombiEditMixer  ; -> prom_a 0x3DB91
+T_F41A7C:	jp ScreenLeave_CombiEditMixer  ; -> prom_a 0x3DD0D
+T_F41A80:	jp ScreenButton_CombiEditMixer  ; -> prom_a 0x3DD80
 T_F41A84:	jp sub_FBDDD2  ; -> prom_a 0x3DDD2
 T_F41A88:	jp T_F41A88_Nop  ; -> prom_a 0x3C5B9
 T_F41A8C:	jp T_F41A8C_Nop  ; -> prom_a 0x3C5BA

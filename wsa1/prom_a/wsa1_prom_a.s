@@ -106464,12 +106464,14 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	popw hl                                              ; FBDB8D  4b
 	unlk XIZ                                             ; FBDB8E  ee 0d
 	ret                                                  ; FBDB90  0e
-; ScreenCode3A_Handler: the +0 ENTER method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+; ScreenEnter_CombiEditMixer: the +0 ENTER method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
 ;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A78 jumps here.
-ScreenCode3A_Handler:
-	calr sub_FBDB95                                      ; FBDB91  1e 01 00
+; ScreenEnter_CombiEditMixer: screen 0x3A's +0 ENTER.  Its body posts painters that draw DL_Mixer ("MIXER", "SOUND:") and
+;   the list at 0xF17E2E ("PAGE1/3", "SOUND", "PAN", "VOL") -- the MIXER page of the COMBINATION EDIT group 0x34-0x3A.
+ScreenEnter_CombiEditMixer:
+	calr ScreenEnterBody_CombiEditMixer                                      ; FBDB91  1e 01 00
 	ret                                                  ; FBDB94  0e
-sub_FBDB95:
+ScreenEnterBody_CombiEditMixer:
 	pushw hl                                             ; FBDB95  2b
 	push XIX                                             ; FBDB96  3c
 	lda xix, (0x276a:16)                                ; FBDB97  f1 6a 27 34
@@ -106596,12 +106598,12 @@ sub_FBDB95_Skip:
 	pop XIX                                              ; FBDD0A  5c
 	popw hl                                              ; FBDD0B  4b
 	ret                                                  ; FBDD0C  0e
-; ScreenLeave_Code3A: the +4 LEAVE method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+; ScreenLeave_CombiEditMixer: the +4 LEAVE method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
 ;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A7C jumps here.
-ScreenLeave_Code3A:
-	calr sub_FBDD11                                      ; FBDD0D  1e 01 00
+ScreenLeave_CombiEditMixer:
+	calr ScreenLeaveBody_CombiEditMixer                                      ; FBDD0D  1e 01 00
 	ret                                                  ; FBDD10  0e
-sub_FBDD11:
+ScreenLeaveBody_CombiEditMixer:
 	pushw hl                                             ; FBDD11  2b
 	push XIX                                             ; FBDD12  3c
 	lda xix, (PanelModeGroup_Previous:16)                                ; FBDD13  f1 77 20 34
@@ -106651,17 +106653,17 @@ sub_FBDD11:
 	pop XIX                                              ; FBDD7D  5c
 	popw hl                                              ; FBDD7E  4b
 	ret                                                  ; FBDD7F  0e
-; ScreenButton_Code3A: the +8 BUTTON method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
+; ScreenButton_CombiEditMixer: the +8 BUTTON method of the screen object for screen id 0x3A -- PanelScreen_VtableTable entry 0x5A
 ;   (ViewB entry 0x3A) points at the thunk triple starting at T_F41A78, and slot T_F41A80 jumps here.
-ScreenButton_Code3A:
+ScreenButton_CombiEditMixer:
 	link XIZ,0x0000                                      ; FBDD80  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBDD84  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBDD87  9e 08 04
-	calr sub_FBDD91                                      ; FBDD8A  1e 04 00
+	calr ScreenButtonBody_CombiEditMixer                                      ; FBDD8A  1e 04 00
 	pop XBC                                              ; FBDD8D  59
 	unlk XIZ                                             ; FBDD8E  ee 0d
 	ret                                                  ; FBDD90  0e
-sub_FBDD91:
+ScreenButtonBody_CombiEditMixer:
 	link XIZ,0x0000                                      ; FBDD91  ee 0c 00 00
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDD95  c1 76 20 3f 16
 	jr nz, .LFBDDAF                                      ; FBDD9A  6e 13

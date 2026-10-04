@@ -27,7 +27,7 @@ the map's image:
 
 - `PanelState_LatchPrevious` copies (0x2076) into it;
 - `PanelState_Init` writes 0xFF to it, which `PanelState_LatchPrevious` tests (`cp (0x2077),0xFF`);
-- its 5 uses are those three, plus `lda XIX,(0x2077)` in `sub_FBDD11` and `cp (0x2077),0x12` in
+- its 5 uses are those three, plus `lda XIX,(0x2077)` in `ScreenLeaveBody_CombiEditMixer` and `cp (0x2077),0x12` in
   `ScreenLeaveBody_CombiEditConfigure`.
 
 ⚠ Not established: what any single mode or group IS, i.e. which instrument mode 0x16 or 0x17
