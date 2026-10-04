@@ -94847,7 +94847,7 @@ GmMode_HandleChange:
 	jr nz, .LFB5970                                      ; FB5964  6e 0a
 	m_cp_mi8 MB16, UiEvent_Byte3, 0x00                          ; FB5966  c1 ba 20 3f 00
 	jr nz, .LFB5970                                      ; FB596B  6e 03
-	calr sub_FB5DFA                                      ; FB596D  1e 8a 04
+	calr GmReset_AllPartsExpression                                      ; FB596D  1e 8a 04
 .LFB5970:
 	pop XIX                                              ; FB5970  5c
 	ret                                                  ; FB5971  0e
@@ -94897,11 +94897,11 @@ sub_FB5972:
 	pop XIX                                              ; FB59E2  5c
 	pop XHL                                              ; FB59E3  5b
 	pop XDE                                              ; FB59E4  5a
-	calr sub_FB5D64                                      ; FB59E5  1e 7c 03
-	calr sub_FB5D96                                      ; FB59E8  1e ab 03
-	calr sub_FB5DC8                                      ; FB59EB  1e da 03
-	calr sub_FB5DFA                                      ; FB59EE  1e 09 04
-	calr sub_FB5E2C                                      ; FB59F1  1e 38 04
+	calr GmReset_AllPartsPitchBend                                      ; FB59E5  1e 7c 03
+	calr GmReset_AllPartsChannelPressure                                      ; FB59E8  1e ab 03
+	calr GmReset_AllPartsModulation                                      ; FB59EB  1e da 03
+	calr GmReset_AllPartsExpression                                      ; FB59EE  1e 09 04
+	calr GmReset_AllPartsHold                                      ; FB59F1  1e 38 04
 	calr sub_FB5E5E                                      ; FB59F4  1e 67 04
 	calr sub_FB5E90                                      ; FB59F7  1e 96 04
 	calr sub_FB5972_Nop                                      ; FB59FA  1e c5 04
@@ -95295,7 +95295,9 @@ sub_FB5D38:
 	pop XIX                                              ; FB5D60  5c
 	unlk XIZ                                             ; FB5D61  ee 0d
 	ret                                                  ; FB5D63  0e
-sub_FB5D64:
+; GmReset_AllPartsPitchBend: parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by sub_FB5972
+;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
+GmReset_AllPartsPitchBend:
 	push XIX                                             ; FB5D64  3c
 	lda xix, (0x60f081:24)                               ; FB5D65  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb1                             ; FB5D6A  f2 80 f0 60 00 b1
@@ -95318,7 +95320,9 @@ sub_FB5D64:
 	jr ule, .LFB5D79                                     ; FB5D92  63 e5
 	pop XIX                                              ; FB5D94  5c
 	ret                                                  ; FB5D95  0e
-sub_FB5D96:
+; GmReset_AllPartsChannelPressure: parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
+GmReset_AllPartsChannelPressure:
 	push XIX                                             ; FB5D96  3c
 	lda xix, (0x60f081:24)                               ; FB5D97  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb4                             ; FB5D9C  f2 80 f0 60 00 b4
@@ -95341,7 +95345,9 @@ sub_FB5D96:
 	jr ule, .LFB5DAB                                     ; FB5DC4  63 e5
 	pop XIX                                              ; FB5DC6  5c
 	ret                                                  ; FB5DC7  0e
-sub_FB5DC8:
+; GmReset_AllPartsModulation: parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
+GmReset_AllPartsModulation:
 	push XIX                                             ; FB5DC8  3c
 	lda xix, (0x60f081:24)                               ; FB5DC9  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb2                             ; FB5DCE  f2 80 f0 60 00 b2
@@ -95364,7 +95370,9 @@ sub_FB5DC8:
 	jr ule, .LFB5DDD                                     ; FB5DF6  63 e5
 	pop XIX                                              ; FB5DF8  5c
 	ret                                                  ; FB5DF9  0e
-sub_FB5DFA:
+; GmReset_AllPartsExpression: parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by sub_FB5972
+;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
+GmReset_AllPartsExpression:
 	push XIX                                             ; FB5DFA  3c
 	lda xix, (0x60f081:24)                               ; FB5DFB  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb3                             ; FB5E00  f2 80 f0 60 00 b3
@@ -95387,7 +95395,9 @@ sub_FB5DFA:
 	jr ule, .LFB5E0F                                     ; FB5E28  63 e5
 	pop XIX                                              ; FB5E2A  5c
 	ret                                                  ; FB5E2B  0e
-sub_FB5E2C:
+; GmReset_AllPartsHold: parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972
+;   (GmMode_HandleChange's) after GmMode_ResetToDefaults.
+GmReset_AllPartsHold:
 	push XIX                                             ; FB5E2C  3c
 	lda xix, (0x60f081:24)                               ; FB5E2D  f2 81 f0 60 34
 	ld (0x60f080:24), 0xb5                             ; FB5E32  f2 80 f0 60 00 b5

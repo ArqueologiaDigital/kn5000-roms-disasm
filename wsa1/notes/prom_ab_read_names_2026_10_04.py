@@ -764,6 +764,24 @@ ROWS = [
      "the GM reset sequence: sub_FB556D (SOUND mode when (0x7F02) & 0xF0 is 0x10), sub_FB5A17, sub_FB56D3, the\n"
      "GmReset_Part* steps (volume 100, effect depths 0 / 0 / 90, pan and tuning centred, bend range 2) and further\n"
      "resets.  Called by sub_FB5972 (GmMode_HandleChange's) and sub_FB585E."),
+    # prom_a 0xFB5D64-0xFB5E2C: per-controller resets.  Each stores a parameter number to (0x60F080), loops (0x60F081) over the
+    # parts 0..31 with (0x60F082) / (0x60F083) fixed, and publishes each through T_Queue2C00_PublishStagedDrainPassB.  The
+    # numbers are Dispatch_By_60F080's ParamMsg_Bx controllers.
+    ("FB5D64", "GmReset_AllPartsPitchBend",
+     "parameter 0xB1 (ParamMsg_B1...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x00 / 0x40 -- the bend centre.  Called by sub_FB5972\n"
+     "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
+    ("FB5DC8", "GmReset_AllPartsModulation",
+     "parameter 0xB2 (ParamMsg_B2...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
+    ("FB5DFA", "GmReset_AllPartsExpression",
+     "parameter 0xB3 (ParamMsg_B3...) for parts 0..31 with (0x60F082) / (0x60F083) = 0x7F / 0x7F.  Called by sub_FB5972\n"
+     "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
+    ("FB5D96", "GmReset_AllPartsChannelPressure",
+     "parameter 0xB4 (ParamMsg_B4...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
+    ("FB5E2C", "GmReset_AllPartsHold",
+     "parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
+     "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
 ]
 
 

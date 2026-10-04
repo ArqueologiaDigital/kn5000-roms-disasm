@@ -2910,6 +2910,11 @@ RENAMES = {
     "sub_FB5C9F": "GmReset_PartFineTune",
     "sub_FB5CCB": "GmReset_PartBendRange",
     "sub_FB58CC": "GmMode_ResetToDefaults",
+    "sub_FB5D64": "GmReset_AllPartsPitchBend",
+    "sub_FB5DC8": "GmReset_AllPartsModulation",
+    "sub_FB5DFA": "GmReset_AllPartsExpression",
+    "sub_FB5D96": "GmReset_AllPartsChannelPressure",
+    "sub_FB5E2C": "GmReset_AllPartsHold",
 }
 
 
