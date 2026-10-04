@@ -1569,7 +1569,7 @@ ROWS = [
      "the same walk, skipping the note-on at the selected position (0x601F0B / 0x601F0D)."),
     ("FEFD8A", "EditScreen_RedrawCursorLayer",
      "while the cursor is inside the measure: layer 1 erased, EditScreen_DrawSelectedEventBar,\n"
-     "EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5."),
+     "EditScreen_DrawCursorTickMarker, the left rule, EditScreen_DrawDataEndMarker."),
     ("FE972B", "EditScreen_DeferredReselectAndRedraw",
      "EditScreen_DeferredActions[2] (queued by the note steppers): EditScreen_SelectEventAtCursor, layer 0 erased,\n"
      "EditScreen_DrawVisibleNotes, EditScreen_RedrawCursorLayer."),
@@ -1618,7 +1618,7 @@ ROWS = [
      "(0x601F5D) + 1.  So the table holds, per beat column shown, the 1-based measure the column belongs to."),
     ("FE9EBB", "EditCursor_RecomputeAndRedraw",
      "EditCursor_ComputeTickInView; inside the view: the cursor layer erased (sub_FEF796),\n"
-     "EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5.  Called by every EditCursor_Tick* / *Beat move."),
+     "EditScreen_DrawCursorTickMarker, the left rule, EditScreen_DrawDataEndMarker.  Called by every EditCursor_Tick* / *Beat move."),
     ("FEA082", "EditScreen_QueueRelocateAfterMove",
      "with an event selected: EditScreen_ActionTimer = 0x85, EditScreen_ActionIndex = 1 -- deferred action 1 five\n"
      "ticks later."),
@@ -1738,6 +1738,33 @@ ROWS = [
     ("FF0407", "KitCategoryLegend_SelectByKitCode",
      "XIY = the legend table for the kit code (XIX+1): 0x20 KitCategoryLegends_ByProgram, 0x28 _User1, 0x29 _User2,\n"
      "0x30 _Ext, otherwise KitCategoryLegends.  No call to it is decoded."),
+    # NOTE / DRUM EDIT: the value fields and the header row
+    ("FEF8D6", "EditScreen_DrawFields", "DrumEdit_DrawFields in DRUM EDIT, NoteEdit_DrawFields in NOTE EDIT."),
+    ("FEF8E5", "NoteEdit_DrawFields",
+     "with an event selected: EditScreen_DrawCursorNote, _DrawEventVelocity, _DrawEventLength; otherwise\n"
+     "_DrawNewNoteLength; then EditScreen_DrawMeasure, _DrawBeat, _DrawTick, _DrawInc."),
+    ("FEF907", "DrumEdit_DrawFields",
+     "with an event selected: EditScreen_DrawCursorNote, _DrawEventVelocity; otherwise _DrawNewNoteVelocity; then\n"
+     "MEAS / beat / tick and INC."),
+    ("FF0BF1", "EditScreen_DrawEventLength",
+     "layer 0: the cell erased (sub_FEF83B); EditField_Length drawn, 4-digit layout below 10000, 5-digit above."),
+    ("FF0C12", "EditScreen_DrawNewNoteLength", "the same for EditField_NewNoteLength."),
+    ("FF0C33", "EditScreen_DrawLengthBelow10000",
+     "(0x26B0) as 1 + 3 digits (thousands at text cell 0x1C0C, the rest at 0x1C0D), or 3 digits below 1000."),
+    ("FF0C9B", "EditScreen_DrawLengthFrom10000", "(0x26B0) as 2 + 3 digits (cells 0x1C0C / 0x1C0E)."),
+    ("FF0D03", "EditScreen_DrawInc", "layer 0: DrumEdit_DrawIncLabel in DRUM EDIT, NoteEdit_DrawIncNumber in NOTE EDIT."),
+    ("FF0D17", "NoteEdit_DrawIncNumber", "EditField_Inc through DisplayList_FF0D2F (a number)."),
+    ("FF0D3E", "DrumEdit_DrawIncLabel", "EditField_Inc through DisplayList_FF0D56 and TickLabels (a label)."),
+    ("FEF938", "EditScreen_DrawBeatNumbers",
+     "layer 0, row y 0x18: at each beat column that is not a measure start (EditScreen_BeatTable entry 0) the\n"
+     "beat's number within its measure (Digits_FEF999, restarting at 1 after each start), x = 24 x column + 0x0D\n"
+     "(NOTE) or 0x55 (DRUM)."),
+    ("FEFDE5", "EditScreen_DrawDataEndMarker",
+     "EditScreen_CountBeatsInMeasure (cursor and position kept); when the part's chain ends inside the view, layer\n"
+     "1: Glyph_FEFE58 at x = 24 x the beats it holds + 0x0D / 0x56, y 0x21."),
+    ("FEF926", "EditScreen_DrawHeaderAndGrid",
+     "layer 0: EditScreen_DrawBeatNumbers, EditScreen_DrawMeasureNumbers, EditScreen_DrawGridLines,\n"
+     "EditScreen_DrawMeasureStartLines."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

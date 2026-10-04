@@ -4114,6 +4114,19 @@ RENAMES = {
     "sub_FF0954": "DrumEdit_DrawRowGuides",
     "sub_FF096C": "DrumEdit_DrawDottedHLine",
     "sub_FF0407": "KitCategoryLegend_SelectByKitCode",
+    "sub_FEF8D6": "EditScreen_DrawFields",
+    "sub_FEF8E5": "NoteEdit_DrawFields",
+    "sub_FEF907": "DrumEdit_DrawFields",
+    "sub_FF0BF1": "EditScreen_DrawEventLength",
+    "sub_FF0C12": "EditScreen_DrawNewNoteLength",
+    "sub_FF0C33": "EditScreen_DrawLengthBelow10000",
+    "sub_FF0C9B": "EditScreen_DrawLengthFrom10000",
+    "sub_FF0D03": "EditScreen_DrawInc",
+    "sub_FF0D17": "NoteEdit_DrawIncNumber",
+    "sub_FF0D3E": "DrumEdit_DrawIncLabel",
+    "sub_FEF938": "EditScreen_DrawBeatNumbers",
+    "sub_FEFDE5": "EditScreen_DrawDataEndMarker",
+    "sub_FEF926": "EditScreen_DrawHeaderAndGrid",
 }
 
 
