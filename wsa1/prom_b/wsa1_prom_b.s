@@ -90689,7 +90689,7 @@ T_Blink_Tick:	jp Blink_Tick  ; F42E2C (was T_F42E2C) -> prom_b 0x0E83A   x1
 T_Blink_GetState:	jp Blink_GetState  ; F42E30 (was T_F42E30) -> prom_b 0x0E835   x2
 	.fill 0xC, 1, 0x0E  ; 0xF42E34: 12 x ret
 T_F42E40:	.long RetStub_F53000	; ptr -> 0xF53000 (prom_b 0x53000)
-T_F42E44:	jp ScreenCodeA3_Handler  ; -> prom_b 0x53025
+T_F42E44:	jp ScreenEnter_DrawbarScreen  ; -> prom_b 0x53025
 T_F42E48:	jp T_F42E48_Nop  ; -> prom_b 0x53029
 ; Evidence: slot 0xF42E4C is `jp 0xF5302A`; prom_b 0xF5302A carries the label
 ;           DrawbarScreen_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -110726,7 +110726,7 @@ T_F42E58_Nop:		; <- T_F42E58, T_F42E5C
 	ret	; F53024  ret
 
 ; --------------------------------------------------------------------------
-; ScreenCodeA3_Handler
+; ScreenEnter_DrawbarScreen
 ; Called from: thunk slot T_F42E44
 ; Evidence: 0xF53025 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -110734,10 +110734,12 @@ T_F42E58_Nop:		; <- T_F42E58, T_F42E5C
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenCodeA3_Handler: the +0 ENTER method of the screen object for screen id 0xA3 -- PanelScreen_VtableTable entry 0xC3
+; ScreenEnter_DrawbarScreen: the +0 ENTER method of the screen object for screen id 0xA3 -- PanelScreen_VtableTable entry 0xC3
 ;   (ViewB entry 0xA3) points at the thunk triple starting at T_F42E44, and slot T_F42E44 jumps here.
-ScreenCodeA3_Handler:		; <- T_F42E44
-	calr	sub_F53052	; F53025  calr 0xf53052
+; ScreenEnter_DrawbarScreen: screen 0xA3's +0 ENTER.  Its vtable (ViewB [0xA3] = T_F42E44) is T_F42E44 enter, T_F42E48 leave
+;   (a ret) and T_F42E4C = T_DrawbarScreen_Dispatch, the button method -- so 0xA3 is the drawbar screen (2026-10-04).
+ScreenEnter_DrawbarScreen:		; <- T_F42E44
+	calr	ScreenEnterBody_DrawbarScreen	; F53025  calr 0xf53052
 	ret	; F53028  ret
 
 ; --------------------------------------------------------------------------
@@ -110794,7 +110796,7 @@ T_F42E50_Nop:		; <- T_F42E50
 	ret	; F53051  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53052
+; ScreenEnterBody_DrawbarScreen
 ; Called from: call from 0xF53025
 ; Evidence: 0xF53052 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -110802,7 +110804,9 @@ T_F42E50_Nop:		; <- T_F42E50
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53052:
+; ScreenEnterBody_DrawbarScreen: the body of ScreenEnter_DrawbarScreen -- resets (0x289C..0x28A2) on a new screen (1s when
+;   the previous screen was 0x66, DSP EFFECT), the dial buttons from (0x289E), then posts the drawbar painters.
+ScreenEnterBody_DrawbarScreen:
 	push	xix	; F53052  push XIX
 	lda	xix, (10399:16)	; F53053  lda XIX,0x289f
 	ld	(10396:16), 0	; F53057  ld (0x289c),0x00

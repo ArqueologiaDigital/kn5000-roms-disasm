@@ -1045,7 +1045,7 @@ RENAMES = [
     ("sub_F0AAB3", "ScreenButton_SoundEditDspEffect"),
     ("sub_F4C46A", "ScreenEnter_CreatorSelectController"),
     ("sub_F4C4B5", "ScreenButton_CreatorSelectController"),
-    ("sub_F53025", "ScreenCodeA3_Handler"),
+    ("sub_F53025", "ScreenEnter_DrawbarScreen"),
     ("sub_F7D2B4", "ScreenEnter_StepRecord"),
     ("sub_F7D2B9", "ScreenLeave_StepRecord"),
     ("sub_F7D2BE", "ScreenButton_StepRecord"),
@@ -2877,4 +2877,6 @@ RENAMES = [
     ("ScreenCodeCA_Handler", "ScreenEnter_SoundEditDspEffect"),
     ("ScreenLeave_CodeCA", "ScreenLeave_SoundEditDspEffect"),
     ("ScreenButton_CodeCA", "ScreenButton_SoundEditDspEffect"),
+    ("ScreenCodeA3_Handler", "ScreenEnter_DrawbarScreen"),
+    ("sub_F53052", "ScreenEnterBody_DrawbarScreen"),
 ]
