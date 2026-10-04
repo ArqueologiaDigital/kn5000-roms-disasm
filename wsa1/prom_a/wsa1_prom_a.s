@@ -59558,9 +59558,11 @@ TuneScale_LoadFields:
 	call T_DisplayListB_RunOne_Stack                     ; FA0682  1d 0c 2e f4
 	inc 8,XSP                                            ; FA0686  ef 60
 	ret                                                  ; FA0688  0e
-; ScreenCode64_Handler: the +0 ENTER method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
+; Screen_TouchSensitivityOrTest_Enter: the +0 ENTER method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
 ;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41938 jumps here.
-ScreenCode64_Handler:
+; Screen_TouchSensitivityOrTest_Enter: the ENTER method of screen 0x64, the SYSTEM menu item 0VERALL T0UCH SENSITIVITY (variant 1, SX-WSA1) / TEST (variant 2, SX-WSA1R)
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_TouchSensitivityOrTest_Enter:
 	link XIZ,0xfffc                                      ; FA0689  ee 0c fc ff
 	pushw hl                                             ; FA068D  2b
 	push XIX                                             ; FA068E  3c
@@ -59660,9 +59662,11 @@ ScreenCode64_Handler:
 	ret                                                  ; FA07A0  0e
 T_F4193C_Nop:
 	ret                                                  ; FA07A1  0e
-; ScreenButton_Code64: the +8 BUTTON method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
+; Screen_TouchSensitivityOrTest_Button: the +8 BUTTON method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
 ;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41940 jumps here.
-ScreenButton_Code64:
+; Screen_TouchSensitivityOrTest_Button: the BUTTON method of screen 0x64, the SYSTEM menu item 0VERALL T0UCH SENSITIVITY (variant 1, SX-WSA1) / TEST (variant 2, SX-WSA1R)
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_TouchSensitivityOrTest_Button:
 	link XIZ,0x0000                                      ; FA07A2  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA07A6  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA07A9  9e 08 04
@@ -60342,9 +60346,11 @@ sub_FA0DCC:
 	pop XIX                                              ; FA0DF0  5c
 	popw hl                                              ; FA0DF1  4b
 	ret                                                  ; FA0DF2  0e
-; ScreenCode65_Handler: the +0 ENTER method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+; Screen_ControllerAssign_Enter: the +0 ENTER method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
 ;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41948 jumps here.
-ScreenCode65_Handler:
+; Screen_ControllerAssign_Enter: the ENTER method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_ControllerAssign_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; FA0DF3  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0DF7  c1 7b 20 f3
 	jr z, .LFA0E07                                       ; FA0DFB  66 0a
@@ -60373,9 +60379,11 @@ ScreenCode65_Handler:
 	call T_Kernel_SemaSignal_StackArg                    ; FA0E46  1d c0 2d f4
 	inc 6,XSP                                            ; FA0E4A  ef 66
 	ret                                                  ; FA0E4C  0e
-; ScreenLeave_Code65: the +4 LEAVE method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+; Screen_ControllerAssign_Leave: the +4 LEAVE method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
 ;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F4194C jumps here.
-ScreenLeave_Code65:
+; Screen_ControllerAssign_Leave: the LEAVE method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_ControllerAssign_Leave:
 	link XIZ,0xfffc                                      ; FA0E4D  ee 0c fc ff
 sub_FA0E51:
 	push XIX                                             ; FA0E51  3c
@@ -60430,9 +60438,11 @@ sub_FA0E51:
 	pop XIX                                              ; FA0EE6  5c
 	unlk XIZ                                             ; FA0EE7  ee 0d
 	ret                                                  ; FA0EE9  0e
-; ScreenButton_Code65: the +8 BUTTON method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
+; Screen_ControllerAssign_Button: the +8 BUTTON method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
 ;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41950 jumps here.
-ScreenButton_Code65:
+; Screen_ControllerAssign_Button: the BUTTON method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_ControllerAssign_Button:
 	link XIZ,0x0000                                      ; FA0EEA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0EEE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA0EF1  9e 08 04
@@ -60847,9 +60857,11 @@ sub_FA10CD:
 	pop XBC                                              ; FA129A  59
 	pop XIX                                              ; FA129B  5c
 	ret                                                  ; FA129C  0e
-; ScreenCode6A_Handler: the +0 ENTER method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+; Screen_Initial_Enter: the +0 ENTER method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
 ;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42670 jumps here.
-ScreenCode6A_Handler:
+; Screen_Initial_Enter: the ENTER method of screen 0x6A, the SYSTEM menu item INITIAL
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_Initial_Enter:
 	push XIX                                             ; FA129D  3c
 	lda xix, (UI_ScreenStage:16)                                ; FA129E  f1 7e 20 34
 	ld c, (UI_ScreenLatch:16)                                   ; FA12A2  c1 7a 20 23
@@ -60871,18 +60883,22 @@ ScreenCode6A_Handler:
 .LFA12CC:
 	pop XIX                                              ; FA12CC  5c
 	ret                                                  ; FA12CD  0e
-; ScreenLeave_Code6A: the +4 LEAVE method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+; Screen_Initial_Leave: the +4 LEAVE method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
 ;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42674 jumps here.
-ScreenLeave_Code6A:
+; Screen_Initial_Leave: the LEAVE method of screen 0x6A, the SYSTEM menu item INITIAL
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_Initial_Leave:
 	ld c, (UI_ScreenLatch:16)                                   ; FA12CE  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA12D2  c1 7b 20 f3
 	jr z, .LFA12DC                                       ; FA12D6  66 04
 	call T_F425DC                                        ; FA12D8  1d dc 25 f4
 .LFA12DC:
 	ret                                                  ; FA12DC  0e
-; ScreenButton_Code6A: the +8 BUTTON method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
+; Screen_Initial_Button: the +8 BUTTON method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
 ;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42678 jumps here.
-ScreenButton_Code6A:
+; Screen_Initial_Button: the BUTTON method of screen 0x6A, the SYSTEM menu item INITIAL
+;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
+Screen_Initial_Button:
 	link XIZ,0x0000                                      ; FA12DD  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA12E1  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FA12E4  9e 08 04

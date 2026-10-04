@@ -896,18 +896,18 @@
 	.set	T_F4192C_Nop, 0xFA00E9
 	.set	Screen_TuneScale_Button, 0xFA00EA
 	.set	T_F41934_Nop, 0xFA0111
-	.set	ScreenCode64_Handler, 0xFA0689
+	.set	Screen_TouchSensitivityOrTest_Enter, 0xFA0689
 	.set	T_F4193C_Nop, 0xFA07A1
-	.set	ScreenButton_Code64, 0xFA07A2
+	.set	Screen_TouchSensitivityOrTest_Button, 0xFA07A2
 	.set	T_F41944_Nop, 0xFA07EA
 	.set	sub_FA0D10, 0xFA0D10
-	.set	ScreenCode65_Handler, 0xFA0DF3
-	.set	ScreenLeave_Code65, 0xFA0E4D
-	.set	ScreenButton_Code65, 0xFA0EEA
+	.set	Screen_ControllerAssign_Enter, 0xFA0DF3
+	.set	Screen_ControllerAssign_Leave, 0xFA0E4D
+	.set	Screen_ControllerAssign_Button, 0xFA0EEA
 	.set	T_F41954_Nop, 0xFA0F11
-	.set	ScreenCode6A_Handler, 0xFA129D
-	.set	ScreenLeave_Code6A, 0xFA12CE
-	.set	ScreenButton_Code6A, 0xFA12DD
+	.set	Screen_Initial_Enter, 0xFA129D
+	.set	Screen_Initial_Leave, 0xFA12CE
+	.set	Screen_Initial_Button, 0xFA12DD
 	.set	T_F4267C_Nop, 0xFA1304
 	.set	MIDI_EntryThunks, 0xFA5400
 	.set	MIDI_RX_ErrorReset, 0xFA5418
@@ -89333,13 +89333,13 @@ T_Screen_TuneScale_Enter:	jp Screen_TuneScale_Enter  ; -> prom_a 0x20094
 T_F4192C:	jp T_F4192C_Nop  ; -> prom_a 0x200E9
 T_Screen_TuneScale_Button:	jp Screen_TuneScale_Button  ; -> prom_a 0x200EA
 T_F41934:	jp T_F41934_Nop  ; -> prom_a 0x20111
-T_F41938:	jp ScreenCode64_Handler  ; -> prom_a 0x20689
+T_F41938:	jp Screen_TouchSensitivityOrTest_Enter  ; -> prom_a 0x20689
 T_F4193C:	jp T_F4193C_Nop  ; -> prom_a 0x207A1
-T_F41940:	jp ScreenButton_Code64  ; -> prom_a 0x207A2
+T_F41940:	jp Screen_TouchSensitivityOrTest_Button  ; -> prom_a 0x207A2
 T_F41944:	jp T_F41944_Nop  ; -> prom_a 0x207EA
-T_F41948:	jp ScreenCode65_Handler  ; -> prom_a 0x20DF3
-T_F4194C:	jp ScreenLeave_Code65  ; -> prom_a 0x20E4D
-T_F41950:	jp ScreenButton_Code65  ; -> prom_a 0x20EEA
+T_F41948:	jp Screen_ControllerAssign_Enter  ; -> prom_a 0x20DF3
+T_F4194C:	jp Screen_ControllerAssign_Leave  ; -> prom_a 0x20E4D
+T_F41950:	jp Screen_ControllerAssign_Button  ; -> prom_a 0x20EEA
 T_F41954:	jp T_F41954_Nop  ; -> prom_a 0x20F11
 T_Screen_MainOutEqualizer_Enter:	jp Screen_MainOutEqualizer_Enter  ; -> prom_a 0x1EF6C
 T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
@@ -90193,9 +90193,9 @@ T_F42634:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
 T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
 	.fill 0x8, 1, 0x0E  ; 0xF42668: 8 x ret
-T_F42670:	jp ScreenCode6A_Handler  ; -> prom_a 0x2129D
-T_F42674:	jp ScreenLeave_Code6A  ; -> prom_a 0x212CE
-T_F42678:	jp ScreenButton_Code6A  ; -> prom_a 0x212DD
+T_F42670:	jp Screen_Initial_Enter  ; -> prom_a 0x2129D
+T_F42674:	jp Screen_Initial_Leave  ; -> prom_a 0x212CE
+T_F42678:	jp Screen_Initial_Button  ; -> prom_a 0x212DD
 T_F4267C:	jp T_F4267C_Nop  ; -> prom_a 0x21304
 T_Screen_SoundGroupNaming_Enter:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
 T_Screen_SoundGroupNaming_Leave:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
