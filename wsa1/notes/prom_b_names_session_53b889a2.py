@@ -2935,4 +2935,5 @@ RENAMES = [
     ("UI_GotoScreen24", "UI_GotoNoteEditPartSelect"),
     ("UI_GotoScreen27", "UI_GotoDrumEditPartSelect"),
     ("SysExDump_ShowScreenB3", "SysExDump_ShowWriteProtectError"),
+    ("sub_F4402A", "SeqBufRing_Discard_Veneer"),
 ]

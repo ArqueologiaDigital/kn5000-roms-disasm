@@ -88644,7 +88644,7 @@ T_F40A50:	jp sub_F454B3  ; -> prom_b 0x454B3
 T_F40A54:	jp sub_F46015  ; -> prom_b 0x46015
 T_Var20A9_SetBits01:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
 T_UiStatus_ShowMessage0E:	jp UiStatus_ShowMessage0E  ; -> prom_b 0x45FB4   x3
-T_F40A60:	jp sub_F4402A  ; -> prom_b 0x4402A   x1
+T_F40A60:	jp SeqBufRing_Discard_Veneer  ; -> prom_b 0x4402A   x1
 T_F40A64:	jp TimedEventRing_Discard_Veneer  ; -> prom_b 0x44030
 	.fill 0x4, 1, 0x00  ; 0xF40A68: 4 x nop
 T_F40A6C:	jp sub_F44033  ; -> prom_b 0x44033
@@ -91309,7 +91309,7 @@ sub_F44027:		; <- T_F40A88
 	jrl	sub_F44CA7	; F44027  jrl T,0xf44ca7
 
 ; --------------------------------------------------------------------------
-; sub_F4402A
+; SeqBufRing_Discard_Veneer
 ; Called from: T_F40A60 (x1)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40A60 holds `jp 0x00F4402A`, and 0xF4402A is an
@@ -91319,7 +91319,8 @@ sub_F44027:		; <- T_F40A88
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4402A:		; <- T_F40A60
+; SeqBufRing_Discard_Veneer: a jump to SeqBufRing_Discard -- `jrl SeqBufRing_Discard`.
+SeqBufRing_Discard_Veneer:		; <- T_F40A60
 	jrl	SeqBufRing_Discard	; F4402A  jrl T,0xf45975
 
 ; --------------------------------------------------------------------------
