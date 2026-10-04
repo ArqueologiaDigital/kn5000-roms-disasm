@@ -114,7 +114,7 @@ def s1_dispatchers():
 
 
 def s2_dispatch_table():
-    print("\n2  prom_b DispatchTable_F4C38D -- 23 pointers, HOW MANY DEFAULT STUBS")
+    print("\n2  prom_b ScreenButtonHandlers_CreatorSelectController -- 23 pointers, HOW MANY DEFAULT STUBS")
     ps = [w32("b", 0xF4C38D + 4 * i) for i in range(23)]
     n = sum(1 for p in ps if p == 0x00F42C70)
     check(n == 15, "entries equal to the default stub 0x00F42C70", str(n))
@@ -369,7 +369,7 @@ def selftest():
     check(sum(1 for i in range(64) if at("c", a, 64)[i] != at("c", b, 64)[i]) != 0,
           "the two dispatchers are NOT identical over the 64 bytes the tree claims")
     check(w32("b", 0xF4C38D) == 0x00F42C70,
-          "entry 0 of DispatchTable_F4C38D really is the default stub")
+          "entry 0 of ScreenButtonHandlers_CreatorSelectController really is the default stub")
     check(sum(1 for p in [w32("b", 0xF4C38D + 4 * i) for i in range(23)]
               if p == 0x00F42C70) != 19,
           "19 is refuted, not merely unconfirmed")

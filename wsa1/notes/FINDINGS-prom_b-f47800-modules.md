@@ -47,7 +47,7 @@ count, and must never be quoted as one.
 | 0xF4B7AD-0xF4B7CC | `IdentityMap_F4B7AD` | 32 |
 | 0xF4B7CD-0xF4BFFF | `.fill` 0x0E | 2,099 |
 | 0xF4C000-0xF4C38C | `DL_F4C000` | 909 |
-| 0xF4C38D-0xF4C3E8 | `DispatchTable_F4C38D` | 92 |
+| 0xF4C38D-0xF4C3E8 | `ScreenButtonHandlers_CreatorSelectController` | 92 |
 | 0xF4C3E9-0xF4C3F1 | `BitMask_F4C3E9` | 9 |
 | 0xF4C3F2-0xF4C735 | code | 836 |
 | 0xF4C736-0xF4C7FF | `.fill` 0x0E | 202 |
@@ -122,7 +122,7 @@ one at 0xF4C2F8 frames as opcode 0x00 with length 134. It is recorded, not
 smoothed — the walk still lands on the pointer table, which is the only thing
 the record count rests on.
 
-**`DispatchTable_F4C38D`** — 23 pointers. **Fifteen** are the default thunk stub
+**`ScreenButtonHandlers_CreatorSelectController`** — 23 pointers. **Fifteen** are the default thunk stub
 `0x00F42C70` (see `notes/prom_b_default_slot_census.py`); the remaining eight
 resolve to **three** addresses inside this module — 0xF4C4DD six times, 0xF4C588
 once, 0xF4C5A2 once — and all three are asserted to be instruction boundaries of
@@ -180,7 +180,7 @@ phrasing fault; they are separated here rather than lumped together:
 
 | label | header claimed the instruction was at | it is actually at |
 |---|---|---|
-| `DispatchTable_F4C38D` | 0xF4C4C9 | **0xF4C4C8** `add XWA,0x00f4c38d` |
+| `ScreenButtonHandlers_CreatorSelectController` | 0xF4C4C9 | **0xF4C4C8** `add XWA,0x00f4c38d` |
 | `BitMask_F4C3E9` | 0xF4C6D5 | **0xF4C6D4** `add XBC,0x00f4c3e9` |
 
 The cause was a one-line shortcut: the generator computed the reader's address

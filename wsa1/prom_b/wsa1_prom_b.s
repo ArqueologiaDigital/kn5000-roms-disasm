@@ -91160,9 +91160,9 @@ T_F434CC:	jp T_F434CC_Nop  ; -> prom_a 0x1EF07
 T_SoundCopy_ReadExtGroupDrumFlag:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a 0x1FDC8
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
-T_F434E0:	jp ScreenCodeAD_Handler  ; -> prom_b 0x4C46A
+T_F434E0:	jp ScreenEnter_CreatorSelectController  ; -> prom_b 0x4C46A
 T_UI_RequestBits_ClearBit7:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
-T_F434E8:	jp ScreenButton_CodeAD  ; -> prom_b 0x4C4B5
+T_F434E8:	jp ScreenButton_CreatorSelectController  ; -> prom_b 0x4C4B5
 T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
 T_F434F4:	jp sub_F4C42E  ; -> prom_b 0x4C42E
@@ -96047,7 +96047,7 @@ WorkspaceDefaults:
 ;   0xF48C1A-0xF494B7  code     0xF494B8-0xF497FF    840 bytes of padding
 ;   0xF49800-0xF4B7AC  code     0xF4B7AD-0xF4B7CC  IdentityMap_F4B7AD
 ;                               0xF4B7CD-0xF4BFFF  2,099 bytes of padding
-;   0xF4C000-0xF4C3F1  data     DL_CreatorSelectController, DispatchTable_F4C38D, BitMask_F4C3E9
+;   0xF4C000-0xF4C3F1  data     DL_CreatorSelectController, ScreenButtonHandlers_CreatorSelectController, BitMask_F4C3E9
 ;   0xF4C3F2-0xF4C735  code     0xF4C736-0xF4C7FF    202 bytes of padding
 ;   0xF4C800-0xF4CB5A  code     0xF4CB5B-0xF4CFFF  1,189 bytes of padding
 ;   0xF4D000-0xF4D949  code     0xF4D94A-0xF4DFFF  1,718 bytes of padding
@@ -96073,10 +96073,10 @@ WorkspaceDefaults:
 ;             so the list's caller is not established and the records are emitted
 ;             as framed `.byte` rows rather than rendered.
 ;             ⚠ 2026-09-25 (lane promb): the callers ARE in this module, with
-;             24-bit `lda` operands -- sub_F4C5C9 and sub_F4C60C -- and the span is
+;             24-bit `lda` operands -- Paint_CreatorSelectController and Paint_CreatorSelectControllerNames -- and the span is
 ;             six pieces, rendered below as DL_CreatorSelectController et al.
 ;
-;   0xF4C38D  DispatchTable_F4C38D -- 23 pointers, 19 of them the default thunk
+;   0xF4C38D  ScreenButtonHandlers_CreatorSelectController -- 23 pointers, 19 of them the default thunk
 ;             stub 0x00F42C70.
 ;
 ;   0xF4B7AD / 0xF4E5DC  two more IDENTITY MAPS, 32 bytes of 0..31 each, joining
@@ -103423,7 +103423,7 @@ IdentityMap_F4B7AD:
 ;   B list reads, and a second B list.  Rendered record by record.
 ; ⚠ REPLACES `DL_F4C000`, filed as 81 records with "Called from: NOT
 ;   established" and "Unknown: which interpreter runs it" -- both false:
-;   sub_F4C5C9 and sub_F4C60C in this module name every piece with 24-bit
+;   Paint_CreatorSelectController and Paint_CreatorSelectControllerNames in this module name every piece with 24-bit
 ;   `lda` operands and run it through T_DisplayList_Run_Stack (A) or
 ;   T_DisplayListB_Run_Stack (B).  The record that framed as "op 0x00 with
 ;   length 134" at 0xF4C2F8 was the flat walk reading the entry arrays at
@@ -103433,7 +103433,7 @@ IdentityMap_F4B7AD:
 ; --------------------------------------------------------------------------
 ; DL_CreatorSelectController -- 0xF4C000-0xF4C044, interpreter A: the title,
 ;   drawn when (0x2870) == 0: CREATOR SELECT (op 0x1C, the title face),
-;   CONTROLLER, a 24x24 glyph and two frames.  Run by sub_F4C5C9: `lda
+;   CONTROLLER, a 24x24 glyph and two frames.  Run by Paint_CreatorSelectController: `lda
 ;   XBC,0xF4C045` (the end) / `lda XWA,0xF4C000` / `call
 ;   T_DisplayList_Run_Stack` at 0xF4C5F3.
 ; --------------------------------------------------------------------------
@@ -103468,7 +103468,7 @@ DL_CreatorSelectController:
 ; DL_CreatorSelectController_Alt -- 0xF4C045-0xF4C070, interpreter A: the
 ;   same title drawn when (0x2870) != 0 -- the same run call as the first
 ;   piece, reached through the other arm of `cp (0x2870),0 / jr nz`.  Run by
-;   sub_F4C5C9: `lda XBC,0xF4C071` (the end) / `lda XWA,0xF4C045` / `call
+;   Paint_CreatorSelectController: `lda XBC,0xF4C071` (the end) / `lda XWA,0xF4C045` / `call
 ;   T_DisplayList_Run_Stack` at 0xF4C5F3.
 ; --------------------------------------------------------------------------
 DL_CreatorSelectController_Alt:
@@ -103488,7 +103488,7 @@ DL_CreatorSelectController_Alt:
 ; --------------------------------------------------------------------------
 ; DL_CreatorSelectController_Grid -- 0xF4C071-0xF4C2B6, interpreter A:
 ;   always drawn after the title: two rows of the digits 1-6 and the frames
-;   and lines of a six-slot grid.  Run by sub_F4C5C9: `lda XBC,0xF4C2B7`
+;   and lines of a six-slot grid.  Run by Paint_CreatorSelectController: `lda XBC,0xF4C2B7`
 ;   (the end) / `lda XWA,0xF4C071` / `call T_DisplayList_Run_Stack` at
 ;   0xF4C603.
 ; --------------------------------------------------------------------------
@@ -103795,10 +103795,10 @@ DL_CreatorSelectController_Grid:
 ;   four interpreter-B records on (0x2640): two op-0x04 records (swi 7 fn
 ;   0x0E, LCD_Svc_0E_ClearColumns, one 6-byte IY/BC/HL entry each since
 ;   their mask is 0) and two op-0x03 records (fn 5, LCD_Svc_05_FillRect,
-;   8-byte x0/y0/x1/y1 entries indexed by (0x2640) & 7).  sub_F4C60C sets
+;   8-byte x0/y0/x1/y1 entries indexed by (0x2640) & 7).  Paint_CreatorSelectControllerNames sets
 ;   (0x2640) to the index of the lowest set bit among the low six of
 ;   IndexedTable_GetByte(25 or 26, 32 + (0x2250)) before running it -- the
-;   selected slot of the grid.  Run by sub_F4C60C: `lda XBC,0xF4C2E3` (the
+;   selected slot of the grid.  Run by Paint_CreatorSelectControllerNames: `lda XBC,0xF4C2E3` (the
 ;   end) / `lda XWA,0xF4C2B7` / `call T_DisplayListB_Run_Stack` at 0xF4C677.
 ; --------------------------------------------------------------------------
 DLB_CreatorSelectController_Cursor:
@@ -103855,7 +103855,7 @@ CreatorSelectController_Boxes2:		; 8 entries of 8 bytes, index (0x2640) & 0x07
 ; DLB_CreatorSelectController_Names -- 0xF4C36F-0xF4C38C, interpreter B: two
 ;   op-0x02 string readouts with source (0x0000) and mask 0 -- entry 0 of
 ;   the 13-byte string tables at RAM 0x2950 and 0x2940, drawn with swi 7 fn
-;   0x20.  Run by sub_F4C60C: `lda XBC,0xF4C38D` (the end) / `lda
+;   0x20.  Run by Paint_CreatorSelectControllerNames: `lda XBC,0xF4C38D` (the end) / `lda
 ;   XWA,0xF4C36F` / `call T_DisplayListB_Run_Stack` at 0xF4C61F.
 ; --------------------------------------------------------------------------
 DLB_CreatorSelectController_Names:
@@ -103878,7 +103878,7 @@ DLB_CreatorSelectController_Names:
 
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F4C38D -- 23 32-bit pointers.  15 of them are the DEFAULT
+; ScreenButtonHandlers_CreatorSelectController -- 23 32-bit pointers.  15 of them are the DEFAULT
 ;                         thunk slot 0x00F42C70 (see
 ;                         notes/prom_b_default_slot_census.py); the other 8
 ;                         point into this module, at 0xF4C4DD, 0xF4C588,
@@ -103910,7 +103910,9 @@ DLB_CreatorSelectController_Names:
 ;          notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
-DispatchTable_F4C38D:
+; ScreenButtonHandlers_CreatorSelectController: the screen's button table by panel button code -- [9] LcdKeyRow2, [15]
+;   ExitKey (2026-10-04).
+ScreenButtonHandlers_CreatorSelectController:
 	.long	T_F42C70	; F4C38D  [0] -> default stub
 	.long	sub_F4C4DD	; F4C391  [1] -> 0xF4C4DD
 	.long	sub_F4C4DD	; F4C395  [2] -> 0xF4C4DD
@@ -103920,13 +103922,13 @@ DispatchTable_F4C38D:
 	.long	sub_F4C4DD	; F4C3A5  [6] -> 0xF4C4DD
 	.long	T_F42C70	; F4C3A9  [7] -> default stub
 	.long	T_F42C70	; F4C3AD  [8] -> default stub
-	.long	LcdKeyRow2_ScreenCodeAD	; F4C3B1  [9] -> 0xF4C588
+	.long	LcdKeyRow2_CreatorSelectController	; F4C3B1  [9] -> 0xF4C588
 	.long	T_F42C70	; F4C3B5  [10] -> default stub
 	.long	T_F42C70	; F4C3B9  [11] -> default stub
 	.long	T_F42C70	; F4C3BD  [12] -> default stub
 	.long	T_F42C70	; F4C3C1  [13] -> default stub
 	.long	T_F42C70	; F4C3C5  [14] -> default stub
-	.long	ExitKey_ScreenCodeAD	; F4C3C9  [15] -> 0xF4C5A2
+	.long	ExitKey_CreatorSelectController	; F4C3C9  [15] -> 0xF4C5A2
 	.long	T_F42C70	; F4C3CD  [16] -> default stub
 	.long	T_F42C70	; F4C3D1  [17] -> default stub
 	.long	T_F42C70	; F4C3D5  [18] -> default stub
@@ -103946,7 +103948,7 @@ DispatchTable_F4C38D:
 ;          spells the address.
 ; Entry count: 9, and the END is a thunk target: 0xF4C3F2 is T_F434E0's
 ;              target, so the byte after this island is an entry point the
-;              hardware uses.  The START is where DispatchTable_F4C38D's 23
+;              hardware uses.  The START is where ScreenButtonHandlers_CreatorSelectController's 23
 ;              pointers stop.
 ; Evidence: the nine bytes are compared with [0] + [1<<k] on every emit, and
 ;           0xF4C3F2's thunk slot is re-read from the table.
@@ -104030,7 +104032,7 @@ sub_F4C42E_Epilogue:
 	ret	; F4C469  ret
 
 ; --------------------------------------------------------------------------
-; ScreenCodeAD_Handler
+; ScreenEnter_CreatorSelectController
 ; Called from: T_F434E0 (x0)
 ; Touches: (0x207C) (0x207D) (0x2095) (0x2870)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F4C684
@@ -104041,9 +104043,11 @@ sub_F4C42E_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenCodeAD_Handler: the +0 ENTER method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
+; ScreenEnter_CreatorSelectController: the +0 ENTER method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
 ;   (ViewB entry 0xAD) points at the thunk triple starting at T_F434E0, and slot T_F434E0 jumps here.
-ScreenCodeAD_Handler:		; <- T_F434E0
+; ScreenEnter_CreatorSelectController: screen 0xAD's +0 ENTER method.  0xAD is CREATOR SELECT CONTROLLER: the painter
+;   it posts, Paint_CreatorSelectController, runs DL_CreatorSelectController (title "CREATOR SELECT", "CONTROLLER").
+ScreenEnter_CreatorSelectController:		; <- T_F434E0
 	ld	c, (UI_ScreenId:16)	; F4C46A  ld C,(0x207c)
 	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F4C46E  cp C,(0x207d)
 	jr	z, sub_F4C46A_Skip	; F4C472  jr Z,0xf4c479
@@ -104053,7 +104057,7 @@ sub_F4C46A_Skip:
 	and	c, 16	; F4C47D  and C,0x10
 	jr	nz, sub_F4C46A_Skip2	; F4C480  jr NZ,0xf4c499
 	call	T_CallbackQueue_ResetAndRestartTask2	; F4C482  call 0xf42e80
-	lda	xbc, (sub_F4C5C9:24)	; F4C486  lda XBC,0xf4c5c9
+	lda	xbc, (Paint_CreatorSelectController:24)	; F4C486  lda XBC,0xf4c5c9
 	push	xbc	; F4C48B  push XBC
 	call	T_CallbackQueue_Post	; F4C48C  call 0xf42e84
 	pushw	1	; F4C490  push 0x0001
@@ -104061,7 +104065,7 @@ sub_F4C46A_Skip:
 	inc	6, xsp	; F4C497  inc 6,XSP
 sub_F4C46A_Skip2:
 	calr	sub_F4C684	; F4C499  calr 0xf4c684
-	lda	xbc, (sub_F4C60C:24)	; F4C49C  lda XBC,0xf4c60c
+	lda	xbc, (Paint_CreatorSelectControllerNames:24)	; F4C49C  lda XBC,0xf4c60c
 	push	xbc	; F4C4A1  push XBC
 	call	T_CallbackQueue_Post	; F4C4A2  call 0xf42e84
 	pushw	1	; F4C4A6  push 0x0001
@@ -104086,7 +104090,7 @@ UI_RequestBits_ClearBit7:		; <- T_UI_RequestBits_ClearBit7
 	ret	; F4C4B4  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_CodeAD
+; ScreenButton_CreatorSelectController
 ; Called from: T_F434E8 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   T_PanelCode_ToSlotAndFlags
@@ -104097,16 +104101,16 @@ UI_RequestBits_ClearBit7:		; <- T_UI_RequestBits_ClearBit7
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_CodeAD: the +8 BUTTON method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
+; ScreenButton_CreatorSelectController: the +8 BUTTON method of the screen object for screen id 0xAD -- PanelScreen_VtableTable entry 0xCD
 ;   (ViewB entry 0xAD) points at the thunk triple starting at T_F434E0, and slot T_F434E8 jumps here.
-ScreenButton_CodeAD:		; <- T_F434E8
+ScreenButton_CreatorSelectController:		; <- T_F434E8
 	link XIZ,0x0000	; F4C4B5  link XIZ,0x0000
 	m_push MWD+r6, 0x0a	; F4C4B9  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F4C4BC  pushw (XIZ+0x08)
 	call	T_PanelCode_ToSlotAndFlags	; F4C4BF  call 0xf42c74
 	mul	a, 4	; F4C4C3  mul A,0x04
 	extz	xwa	; F4C4C6  extz XWA
-	add	xwa, DispatchTable_F4C38D	; F4C4C8  add XWA,0x00f4c38d
+	add	xwa, ScreenButtonHandlers_CreatorSelectController	; F4C4C8  add XWA,0x00f4c38d
 	ld	xbc, (xwa)	; F4C4CE  ld XBC,(XWA)
 	lda	xiy, (sub_F4C4B5_Resume:24)	; F4C4D0  lda XIY,0xf4c4d8
 	push	xiy	; F4C4D5  push XIY
@@ -104211,7 +104215,7 @@ sub_F4C4DD_Epilogue:
 	popw	hl	; F4C586  pop HL
 	ret	; F4C587  ret
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_ScreenCodeAD -- row 2 of the five key pairs flanking the LCD, on
+; LcdKeyRow2_CreatorSelectController -- row 2 of the five key pairs flanking the LCD, on
 ;           the ScreenCodeAD screen
 ; Reached by: SW26 "LCD RIGHT 2" (matrix segment 3 bit 1, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6A6
@@ -104221,7 +104225,7 @@ sub_F4C4DD_Epilogue:
 ;           {class 0xA9, code 0x09} -> delivered code 0x89. prom_a
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
-;           ScreenButton_CodeAD calls PanelCode_ToSlotAndFlags (prom_b
+;           ScreenButton_CreatorSelectController calls PanelCode_ToSlotAndFlags (prom_b
 ;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
 ;           XWA,0x00f4c38d` at 0xF4C4C8, so the index is the REMAPPED SLOT and
 ;           this is slot 9 of the 23.
@@ -104256,7 +104260,7 @@ sub_F4C4DD_Epilogue:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-LcdKeyRow2_ScreenCodeAD:
+LcdKeyRow2_CreatorSelectController:
 	ld	c, (PanelEvent_Flags:16)	; F4C588  ld C,(0x28b0)
 	and	c, 1	; F4C58C  and C,0x01
 	jr	nz, sub_F4C588_Return	; F4C58F  jr NZ,0xf4c5a1
@@ -104267,13 +104271,13 @@ LcdKeyRow2_ScreenCodeAD:
 sub_F4C588_Return:
 	ret	; F4C5A1  ret
 ; ---------------------------------------------------------------------
-; ExitKey_ScreenCodeAD -- the EXIT key, on the ScreenCodeAD screen
+; ExitKey_CreatorSelectController -- the EXIT key, on the ScreenCodeAD screen
 ; Reached by: SW32 "EXIT" (matrix segment 3 bit 7, wire 0xC3) ->
 ;           PanelWireGroupMap_Variant2[0x63] = group 0x03 -> record 0xF8B6BE
 ;           {class 0xA9, code 0x0F} -> delivered code 0x0F. prom_a
 ;           PanelButton_Route masks the code `and L,0x1f` at 0xF861AE as
 ;           always, but THIS screen is dispatched by the OTHER family:
-;           ScreenButton_CodeAD calls PanelCode_ToSlotAndFlags (prom_b
+;           ScreenButton_CreatorSelectController calls PanelCode_ToSlotAndFlags (prom_b
 ;           0xF55019) through thunk T_F42C74 and then `mul A,0x04 / add
 ;           XWA,0x00f4c38d` at 0xF4C4C8, so the index is the REMAPPED SLOT and
 ;           this is slot 15 of the 23.
@@ -104302,7 +104306,7 @@ sub_F4C588_Return:
 ;           reads notes/wave7_panel_button_codes.py (layer 1) and
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
-ExitKey_ScreenCodeAD:
+ExitKey_CreatorSelectController:
 	ld	c, (PanelEvent_Flags:16)	; F4C5A2  ld C,(0x28b0)
 	and	c, 1	; F4C5A6  and C,0x01
 	jr	nz, sub_F4C5A2_Return	; F4C5A9  jr NZ,0xf4c5c8
@@ -104317,7 +104321,9 @@ sub_F4C5A2_Skip:
 	ld	(UI_Request:16), 1	; F4C5C3  ld (0x2070),0x01
 sub_F4C5A2_Return:
 	ret	; F4C5C8  ret
-sub_F4C5C9:
+; Paint_CreatorSelectController: layer 0; DL_CreatorSelectController (the title) .. _Alt when (0x2870) = 0, else
+;   DL_CreatorSelectController_Alt .. _Grid; then _Grid .. DLB_CreatorSelectController_Cursor.  Posted by ScreenEnter_CreatorSelectController.
+Paint_CreatorSelectController:
 	call	T_F42E10	; F4C5C9  call 0xf42e10
 	ld	(LCD_CurrentLayer:16), 0	; F4C5CD  ld (0x2540),0x00
 	m_cp_mi8 MB16, 0x2870, 0x00	; F4C5D2  cp (0x2870),0x00
@@ -104342,11 +104348,13 @@ sub_F4C5A2_Join:
 	inc	8, xsp	; F4C607  inc 0,XSP
 	inc	8, xsp	; F4C609  inc 0,XSP
 	ret	; F4C60B  ret
-sub_F4C60C:
+; Paint_CreatorSelectControllerNames: layer 0; the interpreter-B list DLB_CreatorSelectController_Names, then the
+;   current part's byte 26 (25 when (0x2870) is not 0) of IndexedTable as a bit map.  Posted by ScreenEnter_CreatorSelectController.
+Paint_CreatorSelectControllerNames:
 	pushw	hl	; F4C60C  push HL
 	push	xix	; F4C60D  push XIX
 	ld	(LCD_CurrentLayer:16), 0	; F4C60E  ld (0x2540),0x00
-	lda	xbc, (DispatchTable_F4C38D:24)	; F4C613  lda XBC,0xf4c38d
+	lda	xbc, (ScreenButtonHandlers_CreatorSelectController:24)	; F4C613  lda XBC,0xf4c38d
 	push	xbc	; F4C618  push XBC
 	lda	xwa, (DLB_CreatorSelectController_Names:24)	; F4C619  lda XWA,0xf4c36f
 	push	xwa	; F4C61E  push XWA
@@ -110751,7 +110759,7 @@ T_F42E48_Nop:		; <- T_F42E48
 ;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
 ;               (XBC)` -- the image-wide message-dispatch idiom, here
 ;               through PanelButtonTable_DrawbarScreen.
-; Evidence: the byte-identical idiom appears at sub_F0F17C, ScreenButton_CodeAD and
+; Evidence: the byte-identical idiom appears at sub_F0F17C, ScreenButton_CreatorSelectController and
 ;           0xF1233E in this same file, each with its own table; the only
 ;           thing this file adds is WHICH table.  The name states the
 ;           mechanism and the table, not a purpose.
@@ -114732,7 +114740,7 @@ Stub_Ret_F55018:
 ; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
 ; Called from: thunk T_PanelCode_ToSlotAndFlags (0xF42C74), which four screen-module
 ;              dispatchers call before `mul A,4 / add XWA,<their table>`:
-;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CodeAD and
+;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), ScreenButton_CreatorSelectController and
 ;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
 ;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags

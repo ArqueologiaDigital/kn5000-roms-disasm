@@ -62,7 +62,7 @@ HOW THE CODE/DATA SPLIT WAS MADE
                                        read by `ld XIX,0x00F4B7AD` at 0xF4A533
           0xF4C000  DL_F4C000          81 records whose own length bytes walk
                                        from 0xF4C000 onto 0xF4C38D exactly
-          0xF4C38D  DispatchTable_F4C38D  23 pointers, all into prom_b
+          0xF4C38D  ScreenButtonHandlers_CreatorSelectController  23 pointers, all into prom_b
           0xF4C3E9  BitMask_F4C3E9     9 bytes, ends at thunk target 0xF4C3F2
           0xF4E5DC  IdentityMap_F4E5DC 32 bytes, read at 0xF4E234
           0xF4E5FC  BitWeight_F4E5FC   16 words, read at 0xF4E510
@@ -285,7 +285,7 @@ DATA_LABEL = {
     0xF48C00: "Table_F48C00",
     0xF4B7AD: "IdentityMap_F4B7AD",
     0xF4C000: "DL_F4C000",
-    0xF4C38D: "DispatchTable_F4C38D",
+    0xF4C38D: "ScreenButtonHandlers_CreatorSelectController",
     0xF4C3E9: "BitMask_F4C3E9",
     0xF4E5DC: "IdentityMap_F4E5DC",
     0xF4E5FC: "BitWeight_F4E5FC",
@@ -541,7 +541,7 @@ def block_dl(lab):
                 "%d records, and the count is SELF-CHECKING rather than measured: "
                 "starting at 0xF4C000 and advancing by each record's own length "
                 "byte lands on 0x%06X, which is exactly where "
-                "DispatchTable_F4C38D begins.  A miscount anywhere in the walk "
+                "ScreenButtonHandlers_CreatorSelectController begins.  A miscount anywhere in the walk "
                 "would end somewhere else."
                 % (len(recs), end))
     out += wrap("; Text it draws: ",
@@ -582,7 +582,7 @@ def block_ptbl(lab):
     ps, rd = ptrs(), direct_refs(PTBL_AT)
     default = 0xF42C70
     out = ["; " + "-" * 74]
-    out += wrap("; DispatchTable_F4C38D -- ",
+    out += wrap("; ScreenButtonHandlers_CreatorSelectController -- ",
                 "%d 32-bit pointers.  %d of them are the DEFAULT thunk slot "
                 "0x00F42C70 (see notes/prom_b_default_slot_census.py); the other "
                 "%d point into this module, at %s."
@@ -609,7 +609,7 @@ def block_ptbl(lab):
                 "the index space is sparse, but nothing decoded here gives its "
                 "bound." % (ps.count(default), PTBL_N))
     out.append("; " + "-" * 74)
-    out.append("DispatchTable_F4C38D:")
+    out.append("ScreenButtonHandlers_CreatorSelectController:")
     for i, p in enumerate(ps):
         tag = "default stub" if p == default else (lab.get(p) or "0x%06X" % p)
         out.append("\t.long\t0x00%06X\t; %06X  [%d] -> %s"
@@ -629,7 +629,7 @@ def block_bitmask(lab):
     out += wrap("; Entry count: ",
                 "9, and the END is a thunk target: 0xF4C3F2 is T_F434E0's target, "
                 "so the byte after this island is an entry point the hardware "
-                "uses.  The START is where DispatchTable_F4C38D's 23 pointers "
+                "uses.  The START is where ScreenButtonHandlers_CreatorSelectController's 23 pointers "
                 "stop.")
     out += wrap("; Evidence: ", "the nine bytes are compared with [0] + [1<<k] on "
                 "every emit, and 0xF4C3F2's thunk slot is re-read from the table.")
@@ -811,7 +811,7 @@ def checks(verbose=True):
         c("  ...whose operand field starts %d byte(s) in" % (rd[0] - ia),
           rd[0] - ia in (1, 2), True)
     for nm, a in (("BitWeight_F4E5FC", 0xF4E5FC),
-                  ("DispatchTable_F4C38D", PTBL_AT),
+                  ("ScreenButtonHandlers_CreatorSelectController", PTBL_AT),
                   ("BitMask_F4C3E9", 0xF4C3E9),
                   ("Table_F4EF38", 0xF4EF38)):
         r0 = direct_refs(a)[0]
@@ -825,13 +825,13 @@ def checks(verbose=True):
       [1 << i for i in range(16)])
     c("  and exactly one site spells it", len(direct_refs(0xF4E5FC)), 1)
     recs, end = dl_records()
-    c("DL_F4C000's own length bytes walk onto DispatchTable_F4C38D",
+    c("DL_F4C000's own length bytes walk onto ScreenButtonHandlers_CreatorSelectController",
       "0x%06X" % end, "0x%06X" % PTBL_AT)
     c("  in %d records" % len(recs), len(recs), 81)
     c("  and nothing spells 0xF4C000 as a 32-bit word",
       len(direct_refs(DL_AT)), 0)
     ps = ptrs()
-    c("DispatchTable_F4C38D's %d entries are all prom_b addresses" % PTBL_N,
+    c("ScreenButtonHandlers_CreatorSelectController's %d entries are all prom_b addresses" % PTBL_N,
       sorted(set("0x%06X" % p for p in ps if not 0xF00000 <= p <= 0xFFFFFF)), [])
     c("  the word one entry past the table is NOT a prom_b address",
       0xF00000 <= int.from_bytes(at(PTBL_AT + 4 * PTBL_N, 4), "little") <= 0xFFFFFF,
@@ -920,7 +920,7 @@ BANNER = """
 ;   0xF48C1A-0xF494B7  code     0xF494B8-0xF497FF    840 bytes of padding
 ;   0xF49800-0xF4B7AC  code     0xF4B7AD-0xF4B7CC  IdentityMap_F4B7AD
 ;                               0xF4B7CD-0xF4BFFF  2,099 bytes of padding
-;   0xF4C000-0xF4C3F1  data     DL_F4C000, DispatchTable_F4C38D, BitMask_F4C3E9
+;   0xF4C000-0xF4C3F1  data     DL_F4C000, ScreenButtonHandlers_CreatorSelectController, BitMask_F4C3E9
 ;   0xF4C3F2-0xF4C735  code     0xF4C736-0xF4C7FF    202 bytes of padding
 ;   0xF4C800-0xF4CB5A  code     0xF4CB5B-0xF4CFFF  1,189 bytes of padding
 ;   0xF4D000-0xF4D949  code     0xF4D94A-0xF4DFFF  1,718 bytes of padding
@@ -946,7 +946,7 @@ BANNER = """
 ;             so the list's caller is not established and the records are emitted
 ;             as framed `.byte` rows rather than rendered.
 ;
-;   0xF4C38D  DispatchTable_F4C38D -- 23 pointers, 19 of them the default thunk
+;   0xF4C38D  ScreenButtonHandlers_CreatorSelectController -- 23 pointers, 19 of them the default thunk
 ;             stub 0x00F42C70.
 ;
 ;   0xF4B7AD / 0xF4E5DC  two more IDENTITY MAPS, 32 bytes of 0..31 each, joining
