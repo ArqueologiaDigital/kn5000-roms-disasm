@@ -2825,4 +2825,9 @@ RENAMES = [
     ("sub_F70D42", "SmfCC_RpnLsb"),
     ("DispatchTable_F7048D", "SmfCC_HandlersByNumber"),
     ("DispatchTable_F7048D_Nop3", "SmfCC_Ignore"),
+    ("sub_F6FB51", "SmfEvent_Meta"),
+    ("sub_F6FC10", "SmfMeta_SetTempo"),
+    ("sub_F6FD91", "Smf_SkipBytes"),
+    ("sub_F712FB", "Smf_DeltaToPpq96"),
+    ("sub_F712B6", "Smf_AddDeltaToHeldNotes"),
 ]

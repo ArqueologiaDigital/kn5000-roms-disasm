@@ -165192,7 +165192,7 @@ Smf_ReadFile_Loop2:
 	inc	1, xiy	; F6F6D8  inc 1,XIY
 	cp	xiy, 16	; F6F6DA  cp XIY,0x00000010
 	jr	ule, Smf_ReadFile_Loop2	; F6F6E0  jr ULE,0xf6f6d3
-	calr	sub_F712B6	; F6F6E2  calr 0xf712b6
+	calr	Smf_AddDeltaToHeldNotes	; F6F6E2  calr 0xf712b6
 	calr	InputStream_GetByte	; F6F6E5  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F6F6E8  ld W,(0x124a)
 	cp	w, 1:i3	; F6F6EC  cp W,1
@@ -165202,7 +165202,7 @@ Smf_ReadFile_Loop2:
 Smf_ReadFile_Skip8:
 	cp	a, 255	; F6F6F6  cp A,0xff
 	jr	nz, Smf_ReadFile_Skip11	; F6F6F9  jr NZ,0xf6f729
-	calr	sub_F6FB51	; F6F6FB  calr 0xf6fb51
+	calr	SmfEvent_Meta	; F6F6FB  calr 0xf6fb51
 	ld	w, (InputStream_Status:16)	; F6F6FE  ld W,(0x124a)
 	cp	w, 1:i3	; F6F702  cp W,1
 	jr	z, Smf_ReadFile_Skip9	; F6F704  jr Z,0xf6f70c
@@ -165826,10 +165826,10 @@ sub_F6FB38_Loop:
 	ret	; F6FB50  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FB51
+; SmfEvent_Meta
 ; Called from: in-module: 0xF6F6FB 0xF71CB4
 ; Touches: (0x10CB) (0x124A)
-; Calls:   InputStream_GetByte Smf_ReadVlq sub_F6FD91 sub_F6FC10
+; Calls:   InputStream_GetByte Smf_ReadVlq Smf_SkipBytes SmfMeta_SetTempo
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FB51 is an instruction boundary of this
@@ -165838,7 +165838,10 @@ sub_F6FB38_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FB51:
+; SmfEvent_Meta: after an FF byte: reads the meta type; 0x2F (End of Track) reads its length byte and sets (0x10CB) = 0xFF;
+;   0x51 (Set Tempo) reads two bytes and SmfMeta_SetTempo; 0x02, 0x03, 0x58 and every other type: Smf_ReadVlq for the
+;   length and Smf_SkipBytes.
+SmfEvent_Meta:
 	calr	InputStream_GetByte	; F6FB51  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F6FB54  ld W,(0x124a)
 	cp	w, 1:i3	; F6FB58  cp W,1
@@ -165864,7 +165867,7 @@ sub_F6FB51_Skip:
 	cp	w, 253	; F6FB8A  cp W,0xfd
 	jrl	nz, sub_F6FB51_Return	; F6FB8D  jrl NZ,0xf6fc0f
 sub_F6FB51_Skip2:
-	calr	sub_F6FD91	; F6FB90  calr 0xf6fd91
+	calr	Smf_SkipBytes	; F6FB90  calr 0xf6fd91
 	jrl	sub_F6FB51_Return	; F6FB93  jrl T,0xf6fc0f
 sub_F6FB51_Skip3:
 	calr	Smf_ReadVlq	; F6FB96  calr 0xf6fd7a
@@ -165874,7 +165877,7 @@ sub_F6FB51_Skip3:
 	cp	w, 253	; F6FBA1  cp W,0xfd
 	jr	nz, sub_F6FB51_Return	; F6FBA4  jr NZ,0xf6fc0f
 sub_F6FB51_Skip4:
-	calr	sub_F6FD91	; F6FBA6  calr 0xf6fd91
+	calr	Smf_SkipBytes	; F6FBA6  calr 0xf6fd91
 	jr	sub_F6FB51_Return	; F6FBA9  jr T,0xf6fc0f
 sub_F6FB51_Skip5:
 	calr	Smf_ReadVlq	; F6FBAB  calr 0xf6fd7a
@@ -165884,7 +165887,7 @@ sub_F6FB51_Skip5:
 	cp	w, 253	; F6FBB6  cp W,0xfd
 	jr	nz, sub_F6FB51_Return	; F6FBB9  jr NZ,0xf6fc0f
 sub_F6FB51_Skip6:
-	calr	sub_F6FD91	; F6FBBB  calr 0xf6fd91
+	calr	Smf_SkipBytes	; F6FBBB  calr 0xf6fd91
 	jr	sub_F6FB51_Return	; F6FBBE  jr T,0xf6fc0f
 sub_F6FB51_Skip7:
 	calr	InputStream_GetByte	; F6FBC0  calr 0xf7138f
@@ -165911,7 +165914,7 @@ sub_F6FB51_Skip10:
 	cp	w, 253	; F6FBF2  cp W,0xfd
 	jr	nz, sub_F6FB51_Return	; F6FBF5  jr NZ,0xf6fc0f
 sub_F6FB51_Skip11:
-	calr	sub_F6FC10	; F6FBF7  calr 0xf6fc10
+	calr	SmfMeta_SetTempo	; F6FBF7  calr 0xf6fc10
 	jr	sub_F6FB51_Return	; F6FBFA  jr T,0xf6fc0f
 sub_F6FB51_Skip12:
 	calr	Smf_ReadVlq	; F6FBFC  calr 0xf6fd7a
@@ -165921,12 +165924,12 @@ sub_F6FB51_Skip12:
 	cp	w, 253	; F6FC07  cp W,0xfd
 	jr	nz, sub_F6FB51_Return	; F6FC0A  jr NZ,0xf6fc0f
 sub_F6FB51_Skip13:
-	calr	sub_F6FD91	; F6FC0C  calr 0xf6fd91
+	calr	Smf_SkipBytes	; F6FC0C  calr 0xf6fd91
 sub_F6FB51_Return:
 	ret	; F6FC0F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FC10
+; SmfMeta_SetTempo
 ; Called from: in-module: 0xF6FBF7
 ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
 ;          (0x1238) (0x124A) (0x360C) +1 more
@@ -165939,7 +165942,9 @@ sub_F6FB51_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FC10:
+; SmfMeta_SetTempo: the Set Tempo meta event: the microseconds per quarter note (three bytes, the first in A) -> BPM = 234,375 /
+;   (tempo >> 8), i.e. 60,000,000 / tempo, clamped to 40..300 -- the range Tempo_ApplyBpm accepts.
+SmfMeta_SetTempo:
 	ld	(SmfOut_Tempo+2:16), 0	; F6FC10  ld (0x108e),0x00
 	ld	(4239:16), a	; F6FC15  ld (0x108f),A
 	calr	InputStream_GetByte	; F6FC19  calr 0xf7138f
@@ -166109,7 +166114,7 @@ sub_F6FD7A_Return:
 	ret	; F6FD90  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6FD91
+; Smf_SkipBytes
 ; Called from: in-module: 0xF6FB90 0xF6FBA6 0xF6FBBB 0xF6FC0C 0xF71693
 ; Touches: (0x1088) (0x1198) (0x1238) (0x1248) (0x124A)  |  0x60AAFF
 ; Calls:   InputStream_Refill T_F42604
@@ -166121,7 +166126,9 @@ sub_F6FD7A_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6FD91:
+; Smf_SkipBytes: advances InputStream_Cursor by Smf_VlqValue, refilling the 1 KB input window (InputStream_Refill) when it passes
+;   0x60AAFF.
+Smf_SkipBytes:
 	ld	(InputStream_Status:16), 1	; F6FD91  ld (0x124a),0x01
 	ld	xix, (InputStream_Cursor:16)	; F6FD96  ld XIX,(0x1088)
 	add	xix, (Smf_VlqValue:16)	; F6FD9A  add XIX,(0x1198)
@@ -169243,10 +169250,10 @@ sub_F7129A:
 	ret	; F712B5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F712B6
+; Smf_AddDeltaToHeldNotes
 ; Called from: in-module: 0xF6F6E2 0xF71C94
 ; Touches: nothing with an absolute address
-; Calls:   sub_F712FB
+; Calls:   Smf_DeltaToPpq96
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF712B6 is an instruction boundary of this
@@ -169255,7 +169262,9 @@ sub_F7129A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F712B6:
+; Smf_AddDeltaToHeldNotes: for each of the 33 seven-byte records at 0x305A whose bit 7 is set (a note still sounding), adds Smf_DeltaToPpq96 to
+;   its word at +5, saturating at 0x2FFF -- the largest note length (EditField_Length's limit).
+Smf_AddDeltaToHeldNotes:
 	xor	xiy, xiy	; F712B6  xor XIY,XIY
 sub_F712B6_Loop:
 	push	xix	; F712B8  push XIX
@@ -169263,7 +169272,7 @@ sub_F712B6_Loop:
 	mx_bit 7, MXD, ra_IX, ra_IY	; F712BE  bit 7,(XIX+IY)
 	pop	xix	; F712C3  pop XIX
 	jr	z, sub_F712B6_Skip2	; F712C4  jr Z,0xf712ec
-	calr	sub_F712FB	; F712C6  calr 0xf712fb
+	calr	Smf_DeltaToPpq96	; F712C6  calr 0xf712fb
 	push	xix	; F712C9  push XIX
 	ld	xix, 12378	; F712CA  ld XIX,0x0000305a
 	add	xix, xiy	; F712CF  add XIX,XIY
@@ -169272,7 +169281,7 @@ sub_F712B6_Loop:
 	jr	ov, sub_F712B6_Skip	; F712D5  jr PE/OV,0xf712dd
 
 ; --------------------------------------------------------------------------
-; REACHED CODE, not data (was `Data_F712D7`), part of sub_F712B6:
+; REACHED CODE, not data (was `Data_F712D7`), part of Smf_AddDeltaToHeldNotes:
 ;   the no-overflow arm of `jr ov` at 0xF712D5: `cp WA,0x2FFF / jr ...`.
 ; --------------------------------------------------------------------------
 	cp	wa, 12287	; F712D7  cp WA,0x2fff
@@ -169293,7 +169302,7 @@ sub_F712B6_Skip2:
 	ret	; F712FA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F712FB
+; Smf_DeltaToPpq96
 ; Called from: in-module: 0xF712C6
 ; Touches: (0x107C) (0x1198) (0x119A) (0x1250) (0x1252)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -169304,7 +169313,8 @@ sub_F712B6_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F712FB:
+; Smf_DeltaToPpq96: the delta time in Smf_VlqValue (24 bits) rescaled to 96 per beat: * 96 / Smf_Division, unless the division is 96.
+Smf_DeltaToPpq96:
 	ld	wa, (Smf_Division:16)	; F712FB  ld WA,(0x107c)
 	cp	wa, 96	; F712FF  cp WA,0x0060
 	jr	z, sub_F712FB_Skip2	; F71303  jr Z,0xf7135e
@@ -169628,7 +169638,7 @@ Data_F71512:
 ; Called from: in-module: 0xF6F733 0xF71CF1
 ; Touches: (0x1198) (0x11B1) (0x1239) (0x124A) (0x124B) (0x137B) (0x137C)
 ;          (0x137D) (0x137E)
-; Calls:   Smf_ReadVlq InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange sub_F6FD91
+; Calls:   Smf_ReadVlq InputStream_GetByte sub_F71417 SmfSysEx_ApplyParamChange Smf_SkipBytes
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71525 is an instruction boundary of this
@@ -169801,7 +169811,7 @@ SmfEvent_SysEx_Join:
 	ld	(Smf_VlqValue:16), hl	; F7168C  ld (0x1198),HL
 	calr	SmfSysEx_ApplyParamChange	; F71690  calr 0xf71697
 SmfEvent_SysEx_Join2:
-	calr	sub_F6FD91	; F71693  calr 0xf6fd91
+	calr	Smf_SkipBytes	; F71693  calr 0xf6fd91
 SmfEvent_SysEx_Return:
 	ret	; F71696  ret
 
@@ -170491,8 +170501,8 @@ Data_F71BE6:
 ; sub_F71BEA
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
-; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq sub_F728FE sub_F710E7 sub_F712B6
-;          sub_F6FB51 sub_F728A3 SmfEvent_SysEx sub_F71D71 SmfEvent_ReadWithRunningStatus
+; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq sub_F728FE sub_F710E7 Smf_AddDeltaToHeldNotes
+;          SmfEvent_Meta sub_F728A3 SmfEvent_SysEx sub_F71D71 SmfEvent_ReadWithRunningStatus
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71BEA is an instruction boundary of this
@@ -170566,7 +170576,7 @@ sub_F71BEA_Skip5:
 	ld	iy, (4530:16)	; F71C8A  ld IY,(0x11b2)
 	calr	sub_F728FE	; F71C8E  calr 0xf728fe
 	calr	sub_F710E7	; F71C91  calr 0xf710e7
-	calr	sub_F712B6	; F71C94  calr 0xf712b6
+	calr	Smf_AddDeltaToHeldNotes	; F71C94  calr 0xf712b6
 	calr	InputStream_GetByte	; F71C97  calr 0xf7138f
 	ld	w, (InputStream_Status:16)	; F71C9A  ld W,(0x124a)
 	cp	w, 1:i3	; F71C9E  cp W,1
@@ -170578,7 +170588,7 @@ sub_F71BEA_Skip5:
 sub_F71BEA_Skip6:
 	cp	a, 255	; F71CAF  cp A,0xff
 	jr	nz, sub_F71BEA_Skip9	; F71CB2  jr NZ,0xf71ce7
-	calr	sub_F6FB51	; F71CB4  calr 0xf6fb51
+	calr	SmfEvent_Meta	; F71CB4  calr 0xf6fb51
 	ld	w, (InputStream_Status:16)	; F71CB7  ld W,(0x124a)
 	cp	w, 1:i3	; F71CBB  cp W,1
 	jr	z, sub_F71BEA_Skip7	; F71CBD  jr Z,0xf71ccc

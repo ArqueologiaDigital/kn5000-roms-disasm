@@ -695,6 +695,21 @@ ROWS = [
      "SmfEvent_ControlChange's arm for MIDI controller 101 (`cp a,101 / jr z`)."),
     ("F70D42", "SmfCC_RpnLsb",
      "SmfEvent_ControlChange's arm for MIDI controller 100 (`cp a,100 / jr z`)."),
+    ("F6FB51", "SmfEvent_Meta",
+     "after an FF byte: reads the meta type; 0x2F (End of Track) reads its length byte and sets (0x10CB) = 0xFF;\n"
+     "0x51 (Set Tempo) reads two bytes and SmfMeta_SetTempo; 0x02, 0x03, 0x58 and every other type: Smf_ReadVlq for the\n"
+     "length and Smf_SkipBytes."),
+    ("F6FC10", "SmfMeta_SetTempo",
+     "the Set Tempo meta event: the microseconds per quarter note (three bytes, the first in A) -> BPM = 234,375 /\n"
+     "(tempo >> 8), i.e. 60,000,000 / tempo, clamped to 40..300 -- the range Tempo_ApplyBpm accepts."),
+    ("F6FD91", "Smf_SkipBytes",
+     "advances InputStream_Cursor by Smf_VlqValue, refilling the 1 KB input window (InputStream_Refill) when it passes\n"
+     "0x60AAFF."),
+    ("F712FB", "Smf_DeltaToPpq96",
+     "the delta time in Smf_VlqValue (24 bits) rescaled to 96 per beat: * 96 / Smf_Division, unless the division is 96."),
+    ("F712B6", "Smf_AddDeltaToHeldNotes",
+     "for each of the 33 seven-byte records at 0x305A whose bit 7 is set (a note still sounding), adds Smf_DeltaToPpq96 to\n"
+     "its word at +5, saturating at 0x2FFF -- the largest note length (EditField_Length's limit)."),
 ]
 
 
