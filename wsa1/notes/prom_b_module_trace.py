@@ -7,7 +7,7 @@ QUESTION IT ANSWERS
   and then resynchronises, and the only symptom is that a KNOWN entry point --
   a thunk target -- is no longer on an instruction boundary.  That is exactly
   what prom_b 0xF63441 does: the linear decode of the module steps over
-  0xF63489, and 0xF63489 is the target of thunk slot T_F42790.
+  0xF63489, and 0xF63489 is the target of thunk slot T_BStore_OpenChainAtSavedCursor.
 
   This script does a RECURSIVE DESCENT inside one address range instead, seeded
   from the module's own entry points, and prints the runs no walk ever reached.

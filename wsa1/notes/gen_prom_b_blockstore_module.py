@@ -20,7 +20,7 @@ HOW
       notes/prom_b_module_trace.py never reaches them by following control flow
       from the module's own entry points, and because in the 0xF63441 case a
       linear decode steps straight over 0xF63489 -- which is the target of thunk
-      slot T_F42790 and therefore must be an instruction;
+      slot T_BStore_OpenChainAtSavedCursor and therefore must be an instruction;
     * the 1008-byte 0x0E tail is emitted as `.fill`;
     * labels come from LABELS below, keyed by ADDRESS, and the script asserts
       that every label address is an instruction boundary in the transcription
@@ -61,7 +61,7 @@ DATA_NOTE = {
                "indexed by the error code (0x0D4A); the byte it yields is stored "
                "to (0x2880).  Read by BStore_ErrorToStatusByte (0xF6342C), the "
                "only site in prom_a+prom_b that names 0x00F63441.  Extent is "
-               "abutment: the next byte, 0xF63489, is thunk T_F42790's target.  "
+               "abutment: the next byte, 0xF63489, is thunk T_BStore_OpenChainAtSavedCursor's target.  "
                "72 bytes lay out as 6 rows of 12 with only four distinct non-0xFF "
                "values (0x23 at row+0 and row+7, 0x0F at row+5, and row+9 taking "
                "0xFF,0xFF,0x35,0x1D,0x1C,0x1B).  What the value MEANS is not "

@@ -1559,7 +1559,7 @@
 	.set T_ScreenEnter_Effect2OutputConflict,                                                                      0x00F418A8
 	.set T_ScreenEnterBody_CombiEditMixer,                                                                      0x00F418B8
 	.set T_F418C8,                                                                      0x00F418C8
-	.set T_F418CC,                                                                      0x00F418CC
+	.set T_CombiEdit_RunPendingRepaint,                                                                      0x00F418CC
 	.set T_PanelMode_System_Enter,                                                      0x00F41910
 	.set T_Screen_System_Enter,                                                         0x00F41918
 	.set T_Screen_TuneScale_Enter,                                                      0x00F41928
@@ -17355,7 +17355,7 @@ UiEventPassB_TailList:
 	.long T_PanelScreen_RequestRedrawIfFieldQueued                              ; F88E99  [2]   -> 0xF40290
 	.long T_MidiIn_ServiceDeferred              ; F88E9D  [3]   -> 0xF40758
 	.long T_F42E60                              ; F88EA1  [4]   -> 0xF42E60
-	.long T_F418CC                              ; F88EA5  [5]   -> 0xF418CC
+	.long T_CombiEdit_RunPendingRepaint                              ; F88EA5  [5]   -> 0xF418CC
 	.long 0xFFFFFFFF                            ; F88EA9  [6]   end of list
 
 ; --- 0xF88EAD-0xF88EC0  0x00 pad (20 bytes) ---
@@ -61293,7 +61293,7 @@ LcdKeyRow4_Initial:
 	jr z, .LFA1333                                       ; FA132A  66 07
 	jr .LFA1336                                          ; FA132C  68 08
 .LFA132E:
-	calr sub_FA14E3                                          ; FA132E  1e b2 01
+	calr Initial_SelectPreviousItem                                          ; FA132E  1e b2 01
 	jr .LFA1336                                          ; FA1331  68 03
 .LFA1333:
 	calr sub_FA1533                                          ; FA1333  1e fd 01
@@ -61308,7 +61308,7 @@ LcdKeyRow5_Initial:
 	jr z, .LFA1343                                       ; FA133F  66 02
 	jr .LFA1346                                          ; FA1341  68 03
 .LFA1343:
-	calr sub_FA1546                                          ; FA1343  1e 00 02
+	calr Initial_SelectNextItem                                          ; FA1343  1e 00 02
 .LFA1346:
 	ret                                                  ; FA1346  0e
 ; ExitKey_Initial: HandlerTable23_FA1DED slot 15, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
@@ -61516,7 +61516,10 @@ JumpTable_FA146F_Code_Epilogue:
 	pop XHL                                              ; FA14E0  5b
 	pop XDE                                              ; FA14E1  5a
 	ret                                                  ; FA14E2  0e
-sub_FA14E3:
+; Initial_SelectPreviousItem: LcdKeyRow4_Initial: with Descriptor9_FA1B82 (+7 = 1: PanelEvent_Flags bit 0 set, the down step;
+;   maximum 6, one less on Variant_Flag 2), EditValue_StepBitField on Initial_SelectedItem; when it moved, posts
+;   the repaint sub_FA15CC and signals semaphore 1.  Only when PanelEvent_Flags bit 0 is clear on entry.
+Initial_SelectPreviousItem:
 	link XIZ,0xfff7                                      ; FA14E3  ee 0c f7 ff
 	push XIX                                             ; FA14E7  3c
 	lda xix, (xiz-9)                                     ; FA14E8  be f7 34
@@ -61558,7 +61561,8 @@ sub_FA1533:
 	m_set 4, MD16, UI_Request_Hi                                ; FA1541  f1 71 20 bc
 .LFA1545:
 	ret                                                  ; FA1545  0e
-sub_FA1546:
+; Initial_SelectNextItem: LcdKeyRow5_Initial: the same with Descriptor9_FA1B8B (+7 = 0: the up step).
+Initial_SelectNextItem:
 	link XIZ,0xfff7                                      ; FA1546  ee 0c f7 ff
 	push XIX                                             ; FA154A  3c
 	lda xix, (xiz-9)                                     ; FA154B  be f7 34
@@ -105218,7 +105222,9 @@ sub_FBC5F1:
 	calr sub_FBCA31                                      ; FBC64B  1e e3 03
 .LFBC64E:
 	ret                                                  ; FBC64E  0e
-sub_FBC64F:
+; CombiEdit_RunPendingRepaint: T_CombiEdit_RunPendingRepaint's body: when (0x277D) is 1 and the screen is one of COMBINATION EDIT's (0x33-0x3A, 0xB0-0xB7), posts
+;   that page's repaint routine to the callback queue and signals semaphore 1; (0x277D) = 0.
+CombiEdit_RunPendingRepaint:
 	m_cp_mi8 MB16, 0x277d, 0x01                          ; FBC64F  c1 7d 27 3f 01
 	jrl nz, .LFBC6CF                                     ; FBC654  7e 78 00
 	ld bc, (UI_ScreenId:16)                                 ; FBC657  d1 7c 20 21
@@ -178101,7 +178107,7 @@ sub_FE94FB:
 .LFE9531:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9531  1e c4 f6
 	calr sub_FE8AE9                                          ; FE9534  1e b2 f5
-	calr sub_FE98E7                                      ; FE9537  1e ad 03
+	calr EditCursor_SeekToTick                                      ; FE9537  1e ad 03
 	calr sub_FE8F11                                          ; FE953A  1e d4 f9
 	calr sub_FEF7B4                                          ; FE953D  1e 74 62
 	calr sub_FEF926                                          ; FE9540  1e e3 63
@@ -178140,7 +178146,7 @@ sub_FE955D:
 .LFE9596:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9596  1e 5f f6
 	calr sub_FE8AE9                                          ; FE9599  1e 4d f5
-	calr sub_FE98E7                                      ; FE959C  1e 48 03
+	calr EditCursor_SeekToTick                                      ; FE959C  1e 48 03
 	calr sub_FE8CB4                                          ; FE959F  1e 12 f7
 	calr sub_FE8A9B                                          ; FE95A2  1e f6 f4
 	calr sub_FE8F11                                          ; FE95A5  1e 69 f9
@@ -178242,7 +178248,7 @@ sub_FE9694:
 	ld (EditCursor_Tick:24), a                                 ; FE96BC  f2 43 1f 60 41
 	calr sub_FE8ED3                                          ; FE96C1  1e 0f f8
 	calr sub_FE9EDA                                          ; FE96C4  1e 13 08
-	calr sub_FE98E7                                      ; FE96C7  1e 1d 02
+	calr EditCursor_SeekToTick                                      ; FE96C7  1e 1d 02
 	calr sub_FE8F11                                          ; FE96CA  1e 44 f8
 	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
 	calr sub_FEF926                                          ; FE96D0  1e 53 62
@@ -178321,7 +178327,7 @@ sub_FE9762:
 	ld (0x601f1b:24), a                                 ; FE9795  f2 1b 1f 60 41
 	calr BStoreCursor_SeekPrevTag                                          ; FE979A  1e 4e eb
 	calr sub_FE9983                                      ; FE979D  1e e3 01
-	calr sub_FE984B                                      ; FE97A0  1e a8 00
+	calr EditCursor_SeekPastTick                                      ; FE97A0  1e a8 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE97A3  c1 4a 0d 3f 00
 	jr nz, .LFE97DB                                      ; FE97A8  6e 31
 	ld (0x601f16:24), 0x90                             ; FE97AA  f2 16 1f 60 00 90
@@ -178380,7 +178386,10 @@ sub_FE9830:
 	call BStoreCursor_ReadByte                                        ; FE9844  1d 32 22 ff
 	xor W,W                                              ; FE9848  c8 d0
 	ret                                                  ; FE984A  0e
-sub_FE984B:
+; EditCursor_SeekPastTick: opens the edited measure (sub_FE8EF3, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81
+;   markers up to EditCursor_Beat, then steps over every event whose tick is <= EditCursor_Tick (`jr ule`) and
+;   backs onto the tag; 0x601F05 += the beat, 0x601F07 = the tick.  Called by EditCursor_NextBeat.
+EditCursor_SeekPastTick:
 	calr sub_FE8EF3                                          ; FE984B  1e a5 f6
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE984E  c1 4a 0d 3f 00
 	jr z, .LFE9863                                       ; FE9853  66 0e
@@ -178434,7 +178443,8 @@ sub_FE984B:
 	ret                                                  ; FE98E5  0e
 .LFE98E6:
 	ret                                                  ; FE98E6  0e
-sub_FE98E7:
+; EditCursor_SeekToTick: EditCursor_SeekPastTick's twin that stops at the first event whose tick is >= EditCursor_Tick (`jr c`).
+EditCursor_SeekToTick:
 	calr sub_FE8EF3                                          ; FE98E7  1e 09 f6
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE98EA  c1 4a 0d 3f 00
 	jr z, .LFE98FF                                       ; FE98EF  66 0e
@@ -178510,7 +178520,10 @@ sub_FE9997:
 	calr BStore_CursorSlot_Restore                                          ; FE99B8  1e 5a f3
 	calr sub_FEA535                                          ; FE99BB  1e 77 0b
 	ret                                                  ; FE99BE  0e
-sub_FE99BF:
+; EditField_StoreLengthInNoteEvent: when the event at the block-store cursor is a note-on (0x9n), steps 4 bytes in and writes EditField_Length as
+;   two 7-bit bytes, length mod 0x60 then length / 0x60 (`div A,0x60`); the cursor is saved and restored around it.
+;   Called by EditField_LengthUp / _LengthDown / _LengthUp12 / _LengthDown12.
+EditField_StoreLengthInNoteEvent:
 	calr BStore_CursorSlot_Save                                          ; FE99BF  1e 2c f3
 	call BStoreCursor_ReadByte                                        ; FE99C2  1d 32 22 ff
 	and A,0xf0                                           ; FE99C6  c9 cc f0
@@ -179056,7 +179069,7 @@ EditCursor_NextBeat:
 	calr EditScreen_DrawBeat                                          ; FE9E6B  1e 96 6b
 	calr sub_FE9EBB                                      ; FE9E6E  1e 4a 00
 	calr BStore_CursorSlot_Save                                          ; FE9E71  1e 7a ee
-	calr sub_FE984B                                          ; FE9E74  1e d4 f9
+	calr EditCursor_SeekPastTick                                          ; FE9E74  1e d4 f9
 	calr BStore_CursorSlot_Restore                                          ; FE9E77  1e 9b ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9E7A  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9E7F  6e 04
@@ -179074,7 +179087,7 @@ EditCursor_NextBeat:
 	calr EditScreen_DrawBeat                                          ; FE9EA1  1e 60 6b
 	calr sub_FE9EBB                                      ; FE9EA4  1e 14 00
 	calr BStore_CursorSlot_Save                                          ; FE9EA7  1e 44 ee
-	calr sub_FE984B                                          ; FE9EAA  1e 9e f9
+	calr EditCursor_SeekPastTick                                          ; FE9EAA  1e 9e f9
 	calr BStore_CursorSlot_Restore                                          ; FE9EAD  1e 65 ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9EB0  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9EB5  6e ce
@@ -179437,7 +179450,7 @@ EditField_LengthUp:
 	ret                                                  ; FEA209  0e
 .LFEA20A:
 	m_add_mi16 MW24, EditField_Length, 0x0001                    ; FEA20A  d2 47 1f 60 38 01 00
-	calr sub_FE99BF                                          ; FEA211  1e ab f7
+	calr EditField_StoreLengthInNoteEvent                                          ; FEA211  1e ab f7
 	calr sub_FF0BF1                                      ; FEA214  1e da 69
 	calr sub_FEA12D                                      ; FEA217  1e 13 ff
 	ld (0x601f58:24), 0x83                             ; FEA21A  f2 58 1f 60 00 83
@@ -179468,7 +179481,7 @@ EditField_LengthDown:
 .LFEA261:
 	subw	(EditField_Length:24), 0x0001                ; FEA261  d2 47 1f 60 3a 01 00
 .LFEA268:
-	calr sub_FE99BF                                          ; FEA268  1e 54 f7
+	calr EditField_StoreLengthInNoteEvent                                          ; FEA268  1e 54 f7
 	calr sub_FF0BF1                                      ; FEA26B  1e 83 69
 	calr sub_FEA12D                                      ; FEA26E  1e bc fe
 	ld (0x601f58:24), 0x83                             ; FEA271  f2 58 1f 60 00 83
@@ -180547,7 +180560,7 @@ EditField_LengthUp12:
 	jr ule, .LFEAD02                                     ; FEACF9  63 07
 	ldw (EditField_Length:24), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
 .LFEAD02:
-	calr sub_FE99BF                                          ; FEAD02  1e ba ec
+	calr EditField_StoreLengthInNoteEvent                                          ; FEAD02  1e ba ec
 	calr sub_FF0BF1                                      ; FEAD05  1e e9 5e
 	calr sub_FEA12D                                      ; FEAD08  1e 22 f4
 	ld (0x601f58:24), 0x83                             ; FEAD0B  f2 58 1f 60 00 83
@@ -180591,7 +180604,7 @@ EditField_LengthDown12:
 .LFEAD82:
 	m_cp_mi16 MW24, EditField_Length, 0x0001                     ; FEAD82  d2 47 1f 60 3f 01 00
 	jr c, .LFEAD65                                       ; FEAD89  67 da
-	calr sub_FE99BF                                          ; FEAD8B  1e 31 ec
+	calr EditField_StoreLengthInNoteEvent                                          ; FEAD8B  1e 31 ec
 	calr sub_FF0BF1                                      ; FEAD8E  1e 60 5e
 	calr sub_FEA12D                                      ; FEAD91  1e 99 f3
 	ld (0x601f58:24), 0x83                             ; FEAD94  f2 58 1f 60 00 83
@@ -180651,7 +180664,7 @@ sub_FEADFB:
 	jr nc, .LFEAE54                                      ; FEAE31  6f 21
 	calr sub_FEA743                                      ; FEAE33  1e 0d f9
 	calr BStore_CursorSlot_Save                                          ; FEAE36  1e b5 de
-	calr sub_FE984B                                          ; FEAE39  1e 0f ea
+	calr EditCursor_SeekPastTick                                          ; FEAE39  1e 0f ea
 	calr BStore_CursorSlot_Restore                                          ; FEAE3C  1e d6 de
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FEAE3F  c1 4a 0d 3f 00
 	jr nz, .LFEAE50                                      ; FEAE44  6e 0a
@@ -185532,9 +185545,11 @@ sub_FF0841:
 	calr sub_FF08AA                                      ; FF0848  1e 5f 00
 	ret                                                  ; FF084B  0e
 .LFF084C:
-	calr sub_FF0850                                      ; FF084C  1e 01 00
+	calr EditMeasure_DrawBeatLines                                      ; FF084C  1e 01 00
 	ret                                                  ; FF084F  0e
-sub_FF0850:
+; EditMeasure_DrawBeatLines: layer 2: for beats 1 .. EditMeasure_Beats-1, at x = 0x10 + 24 x beat from y 0x29 to 0xA8, SWI 7 0x1B
+;   (EraseRect) then 0x12 (LCD_Svc_12_DrawVLineDashed).
+EditMeasure_DrawBeatLines:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF0850  f1 40 25 00 02
 	ld e, 0x01:opc                                          ; FF0855  25 01
 .LFF0857:

@@ -164,7 +164,7 @@ Both look like a C compiler comparing a zero-extended byte against `0xFF`.
 
 A **linear** decode of the module resynchronises after a data table and gives no
 sign of it — except that it steps clean over `0xF63489`, which is the target of
-thunk slot `T_F42790` and therefore must be an instruction. `notes/prom_b_module_trace.py`
+thunk slot `T_BStore_OpenChainAtSavedCursor` and therefore must be an instruction. `notes/prom_b_module_trace.py`
 does a recursive descent from the module's own entry points instead and reports
 the runs no walk reaches:
 

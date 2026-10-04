@@ -1398,6 +1398,41 @@ ROWS = [
      "Medley_LastSong."),
     ("FE169D", "Medley_CopySongNameForDisplay",
      "Disk_FileName[2..7] -> 0x0E38 (6 characters), then spaces to 11."),
+    # ranked by named context (the session's rank_context.py), read one by one
+    ("FE99BF", "EditField_StoreLengthInNoteEvent",
+     "when the event at the block-store cursor is a note-on (0x9n), steps 4 bytes in and writes EditField_Length as\n"
+     "two 7-bit bytes, length mod 0x60 then length / 0x60 (`div A,0x60`); the cursor is saved and restored around it.\n"
+     "Called by EditField_LengthUp / _LengthDown / _LengthUp12 / _LengthDown12."),
+    ("F77F9A", "SmfOut_WriteFirstWindow",
+     "Disk_Flags |= 0x20, T_DiskApi_WriteFileFromWindow_Entry, A = Disk_LastError, the flag cleared again -- the\n"
+     "SMF writer's first window (the code after it writes a continuation with bit 1, and the final flush closes)."),
+    ("FBC64F", "CombiEdit_RunPendingRepaint",
+     "T_CombiEdit_RunPendingRepaint's body: when (0x277D) is 1 and the screen is one of COMBINATION EDIT's (0x33-0x3A, 0xB0-0xB7), posts\n"
+     "that page's repaint routine to the callback queue and signals semaphore 1; (0x277D) = 0."),
+    ("FE984B", "EditCursor_SeekPastTick",
+     "opens the edited measure (sub_FE8EF3, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81\n"
+     "markers up to EditCursor_Beat, then steps over every event whose tick is <= EditCursor_Tick (`jr ule`) and\n"
+     "backs onto the tag; 0x601F05 += the beat, 0x601F07 = the tick.  Called by EditCursor_NextBeat."),
+    ("FE98E7", "EditCursor_SeekToTick",
+     "EditCursor_SeekPastTick's twin that stops at the first event whose tick is >= EditCursor_Tick (`jr c`)."),
+    ("F7C869", "N0teChange_StageDisplayFields",
+     "N0TE CHANGE's fields into DisplayListB_Stage for its page: the track (0x0DEE), N0teChange_FromMeasure /\n"
+     "_ToMeasure, the two notes split into octave and note name by `divs WA,12`; (0x129E) = the measure count,\n"
+     "To - From + 1."),
+    ("FA14E3", "Initial_SelectPreviousItem",
+     "LcdKeyRow4_Initial: with Descriptor9_FA1B82 (+7 = 1: PanelEvent_Flags bit 0 set, the down step;\n"
+     "maximum 6, one less on Variant_Flag 2), EditValue_StepBitField on Initial_SelectedItem; when it moved, posts\n"
+     "the repaint sub_FA15CC and signals semaphore 1.  Only when PanelEvent_Flags bit 0 is clear on entry."),
+    ("FA1546", "Initial_SelectNextItem",
+     "LcdKeyRow5_Initial: the same with Descriptor9_FA1B8B (+7 = 0: the up step)."),
+    ("FF0850", "EditMeasure_DrawBeatLines",
+     "layer 2: for beats 1 .. EditMeasure_Beats-1, at x = 0x10 + 24 x beat from y 0x29 to 0xA8, SWI 7 0x1B\n"
+     "(EraseRect) then 0x12 (LCD_Svc_12_DrawVLineDashed)."),
+    ("F63489", "BStore_OpenChainAtSavedCursor",
+     "T_BStore_OpenChainAtSavedCursor's body: BStore_OpenChain for entry A (error 1 is cleared and returned as 0); then entry A's saved\n"
+     "cursor -- offset byte 0x6034A0[A-1], 5..255, else error 11; block word 0x60347E[A-1], <= BStore_BlockLimit,\n"
+     "else error 10 -- becomes BStore_CursorBlock (BStore_SeekBlock); the block must be allocated (bit 7, else 11)\n"
+     "and the byte at the offset not tag 0x84 (else error 6)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

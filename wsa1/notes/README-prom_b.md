@@ -604,7 +604,7 @@ inside one address range, seeded from the thunk table's own `jp` targets.
 Written 2026-08-25 because a linear sweep cannot find a data island: it
 resynchronises afterwards and the only symptom is that a KNOWN entry point stops
 being on an instruction boundary. prom_b `0xF63441` does exactly that — the
-linear decode steps over `0xF63489`, which is thunk `T_F42790`'s target. ⚠ It
+linear decode steps over `0xF63489`, which is thunk `T_BStore_OpenChainAtSavedCursor`'s target. ⚠ It
 also showed that `scripts/analysis/trace_code.py`'s 32-phase decode table is
 **not** complete: neither `0xF63489` nor `0xF63CE0` has an entry in it, because
 the phase sweeps resynchronise long before they reach that module. This script
