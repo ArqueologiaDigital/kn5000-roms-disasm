@@ -204,3 +204,59 @@ Not established:
 - Who sets each `NoteRouting_ChangeFlags` bit. The immediate writes set bits 0, 1, 2, 3, 6, 7 and 15:
   0xFC5740 `orw 0x8004`, 0xFC5B80 `orw 0x0003`, 0xFC5ABC and 0xFC5BA3 `set`, 0xFC6343 `orw 0x00C0`. Six more
   `or` writes take their bits from BC.
+
+## 8. The tone-generator senders, all-notes-off, and test notes (2026-10-04)
+
+**Messages on the link.** `PartFrame_SendToToneGen` sends a part frame as 4-byte messages
+`[status, part, data 1, data 2]` over `T_Link_SendBlockIn32ByteChunks`, built in `NoteSend_MsgBuffer`
+(0x602000). The status bytes seen are:
+- 0x90 for a note, with velocity 0 for a note-off;
+- 0xB0 with 0x78 or 0x7B for all sound off / all notes off. These are the MIDI controller numbers.
+- 0x88: `Drawbar_SendPartParams` sends it as a 6-byte block `[0x88, part, p, 0, value, 0]`.
+
+On screen 0xDA (SINE WAVE CHECK) the part byte is `SoundSel_Group | 0xF0`. Status bit 3 is added when
+(0x7F02) & 0xF0 is 0x10 and the frame came by the note-list path. What it selects on the link is not established.
+
+**Poly and mono.** `PartToneGen_State` (0x6020D4) keeps one byte per part:
+- 0x80: nothing sounds;
+- 0xFF: poly notes were sent;
+- otherwise: the note a mono part sounds.
+
+A part whose tone-generator record (block +0x92) has bit 6, and whose state is not 0xFF, goes to
+`PartFrame_SendMonoToToneGen`. That sender sounds only the note at the tail of the part's note list. A change of
+note is a note-off plus a note-on in one block. When the list empties, the note-off is followed by CC 0x7B.
+Every other part goes to `PartFrame_SendPolyToToneGen`. It sends each entry and follows with CC 0x7B when the
+list has emptied. A part still in the poly state (0xFF) stays poly until it falls silent, even after bit 6 is
+set.
+
+**All-notes-off, per source.** Three directory slots release every sounding note of one source:
+
+| slot | routine | releases | outputs |
+|---|---|---|---|
+| `T_PartNotes_ReleaseAllReceivedMidiIn` | `PartNotes_ReleaseAllReceivedMidiIn` | MIDI IN notes on the per-channel path, each channel 0..31 | tone generator, record |
+| `T_NoteList_ReleaseAllSource0` | `NoteList_ReleaseAllSource0` | source 0's note list, through the parts | all three |
+| `T_PartNotes_ReleaseAllTrackNotes` | `PartNotes_ReleaseAllTrackNotes` | each track's notes on its part | tone generator, MIDI OUT |
+
+A fourth slot (0xF413CC) calls a bare ret.
+- The first has six call sites: `MidiFilePlay_Stop`, `MainTask_PhaseVector`,
+  `Transport_StopAllRunning_SaveRegs2`, `LcdKeyRow1_SoundEditMemoryWrite`, PartNotes_ReleaseReceivedOnScreenChange and Notes_ReleaseAllSources.
+- The second has three: `Transport_StopAllRunning_SaveRegs2`, `LcdKeyRow1_SoundEditMemoryWrite` and
+  Notes_ReleaseAllSources.
+- The third has eleven. Seven are in prom_b, five of them in 0xF44C37..0xF4AF51. The others are
+  `MainTask_PhaseVector`, `MainTask_PanelTimersTick`, Notes_ReleaseAllSources and a SaveRegs wrapper.
+
+**Re-sounding after a parameter change.** `PartNotes_ResoundOnToneGen` (`T_PartNotes_ResoundOnToneGen`)
+collects a part's notes without releasing them (`PartNotes_CollectFrame`). If any of them sounds on the tone
+generator, it:
+1. sends CC 0x7B;
+2. sets bits 6-7 of each tone-generator velocity;
+3. resets the part's state;
+4. sends the notes again.
+
+Its only caller is the DRAWBAR screen's `Drawbar_SendPartParams`. That routine first sends CC 0x78, then seven
+values from 0x2890. What velocity bits 6-7 mean on the link is not established.
+
+**Test notes.** SINE WAVE CHECK (`SineWaveCheck_ServiceSwitches`) plays notes 0x3C..0x3F while one of four
+switches is held. Each note goes both to the tone generator, through `ToneGen_SendSoundSelNote` (part byte
+`SoundSel_Group | 0xF0`), and to MIDI OUT channel 0, through `MidiOut_SendNote`. `MidiOut_SendNote` writes the
+3-byte message to the port A ring for channels 0-15 and to the port B ring for 16-31.

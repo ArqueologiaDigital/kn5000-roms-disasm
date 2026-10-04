@@ -1478,17 +1478,17 @@
 	.set T_MidiInA_ProcessRing,                                                                      0x00F413B4
 	.set T_F413B8,                                                                      0x00F413B8
 	.set T_TimedEvents_ProcessRing,                                                                      0x00F413BC
-	.set T_F413C0,                                                                      0x00F413C0
-	.set T_F413C4,                                                                      0x00F413C4
-	.set T_F413C8,                                                                      0x00F413C8
+	.set T_PartNotes_ReleaseAllReceivedMidiIn,                                                                      0x00F413C0
+	.set T_NoteList_ReleaseAllSource0,                                                                      0x00F413C4
+	.set T_PartNotes_ReleaseAllTrackNotes,                                                                      0x00F413C8
 	.set T_F413CC,                                                                      0x00F413CC
 	.set T_Ram3800_InitDataImage,                                                       0x00F413D0
 	.set T_NoteRouting_ApplyQueuedChanges,                                                                      0x00F413D4
 	.set T_F413DC,                                                                      0x00F413DC
 	.set T_F413E0,                                                                      0x00F413E0
 	.set T_MidiInB_ProcessRing,                                                                      0x00F413F8
-	.set T_F413FC,                                                                      0x00F413FC
-	.set T_F41400,                                                                      0x00F41400
+	.set T_ToneGen_SendSoundSelNote,                                                                      0x00F413FC
+	.set T_MidiOut_SendNote,                                                                      0x00F41400
 	.set T_F414B0,                                                                      0x00F414B0
 	.set T_F414B4,                                                                      0x00F414B4
 	.set T_F414B8,                                                                      0x00F414B8
@@ -6160,7 +6160,7 @@ MainTask_Loop:
 	call T_MidiInARing_Init                               ; F82063  1d b8 1d f4
 	m_and_mi8 MB8, MIDI_RX_Flags, 0xd3                            ; F82067  c0 9e 3c d3
 	ei 0x00                                              ; F8206B  06 00
-	call T_F413C0                                        ; F8206D  1d c0 13 f4
+	call T_PartNotes_ReleaseAllReceivedMidiIn                                        ; F8206D  1d c0 13 f4
 	call T_F40894                                        ; F82071  1d 94 08 f4
 .LF82075:
 	ei 0x00                                              ; F82075  06 00
@@ -6278,7 +6278,7 @@ MainTask_Loop:
 	bit 1,(XIY)                                          ; F82196  b5 c9
 	jr z, .LF821A5                                       ; F82198  66 0b
 	and (XIY),0xfd                                       ; F8219A  85 3c fd
-	call T_F413C8                                        ; F8219D  1d c8 13 f4
+	call T_PartNotes_ReleaseAllTrackNotes                                        ; F8219D  1d c8 13 f4
 	call T_F41F18                                        ; F821A1  1d 18 1f f4
 .LF821A5:
 	bit	7, (0xa3:8)                                   ; F821A5  f0 a3 cf
@@ -6318,7 +6318,7 @@ MainTask_PanelTimersTick:
 	call T_PanelTimers_Step                              ; F821ED  1d 44 0f f4
 	call T_PanelHold_Tick                                ; F821F1  1d 74 0f f4
 	ret                                                  ; F821F5  0e
-	call T_F413C8                                        ; F821F6  1d c8 13 f4
+	call T_PartNotes_ReleaseAllTrackNotes                                        ; F821F6  1d c8 13 f4
 	call T_F41F18                                        ; F821FA  1d 18 1f f4
 	m_and_mi8 MB16, 0x34d0, 0xfd                         ; F821FE  c1 d0 34 3c fd
 	ret                                                  ; F82203  0e
@@ -40537,10 +40537,15 @@ SineWaveCheck_PollIfCurrent:
 	calr SineWaveCheck_ServiceSwitches                                            ; F954A6  1e 01 00
 .LF954A9:
 	ret                                                  ; F954A9  0e
-; SineWaveCheck_ServiceSwitches -- per switch of (0x2B33) bits 0-3: issue T_F413FC/T_F41400 with 0x7F while it alone is held, with 0 once released
-; Evidence: C = (0x2B33) & 0x0F; exactly bit k (k = 0..3) and (0x2840) bit k+2 clear -> set it, T_F413FC(0, 0x3C+k, 0x7F) and T_F41400(0, 0x3C+k, 0x7F); any
+; SineWaveCheck_ServiceSwitches -- per switch of (0x2B33) bits 0-3: issue T_ToneGen_SendSoundSelNote/T_MidiOut_SendNote with 0x7F while it alone is held, with 0 once released
+; Evidence: C = (0x2B33) & 0x0F; exactly bit k (k = 0..3) and (0x2840) bit k+2 clear -> set it, T_ToneGen_SendSoundSelNote(0, 0x3C+k, 0x7F) and T_MidiOut_SendNote(0, 0x3C+k, 0x7F); any
 ; other value -> for each set bit k+2 of (0x2840): clear it and make the same two calls with 0 in place of 0x7F.
-; ⚠ What T_F413FC/T_F41400 (sub_FC8FD7/sub_FC9016) do is not established; nor which panel controls segment 3 bits 0-3 are.
+; ⚠ What T_ToneGen_SendSoundSelNote/T_MidiOut_SendNote (ToneGen_SendSoundSelNote/MidiOut_SendNote) do is not established; nor which panel controls segment 3 bits 0-3 are.
+; 2026-10-04: now established -- the two directory slots (0xF413FC, 0xF41400) jump to ToneGen_SendSoundSelNote
+;   ([0x90, SoundSel_Group | 0xF0, note, velocity] over the tone-generator link) and MidiOut_SendNote (channel 0:
+;   MIDI OUT A).  So each switch plays
+;   note 0x3C + k on the tone generator and on MIDI OUT while it alone is held.  Which panel controls bits 0-3 are
+;   is still open.
 SineWaveCheck_ServiceSwitches:
 	push XIX                                             ; F954AA  3c
 	lda xix, (0x2840:16)                                ; F954AB  f1 40 28 34
@@ -40564,7 +40569,7 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x7f                                           ; F954D8  0b 7f 00
 	pushw 0x3c                                           ; F954DB  0b 3c 00
 	pushw 0x00                                           ; F954DE  0b 00 00
-	call T_F413FC                                        ; F954E1  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F954E1  1d fc 13 f4
 	inc 6,XSP                                            ; F954E5  ef 66
 	pushw 0x7f                                           ; F954E7  0b 7f 00
 	pushw 0x3c                                           ; F954EA  0b 3c 00
@@ -40577,7 +40582,7 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x7f                                           ; F954FB  0b 7f 00
 	pushw 0x3d                                           ; F954FE  0b 3d 00
 	pushw 0x00                                           ; F95501  0b 00 00
-	call T_F413FC                                        ; F95504  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F95504  1d fc 13 f4
 	inc 6,XSP                                            ; F95508  ef 66
 	pushw 0x7f                                           ; F9550A  0b 7f 00
 	pushw 0x3d                                           ; F9550D  0b 3d 00
@@ -40590,7 +40595,7 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x7f                                           ; F9551E  0b 7f 00
 	pushw 0x3e                                           ; F95521  0b 3e 00
 	pushw 0x00                                           ; F95524  0b 00 00
-	call T_F413FC                                        ; F95527  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F95527  1d fc 13 f4
 	inc 6,XSP                                            ; F9552B  ef 66
 	pushw 0x7f                                           ; F9552D  0b 7f 00
 	pushw 0x3e                                           ; F95530  0b 3e 00
@@ -40603,7 +40608,7 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x7f                                           ; F95541  0b 7f 00
 	pushw 0x3f                                           ; F95544  0b 3f 00
 	pushw 0x00                                           ; F95547  0b 00 00
-	call T_F413FC                                        ; F9554A  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F9554A  1d fc 13 f4
 	inc 6,XSP                                            ; F9554E  ef 66
 	pushw 0x7f                                           ; F95550  0b 7f 00
 	jrl .LF955EA                                             ; F95553  78 94 00
@@ -40615,11 +40620,11 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x00                                           ; F95560  0b 00 00
 	pushw 0x3c                                           ; F95563  0b 3c 00
 	pushw 0x00                                           ; F95566  0b 00 00
-	call T_F413FC                                        ; F95569  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F95569  1d fc 13 f4
 	pushw 0x00                                           ; F9556D  0b 00 00
 	pushw 0x3c                                           ; F95570  0b 3c 00
 	pushw 0x00                                           ; F95573  0b 00 00
-	call T_F41400                                        ; F95576  1d 00 14 f4
+	call T_MidiOut_SendNote                                        ; F95576  1d 00 14 f4
 	inc 8,XSP                                            ; F9557A  ef 60
 	inc 4,XSP                                            ; F9557C  ef 64
 .LF9557E:
@@ -40630,11 +40635,11 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x00                                           ; F95588  0b 00 00
 	pushw 0x3d                                           ; F9558B  0b 3d 00
 	pushw 0x00                                           ; F9558E  0b 00 00
-	call T_F413FC                                        ; F95591  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F95591  1d fc 13 f4
 	pushw 0x00                                           ; F95595  0b 00 00
 	pushw 0x3d                                           ; F95598  0b 3d 00
 	pushw 0x00                                           ; F9559B  0b 00 00
-	call T_F41400                                        ; F9559E  1d 00 14 f4
+	call T_MidiOut_SendNote                                        ; F9559E  1d 00 14 f4
 	inc 8,XSP                                            ; F955A2  ef 60
 	inc 4,XSP                                            ; F955A4  ef 64
 .LF955A6:
@@ -40645,11 +40650,11 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x00                                           ; F955B0  0b 00 00
 	pushw 0x3e                                           ; F955B3  0b 3e 00
 	pushw 0x00                                           ; F955B6  0b 00 00
-	call T_F413FC                                        ; F955B9  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F955B9  1d fc 13 f4
 	pushw 0x00                                           ; F955BD  0b 00 00
 	pushw 0x3e                                           ; F955C0  0b 3e 00
 	pushw 0x00                                           ; F955C3  0b 00 00
-	call T_F41400                                        ; F955C6  1d 00 14 f4
+	call T_MidiOut_SendNote                                        ; F955C6  1d 00 14 f4
 	inc 8,XSP                                            ; F955CA  ef 60
 	inc 4,XSP                                            ; F955CC  ef 64
 .LF955CE:
@@ -40660,14 +40665,14 @@ SineWaveCheck_ServiceSwitches:
 	pushw 0x00                                           ; F955D8  0b 00 00
 	pushw 0x3f                                           ; F955DB  0b 3f 00
 	pushw 0x00                                           ; F955DE  0b 00 00
-	call T_F413FC                                        ; F955E1  1d fc 13 f4
+	call T_ToneGen_SendSoundSelNote                                        ; F955E1  1d fc 13 f4
 	inc 6,XSP                                            ; F955E5  ef 66
 	pushw 0x00                                           ; F955E7  0b 00 00
 .LF955EA:
 	pushw 0x3f                                           ; F955EA  0b 3f 00
 .LF955ED:
 	pushw 0x00                                           ; F955ED  0b 00 00
-	call T_F41400                                        ; F955F0  1d 00 14 f4
+	call T_MidiOut_SendNote                                        ; F955F0  1d 00 14 f4
 	inc 6,XSP                                            ; F955F4  ef 66
 .LF955F6:
 	pop XIX                                              ; F955F6  5c
@@ -40727,11 +40732,13 @@ PanelCpuCheck_FlashStatusOnLed:
 	ret                                                  ; F95658  0e
 T_F4015C_Nop:
 	ret                                                  ; F95659  0e
-sub_F9565A:
+; PartNotes_ReleaseReceivedOnScreenChange: when UI_ScreenLatch differs from UI_ScreenLatch_Previous (the screen just changed): T_PartNotes_ReleaseAllReceivedMidiIn.
+;   Called by Paint_SineWaveCheckMode and through its directory slot 0xF40160.
+PartNotes_ReleaseReceivedOnScreenChange:
 	ld c, (UI_ScreenLatch_Previous:16)                                   ; F9565A  c1 7b 20 23
 	m_cp_rm MB16, UI_ScreenLatch, r3                             ; F9565E  c1 7a 20 f3
 	jr z, .LF95668                                           ; F95662  66 04
-	call T_F413C0                                        ; F95664  1d c0 13 f4
+	call T_PartNotes_ReleaseAllReceivedMidiIn                                        ; F95664  1d c0 13 f4
 .LF95668:
 	ret                                                  ; F95668  0e
 T_F40164_Nop:
@@ -41097,7 +41104,7 @@ Paint_SineWaveCheckMode:
 	call T_PendingEventQueue_AppendStackArgs                                        ; F957F2  1d 18 1b f4
 	add XSP,0x00000018                                   ; F957F6  ef c8 18 00 00 00
 .LF957FC:
-	calr sub_F9565A                                          ; F957FC  1e 5b fe
+	calr PartNotes_ReleaseReceivedOnScreenChange                                          ; F957FC  1e 5b fe
 	call LCD_BlankThenSetPanel2Layer                                      ; F957FF  1d 2b 4c f9
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F95803  f1 40 25 00 00
 	lda xbc, (DLRec_F2C9C2:24)                           ; F95808  f2 c2 c9 f2 31
@@ -100918,7 +100925,7 @@ SmfPlay_StopAtEndOfTrack:
 	popw de                                              ; FB91C6  4a
 	popw hl                                              ; FB91C7  4b
 	ret                                                  ; FB91C8  0e
-; MidiFilePlay_Stop: clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_F413C0, then clears the
+; MidiFilePlay_Stop: clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_PartNotes_ReleaseAllReceivedMidiIn, then clears the
 ;   position (0x605040) and (0x605044) / (0x605048).  Called by MidiFileDirectPlay_LcdKeyRow1, both ticks, and the leave.
 MidiFilePlay_Stop:
 	pushw hl                                             ; FB91C9  2b
@@ -100928,7 +100935,7 @@ MidiFilePlay_Stop:
 	and (XIX),0xfe                                       ; FB91D1  84 3c fe
 	ld (0x60504c:24), 0x00                             ; FB91D4  f2 4c 50 60 00 00
 	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB91DA  1e 3f 00
-	call T_F413C0                                        ; FB91DD  1d c0 13 f4
+	call T_PartNotes_ReleaseAllReceivedMidiIn                                        ; FB91DD  1d c0 13 f4
 	calr MidiFilePlay_ClearPosition                                      ; FB91E1  1e 37 07
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB91E4  1e 7a 0c
 	calr SmfPlay_ClearEventTimes                                      ; FB91E7  1e 7f 0c
@@ -120326,7 +120333,7 @@ MixedTables_FC6626:
 ;
 ; CHOSEN by notes/prom_a_call_graph.py --modules: T_F413B4-T_F41400 (20 slots,
 ; reference upper bound 52 SUMMED OVER THE MODULE -- no single slot is near it;
-; the busiest is T_F413C8 at 11) is prom_a's third-ranked unconverted module and
+; the busiest is T_PartNotes_ReleaseAllTrackNotes at 11) is prom_a's third-ranked unconverted module and
 ; all 20 of its targets land here.  18,558 substantive bytes; the 10,113-byte 0x0E
 ; run that follows is emitted as `.fill` and is NOT part of that figure.
 ;
@@ -120370,7 +120377,7 @@ MixedTables_FC6626:
 ;   it the module's highest reference count.  T_MidiInA_ProcessRing is the module's FIRST
 ;   slot and it targets 0xFC80E2; T_Ram3800_InitDataImage (T_F413D0) is the one that targets 0xFC807D, and
 ;   its reference upper bound is 1.  The module's busiest single slot is
-;   T_F413C8 at 11, targeting 0xFC8CE0.  52 is the module TOTAL, which is what
+;   T_PartNotes_ReleaseAllTrackNotes at 11, targeting 0xFC8CE0.  52 is the module TOTAL, which is what
 ;   `--modules` ranks by.
 ;
 ; WHAT IT TALKS TO.  Every external call is through the prom_b directory, and
@@ -120513,7 +120520,7 @@ Ram3800_InitAll:
 	ld XBC,0x00000054                                    ; FC8063  41 54 00 00 00
 	and XBC,XBC                                          ; FC8068  e9 c1
 	jr z, .LFC807C                                       ; FC806A  66 10
-	lda xix, (0x602000:24)                               ; FC806C  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FC806C  f2 00 20 60 34
 	xor WA,WA                                            ; FC8071  d8 d0
 .LFC8073:
 	ld (xix+), a                                    ; FC8073  f5 f0 41
@@ -121557,7 +121564,11 @@ TimedEvents_ProcessRing:
 	popw hl                                              ; FC8A89  4b
 	unlk XIZ                                             ; FC8A8A  ee 0d
 	ret                                                  ; FC8A8C  0e
-sub_FC8A8D:
+; PartNotes_ReleaseAllReceivedMidiIn: T_PartNotes_ReleaseAllReceivedMidiIn: for each channel 0..31, each part that receives on it (block +0x22 = the channel, record +0x152 bit 6)
+;   releases its MIDI IN notes on it (PartNotes_BuildReleaseFrame, source 1, mask 7); the note-offs go to the tone
+;   generator and the record buffer.  Six call sites, in MidiFilePlay_Stop, MainTask_PhaseVector,
+;   Transport_StopAllRunning_SaveRegs2, LcdKeyRow1_SoundEditMemoryWrite, PartNotes_ReleaseReceivedOnScreenChange and Notes_ReleaseAllSources.
+PartNotes_ReleaseAllReceivedMidiIn:
 	link XIZ,0xfed8                                      ; FC8A8D  ee 0c d8 fe
 	pushw hl                                             ; FC8A91  2b
 	pushw de                                             ; FC8A92  2a
@@ -121621,7 +121632,12 @@ sub_FC8A8D:
 	popw hl                                              ; FC8B32  4b
 	unlk XIZ                                             ; FC8B33  ee 0d
 	ret                                                  ; FC8B35  0e
-sub_FC8B36:
+; NoteList_ReleaseAllSource0: T_NoteList_ReleaseAllSource0: every note on source 0's note list becomes a note-off (NoteList_BuildReleaseAllFrame, source 0) and
+;   leaves the list (NoteList_ApplyFrame); each part of the voice mask then takes it as a note frame does
+;   (NoteFrame_SelectForPart, NoteRouting_ForPart, PartNotes_ApplyFrame, the three outputs).  In MIDI IN mode 1 the
+;   note-offs also go out as one MIDI OUT frame.  Its entry +5 byte, which Ring601850_ProcessNoteEvents fills with
+;   NoteRouting_ListChannel, is here the part loop's counter (XIZ-5) (0xFC8C61).
+NoteList_ReleaseAllSource0:
 	link XIZ,0xfe40                                      ; FC8B36  ee 0c 40 fe
 	pushw hl                                             ; FC8B3A  2b
 	pushw de                                             ; FC8B3B  2a
@@ -121773,7 +121789,10 @@ sub_FC8B36:
 	popw hl                                              ; FC8CDC  4b
 	unlk XIZ                                             ; FC8CDD  ee 0d
 	ret                                                  ; FC8CDF  0e
-sub_FC8CE0:
+; PartNotes_ReleaseAllTrackNotes: T_PartNotes_ReleaseAllTrackNotes: for each of the 16 tracks that has a part (BStore_TrackToPart), the track's notes on it (source 2,
+;   channel key = the track) become note-offs (PartNotes_BuildReleaseFrame, mask 7) sent to the tone generator and
+;   MIDI OUT.  Eleven callers through the slot, among them MainTask_PanelTimersTick and MainTask_PhaseVector.
+PartNotes_ReleaseAllTrackNotes:
 	link XIZ,0xfed8                                      ; FC8CE0  ee 0c d8 fe
 	pushw hl                                             ; FC8CE4  2b
 	push XIX                                             ; FC8CE5  3c
@@ -122162,10 +122181,13 @@ sub_FC8D45_Nop:
 	pop XHL                                              ; FC8FD3  5b
 	unlk XIZ                                             ; FC8FD4  ee 0d
 	ret                                                  ; FC8FD6  0e
-sub_FC8FD7:
+; ToneGen_SendSoundSelNote: T_ToneGen_SendSoundSelNote (-, note, velocity): [0x90, SoundSel_Group | 0xF0, note, velocity] over the link
+;   (T_Link_SendBlockIn32ByteChunks).  SineWaveCheck_ServiceSwitches plays notes 0x3C..0x3F with it, velocity 0x7F
+;   while a switch is held and 0 on release.
+ToneGen_SendSoundSelNote:
 	link XIZ,0xfffc                                      ; FC8FD7  ee 0c fc ff
 	push XIX                                             ; FC8FDB  3c
-	lda xix, (0x602000:24)                               ; FC8FDC  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FC8FDC  f2 00 20 60 34
 	ld (XIX),0x90                                        ; FC8FE1  b4 00 90
 	ld XBC,XIX                                           ; FC8FE4  ec 89
 	inc 1,XBC                                            ; FC8FE6  e9 61
@@ -122177,7 +122199,7 @@ sub_FC8FD7:
 	ld (XIX+0x02),C                                      ; FC8FF7  bc 02 43
 	ld C,(XIZ+0x0c)                                      ; FC8FFA  8e 0c 23
 	ld (XIX+0x03),C                                      ; FC8FFD  bc 03 43
-	lda xbc, (0x602000:24)                               ; FC9000  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FC9000  f2 00 20 60 31
 	push XBC                                             ; FC9005  39
 	pushw 0x04                                           ; FC9006  0b 04 00
 	pushw 0x00                                           ; FC9009  0b 00 00
@@ -122186,12 +122208,15 @@ sub_FC8FD7:
 	pop XIX                                              ; FC9012  5c
 	unlk XIZ                                             ; FC9013  ee 0d
 	ret                                                  ; FC9015  0e
-sub_FC9016:
+; MidiOut_SendNote: T_MidiOut_SendNote (channel 0..31, note, velocity): the 3-byte message [0x90 | channel & 0x0F, note, velocity] on MIDI OUT A
+;   (channels 0-15: Ring601432_PutBlock, MIDI_PostSendWork) or B (16-31: Ring60153C_PutBlock, _PortB), with
+;   interrupts held at level 6.  SineWaveCheck_ServiceSwitches sends channel 0 with it.
+MidiOut_SendNote:
 	link XIZ,0xfffc                                      ; FC9016  ee 0c fc ff
 	pushw hl                                             ; FC901A  2b
 	push XIX                                             ; FC901B  3c
 	ld H,(XIZ+0x08)                                      ; FC901C  8e 08 26
-	lda xix, (0x602000:24)                               ; FC901F  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FC901F  f2 00 20 60 34
 	cp H,0x10                                            ; FC9024  ce cf 10
 	jr nc, .LFC905E                                      ; FC9027  6f 35
 	ld C,H                                               ; FC9029  ce 8b
@@ -122206,7 +122231,7 @@ sub_FC9016:
 	ld A,(XIZ+0x0c)                                      ; FC903F  8e 0c 21
 	ld (XBC+0x01),A                                      ; FC9042  b9 01 41
 	ei 0x06                                              ; FC9045  06 06
-	lda xbc, (0x602000:24)                               ; FC9047  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FC9047  f2 00 20 60 31
 	push XBC                                             ; FC904C  39
 	pushw 0x03                                           ; FC904D  0b 03 00
 	call T_Ring601432_PutBlock                           ; FC9050  1d f8 1d f4
@@ -122228,7 +122253,7 @@ sub_FC9016:
 	ld A,(XIZ+0x0c)                                      ; FC9077  8e 0c 21
 	ld (XBC+0x01),A                                      ; FC907A  b9 01 41
 	ei 0x06                                              ; FC907D  06 06
-	lda xbc, (0x602000:24)                               ; FC907F  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FC907F  f2 00 20 60 31
 	push XBC                                             ; FC9084  39
 	pushw 0x03                                           ; FC9085  0b 03 00
 	call T_Ring60153C_PutBlock                           ; FC9088  1d 1c 1e f4
@@ -124185,7 +124210,11 @@ PartNoteList_MoveNode:
 	pop XHL                                              ; FCA272  5b
 	unlk XIZ                                             ; FCA273  ee 0d
 	ret                                                  ; FCA275  0e
-sub_FCA276:
+; PartNotes_CollectFrame: (frame with a source at +2 -- 0xFF any -- and a channel key at +3, outputs mask, part): PartNotes_BuildReleaseFrame
+;   without the release: each of the part's notes from that source with that key is copied into the frame as it is,
+;   and A has bit 0 / 1 / 2 when one still sounds on that output.  A node already released on all three returns to
+;   the pool and to PartNote_Budget.
+PartNotes_CollectFrame:
 	link XIZ,0xffee                                      ; FCA276  ee 0c ee ff
 	pushw hl                                             ; FCA27A  2b
 	pushw de                                             ; FCA27B  2a
@@ -124647,6 +124676,8 @@ PartNotes_BuildReleaseFrame:
 	unlk XIZ                                             ; FCA6B8  ee 0d
 	ret                                                  ; FCA6BA  0e
 ; PartFrame_SendToToneGen: result bit 0 of PartNotes_ApplyFrame: the frame to the tone generator (over the link).
+; 2026-10-04: per part, PartFrame_SendMonoToToneGen when the part's tone-generator record (block +0x92) has bit 6
+;   and its PartToneGen_State is not 0xFF, else PartFrame_SendPolyToToneGen; their result is the new state.
 PartFrame_SendToToneGen:
 	link XIZ,0x0000                                      ; FCA6BB  ee 0c 00 00
 	pushw hl                                             ; FCA6BF  2b
@@ -124664,7 +124695,7 @@ PartFrame_SendToToneGen:
 	extz BC                                              ; FCA6DF  d9 12
 	extz XBC                                             ; FCA6E1  e9 12
 	ld XIX,XBC                                           ; FCA6E3  e9 8c
-	add XBC,0x006020d4                                   ; FCA6E5  e9 c8 d4 20 60 00
+	add XBC,PartToneGen_State                                   ; FCA6E5  e9 c8 d4 20 60 00
 	ld L,(XBC)                                           ; FCA6EB  81 27
 	cp L,0xff                                            ; FCA6ED  cf cf ff
 	jr z, .LFCA709                                       ; FCA6F0  66 17
@@ -124673,8 +124704,8 @@ PartFrame_SendToToneGen:
 	pushw hl                                             ; FCA6F6  2b
 	push 0x00                                            ; FCA6F7  09 00
 	push H                                               ; FCA6F9  ce 04
-	calr sub_FCA8D4                                      ; FCA6FB  1e d6 01
-	lda xbc, (0x6020d4:24)                               ; FCA6FE  f2 d4 20 60 31
+	calr PartFrame_SendMonoToToneGen                                      ; FCA6FB  1e d6 01
+	lda xbc, (PartToneGen_State:24)                               ; FCA6FE  f2 d4 20 60 31
 	add XBC,XIX                                          ; FCA703  ec 81
 	ld (XBC),A                                           ; FCA705  b1 41
 	jr .LFCA731                                          ; FCA707  68 28
@@ -124685,14 +124716,14 @@ PartFrame_SendToToneGen:
 	extz WA                                              ; FCA70F  d8 12
 	extz XWA                                             ; FCA711  e8 12
 	ld XIX,XWA                                           ; FCA713  e8 8c
-	add XWA,0x006020d4                                   ; FCA715  e8 c8 d4 20 60 00
+	add XWA,PartToneGen_State                                   ; FCA715  e8 c8 d4 20 60 00
 	ld W,(XWA)                                           ; FCA71B  80 20
 	push 0x00                                            ; FCA71D  09 00
 	push W                                               ; FCA71F  c8 04
 	push 0x00                                            ; FCA721  09 00
 	push H                                               ; FCA723  ce 04
-	calr sub_FCA738                                      ; FCA725  1e 10 00
-	lda xbc, (0x6020d4:24)                               ; FCA728  f2 d4 20 60 31
+	calr PartFrame_SendPolyToToneGen                                      ; FCA725  1e 10 00
+	lda xbc, (PartToneGen_State:24)                               ; FCA728  f2 d4 20 60 31
 	add XBC,XIX                                          ; FCA72D  ec 81
 	ld (XBC),A                                           ; FCA72F  b1 41
 .LFCA731:
@@ -124701,7 +124732,13 @@ PartFrame_SendToToneGen:
 	popw hl                                              ; FCA734  4b
 	unlk XIZ                                             ; FCA735  ee 0d
 	ret                                                  ; FCA737  0e
-sub_FCA738:
+; PartFrame_SendPolyToToneGen: (part, state, frame): each entry's tone-generator note (entry +3) goes over the link as [0x90 (| 8), part, note,
+;   velocity (+4)] and makes the state 0xFF; a note of 0xA0 sends [0xB0, part, 0x78, 0] instead (state 0x80) and 0xFF
+;   is skipped.  When the part's note list is empty after a note went out, [0xB0, part, 0x7B, 0] follows and the
+;   state is 0x80.  A = the new state.  On screen 0xDA the part byte is SoundSel_Group | 0xF0.  Status bit 3 is set
+;   when (0x7F02) & 0xF0 is 0x10 and the frame came by the note-list path (source 0, or source 1 in mode 2 or on
+;   NoteRouting_ListChannel in mode 1); what it means on the link is not established.
+PartFrame_SendPolyToToneGen:
 	link XIZ,0xfff0                                      ; FCA738  ee 0c f0 ff
 	pushw hl                                             ; FCA73C  2b
 	pushw de                                             ; FCA73D  2a
@@ -124743,7 +124780,7 @@ sub_FCA738:
 .LFCA79C:
 	ld h, 0x08:opc                                          ; FCA79C  26 08
 .LFCA79E:
-	lda xix, (0x602000:24)                               ; FCA79E  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FCA79E  f2 00 20 60 34
 	ld XBC,(XIZ+0x0c)                                    ; FCA7A3  ae 0c 21
 	inc 7,XBC                                            ; FCA7A6  e9 67
 	ld (xiz-4), xbc                                      ; FCA7A8  be fc 61
@@ -124757,7 +124794,7 @@ sub_FCA738:
 	inc 7,XWA                                            ; FCA7BA  e8 67
 	add XBC,XWA                                          ; FCA7BC  e8 81
 	ld (xiz-8), xbc                                      ; FCA7BE  be f8 61
-; (sub_FCA7C1 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FCA738;
+; (sub_FCA7C1 removed 2026-10-04: no code names it and the line above falls through into it -- part of PartFrame_SendPolyToToneGen;
 ;  notes/prom_a_stray_label_removal.py)
 	ld xwa, (xiz-4)                                      ; FCA7C1  ae fc 20
 	cp XWA,XBC                                           ; FCA7C4  e9 f0
@@ -124781,12 +124818,12 @@ sub_FCA738:
 	ld (XBC+0x01),0x78                                   ; FCA7F1  b9 01 00 78
 	ld xbc, (xiz-8)                                      ; FCA7F5  ae f8 21
 	ld (XBC+0x02),0x00                                   ; FCA7F8  b9 02 00 00
-	lda xbc, (0x602000:24)                               ; FCA7FC  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCA7FC  f2 00 20 60 31
 	push XBC                                             ; FCA801  39
 	pushw 0x04                                           ; FCA802  0b 04 00
 	pushw 0x00                                           ; FCA805  0b 00 00
 	call T_Link_SendBlockIn32ByteChunks                                        ; FCA808  1d d4 0e f4
-	lda xix, (0x602000:24)                               ; FCA80C  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FCA80C  f2 00 20 60 34
 	ld (XIZ+0x0a),0x80                                   ; FCA811  be 0a 00 80
 	jr .LFCA86B                                          ; FCA815  68 54
 .LFCA817:
@@ -124813,12 +124850,12 @@ sub_FCA738:
 	ld H,C                                               ; FCA84A  cb 8e
 	ld xbc, (xiz-16)                                     ; FCA84C  ae f0 21
 	ld (XBC),H                                           ; FCA84F  b1 46
-	lda xbc, (0x602000:24)                               ; FCA851  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCA851  f2 00 20 60 31
 	push XBC                                             ; FCA856  39
 	pushw 0x04                                           ; FCA857  0b 04 00
 	pushw 0x00                                           ; FCA85A  0b 00 00
 	call T_Link_SendBlockIn32ByteChunks                                        ; FCA85D  1d d4 0e f4
-	lda xix, (0x602000:24)                               ; FCA861  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FCA861  f2 00 20 60 34
 	ld e, 0xff:opc                                          ; FCA866  25 ff
 	ld (XIZ+0x0a),E                                      ; FCA868  be 0a 45
 .LFCA86B:
@@ -124850,7 +124887,7 @@ sub_FCA738:
 	ld (XBC+0x01),0x7b                                   ; FCA8AA  b9 01 00 7b
 	ld xbc, (xiz-8)                                      ; FCA8AE  ae f8 21
 	ld (XBC+0x02),0x00                                   ; FCA8B1  b9 02 00 00
-	lda xbc, (0x602000:24)                               ; FCA8B5  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCA8B5  f2 00 20 60 31
 	push XBC                                             ; FCA8BA  39
 	pushw 0x04                                           ; FCA8BB  0b 04 00
 	pushw 0x00                                           ; FCA8BE  0b 00 00
@@ -124866,7 +124903,11 @@ sub_FCA738:
 	popw hl                                              ; FCA8D0  4b
 	unlk XIZ                                             ; FCA8D1  ee 0d
 	ret                                                  ; FCA8D3  0e
-sub_FCA8D4:
+; PartFrame_SendMonoToToneGen: (part, state, frame), for a part whose tone-generator record has bit 6: one note at a time, the one at the tail of
+;   the part's note list (head +0x0D).  State 0x80 (silent): a note-on for it.  A different note sounding: its note-off
+;   and the new note-on in one 8-byte block.  List empty: the sounding note's note-off and [0xB0, part, 0x7B, 0].
+;   A = the note now sounding, or 0x80.  The status byte is built as in PartFrame_SendPolyToToneGen.
+PartFrame_SendMonoToToneGen:
 	link XIZ,0xffee                                      ; FCA8D4  ee 0c ee ff
 	push XHL                                             ; FCA8D8  3b
 	push XDE                                             ; FCA8D9  3a
@@ -124876,7 +124917,7 @@ sub_FCA8D4:
 	ld HL,BC                                             ; FCA8E0  d9 8b
 	ldw ix, PartNoteList_Heads                                       ; FCA8E2  34 f7 39
 	add IX,BC                                            ; FCA8E5  d9 84
-	lda xbc, (0x602000:24)                               ; FCA8E7  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCA8E7  f2 00 20 60 31
 	ld (xiz-4), xbc                                      ; FCA8EC  be fc 61
 	ld A,(XIZ+0x08)                                      ; FCA8EF  8e 08 21
 	ld (xiz-5), a                                        ; FCA8F2  be fb 41
@@ -124950,7 +124991,7 @@ sub_FCA8D4:
 	ld (xiz-18), xbc                                     ; FCA9A7  be ee 61
 	ld A,(XHL+0x06)                                      ; FCA9AA  8b 06 21
 	ld (XBC),A                                           ; FCA9AD  b1 41
-	lda xbc, (0x602000:24)                               ; FCA9AF  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCA9AF  f2 00 20 60 31
 	push XBC                                             ; FCA9B4  39
 	pushw 0x04                                           ; FCA9B5  0b 04 00
 	pushw 0x00                                           ; FCA9B8  0b 00 00
@@ -124998,7 +125039,7 @@ sub_FCA8D4:
 	ld (xiz-14), xbc                                     ; FCAA25  be f2 61
 	ld A,(XHL+0x06)                                      ; FCAA28  8b 06 21
 	ld (XBC),A                                           ; FCAA2B  b1 41
-	lda xbc, (0x602000:24)                               ; FCAA2D  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAA2D  f2 00 20 60 31
 	push XBC                                             ; FCAA32  39
 	pushw 0x08                                           ; FCAA33  0b 08 00
 	pushw 0x00                                           ; FCAA36  0b 00 00
@@ -125025,7 +125066,7 @@ sub_FCA8D4:
 	ld (XIX+0x04),C                                      ; FCAA6E  bc 04 43
 	ld (XIX+0x05),0x7b                                   ; FCAA71  bc 05 00 7b
 	ld (XIX+0x06),0x00                                   ; FCAA75  bc 06 00 00
-	lda xbc, (0x602000:24)                               ; FCAA79  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAA79  f2 00 20 60 31
 	push XBC                                             ; FCAA7E  39
 	pushw 0x08                                           ; FCAA7F  0b 08 00
 	pushw 0x00                                           ; FCAA82  0b 00 00
@@ -125048,7 +125089,7 @@ PartFrame_SendToMidiOut:
 	pushw hl                                             ; FCAA9C  2b
 	pushw de                                             ; FCAA9D  2a
 	push XIX                                             ; FCAA9E  3c
-	lda xix, (0x602000:24)                               ; FCAA9F  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FCAA9F  f2 00 20 60 34
 	ld XBC,(XIZ+0x08)                                    ; FCAAA4  ae 08 21
 	inc 7,XBC                                            ; FCAAA7  e9 67
 	ld (xiz-4), xbc                                      ; FCAAA9  be fc 61
@@ -125107,7 +125148,7 @@ PartFrame_SendToMidiOut:
 	ld h, 0x02:opc                                          ; FCAB2D  26 02
 .LFCAB2F:
 	ei 0x06                                              ; FCAB2F  06 06
-	lda xbc, (0x602000:24)                               ; FCAB31  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAB31  f2 00 20 60 31
 	push XBC                                             ; FCAB36  39
 	ld A,H                                               ; FCAB37  ce 89
 	extz WA                                              ; FCAB39  d8 12
@@ -125155,7 +125196,7 @@ PartFrame_SendToMidiOut:
 	ld h, 0x02:opc                                          ; FCABA0  26 02
 .LFCABA2:
 	ei 0x06                                              ; FCABA2  06 06
-	lda xbc, (0x602000:24)                               ; FCABA4  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCABA4  f2 00 20 60 31
 	push XBC                                             ; FCABA9  39
 	ld A,H                                               ; FCABAA  ce 89
 	extz WA                                              ; FCABAC  d8 12
@@ -125165,7 +125206,7 @@ PartFrame_SendToMidiOut:
 	inc 6,XSP                                            ; FCABB7  ef 66
 	ei 0x00                                              ; FCABB9  06 00
 .LFCABBB:
-	lda xix, (0x602000:24)                               ; FCABBB  f2 00 20 60 34
+	lda xix, (NoteSend_MsgBuffer:24)                               ; FCABBB  f2 00 20 60 34
 .LFCABC0:
 	ld XBC,0x00000009                                    ; FCABC0  41 09 00 00 00
 	add (xiz-4), xbc                                     ; FCABC5  ae fc 89
@@ -125214,7 +125255,7 @@ PartFrame_SendToMidiOut:
 	ld h, 0x02:opc                                          ; FCAC3C  26 02
 .LFCAC3E:
 	ei 0x06                                              ; FCAC3E  06 06
-	lda xbc, (0x602000:24)                               ; FCAC40  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAC40  f2 00 20 60 31
 	push XBC                                             ; FCAC45  39
 	ld A,H                                               ; FCAC46  ce 89
 	extz WA                                              ; FCAC48  d8 12
@@ -125246,7 +125287,7 @@ PartFrame_SendToMidiOut:
 	ld h, 0x02:opc                                          ; FCAC89  26 02
 .LFCAC8B:
 	ei 0x06                                              ; FCAC8B  06 06
-	lda xbc, (0x602000:24)                               ; FCAC8D  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAC8D  f2 00 20 60 31
 	push XBC                                             ; FCAC92  39
 	ld A,H                                               ; FCAC93  ce 89
 	extz WA                                              ; FCAC95  d8 12
@@ -125272,7 +125313,7 @@ PartFrame_RecordToSeqBuf:
 	set	0, (SeqBuf_Flags:8)                                   ; FCACB3  f0 aa b8
 	ld	d, (Seq_BeatTick:8)                                      ; FCACB6  c0 93 24
 	ei 0x00                                              ; FCACB9  06 00
-	lda xbc, (0x602000:24)                               ; FCACBB  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCACBB  f2 00 20 60 31
 	ld (xiz-4), xbc                                      ; FCACC0  be fc 61
 	ldw hl, 0x00                                         ; FCACC3  33 00 00
 	ld XIX,(XIZ+0x08)                                    ; FCACC6  ae 08 24
@@ -125332,11 +125373,11 @@ PartFrame_RecordToSeqBuf:
 	cp XWA,XBC                                           ; FCAD49  e9 f0
 	jr nz, .LFCAD65                                      ; FCAD4B  6e 18
 .LFCAD4D:
-	lda xbc, (0x602000:24)                               ; FCAD4D  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAD4D  f2 00 20 60 31
 	push XBC                                             ; FCAD52  39
 	pushw hl                                             ; FCAD53  2b
 	call T_SeqBufRing_PutBlock                           ; FCAD54  1d 8c 1d f4
-	lda xbc, (0x602000:24)                               ; FCAD58  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCAD58  f2 00 20 60 31
 	ld (xiz-4), xbc                                      ; FCAD5D  be fc 61
 	ldw hl, 0x00                                         ; FCAD60  33 00 00
 	inc 6,XSP                                            ; FCAD63  ef 66
@@ -125966,7 +126007,12 @@ MidiFrame_ToNoteFrame:
 	popw hl                                              ; FCB2EC  4b
 	unlk XIZ                                             ; FCB2ED  ee 0d
 	ret                                                  ; FCB2EF  0e
-sub_FCB2F0:
+; PartNotes_ResoundOnToneGen: T_PartNotes_ResoundOnToneGen (source, part): the part's notes from the source keyed by the part (PartNotes_CollectFrame, mask 1).
+;   When one sounds on the tone generator and the part plays tone-generator part = itself (block +0x02):
+;   [0xB0, part, 0x7B, 0], bits 6-7 set in each entry's tone-generator velocity, the part's state (0x6020D4) = 0x80,
+;   and the frame sent again (PartFrame_SendToToneGen).  What velocity bits 6-7 mean on the link is not established.
+;   Its one caller is Drawbar_SendPartParams, with source 0xFF.
+PartNotes_ResoundOnToneGen:
 	link XIZ,0xfed4                                      ; FCB2F0  ee 0c d4 fe
 	pushw hl                                             ; FCB2F4  2b
 	pushw de                                             ; FCB2F5  2a
@@ -125981,7 +126027,7 @@ sub_FCB2F0:
 	pushw 0x01                                           ; FCB311  0b 01 00
 	lda xbc, (xiz-296)                                   ; FCB314  f3 f9 d8 fe 31
 	push XBC                                             ; FCB319  39
-	calr sub_FCA276                                      ; FCB31A  1e 59 ef
+	calr PartNotes_CollectFrame                                      ; FCB31A  1e 59 ef
 	ld H,A                                               ; FCB31D  c9 8e
 	inc 8,XSP                                            ; FCB31F  ef 60
 	cp a, 0x00:i3                                          ; FCB321  c9 d8
@@ -125996,7 +126042,7 @@ sub_FCB2F0:
 	ld A,(XBC)                                           ; FCB33A  81 21
 	cp A,D                                               ; FCB33C  cc f1
 	jrl nz, .LFCB3CD                                     ; FCB33E  7e 8c 00
-	lda xbc, (0x602000:24)                               ; FCB341  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCB341  f2 00 20 60 31
 	ld (xiz-300), xbc                                    ; FCB346  f3 f9 d4 fe 61
 	ld (XBC),0xb0                                        ; FCB34B  b1 00 b0
 	ld xbc, (xiz-300)                                    ; FCB34E  e3 f9 d4 fe 21
@@ -126005,7 +126051,7 @@ sub_FCB2F0:
 	ld (XBC+0x02),0x7b                                   ; FCB35B  b9 02 00 7b
 	ld xbc, (xiz-300)                                    ; FCB35F  e3 f9 d4 fe 21
 	ld (XBC+0x03),0x00                                   ; FCB364  b9 03 00 00
-	lda xbc, (0x602000:24)                               ; FCB368  f2 00 20 60 31
+	lda xbc, (NoteSend_MsgBuffer:24)                               ; FCB368  f2 00 20 60 31
 	push XBC                                             ; FCB36D  39
 	pushw 0x04                                           ; FCB36E  0b 04 00
 	pushw 0x00                                           ; FCB371  0b 00 00
@@ -126031,7 +126077,7 @@ sub_FCB2F0:
 	ld C,D                                               ; FCB3B4  cc 8b
 	extz BC                                              ; FCB3B6  d9 12
 	extz XBC                                             ; FCB3B8  e9 12
-	add XBC,0x006020d4                                   ; FCB3BA  e9 c8 d4 20 60 00
+	add XBC,PartToneGen_State                                   ; FCB3BA  e9 c8 d4 20 60 00
 	ld (XBC),0x80                                        ; FCB3C0  b1 00 80
 	lda xbc, (xiz-296)                                   ; FCB3C3  f3 f9 d8 fe 31
 	push XBC                                             ; FCB3C8  39
@@ -126060,7 +126106,7 @@ sub_FCB2F0:
 ;   RAM 0x3800  32 x u8, all 24    a per-SLOT budget.  0xFC9FFE `add XIY,
 ;               0x00003800 / ld C,(XIY) / cp c,0 / jrl le` skips when it is
 ;               <= 0; 0xFCA0CE `decm8 0x01,(xbc)` spends one; five more `add
-;               XBC,0x00003800` in PartNotes_ApplyFrame/sub_FCA276/PartNotes_BuildReleaseFrame.
+;               XBC,0x00003800` in PartNotes_ApplyFrame/PartNotes_CollectFrame/PartNotes_BuildReleaseFrame.
 ;   RAM 0x3820   3 x u8, all 16    the same per QUEUE (0xFC9CB3, 0xFC9D49).
 ;   RAM 0x3823   3 x 13-byte QUEUE HEADS.  0xFC8F7C `ldw DE,0x3823 / add
 ;               DE,13*k`.  Node layout: +0..+8 payload (+2 a key byte and
@@ -160848,12 +160894,13 @@ TimedEventRing_Discard_SaveRegs_C:
 	pop XHL                                              ; FE018E  5b
 	pop XDE                                              ; FE018F  5a
 	ret                                                  ; FE0190  0e
-sub_FE0191:
+; PartNotes_ReleaseAllTrackNotes_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_PartNotes_ReleaseAllTrackNotes and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+PartNotes_ReleaseAllTrackNotes_SaveRegs:
 	push XDE                                             ; FE0191  3a
 	push XHL                                             ; FE0192  3b
 	push XIX                                             ; FE0193  3c
 	push XIZ                                             ; FE0194  3e
-	call T_F413C8                                        ; FE0195  1d c8 13 f4
+	call T_PartNotes_ReleaseAllTrackNotes                                        ; FE0195  1d c8 13 f4
 	pop XIZ                                              ; FE0199  5e
 	pop XIX                                              ; FE019A  5c
 	pop XHL                                              ; FE019B  5b
@@ -160968,7 +161015,7 @@ Transport_StopAllRunning_SaveRegs2:
 	push XHL                                             ; FE0215  3b
 	push XIX                                             ; FE0216  3c
 	push XIZ                                             ; FE0217  3e
-	call T_F413C0                                        ; FE0218  1d c0 13 f4
+	call T_PartNotes_ReleaseAllReceivedMidiIn                                        ; FE0218  1d c0 13 f4
 	pop XIZ                                              ; FE021C  5e
 	pop XIX                                              ; FE021D  5c
 	pop XHL                                              ; FE021E  5b
@@ -160978,20 +161025,22 @@ Transport_StopAllRunning_SaveRegs2:
 	push XHL                                             ; FE0222  3b
 	push XIX                                             ; FE0223  3c
 	push XIZ                                             ; FE0224  3e
-	call T_F413C4                                        ; FE0225  1d c4 13 f4
+	call T_NoteList_ReleaseAllSource0                                        ; FE0225  1d c4 13 f4
 	pop XIZ                                              ; FE0229  5e
 	pop XIX                                              ; FE022A  5c
 	pop XHL                                              ; FE022B  5b
 	pop XDE                                              ; FE022C  5a
 	ret                                                  ; FE022D  0e
-sub_FE022E:
+; Notes_ReleaseAllSources: saves XDE / XHL / XIX / XIZ and releases every sounding note of the three sources: T_NoteList_ReleaseAllSource0,
+;   T_PartNotes_ReleaseAllReceivedMidiIn, T_PartNotes_ReleaseAllTrackNotes.  Its caller is Notes_ReleaseAllSources_Call.
+Notes_ReleaseAllSources:
 	push XDE                                             ; FE022E  3a
 	push XHL                                             ; FE022F  3b
 	push XIX                                             ; FE0230  3c
 	push XIZ                                             ; FE0231  3e
-	call T_F413C4                                        ; FE0232  1d c4 13 f4
-	call T_F413C0                                        ; FE0236  1d c0 13 f4
-	call T_F413C8                                        ; FE023A  1d c8 13 f4
+	call T_NoteList_ReleaseAllSource0                                        ; FE0232  1d c4 13 f4
+	call T_PartNotes_ReleaseAllReceivedMidiIn                                        ; FE0236  1d c0 13 f4
+	call T_PartNotes_ReleaseAllTrackNotes                                        ; FE023A  1d c8 13 f4
 	pop XIZ                                              ; FE023E  5e
 	pop XIX                                              ; FE023F  5c
 	pop XHL                                              ; FE0240  5b
@@ -163329,8 +163378,9 @@ sub_FE1705:
 	calr sub_FE09BE_Nop                                          ; FE1714  1e 16 fe
 	pop XIX                                              ; FE1717  5c
 	ret                                                  ; FE1718  0e
-sub_FE1719:
-	calr sub_FE022E                                          ; FE1719  1e 12 eb
+; Notes_ReleaseAllSources_Call: calls Notes_ReleaseAllSources and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Notes_ReleaseAllSources_Call:
+	calr Notes_ReleaseAllSources                                          ; FE1719  1e 12 eb
 	ret                                                  ; FE171C  0e
 ; DiskFile_SetFcbName: copies the 11-byte 8.3 name Disk_FileName (0x21C8..) into the file-control block 0x178E, +1 .. +11.
 DiskFile_SetFcbName:
@@ -163935,8 +163985,9 @@ sub_FE1C67:
 	calr Disk_MountAndScanDirectory_LeaveOnError                                          ; FE1C6A  1e ee e8
 	calr Ring_InitTenOfFourteen                                            ; FE1C6D  1e b9 00
 	ret                                                  ; FE1C70  0e
-sub_FE1C71:
-	calr sub_FE1719                                          ; FE1C71  1e a5 fa
+; Notes_ReleaseAllSources_Call_Call: calls Notes_ReleaseAllSources_Call and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Notes_ReleaseAllSources_Call_Call:
+	calr Notes_ReleaseAllSources_Call                                          ; FE1C71  1e a5 fa
 	ret                                                  ; FE1C74  0e
 sub_FE1C75:
 	calr sub_FE2EF9                                          ; FE1C75  1e 81 12
@@ -166069,9 +166120,9 @@ sub_FE2E96:
 	lda xix, (0x21e8:16)                                ; FE2E97  f1 e8 21 34
 	m_or_mi8 MBI+r4, 0, 0x40                             ; FE2E9B  84 3e 40
 	calr TimedEventRing_Discard_SaveRegs_C                                          ; FE2E9E  1e e3 d2
-	calr sub_FE0191                                          ; FE2EA1  1e ed d2
+	calr PartNotes_ReleaseAllTrackNotes_SaveRegs                                          ; FE2EA1  1e ed d2
 	calr sub_FE019E                                          ; FE2EA4  1e f7 d2
-	calr sub_FE1719                                          ; FE2EA7  1e 6f e8
+	calr Notes_ReleaseAllSources_Call                                          ; FE2EA7  1e 6f e8
 	and (XIX),0xbf                                       ; FE2EAA  84 3c bf
 	pop XIX                                              ; FE2EAD  5c
 	ret                                                  ; FE2EAE  0e

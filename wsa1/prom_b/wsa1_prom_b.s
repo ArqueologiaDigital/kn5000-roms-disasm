@@ -727,7 +727,7 @@
 	.set	T_F40154_Nop, 0xF95647
 	.set	PanelCpuCheck_FlashStatusOnLed, 0xF95648
 	.set	T_F4015C_Nop, 0xF95659
-	.set	sub_F9565A, 0xF9565A
+	.set	PartNotes_ReleaseReceivedOnScreenChange, 0xF9565A
 	.set	T_F40164_Nop, 0xF95669
 	.set	PanelSwLedCheck_Step, 0xF9566A
 	.set	T_F4016C_Nop, 0xF95731
@@ -1579,16 +1579,16 @@
 	.set	MidiInB_ProcessRing, 0xFC8448
 	.set	Ring601850_ProcessNoteEvents, 0xFC87AE
 	.set	TimedEvents_ProcessRing, 0xFC8960
-	.set	sub_FC8A8D, 0xFC8A8D
-	.set	sub_FC8B36, 0xFC8B36
-	.set	sub_FC8CE0, 0xFC8CE0
+	.set	PartNotes_ReleaseAllReceivedMidiIn, 0xFC8A8D
+	.set	NoteList_ReleaseAllSource0, 0xFC8B36
+	.set	PartNotes_ReleaseAllTrackNotes, 0xFC8CE0
 	.set	sub_FC8D45, 0xFC8D45
 	.set	NoteRouting_ApplyQueuedChanges, 0xFC8D49
 	.set	sub_FC8E7B, 0xFC8E7B
-	.set	sub_FC8FD7, 0xFC8FD7
-	.set	sub_FC9016, 0xFC9016
+	.set	ToneGen_SendSoundSelNote, 0xFC8FD7
+	.set	MidiOut_SendNote, 0xFC9016
 	.set	sub_FCAD7C, 0xFCAD7C
-	.set	sub_FCB2F0, 0xFCB2F0
+	.set	PartNotes_ResoundOnToneGen, 0xFCB2F0
 	.set	PanelOpTable_FCF383, 0xFCF383
 	.set	PanelOpTable_FCF3CB, 0xFCF3CB
 	.set	PanelOpTable_FCF413, 0xFCF413
@@ -1898,7 +1898,7 @@
 	.set	MidiFileSave_Page3_LcdKeyRow3, 0xFE1C59
 	.set	sub_FE1C5D, 0xFE1C5D
 	.set	sub_FE1C67, 0xFE1C67
-	.set	sub_FE1C71, 0xFE1C71
+	.set	Notes_ReleaseAllSources_Call_Call, 0xFE1C71
 	.set	sub_FE1C75, 0xFE1C75
 	.set	sub_FE1C79, 0xFE1C79
 	.set	DiskSaveFile_Execute_Entry, 0xFE1C80
@@ -22203,7 +22203,7 @@ sub_F0B36C_Skip2:
 ; LcdKeyRow1_SoundEditMemoryWrite
 ; Called from: table 0xFCF80C[224]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA901 0xFD60D9 0xFDA911 T_F413C4 T_F413C0 T_F413C8 0xFDA341
+; Calls:   0xFDA901 0xFD60D9 0xFDA911 T_NoteList_ReleaseAllSource0 T_PartNotes_ReleaseAllReceivedMidiIn T_PartNotes_ReleaseAllTrackNotes 0xFDA341
 ;          0xFD608B
 ; Evidence: word [224] of the pointer table at 0xFCF80C reads 0x00F0B533, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B533 is an
@@ -22228,9 +22228,9 @@ LcdKeyRow1_SoundEditMemoryWrite:
 	jr	sub_F0B36C_Join	; F0B550  jr T,0xf0b575
 sub_F0B36C_Skip3:
 	call	sub_FDA911	; F0B552  call 0xfda911
-	call	T_F413C4	; F0B556  call 0xf413c4
-	call	T_F413C0	; F0B55A  call 0xf413c0
-	call	T_F413C8	; F0B55E  call 0xf413c8
+	call	T_NoteList_ReleaseAllSource0	; F0B556  call 0xf413c4
+	call	T_PartNotes_ReleaseAllReceivedMidiIn	; F0B55A  call 0xf413c0
+	call	T_PartNotes_ReleaseAllTrackNotes	; F0B55E  call 0xf413c8
 	pushw	1	; F0B562  push 0x0001
 	call	Var27FE_Set	; F0B565  call 0xfda341
 	pushw	1	; F0B569  push 0x0001
@@ -88903,7 +88903,9 @@ T_F40150:	jp T_F40150_Nop  ; -> prom_a 0x15646
 T_F40154:	jp T_F40154_Nop  ; -> prom_a 0x15647
 T_PanelCpuCheck_FlashStatusOnLed:	jp PanelCpuCheck_FlashStatusOnLed  ; -> prom_a 0x15648
 T_F4015C:	jp T_F4015C_Nop  ; -> prom_a 0x15659
-T_F40160:	jp sub_F9565A  ; -> prom_a 0x1565A
+; Evidence: slot 0xF40160 is `jp 0xF9565A`; prom_a 0xF9565A carries the label
+;           PartNotes_ReleaseReceivedOnScreenChange (graded CONTENT).  DERIVATIVE name.
+T_PartNotes_ReleaseReceivedOnScreenChange:	jp PartNotes_ReleaseReceivedOnScreenChange  ; F40160 (was T_F40160) -> prom_a 0x1565A
 T_F40164:	jp T_F40164_Nop  ; -> prom_a 0x15669
 T_PanelSwLedCheck_Step:	jp PanelSwLedCheck_Step  ; -> prom_a 0x1566A
 T_F4016C:	jp T_F4016C_Nop  ; -> prom_a 0x15731
@@ -89770,9 +89772,15 @@ T_F413B8:	jp Ring601850_ProcessNoteEvents  ; -> prom_a 0x487AE   x4
 ; Evidence: slot 0xF413BC is `jp 0xFC8960`; prom_a 0xFC8960 carries the label
 ;           TimedEvents_ProcessRing (graded CONTENT).  DERIVATIVE name.
 T_TimedEvents_ProcessRing:	jp TimedEvents_ProcessRing  ; F413BC (was T_F413BC) -> prom_a 0x48960   x1
-T_F413C0:	jp sub_FC8A8D  ; -> prom_a 0x48A8D   x6
-T_F413C4:	jp sub_FC8B36  ; -> prom_a 0x48B36   x3
-T_F413C8:	jp sub_FC8CE0  ; -> prom_a 0x48CE0   x11
+; Evidence: slot 0xF413C0 is `jp 0xFC8A8D`; prom_a 0xFC8A8D carries the label
+;           PartNotes_ReleaseAllReceivedMidiIn (graded CONTENT).  DERIVATIVE name.
+T_PartNotes_ReleaseAllReceivedMidiIn:	jp PartNotes_ReleaseAllReceivedMidiIn  ; F413C0 (was T_F413C0) -> prom_a 0x48A8D   x6
+; Evidence: slot 0xF413C4 is `jp 0xFC8B36`; prom_a 0xFC8B36 carries the label
+;           NoteList_ReleaseAllSource0 (graded CONTENT).  DERIVATIVE name.
+T_NoteList_ReleaseAllSource0:	jp NoteList_ReleaseAllSource0  ; F413C4 (was T_F413C4) -> prom_a 0x48B36   x3
+; Evidence: slot 0xF413C8 is `jp 0xFC8CE0`; prom_a 0xFC8CE0 carries the label
+;           PartNotes_ReleaseAllTrackNotes (graded CONTENT).  DERIVATIVE name.
+T_PartNotes_ReleaseAllTrackNotes:	jp PartNotes_ReleaseAllTrackNotes  ; F413C8 (was T_F413C8) -> prom_a 0x48CE0   x11
 T_F413CC:	jp sub_FC8D45  ; -> prom_a 0x48D45   x1
 ; Evidence: slot 0xF413D0 is `jp 0xFC807D`; prom_a 0xFC807D carries the label
 ;           Ram3800_InitDataImage, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -89780,7 +89788,9 @@ T_Ram3800_InitDataImage:	jp Ram3800_InitDataImage  ; F413D0 (was T_F413D0) -> pr
 ; Evidence: slot 0xF413D4 is `jp 0xFC8D49`; prom_a 0xFC8D49 carries the label
 ;           NoteRouting_ApplyQueuedChanges (graded CONTENT).  DERIVATIVE name.
 T_NoteRouting_ApplyQueuedChanges:	jp NoteRouting_ApplyQueuedChanges  ; F413D4 (was T_F413D4) -> prom_a 0x48D49   x2
-T_F413D8:	jp sub_FCB2F0  ; -> prom_a 0x4B2F0   x1
+; Evidence: slot 0xF413D8 is `jp 0xFCB2F0`; prom_a 0xFCB2F0 carries the label
+;           PartNotes_ResoundOnToneGen (graded CONTENT).  DERIVATIVE name.
+T_PartNotes_ResoundOnToneGen:	jp PartNotes_ResoundOnToneGen  ; F413D8 (was T_F413D8) -> prom_a 0x4B2F0   x1
 T_F413DC:	jp sub_FCAD7C  ; -> prom_a 0x4AD7C   x2
 T_F413E0:	jp sub_FC8E7B  ; -> prom_a 0x48E7B   x2
 T_F413E4:	jp T_F413E4_Nop  ; -> prom_a 0x480DC   x3
@@ -89791,8 +89801,12 @@ T_F413F4:	jp T_F413F4_Nop  ; -> prom_a 0x480E0
 ; Evidence: slot 0xF413F8 is `jp 0xFC8448`; prom_a 0xFC8448 carries the label
 ;           MidiInB_ProcessRing (graded CONTENT).  DERIVATIVE name.
 T_MidiInB_ProcessRing:	jp MidiInB_ProcessRing  ; F413F8 (was T_F413F8) -> prom_a 0x48448   x1
-T_F413FC:	jp sub_FC8FD7  ; -> prom_a 0x48FD7   x8
-T_F41400:	jp sub_FC9016  ; -> prom_a 0x49016   x4
+; Evidence: slot 0xF413FC is `jp 0xFC8FD7`; prom_a 0xFC8FD7 carries the label
+;           ToneGen_SendSoundSelNote (graded CONTENT).  DERIVATIVE name.
+T_ToneGen_SendSoundSelNote:	jp ToneGen_SendSoundSelNote  ; F413FC (was T_F413FC) -> prom_a 0x48FD7   x8
+; Evidence: slot 0xF41400 is `jp 0xFC9016`; prom_a 0xFC9016 carries the label
+;           MidiOut_SendNote (graded CONTENT).  DERIVATIVE name.
+T_MidiOut_SendNote:	jp MidiOut_SendNote  ; F41400 (was T_F41400) -> prom_a 0x49016   x4
 	.fill 0xAC, 1, 0x0E  ; 0xF41404: 172 x ret
 T_F414B0:	jp sub_F4C800  ; -> prom_b 0x4C800   x2
 T_F414B4:	jp sub_F4C802  ; -> prom_b 0x4C802   x1
@@ -90987,7 +91001,9 @@ T_DiskApi_DeleteFile_Call:	jp DiskApi_DeleteFile_Call  ; -> prom_a 0x61C55   x11
 T_F425B4:	jp sub_FE1C5D  ; -> prom_a 0x61C5D   x3
 T_F425B8:	jp sub_FE1C67  ; -> prom_a 0x61C67   x2
 T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
-T_F425C0:	jp sub_FE1C71  ; -> prom_a 0x61C71
+; Evidence: slot 0xF425C0 is `jp 0xFE1C71`; prom_a 0xFE1C71 carries the label
+;           Notes_ReleaseAllSources_Call_Call (graded CONTENT).  DERIVATIVE name.
+T_Notes_ReleaseAllSources_Call_Call:	jp Notes_ReleaseAllSources_Call_Call  ; F425C0 (was T_F425C0) -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
 T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
 ; Evidence: slot 0xF425CC is `jp 0xFE1C80`; prom_a 0xFE1C80 carries the label
@@ -93852,7 +93868,7 @@ sub_F44C15:
 ; sub_F44C37
 ; Called from: in-module: 0xF44C1E
 ; Touches: (0x0C05)
-; Calls:   sub_F45BD3 T_F413C8 T_F41F18 sub_F44B2D
+; Calls:   sub_F45BD3 T_PartNotes_ReleaseAllTrackNotes T_F41F18 sub_F44B2D
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44C37 is an instruction boundary.
 ;           The name IS the address.
@@ -93864,7 +93880,7 @@ sub_F44C37:
 	jr	z, sub_F44C37_Return	; F44C3B  jr Z,0xf44c50
 	ld	(3077:16), 0	; F44C3D  ld (0x0c05),0x00
 	calr	sub_F45BD3	; F44C42  calr 0xf45bd3
-	call	T_F413C8	; F44C45  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F44C45  call 0xf413c8
 	call	T_F41F18	; F44C49  call 0xf41f18
 	calr	sub_F44B2D	; F44C4D  calr 0xf44b2d
 sub_F44C37_Return:
@@ -93875,7 +93891,7 @@ sub_F44C37_Return:
 ; Called from: in-module: 0xF44A6B
 ; Touches: (0x207A) (0x3008) (0x349A) (0x34BB) (0x34D1) (0x34D2) (0x34D8)
 ;          (0x3550)
-; Calls:   T_F413C8 T_F41F18 sub_F44CA7 T_NoteRouting_RebuildForSong
+; Calls:   T_PartNotes_ReleaseAllTrackNotes T_F41F18 sub_F44CA7 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44C51 is an instruction boundary.
 ;           The name IS the address.
@@ -93888,7 +93904,7 @@ sub_F44C51:
 	m_and_mi8 MB16, 0x34d1, 0xbf	; F44C57  and (0x34d1),0xbf
 sub_F44C51_Skip:
 	m_and_mi8 MB16, 0x34d8, 0x7f	; F44C5C  and (0x34d8),0x7f
-	call	T_F413C8	; F44C61  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F44C61  call 0xf413c8
 	call	T_F41F18	; F44C65  call 0xf41f18
 	m_or_mi8 MB16, 0x34d2, 0x08	; F44C69  or (0x34d2),0x08
 	ld	xwa, (12296:16)	; F44C6E  ld XWA,(0x3008)
@@ -94132,7 +94148,7 @@ sub_F44E58:
 ; sub_F44E6B
 ; Called from: in-module: 0xF445E4 0xF44EED 0xF44F24 0xF44FC6 0xF44FFD
 ; Touches: (0x34D2)
-; Calls:   T_F413C8 T_F41F18 T_F40CB4 T_NoteRouting_RebuildForSong
+; Calls:   T_PartNotes_ReleaseAllTrackNotes T_F41F18 T_F40CB4 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44E6B is an instruction boundary.
 ;           The name IS the address.
@@ -94143,7 +94159,7 @@ sub_F44E6B:
 	m_bit 1, MD16, 0x34d2	; F44E6B  bit 1,(0x34d2)
 	jr	z, sub_F44E6B_Return	; F44E6F  jr Z,0xf44e8d
 	m_and_mi8 MB16, 0x34d2, 0xfd	; F44E71  and (0x34d2),0xfd
-	call	T_F413C8	; F44E76  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F44E76  call 0xf413c8
 	call	T_F41F18	; F44E7A  call 0xf41f18
 	xor	xwa, xwa	; F44E7E  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44E80  ld (0x60341e),XWA
@@ -98729,7 +98745,7 @@ sub_F4840E_Nop:
 ; Touches: (0x207A) (0x2095) (0x349A) (0x349C) (0x349F) (0x34D4) (0x3552)
 ;          (0x361E) (0x3622) (0x36C6) +2 more  |  0x003460 0x003482 0x00362A
 ;          0x00364C
-; Calls:   sub_F486D9 T_F40AB0 T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_F413C8
+; Calls:   sub_F486D9 T_F40AB0 T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_PartNotes_ReleaseAllTrackNotes
 ;          T_F41F18
 ; Evidence: thunk slot T_F40B5C holds `jp 0x00F48464`, and 0xF48464 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -98834,7 +98850,7 @@ sub_F48463_Skip5:
 	ld	xhl, 13442	; F48567  ld XHL,0x00003482
 	ldir83	; F4856C  ldir
 	call	T_Nop_CallsEmptyDirectorySlot_Veneer	; F4856E  call 0xf40a90
-	call	T_F413C8	; F48572  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F48572  call 0xf413c8
 	call	T_F41F18	; F48576  call 0xf41f18
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4857A  or (0x34d4),0x10
 	ret	; F4857F  ret
@@ -103295,7 +103311,7 @@ sub_F4AEEE_Return:
 ; sub_F4AF51
 ; Called from: T_F40BFC (x2)
 ; Touches: (0x2070) (0x2880) (0x3000) (0x36F2) (0x36F4)  |  0x000000
-; Calls:   T_SeqBufRing_Discard_Veneer T_F413C8 T_F41F18 sub_F4A6E7 sub_F4A813 sub_F4B433
+; Calls:   T_SeqBufRing_Discard_Veneer T_PartNotes_ReleaseAllTrackNotes T_F41F18 sub_F4A6E7 sub_F4A813 sub_F4B433
 ;          sub_F4B08B sub_F4A6CF sub_F4AB8A T_F40B68 sub_F4A90A T_F40B64 +2
 ;          more
 ; Evidence: thunk slot T_F40BFC holds `jp 0x00F4AF51`, and 0xF4AF51 is an
@@ -103310,7 +103326,7 @@ sub_F4AF51:		; <- T_F40BFC
 	cp	xwa, 0	; F4AF55  cp XWA,0x00000000
 	jrl	z, sub_F4AEEE_Return2	; F4AF5B  jrl Z,0xf4afd4
 	call	T_SeqBufRing_Discard_Veneer	; F4AF5E  call 0xf40a60
-	call	T_F413C8	; F4AF62  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F4AF62  call 0xf413c8
 	call	T_F41F18	; F4AF66  call 0xf41f18
 	bit	2, (TransportB_State:8)	; F4AF6A  bit 2,(0x96)
 	jr	nz, sub_F4AEEE_Skip2	; F4AF6D  jr NZ,0xf4af7d
@@ -113069,7 +113085,7 @@ SoftKeyCol1_DrawbarScreen:
 	or	(xix), a	; F5342E  or (XIX),A
 	push	0	; F53430  push 0x00
 	m_push MB16, 0x289c	; F53432  push (0x289c)
-	calr	sub_F540F3	; F53436  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F53436  calr 0xf540f3
 	lda	xbc, (Drawbar1_16ft_Update:24)	; F53439  lda XBC,0xf5394c
 	push	xbc	; F5343E  push XBC
 	call	T_CallbackQueue_Post	; F5343F  call 0xf42e84
@@ -113152,7 +113168,7 @@ SoftKeyCol2_DrawbarScreen:
 	or	(xix), a	; F53470  or (XIX),A
 	push	0	; F53472  push 0x00
 	m_push MB16, 0x289c	; F53474  push (0x289c)
-	calr	sub_F540F3	; F53478  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F53478  calr 0xf540f3
 	lda	xbc, (Drawbar2_5_1_3ft_Update:24)	; F5347B  lda XBC,0xf539c0
 	push	xbc	; F53480  push XBC
 	call	T_CallbackQueue_Post	; F53481  call 0xf42e84
@@ -113238,7 +113254,7 @@ SoftKeyCol3_DrawbarScreen:
 	or	(xix), a	; F534BB  or (XIX),A
 	push	0	; F534BD  push 0x00
 	m_push MB16, 0x289c	; F534BF  push (0x289c)
-	calr	sub_F540F3	; F534C3  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F534C3  calr 0xf540f3
 	lda	xbc, (Drawbar3_8ft_Update:24)	; F534C6  lda XBC,0xf53a34
 	push	xbc	; F534CB  push XBC
 	call	T_CallbackQueue_Post	; F534CC  call 0xf42e84
@@ -113324,7 +113340,7 @@ SoftKeyCol4_DrawbarScreen:
 	or	(xix), a	; F53506  or (XIX),A
 	push	0	; F53508  push 0x00
 	m_push MB16, 0x289c	; F5350A  push (0x289c)
-	calr	sub_F540F3	; F5350E  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F5350E  calr 0xf540f3
 	lda	xbc, (Drawbar4_4ft_Update:24)	; F53511  lda XBC,0xf53ac3
 	push	xbc	; F53516  push XBC
 	call	T_CallbackQueue_Post	; F53517  call 0xf42e84
@@ -113405,7 +113421,7 @@ SoftKeyCol5_DrawbarScreen:
 	or	(xix), a	; F53548  or (XIX),A
 	push	0	; F5354A  push 0x00
 	m_push MB16, 0x289c	; F5354C  push (0x289c)
-	calr	sub_F540F3	; F53550  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F53550  calr 0xf540f3
 	lda	xbc, (Drawbar5_2_2_3ft_Update:24)	; F53553  lda XBC,0xf53b52
 	push	xbc	; F53558  push XBC
 	call	T_CallbackQueue_Post	; F53559  call 0xf42e84
@@ -113489,7 +113505,7 @@ SoftKeyCol6_DrawbarScreen:
 	or	(xix), a	; F53593  or (XIX),A
 	push	0	; F53595  push 0x00
 	m_push MB16, 0x289c	; F53597  push (0x289c)
-	calr	sub_F540F3	; F5359B  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F5359B  calr 0xf540f3
 	lda	xbc, (Drawbar6_2ft_Update:24)	; F5359E  lda XBC,0xf53bc6
 	push	xbc	; F535A3  push XBC
 	call	T_CallbackQueue_Post	; F535A4  call 0xf42e84
@@ -113570,7 +113586,7 @@ SoftKeyCol7_DrawbarScreen:
 	or	(xix), a	; F535D5  or (XIX),A
 	push	0	; F535D7  push 0x00
 	m_push MB16, 0x289c	; F535D9  push (0x289c)
-	calr	sub_F540F3	; F535DD  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F535DD  calr 0xf540f3
 	lda	xbc, (Drawbar7_1_3_5ft_Update:24)	; F535E0  lda XBC,0xf53c55
 	push	xbc	; F535E5  push XBC
 	call	T_CallbackQueue_Post	; F535E6  call 0xf42e84
@@ -113654,7 +113670,7 @@ SoftKeyCol8_DrawbarScreen:
 	or	(xix), a	; F53620  or (XIX),A
 	push	0	; F53622  push 0x00
 	m_push MB16, 0x289c	; F53624  push (0x289c)
-	calr	sub_F540F3	; F53628  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F53628  calr 0xf540f3
 	lda	xbc, (Drawbar8_1_1_3ft_Update:24)	; F5362B  lda XBC,0xf53cc9
 	push	xbc	; F53630  push XBC
 	call	T_CallbackQueue_Post	; F53631  call 0xf42e84
@@ -113701,7 +113717,7 @@ PageKey_DrawbarScreen:
 	or	(xix), a	; F53662  or (XIX),A
 	push	0	; F53664  push 0x00
 	m_push MB16, 0x289c	; F53666  push (0x289c)
-	calr	sub_F540F3	; F5366A  calr 0xf540f3
+	calr	Drawbar_SendPartParams	; F5366A  calr 0xf540f3
 	lda	xbc, (Drawbar9_1ft_Update:24)	; F5366D  lda XBC,0xf53d58
 	push	xbc	; F53672  push XBC
 	call	T_CallbackQueue_Post	; F53673  call 0xf42e84
@@ -115107,7 +115123,7 @@ sub_F540C3:
 	ret	; F540F2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F540F3
+; Drawbar_SendPartParams
 ; Called from: call from 0xF53436, 0xF53478, 0xF534C3, 0xF5350E, 0xF53550,
 ;              0xF5359B, +3 more
 ; Evidence: 0xF540F3 is an instruction boundary of this transcription, re-
@@ -115116,7 +115132,10 @@ sub_F540C3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F540F3:
+; Drawbar_SendPartParams: (part), from the DRAWBAR screen's page and soft keys: [0xB0, part, 0x78, 0] over the link, then the seven bytes at
+;   0x2890.. as 6-byte messages [0x88, part, p, 0, value, 0] for p = 11, 12, 4, 5, 6, 7, 8, then T_PartNotes_ResoundOnToneGen
+;   (PartNotes_ResoundOnToneGen) with source 0xFF so that held notes sound again.
+Drawbar_SendPartParams:
 	link XIZ,0xfff6	; F540F3  link XIZ,0xfff6
 	pushw	hl	; F540F7  push HL
 	push	xix	; F540F8  push XIX
@@ -115174,7 +115193,7 @@ sub_F540F3_Loop2:
 	jr	ule, sub_F540F3_Loop2	; F5417E  jr ULE,0xf5415a
 	pushw	hl	; F54180  push HL
 	pushw	255	; F54181  push 0x00ff
-	call	T_F413D8	; F54184  call 0xf413d8
+	call	T_PartNotes_ResoundOnToneGen	; F54184  call 0xf413d8
 	pop	xbc	; F54188  pop XBC
 	pop	xix	; F54189  pop XIX
 	popw	hl	; F5418A  pop HL
@@ -122524,7 +122543,7 @@ sub_F57286_Skip6:
 ; ScreenLeave_CyclePlayEditScreen
 ; Called from: in-module: 0xF55886 0xF57414
 ; Touches: (0x207A) (0x207B) (0x3628)
-; Calls:   sub_F56579 T_F413C8 T_F41F18 T_NoteRouting_RebuildForSong
+; Calls:   sub_F56579 T_PartNotes_ReleaseAllTrackNotes T_F41F18 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57311 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -122541,7 +122560,7 @@ sub_F57311_Skip:
 	bit	2, (TransportB_State:8)	; F57322  bit 2,(0x96)
 	jr	z, sub_F57311_Skip2	; F57325  jr Z,0xf57332
 	calr	sub_F56579	; F57327  calr 0xf56579
-	call	T_F413C8	; F5732A  call 0xf413c8
+	call	T_PartNotes_ReleaseAllTrackNotes	; F5732A  call 0xf413c8
 	call	T_F41F18	; F5732E  call 0xf41f18
 sub_F57311_Skip2:
 	call	T_NoteRouting_RebuildForSong	; F57332  call 0xf411b8

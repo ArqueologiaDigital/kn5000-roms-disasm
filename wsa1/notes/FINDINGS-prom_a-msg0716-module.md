@@ -174,7 +174,7 @@ published by no slot at all.
 said T_MidiInA_ProcessRing and called it "the module's highest reference count". T_MidiInA_ProcessRing is
 the module's *first* slot and targets 0xFC80E2; T_F413D0 is the one that targets
 0xFC807D, and its bound is 1. The 52 that `--modules` ranks by is the module
-*total*; the busiest single slot is T_F413C8 at 11. The check script now pins
+*total*; the busiest single slot is T_PartNotes_ReleaseAllTrackNotes at 11. The check script now pins
 all three.
 
 **Nine-entry inline jump table at 0xFC8DB2**, count from the reader's own

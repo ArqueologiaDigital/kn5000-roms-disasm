@@ -77,7 +77,7 @@ ROWS = [
     ("FB9FE1", "MidiFileDirectPlay_Tick",
      "the same as SequencerMedley_MidiFileTick for screen 0x45 (no medley-source test)."),
     ("FB91C9", "MidiFilePlay_Stop",
-     "clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_F413C0, then clears the\n"
+     "clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_PartNotes_ReleaseAllReceivedMidiIn, then clears the\n"
      "position (0x605040) and (0x605044) / (0x605048).  Called by MidiFileDirectPlay_LcdKeyRow1, both ticks, and the leave."),
     ("FB991B", "MidiFilePlay_ClearPosition",
      "(0x605040) = 0: the 32-bit song position the ticks build as beat * 96 + tick."),
@@ -2113,6 +2113,63 @@ ROWS = [
      "(out, routing block, part): the tone-generator output (+0x02 and its +0x92 record, without the bit-5 test) and the\n"
      "recording track; MIDI OUT always 0xFF.  The MIDI IN processors' per-channel path: each part whose +0x22 is the\n"
      "frame's channel and whose record has bit 6 receives the frame."),
+    # the note core: all-notes-off per source, the tone-generator senders, test-mode notes (FINDINGS-prom_a-note-frames.md section 8)
+    ("FC8A8D", "PartNotes_ReleaseAllReceivedMidiIn",
+     "T_PartNotes_ReleaseAllReceivedMidiIn: for each channel 0..31, each part that receives on it (block +0x22 = the channel, record +0x152 bit 6)\n"
+     "releases its MIDI IN notes on it (PartNotes_BuildReleaseFrame, source 1, mask 7); the note-offs go to the tone\n"
+     "generator and the record buffer.  Six call sites, in MidiFilePlay_Stop, MainTask_PhaseVector,\n"
+     "Transport_StopAllRunning_SaveRegs2, LcdKeyRow1_SoundEditMemoryWrite, PartNotes_ReleaseReceivedOnScreenChange and Notes_ReleaseAllSources."),
+    ("FC8B36", "NoteList_ReleaseAllSource0",
+     "T_NoteList_ReleaseAllSource0: every note on source 0's note list becomes a note-off (NoteList_BuildReleaseAllFrame, source 0) and\n"
+     "leaves the list (NoteList_ApplyFrame); each part of the voice mask then takes it as a note frame does\n"
+     "(NoteFrame_SelectForPart, NoteRouting_ForPart, PartNotes_ApplyFrame, the three outputs).  In MIDI IN mode 1 the\n"
+     "note-offs also go out as one MIDI OUT frame.  Its entry +5 byte, which Ring601850_ProcessNoteEvents fills with\n"
+     "NoteRouting_ListChannel, is here the part loop's counter (XIZ-5) (0xFC8C61)."),
+    ("FC8CE0", "PartNotes_ReleaseAllTrackNotes",
+     "T_PartNotes_ReleaseAllTrackNotes: for each of the 16 tracks that has a part (BStore_TrackToPart), the track's notes on it (source 2,\n"
+     "channel key = the track) become note-offs (PartNotes_BuildReleaseFrame, mask 7) sent to the tone generator and\n"
+     "MIDI OUT.  Eleven callers through the slot, among them MainTask_PanelTimersTick and MainTask_PhaseVector."),
+    ("FCA738", "PartFrame_SendPolyToToneGen",
+     "(part, state, frame): each entry's tone-generator note (entry +3) goes over the link as [0x90 (| 8), part, note,\n"
+     "velocity (+4)] and makes the state 0xFF; a note of 0xA0 sends [0xB0, part, 0x78, 0] instead (state 0x80) and 0xFF\n"
+     "is skipped.  When the part's note list is empty after a note went out, [0xB0, part, 0x7B, 0] follows and the\n"
+     "state is 0x80.  A = the new state.  On screen 0xDA the part byte is SoundSel_Group | 0xF0.  Status bit 3 is set\n"
+     "when (0x7F02) & 0xF0 is 0x10 and the frame came by the note-list path (source 0, or source 1 in mode 2 or on\n"
+     "NoteRouting_ListChannel in mode 1); what it means on the link is not established."),
+    ("FCA8D4", "PartFrame_SendMonoToToneGen",
+     "(part, state, frame), for a part whose tone-generator record has bit 6: one note at a time, the one at the tail of\n"
+     "the part's note list (head +0x0D).  State 0x80 (silent): a note-on for it.  A different note sounding: its note-off\n"
+     "and the new note-on in one 8-byte block.  List empty: the sounding note's note-off and [0xB0, part, 0x7B, 0].\n"
+     "A = the note now sounding, or 0x80.  The status byte is built as in PartFrame_SendPolyToToneGen."),
+    ("FCA276", "PartNotes_CollectFrame",
+     "(frame with a source at +2 -- 0xFF any -- and a channel key at +3, outputs mask, part): PartNotes_BuildReleaseFrame\n"
+     "without the release: each of the part's notes from that source with that key is copied into the frame as it is,\n"
+     "and A has bit 0 / 1 / 2 when one still sounds on that output.  A node already released on all three returns to\n"
+     "the pool and to PartNote_Budget."),
+    ("FCB2F0", "PartNotes_ResoundOnToneGen",
+     "T_PartNotes_ResoundOnToneGen (source, part): the part's notes from the source keyed by the part (PartNotes_CollectFrame, mask 1).\n"
+     "When one sounds on the tone generator and the part plays tone-generator part = itself (block +0x02):\n"
+     "[0xB0, part, 0x7B, 0], bits 6-7 set in each entry's tone-generator velocity, the part's state (0x6020D4) = 0x80,\n"
+     "and the frame sent again (PartFrame_SendToToneGen).  What velocity bits 6-7 mean on the link is not established.\n"
+     "Its one caller is Drawbar_SendPartParams, with source 0xFF."),
+    ("F540F3", "Drawbar_SendPartParams",
+     "(part), from the DRAWBAR screen's page and soft keys: [0xB0, part, 0x78, 0] over the link, then the seven bytes at\n"
+     "0x2890.. as 6-byte messages [0x88, part, p, 0, value, 0] for p = 11, 12, 4, 5, 6, 7, 8, then T_PartNotes_ResoundOnToneGen\n"
+     "(PartNotes_ResoundOnToneGen) with source 0xFF so that held notes sound again."),
+    ("FC8FD7", "ToneGen_SendSoundSelNote",
+     "T_ToneGen_SendSoundSelNote (-, note, velocity): [0x90, SoundSel_Group | 0xF0, note, velocity] over the link\n"
+     "(T_Link_SendBlockIn32ByteChunks).  SineWaveCheck_ServiceSwitches plays notes 0x3C..0x3F with it, velocity 0x7F\n"
+     "while a switch is held and 0 on release."),
+    ("FC9016", "MidiOut_SendNote",
+     "T_MidiOut_SendNote (channel 0..31, note, velocity): the 3-byte message [0x90 | channel & 0x0F, note, velocity] on MIDI OUT A\n"
+     "(channels 0-15: Ring601432_PutBlock, MIDI_PostSendWork) or B (16-31: Ring60153C_PutBlock, _PortB), with\n"
+     "interrupts held at level 6.  SineWaveCheck_ServiceSwitches sends channel 0 with it."),
+    ("FE022E", "Notes_ReleaseAllSources",
+     "saves XDE / XHL / XIX / XIZ and releases every sounding note of the three sources: T_NoteList_ReleaseAllSource0,\n"
+     "T_PartNotes_ReleaseAllReceivedMidiIn, T_PartNotes_ReleaseAllTrackNotes.  Its caller is Notes_ReleaseAllSources_Call."),
+    ("F9565A", "PartNotes_ReleaseReceivedOnScreenChange",
+     "when UI_ScreenLatch differs from UI_ScreenLatch_Previous (the screen just changed): T_PartNotes_ReleaseAllReceivedMidiIn.\n"
+     "Called by Paint_SineWaveCheckMode and through its directory slot 0xF40160."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

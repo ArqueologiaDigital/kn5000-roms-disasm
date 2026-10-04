@@ -3424,7 +3424,7 @@ RENAMES = {
     "sub_FC5D87": "NoteRouting_QueueMidiInChanges",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FC6050": "NoteRouting_QueueMidiOutSchemeChange",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FC626B": "sub_FC61A6",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FCA7C1": "sub_FCA738",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FCA7C1": "PartFrame_SendPolyToToneGen",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FD0E49": "SoftKeyCol6_SoundEditModelingToneTemplate",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FD1221": "SoftKeyCol3_SoundEditToneLayerPanning",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FD173D": "SoftKeyCol3_SoundEditToneLayerVelocityLayer",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4274,6 +4274,29 @@ RENAMES = {
     "sub_FC8DE6_Nop": "NoteChange_Kind1_Nop",
     "sub_FC8E13_Nop": "NoteChange_PartToneGen_Nop",
     "T_F413D4": "T_NoteRouting_ApplyQueuedChanges",
+    "sub_FC8A8D": "PartNotes_ReleaseAllReceivedMidiIn",
+    "sub_FC8B36": "NoteList_ReleaseAllSource0",
+    "sub_FC8CE0": "PartNotes_ReleaseAllTrackNotes",
+    "sub_FCA738": "PartFrame_SendPolyToToneGen",
+    "sub_FCA8D4": "PartFrame_SendMonoToToneGen",
+    "sub_FCA276": "PartNotes_CollectFrame",
+    "sub_FCB2F0": "PartNotes_ResoundOnToneGen",
+    "sub_F540F3": "Drawbar_SendPartParams",
+    "sub_FC8FD7": "ToneGen_SendSoundSelNote",
+    "sub_FC9016": "MidiOut_SendNote",
+    "T_F413C0": "T_PartNotes_ReleaseAllReceivedMidiIn",
+    "T_F413C4": "T_NoteList_ReleaseAllSource0",
+    "T_F413C8": "T_PartNotes_ReleaseAllTrackNotes",
+    "T_F413D8": "T_PartNotes_ResoundOnToneGen",
+    "T_F413FC": "T_ToneGen_SendSoundSelNote",
+    "T_F41400": "T_MidiOut_SendNote",
+    "sub_FE0191": "PartNotes_ReleaseAllTrackNotes_SaveRegs",
+    "sub_FE022E": "Notes_ReleaseAllSources",
+    "sub_F9565A": "PartNotes_ReleaseReceivedOnScreenChange",
+    "T_F40160": "T_PartNotes_ReleaseReceivedOnScreenChange",
+    "sub_FE1719": "Notes_ReleaseAllSources_Call",
+    "sub_FE1C71": "Notes_ReleaseAllSources_Call_Call",
+    "T_F425C0": "T_Notes_ReleaseAllSources_Call_Call",
 }
 
 
