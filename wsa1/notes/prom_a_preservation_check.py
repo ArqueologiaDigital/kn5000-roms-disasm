@@ -4220,6 +4220,9 @@ RENAMES = {
     "sub_FCA6BB": "PartFrame_SendToToneGen",
     "sub_FCAA98": "PartFrame_SendToMidiOut",
     "sub_FCACAA": "PartFrame_RecordToSeqBuf",
+    "sub_FCAE76": "NoteRouting_ForPart",
+    "sub_FCB1BB": "NoteRouting_ForTrack",
+    "sub_FC9E46": "NoteList_BuildReleaseAllFrame",
 }
 
 

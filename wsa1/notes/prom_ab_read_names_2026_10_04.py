@@ -1925,9 +1925,9 @@ ROWS = [
     ("FC8448", "MidiInB_ProcessRing", "the same for MIDI IN B (T_MidiInBRing_ScanRewind, MidiInB_GatherFrame)."),
     ("FC8960", "TimedEvents_ProcessRing",
      "T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a\n"
-     "part through 0x603422 (0xFF = skip), then sub_FCB1BB, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path."),
+     "part through 0x603422 (0xFF = skip), then NoteRouting_ForTrack, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path."),
     ("FC87AE", "Ring601850_ProcessNoteEvents",
-     "T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,\n"
+     "T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, NoteRouting_ForPart,\n"
      "PartNotes_ApplyFrame, PartFrame_SendToToneGen."),
     ("FC915C", "MidiInA_GatherFrame",
      "(pending, frame): frame = {count, kind 0x90 / 0xB0, 1, channel, entries of 9 bytes from +7: note, velocity};\n"
@@ -1978,6 +1978,18 @@ ROWS = [
     ("FCACAA", "PartFrame_RecordToSeqBuf",
      "result bit 2: each entry as a 5-byte 0x90 event with Seq_BeatTick, staged at 0x602000 and put on SeqBufRing\n"
      "(SeqBuf_Flags bit 0 set)."),
+    ("FCAE76", "NoteRouting_ForPart",
+     "(out, routing block, part D): out+0 = the tone-generator part (block +2 + D) when it is not 0xFF, block +0x298\n"
+     "bit 9 is clear and the part's record (+0x92 + 6 D) has bit 5 (or 0x602498 bit 6), with out+3 = that record;\n"
+     "out+1 = the MIDI OUT channel (+0x22 + D) when its port is allowed (+0x293 bit 4 for 0..15, bit 3 for 16..31)\n"
+     "and the part's MIDI record (+0x152 + 10 D) has bit 5, with out+7 = that record; out+2 = the track whose +0x42\n"
+     "entry is D | 0x80, only while 0x602498 bit 7; each missing output 0xFF with the default record 0x602ACA."),
+    ("FCB1BB", "NoteRouting_ForTrack",
+     "(out, routing block, track): out+0 = the part the track feeds (+0x42 + track, low 5 bits), out+1 = its MIDI OUT\n"
+     "channel (+0x52 + track) when the port is allowed, out+2 = 0xFF (no recording) -- the timed-event path."),
+    ("FC9E46", "NoteList_BuildReleaseAllFrame",
+     "(frame with the source at +1): every node of that source's list copied into the frame with velocity 0 -- a\n"
+     "note-off for each sounding note; A = the low byte of their ORed voice masks."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

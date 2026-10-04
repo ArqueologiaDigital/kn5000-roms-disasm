@@ -118411,7 +118411,7 @@ sub_FC5420:
 	ld XBC,0x00000784                                    ; FC544E  41 84 07 00 00
 	and XBC,XBC                                          ; FC5453  e9 c1
 	jr z, .LFC5468                                       ; FC5455  66 11
-	lda xix, (0x602200:24)                               ; FC5457  f2 00 22 60 34
+	lda xix, (NoteRouting:24)                               ; FC5457  f2 00 22 60 34
 	ldw wa, 0xffff                                       ; FC545C  30 ff ff
 .LFC545F:
 	ld (xix+), a                                    ; FC545F  f5 f0 41
@@ -118429,7 +118429,7 @@ sub_FC546A:
 	m_res 7, MD16, 0x4c01                                ; FC5479  f1 01 4c b7
 	ld c, (0x4c22:24)                                   ; FC547D  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC5482  c2 21 4c 00 e3
-	ld (0x602200:24), c                                 ; FC5487  f2 00 22 60 43
+	ld (NoteRouting:24), c                                 ; FC5487  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC548C  23 04
 	m_mul MB16, PanelMode, 3                                ; FC548E  c1 78 20 43
 	extz XBC                                             ; FC5492  e9 12
@@ -118459,7 +118459,7 @@ sub_FC54C6:
 	call sub_FC61A6                                      ; FC54CB  1d a6 61 fc
 	ld c, (0x4c22:24)                                   ; FC54CF  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC54D4  c2 21 4c 00 e3
-	ld (0x602200:24), c                                 ; FC54D9  f2 00 22 60 43
+	ld (NoteRouting:24), c                                 ; FC54D9  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC54DE  23 04
 	m_mul MB16, PanelMode, 3                                ; FC54E0  c1 78 20 43
 	extz XBC                                             ; FC54E4  e9 12
@@ -118488,7 +118488,7 @@ sub_FC5518:
 	push XIX                                             ; FC551C  3c
 	ld c, (0x4c22:24)                                   ; FC551D  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC5522  c2 21 4c 00 e3
-	ld (0x602200:24), c                                 ; FC5527  f2 00 22 60 43
+	ld (NoteRouting:24), c                                 ; FC5527  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC552C  23 04
 	m_mul MB16, PanelMode, 3                                ; FC552E  c1 78 20 43
 	extz XBC                                             ; FC5532  e9 12
@@ -118524,7 +118524,7 @@ sub_FC5566:
 .LFC5581:
 	ld c, (0x4c22:24)                                   ; FC5581  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC5586  c2 21 4c 00 e3
-	ld (0x602200:24), c                                 ; FC558B  f2 00 22 60 43
+	ld (NoteRouting:24), c                                 ; FC558B  f2 00 22 60 43
 	ld c, 0x04:opc                                          ; FC5590  23 04
 	m_mul MB16, PanelMode, 3                                ; FC5592  c1 78 20 43
 	extz XBC                                             ; FC5596  e9 12
@@ -118583,7 +118583,7 @@ sub_FC55CA:
 	mul wa, h                                          ; FC561A  ce 41
 	extz XWA                                             ; FC561C  e8 12
 	add XWA,0x00000094                                   ; FC561E  e8 c8 94 00 00 00
-	add XWA,0x00602200                                   ; FC5624  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FC5624  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC562A  b0 61
 	ld xbc, (xiz-8)                                      ; FC562C  ae f8 21
 	ld XIX,XBC                                           ; FC562F  e9 8c
@@ -118592,13 +118592,13 @@ sub_FC55CA:
 	extz XWA                                             ; FC5635  e8 12
 	ld (xiz-16), xwa                                     ; FC5637  be f0 60
 	add XWA,0x00000154                                   ; FC563A  e8 c8 54 01 00 00
-	add XWA,0x00602200                                   ; FC5640  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FC5640  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC5646  b0 61
 	ld xbc, (xiz-4)                                      ; FC5648  ae fc 21
 	ld XIX,XBC                                           ; FC564B  e9 8c
 	ld xwa, (xiz-16)                                     ; FC564D  ae f0 20
 	add XWA,0x00000158                                   ; FC5650  e8 c8 58 01 00 00
-	add XWA,0x00602200                                   ; FC5656  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FC5656  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC565C  b0 61
 	m_set 7, MD16, 0x4c05                                ; FC565E  f1 05 4c bf
 	inc 6,XSP                                            ; FC5662  ef 66
@@ -118614,7 +118614,7 @@ sub_FC55CA:
 	extz BC                                              ; FC567C  d9 12
 	extz XBC                                             ; FC567E  e9 12
 	add XBC,0x00000022                                   ; FC5680  e9 c8 22 00 00 00
-	add XBC,0x00602200                                   ; FC5686  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC5686  e9 c8 00 22 60 00
 	ld a, (xiz-14)                                       ; FC568C  8e f2 21
 	ld (XBC),A                                           ; FC568F  b1 41
 	pushw hl                                             ; FC5691  2b
@@ -118628,13 +118628,13 @@ sub_FC55CA:
 	extz XWA                                             ; FC56A3  e8 12
 	ld (xiz-18), xwa                                     ; FC56A5  be ee 60
 	add XWA,0x00000154                                   ; FC56A8  e8 c8 54 01 00 00
-	add XWA,0x00602200                                   ; FC56AE  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FC56AE  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC56B4  b0 61
 	ld xbc, (xiz-4)                                      ; FC56B6  ae fc 21
 	ld XIX,XBC                                           ; FC56B9  e9 8c
 	ld xwa, (xiz-18)                                     ; FC56BB  ae ee 20
 	add XWA,0x00000158                                   ; FC56BE  e8 c8 58 01 00 00
-	add XWA,0x00602200                                   ; FC56C4  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FC56C4  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC56CA  b0 61
 	ld BC,DE                                             ; FC56CC  da 89
 	or	(0x4c04:16), bc                      ; FC56CE  d1 04 4c e9
@@ -118650,7 +118650,7 @@ sub_FC55CA:
 	mul bc, h                                          ; FC56E8  ce 43
 	extz XBC                                             ; FC56EA  e9 12
 	add XBC,0x00000092                                   ; FC56EC  e9 c8 92 00 00 00
-	add XBC,0x00602200                                   ; FC56F2  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC56F2  e9 c8 00 22 60 00
 	res 5,(XBC)                                          ; FC56F8  b1 b5
 	cp h, 0x07:i3                                          ; FC56FA  ce df
 	jr ugt, .LFC5740                                     ; FC56FC  6b 42
@@ -118667,7 +118667,7 @@ sub_FC55CA:
 	mul bc, h                                          ; FC5717  ce 43
 	extz XBC                                             ; FC5719  e9 12
 	add XBC,0x00000092                                   ; FC571B  e9 c8 92 00 00 00
-	add XBC,0x00602200                                   ; FC5721  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC5721  e9 c8 00 22 60 00
 	set 5,(XBC)                                          ; FC5727  b1 bd
 	cp h, 0x07:i3                                          ; FC5729  ce df
 	jr ugt, .LFC5740                                     ; FC572B  6b 13
@@ -118690,7 +118690,7 @@ sub_FC55CA:
 	mul bc, h                                          ; FC575A  ce 43
 	extz XBC                                             ; FC575C  e9 12
 	add XBC,0x00000152                                   ; FC575E  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC5764  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC5764  e9 c8 00 22 60 00
 	res 5,(XBC)                                          ; FC576A  b1 b5
 	cp h, 0x07:i3                                          ; FC576C  ce df
 	jr ugt, .LFC57B2                                     ; FC576E  6b 42
@@ -118707,7 +118707,7 @@ sub_FC55CA:
 	mul bc, h                                          ; FC5789  ce 43
 	extz XBC                                             ; FC578B  e9 12
 	add XBC,0x00000152                                   ; FC578D  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC5793  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC5793  e9 c8 00 22 60 00
 	set 5,(XBC)                                          ; FC5799  b1 bd
 	cp h, 0x07:i3                                          ; FC579B  ce df
 	jr ugt, .LFC57B2                                     ; FC579D  6b 13
@@ -118729,7 +118729,7 @@ sub_FC55CA:
 	extz XBC                                             ; FC57C5  e9 12
 	add XBC,0x00000152                                   ; FC57C7  e9 c8 52 01 00 00
 	ld XIX,XBC                                           ; FC57CD  e9 8c
-	add XIX,0x00602200                                   ; FC57CF  ec c8 00 22 60 00
+	add XIX,NoteRouting                                   ; FC57CF  ec c8 00 22 60 00
 	ld c, (UiEvent_Byte2:16)                                   ; FC57D5  c1 b9 20 23
 	and C,0x80                                           ; FC57D9  cb cc 80
 	jr z, .LFC57E2                                       ; FC57DC  66 04
@@ -118787,7 +118787,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC5854  ce 43
 	extz XBC                                             ; FC5856  e9 12
 	add XBC,0x00000093                                   ; FC5858  e9 c8 93 00 00 00
-	add XBC,0x00602200                                   ; FC585E  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC585E  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC5864  b1 45
 	jrl .LFC5964                                         ; FC5866  78 fb 00
 .LFC5869:
@@ -118801,7 +118801,7 @@ sub_FC57F0:
 	extz XBC                                             ; FC587A  e9 12
 	add XBC,0x00000092                                   ; FC587C  e9 c8 92 00 00 00
 	ld XIX,XBC                                           ; FC5882  e9 8c
-	add XIX,0x00602200                                   ; FC5884  ec c8 00 22 60 00
+	add XIX,NoteRouting                                   ; FC5884  ec c8 00 22 60 00
 	cp e, 0x01:i3                                          ; FC588A  cd d9
 	jr nz, .LFC5893                                      ; FC588C  6e 05
 	set 6,(XIX)                                          ; FC588E  b4 be
@@ -118822,7 +118822,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC58AE  ce 43
 	extz XBC                                             ; FC58B0  e9 12
 	add XBC,0x00000064                                   ; FC58B2  e9 c8 64 00 00 00
-	add XBC,0x00602200                                   ; FC58B8  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC58B8  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC58BE  b1 45
 	jrl .LFC5964                                         ; FC58C0  78 a1 00
 .LFC58C3:
@@ -118838,7 +118838,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC58D9  ce 43
 	extz XBC                                             ; FC58DB  e9 12
 	add XBC,0x00000063                                   ; FC58DD  e9 c8 63 00 00 00
-	add XBC,0x00602200                                   ; FC58E3  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC58E3  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC58E9  b1 45
 	jrl .LFC5964                                         ; FC58EB  78 76 00
 .LFC58EE:
@@ -118854,7 +118854,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC5903  ce 43
 	extz XBC                                             ; FC5905  e9 12
 	add XBC,0x00000066                                   ; FC5907  e9 c8 66 00 00 00
-	add XBC,0x00602200                                   ; FC590D  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC590D  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC5913  b1 45
 	jr .LFC5964                                          ; FC5915  68 4d
 .LFC5917:
@@ -118870,7 +118870,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC592B  ce 43
 	extz XBC                                             ; FC592D  e9 12
 	add XBC,0x00000065                                   ; FC592F  e9 c8 65 00 00 00
-	add XBC,0x00602200                                   ; FC5935  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC5935  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC593B  b1 45
 	jr .LFC5964                                          ; FC593D  68 25
 .LFC593F:
@@ -118885,7 +118885,7 @@ sub_FC57F0:
 	mul bc, h                                          ; FC5952  ce 43
 	extz XBC                                             ; FC5954  e9 12
 	add XBC,0x00000153                                   ; FC5956  e9 c8 53 01 00 00
-	add XBC,0x00602200                                   ; FC595C  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC595C  e9 c8 00 22 60 00
 	ld (XBC),E                                           ; FC5962  b1 45
 .LFC5964:
 	m_set 7, MD16, 0x4c05                                ; FC5964  f1 05 4c bf
@@ -118902,7 +118902,7 @@ T_F411CC_Nop:
 	ret                                                  ; FC596E  0e
 sub_FC596F:
 	push XIX                                             ; FC596F  3c
-	lda xix, (0x602200:24)                               ; FC5970  f2 00 22 60 34
+	lda xix, (NoteRouting:24)                               ; FC5970  f2 00 22 60 34
 	ld bc, (UiEvent_Byte1:16)                                 ; FC5975  d1 b8 20 21
 	extz BC                                              ; FC5979  d9 12
 	cp bc, 0x00:i3                                         ; FC597B  d9 d8
@@ -118929,7 +118929,7 @@ sub_FC59AC:
 	pushw hl                                             ; FC59AC  2b
 	pushw de                                             ; FC59AD  2a
 	push XIX                                             ; FC59AE  3c
-	lda xix, (0x602200:24)                               ; FC59AF  f2 00 22 60 34
+	lda xix, (NoteRouting:24)                               ; FC59AF  f2 00 22 60 34
 	ldw de, 0x8020                                       ; FC59B4  32 20 80
 	ld l, (UiEvent_Byte2:16)                                   ; FC59B7  c1 b9 20 27
 	ld h, (UiEvent_Byte3:16)                                   ; FC59BB  c1 ba 20 26
@@ -119101,7 +119101,7 @@ sub_FC5B26:
 	pushw hl                                             ; FC5B26  2b
 	pushw de                                             ; FC5B27  2a
 	push XIX                                             ; FC5B28  3c
-	lda xix, (0x602200:24)                               ; FC5B29  f2 00 22 60 34
+	lda xix, (NoteRouting:24)                               ; FC5B29  f2 00 22 60 34
 	ld DE,(XIX+0x0298)                                   ; FC5B2E  d3 f1 98 02 22
 	ld BC,DE                                             ; FC5B33  da 89
 	and BC,0x0010                                        ; FC5B35  d9 cc 10 00
@@ -119273,7 +119273,7 @@ sub_FC5C7C:
 	call T_F413D4                                        ; FC5CBF  1d d4 13 f4
 	push XIX                                             ; FC5CC3  3c
 	ldw bc, 0x014d                                       ; FC5CC4  31 4d 01
-	lda xiy, (0x602200:24)                               ; FC5CC7  f2 00 22 60 35
+	lda xiy, (NoteRouting:24)                               ; FC5CC7  f2 00 22 60 35
 	lda xix, (0x602600:24)                               ; FC5CCC  f2 00 26 60 34
 	ldirw                                                ; FC5CD1  95 11
 	pop XIX                                              ; FC5CD3  5c
@@ -119452,7 +119452,7 @@ sub_FC5D30:
 	lda xbc, (0x602600:24)                               ; FC5E82  f2 00 26 60 31
 	add XBC,XIX                                          ; FC5E87  ec 81
 	ld D,(XBC)                                           ; FC5E89  81 24
-	lda xbc, (0x602200:24)                               ; FC5E8B  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5E8B  f2 00 22 60 31
 	add XBC,XIX                                          ; FC5E90  ec 81
 	ld L,(XBC)                                           ; FC5E92  81 27
 	ld (xiz-8), xix                                      ; FC5E94  be f8 64
@@ -119465,7 +119465,7 @@ sub_FC5D30:
 	pushw hl                                             ; FC5EA6  2b
 	jr .LFC5EF5                                          ; FC5EA7  68 4c
 .LFC5EA9:
-	lda xbc, (0x602200:24)                               ; FC5EA9  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5EA9  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf8, r1                            ; FC5EAE  ae f8 81
 	ld A,(XBC)                                           ; FC5EB1  81 21
 	cp A,0xff                                            ; FC5EB3  c9 cf ff
@@ -119478,14 +119478,14 @@ sub_FC5D30:
 	and A,0x40                                           ; FC5ECC  c9 cc 40
 	srl a, 0x06                                          ; FC5ECF  c9 ef 06
 	ld L,A                                               ; FC5ED2  c9 8f
-	lda xbc, (0x602200:24)                               ; FC5ED4  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5ED4  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf4, r1                            ; FC5ED9  ae f4 81
 	ld W,(XBC)                                           ; FC5EDC  81 20
 	and W,0x40                                           ; FC5EDE  c8 cc 40
 	srl w, 0x06                                          ; FC5EE1  c8 ef 06
 	cp W,A                                               ; FC5EE4  c9 f0
 	jr z, .LFC5F01                                       ; FC5EE6  66 19
-	lda xbc, (0x602200:24)                               ; FC5EE8  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5EE8  f2 00 22 60 31
 	add XBC,XIX                                          ; FC5EED  ec 81
 	ld A,(XBC)                                           ; FC5EEF  81 21
 	pushw wa                                             ; FC5EF1  28
@@ -119526,7 +119526,7 @@ sub_FC5F19:
 	m_add_rm MLD+r6, 0xfc, r1                            ; FC5F3F  ae fc 81
 	ld H,(XBC)                                           ; FC5F42  81 26
 	and H,0x1f                                           ; FC5F44  ce cc 1f
-	lda xbc, (0x602200:24)                               ; FC5F47  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5F47  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xfc, r1                            ; FC5F4C  ae fc 81
 	ld L,(XBC)                                           ; FC5F4F  81 27
 	and L,0x1f                                           ; FC5F51  cf cc 1f
@@ -119545,7 +119545,7 @@ sub_FC5F19:
 	add XBC,XIX                                          ; FC5F6E  ec 81
 	ld H,(XBC)                                           ; FC5F70  81 26
 	and H,0x1f                                           ; FC5F72  ce cc 1f
-	lda xbc, (0x602200:24)                               ; FC5F75  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC5F75  f2 00 22 60 31
 	add XBC,XIX                                          ; FC5F7A  ec 81
 	ld L,(XBC)                                           ; FC5F7C  81 27
 	and L,0x1f                                           ; FC5F7E  cf cc 1f
@@ -119630,7 +119630,7 @@ sub_FC5FAC:
 	lda xbc, (0x602600:24)                               ; FC6031  f2 00 26 60 31
 	add XBC,XIX                                          ; FC6036  ec 81
 	ld L,(XBC)                                           ; FC6038  81 27
-	lda xbc, (0x602200:24)                               ; FC603A  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC603A  f2 00 22 60 31
 	add XBC,XIX                                          ; FC603F  ec 81
 	ld D,(XBC)                                           ; FC6041  81 24
 	cp D,L                                               ; FC6043  cf f4
@@ -119667,7 +119667,7 @@ sub_FC6065:
 	lda xbc, (0x602600:24)                               ; FC6078  f2 00 26 60 31
 	add XBC,XIX                                          ; FC607D  ec 81
 	ld D,(XBC)                                           ; FC607F  81 24
-	lda xbc, (0x602200:24)                               ; FC6081  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC6081  f2 00 22 60 31
 	add XBC,XIX                                          ; FC6086  ec 81
 	ld L,(XBC)                                           ; FC6088  81 27
 	ld (xiz-8), xix                                      ; FC608A  be f8 64
@@ -119680,7 +119680,7 @@ sub_FC6065:
 	pushw hl                                             ; FC609C  2b
 	jr .LFC60EB                                          ; FC609D  68 4c
 .LFC609F:
-	lda xbc, (0x602200:24)                               ; FC609F  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC609F  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf8, r1                            ; FC60A4  ae f8 81
 	ld A,(XBC)                                           ; FC60A7  81 21
 	cp A,0xff                                            ; FC60A9  c9 cf ff
@@ -119693,14 +119693,14 @@ sub_FC6065:
 	and A,0x20                                           ; FC60C2  c9 cc 20
 	srl a, 0x05                                          ; FC60C5  c9 ef 05
 	ld L,A                                               ; FC60C8  c9 8f
-	lda xbc, (0x602200:24)                               ; FC60CA  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC60CA  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf4, r1                            ; FC60CF  ae f4 81
 	ld W,(XBC)                                           ; FC60D2  81 20
 	and W,0x20                                           ; FC60D4  c8 cc 20
 	srl w, 0x05                                          ; FC60D7  c8 ef 05
 	cp W,A                                               ; FC60DA  c9 f0
 	jr z, .LFC60F7                                       ; FC60DC  66 19
-	lda xbc, (0x602200:24)                               ; FC60DE  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC60DE  f2 00 22 60 31
 	add XBC,XIX                                          ; FC60E3  ec 81
 	ld A,(XBC)                                           ; FC60E5  81 21
 	pushw wa                                             ; FC60E7  28
@@ -119734,7 +119734,7 @@ sub_FC610F:
 	add XBC,XIX                                          ; FC611E  ec 81
 	ld L,(XBC)                                           ; FC6120  81 27
 	and L,0x1f                                           ; FC6122  cf cc 1f
-	lda xbc, (0x602200:24)                               ; FC6125  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC6125  f2 00 22 60 31
 	add XBC,XIX                                          ; FC612A  ec 81
 	ld D,(XBC)                                           ; FC612C  81 24
 	and D,0x1f                                           ; FC612E  cc cc 1f
@@ -119769,7 +119769,7 @@ sub_FC6153:
 	ld h, (0x602201:24)                                 ; FC6166  c2 01 22 60 26
 	cp H,0xff                                            ; FC616B  ce cf ff
 	jr nz, .LFC617D                                      ; FC616E  6e 0d
-	ld c, (0x602200:24)                                 ; FC6170  c2 00 22 60 23
+	ld c, (NoteRouting:24)                                 ; FC6170  c2 00 22 60 23
 	extz BC                                              ; FC6175  d9 12
 	extz XBC                                             ; FC6177  e9 12
 	ld (XIX),XBC                                         ; FC6179  b4 61
@@ -119873,10 +119873,10 @@ sub_FC61A6:
 ;  notes/prom_a_stray_label_removal.py)
 	jr nz, .LFC6286                                      ; FC626B  6e 19
 .LFC626D:
-	lda xbc, (0x602200:24)                               ; FC626D  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC626D  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC6272  ae f6 81
 	ld (XBC),0xff                                        ; FC6275  b1 00 ff
-	lda xbc, (0x602200:24)                               ; FC6278  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC6278  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xfa, r1                            ; FC627D  ae fa 81
 	ld (XBC),0xff                                        ; FC6280  b1 00 ff
 	jrl .LFC6343                                         ; FC6283  78 bd 00
@@ -119905,16 +119905,16 @@ sub_FC61A6:
 	extz XBC                                             ; FC62BA  e9 12
 	add XBC,Bytes_00_to_1F_FC64A5                        ; FC62BC  e9 c8 a5 64 fc 00
 	ld A,(XBC)                                           ; FC62C2  81 21
-	lda xbc, (0x602200:24)                               ; FC62C4  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC62C4  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC62C9  ae f6 81
 	ld (XBC),A                                           ; FC62CC  b1 41
 	jr .LFC62DB                                          ; FC62CE  68 0b
 .LFC62D0:
-	lda xbc, (0x602200:24)                               ; FC62D0  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC62D0  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC62D5  ae f6 81
 	ld (XBC),0xff                                        ; FC62D8  b1 00 ff
 .LFC62DB:
-	lda xbc, (0x602200:24)                               ; FC62DB  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC62DB  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xfa, r1                            ; FC62E0  ae fa 81
 	ld a, (xiz-1)                                        ; FC62E3  8e ff 21
 	ld (XBC),A                                           ; FC62E6  b1 41
@@ -119947,7 +119947,7 @@ sub_FC61A6:
 	add XBC,Bytes_00_to_1F_FC64A5                        ; FC632E  e9 c8 a5 64 fc 00
 	ld A,(XBC)                                           ; FC6334  81 21
 	set 0x07,A                                           ; FC6336  c9 31 07
-	lda xbc, (0x602200:24)                               ; FC6339  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC6339  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC633E  ae f6 81
 	ld (XBC),A                                           ; FC6341  b1 41
 .LFC6343:
@@ -119998,45 +119998,45 @@ sub_FC6393:
 	ld (xiz-12), xbc                                     ; FC63AD  be f4 61
 	ld (xiz-16), xbc                                     ; FC63B0  be f0 61
 	add XBC,0x00000092                                   ; FC63B3  e9 c8 92 00 00 00
-	add XBC,0x00602200                                   ; FC63B9  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC63B9  e9 c8 00 22 60 00
 	ld (xiz-20), xbc                                     ; FC63BF  be ec 61
 	res 7,(XBC)                                          ; FC63C2  b1 b7
 	res 6,(XBC)                                          ; FC63C4  b1 b6
 	ld xbc, (xiz-16)                                     ; FC63C6  ae f0 21
 	add XBC,0x00000093                                   ; FC63C9  e9 c8 93 00 00 00
-	add XBC,0x00602200                                   ; FC63CF  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC63CF  e9 c8 00 22 60 00
 	ld (XBC),0x00                                        ; FC63D5  b1 00 00
 	ld xbc, (xiz-16)                                     ; FC63D8  ae f0 21
 	add XBC,0x00000094                                   ; FC63DB  e9 c8 94 00 00 00
-	add XBC,0x00602200                                   ; FC63E1  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC63E1  e9 c8 00 22 60 00
 	lda xwa, (0x602aca:24)                               ; FC63E7  f2 ca 2a 60 30
 	ld (XBC),XWA                                         ; FC63EC  b1 60
 	ld xbc, (xiz-4)                                      ; FC63EE  ae fc 21
 	ld (xiz-24), xbc                                     ; FC63F1  be e8 61
 	ld (xiz-28), xbc                                     ; FC63F4  be e4 61
 	add XBC,0x00000152                                   ; FC63F7  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC63FD  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC63FD  e9 c8 00 22 60 00
 	ld (xiz-32), xbc                                     ; FC6403  be e0 61
 	res 7,(XBC)                                          ; FC6406  b1 b7
 	set 6,(XBC)                                          ; FC6408  b1 be
 	set 5,(XBC)                                          ; FC640A  b1 bd
 	ld xbc, (xiz-28)                                     ; FC640C  ae e4 21
 	add XBC,0x00000153                                   ; FC640F  e9 c8 53 01 00 00
-	add XBC,0x00602200                                   ; FC6415  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC6415  e9 c8 00 22 60 00
 	ld (XBC),0x00                                        ; FC641B  b1 00 00
 	ld xbc, (xiz-28)                                     ; FC641E  ae e4 21
 	add XBC,0x00000154                                   ; FC6421  e9 c8 54 01 00 00
-	add XBC,0x00602200                                   ; FC6427  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC6427  e9 c8 00 22 60 00
 	lda xwa, (0x602aca:24)                               ; FC642D  f2 ca 2a 60 30
 	ld (XBC),XWA                                         ; FC6432  b1 60
 	ld xbc, (xiz-28)                                     ; FC6434  ae e4 21
 	add XBC,0x00000158                                   ; FC6437  e9 c8 58 01 00 00
-	add XBC,0x00602200                                   ; FC643D  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC643D  e9 c8 00 22 60 00
 	lda xwa, (0x602aca:24)                               ; FC6443  f2 ca 2a 60 30
 	ld (XBC),XWA                                         ; FC6448  b1 60
 	ld L,H                                               ; FC644A  ce 8f
 	ld (xiz-36), xix                                     ; FC644C  be dc 64
-	lda xbc, (0x602200:24)                               ; FC644F  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC644F  f2 00 22 60 31
 	m_add_rm MLD+r6, 0xdc, r1                            ; FC6454  ae dc 81
 	ld (XBC),L                                           ; FC6457  b1 47
 	ld xbc, (xiz-12)                                     ; FC6459  ae f4 21
@@ -120598,7 +120598,7 @@ MidiInA_ProcessRing:
 	lda xwa, (xiz-302)                                   ; FC814F  f3 f9 d2 fe 30
 	push XWA                                             ; FC8154  38
 	call MidiFrame_ToNoteFrame                                      ; FC8155  1d 69 b2 fc
-	lda xbc, (0x602200:24)                               ; FC8159  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8159  f2 00 22 60 31
 	push XBC                                             ; FC815E  39
 	lda xwa, (xiz-416)                                   ; FC815F  f3 f9 60 fe 30
 	push XWA                                             ; FC8164  38
@@ -120615,7 +120615,7 @@ MidiInA_ProcessRing:
 	jrl z, .LFC8210                                      ; FC817E  76 8f 00
 	push 0x00                                            ; FC8181  09 00
 	push D                                               ; FC8183  cc 04
-	lda xbc, (0x602200:24)                               ; FC8185  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8185  f2 00 22 60 31
 	push XBC                                             ; FC818A  39
 	lda xwa, (xiz-416)                                   ; FC818B  f3 f9 60 fe 30
 	push XWA                                             ; FC8190  38
@@ -120628,7 +120628,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC8210                                       ; FC81A1  66 6d
 	push 0x00                                            ; FC81A3  09 00
 	push D                                               ; FC81A5  cc 04
-	lda xbc, (0x602200:24)                               ; FC81A7  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC81A7  f2 00 22 60 31
 	push XBC                                             ; FC81AC  39
 	lda xwa, (xiz-724)                                   ; FC81AD  f3 f9 2c fd 30
 	push XWA                                             ; FC81B2  38
@@ -120680,7 +120680,7 @@ MidiInA_ProcessRing:
 	ld XIX,0x00000022                                    ; FC8224  44 22 00 00 00
 	ldw hl, 0x00                                         ; FC8229  33 00 00
 .LFC822C:
-	lda xbc, (0x602200:24)                               ; FC822C  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC822C  f2 00 22 60 31
 	add XBC,XIX                                          ; FC8231  ec 81
 	ld E,(XBC)                                           ; FC8233  81 25
 	ld a, (xiz-299)                                      ; FC8235  c3 f9 d5 fe 21
@@ -120689,12 +120689,12 @@ MidiInA_ProcessRing:
 	ld BC,HL                                             ; FC823E  db 89
 	extz XBC                                             ; FC8240  e9 12
 	add XBC,0x00000152                                   ; FC8242  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC8248  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC8248  e9 c8 00 22 60 00
 	bit 6,(XBC)                                          ; FC824E  b1 ce
 	jr z, .LFC82A6                                       ; FC8250  66 54
 	push 0x00                                            ; FC8252  09 00
 	push D                                               ; FC8254  cc 04
-	lda xbc, (0x602200:24)                               ; FC8256  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8256  f2 00 22 60 31
 	push XBC                                             ; FC825B  39
 	lda xwa, (xiz-724)                                   ; FC825C  f3 f9 2c fd 30
 	push XWA                                             ; FC8261  38
@@ -120754,7 +120754,7 @@ MidiInA_ProcessRing:
 	call MidiFrame_ToNoteFrame                                      ; FC82F0  1d 69 b2 fc
 	lda xbc, (xiz-416)                                   ; FC82F4  f3 f9 60 fe 31
 	push XBC                                             ; FC82F9  39
-	call sub_FC9E46                                      ; FC82FA  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC82FA  1d 46 9e fc
 	extz WA                                              ; FC82FE  d8 12
 	extz XWA                                             ; FC8300  e8 12
 	ld XIX,XWA                                           ; FC8302  e8 8c
@@ -120769,7 +120769,7 @@ MidiInA_ProcessRing:
 	jrl z, .LFC83A9                                      ; FC8317  76 8f 00
 	push 0x00                                            ; FC831A  09 00
 	push D                                               ; FC831C  cc 04
-	lda xbc, (0x602200:24)                               ; FC831E  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC831E  f2 00 22 60 31
 	push XBC                                             ; FC8323  39
 	lda xwa, (xiz-416)                                   ; FC8324  f3 f9 60 fe 30
 	push XWA                                             ; FC8329  38
@@ -120782,7 +120782,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC83A9                                       ; FC833A  66 6d
 	push 0x00                                            ; FC833C  09 00
 	push D                                               ; FC833E  cc 04
-	lda xbc, (0x602200:24)                               ; FC8340  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8340  f2 00 22 60 31
 	push XBC                                             ; FC8345  39
 	lda xwa, (xiz-724)                                   ; FC8346  f3 f9 2c fd 30
 	push XWA                                             ; FC834B  38
@@ -120835,7 +120835,7 @@ MidiInA_ProcessRing:
 	ld XIX,0x00000022                                    ; FC83C3  44 22 00 00 00
 	ldw hl, 0x00                                         ; FC83C8  33 00 00
 .LFC83CB:
-	lda xbc, (0x602200:24)                               ; FC83CB  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC83CB  f2 00 22 60 31
 	add XBC,XIX                                          ; FC83D0  ec 81
 	ld E,(XBC)                                           ; FC83D2  81 25
 	ld a, (xiz-299)                                      ; FC83D4  c3 f9 d5 fe 21
@@ -120844,7 +120844,7 @@ MidiInA_ProcessRing:
 	ld BC,HL                                             ; FC83DD  db 89
 	extz XBC                                             ; FC83DF  e9 12
 	add XBC,0x00000152                                   ; FC83E1  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC83E7  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC83E7  e9 c8 00 22 60 00
 	bit 6,(XBC)                                          ; FC83ED  b1 ce
 	jr z, .LFC842C                                       ; FC83EF  66 3b
 	push 0x00                                            ; FC83F1  09 00
@@ -120931,7 +120931,7 @@ MidiInB_ProcessRing:
 	lda xwa, (xiz-302)                                   ; FC84B5  f3 f9 d2 fe 30
 	push XWA                                             ; FC84BA  38
 	call MidiFrame_ToNoteFrame                                      ; FC84BB  1d 69 b2 fc
-	lda xbc, (0x602200:24)                               ; FC84BF  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC84BF  f2 00 22 60 31
 	push XBC                                             ; FC84C4  39
 	lda xwa, (xiz-416)                                   ; FC84C5  f3 f9 60 fe 30
 	push XWA                                             ; FC84CA  38
@@ -120948,7 +120948,7 @@ MidiInB_ProcessRing:
 	jrl z, .LFC8576                                      ; FC84E4  76 8f 00
 	push 0x00                                            ; FC84E7  09 00
 	push D                                               ; FC84E9  cc 04
-	lda xbc, (0x602200:24)                               ; FC84EB  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC84EB  f2 00 22 60 31
 	push XBC                                             ; FC84F0  39
 	lda xwa, (xiz-416)                                   ; FC84F1  f3 f9 60 fe 30
 	push XWA                                             ; FC84F6  38
@@ -120961,7 +120961,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC8576                                       ; FC8507  66 6d
 	push 0x00                                            ; FC8509  09 00
 	push D                                               ; FC850B  cc 04
-	lda xbc, (0x602200:24)                               ; FC850D  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC850D  f2 00 22 60 31
 	push XBC                                             ; FC8512  39
 	lda xwa, (xiz-724)                                   ; FC8513  f3 f9 2c fd 30
 	push XWA                                             ; FC8518  38
@@ -121013,7 +121013,7 @@ MidiInB_ProcessRing:
 	ld XIX,0x00000022                                    ; FC858A  44 22 00 00 00
 	ldw hl, 0x00                                         ; FC858F  33 00 00
 .LFC8592:
-	lda xbc, (0x602200:24)                               ; FC8592  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8592  f2 00 22 60 31
 	add XBC,XIX                                          ; FC8597  ec 81
 	ld E,(XBC)                                           ; FC8599  81 25
 	ld a, (xiz-299)                                      ; FC859B  c3 f9 d5 fe 21
@@ -121022,12 +121022,12 @@ MidiInB_ProcessRing:
 	ld BC,HL                                             ; FC85A4  db 89
 	extz XBC                                             ; FC85A6  e9 12
 	add XBC,0x00000152                                   ; FC85A8  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC85AE  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC85AE  e9 c8 00 22 60 00
 	bit 6,(XBC)                                          ; FC85B4  b1 ce
 	jr z, .LFC860C                                       ; FC85B6  66 54
 	push 0x00                                            ; FC85B8  09 00
 	push D                                               ; FC85BA  cc 04
-	lda xbc, (0x602200:24)                               ; FC85BC  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC85BC  f2 00 22 60 31
 	push XBC                                             ; FC85C1  39
 	lda xwa, (xiz-724)                                   ; FC85C2  f3 f9 2c fd 30
 	push XWA                                             ; FC85C7  38
@@ -121087,7 +121087,7 @@ MidiInB_ProcessRing:
 	call MidiFrame_ToNoteFrame                                      ; FC8656  1d 69 b2 fc
 	lda xbc, (xiz-416)                                   ; FC865A  f3 f9 60 fe 31
 	push XBC                                             ; FC865F  39
-	call sub_FC9E46                                      ; FC8660  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC8660  1d 46 9e fc
 	extz WA                                              ; FC8664  d8 12
 	extz XWA                                             ; FC8666  e8 12
 	ld XIX,XWA                                           ; FC8668  e8 8c
@@ -121102,7 +121102,7 @@ MidiInB_ProcessRing:
 	jrl z, .LFC870F                                      ; FC867D  76 8f 00
 	push 0x00                                            ; FC8680  09 00
 	push D                                               ; FC8682  cc 04
-	lda xbc, (0x602200:24)                               ; FC8684  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8684  f2 00 22 60 31
 	push XBC                                             ; FC8689  39
 	lda xwa, (xiz-416)                                   ; FC868A  f3 f9 60 fe 30
 	push XWA                                             ; FC868F  38
@@ -121115,7 +121115,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC870F                                       ; FC86A0  66 6d
 	push 0x00                                            ; FC86A2  09 00
 	push D                                               ; FC86A4  cc 04
-	lda xbc, (0x602200:24)                               ; FC86A6  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC86A6  f2 00 22 60 31
 	push XBC                                             ; FC86AB  39
 	lda xwa, (xiz-724)                                   ; FC86AC  f3 f9 2c fd 30
 	push XWA                                             ; FC86B1  38
@@ -121168,7 +121168,7 @@ MidiInB_ProcessRing:
 	ld XIX,0x00000022                                    ; FC8729  44 22 00 00 00
 	ldw hl, 0x00                                         ; FC872E  33 00 00
 .LFC8731:
-	lda xbc, (0x602200:24)                               ; FC8731  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8731  f2 00 22 60 31
 	add XBC,XIX                                          ; FC8736  ec 81
 	ld E,(XBC)                                           ; FC8738  81 25
 	ld a, (xiz-299)                                      ; FC873A  c3 f9 d5 fe 21
@@ -121177,7 +121177,7 @@ MidiInB_ProcessRing:
 	ld BC,HL                                             ; FC8743  db 89
 	extz XBC                                             ; FC8745  e9 12
 	add XBC,0x00000152                                   ; FC8747  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC874D  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC874D  e9 c8 00 22 60 00
 	bit 6,(XBC)                                          ; FC8753  b1 ce
 	jr z, .LFC8792                                       ; FC8755  66 3b
 	push 0x00                                            ; FC8757  09 00
@@ -121218,7 +121218,7 @@ MidiInB_ProcessRing:
 	popw hl                                              ; FC87AA  4b
 	unlk XIZ                                             ; FC87AB  ee 0d
 	ret                                                  ; FC87AD  0e
-; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,
+; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, NoteRouting_ForPart,
 ;   PartNotes_ApplyFrame, PartFrame_SendToToneGen.
 Ring601850_ProcessNoteEvents:
 	link XIZ,0xfe3a                                      ; FC87AE  ee 0c 3a fe
@@ -121235,7 +121235,7 @@ Ring601850_ProcessNoteEvents:
 	inc 8,XSP                                            ; FC87C5  ef 60
 	cp a, 0x00:i3                                          ; FC87C7  c9 d8
 	jrl z, .LFC895A                                      ; FC87C9  76 8e 01
-	lda xbc, (0x602200:24)                               ; FC87CC  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC87CC  f2 00 22 60 31
 	push XBC                                             ; FC87D1  39
 	lda xwa, (xiz-126)                                   ; FC87D2  be 82 30
 	push XWA                                             ; FC87D5  38
@@ -121254,7 +121254,7 @@ Ring601850_ProcessNoteEvents:
 	jrl z, .LFC8884                                      ; FC87F4  76 8d 00
 	push 0x00                                            ; FC87F7  09 00
 	push H                                               ; FC87F9  ce 04
-	lda xbc, (0x602200:24)                               ; FC87FB  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC87FB  f2 00 22 60 31
 	push XBC                                             ; FC8800  39
 	lda xwa, (xiz-126)                                   ; FC8801  be 82 30
 	push XWA                                             ; FC8804  38
@@ -121267,11 +121267,11 @@ Ring601850_ProcessNoteEvents:
 	jr z, .LFC8884                                       ; FC8815  66 6d
 	push 0x00                                            ; FC8817  09 00
 	push H                                               ; FC8819  ce 04
-	lda xbc, (0x602200:24)                               ; FC881B  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC881B  f2 00 22 60 31
 	push XBC                                             ; FC8820  39
 	lda xwa, (xiz-434)                                   ; FC8821  f3 f9 4e fe 30
 	push XWA                                             ; FC8826  38
-	call sub_FCAE76                                      ; FC8827  1d 76 ae fc
+	call NoteRouting_ForPart                                      ; FC8827  1d 76 ae fc
 	push 0x00                                            ; FC882B  09 00
 	push H                                               ; FC882D  ce 04
 	lda xbc, (xiz-434)                                   ; FC882F  f3 f9 4e fe 31
@@ -121378,7 +121378,7 @@ Ring601850_ProcessNoteEvents:
 	unlk XIZ                                             ; FC895D  ee 0d
 	ret                                                  ; FC895F  0e
 ; TimedEvents_ProcessRing: T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a
-;   part through 0x603422 (0xFF = skip), then sub_FCB1BB, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path.
+;   part through 0x603422 (0xFF = skip), then NoteRouting_ForTrack, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path.
 TimedEvents_ProcessRing:
 	link XIZ,0xfec6                                      ; FC8960  ee 0c c6 fe
 	pushw hl                                             ; FC8964  2b
@@ -121413,11 +121413,11 @@ TimedEvents_ProcessRing:
 	pushw hl                                             ; FC89AC  2b
 	push 0x00                                            ; FC89AD  09 00
 	push H                                               ; FC89AF  ce 04
-	lda xbc, (0x602200:24)                               ; FC89B1  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC89B1  f2 00 22 60 31
 	push XBC                                             ; FC89B6  39
 	lda xwa, (xiz-18)                                    ; FC89B7  be ee 30
 	push XWA                                             ; FC89BA  38
-	call sub_FCB1BB                                      ; FC89BB  1d bb b1 fc
+	call NoteRouting_ForTrack                                      ; FC89BB  1d bb b1 fc
 	push 0x00                                            ; FC89BF  09 00
 	push H                                               ; FC89C1  ce 04
 	lda xbc, (xiz-18)                                    ; FC89C3  be ee 31
@@ -121529,7 +121529,7 @@ sub_FC8A8D:
 	ld XIX,0x00000022                                    ; FC8AB3  44 22 00 00 00
 	ldw hl, 0x00                                         ; FC8AB8  33 00 00
 .LFC8ABB:
-	lda xbc, (0x602200:24)                               ; FC8ABB  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8ABB  f2 00 22 60 31
 	add XBC,XIX                                          ; FC8AC0  ec 81
 	ld D,(XBC)                                           ; FC8AC2  81 24
 	ld a, (xiz-293)                                      ; FC8AC4  c3 f9 db fe 21
@@ -121538,7 +121538,7 @@ sub_FC8A8D:
 	ld BC,HL                                             ; FC8ACD  db 89
 	extz XBC                                             ; FC8ACF  e9 12
 	add XBC,0x00000152                                   ; FC8AD1  e9 c8 52 01 00 00
-	add XBC,0x00602200                                   ; FC8AD7  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FC8AD7  e9 c8 00 22 60 00
 	bit 6,(XBC)                                          ; FC8ADD  b1 ce
 	jr z, .LFC8B15                                       ; FC8ADF  66 34
 	pushw de                                             ; FC8AE1  2a
@@ -121586,11 +121586,11 @@ sub_FC8B36:
 	ld (xiz-119), 0x00                                   ; FC8B41  be 89 00 00
 	lda xbc, (xiz-120)                                   ; FC8B45  be 88 31
 	push XBC                                             ; FC8B48  39
-	call sub_FC9E46                                      ; FC8B49  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC8B49  1d 46 9e fc
 	pop XIY                                              ; FC8B4D  5d
 	cp a, 0x00:i3                                          ; FC8B4E  c9 d8
 	jrl z, .LFC8CDA                                      ; FC8B50  76 87 01
-	lda xbc, (0x602200:24)                               ; FC8B53  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8B53  f2 00 22 60 31
 	push XBC                                             ; FC8B58  39
 	lda xwa, (xiz-120)                                   ; FC8B59  be 88 30
 	push XWA                                             ; FC8B5C  38
@@ -121609,7 +121609,7 @@ sub_FC8B36:
 	jrl z, .LFC8C0A                                      ; FC8B7E  76 89 00
 	push 0x00                                            ; FC8B81  09 00
 	m_push MBD+r6, 0xfb                                  ; FC8B83  8e fb 04
-	lda xbc, (0x602200:24)                               ; FC8B86  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8B86  f2 00 22 60 31
 	push XBC                                             ; FC8B8B  39
 	lda xwa, (xiz-120)                                   ; FC8B8C  be 88 30
 	push XWA                                             ; FC8B8F  38
@@ -121622,11 +121622,11 @@ sub_FC8B36:
 	jr z, .LFC8C0A                                       ; FC8BA0  66 68
 	push 0x00                                            ; FC8BA2  09 00
 	m_push MBD+r6, 0xfb                                  ; FC8BA4  8e fb 04
-	lda xbc, (0x602200:24)                               ; FC8BA7  f2 00 22 60 31
+	lda xbc, (NoteRouting:24)                               ; FC8BA7  f2 00 22 60 31
 	push XBC                                             ; FC8BAC  39
 	lda xwa, (xiz-428)                                   ; FC8BAD  f3 f9 54 fe 30
 	push XWA                                             ; FC8BB2  38
-	call sub_FCAE76                                      ; FC8BB3  1d 76 ae fc
+	call NoteRouting_ForPart                                      ; FC8BB3  1d 76 ae fc
 	push 0x00                                            ; FC8BB7  09 00
 	m_push MBD+r6, 0xfb                                  ; FC8BB9  8e fb 04
 	lda xbc, (xiz-428)                                   ; FC8BBC  f3 f9 54 fe 31
@@ -123120,7 +123120,7 @@ sub_FC9933:
 	ld (xiz-114), 0x00                                   ; FC9945  be 8e 00 00
 	lda xbc, (xiz-114)                                   ; FC9949  be 8e 31
 	push XBC                                             ; FC994C  39
-	call sub_FC9E46                                      ; FC994D  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC994D  1d 46 9e fc
 	extz WA                                              ; FC9951  d8 12
 	extz XWA                                             ; FC9953  e8 12
 	ld XIX,XWA                                           ; FC9955  e8 8c
@@ -123261,7 +123261,7 @@ sub_FC9AA1:
 	ld (xiz-117), 0x00                                   ; FC9AAC  be 8b 00 00
 	lda xbc, (xiz-118)                                   ; FC9AB0  be 8a 31
 	push XBC                                             ; FC9AB3  39
-	call sub_FC9E46                                      ; FC9AB4  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC9AB4  1d 46 9e fc
 	pop XIY                                              ; FC9AB8  5d
 	cp a, 0x00:i3                                          ; FC9AB9  c9 d8
 	jrl z, .LFC9BB9                                      ; FC9ABB  76 fb 00
@@ -123348,7 +123348,7 @@ sub_FC9AA1:
 	ld (xiz-117), 0x01                                   ; FC9BBD  be 8b 00 01
 	lda xbc, (xiz-118)                                   ; FC9BC1  be 8a 31
 	push XBC                                             ; FC9BC4  39
-	call sub_FC9E46                                      ; FC9BC5  1d 46 9e fc
+	call NoteList_BuildReleaseAllFrame                                      ; FC9BC5  1d 46 9e fc
 	pop XIY                                              ; FC9BC9  5d
 	cp a, 0x00:i3                                          ; FC9BCA  c9 d8
 	jr z, .LFC9C17                                       ; FC9BCC  66 49
@@ -123626,7 +123626,9 @@ NoteList_MoveNode:
 	pop XHL                                              ; FC9E42  5b
 	unlk XIZ                                             ; FC9E43  ee 0d
 	ret                                                  ; FC9E45  0e
-sub_FC9E46:
+; NoteList_BuildReleaseAllFrame: (frame with the source at +1): every node of that source's list copied into the frame with velocity 0 -- a
+;   note-off for each sounding note; A = the low byte of their ORed voice masks.
+NoteList_BuildReleaseAllFrame:
 	link XIZ,0xfff4                                      ; FC9E46  ee 0c f4 ff
 	push XHL                                             ; FC9E4A  3b
 	push XDE                                             ; FC9E4B  3a
@@ -124565,7 +124567,7 @@ PartFrame_SendToToneGen:
 	mul wa, h                                          ; FCA6C9  ce 41
 	extz XWA                                             ; FCA6CB  e8 12
 	add XWA,0x00000092                                   ; FCA6CD  e8 c8 92 00 00 00
-	add XWA,0x00602200                                   ; FCA6D3  e8 c8 00 22 60 00
+	add XWA,NoteRouting                                   ; FCA6D3  e8 c8 00 22 60 00
 	bit 6,(XWA)                                          ; FCA6D9  b0 ce
 	jr z, .LFCA709                                       ; FCA6DB  66 2c
 	ld C,H                                               ; FCA6DD  ce 8b
@@ -125392,7 +125394,12 @@ PartNote_TransposeForMidiOut:
 	popw hl                                              ; FCAE72  4b
 	unlk XIZ                                             ; FCAE73  ee 0d
 	ret                                                  ; FCAE75  0e
-sub_FCAE76:
+; NoteRouting_ForPart: (out, routing block, part D): out+0 = the tone-generator part (block +2 + D) when it is not 0xFF, block +0x298
+;   bit 9 is clear and the part's record (+0x92 + 6 D) has bit 5 (or 0x602498 bit 6), with out+3 = that record;
+;   out+1 = the MIDI OUT channel (+0x22 + D) when its port is allowed (+0x293 bit 4 for 0..15, bit 3 for 16..31)
+;   and the part's MIDI record (+0x152 + 10 D) has bit 5, with out+7 = that record; out+2 = the track whose +0x42
+;   entry is D | 0x80, only while 0x602498 bit 7; each missing output 0xFF with the default record 0x602ACA.
+NoteRouting_ForPart:
 	link XIZ,0x0000                                      ; FCAE76  ee 0c 00 00
 	pushw hl                                             ; FCAE7A  2b
 	pushw de                                             ; FCAE7B  2a
@@ -125733,7 +125740,9 @@ sub_FCB126:
 	popw hl                                              ; FCB1B7  4b
 	unlk XIZ                                             ; FCB1B8  ee 0d
 	ret                                                  ; FCB1BA  0e
-sub_FCB1BB:
+; NoteRouting_ForTrack: (out, routing block, track): out+0 = the part the track feeds (+0x42 + track, low 5 bits), out+1 = its MIDI OUT
+;   channel (+0x52 + track) when the port is allowed, out+2 = 0xFF (no recording) -- the timed-event path.
+NoteRouting_ForTrack:
 	link XIZ,0x0000                                      ; FCB1BB  ee 0c 00 00
 	pushw hl                                             ; FCB1BF  2b
 	push XIX                                             ; FCB1C0  3c
@@ -125887,7 +125896,7 @@ sub_FCB2F0:
 	extz BC                                              ; FCB32E  d9 12
 	extz XBC                                             ; FCB330  e9 12
 	inc 2,XBC                                            ; FCB332  e9 62
-	add XBC,0x00602200                                   ; FCB334  e9 c8 00 22 60 00
+	add XBC,NoteRouting                                   ; FCB334  e9 c8 00 22 60 00
 	ld A,(XBC)                                           ; FCB33A  81 21
 	cp A,D                                               ; FCB33C  cc f1
 	jrl nz, .LFCB3CD                                     ; FCB33E  7e 8c 00

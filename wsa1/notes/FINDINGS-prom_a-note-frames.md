@@ -83,9 +83,28 @@ Each entry goes to up to three outputs, given by the part block:
 On screen 0x28 (DRUM EDIT) the tone-generator and MIDI OUT notes are replaced by `EditCursor_Note`. That is
 why a DRUM EDIT row audition sounds the row's drum.
 
-## 5. Not established yet
+## 5. The routing block at 0x602200 (2026-10-04)
 
-- What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `PartNotes_ApplyFrame`, `PartFrame_SendToToneGen`, `sub_FCAE76`, `sub_FCB1BB`)
+`NoteRouting` (0x602200) is the "part block" the stages above pass around. Read off `NoteRouting_ForPart` and
+`NoteRouting_ForTrack`:
+
+| offset | holds |
+|---|---|
+| +0x02 + part | the tone-generator part the part plays (0xFF = none) |
+| +0x22 + part | the part's MIDI OUT channel: 0..15 port A, 16..31 port B |
+| +0x42 + track | the part a sequencer track feeds (bit 7 when recording), 0xFF = none |
+| +0x52 + track | a sequencer track's MIDI OUT channel |
+| +0x62 + 6 x part | the part's key / velocity range record |
+| +0x92 + 6 x part | the tone-generator record of the part (bit 5 of its first byte: the output is on) |
+| +0x152 + 10 x part | the MIDI OUT record of the part (bit 5: on) |
+| +0x293 | bit 3 MIDI OUT port B allowed, bit 4 port A, bit 5 no tone-generator output |
+| +0x298 | bit 9 (word): no tone-generator output |
+
+A missing output points at the default record 0x602ACA.
+
+## 6. Not established yet
+
+- What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `PartNotes_ApplyFrame`, `PartFrame_SendToToneGen`, `NoteRouting_ForPart`, `NoteRouting_ForTrack`)
   do with an entry.
 - What the state at 0x602200 / 0x6020D4 / 0x602492 / 0x602493 holds.
 - Three of the sinks are visible: the tone generator over the link (`T_Link_SendBlockIn32ByteChunks`), the
