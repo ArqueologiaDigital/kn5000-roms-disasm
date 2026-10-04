@@ -225,6 +225,8 @@ GROUPS = [
         0x601F46: ("EditField_Velocity", "the VEL field, 1..127, 100 by default", "EditField_VelocityUp / _Down / _Up5 / _Down5; 0xFE833F sets 100"),
         0x601F47: ("EditField_Length", "the LEN field (word), 1..0x2FFF, when (0x601F5B) bit 0 is set", "EditField_LengthUp / _Down / _Up12 / _Down12"),
         0x601F4D: ("EditField_Inc", "the INC field (word): the cursor step in ticks, 1..0x60, 0x30 by default", "EditField_IncUp / _Down / _Up5 / _Down5"),
+        0x601F71: ("DrumEdit_TopRowNote", "the note number of DRUM EDIT's top row; row k shows it + k; 0x28 by default", "DrumEdit_DrawRowNote0..11; EditScreen_BootPhase2And4 sets 0x28"),
+        0x601F73: ("EditScreen_CursorRow", "the left column's highlighted row, 0..11 (y = row * 10 + 0x2A); 5 by default", "EditScreen_HighlightCursorRow; EditScreen_BootPhase2And4 sets 5"),
         0x601F70: ("EditScreen_Mode", "bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A", "ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it"),
     }),
     ("wsa1/notes/FINDINGS-prom_a-panel-state-variables.md", "1. The mode / screen latches; 2. The dial's button pair", {

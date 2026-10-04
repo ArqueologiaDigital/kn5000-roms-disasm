@@ -941,7 +941,7 @@ def mode_services():
                  ",".join("0x%02X@%06X" % (v, a) for a, v in svc)))
         print("        -> %s" % tag)
     print("\n  the three that keep sub_XXXXXX, and why:")
-    print("    sub_FEB03D  its rectangle's Y is 10*(0x601F73)+0x2A -- a row INDEX")
+    print("    EditScreen_HighlightCursorRow  its rectangle's Y is 10*(0x601F73)+0x2A -- a row INDEX")
     print("                whose meaning is not established, so `what it fills` is not")
     print("                sayable without naming that variable.")
     print("    sub_FF0178  TWO service-0x05 fills bracketing two `calr` sites this round")

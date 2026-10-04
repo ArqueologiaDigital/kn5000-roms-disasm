@@ -518,6 +518,52 @@ ROWS = [
      "(DisplayList_FF09D8, string table entry 0 at 0xFF09E7)."),
     ("FF0A04", "EditScreen_DrawBeat", "layer 0; EditCursor_Beat + 1 to 0x26B0, DisplayList_FF0A39 (op 06, digits)."),
     ("FF0A52", "EditScreen_DrawTick", "layer 0; EditCursor_Tick to 0x26B0, DisplayList_FF0A71 (op 06, digits)."),
+    # prom_a 0xFEB03D-0xFEB280: the left column of NOTE / DRUM EDIT, x 0..0x16, twelve 10-pixel rows from y = 0x2A.
+    ("FEB07A", "DrumEdit_DrawRowNotes",
+     "layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by sub_FEB069 only when EditScreen_Mode\n"
+     "bit 0 (DRUM EDIT) is set."),
+    ("FEB03D", "EditScreen_HighlightCursorRow",
+     "LCD_Svc_05_FillRect x 0..0x16, y = (0x601F73) * 10 + 0x2A .. +8: one 10-pixel row of the left column.  Called\n"
+     "between EditScreen_EraseLeftColumn_Layer1 and the DRUM EDIT row numbers by the three column redraws."),
+    ("FEF86D", "EditScreen_EraseLeftColumn_Layer1",
+     "layer 1, DisplayList_FEF881: LCD_Svc_1B_EraseRect (0, 0x2A)-(0x16, 0xA3) -- the twelve rows' column.  Called by\n"
+     "NoteEdit_DrawKeyboardRuler and the column redraws."),
+    ("FEB0A4", "DrumEdit_DrawRowNote0",
+     "(0x601F71) + 0 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 0's note number."),
+    ("FEB0C8", "DrumEdit_DrawRowNote1",
+     "(0x601F71) + 1 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 1's note number."),
+    ("FEB0F0", "DrumEdit_DrawRowNote2",
+     "(0x601F71) + 2 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 2's note number."),
+    ("FEB118", "DrumEdit_DrawRowNote3",
+     "(0x601F71) + 3 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 3's note number."),
+    ("FEB140", "DrumEdit_DrawRowNote4",
+     "(0x601F71) + 4 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 4's note number."),
+    ("FEB168", "DrumEdit_DrawRowNote5",
+     "(0x601F71) + 5 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 5's note number."),
+    ("FEB190", "DrumEdit_DrawRowNote6",
+     "(0x601F71) + 6 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 6's note number."),
+    ("FEB1B8", "DrumEdit_DrawRowNote7",
+     "(0x601F71) + 7 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 7's note number."),
+    ("FEB1E0", "DrumEdit_DrawRowNote8",
+     "(0x601F71) + 8 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 8's note number."),
+    ("FEB208", "DrumEdit_DrawRowNote9",
+     "(0x601F71) + 9 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 9's note number."),
+    ("FEB230", "DrumEdit_DrawRowNote10",
+     "(0x601F71) + 10 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 10's note number."),
+    ("FEB258", "DrumEdit_DrawRowNote11",
+     "(0x601F71) + 11 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
+     "handler 0xF31C14) -- row 11's note number."),
 ]
 
 

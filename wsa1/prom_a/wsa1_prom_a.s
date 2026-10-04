@@ -174711,8 +174711,8 @@ EditScreen_BootPhase2And4:
 	ldw (0x601f51:24), 0x30                             ; FE8346  f2 51 1f 60 02 30 00
 	ldw (0x601f4b:24), 0x26                             ; FE834D  f2 4b 1f 60 02 26 00
 	ld (0x601f53:24), 0x05                             ; FE8354  f2 53 1f 60 00 05
-	ldw (0x601f71:24), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
-	ldw (0x601f73:24), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
+	ldw (DrumEdit_TopRowNote:24), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
+	ldw (EditScreen_CursorRow:24), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
 	ld (EditField_Velocity:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
 	ret                                                  ; FE836E  0e
 ; ---------------------------------------------------------------------
@@ -175744,8 +175744,8 @@ NoteEdit_DrawKeyboardRuler:
 	ret                                                  ; FE8D5D  0e
 .LFE8D5E:
 	calr sub_FEAFB7                                          ; FE8D5E  1e 56 22
-	calr sub_FEF86D                                          ; FE8D61  1e 09 6b
-	calr sub_FEB03D                                          ; FE8D64  1e d6 22
+	calr EditScreen_EraseLeftColumn_Layer1                                          ; FE8D61  1e 09 6b
+	calr EditScreen_HighlightCursorRow                                          ; FE8D64  1e d6 22
 	calr sub_FEB069                                          ; FE8D67  1e ff 22
 	ret                                                  ; FE8D6A  0e
 ; ---------------------------------------------------------------------
@@ -179123,12 +179123,12 @@ sub_FEAEBC:
 	ld A,(XIX)                                           ; FEAEC1  84 21
 	bit 0x07,A                                           ; FEAEC3  c9 33 07
 	jr nz, .LFEAF27                                      ; FEAEC6  6e 5f
-	m_cp_mi16 MW24, 0x601f73, 0x000b                     ; FEAEC8  d2 73 1f 60 3f 0b 00
+	m_cp_mi16 MW24, EditScreen_CursorRow, 0x000b                     ; FEAEC8  d2 73 1f 60 3f 0b 00
 	jr nc, .LFEAEF2                                      ; FEAECF  6f 21
-	incw 0x01, (0x601f73:24)                          ; FEAED1  d2 73 1f 60 61
+	incw 0x01, (EditScreen_CursorRow:24)                          ; FEAED1  d2 73 1f 60 61
 	calr sub_FEAFB7                                      ; FEAED6  1e de 00
-	calr sub_FEF86D                                          ; FEAED9  1e 91 49
-	calr sub_FEB03D                                      ; FEAEDC  1e 5e 01
+	calr EditScreen_EraseLeftColumn_Layer1                                          ; FEAED9  1e 91 49
+	calr EditScreen_HighlightCursorRow                                      ; FEAEDC  1e 5e 01
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAEDF  1e 77 49
 	calr sub_FEF778                                          ; FEAEE2  1e 93 48
 	calr sub_FEF8D6                                          ; FEAEE5  1e ee 49
@@ -179137,9 +179137,9 @@ sub_FEAEBC:
 	calr sub_FE8040                                          ; FEAEEE  1e 4f d1
 	ret                                                  ; FEAEF1  0e
 .LFEAEF2:
-	m_cp_mi16 MW24, 0x601f71, 0x0074                     ; FEAEF2  d2 71 1f 60 3f 74 00
+	m_cp_mi16 MW24, DrumEdit_TopRowNote, 0x0074                     ; FEAEF2  d2 71 1f 60 3f 74 00
 	jr nc, .LFEAF27                                      ; FEAEF9  6f 2c
-	incw 0x01, (0x601f71:24)                          ; FEAEFB  d2 71 1f 60 61
+	incw 0x01, (DrumEdit_TopRowNote:24)                          ; FEAEFB  d2 71 1f 60 61
 	ld (0x601f58:24), 0x83                             ; FEAF00  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x05                             ; FEAF06  f2 59 1f 60 00 05
 	calr sub_FEAFB7                                      ; FEAF0C  1e a8 00
@@ -179172,12 +179172,12 @@ sub_FEAF4A:
 	ld A,(XIX)                                           ; FEAF4F  84 21
 	bit 0x07,A                                           ; FEAF51  c9 33 07
 	jr nz, .LFEAFB5                                      ; FEAF54  6e 5f
-	m_cp_mi16 MW24, 0x601f73, 0x0000                     ; FEAF56  d2 73 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditScreen_CursorRow, 0x0000                     ; FEAF56  d2 73 1f 60 3f 00 00
 	jr z, .LFEAF80                                       ; FEAF5D  66 21
-	decw 0x01, (0x601f73:24)                          ; FEAF5F  d2 73 1f 60 69
+	decw 0x01, (EditScreen_CursorRow:24)                          ; FEAF5F  d2 73 1f 60 69
 	calr sub_FEAFB7                                      ; FEAF64  1e 50 00
-	calr sub_FEF86D                                          ; FEAF67  1e 03 49
-	calr sub_FEB03D                                      ; FEAF6A  1e d0 00
+	calr EditScreen_EraseLeftColumn_Layer1                                          ; FEAF67  1e 03 49
+	calr EditScreen_HighlightCursorRow                                      ; FEAF6A  1e d0 00
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF6D  1e e9 48
 	calr sub_FEF778                                          ; FEAF70  1e 05 48
 	calr sub_FEF8D6                                          ; FEAF73  1e 60 49
@@ -179186,9 +179186,9 @@ sub_FEAF4A:
 	calr sub_FE8040                                          ; FEAF7C  1e c1 d0
 	ret                                                  ; FEAF7F  0e
 .LFEAF80:
-	m_cp_mi16 MW24, 0x601f71, 0x0001                     ; FEAF80  d2 71 1f 60 3f 01 00
+	m_cp_mi16 MW24, DrumEdit_TopRowNote, 0x0001                     ; FEAF80  d2 71 1f 60 3f 01 00
 	jr z, .LFEAFB5                                       ; FEAF87  66 2c
-	decw 0x01, (0x601f71:24)                          ; FEAF89  d2 71 1f 60 69
+	decw 0x01, (DrumEdit_TopRowNote:24)                          ; FEAF89  d2 71 1f 60 69
 	ld (0x601f58:24), 0x83                             ; FEAF8E  f2 58 1f 60 00 83
 	ld (0x601f59:24), 0x05                             ; FEAF94  f2 59 1f 60 00 05
 	calr sub_FEAFB7                                      ; FEAF9A  1e 1a 00
@@ -179207,8 +179207,8 @@ sub_FEAF4A:
 sub_FEAFB7:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEAFB7  f2 70 1f 60 c8
 	jr z, .LFEAFCF                                       ; FEAFBC  66 11
-	ld wa, (0x601f71:24)                                ; FEAFBE  d2 71 1f 60 20
-	ld de, (0x601f73:24)                                ; FEAFC3  d2 73 1f 60 22
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEAFBE  d2 71 1f 60 20
+	ld de, (EditScreen_CursorRow:24)                                ; FEAFC3  d2 73 1f 60 22
 	add WA,DE                                            ; FEAFC8  da 80
 	ld (0x601f44:24), a                                 ; FEAFCA  f2 44 1f 60 41
 .LFEAFCF:
@@ -179256,10 +179256,12 @@ sub_FEB033:
 	calr sub_FEA535                                      ; FEB033  1e ff f4
 	ld (0x601f5a:24), 0x82                             ; FEB036  f2 5a 1f 60 00 82
 	ret                                                  ; FEB03C  0e
-sub_FEB03D:
+; EditScreen_HighlightCursorRow: LCD_Svc_05_FillRect x 0..0x16, y = (0x601F73) * 10 + 0x2A .. +8: one 10-pixel row of the left column.  Called
+;   between EditScreen_EraseLeftColumn_Layer1 and the DRUM EDIT row numbers by the three column redraws.
+EditScreen_HighlightCursorRow:
 	ldw (LCD_X0:16), 0x00                                ; FEB03D  f1 30 25 02 00 00
 	ldw (LCD_X1:16), 0x16                                ; FEB043  f1 34 25 02 16 00
-	ld wa, (0x601f73:24)                                ; FEB049  d2 73 1f 60 20
+	ld wa, (EditScreen_CursorRow:24)                                ; FEB049  d2 73 1f 60 20
 	mul A,0x0a                                           ; FEB04E  c9 08 0a
 	add WA,0x002a                                        ; FEB051  d8 c8 2a 00
 	ld (LCD_Y0:16), wa                                  ; FEB055  f1 32 25 50
@@ -179273,26 +179275,28 @@ sub_FEB069:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEB069  f2 70 1f 60 c8
 	jr z, .LFEB079                                       ; FEB06E  66 09
 	calr sub_FEF88B                                          ; FEB070  1e 18 48
-	calr sub_FEB07A                                      ; FEB073  1e 04 00
+	calr DrumEdit_DrawRowNotes                                      ; FEB073  1e 04 00
 	calr sub_FEB280                                          ; FEB076  1e 07 02
 .LFEB079:
 	ret                                                  ; FEB079  0e
-sub_FEB07A:
+; DrumEdit_DrawRowNotes: layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by sub_FEB069 only when EditScreen_Mode
+;   bit 0 (DRUM EDIT) is set.
+DrumEdit_DrawRowNotes:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEB07A  f1 40 25 00 00
-	calr sub_FEB0A4                                      ; FEB07F  1e 22 00
-	calr sub_FEB0C8                                            ; FEB082  1e 43 00
-	calr sub_FEB0F0                                            ; FEB085  1e 68 00
-	calr sub_FEB118                                            ; FEB088  1e 8d 00
-	calr sub_FEB140                                            ; FEB08B  1e b2 00
-	calr sub_FEB168                                            ; FEB08E  1e d7 00
-	calr sub_FEB190                                            ; FEB091  1e fc 00
-	calr sub_FEB1B8                                          ; FEB094  1e 21 01
-	calr sub_FEB1E0                                          ; FEB097  1e 46 01
-	calr sub_FEB208                                          ; FEB09A  1e 6b 01
-	calr sub_FEB230                                          ; FEB09D  1e 90 01
-	calr sub_FEB258                                          ; FEB0A0  1e b5 01
+	calr DrumEdit_DrawRowNote0                                      ; FEB07F  1e 22 00
+	calr DrumEdit_DrawRowNote1                                            ; FEB082  1e 43 00
+	calr DrumEdit_DrawRowNote2                                            ; FEB085  1e 68 00
+	calr DrumEdit_DrawRowNote3                                            ; FEB088  1e 8d 00
+	calr DrumEdit_DrawRowNote4                                            ; FEB08B  1e b2 00
+	calr DrumEdit_DrawRowNote5                                            ; FEB08E  1e d7 00
+	calr DrumEdit_DrawRowNote6                                            ; FEB091  1e fc 00
+	calr DrumEdit_DrawRowNote7                                          ; FEB094  1e 21 01
+	calr DrumEdit_DrawRowNote8                                          ; FEB097  1e 46 01
+	calr DrumEdit_DrawRowNote9                                          ; FEB09A  1e 6b 01
+	calr DrumEdit_DrawRowNote10                                          ; FEB09D  1e 90 01
+	calr DrumEdit_DrawRowNote11                                          ; FEB0A0  1e b5 01
 	ret                                                  ; FEB0A3  0e
-; sub_FEB0A4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote0 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 6
 ; instructions to its first `ret`:
@@ -179308,11 +179312,13 @@ sub_FEB07A:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB0A4:
-	ld wa, (0x601f71:24)                                ; FEB0A4  d2 71 1f 60 20
+; DrumEdit_DrawRowNote0: (0x601F71) + 0 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 0's note number.
+DrumEdit_DrawRowNote0:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB0A4  d2 71 1f 60 20
 	ld (0x26b0:16), wa                                  ; FEB0A9  f1 b0 26 50
 	ld XIY,DisplayList_FEB0BC                            ; FEB0AD  45 bc b0 fe 00
-	ld XIX,sub_FEB0C8                                    ; FEB0B2  44 c8 b0 fe 00
+	ld XIX,DrumEdit_DrawRowNote1                                    ; FEB0B2  44 c8 b0 fe 00
 	call T_DisplayListB_Run                              ; FEB0B7  1d f4 17 f4
 	ret                                                  ; FEB0BB  0e
 
@@ -179321,7 +179327,7 @@ sub_FEB0A4:
 DisplayList_FEB0BC:
 	.byte 0x0A, 0x0C                               ; FEB0BC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x2B, 0x00, 0x03  ; FEB0BE
-; sub_FEB0C8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote1 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179337,12 +179343,14 @@ DisplayList_FEB0BC:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB0C8:
-	ld wa, (0x601f71:24)                                ; FEB0C8  d2 71 1f 60 20
+; DrumEdit_DrawRowNote1: (0x601F71) + 1 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 1's note number.
+DrumEdit_DrawRowNote1:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB0C8  d2 71 1f 60 20
 	add WA,0x0001                                        ; FEB0CD  d8 c8 01 00
 	ld (0x26b0:16), wa                                  ; FEB0D1  f1 b0 26 50
 	ld XIY,DisplayList_FEB0E4                            ; FEB0D5  45 e4 b0 fe 00
-	ld XIX,sub_FEB0F0                                    ; FEB0DA  44 f0 b0 fe 00
+	ld XIX,DrumEdit_DrawRowNote2                                    ; FEB0DA  44 f0 b0 fe 00
 	call T_DisplayListB_Run                              ; FEB0DF  1d f4 17 f4
 	ret                                                  ; FEB0E3  0e
 
@@ -179351,7 +179359,7 @@ sub_FEB0C8:
 DisplayList_FEB0E4:
 	.byte 0x0A, 0x0C                               ; FEB0E4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x35, 0x00, 0x03  ; FEB0E6
-; sub_FEB0F0 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote2 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179367,12 +179375,14 @@ DisplayList_FEB0E4:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB0F0:
-	ld wa, (0x601f71:24)                                ; FEB0F0  d2 71 1f 60 20
+; DrumEdit_DrawRowNote2: (0x601F71) + 2 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 2's note number.
+DrumEdit_DrawRowNote2:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB0F0  d2 71 1f 60 20
 	add WA,0x0002                                        ; FEB0F5  d8 c8 02 00
 	ld (0x26b0:16), wa                                  ; FEB0F9  f1 b0 26 50
 	ld XIY,DisplayList_FEB10C                            ; FEB0FD  45 0c b1 fe 00
-	ld XIX,sub_FEB118                                    ; FEB102  44 18 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote3                                    ; FEB102  44 18 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB107  1d f4 17 f4
 	ret                                                  ; FEB10B  0e
 
@@ -179381,7 +179391,7 @@ sub_FEB0F0:
 DisplayList_FEB10C:
 	.byte 0x0A, 0x0C                               ; FEB10C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x3F, 0x00, 0x03  ; FEB10E
-; sub_FEB118 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote3 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179397,12 +179407,14 @@ DisplayList_FEB10C:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB118:
-	ld wa, (0x601f71:24)                                ; FEB118  d2 71 1f 60 20
+; DrumEdit_DrawRowNote3: (0x601F71) + 3 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 3's note number.
+DrumEdit_DrawRowNote3:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB118  d2 71 1f 60 20
 	add WA,0x0003                                        ; FEB11D  d8 c8 03 00
 	ld (0x26b0:16), wa                                  ; FEB121  f1 b0 26 50
 	ld XIY,DisplayList_FEB134                            ; FEB125  45 34 b1 fe 00
-	ld XIX,sub_FEB140                                    ; FEB12A  44 40 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote4                                    ; FEB12A  44 40 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB12F  1d f4 17 f4
 	ret                                                  ; FEB133  0e
 
@@ -179411,7 +179423,7 @@ sub_FEB118:
 DisplayList_FEB134:
 	.byte 0x0A, 0x0C                               ; FEB134  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x49, 0x00, 0x03  ; FEB136
-; sub_FEB140 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179427,12 +179439,14 @@ DisplayList_FEB134:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB140:
-	ld wa, (0x601f71:24)                                ; FEB140  d2 71 1f 60 20
+; DrumEdit_DrawRowNote4: (0x601F71) + 4 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 4's note number.
+DrumEdit_DrawRowNote4:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB140  d2 71 1f 60 20
 	add WA,0x0004                                        ; FEB145  d8 c8 04 00
 	ld (0x26b0:16), wa                                  ; FEB149  f1 b0 26 50
 	ld XIY,DisplayList_FEB15C                            ; FEB14D  45 5c b1 fe 00
-	ld XIX,sub_FEB168                                    ; FEB152  44 68 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote5                                    ; FEB152  44 68 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB157  1d f4 17 f4
 	ret                                                  ; FEB15B  0e
 
@@ -179441,7 +179455,7 @@ sub_FEB140:
 DisplayList_FEB15C:
 	.byte 0x0A, 0x0C                               ; FEB15C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x53, 0x00, 0x03  ; FEB15E
-; sub_FEB168 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote5 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179457,12 +179471,14 @@ DisplayList_FEB15C:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB168:
-	ld wa, (0x601f71:24)                                ; FEB168  d2 71 1f 60 20
+; DrumEdit_DrawRowNote5: (0x601F71) + 5 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 5's note number.
+DrumEdit_DrawRowNote5:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB168  d2 71 1f 60 20
 	add WA,0x0005                                        ; FEB16D  d8 c8 05 00
 	ld (0x26b0:16), wa                                  ; FEB171  f1 b0 26 50
 	ld XIY,DisplayList_FEB184                            ; FEB175  45 84 b1 fe 00
-	ld XIX,sub_FEB190                                    ; FEB17A  44 90 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote6                                    ; FEB17A  44 90 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB17F  1d f4 17 f4
 	ret                                                  ; FEB183  0e
 
@@ -179471,7 +179487,7 @@ sub_FEB168:
 DisplayList_FEB184:
 	.byte 0x0A, 0x0C                               ; FEB184  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x5D, 0x00, 0x03  ; FEB186
-; sub_FEB190 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote6 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179487,12 +179503,14 @@ DisplayList_FEB184:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB190:
-	ld wa, (0x601f71:24)                                ; FEB190  d2 71 1f 60 20
+; DrumEdit_DrawRowNote6: (0x601F71) + 6 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 6's note number.
+DrumEdit_DrawRowNote6:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB190  d2 71 1f 60 20
 	add WA,0x0006                                        ; FEB195  d8 c8 06 00
 	ld (0x26b0:16), wa                                  ; FEB199  f1 b0 26 50
 	ld XIY,DisplayList_FEB1AC                            ; FEB19D  45 ac b1 fe 00
-	ld XIX,sub_FEB1B8                                    ; FEB1A2  44 b8 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote7                                    ; FEB1A2  44 b8 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB1A7  1d f4 17 f4
 	ret                                                  ; FEB1AB  0e
 
@@ -179501,7 +179519,7 @@ sub_FEB190:
 DisplayList_FEB1AC:
 	.byte 0x0A, 0x0C                               ; FEB1AC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x67, 0x00, 0x03  ; FEB1AE
-; sub_FEB1B8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179517,12 +179535,14 @@ DisplayList_FEB1AC:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB1B8:
-	ld wa, (0x601f71:24)                                ; FEB1B8  d2 71 1f 60 20
+; DrumEdit_DrawRowNote7: (0x601F71) + 7 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 7's note number.
+DrumEdit_DrawRowNote7:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB1B8  d2 71 1f 60 20
 	add WA,0x0007                                        ; FEB1BD  d8 c8 07 00
 	ld (0x26b0:16), wa                                  ; FEB1C1  f1 b0 26 50
 	ld XIY,DisplayList_FEB1D4                            ; FEB1C5  45 d4 b1 fe 00
-	ld XIX,sub_FEB1E0                                    ; FEB1CA  44 e0 b1 fe 00
+	ld XIX,DrumEdit_DrawRowNote8                                    ; FEB1CA  44 e0 b1 fe 00
 	call T_DisplayListB_Run                              ; FEB1CF  1d f4 17 f4
 	ret                                                  ; FEB1D3  0e
 
@@ -179531,7 +179551,7 @@ sub_FEB1B8:
 DisplayList_FEB1D4:
 	.byte 0x0A, 0x0C                               ; FEB1D4  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x71, 0x00, 0x03  ; FEB1D6
-; sub_FEB1E0 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote8 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179547,12 +179567,14 @@ DisplayList_FEB1D4:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB1E0:
-	ld wa, (0x601f71:24)                                ; FEB1E0  d2 71 1f 60 20
+; DrumEdit_DrawRowNote8: (0x601F71) + 8 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 8's note number.
+DrumEdit_DrawRowNote8:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB1E0  d2 71 1f 60 20
 	add WA,0x0008                                        ; FEB1E5  d8 c8 08 00
 	ld (0x26b0:16), wa                                  ; FEB1E9  f1 b0 26 50
 	ld XIY,DisplayList_FEB1FC                            ; FEB1ED  45 fc b1 fe 00
-	ld XIX,sub_FEB208                                    ; FEB1F2  44 08 b2 fe 00
+	ld XIX,DrumEdit_DrawRowNote9                                    ; FEB1F2  44 08 b2 fe 00
 	call T_DisplayListB_Run                              ; FEB1F7  1d f4 17 f4
 	ret                                                  ; FEB1FB  0e
 
@@ -179561,7 +179583,7 @@ sub_FEB1E0:
 DisplayList_FEB1FC:
 	.byte 0x0A, 0x0C                               ; FEB1FC  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x7B, 0x00, 0x03  ; FEB1FE
-; sub_FEB208 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote9 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179577,12 +179599,14 @@ DisplayList_FEB1FC:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB208:
-	ld wa, (0x601f71:24)                                ; FEB208  d2 71 1f 60 20
+; DrumEdit_DrawRowNote9: (0x601F71) + 9 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 9's note number.
+DrumEdit_DrawRowNote9:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB208  d2 71 1f 60 20
 	add WA,0x0009                                        ; FEB20D  d8 c8 09 00
 	ld (0x26b0:16), wa                                  ; FEB211  f1 b0 26 50
 	ld XIY,DisplayList_FEB224                            ; FEB215  45 24 b2 fe 00
-	ld XIX,sub_FEB230                                    ; FEB21A  44 30 b2 fe 00
+	ld XIX,DrumEdit_DrawRowNote10                                    ; FEB21A  44 30 b2 fe 00
 	call T_DisplayListB_Run                              ; FEB21F  1d f4 17 f4
 	ret                                                  ; FEB223  0e
 
@@ -179591,7 +179615,7 @@ sub_FEB208:
 DisplayList_FEB224:
 	.byte 0x0A, 0x0C                               ; FEB224  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x85, 0x00, 0x03  ; FEB226
-; sub_FEB230 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote10 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179607,12 +179631,14 @@ DisplayList_FEB224:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB230:
-	ld wa, (0x601f71:24)                                ; FEB230  d2 71 1f 60 20
+; DrumEdit_DrawRowNote10: (0x601F71) + 10 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 10's note number.
+DrumEdit_DrawRowNote10:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB230  d2 71 1f 60 20
 	add WA,0x000a                                        ; FEB235  d8 c8 0a 00
 	ld (0x26b0:16), wa                                  ; FEB239  f1 b0 26 50
 	ld XIY,DisplayList_FEB24C                            ; FEB23D  45 4c b2 fe 00
-	ld XIX,sub_FEB258                                    ; FEB242  44 58 b2 fe 00
+	ld XIX,DrumEdit_DrawRowNote11                                    ; FEB242  44 58 b2 fe 00
 	call T_DisplayListB_Run                              ; FEB247  1d f4 17 f4
 	ret                                                  ; FEB24B  0e
 
@@ -179621,7 +179647,7 @@ sub_FEB230:
 DisplayList_FEB24C:
 	.byte 0x0A, 0x0C                               ; FEB24C  op 0A, 12 bytes, handler 0xF31C14
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x17, 0x02, 0x00, 0x8F, 0x00, 0x03  ; FEB24E
-; sub_FEB258 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DrumEdit_DrawRowNote11 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 7
 ; instructions to its first `ret`:
@@ -179637,8 +179663,10 @@ DisplayList_FEB24C:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEB258:
-	ld wa, (0x601f71:24)                                ; FEB258  d2 71 1f 60 20
+; DrumEdit_DrawRowNote11: (0x601F71) + 11 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,
+;   handler 0xF31C14) -- row 11's note number.
+DrumEdit_DrawRowNote11:
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEB258  d2 71 1f 60 20
 	add WA,0x000b                                        ; FEB25D  d8 c8 0b 00
 	ld (0x26b0:16), wa                                  ; FEB261  f1 b0 26 50
 	ld XIY,DisplayList_FEB274                            ; FEB265  45 74 b2 fe 00
@@ -179663,7 +179691,7 @@ sub_FEB280:
 	ret                                                  ; FEB28F  0e
 sub_FEB290:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEB290  f1 40 25 00 00
-	ld hl, (0x601f71:24)                                ; FEB295  d2 71 1f 60 23
+	ld hl, (DrumEdit_TopRowNote:24)                                ; FEB295  d2 71 1f 60 23
 	add HL,DE                                            ; FEB29A  da 83
 	ld XIX,0x00603422                                    ; FEB29C  44 22 34 60 00
 	ld a, (0x601f00:24)                                 ; FEB2A1  c2 00 1f 60 21
@@ -182157,7 +182185,7 @@ EditScreen_EraseEditArea_Layer1:
 .LFEF869:
 	calr NoteEdit_EraseEditArea                                          ; FEF869  1e 7a ff
 	ret                                                  ; FEF86C  0e
-; sub_FEF86D -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_EraseLeftColumn_Layer1 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 5
 ; instructions to its first `ret`:
@@ -182173,7 +182201,9 @@ EditScreen_EraseEditArea_Layer1:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF86D:
+; EditScreen_EraseLeftColumn_Layer1: layer 1, DisplayList_FEF881: LCD_Svc_1B_EraseRect (0, 0x2A)-(0x16, 0xA3) -- the twelve rows' column.  Called by
+;   NoteEdit_DrawKeyboardRuler and the column redraws.
+EditScreen_EraseLeftColumn_Layer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF86D  f1 40 25 00 01
 	ld XIY,DisplayList_FEF881                            ; FEF872  45 81 f8 fe 00
 	ld XIX,sub_FEF88B                                    ; FEF877  44 8b f8 fe 00
@@ -183021,7 +183051,7 @@ sub_FEFF2D:
 sub_FEFFB4:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFB4  f2 70 1f 60 c8
 	jr z, .LFEFFC6                                       ; FEFFB9  66 0b
-	ld wa, (0x601f71:24)                                ; FEFFBB  d2 71 1f 60 20
+	ld wa, (DrumEdit_TopRowNote:24)                                ; FEFFBB  d2 71 1f 60 20
 	ld W,A                                               ; FEFFC0  c9 88
 	add W,0x0b                                           ; FEFFC2  c8 c8 0b
 	ret                                                  ; FEFFC5  0e
