@@ -3027,4 +3027,9 @@ RENAMES = [
     ("Fwd_F55804", "ModeLeave_RealtimeRecord_Fwd"),
     ("Fwd_F55808", "ModeEnter_SeqPlay_Fwd"),
     ("Fwd_F5580C", "ModeLeave_SeqPlay_Fwd"),
+    ("sub_FE810B", "ModeEnter_Sequencer"),
+    ("sub_F7D020", "ModeEnter_StepRecord"),
+    ("sub_F7D018", "ModeEnter_Edit"),
+    ("sub_FBCB06", "ModeEnter_CombiEditPart"),
+    ("sub_FF42B7", "ModeEnter_SoundCopy"),
 ]

@@ -104663,7 +104663,9 @@ sub_FBCA31:
 	popw hl                                              ; FBCB02  4b
 	unlk XIZ                                             ; FBCB03  ee 0d
 	ret                                                  ; FBCB05  0e
-sub_FBCB06:
+; ModeEnter_CombiEditPart: the +0 ENTER of panel mode 9 (T_F41840); PanelMode_ToScreenIdMap[9] = 0xB0, the COMBINATION
+;   EDIT part menu.  Seeds the part copies (0x2765/66/6D) from UI_PartIndex, T_SoundGroup_ReloadSelection.
+ModeEnter_CombiEditPart:
 	pushw hl                                             ; FBCB06  2b
 	m_set 1, MD16, 0x2134                                ; FBCB07  f1 34 21 b9
 	ld h, (UI_PartIndex:16)                                   ; FBCB0B  c1 50 22 26
@@ -174305,7 +174307,9 @@ LCD_ScreenRedraw_End_Copy:
 	ld a, 0x0c:opc                                          ; FE8107  21 0c
 	swi 7                                                ; FE8109  ff
 	ret                                                  ; FE810A  0e
-sub_FE810B:
+; ModeEnter_Sequencer: the +0 ENTER of panel mode 3 (PanelScreen_VtableTable[3] = T_F402A4); PanelMode_ToScreenIdMap[3] =
+;   0x04, the screen whose vtable is T_Paint_Sequencer.  T_SoundGroup_ReloadSelection, (0x2134) |= 2.
+ModeEnter_Sequencer:
 	call T_SoundGroup_ReloadSelection                                        ; FE810B  1d c8 15 f4
 	orw	(0x2134:16), 0x0002                  ; FE810F  d1 34 21 3e 02 00
 	ret                                                  ; FE8115  0e
@@ -187097,7 +187101,8 @@ Text_FF42A1__FF42B1:
 CallbackQueue_ResetAndRestartTask2_Call:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF42B2  1d 80 2e f4
 	ret                                                  ; FF42B6  0e
-sub_FF42B7:
+; ModeEnter_SoundCopy: the +0 ENTER of panel mode 14 (T_F42254); PanelMode_ToScreenIdMap[14] = 0x5E, Screen_SoundCopy.
+ModeEnter_SoundCopy:
 	m_set 1, MD16, 0x2134                                ; FF42B7  f1 34 21 b9
 	call T_SoundGroup_ReloadSelection                                        ; FF42BB  1d c8 15 f4
 	ret                                                  ; FF42BF  0e
@@ -187106,7 +187111,7 @@ Var2134_SetBit1_3:
 	m_set 1, MD16, 0x2134                                ; FF42C0  f1 34 21 b9
 	ret                                                  ; FF42C4  0e
 sub_FF42C5:
-	calr sub_FF42B7                                      ; FF42C5  1e ef ff
+	calr ModeEnter_SoundCopy                                      ; FF42C5  1e ef ff
 	ret                                                  ; FF42C8  0e
 ; Var2134_SetBit1_3_Call: calls Var2134_SetBit1_3 and returns -- `calr Var2134_SetBit1_3 / ret`.
 Var2134_SetBit1_3_Call:

@@ -1132,7 +1132,7 @@
 	.set	T_F418B4_Nop, 0xFBC5F0
 	.set	sub_FBC5F1, 0xFBC5F1
 	.set	sub_FBC64F, 0xFBC64F
-	.set	sub_FBCB06, 0xFBCB06
+	.set	ModeEnter_CombiEditPart, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
 	.set	ScreenEnter_CombiEditPartMenu, 0xFBCB40
 	.set	T_F4184C_Nop, 0xFBCB81
@@ -1777,7 +1777,7 @@
 	.set	ScreenLeave_DrumEditPartSelect, 0xFE8045
 	.set	T_F402B8_Nop, 0xFE805F
 	.set	ScreenButton_Sequencer, 0xFE8060
-	.set	sub_FE810B, 0xFE810B
+	.set	ModeEnter_Sequencer, 0xFE810B
 	.set	sub_FE8116, 0xFE8116
 	.set	Paint_Sequencer, 0xFE812C
 	.set	ScreenLeave_Sequencer, 0xFE8165
@@ -1794,7 +1794,7 @@
 	.set	T_F402D8_Nop, 0xFE8CB3
 	.set	ScreenButton_NoteEdit, 0xFE9A33
 	.set	ScreenButton_DrumEdit, 0xFE9B8D
-	.set	sub_FF42B7, 0xFF42B7
+	.set	ModeEnter_SoundCopy, 0xFF42B7
 	.set	Var2134_SetBit1_3, 0xFF42C0
 	.set	sub_FF42C5, 0xFF42C5
 	.set	Var2134_SetBit1_3_Call, 0xFF42C9
@@ -88370,7 +88370,7 @@ T_ParamImage_SnapshotCombinationAndParts_Entry:	jp ParamImage_SnapshotCombinatio
 T_PanelScreen_RequestRedrawIfFieldQueued:	jp PanelScreen_RequestRedrawIfFieldQueued  ; -> prom_a 0x19400
 	.fill 0xC, 1, 0x0E  ; 0xF40294: 12 x ret
 T_F402A0:	.long 0x00FE8046	; ptr -> 0xFE8046 (prom_a 0x68046)
-T_F402A4:	jp sub_FE810B  ; -> prom_a 0x6810B
+T_F402A4:	jp ModeEnter_Sequencer  ; -> prom_a 0x6810B
 T_F402A8:	jp sub_FE8116  ; -> prom_a 0x68116
 ; Evidence: slot 0xF402AC is `jp 0xFE812C`; prom_a 0xFE812C carries the label
 ;           Paint_Sequencer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -89307,7 +89307,7 @@ T_DisplayListB_RunOne:	jp DisplayListB_RunOne  ; F41830 (was T_F41830) -> prom_b
 ;           DrawValueGlyph_24x24, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DrawValueGlyph_24x24:	jp DrawValueGlyph_24x24  ; F41834 (was T_F41834) -> prom_b 0x31873   x10
 	.fill 0x8, 1, 0x0E  ; 0xF41838: 8 x ret
-T_F41840:	jp sub_FBCB06  ; -> prom_a 0x3CB06
+T_F41840:	jp ModeEnter_CombiEditPart  ; -> prom_a 0x3CB06
 T_F41844:	jp sub_FBCB31  ; -> prom_a 0x3CB31
 T_F41848:	jp ScreenEnter_CombiEditPartMenu  ; -> prom_a 0x3CB40
 T_F4184C:	jp T_F4184C_Nop  ; -> prom_a 0x3CB81
@@ -90029,7 +90029,7 @@ T_ScreenButton_SoundEditModelingDriverWaveform:	jp ScreenButton_SoundEditModelin
 T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
 T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
-T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
+T_F42254:	jp ModeEnter_SoundCopy  ; -> prom_a 0x742B7
 T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
 T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
 T_Var2134_SetBit1_3_Call:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
@@ -90804,9 +90804,9 @@ T_F4302C:	jp sub_FE7800  ; -> prom_a 0x67800   x1
 T_F43030:	jp sub_FE782C  ; -> prom_a 0x6782C   x1
 T_F43034:	jp sub_FE7848  ; -> prom_a 0x67848   x1
 	.fill 0x8, 1, 0x0E  ; 0xF43038: 8 x ret
-T_F43040:	jp sub_F7D018  ; -> prom_b 0x7D018
+T_F43040:	jp ModeEnter_Edit  ; -> prom_b 0x7D018
 T_F43044:	jp sub_F7D01C  ; -> prom_b 0x7D01C
-T_F43048:	jp sub_F7D020  ; -> prom_b 0x7D020
+T_F43048:	jp ModeEnter_StepRecord  ; -> prom_b 0x7D020
 T_F4304C:	jp sub_F7D025  ; -> prom_b 0x7D025
 ; Evidence: slot 0xF43050 is `jp 0xF7D02A`; prom_b 0xF7D02A carries the label
 ;           ScreenEnter_Edit (graded CONTENT).  DERIVATIVE name.
@@ -190959,7 +190959,8 @@ Veneer_F81E7E:
 	jrl	sub_F81E7E - 0xF7D018	; F7D015  jrl T,0xf81e7e
 ; Evidence: the +0 word of screen object F43040, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86EDD.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
-sub_F7D018:
+; ModeEnter_Edit: the +0 ENTER of panel mode 7 (T_F43040); PanelMode_ToScreenIdMap[7] = 0x1A, ScreenEnter_Edit's screen.
+ModeEnter_Edit:
 	calr	sub_F7E971	; F7D018  calr 0xf7e971
 	ret	; F7D01B  ret
 ; Evidence: the +4 word of screen object F43040 (prom_a's PanelScreen_VtableTable);
@@ -190969,7 +190970,8 @@ sub_F7D01C:
 	ret	; F7D01F  ret
 ; Evidence: the +0 word of screen object F43048, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86ED9.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
-sub_F7D020:
+; ModeEnter_StepRecord: the +0 ENTER of panel mode 6 (T_F43048); PanelMode_ToScreenIdMap[6] = 0x0F, StepRecordPartSelect.
+ModeEnter_StepRecord:
 	call	sub_F80F3A	; F7D020  call 0xf80f3a
 	ret	; F7D024  ret
 ; Evidence: the +4 word of screen object F43048 (prom_a's PanelScreen_VtableTable);
