@@ -187,7 +187,7 @@ against the FAT root directory:
 
 | content type | extension(s) | load | save | notes |
 |---|---|---|---|---|
-| 1 SEQUENCER | `SQF` and `SEQ` (through prom_b `T_F41EF8` / `T_F41EFC`) | `DiskLoad_Sequencer` | `DiskSave_Sequencer` | read 2026-10-04: see the next section |
+| 1 SEQUENCER | `SQF` and `SEQ` (through prom_b `T_SeqFile_Load` / `T_SeqFile_Save`) | `DiskLoad_Sequencer` | `DiskSave_Sequencer` | read 2026-10-04: see the next section |
 | 2 COMBINATION | `CMB` | `DiskLoad_Combination` | `DiskSave_Combination` | tag `WSA1`; 0x16300 bytes to 0xEC0000 |
 | 3 SOUND | `TM ` | `DiskLoad_Sound` | `DiskSave_Sound` | tag `WSA SOUND RAM S0`; 0x40000 bytes to 0xE80000 |
 | 4 PANEL | `LSW` and `SLS` | `DiskLoad_PanelLswFile` + `_PanelSlsFile` | `DiskSave_Panel*` | `SLS` = 0x600 bytes of RAM 0x7000 |
@@ -205,7 +205,7 @@ cited here has its evidence in `notes/prom_ab_read_names_2026_10_04.py`.
 ### 2026-10-04: the SEQUENCER content type -- two files, `SQF` and `SEQ`
 
 `DiskLoad_Sequencer` / `DiskSave_Sequencer` reach prom_a's sequencer file module (0xFBAC00-0xFBB42E)
-through `T_F41EF8` / `T_F41EFC`. Its routines, now named, write two files under the one base name:
+through `T_SeqFile_Load` / `T_SeqFile_Save`. Its routines, now named, write two files under the one base name:
 
 | file | what it holds | load window | save window |
 |---|---|---|---|
@@ -241,10 +241,47 @@ Results go to `(0x23CB)`: 0x10 bad SQF, 0x1E no room in the store, 7 no room on 
 
 ⚠ Not established:
 - what the workspace word `+0x1C` is. `Smf_WriteFile` refuses to run while it is non-zero (status 9), and
-  `sub_FBB392` / `sub_FBB3DC` gather it from all ten banks.
-- `Disk_SaveSeqFile` (window from `0x609000`) has no decoded caller of its entry `T_F42630`.
+  `BStore_GetDiskBankPassword` / `BStore_GetAnyBankPassword` gather it from all ten banks.
+  **ANSWERED the same day:** it is the bank's save PASSWORD (next section).
+- `Disk_SaveSeqFile` (window from `0x609000`) has no decoded caller of its entry `T_Disk_SaveSeqFile_Entry`.
 
 Every routine's evidence is a row of `notes/prom_ab_read_names_2026_10_04.py`.
+
+### 2026-10-04: the DISK SAVE PASSWORD -- a hidden page, and banks that clear themselves at boot
+
+`BStore_Password`, workspace word `+0x1C` (`0x60341C`), is a two-character password. Each bank copy
+holds its own at `0x61001C + n*0xC00`. The DISK SAVE FILE screen handles it as follows.
+
+**Setting it.**
+- Page 1's SoftKeyCol4 counts presses in `DiskSave_PasswordUnlockCount` (0x220C).
+- Past six presses, page 3 opens if the bank has no password: "DISK SAVE:PASSWORD / Please set the
+  PASSWORD", drawn by `ScreenEnter_DiskSaveFile_Page3`. If it has one, the press shows status 0x0A instead.
+- Page 3's LcdKeyRow1 copies the first two characters of the entry buffer `DiskSave_PasswordEntry` (0x22F0,
+  16 bytes) into `DiskSave_Password` (0x220F / 0x2210).
+- The save writes them into the workspace (`DiskSave_StorePasswordInWorkspace`, when the count is at least
+  6), so the SQF carries the password.
+- A save that ends with result 3 (OK) zeroes the count and the entered password (`DiskSave_ShowResult`).
+
+**Saving over it.** `DiskSaveFile_CheckDriveThenPassword` senses the drive first.
+- It then asks `DiskSave_IsBankPasswordSet`. For SEQUENCER, or screen 0x4E, that checks bank `Disk_SeqBank`
+  (`BStore_GetDiskBankPassword`); for ALL, every bank (`BStore_GetAnyBankPassword`, the first non-zero one).
+- When one is set, page 4 opens: "PASSWORD is already set." (`DiskSaveFile_AskForPassword`).
+- Its LcdKeyRow1 compares the entry with the stored word (`DiskSave_ComparePassword`). A mismatch shows
+  status 0x11 and returns to page 1. A match shows status 0x12 and goes on to save.
+- The save itself (`DiskSaveFile_SaveOrConfirmOverwrite`) asks for confirmation on page 2 when the selected
+  slot already holds a file (`DiskSave_IsSelectedFileNew`: its 8 listing bytes at `0x60A488 + 16*n` are not
+  all 0x80), unless an SMF write is in progress (`(0x21E8)` bit 7).
+- **SMF export is refused** for a bank with a password: `Smf_WriteFile` stops with status 9.
+
+**At boot the protected banks are erased.** `BStore_BootPhase3` calls
+`BStore_ClearPasswordProtectedBanks`. It walks banks 0..9 (`BStore_MoveWorkspaceToNextBank`), and for each
+bank whose password word is non-zero it runs `SongClear_ClearCurrentBank` -- the SONG CLEAR job's own
+routine, `SongClear_ClearBank`, which `SongClear_LcdKeyRow4` calls -- and zeroes the password. So a
+password-protected song survives only until the next power-on. `SeqFile_Load` calls the same clear on the
+target bank before it reads a one-bank SQF over it.
+
+⚠ Not established: what status codes 0x0A, 0x11 and 0x12 print. They are not tied to their texts here,
+though `DL_Error11ThePasswordThatYouEnteredIs` and `DL_PasswordOk` exist.
 
 ### `L0AD` is not a typo in this note
 

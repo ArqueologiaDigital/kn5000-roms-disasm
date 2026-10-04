@@ -3477,8 +3477,8 @@ RENAMES = {
     "sub_FDE006": "ToneEditPage_A8_SerialParallel",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDE0F7": "ToneEditPage_A8_SerialParallel",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FDE529": "ScreenButton_SoundEditFilterHpf24",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FE0047": "sub_FE0046",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FE07D0": "sub_FE0785",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FE0047": "SeqFile_Save_SaveRegs",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FE07D0": "DiskSave_ComparePassword",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE1456": "sub_FE144E",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE1DF9": "DiskLoad_ByContentType",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE2971": "DiskSave_CopyWordsToBuffer",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -3895,6 +3895,47 @@ RENAMES = {
     "sub_F001B0": "Transport_StartStopFromZero_Call",
     "sub_F62C20": "BStore_LoadGeometry_Call",
     "sub_F67470": "Format_ChordName_Call",
+    "sub_FE1C80": "DiskSaveFile_Execute_Entry",
+    "sub_FE05EC": "DiskSaveFile_CheckDriveThenPassword",
+    "sub_FE0648": "DiskSaveFile_SaveOrConfirmOverwrite",
+    "sub_FE066C": "DiskSaveFile_SaveNow",
+    "sub_FE06EA": "DiskSave_StorePasswordInWorkspace",
+    "sub_FE070C": "DiskSave_ShowResult",
+    "sub_FE0811": "DiskSave_IsBankPasswordSet",
+    "sub_FE085B": "DiskSaveFile_AskForPassword",
+    "sub_FE0870": "DiskSave_IsSelectedFileNew",
+    "sub_FE07E0": "DiskSaveFile_CheckPasswordThenSave",
+    "sub_FE0785": "DiskSave_ComparePassword",
+    "sub_FBB392": "BStore_GetDiskBankPassword",
+    "sub_FBB3DC": "BStore_GetAnyBankPassword",
+    "sub_F441AB": "BStore_ClearPasswordProtectedBanks",
+    "sub_F64BB6": "BStore_MoveWorkspaceToNextBank",
+    "sub_F608D0": "SongClear_ClearBank",
+    "sub_F60B0C": "SongClear_ClearCurrentBank",
+    "T_F418D0": "T_PartParam_StepFieldById",
+    "T_F418D4": "T_PartParam_EnterFieldById",
+    "T_F41EF8": "T_SeqFile_Load",
+    "T_F41EFC": "T_SeqFile_Save",
+    "T_F41F00": "T_BStore_GetDiskBankPassword",
+    "T_F41F04": "T_BStore_GetAnyBankPassword",
+    "T_F4225C": "T_ModeEnter_SoundCopy_Call",
+    "T_F425CC": "T_DiskSaveFile_Execute_Entry",
+    "T_F42624": "T_Disk_LoadSqfToWorkspace_Entry",
+    "T_F42628": "T_Disk_LoadSeqToHeap_Entry",
+    "T_F4262C": "T_Disk_SaveSqfFromStaging_Entry",
+    "T_F42630": "T_Disk_SaveSeqFile_Entry",
+    "T_F426E0": "T_SongClear_ClearBank",
+    "T_F42708": "T_SongClear_ClearCurrentBank",
+    "T_F427FC": "T_BStore_LoadGeometry_Call",
+    "T_F42830": "T_BStore_MoveWorkspaceToNextBank",
+    "T_F42EE4": "T_Format_ChordName_Call",
+    "sub_FE0046": "SeqFile_Save_SaveRegs",
+    "sub_FE0053": "SeqFile_Load_SaveRegs",
+    "sub_FE0266": "BStore_GetAnyBankPassword_SaveRegs",
+    "sub_FE0273": "BStore_GetDiskBankPassword_SaveRegs",
+    "sub_FE1CD0": "DiskSave_IsSelectedFileNew_Call",
+    "sub_FE1CDC": "DiskSaveFile_SaveOrConfirmOverwrite_Call",
+    "sub_FE1CE0": "DiskSaveFile_CheckPasswordThenSave_Call",
 }
 
 

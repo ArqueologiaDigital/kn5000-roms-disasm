@@ -443,8 +443,8 @@ ROWS = [
     ("FE2531", "DiskSave_ByContentType",
      "the same dispatch on (0x2725) for saving: 1 DiskSave_Sequencer, 2 _Combination, 3 _Sound, 4 _PanelLswFile +\n"
      "_PanelSlsFile, 5 _MidiSetting, 6 _SoundRemap, 7 _CombiRemap, 8 _DrumMap; 0 ALL, all of them."),
-    ("FE2368", "DiskLoad_Sequencer", "content type 1: T_F41EF8 (saving registers); result (0x23CB), 0x1D read as 1."),
-    ("FE2CBF", "DiskSave_Sequencer", "content type 1: sub_FE0046; result (0x23CB)."),
+    ("FE2368", "DiskLoad_Sequencer", "content type 1: T_SeqFile_Load (saving registers); result (0x23CB), 0x1D read as 1."),
+    ("FE2CBF", "DiskSave_Sequencer", "content type 1: SeqFile_Save_SaveRegs; result (0x23CB)."),
     ("FE202F", "DiskLoad_Sound",
      "content type 3: extension 'TM ', DiskLoad_ReadFileIntoWindow, DiskLoad_CheckSoundRamTag ('WSA SOUND RAM S0'),\n"
      "then sub_FE20E1 moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg."),
@@ -1146,13 +1146,13 @@ ROWS = [
      "(field id H = (XIZ+8), part L = (XIZ+10)): the high nibble of H, in pairs, picks the step table -- ids\n"
      "0x00-0x1F PartParamStep_Ids00to1F, 0x20-0x3F PartParamStep_Ids20to3F at H-0x20, ... 0xA0-0xBF PartParamStep_IdsA0toBF; 0xC0 and up\n"
      "do nothing -- and calls the entry with the part.  Called by the COMBINATION EDIT INTERNAL SOUND / CONFIGURE\n"
-     "soft keys and T_F418D0."),
+     "soft keys and T_PartParam_StepFieldById."),
     ("FBB93C", "PartParam_EnterFieldById",
      "PartParam_StepFieldById's number-pad twin over PartParamEnter_Ids00to1F .. PartParamEnter_IdsA0toBF, the same id ranges.\n"
-     "Called by NumberPadKey_CombiEditInternalSound and T_F418D4."),
+     "Called by NumberPadKey_CombiEditInternalSound and T_PartParam_EnterFieldById."),
     # the sequencer's file module, prom_a 0xFBAC00-0xFBB42E (FINDINGS-prom_b-disk-and-file-menus.md, SQF / SEQ)
     ("FBAC00", "SeqFile_Load",
-     "DiskLoad_Sequencer's body (T_F41EF8, through sub_FE0053).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;\n"
+     "DiskLoad_Sequencer's body (T_SeqFile_Load, through SeqFile_Load_SaveRegs).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;\n"
      "0 -> one song into bank Disk_SeqBank.  The workspace 0x603400 goes to its bank copy, the free chain is stashed,\n"
      "bank Disk_SeqBank's copy becomes the workspace and BStore_CurrentBank, and the SQF is read over it\n"
      "(Disk_LoadSqfToWorkspace_Entry).  If its blocks ((0x603452) >> 4) fit in the stashed free count (else result\n"
@@ -1197,7 +1197,7 @@ ROWS = [
     ("FBB0D6", "BStore_DiskBankCopyAddr",
      "XIY = 0x610000 + Disk_SeqBank x 0xC00, the copy of the bank the disk screen selected."),
     ("FBAE5A", "SeqFile_Save",
-     "DiskSave_Sequencer's body (T_F41EFC, through sub_FE0046).  Content type ALL -> SeqFile_SaveAllBanks.\n"
+     "DiskSave_Sequencer's body (T_SeqFile_Save, through SeqFile_Save_SaveRegs).  Content type ALL -> SeqFile_SaveAllBanks.\n"
      "Otherwise: workspace -> its bank copy; bank Disk_SeqBank's copy -> staging 0x609400, all-banks flag +4 = 0;\n"
      "each in-use directory entry's chain (+0x100, stride 3, bit 7) is counted and renumbered from 1 in order, the\n"
      "running total stored at +0x7E + 2k and x 16 at +0x52; the SQF is written (Disk_SaveSqfFromStaging_Entry);\n"
@@ -1241,16 +1241,16 @@ ROWS = [
      "cleared, DiskApi_WriteFileFromWindow."),
     ("FE2C64", "Disk_SaveSeqFile",
      "(0x761A) = (0x603452); DiskApi_CheckFreeSpace for that many paragraphs; with room: extension SEQ, window\n"
-     "0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_F42630\n"
+     "0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_Disk_SaveSeqFile_Entry\n"
      "is decoded in prom_a or prom_b; SeqFile_Save writes the SEQ through SeqFile_WriteSeqCompacted."),
     ("FE1BEB", "Disk_LoadSqfToWorkspace_Entry",
-     "the directory entry behind T_F42624: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load."),
+     "the directory entry behind T_Disk_LoadSqfToWorkspace_Entry: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load."),
     ("FE1BF3", "Disk_LoadSeqToHeap_Entry",
-     "behind T_F42628: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks."),
+     "behind T_Disk_LoadSeqToHeap_Entry: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks."),
     ("FE1BFB", "Disk_SaveSqfFromStaging_Entry",
-     "behind T_F4262C: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save."),
+     "behind T_Disk_SaveSqfFromStaging_Entry: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save."),
     ("FE1C03", "Disk_SaveSeqFile_Entry",
-     "behind T_F42630: Disk_SaveSeqFile, A -> Disk_LastError."),
+     "behind T_Disk_SaveSeqFile_Entry: Disk_SaveSeqFile, A -> Disk_LastError."),
     ("FE2D30", "Disk_SetWindowStartToWorkspace", "Disk_WindowStart = 0x603400, the sequencer workspace."),
     ("FE2D9D", "Disk_SetWindowEndToWorkspaceEnd", "Disk_WindowEnd = 0x604000."),
     ("FE2D1D", "Disk_SetWindowStartToHeap", "Disk_WindowStart = BStore_HeapBase."),
@@ -1259,6 +1259,64 @@ ROWS = [
     ("FE2DA7", "Disk_SetWindowEndToHeapPlusSeqLength", "Disk_WindowEnd = BStore_HeapBase + (0x761A) x 16."),
     ("FE2D26", "Disk_SetWindowStartToSqfStaging", "Disk_WindowStart = 0x609400, SeqFile_Save's one-bank staging copy."),
     ("FE2D93", "Disk_SetWindowEndToSqfStagingEnd", "Disk_WindowEnd = 0x60A000."),
+    # the DISK SAVE FILE flow and the save password (FINDINGS-prom_b-disk-and-file-menus.md, DISK SAVE PASSWORD)
+    ("FE1C80", "DiskSaveFile_Execute_Entry",
+     "the directory entry behind T_DiskSaveFile_Execute_Entry (LcdKeyRow1_DiskSaveFile_Page1, LcdKeyRow3_DiskSaveFile_Page2,\n"
+     "Smf_WriteFile): status 5; on page 2 (the overwrite question) DiskSaveFile_SaveNow, else\n"
+     "DiskSaveFile_CheckDriveThenPassword; Ring_InitTenOfFourteen."),
+    ("FE05EC", "DiskSaveFile_CheckDriveThenPassword",
+     "Disk_RequestSenseDriveStatus: 0x2F -> status 0x0C, other non-zero -> 8, each shown with a delay and back to\n"
+     "page 1.  Ready: DiskSave_IsBankPasswordSet -> (0x1735); set -> DiskSaveFile_AskForPassword, else\n"
+     "DiskSaveFile_SaveOrConfirmOverwrite."),
+    ("FE0648", "DiskSaveFile_SaveOrConfirmOverwrite",
+     "during an SMF write ((0x21E8) bit 7) DiskSaveFile_SaveNow; otherwise DiskSave_IsSelectedFileNew: new ->\n"
+     "DiskSaveFile_SaveNow, existing -> page 2 (the overwrite question).  Repaint bit 4."),
+    ("FE066C", "DiskSaveFile_SaveNow",
+     "Disk_RequestSenseDriveStatus (failure: status 8 / 0 / 0x0C and a delay); ready: status 0x0B,\n"
+     "Var2216_SetW145C, DiskSave_StorePasswordInWorkspace, DiskSave_ByContentType, DiskSave_ShowResult(result);\n"
+     "then screen request 1 when UI_StatusCode is 0x23, else page 0."),
+    ("FE06EA", "DiskSave_StorePasswordInWorkspace",
+     "when (0x220C) -- the page-1 SoftKeyCol4 count that opened the password page -- is at least 6:\n"
+     "(0x60341C) = (0x2210) << 8 | (0x220F), the two characters page 3 took from the entry buffer 0x22F0."),
+    ("FE070C", "DiskSave_ShowResult",
+     "(result): 3 -> status 3, Delay_500Ticks, (0x220F) = (0x220C) = 0 (the entered password is spent); else\n"
+     "status 7 for 7 and 6 for anything else, sub_FE1907 and, outside an SMF write, a delay.  Returns the result."),
+    ("FE0811", "DiskSave_IsBankPasswordSet",
+     "unless (0x21FA) is 3: on screen 0x4E or for content type SEQUENCER, the password of bank Disk_SeqBank\n"
+     "(BStore_GetDiskBankPassword via BStore_GetDiskBankPassword_SaveRegs); for ALL, the first set one of any bank\n"
+     "(BStore_GetAnyBankPassword via BStore_GetAnyBankPassword_SaveRegs).  0xFE when the word in (0x23CE) is non-zero, else 0."),
+    ("FE085B", "DiskSaveFile_AskForPassword",
+     "(0x222A) = 0xFA, NameEdit_CursorPos = 0, page 4 -- ScreenEnter_DiskSaveFile_Page4 draws\n"
+     "DL_DiskSavePasswordSave and DL_PasswordIsAlreadySetPleaseSetThe."),
+    ("FE0870", "DiskSave_IsSelectedFileNew",
+     "the 8 bytes at 0x60A488 + 16 x (0x2724) -- the selected listing slot -- all 0x80: Disk_LastError = 0,\n"
+     "A = 0; any other byte: 0xFE (a file is there)."),
+    ("FE07E0", "DiskSaveFile_CheckPasswordThenSave",
+     "the directory entry T_F4260C's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,\n"
+     "delay, page 1; match -> status 0x12, Delay_500Ticks, DiskSaveFile_SaveOrConfirmOverwrite."),
+    ("FE0785", "DiskSave_ComparePassword",
+     "the entered (0x2210) << 8 | (0x220F) against (0x23CE) -- bank Disk_SeqBank's password for SEQUENCER\n"
+     "(BStore_GetDiskBankPassword_SaveRegs), any bank's for ALL (BStore_GetAnyBankPassword_SaveRegs); other content types pass.  0 = match, 0xFE = mismatch."),
+    ("FBB392", "BStore_GetDiskBankPassword",
+     "gathers word +0x1C of the ten bank copies (0x61001C + n x 0xC00) into 0x60A000[n], the live workspace's\n"
+     "(0x60341C) for the current bank, and returns bank Disk_SeqBank's in (0x23CE).  Thunk T_BStore_GetDiskBankPassword."),
+    ("FBB3DC", "BStore_GetAnyBankPassword",
+     "the same gathering, then (0x23CE) = the first non-zero of the ten, or 0.  Thunk T_BStore_GetAnyBankPassword."),
+    ("F441AB", "BStore_ClearPasswordProtectedBanks",
+     "BStore_BootPhase3's: saves the workspace to its bank, then for banks 0..9 (BStore_MoveWorkspaceToNextBank)\n"
+     "runs SongClear_ClearCurrentBank wherever the password word (0x60341C) is non-zero, and zeroes it; then\n"
+     "restores the current bank."),
+    ("F64BB6", "BStore_MoveWorkspaceToNextBank",
+     "(0x0E2B) / (0x0E2D) = BStore_FreeHead / FreeCount; unless BStore_CurrentBank is 0 the workspace goes back\n"
+     "to bank CurrentBank-1 (BStore_Workspace_SaveToBank); then bank CurrentBank is loaded\n"
+     "(BStore_Workspace_LoadFromBank).  Thunk T_BStore_MoveWorkspaceToNextBank, called by BStore_ClearPasswordProtectedBanks."),
+    ("F608D0", "SongClear_ClearBank",
+     "the SONG CLEAR job's action (SongClear_LcdKeyRow4, through T_SongClear_ClearBank) on bank (0x0E02), 10 = all of them\n"
+     "(sub_F610E3): sub_F60F4F, then in the bank copy the password word +0x1C = 0 and every directory entry's bit\n"
+     "7 cleared and start block 0xFFFF."),
+    ("F60B0C", "SongClear_ClearCurrentBank",
+     "SongClear_ClearBank with (0x0E02) = BStore_CurrentBank, the old value restored.  Thunk T_SongClear_ClearCurrentBank, called by\n"
+     "BStore_ClearPasswordProtectedBanks and by SeqFile_Load on its target bank."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

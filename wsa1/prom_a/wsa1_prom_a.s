@@ -1653,10 +1653,10 @@
 	.set T_Gfx_DrawLine_Solid,                                                          0x00F41EE4
 	.set T_Gfx_DrawLine_Dashed,                                                         0x00F41EE8
 	.set T_F41EEC,                                                                      0x00F41EEC
-	.set T_F41EF8,                                                                      0x00F41EF8
-	.set T_F41EFC,                                                                      0x00F41EFC
-	.set T_F41F00,                                                                      0x00F41F00
-	.set T_F41F04,                                                                      0x00F41F04
+	.set T_SeqFile_Load,                                                                      0x00F41EF8
+	.set T_SeqFile_Save,                                                                      0x00F41EFC
+	.set T_BStore_GetDiskBankPassword,                                                                      0x00F41F00
+	.set T_BStore_GetAnyBankPassword,                                                                      0x00F41F04
 	.set T_F41F10,                                                                      0x00F41F10
 	.set T_F41F14,                                                                      0x00F41F14
 	.set T_F41F18,                                                                      0x00F41F18
@@ -1702,7 +1702,7 @@
 	.set T_ScreenEnter_SoundEditModelingDriverWaveform,                                                                      0x00F4219C
 	.set T_F42250,                                                                      0x00F42250
 	.set T_ModeEnter_SoundCopy,                                                                      0x00F42254
-	.set T_F4225C,                                                                      0x00F4225C
+	.set T_ModeEnter_SoundCopy_Call,                                                                      0x00F4225C
 	.set T_Paint_DiskMenu,                                                              0x00F42264
 	.set T_Paint_MidiFileDirectPlay,                                                    0x00F42274
 	.set T_ScreenEnter_SoundEditDspEffect,                                                                      0x00F42320
@@ -1781,7 +1781,7 @@
 	.set T_F425B8,                                                                      0x00F425B8
 	.set T_F425C4,                                                                      0x00F425C4
 	.set T_F425C8,                                                                      0x00F425C8
-	.set T_F425CC,                                                                      0x00F425CC
+	.set T_DiskSaveFile_Execute_Entry,                                                                      0x00F425CC
 	.set T_MidiFileSave_Page5_LcdKeyRow3,                                                                      0x00F425D0
 	.set T_F425D4,                                                                      0x00F425D4
 	.set T_F425D8,                                                                      0x00F425D8
@@ -1797,9 +1797,9 @@
 	.set T_F42618,                                                                      0x00F42618
 	.set T_F4261C,                                                                      0x00F4261C
 	.set T_F42620,                                                                      0x00F42620
-	.set T_F42624,                                                                      0x00F42624
-	.set T_F42628,                                                                      0x00F42628
-	.set T_F4262C,                                                                      0x00F4262C
+	.set T_Disk_LoadSqfToWorkspace_Entry,                                                                      0x00F42624
+	.set T_Disk_LoadSeqToHeap_Entry,                                                                      0x00F42628
+	.set T_Disk_SaveSqfFromStaging_Entry,                                                                      0x00F4262C
 	.set T_MidiFileSave_Page3_LcdKeyRow3,                                                                      0x00F42634
 	.set T_F42660,                                                                      0x00F42660
 	.set T_F42664,                                                                      0x00F42664
@@ -1808,7 +1808,7 @@
 	.set T_Screen_CombinationGroupNaming_Enter,                                         0x00F42690
 	.set T_Screen_SoundCopy_Enter,                                                      0x00F426A0
 	.set T_Screen_CombinationCopy_Enter,                                                0x00F426B0
-	.set T_F42708,                                                                      0x00F42708
+	.set T_SongClear_ClearCurrentBank,                                                                      0x00F42708
 	.set T_F42828,                                                                      0x00F42828
 	.set T_F4282C,                                                                      0x00F4282C
 	.set T_BStore_AppendBytes_Veneer,                                                   0x00F42894
@@ -13789,7 +13789,7 @@ PanelScreen_VtableTable:
 	.long T_PanelMode_MidiEnter                              ; F86F09  [18]   -> 0xF41640
 	.long PanelScreen_NullVtable                ; F86F0D  [19]   -> PanelScreen_NullVtable
 	.long T_ModeEnter_SoundCopy                              ; F86F11  [20]   -> 0xF42254
-	.long T_F4225C                              ; F86F15  [21]   -> 0xF4225C
+	.long T_ModeEnter_SoundCopy_Call                              ; F86F15  [21]   -> 0xF4225C
 	.long T_F41A00                              ; F86F19  [22]   -> 0xF41A00
 	.long T_F41F54                              ; F86F1D  [23]   -> 0xF41F54
 	.long PanelScreen_NullVtable                ; F86F21  [24]   -> PanelScreen_NullVtable
@@ -52871,7 +52871,7 @@ LcdKeyRow1_SoundGroupNaming:
 	add WA,BC                                            ; F9CCD6  d9 80
 	extz XWA                                             ; F9CCD8  e8 12
 	ld (xiz-4), xwa                                      ; F9CCDA  be fc 60
-	lda xbc, (0x22f0:16)                                ; F9CCDD  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; F9CCDD  f1 f0 22 31
 	ld (xiz-8), xbc                                      ; F9CCE1  be f8 61
 	ld h, 0x04:opc                                          ; F9CCE4  26 04
 .LF9CCE6:
@@ -53176,7 +53176,7 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 	calr UserSoundBank_RemoteGroupNameAddr                                          ; F9CF0F  1e e4 28
 	push XIY                                             ; F9CF12  3d
 	pushw 0x10                                           ; F9CF13  0b 10 00
-	lda xbc, (0x22f0:16)                                ; F9CF16  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; F9CF16  f1 f0 22 31
 	push XBC                                             ; F9CF1A  39
 	calr Link_WriteRemoteBlock                                          ; F9CF1B  1e a3 2b
 	inc 8,XSP                                            ; F9CF1E  ef 60
@@ -53195,7 +53195,7 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 	add BC,DE                                            ; F9CF3F  da 81
 	extz XBC                                             ; F9CF41  e9 12
 	ld (xiz-4), xbc                                      ; F9CF43  be fc 61
-	lda xix, (0x22f0:16)                                ; F9CF46  f1 f0 22 34
+	lda xix, (DiskSave_PasswordEntry:16)                                ; F9CF46  f1 f0 22 34
 	ld h, 0x04:opc                                          ; F9CF4A  26 04
 .LF9CF4C:
 	ld XBC,(XIX)                                         ; F9CF4C  a4 21
@@ -53552,7 +53552,7 @@ LcdKeyRow1_CombinationGroupNaming:
 	add WA,BC                                            ; F9D13E  d9 80
 	extz XWA                                             ; F9D140  e8 12
 	ld (xiz-4), xwa                                      ; F9D142  be fc 60
-	lda xbc, (0x22f0:16)                                ; F9D145  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; F9D145  f1 f0 22 31
 	ld (xiz-8), xbc                                      ; F9D149  be f8 61
 	ld h, 0x04:opc                                          ; F9D14C  26 04
 .LF9D14E:
@@ -53842,7 +53842,7 @@ CombinationGroupNaming_StoreGroupName:
 	calr CombiBank_RemoteGroupNameAddr                                          ; F9D361  1e ac 25
 	push XIY                                             ; F9D364  3d
 	pushw 0x10                                           ; F9D365  0b 10 00
-	lda xbc, (0x22f0:16)                                ; F9D368  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; F9D368  f1 f0 22 31
 	push XBC                                             ; F9D36C  39
 	calr Link_WriteRemoteBlock                                          ; F9D36D  1e 51 27
 	inc 8,XSP                                            ; F9D370  ef 60
@@ -53862,7 +53862,7 @@ CombinationGroupNaming_StoreGroupName:
 	add BC,DE                                            ; F9D391  da 81
 	extz XBC                                             ; F9D393  e9 12
 	ld (xiz-4), xbc                                      ; F9D395  be fc 61
-	lda xix, (0x22f0:16)                                ; F9D398  f1 f0 22 34
+	lda xix, (DiskSave_PasswordEntry:16)                                ; F9D398  f1 f0 22 34
 	ld h, 0x04:opc                                          ; F9D39C  26 04
 .LF9D39E:
 	ld XBC,(XIX)                                         ; F9D39E  a4 21
@@ -57513,7 +57513,7 @@ LcdKeyRow1_DrumsMapNaming:
 	add XBC,ByteTable16_FA1A5E                           ; F9F28A  e9 c8 5e 1a fa 00
 	ld XBC,(XBC)                                         ; F9F290  a1 21
 	ld XIX,XBC                                           ; F9F292  e9 8c
-	lda xwa, (0x22f0:16)                                ; F9F294  f1 f0 22 30
+	lda xwa, (DiskSave_PasswordEntry:16)                                ; F9F294  f1 f0 22 30
 	ld (xiz-4), xwa                                      ; F9F298  be fc 60
 	ld h, 0x04:opc                                          ; F9F29B  26 04
 .LF9F29D:
@@ -57545,7 +57545,7 @@ LcdKeyRow1_DrumsMapNaming:
 	add XBC,ByteTable16_FA1A5E                           ; F9F2D4  e9 c8 5e 1a fa 00
 	ld XBC,(XBC)                                         ; F9F2DA  a1 21
 	ld XIX,XBC                                           ; F9F2DC  e9 8c
-	lda xwa, (0x22f0:16)                                ; F9F2DE  f1 f0 22 30
+	lda xwa, (DiskSave_PasswordEntry:16)                                ; F9F2DE  f1 f0 22 30
 	ld (xiz-4), xwa                                      ; F9F2E2  be fc 60
 	ld h, 0x04:opc                                          ; F9F2E5  26 04
 .LF9F2E7:
@@ -102708,7 +102708,7 @@ MidiFile_Tables_FBA169:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 2505, 1, 0x0E
 
-; SeqFile_Load: DiskLoad_Sequencer's body (T_F41EF8, through sub_FE0053).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;
+; SeqFile_Load: DiskLoad_Sequencer's body (T_SeqFile_Load, through SeqFile_Load_SaveRegs).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;
 ;   0 -> one song into bank Disk_SeqBank.  The workspace 0x603400 goes to its bank copy, the free chain is stashed,
 ;   bank Disk_SeqBank's copy becomes the workspace and BStore_CurrentBank, and the SQF is read over it
 ;   (Disk_LoadSqfToWorkspace_Entry).  If its blocks ((0x603452) >> 4) fit in the stashed free count (else result
@@ -102742,12 +102742,12 @@ SeqFile_Load:
 	call BStore_UnstashFreeChain                                      ; FBAC42  1d fd ad fb
 	ld a, (Disk_SeqBank:16)                                   ; FBAC46  c1 2b 27 21
 	ld (BStore_CurrentBank:16), a                                   ; FBAC4A  f1 0a 36 41
-	call T_F42708                                        ; FBAC4E  1d 08 27 f4
+	call T_SongClear_ClearCurrentBank                                        ; FBAC4E  1d 08 27 f4
 	call BStore_StashFreeChain                                      ; FBAC52  1d ea ad fb
 	ld XIY,0x00603400                                    ; FBAC56  45 00 34 60 00
 	call BStore_CurrentBankCopyAddr                                      ; FBAC5B  1d c3 b0 fb
 	ldir85                                               ; FBAC5F  85 11
-	call T_F42624                                        ; FBAC61  1d 24 26 f4
+	call T_Disk_LoadSqfToWorkspace_Entry                                        ; FBAC61  1d 24 26 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBAC65  c1 43 22 3f 01
 	jrl nz, .LFBACD2                                     ; FBAC6A  7e 65 00
 	call T_F40AC8                                        ; FBAC6D  1d c8 0a f4
@@ -102811,7 +102811,7 @@ SeqFile_LoadSongBlocks:
 	push XWA                                             ; FBAD0B  38
 	call BStore_FreeHeadBlockAddr                                      ; FBAD0C  1d 2a ae fb
 	ld (BStore_HeapBase:16), xix                                 ; FBAD10  f1 04 36 64
-	call T_F42628                                        ; FBAD14  1d 28 26 f4
+	call T_Disk_LoadSeqToHeap_Entry                                        ; FBAD14  1d 28 26 f4
 	pop XWA                                              ; FBAD18  58
 	ld (BStore_HeapBase:16), xwa                                 ; FBAD19  f1 04 36 60
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBAD1D  c1 43 22 3f 01
@@ -102941,7 +102941,7 @@ BStore_RelocateBlockNumber:
 	ld (XIX),HL                                          ; FBAE57  b4 53
 .LFBAE59:
 	ret                                                  ; FBAE59  0e
-; SeqFile_Save: DiskSave_Sequencer's body (T_F41EFC, through sub_FE0046).  Content type ALL -> SeqFile_SaveAllBanks.
+; SeqFile_Save: DiskSave_Sequencer's body (T_SeqFile_Save, through SeqFile_Save_SaveRegs).  Content type ALL -> SeqFile_SaveAllBanks.
 ;   Otherwise: workspace -> its bank copy; bank Disk_SeqBank's copy -> staging 0x609400, all-banks flag +4 = 0;
 ;   each in-use directory entry's chain (+0x100, stride 3, bit 7) is counted and renumbered from 1 in order, the
 ;   running total stored at +0x7E + 2k and x 16 at +0x52; the SQF is written (Disk_SaveSqfFromStaging_Entry);
@@ -103007,7 +103007,7 @@ SeqFile_Save:
 	sla wa, 0x04                                         ; FBAEFB  d8 ec 04
 	ld XIY,0x00609452                                    ; FBAEFE  45 52 94 60 00
 	ld (XIY),WA                                          ; FBAF03  b5 50
-	call T_F4262C                                        ; FBAF05  1d 2c 26 f4
+	call T_Disk_SaveSqfFromStaging_Entry                                        ; FBAF05  1d 2c 26 f4
 	ld a, (Disk_LastError:16)                                   ; FBAF09  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBAF0D  f1 cb 23 41
 	cp a, 0x03:i3                                          ; FBAF11  c9 db
@@ -103424,7 +103424,9 @@ SeqFile_SaveAllBanks:
 .LFBB38B:
 	ld (0x610004:24), 0x00                             ; FBB38B  f2 04 00 61 00 00
 	ret                                                  ; FBB391  0e
-sub_FBB392:
+; BStore_GetDiskBankPassword: gathers word +0x1C of the ten bank copies (0x61001C + n x 0xC00) into 0x60A000[n], the live workspace's
+;   (0x60341C) for the current bank, and returns bank Disk_SeqBank's in (0x23CE).  Thunk T_BStore_GetDiskBankPassword.
+BStore_GetDiskBankPassword:
 	ldw bc, 0x0a                                         ; FBB392  31 0a 00
 	ld XIY,0x0061001c                                    ; FBB395  45 1c 00 61 00
 	ld XIX,0x0060a000                                    ; FBB39A  44 00 a0 60 00
@@ -103434,7 +103436,7 @@ sub_FBB392:
 	add XIY,0x00000c00                                   ; FBB3A3  ed c8 00 0c 00 00
 	inc 2,XIX                                            ; FBB3A9  ec 62
 	djnz16 bc, .LFBB39F                                  ; FBB3AB  d9 1c f1
-	ld hl, (0x60341c:24)                                ; FBB3AE  d2 1c 34 60 23
+	ld hl, (BStore_Password:24)                                ; FBB3AE  d2 1c 34 60 23
 	ld XIX,0x0060a000                                    ; FBB3B3  44 00 a0 60 00
 	xor XWA,XWA                                          ; FBB3B8  e8 d0
 	ld a, (BStore_CurrentBank:16)                                   ; FBB3BA  c1 0a 36 21
@@ -103447,9 +103449,10 @@ sub_FBB392:
 	sla xwa, 0x01                                        ; FBB3D0  e8 ec 01
 	add XIX,XWA                                          ; FBB3D3  e8 84
 	ld HL,(XIX)                                          ; FBB3D5  94 23
-	ld (0x23ce:16), hl                                  ; FBB3D7  f1 ce 23 53
+	ld (DiskSave_StoredPassword:16), hl                                  ; FBB3D7  f1 ce 23 53
 	ret                                                  ; FBB3DB  0e
-sub_FBB3DC:
+; BStore_GetAnyBankPassword: the same gathering, then (0x23CE) = the first non-zero of the ten, or 0.  Thunk T_BStore_GetAnyBankPassword.
+BStore_GetAnyBankPassword:
 	ldw bc, 0x0a                                         ; FBB3DC  31 0a 00
 	ld XIY,0x0061001c                                    ; FBB3DF  45 1c 00 61 00
 	ld XIX,0x0060a000                                    ; FBB3E4  44 00 a0 60 00
@@ -103459,7 +103462,7 @@ sub_FBB3DC:
 	add XIY,0x00000c00                                   ; FBB3ED  ed c8 00 0c 00 00
 	inc 2,XIX                                            ; FBB3F3  ec 62
 	djnz16 bc, .LFBB3E9                                  ; FBB3F5  d9 1c f1
-	ld hl, (0x60341c:24)                                ; FBB3F8  d2 1c 34 60 23
+	ld hl, (BStore_Password:24)                                ; FBB3F8  d2 1c 34 60 23
 	ld XIX,0x0060a000                                    ; FBB3FD  44 00 a0 60 00
 	xor XWA,XWA                                          ; FBB402  e8 d0
 	ld a, (BStore_CurrentBank:16)                                   ; FBB404  c1 0a 36 21
@@ -103472,12 +103475,12 @@ sub_FBB3DC:
 	ld HL,(XIX)                                          ; FBB417  94 23
 	cp hl, 0x00:i3                                         ; FBB419  db d8
 	jr z, .LFBB423                                       ; FBB41B  66 06
-	ld (0x23ce:16), hl                                  ; FBB41D  f1 ce 23 53
+	ld (DiskSave_StoredPassword:16), hl                                  ; FBB41D  f1 ce 23 53
 	jr .LFBB42E                                          ; FBB421  68 0b
 .LFBB423:
 	inc 2,XIX                                            ; FBB423  ec 62
 	djnz16 bc, .LFBB417                                  ; FBB425  d9 1c ef
-	ldw (0x23ce:16), 0x00                                ; FBB428  f1 ce 23 02 00 00
+	ldw (DiskSave_StoredPassword:16), 0x00                                ; FBB428  f1 ce 23 02 00 00
 .LFBB42E:
 	ret                                                  ; FBB42E  0e
 
@@ -103489,7 +103492,7 @@ sub_FBB3DC:
 ; PartParam_StepFieldById: (field id H = (XIZ+8), part L = (XIZ+10)): the high nibble of H, in pairs, picks the step table -- ids
 ;   0x00-0x1F PartParamStep_Ids00to1F, 0x20-0x3F PartParamStep_Ids20to3F at H-0x20, ... 0xA0-0xBF PartParamStep_IdsA0toBF; 0xC0 and up
 ;   do nothing -- and calls the entry with the part.  Called by the COMBINATION EDIT INTERNAL SOUND / CONFIGURE
-;   soft keys and T_F418D0.
+;   soft keys and T_PartParam_StepFieldById.
 PartParam_StepFieldById:
 	link XIZ,0x0000                                      ; FBB800  ee 0c 00 00
 	pushw hl                                             ; FBB804  2b
@@ -103613,7 +103616,7 @@ PartParam_StepFieldById:
 	unlk XIZ                                             ; FBB939  ee 0d
 	ret                                                  ; FBB93B  0e
 ; PartParam_EnterFieldById: PartParam_StepFieldById's number-pad twin over PartParamEnter_Ids00to1F .. PartParamEnter_IdsA0toBF, the same id ranges.
-;   Called by NumberPadKey_CombiEditInternalSound and T_F418D4.
+;   Called by NumberPadKey_CombiEditInternalSound and T_PartParam_EnterFieldById.
 PartParam_EnterFieldById:
 	link XIZ,0x0000                                      ; FBB93C  ee 0c 00 00
 	pushw hl                                             ; FBB940  2b
@@ -110164,7 +110167,7 @@ ScreenEnterBody_CombinationNaming:
 	push XIX                                             ; FBF190  3c
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBF191  c1 7f 27 3f 01
 	jr nz, .LFBF1BE                                      ; FBF196  6e 26
-	lda xbc, (0x22f0:16)                                ; FBF198  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; FBF198  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF19C  be fc 61
 	ldw wa, 0x1d00                                       ; FBF19F  30 00 1d
 	inc 2,WA                                             ; FBF1A2  d8 62
@@ -110182,7 +110185,7 @@ ScreenEnterBody_CombinationNaming:
 	sub H,C                                              ; FBF1BA  cb a6
 	jr nz, .LFBF1AA                                      ; FBF1BC  6e ec
 .LFBF1BE:
-	lda xbc, (0x22f0:16)                                ; FBF1BE  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; FBF1BE  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF1C2  be fc 61
 	lda xix, (0x7622:16)                                ; FBF1C5  f1 22 76 34
 	ld h, 0x10:opc                                          ; FBF1C9  26 10
@@ -110217,7 +110220,7 @@ ScreenLeaveBody_CombinationNaming:
 	ld c, (UI_ScreenLatch:16)                                   ; FBF205  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF209  c1 7b 20 f3
 	jr z, .LFBF230                                       ; FBF20D  66 21
-	lda xbc, (0x22f0:16)                                ; FBF20F  f1 f0 22 31
+	lda xbc, (DiskSave_PasswordEntry:16)                                ; FBF20F  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF213  be fc 61
 	lda xix, (0x7622:16)                                ; FBF216  f1 22 76 34
 	ld h, 0x10:opc                                          ; FBF21A  26 10
@@ -143627,7 +143630,7 @@ sub_FD77B3:
 	ld C,H                                               ; FD77D5  ce 8b
 	extz BC                                              ; FD77D7  d9 12
 	extz XBC                                             ; FD77D9  e9 12
-	ld (XBC+0x22f0),D                                    ; FD77DB  f3 e5 f0 22 44
+	ld (XBC+DiskSave_PasswordEntry),D                                    ; FD77DB  f3 e5 f0 22 44
 	inc 1,H                                              ; FD77E0  ce 61
 .LFD77E2:
 	cp H,L                                               ; FD77E2  cf f6
@@ -143714,7 +143717,7 @@ sub_FD785C:
 	ld C,H                                               ; FD7874  ce 8b
 	extz BC                                              ; FD7876  d9 12
 	extz XBC                                             ; FD7878  e9 12
-	ld D,(XBC+0x22f0)                                    ; FD787A  c3 e5 f0 22 24
+	ld D,(XBC+DiskSave_PasswordEntry)                                    ; FD787A  c3 e5 f0 22 24
 	ld C,H                                               ; FD787F  ce 8b
 	extz BC                                              ; FD7881  d9 12
 	extz XBC                                             ; FD7883  e9 12
@@ -144119,7 +144122,7 @@ Arr22F0_Set:
 	extz BC                                              ; FD7B96  d9 12
 	extz XBC                                             ; FD7B98  e9 12
 	ld A,(XIZ+0x0a)                                      ; FD7B9A  8e 0a 21
-	ld (XBC+0x22f0),A                                    ; FD7B9D  f3 e5 f0 22 41
+	ld (XBC+DiskSave_PasswordEntry),A                                    ; FD7B9D  f3 e5 f0 22 41
 .LFD7BA2:
 	unlk XIZ                                             ; FD7BA2  ee 0d
 	ret                                                  ; FD7BA4  0e
@@ -144131,7 +144134,7 @@ Arr22F0_Get:
 	ld BC,(XIZ+0x08)                                     ; FD7BAF  9e 08 21
 	extz BC                                              ; FD7BB2  d9 12
 	extz XBC                                             ; FD7BB4  e9 12
-	ld A,(XBC+0x22f0)                                    ; FD7BB6  c3 e5 f0 22 21
+	ld A,(XBC+DiskSave_PasswordEntry)                                    ; FD7BB6  c3 e5 f0 22 21
 	ld XBC,(XIZ+0x0a)                                    ; FD7BBB  ae 0a 21
 	ld (XBC),A                                           ; FD7BBE  b1 41
 .LFD7BC0:
@@ -160331,25 +160334,27 @@ Disk_FormatSelectedMedia_Veneer:
 	pop XHL                                              ; FE0043  5b
 	pop XDE                                              ; FE0044  5a
 	ret                                                  ; FE0045  0e
-sub_FE0046:
+; SeqFile_Save_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_SeqFile_Save and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+SeqFile_Save_SaveRegs:
 	push XDE                                             ; FE0046  3a
-; (sub_FE0047 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE0046;
+; (sub_FE0047 removed 2026-10-04: no code names it and the line above falls through into it -- part of SeqFile_Save_SaveRegs;
 ;  notes/prom_a_stray_label_removal.py)
 	push XHL                                             ; FE0047  3b
 	push XIX                                             ; FE0048  3c
 	push XIZ                                             ; FE0049  3e
-	call T_F41EFC                                        ; FE004A  1d fc 1e f4
+	call T_SeqFile_Save                                        ; FE004A  1d fc 1e f4
 	pop XIZ                                              ; FE004E  5e
 	pop XIX                                              ; FE004F  5c
 	pop XHL                                              ; FE0050  5b
 	pop XDE                                              ; FE0051  5a
 	ret                                                  ; FE0052  0e
-sub_FE0053:
+; SeqFile_Load_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_SeqFile_Load and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+SeqFile_Load_SaveRegs:
 	push XDE                                             ; FE0053  3a
 	push XHL                                             ; FE0054  3b
 	push XIX                                             ; FE0055  3c
 	push XIZ                                             ; FE0056  3e
-	call T_F41EF8                                        ; FE0057  1d f8 1e f4
+	call T_SeqFile_Load                                        ; FE0057  1d f8 1e f4
 	pop XIZ                                              ; FE005B  5e
 	pop XIX                                              ; FE005C  5c
 	pop XHL                                              ; FE005D  5b
@@ -160825,23 +160830,25 @@ sub_FE0250:
 	pop XHL                                              ; FE0263  5b
 	pop XDE                                              ; FE0264  5a
 	ret                                                  ; FE0265  0e
-sub_FE0266:
+; BStore_GetAnyBankPassword_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_BStore_GetAnyBankPassword and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+BStore_GetAnyBankPassword_SaveRegs:
 	push XDE                                             ; FE0266  3a
 	push XHL                                             ; FE0267  3b
 	push XIX                                             ; FE0268  3c
 	push XIZ                                             ; FE0269  3e
-	call T_F41F04                                        ; FE026A  1d 04 1f f4
+	call T_BStore_GetAnyBankPassword                                        ; FE026A  1d 04 1f f4
 	pop XIZ                                              ; FE026E  5e
 	pop XIX                                              ; FE026F  5c
 	pop XHL                                              ; FE0270  5b
 	pop XDE                                              ; FE0271  5a
 	ret                                                  ; FE0272  0e
-sub_FE0273:
+; BStore_GetDiskBankPassword_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_BStore_GetDiskBankPassword and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+BStore_GetDiskBankPassword_SaveRegs:
 	push XDE                                             ; FE0273  3a
 	push XHL                                             ; FE0274  3b
 	push XIX                                             ; FE0275  3c
 	push XIZ                                             ; FE0276  3e
-	call T_F41F00                                        ; FE0277  1d 00 1f f4
+	call T_BStore_GetDiskBankPassword                                        ; FE0277  1d 00 1f f4
 	pop XIZ                                              ; FE027B  5e
 	pop XIX                                              ; FE027C  5c
 	pop XHL                                              ; FE027D  5b
@@ -161197,7 +161204,10 @@ sub_FE05AE:
 	pop XIX                                              ; FE05E9  5c
 	popw hl                                              ; FE05EA  4b
 	ret                                                  ; FE05EB  0e
-sub_FE05EC:
+; DiskSaveFile_CheckDriveThenPassword: Disk_RequestSenseDriveStatus: 0x2F -> status 0x0C, other non-zero -> 8, each shown with a delay and back to
+;   page 1.  Ready: DiskSave_IsBankPasswordSet -> (0x1735); set -> DiskSaveFile_AskForPassword, else
+;   DiskSaveFile_SaveOrConfirmOverwrite.
+DiskSaveFile_CheckDriveThenPassword:
 	pushw hl                                             ; FE05EC  2b
 	push XIX                                             ; FE05ED  3c
 	lda xix, (0x1736:24)                                 ; FE05EE  f2 36 17 00 34
@@ -161218,15 +161228,15 @@ sub_FE05EC:
 	ld (XIX),0x08                                        ; FE060E  b4 00 08
 	jr .LFE062B                                              ; FE0611  68 18
 .LFE0613:
-	calr sub_FE0811                                          ; FE0613  1e fb 01
+	calr DiskSave_IsBankPasswordSet                                          ; FE0613  1e fb 01
 	ld H,A                                               ; FE0616  c9 8e
 	ld (0x1735:24), a                                   ; FE0618  f2 35 17 00 41
 	cp h, 0x00:i3                                          ; FE061D  ce d8
 	jr nz, .LFE0626                                          ; FE061F  6e 05
-	calr sub_FE0648                                            ; FE0621  1e 24 00
+	calr DiskSaveFile_SaveOrConfirmOverwrite                                            ; FE0621  1e 24 00
 	jr .LFE0645                                              ; FE0624  68 1f
 .LFE0626:
-	calr sub_FE085B                                          ; FE0626  1e 32 02
+	calr DiskSaveFile_AskForPassword                                          ; FE0626  1e 32 02
 	jr .LFE0645                                              ; FE0629  68 1a
 .LFE062B:
 	ld C,(XIX)                                           ; FE062B  84 23
@@ -161242,17 +161252,19 @@ sub_FE05EC:
 	pop XIX                                              ; FE0645  5c
 	popw hl                                              ; FE0646  4b
 	ret                                                  ; FE0647  0e
-sub_FE0648:
+; DiskSaveFile_SaveOrConfirmOverwrite: during an SMF write ((0x21E8) bit 7) DiskSaveFile_SaveNow; otherwise DiskSave_IsSelectedFileNew: new ->
+;   DiskSaveFile_SaveNow, existing -> page 2 (the overwrite question).  Repaint bit 4.
+DiskSaveFile_SaveOrConfirmOverwrite:
 	ld c, (0x21e8:16)                                   ; FE0648  c1 e8 21 23
 	and C,0x80                                           ; FE064C  cb cc 80
 	jr z, .LFE0656                                           ; FE064F  66 05
-	calr sub_FE066C                                            ; FE0651  1e 18 00
+	calr DiskSaveFile_SaveNow                                            ; FE0651  1e 18 00
 	jr .LFE066B                                              ; FE0654  68 15
 .LFE0656:
-	calr sub_FE0870                                          ; FE0656  1e 17 02
+	calr DiskSave_IsSelectedFileNew                                          ; FE0656  1e 17 02
 	cp a, 0x00:i3                                          ; FE0659  c9 d8
 	jr nz, .LFE0662                                          ; FE065B  6e 05
-	calr sub_FE066C                                            ; FE065D  1e 0c 00
+	calr DiskSaveFile_SaveNow                                            ; FE065D  1e 0c 00
 	jr .LFE0667                                              ; FE0660  68 05
 .LFE0662:
 	ld (UI_ScreenPage:16), 0x02                                 ; FE0662  f1 29 22 00 02
@@ -161260,7 +161272,10 @@ sub_FE0648:
 	m_set 4, MD16, UI_Request_Hi                                ; FE0667  f1 71 20 bc
 .LFE066B:
 	ret                                                  ; FE066B  0e
-sub_FE066C:
+; DiskSaveFile_SaveNow: Disk_RequestSenseDriveStatus (failure: status 8 / 0 / 0x0C and a delay); ready: status 0x0B,
+;   Var2216_SetW145C, DiskSave_StorePasswordInWorkspace, DiskSave_ByContentType, DiskSave_ShowResult(result);
+;   then screen request 1 when UI_StatusCode is 0x23, else page 0.
+DiskSaveFile_SaveNow:
 	pushw hl                                             ; FE066C  2b
 	push XIX                                             ; FE066D  3c
 	lda xix, (0x1736:24)                                 ; FE066E  f2 36 17 00 34
@@ -161289,13 +161304,13 @@ sub_FE066C:
 	pushw 0x0b                                           ; FE06AB  0b 0b 00
 	calr StatusMsg_ShowByIndex                                          ; FE06AE  1e 87 11
 	calr Var2216_SetW145C                                          ; FE06B1  1e 05 29
-	calr sub_FE06EA                                            ; FE06B4  1e 33 00
+	calr DiskSave_StorePasswordInWorkspace                                            ; FE06B4  1e 33 00
 	calr DiskSave_ByContentType                                          ; FE06B7  1e 77 1e
 	ld H,A                                               ; FE06BA  c9 8e
 	ld (XIX),A                                           ; FE06BC  b4 41
 	push 0x00                                            ; FE06BE  09 00
 	push H                                               ; FE06C0  ce 04
-	calr sub_FE070C                                            ; FE06C2  1e 47 00
+	calr DiskSave_ShowResult                                            ; FE06C2  1e 47 00
 .LFE06C5:
 	pop XIY                                              ; FE06C5  5d
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; FE06C6  c1 80 28 3f 23
@@ -161311,22 +161326,26 @@ sub_FE066C:
 	pop XIX                                              ; FE06E7  5c
 	popw hl                                              ; FE06E8  4b
 	ret                                                  ; FE06E9  0e
-sub_FE06EA:
+; DiskSave_StorePasswordInWorkspace: when (0x220C) -- the page-1 SoftKeyCol4 count that opened the password page -- is at least 6:
+;   (0x60341C) = (0x2210) << 8 | (0x220F), the two characters page 3 took from the entry buffer 0x22F0.
+DiskSave_StorePasswordInWorkspace:
 	pushw hl                                             ; FE06EA  2b
-	m_cp_mi8 MB16, 0x220c, 0x06                          ; FE06EB  c1 0c 22 3f 06
+	m_cp_mi8 MB16, DiskSave_PasswordUnlockCount, 0x06                          ; FE06EB  c1 0c 22 3f 06
 	jr c, .LFE070A                                           ; FE06F0  67 18
-	ld bc, (0x2210:16)                                 ; FE06F2  d1 10 22 21
+	ld bc, (DiskSave_Password+1:16)                                 ; FE06F2  d1 10 22 21
 	extz BC                                              ; FE06F6  d9 12
 	ld HL,BC                                             ; FE06F8  d9 8b
 	sll hl, 0x08                                         ; FE06FA  db ee 08
-	ld bc, (0x220f:16)                                 ; FE06FD  d1 0f 22 21
+	ld bc, (DiskSave_Password:16)                                 ; FE06FD  d1 0f 22 21
 	extz BC                                              ; FE0701  d9 12
 	or BC,HL                                             ; FE0703  db e1
-	ld (0x60341c:24), bc                                ; FE0705  f2 1c 34 60 51
+	ld (BStore_Password:24), bc                                ; FE0705  f2 1c 34 60 51
 .LFE070A:
 	popw hl                                              ; FE070A  4b
 	ret                                                  ; FE070B  0e
-sub_FE070C:
+; DiskSave_ShowResult: (result): 3 -> status 3, Delay_500Ticks, (0x220F) = (0x220C) = 0 (the entered password is spent); else
+;   status 7 for 7 and 6 for anything else, sub_FE1907 and, outside an SMF write, a delay.  Returns the result.
+DiskSave_ShowResult:
 	link XIZ,0x0000                                      ; FE070C  ee 0c 00 00
 	pushw hl                                             ; FE0710  2b
 	ld H,(XIZ+0x08)                                      ; FE0711  8e 08 26
@@ -161336,8 +161355,8 @@ sub_FE070C:
 	push H                                               ; FE071A  ce 04
 	calr StatusMsg_ShowByIndex                                          ; FE071C  1e 19 11
 	calr Delay_500Ticks                                          ; FE071F  1e f7 0c
-	ld (0x220f:16), 0x00                                 ; FE0722  f1 0f 22 00 00
-	ld (0x220c:16), 0x00                                 ; FE0727  f1 0c 22 00 00
+	ld (DiskSave_Password:16), 0x00                                 ; FE0722  f1 0f 22 00 00
+	ld (DiskSave_PasswordUnlockCount:16), 0x00                                 ; FE0727  f1 0c 22 00 00
 	jr .LFE074E                                              ; FE072C  68 20
 .LFE072E:
 	cp h, 0x07:i3                                          ; FE072E  ce df
@@ -161390,7 +161409,9 @@ Disk_RequestSenseDriveStatus:
 	pop XIY                                              ; FE0782  5d
 	pop XIX                                              ; FE0783  5c
 	ret                                                  ; FE0784  0e
-sub_FE0785:
+; DiskSave_ComparePassword: the entered (0x2210) << 8 | (0x220F) against (0x23CE) -- bank Disk_SeqBank's password for SEQUENCER
+;   (BStore_GetDiskBankPassword_SaveRegs), any bank's for ALL (BStore_GetAnyBankPassword_SaveRegs); other content types pass.  0 = match, 0xFE = mismatch.
+DiskSave_ComparePassword:
 	pushw hl                                             ; FE0785  2b
 	ld bc, (Disk_ContentType:16)                                 ; FE0786  d1 25 27 21
 	extz BC                                              ; FE078A  d9 12
@@ -161404,29 +161425,29 @@ sub_FE0785:
 	jr z, .LFE07DC                                           ; FE079A  66 40
 	jr .LFE07DC                                              ; FE079C  68 3e
 .LFE079E:
-	calr sub_FE0266                                          ; FE079E  1e c5 fa
-	ld bc, (0x2210:16)                                 ; FE07A1  d1 10 22 21
+	calr BStore_GetAnyBankPassword_SaveRegs                                          ; FE079E  1e c5 fa
+	ld bc, (DiskSave_Password+1:16)                                 ; FE07A1  d1 10 22 21
 	extz BC                                              ; FE07A5  d9 12
 	ld HL,BC                                             ; FE07A7  d9 8b
 	sll hl, 0x08                                         ; FE07A9  db ee 08
-	ld bc, (0x220f:16)                                 ; FE07AC  d1 0f 22 21
+	ld bc, (DiskSave_Password:16)                                 ; FE07AC  d1 0f 22 21
 	extz BC                                              ; FE07B0  d9 12
 	or BC,HL                                             ; FE07B2  db e1
-	m_cp_mr MW16, 0x23ce, r1                             ; FE07B4  d1 ce 23 f9
+	m_cp_mr MW16, DiskSave_StoredPassword, r1                             ; FE07B4  d1 ce 23 f9
 	jr z, .LFE07DC                                           ; FE07B8  66 22
 	jr .LFE07D8                                              ; FE07BA  68 1c
 .LFE07BC:
-	calr sub_FE0273                                          ; FE07BC  1e b4 fa
-	ld bc, (0x2210:16)                                 ; FE07BF  d1 10 22 21
+	calr BStore_GetDiskBankPassword_SaveRegs                                          ; FE07BC  1e b4 fa
+	ld bc, (DiskSave_Password+1:16)                                 ; FE07BF  d1 10 22 21
 	extz BC                                              ; FE07C3  d9 12
 	ld HL,BC                                             ; FE07C5  d9 8b
 	sll hl, 0x08                                         ; FE07C7  db ee 08
-	ld bc, (0x220f:16)                                 ; FE07CA  d1 0f 22 21
+	ld bc, (DiskSave_Password:16)                                 ; FE07CA  d1 0f 22 21
 	extz BC                                              ; FE07CE  d9 12
-; (sub_FE07D0 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE0785;
+; (sub_FE07D0 removed 2026-10-04: no code names it and the line above falls through into it -- part of DiskSave_ComparePassword;
 ;  notes/prom_a_stray_label_removal.py)
 	or BC,HL                                             ; FE07D0  db e1
-	m_cp_mr MW16, 0x23ce, r1                             ; FE07D2  d1 ce 23 f9
+	m_cp_mr MW16, DiskSave_StoredPassword, r1                             ; FE07D2  d1 ce 23 f9
 	jr z, .LFE07DC                                           ; FE07D6  66 04
 .LFE07D8:
 	ld a, 0xfe:opc                                          ; FE07D8  21 fe
@@ -161436,8 +161457,10 @@ sub_FE0785:
 .LFE07DE:
 	popw hl                                              ; FE07DE  4b
 	ret                                                  ; FE07DF  0e
-sub_FE07E0:
-	calr sub_FE0785                                          ; FE07E0  1e a2 ff
+; DiskSaveFile_CheckPasswordThenSave: the directory entry T_F4260C's body, page 4's LcdKeyRow1: DiskSave_ComparePassword; mismatch -> status 0x11,
+;   delay, page 1; match -> status 0x12, Delay_500Ticks, DiskSaveFile_SaveOrConfirmOverwrite.
+DiskSaveFile_CheckPasswordThenSave:
+	calr DiskSave_ComparePassword                                          ; FE07E0  1e a2 ff
 	cp a, 0x00:i3                                          ; FE07E3  c9 d8
 	jr z, .LFE0803                                           ; FE07E5  66 1c
 	pushw 0x11                                           ; FE07E7  0b 11 00
@@ -161453,18 +161476,21 @@ sub_FE07E0:
 	pushw 0x12                                           ; FE0803  0b 12 00
 	calr StatusMsg_ShowByIndex                                          ; FE0806  1e 2f 10
 	calr Delay_500Ticks                                          ; FE0809  1e 0d 0c
-	calr sub_FE0648                                          ; FE080C  1e 39 fe
+	calr DiskSaveFile_SaveOrConfirmOverwrite                                          ; FE080C  1e 39 fe
 	popw bc                                              ; FE080F  49
 .LFE0810:
 	ret                                                  ; FE0810  0e
-sub_FE0811:
+; DiskSave_IsBankPasswordSet: unless (0x21FA) is 3: on screen 0x4E or for content type SEQUENCER, the password of bank Disk_SeqBank
+;   (BStore_GetDiskBankPassword via BStore_GetDiskBankPassword_SaveRegs); for ALL, the first set one of any bank
+;   (BStore_GetAnyBankPassword via BStore_GetAnyBankPassword_SaveRegs).  0xFE when the word in (0x23CE) is non-zero, else 0.
+DiskSave_IsBankPasswordSet:
 	push XIX                                             ; FE0811  3c
-	lda xix, (0x23ce:16)                                ; FE0812  f1 ce 23 34
+	lda xix, (DiskSave_StoredPassword:16)                                ; FE0812  f1 ce 23 34
 	m_cp_mi8 MB16, 0x21fa, 0x03                          ; FE0816  c1 fa 21 3f 03
 	jr z, .LFE0857                                           ; FE081B  66 3a
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x4e                          ; FE081D  c1 7a 20 3f 4e
 	jr nz, .LFE082F                                          ; FE0822  6e 0b
-	calr sub_FE0273                                          ; FE0824  1e 4c fa
+	calr BStore_GetDiskBankPassword_SaveRegs                                          ; FE0824  1e 4c fa
 	ld BC,(XIX)                                          ; FE0827  94 21
 	cp bc, 0x00:i3                                         ; FE0829  d9 d8
 	jr z, .LFE0857                                           ; FE082B  66 2a
@@ -161478,13 +161504,13 @@ sub_FE0811:
 	jr z, .LFE084A                                           ; FE083B  66 0d
 	jr .LFE0857                                              ; FE083D  68 18
 .LFE083F:
-	calr sub_FE0266                                          ; FE083F  1e 24 fa
+	calr BStore_GetAnyBankPassword_SaveRegs                                          ; FE083F  1e 24 fa
 	ld BC,(XIX)                                          ; FE0842  94 21
 	cp bc, 0x00:i3                                         ; FE0844  d9 d8
 	jr z, .LFE0857                                           ; FE0846  66 0f
 	jr .LFE0853                                              ; FE0848  68 09
 .LFE084A:
-	calr sub_FE0273                                          ; FE084A  1e 26 fa
+	calr BStore_GetDiskBankPassword_SaveRegs                                          ; FE084A  1e 26 fa
 	ld BC,(XIX)                                          ; FE084D  94 21
 	cp bc, 0x00:i3                                         ; FE084F  d9 d8
 	jr z, .LFE0857                                           ; FE0851  66 04
@@ -161496,13 +161522,17 @@ sub_FE0811:
 .LFE0859:
 	pop XIX                                              ; FE0859  5c
 	ret                                                  ; FE085A  0e
-sub_FE085B:
+; DiskSaveFile_AskForPassword: (0x222A) = 0xFA, NameEdit_CursorPos = 0, page 4 -- ScreenEnter_DiskSaveFile_Page4 draws
+;   DL_DiskSavePasswordSave and DL_PasswordIsAlreadySetPleaseSetThe.
+DiskSaveFile_AskForPassword:
 	ld (0x222a:16), 0xfa                                 ; FE085B  f1 2a 22 00 fa
 	ld (NameEdit_CursorPos:16), 0x00                                 ; FE0860  f1 2d 22 00 00
 	ld (UI_ScreenPage:16), 0x04                                 ; FE0865  f1 29 22 00 04
 	ld (UI_Request_Hi:16), 0x10                                 ; FE086A  f1 71 20 00 10
 	ret                                                  ; FE086F  0e
-sub_FE0870:
+; DiskSave_IsSelectedFileNew: the 8 bytes at 0x60A488 + 16 x (0x2724) -- the selected listing slot -- all 0x80: Disk_LastError = 0,
+;   A = 0; any other byte: 0xFE (a file is there).
+DiskSave_IsSelectedFileNew:
 	link XIZ,0xfffc                                      ; FE0870  ee 0c fc ff
 	pushw hl                                             ; FE0874  2b
 	push XIX                                             ; FE0875  3c
@@ -163587,22 +163617,22 @@ sub_FE1BDE:
 	pop XHL                                              ; FE1BE8  5b
 	pop XDE                                              ; FE1BE9  5a
 	ret                                                  ; FE1BEA  0e
-; Disk_LoadSqfToWorkspace_Entry: the directory entry behind T_F42624: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load.
+; Disk_LoadSqfToWorkspace_Entry: the directory entry behind T_Disk_LoadSqfToWorkspace_Entry: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load.
 Disk_LoadSqfToWorkspace_Entry:
 	calr Disk_LoadSqfToWorkspace                                          ; FE1BEB  1e 8d 07
 	ld (Disk_LastError:16), a                                   ; FE1BEE  f1 43 22 41
 	ret                                                  ; FE1BF2  0e
-; Disk_LoadSeqToHeap_Entry: behind T_F42628: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks.
+; Disk_LoadSeqToHeap_Entry: behind T_Disk_LoadSeqToHeap_Entry: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks.
 Disk_LoadSeqToHeap_Entry:
 	calr Disk_LoadSeqToHeap                                          ; FE1BF3  1e 44 07
 	ld (Disk_LastError:16), a                                   ; FE1BF6  f1 43 22 41
 	ret                                                  ; FE1BFA  0e
-; Disk_SaveSqfFromStaging_Entry: behind T_F4262C: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save.
+; Disk_SaveSqfFromStaging_Entry: behind T_Disk_SaveSqfFromStaging_Entry: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save.
 Disk_SaveSqfFromStaging_Entry:
 	calr Disk_SaveSqfFromStaging                                          ; FE1BFB  1e c9 10
 	ld (Disk_LastError:16), a                                   ; FE1BFE  f1 43 22 41
 	ret                                                  ; FE1C02  0e
-; Disk_SaveSeqFile_Entry: behind T_F42630: Disk_SaveSeqFile, A -> Disk_LastError.
+; Disk_SaveSeqFile_Entry: behind T_Disk_SaveSeqFile_Entry: Disk_SaveSeqFile, A -> Disk_LastError.
 Disk_SaveSeqFile_Entry:
 	calr Disk_SaveSeqFile                                          ; FE1C03  1e 5e 10
 	ld (Disk_LastError:16), a                                   ; FE1C06  f1 43 22 41
@@ -163687,14 +163717,17 @@ sub_FE1C79:
 	calr sub_FE0599                                          ; FE1C79  1e 1d e9
 	calr Ring_InitTenOfFourteen                                            ; FE1C7C  1e aa 00
 	ret                                                  ; FE1C7F  0e
-sub_FE1C80:
+; DiskSaveFile_Execute_Entry: the directory entry behind T_DiskSaveFile_Execute_Entry (LcdKeyRow1_DiskSaveFile_Page1, LcdKeyRow3_DiskSaveFile_Page2,
+;   Smf_WriteFile): status 5; on page 2 (the overwrite question) DiskSaveFile_SaveNow, else
+;   DiskSaveFile_CheckDriveThenPassword; Ring_InitTenOfFourteen.
+DiskSaveFile_Execute_Entry:
 	ld (UI_StatusCode:16), 0x05                                 ; FE1C80  f1 80 28 00 05
 	m_cp_mi8 MB16, UI_ScreenPage, 0x02                          ; FE1C85  c1 29 22 3f 02
 	jr z, .LFE1C91                                           ; FE1C8A  66 05
-	calr sub_FE05EC                                          ; FE1C8C  1e 5d e9
+	calr DiskSaveFile_CheckDriveThenPassword                                          ; FE1C8C  1e 5d e9
 	jr .LFE1C94                                              ; FE1C8F  68 03
 .LFE1C91:
-	calr sub_FE066C                                          ; FE1C91  1e d8 e9
+	calr DiskSaveFile_SaveNow                                          ; FE1C91  1e d8 e9
 .LFE1C94:
 	calr Ring_InitTenOfFourteen                                            ; FE1C94  1e 92 00
 	ret                                                  ; FE1C97  0e
@@ -163752,8 +163785,9 @@ DiskSaveFile_Page5_LcdKeyRow3:
 sub_FE1CCC:
 	calr sub_FE139D                                          ; FE1CCC  1e ce f6
 	ret                                                  ; FE1CCF  0e
-sub_FE1CD0:
-	calr sub_FE0870                                          ; FE1CD0  1e 9d eb
+; DiskSave_IsSelectedFileNew_Call: calls DiskSave_IsSelectedFileNew and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+DiskSave_IsSelectedFileNew_Call:
+	calr DiskSave_IsSelectedFileNew                                          ; FE1CD0  1e 9d eb
 	ret                                                  ; FE1CD3  0e
 ; Var2216_SetW145C_Call: calls Var2216_SetW145C and returns -- `calr Var2216_SetW145C / ret`.
 Var2216_SetW145C_Call:
@@ -163762,11 +163796,13 @@ Var2216_SetW145C_Call:
 sub_FE1CD8:
 	calr sub_FE2F93                                          ; FE1CD8  1e b8 12
 	ret                                                  ; FE1CDB  0e
-sub_FE1CDC:
-	calr sub_FE0648                                          ; FE1CDC  1e 69 e9
+; DiskSaveFile_SaveOrConfirmOverwrite_Call: calls DiskSaveFile_SaveOrConfirmOverwrite and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+DiskSaveFile_SaveOrConfirmOverwrite_Call:
+	calr DiskSaveFile_SaveOrConfirmOverwrite                                          ; FE1CDC  1e 69 e9
 	ret                                                  ; FE1CDF  0e
-sub_FE1CE0:
-	calr sub_FE07E0                                          ; FE1CE0  1e fd ea
+; DiskSaveFile_CheckPasswordThenSave_Call: calls DiskSaveFile_CheckPasswordThenSave and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+DiskSaveFile_CheckPasswordThenSave_Call:
+	calr DiskSaveFile_CheckPasswordThenSave                                          ; FE1CE0  1e fd ea
 	ret                                                  ; FE1CE3  0e
 sub_FE1CE4:
 	calr sub_FE1CE4_Nop                                          ; FE1CE4  1e 51 12
@@ -164534,9 +164570,9 @@ Disk_LoadSeqToHeap:
 	ld a, 0x01:opc                                          ; FE2364  21 01
 	pop XIX                                              ; FE2366  5c
 	ret                                                  ; FE2367  0e
-; DiskLoad_Sequencer: content type 1: T_F41EF8 (saving registers); result (0x23CB), 0x1D read as 1.
+; DiskLoad_Sequencer: content type 1: T_SeqFile_Load (saving registers); result (0x23CB), 0x1D read as 1.
 DiskLoad_Sequencer:
-	calr sub_FE0053                                          ; FE2368  1e e8 dc
+	calr SeqFile_Load_SaveRegs                                          ; FE2368  1e e8 dc
 	m_cp_mi8 MB16, 0x23cb, 0x1d                          ; FE236B  c1 cb 23 3f 1d
 	jr nz, .LFE2376                                          ; FE2370  6e 04
 	ld a, 0x01:opc                                          ; FE2372  21 01
@@ -165515,7 +165551,7 @@ sub_FE2AA9:
 	unlk XIZ                                             ; FE2C61  ee 0d
 	ret                                                  ; FE2C63  0e
 ; Disk_SaveSeqFile: (0x761A) = (0x603452); DiskApi_CheckFreeSpace for that many paragraphs; with room: extension SEQ, window
-;   0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_F42630
+;   0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_Disk_SaveSeqFile_Entry
 ;   is decoded in prom_a or prom_b; SeqFile_Save writes the SEQ through SeqFile_WriteSeqCompacted.
 Disk_SaveSeqFile:
 	pushw hl                                             ; FE2C64  2b
@@ -165555,9 +165591,9 @@ Disk_SaveSeqFile:
 	popw de                                              ; FE2CBC  4a
 	popw hl                                              ; FE2CBD  4b
 	ret                                                  ; FE2CBE  0e
-; DiskSave_Sequencer: content type 1: sub_FE0046; result (0x23CB).
+; DiskSave_Sequencer: content type 1: SeqFile_Save_SaveRegs; result (0x23CB).
 DiskSave_Sequencer:
-	calr sub_FE0046                                          ; FE2CBF  1e 84 d3
+	calr SeqFile_Save_SaveRegs                                          ; FE2CBF  1e 84 d3
 	ld a, (0x23cb:16)                                   ; FE2CC2  c1 cb 23 21
 	ret                                                  ; FE2CC6  0e
 ; Disk_SaveSqfFromStaging: extension SQF, window 0x609400-0x60A000 (one bank copy, staged by SeqFile_Save), Disk_Flags bits 5 and 1
@@ -191464,7 +191500,7 @@ ScreenEnter_DiskSaveFile_Page3:   ; entry: named by 1 `.long` operand, first at 
 	pushw 0x10                                           ; FF5625  0b 10 00
 	lda xbc, (Text_FF3A18:24)                            ; FF5628  f2 18 3a ff 31
 	push XBC                                             ; FF562D  39
-	lda xwa, (0x22f0:16)                                ; FF562E  f1 f0 22 30
+	lda xwa, (DiskSave_PasswordEntry:16)                                ; FF562E  f1 f0 22 30
 	push XWA                                             ; FF5632  38
 	call MemCpy_C                                      ; FF5633  1d b5 78 ff
 	pushw 0x02                                           ; FF5637  0b 02 00
@@ -191487,7 +191523,7 @@ ScreenEnter_DiskSaveFile_Page3:   ; entry: named by 1 `.long` operand, first at 
 ;   when UI_ScreenPage is 4 (notes/prom_a_page_enter_names.py).
 ScreenEnter_DiskSaveFile_Page4:   ; entry: named by 1 `.long` operand, first at 0xFF3A10
 	push XIX                                             ; FF566B  3c
-	lda xix, (0x22f0:16)                                ; FF566C  f1 f0 22 34
+	lda xix, (DiskSave_PasswordEntry:16)                                ; FF566C  f1 f0 22 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5670  1d 80 2e f4
 	pushw 0x10                                           ; FF5674  0b 10 00
 	lda xbc, (Text_FF3A18:24)                            ; FF5677  f2 18 3a ff 31
@@ -191893,7 +191929,7 @@ ExitKey_DiskSaveFile_Page0:
 ;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
 SoftKeyCol4_DiskSaveFile_Page1:   ; entry: named by 2 `.long` operands, first at 0xFF3AB5
 	push XIX                                             ; FF59A5  3c
-	lda xix, (0x220c:16)                                ; FF59A6  f1 0c 22 34
+	lda xix, (DiskSave_PasswordUnlockCount:16)                                ; FF59A6  f1 0c 22 34
 	ld c, (0x2726:16)                                   ; FF59AA  c1 26 27 23
 	and C,0x01                                           ; FF59AE  cb cc 01
 	jr nz, .LFF59E7                                      ; FF59B1  6e 34
@@ -191901,14 +191937,14 @@ SoftKeyCol4_DiskSaveFile_Page1:   ; entry: named by 2 `.long` operands, first at
 	ld C,(XIX)                                           ; FF59B5  84 23
 	cp c, 0x06:i3                                          ; FF59B7  cb de
 	jr ule, .LFF59E7                                     ; FF59B9  63 2c
-	m_cp_mi16 MW24, 0x60341c, 0x0000                     ; FF59BB  d2 1c 34 60 3f 00 00
+	m_cp_mi16 MW24, BStore_Password, 0x0000                     ; FF59BB  d2 1c 34 60 3f 00 00
 	jr nz, .LFF59D0                                      ; FF59C2  6e 0c
 	ld (UI_ScreenPage:16), 0x03                                 ; FF59C4  f1 29 22 00 03
 	ld (UI_Request_Hi:16), 0x10                                 ; FF59C9  f1 71 20 00 10
 	jr .LFF59E7                                          ; FF59CE  68 17
 .LFF59D0:
 	ld (XIX),0x00                                        ; FF59D0  b4 00 00
-	ld (0x220f:16), 0x00                                 ; FF59D3  f1 0f 22 00 00
+	ld (DiskSave_Password:16), 0x00                                 ; FF59D3  f1 0f 22 00 00
 	ld (UI_StatusCode:16), 0x0a                                 ; FF59D8  f1 80 28 00 0a
 	ld (UI_Request:16), 0xab                                 ; FF59DD  f1 70 20 00 ab
 	ld (UI_Request_Hi:16), 0x40                                 ; FF59E2  f1 71 20 00 40
@@ -191956,7 +191992,7 @@ LcdKeyRow1_DiskSaveFile_Page1:
 	ld c, (0x2726:16)                                   ; FF5A07  c1 26 27 23
 	and C,0x01                                           ; FF5A0B  cb cc 01
 	jr nz, .LFF5A1A                                      ; FF5A0E  6e 0a
-	call T_F425CC                                        ; FF5A10  1d cc 25 f4
+	call T_DiskSaveFile_Execute_Entry                                        ; FF5A10  1d cc 25 f4
 	call sub_FF7959                                      ; FF5A14  1d 59 79 ff
 	jr .LFF5A2A                                          ; FF5A18  68 10
 .LFF5A1A:
@@ -192208,7 +192244,7 @@ LcdKeyRow3_DiskSaveFile_Page2:
 	ld BC,(XIZ+0x08)                                     ; FF5AF0  9e 08 21
 	and BC,0x0080                                        ; FF5AF3  d9 cc 80 00
 	jr nz, .LFF5B01                                      ; FF5AF7  6e 08
-	call T_F425CC                                        ; FF5AF9  1d cc 25 f4
+	call T_DiskSaveFile_Execute_Entry                                        ; FF5AF9  1d cc 25 f4
 	call sub_FF7959                                      ; FF5AFD  1d 59 79 ff
 .LFF5B01:
 	unlk XIZ                                             ; FF5B01  ee 0d
@@ -196756,11 +196792,11 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	push XIX                                             ; FF78CA  3c
 	push XHL                                             ; FF78CB  3b
 	push XDE                                             ; FF78CC  3a
-	ld XIX,0x000022f0                                    ; FF78CD  44 f0 22 00 00
+	ld XIX,DiskSave_PasswordEntry                                    ; FF78CD  44 f0 22 00 00
 	ld A,(XIX)                                           ; FF78D2  84 21
-	ld (0x220f:16), a                                   ; FF78D4  f1 0f 22 41
+	ld (DiskSave_Password:16), a                                   ; FF78D4  f1 0f 22 41
 	ld A,(XIX+0x01)                                      ; FF78D8  8c 01 21
-	ld (0x2210:16), a                                   ; FF78DB  f1 10 22 41
+	ld (DiskSave_Password+1:16), a                                   ; FF78DB  f1 10 22 41
 	ld a, (0x2724:16)                                   ; FF78DF  c1 24 27 21
 	ldw bc, 0x01                                         ; FF78E3  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF78E6  1d 26 78 ff
@@ -196860,8 +196896,8 @@ DiskFileScreen_LeaveCommon:
 	push XDE                                             ; FF798F  3a
 	call T_Disk_PortA3_Release_Call_Call                                        ; FF7990  1d 90 25 f4
 	call sub_FF796C                                      ; FF7994  1d 6c 79 ff
-	ldw (0x220f:16), 0x00                                ; FF7998  f1 0f 22 02 00 00
-	ld (0x220c:16), 0x00                                 ; FF799E  f1 0c 22 00 00
+	ldw (DiskSave_Password:16), 0x00                                ; FF7998  f1 0f 22 02 00 00
+	ld (DiskSave_PasswordUnlockCount:16), 0x00                                 ; FF799E  f1 0c 22 00 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FF79A3  c1 d4 34 3e 10
 	m_res 3, MD16, 0x34bb                                ; FF79A8  f1 bb 34 b3
 	pop XDE                                              ; FF79AC  5a
@@ -196875,11 +196911,11 @@ DiskSaveFile_Page4_LcdKeyRow1:
 	push XIX                                             ; FF79B2  3c
 	push XHL                                             ; FF79B3  3b
 	push XDE                                             ; FF79B4  3a
-	ld XIX,0x000022f0                                    ; FF79B5  44 f0 22 00 00
+	ld XIX,DiskSave_PasswordEntry                                    ; FF79B5  44 f0 22 00 00
 	ld A,(XIX)                                           ; FF79BA  84 21
-	ld (0x220f:16), a                                   ; FF79BC  f1 0f 22 41
+	ld (DiskSave_Password:16), a                                   ; FF79BC  f1 0f 22 41
 	ld A,(XIX+0x01)                                      ; FF79C0  8c 01 21
-	ld (0x2210:16), a                                   ; FF79C3  f1 10 22 41
+	ld (DiskSave_Password+1:16), a                                   ; FF79C3  f1 10 22 41
 	ld a, (0x2724:16)                                   ; FF79C7  c1 24 27 21
 	ldw bc, 0x01                                         ; FF79CB  31 01 00
 	call Disk_CopyDirEntryToFileName                                      ; FF79CE  1d 26 78 ff

@@ -25,7 +25,7 @@ WHY A SECOND CENSUS, WHEN ROUND 7 ALREADY WROTE ONE
     own start.  Its S1 bucket is 281 against round 7's 283 one-byte ret stubs,
     and the two differences are named: `sub_FADDA9` and `sub_FADE55` are inside
     gen_prom_a_fad800_module.py's range where extent_ends() cannot see a 1-byte
-    extent, and `sub_FE0046` is a one-byte object whose byte is a `push`, not a
+    extent, and `SeqFile_Save_SaveRegs` is a one-byte object whose byte is a `push`, not a
     `ret`, so it is correctly NOT a ret stub.
 
 ★★ THE HEADLINE, AND IT IS A CEILING, NOT A TARGET
@@ -4117,10 +4117,10 @@ def selftest():
             check("%s: inside the fad800 emitter's range, so extent_ends() gives "
                   "it %d bytes and it is not S1" % (nm9, by[nm9].ext_bytes),
                   by[nm9].ext_bytes > 1 and by[nm9].bucket != "S1", by[nm9].bucket)
-    if "sub_FE0046" in by:
-        r9 = by["sub_FE0046"]
+    if "SeqFile_Save_SaveRegs" in by:
+        r9 = by["SeqFile_Save_SaveRegs"]
         f9 = flow_of(r9)
-        check("sub_FE0046 is a ONE-BYTE object whose byte is `%s`, not a ret, so "
+        check("SeqFile_Save_SaveRegs is a ONE-BYTE object whose byte is `%s`, not a ret, so "
               "it is correctly not S1" % (f9[0][1] if f9 else "?"),
               r9.ext_bytes == 1 and r9.bucket != "S1", r9.bucket)
     # references partition the population exactly, and the split is the point

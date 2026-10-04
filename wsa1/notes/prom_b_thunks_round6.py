@@ -118,7 +118,12 @@ those equates naming a label that no longer exists.  Promote the slots named sin
                                                            # then: the two-line evidence block and the
                                                            # `(was T_<addr>)` marker, as --apply wrote them,
                                                            # on exactly the slots that .sed renamed
-Same rules (CONTENT targets only, R2 / R3 still dropped); --mark is idempotent.  It takes the .sed
+    python3 notes/prom_b_thunks_round6.py --fix-ranges scripts/renaming/<the run's>.sed
+                                                           # last: a token rename turns a SPAN of slots
+                                                           # `T_F40A3C-T_F40A64` into a half-name; this puts
+                                                           # back the address spelling of every endpoint the
+                                                           # run renamed, in every wsa1 .s / .md / .py
+Same rules (CONTENT targets only, R2 / R3 still dropped); --mark and --fix-ranges are idempotent.  It takes the .sed
 because ~580 slots other passes renamed carry no marker, and a mark-everything run would claim them.  Run the gate afterwards:
     python3 scripts/analysis/assert_byte_identical.py
 """
@@ -768,6 +773,34 @@ def mark():
     return 0
 
 
+def fix_ranges():
+    """Restore the address spelling of span endpoints a token rename rewrote (2026-10-04: 36, then 9)."""
+    sed = open(sys.argv[sys.argv.index("--fix-ranges") + 1]).read()
+    pairs = dict((n, o) for o, n in re.findall(r'^s/\\b(T_[0-9A-F]{6})\\b/(T_\w+)/g$', sed, re.M))
+    if not pairs:
+        print("no T_ renames in that .sed")
+        return 0
+    alt = "|".join(sorted(map(re.escape, pairs), key=len, reverse=True))
+    span = re.compile(r'(?:T_\w+\s*(?:-|\.\.)\s*(?:%s)\b)|(?:\b(?:%s)\s*(?:-|\.\.)\s*T_\w+)' % (alt, alt))
+    one = re.compile(r'\b(%s)\b' % alt)
+    total = 0
+    for dirpath, _dirs, files in os.walk(ROOT):
+        for fn in files:
+            if not fn.endswith((".s", ".md", ".py")):
+                continue
+            path = os.path.join(dirpath, fn)
+            raw = open(path, "rb").read().decode("latin-1")
+            new, n = span.subn(lambda m: one.sub(lambda k: pairs[k.group(1)], m.group(0)), raw)
+            if n:
+                total += n
+                data = new.encode("latin-1")
+                with open(path + ".tmp", "wb") as fh:
+                    fh.write(data)
+                os.replace(path + ".tmp", path)
+    print("span endpoints restored in %d expressions" % total)
+    return 0
+
+
 def main():
     if "--pending-args" in sys.argv:
         for old, (new, _s, _t, _n) in pending().items():
@@ -775,6 +808,8 @@ def main():
         return 0
     if "--mark" in sys.argv:
         return mark()
+    if "--fix-ranges" in sys.argv:
+        return fix_ranges()
     if "--selftest" in sys.argv:
         return selftest()
     if "--apply" in sys.argv:

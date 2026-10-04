@@ -530,6 +530,19 @@ GROUPS = [
         0x272B: ("Disk_SeqBank", "the sequencer bank 0..9 a disk load goes into / a save comes from",
                  "LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: the DISK SAVE PASSWORD -- a hidden page, and banks that clear themselves at boot", {
+        0x60341C: ("BStore_Password", "workspace word +0x1C: the bank's two-character save password, 0 = none",
+                   "DiskSave_StorePasswordInWorkspace writes it; Smf_WriteFile refuses while it is set; BStore_ClearPasswordProtectedBanks"),
+        0x220C: ("DiskSave_PasswordUnlockCount", "DISK SAVE FILE page 1's SoftKeyCol4 presses; past 6 the password page opens",
+                 "SoftKeyCol4_DiskSaveFile_Page1 counts it; DiskSave_StorePasswordInWorkspace tests >= 6"),
+        0x220F: ("DiskSave_Password", "the entered password's two characters (0x220F, 0x2210)",
+                 "DiskSaveFile_Page3 / _Page4_LcdKeyRow1 copy them from DiskSave_PasswordEntry"),
+        0x2210: ("DiskSave_Password+1", "its second character", "as above"),
+        0x22F0: ("DiskSave_PasswordEntry", "the password pages' 16-byte entry buffer",
+                 "ScreenEnter_DiskSaveFile_Page3 / _Page4 fill it from Text_FF3A18"),
+        0x23CE: ("DiskSave_StoredPassword", "the password the entry is checked against",
+                 "BStore_GetDiskBankPassword / _GetAnyBankPassword write it; DiskSave_ComparePassword reads it"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

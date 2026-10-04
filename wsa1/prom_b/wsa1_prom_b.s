@@ -1142,8 +1142,8 @@
 	.set	MidiFilePlay_Tick, 0xFB9E79
 	.set	SeqFile_Load, 0xFBAC00
 	.set	SeqFile_Save, 0xFBAE5A
-	.set	sub_FBB392, 0xFBB392
-	.set	sub_FBB3DC, 0xFBB3DC
+	.set	BStore_GetDiskBankPassword, 0xFBB392
+	.set	BStore_GetAnyBankPassword, 0xFBB3DC
 	.set	PartParam_StepFieldById, 0xFBB800
 	.set	PartParam_EnterFieldById, 0xFBB93C
 	.set	PartParam_RefuseNumberEntry, 0xFBBA83
@@ -1901,7 +1901,7 @@
 	.set	sub_FE1C71, 0xFE1C71
 	.set	sub_FE1C75, 0xFE1C75
 	.set	sub_FE1C79, 0xFE1C79
-	.set	sub_FE1C80, 0xFE1C80
+	.set	DiskSaveFile_Execute_Entry, 0xFE1C80
 	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
 	.set	sub_FE1C9F, 0xFE1C9F
 	.set	sub_FE1CA3, 0xFE1CA3
@@ -1913,11 +1913,11 @@
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
 	.set	DiskSaveFile_Page5_LcdKeyRow3, 0xFE1CC8
 	.set	sub_FE1CCC, 0xFE1CCC
-	.set	sub_FE1CD0, 0xFE1CD0
+	.set	DiskSave_IsSelectedFileNew_Call, 0xFE1CD0
 	.set	Var2216_SetW145C_Call, 0xFE1CD4
 	.set	sub_FE1CD8, 0xFE1CD8
-	.set	sub_FE1CDC, 0xFE1CDC
-	.set	sub_FE1CE0, 0xFE1CE0
+	.set	DiskSaveFile_SaveOrConfirmOverwrite_Call, 0xFE1CDC
+	.set	DiskSaveFile_CheckPasswordThenSave_Call, 0xFE1CE0
 	.set	sub_FE1CE4, 0xFE1CE4
 	.set	Disk_CommandDispatch_Thunk_Entry, 0xFE3000
 	.set	Fdc_Request_Thunk_Entry, 0xFE3004
@@ -29619,7 +29619,7 @@ SoftKeyCol3_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2798)
-; Calls:   DspEffect_StepAlgorithm T_F418D0
+; Calls:   DspEffect_StepAlgorithm T_PartParam_StepFieldById
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29640,7 +29640,7 @@ SoftKeyCol3_DspEffect_Section0:
 sub_F0F35F_Skip:
 	pushw	0	; F0F36B  push 0x0000
 	pushw	32	; F0F36E  push 0x0020
-	call	T_F418D0	; F0F371  call 0xf418d0
+	call	T_PartParam_StepFieldById	; F0F371  call 0xf418d0
 	jr	sub_F0F37C_Join	; F0F375  jr T,0xf0f385
 
 ; --------------------------------------------------------------------------
@@ -29762,7 +29762,7 @@ SoftKeyCol4_DspEffect_BySection:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2791) (0x2798)
-; Calls:   T_F418D0
+; Calls:   T_PartParam_StepFieldById
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29780,7 +29780,7 @@ SoftKeyCol4_DspEffect_Section0:
 	jr	z, DispatchTable_F0F3AE_Nop4	; F0F3CB  jr Z,0xf0f3eb
 	pushw	0	; F0F3CD  push 0x0000
 	pushw	33	; F0F3D0  push 0x0021
-	call	T_F418D0	; F0F3D3  call 0xf418d0
+	call	T_PartParam_StepFieldById	; F0F3D3  call 0xf418d0
 	m_set 0, MD16, 0x2791	; F0F3D7  set 0,(0x2791)
 	ld	(PanelDial_DownButton:16), 131	; F0F3DB  ld (0x209b),0x83  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 3	; F0F3E0  ld (0x209c),0x03  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -32429,7 +32429,7 @@ sub_F101E7_Return:
 ; sub_F10222
 ; Called from: in-module: 0xF0F2C8
 ; Touches: (0x2797)
-; Calls:   T_F418D0
+; Calls:   T_PartParam_StepFieldById
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF10222 is an instruction boundary of this
@@ -32460,7 +32460,7 @@ sub_F10222_Skip3:
 	pushw	0	; F10246  push 0x0000
 	pushw	8	; F10249  push 0x0008
 sub_F10222_Join:
-	call	T_F418D0	; F1024C  call 0xf418d0
+	call	T_PartParam_StepFieldById	; F1024C  call 0xf418d0
 	pop	xiy	; F10250  pop XIY
 sub_F10222_Return:
 	ret	; F10251  ret
@@ -90055,8 +90055,12 @@ T_ScreenButtonBody_CombiEditMixer:	jp ScreenButtonBody_CombiEditMixer  ; F418C0 
 T_F418C4:	jp T_F418C4_Nop  ; -> prom_a 0x3DDD6
 T_F418C8:	jp sub_FBC5F1  ; -> prom_a 0x3C5F1
 T_F418CC:	jp sub_FBC64F  ; -> prom_a 0x3C64F
-T_F418D0:	jp PartParam_StepFieldById  ; -> prom_a 0x3B800   x3
-T_F418D4:	jp PartParam_EnterFieldById  ; -> prom_a 0x3B93C
+; Evidence: slot 0xF418D0 is `jp 0xFBB800`; prom_a 0xFBB800 carries the label
+;           PartParam_StepFieldById (graded CONTENT).  DERIVATIVE name.
+T_PartParam_StepFieldById:	jp PartParam_StepFieldById  ; F418D0 (was T_F418D0) -> prom_a 0x3B800   x3
+; Evidence: slot 0xF418D4 is `jp 0xFBB93C`; prom_a 0xFBB93C carries the label
+;           PartParam_EnterFieldById (graded CONTENT).  DERIVATIVE name.
+T_PartParam_EnterFieldById:	jp PartParam_EnterFieldById  ; F418D4 (was T_F418D4) -> prom_a 0x3B93C
 T_F418D8:	jp sub_FBEE83  ; -> prom_a 0x3EE83
 	.fill 0x34, 1, 0x0E  ; 0xF418DC: 52 x ret
 T_PanelMode_System_Enter:	jp PanelMode_System_Enter  ; -> prom_a 0x1FED1
@@ -90594,10 +90598,18 @@ T_Gfx_DrawLine_Solid:	jp Gfx_DrawLine_Solid  ; F41EE4 (was T_F41EE4) -> prom_b 0
 T_Gfx_DrawLine_Dashed:	jp Gfx_DrawLine_Dashed  ; F41EE8 (was T_F41EE8) -> prom_b 0x5B881   x9
 T_F41EEC:	jp sub_F5B81C  ; -> prom_b 0x5B81C   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41EF0: 8 x ret
-T_F41EF8:	jp SeqFile_Load  ; -> prom_a 0x3AC00   x1
-T_F41EFC:	jp SeqFile_Save  ; -> prom_a 0x3AE5A   x1
-T_F41F00:	jp sub_FBB392  ; -> prom_a 0x3B392   x1
-T_F41F04:	jp sub_FBB3DC  ; -> prom_a 0x3B3DC   x1
+; Evidence: slot 0xF41EF8 is `jp 0xFBAC00`; prom_a 0xFBAC00 carries the label
+;           SeqFile_Load (graded CONTENT).  DERIVATIVE name.
+T_SeqFile_Load:	jp SeqFile_Load  ; F41EF8 (was T_F41EF8) -> prom_a 0x3AC00   x1
+; Evidence: slot 0xF41EFC is `jp 0xFBAE5A`; prom_a 0xFBAE5A carries the label
+;           SeqFile_Save (graded CONTENT).  DERIVATIVE name.
+T_SeqFile_Save:	jp SeqFile_Save  ; F41EFC (was T_F41EFC) -> prom_a 0x3AE5A   x1
+; Evidence: slot 0xF41F00 is `jp 0xFBB392`; prom_a 0xFBB392 carries the label
+;           BStore_GetDiskBankPassword (graded CONTENT).  DERIVATIVE name.
+T_BStore_GetDiskBankPassword:	jp BStore_GetDiskBankPassword  ; F41F00 (was T_F41F00) -> prom_a 0x3B392   x1
+; Evidence: slot 0xF41F04 is `jp 0xFBB3DC`; prom_a 0xFBB3DC carries the label
+;           BStore_GetAnyBankPassword (graded CONTENT).  DERIVATIVE name.
+T_BStore_GetAnyBankPassword:	jp BStore_GetAnyBankPassword  ; F41F04 (was T_F41F04) -> prom_a 0x3B3DC   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
 T_F41F10:	jp sub_FAED76  ; -> prom_a 0x2ED76   x1
 T_F41F14:	jp sub_FAE84D  ; -> prom_a 0x2E84D   x5
@@ -90769,7 +90781,9 @@ T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 ;           ModeEnter_SoundCopy (graded CONTENT).  DERIVATIVE name.
 T_ModeEnter_SoundCopy:	jp ModeEnter_SoundCopy  ; F42254 (was T_F42254) -> prom_a 0x742B7
 T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
-T_F4225C:	jp ModeEnter_SoundCopy_Call  ; -> prom_a 0x742C5
+; Evidence: slot 0xF4225C is `jp 0xFF42C5`; prom_a 0xFF42C5 carries the label
+;           ModeEnter_SoundCopy_Call (graded CONTENT).  DERIVATIVE name.
+T_ModeEnter_SoundCopy_Call:	jp ModeEnter_SoundCopy_Call  ; F4225C (was T_F4225C) -> prom_a 0x742C5
 T_Var2134_SetBit1_3_Call:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
 T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
 T_ScreenLeave_DiskMenu:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
@@ -90956,7 +90970,9 @@ T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ;
 T_F425C0:	jp sub_FE1C71  ; -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
 T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
-T_F425CC:	jp sub_FE1C80  ; -> prom_a 0x61C80   x3
+; Evidence: slot 0xF425CC is `jp 0xFE1C80`; prom_a 0xFE1C80 carries the label
+;           DiskSaveFile_Execute_Entry (graded CONTENT).  DERIVATIVE name.
+T_DiskSaveFile_Execute_Entry:	jp DiskSaveFile_Execute_Entry  ; F425CC (was T_F425CC) -> prom_a 0x61C80   x3
 T_MidiFileSave_Page5_LcdKeyRow3:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
 T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
 T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
@@ -90972,20 +90988,28 @@ T_Disk_ResetAndMountFloppy_Call:	jp Disk_ResetAndMountFloppy_Call  ; F425EC (was
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
-T_F425FC:	jp sub_FE1CD0  ; -> prom_a 0x61CD0
+T_F425FC:	jp DiskSave_IsSelectedFileNew_Call  ; -> prom_a 0x61CD0
 T_Var2216_SetW145C_Call:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
 T_F42604:	jp sub_FE1CD8  ; -> prom_a 0x61CD8   x8
-T_F42608:	jp sub_FE1CDC  ; -> prom_a 0x61CDC   x1
-T_F4260C:	jp sub_FE1CE0  ; -> prom_a 0x61CE0   x1
+T_F42608:	jp DiskSaveFile_SaveOrConfirmOverwrite_Call  ; -> prom_a 0x61CDC   x1
+T_F4260C:	jp DiskSaveFile_CheckPasswordThenSave_Call  ; -> prom_a 0x61CE0   x1
 T_F42610:	jp sub_FE1CE4  ; -> prom_a 0x61CE4   x1
 T_F42614:	jp sub_FE1C0B  ; -> prom_a 0x61C0B   x5
 T_F42618:	jp sub_FE04BE  ; -> prom_a 0x604BE   x2
 T_F4261C:	jp sub_FE0391  ; -> prom_a 0x60391   x26
 T_F42620:	jp sub_FE0435  ; -> prom_a 0x60435   x2
-T_F42624:	jp Disk_LoadSqfToWorkspace_Entry  ; -> prom_a 0x61BEB   x1
-T_F42628:	jp Disk_LoadSeqToHeap_Entry  ; -> prom_a 0x61BF3   x1
-T_F4262C:	jp Disk_SaveSqfFromStaging_Entry  ; -> prom_a 0x61BFB   x1
-T_F42630:	jp Disk_SaveSeqFile_Entry  ; -> prom_a 0x61C03
+; Evidence: slot 0xF42624 is `jp 0xFE1BEB`; prom_a 0xFE1BEB carries the label
+;           Disk_LoadSqfToWorkspace_Entry (graded CONTENT).  DERIVATIVE name.
+T_Disk_LoadSqfToWorkspace_Entry:	jp Disk_LoadSqfToWorkspace_Entry  ; F42624 (was T_F42624) -> prom_a 0x61BEB   x1
+; Evidence: slot 0xF42628 is `jp 0xFE1BF3`; prom_a 0xFE1BF3 carries the label
+;           Disk_LoadSeqToHeap_Entry (graded CONTENT).  DERIVATIVE name.
+T_Disk_LoadSeqToHeap_Entry:	jp Disk_LoadSeqToHeap_Entry  ; F42628 (was T_F42628) -> prom_a 0x61BF3   x1
+; Evidence: slot 0xF4262C is `jp 0xFE1BFB`; prom_a 0xFE1BFB carries the label
+;           Disk_SaveSqfFromStaging_Entry (graded CONTENT).  DERIVATIVE name.
+T_Disk_SaveSqfFromStaging_Entry:	jp Disk_SaveSqfFromStaging_Entry  ; F4262C (was T_F4262C) -> prom_a 0x61BFB   x1
+; Evidence: slot 0xF42630 is `jp 0xFE1C03`; prom_a 0xFE1C03 carries the label
+;           Disk_SaveSeqFile_Entry (graded CONTENT).  DERIVATIVE name.
+T_Disk_SaveSeqFile_Entry:	jp Disk_SaveSeqFile_Entry  ; F42630 (was T_F42630) -> prom_a 0x61C03
 T_MidiFileSave_Page3_LcdKeyRow3:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 	.fill 0x28, 1, 0x0E  ; 0xF42638: 40 x ret
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
@@ -91012,7 +91036,9 @@ T_F426B4:	jp T_F426B4_Nop  ; -> prom_a 0x1DFCB
 T_Screen_CombinationCopy_Button:	jp Screen_CombinationCopy_Button  ; -> prom_a 0x1DFCC
 T_F426BC:	jp T_F426BC_Nop  ; -> prom_a 0x1DFF3
 	.fill 0x20, 1, 0x0E  ; 0xF426C0: 32 x ret
-T_F426E0:	jp sub_F608D0  ; -> prom_b 0x608D0   x3
+; Evidence: slot 0xF426E0 is `jp 0xF608D0`; prom_b 0xF608D0 carries the label
+;           SongClear_ClearBank (graded CONTENT).  DERIVATIVE name.
+T_SongClear_ClearBank:	jp SongClear_ClearBank  ; F426E0 (was T_F426E0) -> prom_b 0x608D0   x3
 T_F426E4:	jp sub_F6079A  ; -> prom_b 0x6079A   x2
 T_F426E8:	jp sub_F60012  ; -> prom_b 0x60012   x1
 T_F426EC:	jp sub_F5E3DA  ; -> prom_b 0x5E3DA   x1
@@ -91022,7 +91048,9 @@ T_F426F8:	jp sub_F5F221  ; -> prom_b 0x5F221   x2
 T_F426FC:	jp sub_F60598  ; -> prom_b 0x60598   x1
 T_F42700:	jp sub_F5DAA2  ; -> prom_b 0x5DAA2   x1
 T_F42704:	jp sub_F60B22  ; -> prom_b 0x60B22   x6
-T_F42708:	jp sub_F60B0C  ; -> prom_b 0x60B0C   x6
+; Evidence: slot 0xF42708 is `jp 0xF60B0C`; prom_b 0xF60B0C carries the label
+;           SongClear_ClearCurrentBank (graded CONTENT).  DERIVATIVE name.
+T_SongClear_ClearCurrentBank:	jp SongClear_ClearCurrentBank  ; F42708 (was T_F42708) -> prom_b 0x60B0C   x6
 T_F4270C:	jp sub_F5EBD0  ; -> prom_b 0x5EBD0   x25
 T_F42710:	jp sub_F5EC0E  ; -> prom_b 0x5EC0E   x7
 T_F42714:	jp sub_F60B4E  ; -> prom_b 0x60B4E   x1
@@ -91085,7 +91113,9 @@ T_F427EC:	jp sub_F62C10  ; -> prom_b 0x62C10   x4
 T_F427F0:	jp sub_F62C14  ; -> prom_b 0x62C14   x3
 T_F427F4:	jp sub_F62C18  ; -> prom_b 0x62C18   x3
 T_BStore_OpenChain_Call:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
-T_F427FC:	jp BStore_LoadGeometry_Call  ; -> prom_b 0x62C20   x6
+; Evidence: slot 0xF427FC is `jp 0xF62C20`; prom_b 0xF62C20 carries the label
+;           BStore_LoadGeometry_Call (graded CONTENT).  DERIVATIVE name.
+T_BStore_LoadGeometry_Call:	jp BStore_LoadGeometry_Call  ; F427FC (was T_F427FC) -> prom_b 0x62C20   x6
 ; Evidence: slot 0xF42800 is `jp 0xF62C00`; prom_b 0xF62C00 carries the label
 ;           BStore_Veneers, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_Veneers:	jp BStore_Veneers  ; F42800 (was T_F42800) -> prom_b 0x62C00   x2
@@ -91100,7 +91130,9 @@ T_BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60:	jp BStore_ErrorToStat
 T_F42824:	jp sub_F64A7A  ; -> prom_b 0x64A7A   x1
 T_F42828:	jp sub_F62C05  ; -> prom_b 0x62C05
 T_F4282C:	jp sub_F64B1B  ; -> prom_b 0x64B1B   x1
-T_F42830:	jp sub_F64BB6  ; -> prom_b 0x64BB6   x1
+; Evidence: slot 0xF42830 is `jp 0xF64BB6`; prom_b 0xF64BB6 carries the label
+;           BStore_MoveWorkspaceToNextBank (graded CONTENT).  DERIVATIVE name.
+T_BStore_MoveWorkspaceToNextBank:	jp BStore_MoveWorkspaceToNextBank  ; F42830 (was T_F42830) -> prom_b 0x64BB6   x1
 	.fill 0x4C, 1, 0x0E  ; 0xF42834: 76 x ret
 T_F42880:	jp sub_F7A400  ; -> prom_b 0x7A400   x2
 T_F42884:	jp sub_F7A402  ; -> prom_b 0x7A402   x17
@@ -91529,7 +91561,9 @@ T_F42ED4:	jp sub_F6A26C  ; -> prom_b 0x6A26C
 T_F42ED8:	jp sub_F6C515  ; -> prom_b 0x6C515
 T_F42EDC:	jp sub_F6AF58  ; -> prom_b 0x6AF58   x1
 T_F42EE0:	jp sub_F68787  ; -> prom_b 0x68787
-T_F42EE4:	jp Format_ChordName_Call  ; -> prom_b 0x67470
+; Evidence: slot 0xF42EE4 is `jp 0xF67470`; prom_b 0xF67470 carries the label
+;           Format_ChordName_Call (graded CONTENT).  DERIVATIVE name.
+T_Format_ChordName_Call:	jp Format_ChordName_Call  ; F42EE4 (was T_F42EE4) -> prom_b 0x67470
 T_F42EE8:	jp sub_F67434  ; -> prom_b 0x67434
 T_F42EEC:	jp T_F42EEC_Nop  ; -> prom_b 0x687EC
 T_F42EF0:	jp T_F42EF0_Nop  ; -> prom_b 0x6AB8E
@@ -92344,8 +92378,8 @@ sub_F440A0_Loop:
 ; BStore_BootPhase3
 ; Called from: T_BStore_BootPhase3 (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
-; Calls:   TimedEventRing_Discard SeqBufRing_Discard sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
-;          sub_F44505 T_F411B8 sub_F44143 sub_F441AB T_EditScreen_BootPhase2And4 sub_F44237 +1
+; Calls:   TimedEventRing_Discard SeqBufRing_Discard sub_F4542D T_BStore_LoadGeometry_Call T_F427B8 T_BStore_LatchHeapBase_Veneer
+;          sub_F44505 T_F411B8 sub_F44143 BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_BStore_BootPhase3 holds `jp 0x00F440C4`, and 0xF440C4 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -92372,7 +92406,7 @@ sub_F440A0_Skip:
 	jr	z, sub_F440A0_Skip2	; F440ED  jr Z,0xf440f4
 	m_or_mi8 MB16, 0x34d3, 0x04	; F440EF  or (0x34d3),0x04
 sub_F440A0_Skip2:
-	call	T_F427FC	; F440F4  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F440F4  call 0xf427fc
 	call	T_F427B8	; F440F8  call 0xf427b8
 	call	T_BStore_LatchHeapBase_Veneer	; F440FC  call 0xf42890
 	calr	sub_F44505	; F44100  calr 0xf44505
@@ -92383,7 +92417,7 @@ sub_F440A0_Skip2:
 	ld	(BStore_CurrentBank:16), a	; F44115  ld (0x360a),A
 	ld	xwa, (13836:16)	; F44119  ld XWA,(0x360c)
 	push	xwa	; F4411D  push XWA
-	calr	sub_F441AB	; F4411E  calr 0xf441ab
+	calr	BStore_ClearPasswordProtectedBanks	; F4411E  calr 0xf441ab
 	pop	xwa	; F44121  pop XWA
 	ld	(13836:16), xwa	; F44122  ld (0x360c),XWA
 	call	T_EditScreen_BootPhase2And4	; F44126  call 0xf40300
@@ -92470,17 +92504,20 @@ sub_F44143_Loop2:
 	ret	; F441AA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F441AB
+; BStore_ClearPasswordProtectedBanks
 ; Called from: in-module: 0xF4411E
 ; Touches: (0x0E43) (0x360A)  |  0x603400 0x610000
-; Calls:   T_F42830 T_F42708
+; Calls:   T_BStore_MoveWorkspaceToNextBank T_SongClear_ClearCurrentBank
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF441AB is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F441AB:
+; BStore_ClearPasswordProtectedBanks: BStore_BootPhase3's: saves the workspace to its bank, then for banks 0..9 (BStore_MoveWorkspaceToNextBank)
+;   runs SongClear_ClearCurrentBank wherever the password word (0x60341C) is non-zero, and zeroes it; then
+;   restores the current bank.
+BStore_ClearPasswordProtectedBanks:
 	xor	wa, wa	; F441AB  xor WA,WA
 	ld	a, (BStore_CurrentBank:16)	; F441AD  ld A,(0x360a)
 	ld	(3651:16), a	; F441B1  ld (0x0e43),A
@@ -92496,14 +92533,14 @@ sub_F441AB_Join:
 	m_cp_mi8 MB16, BStore_CurrentBank, 0x0a	; F441D3  cp (0x360a),0x0a
 	jr	nc, sub_F441AB_Skip2	; F441D8  jr NC,0xf441fa
 	push_a	; F441DA  push A
-	call	T_F42830	; F441DB  call 0xf42830
+	call	T_BStore_MoveWorkspaceToNextBank	; F441DB  call 0xf42830
 	pop_a	; F441DF  pop A
-	m_cp_mi16 MW24, 0x60341c, 0x0000	; F441E0  cp (0x60341c),0x0000
+	m_cp_mi16 MW24, BStore_Password, 0x0000	; F441E0  cp (0x60341c),0x0000
 	jr	z, sub_F441AB_Skip	; F441E7  jr Z,0xf441f6
 	push_a	; F441E9  push A
-	call	T_F42708	; F441EA  call 0xf42708
+	call	T_SongClear_ClearCurrentBank	; F441EA  call 0xf42708
 	pop_a	; F441EE  pop A
-	ldw	(6304796:24), 0	; F441EF  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F441EF  ld (0x60341c),0x0000
 sub_F441AB_Skip:
 	inc	1, a	; F441F6  inc 1,A
 	jr	sub_F441AB_Join	; F441F8  jr T,0xf441cf
@@ -92573,7 +92610,7 @@ T_F44004_Nop:		; <- T_F44004
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44260:
-	ldw	(6304796:24), 0	; F44260  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F44260  ld (0x60341c),0x0000
 	calr	sub_F45D19	; F44267  calr 0xf45d19
 	calr	sub_F45D80	; F4426A  calr 0xf45d80
 	ld	xwa, 4294967295	; F4426D  ld XWA,0xffffffff
@@ -105323,14 +105360,14 @@ sub_F4C6E0:
 	ld	a, (xiy)	; F4C702  ld A,(XIY)
 	push	xiy	; F4C704  push XIY
 	call	T_UiText_CopyLabel13_To_22F0	; F4C705  call 0xf43330
-	ld	xiy, 8944	; F4C709  ld XIY,0x000022f0
+	ld	xiy, DiskSave_PasswordEntry	; F4C709  ld XIY,0x000022f0
 	ld	xix, 10560	; F4C70E  ld XIX,0x00002940
 	ldw	bc, 7	; F4C713  ld BC,0x0007
 	ldirw	; F4C716  ldirw
 	pop	xiy	; F4C718  pop XIY
 	ld	a, (xiy+1)	; F4C719  ld A,(XIY+0x01)
 	call	T_UiText_CopyLabel13_To_22F0	; F4C71C  call 0xf43330
-	ld	xiy, 8944	; F4C720  ld XIY,0x000022f0
+	ld	xiy, DiskSave_PasswordEntry	; F4C720  ld XIY,0x000022f0
 	ld	xix, 10576	; F4C725  ld XIX,0x00002950
 	ldw	bc, 7	; F4C72A  ld BC,0x0007
 	ldirw	; F4C72D  ldirw
@@ -106309,7 +106346,7 @@ sub_F4D002_Skip5:
 	calr	sub_F4D7BD	; F4D19D  calr 0xf4d7bd
 	call	T_F40A8C	; F4D1A0  call 0xf40a8c
 	calr	sub_F4D1B8	; F4D1A4  calr 0xf4d1b8
-	ldw	(6304796:24), 0	; F4D1A7  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F4D1A7  ld (0x60341c),0x0000
 	ld	(6304982:24), 0	; F4D1AE  ld (0x6034d6),0x00
 	calr	sub_F4D238	; F4D1B4  calr 0xf4d238
 	ret	; F4D1B7  ret
@@ -106415,7 +106452,7 @@ sub_F4D238_Loop2:
 	ld	xix, 6356992	; F4D26F  ld XIX,0x00610000
 	mx_lda32 MXD, ra_IX, ra_DE, 4	; F4D274  lda XIX,XIX+DE
 	lda	xix, (xix+28)	; F4D279  lda XIX,XIX+0x1c
-	ld	xiy, 6304796	; F4D27C  ld XIY,0x0060341c
+	ld	xiy, BStore_Password	; F4D27C  ld XIY,0x0060341c
 	ldir85	; F4D281  ldir
 	inc	1, wa	; F4D283  inc 1,WA
 	cp	wa, 10	; F4D285  cp WA,0x000a
@@ -106496,7 +106533,7 @@ sub_F4D238_Return:
 ; Touches: (0x0C55) (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x0C70)
 ;          (0x0D1C) (0x0D1D) (0x0D4A) +11 more  |  0x003460 0x003482
 ;          0x0034EE 0x003510 0x003532 0x60347E +4 more
-; Calls:   sub_F4D89D T_F427FC T_F427E8 T_BStore_AppendBytes_Veneer T_BStore_OpenChain_Call T_F427F0 T_F427F4
+; Calls:   sub_F4D89D T_BStore_LoadGeometry_Call T_F427E8 T_BStore_AppendBytes_Veneer T_BStore_OpenChain_Call T_F427F0 T_F427F4
 ;          sub_F4D758
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4D346 is an instruction boundary.
@@ -106557,7 +106594,7 @@ sub_F4D346_Return:
 	ret	; F4D3E0  ret
 sub_F4D346_Join2:
 	push	xiy	; F4D3E1  push XIY
-	call	T_F427FC	; F4D3E2  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F4D3E2  call 0xf427fc
 	ld	(BStore_ErrorCode:16), 0	; F4D3E6  ld (0x0d4a),0x00
 	xor	wa, wa	; F4D3EB  xor WA,WA
 	ld	a, (13642:16)	; F4D3ED  ld A,(0x354a)
@@ -106719,7 +106756,7 @@ sub_F4D346_Join4:
 	push	xix	; F4D5BB  push XIX
 	push	xiy	; F4D5BC  push XIY
 	push	xiz	; F4D5BD  push XIZ
-	call	T_F427FC	; F4D5BE  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F4D5BE  call 0xf427fc
 	pop	xiz	; F4D5C2  pop XIZ
 	pop	xiy	; F4D5C3  pop XIY
 	pop	xix	; F4D5C4  pop XIX
@@ -106838,7 +106875,7 @@ sub_F4D651_Join2:
 ; sub_F4D690
 ; Called from: T_F40C5C (x7)
 ; Touches: (0x0C90) (0x0D1C) (0x0D1D) (0x0D4A) (0x126E)
-; Calls:   T_F427FC T_BStore_OpenChain_Call T_F427F0 sub_F4D651 T_F427F4
+; Calls:   T_BStore_LoadGeometry_Call T_BStore_OpenChain_Call T_F427F0 sub_F4D651 T_F427F4
 ; Evidence: thunk slot T_F40C5C holds `jp 0x00F4D690`, and 0xF4D690 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -106856,7 +106893,7 @@ sub_F4D690:		; <- T_F40C5C
 	push	xix	; F4D69D  push XIX
 	push	xiy	; F4D69E  push XIY
 	push	xiz	; F4D69F  push XIZ
-	call	T_F427FC	; F4D6A0  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F4D6A0  call 0xf427fc
 	pop	xiz	; F4D6A4  pop XIZ
 	pop	xiy	; F4D6A5  pop XIY
 	pop	xix	; F4D6A6  pop XIX
@@ -106905,7 +106942,7 @@ sub_F4D651_Return:
 ; sub_F4D6F6
 ; Called from: T_F40C60 (x2)
 ; Touches: (0x0C55) (0x0C8A) (0x0D1C) (0x0D1D) (0x0D4A)
-; Calls:   T_F427FC T_F427F0 T_F427F4
+; Calls:   T_BStore_LoadGeometry_Call T_F427F0 T_F427F4
 ; Evidence: thunk slot T_F40C60 holds `jp 0x00F4D6F6`, and 0xF4D6F6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -106915,7 +106952,7 @@ sub_F4D651_Return:
 ; --------------------------------------------------------------------------
 sub_F4D6F6:		; <- T_F40C60
 	pushw	wa	; F4D6F6  push WA
-	call	T_F427FC	; F4D6F7  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F4D6F7  call 0xf427fc
 	popw	wa	; F4D6FB  pop WA
 	ld	(BStore_ErrorCode:16), 0	; F4D6FC  ld (0x0d4a),0x00
 	m_bit 2, MD16, 0x0c8a	; F4D701  bit 2,(0x0c8a)
@@ -128901,7 +128938,7 @@ UiText_CopyLabel13_To_22F0:		; <- T_UiText_CopyLabel13_To_22F0
 	mul	a, 13	; F5B807  mul A,0x0d
 	ld	xiy, ControllerDestinationNames	; F5B80A  ld XIY,0x00f33022
 	add	xiy, xwa	; F5B80F  add XIY,XWA
-	ld	xix, 8944	; F5B811  ld XIX,0x000022f0
+	ld	xix, DiskSave_PasswordEntry	; F5B811  ld XIX,0x000022f0
 	ldw	bc, 13	; F5B816  ld BC,0x000d
 	ldir85	; F5B819  ldir
 	ret	; F5B81B  ret
@@ -137497,19 +137534,22 @@ sub_F6079E_Join:
 	ret	; F608CF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F608D0
-; Called from: T_F426E0 (x3); in-module: 0xF60B19
+; SongClear_ClearBank
+; Called from: T_SongClear_ClearBank (x3); in-module: 0xF60B19
 ; Touches: (0x0CA2) (0x0E02) (0x360A)  |  0x00001C 0x000100 0x000D50
 ;          0x000D70 0x603500 0x610000
 ; Calls:   T_BStore_LoadGeometry sub_F610E3 sub_F60F4F T_F42880 sub_F609B6 T_F40A1C
-; Evidence: thunk slot T_F426E0 holds `jp 0x00F608D0`, and 0xF608D0 is an
+; Evidence: thunk slot T_SongClear_ClearBank holds `jp 0x00F608D0`, and 0xF608D0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F608D0:		; <- T_F426E0
+; SongClear_ClearBank: the SONG CLEAR job's action (SongClear_LcdKeyRow4, through T_SongClear_ClearBank) on bank (0x0E02), 10 = all of them
+;   (sub_F610E3): sub_F60F4F, then in the bank copy the password word +0x1C = 0 and every directory entry's bit
+;   7 cleared and start block 0xFFFF.
+SongClear_ClearBank:		; <- T_SongClear_ClearBank
 	call	T_BStore_LoadGeometry	; F608D0  call 0xf427c4
 	m_cp_mi8 MB16, 0x0e02, 0x0a	; F608D4  cp (0x0e02),0x0a
 	jr	nz, sub_F608D0_Skip	; F608D9  jr NZ,0xf608e2
@@ -137549,7 +137589,7 @@ sub_F608D0_Loop:
 	ld	a, (BStore_CurrentBank:16)	; F6093F  ld A,(0x360a)
 	m_cp_rm MB16, 0x0e02, 1	; F60943  cp A,(0x0e02)
 	jr	nz, sub_F608D0_Skip2	; F60947  jr NZ,0xf6099b
-	ldw	(6304796:24), 0	; F60949  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F60949  ld (0x60341c),0x0000
 	xor	iy, iy	; F60950  xor IY,IY
 	xor	wa, wa	; F60952  xor WA,WA
 	xor	hl, hl	; F60954  xor HL,HL
@@ -137578,7 +137618,7 @@ sub_F608D0_Skip2:
 	call	sub_F60F4F	; F6099B  call 0xf60f4f
 	jr	sub_F608D0_Join3	; F6099F  jr T,0xf609ac
 sub_F608D0_Join2:
-	ldw	(6304796:24), 0	; F609A1  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F609A1  ld (0x60341c),0x0000
 	call	T_F42880	; F609A8  call 0xf42880
 sub_F608D0_Join3:
 	call	sub_F609B6	; F609AC  call 0xf609b6
@@ -137669,23 +137709,25 @@ sub_F609B6:
 	ret	; F60B0B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F60B0C
-; Called from: T_F42708 (x6)
+; SongClear_ClearCurrentBank
+; Called from: T_SongClear_ClearCurrentBank (x6)
 ; Touches: (0x0E02) (0x360A)
-; Calls:   sub_F608D0
-; Evidence: thunk slot T_F42708 holds `jp 0x00F60B0C`, and 0xF60B0C is an
+; Calls:   SongClear_ClearBank
+; Evidence: thunk slot T_SongClear_ClearCurrentBank holds `jp 0x00F60B0C`, and 0xF60B0C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F60B0C:		; <- T_F42708
+; SongClear_ClearCurrentBank: SongClear_ClearBank with (0x0E02) = BStore_CurrentBank, the old value restored.  Thunk T_SongClear_ClearCurrentBank, called by
+;   BStore_ClearPasswordProtectedBanks and by SeqFile_Load on its target bank.
+SongClear_ClearCurrentBank:		; <- T_SongClear_ClearCurrentBank
 	ld	a, (3586:16)	; F60B0C  ld A,(0x0e02)
 	pushw	wa	; F60B10  push WA
 	ld	a, (BStore_CurrentBank:16)	; F60B11  ld A,(0x360a)
 	ld	(3586:16), a	; F60B15  ld (0x0e02),A
-	calr	sub_F608D0	; F60B19  calr 0xf608d0
+	calr	SongClear_ClearBank	; F60B19  calr 0xf608d0
 	popw	wa	; F60B1C  pop WA
 	ld	(3586:16), a	; F60B1D  ld (0x0e02),A
 	ret	; F60B21  ret
@@ -138256,7 +138298,7 @@ sub_F60F4F_Loop2:
 	xor	xwa, xwa	; F61051  xor XWA,XWA
 	ld	(6304798:24), xwa	; F61053  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F61058  ld (0x360c),XWA
-	ld	(6304796:24), wa	; F6105C  ld (0x60341c),WA
+	ld	(BStore_Password:24), wa	; F6105C  ld (0x60341c),WA
 	ld	xix, 6304894	; F61061  ld XIX,0x0060347e
 	ldw	wa, 65535	; F61066  ld WA,0xffff
 	ld	c, 17:opc	; F61069  ld C,0x11
@@ -140513,7 +140555,7 @@ BStore_OpenChain_Call:		; <- T_BStore_OpenChain_Call
 	calr	BStore_OpenChain	; F62C1C  calr 0xf638bb
 	ret	; F62C1F  ret
 ; BStore_LoadGeometry_Call: calls BStore_LoadGeometry and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
-BStore_LoadGeometry_Call:		; <- T_F427FC
+BStore_LoadGeometry_Call:		; <- T_BStore_LoadGeometry_Call
 	calr	BStore_LoadGeometry	; F62C20  calr 0xf63be5
 	ret	; F62C23  ret
 	calr	BStore_CursorAdvance	; F62C24  calr 0xf635c9
@@ -143769,7 +143811,10 @@ sub_F64B7A_Join:
 sub_F64B7A_Skip2:
 	call	T_F411B8	; F64BB1  call 0xf411b8
 	ret	; F64BB5  ret
-sub_F64BB6:		; <- T_F42830
+; BStore_MoveWorkspaceToNextBank: (0x0E2B) / (0x0E2D) = BStore_FreeHead / FreeCount; unless BStore_CurrentBank is 0 the workspace goes back
+;   to bank CurrentBank-1 (BStore_Workspace_SaveToBank); then bank CurrentBank is loaded
+;   (BStore_Workspace_LoadFromBank).  Thunk T_BStore_MoveWorkspaceToNextBank, called by BStore_ClearPasswordProtectedBanks.
+BStore_MoveWorkspaceToNextBank:		; <- T_BStore_MoveWorkspaceToNextBank
 	ld	wa, (BStore_FreeHead:24)	; F64BB6  ld WA,(0x6034b8)
 	ld	(3627:16), wa	; F64BBB  ld (0x0e2b),WA
 	ld	wa, (BStore_FreeCount:24)	; F64BBF  ld WA,(0x6034ba)
@@ -146517,7 +146562,7 @@ TrackAssignPresets_SoftKeyCol6:		; <- T_TrackAssignPresets_SoftKeyCol6
 ; Called from: in-module: 0xF66658
 ; Touches: (0x0DFD) (0x0DFE) (0x0E02) (0x124C) (0x360A) (0x7F4D)  |
 ;          0x603422 0x603433 0x610000
-; Calls:   sub_F6682C T_F426E0 T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F411B8
+; Calls:   sub_F6682C T_SongClear_ClearBank T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F411B8
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF66668 is an instruction
 ;           boundary.  The name IS the address.
@@ -146539,7 +146584,7 @@ sub_F66668_Skip:
 	pushw	hl	; F66688  push HL
 	ld	a, (3582:16)	; F66689  ld A,(0x0dfe)
 	ld	(3586:16), a	; F6668D  ld (0x0e02),A
-	call	T_F426E0	; F66691  call 0xf426e0
+	call	T_SongClear_ClearBank	; F66691  call 0xf426e0
 	popw	hl	; F66695  pop HL
 	ld	(3586:16), l	; F66696  ld (0x0e02),L
 	xor	hl, hl	; F6669A  xor HL,HL
@@ -147209,10 +147254,10 @@ sub_F6746C:
 
 ; --------------------------------------------------------------------------
 ; Format_ChordName_Call
-; Called from: T_F42EE4 (x0)
+; Called from: T_Format_ChordName_Call (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   0xF6DAA6 sub_F6B399
-; Evidence: thunk slot T_F42EE4 holds `jp 0x00F67470`, and 0xF67470 is an
+; Evidence: thunk slot T_Format_ChordName_Call holds `jp 0x00F67470`, and 0xF67470 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -147220,7 +147265,7 @@ sub_F6746C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Format_ChordName_Call: calls Format_ChordName and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
-Format_ChordName_Call:		; <- T_F42EE4
+Format_ChordName_Call:		; <- T_Format_ChordName_Call
 	call	Format_ChordName	; F67470  call 0xf6daa6
 	ret	; F67474  ret
 	calr	sub_F6B399	; F67475  calr 0xf6b399
@@ -165923,7 +165968,7 @@ OldCopy_F7AA5D:
 ; Called from: in-module: 0xF6F043 0xF6F0AA 0xF6F0D8
 ; Touches: (0x0D4A) (0x0E02) (0x12F6) (0x2070) (0x2071) (0x2075) (0x207E)
 ;          (0x2880) (0x3010) (0x360A) +1 more  |  0x610000
-; Calls:   OldCopy_SongStore_LoadSongHeaderToDisplay T_F426E0 OldCopy_sub_F7AB3F
+; Calls:   OldCopy_SongStore_LoadSongHeaderToDisplay T_SongClear_ClearBank OldCopy_sub_F7AB3F
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -166003,7 +166048,7 @@ OldCopy_SongClear_LcdKeyRow4:
 OldCopy_F7AB08:
 	ld	(UI_StatusCode:16), 255	; F6F108  ld (0x2880),0xff
 	ld	(BStore_ErrorCode:16), 0	; F6F10D  ld (0x0d4a),0x00
-	call	T_F426E0	; F6F112  call 0xf426e0
+	call	T_SongClear_ClearBank	; F6F112  call 0xf426e0
 	call	OldCopy_sub_F7AB3F	; F6F116  call 0xf6f13f
 	ld	a, (3586:16)	; F6F11A  ld A,(0x0e02)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F11E  cp A,(0x360a)
@@ -166744,7 +166789,7 @@ Smf_ReadFile_Skip6:
 	ld	(xix+), a	; F6F691  ld (XIX+),A
 	djnz16	bc, -27	; F6F694  djnz BC,0xf6f67c
 	call	T_F409E0	; F6F697  call 0xf409e0
-	call	T_F42708	; F6F69B  call 0xf42708
+	call	T_SongClear_ClearCurrentBank	; F6F69B  call 0xf42708
 	xor	xwa, xwa	; F6F69F  xor XWA,XWA
 	ld	(6304798:24), xwa	; F6F6A1  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F6F6A6  ld (0x360c),XWA
@@ -166837,24 +166882,24 @@ Smf_ReadFile_Skip17:
 	jrl	Smf_ReadFile_Loop	; F6F77D  jrl T,0xf6f6bd
 Smf_ReadFile_Join2:
 	calr	InputStream_RefillDone	; F6F780  calr 0xf765de
-	call	T_F42708	; F6F783  call 0xf42708
+	call	T_SongClear_ClearCurrentBank	; F6F783  call 0xf42708
 	xor	xwa, xwa	; F6F787  xor XWA,XWA
 	ld	(6304798:24), xwa	; F6F789  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F6F78E  ld (0x360c),XWA
 	call	T_F40CB4	; F6F792  call 0xf40cb4
-	ldw	(6304796:24), 0	; F6F796  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F6F796  ld (0x60341c),0x0000
 	m_cp_mi8 MB16, UI_StatusCode, 0x31	; F6F79D  cp (0x2880),0x31
 	jrl	z, Smf_ReadFile_Join8	; F6F7A2  jrl Z,0xf6f89f
 	ld	(UI_StatusCode:16), 31	; F6F7A5  ld (0x2880),0x1f
 	jrl	Smf_ReadFile_Join8	; F6F7AA  jrl T,0xf6f89f
 Smf_ReadFile_Join3:
 	calr	InputStream_RefillDone	; F6F7AD  calr 0xf765de
-	call	T_F42708	; F6F7B0  call 0xf42708
+	call	T_SongClear_ClearCurrentBank	; F6F7B0  call 0xf42708
 	xor	xwa, xwa	; F6F7B4  xor XWA,XWA
 	ld	(6304798:24), xwa	; F6F7B6  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F6F7BB  ld (0x360c),XWA
 	call	T_F40CB4	; F6F7BF  call 0xf40cb4
-	ldw	(6304796:24), 0	; F6F7C3  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F6F7C3  ld (0x60341c),0x0000
 	ld	l, (InputStream_Status:16)	; F6F7CA  ld L,(0x124a)
 	calr	sub_F72F2D	; F6F7CE  calr 0xf72f2d
 	ld	(UI_StatusCode:16), l	; F6F7D1  ld (0x2880),L
@@ -166920,7 +166965,7 @@ Smf_ReadFile_Join7:
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F6F882  and (0x34bb),0xf7
 	call	T_F409E0	; F6F887  call 0xf409e0
 	calr	sub_F6F8C7	; F6F88B  calr 0xf6f8c7
-	ldw	(6304796:24), 0	; F6F88E  ld (0x60341c),0x0000
+	ldw	(BStore_Password:24), 0	; F6F88E  ld (0x60341c),0x0000
 	call	T_F411B8	; F6F895  call 0xf411b8
 	ldw	(UI_Request:16), 520	; F6F899  ld (0x2070),0x0208
 Smf_ReadFile_Join8:
@@ -172037,7 +172082,7 @@ sub_F71A95_Epilogue:
 ; Smf_ReadMultiTrack
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
-; Calls:   T_F409E0 T_F42708 sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
+; Calls:   T_F409E0 T_SongClear_ClearCurrentBank sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
 ;          Smf_ReadTrackChunk InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -172054,7 +172099,7 @@ Smf_ReadMultiTrack:
 	ld	(4665:16), a	; F71B84  ld (0x1239),A
 	ld	(4683:16), a	; F71B88  ld (0x124b),A
 	call	T_F409E0	; F71B8C  call 0xf409e0
-	call	T_F42708	; F71B90  call 0xf42708
+	call	T_SongClear_ClearCurrentBank	; F71B90  call 0xf42708
 	xor	xwa, xwa	; F71B94  xor XWA,XWA
 	ld	(6304798:24), xwa	; F71B96  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F71B9B  ld (0x360c),XWA
@@ -174125,7 +174170,7 @@ sub_F729D9_Loop:
 ; Called from: in-module: 0xF729CC 0xF729F8 0xF72A1D
 ; Touches: (0x0C70) (0x0C71) (0x0C72) (0x0C8A) (0x0C8B) (0x0CA2) (0x0CB6)
 ;          (0x0CF8) (0x0CFA) (0x0CFE) +7 more  |  0x603500 0x60A000 0x60A100
-; Calls:   T_F427FC T_BStore_OpenChain_Call T_F40A04 sub_F72EBA SongStore_SeekBlock_Copy sub_F72E86
+; Calls:   T_BStore_LoadGeometry_Call T_BStore_OpenChain_Call T_F40A04 sub_F72EBA SongStore_SeekBlock_Copy sub_F72E86
 ;          T_F42884 sub_F72CBC sub_F72C74 sub_F72BB3 sub_F72BC7 sub_F72BBD
 ;          +2 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -174138,7 +174183,7 @@ sub_F729D9_Loop:
 ; --------------------------------------------------------------------------
 sub_F72A2B:
 	ld	(3211:16), 0	; F72A2B  ld (0x0c8b),0x00
-	call	T_F427FC	; F72A30  call 0xf427fc
+	call	T_BStore_LoadGeometry_Call	; F72A30  call 0xf427fc
 	ld	a, (3184:16)	; F72A34  ld A,(0x0c70)
 	cp	a, 1:i3	; F72A38  cp A,1
 	jr	c, sub_F72A2B_Skip	; F72A3A  jr C,0xf72a64
@@ -176171,7 +176216,7 @@ Data_F73844:
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A480 0x60A700
 ; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_Var2216_SetW145C_Call T_F42604 SmfWrite_SaveFileName
-;          T_F425CC SmfWrite_RestoreFileName T_DiskApi_DeleteFile_Call sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
+;          T_DiskSaveFile_Execute_Entry SmfWrite_RestoreFileName T_DiskApi_DeleteFile_Call sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
 ;          more
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
@@ -176200,7 +176245,7 @@ Data_F73844:
 Smf_WriteFile:
 	ld	a, (Disk_ContentType:16)	; F7385F  ld A,(0x2725)
 	pushw	wa	; F73863  push WA
-	m_cp_mi16 MW24, 0x60341c, 0x0000	; F73864  cp (0x60341c),0x0000
+	m_cp_mi16 MW24, BStore_Password, 0x0000	; F73864  cp (0x60341c),0x0000
 	jr	z, Smf_WriteFile_Skip	; F7386B  jr Z,0xf73875
 	ld	(UI_StatusCode:16), 9	; F7386D  ld (0x2880),0x09
 	jrl	Smf_WriteFile_Join11	; F73872  jrl T,0xf747fa
@@ -176276,7 +176321,7 @@ Smf_WriteFile_Join:
 	ld	(Disk_ContentType:16), 1	; F73929  ld (0x2725),0x01
 	ld	l, (UI_ScreenPage:16)	; F7392E  ld L,(0x2229)
 	pushw	hl	; F73932  push HL
-	call	T_F425CC	; F73933  call 0xf425cc
+	call	T_DiskSaveFile_Execute_Entry	; F73933  call 0xf425cc
 	popw	hl	; F73937  pop HL
 	ld	(UI_ScreenPage:16), l	; F73938  ld (0x2229),L
 	calr	SmfWrite_RestoreFileName	; F7393C  calr 0xf7491f
@@ -186479,7 +186524,7 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 ; Called from: T_SongClear_LcdKeyRow4 (x1)
 ; Touches: (0x0D4A) (0x0E02) (0x2070) (0x2071) (0x2075) (0x207E) (0x2880)
 ;          (0x3010) (0x360A) (0x360C)
-; Calls:   T_F426E0 sub_F7AB3F
+; Calls:   T_SongClear_ClearBank sub_F7AB3F
 ; Evidence: thunk slot T_SongClear_LcdKeyRow4 holds `jp 0x00F7AAF0`, and 0xF7AAF0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -186498,7 +186543,7 @@ SongClear_LcdKeyRow4:		; <- T_SongClear_LcdKeyRow4
 SongStore_LoadSongHeaderToDisplay_Skip2:
 	ld	(UI_StatusCode:16), 255	; F7AB08  ld (0x2880),0xff
 	ld	(BStore_ErrorCode:16), 0	; F7AB0D  ld (0x0d4a),0x00
-	call	T_F426E0	; F7AB12  call 0xf426e0
+	call	T_SongClear_ClearBank	; F7AB12  call 0xf426e0
 	call	sub_F7AB3F	; F7AB16  call 0xf7ab3f
 	ld	a, (3586:16)	; F7AB1A  ld A,(0x0e02)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F7AB1E  cp A,(0x360a)

@@ -78,7 +78,7 @@ are the UI's way in:
 | `T_DiskApi_WriteFileFromWindow_Entry` | 0xFE1C4D | 9 |
 | `T_DiskApi_DeleteFile_Call` | 0xFE1C55 | 10 |
 | `T_F425C8` | 0xFE1C79 | 2 |
-| `T_F425CC` | 0xFE1C80 | 1 |
+| `T_DiskSaveFile_Execute_Entry` | 0xFE1C80 | 1 |
 | `T_DiskApi_CloseFile_Call` | 0xFE1CAF | 4 |
 | `T_F425E8` | 0xFE1CB3 | 3 |
 | `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
