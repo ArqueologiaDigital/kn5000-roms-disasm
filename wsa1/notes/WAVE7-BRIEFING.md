@@ -149,7 +149,7 @@ Output at resume, truncated to the spans a wave would plausibly pick:
         <- T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8     13 slots,  13 unconverted, extent   1199,    0 refs
     0xF5553F-0xF57D1E  file 0x5553F     10,207 bytes
         <- T_F40D90-T_F40E18     35 slots,  35 unconverted, extent   3365,    8 refs
-        <- T_F42C70-T_F42CA8     15 slots,   3 unconverted, extent    427,   33 refs
+        <- T_TableDefault_Ret-T_F42CA8     15 slots,   3 unconverted, extent    427,   33 refs
         <- T_F40ED0-T_F40EF0      9 slots,   1 unconverted, extent      0,    0 refs
     0xF78029-0xF7A400  file 0x78029      9,175 bytes
     0xF3E15C-0xF40000  file 0x3E15C      7,844 bytes

@@ -617,7 +617,7 @@ def neighbour():
     print()
     print("WHICH THUNK RUN SERVES WHICH BLOCK -- this is the answer:")
     for lo, hi, lab in ((0x42E40, 0x42E70, "T_F42E40-T_F42E6C"),
-                        (0x42C70, 0x42CAC, "T_F42C70-T_F42CA8"),
+                        (0x42C70, 0x42CAC, "T_TableDefault_Ret-T_F42CA8"),
                         (0x40D90, 0x40E1C, "T_F40D90-T_F40E18")):
         tg = []
         for slot in range(lo, hi, 4):
@@ -630,7 +630,7 @@ def neighbour():
               "converted 0xF55000 block %2d | in 0xF5553F+ %2d"
               % (lab, len(tg), min(tg), max(tg), n_span, n_conv, n_next))
     print()
-    print("  T_F42C70-T_F42CA8 STRADDLES the boundary: T_F42CA8 -> 0x%06X, the"
+    print("  T_TableDefault_Ret-T_F42CA8 STRADDLES the boundary: T_F42CA8 -> 0x%06X, the"
           % 0xF5553F)
     print("  first byte of the NEXT .incbin, while TWELVE of its slots are")
     print("  already-converted code at 0xF55018-0xF551E7.  So 0xF5553F is the")
@@ -805,7 +805,7 @@ def selftest():
     for slot in range(0x42C70, 0x42CAC, 4):
         _k, v = TT.classify(b, slot)
         tg.append(v)
-    check("T_F42C70-T_F42CA8 slots", len(tg), 15)
+    check("T_TableDefault_Ret-T_F42CA8 slots", len(tg), 15)
     check("  ... targets in the ALREADY-CONVERTED 0xF55000 block",
           sum(1 for v in tg if 0xF55000 <= v < NEXT_SPAN[0]), 12)
     check("  ... targets in the NEXT .incbin 0xF5553F-0xF57D1E",

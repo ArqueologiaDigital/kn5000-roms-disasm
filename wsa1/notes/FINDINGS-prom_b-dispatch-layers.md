@@ -125,7 +125,7 @@ key opens -- see `FINDINGS-prom_ab-screen-stage-and-flags.md`. Four of the 25 sc
 
 ## And a fourth thing that is not a dispatch layer
 
-`0xF55018` — the target of `T_F42C70`, whose slot address `70 2C F4 00` occurs
+`0xF55018` — the target of `T_TableDefault_Ret`, whose slot address `70 2C F4 00` occurs
 **397 times** as data in prom_a+prom_b (222 in prom_a, 175 in prom_b) — is a
 single byte `0x0E`. A bare `ret`. Whatever those pointer tables are, their
 default entry does nothing. `0xF55018` sits at the tail of a run of `0E 00 00 00`

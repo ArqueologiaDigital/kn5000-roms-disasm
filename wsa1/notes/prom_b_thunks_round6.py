@@ -57,11 +57,11 @@ QUESTION IT ANSWERS
         slots; one framing is honest and the other is not.
 
     R2  TAKE THE NAME FROM A FRAMED TARGET.
-        Yield: +9 slots (T_F40F1C -> SC1_Entry_F40F1C, T_F42C70 ->
+        Yield: +9 slots (T_F40F1C -> SC1_Entry_F40F1C, T_TableDefault_Ret ->
         Stub_Ret_F55018, ...).  Rejected, and this one is free to reject
         because it buys LITERALLY NOTHING: `T_Stub_Ret_F55018` still ends in six
         hex digits, so wave7_documentation_metrics.py grades the result FRAMED
-        exactly as it grades `T_F42C70`.  A rename that changes the spelling and
+        exactly as it grades `T_TableDefault_Ret`.  A rename that changes the spelling and
         not the grade is churn.  --rejected asserts this: it re-grades all nine.
 
     R3  DISAMBIGUATE THE ALIAS PAIRS WITH A SUFFIX.

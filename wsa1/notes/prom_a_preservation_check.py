@@ -3505,6 +3505,7 @@ RENAMES = {
     "PtrTable_F1B2F1": "ScreenButtons_Effect2OutputConflict",
     "PtrTable_F1B34D": "ScreenButtons_WriteProtectError",
     "PtrTable_F1B1B0": "ScreenButtons_CombinationNamingWrite",
+    "T_F42C70": "T_TableDefault_Ret",
 }
 
 

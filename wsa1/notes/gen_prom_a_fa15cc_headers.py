@@ -29,7 +29,7 @@ QUESTION IT ANSWERS
 WHY .byte, NOT .long, FOR THE HANDLER/POINTER TABLES
   handler_table_23 and pointer_table_3 are 4-byte-aligned pointer arrays by
   construction (R3 PTR23 in identify.py: 23 consecutive LE32 words each either
-  the T_F42C70 no-op stub or inside 0xF90000-0xFB0000), so `.long` would be
+  the T_TableDefault_Ret no-op stub or inside 0xF90000-0xFB0000), so `.long` would be
   defensible. This script still emits `.byte` for everything, because
   gen_prom_a_block.py's `longs_block` REFUSES a span whose length is not a
   multiple of 4, and getting that wrong for 270 auto-generated spans is a

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Where does the 4-byte spelling of thunk slot T_F42C70 (0x00F42C70) occur, and
+"""Where does the 4-byte spelling of thunk slot T_TableDefault_Ret (0x00F42C70) occur, and
    does it form one dense run?
 
 QUESTION ANSWERED

@@ -78,7 +78,7 @@ RULES, AND THE NULL MEASURED FOR EACH  (`--null`)
      10 bytes, 2 at 592.  R6's is not zero either (130).  See `--null`, and see
      the ★ below for why the layout survives that.
   R3 PTR23     23 consecutive LE32 words, each 0x00F42C70 (the no-op `ret` stub
-     behind thunk T_F42C70) or inside 0x00F90000-0x00FB0000.
+     behind thunk T_TableDefault_Ret) or inside 0x00F90000-0x00FB0000.
   R4 FILL      a run of >= 16 bytes of 0x0E.
   R5 EXTEND    a table whose entry width divides the bytes between it and the next
      proven object runs to that object.  Applied ONLY to holes, only when the
@@ -1071,7 +1071,7 @@ def selftest():
     nt = sum(1 for lo, hi, k, ev in known if k == "handler_table_23")
     noop = sum(1 for lo, hi, k, ev in known if k == "handler_table_23"
                for j in range(23) if w32(lo + 4 * j) == 0xF42C70)
-    chk("16 handler tables, 222 of their 368 slots are the T_F42C70 no-op",
+    chk("16 handler tables, 222 of their 368 slots are the T_TableDefault_Ret no-op",
         nt == 16 and noop == 222)
     allp = [i for i in range(len(ROM) - 3)
             if ROM[i:i + 4] == b"\x70\x2c\xf4\x00"]

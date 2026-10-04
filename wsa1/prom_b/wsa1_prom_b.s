@@ -38438,7 +38438,7 @@ EffectValueRanges:
 ;          which editor screen each of the 32 rows is.
 ; --------------------------------------------------------------------------
 ScreenTable_F131E4:
-	.long	T_F42C70	; F131E4  [0] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F131E4  [0] -> 0xF42C70
 	.long	DspEffect_StepU8	; F131E8  [1] -> DspEffect_StepU8
 	.long	DspEffect_StepEqFc	; F131EC  [2] -> DspEffect_StepEqFc
 	.long	DspEffect_StepEqFc	; F131F0  [3] -> DspEffect_StepEqFc
@@ -38469,11 +38469,11 @@ ScreenTable_F131E4:
 	.long	DspEffect_StepU16	; F13254  [28] -> DspEffect_StepU16
 	.long	DspEffect_StepU8	; F13258  [29] -> DspEffect_StepU8
 	.long	DspEffect_StepU8	; F1325C  [30] -> DspEffect_StepU8
-	.long	T_F42C70	; F13260  [31] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13260  [31] -> 0xF42C70
 
 ; --- array 1 of 4: 32 code pointers, read at 0xF110EA ---
 DspEffect_LoadValueTable:
-	.long	T_F42C70	; F13264  [32] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13264  [32] -> 0xF42C70
 	.long	DspEffect_LoadByte	; F13268  [33] -> DspEffect_LoadByte
 	.long	DspEffect_LoadEqFc	; F1326C  [34] -> DspEffect_LoadEqFc
 	.long	DspEffect_LoadEqFc	; F13270  [35] -> DspEffect_LoadEqFc
@@ -38504,7 +38504,7 @@ DspEffect_LoadValueTable:
 	.long	DspEffect_LoadWord	; F132D4  [60] -> DspEffect_LoadWord
 	.long	DspEffect_LoadByte	; F132D8  [61] -> DspEffect_LoadByte
 	.long	DspEffect_LoadByte	; F132DC  [62] -> DspEffect_LoadByte
-	.long	T_F42C70	; F132E0  [63] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F132E0  [63] -> 0xF42C70
 
 ; --- array 2 of 4: 32 DISPLAY-LIST pointers, read at 0xF110FA and handed to
 ;     DisplayListB_RunOne_Stack.  These are DATA, not entry points. ---
@@ -38546,7 +38546,7 @@ ScreenDisplayLists_F132E4:
 ; DspEffect_RepairValueTable: array 3 of the four type-indexed arrays -- one repair routine per value type, read by
 ;   DspEffect_RepairParams (0xF1172A); the same columns as the DspEffect_Step* array and DspEffect_LoadValueTable.
 DspEffect_RepairValueTable:
-	.long	T_F42C70	; F13364  [96] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13364  [96] -> 0xF42C70
 	.long	DspEffect_RepairU8	; F13368  [97] -> DspEffect_RepairU8
 	.long	DspEffect_RepairEqFc	; F1336C  [98] -> DspEffect_RepairEqFc
 	.long	DspEffect_RepairEqFc	; F13370  [99] -> DspEffect_RepairEqFc
@@ -38577,7 +38577,7 @@ DspEffect_RepairValueTable:
 	.long	DspEffect_RepairU16	; F133D4  [124] -> DspEffect_RepairU16
 	.long	DspEffect_RepairU8	; F133D8  [125] -> DspEffect_RepairU8
 	.long	DspEffect_RepairU8	; F133DC  [126] -> DspEffect_RepairU8
-	.long	T_F42C70	; F133E0  [127] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F133E0  [127] -> 0xF42C70
 
 
 ;--------------------------------------------------------------------------
@@ -38861,16 +38861,16 @@ DispatchTable_F135FD:
 	.long	LcdKeyRow3_DspEffect	; F13625  [10] -> LcdKeyRow3_DspEffect
 	.long	LcdKeyRow4_DspEffect	; F13629  [11] -> LcdKeyRow4_DspEffect
 	.long	LcdKeyRow5_DspEffect	; F1362D  [12] -> LcdKeyRow5_DspEffect
-	.long	T_F42C70	; F13631  [13] -> 0xF42C70
-	.long	T_F42C70	; F13635  [14] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13631  [13] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13635  [14] -> 0xF42C70
 	.long	ExitKey_DspEffect	; F13639  [15] -> ExitKey_DspEffect
-	.long	T_F42C70	; F1363D  [16] -> 0xF42C70
-	.long	T_F42C70	; F13641  [17] -> 0xF42C70
-	.long	T_F42C70	; F13645  [18] -> 0xF42C70
-	.long	T_F42C70	; F13649  [19] -> 0xF42C70
-	.long	T_F42C70	; F1364D  [20] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1363D  [16] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13641  [17] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13645  [18] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13649  [19] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1364D  [20] -> 0xF42C70
 	.long	CompareKey_DspEffect	; F13651  [21] -> CompareKey_DspEffect
-	.long	T_F42C70	; F13655  [22] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13655  [22] -> 0xF42C70
 
 
 ;--------------------------------------------------------------------------
@@ -39202,29 +39202,29 @@ EffectParamNumberMap:
 ; --------------------------------------------------------------------------
 ; ButtonTable23_MainOutEqualizer: MAIN OUT EQUALIZER's 23-slot button table, indexed by T_PanelCode_ToSlotAndFlags's slot.
 ButtonTable23_MainOutEqualizer:
-	.long	T_F42C70	; F1394F  [0] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1394F  [0] -> 0xF42C70
 	.long	SoftKeyCol2_MainOutEqualizer	; F13953  [1] -> SoftKeyCol2_MainOutEqualizer
 	.long	SoftKeyCol3_MainOutEqualizer	; F13957  [2] -> SoftKeyCol3_MainOutEqualizer
-	.long	T_F42C70	; F1395B  [3] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1395B  [3] -> 0xF42C70
 	.long	SoftKeyCol5_MainOutEqualizer	; F1395F  [4] -> SoftKeyCol5_MainOutEqualizer
 	.long	SoftKeyCol6_MainOutEqualizer	; F13963  [5] -> SoftKeyCol6_MainOutEqualizer
-	.long	T_F42C70	; F13967  [6] -> 0xF42C70
-	.long	T_F42C70	; F1396B  [7] -> 0xF42C70
-	.long	T_F42C70	; F1396F  [8] -> 0xF42C70
-	.long	T_F42C70	; F13973  [9] -> 0xF42C70
-	.long	T_F42C70	; F13977  [10] -> 0xF42C70
-	.long	T_F42C70	; F1397B  [11] -> 0xF42C70
-	.long	T_F42C70	; F1397F  [12] -> 0xF42C70
-	.long	T_F42C70	; F13983  [13] -> 0xF42C70
-	.long	T_F42C70	; F13987  [14] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13967  [6] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1396B  [7] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1396F  [8] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13973  [9] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13977  [10] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1397B  [11] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1397F  [12] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13983  [13] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13987  [14] -> 0xF42C70
 	.long	ExitKey_MainOutEqualizer	; F1398B  [15] -> ExitKey_MainOutEqualizer
-	.long	T_F42C70	; F1398F  [16] -> 0xF42C70
-	.long	T_F42C70	; F13993  [17] -> 0xF42C70
-	.long	T_F42C70	; F13997  [18] -> 0xF42C70
-	.long	T_F42C70	; F1399B  [19] -> 0xF42C70
-	.long	T_F42C70	; F1399F  [20] -> 0xF42C70
-	.long	T_F42C70	; F139A3  [21] -> 0xF42C70
-	.long	T_F42C70	; F139A7  [22] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1398F  [16] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13993  [17] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F13997  [18] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1399B  [19] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F1399F  [20] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F139A3  [21] -> 0xF42C70
+	.long	T_TableDefault_Ret	; F139A7  [22] -> 0xF42C70
 
 
 ; --------------------------------------------------------------------------
@@ -51212,29 +51212,29 @@ BitTable_F1AE95:
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombiEditPartMenu: the 23-slot button table ScreenButton_CombiEditPartMenu indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_CombiEditPartMenu:
-	.long T_F42C70                       ; F1AEB5  [0]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEB9  [1]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEBD  [2]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEC1  [3]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEC5  [4]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEC9  [5]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AECD  [6]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AED1  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEB5  [0]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEB9  [1]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEBD  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEC1  [3]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEC5  [4]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEC9  [5]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AECD  [6]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AED1  [7]   -> prom_b 0xF42C70
 	.long 0x00FBCBAA                       ; F1AED5  [8]   -> prom_a 0xFBCBAA
 	.long 0x00FBCBF1                       ; F1AED9  [9]   -> prom_a 0xFBCBF1
 	.long LcdKeyRow3_CombiEditPartMenu                       ; F1AEDD  [10]   -> prom_a 0xFBCC3D
 	.long LcdKeyRow4_CombiEditPartMenu                       ; F1AEE1  [11]   -> prom_a 0xFBCC64
 	.long LcdKeyRow5_CombiEditPartMenu                       ; F1AEE5  [12]   -> prom_a 0xFBCC8B
-	.long T_F42C70                       ; F1AEE9  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEED  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEE9  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEED  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombiEditPartMenu                       ; F1AEF1  [15]   -> prom_a 0xFBCC9E
-	.long T_F42C70                       ; F1AEF5  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEF9  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AEFD  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF01  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF05  [20]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF09  [21]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF0D  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEF5  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEF9  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AEFD  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF01  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF05  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF09  [21]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF0D  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombiEditInternalSound -- pointer table, 0xF1AF11-0xF1AF6C (92 bytes)
@@ -51254,19 +51254,19 @@ ScreenButtons_CombiEditInternalSound:
 	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF2D  [7]   -> prom_a 0xFBCFD1
 	.long 0x00FBCBAA                       ; F1AF31  [8]   -> prom_a 0xFBCBAA
 	.long 0x00FBCBF1                       ; F1AF35  [9]   -> prom_a 0xFBCBF1
-	.long T_F42C70                       ; F1AF39  [10]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF3D  [11]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF41  [12]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF45  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF49  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF39  [10]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF3D  [11]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF41  [12]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF45  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF49  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombiEditInternalSound                       ; F1AF4D  [15]   -> prom_a 0xFBD016
 	.long PageKey_CombiEditInternalSound                       ; F1AF51  [16]   -> prom_a 0xFBD044
-	.long T_F42C70                       ; F1AF55  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF55  [17]   -> prom_b 0xF42C70
 	.long NumberPadKey_CombiEditInternalSound                       ; F1AF59  [18]   -> prom_a 0xFBD0A4
-	.long T_F42C70                       ; F1AF5D  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1AF61  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF5D  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF61  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1AF65  [21]   -> prom_a 0xFBEDBE
-	.long T_F42C70                       ; F1AF69  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1AF69  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; IndexMap_F1AF6D -- index map, 0xF1AF6D-0xF1AF72 (6 bytes)
@@ -51372,16 +51372,16 @@ ScreenButtons_CombiEditMixer:
 	.long LcdKeyRow3_CombiEditMixer                       ; F1AFFD  [10]   -> prom_a 0xFBDECC
 	.long LcdKeyRow4_CombiEditMixer                       ; F1B001  [11]   -> prom_a 0xFBDF26
 	.long LcdKeyRow5_CombiEditMixer                       ; F1B005  [12]   -> prom_a 0xFBDF86
-	.long T_F42C70                       ; F1B009  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B00D  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B009  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B00D  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombiEditMixer                       ; F1B011  [15]   -> prom_a 0xFBDFCC
 	.long PageKey_CombiEditMixer                       ; F1B015  [16]   -> prom_a 0xFBE038
-	.long T_F42C70                       ; F1B019  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B01D  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B021  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B025  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B019  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B01D  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B021  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B025  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1B029  [21]   -> prom_a 0xFBEDBE
-	.long T_F42C70                       ; F1B02D  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B02D  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; IndexMap_F1B031 -- index map, 0xF1B031-0xF1B03E (14 bytes)
@@ -51579,29 +51579,29 @@ PtrTable_F1B12B:
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombinationNaming: the 23-slot button table Screen_CombinationNaming_Button indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_CombinationNaming:
-	.long T_F42C70                       ; F1B14B  [0]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B14F  [1]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B153  [2]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B157  [3]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B15B  [4]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B15F  [5]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B163  [6]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B167  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B14B  [0]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B14F  [1]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B153  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B157  [3]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B15B  [4]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B15F  [5]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B163  [6]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B167  [7]   -> prom_b 0xF42C70
 	.long LcdKeyRow1_CombinationNaming                       ; F1B16B  [8]   -> prom_a 0xFBEFB1
-	.long T_F42C70                       ; F1B16F  [9]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B16F  [9]   -> prom_b 0xF42C70
 	.long LcdKeyRow3_CombinationNaming                       ; F1B173  [10]   -> prom_a 0xFBEFD2
 	.long LcdKeyRow4_CombinationNaming                       ; F1B177  [11]   -> prom_a 0xFBEFE6
 	.long LcdKeyRow5_CombinationNaming                       ; F1B17B  [12]   -> prom_a 0xFBEFFA
-	.long T_F42C70                       ; F1B17F  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B183  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B17F  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B183  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombinationNaming                       ; F1B187  [15]   -> prom_a 0xFBF00D
-	.long T_F42C70                       ; F1B18B  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B18F  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B193  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B197  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B19B  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B18B  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B18F  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B193  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B197  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B19B  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1B19F  [21]   -> prom_a 0xFBEDBE
-	.long T_F42C70                       ; F1B1A3  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B1A3  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; Record_F1B1A7 -- record, 0xF1B1A7-0xF1B1AF (9 bytes)
@@ -51675,29 +51675,29 @@ IndexMap_F1B230:
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombiEditConfigure: the 23-slot button table ScreenButtonBody_CombiEditConfigure indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_CombiEditConfigure:
-	.long T_F42C70                       ; F1B239  [0]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B239  [0]   -> prom_b 0xF42C70
 	.long SoftKeyCol2_CombiEditConfigure                       ; F1B23D  [1]   -> prom_a 0xFBF499
-	.long T_F42C70                       ; F1B241  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B241  [2]   -> prom_b 0xF42C70
 	.long SoftKeyCol4_CombiEditConfigure                       ; F1B245  [3]   -> prom_a 0xFBF50F
 	.long SoftKeyCol5_CombiEditConfigure                       ; F1B249  [4]   -> prom_a 0xFBF53A
 	.long SoftKeyCol6_CombiEditConfigure                       ; F1B24D  [5]   -> prom_a 0xFBF582
 	.long SoftKeyCol7_CombiEditConfigure                       ; F1B251  [6]   -> prom_a 0xFBF5CA
-	.long T_F42C70                       ; F1B255  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B255  [7]   -> prom_b 0xF42C70
 	.long LcdKeyRow1_CombiEditConfigure                       ; F1B259  [8]   -> prom_a 0xFBF5F5
 	.long LcdKeyRow2_CombiEditConfigure                       ; F1B25D  [9]   -> prom_a 0xFBF609
 	.long LcdKeyRow3_CombiEditConfigure                       ; F1B261  [10]   -> prom_a 0xFBF62F
 	.long LcdKeyRow4_CombiEditConfigure                       ; F1B265  [11]   -> prom_a 0xFBF655
-	.long T_F42C70                       ; F1B269  [12]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B26D  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B271  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B269  [12]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B26D  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B271  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombiEditConfigure                       ; F1B275  [15]   -> prom_a 0xFBF67B
-	.long T_F42C70                       ; F1B279  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B27D  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B281  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B285  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B289  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B279  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B27D  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B281  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B285  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B289  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1B28D  [21]   -> prom_a 0xFBEDBE
-	.long T_F42C70                       ; F1B291  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B291  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombiEditMenu -- pointer table, 0xF1B295-0xF1B2F0 (92 bytes)
@@ -51708,28 +51708,28 @@ ScreenButtons_CombiEditConfigure:
 ; ScreenButtons_CombiEditMenu: the 23-slot button table ScreenButton_CombiEditMenu indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_CombiEditMenu:
 	.long SoftKeyCol1_CombiEditMenu                       ; F1B295  [0]   -> prom_a 0xFBFC53
-	.long T_F42C70                       ; F1B299  [1]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B29D  [2]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2A1  [3]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2A5  [4]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2A9  [5]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2AD  [6]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2B1  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B299  [1]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B29D  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2A1  [3]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2A5  [4]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2A9  [5]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2AD  [6]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2B1  [7]   -> prom_b 0xF42C70
 	.long LcdKeyRow1_CombiEditMenu                       ; F1B2B5  [8]   -> prom_a 0xFBFB34
 	.long LcdKeyRow2_CombiEditMenu                       ; F1B2B9  [9]   -> prom_a 0xFBFB68
 	.long LcdKeyRow3_CombiEditMenu                       ; F1B2BD  [10]   -> prom_a 0xFBFB9A
 	.long LcdKeyRow4_CombiEditMenu                       ; F1B2C1  [11]   -> prom_a 0xFBFBC1
 	.long LcdKeyRow5_CombiEditMenu                       ; F1B2C5  [12]   -> prom_a 0xFBFBE8
-	.long T_F42C70                       ; F1B2C9  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2CD  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2C9  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2CD  [14]   -> prom_b 0xF42C70
 	.long ExitKey_CombiEditMenu                       ; F1B2D1  [15]   -> prom_a 0xFBFC0F
-	.long T_F42C70                       ; F1B2D5  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2D9  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2DD  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2E1  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2E5  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2D5  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2D9  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2DD  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2E1  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2E5  [20]   -> prom_b 0xF42C70
 	.long CompareKey_CombiEdit                       ; F1B2E9  [21]   -> prom_a 0xFBEDBE
-	.long T_F42C70                       ; F1B2ED  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2ED  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; ScreenButtons_Effect2OutputConflict -- pointer table, 0xF1B2F1-0xF1B34C (92 bytes)
@@ -51739,29 +51739,29 @@ ScreenButtons_CombiEditMenu:
 ; --------------------------------------------------------------------------
 ; ScreenButtons_Effect2OutputConflict: the 23-slot button table ScreenButtonBody_Effect2OutputConflict indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_Effect2OutputConflict:
-	.long T_F42C70                       ; F1B2F1  [0]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2F5  [1]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2F9  [2]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B2FD  [3]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B301  [4]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B305  [5]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B309  [6]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B30D  [7]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B311  [8]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B315  [9]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B319  [10]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B31D  [11]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B321  [12]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B325  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B329  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2F1  [0]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2F5  [1]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2F9  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B2FD  [3]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B301  [4]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B305  [5]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B309  [6]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B30D  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B311  [8]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B315  [9]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B319  [10]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B31D  [11]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B321  [12]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B325  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B329  [14]   -> prom_b 0xF42C70
 	.long ExitKey_Effect2OutputConflict                       ; F1B32D  [15]   -> prom_a 0xFBFE1F
-	.long T_F42C70                       ; F1B331  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B335  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B339  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B33D  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B341  [20]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B345  [21]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B349  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B331  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B335  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B339  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B33D  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B341  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B345  [21]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B349  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
 ; ScreenButtons_WriteProtectError -- pointer table, 0xF1B34D-0xF1B3A8 (92 bytes)
@@ -51771,29 +51771,29 @@ ScreenButtons_Effect2OutputConflict:
 ; --------------------------------------------------------------------------
 ; ScreenButtons_WriteProtectError: the 23-slot button table ScreenButtonBody_WriteProtectError indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
 ScreenButtons_WriteProtectError:
-	.long T_F42C70                       ; F1B34D  [0]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B351  [1]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B355  [2]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B359  [3]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B35D  [4]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B361  [5]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B365  [6]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B369  [7]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B36D  [8]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B371  [9]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B34D  [0]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B351  [1]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B355  [2]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B359  [3]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B35D  [4]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B361  [5]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B365  [6]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B369  [7]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B36D  [8]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B371  [9]   -> prom_b 0xF42C70
 	.long LcdKeyRow3_WriteProtectError                       ; F1B375  [10]   -> prom_a 0xFBFF02
 	.long 0x00FBFF19                       ; F1B379  [11]   -> prom_a 0xFBFF19
-	.long T_F42C70                       ; F1B37D  [12]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B381  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B385  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B37D  [12]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B381  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B385  [14]   -> prom_b 0xF42C70
 	.long 0x00FBFF19                       ; F1B389  [15]   -> prom_a 0xFBFF19
-	.long T_F42C70                       ; F1B38D  [16]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B391  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B395  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B399  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B39D  [20]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B3A1  [21]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F1B3A5  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B38D  [16]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B391  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B395  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B399  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B39D  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B3A1  [21]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F1B3A5  [22]   -> prom_b 0xF42C70
 
 ; --- 0xF1B3A9-0xF1B3FF  87 bytes of 0x0E padding ---
 	.fill	87, 1, 0x0E	; asserted a single value
@@ -90904,7 +90904,9 @@ T_SequencerMedley_SoftKeyCol7:	jp SequencerMedley_SoftKeyCol7  ; -> prom_b 0x664
 T_SequencerMedley_SoftKeyCol8:	jp SequencerMedley_SoftKeyCol8  ; -> prom_b 0x663D7   x1
 T_SequencerMedley_LcdKeyRow4:	jp SequencerMedley_LcdKeyRow4  ; -> prom_b 0x6645A   x1
 	.fill 0x40, 1, 0x0E  ; 0xF42C30: 64 x ret
-T_F42C70:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
+; T_TableDefault_Ret: the thunk onto a bare `ret` (Stub_Ret_F55018) that fills the unused slots of handler and
+;   button tables in both images -- 222 occurrences of its address in prom_a's bytes, 175 in prom_b's (comment below).
+T_TableDefault_Ret:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
 				; `70 2C F4 00` occur 397 times in prom_a+prom_b
 				; -- 222 in prom_a, 175 in prom_b -- so it is a
 				; DEFAULT entry filling pointer tables.
@@ -104298,29 +104300,29 @@ DLB_CreatorSelectController_Names:
 ; ScreenButtonHandlers_CreatorSelectController: the screen's button table by panel button code -- [9] LcdKeyRow2, [15]
 ;   ExitKey (2026-10-04).
 ScreenButtonHandlers_CreatorSelectController:
-	.long	T_F42C70	; F4C38D  [0] -> default stub
+	.long	T_TableDefault_Ret	; F4C38D  [0] -> default stub
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C391  [1] -> 0xF4C4DD
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C395  [2] -> 0xF4C4DD
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C399  [3] -> 0xF4C4DD
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C39D  [4] -> 0xF4C4DD
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C3A1  [5] -> 0xF4C4DD
 	.long	SoftKeyCols2to7_CreatorSelectController	; F4C3A5  [6] -> 0xF4C4DD
-	.long	T_F42C70	; F4C3A9  [7] -> default stub
-	.long	T_F42C70	; F4C3AD  [8] -> default stub
+	.long	T_TableDefault_Ret	; F4C3A9  [7] -> default stub
+	.long	T_TableDefault_Ret	; F4C3AD  [8] -> default stub
 	.long	LcdKeyRow2_CreatorSelectController	; F4C3B1  [9] -> 0xF4C588
-	.long	T_F42C70	; F4C3B5  [10] -> default stub
-	.long	T_F42C70	; F4C3B9  [11] -> default stub
-	.long	T_F42C70	; F4C3BD  [12] -> default stub
-	.long	T_F42C70	; F4C3C1  [13] -> default stub
-	.long	T_F42C70	; F4C3C5  [14] -> default stub
+	.long	T_TableDefault_Ret	; F4C3B5  [10] -> default stub
+	.long	T_TableDefault_Ret	; F4C3B9  [11] -> default stub
+	.long	T_TableDefault_Ret	; F4C3BD  [12] -> default stub
+	.long	T_TableDefault_Ret	; F4C3C1  [13] -> default stub
+	.long	T_TableDefault_Ret	; F4C3C5  [14] -> default stub
 	.long	ExitKey_CreatorSelectController	; F4C3C9  [15] -> 0xF4C5A2
-	.long	T_F42C70	; F4C3CD  [16] -> default stub
-	.long	T_F42C70	; F4C3D1  [17] -> default stub
-	.long	T_F42C70	; F4C3D5  [18] -> default stub
-	.long	T_F42C70	; F4C3D9  [19] -> default stub
-	.long	T_F42C70	; F4C3DD  [20] -> default stub
-	.long	T_F42C70	; F4C3E1  [21] -> default stub
-	.long	T_F42C70	; F4C3E5  [22] -> default stub
+	.long	T_TableDefault_Ret	; F4C3CD  [16] -> default stub
+	.long	T_TableDefault_Ret	; F4C3D1  [17] -> default stub
+	.long	T_TableDefault_Ret	; F4C3D5  [18] -> default stub
+	.long	T_TableDefault_Ret	; F4C3D9  [19] -> default stub
+	.long	T_TableDefault_Ret	; F4C3DD  [20] -> default stub
+	.long	T_TableDefault_Ret	; F4C3E1  [21] -> default stub
+	.long	T_TableDefault_Ret	; F4C3E5  [22] -> default stub
 
 
 ; --------------------------------------------------------------------------
@@ -114238,19 +114240,19 @@ PanelButtonTable_DrawbarScreen:
 	.long SoftKeyCol8_DrawbarScreen                       ; F54264  [7]   -> SoftKeyCol8_DrawbarScreen
 	.long LcdKeyRow1_DrawbarScreen                       ; F54268  [8]   -> LcdKeyRow1_DrawbarScreen
 	.long LcdKeyRow2_DrawbarScreen                       ; F5426C  [9]   -> LcdKeyRow2_DrawbarScreen
-	.long T_F42C70                       ; F54270  [10]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F54270  [10]   -> prom_b 0xF42C70
 	.long LcdKeyRow4_DrawbarScreen                       ; F54274  [11]   -> LcdKeyRow4_DrawbarScreen
 	.long LcdKeyRow5_DrawbarScreen                       ; F54278  [12]   -> LcdKeyRow5_DrawbarScreen
-	.long T_F42C70                       ; F5427C  [13]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F54280  [14]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F5427C  [13]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F54280  [14]   -> prom_b 0xF42C70
 	.long ExitKey_DrawbarScreen                       ; F54284  [15]   -> ExitKey_DrawbarScreen
 	.long PageKey_DrawbarScreen                       ; F54288  [16]   -> PageKey_DrawbarScreen
-	.long T_F42C70                       ; F5428C  [17]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F54290  [18]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F54294  [19]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F54298  [20]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F5429C  [21]   -> prom_b 0xF42C70
-	.long T_F42C70                       ; F542A0  [22]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F5428C  [17]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F54290  [18]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F54294  [19]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F54298  [20]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F5429C  [21]   -> prom_b 0xF42C70
+	.long T_TableDefault_Ret                       ; F542A0  [22]   -> prom_b 0xF42C70
 
 ; --- 0xF542A4-0xF542D0  data (45 bytes) ---
 
@@ -115119,7 +115121,7 @@ Bitmap_F54D7E_Duplicate:
 ;   T_IndexedTable_GetByte -> 0xF5533C  119 opcode-anchored references
 ;   T_F42C78 -> 0xF550A6   77
 ;   T_IndexedTable_GetPtr -> 0xF55321   45
-;   T_F42C70 -> 0xF55018  never called, but its 4-byte slot ADDRESS (`70 2C F4
+;   T_TableDefault_Ret -> 0xF55018  never called, but its 4-byte slot ADDRESS (`70 2C F4
 ;                         00`) occurs 397 times in prom_a+prom_b, 222 of them in
 ;                         one run at prom_a 0x216B4.  This block settles what it
 ;                         is: 0xF55018 is a single byte 0x0E -- a bare `ret`.
@@ -115140,7 +115142,7 @@ Bitmap_F54D7E_Duplicate:
 ; ---------------------------------------------------------------------
 ; Stub_Ret_F55018 -- the do-nothing entry the thunk table's most-spelled slot
 ;                    points at
-; Called from: thunk T_F42C70 (0xF42C70).  That slot is never the operand of a
+; Called from: thunk T_TableDefault_Ret (0xF42C70).  That slot is never the operand of a
 ;              call or jp; its 32-bit ADDRESS appears 397 times as data.
 ; Inputs:  none.  Outputs: none.
 ; Evidence: the byte at 0xF55018 is 0x0E, which is RET

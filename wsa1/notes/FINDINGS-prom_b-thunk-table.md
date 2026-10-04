@@ -98,7 +98,7 @@ data. The numbers rank slots; they are not exact call counts.
 indexes a 64-entry table at prom_a `0xF8E9C6`. That is the machine's system-call
 interface; see `FINDINGS-ui-display-list.md`.
 
-`T_F42C70` (`jp 0xF55018`) is never *called*, but its 4-byte address spelling
+`T_TableDefault_Ret` (`jp 0xF55018`) is never *called*, but its 4-byte address spelling
 `70 2C F4 00` occurs **397 times** in prom_a+prom_b — 222 in prom_a, 175 in
 prom_b. It is a **default entry that fills pointer tables**.
 

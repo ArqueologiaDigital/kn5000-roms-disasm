@@ -1886,6 +1886,7 @@
 	.set T_SequencerMedley_SoftKeyCol7,                                                                      0x00F42C24
 	.set T_SequencerMedley_SoftKeyCol8,                                                                      0x00F42C28
 	.set T_SequencerMedley_LcdKeyRow4,                                                                      0x00F42C2C
+	.set T_TableDefault_Ret,                                                            0x00F42C70
 	.set T_PanelCode_ToSlotAndFlags,                                                    0x00F42C74
 	.set T_F42C78,                                                                      0x00F42C78
 	.set T_Queue2C00_Append4,                                                           0x00F42C80
@@ -51384,6 +51385,9 @@ Screen_ReMapEdit_Button:
 	ret                                                  ; F9C0E8  0e
 T_F41974_Nop:
 	ret                                                  ; F9C0E9  0e
+; SoftKeyCol1_ReMapEdit: HandlerTable23_FA1690 slot 0, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_ReMapEdit:
 	link XIZ,0xffee                                      ; F9C0EA  ee 0c ee ff
 	push XIX                                             ; F9C0EE  3c
 	lda xix, (0x2900:16)                                ; F9C0EF  f1 00 29 34
@@ -51450,6 +51454,9 @@ T_F41974_Nop:
 	pop XIX                                              ; F9C192  5c
 	unlk XIZ                                             ; F9C193  ee 0d
 	ret                                                  ; F9C195  0e
+; SoftKeyCol2_ReMapEdit: HandlerTable23_FA1690 slot 1, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_ReMapEdit:
 	link XIZ,0xffee                                      ; F9C196  ee 0c ee ff
 	push XIX                                             ; F9C19A  3c
 	lda xix, (0x2900:16)                                ; F9C19B  f1 00 29 34
@@ -51544,6 +51551,9 @@ T_F41974_Nop:
 	pop XIX                                              ; F9C27F  5c
 	unlk XIZ                                             ; F9C280  ee 0d
 	ret                                                  ; F9C282  0e
+; SoftKeyCols3_4_ReMapEdit: HandlerTable23_FA1690 slots 2,3, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols3_4_ReMapEdit:
 	link XIZ,0xffee                                      ; F9C283  ee 0c ee ff
 	push XIX                                             ; F9C287  3c
 	lda xix, (0x2900:16)                                ; F9C288  f1 00 29 34
@@ -51612,6 +51622,9 @@ T_F41974_Nop:
 	pop XIX                                              ; F9C32F  5c
 	unlk XIZ                                             ; F9C330  ee 0d
 	ret                                                  ; F9C332  0e
+; SoftKeyCol5_ReMapEdit: HandlerTable23_FA1690 slot 4, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_ReMapEdit:
 	push XIX                                             ; F9C333  3c
 	lda xix, (0x2900:16)                                ; F9C334  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9C338  f1 9b 20 00 06
@@ -51654,6 +51667,9 @@ T_F41974_Nop:
 .LF9C3A3:
 	pop XIX                                              ; F9C3A3  5c
 	ret                                                  ; F9C3A4  0e
+; SoftKeyCol6_ReMapEdit: HandlerTable23_FA1690 slot 5, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_ReMapEdit:
 	push XIX                                             ; F9C3A5  3c
 	lda xix, (0x2900:16)                                ; F9C3A6  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9C3AA  f1 9b 20 00 06
@@ -51694,6 +51710,9 @@ T_F41974_Nop:
 .LF9C40B:
 	pop XIX                                              ; F9C40B  5c
 	ret                                                  ; F9C40C  0e
+; SoftKeyCols7_8_ReMapEdit: HandlerTable23_FA1690 slots 6,7, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols7_8_ReMapEdit:
 	link XIZ,0xffee                                      ; F9C40D  ee 0c ee ff
 	push XIX                                             ; F9C411  3c
 	lda xix, (0x2900:16)                                ; F9C412  f1 00 29 34
@@ -51764,6 +51783,9 @@ T_F41974_Nop:
 	pop XIX                                              ; F9C4B9  5c
 	unlk XIZ                                             ; F9C4BA  ee 0d
 	ret                                                  ; F9C4BC  0e
+; LcdKeyRow1_ReMapEdit: HandlerTable23_FA1690 slot 8, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_ReMapEdit:
 	ld c, (PanelEvent_Flags:16)                                   ; F9C4BD  c1 b0 28 23
 	and C,0x01                                           ; F9C4C1  cb cc 01
 	jr nz, .LF9C4D1                                      ; F9C4C4  6e 0b
@@ -51775,6 +51797,9 @@ T_F41974_Nop:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9C4D4  f1 95 20 bc
 .LF9C4D8:
 	ret                                                  ; F9C4D8  0e
+; ExitKey_ReMapEdit: HandlerTable23_FA1690 slot 15, the 23-slot button table Screen_ReMapEdit_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_ReMapEdit:
 	ld c, (PanelEvent_Flags:16)                                   ; F9C4D9  c1 b0 28 23
 	and C,0x01                                           ; F9C4DD  cb cc 01
 	jr nz, .LF9C4FB                                      ; F9C4E0  6e 19
@@ -52388,6 +52413,9 @@ Screen_SoundCombinationManager_Button:
 	ret                                                  ; F9CA33  0e
 T_F41984_Nop:
 	ret                                                  ; F9CA34  0e
+; LcdKeyRow2_SoundCombinationManager: HandlerTable23_FA1712 slot 9, the 23-slot button table Screen_SoundCombinationManager_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_SoundCombinationManager:
 	pushw hl                                             ; F9CA35  2b
 	push XIX                                             ; F9CA36  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9CA37  f1 71 20 34
@@ -52406,6 +52434,9 @@ T_F41984_Nop:
 	pop XIX                                              ; F9CA59  5c
 	popw hl                                              ; F9CA5A  4b
 	ret                                                  ; F9CA5B  0e
+; LcdKeyRow3_SoundCombinationManager: HandlerTable23_FA1712 slot 10, the 23-slot button table Screen_SoundCombinationManager_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_SoundCombinationManager:
 	pushw hl                                             ; F9CA5C  2b
 	push XIX                                             ; F9CA5D  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9CA5E  f1 71 20 34
@@ -52424,6 +52455,9 @@ T_F41984_Nop:
 	pop XIX                                              ; F9CA80  5c
 	popw hl                                              ; F9CA81  4b
 	ret                                                  ; F9CA82  0e
+; LcdKeyRow4_SoundCombinationManager: HandlerTable23_FA1712 slot 11, the 23-slot button table Screen_SoundCombinationManager_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_SoundCombinationManager:
 	pushw hl                                             ; F9CA83  2b
 	push XIX                                             ; F9CA84  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9CA85  f1 71 20 34
@@ -52442,6 +52476,9 @@ T_F41984_Nop:
 	pop XIX                                              ; F9CAA7  5c
 	popw hl                                              ; F9CAA8  4b
 	ret                                                  ; F9CAA9  0e
+; LcdKeyRow5_SoundCombinationManager: HandlerTable23_FA1712 slot 12, the 23-slot button table Screen_SoundCombinationManager_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow5_SoundCombinationManager:
 	ld c, (PanelEvent_Flags:16)                                   ; F9CAAA  c1 b0 28 23
 	and C,0x01                                           ; F9CAAE  cb cc 01
 	jr z, .LF9CABC                                       ; F9CAB1  66 09
@@ -52449,6 +52486,9 @@ T_F41984_Nop:
 	ld (UI_Request:16), 0x5f                                 ; F9CAB7  f1 70 20 00 5f
 .LF9CABC:
 	ret                                                  ; F9CABC  0e
+; ExitKey_SoundCombinationManager: HandlerTable23_FA1712 slot 15, the 23-slot button table Screen_SoundCombinationManager_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_SoundCombinationManager:
 	ld c, (PanelEvent_Flags:16)                                   ; F9CABD  c1 b0 28 23
 	and C,0x01                                           ; F9CAC1  cb cc 01
 	jr nz, .LF9CADF                                      ; F9CAC4  6e 19
@@ -52627,6 +52667,9 @@ SoundGroupNaming_AdjustBank:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9CB90  f1 95 20 bc
 .LF9CB94:
 	ret                                                  ; F9CB94  0e
+; SoftKeyCol1_SoundGroupNaming: HandlerTable23_FA176E slot 0, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CB95  d1 94 26 21
 	extz BC                                              ; F9CB99  d9 12
 	cp bc, 0x00:i3                                         ; F9CB9B  d9 d8
@@ -52644,6 +52687,9 @@ SoundGroupNaming_AdjustBank:
 	popw bc                                              ; F9CBB2  49
 .LF9CBB3:
 	ret                                                  ; F9CBB3  0e
+; SoftKeyCol2_SoundGroupNaming: HandlerTable23_FA176E slot 1, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CBB4  d1 94 26 21
 	extz BC                                              ; F9CBB8  d9 12
 	cp bc, 0x00:i3                                         ; F9CBBA  d9 d8
@@ -52661,6 +52707,9 @@ SoundGroupNaming_AdjustBank:
 	popw bc                                              ; F9CBD1  49
 .LF9CBD2:
 	ret                                                  ; F9CBD2  0e
+; SoftKeyCol3_SoundGroupNaming: HandlerTable23_FA176E slot 2, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol3_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CBD3  d1 94 26 21
 	extz BC                                              ; F9CBD7  d9 12
 	cp bc, 0x00:i3                                         ; F9CBD9  d9 d8
@@ -52678,6 +52727,9 @@ SoundGroupNaming_AdjustBank:
 	popw bc                                              ; F9CBF0  49
 .LF9CBF1:
 	ret                                                  ; F9CBF1  0e
+; SoftKeyCol4_SoundGroupNaming: HandlerTable23_FA176E slot 3, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol4_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CBF2  d1 94 26 21
 ; (sub_F9CBF6 removed 2026-10-04: no code names it and the line above falls through into it -- part of SoundGroupNaming_AdjustBank;
 ;  notes/prom_a_stray_label_removal.py)
@@ -52712,6 +52764,9 @@ SoundGroupNaming_AdjustGroup:
 	calr SoundGroupNaming_DrawGroupCursor                                      ; F9CC26  1e 7e 02
 .LF9CC29:
 	ret                                                  ; F9CC29  0e
+; SoftKeyCol5_SoundGroupNaming: HandlerTable23_FA176E slot 4, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CC2A  d1 94 26 21
 	extz BC                                              ; F9CC2E  d9 12
 	cp bc, 0x00:i3                                         ; F9CC30  d9 d8
@@ -52729,6 +52784,9 @@ SoundGroupNaming_AdjustGroup:
 	popw bc                                              ; F9CC47  49
 .LF9CC48:
 	ret                                                  ; F9CC48  0e
+; SoftKeyCol6_SoundGroupNaming: HandlerTable23_FA176E slot 5, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CC49  d1 94 26 21
 	extz BC                                              ; F9CC4D  d9 12
 	cp bc, 0x00:i3                                         ; F9CC4F  d9 d8
@@ -52746,6 +52804,9 @@ SoundGroupNaming_AdjustGroup:
 	popw bc                                              ; F9CC66  49
 .LF9CC67:
 	ret                                                  ; F9CC67  0e
+; SoftKeyCol7_SoundGroupNaming: HandlerTable23_FA176E slot 6, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol7_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CC68  d1 94 26 21
 	extz BC                                              ; F9CC6C  d9 12
 	cp bc, 0x00:i3                                         ; F9CC6E  d9 d8
@@ -52763,6 +52824,9 @@ SoundGroupNaming_AdjustGroup:
 	popw bc                                              ; F9CC85  49
 .LF9CC86:
 	ret                                                  ; F9CC86  0e
+; SoftKeyCol8_SoundGroupNaming: HandlerTable23_FA176E slot 7, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol8_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CC87  d1 94 26 21
 	extz BC                                              ; F9CC8B  d9 12
 	cp bc, 0x00:i3                                         ; F9CC8D  d9 d8
@@ -52782,6 +52846,9 @@ SoundGroupNaming_AdjustGroup:
 	popw bc                                              ; F9CCA4  49
 .LF9CCA5:
 	ret                                                  ; F9CCA5  0e
+; LcdKeyRow1_SoundGroupNaming: HandlerTable23_FA176E slot 8, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_SoundGroupNaming:
 	link XIZ,0xfff8                                      ; F9CCA6  ee 0c f8 ff
 	pushw hl                                             ; F9CCAA  2b
 	push XIX                                             ; F9CCAB  3c
@@ -52869,6 +52936,9 @@ SoundGroupNaming_AdjustGroup:
 	popw hl                                              ; F9CD84  4b
 	unlk XIZ                                             ; F9CD85  ee 0d
 	ret                                                  ; F9CD87  0e
+; LcdKeyRow2_SoundGroupNaming: HandlerTable23_FA176E slot 9, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_SoundGroupNaming:
 	ld bc, (0x2694:16)                                 ; F9CD88  d1 94 26 21
 	extz BC                                              ; F9CD8C  d9 12
 	cp bc, 0x00:i3                                         ; F9CD8E  d9 d8
@@ -52883,6 +52953,9 @@ SoundGroupNaming_AdjustGroup:
 	popw bc                                              ; F9CDA0  49
 .LF9CDA1:
 	ret                                                  ; F9CDA1  0e
+; ExitKey_SoundGroupNaming: HandlerTable23_FA176E slot 15, the 23-slot button table Screen_SoundGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_SoundGroupNaming:
 	push XIX                                             ; F9CDA2  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9CDA3  f1 71 20 34
 	ld bc, (0x2694:16)                                 ; F9CDA7  d1 94 26 21
@@ -53279,6 +53352,9 @@ CombinationGroupNaming_AdjustBank:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9CFF8  f1 95 20 bc
 .LF9CFFC:
 	ret                                                  ; F9CFFC  0e
+; SoftKeyCol1_CombinationGroupNaming: HandlerTable23_FA17CF slot 0, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9CFFD  d1 97 26 21
 	extz BC                                              ; F9D001  d9 12
 	cp bc, 0x00:i3                                         ; F9D003  d9 d8
@@ -53296,6 +53372,9 @@ CombinationGroupNaming_AdjustBank:
 	popw bc                                              ; F9D01A  49
 .LF9D01B:
 	ret                                                  ; F9D01B  0e
+; SoftKeyCol2_CombinationGroupNaming: HandlerTable23_FA17CF slot 1, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D01C  d1 97 26 21
 	extz BC                                              ; F9D020  d9 12
 	cp bc, 0x00:i3                                         ; F9D022  d9 d8
@@ -53313,6 +53392,9 @@ CombinationGroupNaming_AdjustBank:
 	popw bc                                              ; F9D039  49
 .LF9D03A:
 	ret                                                  ; F9D03A  0e
+; SoftKeyCol3_CombinationGroupNaming: HandlerTable23_FA17CF slot 2, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol3_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D03B  d1 97 26 21
 	extz BC                                              ; F9D03F  d9 12
 	cp bc, 0x00:i3                                         ; F9D041  d9 d8
@@ -53330,6 +53412,9 @@ CombinationGroupNaming_AdjustBank:
 	popw bc                                              ; F9D058  49
 .LF9D059:
 	ret                                                  ; F9D059  0e
+; SoftKeyCol4_CombinationGroupNaming: HandlerTable23_FA17CF slot 3, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol4_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D05A  d1 97 26 21
 	extz BC                                              ; F9D05E  d9 12
 	cp bc, 0x00:i3                                         ; F9D060  d9 d8
@@ -53362,6 +53447,9 @@ CombinationGroupNaming_AdjustGroup:
 	calr CombinationGroupNaming_DrawGroupCursor                                      ; F9D08E  1e 7e 02
 .LF9D091:
 	ret                                                  ; F9D091  0e
+; SoftKeyCol5_CombinationGroupNaming: HandlerTable23_FA17CF slot 4, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D092  d1 97 26 21
 	extz BC                                              ; F9D096  d9 12
 	cp bc, 0x00:i3                                         ; F9D098  d9 d8
@@ -53379,6 +53467,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D0AF  49
 .LF9D0B0:
 	ret                                                  ; F9D0B0  0e
+; SoftKeyCol6_CombinationGroupNaming: HandlerTable23_FA17CF slot 5, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D0B1  d1 97 26 21
 	extz BC                                              ; F9D0B5  d9 12
 	cp bc, 0x00:i3                                         ; F9D0B7  d9 d8
@@ -53396,6 +53487,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D0CE  49
 .LF9D0CF:
 	ret                                                  ; F9D0CF  0e
+; SoftKeyCol7_CombinationGroupNaming: HandlerTable23_FA17CF slot 6, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol7_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D0D0  d1 97 26 21
 	extz BC                                              ; F9D0D4  d9 12
 	cp bc, 0x00:i3                                         ; F9D0D6  d9 d8
@@ -53413,6 +53507,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D0ED  49
 .LF9D0EE:
 	ret                                                  ; F9D0EE  0e
+; SoftKeyCol8_CombinationGroupNaming: HandlerTable23_FA17CF slot 7, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol8_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D0EF  d1 97 26 21
 	extz BC                                              ; F9D0F3  d9 12
 	cp bc, 0x00:i3                                         ; F9D0F5  d9 d8
@@ -53430,6 +53527,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D10C  49
 .LF9D10D:
 	ret                                                  ; F9D10D  0e
+; LcdKeyRow1_CombinationGroupNaming: HandlerTable23_FA17CF slot 8, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_CombinationGroupNaming:
 	link XIZ,0xfff8                                      ; F9D10E  ee 0c f8 ff
 	pushw hl                                             ; F9D112  2b
 	push XIX                                             ; F9D113  3c
@@ -53517,6 +53617,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw hl                                              ; F9D1EC  4b
 	unlk XIZ                                             ; F9D1ED  ee 0d
 	ret                                                  ; F9D1EF  0e
+; LcdKeyRow2_CombinationGroupNaming: HandlerTable23_FA17CF slot 9, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_CombinationGroupNaming:
 	ld bc, (0x2697:16)                                 ; F9D1F0  d1 97 26 21
 	extz BC                                              ; F9D1F4  d9 12
 	cp bc, 0x00:i3                                         ; F9D1F6  d9 d8
@@ -53531,6 +53634,9 @@ CombinationGroupNaming_AdjustGroup:
 	popw bc                                              ; F9D208  49
 .LF9D209:
 	ret                                                  ; F9D209  0e
+; ExitKey_CombinationGroupNaming: HandlerTable23_FA17CF slot 15, the 23-slot button table Screen_CombinationGroupNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_CombinationGroupNaming:
 	push XIX                                             ; F9D20A  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9D20B  f1 71 20 34
 	ld bc, (0x2697:16)                                 ; F9D20F  d1 97 26 21
@@ -53902,6 +54008,9 @@ SoundCopy_AdjustSourceBank:
 	pop XIX                                              ; F9D4A9  5c
 	unlk XIZ                                             ; F9D4AA  ee 0d
 	ret                                                  ; F9D4AC  0e
+; SoftKeyCol1_SoundCopy: HandlerTable23_FA182F slot 0, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_SoundCopy:
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9D4AD  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9D4B2  f1 9c 20 00 82
 	ld bc, (CopyScreen_Page:16)                                 ; F9D4B7  d1 9a 26 21
@@ -53915,6 +54024,9 @@ SoundCopy_AdjustSourceBank:
 	calr SoundCopy_AdjustSourceBank                                      ; F9D4C7  1e 69 ff
 .LF9D4CA:
 	ret                                                  ; F9D4CA  0e
+; SoftKeyCol2_SoundCopy: HandlerTable23_FA182F slot 1, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_SoundCopy:
 	link XIZ,0xfff7                                      ; F9D4CB  ee 0c f7 ff
 	push XIX                                             ; F9D4CF  3c
 	ldw bc, 0x09                                         ; F9D4D0  31 09 00
@@ -53966,6 +54078,9 @@ SoundCopy_AdjustSourceBank:
 	pop XIX                                              ; F9D546  5c
 	unlk XIZ                                             ; F9D547  ee 0d
 	ret                                                  ; F9D549  0e
+; SoftKeyCols3_4_SoundCopy: HandlerTable23_FA182F slots 2,3, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols3_4_SoundCopy:
 	link XIZ,0xffe5                                      ; F9D54A  ee 0c e5 ff
 	pushw hl                                             ; F9D54E  2b
 	push XIX                                             ; F9D54F  3c
@@ -54144,6 +54259,9 @@ SoundCopy_AdjustDestBank:
 .LF9D6F5:
 	pop XIX                                              ; F9D6F5  5c
 	ret                                                  ; F9D6F6  0e
+; SoftKeyCol5_SoundCopy: HandlerTable23_FA182F slot 4, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_SoundCopy:
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D6F7  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9D6FC  f1 9c 20 00 86
 	ld bc, (CopyScreen_Page:16)                                 ; F9D701  d1 9a 26 21
@@ -54157,6 +54275,9 @@ SoundCopy_AdjustDestBank:
 	calr SoundCopy_AdjustDestBank                                      ; F9D711  1e 89 ff
 .LF9D714:
 	ret                                                  ; F9D714  0e
+; SoftKeyCol6_SoundCopy: HandlerTable23_FA182F slot 5, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_SoundCopy:
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D715  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9D71A  f1 9c 20 00 86
 	ld bc, (CopyScreen_Page:16)                                 ; F9D71F  d1 9a 26 21
@@ -54186,6 +54307,9 @@ SoundCopy_AdjustDestBank:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9D759  f1 95 20 bc
 .LF9D75D:
 	ret                                                  ; F9D75D  0e
+; SoftKeyCols7_8_SoundCopy: HandlerTable23_FA182F slots 6,7, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols7_8_SoundCopy:
 	push XIX                                             ; F9D75E  3c
 	lda xix, (0x2900:16)                                ; F9D75F  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9D763  f1 9b 20 00 06
@@ -54268,6 +54392,9 @@ SoundCopy_AdjustDestBank:
 .LF9D829:
 	pop XIX                                              ; F9D829  5c
 	ret                                                  ; F9D82A  0e
+; LcdKeyRow1_SoundCopy: HandlerTable23_FA182F slot 8, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_SoundCopy:
 	pushw hl                                             ; F9D82B  2b
 	push XIX                                             ; F9D82C  3c
 	lda xix, (CopyScreen_Page:16)                                ; F9D82D  f1 9a 26 34
@@ -54332,6 +54459,9 @@ SoundCopy_AdjustDestBank:
 	pop XIX                                              ; F9D8BE  5c
 	popw hl                                              ; F9D8BF  4b
 	ret                                                  ; F9D8C0  0e
+; LcdKeyRow3_SoundCopy: HandlerTable23_FA182F slot 10, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_SoundCopy:
 	ld bc, (CopyScreen_Page:16)                                 ; F9D8C1  d1 9a 26 21
 	extz BC                                              ; F9D8C5  d9 12
 	cp bc, 0x02:i3                                         ; F9D8C7  d9 da
@@ -54345,6 +54475,9 @@ SoundCopy_AdjustDestBank:
 	calr SoundCopy_Execute                                          ; F9D8DA  1e 8f 04
 .LF9D8DD:
 	ret                                                  ; F9D8DD  0e
+; LcdKeyRow4_SoundCopy: HandlerTable23_FA182F slot 11, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_SoundCopy:
 	push XIX                                             ; F9D8DE  3c
 	lda xix, (CopyScreen_Page:16)                                ; F9D8DF  f1 9a 26 34
 	ld C,(XIX)                                           ; F9D8E3  84 23
@@ -54360,6 +54493,9 @@ SoundCopy_AdjustDestBank:
 .LF9D8F8:
 	pop XIX                                              ; F9D8F8  5c
 	ret                                                  ; F9D8F9  0e
+; ExitKey_SoundCopy: HandlerTable23_FA182F slot 15, the 23-slot button table Screen_SoundCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_SoundCopy:
 	push XIX                                             ; F9D8FA  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9D8FB  f1 71 20 34
 	ld bc, (CopyScreen_Page:16)                                 ; F9D8FF  d1 9a 26 21
@@ -55193,6 +55329,9 @@ CombinationCopy_AdjustSourceBank:
 	pop XIX                                              ; F9E06A  5c
 	unlk XIZ                                             ; F9E06B  ee 0d
 	ret                                                  ; F9E06D  0e
+; SoftKeyCol1_CombinationCopy: HandlerTable23_FA1892 slot 0, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_CombinationCopy:
 	ld (PanelDial_DownButton:16), 0x02                                 ; F9E06E  f1 9b 20 00 02
 	ld (PanelDial_UpButton:16), 0x82                                 ; F9E073  f1 9c 20 00 82
 	ld bc, (CopyScreen_Page:16)                                 ; F9E078  d1 9a 26 21
@@ -55206,6 +55345,9 @@ CombinationCopy_AdjustSourceBank:
 	calr CombinationCopy_AdjustSourceBank                                      ; F9E088  1e 69 ff
 .LF9E08B:
 	ret                                                  ; F9E08B  0e
+; SoftKeyCol2_CombinationCopy: HandlerTable23_FA1892 slot 1, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_CombinationCopy:
 	link XIZ,0xfff7                                      ; F9E08C  ee 0c f7 ff
 	push XIX                                             ; F9E090  3c
 	ldw bc, 0x09                                         ; F9E091  31 09 00
@@ -55257,6 +55399,9 @@ CombinationCopy_AdjustSourceBank:
 	pop XIX                                              ; F9E107  5c
 	unlk XIZ                                             ; F9E108  ee 0d
 	ret                                                  ; F9E10A  0e
+; SoftKeyCols3_4_CombinationCopy: HandlerTable23_FA1892 slots 2,3, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols3_4_CombinationCopy:
 	link XIZ,0xffe5                                      ; F9E10B  ee 0c e5 ff
 	pushw hl                                             ; F9E10F  2b
 	push XIX                                             ; F9E110  3c
@@ -55434,6 +55579,9 @@ CombinationCopy_AdjustDestBank:
 .LF9E2B6:
 	pop XIX                                              ; F9E2B6  5c
 	ret                                                  ; F9E2B7  0e
+; SoftKeyCol5_CombinationCopy: HandlerTable23_FA1892 slot 4, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_CombinationCopy:
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2B8  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2BD  f1 9c 20 00 86
 	ld bc, (CopyScreen_Page:16)                                 ; F9E2C2  d1 9a 26 21
@@ -55447,6 +55595,9 @@ CombinationCopy_AdjustDestBank:
 	calr CombinationCopy_AdjustDestBank                                      ; F9E2D2  1e 89 ff
 .LF9E2D5:
 	ret                                                  ; F9E2D5  0e
+; SoftKeyCol6_CombinationCopy: HandlerTable23_FA1892 slot 5, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_CombinationCopy:
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E2D6  f1 9b 20 00 06
 	ld (PanelDial_UpButton:16), 0x86                                 ; F9E2DB  f1 9c 20 00 86
 	ld bc, (CopyScreen_Page:16)                                 ; F9E2E0  d1 9a 26 21
@@ -55476,6 +55627,9 @@ CombinationCopy_AdjustDestBank:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9E31A  f1 95 20 bc
 .LF9E31E:
 	ret                                                  ; F9E31E  0e
+; SoftKeyCols7_8_CombinationCopy: HandlerTable23_FA1892 slots 6,7, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols7_8_CombinationCopy:
 	push XIX                                             ; F9E31F  3c
 	lda xix, (0x2900:16)                                ; F9E320  f1 00 29 34
 	ld (PanelDial_DownButton:16), 0x06                                 ; F9E324  f1 9b 20 00 06
@@ -55558,6 +55712,9 @@ CombinationCopy_AdjustDestBank:
 .LF9E3EA:
 	pop XIX                                              ; F9E3EA  5c
 	ret                                                  ; F9E3EB  0e
+; LcdKeyRow1_CombinationCopy: HandlerTable23_FA1892 slot 8, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_CombinationCopy:
 	pushw hl                                             ; F9E3EC  2b
 	push XIX                                             ; F9E3ED  3c
 	lda xix, (CopyScreen_Page:16)                                ; F9E3EE  f1 9a 26 34
@@ -55622,6 +55779,9 @@ CombinationCopy_AdjustDestBank:
 	pop XIX                                              ; F9E47F  5c
 	popw hl                                              ; F9E480  4b
 	ret                                                  ; F9E481  0e
+; LcdKeyRow3_CombinationCopy: HandlerTable23_FA1892 slot 10, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_CombinationCopy:
 	push XIX                                             ; F9E482  3c
 	lda xix, (CopyScreen_Page:16)                                ; F9E483  f1 9a 26 34
 	ld C,(XIX)                                           ; F9E487  84 23
@@ -55642,6 +55802,9 @@ CombinationCopy_AdjustDestBank:
 .LF9E4B2:
 	pop XIX                                              ; F9E4B2  5c
 	ret                                                  ; F9E4B3  0e
+; LcdKeyRow4_CombinationCopy: HandlerTable23_FA1892 slot 11, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_CombinationCopy:
 	push XIX                                             ; F9E4B4  3c
 	lda xix, (CopyScreen_Page:16)                                ; F9E4B5  f1 9a 26 34
 	ld C,(XIX)                                           ; F9E4B9  84 23
@@ -55657,6 +55820,9 @@ CombinationCopy_AdjustDestBank:
 .LF9E4CE:
 	pop XIX                                              ; F9E4CE  5c
 	ret                                                  ; F9E4CF  0e
+; ExitKey_CombinationCopy: HandlerTable23_FA1892 slot 15, the 23-slot button table Screen_CombinationCopy_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_CombinationCopy:
 	push XIX                                             ; F9E4D0  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9E4D1  f1 71 20 34
 	ld bc, (CopyScreen_Page:16)                                 ; F9E4D5  d1 9a 26 21
@@ -56446,6 +56612,9 @@ Screen_DataLoadFilter_Button:
 	ret                                                  ; F9EC14  0e
 T_F419A4_Nop:
 	ret                                                  ; F9EC15  0e
+; SoftKeyCols1to4_DataLoadFilter: HandlerTable23_FA18EE slots 0,1,2,3, the 23-slot button table Screen_DataLoadFilter_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols1to4_DataLoadFilter:
 	lda xbc, (Descriptor9_FA1B24:24)                     ; F9EC16  f2 24 1b fa 31
 	push XBC                                             ; F9EC1B  39
 	lda xwa, (DataLoadFilter_ItemCursor:16)                                ; F9EC1C  f1 a5 26 30
@@ -56462,6 +56631,9 @@ T_F419A4_Nop:
 	inc 6,XSP                                            ; F9EC3C  ef 66
 .LF9EC3E:
 	ret                                                  ; F9EC3E  0e
+; SoftKeyCols5to8_DataLoadFilter: HandlerTable23_FA18EE slots 4,5,6,7, the 23-slot button table Screen_DataLoadFilter_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols5to8_DataLoadFilter:
 	ld bc, (DataLoadFilter_ItemCursor:16)                                 ; F9EC3F  d1 a5 26 21
 	extz BC                                              ; F9EC43  d9 12
 	extz XBC                                             ; F9EC45  e9 12
@@ -56541,6 +56713,9 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	jr .LF9EC89                                          ; F9ECBA  68 cd
 .LF9ECBC:
 	ret                                                  ; F9ECBC  0e
+; ExitKey_DataLoadFilter: HandlerTable23_FA18EE slot 15, the 23-slot button table Screen_DataLoadFilter_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_DataLoadFilter:
 	ld c, (PanelEvent_Flags:16)                                   ; F9ECBD  c1 b0 28 23
 	and C,0x01                                           ; F9ECC1  cb cc 01
 	jr nz, .LF9ECDF                                      ; F9ECC4  6e 19
@@ -56655,6 +56830,9 @@ Screen_MemoryProtect_Button:
 	ret                                                  ; F9EDC8  0e
 T_F41994_Nop:
 	ret                                                  ; F9EDC9  0e
+; SoftKeyCols1to4_MemoryProtect: HandlerTable23_FA194A slots 0,1,2,3, the 23-slot button table Screen_MemoryProtect_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols1to4_MemoryProtect:
 	lda xbc, (Descriptor3_FA1B4E:24)                     ; F9EDCA  f2 4e 1b fa 31
 	push XBC                                             ; F9EDCF  39
 	lda xwa, (0x26a6:16)                                ; F9EDD0  f1 a6 26 30
@@ -56671,6 +56849,9 @@ T_F41994_Nop:
 	inc 6,XSP                                            ; F9EDF0  ef 66
 .LF9EDF2:
 	ret                                                  ; F9EDF2  0e
+; SoftKeyCols5to8_MemoryProtect: HandlerTable23_FA194A slots 4,5,6,7, the 23-slot button table Screen_MemoryProtect_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols5to8_MemoryProtect:
 	ld bc, (0x26a6:16)                                 ; F9EDF3  d1 a6 26 21
 	extz BC                                              ; F9EDF7  d9 12
 	cp bc, 0x00:i3                                         ; F9EDF9  d9 d8
@@ -56701,6 +56882,9 @@ T_F41994_Nop:
 	m_set 4, MD16, UI_ScreenFlags                                ; F9EE2F  f1 95 20 bc
 .LF9EE33:
 	ret                                                  ; F9EE33  0e
+; ExitKey_MemoryProtect: HandlerTable23_FA194A slot 15, the 23-slot button table Screen_MemoryProtect_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_MemoryProtect:
 	ld c, (PanelEvent_Flags:16)                                   ; F9EE34  c1 b0 28 23
 	and C,0x01                                           ; F9EE38  cb cc 01
 	jr nz, .LF9EE56                                      ; F9EE3B  6e 19
@@ -56788,12 +56972,18 @@ Screen_SoundMute_Button:
 	ret                                                  ; F9EF06  0e
 T_F434CC_Nop:
 	ret                                                  ; F9EF07  0e
+; SoftKeyCols3to6_SoundMute: HandlerTable23_FA19A6 slots 2,3,4,5, the 23-slot button table Screen_SoundMute_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols3to6_SoundMute:
 	lda xbc, (Descriptor3_FA1B57:24)                     ; F9EF08  f2 57 1b fa 31
 	push XBC                                             ; F9EF0D  39
 	pushw 0x98                                           ; F9EF0E  0b 98 00
 	call T_IndexedParam_SetBit                           ; F9EF11  1d 98 2c f4
 	inc 6,XSP                                            ; F9EF15  ef 66
 	ret                                                  ; F9EF17  0e
+; ExitKey_SoundMute: HandlerTable23_FA19A6 slot 15, the 23-slot button table Screen_SoundMute_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_SoundMute:
 	ld c, (PanelEvent_Flags:16)                                   ; F9EF18  c1 b0 28 23
 	and C,0x01                                           ; F9EF1C  cb cc 01
 	jr nz, .LF9EF3A                                      ; F9EF1F  6e 19
@@ -57010,6 +57200,9 @@ DrumsMap_AdjustMap:
 	calr DrumsMap_DrawSoundColumn                                      ; F9F053  1e 13 04
 .LF9F056:
 	ret                                                  ; F9F056  0e
+; SoftKeyCol1_DrumsMapNaming: HandlerTable23_FA1A02 slot 0, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F057  d1 00 27 21
 	extz BC                                              ; F9F05B  d9 12
 	cp bc, 0x00:i3                                         ; F9F05D  d9 d8
@@ -57027,6 +57220,9 @@ DrumsMap_AdjustMap:
 	popw bc                                              ; F9F074  49
 .LF9F075:
 	ret                                                  ; F9F075  0e
+; SoftKeyCol2_DrumsMapNaming: HandlerTable23_FA1A02 slot 1, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F076  d1 00 27 21
 	extz BC                                              ; F9F07A  d9 12
 	cp bc, 0x00:i3                                         ; F9F07C  d9 d8
@@ -57116,6 +57312,9 @@ DrumsMap_MoveRowCursor:
 .LF9F129:
 	pop XIX                                              ; F9F129  5c
 	ret                                                  ; F9F12A  0e
+; SoftKeyCol3_DrumsMapNaming: HandlerTable23_FA1A02 slot 2, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol3_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F12B  d1 00 27 21
 	extz BC                                              ; F9F12F  d9 12
 	cp bc, 0x00:i3                                         ; F9F131  d9 d8
@@ -57133,6 +57332,9 @@ DrumsMap_MoveRowCursor:
 	popw bc                                              ; F9F148  49
 .LF9F149:
 	ret                                                  ; F9F149  0e
+; SoftKeyCol4_DrumsMapNaming: HandlerTable23_FA1A02 slot 3, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol4_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F14A  d1 00 27 21
 	extz BC                                              ; F9F14E  d9 12
 	cp bc, 0x00:i3                                         ; F9F150  d9 d8
@@ -57150,6 +57352,9 @@ DrumsMap_MoveRowCursor:
 	popw bc                                              ; F9F167  49
 .LF9F168:
 	ret                                                  ; F9F168  0e
+; SoftKeyCol5_DrumsMapNaming: HandlerTable23_FA1A02 slot 4, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F169  d1 00 27 21
 	extz BC                                              ; F9F16D  d9 12
 	cp bc, 0x00:i3                                         ; F9F16F  d9 d8
@@ -57220,6 +57425,9 @@ DrumsMap_AdjustRowSound:
 	popw hl                                              ; F9F1F4  4b
 	unlk XIZ                                             ; F9F1F5  ee 0d
 	ret                                                  ; F9F1F7  0e
+; SoftKeyCol6_DrumsMapNaming: HandlerTable23_FA1A02 slot 5, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F1F8  d1 00 27 21
 	extz BC                                              ; F9F1FC  d9 12
 	cp bc, 0x00:i3                                         ; F9F1FE  d9 d8
@@ -57237,6 +57445,9 @@ DrumsMap_AdjustRowSound:
 	popw bc                                              ; F9F215  49
 .LF9F216:
 	ret                                                  ; F9F216  0e
+; SoftKeyCol7_DrumsMapNaming: HandlerTable23_FA1A02 slot 6, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol7_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F217  d1 00 27 21
 	extz BC                                              ; F9F21B  d9 12
 	cp bc, 0x00:i3                                         ; F9F21D  d9 d8
@@ -57254,6 +57465,9 @@ DrumsMap_AdjustRowSound:
 	popw bc                                              ; F9F234  49
 .LF9F235:
 	ret                                                  ; F9F235  0e
+; SoftKeyCol8_DrumsMapNaming: HandlerTable23_FA1A02 slot 7, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol8_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F236  d1 00 27 21
 	extz BC                                              ; F9F23A  d9 12
 	cp bc, 0x00:i3                                         ; F9F23C  d9 d8
@@ -57271,6 +57485,9 @@ DrumsMap_AdjustRowSound:
 	popw bc                                              ; F9F253  49
 .LF9F254:
 	ret                                                  ; F9F254  0e
+; LcdKeyRow1_DrumsMapNaming: HandlerTable23_FA1A02 slot 8, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_DrumsMapNaming:
 	link XIZ,0xfffc                                      ; F9F255  ee 0c fc ff
 	pushw hl                                             ; F9F259  2b
 	push XIX                                             ; F9F25A  3c
@@ -57350,6 +57567,9 @@ DrumsMap_AdjustRowSound:
 	popw hl                                              ; F9F307  4b
 	unlk XIZ                                             ; F9F308  ee 0d
 	ret                                                  ; F9F30A  0e
+; LcdKeyRow2_DrumsMapNaming: HandlerTable23_FA1A02 slot 9, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_DrumsMapNaming:
 	ld bc, (0x2700:16)                                 ; F9F30B  d1 00 27 21
 	extz BC                                              ; F9F30F  d9 12
 	cp bc, 0x00:i3                                         ; F9F311  d9 d8
@@ -57364,6 +57584,9 @@ DrumsMap_AdjustRowSound:
 	popw bc                                              ; F9F323  49
 .LF9F324:
 	ret                                                  ; F9F324  0e
+; ExitKey_DrumsMapNaming: HandlerTable23_FA1A02 slot 15, the 23-slot button table Screen_DrumsMapNaming_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_DrumsMapNaming:
 	push XIX                                             ; F9F325  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9F326  f1 71 20 34
 	ld bc, (0x2700:16)                                 ; F9F32A  d1 00 27 21
@@ -58775,6 +58998,9 @@ Screen_System_Button:
 	ret                                                  ; F9FF26  0e
 T_F41924_Nop:
 	ret                                                  ; F9FF27  0e
+; LcdKeyRow1_System: HandlerTable23_FA1B94 slot 8, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_System:
 	pushw hl                                             ; F9FF28  2b
 	push XIX                                             ; F9FF29  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9FF2A  f1 71 20 34
@@ -58793,6 +59019,9 @@ T_F41924_Nop:
 	pop XIX                                              ; F9FF4C  5c
 	popw hl                                              ; F9FF4D  4b
 	ret                                                  ; F9FF4E  0e
+; LcdKeyRow2_System: HandlerTable23_FA1B94 slot 9, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_System:
 	pushw hl                                             ; F9FF4F  2b
 	push XIX                                             ; F9FF50  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9FF51  f1 71 20 34
@@ -58811,6 +59040,9 @@ T_F41924_Nop:
 	pop XIX                                              ; F9FF73  5c
 	popw hl                                              ; F9FF74  4b
 	ret                                                  ; F9FF75  0e
+; LcdKeyRow3_System: HandlerTable23_FA1B94 slot 10, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_System:
 	pushw hl                                             ; F9FF76  2b
 	push XIX                                             ; F9FF77  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9FF78  f1 71 20 34
@@ -58829,6 +59061,9 @@ T_F41924_Nop:
 	pop XIX                                              ; F9FF9A  5c
 	popw hl                                              ; F9FF9B  4b
 	ret                                                  ; F9FF9C  0e
+; LcdKeyRow4_System: HandlerTable23_FA1B94 slot 11, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_System:
 	push XIX                                             ; F9FF9D  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9FF9E  f1 71 20 34
 	ld c, (PanelEvent_Flags:16)                                   ; F9FFA2  c1 b0 28 23
@@ -58852,6 +59087,9 @@ T_F41924_Nop:
 .LF9FFD4:
 	pop XIX                                              ; F9FFD4  5c
 	ret                                                  ; F9FFD5  0e
+; LcdKeyRow5_System: HandlerTable23_FA1B94 slot 12, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow5_System:
 	pushw hl                                             ; F9FFD6  2b
 	push XIX                                             ; F9FFD7  3c
 	lda xix, (UI_Request_Hi:16)                                ; F9FFD8  f1 71 20 34
@@ -58870,6 +59108,9 @@ T_F41924_Nop:
 	pop XIX                                              ; F9FFFA  5c
 	popw hl                                              ; F9FFFB  4b
 	ret                                                  ; F9FFFC  0e
+; ExitKey_System: HandlerTable23_FA1B94 slot 15, the 23-slot button table Screen_System_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_System:
 	ld c, (PanelEvent_Flags:16)                                   ; F9FFFD  c1 b0 28 23
 	and C,0x01                                           ; FA0001  cb cc 01
 	jr nz, .LFA001F                                      ; FA0004  6e 19
@@ -58998,6 +59239,9 @@ Screen_TuneScale_Button:
 	ret                                                  ; FA0110  0e
 T_F41934_Nop:
 	ret                                                  ; FA0111  0e
+; SoftKeyCol1_TuneScale: HandlerTable23_FA1BF0 slot 0, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol1_TuneScale:
 	ld c, (0x78a2:16)                                   ; FA0112  c1 a2 78 23
 	cp C,0x80                                            ; FA0116  cb cf 80
 	jr nz, .LFA0143                                      ; FA0119  6e 28
@@ -59017,6 +59261,9 @@ T_F41934_Nop:
 	inc 6,XSP                                            ; FA0141  ef 66
 .LFA0143:
 	ret                                                  ; FA0143  0e
+; SoftKeyCol2_TuneScale: HandlerTable23_FA1BF0 slot 1, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol2_TuneScale:
 	ld (PanelDial_DownButton:16), 0x81                                 ; FA0144  f1 9b 20 00 81
 	ld (PanelDial_UpButton:16), 0x01                                 ; FA0149  f1 9c 20 00 01
 	pushw 0x01                                           ; FA014E  0b 01 00
@@ -59024,6 +59271,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA0154  1e 0d 01
 	pop XBC                                              ; FA0157  59
 	ret                                                  ; FA0158  0e
+; SoftKeyCol3_TuneScale: HandlerTable23_FA1BF0 slot 2, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol3_TuneScale:
 	ld (PanelDial_DownButton:16), 0x82                                 ; FA0159  f1 9b 20 00 82
 	ld (PanelDial_UpButton:16), 0x02                                 ; FA015E  f1 9c 20 00 02
 	pushw 0x03                                           ; FA0163  0b 03 00
@@ -59031,6 +59281,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA0169  1e f8 00
 	pop XBC                                              ; FA016C  59
 	ret                                                  ; FA016D  0e
+; SoftKeyCol4_TuneScale: HandlerTable23_FA1BF0 slot 3, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol4_TuneScale:
 	ld (PanelDial_DownButton:16), 0x83                                 ; FA016E  f1 9b 20 00 83
 	ld (PanelDial_UpButton:16), 0x03                                 ; FA0173  f1 9c 20 00 03
 	pushw 0xff                                           ; FA0178  0b ff 00
@@ -59038,6 +59291,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA017E  1e e3 00
 	pop XBC                                              ; FA0181  59
 	ret                                                  ; FA0182  0e
+; SoftKeyCol5_TuneScale: HandlerTable23_FA1BF0 slot 4, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol5_TuneScale:
 	ld (PanelDial_DownButton:16), 0x84                                 ; FA0183  f1 9b 20 00 84
 	ld (PanelDial_UpButton:16), 0x04                                 ; FA0188  f1 9c 20 00 04
 	pushw 0x06                                           ; FA018D  0b 06 00
@@ -59045,6 +59301,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA0193  1e ce 00
 	pop XBC                                              ; FA0196  59
 	ret                                                  ; FA0197  0e
+; SoftKeyCol6_TuneScale: HandlerTable23_FA1BF0 slot 5, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol6_TuneScale:
 	ld (PanelDial_DownButton:16), 0x85                                 ; FA0198  f1 9b 20 00 85
 	ld (PanelDial_UpButton:16), 0x05                                 ; FA019D  f1 9c 20 00 05
 	pushw 0x08                                           ; FA01A2  0b 08 00
@@ -59052,6 +59311,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA01A8  1e b9 00
 	pop XBC                                              ; FA01AB  59
 	ret                                                  ; FA01AC  0e
+; SoftKeyCol7_TuneScale: HandlerTable23_FA1BF0 slot 6, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol7_TuneScale:
 	ld (PanelDial_DownButton:16), 0x86                                 ; FA01AD  f1 9b 20 00 86
 	ld (PanelDial_UpButton:16), 0x06                                 ; FA01B2  f1 9c 20 00 06
 	pushw 0x0a                                           ; FA01B7  0b 0a 00
@@ -59059,6 +59321,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA01BD  1e a4 00
 	pop XBC                                              ; FA01C0  59
 	ret                                                  ; FA01C1  0e
+; SoftKeyCol8_TuneScale: HandlerTable23_FA1BF0 slot 7, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCol8_TuneScale:
 	ld (PanelDial_DownButton:16), 0x87                                 ; FA01C2  f1 9b 20 00 87
 	ld (PanelDial_UpButton:16), 0x07                                 ; FA01C7  f1 9c 20 00 07
 	pushw 0xff                                           ; FA01CC  0b ff 00
@@ -59066,6 +59331,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustUserKey                                      ; FA01D2  1e 8f 00
 	pop XBC                                              ; FA01D5  59
 	ret                                                  ; FA01D6  0e
+; LcdKeyRow1_TuneScale: HandlerTable23_FA1BF0 slot 8, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow1_TuneScale:
 	push XIX                                             ; FA01D7  3c
 	lda xix, (PanelEvent_Flags:16)                                ; FA01D8  f1 b0 28 34
 	ld C,(XIX)                                           ; FA01DC  84 23
@@ -59078,6 +59346,9 @@ T_F41934_Nop:
 .LFA01F3:
 	pop XIX                                              ; FA01F3  5c
 	ret                                                  ; FA01F4  0e
+; LcdKeyRow2_TuneScale: HandlerTable23_FA1BF0 slot 9, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow2_TuneScale:
 	ld c, (PanelEvent_Flags:16)                                   ; FA01F5  c1 b0 28 23
 	and C,0x01                                           ; FA01F9  cb cc 01
 	jr nz, .LFA020B                                      ; FA01FC  6e 0d
@@ -59086,6 +59357,9 @@ T_F41934_Nop:
 	calr TuneScale_MoveItemCursor                                      ; FA0208  1e 36 02
 .LFA020B:
 	ret                                                  ; FA020B  0e
+; LcdKeyRow3_TuneScale: HandlerTable23_FA1BF0 slot 10, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_TuneScale:
 	ld c, (PanelEvent_Flags:16)                                   ; FA020C  c1 b0 28 23
 	and C,0x01                                           ; FA0210  cb cc 01
 	jr nz, .LFA0222                                      ; FA0213  6e 0d
@@ -59094,6 +59368,9 @@ T_F41934_Nop:
 	calr TuneScale_AdjustSelectedItem                                      ; FA021F  1e 48 02
 .LFA0222:
 	ret                                                  ; FA0222  0e
+; LcdKeyRow4_TuneScale: HandlerTable23_FA1BF0 slot 11, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_TuneScale:
 	push XIX                                             ; FA0223  3c
 	lda xix, (PanelEvent_Flags:16)                                ; FA0224  f1 b0 28 34
 	ld C,(XIX)                                           ; FA0228  84 23
@@ -59106,6 +59383,9 @@ T_F41934_Nop:
 .LFA023F:
 	pop XIX                                              ; FA023F  5c
 	ret                                                  ; FA0240  0e
+; ExitKey_TuneScale: HandlerTable23_FA1BF0 slot 15, the 23-slot button table Screen_TuneScale_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_TuneScale:
 	ld c, (PanelEvent_Flags:16)                                   ; FA0241  c1 b0 28 23
 	and C,0x01                                           ; FA0245  cb cc 01
 	jr nz, .LFA0263                                      ; FA0248  6e 19
@@ -59735,6 +60015,9 @@ Screen_TouchSensitivityOrTest_Button:
 	ret                                                  ; FA07E9  0e
 T_F41944_Nop:
 	ret                                                  ; FA07EA  0e
+; SoftKeyCols1to4_OverallTouchSensitivity: HandlerTable23_FA1CAB slots 0,1,2,3, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols1to4_OverallTouchSensitivity:
 	lda xbc, (Descriptor9_FA1E91:24)                     ; FA07EB  f2 91 1e fa 31
 	push XBC                                             ; FA07F0  39
 	lda xwa, (0x2693:16)                                ; FA07F1  f1 93 26 30
@@ -59751,6 +60034,9 @@ T_F41944_Nop:
 	inc 6,XSP                                            ; FA0811  ef 66
 .LFA0813:
 	ret                                                  ; FA0813  0e
+; SoftKeyCols1to4_SystemTest: HandlerTable23_FA1D10 slots 0,1,2,3, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols1to4_SystemTest:
 	lda xbc, (Descriptor9_FA1EBE:24)                     ; FA0814  f2 be 1e fa 31
 	push XBC                                             ; FA0819  39
 	lda xwa, (0x26a7:16)                                ; FA081A  f1 a7 26 30
@@ -59773,6 +60059,9 @@ T_F41944_Nop:
 	inc 4,XSP                                            ; FA084D  ef 64
 .LFA084F:
 	ret                                                  ; FA084F  0e
+; SoftKeyCols5to8_OverallTouchSensitivity: HandlerTable23_FA1CAB slots 4,5,6,7, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols5to8_OverallTouchSensitivity:
 	ld bc, (0x2693:16)                                 ; FA0850  d1 93 26 21
 	extz BC                                              ; FA0854  d9 12
 	cp bc, 0x00:i3                                         ; FA0856  d9 d8
@@ -59806,6 +60095,9 @@ T_F41944_Nop:
 .LFA088F:
 	ret                                                  ; FA088F  0e
 	ret                                                  ; FA0890  0e
+; SoftKeyCols5_6_SystemTest: HandlerTable23_FA1D10 slots 4,5, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols5_6_SystemTest:
 	push XIX                                             ; FA0891  3c
 	lda xix, (T_F42C78:24)                               ; FA0892  f2 78 2c f4 34
 	ld c, (0x2902:24)                                   ; FA0897  c2 02 29 00 23
@@ -59924,6 +60216,9 @@ sub_FA095B:   ; entry: named by 1 `.long` operand, first at 0xFA08D3
 .LFA098D:
 	pop XIX                                              ; FA098D  5c
 	ret                                                  ; FA098E  0e
+; SoftKeyCols7_8_SystemTest: HandlerTable23_FA1D10 slots 6,7, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols7_8_SystemTest:
 	push XIX                                             ; FA098F  3c
 	lda xix, (T_F42C78:24)                               ; FA0990  f2 78 2c f4 34
 	ld c, (0x2902:24)                                   ; FA0995  c2 02 29 00 23
@@ -60035,6 +60330,9 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 .LFA0A87:
 	pop XIX                                              ; FA0A87  5c
 	ret                                                  ; FA0A88  0e
+; ExitKey_TouchSensitivityOrTest: HandlerTable23_FA1CAB slots 15,15, the 23-slot button table Screen_TouchSensitivityOrTest_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_TouchSensitivityOrTest:
 	ld c, (PanelEvent_Flags:16)                                   ; FA0A89  c1 b0 28 23
 	and C,0x01                                           ; FA0A8D  cb cc 01
 	jr nz, .LFA0AAB                                      ; FA0A90  6e 19
@@ -60499,6 +60797,9 @@ Screen_ControllerAssign_Button:
 	ret                                                  ; FA0F10  0e
 T_F41954_Nop:
 	ret                                                  ; FA0F11  0e
+; SoftKeyCols1to4_ControllerAssign: HandlerTable23_FA1D6C slots 0,1,2,3, the 23-slot button table Screen_ControllerAssign_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols1to4_ControllerAssign:
 	push XIX                                             ; FA0F12  3c
 	lda xix, (0x26f1:16)                                ; FA0F13  f1 f1 26 34
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FA0F17  c0 c4 3f 01
@@ -60540,6 +60841,9 @@ T_F41954_Nop:
 .LFA0F6E:
 	pop XIX                                              ; FA0F6E  5c
 	ret                                                  ; FA0F6F  0e
+; SoftKeyCols5to8_ControllerAssign: HandlerTable23_FA1D6C slots 4,5,6,7, the 23-slot button table Screen_ControllerAssign_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+SoftKeyCols5to8_ControllerAssign:
 	pushw hl                                             ; FA0F70  2b
 	pushw de                                             ; FA0F71  2a
 	m_cp_mi8 MB16, 0x26f0, 0x00                          ; FA0F72  c1 f0 26 3f 00
@@ -60597,6 +60901,9 @@ T_F41954_Nop:
 	popw de                                              ; FA0FE7  4a
 	popw hl                                              ; FA0FE8  4b
 	ret                                                  ; FA0FE9  0e
+; ExitKey_ControllerAssign: HandlerTable23_FA1D6C slot 15, the 23-slot button table Screen_ControllerAssign_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_ControllerAssign:
 	ld c, (PanelEvent_Flags:16)                                   ; FA0FEA  c1 b0 28 23
 	and C,0x01                                           ; FA0FEE  cb cc 01
 	jr nz, .LFA100C                                      ; FA0FF1  6e 19
@@ -60610,6 +60917,9 @@ T_F41954_Nop:
 	ld (UI_Request:16), 0x60                                 ; FA1007  f1 70 20 00 60
 .LFA100C:
 	ret                                                  ; FA100C  0e
+; PageKey_ControllerAssign: HandlerTable23_FA1D6C slot 16, the 23-slot button table Screen_ControllerAssign_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+PageKey_ControllerAssign:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FA100D  c0 c4 3f 01
 	jr nz, .LFA102C                                      ; FA1011  6e 19
 	lda xbc, (Descriptor9_FA1EDF:24)                     ; FA1013  f2 df 1e fa 31
@@ -60955,6 +61265,9 @@ Screen_Initial_Button:
 	ret                                                  ; FA1303  0e
 T_F4267C_Nop:
 	ret                                                  ; FA1304  0e
+; LcdKeyRow3_Initial: HandlerTable23_FA1DED slot 10, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow3_Initial:
 	ld bc, (UI_ScreenStage:16)                                 ; FA1305  d1 7e 20 21
 	extz BC                                              ; FA1309  d9 12
 	cp bc, 0x00:i3                                         ; FA130B  d9 d8
@@ -60969,6 +61282,9 @@ T_F4267C_Nop:
 	calr sub_FA1445                                          ; FA131A  1e 28 01
 .LFA131D:
 	ret                                                  ; FA131D  0e
+; LcdKeyRow4_Initial: HandlerTable23_FA1DED slot 11, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow4_Initial:
 	ld bc, (UI_ScreenStage:16)                                 ; FA131E  d1 7e 20 21
 	extz BC                                              ; FA1322  d9 12
 	cp bc, 0x00:i3                                         ; FA1324  d9 d8
@@ -60983,6 +61299,9 @@ T_F4267C_Nop:
 	calr sub_FA1533                                          ; FA1333  1e fd 01
 .LFA1336:
 	ret                                                  ; FA1336  0e
+; LcdKeyRow5_Initial: HandlerTable23_FA1DED slot 12, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+LcdKeyRow5_Initial:
 	ld bc, (UI_ScreenStage:16)                                 ; FA1337  d1 7e 20 21
 	extz BC                                              ; FA133B  d9 12
 	cp bc, 0x00:i3                                         ; FA133D  d9 d8
@@ -60992,6 +61311,9 @@ T_F4267C_Nop:
 	calr sub_FA1546                                          ; FA1343  1e 00 02
 .LFA1346:
 	ret                                                  ; FA1346  0e
+; ExitKey_Initial: HandlerTable23_FA1DED slot 15, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
+;   (notes/prom_a_handlertable23_convert.py).
+ExitKey_Initial:
 	ld bc, (UI_ScreenStage:16)                                 ; FA1347  d1 7e 20 21
 	extz BC                                              ; FA134B  d9 12
 	cp bc, 0x00:i3                                         ; FA134D  d9 d8
@@ -61566,13 +61888,32 @@ Descriptor9_FA1687:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1690:
-	.byte 0xea, 0xc0, 0xf9, 0x00, 0x96, 0xc1, 0xf9, 0x00, 0x83, 0xc2, 0xf9, 0x00, 0x83, 0xc2, 0xf9, 0x00  ; FA1690
-	.byte 0x33, 0xc3, 0xf9, 0x00, 0xa5, 0xc3, 0xf9, 0x00, 0x0d, 0xc4, 0xf9, 0x00, 0x0d, 0xc4, 0xf9, 0x00  ; FA16A0
-	.byte 0xbd, 0xc4, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16B0
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xd9, 0xc4, 0xf9, 0x00  ; FA16C0
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16D0
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16E0
+	.long SoftKeyCol1_ReMapEdit                    ; FA1690  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_ReMapEdit                    ; FA1694  [ 1]  SoftKeyCol2
+	.long SoftKeyCols3_4_ReMapEdit                 ; FA1698  [ 2]  SoftKeyCol3
+	.long SoftKeyCols3_4_ReMapEdit                 ; FA169C  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_ReMapEdit                    ; FA16A0  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_ReMapEdit                    ; FA16A4  [ 5]  SoftKeyCol6
+	.long SoftKeyCols7_8_ReMapEdit                 ; FA16A8  [ 6]  SoftKeyCol7
+	.long SoftKeyCols7_8_ReMapEdit                 ; FA16AC  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_ReMapEdit                     ; FA16B0  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA16B4  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA16B8  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA16BC  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA16C0  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA16C4  [13]
+	.long T_TableDefault_Ret                       ; FA16C8  [14]
+	.long ExitKey_ReMapEdit                        ; FA16CC  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA16D0  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA16D4  [17]
+	.long T_TableDefault_Ret                       ; FA16D8  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA16DC  [19]
+	.long T_TableDefault_Ret                       ; FA16E0  [20]
+	.long T_TableDefault_Ret                       ; FA16E4  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA16E8  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable8_FA16EC -- 8 bytes, kind=byte_table_8
 ;
@@ -61649,13 +61990,32 @@ ByteTable12_FA1706:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1712:
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1712
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1722
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x35, 0xca, 0xf9, 0x00, 0x5c, 0xca, 0xf9, 0x00, 0x83, 0xca, 0xf9, 0x00  ; FA1732
-	.byte 0xaa, 0xca, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xbd, 0xca, 0xf9, 0x00  ; FA1742
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1752
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1762
+	.long T_TableDefault_Ret                       ; FA1712  [ 0]  SoftKeyCol1
+	.long T_TableDefault_Ret                       ; FA1716  [ 1]  SoftKeyCol2
+	.long T_TableDefault_Ret                       ; FA171A  [ 2]  SoftKeyCol3
+	.long T_TableDefault_Ret                       ; FA171E  [ 3]  SoftKeyCol4
+	.long T_TableDefault_Ret                       ; FA1722  [ 4]  SoftKeyCol5
+	.long T_TableDefault_Ret                       ; FA1726  [ 5]  SoftKeyCol6
+	.long T_TableDefault_Ret                       ; FA172A  [ 6]  SoftKeyCol7
+	.long T_TableDefault_Ret                       ; FA172E  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA1732  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_SoundCombinationManager       ; FA1736  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_SoundCombinationManager       ; FA173A  [10]  LcdKeyRow3
+	.long LcdKeyRow4_SoundCombinationManager       ; FA173E  [11]  LcdKeyRow4
+	.long LcdKeyRow5_SoundCombinationManager       ; FA1742  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1746  [13]
+	.long T_TableDefault_Ret                       ; FA174A  [14]
+	.long ExitKey_SoundCombinationManager          ; FA174E  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1752  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1756  [17]
+	.long T_TableDefault_Ret                       ; FA175A  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA175E  [19]
+	.long T_TableDefault_Ret                       ; FA1762  [20]
+	.long T_TableDefault_Ret                       ; FA1766  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA176A  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA176E -- 92 bytes, kind=handler_table_23
 ;
@@ -61667,13 +62027,32 @@ HandlerTable23_FA1712:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA176E:
-	.byte 0x95, 0xcb, 0xf9, 0x00, 0xb4, 0xcb, 0xf9, 0x00, 0xd3, 0xcb, 0xf9, 0x00, 0xf2, 0xcb, 0xf9, 0x00  ; FA176E
-	.byte 0x2a, 0xcc, 0xf9, 0x00, 0x49, 0xcc, 0xf9, 0x00, 0x68, 0xcc, 0xf9, 0x00, 0x87, 0xcc, 0xf9, 0x00  ; FA177E
-	.byte 0xa6, 0xcc, 0xf9, 0x00, 0x88, 0xcd, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA178E
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xa2, 0xcd, 0xf9, 0x00  ; FA179E
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17AE
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17BE
+	.long SoftKeyCol1_SoundGroupNaming             ; FA176E  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_SoundGroupNaming             ; FA1772  [ 1]  SoftKeyCol2
+	.long SoftKeyCol3_SoundGroupNaming             ; FA1776  [ 2]  SoftKeyCol3
+	.long SoftKeyCol4_SoundGroupNaming             ; FA177A  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_SoundGroupNaming             ; FA177E  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_SoundGroupNaming             ; FA1782  [ 5]  SoftKeyCol6
+	.long SoftKeyCol7_SoundGroupNaming             ; FA1786  [ 6]  SoftKeyCol7
+	.long SoftKeyCol8_SoundGroupNaming             ; FA178A  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_SoundGroupNaming              ; FA178E  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_SoundGroupNaming              ; FA1792  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1796  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA179A  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA179E  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA17A2  [13]
+	.long T_TableDefault_Ret                       ; FA17A6  [14]
+	.long ExitKey_SoundGroupNaming                 ; FA17AA  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA17AE  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA17B2  [17]
+	.long T_TableDefault_Ret                       ; FA17B6  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA17BA  [19]
+	.long T_TableDefault_Ret                       ; FA17BE  [20]
+	.long T_TableDefault_Ret                       ; FA17C2  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA17C6  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable5_FA17CA -- 5 bytes, kind=byte_table_5
 ;
@@ -61698,13 +62077,32 @@ ByteTable5_FA17CA:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA17CF:
-	.byte 0xfd, 0xcf, 0xf9, 0x00, 0x1c, 0xd0, 0xf9, 0x00, 0x3b, 0xd0, 0xf9, 0x00, 0x5a, 0xd0, 0xf9, 0x00  ; FA17CF
-	.byte 0x92, 0xd0, 0xf9, 0x00, 0xb1, 0xd0, 0xf9, 0x00, 0xd0, 0xd0, 0xf9, 0x00, 0xef, 0xd0, 0xf9, 0x00  ; FA17DF
-	.byte 0x0e, 0xd1, 0xf9, 0x00, 0xf0, 0xd1, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17EF
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x0a, 0xd2, 0xf9, 0x00  ; FA17FF
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA180F
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA181F
+	.long SoftKeyCol1_CombinationGroupNaming       ; FA17CF  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_CombinationGroupNaming       ; FA17D3  [ 1]  SoftKeyCol2
+	.long SoftKeyCol3_CombinationGroupNaming       ; FA17D7  [ 2]  SoftKeyCol3
+	.long SoftKeyCol4_CombinationGroupNaming       ; FA17DB  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_CombinationGroupNaming       ; FA17DF  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_CombinationGroupNaming       ; FA17E3  [ 5]  SoftKeyCol6
+	.long SoftKeyCol7_CombinationGroupNaming       ; FA17E7  [ 6]  SoftKeyCol7
+	.long SoftKeyCol8_CombinationGroupNaming       ; FA17EB  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_CombinationGroupNaming        ; FA17EF  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_CombinationGroupNaming        ; FA17F3  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA17F7  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA17FB  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA17FF  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1803  [13]
+	.long T_TableDefault_Ret                       ; FA1807  [14]
+	.long ExitKey_CombinationGroupNaming           ; FA180B  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA180F  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1813  [17]
+	.long T_TableDefault_Ret                       ; FA1817  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA181B  [19]
+	.long T_TableDefault_Ret                       ; FA181F  [20]
+	.long T_TableDefault_Ret                       ; FA1823  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1827  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable4_FA182B -- 4 bytes, kind=byte_table_4
 ;
@@ -61729,13 +62127,32 @@ ByteTable4_FA182B:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA182F:
-	.byte 0xad, 0xd4, 0xf9, 0x00, 0xcb, 0xd4, 0xf9, 0x00, 0x4a, 0xd5, 0xf9, 0x00, 0x4a, 0xd5, 0xf9, 0x00  ; FA182F
-	.byte 0xf7, 0xd6, 0xf9, 0x00, 0x15, 0xd7, 0xf9, 0x00, 0x5e, 0xd7, 0xf9, 0x00, 0x5e, 0xd7, 0xf9, 0x00  ; FA183F
-	.byte 0x2b, 0xd8, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xc1, 0xd8, 0xf9, 0x00, 0xde, 0xd8, 0xf9, 0x00  ; FA184F
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xfa, 0xd8, 0xf9, 0x00  ; FA185F
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA186F
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA187F
+	.long SoftKeyCol1_SoundCopy                    ; FA182F  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_SoundCopy                    ; FA1833  [ 1]  SoftKeyCol2
+	.long SoftKeyCols3_4_SoundCopy                 ; FA1837  [ 2]  SoftKeyCol3
+	.long SoftKeyCols3_4_SoundCopy                 ; FA183B  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_SoundCopy                    ; FA183F  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_SoundCopy                    ; FA1843  [ 5]  SoftKeyCol6
+	.long SoftKeyCols7_8_SoundCopy                 ; FA1847  [ 6]  SoftKeyCol7
+	.long SoftKeyCols7_8_SoundCopy                 ; FA184B  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_SoundCopy                     ; FA184F  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1853  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_SoundCopy                     ; FA1857  [10]  LcdKeyRow3
+	.long LcdKeyRow4_SoundCopy                     ; FA185B  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA185F  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1863  [13]
+	.long T_TableDefault_Ret                       ; FA1867  [14]
+	.long ExitKey_SoundCopy                        ; FA186B  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA186F  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1873  [17]
+	.long T_TableDefault_Ret                       ; FA1877  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA187B  [19]
+	.long T_TableDefault_Ret                       ; FA187F  [20]
+	.long T_TableDefault_Ret                       ; FA1883  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1887  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable5_FA188B -- 5 bytes, kind=byte_table_5
 ;
@@ -61773,13 +62190,32 @@ ByteTable2_FA1890:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1892:
-	.byte 0x6e, 0xe0, 0xf9, 0x00, 0x8c, 0xe0, 0xf9, 0x00, 0x0b, 0xe1, 0xf9, 0x00, 0x0b, 0xe1, 0xf9, 0x00  ; FA1892
-	.byte 0xb8, 0xe2, 0xf9, 0x00, 0xd6, 0xe2, 0xf9, 0x00, 0x1f, 0xe3, 0xf9, 0x00, 0x1f, 0xe3, 0xf9, 0x00  ; FA18A2
-	.byte 0xec, 0xe3, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x82, 0xe4, 0xf9, 0x00, 0xb4, 0xe4, 0xf9, 0x00  ; FA18B2
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xd0, 0xe4, 0xf9, 0x00  ; FA18C2
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA18D2
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA18E2
+	.long SoftKeyCol1_CombinationCopy              ; FA1892  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_CombinationCopy              ; FA1896  [ 1]  SoftKeyCol2
+	.long SoftKeyCols3_4_CombinationCopy           ; FA189A  [ 2]  SoftKeyCol3
+	.long SoftKeyCols3_4_CombinationCopy           ; FA189E  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_CombinationCopy              ; FA18A2  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_CombinationCopy              ; FA18A6  [ 5]  SoftKeyCol6
+	.long SoftKeyCols7_8_CombinationCopy           ; FA18AA  [ 6]  SoftKeyCol7
+	.long SoftKeyCols7_8_CombinationCopy           ; FA18AE  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_CombinationCopy               ; FA18B2  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA18B6  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_CombinationCopy               ; FA18BA  [10]  LcdKeyRow3
+	.long LcdKeyRow4_CombinationCopy               ; FA18BE  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA18C2  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA18C6  [13]
+	.long T_TableDefault_Ret                       ; FA18CA  [14]
+	.long ExitKey_CombinationCopy                  ; FA18CE  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA18D2  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA18D6  [17]
+	.long T_TableDefault_Ret                       ; FA18DA  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA18DE  [19]
+	.long T_TableDefault_Ret                       ; FA18E2  [20]
+	.long T_TableDefault_Ret                       ; FA18E6  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA18EA  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA18EE -- 92 bytes, kind=handler_table_23
 ;
@@ -61791,13 +62227,32 @@ HandlerTable23_FA1892:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA18EE:
-	.byte 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00  ; FA18EE
-	.byte 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00  ; FA18FE
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA190E
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xbd, 0xec, 0xf9, 0x00  ; FA191E
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA192E
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA193E
+	.long SoftKeyCols1to4_DataLoadFilter           ; FA18EE  [ 0]  SoftKeyCol1
+	.long SoftKeyCols1to4_DataLoadFilter           ; FA18F2  [ 1]  SoftKeyCol2
+	.long SoftKeyCols1to4_DataLoadFilter           ; FA18F6  [ 2]  SoftKeyCol3
+	.long SoftKeyCols1to4_DataLoadFilter           ; FA18FA  [ 3]  SoftKeyCol4
+	.long SoftKeyCols5to8_DataLoadFilter           ; FA18FE  [ 4]  SoftKeyCol5
+	.long SoftKeyCols5to8_DataLoadFilter           ; FA1902  [ 5]  SoftKeyCol6
+	.long SoftKeyCols5to8_DataLoadFilter           ; FA1906  [ 6]  SoftKeyCol7
+	.long SoftKeyCols5to8_DataLoadFilter           ; FA190A  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA190E  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1912  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1916  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA191A  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA191E  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1922  [13]
+	.long T_TableDefault_Ret                       ; FA1926  [14]
+	.long ExitKey_DataLoadFilter                   ; FA192A  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA192E  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1932  [17]
+	.long T_TableDefault_Ret                       ; FA1936  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA193A  [19]
+	.long T_TableDefault_Ret                       ; FA193E  [20]
+	.long T_TableDefault_Ret                       ; FA1942  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1946  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA194A -- 92 bytes, kind=handler_table_23
 ;
@@ -61809,13 +62264,32 @@ HandlerTable23_FA18EE:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA194A:
-	.byte 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00  ; FA194A
-	.byte 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00  ; FA195A
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA196A
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x34, 0xee, 0xf9, 0x00  ; FA197A
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA198A
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA199A
+	.long SoftKeyCols1to4_MemoryProtect            ; FA194A  [ 0]  SoftKeyCol1
+	.long SoftKeyCols1to4_MemoryProtect            ; FA194E  [ 1]  SoftKeyCol2
+	.long SoftKeyCols1to4_MemoryProtect            ; FA1952  [ 2]  SoftKeyCol3
+	.long SoftKeyCols1to4_MemoryProtect            ; FA1956  [ 3]  SoftKeyCol4
+	.long SoftKeyCols5to8_MemoryProtect            ; FA195A  [ 4]  SoftKeyCol5
+	.long SoftKeyCols5to8_MemoryProtect            ; FA195E  [ 5]  SoftKeyCol6
+	.long SoftKeyCols5to8_MemoryProtect            ; FA1962  [ 6]  SoftKeyCol7
+	.long SoftKeyCols5to8_MemoryProtect            ; FA1966  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA196A  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA196E  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1972  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA1976  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA197A  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA197E  [13]
+	.long T_TableDefault_Ret                       ; FA1982  [14]
+	.long ExitKey_MemoryProtect                    ; FA1986  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA198A  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA198E  [17]
+	.long T_TableDefault_Ret                       ; FA1992  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1996  [19]
+	.long T_TableDefault_Ret                       ; FA199A  [20]
+	.long T_TableDefault_Ret                       ; FA199E  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA19A2  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA19A6 -- 92 bytes, kind=handler_table_23
 ;
@@ -61827,13 +62301,32 @@ HandlerTable23_FA194A:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA19A6:
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x08, 0xef, 0xf9, 0x00, 0x08, 0xef, 0xf9, 0x00  ; FA19A6
-	.byte 0x08, 0xef, 0xf9, 0x00, 0x08, 0xef, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19B6
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19C6
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x18, 0xef, 0xf9, 0x00  ; FA19D6
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19E6
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19F6
+	.long T_TableDefault_Ret                       ; FA19A6  [ 0]  SoftKeyCol1
+	.long T_TableDefault_Ret                       ; FA19AA  [ 1]  SoftKeyCol2
+	.long SoftKeyCols3to6_SoundMute                ; FA19AE  [ 2]  SoftKeyCol3
+	.long SoftKeyCols3to6_SoundMute                ; FA19B2  [ 3]  SoftKeyCol4
+	.long SoftKeyCols3to6_SoundMute                ; FA19B6  [ 4]  SoftKeyCol5
+	.long SoftKeyCols3to6_SoundMute                ; FA19BA  [ 5]  SoftKeyCol6
+	.long T_TableDefault_Ret                       ; FA19BE  [ 6]  SoftKeyCol7
+	.long T_TableDefault_Ret                       ; FA19C2  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA19C6  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA19CA  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA19CE  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA19D2  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA19D6  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA19DA  [13]
+	.long T_TableDefault_Ret                       ; FA19DE  [14]
+	.long ExitKey_SoundMute                        ; FA19E2  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA19E6  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA19EA  [17]
+	.long T_TableDefault_Ret                       ; FA19EE  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA19F2  [19]
+	.long T_TableDefault_Ret                       ; FA19F6  [20]
+	.long T_TableDefault_Ret                       ; FA19FA  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA19FE  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA1A02 -- 92 bytes, kind=handler_table_23
 ;
@@ -61845,13 +62338,32 @@ HandlerTable23_FA19A6:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1A02:
-	.byte 0x57, 0xf0, 0xf9, 0x00, 0x76, 0xf0, 0xf9, 0x00, 0x2b, 0xf1, 0xf9, 0x00, 0x4a, 0xf1, 0xf9, 0x00  ; FA1A02
-	.byte 0x69, 0xf1, 0xf9, 0x00, 0xf8, 0xf1, 0xf9, 0x00, 0x17, 0xf2, 0xf9, 0x00, 0x36, 0xf2, 0xf9, 0x00  ; FA1A12
-	.byte 0x55, 0xf2, 0xf9, 0x00, 0x0b, 0xf3, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A22
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x25, 0xf3, 0xf9, 0x00  ; FA1A32
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A42
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A52
+	.long SoftKeyCol1_DrumsMapNaming               ; FA1A02  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_DrumsMapNaming               ; FA1A06  [ 1]  SoftKeyCol2
+	.long SoftKeyCol3_DrumsMapNaming               ; FA1A0A  [ 2]  SoftKeyCol3
+	.long SoftKeyCol4_DrumsMapNaming               ; FA1A0E  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_DrumsMapNaming               ; FA1A12  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_DrumsMapNaming               ; FA1A16  [ 5]  SoftKeyCol6
+	.long SoftKeyCol7_DrumsMapNaming               ; FA1A1A  [ 6]  SoftKeyCol7
+	.long SoftKeyCol8_DrumsMapNaming               ; FA1A1E  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_DrumsMapNaming                ; FA1A22  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_DrumsMapNaming                ; FA1A26  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1A2A  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA1A2E  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA1A32  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1A36  [13]
+	.long T_TableDefault_Ret                       ; FA1A3A  [14]
+	.long ExitKey_DrumsMapNaming                   ; FA1A3E  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1A42  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1A46  [17]
+	.long T_TableDefault_Ret                       ; FA1A4A  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1A4E  [19]
+	.long T_TableDefault_Ret                       ; FA1A52  [20]
+	.long T_TableDefault_Ret                       ; FA1A56  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1A5A  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable16_FA1A5E -- 16 bytes, kind=byte_table_16
 ;
@@ -62383,13 +62895,32 @@ Descriptor9_FA1B8B:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1B94:
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1B94
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BA4
-	.byte 0x28, 0xff, 0xf9, 0x00, 0x4f, 0xff, 0xf9, 0x00, 0x76, 0xff, 0xf9, 0x00, 0x9d, 0xff, 0xf9, 0x00  ; FA1BB4
-	.byte 0xd6, 0xff, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xfd, 0xff, 0xf9, 0x00  ; FA1BC4
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BD4
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BE4
+	.long T_TableDefault_Ret                       ; FA1B94  [ 0]  SoftKeyCol1
+	.long T_TableDefault_Ret                       ; FA1B98  [ 1]  SoftKeyCol2
+	.long T_TableDefault_Ret                       ; FA1B9C  [ 2]  SoftKeyCol3
+	.long T_TableDefault_Ret                       ; FA1BA0  [ 3]  SoftKeyCol4
+	.long T_TableDefault_Ret                       ; FA1BA4  [ 4]  SoftKeyCol5
+	.long T_TableDefault_Ret                       ; FA1BA8  [ 5]  SoftKeyCol6
+	.long T_TableDefault_Ret                       ; FA1BAC  [ 6]  SoftKeyCol7
+	.long T_TableDefault_Ret                       ; FA1BB0  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_System                        ; FA1BB4  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_System                        ; FA1BB8  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_System                        ; FA1BBC  [10]  LcdKeyRow3
+	.long LcdKeyRow4_System                        ; FA1BC0  [11]  LcdKeyRow4
+	.long LcdKeyRow5_System                        ; FA1BC4  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1BC8  [13]
+	.long T_TableDefault_Ret                       ; FA1BCC  [14]
+	.long ExitKey_System                           ; FA1BD0  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1BD4  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1BD8  [17]
+	.long T_TableDefault_Ret                       ; FA1BDC  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1BE0  [19]
+	.long T_TableDefault_Ret                       ; FA1BE4  [20]
+	.long T_TableDefault_Ret                       ; FA1BE8  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1BEC  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA1BF0 -- 92 bytes, kind=handler_table_23
 ;
@@ -62401,13 +62932,32 @@ HandlerTable23_FA1B94:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1BF0:
-	.byte 0x12, 0x01, 0xfa, 0x00, 0x44, 0x01, 0xfa, 0x00, 0x59, 0x01, 0xfa, 0x00, 0x6e, 0x01, 0xfa, 0x00  ; FA1BF0
-	.byte 0x83, 0x01, 0xfa, 0x00, 0x98, 0x01, 0xfa, 0x00, 0xad, 0x01, 0xfa, 0x00, 0xc2, 0x01, 0xfa, 0x00  ; FA1C00
-	.byte 0xd7, 0x01, 0xfa, 0x00, 0xf5, 0x01, 0xfa, 0x00, 0x0c, 0x02, 0xfa, 0x00, 0x23, 0x02, 0xfa, 0x00  ; FA1C10
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x41, 0x02, 0xfa, 0x00  ; FA1C20
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1C30
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1C40
+	.long SoftKeyCol1_TuneScale                    ; FA1BF0  [ 0]  SoftKeyCol1
+	.long SoftKeyCol2_TuneScale                    ; FA1BF4  [ 1]  SoftKeyCol2
+	.long SoftKeyCol3_TuneScale                    ; FA1BF8  [ 2]  SoftKeyCol3
+	.long SoftKeyCol4_TuneScale                    ; FA1BFC  [ 3]  SoftKeyCol4
+	.long SoftKeyCol5_TuneScale                    ; FA1C00  [ 4]  SoftKeyCol5
+	.long SoftKeyCol6_TuneScale                    ; FA1C04  [ 5]  SoftKeyCol6
+	.long SoftKeyCol7_TuneScale                    ; FA1C08  [ 6]  SoftKeyCol7
+	.long SoftKeyCol8_TuneScale                    ; FA1C0C  [ 7]  SoftKeyCol8
+	.long LcdKeyRow1_TuneScale                     ; FA1C10  [ 8]  LcdKeyRow1
+	.long LcdKeyRow2_TuneScale                     ; FA1C14  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_TuneScale                     ; FA1C18  [10]  LcdKeyRow3
+	.long LcdKeyRow4_TuneScale                     ; FA1C1C  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA1C20  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1C24  [13]
+	.long T_TableDefault_Ret                       ; FA1C28  [14]
+	.long ExitKey_TuneScale                        ; FA1C2C  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1C30  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1C34  [17]
+	.long T_TableDefault_Ret                       ; FA1C38  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1C3C  [19]
+	.long T_TableDefault_Ret                       ; FA1C40  [20]
+	.long T_TableDefault_Ret                       ; FA1C44  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1C48  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable16_FA1C4C -- 16 bytes, kind=byte_table_16
 ;
@@ -62449,13 +62999,32 @@ ByteTable79_FA1C5C:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1CAB:
-	.byte 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00  ; FA1CAB
-	.byte 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00  ; FA1CBB
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CCB
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x89, 0x0a, 0xfa, 0x00  ; FA1CDB
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CEB
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CFB
+	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CAB  [ 0]  SoftKeyCol1
+	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CAF  [ 1]  SoftKeyCol2
+	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CB3  [ 2]  SoftKeyCol3
+	.long SoftKeyCols1to4_OverallTouchSensitivity  ; FA1CB7  [ 3]  SoftKeyCol4
+	.long SoftKeyCols5to8_OverallTouchSensitivity  ; FA1CBB  [ 4]  SoftKeyCol5
+	.long SoftKeyCols5to8_OverallTouchSensitivity  ; FA1CBF  [ 5]  SoftKeyCol6
+	.long SoftKeyCols5to8_OverallTouchSensitivity  ; FA1CC3  [ 6]  SoftKeyCol7
+	.long SoftKeyCols5to8_OverallTouchSensitivity  ; FA1CC7  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA1CCB  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1CCF  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1CD3  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA1CD7  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA1CDB  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1CDF  [13]
+	.long T_TableDefault_Ret                       ; FA1CE3  [14]
+	.long ExitKey_TouchSensitivityOrTest           ; FA1CE7  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1CEB  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1CEF  [17]
+	.long T_TableDefault_Ret                       ; FA1CF3  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1CF7  [19]
+	.long T_TableDefault_Ret                       ; FA1CFB  [20]
+	.long T_TableDefault_Ret                       ; FA1CFF  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1D03  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable9_FA1D07 -- 9 bytes, kind=byte_table_9
 ;
@@ -62480,13 +63049,32 @@ ByteTable9_FA1D07:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1D10:
-	.byte 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00  ; FA1D10
-	.byte 0x91, 0x08, 0xfa, 0x00, 0x91, 0x08, 0xfa, 0x00, 0x8f, 0x09, 0xfa, 0x00, 0x8f, 0x09, 0xfa, 0x00  ; FA1D20
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D30
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x89, 0x0a, 0xfa, 0x00  ; FA1D40
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D50
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D60
+	.long SoftKeyCols1to4_SystemTest               ; FA1D10  [ 0]  SoftKeyCol1
+	.long SoftKeyCols1to4_SystemTest               ; FA1D14  [ 1]  SoftKeyCol2
+	.long SoftKeyCols1to4_SystemTest               ; FA1D18  [ 2]  SoftKeyCol3
+	.long SoftKeyCols1to4_SystemTest               ; FA1D1C  [ 3]  SoftKeyCol4
+	.long SoftKeyCols5_6_SystemTest                ; FA1D20  [ 4]  SoftKeyCol5
+	.long SoftKeyCols5_6_SystemTest                ; FA1D24  [ 5]  SoftKeyCol6
+	.long SoftKeyCols7_8_SystemTest                ; FA1D28  [ 6]  SoftKeyCol7
+	.long SoftKeyCols7_8_SystemTest                ; FA1D2C  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA1D30  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1D34  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1D38  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA1D3C  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA1D40  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1D44  [13]
+	.long T_TableDefault_Ret                       ; FA1D48  [14]
+	.long ExitKey_TouchSensitivityOrTest           ; FA1D4C  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1D50  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1D54  [17]
+	.long T_TableDefault_Ret                       ; FA1D58  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1D5C  [19]
+	.long T_TableDefault_Ret                       ; FA1D60  [20]
+	.long T_TableDefault_Ret                       ; FA1D64  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1D68  [22]
 ; ---------------------------------------------------------------------
 ; HandlerTable23_FA1D6C -- 92 bytes, kind=handler_table_23
 ;
@@ -62498,13 +63086,32 @@ HandlerTable23_FA1D10:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1D6C:
-	.byte 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00  ; FA1D6C
-	.byte 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00  ; FA1D7C
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D8C
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xea, 0x0f, 0xfa, 0x00  ; FA1D9C
-	.byte 0x0d, 0x10, 0xfa, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DAC
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DBC
+	.long SoftKeyCols1to4_ControllerAssign         ; FA1D6C  [ 0]  SoftKeyCol1
+	.long SoftKeyCols1to4_ControllerAssign         ; FA1D70  [ 1]  SoftKeyCol2
+	.long SoftKeyCols1to4_ControllerAssign         ; FA1D74  [ 2]  SoftKeyCol3
+	.long SoftKeyCols1to4_ControllerAssign         ; FA1D78  [ 3]  SoftKeyCol4
+	.long SoftKeyCols5to8_ControllerAssign         ; FA1D7C  [ 4]  SoftKeyCol5
+	.long SoftKeyCols5to8_ControllerAssign         ; FA1D80  [ 5]  SoftKeyCol6
+	.long SoftKeyCols5to8_ControllerAssign         ; FA1D84  [ 6]  SoftKeyCol7
+	.long SoftKeyCols5to8_ControllerAssign         ; FA1D88  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA1D8C  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1D90  [ 9]  LcdKeyRow2
+	.long T_TableDefault_Ret                       ; FA1D94  [10]  LcdKeyRow3
+	.long T_TableDefault_Ret                       ; FA1D98  [11]  LcdKeyRow4
+	.long T_TableDefault_Ret                       ; FA1D9C  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1DA0  [13]
+	.long T_TableDefault_Ret                       ; FA1DA4  [14]
+	.long ExitKey_ControllerAssign                 ; FA1DA8  [15]  ExitKey
+	.long PageKey_ControllerAssign                 ; FA1DAC  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1DB0  [17]
+	.long T_TableDefault_Ret                       ; FA1DB4  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1DB8  [19]
+	.long T_TableDefault_Ret                       ; FA1DBC  [20]
+	.long T_TableDefault_Ret                       ; FA1DC0  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1DC4  [22]
 ; ---------------------------------------------------------------------
 ; ByteTable9_FA1DC8 -- 9 bytes, kind=byte_table_9
 ;
@@ -62568,13 +63175,32 @@ PtrTable3_FA1DE1:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
+; 2026-10-04: the payload is READ now -- 23 handler addresses, slot k = the 23-slot control k; each named
+;   <Control>_<Screen> or T_TableDefault_Ret (notes/prom_a_handlertable23_convert.py).
 HandlerTable23_FA1DED:
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DED
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DFD
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x05, 0x13, 0xfa, 0x00, 0x1e, 0x13, 0xfa, 0x00  ; FA1E0D
-	.byte 0x37, 0x13, 0xfa, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x47, 0x13, 0xfa, 0x00  ; FA1E1D
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1E2D
-	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1E3D
+	.long T_TableDefault_Ret                       ; FA1DED  [ 0]  SoftKeyCol1
+	.long T_TableDefault_Ret                       ; FA1DF1  [ 1]  SoftKeyCol2
+	.long T_TableDefault_Ret                       ; FA1DF5  [ 2]  SoftKeyCol3
+	.long T_TableDefault_Ret                       ; FA1DF9  [ 3]  SoftKeyCol4
+	.long T_TableDefault_Ret                       ; FA1DFD  [ 4]  SoftKeyCol5
+	.long T_TableDefault_Ret                       ; FA1E01  [ 5]  SoftKeyCol6
+	.long T_TableDefault_Ret                       ; FA1E05  [ 6]  SoftKeyCol7
+	.long T_TableDefault_Ret                       ; FA1E09  [ 7]  SoftKeyCol8
+	.long T_TableDefault_Ret                       ; FA1E0D  [ 8]  LcdKeyRow1
+	.long T_TableDefault_Ret                       ; FA1E11  [ 9]  LcdKeyRow2
+	.long LcdKeyRow3_Initial                       ; FA1E15  [10]  LcdKeyRow3
+	.long LcdKeyRow4_Initial                       ; FA1E19  [11]  LcdKeyRow4
+	.long LcdKeyRow5_Initial                       ; FA1E1D  [12]  LcdKeyRow5
+	.long T_TableDefault_Ret                       ; FA1E21  [13]
+	.long T_TableDefault_Ret                       ; FA1E25  [14]
+	.long ExitKey_Initial                          ; FA1E29  [15]  ExitKey
+	.long T_TableDefault_Ret                       ; FA1E2D  [16]  PageKey
+	.long T_TableDefault_Ret                       ; FA1E31  [17]
+	.long T_TableDefault_Ret                       ; FA1E35  [18]  NumberPadKey
+	.long T_TableDefault_Ret                       ; FA1E39  [19]
+	.long T_TableDefault_Ret                       ; FA1E3D  [20]
+	.long T_TableDefault_Ret                       ; FA1E41  [21]  CompareKey
+	.long T_TableDefault_Ret                       ; FA1E45  [22]
 ; ---------------------------------------------------------------------
 ; Descriptor9_FA1E49 -- 9 bytes, kind=descriptor_9
 ;
