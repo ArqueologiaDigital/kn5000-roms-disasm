@@ -104028,23 +104028,25 @@ ScreenButton_Code35:
 	ret                                                  ; FBC59D  0e
 T_F41A34_Nop:
 	ret                                                  ; FBC59E  0e
-; ScreenCode36_Handler: the +0 ENTER method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+; ScreenEnter_CombinationNaming: the +0 ENTER method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
 ;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A38 jumps here.
-ScreenCode36_Handler:
-	calr sub_FBF18B                                          ; FBC59F  1e e9 2b
+; ScreenEnter_CombinationNaming: screen 0x36's +0 ENTER.  0x36 is COMBINATION NAMING: its body ScreenEnterBody_CombinationNaming
+;   calls Paint_CombinationNamingWrite, which runs DL_CombinationNaming_F19BE5 ("COMBI.EDIT" / "COMBINATION NAMING" / "WRITE").
+ScreenEnter_CombinationNaming:
+	calr ScreenEnterBody_CombinationNaming                                          ; FBC59F  1e e9 2b
 	ret                                                  ; FBC5A2  0e
-; ScreenLeave_Code36: the +4 LEAVE method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+; ScreenLeave_CombinationNaming: the +4 LEAVE method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
 ;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A3C jumps here.
-ScreenLeave_Code36:
-	calr sub_FBF1FF                                          ; FBC5A3  1e 59 2c
+ScreenLeave_CombinationNaming:
+	calr ScreenLeaveBody_CombinationNaming                                          ; FBC5A3  1e 59 2c
 	ret                                                  ; FBC5A6  0e
-; ScreenButton_Code36: the +8 BUTTON method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
+; ScreenButton_CombinationNaming: the +8 BUTTON method of the screen object for screen id 0x36 -- PanelScreen_VtableTable entry 0x56
 ;   (ViewB entry 0x36) points at the thunk triple starting at T_F41A38, and slot T_F41A40 jumps here.
-ScreenButton_Code36:
+ScreenButton_CombinationNaming:
 	link XIZ,0x0000                                      ; FBC5A7  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5AB  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5AE  9e 08 04
-	calr sub_FBF236                                          ; FBC5B1  1e 82 2c
+	calr ScreenButtonBody_CombinationNaming                                          ; FBC5B1  1e 82 2c
 	pop XBC                                              ; FBC5B4  59
 	unlk XIZ                                             ; FBC5B5  ee 0d
 	ret                                                  ; FBC5B7  0e
@@ -104058,10 +104060,12 @@ T_F41A90_Nop:
 	ret                                                  ; FBC5BB  0e
 T_F41A94_Nop:
 	ret                                                  ; FBC5BC  0e
-; ScreenCodeB3_Handler: the +0 ENTER method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
+; ScreenEnter_WriteProtectError: the +0 ENTER method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
 ;   (ViewB entry 0xB3) points at the thunk triple starting at T_F41878, and slot T_F41878 jumps here.
-ScreenCodeB3_Handler:
-	calr sub_FBFEB9                                          ; FBC5BD  1e f9 38
+; ScreenEnter_WriteProtectError: screen 0xB3's +0 ENTER.  Its painter (posted by ScreenEnterBody_WriteProtectError) runs
+;   DL_Err0rTheS0undOrC0mbinati0n: "ERR0R! The S0UND or C0MBINATI0N memories are write protected." with YES / NO.
+ScreenEnter_WriteProtectError:
+	calr ScreenEnterBody_WriteProtectError                                          ; FBC5BD  1e f9 38
 	ret                                                  ; FBC5C0  0e
 ; ---------------------------------------------------------------------
 ; Var2075_ClrBit7_Entry -- a PURE WRAPPER for Var2075_ClrBit7: it IS that
@@ -104078,35 +104082,37 @@ ScreenCodeB3_Handler:
 Var2075_ClrBit7_Entry:
 	calr Var2075_ClrBit7                                          ; FBC5C1  1e 11 39
 	ret                                                  ; FBC5C4  0e
-; ScreenButton_CodeB3: the +8 BUTTON method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
+; ScreenButton_WriteProtectError: the +8 BUTTON method of the screen object for screen id 0xB3 -- PanelScreen_VtableTable entry 0xD3
 ;   (ViewB entry 0xB3) points at the thunk triple starting at T_F41878, and slot T_F41880 jumps here.
-ScreenButton_CodeB3:
+ScreenButton_WriteProtectError:
 	link XIZ,0x0000                                      ; FBC5C5  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5C9  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5CC  9e 08 04
-	calr sub_FBFEDA                                          ; FBC5CF  1e 08 39
+	calr ScreenButtonBody_WriteProtectError                                          ; FBC5CF  1e 08 39
 	pop XBC                                              ; FBC5D2  59
 	unlk XIZ                                             ; FBC5D3  ee 0d
 	ret                                                  ; FBC5D5  0e
 T_F41884_Nop:
 	ret                                                  ; FBC5D6  0e
-; ScreenCodeB6_Handler: the +0 ENTER method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+; ScreenEnter_Effect2OutputConflict: the +0 ENTER method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
 ;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418A8 jumps here.
-ScreenCodeB6_Handler:
-	calr sub_FBFDC0                                          ; FBC5D7  1e e6 37
+; ScreenEnter_Effect2OutputConflict: screen 0xB6's +0 ENTER.  Its painter runs DL_F1A84F / DL_F1A8EF: "It is impossible
+;   to use both the Main and Sub outputs if Effect2 is turned on.  Please select either the Main or Sub outputs."
+ScreenEnter_Effect2OutputConflict:
+	calr ScreenEnterBody_Effect2OutputConflict                                          ; FBC5D7  1e e6 37
 	ret                                                  ; FBC5DA  0e
-; ScreenLeave_CodeB6: the +4 LEAVE method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+; ScreenLeave_Effect2OutputConflict: the +4 LEAVE method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
 ;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418AC jumps here.
-ScreenLeave_CodeB6:
-	calr sub_FBFDD4                                          ; FBC5DB  1e f6 37
+ScreenLeave_Effect2OutputConflict:
+	calr ScreenLeaveBody_Effect2OutputConflict                                          ; FBC5DB  1e f6 37
 	ret                                                  ; FBC5DE  0e
-; ScreenButton_CodeB6: the +8 BUTTON method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
+; ScreenButton_Effect2OutputConflict: the +8 BUTTON method of the screen object for screen id 0xB6 -- PanelScreen_VtableTable entry 0xD6
 ;   (ViewB entry 0xB6) points at the thunk triple starting at T_F418A8, and slot T_F418B0 jumps here.
-ScreenButton_CodeB6:
+ScreenButton_Effect2OutputConflict:
 	link XIZ,0x0000                                      ; FBC5DF  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBC5E3  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBC5E6  9e 08 04
-	calr sub_FBFDF7                                          ; FBC5E9  1e 0b 38
+	calr ScreenButtonBody_Effect2OutputConflict                                          ; FBC5E9  1e 0b 38
 	pop XBC                                              ; FBC5EC  59
 	unlk XIZ                                             ; FBC5ED  ee 0d
 	ret                                                  ; FBC5EF  0e
@@ -109009,7 +109015,7 @@ sub_FBF10A:
 	popw hl                                              ; FBF187  4b
 	unlk XIZ                                             ; FBF188  ee 0d
 	ret                                                  ; FBF18A  0e
-sub_FBF18B:
+ScreenEnterBody_CombinationNaming:
 	link XIZ,0xfffc                                      ; FBF18B  ee 0c fc ff
 	pushw hl                                             ; FBF18F  2b
 	push XIX                                             ; FBF190  3c
@@ -109061,7 +109067,7 @@ sub_FBF18B:
 	popw hl                                              ; FBF1FB  4b
 	unlk XIZ                                             ; FBF1FC  ee 0d
 	ret                                                  ; FBF1FE  0e
-sub_FBF1FF:
+ScreenLeaveBody_CombinationNaming:
 	link XIZ,0xfffc                                      ; FBF1FF  ee 0c fc ff
 	pushw hl                                             ; FBF203  2b
 	push XIX                                             ; FBF204  3c
@@ -109088,7 +109094,7 @@ sub_FBF1FF:
 	unlk XIZ                                             ; FBF232  ee 0d
 	ret                                                  ; FBF234  0e
 	ret                                                  ; FBF235  0e
-sub_FBF236:
+ScreenButtonBody_CombinationNaming:
 	link XIZ,0x0000                                      ; FBF236  ee 0c 00 00
 	pushw hl                                             ; FBF23A  2b
 	ld HL,(XIZ+0x08)                                     ; FBF23B  9e 08 23
@@ -109149,7 +109155,7 @@ sub_FBF236:
 ; ---------------------------------------------------------------------
 ; Paint_CombinationNamingWrite -- paints the "COMBINATION NAMING" screen's "WRITE" state
 ;
-; Called from: prom_a sub_FBF18B (`calr`) at 0xFBF1F6
+; Called from: prom_a ScreenEnterBody_CombinationNaming (`calr`) at 0xFBF1F6
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK --
 ;          lda XBC,<end> / push XBC / lda XWA,<start> / push XWA,
@@ -110303,7 +110309,7 @@ sub_FBFC32:
 	add XSP,0x0000001a                                   ; FBFDB8  ef c8 1a 00 00 00
 	pop XIX                                              ; FBFDBE  5c
 	ret                                                  ; FBFDBF  0e
-sub_FBFDC0:
+ScreenEnterBody_Effect2OutputConflict:
 	lda xbc, (.LFBFE42:24)                               ; FBFDC0  f2 42 fe fb 31
 	push XBC                                             ; FBFDC5  39
 	call T_CallbackQueue_Post                            ; FBFDC6  1d 84 2e f4
@@ -110311,7 +110317,7 @@ sub_FBFDC0:
 	call T_Kernel_SemaSignal_StackArg                    ; FBFDCD  1d c0 2d f4
 	inc 6,XSP                                            ; FBFDD1  ef 66
 	ret                                                  ; FBFDD3  0e
-sub_FBFDD4:
+ScreenLeaveBody_Effect2OutputConflict:
 	pushw hl                                             ; FBFDD4  2b
 	ld h, (PanelModeGroup:16)                                   ; FBFDD5  c1 76 20 26
 	cp H,0x08                                            ; FBFDD9  ce cf 08
@@ -110329,7 +110335,7 @@ Var277E_Set02:
 .LFBFDF5:
 	popw hl                                              ; FBFDF5  4b
 	ret                                                  ; FBFDF6  0e
-sub_FBFDF7:
+ScreenButtonBody_Effect2OutputConflict:
 	link XIZ,0x0000                                      ; FBFDF7  ee 0c 00 00
 sub_FBFDFB:
 	m_push MWD+r6, 0x0a                                  ; FBFDFB  9e 0a 04
@@ -110405,7 +110411,7 @@ sub_FBFE2C:
 	inc 8,XSP                                            ; FBFEB5  ef 60
 	pop XIX                                              ; FBFEB7  5c
 	ret                                                  ; FBFEB8  0e
-sub_FBFEB9:
+ScreenEnterBody_WriteProtectError:
 	m_set 7, MD16, UI_RequestBits                                ; FBFEB9  f1 75 20 bf
 	call T_CallbackQueue_ResetAndRestartTask2            ; FBFEBD  1d 80 2e f4
 	lda xbc, (.LFBFF40:24)                               ; FBFEC1  f2 40 ff fb 31
@@ -110431,7 +110437,7 @@ sub_FBFEB9:
 Var2075_ClrBit7:
 	m_res 7, MD16, UI_RequestBits                                ; FBFED5  f1 75 20 b7
 	ret                                                  ; FBFED9  0e
-sub_FBFEDA:
+ScreenButtonBody_WriteProtectError:
 	link XIZ,0x0000                                      ; FBFEDA  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FBFEDE  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FBFEE1  9e 08 04

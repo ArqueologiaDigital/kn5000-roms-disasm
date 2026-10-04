@@ -1114,21 +1114,21 @@
 	.set	ScreenLeave_Code35, 0xFBC589
 	.set	ScreenButton_Code35, 0xFBC58D
 	.set	T_F41A34_Nop, 0xFBC59E
-	.set	ScreenCode36_Handler, 0xFBC59F
-	.set	ScreenLeave_Code36, 0xFBC5A3
-	.set	ScreenButton_Code36, 0xFBC5A7
+	.set	ScreenEnter_CombinationNaming, 0xFBC59F
+	.set	ScreenLeave_CombinationNaming, 0xFBC5A3
+	.set	ScreenButton_CombinationNaming, 0xFBC5A7
 	.set	T_F41A44_Nop, 0xFBC5B8
 	.set	T_F41A88_Nop, 0xFBC5B9
 	.set	T_F41A8C_Nop, 0xFBC5BA
 	.set	T_F41A90_Nop, 0xFBC5BB
 	.set	T_F41A94_Nop, 0xFBC5BC
-	.set	ScreenCodeB3_Handler, 0xFBC5BD
+	.set	ScreenEnter_WriteProtectError, 0xFBC5BD
 	.set	Var2075_ClrBit7_Entry, 0xFBC5C1
-	.set	ScreenButton_CodeB3, 0xFBC5C5
+	.set	ScreenButton_WriteProtectError, 0xFBC5C5
 	.set	T_F41884_Nop, 0xFBC5D6
-	.set	ScreenCodeB6_Handler, 0xFBC5D7
-	.set	ScreenLeave_CodeB6, 0xFBC5DB
-	.set	ScreenButton_CodeB6, 0xFBC5DF
+	.set	ScreenEnter_Effect2OutputConflict, 0xFBC5D7
+	.set	ScreenLeave_Effect2OutputConflict, 0xFBC5DB
+	.set	ScreenButton_Effect2OutputConflict, 0xFBC5DF
 	.set	T_F418B4_Nop, 0xFBC5F0
 	.set	sub_FBC5F1, 0xFBC5F1
 	.set	sub_FBC64F, 0xFBC64F
@@ -89321,9 +89321,9 @@ T_F41868:	jp ScreenCodeB2_Handler  ; -> prom_a 0x3C56B
 T_F4186C:	jp ScreenLeave_CodeB2  ; -> prom_a 0x3C56F
 T_F41870:	jp ScreenButton_CodeB2  ; -> prom_a 0x3C573
 T_F41874:	jp T_F41874_Nop  ; -> prom_a 0x3C584
-T_F41878:	jp ScreenCodeB3_Handler  ; -> prom_a 0x3C5BD
+T_F41878:	jp ScreenEnter_WriteProtectError  ; -> prom_a 0x3C5BD
 T_Var2075_ClrBit7_Entry:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
-T_F41880:	jp ScreenButton_CodeB3  ; -> prom_a 0x3C5C5
+T_F41880:	jp ScreenButton_WriteProtectError  ; -> prom_a 0x3C5C5
 T_F41884:	jp T_F41884_Nop  ; -> prom_a 0x3C5D6
 T_F41888:	jp ScreenCodeB4_Handler  ; -> prom_a 0x3CDEC
 T_F4188C:	jp ScreenLeave_CodeB4  ; -> prom_a 0x3CEE7
@@ -89333,9 +89333,9 @@ T_F41898:	jp ScreenCodeB5_Handler  ; -> prom_a 0x3CDF0
 T_F4189C:	jp ScreenLeave_CodeB5  ; -> prom_a 0x3CEEB
 T_F418A0:	jp ScreenButton_CodeB5  ; -> prom_a 0x3CF09
 T_F418A4:	jp T_F418A4_Nop  ; -> prom_a 0x3CF7E
-T_F418A8:	jp ScreenCodeB6_Handler  ; -> prom_a 0x3C5D7
-T_F418AC:	jp ScreenLeave_CodeB6  ; -> prom_a 0x3C5DB
-T_F418B0:	jp ScreenButton_CodeB6  ; -> prom_a 0x3C5DF
+T_F418A8:	jp ScreenEnter_Effect2OutputConflict  ; -> prom_a 0x3C5D7
+T_F418AC:	jp ScreenLeave_Effect2OutputConflict  ; -> prom_a 0x3C5DB
+T_F418B0:	jp ScreenButton_Effect2OutputConflict  ; -> prom_a 0x3C5DF
 T_F418B4:	jp T_F418B4_Nop  ; -> prom_a 0x3C5F0
 T_F418B8:	jp sub_FBDB95  ; -> prom_a 0x3DB95
 T_F418BC:	jp sub_FBDD11  ; -> prom_a 0x3DD11
@@ -89408,9 +89408,9 @@ T_F41A28:	jp ScreenCode35_Handler  ; -> prom_a 0x3C585
 T_F41A2C:	jp ScreenLeave_Code35  ; -> prom_a 0x3C589
 T_F41A30:	jp ScreenButton_Code35  ; -> prom_a 0x3C58D
 T_F41A34:	jp T_F41A34_Nop  ; -> prom_a 0x3C59E
-T_F41A38:	jp ScreenCode36_Handler  ; -> prom_a 0x3C59F
-T_F41A3C:	jp ScreenLeave_Code36  ; -> prom_a 0x3C5A3
-T_F41A40:	jp ScreenButton_Code36  ; -> prom_a 0x3C5A7
+T_F41A38:	jp ScreenEnter_CombinationNaming  ; -> prom_a 0x3C59F
+T_F41A3C:	jp ScreenLeave_CombinationNaming  ; -> prom_a 0x3C5A3
+T_F41A40:	jp ScreenButton_CombinationNaming  ; -> prom_a 0x3C5A7
 T_F41A44:	jp T_F41A44_Nop  ; -> prom_a 0x3C5B8
 T_F41A48:	jp ScreenCode37_Handler  ; -> prom_a 0x3CDF4
 T_F41A4C:	jp ScreenLeave_Code37  ; -> prom_a 0x3CEEF
