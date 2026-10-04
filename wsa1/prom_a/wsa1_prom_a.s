@@ -38966,7 +38966,7 @@ LCD_ScrollLayer2_Forward3Lines:
 ; ---------------------------------------------------------------------
 LCD_DrawAllInitialSettingMessage:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F94210  f1 40 25 00 00
-	ld XIY,LCD_DrawAllInitialSettingMessage__F9422C                                    ; F94215  45 2c 42 f9 00
+	ld XIY,Str_AllInitialSetting                                    ; F94215  45 2c 42 f9 00
 	ldw hl, 0x00                                         ; F9421A  33 00 00
 	ldw bc, 0x14                                         ; F9421D  31 14 00
 	ldw ix, 0x07d0                                       ; F94220  34 d0 07
@@ -38976,20 +38976,11 @@ LCD_DrawAllInitialSettingMessage:
 	ld a, 0x0c:opc                                          ; F94228  21 0c
 	swi 7                                                ; F9422A  ff
 	ret                                                  ; F9422B  0e
-LCD_DrawAllInitialSettingMessage__F9422C:
-	ld XBC,0x49204c4c                                    ; F9422C  41 4c 4c 20 49
-	popw iz                                              ; F94231  4e
-	popw bc                                              ; F94232  49
-	.byte 0x54                                           ; F94233  54
-	popw bc                                              ; F94234  49
-	ld XBC,0x4553204c                                    ; F94235  41 4c 20 53 45
-	.byte 0x54                                           ; F9423A  54
-	.byte 0x54                                           ; F9423B  54
-	popw bc                                              ; F9423C  49
-	popw iz                                              ; F9423D  4e
-	ld XSP,0x2540f121                                    ; F9423E  47 21 f1 40 25
-	nop                                                  ; F94243  00
-	nop                                                  ; F94244  00
+; The 20 characters LCD_DrawAllInitialSettingMessage draws (BC = 0x14, SWI 7 service 8).  These bytes were
+; decoded as instructions, and the decode ran on two bytes into the next routine at 0xF94240 (2026-10-04).
+Str_AllInitialSetting:
+	.ascii "ALL INITIAL SETTING!"                         ; F9422C  41 4c 4c 20 49 4e 49 54 49 41 4c 20 53 45 54 54 49 4e 47 21
+	ld (LCD_CurrentLayer:16), 0x00                                 ; F94240  f1 40 25 00 00
 	ldw (LCD_X0:16), 0x92                                ; F94245  f1 30 25 02 92 00
 	ldw (LCD_Y0:16), 0xd8                                ; F9424B  f1 32 25 02 d8 00
 	ldw (LCD_X1:16), 0xa2                                ; F94251  f1 34 25 02 a2 00
@@ -177381,7 +177372,7 @@ sub_FE9D16:
 	ret                                                  ; FE9D2D  0e
 sub_FE9D2E:
 	calr sub_FEF778                                          ; FE9D2E  1e 47 5a
-	calr sub_FF0989                                          ; FE9D31  1e 55 6c
+	calr EditScreen_DrawMeasure                                          ; FE9D31  1e 55 6c
 	calr sub_FEF796                                          ; FE9D34  1e 5f 5a
 	ldw (0x601f54:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D3E  1e 73 5a
@@ -177395,7 +177386,7 @@ sub_FE9D2E:
 	ret                                                  ; FE9D5F  0e
 sub_FE9D60:
 	calr sub_FEF778                                          ; FE9D60  1e 15 5a
-	calr sub_FF0989                                          ; FE9D63  1e 23 6c
+	calr EditScreen_DrawMeasure                                          ; FE9D63  1e 23 6c
 	calr sub_FEF796                                          ; FE9D66  1e 2d 5a
 	ldw (0x601f54:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D70  1e 41 5a
@@ -177433,7 +177424,7 @@ EditCursor_TickPlus1:
 	ret                                                  ; FE9DC1  0e
 .LFE9DC2:
 	m_add_mi8 MB24, EditCursor_Tick, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
-	calr sub_FF0A52                                          ; FE9DC8  1e 87 6c
+	calr EditScreen_DrawTick                                          ; FE9DC8  1e 87 6c
 	calr sub_FE9EBB                                      ; FE9DCB  1e ed 00
 	calr sub_FF0205                                          ; FE9DCE  1e 34 64
 	calr sub_FEA082                                      ; FE9DD1  1e ae 02
@@ -177452,7 +177443,7 @@ EditCursor_TickPlus5:
 	jr ule, .LFE9DF7                                     ; FE9DEF  63 06
 	ld (EditCursor_Tick:24), 0x5f                             ; FE9DF1  f2 43 1f 60 00 5f
 .LFE9DF7:
-	calr sub_FF0A52                                          ; FE9DF7  1e 58 6c
+	calr EditScreen_DrawTick                                          ; FE9DF7  1e 58 6c
 	calr sub_FE9EBB                                      ; FE9DFA  1e be 00
 	calr sub_FF0205                                          ; FE9DFD  1e 05 64
 sub_FE9E00:
@@ -177493,8 +177484,8 @@ EditCursor_NextBeat:
 .LFE9E5B:
 	ld (EditCursor_Tick:24), 0x00                             ; FE9E5B  f2 43 1f 60 00 00
 	m_add_mi16 MW24, EditCursor_Beat, 0x0001                    ; FE9E61  d2 41 1f 60 38 01 00
-	calr sub_FF0A52                                          ; FE9E68  1e e7 6b
-	calr sub_FF0A04                                          ; FE9E6B  1e 96 6b
+	calr EditScreen_DrawTick                                          ; FE9E68  1e e7 6b
+	calr EditScreen_DrawBeat                                          ; FE9E6B  1e 96 6b
 	calr sub_FE9EBB                                      ; FE9E6E  1e 4a 00
 	calr BStore_CursorSlot_Save                                          ; FE9E71  1e 7a ee
 	calr sub_FE984B                                          ; FE9E74  1e d4 f9
@@ -177510,9 +177501,9 @@ EditCursor_NextBeat:
 	ldw (EditCursor_Beat:24), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
 	incw 0x01, (EditCursor_Measure:24)                          ; FE9E90  d2 3f 1f 60 61
 	ld (EditCursor_Tick:24), 0x00                             ; FE9E95  f2 43 1f 60 00 00
-	calr sub_FF0989                                          ; FE9E9B  1e eb 6a
-	calr sub_FF0A52                                          ; FE9E9E  1e b1 6b
-	calr sub_FF0A04                                          ; FE9EA1  1e 60 6b
+	calr EditScreen_DrawMeasure                                          ; FE9E9B  1e eb 6a
+	calr EditScreen_DrawTick                                          ; FE9E9E  1e b1 6b
+	calr EditScreen_DrawBeat                                          ; FE9EA1  1e 60 6b
 	calr sub_FE9EBB                                      ; FE9EA4  1e 14 00
 	calr BStore_CursorSlot_Save                                          ; FE9EA7  1e 44 ee
 	calr sub_FE984B                                          ; FE9EAA  1e 9e f9
@@ -177606,7 +177597,7 @@ sub_FE9F74:
 	ret                                                  ; FE9F81  0e
 .LFE9F82:
 	sub	(EditCursor_Tick:24), 0x01                  ; FE9F82  c2 43 1f 60 3a 01
-	calr sub_FF0A52                                          ; FE9F88  1e c7 6a
+	calr EditScreen_DrawTick                                          ; FE9F88  1e c7 6a
 	calr sub_FE9EBB                                      ; FE9F8B  1e 2d ff
 	calr sub_FF0205                                          ; FE9F8E  1e 74 62
 	calr sub_FEA082                                      ; FE9F91  1e ee 00
@@ -177624,7 +177615,7 @@ sub_FE9F95:
 	jr c, .LFE9FBF                                       ; FE9FAB  67 12
 	ld (EditCursor_Tick:24), a                                 ; FE9FAD  f2 43 1f 60 41
 .LFE9FB2:
-	calr sub_FF0A52                                          ; FE9FB2  1e 9d 6a
+	calr EditScreen_DrawTick                                          ; FE9FB2  1e 9d 6a
 	calr sub_FE9EBB                                      ; FE9FB5  1e 03 ff
 	calr sub_FF0205                                          ; FE9FB8  1e 4a 62
 	calr sub_FEA082                                      ; FE9FBB  1e c4 00
@@ -177637,8 +177628,8 @@ sub_FE9FC7:
 	jr z, .LFE9FEA                                       ; FE9FCE  66 1a
 	ld (EditCursor_Tick:24), 0x5f                             ; FE9FD0  f2 43 1f 60 00 5f
 	subw	(EditCursor_Beat:24), 0x0001                ; FE9FD6  d2 41 1f 60 3a 01 00
-	calr sub_FF0A52                                          ; FE9FDD  1e 72 6a
-	calr sub_FF0A04                                          ; FE9FE0  1e 21 6a
+	calr EditScreen_DrawTick                                          ; FE9FDD  1e 72 6a
+	calr EditScreen_DrawBeat                                          ; FE9FE0  1e 21 6a
 	calr sub_FE9EBB                                      ; FE9FE3  1e d5 fe
 	calr sub_FEA082                                      ; FE9FE6  1e 99 00
 	ret                                                  ; FE9FE9  0e
@@ -177662,9 +177653,9 @@ sub_FE9FC7:
 	calr sub_FEA037                                      ; FEA017  1e 1d 00
 	subw	(EditCursor_Measure:24), 0x0001                ; FEA01A  d2 3f 1f 60 3a 01 00
 	ld (EditCursor_Tick:24), 0x5f                             ; FEA021  f2 43 1f 60 00 5f
-	calr sub_FF0989                                          ; FEA027  1e 5f 69
-	calr sub_FF0A52                                          ; FEA02A  1e 25 6a
-	calr sub_FF0A04                                          ; FEA02D  1e d4 69
+	calr EditScreen_DrawMeasure                                          ; FEA027  1e 5f 69
+	calr EditScreen_DrawTick                                          ; FEA02A  1e 25 6a
+	calr EditScreen_DrawBeat                                          ; FEA02D  1e d4 69
 	calr sub_FE9EBB                                      ; FEA030  1e 88 fe
 	calr sub_FEA082                                      ; FEA033  1e 4c 00
 	ret                                                  ; FEA036  0e
@@ -182260,9 +182251,9 @@ sub_FEF8E5:
 .LFEF8F7:
 	calr sub_FF0C12                                          ; FEF8F7  1e 18 13
 .LFEF8FA:
-	calr sub_FF0989                                          ; FEF8FA  1e 8c 10
-	calr sub_FF0A04                                          ; FEF8FD  1e 04 11
-	calr sub_FF0A52                                          ; FEF900  1e 4f 11
+	calr EditScreen_DrawMeasure                                          ; FEF8FA  1e 8c 10
+	calr EditScreen_DrawBeat                                          ; FEF8FD  1e 04 11
+	calr EditScreen_DrawTick                                          ; FEF900  1e 4f 11
 	calr sub_FF0D03                                          ; FEF903  1e fd 13
 	ret                                                  ; FEF906  0e
 sub_FEF907:
@@ -182274,9 +182265,9 @@ sub_FEF907:
 .LFEF916:
 	calr sub_FF0B3A                                          ; FEF916  1e 21 12
 .LFEF919:
-	calr sub_FF0989                                          ; FEF919  1e 6d 10
-	calr sub_FF0A04                                          ; FEF91C  1e e5 10
-	calr sub_FF0A52                                          ; FEF91F  1e 30 11
+	calr EditScreen_DrawMeasure                                          ; FEF919  1e 6d 10
+	calr EditScreen_DrawBeat                                          ; FEF91C  1e e5 10
+	calr EditScreen_DrawTick                                          ; FEF91F  1e 30 11
 	calr sub_FF0D03                                          ; FEF922  1e de 13
 	ret                                                  ; FEF925  0e
 sub_FEF926:
@@ -184071,7 +184062,7 @@ sub_FF096C:
 	cp DE,0x0101                                         ; FF0982  da cf 01 01
 	jr c, .LFF096F                                       ; FF0986  67 e7
 	ret                                                  ; FF0988  0e
-; sub_FF0989 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawMeasure -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 8
 ; instructions to its first `ret`:
@@ -184087,13 +184078,15 @@ sub_FF096C:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF0989:
+; EditScreen_DrawMeasure: layer 0; EditCursor_Measure below 1000 is drawn as a number (DisplayList_FF09EB), otherwise the string '***.'
+;   (DisplayList_FF09D8, string table entry 0 at 0xFF09E7).
+EditScreen_DrawMeasure:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0989  f1 40 25 00 00
 	m_cp_mi16 MW24, EditCursor_Measure, 0x03e8                     ; FF098E  d2 3f 1f 60 3f e8 03
 	jr c, .LFF09AC                                       ; FF0995  67 15
 	ldw (0x26b0:16), 0x00                                ; FF0997  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF09D8                            ; FF099D  45 d8 09 ff 00
-	ld XIX,DisplayList_FF09D8__FF09E7                                    ; FF09A2  44 e7 09 ff 00
+	ld XIX,Str_EditMeasureOverflow                                    ; FF09A2  44 e7 09 ff 00
 	call T_DisplayListB_Run                              ; FF09A7  1d f4 17 f4
 	ret                                                  ; FF09AB  0e
 .LFF09AC:
@@ -184104,7 +184097,7 @@ sub_FF0989:
 	call T_DisplayListB_Run                              ; FF09BF  1d f4 17 f4
 	ldw (0x26b0:16), 0x00                                ; FF09C3  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF09F5                            ; FF09C9  45 f5 09 ff 00
-	ld XIX,sub_FF0A04                                    ; FF09CE  44 04 0a ff 00
+	ld XIX,EditScreen_DrawBeat                                    ; FF09CE  44 04 0a ff 00
 	call T_DisplayListB_Run                              ; FF09D3  1d f4 17 f4
 	ret                                                  ; FF09D7  0e
 
@@ -184113,11 +184106,11 @@ sub_FF0989:
 DisplayList_FF09D8:
 	.byte 0x02, 0x0F                               ; FF09D8  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x04, 0x00, 0xF9, 0x1B  ; FF09DA
-DisplayList_FF09D8__FF09E7:
-	pushw de                                             ; FF09E7  2a
-	pushw de                                             ; FF09E8  2a
-	pushw de                                             ; FF09E9  2a
-	pushw iz                                             ; FF09EA  2e
+; The 4-character string DisplayList_FF09D8's op-02 record draws (string table, 4 bytes per entry, entry 0):
+; EditScreen_DrawMeasure shows it instead of the measure number when EditCursor_Measure >= 1000.  It was decoded as
+; `pushw de` x3 / `pushw iz`; it is also that list's end bound (XIX).  (2026-10-04)
+Str_EditMeasureOverflow:
+	.ascii "***."                                        ; FF09E7  2a 2a 2a 2e
 
 ; DisplayList_FF09EB -- 1 record(s), 10 bytes.  Run by interpreter B (0xF31AF0)
 ; The length bytes walk from 0xFF09EB and land exactly on 0xFF09F5.
@@ -184130,7 +184123,7 @@ DisplayList_FF09EB:
 DisplayList_FF09F5:
 	.byte 0x02, 0x0F                               ; FF09F5  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFC, 0x1B  ; FF09F7
-; sub_FF0A04 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawBeat -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 13
 ; instructions to its first `ret`:
@@ -184147,7 +184140,8 @@ DisplayList_FF09F5:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF0A04:
+; EditScreen_DrawBeat: layer 0; EditCursor_Beat + 1 to 0x26B0, DisplayList_FF0A39 (op 06, digits).
+EditScreen_DrawBeat:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0A04  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A09  d8 d0
 	ld wa, (EditCursor_Beat:24)                                ; FF0A0B  d2 41 1f 60 20
@@ -184158,7 +184152,7 @@ sub_FF0A04:
 	call T_DisplayListB_Run                              ; FF0A20  1d f4 17 f4
 	ldw (0x26b0:16), 0x00                                ; FF0A24  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF0A43                            ; FF0A2A  45 43 0a ff 00
-	ld XIX,sub_FF0A52                                    ; FF0A2F  44 52 0a ff 00
+	ld XIX,EditScreen_DrawTick                                    ; FF0A2F  44 52 0a ff 00
 	call T_DisplayListB_Run                              ; FF0A34  1d f4 17 f4
 	ret                                                  ; FF0A38  0e
 
@@ -184173,7 +184167,7 @@ DisplayList_FF0A39:
 DisplayList_FF0A43:
 	.byte 0x02, 0x0F                               ; FF0A43  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xEA, 0x09, 0xFF, 0x00, 0x01, 0x00, 0xFE, 0x1B  ; FF0A45
-; sub_FF0A52 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawTick -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 8
 ; instructions to its first `ret`:
@@ -184189,7 +184183,8 @@ DisplayList_FF0A43:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF0A52:
+; EditScreen_DrawTick: layer 0; EditCursor_Tick to 0x26B0, DisplayList_FF0A71 (op 06, digits).
+EditScreen_DrawTick:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0A52  f1 40 25 00 00
 	xor WA,WA                                            ; FF0A57  d8 d0
 	ld a, (EditCursor_Tick:24)                                 ; FF0A59  c2 43 1f 60 21

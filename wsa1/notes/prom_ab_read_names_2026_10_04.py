@@ -511,6 +511,13 @@ ROWS = [
      "EditScreen_Mode bit 0 (DRUM EDIT) -> DrumEdit_EraseEditArea_Layer0, else NoteEdit_EraseEditArea_Layer0.  22 call sites."),
     ("FEF859", "EditScreen_EraseEditArea_Layer1",
      "LCD_CurrentLayer = 1, then by EditScreen_Mode bit 0 DrumEdit_ or NoteEdit_EraseEditArea."),
+    # prom_a 0xFF0989-0xFF0A7A: the NOTE / DRUM EDIT position readouts.  Each stores a value to the interpreter-B
+    # source variable 0x26B0 and runs a one-record list that draws it (op 06: digits; op 02: a string-table entry).
+    ("FF0989", "EditScreen_DrawMeasure",
+     "layer 0; EditCursor_Measure below 1000 is drawn as a number (DisplayList_FF09EB), otherwise the string '***.'\n"
+     "(DisplayList_FF09D8, string table entry 0 at 0xFF09E7)."),
+    ("FF0A04", "EditScreen_DrawBeat", "layer 0; EditCursor_Beat + 1 to 0x26B0, DisplayList_FF0A39 (op 06, digits)."),
+    ("FF0A52", "EditScreen_DrawTick", "layer 0; EditCursor_Tick to 0x26B0, DisplayList_FF0A71 (op 06, digits)."),
 ]
 
 

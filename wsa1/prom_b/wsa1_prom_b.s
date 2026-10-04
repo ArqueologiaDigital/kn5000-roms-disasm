@@ -159518,7 +159518,7 @@ MsgLine_Control_Cleared:
 	ldw	bc, 15	; F6D41B  ld BC,0x000f
 	ld	(xix+), wa	; F6D41E  ld (XIX+),WA
 	djnz16	bc, -6	; F6D421  djnz BC,0xf6d41e
-	ld	xiy, MsgLine_Control_Cleared_Code	; F6D424  ld XIY,0x00f6d464
+	ld	xiy, Str_MsgLine_Control	; F6D424  ld XIY,0x00f6d464
 	ld	xix, MsgLine_Text+5	; F6D429  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D42E  ld BC,0x0007
 	ldir85	; F6D431  ldir
@@ -159585,7 +159585,7 @@ sub_F6D443:
 ; --------------------------------------------------------------------------
 MsgLine_Control:
 	calr	MsgLine_Clear	; F6D447  calr 0xf6d9fb
-	ld	xiy, MsgLine_Control_Cleared_Code	; F6D44A  ld XIY,0x00f6d464
+	ld	xiy, Str_MsgLine_Control	; F6D44A  ld XIY,0x00f6d464
 	ld	xix, MsgLine_Text+5	; F6D44F  ld XIX,0x00000fe9
 	ldw	bc, 7	; F6D454  ld BC,0x0007
 	ldir85	; F6D457  ldir
@@ -159593,11 +159593,11 @@ MsgLine_Control:
 	calr	sub_F6D890	; F6D45C  calr 0xf6d890
 	call	T_F431B4	; F6D45F  call 0xf431b4
 	ret	; F6D463  ret
-MsgLine_Control_Cleared_Code:
-	ld	xhl, 1381256783	; F6D464  ld XHL,0x52544e4f
-	popw	sp	; F6D469  pop SP
-	popw	ix	; F6D46A  pop IX
-	ret	; F6D46B  ret
+; The seven characters MsgLine_Control copies to MsgLine_Text+5 (`ldir` with BC = 7).  They were decoded as
+; `ld XHL,0x52544e4f` / `pop SP` / `pop IX`; the 0x0E after them is the image's `ret` fill (2026-10-04).
+Str_MsgLine_Control:
+	.ascii	"CONTROL"	; F6D464  CONTROL
+	.byte	0x0E	; F6D46B  fill (`ret`)
 
 ; --------------------------------------------------------------------------
 ; sub_F6A4D9_Nop

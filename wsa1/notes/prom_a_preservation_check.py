@@ -2788,6 +2788,12 @@ RENAMES = {
     "sub_FEF7FF": "DrumEdit_EraseEditArea_Layer0",
     "sub_FEF7D2": "EditScreen_EraseEditArea_Layer0",
     "sub_FEF859": "EditScreen_EraseEditArea_Layer1",
+    "sub_FF0989": "EditScreen_DrawMeasure",
+    "sub_FF0A04": "EditScreen_DrawBeat",
+    "sub_FF0A52": "EditScreen_DrawTick",
+    "DisplayList_FF09D8__FF09E7": "Str_EditMeasureOverflow",
+    "MsgLine_Control_Cleared_Code": "Str_MsgLine_Control",
+    "LCD_DrawAllInitialSettingMessage__F9422C": "Str_AllInitialSetting",
 }
 
 

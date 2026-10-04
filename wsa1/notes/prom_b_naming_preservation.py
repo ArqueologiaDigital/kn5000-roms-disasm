@@ -179,6 +179,17 @@ def main():
                     return cand
         return None
 
+    retyped = set()
+    for l in new:
+        m = re.match(r'^\s*\.(ascii|byte)\s+(.*?)\s*;\s*(F[0-9A-F]{5})\b', l)
+        if not m:
+            continue
+        if m.group(1) == "ascii":
+            n = len(re.sub(r'\\(.)', r'\1', m.group(2).strip()[1:-1]))
+        else:
+            n = len([x for x in m.group(2).split(",") if x.strip()])
+        a = int(m.group(3), 16)
+        retyped.update(range(a, a + n))
     kept = renamed = retitled = quoted = converted = deleted = symbolic = 0
     missing = []
     for ln in old:
@@ -216,6 +227,12 @@ def main():
             have[c] -= 1
             symbolic += 1
             continue
+        # an instruction line that was really data (text decoded as code) and is now inside a `.ascii` / `.byte`
+        # line of the working tree that covers its address; the byte gate checks the bytes (2026-10-04)
+        ma = re.search(r";\s*(F[0-9A-F]{5})\b", ln)
+        if ma and not ln.lstrip().startswith((";", ".")) and int(ma.group(1), 16) in retyped:
+            converted += 1
+            continue
         # a comment line whose TEXT is quoted verbatim inside a replacement
         body = re.sub(r"\s+", " ", ln.strip().lstrip(";").strip())
         if ln.lstrip().startswith(";") and len(body) > 12 and body in flat:
@@ -237,7 +254,7 @@ def main():
     print(f"  accounted for by a rename {renamed}")
     print(f"  header title rewritten as `; <name> -- 0x<addr>` {retitled}")
     print(f"  stanza REPLACED, its text quoted verbatim in the replacement {quoted}")
-    print(f"  `.incbin` line CONVERTED to assembly (byte gate is the proof) {converted}")
+    print(f"  `.incbin` line CONVERTED to assembly, or an instruction re-typed as .ascii/.byte (byte gate is the proof) {converted}")
     print(f"  number -> equate of the same value (symbolize_wsa1_rom_addresses.py) {symbolic}")
     print(f"  ADDED                  {added}")
     print(f"  UNACCOUNTED FOR        {deleted}")
