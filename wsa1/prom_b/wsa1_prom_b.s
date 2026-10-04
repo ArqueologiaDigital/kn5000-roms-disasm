@@ -90452,11 +90452,11 @@ T_F42B74:	jp sub_F6609C  ; -> prom_b 0x6609C
 T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
 T_F42B7C:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
 T_F42B80:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
-T_F42B84:	jp sub_F6625C  ; -> prom_b 0x6625C   x1
-T_F42B88:	jp sub_F66278  ; -> prom_b 0x66278   x1
+T_F42B84:	jp SequencerMedley_StepFieldUp  ; -> prom_b 0x6625C   x1
+T_F42B88:	jp SequencerMedley_StepFieldDown  ; -> prom_b 0x66278   x1
 T_F42B8C:	jp TrackAssign_StageZero_LcdKeyRow2  ; -> prom_b 0x65C5E   x1
 T_F42B90:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
-T_F42B94:	jp sub_F65CD6  ; -> prom_b 0x65CD6   x2
+T_F42B94:	jp TrackAssign_SelectTrackGroup  ; -> prom_b 0x65CD6   x2
 T_F42B98:	jp sub_F65DAE  ; -> prom_b 0x65DAE   x1
 T_F42B9C:	jp sub_F65DD3  ; -> prom_b 0x65DD3   x2
 T_F42BA0:	jp sub_F65DF8  ; -> prom_b 0x65DF8   x1
@@ -90466,14 +90466,14 @@ T_F42BAC:	jp TrackAssign_StageZero_SoftKeyCol7  ; -> prom_b 0x65FDD   x1
 T_F42BB0:	jp TrackAssign_StageNonZero_LcdKeyRow2  ; -> prom_b 0x66020   x1
 T_F42BB4:	jp sub_F65C00  ; -> prom_b 0x65C00   x1
 T_F42BB8:	jp sub_F65C0D  ; -> prom_b 0x65C0D   x1
-T_F42BBC:	jp sub_F664AE  ; -> prom_b 0x664AE   x8
-T_F42BC0:	jp sub_F66081  ; -> prom_b 0x66081   x2
-T_F42BC4:	jp sub_F664D5  ; -> prom_b 0x664D5   x1
+T_F42BBC:	jp StepRecordPartSelect_OpenStepRecord  ; -> prom_b 0x664AE   x8
+T_F42BC0:	jp TrackAssign_ReturnToStageZero  ; -> prom_b 0x66081   x2
+T_F42BC4:	jp StepRecordPartSelect_ResetOnEntry  ; -> prom_b 0x664D5   x1
 T_F42BC8:	jp StepRecordPartSelect_OnLeave  ; -> prom_b 0x6650F   x1
-T_F42BCC:	jp sub_F660ED  ; -> prom_b 0x660ED   x1
+T_F42BCC:	jp SequencerMedley_InitOnEntry  ; -> prom_b 0x660ED   x1
 T_F42BD0:	jp SequencerMedley_OnLeave  ; -> prom_b 0x6614E   x1
 T_F42BD4:	jp SequencerMedley_LcdKeyRow2  ; -> prom_b 0x66191   x1
-T_F42BD8:	jp sub_F66201  ; -> prom_b 0x66201   x1
+T_F42BD8:	jp SequencerMedley_StopPlayback  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
 T_F42BE0:	jp T_F42BE0_Nop  ; -> prom_b 0x6656D
 T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
@@ -90481,15 +90481,15 @@ T_F42BE8:	jp TrackAssign_OnLeave  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
 T_F42BF4:	jp TrackAssign_StageZero_LcdKeyRow5  ; -> prom_b 0x6656E   x1
-T_F42BF8:	jp sub_F665B4  ; -> prom_b 0x665B4   x1
+T_F42BF8:	jp TrackAssignPresets_InitFromCurrentBank  ; -> prom_b 0x665B4   x1
 T_F42BFC:	jp T_F42BFC_Nop  ; -> prom_b 0x665F1
 T_F42C00:	jp TrackAssignPresets_SelectField1  ; -> prom_b 0x665F2   x1
 T_F42C04:	jp TrackAssignPresets_SelectField2  ; -> prom_b 0x665FF   x1
 T_F42C08:	jp TrackAssignPresets_SelectField3  ; -> prom_b 0x6660C   x1
-T_F42C0C:	jp sub_F66619  ; -> prom_b 0x66619   x1
-T_F42C10:	jp sub_F66639  ; -> prom_b 0x66639   x1
+T_F42C0C:	jp TrackAssignPresets_BankUp  ; -> prom_b 0x66619   x1
+T_F42C10:	jp TrackAssignPresets_BankDown  ; -> prom_b 0x66639   x1
 T_F42C14:	jp sub_F66658  ; -> prom_b 0x66658   x1
-T_F42C18:	jp sub_F6633A  ; -> prom_b 0x6633A   x2
+T_F42C18:	jp SequencerMedley_SetSourceInternal  ; -> prom_b 0x6633A   x2
 T_F42C1C:	jp SequencerMedley_SoftKeyCol3  ; -> prom_b 0x66382   x1
 T_F42C20:	jp T_F42C20_Nop  ; -> prom_b 0x663D6
 T_F42C24:	jp SequencerMedley_SoftKeyCol7  ; -> prom_b 0x66415   x1
@@ -143243,7 +143243,7 @@ sub_F65C9A_Join:
 	ret	; F65CD5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65CD6
+; TrackAssign_SelectTrackGroup
 ; Called from: T_F42B94 (x2)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
@@ -143254,7 +143254,9 @@ sub_F65C9A_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65CD6:		; <- T_F42B94
+; TrackAssign_SelectTrackGroup: BC = 10 (LcdKeyRow3) clears (0x0C07) bit 0 and sets (0x0C03) = 0; BC = 11 (LcdKeyRow4) sets the bit and (0x0C03) = 8;
+;   then (0x0C06) = the byte map 0x603422[(0x0C03)].  Called by LcdKeyRow3/4_TrackAssign_StageZero.
+TrackAssign_SelectTrackGroup:		; <- T_F42B94
 	cp	bc, 10	; F65CD6  cp BC,0x000a
 	jr	z, sub_F65CD6_Skip	; F65CDA  jr Z,0xf65ce3
 	cp	bc, 11	; F65CDC  cp BC,0x000b
@@ -143746,7 +143748,7 @@ sub_F66020_Skip:
 	ret	; F66080  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66081
+; TrackAssign_ReturnToStageZero
 ; Called from: T_F42BC0 (x2)
 ; Touches: (0x0DC0) (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42BC0 holds `jp 0x00F66081`, and 0xF66081 is an
@@ -143756,7 +143758,9 @@ sub_F66020_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66081:		; <- T_F42BC0
+; TrackAssign_ReturnToStageZero: unless (0x95) bit 2: (0x0DC0) = 0, UI_ScreenStage = 0, UI_Request_Hi |= 0x10.  Called by ExitKey_ and
+;   LcdKeyRow3_TrackAssign_StageNonZero.
+TrackAssign_ReturnToStageZero:		; <- T_F42BC0
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66081  and (0x2075),0xf7
 	bit	2, (0x95:8)	; F66086  bit 2,(0x95)
 	jr	z, sub_F66081_Skip	; F66089  jr Z,0xf6608c
@@ -143771,7 +143775,7 @@ sub_F66081_Skip:
 ; sub_F6609C
 ; Called from: T_F42B74 (x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F660A0
+; Calls:   SequencerMedley_ClampSongRange
 ; Evidence: thunk slot T_F42B74 holds `jp 0x00F6609C`, and 0xF6609C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -143780,11 +143784,11 @@ sub_F66081_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6609C:		; <- T_F42B74
-	calr	sub_F660A0	; F6609C  calr 0xf660a0
+	calr	SequencerMedley_ClampSongRange	; F6609C  calr 0xf660a0
 	ret	; F6609F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F660A0
+; SequencerMedley_ClampSongRange
 ; Called from: in-module: 0xF6609C 0xF662D8
 ; Touches: (0x0E35) (0x2208) (0x2209) (0x220B)
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -143793,7 +143797,9 @@ sub_F6609C:		; <- T_F42B74
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F660A0:
+; SequencerMedley_ClampSongRange: clamps Medley_FirstSong to the source's last song (9 / 19 / 99) and Medley_LastSong (to 0 when beyond it), then
+;   keeps FIRST <= LAST, moving whichever one C (the previous FIRST) says did not change.
+SequencerMedley_ClampSongRange:
 	pushw	hl	; F660A0  push HL
 	ld	a, (Medley_FirstSong:16)	; F660A1  ld A,(0x2208)
 	ld	l, 9:opc	; F660A5  ld L,0x09
@@ -143842,10 +143848,10 @@ T_F42B78_Nop:		; <- T_F42B78
 	ret	; F660EC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F660ED
+; SequencerMedley_InitOnEntry
 ; Called from: T_F42BCC (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x207B) (0x22D0) (0x7F4D)
-; Calls:   sub_F66123 T_F42410 sub_F661F3
+; Calls:   BStore_LoadBankDirectory T_F42410 Blink_EnableThenStop
 ; Evidence: thunk slot T_F42BCC holds `jp 0x00F660ED`, and 0xF660ED is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -143853,7 +143859,9 @@ T_F42B78_Nop:		; <- T_F42B78
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F660ED:		; <- T_F42BCC
+; SequencerMedley_InitOnEntry: on a newly entered screen: (0x0E48) = (0x7F4D), Medley_Playing = 0, (0x22D0) = 0, (0x605068) |= 0x8000,
+;   BStore_LoadBankDirectory, T_F42410; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley.
+SequencerMedley_InitOnEntry:		; <- T_F42BCC
 	ld	a, (UI_ScreenLatch:16)	; F660ED  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F660F1  cp A,(0x207b)
 	jr	z, sub_F660A0_Skip5	; F660F5  jr Z,0xf66118
@@ -143863,17 +143871,17 @@ sub_F660ED:		; <- T_F42BCC
 	ld	(Medley_Playing:16), a	; F66101  ld (0x0dc1),A
 	ld	(8912:16), a	; F66105  ld (0x22d0),A
 	m_or_mi16 MW24, 0x605068, 0x8000	; F66109  or (0x605068),0x8000
-	call	sub_F66123	; F66110  call 0xf66123
+	call	BStore_LoadBankDirectory	; F66110  call 0xf66123
 	call	T_F42410	; F66114  call 0xf42410
 sub_F660A0_Skip5:
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66118  cp (0x0dc1),0x01
 	jr	z, sub_F660A0_Return	; F6611D  jr Z,0xf66122
-	calr	sub_F661F3	; F6611F  calr 0xf661f3
+	calr	Blink_EnableThenStop	; F6611F  calr 0xf661f3
 sub_F660A0_Return:
 	ret	; F66122  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66123
+; BStore_LoadBankDirectory
 ; Called from: in-module: 0xF66110
 ; Touches: (0x360A) (0x360C)  |  0x603400 0x610000
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
@@ -143882,7 +143890,9 @@ sub_F660A0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66123:
+; BStore_LoadBankDirectory: (0x60341E) = (0x360C); copies 3,072 bytes from 0x610000 + BStore_CurrentBank * 0xC00 to 0x603500, the song directory
+;   SmfSize_Pass and the block store walk.
+BStore_LoadBankDirectory:
 	ld	xwa, (13836:16)	; F66123  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F66127  ld (0x60341e),XWA
 	ld	xix, 6356992	; F6612C  ld XIX,0x00610000
@@ -143902,7 +143912,7 @@ sub_F66123:
 ; SequencerMedley_OnLeave
 ; Called from: T_F42BD0 (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
-; Calls:   sub_F66201 T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
+; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
 ; Evidence: thunk slot T_F42BD0 holds `jp 0x00F6614E`, and 0xF6614E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -143915,7 +143925,7 @@ sub_F66123:
 SequencerMedley_OnLeave:		; <- T_F42BD0
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F6614E  cp (0x207a),0x13
 	jr	z, sub_F66123_Return	; F66153  jr Z,0xf66190
-	call	sub_F66201	; F66155  call 0xf66201
+	call	SequencerMedley_StopPlayback	; F66155  call 0xf66201
 	call	T_Disk_PortA3_Release_Entry	; F66159  call 0xf425f0
 	m_and_mi8 MB16, 0x34d0, 0xfb	; F6615D  and (0x34d0),0xfb
 	ld	(8912:16), 0	; F66162  ld (0x22d0),0x00
@@ -143938,7 +143948,7 @@ sub_F66123_Return:
 ; SequencerMedley_LcdKeyRow2
 ; Called from: T_F42BD4 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x2075) (0x220B) (0x2880)
-; Calls:   T_F4302C T_F42E94 T_F4257C sub_F661F3
+; Calls:   T_F4302C T_F42E94 T_F4257C Blink_EnableThenStop
 ; Evidence: thunk slot T_F42BD4 holds `jp 0x00F66191`, and 0xF66191 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -143975,13 +143985,13 @@ sub_F66123_Skip3:
 sub_F66123_Join2:
 	m_cp_mi8 MB16, UI_StatusCode, 0x04	; F661E3  cp (0x2880),0x04
 	jr	ugt, sub_F66123_Return2	; F661E8  jr UGT,0xf661f2
-	calr	sub_F661F3	; F661EA  calr 0xf661f3
+	calr	Blink_EnableThenStop	; F661EA  calr 0xf661f3
 	ld	(Medley_Playing:16), 0	; F661ED  ld (0x0dc1),0x00
 sub_F66123_Return2:
 	ret	; F661F2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F661F3
+; Blink_EnableThenStop
 ; Called from: in-module: 0xF6611F 0xF661EA
 ; Touches: nothing with an absolute address
 ; Calls:   T_Blink_SetEnable T_Blink_Stop
@@ -143991,7 +144001,8 @@ sub_F66123_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F661F3:
+; Blink_EnableThenStop: T_Blink_SetEnable(1) then T_Blink_Stop.
+Blink_EnableThenStop:
 	pushw	1	; F661F3  push 0x0001
 	call	T_Blink_SetEnable	; F661F6  call 0xf42e28
 	inc	2, xsp	; F661FA  inc 2,XSP
@@ -143999,7 +144010,7 @@ sub_F661F3:
 	ret	; F66200  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66201
+; SequencerMedley_StopPlayback
 ; Called from: T_F42BD8 (x1); in-module: 0xF66155
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x0E48) (0x220B) (0x22D0)
 ; Calls:   T_F43030 T_F42E98 T_F4257C
@@ -144010,7 +144021,9 @@ sub_F661F3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66201:		; <- T_F42BD8
+; SequencerMedley_StopPlayback: when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_F43030 and, unless
+;   (0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_F4257C.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave.
+SequencerMedley_StopPlayback:		; <- T_F42BD8
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66201  cp (0x0dc1),0x01
 	jr	nz, sub_F66201_Return	; F66206  jr NZ,0xf66245
 	ld	(Medley_Playing:16), 0	; F66208  ld (0x0dc1),0x00
@@ -144080,10 +144093,10 @@ Medley_SelectField2:		; <- T_F42B80
 	ret	; F6625B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6625C
+; SequencerMedley_StepFieldUp
 ; Called from: T_F42B84 (x1)
 ; Touches: (0x0C0F)
-; Calls:   sub_F66294 sub_F662F7
+; Calls:   SequencerMedley_StepFirstSong SequencerMedley_StepLastSong
 ; Evidence: thunk slot T_F42B84 holds `jp 0x00F6625C`, and 0xF6625C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -144091,7 +144104,8 @@ Medley_SelectField2:		; <- T_F42B80
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6625C:		; <- T_F42B84
+; SequencerMedley_StepFieldUp: clears bit 7 of W, then SequencerMedley_StepFirstSong (Medley_Field 1) or _StepLastSong (2): the step goes UP.
+SequencerMedley_StepFieldUp:		; <- T_F42B84
 	and	w, 127	; F6625C  and W,0x7f
 	m_cp_mi8 MB16, Medley_Field, 0x01	; F6625F  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip4	; F66264  jr Z,0xf6626f
@@ -144099,18 +144113,18 @@ sub_F6625C:		; <- T_F42B84
 	jr	z, sub_F66201_Skip5	; F6626B  jr Z,0xf66274
 	jr	sub_F66201_Return2	; F6626D  jr T,0xf66277
 sub_F66201_Skip4:
-	calr	sub_F66294	; F6626F  calr 0xf66294
+	calr	SequencerMedley_StepFirstSong	; F6626F  calr 0xf66294
 	jr	sub_F66201_Return2	; F66272  jr T,0xf66277
 sub_F66201_Skip5:
-	calr	sub_F662F7	; F66274  calr 0xf662f7
+	calr	SequencerMedley_StepLastSong	; F66274  calr 0xf662f7
 sub_F66201_Return2:
 	ret	; F66277  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66278
+; SequencerMedley_StepFieldDown
 ; Called from: T_F42B88 (x1)
 ; Touches: (0x0C0F)
-; Calls:   sub_F66294 sub_F662F7
+; Calls:   SequencerMedley_StepFirstSong SequencerMedley_StepLastSong
 ; Evidence: thunk slot T_F42B88 holds `jp 0x00F66278`, and 0xF66278 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -144118,7 +144132,8 @@ sub_F66201_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66278:		; <- T_F42B88
+; SequencerMedley_StepFieldDown: sets bit 7 of W, then the same dispatch on Medley_Field: the step goes DOWN.
+SequencerMedley_StepFieldDown:		; <- T_F42B88
 	or	w, 128	; F66278  or W,0x80
 	m_cp_mi8 MB16, Medley_Field, 0x01	; F6627B  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip6	; F66280  jr Z,0xf6628b
@@ -144126,15 +144141,15 @@ sub_F66278:		; <- T_F42B88
 	jr	z, sub_F66201_Skip7	; F66287  jr Z,0xf66290
 	jr	sub_F66201_Return3	; F66289  jr T,0xf66293
 sub_F66201_Skip6:
-	calr	sub_F66294	; F6628B  calr 0xf66294
+	calr	SequencerMedley_StepFirstSong	; F6628B  calr 0xf66294
 	jr	sub_F66201_Return3	; F6628E  jr T,0xf66293
 sub_F66201_Skip7:
-	calr	sub_F662F7	; F66290  calr 0xf662f7
+	calr	SequencerMedley_StepLastSong	; F66290  calr 0xf662f7
 sub_F66201_Return3:
 	ret	; F66293  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66294
+; SequencerMedley_StepFirstSong
 ; Called from: in-module: 0xF6626F 0xF6628B
 ; Touches: (0x0E35) (0x2075) (0x2208) (0x220B)
 ; Calls:   sub_F662D7
@@ -144144,7 +144159,9 @@ sub_F66201_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66294:
+; SequencerMedley_StepFirstSong: unless (0x95) bit 2: W bit 7 set -> Medley_FirstSong - 1 (floor 0); clear -> + 1 up to 9 (INT), 19 (disk, NORM file)
+;   or 99 (MIDI file); then the range fix-up 0xF662D7 and repaint bit 3.
+SequencerMedley_StepFirstSong:
 	bit	2, (0x95:8)	; F66294  bit 2,(0x95)
 	jr	z, sub_F66294_Skip	; F66297  jr Z,0xf6629a
 	ret	; F66299  ret
@@ -144177,7 +144194,7 @@ sub_F66294_Join:
 ; sub_F662D7
 ; Called from: in-module: 0xF662CE 0xF66331
 ; Touches: (0x2208)
-; Calls:   sub_F660A0 T_F42580
+; Calls:   SequencerMedley_ClampSongRange T_F42580
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF662D7 is an instruction
 ;           boundary.  The name IS the address.
@@ -144186,7 +144203,7 @@ sub_F66294_Join:
 ; --------------------------------------------------------------------------
 sub_F662D7:
 	pushw	bc	; F662D7  push BC
-	calr	sub_F660A0	; F662D8  calr 0xf660a0
+	calr	SequencerMedley_ClampSongRange	; F662D8  calr 0xf660a0
 	popw	bc	; F662DB  pop BC
 	m_cp_rm MB16, Medley_FirstSong, 3	; F662DC  cp C,(0x2208)
 	jr	z, sub_F662D7_Return	; F662E0  jr Z,0xf662f6
@@ -144202,7 +144219,7 @@ sub_F662D7_Return:
 	ret	; F662F6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F662F7
+; SequencerMedley_StepLastSong
 ; Called from: in-module: 0xF66274 0xF66290
 ; Touches: (0x0E35) (0x2075) (0x2208) (0x2209) (0x220B)
 ; Calls:   sub_F662D7
@@ -144212,7 +144229,8 @@ sub_F662D7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F662F7:
+; SequencerMedley_StepLastSong: the same as SequencerMedley_StepFirstSong on Medley_LastSong.
+SequencerMedley_StepLastSong:
 	bit	2, (0x95:8)	; F662F7  bit 2,(0x95)
 	jr	z, sub_F662F7_Skip	; F662FA  jr Z,0xf662fd
 	ret	; F662FC  ret
@@ -144242,7 +144260,7 @@ sub_F662F7_Join:
 	ret	; F66339  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6633A
+; SequencerMedley_SetSourceInternal
 ; Called from: T_F42C18 (x2)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1303) (0x1304) (0x2208)
 ;          (0x2209) (0x220B)
@@ -144253,7 +144271,9 @@ sub_F662F7_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6633A:		; <- T_F42C18
+; SequencerMedley_SetSourceInternal: when not playing: Medley_Source = 0 (INT) and Medley_FileType = 0, each to its display stage, and both songs
+;   clamped to 9 (an INT medley has ten songs).  Called by SoftKeyCol2_SequencerMedley and Paint_SequencerMedley.
+SequencerMedley_SetSourceInternal:		; <- T_F42C18
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F6633A  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return	; F6633F  jr NZ,0xf66381
 	ld	a, 0:opc	; F66341  ld A,0x00
@@ -144459,7 +144479,7 @@ sub_F662F7_Return5:
 	ret	; F664AD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F664AE
+; StepRecordPartSelect_OpenStepRecord
 ; Called from: T_F42BBC (x8)
 ; Touches: (0x0C90) (0x0DC8) (0x0E5C) (0x12A0) (0x2070)
 ; Evidence: thunk slot T_F42BBC holds `jp 0x00F664AE`, and 0xF664AE is an
@@ -144469,7 +144489,9 @@ sub_F662F7_Return5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F664AE:		; <- T_F42BBC
+; StepRecordPartSelect_OpenStepRecord: (0x0C90) = 1, (0x0DC8) = 0, and when the chosen part (0x0E5C) is 1..0x11: (0x12A0) = 0 and UI_Request = 0x800E,
+;   screen 0x0E = STEP RECORD.  Called by all eight SoftKeyColN_StepRecordPartSelect.
+StepRecordPartSelect_OpenStepRecord:		; <- T_F42BBC
 	ldw	(3216:16), 1	; F664AE  ld (0x0c90),0x0001
 	ldw	(3528:16), 0	; F664B4  ld (0x0dc8),0x0000
 	m_cp_mi8 MB16, 0x0e5c, 0x00	; F664BA  cp (0x0e5c),0x00
@@ -144482,7 +144504,7 @@ sub_F662F7_Return6:
 	ret	; F664D4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F664D5
+; StepRecordPartSelect_ResetOnEntry
 ; Called from: T_F42BC4 (x1)
 ; Touches: (0x0C00) (0x0E5C) (0x207A) (0x207B) (0x2130) (0x215E) (0x2160)
 ;          (0x3010) (0x34BB)
@@ -144494,7 +144516,9 @@ sub_F662F7_Return6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F664D5:		; <- T_F42BC4
+; StepRecordPartSelect_ResetOnEntry: (0x3010) = (0x60341E); on a newly entered screen (latch changed): chosen part (0x0E5C) = 0, (0x2130) |= 0x100,
+;   (0x2160) = 0xFFFF, (0x215E) = 0, (0x0C00) = 0, T_F409AC; then (0x34BB) |= 4.  Called by Paint_StepRecordPartSelect.
+StepRecordPartSelect_ResetOnEntry:		; <- T_F42BC4
 	ld	xwa, (6304798:24)	; F664D5  ld XWA,(0x60341e)
 	ld	(12304:16), xwa	; F664DA  ld (0x3010),XWA
 	ld	a, (UI_ScreenLatch:16)	; F664DE  ld A,(0x207a)
@@ -144691,7 +144715,7 @@ sub_F65C0D_Nop:
 	ret	; F665B3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F665B4
+; TrackAssignPresets_InitFromCurrentBank
 ; Called from: T_F42BF8 (x1)
 ; Touches: (0x0DFD) (0x0DFE) (0x12F6) (0x12F7) (0x12F8) (0x2070) (0x207B)
 ;          (0x2880) (0x34BB) (0x360A)
@@ -144702,7 +144726,9 @@ sub_F65C0D_Nop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F665B4:		; <- T_F42BF8
+; TrackAssignPresets_InitFromCurrentBank: unless the previous screen latch is 0x11: (0x0DFD) = 1, (0x0DFE) = BStore_CurrentBank (+1 to the display stage),
+;   UI_StatusCode = 0; then, if UI_StatusCode is 0x23, requests screen 0x10.  Called by Paint_TrackAssignPresets.
+TrackAssignPresets_InitFromCurrentBank:		; <- T_F42BF8
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x11	; F665B4  cp (0x207b),0x11
 	jr	z, sub_F662F7_Skip20	; F665B9  jr Z,0xf665e3
 	m_or_mi8 MB16, 0x34bb, 0x04	; F665BB  or (0x34bb),0x04
@@ -144804,7 +144830,7 @@ TrackAssignPresets_SelectField3:		; <- T_F42C08
 	ret	; F66618  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66619
+; TrackAssignPresets_BankUp
 ; Called from: T_F42C0C (x1)
 ; Touches: (0x0DFE) (0x12F7) (0x2075)
 ; Evidence: thunk slot T_F42C0C holds `jp 0x00F66619`, and 0xF66619 is an
@@ -144814,7 +144840,9 @@ TrackAssignPresets_SelectField3:		; <- T_F42C08
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66619:		; <- T_F42C0C
+; TrackAssignPresets_BankUp: (0x0DFE) + 1, stopping at 10, and (0x0DFE) + 1 to DisplayListB_Stage+1; repaint bit 3.  (0x0DFE) is the bank
+;   the page shows: TrackAssignPresets_InitFromCurrentBank loads it from BStore_CurrentBank.  Called by SoftKeyCol3_TrackAssignPresets.
+TrackAssignPresets_BankUp:		; <- T_F42C0C
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66619  or (0x2075),0x08
 	m_and_mi8 MB16, UI_RequestBits, 0xfe	; F6661E  and (0x2075),0xfe
 	ld	a, (3582:16)	; F66623  ld A,(0x0dfe)
@@ -144828,7 +144856,7 @@ sub_F662F7_Skip21:
 	ret	; F66638  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66639
+; TrackAssignPresets_BankDown
 ; Called from: T_F42C10 (x1)
 ; Touches: (0x0DFE) (0x12F7) (0x2075)
 ; Evidence: thunk slot T_F42C10 holds `jp 0x00F66639`, and 0xF66639 is an
@@ -144838,7 +144866,8 @@ sub_F662F7_Skip21:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66639:		; <- T_F42C10
+; TrackAssignPresets_BankDown: (0x0DFE) - 1, stopping at 0, mirrored +1 to DisplayListB_Stage+1.  Called by SoftKeyCol2_TrackAssignPresets.
+TrackAssignPresets_BankDown:		; <- T_F42C10
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66639  or (0x2075),0x08
 	m_and_mi8 MB16, UI_RequestBits, 0xfe	; F6663E  and (0x2075),0xfe
 	ld	a, (3582:16)	; F66643  ld A,(0x0dfe)
