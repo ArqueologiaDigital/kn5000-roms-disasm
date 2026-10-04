@@ -180,4 +180,4 @@ Measured with `--debt`:
   the role read from the body. The pending-note-off machinery (33 five-byte records at RAM 0x305A,
   a due list at 0x10D3, note-offs written as velocity-0 note-ons) is in that script's docstring.
   Still `sub_`: the two big pass bodies' other helpers and the disk-side routines whose prom_a
-  targets (T_F425A8 / AC / B0 / E4 / E8) are unnamed.
+  targets (T_DiskApi_ReadFileToWindow_Entry / AC / B0 / E4 / E8) are unnamed.

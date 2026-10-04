@@ -1277,10 +1277,10 @@
 	.set T_F408F4,                                                                      0x00F408F4
 	.set T_SysExTx_EmitStagedParams,                                                                      0x00F40900
 	.set T_SysExRx_PollRing601C6E,                                                                      0x00F40904
-	.set T_F40950,                                                                      0x00F40950
+	.set T_MidiFilePlay_Tick,                                                                      0x00F40950
 	.set T_MidiFileDirectPlay_LcdKeyRow1,                                                                      0x00F40954
-	.set T_F40958,                                                                      0x00F40958
-	.set T_F4095C,                                                                      0x00F4095C
+	.set T_MidiFileDirectPlay_InitOnEntry,                                                                      0x00F40958
+	.set T_MidiFileDirectPlay_RestoreOnLeave,                                                                      0x00F4095C
 	.set T_F409A0,                                                                      0x00F409A0
 	.set T_F409A4,                                                                      0x00F409A4
 	.set T_F409AC,                                                                      0x00F409AC
@@ -1774,9 +1774,9 @@
 	.set T_F42584,                                                                      0x00F42584
 	.set T_Disk_PortA3_Release_Call_Call,                                               0x00F42590
 	.set T_F42594,                                                                      0x00F42594
-	.set T_F425A8,                                                                      0x00F425A8
-	.set T_F425AC,                                                                      0x00F425AC
-	.set T_F425B0,                                                                      0x00F425B0
+	.set T_DiskApi_ReadFileToWindow_Entry,                                                                      0x00F425A8
+	.set T_DiskApi_WriteFileFromWindow_Entry,                                                                      0x00F425AC
+	.set T_DiskApi_DeleteFile_Call,                                                                      0x00F425B0
 	.set T_F425B4,                                                                      0x00F425B4
 	.set T_F425B8,                                                                      0x00F425B8
 	.set T_F425C4,                                                                      0x00F425C4
@@ -1786,7 +1786,7 @@
 	.set T_F425D4,                                                                      0x00F425D4
 	.set T_F425D8,                                                                      0x00F425D8
 	.set T_F425DC,                                                                      0x00F425DC
-	.set T_F425E4,                                                                      0x00F425E4
+	.set T_DiskApi_CloseFile_Call,                                                                      0x00F425E4
 	.set T_F425E8,                                                                      0x00F425E8
 	.set T_DiskSaveFile_Page5_LcdKeyRow3,                                                                      0x00F425F4
 	.set T_F425F8,                                                                      0x00F425F8
@@ -6284,7 +6284,7 @@ MainTask_Loop:
 	ld	(0xc1:8), a                                      ; F821B6  f0 c1 41
 	call T_F409C8                                        ; F821B9  1d c8 09 f4
 	call T_F42ED0                                        ; F821BD  1d d0 2e f4
-	call T_F40950                                        ; F821C1  1d 50 09 f4
+	call T_MidiFilePlay_Tick                                        ; F821C1  1d 50 09 f4
 	jrl MainTask_Loop                                       ; F821C5  78 60 fe
 ; MainTask_RearmTickCountdown -- (0xC1)=0, call T_F409C4, then reload the tick countdown (0xC2) with 10
 ; Evidence: `xor A / ld (0xC1),A / call T_F409C4 / ld A,0x0A / ld (0xC2),A`; INTTR4_SequencerTick decrements (0xC2) once per tick (0xF83024); MainTask_Loop calls this when (0xC2) is 0 (0xF82050) and unconditionally at the end of each pass (0xF821AE).
@@ -102179,7 +102179,7 @@ sub_FBAF42:
 	jrl .LFBAF7D                                         ; FBB03A  78 40 ff
 .LFBB03D:
 	m_and_mi8 MB16, 0x23ca, 0xfd                         ; FBB03D  c1 ca 23 3c fd
-	call T_F425E4                                        ; FBB042  1d e4 25 f4
+	call T_DiskApi_CloseFile_Call                                        ; FBB042  1d e4 25 f4
 	ld a, (Disk_LastError:16)                                   ; FBB046  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBB04A  f1 cb 23 41
 .LFBB04E:
@@ -102189,12 +102189,12 @@ sub_FBB04F:
 	jr nz, .LFBB06B                                      ; FBB055  6e 14
 	call sub_FBB0A1                                      ; FBB057  1d a1 b0 fb
 	m_or_mi8 MB16, Disk_Flags, 0x20                          ; FBB05B  c1 e7 21 3e 20
-	call T_F425AC                                        ; FBB060  1d ac 25 f4
+	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB060  1d ac 25 f4
 	m_and_mi8 MB16, Disk_Flags, 0xdf                         ; FBB064  c1 e7 21 3c df
 	jr .LFBB079                                          ; FBB069  68 0e
 .LFBB06B:
 	m_or_mi8 MB16, Disk_Flags, 0x02                          ; FBB06B  c1 e7 21 3e 02
-	call T_F425AC                                        ; FBB070  1d ac 25 f4
+	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB070  1d ac 25 f4
 	m_and_mi8 MB16, Disk_Flags, 0xfd                         ; FBB074  c1 e7 21 3c fd
 .LFBB079:
 	incw 0x01, (0x23cc:16)                               ; FBB079  d1 cc 23 61
@@ -102205,7 +102205,7 @@ sub_FBB07E:
 	call sub_FBB0A1                                      ; FBB086  1d a1 b0 fb
 	m_and_mi8 MB16, Disk_Flags, 0xdf                         ; FBB08A  c1 e7 21 3c df
 	m_and_mi8 MB16, Disk_Flags, 0xfd                         ; FBB08F  c1 e7 21 3c fd
-	call T_F425AC                                        ; FBB094  1d ac 25 f4
+	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB094  1d ac 25 f4
 	ld a, (Disk_LastError:16)                                   ; FBB098  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBB09C  f1 cb 23 41
 	ret                                                  ; FBB0A0  0e
@@ -102317,7 +102317,7 @@ sub_FBB199:
 	ld (Disk_FileName+10:16), 0x46                                 ; FBB1B6  f1 d2 21 00 46
 	m_and_mi8 MB16, Disk_Flags, 0xdf                         ; FBB1BB  c1 e7 21 3c df
 	m_and_mi8 MB16, Disk_Flags, 0xfd                         ; FBB1C0  c1 e7 21 3c fd
-	call T_F425A8                                        ; FBB1C5  1d a8 25 f4
+	call T_DiskApi_ReadFileToWindow_Entry                                        ; FBB1C5  1d a8 25 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBB1C9  c1 43 22 3f 01
 	jr z, .LFBB1EA                                       ; FBB1CE  66 1a
 	m_cp_mi8 MB16, 0x2725, 0x00                          ; FBB1D0  c1 25 27 3f 00
@@ -102357,7 +102357,7 @@ sub_FBB20B:
 	ld XIZ,Disk_Flags                                    ; FBB22B  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB230  86 3c df
 	and (XIZ),0xfd                                       ; FBB233  86 3c fd
-	call T_F425A8                                        ; FBB236  1d a8 25 f4
+	call T_DiskApi_ReadFileToWindow_Entry                                        ; FBB236  1d a8 25 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBB23A  c1 43 22 3f 01
 	jr z, .LFBB244                                       ; FBB23F  66 03
 	jrl .LFBB2CC                                         ; FBB241  78 88 00
@@ -102388,7 +102388,7 @@ sub_FBB20B:
 	ld XIZ,Disk_Flags                                    ; FBB29B  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB2A0  86 3c df
 	and (XIZ),0xfd                                       ; FBB2A3  86 3c fd
-	call T_F425A8                                        ; FBB2A6  1d a8 25 f4
+	call T_DiskApi_ReadFileToWindow_Entry                                        ; FBB2A6  1d a8 25 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBB2AA  c1 43 22 3f 01
 	jr z, .LFBB2B3                                       ; FBB2AF  66 02
 	jr .LFBB2CC                                          ; FBB2B1  68 19
@@ -102429,7 +102429,7 @@ sub_FBB2D5:
 	ld XIZ,Disk_Flags                                    ; FBB329  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB32E  86 3c df
 	and (XIZ),0xfd                                       ; FBB331  86 3c fd
-	call T_F425AC                                        ; FBB334  1d ac 25 f4
+	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB334  1d ac 25 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x03                          ; FBB338  c1 43 22 3f 03
 	jr nz, .LFBB383                                      ; FBB33D  6e 44
 	ld bc, (0x603452:24)                                ; FBB33F  d2 52 34 60 21
@@ -102451,7 +102451,7 @@ sub_FBB2D5:
 	ld XIZ,Disk_Flags                                    ; FBB374  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB379  86 3c df
 	and (XIZ),0xfd                                       ; FBB37C  86 3c fd
-	call T_F425AC                                        ; FBB37F  1d ac 25 f4
+	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB37F  1d ac 25 f4
 .LFBB383:
 	ld a, (Disk_LastError:16)                                   ; FBB383  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBB387  f1 cb 23 41
@@ -160176,18 +160176,20 @@ sub_FE09BE:
 	pop XIX                                              ; FE0A96  5c
 	popw hl                                              ; FE0A97  4b
 	ret                                                  ; FE0A98  0e
-sub_FE0A99:
+; DiskApi_WriteFileFromWindow: (T_DiskApi_WriteFileFromWindow_Entry via 0xFE1C4D) unless Disk_Flags bit 1: DiskFile_Create and the transfer address; then DiskFile_WriteBlock
+;   per 1 KB; on a write error DiskFile_Delete (A = 7 or 6); at the window's end DiskApi_CloseFile; A = 3 when done.
+DiskApi_WriteFileFromWindow:
 	pushw hl                                             ; FE0A99  2b
 	push XIX                                             ; FE0A9A  3c
 	lda xix, (Disk_Flags:16)                                ; FE0A9B  f1 e7 21 34
 	ld C,(XIX)                                           ; FE0A9F  84 23
 	and C,0x02                                           ; FE0AA1  cb cc 02
 	jr nz, .LFE0AB3                                          ; FE0AA4  6e 0d
-	calr sub_FE1ADE                                          ; FE0AA6  1e 35 10
+	calr DiskFile_Create                                          ; FE0AA6  1e 35 10
 	cp a, 0x00:i3                                          ; FE0AA9  c9 d8
 	jr nz, .LFE0AE7                                          ; FE0AAB  6e 3a
 	and (XIX),0xfb                                       ; FE0AAD  84 3c fb
-	calr sub_FE0C08                                          ; FE0AB0  1e 55 01
+	calr DiskFile_SetTransferToWindow                                          ; FE0AB0  1e 55 01
 .LFE0AB3:
 	calr DiskFile_WriteBlock                                          ; FE0AB3  1e 57 10
 	ld H,A                                               ; FE0AB6  c9 8e
@@ -160205,10 +160207,10 @@ sub_FE0A99:
 	ld C,(XIX)                                           ; FE0ACE  84 23
 	and C,0x02                                           ; FE0AD0  cb cc 02
 	jr nz, .LFE0AF3                                          ; FE0AD3  6e 1e
-	calr sub_FE0C73                                          ; FE0AD5  1e 9b 01
+	calr DiskFile_AdvanceWindow                                          ; FE0AD5  1e 9b 01
 	cp A,0xff                                            ; FE0AD8  c9 cf ff
 	jr nz, .LFE0AEB                                          ; FE0ADB  6e 0e
-	calr sub_FE0C45                                          ; FE0ADD  1e 65 01
+	calr DiskApi_CloseFile                                          ; FE0ADD  1e 65 01
 	cp a, 0x03:i3                                          ; FE0AE0  c9 db
 	jr z, .LFE0AF3                                           ; FE0AE2  66 0f
 	calr DiskFile_Delete                                          ; FE0AE4  1e 7e 10
@@ -160217,7 +160219,7 @@ sub_FE0A99:
 	jr .LFE0AF5                                              ; FE0AE9  68 0a
 .LFE0AEB:
 	and (XIX),0xfb                                       ; FE0AEB  84 3c fb
-	calr sub_FE0C08                                          ; FE0AEE  1e 17 01
+	calr DiskFile_SetTransferToWindow                                          ; FE0AEE  1e 17 01
 	jr .LFE0AB3                                               ; FE0AF1  68 c0
 .LFE0AF3:
 	ld a, 0x03:opc                                          ; FE0AF3  21 03
@@ -160257,7 +160259,11 @@ sub_FE0AF8:
 	popw hl                                              ; FE0B3F  4b
 	unlk XIZ                                             ; FE0B40  ee 0d
 	ret                                                  ; FE0B42  0e
-sub_FE0B43:
+; DiskApi_ReadFileToWindow: (T_DiskApi_ReadFileToWindow_Entry via 0xFE1C3A) unless Disk_Flags bit 1: DiskFile_Open (once more after 0xFE08BD if it fails; A = 4 when it
+;   fails again), the window end clamped to start + the file size at control block +0x10/+0x12, the transfer
+;   address set; then DiskFile_ReadBlock per 1 KB until the window is full (DiskFile_AdvanceWindow 0xFF), bit 5 asks
+;   for one block, or bit 1 (A = 0xFD: more to come).  A = 5 on a read error, 1 when done.
+DiskApi_ReadFileToWindow:
 	link XIZ,0xfff8                                      ; FE0B43  ee 0c f8 ff
 	pushw hl                                             ; FE0B47  2b
 	push XIX                                             ; FE0B48  3c
@@ -160295,7 +160301,7 @@ sub_FE0B43:
 	ld (0x21d7:16), xwa                                 ; FE0B9D  f1 d7 21 60
 .LFE0BA1:
 	m_res 2, MD16, Disk_Flags                                ; FE0BA1  f1 e7 21 b2
-	calr sub_FE0C08                                            ; FE0BA5  1e 60 00
+	calr DiskFile_SetTransferToWindow                                            ; FE0BA5  1e 60 00
 .LFE0BA8:
 	calr DiskFile_ReadBlock                                          ; FE0BA8  1e de 0e
 	cp a, 0x00:i3                                          ; FE0BAB  c9 d8
@@ -160318,14 +160324,14 @@ sub_FE0B43:
 	ld h, 0xfd:opc                                          ; FE0BD3  26 fd
 	jr .LFE0BE8                                              ; FE0BD5  68 11
 .LFE0BD7:
-	calr sub_FE0C73                                            ; FE0BD7  1e 99 00
+	calr DiskFile_AdvanceWindow                                            ; FE0BD7  1e 99 00
 	cp A,0xff                                            ; FE0BDA  c9 cf ff
 	jr nz, .LFE0BE3                                          ; FE0BDD  6e 04
 .LFE0BDF:
 	ld h, 0x01:opc                                          ; FE0BDF  26 01
 	jr .LFE0BE8                                              ; FE0BE1  68 05
 .LFE0BE3:
-	calr sub_FE0C08                                            ; FE0BE3  1e 22 00
+	calr DiskFile_SetTransferToWindow                                            ; FE0BE3  1e 22 00
 	jr .LFE0BA8                                               ; FE0BE6  68 c0
 .LFE0BE8:
 	ld (0x605a02:24), 0x00                             ; FE0BE8  f2 02 5a 60 00 00
@@ -160343,7 +160349,8 @@ Link_SendAfterSoundRamLoadMsg:
 	call T_Link_SendBlockIn32ByteChunks                                        ; FE0C01  1d d4 0e f4
 	inc 8,XSP                                            ; FE0C05  ef 60
 	ret                                                  ; FE0C07  0e
-sub_FE0C08:
+; DiskFile_SetTransferToWindow: (0x174B) = the window start (0x21D3), or 0x60A080 when Disk_Flags bit 2; then command 0x1A with it (DOS Set DTA).
+DiskFile_SetTransferToWindow:
 	push XIX                                             ; FE0C08  3c
 	lda xix, (0x174b:24)                                 ; FE0C09  f2 4b 17 00 34
 	ld c, (Disk_Flags:16)                                   ; FE0C0E  c1 e7 21 23
@@ -160366,7 +160373,8 @@ sub_FE0C08:
 	inc 8,XSP                                            ; FE0C41  ef 60
 	pop XIX                                              ; FE0C43  5c
 	ret                                                  ; FE0C44  0e
-sub_FE0C45:
+; DiskApi_CloseFile: (T_DiskApi_CloseFile_Call via 0xFE1CAF) DiskFile_Close; A = 3, or, when the close fails, the file is deleted (command 0x13) and A = 6.
+DiskApi_CloseFile:
 	calr DiskFile_Close                                          ; FE0C45  1e f1 0e
 	cp a, 0x00:i3                                          ; FE0C48  c9 d8
 	jr nz, .LFE0C50                                          ; FE0C4A  6e 04
@@ -160384,7 +160392,9 @@ sub_FE0C45:
 	ld a, 0x06:opc                                          ; FE0C70  21 06
 .LFE0C72:
 	ret                                                  ; FE0C72  0e
-sub_FE0C73:
+; DiskFile_AdvanceWindow: (0x21D3) += 0x400 unless that reaches (0x21D7) (A = 0xFF); sets Disk_Flags bit 2 when the next 1 KB would pass the
+;   end; A = 0.
+DiskFile_AdvanceWindow:
 	push XIX                                             ; FE0C73  3c
 	ld xix, (0x21d3:16)                                 ; FE0C74  e1 d3 21 24
 	add XIX,0x00000400                                   ; FE0C78  ec c8 00 04 00 00
@@ -160404,7 +160414,8 @@ sub_FE0C73:
 .LFE0CA0:
 	pop XIX                                              ; FE0CA0  5c
 	ret                                                  ; FE0CA1  0e
-sub_FE0CA2:
+; DiskApi_DeleteFile: (T_DiskApi_DeleteFile_Call via 0xFE1C55) DiskFile_Delete; (0x1735) = its result; A = 0x19 deleted, 0x18 not.
+DiskApi_DeleteFile:
 	pushw hl                                             ; FE0CA2  2b
 	calr DiskFile_Delete                                          ; FE0CA3  1e bf 0e
 	ld H,A                                               ; FE0CA6  c9 8e
@@ -161865,14 +161876,15 @@ DiskFile_CountFreeSpace:
 	ld WA,HL                                             ; FE1ADA  db 88
 	popw hl                                              ; FE1ADC  4b
 	ret                                                  ; FE1ADD  0e
-sub_FE1ADE:
+; (2026-10-04) DiskFile_Create starts here, with DiskFile_SetFcbName; the header below was written for the inner label 0xFE1AF3
+; DiskFile_Create: issues command 0x16 (DiskCmd_CreateFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_Create:
 	pushw hl                                             ; FE1ADE  2b
 	calr DiskFile_SetFcbName                                          ; FE1ADF  1e 3b fc
 	ldw (0x1739:24), 0x16                               ; FE1AE2  f2 39 17 00 02 16 00
 	ldw (0x173b:24), 0x00                               ; FE1AE9  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1AF0  0b 00 00
-; DiskFile_Create: issues command 0x16 (DiskCmd_CreateFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
-DiskFile_Create:
+; (2026-10-04: the label sub_FE1AF3, briefly DiskFile_Create, stood here, mid-routine of DiskFile_Create (0xFE1ADE) and referenced by nothing; removed)
 	lda xbc, (0x178e:24)                                 ; FE1AF3  f2 8e 17 00 31
 	push XBC                                             ; FE1AF8  39
 	pushw 0x16                                           ; FE1AF9  0b 16 00
@@ -162026,20 +162038,23 @@ sub_FE1C33:
 	calr sub_FE0CB9                                          ; FE1C33  1e 83 f0
 	calr Ring_InitTenOfFourteen                                            ; FE1C36  1e f0 00
 	ret                                                  ; FE1C39  0e
-sub_FE1C3A:
-	calr sub_FE0B43                                          ; FE1C3A  1e 06 ef
+; DiskApi_ReadFileToWindow_Entry: the directory's entry (T_DiskApi_ReadFileToWindow_Entry): DiskApi_ReadFileToWindow, A to Disk_LastError, and on screen latch 0x49 (0x360B) bit 0 cleared.
+DiskApi_ReadFileToWindow_Entry:
+	calr DiskApi_ReadFileToWindow                                          ; FE1C3A  1e 06 ef
 	ld (Disk_LastError:16), a                                   ; FE1C3D  f1 43 22 41
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x49                          ; FE1C41  c1 7a 20 3f 49
 	jr nz, .LFE1C4C                                          ; FE1C46  6e 04
 	m_res 0, MD16, 0x360b                                ; FE1C48  f1 0b 36 b0
 .LFE1C4C:
 	ret                                                  ; FE1C4C  0e
-sub_FE1C4D:
-	calr sub_FE0A99                                          ; FE1C4D  1e 49 ee
+; DiskApi_WriteFileFromWindow_Entry: the directory's entry (T_DiskApi_WriteFileFromWindow_Entry): DiskApi_WriteFileFromWindow, A to Disk_LastError.
+DiskApi_WriteFileFromWindow_Entry:
+	calr DiskApi_WriteFileFromWindow                                          ; FE1C4D  1e 49 ee
 	ld (Disk_LastError:16), a                                   ; FE1C50  f1 43 22 41
 	ret                                                  ; FE1C54  0e
-sub_FE1C55:
-	calr sub_FE0CA2                                          ; FE1C55  1e 4a f0
+; DiskApi_DeleteFile_Call: calls DiskApi_DeleteFile and returns -- `calr DiskApi_DeleteFile / ret`.
+DiskApi_DeleteFile_Call:
+	calr DiskApi_DeleteFile                                          ; FE1C55  1e 4a f0
 	ret                                                  ; FE1C58  0e
 ; MidiFileSave_Page3_LcdKeyRow3: the LcdKeyRow3 action of MidiFileSave_Page3 -- called only by LcdKeyRow3_MidiFileSave_Page3.
 MidiFileSave_Page3_LcdKeyRow3:
@@ -162093,8 +162108,9 @@ sub_FE1CA7:
 sub_FE1CAB:
 	calr sub_FE0925                                          ; FE1CAB  1e 77 ec
 	ret                                                  ; FE1CAE  0e
-sub_FE1CAF:
-	calr sub_FE0C45                                          ; FE1CAF  1e 93 ef
+; DiskApi_CloseFile_Call: calls DiskApi_CloseFile and returns -- `calr DiskApi_CloseFile / ret`.
+DiskApi_CloseFile_Call:
+	calr DiskApi_CloseFile                                          ; FE1CAF  1e 93 ef
 	ret                                                  ; FE1CB2  0e
 sub_FE1CB3:
 	m_push MW16, 0x2245                                  ; FE1CB3  d1 45 22 04
@@ -162335,7 +162351,7 @@ sub_FE1E29:
 	calr sub_FE2F86                                          ; FE1E2E  1e 55 11
 	m_or_mi8 MBI+r4, 0, 0x20                             ; FE1E31  84 3e 20
 	and (XIX),0xfd                                       ; FE1E34  84 3c fd
-	calr sub_FE0B43                                          ; FE1E37  1e 09 ed
+	calr DiskApi_ReadFileToWindow                                          ; FE1E37  1e 09 ed
 	pop XIX                                              ; FE1E3A  5c
 	ret                                                  ; FE1E3B  0e
 sub_FE1E3C:
@@ -162364,7 +162380,7 @@ sub_FE1E3C:
 	calr sub_FE2DBC                                          ; FE1E73  1e 46 0f
 	calr sub_FE2D7C                                          ; FE1E76  1e 03 0f
 	m_res 5, MD16, Disk_Flags                                ; FE1E79  f1 e7 21 b5
-	calr sub_FE0B43                                          ; FE1E7D  1e c3 ec
+	calr DiskApi_ReadFileToWindow                                          ; FE1E7D  1e c3 ec
 	ld H,A                                               ; FE1E80  c9 8e
 	cp a, 0x01:i3                                          ; FE1E82  c9 d9
 	jr nz, .LFE1E8E                                          ; FE1E84  6e 08
@@ -162860,7 +162876,7 @@ sub_FE22EF:
 	push XIX                                             ; FE2317  3c
 	pushw 0x1a                                           ; FE2318  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE231B  1d 34 2d f4
-	calr sub_FE0B43                                          ; FE231F  1e 21 e8
+	calr DiskApi_ReadFileToWindow                                          ; FE231F  1e 21 e8
 	ld H,A                                               ; FE2322  c9 8e
 	inc 8,XSP                                            ; FE2324  ef 60
 	cp A,0xfd                                            ; FE2326  c9 cf fd
@@ -162888,7 +162904,7 @@ sub_FE233A:
 	calr sub_FE2DC6                                          ; FE2353  1e 70 0a
 	calr sub_FE2DA7                                          ; FE2356  1e 4e 0a
 	m_res 5, MD16, Disk_Flags                                ; FE2359  f1 e7 21 b5
-	calr sub_FE0B43                                          ; FE235D  1e e3 e7
+	calr DiskApi_ReadFileToWindow                                          ; FE235D  1e e3 e7
 	ld (Disk_LastError:16), a                                   ; FE2360  f1 43 22 41
 	ld a, 0x01:opc                                          ; FE2364  21 01
 	pop XIX                                              ; FE2366  5c
@@ -162915,7 +162931,7 @@ sub_FE237B:
 	calr sub_FE2D30                                          ; FE2392  1e 9b 09
 	calr sub_FE2D9D                                          ; FE2395  1e 05 0a
 	m_res 1, MD16, Disk_Flags                                ; FE2398  f1 e7 21 b1
-	calr sub_FE0B43                                          ; FE239C  1e a4 e7
+	calr DiskApi_ReadFileToWindow                                          ; FE239C  1e a4 e7
 	ld H,A                                               ; FE239F  c9 8e
 	cp a, 0x01:i3                                          ; FE23A1  c9 d9
 	jr z, .LFE23AD                                           ; FE23A3  66 08
@@ -163006,7 +163022,7 @@ sub_FE2430:
 	add XWA,0x00000800                                   ; FE245A  e8 c8 00 08 00 00
 	ld (0x21d7:16), xwa                                 ; FE2460  f1 d7 21 60
 	m_res 1, MD16, Disk_Flags                                ; FE2464  f1 e7 21 b1
-	calr sub_FE0B43                                          ; FE2468  1e d8 e6
+	calr DiskApi_ReadFileToWindow                                          ; FE2468  1e d8 e6
 	ld H,A                                               ; FE246B  c9 8e
 	cp a, 0x01:i3                                          ; FE246D  c9 d9
 	jr z, .LFE2473                                           ; FE246F  66 02
@@ -163035,7 +163051,7 @@ sub_FE2484:
 	add XWA,0x00000800                                   ; FE24A0  e8 c8 00 08 00 00
 	ld (0x21d7:16), xwa                                 ; FE24A6  f1 d7 21 60
 	m_res 1, MD16, Disk_Flags                                ; FE24AA  f1 e7 21 b1
-	calr sub_FE0B43                                          ; FE24AE  1e 92 e6
+	calr DiskApi_ReadFileToWindow                                          ; FE24AE  1e 92 e6
 	ld H,A                                               ; FE24B1  c9 8e
 	cp a, 0x01:i3                                          ; FE24B3  c9 d9
 	jr z, .LFE24B9                                           ; FE24B5  66 02
@@ -163216,7 +163232,7 @@ sub_FE2610:
 	calr Disk_RequestSenseDriveStatus                                          ; FE2611  1e 41 e1
 	cp a, 0x00:i3                                          ; FE2614  c9 d8
 	jr nz, .LFE263D                                          ; FE2616  6e 25
-	calr sub_FE0CA2                                          ; FE2618  1e 87 e6
+	calr DiskApi_DeleteFile                                          ; FE2618  1e 87 e6
 	ld H,A                                               ; FE261B  c9 8e
 	ld (0x1736:24), a                                   ; FE261D  f2 36 17 00 41
 	push 0x00                                            ; FE2622  09 00
@@ -163281,7 +163297,7 @@ sub_FE2699:
 	inc 1,HL                                             ; FE26A8  db 61
 	cp HL,0x000b                                         ; FE26AA  db cf 0b 00
 	jr lt, .LFE26A0                                           ; FE26AE  61 f0
-	calr sub_FE0CA2                                          ; FE26B0  1e ef e5
+	calr DiskApi_DeleteFile                                          ; FE26B0  1e ef e5
 	calr sub_FE0941                                          ; FE26B3  1e 8b e2
 	pop XHL                                              ; FE26B6  5b
 	ret                                                  ; FE26B7  0e
@@ -163572,7 +163588,7 @@ sub_FE2980:
 	calr sub_FE2F86                                          ; FE2985  1e fe 05
 	and (XIX),0xdf                                       ; FE2988  84 3c df
 	and (XIX),0xfd                                       ; FE298B  84 3c fd
-	calr sub_FE0A99                                          ; FE298E  1e 08 e1
+	calr DiskApi_WriteFileFromWindow                                          ; FE298E  1e 08 e1
 	pop XIX                                              ; FE2991  5c
 	ret                                                  ; FE2992  0e
 sub_FE2993:
@@ -163614,7 +163630,7 @@ sub_FE2993:
 	lda xix, (Disk_Flags:16)                                ; FE29FB  f1 e7 21 34
 	m_or_mi8 MBI+r4, 0, 0x20                             ; FE29FF  84 3e 20
 	and (XIX),0xfd                                       ; FE2A02  84 3c fd
-	calr sub_FE0A99                                          ; FE2A05  1e 91 e0
+	calr DiskApi_WriteFileFromWindow                                          ; FE2A05  1e 91 e0
 	ld H,A                                               ; FE2A08  c9 8e
 	cp a, 0x03:i3                                          ; FE2A0A  c9 db
 	jr z, .LFE2A13                                           ; FE2A0C  66 05
@@ -163669,7 +163685,7 @@ sub_FE2A21:
 	lda xix, (Disk_Flags:16)                                ; FE2A83  f1 e7 21 34
 	m_or_mi8 MBI+r4, 0, 0x20                             ; FE2A87  84 3e 20
 	and (XIX),0xfd                                       ; FE2A8A  84 3c fd
-	calr sub_FE0A99                                          ; FE2A8D  1e 09 e0
+	calr DiskApi_WriteFileFromWindow                                          ; FE2A8D  1e 09 e0
 	ld H,A                                               ; FE2A90  c9 8e
 	cp a, 0x03:i3                                          ; FE2A92  c9 db
 	jr z, .LFE2A9B                                           ; FE2A94  66 05
@@ -163733,7 +163749,7 @@ sub_FE2AA9:
 	pushw 0x1a                                           ; FE2B36  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE2B39  1d 34 2d f4
 	m_set 1, MD16, Disk_Flags                                ; FE2B3D  f1 e7 21 b9
-	calr sub_FE0A99                                          ; FE2B41  1e 55 df
+	calr DiskApi_WriteFileFromWindow                                          ; FE2B41  1e 55 df
 	ld H,A                                               ; FE2B44  c9 8e
 	m_res 1, MD16, Disk_Flags                                ; FE2B46  f1 e7 21 b1
 	inc 8,XSP                                            ; FE2B4A  ef 60
@@ -163812,7 +163828,7 @@ sub_FE2AA9:
 	pushw 0x1a                                           ; FE2C17  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE2C1A  1d 34 2d f4
 	m_set 1, MD16, Disk_Flags                                ; FE2C1E  f1 e7 21 b9
-	calr sub_FE0A99                                          ; FE2C22  1e 74 de
+	calr DiskApi_WriteFileFromWindow                                          ; FE2C22  1e 74 de
 	ld H,A                                               ; FE2C25  c9 8e
 	m_res 1, MD16, Disk_Flags                                ; FE2C27  f1 e7 21 b1
 	inc 8,XSP                                            ; FE2C2B  ef 60
@@ -163831,7 +163847,7 @@ sub_FE2AA9:
 	cp BC,DE                                             ; FE2C48  da f1
 	jr c, .LFE2BF4                                            ; FE2C4A  67 a8
 .LFE2C4C:
-	calr sub_FE0C45                                          ; FE2C4C  1e f6 df
+	calr DiskApi_CloseFile                                          ; FE2C4C  1e f6 df
 	ld H,A                                               ; FE2C4F  c9 8e
 	cp a, 0x03:i3                                          ; FE2C51  c9 db
 	jr z, .LFE2C5C                                           ; FE2C53  66 07
@@ -163879,7 +163895,7 @@ sub_FE2C64:
 	calr sub_FE2DA7                                            ; FE2CAF  1e f5 00
 	and (XIX),0xdf                                       ; FE2CB2  84 3c df
 	and (XIX),0xfd                                       ; FE2CB5  84 3c fd
-	calr sub_FE0A99                                          ; FE2CB8  1e de dd
+	calr DiskApi_WriteFileFromWindow                                          ; FE2CB8  1e de dd
 .LFE2CBB:
 	pop XIX                                              ; FE2CBB  5c
 	popw de                                              ; FE2CBC  4a
@@ -163902,7 +163918,7 @@ sub_FE2CC7:
 	calr sub_FE2D93                                            ; FE2CE7  1e a9 00
 	and (XIX),0xdf                                       ; FE2CEA  84 3c df
 	and (XIX),0xfd                                       ; FE2CED  84 3c fd
-	calr sub_FE0A99                                          ; FE2CF0  1e a6 dd
+	calr DiskApi_WriteFileFromWindow                                          ; FE2CF0  1e a6 dd
 	pop XIX                                              ; FE2CF3  5c
 	ret                                                  ; FE2CF4  0e
 sub_FE2CF5:
@@ -187061,7 +187077,7 @@ Paint_MidiFileDirectPlay:
 	call sub_FF793F                                      ; FF4420  1d 3f 79 ff
 	calr sub_FF70B6                                      ; FF4424  1e 8f 2c
 	m_res 4, MD16, UI_ScreenFlags                                ; FF4427  f1 95 20 b4
-	call T_F40958                                        ; FF442B  1d 58 09 f4
+	call T_MidiFileDirectPlay_InitOnEntry                                        ; FF442B  1d 58 09 f4
 	call T_F409AC                                        ; FF442F  1d ac 09 f4
 	call T_F42614                                        ; FF4433  1d 14 26 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF4437  1e 62 31
@@ -187212,7 +187228,7 @@ ScreenLeave_MidiFileDirectPlay:
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF4580  c1 7b 20 f3
 	jr z, .LFF4595                                       ; FF4584  66 0f
 	call DiskFileScreen_LeaveCommon                                      ; FF4586  1d 8c 79 ff
-	call T_F4095C                                        ; FF458A  1d 5c 09 f4
+	call T_MidiFileDirectPlay_RestoreOnLeave                                        ; FF458A  1d 5c 09 f4
 	call sub_FF794C                                      ; FF458E  1d 4c 79 ff
 	calr sub_FF70D8                                      ; FF4592  1e 43 2b
 .LFF4595:
@@ -194881,7 +194897,7 @@ DiskSaveFile_Page3_LcdKeyRow1:
 	ld (XIY+0x08),WA                                     ; FF791D  bd 08 50
 	ld a, 0x3f:opc                                          ; FF7920  21 3f
 	ld (XIY+0x0a),A                                      ; FF7922  bd 0a 41
-	call T_F425B0                                        ; FF7925  1d b0 25 f4
+	call T_DiskApi_DeleteFile_Call                                        ; FF7925  1d b0 25 f4
 	ld XIX,Disk_FileName                                    ; FF7929  44 c8 21 00 00
 	m_popw MDD+r4, 0x06                                  ; FF792E  bc 06 06
 	m_popw MDD+r4, 0x04                                  ; FF7931  bc 04 06

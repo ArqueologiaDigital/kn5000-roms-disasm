@@ -1730,9 +1730,9 @@
 	.set	sub_FE1C2B, 0xFE1C2B
 	.set	sub_FE1C2F, 0xFE1C2F
 	.set	sub_FE1C33, 0xFE1C33
-	.set	sub_FE1C3A, 0xFE1C3A
-	.set	sub_FE1C4D, 0xFE1C4D
-	.set	sub_FE1C55, 0xFE1C55
+	.set	DiskApi_ReadFileToWindow_Entry, 0xFE1C3A
+	.set	DiskApi_WriteFileFromWindow_Entry, 0xFE1C4D
+	.set	DiskApi_DeleteFile_Call, 0xFE1C55
 	.set	MidiFileSave_Page3_LcdKeyRow3, 0xFE1C59
 	.set	sub_FE1C5D, 0xFE1C5D
 	.set	sub_FE1C67, 0xFE1C67
@@ -1745,7 +1745,7 @@
 	.set	sub_FE1CA3, 0xFE1CA3
 	.set	sub_FE1CA7, 0xFE1CA7
 	.set	sub_FE1CAB, 0xFE1CAB
-	.set	sub_FE1CAF, 0xFE1CAF
+	.set	DiskApi_CloseFile_Call, 0xFE1CAF
 	.set	sub_FE1CB3, 0xFE1CB3
 	.set	sub_FE1CC0, 0xFE1CC0
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
@@ -88557,10 +88557,10 @@ T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
 T_SysEx_Checksum:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
 T_SysExTx_SendBytes:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
-T_F40950:	jp MidiFilePlay_Tick  ; -> prom_a 0x39E79   x1
+T_MidiFilePlay_Tick:	jp MidiFilePlay_Tick  ; -> prom_a 0x39E79   x1
 T_MidiFileDirectPlay_LcdKeyRow1:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
-T_F40958:	jp MidiFileDirectPlay_InitOnEntry  ; -> prom_a 0x39B41   x1
-T_F4095C:	jp MidiFileDirectPlay_RestoreOnLeave  ; -> prom_a 0x39B73   x1
+T_MidiFileDirectPlay_InitOnEntry:	jp MidiFileDirectPlay_InitOnEntry  ; -> prom_a 0x39B41   x1
+T_MidiFileDirectPlay_RestoreOnLeave:	jp MidiFileDirectPlay_RestoreOnLeave  ; -> prom_a 0x39B73   x1
 T_F40960:	jp sub_FB9BA4  ; -> prom_a 0x39BA4
 T_F40964:	jp sub_FB9C52  ; -> prom_a 0x39C52
 	.fill 0x8, 1, 0x0E  ; 0xF40968: 8 x ret
@@ -90153,9 +90153,9 @@ T_F42598:	jp sub_FE1C27  ; -> prom_a 0x61C27
 T_F4259C:	jp sub_FE1C2B  ; -> prom_a 0x61C2B
 T_F425A0:	jp sub_FE1C2F  ; -> prom_a 0x61C2F
 T_F425A4:	jp sub_FE1C33  ; -> prom_a 0x61C33
-T_F425A8:	jp sub_FE1C3A  ; -> prom_a 0x61C3A   x11
-T_F425AC:	jp sub_FE1C4D  ; -> prom_a 0x61C4D   x14
-T_F425B0:	jp sub_FE1C55  ; -> prom_a 0x61C55   x11
+T_DiskApi_ReadFileToWindow_Entry:	jp DiskApi_ReadFileToWindow_Entry  ; -> prom_a 0x61C3A   x11
+T_DiskApi_WriteFileFromWindow_Entry:	jp DiskApi_WriteFileFromWindow_Entry  ; -> prom_a 0x61C4D   x14
+T_DiskApi_DeleteFile_Call:	jp DiskApi_DeleteFile_Call  ; -> prom_a 0x61C55   x11
 T_F425B4:	jp sub_FE1C5D  ; -> prom_a 0x61C5D   x3
 T_F425B8:	jp sub_FE1C67  ; -> prom_a 0x61C67   x2
 T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
@@ -90168,7 +90168,7 @@ T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
 T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
 T_F425E0:	jp sub_FE1CAB  ; -> prom_a 0x61CAB
-T_F425E4:	jp sub_FE1CAF  ; -> prom_a 0x61CAF   x5
+T_DiskApi_CloseFile_Call:	jp DiskApi_CloseFile_Call  ; -> prom_a 0x61CAF   x5
 T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_F425EC:	jp sub_FE1CC0  ; -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
@@ -90448,7 +90448,7 @@ T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
 	.fill 0x2C, 1, 0x00  ; 0xF42AC0: 44 x nop
 	.fill 0x84, 1, 0x0E  ; 0xF42AEC: 132 x ret
 T_F42B70:	jp sub_F65C51  ; -> prom_b 0x65C51   x1
-T_F42B74:	jp SequencerMedley_ClampSongRange_Call  ; -> prom_b 0x6609C
+T_SequencerMedley_ClampSongRange_Call:	jp SequencerMedley_ClampSongRange_Call  ; -> prom_b 0x6609C
 T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
 T_Medley_SelectField1:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
 T_Medley_SelectField2:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
@@ -98622,7 +98622,7 @@ DiskFile_CheckSignature_Join12:
 ; sub_F48F19
 ; Called from: in-module: 0xF48C4E
 ; Touches: (0x207C) (0x21D3) (0x21D7) (0x21E7)  |  0x000400
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48F19 is an instruction boundary.
 ;           The name IS the address.
@@ -98654,7 +98654,7 @@ sub_F48F19_Join:
 	ld	xwa, (xiz-4)	; F48F59  ld XWA,(XIZ+0xfc)
 	add	xwa, 1024	; F48F5C  add XWA,0x00000400
 	ld	(8663:16), xwa	; F48F62  ld (0x21d7),XWA
-	call	T_F425A8	; F48F66  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F48F66  call 0xf425a8
 	ld	h, a	; F48F6A  ld H,A
 	m_res 5, MD16, Disk_Flags	; F48F6C  res 5,(0x21e7)
 	pop	xix	; F48F70  pop XIX
@@ -98666,7 +98666,7 @@ sub_F48F19_Join:
 ; sub_F48F75
 ; Called from: in-module: 0xF48E4A
 ; Touches: nothing with an absolute address
-; Calls:   T_F425A8 T_Link_SendBlockIn32ByteChunks
+; Calls:   T_DiskApi_ReadFileToWindow_Entry T_Link_SendBlockIn32ByteChunks
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48F75 is an instruction boundary.
 ;           The name IS the address.
@@ -98678,7 +98678,7 @@ sub_F48F75:
 	push	xix	; F48F76  push XIX
 	lda	xix, (Disk_Flags:16)	; F48F77  lda XIX,0x21e7
 	m_or_mi8 MBI+r4, 0, 0x02	; F48F7B  or (XIX),0x02
-	call	T_F425A8	; F48F7E  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F48F7E  call 0xf425a8
 	ld	h, a	; F48F82  ld H,A
 	m_and_mi8 MBI+r4, 0, 0xfd	; F48F84  and (XIX),0xfd
 	ld	a, h	; F48F87  ld A,H
@@ -143774,10 +143774,10 @@ sub_F66081_Skip:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_ClampSongRange_Call
-; Called from: T_F42B74 (x0)
+; Called from: T_SequencerMedley_ClampSongRange_Call (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   SequencerMedley_ClampSongRange
-; Evidence: thunk slot T_F42B74 holds `jp 0x00F6609C`, and 0xF6609C is an
+; Evidence: thunk slot T_SequencerMedley_ClampSongRange_Call holds `jp 0x00F6609C`, and 0xF6609C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143785,7 +143785,7 @@ sub_F66081_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_ClampSongRange_Call: calls SequencerMedley_ClampSongRange and returns -- `calr SequencerMedley_ClampSongRange / ret`.
-SequencerMedley_ClampSongRange_Call:		; <- T_F42B74
+SequencerMedley_ClampSongRange_Call:		; <- T_SequencerMedley_ClampSongRange_Call
 	calr	SequencerMedley_ClampSongRange	; F6609C  calr 0xf660a0
 	ret	; F6609F  ret
 
@@ -158714,7 +158714,7 @@ sub_F6CFCB:
 ;     (0x21D0)-(0x21D2), an 8.3 filename EXTENSION field.
 ;
 ; ⚠ WHAT IS NOT ESTABLISHED ABOUT IT.  WHERE the bytes come from: the refill
-; leaves prom_b through T_F425A8/T_F425B0/T_F425E8 into prom_a 0xFE1C3A /
+; leaves prom_b through T_DiskApi_ReadFileToWindow_Entry/T_DiskApi_DeleteFile_Call/T_F425E8 into prom_a 0xFE1C3A /
 ; 0xFE1C55 / 0xFE1CB3, all three of which are `sub_` there.  And whose buffer
 ; 0x60A700 is: it lies inside the 0x60A000 region prom_a's block/remote reader
 ; passes as a DESTINATION -- `lda_24 XBC,(0x60a000)` at 21 sites in prom_a's
@@ -169319,7 +169319,7 @@ sub_F71369_Return:
 ;          evidence about a file format.
 ; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
 ;          FOR.  Left as sub_XXXXXX with the gap stated`.
-; Unknown: what fills the window; the refill leaves prom_b through T_F425A8.
+; Unknown: what fills the window; the refill leaves prom_b through T_DiskApi_ReadFileToWindow_Entry.
 ; --------------------------------------------------------------------------
 InputStream_GetByte:
 	push	xix	; F7138F  push XIX
@@ -174392,7 +174392,7 @@ Data_F73844:
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A480 0x60A700
 ; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_Var2216_SetW145C_Call T_F42604 SmfWrite_SaveFileName
-;          T_F425CC SmfWrite_RestoreFileName T_F425B0 sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
+;          T_F425CC SmfWrite_RestoreFileName T_DiskApi_DeleteFile_Call sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
 ;          more
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
@@ -174523,7 +174523,7 @@ Smf_WriteFile_Join:
 	ld	(Disk_FileName+8:16), 77	; F73980  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F73985  ld (0x21d1),0x49
 	ld	(Disk_FileName+10:16), 68	; F7398A  ld (0x21d2),0x44
-	call	T_F425B0	; F7398F  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F7398F  call 0xf425b0
 	m_popw MD16, Disk_FileName+6	; F73993  popw (0x21ce)
 	m_popw MD16, Disk_FileName+4	; F73997  popw (0x21cc)
 	m_popw MD16, Disk_FileName+2	; F7399B  popw (0x21ca)
@@ -175829,7 +175829,7 @@ Smf_WriteFile_Join9:
 	ld	(Disk_FileName+10:16), 63	; F747B0  ld (0x21d2),0x3f
 	ld	l, (UI_StatusCode:16)	; F747B5  ld L,(0x2880)
 	pushw	hl	; F747B9  push HL
-	call	T_F425B0	; F747BA  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F747BA  call 0xf425b0
 	popw	hl	; F747BE  pop HL
 	ld	(UI_StatusCode:16), l	; F747BF  ld (0x2880),L
 Smf_WriteFile_Skip57:
@@ -176047,7 +176047,7 @@ sub_F748AD_Epilogue:
 ; sub_F748F0
 ; Called from: in-module: 0xF74775 0xF747CD 0xF747EB
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x2725)
-; Calls:   T_F425C8 T_F425B0 SmfWrite_RestoreFileName
+; Calls:   T_F425C8 T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF748F0 is an instruction boundary of this
@@ -176066,7 +176066,7 @@ sub_F748F0:
 	ld	(Disk_FileName+8:16), 63	; F74908  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F7490D  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F74912  ld (0x21d2),0x3f
-	call	T_F425B0	; F74917  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F74917  call 0xf425b0
 	calr	SmfWrite_RestoreFileName	; F7491B  calr 0xf7491f
 	ret	; F7491E  ret
 
@@ -176408,7 +176408,7 @@ sub_F74AC5_Join:
 ;              0xF74A2D 0xF74A42 0xF74A57 +5 more
 ; Touches: (0x1088) (0x1238) (0x1248) (0x126C) (0x21D0) (0x21D1) (0x21D2)
 ;          (0x2724)  |  0x60A480 0x60A700 0x60AAFF
-; Calls:   sub_F765E6 T_F42604 sub_F76661 SmfWrite_SaveFileName T_F425B0 SmfWrite_RestoreFileName
+; Calls:   sub_F765E6 T_F42604 sub_F76661 SmfWrite_SaveFileName T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74B3A is an instruction boundary of this
@@ -176494,7 +176494,7 @@ sub_F74B3A_Epilogue:
 	ld	(Disk_FileName+8:16), 63	; F74BDB  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F74BE0  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F74BE5  ld (0x21d2),0x3f
-	call	T_F425B0	; F74BEA  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F74BEA  call 0xf425b0
 	calr	SmfWrite_RestoreFileName	; F74BEE  calr 0xf7491f
 	pop	xbc	; F74BF1  pop XBC
 	pop	xhl	; F74BF2  pop XHL
@@ -179114,7 +179114,7 @@ sub_F76567_Join:
 ; Called from: in-module: 0xF6F55F 0xF7658F
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7659B is an instruction boundary of this
@@ -179136,7 +179136,7 @@ sub_F7659B_Skip:
 	ld	xwa, 6335232	; F765BC  ld XWA,0x0060ab00
 	ld	(8663:16), xwa	; F765C1  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F765C5  or (0x21e7),0x20
-	call	T_F425A8	; F765CA  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F765CA  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F765CE  and (0x21e7),0xdf
 	ret	; F765D3  ret
 
@@ -179144,7 +179144,7 @@ sub_F7659B_Skip:
 ; InputStream_Refill -- 0xF765D4
 ; Called from: in-module: 0xF6FDA7 0xF713A7 0xF76593
 ; Touches: (0x21E7)
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF765D4 is an instruction boundary of this
@@ -179159,11 +179159,11 @@ sub_F7659B_Skip:
 ;          about where the bytes come from.
 ; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
 ;          FOR.  Left as sub_XXXXXX with the gap stated`.
-; Unknown: what prom_a 0xFE1C3A, behind slot T_F425A8, reads from.
+; Unknown: what prom_a 0xFE1C3A, behind slot T_DiskApi_ReadFileToWindow_Entry, reads from.
 ; --------------------------------------------------------------------------
 InputStream_Refill:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F765D4  or (0x21e7),0x02
-	call	T_F425A8	; F765D9  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F765D9  call 0xf425a8
 	ret	; F765DD  ret
 
 ; --------------------------------------------------------------------------
@@ -179236,7 +179236,7 @@ sub_F765E6_Skip:
 	ld	(Disk_FileName+8:16), 77	; F7661E  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F76623  ld (0x21d1),0x49
 	ld	(Disk_FileName+10:16), 68	; F76628  ld (0x21d2),0x44
-	call	T_F425B0	; F7662D  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F7662D  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F76631  or (0x21e7),0x80
 	ld	(Disk_FileName+8:16), 77	; F76636  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F7663B  ld (0x21d1),0x49
@@ -179250,7 +179250,7 @@ sub_F765E6_Return:
 ; sub_F7664E
 ; Called from: in-module: 0xF76649
 ; Touches: (0x21E7) (0x2243)
-; Calls:   T_F425AC
+; Calls:   T_DiskApi_WriteFileFromWindow_Entry
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -179262,7 +179262,7 @@ sub_F765E6_Return:
 ; --------------------------------------------------------------------------
 sub_F7664E:
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F7664E  or (0x21e7),0x20
-	call	T_F425AC	; F76653  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F76653  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F76657  ld A,(0x2243)
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F7665B  and (0x21e7),0xdf
 	ret	; F76660  ret
@@ -179271,7 +179271,7 @@ sub_F7664E:
 ; sub_F76661
 ; Called from: in-module: 0xF74B95
 ; Touches: (0x21E7) (0x2243)
-; Calls:   T_F425AC
+; Calls:   T_DiskApi_WriteFileFromWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76661 is an instruction boundary of this
@@ -179282,7 +179282,7 @@ sub_F7664E:
 ; --------------------------------------------------------------------------
 sub_F76661:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F76661  or (0x21e7),0x02
-	call	T_F425AC	; F76666  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F76666  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F7666A  ld A,(0x2243)
 	ret	; F7666E  ret
 
@@ -179290,7 +179290,7 @@ sub_F76661:
 ; sub_F7666F
 ; Called from: in-module: 0xF74772
 ; Touches: (0x126C) (0x21E7)
-; Calls:   T_F425AC T_F425E4
+; Calls:   T_DiskApi_WriteFileFromWindow_Entry T_DiskApi_CloseFile_Call
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7666F is an instruction boundary of this
@@ -179303,10 +179303,10 @@ sub_F7666F:
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F7666F  cp (0x126c),0x0000
 	jr	z, sub_F7666F_Skip	; F76675  jr Z,0xf76680
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F76677  or (0x21e7),0x02
-	call	T_F425AC	; F7667C  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F7667C  call 0xf425ac
 sub_F7666F_Skip:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F76680  and (0x21e7),0xfd
-	call	T_F425E4	; F76685  call 0xf425e4
+	call	T_DiskApi_CloseFile_Call	; F76685  call 0xf425e4
 	ret	; F76689  ret
 
 ; --------------------------------------------------------------------------
@@ -179406,7 +179406,7 @@ sub_F7669D_Code_Skip3:
 	ld	(Disk_FileName+10:16), 63	; F76761  ld (0x21d2),0x3f
 	ld	l, (UI_StatusCode:16)	; F76766  ld L,(0x2880)
 	pushw	hl	; F7676A  push HL
-	call	T_F425B0	; F7676B  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F7676B  call 0xf425b0
 	popw	hl	; F7676F  pop HL
 	ld	(UI_StatusCode:16), l	; F76770  ld (0x2880),L
 sub_F7669D_Code_Skip4:
@@ -179615,7 +179615,7 @@ sub_F768A1:
 	ld	(Disk_FileName+8:16), 63	; F768B9  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F768BE  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F768C3  ld (0x21d2),0x3f
-	call	T_F425B0	; F768C8  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F768C8  call 0xf425b0
 	calr	SmfSize_RestoreFileName	; F768CC  calr 0xf768d0
 	ret	; F768CF  ret
 
@@ -179973,7 +179973,7 @@ sub_F76ADF_Epilogue:
 	ld	(Disk_FileName+8:16), 63	; F76B80  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F76B85  ld (0x21d1),0x3f
 	ld	(Disk_FileName+10:16), 63	; F76B8A  ld (0x21d2),0x3f
-	call	T_F425B0	; F76B8F  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F76B8F  call 0xf425b0
 	calr	SmfSize_RestoreFileName	; F76B93  calr 0xf768d0
 	pop	xbc	; F76B96  pop XBC
 	pop	xhl	; F76B97  pop XHL
@@ -181961,7 +181961,7 @@ sub_F77C92_Join:
 ; Called from: in-module: 0xF77CF4
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77D00 is an instruction boundary of this
@@ -181983,7 +181983,7 @@ sub_F77D00_Skip:
 	ld	xwa, 6335232	; F77D21  ld XWA,0x0060ab00
 	ld	(8663:16), xwa	; F77D26  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77D2A  or (0x21e7),0x20
-	call	T_F425A8	; F77D2F  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F77D2F  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77D33  and (0x21e7),0xdf
 	ret	; F77D38  ret
 
@@ -181991,7 +181991,7 @@ sub_F77D00_Skip:
 ; sub_F77D39
 ; Called from: in-module: 0xF77CF8
 ; Touches: (0x21E7)
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77D39 is an instruction boundary of this
@@ -182002,7 +182002,7 @@ sub_F77D00_Skip:
 ; --------------------------------------------------------------------------
 sub_F77D39:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77D39  or (0x21e7),0x02
-	call	T_F425A8	; F77D3E  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F77D3E  call 0xf425a8
 	ret	; F77D42  ret
 
 ; --------------------------------------------------------------------------
@@ -182050,7 +182050,7 @@ sub_F77D4B_Skip:
 	ld	(Disk_FileName+8:16), 77	; F77D83  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F77D88  ld (0x21d1),0x49
 	ld	(Disk_FileName+10:16), 68	; F77D8D  ld (0x21d2),0x44
-	call	T_F425B0	; F77D92  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F77D92  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77D96  or (0x21e7),0x80
 	ld	(Disk_FileName+8:16), 77	; F77D9B  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F77DA0  ld (0x21d1),0x49
@@ -182064,7 +182064,7 @@ sub_F77D4B_Return:
 ; sub_F77DB3
 ; Called from: in-module: 0xF77DAE
 ; Touches: (0x126C) (0x21E7) (0x2243)
-; Calls:   T_F425AC T_F425E4
+; Calls:   T_DiskApi_WriteFileFromWindow_Entry T_DiskApi_CloseFile_Call
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -182076,23 +182076,23 @@ sub_F77D4B_Return:
 ; --------------------------------------------------------------------------
 sub_F77DB3:
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77DB3  or (0x21e7),0x20
-	call	T_F425AC	; F77DB8  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77DB8  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77DBC  ld A,(0x2243)
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77DC0  and (0x21e7),0xdf
 	ret	; F77DC5  ret
 sub_F77DC6:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77DC6  or (0x21e7),0x02
-	call	T_F425AC	; F77DCB  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77DCB  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77DCF  ld A,(0x2243)
 	ret	; F77DD3  ret
 sub_F77DD4:
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F77DD4  cp (0x126c),0x0000
 	jr	z, sub_F77DB3_Skip	; F77DDA  jr Z,0xf77de5
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77DDC  or (0x21e7),0x02
-	call	T_F425AC	; F77DE1  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77DE1  call 0xf425ac
 sub_F77DB3_Skip:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F77DE5  and (0x21e7),0xfd
-	call	T_F425E4	; F77DEA  call 0xf425e4
+	call	T_DiskApi_CloseFile_Call	; F77DEA  call 0xf425e4
 	ret	; F77DEE  ret
 
 ; --------------------------------------------------------------------------
@@ -182206,7 +182206,7 @@ sub_F77DEF_Join:
 ; Called from: in-module: 0xF77EDB
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77EE7 is an instruction boundary of this
@@ -182228,7 +182228,7 @@ sub_F77EE7_Skip:
 	ld	xwa, 6335232	; F77F08  ld XWA,0x0060ab00
 	ld	(8663:16), xwa	; F77F0D  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77F11  or (0x21e7),0x20
-	call	T_F425A8	; F77F16  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F77F16  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77F1A  and (0x21e7),0xdf
 	ret	; F77F1F  ret
 
@@ -182236,7 +182236,7 @@ sub_F77EE7_Skip:
 ; sub_F77F20
 ; Called from: in-module: 0xF77EDF
 ; Touches: (0x21E7)
-; Calls:   T_F425A8
+; Calls:   T_DiskApi_ReadFileToWindow_Entry
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77F20 is an instruction boundary of this
@@ -182247,7 +182247,7 @@ sub_F77EE7_Skip:
 ; --------------------------------------------------------------------------
 sub_F77F20:
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77F20  or (0x21e7),0x02
-	call	T_F425A8	; F77F25  call 0xf425a8
+	call	T_DiskApi_ReadFileToWindow_Entry	; F77F25  call 0xf425a8
 	ret	; F77F29  ret
 
 ; --------------------------------------------------------------------------
@@ -182255,7 +182255,7 @@ sub_F77F20:
 ; Called from: in-module: 0xF77EE3
 ; Touches: (0x10C5) (0x10C6) (0x10C7) (0x21D0) (0x21D1) (0x21D2) (0x21E7)
 ;          (0x2243) (0x2245)
-; Calls:   T_F425E8 T_F425B0 sub_F77FD6 sub_F77F9A
+; Calls:   T_F425E8 T_DiskApi_DeleteFile_Call sub_F77FD6 sub_F77F9A
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77F2A is an instruction boundary of this
@@ -182290,7 +182290,7 @@ sub_F77F2A_Skip:
 	ld	(Disk_FileName+8:16), 77	; F77F6A  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F77F6F  ld (0x21d1),0x49
 	ld	(Disk_FileName+10:16), 68	; F77F74  ld (0x21d2),0x44
-	call	T_F425B0	; F77F79  call 0xf425b0
+	call	T_DiskApi_DeleteFile_Call	; F77F79  call 0xf425b0
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77F7D  or (0x21e7),0x80
 	ld	(Disk_FileName+8:16), 77	; F77F82  ld (0x21d0),0x4d
 	ld	(Disk_FileName+9:16), 73	; F77F87  ld (0x21d1),0x49
@@ -182304,7 +182304,7 @@ sub_F77F2A_Return:
 ; sub_F77F9A
 ; Called from: in-module: 0xF77F95
 ; Touches: (0x126C) (0x21E7) (0x2243)
-; Calls:   T_F425AC T_F425E4
+; Calls:   T_DiskApi_WriteFileFromWindow_Entry T_DiskApi_CloseFile_Call
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -182316,21 +182316,21 @@ sub_F77F2A_Return:
 ; --------------------------------------------------------------------------
 sub_F77F9A:
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77F9A  or (0x21e7),0x20
-	call	T_F425AC	; F77F9F  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77F9F  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77FA3  ld A,(0x2243)
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77FA7  and (0x21e7),0xdf
 	ret	; F77FAC  ret
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77FAD  or (0x21e7),0x02
-	call	T_F425AC	; F77FB2  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77FB2  call 0xf425ac
 	ld	a, (Disk_LastError:16)	; F77FB6  ld A,(0x2243)
 	ret	; F77FBA  ret
 	m_cp_mi16 MW16, SmfOut_WindowsFlushed, 0x0000	; F77FBB  cp (0x126c),0x0000
 	jr	z, sub_F77F9A_Skip	; F77FC1  jr Z,0xf77fcc
 	m_or_mi8 MB16, Disk_Flags, 0x02	; F77FC3  or (0x21e7),0x02
-	call	T_F425AC	; F77FC8  call 0xf425ac
+	call	T_DiskApi_WriteFileFromWindow_Entry	; F77FC8  call 0xf425ac
 sub_F77F9A_Skip:
 	m_and_mi8 MB16, Disk_Flags, 0xfd	; F77FCC  and (0x21e7),0xfd
-	call	T_F425E4	; F77FD1  call 0xf425e4
+	call	T_DiskApi_CloseFile_Call	; F77FD1  call 0xf425e4
 	ret	; F77FD5  ret
 
 ; --------------------------------------------------------------------------

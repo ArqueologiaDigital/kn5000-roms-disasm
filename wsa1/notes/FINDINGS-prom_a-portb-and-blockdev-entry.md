@@ -74,12 +74,12 @@ are the UI's way in:
 | `T_F42578` | 0xFE1BDE | 7: 0xF44882, 0xF44934, 0xF45132, 0xF56534, 0xF6AEE0, 0xF6F521, 0xF6F83D |
 | `T_F4257C` | 0xFE152E | 5: 0xF44A92, 0xF44AD3, 0xF661DF, 0xF66241, 0xF6649D |
 | `T_F42580` | 0xFE1C16 | 2: 0xF662EA, 0xF662F2 |
-| `T_F425A8` | 0xFE1C3A | 8 |
-| `T_F425AC` | 0xFE1C4D | 9 |
-| `T_F425B0` | 0xFE1C55 | 10 |
+| `T_DiskApi_ReadFileToWindow_Entry` | 0xFE1C3A | 8 |
+| `T_DiskApi_WriteFileFromWindow_Entry` | 0xFE1C4D | 9 |
+| `T_DiskApi_DeleteFile_Call` | 0xFE1C55 | 10 |
 | `T_F425C8` | 0xFE1C79 | 2 |
 | `T_F425CC` | 0xFE1C80 | 1 |
-| `T_F425E4` | 0xFE1CAF | 4 |
+| `T_DiskApi_CloseFile_Call` | 0xFE1CAF | 4 |
 | `T_F425E8` | 0xFE1CB3 | 3 |
 | `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
 | `T_Var2216_SetW145C_Call` | 0xFE1CD4 | 2 |

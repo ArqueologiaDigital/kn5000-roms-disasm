@@ -180,7 +180,7 @@ ROWS = [
      "issues command 0x83 (DiskCmd_ReadFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
     ("FE1AB5", "DiskFile_CountFreeSpace",
      "issues command 0x80 (DiskCmd_CountFreeSpace; its 16-bit result goes to (0x1739)): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
-    ("FE1AF3", "DiskFile_Create",
+    ("FE1ADE", "DiskFile_Create",
      "issues command 0x16 (DiskCmd_CreateFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
     ("FE1B0D", "DiskFile_WriteBlock",
      "issues command 0x84 (DiskCmd_WriteFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
@@ -188,6 +188,30 @@ ROWS = [
      "issues command 0x10 (DiskCmd_CloseFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
     ("FE1B65", "DiskFile_Delete",
      "issues command 0x13 (DiskCmd_DeleteFile; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    # prom_a: the disk API prom_b calls through the thunk directory.  The memory window is (0x21D3) .. (0x21D7)
+    # (SmfSize_ / InputStream_ code sets them to 0x60A700 .. 0x60AB00); Disk_Flags bit 1 = continue an earlier call,
+    # bit 2 = the last, partial 1 KB block (transfer through 0x60A080), bit 5 = stop after one block.
+    ("FE0B43", "DiskApi_ReadFileToWindow",
+     "(T_DiskApi_ReadFileToWindow_Entry via 0xFE1C3A) unless Disk_Flags bit 1: DiskFile_Open (once more after 0xFE08BD if it fails; A = 4 when it\n"
+     "fails again), the window end clamped to start + the file size at control block +0x10/+0x12, the transfer\n"
+     "address set; then DiskFile_ReadBlock per 1 KB until the window is full (DiskFile_AdvanceWindow 0xFF), bit 5 asks\n"
+     "for one block, or bit 1 (A = 0xFD: more to come).  A = 5 on a read error, 1 when done."),
+    ("FE0A99", "DiskApi_WriteFileFromWindow",
+     "(T_DiskApi_WriteFileFromWindow_Entry via 0xFE1C4D) unless Disk_Flags bit 1: DiskFile_Create and the transfer address; then DiskFile_WriteBlock\n"
+     "per 1 KB; on a write error DiskFile_Delete (A = 7 or 6); at the window's end DiskApi_CloseFile; A = 3 when done."),
+    ("FE0CA2", "DiskApi_DeleteFile",
+     "(T_DiskApi_DeleteFile_Call via 0xFE1C55) DiskFile_Delete; (0x1735) = its result; A = 0x19 deleted, 0x18 not."),
+    ("FE0C45", "DiskApi_CloseFile",
+     "(T_DiskApi_CloseFile_Call via 0xFE1CAF) DiskFile_Close; A = 3, or, when the close fails, the file is deleted (command 0x13) and A = 6."),
+    ("FE0C08", "DiskFile_SetTransferToWindow",
+     "(0x174B) = the window start (0x21D3), or 0x60A080 when Disk_Flags bit 2; then command 0x1A with it (DOS Set DTA)."),
+    ("FE0C73", "DiskFile_AdvanceWindow",
+     "(0x21D3) += 0x400 unless that reaches (0x21D7) (A = 0xFF); sets Disk_Flags bit 2 when the next 1 KB would pass the\n"
+     "end; A = 0."),
+    ("FE1C3A", "DiskApi_ReadFileToWindow_Entry",
+     "the directory's entry (T_DiskApi_ReadFileToWindow_Entry): DiskApi_ReadFileToWindow, A to Disk_LastError, and on screen latch 0x49 (0x360B) bit 0 cleared."),
+    ("FE1C4D", "DiskApi_WriteFileFromWindow_Entry",
+     "the directory's entry (T_DiskApi_WriteFileFromWindow_Entry): DiskApi_WriteFileFromWindow, A to Disk_LastError."),
 ]
 
 

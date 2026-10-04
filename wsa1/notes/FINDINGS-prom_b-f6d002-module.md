@@ -251,7 +251,7 @@ gives 0x30 in `(0x2880)`; and the format must be 0 or 1. Then the track tag:
 ### 4.1 What is NOT established, and is not claimed
 
 * **WHERE the bytes come from.** The refill leaves prom_b through
-  `T_F425A8`/`T_F425B0`/`T_F425E8` into prom_a `0xFE1C3A` / `0xFE1C55` /
+  `T_DiskApi_ReadFileToWindow_Entry`/`T_DiskApi_DeleteFile_Call`/`T_F425E8` into prom_a `0xFE1C3A` / `0xFE1C55` /
   `0xFE1CB3`, all three of which are `sub_` in prom_a. The floppy
   (`notes/FINDINGS-prom_a-fdc.md`) is the obvious candidate and this note does not
   assert it.
