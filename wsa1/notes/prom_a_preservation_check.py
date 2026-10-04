@@ -4080,6 +4080,16 @@ RENAMES = {
     "sub_FEA47F": "EditPos_SeekLastNoteBeforeOldCursor",
     "sub_FEA4DC": "EditCursor_LandOnNote",
     "sub_FEA50C": "EditCursor_LandOnGrid",
+    "sub_FEA923": "EditPos_SeekPrevShownNote",
+    "sub_FEADFB": "EditCursor_NextBeatStart",
+    "sub_FEAE58": "EditCursor_PrevBeatStart",
+    "sub_FEAFB7": "DrumEdit_CursorNoteFromRow",
+    "sub_FEB033": "DrumEdit_AuditionEnteredNote",
+    "sub_FEB069": "DrumEdit_RedrawRowList",
+    "sub_FE9648": "EditScreen_ShowPreviousMeasure",
+    "sub_FE9694": "EditScreen_ShowPreviousMeasureAtTick",
+    "sub_FE94FB": "EditScreen_ShowCursorMeasure",
+    "sub_FE955D": "EditScreen_WrapAndShowCursorMeasure",
 }
 
 

@@ -521,7 +521,7 @@ ROWS = [
     ("FF0A52", "EditScreen_DrawTick", "layer 0; EditCursor_Tick to 0x26B0, DisplayList_FF0A71 (op 06, digits)."),
     # prom_a 0xFEB03D-0xFEB280: the left column of NOTE / DRUM EDIT, x 0..0x16, twelve 10-pixel rows from y = 0x2A.
     ("FEB07A", "DrumEdit_DrawRowNotes",
-     "layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by sub_FEB069 only when EditScreen_Mode\n"
+     "layer 0, then DrumEdit_DrawRowNote0 .. DrumEdit_DrawRowNote11.  Called by DrumEdit_RedrawRowList only when EditScreen_Mode\n"
      "bit 0 (DRUM EDIT) is set."),
     ("FEB03D", "EditScreen_HighlightCursorRow",
      "LCD_Svc_05_FillRect x 0..0x16, y = (0x601F73) * 10 + 0x2A .. +8: one 10-pixel row of the left column.  Called\n"
@@ -1518,7 +1518,7 @@ ROWS = [
      "DrumEdit_SoftKeyCol8 and NoteEdit_EnterHeldNotes."),
     ("FE9290", "EditScreen_StepCursorAfterEntry",
      "EditCursor_AdvanceToNextIncStep and EditScreen_ExtendChainToCursorBeat; inside the measure the fields are\n"
-     "redrawn, past its end sub_FE955D; EditScreen_CursorFlags bit 2 (extension failed) -> sub_FE8BD4."),
+     "redrawn, past its end EditScreen_WrapAndShowCursorMeasure; EditScreen_CursorFlags bit 2 (extension failed) -> sub_FE8BD4."),
     ("FEA64D", "EditScreen_ExtendChainToCursorBeat",
      "appends beat markers (EditScreen_AppendBeatMarker) until the chain holds the cursor's beat; CursorFlags bit 2\n"
      "is set when an append fails; the block-store cursor is restored."),
@@ -1644,12 +1644,43 @@ ROWS = [
      "the last shown note before (0x601F56): walks from the mark saving the cursor at each note; CursorFlags bit 3\n"
      "is set when there is none."),
     ("FEA4DC", "EditCursor_LandOnNote",
-     "EditCursor_TickInMeasure = the note's position; past the view -> sub_FE955D; otherwise\n"
+     "EditCursor_TickInMeasure = the note's position; past the view -> EditScreen_WrapAndShowCursorMeasure; otherwise\n"
      "EditCursor_SplitViewTick, EditScreen_SelectEventAtCursor, the fields and cursor redrawn,\n"
      "EditScreen_AuditionEvent."),
     ("FEA50C", "EditCursor_LandOnGrid",
-     "past the view -> sub_FE955D; otherwise the selection cleared (CursorFlags bit 0), the block-store cursor\n"
+     "past the view -> EditScreen_WrapAndShowCursorMeasure; otherwise the selection cleared (CursorFlags bit 0), the block-store cursor\n"
      "restored, the cursor layer redrawn, EditCursor_SplitViewTick, the fields redrawn."),
+    ("FEA923", "EditPos_SeekPrevShownNote",
+     "steps back (BStoreCursor_SeekPrevTag) to the previous note-on DrumEdit_IsOtherNote passes, loading its tick;\n"
+     "EditPos_Beat - 1 at each 0x81; CursorFlags bit 3 when the measure's start is passed or a BStore error comes."),
+    ("FEADFB", "EditCursor_NextBeatStart",
+     "NoteEdit_Button24 / DrumEdit_Button23: selection cleared, EditCursor_AdvanceToNextIncStep with EditField_Inc\n"
+     "forced to 0x60 (restored after), then EditCursor_SplitViewTick and EditCursor_SeekPastTick and a redraw;\n"
+     "past the view, EditScreen_WrapAndShowCursorMeasure."),
+    ("FEAE58", "EditCursor_PrevBeatStart",
+     "NoteEdit_Button23 / DrumEdit_Button22: the mirror with EditCursor_StepBackToIncGrid at a 0x60 grid; at view\n"
+     "tick 0, EditScreen_ShowPreviousMeasure."),
+    ("FEAFB7", "DrumEdit_CursorNoteFromRow",
+     "DRUM EDIT: EditCursor_Note = DrumEdit_TopRowNote + EditScreen_CursorRow."),
+    ("FEB033", "DrumEdit_AuditionEnteredNote",
+     "EditScreen_AuditionEvent, EditScreen_ActionTimer2 = 0x82.  Called by DrumEdit_SoftKeyCol8 after it enters a\n"
+     "note."),
+    ("FEB069", "DrumEdit_RedrawRowList",
+     "DRUM EDIT: the left column erased (sub_FEF88B), DrumEdit_DrawRowNotes, sub_FEB280."),
+    ("FE9648", "EditScreen_ShowPreviousMeasure",
+     "with EditCursor_Measure > 1: the view is rebuilt from the measure before (EditScreen_OpenCursorMeasure and\n"
+     "EditScreen_BuildBeatTable with the measure lowered by one, then raised back), the cursor at beat 0 tick 0 of\n"
+     "its measure (EditScreen_SeekCursorMeasureStart, EditCursor_ComputeTickInView), selection and screen redrawn."),
+    ("FE9694", "EditScreen_ShowPreviousMeasureAtTick",
+     "EditScreen_ShowPreviousMeasure with EditCursor_SeekToTick before the re-selection.  Called by\n"
+     "EditCursor_PrevBeat."),
+    ("FE94FB", "EditScreen_ShowCursorMeasure",
+     "the view rebuilt to start at the cursor's measure: EditScreen_OpenCursorMeasure (moving on through sub_FE93CA\n"
+     "when it is missing), EditScreen_SeekCursorBeat, EditScreen_BuildBeatTable, EditCursor_SeekToTick,\n"
+     "EditScreen_SelectEventAtCursor, everything redrawn; with a selection, EditScreen_AuditionEvent."),
+    ("FE955D", "EditScreen_WrapAndShowCursorMeasure",
+     "EditCursor_WrapAndRecompute, then EditScreen_ShowCursorMeasure's sequence.  Called when a move runs past\n"
+     "the view."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
