@@ -167,6 +167,27 @@ ROWS = [
      "the first cluster IZ .. (0x605D58) - 1 whose FAT entry is 0; HL = 0 when none."),
     ("FE48C7", "Fat_FindFreeClusterAfter",
      "cluster + 1 when its entry is 0, else Fat_FindFreeClusterFrom(2); HL = 0 when none."),
+    # prom_a 0xFE171D-0xFE1BBF: the UI's file calls, one Disk_CommandDispatch command each
+    ("FE171D", "DiskFile_SetFcbName",
+     "copies the 11-byte 8.3 name Disk_FileName (0x21C8..) into the file-control block 0x178E, +1 .. +11."),
+    ("FE19FF", "DiskFile_FindFirst",
+     "issues command 0x11 (DiskCmd_FindFirst; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1A2E", "DiskFile_FindNext",
+     "issues command 0x12 (DiskCmd_FindNext): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1A5A", "DiskFile_Open",
+     "issues command 0x0F (DiskCmd_OpenFile; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1A89", "DiskFile_ReadBlock",
+     "issues command 0x83 (DiskCmd_ReadFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1AB5", "DiskFile_CountFreeSpace",
+     "issues command 0x80 (DiskCmd_CountFreeSpace; its 16-bit result goes to (0x1739)): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1AF3", "DiskFile_Create",
+     "issues command 0x16 (DiskCmd_CreateFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1B0D", "DiskFile_WriteBlock",
+     "issues command 0x84 (DiskCmd_WriteFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1B39", "DiskFile_Close",
+     "issues command 0x10 (DiskCmd_CloseFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
+    ("FE1B65", "DiskFile_Delete",
+     "issues command 0x13 (DiskCmd_DeleteFile; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735)."),
 ]
 
 

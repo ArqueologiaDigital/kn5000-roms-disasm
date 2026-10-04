@@ -159505,7 +159505,7 @@ sub_FE04BE:
 	ld (XIX+0x08),0x4d                                   ; FE04D8  bc 08 00 4d
 	ld (XIX+0x09),0x49                                   ; FE04DC  bc 09 00 49
 	ld (XIX+0x0a),0x44                                   ; FE04E0  bc 0a 00 44
-	calr sub_FE171D                                          ; FE04E4  1e 36 12
+	calr DiskFile_SetFcbName                                          ; FE04E4  1e 36 12
 	pushw 0x00                                           ; FE04E7  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE04EA  f2 8e 17 00 31
 	push XBC                                             ; FE04EF  39
@@ -160189,14 +160189,14 @@ sub_FE0A99:
 	and (XIX),0xfb                                       ; FE0AAD  84 3c fb
 	calr sub_FE0C08                                          ; FE0AB0  1e 55 01
 .LFE0AB3:
-	calr sub_FE1B0D                                          ; FE0AB3  1e 57 10
+	calr DiskFile_WriteBlock                                          ; FE0AB3  1e 57 10
 	ld H,A                                               ; FE0AB6  c9 8e
 	ld C,(XIX)                                           ; FE0AB8  84 23
 	and C,0x20                                           ; FE0ABA  cb cc 20
 	jr nz, .LFE0AF3                                          ; FE0ABD  6e 34
 	cp a, 0x00:i3                                          ; FE0ABF  c9 d8
 	jr z, .LFE0ACE                                           ; FE0AC1  66 0b
-	calr sub_FE1B65                                          ; FE0AC3  1e 9f 10
+	calr DiskFile_Delete                                          ; FE0AC3  1e 9f 10
 	cp h, 0x01:i3                                          ; FE0AC6  ce d9
 	jr nz, .LFE0AE7                                          ; FE0AC8  6e 1d
 	ld a, 0x07:opc                                          ; FE0ACA  21 07
@@ -160211,7 +160211,7 @@ sub_FE0A99:
 	calr sub_FE0C45                                          ; FE0ADD  1e 65 01
 	cp a, 0x03:i3                                          ; FE0AE0  c9 db
 	jr z, .LFE0AF3                                           ; FE0AE2  66 0f
-	calr sub_FE1B65                                          ; FE0AE4  1e 7e 10
+	calr DiskFile_Delete                                          ; FE0AE4  1e 7e 10
 .LFE0AE7:
 	ld a, 0x06:opc                                          ; FE0AE7  21 06
 	jr .LFE0AF5                                              ; FE0AE9  68 0a
@@ -160265,12 +160265,12 @@ sub_FE0B43:
 	ld c, (Disk_Flags:16)                                   ; FE0B4F  c1 e7 21 23
 	and C,0x02                                           ; FE0B53  cb cc 02
 	jr nz, .LFE0BA8                                          ; FE0B56  6e 50
-	calr sub_FE1A5A                                          ; FE0B58  1e ff 0e
+	calr DiskFile_Open                                          ; FE0B58  1e ff 0e
 	ld H,A                                               ; FE0B5B  c9 8e
 	cp a, 0x00:i3                                          ; FE0B5D  c9 d8
 	jr z, .LFE0B69                                           ; FE0B5F  66 08
 	calr sub_FE08BD                                          ; FE0B61  1e 59 fd
-	calr sub_FE1A5A                                          ; FE0B64  1e f3 0e
+	calr DiskFile_Open                                          ; FE0B64  1e f3 0e
 	ld H,A                                               ; FE0B67  c9 8e
 .LFE0B69:
 	cp h, 0x00:i3                                          ; FE0B69  ce d8
@@ -160297,7 +160297,7 @@ sub_FE0B43:
 	m_res 2, MD16, Disk_Flags                                ; FE0BA1  f1 e7 21 b2
 	calr sub_FE0C08                                            ; FE0BA5  1e 60 00
 .LFE0BA8:
-	calr sub_FE1A89                                          ; FE0BA8  1e de 0e
+	calr DiskFile_ReadBlock                                          ; FE0BA8  1e de 0e
 	cp a, 0x00:i3                                          ; FE0BAB  c9 d8
 	jr z, .LFE0BB3                                           ; FE0BAD  66 04
 	ld h, 0x05:opc                                          ; FE0BAF  26 05
@@ -160367,7 +160367,7 @@ sub_FE0C08:
 	pop XIX                                              ; FE0C43  5c
 	ret                                                  ; FE0C44  0e
 sub_FE0C45:
-	calr sub_FE1B39                                          ; FE0C45  1e f1 0e
+	calr DiskFile_Close                                          ; FE0C45  1e f1 0e
 	cp a, 0x00:i3                                          ; FE0C48  c9 d8
 	jr nz, .LFE0C50                                          ; FE0C4A  6e 04
 	ld a, 0x03:opc                                          ; FE0C4C  21 03
@@ -160406,7 +160406,7 @@ sub_FE0C73:
 	ret                                                  ; FE0CA1  0e
 sub_FE0CA2:
 	pushw hl                                             ; FE0CA2  2b
-	calr sub_FE1B65                                          ; FE0CA3  1e bf 0e
+	calr DiskFile_Delete                                          ; FE0CA3  1e bf 0e
 	ld H,A                                               ; FE0CA6  c9 8e
 	ld (0x1735:24), a                                   ; FE0CA8  f2 35 17 00 41
 	cp h, 0x00:i3                                          ; FE0CAD  ce d8
@@ -160537,7 +160537,7 @@ sub_FE0CB9:
 	push XIX                                             ; FE0E4F  3c
 	pushw 0x1a                                           ; FE0E50  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE0E53  1d 34 2d f4
-	calr sub_FE19FF                                          ; FE0E57  1e a5 0b
+	calr DiskFile_FindFirst                                          ; FE0E57  1e a5 0b
 	ld H,A                                               ; FE0E5A  c9 8e
 	ld (0x1735:24), a                                   ; FE0E5C  f2 35 17 00 41
 	inc 8,XSP                                            ; FE0E61  ef 60
@@ -160549,7 +160549,7 @@ sub_FE0CB9:
 	ld (0x2218:16), 0x00                                 ; FE0E6B  f1 18 22 00 00
 .LFE0E70:
 	calr sub_FE0E89                                            ; FE0E70  1e 16 00
-	calr sub_FE1A2E                                          ; FE0E73  1e b8 0b
+	calr DiskFile_FindNext                                          ; FE0E73  1e b8 0b
 	ld H,A                                               ; FE0E76  c9 8e
 	ld (0x1735:24), a                                   ; FE0E78  f2 35 17 00 41
 	cp h, 0x00:i3                                          ; FE0E7D  ce d8
@@ -160939,7 +160939,7 @@ sub_FE1218:
 	push XBC                                             ; FE128F  39
 	pushw 0x1a                                           ; FE1290  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1293  1d 34 2d f4
-	calr sub_FE19FF                                          ; FE1297  1e 65 07
+	calr DiskFile_FindFirst                                          ; FE1297  1e 65 07
 	inc 8,XSP                                            ; FE129A  ef 60
 	cp a, 0x00:i3                                          ; FE129C  c9 d8
 	jr z, .LFE12A5                                           ; FE129E  66 05
@@ -160989,7 +160989,7 @@ sub_FE1218:
 .LFE1323:
 	m_xor_mi8 MB16, 0x2218, 0xff                         ; FE1323  c1 18 22 3d ff
 .LFE1328:
-	calr sub_FE1A2E                                          ; FE1328  1e 03 07
+	calr DiskFile_FindNext                                          ; FE1328  1e 03 07
 	ld H,A                                               ; FE132B  c9 8e
 	cp a, 0x00:i3                                          ; FE132D  c9 d8
 	jr z, .LFE12B1                                           ; FE132F  66 80
@@ -161470,7 +161470,8 @@ sub_FE1705:
 sub_FE1719:
 	calr sub_FE022E                                          ; FE1719  1e 12 eb
 	ret                                                  ; FE171C  0e
-sub_FE171D:
+; DiskFile_SetFcbName: copies the 11-byte 8.3 name Disk_FileName (0x21C8..) into the file-control block 0x178E, +1 .. +11.
+DiskFile_SetFcbName:
 	push XIX                                             ; FE171D  3c
 	lda xix, (0x178e:24)                                 ; FE171E  f2 8e 17 00 34
 	ld c, (Disk_FileName:16)                                   ; FE1723  c1 c8 21 23
@@ -161782,9 +161783,10 @@ sub_FE1962:
 	ld a, (0x1735:24)                                   ; FE19F8  c2 35 17 00 21
 	pop XIX                                              ; FE19FD  5c
 	ret                                                  ; FE19FE  0e
-sub_FE19FF:
+; DiskFile_FindFirst: issues command 0x11 (DiskCmd_FindFirst; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_FindFirst:
 	pushw hl                                             ; FE19FF  2b
-	calr sub_FE171D                                          ; FE1A00  1e 1a fd
+	calr DiskFile_SetFcbName                                          ; FE1A00  1e 1a fd
 	ldw (0x1739:24), 0x11                               ; FE1A03  f2 39 17 00 02 11 00
 	ldw (0x173b:24), 0x00                               ; FE1A0A  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A11  0b 00 00
@@ -161798,7 +161800,8 @@ sub_FE19FF:
 	ld A,H                                               ; FE1A2A  ce 89
 	popw hl                                              ; FE1A2C  4b
 	ret                                                  ; FE1A2D  0e
-sub_FE1A2E:
+; DiskFile_FindNext: issues command 0x12 (DiskCmd_FindNext): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_FindNext:
 	pushw hl                                             ; FE1A2E  2b
 	ldw (0x1739:24), 0x12                               ; FE1A2F  f2 39 17 00 02 12 00
 	ldw (0x173b:24), 0x00                               ; FE1A36  f2 3b 17 00 02 00 00
@@ -161813,9 +161816,10 @@ sub_FE1A2E:
 	ld A,H                                               ; FE1A56  ce 89
 	popw hl                                              ; FE1A58  4b
 	ret                                                  ; FE1A59  0e
-sub_FE1A5A:
+; DiskFile_Open: issues command 0x0F (DiskCmd_OpenFile; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_Open:
 	pushw hl                                             ; FE1A5A  2b
-	calr sub_FE171D                                          ; FE1A5B  1e bf fc
+	calr DiskFile_SetFcbName                                          ; FE1A5B  1e bf fc
 	ldw (0x1739:24), 0x0f                               ; FE1A5E  f2 39 17 00 02 0f 00
 	ldw (0x173b:24), 0x00                               ; FE1A65  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A6C  0b 00 00
@@ -161829,7 +161833,8 @@ sub_FE1A5A:
 	ld A,H                                               ; FE1A85  ce 89
 	popw hl                                              ; FE1A87  4b
 	ret                                                  ; FE1A88  0e
-sub_FE1A89:
+; DiskFile_ReadBlock: issues command 0x83 (DiskCmd_ReadFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_ReadBlock:
 	pushw hl                                             ; FE1A89  2b
 	ldw (0x1739:24), 0x83                               ; FE1A8A  f2 39 17 00 02 83 00
 	ldw (0x173b:24), 0x00                               ; FE1A91  f2 3b 17 00 02 00 00
@@ -161844,7 +161849,8 @@ sub_FE1A89:
 	ld A,H                                               ; FE1AB1  ce 89
 	popw hl                                              ; FE1AB3  4b
 	ret                                                  ; FE1AB4  0e
-sub_FE1AB5:
+; DiskFile_CountFreeSpace: issues command 0x80 (DiskCmd_CountFreeSpace; its 16-bit result goes to (0x1739)): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_CountFreeSpace:
 	pushw hl                                             ; FE1AB5  2b
 	ldw (0x1739:24), 0x80                               ; FE1AB6  f2 39 17 00 02 80 00
 	ldw (0x173f:24), 0x00                               ; FE1ABD  f2 3f 17 00 02 00 00
@@ -161861,11 +161867,12 @@ sub_FE1AB5:
 	ret                                                  ; FE1ADD  0e
 sub_FE1ADE:
 	pushw hl                                             ; FE1ADE  2b
-	calr sub_FE171D                                          ; FE1ADF  1e 3b fc
+	calr DiskFile_SetFcbName                                          ; FE1ADF  1e 3b fc
 	ldw (0x1739:24), 0x16                               ; FE1AE2  f2 39 17 00 02 16 00
 	ldw (0x173b:24), 0x00                               ; FE1AE9  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1AF0  0b 00 00
-sub_FE1AF3:
+; DiskFile_Create: issues command 0x16 (DiskCmd_CreateFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_Create:
 	lda xbc, (0x178e:24)                                 ; FE1AF3  f2 8e 17 00 31
 	push XBC                                             ; FE1AF8  39
 	pushw 0x16                                           ; FE1AF9  0b 16 00
@@ -161876,7 +161883,8 @@ sub_FE1AF3:
 	ld A,H                                               ; FE1B09  ce 89
 	popw hl                                              ; FE1B0B  4b
 	ret                                                  ; FE1B0C  0e
-sub_FE1B0D:
+; DiskFile_WriteBlock: issues command 0x84 (DiskCmd_WriteFileBlock): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_WriteBlock:
 	pushw hl                                             ; FE1B0D  2b
 	ldw (0x1739:24), 0x84                               ; FE1B0E  f2 39 17 00 02 84 00
 	ldw (0x173b:24), 0x00                               ; FE1B15  f2 3b 17 00 02 00 00
@@ -161891,7 +161899,8 @@ sub_FE1B0D:
 	ld A,H                                               ; FE1B35  ce 89
 	popw hl                                              ; FE1B37  4b
 	ret                                                  ; FE1B38  0e
-sub_FE1B39:
+; DiskFile_Close: issues command 0x10 (DiskCmd_CloseFile): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_Close:
 	pushw hl                                             ; FE1B39  2b
 	ldw (0x1739:24), 0x10                               ; FE1B3A  f2 39 17 00 02 10 00
 	ldw (0x173b:24), 0x00                               ; FE1B41  f2 3b 17 00 02 00 00
@@ -161906,9 +161915,10 @@ sub_FE1B39:
 	ld A,H                                               ; FE1B61  ce 89
 	popw hl                                              ; FE1B63  4b
 	ret                                                  ; FE1B64  0e
-sub_FE1B65:
+; DiskFile_Delete: issues command 0x13 (DiskCmd_DeleteFile; DiskFile_SetFcbName first): (0x1739) = the command, (0x173B) = 0, Disk_CommandDispatch through T_Disk_CommandDispatch_SaveRegs_Entry with the file-control block at RAM 0x178E, the result byte to (0x1735).
+DiskFile_Delete:
 	pushw hl                                             ; FE1B65  2b
-	calr sub_FE171D                                          ; FE1B66  1e b4 fb
+	calr DiskFile_SetFcbName                                          ; FE1B66  1e b4 fb
 	ldw (0x1739:24), 0x13                               ; FE1B69  f2 39 17 00 02 13 00
 	ldw (0x173b:24), 0x00                               ; FE1B70  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B77  0b 00 00
@@ -163072,7 +163082,7 @@ sub_FE24BE:
 	popw hl                                              ; FE250A  4b
 	unlk XIZ                                             ; FE250B  ee 0d
 	ret                                                  ; FE250D  0e
-	calr sub_FE1A5A                                          ; FE250E  1e 49 f5
+	calr DiskFile_Open                                          ; FE250E  1e 49 f5
 	cp a, 0x00:i3                                          ; FE2511  c9 d8
 	jr nz, .LFE252A                                          ; FE2513  6e 15
 	ld bc, (0x179e:24)                                  ; FE2515  d2 9e 17 00 21
@@ -163081,7 +163091,7 @@ sub_FE24BE:
 	ld bc, (0x17a0:24)                                  ; FE251E  d2 a0 17 00 21
 	cp bc, 0x00:i3                                         ; FE2523  d9 d8
 	jr nz, .LFE252E                                          ; FE2525  6e 07
-	calr sub_FE1B65                                          ; FE2527  1e 3b f6
+	calr DiskFile_Delete                                          ; FE2527  1e 3b f6
 .LFE252A:
 	ld a, 0x06:opc                                          ; FE252A  21 06
 	jr .LFE2530                                              ; FE252C  68 02
@@ -163278,7 +163288,7 @@ sub_FE2699:
 sub_FE26B8:
 	link XIZ,0x0000                                      ; FE26B8  ee 0c 00 00
 	pushw hl                                             ; FE26BC  2b
-	calr sub_FE1AB5                                          ; FE26BD  1e f5 f3
+	calr DiskFile_CountFreeSpace                                          ; FE26BD  1e f5 f3
 	ld HL,WA                                             ; FE26C0  d8 8b
 	cp WA,0xffff                                         ; FE26C2  d8 cf ff ff
 	jr nz, .LFE26CC                                          ; FE26C6  6e 04
@@ -163608,7 +163618,7 @@ sub_FE2993:
 	ld H,A                                               ; FE2A08  c9 8e
 	cp a, 0x03:i3                                          ; FE2A0A  c9 db
 	jr z, .LFE2A13                                           ; FE2A0C  66 05
-	calr sub_FE1B65                                          ; FE2A0E  1e 54 f1
+	calr DiskFile_Delete                                          ; FE2A0E  1e 54 f1
 	jr .LFE2A1C                                              ; FE2A11  68 09
 .LFE2A13:
 	pushw 0x00                                           ; FE2A13  0b 00 00
@@ -163663,7 +163673,7 @@ sub_FE2A21:
 	ld H,A                                               ; FE2A90  c9 8e
 	cp a, 0x03:i3                                          ; FE2A92  c9 db
 	jr z, .LFE2A9B                                           ; FE2A94  66 05
-	calr sub_FE1B65                                          ; FE2A96  1e cc f0
+	calr DiskFile_Delete                                          ; FE2A96  1e cc f0
 	jr .LFE2AA4                                              ; FE2A99  68 09
 .LFE2A9B:
 	pushw 0x01                                           ; FE2A9B  0b 01 00
@@ -163729,7 +163739,7 @@ sub_FE2AA9:
 	inc 8,XSP                                            ; FE2B4A  ef 60
 	cp a, 0x03:i3                                          ; FE2B4C  c9 db
 	jr z, .LFE2B5B                                           ; FE2B4E  66 0b
-	calr sub_FE1B65                                          ; FE2B50  1e 12 f0
+	calr DiskFile_Delete                                          ; FE2B50  1e 12 f0
 	cp h, 0x01:i3                                          ; FE2B53  ce d9
 	jrl nz, .LFE2C58                                       ; FE2B55  7e 00 01
 	jrl .LFE2C38                                             ; FE2B58  78 dd 00
@@ -163808,7 +163818,7 @@ sub_FE2AA9:
 	inc 8,XSP                                            ; FE2C2B  ef 60
 	cp a, 0x03:i3                                          ; FE2C2D  c9 db
 	jr z, .LFE2C3C                                           ; FE2C2F  66 0b
-	calr sub_FE1B65                                          ; FE2C31  1e 31 ef
+	calr DiskFile_Delete                                          ; FE2C31  1e 31 ef
 	cp h, 0x01:i3                                          ; FE2C34  ce d9
 	jr nz, .LFE2C58                                          ; FE2C36  6e 20
 .LFE2C38:
@@ -163825,7 +163835,7 @@ sub_FE2AA9:
 	ld H,A                                               ; FE2C4F  c9 8e
 	cp a, 0x03:i3                                          ; FE2C51  c9 db
 	jr z, .LFE2C5C                                           ; FE2C53  66 07
-	calr sub_FE1B65                                          ; FE2C55  1e 0d ef
+	calr DiskFile_Delete                                          ; FE2C55  1e 0d ef
 .LFE2C58:
 	ld a, 0x06:opc                                          ; FE2C58  21 06
 	jr .LFE2C5E                                              ; FE2C5A  68 02
