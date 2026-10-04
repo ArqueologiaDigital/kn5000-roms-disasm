@@ -104234,12 +104234,12 @@ DLB_CreatorSelectController_Names:
 ;   ExitKey (2026-10-04).
 ScreenButtonHandlers_CreatorSelectController:
 	.long	T_F42C70	; F4C38D  [0] -> default stub
-	.long	sub_F4C4DD	; F4C391  [1] -> 0xF4C4DD
-	.long	sub_F4C4DD	; F4C395  [2] -> 0xF4C4DD
-	.long	sub_F4C4DD	; F4C399  [3] -> 0xF4C4DD
-	.long	sub_F4C4DD	; F4C39D  [4] -> 0xF4C4DD
-	.long	sub_F4C4DD	; F4C3A1  [5] -> 0xF4C4DD
-	.long	sub_F4C4DD	; F4C3A5  [6] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C391  [1] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C395  [2] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C399  [3] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C39D  [4] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C3A1  [5] -> 0xF4C4DD
+	.long	SoftKeyCols2to7_CreatorSelectController	; F4C3A5  [6] -> 0xF4C4DD
 	.long	T_F42C70	; F4C3A9  [7] -> default stub
 	.long	T_F42C70	; F4C3AD  [8] -> default stub
 	.long	LcdKeyRow2_CreatorSelectController	; F4C3B1  [9] -> 0xF4C588
@@ -104455,10 +104455,14 @@ sub_F4C4B5_Resume:
 ; --------------------------------------------------------------------------
 T_F434EC_Nop:		; <- T_F434EC
 	ret	; F4C4DC  ret
-sub_F4C4DD:
+; SoftKeyCols2to7_CreatorSelectController: ScreenButtonHandlers_CreatorSelectController slots 1..6 (soft keys 2..7, button codes 1..6): v =
+;   CreatorSelect_ButtonCodeToBit(PanelEvent_ButtonCode); when (0x2870) is 0 / 1 and the part's IndexedTable entry
+;   0x20 + UI_PartIndex byte 26 / 25 & 0x3F differs from v, T_List2030_Append4(entry, 26 / 25, v, 0x3F) -- one key, one bit
+;   of the six.
+SoftKeyCols2to7_CreatorSelectController:
 	pushw	hl	; F4C4DD  push HL
 	push	xix	; F4C4DE  push XIX
-	lda	xix, (sub_F4C6BF:24)	; F4C4DF  lda XIX,0xf4c6bf
+	lda	xix, (CreatorSelect_ButtonCodeToBit:24)	; F4C4DF  lda XIX,0xf4c6bf
 	ld	h, (UI_PartIndex:16)	; F4C4E4  ld H,(0x2250)
 	set	5, h	; F4C4E8  set 0x05,H
 	push	0	; F4C4EB  push 0x00
@@ -104766,7 +104770,8 @@ sub_F4C684_Join:
 sub_F4C684_Epilogue:
 	pop	xix	; F4C6BD  pop XIX
 	ret	; F4C6BE  ret
-sub_F4C6BF:
+; CreatorSelect_ButtonCodeToBit: (code): BitMask_F4C3E9[code], 0 for code above 8 -- 0, 1, 2, 4 ... 0x80.
+CreatorSelect_ButtonCodeToBit:
 	link XIZ,0x0000	; F4C6BF  link XIZ,0x0000
 	pushw	hl	; F4C6C3  push HL
 	ld	h, (xiz+8)	; F4C6C4  ld H,(XIZ+0x08)

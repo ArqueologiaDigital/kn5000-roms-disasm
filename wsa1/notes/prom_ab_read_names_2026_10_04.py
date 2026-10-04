@@ -985,6 +985,14 @@ ROWS = [
     ("FC0FF3", "Msg0716_AllSoundOffParts0to7",
      "unless (0x7F0B) bit 0, and only when (0x070E) bit 5 or 6 is set: Msg0716_PostCC78_AllSoundOff for parts 0..7 --\n"
      "the parts Msg0716_PartPostCC78_AllSoundOff skips in that case.  Called last by Msg0716_FlushPending's group posts."),
+    # prom_b 0xF4C4DD / 0xF4C6BF: the CREATOR SELECT CONTROLLER screen's six soft keys
+    ("F4C4DD", "SoftKeyCols2to7_CreatorSelectController",
+     "ScreenButtonHandlers_CreatorSelectController slots 1..6 (soft keys 2..7, button codes 1..6): v =\n"
+     "CreatorSelect_ButtonCodeToBit(PanelEvent_ButtonCode); when (0x2870) is 0 / 1 and the part's IndexedTable entry\n"
+     "0x20 + UI_PartIndex byte 26 / 25 & 0x3F differs from v, T_List2030_Append4(entry, 26 / 25, v, 0x3F) -- one key, one bit\n"
+     "of the six."),
+    ("F4C6BF", "CreatorSelect_ButtonCodeToBit",
+     "(code): BitMask_F4C3E9[code], 0 for code above 8 -- 0, 1, 2, 4 ... 0x80."),
 ]
 
 

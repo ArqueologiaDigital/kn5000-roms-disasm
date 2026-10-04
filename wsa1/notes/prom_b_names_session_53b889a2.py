@@ -3294,4 +3294,6 @@ RENAMES = [
     ("sub_FC0DC5", "Msg0716_PostStream3Op80IfChanged"),
     ("sub_FC0DD3", "Msg0716_PostStream3Op90IfChanged"),
     ("sub_FC0FF3", "Msg0716_AllSoundOffParts0to7"),
+    ("sub_F4C4DD", "SoftKeyCols2to7_CreatorSelectController"),
+    ("sub_F4C6BF", "CreatorSelect_ButtonCodeToBit"),
 ]

@@ -38,7 +38,7 @@ The rows add up to the census total of 153.
 
 - 7 in `PanelCode_ToSlotAndFlags` itself: the store, `mul BC,(0x28B1)`, and the slot folding at
   0x11 / 0x19 / 0x1A / 0x1B;
-- 4 `push (0x28B1)` in `sub_F4C4DD` / `sub_F4C53A`;
+- 4 `push (0x28B1)` in `SoftKeyCols2to7_CreatorSelectController` / `sub_F4C53A`;
 - one `ld L,(0x28B1) / cp L,0x11` in prom_a.
 
 ⚠ **Not established:**
