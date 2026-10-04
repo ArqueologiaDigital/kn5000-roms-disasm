@@ -3203,6 +3203,10 @@ def mode_screens():
 
 NAMES10 = ATA_NAMES + OTHER_NAMES + SCREEN_NAMES
 
+# 2026-10-04: a refusal answered later.  The receiver of these messages, prom_c MidiCtrl_Dispatch, reads byte
+# [2] as the MIDI controller number (notes/prom_a_msg0716_message_names.py); 0xFC151B posts controller 7.
+SUPERSEDED10 = {"sub_FC151B": "Msg0716_PostCC07_Volume"}
+
 # ---------------------------------------------------------------------------
 # ★ AND THE REFUSALS, which are part of the result.
 # ---------------------------------------------------------------------------
@@ -3480,6 +3484,8 @@ def verify10():
             print("  CONTRADICTION  a 'NOT NAMED' header sits above %s" % new)
             bad += 1
     for old, _why in REFUSALS10:
+        if SUPERSEDED10.get(old) and re.search(r'^' + SUPERSEDED10[old] + r':', text, re.M):
+            continue                                  # answered later, see SUPERSEDED10
         if not re.search(r'^' + re.escape(old) + r':', text, re.M):
             print("  REFUSAL LOST  %s" % old)
             bad += 1

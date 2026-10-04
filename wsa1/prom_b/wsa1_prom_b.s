@@ -1324,9 +1324,9 @@
 	.set	sub_FC1116, 0xFC1116
 	.set	sub_FC11FB, 0xFC11FB
 	.set	sub_FC182F, 0xFC182F
-	.set	sub_FC188F, 0xFC188F
+	.set	Msg0716_PostSysEx50_A3, 0xFC188F
 	.set	sub_FC18AA, 0xFC18AA
-	.set	sub_FC18B2, 0xFC18B2
+	.set	Msg0716_PostSysEx50_87, 0xFC18B2
 	.set	T_F40FD8_Nop, 0xFC19DC
 	.set	sub_FC1B81, 0xFC1B81
 	.set	sub_FC1C59, 0xFC1C59
@@ -88915,14 +88915,14 @@ T_F40FFC:	jp sub_FC22BA  ; -> prom_a 0x422BA   x3
 T_F41000:	jp sub_FC2403  ; -> prom_a 0x42403   x4
 T_F41004:	jp sub_FC24EB  ; -> prom_a 0x424EB   x4
 T_F41008:	jp sub_FC2526  ; -> prom_a 0x42526   x7
-T_F4100C:	jp sub_FC188F  ; -> prom_a 0x4188F   x1
+T_F4100C:	jp Msg0716_PostSysEx50_A3  ; -> prom_a 0x4188F   x1
 T_F41010:	jp sub_FC1B81  ; -> prom_a 0x41B81   x9
 T_F41014:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
 T_F41018:	jp sub_FC2035  ; -> prom_a 0x42035   x3
 ; Evidence: slot 0xF4101C is `jp 0xFC2222`; prom_a 0xFC2222 carries the label
 ;           SoundGroup_MaxMemberIndex_Get (graded CONTENT).  DERIVATIVE name.
 T_SoundGroup_MaxMemberIndex_Get:	jp SoundGroup_MaxMemberIndex_Get  ; F4101C (was T_F4101C) -> prom_a 0x42222   x14
-T_F41020:	jp sub_FC18B2  ; -> prom_a 0x418B2   x3
+T_F41020:	jp Msg0716_PostSysEx50_87  ; -> prom_a 0x418B2   x3
 T_F41024:	jp sub_FC239B  ; -> prom_a 0x4239B   x2
 T_F41028:	jp sub_FC24E3  ; -> prom_a 0x424E3   x2
 T_F4102C:	jp sub_FC1C59  ; -> prom_a 0x41C59   x4

@@ -101,6 +101,18 @@ the start of the 0x00..0x18 ramp that follows.
 
 ### What is *not* established
 
+**Answered in part, 2026-10-04** (`notes/prom_a_msg0716_message_names.py`). The messages are
+MIDI-shaped. The builders at 0xFC151B-0xFC19FF write status 0xB0, the part number the handler
+stored in byte 1 (the object record's +6), a controller number, and the UI event's value. They are
+named by controller: `Msg0716_PostCC07_Volume`, `_PostCC5B_Effect1Depth`, `_PostCC40_Sustain` and
+so on (MIDI 1.0 numbers). Numbers 0x80 and above are not MIDI controllers and keep the number
+(`Msg0716_PostCtrl80`). Status 0xD0 is Channel Pressure, and `F0 50 cmd` is a system-exclusive
+message with Matsushita's manufacturer ID (`Msg0716_PostSysEx50_<cmd>`, command meaning open).
+The three value tails are `Msg0716_PostValueMasked` / `_AsSwitch` / `_Clamped`. Handler-table
+entries that only store the part and call one builder are `Msg0716_Part<builder>`. What selects a
+handler, the index (0x20B8), is still not established.
+
+
 What any handler does. The four strings — `Sound Name *****`, `Combi Name *****`,
 `Combi Group Name`, `EXT Silent Group` — are the only words in the module and
 **every one of them is a fallback**, loaded only when a pointer compares equal to

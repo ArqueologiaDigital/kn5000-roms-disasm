@@ -110651,7 +110651,7 @@ Msg0716_InitAllRecords:
 	ld (UiEvent_Byte2:16), 0x7f                                 ; FC0020  f1 b9 20 00 7f
 	ld (XIX+0x01),L                                      ; FC0025  bc 01 47
 	pushw hl                                             ; FC0028  2b
-	calr sub_FC15E1                                          ; FC0029  1e b5 15
+	calr Msg0716_PostCtrlInt97                                          ; FC0029  1e b5 15
 	popw hl                                              ; FC002C  4b
 	inc 1,HL                                             ; FC002D  db 61
 	cp HL,0x001f                                         ; FC002F  db cf 1f 00
@@ -110667,11 +110667,11 @@ Msg0716_InitAllRecords:
 	ld XIX,0x00000716                                    ; FC0053  44 16 07 00 00
 	ld (UiEvent_Byte2:16), 0x64                                 ; FC0058  f1 b9 20 00 64
 	ld (XIX+0x01),0x20                                   ; FC005D  bc 01 00 20
-	calr sub_FC151B                                          ; FC0061  1e b7 14
+	calr Msg0716_PostCC07_Volume                                          ; FC0061  1e b7 14
 	ld XIX,0x00000716                                    ; FC0064  44 16 07 00 00
 	ld (UiEvent_Byte2:16), 0x7f                                 ; FC0069  f1 b9 20 00 7f
 	ld (XIX+0x01),0x20                                   ; FC006E  bc 01 00 20
-	calr sub_FC1679                                          ; FC0072  1e 04 16
+	calr Msg0716_PostCC0B_Expression                                          ; FC0072  1e 04 16
 	ret                                                  ; FC0075  0e
 ; ---------------------------------------------------------------------
 ; RemoteImage_LoadHeader -- fill RAM 0x08C0..0x08EB from a remote 0x00C00000
@@ -110855,13 +110855,13 @@ sub_FC01FA:
 	ret                                                  ; FC0205  0e
 sub_FC0206:
 	push XIX                                             ; FC0206  3c
-	calr sub_FC19FF                                          ; FC0207  1e f5 17
+	calr Msg0716_PostSysEx50_92                                          ; FC0207  1e f5 17
 	calr sub_FC0215                                      ; FC020A  1e 08 00
 	pop XIX                                              ; FC020D  5c
 	ret                                                  ; FC020E  0e
 sub_FC020F:
 	push XIX                                             ; FC020F  3c
-	calr sub_FC19FF                                          ; FC0210  1e ec 17
+	calr Msg0716_PostSysEx50_92                                          ; FC0210  1e ec 17
 	pop XIX                                              ; FC0213  5c
 	ret                                                  ; FC0214  0e
 sub_FC0215:
@@ -111447,7 +111447,7 @@ sub_FC0724:
 	bit 1,(XIY+0x0c)                                     ; FC073D  bd 0c c9
 	jr z, .LFC0748                                       ; FC0740  66 06
 	ld (XIX+0x01),L                                      ; FC0742  bc 01 47
-	calr sub_FC166C                                          ; FC0745  1e 24 0f
+	calr Msg0716_PostCC01_Modulation                                          ; FC0745  1e 24 0f
 .LFC0748:
 	ret                                                  ; FC0748  0e
 sub_FC0749:
@@ -111456,7 +111456,7 @@ sub_FC0749:
 	cp L,0x20                                            ; FC0752  cf cf 20
 	jr nc, .LFC075D                                      ; FC0755  6f 06
 	ld (XIX+0x01),L                                      ; FC0757  bc 01 47
-	calr sub_FC1679                                          ; FC075A  1e 1c 0f
+	calr Msg0716_PostCC0B_Expression                                          ; FC075A  1e 1c 0f
 .LFC075D:
 	ret                                                  ; FC075D  0e
 sub_FC075E:
@@ -111472,7 +111472,7 @@ sub_FC075E:
 	bit 5,(XIY+0x0b)                                     ; FC077E  bd 0b cd
 	jr z, .LFC0789                                       ; FC0781  66 06
 	ld (XIX+0x01),L                                      ; FC0783  bc 01 47
-	calr sub_FC1700                                          ; FC0786  1e 77 0f
+	calr Msg0716_PostChannelPressure                                          ; FC0786  1e 77 0f
 .LFC0789:
 	ret                                                  ; FC0789  0e
 sub_FC078A:
@@ -111504,7 +111504,7 @@ sub_FC07B1:
 	bit 0,(XIY+0x0e)                                     ; FC07CA  bd 0e c8
 	jr z, .LFC07D5                                       ; FC07CD  66 06
 	ld (XIX+0x01),L                                      ; FC07CF  bc 01 47
-	calr sub_FC1686                                          ; FC07D2  1e b1 0e
+	calr Msg0716_PostCC10_GeneralPurpose1                                          ; FC07D2  1e b1 0e
 .LFC07D5:
 	ret                                                  ; FC07D5  0e
 sub_FC07D6:
@@ -111518,7 +111518,7 @@ sub_FC07D6:
 	bit 1,(XIY+0x0e)                                     ; FC07EF  bd 0e c9
 	jr z, .LFC07FA                                       ; FC07F2  66 06
 	ld (XIX+0x01),L                                      ; FC07F4  bc 01 47
-	calr sub_FC1693                                          ; FC07F7  1e 99 0e
+	calr Msg0716_PostCC11_GeneralPurpose2                                          ; FC07F7  1e 99 0e
 .LFC07FA:
 	ret                                                  ; FC07FA  0e
 sub_FC07FB:
@@ -111532,7 +111532,7 @@ sub_FC07FB:
 	bit 2,(XIY+0x0e)                                     ; FC0814  bd 0e ca
 	jr z, .LFC081F                                       ; FC0817  66 06
 	ld (XIX+0x01),L                                      ; FC0819  bc 01 47
-	calr sub_FC16A0                                          ; FC081C  1e 81 0e
+	calr Msg0716_PostCC12_GeneralPurpose3                                          ; FC081C  1e 81 0e
 .LFC081F:
 	ret                                                  ; FC081F  0e
 sub_FC0820:
@@ -111546,7 +111546,7 @@ sub_FC0820:
 	bit 3,(XIY+0x0e)                                     ; FC0839  bd 0e cb
 	jr z, .LFC0844                                       ; FC083C  66 06
 	ld (XIX+0x01),L                                      ; FC083E  bc 01 47
-	calr sub_FC16AD                                          ; FC0841  1e 69 0e
+	calr Msg0716_PostCC13_GeneralPurpose4                                          ; FC0841  1e 69 0e
 .LFC0844:
 	ret                                                  ; FC0844  0e
 sub_FC0845:
@@ -111560,7 +111560,7 @@ sub_FC0845:
 	bit 4,(XIY+0x0e)                                     ; FC085E  bd 0e cc
 	jr z, .LFC0869                                       ; FC0861  66 06
 	ld (XIX+0x01),L                                      ; FC0863  bc 01 47
-	calr sub_FC16BA                                          ; FC0866  1e 51 0e
+	calr Msg0716_PostCC02_Breath                                          ; FC0866  1e 51 0e
 .LFC0869:
 	ret                                                  ; FC0869  0e
 sub_FC086A:
@@ -111574,7 +111574,7 @@ sub_FC086A:
 	bit 5,(XIY+0x0e)                                     ; FC0883  bd 0e cd
 	jr z, .LFC088E                                       ; FC0886  66 06
 	ld (XIX+0x01),L                                      ; FC0888  bc 01 47
-	calr sub_FC16C7                                          ; FC088B  1e 39 0e
+	calr Msg0716_PostCC04_Foot                                          ; FC088B  1e 39 0e
 .LFC088E:
 	ret                                                  ; FC088E  0e
 	ret                                                  ; FC088F  0e
@@ -111724,13 +111724,13 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop2                                 ; FC09D6  [  2]
 	.long sub_FC0C20                                 ; FC09DA  [  3]
 	.long sub_FC0C50                                 ; FC09DE  [  4]
-	.long sub_FC0C70                                 ; FC09E2  [  5]
+	.long Msg0716_PartPostCC5D_Effect3Depth                                 ; FC09E2  [  5]
 	.long sub_FC0C7A                                 ; FC09E6  [  6]
-	.long sub_FC0C84                                 ; FC09EA  [  7]
+	.long Msg0716_PartPostCC5B_Effect1Depth                                 ; FC09EA  [  7]
 	.long sub_FC0C8E                                 ; FC09EE  [  8]
-	.long sub_FC0CA8                                 ; FC09F2  [  9]
-	.long sub_FC0CB2                                 ; FC09F6  [ 10]
-	.long sub_FC0CBC                                 ; FC09FA  [ 11]
+	.long Msg0716_PartPostCtrlInt82                                 ; FC09F2  [  9]
+	.long Msg0716_PartPostCtrlInt81                                 ; FC09F6  [ 10]
+	.long Msg0716_PartPostCtrlInt80                                 ; FC09FA  [ 11]
 	.long sub_FC0CC6                                 ; FC09FE  [ 12]
 	.long Msg0716_HandlerTables_Nop13                                 ; FC0A02  [ 13]
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A06  [ 14]
@@ -111910,23 +111910,27 @@ sub_FC0C50:   ; entry: named by 1 `.long` operand, first at 0xFC09DE
 	pop XIY                                              ; FC0C66  5d
 	jr z, .LFC0C6F                                       ; FC0C67  66 06
 	ld (XIX+0x01),W                                      ; FC0C69  bc 01 40
-	calr sub_FC15B8                                          ; FC0C6C  1e 49 09
+	calr Msg0716_PostCC40_Sustain                                          ; FC0C6C  1e 49 09
 .LFC0C6F:
 	ret                                                  ; FC0C6F  0e
-sub_FC0C70:   ; entry: named by 1 `.long` operand, first at 0xFC09E2
+; Msg0716_PartPostCC5D_Effect3Depth: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCC5D_Effect3Depth (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCC5D_Effect3Depth:   ; entry: named by 1 `.long` operand, first at 0xFC09E2
 	ld A,(XIZ+0x06)                                      ; FC0C70  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C73  bc 01 41
-	calr sub_FC1581                                          ; FC0C76  1e 08 09
+	calr Msg0716_PostCC5D_Effect3Depth                                          ; FC0C76  1e 08 09
 	ret                                                  ; FC0C79  0e
 sub_FC0C7A:   ; entry: named by 1 `.long` operand, first at 0xFC09E6
 	ld A,(XIZ+0x06)                                      ; FC0C7A  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C7D  bc 01 41
 	calr sub_FC1726                                          ; FC0C80  1e a3 0a
 	ret                                                  ; FC0C83  0e
-sub_FC0C84:   ; entry: named by 1 `.long` operand, first at 0xFC09EA
+; Msg0716_PartPostCC5B_Effect1Depth: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCC5B_Effect1Depth (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCC5B_Effect1Depth:   ; entry: named by 1 `.long` operand, first at 0xFC09EA
 	ld A,(XIZ+0x06)                                      ; FC0C84  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C87  bc 01 41
-	calr sub_FC158E                                          ; FC0C8A  1e 01 09
+	calr Msg0716_PostCC5B_Effect1Depth                                          ; FC0C8A  1e 01 09
 	ret                                                  ; FC0C8D  0e
 sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	ld A,(XIZ+0x06)                                      ; FC0C8E  8e 06 21
@@ -111941,20 +111945,26 @@ sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	calr Msg0716_Post_Trampoline_Wrap                                          ; FC0CA4  1e 61 09
 .LFC0CA7:
 	ret                                                  ; FC0CA7  0e
-sub_FC0CA8:   ; entry: named by 1 `.long` operand, first at 0xFC09F2
+; Msg0716_PartPostCtrlInt82: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCtrlInt82 (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCtrlInt82:   ; entry: named by 1 `.long` operand, first at 0xFC09F2
 	ld A,(XIZ+0x06)                                      ; FC0CA8  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CAB  bc 01 41
-	calr sub_FC165F                                          ; FC0CAE  1e ae 09
+	calr Msg0716_PostCtrlInt82                                          ; FC0CAE  1e ae 09
 	ret                                                  ; FC0CB1  0e
-sub_FC0CB2:   ; entry: named by 1 `.long` operand, first at 0xFC09F6
+; Msg0716_PartPostCtrlInt81: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCtrlInt81 (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCtrlInt81:   ; entry: named by 1 `.long` operand, first at 0xFC09F6
 	ld A,(XIZ+0x06)                                      ; FC0CB2  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CB5  bc 01 41
-	calr sub_FC1652                                          ; FC0CB8  1e 97 09
+	calr Msg0716_PostCtrlInt81                                          ; FC0CB8  1e 97 09
 	ret                                                  ; FC0CBB  0e
-sub_FC0CBC:   ; entry: named by 1 `.long` operand, first at 0xFC09FA
+; Msg0716_PartPostCtrlInt80: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCtrlInt80 (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCtrlInt80:   ; entry: named by 1 `.long` operand, first at 0xFC09FA
 	ld A,(XIZ+0x06)                                      ; FC0CBC  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CBF  bc 01 41
-	calr sub_FC1645                                          ; FC0CC2  1e 80 09
+	calr Msg0716_PostCtrlInt80                                          ; FC0CC2  1e 80 09
 	ret                                                  ; FC0CC5  0e
 sub_FC0CC6:   ; entry: named by 1 `.long` operand, first at 0xFC09FE
 	m_bit 3, MD16, UiEvent_Byte3                                ; FC0CC6  f1 ba 20 cb
@@ -111978,13 +111988,13 @@ Msg0716_HandlerTables_Nop19:   ; entry: named by 20 `.long` operands, first at 0
 sub_FC0CE3:   ; entry: named by 1 `.long` operand, first at 0xFC0A6A
 	ld A,(XIZ+0x06)                                      ; FC0CE3  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CE6  bc 01 41
-	calr sub_FC16D4                                          ; FC0CE9  1e e8 09
+	calr Msg0716_PostCtrlInt9A                                          ; FC0CE9  1e e8 09
 sub_FC0CEC:
 	ret                                                  ; FC0CEC  0e
 sub_FC0CED:   ; entry: named by 1 `.long` operand, first at 0xFC0A6E
 	ld A,(XIZ+0x06)                                      ; FC0CED  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CF0  bc 01 41
-	calr sub_FC16E1                                          ; FC0CF3  1e eb 09
+	calr Msg0716_PostCtrlInt99                                          ; FC0CF3  1e eb 09
 	ret                                                  ; FC0CF6  0e
 	ret                                                  ; FC0CF7  0e
 	ret                                                  ; FC0CF8  0e
@@ -112010,7 +112020,7 @@ Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FC0D10  0e
 	ret                                                  ; FC0D11  0e
 sub_FC0D12:   ; entry: named by 1 `.long` operand, first at 0xFC0A8E
-	calr sub_FC17CD                                          ; FC0D12  1e b8 0a
+	calr Msg0716_PostSysEx50_86                                          ; FC0D12  1e b8 0a
 	calr ScaleTuning_PostAllTwelveSemitones                                      ; FC0D15  1e 29 00
 	ret                                                  ; FC0D18  0e
 sub_FC0D19:   ; entry: named by 1 `.long` operand, first at 0xFC0A92
@@ -112022,7 +112032,7 @@ sub_FC0D1D:
 .LFC0D25:
 	m_bit 7, MD16, UiEvent_Byte3                                ; FC0D25  f1 ba 20 cf
 	jr z, .LFC0D2E                                       ; FC0D29  66 03
-	calr sub_FC1805                                          ; FC0D2B  1e d7 0a
+	calr Msg0716_PostSysEx50_B1                                          ; FC0D2B  1e d7 0a
 .LFC0D2E:
 	ret                                                  ; FC0D2E  0e
 sub_FC0D2F:   ; entry: named by 12 `.long` operands, first at 0xFC0A96
@@ -112164,7 +112174,7 @@ Msg0716_HandlerTables_Nop70:   ; entry: named by 2 `.long` operands, first at 0x
 Msg0716_HandlerTables_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFC0AEE
 	ret                                                  ; FC0DE2  0e
 sub_FC0DE3:   ; entry: named by 1 `.long` operand, first at 0xFC0AF2
-	calr sub_FC17AE                                          ; FC0DE3  1e c8 09
+	calr Msg0716_PostSysEx50_82                                          ; FC0DE3  1e c8 09
 	ret                                                  ; FC0DE6  0e
 sub_FC0DE7:   ; entry: named by 1 `.long` operand, first at 0xFC0AF6
 	calr sub_FC0DE7_Nop                                          ; FC0DE7  1e 9d 09
@@ -112196,7 +112206,7 @@ Msg0716_SetPendingBit5_B:   ; entry: named by 1 `.long` operand, first at 0xFC0B
 sub_FC0E12:   ; entry: named by 1 `.long` operand, first at 0xFC0B3A
 	ld XIX,0x00000716                                    ; FC0E12  44 16 07 00 00
 	ld (XIX+0x01),0x20                                   ; FC0E17  bc 01 00 20
-	calr sub_FC151B                                          ; FC0E1B  1e fd 06
+	calr Msg0716_PostCC07_Volume                                          ; FC0E1B  1e fd 06
 	ret                                                  ; FC0E1E  0e
 Msg0716_HandlerTables_Nop92:   ; entry: named by 1 `.long` operand, first at 0xFC0B3E
 	ret                                                  ; FC0E1F  0e
@@ -112217,10 +112227,10 @@ sub_FC0E36:   ; entry: named by 1 `.long` operand, first at 0xFC0B8E
 	calr sub_FC161D                                          ; FC0E46  1e d4 07
 	ret                                                  ; FC0E49  0e
 sub_FC0E4A:   ; entry: named by 1 `.long` operand, first at 0xFC0B92
-	calr sub_FC179C                                          ; FC0E4A  1e 4f 09
+	calr Msg0716_PostSysEx50_80                                          ; FC0E4A  1e 4f 09
 	ret                                                  ; FC0E4D  0e
 sub_FC0E4E:   ; entry: named by 1 `.long` operand, first at 0xFC0B96
-	calr sub_FC178B                                          ; FC0E4E  1e 3a 09
+	calr Msg0716_PostSysEx50_81                                          ; FC0E4E  1e 3a 09
 	ret                                                  ; FC0E51  0e
 Msg0716_HandlerTables_Nop115:   ; entry: named by 14 `.long` operands, first at 0xFC0B9A
 	ret                                                  ; FC0E52  0e
@@ -112964,7 +112974,9 @@ sub_FC14F8:
 .LFC151A:
 	ret                                                  ; FC151A  0e
 ; ---------------------------------------------------------------------
-; sub_FC151B -- REFUSED A NAME, and this is the reason.
+; Msg0716_PostCC07_Volume -- REFUSED A NAME, and this is the reason.
+; ⚠ SUPERSEDED 2026-10-04: the receiver, prom_c MidiCtrl_Dispatch, reads byte [2] as the MIDI controller
+;   number (numbers below 0x80 are MIDI's; >= 0x80 its own MidiCtrl_IntXX) -- notes/prom_a_msg0716_message_names.py.
 ;
 ; It is one of a family of 0xFC0000-module handlers that write 0xB0 to
 ; (XIX), a selector to (XIX+0x02) and (0x20B9) masked by C to
@@ -112980,11 +112992,13 @@ sub_FC14F8:
 ; Refused by notes/prom_a_census_round8.py: `sub_XXXXXX` plus a
 ; stated gap is worth more than a plausible guess.
 ; ---------------------------------------------------------------------
-sub_FC151B:
+; Msg0716_PostCC07_Volume: posts B0 <part> 07 <value> to CPU 2 -- controller 0x07 (MIDI Volume), value through Msg0716_PostValueMasked with limit 0x7F
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC07_Volume:
 	ld (XIX),0xb0                                        ; FC151B  b4 00 b0
 	ld (XIX+0x02),0x07                                   ; FC151E  bc 02 00 07
 	ld c, 0x7f:opc                                          ; FC1522  23 7f
-	calr sub_FC18CC                                      ; FC1524  1e a5 03
+	calr Msg0716_PostValueMasked                                      ; FC1524  1e a5 03
 	ret                                                  ; FC1527  0e
 sub_FC1528:
 	ld (XIX),0xb0                                        ; FC1528  b4 00 b0
@@ -113023,17 +113037,21 @@ sub_FC1545:
 	ldw bc, 0x04                                         ; FC157A  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC157D  1e 9a 04
 	ret                                                  ; FC1580  0e
-sub_FC1581:
+; Msg0716_PostCC5D_Effect3Depth: posts B0 <part> 5D <value> to CPU 2 -- controller 0x5D (MIDI Effect3Depth), value through Msg0716_PostValueMasked with limit 0x7F
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC5D_Effect3Depth:
 	ld (XIX),0xb0                                        ; FC1581  b4 00 b0
 	ld (XIX+0x02),0x5d                                   ; FC1584  bc 02 00 5d
 	ld c, 0x7f:opc                                          ; FC1588  23 7f
-	calr sub_FC18CC                                      ; FC158A  1e 3f 03
+	calr Msg0716_PostValueMasked                                      ; FC158A  1e 3f 03
 	ret                                                  ; FC158D  0e
-sub_FC158E:
+; Msg0716_PostCC5B_Effect1Depth: posts B0 <part> 5B <value> to CPU 2 -- controller 0x5B (MIDI Effect1Depth), value through Msg0716_PostValueMasked with limit 0x7F
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC5B_Effect1Depth:
 	ld (XIX),0xb0                                        ; FC158E  b4 00 b0
 	ld (XIX+0x02),0x5b                                   ; FC1591  bc 02 00 5b
 	ld c, 0x7f:opc                                          ; FC1595  23 7f
-	calr sub_FC18CC                                      ; FC1597  1e 32 03
+	calr Msg0716_PostValueMasked                                      ; FC1597  1e 32 03
 	ret                                                  ; FC159A  0e
 	ret                                                  ; FC159B  0e
 sub_FC159C:
@@ -113047,11 +113065,13 @@ sub_FC159C:
 	ldw bc, 0x04                                         ; FC15B1  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC15B4  1e 63 04
 	ret                                                  ; FC15B7  0e
-sub_FC15B8:
+; Msg0716_PostCC40_Sustain: posts B0 <part> 40 <value> to CPU 2 -- controller 0x40 (MIDI Sustain), value through Msg0716_PostValueAsSwitch with limit 0x08
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC40_Sustain:
 	ld (XIX),0xb0                                        ; FC15B8  b4 00 b0
 	ld (XIX+0x02),0x40                                   ; FC15BB  bc 02 00 40
 	ld c, 0x08:opc                                          ; FC15BF  23 08
-	calr sub_FC18DC                                      ; FC15C1  1e 18 03
+	calr Msg0716_PostValueAsSwitch                                      ; FC15C1  1e 18 03
 	ret                                                  ; FC15C4  0e
 sub_FC15C5:
 	ld (XIX),0xb0                                        ; FC15C5  b4 00 b0
@@ -113065,21 +113085,23 @@ sub_FC15C5:
 	ldw bc, 0x04                                         ; FC15DA  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC15DD  1e 3a 04
 	ret                                                  ; FC15E0  0e
-sub_FC15E1:
+; Msg0716_PostCtrlInt97: posts B0 <part> 97 <value> to CPU 2 -- controller 0x97 (not a MIDI number; the receiver's MidiCtrl_Int97), value through Msg0716_PostValueMasked with limit 0x07
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt97:
 	ld (XIX),0xb0                                        ; FC15E1  b4 00 b0
 	ld (XIX+0x02),0x97                                   ; FC15E4  bc 02 00 97
 	ld c, 0x07:opc                                          ; FC15E8  23 07
-	calr sub_FC18CC                                      ; FC15EA  1e df 02
+	calr Msg0716_PostValueMasked                                      ; FC15EA  1e df 02
 	ret                                                  ; FC15ED  0e
 	ld (XIX),0xb0                                        ; FC15EE  b4 00 b0
 	ld (XIX+0x02),0x43                                   ; FC15F1  bc 02 00 43
 	ld c, 0xff:opc                                          ; FC15F5  23 ff
-	calr sub_FC18CC                                      ; FC15F7  1e d2 02
+	calr Msg0716_PostValueMasked                                      ; FC15F7  1e d2 02
 	ret                                                  ; FC15FA  0e
 	ld (XIX),0xb0                                        ; FC15FB  b4 00 b0
 	ld (XIX+0x02),0x42                                   ; FC15FE  bc 02 00 42
 	ld c, 0xff:opc                                          ; FC1602  23 ff
-	calr sub_FC18CC                                      ; FC1604  1e c5 02
+	calr Msg0716_PostValueMasked                                      ; FC1604  1e c5 02
 	ret                                                  ; FC1607  0e
 Msg0716_Post_Trampoline_Wrap:
 	ld (XIX),0xb0                                        ; FC1608  b4 00 b0
@@ -113108,83 +113130,109 @@ sub_FC161D:
 	ldw bc, 0x04                                         ; FC163E  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1641  1e d6 03
 	ret                                                  ; FC1644  0e
-sub_FC1645:
+; Msg0716_PostCtrlInt80: posts B0 <part> 80 <value> to CPU 2 -- controller 0x80 (not a MIDI number; the receiver's MidiCtrl_Int80), value through Msg0716_PostValueClamped with limit 0x0C
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt80:
 	ld (XIX),0xb0                                        ; FC1645  b4 00 b0
 	ld (XIX+0x02),0x80                                   ; FC1648  bc 02 00 80
 	ld c, 0x0c:opc                                          ; FC164C  23 0c
-	calr sub_FC18F7                                      ; FC164E  1e a6 02
+	calr Msg0716_PostValueClamped                                      ; FC164E  1e a6 02
 	ret                                                  ; FC1651  0e
-sub_FC1652:
+; Msg0716_PostCtrlInt81: posts B0 <part> 81 <value> to CPU 2 -- controller 0x81 (not a MIDI number; the receiver's MidiCtrl_Int81), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt81:
 	ld (XIX),0xb0                                        ; FC1652  b4 00 b0
 	ld (XIX+0x02),0x81                                   ; FC1655  bc 02 00 81
 	ld c, 0xff:opc                                          ; FC1659  23 ff
-	calr sub_FC18CC                                      ; FC165B  1e 6e 02
+	calr Msg0716_PostValueMasked                                      ; FC165B  1e 6e 02
 	ret                                                  ; FC165E  0e
-sub_FC165F:
+; Msg0716_PostCtrlInt82: posts B0 <part> 82 <value> to CPU 2 -- controller 0x82 (not a MIDI number; the receiver's MidiCtrl_Int82), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt82:
 	ld (XIX),0xb0                                        ; FC165F  b4 00 b0
 	ld (XIX+0x02),0x82                                   ; FC1662  bc 02 00 82
 	ld c, 0xff:opc                                          ; FC1666  23 ff
-	calr sub_FC18CC                                      ; FC1668  1e 61 02
+	calr Msg0716_PostValueMasked                                      ; FC1668  1e 61 02
 	ret                                                  ; FC166B  0e
-sub_FC166C:
+; Msg0716_PostCC01_Modulation: posts B0 <part> 01 <value> to CPU 2 -- controller 0x01 (MIDI Modulation), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC01_Modulation:
 	ld (XIX),0xb0                                        ; FC166C  b4 00 b0
 	ld (XIX+0x02),0x01                                   ; FC166F  bc 02 00 01
 	ld c, 0xff:opc                                          ; FC1673  23 ff
-	calr sub_FC18CC                                      ; FC1675  1e 54 02
+	calr Msg0716_PostValueMasked                                      ; FC1675  1e 54 02
 	ret                                                  ; FC1678  0e
-sub_FC1679:
+; Msg0716_PostCC0B_Expression: posts B0 <part> 0B <value> to CPU 2 -- controller 0x0B (MIDI Expression), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC0B_Expression:
 	ld (XIX),0xb0                                        ; FC1679  b4 00 b0
 	ld (XIX+0x02),0x0b                                   ; FC167C  bc 02 00 0b
 	ld c, 0xff:opc                                          ; FC1680  23 ff
-	calr sub_FC18CC                                      ; FC1682  1e 47 02
+	calr Msg0716_PostValueMasked                                      ; FC1682  1e 47 02
 	ret                                                  ; FC1685  0e
-sub_FC1686:
+; Msg0716_PostCC10_GeneralPurpose1: posts B0 <part> 10 <value> to CPU 2 -- controller 0x10 (MIDI GeneralPurpose1), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC10_GeneralPurpose1:
 	ld (XIX),0xb0                                        ; FC1686  b4 00 b0
 	ld (XIX+0x02),0x10                                   ; FC1689  bc 02 00 10
 	ld c, 0xff:opc                                          ; FC168D  23 ff
-	calr sub_FC18CC                                      ; FC168F  1e 3a 02
+	calr Msg0716_PostValueMasked                                      ; FC168F  1e 3a 02
 	ret                                                  ; FC1692  0e
-sub_FC1693:
+; Msg0716_PostCC11_GeneralPurpose2: posts B0 <part> 11 <value> to CPU 2 -- controller 0x11 (MIDI GeneralPurpose2), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC11_GeneralPurpose2:
 	ld (XIX),0xb0                                        ; FC1693  b4 00 b0
 	ld (XIX+0x02),0x11                                   ; FC1696  bc 02 00 11
 	ld c, 0xff:opc                                          ; FC169A  23 ff
-	calr sub_FC18CC                                      ; FC169C  1e 2d 02
+	calr Msg0716_PostValueMasked                                      ; FC169C  1e 2d 02
 	ret                                                  ; FC169F  0e
-sub_FC16A0:
+; Msg0716_PostCC12_GeneralPurpose3: posts B0 <part> 12 <value> to CPU 2 -- controller 0x12 (MIDI GeneralPurpose3), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC12_GeneralPurpose3:
 	ld (XIX),0xb0                                        ; FC16A0  b4 00 b0
 	ld (XIX+0x02),0x12                                   ; FC16A3  bc 02 00 12
 	ld c, 0xff:opc                                          ; FC16A7  23 ff
-	calr sub_FC18CC                                      ; FC16A9  1e 20 02
+	calr Msg0716_PostValueMasked                                      ; FC16A9  1e 20 02
 	ret                                                  ; FC16AC  0e
-sub_FC16AD:
+; Msg0716_PostCC13_GeneralPurpose4: posts B0 <part> 13 <value> to CPU 2 -- controller 0x13 (MIDI GeneralPurpose4), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC13_GeneralPurpose4:
 	ld (XIX),0xb0                                        ; FC16AD  b4 00 b0
 	ld (XIX+0x02),0x13                                   ; FC16B0  bc 02 00 13
 	ld c, 0xff:opc                                          ; FC16B4  23 ff
-	calr sub_FC18CC                                      ; FC16B6  1e 13 02
+	calr Msg0716_PostValueMasked                                      ; FC16B6  1e 13 02
 	ret                                                  ; FC16B9  0e
-sub_FC16BA:
+; Msg0716_PostCC02_Breath: posts B0 <part> 02 <value> to CPU 2 -- controller 0x02 (MIDI Breath), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC02_Breath:
 	ld (XIX),0xb0                                        ; FC16BA  b4 00 b0
 	ld (XIX+0x02),0x02                                   ; FC16BD  bc 02 00 02
 	ld c, 0xff:opc                                          ; FC16C1  23 ff
-	calr sub_FC18CC                                      ; FC16C3  1e 06 02
+	calr Msg0716_PostValueMasked                                      ; FC16C3  1e 06 02
 	ret                                                  ; FC16C6  0e
-sub_FC16C7:
+; Msg0716_PostCC04_Foot: posts B0 <part> 04 <value> to CPU 2 -- controller 0x04 (MIDI Foot), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCC04_Foot:
 	ld (XIX),0xb0                                        ; FC16C7  b4 00 b0
 	ld (XIX+0x02),0x04                                   ; FC16CA  bc 02 00 04
 	ld c, 0xff:opc                                          ; FC16CE  23 ff
-	calr sub_FC18CC                                      ; FC16D0  1e f9 01
+	calr Msg0716_PostValueMasked                                      ; FC16D0  1e f9 01
 	ret                                                  ; FC16D3  0e
-sub_FC16D4:
+; Msg0716_PostCtrlInt9A: posts B0 <part> 9A <value> to CPU 2 -- controller 0x9A (not a MIDI number; the receiver's MidiCtrl_Int9A), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt9A:
 	ld (XIX),0xb0                                        ; FC16D4  b4 00 b0
 	ld (XIX+0x02),0x9a                                   ; FC16D7  bc 02 00 9a
 	ld c, 0xff:opc                                          ; FC16DB  23 ff
-	calr sub_FC18CC                                      ; FC16DD  1e ec 01
+	calr Msg0716_PostValueMasked                                      ; FC16DD  1e ec 01
 	ret                                                  ; FC16E0  0e
-sub_FC16E1:
+; Msg0716_PostCtrlInt99: posts B0 <part> 99 <value> to CPU 2 -- controller 0x99 (not a MIDI number; the receiver's MidiCtrl_Int99), value through Msg0716_PostValueMasked with limit 0xFF
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostCtrlInt99:
 	ld (XIX),0xb0                                        ; FC16E1  b4 00 b0
 	ld (XIX+0x02),0x99                                   ; FC16E4  bc 02 00 99
 	ld c, 0xff:opc                                          ; FC16E8  23 ff
-	calr sub_FC18CC                                      ; FC16EA  1e df 01
+	calr Msg0716_PostValueMasked                                      ; FC16EA  1e df 01
 	ret                                                  ; FC16ED  0e
 Msg0716_Post_Trampoline_4:
 	ld (XIX),0xb0                                        ; FC16EE  b4 00 b0
@@ -113193,11 +113241,13 @@ Msg0716_Post_Trampoline_4:
 	ldw bc, 0x04                                         ; FC16F9  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC16FC  1e 1b 03
 	ret                                                  ; FC16FF  0e
-sub_FC1700:
+; Msg0716_PostChannelPressure: posts D0 <part> 00 <value> (MIDI Channel Pressure) to CPU 2, value through Msg0716_PostValueMasked
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostChannelPressure:
 	ld (XIX),0xd0                                        ; FC1700  b4 00 d0
 	ld (XIX+0x02),0x00                                   ; FC1703  bc 02 00 00
 	ld c, 0xff:opc                                          ; FC1707  23 ff
-	calr sub_FC18CC                                      ; FC1709  1e c0 01
+	calr Msg0716_PostValueMasked                                      ; FC1709  1e c0 01
 	ret                                                  ; FC170C  0e
 sub_FC170D:
 	ld (XIX),0xe0                                        ; FC170D  b4 00 e0
@@ -113258,23 +113308,29 @@ sub_FC0DE7_Nop:
 	ret                                                  ; FC1788  0e
 	ret                                                  ; FC1789  0e
 	ret                                                  ; FC178A  0e
-sub_FC178B:
+; Msg0716_PostSysEx50_81: posts F0 50 81 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x81, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_81:
 	ld (XIX),0xf0                                        ; FC178B  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC178E  bc 01 00 50
 	ld (XIX+0x02),0x81                                   ; FC1792  bc 02 00 81
 	ld c, 0xff:opc                                          ; FC1796  23 ff
-	calr sub_FC18CC                                      ; FC1798  1e 31 01
+	calr Msg0716_PostValueMasked                                      ; FC1798  1e 31 01
 sub_FC179B:
 	ret                                                  ; FC179B  0e
-sub_FC179C:
+; Msg0716_PostSysEx50_80: posts F0 50 80 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x80, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_80:
 	ld (XIX),0xf0                                        ; FC179C  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC179F  bc 01 00 50
 	ld (XIX+0x02),0x80                                   ; FC17A3  bc 02 00 80
 	ld c, 0xff:opc                                          ; FC17A7  23 ff
-	calr sub_FC18CC                                      ; FC17A9  1e 20 01
+	calr Msg0716_PostValueMasked                                      ; FC17A9  1e 20 01
 	ret                                                  ; FC17AC  0e
 	ret                                                  ; FC17AD  0e
-sub_FC17AE:
+; Msg0716_PostSysEx50_82: posts F0 50 82 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x82, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_82:
 	ld (XIX),0xf0                                        ; FC17AE  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC17B1  bc 01 00 50
 	ld (XIX+0x02),0x82                                   ; FC17B5  bc 02 00 82
@@ -113285,12 +113341,14 @@ sub_FC17AE:
 	ldw bc, 0x04                                         ; FC17C6  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC17C9  1e 4e 02
 	ret                                                  ; FC17CC  0e
-sub_FC17CD:
+; Msg0716_PostSysEx50_86: posts F0 50 86 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x86, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_86:
 	ld (XIX),0xf0                                        ; FC17CD  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC17D0  bc 01 00 50
 	ld (XIX+0x02),0x86                                   ; FC17D4  bc 02 00 86
 	ld c, 0xff:opc                                          ; FC17D8  23 ff
-	calr sub_FC18CC                                      ; FC17DA  1e ef 00
+	calr Msg0716_PostValueMasked                                      ; FC17DA  1e ef 00
 	ret                                                  ; FC17DD  0e
 	ret                                                  ; FC17DE  0e
 sub_FC17DF:
@@ -113308,12 +113366,14 @@ sub_FC17DF:
 	ldw bc, 0x04                                         ; FC17FE  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1801  1e 16 02
 	ret                                                  ; FC1804  0e
-sub_FC1805:
+; Msg0716_PostSysEx50_B1: posts F0 50 B1 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0xB1, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_B1:
 	ld (XIX),0xf0                                        ; FC1805  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC1808  bc 01 00 50
 	ld (XIX+0x02),0xb1                                   ; FC180C  bc 02 00 b1
 	ld c, 0x80:opc                                          ; FC1810  23 80
-	calr sub_FC18DC                                      ; FC1812  1e c7 00
+	calr Msg0716_PostValueAsSwitch                                      ; FC1812  1e c7 00
 	ret                                                  ; FC1815  0e
 Msg0716_Post_Trampoline_Wrap_2:
 	ld (XIX),0xf0                                        ; FC1816  b4 00 f0
@@ -113366,7 +113426,9 @@ sub_FC1859:
 	ldw bc, 0x04                                         ; FC1888  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC188B  1e 8c 01
 	ret                                                  ; FC188E  0e
-sub_FC188F:
+; Msg0716_PostSysEx50_A3: posts F0 50 A3 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0xA3, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_A3:
 	ld XIX,0x00000716                                    ; FC188F  44 16 07 00 00
 	ld (XIX),0xf0                                        ; FC1894  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC1897  bc 01 00 50
@@ -113377,9 +113439,11 @@ sub_FC188F:
 	ret                                                  ; FC18A9  0e
 sub_FC18AA:
 	ld A,(XSP+0x04)                                      ; FC18AA  8f 04 21
-	call sub_FC18B2                                      ; FC18AD  1d b2 18 fc
+	call Msg0716_PostSysEx50_87                                      ; FC18AD  1d b2 18 fc
 	ret                                                  ; FC18B1  0e
-sub_FC18B2:
+; Msg0716_PostSysEx50_87: posts F0 50 87 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x87, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_87:
 	ld XIX,0x00000716                                    ; FC18B2  44 16 07 00 00
 	ld (XIX),0xf0                                        ; FC18B7  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC18BA  bc 01 00 50
@@ -113388,14 +113452,18 @@ sub_FC18B2:
 	ldw bc, 0x04                                         ; FC18C5  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC18C8  1e 4f 01
 	ret                                                  ; FC18CB  0e
-sub_FC18CC:
+; Msg0716_PostValueMasked: the shared tail of the Msg0716 builders -- value = UiEvent_Byte2 AND C, byte 3 of the message at 0x0716, BC = 4,
+;   Msg0716_Post_Trampoline (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostValueMasked:
 	ld a, (UiEvent_Byte2:16)                                   ; FC18CC  c1 b9 20 21
 	and A,C                                              ; FC18D0  cb c1
 	ld (XIX+0x03),A                                      ; FC18D2  bc 03 41
 	ldw bc, 0x04                                         ; FC18D5  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC18D8  1e 3f 01
 	ret                                                  ; FC18DB  0e
-sub_FC18DC:
+; Msg0716_PostValueAsSwitch: the shared tail of the Msg0716 builders -- value = 0x7F if UiEvent_Byte2 AND C, else 0, byte 3 of the message at 0x0716, BC = 4,
+;   Msg0716_Post_Trampoline (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostValueAsSwitch:
 	ld (XIX+0x03),0x00                                   ; FC18DC  bc 03 00 00
 	ldfr_berp c, 0x3c                                      ; FC18E0  c7 3c 9b   ld RL3,C
 	and c, (UiEvent_Byte2:16)                                   ; FC18E3  c1 b9 20 c3
@@ -113406,7 +113474,9 @@ sub_FC18DC:
 	ldw bc, 0x04                                         ; FC18F0  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC18F3  1e 24 01
 	ret                                                  ; FC18F6  0e
-sub_FC18F7:
+; Msg0716_PostValueClamped: the shared tail of the Msg0716 builders -- value = min(UiEvent_Byte2, C), byte 3 of the message at 0x0716, BC = 4,
+;   Msg0716_Post_Trampoline (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostValueClamped:
 	ld a, (UiEvent_Byte2:16)                                   ; FC18F7  c1 b9 20 21
 	cp A,C                                               ; FC18FB  cb f1
 	jr ule, .LFC1901                                     ; FC18FD  63 02
@@ -113517,7 +113587,9 @@ sub_FC19E0:
 	ldw bc, 0x06                                         ; FC19F7  31 06 00
 	call Msg0716_Post_Trampoline                         ; FC19FA  1d 1a 1a fc
 	ret                                                  ; FC19FE  0e
-sub_FC19FF:
+; Msg0716_PostSysEx50_92: posts F0 50 92 ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),
+;   command 0x92, whose meaning is not established here (notes/prom_a_msg0716_message_names.py).
+Msg0716_PostSysEx50_92:
 	ld XIX,0x00000716                                    ; FC19FF  44 16 07 00 00
 	ld (XIX),0xf0                                        ; FC1A04  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC1A07  bc 01 00 50
