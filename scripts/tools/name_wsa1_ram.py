@@ -543,6 +543,16 @@ GROUPS = [
         0x23CE: ("DiskSave_StoredPassword", "the password the entry is checked against",
                  "BStore_GetDiskBankPassword / _GetAnyBankPassword write it; DiskSave_ComparePassword reads it"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: MIDI FILE DIRECT PLAY streams the file through a reader task and two buffers", {
+        0x170E: ("MidiFileStream_State", "1 = streaming, 2 = ended or failed", "MidiFileStream_Open / _GetByte / _Close"),
+        0x1704: ("MidiFileStream_BufLeft", "bytes left in the current buffer", "MidiFileStream_GetByte"),
+        0x1706: ("MidiFileStream_Buffer", "the buffer being read (word count, word flag, 0x400 bytes)", "MidiFileStream_GetByte / _Close"),
+        0x170A: ("MidiFileStream_ReadPtr", "the next byte in it", "MidiFileStream_GetByte"),
+        0x1700: ("MidiFileStream_FileSize", "the file's size, from the FCB's +0x10", "MidiFileStream_ReaderTask"),
+        0x17B7: ("MidiFileStream_TaskRunning", "1 while the reader task runs", "MidiFileStream_ReaderTask sets / clears it; _Close waits on it"),
+        0x178E: ("Disk_Fcb", "the file-control block every DiskFile_* call passes (DOS layout: +1..+11 the 8.3 name, +0x10 the size)",
+                 "DiskFile_SetFcbName copies Disk_FileName to +1; DiskFile_Open / _Close / _ReadBlock / ... push it; the stream uses it too"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

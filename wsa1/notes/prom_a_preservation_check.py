@@ -3953,6 +3953,21 @@ RENAMES = {
     "T_F425FC": "T_DiskSave_IsSelectedFileNew_Call",
     "T_F42608": "T_DiskSaveFile_SaveOrConfirmOverwrite_Call",
     "T_F4260C": "T_DiskSaveFile_CheckPasswordThenSave_Call",
+    "sub_FE04BE": "MidiFileStream_Open",
+    "sub_FE02AB": "MidiFileStream_ReaderTask",
+    "sub_FE0280": "MidiFileStream_ReadBlock",
+    "sub_FE0391": "MidiFileStream_GetByte",
+    "sub_FE0435": "MidiFileStream_Close",
+    "sub_FE1337": "NameEdit_MoveCursor",
+    "sub_FE139D": "NameEdit_SyncCharIndex",
+    "sub_FE1863": "NameEdit_StepChar",
+    "T_F42618": "T_MidiFileStream_Open",
+    "T_F4261C": "T_MidiFileStream_GetByte",
+    "T_F42620": "T_MidiFileStream_Close",
+    "T_F433C0": "T_MidiFileStream_ReaderTask",
+    "sub_FE1C9F": "NameEdit_MoveCursor_Call",
+    "sub_FE1CA3": "NameEdit_StepChar_Call",
+    "sub_FE1CCC": "NameEdit_SyncCharIndex_Call",
 }
 
 

@@ -476,3 +476,12 @@
 	.equ DiskSave_PasswordEntry,			0x22f0	; the password pages' 16-byte entry buffer -- ScreenEnter_DiskSaveFile_Page3 / _Page4 fill it from Text_FF3A18
 	.equ DiskSave_StoredPassword,			0x23ce	; the password the entry is checked against -- BStore_GetDiskBankPassword / _GetAnyBankPassword write it; DiskSave_ComparePassword reads it
 	.equ BStore_Password,				0x60341c	; workspace word +0x1C: the bank's two-character save password, 0 = none -- DiskSave_StorePasswordInWorkspace writes it; Smf_WriteFile refuses while it is set; BStore_ClearPasswordProtectedBanks
+
+; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: MIDI FILE DIRECT PLAY streams the file through a reader task and two buffers"
+	.equ MidiFileStream_FileSize,			0x1700	; the file's size, from the FCB's +0x10 -- MidiFileStream_ReaderTask
+	.equ MidiFileStream_BufLeft,			0x1704	; bytes left in the current buffer -- MidiFileStream_GetByte
+	.equ MidiFileStream_Buffer,			0x1706	; the buffer being read (word count, word flag, 0x400 bytes) -- MidiFileStream_GetByte / _Close
+	.equ MidiFileStream_ReadPtr,			0x170a	; the next byte in it -- MidiFileStream_GetByte
+	.equ MidiFileStream_State,			0x170e	; 1 = streaming, 2 = ended or failed -- MidiFileStream_Open / _GetByte / _Close
+	.equ Disk_Fcb,					0x178e	; the file-control block every DiskFile_* call passes (DOS layout: +1..+11 the 8.3 name, +0x10 the size) -- DiskFile_SetFcbName copies Disk_FileName to +1; DiskFile_Open / _Close / _ReadBlock / ... push it; the stream uses it too
+	.equ MidiFileStream_TaskRunning,		0x17b7	; 1 while the reader task runs -- MidiFileStream_ReaderTask sets / clears it; _Close waits on it

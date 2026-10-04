@@ -1869,10 +1869,10 @@
 	.set	ScreenButton_SoundEditFilterEnvelope2, 0xFDE6AF
 	.set	ScreenButton_SoundEditFilterLfo, 0xFDE70F
 	.set	Disk_PhaseVector, 0xFE0000
-	.set	sub_FE02AB, 0xFE02AB
-	.set	sub_FE0391, 0xFE0391
-	.set	sub_FE0435, 0xFE0435
-	.set	sub_FE04BE, 0xFE04BE
+	.set	MidiFileStream_ReaderTask, 0xFE02AB
+	.set	MidiFileStream_GetByte, 0xFE0391
+	.set	MidiFileStream_Close, 0xFE0435
+	.set	MidiFileStream_Open, 0xFE04BE
 	.set	sub_FE144E, 0xFE144E
 	.set	sub_FE152E, 0xFE152E
 	.set	SysPartMidi_ResetBlock1Default_Call, 0xFE1BCA
@@ -1903,8 +1903,8 @@
 	.set	sub_FE1C79, 0xFE1C79
 	.set	DiskSaveFile_Execute_Entry, 0xFE1C80
 	.set	MidiFileSave_Page5_LcdKeyRow3, 0xFE1C98
-	.set	sub_FE1C9F, 0xFE1C9F
-	.set	sub_FE1CA3, 0xFE1CA3
+	.set	NameEdit_MoveCursor_Call, 0xFE1C9F
+	.set	NameEdit_StepChar_Call, 0xFE1CA3
 	.set	sub_FE1CA7, 0xFE1CA7
 	.set	Disk_SaveFileName_Call, 0xFE1CAB
 	.set	DiskApi_CloseFile_Call, 0xFE1CAF
@@ -1912,7 +1912,7 @@
 	.set	Disk_ResetAndMountFloppy_Call, 0xFE1CC0
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
 	.set	DiskSaveFile_Page5_LcdKeyRow3, 0xFE1CC8
-	.set	sub_FE1CCC, 0xFE1CCC
+	.set	NameEdit_SyncCharIndex_Call, 0xFE1CCC
 	.set	DiskSave_IsSelectedFileNew_Call, 0xFE1CD0
 	.set	Var2216_SetW145C_Call, 0xFE1CD4
 	.set	sub_FE1CD8, 0xFE1CD8
@@ -90974,8 +90974,8 @@ T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
 ;           DiskSaveFile_Execute_Entry (graded CONTENT).  DERIVATIVE name.
 T_DiskSaveFile_Execute_Entry:	jp DiskSaveFile_Execute_Entry  ; F425CC (was T_F425CC) -> prom_a 0x61C80   x3
 T_MidiFileSave_Page5_LcdKeyRow3:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
-T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
-T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
+T_F425D4:	jp NameEdit_MoveCursor_Call  ; -> prom_a 0x61C9F   x2
+T_F425D8:	jp NameEdit_StepChar_Call  ; -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
 ; Evidence: slot 0xF425E0 is `jp 0xFE1CAB`; prom_a 0xFE1CAB carries the label
 ;           Disk_SaveFileName_Call (graded CONTENT).  DERIVATIVE name.
@@ -90987,7 +90987,7 @@ T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_Disk_ResetAndMountFloppy_Call:	jp Disk_ResetAndMountFloppy_Call  ; F425EC (was T_F425EC) -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
-T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
+T_F425F8:	jp NameEdit_SyncCharIndex_Call  ; -> prom_a 0x61CCC   x3
 ; Evidence: slot 0xF425FC is `jp 0xFE1CD0`; prom_a 0xFE1CD0 carries the label
 ;           DiskSave_IsSelectedFileNew_Call (graded CONTENT).  DERIVATIVE name.
 T_DiskSave_IsSelectedFileNew_Call:	jp DiskSave_IsSelectedFileNew_Call  ; F425FC (was T_F425FC) -> prom_a 0x61CD0
@@ -91001,9 +91001,15 @@ T_DiskSaveFile_SaveOrConfirmOverwrite_Call:	jp DiskSaveFile_SaveOrConfirmOverwri
 T_DiskSaveFile_CheckPasswordThenSave_Call:	jp DiskSaveFile_CheckPasswordThenSave_Call  ; F4260C (was T_F4260C) -> prom_a 0x61CE0   x1
 T_F42610:	jp sub_FE1CE4  ; -> prom_a 0x61CE4   x1
 T_F42614:	jp sub_FE1C0B  ; -> prom_a 0x61C0B   x5
-T_F42618:	jp sub_FE04BE  ; -> prom_a 0x604BE   x2
-T_F4261C:	jp sub_FE0391  ; -> prom_a 0x60391   x26
-T_F42620:	jp sub_FE0435  ; -> prom_a 0x60435   x2
+; Evidence: slot 0xF42618 is `jp 0xFE04BE`; prom_a 0xFE04BE carries the label
+;           MidiFileStream_Open (graded CONTENT).  DERIVATIVE name.
+T_MidiFileStream_Open:	jp MidiFileStream_Open  ; F42618 (was T_F42618) -> prom_a 0x604BE   x2
+; Evidence: slot 0xF4261C is `jp 0xFE0391`; prom_a 0xFE0391 carries the label
+;           MidiFileStream_GetByte (graded CONTENT).  DERIVATIVE name.
+T_MidiFileStream_GetByte:	jp MidiFileStream_GetByte  ; F4261C (was T_F4261C) -> prom_a 0x60391   x26
+; Evidence: slot 0xF42620 is `jp 0xFE0435`; prom_a 0xFE0435 carries the label
+;           MidiFileStream_Close (graded CONTENT).  DERIVATIVE name.
+T_MidiFileStream_Close:	jp MidiFileStream_Close  ; F42620 (was T_F42620) -> prom_a 0x60435   x2
 ; Evidence: slot 0xF42624 is `jp 0xFE1BEB`; prom_a 0xFE1BEB carries the label
 ;           Disk_LoadSqfToWorkspace_Entry (graded CONTENT).  DERIVATIVE name.
 T_Disk_LoadSqfToWorkspace_Entry:	jp Disk_LoadSqfToWorkspace_Entry  ; F42624 (was T_F42624) -> prom_a 0x61BEB   x1
@@ -91963,7 +91969,9 @@ T_MidiIn_PumpPortB:	jp MidiIn_PumpPortB  ; F43358 (was T_F43358) -> prom_a 0x260
 T_MidiFileL0ad_LcdKeyRow1:	jp MidiFileL0ad_LcdKeyRow1  ; -> prom_b 0x6F400   x1
 T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
-T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
+; Evidence: slot 0xF433C0 is `jp 0xFE02AB`; prom_a 0xFE02AB carries the label
+;           MidiFileStream_ReaderTask (graded CONTENT).  DERIVATIVE name.
+T_MidiFileStream_ReaderTask:	jp MidiFileStream_ReaderTask  ; F433C0 (was T_F433C0) -> prom_a 0x602AB
 	.fill 0xC, 1, 0x0E  ; 0xF433C4: 12 x ret
 T_ScreenEnter_SoundEditDigitalEffect:	jp ScreenEnter_SoundEditDigitalEffect  ; -> prom_a 0x5D02D
 T_ScreenLeave_SoundEditDigitalEffect:	jp ScreenLeave_SoundEditDigitalEffect  ; -> prom_a 0x5E2EC

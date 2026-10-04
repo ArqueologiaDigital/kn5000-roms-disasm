@@ -1355,6 +1355,38 @@ ROWS = [
     ("FE2DDD", "DiskLoad_CheckLswHeader",
      "A = 1 when the file buffer's bytes +4 / +5 (0x60A084 / 0x60A085) are 'W' 'A', else 0 -- DiskLoad_PanelLswFile\n"
      "refuses the file with 0x10 on 0."),
+    # MIDI FILE DIRECT PLAY's stream (FINDINGS-prom_b-disk-and-file-menus.md) and the file-name editor
+    ("FE04BE", "MidiFileStream_Open",
+     "T_MidiFileStream_Open's body (MidiFileDirectPlay_LcdKeyRow1): (0x178E) = 1, (0x1704) = 0, (0x170E) = 1, extension MID,\n"
+     "DiskFile_SetFcbName, DiskCmd 0x0F (open) on the FCB at 0x178E; failure -> (0x170E) = 2, WA = 0xFFFF; success\n"
+     "-> kernel task 4 (MidiFileStream_ReaderTask) started, WA = 0."),
+    ("FE02AB", "MidiFileStream_ReaderTask",
+     "kernel task 4 (task-table entry 0xF85EAE, thunk T_MidiFileStream_ReaderTask, stack 0x60EB00): (0x17B7) = 1; file size = the\n"
+     "FCB's +0x10 words (0x179E, 0x17A0) -> (0x1700); buffers 0x604B00 and 0x605300 seeded onto queue 2; then\n"
+     "each buffer received from queue 2 is filled with the next 0x400 bytes (MidiFileStream_ReadBlock) and sent to\n"
+     "queue 3 -- a non-zero flag word (+2) is a stop request, sent back with 0xFFFE; at the end (0x17B7) = 0 and\n"
+     "T_Kernel_ExitTask_2."),
+    ("FE0280", "MidiFileStream_ReadBlock",
+     "(dst): DiskCmd 0x1A (set transfer address) = dst, then DiskCmd 0x83 (read file block) on the FCB at 0x178E;\n"
+     "returns its status."),
+    ("FE0391", "MidiFileStream_GetByte",
+     "T_MidiFileStream_GetByte's body (MidiFileDirectPlay_Tick, SequencerMedley_MidiFileTick): while (0x170E) = 1, the next byte\n"
+     "of the current buffer (0x1706 / read pointer 0x170A / count 0x1704), a fresh one taken from queue 3 when it\n"
+     "runs out; an emptied full (0x400) buffer goes back on queue 2; a short one or a set flag -> (0x170E) = 2.\n"
+     "WA = the byte, or 0xFFFF."),
+    ("FE0435", "MidiFileStream_Close",
+     "T_MidiFileStream_Close's body (MidiFilePlay_Stop): drains queue 2, posts the current buffer with flag 0xFFFF (stop),\n"
+     "waits for (0x17B7) = 0, (0x170E) = 2, drains queues 3 and 2, blanks the 11 bytes of Disk_FileName."),
+    ("FE1337", "NameEdit_MoveCursor",
+     "SoftKeyCol1/2 on DISK SAVE FILE page 0 (through NameEdit_MoveCursor_Call): NameEdit_CursorPos -1 when (0x272C) bit 7 is set\n"
+     "(not below 3), else +1 (not above 8); with (0x208C) bit 0 the 9-character name is first blanked to '_' and\n"
+     "the cursor set to 3; then NameEdit_SyncCharIndex."),
+    ("FE139D", "NameEdit_SyncCharIndex",
+     "NameEdit_CharIndex = the position of Disk_FileName[NameEdit_CursorPos - 1] in the 37-character set at 0x1753\n"
+     "(Disk_InitFileNameCharset), 0 when absent."),
+    ("FE1863", "NameEdit_StepChar",
+     "SoftKeyCol4/5 on page 0 (through NameEdit_StepChar_Call): NameEdit_CharIndex -1 when (0x272C) bit 7 is set (not below 0),\n"
+     "else +1 (not above 0x24); the character set[index] goes into Disk_FileName at the cursor."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

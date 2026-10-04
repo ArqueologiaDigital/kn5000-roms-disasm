@@ -283,6 +283,30 @@ target bank before it reads a one-bank SQF over it.
 ⚠ Not established: what status codes 0x0A, 0x11 and 0x12 print. They are not tied to their texts here,
 though `DL_Error11ThePasswordThatYouEnteredIs` and `DL_PasswordOk` exist.
 
+### 2026-10-04: MIDI FILE DIRECT PLAY streams the file through a reader task and two buffers
+
+DIRECT PLAY does not load a `.MID` file. It streams it:
+- **Open.** `MidiFileStream_Open` (directory slot `T_MidiFileStream_Open`, called by `MidiFileDirectPlay_LcdKeyRow1`)
+  names the disk module's one FCB, `Disk_Fcb` (0x178E), with extension `MID` and opens it (DiskCmd 0x0F).
+  It sets `MidiFileStream_State` (0x170E) = 1 and starts kernel task 4.
+- **Read ahead.** Task 4 is `MidiFileStream_ReaderTask`: task-table entry 0xF85EAE, thunk `T_MidiFileStream_ReaderTask`,
+  stack 0x60EB00. It sets `MidiFileStream_TaskRunning` (0x17B7) and takes the file size from the FCB's
+  `+0x10` (DOS layout) into `MidiFileStream_FileSize` (0x1700). It seeds message queue 2 with two buffers,
+  `0x604B00` and `0x605300`.
+  - Each buffer is a word count, a word flag, then 0x400 bytes.
+  - For each buffer it receives, it reads the next 0x400 bytes into it (`MidiFileStream_ReadBlock`:
+    DiskCmd 0x1A, then 0x83) and sends it to queue 3, with the count cut to what is left of the file.
+  - A buffer that arrives with a non-zero flag is a stop request. It goes back with flag 0xFFFE, and the
+    task clears 0x17B7 and exits.
+- **Consume.** `MidiFileStream_GetByte` (`T_MidiFileStream_GetByte`) is what the players call, in
+  `MidiFileDirectPlay_Tick` and `SequencerMedley_MidiFileTick`. It returns one byte, or 0xFFFF at the end.
+  - When `MidiFileStream_BufLeft` (0x1704) is 0, it takes the next buffer from queue 3
+    (`MidiFileStream_Buffer` 0x1706, read pointer `MidiFileStream_ReadPtr` 0x170A).
+  - A full buffer it empties goes back on queue 2 to be refilled. A short one, or a non-zero flag, sets
+    the state to 2.
+- **Close.** `MidiFileStream_Close` (`T_MidiFileStream_Close`, `MidiFilePlay_Stop`) posts a stop request on queue 2 and
+  waits until 0x17B7 is clear. It then drains both queues and blanks `Disk_FileName`.
+
 ### `L0AD` is not a typo in this note
 
 Many of these labels spell capital **O** with character code **0x30**, the digit

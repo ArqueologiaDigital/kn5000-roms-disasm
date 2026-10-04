@@ -1794,9 +1794,9 @@
 	.set T_DiskSaveFile_CheckPasswordThenSave_Call,                                                                      0x00F4260C
 	.set T_F42610,                                                                      0x00F42610
 	.set T_F42614,                                                                      0x00F42614
-	.set T_F42618,                                                                      0x00F42618
-	.set T_F4261C,                                                                      0x00F4261C
-	.set T_F42620,                                                                      0x00F42620
+	.set T_MidiFileStream_Open,                                                                      0x00F42618
+	.set T_MidiFileStream_GetByte,                                                                      0x00F4261C
+	.set T_MidiFileStream_Close,                                                                      0x00F42620
 	.set T_Disk_LoadSqfToWorkspace_Entry,                                                                      0x00F42624
 	.set T_Disk_LoadSeqToHeap_Entry,                                                                      0x00F42628
 	.set T_Disk_SaveSqfFromStaging_Entry,                                                                      0x00F4262C
@@ -100892,7 +100892,7 @@ sub_FB9176:
 .LFB91B1:
 	calr SeqClock_ResetBeatAndTick                                      ; FB91B1  1e b6 ff
 	m_set 4, MD16, UI_ScreenFlags                                ; FB91B4  f1 95 20 bc
-	call T_F42620                                        ; FB91B8  1d 20 26 f4
+	call T_MidiFileStream_Close                                        ; FB91B8  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB91BC  84 3c fd
 	ld (0x605148:24), 0x00                             ; FB91BF  f2 48 51 60 00 00
 	pop XIX                                              ; FB91C5  5c
@@ -100929,7 +100929,7 @@ sub_FB91EE_Loop:
 	jr nz, sub_FB91EE_Loop                                    ; FB9206  6e f6
 .LFB9208:
 	calr SeqClock_ResetBeatAndTick                                      ; FB9208  1e 5f ff
-	call T_F42620                                        ; FB920B  1d 20 26 f4
+	call T_MidiFileStream_Close                                        ; FB920B  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB920F  84 3c fd
 	ld (0x605148:24), 0x00                             ; FB9212  f2 48 51 60 00 00
 	pop XIX                                              ; FB9218  5c
@@ -101115,7 +101115,7 @@ sub_FB92EF:
 	jr z, .LFB933F                                       ; FB9314  66 29
 	cp BC,0x00d0                                         ; FB9316  d9 cf d0 00
 	jr z, .LFB933F                                       ; FB931A  66 23
-	call T_F4261C                                        ; FB931C  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB931C  1d 1c 26 f4
 	ld HL,WA                                             ; FB9320  d8 8b
 	ld (0x605145:24), wa                                ; FB9322  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9327  db d8
@@ -101159,7 +101159,7 @@ sub_FB9345:
 	jr ule, .LFB93C7                                     ; FB9383  63 42
 	ldw hl, 0x01                                         ; FB9385  33 01 00
 .LFB9388:
-	call T_F4261C                                        ; FB9388  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9388  1d 1c 26 f4
 	ld (xiz-2), wa                                       ; FB938C  be fe 50
 	ld (0x605145:24), wa                                ; FB938F  f2 45 51 60 50
 	m_cp_mi16 MWD+r6, 0xfe, 0x0000                       ; FB9394  9e fe 3f 00 00
@@ -101193,7 +101193,7 @@ sub_FB93D0:
 	lda xix, (0x605145:24)                               ; FB93D3  f2 45 51 60 34
 	ld h, 0x01:opc                                          ; FB93D8  26 01
 .LFB93DA:
-	call T_F4261C                                        ; FB93DA  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB93DA  1d 1c 26 f4
 	ld DE,WA                                             ; FB93DE  d8 8a
 	ld (XIX),WA                                          ; FB93E0  b4 50
 	cp de, 0x00:i3                                         ; FB93E2  da d8
@@ -101360,7 +101360,7 @@ sub_FB9532:
 	lda xix, (0x605145:24)                               ; FB9535  f2 45 51 60 34
 	ld h, 0x01:opc                                          ; FB953A  26 01
 .LFB953C:
-	call T_F4261C                                        ; FB953C  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB953C  1d 1c 26 f4
 	ld DE,WA                                             ; FB9540  d8 8a
 	ld (XIX),WA                                          ; FB9542  b4 50
 	cp de, 0x00:i3                                         ; FB9544  da d8
@@ -101419,7 +101419,7 @@ sub_FB9599:
 .LFB95A8:
 	cp HL,DE                                             ; FB95A8  da f3
 	jr ugt, .LFB95CE                                     ; FB95AA  6b 22
-	call T_F4261C                                        ; FB95AC  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB95AC  1d 1c 26 f4
 	ld IX,WA                                             ; FB95B0  d8 8c
 	ld (0x605145:24), wa                                ; FB95B2  f2 45 51 60 50
 	cp ix, 0x00:i3                                         ; FB95B7  dc d8
@@ -101484,7 +101484,7 @@ sub_FB9635:
 	pushw hl                                             ; FB9635  2b
 	push XIX                                             ; FB9636  3c
 	lda xix, (0x605147:24)                               ; FB9637  f2 47 51 60 34
-	call T_F4261C                                        ; FB963C  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB963C  1d 1c 26 f4
 	ld HL,WA                                             ; FB9640  d8 8b
 	ld (0x605145:24), wa                                ; FB9642  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9647  db d8
@@ -101493,7 +101493,7 @@ sub_FB9635:
 .LFB964E:
 	ld c, (0x605145:24)                                 ; FB964E  c2 45 51 60 23
 	ld (0x605063:24), c                                 ; FB9653  f2 63 50 60 43
-	call T_F4261C                                        ; FB9658  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9658  1d 1c 26 f4
 	ld HL,WA                                             ; FB965C  d8 8b
 	ld (0x605145:24), wa                                ; FB965E  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9663  db d8
@@ -101502,7 +101502,7 @@ sub_FB9635:
 .LFB966A:
 	ld c, (0x605145:24)                                 ; FB966A  c2 45 51 60 23
 	ld (0x605064:24), c                                 ; FB966F  f2 64 50 60 43
-	call T_F4261C                                        ; FB9674  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9674  1d 1c 26 f4
 	ld HL,WA                                             ; FB9678  d8 8b
 	ld (0x605145:24), wa                                ; FB967A  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB967F  db d8
@@ -101546,7 +101546,7 @@ sub_FB9697:
 	ld (xiz-8), xwa                                      ; FB96B0  be f8 60
 	ld h, 0x00:opc                                          ; FB96B3  26 00
 .LFB96B5:
-	call T_F4261C                                        ; FB96B5  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB96B5  1d 1c 26 f4
 	ld DE,WA                                             ; FB96B9  d8 8a
 	ld (0x605145:24), wa                                ; FB96BB  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB96C0  da d8
@@ -101583,7 +101583,7 @@ sub_FB9697:
 	jrl z, .LFB9781                                      ; FB9705  76 79 00
 	ld h, 0x7c:opc                                          ; FB9708  26 7c
 .LFB970A:
-	call T_F4261C                                        ; FB970A  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB970A  1d 1c 26 f4
 	ld DE,WA                                             ; FB970E  d8 8a
 	ld (0x605145:24), wa                                ; FB9710  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9715  da d8
@@ -101597,7 +101597,7 @@ sub_FB9697:
 	jr nz, .LFB970A                                      ; FB972A  6e de
 	ld h, 0x00:opc                                          ; FB972C  26 00
 .LFB972E:
-	call T_F4261C                                        ; FB972E  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB972E  1d 1c 26 f4
 	ld DE,WA                                             ; FB9732  d8 8a
 	ld (0x605145:24), wa                                ; FB9734  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9739  da d8
@@ -101636,7 +101636,7 @@ sub_FB9697:
 	calr sub_FB9E3F                                      ; FB9781  1e bb 06
 	ld h, 0x05:opc                                          ; FB9784  26 05
 .LFB9786:
-	call T_F4261C                                        ; FB9786  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9786  1d 1c 26 f4
 	ld DE,WA                                             ; FB978A  d8 8a
 	ld (0x605145:24), wa                                ; FB978C  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9791  da d8
@@ -101648,7 +101648,7 @@ sub_FB9697:
 	dec 1,H                                              ; FB97A2  ce 69
 	cp h, 0x00:i3                                          ; FB97A4  ce d8
 	jr nz, .LFB9786                                      ; FB97A6  6e de
-	call T_F4261C                                        ; FB97A8  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB97A8  1d 1c 26 f4
 	ld HL,WA                                             ; FB97AC  d8 8b
 	ld (0x605145:24), wa                                ; FB97AE  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97B3  db d8
@@ -101660,7 +101660,7 @@ sub_FB9697:
 	ld (0x60505a:24), h                                 ; FB97C4  f2 5a 50 60 46
 	cp h, 0x00:i3                                          ; FB97C9  ce d8
 	jrl nz, .LFB9915                                     ; FB97CB  7e 47 01
-	call T_F4261C                                        ; FB97CE  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB97CE  1d 1c 26 f4
 	ld HL,WA                                             ; FB97D2  d8 8b
 	ld (0x605145:24), wa                                ; FB97D4  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97D9  db d8
@@ -101670,7 +101670,7 @@ sub_FB9697:
 	ld h, (0x605145:24)                                 ; FB97E0  c2 45 51 60 26
 	ld (0x605056:24), h                                 ; FB97E5  f2 56 50 60 46
 	ld (0x605059:24), h                                 ; FB97EA  f2 59 50 60 46
-	call T_F4261C                                        ; FB97EF  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB97EF  1d 1c 26 f4
 	ld HL,WA                                             ; FB97F3  d8 8b
 	ld (0x605145:24), wa                                ; FB97F5  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97FA  db d8
@@ -101680,7 +101680,7 @@ sub_FB9697:
 	ld h, (0x605145:24)                                 ; FB9801  c2 45 51 60 26
 	ld (0x605056:24), h                                 ; FB9806  f2 56 50 60 46
 	ld (0x605058:24), h                                 ; FB980B  f2 58 50 60 46
-	call T_F4261C                                        ; FB9810  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9810  1d 1c 26 f4
 	ld HL,WA                                             ; FB9814  d8 8b
 	ld (0x605145:24), wa                                ; FB9816  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB981B  db d8
@@ -101694,7 +101694,7 @@ sub_FB9697:
 	extz BC                                              ; FB9833  d9 12
 	sll bc, 0x08                                         ; FB9835  d9 ee 08
 	ld (0x605066:24), bc                                ; FB9838  f2 66 50 60 51
-	call T_F4261C                                        ; FB983D  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB983D  1d 1c 26 f4
 	ld HL,WA                                             ; FB9841  d8 8b
 	ld (0x605145:24), wa                                ; FB9843  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9848  db d8
@@ -101719,7 +101719,7 @@ sub_FB9697:
 	calr MidiFilePlay_ClearPosition                                      ; FB9887  1e 91 00
 	ld h, 0x00:opc                                          ; FB988A  26 00
 .LFB988C:
-	call T_F4261C                                        ; FB988C  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB988C  1d 1c 26 f4
 	ld DE,WA                                             ; FB9890  d8 8a
 	ld (0x605145:24), wa                                ; FB9892  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9897  da d8
@@ -101756,7 +101756,7 @@ sub_FB9697:
 	jr nz, .LFB9915                                      ; FB98DC  6e 37
 	ld h, 0x04:opc                                          ; FB98DE  26 04
 .LFB98E0:
-	call T_F4261C                                        ; FB98E0  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB98E0  1d 1c 26 f4
 	ld DE,WA                                             ; FB98E4  d8 8a
 	ld (0x605145:24), wa                                ; FB98E6  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB98EB  da d8
@@ -101788,7 +101788,7 @@ sub_FB9923:
 	pushw hl                                             ; FB9923  2b
 	push XIX                                             ; FB9924  3c
 	lda xix, (0x605147:24)                               ; FB9925  f2 47 51 60 34
-	call T_F4261C                                        ; FB992A  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB992A  1d 1c 26 f4
 	ld HL,WA                                             ; FB992E  d8 8b
 	ld (0x605145:24), wa                                ; FB9930  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9935  db d8
@@ -101805,7 +101805,7 @@ sub_FB9923:
 	jr z, .LFB997E                                       ; FB9954  66 28
 	jr .LFB999F                                          ; FB9956  68 47
 .LFB9958:
-	call T_F4261C                                        ; FB9958  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9958  1d 1c 26 f4
 	ld HL,WA                                             ; FB995C  d8 8b
 	ld (0x605145:24), wa                                ; FB995E  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9963  db d8
@@ -101818,7 +101818,7 @@ sub_FB9923:
 	calr sub_FB9176                                      ; FB9979  1e fa f7
 	jr .LFB99A8                                          ; FB997C  68 2a
 .LFB997E:
-	call T_F4261C                                        ; FB997E  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB997E  1d 1c 26 f4
 	ld HL,WA                                             ; FB9982  d8 8b
 	ld (0x605145:24), wa                                ; FB9984  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9989  db d8
@@ -101890,7 +101890,7 @@ sub_FB99F5:
 	dec 1,BC                                             ; FB9A25  d9 69
 	cp HL,BC                                             ; FB9A27  d9 f3
 	jr ugt, .LFB9A5F                                     ; FB9A29  6b 34
-	call T_F4261C                                        ; FB9A2B  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9A2B  1d 1c 26 f4
 	ld DE,WA                                             ; FB9A2F  d8 8a
 	ld (0x605145:24), wa                                ; FB9A31  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9A36  da d8
@@ -101940,7 +101940,7 @@ sub_FB99F5:
 	dec 1,BC                                             ; FB9AAD  d9 69
 	cp HL,BC                                             ; FB9AAF  d9 f3
 	jr ugt, .LFB9AE7                                     ; FB9AB1  6b 34
-	call T_F4261C                                        ; FB9AB3  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9AB3  1d 1c 26 f4
 	ld DE,WA                                             ; FB9AB7  d8 8a
 	ld (0x605145:24), wa                                ; FB9AB9  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9ABE  da d8
@@ -102258,7 +102258,7 @@ sub_FB9DA0:
 	sub XWA,XWA                                          ; FB9DC1  e8 a0
 	ld (0x60341e:24), xwa                               ; FB9DC3  f2 1e 34 60 60
 	ld (XIX),0x00                                        ; FB9DC8  b4 00 00
-	call T_F42618                                        ; FB9DCB  1d 18 26 f4
+	call T_MidiFileStream_Open                                        ; FB9DCB  1d 18 26 f4
 	cp wa, 0x00:i3                                         ; FB9DCF  d8 d8
 	jr ge, .LFB9DDE                                      ; FB9DD1  69 0b
 	m_set 0, MD24, 0x605147                              ; FB9DD3  f2 47 51 60 b8
@@ -102287,7 +102287,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 	and C,0x04                                           ; FB9E0A  cb cc 04
 	jr nz, .LFB9E36                                      ; FB9E0D  6e 27
 	m_res 2, MD16, 0x34bb                                ; FB9E0F  f1 bb 34 b2
-	call T_F42618                                        ; FB9E13  1d 18 26 f4
+	call T_MidiFileStream_Open                                        ; FB9E13  1d 18 26 f4
 	cp wa, 0x00:i3                                         ; FB9E17  d8 d8
 	jr ge, .LFB9E20                                      ; FB9E19  69 05
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9E1B  84 3e 01
@@ -102432,7 +102432,7 @@ SequencerMedley_MidiFileTick:
 	ld XBC,(XIX)                                         ; FB9F87  a4 21
 	m_cp_rm ML24, 0x605044, r1                           ; FB9F89  e2 44 50 60 f1
 	jr c, .LFB9FDC                                       ; FB9F8E  67 4c
-	call T_F4261C                                        ; FB9F90  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FB9F90  1d 1c 26 f4
 	ld HL,WA                                             ; FB9F94  d8 8b
 	ld (0x605145:24), wa                                ; FB9F96  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9F9B  db d8
@@ -102543,7 +102543,7 @@ MidiFileDirectPlay_Tick:
 	ldw (0x60514b:24), 0x00                             ; FBA0B4  f2 4b 51 60 02 00 00
 	jr .LFBA108                                          ; FBA0BB  68 4b
 .LFBA0BD:
-	call T_F4261C                                        ; FBA0BD  1d 1c 26 f4
+	call T_MidiFileStream_GetByte                                        ; FBA0BD  1d 1c 26 f4
 	ld HL,WA                                             ; FBA0C1  d8 8b
 	ld (0x605145:24), wa                                ; FBA0C3  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FBA0C8  db d8
@@ -160854,7 +160854,9 @@ BStore_GetDiskBankPassword_SaveRegs:
 	pop XHL                                              ; FE027D  5b
 	pop XDE                                              ; FE027E  5a
 	ret                                                  ; FE027F  0e
-sub_FE0280:
+; MidiFileStream_ReadBlock: (dst): DiskCmd 0x1A (set transfer address) = dst, then DiskCmd 0x83 (read file block) on the FCB at 0x178E;
+;   returns its status.
+MidiFileStream_ReadBlock:
 	link XIZ,0x0000                                      ; FE0280  ee 0c 00 00
 	pushw 0x00                                           ; FE0284  0b 00 00
 	ld XBC,(XIZ+0x08)                                    ; FE0287  ae 08 21
@@ -160862,7 +160864,7 @@ sub_FE0280:
 	pushw 0x1a                                           ; FE028B  0b 1a 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE028E  1d 34 2d f4
 	pushw 0x00                                           ; FE0292  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE0295  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE0295  f2 8e 17 00 31
 	push XBC                                             ; FE029A  39
 	pushw 0x83                                           ; FE029B  0b 83 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE029E  1d 34 2d f4
@@ -160871,20 +160873,25 @@ sub_FE0280:
 	inc 8,XSP                                            ; FE02A6  ef 60
 	unlk XIZ                                             ; FE02A8  ee 0d
 	ret                                                  ; FE02AA  0e
-sub_FE02AB:
+; MidiFileStream_ReaderTask: kernel task 4 (task-table entry 0xF85EAE, thunk T_MidiFileStream_ReaderTask, stack 0x60EB00): (0x17B7) = 1; file size = the
+;   FCB's +0x10 words (0x179E, 0x17A0) -> (0x1700); buffers 0x604B00 and 0x605300 seeded onto queue 2; then
+;   each buffer received from queue 2 is filled with the next 0x400 bytes (MidiFileStream_ReadBlock) and sent to
+;   queue 3 -- a non-zero flag word (+2) is a stop request, sent back with 0xFFFE; at the end (0x17B7) = 0 and
+;   T_Kernel_ExitTask_2.
+MidiFileStream_ReaderTask:
 	link XIZ,0xfff8                                      ; FE02AB  ee 0c f8 ff
 	pushw hl                                             ; FE02AF  2b
 	push XIX                                             ; FE02B0  3c
-	ld (0x17b7:24), 0x01                               ; FE02B1  f2 b7 17 00 00 01
+	ld (MidiFileStream_TaskRunning:24), 0x01                               ; FE02B1  f2 b7 17 00 00 01
 	ld bc, (0x17a0:24)                                  ; FE02B7  d2 a0 17 00 21
 	extz XBC                                             ; FE02BC  e9 12
 	ld XIX,XBC                                           ; FE02BE  e9 8c
 	sll xix, 16                                        ; FE02C0  ec ee 00
-	ld (0x1700:24), xix                                 ; FE02C3  f2 00 17 00 64
+	ld (MidiFileStream_FileSize:24), xix                                 ; FE02C3  f2 00 17 00 64
 	ld bc, (0x179e:24)                                  ; FE02C8  d2 9e 17 00 21
 	extz XBC                                             ; FE02CD  e9 12
 	add XBC,XIX                                          ; FE02CF  ec 81
-	ld (0x1700:24), xbc                                 ; FE02D1  f2 00 17 00 61
+	ld (MidiFileStream_FileSize:24), xbc                                 ; FE02D1  f2 00 17 00 61
 	ld XIX,0x00604b00                                    ; FE02D6  44 00 4b 60 00
 	ld (0x17b3:24), xix                                 ; FE02DB  f2 b3 17 00 64
 	m_ld_mi16 MDD+r4, 0x02, 0x0000                       ; FE02E0  bc 02 02 00 00
@@ -160906,7 +160913,7 @@ sub_FE02AB:
 	ld BC,HL                                             ; FE0315  db 89
 	extz XBC                                             ; FE0317  e9 12
 	ld (xiz-8), xbc                                      ; FE0319  be f8 61
-	m_cp_rm ML24, 0x001700, r1                           ; FE031C  e2 00 17 00 f1
+	m_cp_rm ML24, MidiFileStream_FileSize, r1                           ; FE031C  e2 00 17 00 f1
 	jr ugt, .LFE0382                                         ; FE0321  6b 5f
 	pushw 0x02                                           ; FE0323  0b 02 00
 	call T_MsgQueue_ReceiveBlocking                      ; FE0326  1d cc 2d f4
@@ -160917,7 +160924,7 @@ sub_FE02AB:
 	jr nz, .LFE0343                                          ; FE0332  6e 0f
 	inc 4,XIY                                            ; FE0334  ed 64
 	push XIY                                             ; FE0336  3d
-	calr sub_FE0280                                          ; FE0337  1e 46 ff
+	calr MidiFileStream_ReadBlock                                          ; FE0337  1e 46 ff
 	pop XIY                                              ; FE033A  5d
 	cp wa, 0x00:i3                                         ; FE033B  d8 d8
 	jr z, .LFE0354                                           ; FE033D  66 15
@@ -160931,7 +160938,7 @@ sub_FE02AB:
 	jr .LFE0382                                              ; FE0352  68 2e
 .LFE0354:
 	m_ld_mi16 MDI+r4, 0, 0x0400                          ; FE0354  b4 02 00 04
-	ld xbc, (0x1700:24)                                 ; FE0358  e2 00 17 00 21
+	ld xbc, (MidiFileStream_FileSize:24)                                 ; FE0358  e2 00 17 00 21
 	m_sub_rm MLD+r6, 0xf8, r1                            ; FE035D  ae f8 a1
 	ld (xiz-4), xbc                                      ; FE0360  be fc 61
 	cp XBC,0x00000400                                    ; FE0363  e9 cf 00 04 00 00
@@ -160946,59 +160953,63 @@ sub_FE02AB:
 	inc 6,XSP                                            ; FE037E  ef 66
 	jr .LFE0315                                              ; FE0380  68 93
 .LFE0382:
-	ld (0x17b7:24), 0x00                               ; FE0382  f2 b7 17 00 00 00
+	ld (MidiFileStream_TaskRunning:24), 0x00                               ; FE0382  f2 b7 17 00 00 00
 	call T_Kernel_ExitTask_2                                        ; FE0388  1d b0 2d f4
 	pop XIX                                              ; FE038C  5c
 	popw hl                                              ; FE038D  4b
 	unlk XIZ                                             ; FE038E  ee 0d
 	ret                                                  ; FE0390  0e
-sub_FE0391:
+; MidiFileStream_GetByte: T_MidiFileStream_GetByte's body (MidiFileDirectPlay_Tick, SequencerMedley_MidiFileTick): while (0x170E) = 1, the next byte
+;   of the current buffer (0x1706 / read pointer 0x170A / count 0x1704), a fresh one taken from queue 3 when it
+;   runs out; an emptied full (0x400) buffer goes back on queue 2; a short one or a set flag -> (0x170E) = 2.
+;   WA = the byte, or 0xFFFF.
+MidiFileStream_GetByte:
 	pushw hl                                             ; FE0391  2b
 	push XIX                                             ; FE0392  3c
-	lda xix, (0x1706:24)                                 ; FE0393  f2 06 17 00 34
-	m_cp_mi8 MB24, 0x00170e, 0x01                        ; FE0398  c2 0e 17 00 3f 01
+	lda xix, (MidiFileStream_Buffer:24)                                 ; FE0393  f2 06 17 00 34
+	m_cp_mi8 MB24, MidiFileStream_State, 0x01                        ; FE0398  c2 0e 17 00 3f 01
 	jrl nz, .LFE042F                                         ; FE039E  7e 8e 00
-	m_cp_mi16 MW24, 0x001704, 0x0000                     ; FE03A1  d2 04 17 00 3f 00 00
+	m_cp_mi16 MW24, MidiFileStream_BufLeft, 0x0000                     ; FE03A1  d2 04 17 00 3f 00 00
 	jr nz, .LFE03C6                                          ; FE03A8  6e 1c
 	pushw 0x03                                           ; FE03AA  0b 03 00
 	call T_MsgQueue_ReceiveBlocking                      ; FE03AD  1d cc 2d f4
 	ld (XIX),XIY                                         ; FE03B1  b4 65
 	ld XBC,(XIX)                                         ; FE03B3  a4 21
 	ld WA,(XBC)                                          ; FE03B5  91 20
-	ld (0x1704:24), wa                                  ; FE03B7  f2 04 17 00 50
+	ld (MidiFileStream_BufLeft:24), wa                                  ; FE03B7  f2 04 17 00 50
 	ld XBC,(XIX)                                         ; FE03BC  a4 21
 	inc 4,XBC                                            ; FE03BE  e9 64
-	ld (0x170a:24), xbc                                 ; FE03C0  f2 0a 17 00 61
+	ld (MidiFileStream_ReadPtr:24), xbc                                 ; FE03C0  f2 0a 17 00 61
 	popw iy                                              ; FE03C5  4d
 .LFE03C6:
 	ld XBC,(XIX)                                         ; FE03C6  a4 21
 	ld WA,(XBC+0x02)                                     ; FE03C8  99 02 20
 	cp wa, 0x00:i3                                         ; FE03CB  d8 d8
 	jr z, .LFE03DC                                           ; FE03CD  66 0d
-	ld (0x170e:24), 0x02                               ; FE03CF  f2 0e 17 00 00 02
+	ld (MidiFileStream_State:24), 0x02                               ; FE03CF  f2 0e 17 00 00 02
 	ld XBC,(XIX)                                         ; FE03D5  a4 21
 	ld WA,(XBC+0x02)                                     ; FE03D7  99 02 20
 	jr .LFE0432                                              ; FE03DA  68 56
 .LFE03DC:
-	m_cp_mi16 MW24, 0x001704, 0x0000                     ; FE03DC  d2 04 17 00 3f 00 00
+	m_cp_mi16 MW24, MidiFileStream_BufLeft, 0x0000                     ; FE03DC  d2 04 17 00 3f 00 00
 	jr nz, .LFE03ED                                          ; FE03E3  6e 08
-	ld (0x170e:24), 0x02                               ; FE03E5  f2 0e 17 00 00 02
+	ld (MidiFileStream_State:24), 0x02                               ; FE03E5  f2 0e 17 00 00 02
 	jr .LFE042F                                              ; FE03EB  68 42
 .LFE03ED:
-	ld xbc, (0x170a:24)                                 ; FE03ED  e2 0a 17 00 21
+	ld xbc, (MidiFileStream_ReadPtr:24)                                 ; FE03ED  e2 0a 17 00 21
 	ld A,(XBC)                                           ; FE03F2  81 21
 	extz WA                                              ; FE03F4  d8 12
 	ld HL,WA                                             ; FE03F6  d8 8b
 	inc 1,XBC                                            ; FE03F8  e9 61
-	ld (0x170a:24), xbc                                 ; FE03FA  f2 0a 17 00 61
-	decw 0x01, (0x1704:24)                            ; FE03FF  d2 04 17 00 69
-	m_cp_mi16 MW24, 0x001704, 0x0000                     ; FE0404  d2 04 17 00 3f 00 00
+	ld (MidiFileStream_ReadPtr:24), xbc                                 ; FE03FA  f2 0a 17 00 61
+	decw 0x01, (MidiFileStream_BufLeft:24)                            ; FE03FF  d2 04 17 00 69
+	m_cp_mi16 MW24, MidiFileStream_BufLeft, 0x0000                     ; FE0404  d2 04 17 00 3f 00 00
 	jr nz, .LFE042B                                          ; FE040B  6e 1e
 	ld XIY,(XIX)                                         ; FE040D  a4 25
 	ld BC,(XIY)                                          ; FE040F  95 21
 	cp BC,0x0400                                         ; FE0411  d9 cf 00 04
 	jr z, .LFE041F                                           ; FE0415  66 08
-	ld (0x170e:24), 0x02                               ; FE0417  f2 0e 17 00 00 02
+	ld (MidiFileStream_State:24), 0x02                               ; FE0417  f2 0e 17 00 00 02
 	jr .LFE042B                                              ; FE041D  68 0c
 .LFE041F:
 	ld XBC,(XIX)                                         ; FE041F  a4 21
@@ -161015,7 +161026,9 @@ sub_FE0391:
 	pop XIX                                              ; FE0432  5c
 	popw hl                                              ; FE0433  4b
 	ret                                                  ; FE0434  0e
-sub_FE0435:
+; MidiFileStream_Close: T_MidiFileStream_Close's body (MidiFilePlay_Stop): drains queue 2, posts the current buffer with flag 0xFFFF (stop),
+;   waits for (0x17B7) = 0, (0x170E) = 2, drains queues 3 and 2, blanks the 11 bytes of Disk_FileName.
+MidiFileStream_Close:
 	link XIZ,0xfffc                                      ; FE0435  ee 0c fc ff
 	push XHL                                             ; FE0439  3b
 	push XIX                                             ; FE043A  3c
@@ -161031,17 +161044,17 @@ sub_FE0435:
 	popw wa                                              ; FE0450  48
 	cp XIY,XBC                                           ; FE0451  e9 f5
 	jr nz, .LFE0440                                           ; FE0453  6e eb
-	ld xbc, (0x1706:24)                                 ; FE0455  e2 06 17 00 21
+	ld xbc, (MidiFileStream_Buffer:24)                                 ; FE0455  e2 06 17 00 21
 	m_ld_mi16 MDD+r1, 0x02, 0xffff                       ; FE045A  b9 02 02 ff ff
-	ld xbc, (0x1706:24)                                 ; FE045F  e2 06 17 00 21
+	ld xbc, (MidiFileStream_Buffer:24)                                 ; FE045F  e2 06 17 00 21
 	push XBC                                             ; FE0464  39
 	pushw 0x02                                           ; FE0465  0b 02 00
 	call T_MsgQueue_Send_StackArg                                        ; FE0468  1d c8 2d f4
 	inc 6,XSP                                            ; FE046C  ef 66
 .LFE046E:
-	m_cp_mi8 MB24, 0x0017b7, 0x00                        ; FE046E  c2 b7 17 00 3f 00
+	m_cp_mi8 MB24, MidiFileStream_TaskRunning, 0x00                        ; FE046E  c2 b7 17 00 3f 00
 	jr nz, .LFE046E                                            ; FE0474  6e f8
-	ld (0x170e:24), 0x02                               ; FE0476  f2 0e 17 00 00 02
+	ld (MidiFileStream_State:24), 0x02                               ; FE0476  f2 0e 17 00 00 02
 .LFE047C:
 	pushw 0x03                                           ; FE047C  0b 03 00
 	lda xiy, (.LFE0487:24)                               ; FE047F  f2 87 04 fe 35
@@ -161075,26 +161088,29 @@ sub_FE0435:
 	pop XHL                                              ; FE04BA  5b
 	unlk XIZ                                             ; FE04BB  ee 0d
 	ret                                                  ; FE04BD  0e
-sub_FE04BE:
+; MidiFileStream_Open: T_MidiFileStream_Open's body (MidiFileDirectPlay_LcdKeyRow1): (0x178E) = 1, (0x1704) = 0, (0x170E) = 1, extension MID,
+;   DiskFile_SetFcbName, DiskCmd 0x0F (open) on the FCB at 0x178E; failure -> (0x170E) = 2, WA = 0xFFFF; success
+;   -> kernel task 4 (MidiFileStream_ReaderTask) started, WA = 0.
+MidiFileStream_Open:
 	push XIX                                             ; FE04BE  3c
 	lda xix, (Disk_FileName:16)                                ; FE04BF  f1 c8 21 34
-	ld (0x178e:24), 0x01                               ; FE04C3  f2 8e 17 00 00 01
-	ldw (0x1704:24), 0x00                               ; FE04C9  f2 04 17 00 02 00 00
-	ld (0x170e:24), 0x01                               ; FE04D0  f2 0e 17 00 00 01
+	ld (Disk_Fcb:24), 0x01                               ; FE04C3  f2 8e 17 00 00 01
+	ldw (MidiFileStream_BufLeft:24), 0x00                               ; FE04C9  f2 04 17 00 02 00 00
+	ld (MidiFileStream_State:24), 0x01                               ; FE04D0  f2 0e 17 00 00 01
 	extz XIX                                             ; FE04D6  ec 12
 	ld (XIX+0x08),0x4d                                   ; FE04D8  bc 08 00 4d
 	ld (XIX+0x09),0x49                                   ; FE04DC  bc 09 00 49
 	ld (XIX+0x0a),0x44                                   ; FE04E0  bc 0a 00 44
 	calr DiskFile_SetFcbName                                          ; FE04E4  1e 36 12
 	pushw 0x00                                           ; FE04E7  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE04EA  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE04EA  f2 8e 17 00 31
 	push XBC                                             ; FE04EF  39
 	pushw 0x0f                                           ; FE04F0  0b 0f 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE04F3  1d 34 2d f4
 	inc 8,XSP                                            ; FE04F7  ef 60
 	cp a, 0x00:i3                                          ; FE04F9  c9 d8
 	jr z, .LFE0508                                           ; FE04FB  66 0b
-	ld (0x170e:24), 0x02                               ; FE04FD  f2 0e 17 00 00 02
+	ld (MidiFileStream_State:24), 0x02                               ; FE04FD  f2 0e 17 00 00 02
 	ldw wa, 0xffff                                       ; FE0503  30 ff ff
 	jr .LFE0512                                              ; FE0506  68 0a
 .LFE0508:
@@ -161654,7 +161670,7 @@ sub_FE1D52_Nop2:
 	ret                                                  ; FE095E  0e
 Disk_PortA3_Release_Call:
 	calr Disk_PortA3_Release                                          ; FE095F  1e 95 0f
-	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
+	ld (Disk_Fcb:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
 	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
 	ret                                                  ; FE096F  0e
 ; Disk_ShowMountError: for a mount result: 1 -> StatusMsg_ShowByIndex(8) (status 0x02, Error02 'There is no disk in the disk drive');
@@ -161998,7 +162014,7 @@ DiskApi_CloseFile:
 	ldw (0x1739:24), 0x13                               ; FE0C50  f2 39 17 00 02 13 00
 	ldw (0x173b:24), 0x00                               ; FE0C57  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE0C5E  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE0C61  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE0C61  f2 8e 17 00 31
 	push XBC                                             ; FE0C66  39
 	pushw 0x13                                           ; FE0C67  0b 13 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE0C6A  1d 34 2d f4
@@ -162634,7 +162650,10 @@ Disk_ScanMidiFiles:
 	popw hl                                              ; FE1333  4b
 	unlk XIZ                                             ; FE1334  ee 0d
 	ret                                                  ; FE1336  0e
-sub_FE1337:
+; NameEdit_MoveCursor: SoftKeyCol1/2 on DISK SAVE FILE page 0 (through NameEdit_MoveCursor_Call): NameEdit_CursorPos -1 when (0x272C) bit 7 is set
+;   (not below 3), else +1 (not above 8); with (0x208C) bit 0 the 9-character name is first blanked to '_' and
+;   the cursor set to 3; then NameEdit_SyncCharIndex.
+NameEdit_MoveCursor:
 	push XHL                                             ; FE1337  3b
 	push XIX                                             ; FE1338  3c
 	lda xix, (0x1737:24)                                 ; FE1339  f2 37 17 00 34
@@ -162673,11 +162692,13 @@ sub_FE1337:
 .LFE1391:
 	ld C,(XIX)                                           ; FE1391  84 23
 	ld (NameEdit_CursorPos:16), c                                   ; FE1393  f1 2d 22 43
-	calr sub_FE139D                                            ; FE1397  1e 03 00
+	calr NameEdit_SyncCharIndex                                            ; FE1397  1e 03 00
 	pop XIX                                              ; FE139A  5c
 	pop XHL                                              ; FE139B  5b
 	ret                                                  ; FE139C  0e
-sub_FE139D:
+; NameEdit_SyncCharIndex: NameEdit_CharIndex = the position of Disk_FileName[NameEdit_CursorPos - 1] in the 37-character set at 0x1753
+;   (Disk_InitFileNameCharset), 0 when absent.
+NameEdit_SyncCharIndex:
 	pushw hl                                             ; FE139D  2b
 	push XIX                                             ; FE139E  3c
 	lda xix, (0x1737:24)                                 ; FE139F  f2 37 17 00 34
@@ -163109,7 +163130,7 @@ sub_FE1719:
 ; DiskFile_SetFcbName: copies the 11-byte 8.3 name Disk_FileName (0x21C8..) into the file-control block 0x178E, +1 .. +11.
 DiskFile_SetFcbName:
 	push XIX                                             ; FE171D  3c
-	lda xix, (0x178e:24)                                 ; FE171E  f2 8e 17 00 34
+	lda xix, (Disk_Fcb:24)                                 ; FE171E  f2 8e 17 00 34
 	ld c, (Disk_FileName:16)                                   ; FE1723  c1 c8 21 23
 	ld (XIX+0x01),C                                      ; FE1727  bc 01 43
 	ld c, (Disk_FileName+1:16)                                   ; FE172A  c1 c9 21 23
@@ -163221,7 +163242,9 @@ StatusMsg_ShowByIndex:
 	ret                                                  ; FE1861  0e
 sub_FE237B_Nop:
 	ret                                                  ; FE1862  0e
-sub_FE1863:
+; NameEdit_StepChar: SoftKeyCol4/5 on page 0 (through NameEdit_StepChar_Call): NameEdit_CharIndex -1 when (0x272C) bit 7 is set (not below 0),
+;   else +1 (not above 0x24); the character set[index] goes into Disk_FileName at the cursor.
+NameEdit_StepChar:
 	pushw hl                                             ; FE1863  2b
 	push XIX                                             ; FE1864  3c
 	lda xix, (0x1735:24)                                 ; FE1865  f2 35 17 00 34
@@ -163430,7 +163453,7 @@ DiskFile_FindFirst:
 	ldw (0x1739:24), 0x11                               ; FE1A03  f2 39 17 00 02 11 00
 	ldw (0x173b:24), 0x00                               ; FE1A0A  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A11  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1A14  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1A14  f2 8e 17 00 31
 	push XBC                                             ; FE1A19  39
 	pushw 0x11                                           ; FE1A1A  0b 11 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A1D  1d 34 2d f4
@@ -163446,7 +163469,7 @@ DiskFile_FindNext:
 	ldw (0x1739:24), 0x12                               ; FE1A2F  f2 39 17 00 02 12 00
 	ldw (0x173b:24), 0x00                               ; FE1A36  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A3D  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1A40  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1A40  f2 8e 17 00 31
 	push XBC                                             ; FE1A45  39
 	pushw 0x12                                           ; FE1A46  0b 12 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A49  1d 34 2d f4
@@ -163463,7 +163486,7 @@ DiskFile_Open:
 	ldw (0x1739:24), 0x0f                               ; FE1A5E  f2 39 17 00 02 0f 00
 	ldw (0x173b:24), 0x00                               ; FE1A65  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A6C  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1A6F  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1A6F  f2 8e 17 00 31
 	push XBC                                             ; FE1A74  39
 	pushw 0x0f                                           ; FE1A75  0b 0f 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1A78  1d 34 2d f4
@@ -163479,7 +163502,7 @@ DiskFile_ReadBlock:
 	ldw (0x1739:24), 0x83                               ; FE1A8A  f2 39 17 00 02 83 00
 	ldw (0x173b:24), 0x00                               ; FE1A91  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A98  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1A9B  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1A9B  f2 8e 17 00 31
 	push XBC                                             ; FE1AA0  39
 	pushw 0x83                                           ; FE1AA1  0b 83 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1AA4  1d 34 2d f4
@@ -163514,7 +163537,7 @@ DiskFile_Create:
 	ldw (0x173b:24), 0x00                               ; FE1AE9  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1AF0  0b 00 00
 ; (2026-10-04: the label sub_FE1AF3, briefly DiskFile_Create, stood here, mid-routine of DiskFile_Create (0xFE1ADE) and referenced by nothing; removed)
-	lda xbc, (0x178e:24)                                 ; FE1AF3  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1AF3  f2 8e 17 00 31
 	push XBC                                             ; FE1AF8  39
 	pushw 0x16                                           ; FE1AF9  0b 16 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1AFC  1d 34 2d f4
@@ -163530,7 +163553,7 @@ DiskFile_WriteBlock:
 	ldw (0x1739:24), 0x84                               ; FE1B0E  f2 39 17 00 02 84 00
 	ldw (0x173b:24), 0x00                               ; FE1B15  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B1C  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1B1F  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1B1F  f2 8e 17 00 31
 	push XBC                                             ; FE1B24  39
 	pushw 0x84                                           ; FE1B25  0b 84 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B28  1d 34 2d f4
@@ -163546,7 +163569,7 @@ DiskFile_Close:
 	ldw (0x1739:24), 0x10                               ; FE1B3A  f2 39 17 00 02 10 00
 	ldw (0x173b:24), 0x00                               ; FE1B41  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B48  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1B4B  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1B4B  f2 8e 17 00 31
 	push XBC                                             ; FE1B50  39
 	pushw 0x10                                           ; FE1B51  0b 10 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B54  1d 34 2d f4
@@ -163563,7 +163586,7 @@ DiskFile_Delete:
 	ldw (0x1739:24), 0x13                               ; FE1B69  f2 39 17 00 02 13 00
 	ldw (0x173b:24), 0x00                               ; FE1B70  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B77  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1B7A  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1B7A  f2 8e 17 00 31
 	push XBC                                             ; FE1B7F  39
 	pushw 0x13                                           ; FE1B80  0b 13 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1B83  1d 34 2d f4
@@ -163577,7 +163600,7 @@ DiskFile_Delete:
 	ldw (0x1739:24), 0x85                               ; FE1B95  f2 39 17 00 02 85 00
 	ldw (0x173b:24), 0x00                               ; FE1B9C  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1BA3  0b 00 00
-	lda xbc, (0x178e:24)                                 ; FE1BA6  f2 8e 17 00 31
+	lda xbc, (Disk_Fcb:24)                                 ; FE1BA6  f2 8e 17 00 31
 	push XBC                                             ; FE1BAB  39
 	pushw 0x85                                           ; FE1BAC  0b 85 00
 	call T_Disk_CommandDispatch_SaveRegs_Entry                                        ; FE1BAF  1d 34 2d f4
@@ -163736,11 +163759,13 @@ MidiFileSave_Page5_LcdKeyRow3:
 	calr sub_FE09BE                                          ; FE1C98  1e 23 ed
 	calr Ring_InitTenOfFourteen                                            ; FE1C9B  1e 8b 00
 	ret                                                  ; FE1C9E  0e
-sub_FE1C9F:
-	calr sub_FE1337                                          ; FE1C9F  1e 95 f6
+; NameEdit_MoveCursor_Call: calls NameEdit_MoveCursor and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+NameEdit_MoveCursor_Call:
+	calr NameEdit_MoveCursor                                          ; FE1C9F  1e 95 f6
 	ret                                                  ; FE1CA2  0e
-sub_FE1CA3:
-	calr sub_FE1863                                          ; FE1CA3  1e bd fb
+; NameEdit_StepChar_Call: calls NameEdit_StepChar and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+NameEdit_StepChar_Call:
+	calr NameEdit_StepChar                                          ; FE1CA3  1e bd fb
 	ret                                                  ; FE1CA6  0e
 sub_FE1CA7:
 	calr sub_FE1705                                          ; FE1CA7  1e 5b fa
@@ -163782,8 +163807,9 @@ Disk_PortA3_Release_Entry:
 DiskSaveFile_Page5_LcdKeyRow3:
 	calr sub_FE2667                                          ; FE1CC8  1e 9c 09
 	ret                                                  ; FE1CCB  0e
-sub_FE1CCC:
-	calr sub_FE139D                                          ; FE1CCC  1e ce f6
+; NameEdit_SyncCharIndex_Call: calls NameEdit_SyncCharIndex and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+NameEdit_SyncCharIndex_Call:
+	calr NameEdit_SyncCharIndex                                          ; FE1CCC  1e ce f6
 	ret                                                  ; FE1CCF  0e
 ; DiskSave_IsSelectedFileNew_Call: calls DiskSave_IsSelectedFileNew and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
 DiskSave_IsSelectedFileNew_Call:
