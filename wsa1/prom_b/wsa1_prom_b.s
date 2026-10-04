@@ -30803,7 +30803,7 @@ DispatchTable_F0F708_Nop4:
 	ret	; F0F75A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F75B
+; CompareKey_DspEffect
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x2807)
@@ -30818,7 +30818,9 @@ DispatchTable_F0F708_Nop4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F75B:
+; CompareKey_DspEffect: DispatchTable_F135FD[21] -- the CompareKey handler of DspEffect; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+CompareKey_DspEffect:
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F75B  cp (0x2076),0x17
 	jr	nz, sub_F0F75B_Return	; F0F760  jr NZ,0xf0f787
 	m_cp_mi8 MB16, 0x2807, 0x01	; F0F762  cp (0x2807),0x01
@@ -38597,7 +38599,7 @@ DispatchTable_F135FD:
 	.long	T_F42C70	; F13645  [18] -> 0xF42C70
 	.long	T_F42C70	; F13649  [19] -> 0xF42C70
 	.long	T_F42C70	; F1364D  [20] -> 0xF42C70
-	.long	sub_F0F75B	; F13651  [21] -> sub_F0F75B
+	.long	CompareKey_DspEffect	; F13651  [21] -> CompareKey_DspEffect
 	.long	T_F42C70	; F13655  [22] -> 0xF42C70
 
 
@@ -116968,7 +116970,7 @@ ScreenButtons_CycleRecordScreen:
 	.long	Nop_Ret_F568AA	; F55A0E  [24] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F55A12  [25] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F55A16  [26] -> Nop_Ret_F568AA
-	.long	sub_F567DE	; F55A1A  [27] -> sub_F567DE
+	.long	NumberPadKey_CycleRecordScreen	; F55A1A  [27] -> NumberPadKey_CycleRecordScreen
 	.long	Nop_Ret_F568AA	; F55A1E  [28] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F55A22  [29] -> Nop_Ret_F568AA
 	.long	Nop_Ret_F568AA	; F55A26  [30] -> Nop_Ret_F568AA
@@ -117087,7 +117089,7 @@ ScreenButtons_CyclePlayScreen:
 	.long	Nop_Ret_F56FD5	; F55B0E  [24] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55B12  [25] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55B16  [26] -> Nop_Ret_F56FD5
-	.long	sub_F56F09	; F55B1A  [27] -> sub_F56F09
+	.long	NumberPadKey_CyclePlayScreen	; F55B1A  [27] -> NumberPadKey_CyclePlayScreen
 	.long	Nop_Ret_F56FD5	; F55B1E  [28] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55B22  [29] -> Nop_Ret_F56FD5
 	.long	Nop_Ret_F56FD5	; F55B26  [30] -> Nop_Ret_F56FD5
@@ -119167,7 +119169,7 @@ sub_F5670C_Return6:
 	ret	; F567DD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F567DE
+; NumberPadKey_CycleRecordScreen
 ; Called from: table 0xF559AE[27]
 ; Touches: (0x2267) (0x2826) (0x34D9) (0x3622) (0x3624) (0x36CE)
 ; Calls:   T_AsciiDigits3_ToValue T_Blink_Stop sub_F569AF sub_F56850
@@ -119178,7 +119180,9 @@ sub_F5670C_Return6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F567DE:
+; NumberPadKey_CycleRecordScreen: ScreenButtons_CycleRecordScreen[27] -- the NumberPadKey handler of CycleRecordScreen; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+NumberPadKey_CycleRecordScreen:
 	bit	2, (TransportB_State:8)	; F567DE  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return7	; F567E1  jr NZ,0xf5684f
 	m_bit 2, MD16, 0x34d9	; F567E3  bit 2,(0x34d9)
@@ -120451,7 +120455,7 @@ sub_F56ED4_Return2:
 	ret	; F56F08  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56F09
+; NumberPadKey_CyclePlayScreen
 ; Called from: table 0xF55AAE[27]; in-module: 0xF5737D
 ; Touches: (0x2267) (0x2826) (0x34D9) (0x361E) (0x3620) (0x3627)
 ; Calls:   T_AsciiDigits3_ToValue T_Blink_Stop sub_F570DC sub_F56F7B
@@ -120462,7 +120466,9 @@ sub_F56ED4_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56F09:
+; NumberPadKey_CyclePlayScreen: ScreenButtons_CyclePlayScreen[27] -- the NumberPadKey handler of CyclePlayScreen; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+NumberPadKey_CyclePlayScreen:
 	bit	2, (TransportB_State:8)	; F56F09  bit 2,(0x96)
 	jr	nz, sub_F56F09_Return	; F56F0C  jr NZ,0xf56f7a
 	m_bit 2, MD16, 0x34d9	; F56F0E  bit 2,(0x34d9)
@@ -121294,7 +121300,7 @@ sub_F5736B_Return:
 ; Fwd_F5737D
 ; Called from: table 0xF55B2E[27]; in-module: 0xF5742E
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56F09
+; Calls:   NumberPadKey_CyclePlayScreen
 ; Evidence: entry [27] of the table at 0xF55B2E reads 0x00F5737D, that table
 ;           is entered with `call XIX` after a bounds-checked index, and
 ;           0xF5737D is an instruction boundary of this transcription.
@@ -121306,7 +121312,7 @@ sub_F5736B_Return:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 Fwd_F5737D:
-	calr	sub_F56F09	; F5737D  calr 0xf56f09
+	calr	NumberPadKey_CyclePlayScreen	; F5737D  calr 0xf56f09
 	ret	; F57380  ret
 
 ; --------------------------------------------------------------------------
@@ -146232,7 +146238,9 @@ StepRecord_TrackKindButtonTable:
 
 StepRecord_TrackKindButtonTable_Nop0:
 	ret	; F67603  ret
-sub_F67604:
+; SoftKeyCol1_StepRecord: DispatchTable_F67616[0] -- the SoftKeyCol1 handler of StepRecord; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol1_StepRecord:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F67604  or (0x2075),0x08
 	bit	7, w	; F67609  bit 0x07,W
 	jr	z, sub_F67604_Skip	; F6760C  jr Z,0xf67612
@@ -146275,7 +146283,7 @@ sub_F67604_Skip:
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67616:
-	.long	sub_F67604	; F67616  [0] -> 0xF67604
+	.long	SoftKeyCol1_StepRecord	; F67616  [0] -> 0xF67604
 	.long	DispatchTable_F674CE_Nop0	; F6761A  [1] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F6761E  [2] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67622  [3] -> ret stub
@@ -146292,7 +146300,7 @@ DispatchTable_F67616:
 	.long	DispatchTable_F674CE_Nop0	; F6764E  [14] -> ret stub
 	.long	ExitKey_StepRecord	; F67652  [15] -> 0xF67696
 	.long	DispatchTable_F674CE_Nop0	; F67656  [16] -> ret stub
-	.long	sub_F67604	; F6765A  [17] -> 0xF67604
+	.long	SoftKeyCol1_StepRecord	; F6765A  [17] -> 0xF67604
 	.long	DispatchTable_F674CE_Nop0	; F6765E  [18] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67662  [19] -> ret stub
 	.long	DispatchTable_F674CE_Nop0	; F67666  [20] -> ret stub

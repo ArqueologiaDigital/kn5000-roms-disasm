@@ -186346,13 +186346,13 @@ Text_FF3A18:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3A29:
-	.long sub_FF5768                                 ; FF3A29  [  0]
-	.long sub_FF57C0                                 ; FF3A2D  [  1]
+	.long SoftKeyCol1_DiskSaveFile_Page0                                 ; FF3A29  [  0]
+	.long SoftKeyCol2_DiskSaveFile_Page0                                 ; FF3A2D  [  1]
 	.long Text_FF42A1__FF42B1                                 ; FF3A31  [  2]
-	.long sub_FF5818                                 ; FF3A35  [  3]
-	.long sub_FF585C                                 ; FF3A39  [  4]
+	.long SoftKeyCol4_DiskSaveFile_Page0                                 ; FF3A35  [  3]
+	.long SoftKeyCol5_DiskSaveFile_Page0                                 ; FF3A39  [  4]
 	.long Text_FF42A1__FF42B1                                 ; FF3A3D  [  5]
-	.long sub_FF58A0                                 ; FF3A41  [  6]
+	.long SoftKeyCol7_DiskSaveFile_Page0                                 ; FF3A41  [  6]
 	.long Text_FF42A1__FF42B1                                 ; FF3A45  [  7]
 	.long LcdKeyRow1_DiskSaveFile_Page0              ; FF3A49  [  8]
 	.long Text_FF42A1__FF42B1                                 ; FF3A4D  [  9]
@@ -186363,13 +186363,13 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3A61  [ 14]
 	.long ExitKey_DiskSaveFile_Page0                 ; FF3A65  [ 15]
 	.long Text_FF42A1__FF42B1                                 ; FF3A69  [ 16]
-	.long sub_FF5768                                 ; FF3A6D  [ 17]
-	.long sub_FF57C0                                 ; FF3A71  [ 18]
+	.long SoftKeyCol1_DiskSaveFile_Page0                                 ; FF3A6D  [ 17]
+	.long SoftKeyCol2_DiskSaveFile_Page0                                 ; FF3A71  [ 18]
 	.long Text_FF42A1__FF42B1                                 ; FF3A75  [ 19]
-	.long sub_FF5818                                 ; FF3A79  [ 20]
-	.long sub_FF585C                                 ; FF3A7D  [ 21]
+	.long SoftKeyCol4_DiskSaveFile_Page0                                 ; FF3A79  [ 20]
+	.long SoftKeyCol5_DiskSaveFile_Page0                                 ; FF3A7D  [ 21]
 	.long Text_FF42A1__FF42B1                                 ; FF3A81  [ 22]
-	.long sub_FF58A0                                 ; FF3A85  [ 23]
+	.long SoftKeyCol7_DiskSaveFile_Page0                                 ; FF3A85  [ 23]
 	.long Text_FF42A1__FF42B1                                 ; FF3A89  [ 24]
 	.long Text_FF42A1__FF42B1                                 ; FF3A8D  [ 25]
 	.long Text_FF42A1__FF42B1                                 ; FF3A91  [ 26]
@@ -186381,7 +186381,7 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3AA9  [ 32]
 	.long Text_FF42A1__FF42B1                                 ; FF3AAD  [ 33]
 	.long Text_FF42A1__FF42B1                                 ; FF3AB1  [ 34]
-	.long sub_FF59A5                                 ; FF3AB5  [ 35]
+	.long SoftKeyCol4_DiskSaveFile_Page1                                 ; FF3AB5  [ 35]
 	.long Text_FF42A1__FF42B1                                 ; FF3AB9  [ 36]
 	.long Text_FF42A1__FF42B1                                 ; FF3ABD  [ 37]
 	.long Text_FF42A1__FF42B1                                 ; FF3AC1  [ 38]
@@ -186398,7 +186398,7 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3AED  [ 49]
 	.long Text_FF42A1__FF42B1                                 ; FF3AF1  [ 50]
 	.long Text_FF42A1__FF42B1                                 ; FF3AF5  [ 51]
-	.long sub_FF59A5                                 ; FF3AF9  [ 52]
+	.long SoftKeyCol4_DiskSaveFile_Page1                                 ; FF3AF9  [ 52]
 	.long Text_FF42A1__FF42B1                                 ; FF3AFD  [ 53]
 	.long Text_FF42A1__FF42B1                                 ; FF3B01  [ 54]
 	.long Text_FF42A1__FF42B1                                 ; FF3B05  [ 55]
@@ -186599,13 +186599,13 @@ Dispatch_FF3D29:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3D39:
-	.long sub_FF5F0B                                 ; FF3D39  [  0]
-	.long sub_FF5F13                                 ; FF3D3D  [  1]
+	.long SoftKeyCol1_MidiFileSave_Page0                                 ; FF3D39  [  0]
+	.long SoftKeyCol2_MidiFileSave_Page0                                 ; FF3D3D  [  1]
 	.long Text_FF42A1__FF42B1                                 ; FF3D41  [  2]
-	.long sub_FF5F90                                 ; FF3D45  [  3]
-	.long sub_FF5F98                                 ; FF3D49  [  4]
+	.long SoftKeyCol4_MidiFileSave_Page0                                 ; FF3D45  [  3]
+	.long SoftKeyCol5_MidiFileSave_Page0                                 ; FF3D49  [  4]
 	.long Text_FF42A1__FF42B1                                 ; FF3D4D  [  5]
-	.long sub_FF5FFF                                 ; FF3D51  [  6]
+	.long SoftKeyCol7_MidiFileSave_Page0                                 ; FF3D51  [  6]
 	.long Text_FF42A1__FF42B1                                 ; FF3D55  [  7]
 	.long LcdKeyRow1_MidiFileSave_Page0              ; FF3D59  [  8]
 	.long Text_FF42A1__FF42B1                                 ; FF3D5D  [  9]
@@ -186616,13 +186616,13 @@ Dispatch_FF3D39:
 	.long Text_FF42A1__FF42B1                                 ; FF3D71  [ 14]
 	.long ExitKey_MidiFileSave_Pages0_1_2_3          ; FF3D75  [ 15]
 	.long Text_FF42A1__FF42B1                                 ; FF3D79  [ 16]
-	.long sub_FF5F0B                                 ; FF3D7D  [ 17]
-	.long sub_FF5F13                                 ; FF3D81  [ 18]
+	.long SoftKeyCol1_MidiFileSave_Page0                                 ; FF3D7D  [ 17]
+	.long SoftKeyCol2_MidiFileSave_Page0                                 ; FF3D81  [ 18]
 	.long Text_FF42A1__FF42B1                                 ; FF3D85  [ 19]
-	.long sub_FF5F90                                 ; FF3D89  [ 20]
-	.long sub_FF5F98                                 ; FF3D8D  [ 21]
+	.long SoftKeyCol4_MidiFileSave_Page0                                 ; FF3D89  [ 20]
+	.long SoftKeyCol5_MidiFileSave_Page0                                 ; FF3D8D  [ 21]
 	.long Text_FF42A1__FF42B1                                 ; FF3D91  [ 22]
-	.long sub_FF5FFF                                 ; FF3D95  [ 23]
+	.long SoftKeyCol7_MidiFileSave_Page0                                 ; FF3D95  [ 23]
 	.long Text_FF42A1__FF42B1                                 ; FF3D99  [ 24]
 	.long Text_FF42A1__FF42B1                                 ; FF3D9D  [ 25]
 	.long Text_FF42A1__FF42B1                                 ; FF3DA1  [ 26]
@@ -186861,10 +186861,10 @@ Dispatch_FF4041:
 ; ---------------------------------------------------------------------
 Dispatch_FF4049:
 	.long sub_FF6906                                 ; FF4049  [  0]
-	.long sub_FF6B35                                 ; FF404D  [  1]
+	.long SoftKeyCol2_L0adSingleS0und_Page0                                 ; FF404D  [  1]
 	.long sub_FF6BD2                                 ; FF4051  [  2]
 	.long sub_FF6BD2                                 ; FF4055  [  3]
-	.long sub_FF6C24                                 ; FF4059  [  4]
+	.long SoftKeyCol5_L0adSingleS0und_Page0                                 ; FF4059  [  4]
 	.long sub_FF6C9E                                 ; FF405D  [  5]
 	.long sub_FF6CF0                                 ; FF4061  [  6]
 	.long sub_FF6CF0                                 ; FF4065  [  7]
@@ -186878,10 +186878,10 @@ Dispatch_FF4049:
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4085  [ 15]
 	.long Text_FF42A1__FF42B1                                 ; FF4089  [ 16]
 	.long sub_FF6906                                 ; FF408D  [ 17]
-	.long sub_FF6B35                                 ; FF4091  [ 18]
+	.long SoftKeyCol2_L0adSingleS0und_Page0                                 ; FF4091  [ 18]
 	.long sub_FF6BD2                                 ; FF4095  [ 19]
 	.long sub_FF6BD2                                 ; FF4099  [ 20]
-	.long sub_FF6C24                                 ; FF409D  [ 21]
+	.long SoftKeyCol5_L0adSingleS0und_Page0                                 ; FF409D  [ 21]
 	.long sub_FF6C9E                                 ; FF40A1  [ 22]
 	.long sub_FF6CF0                                 ; FF40A5  [ 23]
 	.long sub_FF6CF0                                 ; FF40A9  [ 24]
@@ -186893,7 +186893,7 @@ Dispatch_FF4049:
 	.long Text_FF42A1__FF42B1                                 ; FF40C1  [ 30]
 	.long Text_FF42A1__FF42B1                                 ; FF40C5  [ 31]
 	.long sub_FF6906                                 ; FF40C9  [ 32]
-	.long sub_FF6924                                 ; FF40CD  [ 33]
+	.long SoftKeyCol2_L0adSingleS0und_Page1                                 ; FF40CD  [ 33]
 	.long sub_FF69B9                                 ; FF40D1  [ 34]
 	.long sub_FF69B9                                 ; FF40D5  [ 35]
 	.long sub_FF6A17                                 ; FF40D9  [ 36]
@@ -186910,7 +186910,7 @@ Dispatch_FF4049:
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4105  [ 47]
 	.long Text_FF42A1__FF42B1                                 ; FF4109  [ 48]
 	.long sub_FF6906                                 ; FF410D  [ 49]
-	.long sub_FF6924                                 ; FF4111  [ 50]
+	.long SoftKeyCol2_L0adSingleS0und_Page1                                 ; FF4111  [ 50]
 	.long sub_FF69B9                                 ; FF4115  [ 51]
 	.long sub_FF69B9                                 ; FF4119  [ 52]
 	.long sub_FF6A17                                 ; FF411D  [ 53]
@@ -190245,7 +190245,9 @@ PanelButtonDispatch_DiskSaveFile:
 	popw hl                                              ; FF5764  4b
 	unlk XIZ                                             ; FF5765  ee 0d
 	ret                                                  ; FF5767  0e
-sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
+; SoftKeyCol1_DiskSaveFile_Page0: Dispatch_FF3A29+0[0] -- the SoftKeyCol1 handler of DiskSaveFile_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol1_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 	pushw 0x03                                           ; FF5768  0b 03 00
 	pushw 0x04                                           ; FF576B  0b 04 00
 	calr PanelDial_SetButtonPair                                      ; FF576E  1e b9 19
@@ -190271,7 +190273,9 @@ sub_FF5768:   ; entry: named by 2 `.long` operands, first at 0xFF3A29
 	call T_DisplayListB_Run_Stack                        ; FF57B5  1d 04 2e f4
 	add XSP,0x00000014                                   ; FF57B9  ef c8 14 00 00 00
 	ret                                                  ; FF57BF  0e
-sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
+; SoftKeyCol2_DiskSaveFile_Page0: Dispatch_FF3A29+0[1] -- the SoftKeyCol2 handler of DiskSaveFile_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol2_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 	pushw 0x03                                           ; FF57C0  0b 03 00
 	pushw 0x04                                           ; FF57C3  0b 04 00
 	calr PanelDial_SetButtonPair                                      ; FF57C6  1e 61 19
@@ -190297,7 +190301,9 @@ sub_FF57C0:   ; entry: named by 2 `.long` operands, first at 0xFF3A2D
 	call T_DisplayListB_Run_Stack                        ; FF580D  1d 04 2e f4
 	add XSP,0x00000014                                   ; FF5811  ef c8 14 00 00 00
 	ret                                                  ; FF5817  0e
-sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
+; SoftKeyCol4_DiskSaveFile_Page0: Dispatch_FF3A29+0[3] -- the SoftKeyCol4 handler of DiskSaveFile_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol4_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 	pushw 0x03                                           ; FF5818  0b 03 00
 	pushw 0x04                                           ; FF581B  0b 04 00
 	calr PanelDial_SetButtonPair                                      ; FF581E  1e 09 19
@@ -190318,7 +190324,9 @@ sub_FF5818:   ; entry: named by 2 `.long` operands, first at 0xFF3A35
 	inc 8,XSP                                            ; FF5857  ef 60
 	inc 4,XSP                                            ; FF5859  ef 64
 	ret                                                  ; FF585B  0e
-sub_FF585C:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
+; SoftKeyCol5_DiskSaveFile_Page0: Dispatch_FF3A29+0[4] -- the SoftKeyCol5 handler of DiskSaveFile_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol5_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
 	pushw 0x03                                           ; FF585C  0b 03 00
 	pushw 0x04                                           ; FF585F  0b 04 00
 	calr PanelDial_SetButtonPair                                      ; FF5862  1e c5 18
@@ -190339,7 +190347,9 @@ sub_FF585C:   ; entry: named by 2 `.long` operands, first at 0xFF3A39
 	inc 8,XSP                                            ; FF589B  ef 60
 	inc 4,XSP                                            ; FF589D  ef 64
 	ret                                                  ; FF589F  0e
-sub_FF58A0:   ; entry: named by 2 `.long` operands, first at 0xFF3A41
+; SoftKeyCol7_DiskSaveFile_Page0: Dispatch_FF3A29+0[6] -- the SoftKeyCol7 handler of DiskSaveFile_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol7_DiskSaveFile_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3A41
 	pushw hl                                             ; FF58A0  2b
 	pushw de                                             ; FF58A1  2a
 	push XIX                                             ; FF58A2  3c
@@ -190502,7 +190512,9 @@ ExitKey_DiskSaveFile_Page0:
 .LFF59A2:
 	unlk XIZ                                             ; FF59A2  ee 0d
 	ret                                                  ; FF59A4  0e
-sub_FF59A5:   ; entry: named by 2 `.long` operands, first at 0xFF3AB5
+; SoftKeyCol4_DiskSaveFile_Page1: Dispatch_FF3A29+128[3] -- the SoftKeyCol4 handler of DiskSaveFile_Page1; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol4_DiskSaveFile_Page1:   ; entry: named by 2 `.long` operands, first at 0xFF3AB5
 	push XIX                                             ; FF59A5  3c
 	lda xix, (0x220c:16)                                ; FF59A6  f1 0c 22 34
 	ld c, (0x2726:16)                                   ; FF59AA  c1 26 27 23
@@ -191456,12 +191468,16 @@ PanelButtonDispatch_MidiFileSave:
 	popw hl                                              ; FF5F07  4b
 	unlk XIZ                                             ; FF5F08  ee 0d
 	ret                                                  ; FF5F0A  0e
-sub_FF5F0B:   ; entry: named by 2 `.long` operands, first at 0xFF3D39
+; SoftKeyCol1_MidiFileSave_Page0: Dispatch_FF3D39+0[0] -- the SoftKeyCol1 handler of MidiFileSave_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol1_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D39
 	pushw 0x01                                           ; FF5F0B  0b 01 00
 	calr sub_FF5F1B                                      ; FF5F0E  1e 0a 00
 	popw bc                                              ; FF5F11  49
 	ret                                                  ; FF5F12  0e
-sub_FF5F13:   ; entry: named by 2 `.long` operands, first at 0xFF3D3D
+; SoftKeyCol2_MidiFileSave_Page0: Dispatch_FF3D39+0[1] -- the SoftKeyCol2 handler of MidiFileSave_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol2_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D3D
 	pushw 0x00                                           ; FF5F13  0b 00 00
 	calr sub_FF5F1B                                      ; FF5F16  1e 02 00
 	popw bc                                              ; FF5F19  49
@@ -191511,12 +191527,16 @@ sub_FF5F32:
 	pop XIX                                              ; FF5F8C  5c
 	unlk XIZ                                             ; FF5F8D  ee 0d
 	ret                                                  ; FF5F8F  0e
-sub_FF5F90:   ; entry: named by 2 `.long` operands, first at 0xFF3D45
+; SoftKeyCol4_MidiFileSave_Page0: Dispatch_FF3D39+0[3] -- the SoftKeyCol4 handler of MidiFileSave_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol4_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D45
 	pushw 0x81                                           ; FF5F90  0b 81 00
 	calr sub_FF5FA0                                      ; FF5F93  1e 0a 00
 	popw bc                                              ; FF5F96  49
 	ret                                                  ; FF5F97  0e
-sub_FF5F98:   ; entry: named by 2 `.long` operands, first at 0xFF3D49
+; SoftKeyCol5_MidiFileSave_Page0: Dispatch_FF3D39+0[4] -- the SoftKeyCol5 handler of MidiFileSave_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol5_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D49
 	pushw 0x01                                           ; FF5F98  0b 01 00
 sub_FF5F9B:
 	calr sub_FF5FA0                                      ; FF5F9B  1e 02 00
@@ -191550,7 +191570,9 @@ sub_FF5FA0:
 	add XSP,0x00000014                                   ; FF5FF6  ef c8 14 00 00 00
 	unlk XIZ                                             ; FF5FFC  ee 0d
 	ret                                                  ; FF5FFE  0e
-sub_FF5FFF:   ; entry: named by 2 `.long` operands, first at 0xFF3D51
+; SoftKeyCol7_MidiFileSave_Page0: Dispatch_FF3D39+0[6] -- the SoftKeyCol7 handler of MidiFileSave_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol7_MidiFileSave_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF3D51
 	push XHL                                             ; FF5FFF  3b
 	pushw 0x03                                           ; FF6000  0b 03 00
 	pushw 0x04                                           ; FF6003  0b 04 00
@@ -193122,7 +193144,9 @@ sub_FF6906:   ; entry: named by 8 `.long` operands, first at 0xFF4049
 	call DLB_Handler_StringTable_Veneer                                      ; FF691D  1d 56 76 ff
 	inc 8,XSP                                            ; FF6921  ef 60
 	ret                                                  ; FF6923  0e
-sub_FF6924:   ; entry: named by 2 `.long` operands, first at 0xFF40CD
+; SoftKeyCol2_L0adSingleS0und_Page1: Dispatch_FF4049+128[1] -- the SoftKeyCol2 handler of L0adSingleS0und_Page1; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol2_L0adSingleS0und_Page1:   ; entry: named by 2 `.long` operands, first at 0xFF40CD
 	link XIZ,0x0000                                      ; FF6924  ee 0c 00 00
 	push XIX                                             ; FF6928  3c
 	lda xix, (0x2728:16)                                ; FF6929  f1 28 27 34
@@ -193374,7 +193398,9 @@ LcdKeyRow1_L0adSingleS0und_Page1:
 .LFF6B32:
 	unlk XIZ                                             ; FF6B32  ee 0d
 	ret                                                  ; FF6B34  0e
-sub_FF6B35:   ; entry: named by 2 `.long` operands, first at 0xFF404D
+; SoftKeyCol2_L0adSingleS0und_Page0: Dispatch_FF4049+0[1] -- the SoftKeyCol2 handler of L0adSingleS0und_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol2_L0adSingleS0und_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF404D
 	link XIZ,0x0000                                      ; FF6B35  ee 0c 00 00
 	pushw hl                                             ; FF6B39  2b
 	push XIX                                             ; FF6B3A  3c
@@ -193484,7 +193510,9 @@ sub_FF6BD2:   ; entry: named by 4 `.long` operands, first at 0xFF4051
 	popw hl                                              ; FF6C20  4b
 	unlk XIZ                                             ; FF6C21  ee 0d
 	ret                                                  ; FF6C23  0e
-sub_FF6C24:   ; entry: named by 2 `.long` operands, first at 0xFF4059
+; SoftKeyCol5_L0adSingleS0und_Page0: Dispatch_FF4049+0[4] -- the SoftKeyCol5 handler of L0adSingleS0und_Page0; the table's other named entries sit at their own
+;   controls' slots and name the same screen (notes/prom_ab_button_table_siblings.py).
+SoftKeyCol5_L0adSingleS0und_Page0:   ; entry: named by 2 `.long` operands, first at 0xFF4059
 	link XIZ,0x0000                                      ; FF6C24  ee 0c 00 00
 	pushw hl                                             ; FF6C28  2b
 	push XIX                                             ; FF6C29  3c

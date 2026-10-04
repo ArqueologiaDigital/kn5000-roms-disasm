@@ -1,0 +1,19 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FF5768\b/SoftKeyCol1_DiskSaveFile_Page0/g
+s/\bsub_FF57C0\b/SoftKeyCol2_DiskSaveFile_Page0/g
+s/\bsub_FF5818\b/SoftKeyCol4_DiskSaveFile_Page0/g
+s/\bsub_FF585C\b/SoftKeyCol5_DiskSaveFile_Page0/g
+s/\bsub_FF58A0\b/SoftKeyCol7_DiskSaveFile_Page0/g
+s/\bsub_FF59A5\b/SoftKeyCol4_DiskSaveFile_Page1/g
+s/\bsub_FF5F0B\b/SoftKeyCol1_MidiFileSave_Page0/g
+s/\bsub_FF5F13\b/SoftKeyCol2_MidiFileSave_Page0/g
+s/\bsub_FF5F90\b/SoftKeyCol4_MidiFileSave_Page0/g
+s/\bsub_FF5F98\b/SoftKeyCol5_MidiFileSave_Page0/g
+s/\bsub_FF5FFF\b/SoftKeyCol7_MidiFileSave_Page0/g
+s/\bsub_FF6B35\b/SoftKeyCol2_L0adSingleS0und_Page0/g
+s/\bsub_FF6C24\b/SoftKeyCol5_L0adSingleS0und_Page0/g
+s/\bsub_FF6924\b/SoftKeyCol2_L0adSingleS0und_Page1/g
+s/\bsub_F0F75B\b/CompareKey_DspEffect/g
+s/\bsub_F567DE\b/NumberPadKey_CycleRecordScreen/g
+s/\bsub_F56F09\b/NumberPadKey_CyclePlayScreen/g
+s/\bsub_F67604\b/SoftKeyCol1_StepRecord/g
