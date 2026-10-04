@@ -25,7 +25,7 @@ Census figures:
   - 4 draw neither (`Paint_PowerOnSplash` is one of them).
 - **The two-press shape of an execute key**, `cp (0x207E),1 / jr z, run / ld (0x207E),1 /
   or (0x2071),0x10`, occurs 14 times (prom_b's command module, e.g. `SongClear_LcdKeyRow4` and
-  `sub_F7B162`):
+  `MeasureDelete_LcdKeyRow3`):
   - the first press sets the stage to 1 and requests a redraw, which paints the question;
   - the second press, with the stage already 1, runs the job and writes 0 back.
 

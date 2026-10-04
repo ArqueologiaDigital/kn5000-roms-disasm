@@ -90333,7 +90333,7 @@ T_F428F0:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
 T_F428F4:	jp Vel0cityChange_StageZero_LcdKeyRow4  ; -> prom_b 0x7BD6A   x1
 T_F428F8:	jp sub_F7BD7F  ; -> prom_b 0x7BD7F   x4
 T_F428FC:	jp sub_F7BDD4  ; -> prom_b 0x7BDD4   x2
-T_F42900:	jp sub_F7BEF4  ; -> prom_b 0x7BEF4   x2
+T_F42900:	jp Vel0cityChange_LcdKeyRow2  ; -> prom_b 0x7BEF4   x2
 T_F42904:	jp sub_F7BDC0  ; -> prom_b 0x7BDC0
 T_F42908:	jp sub_F7BFEA  ; -> prom_b 0x7BFEA   x1
 T_F4290C:	jp Quantize_OnLeave  ; -> prom_b 0x7C0AF   x1
@@ -90345,7 +90345,7 @@ T_F42920:	jp Quantize_SelectField5  ; -> prom_b 0x7C310   x1
 T_F42924:	jp Quantize_SelectField6  ; -> prom_b 0x7C31B   x1
 T_F42928:	jp sub_F7C0F1  ; -> prom_b 0x7C0F1   x4
 T_F4292C:	jp sub_F7C17D  ; -> prom_b 0x7C17D   x2
-T_F42930:	jp sub_F7C326  ; -> prom_b 0x7C326   x2
+T_F42930:	jp Quantize_LcdKeyRow3  ; -> prom_b 0x7C326   x2
 T_F42934:	jp sub_F7C13E  ; -> prom_b 0x7C13E
 T_F42938:	jp sub_F7AC9D  ; -> prom_b 0x7AC9D   x1
 T_F4293C:	jp TrackMerge_OnLeave  ; -> prom_b 0x7ACA6   x1
@@ -90355,7 +90355,7 @@ T_F42948:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
 T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
 T_F42950:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
-T_F42958:	jp sub_F7AE0C  ; -> prom_b 0x7AE0C   x2
+T_F42958:	jp TrackMerge_LcdKeyRow2  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
 T_F42960:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
 T_F42964:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
@@ -90363,7 +90363,7 @@ T_F42968:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
 T_F4296C:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
 T_F42970:	jp sub_F7B045  ; -> prom_b 0x7B045   x4
 T_F42974:	jp sub_F7B08B  ; -> prom_b 0x7B08B   x2
-T_F42978:	jp sub_F7B162  ; -> prom_b 0x7B162   x2
+T_F42978:	jp MeasureDelete_LcdKeyRow3  ; -> prom_b 0x7B162   x2
 T_F4297C:	jp sub_F7B07A  ; -> prom_b 0x7B07A
 T_F42980:	jp sub_F7B22C  ; -> prom_b 0x7B22C   x1
 T_F42984:	jp MeasureErase_OnLeave  ; -> prom_b 0x7B23A   x1
@@ -90373,7 +90373,7 @@ T_F42990:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
 T_F42994:	jp MeasureErase_SelectField4  ; -> prom_b 0x7B271   x1
 T_F42998:	jp sub_F7B27C  ; -> prom_b 0x7B27C   x4
 T_F4299C:	jp sub_F7B2CE  ; -> prom_b 0x7B2CE   x2
-T_F429A0:	jp sub_F7B3E0  ; -> prom_b 0x7B3E0   x2
+T_F429A0:	jp MeasureErase_LcdKeyRow2  ; -> prom_b 0x7B3E0   x2
 T_F429A4:	jp sub_F7B2BD  ; -> prom_b 0x7B2BD
 T_F429A8:	jp sub_F7B4BF  ; -> prom_b 0x7B4BF   x1
 T_F429AC:	jp MeasureInsert_OnLeave  ; -> prom_b 0x7B4CD   x1
@@ -90419,7 +90419,7 @@ T_F42A48:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
 T_F42A4C:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
 T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
 T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
-T_F42A58:	jp sub_F7C7F0  ; -> prom_b 0x7C7F0   x2
+T_F42A58:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
 T_F42A5C:	jp sub_F7C843  ; -> prom_b 0x7C843   x2
 T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
 T_F42A64:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
@@ -90459,7 +90459,7 @@ T_F42B90:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
 T_F42B94:	jp TrackAssign_SelectTrackGroup  ; -> prom_b 0x65CD6   x2
 T_F42B98:	jp sub_F65DAE  ; -> prom_b 0x65DAE   x1
 T_F42B9C:	jp sub_F65DD3  ; -> prom_b 0x65DD3   x2
-T_F42BA0:	jp sub_F65DF8  ; -> prom_b 0x65DF8   x1
+T_F42BA0:	jp TrackAssign_StageZero_SoftKeyCol4  ; -> prom_b 0x65DF8   x1
 T_F42BA4:	jp TrackAssign_StageZero_LcdKeyRow3  ; -> prom_b 0x65E94   x1
 T_F42BA8:	jp TrackAssign_StageZero_SoftKeyCol5  ; -> prom_b 0x65F7C   x1
 T_F42BAC:	jp TrackAssign_StageZero_SoftKeyCol7  ; -> prom_b 0x65FDD   x1
@@ -90488,7 +90488,7 @@ T_F42C04:	jp TrackAssignPresets_SelectField2  ; -> prom_b 0x665FF   x1
 T_F42C08:	jp TrackAssignPresets_SelectField3  ; -> prom_b 0x6660C   x1
 T_F42C0C:	jp TrackAssignPresets_BankUp  ; -> prom_b 0x66619   x1
 T_F42C10:	jp TrackAssignPresets_BankDown  ; -> prom_b 0x66639   x1
-T_F42C14:	jp sub_F66658  ; -> prom_b 0x66658   x1
+T_F42C14:	jp TrackAssignPresets_SoftKeyCol6  ; -> prom_b 0x66658   x1
 T_F42C18:	jp SequencerMedley_SetSourceInternal  ; -> prom_b 0x6633A   x2
 T_F42C1C:	jp SequencerMedley_SoftKeyCol3  ; -> prom_b 0x66382   x1
 T_F42C20:	jp T_F42C20_Nop  ; -> prom_b 0x663D6
@@ -143423,7 +143423,7 @@ sub_F65DD3_Return:
 	ret	; F65DF7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F65DF8
+; TrackAssign_StageZero_SoftKeyCol4
 ; Called from: T_F42BA0 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0DC0) (0x2075)  |  0x603422
 ; Evidence: thunk slot T_F42BA0 holds `jp 0x00F65DF8`, and 0xF65DF8 is an
@@ -143433,7 +143433,8 @@ sub_F65DD3_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F65DF8:		; <- T_F42BA0
+; TrackAssign_StageZero_SoftKeyCol4: the SoftKeyCol4 action of TrackAssign_StageZero -- called only by SoftKeyCol4_TrackAssign_StageZero.
+TrackAssign_StageZero_SoftKeyCol4:		; <- T_F42BA0
 	bit	2, (0x96:8)	; F65DF8  bit 2,(0x96)
 	jr	z, sub_F65DF8_Skip	; F65DFB  jr Z,0xf65dfe
 	ret	; F65DFD  ret
@@ -143476,7 +143477,7 @@ sub_F65DF8_Return:
 ;   entry 0 (0x00) is never read.  ClampInc_0to31 -- 0xF65E74-0xF65E93, 32
 ;   bytes: entry k is k+1 (k = 0..30); entry 31 (0x1F) is never read.
 ;   Converted 2026-09-25 (lane promb).
-; Read by: sub_F65DF8, on the byte at (0x0C06): with bit 7 of W set it skips
+; Read by: TrackAssign_StageZero_SoftKeyCol4, on the byte at (0x0C06): with bit 7 of W set it skips
 ;   when the byte is 0 and otherwise does `ld XDE,0x00F65E54 / ld A,(XDE+HL)`
 ;   (0xF65E15); with bit 7 clear it skips when the byte is 0x1F and otherwise
 ;   does `ld XDE,0x00F65E74 / ld A,(XDE+HL)` (0xF65E30); either way the result
@@ -144881,7 +144882,7 @@ sub_F662F7_Skip22:
 	ret	; F66657  ret
 
 ; --------------------------------------------------------------------------
-; sub_F66658
+; TrackAssignPresets_SoftKeyCol6
 ; Called from: T_F42C14 (x1)
 ; Touches: (0x2070) (0x2880)
 ; Calls:   sub_F66668
@@ -144892,7 +144893,8 @@ sub_F662F7_Skip22:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F66658:		; <- T_F42C14
+; TrackAssignPresets_SoftKeyCol6: the SoftKeyCol6 action of TrackAssignPresets -- called only by SoftKeyCol6_TrackAssignPresets.
+TrackAssignPresets_SoftKeyCol6:		; <- T_F42C14
 	call	sub_F66668	; F66658  call 0xf66668
 	ld	(UI_StatusCode:16), 35	; F6665C  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F66661  ld (0x2070),0x40ab
@@ -149288,7 +149290,7 @@ sub_F68DBE_Return:
 	ret	; F68E41  ret
 	ret	; F68E42  ret
 	ret	; F68E43  ret
-	calr	sub_F68F67	; F68E44  calr 0xf68f67
+	calr	StepRecordSub00_LcdKeyRow4	; F68E44  calr 0xf68f67
 	ret	; F68E47  ret
 
 ; --------------------------------------------------------------------------
@@ -149504,7 +149506,7 @@ sub_F68F62:
 	jr	nz, sub_F68F67_Return	; F68F65  jr NZ,0xf68fb3
 
 ; --------------------------------------------------------------------------
-; sub_F68F67
+; StepRecordSub00_LcdKeyRow4
 ; Called from: in-module: 0xF68E44
 ; Touches: (0x0E4F) (0x0E53) (0x0E63) (0x0ED5) (0x20A9)
 ; Calls:   sub_F69019 sub_F6C52A sub_F6A2FC sub_F6B8F1 sub_F693F6 sub_F6742C
@@ -149514,7 +149516,8 @@ sub_F68F62:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F68F67:
+; StepRecordSub00_LcdKeyRow4: the LcdKeyRow4 action of StepRecordSub00 -- called only by LcdKeyRow4_StepRecordSub00.
+StepRecordSub00_LcdKeyRow4:
 	calr	sub_F69019	; F68F67  calr 0xf69019
 	cp	w, 1:i3	; F68F6A  cp W,1
 	jr	z, sub_F68F67_Join	; F68F6C  jr Z,0xf68f89
@@ -157989,7 +157992,7 @@ sub_F6CAE7_Skip:
 	ld	a, (4844:16)	; F6CAF6  ld A,(0x12ec)
 	xor	l, l	; F6CAFA  xor L,L
 	ld	h, 3:opc	; F6CAFC  ld H,0x03
-	call	sub_F6CB52	; F6CAFE  call 0xf6cb52
+	call	StepRecordSub11_SoftKeyCol2	; F6CAFE  call 0xf6cb52
 	ld	(4844:16), a	; F6CB02  ld (0x12ec),A
 	call	sub_F6C984	; F6CB06  call 0xf6c984
 	call	MsgLine_PanKeyShiftTuningBendSens	; F6CB0A  call 0xf6c9c7
@@ -158024,7 +158027,7 @@ sub_F6CB13_Join:
 	ret	; F6CB51  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6CB52
+; StepRecordSub11_SoftKeyCol2
 ; Called from: in-module: 0xF6CAFE
 ; Touches: (0x0E4F) (0x0E50) (0x0E53) (0x0E63) (0x0ED4) (0x0ED5)
 ; Calls:   sub_F6B387 sub_F6C43C sub_F6B8BD sub_F6B8F1 sub_F6741C sub_F69C03
@@ -158034,7 +158037,8 @@ sub_F6CB13_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6CB52:
+; StepRecordSub11_SoftKeyCol2: the SoftKeyCol2 action of StepRecordSub11 -- called only by SoftKeyCol2_StepRecordSub11.
+StepRecordSub11_SoftKeyCol2:
 	bit	7, w	; F6CB52  bit 0x07,W
 	jr	nz, sub_F6CB52_Skip	; F6CB55  jr NZ,0xf6cb65
 	cp	a, h	; F6CB57  cp A,H
@@ -185218,7 +185222,7 @@ sub_F7ADDC_Return:
 	ret	; F7AE0B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AE0C
+; TrackMerge_LcdKeyRow2
 ; Called from: T_F42958 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C15) (0x0C70) (0x0C71) (0x0C72) (0x0D4A)
 ;          (0x2070) (0x2071) (0x2075) +5 more
@@ -185230,7 +185234,8 @@ sub_F7ADDC_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7AE0C:		; <- T_F42958
+; TrackMerge_LcdKeyRow2: the LcdKeyRow2 action of TrackMerge_StageNonZero, TrackMerge_StageZero -- called only by LcdKeyRow2_TrackMerge_StageNonZero, LcdKeyRow2_TrackMerge_StageZero.
+TrackMerge_LcdKeyRow2:		; <- T_F42958
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AE0C  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AE11  cp (0x207e),0x01
 	jr	z, sub_F7ADDC_Skip	; F7AE16  jr Z,0xf7ae25
@@ -185691,7 +185696,7 @@ sub_F7B128_Skip:
 	ret	; F7B161  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B162
+; MeasureDelete_LcdKeyRow3
 ; Called from: T_F42978 (x2)
 ; Touches: (0x0C13) (0x0C18) (0x0C1C) (0x0C35) (0x0C70) (0x0C73) (0x0C77)
 ;          (0x0D4A) (0x0DD6) (0x0DD8) +5 more
@@ -185703,7 +185708,8 @@ sub_F7B128_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B162:		; <- T_F42978
+; MeasureDelete_LcdKeyRow3: the LcdKeyRow3 action of MeasureDelete_StageNonZero, MeasureDelete_StageZero -- called only by LcdKeyRow3_MeasureDelete_StageNonZero, LcdKeyRow3_MeasureDelete_StageZero.
+MeasureDelete_LcdKeyRow3:		; <- T_F42978
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B162  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B167  cp (0x207e),0x01
 	jr	z, sub_F7B128_Skip2	; F7B16C  jr Z,0xf7b17a
@@ -186114,7 +186120,7 @@ sub_F7B3B1_Join:
 	ret	; F7B3DF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B3E0
+; MeasureErase_LcdKeyRow2
 ; Called from: T_F429A0 (x2)
 ; Touches: (0x0C13) (0x0C16) (0x0C18) (0x0C1C) (0x0C2A) (0x0C2C) (0x0C35)
 ;          (0x0C70) (0x0C73) (0x0C77) +7 more
@@ -186126,7 +186132,8 @@ sub_F7B3B1_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B3E0:		; <- T_F429A0
+; MeasureErase_LcdKeyRow2: the LcdKeyRow2 action of MeasureErase_StageNonZero, MeasureErase_StageZero -- called only by LcdKeyRow2_MeasureErase_StageNonZero, LcdKeyRow2_MeasureErase_StageZero.
+MeasureErase_LcdKeyRow2:		; <- T_F429A0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B3E0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B3E5  cp (0x207e),0x01
 	jr	z, sub_F7B3B1_Skip3	; F7B3EA  jr Z,0xf7b3f8
@@ -187745,7 +187752,7 @@ sub_F7BEB3_Return:
 	ret	; F7BEF3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BEF4
+; Vel0cityChange_LcdKeyRow2
 ; Called from: T_F42900 (x2)
 ; Touches: (0x0C13) (0x0C1E) (0x0C20) (0x0C22) (0x0C35) (0x0C70) (0x0C73)
 ;          (0x0C77) (0x0C7A) (0x0C7B) +6 more
@@ -187757,7 +187764,8 @@ sub_F7BEB3_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BEF4:		; <- T_F42900
+; Vel0cityChange_LcdKeyRow2: the LcdKeyRow2 action of Vel0cityChange_StageNonZero, Vel0cityChange_StageZero -- called only by LcdKeyRow2_Vel0cityChange_StageNonZero, LcdKeyRow2_Vel0cityChange_StageZero.
+Vel0cityChange_LcdKeyRow2:		; <- T_F42900
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BEF4  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BEF9  cp (0x207e),0x01
 	jr	z, sub_F7BEB3_Skip3	; F7BEFE  jr Z,0xf7bf0c
@@ -188405,7 +188413,7 @@ Quantize_SelectField6:		; <- T_F42924
 	ret	; F7C325  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C326
+; Quantize_LcdKeyRow3
 ; Called from: T_F42930 (x2)
 ; Touches: (0x0C26) (0x0C28) (0x0C35) (0x0C37) (0x0C70) (0x0C73) (0x0C77)
 ;          (0x0C7F) (0x0D4A) (0x2070) +4 more
@@ -188417,7 +188425,8 @@ Quantize_SelectField6:		; <- T_F42924
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C326:		; <- T_F42930
+; Quantize_LcdKeyRow3: the LcdKeyRow3 action of Quantize_StageNonZero, Quantize_StageZero -- called only by LcdKeyRow3_Quantize_StageNonZero, LcdKeyRow3_Quantize_StageZero.
+Quantize_LcdKeyRow3:		; <- T_F42930
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C326  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C32B  cp (0x207e),0x01
 	jr	z, sub_F7C326_Skip	; F7C330  jr Z,0xf7c33f
@@ -189317,7 +189326,7 @@ sub_F7C7BC_Join:
 	ret	; F7C7EF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C7F0
+; Transp0se_LcdKeyRow2
 ; Called from: T_F42A58 (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DF7) (0x0DF8) (0x0E00) (0x2070)
 ;          (0x2071) (0x2075) (0x207E) +1 more
@@ -189329,7 +189338,8 @@ sub_F7C7BC_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C7F0:		; <- T_F42A58
+; Transp0se_LcdKeyRow2: the LcdKeyRow2 action of Transp0se_StageNonZero, Transp0se_StageZero -- called only by LcdKeyRow2_Transp0se_StageNonZero, LcdKeyRow2_Transp0se_StageZero.
+Transp0se_LcdKeyRow2:		; <- T_F42A58
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C7F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C7F5  cp (0x207e),0x01
 	jr	z, sub_F7C7F0_Skip	; F7C7FA  jr Z,0xf7c808

@@ -44,7 +44,11 @@ def callers():
         for l in text.split("\n"):
             m = re.match(r'^([A-Za-z_][\w$]*):', l)
             if m:
-                cur = m.group(1)
+                # a branch target (_Skip/_Join/_Loop/_Return/_Epilogue N) belongs to the routine it sits in, whatever
+                # routine its name was copied from (2026-10-04: ScreenLeaveBody_TrackAssignPresets_Join2 is inside
+                # SoftKeyCol3_TrackAssignPresets)
+                if not re.search(r'_(Skip|Join|Loop|Return|Epilogue)\d*$', m.group(1)):
+                    cur = m.group(1)
                 continue
             for t in re.findall(r'\b(?:call|calr|jp|jr|jrl)\s+(?:\w+,\s*)?((?:sub_F[0-9A-F]{5}|T_F4[0-9A-F]{4}\w*))\b', l.split(";")[0], re.I):
                 t = THUNK.get(t, t)
