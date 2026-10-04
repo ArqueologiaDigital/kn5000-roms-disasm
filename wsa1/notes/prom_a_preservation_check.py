@@ -2762,6 +2762,19 @@ RENAMES = {
     "sub_FE1E29": "DiskLoad_ReadFileIntoWindow",
     "sub_FE2980": "DiskSave_WriteWindowToFile",
     "sub_FE1FFF": "DiskLoad_ApplyPanelImage",
+    "sub_FE1218": "Disk_ScanMidiFiles",
+    "sub_FE11D9": "Disk_MountAndScanMidiFiles",
+    "sub_FE0E89": "Disk_ScanDirectory_RecordEntry",
+    "sub_F7ABDC": "TrackClear_ReturnToStageZero",
+    "sub_F7ADF5": "TrackMerge_ReturnToStageZero",
+    "sub_F7B761": "MeasureInsert_ReturnToStageZero",
+    "sub_F7BB82": "MeasureC0py_ReturnToStageZero",
+    "sub_F7C5C0": "S0ngC0py_ReturnToStageZero",
+    "sub_F7C843": "Transp0se_ReturnToStageZero",
+    "sub_F7CAC2": "N0teChange_ReturnToStageZero",
+    "sub_F7CCCA": "AdvanceDelay_ReturnToStageZero",
+    "OldCopy_sub_F7ABDC": "OldCopy_TrackClear_ReturnToStageZero",
+    "OldCopy_sub_F7ADF5": "OldCopy_TrackMerge_ReturnToStageZero",
 }
 
 

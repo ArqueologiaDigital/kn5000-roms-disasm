@@ -90345,7 +90345,7 @@ T_SongClear_LcdKeyRow5:	jp SongClear_LcdKeyRow5  ; -> prom_b 0x7AADD   x1
 T_SongClear_LcdKeyRow4:	jp SongClear_LcdKeyRow4  ; -> prom_b 0x7AAF0   x1
 T_F428D0:	jp sub_F7AB9C  ; -> prom_b 0x7AB9C   x1
 T_TrackClear_OnLeave:	jp TrackClear_OnLeave  ; -> prom_b 0x7ABB9   x1
-T_F428D8:	jp sub_F7ABDC  ; -> prom_b 0x7ABDC   x2
+T_F428D8:	jp TrackClear_ReturnToStageZero  ; -> prom_b 0x7ABDC   x2
 T_TrackClear_LcdKeyRow2:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
 T_F428E0:	jp sub_F7BCFD  ; -> prom_b 0x7BCFD   x1
 T_Vel0cityChange_OnLeave:	jp Vel0cityChange_OnLeave  ; -> prom_b 0x7BD24   x1
@@ -90376,7 +90376,7 @@ T_TrackMerge_SelectField2:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
 T_TrackMerge_SelectField3:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
 T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
 T_TrackMerge_StageZero_SoftKeyCol5:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
-T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
+T_F42954:	jp TrackMerge_ReturnToStageZero  ; -> prom_b 0x7ADF5   x2
 T_TrackMerge_LcdKeyRow2:	jp TrackMerge_LcdKeyRow2  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
 T_MeasureDelete_OnLeave:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
@@ -90407,7 +90407,7 @@ T_MeasureInsert_SelectField5:	jp MeasureInsert_SelectField5  ; -> prom_b 0x7B522
 T_MeasureInsert_SelectField6:	jp MeasureInsert_SelectField6  ; -> prom_b 0x7B532   x1
 T_F429C8:	jp sub_F7B53D  ; -> prom_b 0x7B53D   x2
 T_F429CC:	jp sub_F7B58C  ; -> prom_b 0x7B58C   x2
-T_F429D0:	jp sub_F7B761  ; -> prom_b 0x7B761   x2
+T_F429D0:	jp MeasureInsert_ReturnToStageZero  ; -> prom_b 0x7B761   x2
 T_MeasureInsert_LcdKeyRow1:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
 T_F429D8:	jp sub_F7B8DC  ; -> prom_b 0x7B8DC   x1
 T_MeasureC0py_OnLeave:	jp MeasureC0py_OnLeave  ; -> prom_b 0x7B8EA   x1
@@ -90419,7 +90419,7 @@ T_MeasureC0py_SelectField5:	jp MeasureC0py_SelectField5  ; -> prom_b 0x7B93F   x
 T_MeasureC0py_SelectField6:	jp MeasureC0py_SelectField6  ; -> prom_b 0x7B94F   x1
 T_F429F8:	jp sub_F7B95A  ; -> prom_b 0x7B95A   x2
 T_F429FC:	jp sub_F7B9AB  ; -> prom_b 0x7B9AB   x2
-T_F42A00:	jp sub_F7BB82  ; -> prom_b 0x7BB82   x2
+T_F42A00:	jp MeasureC0py_ReturnToStageZero  ; -> prom_b 0x7BB82   x2
 T_MeasureC0py_LcdKeyRow1:	jp MeasureC0py_LcdKeyRow1  ; -> prom_b 0x7BB92   x2
 T_F42A08:	jp sub_F7C3B2  ; -> prom_b 0x7C3B2   x1
 T_F42A0C:	jp sub_F7C3EE  ; -> prom_b 0x7C3EE
@@ -90432,7 +90432,7 @@ T_S0ngC0py_StageZero_SoftKeyCol5:	jp S0ngC0py_StageZero_SoftKeyCol5  ; -> prom_b
 T_S0ngC0py_StageZero_SoftKeyCol8:	jp S0ngC0py_StageZero_SoftKeyCol8  ; -> prom_b 0x7C528   x1
 T_S0ngC0py_StageZero_SoftKeyCol7:	jp S0ngC0py_StageZero_SoftKeyCol7  ; -> prom_b 0x7C4FF   x1
 T_S0ngC0py_LcdKeyRow2:	jp S0ngC0py_LcdKeyRow2  ; -> prom_b 0x7C555   x2
-T_F42A34:	jp sub_F7C5C0  ; -> prom_b 0x7C5C0   x2
+T_F42A34:	jp S0ngC0py_ReturnToStageZero  ; -> prom_b 0x7C5C0   x2
 T_F42A38:	jp sub_F7C606  ; -> prom_b 0x7C606   x1
 T_Transp0se_OnLeave:	jp Transp0se_OnLeave  ; -> prom_b 0x7C666   x1
 T_Transp0se_SelectField1:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
@@ -90442,7 +90442,7 @@ T_Transp0se_SelectField4:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
 T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
 T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
 T_Transp0se_LcdKeyRow2:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
-T_F42A5C:	jp sub_F7C843  ; -> prom_b 0x7C843   x2
+T_F42A5C:	jp Transp0se_ReturnToStageZero  ; -> prom_b 0x7C843   x2
 T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
 T_AdvanceDelay_OnLeave:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
 T_AdvanceDelay_SelectField1:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
@@ -90452,7 +90452,7 @@ T_AdvanceDelay_SelectField4:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F  
 T_F42A78:	jp sub_F7CB4A  ; -> prom_b 0x7CB4A   x2
 T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
 T_AdvanceDelay_LcdKeyRow3:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
-T_F42A84:	jp sub_F7CCCA  ; -> prom_b 0x7CCCA   x2
+T_F42A84:	jp AdvanceDelay_ReturnToStageZero  ; -> prom_b 0x7CCCA   x2
 T_F42A88:	jp sub_F7C853  ; -> prom_b 0x7C853   x1
 T_N0teChange_OnLeave:	jp N0teChange_OnLeave  ; -> prom_b 0x7C8BC   x1
 T_N0teChange_SelectField1:	jp N0teChange_SelectField1  ; -> prom_b 0x7C8C8   x1
@@ -90463,7 +90463,7 @@ T_N0teChange_SelectField5:	jp N0teChange_SelectField5  ; -> prom_b 0x7C908   x1
 T_F42AA4:	jp sub_F7C918  ; -> prom_b 0x7C918   x2
 T_F42AA8:	jp sub_F7C964  ; -> prom_b 0x7C964   x2
 T_N0teChange_LcdKeyRow4:	jp N0teChange_LcdKeyRow4  ; -> prom_b 0x7CA6F   x2
-T_F42AB0:	jp sub_F7CAC2  ; -> prom_b 0x7CAC2   x2
+T_F42AB0:	jp N0teChange_ReturnToStageZero  ; -> prom_b 0x7CAC2   x2
 T_F42AB4:	jp sub_F7C5CB  ; -> prom_b 0x7C5CB   x1
 T_F42AB8:	jp sub_F7C5EA  ; -> prom_b 0x7C5EA
 T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
@@ -164545,7 +164545,7 @@ OldCopy_TrackClear_OnLeave:
 	call	T_F409E0	; F6F1D7  call 0xf409e0
 OldCopy_F7ABDB:
 	ret	; F6F1DB  ret
-OldCopy_sub_F7ABDC:
+OldCopy_TrackClear_ReturnToStageZero:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F6F1DC  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F1E1  cp (0x207e),0x01
 	jr	z, OldCopy_F7ABEA	; F6F1E6  jr Z,0xf6f1ea
@@ -164748,7 +164748,7 @@ OldCopy_sub_F7ADDC:
 	ld	(6304859:24), a	; F6F3EB  ld (0x60345b),A
 	ld	(DisplayListB_Stage+2:16), a	; F6F3F0  ld (0x12f8),A
 	ret	; F6F3F4  ret
-OldCopy_sub_F7ADF5:
+OldCopy_TrackMerge_ReturnToStageZero:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F6F3F5  cp (0x207e),0x01
 	jr	nz, sub_F7ADDC_Return - 0xBA00	; F6F3FA  jr NZ,0xf6f40b
 	.byte	0xC1, 0x75, 0x20, 0x3C	; F6F3FC  the first 4 of the 5 bytes of `and (0x2075),0xf6` (live 0xF7ADFC); this build's MidiFileL0ad_LcdKeyRow1 begins at 0xF6F400
@@ -184878,7 +184878,7 @@ sub_F7AB3F_Return3:
 	ret	; F7ABDB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ABDC
+; TrackClear_ReturnToStageZero
 ; Called from: T_F428D8 (x2)
 ; Touches: (0x0DBE) (0x2071) (0x2075) (0x207E) (0x212E) (0x215E)
 ; Evidence: thunk slot T_F428D8 holds `jp 0x00F7ABDC`, and 0xF7ABDC is an
@@ -184888,7 +184888,9 @@ sub_F7AB3F_Return3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7ABDC:		; <- T_F428D8
+; TrackClear_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of TrackClear_StageNonZero;
+;   called by ExitKey_TrackClear_StageNonZero, LcdKeyRow3_TrackClear_StageNonZero (notes/prom_ab_stage_zero_names.py).
+TrackClear_ReturnToStageZero:		; <- T_F428D8
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ABDC  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ABE1  cp (0x207e),0x01
 	jr	z, sub_F7AB3F_Skip2	; F7ABE6  jr Z,0xf7abea
@@ -185245,7 +185247,7 @@ sub_F7ADDC:
 	ret	; F7ADF4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7ADF5
+; TrackMerge_ReturnToStageZero
 ; Called from: T_F42954 (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42954 holds `jp 0x00F7ADF5`, and 0xF7ADF5 is an
@@ -185255,7 +185257,9 @@ sub_F7ADDC:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7ADF5:		; <- T_F42954
+; TrackMerge_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of TrackMerge_StageNonZero;
+;   called by ExitKey_TrackMerge_StageNonZero, LcdKeyRow4_TrackMerge_StageNonZero (notes/prom_ab_stage_zero_names.py).
+TrackMerge_ReturnToStageZero:		; <- T_F42954
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7ADF5  cp (0x207e),0x01
 	jr	nz, sub_F7ADDC_Return	; F7ADFA  jr NZ,0xf7ae0b
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7ADFC  and (0x2075),0xf6
@@ -186697,7 +186701,7 @@ sub_F7B74C:
 	ret	; F7B760  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7B761
+; MeasureInsert_ReturnToStageZero
 ; Called from: T_F429D0 (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F429D0 holds `jp 0x00F7B761`, and 0xF7B761 is an
@@ -186707,7 +186711,9 @@ sub_F7B74C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7B761:		; <- T_F429D0
+; MeasureInsert_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of MeasureInsert_StageNonZero;
+;   called by ExitKey_MeasureInsert_StageNonZero, LcdKeyRow5_MeasureInsert_StageNonZero (notes/prom_ab_stage_zero_names.py).
+MeasureInsert_ReturnToStageZero:		; <- T_F429D0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B761  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7B766  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7B76B  or (0x2071),0x10
@@ -187297,7 +187303,7 @@ sub_F7BB6D:
 	ret	; F7BB81  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7BB82
+; MeasureC0py_ReturnToStageZero
 ; Called from: T_F42A00 (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42A00 holds `jp 0x00F7BB82`, and 0xF7BB82 is an
@@ -187307,7 +187313,9 @@ sub_F7BB6D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7BB82:		; <- T_F42A00
+; MeasureC0py_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of MeasureC0py_StageNonZero;
+;   called by ExitKey_MeasureC0py_StageNonZero, LcdKeyRow5_MeasureC0py_StageNonZero (notes/prom_ab_stage_zero_names.py).
+MeasureC0py_ReturnToStageZero:		; <- T_F42A00
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BB82  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7BB87  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7BB8C  or (0x2071),0x10
@@ -188865,7 +188873,7 @@ sub_F7C440_Return7:
 	ret	; F7C5BF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C5C0
+; S0ngC0py_ReturnToStageZero
 ; Called from: T_F42A34 (x2)
 ; Touches: (0x2071) (0x207E)
 ; Evidence: thunk slot T_F42A34 holds `jp 0x00F7C5C0`, and 0xF7C5C0 is an
@@ -188875,7 +188883,9 @@ sub_F7C440_Return7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C5C0:		; <- T_F42A34
+; S0ngC0py_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of S0ngC0py_StageNonZero;
+;   called by ExitKey_S0ngC0py_StageNonZero, LcdKeyRow3_S0ngC0py_StageNonZero (notes/prom_ab_stage_zero_names.py).
+S0ngC0py_ReturnToStageZero:		; <- T_F42A34
 	ld	(UI_ScreenStage:16), 0	; F7C5C0  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C5C5  or (0x2071),0x10
 	ret	; F7C5CA  ret
@@ -189409,7 +189419,7 @@ sub_F7C7F0_Return:
 	ret	; F7C842  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7C843
+; Transp0se_ReturnToStageZero
 ; Called from: T_F42A5C (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42A5C holds `jp 0x00F7C843`, and 0xF7C843 is an
@@ -189419,7 +189429,9 @@ sub_F7C7F0_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7C843:		; <- T_F42A5C
+; Transp0se_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of Transp0se_StageNonZero;
+;   called by ExitKey_Transp0se_StageNonZero, LcdKeyRow3_Transp0se_StageNonZero (notes/prom_ab_stage_zero_names.py).
+Transp0se_ReturnToStageZero:		; <- T_F42A5C
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C843  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7C848  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7C84D  or (0x2071),0x10
@@ -189914,7 +189926,7 @@ sub_F7CA6F_Return:
 	ret	; F7CAC1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CAC2
+; N0teChange_ReturnToStageZero
 ; Called from: T_F42AB0 (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42AB0 holds `jp 0x00F7CAC2`, and 0xF7CAC2 is an
@@ -189924,7 +189936,9 @@ sub_F7CA6F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CAC2:		; <- T_F42AB0
+; N0teChange_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of N0teChange_StageNonZero;
+;   called by ExitKey_N0teChange_StageNonZero, LcdKeyRow5_N0teChange_StageNonZero (notes/prom_ab_stage_zero_names.py).
+N0teChange_ReturnToStageZero:		; <- T_F42AB0
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CAC2  and (0x2075),0xf6
 	ld	(UI_ScreenStage:16), 0	; F7CAC7  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CACC  or (0x2071),0x10
@@ -190351,7 +190365,7 @@ sub_F7CC7C_Return:
 	ret	; F7CCC9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7CCCA
+; AdvanceDelay_ReturnToStageZero
 ; Called from: T_F42A84 (x2)
 ; Touches: (0x2071) (0x2075) (0x207E)
 ; Evidence: thunk slot T_F42A84 holds `jp 0x00F7CCCA`, and 0xF7CCCA is an
@@ -190361,7 +190375,9 @@ sub_F7CC7C_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7CCCA:		; <- T_F42A84
+; AdvanceDelay_ReturnToStageZero: UI_ScreenStage = 0 and UI_Request_Hi |= 0x10 -- back to stage 0 of AdvanceDelay_StageNonZero;
+;   called by ExitKey_AdvanceDelay_StageNonZero, LcdKeyRow4_AdvanceDelay_StageNonZero (notes/prom_ab_stage_zero_names.py).
+AdvanceDelay_ReturnToStageZero:		; <- T_F42A84
 	ld	(UI_ScreenStage:16), 0	; F7CCCA  ld (0x207e),0x00
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F7CCCF  or (0x2071),0x10
 	ret	; F7CCD4  ret

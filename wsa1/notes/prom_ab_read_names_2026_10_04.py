@@ -410,7 +410,7 @@ ROWS = [
      "2 or 3 -> index 16 (status 0x00, Error00); 0xFF -> index 13 (status 0x04, the bare ERROR list); each with a delay."),
     ("FE0CB9", "Disk_ScanDirectory",
      "builds its line buffers, sets Disk_FileName to eleven '?', the transfer address (code 0x1A) to 0x60A080 (also\n"
-     "(0x21D3)), then DiskFile_FindFirst and, per found entry, sub_FE0E89 + DiskFile_FindNext until it fails.\n"
+     "(0x21D3)), then DiskFile_FindFirst and, per found entry, Disk_ScanDirectory_RecordEntry + DiskFile_FindNext until it fails.\n"
      "Returns 0, or 0x1A when nothing matched."),
     ("FE0527", "Disk_MountAndScanDirectory",
      "StatusMsg_ShowByIndex(9) (PLEASE WAIT), Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanDirectory,\n"
@@ -481,6 +481,16 @@ ROWS = [
     ("FE1FFF", "DiskLoad_ApplyPanelImage",
      "Disk_Flags |= 0x18 around: ParamImage_WriteRecordHeaders, ParamImage_SanitizeAllAndHook, ParamImage_QueueDiffAll,\n"
      "Queue2C00_DrainPassB, MidiIn_ServiceDeferred, UiEventList_Publish; returns 1.  Called after the LSW file is read."),
+    ("FE1218", "Disk_ScanMidiFiles",
+     "sets Disk_FileName to eight '?' + 'MID', the transfer address, DiskFile_FindFirst / _FindNext, and per entry\n"
+     "(not deleted -- first byte 0xE5 -- and extension M I D) records it."),
+    ("FE11D9", "Disk_MountAndScanMidiFiles",
+     "sub_FE0514, Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanMidiFiles, Disk_RestoreFileName;\n"
+     "otherwise Disk_PortA3_Release, Disk_ShowMountError, a 1500-tick delay and UI_StatusCode = 2."),
+    ("FE0E89", "Disk_ScanDirectory_RecordEntry",
+     "for the entry DiskFile_FindFirst/_FindNext left at 0x60A080: if a record among the twenty 16-byte records at\n"
+     "0x60A480 starts with the same two name characters, sub_FE0F6B merges it; otherwise, unless the entry is deleted\n"
+     "(0xE5) or a .MID file or the table is full (0x840), sub_FE10AA and its 11-byte name go to a new record at (0x222B)."),
 ]
 
 

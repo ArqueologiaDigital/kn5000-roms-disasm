@@ -160585,7 +160585,7 @@ DiskApi_DeleteFile:
 	popw hl                                              ; FE0CB7  4b
 	ret                                                  ; FE0CB8  0e
 ; Disk_ScanDirectory: builds its line buffers, sets Disk_FileName to eleven '?', the transfer address (code 0x1A) to 0x60A080 (also
-;   (0x21D3)), then DiskFile_FindFirst and, per found entry, sub_FE0E89 + DiskFile_FindNext until it fails.
+;   (0x21D3)), then DiskFile_FindFirst and, per found entry, Disk_ScanDirectory_RecordEntry + DiskFile_FindNext until it fails.
 ;   Returns 0, or 0x1A when nothing matched.
 Disk_ScanDirectory:
 	link XIZ,0xffe0                                      ; FE0CB9  ee 0c e0 ff
@@ -160717,7 +160717,7 @@ Disk_ScanDirectory:
 .LFE0E6B:
 	ld (0x2218:16), 0x00                                 ; FE0E6B  f1 18 22 00 00
 .LFE0E70:
-	calr sub_FE0E89                                            ; FE0E70  1e 16 00
+	calr Disk_ScanDirectory_RecordEntry                                            ; FE0E70  1e 16 00
 	calr DiskFile_FindNext                                          ; FE0E73  1e b8 0b
 	ld H,A                                               ; FE0E76  c9 8e
 	ld (0x1735:24), a                                   ; FE0E78  f2 35 17 00 41
@@ -160730,7 +160730,10 @@ Disk_ScanDirectory:
 	popw hl                                              ; FE0E85  4b
 	unlk XIZ                                             ; FE0E86  ee 0d
 	ret                                                  ; FE0E88  0e
-sub_FE0E89:
+; Disk_ScanDirectory_RecordEntry: for the entry DiskFile_FindFirst/_FindNext left at 0x60A080: if a record among the twenty 16-byte records at
+;   0x60A480 starts with the same two name characters, sub_FE0F6B merges it; otherwise, unless the entry is deleted
+;   (0xE5) or a .MID file or the table is full (0x840), sub_FE10AA and its 11-byte name go to a new record at (0x222B).
+Disk_ScanDirectory_RecordEntry:
 	link XIZ,0xfff8                                      ; FE0E89  ee 0c f8 ff
 	pushw hl                                             ; FE0E8D  2b
 	push XIX                                             ; FE0E8E  3c
@@ -161034,7 +161037,9 @@ sub_FE10AA:
 	popw hl                                              ; FE11D5  4b
 	unlk XIZ                                             ; FE11D6  ee 0d
 	ret                                                  ; FE11D8  0e
-sub_FE11D9:
+; Disk_MountAndScanMidiFiles: sub_FE0514, Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanMidiFiles, Disk_RestoreFileName;
+;   otherwise Disk_PortA3_Release, Disk_ShowMountError, a 1500-tick delay and UI_StatusCode = 2.
+Disk_MountAndScanMidiFiles:
 	pushw hl                                             ; FE11D9  2b
 	calr sub_FE0514                                          ; FE11DA  1e 37 f3
 	calr Disk_MountFloppyWithRetry                                          ; FE11DD  1e dd f6
@@ -161042,7 +161047,7 @@ sub_FE11D9:
 	cp a, 0x00:i3                                          ; FE11E2  c9 d8
 	jr nz, .LFE11F1                                          ; FE11E4  6e 0b
 	calr Disk_SaveFileName                                          ; FE11E6  1e 3c f7
-	calr sub_FE1218                                            ; FE11E9  1e 2c 00
+	calr Disk_ScanMidiFiles                                            ; FE11E9  1e 2c 00
 	calr Disk_RestoreFileName                                          ; FE11EC  1e 52 f7
 	jr .LFE1216                                              ; FE11EF  68 25
 .LFE11F1:
@@ -161062,7 +161067,9 @@ sub_FE11D9:
 .LFE1216:
 	popw hl                                              ; FE1216  4b
 	ret                                                  ; FE1217  0e
-sub_FE1218:
+; Disk_ScanMidiFiles: sets Disk_FileName to eight '?' + 'MID', the transfer address, DiskFile_FindFirst / _FindNext, and per entry
+;   (not deleted -- first byte 0xE5 -- and extension M I D) records it.
+Disk_ScanMidiFiles:
 	link XIZ,0xfff8                                      ; FE1218  ee 0c f8 ff
 	pushw hl                                             ; FE121C  2b
 	pushw de                                             ; FE121D  2a
@@ -162167,7 +162174,7 @@ sub_FE1C03:
 	ld (Disk_LastError:16), a                                   ; FE1C06  f1 43 22 41
 	ret                                                  ; FE1C0A  0e
 sub_FE1C0B:
-	calr sub_FE11D9                                          ; FE1C0B  1e cb f5
+	calr Disk_MountAndScanMidiFiles                                          ; FE1C0B  1e cb f5
 	calr Ring_InitTenOfFourteen                                          ; FE1C0E  1e 18 01
 	ret                                                  ; FE1C11  0e
 ; Disk_BootPhase3: module 23's boot phase 3 handler -- ModuleInitDirectory_F82641[23]'s vector 0xFE0000, slot 3
