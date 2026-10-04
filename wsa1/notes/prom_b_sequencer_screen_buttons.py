@@ -54,9 +54,13 @@ def thunk(addr):
 
 
 def table(base):
-    lab = "SelectorRoutines_F%05X" % (base & 0xFFFFF)
+    # found by ADDRESS, so the plan re-runs after it was applied (the label is SelectorRoutines_F<addr> before,
+    # ScreenButtons_<Screen> after)
     L = B.split("\n")
-    i = L.index(lab + ":")
+    i = next(k for k, l in enumerate(L) if re.match(r'^\s*\.long\s+\w+\s*;\s*F%05X\s+\[\s*0\]' % (base & 0xFFFFF), l)) - 1
+    while not re.match(r'^[A-Za-z_][\w$]*:', L[i]):
+        i -= 1
+    lab = L[i].split(":")[0]
     out = []
     for l in L[i + 1:i + 40]:
         m = re.match(r'^\s*\.long\s+(\w+)', l)
