@@ -2021,7 +2021,7 @@ NAMES9 = RING_NAMES + SOUND_NAMES + VENEER_NAMES + RECORD_NAMES
 # ⚠ REFUSED, with the reason, and NOT written into the listing where a refusal
 # header already stands there.
 REFUSALS9 = [
-    ("sub_FC2035",
+    ("SoundGroupName_Lookup",
      "Round 7's --apply-strings already refused it and this round confirms the "
      "refusal from a different direction. Its `cp W` ladder is the SAME ladder "
      "that SoundGroup_MaxMemberIndex_Get uses, and four of its arms do return "

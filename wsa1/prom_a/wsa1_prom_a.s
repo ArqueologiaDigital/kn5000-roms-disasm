@@ -1360,13 +1360,13 @@
 	.set T_F41004,                                                                      0x00F41004
 	.set T_F41008,                                                                      0x00F41008
 	.set T_Msg0716_PostSysEx50_A3,                                                                      0x00F4100C
-	.set T_F41010,                                                                      0x00F41010
-	.set T_F41018,                                                                      0x00F41018
+	.set T_SoundName_Lookup,                                                                      0x00F41010
+	.set T_SoundGroupName_Lookup,                                                                      0x00F41018
 	.set T_SoundGroup_MaxMemberIndex_Get,                                               0x00F4101C
 	.set T_F41024,                                                                      0x00F41024
 	.set T_F41028,                                                                      0x00F41028
-	.set T_F4102C,                                                                      0x00F4102C
-	.set T_F41030,                                                                      0x00F41030
+	.set T_CombiName_Lookup,                                                                      0x00F4102C
+	.set T_CombiGroupName_Lookup,                                                                      0x00F41030
 	.set T_SoundGroup_MaxMemberIndex_GetToneCopy,                                       0x00F41034
 	.set T_F41038,                                                                      0x00F41038
 	.set T_F4103C,                                                                      0x00F4103C
@@ -32225,7 +32225,7 @@ Paint_SoundModeFields_DeadCopy:   ; entry: named by 1 `ld` operand, first at 0xF
 	ld W,(XIY+0x01)                                      ; F90A4C  8d 01 20
 	and W,0x7f                                           ; F90A4F  c8 cc 7f
 	ld b, (UI_PartIndex:16)                                   ; F90A52  c1 50 22 22
-	call T_F41010                                        ; F90A56  1d 10 10 f4
+	call T_SoundName_Lookup                                        ; F90A56  1d 10 10 f4
 	ldw bc, 0x10                                         ; F90A5A  31 10 00
 	xor HL,HL                                            ; F90A5D  db d3
 	ldw ix, 0x09b4                                       ; F90A5F  34 b4 09
@@ -32653,7 +32653,7 @@ Paint_SoundModeFields:   ; entry: named by 1 `ld` operand, first at 0xF90DC8
 	ld W,(XIY+0x01)                                      ; F90E58  8d 01 20
 	and W,0x7f                                           ; F90E5B  c8 cc 7f
 	ld b, (UI_PartIndex:16)                                   ; F90E5E  c1 50 22 22
-	call T_F41010                                        ; F90E62  1d 10 10 f4
+	call T_SoundName_Lookup                                        ; F90E62  1d 10 10 f4
 	ldw bc, 0x10                                         ; F90E66  31 10 00
 	xor HL,HL                                            ; F90E69  db d3
 	ldw ix, 0x09b4                                       ; F90E6B  34 b4 09
@@ -33940,7 +33940,7 @@ sub_F918E5:
 	and W,0x7f                                           ; F91900  c8 cc 7f
 	m_ld_rm MBD+r6, 0x00, r1                             ; F91903  8e 00 21
 	ld b, (UI_PartIndex:16)                                   ; F91906  c1 50 22 22
-	call T_F41010                                        ; F9190A  1d 10 10 f4
+	call T_SoundName_Lookup                                        ; F9190A  1d 10 10 f4
 	ldw bc, 0x10                                         ; F9190E  31 10 00
 	xor HL,HL                                            ; F91911  db d3
 	ldw (LCD_X0:16), 0x9b                                ; F91913  f1 30 25 02 9b 00
@@ -34379,7 +34379,7 @@ Paint_C0mbinati0nM0dePage1:   ; entry: named by 1 `ld` operand, first at 0xF9165
 	calr sub_F911B6                                          ; F91CEE  1e c5 f4
 	ret                                                  ; F91CF1  0e
 ; C0mbinati0nM0de_RepaintPage1Fields -- COMBINATION MODE page 1 field refresh: redraws the combination name and number, then every field of the selected part whose dirty bit is set
-; Evidence: posted by sub_F9167C when (0x2687) == 0 (0xF91683) and by C0mbinati0nM0de_StepSelectedPart. Name: T_F4102C (sub_FC1C59, fallback Msg0716_Str_CombiName "Combi Name *****") drawn by swi 0x21 (LCD_Svc_21_DrawText16x24) at IX 0x09B4;
+; Evidence: posted by sub_F9167C when (0x2687) == 0 (0xF91683) and by C0mbinati0nM0de_StepSelectedPart. Name: T_CombiName_Lookup (CombiName_Lookup, fallback Msg0716_Str_CombiName "Combi Name *****") drawn by swi 0x21 (LCD_Svc_21_DrawText16x24) at IX 0x09B4;
 ; number: bank code (0x7F0A) and ((0x7F08) << 3 | (0x7F09)) + 1 through DL_F29765 (DLText_PartCodes). Then, from the record of part (0x2250) (PartRecord_GetPtr), per bit of (0x2676): 0 +0x03, 1 +0x08 (pan text 0xF28468), 2 +0x05, 3 +0x07, 4 +0x0D, 7 +0x06 (0/1),
 ; 5 (0x2250) itself, 6 ((0x78B2) - 0x1C) / 12 -- the octave the OCT column's soft key edits. Then sub_F90F9F for (0x2677), clears (0x2676)/(0x2677), swi 0x0C with C = 7.
 C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first at 0xF91683
@@ -34387,7 +34387,7 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	ld a, (0x7f03:16)                                   ; F91CF7  c1 03 7f 21
 	ld w, (0x7f04:16)                                   ; F91CFB  c1 04 7f 20
 	ld b, 0x98:opc                                          ; F91CFF  22 98
-	call T_F4102C                                        ; F91D01  1d 2c 10 f4
+	call T_CombiName_Lookup                                        ; F91D01  1d 2c 10 f4
 	ldw bc, 0x10                                         ; F91D05  31 10 00
 	xor HL,HL                                            ; F91D08  db d3
 	ldw ix, 0x09b4                                       ; F91D0A  34 b4 09
@@ -35685,7 +35685,7 @@ Draw_SoundGroupMenuReMap1ReMap2:   ; entry: named by 1 `ld` operand, first at 0x
 	ld w, (SoundSel_Bank:16)                                   ; F9286A  c1 6a 21 20
 	push E                                               ; F9286E  cd 04
 	push D                                               ; F92870  cc 04
-	call T_F41018                                        ; F92872  1d 18 10 f4
+	call T_SoundGroupName_Lookup                                        ; F92872  1d 18 10 f4
 	pop D                                                ; F92876  cc 05
 	push D                                               ; F92878  cc 04
 	ld XIZ,0x00f2b40f                                    ; F9287A  46 0f b4 f2 00
@@ -36325,7 +36325,7 @@ Draw_GroupSoundDisplayHoldGr0up:   ; entry: named by 1 `ld` operand, first at 0x
 	m_and_mi8 MB16, 0x2673, 0x7f                         ; F92D6A  c1 73 26 3c 7f
 	ret                                                  ; F92D6F  0e
 ; GroupSoundDisplayHold_RepaintFields -- draws the live part of GROUP: SOUND DISPLAY HOLD: group name, number range, group number, bank legends, HOLD state and the member names
-; Evidence: posted by InstallPainter_GroupSoundDisplayHold (0xF92D3C). Group name: T_F41018 (A=(0x2169), B=(0x2250), W=(0x216A)) drawn 16 characters by swi 6 at IX 0x0129; then GroupSoundDisplayHold_DrawNumberRange, DisplayHold_ShowGroupNumber,
+; Evidence: posted by InstallPainter_GroupSoundDisplayHold (0xF92D3C). Group name: T_SoundGroupName_Lookup (A=(0x2169), B=(0x2250), W=(0x216A)) drawn 16 characters by swi 6 at IX 0x0129; then GroupSoundDisplayHold_DrawNumberRange, DisplayHold_ShowGroupNumber,
 ; BankLegend_DrawRom12Ext / BankLegend_EraseRow (by (0x216A) bit 3), Paint_Drum, BankLegend_DrawUser, DisplayHold_DrawHoldHighlight.
 ; (0x2672) = index of the last 8-name page, from T_SoundGroup_MaxMemberIndex_Get; max index <= 8: GroupSoundDisplayHold_DrawMemberNames + GroupSoundDisplayHold_HighlightSelected directly, <= 15: GroupMembers_ShowPageOfTwo, else GroupMembers_ShowPageOfMany. Ends with (0x2673) &= 0xBF.
 GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first at 0xF92D3C
@@ -36337,7 +36337,7 @@ GroupSoundDisplayHold_RepaintFields:   ; entry: named by 1 `ld` operand, first a
 	ld a, (SoundSel_Group:16)                                   ; F92D85  c1 69 21 21
 	ld b, (UI_PartIndex:16)                                   ; F92D89  c1 50 22 22
 	ld w, (SoundSel_Bank:16)                                   ; F92D8D  c1 6a 21 20
-	call T_F41018                                        ; F92D91  1d 18 10 f4
+	call T_SoundGroupName_Lookup                                        ; F92D91  1d 18 10 f4
 	ldw ix, 0x0129                                       ; F92D95  34 29 01
 	ldw hl, 0x00                                         ; F92D98  33 00 00
 	ldw bc, 0x10                                         ; F92D9B  31 10 00
@@ -37238,7 +37238,7 @@ LCD_EraseLayer1_FixedRect:
 	ret                                                  ; F934AE  0e
 ; GroupSoundDisplayHold_DrawMemberNames -- draw the 16-character sound names of members DE..WA of the shown group into their layer-0 slots
 ; Evidence: XIZ = DLPtrTable_F2B510[A folded to 0..7] (prom_b screen-position word arrays); per member IX = position (sub_F92F16), (0x60F01C) = (0x2250),
-; T_F4078C, then T_F41010 = sub_FC1B81 (its not-found fallback is the ROM string "Sound Name *****") with B = (0x2250), and SWI7 0x06 with BC = 0x10.
+; T_F4078C, then T_SoundName_Lookup = SoundName_Lookup (its not-found fallback is the ROM string "Sound Name *****") with B = (0x2250), and SWI7 0x06 with BC = 0x10.
 ; In: A = max member index, L = group, DE = first member, WA = last member. Callers: sub_F92D70, sub_F92E36, sub_F92E76. Twin: GroupCombiDisplayHold_DrawMemberNames.
 GroupSoundDisplayHold_DrawMemberNames:
 	pushw wa                                             ; F934AF  28
@@ -37290,7 +37290,7 @@ GroupSoundDisplayHold_DrawMemberNames:
 	ld W,H                                               ; F9350C  ce 88
 	ld A,L                                               ; F9350E  cf 89
 	ld b, (UI_PartIndex:16)                                   ; F93510  c1 50 22 22
-	call T_F41010                                        ; F93514  1d 10 10 f4
+	call T_SoundName_Lookup                                        ; F93514  1d 10 10 f4
 	ldw bc, 0x10                                         ; F93518  31 10 00
 	xor HL,HL                                            ; F9351B  db d3
 	ld a, 0x06:opc                                          ; F9351D  21 06
@@ -37515,7 +37515,7 @@ Draw_CombinationGroupMenuReMap1:   ; entry: named by 1 `ld` operand, first at 0x
 	ld w, (SoundSel_Bank:16)                                   ; F93699  c1 6a 21 20
 	push E                                               ; F9369D  cd 04
 	push D                                               ; F9369F  cc 04
-	call T_F41030                                        ; F936A1  1d 30 10 f4
+	call T_CombiGroupName_Lookup                                        ; F936A1  1d 30 10 f4
 	pop D                                                ; F936A5  cc 05
 	push D                                               ; F936A7  cc 04
 	ld XIZ,0x00f2b40f                                    ; F936A9  46 0f b4 f2 00
@@ -37591,7 +37591,7 @@ ScreenButtonHandlers_CombinationGroupMenu_Nop2:   ; entry: named by 2 `.long` op
 ; SoftKeyCol4_CombinationGroupMenu -- SOFT KEY column 4 on this screen: switch the group bank (0x216A) to 0x10, only while (0x08EC) bit 1 is set
 ; Evidence: ScreenButtonHandlers_CombinationGroupMenu [0x03] and [0x14]; Dispatch_FF3D39's CONTROL LEGEND gives code 0x03 = SOFT KEY column 4, and
 ;          [c+0x11] is the same column's code re-pressed while already held (PanelButton_InterlockMask32 header; notes/proma-2026-09-25/gen_held_sets.py S1-S4).
-; Body: SoftKeyCol1's with 0x10 and an extra `bit 1,(0x08EC)` gate; sub_FC2155 (the group-name fetch) answers banks 0x10-0x17 with the ROM string
+; Body: SoftKeyCol1's with 0x10 and an extra `bit 1,(0x08EC)` gate; CombiGroupName_Lookup (the group-name fetch) answers banks 0x10-0x17 with the ROM string
 ; "EXT Silent Group" when that same bit is clear.  Also `calr` from SoftKeyCol4_GroupCombiDisplayHold.
 SoftKeyCol4_CombinationGroupMenu:
 	ld a, (SoundSel_Bank:16)                                   ; F93742  c1 6a 21 21
@@ -37902,7 +37902,7 @@ Draw_GroupCombiDisplayHoldGr0up:   ; entry: named by 1 `ld` operand, first at 0x
 	m_and_mi8 MB16, 0x2673, 0x7f                         ; F9393C  c1 73 26 3c 7f
 	ret                                                  ; F93941  0e
 ; GroupCombiDisplayHold_PaintGroupAndNames -- the second painter: group name and numbers, then the member names of the right page and the highlight
-; Evidence: queued at 0xF9390E.  T_Blink_Stop, GroupDisplayHold_ClearNameSlots, B record 0xF2B8F9, T_F41030 (group-name fetch sub_FC2155) + SWI7 0x06 of 16
+; Evidence: queued at 0xF9390E.  T_Blink_Stop, GroupDisplayHold_ClearNameSlots, B record 0xF2B8F9, T_CombiGroupName_Lookup (group-name fetch CombiGroupName_Lookup) + SWI7 0x06 of 16
 ; characters at IX 0x0129, sub_F931A4, sub_F93124, sub_F92A10/sub_F92A40 by (0x216A) bit 3, sub_F9291F, sub_F9315D (DISPLAY HOLD box).  Then (0x2672) = last
 ; page index from T_SoundGroup_MaxMemberIndex_GetToneCopy, and: max index <= 8 -> GroupCombiDisplayHold_DrawMemberNames + _HighlightSelected on page 0;
 ; 9..15 -> GroupCombiDisplayHold_ShowMemberPage_TwoPages; more -> _ManyPages; ends with (0x2673) &= 0xBF.
@@ -37915,7 +37915,7 @@ GroupCombiDisplayHold_PaintGroupAndNames:   ; entry: named by 1 `ld` operand, fi
 	ld a, (SoundSel_Group:16)                                   ; F93957  c1 69 21 21
 	ld b, 0x98:opc                                          ; F9395B  22 98
 	ld w, (SoundSel_Bank:16)                                   ; F9395D  c1 6a 21 20
-	call T_F41030                                        ; F93961  1d 30 10 f4
+	call T_CombiGroupName_Lookup                                        ; F93961  1d 30 10 f4
 	ldw ix, 0x0129                                       ; F93965  34 29 01
 	ldw hl, 0x00                                         ; F93968  33 00 00
 	ldw bc, 0x10                                         ; F9396B  31 10 00
@@ -38565,7 +38565,7 @@ GroupCombiDisplayHold_HighlightSelected:
 	swi 7                                                ; F93ED2  ff
 	ret                                                  ; F93ED3  0e
 ; GroupCombiDisplayHold_DrawMemberNames -- draw the 16-character combination names of members DE..WA of the shown group into their layer-0 slots
-; Evidence: GroupSoundDisplayHold_DrawMemberNames' loop with 0x98 for (0x2250): (0x60F17F) = 0x98, T_F407FC, then T_F4102C = sub_FC1C59 (its not-found
+; Evidence: GroupSoundDisplayHold_DrawMemberNames' loop with 0x98 for (0x2250): (0x60F17F) = 0x98, T_F407FC, then T_CombiName_Lookup = CombiName_Lookup (its not-found
 ; fallback is the ROM string "Combi Name *****") with B = 0x98, and SWI7 0x06 with BC = 0x10.  In: A = max member index, L = group, DE..WA = members.
 GroupCombiDisplayHold_DrawMemberNames:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F93ED4  f1 40 25 00 00
@@ -38617,7 +38617,7 @@ GroupCombiDisplayHold_DrawMemberNames:
 	ld W,H                                               ; F93F2F  ce 88
 	ld A,L                                               ; F93F31  cf 89
 	ld b, 0x98:opc                                          ; F93F33  22 98
-	call T_F4102C                                        ; F93F35  1d 2c 10 f4
+	call T_CombiName_Lookup                                        ; F93F35  1d 2c 10 f4
 	ldw bc, 0x10                                         ; F93F39  31 10 00
 	xor HL,HL                                            ; F93F3C  db d3
 	ld a, 0x06:opc                                          ; F93F3E  21 06
@@ -45535,7 +45535,7 @@ Combination_ReadFromCpu2:   ; entry: prom_b routine directory
 	cp H,0x10                                            ; F98950  ce cf 10
 	jr nz, .LF9897F                                      ; F98953  6e 2a
 .LF98955:
-	ld XBC,.LF80300                                      ; F98955  41 00 03 f8 00
+	ld XBC,PromC_PresetBank_Records                                     ; F98955  41 00 03 f8 00
 	ld (xiz-4), xbc                                      ; F9895A  be fc 61
 	ld WA,(XIZ+0x08)                                     ; F9895D  9e 08 20
 	extz WA                                              ; F98960  d8 12
@@ -53141,7 +53141,7 @@ SoundGroupNaming_DrawGroupCursor:
 	ret                                                  ; F9CEC2  0e
 ; SoundGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of group (0x2696) of the selected bank
 ; Evidence: 5-entry LE32 table at 0xF9CEE6 indexed by (0x2695): USER 1/2 -> UserSoundBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); RE-MAP 1-3 -> copy to 0x5240 + 0x210*(bank-2) + 16*group.
-; Evidence: those RAM bases are exactly where sub_FC2035 (the group-name source behind SoundGroupName_CopyToBuffer) reads re-map group names for codes 0x18/0x19/0x1A (0xFC20F4-0xFC2102).
+; Evidence: those RAM bases are exactly where SoundGroupName_Lookup (the group-name source behind SoundGroupName_CopyToBuffer) reads re-map group names for codes 0x18/0x19/0x1A (0xFC20F4-0xFC2102).
 ; Called at 0xF9CD6E from the HandlerTable23_FA176E slot-8 handler (0xF9CCA6) -- the WRITE key in naming state (0x2694)=1 -- after the (0x7FD6) bit-0 protect test for USER banks.
 SoundGroupNaming_StoreGroupName:
 	link XIZ,0xfffc                                      ; F9CEC3  ee 0c fc ff
@@ -53820,7 +53820,7 @@ CombinationGroupNaming_DrawGroupCursor:
 	inc 8,XSP                                            ; F9D328  ef 60
 	ret                                                  ; F9D32A  0e
 ; CombinationGroupNaming_StoreGroupName -- stores the 16-byte name edited at 0x22F0 as the name of combination group (0x2699) of the selected bank
-; Evidence: (0x2698)=0 (USER 1): CombiBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); 1-3 (RE-MAP 1-3): copy to 0x5890 + 0x210*(sel-1) + 16*group -- the RAM bases sub_FC2155 (behind CombiGroupName_CopyToBuffer) reads for codes 0x18-0x1A.
+; Evidence: (0x2698)=0 (USER 1): CombiBank_RemoteGroupNameAddr + Link_WriteRemoteBlock(0x22F0, 0x10, remote); 1-3 (RE-MAP 1-3): copy to 0x5890 + 0x210*(sel-1) + 16*group -- the RAM bases CombiGroupName_Lookup (behind CombiGroupName_CopyToBuffer) reads for codes 0x18-0x1A.
 ; Called from the HandlerTable23_FA17CF slot-8 handler at 0xF9D1D6 after the (0x7FD6) bit-1 protect test.
 CombinationGroupNaming_StoreGroupName:
 	link XIZ,0xfffc                                      ; F9D32B  ee 0c fc ff
@@ -57983,7 +57983,7 @@ DrumsMap_DrawRowCursor:
 	inc 8,XSP                                            ; F9F5E5  ef 60
 	ret                                                  ; F9F5E7  0e
 ; SoundName_CopyToBuffer -- copies the 16-character name of sound (group, member) of a bank into a caller's buffer
-; Evidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_F407F4 (sub_FAB658) resolves the sound code into (0x60F164)/(0x60F165); T_F41010 (sub_FC1B81, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+; Evidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_F407F4 (sub_FAB658) resolves the sound code into (0x60F164)/(0x60F165); T_SoundName_Lookup (SoundName_Lookup, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
 ; In: (XIZ+8) group, (XIZ+0x0A) member, (XIZ+0x0C) bank code, (XIZ+0x0E) destination.
 SoundName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F5E8  ee 0c fc ff
@@ -58005,7 +58005,7 @@ SoundName_CopyToBuffer:
 	ld a, (0x60f164:24)                                 ; F9F617  c2 64 f1 60 21
 	ld w, (0x60f165:24)                                 ; F9F61C  c2 65 f1 60 20
 	ld b, (0x60f01c:24)                                 ; F9F621  c2 1c f0 60 22
-	call T_F41010                                        ; F9F626  1d 10 10 f4
+	call T_SoundName_Lookup                                        ; F9F626  1d 10 10 f4
 	ld (UI_DrawScratch:16), xiy                                 ; F9F62A  f1 40 26 65
 	pop XIZ                                              ; F9F62E  5e
 	pop XIX                                              ; F9F62F  5c
@@ -58032,7 +58032,7 @@ SoundName_CopyToBuffer:
 	unlk XIZ                                             ; F9F658  ee 0d
 	ret                                                  ; F9F65A  0e
 ; SoundGroupName_CopyToBuffer -- copies the 16-character name of sound group `group` of a bank into a caller's buffer
-; Evidence: A = (XIZ+8) group, W = (XIZ+0x0A) bank code, B = (0x2250); T_F41018 (sub_FC2035, which returns ToneGroupNames 'PIANO..', RAM 0x5240/0x5450/0x5660 for codes 0x18-0x1A, or a link-fetched name) leaves XIY; four longwords copied to (XIZ+0x0C).
+; Evidence: A = (XIZ+8) group, W = (XIZ+0x0A) bank code, B = (0x2250); T_SoundGroupName_Lookup (SoundGroupName_Lookup, which returns ToneGroupNames 'PIANO..', RAM 0x5240/0x5450/0x5660 for codes 0x18-0x1A, or a link-fetched name) leaves XIY; four longwords copied to (XIZ+0x0C).
 SoundGroupName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F65B  ee 0c fc ff
 	pushw hl                                             ; F9F65F  2b
@@ -58048,7 +58048,7 @@ SoundGroupName_CopyToBuffer:
 	ld a, (UI_DrawScratch:16)                                   ; F9F673  c1 40 26 21
 	ld w, (UI_DrawScratch+1:16)                                   ; F9F677  c1 41 26 20
 	ld b, (UI_PartIndex:16)                                   ; F9F67B  c1 50 22 22
-	call T_F41018                                        ; F9F67F  1d 18 10 f4
+	call T_SoundGroupName_Lookup                                        ; F9F67F  1d 18 10 f4
 	ld (UI_DrawScratch:16), xiy                                 ; F9F683  f1 40 26 65
 	pop XIZ                                              ; F9F687  5e
 	pop XIX                                              ; F9F688  5c
@@ -58104,7 +58104,7 @@ SoundGroup_MaxMemberIndex_ByStack:
 	unlk XIZ                                             ; F9F6E9  ee 0d
 	ret                                                  ; F9F6EB  0e
 ; CombiName_CopyToBuffer -- copies the 16-character name of combination (group, member) of a bank into a caller's buffer
-; Evidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_F40804 (sub_FAB779) resolves the code into (0x60F185)/(0x60F186); T_F4102C (sub_FC1C59, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+; Evidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_F40804 (sub_FAB779) resolves the code into (0x60F185)/(0x60F186); T_CombiName_Lookup (CombiName_Lookup, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
 CombiName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F6EC  ee 0c fc ff
 	pushw hl                                             ; F9F6F0  2b
@@ -58124,7 +58124,7 @@ CombiName_CopyToBuffer:
 	ld a, (0x60f185:24)                                 ; F9F718  c2 85 f1 60 21
 	ld w, (0x60f186:24)                                 ; F9F71D  c2 86 f1 60 20
 	ld b, (0x60f17f:24)                                 ; F9F722  c2 7f f1 60 22
-	call T_F4102C                                        ; F9F727  1d 2c 10 f4
+	call T_CombiName_Lookup                                        ; F9F727  1d 2c 10 f4
 	ld (UI_DrawScratch:16), xiy                                 ; F9F72B  f1 40 26 65
 	pop XIZ                                              ; F9F72F  5e
 	pop XIX                                              ; F9F730  5c
@@ -58151,7 +58151,7 @@ CombiName_CopyToBuffer:
 	unlk XIZ                                             ; F9F759  ee 0d
 	ret                                                  ; F9F75B  0e
 ; CombiGroupName_CopyToBuffer -- copies the 16-character name of combination group `group` of a bank into a caller's buffer
-; Evidence: A = group, W = bank code, B = 0x98; T_F41030 (sub_FC2155: RAM 0x5890/0x5AA0/0x5CB0 for codes 0x18-0x1A, else link-fetched with fallback Msg0716_Str_GroupPair_B 'Combi Group Name'/'EXT Silent Group') leaves XIY; four longwords copied to (XIZ+0x0C).
+; Evidence: A = group, W = bank code, B = 0x98; T_CombiGroupName_Lookup (CombiGroupName_Lookup: RAM 0x5890/0x5AA0/0x5CB0 for codes 0x18-0x1A, else link-fetched with fallback Msg0716_Str_GroupPair_B 'Combi Group Name'/'EXT Silent Group') leaves XIY; four longwords copied to (XIZ+0x0C).
 CombiGroupName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F75C  ee 0c fc ff
 	pushw hl                                             ; F9F760  2b
@@ -58168,7 +58168,7 @@ CombiGroupName_CopyToBuffer:
 	ld a, (UI_DrawScratch:16)                                   ; F9F779  c1 40 26 21
 	ld w, (UI_DrawScratch+1:16)                                   ; F9F77D  c1 41 26 20
 	ld b, (UI_DrawScratch+2:16)                                   ; F9F781  c1 42 26 22
-	call T_F41030                                        ; F9F785  1d 30 10 f4
+	call T_CombiGroupName_Lookup                                        ; F9F785  1d 30 10 f4
 	ld (UI_DrawScratch:16), xiy                                 ; F9F789  f1 40 26 65
 	pop XIZ                                              ; F9F78D  5e
 	pop XIX                                              ; F9F78E  5c
@@ -58224,7 +58224,7 @@ CombiGroup_MaxMemberIndex_ByStack:
 	unlk XIZ                                             ; F9F7F3  ee 0d
 	ret                                                  ; F9F7F5  0e
 ; UserSoundBank_RemoteGroupNameAddr -- returns in XIY the far-side (link) address of the 16-byte name of group H of USER 1 (code 8) or USER 2 (code 9), or 0xFFFFFFFF for any other bank
-; Evidence: groups 0-7 at 0xE80010/0xEA0010 + 16*H, groups 8-15 at 0xE8FF90/0xEAFF90 + 16*H (i.e. 0xE90010/0xEB0010 onward); callers hand XIY to Link_ReadRemoteBlock / Link_WriteRemoteBlock as the remote address -- the same 0xE8-0xEB windows sub_FC2035 reads user group names from.
+; Evidence: groups 0-7 at 0xE80010/0xEA0010 + 16*H, groups 8-15 at 0xE8FF90/0xEAFF90 + 16*H (i.e. 0xE90010/0xEB0010 onward); callers hand XIY to Link_ReadRemoteBlock / Link_WriteRemoteBlock as the remote address -- the same 0xE8-0xEB windows SoundGroupName_Lookup reads user group names from.
 ; In: (XIZ+8) bank code, (XIZ+0x0A) group.
 UserSoundBank_RemoteGroupNameAddr:
 	link XIZ,0x0000                                      ; F9F7F6  ee 0c 00 00
@@ -58359,6 +58359,7 @@ UserSoundBank_RemoteSoundAddr:
 ; prom_c (CPU 2) addresses these two routines compute for remote reads over the link.  prom_c is mapped at
 ; 0xF80000 on its own CPU, over the same numbers as this image, so they are NOT prom_a labels; the names
 ; are prom_c's (wsa1/prom_c/data_tables/preset_bank.s).
+	.equ PromC_PresetBank_Header, 0x00F80000	; the 0x300-byte header block: signature, chunk table, the bank names at +0x200 (2026-10-04)
 	.equ PromC_PresetBank_CategoryNames, 0x00F80200	; 16 x 16-byte bank names
 	.equ PromC_PresetBank_Records, 0x00F80300	; the 0x2C0-byte combination records, 0x1600 per bank
 	.equ PromC_PresetBank_Sizeable_Orch, 0x00F8F500	; = PresetBank_Records + 11 * 0x1600
@@ -58830,7 +58831,7 @@ SoundCopy_HandleReceivedSound:
 	unlk XIZ                                             ; F9FDAD  ee 0d
 	ret                                                  ; F9FDAF  0e
 ; SoundCopy_InitRequestHeader -- writes the fixed bytes of the 6-byte request record at 0x2915: +0 = 0x80, +2 = 0x14, +4 = 0x01, +5 = 0x5E
-; Evidence: the two SoundCopy_Request* routines then fill +1/+3 with the sound code and send the record through T_F40ED4; +5 = 0x5E equals SOUND COPY's screen id, which SoundCopy_HandleReceivedSound tests in (0x207C). sub_FC1BB9's name request uses the same 0x80 / +2 sub-command layout with 0x04.
+; Evidence: the two SoundCopy_Request* routines then fill +1/+3 with the sound code and send the record through T_F40ED4; +5 = 0x5E equals SOUND COPY's screen id, which SoundCopy_HandleReceivedSound tests in (0x207C). SoundName_SendQuery's name request uses the same 0x80 / +2 sub-command layout with 0x04.
 SoundCopy_InitRequestHeader:
 	push XIX                                             ; F9FDB0  3c
 	lda xix, (0x2915:16)                                ; F9FDB1  f1 15 29 34
@@ -79473,7 +79474,7 @@ sub_FAABB3:
 	lda xbc, (0x7300:16)                                ; FAABE9  f1 00 73 31
 	push XBC                                             ; FAABED  39
 	pushw 0x02c0                                         ; FAABEE  0b c0 02
-	ld XWA,.LF80300                                      ; FAABF1  40 00 03 f8 00
+	ld XWA,PromC_PresetBank_Records                                     ; FAABF1  40 00 03 f8 00
 	push XWA                                             ; FAABF6  38
 	call T_Link_SendCommandE2                            ; FAABF7  1d f0 0e f4
 	call T_Link_WaitBlockDone                            ; FAABFB  1d 3c 12 f4
@@ -89131,16 +89132,19 @@ PatchList_RecordBytes2B_Ptr:
 ;       0xFE29EB 0xFE2A73 0xFE2B86 0xFE2BC6
 ;   Fourteen of them do queue a link packet first -- nine with `call 0xf40ef0`
 ;   as the immediately preceding call, two with it two calls back in the same
-;   block (0xFB2560, 0xFB275B), three one call deeper inside sub_FC1C77 /
-;   sub_FC2112 / sub_FC21D0.  The fifteenth, 0xFB6FD1, reaches the wait after
+;   block (0xFB2560, 0xFB275B), three one call deeper inside CombiName_RequestRead /
+;   SoundGroupName_RequestRead / CombiGroupName_RequestRead.  The fifteenth, 0xFB6FD1, reaches the wait after
 ;   `call sub_FB2877_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr SysExTx_AppendContHeaderIfCont`,
 ;   and neither of those touches 0xF40EF0 -- so what it is waiting on is NOT
 ;   established.
 ;   And the SOURCE handed to the builder is not always remote flash: the eight
 ;   literal bases the checks pin are 0x00F80300 (prom_a's OWN ROM, at 0xFAABF1
-;   and inside sub_FC1C77), 0x00C00000 (at 0xFC00AE), 0x00E80000, 0x00EC0000
+;   and inside CombiName_RequestRead), 0x00C00000 (at 0xFC00AE), 0x00E80000, 0x00EC0000
 ;   and 0x00EC0300.  The release path is on the LINK BLOCK TRANSFER in general,
 ;   not on remote flash specifically.
+;   CORRECTED 2026-10-04: 0x00F80300 is not prom_a's own ROM.  It is CPU 2's (prom_c's) preset combination records,
+;   PromC_PresetBank_Records -- the address goes to CPU 2 in a link packet.  The sites were spelled .LF80300, a
+;   label of this image at the same number (prom_c/data_tables/preset_bank.s READERS lists them).
 ;
 ; ⚠ WHAT IS NOT ESTABLISHED: what the blocks CONTAIN (the routines that consume
 ; them, 0xFB7649 and 0xFB6FB2, are converted here but unnamed), and why the
@@ -110201,7 +110205,7 @@ sub_FBF10A:
 	ld w, (UI_DrawScratch:16)                                   ; FBF124  c1 40 26 20
 	ld a, (UI_DrawScratch+1:16)                                   ; FBF128  c1 41 26 21
 	ld b, (UI_DrawScratch+2:16)                                   ; FBF12C  c1 42 26 22
-	call T_F4102C                                        ; FBF130  1d 2c 10 f4
+	call T_CombiName_Lookup                                        ; FBF130  1d 2c 10 f4
 	ld (UI_DrawScratch:16), xiy                                 ; FBF134  f1 40 26 65
 	pop XIZ                                              ; FBF138  5e
 	pop XIX                                              ; FBF139  5c
@@ -115317,12 +115321,12 @@ sub_FC1B6C:
 	ld w, (0x60a000:24)                                 ; FC1B77  c2 00 a0 60 20
 	ld a, (0x60a001:24)                                 ; FC1B7C  c2 01 a0 60 21
 ; ---------------------------------------------------------------------
-; sub_FC1B81 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; SoundName_Lookup -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_b T_F41010 (`jp`)
-;          prom_a sub_F90989 (`call` through T_F41010) at 0xF90A56
-;          prom_a InstallPainter_SoundMode (`call` through T_F41010) at 0xF90E62
-;          prom_a sub_F918E5 (`call` through T_F41010) at 0xF9190A
+; Called from: prom_b T_SoundName_Lookup (`jp`)
+;          prom_a sub_F90989 (`call` through T_SoundName_Lookup) at 0xF90A56
+;          prom_a InstallPainter_SoundMode (`call` through T_SoundName_Lookup) at 0xF90E62
+;          prom_a sub_F918E5 (`call` through T_SoundName_Lookup) at 0xF9190A
 ;          ... and 2 more
 ;
 ;     0xFC1BAE loads 0xFC1C49, where the ROM reads:
@@ -115336,7 +115340,10 @@ sub_FC1B6C:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FC1B81:
+; SoundName_Lookup: T_SoundName_Lookup (W = bank, A = number -- the callers pass a part record's +1 & 0x7F and +0): under semaphore 4,
+;   SoundName_SendQuery, then Link_ReceiveEchoedReply for 17 bytes into 0x810.  XIY = 0x810, or Msg0716_Str_SoundName
+;   ('Sound Name *****') when CPU 2 does not answer.
+SoundName_Lookup:
 	push XIX                                             ; FC1B81  3c
 	pushw wa                                             ; FC1B82  28
 	pushw bc                                             ; FC1B83  29
@@ -115347,10 +115354,10 @@ sub_FC1B81:
 	call T_Kernel_SemaWait                               ; FC1B89  1d 90 2d f4
 	pop_a                                                ; FC1B8D  15
 	ld XIY,0x00000800                                    ; FC1B8E  45 00 08 00 00
-	call sub_FC1BB9                                      ; FC1B93  1d b9 1b fc
+	call SoundName_SendQuery                                      ; FC1B93  1d b9 1b fc
 	ldw de, 0x11                                         ; FC1B97  32 11 00
 	ld c, 0x00:opc                                          ; FC1B9A  23 00
-	call sub_FC1BDC                                      ; FC1B9C  1d dc 1b fc
+	call Link_ReceiveEchoedReply                                      ; FC1B9C  1d dc 1b fc
 	ld a, 0x04:opc                                          ; FC1BA0  21 04
 	call T_Kernel_SemaSignal                             ; FC1BA2  1d 88 2d f4
 	cp XIY,0xffffffff                                    ; FC1BA6  ed cf ff ff ff ff
@@ -115363,7 +115370,8 @@ sub_FC1B81:
 	popw wa                                              ; FC1BB6  48
 	pop XIX                                              ; FC1BB7  5c
 	ret                                                  ; FC1BB8  0e
-sub_FC1BB9:
+; SoundName_SendQuery: the 6-byte link request [0x80, W, 0x04, A, 0, 0] built at XIY (0x800) and sent with T_Link_SendBlockIn32ByteChunks.
+SoundName_SendQuery:
 	ld (XIY),0x80                                        ; FC1BB9  b5 00 80
 	ld (XIY+0x01),W                                      ; FC1BBC  bd 01 40
 	ld (XIY+0x02),0x04                                   ; FC1BBF  bd 02 00 04
@@ -115376,13 +115384,16 @@ sub_FC1BB9:
 	call T_Link_SendBlockIn32ByteChunks                                        ; FC1BD5  1d d4 0e f4
 	inc 8,XSP                                            ; FC1BD9  ef 60
 	ret                                                  ; FC1BDB  0e
-sub_FC1BDC:
+; Link_ReceiveEchoedReply: (C = offset, DE = count): reads the reply from Ring60480A (Ring60480A_GetWithTimeout): first the 6 request bytes
+;   echoed back, compared with 0x800.. until they match, then DE bytes into 0x810 + C.  XIY = 0x810, or 0xFFFFFFFF on a
+;   timeout.
+Link_ReceiveEchoedReply:
 	pushw bc                                             ; FC1BDC  29
 	ld XIX,0x00000800                                    ; FC1BDD  44 00 08 00 00
 	ldw hl, 0x06                                         ; FC1BE2  33 06 00
 .LFC1BE5:
 	push C                                               ; FC1BE5  cb 04
-	call sub_FC1C29                                      ; FC1BE7  1d 29 1c fc
+	call Ring60480A_GetWithTimeout                                      ; FC1BE7  1d 29 1c fc
 	pop C                                                ; FC1BEB  cb 05
 	cp XIY,0xffffffff                                    ; FC1BED  ed cf ff ff ff ff
 	jr z, .LFC1C27                                       ; FC1BF3  66 32
@@ -115396,7 +115407,7 @@ sub_FC1BDC:
 	add XIY,XBC                                          ; FC1C07  e9 85
 .LFC1C09:
 	push C                                               ; FC1C09  cb 04
-	call sub_FC1C29                                      ; FC1C0B  1d 29 1c fc
+	call Ring60480A_GetWithTimeout                                      ; FC1C0B  1d 29 1c fc
 	pop C                                                ; FC1C0F  cb 05
 	cp XIY,0xffffffff                                    ; FC1C11  ed cf ff ff ff ff
 	jr z, .LFC1C27                                       ; FC1C17  66 0e
@@ -115408,7 +115419,8 @@ sub_FC1BDC:
 .LFC1C27:
 	popw bc                                              ; FC1C27  49
 	ret                                                  ; FC1C28  0e
-sub_FC1C29:
+; Ring60480A_GetWithTimeout: T_Ring60480A_Get retried up to 0xFFFF times while it returns 0xFFFF; XIY = 0xFFFFFFFF when it never delivers.
+Ring60480A_GetWithTimeout:
 	ldw bc, 0xffff                                       ; FC1C29  31 ff ff
 .LFC1C2C:
 	pushw bc                                             ; FC1C2C  29
@@ -115434,18 +115446,18 @@ sub_FC1C29:
 ; Evidence: 0xFC1BA6 is `cp XIY,0xffffffff / jr NZ,+5 / ld XIY,0x00fc1c49`, so
 ; it is the string used when the real name pointer is the all-ones sentinel.
 ; The length is 16 because the next byte, 0xFC1C59, is a directory target
-; (T_F4102C) and decodes as `push XIX`; the byte at +16 is 0x3C, not NUL.
+; (T_CombiName_Lookup) and decodes as `push XIX`; the byte at +16 is 0x3C, not NUL.
 ; Unknown: which field the caller was trying to name.
 ; ---------------------------------------------------------------------
 Msg0716_Str_SoundName:
 	.byte 0x53, 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x4e, 0x61, 0x6d, 0x65, 0x20, 0x2a, 0x2a, 0x2a, 0x2a, 0x2a  ; FC1C49
 ; ---------------------------------------------------------------------
-; sub_FC1C59 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; CombiName_Lookup -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_b T_F4102C (`jp`)
-;          prom_a sub_F918E5 (`call` through T_F4102C) at 0xF91D01
-;          prom_a GroupCombiDisplayHold_DrawMemberNames (`call` through T_F4102C) at 0xF93F35
-;          prom_a CombiName_CopyToBuffer (`call` through T_F4102C) at 0xF9F727
+; Called from: prom_b T_CombiName_Lookup (`jp`)
+;          prom_a sub_F918E5 (`call` through T_CombiName_Lookup) at 0xF91D01
+;          prom_a GroupCombiDisplayHold_DrawMemberNames (`call` through T_CombiName_Lookup) at 0xF93F35
+;          prom_a CombiName_CopyToBuffer (`call` through T_CombiName_Lookup) at 0xF9F727
 ;          ... and 1 more
 ;
 ;     0xFC1C6C loads 0xFC1CC1, where the ROM reads:
@@ -115459,13 +115471,15 @@ Msg0716_Str_SoundName:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FC1C59:
+; CombiName_Lookup: T_CombiName_Lookup (W = bank, A = number): CombiName_RequestRead, T_Link_WaitBlockDone.  XIY = the 16 bytes at 0x810, or
+;   Msg0716_Str_CombiName ('Combi Name *****') on failure.
+CombiName_Lookup:
 	push XIX                                             ; FC1C59  3c
 	pushw wa                                             ; FC1C5A  28
 	pushw bc                                             ; FC1C5B  29
 	pushw de                                             ; FC1C5C  2a
 	pushw hl                                             ; FC1C5D  2b
-	call sub_FC1C77                                      ; FC1C5E  1d 77 1c fc
+	call CombiName_RequestRead                                      ; FC1C5E  1d 77 1c fc
 	call T_Link_WaitBlockDone                            ; FC1C62  1d 3c 12 f4
 	cp WA,0xffff                                         ; FC1C66  d8 cf ff ff
 	jr nz, .LFC1C71                                      ; FC1C6A  6e 05
@@ -115477,7 +115491,15 @@ sub_FC1C59:
 	popw wa                                              ; FC1C74  48
 	pop XIX                                              ; FC1C75  5c
 	ret                                                  ; FC1C76  0e
-sub_FC1C77:
+; 2026-10-04: CPU 2's addresses, passed in link packets (T_Link_SendCommandE2 reads CPU 2's memory).  They were
+;   spelled .LF80300 and wsa1_prom_a, which are THIS image's labels at the same numbers -- a false cross-reference.
+;   CPU 2's ROM (prom_c, at CPU-2 0xF80000) holds the preset combinations: number k at 0xF80300 + k x 0x2C0 with
+;   its 16-character name at +2 ('Downtown Set', 'ReggaeBass Chord' ...), and their group names at 0xF80200 + k x 16
+;   ('FUSION COMBO1', 'JAZZ COMBO' ...).  Checked against original_ROMs/wsa1_prom_c.ic28.  They are PromC_PresetBank_Records / _Header.
+; CombiName_RequestRead: T_Link_SendCommandE2 for the 16 name bytes of combination A of bank W into 0x810: CPU 2 address = base + A x
+;   0x2C0 + 2, base PromC_PresetBank_Records (W < 8: the preset combinations in CPU 2's ROM), 0xEC0300 (W < 16: CPU 2's
+;   flash, the USER bank), or (0x08E4) + 0x300 (W < 24).  The layout: prom_c/data_tables/preset_bank.s READERS.
+CombiName_RequestRead:
 	cp W,0x08                                            ; FC1C77  c8 cf 08
 	jr c, .LFC1C86                                       ; FC1C7A  67 0a
 	cp W,0x10                                            ; FC1C7C  c8 cf 10
@@ -115485,7 +115507,7 @@ sub_FC1C77:
 	cp W,0x18                                            ; FC1C81  c8 cf 18
 	jr c, .LFC1C94                                       ; FC1C84  67 0e
 .LFC1C86:
-	ld XIX,.LF80300                                      ; FC1C86  44 00 03 f8 00
+	ld XIX,PromC_PresetBank_Records                                     ; FC1C86  44 00 03 f8 00
 	jr .LFC1C9E                                          ; FC1C8B  68 11
 .LFC1C8D:
 	ld XIX,0x00ec0300                                    ; FC1C8D  44 00 03 ec 00
@@ -115767,7 +115789,7 @@ sub_FC1E68:
 	calr sub_FC1F4B                                      ; FC1EC5  1e 83 00
 	pushw bc                                             ; FC1EC8  29
 	ld c, 0x00:opc                                          ; FC1EC9  23 00
-	calr sub_FC1BDC                                          ; FC1ECB  1e 0e fd
+	calr Link_ReceiveEchoedReply                                          ; FC1ECB  1e 0e fd
 	popw bc                                              ; FC1ECE  49
 	cp XIY,0xffffffff                                    ; FC1ECF  ed cf ff ff ff ff
 	jr z, .LFC1F37                                       ; FC1ED5  66 60
@@ -115776,7 +115798,7 @@ sub_FC1E68:
 	ld XIY,0x00000800                                    ; FC1EDD  45 00 08 00 00
 	calr sub_FC1F4B                                      ; FC1EE2  1e 66 00
 	ld c, 0x01:opc                                          ; FC1EE5  23 01
-	calr sub_FC1BDC                                          ; FC1EE7  1e f2 fc
+	calr Link_ReceiveEchoedReply                                          ; FC1EE7  1e f2 fc
 	cp XIY,0xffffffff                                    ; FC1EEA  ed cf ff ff ff ff
 	jr z, .LFC1F37                                       ; FC1EF0  66 45
 	jr .LFC1F2E                                          ; FC1EF2  68 3a
@@ -115788,7 +115810,7 @@ sub_FC1E68:
 	calr sub_FC1F71                                      ; FC1F01  1e 6d 00
 	pushw bc                                             ; FC1F04  29
 	ld c, 0x00:opc                                          ; FC1F05  23 00
-	calr sub_FC1BDC                                          ; FC1F07  1e d2 fc
+	calr Link_ReceiveEchoedReply                                          ; FC1F07  1e d2 fc
 	popw bc                                              ; FC1F0A  49
 	cp XIY,0xffffffff                                    ; FC1F0B  ed cf ff ff ff ff
 	jr z, .LFC1F37                                       ; FC1F11  66 24
@@ -115797,7 +115819,7 @@ sub_FC1E68:
 	ld XIY,0x00000800                                    ; FC1F19  45 00 08 00 00
 	calr sub_FC1F71                                      ; FC1F1E  1e 50 00
 	ld c, 0x01:opc                                          ; FC1F21  23 01
-	calr sub_FC1BDC                                          ; FC1F23  1e b6 fc
+	calr Link_ReceiveEchoedReply                                          ; FC1F23  1e b6 fc
 	cp XIY,0xffffffff                                    ; FC1F26  ed cf ff ff ff ff
 	jr z, .LFC1F37                                       ; FC1F2C  66 09
 .LFC1F2E:
@@ -115934,12 +115956,12 @@ sub_FC200D:
 	normal                                               ; FC2033  01
 	normal                                               ; FC2034  01
 ; ---------------------------------------------------------------------
-; sub_FC2035 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; SoundGroupName_Lookup -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_b T_F41018 (`jp`)
-;          prom_a InstallPainter_SoundGroupMenu (`call` through T_F41018) at 0xF92872
-;          prom_a InstallPainter_GroupSoundDisplayHold (`call` through T_F41018) at 0xF92D91
-;          prom_a SoundGroupName_CopyToBuffer (`call` through T_F41018) at 0xF9F67F
+; Called from: prom_b T_SoundGroupName_Lookup (`jp`)
+;          prom_a InstallPainter_SoundGroupMenu (`call` through T_SoundGroupName_Lookup) at 0xF92872
+;          prom_a InstallPainter_GroupSoundDisplayHold (`call` through T_SoundGroupName_Lookup) at 0xF92D91
+;          prom_a SoundGroupName_CopyToBuffer (`call` through T_SoundGroupName_Lookup) at 0xF9F67F
 ;
 ;     0xFC2070 loads 0xF068B4, where the ROM reads:
 ;        "PIANO           E.PIANO         HARPSI. & MALLET"
@@ -115958,7 +115980,12 @@ sub_FC200D:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FC2035:
+; SoundGroupName_Lookup: T_SoundGroupName_Lookup (W = bank, A = group): XIY = a 16-character group name.  Local tables: ToneGroupNames (W 0, 2-7 and
+;   above 0x2F), +0x100 (W 1), +0x200 (W 0x20-0x27), +0x300 (W 0x28-0x2F); RAM 0x5450 (W 0x19), 0x5660 (W 0x1A),
+;   0x5240 (the other W 0x18-0x1F).  Read from CPU 2 with SoundGroupName_RequestRead: banks 8 and 0x0A-0x0F at
+;   0xE80000 (groups 0-7) / 0xE90000 (8-15), bank 9 at 0xEA0000 / 0xEB0000, banks 0x10-0x17 at (0x08E0) - 0x10
+;   while (0x08EC) bit 0 is set.  A failed read gives Msg0716_Str_GroupPair_B.
+SoundGroupName_Lookup:
 	cp w, 0x01:i3                                          ; FC2035  c8 d9
 	jr z, .LFC2077                                       ; FC2037  66 3e
 	cp W,0x08                                            ; FC2039  c8 cf 08
@@ -115985,13 +116012,13 @@ sub_FC2035:
 	ld XIY,ToneGroupNames                                ; FC2070  45 b4 68 f0 00
 	jr .LFC208A                                          ; FC2075  68 13
 .LFC2077:
-	ld XIY,0x00f069b4                                    ; FC2077  45 b4 69 f0 00
+	ld XIY,ToneGroupNames+0x100                                   ; FC2077  45 b4 69 f0 00
 	jr .LFC208A                                          ; FC207C  68 0c
 .LFC207E:
-	ld XIY,0x00f06ab4                                    ; FC207E  45 b4 6a f0 00
+	ld XIY,ToneGroupNames+0x200                                   ; FC207E  45 b4 6a f0 00
 	jr .LFC208A                                          ; FC2083  68 05
 .LFC2085:
-	ld XIY,0x00f06bb4                                    ; FC2085  45 b4 6b f0 00
+	ld XIY,ToneGroupNames+0x300                                   ; FC2085  45 b4 6b f0 00
 .LFC208A:
 	push XWA                                             ; FC208A  38
 	xor W,W                                              ; FC208B  c8 d0
@@ -116028,7 +116055,7 @@ sub_FC2035:
 	pushw de                                             ; FC20D7  2a
 	pushw hl                                             ; FC20D8  2b
 	ld XIX,XIY                                           ; FC20D9  ed 8c
-	call sub_FC2112                                      ; FC20DB  1d 12 21 fc
+	call SoundGroupName_RequestRead                                      ; FC20DB  1d 12 21 fc
 	call T_Link_WaitBlockDone                            ; FC20DF  1d 3c 12 f4
 	cp WA,0xffff                                         ; FC20E3  d8 cf ff ff
 	jr nz, .LFC20EE                                      ; FC20E7  6e 05
@@ -116056,7 +116083,8 @@ sub_FC2035:
 	add XIY,XWA                                          ; FC210E  e8 85
 	pop XWA                                              ; FC2110  58
 	ret                                                  ; FC2111  0e
-sub_FC2112:
+; SoundGroupName_RequestRead: T_Link_SendCommandE2 for the 16 bytes at CPU-2 XIX + 0x10 + A x 16 into 0x810.
+SoundGroupName_RequestRead:
 	add XIX,0x00000010                                   ; FC2112  ec c8 10 00 00 00
 	xor W,W                                              ; FC2118  c8 d0
 	mul WA,0x0010                                        ; FC211A  d8 08 10 00
@@ -116074,19 +116102,19 @@ sub_FC2112:
 ; Two 16-byte strings, no terminators.  Evidence that they are two and not one:
 ; 0xFC20C3 loads 0x00FC2145 -- the SECOND of them -- as the fallback when bit 0
 ; of (0x08EC) is clear, so 0xFC2145 is an address the code forms.  0xFC2155 is
-; a directory target (T_F41030) and decodes as `cp W,0x08`.
+; a directory target (T_CombiGroupName_Lookup) and decodes as `cp W,0x08`.
 ; Unknown: what "EXT" abbreviates.
 ; ---------------------------------------------------------------------
 Msg0716_Str_GroupPair_A:
 	.byte 0x43, 0x6f, 0x6d, 0x62, 0x69, 0x20, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x20, 0x4e, 0x61, 0x6d, 0x65  ; FC2135
 	.byte 0x45, 0x58, 0x54, 0x20, 0x53, 0x69, 0x6c, 0x65, 0x6e, 0x74, 0x20, 0x47, 0x72, 0x6f, 0x75, 0x70  ; FC2145
 ; ---------------------------------------------------------------------
-; sub_FC2155 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; CombiGroupName_Lookup -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_b T_F41030 (`jp`)
-;          prom_a InstallPainter_CombinationGroupMenu (`call` through T_F41030) at 0xF936A1
-;          prom_a InstallPainter_GroupCombiDisplayHold (`call` through T_F41030) at 0xF93961
-;          prom_a CombiGroupName_CopyToBuffer (`call` through T_F41030) at 0xF9F785
+; Called from: prom_b T_CombiGroupName_Lookup (`jp`)
+;          prom_a InstallPainter_CombinationGroupMenu (`call` through T_CombiGroupName_Lookup) at 0xF936A1
+;          prom_a InstallPainter_GroupCombiDisplayHold (`call` through T_CombiGroupName_Lookup) at 0xF93961
+;          prom_a CombiGroupName_CopyToBuffer (`call` through T_CombiGroupName_Lookup) at 0xF9F785
 ;
 ;     0xFC2187 loads 0xFC2203, where the ROM reads:
 ;        "EXT Silent Group"
@@ -116101,7 +116129,12 @@ Msg0716_Str_GroupPair_A:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FC2155:
+; CombiGroupName_Lookup: T_CombiGroupName_Lookup (W = bank, A = group -- preset_bank.s calls it the bank name): read from CPU 2 with
+;   CombiGroupName_RequestRead -- PromC_PresetBank_Header (W < 8 and W
+;   above 0x1F: 0xF80200 + A x 16, 'FUSION COMBO1' ...), 0xEC0000 (W 8-15), (0x08E4) (W 0x10-0x17 while (0x08EC)
+;   bit 1 is set); RAM 0x5AA0 (W 0x19), 0x5CB0 (W 0x1A), 0x5890 (the other W 0x18-0x1F).  Failure:
+;   Msg0716_Str_GroupPair_B.
+CombiGroupName_Lookup:
 	cp W,0x08                                            ; FC2155  c8 cf 08
 	jr c, .LFC2173                                       ; FC2158  67 19
 	cp W,0x10                                            ; FC215A  c8 cf 10
@@ -116115,7 +116148,7 @@ sub_FC2155:
 	cp W,0x20                                            ; FC216E  c8 cf 20
 	jr c, .LFC21B2                                       ; FC2171  67 3f
 .LFC2173:
-	ld XIY,wsa1_prom_a                                   ; FC2173  45 00 00 f8 00
+	ld XIY,PromC_PresetBank_Header                                   ; FC2173  45 00 00 f8 00
 	jr .LFC2192                                          ; FC2178  68 18
 .LFC217A:
 	ld XIY,0x00ec0000                                    ; FC217A  45 00 00 ec 00
@@ -116134,7 +116167,7 @@ sub_FC2155:
 	pushw de                                             ; FC2195  2a
 	pushw hl                                             ; FC2196  2b
 	ld XIX,XIY                                           ; FC2197  ed 8c
-	call sub_FC21D0                                      ; FC2199  1d d0 21 fc
+	call CombiGroupName_RequestRead                                      ; FC2199  1d d0 21 fc
 	call T_Link_WaitBlockDone                            ; FC219D  1d 3c 12 f4
 	cp WA,0xffff                                         ; FC21A1  d8 cf ff ff
 	jr nz, .LFC21AC                                      ; FC21A5  6e 05
@@ -116162,7 +116195,8 @@ sub_FC2155:
 	add XIY,XWA                                          ; FC21CC  e8 85
 	pop XWA                                              ; FC21CE  58
 	ret                                                  ; FC21CF  0e
-sub_FC21D0:
+; CombiGroupName_RequestRead: T_Link_SendCommandE2 for the 16 bytes at CPU-2 XIX + 0x200 + A x 16 into 0x810.
+CombiGroupName_RequestRead:
 	add XIX,0x00000200                                   ; FC21D0  ec c8 00 02 00 00
 	xor W,W                                              ; FC21D6  c8 d0
 	mul WA,0x0010                                        ; FC21D8  d8 08 10 00

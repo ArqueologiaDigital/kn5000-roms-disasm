@@ -76,8 +76,8 @@
 ;                            indexed by the bank alone: 16 names for 16 banks of 8
 ;     Combination_ReadFromCpu2 (0xF98927)  0xF80300 + 0x2C0*index, 0x2C0 bytes -> CPU 1 RAM 0x7620
 ;     sub_FAABB3 (0xFAABB3)  0xF80300 itself (combination 0), 0x2C0 bytes -> CPU 1 RAM 0x7300
-;     sub_FC1C77 (0xFC1C77)  0xF80300 + 0x2C0*index + 2, 16 bytes -> 0x810: the NAME alone
-;     sub_FC21D0 (0xFC21D0)  base 0xF80000 (loaded by sub_FC2155) + 0x200 + 0x10*bank,
+;     CombiName_RequestRead (0xFC1C77)  0xF80300 + 0x2C0*index + 2, 16 bytes -> 0x810: the NAME alone
+;     CombiGroupName_RequestRead (0xFC21D0)  base 0xF80000 (loaded by CombiGroupName_Lookup) + 0x200 + 0x10*bank,
 ;                            16 bytes -> 0x810: one bank name
 ;   So the record stride 0x2C0 = 704 and the bank stride 0x1600 = 8 x 704 are the
 ;   READERS' constants, not only the data's; CombiBank_RemoteCombiAddr's three branches (0xF80300,
@@ -130,8 +130,8 @@ PresetBank:
 ; The COMBINATION block header.  Its first 16 bytes equal the signature the SysEx
 ; reference prints for bulk-dump block COMBINATION 1 (ADR 50 00 00), read from a
 ; real instrument's dump (wsa1/docs/system-exclusive-reference/tbl-signatures.tex).
-; Its fields are not read as fields: sub_FC2155 (0xFC2155) loads 0xF80000 as the
-; block base and sub_FC21D0 adds the constant 0x200, and the combination readers
+; Its fields are not read as fields: CombiGroupName_Lookup (0xFC2155) loads 0xF80000 as the
+; block base and CombiGroupName_RequestRead adds the constant 0x200, and the combination readers
 ; carry 0x300 and 0x2C0 as constants too -- the same values directory entries 1 and
 ; 2 and the stride word below hold.
 PresetBank_Header:
@@ -158,7 +158,7 @@ PresetBank_HeaderPad:
 ; PresetBank_CategoryNames -- 0xF80200..0xF802FF  (16 x 16 bytes)
 ; ----------------------------------------------------------------------------
 ; Bank names, 16 bytes each, one per bank of eight combinations.  Read by prom_a
-; CombiBank_RemoteGroupNameAddr (0xF9F910) as 0xF80200 + 0x10*bank and by sub_FC21D0 (0xFC21D0) as
+; CombiBank_RemoteGroupNameAddr (0xF9F910) as 0xF80200 + 0x10*bank and by CombiGroupName_RequestRead (0xFC21D0) as
 ; 0xF80000 + 0x200 + 0x10*bank, remote-read over the link (see READERS above).
 PresetBank_CategoryNames:
 	.ascii	"FUSION COMBO1   "	; [ 0]
@@ -9569,7 +9569,7 @@ PresetBank_Avant_gardeMusic:
 ; ............................................................................
 ; record 128 -- 0xF96300  '    Clear       '   (the template; not one of the 128 the header counts)
 ; No bank name and outside CombiBank_RemoteCombiAddr's 16 x 8 (bank 16 would be 0xF80300 + 0x1600*16,
-; this record's address); Combination_ReadFromCpu2 and sub_FC1C77 index linearly and reach it as index 128.
+; this record's address); Combination_ReadFromCpu2 and CombiName_RequestRead index linearly and reach it as index 128.
 ; No caller passing 128 has been pinned.  The only record whose eight A blocks all set
 ; LOCAL CONTROL (payload +0x0D bit 5, see WHAT IT IS above).
 PresetBank_Clear:

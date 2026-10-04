@@ -1490,13 +1490,13 @@
 	.set	sub_FC18AA, 0xFC18AA
 	.set	Msg0716_PostSysEx50_87, 0xFC18B2
 	.set	T_F40FD8_Nop, 0xFC19DC
-	.set	sub_FC1B81, 0xFC1B81
-	.set	sub_FC1C59, 0xFC1C59
+	.set	SoundName_Lookup, 0xFC1B81
+	.set	CombiName_Lookup, 0xFC1C59
 	.set	T_F40FC8_Nop, 0xFC1CD1
 	.set	sub_FC1D92, 0xFC1D92
 	.set	sub_FC1E68, 0xFC1E68
-	.set	sub_FC2035, 0xFC2035
-	.set	sub_FC2155, 0xFC2155
+	.set	SoundGroupName_Lookup, 0xFC2035
+	.set	CombiGroupName_Lookup, 0xFC2155
 	.set	sub_FC2213, 0xFC2213
 	.set	SoundGroup_MaxMemberIndex_Get, 0xFC2222
 	.set	SoundGroup_MaxMemberIndex_GetToneCopy, 0xFC2282
@@ -18039,7 +18039,7 @@ SoundEditCopy_RepaintField_Return:
 ; sub_F09C63
 ; Called from: in-module: 0xF09C03 0xF09C2B
 ; Touches: (0x2540) (0x27B0) (0x27B1) (0x27B5) (0x27F5)
-; Calls:   T_F41010
+; Calls:   T_SoundName_Lookup
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF09C63 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -18051,7 +18051,7 @@ sub_F09C63:
 	ld	h, (ModelingPage_Fields+11:16)	; F09C69  ld H,(0x27b1)
 	ld	a, h	; F09C6D  ld A,H
 	ld	b, 0:opc	; F09C6F  ld B,0x00
-	call	T_F41010	; F09C71  call 0xf41010
+	call	T_SoundName_Lookup	; F09C71  call 0xf41010
 	ld	a, (xiy+16)	; F09C75  ld A,(XIY+0x10)
 	and	a, 192	; F09C78  and A,0xc0
 	cp	a, 64	; F09C7B  cp A,0x40
@@ -89616,17 +89616,25 @@ T_F41008:	jp sub_FC2526  ; -> prom_a 0x42526   x7
 ; Evidence: slot 0xF4100C is `jp 0xFC188F`; prom_a 0xFC188F carries the label
 ;           Msg0716_PostSysEx50_A3 (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_PostSysEx50_A3:	jp Msg0716_PostSysEx50_A3  ; F4100C (was T_F4100C) -> prom_a 0x4188F   x1
-T_F41010:	jp sub_FC1B81  ; -> prom_a 0x41B81   x9
+; Evidence: slot 0xF41010 is `jp 0xFC1B81`; prom_a 0xFC1B81 carries the label
+;           SoundName_Lookup (graded CONTENT).  DERIVATIVE name.
+T_SoundName_Lookup:	jp SoundName_Lookup  ; F41010 (was T_F41010) -> prom_a 0x41B81   x9
 T_F41014:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
-T_F41018:	jp sub_FC2035  ; -> prom_a 0x42035   x3
+; Evidence: slot 0xF41018 is `jp 0xFC2035`; prom_a 0xFC2035 carries the label
+;           SoundGroupName_Lookup (graded CONTENT).  DERIVATIVE name.
+T_SoundGroupName_Lookup:	jp SoundGroupName_Lookup  ; F41018 (was T_F41018) -> prom_a 0x42035   x3
 ; Evidence: slot 0xF4101C is `jp 0xFC2222`; prom_a 0xFC2222 carries the label
 ;           SoundGroup_MaxMemberIndex_Get (graded CONTENT).  DERIVATIVE name.
 T_SoundGroup_MaxMemberIndex_Get:	jp SoundGroup_MaxMemberIndex_Get  ; F4101C (was T_F4101C) -> prom_a 0x42222   x14
 T_F41020:	jp Msg0716_PostSysEx50_87  ; -> prom_a 0x418B2   x3
 T_F41024:	jp sub_FC239B  ; -> prom_a 0x4239B   x2
 T_F41028:	jp sub_FC24E3  ; -> prom_a 0x424E3   x2
-T_F4102C:	jp sub_FC1C59  ; -> prom_a 0x41C59   x4
-T_F41030:	jp sub_FC2155  ; -> prom_a 0x42155   x3
+; Evidence: slot 0xF4102C is `jp 0xFC1C59`; prom_a 0xFC1C59 carries the label
+;           CombiName_Lookup (graded CONTENT).  DERIVATIVE name.
+T_CombiName_Lookup:	jp CombiName_Lookup  ; F4102C (was T_F4102C) -> prom_a 0x41C59   x4
+; Evidence: slot 0xF41030 is `jp 0xFC2155`; prom_a 0xFC2155 carries the label
+;           CombiGroupName_Lookup (graded CONTENT).  DERIVATIVE name.
+T_CombiGroupName_Lookup:	jp CombiGroupName_Lookup  ; F41030 (was T_F41030) -> prom_a 0x42155   x3
 ; Evidence: slot 0xF41034 is `jp 0xFC2282`; prom_a 0xFC2282 carries the label
 ;           SoundGroup_MaxMemberIndex_GetToneCopy (graded CONTENT).  DERIVATIVE name.
 T_SoundGroup_MaxMemberIndex_GetToneCopy:	jp SoundGroup_MaxMemberIndex_GetToneCopy  ; F41034 (was T_F41034) -> prom_a 0x42282   x7
@@ -117528,7 +117536,7 @@ sub_F556D2:		; <- T_F42C9C
 ; sub_F556EA
 ; Called from: T_F42CA0 (0xF42CA0, x5)
 ; Touches: (0x2640) (0x2641) (0x2642)
-; Calls:   0xF5533C T_F41010
+; Calls:   0xF5533C T_SoundName_Lookup
 ; Evidence: thunk slot T_F42CA0 holds `jp 0x00F556EA`, and 0xF556EA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -117557,7 +117565,7 @@ sub_F556EA:		; <- T_F42CA0
 	ld	w, (UI_DrawScratch:16)	; F55713  ld W,(0x2640)
 	ld	a, (UI_DrawScratch+1:16)	; F55717  ld A,(0x2641)
 	ld	b, (UI_DrawScratch+2:16)	; F5571B  ld B,(0x2642)
-	call	T_F41010	; F5571F  call 0xf41010
+	call	T_SoundName_Lookup	; F5571F  call 0xf41010
 	ld	(UI_DrawScratch:16), xiy	; F55723  ld (0x2640),XIY
 	pop	xiz	; F55727  pop XIZ
 	pop	xix	; F55728  pop XIX
@@ -132049,7 +132057,7 @@ sub_F5CFA4_Join6:
 ; Called from: in-module: 0xF5D194 0xF5D30E
 ; Touches: (0x207A) (0x2540) (0x27A6) (0x27A7) (0x27A8) (0x27F5) (0x27F6)  |
 ;          0xF01800 0xF01873 0xF01E72 0xF01F96 0xF057C0 0xF057E3 +16 more
-; Calls:   T_F41010 T_DisplayList_Run T_DisplayListB_Run sub_F5D3C6 sub_F5D199 T_DLB_Handler_StringTable
+; Calls:   T_SoundName_Lookup T_DisplayList_Run T_DisplayListB_Run sub_F5D3C6 sub_F5D199 T_DLB_Handler_StringTable
 ;          T_DisplayListB_RunOne
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D199 is an instruction boundary.
@@ -132084,7 +132092,7 @@ sub_F5D199_Skip2:
 	ld	a, h	; F5D1D4  ld A,H
 sub_F5D199_Join:
 	ld	b, 0:opc	; F5D1D6  ld B,0x00
-	call	T_F41010	; F5D1D8  call 0xf41010
+	call	T_SoundName_Lookup	; F5D1D8  call 0xf41010
 	ldw	bc, 16	; F5D1DC  ld BC,0x0010
 	xor	hl, hl	; F5D1DF  xor HL,HL
 	ldw	ix, 5889	; F5D1E1  ld IX,0x1701
@@ -162198,7 +162206,7 @@ sub_F6D710:
 ; sub_F6D72F
 ; Called from: in-module: 0xF6D888
 ; Touches: (0x12B5) (0x12B6) (0x12B7)
-; Calls:   T_F40790 T_F41010
+; Calls:   T_F40790 T_SoundName_Lookup
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6D72F is an instruction boundary of this
@@ -162239,7 +162247,7 @@ sub_F6D72F_Skip:
 	ld	b, (4789:16)	; F6D78D  ld B,(0x12b5)
 	ld	a, (4791:16)	; F6D791  ld A,(0x12b7)
 	ld	w, (4790:16)	; F6D795  ld W,(0x12b6)
-	call	T_F41010	; F6D799  call 0xf41010
+	call	T_SoundName_Lookup	; F6D799  call 0xf41010
 	ld	xix, MsgLine_Text+14	; F6D79D  ld XIX,0x00000ff2
 	m_cp_mi8 MB16, 0x12b5, 0x40	; F6D7A2  cp (0x12b5),0x40
 	jr	nz, sub_F6D72F_Skip2	; F6D7A7  jr NZ,0xf6d7c1

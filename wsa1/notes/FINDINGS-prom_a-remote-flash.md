@@ -121,9 +121,9 @@ converted code, because the source rebuilds the ROM byte-identically — finds
 | `0xFB6FD1` | `calr SysExTx_AppendContHeaderIfCont` | **no builder anywhere on the path** |
 | `0xFC00BE` | `call 0xf40ef0` | src `0x00C00000`, count `0x34` |
 | `0xFC0188` | `call 0xf40ef0` | src `0x00C00000 + (0x0878)` |
-| `0xFC1C62` | `call sub_FC1C77` | builder at `0xFC1CB6`; src `0x00F80300`, `0x00EC0300` or `(0x08E4)+0x300` |
-| `0xFC20DF` | `call sub_FC2112` | builder at `0xFC212A` |
-| `0xFC219D` | `call sub_FC21D0` | builder at `0xFC21E8` |
+| `0xFC1C62` | `call CombiName_RequestRead` | builder at `0xFC1CB6`; src `0x00F80300`, `0x00EC0300` or `(0x08E4)+0x300` |
+| `0xFC20DF` | `call SoundGroupName_RequestRead` | builder at `0xFC212A` |
+| `0xFC219D` | `call CombiGroupName_RequestRead` | builder at `0xFC21E8` |
 | `0xFE29EB` | `call 0xf40ef0` | src `0x00E80000`, count `0x2C00` |
 | `0xFE2A73` | `call 0xf40ef0` | src `0x00EC0000`, count `0x2C00` |
 | `0xFE2B86` | `call 0xf40ef0` | src `XBC`, count `0x2C00` |
@@ -144,6 +144,12 @@ the gap is **open again**, and the observation the driver lane needs is that the
 release only ever runs *after a transfer was queued*, so an emulator whose
 transfer never completes and whose deadline never expires will hold the line low
 regardless of which caller ran.
+
+**Corrected 2026-10-04.** `0x00F80300` is not prom_a's own ROM. It is an address in CPU 2's space, sent in a
+link packet: CPU 2's ROM (prom_c, at CPU-2 0xF80000) holds the preset combinations there
+(`PromC_PresetBank_Records`; `prom_c/data_tables/preset_bank.s`, READERS). The table row for 0xFAABFB above
+makes the same mistake. The sites at 0xF98955, 0xFAABF1 and 0xFC1C86 were spelled `.LF80300`, a prom_a
+label with the same number, and now read `PromC_PresetBank_Records`.
 
 > ⚠ **The count moved again on 2026-08-25**, in the same round, when the boot
 > block and the two UI screen blocks were converted: **21** call sites, not 15.

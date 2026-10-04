@@ -296,3 +296,24 @@ Nothing in this document was measured from the listing. The listing was generate
 from `notes/prom_a_block_headers.txt` by `notes/gen_prom_a_block.py`, which takes
 every instruction from `prom_a/roundtrip.py` and therefore cannot break the byte
 gate; the numbers come from the two check scripts, which read the ROMs.
+
+## Name lookups across the link (2026-10-04)
+
+Four directory slots in 0xFC1B81-0xFC21E8 return a pointer (XIY) to a 16-character name:
+
+| slot | routine | how it gets the name | default when CPU 2 does not answer |
+|---|---|---|---|
+| `T_SoundName_Lookup` | `SoundName_Lookup` | asks CPU 2 with the 6-byte packet [0x80, bank, 0x04, number, 0, 0] (`SoundName_SendQuery`). The reply (`Link_ReceiveEchoedReply`) is the six bytes echoed back, then 17 name bytes. | "Sound Name *****" |
+| `T_CombiName_Lookup` | `CombiName_Lookup` | a 0xE2 remote read (`CombiName_RequestRead`) of record + 2 | "Combi Name *****" |
+| `T_SoundGroupName_Lookup` | `SoundGroupName_Lookup` | `ToneGroupNames` in prom_b for the internal banks; RAM or a remote read for the others | `Msg0716_Str_GroupPair_B` |
+| `T_CombiGroupName_Lookup` | `CombiGroupName_Lookup` | a remote read of the bank-name block (`CombiGroupName_RequestRead`) | `Msg0716_Str_GroupPair_B` |
+
+The remote addresses are CPU 2's. The preset combinations sit in CPU 2's ROM at `PromC_PresetBank_Records`
+(0xF80300, stride 0x2C0), with the bank names at `PromC_PresetBank_Header` + 0x200. The USER bank is at
+0xEC0300 in CPU 2's flash. The record layout is in `prom_c/data_tables/preset_bank.s`. The two prom_a sites
+that spelled 0xF80300 and 0xF80000 as this image's own labels now use those equates.
+
+`Ring60480A_GetWithTimeout` (`T_Ring60480A_Get`, up to 0xFFFF tries) is the receive side.
+`Link_ReceiveEchoedReply` waits for the request's six bytes to come back before it copies the payload into
+0x810. The 0x81 / 0x85 query in 0xFC1E68 (two 6-bit values per slot, drawn by `Paint_SoundModeFields` as
+13-character labels) is not named yet. What its two parameters are is not established.

@@ -4353,6 +4353,20 @@ RENAMES = {
     "T_F42F54": "T_DspEffect_OnParamEvent",
     "T_F434F0": "T_CreatorSelectController_OpenOnEvent",
     "T_F434F4": "T_CreatorSelectController_OnPartEvent",
+    "sub_FC1B81": "SoundName_Lookup",
+    "sub_FC1BB9": "SoundName_SendQuery",
+    "sub_FC1BDC": "Link_ReceiveEchoedReply",
+    "sub_FC1C29": "Ring60480A_GetWithTimeout",
+    "sub_FC1C59": "CombiName_Lookup",
+    "sub_FC1C77": "CombiName_RequestRead",
+    "sub_FC2035": "SoundGroupName_Lookup",
+    "sub_FC2112": "SoundGroupName_RequestRead",
+    "sub_FC2155": "CombiGroupName_Lookup",
+    "sub_FC21D0": "CombiGroupName_RequestRead",
+    "T_F41010": "T_SoundName_Lookup",
+    "T_F41018": "T_SoundGroupName_Lookup",
+    "T_F4102C": "T_CombiName_Lookup",
+    "T_F41030": "T_CombiGroupName_Lookup",
 }
 
 

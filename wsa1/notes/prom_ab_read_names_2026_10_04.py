@@ -2284,6 +2284,42 @@ ROWS = [
     ("F53DF4", "Drawbar_ReloadIfMarked",
      "T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls sub_F540C3 (sends the 6-byte link\n"
      "message 81 00 10 01 01 A3)."),
+    # sound / combination / group name lookups over the CPU 1 - CPU 2 link
+    ("FC1B81", "SoundName_Lookup",
+     "T_SoundName_Lookup (W = bank, A = number -- the callers pass a part record's +1 & 0x7F and +0): under semaphore 4,\n"
+     "SoundName_SendQuery, then Link_ReceiveEchoedReply for 17 bytes into 0x810.  XIY = 0x810, or Msg0716_Str_SoundName\n"
+     "('Sound Name *****') when CPU 2 does not answer."),
+    ("FC1BB9", "SoundName_SendQuery",
+     "the 6-byte link request [0x80, W, 0x04, A, 0, 0] built at XIY (0x800) and sent with T_Link_SendBlockIn32ByteChunks."),
+    ("FC1BDC", "Link_ReceiveEchoedReply",
+     "(C = offset, DE = count): reads the reply from Ring60480A (Ring60480A_GetWithTimeout): first the 6 request bytes\n"
+     "echoed back, compared with 0x800.. until they match, then DE bytes into 0x810 + C.  XIY = 0x810, or 0xFFFFFFFF on a\n"
+     "timeout."),
+    ("FC1C29", "Ring60480A_GetWithTimeout",
+     "T_Ring60480A_Get retried up to 0xFFFF times while it returns 0xFFFF; XIY = 0xFFFFFFFF when it never delivers."),
+    ("FC1C59", "CombiName_Lookup",
+     "T_CombiName_Lookup (W = bank, A = number): CombiName_RequestRead, T_Link_WaitBlockDone.  XIY = the 16 bytes at 0x810, or\n"
+     "Msg0716_Str_CombiName ('Combi Name *****') on failure."),
+    ("FC1C77", "CombiName_RequestRead",
+     "T_Link_SendCommandE2 for the 16 name bytes of combination A of bank W into 0x810: CPU 2 address = base + A x\n"
+     "0x2C0 + 2, base PromC_PresetBank_Records (W < 8: the preset combinations in CPU 2's ROM), 0xEC0300 (W < 16: CPU 2's\n"
+     "flash, the USER bank), or (0x08E4) + 0x300 (W < 24).  The layout: prom_c/data_tables/preset_bank.s READERS."),
+    ("FC2035", "SoundGroupName_Lookup",
+     "T_SoundGroupName_Lookup (W = bank, A = group): XIY = a 16-character group name.  Local tables: ToneGroupNames (W 0, 2-7 and\n"
+     "above 0x2F), +0x100 (W 1), +0x200 (W 0x20-0x27), +0x300 (W 0x28-0x2F); RAM 0x5450 (W 0x19), 0x5660 (W 0x1A),\n"
+     "0x5240 (the other W 0x18-0x1F).  Read from CPU 2 with SoundGroupName_RequestRead: banks 8 and 0x0A-0x0F at\n"
+     "0xE80000 (groups 0-7) / 0xE90000 (8-15), bank 9 at 0xEA0000 / 0xEB0000, banks 0x10-0x17 at (0x08E0) - 0x10\n"
+     "while (0x08EC) bit 0 is set.  A failed read gives Msg0716_Str_GroupPair_B."),
+    ("FC2112", "SoundGroupName_RequestRead",
+     "T_Link_SendCommandE2 for the 16 bytes at CPU-2 XIX + 0x10 + A x 16 into 0x810."),
+    ("FC2155", "CombiGroupName_Lookup",
+     "T_CombiGroupName_Lookup (W = bank, A = group -- preset_bank.s calls it the bank name): read from CPU 2 with\n"
+     "CombiGroupName_RequestRead -- PromC_PresetBank_Header (W < 8 and W\n"
+     "above 0x1F: 0xF80200 + A x 16, 'FUSION COMBO1' ...), 0xEC0000 (W 8-15), (0x08E4) (W 0x10-0x17 while (0x08EC)\n"
+     "bit 1 is set); RAM 0x5AA0 (W 0x19), 0x5CB0 (W 0x1A), 0x5890 (the other W 0x18-0x1F).  Failure:\n"
+     "Msg0716_Str_GroupPair_B."),
+    ("FC21D0", "CombiGroupName_RequestRead",
+     "T_Link_SendCommandE2 for the 16 bytes at CPU-2 XIX + 0x200 + A x 16 into 0x810."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

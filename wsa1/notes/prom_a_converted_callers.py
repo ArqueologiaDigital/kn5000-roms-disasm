@@ -121,9 +121,9 @@ EXPECT = [
     (0xFB6FD1, "calr SysExTx_AppendContHeaderIfCont"),
     (0xFC00BE, "call 0xf40ef0"),
     (0xFC0188, "call 0xf40ef0"),
-    (0xFC1C62, "call sub_FC1C77"),
-    (0xFC20DF, "call sub_FC2112"),
-    (0xFC219D, "call sub_FC21D0"),
+    (0xFC1C62, "call CombiName_RequestRead"),
+    (0xFC20DF, "call SoundGroupName_RequestRead"),
+    (0xFC219D, "call CombiGroupName_RequestRead"),
     (0xFE29EB, "call 0xf40ef0"),
     (0xFE2A73, "call 0xf40ef0"),
     (0xFE2B86, "call 0xf40ef0"),
@@ -132,9 +132,9 @@ EXPECT = [
 
 # Which of the four intermediate routines reaches the packet builder itself.
 INTERMEDIATE = {
-    "sub_FC1C77": 0xFC1CB6,
-    "sub_FC2112": 0xFC212A,
-    "sub_FC21D0": 0xFC21E8,
+    "CombiName_RequestRead": 0xFC1CB6,
+    "SoundGroupName_RequestRead": 0xFC212A,
+    "CombiGroupName_RequestRead": 0xFC21E8,
 }
 NO_BUILD = "SysExTx_AppendContHeaderIfCont"   # this one does NOT reach 0xF40EF0
 
@@ -228,7 +228,7 @@ def checks():
         0xFC00AE: 0x00C00000,   # the 0xC00000 device window
         0xFE29E1: 0x00E80000,
         0xFE2A69: 0x00EC0000,
-        0xFC1C86: 0x00F80300,   # inside sub_FC1C77
+        0xFC1C86: 0x00F80300,   # inside CombiName_RequestRead
         0xFC1C8D: 0x00EC0300,
         # the four boot-block sites, added 2026-08-25.  NONE of these is flash.
         0xF8289B: 0x00C00000,   # ExtBoard_Identify: the expansion-board window
