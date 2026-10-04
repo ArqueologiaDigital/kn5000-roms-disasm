@@ -165693,7 +165693,7 @@ Smf_ReadFile_Skip3:
 	jrl	nz, Smf_ReadFile_Skip18	; F6F62C  jrl NZ,0xf6f7d8
 	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6F62F  cp (0x107a),0x0001
 	jr	z, Smf_ReadFile_Skip4	; F6F635  jr Z,0xf6f655
-	calr	sub_F71B82	; F6F637  calr 0xf71b82
+	calr	Smf_ReadMultiTrack	; F6F637  calr 0xf71b82
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6F63A  cp (0x1238),0x00
 	jrl	nz, Smf_ReadFile_Join2	; F6F63F  jrl NZ,0xf6f780
 	m_cp_mi8 MB16, 0x1010, 0x00	; F6F642  cp (0x1010),0x00
@@ -165856,7 +165856,7 @@ Smf_ReadFile_Join5:
 	calr	sub_F6F94E	; F6F7E7  calr 0xf6f94e
 	ld	(UI_StatusCode:16), 35	; F6F7EA  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F6F7EF  call 0xf41600
-	calr	sub_F72F20	; F6F7F3  calr 0xf72f20
+	calr	Smf_BusyDelay	; F6F7F3  calr 0xf72f20
 	m_cp_mi8 MB16, 0x1239, 0xff	; F6F7F6  cp (0x1239),0xff
 	jr	z, Smf_ReadFile_Skip19	; F6F7FB  jr Z,0xf6f80c
 	ld	c, 0:opc	; F6F7FD  ld C,0x00
@@ -166867,7 +166867,7 @@ Smf_ClearVlqValue:
 ; SmfEvent_ReadWithRunningStatus
 ; Called from: in-module: 0xF6F766 0xF71D30
 ; Touches: (0x1078) (0x107A) (0x10CC) (0x124A)
-; Calls:   InputStream_GetByte sub_F71DB7 SmfEvent_DispatchChannelMessage
+; Calls:   InputStream_GetByte SmfEvent_DispatchChannelMessage_MultiTrack SmfEvent_DispatchChannelMessage
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FEA1 is an instruction boundary of this
@@ -166877,7 +166877,7 @@ Smf_ClearVlqValue:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SmfEvent_ReadWithRunningStatus: A is a data byte: the status is the running status (0x10CC); A and the remaining data bytes to 0x10D1..; then
-;   SmfEvent_DispatchChannelMessage for a format-0 or one-track file, sub_F71DB7 otherwise.
+;   SmfEvent_DispatchChannelMessage for a format-0 or one-track file, SmfEvent_DispatchChannelMessage_MultiTrack otherwise.
 SmfEvent_ReadWithRunningStatus:
 	ld	c, a	; F6FEA1  ld C,A
 	ld	a, (Smf_RunningStatus:16)	; F6FEA3  ld A,(0x10cc)
@@ -166916,7 +166916,7 @@ sub_F6FEA1_Skip3:
 	jr	z, sub_F6FEA1_Skip4	; F6FEEB  jr Z,0xf6fefa
 	m_cp_mi16 MW16, Smf_TrackCount, 0x0001	; F6FEED  cp (0x107a),0x0001
 	jr	z, sub_F6FEA1_Skip4	; F6FEF3  jr Z,0xf6fefa
-	calr	sub_F71DB7	; F6FEF5  calr 0xf71db7
+	calr	SmfEvent_DispatchChannelMessage_MultiTrack	; F6FEF5  calr 0xf71db7
 	jr	sub_F6FEA1_Return	; F6FEF8  jr T,0xf6fefd
 sub_F6FEA1_Skip4:
 	calr	SmfEvent_DispatchChannelMessage	; F6FEFA  calr 0xf6ff44
@@ -171021,11 +171021,11 @@ sub_F71A95_Epilogue:
 	ret	; F71B81  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71B82
+; Smf_ReadMultiTrack
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
 ; Calls:   T_F409E0 T_F42708 sub_F72822 sub_F6FB38 ClearRam10D3_34Bytes_Copy sub_F6F929
-;          sub_F71BEA InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
+;          Smf_ReadTrackChunk InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71B82 is an instruction boundary of this
@@ -171034,7 +171034,9 @@ sub_F71A95_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71B82:
+; Smf_ReadMultiTrack: Smf_ReadFile's branch for format 1 with more than one track (cp (Smf_Format),1 / cp (Smf_TrackCount),1 at 0xF6F626):
+;     for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and sub_F729D9; then sub_F72F5C.
+Smf_ReadMultiTrack:
 	xor	a, a	; F71B82  xor A,A
 	ld	(4665:16), a	; F71B84  ld (0x1239),A
 	ld	(4683:16), a	; F71B88  ld (0x124b),A
@@ -171050,7 +171052,7 @@ sub_F71B82_Loop:
 	calr	sub_F6FB38	; F71BAB  calr 0xf6fb38
 	calr	ClearRam10D3_34Bytes_Copy	; F71BAE  calr 0xf71d4f
 	call	sub_F6F929	; F71BB1  call 0xf6f929
-	calr	sub_F71BEA	; F71BB5  calr 0xf71bea
+	calr	Smf_ReadTrackChunk	; F71BB5  calr 0xf71bea
 	m_cp_mi8 MB16, 0x1010, 0x00	; F71BB8  cp (0x1010),0x00
 	jr	z, sub_F71B82_Skip	; F71BBD  jr Z,0xf71bc4
 	calr	InputStream_RefillDone	; F71BBF  calr 0xf765de
@@ -171070,7 +171072,7 @@ sub_F71B82_Return:
 	ret	; F71BE5  ret
 
 ; --------------------------------------------------------------------------
-; Data_F71BE6 -- 4 bytes this block could not split.  No content rule framed
+; SmfTrackTag -- 4 bytes this block could not split.  No content rule framed
 ;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
 ;                -- and the code walk never reached it from a thunk slot, a
 ;                proven call site, an opcode-anchored call or an entry of a
@@ -171084,16 +171086,17 @@ sub_F71B82_Return:
 ;           such.
 ; Unknown: everything about it except its bytes.
 ; --------------------------------------------------------------------------
-Data_F71BE6:
-	.byte	0x4D, 0x54, 0x72, 0x6B	; F71BE6  [0..3]
+; SmfTrackTag: "MTrk", the track-chunk tag Smf_ReadTrackChunk compares (the multi-track path's own copy of SmfChunkTags+4).
+SmfTrackTag:
+	.ascii	"MTrk"	; F71BE6  [0..3]
 
 
 ; --------------------------------------------------------------------------
-; sub_F71BEA
+; Smf_ReadTrackChunk
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
-; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq sub_F728FE sub_F710E7 Smf_AddDeltaToHeldNotes
-;          SmfEvent_Meta sub_F728A3 SmfEvent_SysEx sub_F71D71 SmfEvent_ReadWithRunningStatus
+; Calls:   InputStream_GetByte Smf_ReadVlqBytes_Copy Smf_DecodeVlq Smf_TrackToSlot sub_F710E7 Smf_AddDeltaToHeldNotes
+;          SmfEvent_Meta sub_F728A3 SmfEvent_SysEx SmfEvent_ReadWithNewStatus_MultiTrack SmfEvent_ReadWithRunningStatus
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71BEA is an instruction boundary of this
@@ -171102,9 +171105,12 @@ Data_F71BE6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71BEA:
+; Smf_ReadTrackChunk: one MTrk chunk of the multi-track path: compares the 4 tag bytes at Data_F71BE6 (UI_StatusCode 49 on a mismatch), reads the
+;     length into SmfOut_TrackLength, then loops delta (Smf_ReadVlqBytes_Copy / Smf_DecodeVlq) and event: 0xFF SmfEvent_Meta,
+;     0xF0 / 0xF7 SmfEvent_SysEx, running status SmfEvent_ReadWithRunningStatus, new status SmfEvent_ReadWithNewStatus_MultiTrack.
+Smf_ReadTrackChunk:
 	ldw	bc, 4	; F71BEA  ld BC,0x0004
-	ld	xiy, Data_F71BE6	; F71BED  ld XIY,0x00f71be6
+	ld	xiy, SmfTrackTag	; F71BED  ld XIY,0x00f71be6
 	pushw	bc	; F71BF2  push BC
 	push	xiy	; F71BF3  push XIY
 	calr	InputStream_GetByte	; F71BF4  calr 0xf7138f
@@ -171165,7 +171171,7 @@ sub_F71BEA_Skip4:
 sub_F71BEA_Skip5:
 	calr	Smf_DecodeVlq	; F71C87  calr 0xf6fe1b
 	ld	iy, (4530:16)	; F71C8A  ld IY,(0x11b2)
-	calr	sub_F728FE	; F71C8E  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F71C8E  calr 0xf728fe
 	calr	sub_F710E7	; F71C91  calr 0xf710e7
 	calr	Smf_AddDeltaToHeldNotes	; F71C94  calr 0xf712b6
 	calr	InputStream_GetByte	; F71C97  calr 0xf7138f
@@ -171216,7 +171222,7 @@ sub_F71BEA_Skip11:
 sub_F71BEA_Skip12:
 	bit	7, a	; F71D0B  bit 0x07,A
 	jr	z, sub_F71BEA_Skip13	; F71D0E  jr Z,0xf71d30
-	calr	sub_F71D71	; F71D10  calr 0xf71d71
+	calr	SmfEvent_ReadWithNewStatus_MultiTrack	; F71D10  calr 0xf71d71
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71D13  cp (0x1238),0x00
 	jr	nz, sub_F71BEA_Join	; F71D18  jr NZ,0xf71d29
 	ld	w, (InputStream_Status:16)	; F71D1A  ld W,(0x124a)
@@ -171274,10 +171280,10 @@ ClearRam10D3_34Bytes_Copy:
 	ret	; F71D70  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71D71
+; SmfEvent_ReadWithNewStatus_MultiTrack
 ; Called from: in-module: 0xF71D10
 ; Touches: (0x10CC) (0x124A)
-; Calls:   InputStream_GetByte sub_F71DB7
+; Calls:   InputStream_GetByte SmfEvent_DispatchChannelMessage_MultiTrack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71D71 is an instruction boundary of this
@@ -171286,7 +171292,9 @@ ClearRam10D3_34Bytes_Copy:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71D71:
+; SmfEvent_ReadWithNewStatus_MultiTrack: the multi-track copy of SmfEvent_ReadWithNewStatus: Smf_RunningStatus = A, one data byte for 0xC0 / 0xD0 and two
+;     otherwise, then SmfEvent_DispatchChannelMessage_MultiTrack.
+SmfEvent_ReadWithNewStatus_MultiTrack:
 	ld	(Smf_RunningStatus:16), a	; F71D71  ld (0x10cc),A
 	xor	bc, bc	; F71D75  xor BC,BC
 	ld	xix, Smf_EventStatus	; F71D77  ld XIX,0x000010d0
@@ -171318,15 +171326,15 @@ sub_F71D71_Skip2:
 sub_F71D71_Skip3:
 	cp	c, w	; F71DAF  cp C,W
 	jr	ule, sub_F71D71_Loop	; F71DB1  jr ULE,0xf71d81
-	calr	sub_F71DB7	; F71DB3  calr 0xf71db7
+	calr	SmfEvent_DispatchChannelMessage_MultiTrack	; F71DB3  calr 0xf71db7
 sub_F71D71_Return:
 	ret	; F71DB6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71DB7
+; SmfEvent_DispatchChannelMessage_MultiTrack
 ; Called from: in-module: 0xF6FEF5 0xF71DB3
 ; Touches: (0x10D0) (0x10D1)
-; Calls:   sub_F71E21 0xF7208D sub_F721A3 sub_F7222D sub_F72754 sub_F71E89
+; Calls:   SmfEvent_ChannelPressure_MultiTrack 0xF7208D SmfEvent_NoteOff_MultiTrack SmfEvent_ControlChange_MultiTrack SmfEvent_PitchBend_MultiTrack SmfEvent_ProgramChange_MultiTrack
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71DB7 is an instruction boundary of this
@@ -171335,7 +171343,9 @@ sub_F71D71_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71DB7:
+; SmfEvent_DispatchChannelMessage_MultiTrack: the multi-track copy of SmfEvent_DispatchChannelMessage: by status 0x90 (velocity 0 -> note off), 0x80, 0xB0,
+;     0xE0, 0xC0, 0xD0 to the *_MultiTrack handlers.
+SmfEvent_DispatchChannelMessage_MultiTrack:
 	ld	xix, Smf_EventStatus	; F71DB7  ld XIX,0x000010d0
 	ld	a, (Smf_EventStatus:16)	; F71DBC  ld A,(0x10d0)
 	pushw	hl	; F71DC0  push HL
@@ -171366,33 +171376,33 @@ sub_F71DB7_Skip2:
 	jr	z, sub_F71DB7_Skip3	; F71DF9  jr Z,0xf71dfd
 	jr	sub_F71DB7_Return	; F71DFB  jr T,0xf71e20
 sub_F71DB7_Skip3:
-	calr	sub_F71E21	; F71DFD  calr 0xf71e21
+	calr	SmfEvent_ChannelPressure_MultiTrack	; F71DFD  calr 0xf71e21
 	jr	sub_F71DB7_Return	; F71E00  jr T,0xf71e20
 sub_F71DB7_Skip4:
 	ld	w, (xix+2)	; F71E02  ld W,(XIX+0x02)
 	cp	w, 0:i3	; F71E05  cp W,0
 	jr	z, sub_F71DB7_Skip5	; F71E07  jr Z,0xf71e0e
-	calr	sub_F7208D	; F71E09  calr 0xf7208d
+	calr	SmfEvent_NoteOn_MultiTrack	; F71E09  calr 0xf7208d
 	jr	sub_F71DB7_Return	; F71E0C  jr T,0xf71e20
 sub_F71DB7_Skip5:
-	calr	sub_F721A3	; F71E0E  calr 0xf721a3
+	calr	SmfEvent_NoteOff_MultiTrack	; F71E0E  calr 0xf721a3
 	jr	sub_F71DB7_Return	; F71E11  jr T,0xf71e20
 sub_F71DB7_Skip6:
-	calr	sub_F7222D	; F71E13  calr 0xf7222d
+	calr	SmfEvent_ControlChange_MultiTrack	; F71E13  calr 0xf7222d
 	jr	sub_F71DB7_Return	; F71E16  jr T,0xf71e20
 sub_F71DB7_Skip7:
-	calr	sub_F72754	; F71E18  calr 0xf72754
+	calr	SmfEvent_PitchBend_MultiTrack	; F71E18  calr 0xf72754
 	jr	sub_F71DB7_Return	; F71E1B  jr T,0xf71e20
 sub_F71DB7_Skip8:
-	calr	sub_F71E89	; F71E1D  calr 0xf71e89
+	calr	SmfEvent_ProgramChange_MultiTrack	; F71E1D  calr 0xf71e89
 sub_F71DB7_Return:
 	ret	; F71E20  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71E21
+; SmfEvent_ChannelPressure_MultiTrack
 ; Called from: in-module: 0xF71DFD
 ; Touches: (0x10D0) (0x10D1) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E21 is an instruction boundary of this
@@ -171401,13 +171411,14 @@ sub_F71DB7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71E21:
+; SmfEvent_ChannelPressure_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xD0; writes 0xA0 | channel, the time and the value into the block store.
+SmfEvent_ChannelPressure_MultiTrack:
 	ld	iy, (4530:16)	; F71E21  ld IY,(0x11b2)
 	extz	xiy	; F71E25  extz XIY
-	calr	sub_F728FE	; F71E27  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F71E27  calr 0xf728fe
 	and	xiy, 15	; F71E2A  and XIY,0x0000000f
 	push	xiy	; F71E30  push XIY
-	calr	sub_F727C8	; F71E31  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F71E31  calr 0xf727c8
 	ld	w, (Smf_EventStatus:16)	; F71E34  ld W,(0x10d0)
 	and	w, 15	; F71E38  and W,0x0f
 	ld	a, 160:opc	; F71E3B  ld A,0xa0
@@ -171437,18 +171448,18 @@ sub_F71E21:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71E76  cp (0x1238),0x00
 	jr	nz, sub_F71E21_Return	; F71E7B  jr NZ,0xf71e88
 	calr	sub_F7129A	; F71E7D  calr 0xf7129a
-	calr	sub_F727F6	; F71E80  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F71E80  calr 0xf727f6
 	ld	(4664:16), 0	; F71E83  ld (0x1238),0x00
 sub_F71E21_Return:
 	ret	; F71E88  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71E89
+; SmfEvent_ProgramChange_MultiTrack
 ; Called from: in-module: 0xF71E1D
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   sub_F71417 sub_F728FE sub_F701F1 T_F41004 sub_F727C8 BStore_PutByteAndAdvance
-;          Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   sub_F71417 Smf_TrackToSlot sub_F701F1 T_F41004 BStore_LoadTrackCursor BStore_PutByteAndAdvance
+;          Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71E89 is an instruction boundary of this
@@ -171457,7 +171468,8 @@ sub_F71E21_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71E89:
+; SmfEvent_ProgramChange_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xC0.
+SmfEvent_ProgramChange_MultiTrack:
 	m_bit 0, MD16, 0x124b	; F71E89  bit 0,(0x124b)
 	jr	nz, sub_F71E89_Skip2	; F71E8D  jr NZ,0xf71ea9
 	ld	(4665:16), 255	; F71E8F  ld (0x1239),0xff
@@ -171472,7 +171484,7 @@ sub_F71E89_Skip2:
 	and	iy, 15	; F71EAD  and IY,0x000f
 sub_F71E89_Loop:
 	ld	iy, (4530:16)	; F71EB1  ld IY,(0x11b2)
-	calr	sub_F728FE	; F71EB5  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F71EB5  calr 0xf728fe
 	and	iy, 15	; F71EB8  and IY,0x000f
 	m_bit 0, MD16, 0x11b1	; F71EBC  bit 0,(0x11b1)
 	jr	nz, sub_F71E89_Skip3	; F71EC0  jr NZ,0xf71eca
@@ -171501,7 +171513,7 @@ sub_F71E89_Skip3:
 	call	T_F41004	; F71F14  call 0xf41004
 	push	xiy	; F71F18  push XIY
 	push	xhl	; F71F19  push XHL
-	calr	sub_F727C8	; F71F1A  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F71F1A  calr 0xf727c8
 	pop	xhl	; F71F1D  pop XHL
 	ld	a, 192:opc	; F71F1E  ld A,0xc0
 	ld	w, (6352916:24)	; F71F20  ld W,(0x60f014)
@@ -171568,12 +171580,12 @@ sub_F71E89_Skip3:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FBA  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FBF  jrl NZ,0xf7207c
 	calr	sub_F7129A	; F71FC2  calr 0xf7129a
-	calr	sub_F727F6	; F71FC5  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F71FC5  calr 0xf727f6
 	ld	(4664:16), 0	; F71FC8  ld (0x1238),0x00
 	jrl	sub_F71E89_Return	; F71FCD  jrl T,0xf7207c
 sub_F71E89_Skip4:
 	push	xiy	; F71FD0  push XIY
-	calr	sub_F727C8	; F71FD1  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F71FD1  calr 0xf727c8
 	ld	a, 192:opc	; F71FD4  ld A,0xc0
 	pop	xiy	; F71FD6  pop XIY
 	push	xiy	; F71FD7  push XIY
@@ -171629,12 +171641,12 @@ sub_F71E89_Skip4:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72060  cp (0x1238),0x00
 	jr	nz, sub_F71E89_Return	; F72065  jr NZ,0xf7207c
 	calr	sub_F7129A	; F72067  calr 0xf7129a
-	calr	sub_F727F6	; F7206A  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F7206A  calr 0xf727f6
 	ld	(4664:16), 0	; F7206D  ld (0x1238),0x00
 	jr	sub_F71E89_Return	; F72072  jr T,0xf7207c
 
 ; --------------------------------------------------------------------------
-; UNREACHED CODE, not data (was `Data_F72074`), part of sub_F71E89:
+; UNREACHED CODE, not data (was `Data_F72074`), part of SmfEvent_ProgramChange_MultiTrack:
 ;   `cp (0x1239),0xFF / jrl Z,0xF71EB1` -- the jrl lands on an instruction start of this source
 ;   (0xF71EB1), and the decode ends on the `ret` the jr above targets.
 ;   Nothing in prom_b branches to, calls or spells 0xF72074 (code_islands.py searches every
@@ -171668,8 +171680,9 @@ sub_F71E89_Return:
 ; --------------------------------------------------------------------------
 ByteMap_F7207D:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F7207D  [0..15]
-sub_F7208D:
-; `calr sub_F7208D` at 0xF71E09 lands on `ld XIY,0x0000305A` (45 5A 30 00 00); the source had
+; SmfEvent_NoteOn_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0x90 with a non-zero velocity.
+SmfEvent_NoteOn_MultiTrack:
+; `calr SmfEvent_NoteOn_MultiTrack` at 0xF71E09 lands on `ld XIY,0x0000305A` (45 5A 30 00 00); the source had
 ;   `.byte 0x45, 0x5A` and a `ld WA,0` framed from 0xF7208F, inside it.  The loop below walks
 ;   XIY from 0x305A in 7-byte steps to 0x313A.
 	ld	xiy, 12378	; F7208D  ld XIY,0x0000305a
@@ -171697,11 +171710,11 @@ sub_F7208D_Skip3:
 	m_or_mi8 MB16, 0x11b1, 0x01	; F720CB  or (0x11b1),0x01
 	ld	iy, (4530:16)	; F720D0  ld IY,(0x11b2)
 	extz	xiy	; F720D4  extz XIY
-	calr	sub_F728FE	; F720D6  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F720D6  calr 0xf728fe
 	and	iy, 15	; F720D9  and IY,0x000f
 	push	xiy	; F720DD  push XIY
 	push	xix	; F720DE  push XIX
-	calr	sub_F727C8	; F720DF  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F720DF  calr 0xf727c8
 	pop	xix	; F720E2  pop XIX
 	ld	w, (Smf_EventStatus:16)	; F720E3  ld W,(0x10d0)
 	and	w, 15	; F720E7  and W,0x0f
@@ -171774,7 +171787,7 @@ sub_F7208D_Skip4:
 	jr	nz, sub_F7208D_Return	; F7217B  jr NZ,0xf721a2
 	calr	sub_F7129A	; F7217D  calr 0xf7129a
 	push	xix	; F72180  push XIX
-	calr	sub_F727F6	; F72181  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F72181  calr 0xf727f6
 	pop	xix	; F72184  pop XIX
 	ld	a, (Smf_EventStatus:16)	; F72185  ld A,(0x10d0)
 	and	a, 15	; F72189  and A,0x0f
@@ -171789,7 +171802,7 @@ sub_F7208D_Return:
 	ret	; F721A2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F721A3
+; SmfEvent_NoteOff_MultiTrack
 ; Called from: in-module: 0xF71E0E
 ; Touches: (0x10D0) (0x10D1) (0x126E) (0x345C) (0x345E)
 ; Calls:   SongStore_SeekBlock_Copy sub_F710BA
@@ -171801,7 +171814,8 @@ sub_F7208D_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F721A3:
+; SmfEvent_NoteOff_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0x80, and 0x90 with velocity 0.
+SmfEvent_NoteOff_MultiTrack:
 	ld	xiy, 12378	; F721A3  ld XIY,0x0000305a
 sub_F721A3_Loop:
 	m_bit 7, MDI+r5, 0	; F721A8  bit 7,(XIY)
@@ -171856,7 +171870,7 @@ sub_F721A3_Return:
 	ret	; F7222C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7222D
+; SmfEvent_ControlChange_MultiTrack
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 sub_F725D9
@@ -171870,7 +171884,8 @@ sub_F721A3_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7222D:
+; SmfEvent_ControlChange_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xB0.
+SmfEvent_ControlChange_MultiTrack:
 	m_bit 0, MD16, 0x124b	; F7222D  bit 0,(0x124b)
 	jr	nz, sub_F7222D_Skip2	; F72231  jr NZ,0xf7224d
 	ld	(4665:16), 255	; F72233  ld (0x1239),0xff
@@ -172074,7 +172089,7 @@ sub_F72364:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -172087,10 +172102,10 @@ sub_F72364:
 ; --------------------------------------------------------------------------
 sub_F7237D:
 	ld	iy, (4530:16)	; F7237D  ld IY,(0x11b2)
-	calr	sub_F728FE	; F72381  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F72381  calr 0xf728fe
 	and	iy, 15	; F72384  and IY,0x000f
 	push	xiy	; F72388  push XIY
-	calr	sub_F727C8	; F72389  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F72389  calr 0xf727c8
 	ld	w, (Smf_EventStatus:16)	; F7238C  ld W,(0x10d0)
 	and	w, 15	; F72390  and W,0x0f
 	ld	a, 208:opc	; F72393  ld A,0xd0
@@ -172120,7 +172135,7 @@ sub_F7237D:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F723CE  cp (0x1238),0x00
 	jr	nz, sub_F7237D_Return	; F723D3  jr NZ,0xf723e0
 	calr	sub_F7129A	; F723D5  calr 0xf7129a
-	calr	sub_F727F6	; F723D8  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F723D8  calr 0xf727f6
 	ld	(4664:16), 0	; F723DB  ld (0x1238),0x00
 sub_F7237D_Return:
 	ret	; F723E0  ret
@@ -172287,7 +172302,7 @@ sub_F724A7_Skip:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -172300,9 +172315,9 @@ sub_F724A7_Skip:
 ; --------------------------------------------------------------------------
 sub_F724CB:
 	ld	iy, (4530:16)	; F724CB  ld IY,(0x11b2)
-	calr	sub_F728FE	; F724CF  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F724CF  calr 0xf728fe
 	and	iy, 15	; F724D2  and IY,0x000f
-	calr	sub_F727C8	; F724D6  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F724D6  calr 0xf727c8
 	push	xiy	; F724D9  push XIY
 	ld	a, 176:opc	; F724DA  ld A,0xb0
 	calr	BStore_PutByteAndAdvance	; F724DC  calr 0xf70fda
@@ -172349,7 +172364,7 @@ sub_F724CB:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72542  cp (0x1238),0x00
 	jr	nz, sub_F724CB_Return	; F72547  jr NZ,0xf72554
 	calr	sub_F7129A	; F72549  calr 0xf7129a
-	calr	sub_F727F6	; F7254C  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F7254C  calr 0xf727f6
 	ld	(4664:16), 0	; F7254F  ld (0x1238),0x00
 sub_F724CB_Return:
 	ret	; F72554  ret
@@ -172552,7 +172567,7 @@ sub_F726A2_Skip:
 ; sub_F726C6
 ; Called from: in-module: 0xF724C7 0xF72636 0xF7267A 0xF7269E 0xF726C2
 ; Touches: (0x10D0) (0x11AE) (0x11AF) (0x11B0) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726C6 is an instruction boundary of this
@@ -172563,10 +172578,10 @@ sub_F726A2_Skip:
 ; --------------------------------------------------------------------------
 sub_F726C6:
 	ld	iy, (4530:16)	; F726C6  ld IY,(0x11b2)
-	calr	sub_F728FE	; F726CA  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F726CA  calr 0xf728fe
 	and	iy, 15	; F726CD  and IY,0x000f
 	push	xiy	; F726D1  push XIY
-	calr	sub_F727C8	; F726D2  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F726D2  calr 0xf727c8
 	ld	a, 176:opc	; F726D5  ld A,0xb0
 	calr	BStore_PutByteAndAdvance	; F726D7  calr 0xf70fda
 	pop	xiy	; F726DA  pop XIY
@@ -172612,16 +172627,16 @@ sub_F726C6:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F72741  cp (0x1238),0x00
 	jr	nz, sub_F726C6_Return	; F72746  jr NZ,0xf72753
 	calr	sub_F7129A	; F72748  calr 0xf7129a
-	calr	sub_F727F6	; F7274B  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F7274B  calr 0xf727f6
 	ld	(4664:16), 0	; F7274E  ld (0x1238),0x00
 sub_F726C6_Return:
 	ret	; F72753  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72754
+; SmfEvent_PitchBend_MultiTrack
 ; Called from: in-module: 0xF71E18
 ; Touches: (0x10D0) (0x10D1) (0x10D2) (0x11B2) (0x1238)
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A sub_F727F6
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAndAdvance Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72754 is an instruction boundary of this
@@ -172630,12 +172645,13 @@ sub_F726C6_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72754:
+; SmfEvent_PitchBend_MultiTrack: SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xE0.
+SmfEvent_PitchBend_MultiTrack:
 	ld	iy, (4530:16)	; F72754  ld IY,(0x11b2)
-	calr	sub_F728FE	; F72758  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F72758  calr 0xf728fe
 	and	iy, 15	; F7275B  and IY,0x000f
 	push	xiy	; F7275F  push XIY
-	calr	sub_F727C8	; F72760  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F72760  calr 0xf727c8
 	ld	w, (Smf_EventStatus:16)	; F72763  ld W,(0x10d0)
 	and	w, 15	; F72767  and W,0x0f
 	ld	a, 224:opc	; F7276A  ld A,0xe0
@@ -172671,17 +172687,17 @@ sub_F72754:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F727B5  cp (0x1238),0x00
 	jr	nz, sub_F72754_Return	; F727BA  jr NZ,0xf727c7
 	calr	sub_F7129A	; F727BC  calr 0xf7129a
-	calr	sub_F727F6	; F727BF  calr 0xf727f6
+	calr	BStore_SaveTrackCursor	; F727BF  calr 0xf727f6
 	ld	(4664:16), 0	; F727C2  ld (0x1238),0x00
 sub_F72754_Return:
 	ret	; F727C7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F727C8
+; BStore_LoadTrackCursor
 ; Called from: in-module: 0xF71E31 0xF71F1A 0xF71FD1 0xF720DF 0xF72389
 ;              0xF724D6 0xF726D2 0xF72760 +1 more
 ; Touches: (0x11B2) (0x345C) (0x345E)
-; Calls:   sub_F728FE
+; Calls:   Smf_TrackToSlot
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF727C8 is an instruction boundary of this
@@ -172690,10 +172706,12 @@ sub_F72754_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F727C8:
+; BStore_LoadTrackCursor: BStore_CursorBlock / BStore_CursorOffset = the saved cursor of slot Smf_TrackToSlot((0x11B2)): word 0x3460[slot], byte
+;     0x3482[slot].  Called before each multi-track event write; BStore_SaveTrackCursor after it.
+BStore_LoadTrackCursor:
 	push	xde	; F727C8  push XDE
 	ld	iy, (4530:16)	; F727C9  ld IY,(0x11b2)
-	calr	sub_F728FE	; F727CD  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F727CD  calr 0xf728fe
 	sla	iy, 1	; F727D0  sla 0x01,IY
 	ld	xde, 13408	; F727D3  ld XDE,0x00003460
 	mx_ld_rm MXW, ra_DE, ra_IY, 0	; F727D8  ld WA,(XDE+IY)
@@ -172707,11 +172725,11 @@ sub_F727C8:
 	ret	; F727F5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F727F6
+; BStore_SaveTrackCursor
 ; Called from: in-module: 0xF71E80 0xF71FC5 0xF7206A 0xF72181 0xF723D8
 ;              0xF7254C 0xF7274B 0xF727BF
 ; Touches: (0x11B2) (0x345C) (0x345E)
-; Calls:   sub_F728FE
+; Calls:   Smf_TrackToSlot
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF727F6 is an instruction boundary of this
@@ -172720,10 +172738,11 @@ sub_F727C8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F727F6:
+; BStore_SaveTrackCursor: stores BStore_CursorBlock / BStore_CursorOffset back into 0x3460[slot] / 0x3482[slot].
+BStore_SaveTrackCursor:
 	push	xde	; F727F6  push XDE
 	ld	iy, (4530:16)	; F727F7  ld IY,(0x11b2)
-	calr	sub_F728FE	; F727FB  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F727FB  calr 0xf728fe
 	ld	wa, (BStore_CursorBlock:16)	; F727FE  ld WA,(0x345c)
 	sla	xiy, 1	; F72802  sla 0x01,XIY
 	ld	xde, 13408	; F72805  ld XDE,0x00003460
@@ -172739,7 +172758,7 @@ sub_F727F6:
 ; sub_F72822
 ; Called from: in-module: 0xF71BA8
 ; Touches: (0x11B2) (0x126E) (0x3608)  |  0x603500
-; Calls:   sub_F728FE T_F42884 SongStore_SeekBlock_Copy
+; Calls:   Smf_TrackToSlot T_F42884 SongStore_SeekBlock_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF72822 is an instruction boundary of this
@@ -172750,7 +172769,7 @@ sub_F727F6:
 ; --------------------------------------------------------------------------
 sub_F72822:
 	ld	iy, (4530:16)	; F72822  ld IY,(0x11b2)
-	calr	sub_F728FE	; F72826  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F72826  calr 0xf728fe
 	ld	ix, iy	; F72829  ld IX,IY
 	m_cp_mi16 MW24, BStore_FreeCount, 0x0011	; F7282B  cp (0x6034ba),0x0011
 	jr	c, sub_F72822_Return	; F72832  jr C,0xf728a2
@@ -172787,7 +172806,7 @@ sub_F72822:
 	mx_st_mr16 MXD, ra_HL, ra_IX, 0	; F7288A  ld (XHL+IX),WA
 	ld	xhl, 13442	; F7288F  ld XHL,0x00003482
 	ld	iy, (4530:16)	; F72894  ld IY,(0x11b2)
-	calr	sub_F728FE	; F72898  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F72898  calr 0xf728fe
 	mx_ld_mi16 MXD, ra_HL, ra_IY, 0x0005	; F7289B  ld (XHL+IY),0x0005
 sub_F72822_Return:
 	ret	; F728A2  ret
@@ -172796,7 +172815,7 @@ sub_F72822_Return:
 ; sub_F728A3
 ; Called from: in-module: 0xF71CE2
 ; Touches: (0x11B2)  |  0x603500
-; Calls:   sub_F728FE sub_F727C8 BStore_PutByteAtCursor sub_F728D5
+; Calls:   Smf_TrackToSlot BStore_LoadTrackCursor BStore_PutByteAtCursor sub_F728D5
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF728A3 is an instruction boundary of this
@@ -172808,7 +172827,7 @@ sub_F72822_Return:
 sub_F728A3:
 	ld	hl, (4530:16)	; F728A3  ld HL,(0x11b2)
 	ld	iy, hl	; F728A7  ld IY,HL
-	calr	sub_F728FE	; F728A9  calr 0xf728fe
+	calr	Smf_TrackToSlot	; F728A9  calr 0xf728fe
 	ld	hl, iy	; F728AC  ld HL,IY
 	sla	iy, 1	; F728AE  sla 0x01,IY
 	add	iy, hl	; F728B1  add IY,HL
@@ -172820,7 +172839,7 @@ sub_F728A3:
 	ld	iy, (4530:16)	; F728C1  ld IY,(0x11b2)
 	ld	hl, iy	; F728C5  ld HL,IY
 	push	xhl	; F728C7  push XHL
-	calr	sub_F727C8	; F728C8  calr 0xf727c8
+	calr	BStore_LoadTrackCursor	; F728C8  calr 0xf727c8
 	ld	a, 130:opc	; F728CB  ld A,0x82
 	calr	BStore_PutByteAtCursor	; F728CD  calr 0xf70fe1
 	calr	sub_F728D5	; F728D0  calr 0xf728d5
@@ -172857,11 +172876,11 @@ sub_F728D5_Skip:
 	ret	; F728FD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F728FE
+; Smf_TrackToSlot
 ; Called from: in-module: 0xF71C8E 0xF71E27 0xF71EB5 0xF720D6 0xF72381
 ;              0xF724CF 0xF726CA 0xF72758 +5 more
 ; Touches: nothing with an absolute address
-; Calls:   SongStore_SeekBlock_Copy sub_F72F20 sub_F729D9 sub_F72F2D
+; Calls:   SongStore_SeekBlock_Copy Smf_BusyDelay sub_F729D9 sub_F72F2D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF728FE is an instruction boundary of this
@@ -172870,7 +172889,8 @@ sub_F728D5_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F728FE:
+; Smf_TrackToSlot: IY = min(IY, 1), zero-extended: every source track above 1 shares slot 1.  Followed by four unreferenced one-call stubs.
+Smf_TrackToSlot:
 	cp	iy, 1:i3	; F728FE  cp IY,1
 	jr	ule, sub_F728FE_Skip	; F72900  jr ULE,0xf72905
 	ldw	iy, 1	; F72902  ld IY,0x0001
@@ -172879,7 +172899,7 @@ sub_F728FE_Skip:
 	ret	; F72907  ret
 	calr	SongStore_SeekBlock_Copy	; F72908  calr 0xf72f0a
 	ret	; F7290B  ret
-	calr	sub_F72F20	; F7290C  calr 0xf72f20
+	calr	Smf_BusyDelay	; F7290C  calr 0xf72f20
 	ret	; F7290F  ret
 	calr	sub_F729D9	; F72910  calr 0xf729d9
 	ret	; F72913  ret
@@ -173711,7 +173731,7 @@ SongStore_SeekBlock_Copy:
 	ret	; F72F1F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F72F20
+; Smf_BusyDelay
 ; Called from: in-module: 0xF6F7F3 0xF7290C 0xF74781
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -173722,7 +173742,8 @@ SongStore_SeekBlock_Copy:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F72F20:
+; Smf_BusyDelay: 3072 x 960 empty djnz16 iterations.  Called by Smf_ReadFile and Smf_WriteFile.
+Smf_BusyDelay:
 	ldw	bc, 3072	; F72F20  ld BC,0x0c00
 	ldw	hl, 960	; F72F23  ld HL,0x03c0
 	djnz16	hl, -3	; F72F26  djnz HL,0xf72f26
@@ -176508,7 +176529,7 @@ Smf_WriteFile_Skip56:
 	calr	sub_F748F0	; F74775  calr 0xf748f0
 	ld	(UI_StatusCode:16), 35	; F74778  ld (0x2880),0x23
 	call	T_MessageScreen_Paint	; F7477D  call 0xf41600
-	calr	sub_F72F20	; F74781  calr 0xf72f20
+	calr	Smf_BusyDelay	; F74781  calr 0xf72f20
 	ld	(UI_ScreenPage:16), 0	; F74784  ld (0x2229),0x00
 	m_or_mi8 MB16, 0x34d4, 0x10	; F74789  or (0x34d4),0x10
 Smf_WriteFile_Join8:

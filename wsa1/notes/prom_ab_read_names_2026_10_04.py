@@ -632,7 +632,7 @@ ROWS = [
      "otherwise to 0x10D1..; then SmfEvent_DispatchChannelMessage."),
     ("F6FEA1", "SmfEvent_ReadWithRunningStatus",
      "A is a data byte: the status is the running status (0x10CC); A and the remaining data bytes to 0x10D1..; then\n"
-     "SmfEvent_DispatchChannelMessage for a format-0 or one-track file, sub_F71DB7 otherwise."),
+     "SmfEvent_DispatchChannelMessage for a format-0 or one-track file, SmfEvent_DispatchChannelMessage_MultiTrack otherwise."),
     ("F6FF44", "SmfEvent_DispatchChannelMessage",
      "clamps both data bytes to 127 and dispatches on the status's high nibble: 0x90 with velocity > 0 SmfEvent_NoteOn,\n"
      "0x80 or velocity 0 SmfEvent_NoteOff, 0xB0 _ControlChange, 0xE0 _PitchBend, 0xC0 _ProgramChange, 0xD0 _ChannelPressure;\n"
@@ -1060,6 +1060,42 @@ ROWS = [
      "(0x0C4E) = W, (0x0C4F) = 0 (up), then field AdvanceDelay_Field 1..4 through the SongStore_DispatchC_1 table."),
     ("F7CB90", "AdvanceDelay_StepFieldDown",
      "the same with (0x0C4F) = 0x80 (down)."),
+    # prom_b 0xF71B82-0xF72F20: the SMF reader's MULTI-TRACK path.  Smf_ReadFile reads format 0, or a one-track file, itself
+    # with the SmfEvent_* handlers at 0xF6FExx; for format 1 with Smf_TrackCount != 1 it calls Smf_ReadMultiTrack (0xF6F637).
+    ("F71B82", "Smf_ReadMultiTrack",
+     "Smf_ReadFile's branch for format 1 with more than one track (cp (Smf_Format),1 / cp (Smf_TrackCount),1 at 0xF6F626):\n"
+     "  for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and sub_F729D9; then sub_F72F5C."),
+    ("F71BEA", "Smf_ReadTrackChunk",
+     "one MTrk chunk of the multi-track path: compares the 4 tag bytes at SmfTrackTag (UI_StatusCode 49 on a mismatch), reads the\n"
+     "  length into SmfOut_TrackLength, then loops delta (Smf_ReadVlqBytes_Copy / Smf_DecodeVlq) and event: 0xFF SmfEvent_Meta,\n"
+     "  0xF0 / 0xF7 SmfEvent_SysEx, running status SmfEvent_ReadWithRunningStatus, new status SmfEvent_ReadWithNewStatus_MultiTrack."),
+    ("F71D71", "SmfEvent_ReadWithNewStatus_MultiTrack",
+     "the multi-track copy of SmfEvent_ReadWithNewStatus: Smf_RunningStatus = A, one data byte for 0xC0 / 0xD0 and two\n"
+     "  otherwise, then SmfEvent_DispatchChannelMessage_MultiTrack."),
+    ("F71DB7", "SmfEvent_DispatchChannelMessage_MultiTrack",
+     "the multi-track copy of SmfEvent_DispatchChannelMessage: by status 0x90 (velocity 0 -> note off), 0x80, 0xB0,\n"
+     "  0xE0, 0xC0, 0xD0 to the *_MultiTrack handlers."),
+    ("F7208D", "SmfEvent_NoteOn_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0x90 with a non-zero velocity."),
+    ("F721A3", "SmfEvent_NoteOff_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0x80, and 0x90 with velocity 0."),
+    ("F7222D", "SmfEvent_ControlChange_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xB0."),
+    ("F72754", "SmfEvent_PitchBend_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xE0."),
+    ("F71E89", "SmfEvent_ProgramChange_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xC0."),
+    ("F71E21", "SmfEvent_ChannelPressure_MultiTrack",
+     "SmfEvent_DispatchChannelMessage_MultiTrack's arm for status 0xD0; writes 0xA0 | channel, the time and the value into the block store."),
+    ("F727C8", "BStore_LoadTrackCursor",
+     "BStore_CursorBlock / BStore_CursorOffset = the saved cursor of slot Smf_TrackToSlot((0x11B2)): word 0x3460[slot], byte\n"
+     "  0x3482[slot].  Called before each multi-track event write; BStore_SaveTrackCursor after it."),
+    ("F727F6", "BStore_SaveTrackCursor",
+     "stores BStore_CursorBlock / BStore_CursorOffset back into 0x3460[slot] / 0x3482[slot]."),
+    ("F728FE", "Smf_TrackToSlot",
+     "IY = min(IY, 1), zero-extended: every source track above 1 shares slot 1.  Followed by four unreferenced one-call stubs."),
+    ("F72F20", "Smf_BusyDelay",
+     "3072 x 960 empty djnz16 iterations.  Called by Smf_ReadFile and Smf_WriteFile."),
 ]
 
 
