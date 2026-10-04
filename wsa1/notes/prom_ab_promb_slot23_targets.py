@@ -2,7 +2,7 @@
 """Place prom_a labels at the targets of prom_b's 23-slot button tables that still point into prom_a by NUMBER.
 
 QUESTION IT ANSWERS
-  prom_b holds button tables for prom_a's COMBINATION screens (PtrTable_F1AEB5 ... PtrTable_F1B34D).  Their entries
+  prom_b holds button tables for prom_a's COMBINATION screens (ScreenButtons_CombiEditPartMenu ... ScreenButtons_WriteProtectError).  Their entries
   are `.long 0x00FBxxxx` with no label at the target, because nothing ever named those prom_a entry points, so
   the targets are unnamed routines that the sub_ count cannot even see.  Each table's own header says which
   prom_a instruction reads it ("base and width from prom_a 0x..."); that instruction sits in a named screen

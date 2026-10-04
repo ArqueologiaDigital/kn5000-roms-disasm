@@ -749,12 +749,12 @@
 	.set PtrTable_F1AE71,                         0x00F1AE71
 	.set PtrTable_F1AE89,                         0x00F1AE89
 	.set BitTable_F1AE95,                         0x00F1AE95
-	.set PtrTable_F1AEB5,                         0x00F1AEB5
-	.set PtrTable_F1AF11,                         0x00F1AF11
+	.set ScreenButtons_CombiEditPartMenu,                         0x00F1AEB5
+	.set ScreenButtons_CombiEditInternalSound,                         0x00F1AF11
 	.set IndexMap_F1AF6D,                         0x00F1AF6D
 	.set PtrTable_F1AFA5,                         0x00F1AFA5
 	.set PtrTable_F1AFBD,                         0x00F1AFBD
-	.set PtrTable_F1AFD5,                         0x00F1AFD5
+	.set ScreenButtons_CombiEditMixer,                         0x00F1AFD5
 	.set IndexMap_F1B031,                         0x00F1B031
 	.set PtrTable_F1B03F,                         0x00F1B03F
 	.set PtrTable_F1B04B,                         0x00F1B04B
@@ -767,14 +767,14 @@
 	.set IndexMap_F1B0FB,                         0x00F1B0FB
 	.set PtrTable_F1B10B,                         0x00F1B10B
 	.set PtrTable_F1B12B,                         0x00F1B12B
-	.set PtrTable_F1B14B,                         0x00F1B14B
+	.set ScreenButtons_CombinationNaming,                         0x00F1B14B
 	.set Record_F1B1A7,                           0x00F1B1A7
-	.set PtrTable_F1B1B0,                         0x00F1B1B0
+	.set ScreenButtons_CombinationNamingWrite,                         0x00F1B1B0
 	.set IndexMap_F1B230,                         0x00F1B230
-	.set PtrTable_F1B239,                         0x00F1B239
-	.set PtrTable_F1B295,                         0x00F1B295
-	.set PtrTable_F1B2F1,                         0x00F1B2F1
-	.set PtrTable_F1B34D,                         0x00F1B34D
+	.set ScreenButtons_CombiEditConfigure,                         0x00F1B239
+	.set ScreenButtons_CombiEditMenu,                         0x00F1B295
+	.set ScreenButtons_Effect2OutputConflict,                         0x00F1B2F1
+	.set ScreenButtons_WriteProtectError,                         0x00F1B34D
 	.set Font_Svc06_8x14,                         0x00F1B400
 	.set Font_Svc07_8x16,                         0x00F1BEF0
 	.set Font_Svc08_16x16,                        0x00F1CB70
@@ -1958,7 +1958,7 @@
 	.set T_SoundEditNaming_SoftKeyCol4,                                                                      0x00F42F90
 	.set T_SoundEditNaming_SoftKeyCol5,                                                                      0x00F42F94
 	.set T_SoundEditNaming_SoftKeyCol6,                                                                      0x00F42F98
-	.set T_F42F9C,                                                                      0x00F42F9C
+	.set T_SoundEditNaming_SoftKeyCol7,                                                                      0x00F42F9C
 	.set T_SoundEditNaming_SoftKeyCol8,                                                                      0x00F42FA0
 	.set T_SoundEditNaming_LcdKeyRow1,                                                                      0x00F42FA4
 	.set T_SoundEditNaming_LcdKeyRow2,                                                                      0x00F42FA8
@@ -52750,7 +52750,7 @@ SoundGroupNaming_AdjustGroup:
 .LF9CC7D:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC7D  1e 87 2e
 	pushw wa                                             ; F9CC80  28
-	call T_F42F9C                                        ; F9CC81  1d 9c 2f f4
+	call T_SoundEditNaming_SoftKeyCol7                                        ; F9CC81  1d 9c 2f f4
 	popw bc                                              ; F9CC85  49
 .LF9CC86:
 	ret                                                  ; F9CC86  0e
@@ -53400,7 +53400,7 @@ CombinationGroupNaming_AdjustGroup:
 .LF9D0E5:
 	calr PanelFlags_PairBitAsWord                                          ; F9D0E5  1e 1f 2a
 	pushw wa                                             ; F9D0E8  28
-	call T_F42F9C                                        ; F9D0E9  1d 9c 2f f4
+	call T_SoundEditNaming_SoftKeyCol7                                        ; F9D0E9  1d 9c 2f f4
 	popw bc                                              ; F9D0ED  49
 .LF9D0EE:
 	ret                                                  ; F9D0EE  0e
@@ -57241,7 +57241,7 @@ DrumsMap_AdjustRowSound:
 .LF9F22C:
 	calr PanelFlags_PairBitAsWord                                      ; F9F22C  1e d8 08
 	pushw wa                                             ; F9F22F  28
-	call T_F42F9C                                        ; F9F230  1d 9c 2f f4
+	call T_SoundEditNaming_SoftKeyCol7                                        ; F9F230  1d 9c 2f f4
 	popw bc                                              ; F9F234  49
 .LF9F235:
 	ret                                                  ; F9F235  0e
@@ -104778,7 +104778,7 @@ ScreenButton_CombiEditPartMenu:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBCB8C  1d 74 2c f4
 	mul A,0x04                                           ; FBCB90  c9 08 04
 	extz XWA                                             ; FBCB93  e8 12
-	add XWA,PtrTable_F1AEB5                              ; FBCB95  e8 c8 b5 ae f1 00
+	add XWA,ScreenButtons_CombiEditPartMenu                              ; FBCB95  e8 c8 b5 ae f1 00
 	ld XBC,(XWA)                                         ; FBCB9B  a0 21
 	lda xiy, (.LFBCBA5:24)                               ; FBCB9D  f2 a5 cb fb 35
 	push XIY                                             ; FBCBA2  3d
@@ -104850,7 +104850,7 @@ T_F41854_Nop:
 .LFBCC3B:
 	popw hl                                              ; FBCC3B  4b
 	ret                                                  ; FBCC3C  0e
-; LcdKeyRow3_CombiEditPartMenu: PtrTable_F1AEB5[10], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_CombiEditPartMenu: ScreenButtons_CombiEditPartMenu[10], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of CombiEditPartMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_CombiEditPartMenu:
 	pushw hl                                             ; FBCC3D  2b
@@ -104871,7 +104871,7 @@ LcdKeyRow3_CombiEditPartMenu:
 	pop XIX                                              ; FBCC61  5c
 	popw hl                                              ; FBCC62  4b
 	ret                                                  ; FBCC63  0e
-; LcdKeyRow4_CombiEditPartMenu: PtrTable_F1AEB5[11], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow4_CombiEditPartMenu: ScreenButtons_CombiEditPartMenu[11], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow4 handler of CombiEditPartMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow4_CombiEditPartMenu:
 	pushw hl                                             ; FBCC64  2b
@@ -104892,7 +104892,7 @@ LcdKeyRow4_CombiEditPartMenu:
 	pop XIX                                              ; FBCC88  5c
 	popw hl                                              ; FBCC89  4b
 	ret                                                  ; FBCC8A  0e
-; LcdKeyRow5_CombiEditPartMenu: PtrTable_F1AEB5[12], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow5_CombiEditPartMenu: ScreenButtons_CombiEditPartMenu[12], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow5 handler of CombiEditPartMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow5_CombiEditPartMenu:
 	ld c, (PanelEvent_Flags:16)                                   ; FBCC8B  c1 b0 28 23
@@ -104902,7 +104902,7 @@ LcdKeyRow5_CombiEditPartMenu:
 	ld (UI_Request:16), 0x66                                 ; FBCC98  f1 70 20 00 66
 .LFBCC9D:
 	ret                                                  ; FBCC9D  0e
-; ExitKey_CombiEditPartMenu: PtrTable_F1AEB5[15], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombiEditPartMenu: ScreenButtons_CombiEditPartMenu[15], the 23-slot button table ScreenButton_CombiEditPartMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombiEditPartMenu (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombiEditPartMenu:
 	ld c, (PanelEvent_Flags:16)                                   ; FBCC9E  c1 b0 28 23
@@ -105223,7 +105223,7 @@ ScreenButton_CombiEditInternalSound:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBCF60  1d 74 2c f4
 	mul A,0x04                                           ; FBCF64  c9 08 04
 	extz XWA                                             ; FBCF67  e8 12
-	add XWA,PtrTable_F1AF11                              ; FBCF69  e8 c8 11 af f1 00
+	add XWA,ScreenButtons_CombiEditInternalSound                              ; FBCF69  e8 c8 11 af f1 00
 	ld XBC,(XWA)                                         ; FBCF6F  a0 21
 	lda xiy, (.LFBCF79:24)                               ; FBCF71  f2 79 cf fb 35
 	push XIY                                             ; FBCF76  3d
@@ -105243,7 +105243,7 @@ T_F41A64_Nop:
 	ret                                                  ; FBCF80  0e
 T_F41864_Nop:
 	ret                                                  ; FBCF81  0e
-; SoftKeyCols1to4_CombiEditInternalSound: PtrTable_F1AF11 slots [0, 1, 2, 3], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags --
+; SoftKeyCols1to4_CombiEditInternalSound: ScreenButtons_CombiEditInternalSound slots [0, 1, 2, 3], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags --
 ;   one handler for soft keys 1, 2, 3, 4 of CombiEditInternalSound (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCols1to4_CombiEditInternalSound:
 	link XIZ,0xfff6                                      ; FBCF82  ee 0c f6 ff
@@ -105278,7 +105278,7 @@ sub_FBCF81_Skip:
 	popw hl                                              ; FBCFCD  4b
 	unlk XIZ                                             ; FBCFCE  ee 0d
 	ret                                                  ; FBCFD0  0e
-; SoftKeyCols5to8_CombiEditInternalSound: PtrTable_F1AF11 slots [4, 5, 6, 7], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags --
+; SoftKeyCols5to8_CombiEditInternalSound: ScreenButtons_CombiEditInternalSound slots [4, 5, 6, 7], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags --
 ;   one handler for soft keys 5, 6, 7, 8 of CombiEditInternalSound (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCols5to8_CombiEditInternalSound:
 	pushw hl                                             ; FBCFD1  2b
@@ -105312,7 +105312,7 @@ SoftKeyCols5to8_CombiEditInternalSound:
 	pop XIX                                              ; FBD013  5c
 	popw hl                                              ; FBD014  4b
 	ret                                                  ; FBD015  0e
-; ExitKey_CombiEditInternalSound: PtrTable_F1AF11[15], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombiEditInternalSound: ScreenButtons_CombiEditInternalSound[15], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombiEditInternalSound (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombiEditInternalSound:
 	pushw hl                                             ; FBD016  2b
@@ -105335,7 +105335,7 @@ ExitKey_CombiEditInternalSound:
 	pop XIX                                              ; FBD041  5c
 	popw hl                                              ; FBD042  4b
 	ret                                                  ; FBD043  0e
-; PageKey_CombiEditInternalSound: PtrTable_F1AF11[16], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
+; PageKey_CombiEditInternalSound: ScreenButtons_CombiEditInternalSound[16], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
 ;   PageKey handler of CombiEditInternalSound (notes/prom_ab_promb_slot23_targets.py).
 PageKey_CombiEditInternalSound:
 	ld bc, (UI_ScreenId:16)                                 ; FBD044  d1 7c 20 21
@@ -105375,7 +105375,7 @@ PageKey_CombiEditInternalSound:
 	m_set 4, MD16, UI_Request_Hi                                ; FBD09F  f1 71 20 bc
 .LFBD0A3:
 	ret                                                  ; FBD0A3  0e
-; NumberPadKey_CombiEditInternalSound: PtrTable_F1AF11[18], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
+; NumberPadKey_CombiEditInternalSound: ScreenButtons_CombiEditInternalSound[18], the 23-slot button table ScreenButton_CombiEditInternalSound reads through T_PanelCode_ToSlotAndFlags -- the
 ;   NumberPadKey handler of CombiEditInternalSound (notes/prom_ab_promb_slot23_targets.py).
 NumberPadKey_CombiEditInternalSound:
 	pushw hl                                             ; FBD0A4  2b
@@ -106761,7 +106761,7 @@ ScreenButtonBody_CombiEditMixer:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBDDB5  1d 74 2c f4
 	mul A,0x04                                           ; FBDDB9  c9 08 04
 	extz XWA                                             ; FBDDBC  e8 12
-	add XWA,PtrTable_F1AFD5                              ; FBDDBE  e8 c8 d5 af f1 00
+	add XWA,ScreenButtons_CombiEditMixer                              ; FBDDBE  e8 c8 d5 af f1 00
 	ld XBC,(XWA)                                         ; FBDDC4  a0 21
 	lda xiy, (.LFBDDCE:24)                               ; FBDDC6  f2 ce dd fb 35
 	push XIY                                             ; FBDDCB  3d
@@ -106776,7 +106776,7 @@ sub_FBDDD2:
 	ret                                                  ; FBDDD5  0e
 T_F418C4_Nop:
 	ret                                                  ; FBDDD6  0e
-; SoftKeyCols1to8_CombiEditMixer: PtrTable_F1AFD5 slots [0, 1, 2, 3, 4, 5, 6, 7], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags --
+; SoftKeyCols1to8_CombiEditMixer: ScreenButtons_CombiEditMixer slots [0, 1, 2, 3, 4, 5, 6, 7], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags --
 ;   one handler for soft keys 1, 2, 3, 4, 5, 6, 7, 8 of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCols1to8_CombiEditMixer:
 	pushw hl                                             ; FBDDD7  2b
@@ -106797,7 +106797,7 @@ SoftKeyCols1to8_CombiEditMixer:
 	popw bc                                              ; FBDDF6  49
 	popw hl                                              ; FBDDF7  4b
 	ret                                                  ; FBDDF8  0e
-; LcdKeyRow1_CombiEditMixer: PtrTable_F1AFD5[8], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow1_CombiEditMixer: ScreenButtons_CombiEditMixer[8], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow1 handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow1_CombiEditMixer:
 	pushw hl                                             ; FBDDF9  2b
@@ -106854,7 +106854,7 @@ LcdKeyRow1_CombiEditMixer:
 	pop XIX                                              ; FBDE68  5c
 	popw hl                                              ; FBDE69  4b
 	ret                                                  ; FBDE6A  0e
-; LcdKeyRow2_CombiEditMixer: PtrTable_F1AFD5[9], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow2_CombiEditMixer: ScreenButtons_CombiEditMixer[9], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow2 handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow2_CombiEditMixer:
 	pushw hl                                             ; FBDE6B  2b
@@ -106904,7 +106904,7 @@ LcdKeyRow2_CombiEditMixer:
 	pop XIX                                              ; FBDEC9  5c
 	popw hl                                              ; FBDECA  4b
 	ret                                                  ; FBDECB  0e
-; LcdKeyRow3_CombiEditMixer: PtrTable_F1AFD5[10], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_CombiEditMixer: ScreenButtons_CombiEditMixer[10], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_CombiEditMixer:
 	pushw hl                                             ; FBDECC  2b
@@ -106952,7 +106952,7 @@ LcdKeyRow3_CombiEditMixer:
 	pop XIX                                              ; FBDF23  5c
 	popw hl                                              ; FBDF24  4b
 	ret                                                  ; FBDF25  0e
-; LcdKeyRow4_CombiEditMixer: PtrTable_F1AFD5[11], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow4_CombiEditMixer: ScreenButtons_CombiEditMixer[11], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow4 handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow4_CombiEditMixer:
 	pushw hl                                             ; FBDF26  2b
@@ -107003,7 +107003,7 @@ LcdKeyRow4_CombiEditMixer:
 	pop XIX                                              ; FBDF83  5c
 	popw hl                                              ; FBDF84  4b
 	ret                                                  ; FBDF85  0e
-; LcdKeyRow5_CombiEditMixer: PtrTable_F1AFD5[12], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow5_CombiEditMixer: ScreenButtons_CombiEditMixer[12], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow5 handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow5_CombiEditMixer:
 	push XIX                                             ; FBDF86  3c
@@ -107039,7 +107039,7 @@ LcdKeyRow5_CombiEditMixer:
 .LFBDFCA:
 	pop XIX                                              ; FBDFCA  5c
 	ret                                                  ; FBDFCB  0e
-; ExitKey_CombiEditMixer: PtrTable_F1AFD5[15], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombiEditMixer: ScreenButtons_CombiEditMixer[15], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombiEditMixer:
 	pushw hl                                             ; FBDFCC  2b
@@ -107086,7 +107086,7 @@ ExitKey_CombiEditMixer:
 	pop XIX                                              ; FBE035  5c
 	popw hl                                              ; FBE036  4b
 	ret                                                  ; FBE037  0e
-; PageKey_CombiEditMixer: PtrTable_F1AFD5[16], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
+; PageKey_CombiEditMixer: ScreenButtons_CombiEditMixer[16], the 23-slot button table ScreenButtonBody_CombiEditMixer reads through T_PanelCode_ToSlotAndFlags -- the
 ;   PageKey handler of CombiEditMixer (notes/prom_ab_promb_slot23_targets.py).
 PageKey_CombiEditMixer:
 	lda xbc, (Record_F1AE3F:24)                          ; FBE038  f2 3f ae f1 31
@@ -108614,7 +108614,7 @@ CombiEdit_CompareOn:
 .LFBEDBD:
 	ret                                                  ; FBEDBD  0e
 ; CompareKey_CombiEdit: slot 21 (code 0x1E, COMPARE -- Dispatch_FF4049's code map) of the 23-slot button tables of
-;   CombiEditInternalSound (PtrTable_F1AF11), CombiEditMixer (_F1AFD5), CombinationNaming (_F1B14B), CombiEditConfigure
+;   CombiEditInternalSound (ScreenButtons_CombiEditInternalSound), CombiEditMixer (_F1AFD5), CombinationNaming (_F1B14B), CombiEditConfigure
 ;   (_F1B239) and CombiEditMenu (_F1B295); ScreenButton_CombiEditDspEffect also calls it for code 0x1E.
 CompareKey_CombiEdit:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEDBE  c1 76 20 3f 16
@@ -108916,7 +108916,7 @@ Screen_CombinationNaming_Button:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBEF93  1d 74 2c f4
 	mul A,0x04                                           ; FBEF97  c9 08 04
 	extz XWA                                             ; FBEF9A  e8 12
-	add XWA,PtrTable_F1B14B                              ; FBEF9C  e8 c8 4b b1 f1 00
+	add XWA,ScreenButtons_CombinationNaming                              ; FBEF9C  e8 c8 4b b1 f1 00
 	ld XBC,(XWA)                                         ; FBEFA2  a0 21
 	lda xiy, (.LFBEFAC:24)                               ; FBEFA4  f2 ac ef fb 35
 	push XIY                                             ; FBEFA9  3d
@@ -108928,7 +108928,7 @@ Screen_CombinationNaming_Button:
 	ret                                                  ; FBEFAF  0e
 T_F41AA4_Nop:
 	ret                                                  ; FBEFB0  0e
-; LcdKeyRow1_CombinationNaming: PtrTable_F1B14B[8], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow1_CombinationNaming: ScreenButtons_CombinationNaming[8], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow1 handler of CombinationNaming (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow1_CombinationNaming:
 	ld c, (PanelEvent_Flags:16)                                   ; FBEFB1  c1 b0 28 23
@@ -108944,7 +108944,7 @@ LcdKeyRow1_CombinationNaming:
 	calr sub_FBF03A                                      ; FBEFCE  1e 69 00
 .LFBEFD1:
 	ret                                                  ; FBEFD1  0e
-; LcdKeyRow3_CombinationNaming: PtrTable_F1B14B[10], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_CombinationNaming: ScreenButtons_CombinationNaming[10], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of CombinationNaming (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_CombinationNaming:
 	push XIX                                             ; FBEFD2  3c
@@ -108957,7 +108957,7 @@ LcdKeyRow3_CombinationNaming:
 .LFBEFE4:
 	pop XIX                                              ; FBEFE4  5c
 	ret                                                  ; FBEFE5  0e
-; LcdKeyRow4_CombinationNaming: PtrTable_F1B14B[11], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow4_CombinationNaming: ScreenButtons_CombinationNaming[11], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow4 handler of CombinationNaming (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow4_CombinationNaming:
 	push XIX                                             ; FBEFE6  3c
@@ -108970,7 +108970,7 @@ LcdKeyRow4_CombinationNaming:
 .LFBEFF8:
 	pop XIX                                              ; FBEFF8  5c
 	ret                                                  ; FBEFF9  0e
-; LcdKeyRow5_CombinationNaming: PtrTable_F1B14B[12], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow5_CombinationNaming: ScreenButtons_CombinationNaming[12], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow5 handler of CombinationNaming (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow5_CombinationNaming:
 	ld c, (PanelEvent_Flags:16)                                   ; FBEFFA  c1 b0 28 23
@@ -108980,7 +108980,7 @@ LcdKeyRow5_CombinationNaming:
 	ld (UI_Request:16), 0x36                                 ; FBF007  f1 70 20 00 36
 .LFBF00C:
 	ret                                                  ; FBF00C  0e
-; ExitKey_CombinationNaming: PtrTable_F1B14B[15], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombinationNaming: ScreenButtons_CombinationNaming[15], the 23-slot button table Screen_CombinationNaming_Button reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombinationNaming (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombinationNaming:
 	ld c, (PanelEvent_Flags:16)                                   ; FBF00D  c1 b0 28 23
@@ -109228,6 +109228,9 @@ ScreenLeaveBody_CombinationNaming:
 	popw hl                                              ; FBF231  4b
 	unlk XIZ                                             ; FBF232  ee 0d
 	ret                                                  ; FBF234  0e
+; CombinationNamingWrite_NoAction: the bare `ret` that 12 of ScreenButtons_CombinationNamingWrite's 32 slots name -- a control with nothing
+;   to do on screen 0x36.
+CombinationNamingWrite_NoAction:
 	ret                                                  ; FBF235  0e
 ScreenButtonBody_CombinationNaming:
 	link XIZ,0x0000                                      ; FBF236  ee 0c 00 00
@@ -109245,7 +109248,7 @@ ScreenButtonBody_CombinationNaming:
 	m_push MWD+r6, 0x0a                                  ; FBF256  9e 0a 04
 	ldw bc, 0x04                                         ; FBF259  31 04 00
 	mul xbc, hl                                         ; FBF25C  db 41
-	add XBC,PtrTable_F1B1B0                              ; FBF25E  e9 c8 b0 b1 f1 00
+	add XBC,ScreenButtons_CombinationNamingWrite                              ; FBF25E  e9 c8 b0 b1 f1 00
 	ld XBC,(XBC)                                         ; FBF264  a1 21
 	lda xiy, (.LFBF26E:24)                               ; FBF266  f2 6e f2 fb 35
 	push XIY                                             ; FBF26B  3d
@@ -109257,6 +109260,11 @@ ScreenButtonBody_CombinationNaming:
 	unlk XIZ                                             ; FBF270  ee 0d
 	ret                                                  ; FBF272  0e
 	ret                                                  ; FBF273  0e
+; LcdKeyRow1_CombinationNamingWrite: ScreenButtons_CombinationNamingWrite[8] -- the LcdKeyRow1 handler of screen 0x36, the COMBINATION NAMING page
+;   reached from COMBI.EDIT WRITE (Paint_CombinationNamingWrite).  The table is indexed by the raw button code
+;   (ScreenButtonBody_CombinationNaming: `cp HL,0x1F`, then `mul XBC,HL` by 4).  Screen 0x3C, the other COMBINATION
+;   NAMING, has its own <Control>_CombinationNaming handlers.
+LcdKeyRow1_CombinationNamingWrite:
 	link XIZ,0x0000                                      ; FBF274  ee 0c 00 00
 	m_cp_mi16 MWD+r6, 0x08, 0x0000                       ; FBF278  9e 08 3f 00 00
 	jr z, .LFBF28A                                       ; FBF27D  66 0b
@@ -109270,6 +109278,8 @@ ScreenButtonBody_CombinationNaming:
 .LFBF292:
 	unlk XIZ                                             ; FBF292  ee 0d
 	ret                                                  ; FBF294  0e
+; LcdKeyRow2_CombinationNamingWrite: ScreenButtons_CombinationNamingWrite[9] -- the LcdKeyRow2 handler of screen 0x36 (see LcdKeyRow1_CombinationNamingWrite).
+LcdKeyRow2_CombinationNamingWrite:
 	link XIZ,0x0000                                      ; FBF295  ee 0c 00 00
 	m_cp_mi16 MWD+r6, 0x08, 0x0000                       ; FBF299  9e 08 3f 00 00
 	jr nz, .LFBF2A8                                      ; FBF29E  6e 08
@@ -109279,6 +109289,8 @@ ScreenButtonBody_CombinationNaming:
 .LFBF2A8:
 	unlk XIZ                                             ; FBF2A8  ee 0d
 	ret                                                  ; FBF2AA  0e
+; ExitKey_CombinationNamingWrite: ScreenButtons_CombinationNamingWrite[15] -- the EXIT handler of screen 0x36 (see LcdKeyRow1_CombinationNamingWrite).
+ExitKey_CombinationNamingWrite:
 	link XIZ,0x0000                                      ; FBF2AB  ee 0c 00 00
 	m_cp_mi16 MWD+r6, 0x08, 0x0000                       ; FBF2AF  9e 08 3f 00 00
 	jr nz, .LFBF2BF                                      ; FBF2B4  6e 09
@@ -109472,7 +109484,7 @@ ScreenButtonBody_CombiEditConfigure:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBF477  1d 74 2c f4
 	mul A,0x04                                           ; FBF47B  c9 08 04
 	extz XWA                                             ; FBF47E  e8 12
-	add XWA,PtrTable_F1B239                              ; FBF480  e8 c8 39 b2 f1 00
+	add XWA,ScreenButtons_CombiEditConfigure                              ; FBF480  e8 c8 39 b2 f1 00
 	ld XBC,(XWA)                                         ; FBF486  a0 21
 	lda xiy, (.LFBF490:24)                               ; FBF488  f2 90 f4 fb 35
 	push XIY                                             ; FBF48D  3d
@@ -109486,7 +109498,7 @@ ScreenButtonBody_CombiEditConfigure:
 	ret                                                  ; FBF497  0e
 sub_FBF453_Nop:
 	ret                                                  ; FBF498  0e
-; SoftKeyCol2_CombiEditConfigure: PtrTable_F1B239[1], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol2_CombiEditConfigure: ScreenButtons_CombiEditConfigure[1], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol2 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol2_CombiEditConfigure:
 	pushw hl                                             ; FBF499  2b
@@ -109535,7 +109547,7 @@ SoftKeyCol2_CombiEditConfigure:
 	popw de                                              ; FBF50C  4a
 	popw hl                                              ; FBF50D  4b
 	ret                                                  ; FBF50E  0e
-; SoftKeyCol4_CombiEditConfigure: PtrTable_F1B239[3], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol4_CombiEditConfigure: ScreenButtons_CombiEditConfigure[3], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol4 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol4_CombiEditConfigure:
 	m_cp_mi8 MB16, 0x2767, 0x00                          ; FBF50F  c1 67 27 3f 00
@@ -109554,7 +109566,7 @@ SoftKeyCol4_CombiEditConfigure:
 	pop XIY                                              ; FBF538  5d
 .LFBF539:
 	ret                                                  ; FBF539  0e
-; SoftKeyCol5_CombiEditConfigure: PtrTable_F1B239[4], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol5_CombiEditConfigure: ScreenButtons_CombiEditConfigure[4], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol5 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol5_CombiEditConfigure:
 	pushw hl                                             ; FBF53A  2b
@@ -109595,7 +109607,7 @@ SoftKeyCol5_CombiEditConfigure:
 .LFBF580:
 	popw hl                                              ; FBF580  4b
 	ret                                                  ; FBF581  0e
-; SoftKeyCol6_CombiEditConfigure: PtrTable_F1B239[5], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol6_CombiEditConfigure: ScreenButtons_CombiEditConfigure[5], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol6 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol6_CombiEditConfigure:
 	pushw hl                                             ; FBF582  2b
@@ -109636,7 +109648,7 @@ SoftKeyCol6_CombiEditConfigure:
 .LFBF5C8:
 	popw hl                                              ; FBF5C8  4b
 	ret                                                  ; FBF5C9  0e
-; SoftKeyCol7_CombiEditConfigure: PtrTable_F1B239[6], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol7_CombiEditConfigure: ScreenButtons_CombiEditConfigure[6], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol7 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol7_CombiEditConfigure:
 	m_cp_mi8 MB16, 0x2767, 0x00                          ; FBF5CA  c1 67 27 3f 00
@@ -109655,7 +109667,7 @@ SoftKeyCol7_CombiEditConfigure:
 	pop XIY                                              ; FBF5F3  5d
 .LFBF5F4:
 	ret                                                  ; FBF5F4  0e
-; LcdKeyRow1_CombiEditConfigure: PtrTable_F1B239[8], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow1_CombiEditConfigure: ScreenButtons_CombiEditConfigure[8], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow1 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow1_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF5F5  c1 76 20 3f 16
@@ -109666,7 +109678,7 @@ LcdKeyRow1_CombiEditConfigure:
 	calr sub_FBFC32                                      ; FBF605  1e 2a 06
 .LFBF608:
 	ret                                                  ; FBF608  0e
-; LcdKeyRow2_CombiEditConfigure: PtrTable_F1B239[9], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow2_CombiEditConfigure: ScreenButtons_CombiEditConfigure[9], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow2 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow2_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF609  c1 76 20 3f 16
@@ -109681,7 +109693,7 @@ LcdKeyRow2_CombiEditConfigure:
 	m_set 4, MD16, UI_Request_Hi                                ; FBF62A  f1 71 20 bc
 .LFBF62E:
 	ret                                                  ; FBF62E  0e
-; LcdKeyRow3_CombiEditConfigure: PtrTable_F1B239[10], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_CombiEditConfigure: ScreenButtons_CombiEditConfigure[10], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF62F  c1 76 20 3f 16
@@ -109696,7 +109708,7 @@ LcdKeyRow3_CombiEditConfigure:
 	m_set 4, MD16, UI_Request_Hi                                ; FBF650  f1 71 20 bc
 .LFBF654:
 	ret                                                  ; FBF654  0e
-; LcdKeyRow4_CombiEditConfigure: PtrTable_F1B239[11], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow4_CombiEditConfigure: ScreenButtons_CombiEditConfigure[11], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow4 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow4_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBF655  c1 76 20 3f 16
@@ -109711,7 +109723,7 @@ LcdKeyRow4_CombiEditConfigure:
 	m_set 4, MD16, UI_Request_Hi                                ; FBF676  f1 71 20 bc
 .LFBF67A:
 	ret                                                  ; FBF67A  0e
-; ExitKey_CombiEditConfigure: PtrTable_F1B239[15], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombiEditConfigure: ScreenButtons_CombiEditConfigure[15], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombiEditConfigure:
 	push XIX                                             ; FBF67B  3c
@@ -110193,7 +110205,7 @@ ScreenButton_CombiEditMenu:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBFB16  1d 74 2c f4
 	mul A,0x04                                           ; FBFB1A  c9 08 04
 	extz XWA                                             ; FBFB1D  e8 12
-	add XWA,PtrTable_F1B295                              ; FBFB1F  e8 c8 95 b2 f1 00
+	add XWA,ScreenButtons_CombiEditMenu                              ; FBFB1F  e8 c8 95 b2 f1 00
 	ld XBC,(XWA)                                         ; FBFB25  a0 21
 	lda xiy, (.LFBFB2F:24)                               ; FBFB27  f2 2f fb fb 35
 	push XIY                                             ; FBFB2C  3d
@@ -110205,7 +110217,7 @@ ScreenButton_CombiEditMenu:
 	ret                                                  ; FBFB32  0e
 T_F41A24_Nop:
 	ret                                                  ; FBFB33  0e
-; LcdKeyRow1_CombiEditMenu: PtrTable_F1B295[8], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow1_CombiEditMenu: ScreenButtons_CombiEditMenu[8], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow1 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow1_CombiEditMenu:
 	push XIX                                             ; FBFB34  3c
@@ -110228,7 +110240,7 @@ LcdKeyRow1_CombiEditMenu:
 .LFBFB66:
 	pop XIX                                              ; FBFB66  5c
 	ret                                                  ; FBFB67  0e
-; LcdKeyRow2_CombiEditMenu: PtrTable_F1B295[9], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow2_CombiEditMenu: ScreenButtons_CombiEditMenu[9], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow2 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow2_CombiEditMenu:
 	ld c, (PanelEvent_Flags:16)                                   ; FBFB68  c1 b0 28 23
@@ -110252,7 +110264,7 @@ LcdKeyRow2_CombiEditMenu:
 	calr sub_FBFC32                                      ; FBFB96  1e 99 00
 .LFBFB99:
 	ret                                                  ; FBFB99  0e
-; LcdKeyRow3_CombiEditMenu: PtrTable_F1B295[10], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_CombiEditMenu: ScreenButtons_CombiEditMenu[10], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_CombiEditMenu:
 	pushw hl                                             ; FBFB9A  2b
@@ -110273,7 +110285,7 @@ LcdKeyRow3_CombiEditMenu_Skip:
 	pop XIX                                              ; FBFBBE  5c
 	popw hl                                              ; FBFBBF  4b
 	ret                                                  ; FBFBC0  0e
-; LcdKeyRow4_CombiEditMenu: PtrTable_F1B295[11], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow4_CombiEditMenu: ScreenButtons_CombiEditMenu[11], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow4 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow4_CombiEditMenu:
 	pushw hl                                             ; FBFBC1  2b
@@ -110294,7 +110306,7 @@ LcdKeyRow4_CombiEditMenu:
 	pop XIX                                              ; FBFBE5  5c
 	popw hl                                              ; FBFBE6  4b
 	ret                                                  ; FBFBE7  0e
-; LcdKeyRow5_CombiEditMenu: PtrTable_F1B295[12], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow5_CombiEditMenu: ScreenButtons_CombiEditMenu[12], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow5 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow5_CombiEditMenu:
 	pushw hl                                             ; FBFBE8  2b
@@ -110315,7 +110327,7 @@ LcdKeyRow5_CombiEditMenu:
 	pop XIX                                              ; FBFC0C  5c
 	popw hl                                              ; FBFC0D  4b
 	ret                                                  ; FBFC0E  0e
-; ExitKey_CombiEditMenu: PtrTable_F1B295[15], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_CombiEditMenu: ScreenButtons_CombiEditMenu[15], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_CombiEditMenu:
 	ld c, (PanelEvent_Flags:16)                                   ; FBFC0F  c1 b0 28 23
@@ -110349,7 +110361,7 @@ sub_FBFC32:
 	popw bc                                              ; FBFC50  49
 	pop XIX                                              ; FBFC51  5c
 	ret                                                  ; FBFC52  0e
-; SoftKeyCol1_CombiEditMenu: PtrTable_F1B295[0], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
+; SoftKeyCol1_CombiEditMenu: ScreenButtons_CombiEditMenu[0], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol1 handler of CombiEditMenu (notes/prom_ab_promb_slot23_targets.py).
 SoftKeyCol1_CombiEditMenu:
 	link XIZ,0xfffa                                      ; FBFC53  ee 0c fa ff
@@ -110536,7 +110548,7 @@ ScreenButtonBody_Effect2OutputConflict:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBFE01  1d 74 2c f4
 	mul A,0x04                                           ; FBFE05  c9 08 04
 	extz XWA                                             ; FBFE08  e8 12
-	add XWA,PtrTable_F1B2F1                              ; FBFE0A  e8 c8 f1 b2 f1 00
+	add XWA,ScreenButtons_Effect2OutputConflict                              ; FBFE0A  e8 c8 f1 b2 f1 00
 	ld XBC,(XWA)                                         ; FBFE10  a0 21
 	lda xiy, (.LFBFE1A:24)                               ; FBFE12  f2 1a fe fb 35
 	push XIY                                             ; FBFE17  3d
@@ -110546,7 +110558,7 @@ ScreenButtonBody_Effect2OutputConflict:
 	unlk XIZ                                             ; FBFE1B  ee 0d
 	ret                                                  ; FBFE1D  0e
 	ret                                                  ; FBFE1E  0e
-; ExitKey_Effect2OutputConflict: PtrTable_F1B2F1[15], the 23-slot button table ScreenButtonBody_Effect2OutputConflict reads through T_PanelCode_ToSlotAndFlags -- the
+; ExitKey_Effect2OutputConflict: ScreenButtons_Effect2OutputConflict[15], the 23-slot button table ScreenButtonBody_Effect2OutputConflict reads through T_PanelCode_ToSlotAndFlags -- the
 ;   ExitKey handler of Effect2OutputConflict (notes/prom_ab_promb_slot23_targets.py).
 ExitKey_Effect2OutputConflict:
 	ld c, (PanelEvent_Flags:16)                                   ; FBFE1F  c1 b0 28 23
@@ -110641,7 +110653,7 @@ ScreenButtonBody_WriteProtectError:
 	call T_PanelCode_ToSlotAndFlags                                        ; FBFEE4  1d 74 2c f4
 	mul A,0x04                                           ; FBFEE8  c9 08 04
 	extz XWA                                             ; FBFEEB  e8 12
-	add XWA,PtrTable_F1B34D                              ; FBFEED  e8 c8 4d b3 f1 00
+	add XWA,ScreenButtons_WriteProtectError                              ; FBFEED  e8 c8 4d b3 f1 00
 	ld XBC,(XWA)                                         ; FBFEF3  a0 21
 	lda xiy, (.LFBFEFD:24)                               ; FBFEF5  f2 fd fe fb 35
 	push XIY                                             ; FBFEFA  3d
@@ -110651,7 +110663,7 @@ ScreenButtonBody_WriteProtectError:
 	unlk XIZ                                             ; FBFEFE  ee 0d
 	ret                                                  ; FBFF00  0e
 	ret                                                  ; FBFF01  0e
-; LcdKeyRow3_WriteProtectError: PtrTable_F1B34D[10], the 23-slot button table ScreenButtonBody_WriteProtectError reads through T_PanelCode_ToSlotAndFlags -- the
+; LcdKeyRow3_WriteProtectError: ScreenButtons_WriteProtectError[10], the 23-slot button table ScreenButtonBody_WriteProtectError reads through T_PanelCode_ToSlotAndFlags -- the
 ;   LcdKeyRow3 handler of WriteProtectError (notes/prom_ab_promb_slot23_targets.py).
 LcdKeyRow3_WriteProtectError:
 	ld c, (PanelEvent_Flags:16)                                   ; FBFF02  c1 b0 28 23
@@ -186757,7 +186769,7 @@ Dispatch_FF3A29:
 	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3BB5  [ 99]
 	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3BB9  [100]
 	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3BBD  [101]
-	.long T_F42F9C                                   ; FF3BC1  [102]
+	.long T_SoundEditNaming_SoftKeyCol7                                   ; FF3BC1  [102]
 	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3BC5  [103]
 	.long LcdKeyRow1_DiskSaveFile_Page3              ; FF3BC9  [104]
 	.long DispatchMatrix_NoAction                                 ; FF3BCD  [105]
@@ -186774,7 +186786,7 @@ Dispatch_FF3A29:
 	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3BF9  [116]
 	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3BFD  [117]
 	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C01  [118]
-	.long T_F42F9C                                   ; FF3C05  [119]
+	.long T_SoundEditNaming_SoftKeyCol7                                   ; FF3C05  [119]
 	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C09  [120]
 	.long DispatchMatrix_NoAction                                 ; FF3C0D  [121]
 	.long DispatchMatrix_NoAction                                 ; FF3C11  [122]
@@ -186789,7 +186801,7 @@ Dispatch_FF3A29:
 	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3C35  [131]
 	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3C39  [132]
 	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C3D  [133]
-	.long T_F42F9C                                   ; FF3C41  [134]
+	.long T_SoundEditNaming_SoftKeyCol7                                   ; FF3C41  [134]
 	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C45  [135]
 	.long LcdKeyRow1_DiskSaveFile_Page4              ; FF3C49  [136]
 	.long DispatchMatrix_NoAction                                 ; FF3C4D  [137]
@@ -186806,7 +186818,7 @@ Dispatch_FF3A29:
 	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3C79  [148]
 	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3C7D  [149]
 	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C81  [150]
-	.long T_F42F9C                                   ; FF3C85  [151]
+	.long T_SoundEditNaming_SoftKeyCol7                                   ; FF3C85  [151]
 	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C89  [152]
 	.long DispatchMatrix_NoAction                                 ; FF3C8D  [153]
 	.long DispatchMatrix_NoAction                                 ; FF3C91  [154]

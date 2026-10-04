@@ -1209,6 +1209,10 @@
 	.set	LcdKeyRow4_CombinationNaming, 0xFBEFE6
 	.set	LcdKeyRow5_CombinationNaming, 0xFBEFFA
 	.set	ExitKey_CombinationNaming, 0xFBF00D
+	.set	CombinationNamingWrite_NoAction, 0xFBF235
+	.set	LcdKeyRow1_CombinationNamingWrite, 0xFBF274
+	.set	LcdKeyRow2_CombinationNamingWrite, 0xFBF295
+	.set	ExitKey_CombinationNamingWrite, 0xFBF2AB
 	.set	SoftKeyCol2_CombiEditConfigure, 0xFBF499
 	.set	SoftKeyCol4_CombiEditConfigure, 0xFBF50F
 	.set	SoftKeyCol5_CombiEditConfigure, 0xFBF53A
@@ -22469,7 +22473,7 @@ SoftKeyCol6_SoundEditNaming:
 ; SoftKeyCol7_SoundEditNaming
 ; Called from: table 0xFCF80C[240]
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0BDAC
+; Calls:   SoundEditNaming_SoftKeyCol7
 ; Evidence: word [240] of the pointer table at 0xFCF80C reads 0x00F0B727, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0B727 is an
 ;           instruction boundary of this transcription.
@@ -22492,7 +22496,7 @@ sub_F0B727_Skip:
 	ldw	hl, 32768	; F0B73B  ld HL,0x8000
 sub_F0B727_Join:
 	pushw	hl	; F0B73E  push HL
-	calr	sub_F0BDAC	; F0B73F  calr 0xf0bdac
+	calr	SoundEditNaming_SoftKeyCol7	; F0B73F  calr 0xf0bdac
 	popw	bc	; F0B742  pop BC
 	popw	hl	; F0B743  pop HL
 	unlk XIZ	; F0B744  unlk XIZ
@@ -23350,17 +23354,21 @@ sub_F0BD31_Skip:
 	ret	; F0BDAB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0BDAC
-; Called from: T_F42F9C (x3); in-module: 0xF0B73F
+; SoundEditNaming_SoftKeyCol7
+; Called from: T_SoundEditNaming_SoftKeyCol7 (x3); in-module: 0xF0B73F
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F9C holds `jp 0x00F0BDAC`, and 0xF0BDAC is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol7 holds `jp 0x00F0BDAC`, and 0xF0BDAC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0BDAC:		; <- T_F42F9C
+; SoundEditNaming_SoftKeyCol7: the routine directory slot between T_SoundEditNaming_SoftKeyCol6 and _SoftKeyCol8
+;   (T_SoundEditNaming_SoftKeyCol7), and slot 6 of ScreenButtons_CombinationNamingWrite -- SOFT KEY 7.  Steps the character Arr27A6[1] by 16, one row of
+;   the 16-wide table: down to >= 0, or up (argument bit 15) to <= 95; then sub_FD7C5A, Arr22F0_Set and two
+;   T_Dispatch_Code80(159) posts, as SoundEditNaming_SoftKeyCol6 does after its step of 1.  Also called by SoftKeyCol7_SoundEditNaming.
+SoundEditNaming_SoftKeyCol7:		; <- T_SoundEditNaming_SoftKeyCol7
 	link XIZ,0xfffa	; F0BDAC  link XIZ,0xfffa
 	pushw	hl	; F0BDB0  push HL
 	ld	h, 0:opc	; F0BDB1  ld H,0x00
@@ -51196,12 +51204,13 @@ BitTable_F1AE95:
 	.byte 0x80, 0x00, 0x00, 0x00   ; F1AEB1  [7]
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AEB5 -- pointer table, 0xF1AEB5-0xF1AF10 (92 bytes)
+; ScreenButtons_CombiEditPartMenu -- pointer table, 0xF1AEB5-0xF1AF10 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xF42C70 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBCB95
 ; --------------------------------------------------------------------------
-PtrTable_F1AEB5:
+; ScreenButtons_CombiEditPartMenu: the 23-slot button table ScreenButton_CombiEditPartMenu indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombiEditPartMenu:
 	.long T_F42C70                       ; F1AEB5  [0]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AEB9  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AEBD  [2]   -> prom_b 0xF42C70
@@ -51227,12 +51236,13 @@ PtrTable_F1AEB5:
 	.long T_F42C70                       ; F1AF0D  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AF11 -- pointer table, 0xF1AF11-0xF1AF6C (92 bytes)
+; ScreenButtons_CombiEditInternalSound -- pointer table, 0xF1AF11-0xF1AF6C (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xFBCF82 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBCF69
 ; --------------------------------------------------------------------------
-PtrTable_F1AF11:
+; ScreenButtons_CombiEditInternalSound: the 23-slot button table ScreenButton_CombiEditInternalSound indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombiEditInternalSound:
 	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF11  [0]   -> prom_a 0xFBCF82
 	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF15  [1]   -> prom_a 0xFBCF82
 	.long SoftKeyCols1to4_CombiEditInternalSound                       ; F1AF19  [2]   -> prom_a 0xFBCF82
@@ -51341,12 +51351,13 @@ PtrTable_F1AFBD:
 	.long 0x00FBD7D9                       ; F1AFD1  [5]   -> prom_a 0xFBD7D9
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AFD5 -- pointer table, 0xF1AFD5-0xF1B030 (92 bytes)
+; ScreenButtons_CombiEditMixer -- pointer table, 0xF1AFD5-0xF1B030 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xFBDDD7 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBDDBE
 ; --------------------------------------------------------------------------
-PtrTable_F1AFD5:
+; ScreenButtons_CombiEditMixer: the 23-slot button table ScreenButtonBody_CombiEditMixer indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombiEditMixer:
 	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFD5  [0]   -> prom_a 0xFBDDD7
 	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFD9  [1]   -> prom_a 0xFBDDD7
 	.long SoftKeyCols1to8_CombiEditMixer                       ; F1AFDD  [2]   -> prom_a 0xFBDDD7
@@ -51560,12 +51571,13 @@ PtrTable_F1B12B:
 	.long RecordArray_F18795 + 0x77                       ; F1B147  [7]   -> 0xF1880C (inside this span)
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B14B -- pointer table, 0xF1B14B-0xF1B1A6 (92 bytes)
+; ScreenButtons_CombinationNaming -- pointer table, 0xF1B14B-0xF1B1A6 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xF42C70 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBEF9C
 ; --------------------------------------------------------------------------
-PtrTable_F1B14B:
+; ScreenButtons_CombinationNaming: the 23-slot button table Screen_CombinationNaming_Button indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombinationNaming:
 	.long T_F42C70                       ; F1B14B  [0]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B14F  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B153  [2]   -> prom_b 0xF42C70
@@ -51598,44 +51610,45 @@ Record_F1B1A7:
 	.byte 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x00   ; F1B1A7  .........
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B1B0 -- pointer table, 0xF1B1B0-0xF1B22F (128 bytes)
+; ScreenButtons_CombinationNamingWrite -- pointer table, 0xF1B1B0-0xF1B22F (128 bytes)
 ; Shape: 32 entries of 4 bytes = 128 bytes, which is the whole segment.
 ; First / last: 0xF42F84 ... 0xFBF235
 ; Evidence: 32 entries of 4 bytes; base and width from prom_a 0xFBF25E
 ; --------------------------------------------------------------------------
-PtrTable_F1B1B0:
+; ScreenButtons_CombinationNamingWrite: screen 0x36's 32-slot button table, indexed by the raw button code in ScreenButtonBody_CombinationNaming.
+ScreenButtons_CombinationNamingWrite:
 	.long T_SoundEditNaming_SoftKeyCol1                       ; F1B1B0  [0]   -> prom_b 0xF42F84
 	.long T_SoundEditNaming_SoftKeyCol2                       ; F1B1B4  [1]   -> prom_b 0xF42F88
 	.long T_SoundEditNaming_SoftKeyCol3                       ; F1B1B8  [2]   -> prom_b 0xF42F8C
 	.long T_SoundEditNaming_SoftKeyCol4                       ; F1B1BC  [3]   -> prom_b 0xF42F90
 	.long T_SoundEditNaming_SoftKeyCol5                       ; F1B1C0  [4]   -> prom_b 0xF42F94
 	.long T_SoundEditNaming_SoftKeyCol6                       ; F1B1C4  [5]   -> prom_b 0xF42F98
-	.long T_F42F9C                       ; F1B1C8  [6]   -> prom_b 0xF42F9C
+	.long T_SoundEditNaming_SoftKeyCol7                       ; F1B1C8  [6]   -> prom_b 0xF42F9C
 	.long T_SoundEditNaming_SoftKeyCol8                       ; F1B1CC  [7]   -> prom_b 0xF42FA0
-	.long 0x00FBF274                       ; F1B1D0  [8]   -> prom_a 0xFBF274
-	.long 0x00FBF295                       ; F1B1D4  [9]   -> prom_a 0xFBF295
-	.long 0x00FBF235                       ; F1B1D8  [10]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B1DC  [11]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B1E0  [12]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B1E4  [13]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B1E8  [14]   -> prom_a 0xFBF235
-	.long 0x00FBF2AB                       ; F1B1EC  [15]   -> prom_a 0xFBF2AB
-	.long 0x00FBF235                       ; F1B1F0  [16]   -> prom_a 0xFBF235
+	.long LcdKeyRow1_CombinationNamingWrite                       ; F1B1D0  [8]   -> prom_a 0xFBF274
+	.long LcdKeyRow2_CombinationNamingWrite                       ; F1B1D4  [9]   -> prom_a 0xFBF295
+	.long CombinationNamingWrite_NoAction                       ; F1B1D8  [10]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B1DC  [11]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B1E0  [12]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B1E4  [13]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B1E8  [14]   -> prom_a 0xFBF235
+	.long ExitKey_CombinationNamingWrite                       ; F1B1EC  [15]   -> prom_a 0xFBF2AB
+	.long CombinationNamingWrite_NoAction                       ; F1B1F0  [16]   -> prom_a 0xFBF235
 	.long T_SoundEditNaming_SoftKeyCol1                       ; F1B1F4  [17]   -> prom_b 0xF42F84
 	.long T_SoundEditNaming_SoftKeyCol2                       ; F1B1F8  [18]   -> prom_b 0xF42F88
 	.long T_SoundEditNaming_SoftKeyCol3                       ; F1B1FC  [19]   -> prom_b 0xF42F8C
 	.long T_SoundEditNaming_SoftKeyCol4                       ; F1B200  [20]   -> prom_b 0xF42F90
 	.long T_SoundEditNaming_SoftKeyCol5                       ; F1B204  [21]   -> prom_b 0xF42F94
 	.long T_SoundEditNaming_SoftKeyCol6                       ; F1B208  [22]   -> prom_b 0xF42F98
-	.long T_F42F9C                       ; F1B20C  [23]   -> prom_b 0xF42F9C
+	.long T_SoundEditNaming_SoftKeyCol7                       ; F1B20C  [23]   -> prom_b 0xF42F9C
 	.long T_SoundEditNaming_SoftKeyCol8                       ; F1B210  [24]   -> prom_b 0xF42FA0
-	.long 0x00FBF235                       ; F1B214  [25]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B218  [26]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B21C  [27]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B220  [28]   -> prom_a 0xFBF235
-	.long 0x00FBF235                       ; F1B224  [29]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B214  [25]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B218  [26]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B21C  [27]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B220  [28]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B224  [29]   -> prom_a 0xFBF235
 	.long CompareKey_CombiEdit                       ; F1B228  [30]   -> prom_a 0xFBEDBE
-	.long 0x00FBF235                       ; F1B22C  [31]   -> prom_a 0xFBF235
+	.long CombinationNamingWrite_NoAction                       ; F1B22C  [31]   -> prom_a 0xFBF235
 
 ; --------------------------------------------------------------------------
 ; IndexMap_F1B230 -- index map, 0xF1B230-0xF1B238 (9 bytes)
@@ -51654,12 +51667,13 @@ IndexMap_F1B230:
 	.byte 0x05   ; F1B238  [8]  = 5
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B239 -- pointer table, 0xF1B239-0xF1B294 (92 bytes)
+; ScreenButtons_CombiEditConfigure -- pointer table, 0xF1B239-0xF1B294 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xF42C70 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBF480
 ; --------------------------------------------------------------------------
-PtrTable_F1B239:
+; ScreenButtons_CombiEditConfigure: the 23-slot button table ScreenButtonBody_CombiEditConfigure indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombiEditConfigure:
 	.long T_F42C70                       ; F1B239  [0]   -> prom_b 0xF42C70
 	.long SoftKeyCol2_CombiEditConfigure                       ; F1B23D  [1]   -> prom_a 0xFBF499
 	.long T_F42C70                       ; F1B241  [2]   -> prom_b 0xF42C70
@@ -51685,12 +51699,13 @@ PtrTable_F1B239:
 	.long T_F42C70                       ; F1B291  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B295 -- pointer table, 0xF1B295-0xF1B2F0 (92 bytes)
+; ScreenButtons_CombiEditMenu -- pointer table, 0xF1B295-0xF1B2F0 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xFBFC53 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFB1F
 ; --------------------------------------------------------------------------
-PtrTable_F1B295:
+; ScreenButtons_CombiEditMenu: the 23-slot button table ScreenButton_CombiEditMenu indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_CombiEditMenu:
 	.long SoftKeyCol1_CombiEditMenu                       ; F1B295  [0]   -> prom_a 0xFBFC53
 	.long T_F42C70                       ; F1B299  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B29D  [2]   -> prom_b 0xF42C70
@@ -51716,12 +51731,13 @@ PtrTable_F1B295:
 	.long T_F42C70                       ; F1B2ED  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B2F1 -- pointer table, 0xF1B2F1-0xF1B34C (92 bytes)
+; ScreenButtons_Effect2OutputConflict -- pointer table, 0xF1B2F1-0xF1B34C (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xF42C70 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFE0A
 ; --------------------------------------------------------------------------
-PtrTable_F1B2F1:
+; ScreenButtons_Effect2OutputConflict: the 23-slot button table ScreenButtonBody_Effect2OutputConflict indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_Effect2OutputConflict:
 	.long T_F42C70                       ; F1B2F1  [0]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2F5  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2F9  [2]   -> prom_b 0xF42C70
@@ -51747,12 +51763,13 @@ PtrTable_F1B2F1:
 	.long T_F42C70                       ; F1B349  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1B34D -- pointer table, 0xF1B34D-0xF1B3A8 (92 bytes)
+; ScreenButtons_WriteProtectError -- pointer table, 0xF1B34D-0xF1B3A8 (92 bytes)
 ; Shape: 23 entries of 4 bytes = 92 bytes, which is the whole segment.
 ; First / last: 0xF42C70 ... 0xF42C70
 ; Evidence: 23 entries of 4 bytes; base and width from prom_a 0xFBFEED
 ; --------------------------------------------------------------------------
-PtrTable_F1B34D:
+; ScreenButtons_WriteProtectError: the 23-slot button table ScreenButtonBody_WriteProtectError indexes through T_PanelCode_ToSlotAndFlags (notes/prom_ab_promb_slot23_targets.py).
+ScreenButtons_WriteProtectError:
 	.long T_F42C70                       ; F1B34D  [0]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B351  [1]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B355  [2]   -> prom_b 0xF42C70
@@ -91127,7 +91144,7 @@ T_SoundEditNaming_SoftKeyCol3:	jp SoundEditNaming_SoftKeyCol3  ; -> prom_b 0x0BA
 T_SoundEditNaming_SoftKeyCol4:	jp SoundEditNaming_SoftKeyCol4  ; -> prom_b 0x0BBB4   x3
 T_SoundEditNaming_SoftKeyCol5:	jp SoundEditNaming_SoftKeyCol5  ; -> prom_b 0x0BC98   x3
 T_SoundEditNaming_SoftKeyCol6:	jp SoundEditNaming_SoftKeyCol6  ; -> prom_b 0x0BD31   x3
-T_F42F9C:	jp sub_F0BDAC  ; -> prom_b 0x0BDAC   x3
+T_SoundEditNaming_SoftKeyCol7:	jp SoundEditNaming_SoftKeyCol7  ; -> prom_b 0x0BDAC   x3
 T_SoundEditNaming_SoftKeyCol8:	jp SoundEditNaming_SoftKeyCol8  ; -> prom_b 0x0BE44   x3
 T_SoundEditNaming_LcdKeyRow1:	jp SoundEditNaming_LcdKeyRow1  ; -> prom_b 0x0BEBF   x6
 T_SoundEditNaming_LcdKeyRow2:	jp SoundEditNaming_LcdKeyRow2  ; -> prom_b 0x0BF04   x4
