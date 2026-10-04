@@ -1193,7 +1193,7 @@
 	.set	sub_FC01DD, 0xFC01DD
 	.set	sub_FC01F3, 0xFC01F3
 	.set	sub_FC0206, 0xFC0206
-	.set	sub_FC020F, 0xFC020F
+	.set	Msg0716_PostSysEx50_92_SaveRegs, 0xFC020F
 	.set	T_F40FF8_Nop, 0xFC024F
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13, 0xFC0250
 	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13, 0xFC0260
@@ -1726,8 +1726,8 @@
 	.set	T_F4258C_Nop, 0xFE1C1E
 	.set	Disk_PortA3_Release_Call_Call, 0xFE1C1F
 	.set	sub_FE1C23, 0xFE1C23
-	.set	sub_FE1C27, 0xFE1C27
-	.set	sub_FE1C2B, 0xFE1C2B
+	.set	Disk_MountAndScanDirectory_Call, 0xFE1C27
+	.set	Disk_MountAndScanDirectory_LeaveOnError_Call, 0xFE1C2B
 	.set	sub_FE1C2F, 0xFE1C2F
 	.set	sub_FE1C33, 0xFE1C33
 	.set	DiskApi_ReadFileToWindow_Entry, 0xFE1C3A
@@ -1744,10 +1744,10 @@
 	.set	sub_FE1C9F, 0xFE1C9F
 	.set	sub_FE1CA3, 0xFE1CA3
 	.set	sub_FE1CA7, 0xFE1CA7
-	.set	sub_FE1CAB, 0xFE1CAB
+	.set	Disk_SaveFileName_Call, 0xFE1CAB
 	.set	DiskApi_CloseFile_Call, 0xFE1CAF
 	.set	sub_FE1CB3, 0xFE1CB3
-	.set	sub_FE1CC0, 0xFE1CC0
+	.set	Disk_ResetAndMountFloppy_Call, 0xFE1CC0
 	.set	Disk_PortA3_Release_Entry, 0xFE1CC4
 	.set	DiskSaveFile_Page5_LcdKeyRow3, 0xFE1CC8
 	.set	sub_FE1CCC, 0xFE1CCC
@@ -2116,13 +2116,13 @@ sub_F00108:
 	calr	Transport_StartStopContinue	; F00127  calr 0xf0020b
 	jr	sub_F00108_Join	; F0012A  jr T,0xf00143
 sub_F00108_Skip:
-	calr	sub_F0023C	; F0012C  calr 0xf0023c
+	calr	Transport_StartStopContinue_Call	; F0012C  calr 0xf0023c
 	jr	sub_F00108_Join	; F0012F  jr T,0xf00143
 sub_F00108_Skip2:
 	ld	xwa, (6304798:24)	; F00131  ld XWA,(0x60341e)
 	cp	xwa, 0	; F00136  cp XWA,0x00000000
 	jr	z, sub_F00108_Join	; F0013C  jr Z,0xf00143
-	calr	sub_F00240	; F0013E  calr 0xf00240
+	calr	Transport_ToggleCAndB_Call	; F0013E  calr 0xf00240
 	jr	sub_F00108_Join	; F00141  jr T,0xf00143
 sub_F00108_Join:
 	jr	sub_F00108_Return	; F00143  jr T,0xf0017a
@@ -2301,10 +2301,12 @@ sub_F001C9_Skip4:
 	calr	Transport_StopAllRunning	; F00238  calr 0xf000b9
 sub_F001C9_Return2:
 	ret	; F0023B  ret
-sub_F0023C:
+; Transport_StartStopContinue_Call: calls Transport_StartStopContinue and returns -- `calr Transport_StartStopContinue / ret`.
+Transport_StartStopContinue_Call:
 	calr	Transport_StartStopContinue	; F0023C  calr 0xf0020b
 	ret	; F0023F  ret
-sub_F00240:
+; Transport_ToggleCAndB_Call: calls Transport_ToggleCAndB and returns -- `calr Transport_ToggleCAndB / ret`.
+Transport_ToggleCAndB_Call:
 	calr	Transport_ToggleCAndB	; F00240  calr 0xf001b5
 	ret	; F00243  ret
 ; Transport_StartAllContinue: the same start without resetting C's or B's counters (only TransportA_ResetCounters).
@@ -88619,7 +88621,7 @@ T_F40A04:	jp T_F40C74  ; -> prom_b 0x40C74   x8
 T_Var34D1_SetBits20:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
 T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
 T_F40A10:	jp sub_F45975  ; -> prom_b 0x45975   x2
-T_F40A14:	jp sub_F45B0A  ; -> prom_b 0x45B0A   x8
+T_F40A14:	jp TimedEventRing_Discard  ; -> prom_b 0x45B0A   x8
 T_F40A18:	jp sub_F455A0  ; -> prom_b 0x455A0   x2
 T_F40A1C:	jp sub_F44367  ; -> prom_b 0x44367   x15
 T_F40A20:	jp sub_F455C5  ; -> prom_b 0x455C5   x3
@@ -88641,7 +88643,7 @@ T_F40A54:	jp sub_F46015  ; -> prom_b 0x46015
 T_Var20A9_SetBits01:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
 T_UiStatus_ShowMessage0E:	jp UiStatus_ShowMessage0E  ; -> prom_b 0x45FB4   x3
 T_F40A60:	jp sub_F4402A  ; -> prom_b 0x4402A   x1
-T_F40A64:	jp sub_F44030  ; -> prom_b 0x44030
+T_F40A64:	jp TimedEventRing_Discard_Veneer  ; -> prom_b 0x44030
 	.fill 0x4, 1, 0x00  ; 0xF40A68: 4 x nop
 T_F40A6C:	jp sub_F44033  ; -> prom_b 0x44033
 T_F40A70:	jp sub_F4566A  ; -> prom_b 0x4566A   x1
@@ -88960,7 +88962,7 @@ T_F41050:	jp sub_FC01DD  ; -> prom_a 0x401DD   x2
 T_F41054:	jp sub_FC11FB  ; -> prom_a 0x411FB   x4
 T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1
-T_F41060:	jp sub_FC020F  ; -> prom_a 0x4020F   x1
+T_F41060:	jp Msg0716_PostSysEx50_92_SaveRegs  ; -> prom_a 0x4020F   x1
 	.fill 0xC, 1, 0x0E  ; 0xF41064: 12 x ret
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13  ; -> prom_a 0x40250
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13  ; -> prom_a 0x40260
@@ -90169,8 +90171,8 @@ T_F42588:	jp sub_FE1C17  ; -> prom_a 0x61C17
 T_F4258C:	jp T_F4258C_Nop  ; -> prom_a 0x61C1E
 T_Disk_PortA3_Release_Call_Call:	jp Disk_PortA3_Release_Call_Call  ; -> prom_a 0x61C1F   x4
 T_F42594:	jp sub_FE1C23  ; -> prom_a 0x61C23   x15
-T_F42598:	jp sub_FE1C27  ; -> prom_a 0x61C27
-T_F4259C:	jp sub_FE1C2B  ; -> prom_a 0x61C2B
+T_F42598:	jp Disk_MountAndScanDirectory_Call  ; -> prom_a 0x61C27
+T_F4259C:	jp Disk_MountAndScanDirectory_LeaveOnError_Call  ; -> prom_a 0x61C2B
 T_F425A0:	jp sub_FE1C2F  ; -> prom_a 0x61C2F
 T_F425A4:	jp sub_FE1C33  ; -> prom_a 0x61C33
 T_DiskApi_ReadFileToWindow_Entry:	jp DiskApi_ReadFileToWindow_Entry  ; -> prom_a 0x61C3A   x11
@@ -90187,10 +90189,10 @@ T_MidiFileSave_Page5_LcdKeyRow3:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0
 T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
 T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
-T_F425E0:	jp sub_FE1CAB  ; -> prom_a 0x61CAB
+T_F425E0:	jp Disk_SaveFileName_Call  ; -> prom_a 0x61CAB
 T_DiskApi_CloseFile_Call:	jp DiskApi_CloseFile_Call  ; -> prom_a 0x61CAF   x5
 T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
-T_F425EC:	jp sub_FE1CC0  ; -> prom_a 0x61CC0
+T_F425EC:	jp Disk_ResetAndMountFloppy_Call  ; -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
 T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
@@ -91333,7 +91335,7 @@ sub_F4402D:		; <- T_F40A44
 	jrl	sub_F4598A	; F4402D  jrl T,0xf4598a
 
 ; --------------------------------------------------------------------------
-; sub_F44030
+; TimedEventRing_Discard_Veneer
 ; Called from: T_F40A64 (x0); in-module: 0xF4476F
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40A64 holds `jp 0x00F44030`, and 0xF44030 is an
@@ -91343,8 +91345,9 @@ sub_F4402D:		; <- T_F40A44
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44030:		; <- T_F40A64
-	jrl	sub_F45B0A	; F44030  jrl T,0xf45b0a
+; TimedEventRing_Discard_Veneer: a jump to TimedEventRing_Discard -- `jrl TimedEventRing_Discard`.
+TimedEventRing_Discard_Veneer:		; <- T_F40A64
+	jrl	TimedEventRing_Discard	; F44030  jrl T,0xf45b0a
 
 ; --------------------------------------------------------------------------
 ; sub_F44033
@@ -91512,7 +91515,7 @@ sub_F440A0_Loop:
 ; BStore_BootPhase3
 ; Called from: T_F4400C (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
-; Calls:   sub_F45B0A sub_F45975 sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
+; Calls:   TimedEventRing_Discard sub_F45975 sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
 ;          sub_F44505 T_F411B8 sub_F44143 sub_F441AB T_F40300 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_F4400C holds `jp 0x00F440C4`, and 0xF440C4 is an
@@ -91529,7 +91532,7 @@ BStore_BootPhase3:		; <- T_F4400C
 	jr	nz, sub_F440A0_Skip	; F440C8  jr NZ,0xf440d7
 	xor	xwa, xwa	; F440CA  xor XWA,XWA
 	ld	(6304798:24), xwa	; F440CC  ld (0x60341e),XWA
-	calr	sub_F45B0A	; F440D1  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F440D1  calr 0xf45b0a
 	calr	sub_F45975	; F440D4  calr 0xf45975
 sub_F440A0_Skip:
 	ldw	(13650:16), 1	; F440D7  ld (0x3552),0x0001
@@ -92181,7 +92184,7 @@ sub_F44623_Return:
 ; Touches: (0x0C55) (0x0D4A) (0x207C) (0x3456) (0x3458) (0x345E) (0x349A)
 ;          (0x349C) (0x349F) (0x34BB) +3 more  |  0x000000
 ; Calls:   sub_F44033 sub_F455E6 T_F40C90 sub_F45FE5 sub_F4477F T_F40B54
-;          sub_F44030 Nop_CallsEmptyDirectorySlot_Veneer
+;          TimedEventRing_Discard_Veneer Nop_CallsEmptyDirectorySlot_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4466D is an instruction boundary.
 ;           The name IS the address.
@@ -92276,7 +92279,7 @@ sub_F4466D_Skip5:
 	jr	z, sub_F4466D_Skip6	; F44763  jr Z,0xf44777
 	m_or_mi8 MB16, 0x34bb, 0x08	; F44765  or (0x34bb),0x08
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4476A  or (0x34d4),0x10
-	call	sub_F44030	; F4476F  call 0xf44030
+	call	TimedEventRing_Discard_Veneer	; F4476F  call 0xf44030
 	call	Nop_CallsEmptyDirectorySlot_Veneer	; F44773  call 0xf44039
 sub_F4466D_Skip6:
 	ld	(168:8), 0:io	; F44777  ld (0xa8),0x00
@@ -92791,7 +92794,7 @@ sub_F44AEE_Return:
 ; Called from: T_F40AAC (x2); in-module: 0xF44A3B 0xF44C4D
 ; Touches: (0x345B) (0x34BB) (0x34D2) (0x34D4) (0x355A)  |  0x000000
 ;          0x0033EA
-; Calls:   sub_F45B0A sub_F44BE8 sub_F44B95
+; Calls:   TimedEventRing_Discard sub_F44BE8 sub_F44B95
 ; Evidence: thunk slot T_F40AAC holds `jp 0x00F44B2D`, and 0xF44B2D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -92827,7 +92830,7 @@ sub_F44B2D_Skip:
 	ld	(xix+), wa	; F44B7B  ld (XIX+),WA
 	djnz16	bc, -6	; F44B7E  djnz BC,0xf44b7b
 	ld	(168:8), 0:io	; F44B81  ld (0xa8),0x00
-	calr	sub_F45B0A	; F44B84  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F44B84  calr 0xf45b0a
 	m_or_mi8 MB16, 0x355a, 0x02	; F44B87  or (0x355a),0x02
 	calr	sub_F44BE8	; F44B8C  calr 0xf44be8
 	jr	sub_F44B2D_Return	; F44B8F  jr T,0xf44b94
@@ -92841,7 +92844,7 @@ sub_F44B2D_Return:
 ; Called from: in-module: 0xF44B91 0xF4510E 0xF45B44
 ; Touches: (0x3456) (0x3458) (0x345B) (0x34D0) (0x34D9) (0x3552)  |
 ;          0x0033EA
-; Calls:   sub_F45FE5 sub_F45B0A sub_F45D9B sub_F4598A sub_F44516 sub_F44BE8
+; Calls:   sub_F45FE5 TimedEventRing_Discard sub_F45D9B sub_F4598A sub_F44516 sub_F44BE8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44B95 is an instruction boundary.
 ;           The name IS the address.
@@ -92866,7 +92869,7 @@ sub_F44B95:
 	ldw	(13650:16), 1	; F44BC7  ld (0x3552),0x0001
 	calr	sub_F45FE5	; F44BCD  calr 0xf45fe5
 sub_F44B95_Skip:
-	calr	sub_F45B0A	; F44BD0  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F44BD0  calr 0xf45b0a
 	calr	sub_F45D9B	; F44BD3  calr 0xf45d9b
 	ld	(168:8), 0:io	; F44BD6  ld (0xa8),0x00
 	m_or_mi8 MB16, 0x34d0, 0x10	; F44BD9  or (0x34d0),0x10
@@ -93234,7 +93237,7 @@ sub_F44E6B_Return:
 ; Called from: T_F40AA0 (x0); in-module: 0xF4460E 0xF45338
 ; Touches: (0x3008) (0x349F) (0x34D2) (0x3738) (0x373A)  |  0x000000
 ;          0x600800
-; Calls:   sub_F44E6B sub_F45B0A sub_F454B3 sub_F45B6E sub_F450B2
+; Calls:   sub_F44E6B TimedEventRing_Discard sub_F454B3 sub_F45B6E sub_F450B2
 ; Evidence: thunk slot T_F40AA0 holds `jp 0x00F44E8E`, and 0xF44E8E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93277,7 +93280,7 @@ sub_F44E8E_Join:
 	calr	sub_F44E6B	; F44EED  calr 0xf44e6b
 	xor	xwa, xwa	; F44EF0  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44EF2  ld (0x60341e),XWA
-	calr	sub_F45B0A	; F44EF7  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F44EF7  calr 0xf45b0a
 	xor	xwa, xwa	; F44EFA  xor XWA,XWA
 	ld	(14136:16), xwa	; F44EFC  ld (0x3738),XWA
 	jr	sub_F44E8E_Return	; F44F00  jr T,0xf44f66
@@ -93293,7 +93296,7 @@ sub_F44E8E_Skip2:
 	calr	sub_F44E6B	; F44F24  calr 0xf44e6b
 	xor	xwa, xwa	; F44F27  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44F29  ld (0x60341e),XWA
-	calr	sub_F45B0A	; F44F2E  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F44F2E  calr 0xf45b0a
 	xor	xwa, xwa	; F44F31  xor XWA,XWA
 	ld	(14136:16), xwa	; F44F33  ld (0x3738),XWA
 	jr	sub_F44E8E_Return	; F44F37  jr T,0xf44f66
@@ -93325,7 +93328,7 @@ sub_F44E8E_Return:
 ; Called from: T_F40ABC (x2)
 ; Touches: (0x3008) (0x349F) (0x34D2) (0x3738) (0x373A)  |  0x000000
 ;          0x600800
-; Calls:   sub_F44E6B sub_F45B0A sub_F454B3 sub_F45B6E
+; Calls:   sub_F44E6B TimedEventRing_Discard sub_F454B3 sub_F45B6E
 ; Evidence: thunk slot T_F40ABC holds `jp 0x00F44F67`, and 0xF44F67 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93368,7 +93371,7 @@ sub_F44E8E_Join3:
 	calr	sub_F44E6B	; F44FC6  calr 0xf44e6b
 	xor	xwa, xwa	; F44FC9  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44FCB  ld (0x60341e),XWA
-	calr	sub_F45B0A	; F44FD0  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F44FD0  calr 0xf45b0a
 	xor	xwa, xwa	; F44FD3  xor XWA,XWA
 	ld	(14136:16), xwa	; F44FD5  ld (0x3738),XWA
 	jr	sub_F44E8E_Return2	; F44FD9  jr T,0xf4503c
@@ -93384,7 +93387,7 @@ sub_F44E8E_Skip6:
 	calr	sub_F44E6B	; F44FFD  calr 0xf44e6b
 	xor	xwa, xwa	; F45000  xor XWA,XWA
 	ld	(6304798:24), xwa	; F45002  ld (0x60341e),XWA
-	calr	sub_F45B0A	; F45007  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F45007  calr 0xf45b0a
 	xor	xwa, xwa	; F4500A  xor XWA,XWA
 	ld	(14136:16), xwa	; F4500C  ld (0x3738),XWA
 	jr	sub_F44E8E_Return2	; F45010  jr T,0xf4503c
@@ -93628,7 +93631,7 @@ sub_F45119_Loop3:
 ; Called from: T_F409D0 (x4)
 ; Touches: (0x3008) (0x3456) (0x3458) (0x34BB) (0x34D4) (0x34D9) (0x3552)
 ;          (0x360B) (0x36D4)  |  0x000000
-; Calls:   sub_F45263 sub_F45FE5 sub_F45B0A T_F411B8 sub_F45975 T_F42574
+; Calls:   sub_F45263 sub_F45FE5 TimedEventRing_Discard T_F411B8 sub_F45975 T_F42574
 ; Evidence: thunk slot T_F409D0 holds `jp 0x00F451E6`, and 0xF451E6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93667,7 +93670,7 @@ sub_F45119_Skip5:
 	m_or_mi8 MB16, 0x34d4, 0x18	; F4524D  or (0x34d4),0x18
 	jr	sub_F45119_Join2	; F45252  jr T,0xf45257
 sub_F45119_Skip6:
-	calr	sub_F45B0A	; F45254  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F45254  calr 0xf45b0a
 sub_F45119_Join2:
 	call	T_F411B8	; F45257  call 0xf411b8
 	calr	sub_F45975	; F4525B  calr 0xf45975
@@ -93731,7 +93734,7 @@ sub_F45263_Loop3:
 ; sub_F452D3
 ; Called from: T_F409D4 (x2)
 ; Touches: (0x3008) (0x300C) (0x349F) (0x34D1)  |  0x000000
-; Calls:   sub_F45B0A T_F411B8 sub_F44E8E
+; Calls:   TimedEventRing_Discard T_F411B8 sub_F44E8E
 ; Evidence: thunk slot T_F409D4 holds `jp 0x00F452D3`, and 0xF452D3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -93753,7 +93756,7 @@ sub_F452D3:		; <- T_F409D4
 	ld	(12296:16), xwa	; F452F4  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F452F8  ld (0x300c),XWA
 	m_and_mi8 MB16, 0x34d1, 0x7f	; F452FC  and (0x34d1),0x7f
-	calr	sub_F45B0A	; F45301  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F45301  calr 0xf45b0a
 sub_F45263_Skip:
 	call	T_F411B8	; F45304  call 0xf411b8
 	jr	sub_F45263_Return	; F45308  jr T,0xf45347
@@ -94241,7 +94244,7 @@ sub_F455C5:		; <- T_F40A20
 ; sub_F455CC
 ; Called from: in-module: 0xF4545B 0xF454AF 0xF455C8
 ; Touches: (0x3008) (0x300C) (0x34D2)
-; Calls:   T_F409AC sub_F45B0A
+; Calls:   T_F409AC TimedEventRing_Discard
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF455CC is an instruction boundary.
 ;           The name IS the address.
@@ -94253,7 +94256,7 @@ sub_F455CC:
 	xor	xwa, xwa	; F455D0  xor XWA,XWA
 	ld	(12296:16), xwa	; F455D2  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F455D6  ld (0x300c),XWA
-	calr	sub_F45B0A	; F455DA  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F455DA  calr 0xf45b0a
 	m_or_mi8 MB16, 0x34d2, 0x02	; F455DD  or (0x34d2),0x02
 	ld	(168:8), 0:io	; F455E2  ld (0xa8),0x00
 	ret	; F455E5  ret
@@ -94699,7 +94702,7 @@ sub_F458FE:
 ; sub_F45942
 ; Called from: in-module: 0xF453B7
 ; Touches: (0x3000) (0x3004) (0x34BB) (0x34D0) (0x34D2) (0x34D4)
-; Calls:   T_F40CB4 sub_F45B0A T_F411B8
+; Calls:   T_F40CB4 TimedEventRing_Discard T_F411B8
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45942 is an instruction boundary.
 ;           The name IS the address.
@@ -94716,7 +94719,7 @@ sub_F45942:
 	m_or_mi8 MB16, 0x34d2, 0x01	; F45959  or (0x34d2),0x01
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4595E  or (0x34d4),0x10
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F45963  and (0x34bb),0xf7
-	calr	sub_F45B0A	; F45968  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F45968  calr 0xf45b0a
 	m_or_mi8 MB16, 0x34d0, 0x02	; F4596B  or (0x34d0),0x02
 	call	T_F411B8	; F45970  call 0xf411b8
 	ret	; F45974  ret
@@ -94930,7 +94933,7 @@ sub_F459D9_Return:
 	ret	; F45B09  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45B0A
+; TimedEventRing_Discard
 ; Called from: T_F40A14 (x8); in-module: 0xF440D1 0xF44B84 0xF44BD0 0xF44EF7
 ;              0xF44F2E 0xF44FD0 0xF45007 0xF45254 +4 more
 ; Touches:   |  0x600800
@@ -94941,7 +94944,9 @@ sub_F459D9_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45B0A:		; <- T_F40A14
+; TimedEventRing_Discard: at interrupt level 6: the ring control block 0x600800's put index (+6) = its get index (+2) and the count (+8) =
+;   0x1FF -- the 0x200-byte TimedEvents_Ring emptied (the block's layout: TimedEventRing_* in prom_a).
+TimedEventRing_Discard:		; <- T_F40A14
 	ei	6	; F45B0A  ei 0x06
 	ld	xhl, 6293504	; F45B0C  ld XHL,0x00600800
 	ld	wa, (xhl+2)	; F45B11  ld WA,(XHL+0x02)
@@ -95082,7 +95087,7 @@ sub_F45BCD:		; <- T_F40AB0
 ; Touches: (0x0C90) (0x0D4A) (0x3456) (0x3458) (0x345E) (0x349A) (0x349C)
 ;          (0x349F) (0x34BB) (0x34D4) +6 more  |  0x000000
 ; Calls:   sub_F45B1F sub_F45B48 sub_F44CA7 sub_F455E6 T_F40C5C T_F40B54
-;          sub_F45B0A Nop_CallsEmptyDirectorySlot
+;          TimedEventRing_Discard Nop_CallsEmptyDirectorySlot
 ; Evidence: thunk slot T_F409DC holds `jp 0x00F45BD3`, and 0xF45BD3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -95168,7 +95173,7 @@ sub_F45BD3_Skip7:
 	ld	xwa, (13466:16)	; F45C99  ld XWA,(0x349a)
 	cp	xwa, 0	; F45C9D  cp XWA,0x00000000
 	jr	z, sub_F45BD3_Join4	; F45CA3  jr Z,0xf45cb6
-	calr	sub_F45B0A	; F45CA5  calr 0xf45b0a
+	calr	TimedEventRing_Discard	; F45CA5  calr 0xf45b0a
 	m_or_mi8 MB16, 0x34d4, 0x10	; F45CA8  or (0x34d4),0x10
 	m_bit 0, MD16, 0x3735	; F45CAD  bit 0,(0x3735)
 	jr	nz, sub_F45BD3_Join4	; F45CB1  jr NZ,0xf45cb6

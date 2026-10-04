@@ -44,7 +44,7 @@ ready, PA bit 3 is the only firmware-side line that can do it. That is the
 answer to "find what actually gates drive-ready" that the ROM can give:
 *nothing else in the firmware is a candidate*.
 
-**Where the second site is.** `sub_FE2F39` — pulse PB2 for 4 ms, wait 10 ms,
+**Where the second site is.** `Disk_InitDriveAndNameEntry` — pulse PB2 for 4 ms, wait 10 ms,
 call 0xFE2EF2, then fill eleven bytes at RAM 0x21C8 with 0x5F and call 0xFE1774.
 It is in the 0xFE2F00 neighbourhood of the disk-request module, not in the
 0xFE08BD block-device head. So the two sites are in different layers, which is
@@ -109,7 +109,7 @@ were not.
 
 ## 3. What this pass did not do
 
-* It did not identify what PB bit 2 resets. The two callers, `sub_FE08BD` and
-  `sub_FE2F39`, are both still `sub_`.
+* It did not identify what PB bit 2 resets. The two callers, `Disk_MountFloppyWithRetry` and
+  `Disk_InitDriveAndNameEntry`, are both still `sub_`.
 * It did not name any of the 74 prom_b entry sites.
 * It did not touch gap A or gap O.

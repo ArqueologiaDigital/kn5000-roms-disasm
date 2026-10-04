@@ -259,9 +259,9 @@ stated gap beats a plausible name.
    none. It decides gap J.
 2. **Find who calls `Disk_FormatSelectedMedia`** and what sets bit 6 of
    `(0x21E7)`. It finishes gap V and gives the emulator a reachable disk path.
-   ⚠ Half of this is now answered: `sub_FE08BD` **clears** bit 6 of `(0x21E7)`
+   ⚠ Half of this is now answered: `Disk_MountFloppyWithRetry` **clears** bit 6 of `(0x21E7)`
    at 0xFE08D1 and **sets** it again at 0xFE08F3 when the disk-command result
-   byte `(0x1735)` — the byte `sub_FE1962` and its siblings store at 0xFE1957 —
+   byte `(0x1735)` — the byte `Disk_MountFloppy` and its siblings store at 0xFE1957 —
    comes back as **0x0B**. And `sub_FE09BE` writes the same bit through a
    POINTER — 0xFE09C0 `lda XIX,0x21E7`, then 0xFE0A0E `and (XIX),0xBF` and
    0xFE0A1B `or (XIX),0x40` — which **copies bit 3 of `(0x21E8)` into bit 6 of

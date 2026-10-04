@@ -95,7 +95,7 @@ All 15 are `calr`, all 15 are inside 0xFE0000-0xFE54B5, and the shape is the one
 a per-operation line has:
 
 * **the asserts are at the head of a routine.** 0xFE08C5 is 4 instructions into
-  `sub_FE08BD`, 0xFE199D is 2 into the routine at 0xFE1997.
+  `Disk_MountFloppyWithRetry`, 0xFE199D is 2 into the routine at 0xFE1997.
 * **eleven of the twelve releases are on an exit path** — the linear stream from
   the call reaches a `ret` within 12 instructions and issues no disk request on
   the way. 0xFE1CC4 is a bare `calr Disk_PortA3_Release / ret` veneer.
@@ -107,13 +107,13 @@ a per-operation line has:
 
 **And the asserting side really is disk traffic.** A breadth-first search over
 `calr`/`call`/`jp`, dereferencing prom_b's routine directory, gets from
-`sub_FE08BD` to `Fdc_Request` (0xFE66C7):
+`Disk_MountFloppyWithRetry` to `Fdc_Request` (0xFE66C7):
 
 ```
-sub_FE08BD -> sub_FE1962 -> T_Disk_CommandDispatch_SaveRegs_Entry -> 0xFE3042 (Disk_CommandDispatch_SaveRegs) -> Disk_CommandDispatch (sub_FE426E) -> DiskCmd_MountDrive -> Fdc_Request
+Disk_MountFloppyWithRetry -> Disk_MountFloppy -> T_Disk_CommandDispatch_SaveRegs_Entry -> 0xFE3042 (Disk_CommandDispatch_SaveRegs) -> Disk_CommandDispatch (sub_FE426E) -> DiskCmd_MountDrive -> Fdc_Request
 ```
 
-`sub_FE1962` is one of **23** call sites of directory slot `T_Disk_CommandDispatch_SaveRegs_Entry`, all in
+`Disk_MountFloppy` is one of **23** call sites of directory slot `T_Disk_CommandDispatch_SaveRegs_Entry`, all in
 this module; the slot's target 0xFE3042 marshals five long registers into
 0x605D70-0x605D80 and tail-jumps into the request layer. So the module that
 drives PA bit 3 is the module that issues disk requests, and it drives the pin
@@ -150,7 +150,7 @@ around them.
 
 ## 5. What this pass did NOT do
 
-* It did not name `sub_FE08BD`, `sub_FE09BE` or the routine at 0xFE1997. They
+* It did not name `Disk_MountFloppyWithRetry`, `sub_FE09BE` or the routine at 0xFE1997. They
   are the three sequences that own the line; what each one is FOR is unknown,
   and the module they live in is still the one whose banner says "converted but
   NOT NAMED".
@@ -165,7 +165,7 @@ reader meets it with no warning attached; the new name states only what the
 instruction does. Everything about the polarity in §2 stands — it is a reading,
 and it is argued, and it lives in prose where it can be contradicted.
 * It did not touch PB bit 3 (**gap U**). ★ But it found a neighbour worth
-  recording: `sub_FE08BD` also drives **PB bit 2** — 0xFE08C8 `set 2,(0x1F)`,
+  recording: `Disk_MountFloppyWithRetry` also drives **PB bit 2** — 0xFE08C8 `set 2,(0x1F)`,
   then `Delay_150Ticks`, then 0xFE08CE `res 2,(0x1F)` — a 307 ms HIGH pulse
   immediately after the PA bit 3 assert. Gap U's argument that "the floppy
   module is PB's only writer" needs to survive that.
@@ -173,7 +173,7 @@ and it is argued, and it lives in prose where it can be contradicted.
   ⚠ **CORRECTED in round 3, 2026-08-25.** This paragraph said the pulse was
   "issued once". It is issued at **two** sites, and the widths differ by a
   factor of 75: 0xFE08C8 holds it HIGH for **307 ms** and then clears it with no
-  settle at all, while `sub_FE2F39` at 0xFE2F3A holds it HIGH for **4 ms**
+  settle at all, while `Disk_InitDriveAndNameEntry` at 0xFE2F3A holds it HIGH for **4 ms**
   (`Delay_Ticks(2)`) and waits 10 ms after clearing. Two widths out of one bit
   is a reset or a strobe, not a level, so PB bit 2 is **not** a second motor
   candidate — which leaves PA bit 3 as the only LEVEL output the disk stack

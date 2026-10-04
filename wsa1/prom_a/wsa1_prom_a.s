@@ -99817,7 +99817,8 @@ RecordTables_FB82A0:
 	pop XIX                                              ; FB9043  5c
 	pop XIZ                                              ; FB9044  5e
 	ret                                                  ; FB9045  0e
-sub_FB9046:
+; Transport_StopAllRunning_SaveRegs: calls Transport_StopAllRunning with the registers it pushes saved around it -- `push XIX / push XIZ / push XHL / push XDE / call T_F409AC / pop XDE / pop XHL / pop XIZ / pop XIX / ret`.
+Transport_StopAllRunning_SaveRegs:
 	push XIX                                             ; FB9046  3c
 	push XIZ                                             ; FB9047  3e
 	push XHL                                             ; FB9048  3b
@@ -99828,7 +99829,8 @@ sub_FB9046:
 	pop XIZ                                              ; FB9050  5e
 	pop XIX                                              ; FB9051  5c
 	ret                                                  ; FB9052  0e
-sub_FB9053:
+; Transport_StartCAndB_SaveRegs: calls Transport_StartCAndB with the registers it pushes saved around it -- `push XIX / push XIZ / push XHL / push XDE / call T_F409A4 / pop XDE / pop XHL / pop XIZ / pop XIX / ret`.
+Transport_StartCAndB_SaveRegs:
 	push XIX                                             ; FB9053  3c
 	push XIZ                                             ; FB9054  3e
 	push XHL                                             ; FB9055  3b
@@ -99873,7 +99875,8 @@ sub_FB906D:
 	pop XIZ                                              ; FB9086  5e
 	pop XIX                                              ; FB9087  5c
 	ret                                                  ; FB9088  0e
-sub_FB9089:
+; TimedEventRing_Discard_SaveRegs_B: calls TimedEventRing_Discard with the registers it pushes saved around it -- `push XIX / push XIZ / push XHL / push XDE / push XWA / call T_F40A14 / pop XWA / pop XDE / pop XHL / pop XIZ / pop XIX / ret`.
+TimedEventRing_Discard_SaveRegs_B:
 	push XIX                                             ; FB9089  3c
 	push XIZ                                             ; FB908A  3e
 	push XHL                                             ; FB908B  3b
@@ -99989,7 +99992,7 @@ sub_FB9176:
 	calr sub_FB9E69                                      ; FB9190  1e d6 0c
 	call sub_FB9060                                      ; FB9193  1d 60 90 fb
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
-	call sub_FB9046                                      ; FB919A  1d 46 90 fb
+	call Transport_StopAllRunning_SaveRegs                                      ; FB919A  1d 46 90 fb
 	ld	d, (TransportB_State:8)                                      ; FB919E  c0 96 24
 	and D,0x04                                           ; FB91A1  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91A4  33 ff 7f
@@ -100026,7 +100029,7 @@ MidiFilePlay_Stop:
 	call sub_FB9060                                      ; FB91EA  1d 60 90 fb
 sub_FB91EE:
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB91EE  1e ab 00
-	call sub_FB9046                                      ; FB91F1  1d 46 90 fb
+	call Transport_StopAllRunning_SaveRegs                                      ; FB91F1  1d 46 90 fb
 	ld	d, (TransportB_State:8)                                      ; FB91F5  c0 96 24
 	and D,0x04                                           ; FB91F8  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91FB  33 ff 7f
@@ -101116,7 +101119,7 @@ MidiFileDirectPlay_InitOnEntry:
 	extz XBC                                             ; FB9B64  e9 12
 	ld A,(XBC+0x03)                                      ; FB9B66  89 03 21
 	ld (0x605144:24), a                                 ; FB9B69  f2 44 51 60 41
-	call sub_FB9089                                      ; FB9B6E  1d 89 90 fb
+	call TimedEventRing_Discard_SaveRegs_B                                      ; FB9B6E  1d 89 90 fb
 	ret                                                  ; FB9B72  0e
 ; MidiFileDirectPlay_RestoreOnLeave: (0x605068) = 0; restores (0x60341E) from (0x605072); MidiFilePlay_Stop; (0x60505E) = 0; then 0xFB9C52 or, when
 ;   (0x605144) bit 2, 0xFB9BA4 (which installs the 17-byte part map from MidiFile_Tables_FBA169 into 0x603422).
@@ -101421,7 +101424,7 @@ sub_FB9E3F:
 	and (XIX),0xfb                                       ; FB9E4A  84 3c fb
 	m_res 3, MD16, 0x34bb                                ; FB9E4D  f1 bb 34 b3
 	ld (0x605148:24), 0x01                             ; FB9E51  f2 48 51 60 00 01
-	call sub_FB9053                                      ; FB9E57  1d 53 90 fb
+	call Transport_StartCAndB_SaveRegs                                      ; FB9E57  1d 53 90 fb
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9E5B  f1 95 20 bc
 	pop XIX                                              ; FB9E5F  5c
 	ret                                                  ; FB9E60  0e
@@ -110882,7 +110885,8 @@ sub_FC0206:
 	calr sub_FC0215                                      ; FC020A  1e 08 00
 	pop XIX                                              ; FC020D  5c
 	ret                                                  ; FC020E  0e
-sub_FC020F:
+; Msg0716_PostSysEx50_92_SaveRegs: calls Msg0716_PostSysEx50_92 with the registers it pushes saved around it -- `push XIX / calr Msg0716_PostSysEx50_92 / pop XIX / ret`.
+Msg0716_PostSysEx50_92_SaveRegs:
 	push XIX                                             ; FC020F  3c
 	calr Msg0716_PostSysEx50_92                                          ; FC0210  1e ec 17
 	pop XIX                                              ; FC0213  5c
@@ -111835,7 +111839,7 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop70                                 ; FC0AE6  [ 70]
 	.long Msg0716_HandlerTables_Nop70                                 ; FC0AEA  [ 71]
 	.long Msg0716_HandlerTables_Nop72                                 ; FC0AEE  [ 72]
-	.long sub_FC0DE3                                 ; FC0AF2  [ 73]
+	.long Msg0716_PostSysEx50_82_Call                                 ; FC0AF2  [ 73]
 	.long sub_FC0DE7                                 ; FC0AF6  [ 74]
 	.long Msg0716_HandlerTables_Nop75                                 ; FC0AFA  [ 75]
 	.long Msg0716_HandlerTables_Nop76                                 ; FC0AFE  [ 76]
@@ -111875,8 +111879,8 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop93                                 ; FC0B86  [110]
 	.long sub_FC0E21                                 ; FC0B8A  [111]
 	.long sub_FC0E36                                 ; FC0B8E  [112]
-	.long sub_FC0E4A                                 ; FC0B92  [113]
-	.long sub_FC0E4E                                 ; FC0B96  [114]
+	.long Msg0716_PostSysEx50_80_Call                                 ; FC0B92  [113]
+	.long Msg0716_PostSysEx50_81_Call                                 ; FC0B96  [114]
 	.long Msg0716_HandlerTables_Nop115                                 ; FC0B9A  [115]
 	.long Msg0716_HandlerTables_Nop115                                 ; FC0B9E  [116]
 	.long Msg0716_HandlerTables_Nop115                                 ; FC0BA2  [117]
@@ -112218,7 +112222,8 @@ Msg0716_HandlerTables_Nop70:   ; entry: named by 2 `.long` operands, first at 0x
 	ret                                                  ; FC0DE1  0e
 Msg0716_HandlerTables_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFC0AEE
 	ret                                                  ; FC0DE2  0e
-sub_FC0DE3:   ; entry: named by 1 `.long` operand, first at 0xFC0AF2
+; Msg0716_PostSysEx50_82_Call: calls Msg0716_PostSysEx50_82 and returns -- `calr Msg0716_PostSysEx50_82 / ret`.
+Msg0716_PostSysEx50_82_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0AF2
 	calr Msg0716_PostSysEx50_82                                          ; FC0DE3  1e c8 09
 	ret                                                  ; FC0DE6  0e
 sub_FC0DE7:   ; entry: named by 1 `.long` operand, first at 0xFC0AF6
@@ -112271,10 +112276,12 @@ sub_FC0E36:   ; entry: named by 1 `.long` operand, first at 0xFC0B8E
 	ld (XIX+0x01),0x00                                   ; FC0E42  bc 01 00 00
 	calr Msg0716_PostCC0A_PanWithOffset                                          ; FC0E46  1e d4 07
 	ret                                                  ; FC0E49  0e
-sub_FC0E4A:   ; entry: named by 1 `.long` operand, first at 0xFC0B92
+; Msg0716_PostSysEx50_80_Call: calls Msg0716_PostSysEx50_80 and returns -- `calr Msg0716_PostSysEx50_80 / ret`.
+Msg0716_PostSysEx50_80_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0B92
 	calr Msg0716_PostSysEx50_80                                          ; FC0E4A  1e 4f 09
 	ret                                                  ; FC0E4D  0e
-sub_FC0E4E:   ; entry: named by 1 `.long` operand, first at 0xFC0B96
+; Msg0716_PostSysEx50_81_Call: calls Msg0716_PostSysEx50_81 and returns -- `calr Msg0716_PostSysEx50_81 / ret`.
+Msg0716_PostSysEx50_81_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0B96
 	calr Msg0716_PostSysEx50_81                                          ; FC0E4E  1e 3a 09
 	ret                                                  ; FC0E51  0e
 Msg0716_HandlerTables_Nop115:   ; entry: named by 14 `.long` operands, first at 0xFC0B9A
@@ -159199,7 +159206,8 @@ sub_FE0150:
 	pop XHL                                              ; FE0181  5b
 	pop XDE                                              ; FE0182  5a
 	ret                                                  ; FE0183  0e
-sub_FE0184:
+; TimedEventRing_Discard_SaveRegs_C: calls TimedEventRing_Discard with the registers it pushes saved around it -- `push XDE / push XHL / push XIX / push XIZ / call T_F40A14 / pop XIZ / pop XIX / pop XHL / pop XDE / ret`.
+TimedEventRing_Discard_SaveRegs_C:
 	push XDE                                             ; FE0184  3a
 	push XHL                                             ; FE0185  3b
 	push XIX                                             ; FE0186  3c
@@ -159312,7 +159320,9 @@ MessageScreen_Paint_SaveRegs2:
 	pop XHL                                              ; FE0204  5b
 	pop XDE                                              ; FE0205  5a
 	ret                                                  ; FE0206  0e
-sub_FE0207:
+; Transport_StopAllRunning_SaveRegs2: push XDE / XHL / XIX / XIZ, call T_F409AC (Transport_StopAllRunning), pop, ret.  The bytes after it to the next
+;   label are two more such wrappers that nothing calls.
+Transport_StopAllRunning_SaveRegs2:
 	push XDE                                             ; FE0207  3a
 	push XHL                                             ; FE0208  3b
 	push XIX                                             ; FE0209  3c
@@ -159668,49 +159678,52 @@ sub_FE0514:
 	calr sub_FE16FE                                          ; FE0522  1e d9 11
 	popw bc                                              ; FE0525  49
 	ret                                                  ; FE0526  0e
-sub_FE0527:
+; Disk_MountAndScanDirectory: StatusMsg_ShowByIndex(9) (PLEASE WAIT), Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanDirectory,
+;   Disk_RestoreFileName; otherwise Disk_ShowMountError and Disk_PortA3_Release.
+Disk_MountAndScanDirectory:
 	pushw hl                                             ; FE0527  2b
 	pushw 0x09                                           ; FE0528  0b 09 00
 	calr StatusMsg_ShowByIndex                                          ; FE052B  1e 0a 13
-	calr sub_FE08BD                                          ; FE052E  1e 8c 03
+	calr Disk_MountFloppyWithRetry                                          ; FE052E  1e 8c 03
 	ld H,A                                               ; FE0531  c9 8e
 	ld (0x1735:24), a                                   ; FE0533  f2 35 17 00 41
 	popw bc                                              ; FE0538  49
 	cp h, 0x00:i3                                          ; FE0539  ce d8
 	jr nz, .LFE0548                                          ; FE053B  6e 0b
-	calr sub_FE0925                                          ; FE053D  1e e5 03
-	calr sub_FE0CB9                                          ; FE0540  1e 76 07
-	calr sub_FE0941                                          ; FE0543  1e fb 03
+	calr Disk_SaveFileName                                          ; FE053D  1e e5 03
+	calr Disk_ScanDirectory                                          ; FE0540  1e 76 07
+	calr Disk_RestoreFileName                                          ; FE0543  1e fb 03
 	jr .LFE0559                                              ; FE0546  68 11
 .LFE0548:
 	push 0x00                                            ; FE0548  09 00
 	m_push MB24, 0x001735                                ; FE054A  c2 35 17 00 04
-	calr sub_FE0970                                          ; FE054F  1e 1e 04
+	calr Disk_ShowMountError                                          ; FE054F  1e 1e 04
 	calr Disk_PortA3_Release                                          ; FE0552  1e a2 13
 	calr sub_FE0527_Nop                                          ; FE0555  1e 6f 2a
 	popw bc                                              ; FE0558  49
 .LFE0559:
 	popw hl                                              ; FE0559  4b
 	ret                                                  ; FE055A  0e
-sub_FE055B:
+; Disk_MountAndScanDirectory_LeaveOnError: the same, but a failed mount also runs sub_FE1907, clears (0x2229) and sets UI_Request_Hi = 0x10.
+Disk_MountAndScanDirectory_LeaveOnError:
 	pushw hl                                             ; FE055B  2b
 	pushw 0x09                                           ; FE055C  0b 09 00
 	calr StatusMsg_ShowByIndex                                          ; FE055F  1e d6 12
-	calr sub_FE08BD                                          ; FE0562  1e 58 03
+	calr Disk_MountFloppyWithRetry                                          ; FE0562  1e 58 03
 	ld H,A                                               ; FE0565  c9 8e
 	ld (0x1735:24), a                                   ; FE0567  f2 35 17 00 41
 	popw bc                                              ; FE056C  49
 	cp h, 0x00:i3                                          ; FE056D  ce d8
 	jr nz, .LFE057C                                          ; FE056F  6e 0b
-	calr sub_FE0925                                          ; FE0571  1e b1 03
-	calr sub_FE0CB9                                          ; FE0574  1e 42 07
-	calr sub_FE0941                                          ; FE0577  1e c7 03
+	calr Disk_SaveFileName                                          ; FE0571  1e b1 03
+	calr Disk_ScanDirectory                                          ; FE0574  1e 42 07
+	calr Disk_RestoreFileName                                          ; FE0577  1e c7 03
 	jr .LFE0597                                              ; FE057A  68 1b
 .LFE057C:
 	calr sub_FE1907                                          ; FE057C  1e 88 13
 	push 0x00                                            ; FE057F  09 00
 	m_push MB24, 0x001735                                ; FE0581  c2 35 17 00 04
-	calr sub_FE0970                                          ; FE0586  1e e7 03
+	calr Disk_ShowMountError                                          ; FE0586  1e e7 03
 	calr Disk_PortA3_Release                                          ; FE0589  1e 6b 13
 	ld (0x2229:16), 0x00                                 ; FE058C  f1 29 22 00 00
 	ld (UI_Request_Hi:16), 0x10                                 ; FE0591  f1 71 20 00 10
@@ -160093,7 +160106,10 @@ sub_FE0870:
 	popw hl                                              ; FE08B9  4b
 	unlk XIZ                                             ; FE08BA  ee 0d
 	ret                                                  ; FE08BC  0e
-sub_FE08BD:
+; Disk_MountFloppyWithRetry: pulses Port B bit 2 (Delay_150Ticks), clears Disk_Flags bit 6, Disk_MountFloppy up to twice while it returns 2;
+;   format 0x0B (18 sectors per track) -> result 0 and Disk_Flags bit 6 set; 0x0A / 0x0C / 0x0D -> 0; format 8 ->
+;   Disk_MountFloppy720K.  Returns the result, also in (0x1735).
+Disk_MountFloppyWithRetry:
 	pushw hl                                             ; FE08BD  2b
 	pushw de                                             ; FE08BE  2a
 	push XIX                                             ; FE08BF  3c
@@ -160108,7 +160124,7 @@ sub_FE08BD:
 	cp hl, 0x00:i3                                         ; FE08D8  db d8
 	jr z, .LFE08E9                                           ; FE08DA  66 0d
 	dec 1,HL                                             ; FE08DC  db 69
-	calr sub_FE1962                                          ; FE08DE  1e 81 10
+	calr Disk_MountFloppy                                          ; FE08DE  1e 81 10
 	ld D,A                                               ; FE08E1  c9 8c
 	ld (XIX),A                                           ; FE08E3  b4 41
 	cp d, 0x02:i3                                          ; FE08E5  cc da
@@ -160136,7 +160152,7 @@ sub_FE08BD:
 	ld C,(XIX)                                           ; FE0911  84 23
 	cp C,0x08                                            ; FE0913  cb cf 08
 	jr nz, .LFE091D                                          ; FE0916  6e 05
-	calr sub_FE192D                                          ; FE0918  1e 12 10
+	calr Disk_MountFloppy720K                                          ; FE0918  1e 12 10
 	ld (XIX),A                                           ; FE091B  b4 41
 .LFE091D:
 	ld C,(XIX)                                           ; FE091D  84 23
@@ -160145,7 +160161,8 @@ sub_FE08BD:
 	popw de                                              ; FE0922  4a
 	popw hl                                              ; FE0923  4b
 	ret                                                  ; FE0924  0e
-sub_FE0925:
+; Disk_SaveFileName: copies the 9 bytes at Disk_FileName to 0x21DB.
+Disk_SaveFileName:
 	push XHL                                             ; FE0925  3b
 	ldw hl, 0x00                                         ; FE0926  33 00 00
 .LFE0929:
@@ -160158,7 +160175,8 @@ sub_FE0925:
 	jr le, .LFE0929                                           ; FE093D  62 ea
 	pop XHL                                              ; FE093F  5b
 	ret                                                  ; FE0940  0e
-sub_FE0941:
+; Disk_RestoreFileName: copies the 9 bytes at 0x21DB back to Disk_FileName.
+Disk_RestoreFileName:
 	push XHL                                             ; FE0941  3b
 	ldw hl, 0x00                                         ; FE0942  33 00 00
 .LFE0945:
@@ -160180,7 +160198,9 @@ Disk_PortA3_Release_Call:
 	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
 	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
 	ret                                                  ; FE096F  0e
-sub_FE0970:
+; Disk_ShowMountError: for a mount result: 1 -> StatusMsg_ShowByIndex(8) (status 0x02, Error02 'There is no disk in the disk drive');
+;   2 or 3 -> index 16 (status 0x00, Error00); 0xFF -> index 13 (status 0x04, the bare ERROR list); each with a delay.
+Disk_ShowMountError:
 	link XIZ,0x0000                                      ; FE0970  ee 0c 00 00
 	pushw hl                                             ; FE0974  2b
 	push XIX                                             ; FE0975  3c
@@ -160230,7 +160250,7 @@ sub_FE09BE:
 	calr Disk_PortA3_Release_Call                                          ; FE09C7  1e 95 ff
 	pushw 0x09                                           ; FE09CA  0b 09 00
 	calr StatusMsg_ShowByIndex                                          ; FE09CD  1e 68 0e
-	calr sub_FE08BD                                          ; FE09D0  1e ea fe
+	calr Disk_MountFloppyWithRetry                                          ; FE09D0  1e ea fe
 	ld H,A                                               ; FE09D3  c9 8e
 	popw bc                                              ; FE09D5  49
 	cp a, 0x00:i3                                          ; FE09D6  c9 d8
@@ -160261,11 +160281,11 @@ sub_FE09BE:
 	popw wa                                              ; FE0A18  48
 	jr z, .LFE0A23                                           ; FE0A19  66 08
 	m_or_mi8 MBI+r4, 0, 0x40                             ; FE0A1B  84 3e 40
-	calr sub_FE1962                                          ; FE0A1E  1e 41 0f
+	calr Disk_MountFloppy                                          ; FE0A1E  1e 41 0f
 	jr .LFE0A29                                              ; FE0A21  68 06
 .LFE0A23:
-	calr sub_FE192D                                          ; FE0A23  1e 07 0f
-	calr sub_FE192D                                          ; FE0A26  1e 04 0f
+	calr Disk_MountFloppy720K                                          ; FE0A23  1e 07 0f
+	calr Disk_MountFloppy720K                                          ; FE0A26  1e 04 0f
 .LFE0A29:
 	calr Disk_FormatSelectedMedia_Veneer                                          ; FE0A29  1e 0d f6
 	ld h, (Disk_LastError:16)                                   ; FE0A2C  c1 43 22 26
@@ -160276,13 +160296,13 @@ sub_FE09BE:
 	and C,0x08                                           ; FE0A40  cb cc 08
 	jr z, .LFE0A50                                           ; FE0A43  66 0b
 	m_or_mi8 MBI+r4, 0, 0x40                             ; FE0A45  84 3e 40
-	calr sub_FE1962                                          ; FE0A48  1e 17 0f
-	calr sub_FE1962                                          ; FE0A4B  1e 14 0f
+	calr Disk_MountFloppy                                          ; FE0A48  1e 17 0f
+	calr Disk_MountFloppy                                          ; FE0A4B  1e 14 0f
 	jr .LFE0A59                                              ; FE0A4E  68 09
 .LFE0A50:
 	and (XIX),0xbf                                       ; FE0A50  84 3c bf
-	calr sub_FE192D                                          ; FE0A53  1e d7 0e
-	calr sub_FE192D                                          ; FE0A56  1e d4 0e
+	calr Disk_MountFloppy720K                                          ; FE0A53  1e d7 0e
+	calr Disk_MountFloppy720K                                          ; FE0A56  1e d4 0e
 .LFE0A59:
 	calr Disk_FormatSelectedMedia_Veneer                                          ; FE0A59  1e dd f5
 	ld h, (Disk_LastError:16)                                   ; FE0A5C  c1 43 22 26
@@ -160410,7 +160430,7 @@ DiskApi_ReadFileToWindow:
 	ld H,A                                               ; FE0B5B  c9 8e
 	cp a, 0x00:i3                                          ; FE0B5D  c9 d8
 	jr z, .LFE0B69                                           ; FE0B5F  66 08
-	calr sub_FE08BD                                          ; FE0B61  1e 59 fd
+	calr Disk_MountFloppyWithRetry                                          ; FE0B61  1e 59 fd
 	calr DiskFile_Open                                          ; FE0B64  1e f3 0e
 	ld H,A                                               ; FE0B67  c9 8e
 .LFE0B69:
@@ -160564,7 +160584,10 @@ DiskApi_DeleteFile:
 .LFE0CB7:
 	popw hl                                              ; FE0CB7  4b
 	ret                                                  ; FE0CB8  0e
-sub_FE0CB9:
+; Disk_ScanDirectory: builds its line buffers, sets Disk_FileName to eleven '?', the transfer address (code 0x1A) to 0x60A080 (also
+;   (0x21D3)), then DiskFile_FindFirst and, per found entry, sub_FE0E89 + DiskFile_FindNext until it fails.
+;   Returns 0, or 0x1A when nothing matched.
+Disk_ScanDirectory:
 	link XIZ,0xffe0                                      ; FE0CB9  ee 0c e0 ff
 	pushw hl                                             ; FE0CBD  2b
 	pushw de                                             ; FE0CBE  2a
@@ -161014,13 +161037,13 @@ sub_FE10AA:
 sub_FE11D9:
 	pushw hl                                             ; FE11D9  2b
 	calr sub_FE0514                                          ; FE11DA  1e 37 f3
-	calr sub_FE08BD                                          ; FE11DD  1e dd f6
+	calr Disk_MountFloppyWithRetry                                          ; FE11DD  1e dd f6
 	ld H,A                                               ; FE11E0  c9 8e
 	cp a, 0x00:i3                                          ; FE11E2  c9 d8
 	jr nz, .LFE11F1                                          ; FE11E4  6e 0b
-	calr sub_FE0925                                          ; FE11E6  1e 3c f7
+	calr Disk_SaveFileName                                          ; FE11E6  1e 3c f7
 	calr sub_FE1218                                            ; FE11E9  1e 2c 00
-	calr sub_FE0941                                          ; FE11EC  1e 52 f7
+	calr Disk_RestoreFileName                                          ; FE11EC  1e 52 f7
 	jr .LFE1216                                              ; FE11EF  68 25
 .LFE11F1:
 	calr Disk_PortA3_Release                                          ; FE11F1  1e 03 07
@@ -161030,7 +161053,7 @@ sub_FE11D9:
 .LFE11FE:
 	push 0x00                                            ; FE11FE  09 00
 	push H                                               ; FE1200  ce 04
-	calr sub_FE0970                                          ; FE1202  1e 6b f7
+	calr Disk_ShowMountError                                          ; FE1202  1e 6b f7
 	pushw 0x05dc                                         ; FE1205  0b dc 05
 	calr Delay_Ticks                                          ; FE1208  1e 16 02
 	ld (0x2229:16), 0x00                                 ; FE120B  f1 29 22 00 00
@@ -161323,7 +161346,7 @@ sub_FE1456:
 	calr sub_FE2FE7                                          ; FE1465  1e 7f 1b
 	cp a, 0x00:i3                                          ; FE1468  c9 d8
 	jr z, .LFE146F                                           ; FE146A  66 03
-	calr sub_FE0527                                          ; FE146C  1e b8 f0
+	calr Disk_MountAndScanDirectory                                          ; FE146C  1e b8 f0
 .LFE146F:
 	ld	h, (0xa3:8)                                      ; FE146F  c0 a3 26
 	res 0x07,H                                           ; FE1472  ce 30 07
@@ -161445,7 +161468,7 @@ sub_FE152E_Cases:
 	jr nz, .LFE15DC                                          ; FE15A2  6e 38
 	ld (0x21fa:16), 0x00                                 ; FE15A4  f1 fa 21 00 00
 	calr Disk_PortA3_Release_Call                                          ; FE15A9  1e b3 f3
-	calr sub_FE08BD                                          ; FE15AC  1e 0e f3
+	calr Disk_MountFloppyWithRetry                                          ; FE15AC  1e 0e f3
 	ld H,A                                               ; FE15AF  c9 8e
 	cp a, 0x00:i3                                          ; FE15B1  c9 d8
 	jr nz, .LFE15CE                                          ; FE15B3  6e 19
@@ -161464,7 +161487,7 @@ sub_FE152E_Cases:
 .LFE15CE:
 	push 0x00                                            ; FE15CE  09 00
 	push H                                               ; FE15D0  ce 04
-	calr sub_FE0970                                          ; FE15D2  1e 9b f3
+	calr Disk_ShowMountError                                          ; FE15D2  1e 9b f3
 	calr Disk_PortA3_Release                                          ; FE15D5  1e 1f 03
 	and (XIX),0xfb                                       ; FE15D8  84 3c fb
 	popw bc                                              ; FE15DB  49
@@ -161494,7 +161517,7 @@ sub_FE15F4:
 	add XBC,0x00000480                                   ; FE1606  e9 c8 80 04 00 00
 	add XBC,0x0060a000                                   ; FE160C  e9 c8 00 a0 60 00
 	ld (xiz-4), xbc                                      ; FE1612  be fc 61
-	calr sub_FE0CB9                                          ; FE1615  1e a1 f6
+	calr Disk_ScanDirectory                                          ; FE1615  1e a1 f6
 	ld xbc, (xiz-4)                                      ; FE1618  ae fc 21
 	ld A,(XBC+0x08)                                      ; FE161B  89 08 21
 	cp A,0x80                                            ; FE161E  c9 cf 80
@@ -161598,11 +161621,11 @@ sub_FE16D6:
 sub_FE16F3:
 	calr sub_FE2E96                                          ; FE16F3  1e a0 17
 	m_set 2, MD16, 0x34bb                                ; FE16F6  f1 bb 34 ba
-	calr sub_FE0207                                          ; FE16FA  1e 0a eb
+	calr Transport_StopAllRunning_SaveRegs2                                          ; FE16FA  1e 0a eb
 	ret                                                  ; FE16FD  0e
 sub_FE16FE:
 	calr sub_FE2E96                                          ; FE16FE  1e 95 17
-	calr sub_FE0207                                          ; FE1701  1e 03 eb
+	calr Transport_StopAllRunning_SaveRegs2                                          ; FE1701  1e 03 eb
 	ret                                                  ; FE1704  0e
 sub_FE1705:
 	push XIX                                             ; FE1705  3c
@@ -161666,7 +161689,8 @@ DiskFile_SetFcbName:
 	pop XIX                                              ; FE179A  5c
 	popw hl                                              ; FE179B  4b
 	ret                                                  ; FE179C  0e
-sub_FE179D:
+; Disk_InitFileNameCharset: writes the 37 characters '_', 'A'..'Z', '0'..'9' to 0x1753.. -- the character set of the name editor.
+Disk_InitFileNameCharset:
 	push XIX                                             ; FE179D  3c
 	lda xix, (0x1753:24)                                 ; FE179E  f2 53 17 00 34
 	ld (XIX),0x5f                                        ; FE17A3  b4 00 5f
@@ -161709,7 +161733,7 @@ sub_FE179D:
 	pop XIX                                              ; FE1836  5c
 	ret                                                  ; FE1837  0e
 ; StatusMsg_ShowByIndex(index) -- UI_StatusCode := UiStatus_CodeByIndex[index]; then, unless bit 7 of (0x21E8)
-;          is set, paint the message screen (MessageScreen_Paint_SaveRegs2 -> T_MessageScreen_Paint) and hold it with sub_FE2FC8
+;          is set, paint the message screen (MessageScreen_Paint_SaveRegs2 -> T_MessageScreen_Paint) and hold it with StatusMsg_HoldForCode
 ;          (Delay_Ticks 1500 for status 0, 500 for status 0x2B, no wait for any other).  22 `calr` sites, and the 24-bit pointer loaded at 0xFE0976.
 StatusMsg_ShowByIndex:
 	link XIZ,0x0000                                      ; FE1838  ee 0c 00 00
@@ -161723,7 +161747,7 @@ StatusMsg_ShowByIndex:
 	and B,0x80                                           ; FE1853  ca cc 80
 	jr nz, .LFE185E                                          ; FE1856  6e 06
 	calr MessageScreen_Paint_SaveRegs2                                          ; FE1858  1e 9f e9
-	calr sub_FE2FC8                                          ; FE185B  1e 6a 17
+	calr StatusMsg_HoldForCode                                          ; FE185B  1e 6a 17
 .LFE185E:
 	unlk XIZ                                             ; FE185E  ee 0d
 	ret                                                  ; FE1860  0e
@@ -161736,7 +161760,7 @@ sub_FE1863:
 	lda xix, (0x1735:24)                                 ; FE1865  f2 35 17 00 34
 	ld c, (0x272c:16)                                   ; FE186A  c1 2c 27 23
 	ld (0x1736:24), c                                   ; FE186E  f2 36 17 00 43
-	calr sub_FE179D                                          ; FE1873  1e 27 ff
+	calr Disk_InitFileNameCharset                                          ; FE1873  1e 27 ff
 	ld c, (0x1736:24)                                   ; FE1876  c2 36 17 00 23
 	and C,0x80                                           ; FE187B  cb cc 80
 	jr nz, .LFE1896                                          ; FE187E  6e 16
@@ -161784,7 +161808,7 @@ sub_FE1863:
 ; ---------------------------------------------------------------------
 ; Disk_PortA3_ClearAndSettle -- wait 10 ms, drive PA bit 3 LOW, wait 307 ms
 ; Called from: 3 calr site(s): 0xFE08C5, 0xFE09F1, 0xFE199D.  0xFE08C5 is 4
-;          instructions into sub_FE08BD and 0xFE199D is 2 into the routine at
+;          instructions into Disk_MountFloppyWithRetry and 0xFE199D is 2 into the routine at
 ;          0xFE1997 -- both at the head, before any disk request goes out.
 ;          0xFE09F1 is 20 instructions into sub_FE09BE and is preceded, by one
 ;          instruction, by a Disk_PortA3_Release call: that routine CYCLES the
@@ -161860,7 +161884,9 @@ sub_FE191F:
 	ret                                                  ; FE1925  0e
 	ld (0x1736:24), 0x0d                               ; FE1926  f2 36 17 00 00 0d
 	ret                                                  ; FE192C  0e
-sub_FE192D:
+; Disk_MountFloppy720K: the same with drive code 0xD0.  Disk_MountFloppyWithRetry calls it when Disk_MountFloppy reports format 8 -- the
+;   code Disk_DetectFloppyFormat gives a 0xF9 media descriptor or 9 sectors per track, i.e. a 720K disk.
+Disk_MountFloppy720K:
 	pushw hl                                             ; FE192D  2b
 	ld XBC,0x000000d0                                    ; FE192E  41 d0 00 00 00
 	ld (0x221d:16), xbc                                 ; FE1933  f1 1d 22 61
@@ -161877,7 +161903,8 @@ sub_FE192D:
 	ld A,H                                               ; FE195E  ce 89
 	popw hl                                              ; FE1960  4b
 	ret                                                  ; FE1961  0e
-sub_FE1962:
+; Disk_MountFloppy: Disk_CommandDispatch code 0 (DiskCmd_MountDrive) with drive code 0xAF, type 0; (0x221D) = 0xAF; the result to (0x1735).
+Disk_MountFloppy:
 	pushw hl                                             ; FE1962  2b
 	ld XBC,0x000000af                                    ; FE1963  41 af 00 00 00
 	ld (0x221d:16), xbc                                 ; FE1968  f1 1d 22 61
@@ -162094,7 +162121,7 @@ DiskFile_Delete:
 	popw hl                                              ; FE1BBE  4b
 	ret                                                  ; FE1BBF  0e
 	link XIZ,0x0000                                      ; FE1BC0  ee 0c 00 00
-	calr sub_FE055B                                          ; FE1BC4  1e 94 e9
+	calr Disk_MountAndScanDirectory_LeaveOnError                                          ; FE1BC4  1e 94 e9
 	unlk XIZ                                             ; FE1BC7  ee 0d
 	ret                                                  ; FE1BC9  0e
 SysPartMidi_ResetBlock1Default_Call:
@@ -162146,7 +162173,7 @@ sub_FE1C0B:
 ; Disk_BootPhase3: module 23's boot phase 3 handler -- ModuleInitDirectory_F82641[23]'s vector 0xFE0000, slot 3
 ;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
 Disk_BootPhase3:
-	calr sub_FE2F39                                          ; FE1C12  1e 24 13
+	calr Disk_InitDriveAndNameEntry                                          ; FE1C12  1e 24 13
 	ret                                                  ; FE1C15  0e
 T_F42580_Nop:
 	ret                                                  ; FE1C16  0e
@@ -162162,17 +162189,19 @@ Disk_PortA3_Release_Call_Call:
 sub_FE1C23:
 	calr sub_FE16F3                                          ; FE1C23  1e cd fa
 	ret                                                  ; FE1C26  0e
-sub_FE1C27:
-	calr sub_FE0527                                          ; FE1C27  1e fd e8
+; Disk_MountAndScanDirectory_Call: calls Disk_MountAndScanDirectory and returns -- `calr Disk_MountAndScanDirectory / ret`.
+Disk_MountAndScanDirectory_Call:
+	calr Disk_MountAndScanDirectory                                          ; FE1C27  1e fd e8
 	ret                                                  ; FE1C2A  0e
-sub_FE1C2B:
-	calr sub_FE055B                                          ; FE1C2B  1e 2d e9
+; Disk_MountAndScanDirectory_LeaveOnError_Call: calls Disk_MountAndScanDirectory_LeaveOnError and returns -- `calr Disk_MountAndScanDirectory_LeaveOnError / ret`.
+Disk_MountAndScanDirectory_LeaveOnError_Call:
+	calr Disk_MountAndScanDirectory_LeaveOnError                                          ; FE1C2B  1e 2d e9
 	ret                                                  ; FE1C2E  0e
 sub_FE1C2F:
 	calr sub_FE191F                                          ; FE1C2F  1e ed fc
 	ret                                                  ; FE1C32  0e
 sub_FE1C33:
-	calr sub_FE0CB9                                          ; FE1C33  1e 83 f0
+	calr Disk_ScanDirectory                                          ; FE1C33  1e 83 f0
 	calr Ring_InitTenOfFourteen                                            ; FE1C36  1e f0 00
 	ret                                                  ; FE1C39  0e
 ; DiskApi_ReadFileToWindow_Entry: the directory's entry (T_DiskApi_ReadFileToWindow_Entry): DiskApi_ReadFileToWindow, A to Disk_LastError, and on screen latch 0x49 (0x360B) bit 0 cleared.
@@ -162199,12 +162228,12 @@ MidiFileSave_Page3_LcdKeyRow3:
 	ret                                                  ; FE1C5C  0e
 sub_FE1C5D:
 	calr sub_FE0514                                          ; FE1C5D  1e b4 e8
-	calr sub_FE0527                                          ; FE1C60  1e c4 e8
+	calr Disk_MountAndScanDirectory                                          ; FE1C60  1e c4 e8
 	calr Ring_InitTenOfFourteen                                            ; FE1C63  1e c3 00
 	ret                                                  ; FE1C66  0e
 sub_FE1C67:
 	calr sub_FE0514                                          ; FE1C67  1e aa e8
-	calr sub_FE055B                                          ; FE1C6A  1e ee e8
+	calr Disk_MountAndScanDirectory_LeaveOnError                                          ; FE1C6A  1e ee e8
 	calr Ring_InitTenOfFourteen                                            ; FE1C6D  1e b9 00
 	ret                                                  ; FE1C70  0e
 sub_FE1C71:
@@ -162242,8 +162271,9 @@ sub_FE1CA3:
 sub_FE1CA7:
 	calr sub_FE1705                                          ; FE1CA7  1e 5b fa
 	ret                                                  ; FE1CAA  0e
-sub_FE1CAB:
-	calr sub_FE0925                                          ; FE1CAB  1e 77 ec
+; Disk_SaveFileName_Call: calls Disk_SaveFileName and returns -- `calr Disk_SaveFileName / ret`.
+Disk_SaveFileName_Call:
+	calr Disk_SaveFileName                                          ; FE1CAB  1e 77 ec
 	ret                                                  ; FE1CAE  0e
 ; DiskApi_CloseFile_Call: calls DiskApi_CloseFile and returns -- `calr DiskApi_CloseFile / ret`.
 DiskApi_CloseFile_Call:
@@ -162255,8 +162285,9 @@ sub_FE1CB3:
 	ld (Disk_LastError:16), a                                   ; FE1CBA  f1 43 22 41
 	popw bc                                              ; FE1CBE  49
 	ret                                                  ; FE1CBF  0e
-sub_FE1CC0:
-	calr sub_FE08BD                                          ; FE1CC0  1e fa eb
+; Disk_ResetAndMountFloppy_Call: calls Disk_MountFloppyWithRetry and returns -- `calr Disk_MountFloppyWithRetry / ret`.
+Disk_ResetAndMountFloppy_Call:
+	calr Disk_MountFloppyWithRetry                                          ; FE1CC0  1e fa eb
 	ret                                                  ; FE1CC3  0e
 ; ---------------------------------------------------------------------
 ; Disk_PortA3_Release_Entry -- a PURE WRAPPER for Disk_PortA3_Release: it IS that
@@ -163426,7 +163457,7 @@ sub_FE2667:
 	ret                                                  ; FE2698  0e
 sub_FE2699:
 	push XHL                                             ; FE2699  3b
-	calr sub_FE0925                                          ; FE269A  1e 88 e2
+	calr Disk_SaveFileName                                          ; FE269A  1e 88 e2
 	ldw hl, 0x02                                         ; FE269D  33 02 00
 .LFE26A0:
 	extz XHL                                             ; FE26A0  eb 12
@@ -163435,7 +163466,7 @@ sub_FE2699:
 	cp HL,0x000b                                         ; FE26AA  db cf 0b 00
 	jr lt, .LFE26A0                                           ; FE26AE  61 f0
 	calr DiskApi_DeleteFile                                          ; FE26B0  1e ef e5
-	calr sub_FE0941                                          ; FE26B3  1e 8b e2
+	calr Disk_RestoreFileName                                          ; FE26B3  1e 8b e2
 	pop XHL                                              ; FE26B6  5b
 	ret                                                  ; FE26B7  0e
 ; DiskApi_CheckFreeSpace: DiskFile_CountFreeSpace (A = 6 when it fails); A = 7 -- the code DiskApi_WriteFileFromWindow returns for a full disk
@@ -164251,7 +164282,7 @@ sub_FE2E96:
 	push XIX                                             ; FE2E96  3c
 	lda xix, (0x21e8:16)                                ; FE2E97  f1 e8 21 34
 	m_or_mi8 MBI+r4, 0, 0x40                             ; FE2E9B  84 3e 40
-	calr sub_FE0184                                          ; FE2E9E  1e e3 d2
+	calr TimedEventRing_Discard_SaveRegs_C                                          ; FE2E9E  1e e3 d2
 	calr sub_FE0191                                          ; FE2EA1  1e ed d2
 	calr sub_FE019E                                          ; FE2EA4  1e f7 d2
 	calr sub_FE1719                                          ; FE2EA7  1e 6f e8
@@ -164321,7 +164352,9 @@ sub_FE2EF9:
 	ret                                                  ; FE2F37  0e
 sub_FE1CE4_Nop:
 	ret                                                  ; FE2F38  0e
-sub_FE2F39:
+; Disk_InitDriveAndNameEntry: Disk_BootPhase3's body: pulses Port B bit 2 (2 and 5 ticks), Var220D_SetW4157, fills Disk_FileName with eleven
+;   '_', Disk_InitFileNameCharset.
+Disk_InitDriveAndNameEntry:
 	pushw hl                                             ; FE2F39  2b
 	set	2, (PB:8)                                   ; FE2F3A  f0 1f ba
 	pushw 0x02                                           ; FE2F3D  0b 02 00
@@ -164340,7 +164373,7 @@ sub_FE2F39:
 	inc 1,H                                              ; FE2F5E  ce 61
 	cp H,0x0b                                            ; FE2F60  ce cf 0b
 	jr c, .LFE2F52                                            ; FE2F63  67 ed
-	calr sub_FE179D                                          ; FE2F65  1e 35 e8
+	calr Disk_InitFileNameCharset                                          ; FE2F65  1e 35 e8
 	popw hl                                              ; FE2F68  4b
 	ret                                                  ; FE2F69  0e
 sub_FE2F6A:
@@ -164394,7 +164427,8 @@ Var2216_SetW145A:
 	ret                                                  ; FE2FC6  0e
 sub_FE0527_Nop:
 	ret                                                  ; FE2FC7  0e
-sub_FE2FC8:
+; StatusMsg_HoldForCode: after StatusMsg_ShowByIndex paints: UI_StatusCode 0 -> Delay_Ticks(1500), 0x2B -> Delay_Ticks(500), else nothing.
+StatusMsg_HoldForCode:
 	ld bc, (UI_StatusCode:16)                                 ; FE2FC8  d1 80 28 21
 	extz BC                                              ; FE2FCC  d9 12
 	cp bc, 0x00:i3                                         ; FE2FCE  d9 d8

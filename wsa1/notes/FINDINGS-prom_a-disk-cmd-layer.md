@@ -104,14 +104,26 @@ groups, and neither can be named honestly yet:
    `Fat_Load` / `_Store`, `Fat_ClusterToSector`, `Fat_FindFreeClusterFrom` / `_After`,
    `Fat_DeleteFileAndFreeChain`, and the cluster and root-directory sector readers and writers.
    Still `sub_`: 0x85 (0xFE423E) and the code-0 case (0xFE370A).
-2. **File-system workers.** Compound routines (e.g. `sub_FE08BD` pulses Port B
+   **Both named later on 2026-10-04.** Code 0 is `DiskCmd_MountDrive`: it stores the drive type,
+   sets the geometry (`Disk_SetDriveGeometry`), issues FDC operations 10 and 0, and on a floppy
+   runs `Disk_DetectFloppyFormat`, which reads the media descriptor byte. Code 0x85 is
+   `DiskCmd_StoreFatIfConsistent`: `Fat_Store` runs only when `Fat_FindCrossLinkedCluster` finds
+   no cluster that two chains share. The FCB helpers under them (`Fat_MatchDirEntryName`,
+   `Fat_FindRootDirEntryByFcbName`, `Fat_FreeChain`, `Fat_DiscardFcbFile`, `Fcb_AddToFileSize`, ...)
+   are also named. Evidence for each is in `notes/prom_ab_read_names_2026_10_04.py`.
+2. **File-system workers.** Compound routines (e.g. `Disk_MountFloppyWithRetry` pulses Port B
    bit 2, clears/sets the ready flag `(0x21E7).6` from the result byte
-   `(0x1735)`; `sub_FE1962` invokes dispatcher command 0 with a fixed argument)
+   `(0x1735)`; `Disk_MountFloppy` invokes dispatcher command 0 with a fixed argument)
    whose *purpose* the source does not state. `FINDINGS-prom_a-portb-and-blockdev-entry.md`
    §1 explicitly declines to say what the Port B bit-2 pulse even does — so a
    name like "reset" would be a guess, not a reading.
    [Named 2026-10-03: `(0x21E7)` is `Disk_Flags` in `wsa1/include/wsa1_ram.inc` -- only its
    bit 6, the ready flag, is established; 91 operands.]
+   [2026-10-04: the purpose of both examples IS stated now, by what command 0 turned out to be.
+   `Disk_MountFloppy` mounts with drive code 0xAF. `Disk_MountFloppyWithRetry` tries it twice and
+   remounts with code 0xD0 (`Disk_MountFloppy720K`) when the detected format is 8, the 720K code.
+   The names still say nothing about the Port B bit-2 pulse, which stays unexplained, so neither
+   name says "reset".]
 
 ### The control that makes the refusal a measurement, not a mood
 

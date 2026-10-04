@@ -334,9 +334,9 @@ def main():
                 seen.add(t); back[t] = (n, site); queue.append(t)
     if not quiet:
         print("\n=== does the routine that ASSERTS reach a disk request? ===")
-        print("  sub_FE08BD -> sub_FE1962 -> T_F42D34 -> 0xFE3042 -> "
+        print("  Disk_MountFloppyWithRetry -> Disk_MountFloppy -> T_F42D34 -> 0xFE3042 -> "
               "Disk_CommandDispatch (sub_FE426E) -> DiskCmd_MountDrive -> Fdc_Request(0xFE66C7)")
-    check("BFS from sub_FE08BD (an asserting routine) reaches Fdc_Request",
+    check("BFS from Disk_MountFloppyWithRetry (an asserting routine) reaches Fdc_Request",
           path is not None)
 
     # ---- 6. gap V side-result: who writes bit 6 of (0x21E7)? ---------------
@@ -354,9 +354,9 @@ def main():
                   "" if a in rows else "   (not an instruction boundary in the source)"))
     real_b6 = {a: v for a, v in b6.items() if a in rows}
     check("(0x21E7) bit 6 is cleared at 0xFE08D1 and set at 0xFE08F3, "
-          "both inside sub_FE08BD",
+          "both inside Disk_MountFloppyWithRetry",
           real_b6.get(0xFE08D1) == "res" and real_b6.get(0xFE08F3) == "set")
-    check("the value that makes sub_FE08BD SET it is 0x0B in (0x1735)",
+    check("the value that makes Disk_MountFloppyWithRetry SET it is 0x0B in (0x1735)",
           rows[0xFE08E9][1] == "ld C,(XIX)"
           and rows[0xFE08EB][1] == "cp C,0x0b"
           and rows[0xFE08C0][1] == "lda_24 xix, (0x1735)")
@@ -375,9 +375,9 @@ def main():
           and rows[0xFE0A19][1] == "jr z, 0x08")
 
     # ---- 7. the PB bit 2 neighbour (gap U's blast radius) ------------------
-    # sub_FE08BD pulses PB bit 2 HIGH for one Delay_150Ticks immediately after
+    # Disk_MountFloppyWithRetry pulses PB bit 2 HIGH for one Delay_150Ticks immediately after
     # asserting PA bit 3.  SFR 0x1F is PB.
-    check("sub_FE08BD pulses PB bit 2 high for 150 ticks right after the "
+    check("Disk_MountFloppyWithRetry pulses PB bit 2 high for 150 ticks right after the "
           "PA bit 3 assert",
           rows[0xFE08C8][0] == b"\xf0\x1f\xba"          # set 2,(0x1F)
           and branch_target(0xFE08CB, rows[0xFE08CB][0]) == 0xFE1411

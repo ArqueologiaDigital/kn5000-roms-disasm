@@ -393,6 +393,43 @@ ROWS = [
      "set around it; otherwise Transport_StopAllRunning."),
     ("F0020B", "Transport_StartStopContinue",
      "the same with Transport_StartAllContinue for the start."),
+    # prom_a 0xFE0000-0xFE2FFF: the disk module's file workers, above DiskCmd_MountDrive.
+    ("FE1962", "Disk_MountFloppy",
+     "Disk_CommandDispatch code 0 (DiskCmd_MountDrive) with drive code 0xAF, type 0; (0x221D) = 0xAF; the result to (0x1735)."),
+    ("FE192D", "Disk_MountFloppy720K",
+     "the same with drive code 0xD0.  Disk_MountFloppyWithRetry calls it when Disk_MountFloppy reports format 8 -- the\n"
+     "code Disk_DetectFloppyFormat gives a 0xF9 media descriptor or 9 sectors per track, i.e. a 720K disk."),
+    ("FE08BD", "Disk_MountFloppyWithRetry",
+     "pulses Port B bit 2 (Delay_150Ticks), clears Disk_Flags bit 6, Disk_MountFloppy up to twice while it returns 2;\n"
+     "format 0x0B (18 sectors per track) -> result 0 and Disk_Flags bit 6 set; 0x0A / 0x0C / 0x0D -> 0; format 8 ->\n"
+     "Disk_MountFloppy720K.  Returns the result, also in (0x1735)."),
+    ("FE0925", "Disk_SaveFileName", "copies the 9 bytes at Disk_FileName to 0x21DB."),
+    ("FE0941", "Disk_RestoreFileName", "copies the 9 bytes at 0x21DB back to Disk_FileName."),
+    ("FE0970", "Disk_ShowMountError",
+     "for a mount result: 1 -> StatusMsg_ShowByIndex(8) (status 0x02, Error02 'There is no disk in the disk drive');\n"
+     "2 or 3 -> index 16 (status 0x00, Error00); 0xFF -> index 13 (status 0x04, the bare ERROR list); each with a delay."),
+    ("FE0CB9", "Disk_ScanDirectory",
+     "builds its line buffers, sets Disk_FileName to eleven '?', the transfer address (code 0x1A) to 0x60A080 (also\n"
+     "(0x21D3)), then DiskFile_FindFirst and, per found entry, sub_FE0E89 + DiskFile_FindNext until it fails.\n"
+     "Returns 0, or 0x1A when nothing matched."),
+    ("FE0527", "Disk_MountAndScanDirectory",
+     "StatusMsg_ShowByIndex(9) (PLEASE WAIT), Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanDirectory,\n"
+     "Disk_RestoreFileName; otherwise Disk_ShowMountError and Disk_PortA3_Release."),
+    ("FE055B", "Disk_MountAndScanDirectory_LeaveOnError",
+     "the same, but a failed mount also runs sub_FE1907, clears (0x2229) and sets UI_Request_Hi = 0x10."),
+    ("FE179D", "Disk_InitFileNameCharset",
+     "writes the 37 characters '_', 'A'..'Z', '0'..'9' to 0x1753.. -- the character set of the name editor."),
+    ("FE2F39", "Disk_InitDriveAndNameEntry",
+     "Disk_BootPhase3's body: pulses Port B bit 2 (2 and 5 ticks), Var220D_SetW4157, fills Disk_FileName with eleven\n"
+     "'_', Disk_InitFileNameCharset."),
+    ("FE2FC8", "StatusMsg_HoldForCode",
+     "after StatusMsg_ShowByIndex paints: UI_StatusCode 0 -> Delay_Ticks(1500), 0x2B -> Delay_Ticks(500), else nothing."),
+    ("F45B0A", "TimedEventRing_Discard",
+     "at interrupt level 6: the ring control block 0x600800's put index (+6) = its get index (+2) and the count (+8) =\n"
+     "0x1FF -- the 0x200-byte TimedEvents_Ring emptied (the block's layout: TimedEventRing_* in prom_a)."),
+    ("FE0207", "Transport_StopAllRunning_SaveRegs2",
+     "push XDE / XHL / XIX / XIZ, call T_F409AC (Transport_StopAllRunning), pop, ret.  The bytes after it to the next\n"
+     "label are two more such wrappers that nothing calls."),
 ]
 
 
