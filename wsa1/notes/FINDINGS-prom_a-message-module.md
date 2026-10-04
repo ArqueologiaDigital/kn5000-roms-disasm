@@ -28,7 +28,7 @@ it is used:
 | 4 | `T_F411B4-T_F411EC` | x65 | 15 | `0xFC546A-0xFC5B25` | **converted** |
 | 5 | `T_F413B4-T_F41400` | x52 | 20 | `0xFC807D-0xFCB2F0` | left, budget |
 
-Converting rank 1 whole also retired `T_F43440-T_F43454` (x11, 6 slots) and
+Converting rank 1 whole also retired `T_PartSettings_ResetToDefault-T_F43454` (x11, 6 slots) and
 `T_F40774-T_F40784` (x7, 5 slots), which publish into the same span — the point
 of converting a contiguous module rather than a list of routines.
 

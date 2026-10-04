@@ -522,6 +522,10 @@ GROUPS = [
         0x2229: ("UI_ScreenPage", "the page of a multi-page screen (DiskSaveFile 0..5, MidiFileSave 0..3, L0adSingle* 0..1)",
                  "the PageDispatch_* ENTER readers index ScreenEnterPages_* by it; the 32-slot control tables add 32 * it"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-initial.md", "1. The screen: seven items, one table", {
+        0x26F2: ("Initial_SelectedItem", "the INITIAL screen's item, 0..6: TOTAL, PART SETTING, SYSTEM, MIDI SETTING, RE-MAP, DRUMS MAP, SEQUENCER",
+                 "Initial_ExecuteSelected bounds it (cp BC,6) and jumps through Initial_ItemTable"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

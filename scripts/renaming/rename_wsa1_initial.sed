@@ -1,0 +1,23 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FA1445\b/Initial_ExecuteSelected/g
+s/\bJumpTable_FA146F\b/Initial_ItemTable/g
+s/\bsub_FA148B\b/Initial_Total/g
+s/\bsub_FA1499\b/Initial_PartSetting/g
+s/\bsub_FA149F\b/Initial_System/g
+s/\bsub_FA14AC\b/Initial_MidiSetting/g
+s/\bsub_FA14B2\b/Initial_ReMap/g
+s/\bsub_FA14BC\b/Initial_DrumsMap/g
+s/\bsub_FA14C2\b/Initial_Sequencer/g
+s/\bsub_FA1432\b/Initial_AskConfirmation/g
+s/\bsub_FAAE2A\b/PartSettings_ResetToDefault/g
+s/\bsub_FAAF91\b/SystemSettings_ResetToDefault/g
+s/\bsub_FAA967\b/MidiSettings_ResetToDefault/g
+s/\bsub_F455A0\b/Sequencer_ResetToDefault/g
+s/\bT_F43440\b/T_PartSettings_ResetToDefault/g
+s/\bT_F43444\b/T_SystemSettings_ResetToDefault/g
+s/\bT_F4077C\b/T_MidiSettings_ResetToDefault/g
+s/\bT_F40A18\b/T_Sequencer_ResetToDefault/g
+s/\bT_F41048\b/T_SoundRemap_ResetToDefault/g
+s/\bT_F4104C\b/T_CombiRemap_ResetToDefault/g
+s/\bT_F41050\b/T_DrumMap_ResetToDefault/g
+s/\bPtrTable_F4FB1C\b/SysExInitial_ItemTable/g

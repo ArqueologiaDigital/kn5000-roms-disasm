@@ -44,7 +44,7 @@ Other uses:
   means there is open. Examples:
   - `Paint_PowerOnSplash` writes 0 then 1 between its two splash images;
   - `PanelTimer_Repeat20AB` increments it;
-  - `sub_FA14C2` writes 2 together with screen request 0xAB.
+  - `Initial_Sequencer` writes 2 together with screen request 0xAB.
 - The name is therefore `UI_ScreenStage`, not `..._Confirm`.
 
 ## 2. `UI_ScreenFlags` (0x2095): request and repaint flags of the panel task

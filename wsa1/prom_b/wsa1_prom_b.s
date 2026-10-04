@@ -958,14 +958,14 @@
 	.set	sub_FAA71F, 0xFAA71F
 	.set	Tempo_ApplyBpm, 0xFAA742
 	.set	T_F407A4_Nop, 0xFAA7AB
-	.set	sub_FAA967, 0xFAA967
+	.set	MidiSettings_ResetToDefault, 0xFAA967
 	.set	sub_FAAA8F, 0xFAAA8F
 	.set	sub_FAAAB1, 0xFAAAB1
 	.set	sub_FAAAB5, 0xFAAAB5
 	.set	sub_FAAB28, 0xFAAB28
 	.set	sub_FAABB3, 0xFAABB3
-	.set	sub_FAAE2A, 0xFAAE2A
-	.set	sub_FAAF91, 0xFAAF91
+	.set	PartSettings_ResetToDefault, 0xFAAE2A
+	.set	SystemSettings_ResetToDefault, 0xFAAF91
 	.set	T_F407A8_Nop, 0xFAB5E9
 	.set	T_F407A0_Nop, 0xFAB5EA
 	.set	sub_FAB643, 0xFAB643
@@ -1075,6 +1075,13 @@
 	.set	SysExCmd_ThirdRegionWrite, 0xFB3483
 	.set	SysExCmd_ThirdRegionRequest, 0xFB3495
 	.set	SysExCmd_ParamWrite, 0xFB34CA
+	.set	SysExInitial_Total, 0xFB3DBC
+	.set	SysExInitial_PartSetting, 0xFB3DCD
+	.set	SysExInitial_System, 0xFB3DD2
+	.set	SysExInitial_MidiSetting, 0xFB3DE6
+	.set	SysExInitial_ReMap, 0xFB3E02
+	.set	SysExInitial_DrumsMap, 0xFB3E22
+	.set	SysExInitial_Sequencer, 0xFB3E3E
 	.set	SysExParam_Request_DispatchGroup, 0xFB42AB
 	.set	SysExTx_EmitStagedParams, 0xFB4B7D
 	.set	SysExTx_StagedParam_Ignore, 0xFB4BDD
@@ -87872,10 +87879,10 @@ DL_F3E2EB:
 ; ⚠ WHAT THE RECORDS ARE (2026-09-25): the FACTORY DEFAULTS of the parameter
 ; records.  Each `[id, len, payload]` is copied, payload byte H to record byte
 ; H, into the RAM record ParamNumber_RecordPtrs (prom_a 0xFACDEA, the table
-; (0x60F018) points at) gives for its id -- by prom_a sub_FAAE2A (routine slot
-; T_F43440; ids 0x00-0x3F, through PtrTable_FAD28A), sub_FAAF91 (T_F43444; the
+; (0x60F018) points at) gives for its id -- by prom_a PartSettings_ResetToDefault (routine slot
+; T_PartSettings_ResetToDefault; ids 0x00-0x3F, through PtrTable_FAD28A), SystemSettings_ResetToDefault (T_SystemSettings_ResetToDefault; the
 ; 13 others, through ByteTable_FAD38A + PtrTable_FAD397, then ids 0x61-0x63 on
-; to DspEffect_ApplyAlgorithmDefaults via T_DspEffect_ApplyAlgorithmDefaults) and sub_FAA967 (T_F4077C; bytes 0x0D-0x15 of ids
+; to DspEffect_ApplyAlgorithmDefaults via T_DspEffect_ApplyAlgorithmDefaults) and MidiSettings_ResetToDefault (T_MidiSettings_ResetToDefault; bytes 0x0D-0x15 of ids
 ; 0x00-0x1F).  Ids 0x00-0x1F / 0x20-0x3F are the two halves of the 32 PART
 ; records (prom_a's ParamNumber_RecordPtrs header): part k's channel byte
 ; (+0x0D) defaults to k.  The first halves are otherwise identical except part
@@ -87886,14 +87893,14 @@ DL_F3E2EB:
 ; ==============================================================================
 
 ; Default_Record78 -- id 0x78, 16 bytes, the factory default of RAM 0x7622
-;   (ParamNumber_RecordPtrs[0x78]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x78]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[0].
 Default_Record78:
 	.byte 0x78, 0x10	; op 78, 16-byte payload (one-off)
 	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20	; F3F402  |                |
 
 ; Default_Record60 -- id 0x60, 12 bytes, the factory default of RAM 0x7634
-;   (ParamNumber_RecordPtrs[0x60]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x60]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[1].
 Default_Record60:
 	.byte 0x60, 0x0C	; op 60, 12-byte payload (one-off)
@@ -87901,7 +87908,7 @@ Default_Record60:
 
 ; Default_DspEffect1 -- id 0x61, 30 bytes, the factory default of RAM 0x7642
 ;   (ParamNumber_RecordPtrs[0x61]): DSP effect block 1, algorithm 1; prom_a
-;   sub_FAAF91 copies it via PtrTable_FAD397[2].
+;   SystemSettings_ResetToDefault copies it via PtrTable_FAD397[2].
 Default_DspEffect1:
 	.byte 0x61, 0x1E	; op 61, 30-byte payload (one-off)
 	.byte	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3F422  |................|
@@ -87909,7 +87916,7 @@ Default_DspEffect1:
 
 ; Default_DspEffect2 -- id 0x62, 30 bytes, the factory default of RAM 0x7662
 ;   (ParamNumber_RecordPtrs[0x62]): DSP effect block 2, algorithm 35; prom_a
-;   sub_FAAF91 copies it via PtrTable_FAD397[3].
+;   SystemSettings_ResetToDefault copies it via PtrTable_FAD397[3].
 Default_DspEffect2:
 	.byte 0x62, 0x1E	; op 62, 30-byte payload (one-off)
 	.byte	0x23, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3F442  |#...............|
@@ -87917,7 +87924,7 @@ Default_DspEffect2:
 
 ; Default_DspEffect3 -- id 0x63, 30 bytes, the factory default of RAM 0x7682
 ;   (ParamNumber_RecordPtrs[0x63]): DSP effect block 3, algorithm 20; prom_a
-;   sub_FAAF91 copies it via PtrTable_FAD397[4].
+;   SystemSettings_ResetToDefault copies it via PtrTable_FAD397[4].
 Default_DspEffect3:
 	.byte 0x63, 0x1E	; op 63, 30-byte payload (one-off)
 	.byte	0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3F462  |................|
@@ -87925,7 +87932,7 @@ Default_DspEffect3:
 
 ; Default_Part00_A -- id 0x00, 30 bytes, the factory default of RAM 0x76A2
 ;   (ParamNumber_RecordPtrs[0x00]): part 0, first half; +0x0D (channel) = 0;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x00]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x00]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part00_A:
 	.byte 0x00, 0x1E	; op 00, 30-byte payload (slot 1/64)
@@ -87934,7 +87941,7 @@ Default_Part00_A:
 
 ; Default_Part00_B -- id 0x20, 30 bytes, the factory default of RAM 0x76C2
 ;   (ParamNumber_RecordPtrs[0x20]): part 0, second half (id 0x00 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x20].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x20].
 Default_Part00_B:
 	.byte 0x20, 0x1E	; op 20, 30-byte payload (slot 2/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F4A2  |...........`..?.|
@@ -87942,7 +87949,7 @@ Default_Part00_B:
 
 ; Default_Part01_A -- id 0x01, 30 bytes, the factory default of RAM 0x76E2
 ;   (ParamNumber_RecordPtrs[0x01]): part 1, first half; +0x0D (channel) = 1;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x01]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x01]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part01_A:
 	.byte 0x01, 0x1E	; op 01, 30-byte payload (slot 3/64)
@@ -87951,7 +87958,7 @@ Default_Part01_A:
 
 ; Default_Part01_B -- id 0x21, 30 bytes, the factory default of RAM 0x7702
 ;   (ParamNumber_RecordPtrs[0x21]): part 1, second half (id 0x01 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x21].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x21].
 Default_Part01_B:
 	.byte 0x21, 0x1E	; op 21, 30-byte payload (slot 4/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F4E2  |...........`..?.|
@@ -87959,7 +87966,7 @@ Default_Part01_B:
 
 ; Default_Part02_A -- id 0x02, 30 bytes, the factory default of RAM 0x7722
 ;   (ParamNumber_RecordPtrs[0x02]): part 2, first half; +0x0D (channel) = 2;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x02]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x02]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part02_A:
 	.byte 0x02, 0x1E	; op 02, 30-byte payload (slot 5/64)
@@ -87968,7 +87975,7 @@ Default_Part02_A:
 
 ; Default_Part02_B -- id 0x22, 30 bytes, the factory default of RAM 0x7742
 ;   (ParamNumber_RecordPtrs[0x22]): part 2, second half (id 0x02 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x22].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x22].
 Default_Part02_B:
 	.byte 0x22, 0x1E	; op 22, 30-byte payload (slot 6/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F522  |...........`..?.|
@@ -87976,7 +87983,7 @@ Default_Part02_B:
 
 ; Default_Part03_A -- id 0x03, 30 bytes, the factory default of RAM 0x7762
 ;   (ParamNumber_RecordPtrs[0x03]): part 3, first half; +0x0D (channel) = 3;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x03]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x03]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part03_A:
 	.byte 0x03, 0x1E	; op 03, 30-byte payload (slot 7/64)
@@ -87985,7 +87992,7 @@ Default_Part03_A:
 
 ; Default_Part03_B -- id 0x23, 30 bytes, the factory default of RAM 0x7782
 ;   (ParamNumber_RecordPtrs[0x23]): part 3, second half (id 0x03 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x23].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x23].
 Default_Part03_B:
 	.byte 0x23, 0x1E	; op 23, 30-byte payload (slot 8/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F562  |...........`..?.|
@@ -87993,7 +88000,7 @@ Default_Part03_B:
 
 ; Default_Part04_A -- id 0x04, 30 bytes, the factory default of RAM 0x77A2
 ;   (ParamNumber_RecordPtrs[0x04]): part 4, first half; +0x0D (channel) = 4;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x04]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x04]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part04_A:
 	.byte 0x04, 0x1E	; op 04, 30-byte payload (slot 9/64)
@@ -88002,7 +88009,7 @@ Default_Part04_A:
 
 ; Default_Part04_B -- id 0x24, 30 bytes, the factory default of RAM 0x77C2
 ;   (ParamNumber_RecordPtrs[0x24]): part 4, second half (id 0x04 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x24].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x24].
 Default_Part04_B:
 	.byte 0x24, 0x1E	; op 24, 30-byte payload (slot 10/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F5A2  |...........`..?.|
@@ -88010,7 +88017,7 @@ Default_Part04_B:
 
 ; Default_Part05_A -- id 0x05, 30 bytes, the factory default of RAM 0x77E2
 ;   (ParamNumber_RecordPtrs[0x05]): part 5, first half; +0x0D (channel) = 5;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x05]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x05]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part05_A:
 	.byte 0x05, 0x1E	; op 05, 30-byte payload (slot 11/64)
@@ -88019,7 +88026,7 @@ Default_Part05_A:
 
 ; Default_Part05_B -- id 0x25, 30 bytes, the factory default of RAM 0x7802
 ;   (ParamNumber_RecordPtrs[0x25]): part 5, second half (id 0x05 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x25].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x25].
 Default_Part05_B:
 	.byte 0x25, 0x1E	; op 25, 30-byte payload (slot 12/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F5E2  |...........`..?.|
@@ -88027,7 +88034,7 @@ Default_Part05_B:
 
 ; Default_Part06_A -- id 0x06, 30 bytes, the factory default of RAM 0x7822
 ;   (ParamNumber_RecordPtrs[0x06]): part 6, first half; +0x0D (channel) = 6;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x06]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x06]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part06_A:
 	.byte 0x06, 0x1E	; op 06, 30-byte payload (slot 13/64)
@@ -88036,7 +88043,7 @@ Default_Part06_A:
 
 ; Default_Part06_B -- id 0x26, 30 bytes, the factory default of RAM 0x7842
 ;   (ParamNumber_RecordPtrs[0x26]): part 6, second half (id 0x06 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x26].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x26].
 Default_Part06_B:
 	.byte 0x26, 0x1E	; op 26, 30-byte payload (slot 14/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F622  |...........`..?.|
@@ -88044,7 +88051,7 @@ Default_Part06_B:
 
 ; Default_Part07_A -- id 0x07, 30 bytes, the factory default of RAM 0x7862
 ;   (ParamNumber_RecordPtrs[0x07]): part 7, first half; +0x0D (channel) = 7;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x07]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x07]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part07_A:
 	.byte 0x07, 0x1E	; op 07, 30-byte payload (slot 15/64)
@@ -88053,21 +88060,21 @@ Default_Part07_A:
 
 ; Default_Part07_B -- id 0x27, 30 bytes, the factory default of RAM 0x7882
 ;   (ParamNumber_RecordPtrs[0x27]): part 7, second half (id 0x07 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x27].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x27].
 Default_Part07_B:
 	.byte 0x27, 0x1E	; op 27, 30-byte payload (slot 16/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F662  |...........`..?.|
 	.byte	0x84, 0x00, 0x00, 0x70, 0xB7, 0x00, 0x3F, 0x40, 0x01, 0x02, 0x01, 0x00, 0x00, 0x00	; F3F672  |...p..?@......|
 
 ; Default_Record92 -- id 0x92, 14 bytes, the factory default of RAM 0x78A2
-;   (ParamNumber_RecordPtrs[0x92]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x92]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[5].
 Default_Record92:
 	.byte 0x92, 0x0E	; op 92, 14-byte payload (one-off)
 	.byte	0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; F3F682  |..............|
 
 ; Default_Record79 -- id 0x79, 44 bytes, the factory default of RAM 0x78B2
-;   (ParamNumber_RecordPtrs[0x79]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x79]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[6].
 Default_Record79:
 	.byte 0x79, 0x2C	; op 79, 44-byte payload (one-off)
@@ -88079,7 +88086,7 @@ Default_Record79:
 
 ; Default_Part08_A -- id 0x08, 30 bytes, the factory default of RAM 0x78E2
 ;   (ParamNumber_RecordPtrs[0x08]): part 8, first half; +0x0D (channel) = 8;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x08]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x08]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part08_A:
 	.byte 0x08, 0x1E	; op 08, 30-byte payload (slot 17/64)
@@ -88088,7 +88095,7 @@ Default_Part08_A:
 
 ; Default_Part08_B -- id 0x28, 30 bytes, the factory default of RAM 0x7902
 ;   (ParamNumber_RecordPtrs[0x28]): part 8, second half (id 0x08 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x28].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x28].
 Default_Part08_B:
 	.byte 0x28, 0x1E	; op 28, 30-byte payload (slot 18/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F6E2  |...........`..?.|
@@ -88096,7 +88103,7 @@ Default_Part08_B:
 
 ; Default_Part09_A -- id 0x09, 30 bytes, the factory default of RAM 0x7922
 ;   (ParamNumber_RecordPtrs[0x09]): part 9, first half; +0x0D (channel) = 9;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x09]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x09]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part09_A:
 	.byte 0x09, 0x1E	; op 09, 30-byte payload (slot 19/64)
@@ -88105,7 +88112,7 @@ Default_Part09_A:
 
 ; Default_Part09_B -- id 0x29, 30 bytes, the factory default of RAM 0x7942
 ;   (ParamNumber_RecordPtrs[0x29]): part 9, second half (id 0x09 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x29].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x29].
 Default_Part09_B:
 	.byte 0x29, 0x1E	; op 29, 30-byte payload (slot 20/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F722  |...........`..?.|
@@ -88113,7 +88120,7 @@ Default_Part09_B:
 
 ; Default_Part10_A -- id 0x0A, 30 bytes, the factory default of RAM 0x7962
 ;   (ParamNumber_RecordPtrs[0x0A]): part 10, first half; +0x0D (channel) = 10;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0A]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0A]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part10_A:
 	.byte 0x0A, 0x1E	; op 0A, 30-byte payload (slot 21/64)
@@ -88122,7 +88129,7 @@ Default_Part10_A:
 
 ; Default_Part10_B -- id 0x2A, 30 bytes, the factory default of RAM 0x7982
 ;   (ParamNumber_RecordPtrs[0x2A]): part 10, second half (id 0x0A + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2A].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2A].
 Default_Part10_B:
 	.byte 0x2A, 0x1E	; op 2A, 30-byte payload (slot 22/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F762  |...........`..?.|
@@ -88130,7 +88137,7 @@ Default_Part10_B:
 
 ; Default_Part11_A -- id 0x0B, 30 bytes, the factory default of RAM 0x79A2
 ;   (ParamNumber_RecordPtrs[0x0B]): part 11, first half; +0x0D (channel) = 11;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0B]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0B]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part11_A:
 	.byte 0x0B, 0x1E	; op 0B, 30-byte payload (slot 23/64)
@@ -88139,7 +88146,7 @@ Default_Part11_A:
 
 ; Default_Part11_B -- id 0x2B, 30 bytes, the factory default of RAM 0x79C2
 ;   (ParamNumber_RecordPtrs[0x2B]): part 11, second half (id 0x0B + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2B].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2B].
 Default_Part11_B:
 	.byte 0x2B, 0x1E	; op 2B, 30-byte payload (slot 24/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F7A2  |...........`..?.|
@@ -88147,7 +88154,7 @@ Default_Part11_B:
 
 ; Default_Part12_A -- id 0x0C, 30 bytes, the factory default of RAM 0x79E2
 ;   (ParamNumber_RecordPtrs[0x0C]): part 12, first half; +0x0D (channel) = 12;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0C]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0C]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part12_A:
 	.byte 0x0C, 0x1E	; op 0C, 30-byte payload (slot 25/64)
@@ -88156,7 +88163,7 @@ Default_Part12_A:
 
 ; Default_Part12_B -- id 0x2C, 30 bytes, the factory default of RAM 0x7A02
 ;   (ParamNumber_RecordPtrs[0x2C]): part 12, second half (id 0x0C + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2C].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2C].
 Default_Part12_B:
 	.byte 0x2C, 0x1E	; op 2C, 30-byte payload (slot 26/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F7E2  |...........`..?.|
@@ -88164,7 +88171,7 @@ Default_Part12_B:
 
 ; Default_Part13_A -- id 0x0D, 30 bytes, the factory default of RAM 0x7A22
 ;   (ParamNumber_RecordPtrs[0x0D]): part 13, first half; +0x0D (channel) = 13;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0D]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0D]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part13_A:
 	.byte 0x0D, 0x1E	; op 0D, 30-byte payload (slot 27/64)
@@ -88173,7 +88180,7 @@ Default_Part13_A:
 
 ; Default_Part13_B -- id 0x2D, 30 bytes, the factory default of RAM 0x7A42
 ;   (ParamNumber_RecordPtrs[0x2D]): part 13, second half (id 0x0D + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2D].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2D].
 Default_Part13_B:
 	.byte 0x2D, 0x1E	; op 2D, 30-byte payload (slot 28/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F822  |...........`..?.|
@@ -88181,7 +88188,7 @@ Default_Part13_B:
 
 ; Default_Part14_A -- id 0x0E, 30 bytes, the factory default of RAM 0x7A62
 ;   (ParamNumber_RecordPtrs[0x0E]): part 14, first half; +0x0D (channel) = 14;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0E]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0E]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part14_A:
 	.byte 0x0E, 0x1E	; op 0E, 30-byte payload (slot 29/64)
@@ -88190,7 +88197,7 @@ Default_Part14_A:
 
 ; Default_Part14_B -- id 0x2E, 30 bytes, the factory default of RAM 0x7A82
 ;   (ParamNumber_RecordPtrs[0x2E]): part 14, second half (id 0x0E + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2E].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2E].
 Default_Part14_B:
 	.byte 0x2E, 0x1E	; op 2E, 30-byte payload (slot 30/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F862  |...........`..?.|
@@ -88198,7 +88205,7 @@ Default_Part14_B:
 
 ; Default_Part15_A -- id 0x0F, 30 bytes, the factory default of RAM 0x7AA2
 ;   (ParamNumber_RecordPtrs[0x0F]): part 15, first half; +0x0D (channel) = 15;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x0F]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x0F]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part15_A:
 	.byte 0x0F, 0x1E	; op 0F, 30-byte payload (slot 31/64)
@@ -88207,7 +88214,7 @@ Default_Part15_A:
 
 ; Default_Part15_B -- id 0x2F, 30 bytes, the factory default of RAM 0x7AC2
 ;   (ParamNumber_RecordPtrs[0x2F]): part 15, second half (id 0x0F + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x2F].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x2F].
 Default_Part15_B:
 	.byte 0x2F, 0x1E	; op 2F, 30-byte payload (slot 32/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F8A2  |...........`..?.|
@@ -88215,7 +88222,7 @@ Default_Part15_B:
 
 ; Default_Part16_A -- id 0x10, 30 bytes, the factory default of RAM 0x7AE2
 ;   (ParamNumber_RecordPtrs[0x10]): part 16, first half; +0x0D (channel) = 16;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x10]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x10]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part16_A:
 	.byte 0x10, 0x1E	; op 10, 30-byte payload (slot 33/64)
@@ -88224,7 +88231,7 @@ Default_Part16_A:
 
 ; Default_Part16_B -- id 0x30, 30 bytes, the factory default of RAM 0x7B02
 ;   (ParamNumber_RecordPtrs[0x30]): part 16, second half (id 0x10 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x30].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x30].
 Default_Part16_B:
 	.byte 0x30, 0x1E	; op 30, 30-byte payload (slot 34/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F8E2  |...........`..?.|
@@ -88232,7 +88239,7 @@ Default_Part16_B:
 
 ; Default_Part17_A -- id 0x11, 30 bytes, the factory default of RAM 0x7B22
 ;   (ParamNumber_RecordPtrs[0x11]): part 17, first half; +0x0D (channel) = 17;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x11]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x11]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part17_A:
 	.byte 0x11, 0x1E	; op 11, 30-byte payload (slot 35/64)
@@ -88241,7 +88248,7 @@ Default_Part17_A:
 
 ; Default_Part17_B -- id 0x31, 30 bytes, the factory default of RAM 0x7B42
 ;   (ParamNumber_RecordPtrs[0x31]): part 17, second half (id 0x11 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x31].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x31].
 Default_Part17_B:
 	.byte 0x31, 0x1E	; op 31, 30-byte payload (slot 36/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F922  |...........`..?.|
@@ -88249,7 +88256,7 @@ Default_Part17_B:
 
 ; Default_Part18_A -- id 0x12, 30 bytes, the factory default of RAM 0x7B62
 ;   (ParamNumber_RecordPtrs[0x12]): part 18, first half; +0x0D (channel) = 18;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x12]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x12]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part18_A:
 	.byte 0x12, 0x1E	; op 12, 30-byte payload (slot 37/64)
@@ -88258,7 +88265,7 @@ Default_Part18_A:
 
 ; Default_Part18_B -- id 0x32, 30 bytes, the factory default of RAM 0x7B82
 ;   (ParamNumber_RecordPtrs[0x32]): part 18, second half (id 0x12 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x32].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x32].
 Default_Part18_B:
 	.byte 0x32, 0x1E	; op 32, 30-byte payload (slot 38/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F962  |...........`..?.|
@@ -88266,7 +88273,7 @@ Default_Part18_B:
 
 ; Default_Part19_A -- id 0x13, 30 bytes, the factory default of RAM 0x7BA2
 ;   (ParamNumber_RecordPtrs[0x13]): part 19, first half; +0x0D (channel) = 19;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x13]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x13]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part19_A:
 	.byte 0x13, 0x1E	; op 13, 30-byte payload (slot 39/64)
@@ -88275,7 +88282,7 @@ Default_Part19_A:
 
 ; Default_Part19_B -- id 0x33, 30 bytes, the factory default of RAM 0x7BC2
 ;   (ParamNumber_RecordPtrs[0x33]): part 19, second half (id 0x13 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x33].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x33].
 Default_Part19_B:
 	.byte 0x33, 0x1E	; op 33, 30-byte payload (slot 40/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F9A2  |...........`..?.|
@@ -88283,7 +88290,7 @@ Default_Part19_B:
 
 ; Default_Part20_A -- id 0x14, 30 bytes, the factory default of RAM 0x7BE2
 ;   (ParamNumber_RecordPtrs[0x14]): part 20, first half; +0x0D (channel) = 20;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x14]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x14]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part20_A:
 	.byte 0x14, 0x1E	; op 14, 30-byte payload (slot 41/64)
@@ -88292,7 +88299,7 @@ Default_Part20_A:
 
 ; Default_Part20_B -- id 0x34, 30 bytes, the factory default of RAM 0x7C02
 ;   (ParamNumber_RecordPtrs[0x34]): part 20, second half (id 0x14 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x34].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x34].
 Default_Part20_B:
 	.byte 0x34, 0x1E	; op 34, 30-byte payload (slot 42/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3F9E2  |...........`..?.|
@@ -88300,7 +88307,7 @@ Default_Part20_B:
 
 ; Default_Part21_A -- id 0x15, 30 bytes, the factory default of RAM 0x7C22
 ;   (ParamNumber_RecordPtrs[0x15]): part 21, first half; +0x0D (channel) = 21;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x15]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x15]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part21_A:
 	.byte 0x15, 0x1E	; op 15, 30-byte payload (slot 43/64)
@@ -88309,7 +88316,7 @@ Default_Part21_A:
 
 ; Default_Part21_B -- id 0x35, 30 bytes, the factory default of RAM 0x7C42
 ;   (ParamNumber_RecordPtrs[0x35]): part 21, second half (id 0x15 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x35].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x35].
 Default_Part21_B:
 	.byte 0x35, 0x1E	; op 35, 30-byte payload (slot 44/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FA22  |...........`..?.|
@@ -88317,7 +88324,7 @@ Default_Part21_B:
 
 ; Default_Part22_A -- id 0x16, 30 bytes, the factory default of RAM 0x7C62
 ;   (ParamNumber_RecordPtrs[0x16]): part 22, first half; +0x0D (channel) = 22;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x16]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x16]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part22_A:
 	.byte 0x16, 0x1E	; op 16, 30-byte payload (slot 45/64)
@@ -88326,7 +88333,7 @@ Default_Part22_A:
 
 ; Default_Part22_B -- id 0x36, 30 bytes, the factory default of RAM 0x7C82
 ;   (ParamNumber_RecordPtrs[0x36]): part 22, second half (id 0x16 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x36].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x36].
 Default_Part22_B:
 	.byte 0x36, 0x1E	; op 36, 30-byte payload (slot 46/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FA62  |...........`..?.|
@@ -88334,7 +88341,7 @@ Default_Part22_B:
 
 ; Default_Part23_A -- id 0x17, 30 bytes, the factory default of RAM 0x7CA2
 ;   (ParamNumber_RecordPtrs[0x17]): part 23, first half; +0x0D (channel) = 23;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x17]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x17]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part23_A:
 	.byte 0x17, 0x1E	; op 17, 30-byte payload (slot 47/64)
@@ -88343,7 +88350,7 @@ Default_Part23_A:
 
 ; Default_Part23_B -- id 0x37, 30 bytes, the factory default of RAM 0x7CC2
 ;   (ParamNumber_RecordPtrs[0x37]): part 23, second half (id 0x17 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x37].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x37].
 Default_Part23_B:
 	.byte 0x37, 0x1E	; op 37, 30-byte payload (slot 48/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FAA2  |...........`..?.|
@@ -88351,7 +88358,7 @@ Default_Part23_B:
 
 ; Default_Part24_A -- id 0x18, 30 bytes, the factory default of RAM 0x7CE2
 ;   (ParamNumber_RecordPtrs[0x18]): part 24, first half; +0x0D (channel) = 24;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x18]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x18]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part24_A:
 	.byte 0x18, 0x1E	; op 18, 30-byte payload (slot 49/64)
@@ -88360,7 +88367,7 @@ Default_Part24_A:
 
 ; Default_Part24_B -- id 0x38, 30 bytes, the factory default of RAM 0x7D02
 ;   (ParamNumber_RecordPtrs[0x38]): part 24, second half (id 0x18 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x38].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x38].
 Default_Part24_B:
 	.byte 0x38, 0x1E	; op 38, 30-byte payload (slot 50/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FAE2  |...........`..?.|
@@ -88368,7 +88375,7 @@ Default_Part24_B:
 
 ; Default_Part25_A -- id 0x19, 30 bytes, the factory default of RAM 0x7D22
 ;   (ParamNumber_RecordPtrs[0x19]): part 25, first half; +0x0D (channel) = 25;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x19]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x19]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part25_A:
 	.byte 0x19, 0x1E	; op 19, 30-byte payload (slot 51/64)
@@ -88377,7 +88384,7 @@ Default_Part25_A:
 
 ; Default_Part25_B -- id 0x39, 30 bytes, the factory default of RAM 0x7D42
 ;   (ParamNumber_RecordPtrs[0x39]): part 25, second half (id 0x19 + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x39].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x39].
 Default_Part25_B:
 	.byte 0x39, 0x1E	; op 39, 30-byte payload (slot 52/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FB22  |...........`..?.|
@@ -88385,7 +88392,7 @@ Default_Part25_B:
 
 ; Default_Part26_A -- id 0x1A, 30 bytes, the factory default of RAM 0x7D62
 ;   (ParamNumber_RecordPtrs[0x1A]): part 26, first half; +0x0D (channel) = 26;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1A]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1A]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part26_A:
 	.byte 0x1A, 0x1E	; op 1A, 30-byte payload (slot 53/64)
@@ -88394,7 +88401,7 @@ Default_Part26_A:
 
 ; Default_Part26_B -- id 0x3A, 30 bytes, the factory default of RAM 0x7D82
 ;   (ParamNumber_RecordPtrs[0x3A]): part 26, second half (id 0x1A + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3A].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3A].
 Default_Part26_B:
 	.byte 0x3A, 0x1E	; op 3A, 30-byte payload (slot 54/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FB62  |...........`..?.|
@@ -88402,7 +88409,7 @@ Default_Part26_B:
 
 ; Default_Part27_A -- id 0x1B, 30 bytes, the factory default of RAM 0x7DA2
 ;   (ParamNumber_RecordPtrs[0x1B]): part 27, first half; +0x0D (channel) = 27;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1B]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1B]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part27_A:
 	.byte 0x1B, 0x1E	; op 1B, 30-byte payload (slot 55/64)
@@ -88411,7 +88418,7 @@ Default_Part27_A:
 
 ; Default_Part27_B -- id 0x3B, 30 bytes, the factory default of RAM 0x7DC2
 ;   (ParamNumber_RecordPtrs[0x3B]): part 27, second half (id 0x1B + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3B].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3B].
 Default_Part27_B:
 	.byte 0x3B, 0x1E	; op 3B, 30-byte payload (slot 56/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FBA2  |...........`..?.|
@@ -88419,7 +88426,7 @@ Default_Part27_B:
 
 ; Default_Part28_A -- id 0x1C, 30 bytes, the factory default of RAM 0x7DE2
 ;   (ParamNumber_RecordPtrs[0x1C]): part 28, first half; +0x0D (channel) = 28;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1C]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1C]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part28_A:
 	.byte 0x1C, 0x1E	; op 1C, 30-byte payload (slot 57/64)
@@ -88428,7 +88435,7 @@ Default_Part28_A:
 
 ; Default_Part28_B -- id 0x3C, 30 bytes, the factory default of RAM 0x7E02
 ;   (ParamNumber_RecordPtrs[0x3C]): part 28, second half (id 0x1C + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3C].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3C].
 Default_Part28_B:
 	.byte 0x3C, 0x1E	; op 3C, 30-byte payload (slot 58/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FBE2  |...........`..?.|
@@ -88436,7 +88443,7 @@ Default_Part28_B:
 
 ; Default_Part29_A -- id 0x1D, 30 bytes, the factory default of RAM 0x7E22
 ;   (ParamNumber_RecordPtrs[0x1D]): part 29, first half; +0x0D (channel) = 29;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1D]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1D]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part29_A:
 	.byte 0x1D, 0x1E	; op 1D, 30-byte payload (slot 59/64)
@@ -88445,7 +88452,7 @@ Default_Part29_A:
 
 ; Default_Part29_B -- id 0x3D, 30 bytes, the factory default of RAM 0x7E42
 ;   (ParamNumber_RecordPtrs[0x3D]): part 29, second half (id 0x1D + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3D].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3D].
 Default_Part29_B:
 	.byte 0x3D, 0x1E	; op 3D, 30-byte payload (slot 60/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FC22  |...........`..?.|
@@ -88453,7 +88460,7 @@ Default_Part29_B:
 
 ; Default_Part30_A -- id 0x1E, 30 bytes, the factory default of RAM 0x7E62
 ;   (ParamNumber_RecordPtrs[0x1E]): part 30, first half; +0x0D (channel) = 30;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1E]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1E]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part30_A:
 	.byte 0x1E, 0x1E	; op 1E, 30-byte payload (slot 61/64)
@@ -88462,7 +88469,7 @@ Default_Part30_A:
 
 ; Default_Part30_B -- id 0x3E, 30 bytes, the factory default of RAM 0x7E82
 ;   (ParamNumber_RecordPtrs[0x3E]): part 30, second half (id 0x1E + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3E].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3E].
 Default_Part30_B:
 	.byte 0x3E, 0x1E	; op 3E, 30-byte payload (slot 62/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FC62  |...........`..?.|
@@ -88470,7 +88477,7 @@ Default_Part30_B:
 
 ; Default_Part31_A -- id 0x1F, 30 bytes, the factory default of RAM 0x7EA2
 ;   (ParamNumber_RecordPtrs[0x1F]): part 31, first half; +0x0D (channel) = 31;
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x1F]; sub_FAA967 bytes
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x1F]; MidiSettings_ResetToDefault bytes
 ;   0x0D-0x15.
 Default_Part31_A:
 	.byte 0x1F, 0x1E	; op 1F, 30-byte payload (slot 63/64)
@@ -88479,14 +88486,14 @@ Default_Part31_A:
 
 ; Default_Part31_B -- id 0x3F, 30 bytes, the factory default of RAM 0x7EC2
 ;   (ParamNumber_RecordPtrs[0x3F]): part 31, second half (id 0x1F + 0x20);
-;   prom_a sub_FAAE2A copies it via PtrTable_FAD28A[0x3F].
+;   prom_a PartSettings_ResetToDefault copies it via PtrTable_FAD28A[0x3F].
 Default_Part31_B:
 	.byte 0x3F, 0x1E	; op 3F, 30-byte payload (slot 64/64)
 	.byte	0x00, 0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x7F, 0x00, 0x7F, 0x60, 0x0B, 0x00, 0x3F, 0x10	; F3FCA2  |...........`..?.|
 	.byte	0x84, 0x00, 0x00, 0x70, 0xB7, 0x00, 0x3F, 0x40, 0x01, 0x02, 0x01, 0x00, 0x00, 0x00	; F3FCB2  |...p..?@......|
 
 ; Default_Record7A -- id 0x7A, 28 bytes, the factory default of RAM 0x7EE2
-;   (ParamNumber_RecordPtrs[0x7A]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x7A]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[7].
 Default_Record7A:
 	.byte 0x7A, 0x1C	; op 7A, 28-byte payload (one-off)
@@ -88496,14 +88503,14 @@ Default_Record7A:
 	.byte 0xFF, 0xFF	; F3FCDE  end-of-section marker (see header)
 
 ; Default_Record98 -- id 0x98, 14 bytes, the factory default of RAM 0x7F02
-;   (ParamNumber_RecordPtrs[0x98]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x98]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[8].
 Default_Record98:
 	.byte 0x98, 0x0E	; op 98, 14-byte payload (one-off)
 	.byte	0x00, 0x00, 0x00, 0x76, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3FCE2  |...v..........|
 
 ; Default_Record99 -- id 0x99, 30 bytes, the factory default of RAM 0x7F12
-;   (ParamNumber_RecordPtrs[0x99]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x99]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[9].
 Default_Record99:
 	.byte 0x99, 0x1E	; op 99, 30-byte payload (one-off)
@@ -88511,7 +88518,7 @@ Default_Record99:
 	.byte	0x82, 0x01, 0x02, 0x81, 0x00, 0x10, 0x11, 0x12, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00	; F3FD02  |..............|
 
 ; Default_Record80 -- id 0x80, 22 bytes, the factory default of RAM 0x7F32
-;   (ParamNumber_RecordPtrs[0x80]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x80]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[10].
 Default_Record80:
 	.byte 0x80, 0x16	; op 80, 22-byte payload (one-off)
@@ -88519,14 +88526,14 @@ Default_Record80:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3FD22  |......|
 
 ; Default_Record91 -- id 0x91, 14 bytes, the factory default of RAM 0x7F4A
-;   (ParamNumber_RecordPtrs[0x91]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x91]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[11].
 Default_Record91:
 	.byte 0x91, 0x0E	; op 91, 14-byte payload (one-off)
 	.byte	0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F3FD2A  |..............|
 
 ; Default_Record93 -- id 0x93, 36 bytes, the factory default of RAM 0x7F5A
-;   (ParamNumber_RecordPtrs[0x93]); prom_a sub_FAAF91 copies it via
+;   (ParamNumber_RecordPtrs[0x93]); prom_a SystemSettings_ResetToDefault copies it via
 ;   PtrTable_FAD397[12].
 Default_Record93:
 	.byte 0x93, 0x24	; op 93, 36-byte payload (one-off)
@@ -88876,7 +88883,7 @@ T_F40760:	jp sub_FA7E0C  ; -> prom_a 0x27E0C   x1
 T_ParamModule_PhaseVector:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
 T_F40774:	jp sub_FAAAB1  ; -> prom_a 0x2AAB1   x2
 T_F40778:	jp sub_FAAA8F  ; -> prom_a 0x2AA8F
-T_F4077C:	jp sub_FAA967  ; -> prom_a 0x2A967   x2
+T_MidiSettings_ResetToDefault:	jp MidiSettings_ResetToDefault  ; -> prom_a 0x2A967   x2
 T_F40780:	jp sub_FAB7E6  ; -> prom_a 0x2B7E6   x1
 T_F40784:	jp sub_FABD33  ; -> prom_a 0x2BD33   x2
 	ret  ; 0xF40788: 1 x ret
@@ -89008,7 +89015,7 @@ T_Var34D1_SetBits20:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
 T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
 T_F40A10:	jp SeqBufRing_Discard  ; -> prom_b 0x45975   x2
 T_F40A14:	jp TimedEventRing_Discard  ; -> prom_b 0x45B0A   x8
-T_F40A18:	jp sub_F455A0  ; -> prom_b 0x455A0   x2
+T_Sequencer_ResetToDefault:	jp Sequencer_ResetToDefault  ; -> prom_b 0x455A0   x2
 T_F40A1C:	jp sub_F44367  ; -> prom_b 0x44367   x15
 T_F40A20:	jp sub_F455C5  ; -> prom_b 0x455C5   x3
 T_F40A24:	jp sub_F456EC  ; -> prom_b 0x456EC   x2
@@ -89342,9 +89349,9 @@ T_F41038:	jp sub_FC1E68  ; -> prom_a 0x41E68   x4
 T_F4103C:	jp sub_FC1D92  ; -> prom_a 0x41D92   x1
 T_F41040:	jp sub_FC25A8  ; -> prom_a 0x425A8   x1
 T_F41044:	jp sub_FC25A2  ; -> prom_a 0x425A2   x1
-T_F41048:	jp SoundRemap_ResetToDefault  ; -> prom_a 0x401B1   x2
-T_F4104C:	jp CombiRemap_ResetToDefault  ; -> prom_a 0x401C7   x2
-T_F41050:	jp DrumMap_ResetToDefault  ; -> prom_a 0x401DD   x2
+T_SoundRemap_ResetToDefault:	jp SoundRemap_ResetToDefault  ; -> prom_a 0x401B1   x2
+T_CombiRemap_ResetToDefault:	jp CombiRemap_ResetToDefault  ; -> prom_a 0x401C7   x2
+T_DrumMap_ResetToDefault:	jp DrumMap_ResetToDefault  ; -> prom_a 0x401DD   x2
 T_F41054:	jp sub_FC11FB  ; -> prom_a 0x411FB   x4
 T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1
@@ -91516,8 +91523,8 @@ T_TuneScale_KeyScalingCodeToIndex:	jp TuneScale_KeyScalingCodeToIndex  ; -> prom
 	.fill 0xC, 1, 0x0E  ; 0xF43424: 12 x ret
 T_DiskFile_CheckSignature:	jp DiskFile_CheckSignature  ; -> prom_b 0x48C1A   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43434: 12 x ret
-T_F43440:	jp sub_FAAE2A  ; -> prom_a 0x2AE2A   x2
-T_F43444:	jp sub_FAAF91  ; -> prom_a 0x2AF91   x2
+T_PartSettings_ResetToDefault:	jp PartSettings_ResetToDefault  ; -> prom_a 0x2AE2A   x2
+T_SystemSettings_ResetToDefault:	jp SystemSettings_ResetToDefault  ; -> prom_a 0x2AF91   x2
 T_ParamMsg_ResendTwoAssignedCtrls:	jp ParamMsg_ResendTwoAssignedCtrls  ; -> prom_a 0x2BFFF
 T_ParamRecord_SetPartsField18Bit0:	jp ParamRecord_SetPartsField18Bit0  ; -> prom_a 0x2C7C4   x3
 T_F43450:	jp sub_FAABB3  ; -> prom_a 0x2ABB3   x1
@@ -94587,18 +94594,19 @@ sub_F454B3_Epilogue2:
 	ret	; F4559F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F455A0
-; Called from: T_F40A18 (x2)
+; Sequencer_ResetToDefault
+; Called from: T_Sequencer_ResetToDefault (x2)
 ; Touches: (0x7EE2)
 ; Calls:   sub_F44260 sub_F440A0 T_Queue2E00_AppendRegs T_F40794
-; Evidence: thunk slot T_F40A18 holds `jp 0x00F455A0`, and 0xF455A0 is an
+; Evidence: thunk slot T_Sequencer_ResetToDefault holds `jp 0x00F455A0`, and 0xF455A0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F455A0:		; <- T_F40A18
+; Sequencer_ResetToDefault: what INITIAL item 6 SEQUENCER runs (screen and SysEx): block store reset, tempo 120 (notes/FINDINGS-prom_a-initial.md)
+Sequencer_ResetToDefault:		; <- T_Sequencer_ResetToDefault
 	calr	sub_F44260	; F455A0  calr 0xf44260
 	ld	(6304982:24), 0	; F455A3  ld (0x6034d6),0x00
 	calr	sub_F440A0	; F455A9  calr 0xf440a0
@@ -109093,7 +109101,7 @@ IndexMap_F4FA9B:
 ; --- 0xF4FB1C-0xF4FE37  romtab (796 bytes) ---
 
 ; --------------------------------------------------------------------------
-; PtrTable_F4FB1C -- 7 32-bit pointers, 7 into prom_a and 0 into prom_b
+; SysExInitial_ItemTable -- 7 32-bit pointers, 7 into prom_a and 0 into prom_b
 ; Read by: prom_a 0xFB3E87 `add XBC,0x00f4fb1c`
 ; Entry count: 7, measured by abutment: 7 x 4 = 28 bytes reaches 0xF4FB38
 ;              exactly, which is the next address an instruction names.
@@ -109103,14 +109111,15 @@ IndexMap_F4FA9B:
 ;           instruction text on which it fires zero times.  The BASE is the
 ;           address an instruction spells, not a boundary this file chose.
 ; --------------------------------------------------------------------------
-PtrTable_F4FB1C:
-	.long 0x00FB3DBC                       ; F4FB1C  [0]   -> prom_a 0xFB3DBC
-	.long 0x00FB3DCD                       ; F4FB20  [1]   -> prom_a 0xFB3DCD
-	.long 0x00FB3DD2                       ; F4FB24  [2]   -> prom_a 0xFB3DD2
-	.long 0x00FB3DE6                       ; F4FB28  [3]   -> prom_a 0xFB3DE6
-	.long 0x00FB3E02                       ; F4FB2C  [4]   -> prom_a 0xFB3E02
-	.long 0x00FB3E22                       ; F4FB30  [5]   -> prom_a 0xFB3E22
-	.long 0x00FB3E3E                       ; F4FB34  [6]   -> prom_a 0xFB3E3E
+; SysExInitial_ItemTable: the seven INITIAL arms SysExParam_SetInitial (prom_a 0xFB3E5A) jumps through, in the screen's item order (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_ItemTable:
+	.long SysExInitial_Total                       ; F4FB1C  [0]   -> prom_a 0xFB3DBC
+	.long SysExInitial_PartSetting                       ; F4FB20  [1]   -> prom_a 0xFB3DCD
+	.long SysExInitial_System                       ; F4FB24  [2]   -> prom_a 0xFB3DD2
+	.long SysExInitial_MidiSetting                       ; F4FB28  [3]   -> prom_a 0xFB3DE6
+	.long SysExInitial_ReMap                       ; F4FB2C  [4]   -> prom_a 0xFB3E02
+	.long SysExInitial_DrumsMap                       ; F4FB30  [5]   -> prom_a 0xFB3E22
+	.long SysExInitial_Sequencer                       ; F4FB34  [6]   -> prom_a 0xFB3E3E
 
 ; --------------------------------------------------------------------------
 ; SysExTx_StagedParamHandlers -- 192 32-bit pointers, 192 into prom_a and 0 into prom_b

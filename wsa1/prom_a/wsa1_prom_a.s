@@ -1226,7 +1226,7 @@
 	.set T_F40760,                                                                      0x00F40760
 	.set T_ParamModule_PhaseVector,                                                                      0x00F40770
 	.set T_F40774,                                                                      0x00F40774
-	.set T_F4077C,                                                                      0x00F4077C
+	.set T_MidiSettings_ResetToDefault,                                                                      0x00F4077C
 	.set T_F40780,                                                                      0x00F40780
 	.set T_F4078C,                                                                      0x00F4078C
 	.set T_F40790,                                                                      0x00F40790
@@ -1298,7 +1298,7 @@
 	.set T_F40A0C,                                                                      0x00F40A0C
 	.set T_F40A10,                                                                      0x00F40A10
 	.set T_F40A14,                                                                      0x00F40A14
-	.set T_F40A18,                                                                      0x00F40A18
+	.set T_Sequencer_ResetToDefault,                                                                      0x00F40A18
 	.set T_F40A24,                                                                      0x00F40A24
 	.set T_F40A28,                                                                      0x00F40A28
 	.set T_F40A34_Zeroed,                                                               0x00F40A34	; prom_b: 8 zero bytes (nop) that run into T_F40A3C
@@ -1372,9 +1372,9 @@
 	.set T_F4103C,                                                                      0x00F4103C
 	.set T_F41040,                                                                      0x00F41040
 	.set T_F41044,                                                                      0x00F41044
-	.set T_F41048,                                                                      0x00F41048
-	.set T_F4104C,                                                                      0x00F4104C
-	.set T_F41050,                                                                      0x00F41050
+	.set T_SoundRemap_ResetToDefault,                                                                      0x00F41048
+	.set T_CombiRemap_ResetToDefault,                                                                      0x00F4104C
+	.set T_DrumMap_ResetToDefault,                                                                      0x00F41050
 	.set T_F41054,                                                                      0x00F41054
 	.set T_F4105C,                                                                      0x00F4105C
 	.set T_F41060,                                                                      0x00F41060
@@ -2012,8 +2012,8 @@
 	.set T_SoundCopy_HandleReceivedSound,                                               0x00F4341C
 	.set T_TuneScale_KeyScalingCodeToIndex,                                             0x00F43420
 	.set T_DiskFile_CheckSignature,                                                     0x00F43430
-	.set T_F43440,                                                                      0x00F43440
-	.set T_F43444,                                                                      0x00F43444
+	.set T_PartSettings_ResetToDefault,                                                                      0x00F43440
+	.set T_SystemSettings_ResetToDefault,                                                                      0x00F43444
 	.set T_ParamRecord_SetPartsField18Bit0,                                             0x00F4344C
 	.set T_F43450,                                                                      0x00F43450
 	.set T_Queue2E00_PostParam98Fields,                                                 0x00F43454
@@ -2035,7 +2035,7 @@
 	.set SysExSession_CategoryEndTable,                         0x00F4F9E6
 	.set SysExSession_AbortTable,                         0x00F4FA2E
 	.set MidiSysEx_Tail3Init,                     0x00F4FA76
-	.set PtrTable_F4FB1C,                         0x00F4FB1C
+	.set SysExInitial_ItemTable,                         0x00F4FB1C
 	.set SysExTx_StagedParamHandlers,                         0x00F4FB38
 	.set SysExStatus_MessageIdMap,                         0x00F511C7
 	.set Pointer_F51E20,                          0x00F51E20
@@ -61276,10 +61276,10 @@ LcdKeyRow3_Initial:
 	jr z, .LFA131A                                       ; FA1311  66 07
 	jr .LFA131D                                          ; FA1313  68 08
 .LFA1315:
-	calr sub_FA1432                                          ; FA1315  1e 1a 01
+	calr Initial_AskConfirmation                                          ; FA1315  1e 1a 01
 	jr .LFA131D                                          ; FA1318  68 03
 .LFA131A:
-	calr sub_FA1445                                          ; FA131A  1e 28 01
+	calr Initial_ExecuteSelected                                          ; FA131A  1e 28 01
 .LFA131D:
 	ret                                                  ; FA131D  0e
 ; LcdKeyRow4_Initial: HandlerTable23_FA1DED slot 11, the 23-slot button table Screen_Initial_Button indexes through T_PanelCode_ToSlotAndFlags
@@ -61332,7 +61332,7 @@ ExitKey_Initial:
 	ld c, (UI_ScreenLatch:16)                                   ; FA1364  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA1368  c1 7b 20 f3
 	jr z, .LFA1373                                       ; FA136C  66 05
-	ld (0x26f2:16), 0x00                                 ; FA136E  f1 f2 26 00 00
+	ld (Initial_SelectedItem:16), 0x00                                 ; FA136E  f1 f2 26 00 00
 .LFA1373:
 	m_or_mi8 MB16, UI_RequestBits, 0x09                          ; FA1373  c1 75 20 3e 09
 	ld (PanelDial_DownButton:16), 0x0b                                 ; FA1378  f1 9b 20 00 0b
@@ -61427,7 +61427,8 @@ ExitKey_Initial:
 	m_set 1, MD16, UI_Request_Hi                                ; FA1428  f1 71 20 b9
 	ld (UI_Request:16), 0x01                                 ; FA142C  f1 70 20 00 01
 	ret                                                  ; FA1431  0e
-sub_FA1432:   ; entry: reachable-run entry
+; Initial_AskConfirmation: LcdKeyRow3_Initial at stage 0: UI_ScreenStage = 1 (the confirmation page) unless PanelEvent_Flags bit 0 (notes/FINDINGS-prom_a-initial.md)
+Initial_AskConfirmation:   ; entry: reachable-run entry
 	ld c, (PanelEvent_Flags:16)                                   ; FA1432  c1 b0 28 23
 	and C,0x01                                           ; FA1436  cb cc 01
 	jr nz, .LFA1444                                      ; FA1439  6e 09
@@ -61435,7 +61436,9 @@ sub_FA1432:   ; entry: reachable-run entry
 	m_set 4, MD16, UI_Request_Hi                                ; FA1440  f1 71 20 bc
 .LFA1444:
 	ret                                                  ; FA1444  0e
-sub_FA1445:
+; Initial_ExecuteSelected: the INITIAL screen's execute (LcdKeyRow3_Initial at stage 1): runs Initial_ItemTable[Initial_SelectedItem], 0..6, then status
+;   0x23 and screen 0xAB at stage 2 (notes/FINDINGS-prom_a-initial.md)
+Initial_ExecuteSelected:
 	push XDE                                             ; FA1445  3a
 	push XHL                                             ; FA1446  3b
 	push XIX                                             ; FA1447  3c
@@ -61444,55 +61447,63 @@ sub_FA1445:
 	and C,0x01                                           ; FA144D  cb cc 01
 	jrl nz, JumpTable_FA146F_Code_Epilogue                                         ; FA1450  7e 8b 00
 	res	4, (0x97:8)                                   ; FA1453  f0 97 b4
-	ld bc, (0x26f2:16)                                 ; FA1456  d1 f2 26 21
+	ld bc, (Initial_SelectedItem:16)                                 ; FA1456  d1 f2 26 21
 	extz BC                                              ; FA145A  d9 12
 	extz XBC                                             ; FA145C  e9 12
 	cp bc, 0x06:i3                                         ; FA145E  d9 de
 	jr ugt, sub_FA14C2_Join                                         ; FA1460  6b 64
 	sll bc, 0x02                                         ; FA1462  d9 ee 02
-	add XBC,JumpTable_FA146F                             ; FA1465  e9 c8 6f 14 fa 00
+	add XBC,Initial_ItemTable                             ; FA1465  e9 c8 6f 14 fa 00
 	ld XBC,(XBC)                                         ; FA146B  a1 21
 	jp (xbc)                                             ; FA146D  b1 d8
-JumpTable_FA146F:
-	.long sub_FA148B                                 ; FA146F  [  0]
-	.long sub_FA1499                                 ; FA1473  [  1]
-	.long sub_FA149F                                 ; FA1477  [  2]
-	.long sub_FA14AC                                 ; FA147B  [  3]
-	.long sub_FA14B2                                 ; FA147F  [  4]
-	.long sub_FA14BC                                 ; FA1483  [  5]
-	.long sub_FA14C2                                 ; FA1487  [  6]
-sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
+; Initial_ItemTable: the seven INITIAL items in screen order: TOTAL, PART SETTING, SYSTEM, MIDI SETTING, RE-MAP, DRUMS MAP, SEQUENCER (notes/FINDINGS-prom_a-initial.md)
+Initial_ItemTable:
+	.long Initial_Total                                 ; FA146F  [  0]
+	.long Initial_PartSetting                                 ; FA1473  [  1]
+	.long Initial_System                                 ; FA1477  [  2]
+	.long Initial_MidiSetting                                 ; FA147B  [  3]
+	.long Initial_ReMap                                 ; FA147F  [  4]
+	.long Initial_DrumsMap                                 ; FA1483  [  5]
+	.long Initial_Sequencer                                 ; FA1487  [  6]
+; Initial_Total: item 0 TOTAL (notes/FINDINGS-prom_a-initial.md)
+Initial_Total:   ; entry: jump-table target (Initial_ItemTable[0])
 	call T_ModuleInit_Phase2Veneer                                        ; FA148B  1d 34 00 f4
 	call T_F40A00                                        ; FA148F  1d 00 0a f4
 	call T_F43450                                        ; FA1493  1d 50 34 f4
 	jr .LFA14A7                                       ; FA1497  68 0e
-; entry: jump-table target (JumpTable_FA146F[1])
-sub_FA1499:   ; entry: named by 1 `.long` operand, first at 0xFA1473
-	call T_F43440                                        ; FA1499  1d 40 34 f4
+; entry: jump-table target (Initial_ItemTable[1])
+; Initial_PartSetting: item 1 PART SETTING (notes/FINDINGS-prom_a-initial.md)
+Initial_PartSetting:   ; entry: named by 1 `.long` operand, first at 0xFA1473
+	call T_PartSettings_ResetToDefault                                        ; FA1499  1d 40 34 f4
 	jr sub_FA14C2_Join                                     ; FA149D  68 27
-; entry: jump-table target (JumpTable_FA146F[2])
-sub_FA149F:   ; entry: named by 1 `.long` operand, first at 0xFA1477
+; entry: jump-table target (Initial_ItemTable[2])
+; Initial_System: item 2 SYSTEM (notes/FINDINGS-prom_a-initial.md)
+Initial_System:   ; entry: named by 1 `.long` operand, first at 0xFA1477
 	call T_Mode_SwitchToSound                                        ; FA149F  1d c4 15 f4
-	call T_F43444                                        ; FA14A3  1d 44 34 f4
+	call T_SystemSettings_ResetToDefault                                        ; FA14A3  1d 44 34 f4
 .LFA14A7:
 	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
 	jr sub_FA14C2_Join                                     ; FA14AA  68 1a
-; entry: jump-table target (JumpTable_FA146F[3])
-sub_FA14AC:   ; entry: named by 1 `.long` operand, first at 0xFA147B
-	call T_F4077C                                        ; FA14AC  1d 7c 07 f4
+; entry: jump-table target (Initial_ItemTable[3])
+; Initial_MidiSetting: item 3 MIDI SETTING (notes/FINDINGS-prom_a-initial.md)
+Initial_MidiSetting:   ; entry: named by 1 `.long` operand, first at 0xFA147B
+	call T_MidiSettings_ResetToDefault                                        ; FA14AC  1d 7c 07 f4
 	jr sub_FA14C2_Join                                     ; FA14B0  68 14
-; entry: jump-table target (JumpTable_FA146F[4])
-sub_FA14B2:   ; entry: named by 1 `.long` operand, first at 0xFA147F
-	call T_F41048                                        ; FA14B2  1d 48 10 f4
-	call T_F4104C                                        ; FA14B6  1d 4c 10 f4
+; entry: jump-table target (Initial_ItemTable[4])
+; Initial_ReMap: item 4 RE-MAP: both remap resets (notes/FINDINGS-prom_a-initial.md)
+Initial_ReMap:   ; entry: named by 1 `.long` operand, first at 0xFA147F
+	call T_SoundRemap_ResetToDefault                                        ; FA14B2  1d 48 10 f4
+	call T_CombiRemap_ResetToDefault                                        ; FA14B6  1d 4c 10 f4
 	jr sub_FA14C2_Join                                     ; FA14BA  68 0a
-; entry: jump-table target (JumpTable_FA146F[5])
-sub_FA14BC:   ; entry: named by 1 `.long` operand, first at 0xFA1483
-	call T_F41050                                        ; FA14BC  1d 50 10 f4
+; entry: jump-table target (Initial_ItemTable[5])
+; Initial_DrumsMap: item 5 DRUMS MAP (notes/FINDINGS-prom_a-initial.md)
+Initial_DrumsMap:   ; entry: named by 1 `.long` operand, first at 0xFA1483
+	call T_DrumMap_ResetToDefault                                        ; FA14BC  1d 50 10 f4
 	jr sub_FA14C2_Join                                     ; FA14C0  68 04
-; entry: jump-table target (JumpTable_FA146F[6])
-sub_FA14C2:   ; entry: named by 1 `.long` operand, first at 0xFA1487
-	call T_F40A18                                        ; FA14C2  1d 18 0a f4
+; entry: jump-table target (Initial_ItemTable[6])
+; Initial_Sequencer: item 6 SEQUENCER (notes/FINDINGS-prom_a-initial.md)
+Initial_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFA1487
+	call T_Sequencer_ResetToDefault                                        ; FA14C2  1d 18 0a f4
 sub_FA14C2_Join:   ; entry: reachable-run entry
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; FA14C6  c1 75 20 3c 6f
 	ld (UI_StatusCode:16), 0x23                                 ; FA14CB  f1 80 28 00 23
@@ -61523,7 +61534,7 @@ sub_FA14E3:
 	and C,0x01                                           ; FA1507  cb cc 01
 	jr nz, .LFA152F                                      ; FA150A  6e 23
 	push XIX                                             ; FA150C  3c
-	lda xbc, (0x26f2:16)                                ; FA150D  f1 f2 26 31
+	lda xbc, (Initial_SelectedItem:16)                                ; FA150D  f1 f2 26 31
 	push XBC                                             ; FA1511  39
 	call T_F42C78                                        ; FA1512  1d 78 2c f4
 	inc 8,XSP                                            ; FA1516  ef 60
@@ -61565,7 +61576,7 @@ sub_FA1546:
 	and C,0x01                                           ; FA156A  cb cc 01
 	jr nz, .LFA1592                                      ; FA156D  6e 23
 	push XIX                                             ; FA156F  3c
-	lda xbc, (0x26f2:16)                                ; FA1570  f1 f2 26 31
+	lda xbc, (Initial_SelectedItem:16)                                ; FA1570  f1 f2 26 31
 	push XBC                                             ; FA1574  39
 	call T_F42C78                                        ; FA1575  1d 78 2c f4
 	inc 8,XSP                                            ; FA1579  ef 60
@@ -77775,7 +77786,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ;
 ; Chosen by notes/prom_a_call_graph.py --modules: T_F4078C-T_ParamMsg_RefreshMasksOnCtrlFieldChange was the
 ; highest-ranked UNCONVERTED prom_a directory module (x171 over 34 slots,
-; targets 0xFAA418-0xFAC786), and T_F43440-T_Queue2E00_PostParam98Fields (x11) and T_F40774-T_F40784
+; targets 0xFAA418-0xFAC786), and T_PartSettings_ResetToDefault-T_Queue2E00_PostParam98Fields (x11) and T_F40774-T_F40784
 ; (x7) publish into the same span, so converting it whole retires three modules.
 ;
 ; MODULE EXTENT, and how it was established -- not by address arithmetic:
@@ -79149,7 +79160,8 @@ ParamModule_BootPhase3:
 .LFAA963:
 	calr sub_FAAD19                                      ; FAA963  1e b3 03
 	ret                                                  ; FAA966  0e
-sub_FAA967:
+; MidiSettings_ResetToDefault: what INITIAL item 3 MIDI SETTING runs (screen and SysEx) (notes/FINDINGS-prom_a-initial.md)
+MidiSettings_ResetToDefault:
 	link XIZ,0xfff6                                      ; FAA967  ee 0c f6 ff
 	pushw hl                                             ; FAA96B  2b
 	pushw de                                             ; FAA96C  2a
@@ -79664,7 +79676,8 @@ sub_FAAD19:
 	popw de                                              ; FAAE27  4a
 	popw hl                                              ; FAAE28  4b
 	ret                                                  ; FAAE29  0e
-sub_FAAE2A:
+; PartSettings_ResetToDefault: what INITIAL item 1 PART SETTING runs (screen and SysEx): loops over the PART parameter records from 0x20 (notes/FINDINGS-prom_a-initial.md)
+PartSettings_ResetToDefault:
 	link XIZ,0xffec                                      ; FAAE2A  ee 0c ec ff
 	pushw hl                                             ; FAAE2E  2b
 	pushw de                                             ; FAAE2F  2a
@@ -79819,10 +79832,10 @@ sub_FAAE2A:
 	unlk XIZ                                             ; FAAF8E  ee 0d
 	ret                                                  ; FAAF90  0e
 ; ---------------------------------------------------------------------
-; sub_FAAF91 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; SystemSettings_ResetToDefault -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_b T_F43444 (`jp`)
-;          prom_a sub_FB3C34 (`call` through T_F43444) at 0xFB3DD7
+; Called from: prom_b T_SystemSettings_ResetToDefault (`jp`)
+;          prom_a sub_FB3C34 (`call` through T_SystemSettings_ResetToDefault) at 0xFB3DD7
 ;
 ;     0xFAAFCE loads 0xFAD38A, where the ROM reads:
 ;        "x`abc"
@@ -79837,7 +79850,8 @@ sub_FAAE2A:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FAAF91:
+; SystemSettings_ResetToDefault: what INITIAL item 2 SYSTEM runs (screen and SysEx) (notes/FINDINGS-prom_a-initial.md)
+SystemSettings_ResetToDefault:
 	link XIZ,0xffe6                                      ; FAAF91  ee 0c e6 ff
 	pushw hl                                             ; FAAF95  2b
 	pushw de                                             ; FAAF96  2a
@@ -83571,8 +83585,8 @@ BitMask32_Table:
 ;          included); the prom_b record at entry[n] is `[op][len][payload]`
 ;          (prom_b's 0xF3F400 module framing) with op == n and len == 0x1E;
 ;          and both readers copy payload bytes into the RAM record of the same
-;          number -- sub_FAAE2A all `len` bytes from +2 (numbers 0x00-0x1F,
-;          then 0x20-0x3F through +0x80), sub_FAA967 bytes 0x0D..0x15 of the
+;          number -- PartSettings_ResetToDefault all `len` bytes from +2 (numbers 0x00-0x1F,
+;          then 0x20-0x3F through +0x80), MidiSettings_ResetToDefault bytes 0x0D..0x15 of the
 ;          32 first halves.  So prom_b 0xF3F480-0xF3FCBF is the part records'
 ;          factory defaults.
 ; ★ CORRECTED: the two lines this replaces said what lives at 0xF3Fxxx was
@@ -92560,6 +92574,8 @@ SysExParam_SetEffect2OnOff:
 	popw hl                                              ; FB3DB8  4b
 	unlk XIZ                                             ; FB3DB9  ee 0d
 	ret                                                  ; FB3DBB  0e
+; SysExInitial_Total: SysExInitial_ItemTable[0] -- SysEx INITIAL (parameter 08 00) value 0 TOTAL: T_ModuleInit_Phase2Veneer, T_F40A00 (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_Total:
 	push XDE                                             ; FB3DBC  3a
 	push XHL                                             ; FB3DBD  3b
 	push XIX                                             ; FB3DBE  3c
@@ -92571,12 +92587,16 @@ SysExParam_SetEffect2OnOff:
 	pop XHL                                              ; FB3DCA  5b
 	pop XDE                                              ; FB3DCB  5a
 	ret                                                  ; FB3DCC  0e
-	call T_F43440                                        ; FB3DCD  1d 40 34 f4
+; SysExInitial_PartSetting: SysExInitial_ItemTable[1] -- SysEx INITIAL (parameter 08 00) value 1 PART SETTING (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_PartSetting:
+	call T_PartSettings_ResetToDefault                                        ; FB3DCD  1d 40 34 f4
 	ret                                                  ; FB3DD1  0e
+; SysExInitial_System: SysExInitial_ItemTable[2] -- SysEx INITIAL (parameter 08 00) value 2 SYSTEM, then a 0x3FFF countdown (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_System:
 	pushw hl                                             ; FB3DD2  2b
 	pushw de                                             ; FB3DD3  2a
 	ldw hl, 0x3fff                                       ; FB3DD4  33 ff 3f
-	call T_F43444                                        ; FB3DD7  1d 44 34 f4
+	call T_SystemSettings_ResetToDefault                                        ; FB3DD7  1d 44 34 f4
 .LFB3DDB:
 	ld DE,HL                                             ; FB3DDB  db 8a
 	dec 1,HL                                             ; FB3DDD  db 69
@@ -92585,6 +92605,8 @@ SysExParam_SetEffect2OnOff:
 	popw de                                              ; FB3DE3  4a
 	popw hl                                              ; FB3DE4  4b
 	ret                                                  ; FB3DE5  0e
+; SysExInitial_MidiSetting: SysExInitial_ItemTable[3] -- SysEx INITIAL (parameter 08 00) value 3 MIDI SETTING, then a 0x7FFF countdown (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_MidiSetting:
 	pushw hl                                             ; FB3DE6  2b
 	pushw de                                             ; FB3DE7  2a
 	ldw hl, 0x7fff                                       ; FB3DE8  33 ff 7f
@@ -92592,7 +92614,7 @@ SysExParam_SetEffect2OnOff:
 	push XHL                                             ; FB3DEC  3b
 	push XIX                                             ; FB3DED  3c
 	push XIZ                                             ; FB3DEE  3e
-	call T_F4077C                                        ; FB3DEF  1d 7c 07 f4
+	call T_MidiSettings_ResetToDefault                                        ; FB3DEF  1d 7c 07 f4
 	pop XIZ                                              ; FB3DF3  5e
 	pop XIX                                              ; FB3DF4  5c
 	pop XHL                                              ; FB3DF5  5b
@@ -92605,6 +92627,8 @@ SysExParam_SetEffect2OnOff:
 	popw de                                              ; FB3DFF  4a
 	popw hl                                              ; FB3E00  4b
 	ret                                                  ; FB3E01  0e
+; SysExInitial_ReMap: SysExInitial_ItemTable[4] -- SysEx INITIAL (parameter 08 00) value 4 RE-MAP: both remap resets, then a 0xFFFF countdown (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_ReMap:
 	pushw hl                                             ; FB3E02  2b
 	pushw de                                             ; FB3E03  2a
 	ldw hl, 0xffff                                       ; FB3E04  33 ff ff
@@ -92612,8 +92636,8 @@ SysExParam_SetEffect2OnOff:
 	push XHL                                             ; FB3E08  3b
 	push XIX                                             ; FB3E09  3c
 	push XIZ                                             ; FB3E0A  3e
-	call T_F41048                                        ; FB3E0B  1d 48 10 f4
-	call T_F4104C                                        ; FB3E0F  1d 4c 10 f4
+	call T_SoundRemap_ResetToDefault                                        ; FB3E0B  1d 48 10 f4
+	call T_CombiRemap_ResetToDefault                                        ; FB3E0F  1d 4c 10 f4
 	pop XIZ                                              ; FB3E13  5e
 	pop XIX                                              ; FB3E14  5c
 	pop XHL                                              ; FB3E15  5b
@@ -92626,6 +92650,8 @@ SysExParam_SetEffect2OnOff:
 	popw de                                              ; FB3E1F  4a
 	popw hl                                              ; FB3E20  4b
 	ret                                                  ; FB3E21  0e
+; SysExInitial_DrumsMap: SysExInitial_ItemTable[5] -- SysEx INITIAL (parameter 08 00) value 5 DRUMS MAP, then a 0xFFFF countdown (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_DrumsMap:
 	pushw hl                                             ; FB3E22  2b
 	pushw de                                             ; FB3E23  2a
 	ldw hl, 0xffff                                       ; FB3E24  33 ff ff
@@ -92633,7 +92659,7 @@ SysExParam_SetEffect2OnOff:
 	push XHL                                             ; FB3E28  3b
 	push XIX                                             ; FB3E29  3c
 	push XIZ                                             ; FB3E2A  3e
-	call T_F41050                                        ; FB3E2B  1d 50 10 f4
+	call T_DrumMap_ResetToDefault                                        ; FB3E2B  1d 50 10 f4
 	pop XIZ                                              ; FB3E2F  5e
 	pop XIX                                              ; FB3E30  5c
 	pop XHL                                              ; FB3E31  5b
@@ -92646,6 +92672,8 @@ SysExParam_SetEffect2OnOff:
 	popw de                                              ; FB3E3B  4a
 	popw hl                                              ; FB3E3C  4b
 	ret                                                  ; FB3E3D  0e
+; SysExInitial_Sequencer: SysExInitial_ItemTable[6] -- SysEx INITIAL (parameter 08 00) value 6 SEQUENCER, then a 0xFFFF countdown (notes/FINDINGS-prom_a-initial.md)
+SysExInitial_Sequencer:
 	pushw hl                                             ; FB3E3E  2b
 	pushw de                                             ; FB3E3F  2a
 	ldw hl, 0xffff                                       ; FB3E40  33 ff ff
@@ -92653,7 +92681,7 @@ SysExParam_SetEffect2OnOff:
 	push XHL                                             ; FB3E44  3b
 	push XIX                                             ; FB3E45  3c
 	push XIZ                                             ; FB3E46  3e
-	call T_F40A18                                        ; FB3E47  1d 18 0a f4
+	call T_Sequencer_ResetToDefault                                        ; FB3E47  1d 18 0a f4
 	pop XIZ                                              ; FB3E4B  5e
 	pop XIX                                              ; FB3E4C  5c
 	pop XHL                                              ; FB3E4D  5b
@@ -92666,7 +92694,7 @@ SysExParam_SetEffect2OnOff:
 	popw de                                              ; FB3E57  4a
 	popw hl                                              ; FB3E58  4b
 	ret                                                  ; FB3E59  0e
-; SysExParam_SetInitial: setter of INITIAL (receive-only): value 0..6 picks the PtrTable_F4FB1C arm, after the status 0x25 message and T_F409AC.
+; SysExParam_SetInitial: setter of INITIAL (receive-only): value 0..6 picks the SysExInitial_ItemTable arm, after the status 0x25 message and T_F409AC.
 ;  Descriptor field: +0x14.
 ;  (notes/sysex-probes/sysex_param_addresses.py descriptors (+0x14 setter, +0x18 reader); names: param_names.json (Technics Reference Guide))
 SysExParam_SetInitial:
@@ -92692,7 +92720,7 @@ SysExParam_SetInitial:
 	ld c, 0x04:opc                                          ; FB3E81  23 04
 	mul bc, h                                          ; FB3E83  ce 43
 	extz XBC                                             ; FB3E85  e9 12
-	add XBC,PtrTable_F4FB1C                              ; FB3E87  e9 c8 1c fb f4 00
+	add XBC,SysExInitial_ItemTable                              ; FB3E87  e9 c8 1c fb f4 00
 	ld XBC,(XBC)                                         ; FB3E8D  a1 21
 	lda xiy, (.LFB3E97:24)                               ; FB3E8F  f2 97 3e fb 35
 	push XIY                                             ; FB3E94  3d
