@@ -319,6 +319,11 @@
 ; ---- wsa1/prom_a/wsa1_prom_a.s -- "MIDI_TX_Ready header: the real-time requests"
 	.equ MidiTx_RealtimePending,			0x00a0	; bits 0-4 queue F8 clock, FA start, FB continue, FC stop, FE active sensing -- MIDI_TX_Ready
 
+; ---- wsa1/prom_a/wsa1_prom_a.s -- "DiskApi_ReadFileToWindow header (the window); prom_b DL_F583F0 (the content type)"
+	.equ Disk_WindowStart,				0x21d3	; start of the memory window a file is read into / written from (32-bit) -- DiskApi_ReadFileToWindow, DiskLoad_ReadRemapFile
+	.equ Disk_WindowEnd,				0x21d7	; end of that window (32-bit); clamped to start + the file size -- DiskApi_ReadFileToWindow
+	.equ Disk_ContentType,				0x2725	; the SAVE / LOAD content type, 0 ALL .. 8 DRUM MAP -- prom_b DL_F583F0 draws it from DLText_F585AD; DiskLoad_ByContentType
+
 ; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "2. The MIDI-in rings"
 	.equ MidiIn_PortARing,				0x600c1e	; MIDI port A's received-byte ring (0x400) -- MidiIn_PumpPortA, MidiIn_RoutePortA
 	.equ MidiIn_PortBRing,				0x601028	; MIDI port B's received-byte ring (0x400) -- MidiIn_PumpPortB, MidiIn_RoutePortB

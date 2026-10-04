@@ -102037,7 +102037,7 @@ sub_FBAE5A:
 	push XIX                                             ; FBAE5B  3c
 	push XHL                                             ; FBAE5C  3b
 	push XDE                                             ; FBAE5D  3a
-	m_cp_mi8 MB16, 0x2725, 0x00                          ; FBAE5E  c1 25 27 3f 00
+	m_cp_mi8 MB16, Disk_ContentType, 0x00                          ; FBAE5E  c1 25 27 3f 00
 	jr nz, .LFBAE6C                                      ; FBAE63  6e 07
 	call sub_FBB2D5                                      ; FBAE65  1d d5 b2 fb
 	jrl .LFBAF3D                                         ; FBAE69  78 d1 00
@@ -102235,9 +102235,9 @@ sub_FBB07E:
 	ret                                                  ; FBB0A0  0e
 sub_FBB0A1:
 	ld XWA,0x00609400                                    ; FBB0A1  40 00 94 60 00
-	ld (0x21d3:16), xwa                                 ; FBB0A6  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB0A6  f1 d3 21 60
 	ld XWA,0x006097ff                                    ; FBB0AA  40 ff 97 60 00
-	ld (0x21d7:16), xwa                                 ; FBB0AF  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB0AF  f1 d7 21 60
 	ld (Disk_FileName+8:16), 0x53                                 ; FBB0B3  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x45                                 ; FBB0B8  f1 d1 21 00 45
 	ld (Disk_FileName+10:16), 0x51                                 ; FBB0BD  f1 d2 21 00 51
@@ -102333,9 +102333,9 @@ sub_FBB159:
 	ret                                                  ; FBB198  0e
 sub_FBB199:
 	ld XWA,0x00609400                                    ; FBB199  40 00 94 60 00
-	ld (0x21d3:16), xwa                                 ; FBB19E  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB19E  f1 d3 21 60
 	add XWA,0x00000600                                   ; FBB1A2  e8 c8 00 06 00 00
-	ld (0x21d7:16), xwa                                 ; FBB1A8  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB1A8  f1 d7 21 60
 	ld (Disk_FileName+8:16), 0x53                                 ; FBB1AC  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x51                                 ; FBB1B1  f1 d1 21 00 51
 	ld (Disk_FileName+10:16), 0x46                                 ; FBB1B6  f1 d2 21 00 46
@@ -102344,7 +102344,7 @@ sub_FBB199:
 	call T_DiskApi_ReadFileToWindow_Entry                                        ; FBB1C5  1d a8 25 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBB1C9  c1 43 22 3f 01
 	jr z, .LFBB1EA                                       ; FBB1CE  66 1a
-	m_cp_mi8 MB16, 0x2725, 0x00                          ; FBB1D0  c1 25 27 3f 00
+	m_cp_mi8 MB16, Disk_ContentType, 0x00                          ; FBB1D0  c1 25 27 3f 00
 	jr nz, .LFBB1DE                                      ; FBB1D5  6e 07
 	ld (0x23cb:16), 0x01                                 ; FBB1D7  f1 cb 23 00 01
 	jr .LFBB1E6                                          ; FBB1DC  68 08
@@ -102372,9 +102372,9 @@ sub_FBB199:
 	ret                                                  ; FBB20A  0e
 sub_FBB20B:
 	ld XWA,0x00610000                                    ; FBB20B  40 00 00 61 00
-	ld (0x21d3:16), xwa                                 ; FBB210  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB210  f1 d3 21 60
 	add XWA,0x00007800                                   ; FBB214  e8 c8 00 78 00 00
-	ld (0x21d7:16), xwa                                 ; FBB21A  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB21A  f1 d7 21 60
 	ld XIZ,Disk_FileName+8                                    ; FBB21E  46 d0 21 00 00
 	ldw (xiz+), 0x5153                            ; FBB223  f5 f9 02 53 51
 	ld (XIZ),0x46                                        ; FBB228  b6 00 46
@@ -102400,12 +102400,12 @@ sub_FBB20B:
 	jr .LFBB2C4                                          ; FBB273  68 4f
 .LFBB275:
 	ld XWA,0x00617800                                    ; FBB275  40 00 78 61 00
-	ld (0x21d3:16), xwa                                 ; FBB27A  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB27A  f1 d3 21 60
 	xor XBC,XBC                                          ; FBB27E  e9 d1
 	ld bc, (0x603452:24)                                ; FBB280  d2 52 34 60 21
 	sla xbc, 0x04                                        ; FBB285  e9 ec 04
 	add XWA,XBC                                          ; FBB288  e9 80
-	ld (0x21d7:16), xwa                                 ; FBB28A  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB28A  f1 d7 21 60
 	ld XIZ,Disk_FileName+8                                    ; FBB28E  46 d0 21 00 00
 	ldw (xiz+), 0x4553                            ; FBB293  f5 f9 02 53 45
 	ld (XIZ),0x51                                        ; FBB298  b6 00 51
@@ -102444,9 +102444,9 @@ sub_FBB2D5:
 	ldir85                                               ; FBB301  85 11
 	ld (0x610004:24), 0x01                             ; FBB303  f2 04 00 61 00 01
 	ld XWA,0x00610000                                    ; FBB309  40 00 00 61 00
-	ld (0x21d3:16), xwa                                 ; FBB30E  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB30E  f1 d3 21 60
 	add XWA,0x00007800                                   ; FBB312  e8 c8 00 78 00 00
-	ld (0x21d7:16), xwa                                 ; FBB318  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB318  f1 d7 21 60
 	ld XIZ,Disk_FileName+8                                    ; FBB31C  46 d0 21 00 00
 	ldw (xiz+), 0x5153                            ; FBB321  f5 f9 02 53 51
 	ld (XIZ),0x46                                        ; FBB326  b6 00 46
@@ -102463,12 +102463,12 @@ sub_FBB2D5:
 	jr .LFBB38B                                          ; FBB34C  68 3d
 .LFBB34E:
 	ld XWA,0x00617800                                    ; FBB34E  40 00 78 61 00
-	ld (0x21d3:16), xwa                                 ; FBB353  f1 d3 21 60
+	ld (Disk_WindowStart:16), xwa                                 ; FBB353  f1 d3 21 60
 	xor XBC,XBC                                          ; FBB357  e9 d1
 	ld bc, (0x603452:24)                                ; FBB359  d2 52 34 60 21
 	sla xbc, 0x04                                        ; FBB35E  e9 ec 04
 	add XWA,XBC                                          ; FBB361  e9 80
-	ld (0x21d7:16), xwa                                 ; FBB363  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FBB363  f1 d7 21 60
 	ld XIZ,Disk_FileName+8                                    ; FBB367  46 d0 21 00 00
 	ldw (xiz+), 0x4553                            ; FBB36C  f5 f9 02 53 45
 	ld (XIZ),0x51                                        ; FBB371  b6 00 51
@@ -159747,7 +159747,7 @@ sub_FE05AE:
 	calr sub_FE2E96                                          ; FE05B4  1e df 28
 	pushw 0x0a                                           ; FE05B7  0b 0a 00
 	calr StatusMsg_ShowByIndex                                          ; FE05BA  1e 7b 12
-	calr sub_FE1D52                                          ; FE05BD  1e 92 17
+	calr DiskLoad_ByContentType                                          ; FE05BD  1e 92 17
 	ld H,A                                               ; FE05C0  c9 8e
 	ld (Disk_LastError:16), a                                   ; FE05C2  f1 43 22 41
 	push 0x00                                            ; FE05C6  09 00
@@ -159862,7 +159862,7 @@ sub_FE066C:
 	calr StatusMsg_ShowByIndex                                          ; FE06AE  1e 87 11
 	calr Var2216_SetW145C                                          ; FE06B1  1e 05 29
 	calr sub_FE06EA                                            ; FE06B4  1e 33 00
-	calr sub_FE2531                                          ; FE06B7  1e 77 1e
+	calr DiskSave_ByContentType                                          ; FE06B7  1e 77 1e
 	ld H,A                                               ; FE06BA  c9 8e
 	ld (XIX),A                                           ; FE06BC  b4 41
 	push 0x00                                            ; FE06BE  09 00
@@ -159964,7 +159964,7 @@ Disk_RequestSenseDriveStatus:
 	ret                                                  ; FE0784  0e
 sub_FE0785:
 	pushw hl                                             ; FE0785  2b
-	ld bc, (0x2725:16)                                 ; FE0786  d1 25 27 21
+	ld bc, (Disk_ContentType:16)                                 ; FE0786  d1 25 27 21
 	extz BC                                              ; FE078A  d9 12
 	cp bc, 0x00:i3                                         ; FE078C  d9 d8
 	jr z, .LFE079E                                           ; FE078E  66 0e
@@ -160041,7 +160041,7 @@ sub_FE0811:
 	jr z, .LFE0857                                           ; FE082B  66 2a
 	jr .LFE0853                                              ; FE082D  68 24
 .LFE082F:
-	ld bc, (0x2725:16)                                 ; FE082F  d1 25 27 21
+	ld bc, (Disk_ContentType:16)                                 ; FE082F  d1 25 27 21
 	extz BC                                              ; FE0833  d9 12
 	cp bc, 0x00:i3                                         ; FE0835  d9 d8
 	jr z, .LFE083F                                           ; FE0837  66 06
@@ -160386,13 +160386,13 @@ sub_FE0AF8:
 	link XIZ,0xfff8                                      ; FE0AF8  ee 0c f8 ff
 	pushw hl                                             ; FE0AFC  2b
 	push XIX                                             ; FE0AFD  3c
-	ld xix, (0x21d3:16)                                 ; FE0AFE  e1 d3 21 24
+	ld xix, (Disk_WindowStart:16)                                 ; FE0AFE  e1 d3 21 24
 	ldw hl, 0x00                                         ; FE0B02  33 00 00
 	ld XBC,0x00000080                                    ; FE0B05  41 80 00 00 00
 	ld (xiz-4), xbc                                      ; FE0B0A  be fc 61
 .LFE0B0D:
-	ld xbc, (0x21d7:16)                                 ; FE0B0D  e1 d7 21 21
-	sub xbc, (0x21d3:16)                                ; FE0B11  e1 d3 21 a1
+	ld xbc, (Disk_WindowEnd:16)                                 ; FE0B0D  e1 d7 21 21
+	sub xbc, (Disk_WindowStart:16)                                ; FE0B11  e1 d3 21 a1
 	ld (xiz-8), xbc                                      ; FE0B15  be f8 61
 	ld WA,HL                                             ; FE0B18  db 88
 	exts XWA                                             ; FE0B1A  e8 13
@@ -160439,8 +160439,8 @@ DiskApi_ReadFileToWindow:
 	ld a, 0x04:opc                                          ; FE0B6D  21 04
 	jrl .LFE0BF0                                             ; FE0B6F  78 7e 00
 .LFE0B72:
-	ld xbc, (0x21d7:16)                                 ; FE0B72  e1 d7 21 21
-	sub xbc, (0x21d3:16)                                ; FE0B76  e1 d3 21 a1
+	ld xbc, (Disk_WindowEnd:16)                                 ; FE0B72  e1 d7 21 21
+	sub xbc, (Disk_WindowStart:16)                                ; FE0B76  e1 d3 21 a1
 	ld (xiz-4), xbc                                      ; FE0B7A  be fc 61
 	ld wa, (0x17a0:24)                                  ; FE0B7D  d2 a0 17 00 20
 	extz XWA                                             ; FE0B82  e8 12
@@ -160452,8 +160452,8 @@ DiskApi_ReadFileToWindow:
 	ld XIX,XWA                                           ; FE0B93  e8 8c
 	cp XBC,XWA                                           ; FE0B95  e8 f1
 	jr ule, .LFE0BA1                                         ; FE0B97  63 08
-	add xwa, (0x21d3:16)                                ; FE0B99  e1 d3 21 80
-	ld (0x21d7:16), xwa                                 ; FE0B9D  f1 d7 21 60
+	add xwa, (Disk_WindowStart:16)                                ; FE0B99  e1 d3 21 80
+	ld (Disk_WindowEnd:16), xwa                                 ; FE0B9D  f1 d7 21 60
 .LFE0BA1:
 	m_res 2, MD16, Disk_Flags                                ; FE0BA1  f1 e7 21 b2
 	calr DiskFile_SetTransferToWindow                                            ; FE0BA5  1e 60 00
@@ -160511,7 +160511,7 @@ DiskFile_SetTransferToWindow:
 	ld c, (Disk_Flags:16)                                   ; FE0C0E  c1 e7 21 23
 	and C,0x04                                           ; FE0C12  cb cc 04
 	jr nz, .LFE0C1F                                          ; FE0C15  6e 08
-	ld xbc, (0x21d3:16)                                 ; FE0C17  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE0C17  e1 d3 21 21
 	ld (XIX),XBC                                         ; FE0C1B  b4 61
 	jr .LFE0C26                                              ; FE0C1D  68 07
 .LFE0C1F:
@@ -160551,17 +160551,17 @@ DiskApi_CloseFile:
 ;   end; A = 0.
 DiskFile_AdvanceWindow:
 	push XIX                                             ; FE0C73  3c
-	ld xix, (0x21d3:16)                                 ; FE0C74  e1 d3 21 24
+	ld xix, (Disk_WindowStart:16)                                 ; FE0C74  e1 d3 21 24
 	add XIX,0x00000400                                   ; FE0C78  ec c8 00 04 00 00
-	m_cp_rm ML16, 0x21d7, r4                             ; FE0C7E  e1 d7 21 f4
+	m_cp_rm ML16, Disk_WindowEnd, r4                             ; FE0C7E  e1 d7 21 f4
 	jr c, .LFE0C88                                           ; FE0C82  67 04
 	ld a, 0xff:opc                                          ; FE0C84  21 ff
 	jr .LFE0CA0                                              ; FE0C86  68 18
 .LFE0C88:
-	ld (0x21d3:16), xix                                 ; FE0C88  f1 d3 21 64
+	ld (Disk_WindowStart:16), xix                                 ; FE0C88  f1 d3 21 64
 	ld XBC,XIX                                           ; FE0C8C  ec 89
 	add XBC,0x00000400                                   ; FE0C8E  e9 c8 00 04 00 00
-	m_cp_rm ML16, 0x21d7, r1                             ; FE0C94  e1 d7 21 f1
+	m_cp_rm ML16, Disk_WindowEnd, r1                             ; FE0C94  e1 d7 21 f1
 	jr ule, .LFE0C9E                                         ; FE0C98  63 04
 	m_set 2, MD16, Disk_Flags                                ; FE0C9A  f1 e7 21 ba
 .LFE0C9E:
@@ -160698,7 +160698,7 @@ Disk_ScanDirectory:
 	cp BC,0x000b                                         ; FE0E2B  d9 cf 0b 00
 	jr lt, .LFE0E17                                           ; FE0E2F  61 e6
 	lda xix, (0x60a080:24)                               ; FE0E31  f2 80 a0 60 34
-	ld (0x21d3:16), xix                                 ; FE0E36  f1 d3 21 64
+	ld (Disk_WindowStart:16), xix                                 ; FE0E36  f1 d3 21 64
 	m_res 2, MD16, Disk_Flags                                ; FE0E3A  f1 e7 21 b2
 	ldw (0x1739:24), 0x1a                               ; FE0E3E  f2 39 17 00 02 1a 00
 	ldw (0x173b:24), 0x00                               ; FE0E45  f2 3b 17 00 02 00 00
@@ -161457,7 +161457,7 @@ sub_FE152E_Cases:
 .LFE157D:
 	ld (UI_StatusCode:16), 0x00                                 ; FE157D  f1 80 28 00 00
 	ld (0x272b:16), 0x00                                 ; FE1582  f1 2b 27 00 00
-	ld (0x2725:16), 0x00                                 ; FE1587  f1 25 27 00 00
+	ld (Disk_ContentType:16), 0x00                                 ; FE1587  f1 25 27 00 00
 	pushw 0x09                                           ; FE158C  0b 09 00
 	calr StatusMsg_ShowByIndex                                          ; FE158F  1e a6 02
 	sub XBC,XBC                                          ; FE1592  e9 a1
@@ -161536,7 +161536,7 @@ sub_FE15F4:
 	pushw 0x0a                                           ; FE163E  0b 0a 00
 	calr StatusMsg_ShowByIndex                                          ; FE1641  1e f4 01
 	calr sub_FE0250                                          ; FE1644  1e 09 ec
-	calr sub_FE1D52                                          ; FE1647  1e 08 07
+	calr DiskLoad_ByContentType                                          ; FE1647  1e 08 07
 	ld H,A                                               ; FE164A  c9 8e
 	calr sub_FE16D6                                            ; FE164C  1e 87 00
 	popw bc                                              ; FE164F  49
@@ -162336,7 +162336,7 @@ sub_FE1CE4:
 ;          0x609400 equal Str_SoundRamTag_Wsa ("WSA SOUND RAM S0", all 16 compared), 0xFF at the first byte
 ;          that differs.
 ;
-; Called from: prom_a sub_FE202F (`calr`) at 0xFE204F, which answers a non-zero A with `ld a,0x10`
+; Called from: prom_a DiskLoad_Sound (`calr`) at 0xFE204F, which answers a non-zero A with `ld a,0x10`
 ;          before any transfer (wsa1/notes/sysex-probes/sysex_signature_checks.py asserts this site).
 ; Renamed from "NOT NAMED" (round 7 recorded only the string) on 2026-10-03, when 0xFE7000-0xFE706D
 ;          was re-framed as data.
@@ -162409,53 +162409,56 @@ Ring_InitTenOfFourteen:
 	call T_Ring60195A_Init                               ; FE1D49  1d 28 1d f4
 	call T_Ring601C6E_Init                               ; FE1D4D  1d b4 1e f4
 	ret                                                  ; FE1D51  0e
-sub_FE1D52:
+; DiskLoad_ByContentType: dispatches on (0x2725): 0 ALL runs every loader below in turn (the sequencer only when Variant_Flag is 1),
+;   1 DiskLoad_Sequencer, 2 _Combination, 3 _Sound, 4 _PanelLswFile + _PanelSlsFile, 5 _MidiSetting,
+;   6 _SoundRemap, 7 _CombiRemap, 8 _DrumMap; anything else returns 4.
+DiskLoad_ByContentType:
 	pushw hl                                             ; FE1D52  2b
 	push XIX                                             ; FE1D53  3c
-	lda xix, (0x2725:16)                                ; FE1D54  f1 25 27 34
+	lda xix, (Disk_ContentType:16)                                ; FE1D54  f1 25 27 34
 	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE1D58  1e 05 e3
 	calr Var2216_SetW145C                                          ; FE1D5B  1e 5b 12
 	ld C,(XIX)                                           ; FE1D5E  84 23
 	cp c, 0x00:i3                                          ; FE1D60  cb d8
 	jr nz, .LFE1DB5                                          ; FE1D62  6e 51
 	calr sub_FE1D52_Nop                                          ; FE1D64  1e f6 eb
-	calr sub_FE2430                                          ; FE1D67  1e c6 06
-	calr sub_FE1E3C                                            ; FE1D6A  1e cf 00
+	calr DiskLoad_PanelSlsFile                                          ; FE1D67  1e c6 06
+	calr DiskLoad_PanelLswFile                                            ; FE1D6A  1e cf 00
 	ld H,A                                               ; FE1D6D  c9 8e
 	calr sub_FE1D52_Nop2                                          ; FE1D6F  1e ec eb
 	cp h, 0x01:i3                                          ; FE1D72  ce d9
 	jrl nz, .LFE1E20                                         ; FE1D74  7e a9 00
-	calr sub_FE202F                                          ; FE1D77  1e b5 02
+	calr DiskLoad_Sound                                          ; FE1D77  1e b5 02
 	ld H,A                                               ; FE1D7A  c9 8e
 	cp a, 0x01:i3                                          ; FE1D7C  c9 d9
 	jrl nz, .LFE1E20                                         ; FE1D7E  7e 9f 00
-	calr sub_FE2092                                          ; FE1D81  1e 0e 03
+	calr DiskLoad_Combination                                          ; FE1D81  1e 0e 03
 	ld H,A                                               ; FE1D84  c9 8e
 	cp a, 0x01:i3                                          ; FE1D86  c9 d9
 	jrl nz, .LFE1E20                                         ; FE1D88  7e 95 00
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FE1D8B  c0 c4 3f 01
 	jr nz, .LFE1D9F                                          ; FE1D8F  6e 0e
-	calr sub_FE2368                                          ; FE1D91  1e d4 05
+	calr DiskLoad_Sequencer                                          ; FE1D91  1e d4 05
 	ld H,A                                               ; FE1D94  c9 8e
 	m_res 0, MD16, 0x360b                                ; FE1D96  f1 0b 36 b0
 	cp a, 0x01:i3                                          ; FE1D9A  c9 d9
 	jrl nz, .LFE1E20                                         ; FE1D9C  7e 81 00
 .LFE1D9F:
-	calr sub_FE23BD                                          ; FE1D9F  1e 1b 06
+	calr DiskLoad_SoundRemap                                          ; FE1D9F  1e 1b 06
 	cp a, 0x01:i3                                          ; FE1DA2  c9 d9
 	jrl nz, .LFE1E20                                         ; FE1DA4  7e 79 00
-	calr sub_FE23EA                                          ; FE1DA7  1e 40 06
+	calr DiskLoad_CombiRemap                                          ; FE1DA7  1e 40 06
 	cp a, 0x01:i3                                          ; FE1DAA  c9 d9
 	jrl nz, .LFE1E20                                         ; FE1DAC  7e 71 00
-	calr sub_FE2417                                          ; FE1DAF  1e 65 06
+	calr DiskLoad_DrumMap                                          ; FE1DAF  1e 65 06
 	jrl .LFE1E20                                             ; FE1DB2  78 6b 00
 .LFE1DB5:
 	ld C,(XIX)                                           ; FE1DB5  84 23
 	cp c, 0x04:i3                                          ; FE1DB7  cb dc
 	jr nz, .LFE1DCC                                          ; FE1DB9  6e 11
 	calr sub_FE1D52_Nop                                          ; FE1DBB  1e 9f eb
-	calr sub_FE1E3C                                            ; FE1DBE  1e 7b 00
-	calr sub_FE2430                                          ; FE1DC1  1e 6c 06
+	calr DiskLoad_PanelLswFile                                            ; FE1DBE  1e 7b 00
+	calr DiskLoad_PanelSlsFile                                          ; FE1DC1  1e 6c 06
 	ld H,A                                               ; FE1DC4  c9 8e
 	calr sub_FE1D52_Nop2                                          ; FE1DC6  1e 95 eb
 	jrl .LFE1E20                                             ; FE1DC9  78 54 00
@@ -162463,19 +162466,19 @@ sub_FE1D52:
 	ld C,(XIX)                                           ; FE1DCC  84 23
 	cp c, 0x03:i3                                          ; FE1DCE  cb db
 	jr nz, .LFE1DD7                                          ; FE1DD0  6e 05
-	calr sub_FE202F                                          ; FE1DD2  1e 5a 02
+	calr DiskLoad_Sound                                          ; FE1DD2  1e 5a 02
 	jr .LFE1E26                                              ; FE1DD5  68 4f
 .LFE1DD7:
 	ld C,(XIX)                                           ; FE1DD7  84 23
 	cp c, 0x02:i3                                          ; FE1DD9  cb da
 	jr nz, .LFE1DE2                                          ; FE1DDB  6e 05
-	calr sub_FE2092                                          ; FE1DDD  1e b2 02
+	calr DiskLoad_Combination                                          ; FE1DDD  1e b2 02
 	jr .LFE1E26                                              ; FE1DE0  68 44
 .LFE1DE2:
 	ld C,(XIX)                                           ; FE1DE2  84 23
 	cp c, 0x01:i3                                          ; FE1DE4  cb d9
 	jr nz, .LFE1DF3                                          ; FE1DE6  6e 0b
-	calr sub_FE2368                                          ; FE1DE8  1e 7d 05
+	calr DiskLoad_Sequencer                                          ; FE1DE8  1e 7d 05
 	ld H,A                                               ; FE1DEB  c9 8e
 	m_res 0, MD16, 0x360b                                ; FE1DED  f1 0b 36 b0
 	jr .LFE1E20                                              ; FE1DF1  68 2d
@@ -162484,25 +162487,25 @@ sub_FE1D52:
 	cp c, 0x05:i3                                          ; FE1DF5  cb dd
 	jr nz, .LFE1DFE                                          ; FE1DF7  6e 05
 sub_FE1DF9:
-	calr sub_FE1EF1                                            ; FE1DF9  1e f5 00
+	calr DiskLoad_MidiSetting                                            ; FE1DF9  1e f5 00
 	jr .LFE1E26                                              ; FE1DFC  68 28
 .LFE1DFE:
 	ld C,(XIX)                                           ; FE1DFE  84 23
 	cp c, 0x06:i3                                          ; FE1E00  cb de
 	jr nz, .LFE1E09                                          ; FE1E02  6e 05
-	calr sub_FE23BD                                          ; FE1E04  1e b6 05
+	calr DiskLoad_SoundRemap                                          ; FE1E04  1e b6 05
 	jr .LFE1E26                                              ; FE1E07  68 1d
 .LFE1E09:
 	ld C,(XIX)                                           ; FE1E09  84 23
 	cp c, 0x07:i3                                          ; FE1E0B  cb df
 	jr nz, .LFE1E14                                          ; FE1E0D  6e 05
-	calr sub_FE23EA                                          ; FE1E0F  1e d8 05
+	calr DiskLoad_CombiRemap                                          ; FE1E0F  1e d8 05
 	jr .LFE1E26                                              ; FE1E12  68 12
 .LFE1E14:
 	ld C,(XIX)                                           ; FE1E14  84 23
 	cp C,0x08                                            ; FE1E16  cb cf 08
 	jr nz, .LFE1E24                                          ; FE1E19  6e 09
-	calr sub_FE2417                                          ; FE1E1B  1e f9 05
+	calr DiskLoad_DrumMap                                          ; FE1E1B  1e f9 05
 	jr .LFE1E26                                              ; FE1E1E  68 06
 .LFE1E20:
 	ld A,H                                               ; FE1E20  ce 89
@@ -162513,7 +162516,8 @@ sub_FE1DF9:
 	pop XIX                                              ; FE1E26  5c
 	popw hl                                              ; FE1E27  4b
 	ret                                                  ; FE1E28  0e
-sub_FE1E29:
+; DiskLoad_ReadFileIntoWindow: sub_FE2F86, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow.
+DiskLoad_ReadFileIntoWindow:
 	push XIX                                             ; FE1E29  3c
 	lda xix, (Disk_Flags:16)                                ; FE1E2A  f1 e7 21 34
 	calr sub_FE2F86                                          ; FE1E2E  1e 55 11
@@ -162522,7 +162526,9 @@ sub_FE1E29:
 	calr DiskApi_ReadFileToWindow                                          ; FE1E37  1e 09 ed
 	pop XIX                                              ; FE1E3A  5c
 	ret                                                  ; FE1E3B  0e
-sub_FE1E3C:
+; DiskLoad_PanelLswFile: content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by sub_FE2DDD
+;   (0x10 when it refuses), read again and applied by sub_FE1EC3 + DiskLoad_ApplyPanelImage.
+DiskLoad_PanelLswFile:
 	pushw hl                                             ; FE1E3C  2b
 	push XIX                                             ; FE1E3D  3c
 	lda xix, (Disk_FileName:16)                                ; FE1E3E  f1 c8 21 34
@@ -162534,7 +162540,7 @@ sub_FE1E3C:
 	ld (XIX+0x0a),0x57                                   ; FE1E52  bc 0a 00 57
 	calr sub_FE2D09                                          ; FE1E56  1e b0 0e
 	calr sub_FE2D5E                                          ; FE1E59  1e 02 0f
-	calr sub_FE1E29                                          ; FE1E5C  1e ca ff
+	calr DiskLoad_ReadFileIntoWindow                                          ; FE1E5C  1e ca ff
 	ld H,A                                               ; FE1E5F  c9 8e
 	cp a, 0x01:i3                                          ; FE1E61  c9 d9
 	jr nz, .LFE1E8E                                          ; FE1E63  6e 29
@@ -162553,7 +162559,7 @@ sub_FE1E3C:
 	cp a, 0x01:i3                                          ; FE1E82  c9 d9
 	jr nz, .LFE1E8E                                          ; FE1E84  6e 08
 	calr sub_FE1EC3                                            ; FE1E86  1e 3a 00
-	calr sub_FE1FFF                                          ; FE1E89  1e 73 01
+	calr DiskLoad_ApplyPanelImage                                          ; FE1E89  1e 73 01
 	jr .LFE1E90                                              ; FE1E8C  68 02
 .LFE1E8E:
 	ld A,H                                               ; FE1E8E  ce 89
@@ -162608,7 +162614,8 @@ sub_FE1EC3:
 	popw hl                                              ; FE1EED  4b
 	unlk XIZ                                             ; FE1EEE  ee 0d
 	ret                                                  ; FE1EF0  0e
-sub_FE1EF1:
+; DiskLoad_MidiSetting: content type 5: extension 'MDS', read into the window, then copied out in 9-byte pieces.
+DiskLoad_MidiSetting:
 	link XIZ,0xfffc                                      ; FE1EF1  ee 0c fc ff
 	pushw hl                                             ; FE1EF5  2b
 	pushw de                                             ; FE1EF6  2a
@@ -162619,7 +162626,7 @@ sub_FE1EF1:
 	ld (Disk_FileName+9:16), 0x44                                 ; FE1F07  f1 d1 21 00 44
 	ld (Disk_FileName+10:16), 0x53                                 ; FE1F0C  f1 d2 21 00 53
 	calr sub_FE2D09                                          ; FE1F11  1e f5 0d
-	calr sub_FE1E29                                          ; FE1F14  1e 12 ff
+	calr DiskLoad_ReadFileIntoWindow                                          ; FE1F14  1e 12 ff
 	ld H,A                                               ; FE1F17  c9 8e
 	cp a, 0x01:i3                                          ; FE1F19  c9 d9
 	jrl nz, .LFE1FA3                                         ; FE1F1B  7e 85 00
@@ -162669,7 +162676,7 @@ sub_FE1EF1:
 	pushw 0x01                                           ; FE1F93  0b 01 00
 	pushw 0x7f4d                                         ; FE1F96  0b 4d 7f
 	calr sub_FE1FAB                                            ; FE1F99  1e 0f 00
-	calr sub_FE1FFF                                            ; FE1F9C  1e 60 00
+	calr DiskLoad_ApplyPanelImage                                            ; FE1F9C  1e 60 00
 	inc 8,XSP                                            ; FE1F9F  ef 60
 	jr .LFE1FA5                                              ; FE1FA1  68 02
 .LFE1FA3:
@@ -162717,7 +162724,9 @@ sub_FE1FDE:
 	popw hl                                              ; FE1FFB  4b
 	unlk XIZ                                             ; FE1FFC  ee 0d
 	ret                                                  ; FE1FFE  0e
-sub_FE1FFF:
+; DiskLoad_ApplyPanelImage: Disk_Flags |= 0x18 around: ParamImage_WriteRecordHeaders, ParamImage_SanitizeAllAndHook, ParamImage_QueueDiffAll,
+;   Queue2C00_DrainPassB, MidiIn_ServiceDeferred, UiEventList_Publish; returns 1.  Called after the LSW file is read.
+DiskLoad_ApplyPanelImage:
 	push XIX                                             ; FE1FFF  3c
 	lda xix, (Disk_Flags:16)                                ; FE2000  f1 e7 21 34
 	m_or_mi8 MBI+r4, 0, 0x18                             ; FE2004  84 3e 18
@@ -162736,7 +162745,9 @@ sub_FE1FFF:
 	ld a, 0x01:opc                                          ; FE202B  21 01
 	pop XIX                                              ; FE202D  5c
 	ret                                                  ; FE202E  0e
-sub_FE202F:
+; DiskLoad_Sound: content type 3: extension 'TM ', DiskLoad_ReadFileIntoWindow, DiskLoad_CheckSoundRamTag ('WSA SOUND RAM S0'),
+;   then sub_FE20E1 moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg.
+DiskLoad_Sound:
 	pushw hl                                             ; FE202F  2b
 	push XIX                                             ; FE2030  3c
 	lda xix, (Disk_FileName:16)                                ; FE2031  f1 c8 21 34
@@ -162745,7 +162756,7 @@ sub_FE202F:
 	ld (XIX+0x09),0x4d                                   ; FE203B  bc 09 00 4d
 	ld (XIX+0x0a),0x20                                   ; FE203F  bc 0a 00 20
 	calr sub_FE2CFF                                          ; FE2043  1e b9 0c
-	calr sub_FE1E29                                          ; FE2046  1e e0 fd
+	calr DiskLoad_ReadFileIntoWindow                                          ; FE2046  1e e0 fd
 	ld H,A                                               ; FE2049  c9 8e
 	cp a, 0x01:i3                                          ; FE204B  c9 d9
 	jr nz, .LFE208D                                          ; FE204D  6e 3e
@@ -162771,7 +162782,7 @@ sub_FE202F:
 .LFE207B:
 	calr sub_FE00EB                                          ; FE207B  1e 6d e0
 .LFE207E:
-	m_cp_mi8 MB16, 0x2725, 0x03                          ; FE207E  c1 25 27 3f 03
+	m_cp_mi8 MB16, Disk_ContentType, 0x03                          ; FE207E  c1 25 27 3f 03
 	jr nz, .LFE208A                                          ; FE2083  6e 05
 	calr sub_FE00F8                                          ; FE2085  1e 70 e0
 	jr .LFE208D                                              ; FE2088  68 03
@@ -162783,7 +162794,9 @@ sub_FE202F:
 	pop XIX                                              ; FE208F  5c
 	popw hl                                              ; FE2090  4b
 	ret                                                  ; FE2091  0e
-sub_FE2092:
+; DiskLoad_Combination: content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), sub_FE20E1 moves 0x16300 bytes to 0xEC0000
+;   in 0x58-byte blocks, T_Queue2E00_PostParam98Fields.
+DiskLoad_Combination:
 	pushw hl                                             ; FE2092  2b
 	push XIX                                             ; FE2093  3c
 	lda xix, (Disk_FileName:16)                                ; FE2094  f1 c8 21 34
@@ -162793,7 +162806,7 @@ sub_FE2092:
 	ld (XIX+0x0a),0x42                                   ; FE20A2  bc 0a 00 42
 	calr sub_FE2D09                                          ; FE20A6  1e 60 0c
 	calr sub_FE2D5E                                          ; FE20A9  1e b2 0c
-	calr sub_FE1E29                                          ; FE20AC  1e 7a fd
+	calr DiskLoad_ReadFileIntoWindow                                          ; FE20AC  1e 7a fd
 	ld H,A                                               ; FE20AF  c9 8e
 	cp a, 0x01:i3                                          ; FE20B1  c9 d9
 	jr nz, .LFE20DC                                          ; FE20B3  6e 27
@@ -162867,7 +162880,7 @@ sub_FE20E1:
 	ld (xiz-16), xbc                                     ; FE215B  be f0 61
 	push XBC                                             ; FE215E  39
 	pushw 0x2c00                                         ; FE215F  0b 00 2c
-	ld xbc, (0x21d3:16)                                 ; FE2162  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2162  e1 d3 21 21
 	push XBC                                             ; FE2166  39
 	call T_Link_SendCommandE4                            ; FE2167  1d 30 12 f4
 	inc 1,DE                                             ; FE216B  da 61
@@ -162894,7 +162907,7 @@ sub_FE20E1:
 	ld (xiz-16), xbc                                     ; FE21A4  be f0 61
 	push XBC                                             ; FE21A7  39
 	pushw 0x2400                                         ; FE21A8  0b 00 24
-	ld xbc, (0x21d3:16)                                 ; FE21AB  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE21AB  e1 d3 21 21
 	push XBC                                             ; FE21AF  39
 	call T_Link_SendCommandE4                            ; FE21B0  1d 30 12 f4
 	inc 8,XSP                                            ; FE21B4  ef 60
@@ -162965,7 +162978,7 @@ sub_FE20E1:
 	ld (xiz-16), xbc                                     ; FE2263  be f0 61
 	push XBC                                             ; FE2266  39
 	pushw 0x2c00                                         ; FE2267  0b 00 2c
-	ld xbc, (0x21d3:16)                                 ; FE226A  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE226A  e1 d3 21 21
 	push XBC                                             ; FE226E  39
 	call T_Link_SendCommandE4                            ; FE226F  1d 30 12 f4
 	inc 1,DE                                             ; FE2273  da 61
@@ -163010,7 +163023,7 @@ sub_FE20E1:
 	sll iy, 0x0a                                         ; FE22C6  dd ee 0a
 	sub IY,DE                                            ; FE22C9  da a5
 	pushw iy                                             ; FE22CB  2d
-	ld xwa, (0x21d3:16)                                 ; FE22CC  e1 d3 21 20
+	ld xwa, (Disk_WindowStart:16)                                 ; FE22CC  e1 d3 21 20
 	push XWA                                             ; FE22D0  38
 	call T_Link_SendCommandE4                            ; FE22D1  1d 30 12 f4
 	inc 8,XSP                                            ; FE22D5  ef 60
@@ -163036,7 +163049,7 @@ sub_FE22EF:
 	ldw bc, 0x0400                                       ; FE22F5  31 00 04
 	m_mul MWD+r6, 0x08, 1                                ; FE22F8  9e 08 41
 	ld XIX,XBC                                           ; FE22FB  e9 8c
-	add xix, (0x21d3:16)                                ; FE22FD  e1 d3 21 84
+	add xix, (Disk_WindowStart:16)                                ; FE22FD  e1 d3 21 84
 	ld (0x174b:24), xix                                 ; FE2301  f2 4b 17 00 64
 	ldw (0x1739:24), 0x1a                               ; FE2306  f2 39 17 00 02 1a 00
 	ldw (0x173b:24), 0x00                               ; FE230D  f2 3b 17 00 02 00 00
@@ -163077,7 +163090,8 @@ sub_FE233A:
 	ld a, 0x01:opc                                          ; FE2364  21 01
 	pop XIX                                              ; FE2366  5c
 	ret                                                  ; FE2367  0e
-sub_FE2368:
+; DiskLoad_Sequencer: content type 1: T_F41EF8 (saving registers); result (0x23CB), 0x1D read as 1.
+DiskLoad_Sequencer:
 	calr sub_FE0053                                          ; FE2368  1e e8 dc
 	m_cp_mi8 MB16, 0x23cb, 0x1d                          ; FE236B  c1 cb 23 3f 1d
 	jr nz, .LFE2376                                          ; FE2370  6e 04
@@ -163115,11 +163129,12 @@ sub_FE237B:
 	pop XIX                                              ; FE23BA  5c
 	popw hl                                              ; FE23BB  4b
 	ret                                                  ; FE23BC  0e
-sub_FE23BD:
+; DiskLoad_SoundRemap: content type 6: extension 'S' + 'RM', DiskLoad_ReadRemapFile, 0x230 (0x650 for a '1' file) bytes to 0x5210.
+DiskLoad_SoundRemap:
 	pushw hl                                             ; FE23BD  2b
 	pushw de                                             ; FE23BE  2a
 	ld (Disk_FileName+8:16), 0x53                                 ; FE23BF  f1 d0 21 00 53
-	calr sub_FE2484                                            ; FE23C4  1e bd 00
+	calr DiskLoad_ReadRemapFile                                            ; FE23C4  1e bd 00
 	ld H,A                                               ; FE23C7  c9 8e
 	cp a, 0x01:i3                                          ; FE23C9  c9 d9
 	jr nz, .LFE23E5                                          ; FE23CB  6e 18
@@ -163131,18 +163146,19 @@ sub_FE23BD:
 .LFE23DD:
 	pushw de                                             ; FE23DD  2a
 	pushw 0x5210                                         ; FE23DE  0b 10 52
-	calr sub_FE24BE                                            ; FE23E1  1e da 00
+	calr DiskLoad_CopyBufferWords                                            ; FE23E1  1e da 00
 	pop XIY                                              ; FE23E4  5d
 .LFE23E5:
 	ld A,H                                               ; FE23E5  ce 89
 	popw de                                              ; FE23E7  4a
 	popw hl                                              ; FE23E8  4b
 	ret                                                  ; FE23E9  0e
-sub_FE23EA:
+; DiskLoad_CombiRemap: content type 7: extension 'C' + 'RM', DiskLoad_ReadRemapFile, the same lengths to 0x5860.
+DiskLoad_CombiRemap:
 	pushw hl                                             ; FE23EA  2b
 	pushw de                                             ; FE23EB  2a
 	ld (Disk_FileName+8:16), 0x43                                 ; FE23EC  f1 d0 21 00 43
-	calr sub_FE2484                                            ; FE23F1  1e 90 00
+	calr DiskLoad_ReadRemapFile                                            ; FE23F1  1e 90 00
 	ld H,A                                               ; FE23F4  c9 8e
 	cp a, 0x01:i3                                          ; FE23F6  c9 d9
 	jr nz, .LFE2412                                          ; FE23F8  6e 18
@@ -163154,26 +163170,28 @@ sub_FE23EA:
 .LFE240A:
 	pushw de                                             ; FE240A  2a
 	pushw 0x5860                                         ; FE240B  0b 60 58
-	calr sub_FE24BE                                            ; FE240E  1e ad 00
+	calr DiskLoad_CopyBufferWords                                            ; FE240E  1e ad 00
 	pop XIY                                              ; FE2411  5d
 .LFE2412:
 	ld A,H                                               ; FE2412  ce 89
 	popw de                                              ; FE2414  4a
 	popw hl                                              ; FE2415  4b
 	ret                                                  ; FE2416  0e
-sub_FE2417:
+; DiskLoad_DrumMap: content type 8: extension 'D' + 'RM', DiskLoad_ReadRemapFile, 0x1D0 bytes to 0x5EB0.
+DiskLoad_DrumMap:
 	pushw hl                                             ; FE2417  2b
 	ld (Disk_FileName+8:16), 0x44                                 ; FE2418  f1 d0 21 00 44
-	calr sub_FE2484                                            ; FE241D  1e 64 00
+	calr DiskLoad_ReadRemapFile                                            ; FE241D  1e 64 00
 	ld H,A                                               ; FE2420  c9 8e
 	pushw 0x01d0                                         ; FE2422  0b d0 01
 	pushw 0x5eb0                                         ; FE2425  0b b0 5e
-	calr sub_FE24BE                                            ; FE2428  1e 93 00
+	calr DiskLoad_CopyBufferWords                                            ; FE2428  1e 93 00
 	pop XIY                                              ; FE242B  5d
 	ld A,H                                               ; FE242C  ce 89
 	popw hl                                              ; FE242E  4b
 	ret                                                  ; FE242F  0e
-sub_FE2430:
+; DiskLoad_PanelSlsFile: content type 4, second file: extension 'SLS', into the window 0x60A700..+0x800, 0x600 bytes copied to 0x7000.
+DiskLoad_PanelSlsFile:
 	link XIZ,0xfffc                                      ; FE2430  ee 0c fc ff
 	pushw hl                                             ; FE2434  2b
 	push XIX                                             ; FE2435  3c
@@ -163185,10 +163203,10 @@ sub_FE2430:
 	calr sub_FE2F86                                          ; FE2448  1e 3b 0b
 	lda xbc, (0x60a700:24)                               ; FE244B  f2 00 a7 60 31
 	ld (xiz-4), xbc                                      ; FE2450  be fc 61
-	ld (0x21d3:16), xbc                                 ; FE2453  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2453  f1 d3 21 61
 	ld xwa, (xiz-4)                                      ; FE2457  ae fc 20
 	add XWA,0x00000800                                   ; FE245A  e8 c8 00 08 00 00
-	ld (0x21d7:16), xwa                                 ; FE2460  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FE2460  f1 d7 21 60
 	m_res 1, MD16, Disk_Flags                                ; FE2464  f1 e7 21 b1
 	calr DiskApi_ReadFileToWindow                                          ; FE2468  1e d8 e6
 	ld H,A                                               ; FE246B  c9 8e
@@ -163198,7 +163216,7 @@ sub_FE2430:
 .LFE2473:
 	pushw 0x0600                                         ; FE2473  0b 00 06
 	pushw 0x7000                                         ; FE2476  0b 00 70
-	calr sub_FE24BE                                            ; FE2479  1e 42 00
+	calr DiskLoad_CopyBufferWords                                            ; FE2479  1e 42 00
 	pop XIY                                              ; FE247C  5d
 	ld a, 0x01:opc                                          ; FE247D  21 01
 .LFE247F:
@@ -163206,7 +163224,8 @@ sub_FE2430:
 	popw hl                                              ; FE2480  4b
 	unlk XIZ                                             ; FE2481  ee 0d
 	ret                                                  ; FE2483  0e
-sub_FE2484:
+; DiskLoad_ReadRemapFile: extension bytes 9-10 = 'RM', window 0x60A700..+0x800, Disk_Flags bit 1 clear, DiskApi_ReadFileToWindow; 1 on success.
+DiskLoad_ReadRemapFile:
 	pushw hl                                             ; FE2484  2b
 	push XIX                                             ; FE2485  3c
 	calr sub_FE2F86                                          ; FE2486  1e fd 0a
@@ -163214,10 +163233,10 @@ sub_FE2484:
 	ld (Disk_FileName+10:16), 0x4d                                 ; FE248E  f1 d2 21 00 4d
 	lda xbc, (0x60a700:24)                               ; FE2493  f2 00 a7 60 31
 	ld XIX,XBC                                           ; FE2498  e9 8c
-	ld (0x21d3:16), xbc                                 ; FE249A  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE249A  f1 d3 21 61
 	ld XWA,XIX                                           ; FE249E  ec 88
 	add XWA,0x00000800                                   ; FE24A0  e8 c8 00 08 00 00
-	ld (0x21d7:16), xwa                                 ; FE24A6  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FE24A6  f1 d7 21 60
 	m_res 1, MD16, Disk_Flags                                ; FE24AA  f1 e7 21 b1
 	calr DiskApi_ReadFileToWindow                                          ; FE24AE  1e 92 e6
 	ld H,A                                               ; FE24B1  c9 8e
@@ -163230,7 +163249,8 @@ sub_FE2484:
 	pop XIX                                              ; FE24BB  5c
 	popw hl                                              ; FE24BC  4b
 	ret                                                  ; FE24BD  0e
-sub_FE24BE:
+; DiskLoad_CopyBufferWords: copies arg-2 bytes (as words) from the buffer 0x60A700 to the arg-1 address.
+DiskLoad_CopyBufferWords:
 	link XIZ,0xfff4                                      ; FE24BE  ee 0c f4 ff
 	pushw hl                                             ; FE24C2  2b
 	push XIX                                             ; FE24C3  3c
@@ -163283,10 +163303,12 @@ sub_FE24BE:
 	ld a, 0x03:opc                                          ; FE252E  21 03
 .LFE2530:
 	ret                                                  ; FE2530  0e
-sub_FE2531:
+; DiskSave_ByContentType: the same dispatch on (0x2725) for saving: 1 DiskSave_Sequencer, 2 _Combination, 3 _Sound, 4 _PanelLswFile +
+;   _PanelSlsFile, 5 _MidiSetting, 6 _SoundRemap, 7 _CombiRemap, 8 _DrumMap; 0 ALL, all of them.
+DiskSave_ByContentType:
 	pushw hl                                             ; FE2531  2b
 	push XIX                                             ; FE2532  3c
-	lda xix, (0x2725:16)                                ; FE2533  f1 25 27 34
+	lda xix, (Disk_ContentType:16)                                ; FE2533  f1 25 27 34
 	calr SysPartMidi_ResetBlock1Default                                          ; FE2537  1e 75 09
 	calr ParamImage_WriteRecordHeaders_Entry_SaveRegs                                          ; FE253A  1e 23 db
 	calr sub_FE2699                                          ; FE253D  1e 59 01
@@ -163294,41 +163316,41 @@ sub_FE2531:
 	ld C,(XIX)                                           ; FE2543  84 23
 	cp c, 0x00:i3                                          ; FE2545  cb d8
 	jr nz, .LFE2598                                          ; FE2547  6e 4f
-	calr sub_FE2863                                          ; FE2549  1e 17 03
+	calr DiskSave_SoundRemap                                          ; FE2549  1e 17 03
 	ld H,A                                               ; FE254C  c9 8e
 	cp a, 0x03:i3                                          ; FE254E  c9 db
 	jr nz, .LFE2557                                          ; FE2550  6e 05
-	calr sub_FE288B                                          ; FE2552  1e 36 03
+	calr DiskSave_CombiRemap                                          ; FE2552  1e 36 03
 	ld H,A                                               ; FE2555  c9 8e
 .LFE2557:
 	cp h, 0x03:i3                                          ; FE2557  ce db
 	jr nz, .LFE2560                                          ; FE2559  6e 05
-	calr sub_FE28B3                                          ; FE255B  1e 55 03
+	calr DiskSave_DrumMap                                          ; FE255B  1e 55 03
 	ld H,A                                               ; FE255E  c9 8e
 .LFE2560:
 	calr sub_FE1D52_Nop                                          ; FE2560  1e fa e3
 	cp h, 0x03:i3                                          ; FE2563  ce db
 	jr nz, .LFE256F                                          ; FE2565  6e 08
-	calr sub_FE26E2                                          ; FE2567  1e 78 01
-	calr sub_FE28D5                                          ; FE256A  1e 68 03
+	calr DiskSave_PanelLswFile                                          ; FE2567  1e 78 01
+	calr DiskSave_PanelSlsFile                                          ; FE256A  1e 68 03
 	ld H,A                                               ; FE256D  c9 8e
 .LFE256F:
 	calr sub_FE1D52_Nop2                                          ; FE256F  1e ec e3
 	cp h, 0x03:i3                                          ; FE2572  ce db
 	jr nz, .LFE257B                                          ; FE2574  6e 05
-	calr sub_FE2993                                          ; FE2576  1e 1a 04
+	calr DiskSave_Sound                                          ; FE2576  1e 1a 04
 	ld H,A                                               ; FE2579  c9 8e
 .LFE257B:
 	cp h, 0x03:i3                                          ; FE257B  ce db
 	jr nz, .LFE2584                                          ; FE257D  6e 05
-	calr sub_FE2A21                                          ; FE257F  1e 9f 04
+	calr DiskSave_Combination                                          ; FE257F  1e 9f 04
 	ld H,A                                               ; FE2582  c9 8e
 .LFE2584:
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FE2584  c0 c4 3f 01
 	jrl nz, .LFE25FA                                         ; FE2588  7e 6f 00
 	cp h, 0x03:i3                                          ; FE258B  ce db
 	jrl nz, .LFE25FA                                         ; FE258D  7e 6a 00
-	calr sub_FE2CBF                                          ; FE2590  1e 2c 07
+	calr DiskSave_Sequencer                                          ; FE2590  1e 2c 07
 	ld H,A                                               ; FE2593  c9 8e
 	jrl .LFE25FA                                             ; FE2595  78 62 00
 .LFE2598:
@@ -163336,51 +163358,51 @@ sub_FE2531:
 	ld C,(XIX)                                           ; FE259B  84 23
 	cp c, 0x04:i3                                          ; FE259D  cb dc
 	jr nz, .LFE25A9                                          ; FE259F  6e 08
-	calr sub_FE26E2                                          ; FE25A1  1e 3e 01
-	calr sub_FE28D5                                          ; FE25A4  1e 2e 03
+	calr DiskSave_PanelLswFile                                          ; FE25A1  1e 3e 01
+	calr DiskSave_PanelSlsFile                                          ; FE25A4  1e 2e 03
 	ld H,A                                               ; FE25A7  c9 8e
 .LFE25A9:
 	calr sub_FE1D52_Nop2                                          ; FE25A9  1e b2 e3
 	ld C,(XIX)                                           ; FE25AC  84 23
 	cp c, 0x03:i3                                          ; FE25AE  cb db
 	jr nz, .LFE25B7                                          ; FE25B0  6e 05
-	calr sub_FE2993                                          ; FE25B2  1e de 03
+	calr DiskSave_Sound                                          ; FE25B2  1e de 03
 	ld H,A                                               ; FE25B5  c9 8e
 .LFE25B7:
 	ld C,(XIX)                                           ; FE25B7  84 23
 	cp c, 0x02:i3                                          ; FE25B9  cb da
 	jr nz, .LFE25C2                                          ; FE25BB  6e 05
-	calr sub_FE2A21                                          ; FE25BD  1e 61 04
+	calr DiskSave_Combination                                          ; FE25BD  1e 61 04
 	ld H,A                                               ; FE25C0  c9 8e
 .LFE25C2:
 	ld C,(XIX)                                           ; FE25C2  84 23
 	cp c, 0x01:i3                                          ; FE25C4  cb d9
 	jr nz, .LFE25CD                                          ; FE25C6  6e 05
-	calr sub_FE2CBF                                          ; FE25C8  1e f4 06
+	calr DiskSave_Sequencer                                          ; FE25C8  1e f4 06
 	ld H,A                                               ; FE25CB  c9 8e
 .LFE25CD:
 	ld C,(XIX)                                           ; FE25CD  84 23
 	cp c, 0x05:i3                                          ; FE25CF  cb dd
 	jr nz, .LFE25D8                                          ; FE25D1  6e 05
-	calr sub_FE2736                                          ; FE25D3  1e 60 01
+	calr DiskSave_MidiSetting                                          ; FE25D3  1e 60 01
 	ld H,A                                               ; FE25D6  c9 8e
 .LFE25D8:
 	ld C,(XIX)                                           ; FE25D8  84 23
 	cp c, 0x06:i3                                          ; FE25DA  cb de
 	jr nz, .LFE25E3                                          ; FE25DC  6e 05
-	calr sub_FE2863                                          ; FE25DE  1e 82 02
+	calr DiskSave_SoundRemap                                          ; FE25DE  1e 82 02
 	ld H,A                                               ; FE25E1  c9 8e
 .LFE25E3:
 	ld C,(XIX)                                           ; FE25E3  84 23
 	cp c, 0x07:i3                                          ; FE25E5  cb df
 	jr nz, .LFE25EE                                          ; FE25E7  6e 05
-	calr sub_FE288B                                          ; FE25E9  1e 9f 02
+	calr DiskSave_CombiRemap                                          ; FE25E9  1e 9f 02
 	ld H,A                                               ; FE25EC  c9 8e
 .LFE25EE:
 	ld C,(XIX)                                           ; FE25EE  84 23
 	cp C,0x08                                            ; FE25F0  cb cf 08
 	jr nz, .LFE25FA                                          ; FE25F3  6e 05
-	calr sub_FE28B3                                          ; FE25F5  1e bb 02
+	calr DiskSave_DrumMap                                          ; FE25F5  1e bb 02
 	ld H,A                                               ; FE25F8  c9 8e
 .LFE25FA:
 	cp h, 0x03:i3                                          ; FE25FA  ce db
@@ -163495,7 +163517,8 @@ DiskApi_CheckFreeSpace:
 	popw hl                                              ; FE26DE  4b
 	unlk XIZ                                             ; FE26DF  ee 0d
 	ret                                                  ; FE26E1  0e
-sub_FE26E2:
+; DiskSave_PanelLswFile: content type 4: DiskApi_CheckFreeSpace for the size in (0x760A)/(0x760B), extension 'LSW', DiskSave_WriteWindowToFile.
+DiskSave_PanelLswFile:
 	pushw hl                                             ; FE26E2  2b
 	pushw de                                             ; FE26E3  2a
 	push XIX                                             ; FE26E4  3c
@@ -163526,13 +163549,14 @@ sub_FE26E2:
 	ld (XIX+0x0a),0x57                                   ; FE2725  bc 0a 00 57
 	calr sub_FE2CF5                                          ; FE2729  1e c9 05
 	calr sub_FE2D7C                                          ; FE272C  1e 4d 06
-	calr sub_FE2980                                          ; FE272F  1e 4e 02
+	calr DiskSave_WriteWindowToFile                                          ; FE272F  1e 4e 02
 .LFE2732:
 	pop XIX                                              ; FE2732  5c
 	popw de                                              ; FE2733  4a
 	popw hl                                              ; FE2734  4b
 	ret                                                  ; FE2735  0e
-sub_FE2736:
+; DiskSave_MidiSetting: content type 5: extension 'MDS'.
+DiskSave_MidiSetting:
 	link XIZ,0xfffb                                      ; FE2736  ee 0c fb ff
 	pushw hl                                             ; FE273A  2b
 	pushw de                                             ; FE273B  2a
@@ -163608,7 +163632,7 @@ sub_FE2736:
 	ld (Disk_FileName+10:16), 0x53                                 ; FE27F9  f1 d2 21 00 53
 	calr sub_FE2D09                                          ; FE27FE  1e 08 05
 	calr sub_FE2D5E                                          ; FE2801  1e 5a 05
-	calr sub_FE2980                                          ; FE2804  1e 79 01
+	calr DiskSave_WriteWindowToFile                                          ; FE2804  1e 79 01
 	inc 8,XSP                                            ; FE2807  ef 60
 	pop XIX                                              ; FE2809  5c
 	popw de                                              ; FE280A  4a
@@ -163651,71 +163675,77 @@ sub_FE2736:
 	popw hl                                              ; FE285F  4b
 	unlk XIZ                                             ; FE2860  ee 0d
 	ret                                                  ; FE2862  0e
-sub_FE2863:
+; DiskSave_SoundRemap: content type 6: extension 'S', then DiskSave_WriteRemapFile.
+DiskSave_SoundRemap:
 	pushw 0x0650                                         ; FE2863  0b 50 06
 	pushw 0x5210                                         ; FE2866  0b 10 52
-	calr sub_FE292D                                            ; FE2869  1e c1 00
+	calr DiskSave_CopyWordsToBuffer                                            ; FE2869  1e c1 00
 	ld (Disk_FileName+8:16), 0x53                                 ; FE286C  f1 d0 21 00 53
 	ld (0x60a70f:24), 0x31                             ; FE2871  f2 0f a7 60 00 31
 	lda xbc, (0x60a700:24)                               ; FE2877  f2 00 a7 60 31
 	add XBC,0x00000800                                   ; FE287C  e9 c8 00 08 00 00
-	ld (0x21d7:16), xbc                                 ; FE2882  f1 d7 21 61
-	calr sub_FE2916                                            ; FE2886  1e 8d 00
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2882  f1 d7 21 61
+	calr DiskSave_WriteRemapFile                                            ; FE2886  1e 8d 00
 	pop XIY                                              ; FE2889  5d
 	ret                                                  ; FE288A  0e
-sub_FE288B:
+; DiskSave_CombiRemap: content type 7: extension 'C', then DiskSave_WriteRemapFile.
+DiskSave_CombiRemap:
 	pushw 0x0650                                         ; FE288B  0b 50 06
 	pushw 0x5860                                         ; FE288E  0b 60 58
-	calr sub_FE292D                                            ; FE2891  1e 99 00
+	calr DiskSave_CopyWordsToBuffer                                            ; FE2891  1e 99 00
 	ld (Disk_FileName+8:16), 0x43                                 ; FE2894  f1 d0 21 00 43
 	ld (0x60a70f:24), 0x31                             ; FE2899  f2 0f a7 60 00 31
 	lda xbc, (0x60a700:24)                               ; FE289F  f2 00 a7 60 31
 	add XBC,0x00000800                                   ; FE28A4  e9 c8 00 08 00 00
-	ld (0x21d7:16), xbc                                 ; FE28AA  f1 d7 21 61
-	calr sub_FE2916                                            ; FE28AE  1e 65 00
+	ld (Disk_WindowEnd:16), xbc                                 ; FE28AA  f1 d7 21 61
+	calr DiskSave_WriteRemapFile                                            ; FE28AE  1e 65 00
 	pop XIY                                              ; FE28B1  5d
 	ret                                                  ; FE28B2  0e
-sub_FE28B3:
+; DiskSave_DrumMap: content type 8: extension 'D', then DiskSave_WriteRemapFile.
+DiskSave_DrumMap:
 	pushw 0x01d0                                         ; FE28B3  0b d0 01
 	pushw 0x5eb0                                         ; FE28B6  0b b0 5e
-	calr sub_FE292D                                            ; FE28B9  1e 71 00
+	calr DiskSave_CopyWordsToBuffer                                            ; FE28B9  1e 71 00
 	ld (Disk_FileName+8:16), 0x44                                 ; FE28BC  f1 d0 21 00 44
 	lda xbc, (0x60a700:24)                               ; FE28C1  f2 00 a7 60 31
 	add XBC,0x00000400                                   ; FE28C6  e9 c8 00 04 00 00
-	ld (0x21d7:16), xbc                                 ; FE28CC  f1 d7 21 61
-	calr sub_FE2916                                            ; FE28D0  1e 43 00
+	ld (Disk_WindowEnd:16), xbc                                 ; FE28CC  f1 d7 21 61
+	calr DiskSave_WriteRemapFile                                            ; FE28D0  1e 43 00
 	pop XIY                                              ; FE28D3  5d
 	ret                                                  ; FE28D4  0e
-sub_FE28D5:
+; DiskSave_PanelSlsFile: content type 4: 0x600 bytes from 0x7000 to the buffer 0x60A700, extension 'SLS', DiskSave_WriteWindowToFile.
+DiskSave_PanelSlsFile:
 	link XIZ,0xfffc                                      ; FE28D5  ee 0c fc ff
 	push XIX                                             ; FE28D9  3c
 	lda xix, (Disk_FileName:16)                                ; FE28DA  f1 c8 21 34
 	pushw 0x0600                                         ; FE28DE  0b 00 06
 	pushw 0x7000                                         ; FE28E1  0b 00 70
-	calr sub_FE292D                                            ; FE28E4  1e 46 00
+	calr DiskSave_CopyWordsToBuffer                                            ; FE28E4  1e 46 00
 	extz XIX                                             ; FE28E7  ec 12
 	ld (XIX+0x08),0x53                                   ; FE28E9  bc 08 00 53
 	ld (XIX+0x09),0x4c                                   ; FE28ED  bc 09 00 4c
 	ld (XIX+0x0a),0x53                                   ; FE28F1  bc 0a 00 53
 	lda xbc, (0x60a700:24)                               ; FE28F5  f2 00 a7 60 31
 	ld (xiz-4), xbc                                      ; FE28FA  be fc 61
-	ld (0x21d3:16), xbc                                 ; FE28FD  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE28FD  f1 d3 21 61
 	ld xwa, (xiz-4)                                      ; FE2901  ae fc 20
 	add XWA,0x00000800                                   ; FE2904  e8 c8 00 08 00 00
-	ld (0x21d7:16), xwa                                 ; FE290A  f1 d7 21 60
-	calr sub_FE2980                                            ; FE290E  1e 6f 00
+	ld (Disk_WindowEnd:16), xwa                                 ; FE290A  f1 d7 21 60
+	calr DiskSave_WriteWindowToFile                                            ; FE290E  1e 6f 00
 	pop XIY                                              ; FE2911  5d
 	pop XIX                                              ; FE2912  5c
 	unlk XIZ                                             ; FE2913  ee 0d
 	ret                                                  ; FE2915  0e
-sub_FE2916:
+; DiskSave_WriteRemapFile: extension bytes 9-10 = 'RM', then the write.
+DiskSave_WriteRemapFile:
 	lda xbc, (0x60a700:24)                               ; FE2916  f2 00 a7 60 31
-	ld (0x21d3:16), xbc                                 ; FE291B  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE291B  f1 d3 21 61
 	ld (Disk_FileName+9:16), 0x52                                 ; FE291F  f1 d1 21 00 52
 	ld (Disk_FileName+10:16), 0x4d                                 ; FE2924  f1 d2 21 00 4d
-	calr sub_FE2980                                            ; FE2929  1e 54 00
+	calr DiskSave_WriteWindowToFile                                            ; FE2929  1e 54 00
 	ret                                                  ; FE292C  0e
-sub_FE292D:
+; DiskSave_CopyWordsToBuffer: the reverse: arg-2 bytes (as words) from the arg-1 address to the buffer 0x60A700.
+DiskSave_CopyWordsToBuffer:
 	link XIZ,0xfff0                                      ; FE292D  ee 0c f0 ff
 	pushw hl                                             ; FE2931  2b
 	push XIX                                             ; FE2932  3c
@@ -163753,7 +163783,8 @@ sub_FE2971:
 	popw hl                                              ; FE297C  4b
 	unlk XIZ                                             ; FE297D  ee 0d
 	ret                                                  ; FE297F  0e
-sub_FE2980:
+; DiskSave_WriteWindowToFile: sub_FE2F86, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow.
+DiskSave_WriteWindowToFile:
 	push XIX                                             ; FE2980  3c
 	lda xix, (Disk_Flags:16)                                ; FE2981  f1 e7 21 34
 	calr sub_FE2F86                                          ; FE2985  1e fe 05
@@ -163762,7 +163793,8 @@ sub_FE2980:
 	calr DiskApi_WriteFileFromWindow                                          ; FE298E  1e 08 e1
 	pop XIX                                              ; FE2991  5c
 	ret                                                  ; FE2992  0e
-sub_FE2993:
+; DiskSave_Sound: content type 3: extension 'TM ' (the file DiskLoad_Sound reads).
+DiskSave_Sound:
 	pushw hl                                             ; FE2993  2b
 	push XIX                                             ; FE2994  3c
 	ld (0x1736:24), 0x00                               ; FE2995  f2 36 17 00 00 00
@@ -163784,7 +163816,7 @@ sub_FE2993:
 	calr sub_FE2D4F                                          ; FE29CC  1e 80 03
 	ld XBC,0x00e80000                                    ; FE29CF  41 00 00 e8 00
 	ld (0x1747:24), xbc                                 ; FE29D4  f2 47 17 00 61
-	ld xwa, (0x21d3:16)                                 ; FE29D9  e1 d3 21 20
+	ld xwa, (Disk_WindowStart:16)                                 ; FE29D9  e1 d3 21 20
 	push XWA                                             ; FE29DD  38
 	pushw 0x2c00                                         ; FE29DE  0b 00 2c
 	ld XWA,0x00e80000                                    ; FE29E1  40 00 00 e8 00
@@ -163818,7 +163850,8 @@ sub_FE2993:
 	pop XIX                                              ; FE2A1E  5c
 	popw hl                                              ; FE2A1F  4b
 	ret                                                  ; FE2A20  0e
-sub_FE2A21:
+; DiskSave_Combination: content type 2: extension 'CMB'.
+DiskSave_Combination:
 	pushw hl                                             ; FE2A21  2b
 	push XIX                                             ; FE2A22  3c
 	ldw (0x173d:24), 0x1630                             ; FE2A23  f2 3d 17 00 02 30 16
@@ -163839,7 +163872,7 @@ sub_FE2A21:
 	calr sub_FE2D4F                                          ; FE2A54  1e f8 02
 	ld XBC,0x00ec0000                                    ; FE2A57  41 00 00 ec 00
 	ld (0x1747:24), xbc                                 ; FE2A5C  f2 47 17 00 61
-	ld xwa, (0x21d3:16)                                 ; FE2A61  e1 d3 21 20
+	ld xwa, (Disk_WindowStart:16)                                 ; FE2A61  e1 d3 21 20
 	push XWA                                             ; FE2A65  38
 	pushw 0x2c00                                         ; FE2A66  0b 00 2c
 	ld XWA,0x00ec0000                                    ; FE2A69  40 00 00 ec 00
@@ -163908,7 +163941,7 @@ sub_FE2AA9:
 	m_mul MWD+r6, 0xf8, 1                                ; FE2B0E  9e f8 41
 	ld XIX,XBC                                           ; FE2B11  e9 8c
 .LFE2B13:
-	ld xbc, (0x21d3:16)                                 ; FE2B13  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2B13  e1 d3 21 21
 	add XBC,XIX                                          ; FE2B17  ec 81
 	ld (xiz-26), xbc                                     ; FE2B19  be e6 61
 	ld (0x174b:24), xbc                                 ; FE2B1C  f2 4b 17 00 61
@@ -163941,7 +163974,7 @@ sub_FE2AA9:
 	ld xbc, (xiz-18)                                     ; FE2B70  ae ee 21
 	m_add_rm MLD+r6, 0xfa, r1                            ; FE2B73  ae fa 81
 	ld (xiz-22), xbc                                     ; FE2B76  be ea 61
-	ld xwa, (0x21d3:16)                                 ; FE2B79  e1 d3 21 20
+	ld xwa, (Disk_WindowStart:16)                                 ; FE2B79  e1 d3 21 20
 	push XWA                                             ; FE2B7D  38
 	pushw 0x2c00                                         ; FE2B7E  0b 00 2c
 	push XBC                                             ; FE2B81  39
@@ -163964,7 +163997,7 @@ sub_FE2AA9:
 	jrl z, .LFE2C4C                                          ; FE2BAD  76 9c 00
 	ld xix, (xiz-22)                                     ; FE2BB0  ae ea 24
 	add XIX,0x00002c00                                   ; FE2BB3  ec c8 00 2c 00 00
-	ld xwa, (0x21d3:16)                                 ; FE2BB9  e1 d3 21 20
+	ld xwa, (Disk_WindowStart:16)                                 ; FE2BB9  e1 d3 21 20
 	push XWA                                             ; FE2BBD  38
 	pushw bc                                             ; FE2BBE  29
 	ld XBC,XIX                                           ; FE2BBF  ec 89
@@ -163987,7 +164020,7 @@ sub_FE2AA9:
 	jr ule, .LFE2C4C                                         ; FE2BED  63 5d
 	ld XIX,0x00000000                                    ; FE2BEF  44 00 00 00 00
 .LFE2BF4:
-	ld xbc, (0x21d3:16)                                 ; FE2BF4  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2BF4  e1 d3 21 21
 	add XBC,XIX                                          ; FE2BF8  ec 81
 	ld (xiz-26), xbc                                     ; FE2BFA  be e6 61
 	ld (0x174b:24), xbc                                 ; FE2BFD  f2 4b 17 00 61
@@ -164072,7 +164105,8 @@ sub_FE2C64:
 	popw de                                              ; FE2CBC  4a
 	popw hl                                              ; FE2CBD  4b
 	ret                                                  ; FE2CBE  0e
-sub_FE2CBF:
+; DiskSave_Sequencer: content type 1: sub_FE0046; result (0x23CB).
+DiskSave_Sequencer:
 	calr sub_FE0046                                          ; FE2CBF  1e 84 d3
 	ld a, (0x23cb:16)                                   ; FE2CC2  c1 cb 23 21
 	ret                                                  ; FE2CC6  0e
@@ -164094,53 +164128,53 @@ sub_FE2CC7:
 	ret                                                  ; FE2CF4  0e
 sub_FE2CF5:
 	ld XBC,0x00007600                                    ; FE2CF5  41 00 76 00 00
-	ld (0x21d3:16), xbc                                 ; FE2CFA  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2CFA  f1 d3 21 61
 	ret                                                  ; FE2CFE  0e
 sub_FE2CFF:
 	ld XBC,0x00609400                                    ; FE2CFF  41 00 94 60 00
-	ld (0x21d3:16), xbc                                 ; FE2D04  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D04  f1 d3 21 61
 	ret                                                  ; FE2D08  0e
 sub_FE2D09:
 	lda xbc, (0x60a080:24)                               ; FE2D09  f2 80 a0 60 31
-	ld (0x21d3:16), xbc                                 ; FE2D0E  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D0E  f1 d3 21 61
 	ret                                                  ; FE2D12  0e
 sub_FE2D13:
 	ld XBC,0x00609000                                    ; FE2D13  41 00 90 60 00
-	ld (0x21d3:16), xbc                                 ; FE2D18  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D18  f1 d3 21 61
 	ret                                                  ; FE2D1C  0e
 sub_FE2D1D:
 	ld xbc, (BStore_HeapBase:16)                                 ; FE2D1D  e1 04 36 21
-	ld (0x21d3:16), xbc                                 ; FE2D21  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D21  f1 d3 21 61
 	ret                                                  ; FE2D25  0e
 sub_FE2D26:
 	ld XBC,0x00609400                                    ; FE2D26  41 00 94 60 00
-	ld (0x21d3:16), xbc                                 ; FE2D2B  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D2B  f1 d3 21 61
 	ret                                                  ; FE2D2F  0e
 sub_FE2D30:
 	ld XBC,0x00603400                                    ; FE2D30  41 00 34 60 00
-	ld (0x21d3:16), xbc                                 ; FE2D35  f1 d3 21 61
+	ld (Disk_WindowStart:16), xbc                                 ; FE2D35  f1 d3 21 61
 	ret                                                  ; FE2D39  0e
 	ldw bc, 0x760a                                       ; FE2D3A  31 0a 76
 	exts XBC                                             ; FE2D3D  e9 13
 	ld WA,(XBC)                                          ; FE2D3F  91 20
 	extz XWA                                             ; FE2D41  e8 12
 	sll xwa, 0x04                                        ; FE2D43  e8 ee 04
-	add xwa, (0x21d3:16)                                ; FE2D46  e1 d3 21 80
-	ld (0x21d7:16), xwa                                 ; FE2D4A  f1 d7 21 60
+	add xwa, (Disk_WindowStart:16)                                ; FE2D46  e1 d3 21 80
+	ld (Disk_WindowEnd:16), xwa                                 ; FE2D4A  f1 d7 21 60
 	ret                                                  ; FE2D4E  0e
 sub_FE2D4F:
-	ld xbc, (0x21d3:16)                                 ; FE2D4F  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2D4F  e1 d3 21 21
 	add XBC,0x00002c00                                   ; FE2D53  e9 c8 00 2c 00 00
-	ld (0x21d7:16), xbc                                 ; FE2D59  f1 d7 21 61
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2D59  f1 d7 21 61
 	ret                                                  ; FE2D5D  0e
 sub_FE2D5E:
-	ld xbc, (0x21d3:16)                                 ; FE2D5E  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2D5E  e1 d3 21 21
 	add XBC,0x00000400                                   ; FE2D62  e9 c8 00 04 00 00
-	ld (0x21d7:16), xbc                                 ; FE2D68  f1 d7 21 61
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2D68  f1 d7 21 61
 	ret                                                  ; FE2D6C  0e
-	ld xbc, (0x21d3:16)                                 ; FE2D6D  e1 d3 21 21
+	ld xbc, (Disk_WindowStart:16)                                 ; FE2D6D  e1 d3 21 21
 	add XBC,0x000007d0                                   ; FE2D71  e9 c8 d0 07 00 00
-	ld (0x21d7:16), xbc                                 ; FE2D77  f1 d7 21 61
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2D77  f1 d7 21 61
 	ret                                                  ; FE2D7B  0e
 sub_FE2D7C:
 	ldw bc, 0x760a                                       ; FE2D7C  31 0a 76
@@ -164149,15 +164183,15 @@ sub_FE2D7C:
 	extz XWA                                             ; FE2D83  e8 12
 	sll xwa, 0x04                                        ; FE2D85  e8 ee 04
 	add XWA,0x00007600                                   ; FE2D88  e8 c8 00 76 00 00
-	ld (0x21d7:16), xwa                                 ; FE2D8E  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FE2D8E  f1 d7 21 60
 	ret                                                  ; FE2D92  0e
 sub_FE2D93:
 	ld XBC,0x0060a000                                    ; FE2D93  41 00 a0 60 00
-	ld (0x21d7:16), xbc                                 ; FE2D98  f1 d7 21 61
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2D98  f1 d7 21 61
 	ret                                                  ; FE2D9C  0e
 sub_FE2D9D:
 	ld XBC,0x00604000                                    ; FE2D9D  41 00 40 60 00
-	ld (0x21d7:16), xbc                                 ; FE2DA2  f1 d7 21 61
+	ld (Disk_WindowEnd:16), xbc                                 ; FE2DA2  f1 d7 21 61
 	ret                                                  ; FE2DA6  0e
 sub_FE2DA7:
 	ldw bc, 0x761a                                       ; FE2DA7  31 1a 76
@@ -164166,7 +164200,7 @@ sub_FE2DA7:
 	extz XWA                                             ; FE2DAE  e8 12
 	sll xwa, 0x04                                        ; FE2DB0  e8 ee 04
 	add xwa, (BStore_HeapBase:16)                                ; FE2DB3  e1 04 36 80
-	ld (0x21d7:16), xwa                                 ; FE2DB7  f1 d7 21 60
+	ld (Disk_WindowEnd:16), xwa                                 ; FE2DB7  f1 d7 21 60
 	ret                                                  ; FE2DBB  0e
 sub_FE2DBC:
 	ldw bc, 0x760a                                       ; FE2DBC  31 0a 76
@@ -187933,9 +187967,9 @@ Paint_DiskL0adFile:
 	add XSP,0x00000020                                   ; FF484B  ef c8 20 00 00 00
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; FF4851  c0 c4 3f 02
 	jrl z, .LFF48EA                                      ; FF4855  76 92 00
-	m_cp_mi8 MB16, 0x2725, 0x00                          ; FF4858  c1 25 27 3f 00
+	m_cp_mi8 MB16, Disk_ContentType, 0x00                          ; FF4858  c1 25 27 3f 00
 	jr z, .LFF4867                                       ; FF485D  66 08
-	m_cp_mi8 MB16, 0x2725, 0x01                          ; FF485F  c1 25 27 3f 01
+	m_cp_mi8 MB16, Disk_ContentType, 0x01                          ; FF485F  c1 25 27 3f 01
 	jrl nz, .LFF48EA                                     ; FF4864  7e 83 00
 .LFF4867:
 	pushw 0x00                                           ; FF4867  0b 00 00
@@ -187957,7 +187991,7 @@ Paint_DiskL0adFile:
 	jp (xix)                                             ; FF4893  b4 d8
 .LFF4895:
 	add XSP,0x00000014                                   ; FF4895  ef c8 14 00 00 00
-	m_cp_mi8 MB16, 0x2725, 0x01                          ; FF489B  c1 25 27 3f 01
+	m_cp_mi8 MB16, Disk_ContentType, 0x01                          ; FF489B  c1 25 27 3f 01
 	jr nz, .LFF48B6                                      ; FF48A0  6e 14
 	lda xbc, (DLTab_F5841F:24)                           ; FF48A2  f2 1f 84 f5 31
 	push XBC                                             ; FF48A7  39
@@ -188002,7 +188036,7 @@ sub_FF48F0:
 	inc 6,XSP                                            ; FF4902  ef 66
 	cp A,0x09                                            ; FF4904  c9 cf 09
 	jr z, .LFF490D                                       ; FF4907  66 04
-	ld (0x2725:16), a                                   ; FF4909  f1 25 27 41
+	ld (Disk_ContentType:16), a                                   ; FF4909  f1 25 27 41
 .LFF490D:
 	popw hl                                              ; FF490D  4b
 	ret                                                  ; FF490E  0e
@@ -188182,7 +188216,7 @@ LcdKeyRow1_DiskL0adFile:
 	inc 6,XSP                                            ; FF49E3  ef 66
 	cp A,0x09                                            ; FF49E5  c9 cf 09
 	jrl z, .LFF4A7F                                      ; FF49E8  76 94 00
-	m_cp_mi8 MB16, 0x2725, 0x00                          ; FF49EB  c1 25 27 3f 00
+	m_cp_mi8 MB16, Disk_ContentType, 0x00                          ; FF49EB  c1 25 27 3f 00
 	jr nz, .LFF4A14                                      ; FF49F0  6e 22
 	pushw 0x00                                           ; FF49F2  0b 00 00
 	lda xiy, (.LFF49FD:24)                               ; FF49F5  f2 fd 49 ff 35
@@ -188202,7 +188236,7 @@ LcdKeyRow1_DiskL0adFile:
 	jr nz, .LFF4A50                                      ; FF4A10  6e 3e
 	jr .LFF4A44                                          ; FF4A12  68 30
 .LFF4A14:
-	m_cp_mi8 MB16, 0x2725, 0x03                          ; FF4A14  c1 25 27 3f 03
+	m_cp_mi8 MB16, Disk_ContentType, 0x03                          ; FF4A14  c1 25 27 3f 03
 	jr nz, .LFF4A2D                                      ; FF4A19  6e 12
 	pushw 0x00                                           ; FF4A1B  0b 00 00
 	lda xiy, (.LFF4A26:24)                               ; FF4A1E  f2 26 4a ff 35
@@ -188214,7 +188248,7 @@ LcdKeyRow1_DiskL0adFile:
 	jr nz, .LFF4A50                                      ; FF4A29  6e 25
 	jr .LFF4A44                                          ; FF4A2B  68 17
 .LFF4A2D:
-	m_cp_mi8 MB16, 0x2725, 0x02                          ; FF4A2D  c1 25 27 3f 02
+	m_cp_mi8 MB16, Disk_ContentType, 0x02                          ; FF4A2D  c1 25 27 3f 02
 	jr nz, .LFF4A50                                      ; FF4A32  6e 1c
 	pushw 0x01                                           ; FF4A34  0b 01 00
 	lda xiy, (.LFF4A3F:24)                               ; FF4A37  f2 3f 4a ff 35
@@ -188398,7 +188432,7 @@ LcdKeyRow4_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4ACB  ee 0c 00 00
 	pushw hl                                             ; FF4ACF  2b
 	push XIX                                             ; FF4AD0  3c
-	lda xix, (0x2725:16)                                ; FF4AD1  f1 25 27 34
+	lda xix, (Disk_ContentType:16)                                ; FF4AD1  f1 25 27 34
 	pushw 0x0b                                           ; FF4AD5  0b 0b 00
 	pushw 0x0c                                           ; FF4AD8  0b 0c 00
 	calr PanelDial_SetButtonPair                                      ; FF4ADB  1e 4c 26
@@ -188728,7 +188762,7 @@ LcdKeyRow5_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4D5D  ee 0c 00 00
 	pushw hl                                             ; FF4D61  2b
 	push XIX                                             ; FF4D62  3c
-	lda xix, (0x2725:16)                                ; FF4D63  f1 25 27 34
+	lda xix, (Disk_ContentType:16)                                ; FF4D63  f1 25 27 34
 	ld BC,(XIZ+0x08)                                     ; FF4D67  9e 08 21
 	and BC,0x0080                                        ; FF4D6A  d9 cc 80 00
 	jrl nz, .LFF4F9F                                     ; FF4D6E  7e 2e 02
@@ -189769,7 +189803,7 @@ sub_FF5546:   ; entry: named by 1 `.long` operand, first at 0xFF3A04
 	pushw 0x0c                                           ; FF554D  0b 0c 00
 	calr PanelDial_SetButtonPair                                      ; FF5550  1e d7 1b
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5553  1d 04 76 ff
-	ld (0x2725:16), 0x00                                 ; FF5557  f1 25 27 00 00
+	ld (Disk_ContentType:16), 0x00                                 ; FF5557  f1 25 27 00 00
 	ld (UI_ScreenItem:16), 0x00                                 ; FF555C  f1 20 27 00 00
 	pop XIY                                              ; FF5561  5d
 	pushw 0x00                                           ; FF5562  0b 00 00
@@ -194504,7 +194538,7 @@ Var7FD6_IsBitClear:
 DiskL0adFile_LcdKeyRow1:
 	pushw hl                                             ; FF7564  2b
 	m_res 3, MD16, UI_RequestBits                                ; FF7565  f1 75 20 b3
-	ld h, (0x2725:16)                                   ; FF7569  c1 25 27 26
+	ld h, (Disk_ContentType:16)                                   ; FF7569  c1 25 27 26
 	calr sub_FF7084                                      ; FF756D  1e 14 fb
 	call T_F425C8                                        ; FF7570  1d c8 25 f4
 	call sub_FF7959                                      ; FF7574  1d 59 79 ff

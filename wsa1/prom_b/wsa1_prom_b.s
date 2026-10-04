@@ -98681,10 +98681,10 @@ sub_F48F19_Skip:
 sub_F48F19_Join:
 	lda	xbc, (6334208:24)	; F48F4D  lda XBC,0x60a700
 	ld	(xiz-4), xbc	; F48F52  ld (XIZ+0xfc),XBC
-	ld	(8659:16), xbc	; F48F55  ld (0x21d3),XBC
+	ld	(Disk_WindowStart:16), xbc	; F48F55  ld (0x21d3),XBC
 	ld	xwa, (xiz-4)	; F48F59  ld XWA,(XIZ+0xfc)
 	add	xwa, 1024	; F48F5C  add XWA,0x00000400
-	ld	(8663:16), xwa	; F48F62  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F48F62  ld (0x21d7),XWA
 	call	T_DiskApi_ReadFileToWindow_Entry	; F48F66  call 0xf425a8
 	ld	h, a	; F48F6A  ld H,A
 	m_res 5, MD16, Disk_Flags	; F48F6C  res 5,(0x21e7)
@@ -122621,7 +122621,7 @@ DL_F583F0:
 	.byte 0x05	; +0x06 swi 7 function
 	.long DLTab_F58455 + 0x18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
-	.short 0x2725	; +0x02 source variable, 16-bit address
+	.short Disk_ContentType	; +0x02 source variable, 16-bit address
 	.byte 0x0F	; +0x04 AND mask
 	.byte 0x00	; +0x05 right shift, low 3 bits
 	.byte 0x06	; +0x06 swi 7 function
@@ -174461,7 +174461,7 @@ Data_F73844:
 ;          FILE FORMAT it produces, not everything the routine does.
 ; --------------------------------------------------------------------------
 Smf_WriteFile:
-	ld	a, (10021:16)	; F7385F  ld A,(0x2725)
+	ld	a, (Disk_ContentType:16)	; F7385F  ld A,(0x2725)
 	pushw	wa	; F73863  push WA
 	m_cp_mi16 MW24, 0x60341c, 0x0000	; F73864  cp (0x60341c),0x0000
 	jr	z, Smf_WriteFile_Skip	; F7386B  jr Z,0xf73875
@@ -174536,7 +174536,7 @@ Smf_WriteFile_Join:
 	ld	xix, Disk_FileName	; F7391F  ld XIX,0x000021c8
 	ldw	bc, 11	; F73924  ld BC,0x000b
 	ldir85	; F73927  ldir
-	ld	(10021:16), 1	; F73929  ld (0x2725),0x01
+	ld	(Disk_ContentType:16), 1	; F73929  ld (0x2725),0x01
 	ld	l, (8745:16)	; F7392E  ld L,(0x2229)
 	pushw	hl	; F73932  push HL
 	call	T_F425CC	; F73933  call 0xf425cc
@@ -175898,7 +175898,7 @@ Smf_WriteFile_Skip58:
 Smf_WriteFile_Join11:
 	m_and_mi8 MB16, 0x21e8, 0x7f	; F747FA  and (0x21e8),0x7f
 	popw	wa	; F747FF  pop WA
-	ld	(10021:16), a	; F74800  ld (0x2725),A
+	ld	(Disk_ContentType:16), a	; F74800  ld (0x2725),A
 	m_and_mi8 MB16, UI_Request_Hi, 0xfd	; F74804  and (0x2071),0xfd
 	ret	; F74809  ret
 
@@ -176103,7 +176103,7 @@ sub_F748F0:
 	ld	xix, Disk_FileName	; F748F5  ld XIX,0x000021c8
 	ldw	bc, 11	; F748FA  ld BC,0x000b
 	ldir85	; F748FD  ldir
-	ld	(10021:16), 1	; F748FF  ld (0x2725),0x01
+	ld	(Disk_ContentType:16), 1	; F748FF  ld (0x2725),0x01
 	call	T_F425C8	; F74904  call 0xf425c8
 	ld	(Disk_FileName+8:16), 63	; F74908  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F7490D  ld (0x21d1),0x3f
@@ -179174,9 +179174,9 @@ sub_F7659B:
 	ld	(Disk_FileName+10:16), 68	; F765AE  ld (0x21d2),0x44
 sub_F7659B_Skip:
 	ld	xwa, 6334208	; F765B3  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F765B8  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F765B8  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F765BC  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F765C1  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F765C1  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F765C5  or (0x21e7),0x20
 	call	T_DiskApi_ReadFileToWindow_Entry	; F765CA  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F765CE  and (0x21e7),0xdf
@@ -179366,9 +179366,9 @@ sub_F7666F_Skip:
 ; --------------------------------------------------------------------------
 sub_F7668A:
 	ld	xwa, 6334208	; F7668A  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F7668F  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F7668F  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F76693  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F76698  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F76698  ld (0x21d7),XWA
 	ret	; F7669C  ret
 ; --------------------------------------------------------------------------
 ; sub_F7669D
@@ -179474,7 +179474,7 @@ sub_F7669D_Code_Entry:
 sub_F7669D_Code_Entry2:
 	and	(0x21e8:16), 127	; F767AB  and (0x21e8),0x7f
 	popw	wa	; F767B0  pop WA
-	ld	(10021:16), a	; F767B1  ld (0x2725),A
+	ld	(Disk_ContentType:16), a	; F767B1  ld (0x2725),A
 	and	(UI_Request_Hi:16), 253	; F767B5  and (0x2071),0xfd
 	ret	; F767BA  ret
 
@@ -179652,7 +179652,7 @@ sub_F768A1:
 	ld	xix, Disk_FileName	; F768A6  ld XIX,0x000021c8
 	ldw	bc, 11	; F768AB  ld BC,0x000b
 	.byte 0x85, 0x11	; F768AE  ldir   [llvm-mc cannot encode this]
-	ld	(10021:16), 1	; F768B0  ld (0x2725),0x01
+	ld	(Disk_ContentType:16), 1	; F768B0  ld (0x2725),0x01
 	call	T_F425C8	; F768B5  call 0xf425c8
 	ld	(Disk_FileName+8:16), 63	; F768B9  ld (0x21d0),0x3f
 	ld	(Disk_FileName+9:16), 63	; F768BE  ld (0x21d1),0x3f
@@ -182021,9 +182021,9 @@ sub_F77D00:
 	ld	(Disk_FileName+10:16), 68	; F77D13  ld (0x21d2),0x44
 sub_F77D00_Skip:
 	ld	xwa, 6334208	; F77D18  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F77D1D  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F77D1D  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77D21  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F77D26  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F77D26  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77D2A  or (0x21e7),0x20
 	call	T_DiskApi_ReadFileToWindow_Entry	; F77D2F  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77D33  and (0x21e7),0xdf
@@ -182154,9 +182154,9 @@ sub_F77DB3_Skip:
 ; --------------------------------------------------------------------------
 sub_F77DEF:
 	ld	xwa, 6334208	; F77DEF  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F77DF4  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F77DF4  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77DF8  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F77DFD  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F77DFD  ld (0x21d7),XWA
 	ret	; F77E01  ret
 	scf	; F77E02  scf
 	ld	a, 201:opc	; F77E03  ld A,0xc9
@@ -182266,9 +182266,9 @@ sub_F77EE7:
 	ld	(Disk_FileName+10:16), 68	; F77EFA  ld (0x21d2),0x44
 sub_F77EE7_Skip:
 	ld	xwa, 6334208	; F77EFF  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F77F04  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F77F04  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77F08  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F77F0D  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F77F0D  ld (0x21d7),XWA
 	m_or_mi8 MB16, Disk_Flags, 0x20	; F77F11  or (0x21e7),0x20
 	call	T_DiskApi_ReadFileToWindow_Entry	; F77F16  call 0xf425a8
 	m_and_mi8 MB16, Disk_Flags, 0xdf	; F77F1A  and (0x21e7),0xdf
@@ -182390,9 +182390,9 @@ sub_F77F9A_Skip:
 ; --------------------------------------------------------------------------
 sub_F77FD6:
 	ld	xwa, 6334208	; F77FD6  ld XWA,0x0060a700
-	ld	(8659:16), xwa	; F77FDB  ld (0x21d3),XWA
+	ld	(Disk_WindowStart:16), xwa	; F77FDB  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77FDF  ld XWA,0x0060ab00
-	ld	(8663:16), xwa	; F77FE4  ld (0x21d7),XWA
+	ld	(Disk_WindowEnd:16), xwa	; F77FE4  ld (0x21d7),XWA
 	ret	; F77FE8  ret
 
 ; --------------------------------------------------------------------------

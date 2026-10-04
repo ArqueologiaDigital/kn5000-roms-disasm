@@ -373,6 +373,11 @@ GROUPS = [
     ("wsa1/prom_a/wsa1_prom_a.s", "MIDI_TX_Ready header: the real-time requests", {
         0x00A0: ("MidiTx_RealtimePending", "bits 0-4 queue F8 clock, FA start, FB continue, FC stop, FE active sensing", "MIDI_TX_Ready"),
     }),
+    ("wsa1/prom_a/wsa1_prom_a.s", "DiskApi_ReadFileToWindow header (the window); prom_b DL_F583F0 (the content type)", {
+        0x21D3: ("Disk_WindowStart", "start of the memory window a file is read into / written from (32-bit)", "DiskApi_ReadFileToWindow, DiskLoad_ReadRemapFile"),
+        0x21D7: ("Disk_WindowEnd", "end of that window (32-bit); clamped to start + the file size", "DiskApi_ReadFileToWindow"),
+        0x2725: ("Disk_ContentType", "the SAVE / LOAD content type, 0 ALL .. 8 DRUM MAP", "prom_b DL_F583F0 draws it from DLText_F585AD; DiskLoad_ByContentType"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),

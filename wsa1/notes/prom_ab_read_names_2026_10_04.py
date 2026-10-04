@@ -430,6 +430,57 @@ ROWS = [
     ("FE0207", "Transport_StopAllRunning_SaveRegs2",
      "push XDE / XHL / XIX / XIZ, call T_F409AC (Transport_StopAllRunning), pop, ret.  The bytes after it to the next\n"
      "label are two more such wrappers that nothing calls."),
+    # prom_a 0xFE1D52-0xFE2A21: DISK LOAD / DISK SAVE by content type.  (0x2725) is the content type: the
+    # interpreter-B record at prom_b DL_F583F0 draws it from DLText_F585AD, twelve bytes per entry, which
+    # reads ALL, SEQUENCER, COMBINATION, SOUND, PANEL, MIDI SETTING, SOUND RE-MAP, COMBI RE-MAP, DRUM MAP.
+    # The extension each routine writes to Disk_FileName+8..10 is quoted: the files on disk use THESE, not
+    # the .ALL/.SEQ/... display strings at 0xF58625.
+    ("FE1D52", "DiskLoad_ByContentType",
+     "dispatches on (0x2725): 0 ALL runs every loader below in turn (the sequencer only when Variant_Flag is 1),\n"
+     "1 DiskLoad_Sequencer, 2 _Combination, 3 _Sound, 4 _PanelLswFile + _PanelSlsFile, 5 _MidiSetting,\n"
+     "6 _SoundRemap, 7 _CombiRemap, 8 _DrumMap; anything else returns 4."),
+    ("FE2531", "DiskSave_ByContentType",
+     "the same dispatch on (0x2725) for saving: 1 DiskSave_Sequencer, 2 _Combination, 3 _Sound, 4 _PanelLswFile +\n"
+     "_PanelSlsFile, 5 _MidiSetting, 6 _SoundRemap, 7 _CombiRemap, 8 _DrumMap; 0 ALL, all of them."),
+    ("FE2368", "DiskLoad_Sequencer", "content type 1: T_F41EF8 (saving registers); result (0x23CB), 0x1D read as 1."),
+    ("FE2CBF", "DiskSave_Sequencer", "content type 1: sub_FE0046; result (0x23CB)."),
+    ("FE202F", "DiskLoad_Sound",
+     "content type 3: extension 'TM ', DiskLoad_ReadFileIntoWindow, DiskLoad_CheckSoundRamTag ('WSA SOUND RAM S0'),\n"
+     "then sub_FE20E1 moves 0x40000 bytes to 0xE80000 in 0x100-byte blocks and Link_SendAfterSoundRamLoadMsg."),
+    ("FE2092", "DiskLoad_Combination",
+     "content type 2: extension 'CMB', DiskLoad_CheckCombiTag ('WSA1'), sub_FE20E1 moves 0x16300 bytes to 0xEC0000\n"
+     "in 0x58-byte blocks, T_Queue2E00_PostParam98Fields."),
+    ("FE1EF1", "DiskLoad_MidiSetting", "content type 5: extension 'MDS', read into the window, then copied out in 9-byte pieces."),
+    ("FE23BD", "DiskLoad_SoundRemap", "content type 6: extension 'S' + 'RM', DiskLoad_ReadRemapFile, 0x230 (0x650 for a '1' file) bytes to 0x5210."),
+    ("FE23EA", "DiskLoad_CombiRemap", "content type 7: extension 'C' + 'RM', DiskLoad_ReadRemapFile, the same lengths to 0x5860."),
+    ("FE2417", "DiskLoad_DrumMap", "content type 8: extension 'D' + 'RM', DiskLoad_ReadRemapFile, 0x1D0 bytes to 0x5EB0."),
+    ("FE2484", "DiskLoad_ReadRemapFile",
+     "extension bytes 9-10 = 'RM', window 0x60A700..+0x800, Disk_Flags bit 1 clear, DiskApi_ReadFileToWindow; 1 on success."),
+    ("FE24BE", "DiskLoad_CopyBufferWords", "copies arg-2 bytes (as words) from the buffer 0x60A700 to the arg-1 address."),
+    ("FE292D", "DiskSave_CopyWordsToBuffer", "the reverse: arg-2 bytes (as words) from the arg-1 address to the buffer 0x60A700."),
+    ("FE1E3C", "DiskLoad_PanelLswFile",
+     "content type 4, first file: extension 'LSW', read through DiskLoad_ReadFileIntoWindow, checked by sub_FE2DDD\n"
+     "(0x10 when it refuses), read again and applied by sub_FE1EC3 + DiskLoad_ApplyPanelImage."),
+    ("FE2430", "DiskLoad_PanelSlsFile",
+     "content type 4, second file: extension 'SLS', into the window 0x60A700..+0x800, 0x600 bytes copied to 0x7000."),
+    ("FE26E2", "DiskSave_PanelLswFile",
+     "content type 4: DiskApi_CheckFreeSpace for the size in (0x760A)/(0x760B), extension 'LSW', DiskSave_WriteWindowToFile."),
+    ("FE28D5", "DiskSave_PanelSlsFile",
+     "content type 4: 0x600 bytes from 0x7000 to the buffer 0x60A700, extension 'SLS', DiskSave_WriteWindowToFile."),
+    ("FE2993", "DiskSave_Sound", "content type 3: extension 'TM ' (the file DiskLoad_Sound reads)."),
+    ("FE2A21", "DiskSave_Combination", "content type 2: extension 'CMB'."),
+    ("FE2736", "DiskSave_MidiSetting", "content type 5: extension 'MDS'."),
+    ("FE2863", "DiskSave_SoundRemap", "content type 6: extension 'S', then DiskSave_WriteRemapFile."),
+    ("FE288B", "DiskSave_CombiRemap", "content type 7: extension 'C', then DiskSave_WriteRemapFile."),
+    ("FE28B3", "DiskSave_DrumMap", "content type 8: extension 'D', then DiskSave_WriteRemapFile."),
+    ("FE2916", "DiskSave_WriteRemapFile", "extension bytes 9-10 = 'RM', then the write."),
+    ("FE1E29", "DiskLoad_ReadFileIntoWindow",
+     "sub_FE2F86, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow."),
+    ("FE2980", "DiskSave_WriteWindowToFile",
+     "sub_FE2F86, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow."),
+    ("FE1FFF", "DiskLoad_ApplyPanelImage",
+     "Disk_Flags |= 0x18 around: ParamImage_WriteRecordHeaders, ParamImage_SanitizeAllAndHook, ParamImage_QueueDiffAll,\n"
+     "Queue2C00_DrainPassB, MidiIn_ServiceDeferred, UiEventList_Publish; returns 1.  Called after the LSW file is read."),
 ]
 
 
