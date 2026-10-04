@@ -4127,6 +4127,14 @@ RENAMES = {
     "sub_FEF938": "EditScreen_DrawBeatNumbers",
     "sub_FEFDE5": "EditScreen_DrawDataEndMarker",
     "sub_FEF926": "EditScreen_DrawHeaderAndGrid",
+    "sub_FEF8AC": "EditScreen_PaintLayer0",
+    "sub_FEF8BE": "EditScreen_PaintLayer1",
+    "sub_FEF8CA": "EditScreen_PaintLayer2",
+    "sub_FEF778": "EditScreen_EraseFieldRow",
+    "sub_FEF796": "EditScreen_EraseMarkerStrip",
+    "sub_FEF7B4": "EditScreen_EraseHeaderRow",
+    "sub_FEF83B": "EditScreen_EraseLengthCell",
+    "sub_FEF88B": "EditScreen_EraseRowLabelArea",
 }
 
 

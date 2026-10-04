@@ -177039,9 +177039,9 @@ EditScreen_EnterNoteEdit:
 	swi 7                                                ; FE8A85  ff
 	ld a, 0x10:opc                                          ; FE8A86  21 10
 	swi 7                                                ; FE8A88  ff
-	calr sub_FEF8AC                                          ; FE8A89  1e 20 6e
-	calr sub_FEF8BE                                          ; FE8A8C  1e 2f 6e
-	calr sub_FEF8CA                                          ; FE8A8F  1e 38 6e
+	calr EditScreen_PaintLayer0                                          ; FE8A89  1e 20 6e
+	calr EditScreen_PaintLayer1                                          ; FE8A8C  1e 2f 6e
+	calr EditScreen_PaintLayer2                                          ; FE8A8F  1e 38 6e
 	ld c, 0x07:opc                                          ; FE8A92  23 07
 	ld a, 0x0c:opc                                          ; FE8A94  21 0c
 	swi 7                                                ; FE8A96  ff
@@ -177902,7 +177902,7 @@ EditScreen_StepCursorAfterEntry:
 	cp (EditCursor_TickInMeasure:24), wa                             ; FE92A5  d2 54 1f 60 f8
 	jr nc, .LFE92B9                                      ; FE92AA  6f 0d
 	calr EditCursor_SplitViewTick                                          ; FE92AC  1e 94 14
-	calr sub_FEF778                                          ; FE92AF  1e c6 64
+	calr EditScreen_EraseFieldRow                                          ; FE92AF  1e c6 64
 	calr EditScreen_DrawFields                                          ; FE92B2  1e 21 66
 	calr EditScreen_RedrawCursorLayer                                          ; FE92B5  1e d2 6a
 	ret                                                  ; FE92B8  0e
@@ -178011,11 +178011,11 @@ EditScreen_ReloadMeasureView:   ; entry: named by 2 `.long` operands, first at 0
 	calr sub_FE8CB4                                          ; FE9372  1e 3f f9
 	calr sub_FE8A9B                                          ; FE9375  1e 23 f7
 	calr EditScreen_SelectEventAtCursor                                          ; FE9378  1e 96 fb
-	calr sub_FEF7B4                                          ; FE937B  1e 36 64
+	calr EditScreen_EraseHeaderRow                                          ; FE937B  1e 36 64
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE937E  1e a5 65
 	calr EditScreen_RedrawCursorLayer                                          ; FE9381  1e 06 6a
 	calr EditScreen_DrawVisibleNotes                                          ; FE9384  1e 38 6b
-	calr sub_FEF778                                          ; FE9387  1e ee 63
+	calr EditScreen_EraseFieldRow                                          ; FE9387  1e ee 63
 	calr EditScreen_DrawFields                                          ; FE938A  1e 49 65
 	ret                                                  ; FE938D  0e
 sub_FE938E:
@@ -178164,12 +178164,12 @@ EditScreen_ShowCursorMeasure:
 	calr EditScreen_BuildBeatTable                                          ; FE9534  1e b2 f5
 	calr EditCursor_SeekToTick                                      ; FE9537  1e ad 03
 	calr EditScreen_SelectEventAtCursor                                          ; FE953A  1e d4 f9
-	calr sub_FEF7B4                                          ; FE953D  1e 74 62
+	calr EditScreen_EraseHeaderRow                                          ; FE953D  1e 74 62
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE9540  1e e3 63
 	calr EditScreen_RedrawCursorLayer                                          ; FE9543  1e 44 68
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9546  1e 89 62
 	calr EditScreen_DrawVisibleNotes                                          ; FE9549  1e 73 69
-	calr sub_FEF778                                          ; FE954C  1e 29 62
+	calr EditScreen_EraseFieldRow                                          ; FE954C  1e 29 62
 	calr EditScreen_DrawFields                                          ; FE954F  1e 84 63
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9552  f2 5b 1f 60 c8
 	jr z, .LFE955C                                       ; FE9557  66 03
@@ -178207,12 +178207,12 @@ EditScreen_WrapAndShowCursorMeasure:
 	calr sub_FE8CB4                                          ; FE959F  1e 12 f7
 	calr sub_FE8A9B                                          ; FE95A2  1e f6 f4
 	calr EditScreen_SelectEventAtCursor                                          ; FE95A5  1e 69 f9
-	calr sub_FEF7B4                                          ; FE95A8  1e 09 62
+	calr EditScreen_EraseHeaderRow                                          ; FE95A8  1e 09 62
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE95AB  1e 78 63
 	calr EditScreen_RedrawCursorLayer                                          ; FE95AE  1e d9 67
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE95B1  1e 1e 62
 	calr EditScreen_DrawVisibleNotes                                          ; FE95B4  1e 08 69
-	calr sub_FEF778                                          ; FE95B7  1e be 61
+	calr EditScreen_EraseFieldRow                                          ; FE95B7  1e be 61
 	calr EditScreen_DrawFields                                          ; FE95BA  1e 19 63
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE95BD  f2 5b 1f 60 c8
 	jr z, .LFE95C7                                       ; FE95C2  66 03
@@ -178288,12 +178288,12 @@ EditScreen_ShowPreviousMeasure:
 	calr EditScreen_SeekCursorMeasureStart                                          ; FE9675  1e 5b f8
 	calr EditCursor_ComputeTickInView                                          ; FE9678  1e 5f 08
 	calr EditScreen_SelectEventAtCursor                                          ; FE967B  1e 93 f8
-	calr sub_FEF7B4                                          ; FE967E  1e 33 61
+	calr EditScreen_EraseHeaderRow                                          ; FE967E  1e 33 61
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE9681  1e a2 62
 	calr EditScreen_RedrawCursorLayer                                          ; FE9684  1e 03 67
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9687  1e 48 61
 	calr EditScreen_DrawVisibleNotes                                          ; FE968A  1e 32 68
-	calr sub_FEF778                                          ; FE968D  1e e8 60
+	calr EditScreen_EraseFieldRow                                          ; FE968D  1e e8 60
 	calr EditScreen_DrawFields                                          ; FE9690  1e 43 62
 	ret                                                  ; FE9693  0e
 ; EditScreen_ShowPreviousMeasureAtTick: EditScreen_ShowPreviousMeasure with EditCursor_SeekToTick before the re-selection.  Called by
@@ -178315,12 +178315,12 @@ EditScreen_ShowPreviousMeasureAtTick:
 	calr EditCursor_ComputeTickInView                                          ; FE96C4  1e 13 08
 	calr EditCursor_SeekToTick                                      ; FE96C7  1e 1d 02
 	calr EditScreen_SelectEventAtCursor                                          ; FE96CA  1e 44 f8
-	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
+	calr EditScreen_EraseHeaderRow                                          ; FE96CD  1e e4 60
 	calr EditScreen_DrawHeaderAndGrid                                          ; FE96D0  1e 53 62
 	calr EditScreen_RedrawCursorLayer                                          ; FE96D3  1e b4 66
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE96D6  1e f9 60
 	calr EditScreen_DrawVisibleNotes                                          ; FE96D9  1e e3 67
-	calr sub_FEF778                                          ; FE96DC  1e 99 60
+	calr EditScreen_EraseFieldRow                                          ; FE96DC  1e 99 60
 	calr EditScreen_DrawFields                                          ; FE96DF  1e f4 61
 	ret                                                  ; FE96E2  0e
 ; EditScreen_SeekPartSavedCursor: BStore_CursorBlock = word 0x60347E[EditScreen_Part], BStore_CursorOffset = byte 0x6034A0[EditScreen_Part]: the
@@ -179031,11 +179031,11 @@ EditCursor_MeasureMinus1:
 ; EditCursor_MeasureChanged: redraws the measure (EditScreen_DrawMeasure between the bottom-row erases), (0x601F54) = 0, erases the edit area on
 ;   both layers, EditCursor_Beat = EditCursor_Tick = 0, (0x601F58) = 0x82, (0x601F59) = 0.  Called by the MEAS +-1 / +-10 steps.
 EditCursor_MeasureChanged:
-	calr sub_FEF778                                          ; FE9D2E  1e 47 5a
+	calr EditScreen_EraseFieldRow                                          ; FE9D2E  1e 47 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D31  1e 55 6c
-	calr sub_FEF796                                          ; FE9D34  1e 5f 5a
+	calr EditScreen_EraseMarkerStrip                                          ; FE9D34  1e 5f 5a
 	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
-	calr sub_FEF7B4                                          ; FE9D3E  1e 73 5a
+	calr EditScreen_EraseHeaderRow                                          ; FE9D3E  1e 73 5a
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D41  1e 8e 5a
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D44  1e 12 5b
 	xor WA,WA                                            ; FE9D47  d8 d0
@@ -179046,11 +179046,11 @@ EditCursor_MeasureChanged:
 	ret                                                  ; FE9D5F  0e
 ; EditCursor_MeasureChangedByCursor: the same with (0x601F58) = 0x81; called only by EditScreen_CursorRight.
 EditCursor_MeasureChangedByCursor:
-	calr sub_FEF778                                          ; FE9D60  1e 15 5a
+	calr EditScreen_EraseFieldRow                                          ; FE9D60  1e 15 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D63  1e 23 6c
-	calr sub_FEF796                                          ; FE9D66  1e 2d 5a
+	calr EditScreen_EraseMarkerStrip                                          ; FE9D66  1e 2d 5a
 	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
-	calr sub_FEF7B4                                          ; FE9D70  1e 41 5a
+	calr EditScreen_EraseHeaderRow                                          ; FE9D70  1e 41 5a
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D73  1e 5c 5a
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D76  1e e0 5a
 	xor WA,WA                                            ; FE9D79  d8 d0
@@ -179174,7 +179174,7 @@ EditCursor_NextBeat:
 	jr nz, .LFE9E85                                      ; FE9EB5  6e ce
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9EB7  1e c8 01
 	ret                                                  ; FE9EBA  0e
-; EditCursor_RecomputeAndRedraw: EditCursor_ComputeTickInView; inside the view: the cursor layer erased (sub_FEF796),
+; EditCursor_RecomputeAndRedraw: EditCursor_ComputeTickInView; inside the view: the cursor layer erased (EditScreen_EraseMarkerStrip),
 ;   EditScreen_DrawCursorTickMarker, the left rule, EditScreen_DrawDataEndMarker.  Called by every EditCursor_Tick* / *Beat move.
 EditCursor_RecomputeAndRedraw:
 	calr EditCursor_ComputeTickInView                                      ; FE9EBB  1e 1c 00
@@ -179182,7 +179182,7 @@ EditCursor_RecomputeAndRedraw:
 	mul C,0x60                                           ; FE9EC3  cb 08 60
 	cp (EditCursor_TickInMeasure:24), bc                             ; FE9EC6  d2 54 1f 60 f9
 	jr nc, .LFE9ED9                                      ; FE9ECB  6f 0c
-	calr sub_FEF796                                          ; FE9ECD  1e c6 58
+	calr EditScreen_EraseMarkerStrip                                          ; FE9ECD  1e c6 58
 	calr EditScreen_DrawCursorTickMarker                                          ; FE9ED0  1e d9 5e
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FE9ED3  1e 83 5f
 	calr EditScreen_DrawDataEndMarker                                          ; FE9ED6  1e 0c 5f
@@ -179854,7 +179854,7 @@ EditCursor_LandOnNote:
 .LFEA4F9:
 	calr EditCursor_SplitViewTick                                      ; FEA4F9  1e 47 02
 	calr EditScreen_SelectEventAtCursor                                          ; FEA4FC  1e 12 ea
-	calr sub_FEF778                                          ; FEA4FF  1e 76 52
+	calr EditScreen_EraseFieldRow                                          ; FEA4FF  1e 76 52
 	calr EditScreen_DrawFields                                          ; FEA502  1e d1 53
 	calr EditScreen_RedrawCursorLayer                                          ; FEA505  1e 82 58
 	calr EditScreen_AuditionEvent                                      ; FEA508  1e 2a 00
@@ -179873,7 +179873,7 @@ EditCursor_LandOnGrid:
 	calr BStore_CursorSlot_Restore                                          ; FEA525  1e ed e7
 	calr EditScreen_RedrawCursorLayer                                          ; FEA528  1e 5f 58
 	calr EditCursor_SplitViewTick                                      ; FEA52B  1e 15 02
-	calr sub_FEF778                                          ; FEA52E  1e 47 52
+	calr EditScreen_EraseFieldRow                                          ; FEA52E  1e 47 52
 	calr EditScreen_DrawFields                                          ; FEA531  1e a2 53
 	ret                                                  ; FEA534  0e
 ; EditScreen_AuditionEvent: EditScreen_EndAudition, EditScreen_AuditionEventNote, EditScreen_ActionTimer2 = 0x82 (end it two ticks
@@ -180420,7 +180420,7 @@ EditScreen_LcdKeyRow4:
 	ld (BStore_CursorOffset:16), bc                                  ; FEAA5B  f1 5e 34 51
 .LFEAA5F:
 	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAA5F  c2 5b 1f 60 3c fe
-	calr sub_FEF778                                          ; FEAA65  1e 10 4d
+	calr EditScreen_EraseFieldRow                                          ; FEAA65  1e 10 4d
 	calr EditScreen_DrawFields                                          ; FEAA68  1e 6b 4e
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAA6B  1e 64 4d
 	calr EditScreen_DrawVisibleNotes                                          ; FEAA6E  1e 4e 54
@@ -180826,7 +180826,7 @@ EditCursor_NextBeatStart:
 	calr BStore_CursorSlot_Restore                                          ; FEAE3C  1e d6 de
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FEAE3F  c1 4a 0d 3f 00
 	jr nz, .LFEAE50                                      ; FEAE44  6e 0a
-	calr sub_FEF778                                          ; FEAE46  1e 2f 49
+	calr EditScreen_EraseFieldRow                                          ; FEAE46  1e 2f 49
 	calr EditScreen_DrawFields                                          ; FEAE49  1e 8a 4a
 	calr EditScreen_RedrawCursorLayer                                          ; FEAE4C  1e 3b 4f
 	ret                                                  ; FEAE4F  0e
@@ -180857,7 +180857,7 @@ EditCursor_PrevBeatStart:
 	popw wa                                              ; FEAE88  48
 	ld (EditField_Inc:24), wa                                ; FEAE89  f2 4d 1f 60 50
 	calr EditCursor_SplitViewTick                                      ; FEAE8E  1e b2 f8
-	calr sub_FEF778                                          ; FEAE91  1e e4 48
+	calr EditScreen_EraseFieldRow                                          ; FEAE91  1e e4 48
 	calr EditScreen_DrawFields                                          ; FEAE94  1e 3f 4a
 	calr EditScreen_RedrawCursorLayer                                          ; FEAE97  1e f0 4e
 	ret                                                  ; FEAE9A  0e
@@ -180887,7 +180887,7 @@ DrumEdit_RowFollowNoteUp:
 	calr EditScreen_EraseLeftColumn_Layer1                                          ; FEAED9  1e 91 49
 	calr EditScreen_HighlightCursorRow                                      ; FEAEDC  1e 5e 01
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAEDF  1e 77 49
-	calr sub_FEF778                                          ; FEAEE2  1e 93 48
+	calr EditScreen_EraseFieldRow                                          ; FEAEE2  1e 93 48
 	calr EditScreen_DrawFields                                          ; FEAEE5  1e ee 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAEE8  1e 9f 4e
 	calr DrumEdit_AuditionRow                                      ; FEAEEB  1e 54 f6
@@ -180903,7 +180903,7 @@ DrumEdit_RowFollowNoteUp:
 	calr DrumEdit_RedrawRowList                                      ; FEAF0F  1e 57 01
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAF12  1e bd 48
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF15  1e 41 49
-	calr sub_FEF778                                          ; FEAF18  1e 5d 48
+	calr EditScreen_EraseFieldRow                                          ; FEAF18  1e 5d 48
 	calr EditScreen_DrawFields                                          ; FEAF1B  1e b8 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAF1E  1e 69 4e
 	calr DrumEdit_AuditionRow                                      ; FEAF21  1e 1e f6
@@ -180937,7 +180937,7 @@ DrumEdit_RowFollowNoteDown:
 	calr EditScreen_EraseLeftColumn_Layer1                                          ; FEAF67  1e 03 49
 	calr EditScreen_HighlightCursorRow                                      ; FEAF6A  1e d0 00
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF6D  1e e9 48
-	calr sub_FEF778                                          ; FEAF70  1e 05 48
+	calr EditScreen_EraseFieldRow                                          ; FEAF70  1e 05 48
 	calr EditScreen_DrawFields                                          ; FEAF73  1e 60 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAF76  1e 11 4e
 	calr DrumEdit_AuditionRow                                      ; FEAF79  1e c6 f5
@@ -180953,7 +180953,7 @@ DrumEdit_RowFollowNoteDown:
 	calr DrumEdit_RedrawRowList                                      ; FEAF9D  1e c9 00
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAFA0  1e 2f 48
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAFA3  1e b3 48
-	calr sub_FEF778                                          ; FEAFA6  1e cf 47
+	calr EditScreen_EraseFieldRow                                          ; FEAFA6  1e cf 47
 	calr EditScreen_DrawFields                                          ; FEAFA9  1e 2a 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAFAC  1e db 4d
 	calr DrumEdit_AuditionRow                                      ; FEAFAF  1e 90 f5
@@ -181033,11 +181033,11 @@ EditScreen_HighlightCursorRow:
 	ld a, 0x05:opc                                          ; FEB065  21 05
 	swi 7                                                ; FEB067  ff
 	ret                                                  ; FEB068  0e
-; DrumEdit_RedrawRowList: DRUM EDIT: the left column erased (sub_FEF88B), DrumEdit_DrawRowNotes, sub_FEB280.
+; DrumEdit_RedrawRowList: DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, sub_FEB280.
 DrumEdit_RedrawRowList:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEB069  f2 70 1f 60 c8
 	jr z, .LFEB079                                       ; FEB06E  66 09
-	calr sub_FEF88B                                          ; FEB070  1e 18 48
+	calr EditScreen_EraseRowLabelArea                                          ; FEB070  1e 18 48
 	calr DrumEdit_DrawRowNotes                                      ; FEB073  1e 04 00
 	calr sub_FEB280                                          ; FEB076  1e 07 02
 .LFEB079:
@@ -183717,7 +183717,7 @@ sub_FEF758:
 ; ---------------------------------------------------------------------
 sub_FEF761:
 	ld XIY,DisplayList_FEF770                            ; FEF761  45 70 f7 fe 00
-	ld XIX,sub_FEF778                                    ; FEF766  44 78 f7 fe 00
+	ld XIX,EditScreen_EraseFieldRow                                    ; FEF766  44 78 f7 fe 00
 	call T_DisplayList_Run                               ; FEF76B  1d f0 17 f4
 	ret                                                  ; FEF76F  0e
 
@@ -183726,7 +183726,7 @@ sub_FEF761:
 DisplayList_FEF770:
 	.byte 0x0E, 0x08                               ; FEF770  op 0E, 8 bytes, handler 0xF31A9F
 	.byte 0x00, 0x00, 0x28, 0x00, 0xF0, 0x00  ; FEF772
-; sub_FEF778 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_EraseFieldRow -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 5
 ; instructions to its first `ret`:
@@ -183742,10 +183742,11 @@ DisplayList_FEF770:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF778:
+; EditScreen_EraseFieldRow: layer 0, DisplayList_FEF78C: EraseRect (8, 0xB2)-(0xE8, 0xC0), the value row at the bottom.
+EditScreen_EraseFieldRow:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF778  f1 40 25 00 00
 	ld XIY,DisplayList_FEF78C                                    ; FEF77D  45 8c f7 fe 00
-	ld XIX,sub_FEF796                                    ; FEF782  44 96 f7 fe 00
+	ld XIX,EditScreen_EraseMarkerStrip                                    ; FEF782  44 96 f7 fe 00
 	call T_DisplayList_Run                               ; FEF787  1d f0 17 f4
 	ret                                                  ; FEF78B  0e
 
@@ -183754,7 +183755,7 @@ sub_FEF778:
 DisplayList_FEF78C:
 	.byte 0x1B, 0x0A                               ; FEF78C  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x08, 0x00, 0xB2, 0x00, 0xE8, 0x00, 0xC0, 0x00  ; FEF78E
-; sub_FEF796 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_EraseMarkerStrip -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 5
 ; instructions to its first `ret`:
@@ -183770,10 +183771,12 @@ DisplayList_FEF78C:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF796:
+; EditScreen_EraseMarkerStrip: layer 1, DisplayList_FEF7AA: EraseRect (0, 0x21)-(0x108, 0x27), the strip the cursor tick marker (y 0x22) and
+;   the data-end marker (y 0x21) are drawn in.
+EditScreen_EraseMarkerStrip:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF796  f1 40 25 00 01
 	ld XIY,DisplayList_FEF7AA                                    ; FEF79B  45 aa f7 fe 00
-	ld XIX,sub_FEF7B4                                    ; FEF7A0  44 b4 f7 fe 00
+	ld XIX,EditScreen_EraseHeaderRow                                    ; FEF7A0  44 b4 f7 fe 00
 	call T_DisplayList_Run                               ; FEF7A5  1d f0 17 f4
 	ret                                                  ; FEF7A9  0e
 
@@ -183782,7 +183785,7 @@ sub_FEF796:
 DisplayList_FEF7AA:
 	.byte 0x1B, 0x0A                               ; FEF7AA  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x21, 0x00, 0x08, 0x01, 0x27, 0x00  ; FEF7AC
-; sub_FEF7B4 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_EraseHeaderRow -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 5
 ; instructions to its first `ret`:
@@ -183798,7 +183801,8 @@ DisplayList_FEF7AA:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF7B4:
+; EditScreen_EraseHeaderRow: layer 0, DisplayList_FEF7C8: EraseRect (0, 0x14)-(0x108, 0x1F), the beat-number row (y 0x18).
+EditScreen_EraseHeaderRow:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF7B4  f1 40 25 00 00
 	ld XIY,DisplayList_FEF7C8                            ; FEF7B9  45 c8 f7 fe 00
 	ld XIX,EditScreen_EraseEditArea_Layer0                                    ; FEF7BE  44 d2 f7 fe 00
@@ -183901,7 +183905,7 @@ DisplayList_FEF813:
 sub_FEF81D:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF81D  f1 40 25 00 00
 	ld XIY,DisplayList_FEF831                                    ; FEF822  45 31 f8 fe 00
-	ld XIX,sub_FEF83B                                    ; FEF827  44 3b f8 fe 00
+	ld XIX,EditScreen_EraseLengthCell                                    ; FEF827  44 3b f8 fe 00
 	call T_DisplayList_Run                               ; FEF82C  1d f0 17 f4
 	ret                                                  ; FEF830  0e
 
@@ -183910,7 +183914,7 @@ sub_FEF81D:
 DisplayList_FEF831:
 	.byte 0x1B, 0x0A                               ; FEF831  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x78, 0x00, 0xB2, 0x00, 0x80, 0x00, 0xC0, 0x00  ; FEF833
-; sub_FEF83B -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_EraseLengthCell -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 5
 ; instructions to its first `ret`:
@@ -183926,7 +183930,9 @@ DisplayList_FEF831:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF83B:
+; EditScreen_EraseLengthCell: layer 0, DisplayList_FEF84F: EraseRect (0xA0, 0xB2)-(0xC8, 0xC0).  Called by EditScreen_DrawEventLength /
+;   _DrawNewNoteLength.
+EditScreen_EraseLengthCell:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF83B  f1 40 25 00 00
 	ld XIY,DisplayList_FEF84F                                    ; FEF840  45 4f f8 fe 00
 	ld XIX,EditScreen_EraseEditArea_Layer1                                    ; FEF845  44 59 f8 fe 00
@@ -183969,7 +183975,7 @@ EditScreen_EraseEditArea_Layer1:
 EditScreen_EraseLeftColumn_Layer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF86D  f1 40 25 00 01
 	ld XIY,DisplayList_FEF881                            ; FEF872  45 81 f8 fe 00
-	ld XIX,sub_FEF88B                                    ; FEF877  44 8b f8 fe 00
+	ld XIX,EditScreen_EraseRowLabelArea                                    ; FEF877  44 8b f8 fe 00
 	call T_DisplayList_Run                               ; FEF87C  1d f0 17 f4
 	ret                                                  ; FEF880  0e
 
@@ -183978,7 +183984,8 @@ EditScreen_EraseLeftColumn_Layer1:
 DisplayList_FEF881:
 	.byte 0x1B, 0x0A                               ; FEF881  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x00, 0x00, 0x2A, 0x00, 0x16, 0x00, 0xA3, 0x00  ; FEF883
-sub_FEF88B:
+; EditScreen_EraseRowLabelArea: layer 0, DisplayList_FEF89F: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws.
+EditScreen_EraseRowLabelArea:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF88B  f1 40 25 00 00
 	ld XIY,DisplayList_FEF89F                            ; FEF890  45 9f f8 fe 00
 	ld XIX,sub_FEF8A9                                    ; FEF895  44 a9 f8 fe 00
@@ -184009,19 +184016,23 @@ DisplayList_FEF89F:
 	.byte 0x00, 0x00, 0x29, 0x00, 0x58, 0x00, 0xA3, 0x00  ; FEF8A1
 sub_FEF8A9:   ; entry: named by 1 `ld` operand, first at 0xFEF895
 	calr sub_FEF746                                          ; FEF8A9  1e 9a fe
-sub_FEF8AC:
+; EditScreen_PaintLayer0: layer 0: EditScreen_DrawFields, EditScreen_DrawVisibleNotes, EditScreen_DrawHeaderAndGrid.  Called by
+;   EditScreen_EnterNoteEdit.
+EditScreen_PaintLayer0:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF8AC  f1 40 25 00 00
 	calr EditScreen_DrawFields                                      ; FEF8B1  1e 22 00
 	calr EditScreen_DrawVisibleNotes                                          ; FEF8B4  1e 08 06
 	calr EditScreen_DrawHeaderAndGrid                                      ; FEF8B7  1e 6c 00
 	ret                                                  ; FEF8BA  0e
 	calr sub_FEF74F                                          ; FEF8BB  1e 91 fe
-sub_FEF8BE:
+; EditScreen_PaintLayer1: layer 1: EditScreen_RedrawCursorLayer.
+EditScreen_PaintLayer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF8BE  f1 40 25 00 01
 	calr EditScreen_RedrawCursorLayer                                          ; FEF8C3  1e c4 04
 	ret                                                  ; FEF8C6  0e
 	calr sub_FEF758                                          ; FEF8C7  1e 8e fe
-sub_FEF8CA:
+; EditScreen_PaintLayer2: layer 2: EditScreen_PaintStaticLayer, EditScreen_DrawRulersAndLegend.
+EditScreen_PaintLayer2:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FEF8CA  f1 40 25 00 02
 	calr EditScreen_PaintStaticLayer                                          ; FEF8CF  1e 4d 0a
 	calr EditScreen_DrawRulersAndLegend                                          ; FEF8D2  1e de 0a
@@ -184572,7 +184583,7 @@ EditScreen_RedrawCursorLayer:
 	mul C,0x60                                           ; FEFD8F  cb 08 60
 	cp (EditCursor_TickInMeasure:24), bc                             ; FEFD92  d2 54 1f 60 f9
 	jr nc, .LFEFDAB                                      ; FEFD97  6f 12
-	calr sub_FEF796                                          ; FEFD99  1e fa f9
+	calr EditScreen_EraseMarkerStrip                                          ; FEFD99  1e fa f9
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEFD9C  1e ba fa
 	calr EditScreen_DrawSelectedEventBar                                          ; FEFD9F  1e 4b 03
 	calr EditScreen_DrawCursorTickMarker                                      ; FEFDA2  1e 07 00
@@ -186258,10 +186269,10 @@ DisplayList_FF0BE1:
 ;          zeroes their index (0x26B0) before each run, so they draw "v" before the value's digits.  It is also
 ;          where DisplayList_FF0BE1 ends (EditScreen_DrawEventVelocity's XIX).  Was decoded as `jrl z` with the routine below.
 Str_v:	.ascii	"v"	; FF0BF0
-; EditScreen_DrawEventLength: layer 0: the cell erased (sub_FEF83B); EditField_Length drawn, 4-digit layout below 10000, 5-digit above.
+; EditScreen_DrawEventLength: layer 0: the cell erased (EditScreen_EraseLengthCell); EditField_Length drawn, 4-digit layout below 10000, 5-digit above.
 EditScreen_DrawEventLength:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0BF1  f1 40 25 00 00
-	calr sub_FEF83B                                          ; FF0BF6  1e 42 ec
+	calr EditScreen_EraseLengthCell                                          ; FF0BF6  1e 42 ec
 	ld wa, (EditField_Length:24)                                ; FF0BF9  d2 47 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0BFE  f1 b0 26 50
 	m_cp_mi16 MW16, 0x26b0, 0x2710                       ; FF0C02  d1 b0 26 3f 10 27
@@ -186274,7 +186285,7 @@ EditScreen_DrawEventLength:
 ; EditScreen_DrawNewNoteLength: the same for EditField_NewNoteLength.
 EditScreen_DrawNewNoteLength:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0C12  f1 40 25 00 00
-	calr sub_FEF83B                                          ; FF0C17  1e 21 ec
+	calr EditScreen_EraseLengthCell                                          ; FF0C17  1e 21 ec
 	ld wa, (EditField_NewNoteLength:24)                                ; FF0C1A  d2 49 1f 60 20
 	ld (0x26b0:16), wa                                  ; FF0C1F  f1 b0 26 50
 	m_cp_mi16 MW16, 0x26b0, 0x2710                       ; FF0C23  d1 b0 26 3f 10 27

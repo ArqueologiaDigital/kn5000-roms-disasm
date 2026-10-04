@@ -1617,7 +1617,7 @@ ROWS = [
      "EditCursor_Tick, the column found as the first EditScreen_BeatTable entry equal to EditCursor_Measure -\n"
      "(0x601F5D) + 1.  So the table holds, per beat column shown, the 1-based measure the column belongs to."),
     ("FE9EBB", "EditCursor_RecomputeAndRedraw",
-     "EditCursor_ComputeTickInView; inside the view: the cursor layer erased (sub_FEF796),\n"
+     "EditCursor_ComputeTickInView; inside the view: the cursor layer erased (EditScreen_EraseMarkerStrip),\n"
      "EditScreen_DrawCursorTickMarker, the left rule, EditScreen_DrawDataEndMarker.  Called by every EditCursor_Tick* / *Beat move."),
     ("FEA082", "EditScreen_QueueRelocateAfterMove",
      "with an event selected: EditScreen_ActionTimer = 0x85, EditScreen_ActionIndex = 1 -- deferred action 1 five\n"
@@ -1666,7 +1666,7 @@ ROWS = [
      "EditScreen_AuditionEvent, EditScreen_ActionTimer2 = 0x82.  Called by DrumEdit_SoftKeyCol8 after it enters a\n"
      "note."),
     ("FEB069", "DrumEdit_RedrawRowList",
-     "DRUM EDIT: the left column erased (sub_FEF88B), DrumEdit_DrawRowNotes, sub_FEB280."),
+     "DRUM EDIT: the left column erased (EditScreen_EraseRowLabelArea), DrumEdit_DrawRowNotes, sub_FEB280."),
     ("FE9648", "EditScreen_ShowPreviousMeasure",
      "with EditCursor_Measure > 1: the view is rebuilt from the measure before (EditScreen_OpenCursorMeasure and\n"
      "EditScreen_BuildBeatTable with the measure lowered by one, then raised back), the cursor at beat 0 tick 0 of\n"
@@ -1747,7 +1747,7 @@ ROWS = [
      "with an event selected: EditScreen_DrawCursorNote, _DrawEventVelocity; otherwise _DrawNewNoteVelocity; then\n"
      "MEAS / beat / tick and INC."),
     ("FF0BF1", "EditScreen_DrawEventLength",
-     "layer 0: the cell erased (sub_FEF83B); EditField_Length drawn, 4-digit layout below 10000, 5-digit above."),
+     "layer 0: the cell erased (EditScreen_EraseLengthCell); EditField_Length drawn, 4-digit layout below 10000, 5-digit above."),
     ("FF0C12", "EditScreen_DrawNewNoteLength", "the same for EditField_NewNoteLength."),
     ("FF0C33", "EditScreen_DrawLengthBelow10000",
      "(0x26B0) as 1 + 3 digits (thousands at text cell 0x1C0C, the rest at 0x1C0D), or 3 digits below 1000."),
@@ -1765,6 +1765,24 @@ ROWS = [
     ("FEF926", "EditScreen_DrawHeaderAndGrid",
      "layer 0: EditScreen_DrawBeatNumbers, EditScreen_DrawMeasureNumbers, EditScreen_DrawGridLines,\n"
      "EditScreen_DrawMeasureStartLines."),
+    # NOTE / DRUM EDIT: the per-layer paints and the strip erasers (EraseRect records, SWI 7 0x1B)
+    ("FEF8AC", "EditScreen_PaintLayer0",
+     "layer 0: EditScreen_DrawFields, EditScreen_DrawVisibleNotes, EditScreen_DrawHeaderAndGrid.  Called by\n"
+     "EditScreen_EnterNoteEdit."),
+    ("FEF8BE", "EditScreen_PaintLayer1", "layer 1: EditScreen_RedrawCursorLayer."),
+    ("FEF8CA", "EditScreen_PaintLayer2", "layer 2: EditScreen_PaintStaticLayer, EditScreen_DrawRulersAndLegend."),
+    ("FEF778", "EditScreen_EraseFieldRow",
+     "layer 0, DisplayList_FEF78C: EraseRect (8, 0xB2)-(0xE8, 0xC0), the value row at the bottom."),
+    ("FEF796", "EditScreen_EraseMarkerStrip",
+     "layer 1, DisplayList_FEF7AA: EraseRect (0, 0x21)-(0x108, 0x27), the strip the cursor tick marker (y 0x22) and\n"
+     "the data-end marker (y 0x21) are drawn in."),
+    ("FEF7B4", "EditScreen_EraseHeaderRow",
+     "layer 0, DisplayList_FEF7C8: EraseRect (0, 0x14)-(0x108, 0x1F), the beat-number row (y 0x18)."),
+    ("FEF83B", "EditScreen_EraseLengthCell",
+     "layer 0, DisplayList_FEF84F: EraseRect (0xA0, 0xB2)-(0xC8, 0xC0).  Called by EditScreen_DrawEventLength /\n"
+     "_DrawNewNoteLength."),
+    ("FEF88B", "EditScreen_EraseRowLabelArea",
+     "layer 0, DisplayList_FEF89F: EraseRect (0, 0x29)-(0x58, 0xA3), the left area DrumEdit_RedrawRowList redraws."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

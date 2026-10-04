@@ -20,7 +20,7 @@ filtered to targets in this range, returns **56 spans** — and the lists are
 **inline**, sitting immediately after the `ret` of the routine that draws them:
 
 ```
-sub_FEF778:
+EditScreen_EraseFieldRow:
         ld (0x2540),0x00        ; which display layer
         ld XIY,0x00FEF78C       ; list start
         ld XIX,0x00FEF796       ; list end
@@ -29,7 +29,7 @@ sub_FEF778:
 DisplayList_FEF78C:             ; <- the data, 10 bytes, then code again
         .byte 0x1B, 0x0A        ; op 1B, 10 bytes, handler 0xF31A75
         .byte 0x08, 0x00, 0xB2, 0x00, 0xE8, 0x00, 0xC0, 0x00
-sub_FEF796:
+EditScreen_EraseMarkerStrip:
         ld (0x2540),0x01
         ...
 ```
