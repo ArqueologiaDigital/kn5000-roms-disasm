@@ -3390,7 +3390,7 @@ RENAMES = {
     "sub_FAAAE7": "sub_FAAAB5",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAABC7": "sub_FAABB3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAABD9": "sub_FAABB3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FAB64E": "sub_FAB643",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FAB64E": "ProgramChangeMode_OnEvent",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAB7F9": "sub_FAB7E6",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAB8B0": "List2030_Part00to1F_Dispatch",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAC74B": "ParamMsg_ResyncParts_B3_CC0B_Expression",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4324,6 +4324,35 @@ RENAMES = {
     "T_F411D4": "T_NoteRouting_OnMidiSystemEvent",
     "T_F411E0": "T_NoteRouting_SetMidiOutPorts",
     "T_F413DC": "T_NoteRouting_DefaultRecordPtrs",
+    "sub_FAB643": "ProgramChangeMode_OnEvent",
+    "sub_FB5EE9": "GmMode_OnEventPassB",
+    "sub_FB5F0F": "GmMode_PostToMsg0716",
+    "sub_FC182F": "Msg0716_PostGmSystemOnOff",
+    "sub_F914AF": "GmMode_RepaintModeScreen",
+    "sub_FC06FF": "Msg0716_OnPitchBendEvent",
+    "sub_FC075E": "Msg0716_OnChannelPressureEvent",
+    "sub_FBC5F1": "CombiEdit_OnPartParamEvent",
+    "sub_FBC6D0": "CombiEditPage_OnPartParamEvent",
+    "sub_FBC74F": "CombiEditMixer_OnPartParamEvent",
+    "sub_FBCA31": "CombiEditConfigure_OnPartParamEvent",
+    "sub_F0F061": "DspEffect_OnParamEvent",
+    "sub_F0F0FF": "DspEffectEvent_RepaintAndReturn",
+    "sub_F4C3F2": "CreatorSelectController_OpenOnEvent",
+    "sub_F4C42E": "CreatorSelectController_OnPartEvent",
+    "sub_F53DCC": "Drawbar_MarkReloadOnSoundEvent",
+    "sub_F53DF4": "Drawbar_ReloadIfMarked",
+    "T_F4079C": "T_ProgramChangeMode_OnEvent",
+    "T_F408F4": "T_GmMode_OnEventPassB",
+    "T_F4105C": "T_Msg0716_PostGmSystemOnOff",
+    "T_F415A4": "T_GmMode_RepaintModeScreen",
+    "T_F418C8": "T_CombiEdit_OnPartParamEvent",
+    "T_F424F4": "T_Msg0716_OnPitchBendEvent",
+    "T_F42500": "T_Msg0716_OnChannelPressureEvent",
+    "T_F42E54": "T_Drawbar_MarkReloadOnSoundEvent",
+    "T_F42E60": "T_Drawbar_ReloadIfMarked",
+    "T_F42F54": "T_DspEffect_OnParamEvent",
+    "T_F434F0": "T_CreatorSelectController_OpenOnEvent",
+    "T_F434F4": "T_CreatorSelectController_OnPartEvent",
 }
 
 

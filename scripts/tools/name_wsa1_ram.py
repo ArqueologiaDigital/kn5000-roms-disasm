@@ -169,6 +169,10 @@ GROUPS = [
     ("wsa1/prom_b/wsa1_prom_b.s", "EffectAlgoMaps header (0xF133E4)", {
         0x2797: ("Effect_BlockIndex", "which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97", "EffectAlgoMaps: (0x2797) = entry - 97"),
     }),
+    ("wsa1/prom_b/wsa1_prom_b.s", "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers", {
+        0x28A0: ("Drawbar_ReloadMark", "15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it",
+                 "Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked"),
+    }),
     ("wsa1/prom_a/wsa1_prom_a.s", "UiListA_* headers: the payload UiEventList_Run hands the class handlers", {
         0x20B8: ("UiEvent_Byte1", "the event record's byte +1; the message/page number the 0xFC0000 module dispatches on", "UiListA_* headers; MidiIn_ReqRouteRebuild_Msg0D"),
         0x20B9: ("UiEvent_Byte2", "the event record's byte +2", "UiListA_* headers"),

@@ -1232,7 +1232,7 @@
 	.set T_F40790,                                                                      0x00F40790
 	.set T_Tempo_ApplyBpm,                                                                      0x00F40794
 	.set T_ParamMsg_RefreshPartMasks,                                                   0x00F40798
-	.set T_F4079C,                                                                      0x00F4079C
+	.set T_ProgramChangeMode_OnEvent,                                                                      0x00F4079C
 	.set T_F407A0,                                                                      0x00F407A0
 	.set T_F407A4,                                                                      0x00F407A4
 	.set T_F407AC,                                                                      0x00F407AC
@@ -1274,7 +1274,7 @@
 	.set T_SysExRx_PollRing601646,                                                                      0x00F408E8
 	.set T_SysExTx_Tempo,                                                                      0x00F408EC
 	.set T_GmMode_HandleChange,                                                                      0x00F408F0
-	.set T_F408F4,                                                                      0x00F408F4
+	.set T_GmMode_OnEventPassB,                                                                      0x00F408F4
 	.set T_SysExTx_EmitStagedParams,                                                                      0x00F40900
 	.set T_SysExRx_PollRing601C6E,                                                                      0x00F40904
 	.set T_MidiFilePlay_Tick,                                                                      0x00F40950
@@ -1376,7 +1376,7 @@
 	.set T_CombiRemap_ResetToDefault,                                                                      0x00F4104C
 	.set T_DrumMap_ResetToDefault,                                                                      0x00F41050
 	.set T_F41054,                                                                      0x00F41054
-	.set T_F4105C,                                                                      0x00F4105C
+	.set T_Msg0716_PostGmSystemOnOff,                                                                      0x00F4105C
 	.set T_Msg0716_PostSysEx50_92_SaveRegs,                                                                      0x00F41060
 	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13,        0x00F41070
 	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13,      0x00F41074
@@ -1507,7 +1507,7 @@
 	.set T_InstallPainter_GroupCombiDisplayHold_Entry,                                  0x00F41580
 	.set T_F41590,                                                                      0x00F41590
 	.set T_UiEvent_MarkRedrawFromClass20Block,                                          0x00F415A0
-	.set T_F415A4,                                                                      0x00F415A4
+	.set T_GmMode_RepaintModeScreen,                                                                      0x00F415A4
 	.set T_UiEvent_SyncSoundSelection,                                                  0x00F415A8
 	.set T_UiEventClassA8_ShowGroupScreen,                                              0x00F415AC
 	.set T_F415B0,                                                                      0x00F415B0
@@ -1558,7 +1558,7 @@
 	.set T_ScreenEnter_CombiEditInternalSound_B5,                                                                      0x00F41898
 	.set T_ScreenEnter_Effect2OutputConflict,                                                                      0x00F418A8
 	.set T_ScreenEnterBody_CombiEditMixer,                                                                      0x00F418B8
-	.set T_F418C8,                                                                      0x00F418C8
+	.set T_CombiEdit_OnPartParamEvent,                                                                      0x00F418C8
 	.set T_CombiEdit_RunPendingRepaint,                                                                      0x00F418CC
 	.set T_PanelMode_System_Enter,                                                      0x00F41910
 	.set T_Screen_System_Enter,                                                         0x00F41918
@@ -1754,10 +1754,10 @@
 	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26, 0x00F424E8
 	.set T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26, 0x00F424EC
 	.set T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17,                     0x00F424F0
-	.set T_F424F4,                                                                      0x00F424F4
+	.set T_Msg0716_OnPitchBendEvent,                                                                      0x00F424F4
 	.set T_Msg0716_EventPartPostCC01_ModulationIfEnabled,                                                                      0x00F424F8
 	.set T_Msg0716_EventPartPostCC0B_Expression,                                                                      0x00F424FC
-	.set T_F42500,                                                                      0x00F42500
+	.set T_Msg0716_OnChannelPressureEvent,                                                                      0x00F42500
 	.set T_Msg0716_EventPartPostCC40_SustainFromValueIfEnabled,                                                                      0x00F42504
 	.set T_F42508,                                                                      0x00F42508
 	.set T_F4250C,                                                                      0x00F4250C
@@ -1932,8 +1932,8 @@
 	.set T_Blink_Tick,                                                                  0x00F42E2C
 	.set T_Blink_GetState,                                                              0x00F42E30
 	.set T_ScreenEnter_DrawbarScreen,                                                                      0x00F42E44
-	.set T_F42E54,                                                                      0x00F42E54
-	.set T_F42E60,                                                                      0x00F42E60
+	.set T_Drawbar_MarkReloadOnSoundEvent,                                                                      0x00F42E54
+	.set T_Drawbar_ReloadIfMarked,                                                                      0x00F42E60
 	.set T_F42E64,                                                                      0x00F42E64
 	.set T_F42E68,                                                                      0x00F42E68
 	.set T_F42E6C,                                                                      0x00F42E6C
@@ -1947,7 +1947,7 @@
 	.set T_F42F04,                                                                      0x00F42F04
 	.set T_ScreenEnterBody_DspEffect,                                                                      0x00F42F4C
 	.set T_ScreenButtonBody_DspEffect,                                                                      0x00F42F50
-	.set T_F42F54,                                                                      0x00F42F54
+	.set T_DspEffect_OnParamEvent,                                                                      0x00F42F54
 	.set T_DspEffect_ApplyAlgorithmDefaults,                                                                      0x00F42F58
 	.set T_DspEffect_SanitizeBlock,                                                                      0x00F42F5C
 	.set T_ScreenEnterBody_MainOutEqualizer,                                                                      0x00F42F68
@@ -2023,8 +2023,8 @@
 	.set T_Screen_SoundMute_Enter,                                                      0x00F434C0
 	.set T_F434D4,                                                                      0x00F434D4
 	.set T_ScreenEnter_CreatorSelectController,                                                                      0x00F434E0
-	.set T_F434F0,                                                                      0x00F434F0
-	.set T_F434F4,                                                                      0x00F434F4
+	.set T_CreatorSelectController_OpenOnEvent,                                                                      0x00F434F0
+	.set T_CreatorSelectController_OnPartEvent,                                                                      0x00F434F4
 	.set sub_F4F000,                              0x00F4F000
 	.set DrawValueGlyph_Veneer,                   0x00F4F017
 	.set PartSound_StepBankGroupMember,                              0x00F4F02E
@@ -14977,11 +14977,11 @@ UiListB_Class00:
 	.long T_PanelLed_OnPartEvent                              ; F8819A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8819E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881A2  [4]   -> 0xF40754
-	.long T_F418C8                              ; F881A6  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F881A6  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F881AA  [6]   -> 0xF411C0
-	.long T_F42E54                              ; F881AE  [7]   -> 0xF42E54
+	.long T_Drawbar_MarkReloadOnSoundEvent                              ; F881AE  [7]   -> 0xF42E54
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881B2  [8]   -> 0xF40810
-	.long T_F42F54                              ; F881B6  [9]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F881B6  [9]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F881BA  [10]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15002,7 +15002,7 @@ UiListB_Class01:
 	.long T_PanelLed_OnPartEvent                              ; F881C6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881CA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881CE  [4]   -> 0xF40754
-	.long T_F418C8                              ; F881D2  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F881D2  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F881D6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881DA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F881DE  [8]   end of list
@@ -15025,7 +15025,7 @@ UiListB_Class02:
 	.long T_PanelLed_OnPartEvent                              ; F881EA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F881EE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881F2  [4]   -> 0xF40754
-	.long T_F418C8                              ; F881F6  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F881F6  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F881FA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881FE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88202  [8]   end of list
@@ -15048,7 +15048,7 @@ UiListB_Class03:
 	.long T_PanelLed_OnPartEvent                              ; F8820E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88212  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88216  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8821A  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8821A  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8821E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88222  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88226  [8]   end of list
@@ -15071,7 +15071,7 @@ UiListB_Class04:
 	.long T_PanelLed_OnPartEvent                              ; F88232  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88236  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8823A  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8823E  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8823E  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88242  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88246  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8824A  [8]   end of list
@@ -15094,7 +15094,7 @@ UiListB_Class05:
 	.long T_PanelLed_OnPartEvent                              ; F88256  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8825A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8825E  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88262  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88262  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88266  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8826A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8826E  [8]   end of list
@@ -15117,7 +15117,7 @@ UiListB_Class06:
 	.long T_PanelLed_OnPartEvent                              ; F8827A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8827E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88282  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88286  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88286  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8828A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8828E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88292  [8]   end of list
@@ -15140,7 +15140,7 @@ UiListB_Class07:
 	.long T_PanelLed_OnPartEvent                              ; F8829E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882A2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882A6  [4]   -> 0xF40754
-	.long T_F418C8                              ; F882AA  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F882AA  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F882AE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882B2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882B6  [8]   end of list
@@ -15163,7 +15163,7 @@ UiListB_Class08:
 	.long T_PanelLed_OnPartEvent                              ; F882C2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882C6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882CA  [4]   -> 0xF40754
-	.long T_F418C8                              ; F882CE  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F882CE  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F882D2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882D6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882DA  [8]   end of list
@@ -15186,7 +15186,7 @@ UiListB_Class09:
 	.long T_PanelLed_OnPartEvent                              ; F882E6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F882EA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882EE  [4]   -> 0xF40754
-	.long T_F418C8                              ; F882F2  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F882F2  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F882F6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882FA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882FE  [8]   end of list
@@ -15209,7 +15209,7 @@ UiListB_Class0A:
 	.long T_PanelLed_OnPartEvent                              ; F8830A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8830E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88312  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88316  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88316  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8831A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8831E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88322  [8]   end of list
@@ -15232,7 +15232,7 @@ UiListB_Class0B:
 	.long T_PanelLed_OnPartEvent                              ; F8832E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88332  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88336  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8833A  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8833A  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8833E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88342  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88346  [8]   end of list
@@ -15255,7 +15255,7 @@ UiListB_Class0C:
 	.long T_PanelLed_OnPartEvent                              ; F88352  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88356  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8835A  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8835E  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8835E  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88362  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88366  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8836A  [8]   end of list
@@ -15278,7 +15278,7 @@ UiListB_Class0D:
 	.long T_PanelLed_OnPartEvent                              ; F88376  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8837A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8837E  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88382  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88382  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88386  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8838A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8838E  [8]   end of list
@@ -15301,7 +15301,7 @@ UiListB_Class0E:
 	.long T_PanelLed_OnPartEvent                              ; F8839A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8839E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883A2  [4]   -> 0xF40754
-	.long T_F418C8                              ; F883A6  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F883A6  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F883AA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883AE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883B2  [8]   end of list
@@ -15324,7 +15324,7 @@ UiListB_Class0F:
 	.long T_PanelLed_OnPartEvent                              ; F883BE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883C2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883C6  [4]   -> 0xF40754
-	.long T_F418C8                              ; F883CA  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F883CA  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F883CE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883D2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883D6  [8]   end of list
@@ -15347,7 +15347,7 @@ UiListB_Class10:
 	.long T_PanelLed_OnPartEvent                              ; F883E2  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F883E6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883EA  [4]   -> 0xF40754
-	.long T_F418C8                              ; F883EE  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F883EE  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F883F2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883F6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883FA  [8]   end of list
@@ -15370,7 +15370,7 @@ UiListB_Class11:
 	.long T_PanelLed_OnPartEvent                              ; F88406  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8840A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8840E  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88412  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88412  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88416  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8841A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8841E  [8]   end of list
@@ -15393,7 +15393,7 @@ UiListB_Class12:
 	.long T_PanelLed_OnPartEvent                              ; F8842A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8842E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88432  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88436  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88436  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8843A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8843E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88442  [8]   end of list
@@ -15416,7 +15416,7 @@ UiListB_Class13:
 	.long T_PanelLed_OnPartEvent                              ; F8844E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88452  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88456  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8845A  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8845A  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8845E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88462  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88466  [8]   end of list
@@ -15439,7 +15439,7 @@ UiListB_Class14:
 	.long T_PanelLed_OnPartEvent                              ; F88472  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88476  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8847A  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8847E  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8847E  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88482  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88486  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8848A  [8]   end of list
@@ -15462,7 +15462,7 @@ UiListB_Class15:
 	.long T_PanelLed_OnPartEvent                              ; F88496  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8849A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8849E  [4]   -> 0xF40754
-	.long T_F418C8                              ; F884A2  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F884A2  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F884A6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884AA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884AE  [8]   end of list
@@ -15485,7 +15485,7 @@ UiListB_Class16:
 	.long T_PanelLed_OnPartEvent                              ; F884BA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884BE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884C2  [4]   -> 0xF40754
-	.long T_F418C8                              ; F884C6  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F884C6  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F884CA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884CE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884D2  [8]   end of list
@@ -15508,7 +15508,7 @@ UiListB_Class17:
 	.long T_PanelLed_OnPartEvent                              ; F884DE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F884E2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884E6  [4]   -> 0xF40754
-	.long T_F418C8                              ; F884EA  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F884EA  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F884EE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884F2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884F6  [8]   end of list
@@ -15531,7 +15531,7 @@ UiListB_Class18:
 	.long T_PanelLed_OnPartEvent                              ; F88502  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88506  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8850A  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8850E  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8850E  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88512  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88516  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8851A  [8]   end of list
@@ -15554,7 +15554,7 @@ UiListB_Class19:
 	.long T_PanelLed_OnPartEvent                              ; F88526  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8852A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8852E  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88532  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88532  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F88536  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8853A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8853E  [8]   end of list
@@ -15577,7 +15577,7 @@ UiListB_Class1A:
 	.long T_PanelLed_OnPartEvent                              ; F8854A  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F8854E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88552  [4]   -> 0xF40754
-	.long T_F418C8                              ; F88556  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88556  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8855A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8855E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88562  [8]   end of list
@@ -15600,7 +15600,7 @@ UiListB_Class1B:
 	.long T_PanelLed_OnPartEvent                              ; F8856E  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88572  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88576  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8857A  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8857A  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8857E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88582  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88586  [8]   end of list
@@ -15623,7 +15623,7 @@ UiListB_Class1C:
 	.long T_PanelLed_OnPartEvent                              ; F88592  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88596  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8859A  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8859E  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8859E  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F885A2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885A6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885AA  [8]   end of list
@@ -15646,7 +15646,7 @@ UiListB_Class1D:
 	.long T_PanelLed_OnPartEvent                              ; F885B6  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F885BA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885BE  [4]   -> 0xF40754
-	.long T_F418C8                              ; F885C2  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F885C2  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F885C6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885CA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885CE  [8]   end of list
@@ -15669,7 +15669,7 @@ UiListB_Class1E:
 	.long T_PanelLed_OnPartEvent                              ; F885DA  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F885DE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885E2  [4]   -> 0xF40754
-	.long T_F418C8                              ; F885E6  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F885E6  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F885EA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885EE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885F2  [8]   end of list
@@ -15692,7 +15692,7 @@ UiListB_Class1F:
 	.long T_PanelLed_OnPartEvent                              ; F885FE  [2]   -> 0xF4067C
 	.long T_F415B0                              ; F88602  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88606  [4]   -> 0xF40754
-	.long T_F418C8                              ; F8860A  [5]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8860A  [5]   -> 0xF418C8
 	.long T_NoteRouting_OnPartMidiEvent                              ; F8860E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88612  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88616  [8]   end of list
@@ -15713,13 +15713,13 @@ UiListB_Class20:
 	.long T_F42470                              ; F8861A  [0]   -> 0xF42470
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8861E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88622  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88626  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88626  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8862A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8862E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88632  [6]   -> 0xF40810
-	.long T_F42E54                              ; F88636  [7]   -> 0xF42E54
-	.long T_F42F54                              ; F8863A  [8]   -> 0xF42F54
-	.long T_F434F4                              ; F8863E  [9]   -> 0xF434F4
+	.long T_Drawbar_MarkReloadOnSoundEvent                              ; F88636  [7]   -> 0xF42E54
+	.long T_DspEffect_OnParamEvent                              ; F8863A  [8]   -> 0xF42F54
+	.long T_CreatorSelectController_OnPartEvent                              ; F8863E  [9]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88642  [10]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15738,11 +15738,11 @@ UiListB_Class21:
 	.long T_F42474                              ; F88646  [0]   -> 0xF42474
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8864A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8864E  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88652  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88652  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88656  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8865A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8865E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88662  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88662  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88666  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15761,11 +15761,11 @@ UiListB_Class22:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26                              ; F8866A  [0]   -> 0xF42478
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8866E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88672  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88676  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88676  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8867A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8867E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88682  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88686  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88686  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8868A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15784,11 +15784,11 @@ UiListB_Class23:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26                              ; F8868E  [0]   -> 0xF4247C
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88692  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88696  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8869A  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8869A  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8869E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886A2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886A6  [6]   -> 0xF40810
-	.long T_F434F4                              ; F886AA  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F886AA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886AE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15807,11 +15807,11 @@ UiListB_Class24:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26                              ; F886B2  [0]   -> 0xF42480
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886B6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F886BA  [2]   -> 0xF40698
-	.long T_F418C8                              ; F886BE  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F886BE  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F886C2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886C6  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886CA  [6]   -> 0xF40810
-	.long T_F434F4                              ; F886CE  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F886CE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886D2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15830,11 +15830,11 @@ UiListB_Class25:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26                              ; F886D6  [0]   -> 0xF42484
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886DA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F886DE  [2]   -> 0xF40698
-	.long T_F418C8                              ; F886E2  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F886E2  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F886E6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886EA  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886EE  [6]   -> 0xF40810
-	.long T_F434F4                              ; F886F2  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F886F2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F886F6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15853,11 +15853,11 @@ UiListB_Class26:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26                              ; F886FA  [0]   -> 0xF42488
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886FE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88702  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88706  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88706  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8870A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8870E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88712  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88716  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88716  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8871A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15876,11 +15876,11 @@ UiListB_Class27:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26                              ; F8871E  [0]   -> 0xF4248C
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88722  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88726  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8872A  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8872A  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8872E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88732  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88736  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8873A  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8873A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8873E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15899,11 +15899,11 @@ UiListB_Class28:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26                              ; F88742  [0]   -> 0xF42490
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88746  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8874A  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8874E  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8874E  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88752  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88756  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8875A  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8875E  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8875E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88762  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15922,11 +15922,11 @@ UiListB_Class29:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26                              ; F88766  [0]   -> 0xF42494
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8876A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8876E  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88772  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88772  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88776  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8877A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8877E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88782  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88782  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88786  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15945,11 +15945,11 @@ UiListB_Class2A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26                              ; F8878A  [0]   -> 0xF42498
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8878E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88792  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88796  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88796  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8879A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8879E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887A2  [6]   -> 0xF40810
-	.long T_F434F4                              ; F887A6  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F887A6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887AA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15968,11 +15968,11 @@ UiListB_Class2B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26                              ; F887AE  [0]   -> 0xF4249C
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887B2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887B6  [2]   -> 0xF40698
-	.long T_F418C8                              ; F887BA  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F887BA  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F887BE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887C2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887C6  [6]   -> 0xF40810
-	.long T_F434F4                              ; F887CA  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F887CA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887CE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -15991,11 +15991,11 @@ UiListB_Class2C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26                              ; F887D2  [0]   -> 0xF424A0
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887D6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887DA  [2]   -> 0xF40698
-	.long T_F418C8                              ; F887DE  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F887DE  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F887E2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887E6  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887EA  [6]   -> 0xF40810
-	.long T_F434F4                              ; F887EE  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F887EE  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F887F2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16014,11 +16014,11 @@ UiListB_Class2D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26                              ; F887F6  [0]   -> 0xF424A4
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887FA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887FE  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88802  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88802  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88806  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8880A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8880E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88812  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88812  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88816  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16037,11 +16037,11 @@ UiListB_Class2E:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26                              ; F8881A  [0]   -> 0xF424A8
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8881E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88822  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88826  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88826  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8882A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8882E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88832  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88836  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88836  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8883A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16060,11 +16060,11 @@ UiListB_Class2F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26                              ; F8883E  [0]   -> 0xF424AC
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88842  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88846  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8884A  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8884A  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8884E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88852  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88856  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8885A  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8885A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8885E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16083,11 +16083,11 @@ UiListB_Class30:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26                              ; F88862  [0]   -> 0xF424B0
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88866  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8886A  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8886E  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8886E  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88872  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88876  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8887A  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8887E  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8887E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88882  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16106,11 +16106,11 @@ UiListB_Class31:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26                              ; F88886  [0]   -> 0xF424B4
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8888A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8888E  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88892  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88892  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88896  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8889A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8889E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F888A2  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F888A2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888A6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16129,11 +16129,11 @@ UiListB_Class32:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26                              ; F888AA  [0]   -> 0xF424B8
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888AE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888B2  [2]   -> 0xF40698
-	.long T_F418C8                              ; F888B6  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F888B6  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F888BA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888BE  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888C2  [6]   -> 0xF40810
-	.long T_F434F4                              ; F888C6  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F888C6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888CA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16152,11 +16152,11 @@ UiListB_Class33:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26                              ; F888CE  [0]   -> 0xF424BC
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888D2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888D6  [2]   -> 0xF40698
-	.long T_F418C8                              ; F888DA  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F888DA  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F888DE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888E2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888E6  [6]   -> 0xF40810
-	.long T_F434F4                              ; F888EA  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F888EA  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F888EE  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16175,11 +16175,11 @@ UiListB_Class34:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26                              ; F888F2  [0]   -> 0xF424C0
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888F6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888FA  [2]   -> 0xF40698
-	.long T_F418C8                              ; F888FE  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F888FE  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88902  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88906  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8890A  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8890E  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8890E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88912  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16198,11 +16198,11 @@ UiListB_Class35:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26                              ; F88916  [0]   -> 0xF424C4
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8891A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8891E  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88922  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88922  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88926  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8892A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8892E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88932  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88932  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88936  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16221,11 +16221,11 @@ UiListB_Class36:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26                              ; F8893A  [0]   -> 0xF424C8
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8893E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88942  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88946  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88946  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8894A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8894E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88952  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88956  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88956  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8895A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16244,11 +16244,11 @@ UiListB_Class37:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26                              ; F8895E  [0]   -> 0xF424CC
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88962  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88966  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8896A  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8896A  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8896E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88972  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88976  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8897A  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8897A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F8897E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16267,11 +16267,11 @@ UiListB_Class38:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26                              ; F88982  [0]   -> 0xF424D0
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88986  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8898A  [2]   -> 0xF40698
-	.long T_F418C8                              ; F8898E  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F8898E  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88992  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88996  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8899A  [6]   -> 0xF40810
-	.long T_F434F4                              ; F8899E  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F8899E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889A2  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16290,11 +16290,11 @@ UiListB_Class39:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26                              ; F889A6  [0]   -> 0xF424D4
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889AA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889AE  [2]   -> 0xF40698
-	.long T_F418C8                              ; F889B2  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F889B2  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889B6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889BA  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889BE  [6]   -> 0xF40810
-	.long T_F434F4                              ; F889C2  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F889C2  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889C6  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16313,11 +16313,11 @@ UiListB_Class3A:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26                              ; F889CA  [0]   -> 0xF424D8
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889CE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889D2  [2]   -> 0xF40698
-	.long T_F418C8                              ; F889D6  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F889D6  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889DA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889DE  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889E2  [6]   -> 0xF40810
-	.long T_F434F4                              ; F889E6  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F889E6  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F889EA  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16336,11 +16336,11 @@ UiListB_Class3B:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26                              ; F889EE  [0]   -> 0xF424DC
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889F2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889F6  [2]   -> 0xF40698
-	.long T_F418C8                              ; F889FA  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F889FA  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889FE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A02  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A06  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88A0A  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88A0A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A0E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16359,11 +16359,11 @@ UiListB_Class3C:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26                              ; F88A12  [0]   -> 0xF424E0
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A16  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A1A  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88A1E  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88A1E  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A22  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A26  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A2A  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88A2E  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88A2E  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A32  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16382,11 +16382,11 @@ UiListB_Class3D:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26                              ; F88A36  [0]   -> 0xF424E4
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A3A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A3E  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88A42  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88A42  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A46  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A4A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A4E  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88A52  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88A52  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A56  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16405,11 +16405,11 @@ UiListB_Class3E:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26                              ; F88A5A  [0]   -> 0xF424E8
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A5E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A62  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88A66  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88A66  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A6A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A6E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A72  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88A76  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88A76  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A7A  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16428,11 +16428,11 @@ UiListB_Class3F:
 	.long T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26                              ; F88A7E  [0]   -> 0xF424EC
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A82  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A86  [2]   -> 0xF40698
-	.long T_F418C8                              ; F88A8A  [3]   -> 0xF418C8
+	.long T_CombiEdit_OnPartParamEvent                              ; F88A8A  [3]   -> 0xF418C8
 	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A8E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A92  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A96  [6]   -> 0xF40810
-	.long T_F434F4                              ; F88A9A  [7]   -> 0xF434F4
+	.long T_CreatorSelectController_OnPartEvent                              ; F88A9A  [7]   -> 0xF434F4
 	.long 0xFFFFFFFF                            ; F88A9E  [8]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16595,7 +16595,7 @@ UiListB_Class54:
 ; ---------------------------------------------------------------------
 UiListB_Class60:
 	.long T_Msg0716_SetPendingBit0                              ; F88AF2  [0]   -> 0xF41110
-	.long T_F42F54                              ; F88AF6  [1]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F88AF6  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88AFA  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16612,7 +16612,7 @@ UiListB_Class60:
 ; ---------------------------------------------------------------------
 UiListB_Class61:
 	.long T_Msg0716_SetPendingBit1                              ; F88AFE  [0]   -> 0xF41114
-	.long T_F42F54                              ; F88B02  [1]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F88B02  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B06  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16629,7 +16629,7 @@ UiListB_Class61:
 ; ---------------------------------------------------------------------
 UiListB_Class62:
 	.long T_Msg0716_SetPendingBit2                              ; F88B0A  [0]   -> 0xF41118
-	.long T_F42F54                              ; F88B0E  [1]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F88B0E  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B12  [2]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16646,7 +16646,7 @@ UiListB_Class62:
 ; ---------------------------------------------------------------------
 UiListB_Class63:
 	.long T_Msg0716_SetPendingBit3                              ; F88B16  [0]   -> 0xF4111C
-	.long T_F42F54                              ; F88B1A  [1]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F88B1A  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B1E  [2]   end of list
 ; Evidence: UiEventClass_ListTable_B[0x64], the LE32 at 0xF88021, holds 0xF88B22.  GENERATED name.
 UiListB_Class64:
@@ -16814,7 +16814,7 @@ UiListB_Class79:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6                              ; F88B86  [0]   -> 0xF41140
 	.long T_F415B0                              ; F88B8A  [1]   -> 0xF415B0
 	.long T_F411E8                              ; F88B8E  [2]   -> 0xF411E8
-	.long T_F42F54                              ; F88B92  [3]   -> 0xF42F54
+	.long T_DspEffect_OnParamEvent                              ; F88B92  [3]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B96  [4]   end of list
 
 ; ---------------------------------------------------------------------
@@ -16850,7 +16850,7 @@ UiListB_Class80:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2                              ; F88BA6  [0]   -> 0xF41148
 	.long T_F40688                              ; F88BAA  [1]   -> 0xF40688
 	.long T_NoteRouting_OnMidiSystemEvent                              ; F88BAE  [2]   -> 0xF411D4
-	.long T_F4079C                              ; F88BB2  [3]   -> 0xF4079C
+	.long T_ProgramChangeMode_OnEvent                              ; F88BB2  [3]   -> 0xF4079C
 	.long T_MidiIn_ReqRebuild_Msg03_0A          ; F88BB6  [4]   -> 0xF43354
 	.long 0xFFFFFFFF                            ; F88BBA  [5]   end of list
 
@@ -16902,11 +16902,11 @@ UiListB_Class90:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class91:
-	.long T_F408F4                              ; F88BDA  [0]   -> 0xF408F4
+	.long T_GmMode_OnEventPassB                              ; F88BDA  [0]   -> 0xF408F4
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14                              ; F88BDE  [1]   -> 0xF41154
 	.long T_F411D8                              ; F88BE2  [2]   -> 0xF411D8
 	.long T_F42828                              ; F88BE6  [3]   -> 0xF42828
-	.long T_F415A4                              ; F88BEA  [4]   -> 0xF415A4
+	.long T_GmMode_RepaintModeScreen                              ; F88BEA  [4]   -> 0xF415A4
 	.long 0xFFFFFFFF                            ; F88BEE  [5]   end of list
 
 ; ---------------------------------------------------------------------
@@ -17012,7 +17012,7 @@ UiListB_ClassA8:
 	.long T_NoteRouting_SetMidiOutPorts                              ; F88C36  [3]   -> 0xF411E0
 	.long T_F409A0                              ; F88C3A  [4]   -> 0xF409A0
 	.long T_F40CBC                              ; F88C3E  [5]   -> 0xF40CBC
-	.long T_F434F0                              ; F88C42  [6]   -> 0xF434F0
+	.long T_CreatorSelectController_OpenOnEvent                              ; F88C42  [6]   -> 0xF434F0
 	.long T_F415B0                              ; F88C46  [7]   -> 0xF415B0
 	.long 0xFFFFFFFF                            ; F88C4A  [8]   end of list
 
@@ -17109,7 +17109,7 @@ UiListB_ClassB0:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB1:
-	.long T_F424F4                              ; F88C76  [0]   -> 0xF424F4
+	.long T_Msg0716_OnPitchBendEvent                              ; F88C76  [0]   -> 0xF424F4
 	.long 0xFFFFFFFF                            ; F88C7A  [1]   end of list
 
 ; ---------------------------------------------------------------------
@@ -17159,7 +17159,7 @@ UiListB_ClassB3:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_ClassB4:
-	.long T_F42500                              ; F88C96  [0]   -> 0xF42500
+	.long T_Msg0716_OnChannelPressureEvent                              ; F88C96  [0]   -> 0xF42500
 	.long T_PanelLed_OnCtrlParamEvent                              ; F88C9A  [1]   -> 0xF4069C
 	.long 0xFFFFFFFF                            ; F88C9E  [2]   end of list
 
@@ -17354,7 +17354,7 @@ UiEventPassB_TailList:
 	.long T_NoteRouting_RebuildIfPending                              ; F88E95  [1]   -> 0xF411B4
 	.long T_PanelScreen_RequestRedrawIfFieldQueued                              ; F88E99  [2]   -> 0xF40290
 	.long T_MidiIn_ServiceDeferred              ; F88E9D  [3]   -> 0xF40758
-	.long T_F42E60                              ; F88EA1  [4]   -> 0xF42E60
+	.long T_Drawbar_ReloadIfMarked                              ; F88EA1  [4]   -> 0xF42E60
 	.long T_CombiEdit_RunPendingRepaint                              ; F88EA5  [5]   -> 0xF418CC
 	.long 0xFFFFFFFF                            ; F88EA9  [6]   end of list
 
@@ -33411,7 +33411,9 @@ DisplayListPtrs_F90CD8_Nop31:   ; entry: named by 1 `.long` operand, first at 0x
 	ret                                                  ; F914AD  0e
 sub_F914AE:
 	ret                                                  ; F914AE  0e
-sub_F914AF:
+; GmMode_RepaintModeScreen: T_GmMode_RepaintModeScreen, UiListB_Class91: byte 3 with the GM bit (0x04) changed, while (0x97) bit 1 is set and the screen is SOUND
+;   MODE (1) or COMBINATION MODE (2): UI_Request_Hi |= 0x10.
+GmMode_RepaintModeScreen:
 	ld a, (UiEvent_Byte1:16)                                   ; F914AF  c1 b8 20 21
 	cp a, 0x03:i3                                          ; F914B3  c9 db
 	jr nz, .LF914D8                                      ; F914B5  6e 21
@@ -80594,11 +80596,13 @@ sub_FAB5EB:
 .LFAB641:
 	pop XIX                                              ; FAB641  5c
 	ret                                                  ; FAB642  0e
-sub_FAB643:
+; ProgramChangeMode_OnEvent: T_ProgramChangeMode_OnEvent, UiListB_Class80: byte 0 of the MIDI system record with PROGRAM CHANGE MODE's bits (mask 0x03) changed:
+;   calls T_F407C4_Nop, a bare ret.
+ProgramChangeMode_OnEvent:
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x00                          ; FAB643  c1 b8 20 3f 00
 	jr nz, .LFAB656                                      ; FAB648  6e 0c
 	ld c, (UiEvent_Byte3:16)                                   ; FAB64A  c1 ba 20 23
-; (sub_FAB64E removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAB643;
+; (sub_FAB64E removed 2026-10-04: no code names it and the line above falls through into it -- part of ProgramChangeMode_OnEvent;
 ;  notes/prom_a_stray_label_removal.py)
 	and C,0x03                                           ; FAB64E  cb cc 03
 	jr z, .LFAB656                                       ; FAB651  66 03
@@ -95661,7 +95665,7 @@ GmMode_HandleChange:
 	ld C,(XIX)                                           ; FB5945  84 23
 	extz BC                                              ; FB5947  d9 12
 	pushw bc                                             ; FB5949  29
-	calr sub_FB5F0F                                      ; FB594A  1e c2 05
+	calr GmMode_PostToMsg0716                                      ; FB594A  1e c2 05
 	ld C,(XIX)                                           ; FB594D  84 23
 	extz BC                                              ; FB594F  d9 12
 	pushw bc                                             ; FB5951  29
@@ -96327,7 +96331,9 @@ sub_FB5EC3:
 	popw de                                              ; FB5EE6  4a
 	popw hl                                              ; FB5EE7  4b
 	ret                                                  ; FB5EE8  0e
-sub_FB5EE9:
+; GmMode_OnEventPassB: T_GmMode_OnEventPassB, UiListB_Class91: byte 3 with the GM bit (0x04) changed, unless GmMode_HandleChange is running
+;   (0x60F01F bit 0, its re-entry guard): GmMode_PostToMsg0716(the new value).
+GmMode_OnEventPassB:
 	ld c, (0x60f01f:24)                                 ; FB5EE9  c2 1f f0 60 23
 	and C,0x01                                           ; FB5EEE  cb cc 01
 	jr nz, .LFB5F0E                                      ; FB5EF1  6e 1b
@@ -96339,11 +96345,13 @@ sub_FB5EE9:
 	ld bc, (UiEvent_Byte2:16)                                 ; FB5F03  d1 b9 20 21
 	extz BC                                              ; FB5F07  d9 12
 	pushw bc                                             ; FB5F09  29
-	calr sub_FB5F0F                                      ; FB5F0A  1e 02 00
+	calr GmMode_PostToMsg0716                                      ; FB5F0A  1e 02 00
 	popw bc                                              ; FB5F0D  49
 .LFB5F0E:
 	ret                                                  ; FB5F0E  0e
-sub_FB5F0F:
+; GmMode_PostToMsg0716: (value): T_Msg0716_PostGmSystemOnOff (Msg0716_PostGmSystemOnOff) with 1 when value bit 2 -- the GM bit -- is set, else 0.  Called by
+;   GmMode_HandleChange and GmMode_OnEventPassB.
+GmMode_PostToMsg0716:
 	link XIZ,0x0000                                      ; FB5F0F  ee 0c 00 00
 	pushw hl                                             ; FB5F13  2b
 	ld h, 0x00:opc                                          ; FB5F14  26 00
@@ -96355,7 +96363,7 @@ sub_FB5F0F:
 	ld C,H                                               ; FB5F20  ce 8b
 	extz BC                                              ; FB5F22  d9 12
 	pushw bc                                             ; FB5F24  29
-	call T_F4105C                                        ; FB5F25  1d 5c 10 f4
+	call T_Msg0716_PostGmSystemOnOff                                        ; FB5F25  1d 5c 10 f4
 	popw bc                                              ; FB5F29  49
 	popw hl                                              ; FB5F2A  4b
 	unlk XIZ                                             ; FB5F2B  ee 0d
@@ -105236,7 +105244,10 @@ ScreenButton_Effect2OutputConflict:
 	ret                                                  ; FBC5EF  0e
 T_F418B4_Nop:
 	ret                                                  ; FBC5F0  0e
-sub_FBC5F1:
+; CombiEdit_OnPartParamEvent: T_CombiEdit_OnPartParamEvent, UiListB_Class00..3F (every part record): by the COMBINATION EDIT screen -- 0x33 / 0x34 / 0x37 / 0x38 /
+;   0xB0 / 0xB1 / 0xB4 / 0xB5 CombiEditPage_OnPartParamEvent, 0x3A / 0xB7 (MIXER) CombiEditMixer_OnPartParamEvent,
+;   0x35 / 0xB2 (CONFIGURE) CombiEditConfigure_OnPartParamEvent; other screens nothing.
+CombiEdit_OnPartParamEvent:
 	ld bc, (UI_ScreenId:16)                                 ; FBC5F1  d1 7c 20 21
 	extz BC                                              ; FBC5F5  d9 12
 	cp BC,0x0033                                         ; FBC5F7  d9 cf 33 00
@@ -105265,13 +105276,13 @@ sub_FBC5F1:
 	jr z, .LFBC646                                       ; FBC63D  66 07
 	jr .LFBC64E                                          ; FBC63F  68 0d
 .LFBC641:
-	calr sub_FBC6D0                                      ; FBC641  1e 8c 00
+	calr CombiEditPage_OnPartParamEvent                                      ; FBC641  1e 8c 00
 	jr .LFBC64E                                          ; FBC644  68 08
 .LFBC646:
-	calr sub_FBC74F                                      ; FBC646  1e 06 01
+	calr CombiEditMixer_OnPartParamEvent                                      ; FBC646  1e 06 01
 	jr .LFBC64E                                          ; FBC649  68 03
 .LFBC64B:
-	calr sub_FBCA31                                      ; FBC64B  1e e3 03
+	calr CombiEditConfigure_OnPartParamEvent                                      ; FBC64B  1e e3 03
 .LFBC64E:
 	ret                                                  ; FBC64E  0e
 ; CombiEdit_RunPendingRepaint: T_CombiEdit_RunPendingRepaint's body: when (0x277D) is 1 and the screen is one of COMBINATION EDIT's (0x33-0x3A, 0xB0-0xB7), posts
@@ -105326,7 +105337,10 @@ CombiEdit_RunPendingRepaint:
 	ld (0x277d:16), 0x00                                 ; FBC6CA  f1 7d 27 00 00
 .LFBC6CF:
 	ret                                                  ; FBC6CF  0e
-sub_FBC6D0:
+; CombiEditPage_OnPartParamEvent: for the edited part ((0x2765) = class & 0x1F) the byte index, + 0x80 for the second record: 0, 1 and 0x9B..0x9D set
+;   (0x277D) = 1; any other sets UI_ScreenFlags bit 4 (repaint) when the current page's field list
+;   (PtrTable_F1AE71[sub_FBD127()], 0xFF-terminated) holds it.
+CombiEditPage_OnPartParamEvent:
 	pushw hl                                             ; FBC6D0  2b
 	pushw de                                             ; FBC6D1  2a
 	push XIX                                             ; FBC6D2  3c
@@ -105386,7 +105400,8 @@ sub_FBC6D0:
 	popw de                                              ; FBC74C  4a
 	popw hl                                              ; FBC74D  4b
 	ret                                                  ; FBC74E  0e
-sub_FBC74F:
+; CombiEditMixer_OnPartParamEvent: the MIXER screens' handler: calls PtrTable_F1AE89[(0x2767)], one routine per mixer page.
+CombiEditMixer_OnPartParamEvent:
 	ld c, 0x04:opc                                          ; FBC74F  23 04
 	m_mul MB16, 0x2767, 3                                ; FBC751  c1 67 27 43
 	extz XBC                                             ; FBC755  e9 12
@@ -105685,7 +105700,11 @@ sub_FBC74F:
 	popw de                                              ; FBCA2E  4a
 	popw hl                                              ; FBCA2F  4b
 	ret                                                  ; FBCA30  0e
-sub_FBCA31:
+; CombiEditConfigure_OnPartParamEvent: the CONFIGURE screens' handler: for a part in the edited group of 8 ((0x2765) & 0xF8), byte indices 0, 1 and
+;   0x9B..0x9D OR its bit (BitTable_F1AE95) into (0x2770) and set (0x277D) = 1; then by the page (0x2767) a repaint
+;   (UI_ScreenFlags bit 4): page 0 byte 13 (parts up to 31, or 7 in panel-mode group 0x16), page 1 bytes 7 / 8 and
+;   page 2 bytes 9 / 10 of classes 0x20-0x27.
+CombiEditConfigure_OnPartParamEvent:
 	link XIZ,0xfffe                                      ; FBCA31  ee 0c fe ff
 	pushw hl                                             ; FBCA35  2b
 	pushw de                                             ; FBCA36  2a
@@ -112809,7 +112828,9 @@ Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:
 	ld a, 0x11:opc                                          ; FC06F9  21 11
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06FB  1e b1 02
 	ret                                                  ; FC06FE  0e
-sub_FC06FF:
+; Msg0716_OnPitchBendEvent: T_Msg0716_OnPitchBendEvent, UiListB_ClassB1 (byte 1 = the part, 0..31): when the part's Msg0716 record (+0x20) has bit 6 at +0x0B,
+;   Msg0716_PostPitchBend for it.
+Msg0716_OnPitchBendEvent:
 	ld XIX,0x00000716                                    ; FC06FF  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC0704  c1 b8 20 27
 	cp L,0x20                                            ; FC0708  cf cf 20
@@ -112850,7 +112871,9 @@ Msg0716_EventPartPostCC0B_Expression:
 	calr Msg0716_PostCC0B_Expression                                          ; FC075A  1e 1c 0f
 .LFC075D:
 	ret                                                  ; FC075D  0e
-sub_FC075E:
+; Msg0716_OnChannelPressureEvent: T_Msg0716_OnChannelPressureEvent, UiListB_ClassB4 (byte 1 = the part): while (0x7F5F) is nonzero and the part's Msg0716 record (+0x20) has
+;   bit 5 at +0x0B, Msg0716_PostChannelPressure for it.
+Msg0716_OnChannelPressureEvent:
 	m_cp_mi8 MB16, 0x7f5f, 0x00                          ; FC075E  c1 5f 7f 3f 00
 	jr z, .LFC0789                                       ; FC0763  66 24
 	ld XIX,0x00000716                                    ; FC0765  44 16 07 00 00
@@ -114852,7 +114875,9 @@ Msg0716_PostSysEx50_B2:
 	ldw bc, 0x04                                         ; FC1828  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC182B  1e ec 01
 	ret                                                  ; FC182E  0e
-sub_FC182F:
+; Msg0716_PostGmSystemOnOff: T_Msg0716_PostGmSystemOnOff (on): the 4-byte message F0 7F 09 01 (on) or F0 7F 09 02 (off) at 0x716 through Msg0716_Post_Trampoline
+;   -- the GM System On / Off pair (sub-IDs 09 01 / 09 02) -- then sub_FC1859.
+Msg0716_PostGmSystemOnOff:
 	ld W,(XSP+0x04)                                      ; FC182F  8f 04 20
 	push XIX                                             ; FC1832  3c
 	ld XIX,0x00000716                                    ; FC1833  44 16 07 00 00

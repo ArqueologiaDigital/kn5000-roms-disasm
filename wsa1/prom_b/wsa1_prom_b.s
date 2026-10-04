@@ -686,7 +686,7 @@
 	.set	ScreenLeave_SoundMode, 0xF90CC6
 	.set	ScreenButton_SoundMode, 0xF90CCA
 	.set	sub_F90CD4, 0xF90CD4
-	.set	sub_F914AF, 0xF914AF
+	.set	GmMode_RepaintModeScreen, 0xF914AF
 	.set	InstallPainter_C0mbinati0nM0de_Entry, 0xF914D9
 	.set	ScreenLeave_C0mbinati0nM0de, 0xF914DD
 	.set	ScreenButton_C0mbinati0nM0de, 0xF914E1
@@ -968,7 +968,7 @@
 	.set	SystemSettings_ResetToDefault, 0xFAAF91
 	.set	T_F407A8_Nop, 0xFAB5E9
 	.set	T_F407A0_Nop, 0xFAB5EA
-	.set	sub_FAB643, 0xFAB643
+	.set	ProgramChangeMode_OnEvent, 0xFAB643
 	.set	T_F407C4_Nop, 0xFAB657
 	.set	sub_FAB658, 0xFAB658
 	.set	sub_FAB6D7, 0xFAB6D7
@@ -1128,7 +1128,7 @@
 	.set	SysExParam_SetCombinationWriteRequest, 0xFB5241
 	.set	sub_FB585E, 0xFB585E
 	.set	GmMode_HandleChange, 0xFB590A
-	.set	sub_FB5EE9, 0xFB5EE9
+	.set	GmMode_OnEventPassB, 0xFB5EE9
 	.set	SysEx_Checksum, 0xFB7A90
 	.set	SysExTx_SendBytes, 0xFB7AC2
 	.set	MidiFileDirectPlay_InitOnEntry, 0xFB9B41
@@ -1247,7 +1247,7 @@
 	.set	ScreenLeave_Effect2OutputConflict, 0xFBC5DB
 	.set	ScreenButton_Effect2OutputConflict, 0xFBC5DF
 	.set	T_F418B4_Nop, 0xFBC5F0
-	.set	sub_FBC5F1, 0xFBC5F1
+	.set	CombiEdit_OnPartParamEvent, 0xFBC5F1
 	.set	CombiEdit_RunPendingRepaint, 0xFBC64F
 	.set	ModeEnter_CombiEditPart, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
@@ -1462,10 +1462,10 @@
 	.set	T_F4117C_Nop, 0xFC06DE
 	.set	Msg0716_EventPartPostCC78_AllSoundOff, 0xFC06DF
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17, 0xFC06F4
-	.set	sub_FC06FF, 0xFC06FF
+	.set	Msg0716_OnPitchBendEvent, 0xFC06FF
 	.set	Msg0716_EventPartPostCC01_ModulationIfEnabled, 0xFC0724
 	.set	Msg0716_EventPartPostCC0B_Expression, 0xFC0749
-	.set	sub_FC075E, 0xFC075E
+	.set	Msg0716_OnChannelPressureEvent, 0xFC075E
 	.set	Msg0716_EventPartPostCC40_SustainFromValueIfEnabled, 0xFC078A
 	.set	T_F42508_Nop, 0xFC07AF
 	.set	T_F4250C_Nop, 0xFC07B0
@@ -1485,7 +1485,7 @@
 	.set	Msg0716_AllPartsSustainOff, 0xFC10FA
 	.set	sub_FC1116, 0xFC1116
 	.set	sub_FC11FB, 0xFC11FB
-	.set	sub_FC182F, 0xFC182F
+	.set	Msg0716_PostGmSystemOnOff, 0xFC182F
 	.set	Msg0716_PostSysEx50_A3, 0xFC188F
 	.set	sub_FC18AA, 0xFC18AA
 	.set	Msg0716_PostSysEx50_87, 0xFC18B2
@@ -28777,8 +28777,8 @@ sub_F0F047_Return:
 	ret	; F0F060  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F061
-; Called from: T_F42F54 (x0)
+; DspEffect_OnParamEvent
+; Called from: T_DspEffect_OnParamEvent (x0)
 ; Touches: (0x207C) (0x20BB) (0x2790)
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
@@ -28788,7 +28788,10 @@ sub_F0F047_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F061:		; <- T_F42F54
+; DspEffect_OnParamEvent: T_DspEffect_OnParamEvent, UiListB_Class00 / 20 / 60..63 / 79.  On the DSP EFFECT screens (0x39 COMBINATION EDIT, 0x66, 0xCA SOUND
+;   EDIT): part 0's records (class 0x00 / 0x20) repaint while DspEffect_Section is 0; the effect records go through
+;   DispatchTable_F0F0CE by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint.
+DspEffect_OnParamEvent:		; <- T_DspEffect_OnParamEvent
 	pushw	hl	; F0F061  push HL
 	ld	h, (UiEvent_Class:16)	; F0F062  ld H,(0x20bb)
 	cp	h, 0:i3	; F0F066  cp H,0
@@ -28808,7 +28811,7 @@ sub_F0F047_Skip:
 sub_F0F047_Skip2:
 	m_cp_mi8 MB16, DspEffect_Section, 0x00	; F0F08A  cp (0x2790),0x00
 	jrl	nz, sub_F0F0FF_Epilogue	; F0F08F  jrl NZ,0xf0f103
-	jrl	sub_F0F0FF	; F0F092  jrl T,0xf0f0ff
+	jrl	DspEffectEvent_RepaintAndReturn	; F0F092  jrl T,0xf0f0ff
 sub_F0F047_Skip3:
 	ld	bc, (UI_ScreenId:16)	; F0F095  ld BC,(0x207c)
 	extz	bc	; F0F099  extz BC
@@ -28817,7 +28820,7 @@ sub_F0F047_Skip3:
 	cp	bc, 102	; F0F0A1  cp BC,0x0066
 	jr	z, sub_F0F047_Skip4	; F0F0A5  jr Z,0xf0f0b5
 	cp	bc, 107	; F0F0A7  cp BC,0x006b
-	jr	z, sub_F0F0FF	; F0F0AB  jr Z,0xf0f0ff
+	jr	z, DspEffectEvent_RepaintAndReturn	; F0F0AB  jr Z,0xf0f0ff
 	cp	bc, 202	; F0F0AD  cp BC,0x00ca
 	jr	z, sub_F0F047_Skip4	; F0F0B1  jr Z,0xf0f0b5
 	jr	sub_F0F0FF_Epilogue	; F0F0B3  jr T,0xf0f103
@@ -28855,12 +28858,12 @@ sub_F0F047_Skip4:
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
 DispatchTable_F0F0CE:
-	.long	sub_F0F0FF	; F0F0CE  [0] -> sub_F0F0FF
+	.long	DspEffectEvent_RepaintAndReturn	; F0F0CE  [0] -> DspEffectEvent_RepaintAndReturn
 	.long	sub_F0F0E6	; F0F0D2  [1] -> sub_F0F0E6
 	.long	sub_F0F0E6	; F0F0D6  [2] -> sub_F0F0E6
 	.long	sub_F0F0E6	; F0F0DA  [3] -> sub_F0F0E6
-	.long	sub_F0F0FF	; F0F0DE  [4] -> sub_F0F0FF
-	.long	sub_F0F0FF	; F0F0E2  [5] -> sub_F0F0FF
+	.long	DspEffectEvent_RepaintAndReturn	; F0F0DE  [4] -> DspEffectEvent_RepaintAndReturn
+	.long	DspEffectEvent_RepaintAndReturn	; F0F0E2  [5] -> DspEffectEvent_RepaintAndReturn
 
 
 ; --------------------------------------------------------------------------
@@ -28880,16 +28883,16 @@ DispatchTable_F0F0CE:
 ; --------------------------------------------------------------------------
 sub_F0F0E6:
 	cp	h, 97	; F0F0E6  cp H,0x61
-	jr	c, sub_F0F0FF	; F0F0E9  jr C,0xf0f0ff
+	jr	c, DspEffectEvent_RepaintAndReturn	; F0F0E9  jr C,0xf0f0ff
 	cp	h, 99	; F0F0EB  cp H,0x63
-	jr	ugt, sub_F0F0FF	; F0F0EE  jr UGT,0xf0f0ff
+	jr	ugt, DspEffectEvent_RepaintAndReturn	; F0F0EE  jr UGT,0xf0f0ff
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x17	; F0F0F0  cp (0x20b8),0x17
-	jr	nz, sub_F0F0FF	; F0F0F5  jr NZ,0xf0f0ff
+	jr	nz, DspEffectEvent_RepaintAndReturn	; F0F0F5  jr NZ,0xf0f0ff
 	inc	1, (10131:16)	; F0F0F7  inc 1,(0x2793)
 	inc	1, (10133:16)	; F0F0FB  inc 1,(0x2795)
 
 ; --------------------------------------------------------------------------
-; sub_F0F0FF
+; DspEffectEvent_RepaintAndReturn
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2095)
@@ -28903,7 +28906,8 @@ sub_F0F0E6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F0FF:
+; DspEffectEvent_RepaintAndReturn: DspEffect_OnParamEvent's tail: UI_ScreenFlags bit 4 (repaint in place), then its popw hl / ret.
+DspEffectEvent_RepaintAndReturn:
 	m_set 4, MD16, UI_ScreenFlags	; F0F0FF  set 4,(0x2095)
 sub_F0F0FF_Epilogue:
 	popw	hl	; F0F103  pop HL
@@ -89087,7 +89091,9 @@ T_F40790:	jp sub_FAA43A  ; -> prom_a 0x2A43A   x6
 ;           Tempo_ApplyBpm (graded CONTENT).  DERIVATIVE name.
 T_Tempo_ApplyBpm:	jp Tempo_ApplyBpm  ; F40794 (was T_F40794) -> prom_a 0x2A742   x13
 T_ParamMsg_RefreshPartMasks:	jp ParamMsg_RefreshPartMasks  ; -> prom_a 0x2BFE2   x1
-T_F4079C:	jp sub_FAB643  ; -> prom_a 0x2B643
+; Evidence: slot 0xF4079C is `jp 0xFAB643`; prom_a 0xFAB643 carries the label
+;           ProgramChangeMode_OnEvent (graded CONTENT).  DERIVATIVE name.
+T_ProgramChangeMode_OnEvent:	jp ProgramChangeMode_OnEvent  ; F4079C (was T_F4079C) -> prom_a 0x2B643
 T_F407A0:	jp T_F407A0_Nop  ; -> prom_a 0x2B5EA   x4
 T_F407A4:	jp T_F407A4_Nop  ; -> prom_a 0x2A7AB   x6
 T_F407A8:	jp T_F407A8_Nop  ; -> prom_a 0x2B5E9
@@ -89162,7 +89168,9 @@ T_SysExTx_Tempo:	jp SysExTx_Tempo  ; F408EC (was T_F408EC) -> prom_a 0x33355   x
 ; Evidence: slot 0xF408F0 is `jp 0xFB590A`; prom_a 0xFB590A carries the label
 ;           GmMode_HandleChange (graded CONTENT).  DERIVATIVE name.
 T_GmMode_HandleChange:	jp GmMode_HandleChange  ; F408F0 (was T_F408F0) -> prom_a 0x3590A
-T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
+; Evidence: slot 0xF408F4 is `jp 0xFB5EE9`; prom_a 0xFB5EE9 carries the label
+;           GmMode_OnEventPassB (graded CONTENT).  DERIVATIVE name.
+T_GmMode_OnEventPassB:	jp GmMode_OnEventPassB  ; F408F4 (was T_F408F4) -> prom_a 0x35EE9
 T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
 T_SysExTx_EmitStagedParams:	jp SysExTx_EmitStagedParams  ; -> prom_a 0x34B7D   x1
@@ -89631,7 +89639,9 @@ T_CombiRemap_ResetToDefault:	jp CombiRemap_ResetToDefault  ; -> prom_a 0x401C7  
 T_DrumMap_ResetToDefault:	jp DrumMap_ResetToDefault  ; -> prom_a 0x401DD   x2
 T_F41054:	jp sub_FC11FB  ; -> prom_a 0x411FB   x4
 T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
-T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1
+; Evidence: slot 0xF4105C is `jp 0xFC182F`; prom_a 0xFC182F carries the label
+;           Msg0716_PostGmSystemOnOff (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_PostGmSystemOnOff:	jp Msg0716_PostGmSystemOnOff  ; F4105C (was T_F4105C) -> prom_a 0x4182F   x1
 ; Evidence: slot 0xF41060 is `jp 0xFC020F`; prom_a 0xFC020F carries the label
 ;           Msg0716_PostSysEx50_92_SaveRegs (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_PostSysEx50_92_SaveRegs:	jp Msg0716_PostSysEx50_92_SaveRegs  ; F41060 (was T_F41060) -> prom_a 0x4020F   x1
@@ -89874,7 +89884,9 @@ T_F41594:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
 T_F41598:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
 T_F4159C:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
 T_UiEvent_MarkRedrawFromClass20Block:	jp UiEvent_MarkRedrawFromClass20Block  ; -> prom_a 0x13FF2
-T_F415A4:	jp sub_F914AF  ; -> prom_a 0x114AF
+; Evidence: slot 0xF415A4 is `jp 0xF914AF`; prom_a 0xF914AF carries the label
+;           GmMode_RepaintModeScreen (graded CONTENT).  DERIVATIVE name.
+T_GmMode_RepaintModeScreen:	jp GmMode_RepaintModeScreen  ; F415A4 (was T_F415A4) -> prom_a 0x114AF
 T_UiEvent_SyncSoundSelection:	jp UiEvent_SyncSoundSelection  ; -> prom_a 0x1427D
 T_UiEventClassA8_ShowGroupScreen:	jp UiEventClassA8_ShowGroupScreen  ; -> prom_a 0x143EE
 T_F415B0:	jp UiEvent_MarkRedrawFromPartClass  ; -> prom_a 0x13F4E
@@ -90101,7 +90113,9 @@ T_ScreenLeaveBody_CombiEditMixer:	jp ScreenLeaveBody_CombiEditMixer  ; F418BC (w
 ;           ScreenButtonBody_CombiEditMixer (graded CONTENT).  DERIVATIVE name.
 T_ScreenButtonBody_CombiEditMixer:	jp ScreenButtonBody_CombiEditMixer  ; F418C0 (was T_F418C0) -> prom_a 0x3DD91
 T_F418C4:	jp T_F418C4_Nop  ; -> prom_a 0x3DDD6
-T_F418C8:	jp sub_FBC5F1  ; -> prom_a 0x3C5F1
+; Evidence: slot 0xF418C8 is `jp 0xFBC5F1`; prom_a 0xFBC5F1 carries the label
+;           CombiEdit_OnPartParamEvent (graded CONTENT).  DERIVATIVE name.
+T_CombiEdit_OnPartParamEvent:	jp CombiEdit_OnPartParamEvent  ; F418C8 (was T_F418C8) -> prom_a 0x3C5F1
 ; Evidence: slot 0xF418CC is `jp 0xFBC64F`; prom_a 0xFBC64F carries the label
 ;           CombiEdit_RunPendingRepaint (graded CONTENT).  DERIVATIVE name.
 T_CombiEdit_RunPendingRepaint:	jp CombiEdit_RunPendingRepaint  ; F418CC (was T_F418CC) -> prom_a 0x3C64F
@@ -90959,14 +90973,18 @@ T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26:	j
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40631
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40641
 T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17  ; -> prom_a 0x406F4
-T_F424F4:	jp sub_FC06FF  ; -> prom_a 0x406FF
+; Evidence: slot 0xF424F4 is `jp 0xFC06FF`; prom_a 0xFC06FF carries the label
+;           Msg0716_OnPitchBendEvent (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_OnPitchBendEvent:	jp Msg0716_OnPitchBendEvent  ; F424F4 (was T_F424F4) -> prom_a 0x406FF
 ; Evidence: slot 0xF424F8 is `jp 0xFC0724`; prom_a 0xFC0724 carries the label
 ;           Msg0716_EventPartPostCC01_ModulationIfEnabled (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_EventPartPostCC01_ModulationIfEnabled:	jp Msg0716_EventPartPostCC01_ModulationIfEnabled  ; F424F8 (was T_F424F8) -> prom_a 0x40724
 ; Evidence: slot 0xF424FC is `jp 0xFC0749`; prom_a 0xFC0749 carries the label
 ;           Msg0716_EventPartPostCC0B_Expression (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_EventPartPostCC0B_Expression:	jp Msg0716_EventPartPostCC0B_Expression  ; F424FC (was T_F424FC) -> prom_a 0x40749
-T_F42500:	jp sub_FC075E  ; -> prom_a 0x4075E
+; Evidence: slot 0xF42500 is `jp 0xFC075E`; prom_a 0xFC075E carries the label
+;           Msg0716_OnChannelPressureEvent (graded CONTENT).  DERIVATIVE name.
+T_Msg0716_OnChannelPressureEvent:	jp Msg0716_OnChannelPressureEvent  ; F42500 (was T_F42500) -> prom_a 0x4075E
 ; Evidence: slot 0xF42504 is `jp 0xFC078A`; prom_a 0xFC078A carries the label
 ;           Msg0716_EventPartPostCC40_SustainFromValueIfEnabled (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_EventPartPostCC40_SustainFromValueIfEnabled:	jp Msg0716_EventPartPostCC40_SustainFromValueIfEnabled  ; F42504 (was T_F42504) -> prom_a 0x4078A
@@ -91597,10 +91615,14 @@ T_F42E48:	jp T_F42E48_Nop  ; -> prom_b 0x53029
 ;           DrawbarScreen_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DrawbarScreen_Dispatch:	jp DrawbarScreen_Dispatch  ; F42E4C (was T_F42E4C) -> prom_b 0x5302A
 T_F42E50:	jp T_F42E50_Nop  ; -> prom_b 0x53051
-T_F42E54:	jp sub_F53DCC  ; -> prom_b 0x53DCC
+; Evidence: slot 0xF42E54 is `jp 0xF53DCC`; prom_b 0xF53DCC carries the label
+;           Drawbar_MarkReloadOnSoundEvent (graded CONTENT).  DERIVATIVE name.
+T_Drawbar_MarkReloadOnSoundEvent:	jp Drawbar_MarkReloadOnSoundEvent  ; F42E54 (was T_F42E54) -> prom_b 0x53DCC
 T_F42E58:	jp T_F42E58_Nop  ; -> prom_b 0x5301A
 T_F42E5C:	jp T_F42E58_Nop  ; -> prom_b 0x5301A
-T_F42E60:	jp sub_F53DF4  ; -> prom_b 0x53DF4
+; Evidence: slot 0xF42E60 is `jp 0xF53DF4`; prom_b 0xF53DF4 carries the label
+;           Drawbar_ReloadIfMarked (graded CONTENT).  DERIVATIVE name.
+T_Drawbar_ReloadIfMarked:	jp Drawbar_ReloadIfMarked  ; F42E60 (was T_F42E60) -> prom_b 0x53DF4
 T_F42E64:	jp sub_F53E04  ; -> prom_b 0x53E04   x1
 T_F42E68:	jp sub_F541FF  ; -> prom_b 0x541FF   x3
 T_F42E6C:	jp sub_F54210  ; -> prom_b 0x54210   x12
@@ -91654,7 +91676,9 @@ T_ScreenEnterBody_DspEffect:	jp ScreenEnterBody_DspEffect  ; F42F4C (was T_F42F4
 ; Evidence: slot 0xF42F50 is `jp 0xF0F17C`; prom_b 0xF0F17C carries the label
 ;           ScreenButtonBody_DspEffect (graded CONTENT).  DERIVATIVE name.
 T_ScreenButtonBody_DspEffect:	jp ScreenButtonBody_DspEffect  ; F42F50 (was T_F42F50) -> prom_b 0x0F17C   x3
-T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061
+; Evidence: slot 0xF42F54 is `jp 0xF0F061`; prom_b 0xF0F061 carries the label
+;           DspEffect_OnParamEvent (graded CONTENT).  DERIVATIVE name.
+T_DspEffect_OnParamEvent:	jp DspEffect_OnParamEvent  ; F42F54 (was T_F42F54) -> prom_b 0x0F061
 T_DspEffect_ApplyAlgorithmDefaults:	jp DspEffect_ApplyAlgorithmDefaults  ; -> prom_b 0x114DA   x8
 T_DspEffect_SanitizeBlock:	jp DspEffect_SanitizeBlock  ; -> prom_b 0x1156B   x4
 T_DspEffect_SetAlgorithm:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
@@ -92106,8 +92130,12 @@ T_UI_RequestBits_ClearBit7:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
 ;           ScreenButton_CreatorSelectController (graded CONTENT).  DERIVATIVE name.
 T_ScreenButton_CreatorSelectController:	jp ScreenButton_CreatorSelectController  ; F434E8 (was T_F434E8) -> prom_b 0x4C4B5
 T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
-T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
-T_F434F4:	jp sub_F4C42E  ; -> prom_b 0x4C42E
+; Evidence: slot 0xF434F0 is `jp 0xF4C3F2`; prom_b 0xF4C3F2 carries the label
+;           CreatorSelectController_OpenOnEvent (graded CONTENT).  DERIVATIVE name.
+T_CreatorSelectController_OpenOnEvent:	jp CreatorSelectController_OpenOnEvent  ; F434F0 (was T_F434F0) -> prom_b 0x4C3F2
+; Evidence: slot 0xF434F4 is `jp 0xF4C42E`; prom_b 0xF4C42E carries the label
+;           CreatorSelectController_OnPartEvent (graded CONTENT).  DERIVATIVE name.
+T_CreatorSelectController_OnPartEvent:	jp CreatorSelectController_OnPartEvent  ; F434F4 (was T_F434F4) -> prom_b 0x4C42E
 	.fill 0xB08, 1, 0x0E  ; 0xF434F8: 2824 x ret
 ; Evidence: slot 0xF44000 is `jp 0xF44042`; prom_b 0xF44042 carries the label
 ;           BStore_BootPhase0 (graded CONTENT).  DERIVATIVE name.
@@ -104911,17 +104939,20 @@ BitMask_F4C3E9:
 
 
 ; --------------------------------------------------------------------------
-; sub_F4C3F2
-; Called from: T_F434F0 (x0)
+; CreatorSelectController_OpenOnEvent
+; Called from: T_CreatorSelectController_OpenOnEvent (x0)
 ; Touches: (0x2070) (0x2075) (0x207C) (0x20B8) (0x20B9) (0x20BA)
-; Evidence: thunk slot T_F434F0 holds `jp 0x00F4C3F2`, and 0xF4C3F2 is an
+; Evidence: thunk slot T_CreatorSelectController_OpenOnEvent holds `jp 0x00F4C3F2`, and 0xF4C3F2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4C3F2:		; <- T_F434F0
+; CreatorSelectController_OpenOnEvent: T_CreatorSelectController_OpenOnEvent, UiListB_ClassA8: byte 5 with bit 2 both changed and set, not on screen 0xAD (CREATOR SELECT
+;   CONTROLLER) or 0xAA (the power-on splash), and no request pending (UI_Request_Hi & 0xC2): requests screen 0xAD
+;   (UI_Request = 0xAD, UI_Request_Hi |= 0x40, UI_RequestBits bit 7).
+CreatorSelectController_OpenOnEvent:		; <- T_CreatorSelectController_OpenOnEvent
 	push	xix	; F4C3F2  push XIX
 	lda	xix, (UI_Request_Hi:16)	; F4C3F3  lda XIX,0x2071
 	m_cp_mi8 MB16, UiEvent_Byte1, 0x05	; F4C3F7  cp (0x20b8),0x05
@@ -104945,17 +104976,19 @@ sub_F4C3F2_Epilogue:
 	ret	; F4C42D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4C42E
-; Called from: T_F434F4 (x0)
+; CreatorSelectController_OnPartEvent
+; Called from: T_CreatorSelectController_OnPartEvent (x0)
 ; Touches: (0x207C) (0x2095) (0x20B8) (0x20BB) (0x2250) (0x2870)
-; Evidence: thunk slot T_F434F4 holds `jp 0x00F4C42E`, and 0xF4C42E is an
+; Evidence: thunk slot T_CreatorSelectController_OnPartEvent holds `jp 0x00F4C42E`, and 0xF4C42E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4C42E:		; <- T_F434F4
+; CreatorSelectController_OnPartEvent: T_CreatorSelectController_OnPartEvent, UiListB_Class20..3F: on screen 0xAD (CREATOR SELECT CONTROLLER), for class 0x20 or a nonzero
+;   UI_PartIndex, byte index 0x1A -- 0x19 while (0x2870) is nonzero -- repaints (UI_ScreenFlags bit 4).
+CreatorSelectController_OnPartEvent:		; <- T_CreatorSelectController_OnPartEvent
 	pushw	hl	; F4C42E  push HL
 	m_cp_mi8 MB16, UI_ScreenId, 0xad	; F4C42F  cp (0x207c),0xad
 	jr	nz, sub_F4C42E_Epilogue	; F4C434  jr NZ,0xf4c468
@@ -114807,15 +114840,17 @@ Drawbar9_1ft_Update_Skip2:
 	ret	; F53DCB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53DCC
-; Called from: thunk slot T_F42E54
+; Drawbar_MarkReloadOnSoundEvent
+; Called from: thunk slot T_Drawbar_MarkReloadOnSoundEvent
 ; Evidence: 0xF53DCC is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53DCC:		; <- T_F42E54
+; Drawbar_MarkReloadOnSoundEvent: T_Drawbar_MarkReloadOnSoundEvent, UiListB_Class00 / 20 (part 0's records): byte index 0, 1 or 0x9B..0x9D -> (0x28A0) = 15.  The byte
+;   after the drawbar values at 0x2890 (Drawbar_SendPartParams); this code follows Drawbar9_1ft_Update.
+Drawbar_MarkReloadOnSoundEvent:		; <- T_Drawbar_MarkReloadOnSoundEvent
 	ld	bc, (UiEvent_Byte1:16)	; F53DCC  ld BC,(0x20b8)
 	extz	bc	; F53DD0  extz BC
 	cp	bc, 0:i3	; F53DD2  cp BC,0
@@ -114830,23 +114865,25 @@ sub_F53DCC:		; <- T_F42E54
 	jr	z, Drawbar9_1ft_Update_Skip3	; F53DEA  jr Z,0xf53dee
 	jr	Drawbar9_1ft_Update_Return	; F53DEC  jr T,0xf53df3
 Drawbar9_1ft_Update_Skip3:
-	ld	(10400:16), 15	; F53DEE  ld (0x28a0),0x0f
+	ld	(Drawbar_ReloadMark:16), 15	; F53DEE  ld (0x28a0),0x0f
 Drawbar9_1ft_Update_Return:
 	ret	; F53DF3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53DF4
-; Called from: thunk slot T_F42E60
+; Drawbar_ReloadIfMarked
+; Called from: thunk slot T_Drawbar_ReloadIfMarked
 ; Evidence: 0xF53DF4 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53DF4:		; <- T_F42E60
-	m_cp_mi8 MB16, 0x28a0, 0x0f	; F53DF4  cp (0x28a0),0x0f
+; Drawbar_ReloadIfMarked: T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls sub_F540C3 (sends the 6-byte link
+;   message 81 00 10 01 01 A3).
+Drawbar_ReloadIfMarked:		; <- T_Drawbar_ReloadIfMarked
+	m_cp_mi8 MB16, Drawbar_ReloadMark, 0x0f	; F53DF4  cp (0x28a0),0x0f
 	jr	nz, Drawbar9_1ft_Update_Return2	; F53DF9  jr NZ,0xf53e03
-	ld	(10400:16), 240	; F53DFB  ld (0x28a0),0xf0
+	ld	(Drawbar_ReloadMark:16), 240	; F53DFB  ld (0x28a0),0xf0
 	calr	sub_F540C3	; F53E00  calr 0xf540c3
 Drawbar9_1ft_Update_Return2:
 	ret	; F53E03  ret
@@ -114899,7 +114936,7 @@ Drawbar9_1ft_Update_Skip4:
 	jr	z, Drawbar9_1ft_Update_Skip6	; F53E63  jr Z,0xf53e7f
 	jr	Drawbar9_1ft_Update_Join2	; F53E65  jr T,0xf53e86
 Drawbar9_1ft_Update_Skip5:
-	ld	(10400:16), 1	; F53E67  ld (0x28a0),0x01
+	ld	(Drawbar_ReloadMark:16), 1	; F53E67  ld (0x28a0),0x01
 	pushw	0	; F53E6C  push 0x0000
 	calr	sub_F54051	; F53E6F  calr 0xf54051
 	ld	(10384:16), 0	; F53E72  ld (0x2890),0x00
@@ -114907,13 +114944,13 @@ Drawbar9_1ft_Update_Skip5:
 	popw	bc	; F53E7C  pop BC
 	jr	Drawbar9_1ft_Update_Join3	; F53E7D  jr T,0xf53e8d
 Drawbar9_1ft_Update_Skip6:
-	ld	(10400:16), 2	; F53E7F  ld (0x28a0),0x02
+	ld	(Drawbar_ReloadMark:16), 2	; F53E7F  ld (0x28a0),0x02
 	jr	Drawbar9_1ft_Update_Join4	; F53E84  jr T,0xf53e95
 Drawbar9_1ft_Update_Join2:
-	ld	(10400:16), 0	; F53E86  ld (0x28a0),0x00
+	ld	(Drawbar_ReloadMark:16), 0	; F53E86  ld (0x28a0),0x00
 	jr	Drawbar9_1ft_Update_Join4	; F53E8B  jr T,0xf53e95
 Drawbar9_1ft_Update_Join3:
-	m_cp_mi8 MB16, 0x28a0, 0x01	; F53E8D  cp (0x28a0),0x01
+	m_cp_mi8 MB16, Drawbar_ReloadMark, 0x01	; F53E8D  cp (0x28a0),0x01
 	jrl	z, Drawbar9_1ft_Update_Epilogue	; F53E92  jrl Z,0xf5404f
 Drawbar9_1ft_Update_Join4:
 	m_cp_mi8 MB16, UI_ScreenId, 0xa3	; F53E95  cp (0x207c),0xa3
@@ -115314,7 +115351,7 @@ sub_F5418E_Return:
 sub_F54210:		; <- T_F42E6C
 	pushw	hl	; F54210  push HL
 	push	xix	; F54211  push XIX
-	lda	xix, (10400:16)	; F54212  lda XIX,0x28a0
+	lda	xix, (Drawbar_ReloadMark:16)	; F54212  lda XIX,0x28a0
 	ldw	hl, 0	; F54216  ld HL,0x0000
 sub_F54210_Loop:
 	ld	c, (xix)	; F54219  ld C,(XIX)

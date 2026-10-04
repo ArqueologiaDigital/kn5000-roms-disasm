@@ -2228,6 +2228,62 @@ ROWS = [
     ("FCAD7C", "NoteRouting_DefaultRecordPtrs",
      "T_NoteRouting_DefaultRecordPtrs (out): the three 32-bit pointers at out +0 / +4 / +8 = 0x602ACA, the default output record.\n"
      "NoteRouting_OnPartMidiEvent copies them to a part's tone-generator record +2 and MIDI record +2 / +6."),
+    # parameter-event handlers of the pass-B / pass-C class lists (event = record id, byte index, value, changed bits)
+    ("FAB643", "ProgramChangeMode_OnEvent",
+     "T_ProgramChangeMode_OnEvent, UiListB_Class80: byte 0 of the MIDI system record with PROGRAM CHANGE MODE's bits (mask 0x03) changed:\n"
+     "calls T_F407C4_Nop, a bare ret."),
+    ("FB5EE9", "GmMode_OnEventPassB",
+     "T_GmMode_OnEventPassB, UiListB_Class91: byte 3 with the GM bit (0x04) changed, unless GmMode_HandleChange is running\n"
+     "(0x60F01F bit 0, its re-entry guard): GmMode_PostToMsg0716(the new value)."),
+    ("FB5F0F", "GmMode_PostToMsg0716",
+     "(value): T_Msg0716_PostGmSystemOnOff (Msg0716_PostGmSystemOnOff) with 1 when value bit 2 -- the GM bit -- is set, else 0.  Called by\n"
+     "GmMode_HandleChange and GmMode_OnEventPassB."),
+    ("FC182F", "Msg0716_PostGmSystemOnOff",
+     "T_Msg0716_PostGmSystemOnOff (on): the 4-byte message F0 7F 09 01 (on) or F0 7F 09 02 (off) at 0x716 through Msg0716_Post_Trampoline\n"
+     "-- the GM System On / Off pair (sub-IDs 09 01 / 09 02) -- then sub_FC1859."),
+    ("F914AF", "GmMode_RepaintModeScreen",
+     "T_GmMode_RepaintModeScreen, UiListB_Class91: byte 3 with the GM bit (0x04) changed, while (0x97) bit 1 is set and the screen is SOUND\n"
+     "MODE (1) or COMBINATION MODE (2): UI_Request_Hi |= 0x10."),
+    ("FC06FF", "Msg0716_OnPitchBendEvent",
+     "T_Msg0716_OnPitchBendEvent, UiListB_ClassB1 (byte 1 = the part, 0..31): when the part's Msg0716 record (+0x20) has bit 6 at +0x0B,\n"
+     "Msg0716_PostPitchBend for it."),
+    ("FC075E", "Msg0716_OnChannelPressureEvent",
+     "T_Msg0716_OnChannelPressureEvent, UiListB_ClassB4 (byte 1 = the part): while (0x7F5F) is nonzero and the part's Msg0716 record (+0x20) has\n"
+     "bit 5 at +0x0B, Msg0716_PostChannelPressure for it."),
+    ("FBC5F1", "CombiEdit_OnPartParamEvent",
+     "T_CombiEdit_OnPartParamEvent, UiListB_Class00..3F (every part record): by the COMBINATION EDIT screen -- 0x33 / 0x34 / 0x37 / 0x38 /\n"
+     "0xB0 / 0xB1 / 0xB4 / 0xB5 CombiEditPage_OnPartParamEvent, 0x3A / 0xB7 (MIXER) CombiEditMixer_OnPartParamEvent,\n"
+     "0x35 / 0xB2 (CONFIGURE) CombiEditConfigure_OnPartParamEvent; other screens nothing."),
+    ("FBC6D0", "CombiEditPage_OnPartParamEvent",
+     "for the edited part ((0x2765) = class & 0x1F) the byte index, + 0x80 for the second record: 0, 1 and 0x9B..0x9D set\n"
+     "(0x277D) = 1; any other sets UI_ScreenFlags bit 4 (repaint) when the current page's field list\n"
+     "(PtrTable_F1AE71[sub_FBD127()], 0xFF-terminated) holds it."),
+    ("FBC74F", "CombiEditMixer_OnPartParamEvent",
+     "the MIXER screens' handler: calls PtrTable_F1AE89[(0x2767)], one routine per mixer page."),
+    ("FBCA31", "CombiEditConfigure_OnPartParamEvent",
+     "the CONFIGURE screens' handler: for a part in the edited group of 8 ((0x2765) & 0xF8), byte indices 0, 1 and\n"
+     "0x9B..0x9D OR its bit (BitTable_F1AE95) into (0x2770) and set (0x277D) = 1; then by the page (0x2767) a repaint\n"
+     "(UI_ScreenFlags bit 4): page 0 byte 13 (parts up to 31, or 7 in panel-mode group 0x16), page 1 bytes 7 / 8 and\n"
+     "page 2 bytes 9 / 10 of classes 0x20-0x27."),
+    ("F0F061", "DspEffect_OnParamEvent",
+     "T_DspEffect_OnParamEvent, UiListB_Class00 / 20 / 60..63 / 79.  On the DSP EFFECT screens (0x39 COMBINATION EDIT, 0x66, 0xCA SOUND\n"
+     "EDIT): part 0's records (class 0x00 / 0x20) repaint while DspEffect_Section is 0; the effect records go through\n"
+     "DispatchTable_F0F0CE by DspEffect_Section (0..5).  On MAIN OUT EQUALIZER (0x6B) the effect records repaint."),
+    ("F0F0FF", "DspEffectEvent_RepaintAndReturn",
+     "DspEffect_OnParamEvent's tail: UI_ScreenFlags bit 4 (repaint in place), then its popw hl / ret."),
+    ("F4C3F2", "CreatorSelectController_OpenOnEvent",
+     "T_CreatorSelectController_OpenOnEvent, UiListB_ClassA8: byte 5 with bit 2 both changed and set, not on screen 0xAD (CREATOR SELECT\n"
+     "CONTROLLER) or 0xAA (the power-on splash), and no request pending (UI_Request_Hi & 0xC2): requests screen 0xAD\n"
+     "(UI_Request = 0xAD, UI_Request_Hi |= 0x40, UI_RequestBits bit 7)."),
+    ("F4C42E", "CreatorSelectController_OnPartEvent",
+     "T_CreatorSelectController_OnPartEvent, UiListB_Class20..3F: on screen 0xAD (CREATOR SELECT CONTROLLER), for class 0x20 or a nonzero\n"
+     "UI_PartIndex, byte index 0x1A -- 0x19 while (0x2870) is nonzero -- repaints (UI_ScreenFlags bit 4)."),
+    ("F53DCC", "Drawbar_MarkReloadOnSoundEvent",
+     "T_Drawbar_MarkReloadOnSoundEvent, UiListB_Class00 / 20 (part 0's records): byte index 0, 1 or 0x9B..0x9D -> (0x28A0) = 15.  The byte\n"
+     "after the drawbar values at 0x2890 (Drawbar_SendPartParams); this code follows Drawbar9_1ft_Update."),
+    ("F53DF4", "Drawbar_ReloadIfMarked",
+     "T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls sub_F540C3 (sends the 6-byte link\n"
+     "message 81 00 10 01 01 A3)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
