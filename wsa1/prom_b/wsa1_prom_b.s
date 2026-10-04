@@ -172035,7 +172035,7 @@ SmfCC_HandlersByNumber_MultiTrack:
 	.long	DispatchTable_F72323_Nop3	; F72343  [8] -> DispatchTable_F72323_Nop3
 	.long	DispatchTable_F72323_Nop3	; F72347  [9] -> DispatchTable_F72323_Nop3
 	.long	SmfCC_Pan_MultiTrack	; F7234B  [10] -> SmfCC_Pan_MultiTrack
-	.long	ByteMap_F72555 + 0x20	; F7234F  [11] -> 0xF72575
+	.long	SmfCC_Expression_MultiTrack	; F7234F  [11] -> 0xF72575
 	.long	DispatchTable_F72323_Nop3	; F72353  [12] -> DispatchTable_F72323_Nop3
 	.long	DispatchTable_F72323_Nop3	; F72357  [13] -> DispatchTable_F72323_Nop3
 	.long	DispatchTable_F72323_Nop3	; F7235B  [14] -> DispatchTable_F72323_Nop3
@@ -172398,10 +172398,12 @@ sub_F724CB_Return:
 ;           --null-ptr`).
 ; Unknown: what the two index spaces ARE, and who reads it.
 ; --------------------------------------------------------------------------
+; ⚠ CORRECTED 2026-10-04: the 33rd byte below, 0xD1 at 0xF72575, is NOT part of this map.  It is the first byte of
+;   SmfCC_Expression_MultiTrack (`d1 b2 11 25` = ld IY,(0x11B2)), which SmfCC_HandlersByNumber_MultiTrack[11] -- CC 11 --
+;   names.  The map is the 32 bytes 0xF72555-0xF72574, two 0..15 runs; the routine is converted below.
 ByteMap_F72555:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F72555  [0..15]
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F72565  [16..31]
-	.byte	0xD1	; F72575  [32..32]
 
 
 ; --------------------------------------------------------------------------
@@ -172421,14 +172423,50 @@ ByteMap_F72555:
 ;           such.
 ; Unknown: everything about it except its bytes.
 ; --------------------------------------------------------------------------
-Data_F72576:
-	.byte	0xB2, 0x11, 0x25, 0x1E, 0x82, 0x03, 0xDD, 0xCC, 0x0F, 0x00, 0x3D, 0x1E, 0x44, 0x02, 0xC1, 0xD0	; F72576  [0..15]
-	.byte	0x10, 0x20, 0xC8, 0xCC, 0x0F, 0x21, 0xF0, 0xC8, 0xE1, 0x1E, 0x48, 0xEA, 0x5D, 0xC1, 0x38, 0x12	; F72586  [16..31]
-	.byte	0x3F, 0x00, 0x6E, 0x3E, 0xED, 0xEC, 0x01, 0x3C, 0x44, 0xD3, 0x10, 0x00, 0x00, 0xD3, 0x07, 0xF0	; F72596  [32..47]
-	.byte	0xF4, 0x20, 0x5C, 0xED, 0xEF, 0x01, 0x3D, 0x1E, 0x7F, 0xEC, 0x5D, 0x3D, 0x1E, 0x25, 0xEA, 0x5D	; F725A6  [48..63]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x00, 0x6E, 0x1B, 0xC1, 0xD2, 0x10, 0x21, 0x3D, 0x1E, 0x15, 0xEA, 0x5D	; F725B6  [64..79]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x00, 0x6E, 0x0B, 0x1E, 0xCA, 0xEC, 0x1E, 0x23, 0x02, 0xF1, 0x38, 0x12	; F725C6  [80..95]
-	.byte	0x00, 0x00, 0x0E	; F725D6  [96..98]
+; 2026-10-04: these 99 bytes, with the 0xD1 before them, are the routine SmfCC_Expression_MultiTrack (0xF72575-0xF725D8):
+;   SmfCC_HandlersByNumber_MultiTrack[11] names its first byte, and unidasm decodes the span into 37 whole instructions ending
+;   on the `ret` before SmfCC_BankSelectLsb_MultiTrack.  Its shape is SmfEvent_ChannelPressure_MultiTrack's: slot cursor, status
+;   0xF0 | channel, the time (Smf_TicksToPpq96), the value (0x10D2), then BStore_SaveTrackCursor.
+; SmfCC_Expression_MultiTrack: the multi-track copy of SmfCC_Expression (CC 11).
+SmfCC_Expression_MultiTrack:
+	ld	iy, (4530:16)	; F72575  ld IY,(0x11b2)
+	calr	Smf_TrackToSlot	; F72579  calr 0xf728fe
+	and	iy, 15	; F7257C  and IY,0x000f
+	push	xiy	; F72580  push XIY
+	calr	BStore_LoadTrackCursor	; F72581  calr 0xf727c8
+	ld	w, (Smf_EventStatus:16)	; F72584  ld W,(0x10d0)
+	and	w, 15	; F72588  and W,0x0f
+	ld	a, 240:opc	; F7258B  ld A,0xf0
+	or	a, w	; F7258D  or A,W
+	calr	BStore_PutByteAndAdvance	; F7258F  calr 0xf70fda
+	pop	xiy	; F72592  pop XIY
+	m_cp_mi8 MB16, 0x1238, 0x00	; F72593  cp (0x1238),0x00
+	jr	nz, SmfCC_Expression_MultiTrack_Return	; F72598  jr NZ,0xf725d8
+	sla	xiy, 1	; F7259A  sla 0x01,XIY
+	push	xix	; F7259D  push XIX
+	ld	xix, 4307	; F7259E  ld XIX,0x000010d3
+	mx_ld_rm MXW, ra_IX, ra_IY, 0	; F725A3  ld WA,(XIX+IY)
+	pop	xix	; F725A8  pop XIX
+	srl	xiy, 1	; F725A9  srl 0x01,XIY
+	push	xiy	; F725AC  push XIY
+	calr	Smf_TicksToPpq96	; F725AD  calr 0xf7122f
+	pop	xiy	; F725B0  pop XIY
+	push	xiy	; F725B1  push XIY
+	calr	BStore_PutByteAndAdvance	; F725B2  calr 0xf70fda
+	pop	xiy	; F725B5  pop XIY
+	m_cp_mi8 MB16, 0x1238, 0x00	; F725B6  cp (0x1238),0x00
+	jr	nz, SmfCC_Expression_MultiTrack_Return	; F725BB  jr NZ,0xf725d8
+	ld	a, (4306:16)	; F725BD  ld A,(0x10d2)
+	push	xiy	; F725C1  push XIY
+	calr	BStore_PutByteAndAdvance	; F725C2  calr 0xf70fda
+	pop	xiy	; F725C5  pop XIY
+	m_cp_mi8 MB16, 0x1238, 0x00	; F725C6  cp (0x1238),0x00
+	jr	nz, SmfCC_Expression_MultiTrack_Return	; F725CB  jr NZ,0xf725d8
+	calr	sub_F7129A	; F725CD  calr 0xf7129a
+	calr	BStore_SaveTrackCursor	; F725D0  calr 0xf727f6
+	ld	(4664:16), 0	; F725D3  ld (0x1238),0x00
+SmfCC_Expression_MultiTrack_Return:
+	ret	; F725D8  ret
 
 
 ; --------------------------------------------------------------------------

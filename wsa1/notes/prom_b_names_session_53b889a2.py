@@ -3463,4 +3463,5 @@ RENAMES = [
     ("sub_F7267E", "SmfCC_Effect3Depth_MultiTrack"),
     ("sub_F726A2", "SmfCC_Effect4Depth_MultiTrack"),
     ("DispatchTable_F72323", "SmfCC_HandlersByNumber_MultiTrack"),
+    ("Data_F72576", "SmfCC_Expression_MultiTrack"),
 ]
