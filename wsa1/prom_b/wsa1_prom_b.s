@@ -88757,10 +88757,10 @@ T_F40D64:	jp sub_F4E32A  ; -> prom_b 0x4E32A   x1
 T_F40D68:	jp sub_F4E478  ; -> prom_b 0x4E478   x1
 T_F40D6C:	jp sub_F4E390  ; -> prom_b 0x4E390   x1
 	.fill 0x20, 1, 0x0E  ; 0xF40D70: 32 x ret
-T_F40D90:	jp Fwd_F55808  ; -> prom_b 0x55808
-T_F40D94:	jp Fwd_F5580C  ; -> prom_b 0x5580C
-T_F40D98:	jp Fwd_F55800  ; -> prom_b 0x55800
-T_F40D9C:	jp Fwd_F55804  ; -> prom_b 0x55804
+T_F40D90:	jp ModeEnter_SeqPlay_Fwd  ; -> prom_b 0x55808
+T_F40D94:	jp ModeLeave_SeqPlay_Fwd  ; -> prom_b 0x5580C
+T_F40D98:	jp ModeEnter_RealtimeRecord_Fwd  ; -> prom_b 0x55800
+T_F40D9C:	jp ModeLeave_RealtimeRecord_Fwd  ; -> prom_b 0x55804
 T_F40DA0:	jp ScreenEnter_SeqPlayScreen_Fwd  ; -> prom_b 0x55856
 T_F40DA4:	jp ScreenLeave_SeqPlayScreen_Fwd  ; -> prom_b 0x5585A
 T_F40DA8:	jp ScreenButton_SeqPlayScreen  ; -> prom_b 0x5585E
@@ -116068,10 +116068,10 @@ Bit32MaskTable:
 
 
 ; --------------------------------------------------------------------------
-; Fwd_F55800
+; ModeEnter_RealtimeRecord_Fwd
 ; Called from: T_F40D98 (0xF40D98, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5602C
+; Calls:   ModeEnter_RealtimeRecord
 ; Evidence: thunk slot T_F40D98 holds `jp 0x00F55800`, and 0xF55800 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116082,15 +116082,15 @@ Bit32MaskTable:
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55800:		; <- T_F40D98
-	calr	sub_F5602C	; F55800  calr 0xf5602c
+ModeEnter_RealtimeRecord_Fwd:		; <- T_F40D98
+	calr	ModeEnter_RealtimeRecord	; F55800  calr 0xf5602c
 	ret	; F55803  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55804
+; ModeLeave_RealtimeRecord_Fwd
 ; Called from: T_F40D9C (0xF40D9C, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F5603C
+; Calls:   ModeLeave_RealtimeRecord
 ; Evidence: thunk slot T_F40D9C holds `jp 0x00F55804`, and 0xF55804 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116101,15 +116101,15 @@ Fwd_F55800:		; <- T_F40D98
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55804:		; <- T_F40D9C
-	calr	sub_F5603C	; F55804  calr 0xf5603c
+ModeLeave_RealtimeRecord_Fwd:		; <- T_F40D9C
+	calr	ModeLeave_RealtimeRecord	; F55804  calr 0xf5603c
 	ret	; F55807  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F55808
+; ModeEnter_SeqPlay_Fwd
 ; Called from: T_F40D90 (0xF40D90, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56B5F
+; Calls:   ModeEnter_SeqPlay
 ; Evidence: thunk slot T_F40D90 holds `jp 0x00F55808`, and 0xF55808 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116120,15 +116120,15 @@ Fwd_F55804:		; <- T_F40D9C
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F55808:		; <- T_F40D90
-	calr	sub_F56B5F	; F55808  calr 0xf56b5f
+ModeEnter_SeqPlay_Fwd:		; <- T_F40D90
+	calr	ModeEnter_SeqPlay	; F55808  calr 0xf56b5f
 	ret	; F5580B  ret
 
 ; --------------------------------------------------------------------------
-; Fwd_F5580C
+; ModeLeave_SeqPlay_Fwd
 ; Called from: T_F40D94 (0xF40D94, x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F56B67
+; Calls:   ModeLeave_SeqPlay
 ; Evidence: thunk slot T_F40D94 holds `jp 0x00F5580C`, and 0xF5580C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -116139,8 +116139,8 @@ Fwd_F55808:		; <- T_F40D90
 ;          that would distinguish it from its siblings is a bare index into
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
-Fwd_F5580C:		; <- T_F40D94
-	calr	sub_F56B67	; F5580C  calr 0xf56b67
+ModeLeave_SeqPlay_Fwd:		; <- T_F40D94
+	calr	ModeLeave_SeqPlay	; F5580C  calr 0xf56b67
 	ret	; F5580F  ret
 
 ; --------------------------------------------------------------------------
@@ -117549,7 +117549,7 @@ DisplayListB_Run_MasterSongMeasure:
 	ret	; F5602B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5602C
+; ModeEnter_RealtimeRecord
 ; Called from: in-module: 0xF55800
 ; Touches: nothing with an absolute address
 ; Calls:   T_F40CF0 sub_F57433 T_F40CE8 T_F40BD8
@@ -117558,7 +117558,9 @@ DisplayListB_Run_MasterSongMeasure:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5602C:
+; ModeEnter_RealtimeRecord: the +0 ENTER of panel mode 5 -- PanelScreen_VtableTable[5] (view A, indexed by PanelMode) is the
+;   thunk triple T_F40D98, and PanelMode_ToScreenIdMap[5] = 0x06, RealtimeRecordScreen (notes/prom_b_sequencer_screen_buttons.py).
+ModeEnter_RealtimeRecord:
 	call	T_F40CF0	; F5602C  call 0xf40cf0
 	calr	sub_F57433	; F56030  calr 0xf57433
 	call	T_F40CE8	; F56033  call 0xf40ce8
@@ -117566,7 +117568,7 @@ sub_F5602C:
 	ret	; F5603B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5603C
+; ModeLeave_RealtimeRecord
 ; Called from: in-module: 0xF55804
 ; Touches: (0x34D1) (0x36C6) (0x36CA) (0x3758)
 ; Calls:   T_F40CEC sub_F57443
@@ -117575,7 +117577,8 @@ sub_F5602C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5603C:
+; ModeLeave_RealtimeRecord: the +4 LEAVE of panel mode 5 (thunk T_F40D9C).
+ModeLeave_RealtimeRecord:
 	m_and_mi8 MB16, 0x34d1, 0xef	; F5603C  and (0x34d1),0xef
 	call	T_F40CEC	; F56041  call 0xf40cec
 	xor	xwa, xwa	; F56045  xor XWA,XWA
@@ -119645,7 +119648,7 @@ sub_F56B14_Return:
 	ret	; F56B5E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56B5F
+; ModeEnter_SeqPlay
 ; Called from: in-module: 0xF55808
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F57433 T_SoundGroup_ReloadSelection
@@ -119654,13 +119657,15 @@ sub_F56B14_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56B5F:
+; ModeEnter_SeqPlay: the +0 ENTER of panel mode 8 -- PanelScreen_VtableTable[8] is T_F40D90, and
+;   PanelMode_ToScreenIdMap[8] = 0x12, SeqPlayScreen.
+ModeEnter_SeqPlay:
 	calr	sub_F57433	; F56B5F  calr 0xf57433
 	call	T_SoundGroup_ReloadSelection	; F56B62  call 0xf415c8
 	ret	; F56B66  ret
 
 ; --------------------------------------------------------------------------
-; sub_F56B67
+; ModeLeave_SeqPlay
 ; Called from: in-module: 0xF5580C
 ; Touches: (0x2250) (0x36C6) (0x36CA) (0x3757) (0x3758)
 ; Calls:   sub_F57443 T_Queue2E00_AppendRegs T_F411BC
@@ -119669,7 +119674,8 @@ sub_F56B5F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F56B67:
+; ModeLeave_SeqPlay: the +4 LEAVE of panel mode 8 (thunk T_F40D94).
+ModeLeave_SeqPlay:
 	xor	xwa, xwa	; F56B67  xor XWA,XWA
 	ld	(14026:16), xwa	; F56B69  ld (0x36ca),XWA
 	ld	(14022:16), xwa	; F56B6D  ld (0x36c6),XWA

@@ -3069,6 +3069,14 @@ RENAMES = {
     "sub_F57014": "CyclePlayScreen_LcdKeyRow3",
     "sub_F57032": "CyclePlayScreen_LcdKeyRow4",
     "sub_F5739C": "CyclePlayEditScreen_LcdKeyRow2",
+    "sub_F5602C": "ModeEnter_RealtimeRecord",
+    "sub_F5603C": "ModeLeave_RealtimeRecord",
+    "sub_F56B5F": "ModeEnter_SeqPlay",
+    "sub_F56B67": "ModeLeave_SeqPlay",
+    "Fwd_F55800": "ModeEnter_RealtimeRecord_Fwd",
+    "Fwd_F55804": "ModeLeave_RealtimeRecord_Fwd",
+    "Fwd_F55808": "ModeEnter_SeqPlay_Fwd",
+    "Fwd_F5580C": "ModeLeave_SeqPlay_Fwd",
 }
 
 
