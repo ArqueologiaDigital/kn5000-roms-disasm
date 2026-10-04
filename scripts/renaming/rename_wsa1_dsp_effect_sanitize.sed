@@ -1,0 +1,19 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_F1156B\b/DspEffect_SanitizeBlock/g
+s/\bsub_F1162E\b/DspEffect_CopyAlgorithmDefaults/g
+s/\bsub_F11556\b/DspEffect_CopyAlgorithmDefaults_Fwd/g
+s/\bsub_F114DA\b/DspEffect_ApplyAlgorithmDefaults/g
+s/\bsub_F116C4\b/DspEffect_RepairParams/g
+s/\bsub_F11831\b/DspEffect_RepairEqBandFc/g
+s/\bsub_F118E2\b/DspEffect_RepairEqBandGain/g
+s/\bsub_F1195A\b/DspEffect_RepairU8/g
+s/\bsub_F119A9\b/DspEffect_RepairS8/g
+s/\bsub_F119F8\b/DspEffect_RepairU16/g
+s/\bsub_F11A61\b/DspEffect_RepairEqFc/g
+s/\bsub_F11AF3\b/DspEffect_RepairEqQ/g
+s/\bsub_F11B85\b/DspEffect_RepairEqGain/g
+s/\bsub_F11C10\b/DspEffect_RepairSlowFast/g
+s/\bScreenTable_F13364\b/DspEffect_RepairValueTable/g
+s/\bT_F42F5C\b/T_DspEffect_SanitizeBlock/g
+s/\bT_F42F58\b/T_DspEffect_ApplyAlgorithmDefaults/g
+s/\bT_F42F64\b/T_DspEffect_CopyAlgorithmDefaults_Fwd/g

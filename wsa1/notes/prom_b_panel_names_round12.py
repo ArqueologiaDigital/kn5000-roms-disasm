@@ -49,7 +49,7 @@ QUESTION IT ANSWERS
         a vtable word equal to T_F434E8 could only come back empty: ViewB entry 0xAD
         points at T_F434E0, whose +8 slot is T_F434E8.  It is ScreenButton_CreatorSelectController now,
         so table 0xF4C38D belongs to screen 0xAD.  The other two readers' triples
-        (T_F42F48 / T_F42F64) are pointed at by no vtable word, so their refusal stands.
+        (T_F42F48 / T_DspEffect_CopyAlgorithmDefaults_Fwd) are pointed at by no vtable word, so their refusal stands.
       3 REFUSED, no label at that address at all (mid-routine entries); one of
         them, 0xF4C4DD, additionally sits in SIX control slots at once, so even
         with a label the slot would not distinguish it.

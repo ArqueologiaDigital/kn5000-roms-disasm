@@ -30126,7 +30126,7 @@ sub_F0F570:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
-; Calls:   T_IndexedTable_GetPtr sub_F1156B sub_F1018F
+; Calls:   T_IndexedTable_GetPtr DspEffect_SanitizeBlock sub_F1018F
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30148,7 +30148,7 @@ sub_F0F579:
 	extz	bc	; F0F58D  extz BC
 	add	bc, 97	; F0F58F  add BC,0x0061
 	pushw	bc	; F0F593  push BC
-	calr	sub_F1156B	; F0F594  calr 0xf1156b
+	calr	DspEffect_SanitizeBlock	; F0F594  calr 0xf1156b
 	inc	8, xsp	; F0F597  inc 0,XSP
 	jr	DispatchTable_F0F558_Nop4	; F0F599  jr T,0xf0f59e
 sub_F0F579_Skip:
@@ -34756,10 +34756,10 @@ DspEffect_SetAlgorithm_Skip6:
 	ret	; F114D9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F114DA
-; Called from: T_F42F58 (x8)
+; DspEffect_ApplyAlgorithmDefaults
+; Called from: T_DspEffect_ApplyAlgorithmDefaults (x8)
 ; Touches: nothing with an absolute address
-; Calls:   T_IndexedTable_GetPtr sub_F1162E
+; Calls:   T_IndexedTable_GetPtr DspEffect_CopyAlgorithmDefaults
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF114DA is an instruction boundary of this
@@ -34768,7 +34768,12 @@ DspEffect_SetAlgorithm_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F114DA:		; <- T_F42F58
+; DspEffect_ApplyAlgorithmDefaults: (block entry 0x61..0x63, algorithm): when the block's EffectAlgoToPos_BlockNN offers the algorithm,
+;   DspEffect_CopyAlgorithmDefaults into T_IndexedTable_GetPtr(block) and returns 0; otherwise returns 0xFFFF.  The
+;   unqueued twin of DspEffect_SetAlgorithm.  prom_a calls it (thunk T_DspEffect_ApplyAlgorithmDefaults) for blocks
+;   0x61 / 0x62 / 0x63 with the stored algorithm bytes (0x7642 / 0x7662 / 0x7682) at 0xFAAB8E, and with 1 / 0x23 / 0x14 --
+;   the fallbacks DspEffect_SanitizeBlock uses -- at 0xFB565D.
+DspEffect_ApplyAlgorithmDefaults:		; <- T_DspEffect_ApplyAlgorithmDefaults
 	link XIZ,0x0000	; F114DA  link XIZ,0x0000
 	pushw	hl	; F114DE  push HL
 	pushw	de	; F114DF  push DE
@@ -34815,7 +34820,7 @@ DspEffect_SetAlgorithm_Join4:
 	call	T_IndexedTable_GetPtr	; F1153F  call 0xf42c8c
 	push	xiy	; F11543  push XIY
 	pushw	hl	; F11544  push HL
-	calr	sub_F1162E	; F11545  calr 0xf1162e
+	calr	DspEffect_CopyAlgorithmDefaults	; F11545  calr 0xf1162e
 	inc	8, xsp	; F11548  inc 0,XSP
 	sub	wa, wa	; F1154A  sub WA,WA
 	jr	DspEffect_SetAlgorithm_Join5	; F1154C  jr T,0xf11551
@@ -34828,10 +34833,10 @@ DspEffect_SetAlgorithm_Join5:
 	ret	; F11555  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11556
-; Called from: T_F42F64 (x0)
+; DspEffect_CopyAlgorithmDefaults_Fwd
+; Called from: T_DspEffect_CopyAlgorithmDefaults_Fwd (x0)
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1162E
+; Calls:   DspEffect_CopyAlgorithmDefaults
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF11556 is an instruction boundary of this
@@ -34840,22 +34845,23 @@ DspEffect_SetAlgorithm_Join5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11556:		; <- T_F42F64
+; DspEffect_CopyAlgorithmDefaults_Fwd: pushes (block, algorithm byte zero-extended) and calls DspEffect_CopyAlgorithmDefaults.  Thunk slot T_F42F64; no caller found.
+DspEffect_CopyAlgorithmDefaults_Fwd:		; <- T_DspEffect_CopyAlgorithmDefaults_Fwd
 	link XIZ,0x0000	; F11556  link XIZ,0x0000
 	ld	xbc, (xiz+10)	; F1155A  ld XBC,(XIZ+0x0a)
 	push	xbc	; F1155D  push XBC
 	push	0	; F1155E  push 0x00
 	m_push MBD+r6, 0x08	; F11560  push (XIZ+0x08)
-	calr	sub_F1162E	; F11563  calr 0xf1162e
+	calr	DspEffect_CopyAlgorithmDefaults	; F11563  calr 0xf1162e
 	inc	6, xsp	; F11566  inc 6,XSP
 	unlk XIZ	; F11568  unlk XIZ
 	ret	; F1156A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1156B
-; Called from: T_F42F5C (x4); in-module: 0xF0F594 0xF12041 0xF120E3
+; DspEffect_SanitizeBlock
+; Called from: T_DspEffect_SanitizeBlock (x4); in-module: 0xF0F594 0xF12041 0xF120E3
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1162E sub_F116C4
+; Calls:   DspEffect_CopyAlgorithmDefaults DspEffect_RepairParams
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF1156B is an instruction boundary of this
@@ -34864,7 +34870,11 @@ sub_F11556:		; <- T_F42F64
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1156B:		; <- T_F42F5C
+; DspEffect_SanitizeBlock: (block entry 0x61..0x63, block): H = block byte 0 (the algorithm, bit 7 cleared), looked up in that block's
+;   EffectAlgoToPos_Block97/98/99; byte 21 above 99 becomes 35, byte 23 above 1 becomes 0; an algorithm the block does
+;   not offer (0xFF) is replaced by 1 / 35 / 20 through DspEffect_CopyAlgorithmDefaults, otherwise DspEffect_RepairParams.
+;   Thunk T_DspEffect_SanitizeBlock; prom_a's ParamImage_SanitizeAll calls it on records 0x61 and 0x63.
+DspEffect_SanitizeBlock:		; <- T_DspEffect_SanitizeBlock
 	link XIZ,0x0000	; F1156B  link XIZ,0x0000
 	pushw	hl	; F1156F  push HL
 	push	xix	; F11570  push XIX
@@ -34940,7 +34950,7 @@ sub_F1156B_Skip8:
 	push	xbc	; F11611  push XBC
 	pushw	20	; F11612  push 0x0014
 sub_F1156B_Join2:
-	calr	sub_F1162E	; F11615  calr 0xf1162e
+	calr	DspEffect_CopyAlgorithmDefaults	; F11615  calr 0xf1162e
 sub_F1156B_Join3:
 	inc	6, xsp	; F11618  inc 6,XSP
 	jr	sub_F1156B_Join4	; F1161A  jr T,0xf11629
@@ -34949,7 +34959,7 @@ sub_F1156B_Skip9:
 	push	xbc	; F1161F  push XBC
 	push	0	; F11620  push 0x00
 	push	h	; F11622  push H
-	calr	sub_F116C4	; F11624  calr 0xf116c4
+	calr	DspEffect_RepairParams	; F11624  calr 0xf116c4
 	jr	sub_F1156B_Join3	; F11627  jr T,0xf11618
 sub_F1156B_Join4:
 	pop	xix	; F11629  pop XIX
@@ -34958,7 +34968,7 @@ sub_F1156B_Join4:
 	ret	; F1162D  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1162E
+; DspEffect_CopyAlgorithmDefaults
 ; Called from: in-module: 0xF11545 0xF11563 0xF11615 0xF116D4
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -34969,7 +34979,10 @@ sub_F1156B_Join4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1162E:
+; DspEffect_CopyAlgorithmDefaults: (algorithm word, block): byte 0 = the algorithm, then EffectDefaultParams[algorithm]'s record copied the way
+;   DspEffect_SetAlgorithm copies it -- +0 -> byte 22, +1..+4 -> bytes 17..20, values -> bytes 1..16 up to the first
+;   0xFF and zero after it -- but nothing is queued.
+DspEffect_CopyAlgorithmDefaults:
 	link XIZ,0xfff8	; F1162E  link XIZ,0xfff8
 	pushw	hl	; F11632  push HL
 	pushw	de	; F11633  push DE
@@ -35040,10 +35053,10 @@ sub_F1162E_Join2:
 	ret	; F116C3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F116C4
+; DspEffect_RepairParams
 ; Called from: in-module: 0xF11624
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1162E
+; Calls:   DspEffect_CopyAlgorithmDefaults
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF116C4 is an instruction boundary of this
@@ -35052,7 +35065,11 @@ sub_F1162E_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F116C4:
+; DspEffect_RepairParams: (algorithm, block): DspEffect_CopyAlgorithmDefaults into a local copy, then for each EffectParamDescriptors_F12F24[algorithm]
+;   entry (type, offset) up to type 0xFF calls DspEffect_RepairValueTable[type](type, offset, block, defaults);
+;   then DspEffect_RepairEqBandFc (0, 17) / (1, 19) and DspEffect_RepairEqBandGain (0, 17) / (1, 19); finally byte 22
+;   must equal byte +3 of one of the algorithm's descriptors, or it gets the default's byte 22.
+DspEffect_RepairParams:
 	link XIZ,0xffd6	; F116C4  link XIZ,0xffd6
 	pushw	hl	; F116C8  push HL
 	pushw	de	; F116C9  push DE
@@ -35061,7 +35078,7 @@ sub_F116C4:
 	push	xbc	; F116CE  push XBC
 	push	0	; F116CF  push 0x00
 	m_push MBD+r6, 0x08	; F116D1  push (XIZ+0x08)
-	calr	sub_F1162E	; F116D4  calr 0xf1162e
+	calr	DspEffect_CopyAlgorithmDefaults	; F116D4  calr 0xf1162e
 	ld	l, 0:opc	; F116D7  ld L,0x00
 	ld	c, 4:opc	; F116D9  ld C,0x04
 	m_mul MBD+r6, 0x08, 3	; F116DB  mul BC,(XIZ+0x08)
@@ -35099,7 +35116,7 @@ sub_F116C4_Loop:
 	ld	c, 4:opc	; F11724  ld C,0x04
 	mul	bc, e	; F11726  mul BC,E
 	extz	xbc	; F11728  extz XBC
-	add	xbc, ScreenTable_F13364	; F1172A  add XBC,0x00f13364
+	add	xbc, DspEffect_RepairValueTable	; F1172A  add XBC,0x00f13364
 	ld	xbc, (xbc)	; F11730  ld XBC,(XBC)
 	lda	xiy, (sub_F116C4_Resume:24)	; F11732  lda XIY,0xf1173a
 	push	xiy	; F11737  push XIY
@@ -35151,28 +35168,28 @@ sub_F116C4_Join2:
 	push	xwa	; F1178D  push XWA
 	pushw	17	; F1178E  push 0x0011
 	pushw	0	; F11791  push 0x0000
-	calr	sub_F11831	; F11794  calr 0xf11831
+	calr	DspEffect_RepairEqBandFc	; F11794  calr 0xf11831
 	lda	xbc, (xiz-38)	; F11797  lda XBC,XIZ+0xda
 	push	xbc	; F1179A  push XBC
 	ld	xwa, (xiz+10)	; F1179B  ld XWA,(XIZ+0x0a)
 	push	xwa	; F1179E  push XWA
 	pushw	17	; F1179F  push 0x0011
 	pushw	0	; F117A2  push 0x0000
-	calr	sub_F118E2	; F117A5  calr 0xf118e2
+	calr	DspEffect_RepairEqBandGain	; F117A5  calr 0xf118e2
 	lda	xbc, (xiz-38)	; F117A8  lda XBC,XIZ+0xda
 	push	xbc	; F117AB  push XBC
 	ld	xwa, (xiz+10)	; F117AC  ld XWA,(XIZ+0x0a)
 	push	xwa	; F117AF  push XWA
 	pushw	19	; F117B0  push 0x0013
 	pushw	1	; F117B3  push 0x0001
-	calr	sub_F11831	; F117B6  calr 0xf11831
+	calr	DspEffect_RepairEqBandFc	; F117B6  calr 0xf11831
 	lda	xbc, (xiz-38)	; F117B9  lda XBC,XIZ+0xda
 	push	xbc	; F117BC  push XBC
 	ld	xwa, (xiz+10)	; F117BD  ld XWA,(XIZ+0x0a)
 	push	xwa	; F117C0  push XWA
 	pushw	19	; F117C1  push 0x0013
 	pushw	1	; F117C4  push 0x0001
-	calr	sub_F118E2	; F117C7  calr 0xf118e2
+	calr	DspEffect_RepairEqBandGain	; F117C7  calr 0xf118e2
 	ld	xbc, 22	; F117CA  ld XBC,0x00000016
 	add	(xiz+10), xbc	; F117CF  add (XIZ+0x0a),XBC
 	ld	xwa, (xiz+10)	; F117D2  ld XWA,(XIZ+0x0a)
@@ -35220,7 +35237,7 @@ sub_F116C4_Skip4:
 	ret	; F11830  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11831
+; DspEffect_RepairEqBandFc
 ; Called from: in-module: 0xF11794 0xF117B6
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -35231,7 +35248,10 @@ sub_F116C4_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11831:
+; DspEffect_RepairEqBandFc: (which, offset 17 or 19, block, defaults): the Fc field (bits 6..10) of the word at block+offset must lie in
+;   0..min(Fc of +19, 22) for which = 0, max(Fc of +17, 8)..26 for which = 1 -- the band at +17 may not pass the band
+;   at +19; out of range, bytes 17..20 are copied from the defaults.
+DspEffect_RepairEqBandFc:
 	link XIZ,0xffec	; F11831  link XIZ,0xffec
 	pushw	hl	; F11835  push HL
 	pushw	de	; F11836  push DE
@@ -35311,7 +35331,7 @@ sub_F11831_Skip4:
 	ret	; F118E1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F118E2
+; DspEffect_RepairEqBandGain
 ; Called from: in-module: 0xF117A5 0xF117C7
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -35322,7 +35342,9 @@ sub_F11831_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F118E2:
+; DspEffect_RepairEqBandGain: (which, offset, block, defaults): the gain field (bits 0..5) of block+offset above 48 copies bytes 17..20 from
+;   the defaults.  The 0..48 range is EffectValueRanges type 5 (BAND EMPHASIS G).
+DspEffect_RepairEqBandGain:
 	link XIZ,0xffe8	; F118E2  link XIZ,0xffe8
 	pushw	hl	; F118E6  push HL
 	push	xix	; F118E7  push XIX
@@ -35376,7 +35398,7 @@ sub_F118E2_Skip2:
 	ret	; F11959  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1195A
+; DspEffect_RepairU8
 ; Called from: in-module: 0xF11C26
 ; Touches: nothing with an absolute address
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
@@ -35389,7 +35411,9 @@ sub_F118E2_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F1195A:
+; DspEffect_RepairU8: DspEffect_RepairValueTable's entry for the byte types (1, 6..10, ...): the byte at block+offset outside
+;   EffectValueRanges[type] min..max (unsigned) is replaced by the defaults' byte.
+DspEffect_RepairU8:
 	link XIZ,0xfffc	; F1195A  link XIZ,0xfffc
 	pushw	hl	; F1195E  push HL
 	pushw	de	; F1195F  push DE
@@ -35429,7 +35453,7 @@ sub_F1195A_Skip2:
 	ret	; F119A8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F119A9
+; DspEffect_RepairS8
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -35443,7 +35467,8 @@ sub_F1195A_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F119A9:
+; DspEffect_RepairS8: DspEffect_RepairU8 with a SIGNED compare (jr GT / GE): types 0x0C and 0x11, the slots DspEffect_StepS8 takes.
+DspEffect_RepairS8:
 	link XIZ,0xfffc	; F119A9  link XIZ,0xfffc
 	pushw	hl	; F119AD  push HL
 	pushw	de	; F119AE  push DE
@@ -35483,7 +35508,7 @@ sub_F1195A_Skip4:
 	ret	; F119F7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F119F8
+; DspEffect_RepairU16
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -35497,7 +35522,9 @@ sub_F1195A_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F119F8:
+; DspEffect_RepairU16: the 16-bit types (0x14..0x16, 0x18, 0x1A..0x1C): the word at block+offset outside min..max is replaced by
+;   the defaults' two bytes.
+DspEffect_RepairU16:
 	link XIZ,0xfff8	; F119F8  link XIZ,0xfff8
 	pushw	hl	; F119FC  push HL
 	pushw	de	; F119FD  push DE
@@ -35547,7 +35574,7 @@ sub_F1195A_Skip6:
 	ret	; F11A60  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11A61
+; DspEffect_RepairEqFc
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -35561,7 +35588,8 @@ sub_F1195A_Skip6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11A61:
+; DspEffect_RepairEqFc: types 2 and 3 (EMPHASIS Fc): the field (word & 0x07C0) >> 6 outside min..max is replaced by the defaults' field.
+DspEffect_RepairEqFc:
 	link XIZ,0xfffc	; F11A61  link XIZ,0xfffc
 	pushw	hl	; F11A65  push HL
 	pushw	de	; F11A66  push DE
@@ -35628,7 +35656,7 @@ sub_F1195A_Skip8:
 	ret	; F11AF2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11AF3
+; DspEffect_RepairEqQ
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -35642,7 +35670,8 @@ sub_F1195A_Skip8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11AF3:
+; DspEffect_RepairEqQ: type 4 (Q): the field (word & 0xF800) >> 11 outside min..max is replaced by the defaults' field.
+DspEffect_RepairEqQ:
 	link XIZ,0xfffc	; F11AF3  link XIZ,0xfffc
 	pushw	hl	; F11AF7  push HL
 	pushw	de	; F11AF8  push DE
@@ -35709,7 +35738,7 @@ sub_F1195A_Skip10:
 	ret	; F11B84  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11B85
+; DspEffect_RepairEqGain
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -35723,7 +35752,8 @@ sub_F1195A_Skip10:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11B85:
+; DspEffect_RepairEqGain: type 5 (G): the field word & 0x003F outside min..max is replaced by the defaults' field.
+DspEffect_RepairEqGain:
 	link XIZ,0xfffc	; F11B85  link XIZ,0xfffc
 	pushw	hl	; F11B89  push HL
 	pushw	de	; F11B8A  push DE
@@ -35787,11 +35817,11 @@ sub_F1195A_Skip12:
 	ret	; F11C0F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11C10
+; DspEffect_RepairSlowFast
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1195A
+; Calls:   DspEffect_RepairU8
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -35802,7 +35832,8 @@ sub_F1195A_Skip12:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F11C10:
+; DspEffect_RepairSlowFast: type 0x0B (SLOW/FAST): re-pushes its arguments and calls DspEffect_RepairU8.
+DspEffect_RepairSlowFast:
 	link XIZ,0x0000	; F11C10  link XIZ,0x0000
 	ld	xbc, (xiz+16)	; F11C14  ld XBC,(XIZ+0x10)
 	push	xbc	; F11C17  push XBC
@@ -35812,7 +35843,7 @@ sub_F11C10:
 	m_push MBD+r6, 0x0a	; F11C1E  push (XIZ+0x0a)
 	push	0	; F11C21  push 0x00
 	m_push MBD+r6, 0x08	; F11C23  push (XIZ+0x08)
-	calr	sub_F1195A	; F11C26  calr 0xf1195a
+	calr	DspEffect_RepairU8	; F11C26  calr 0xf1195a
 	inc	8, xsp	; F11C29  inc 0,XSP
 	inc	4, xsp	; F11C2B  inc 4,XSP
 	unlk XIZ	; F11C2D  unlk XIZ
@@ -35822,7 +35853,7 @@ sub_F11C10:
 ; DspParam_WriteByNumber
 ; Called from: T_DspParam_WriteByNumber (x2)
 ; Touches: (0x279A) (0x279B)
-; Calls:   T_IndexedTable_GetPtr DspEffect_SetAlgorithm T_IndexedTable_GetByte T_Queue2E00_Append4 sub_F1156B
+; Calls:   T_IndexedTable_GetPtr DspEffect_SetAlgorithm T_IndexedTable_GetByte T_Queue2E00_Append4 DspEffect_SanitizeBlock
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF11C30 is an instruction boundary of this
@@ -36257,7 +36288,7 @@ sub_F1195A_Skip28:
 	push	xbc	; F1203D  push XBC
 	ld	a, (xix)	; F1203E  ld A,(XIX)
 	pushw	wa	; F12040  push WA
-	calr	sub_F1156B	; F12041  calr 0xf1156b
+	calr	DspEffect_SanitizeBlock	; F12041  calr 0xf1156b
 	ld	c, (xix+1)	; F12044  ld C,(XIX+0x01)
 	extz	bc	; F12047  extz BC
 	extz	xbc	; F12049  extz XBC
@@ -36323,7 +36354,7 @@ sub_F1195A_Skip29:
 	push	xbc	; F120DF  push XBC
 	ld	a, (xix)	; F120E0  ld A,(XIX)
 	pushw	wa	; F120E2  push WA
-	calr	sub_F1156B	; F120E3  calr 0xf1156b
+	calr	DspEffect_SanitizeBlock	; F120E3  calr 0xf1156b
 	ld	c, (xix+1)	; F120E6  ld C,(XIX+0x01)
 	extz	bc	; F120E9  extz BC
 	extz	xbc	; F120EB  extz XBC
@@ -36954,7 +36985,7 @@ EqGraph_DisplayListTemplate:
 ;     +2  slot   the parameter's slot, 1-based; a 16-bit parameter takes two
 ;                (DELAY L = 2, DELAY R = 4).  0xFF ends the list: DspEffect_MoveCursor
 ;                (0xF105B8) stops scrolling at the first group whose +2 is
-;                0xFF, and sub_F116C4's loop (0xF116E3) stops on it too.
+;                0xFF, and DspEffect_RepairParams's loop (0xF116E3) stops on it too.
 ;     +3  mark   the group's OWN INDEX, or 0xFF -- in all 435 live groups,
 ;                235 and 200 of them.  DspEffect_PaintParamEditor compares it
 ;                with IndexedTable_GetByte(22, (0x2797)+97) and paints
@@ -38085,8 +38116,8 @@ EffectParamDescriptors_F12F24:
 ;   becomes the step when (0x28B0) bit 2 is set (else the step is 1), +0 the
 ;   floor and +2 the ceiling the stepped value is clamped to (0xF1078D-0xF107A1:
 ;   `sub (XIX),H` unless below floor+step, `add (XIX),H` unless above
-;   ceiling-step).  sub_F1195A (0xF1195A) and its siblings sub_F119A9,
-;   sub_F119F8, sub_F11A61, sub_F11AF3 and sub_F11B85 read +0/+2 again and
+;   ceiling-step).  DspEffect_RepairU8 (0xF1195A) and its siblings DspEffect_RepairS8,
+;   DspEffect_RepairU16, DspEffect_RepairEqFc, DspEffect_RepairEqQ and DspEffect_RepairEqGain read +0/+2 again and
 ;   reset a value outside [+0, +2] from a default array.
 ; Why these are the parameters' ranges: type 0x05 (the three BAND EMPHASIS G
 ;   groups) spans 0..48 and its units column is DLBTable_F15C93, exactly 49
@@ -38140,7 +38171,7 @@ EffectValueRanges:
 ;   0xF131E4  ScreenTable_F131E4        32 code pointers   read at 0xF10700
 ;   0xF13264  DspEffect_LoadValueTable        32 code pointers   read at 0xF110EA
 ;   0xF132E4  ScreenDisplayLists_F132E4 32 DATA pointers   read at 0xF110FA
-;   0xF13364  ScreenTable_F13364        32 code pointers   read at 0xF1172A
+;   0xF13364  DspEffect_RepairValueTable        32 code pointers   read at 0xF1172A
 ;
 ; ⚠⚠ CORRECTED 2026-08-25.  This header used to read "128 32-bit words ...
 ;   classes it TRANSFER ... the entries are ENTRY POINTS and they seed this
@@ -38275,38 +38306,40 @@ ScreenDisplayLists_F132E4:
 	.long	DLB_Records_F157A8	; F13360  [95] -> 0xF157A8
 
 ; --- array 3 of 4: 32 code pointers, read at 0xF1172A ---
-ScreenTable_F13364:
+; DspEffect_RepairValueTable: array 3 of the four type-indexed arrays -- one repair routine per value type, read by
+;   DspEffect_RepairParams (0xF1172A); the same columns as the DspEffect_Step* array and DspEffect_LoadValueTable.
+DspEffect_RepairValueTable:
 	.long	T_F42C70	; F13364  [96] -> 0xF42C70
-	.long	sub_F1195A	; F13368  [97] -> sub_F1195A
-	.long	sub_F11A61	; F1336C  [98] -> sub_F11A61
-	.long	sub_F11A61	; F13370  [99] -> sub_F11A61
-	.long	sub_F11AF3	; F13374  [100] -> sub_F11AF3
-	.long	sub_F11B85	; F13378  [101] -> sub_F11B85
-	.long	sub_F1195A	; F1337C  [102] -> sub_F1195A
-	.long	sub_F1195A	; F13380  [103] -> sub_F1195A
-	.long	sub_F1195A	; F13384  [104] -> sub_F1195A
-	.long	sub_F1195A	; F13388  [105] -> sub_F1195A
-	.long	sub_F1195A	; F1338C  [106] -> sub_F1195A
-	.long	sub_F11C10	; F13390  [107] -> sub_F11C10
-	.long	sub_F119A9	; F13394  [108] -> sub_F119A9
-	.long	sub_F1195A	; F13398  [109] -> sub_F1195A
-	.long	sub_F1195A	; F1339C  [110] -> sub_F1195A
-	.long	sub_F1195A	; F133A0  [111] -> sub_F1195A
-	.long	sub_F1195A	; F133A4  [112] -> sub_F1195A
-	.long	sub_F119A9	; F133A8  [113] -> sub_F119A9
-	.long	sub_F1195A	; F133AC  [114] -> sub_F1195A
-	.long	sub_F1195A	; F133B0  [115] -> sub_F1195A
-	.long	sub_F119F8	; F133B4  [116] -> sub_F119F8
-	.long	sub_F119F8	; F133B8  [117] -> sub_F119F8
-	.long	sub_F119F8	; F133BC  [118] -> sub_F119F8
-	.long	sub_F1195A	; F133C0  [119] -> sub_F1195A
-	.long	sub_F119F8	; F133C4  [120] -> sub_F119F8
-	.long	sub_F1195A	; F133C8  [121] -> sub_F1195A
-	.long	sub_F119F8	; F133CC  [122] -> sub_F119F8
-	.long	sub_F119F8	; F133D0  [123] -> sub_F119F8
-	.long	sub_F119F8	; F133D4  [124] -> sub_F119F8
-	.long	sub_F1195A	; F133D8  [125] -> sub_F1195A
-	.long	sub_F1195A	; F133DC  [126] -> sub_F1195A
+	.long	DspEffect_RepairU8	; F13368  [97] -> DspEffect_RepairU8
+	.long	DspEffect_RepairEqFc	; F1336C  [98] -> DspEffect_RepairEqFc
+	.long	DspEffect_RepairEqFc	; F13370  [99] -> DspEffect_RepairEqFc
+	.long	DspEffect_RepairEqQ	; F13374  [100] -> DspEffect_RepairEqQ
+	.long	DspEffect_RepairEqGain	; F13378  [101] -> DspEffect_RepairEqGain
+	.long	DspEffect_RepairU8	; F1337C  [102] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F13380  [103] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F13384  [104] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F13388  [105] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F1338C  [106] -> DspEffect_RepairU8
+	.long	DspEffect_RepairSlowFast	; F13390  [107] -> DspEffect_RepairSlowFast
+	.long	DspEffect_RepairS8	; F13394  [108] -> DspEffect_RepairS8
+	.long	DspEffect_RepairU8	; F13398  [109] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F1339C  [110] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F133A0  [111] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F133A4  [112] -> DspEffect_RepairU8
+	.long	DspEffect_RepairS8	; F133A8  [113] -> DspEffect_RepairS8
+	.long	DspEffect_RepairU8	; F133AC  [114] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F133B0  [115] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU16	; F133B4  [116] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU16	; F133B8  [117] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU16	; F133BC  [118] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU8	; F133C0  [119] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU16	; F133C4  [120] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU8	; F133C8  [121] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU16	; F133CC  [122] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU16	; F133D0  [123] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU16	; F133D4  [124] -> DspEffect_RepairU16
+	.long	DspEffect_RepairU8	; F133D8  [125] -> DspEffect_RepairU8
+	.long	DspEffect_RepairU8	; F133DC  [126] -> DspEffect_RepairU8
 	.long	T_F42C70	; F133E0  [127] -> 0xF42C70
 
 
@@ -38341,7 +38374,7 @@ ScreenTable_F13364:
 ; block 97: 44 algorithms offered, fall-back 1 `CHORUS`
 ; EffectAlgoToPos_Block97 -- algorithm -> list position for block 97, one entry per algorithm
 ;   number; read by DspEffect_StepAlgorithm (0xF104A7); DspEffect_SetAlgorithm (0xF113A0);
-;   sub_F114DA (0xF1150E); sub_F1156B (0xF11598); DspParam_WriteByNumber (0xF11D7E)
+;   DspEffect_ApplyAlgorithmDefaults (0xF1150E); DspEffect_SanitizeBlock (0xF11598); DspParam_WriteByNumber (0xF11D7E)
 EffectAlgoToPos_Block97:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F133E4  algorithms 0..15
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F133F4  algorithms 16..31
@@ -38402,7 +38435,7 @@ EffectPosToAlgo_Block97:
 ; block 98: 44 algorithms offered, fall-back 35 `EXCITER`
 ; EffectAlgoToPos_Block98 -- algorithm -> list position for block 98, one entry per algorithm
 ;   number; read by DspEffect_StepAlgorithm (0xF104FC); DspEffect_SetAlgorithm (0xF113B7);
-;   sub_F114DA (0xF1151E); sub_F1156B (0xF115A8); DspParam_WriteByNumber (0xF11D8F)
+;   DspEffect_ApplyAlgorithmDefaults (0xF1151E); DspEffect_SanitizeBlock (0xF115A8); DspParam_WriteByNumber (0xF11D8F)
 EffectAlgoToPos_Block98:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x07, 0x08, 0x09, 0x0a, 0xff, 0xff, 0xff, 0xff	; F13491  algorithms 0..15
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; F134A1  algorithms 16..31
@@ -38463,7 +38496,7 @@ EffectPosToAlgo_Block98:
 ; block 99: 56 algorithms offered, fall-back 20 `CONCERT REVERB 1`
 ; EffectAlgoToPos_Block99 -- algorithm -> list position for block 99, one entry per algorithm
 ;   number; read by DspEffect_StepAlgorithm (0xF1054F); DspEffect_SetAlgorithm (0xF113CE);
-;   sub_F114DA (0xF1152E); sub_F1156B (0xF115B8); DspParam_WriteByNumber (0xF11DA0)
+;   DspEffect_ApplyAlgorithmDefaults (0xF1152E); DspEffect_SanitizeBlock (0xF115B8); DspParam_WriteByNumber (0xF11DA0)
 EffectAlgoToPos_Block99:
 	.byte	0x00, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0xff, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff	; F1353E  algorithms 0..15
 	.byte	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0xff, 0xff, 0xff, 0xff	; F1354E  algorithms 16..31
@@ -38662,7 +38695,7 @@ AdjustDesc_Entry121Byte5High:
 ; ⚠ ANSWERED 2026-09-25 (lane promb).  This header used to end by asking what
 ;    indexes this table and what its entries mean.  DspEffect_SetAlgorithm (0xF11365)
 ;    indexes it with 4 * the ALGORITHM number (`mul BC,E` / `add XBC,this` at
-;    0xF113F6-0xF113FC; sub_F1162E does the same at 0xF11646), and an entry
+;    0xF113F6-0xF113FC; DspEffect_CopyAlgorithmDefaults does the same at 0xF11646), and an entry
 ;    points at that algorithm's DEFAULT PARAMETER record, EffectDefaults_* --
 ;    layout and checks in that block's header.  The 72 slots that share one
 ;    target are the 72 `----------` placeholder algorithms, as in
@@ -87596,7 +87629,7 @@ DL_F3E2EB:
 ; (0x60F018) points at) gives for its id -- by prom_a sub_FAAE2A (routine slot
 ; T_F43440; ids 0x00-0x3F, through PtrTable_FAD28A), sub_FAAF91 (T_F43444; the
 ; 13 others, through ByteTable_FAD38A + PtrTable_FAD397, then ids 0x61-0x63 on
-; to sub_F114DA via T_F42F58) and sub_FAA967 (T_F4077C; bytes 0x0D-0x15 of ids
+; to DspEffect_ApplyAlgorithmDefaults via T_DspEffect_ApplyAlgorithmDefaults) and sub_FAA967 (T_F4077C; bytes 0x0D-0x15 of ids
 ; 0x00-0x1F).  Ids 0x00-0x1F / 0x20-0x3F are the two halves of the 32 PART
 ; records (prom_a's ParamNumber_RecordPtrs header): part k's channel byte
 ; (+0x0D) defaults to k.  The first halves are otherwise identical except part
@@ -90852,10 +90885,10 @@ T_F42F48:	jp sub_F0F042  ; -> prom_b 0x0F042
 T_F42F4C:	jp ScreenEnterBody_DspEffect  ; -> prom_b 0x0F105   x3
 T_F42F50:	jp ScreenButtonBody_DspEffect  ; -> prom_b 0x0F17C   x3
 T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061
-T_F42F58:	jp sub_F114DA  ; -> prom_b 0x114DA   x8
-T_F42F5C:	jp sub_F1156B  ; -> prom_b 0x1156B   x4
+T_DspEffect_ApplyAlgorithmDefaults:	jp DspEffect_ApplyAlgorithmDefaults  ; -> prom_b 0x114DA   x8
+T_DspEffect_SanitizeBlock:	jp DspEffect_SanitizeBlock  ; -> prom_b 0x1156B   x4
 T_DspEffect_SetAlgorithm:	jp DspEffect_SetAlgorithm  ; -> prom_b 0x11365
-T_F42F64:	jp sub_F11556  ; -> prom_b 0x11556
+T_DspEffect_CopyAlgorithmDefaults_Fwd:	jp DspEffect_CopyAlgorithmDefaults_Fwd  ; -> prom_b 0x11556
 T_F42F68:	jp ScreenEnterBody_MainOutEqualizer  ; -> prom_b 0x122C5   x1
 T_F42F6C:	jp ScreenButtonBody_MainOutEqualizer  ; -> prom_b 0x12334   x1
 	.fill 0x10, 1, 0x0E  ; 0xF42F70: 16 x ret

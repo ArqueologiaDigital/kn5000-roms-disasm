@@ -782,6 +782,52 @@ ROWS = [
     ("FB5E2C", "GmReset_AllPartsHold",
      "parameter 0xB5 (ParamMsg_B5...) for parts 0..31 with (0x60F082) / (0x60F083) = 0 / 0x7F.  Called by sub_FB5972\n"
      "(GmMode_HandleChange's) after GmMode_ResetToDefaults."),
+    # prom_b 0xF1156B-0xF11C2F: sanitizing a DSP effect block (records 0x61..0x63)
+    ("F1156B", "DspEffect_SanitizeBlock",
+     "(block entry 0x61..0x63, block): H = block byte 0 (the algorithm, bit 7 cleared), looked up in that block's\n"
+     "EffectAlgoToPos_Block97/98/99; byte 21 above 99 becomes 35, byte 23 above 1 becomes 0; an algorithm the block does\n"
+     "not offer (0xFF) is replaced by 1 / 35 / 20 through DspEffect_CopyAlgorithmDefaults, otherwise DspEffect_RepairParams.\n"
+     "Thunk T_DspEffect_SanitizeBlock; prom_a's ParamImage_SanitizeAll calls it on records 0x61 and 0x63."),
+    ("F1162E", "DspEffect_CopyAlgorithmDefaults",
+     "(algorithm word, block): byte 0 = the algorithm, then EffectDefaultParams[algorithm]'s record copied the way\n"
+     "DspEffect_SetAlgorithm copies it -- +0 -> byte 22, +1..+4 -> bytes 17..20, values -> bytes 1..16 up to the first\n"
+     "0xFF and zero after it -- but nothing is queued."),
+    ("F11556", "DspEffect_CopyAlgorithmDefaults_Fwd",
+     "pushes (block, algorithm byte zero-extended) and calls DspEffect_CopyAlgorithmDefaults.  Thunk slot T_DspEffect_CopyAlgorithmDefaults_Fwd; no caller found."),
+    ("F114DA", "DspEffect_ApplyAlgorithmDefaults",
+     "(block entry 0x61..0x63, algorithm): when the block's EffectAlgoToPos_BlockNN offers the algorithm,\n"
+     "DspEffect_CopyAlgorithmDefaults into T_IndexedTable_GetPtr(block) and returns 0; otherwise returns 0xFFFF.  The\n"
+     "unqueued twin of DspEffect_SetAlgorithm.  prom_a calls it (thunk T_DspEffect_ApplyAlgorithmDefaults) for blocks\n"
+     "0x61 / 0x62 / 0x63 with the stored algorithm bytes (0x7642 / 0x7662 / 0x7682) at 0xFAAB8E, and with 1 / 0x23 / 0x14 --\n"
+     "the fallbacks DspEffect_SanitizeBlock uses -- at 0xFB565D."),
+    ("F116C4", "DspEffect_RepairParams",
+     "(algorithm, block): DspEffect_CopyAlgorithmDefaults into a local copy, then for each EffectParamDescriptors_F12F24[algorithm]\n"
+     "entry (type, offset) up to type 0xFF calls DspEffect_RepairValueTable[type](type, offset, block, defaults);\n"
+     "then DspEffect_RepairEqBandFc (0, 17) / (1, 19) and DspEffect_RepairEqBandGain (0, 17) / (1, 19); finally byte 22\n"
+     "must equal byte +3 of one of the algorithm's descriptors, or it gets the default's byte 22."),
+    ("F11831", "DspEffect_RepairEqBandFc",
+     "(which, offset 17 or 19, block, defaults): the Fc field (bits 6..10) of the word at block+offset must lie in\n"
+     "0..min(Fc of +19, 22) for which = 0, max(Fc of +17, 8)..26 for which = 1 -- the band at +17 may not pass the band\n"
+     "at +19; out of range, bytes 17..20 are copied from the defaults."),
+    ("F118E2", "DspEffect_RepairEqBandGain",
+     "(which, offset, block, defaults): the gain field (bits 0..5) of block+offset above 48 copies bytes 17..20 from\n"
+     "the defaults.  The 0..48 range is EffectValueRanges type 5 (BAND EMPHASIS G)."),
+    ("F1195A", "DspEffect_RepairU8",
+     "DspEffect_RepairValueTable's entry for the byte types (1, 6..10, ...): the byte at block+offset outside\n"
+     "EffectValueRanges[type] min..max (unsigned) is replaced by the defaults' byte."),
+    ("F119A9", "DspEffect_RepairS8",
+     "DspEffect_RepairU8 with a SIGNED compare (jr GT / GE): types 0x0C and 0x11, the slots DspEffect_StepS8 takes."),
+    ("F119F8", "DspEffect_RepairU16",
+     "the 16-bit types (0x14..0x16, 0x18, 0x1A..0x1C): the word at block+offset outside min..max is replaced by\n"
+     "the defaults' two bytes."),
+    ("F11A61", "DspEffect_RepairEqFc",
+     "types 2 and 3 (EMPHASIS Fc): the field (word & 0x07C0) >> 6 outside min..max is replaced by the defaults' field."),
+    ("F11AF3", "DspEffect_RepairEqQ",
+     "type 4 (Q): the field (word & 0xF800) >> 11 outside min..max is replaced by the defaults' field."),
+    ("F11B85", "DspEffect_RepairEqGain",
+     "type 5 (G): the field word & 0x003F outside min..max is replaced by the defaults' field."),
+    ("F11C10", "DspEffect_RepairSlowFast",
+     "type 0x0B (SLOW/FAST): re-pushes its arguments and calls DspEffect_RepairU8."),
 ]
 
 

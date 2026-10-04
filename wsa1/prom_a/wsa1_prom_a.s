@@ -1947,8 +1947,8 @@
 	.set T_F42F4C,                                                                      0x00F42F4C
 	.set T_F42F50,                                                                      0x00F42F50
 	.set T_F42F54,                                                                      0x00F42F54
-	.set T_F42F58,                                                                      0x00F42F58
-	.set T_F42F5C,                                                                      0x00F42F5C
+	.set T_DspEffect_ApplyAlgorithmDefaults,                                                                      0x00F42F58
+	.set T_DspEffect_SanitizeBlock,                                                                      0x00F42F5C
 	.set T_F42F68,                                                                      0x00F42F68
 	.set T_F42F6C,                                                                      0x00F42F6C
 	.set T_F42F80,                                                                      0x00F42F80
@@ -42307,21 +42307,21 @@ ParamImageAlt_SanitizeCombination_Entry:   ; entry: prom_b routine directory
 .LF96432:
 ; ParamImage_SanitizeAll -- validate the whole parameter image at 0x7620: effect records 0x61 and 0x63, then
 ; every field script of ScriptTableA_F969DD (offsets 0..0x2BE) and ScriptTableB_F96AA1 (0x2C0..0x95E)
-; Evidence: T_F42F5C (prom_b sub_F1156B: looks the block's type byte up in EffectAlgoToPos_Block97/99 and
+; Evidence: T_DspEffect_SanitizeBlock (prom_b DspEffect_SanitizeBlock: looks the block's type byte up in EffectAlgoToPos_Block97/99 and
 ; rewrites the block) with (0x61, 0x7642) and (0x63, 0x7682), the payloads of records 0x61/0x63; then XIY =
 ; 0x7620 with table A (0xF96455) and table B (.LF96471), both run by the reader .LF964B9; then T_F407A4 and
-; T_F407A0, both bare `ret`s (prom_a 0xFAA7AB, 0xFAB5EA). Record 0x62 is not passed to T_F42F5C here.
+; T_F407A0, both bare `ret`s (prom_a 0xFAA7AB, 0xFAB5EA). Record 0x62 is not passed to T_DspEffect_SanitizeBlock here.
 ParamImage_SanitizeAll:   ; entry: branch/call in converted code
 	ld XWA,0x00007642                                    ; F96432  40 42 76 00 00
 	push XWA                                             ; F96437  38
 	pushw 0x61                                           ; F96438  0b 61 00
-	call T_F42F5C                                        ; F9643B  1d 5c 2f f4
+	call T_DspEffect_SanitizeBlock                                        ; F9643B  1d 5c 2f f4
 	popw wa                                              ; F9643F  48
 	pop XWA                                              ; F96440  58
 	ld XWA,0x00007682                                    ; F96441  40 82 76 00 00
 	push XWA                                             ; F96446  38
 	pushw 0x63                                           ; F96447  0b 63 00
-	call T_F42F5C                                        ; F9644A  1d 5c 2f f4
+	call T_DspEffect_SanitizeBlock                                        ; F9644A  1d 5c 2f f4
 	popw wa                                              ; F9644E  48
 	pop XWA                                              ; F9644F  58
 	ld XIY,0x00007620                                    ; F96450  45 20 76 00 00
@@ -42347,7 +42347,7 @@ ParamImage_SanitizeAllAndHook:   ; entry: branch/call in converted code
 	ret                                                  ; F9647E  0e
 ; ParamImageAlt_SanitizeCombination -- validate the COMBINATION part of the second parameter image at
 ; 0x603620: effect records 0x61/0x63, then ScriptTableA_F969DD only
-; Evidence: XIY = 0x00603620; T_F42F5C with (0x61, 0x603642) and (0x63, 0x603682) -- the same +0x22/+0x62 as
+; Evidence: XIY = 0x00603620; T_DspEffect_SanitizeBlock with (0x61, 0x603642) and (0x63, 0x603682) -- the same +0x22/+0x62 as
 ; ParamImage_SanitizeAll uses at 0x7620; table A at 0xF96484 run by .LF964B9; then T_F401E8 (a bare `ret`).
 ; Same layout: prom_b sub_F448A3 reads 0x603620+0x8C2 into (0x7EE2), the same offset in the main image.
 ParamImageAlt_SanitizeCombination:   ; entry: branch/call in converted code
@@ -42358,7 +42358,7 @@ ParamImageAlt_SanitizeCombination:   ; entry: branch/call in converted code
 	add XIY,0x00000022                                   ; F9648B  ed c8 22 00 00 00
 	push XIY                                             ; F96491  3d
 	pushw 0x61                                           ; F96492  0b 61 00
-	call T_F42F5C                                        ; F96495  1d 5c 2f f4
+	call T_DspEffect_SanitizeBlock                                        ; F96495  1d 5c 2f f4
 	popw wa                                              ; F96499  48
 	pop XIY                                              ; F9649A  5d
 	pop XIY                                              ; F9649B  5d
@@ -42368,7 +42368,7 @@ ParamImageAlt_SanitizeCombination:   ; entry: branch/call in converted code
 	add XIY,0x00000062                                   ; F9649F  ed c8 62 00 00 00
 	push XIY                                             ; F964A5  3d
 	pushw 0x63                                           ; F964A6  0b 63 00
-	call T_F42F5C                                        ; F964A9  1d 5c 2f f4
+	call T_DspEffect_SanitizeBlock                                        ; F964A9  1d 5c 2f f4
 	popw wa                                              ; F964AD  48
 	pop XIY                                              ; F964AE  5d
 	pop XIY                                              ; F964AF  5d
@@ -78747,15 +78747,15 @@ sub_FAAB28:
 	ld c, (0x7642:16)                                   ; FAAB86  c1 42 76 23
 	pushw bc                                             ; FAAB8A  29
 	pushw 0x61                                           ; FAAB8B  0b 61 00
-	call T_F42F58                                        ; FAAB8E  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FAAB8E  1d 58 2f f4
 	ld c, (0x7662:16)                                   ; FAAB92  c1 62 76 23
 	pushw bc                                             ; FAAB96  29
 	pushw 0x62                                           ; FAAB97  0b 62 00
-	call T_F42F58                                        ; FAAB9A  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FAAB9A  1d 58 2f f4
 	ld c, (0x7682:16)                                   ; FAAB9E  c1 82 76 23
 	pushw bc                                             ; FAABA2  29
 	pushw 0x63                                           ; FAABA3  0b 63 00
-	call T_F42F58                                        ; FAABA6  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FAABA6  1d 58 2f f4
 	inc 8,XSP                                            ; FAABAA  ef 60
 	inc 4,XSP                                            ; FAABAC  ef 64
 	pop XIX                                              ; FAABAE  5c
@@ -79275,7 +79275,7 @@ sub_FAAF91:
 	pushw bc                                             ; FAB067  29
 	pushw 0x63                                           ; FAB068  0b 63 00
 .LFAB06B:
-	call T_F42F58                                        ; FAB06B  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FAB06B  1d 58 2f f4
 	pop XIY                                              ; FAB06F  5d
 .LFAB070:
 	ld XBC,XIX                                           ; FAB070  ec 89
@@ -92235,7 +92235,7 @@ sub_FB3C34:
 	ld C,(XIX+0x06)                                      ; FB4110  8c 06 23
 	extz BC                                              ; FB4113  d9 12
 	pushw bc                                             ; FB4115  29
-	call T_F42F58                                        ; FB4116  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FB4116  1d 58 2f f4
 	pop XIY                                              ; FB411A  5d
 	cp WA,0xffff                                         ; FB411B  d8 cf ff ff
 	jr z, .LFB413F                                       ; FB411F  66 1e
@@ -94518,13 +94518,13 @@ sub_FB558F:
 	jr nz, .LFB55FF                                      ; FB5655  6e a8
 	pushw 0x01                                           ; FB5657  0b 01 00
 	pushw 0x61                                           ; FB565A  0b 61 00
-	call T_F42F58                                        ; FB565D  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FB565D  1d 58 2f f4
 	pushw 0x23                                           ; FB5661  0b 23 00
 	pushw 0x62                                           ; FB5664  0b 62 00
-	call T_F42F58                                        ; FB5667  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FB5667  1d 58 2f f4
 	pushw 0x14                                           ; FB566B  0b 14 00
 	pushw 0x63                                           ; FB566E  0b 63 00
-	call T_F42F58                                        ; FB5671  1d 58 2f f4
+	call T_DspEffect_ApplyAlgorithmDefaults                                        ; FB5671  1d 58 2f f4
 	inc 8,XSP                                            ; FB5675  ef 60
 	inc 4,XSP                                            ; FB5677  ef 64
 	pop XIX                                              ; FB5679  5c
