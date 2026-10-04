@@ -105159,7 +105159,7 @@ ScreenButton_CombiEditInternalSound:
 	jr nz, .LFBCF5A                                      ; FBCF4C  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBCF4E  9e 08 3f 1e 00
 	jr nz, .LFBCF7A                                      ; FBCF53  6e 25
-	calr sub_FBEDBE                                          ; FBCF55  1e 66 1e
+	calr CompareKey_CombiEdit                                          ; FBCF55  1e 66 1e
 	jr .LFBCF7A                                          ; FBCF58  68 20
 .LFBCF5A:
 	m_push MWD+r6, 0x0a                                  ; FBCF5A  9e 0a 04
@@ -106682,7 +106682,7 @@ ScreenButtonBody_CombiEditMixer:
 	jr nz, .LFBDDAF                                      ; FBDDA1  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBDDA3  9e 08 3f 1e 00
 	jr nz, .LFBDDCF                                      ; FBDDA8  6e 25
-	calr sub_FBEDBE                                      ; FBDDAA  1e 11 10
+	calr CompareKey_CombiEdit                                      ; FBDDAA  1e 11 10
 	jr .LFBDDCF                                          ; FBDDAD  68 20
 .LFBDDAF:
 	m_push MWD+r6, 0x0a                                  ; FBDDAF  9e 0a 04
@@ -108514,7 +108514,10 @@ sub_FBED94:
 	popw bc                                              ; FBEDBC  49
 .LFBEDBD:
 	ret                                                  ; FBEDBD  0e
-sub_FBEDBE:
+; CompareKey_CombiEdit: slot 21 (code 0x1E, COMPARE -- Dispatch_FF4049's code map) of the 23-slot button tables of
+;   CombiEditInternalSound (PtrTable_F1AF11), CombiEditMixer (_F1AFD5), CombinationNaming (_F1B14B), CombiEditConfigure
+;   (_F1B239) and CombiEditMenu (_F1B295); ScreenButton_CombiEditDspEffect also calls it for code 0x1E.
+CompareKey_CombiEdit:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBEDBE  c1 76 20 3f 16
 	jr nz, .LFBEDD4                                      ; FBEDC3  6e 0f
 	m_cp_mi8 MB16, 0x277f, 0x01                          ; FBEDC5  c1 7f 27 3f 01
@@ -108688,7 +108691,7 @@ ScreenButton_CombiEditDspEffect:
 	cp HL,0x001e                                         ; FBEF03  db cf 1e 00
 	jr nz, .LFBEF0E                                      ; FBEF07  6e 05
 .LFBEF09:
-	calr sub_FBEDBE                                      ; FBEF09  1e b2 fe
+	calr CompareKey_CombiEdit                                      ; FBEF09  1e b2 fe
 	jr .LFBEF17                                          ; FBEF0C  68 09
 .LFBEF0E:
 	m_push MWD+r6, 0x0a                                  ; FBEF0E  9e 0a 04
@@ -108806,7 +108809,7 @@ Screen_CombinationNaming_Button:
 	jr nz, .LFBEF8D                                      ; FBEF7F  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBEF81  9e 08 3f 1e 00
 	jr nz, .LFBEFAD                                      ; FBEF86  6e 25
-	calr sub_FBEDBE                                      ; FBEF88  1e 33 fe
+	calr CompareKey_CombiEdit                                      ; FBEF88  1e 33 fe
 	jr .LFBEFAD                                          ; FBEF8B  68 20
 .LFBEF8D:
 	m_push MWD+r6, 0x0a                                  ; FBEF8D  9e 0a 04
@@ -109122,7 +109125,7 @@ ScreenButtonBody_CombinationNaming:
 	jr nz, .LFBF256                                      ; FBF249  6e 0b
 	cp HL,0x001e                                         ; FBF24B  db cf 1e 00
 	jr nz, .LFBF26F                                      ; FBF24F  6e 1e
-	calr sub_FBEDBE                                      ; FBF251  1e 6a fb
+	calr CompareKey_CombiEdit                                      ; FBF251  1e 6a fb
 	jr .LFBF26F                                          ; FBF254  68 19
 .LFBF256:
 	m_push MWD+r6, 0x0a                                  ; FBF256  9e 0a 04
@@ -109347,7 +109350,7 @@ ScreenButtonBody_CombiEditConfigure:
 	jr nz, .LFBF471                                      ; FBF463  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBF465  9e 08 3f 1e 00
 	jr nz, .LFBF491                                      ; FBF46A  6e 25
-	calr sub_FBEDBE                                      ; FBF46C  1e 4f f9
+	calr CompareKey_CombiEdit                                      ; FBF46C  1e 4f f9
 	jr .LFBF491                                          ; FBF46F  68 20
 .LFBF471:
 	m_push MWD+r6, 0x0a                                  ; FBF471  9e 0a 04
@@ -110038,7 +110041,7 @@ ScreenButton_CombiEditMenu:
 	jr nz, .LFBFB10                                      ; FBFB02  6e 0c
 	m_cp_mi16 MWD+r6, 0x08, 0x001e                       ; FBFB04  9e 08 3f 1e 00
 	jr nz, .LFBFB30                                      ; FBFB09  6e 25
-	calr sub_FBEDBE                                      ; FBFB0B  1e b0 f2
+	calr CompareKey_CombiEdit                                      ; FBFB0B  1e b0 f2
 	jr .LFBFB30                                          ; FBFB0E  68 20
 .LFBFB10:
 	m_push MWD+r6, 0x0a                                  ; FBFB10  9e 0a 04

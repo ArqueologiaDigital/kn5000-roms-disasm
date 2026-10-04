@@ -1168,7 +1168,7 @@
 	.set	T_F418C4_Nop, 0xFBDDD6
 	.set	sub_FBECC3, 0xFBECC3
 	.set	sub_FBED02, 0xFBED02
-	.set	sub_FBEDBE, 0xFBEDBE
+	.set	CompareKey_CombiEdit, 0xFBEDBE
 	.set	sub_FBEE83, 0xFBEE83
 	.set	ScreenEnter_CombiEditMenuRedirect, 0xFBEED9
 	.set	T_F41A0C_Nop, 0xFBEEE3
@@ -50993,7 +50993,7 @@ PtrTable_F1AF11:
 	.long 0x00FBD0A4                       ; F1AF59  [18]   -> prom_a 0xFBD0A4
 	.long T_F42C70                       ; F1AF5D  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1AF61  [20]   -> prom_b 0xF42C70
-	.long sub_FBEDBE                       ; F1AF65  [21]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1AF65  [21]   -> prom_a 0xFBEDBE
 	.long T_F42C70                       ; F1AF69  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
@@ -51107,7 +51107,7 @@ PtrTable_F1AFD5:
 	.long T_F42C70                       ; F1B01D  [18]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B021  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B025  [20]   -> prom_b 0xF42C70
-	.long sub_FBEDBE                       ; F1B029  [21]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1B029  [21]   -> prom_a 0xFBEDBE
 	.long T_F42C70                       ; F1B02D  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
@@ -51326,7 +51326,7 @@ PtrTable_F1B14B:
 	.long T_F42C70                       ; F1B193  [18]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B197  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B19B  [20]   -> prom_b 0xF42C70
-	.long sub_FBEDBE                       ; F1B19F  [21]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1B19F  [21]   -> prom_a 0xFBEDBE
 	.long T_F42C70                       ; F1B1A3  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
@@ -51373,7 +51373,7 @@ PtrTable_F1B1B0:
 	.long 0x00FBF235                       ; F1B21C  [27]   -> prom_a 0xFBF235
 	.long 0x00FBF235                       ; F1B220  [28]   -> prom_a 0xFBF235
 	.long 0x00FBF235                       ; F1B224  [29]   -> prom_a 0xFBF235
-	.long sub_FBEDBE                       ; F1B228  [30]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1B228  [30]   -> prom_a 0xFBEDBE
 	.long 0x00FBF235                       ; F1B22C  [31]   -> prom_a 0xFBF235
 
 ; --------------------------------------------------------------------------
@@ -51420,7 +51420,7 @@ PtrTable_F1B239:
 	.long T_F42C70                       ; F1B281  [18]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B285  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B289  [20]   -> prom_b 0xF42C70
-	.long sub_FBEDBE                       ; F1B28D  [21]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1B28D  [21]   -> prom_a 0xFBEDBE
 	.long T_F42C70                       ; F1B291  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------
@@ -51451,7 +51451,7 @@ PtrTable_F1B295:
 	.long T_F42C70                       ; F1B2DD  [18]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2E1  [19]   -> prom_b 0xF42C70
 	.long T_F42C70                       ; F1B2E5  [20]   -> prom_b 0xF42C70
-	.long sub_FBEDBE                       ; F1B2E9  [21]   -> prom_a 0xFBEDBE
+	.long CompareKey_CombiEdit                       ; F1B2E9  [21]   -> prom_a 0xFBEDBE
 	.long T_F42C70                       ; F1B2ED  [22]   -> prom_b 0xF42C70
 
 ; --------------------------------------------------------------------------

@@ -3127,4 +3127,5 @@ RENAMES = [
     ("sub_F567DE", "NumberPadKey_CycleRecordScreen"),
     ("sub_F56F09", "NumberPadKey_CyclePlayScreen"),
     ("sub_F67604", "SoftKeyCol1_StepRecord"),
+    ("sub_FBEDBE", "CompareKey_CombiEdit"),
 ]
