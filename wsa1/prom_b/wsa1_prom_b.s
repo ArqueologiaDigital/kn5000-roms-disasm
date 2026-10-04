@@ -1140,12 +1140,12 @@
 	.set	sub_FB9DA0, 0xFB9DA0
 	.set	MidiFileDirectPlay_LcdKeyRow1, 0xFB9DFE
 	.set	MidiFilePlay_Tick, 0xFB9E79
-	.set	sub_FBAC00, 0xFBAC00
-	.set	sub_FBAE5A, 0xFBAE5A
+	.set	SeqFile_Load, 0xFBAC00
+	.set	SeqFile_Save, 0xFBAE5A
 	.set	sub_FBB392, 0xFBB392
 	.set	sub_FBB3DC, 0xFBB3DC
-	.set	sub_FBB800, 0xFBB800
-	.set	sub_FBB93C, 0xFBB93C
+	.set	PartParam_StepFieldById, 0xFBB800
+	.set	PartParam_EnterFieldById, 0xFBB93C
 	.set	PartParam_RefuseNumberEntry, 0xFBBA83
 	.set	PartParam_StepSound, 0xFBBA8E
 	.set	PartParam_StepVolume, 0xFBBAA3
@@ -1878,10 +1878,10 @@
 	.set	SysPartMidi_ResetBlock1Default_Call, 0xFE1BCA
 	.set	sub_FE1BCE, 0xFE1BCE
 	.set	sub_FE1BDE, 0xFE1BDE
-	.set	sub_FE1BEB, 0xFE1BEB
-	.set	sub_FE1BF3, 0xFE1BF3
-	.set	sub_FE1BFB, 0xFE1BFB
-	.set	sub_FE1C03, 0xFE1C03
+	.set	Disk_LoadSqfToWorkspace_Entry, 0xFE1BEB
+	.set	Disk_LoadSeqToHeap_Entry, 0xFE1BF3
+	.set	Disk_SaveSqfFromStaging_Entry, 0xFE1BFB
+	.set	Disk_SaveSeqFile_Entry, 0xFE1C03
 	.set	sub_FE1C0B, 0xFE1C0B
 	.set	T_F42580_Nop, 0xFE1C16
 	.set	sub_FE1C17, 0xFE1C17
@@ -1959,7 +1959,7 @@
 	.set	ScreenButton_DrumEdit, 0xFE9B8D
 	.set	ModeEnter_SoundCopy, 0xFF42B7
 	.set	Var2134_SetBit1_3, 0xFF42C0
-	.set	sub_FF42C5, 0xFF42C5
+	.set	ModeEnter_SoundCopy_Call, 0xFF42C5
 	.set	Var2134_SetBit1_3_Call, 0xFF42C9
 	.set	Paint_DiskMenu, 0xFF42CD
 	.set	ScreenLeave_DiskMenu, 0xFF431B
@@ -2299,7 +2299,7 @@ sub_F00108_Skip3:
 	calr	Transport_StartStopFromZero	; F0015E  calr 0xf0017d
 	jr	sub_F00108_Return	; F00161  jr T,0xf0017a
 sub_F00108_Skip4:
-	calr	sub_F001B0	; F00163  calr 0xf001b0
+	calr	Transport_StartStopFromZero_Call	; F00163  calr 0xf001b0
 	jr	sub_F00108_Return	; F00166  jr T,0xf0017a
 sub_F00108_Skip5:
 	ld	xwa, (6304798:24)	; F00168  ld XWA,(0x60341e)
@@ -2349,12 +2349,12 @@ sub_F0017D_Return:
 	ret	; F001AD  ret
 
 ; --- 0xF001AE-0xF001AF, 2 B, converted by lane promB6 (TRAILER).
-;     after Transport_StartStopFromZero's `ret`, before sub_F001B0
+;     after Transport_StartStopFromZero's `ret`, before Transport_StartStopFromZero_Call
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F001AE  routine trailer
 
 ; --------------------------------------------------------------------------
-; sub_F001B0
+; Transport_StartStopFromZero_Call
 ; Reached from: a branch decoded inside this block -- the walk enters 0xF001B0
 ;               from code it had already reached, not from any table.
 ; Extent:  4 bytes, 2 instructions, ends `ret`.  The walk marks exactly
@@ -2364,12 +2364,13 @@ sub_F0017D_Return:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F001B0:
+; Transport_StartStopFromZero_Call: calls Transport_StartStopFromZero and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Transport_StartStopFromZero_Call:
 	calr	Transport_StartStopFromZero	; F001B0  calr 0xf0017d
 	ret	; F001B3  ret
 
 ; --- 0xF001B4-0xF001B4, 1 B, converted by lane promB6 (TRAILER).
-;     one 0x0E byte after sub_F001B0's `ret`: the 0x0E (`ret`) pad this build
+;     one 0x0E byte after Transport_StartStopFromZero_Call's `ret`: the 0x0E (`ret`) pad this build
 ;     uses, already asserted as `.fill ..., 0x0E` in eight other places in
 ;     this file
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
@@ -50601,12 +50602,13 @@ Record_F1AAEC:
 	.fill	9, 1, 0x00	; asserted a single value
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AB13 -- pointer table, 0xF1AB13-0xF1AB4A (56 bytes)
+; PartParamStep_Ids00to1F -- pointer table, 0xF1AB13-0xF1AB4A (56 bytes)
 ; Shape: 14 entries of 4 bytes = 56 bytes, which is the whole segment.
 ; First / last: 0xFBBA8E ... 0xFBBCA4
 ; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB88A
 ; --------------------------------------------------------------------------
-PtrTable_F1AB13:
+; PartParamStep_Ids00to1F: the adjust handlers of field ids 0x00-0x1F, indexed by id - 0x00 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_Ids00to1F:
 	.long PartParam_StepSound                       ; F1AB13  [0]   -> prom_a 0xFBBA8E
 	.long PartParam_StepVolume                       ; F1AB17  [1]   -> prom_a 0xFBBAA3
 	.long PartParam_StepPanpot                       ; F1AB1B  [2]   -> prom_a 0xFBBAD3
@@ -50623,12 +50625,13 @@ PtrTable_F1AB13:
 	.long PartParam_StepKeyScaling                       ; F1AB47  [13]   -> prom_a 0xFBBCA4
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AB4B -- pointer table, 0xF1AB4B-0xF1AB6E (36 bytes)
+; PartParamStep_Ids20to3F -- pointer table, 0xF1AB4B-0xF1AB6E (36 bytes)
 ; Shape: 9 entries of 4 bytes = 36 bytes, which is the whole segment.
 ; First / last: 0xFBBCBC ... 0xFBBF0A
 ; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB8AA
 ; --------------------------------------------------------------------------
-PtrTable_F1AB4B:
+; PartParamStep_Ids20to3F: the adjust handlers of field ids 0x20-0x3F, indexed by id - 0x20 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_Ids20to3F:
 	.long PartParam_StepMainOut                       ; F1AB4B  [0]   -> prom_a 0xFBBCBC
 	.long PartParam_StepSubOut                       ; F1AB4F  [1]   -> prom_a 0xFBBD4F
 	.long PartParam_StepAssignMode                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
@@ -50640,12 +50643,13 @@ PtrTable_F1AB4B:
 	.long PartParam_StepVelocityLayerHigh                       ; F1AB6B  [8]   -> prom_a 0xFBBF0A
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AB6F -- pointer table, 0xF1AB6F-0xF1AB96 (40 bytes)
+; PartParamStep_Ids40to5F -- pointer table, 0xF1AB6F-0xF1AB96 (40 bytes)
 ; Shape: 10 entries of 4 bytes = 40 bytes, which is the whole segment.
 ; First / last: 0xFBBF45 ... 0xFBC01D
 ; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBB8CA
 ; --------------------------------------------------------------------------
-PtrTable_F1AB6F:
+; PartParamStep_Ids40to5F: the adjust handlers of field ids 0x40-0x5F, indexed by id - 0x40 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_Ids40to5F:
 	.long PartParam_StepControllerInternalFilterPitchBend                       ; F1AB6F  [0]   -> prom_a 0xFBBF45
 	.long PartParam_StepControllerInternalFilterModulation1                       ; F1AB73  [1]   -> prom_a 0xFBBF5D
 	.long PartParam_StepControllerInternalFilterModulation2                       ; F1AB77  [2]   -> prom_a 0xFBBF75
@@ -50658,23 +50662,25 @@ PtrTable_F1AB6F:
 	.long PartParam_StepControllerInternalFilterAfterTouch                       ; F1AB93  [9]   -> prom_a 0xFBC01D
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AB97 -- pointer table, 0xF1AB97-0xF1ABA2 (12 bytes)
+; PartParamStep_Ids60to7F -- pointer table, 0xF1AB97-0xF1ABA2 (12 bytes)
 ; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
 ; First / last: 0xFBC035 ... 0xFBC065
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBB8E9
 ; --------------------------------------------------------------------------
-PtrTable_F1AB97:
+; PartParamStep_Ids60to7F: the adjust handlers of field ids 0x60-0x7F, indexed by id - 0x60 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_Ids60to7F:
 	.long PartParam_StepMidiInputFilterProgramChange                       ; F1AB97  [0]   -> prom_a 0xFBC035
 	.long PartParam_StepMidiInputFilterBankSelect                       ; F1AB9B  [1]   -> prom_a 0xFBC04D
 	.long PartParam_StepMidiInputFilterVolume                       ; F1AB9F  [2]   -> prom_a 0xFBC065
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1ABA3 -- pointer table, 0xF1ABA3-0xF1ABE6 (68 bytes)
+; PartParamStep_Ids80to9F -- pointer table, 0xF1ABA3-0xF1ABE6 (68 bytes)
 ; Shape: 17 entries of 4 bytes = 68 bytes, which is the whole segment.
 ; First / last: 0xFBC07D ... 0xFBC215
 ; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBB908
 ; --------------------------------------------------------------------------
-PtrTable_F1ABA3:
+; PartParamStep_Ids80to9F: the adjust handlers of field ids 0x80-0x9F, indexed by id - 0x80 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_Ids80to9F:
 	.long PartParam_StepMidiOutputFilterProgramChange                       ; F1ABA3  [0]   -> prom_a 0xFBC07D
 	.long PartParam_StepMidiOutputFilterBankSelect                       ; F1ABA7  [1]   -> prom_a 0xFBC095
 	.long PartParam_StepMidiOutputFilterVolume                       ; F1ABAB  [2]   -> prom_a 0xFBC0AD
@@ -50694,12 +50700,13 @@ PtrTable_F1ABA3:
 	.long PartParam_StepMidiOutputFilterAfterTouch                       ; F1ABE3  [16]   -> prom_a 0xFBC215
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1ABE7 -- pointer table, 0xF1ABE7-0xF1AC06 (32 bytes)
+; PartParamStep_IdsA0toBF -- pointer table, 0xF1ABE7-0xF1AC06 (32 bytes)
 ; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
 ; First / last: 0xFBC2FF ... 0xFBC53B
 ; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBB927
 ; --------------------------------------------------------------------------
-PtrTable_F1ABE7:
+; PartParamStep_IdsA0toBF: the adjust handlers of field ids 0xA0-0xBF, indexed by id - 0xA0 (PartParam_StepFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamStep_IdsA0toBF:
 	.long PartParam_StepMidiMultipleMessagesOutputProgramChange                       ; F1ABE7  [0]   -> prom_a 0xFBC2FF
 	.long PartParam_StepMidiMultipleMessagesOutputBankSelectMsb                       ; F1ABEB  [1]   -> prom_a 0xFBC352
 	.long PartParam_StepMidiMultipleMessagesOutputBankSelectLsb                       ; F1ABEF  [2]   -> prom_a 0xFBC3D8
@@ -50710,12 +50717,13 @@ PtrTable_F1ABE7:
 	.long PartParam_StepMidiOutKeyTranspose_F1AE12                       ; F1AC03  [7]   -> prom_a 0xFBC53B
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AC07 -- pointer table, 0xF1AC07-0xF1AC3E (56 bytes)
+; PartParamEnter_Ids00to1F -- pointer table, 0xF1AC07-0xF1AC3E (56 bytes)
 ; Shape: 14 entries of 4 bytes = 56 bytes, which is the whole segment.
 ; First / last: 0xFBBA83 ... 0xFBBA83
 ; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB9C7
 ; --------------------------------------------------------------------------
-PtrTable_F1AC07:
+; PartParamEnter_Ids00to1F: the number-entry handlers of field ids 0x00-0x1F, indexed by id - 0x00 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_Ids00to1F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC07  [0]   -> prom_a 0xFBBA83
 	.long PartParam_EnterVolume                       ; F1AC0B  [1]   -> prom_a 0xFBBABB
 	.long PartParam_RefuseNumberEntry                       ; F1AC0F  [2]   -> prom_a 0xFBBA83
@@ -50732,12 +50740,13 @@ PtrTable_F1AC07:
 	.long PartParam_RefuseNumberEntry                       ; F1AC3B  [13]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AC3F -- pointer table, 0xF1AC3F-0xF1AC62 (36 bytes)
+; PartParamEnter_Ids20to3F -- pointer table, 0xF1AC3F-0xF1AC62 (36 bytes)
 ; Shape: 9 entries of 4 bytes = 36 bytes, which is the whole segment.
 ; First / last: 0xFBBA83 ... 0xFBBA83
 ; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB9E8
 ; --------------------------------------------------------------------------
-PtrTable_F1AC3F:
+; PartParamEnter_Ids20to3F: the number-entry handlers of field ids 0x20-0x3F, indexed by id - 0x20 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_Ids20to3F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC3F  [0]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC43  [1]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC47  [2]   -> prom_a 0xFBBA83
@@ -50749,12 +50758,13 @@ PtrTable_F1AC3F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC5F  [8]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AC63 -- pointer table, 0xF1AC63-0xF1AC8A (40 bytes)
+; PartParamEnter_Ids40to5F -- pointer table, 0xF1AC63-0xF1AC8A (40 bytes)
 ; Shape: 10 entries of 4 bytes = 40 bytes, which is the whole segment.
 ; First / last: 0xFBBA83 ... 0xFBBA83
 ; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBBA09
 ; --------------------------------------------------------------------------
-PtrTable_F1AC63:
+; PartParamEnter_Ids40to5F: the number-entry handlers of field ids 0x40-0x5F, indexed by id - 0x40 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_Ids40to5F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC63  [0]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC67  [1]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC6B  [2]   -> prom_a 0xFBBA83
@@ -50767,23 +50777,25 @@ PtrTable_F1AC63:
 	.long PartParam_RefuseNumberEntry                       ; F1AC87  [9]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AC8B -- pointer table, 0xF1AC8B-0xF1AC96 (12 bytes)
+; PartParamEnter_Ids60to7F -- pointer table, 0xF1AC8B-0xF1AC96 (12 bytes)
 ; Shape: 3 entries of 4 bytes = 12 bytes, which is the whole segment.
 ; First / last: 0xFBBA83 ... 0xFBBA83
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBBA29
 ; --------------------------------------------------------------------------
-PtrTable_F1AC8B:
+; PartParamEnter_Ids60to7F: the number-entry handlers of field ids 0x60-0x7F, indexed by id - 0x60 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_Ids60to7F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC8B  [0]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC8F  [1]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC93  [2]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1AC97 -- pointer table, 0xF1AC97-0xF1ACDA (68 bytes)
+; PartParamEnter_Ids80to9F -- pointer table, 0xF1AC97-0xF1ACDA (68 bytes)
 ; Shape: 17 entries of 4 bytes = 68 bytes, which is the whole segment.
 ; First / last: 0xFBBA83 ... 0xFBBA83
 ; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBBA49
 ; --------------------------------------------------------------------------
-PtrTable_F1AC97:
+; PartParamEnter_Ids80to9F: the number-entry handlers of field ids 0x80-0x9F, indexed by id - 0x80 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_Ids80to9F:
 	.long PartParam_RefuseNumberEntry                       ; F1AC97  [0]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC9B  [1]   -> prom_a 0xFBBA83
 	.long PartParam_RefuseNumberEntry                       ; F1AC9F  [2]   -> prom_a 0xFBBA83
@@ -50803,12 +50815,13 @@ PtrTable_F1AC97:
 	.long PartParam_RefuseNumberEntry                       ; F1ACD7  [16]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
-; PtrTable_F1ACDB -- pointer table, 0xF1ACDB-0xF1ACFA (32 bytes)
+; PartParamEnter_IdsA0toBF -- pointer table, 0xF1ACDB-0xF1ACFA (32 bytes)
 ; Shape: 8 entries of 4 bytes = 32 bytes, which is the whole segment.
 ; First / last: 0xFBC316 ... 0xFBC553
 ; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBBA69
 ; --------------------------------------------------------------------------
-PtrTable_F1ACDB:
+; PartParamEnter_IdsA0toBF: the number-entry handlers of field ids 0xA0-0xBF, indexed by id - 0xA0 (PartParam_EnterFieldById) (notes/prom_ab_part_param_switches.py)
+PartParamEnter_IdsA0toBF:
 	.long PartParam_EnterMidiMultipleMessagesOutputProgramChange                       ; F1ACDB  [0]   -> prom_a 0xFBC316
 	.long PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb                       ; F1ACDF  [1]   -> prom_a 0xFBC38F
 	.long PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb                       ; F1ACE3  [2]   -> prom_a 0xFBC3EF
@@ -50830,7 +50843,7 @@ PartParamField_Volume:
 ; PartParamField_Panpot -- record, 0xF1AD04-0xF1AD0C (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAD7
 ; --------------------------------------------------------------------------
-; PartParamField_Panpot: the part-parameter field descriptor of PANPOT -- named by position: PtrTable_F1AB13[2], between VOLUME [1] and KEY SHIFT [3] as on the INTERNAL SOUND page (notes/prom_ab_part_param_fields.py)
+; PartParamField_Panpot: the part-parameter field descriptor of PANPOT -- named by position: PartParamStep_Ids00to1F[2], between VOLUME [1] and KEY SHIFT [3] as on the INTERNAL SOUND page (notes/prom_ab_part_param_fields.py)
 PartParamField_Panpot:
 	.byte 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x00   ; F1AD04  .........
 
@@ -50870,7 +50883,7 @@ PartParamField_Effect1Send:
 ; PartParamField_ReverbSend -- record, 0xF1AD31-0xF1AD39 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBC2F
 ; --------------------------------------------------------------------------
-; PartParamField_ReverbSend: the part-parameter field descriptor of REVERB SEND -- named by position: PtrTable_F1AB13[8], the id the DSP EFFECT screen asks for its REVERB block (notes/prom_ab_part_param_fields.py)
+; PartParamField_ReverbSend: the part-parameter field descriptor of REVERB SEND -- named by position: PartParamStep_Ids00to1F[8], the id the DSP EFFECT screen asks for its REVERB block (notes/prom_ab_part_param_fields.py)
 PartParamField_ReverbSend:
 	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD31  .........
 
@@ -90042,8 +90055,8 @@ T_ScreenButtonBody_CombiEditMixer:	jp ScreenButtonBody_CombiEditMixer  ; F418C0 
 T_F418C4:	jp T_F418C4_Nop  ; -> prom_a 0x3DDD6
 T_F418C8:	jp sub_FBC5F1  ; -> prom_a 0x3C5F1
 T_F418CC:	jp sub_FBC64F  ; -> prom_a 0x3C64F
-T_F418D0:	jp sub_FBB800  ; -> prom_a 0x3B800   x3
-T_F418D4:	jp sub_FBB93C  ; -> prom_a 0x3B93C
+T_F418D0:	jp PartParam_StepFieldById  ; -> prom_a 0x3B800   x3
+T_F418D4:	jp PartParam_EnterFieldById  ; -> prom_a 0x3B93C
 T_F418D8:	jp sub_FBEE83  ; -> prom_a 0x3EE83
 	.fill 0x34, 1, 0x0E  ; 0xF418DC: 52 x ret
 T_PanelMode_System_Enter:	jp PanelMode_System_Enter  ; -> prom_a 0x1FED1
@@ -90581,8 +90594,8 @@ T_Gfx_DrawLine_Solid:	jp Gfx_DrawLine_Solid  ; F41EE4 (was T_F41EE4) -> prom_b 0
 T_Gfx_DrawLine_Dashed:	jp Gfx_DrawLine_Dashed  ; F41EE8 (was T_F41EE8) -> prom_b 0x5B881   x9
 T_F41EEC:	jp sub_F5B81C  ; -> prom_b 0x5B81C   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41EF0: 8 x ret
-T_F41EF8:	jp sub_FBAC00  ; -> prom_a 0x3AC00   x1
-T_F41EFC:	jp sub_FBAE5A  ; -> prom_a 0x3AE5A   x1
+T_F41EF8:	jp SeqFile_Load  ; -> prom_a 0x3AC00   x1
+T_F41EFC:	jp SeqFile_Save  ; -> prom_a 0x3AE5A   x1
 T_F41F00:	jp sub_FBB392  ; -> prom_a 0x3B392   x1
 T_F41F04:	jp sub_FBB3DC  ; -> prom_a 0x3B3DC   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
@@ -90756,7 +90769,7 @@ T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 ;           ModeEnter_SoundCopy (graded CONTENT).  DERIVATIVE name.
 T_ModeEnter_SoundCopy:	jp ModeEnter_SoundCopy  ; F42254 (was T_F42254) -> prom_a 0x742B7
 T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
-T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
+T_F4225C:	jp ModeEnter_SoundCopy_Call  ; -> prom_a 0x742C5
 T_Var2134_SetBit1_3_Call:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
 T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
 T_ScreenLeave_DiskMenu:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
@@ -90969,10 +90982,10 @@ T_F42614:	jp sub_FE1C0B  ; -> prom_a 0x61C0B   x5
 T_F42618:	jp sub_FE04BE  ; -> prom_a 0x604BE   x2
 T_F4261C:	jp sub_FE0391  ; -> prom_a 0x60391   x26
 T_F42620:	jp sub_FE0435  ; -> prom_a 0x60435   x2
-T_F42624:	jp sub_FE1BEB  ; -> prom_a 0x61BEB   x1
-T_F42628:	jp sub_FE1BF3  ; -> prom_a 0x61BF3   x1
-T_F4262C:	jp sub_FE1BFB  ; -> prom_a 0x61BFB   x1
-T_F42630:	jp sub_FE1C03  ; -> prom_a 0x61C03
+T_F42624:	jp Disk_LoadSqfToWorkspace_Entry  ; -> prom_a 0x61BEB   x1
+T_F42628:	jp Disk_LoadSeqToHeap_Entry  ; -> prom_a 0x61BF3   x1
+T_F4262C:	jp Disk_SaveSqfFromStaging_Entry  ; -> prom_a 0x61BFB   x1
+T_F42630:	jp Disk_SaveSeqFile_Entry  ; -> prom_a 0x61C03
 T_MidiFileSave_Page3_LcdKeyRow3:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 	.fill 0x28, 1, 0x0E  ; 0xF42638: 40 x ret
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
@@ -91072,7 +91085,7 @@ T_F427EC:	jp sub_F62C10  ; -> prom_b 0x62C10   x4
 T_F427F0:	jp sub_F62C14  ; -> prom_b 0x62C14   x3
 T_F427F4:	jp sub_F62C18  ; -> prom_b 0x62C18   x3
 T_BStore_OpenChain_Call:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
-T_F427FC:	jp sub_F62C20  ; -> prom_b 0x62C20   x6
+T_F427FC:	jp BStore_LoadGeometry_Call  ; -> prom_b 0x62C20   x6
 ; Evidence: slot 0xF42800 is `jp 0xF62C00`; prom_b 0xF62C00 carries the label
 ;           BStore_Veneers, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_Veneers:	jp BStore_Veneers  ; F42800 (was T_F42800) -> prom_b 0x62C00   x2
@@ -91516,7 +91529,7 @@ T_F42ED4:	jp sub_F6A26C  ; -> prom_b 0x6A26C
 T_F42ED8:	jp sub_F6C515  ; -> prom_b 0x6C515
 T_F42EDC:	jp sub_F6AF58  ; -> prom_b 0x6AF58   x1
 T_F42EE0:	jp sub_F68787  ; -> prom_b 0x68787
-T_F42EE4:	jp sub_F67470  ; -> prom_b 0x67470
+T_F42EE4:	jp Format_ChordName_Call  ; -> prom_b 0x67470
 T_F42EE8:	jp sub_F67434  ; -> prom_b 0x67434
 T_F42EEC:	jp T_F42EEC_Nop  ; -> prom_b 0x687EC
 T_F42EF0:	jp T_F42EF0_Nop  ; -> prom_b 0x6AB8E
@@ -140499,7 +140512,8 @@ sub_F62C18:		; <- T_F427F4
 BStore_OpenChain_Call:		; <- T_BStore_OpenChain_Call
 	calr	BStore_OpenChain	; F62C1C  calr 0xf638bb
 	ret	; F62C1F  ret
-sub_F62C20:		; <- T_F427FC
+; BStore_LoadGeometry_Call: calls BStore_LoadGeometry and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+BStore_LoadGeometry_Call:		; <- T_F427FC
 	calr	BStore_LoadGeometry	; F62C20  calr 0xf63be5
 	ret	; F62C23  ret
 	calr	BStore_CursorAdvance	; F62C24  calr 0xf635c9
@@ -147194,7 +147208,7 @@ sub_F6746C:
 	jp	sub_F6E9BB	; F6746C  jp 0xf6e9bb
 
 ; --------------------------------------------------------------------------
-; sub_F67470
+; Format_ChordName_Call
 ; Called from: T_F42EE4 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   0xF6DAA6 sub_F6B399
@@ -147205,7 +147219,8 @@ sub_F6746C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F67470:		; <- T_F42EE4
+; Format_ChordName_Call: calls Format_ChordName and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Format_ChordName_Call:		; <- T_F42EE4
 	call	Format_ChordName	; F67470  call 0xf6daa6
 	ret	; F67474  ret
 	calr	sub_F6B399	; F67475  calr 0xf6b399
@@ -166376,10 +166391,10 @@ sub_F6F408:
 	push	xhl	; F6F40A  push XHL
 	push	xde	; F6F40B  push XDE
 	call	OldCopy_BStore_Workspace_SaveToBank	; F6F40C  call 0xf6f476
-	ld	a, (10027:16)	; F6F410  ld A,(0x272b)
+	ld	a, (Disk_SeqBank:16)	; F6F410  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F414  cp A,(0x360a)
 	jr	z, sub_F6F408_Skip	; F6F418  jr Z,0xf6f42a
-	ld	a, (10027:16)	; F6F41A  ld A,(0x272b)
+	ld	a, (Disk_SeqBank:16)	; F6F41A  ld A,(0x272b)
 	ld	(BStore_CurrentBank:16), a	; F6F41E  ld (0x360a),A
 	call	sub_F6F4A3	; F6F422  call 0xf6f4a3
 	call	T_F40AC8	; F6F426  call 0xf40ac8
@@ -166414,11 +166429,11 @@ sub_F6F440:
 	push	xix	; F6F441  push XIX
 	push	xhl	; F6F442  push XHL
 	push	xde	; F6F443  push XDE
-	ld	a, (10027:16)	; F6F444  ld A,(0x272b)
+	ld	a, (Disk_SeqBank:16)	; F6F444  ld A,(0x272b)
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F6F448  cp A,(0x360a)
 	jr	z, sub_F6F440_Skip	; F6F44C  jr Z,0xf6f465
 	call	OldCopy_BStore_Workspace_SaveToBank	; F6F44E  call 0xf6f476
-	ld	a, (10027:16)	; F6F452  ld A,(0x272b)
+	ld	a, (Disk_SeqBank:16)	; F6F452  ld A,(0x272b)
 	ld	(BStore_CurrentBank:16), a	; F6F456  ld (0x360a),A
 	call	sub_F6F4A3	; F6F45A  call 0xf6f4a3
 	calr	sub_F6F4F2	; F6F45E  calr 0xf6f4f2

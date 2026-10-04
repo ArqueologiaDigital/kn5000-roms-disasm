@@ -526,6 +526,10 @@ GROUPS = [
         0x26F2: ("Initial_SelectedItem", "the INITIAL screen's item, 0..6: TOTAL, PART SETTING, SYSTEM, MIDI SETTING, RE-MAP, DRUMS MAP, SEQUENCER",
                  "Initial_ExecuteSelected bounds it (cp BC,6) and jumps through Initial_ItemTable"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ", {
+        0x272B: ("Disk_SeqBank", "the sequencer bank 0..9 a disk load goes into / a save comes from",
+                 "LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

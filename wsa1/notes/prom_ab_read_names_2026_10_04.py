@@ -1120,7 +1120,7 @@ ROWS = [
      "SmfEvent_ControlChange_MultiTrack's `cp A,93` arm, CC 93 -- the multi-track copy of SmfCC_Effect3Depth."),
     ("F726A2", "SmfCC_Effect4Depth_MultiTrack",
      "SmfEvent_ControlChange_MultiTrack's `cp A,94` arm, CC 94 -- the multi-track copy of SmfCC_Effect4Depth."),
-    # the part SOUND stepper and the MAIN OUT / SUB OUT steppers (PtrTable_F1AB13[0], PtrTable_F1AB4B[0] / [1])
+    # the part SOUND stepper and the MAIN OUT / SUB OUT steppers (PartParamStep_Ids00to1F[0], PartParamStep_Ids20to3F[0] / [1])
     ("F4F02E", "PartSound_StepBankGroupMember",
      "loads part E's sound from its record -- +0x3D bank, +0x3B group, +0x3C member, SoundGroup_LoadSelectionFromPart's\n"
      "offsets -- into 0x2761 / 0x2762 / 0x2763 and steps it like an odometer, one step in the direction of\n"
@@ -1136,20 +1136,138 @@ ROWS = [
      "Called three times by PartSound_StepBankGroupMember, which compares DE before and after to see whether the\n"
      "level could move."),
     ("FBBCBC", "PartParam_StepMainOut",
-     "PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_EditValue_StepBitField\n"
+     "PartParamStep_Ids20to3F[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_EditValue_StepBitField\n"
      "(EditValue_StepBitField) with PartParamField_MainOut.  If it moved, the new value is kept only when EFFECT2 is\n"
      "off (byte 6 of record E, bit 7 masked, is 0), SUB OUT (byte 4 of E+0x20) is 0, or the new value is 0.\n"
      "Otherwise it sets UI_Request_Hi bit 6 and UI_Request = 0xB6 instead.  So with EFFECT2 on, a part cannot\n"
      "go to MAIN and SUB OUT at once.  A kept value is written back and posted to Queue2C00 (E+0x20, offset 3)."),
+    # the part-parameter field dispatchers (notes/prom_ab_part_param_fields.py, _switches.py)
+    ("FBB800", "PartParam_StepFieldById",
+     "(field id H = (XIZ+8), part L = (XIZ+10)): the high nibble of H, in pairs, picks the step table -- ids\n"
+     "0x00-0x1F PartParamStep_Ids00to1F, 0x20-0x3F PartParamStep_Ids20to3F at H-0x20, ... 0xA0-0xBF PartParamStep_IdsA0toBF; 0xC0 and up\n"
+     "do nothing -- and calls the entry with the part.  Called by the COMBINATION EDIT INTERNAL SOUND / CONFIGURE\n"
+     "soft keys and T_F418D0."),
+    ("FBB93C", "PartParam_EnterFieldById",
+     "PartParam_StepFieldById's number-pad twin over PartParamEnter_Ids00to1F .. PartParamEnter_IdsA0toBF, the same id ranges.\n"
+     "Called by NumberPadKey_CombiEditInternalSound and T_F418D4."),
+    # the sequencer's file module, prom_a 0xFBAC00-0xFBB42E (FINDINGS-prom_b-disk-and-file-menus.md, SQF / SEQ)
+    ("FBAC00", "SeqFile_Load",
+     "DiskLoad_Sequencer's body (T_F41EF8, through sub_FE0053).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;\n"
+     "0 -> one song into bank Disk_SeqBank.  The workspace 0x603400 goes to its bank copy, the free chain is stashed,\n"
+     "bank Disk_SeqBank's copy becomes the workspace and BStore_CurrentBank, and the SQF is read over it\n"
+     "(Disk_LoadSqfToWorkspace_Entry).  If its blocks ((0x603452) >> 4) fit in the stashed free count (else result\n"
+     "0x1E), they are read after the free head and relocated (SeqFile_LoadSongBlocks).  Result -> (0x23CB)."),
+    ("FBB199", "SeqFile_ProbeSqfHeader",
+     "reads the SQF's first 0x600 bytes to 0x609400.  A = 1 when word +5 is 4 and byte +4 is 1 (all banks:\n"
+     "SeqFile_SaveAllBanks writes +4 = 1), 0 when word +5 is 4 otherwise, 2 when the read fails (result = the\n"
+     "error, or 1 for content type ALL), 3 when word +5 is not 4 (result 0x10)."),
+    ("FBB20B", "SeqFile_LoadAllBanks",
+     "reads the SQF as 0x7800 bytes into the ten bank copies at 0x610000 (10 x 0xC00), clears the all-banks flag\n"
+     "(0x610004), copies the current bank's copy into the workspace, and reads the SEQ into the heap from 0x617800,\n"
+     "(0x603452) x 16 bytes -- or, for an empty store ((0x603452) = 0), sets the free head to 1 and\n"
+     "BStore_RebuildFreeChain.  Result -> (0x23CB)."),
+    ("FBAD07", "SeqFile_LoadSongBlocks",
+     "reads the SEQ with BStore_HeapBase moved to the free head's block (BStore_FreeHeadBlockAddr), restores the\n"
+     "base, then adds FreeHead-1 (BStore_FreeHeadIndex) to every block number the song holds: the 17 directory\n"
+     "start blocks (0x603501, stride 3), the 17 words at 0x60347E, and each loaded block's previous / next links\n"
+     "(BStore_RelocateBlockNumber); then BStore_RebuildFreeChain."),
+    ("FBAD82", "BStore_RebuildFreeChain",
+     "BStore_FreeHead += the loaded block count ((0x603452) >> 4), or 0xFFFF past BStore_BlockCount;\n"
+     "BStore_FreeCount = BlockCount - FreeHead + 1; when any are free, blocks FreeHead .. BlockCount are linked as a\n"
+     "free chain (BStore_InitFreeBlock) and the last one's next is 0xFFFF."),
+    ("FBAE10", "BStore_InitFreeBlock",
+     "block XIX, number WA: flags +0 = 0 (free), payload tag +5 = 0x82, previous = WA-1 (0 for 0), next = WA+1."),
+    ("FBAE2A", "BStore_FreeHeadBlockAddr",
+     "XIX = 0x617800 + (BStore_FreeHead - 1) x 0x100 (BStore_FreeHeadIndex), the free head's block."),
+    ("FBAE3B", "BStore_FreeHeadIndex",
+     "WA = BStore_FreeHead - 1, or 0 when it is 0: the number of blocks before the free head."),
+    ("FBAE49", "BStore_RelocateBlockNumber",
+     "adds WA to the word at (XIX) unless it is 0 or 0xFFFF (no block / end of chain)."),
+    ("FBADEA", "BStore_StashFreeChain",
+     "BStore_FreeHead / BStore_FreeCount -- workspace words, so per bank -- to (0x23B8) / (0x23BA), before\n"
+     "SeqFile_Load swaps the workspace."),
+    ("FBADFD", "BStore_UnstashFreeChain",
+     "(0x23B8) / (0x23BA) back to BStore_FreeHead / BStore_FreeCount: the shared heap's free chain carried into\n"
+     "the new bank's workspace."),
+    ("FBB135", "BStore_BlockAddr",
+     "XIX = 0x617800 + (WA - 1) x 0x100 for the 1-based block number WA -- BStore_SeekBlock's arithmetic with the\n"
+     "heap base as a literal."),
+    ("FBB0C3", "BStore_CurrentBankCopyAddr",
+     "XIX = 0x610000 + BStore_CurrentBank x 0xC00, the current bank's copy of the workspace."),
+    ("FBB0D6", "BStore_DiskBankCopyAddr",
+     "XIY = 0x610000 + Disk_SeqBank x 0xC00, the copy of the bank the disk screen selected."),
+    ("FBAE5A", "SeqFile_Save",
+     "DiskSave_Sequencer's body (T_F41EFC, through sub_FE0046).  Content type ALL -> SeqFile_SaveAllBanks.\n"
+     "Otherwise: workspace -> its bank copy; bank Disk_SeqBank's copy -> staging 0x609400, all-banks flag +4 = 0;\n"
+     "each in-use directory entry's chain (+0x100, stride 3, bit 7) is counted and renumbered from 1 in order, the\n"
+     "running total stored at +0x7E + 2k and x 16 at +0x52; the SQF is written (Disk_SaveSqfFromStaging_Entry);\n"
+     "then, if (total, or 4) x 16 paragraphs fit on the disk (result 7 if not), SeqFile_WriteSeqCompacted."),
+    ("FBB2D5", "SeqFile_SaveAllBanks",
+     "needs 0x780 + (0x603452) paragraphs of disk (result 7 if short); workspace -> its bank copy; all-banks flag\n"
+     "(0x610004) = 1; writes the ten bank copies as the SQF (0x610000-0x617800), then the SEQ from 0x617800,\n"
+     "(0x603452) x 16 bytes, or SeqFile_WriteEmptySeq when that is 0; clears the flag."),
+    ("FBAF42", "SeqFile_WriteSeqCompacted",
+     "walks bank Disk_SeqBank's 17 directory chains block by block, copying each into a 4-block staging buffer at\n"
+     "0x609400 (SeqFile_StageBlock) with its links renumbered (SeqFile_RelinkStagedBlock); every 4 blocks and at\n"
+     "the end SeqFile_FlushStagingBlocks, then T_DiskApi_CloseFile_Call.  An empty store: SeqFile_WriteEmptySeq."),
+    ("FBB04F", "SeqFile_FlushStagingBlocks",
+     "writes the staging buffer: the first time ((0x23CC) = 0) after SeqFile_SetSeqStagingWindow with Disk_Flags\n"
+     "bit 5 set, later times with bit 1 set; (0x23CC) += 1."),
+    ("FBB07E", "SeqFile_WriteEmptySeq",
+     "four staging blocks cleared (SeqFile_ClearStagingBlockFlags) and linked (SeqFile_LinkStagingBlocks), written\n"
+     "as a 0x400-byte SEQ file."),
+    ("FBB0A1", "SeqFile_SetSeqStagingWindow",
+     "Disk_WindowStart / End = 0x609400 / 0x6097FF (four blocks), extension SEQ."),
+    ("FBB0E9", "SeqFile_ClearStagingBlockFlags",
+     "flags byte +0 = 0 in the four staging blocks at 0x609400."),
+    ("FBB0FF", "SeqFile_LinkStagingBlocks",
+     "staging block k (0..3): previous = k, next = k+2 -- the links of block k+1 of a 1-based chain."),
+    ("FBB11F", "SeqFile_StageBlock",
+     "copies block (0x23C6) (BStore_BlockAddr) into staging slot (0x23C8) (SeqFile_StagingSlotAddr), 0x100 bytes."),
+    ("FBB146", "SeqFile_StagingSlotAddr",
+     "XIX = 0x609400 + (0x23C8) x 0x100."),
+    ("FBB159", "SeqFile_RelinkStagedBlock",
+     "the staged block becomes number (0x23C4): previous = 0 when it opens a chain ((0x23CA) bit 0), else\n"
+     "number-1; next = 0xFFFF when it closes one (bit 1), else number+1; (0x23C4) += 1."),
+    # the disk module's side of it
+    ("FE237B", "Disk_LoadSqfToWorkspace",
+     "extension SQF, window 0x603400-0x604000 (Disk_SetWindowStartToWorkspace / _EndToWorkspaceEnd),\n"
+     "DiskApi_ReadFileToWindow; on success ParamImageAlt_SanitizeCombination_Entry_SaveRegs and Disk_LastError = 1."),
+    ("FE233A", "Disk_LoadSeqToHeap",
+     "extension SEQ, window BStore_HeapBase .. + (0x603452) x 16 (Disk_SetWindowStartToHeap,\n"
+     "Disk_SetSeqLengthFromWorkspace, Disk_SetWindowEndToHeapPlusSeqLength), DiskApi_ReadFileToWindow."),
+    ("FE2CC7", "Disk_SaveSqfFromStaging",
+     "extension SQF, window 0x609400-0x60A000 (one bank copy, staged by SeqFile_Save), Disk_Flags bits 5 and 1\n"
+     "cleared, DiskApi_WriteFileFromWindow."),
+    ("FE2C64", "Disk_SaveSeqFile",
+     "(0x761A) = (0x603452); DiskApi_CheckFreeSpace for that many paragraphs; with room: extension SEQ, window\n"
+     "0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_F42630\n"
+     "is decoded in prom_a or prom_b; SeqFile_Save writes the SEQ through SeqFile_WriteSeqCompacted."),
+    ("FE1BEB", "Disk_LoadSqfToWorkspace_Entry",
+     "the directory entry behind T_F42624: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load."),
+    ("FE1BF3", "Disk_LoadSeqToHeap_Entry",
+     "behind T_F42628: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks."),
+    ("FE1BFB", "Disk_SaveSqfFromStaging_Entry",
+     "behind T_F4262C: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save."),
+    ("FE1C03", "Disk_SaveSeqFile_Entry",
+     "behind T_F42630: Disk_SaveSeqFile, A -> Disk_LastError."),
+    ("FE2D30", "Disk_SetWindowStartToWorkspace", "Disk_WindowStart = 0x603400, the sequencer workspace."),
+    ("FE2D9D", "Disk_SetWindowEndToWorkspaceEnd", "Disk_WindowEnd = 0x604000."),
+    ("FE2D1D", "Disk_SetWindowStartToHeap", "Disk_WindowStart = BStore_HeapBase."),
+    ("FE2DC6", "Disk_SetSeqLengthFromWorkspace",
+     "(0x761A) = (0x603452), the song store's length in 16-byte units."),
+    ("FE2DA7", "Disk_SetWindowEndToHeapPlusSeqLength", "Disk_WindowEnd = BStore_HeapBase + (0x761A) x 16."),
+    ("FE2D26", "Disk_SetWindowStartToSqfStaging", "Disk_WindowStart = 0x609400, SeqFile_Save's one-bank staging copy."),
+    ("FE2D93", "Disk_SetWindowEndToSqfStagingEnd", "Disk_WindowEnd = 0x60A000."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
 PLACED = [
     ("FBBA8E", "PartParam_StepSound",
-     "PtrTable_F1AB13[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls\n"
+     "PartParamStep_Ids00to1F[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls\n"
      "PartSound_StepBankGroupMember(part)."),
     ("FBBD4F", "PartParam_StepSubOut",
-     "PtrTable_F1AB4B[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN\n"
+     "PartParamStep_Ids20to3F[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN\n"
      "OUT (byte 3) instead of SUB OUT.  One difference: a step that lands on 1 is stepped again\n"
      "(`cp (XIZ-1),1 / jr nz` at 0xFBBD87), so the panel never selects SUB OUT 1."),
     ("F4F273", "PartSound_BankOrder",

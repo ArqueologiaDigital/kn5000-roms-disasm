@@ -466,3 +466,6 @@
 
 ; ---- wsa1/notes/FINDINGS-prom_a-initial.md -- "1. The screen: seven items, one table"
 	.equ Initial_SelectedItem,			0x26f2	; the INITIAL screen's item, 0..6: TOTAL, PART SETTING, SYSTEM, MIDI SETTING, RE-MAP, DRUMS MAP, SEQUENCER -- Initial_ExecuteSelected bounds it (cp BC,6) and jumps through Initial_ItemTable
+
+; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
+	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank

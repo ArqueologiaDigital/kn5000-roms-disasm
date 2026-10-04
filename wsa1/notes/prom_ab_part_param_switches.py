@@ -3,7 +3,7 @@
 
 QUESTION IT ANSWERS
   notes/prom_ab_part_param_fields.py named the field descriptors whose (offset, mask, max, min) equals exactly one
-  PART-area SysEx parameter.  It left the rest of the twelve tables PtrTable_F1AB13 .. PtrTable_F1ACDB numeric:
+  PART-area SysEx parameter.  It left the rest of the twelve tables PartParamStep_Ids00to1F .. PartParamEnter_IdsA0toBF numeric:
   handlers of three other shapes, and records that are not 5-byte numeric descriptors.  One more fact settles them --
   the RECORD SET:
     * IndexedParam_SetBit XORs descriptor byte +2 into PanelEvent_Flags and, when bit 4 of the result is set, adds
@@ -33,7 +33,7 @@ QUESTION IT ANSWERS
   SysExParam_SetMidiMultipleMessagesOutputBankSelect, reads a 16-bit value DE (0x4000 and 0x4001 are the two non-value
   states).  It stores `res 7` of E at offset 15 (0xFB3CC0-0xFB3CC5) and (DE >> 7) & 0x7F at offset 16
   (0xFB3CE3-0xFB3CEB).  So byte 15 is the bank number's low 7 bits, BANK LSB, and it also carries the item's state
-  bit 7; byte 16 is BANK MSB.  The bare `ret` at 0xFBBCA3 that fills PtrTable_F1AB13[12] is PartParam_StepIgnored.
+  bit 7; byte 16 is BANK MSB.  The bare `ret` at 0xFBBCA3 that fills PartParamStep_Ids00to1F[12] is PartParam_StepIgnored.
   REFUSED: a record whose (set, offset, mask) has no unique PART parameter, a shape the planner does not know, a
   layer pair whose companion offsets do not cross.
 
@@ -55,12 +55,12 @@ sys.path.insert(0, os.path.join(ROOT, "notes", "sysex-probes"))
 A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "rb").read().decode("latin-1").split("\n")
 B = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "rb").read().decode("latin-1").split("\n")
 H = "(notes/prom_ab_part_param_switches.py)"
-TABLES = re.compile(r'^(PtrTable_F1A[BC][0-9A-F]{2}):')
+TABLES = re.compile(r'^(PtrTable_F1A[BC][0-9A-F]{2}|PartParam(?:Step|Enter)_Ids\w+):')   # the second: after the rename
 REC = r'((?:Record_F1A[A-F]|PartParamField_)\w+)'
 MMO = "MidiMultipleMessagesOutput"
 # the BANK SELECT item's two bytes, from SysExParam_SetMidiMultipleMessagesOutputBankSelect (see the docstring)
 BANK = {15: "BankSelectLsb", 16: "BankSelectMsb"}
-STUB = {0xFBBCA3: ("PartParam_StepIgnored", "PtrTable_F1AB13[12]: a bare `ret` -- field id 12 has no adjust action")}
+STUB = {0xFBBCA3: ("PartParam_StepIgnored", "PartParamStep_Ids00to1F[12]: a bare `ret` -- field id 12 has no adjust action")}
 SHARED = {"PartParam_StepMultipleMessagesOutputItem": ("PartParam_StepMultipleMessagesOutputItem",
                          "PartParam_StepMultipleMessagesOutputItem(part, 0, offset, bit): the common stepper of a MULTIPLE\n"
                          "  MESSAGES OUTPUT item.  Index = 0 when bit <bit> of byte 0x15 is set, 1 when the byte at <offset> has bit\n"
@@ -277,6 +277,30 @@ def plan():
     return rlab, place, refused, at
 
 
+def tables():
+    """The twelve tables, named by the field-id range the two dispatchers index them with.  Each dispatcher picks a
+    table by the id's high nibble in pairs and indexes it with id - base: `add XBC,<table>`, preceded by
+    `sub XBC,<base*4>` for every table after the first.  Read off the code, not assumed."""
+    out = []
+    for disp, kind in (("PartParam_StepFieldById", "Step"), ("PartParam_EnterFieldById", "Enter")):
+        i = next(k for k, l in enumerate(A) if l.startswith(disp + ":"))
+        base = 0
+        for l in A[i + 1:i + 220]:
+            if re.match(r'^[A-Za-z]\w*:', l) and not l.startswith(disp):
+                break
+            c = re.sub(r'\s+', ' ', l.split(";")[0]).strip()
+            m = re.match(r'sub XBC,(0x[0-9a-f]+)$', c)
+            if m:
+                base = int(m.group(1), 16) // 4
+            m = re.match(r'add XBC,(PtrTable_F1A[BC][0-9A-F]{2})$', c)
+            if m:
+                new = "PartParam%s_Ids%02Xto%02X" % (kind, base, base + 0x1F)
+                out.append((m.group(1), new, "%s: the %s handlers of field ids 0x%02X-0x%02X, indexed by id - 0x%02X (%s) %s"
+                            % (new, "adjust" if kind == "Step" else "number-entry", base, base + 0x1F, base, disp, H)))
+                base = None
+    return out
+
+
 def main():
     rlab, place, refused, at = plan()
     if "--records" in sys.argv:
@@ -286,6 +310,10 @@ def main():
     if "--place" in sys.argv:
         for a, (n, w) in sorted((k, v) for k, v in place.items() if isinstance(k, int)):
             print("%06X=%s|%s: %s %s" % (a, n, n, w.replace("\n", "\\n"), H))
+        return
+    if "--tables" in sys.argv:
+        for old, new, hdr in tables():
+            print("%s=%s|%s" % (old, new, hdr))
         return
     if "--rename" in sys.argv:
         for old, (n, w) in sorted((k, v) for k, v in place.items() if isinstance(k, str)):

@@ -187,7 +187,7 @@ against the FAT root directory:
 
 | content type | extension(s) | load | save | notes |
 |---|---|---|---|---|
-| 1 SEQUENCER | (through prom_b `T_F41EF8`) | `DiskLoad_Sequencer` | `DiskSave_Sequencer` | not read here |
+| 1 SEQUENCER | `SQF` and `SEQ` (through prom_b `T_F41EF8` / `T_F41EFC`) | `DiskLoad_Sequencer` | `DiskSave_Sequencer` | read 2026-10-04: see the next section |
 | 2 COMBINATION | `CMB` | `DiskLoad_Combination` | `DiskSave_Combination` | tag `WSA1`; 0x16300 bytes to 0xEC0000 |
 | 3 SOUND | `TM ` | `DiskLoad_Sound` | `DiskSave_Sound` | tag `WSA SOUND RAM S0`; 0x40000 bytes to 0xE80000 |
 | 4 PANEL | `LSW` and `SLS` | `DiskLoad_PanelLswFile` + `_PanelSlsFile` | `DiskSave_Panel*` | `SLS` = 0x600 bytes of RAM 0x7000 |
@@ -201,6 +201,50 @@ So the `.ALL .SEQ .CMB .SND .PNL ...` strings at `0xF58625` are display text. On
 `CMB`, `MDS` and the three `?RM` coincide with a real extension. The base name is
 whatever `Disk_FileName+0..7` holds, which is the name editor's field. Every routine
 cited here has its evidence in `notes/prom_ab_read_names_2026_10_04.py`.
+
+### 2026-10-04: the SEQUENCER content type -- two files, `SQF` and `SEQ`
+
+`DiskLoad_Sequencer` / `DiskSave_Sequencer` reach prom_a's sequencer file module (0xFBAC00-0xFBB42E)
+through `T_F41EF8` / `T_F41EFC`. Its routines, now named, write two files under the one base name:
+
+| file | what it holds | load window | save window |
+|---|---|---|---|
+| `SQF` | the sequencer **workspace**, 0xC00 bytes: one bank (`0x603400-0x603FFF`); or, in an all-banks file, the ten bank copies at `0x610000 + n*0xC00` (0x7800 bytes) | `0x603400-0x604000` (`Disk_LoadSqfToWorkspace`), or `0x610000-0x617800` (`SeqFile_LoadAllBanks`) | staging `0x609400-0x60A000` (`Disk_SaveSqfFromStaging`), or `0x610000-0x617800` (`SeqFile_SaveAllBanks`) |
+| `SEQ` | the song store's 256-byte **blocks** (FINDINGS-prom_b-block-store.md), `(0x603452) * 16` bytes | at the free head (`SeqFile_LoadSongBlocks`), or the whole heap from `0x617800` | four blocks at a time through staging `0x609400-0x6097FF` (`SeqFile_WriteSeqCompacted`), or the whole heap |
+
+**The all-banks flag** is byte `+4` of the SQF. `SeqFile_SaveAllBanks` sets `(0x610004) = 1` for the write and
+clears it after. `SeqFile_Save` clears `+4` in its one-bank staging copy. `SeqFile_ProbeSqfHeader` reads the
+first 0x600 bytes back and classifies the file:
+- word `+5` must be 4, or the load stops with result 0x10;
+- then `+4 = 1` selects `SeqFile_LoadAllBanks`, anything else the one-bank load.
+
+**One bank is saved compacted.** `SeqFile_Save` walks the selected bank's 17 directory entries
+(workspace `+0x100`, three bytes each, bit 7 = in use). It renumbers each entry's chain from 1, in
+directory order, and stores the running block total in the word at `+0x7E + 2k`.
+`SeqFile_WriteSeqCompacted` then copies the blocks in that order, relinking each one
+(`SeqFile_RelinkStagedBlock`: previous 0 at a chain's start, next 0xFFFF at its end).
+
+**One bank is loaded relocated.** `SeqFile_LoadSongBlocks` reads the SEQ at the shared heap's free head.
+It then adds `FreeHead - 1` to every block number the song holds, skipping 0 and 0xFFFF:
+- the 17 start blocks;
+- the 17 words at `+0x7E`;
+- every block's previous / next links.
+
+`BStore_RebuildFreeChain` then links the remaining blocks as the new free chain. The free head / count
+live in the workspace (`0x6034B8` / `0x6034BA`), so they are per bank. `SeqFile_Load` therefore carries
+them across the workspace swap (`BStore_StashFreeChain` / `BStore_UnstashFreeChain`). A song that needs
+more blocks than are free is refused with result 0x1E.
+
+The bank is `Disk_SeqBank` (RAM 0x272B), 0..9, which `LcdKeyRow4` / `LcdKeyRow5_DiskL0adFile` step.
+Results go to `(0x23CB)`: 0x10 bad SQF, 0x1E no room in the store, 7 no room on the disk, otherwise
+`Disk_LastError`. Reads succeed with 1 and writes with 3.
+
+⚠ Not established:
+- what the workspace word `+0x1C` is. `Smf_WriteFile` refuses to run while it is non-zero (status 9), and
+  `sub_FBB392` / `sub_FBB3DC` gather it from all ten banks.
+- `Disk_SaveSeqFile` (window from `0x609000`) has no decoded caller of its entry `T_F42630`.
+
+Every routine's evidence is a row of `notes/prom_ab_read_names_2026_10_04.py`.
 
 ### `L0AD` is not a typo in this note
 

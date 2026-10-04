@@ -100,9 +100,9 @@ V = [
   "are 0xF00105 (a bare 0x0E `ret`, the array's entry 0) and a `00 00` "
   "trailer."),
  (0xF0017B, 0x02, "TRAILER", None, "after sub_F00108's `ret`, before Transport_StartStopFromZero"),
- (0xF001AE, 0x02, "TRAILER", None, "after Transport_StartStopFromZero's `ret`, before sub_F001B0"),
+ (0xF001AE, 0x02, "TRAILER", None, "after Transport_StartStopFromZero's `ret`, before Transport_StartStopFromZero_Call"),
  (0xF001B4, 0x01, "TRAILER", None,
-  "one 0x0E byte after sub_F001B0's `ret`: the 0x0E (`ret`) pad this build uses, "
+  "one 0x0E byte after Transport_StartStopFromZero_Call's `ret`: the 0x0E (`ret`) pad this build uses, "
   "already asserted as `.fill ..., 0x0E` in eight other places in this file"),
  (0xF001C7, 0x02, "TRAILER", None, "after Transport_ToggleCAndB's `ret`, before Transport_StartAllFromZero"),
  (0xF00280, 0x13, "CODE", None, "entry 0x00F00280 (and 0x00F0028D) of the array Transport_StopByRunningMask"),

@@ -675,18 +675,18 @@
 	.set Record_F1AAD3,                           0x00F1AAD3
 	.set Record_F1AADF,                           0x00F1AADF
 	.set Record_F1AAEC,                           0x00F1AAEC
-	.set PtrTable_F1AB13,                         0x00F1AB13
-	.set PtrTable_F1AB4B,                         0x00F1AB4B
-	.set PtrTable_F1AB6F,                         0x00F1AB6F
-	.set PtrTable_F1AB97,                         0x00F1AB97
-	.set PtrTable_F1ABA3,                         0x00F1ABA3
-	.set PtrTable_F1ABE7,                         0x00F1ABE7
-	.set PtrTable_F1AC07,                         0x00F1AC07
-	.set PtrTable_F1AC3F,                         0x00F1AC3F
-	.set PtrTable_F1AC63,                         0x00F1AC63
-	.set PtrTable_F1AC8B,                         0x00F1AC8B
-	.set PtrTable_F1AC97,                         0x00F1AC97
-	.set PtrTable_F1ACDB,                         0x00F1ACDB
+	.set PartParamStep_Ids00to1F,                         0x00F1AB13
+	.set PartParamStep_Ids20to3F,                         0x00F1AB4B
+	.set PartParamStep_Ids40to5F,                         0x00F1AB6F
+	.set PartParamStep_Ids60to7F,                         0x00F1AB97
+	.set PartParamStep_Ids80to9F,                         0x00F1ABA3
+	.set PartParamStep_IdsA0toBF,                         0x00F1ABE7
+	.set PartParamEnter_Ids00to1F,                         0x00F1AC07
+	.set PartParamEnter_Ids20to3F,                         0x00F1AC3F
+	.set PartParamEnter_Ids40to5F,                         0x00F1AC63
+	.set PartParamEnter_Ids60to7F,                         0x00F1AC8B
+	.set PartParamEnter_Ids80to9F,                         0x00F1AC97
+	.set PartParamEnter_IdsA0toBF,                         0x00F1ACDB
 	.set PartParamField_Volume,                           0x00F1ACFB
 	.set PartParamField_Panpot,                           0x00F1AD04
 	.set PartParamField_KeyShift,                           0x00F1AD0D
@@ -89159,9 +89159,9 @@ SysExModule_EntryThunks:
 	nop                                                  ; FB2015  00
 	nop                                                  ; FB2016  00
 	nop                                                  ; FB2017  00
-; SysExModule_BootPhase0: module 10's boot phase 0 handler, slot 0 of SysExModule_EntryThunks: call sub_FB818A.
+; SysExModule_BootPhase0: module 10's boot phase 0 handler, slot 0 of SysExModule_EntryThunks: call SysEx_ResetSession_Call.
 SysExModule_BootPhase0:
-	call sub_FB818A                                      ; FB2018  1d 8a 81 fb
+	call SysEx_ResetSession_Call                                      ; FB2018  1d 8a 81 fb
 	ret                                                  ; FB201C  0e
 ; SysExModule_Phase3_GmNormalReset -- phase-3 boot slot of the SysEx module: `call ParamApply_ResetPairTablesIfGmNormal / ret`
 ; Evidence: 0xFB201D, reached only by `jp 0xFB201D` at 0xFB200C, slot 3 of SysExModule_EntryThunks -- the walker pass with WA = 0x0C that boot runs through sub_F8283E (0xF827FC).
@@ -100308,7 +100308,8 @@ SysEx_ResetSession:
 	ld (0x60f802:24), 0x00                             ; FB817D  f2 02 f8 60 00 00
 	ld (0x60f804:24), 0x00                             ; FB8183  f2 04 f8 60 00 00
 	ret                                                  ; FB8189  0e
-sub_FB818A:
+; SysEx_ResetSession_Call: calls SysEx_ResetSession and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+SysEx_ResetSession_Call:
 	calr SysEx_ResetSession                                      ; FB818A  1e c9 ff
 	ret                                                  ; FB818D  0e
 	ld XBC,(XSP+0x04)                                    ; FB818E  af 04 21
@@ -102707,12 +102708,17 @@ MidiFile_Tables_FBA169:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 2505, 1, 0x0E
 
-sub_FBAC00:
+; SeqFile_Load: DiskLoad_Sequencer's body (T_F41EF8, through sub_FE0053).  SeqFile_ProbeSqfHeader: 1 -> SeqFile_LoadAllBanks;
+;   0 -> one song into bank Disk_SeqBank.  The workspace 0x603400 goes to its bank copy, the free chain is stashed,
+;   bank Disk_SeqBank's copy becomes the workspace and BStore_CurrentBank, and the SQF is read over it
+;   (Disk_LoadSqfToWorkspace_Entry).  If its blocks ((0x603452) >> 4) fit in the stashed free count (else result
+;   0x1E), they are read after the free head and relocated (SeqFile_LoadSongBlocks).  Result -> (0x23CB).
+SeqFile_Load:
 	push XIZ                                             ; FBAC00  3e
 	push XIX                                             ; FBAC01  3c
 	push XHL                                             ; FBAC02  3b
 	push XDE                                             ; FBAC03  3a
-	call sub_FBB199                                      ; FBAC04  1d 99 b1 fb
+	call SeqFile_ProbeSqfHeader                                      ; FBAC04  1d 99 b1 fb
 	cp a, 0x00:i3                                          ; FBAC08  c9 d8
 	jr z, .LFBAC1F                                       ; FBAC0A  66 13
 	cp a, 0x01:i3                                          ; FBAC0C  c9 d9
@@ -102721,25 +102727,25 @@ sub_FBAC00:
 	jrl z, .LFBACEE                                      ; FBAC12  76 d9 00
 	jrl .LFBACEE                                         ; FBAC15  78 d6 00
 .LFBAC18:
-	call sub_FBB20B                                      ; FBAC18  1d 0b b2 fb
+	call SeqFile_LoadAllBanks                                      ; FBAC18  1d 0b b2 fb
 	jrl .LFBACEE                                         ; FBAC1C  78 cf 00
 .LFBAC1F:
 	ld xwa, (0x360c:16)                                 ; FBAC1F  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; FBAC23  f2 1e 34 60 60
 	ld XIY,0x00603400                                    ; FBAC28  45 00 34 60 00
-	call sub_FBB0C3                                      ; FBAC2D  1d c3 b0 fb
+	call BStore_CurrentBankCopyAddr                                      ; FBAC2D  1d c3 b0 fb
 	ldir85                                               ; FBAC31  85 11
-	call sub_FBADEA                                      ; FBAC33  1d ea ad fb
+	call BStore_StashFreeChain                                      ; FBAC33  1d ea ad fb
 	ld XIX,0x00603400                                    ; FBAC37  44 00 34 60 00
-	call sub_FBB0D6                                      ; FBAC3C  1d d6 b0 fb
+	call BStore_DiskBankCopyAddr                                      ; FBAC3C  1d d6 b0 fb
 	ldir85                                               ; FBAC40  85 11
-	call sub_FBADFD                                      ; FBAC42  1d fd ad fb
-	ld a, (0x272b:16)                                   ; FBAC46  c1 2b 27 21
+	call BStore_UnstashFreeChain                                      ; FBAC42  1d fd ad fb
+	ld a, (Disk_SeqBank:16)                                   ; FBAC46  c1 2b 27 21
 	ld (BStore_CurrentBank:16), a                                   ; FBAC4A  f1 0a 36 41
 	call T_F42708                                        ; FBAC4E  1d 08 27 f4
-	call sub_FBADEA                                      ; FBAC52  1d ea ad fb
+	call BStore_StashFreeChain                                      ; FBAC52  1d ea ad fb
 	ld XIY,0x00603400                                    ; FBAC56  45 00 34 60 00
-	call sub_FBB0C3                                      ; FBAC5B  1d c3 b0 fb
+	call BStore_CurrentBankCopyAddr                                      ; FBAC5B  1d c3 b0 fb
 	ldir85                                               ; FBAC5F  85 11
 	call T_F42624                                        ; FBAC61  1d 24 26 f4
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBAC65  c1 43 22 3f 01
@@ -102750,13 +102756,13 @@ sub_FBAC00:
 	srl wa, 0x04                                         ; FBAC7A  d8 ef 04
 	cp BC,WA                                             ; FBAC7D  d8 f1
 	jr c, .LFBACCB                                       ; FBAC7F  67 4a
-	call sub_FBADFD                                      ; FBAC81  1d fd ad fb
+	call BStore_UnstashFreeChain                                      ; FBAC81  1d fd ad fb
 	m_push MW24, 0x603452                                ; FBAC85  d2 52 34 60 04
 	call T_F414B0                                        ; FBAC8A  1d b0 14 f4
 	m_popw MD24, 0x603452                                ; FBAC8E  f2 52 34 60 06
 	m_cp_mi16 MW24, 0x603452, 0x0000                     ; FBAC93  d2 52 34 60 3f 00 00
 	jr z, .LFBACAC                                       ; FBAC9A  66 10
-	call sub_FBAD07                                      ; FBAC9C  1d 07 ad fb
+	call SeqFile_LoadSongBlocks                                      ; FBAC9C  1d 07 ad fb
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBACA0  c1 43 22 3f 01
 	jr nz, .LFBACD2                                      ; FBACA5  6e 2b
 	ld (0x3552:16), 0x01                                 ; FBACA7  f1 52 35 00 01
@@ -102777,7 +102783,7 @@ sub_FBAC00:
 	ld (0x23cb:16), a                                   ; FBACD6  f1 cb 23 41
 .LFBACDA:
 	ld XIX,0x00603400                                    ; FBACDA  44 00 34 60 00
-	call sub_FBB0D6                                      ; FBACDF  1d d6 b0 fb
+	call BStore_DiskBankCopyAddr                                      ; FBACDF  1d d6 b0 fb
 	ldir85                                               ; FBACE3  85 11
 	ld xwa, (0x60341e:24)                               ; FBACE5  e2 1e 34 60 20
 	ld (0x360c:16), xwa                                 ; FBACEA  f1 0c 36 60
@@ -102796,46 +102802,53 @@ sub_FBACF3:
 	ld (0x3752:16), 0x00                                 ; FBAD01  f1 52 37 00 00
 .LFBAD06:
 	ret                                                  ; FBAD06  0e
-sub_FBAD07:
+; SeqFile_LoadSongBlocks: reads the SEQ with BStore_HeapBase moved to the free head's block (BStore_FreeHeadBlockAddr), restores the
+;   base, then adds FreeHead-1 (BStore_FreeHeadIndex) to every block number the song holds: the 17 directory
+;   start blocks (0x603501, stride 3), the 17 words at 0x60347E, and each loaded block's previous / next links
+;   (BStore_RelocateBlockNumber); then BStore_RebuildFreeChain.
+SeqFile_LoadSongBlocks:
 	ld xwa, (BStore_HeapBase:16)                                 ; FBAD07  e1 04 36 20
 	push XWA                                             ; FBAD0B  38
-	call sub_FBAE2A                                      ; FBAD0C  1d 2a ae fb
+	call BStore_FreeHeadBlockAddr                                      ; FBAD0C  1d 2a ae fb
 	ld (BStore_HeapBase:16), xix                                 ; FBAD10  f1 04 36 64
 	call T_F42628                                        ; FBAD14  1d 28 26 f4
 	pop XWA                                              ; FBAD18  58
 	ld (BStore_HeapBase:16), xwa                                 ; FBAD19  f1 04 36 60
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FBAD1D  c1 43 22 3f 01
 	jr nz, .LFBAD81                                      ; FBAD22  6e 5d
-	call sub_FBAE3B                                      ; FBAD24  1d 3b ae fb
+	call BStore_FreeHeadIndex                                      ; FBAD24  1d 3b ae fb
 	ld XIX,0x00603500                                    ; FBAD28  44 00 35 60 00
 	inc 1,XIX                                            ; FBAD2D  ec 61
 	ldw bc, 0x11                                         ; FBAD2F  31 11 00
 .LFBAD32:
-	call sub_FBAE49                                      ; FBAD32  1d 49 ae fb
+	call BStore_RelocateBlockNumber                                      ; FBAD32  1d 49 ae fb
 	add XIX,0x00000003                                   ; FBAD36  ec c8 03 00 00 00
 	djnz16 bc, .LFBAD32                                  ; FBAD3C  d9 1c f3
-	call sub_FBAE3B                                      ; FBAD3F  1d 3b ae fb
+	call BStore_FreeHeadIndex                                      ; FBAD3F  1d 3b ae fb
 	ld XIX,0x0060347e                                    ; FBAD43  44 7e 34 60 00
 	ldw bc, 0x11                                         ; FBAD48  31 11 00
 .LFBAD4B:
-	call sub_FBAE49                                      ; FBAD4B  1d 49 ae fb
+	call BStore_RelocateBlockNumber                                      ; FBAD4B  1d 49 ae fb
 	inc 2,XIX                                            ; FBAD4F  ec 62
 	djnz16 bc, .LFBAD4B                                  ; FBAD51  d9 1c f7
-	call sub_FBAE2A                                      ; FBAD54  1d 2a ae fb
+	call BStore_FreeHeadBlockAddr                                      ; FBAD54  1d 2a ae fb
 	inc 1,XIX                                            ; FBAD58  ec 61
-	call sub_FBAE3B                                      ; FBAD5A  1d 3b ae fb
+	call BStore_FreeHeadIndex                                      ; FBAD5A  1d 3b ae fb
 	ld bc, (0x603452:24)                                ; FBAD5E  d2 52 34 60 21
 	srl bc, 0x04                                         ; FBAD63  d9 ef 04
 .LFBAD66:
-	call sub_FBAE49                                      ; FBAD66  1d 49 ae fb
+	call BStore_RelocateBlockNumber                                      ; FBAD66  1d 49 ae fb
 	add XIX,0x00000002                                   ; FBAD6A  ec c8 02 00 00 00
-	call sub_FBAE49                                      ; FBAD70  1d 49 ae fb
+	call BStore_RelocateBlockNumber                                      ; FBAD70  1d 49 ae fb
 	add XIX,0x000000fe                                   ; FBAD74  ec c8 fe 00 00 00
 	djnz16 bc, .LFBAD66                                  ; FBAD7A  d9 1c e9
-	call sub_FBAD82                                      ; FBAD7D  1d 82 ad fb
+	call BStore_RebuildFreeChain                                      ; FBAD7D  1d 82 ad fb
 .LFBAD81:
 	ret                                                  ; FBAD81  0e
-sub_FBAD82:
+; BStore_RebuildFreeChain: BStore_FreeHead += the loaded block count ((0x603452) >> 4), or 0xFFFF past BStore_BlockCount;
+;   BStore_FreeCount = BlockCount - FreeHead + 1; when any are free, blocks FreeHead .. BlockCount are linked as a
+;   free chain (BStore_InitFreeBlock) and the last one's next is 0xFFFF.
+BStore_RebuildFreeChain:
 	ld wa, (BStore_FreeHead:24)                                ; FBAD82  d2 b8 34 60 20
 	ld bc, (0x603452:24)                                ; FBAD87  d2 52 34 60 21
 	srl bc, 0x04                                         ; FBAD8C  d9 ef 04
@@ -102853,36 +102866,41 @@ sub_FBAD82:
 	ld (BStore_FreeCount:24), bc                                ; FBADAB  f2 ba 34 60 51
 	cp bc, 0x00:i3                                         ; FBADB0  d9 d8
 	jr z, .LFBADE9                                       ; FBADB2  66 35
-	call sub_FBAE2A                                      ; FBADB4  1d 2a ae fb
+	call BStore_FreeHeadBlockAddr                                      ; FBADB4  1d 2a ae fb
 	ld bc, (BStore_FreeCount:24)                                ; FBADB8  d2 ba 34 60 21
 	ld wa, (BStore_FreeHead:24)                                ; FBADBD  d2 b8 34 60 20
 .LFBADC2:
-	call sub_FBAE10                                      ; FBADC2  1d 10 ae fb
+	call BStore_InitFreeBlock                                      ; FBADC2  1d 10 ae fb
 	inc 1,WA                                             ; FBADC6  d8 61
 	add XIX,0x00000100                                   ; FBADC8  ec c8 00 01 00 00
 	djnz16 bc, .LFBADC2                                  ; FBADCE  d9 1c f1
-	call sub_FBAE2A                                      ; FBADD1  1d 2a ae fb
+	call BStore_FreeHeadBlockAddr                                      ; FBADD1  1d 2a ae fb
 	xor HL,HL                                            ; FBADD5  db d3
 	ld (XIX+0x01),HL                                     ; FBADD7  bc 01 53
 	xor XWA,XWA                                          ; FBADDA  e8 d0
 	ld wa, (BStore_BlockCount:16)                                 ; FBADDC  d1 08 36 20
-	call sub_FBB135                                      ; FBADE0  1d 35 b1 fb
+	call BStore_BlockAddr                                      ; FBADE0  1d 35 b1 fb
 	m_ld_mi16 MDD+r4, 0x03, 0xffff                       ; FBADE4  bc 03 02 ff ff
 .LFBADE9:
 	ret                                                  ; FBADE9  0e
-sub_FBADEA:
+; BStore_StashFreeChain: BStore_FreeHead / BStore_FreeCount -- workspace words, so per bank -- to (0x23B8) / (0x23BA), before
+;   SeqFile_Load swaps the workspace.
+BStore_StashFreeChain:
 	ld wa, (BStore_FreeHead:24)                                ; FBADEA  d2 b8 34 60 20
 	ld (0x23b8:16), wa                                  ; FBADEF  f1 b8 23 50
 	ld wa, (BStore_FreeCount:24)                                ; FBADF3  d2 ba 34 60 20
 	ld (0x23ba:16), wa                                  ; FBADF8  f1 ba 23 50
 	ret                                                  ; FBADFC  0e
-sub_FBADFD:
+; BStore_UnstashFreeChain: (0x23B8) / (0x23BA) back to BStore_FreeHead / BStore_FreeCount: the shared heap's free chain carried into
+;   the new bank's workspace.
+BStore_UnstashFreeChain:
 	ld wa, (0x23b8:16)                                 ; FBADFD  d1 b8 23 20
 	ld (BStore_FreeHead:24), wa                                ; FBAE01  f2 b8 34 60 50
 	ld wa, (0x23ba:16)                                 ; FBAE06  d1 ba 23 20
 	ld (BStore_FreeCount:24), wa                                ; FBAE0A  f2 ba 34 60 50
 	ret                                                  ; FBAE0F  0e
-sub_FBAE10:
+; BStore_InitFreeBlock: block XIX, number WA: flags +0 = 0 (free), payload tag +5 = 0x82, previous = WA-1 (0 for 0), next = WA+1.
+BStore_InitFreeBlock:
 	ld (XIX),0x00                                        ; FBAE10  b4 00 00
 	ld (XIX+0x05),0x82                                   ; FBAE13  bc 05 00 82
 	ld HL,WA                                             ; FBAE17  d8 8b
@@ -102895,14 +102913,16 @@ sub_FBAE10:
 	inc 1,HL                                             ; FBAE24  db 61
 	ld (XIX+0x03),HL                                     ; FBAE26  bc 03 53
 	ret                                                  ; FBAE29  0e
-sub_FBAE2A:
-	call sub_FBAE3B                                      ; FBAE2A  1d 3b ae fb
+; BStore_FreeHeadBlockAddr: XIX = 0x617800 + (BStore_FreeHead - 1) x 0x100 (BStore_FreeHeadIndex), the free head's block.
+BStore_FreeHeadBlockAddr:
+	call BStore_FreeHeadIndex                                      ; FBAE2A  1d 3b ae fb
 	ld XIX,0x00617800                                    ; FBAE2E  44 00 78 61 00
 	ldw bc, 0x0100                                       ; FBAE33  31 00 01
 	mul xwa, bc                                         ; FBAE36  d9 40
 	add XIX,XWA                                          ; FBAE38  e8 84
 	ret                                                  ; FBAE3A  0e
-sub_FBAE3B:
+; BStore_FreeHeadIndex: WA = BStore_FreeHead - 1, or 0 when it is 0: the number of blocks before the free head.
+BStore_FreeHeadIndex:
 	xor XWA,XWA                                          ; FBAE3B  e8 d0
 	ld wa, (BStore_FreeHead:24)                                ; FBAE3D  d2 b8 34 60 20
 	cp wa, 0x00:i3                                         ; FBAE42  d8 d8
@@ -102910,7 +102930,8 @@ sub_FBAE3B:
 	dec 1,WA                                             ; FBAE46  d8 69
 .LFBAE48:
 	ret                                                  ; FBAE48  0e
-sub_FBAE49:
+; BStore_RelocateBlockNumber: adds WA to the word at (XIX) unless it is 0 or 0xFFFF (no block / end of chain).
+BStore_RelocateBlockNumber:
 	ld HL,(XIX)                                          ; FBAE49  94 23
 	cp HL,0xffff                                         ; FBAE4B  db cf ff ff
 	jr z, .LFBAE59                                       ; FBAE4F  66 08
@@ -102920,27 +102941,32 @@ sub_FBAE49:
 	ld (XIX),HL                                          ; FBAE57  b4 53
 .LFBAE59:
 	ret                                                  ; FBAE59  0e
-sub_FBAE5A:
+; SeqFile_Save: DiskSave_Sequencer's body (T_F41EFC, through sub_FE0046).  Content type ALL -> SeqFile_SaveAllBanks.
+;   Otherwise: workspace -> its bank copy; bank Disk_SeqBank's copy -> staging 0x609400, all-banks flag +4 = 0;
+;   each in-use directory entry's chain (+0x100, stride 3, bit 7) is counted and renumbered from 1 in order, the
+;   running total stored at +0x7E + 2k and x 16 at +0x52; the SQF is written (Disk_SaveSqfFromStaging_Entry);
+;   then, if (total, or 4) x 16 paragraphs fit on the disk (result 7 if not), SeqFile_WriteSeqCompacted.
+SeqFile_Save:
 	push XIZ                                             ; FBAE5A  3e
 	push XIX                                             ; FBAE5B  3c
 	push XHL                                             ; FBAE5C  3b
 	push XDE                                             ; FBAE5D  3a
 	m_cp_mi8 MB16, Disk_ContentType, 0x00                          ; FBAE5E  c1 25 27 3f 00
 	jr nz, .LFBAE6C                                      ; FBAE63  6e 07
-	call sub_FBB2D5                                      ; FBAE65  1d d5 b2 fb
+	call SeqFile_SaveAllBanks                                      ; FBAE65  1d d5 b2 fb
 	jrl .LFBAF3D                                         ; FBAE69  78 d1 00
 .LFBAE6C:
 	ld a, (BStore_CurrentBank:16)                                   ; FBAE6C  c1 0a 36 21
-	cp (0x272b:16), a                                    ; FBAE70  c1 2b 27 f9
+	cp (Disk_SeqBank:16), a                                    ; FBAE70  c1 2b 27 f9
 	jr nz, .LFBAE7F                                      ; FBAE74  6e 09
 	ld xwa, (0x360c:16)                                 ; FBAE76  e1 0c 36 20
 	ld (0x60341e:24), xwa                               ; FBAE7A  f2 1e 34 60 60
 .LFBAE7F:
 	ld XIY,0x00603400                                    ; FBAE7F  45 00 34 60 00
-	call sub_FBB0C3                                      ; FBAE84  1d c3 b0 fb
+	call BStore_CurrentBankCopyAddr                                      ; FBAE84  1d c3 b0 fb
 	ldir85                                               ; FBAE88  85 11
 	ld XIX,0x00609400                                    ; FBAE8A  44 00 94 60 00
-	call sub_FBB0D6                                      ; FBAE8F  1d d6 b0 fb
+	call BStore_DiskBankCopyAddr                                      ; FBAE8F  1d d6 b0 fb
 	ldir85                                               ; FBAE93  85 11
 	ld (0x609404:24), 0x00                             ; FBAE95  f2 04 94 60 00 00
 	ld XIY,0x00609500                                    ; FBAE9B  45 00 95 60 00
@@ -102959,7 +102985,7 @@ sub_FBAE5A:
 .LFBAEBF:
 	incw 0x01, (0x23bc:16)                               ; FBAEBF  d1 bc 23 61
 	push XIX                                             ; FBAEC3  3c
-	call sub_FBB135                                      ; FBAEC4  1d 35 b1 fb
+	call BStore_BlockAddr                                      ; FBAEC4  1d 35 b1 fb
 	ld WA,(XIX+0x03)                                     ; FBAEC8  9c 03 20
 	pop XIX                                              ; FBAECB  5c
 	cp WA,0xffff                                         ; FBAECC  d8 cf ff ff
@@ -102999,20 +103025,23 @@ sub_FBAE5A:
 	ld (0x23cb:16), 0x07                                 ; FBAF32  f1 cb 23 00 07
 	jr .LFBAF3D                                          ; FBAF37  68 04
 .LFBAF39:
-	call sub_FBAF42                                      ; FBAF39  1d 42 af fb
+	call SeqFile_WriteSeqCompacted                                      ; FBAF39  1d 42 af fb
 .LFBAF3D:
 	pop XDE                                              ; FBAF3D  5a
 	pop XHL                                              ; FBAF3E  5b
 	pop XIX                                              ; FBAF3F  5c
 	pop XIZ                                              ; FBAF40  5e
 	ret                                                  ; FBAF41  0e
-sub_FBAF42:
+; SeqFile_WriteSeqCompacted: walks bank Disk_SeqBank's 17 directory chains block by block, copying each into a 4-block staging buffer at
+;   0x609400 (SeqFile_StageBlock) with its links renumbered (SeqFile_RelinkStagedBlock); every 4 blocks and at
+;   the end SeqFile_FlushStagingBlocks, then T_DiskApi_CloseFile_Call.  An empty store: SeqFile_WriteEmptySeq.
+SeqFile_WriteSeqCompacted:
 	m_cp_mi16 MW16, 0x23bc, 0x0000                       ; FBAF42  d1 bc 23 3f 00 00
 	jr nz, .LFBAF51                                      ; FBAF48  6e 07
-	call sub_FBB07E                                      ; FBAF4A  1d 7e b0 fb
+	call SeqFile_WriteEmptySeq                                      ; FBAF4A  1d 7e b0 fb
 	jrl .LFBB04E                                         ; FBAF4E  78 fd 00
 .LFBAF51:
-	call sub_FBB0D6                                      ; FBAF51  1d d6 b0 fb
+	call BStore_DiskBankCopyAddr                                      ; FBAF51  1d d6 b0 fb
 	add XIY,0x00000101                                   ; FBAF55  ed c8 01 01 00 00
 	ld (0x23c0:16), xiy                                 ; FBAF5B  f1 c0 23 65
 	xor WA,WA                                            ; FBAF5F  d8 d0
@@ -103022,7 +103051,7 @@ sub_FBAF42:
 	incw 0x01, (0x23c4:16)                               ; FBAF6D  d1 c4 23 61
 	ld (0x23cc:16), wa                                  ; FBAF71  f1 cc 23 50
 	ld (0x23ca:16), a                                   ; FBAF75  f1 ca 23 41
-	call sub_FBB0E9                                      ; FBAF79  1d e9 b0 fb
+	call SeqFile_ClearStagingBlockFlags                                      ; FBAF79  1d e9 b0 fb
 .LFBAF7D:
 	m_or_mi8 MB16, 0x23ca, 0x01                          ; FBAF7D  c1 ca 23 3e 01
 	ld xiy, (0x23c0:16)                                 ; FBAF82  e1 c0 23 25
@@ -103045,15 +103074,15 @@ sub_FBAF42:
 	jr nz, .LFBB001                                      ; FBAFB7  6e 48
 	jrl .LFBB03D                                         ; FBAFB9  78 81 00
 .LFBAFBC:
-	call sub_FBB11F                                      ; FBAFBC  1d 1f b1 fb
+	call SeqFile_StageBlock                                      ; FBAFBC  1d 1f b1 fb
 	xor XWA,XWA                                          ; FBAFC0  e8 d0
 	ld wa, (0x23c6:16)                                 ; FBAFC2  d1 c6 23 20
-	call sub_FBB135                                      ; FBAFC6  1d 35 b1 fb
+	call BStore_BlockAddr                                      ; FBAFC6  1d 35 b1 fb
 	ld WA,(XIX+0x03)                                     ; FBAFCA  9c 03 20
 	cp WA,0xffff                                         ; FBAFCD  d8 cf ff ff
 	jr z, .LFBAFDF                                       ; FBAFD1  66 0c
 	pushw wa                                             ; FBAFD3  28
-	call sub_FBB159                                      ; FBAFD4  1d 59 b1 fb
+	call SeqFile_RelinkStagedBlock                                      ; FBAFD4  1d 59 b1 fb
 	popw wa                                              ; FBAFD8  48
 	ld (0x23c6:16), wa                                  ; FBAFD9  f1 c6 23 50
 	jr .LFBB007                                          ; FBAFDD  68 28
@@ -103062,12 +103091,12 @@ sub_FBAF42:
 	add XIY,0x00000003                                   ; FBAFE3  ed c8 03 00 00 00
 	ld (0x23c0:16), xiy                                 ; FBAFE9  f1 c0 23 65
 	m_or_mi8 MB16, 0x23ca, 0x02                          ; FBAFED  c1 ca 23 3e 02
-	call sub_FBB159                                      ; FBAFF2  1d 59 b1 fb
+	call SeqFile_RelinkStagedBlock                                      ; FBAFF2  1d 59 b1 fb
 	inc 0x01, (0x23c9:16)                                ; FBAFF6  c1 c9 23 61
 	m_cp_mi8 MB16, 0x23c9, 0x11                          ; FBAFFA  c1 c9 23 3f 11
 	jr nz, .LFBB007                                      ; FBAFFF  6e 06
 .LFBB001:
-	call sub_FBB04F                                      ; FBB001  1d 4f b0 fb
+	call SeqFile_FlushStagingBlocks                                      ; FBB001  1d 4f b0 fb
 	jr .LFBB03D                                          ; FBB005  68 36
 .LFBB007:
 	ld a, (0x23c8:16)                                   ; FBB007  c1 c8 23 21
@@ -103079,10 +103108,10 @@ sub_FBAF42:
 .LFBB017:
 	xor A,A                                              ; FBB017  c9 d1
 	ld (0x23c8:16), a                                   ; FBB019  f1 c8 23 41
-	call sub_FBB04F                                      ; FBB01D  1d 4f b0 fb
+	call SeqFile_FlushStagingBlocks                                      ; FBB01D  1d 4f b0 fb
 	m_cp_mi8 MB16, Disk_LastError, 0x03                          ; FBB021  c1 43 22 3f 03
 	jr nz, .LFBB03D                                      ; FBB026  6e 15
-	call sub_FBB0E9                                      ; FBB028  1d e9 b0 fb
+	call SeqFile_ClearStagingBlockFlags                                      ; FBB028  1d e9 b0 fb
 .LFBB02C:
 	ld a, (0x23ca:16)                                   ; FBB02C  c1 ca 23 21
 	and A,0x02                                           ; FBB030  c9 cc 02
@@ -103096,10 +103125,12 @@ sub_FBAF42:
 	ld (0x23cb:16), a                                   ; FBB04A  f1 cb 23 41
 .LFBB04E:
 	ret                                                  ; FBB04E  0e
-sub_FBB04F:
+; SeqFile_FlushStagingBlocks: writes the staging buffer: the first time ((0x23CC) = 0) after SeqFile_SetSeqStagingWindow with Disk_Flags
+;   bit 5 set, later times with bit 1 set; (0x23CC) += 1.
+SeqFile_FlushStagingBlocks:
 	m_cp_mi16 MW16, 0x23cc, 0x0000                       ; FBB04F  d1 cc 23 3f 00 00
 	jr nz, .LFBB06B                                      ; FBB055  6e 14
-	call sub_FBB0A1                                      ; FBB057  1d a1 b0 fb
+	call SeqFile_SetSeqStagingWindow                                      ; FBB057  1d a1 b0 fb
 	m_or_mi8 MB16, Disk_Flags, 0x20                          ; FBB05B  c1 e7 21 3e 20
 	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB060  1d ac 25 f4
 	m_and_mi8 MB16, Disk_Flags, 0xdf                         ; FBB064  c1 e7 21 3c df
@@ -103111,17 +103142,20 @@ sub_FBB04F:
 .LFBB079:
 	incw 0x01, (0x23cc:16)                               ; FBB079  d1 cc 23 61
 	ret                                                  ; FBB07D  0e
-sub_FBB07E:
-	call sub_FBB0E9                                      ; FBB07E  1d e9 b0 fb
-	call sub_FBB0FF                                      ; FBB082  1d ff b0 fb
-	call sub_FBB0A1                                      ; FBB086  1d a1 b0 fb
+; SeqFile_WriteEmptySeq: four staging blocks cleared (SeqFile_ClearStagingBlockFlags) and linked (SeqFile_LinkStagingBlocks), written
+;   as a 0x400-byte SEQ file.
+SeqFile_WriteEmptySeq:
+	call SeqFile_ClearStagingBlockFlags                                      ; FBB07E  1d e9 b0 fb
+	call SeqFile_LinkStagingBlocks                                      ; FBB082  1d ff b0 fb
+	call SeqFile_SetSeqStagingWindow                                      ; FBB086  1d a1 b0 fb
 	m_and_mi8 MB16, Disk_Flags, 0xdf                         ; FBB08A  c1 e7 21 3c df
 	m_and_mi8 MB16, Disk_Flags, 0xfd                         ; FBB08F  c1 e7 21 3c fd
 	call T_DiskApi_WriteFileFromWindow_Entry                                        ; FBB094  1d ac 25 f4
 	ld a, (Disk_LastError:16)                                   ; FBB098  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBB09C  f1 cb 23 41
 	ret                                                  ; FBB0A0  0e
-sub_FBB0A1:
+; SeqFile_SetSeqStagingWindow: Disk_WindowStart / End = 0x609400 / 0x6097FF (four blocks), extension SEQ.
+SeqFile_SetSeqStagingWindow:
 	ld XWA,0x00609400                                    ; FBB0A1  40 00 94 60 00
 	ld (Disk_WindowStart:16), xwa                                 ; FBB0A6  f1 d3 21 60
 	ld XWA,0x006097ff                                    ; FBB0AA  40 ff 97 60 00
@@ -103130,7 +103164,8 @@ sub_FBB0A1:
 	ld (Disk_FileName+9:16), 0x45                                 ; FBB0B8  f1 d1 21 00 45
 	ld (Disk_FileName+10:16), 0x51                                 ; FBB0BD  f1 d2 21 00 51
 	ret                                                  ; FBB0C2  0e
-sub_FBB0C3:
+; BStore_CurrentBankCopyAddr: XIX = 0x610000 + BStore_CurrentBank x 0xC00, the current bank's copy of the workspace.
+BStore_CurrentBankCopyAddr:
 	ld XIX,0x00610000                                    ; FBB0C3  44 00 00 61 00
 	xor XWA,XWA                                          ; FBB0C8  e8 d0
 	ld a, (BStore_CurrentBank:16)                                   ; FBB0CA  c1 0a 36 21
@@ -103138,15 +103173,17 @@ sub_FBB0C3:
 	mul xwa, bc                                         ; FBB0D1  d9 40
 	add XIX,XWA                                          ; FBB0D3  e8 84
 	ret                                                  ; FBB0D5  0e
-sub_FBB0D6:
+; BStore_DiskBankCopyAddr: XIY = 0x610000 + Disk_SeqBank x 0xC00, the copy of the bank the disk screen selected.
+BStore_DiskBankCopyAddr:
 	ld XIY,0x00610000                                    ; FBB0D6  45 00 00 61 00
 	xor XWA,XWA                                          ; FBB0DB  e8 d0
-	ld a, (0x272b:16)                                   ; FBB0DD  c1 2b 27 21
+	ld a, (Disk_SeqBank:16)                                   ; FBB0DD  c1 2b 27 21
 	ldw bc, 0x0c00                                       ; FBB0E1  31 00 0c
 	mul xwa, bc                                         ; FBB0E4  d9 40
 	add XIY,XWA                                          ; FBB0E6  e8 85
 	ret                                                  ; FBB0E8  0e
-sub_FBB0E9:
+; SeqFile_ClearStagingBlockFlags: flags byte +0 = 0 in the four staging blocks at 0x609400.
+SeqFile_ClearStagingBlockFlags:
 	ld XIX,0x00609400                                    ; FBB0E9  44 00 94 60 00
 	xor A,A                                              ; FBB0EE  c9 d1
 	ldw bc, 0x04                                         ; FBB0F0  31 04 00
@@ -103155,7 +103192,8 @@ sub_FBB0E9:
 	add XIX,0x00000100                                   ; FBB0F5  ec c8 00 01 00 00
 	djnz16 bc, .LFBB0F3                                  ; FBB0FB  d9 1c f5
 	ret                                                  ; FBB0FE  0e
-sub_FBB0FF:
+; SeqFile_LinkStagingBlocks: staging block k (0..3): previous = k, next = k+2 -- the links of block k+1 of a 1-based chain.
+SeqFile_LinkStagingBlocks:
 	ld XIX,0x00609401                                    ; FBB0FF  44 01 94 60 00
 	xor WA,WA                                            ; FBB104  d8 d0
 	ldw hl, 0x02                                         ; FBB106  33 02 00
@@ -103168,16 +103206,19 @@ sub_FBB0FF:
 	add XIX,0x00000100                                   ; FBB115  ec c8 00 01 00 00
 	djnz16 bc, .LFBB10C                                  ; FBB11B  d9 1c ee
 	ret                                                  ; FBB11E  0e
-sub_FBB11F:
+; SeqFile_StageBlock: copies block (0x23C6) (BStore_BlockAddr) into staging slot (0x23C8) (SeqFile_StagingSlotAddr), 0x100 bytes.
+SeqFile_StageBlock:
 	xor XWA,XWA                                          ; FBB11F  e8 d0
 	ld wa, (0x23c6:16)                                 ; FBB121  d1 c6 23 20
-	call sub_FBB135                                      ; FBB125  1d 35 b1 fb
+	call BStore_BlockAddr                                      ; FBB125  1d 35 b1 fb
 	ld XIY,XIX                                           ; FBB129  ec 8d
-	call sub_FBB146                                      ; FBB12B  1d 46 b1 fb
+	call SeqFile_StagingSlotAddr                                      ; FBB12B  1d 46 b1 fb
 	ldw bc, 0x0100                                       ; FBB12F  31 00 01
 	ldir85                                               ; FBB132  85 11
 	ret                                                  ; FBB134  0e
-sub_FBB135:
+; BStore_BlockAddr: XIX = 0x617800 + (WA - 1) x 0x100 for the 1-based block number WA -- BStore_SeekBlock's arithmetic with the
+;   heap base as a literal.
+BStore_BlockAddr:
 	extz XWA                                             ; FBB135  e8 12
 	dec 1,WA                                             ; FBB137  d8 69
 	ld XIX,0x00617800                                    ; FBB139  44 00 78 61 00
@@ -103185,7 +103226,8 @@ sub_FBB135:
 	mul xwa, bc                                         ; FBB141  d9 40
 	add XIX,XWA                                          ; FBB143  e8 84
 	ret                                                  ; FBB145  0e
-sub_FBB146:
+; SeqFile_StagingSlotAddr: XIX = 0x609400 + (0x23C8) x 0x100.
+SeqFile_StagingSlotAddr:
 	ld XIX,0x00609400                                    ; FBB146  44 00 94 60 00
 	xor XWA,XWA                                          ; FBB14B  e8 d0
 	ld a, (0x23c8:16)                                   ; FBB14D  c1 c8 23 21
@@ -103193,8 +103235,10 @@ sub_FBB146:
 	mul xwa, bc                                         ; FBB154  d9 40
 	add XIX,XWA                                          ; FBB156  e8 84
 	ret                                                  ; FBB158  0e
-sub_FBB159:
-	call sub_FBB146                                      ; FBB159  1d 46 b1 fb
+; SeqFile_RelinkStagedBlock: the staged block becomes number (0x23C4): previous = 0 when it opens a chain ((0x23CA) bit 0), else
+;   number-1; next = 0xFFFF when it closes one (bit 1), else number+1; (0x23C4) += 1.
+SeqFile_RelinkStagedBlock:
+	call SeqFile_StagingSlotAddr                                      ; FBB159  1d 46 b1 fb
 	ld wa, (0x23c4:16)                                 ; FBB15D  d1 c4 23 20
 	ld h, (0x23ca:16)                                   ; FBB161  c1 ca 23 26
 	and H,0x01                                           ; FBB165  ce cc 01
@@ -103219,7 +103263,10 @@ sub_FBB159:
 .LFBB194:
 	incw 0x01, (0x23c4:16)                               ; FBB194  d1 c4 23 61
 	ret                                                  ; FBB198  0e
-sub_FBB199:
+; SeqFile_ProbeSqfHeader: reads the SQF's first 0x600 bytes to 0x609400.  A = 1 when word +5 is 4 and byte +4 is 1 (all banks:
+;   SeqFile_SaveAllBanks writes +4 = 1), 0 when word +5 is 4 otherwise, 2 when the read fails (result = the
+;   error, or 1 for content type ALL), 3 when word +5 is not 4 (result 0x10).
+SeqFile_ProbeSqfHeader:
 	ld XWA,0x00609400                                    ; FBB199  40 00 94 60 00
 	ld (Disk_WindowStart:16), xwa                                 ; FBB19E  f1 d3 21 60
 	add XWA,0x00000600                                   ; FBB1A2  e8 c8 00 06 00 00
@@ -103258,7 +103305,11 @@ sub_FBB199:
 	ld (0x23cb:16), 0x10                                 ; FBB205  f1 cb 23 00 10
 .LFBB20A:
 	ret                                                  ; FBB20A  0e
-sub_FBB20B:
+; SeqFile_LoadAllBanks: reads the SQF as 0x7800 bytes into the ten bank copies at 0x610000 (10 x 0xC00), clears the all-banks flag
+;   (0x610004), copies the current bank's copy into the workspace, and reads the SEQ into the heap from 0x617800,
+;   (0x603452) x 16 bytes -- or, for an empty store ((0x603452) = 0), sets the free head to 1 and
+;   BStore_RebuildFreeChain.  Result -> (0x23CB).
+SeqFile_LoadAllBanks:
 	ld XWA,0x00610000                                    ; FBB20B  40 00 00 61 00
 	ld (Disk_WindowStart:16), xwa                                 ; FBB210  f1 d3 21 60
 	add XWA,0x00007800                                   ; FBB214  e8 c8 00 78 00 00
@@ -103276,7 +103327,7 @@ sub_FBB20B:
 .LFBB244:
 	ld (0x610004:24), 0x00                             ; FBB244  f2 04 00 61 00 00
 	call T_F414C0                                        ; FBB24A  1d c0 14 f4
-	call sub_FBB0C3                                      ; FBB24E  1d c3 b0 fb
+	call BStore_CurrentBankCopyAddr                                      ; FBB24E  1d c3 b0 fb
 	ld XIY,XIX                                           ; FBB252  ec 8d
 	ld XIX,0x00603400                                    ; FBB254  44 00 34 60 00
 	ldir85                                               ; FBB259  85 11
@@ -103284,7 +103335,7 @@ sub_FBB20B:
 	m_cp_mi16 MW24, 0x603452, 0x0000                     ; FBB25F  d2 52 34 60 3f 00 00
 	jr nz, .LFBB275                                      ; FBB266  6e 0d
 	ldw (BStore_FreeHead:24), 0x01                             ; FBB268  f2 b8 34 60 02 01 00
-	call sub_FBAD82                                      ; FBB26F  1d 82 ad fb
+	call BStore_RebuildFreeChain                                      ; FBB26F  1d 82 ad fb
 	jr .LFBB2C4                                          ; FBB273  68 4f
 .LFBB275:
 	ld XWA,0x00617800                                    ; FBB275  40 00 78 61 00
@@ -103316,7 +103367,10 @@ sub_FBB20B:
 	ld a, (Disk_LastError:16)                                   ; FBB2CC  c1 43 22 21
 	ld (0x23cb:16), a                                   ; FBB2D0  f1 cb 23 41
 	ret                                                  ; FBB2D4  0e
-sub_FBB2D5:
+; SeqFile_SaveAllBanks: needs 0x780 + (0x603452) paragraphs of disk (result 7 if short); workspace -> its bank copy; all-banks flag
+;   (0x610004) = 1; writes the ten bank copies as the SQF (0x610000-0x617800), then the SEQ from 0x617800,
+;   (0x603452) x 16 bytes, or SeqFile_WriteEmptySeq when that is 0; clears the flag.
+SeqFile_SaveAllBanks:
 	call T_F414C4                                        ; FBB2D5  1d c4 14 f4
 	ldw wa, 0x0780                                       ; FBB2D9  30 80 07
 	add wa, (0x603452:24)                            ; FBB2DC  d2 52 34 60 80
@@ -103328,7 +103382,7 @@ sub_FBB2D5:
 	jrl .LFBB38B                                         ; FBB2F5  78 93 00
 .LFBB2F8:
 	ld XIY,0x00603400                                    ; FBB2F8  45 00 34 60 00
-	call sub_FBB0C3                                      ; FBB2FD  1d c3 b0 fb
+	call BStore_CurrentBankCopyAddr                                      ; FBB2FD  1d c3 b0 fb
 	ldir85                                               ; FBB301  85 11
 	ld (0x610004:24), 0x01                             ; FBB303  f2 04 00 61 00 01
 	ld XWA,0x00610000                                    ; FBB309  40 00 00 61 00
@@ -103347,7 +103401,7 @@ sub_FBB2D5:
 	ld bc, (0x603452:24)                                ; FBB33F  d2 52 34 60 21
 	cp bc, 0x00:i3                                         ; FBB344  d9 d8
 	jr nz, .LFBB34E                                      ; FBB346  6e 06
-	call sub_FBB07E                                      ; FBB348  1d 7e b0 fb
+	call SeqFile_WriteEmptySeq                                      ; FBB348  1d 7e b0 fb
 	jr .LFBB38B                                          ; FBB34C  68 3d
 .LFBB34E:
 	ld XWA,0x00617800                                    ; FBB34E  40 00 78 61 00
@@ -103389,7 +103443,7 @@ sub_FBB392:
 	ld (XIX),HL                                          ; FBB3C3  b4 53
 	ld XIX,0x0060a000                                    ; FBB3C5  44 00 a0 60 00
 	xor XWA,XWA                                          ; FBB3CA  e8 d0
-	ld a, (0x272b:16)                                   ; FBB3CC  c1 2b 27 21
+	ld a, (Disk_SeqBank:16)                                   ; FBB3CC  c1 2b 27 21
 	sla xwa, 0x01                                        ; FBB3D0  e8 ec 01
 	add XIX,XWA                                          ; FBB3D3  e8 84
 	ld HL,(XIX)                                          ; FBB3D5  94 23
@@ -103432,7 +103486,11 @@ sub_FBB3DC:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 977, 1, 0x0E
 
-sub_FBB800:
+; PartParam_StepFieldById: (field id H = (XIZ+8), part L = (XIZ+10)): the high nibble of H, in pairs, picks the step table -- ids
+;   0x00-0x1F PartParamStep_Ids00to1F, 0x20-0x3F PartParamStep_Ids20to3F at H-0x20, ... 0xA0-0xBF PartParamStep_IdsA0toBF; 0xC0 and up
+;   do nothing -- and calls the entry with the part.  Called by the COMBINATION EDIT INTERNAL SOUND / CONFIGURE
+;   soft keys and T_F418D0.
+PartParam_StepFieldById:
 	link XIZ,0x0000                                      ; FBB800  ee 0c 00 00
 	pushw hl                                             ; FBB804  2b
 	ld L,(XIZ+0x0a)                                      ; FBB805  8e 0a 27
@@ -103478,7 +103536,7 @@ sub_FBB800:
 	ld c, 0x04:opc                                          ; FBB884  23 04
 	mul bc, h                                          ; FBB886  ce 43
 	extz XBC                                             ; FBB888  e9 12
-	add XBC,PtrTable_F1AB13                              ; FBB88A  e9 c8 13 ab f1 00
+	add XBC,PartParamStep_Ids00to1F                              ; FBB88A  e9 c8 13 ab f1 00
 	ld XBC,(XBC)                                         ; FBB890  a1 21
 	lda xiy, (.LFBB89A:24)                               ; FBB892  f2 9a b8 fb 35
 	push XIY                                             ; FBB897  3d
@@ -103491,7 +103549,7 @@ sub_FBB800:
 	mul bc, h                                          ; FBB8A0  ce 43
 	extz XBC                                             ; FBB8A2  e9 12
 	sub XBC,0x00000080                                   ; FBB8A4  e9 ca 80 00 00 00
-	add XBC,PtrTable_F1AB4B                              ; FBB8AA  e9 c8 4b ab f1 00
+	add XBC,PartParamStep_Ids20to3F                              ; FBB8AA  e9 c8 4b ab f1 00
 	ld XBC,(XBC)                                         ; FBB8B0  a1 21
 	lda xiy, (.LFBB8BA:24)                               ; FBB8B2  f2 ba b8 fb 35
 	push XIY                                             ; FBB8B7  3d
@@ -103504,7 +103562,7 @@ sub_FBB800:
 	mul bc, h                                          ; FBB8C0  ce 43
 	extz XBC                                             ; FBB8C2  e9 12
 	sub XBC,0x00000100                                   ; FBB8C4  e9 ca 00 01 00 00
-	add XBC,PtrTable_F1AB6F                              ; FBB8CA  e9 c8 6f ab f1 00
+	add XBC,PartParamStep_Ids40to5F                              ; FBB8CA  e9 c8 6f ab f1 00
 	ld XBC,(XBC)                                         ; FBB8D0  a1 21
 	lda xiy, (.LFBB8DA:24)                               ; FBB8D2  f2 da b8 fb 35
 	push XIY                                             ; FBB8D7  3d
@@ -103517,7 +103575,7 @@ sub_FBB800:
 	mul bc, h                                          ; FBB8DF  ce 43
 	extz XBC                                             ; FBB8E1  e9 12
 	sub XBC,0x00000180                                   ; FBB8E3  e9 ca 80 01 00 00
-	add XBC,PtrTable_F1AB97                              ; FBB8E9  e9 c8 97 ab f1 00
+	add XBC,PartParamStep_Ids60to7F                              ; FBB8E9  e9 c8 97 ab f1 00
 	ld XBC,(XBC)                                         ; FBB8EF  a1 21
 	lda xiy, (.LFBB8F9:24)                               ; FBB8F1  f2 f9 b8 fb 35
 	push XIY                                             ; FBB8F6  3d
@@ -103530,7 +103588,7 @@ sub_FBB800:
 	mul bc, h                                          ; FBB8FE  ce 43
 	extz XBC                                             ; FBB900  e9 12
 	sub XBC,0x00000200                                   ; FBB902  e9 ca 00 02 00 00
-	add XBC,PtrTable_F1ABA3                              ; FBB908  e9 c8 a3 ab f1 00
+	add XBC,PartParamStep_Ids80to9F                              ; FBB908  e9 c8 a3 ab f1 00
 	ld XBC,(XBC)                                         ; FBB90E  a1 21
 	lda xiy, (.LFBB918:24)                               ; FBB910  f2 18 b9 fb 35
 	push XIY                                             ; FBB915  3d
@@ -103543,7 +103601,7 @@ sub_FBB800:
 	mul bc, h                                          ; FBB91D  ce 43
 	extz XBC                                             ; FBB91F  e9 12
 	sub XBC,0x00000280                                   ; FBB921  e9 ca 80 02 00 00
-	add XBC,PtrTable_F1ABE7                              ; FBB927  e9 c8 e7 ab f1 00
+	add XBC,PartParamStep_IdsA0toBF                              ; FBB927  e9 c8 e7 ab f1 00
 	ld XBC,(XBC)                                         ; FBB92D  a1 21
 	lda xiy, (.LFBB937:24)                               ; FBB92F  f2 37 b9 fb 35
 	push XIY                                             ; FBB934  3d
@@ -103554,7 +103612,9 @@ sub_FBB800:
 	popw hl                                              ; FBB938  4b
 	unlk XIZ                                             ; FBB939  ee 0d
 	ret                                                  ; FBB93B  0e
-sub_FBB93C:
+; PartParam_EnterFieldById: PartParam_StepFieldById's number-pad twin over PartParamEnter_Ids00to1F .. PartParamEnter_IdsA0toBF, the same id ranges.
+;   Called by NumberPadKey_CombiEditInternalSound and T_F418D4.
+PartParam_EnterFieldById:
 	link XIZ,0x0000                                      ; FBB93C  ee 0c 00 00
 	pushw hl                                             ; FBB940  2b
 	pushw de                                             ; FBB941  2a
@@ -103601,7 +103661,7 @@ sub_FBB93C:
 	ld c, 0x04:opc                                          ; FBB9C1  23 04
 	mul bc, h                                          ; FBB9C3  ce 43
 	extz XBC                                             ; FBB9C5  e9 12
-	add XBC,PtrTable_F1AC07                              ; FBB9C7  e9 c8 07 ac f1 00
+	add XBC,PartParamEnter_Ids00to1F                              ; FBB9C7  e9 c8 07 ac f1 00
 	ld XBC,(XBC)                                         ; FBB9CD  a1 21
 	lda xiy, (.LFBB9D7:24)                               ; FBB9CF  f2 d7 b9 fb 35
 	push XIY                                             ; FBB9D4  3d
@@ -103615,7 +103675,7 @@ sub_FBB93C:
 	mul bc, h                                          ; FBB9DE  ce 43
 	extz XBC                                             ; FBB9E0  e9 12
 	sub XBC,0x00000080                                   ; FBB9E2  e9 ca 80 00 00 00
-	add XBC,PtrTable_F1AC3F                              ; FBB9E8  e9 c8 3f ac f1 00
+	add XBC,PartParamEnter_Ids20to3F                              ; FBB9E8  e9 c8 3f ac f1 00
 	ld XBC,(XBC)                                         ; FBB9EE  a1 21
 	lda xiy, (.LFBB9F8:24)                               ; FBB9F0  f2 f8 b9 fb 35
 	push XIY                                             ; FBB9F5  3d
@@ -103629,7 +103689,7 @@ sub_FBB93C:
 	mul bc, h                                          ; FBB9FF  ce 43
 	extz XBC                                             ; FBBA01  e9 12
 	sub XBC,0x00000100                                   ; FBBA03  e9 ca 00 01 00 00
-	add XBC,PtrTable_F1AC63                              ; FBBA09  e9 c8 63 ac f1 00
+	add XBC,PartParamEnter_Ids40to5F                              ; FBBA09  e9 c8 63 ac f1 00
 	ld XBC,(XBC)                                         ; FBBA0F  a1 21
 	lda xiy, (.LFBBA19:24)                               ; FBBA11  f2 19 ba fb 35
 	push XIY                                             ; FBBA16  3d
@@ -103643,7 +103703,7 @@ sub_FBB93C:
 	mul bc, h                                          ; FBBA1F  ce 43
 	extz XBC                                             ; FBBA21  e9 12
 	sub XBC,0x00000180                                   ; FBBA23  e9 ca 80 01 00 00
-	add XBC,PtrTable_F1AC8B                              ; FBBA29  e9 c8 8b ac f1 00
+	add XBC,PartParamEnter_Ids60to7F                              ; FBBA29  e9 c8 8b ac f1 00
 	ld XBC,(XBC)                                         ; FBBA2F  a1 21
 	lda xiy, (.LFBBA39:24)                               ; FBBA31  f2 39 ba fb 35
 	push XIY                                             ; FBBA36  3d
@@ -103657,7 +103717,7 @@ sub_FBB93C:
 	mul bc, h                                          ; FBBA3F  ce 43
 	extz XBC                                             ; FBBA41  e9 12
 	sub XBC,0x00000200                                   ; FBBA43  e9 ca 00 02 00 00
-	add XBC,PtrTable_F1AC97                              ; FBBA49  e9 c8 97 ac f1 00
+	add XBC,PartParamEnter_Ids80to9F                              ; FBBA49  e9 c8 97 ac f1 00
 	ld XBC,(XBC)                                         ; FBBA4F  a1 21
 	lda xiy, (.LFBBA59:24)                               ; FBBA51  f2 59 ba fb 35
 	push XIY                                             ; FBBA56  3d
@@ -103671,7 +103731,7 @@ sub_FBB93C:
 	mul bc, h                                          ; FBBA5F  ce 43
 	extz XBC                                             ; FBBA61  e9 12
 	sub XBC,0x00000280                                   ; FBBA63  e9 ca 80 02 00 00
-	add XBC,PtrTable_F1ACDB                              ; FBBA69  e9 c8 db ac f1 00
+	add XBC,PartParamEnter_IdsA0toBF                              ; FBBA69  e9 c8 db ac f1 00
 	ld XBC,(XBC)                                         ; FBBA6F  a1 21
 	lda xiy, (.LFBBA79:24)                               ; FBBA71  f2 79 ba fb 35
 	push XIY                                             ; FBBA76  3d
@@ -103693,7 +103753,7 @@ PartParam_RefuseNumberEntry:
 	popw bc                                              ; FBBA8A  49
 	sub A,A                                              ; FBBA8B  c9 a1
 	ret                                                  ; FBBA8D  0e
-; PartParam_StepSound: PtrTable_F1AB13[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls
+; PartParam_StepSound: PartParamStep_Ids00to1F[0], the field before VOLUME on the INTERNAL SOUND page: sets UI_RequestBits bit 3 and calls
 ;   PartSound_StepBankGroupMember(part).
 PartParam_StepSound:
 	link XIZ,0x0000                                      ; FBBA8E  ee 0c 00 00
@@ -103704,7 +103764,7 @@ PartParam_StepSound:
 	popw bc                                              ; FBBA9F  49
 	unlk XIZ                                             ; FBBAA0  ee 0d
 	ret                                                  ; FBBAA2  0e
-; PartParam_StepVolume: the adjust handler of PartParamField_Volume (VOLUME), slot PtrTable_F1AB13[1] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepVolume: the adjust handler of PartParamField_Volume (VOLUME), slot PartParamStep_Ids00to1F[1] (notes/prom_ab_part_param_fields.py)
 PartParam_StepVolume:
 	link XIZ,0x0000                                      ; FBBAA3  ee 0c 00 00
 	lda xbc, (PartParamField_Volume:24)                          ; FBBAA7  f2 fb ac f1 31
@@ -103715,7 +103775,7 @@ PartParam_StepVolume:
 	inc 6,XSP                                            ; FBBAB6  ef 66
 	unlk XIZ                                             ; FBBAB8  ee 0d
 	ret                                                  ; FBBABA  0e
-; PartParam_EnterVolume: the number-entry handler of PartParamField_Volume (VOLUME), slot PtrTable_F1AC07[1] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterVolume: the number-entry handler of PartParamField_Volume (VOLUME), slot PartParamEnter_Ids00to1F[1] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterVolume:
 	link XIZ,0x0000                                      ; FBBABB  ee 0c 00 00
 	lda xbc, (PartParamField_Volume:24)                          ; FBBABF  f2 fb ac f1 31
@@ -103726,7 +103786,7 @@ PartParam_EnterVolume:
 	inc 6,XSP                                            ; FBBACE  ef 66
 	unlk XIZ                                             ; FBBAD0  ee 0d
 	ret                                                  ; FBBAD2  0e
-; PartParam_StepPanpot: the adjust handler of PartParamField_Panpot (PANPOT), slot PtrTable_F1AB13[2] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepPanpot: the adjust handler of PartParamField_Panpot (PANPOT), slot PartParamStep_Ids00to1F[2] (notes/prom_ab_part_param_fields.py)
 PartParam_StepPanpot:
 	link XIZ,0x0000                                      ; FBBAD3  ee 0c 00 00
 	lda xbc, (PartParamField_Panpot:24)                          ; FBBAD7  f2 04 ad f1 31
@@ -103737,7 +103797,7 @@ PartParam_StepPanpot:
 	inc 6,XSP                                            ; FBBAE6  ef 66
 	unlk XIZ                                             ; FBBAE8  ee 0d
 	ret                                                  ; FBBAEA  0e
-; PartParam_StepKeyShift: the adjust handler of PartParamField_KeyShift (KEY SHIFT), slot PtrTable_F1AB13[3] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepKeyShift: the adjust handler of PartParamField_KeyShift (KEY SHIFT), slot PartParamStep_Ids00to1F[3] (notes/prom_ab_part_param_fields.py)
 PartParam_StepKeyShift:
 	link XIZ,0x0000                                      ; FBBAEB  ee 0c 00 00
 	lda xbc, (PartParamField_KeyShift:24)                          ; FBBAEF  f2 0d ad f1 31
@@ -103748,7 +103808,7 @@ PartParam_StepKeyShift:
 	inc 6,XSP                                            ; FBBAFE  ef 66
 	unlk XIZ                                             ; FBBB00  ee 0d
 	ret                                                  ; FBBB02  0e
-; PartParam_EnterKeyShift: the number-entry handler of PartParamField_KeyShift (KEY SHIFT), slot PtrTable_F1AC07[3] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterKeyShift: the number-entry handler of PartParamField_KeyShift (KEY SHIFT), slot PartParamEnter_Ids00to1F[3] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterKeyShift:
 	link XIZ,0x0000                                      ; FBBB03  ee 0c 00 00
 	lda xbc, (PartParamField_KeyShift:24)                          ; FBBB07  f2 0d ad f1 31
@@ -103759,7 +103819,7 @@ PartParam_EnterKeyShift:
 	inc 6,XSP                                            ; FBBB16  ef 66
 	unlk XIZ                                             ; FBBB18  ee 0d
 	ret                                                  ; FBBB1A  0e
-; PartParam_StepFineTune: the adjust handler of PartParamField_FineTune (FINE TUNE), slot PtrTable_F1AB13[4] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepFineTune: the adjust handler of PartParamField_FineTune (FINE TUNE), slot PartParamStep_Ids00to1F[4] (notes/prom_ab_part_param_fields.py)
 PartParam_StepFineTune:
 	link XIZ,0x0000                                      ; FBBB1B  ee 0c 00 00
 	lda xbc, (PartParamField_FineTune:24)                          ; FBBB1F  f2 16 ad f1 31
@@ -103770,7 +103830,7 @@ PartParam_StepFineTune:
 	inc 6,XSP                                            ; FBBB2E  ef 66
 	unlk XIZ                                             ; FBBB30  ee 0d
 	ret                                                  ; FBBB32  0e
-; PartParam_EnterFineTune: the number-entry handler of PartParamField_FineTune (FINE TUNE), slot PtrTable_F1AC07[4] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterFineTune: the number-entry handler of PartParamField_FineTune (FINE TUNE), slot PartParamEnter_Ids00to1F[4] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterFineTune:
 	link XIZ,0x0000                                      ; FBBB33  ee 0c 00 00
 	lda xbc, (PartParamField_FineTune:24)                          ; FBBB37  f2 16 ad f1 31
@@ -103781,7 +103841,7 @@ PartParam_EnterFineTune:
 	inc 6,XSP                                            ; FBBB46  ef 66
 	unlk XIZ                                             ; FBBB48  ee 0d
 	ret                                                  ; FBBB4A  0e
-; PartParam_StepPitchBendRange: the adjust handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PtrTable_F1AB13[5] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepPitchBendRange: the adjust handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PartParamStep_Ids00to1F[5] (notes/prom_ab_part_param_fields.py)
 PartParam_StepPitchBendRange:
 	link XIZ,0x0000                                      ; FBBB4B  ee 0c 00 00
 	lda xbc, (PartParamField_PitchBendRange:24)                          ; FBBB4F  f2 1f ad f1 31
@@ -103792,7 +103852,7 @@ PartParam_StepPitchBendRange:
 	inc 6,XSP                                            ; FBBB5E  ef 66
 	unlk XIZ                                             ; FBBB60  ee 0d
 	ret                                                  ; FBBB62  0e
-; PartParam_EnterPitchBendRange: the number-entry handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PtrTable_F1AC07[5] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterPitchBendRange: the number-entry handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PartParamEnter_Ids00to1F[5] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterPitchBendRange:
 	link XIZ,0x0000                                      ; FBBB63  ee 0c 00 00
 	lda xbc, (PartParamField_PitchBendRange:24)                          ; FBBB67  f2 1f ad f1 31
@@ -103803,7 +103863,7 @@ PartParam_EnterPitchBendRange:
 	inc 6,XSP                                            ; FBBB76  ef 66
 	unlk XIZ                                             ; FBBB78  ee 0d
 	ret                                                  ; FBBB7A  0e
-; PartParam_StepEffect1Send: the adjust handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PtrTable_F1AB13[6] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepEffect1Send: the adjust handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PartParamStep_Ids00to1F[6] (notes/prom_ab_part_param_fields.py)
 PartParam_StepEffect1Send:
 	link XIZ,0x0000                                      ; FBBB7B  ee 0c 00 00
 	lda xbc, (PartParamField_Effect1Send:24)                          ; FBBB7F  f2 28 ad f1 31
@@ -103814,7 +103874,7 @@ PartParam_StepEffect1Send:
 	inc 6,XSP                                            ; FBBB8E  ef 66
 	unlk XIZ                                             ; FBBB90  ee 0d
 	ret                                                  ; FBBB92  0e
-; PartParam_EnterEffect1Send: the number-entry handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PtrTable_F1AC07[6] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterEffect1Send: the number-entry handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PartParamEnter_Ids00to1F[6] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterEffect1Send:
 	link XIZ,0x0000                                      ; FBBB93  ee 0c 00 00
 	lda xbc, (PartParamField_Effect1Send:24)                          ; FBBB97  f2 28 ad f1 31
@@ -103825,7 +103885,7 @@ PartParam_EnterEffect1Send:
 	inc 6,XSP                                            ; FBBBA6  ef 66
 	unlk XIZ                                             ; FBBBA8  ee 0d
 	ret                                                  ; FBBBAA  0e
-; PartParam_StepEffect2: PtrTable_F1AB13[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F (notes/prom_ab_part_param_fields.py)
+; PartParam_StepEffect2: PartParamStep_Ids00to1F[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F (notes/prom_ab_part_param_fields.py)
 PartParam_StepEffect2:
 	link XIZ,0x0000                                      ; FBBBAB  ee 0c 00 00
 	pushw hl                                             ; FBBBAF  2b
@@ -103885,7 +103945,7 @@ PartParam_StepEffect2:
 	popw hl                                              ; FBBC27  4b
 	unlk XIZ                                             ; FBBC28  ee 0d
 	ret                                                  ; FBBC2A  0e
-; PartParam_StepReverbSend: the adjust handler of PartParamField_ReverbSend (REVERB SEND), slot PtrTable_F1AB13[8] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepReverbSend: the adjust handler of PartParamField_ReverbSend (REVERB SEND), slot PartParamStep_Ids00to1F[8] (notes/prom_ab_part_param_fields.py)
 PartParam_StepReverbSend:
 	link XIZ,0x0000                                      ; FBBC2B  ee 0c 00 00
 	lda xbc, (PartParamField_ReverbSend:24)                          ; FBBC2F  f2 31 ad f1 31
@@ -103896,7 +103956,7 @@ PartParam_StepReverbSend:
 	inc 6,XSP                                            ; FBBC3E  ef 66
 	unlk XIZ                                             ; FBBC40  ee 0d
 	ret                                                  ; FBBC42  0e
-; PartParam_EnterReverbSend: the number-entry handler of PartParamField_ReverbSend (REVERB SEND), slot PtrTable_F1AC07[8] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterReverbSend: the number-entry handler of PartParamField_ReverbSend (REVERB SEND), slot PartParamEnter_Ids00to1F[8] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterReverbSend:
 	link XIZ,0x0000                                      ; FBBC43  ee 0c 00 00
 	lda xbc, (PartParamField_ReverbSend:24)                          ; FBBC47  f2 31 ad f1 31
@@ -103907,7 +103967,7 @@ PartParam_EnterReverbSend:
 	inc 6,XSP                                            ; FBBC56  ef 66
 	unlk XIZ                                             ; FBBC58  ee 0d
 	ret                                                  ; FBBC5A  0e
-; PartParam_StepLocalControl: LOCAL CONTROL: forces bit 0x20 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_LocalControl); PtrTable_F1AB13[9] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepLocalControl: LOCAL CONTROL: forces bit 0x20 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_LocalControl); PartParamStep_Ids00to1F[9] (notes/prom_ab_part_param_switches.py)
 PartParam_StepLocalControl:
 	link XIZ,0x0000                                      ; FBBC5B  ee 0c 00 00
 	lda xbc, (PartParamField_LocalControl:24)                          ; FBBC5F  f2 3a ad f1 31
@@ -103918,7 +103978,7 @@ PartParam_StepLocalControl:
 	inc 6,XSP                                            ; FBBC6E  ef 66
 	unlk XIZ                                             ; FBBC70  ee 0d
 	ret                                                  ; FBBC72  0e
-; PartParam_StepMidiOutSetting: MIDI OUT SETTING: forces bit 0x40 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutSetting); PtrTable_F1AB13[10] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutSetting: MIDI OUT SETTING: forces bit 0x40 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutSetting); PartParamStep_Ids00to1F[10] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutSetting:
 	link XIZ,0x0000                                      ; FBBC73  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutSetting:24)                          ; FBBC77  f2 3d ad f1 31
@@ -103929,7 +103989,7 @@ PartParam_StepMidiOutSetting:
 	inc 6,XSP                                            ; FBBC86  ef 66
 	unlk XIZ                                             ; FBBC88  ee 0d
 	ret                                                  ; FBBC8A  0e
-; PartParam_StepMidiInSetting: MIDI IN SETTING: forces bit 0x80 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInSetting); PtrTable_F1AB13[11] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiInSetting: MIDI IN SETTING: forces bit 0x80 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInSetting); PartParamStep_Ids00to1F[11] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiInSetting:
 	link XIZ,0x0000                                      ; FBBC8B  ee 0c 00 00
 	lda xbc, (PartParamField_MidiInSetting:24)                          ; FBBC8F  f2 40 ad f1 31
@@ -103940,10 +104000,10 @@ PartParam_StepMidiInSetting:
 	inc 6,XSP                                            ; FBBC9E  ef 66
 	unlk XIZ                                             ; FBBCA0  ee 0d
 	ret                                                  ; FBBCA2  0e
-; PartParam_StepIgnored: PtrTable_F1AB13[12]: a bare `ret` -- field id 12 has no adjust action (notes/prom_ab_part_param_switches.py)
+; PartParam_StepIgnored: PartParamStep_Ids00to1F[12]: a bare `ret` -- field id 12 has no adjust action (notes/prom_ab_part_param_switches.py)
 PartParam_StepIgnored:
 	ret                                                  ; FBBCA3  0e
-; PartParam_StepKeyScaling: KEY SCALING: forces bit 0x08 of byte 12 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_KeyScaling); PtrTable_F1AB13[13] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepKeyScaling: KEY SCALING: forces bit 0x08 of byte 12 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_KeyScaling); PartParamStep_Ids00to1F[13] (notes/prom_ab_part_param_switches.py)
 PartParam_StepKeyScaling:
 	link XIZ,0x0000                                      ; FBBCA4  ee 0c 00 00
 	lda xbc, (PartParamField_KeyScaling:24)                          ; FBBCA8  f2 43 ad f1 31
@@ -103954,7 +104014,7 @@ PartParam_StepKeyScaling:
 	inc 6,XSP                                            ; FBBCB7  ef 66
 	unlk XIZ                                             ; FBBCB9  ee 0d
 	ret                                                  ; FBBCBB  0e
-; PartParam_StepMainOut: PtrTable_F1AB4B[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_EditValue_StepBitField
+; PartParam_StepMainOut: PartParamStep_Ids20to3F[0].  Steps byte 3 of part record E+0x20 (MAIN OUT: SysEx rec 32, offset 3) through T_EditValue_StepBitField
 ;   (EditValue_StepBitField) with PartParamField_MainOut.  If it moved, the new value is kept only when EFFECT2 is
 ;   off (byte 6 of record E, bit 7 masked, is 0), SUB OUT (byte 4 of E+0x20) is 0, or the new value is 0.
 ;   Otherwise it sets UI_Request_Hi bit 6 and UI_Request = 0xB6 instead.  So with EFFECT2 on, a part cannot
@@ -104023,7 +104083,7 @@ PartParam_StepMainOut:
 	popw hl                                              ; FBBD4B  4b
 	unlk XIZ                                             ; FBBD4C  ee 0d
 	ret                                                  ; FBBD4E  0e
-; PartParam_StepSubOut: PtrTable_F1AB4B[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN
+; PartParam_StepSubOut: PartParamStep_Ids20to3F[1]: PartParam_StepMainOut's twin on byte 4 (SUB OUT) with PartParamField_SubOut, testing MAIN
 ;   OUT (byte 3) instead of SUB OUT.  One difference: a step that lands on 1 is stepped again
 ;   (`cp (XIZ-1),1 / jr nz` at 0xFBBD87), so the panel never selects SUB OUT 1.
 PartParam_StepSubOut:
@@ -104099,7 +104159,7 @@ PartParam_StepSubOut:
 	popw hl                                              ; FBBDF5  4b
 	unlk XIZ                                             ; FBBDF6  ee 0d
 	ret                                                  ; FBBDF8  0e
-; PartParam_StepAssignMode: the adjust handler of PartParamField_AssignMode (ASSIGN MODE), slot PtrTable_F1AB4B[2] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepAssignMode: the adjust handler of PartParamField_AssignMode (ASSIGN MODE), slot PartParamStep_Ids20to3F[2] (notes/prom_ab_part_param_fields.py)
 PartParam_StepAssignMode:
 	link XIZ,0x0000                                      ; FBBDF9  ee 0c 00 00
 	lda xbc, (PartParamField_AssignMode:24)                          ; FBBDFD  f2 58 ad f1 31
@@ -104110,7 +104170,7 @@ PartParam_StepAssignMode:
 	inc 6,XSP                                            ; FBBE0C  ef 66
 	unlk XIZ                                             ; FBBE0E  ee 0d
 	ret                                                  ; FBBE10  0e
-; PartParam_StepVelocityOffset: the adjust handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PtrTable_F1AB4B[3] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepVelocityOffset: the adjust handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PartParamStep_Ids20to3F[3] (notes/prom_ab_part_param_fields.py)
 PartParam_StepVelocityOffset:
 	link XIZ,0x0000                                      ; FBBE11  ee 0c 00 00
 	lda xbc, (PartParamField_VelocityOffset:24)                          ; FBBE15  f2 61 ad f1 31
@@ -104121,7 +104181,7 @@ PartParam_StepVelocityOffset:
 	inc 6,XSP                                            ; FBBE24  ef 66
 	unlk XIZ                                             ; FBBE26  ee 0d
 	ret                                                  ; FBBE28  0e
-; PartParam_EnterVelocityOffset: the number-entry handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PtrTable_F1AC3F[3] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterVelocityOffset: the number-entry handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PartParamEnter_Ids20to3F[3] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterVelocityOffset:
 	link XIZ,0x0000                                      ; FBBE29  ee 0c 00 00
 	lda xbc, (PartParamField_VelocityOffset:24)                          ; FBBE2D  f2 61 ad f1 31
@@ -104132,7 +104192,7 @@ PartParam_EnterVelocityOffset:
 	inc 6,XSP                                            ; FBBE3C  ef 66
 	unlk XIZ                                             ; FBBE3E  ee 0d
 	ret                                                  ; FBBE40  0e
-; PartParam_StepBasicChannel: the adjust handler of PartParamField_BasicChannel (BASIC CHANNEL), slot PtrTable_F1AB4B[4] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepBasicChannel: the adjust handler of PartParamField_BasicChannel (BASIC CHANNEL), slot PartParamStep_Ids20to3F[4] (notes/prom_ab_part_param_fields.py)
 PartParam_StepBasicChannel:
 	link XIZ,0x0000                                      ; FBBE41  ee 0c 00 00
 	lda xbc, (PartParamField_BasicChannel:24)                          ; FBBE45  f2 6a ad f1 31
@@ -104144,7 +104204,7 @@ PartParam_StepBasicChannel:
 	unlk XIZ                                             ; FBBE56  ee 0d
 	ret                                                  ; FBBE58  0e
 ; PartParam_StepKeyLayerLow: KEY LAYER LOW: steps byte 7 of part record E+0x20 with its maximum replaced by byte 8 (the HIGH end), so the pair cannot
-;   cross; template PartParamField_KeyLayerLow; PtrTable_F1AB4B[5] (notes/prom_ab_part_param_switches.py)
+;   cross; template PartParamField_KeyLayerLow; PartParamStep_Ids20to3F[5] (notes/prom_ab_part_param_switches.py)
 PartParam_StepKeyLayerLow:
 	link XIZ,0xfff7                                      ; FBBE59  ee 0c f7 ff
 	push XIX                                             ; FBBE5D  3c
@@ -104170,7 +104230,7 @@ PartParam_StepKeyLayerLow:
 	unlk XIZ                                             ; FBBE91  ee 0d
 	ret                                                  ; FBBE93  0e
 ; PartParam_StepKeyLayerHigh: KEY LAYER HIGH: steps byte 8 of part record E+0x20 with its minimum replaced by byte 7 (the LOW end), so the pair cannot
-;   cross; template PartParamField_KeyLayerHigh; PtrTable_F1AB4B[6] (notes/prom_ab_part_param_switches.py)
+;   cross; template PartParamField_KeyLayerHigh; PartParamStep_Ids20to3F[6] (notes/prom_ab_part_param_switches.py)
 PartParam_StepKeyLayerHigh:
 	link XIZ,0xfff7                                      ; FBBE94  ee 0c f7 ff
 	push XIX                                             ; FBBE98  3c
@@ -104196,7 +104256,7 @@ PartParam_StepKeyLayerHigh:
 	unlk XIZ                                             ; FBBECC  ee 0d
 	ret                                                  ; FBBECE  0e
 ; PartParam_StepVelocityLayerLow: VELOCITY LAYER LOW: steps byte 9 of part record E+0x20 with its maximum replaced by byte 10 (the HIGH end), so the pair cannot
-;   cross; template PartParamField_VelocityLayerLow; PtrTable_F1AB4B[7] (notes/prom_ab_part_param_switches.py)
+;   cross; template PartParamField_VelocityLayerLow; PartParamStep_Ids20to3F[7] (notes/prom_ab_part_param_switches.py)
 PartParam_StepVelocityLayerLow:
 	link XIZ,0xfff7                                      ; FBBECF  ee 0c f7 ff
 	push XIX                                             ; FBBED3  3c
@@ -104222,7 +104282,7 @@ PartParam_StepVelocityLayerLow:
 	unlk XIZ                                             ; FBBF07  ee 0d
 	ret                                                  ; FBBF09  0e
 ; PartParam_StepVelocityLayerHigh: VELOCITY LAYER HIGH: steps byte 10 of part record E+0x20 with its minimum replaced by byte 9 (the LOW end), so the pair cannot
-;   cross; template PartParamField_VelocityLayerHigh; PtrTable_F1AB4B[8] (notes/prom_ab_part_param_switches.py)
+;   cross; template PartParamField_VelocityLayerHigh; PartParamStep_Ids20to3F[8] (notes/prom_ab_part_param_switches.py)
 PartParam_StepVelocityLayerHigh:
 	link XIZ,0xfff7                                      ; FBBF0A  ee 0c f7 ff
 	push XIX                                             ; FBBF0E  3c
@@ -104247,7 +104307,7 @@ PartParam_StepVelocityLayerHigh:
 	pop XIX                                              ; FBBF41  5c
 	unlk XIZ                                             ; FBBF42  ee 0d
 	ret                                                  ; FBBF44  0e
-; PartParam_StepControllerInternalFilterPitchBend: CONTROLLER INTERNAL FILTER: PITCH BEND: forces bit 0x40 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterPitchBend); PtrTable_F1AB6F[0] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterPitchBend: CONTROLLER INTERNAL FILTER: PITCH BEND: forces bit 0x40 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterPitchBend); PartParamStep_Ids40to5F[0] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterPitchBend:
 	link XIZ,0x0000                                      ; FBBF45  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterPitchBend:24)                          ; FBBF49  f2 73 ad f1 31
@@ -104258,7 +104318,7 @@ PartParam_StepControllerInternalFilterPitchBend:
 	inc 6,XSP                                            ; FBBF58  ef 66
 	unlk XIZ                                             ; FBBF5A  ee 0d
 	ret                                                  ; FBBF5C  0e
-; PartParam_StepControllerInternalFilterModulation1: CONTROLLER INTERNAL FILTER: MODULATION1: forces bit 0x02 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation1); PtrTable_F1AB6F[1] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterModulation1: CONTROLLER INTERNAL FILTER: MODULATION1: forces bit 0x02 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation1); PartParamStep_Ids40to5F[1] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterModulation1:
 	link XIZ,0x0000                                      ; FBBF5D  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterModulation1:24)                          ; FBBF61  f2 76 ad f1 31
@@ -104269,7 +104329,7 @@ PartParam_StepControllerInternalFilterModulation1:
 	inc 6,XSP                                            ; FBBF70  ef 66
 	unlk XIZ                                             ; FBBF72  ee 0d
 	ret                                                  ; FBBF74  0e
-; PartParam_StepControllerInternalFilterModulation2: CONTROLLER INTERNAL FILTER: MODULATION2: forces bit 0x10 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation2); PtrTable_F1AB6F[2] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterModulation2: CONTROLLER INTERNAL FILTER: MODULATION2: forces bit 0x10 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation2); PartParamStep_Ids40to5F[2] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterModulation2:
 	link XIZ,0x0000                                      ; FBBF75  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterModulation2:24)                          ; FBBF79  f2 79 ad f1 31
@@ -104280,7 +104340,7 @@ PartParam_StepControllerInternalFilterModulation2:
 	inc 6,XSP                                            ; FBBF88  ef 66
 	unlk XIZ                                             ; FBBF8A  ee 0d
 	ret                                                  ; FBBF8C  0e
-; PartParam_StepControllerInternalFilterRealTimeCreatorX: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorX); PtrTable_F1AB6F[3] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterRealTimeCreatorX: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorX); PartParamStep_Ids40to5F[3] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterRealTimeCreatorX:
 	link XIZ,0x0000                                      ; FBBF8D  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterRealTimeCreatorX:24)                          ; FBBF91  f2 7c ad f1 31
@@ -104291,7 +104351,7 @@ PartParam_StepControllerInternalFilterRealTimeCreatorX:
 	inc 6,XSP                                            ; FBBFA0  ef 66
 	unlk XIZ                                             ; FBBFA2  ee 0d
 	ret                                                  ; FBBFA4  0e
-; PartParam_StepControllerInternalFilterRealTimeCreatorY: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorY); PtrTable_F1AB6F[4] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterRealTimeCreatorY: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorY); PartParamStep_Ids40to5F[4] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterRealTimeCreatorY:
 	link XIZ,0x0000                                      ; FBBFA5  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterRealTimeCreatorY:24)                          ; FBBFA9  f2 7f ad f1 31
@@ -104302,7 +104362,7 @@ PartParam_StepControllerInternalFilterRealTimeCreatorY:
 	inc 6,XSP                                            ; FBBFB8  ef 66
 	unlk XIZ                                             ; FBBFBA  ee 0d
 	ret                                                  ; FBBFBC  0e
-; PartParam_StepControllerInternalFilterRealTimeControllerX: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerX); PtrTable_F1AB6F[5] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterRealTimeControllerX: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerX); PartParamStep_Ids40to5F[5] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterRealTimeControllerX:
 	link XIZ,0x0000                                      ; FBBFBD  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterRealTimeControllerX:24)                          ; FBBFC1  f2 82 ad f1 31
@@ -104313,7 +104373,7 @@ PartParam_StepControllerInternalFilterRealTimeControllerX:
 	inc 6,XSP                                            ; FBBFD0  ef 66
 	unlk XIZ                                             ; FBBFD2  ee 0d
 	ret                                                  ; FBBFD4  0e
-; PartParam_StepControllerInternalFilterRealTimeControllerY: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerY); PtrTable_F1AB6F[6] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterRealTimeControllerY: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerY); PartParamStep_Ids40to5F[6] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterRealTimeControllerY:
 	link XIZ,0x0000                                      ; FBBFD5  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterRealTimeControllerY:24)                          ; FBBFD9  f2 85 ad f1 31
@@ -104324,7 +104384,7 @@ PartParam_StepControllerInternalFilterRealTimeControllerY:
 	inc 6,XSP                                            ; FBBFE8  ef 66
 	unlk XIZ                                             ; FBBFEA  ee 0d
 	ret                                                  ; FBBFEC  0e
-; PartParam_StepControllerInternalFilterHold1: CONTROLLER INTERNAL FILTER: HOLD1: forces bit 0x01 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterHold1); PtrTable_F1AB6F[7] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterHold1: CONTROLLER INTERNAL FILTER: HOLD1: forces bit 0x01 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterHold1); PartParamStep_Ids40to5F[7] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterHold1:
 	link XIZ,0x0000                                      ; FBBFED  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterHold1:24)                          ; FBBFF1  f2 88 ad f1 31
@@ -104335,7 +104395,7 @@ PartParam_StepControllerInternalFilterHold1:
 	inc 6,XSP                                            ; FBC000  ef 66
 	unlk XIZ                                             ; FBC002  ee 0d
 	ret                                                  ; FBC004  0e
-; PartParam_StepControllerInternalFilterControlPedal: CONTROLLER INTERNAL FILTER: CONTROL PEDAL: forces bit 0x20 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterControlPedal); PtrTable_F1AB6F[8] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterControlPedal: CONTROLLER INTERNAL FILTER: CONTROL PEDAL: forces bit 0x20 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterControlPedal); PartParamStep_Ids40to5F[8] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterControlPedal:
 	link XIZ,0x0000                                      ; FBC005  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterControlPedal:24)                          ; FBC009  f2 8b ad f1 31
@@ -104346,7 +104406,7 @@ PartParam_StepControllerInternalFilterControlPedal:
 	inc 6,XSP                                            ; FBC018  ef 66
 	unlk XIZ                                             ; FBC01A  ee 0d
 	ret                                                  ; FBC01C  0e
-; PartParam_StepControllerInternalFilterAfterTouch: CONTROLLER INTERNAL FILTER: AFTER TOUCH: forces bit 0x20 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterAfterTouch); PtrTable_F1AB6F[9] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepControllerInternalFilterAfterTouch: CONTROLLER INTERNAL FILTER: AFTER TOUCH: forces bit 0x20 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterAfterTouch); PartParamStep_Ids40to5F[9] (notes/prom_ab_part_param_switches.py)
 PartParam_StepControllerInternalFilterAfterTouch:
 	link XIZ,0x0000                                      ; FBC01D  ee 0c 00 00
 	lda xbc, (PartParamField_ControllerInternalFilterAfterTouch:24)                          ; FBC021  f2 8e ad f1 31
@@ -104357,7 +104417,7 @@ PartParam_StepControllerInternalFilterAfterTouch:
 	inc 6,XSP                                            ; FBC030  ef 66
 	unlk XIZ                                             ; FBC032  ee 0d
 	ret                                                  ; FBC034  0e
-; PartParam_StepMidiInputFilterProgramChange: MIDI INPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 15 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterProgramChange); PtrTable_F1AB97[0] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiInputFilterProgramChange: MIDI INPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 15 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterProgramChange); PartParamStep_Ids60to7F[0] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiInputFilterProgramChange:
 	link XIZ,0x0000                                      ; FBC035  ee 0c 00 00
 	lda xbc, (PartParamField_MidiInputFilterProgramChange:24)                          ; FBC039  f2 91 ad f1 31
@@ -104368,7 +104428,7 @@ PartParam_StepMidiInputFilterProgramChange:
 	inc 6,XSP                                            ; FBC048  ef 66
 	unlk XIZ                                             ; FBC04A  ee 0d
 	ret                                                  ; FBC04C  0e
-; PartParam_StepMidiInputFilterBankSelect: MIDI INPUT FILTER: BANK SELECT: forces bit 0x80 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterBankSelect); PtrTable_F1AB97[1] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiInputFilterBankSelect: MIDI INPUT FILTER: BANK SELECT: forces bit 0x80 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterBankSelect); PartParamStep_Ids60to7F[1] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiInputFilterBankSelect:
 	link XIZ,0x0000                                      ; FBC04D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiInputFilterBankSelect:24)                          ; FBC051  f2 94 ad f1 31
@@ -104379,7 +104439,7 @@ PartParam_StepMidiInputFilterBankSelect:
 	inc 6,XSP                                            ; FBC060  ef 66
 	unlk XIZ                                             ; FBC062  ee 0d
 	ret                                                  ; FBC064  0e
-; PartParam_StepMidiInputFilterVolume: MIDI INPUT FILTER: VOLUME: forces bit 0x04 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterVolume); PtrTable_F1AB97[2] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiInputFilterVolume: MIDI INPUT FILTER: VOLUME: forces bit 0x04 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterVolume); PartParamStep_Ids60to7F[2] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiInputFilterVolume:
 	link XIZ,0x0000                                      ; FBC065  ee 0c 00 00
 	lda xbc, (PartParamField_MidiInputFilterVolume:24)                          ; FBC069  f2 97 ad f1 31
@@ -104390,7 +104450,7 @@ PartParam_StepMidiInputFilterVolume:
 	inc 6,XSP                                            ; FBC078  ef 66
 	unlk XIZ                                             ; FBC07A  ee 0d
 	ret                                                  ; FBC07C  0e
-; PartParam_StepMidiOutputFilterProgramChange: MIDI OUTPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterProgramChange); PtrTable_F1ABA3[0] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterProgramChange: MIDI OUTPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterProgramChange); PartParamStep_Ids80to9F[0] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterProgramChange:
 	link XIZ,0x0000                                      ; FBC07D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterProgramChange:24)                          ; FBC081  f2 9a ad f1 31
@@ -104401,7 +104461,7 @@ PartParam_StepMidiOutputFilterProgramChange:
 	inc 6,XSP                                            ; FBC090  ef 66
 	unlk XIZ                                             ; FBC092  ee 0d
 	ret                                                  ; FBC094  0e
-; PartParam_StepMidiOutputFilterBankSelect: MIDI OUTPUT FILTER: BANK SELECT: forces bit 0x80 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterBankSelect); PtrTable_F1ABA3[1] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterBankSelect: MIDI OUTPUT FILTER: BANK SELECT: forces bit 0x80 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterBankSelect); PartParamStep_Ids80to9F[1] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterBankSelect:
 	link XIZ,0x0000                                      ; FBC095  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterBankSelect:24)                          ; FBC099  f2 9d ad f1 31
@@ -104412,7 +104472,7 @@ PartParam_StepMidiOutputFilterBankSelect:
 	inc 6,XSP                                            ; FBC0A8  ef 66
 	unlk XIZ                                             ; FBC0AA  ee 0d
 	ret                                                  ; FBC0AC  0e
-; PartParam_StepMidiOutputFilterVolume: MIDI OUTPUT FILTER: VOLUME: forces bit 0x04 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterVolume); PtrTable_F1ABA3[2] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterVolume: MIDI OUTPUT FILTER: VOLUME: forces bit 0x04 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterVolume); PartParamStep_Ids80to9F[2] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterVolume:
 	link XIZ,0x0000                                      ; FBC0AD  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterVolume:24)                          ; FBC0B1  f2 a0 ad f1 31
@@ -104423,7 +104483,7 @@ PartParam_StepMidiOutputFilterVolume:
 	inc 6,XSP                                            ; FBC0C0  ef 66
 	unlk XIZ                                             ; FBC0C2  ee 0d
 	ret                                                  ; FBC0C4  0e
-; PartParam_StepMidiOutputFilterPanpot: MIDI OUTPUT FILTER: PANPOT: forces bit 0x10 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPanpot); PtrTable_F1ABA3[3] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterPanpot: MIDI OUTPUT FILTER: PANPOT: forces bit 0x10 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPanpot); PartParamStep_Ids80to9F[3] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterPanpot:
 	link XIZ,0x0000                                      ; FBC0C5  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterPanpot:24)                          ; FBC0C9  f2 a3 ad f1 31
@@ -104434,7 +104494,7 @@ PartParam_StepMidiOutputFilterPanpot:
 	inc 6,XSP                                            ; FBC0D8  ef 66
 	unlk XIZ                                             ; FBC0DA  ee 0d
 	ret                                                  ; FBC0DC  0e
-; PartParam_StepMidiOutputFilterEffectDepth_FBC0DD: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA6); PtrTable_F1ABA3[4] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterEffectDepth_FBC0DD: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA6); PartParamStep_Ids80to9F[4] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterEffectDepth_FBC0DD:
 	link XIZ,0x0000                                      ; FBC0DD  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterEffectDepth_F1ADA6:24)                          ; FBC0E1  f2 a6 ad f1 31
@@ -104445,7 +104505,7 @@ PartParam_StepMidiOutputFilterEffectDepth_FBC0DD:
 	inc 6,XSP                                            ; FBC0F0  ef 66
 	unlk XIZ                                             ; FBC0F2  ee 0d
 	ret                                                  ; FBC0F4  0e
-; PartParam_StepMidiOutputFilterEffectDepth_FBC0F5: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA9); PtrTable_F1ABA3[5] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterEffectDepth_FBC0F5: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA9); PartParamStep_Ids80to9F[5] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterEffectDepth_FBC0F5:
 	link XIZ,0x0000                                      ; FBC0F5  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterEffectDepth_F1ADA9:24)                          ; FBC0F9  f2 a9 ad f1 31
@@ -104456,7 +104516,7 @@ PartParam_StepMidiOutputFilterEffectDepth_FBC0F5:
 	inc 6,XSP                                            ; FBC108  ef 66
 	unlk XIZ                                             ; FBC10A  ee 0d
 	ret                                                  ; FBC10C  0e
-; PartParam_StepMidiOutKeyTranspose_F1ADAC: the adjust handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ABA3[6] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepMidiOutKeyTranspose_F1ADAC: the adjust handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PartParamStep_Ids80to9F[6] (notes/prom_ab_part_param_fields.py)
 PartParam_StepMidiOutKeyTranspose_F1ADAC:
 	link XIZ,0x0000                                      ; FBC10D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutKeyTranspose_F1ADAC:24)                          ; FBC111  f2 ac ad f1 31
@@ -104467,7 +104527,7 @@ PartParam_StepMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC120  ef 66
 	unlk XIZ                                             ; FBC122  ee 0d
 	ret                                                  ; FBC124  0e
-; PartParam_EnterMidiOutKeyTranspose_F1ADAC: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1AC97[6] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterMidiOutKeyTranspose_F1ADAC: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PartParamEnter_Ids80to9F[6] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	link XIZ,0x0000                                      ; FBC125  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutKeyTranspose_F1ADAC:24)                          ; FBC129  f2 ac ad f1 31
@@ -104478,7 +104538,7 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC138  ef 66
 	unlk XIZ                                             ; FBC13A  ee 0d
 	ret                                                  ; FBC13C  0e
-; PartParam_StepMidiOutputFilterPitchBend: MIDI OUTPUT FILTER: PITCH BEND: forces bit 0x40 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPitchBend); PtrTable_F1ABA3[7] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterPitchBend: MIDI OUTPUT FILTER: PITCH BEND: forces bit 0x40 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPitchBend); PartParamStep_Ids80to9F[7] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterPitchBend:
 	link XIZ,0x0000                                      ; FBC13D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterPitchBend:24)                          ; FBC141  f2 b5 ad f1 31
@@ -104489,7 +104549,7 @@ PartParam_StepMidiOutputFilterPitchBend:
 	inc 6,XSP                                            ; FBC150  ef 66
 	unlk XIZ                                             ; FBC152  ee 0d
 	ret                                                  ; FBC154  0e
-; PartParam_StepMidiOutputFilterModulation1: MIDI OUTPUT FILTER: MODULATION1: forces bit 0x02 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation1); PtrTable_F1ABA3[8] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterModulation1: MIDI OUTPUT FILTER: MODULATION1: forces bit 0x02 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation1); PartParamStep_Ids80to9F[8] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterModulation1:
 	link XIZ,0x0000                                      ; FBC155  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterModulation1:24)                          ; FBC159  f2 b8 ad f1 31
@@ -104500,7 +104560,7 @@ PartParam_StepMidiOutputFilterModulation1:
 	inc 6,XSP                                            ; FBC168  ef 66
 	unlk XIZ                                             ; FBC16A  ee 0d
 	ret                                                  ; FBC16C  0e
-; PartParam_StepMidiOutputFilterModulation2: MIDI OUTPUT FILTER: MODULATION2: forces bit 0x10 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation2); PtrTable_F1ABA3[9] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterModulation2: MIDI OUTPUT FILTER: MODULATION2: forces bit 0x10 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation2); PartParamStep_Ids80to9F[9] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterModulation2:
 	link XIZ,0x0000                                      ; FBC16D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterModulation2:24)                          ; FBC171  f2 bb ad f1 31
@@ -104511,7 +104571,7 @@ PartParam_StepMidiOutputFilterModulation2:
 	inc 6,XSP                                            ; FBC180  ef 66
 	unlk XIZ                                             ; FBC182  ee 0d
 	ret                                                  ; FBC184  0e
-; PartParam_StepMidiOutputFilterRealTimeCreatorX: MIDI OUTPUT FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorX); PtrTable_F1ABA3[10] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterRealTimeCreatorX: MIDI OUTPUT FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorX); PartParamStep_Ids80to9F[10] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterRealTimeCreatorX:
 	link XIZ,0x0000                                      ; FBC185  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterRealTimeCreatorX:24)                          ; FBC189  f2 be ad f1 31
@@ -104522,7 +104582,7 @@ PartParam_StepMidiOutputFilterRealTimeCreatorX:
 	inc 6,XSP                                            ; FBC198  ef 66
 	unlk XIZ                                             ; FBC19A  ee 0d
 	ret                                                  ; FBC19C  0e
-; PartParam_StepMidiOutputFilterRealTimeCreatorY: MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorY); PtrTable_F1ABA3[11] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterRealTimeCreatorY: MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorY); PartParamStep_Ids80to9F[11] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterRealTimeCreatorY:
 	link XIZ,0x0000                                      ; FBC19D  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterRealTimeCreatorY:24)                          ; FBC1A1  f2 c1 ad f1 31
@@ -104533,7 +104593,7 @@ PartParam_StepMidiOutputFilterRealTimeCreatorY:
 	inc 6,XSP                                            ; FBC1B0  ef 66
 	unlk XIZ                                             ; FBC1B2  ee 0d
 	ret                                                  ; FBC1B4  0e
-; PartParam_StepMidiOutputFilterRealTimeControllerX: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerX); PtrTable_F1ABA3[12] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterRealTimeControllerX: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerX); PartParamStep_Ids80to9F[12] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterRealTimeControllerX:
 	link XIZ,0x0000                                      ; FBC1B5  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterRealTimeControllerX:24)                          ; FBC1B9  f2 c4 ad f1 31
@@ -104544,7 +104604,7 @@ PartParam_StepMidiOutputFilterRealTimeControllerX:
 	inc 6,XSP                                            ; FBC1C8  ef 66
 	unlk XIZ                                             ; FBC1CA  ee 0d
 	ret                                                  ; FBC1CC  0e
-; PartParam_StepMidiOutputFilterRealTimeControllerY: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerY); PtrTable_F1ABA3[13] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterRealTimeControllerY: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerY); PartParamStep_Ids80to9F[13] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterRealTimeControllerY:
 	link XIZ,0x0000                                      ; FBC1CD  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterRealTimeControllerY:24)                          ; FBC1D1  f2 c7 ad f1 31
@@ -104555,7 +104615,7 @@ PartParam_StepMidiOutputFilterRealTimeControllerY:
 	inc 6,XSP                                            ; FBC1E0  ef 66
 	unlk XIZ                                             ; FBC1E2  ee 0d
 	ret                                                  ; FBC1E4  0e
-; PartParam_StepMidiOutputFilterHold1: MIDI OUTPUT FILTER: HOLD1: forces bit 0x01 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterHold1); PtrTable_F1ABA3[14] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterHold1: MIDI OUTPUT FILTER: HOLD1: forces bit 0x01 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterHold1); PartParamStep_Ids80to9F[14] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterHold1:
 	link XIZ,0x0000                                      ; FBC1E5  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterHold1:24)                          ; FBC1E9  f2 ca ad f1 31
@@ -104566,7 +104626,7 @@ PartParam_StepMidiOutputFilterHold1:
 	inc 6,XSP                                            ; FBC1F8  ef 66
 	unlk XIZ                                             ; FBC1FA  ee 0d
 	ret                                                  ; FBC1FC  0e
-; PartParam_StepMidiOutputFilterControlPedal: MIDI OUTPUT FILTER: CONTROL PEDAL: forces bit 0x20 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterControlPedal); PtrTable_F1ABA3[15] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterControlPedal: MIDI OUTPUT FILTER: CONTROL PEDAL: forces bit 0x20 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterControlPedal); PartParamStep_Ids80to9F[15] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterControlPedal:
 	link XIZ,0x0000                                      ; FBC1FD  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterControlPedal:24)                          ; FBC201  f2 cd ad f1 31
@@ -104577,7 +104637,7 @@ PartParam_StepMidiOutputFilterControlPedal:
 	inc 6,XSP                                            ; FBC210  ef 66
 	unlk XIZ                                             ; FBC212  ee 0d
 	ret                                                  ; FBC214  0e
-; PartParam_StepMidiOutputFilterAfterTouch: MIDI OUTPUT FILTER: AFTER TOUCH: forces bit 0x20 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterAfterTouch); PtrTable_F1ABA3[16] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiOutputFilterAfterTouch: MIDI OUTPUT FILTER: AFTER TOUCH: forces bit 0x20 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterAfterTouch); PartParamStep_Ids80to9F[16] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiOutputFilterAfterTouch:
 	link XIZ,0x0000                                      ; FBC215  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutputFilterAfterTouch:24)                          ; FBC219  f2 d0 ad f1 31
@@ -104690,7 +104750,7 @@ PartParam_StepMultipleMessagesOutputItem:
 	unlk XIZ                                             ; FBC2FC  ee 0d
 	ret                                                  ; FBC2FE  0e
 ; PartParam_StepMidiMultipleMessagesOutputProgramChange: MULTIPLE MESSAGES OUTPUT ProgramChange: PartParam_StepMultipleMessagesOutputItem on byte 14, enable bit 0x01 of
-;   byte 0x15; PtrTable_F1ABE7[0] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[0] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputProgramChange:
 	link XIZ,0x0000                                      ; FBC2FF  ee 0c 00 00
 	pushw 0x01                                           ; FBC303  0b 01 00
@@ -104701,7 +104761,7 @@ PartParam_StepMidiMultipleMessagesOutputProgramChange:
 	inc 6,XSP                                            ; FBC311  ef 66
 	unlk XIZ                                             ; FBC313  ee 0d
 	ret                                                  ; FBC315  0e
-; PartParam_EnterMidiMultipleMessagesOutputProgramChange: MULTIPLE MESSAGES OUTPUT ProgramChange: number entry into PartParamField_MidiMultipleMessagesOutputProgramChangeValue; PtrTable_F1ACDB[0] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputProgramChange: MULTIPLE MESSAGES OUTPUT ProgramChange: number entry into PartParamField_MidiMultipleMessagesOutputProgramChangeValue; PartParamEnter_IdsA0toBF[0] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputProgramChange:
 	link XIZ,0x0000                                      ; FBC316  ee 0c 00 00
 	pushw hl                                             ; FBC31A  2b
@@ -104729,7 +104789,7 @@ PartParam_EnterMidiMultipleMessagesOutputProgramChange:
 	popw hl                                              ; FBC34E  4b
 	unlk XIZ                                             ; FBC34F  ee 0d
 	ret                                                  ; FBC351  0e
-; PartParam_StepMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: T_IndexedParam_AdjustField on PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PtrTable_F1ABE7[1] (notes/prom_ab_part_param_switches.py)
+; PartParam_StepMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: T_IndexedParam_AdjustField on PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PartParamStep_IdsA0toBF[1] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputBankSelectMsb:
 	link XIZ,0x0000                                      ; FBC352  ee 0c 00 00
 	push XIX                                             ; FBC356  3c
@@ -104756,7 +104816,7 @@ PartParam_StepMidiMultipleMessagesOutputBankSelectMsb:
 	pop XIX                                              ; FBC38B  5c
 	unlk XIZ                                             ; FBC38C  ee 0d
 	ret                                                  ; FBC38E  0e
-; PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PtrTable_F1ACDB[1] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PartParamEnter_IdsA0toBF[1] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb:
 	link XIZ,0x0000                                      ; FBC38F  ee 0c 00 00
 	push XIX                                             ; FBC393  3c
@@ -104790,7 +104850,7 @@ PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb:
 	unlk XIZ                                             ; FBC3D5  ee 0d
 	ret                                                  ; FBC3D7  0e
 ; PartParam_StepMidiMultipleMessagesOutputBankSelectLsb: MULTIPLE MESSAGES OUTPUT BankSelectLsb: PartParam_StepMultipleMessagesOutputItem on byte 15, enable bit 0x20 of
-;   byte 0x15; PtrTable_F1ABE7[2] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[2] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputBankSelectLsb:
 	link XIZ,0x0000                                      ; FBC3D8  ee 0c 00 00
 	pushw 0x20                                           ; FBC3DC  0b 20 00
@@ -104801,7 +104861,7 @@ PartParam_StepMidiMultipleMessagesOutputBankSelectLsb:
 	inc 6,XSP                                            ; FBC3EA  ef 66
 	unlk XIZ                                             ; FBC3EC  ee 0d
 	ret                                                  ; FBC3EE  0e
-; PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb: MULTIPLE MESSAGES OUTPUT BankSelectLsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue; PtrTable_F1ACDB[2] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb: MULTIPLE MESSAGES OUTPUT BankSelectLsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue; PartParamEnter_IdsA0toBF[2] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb:
 	link XIZ,0x0000                                      ; FBC3EF  ee 0c 00 00
 	pushw hl                                             ; FBC3F3  2b
@@ -104830,7 +104890,7 @@ PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb:
 	unlk XIZ                                             ; FBC428  ee 0d
 	ret                                                  ; FBC42A  0e
 ; PartParam_StepMidiMultipleMessagesOutputVolume: MULTIPLE MESSAGES OUTPUT Volume: PartParam_StepMultipleMessagesOutputItem on byte 17, enable bit 0x02 of
-;   byte 0x15; PtrTable_F1ABE7[3] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[3] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputVolume:
 	link XIZ,0x0000                                      ; FBC42B  ee 0c 00 00
 	pushw 0x02                                           ; FBC42F  0b 02 00
@@ -104841,7 +104901,7 @@ PartParam_StepMidiMultipleMessagesOutputVolume:
 	inc 6,XSP                                            ; FBC43D  ef 66
 	unlk XIZ                                             ; FBC43F  ee 0d
 	ret                                                  ; FBC441  0e
-; PartParam_EnterMidiMultipleMessagesOutputVolume: MULTIPLE MESSAGES OUTPUT Volume: number entry into PartParamField_MidiMultipleMessagesOutputVolumeValue; PtrTable_F1ACDB[3] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputVolume: MULTIPLE MESSAGES OUTPUT Volume: number entry into PartParamField_MidiMultipleMessagesOutputVolumeValue; PartParamEnter_IdsA0toBF[3] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputVolume:
 	link XIZ,0x0000                                      ; FBC442  ee 0c 00 00
 	pushw hl                                             ; FBC446  2b
@@ -104870,7 +104930,7 @@ PartParam_EnterMidiMultipleMessagesOutputVolume:
 	unlk XIZ                                             ; FBC47B  ee 0d
 	ret                                                  ; FBC47D  0e
 ; PartParam_StepMidiMultipleMessagesOutputPanpot: MULTIPLE MESSAGES OUTPUT Panpot: PartParam_StepMultipleMessagesOutputItem on byte 18, enable bit 0x04 of
-;   byte 0x15; PtrTable_F1ABE7[4] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[4] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputPanpot:
 	link XIZ,0x0000                                      ; FBC47E  ee 0c 00 00
 	pushw 0x04                                           ; FBC482  0b 04 00
@@ -104882,7 +104942,7 @@ PartParam_StepMidiMultipleMessagesOutputPanpot:
 	unlk XIZ                                             ; FBC492  ee 0d
 	ret                                                  ; FBC494  0e
 ; PartParam_StepMidiMultipleMessagesOutputReverbDepth: MULTIPLE MESSAGES OUTPUT ReverbDepth: PartParam_StepMultipleMessagesOutputItem on byte 20, enable bit 0x10 of
-;   byte 0x15; PtrTable_F1ABE7[5] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[5] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputReverbDepth:
 	link XIZ,0x0000                                      ; FBC495  ee 0c 00 00
 	pushw 0x10                                           ; FBC499  0b 10 00
@@ -104893,7 +104953,7 @@ PartParam_StepMidiMultipleMessagesOutputReverbDepth:
 	inc 6,XSP                                            ; FBC4A7  ef 66
 	unlk XIZ                                             ; FBC4A9  ee 0d
 	ret                                                  ; FBC4AB  0e
-; PartParam_EnterMidiMultipleMessagesOutputReverbDepth: MULTIPLE MESSAGES OUTPUT ReverbDepth: number entry into PartParamField_MidiMultipleMessagesOutputReverbDepthValue; PtrTable_F1ACDB[5] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputReverbDepth: MULTIPLE MESSAGES OUTPUT ReverbDepth: number entry into PartParamField_MidiMultipleMessagesOutputReverbDepthValue; PartParamEnter_IdsA0toBF[5] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputReverbDepth:
 	link XIZ,0x0000                                      ; FBC4AC  ee 0c 00 00
 	pushw hl                                             ; FBC4B0  2b
@@ -104922,7 +104982,7 @@ PartParam_EnterMidiMultipleMessagesOutputReverbDepth:
 	unlk XIZ                                             ; FBC4E5  ee 0d
 	ret                                                  ; FBC4E7  0e
 ; PartParam_StepMidiMultipleMessagesOutputChorusDepth: MULTIPLE MESSAGES OUTPUT ChorusDepth: PartParam_StepMultipleMessagesOutputItem on byte 19, enable bit 0x08 of
-;   byte 0x15; PtrTable_F1ABE7[6] (notes/prom_ab_part_param_switches.py)
+;   byte 0x15; PartParamStep_IdsA0toBF[6] (notes/prom_ab_part_param_switches.py)
 PartParam_StepMidiMultipleMessagesOutputChorusDepth:
 	link XIZ,0x0000                                      ; FBC4E8  ee 0c 00 00
 	pushw 0x08                                           ; FBC4EC  0b 08 00
@@ -104933,7 +104993,7 @@ PartParam_StepMidiMultipleMessagesOutputChorusDepth:
 	inc 6,XSP                                            ; FBC4FA  ef 66
 	unlk XIZ                                             ; FBC4FC  ee 0d
 	ret                                                  ; FBC4FE  0e
-; PartParam_EnterMidiMultipleMessagesOutputChorusDepth: MULTIPLE MESSAGES OUTPUT ChorusDepth: number entry into PartParamField_MidiMultipleMessagesOutputChorusDepthValue; PtrTable_F1ACDB[6] (notes/prom_ab_part_param_switches.py)
+; PartParam_EnterMidiMultipleMessagesOutputChorusDepth: MULTIPLE MESSAGES OUTPUT ChorusDepth: number entry into PartParamField_MidiMultipleMessagesOutputChorusDepthValue; PartParamEnter_IdsA0toBF[6] (notes/prom_ab_part_param_switches.py)
 PartParam_EnterMidiMultipleMessagesOutputChorusDepth:
 	link XIZ,0x0000                                      ; FBC4FF  ee 0c 00 00
 	pushw hl                                             ; FBC503  2b
@@ -104961,7 +105021,7 @@ PartParam_EnterMidiMultipleMessagesOutputChorusDepth:
 	popw hl                                              ; FBC537  4b
 	unlk XIZ                                             ; FBC538  ee 0d
 	ret                                                  ; FBC53A  0e
-; PartParam_StepMidiOutKeyTranspose_F1AE12: the adjust handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ABE7[7] (notes/prom_ab_part_param_fields.py)
+; PartParam_StepMidiOutKeyTranspose_F1AE12: the adjust handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PartParamStep_IdsA0toBF[7] (notes/prom_ab_part_param_fields.py)
 PartParam_StepMidiOutKeyTranspose_F1AE12:
 	link XIZ,0x0000                                      ; FBC53B  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutKeyTranspose_F1AE12:24)                          ; FBC53F  f2 12 ae f1 31
@@ -104972,7 +105032,7 @@ PartParam_StepMidiOutKeyTranspose_F1AE12:
 	inc 6,XSP                                            ; FBC54E  ef 66
 	unlk XIZ                                             ; FBC550  ee 0d
 	ret                                                  ; FBC552  0e
-; PartParam_EnterMidiOutKeyTranspose_F1AE12: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ACDB[7] (notes/prom_ab_part_param_fields.py)
+; PartParam_EnterMidiOutKeyTranspose_F1AE12: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PartParamEnter_IdsA0toBF[7] (notes/prom_ab_part_param_fields.py)
 PartParam_EnterMidiOutKeyTranspose_F1AE12:
 	link XIZ,0x0000                                      ; FBC553  ee 0c 00 00
 	lda xbc, (PartParamField_MidiOutKeyTranspose_F1AE12:24)                          ; FBC557  f2 12 ae f1 31
@@ -106248,7 +106308,7 @@ SoftKeyCols5to8_CombiEditInternalSound:
 	add XBC,XWA                                          ; FBCFFA  e8 81
 	ld A,(XBC)                                           ; FBCFFC  81 21
 	pushw wa                                             ; FBCFFE  28
-	calr sub_FBB800                                      ; FBCFFF  1e fe e7
+	calr PartParam_StepFieldById                                      ; FBCFFF  1e fe e7
 	pop XIY                                              ; FBD002  5d
 .LFBD003:
 	call T_Blink_GetState                                ; FBD003  1d 30 2e f4
@@ -106348,7 +106408,7 @@ NumberPadKey_CombiEditInternalSound:
 	add XBC,XWA                                          ; FBD0D6  e8 81
 	ld A,(XBC)                                           ; FBD0D8  81 21
 	pushw wa                                             ; FBD0DA  28
-	calr sub_FBB93C                                      ; FBD0DB  1e 5e e8
+	calr PartParam_EnterFieldById                                      ; FBD0DB  1e 5e e8
 	pop XIY                                              ; FBD0DE  5d
 	cp a, 0x01:i3                                          ; FBD0DF  c9 d9
 	jr nz, .LFBD0E7                                      ; FBD0E1  6e 04
@@ -106380,7 +106440,7 @@ sub_FBD0EE:
 	add XBC,XWA                                          ; FBD11B  e8 81
 	ld A,(XBC)                                           ; FBD11D  81 21
 	pushw wa                                             ; FBD11F  28
-	calr sub_FBB93C                                      ; FBD120  1e 19 e8
+	calr PartParam_EnterFieldById                                      ; FBD120  1e 19 e8
 	pop XIY                                              ; FBD123  5d
 .LFBD124:
 	pop XIX                                              ; FBD124  5c
@@ -108076,7 +108136,7 @@ sub_FBE05D:
 	add XBC,IndexMap_F1B031                              ; FBE092  e9 c8 31 b0 f1 00
 	ld A,(XBC)                                           ; FBE098  81 21
 	pushw wa                                             ; FBE09A  28
-	calr sub_FBB800                                          ; FBE09B  1e 62 d7
+	calr PartParam_StepFieldById                                          ; FBE09B  1e 62 d7
 	pop XIY                                              ; FBE09E  5d
 	jr .LFBE0B4                                          ; FBE09F  68 13
 .LFBE0A1:
@@ -110510,7 +110570,7 @@ SoftKeyCol4_CombiEditConfigure:
 	push 0x00                                            ; FBF52C  09 00
 	m_push MB16, 0x2765                                  ; FBF52E  c1 65 27 04
 	pushw 0x09                                           ; FBF532  0b 09 00
-	calr sub_FBB800                                          ; FBF535  1e c8 c2
+	calr PartParam_StepFieldById                                          ; FBF535  1e c8 c2
 	pop XIY                                              ; FBF538  5d
 .LFBF539:
 	ret                                                  ; FBF539  0e
@@ -110550,7 +110610,7 @@ SoftKeyCol5_CombiEditConfigure:
 	push 0x00                                            ; FBF575  09 00
 	m_push MB16, 0x2765                                  ; FBF577  c1 65 27 04
 	pushw hl                                             ; FBF57B  2b
-	calr sub_FBB800                                          ; FBF57C  1e 81 c2
+	calr PartParam_StepFieldById                                          ; FBF57C  1e 81 c2
 	pop XIY                                              ; FBF57F  5d
 .LFBF580:
 	popw hl                                              ; FBF580  4b
@@ -110591,7 +110651,7 @@ SoftKeyCol6_CombiEditConfigure:
 	push 0x00                                            ; FBF5BD  09 00
 	m_push MB16, 0x2765                                  ; FBF5BF  c1 65 27 04
 	pushw hl                                             ; FBF5C3  2b
-	calr sub_FBB800                                          ; FBF5C4  1e 39 c2
+	calr PartParam_StepFieldById                                          ; FBF5C4  1e 39 c2
 	pop XIY                                              ; FBF5C7  5d
 .LFBF5C8:
 	popw hl                                              ; FBF5C8  4b
@@ -110611,7 +110671,7 @@ SoftKeyCol7_CombiEditConfigure:
 	push 0x00                                            ; FBF5E7  09 00
 	m_push MB16, 0x2765                                  ; FBF5E9  c1 65 27 04
 	pushw 0x24                                           ; FBF5ED  0b 24 00
-	calr sub_FBB800                                          ; FBF5F0  1e 0d c2
+	calr PartParam_StepFieldById                                          ; FBF5F0  1e 0d c2
 	pop XIY                                              ; FBF5F3  5d
 .LFBF5F4:
 	ret                                                  ; FBF5F4  0e
@@ -160306,7 +160366,8 @@ ParamImage_WriteRecordHeaders_Entry_SaveRegs:
 	pop XHL                                              ; FE006A  5b
 	pop XDE                                              ; FE006B  5a
 	ret                                                  ; FE006C  0e
-sub_FE006D:
+; ParamImage_SnapshotAll_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_ParamImage_SnapshotAll and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+ParamImage_SnapshotAll_SaveRegs:
 	push XDE                                             ; FE006D  3a
 	push XHL                                             ; FE006E  3b
 	push XIX                                             ; FE006F  3c
@@ -160461,7 +160522,8 @@ sub_FE00F8:
 	pop XHL                                              ; FE0102  5b
 	pop XDE                                              ; FE0103  5a
 	ret                                                  ; FE0104  0e
-sub_FE0105:
+; Msg0716_PostSysEx50_92_SaveRegs_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_Msg0716_PostSysEx50_92_SaveRegs and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Msg0716_PostSysEx50_92_SaveRegs_SaveRegs:
 	push XDE                                             ; FE0105  3a
 	push XHL                                             ; FE0106  3b
 	push XIX                                             ; FE0107  3c
@@ -160529,7 +160591,8 @@ sub_FE011B:
 	pop XHL                                              ; FE014D  5b
 	pop XDE                                              ; FE014E  5a
 	ret                                                  ; FE014F  0e
-sub_FE0150:
+; ParamImageAlt_SanitizeCombination_Entry_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_ParamImageAlt_SanitizeCombination_Entry and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+ParamImageAlt_SanitizeCombination_Entry_SaveRegs:
 	push XDE                                             ; FE0150  3a
 	push XHL                                             ; FE0151  3b
 	push XIX                                             ; FE0152  3c
@@ -160642,7 +160705,8 @@ sub_FE01BD:
 	pop XHL                                              ; FE01D0  5b
 	pop XDE                                              ; FE01D1  5a
 	ret                                                  ; FE01D2  0e
-sub_FE01D3:
+; Tempo_ApplyBpm_SaveRegs: saves XDE / XHL / XIX / XIZ around a call of T_Tempo_ApplyBpm and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Tempo_ApplyBpm_SaveRegs:
 	push XDE                                             ; FE01D3  3a
 	push XHL                                             ; FE01D4  3b
 	push XIX                                             ; FE01D5  3c
@@ -162829,7 +162893,7 @@ sub_FE152E_Cases:
 	ld (0x2724:16), c                                   ; FE1579  f1 24 27 43
 .LFE157D:
 	ld (UI_StatusCode:16), 0x00                                 ; FE157D  f1 80 28 00 00
-	ld (0x272b:16), 0x00                                 ; FE1582  f1 2b 27 00 00
+	ld (Disk_SeqBank:16), 0x00                                 ; FE1582  f1 2b 27 00 00
 	ld (Disk_ContentType:16), 0x00                                 ; FE1587  f1 25 27 00 00
 	pushw 0x09                                           ; FE158C  0b 09 00
 	calr StatusMsg_ShowByIndex                                          ; FE158F  1e a6 02
@@ -163523,20 +163587,24 @@ sub_FE1BDE:
 	pop XHL                                              ; FE1BE8  5b
 	pop XDE                                              ; FE1BE9  5a
 	ret                                                  ; FE1BEA  0e
-sub_FE1BEB:
-	calr sub_FE237B                                          ; FE1BEB  1e 8d 07
+; Disk_LoadSqfToWorkspace_Entry: the directory entry behind T_F42624: Disk_LoadSqfToWorkspace, A -> Disk_LastError.  Called by SeqFile_Load.
+Disk_LoadSqfToWorkspace_Entry:
+	calr Disk_LoadSqfToWorkspace                                          ; FE1BEB  1e 8d 07
 	ld (Disk_LastError:16), a                                   ; FE1BEE  f1 43 22 41
 	ret                                                  ; FE1BF2  0e
-sub_FE1BF3:
-	calr sub_FE233A                                          ; FE1BF3  1e 44 07
+; Disk_LoadSeqToHeap_Entry: behind T_F42628: Disk_LoadSeqToHeap, A -> Disk_LastError.  Called by SeqFile_LoadSongBlocks.
+Disk_LoadSeqToHeap_Entry:
+	calr Disk_LoadSeqToHeap                                          ; FE1BF3  1e 44 07
 	ld (Disk_LastError:16), a                                   ; FE1BF6  f1 43 22 41
 	ret                                                  ; FE1BFA  0e
-sub_FE1BFB:
-	calr sub_FE2CC7                                          ; FE1BFB  1e c9 10
+; Disk_SaveSqfFromStaging_Entry: behind T_F4262C: Disk_SaveSqfFromStaging, A -> Disk_LastError.  Called by SeqFile_Save.
+Disk_SaveSqfFromStaging_Entry:
+	calr Disk_SaveSqfFromStaging                                          ; FE1BFB  1e c9 10
 	ld (Disk_LastError:16), a                                   ; FE1BFE  f1 43 22 41
 	ret                                                  ; FE1C02  0e
-sub_FE1C03:
-	calr sub_FE2C64                                          ; FE1C03  1e 5e 10
+; Disk_SaveSeqFile_Entry: behind T_F42630: Disk_SaveSeqFile, A -> Disk_LastError.
+Disk_SaveSeqFile_Entry:
+	calr Disk_SaveSeqFile                                          ; FE1C03  1e 5e 10
 	ld (Disk_LastError:16), a                                   ; FE1C06  f1 43 22 41
 	ret                                                  ; FE1C0A  0e
 sub_FE1C0B:
@@ -163906,7 +163974,7 @@ DiskLoad_PanelLswFile:
 	pushw hl                                             ; FE1E3C  2b
 	push XIX                                             ; FE1E3D  3c
 	lda xix, (Disk_FileName:16)                                ; FE1E3E  f1 c8 21 34
-	calr sub_FE006D                                          ; FE1E42  1e 28 e2
+	calr ParamImage_SnapshotAll_SaveRegs                                          ; FE1E42  1e 28 e2
 	calr sub_FE1E93                                            ; FE1E45  1e 4b 00
 	extz XIX                                             ; FE1E48  ec 12
 	ld (XIX+0x08),0x4c                                   ; FE1E4A  bc 08 00 4c
@@ -163995,7 +164063,7 @@ DiskLoad_MidiSetting:
 	pushw de                                             ; FE1EF6  2a
 	pushw ix                                             ; FE1EF7  2c
 	ldw (0x1733:24), 0x00                               ; FE1EF8  f2 33 17 00 02 00 00
-	calr sub_FE006D                                          ; FE1EFF  1e 6b e1
+	calr ParamImage_SnapshotAll_SaveRegs                                          ; FE1EFF  1e 6b e1
 	ld (Disk_FileName+8:16), 0x4d                                 ; FE1F02  f1 d0 21 00 4d
 	ld (Disk_FileName+9:16), 0x44                                 ; FE1F07  f1 d1 21 00 44
 	ld (Disk_FileName+10:16), 0x53                                 ; FE1F0C  f1 d2 21 00 53
@@ -164111,7 +164179,7 @@ DiskLoad_ApplyPanelImage:
 	calr sub_FE00AA                                          ; FE2013  1e 94 e0
 	calr sub_FE00B7                                          ; FE2016  1e 9e e0
 	calr Queue2C00_DrainPassB_SaveRegs3                                          ; FE2019  1e a8 e0
-	calr sub_FE01D3                                          ; FE201C  1e b4 e1
+	calr Tempo_ApplyBpm_SaveRegs                                          ; FE201C  1e b4 e1
 	calr MidiIn_ServiceDeferred_Veneer                                          ; FE201F  1e af e0
 	calr UiEventList_Publish_Veneer                                          ; FE2022  1e b9 e0
 	calr Queue2C00_DrainPassB_SaveRegs3                                          ; FE2025  1e 9c e0
@@ -164161,7 +164229,7 @@ DiskLoad_Sound:
 	calr sub_FE00F8                                          ; FE2085  1e 70 e0
 	jr .LFE208D                                              ; FE2088  68 03
 .LFE208A:
-	calr sub_FE0105                                          ; FE208A  1e 78 e0
+	calr Msg0716_PostSysEx50_92_SaveRegs_SaveRegs                                          ; FE208A  1e 78 e0
 .LFE208D:
 	ld A,H                                               ; FE208D  ce 89
 .LFE208F:
@@ -164445,9 +164513,11 @@ sub_FE22EF:
 	popw hl                                              ; FE2332  4b
 	unlk XIZ                                             ; FE2333  ee 0d
 	ret                                                  ; FE2335  0e
-	calr sub_FE233A                                            ; FE2336  1e 01 00
+	calr Disk_LoadSeqToHeap                                            ; FE2336  1e 01 00
 	ret                                                  ; FE2339  0e
-sub_FE233A:
+; Disk_LoadSeqToHeap: extension SEQ, window BStore_HeapBase .. + (0x603452) x 16 (Disk_SetWindowStartToHeap,
+;   Disk_SetSeqLengthFromWorkspace, Disk_SetWindowEndToHeapPlusSeqLength), DiskApi_ReadFileToWindow.
+Disk_LoadSeqToHeap:
 	push XIX                                             ; FE233A  3c
 	lda xix, (Disk_FileName:16)                                ; FE233B  f1 c8 21 34
 	calr sub_FE2F86                                          ; FE233F  1e 44 0c
@@ -164455,9 +164525,9 @@ sub_FE233A:
 	ld (XIX+0x08),0x53                                   ; FE2344  bc 08 00 53
 	ld (XIX+0x09),0x45                                   ; FE2348  bc 09 00 45
 	ld (XIX+0x0a),0x51                                   ; FE234C  bc 0a 00 51
-	calr sub_FE2D1D                                          ; FE2350  1e ca 09
-	calr sub_FE2DC6                                          ; FE2353  1e 70 0a
-	calr sub_FE2DA7                                          ; FE2356  1e 4e 0a
+	calr Disk_SetWindowStartToHeap                                          ; FE2350  1e ca 09
+	calr Disk_SetSeqLengthFromWorkspace                                          ; FE2353  1e 70 0a
+	calr Disk_SetWindowEndToHeapPlusSeqLength                                          ; FE2356  1e 4e 0a
 	m_res 5, MD16, Disk_Flags                                ; FE2359  f1 e7 21 b5
 	calr DiskApi_ReadFileToWindow                                          ; FE235D  1e e3 e7
 	ld (Disk_LastError:16), a                                   ; FE2360  f1 43 22 41
@@ -164475,7 +164545,9 @@ DiskLoad_Sequencer:
 	ld a, (0x23cb:16)                                   ; FE2376  c1 cb 23 21
 .LFE237A:
 	ret                                                  ; FE237A  0e
-sub_FE237B:
+; Disk_LoadSqfToWorkspace: extension SQF, window 0x603400-0x604000 (Disk_SetWindowStartToWorkspace / _EndToWorkspaceEnd),
+;   DiskApi_ReadFileToWindow; on success ParamImageAlt_SanitizeCombination_Entry_SaveRegs and Disk_LastError = 1.
+Disk_LoadSqfToWorkspace:
 	pushw hl                                             ; FE237B  2b
 	push XIX                                             ; FE237C  3c
 	lda xix, (Disk_FileName:16)                                ; FE237D  f1 c8 21 34
@@ -164484,8 +164556,8 @@ sub_FE237B:
 	ld (XIX+0x08),0x53                                   ; FE2386  bc 08 00 53
 	ld (XIX+0x09),0x51                                   ; FE238A  bc 09 00 51
 	ld (XIX+0x0a),0x46                                   ; FE238E  bc 0a 00 46
-	calr sub_FE2D30                                          ; FE2392  1e 9b 09
-	calr sub_FE2D9D                                          ; FE2395  1e 05 0a
+	calr Disk_SetWindowStartToWorkspace                                          ; FE2392  1e 9b 09
+	calr Disk_SetWindowEndToWorkspaceEnd                                          ; FE2395  1e 05 0a
 	m_res 1, MD16, Disk_Flags                                ; FE2398  f1 e7 21 b1
 	calr DiskApi_ReadFileToWindow                                          ; FE239C  1e a4 e7
 	ld H,A                                               ; FE239F  c9 8e
@@ -164496,7 +164568,7 @@ sub_FE237B:
 	jr .LFE23BA                                              ; FE23AB  68 0d
 .LFE23AD:
 	calr sub_FE237B_Nop                                          ; FE23AD  1e b2 f4
-	calr sub_FE0150                                          ; FE23B0  1e 9d dd
+	calr ParamImageAlt_SanitizeCombination_Entry_SaveRegs                                          ; FE23B0  1e 9d dd
 	ld (Disk_LastError:16), 0x01                                 ; FE23B3  f1 43 22 00 01
 	ld a, 0x01:opc                                          ; FE23B8  21 01
 .LFE23BA:
@@ -165442,11 +165514,14 @@ sub_FE2AA9:
 	popw hl                                              ; FE2C60  4b
 	unlk XIZ                                             ; FE2C61  ee 0d
 	ret                                                  ; FE2C63  0e
-sub_FE2C64:
+; Disk_SaveSeqFile: (0x761A) = (0x603452); DiskApi_CheckFreeSpace for that many paragraphs; with room: extension SEQ, window
+;   0x609000 .. BStore_HeapBase + (0x603452) x 16, DiskApi_WriteFileFromWindow.  No call of its entry T_F42630
+;   is decoded in prom_a or prom_b; SeqFile_Save writes the SEQ through SeqFile_WriteSeqCompacted.
+Disk_SaveSeqFile:
 	pushw hl                                             ; FE2C64  2b
 	pushw de                                             ; FE2C65  2a
 	push XIX                                             ; FE2C66  3c
-	calr sub_FE2DC6                                          ; FE2C67  1e 5c 01
+	calr Disk_SetSeqLengthFromWorkspace                                          ; FE2C67  1e 5c 01
 	ld c, (0x761a:16)                                   ; FE2C6A  c1 1a 76 23
 	extz BC                                              ; FE2C6E  d9 12
 	ld HL,BC                                             ; FE2C70  d9 8b
@@ -165471,7 +165546,7 @@ sub_FE2C64:
 	ld (Disk_FileName+9:16), 0x45                                 ; FE2CA2  f1 d1 21 00 45
 	ld (Disk_FileName+10:16), 0x51                                 ; FE2CA7  f1 d2 21 00 51
 	calr sub_FE2D13                                            ; FE2CAC  1e 64 00
-	calr sub_FE2DA7                                            ; FE2CAF  1e f5 00
+	calr Disk_SetWindowEndToHeapPlusSeqLength                                            ; FE2CAF  1e f5 00
 	and (XIX),0xdf                                       ; FE2CB2  84 3c df
 	and (XIX),0xfd                                       ; FE2CB5  84 3c fd
 	calr DiskApi_WriteFileFromWindow                                          ; FE2CB8  1e de dd
@@ -165485,7 +165560,9 @@ DiskSave_Sequencer:
 	calr sub_FE0046                                          ; FE2CBF  1e 84 d3
 	ld a, (0x23cb:16)                                   ; FE2CC2  c1 cb 23 21
 	ret                                                  ; FE2CC6  0e
-sub_FE2CC7:
+; Disk_SaveSqfFromStaging: extension SQF, window 0x609400-0x60A000 (one bank copy, staged by SeqFile_Save), Disk_Flags bits 5 and 1
+;   cleared, DiskApi_WriteFileFromWindow.
+Disk_SaveSqfFromStaging:
 	push XIX                                             ; FE2CC7  3c
 	lda xix, (Disk_Flags:16)                                ; FE2CC8  f1 e7 21 34
 	calr sub_FE2CC7_Nop                                          ; FE2CCC  1e 1b 03
@@ -165494,8 +165571,8 @@ sub_FE2CC7:
 	ld (Disk_FileName+8:16), 0x53                                 ; FE2CD5  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x51                                 ; FE2CDA  f1 d1 21 00 51
 	ld (Disk_FileName+10:16), 0x46                                 ; FE2CDF  f1 d2 21 00 46
-	calr sub_FE2D26                                            ; FE2CE4  1e 3f 00
-	calr sub_FE2D93                                            ; FE2CE7  1e a9 00
+	calr Disk_SetWindowStartToSqfStaging                                            ; FE2CE4  1e 3f 00
+	calr Disk_SetWindowEndToSqfStagingEnd                                            ; FE2CE7  1e a9 00
 	and (XIX),0xdf                                       ; FE2CEA  84 3c df
 	and (XIX),0xfd                                       ; FE2CED  84 3c fd
 	calr DiskApi_WriteFileFromWindow                                          ; FE2CF0  1e a6 dd
@@ -165517,15 +165594,18 @@ sub_FE2D13:
 	ld XBC,0x00609000                                    ; FE2D13  41 00 90 60 00
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D18  f1 d3 21 61
 	ret                                                  ; FE2D1C  0e
-sub_FE2D1D:
+; Disk_SetWindowStartToHeap: Disk_WindowStart = BStore_HeapBase.
+Disk_SetWindowStartToHeap:
 	ld xbc, (BStore_HeapBase:16)                                 ; FE2D1D  e1 04 36 21
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D21  f1 d3 21 61
 	ret                                                  ; FE2D25  0e
-sub_FE2D26:
+; Disk_SetWindowStartToSqfStaging: Disk_WindowStart = 0x609400, SeqFile_Save's one-bank staging copy.
+Disk_SetWindowStartToSqfStaging:
 	ld XBC,0x00609400                                    ; FE2D26  41 00 94 60 00
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D2B  f1 d3 21 61
 	ret                                                  ; FE2D2F  0e
-sub_FE2D30:
+; Disk_SetWindowStartToWorkspace: Disk_WindowStart = 0x603400, the sequencer workspace.
+Disk_SetWindowStartToWorkspace:
 	ld XBC,0x00603400                                    ; FE2D30  41 00 34 60 00
 	ld (Disk_WindowStart:16), xbc                                 ; FE2D35  f1 d3 21 61
 	ret                                                  ; FE2D39  0e
@@ -165560,15 +165640,18 @@ sub_FE2D7C:
 	add XWA,0x00007600                                   ; FE2D88  e8 c8 00 76 00 00
 	ld (Disk_WindowEnd:16), xwa                                 ; FE2D8E  f1 d7 21 60
 	ret                                                  ; FE2D92  0e
-sub_FE2D93:
+; Disk_SetWindowEndToSqfStagingEnd: Disk_WindowEnd = 0x60A000.
+Disk_SetWindowEndToSqfStagingEnd:
 	ld XBC,0x0060a000                                    ; FE2D93  41 00 a0 60 00
 	ld (Disk_WindowEnd:16), xbc                                 ; FE2D98  f1 d7 21 61
 	ret                                                  ; FE2D9C  0e
-sub_FE2D9D:
+; Disk_SetWindowEndToWorkspaceEnd: Disk_WindowEnd = 0x604000.
+Disk_SetWindowEndToWorkspaceEnd:
 	ld XBC,0x00604000                                    ; FE2D9D  41 00 40 60 00
 	ld (Disk_WindowEnd:16), xbc                                 ; FE2DA2  f1 d7 21 61
 	ret                                                  ; FE2DA6  0e
-sub_FE2DA7:
+; Disk_SetWindowEndToHeapPlusSeqLength: Disk_WindowEnd = BStore_HeapBase + (0x761A) x 16.
+Disk_SetWindowEndToHeapPlusSeqLength:
 	ldw bc, 0x761a                                       ; FE2DA7  31 1a 76
 	exts XBC                                             ; FE2DAA  e9 13
 	ld WA,(XBC)                                          ; FE2DAC  91 20
@@ -165582,7 +165665,8 @@ sub_FE2DBC:
 	exts XBC                                             ; FE2DBF  e9 13
 	m_ld_mi16 MDI+r1, 0, 0x00a0                          ; FE2DC1  b1 02 a0 00
 	ret                                                  ; FE2DC5  0e
-sub_FE2DC6:
+; Disk_SetSeqLengthFromWorkspace: (0x761A) = (0x603452), the song store's length in 16-byte units.
+Disk_SetSeqLengthFromWorkspace:
 	ldw bc, 0x761a                                       ; FE2DC6  31 1a 76
 	exts XBC                                             ; FE2DC9  e9 13
 	ld wa, (0x603452:24)                                ; FE2DCB  d2 52 34 60 20
@@ -188395,7 +188479,8 @@ ModeEnter_SoundCopy:
 Var2134_SetBit1_3:
 	m_set 1, MD16, 0x2134                                ; FF42C0  f1 34 21 b9
 	ret                                                  ; FF42C4  0e
-sub_FF42C5:
+; ModeEnter_SoundCopy_Call: calls ModeEnter_SoundCopy and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+ModeEnter_SoundCopy_Call:
 	calr ModeEnter_SoundCopy                                      ; FF42C5  1e ef ff
 	ret                                                  ; FF42C8  0e
 ; Var2134_SetBit1_3_Call: calls Var2134_SetBit1_3 and returns -- `calr Var2134_SetBit1_3 / ret`.
@@ -189416,7 +189501,7 @@ Paint_DiskL0adFile:
 .LFF482A:
 	call Disk_DrawDirectory20                                      ; FF482A  1d 7f 76 ff
 	calr sub_FF48F0                                      ; FF482E  1e bf 00
-	ld c, (0x272b:16)                                   ; FF4831  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4831  c1 2b 27 23
 	inc 1,C                                              ; FF4835  cb 61
 	ld (0x2733:16), c                                   ; FF4837  f1 33 27 43
 	lda xbc, (DL_F5840A:24)                              ; FF483B  f2 0a 84 f5 31
@@ -189968,14 +190053,14 @@ LcdKeyRow4_DiskL0adFile:
 	pushw 0x0c                                           ; FF4B95  0b 0c 00
 	pushw 0x0b                                           ; FF4B98  0b 0b 00
 	calr PanelDial_SetButtonPair                                      ; FF4B9B  1e 8c 25
-	ld h, (0x272b:16)                                   ; FF4B9E  c1 2b 27 26
-	inc 0x01, (0x272b:16)                                ; FF4BA2  c1 2b 27 61
+	ld h, (Disk_SeqBank:16)                                   ; FF4B9E  c1 2b 27 26
+	inc 0x01, (Disk_SeqBank:16)                                ; FF4BA2  c1 2b 27 61
 	pop XIY                                              ; FF4BA6  5d
 	cp H,0x09                                            ; FF4BA7  ce cf 09
 	jr c, .LFF4BB1                                       ; FF4BAA  67 05
-	ld (0x272b:16), 0x09                                 ; FF4BAC  f1 2b 27 00 09
+	ld (Disk_SeqBank:16), 0x09                                 ; FF4BAC  f1 2b 27 00 09
 .LFF4BB1:
-	ld c, (0x272b:16)                                   ; FF4BB1  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4BB1  c1 2b 27 23
 	inc 1,C                                              ; FF4BB5  cb 61
 	ld (0x2733:16), c                                   ; FF4BB7  f1 33 27 43
 	lda xbc, (0xf58415:24)                               ; FF4BBB  f2 15 84 f5 31
@@ -190017,7 +190102,7 @@ LcdKeyRow4_DiskL0adFile:
 	lda xwa, (DL_F583AB:24)                              ; FF4C14  f2 ab 83 f5 30
 	push XWA                                             ; FF4C19  38
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF4C1A  1d d3 75 ff
-	ld c, (0x272b:16)                                   ; FF4C1E  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4C1E  c1 2b 27 23
 	inc 1,C                                              ; FF4C22  cb 61
 	ld (0x2733:16), c                                   ; FF4C24  f1 33 27 43
 	add XSP,0x00000014                                   ; FF4C28  ef c8 14 00 00 00
@@ -190298,14 +190383,14 @@ LcdKeyRow5_DiskL0adFile:
 	pushw 0x0c                                           ; FF4E29  0b 0c 00
 	pushw 0x0b                                           ; FF4E2C  0b 0b 00
 	calr PanelDial_SetButtonPair                                      ; FF4E2F  1e f8 22
-	ld h, (0x272b:16)                                   ; FF4E32  c1 2b 27 26
-	dec 0x01, (0x272b:16)                                ; FF4E36  c1 2b 27 69
+	ld h, (Disk_SeqBank:16)                                   ; FF4E32  c1 2b 27 26
+	dec 0x01, (Disk_SeqBank:16)                                ; FF4E36  c1 2b 27 69
 	pop XIY                                              ; FF4E3A  5d
 	cp h, 0x00:i3                                          ; FF4E3B  ce d8
 	jr nz, .LFF4E44                                      ; FF4E3D  6e 05
-	ld (0x272b:16), 0x00                                 ; FF4E3F  f1 2b 27 00 00
+	ld (Disk_SeqBank:16), 0x00                                 ; FF4E3F  f1 2b 27 00 00
 .LFF4E44:
-	ld c, (0x272b:16)                                   ; FF4E44  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4E44  c1 2b 27 23
 	inc 1,C                                              ; FF4E48  cb 61
 	ld (0x2733:16), c                                   ; FF4E4A  f1 33 27 43
 	lda xbc, (0xf58415:24)                               ; FF4E4E  f2 15 84 f5 31
@@ -190352,7 +190437,7 @@ LcdKeyRow5_DiskL0adFile:
 	lda xwa, (DL_F583AB:24)                              ; FF4EB0  f2 ab 83 f5 30
 	push XWA                                             ; FF4EB5  38
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF4EB6  1d d3 75 ff
-	ld c, (0x272b:16)                                   ; FF4EBA  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4EBA  c1 2b 27 23
 	inc 1,C                                              ; FF4EBE  cb 61
 	ld (0x2733:16), c                                   ; FF4EC0  f1 33 27 43
 	add XSP,0x00000014                                   ; FF4EC4  ef c8 14 00 00 00
@@ -190432,7 +190517,7 @@ LcdKeyRow5_DiskL0adFile:
 	inc 8,XSP                                            ; FF4F7F  ef 60
 	inc 2,XSP                                            ; FF4F81  ef 62
 .LFF4F83:
-	ld c, (0x272b:16)                                   ; FF4F83  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF4F83  c1 2b 27 23
 	inc 1,C                                              ; FF4F87  cb 61
 	ld (0x2733:16), c                                   ; FF4F89  f1 33 27 43
 	lda xbc, (DL_F5840A:24)                              ; FF4F8D  f2 0a 84 f5 31
@@ -190585,7 +190670,7 @@ Paint_MidiFileL0ad:
 	lda xbc, (DL_F5953B:24)                              ; FF5098  f2 3b 95 f5 31
 	push XBC                                             ; FF509D  39
 	call DLB_Array8_SaveRegs                                      ; FF509E  1d 3f 76 ff
-	ld c, (0x272b:16)                                   ; FF50A2  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF50A2  c1 2b 27 23
 	inc 1,C                                              ; FF50A6  cb 61
 	ld (0x2733:16), c                                   ; FF50A8  f1 33 27 43
 	lda xbc, (DL_F59948:24)                              ; FF50AC  f2 48 99 f5 31
@@ -190977,7 +191062,7 @@ LcdKeyRow3_MidiFileL0ad:
 LcdKeyRow4_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF5310  ee 0c 00 00
 	push XIX                                             ; FF5314  3c
-	lda xix, (0x272b:16)                                ; FF5315  f1 2b 27 34
+	lda xix, (Disk_SeqBank:16)                                ; FF5315  f1 2b 27 34
 	m_set 3, MD16, UI_RequestBits                                ; FF5319  f1 75 20 bb
 	ld BC,(XIZ+0x08)                                     ; FF531D  9e 08 21
 	and BC,0x0080                                        ; FF5320  d9 cc 80 00
@@ -191074,7 +191159,7 @@ LcdKeyRow4_MidiFileL0ad:
 LcdKeyRow5_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF53C6  ee 0c 00 00
 	push XIX                                             ; FF53CA  3c
-	lda xix, (0x272b:16)                                ; FF53CB  f1 2b 27 34
+	lda xix, (Disk_SeqBank:16)                                ; FF53CB  f1 2b 27 34
 	m_set 3, MD16, UI_RequestBits                                ; FF53CF  f1 75 20 bb
 	ld BC,(XIZ+0x08)                                     ; FF53D3  9e 08 21
 	and BC,0x0080                                        ; FF53D6  d9 cc 80 00
@@ -192599,7 +192684,7 @@ ScreenEnter_MidiFileSave_Page1:   ; entry: named by 1 `.long` operand, first at 
 	lda xbc, (DL_F5953B:24)                              ; FF5DA6  f2 3b 95 f5 31
 	push XBC                                             ; FF5DAB  39
 	call DLB_Array8_SaveRegs                                      ; FF5DAC  1d 3f 76 ff
-	ld c, (0x272b:16)                                   ; FF5DB0  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF5DB0  c1 2b 27 23
 	inc 1,C                                              ; FF5DB4  cb 61
 	ld (0x2733:16), c                                   ; FF5DB6  f1 33 27 43
 	lda xbc, (DL_F5993E:24)                              ; FF5DBA  f2 3e 99 f5 31
@@ -193253,11 +193338,11 @@ LcdKeyRow4_MidiFileSave_Page1:
 	push XBC                                             ; FF6234  39
 	jrl .LFF62A7                                         ; FF6235  78 6f 00
 .LFF6238:
-	m_cp_mi8 MB16, 0x272b, 0x09                          ; FF6238  c1 2b 27 3f 09
+	m_cp_mi8 MB16, Disk_SeqBank, 0x09                          ; FF6238  c1 2b 27 3f 09
 	jr nc, .LFF6243                                      ; FF623D  6f 04
-	inc 0x01, (0x272b:16)                                ; FF623F  c1 2b 27 61
+	inc 0x01, (Disk_SeqBank:16)                                ; FF623F  c1 2b 27 61
 .LFF6243:
-	ld c, (0x272b:16)                                   ; FF6243  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF6243  c1 2b 27 23
 	inc 1,C                                              ; FF6247  cb 61
 	ld (0x2733:16), c                                   ; FF6249  f1 33 27 43
 	lda xbc, (DL_F5993E:24)                              ; FF624D  f2 3e 99 f5 31
@@ -193367,11 +193452,11 @@ LcdKeyRow5_MidiFileSave_Page1:
 	push XBC                                             ; FF630C  39
 	jrl .LFF637F                                         ; FF630D  78 6f 00
 .LFF6310:
-	m_cp_mi8 MB16, 0x272b, 0x00                          ; FF6310  c1 2b 27 3f 00
+	m_cp_mi8 MB16, Disk_SeqBank, 0x00                          ; FF6310  c1 2b 27 3f 00
 	jr z, .LFF631B                                       ; FF6315  66 04
-	dec 0x01, (0x272b:16)                                ; FF6317  c1 2b 27 69
+	dec 0x01, (Disk_SeqBank:16)                                ; FF6317  c1 2b 27 69
 .LFF631B:
-	ld c, (0x272b:16)                                   ; FF631B  c1 2b 27 23
+	ld c, (Disk_SeqBank:16)                                   ; FF631B  c1 2b 27 23
 	inc 1,C                                              ; FF631F  cb 61
 	ld (0x2733:16), c                                   ; FF6321  f1 33 27 43
 	lda xbc, (DL_F5993E:24)                              ; FF6325  f2 3e 99 f5 31

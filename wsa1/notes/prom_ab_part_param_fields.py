@@ -2,8 +2,8 @@
 """Name the part-parameter field descriptors (prom_b Record_F1Axxx) and the prom_a handlers that edit them.
 
 QUESTION IT ANSWERS
-  sub_FBB800 (adjust) and sub_FBB93C (number entry) dispatch a field id H through prom_b's PtrTable_F1AB13 ..
-  PtrTable_F1ACDB to prom_a handlers.  Most handlers are a three-line wrapper
+  PartParam_StepFieldById (adjust) and PartParam_EnterFieldById (number entry) dispatch a field id H through prom_b's PartParamStep_Ids00to1F ..
+  PartParamEnter_IdsA0toBF to prom_a handlers.  Most handlers are a three-line wrapper
       lda XBC,<Record_F1Axxx> / push / push 0 / push (XIZ+8) / call T_IndexedParam_AdjustField   (or _SetFieldFromAsciiEntry)
   and the record is a field descriptor: +0 byte offset in the IndexedTable object, +1 mask, +3 maximum, +4 minimum
   (IndexedParam_AdjustField's header).  Two independent facts name the field:
@@ -12,7 +12,7 @@ QUESTION IT ANSWERS
        exactly ONE parameter of the PART area (address 20 xx) is that parameter -- e.g. offset 9, 28..100 is
        KEY SHIFT and offset 11, 0..12 PITCH BEND RANGE;
     2. two records match two PART parameters each (offset 8: PANPOT / KEY LAYER HIGH, offset 7: REVERB SEND / KEY
-       LAYER LOW).  Both are entries of PtrTable_F1AB13, whose field ids follow the COMBINATION EDIT INTERNAL SOUND
+       LAYER LOW).  Both are entries of PartParamStep_Ids00to1F, whose field ids follow the COMBINATION EDIT INTERNAL SOUND
        page (DL_InternalSound_F18CDD: VOLUME / PAN / KEY SHIFT / FINE TUNE / BEND RANGE, then EFFECT1 SEND /
        EFFECT2 / REVERB SEND): id 2 sits between VOLUME and KEY SHIFT, so it is PAN; and the DSP EFFECT screen asks
        for ids 6 / 7 / 8 for its EFFECT 1 / EFFECT 2 / REVERB blocks (sub_F10222), so id 8 is REVERB SEND.
@@ -39,10 +39,10 @@ sys.path.insert(0, os.path.join(ROOT, "notes", "sysex-probes"))
 A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "rb").read().decode("latin-1").split("\n")
 B = open(os.path.join(ROOT, "prom_b", "wsa1_prom_b.s"), "rb").read().decode("latin-1").split("\n")
 H = "(notes/prom_ab_part_param_fields.py)"
-BY_POSITION = {"PartParamField_Panpot": ("PANPOT", "PtrTable_F1AB13[2], between VOLUME [1] and KEY SHIFT [3] as on the INTERNAL SOUND page"),
-               "PartParamField_ReverbSend": ("REVERB SEND", "PtrTable_F1AB13[8], the id the DSP EFFECT screen asks for its REVERB block")}
+BY_POSITION = {"PartParamField_Panpot": ("PANPOT", "PartParamStep_Ids00to1F[2], between VOLUME [1] and KEY SHIFT [3] as on the INTERNAL SOUND page"),
+               "PartParamField_ReverbSend": ("REVERB SEND", "PartParamStep_Ids00to1F[8], the id the DSP EFFECT screen asks for its REVERB block")}
 SPECIAL = {0xFBBA83: ("PartParam_RefuseNumberEntry", "the number-entry slot of a field that takes none: Blink_SetEnable(0), returns 0"),
-           0xFBBBAB: ("PartParam_StepEffect2", "PtrTable_F1AB13[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F")}
+           0xFBBBAB: ("PartParam_StepEffect2", "PartParamStep_Ids00to1F[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F")}
 
 
 def camel(s):
@@ -85,7 +85,7 @@ def handlers():
             at.setdefault(int(m.group(1), 16), i)
     out = {}
     for i, l in enumerate(B):
-        m = re.match(r'^(PtrTable_F1A[BC][0-9A-F]{2}):', l)
+        m = re.match(r'^(PtrTable_F1A[BC][0-9A-F]{2}|PartParam(?:Step|Enter)_Ids\w+):', l)   # the second: after the rename
         if not m:
             continue
         k = 0
