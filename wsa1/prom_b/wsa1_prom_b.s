@@ -1961,12 +1961,12 @@ sub_F0003C:
 sub_F0003C_Skip:
 	m_bit 2, MD16, 0x34bb	; F00053  bit 2,(0x34bb)
 	jr	z, sub_F0003C_Skip2	; F00057  jr Z,0xf0005e
-	calr	sub_F000B9	; F00059  calr 0xf000b9
+	calr	Transport_StopAllRunning	; F00059  calr 0xf000b9
 	jr	sub_F0003C_Return	; F0005C  jr T,0xf00096
 sub_F0003C_Skip2:
-	bit	7, (0x94:8)	; F0005E  bit 7,(0x94)
+	bit	7, (TransportA_State:8)	; F0005E  bit 7,(0x94)
 	jr	z, sub_F0003C_Skip3	; F00061  jr Z,0xf0006a
-	bit	2, (0x96:8)	; F00063  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F00063  bit 2,(0x96)
 	jr	nz, sub_F0003C_Skip3	; F00066  jr NZ,0xf0006a
 	jr	sub_F0003C_Return	; F00068  jr T,0xf00096
 sub_F0003C_Skip3:
@@ -1976,15 +1976,15 @@ sub_F0003C_Skip3:
 	popw	wa	; F00070  pop WA
 	jr	z, sub_F0003C_Return	; F00071  jr Z,0xf00096
 	ei	6	; F00073  ei 0x06
-	ld	a, (0x95:8)	; F00075  ld A,(0x95)
+	ld	a, (TransportC_State:8)	; F00075  ld A,(0x95)
 	bit	2, a	; F00078  bit 0x02,A
 	jr	nz, sub_F0003C_Skip4	; F0007B  jr NZ,0xf00091
 	bit	0, a	; F0007D  bit 0x00,A
 	jr	z, sub_F0003C_Skip4	; F00080  jr Z,0xf00091
 	xor	a, a	; F00082  xor A,A
-	ld	(0x95:8), a	; F00084  ld (0x95),A
-	ld	(0x94:8), a	; F00087  ld (0x94),A
-	ld	(0x96:8), a	; F0008A  ld (0x96),A
+	ld	(TransportC_State:8), a	; F00084  ld (0x95),A
+	ld	(TransportA_State:8), a	; F00087  ld (0x94),A
+	ld	(TransportB_State:8), a	; F0008A  ld (0x96),A
 	ei	0	; F0008D  ei 0x00
 	jr	sub_F0003C_Return	; F0008F  jr T,0xf00096
 sub_F0003C_Skip4:
@@ -2026,22 +2026,24 @@ sub_F00099_Join2:
 	ld	a, 1:opc	; F000B6  ld A,0x01
 sub_F00099_Return:
 	ret	; F000B8  ret
-sub_F000B9:
+; Transport_StopAllRunning: with interrupts at level 6, builds a mask of which transports run (A bit 2 -> 4, B -> 8, C -> 0x10) and calls
+;   Transport_StopByRunningMask[mask]; every handler there writes 0x0C to exactly the running transports' states.
+Transport_StopAllRunning:
 	xor	xhl, xhl	; F000B9  xor XHL,XHL
 	ei	6	; F000BB  ei 0x06
-	bit	2, (0x94:8)	; F000BD  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F000BD  bit 2,(0x94)
 	jr	z, sub_F00099_Skip2	; F000C0  jr Z,0xf000c5
 	or	l, 4	; F000C2  or L,0x04
 sub_F00099_Skip2:
-	bit	2, (0x96:8)	; F000C5  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F000C5  bit 2,(0x96)
 	jr	z, sub_F00099_Skip3	; F000C8  jr Z,0xf000cd
 	or	l, 8	; F000CA  or L,0x08
 sub_F00099_Skip3:
-	bit	2, (0x95:8)	; F000CD  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F000CD  bit 2,(0x95)
 	jr	z, sub_F00099_Skip4	; F000D0  jr Z,0xf000d5
 	or	l, 16	; F000D2  or L,0x10
 sub_F00099_Skip4:
-	ld	xwa, Data_F000E5	; F000D5  ld XWA,0x00f000e5
+	ld	xwa, Transport_StopByRunningMask	; F000D5  ld XWA,0x00f000e5
 	add	xhl, xwa	; F000DA  add XHL,XWA
 	ld	xwa, (xhl)	; F000DC  ld XWA,(XHL)
 	call	(xwa)	; F000DE  call T,XWA
@@ -2049,12 +2051,12 @@ sub_F00099_Skip4:
 	ret	; F000E2  ret
 
 ; --- 0xF000E3-0xF000E4, 2 B, converted by lane promB6 (TRAILER).
-;     after sub_F00099's `ret`, before Data_F000E5
+;     after sub_F00099's `ret`, before Transport_StopByRunningMask
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F000E3  routine trailer
 
 ; --------------------------------------------------------------------------
-; Data_F000E5 -- 1 bytes, EMITTED AS DATA (not promoted to code).
+; Transport_StopByRunningMask -- 1 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F000E5 appears as a 32-bit word at 0xF000D6.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
@@ -2064,11 +2066,13 @@ sub_F00099_Skip4:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F000E5:
+; Transport_StopByRunningMask: Transport_StopAllRunning's eight handlers, indexed by the running mask (A 4, B 8, C 0x10); each writes
+;   0x0C (stop request) to the running transports' states -- entry 0 is a bare ret (notes/prom_ab_read_names_2026_10_04.py).
+Transport_StopByRunningMask:
 	.byte	0x05	; F000E5  |.|
 
 ; --- 0xF000E6-0xF00107, 34 B, converted by lane promB6 (PTRTAB4).
-;     the rest of the 8-entry CALL-DISPATCH array Data_F000E5.  sub_F00099
+;     the rest of the 8-entry CALL-DISPATCH array Transport_StopByRunningMask.  sub_F00099
 ;     ends `ld XWA,0x00F000E5` / `add XHL,XWA` / `ld XWA,(XHL)` / `call XWA`
 ;     at 0xF000D5-0xF000DE, so the object is a table of routine pointers
 ;     reached by an index.  Its eight targets are 0x00F00105 0x00F0028D
@@ -2081,10 +2085,10 @@ Data_F000E5:
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x01, 0xF0, 0x00	; F000E6  top 3 bytes of the entry at F000E5 = 0x00F00105
 	.long	sub_F001C9_Arm	; F000E9  entry 1
-	.long	sub_F002C9	; F000ED  entry 2
+	.long	TransportB_Stop	; F000ED  entry 2
 	.long	sub_F002C9_Arm	; F000F1  entry 3
 	.long	sub_F00293_Arm	; F000F5  entry 4
-	.long	sub_F00280	; F000F9  entry 5
+	.long	Transport_StopCAndA	; F000F9  entry 5
 	.long	sub_F00293_Arm2	; F000FD  entry 6
 	.long	sub_F00293_Arm3	; F00101  entry 7
 	.byte	0x0E, 0x00, 0x00	; F00105  past the array: 0x0E (`ret`) and the routine trailer
@@ -2109,7 +2113,7 @@ sub_F00108:
 	ld	xwa, (6304798:24)	; F0011A  ld XWA,(0x60341e)
 	cp	xwa, 0	; F0011F  cp XWA,0x00000000
 	jr	z, sub_F00108_Skip	; F00125  jr Z,0xf0012c
-	calr	sub_F0020B	; F00127  calr 0xf0020b
+	calr	Transport_StartStopContinue	; F00127  calr 0xf0020b
 	jr	sub_F00108_Join	; F0012A  jr T,0xf00143
 sub_F00108_Skip:
 	calr	sub_F0023C	; F0012C  calr 0xf0023c
@@ -2129,7 +2133,7 @@ sub_F00108_Skip3:
 	ld	xwa, (6304798:24)	; F00151  ld XWA,(0x60341e)
 	cp	xwa, 0	; F00156  cp XWA,0x00000000
 	jr	z, sub_F00108_Skip4	; F0015C  jr Z,0xf00163
-	calr	sub_F0017D	; F0015E  calr 0xf0017d
+	calr	Transport_StartStopFromZero	; F0015E  calr 0xf0017d
 	jr	sub_F00108_Return	; F00161  jr T,0xf0017a
 sub_F00108_Skip4:
 	calr	sub_F001B0	; F00163  calr 0xf001b0
@@ -2138,18 +2142,18 @@ sub_F00108_Skip5:
 	ld	xwa, (6304798:24)	; F00168  ld XWA,(0x60341e)
 	cp	xwa, 0	; F0016D  cp XWA,0x00000000
 	jr	z, sub_F00108_Return	; F00173  jr Z,0xf0017a
-	calr	sub_F001B5	; F00175  calr 0xf001b5
+	calr	Transport_ToggleCAndB	; F00175  calr 0xf001b5
 	jr	sub_F00108_Return	; F00178  jr T,0xf0017a
 sub_F00108_Return:
 	ret	; F0017A  ret
 
 ; --- 0xF0017B-0xF0017C, 2 B, converted by lane promB6 (TRAILER).
-;     after sub_F00108's `ret`, before sub_F0017D
+;     after sub_F00108's `ret`, before Transport_StartStopFromZero
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F0017B  routine trailer
 
 ; --------------------------------------------------------------------------
-; sub_F0017D
+; Transport_StartStopFromZero
 ; Reached from: a branch decoded inside this block -- the walk enters 0xF0017D
 ;               from code it had already reached, not from any table.
 ; Extent:  49 bytes, 15 instructions, ends `ret`.  The walk marks exactly
@@ -2159,13 +2163,15 @@ sub_F00108_Return:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F0017D:
-	bit	2, (0x95:8)	; F0017D  bit 2,(0x95)
+; Transport_StartStopFromZero: if C does not run, Transport_StartAllFromZero; if B runs and (0x3000) is non-zero, T_F40E18 with (0x60501B) bit 0
+;   set around it; otherwise Transport_StopAllRunning.
+Transport_StartStopFromZero:
+	bit	2, (TransportC_State:8)	; F0017D  bit 2,(0x95)
 	jr	nz, sub_F0017D_Skip	; F00180  jr NZ,0xf00187
-	calr	sub_F001C9	; F00182  calr 0xf001c9
+	calr	Transport_StartAllFromZero	; F00182  calr 0xf001c9
 	jr	sub_F0017D_Return	; F00185  jr T,0xf001ad
 sub_F0017D_Skip:
-	bit	2, (0x96:8)	; F00187  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F00187  bit 2,(0x96)
 	jr	z, sub_F0017D_Skip2	; F0018A  jr Z,0xf001aa
 	ld	xwa, (12288:16)	; F0018C  ld XWA,(0x3000)
 	cp	xwa, 0	; F00190  cp XWA,0x00000000
@@ -2175,12 +2181,12 @@ sub_F0017D_Skip:
 	m_and_mi8 MB24, 0x60501b, 0xfe	; F001A2  and (0x60501b),0xfe
 	jr	sub_F0017D_Return	; F001A8  jr T,0xf001ad
 sub_F0017D_Skip2:
-	calr	sub_F000B9	; F001AA  calr 0xf000b9
+	calr	Transport_StopAllRunning	; F001AA  calr 0xf000b9
 sub_F0017D_Return:
 	ret	; F001AD  ret
 
 ; --- 0xF001AE-0xF001AF, 2 B, converted by lane promB6 (TRAILER).
-;     after sub_F0017D's `ret`, before sub_F001B0
+;     after Transport_StartStopFromZero's `ret`, before sub_F001B0
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F001AE  routine trailer
 
@@ -2196,7 +2202,7 @@ sub_F0017D_Return:
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
 sub_F001B0:
-	calr	sub_F0017D	; F001B0  calr 0xf0017d
+	calr	Transport_StartStopFromZero	; F001B0  calr 0xf0017d
 	ret	; F001B3  ret
 
 ; --- 0xF001B4-0xF001B4, 1 B, converted by lane promB6 (TRAILER).
@@ -2207,7 +2213,7 @@ sub_F001B0:
 	.byte	0x0E	; F001B4  routine trailer
 
 ; --------------------------------------------------------------------------
-; sub_F001B5
+; Transport_ToggleCAndB
 ; Reached from: a branch decoded inside this block -- the walk enters 0xF001B5
 ;               from code it had already reached, not from any table.
 ; Extent:  18 bytes, 8 instructions, ends `ret`.  The walk marks exactly
@@ -2217,25 +2223,26 @@ sub_F001B0:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F001B5:
-	bit	2, (0x95:8)	; F001B5  bit 2,(0x95)
+; Transport_ToggleCAndB: if transport C runs, Transport_StopAllRunning; else Transport_StartCAndB at interrupt level 6.
+Transport_ToggleCAndB:
+	bit	2, (TransportC_State:8)	; F001B5  bit 2,(0x95)
 	jr	nz, sub_F001B5_Skip	; F001B8  jr NZ,0xf001c3
 	ei	6	; F001BA  ei 0x06
-	calr	sub_F00293	; F001BC  calr 0xf00293
+	calr	Transport_StartCAndB	; F001BC  calr 0xf00293
 	ei	0	; F001BF  ei 0x00
 	jr	sub_F001B5_Return	; F001C1  jr T,0xf001c6
 sub_F001B5_Skip:
-	calr	sub_F000B9	; F001C3  calr 0xf000b9
+	calr	Transport_StopAllRunning	; F001C3  calr 0xf000b9
 sub_F001B5_Return:
 	ret	; F001C6  ret
 
 ; --- 0xF001C7-0xF001C8, 2 B, converted by lane promB6 (TRAILER).
-;     after sub_F001B5's `ret`, before sub_F001C9
+;     after Transport_ToggleCAndB's `ret`, before Transport_StartAllFromZero
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F001C7  routine trailer
 
 ; --------------------------------------------------------------------------
-; sub_F001C9
+; Transport_StartAllFromZero
 ; Reached from: routine-directory slot T_F409B4, each holding `jp 0x00F001C9`
 ;               (the slots are re-read from the ROM on every emit).
 ; Extent:  183 bytes, 61 instructions, ends `ret`.  The walk marks exactly
@@ -2245,10 +2252,13 @@ sub_F001B5_Return:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F001C9:
-	bit	0, (0x95:8)	; F001C9  bit 0,(0x95)
+; Transport_StartAllFromZero: unless C is starting or running: either a count-in (TransportA_State = 0x80, (0x34D9) |= 4, when (0x34D9) bit 1
+;   is set and bit 2 clear) or TransportC_State = 1 with TransportC_ResetCounters and the MIDI start; then
+;   TransportB_State = 1 + TransportB_ResetCounters and TransportA_State = 1 + TransportA_ResetCounters.
+Transport_StartAllFromZero:
+	bit	0, (TransportC_State:8)	; F001C9  bit 0,(0x95)
 	jr	nz, sub_F001C9_Skip2	; F001CC  jr NZ,0xf001fa
-	bit	2, (0x95:8)	; F001CE  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F001CE  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip2	; F001D1  jr NZ,0xf001fa
 	m_bit 2, MD16, 0x34d9	; F001D3  bit 2,(0x34d9)
 	jr	nz, sub_F001C9_Skip	; F001D7  jr NZ,0xf001f1
@@ -2256,28 +2266,29 @@ sub_F001C9:
 	jr	z, sub_F001C9_Skip	; F001DD  jr Z,0xf001f1
 	call	T_F40A40	; F001DF  call 0xf40a40
 	call	T_F40984	; F001E3  call 0xf40984
-	ld	(148:8), 128:io	; F001E7  ld (0x94),0x80
+	ld	(TransportA_State:8), 128:io	; F001E7  ld (0x94),0x80
 	m_or_mi8 MB16, 0x34d9, 0x04	; F001EA  or (0x34d9),0x04
 	jr	sub_F001C9_Return	; F001EF  jr T,0xf0020a
 sub_F001C9_Skip:
-	ld	(149:8), 1:io	; F001F1  ld (0x95),0x01
-	calr	sub_F002F4	; F001F4  calr 0xf002f4
-	calr	sub_F00320	; F001F7  calr 0xf00320
+	ld	(TransportC_State:8), 1:io	; F001F1  ld (0x95),0x01
+	calr	TransportC_ResetCounters	; F001F4  calr 0xf002f4
+	calr	Transport_QueueMidiStartOrContinue	; F001F7  calr 0xf00320
 sub_F001C9_Skip2:
 	call	T_F40984	; F001FA  call 0xf40984
-	ld	(150:8), 1:io	; F001FE  ld (0x96),0x01
-	calr	sub_F00313	; F00201  calr 0xf00313
-	ld	(148:8), 1:io	; F00204  ld (0x94),0x01
-	calr	sub_F00301	; F00207  calr 0xf00301
+	ld	(TransportB_State:8), 1:io	; F001FE  ld (0x96),0x01
+	calr	TransportB_ResetCounters	; F00201  calr 0xf00313
+	ld	(TransportA_State:8), 1:io	; F00204  ld (0x94),0x01
+	calr	TransportA_ResetCounters	; F00207  calr 0xf00301
 sub_F001C9_Return:
 	ret	; F0020A  ret
-sub_F0020B:
-	bit	2, (0x95:8)	; F0020B  bit 2,(0x95)
+; Transport_StartStopContinue: the same with Transport_StartAllContinue for the start.
+Transport_StartStopContinue:
+	bit	2, (TransportC_State:8)	; F0020B  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip3	; F0020E  jr NZ,0xf00215
-	calr	sub_F00244	; F00210  calr 0xf00244
+	calr	Transport_StartAllContinue	; F00210  calr 0xf00244
 	jr	sub_F001C9_Return2	; F00213  jr T,0xf0023b
 sub_F001C9_Skip3:
-	bit	2, (0x96:8)	; F00215  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F00215  bit 2,(0x96)
 	jr	z, sub_F001C9_Skip4	; F00218  jr Z,0xf00238
 	ld	xwa, (12288:16)	; F0021A  ld XWA,(0x3000)
 	cp	xwa, 0	; F0021E  cp XWA,0x00000000
@@ -2287,19 +2298,20 @@ sub_F001C9_Skip3:
 	m_and_mi8 MB24, 0x60501b, 0xfe	; F00230  and (0x60501b),0xfe
 	jr	sub_F001C9_Return2	; F00236  jr T,0xf0023b
 sub_F001C9_Skip4:
-	calr	sub_F000B9	; F00238  calr 0xf000b9
+	calr	Transport_StopAllRunning	; F00238  calr 0xf000b9
 sub_F001C9_Return2:
 	ret	; F0023B  ret
 sub_F0023C:
-	calr	sub_F0020B	; F0023C  calr 0xf0020b
+	calr	Transport_StartStopContinue	; F0023C  calr 0xf0020b
 	ret	; F0023F  ret
 sub_F00240:
-	calr	sub_F001B5	; F00240  calr 0xf001b5
+	calr	Transport_ToggleCAndB	; F00240  calr 0xf001b5
 	ret	; F00243  ret
-sub_F00244:
-	bit	0, (0x95:8)	; F00244  bit 0,(0x95)
+; Transport_StartAllContinue: the same start without resetting C's or B's counters (only TransportA_ResetCounters).
+Transport_StartAllContinue:
+	bit	0, (TransportC_State:8)	; F00244  bit 0,(0x95)
 	jr	nz, sub_F001C9_Skip6	; F00247  jr NZ,0xf00272
-	bit	2, (0x95:8)	; F00249  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F00249  bit 2,(0x95)
 	jr	nz, sub_F001C9_Skip6	; F0024C  jr NZ,0xf00272
 	m_bit 2, MD16, 0x34d9	; F0024E  bit 2,(0x34d9)
 	jr	nz, sub_F001C9_Skip5	; F00252  jr NZ,0xf0026c
@@ -2307,37 +2319,38 @@ sub_F00244:
 	jr	z, sub_F001C9_Skip5	; F00258  jr Z,0xf0026c
 	call	T_F40A40	; F0025A  call 0xf40a40
 	call	T_F40984	; F0025E  call 0xf40984
-	ld	(148:8), 128:io	; F00262  ld (0x94),0x80
+	ld	(TransportA_State:8), 128:io	; F00262  ld (0x94),0x80
 	m_or_mi8 MB16, 0x34d9, 0x04	; F00265  or (0x34d9),0x04
 	jr	sub_F001C9_Return3	; F0026A  jr T,0xf0027f
 sub_F001C9_Skip5:
-	ld	(149:8), 1:io	; F0026C  ld (0x95),0x01
-	calr	sub_F00320	; F0026F  calr 0xf00320
+	ld	(TransportC_State:8), 1:io	; F0026C  ld (0x95),0x01
+	calr	Transport_QueueMidiStartOrContinue	; F0026F  calr 0xf00320
 sub_F001C9_Skip6:
 	call	T_F40984	; F00272  call 0xf40984
-	ld	(150:8), 1:io	; F00276  ld (0x96),0x01
-	ld	(148:8), 1:io	; F00279  ld (0x94),0x01
-	calr	sub_F00301	; F0027C  calr 0xf00301
+	ld	(TransportB_State:8), 1:io	; F00276  ld (0x96),0x01
+	ld	(TransportA_State:8), 1:io	; F00279  ld (0x94),0x01
+	calr	TransportA_ResetCounters	; F0027C  calr 0xf00301
 sub_F001C9_Return3:
 	ret	; F0027F  ret
 
 ; --- 0xF00280-0xF00292, 19 B, converted by lane promB6 (CODE).
-;     entry 0x00F00280 (and 0x00F0028D) of the array Data_F000E5
+;     entry 0x00F00280 (and 0x00F0028D) of the array Transport_StopByRunningMask
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
-sub_F00280:
-	bit	3, (0x95:8)	; F00280  bit 3,(0x95)
+; Transport_StopCAndA: TransportC_State = 0x0C if C runs and has no stop pending (bit 3), then TransportA_State = 0x0C.  Entry 5 (A and C).
+Transport_StopCAndA:
+	bit	3, (TransportC_State:8)	; F00280  bit 3,(0x95)
 	jr	nz, sub_F001C9_Arm	; F00283  jr NZ,0xf0028d
-	bit	2, (0x95:8)	; F00285  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F00285  bit 2,(0x95)
 	jr	z, sub_F001C9_Arm	; F00288  jr Z,0xf0028d
-	ld	(149:8), 12:io	; F0028A  ld (0x95),0x0c
+	ld	(TransportC_State:8), 12:io	; F0028A  ld (0x95),0x0c
 sub_F001C9_Arm:
-	ld	(148:8), 12:io	; F0028D  ld (0x94),0x0c
+	ld	(TransportA_State:8), 12:io	; F0028D  ld (0x94),0x0c
 	ret	; F00290  ret
 	nop	; F00291  nop
 	nop	; F00292  nop
 
 ; --------------------------------------------------------------------------
-; sub_F00293
+; Transport_StartCAndB
 ; Reached from: routine-directory slot T_F409A4, each holding `jp 0x00F00293`
 ;               (the slots are re-read from the ROM on every emit).
 ; Extent:  10 bytes, 4 instructions, ends `ret`.  The walk marks exactly
@@ -2347,43 +2360,44 @@ sub_F001C9_Arm:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F00293:
-	ld	(149:8), 1:io	; F00293  ld (0x95),0x01
-	calr	sub_F00320	; F00296  calr 0xf00320
-	ld	(150:8), 1:io	; F00299  ld (0x96),0x01
+; Transport_StartCAndB: TransportC_State = 1, Transport_QueueMidiStartOrContinue, TransportB_State = 1.
+Transport_StartCAndB:
+	ld	(TransportC_State:8), 1:io	; F00293  ld (0x95),0x01
+	calr	Transport_QueueMidiStartOrContinue	; F00296  calr 0xf00320
+	ld	(TransportB_State:8), 1:io	; F00299  ld (0x96),0x01
 	ret	; F0029C  ret
 
 ; --- 0xF0029D-0xF002C8, 44 B, converted by lane promB6 (CODE).
-;     entries 0x00F002B9 0x00F002B6 0x00F002B3 of Data_F000E5
+;     entries 0x00F002B9 0x00F002B6 0x00F002B3 of Transport_StopByRunningMask
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
-	bit	0, (0x95:8)	; F0029D  bit 0,(0x95)
+	bit	0, (TransportC_State:8)	; F0029D  bit 0,(0x95)
 	jr	nz, sub_F00293_Return	; F002A0  jr NZ,0xf002b0
-	bit	2, (0x95:8)	; F002A2  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F002A2  bit 2,(0x95)
 	jr	nz, sub_F00293_Return	; F002A5  jr NZ,0xf002b0
-	ld	(149:8), 1:io	; F002A7  ld (0x95),0x01
-	calr	sub_F002F4	; F002AA  calr 0xf002f4
-	calr	sub_F00320	; F002AD  calr 0xf00320
+	ld	(TransportC_State:8), 1:io	; F002A7  ld (0x95),0x01
+	calr	TransportC_ResetCounters	; F002AA  calr 0xf002f4
+	calr	Transport_QueueMidiStartOrContinue	; F002AD  calr 0xf00320
 sub_F00293_Return:
 	ret	; F002B0  ret
 	nop	; F002B1  nop
 	nop	; F002B2  nop
 sub_F00293_Arm3:
-	ld	(148:8), 12:io	; F002B3  ld (0x94),0x0c
+	ld	(TransportA_State:8), 12:io	; F002B3  ld (0x94),0x0c
 sub_F00293_Arm2:
-	ld	(150:8), 12:io	; F002B6  ld (0x96),0x0c
+	ld	(TransportB_State:8), 12:io	; F002B6  ld (0x96),0x0c
 sub_F00293_Arm:
-	bit	3, (0x95:8)	; F002B9  bit 3,(0x95)
+	bit	3, (TransportC_State:8)	; F002B9  bit 3,(0x95)
 	jr	nz, sub_F00293_Arm_Return	; F002BC  jr NZ,0xf002c6
-	bit	2, (0x95:8)	; F002BE  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F002BE  bit 2,(0x95)
 	jr	z, sub_F00293_Arm_Return	; F002C1  jr Z,0xf002c6
-	ld	(149:8), 12:io	; F002C3  ld (0x95),0x0c
+	ld	(TransportC_State:8), 12:io	; F002C3  ld (0x95),0x0c
 sub_F00293_Arm_Return:
 	ret	; F002C6  ret
 	nop	; F002C7  nop
 	nop	; F002C8  nop
 
 ; --------------------------------------------------------------------------
-; sub_F002C9
+; TransportB_Stop
 ; Reached from: routine-directory slot T_F409A8, each holding `jp 0x00F002C9`
 ;               (the slots are re-read from the ROM on every emit).
 ; Extent:  4 bytes, 2 instructions, ends `ret`.  The walk marks exactly
@@ -2393,37 +2407,38 @@ sub_F00293_Arm_Return:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F002C9:
-	ld	(150:8), 12:io	; F002C9  ld (0x96),0x0c
+; TransportB_Stop: TransportB_State = 0x0C.  Transport_StopByRunningMask's entry 2 (only B runs).
+TransportB_Stop:
+	ld	(TransportB_State:8), 12:io	; F002C9  ld (0x96),0x0c
 	ret	; F002CC  ret
 
 ; --- 0xF002CD-0xF002F3, 39 B, converted by lane promB6 (CODE).
-;     entry 0x00F002EB of Data_F000E5
+;     entry 0x00F002EB of Transport_StopByRunningMask
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	nop	; F002CD  nop
 	nop	; F002CE  nop
-	ld	(148:8), 1:io	; F002CF  ld (0x94),0x01
-	calr	sub_F00301	; F002D2  calr 0xf00301
-	bit	0, (0x95:8)	; F002D5  bit 0,(0x95)
+	ld	(TransportA_State:8), 1:io	; F002CF  ld (0x94),0x01
+	calr	TransportA_ResetCounters	; F002D2  calr 0xf00301
+	bit	0, (TransportC_State:8)	; F002D5  bit 0,(0x95)
 	jr	nz, sub_F002C9_Return	; F002D8  jr NZ,0xf002e8
-	bit	2, (0x95:8)	; F002DA  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F002DA  bit 2,(0x95)
 	jr	nz, sub_F002C9_Return	; F002DD  jr NZ,0xf002e8
-	ld	(149:8), 1:io	; F002DF  ld (0x95),0x01
-	calr	sub_F002F4	; F002E2  calr 0xf002f4
-	calr	sub_F00320	; F002E5  calr 0xf00320
+	ld	(TransportC_State:8), 1:io	; F002DF  ld (0x95),0x01
+	calr	TransportC_ResetCounters	; F002E2  calr 0xf002f4
+	calr	Transport_QueueMidiStartOrContinue	; F002E5  calr 0xf00320
 sub_F002C9_Return:
 	ret	; F002E8  ret
 	nop	; F002E9  nop
 	nop	; F002EA  nop
 sub_F002C9_Arm:
-	ld	(150:8), 12:io	; F002EB  ld (0x96),0x0c
-	ld	(148:8), 12:io	; F002EE  ld (0x94),0x0c
+	ld	(TransportB_State:8), 12:io	; F002EB  ld (0x96),0x0c
+	ld	(TransportA_State:8), 12:io	; F002EE  ld (0x94),0x0c
 	ret	; F002F1  ret
 	nop	; F002F2  nop
 	nop	; F002F3  nop
 
 ; --------------------------------------------------------------------------
-; sub_F002F4
+; TransportC_ResetCounters
 ; Reached from: a branch decoded inside this block -- the walk enters 0xF002F4
 ;               from code it had already reached, not from any table.
 ; Extent:  75 bytes, 30 instructions, ends `ret`.  The walk marks exactly
@@ -2433,38 +2448,43 @@ sub_F002C9_Arm:
 ;          reachable bytes and defers every semantic question, so the label
 ;          stays sub_XXXXXX with the gap stated.
 ; --------------------------------------------------------------------------
-sub_F002F4:
+; TransportC_ResetCounters: TransportC_Tick = 0, TransportC_Beat = 0, at interrupt level 6.
+TransportC_ResetCounters:
 	xor	wa, wa	; F002F4  xor WA,WA
 	ei	6	; F002F6  ei 0x06
-	ld	(0x8d:8), a	; F002F8  ld (0x8d),A
-	ld	(0x8e:8), wa	; F002FB  ld (0x8e),WA
+	ld	(TransportC_Tick:8), a	; F002F8  ld (0x8d),A
+	ld	(TransportC_Beat:8), wa	; F002FB  ld (0x8e),WA
 	ei	0	; F002FE  ei 0x00
 	ret	; F00300  ret
-sub_F00301:
+; TransportA_ResetCounters: TransportA_Tick, TransportA_Beat and TransportA_Bar = 0, at interrupt level 6.
+TransportA_ResetCounters:
 	xor	wa, wa	; F00301  xor WA,WA
 	ei	6	; F00303  ei 0x06
-	ld	(0x8b:8), a	; F00305  ld (0x8b),A
-	ld	(0x8c:8), a	; F00308  ld (0x8c),A
-	ld	(6311938:24), a	; F0030B  ld (0x605002),A
+	ld	(TransportA_Tick:8), a	; F00305  ld (0x8b),A
+	ld	(TransportA_Beat:8), a	; F00308  ld (0x8c),A
+	ld	(TransportA_Bar:24), a	; F0030B  ld (0x605002),A
 	ei	0	; F00310  ei 0x00
 	ret	; F00312  ret
-sub_F00313:
+; TransportB_ResetCounters: TransportB_Beat = 0, Seq_BeatTick (B's tick) = 0, at interrupt level 6.
+TransportB_ResetCounters:
 	xor	wa, wa	; F00313  xor WA,WA
 	ei	6	; F00315  ei 0x06
-	ld	(0x91:8), wa	; F00317  ld (0x91),WA
+	ld	(TransportB_Beat:8), wa	; F00317  ld (0x91),WA
 	ld	(Seq_BeatTick:8), a	; F0031A  ld (0x93),A
 	ei	0	; F0031D  ei 0x00
 	ret	; F0031F  ret
-sub_F00320:
+; Transport_QueueMidiStartOrContinue: when MIDI setting (0x7F34) bit 2 is set: MidiTx_RealtimePending bit 2 (FB CONTINUE) if (0x34BB) bit 3, else bit 1
+;   (FA START), then T_MIDI_PostSendWork.
+Transport_QueueMidiStartOrContinue:
 	m_bit 2, MD16, 0x7f34	; F00320  bit 2,(0x7f34)
 	jr	z, sub_F002F4_Return	; F00324  jr Z,0xf0033e
 	ei	6	; F00326  ei 0x06
 	m_bit 3, MD16, 0x34bb	; F00328  bit 3,(0x34bb)
 	jr	z, sub_F002F4_Skip	; F0032C  jr Z,0xf00334
-	m_or_mi8 MB8, 0xa0, 0x04	; F0032E  or (0xa0),0x04
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x04	; F0032E  or (0xa0),0x04
 	jr	sub_F002F4_Join	; F00332  jr T,0xf00338
 sub_F002F4_Skip:
-	m_or_mi8 MB8, 0xa0, 0x02	; F00334  or (0xa0),0x02
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x02	; F00334  or (0xa0),0x02
 sub_F002F4_Join:
 	call	T_MIDI_PostSendWork	; F00338  call 0xf40724
 sub_F00D24_Code:
@@ -2973,7 +2993,7 @@ Data_F007FE:
 ; --------------------------------------------------------------------------
 sub_F00800:
 	ei	6	; F00800  ei 0x06
-	ld	a, (0x96:8)	; F00802  ld A,(0x96)
+	ld	a, (TransportB_State:8)	; F00802  ld A,(0x96)
 	ei	0	; F00805  ei 0x00
 	ld	w, (6311962:24)	; F00807  ld W,(0x60501a)
 	ld	(6311962:24), a	; F0080C  ld (0x60501a),A
@@ -2985,26 +3005,26 @@ sub_F00800:
 	jr	nz, sub_F00800_Skip	; F0081D  jr NZ,0xf00822
 	calr	Var20D4_ClearBitsC0	; F0081F  calr 0xf009a8
 sub_F00800_Skip:
-	bit	2, (0x96:8)	; F00822  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F00822  bit 2,(0x96)
 	jr	z, sub_F00800_Skip2	; F00825  jr Z,0xf0082a
 	calr	sub_F00895	; F00827  calr 0xf00895
 sub_F00800_Skip2:
 	calr	sub_F0082E	; F0082A  calr 0xf0082e
 	ret	; F0082D  ret
 sub_F0082E:
-	bit	2, (0x94:8)	; F0082E  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F0082E  bit 2,(0x94)
 	jr	z, sub_F0082E_Return	; F00831  jr Z,0xf00894
 	ld	xwa, (12288:16)	; F00833  ld XWA,(0x3000)
 	cp	xwa, 0	; F00837  cp XWA,0x00000000
 	jr	z, sub_F0082E_Return	; F0083D  jr Z,0xf00894
 	ei	6	; F0083F  ei 0x06
-	ld	a, (6311938:24)	; F00841  ld A,(0x605002)
+	ld	a, (TransportA_Bar:24)	; F00841  ld A,(0x605002)
 	ld	(6311953:24), a	; F00846  ld (0x605011),A
-	ld	a, (0x8c:8)	; F0084B  ld A,(0x8c)
+	ld	a, (TransportA_Beat:8)	; F0084B  ld A,(0x8c)
 	ld	(6311954:24), a	; F0084E  ld (0x605012),A
-	ld	a, (0x8b:8)	; F00853  ld A,(0x8b)
+	ld	a, (TransportA_Tick:8)	; F00853  ld A,(0x8b)
 	ld	(6311955:24), a	; F00856  ld (0x605013),A
-	ld	a, (0x94:8)	; F0085B  ld A,(0x94)
+	ld	a, (TransportA_State:8)	; F0085B  ld A,(0x94)
 	ld	(6311959:24), a	; F0085E  ld (0x605017),A
 	ei	0	; F00863  ei 0x00
 sub_F0082E_Join:
@@ -3028,7 +3048,7 @@ sub_F0082E_Return:
 	ret	; F00894  ret
 sub_F00895:
 	ld	wa, (13650:16)	; F00895  ld WA,(0x3552)
-	m_ld_rm MW8, 0x91, 1	; F00899  ld BC,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 1	; F00899  ld BC,(0x91)
 	ld	e, (Seq_BeatTick:8)	; F0089C  ld E,(0x93)
 	m_cp_rm MW24, 0x60501c, 0	; F0089F  cp WA,(0x60501c)
 	jr	z, sub_F00895_Skip	; F008A4  jr Z,0xf008ab
@@ -3124,7 +3144,7 @@ sub_F0095D:
 	ld	xwa, 0	; F00963  ld XWA,0x00000000
 	ld	wa, bc	; F00968  ld WA,BC
 	ld	xbc, 0	; F0096A  ld XBC,0x00000000
-	ld	c, (6311936:24)	; F0096F  ld C,(0x605000)
+	ld	c, (TransportA_BeatsPerBar:24)	; F0096F  ld C,(0x605000)
 	div	xwa, bc	; F00974  div XWA,BC
 	srl	xwa, 16	; F00976  srl 0x00,XWA
 	cp	wa, 0:i3	; F00979  cp WA,0
@@ -3168,7 +3188,7 @@ sub_F009AE_Skip:
 	jr	nz, sub_F009AE_Skip4	; F009C8  jr NZ,0xf00a0d
 	m_cp_mi8 MB24, 0x605015, 0x00	; F009CA  cp (0x605015),0x00
 	jr	nz, sub_F009AE_Skip2	; F009D0  jr NZ,0xf009dc
-	ld	a, (6311936:24)	; F009D2  ld A,(0x605000)
+	ld	a, (TransportA_BeatsPerBar:24)	; F009D2  ld A,(0x605000)
 	ld	(6311937:24), a	; F009D7  ld (0x605001),A
 sub_F009AE_Skip2:
 	ld	a, (6311937:24)	; F009DC  ld A,(0x605001)
@@ -3292,11 +3312,11 @@ sub_F00AFF:
 	ld	xiz, Data_F00B48	; F00B23  ld XIZ,0x00f00b48
 	ld	(6311941:24), xiz	; F00B28  ld (0x605005),XIZ
 	ei	6	; F00B2D  ei 0x06
-	ld	a, (6311936:24)	; F00B2F  ld A,(0x605000)
+	ld	a, (TransportA_BeatsPerBar:24)	; F00B2F  ld A,(0x605000)
 	ld	(6311937:24), a	; F00B34  ld (0x605001),A
-	ld	(6311938:24), 0	; F00B39  ld (0x605002),0x00
-	ld	(140:8), 0:io	; F00B3F  ld (0x8c),0x00
-	ld	(139:8), 0:io	; F00B42  ld (0x8b),0x00
+	ld	(TransportA_Bar:24), 0	; F00B39  ld (0x605002),0x00
+	ld	(TransportA_Beat:8), 0:io	; F00B3F  ld (0x8c),0x00
+	ld	(TransportA_Tick:8), 0:io	; F00B42  ld (0x8b),0x00
 	ei	0	; F00B45  ei 0x00
 	ret	; F00B47  ret
 
@@ -3436,7 +3456,7 @@ sub_F00CE3:
 	ld	c, 4:opc	; F00D09  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F00D0B  mul BC,(XIZ+0xfc)
 	extz	xbc	; F00D0E  extz XBC
-	add	xbc, sub_F002F4	; F00D10  add XBC,0x00f002f4
+	add	xbc, TransportC_ResetCounters	; F00D10  add XBC,0x00f002f4
 	ld	xbc, (xbc)	; F00D16  ld XBC,(XBC)
 	lda	xiy, (sub_F00CE3_Resume:24)	; F00D18  lda XIY,0xf00d20
 	push	xiy	; F00D1D  push XIY
@@ -88572,11 +88592,11 @@ T_F40980:	jp sub_F00800  ; -> prom_b 0x00800
 T_F40984:	jp sub_F00AFF  ; -> prom_b 0x00AFF   x5
 	.fill 0x18, 1, 0x0E  ; 0xF40988: 24 x ret
 T_F409A0:	jp sub_F0001A_Join  ; -> prom_b 0x0001B
-T_F409A4:	jp sub_F00293  ; -> prom_b 0x00293   x1
-T_F409A8:	jp sub_F002C9  ; -> prom_b 0x002C9   x2
-T_F409AC:	jp sub_F000B9  ; -> prom_b 0x000B9   x29
+T_F409A4:	jp Transport_StartCAndB  ; -> prom_b 0x00293   x1
+T_F409A8:	jp TransportB_Stop  ; -> prom_b 0x002C9   x2
+T_F409AC:	jp Transport_StopAllRunning  ; -> prom_b 0x000B9   x29
 T_F409B0:	jp T_F409B0_Nop  ; -> prom_b 0x0001A
-T_F409B4:	jp sub_F001C9  ; -> prom_b 0x001C9   x1
+T_F409B4:	jp Transport_StartAllFromZero  ; -> prom_b 0x001C9   x1
 	.fill 0x8, 1, 0x0E  ; 0xF409B8: 8 x ret
 T_F409C0:	.long T_F44000	; ptr -> 0xF44000 (prom_b 0x44000)
 T_F409C4:	jp T_F40B44  ; -> prom_b 0x40B44   x1
@@ -91552,7 +91572,7 @@ sub_F440A0_Skip2:
 ; --------------------------------------------------------------------------
 sub_F44131:		; <- T_F40AC8
 	ld	a, (6304983:24)	; F44131  ld A,(0x6034d7)
-	ld	(6311936:24), a	; F44136  ld (0x605000),A
+	ld	(TransportA_BeatsPerBar:24), a	; F44136  ld (0x605000),A
 	ld	(0xc3:8), a	; F4413B  ld (0xc3),A
 	ld	(3555:16), a	; F4413E  ld (0x0de3),A
 	ret	; F44142  ret
@@ -92060,7 +92080,7 @@ sub_F44582:		; <- T_F409C8
 	ld	(6304798:24), xwa	; F4458A  ld (0x60341e),XWA
 	ld	(12288:16), xwa	; F4458F  ld (0x3000),XWA
 sub_F44516_Skip3:
-	bit	2, (0x96:8)	; F44593  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44593  bit 2,(0x96)
 	jr	nz, sub_F44516_Skip5	; F44596  jr NZ,0xf445bc
 	m_cp_mi8 MB16, UI_ScreenId, 0x06	; F44598  cp (0x207c),0x06
 	jr	z, sub_F44516_Skip4	; F4459D  jr Z,0xf445a6
@@ -92140,15 +92160,15 @@ sub_F44623:
 	jr	z, sub_F44623_Return	; F4463B  jr Z,0xf4466c
 	m_cp_mi16 MW16, 0x3552, 0x8001	; F4463D  cp (0x3552),0x8001
 	jr	nz, sub_F44623_Return	; F44643  jr NZ,0xf4466c
-	ld	a, (6311936:24)	; F44645  ld A,(0x605000)
+	ld	a, (TransportA_BeatsPerBar:24)	; F44645  ld A,(0x605000)
 	dec	1, a	; F4464A  dec 1,A
-	m_cp_rm MB8, 0x8c, 1	; F4464C  cp A,(0x8c)
+	m_cp_rm MB8, TransportA_Beat, 1	; F4464C  cp A,(0x8c)
 	jr	nz, sub_F44623_Return	; F4464F  jr NZ,0xf4466c
-	m_cp_mi8 MB8, 0x8b, 0x47	; F44651  cp (0x8b),0x47
+	m_cp_mi8 MB8, TransportA_Tick, 0x47	; F44651  cp (0x8b),0x47
 	jr	ule, sub_F44623_Return	; F44655  jr ULE,0xf4466c
 	xor	wa, wa	; F44657  xor WA,WA
 	ld	(Seq_BeatTick:8), a	; F44659  ld (0x93),A
-	m_ld_rm MW8, 0x91, 0	; F4465C  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F4465C  ld WA,(0x91)
 	ld	(13398:16), wa	; F4465F  ld (0x3456),WA
 	m_and_mi8 MB16, 0x34d4, 0xf7	; F44663  and (0x34d4),0xf7
 	call	T_F411B8	; F44668  call 0xf411b8
@@ -92174,7 +92194,7 @@ sub_F4466D:
 	ld	xwa, (6304798:24)	; F44673  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44678  cp XWA,0x00000000
 	jrl	z, sub_F4466D_Join2	; F4467E  jrl Z,0xf4477a
-	bit	2, (0x96:8)	; F44681  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44681  bit 2,(0x96)
 	jrl	nz, sub_F4466D_Join2	; F44684  jrl NZ,0xf4477a
 	ld	w, (0xa5:8)	; F44687  ld W,(0xa5)
 	ld	a, (0xa4:8)	; F4468A  ld A,(0xa4)
@@ -92187,14 +92207,14 @@ sub_F4466D_Skip:
 	ld	c, a	; F4469B  ld C,A
 	and	c, 3	; F4469D  and C,0x03
 	srl	wa, 2	; F446A0  srl 0x02,WA
-	ld	(0x91:8), wa	; F446A3  ld (0x91),WA
+	ld	(TransportB_Beat:8), wa	; F446A3  ld (0x91),WA
 	ld	(3157:16), wa	; F446A6  ld (0x0c55),WA
 	xor	b, b	; F446AA  xor B,B
 	ld	iy, bc	; F446AC  ld IY,BC
 	ld	xix, WorkspaceDefaults + 0x77	; F446AE  ld XIX,0x00f460eb
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F446B3  ld A,(XIX+IY)
 	ld	(Seq_BeatTick:8), a	; F446B8  ld (0x93),A
-	m_cp_mi16 MW8, 0x91, 0x0000	; F446BB  cp (0x91),0x0000
+	m_cp_mi16 MW8, TransportB_Beat, 0x0000	; F446BB  cp (0x91),0x0000
 	jr	nz, sub_F4466D_Skip2	; F446C0  jr NZ,0xf446cf
 	m_cp_mi8 MB8, Seq_BeatTick, 0x00	; F446C2  cp (0x93),0x00
 	jr	nz, sub_F4466D_Skip2	; F446C6  jr NZ,0xf446cf
@@ -92216,7 +92236,7 @@ sub_F4466D_Loop:
 	ld	(BStore_CursorOffset:16), iy	; F446F3  ld (0x345e),IY
 	ld	(13650:16), de	; F446F7  ld (0x3552),DE
 	xor	b, b	; F446FB  xor B,B
-	m_ld_rm MW8, 0x91, 0	; F446FD  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F446FD  ld WA,(0x91)
 	sub	wa, bc	; F44700  sub WA,BC
 	ld	(13398:16), wa	; F44702  ld (0x3456),WA
 	m_cp_mi8 MB16, UI_ScreenId, 0x12	; F44706  cp (0x207c),0x12
@@ -92352,12 +92372,12 @@ sub_F44809:
 	m_bit 0, MD16, 0x34d3	; F44809  bit 0,(0x34d3)
 	jrl	z, sub_F44809_Return	; F4480D  jrl Z,0xf448a2
 	m_and_mi8 MB16, 0x34d3, 0xfe	; F44810  and (0x34d3),0xfe
-	bit	2, (0x96:8)	; F44815  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44815  bit 2,(0x96)
 	jrl	nz, sub_F44809_Return	; F44818  jrl NZ,0xf448a2
 	ld	xwa, (12288:16)	; F4481B  ld XWA,(0x3000)
 	cp	xwa, 0	; F4481F  cp XWA,0x00000000
 	jr	nz, sub_F44809_Return	; F44825  jr NZ,0xf448a2
-	bit	2, (0x94:8)	; F44827  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F44827  bit 2,(0x94)
 	jr	nz, sub_F44809_Return	; F4482A  jr NZ,0xf448a2
 	calr	sub_F448C6	; F4482C  calr 0xf448c6
 	cp	a, 0:i3	; F4482F  cp A,0
@@ -92506,7 +92526,7 @@ sub_F4491C:
 	ld	xwa, (6304798:24)	; F44922  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44927  cp XWA,0x00000000
 	jr	z, sub_F4491C_Skip	; F4492D  jr Z,0xf44938
-	bit	2, (0x95:8)	; F4492F  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F4492F  bit 2,(0x95)
 	jr	nz, sub_F4491C_Return	; F44932  jr NZ,0xf4493d
 	call	T_F42578	; F44934  call 0xf42578
 sub_F4491C_Skip:
@@ -92568,9 +92588,9 @@ sub_F4495A_Epilogue:
 sub_F44964:
 	calr	sub_F4598A	; F44964  calr 0xf4598a
 	ei	6	; F44967  ei 0x06
-	ld	a, (0x96:8)	; F44969  ld A,(0x96)
+	ld	a, (TransportB_State:8)	; F44969  ld A,(0x96)
 	ld	(13402:16), a	; F4496C  ld (0x345a),A
-	m_and_mi8 MB8, 0x96, 0xed	; F44970  and (0x96),0xed
+	m_and_mi8 MB8, TransportB_State, 0xed	; F44970  and (0x96),0xed
 	ei	0	; F44974  ei 0x00
 	ld	xwa, (12288:16)	; F44976  ld XWA,(0x3000)
 	cp	xwa, 0	; F4497A  cp XWA,0x00000000
@@ -92691,7 +92711,7 @@ sub_F44A3B_Skip3:
 	jr	z, sub_F44A3B_Return	; F44AAB  jr Z,0xf44ad9
 	call	T_F409AC	; F44AAD  call 0xf409ac
 	ldw	bc, 61440	; F44AB1  ld BC,0xf000
-	bit	2, (0x95:8)	; F44AB4  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F44AB4  bit 2,(0x95)
 	jr	z, sub_F44A3B_Skip4	; F44AB7  jr Z,0xf44abf
 	nop	; F44AB9  nop
 	nop	; F44ABA  nop
@@ -92746,7 +92766,7 @@ sub_F44AEE:		; <- T_F40AC4
 	jr	z, sub_F44AEE_Skip	; F44AF2  jr Z,0xf44b0f
 	ld	a, (Seq_BeatTick:8)	; F44AF4  ld A,(0x93)
 	ld	(13403:16), a	; F44AF7  ld (0x345b),A
-	m_ld_rm MW8, 0x91, 0	; F44AFB  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F44AFB  ld WA,(0x91)
 	ld	xix, 13290	; F44AFE  ld XIX,0x000033ea
 	xor	bc, bc	; F44B03  xor BC,BC
 	ld	c, 17:opc	; F44B05  ld C,0x11
@@ -92755,7 +92775,7 @@ sub_F44AEE:		; <- T_F40AC4
 	jr	sub_F44AEE_Return	; F44B0D  jr T,0xf44b2c
 sub_F44AEE_Skip:
 	ld	(13403:16), 0	; F44B0F  ld (0x345b),0x00
-	ldw	(145:8), 0:io	; F44B14  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F44B14  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F44B18  ld (0x93),0x00
 	xor	wa, wa	; F44B1B  xor WA,WA
 	ld	xix, 13290	; F44B1D  ld XIX,0x000033ea
@@ -92789,7 +92809,7 @@ sub_F44B2D:		; <- T_F40AAC
 sub_F44B2D_Skip:
 	m_bit 0, MD16, 0x34d2	; F44B46  bit 0,(0x34d2)
 	jr	nz, sub_F44B2D_Return	; F44B4A  jr NZ,0xf44b94
-	bit	2, (0x96:8)	; F44B4C  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44B4C  bit 2,(0x96)
 	jr	nz, sub_F44B2D_Return	; F44B4F  jr NZ,0xf44b94
 	m_bit 6, MD16, 0x34d4	; F44B51  bit 6,(0x34d4)
 	jr	nz, sub_F44B2D_Return	; F44B55  jr NZ,0xf44b94
@@ -92800,7 +92820,7 @@ sub_F44B2D_Skip:
 	jr	z, sub_F44B2D_Skip2	; F44B66  jr Z,0xf44b91
 	ld	a, (Seq_BeatTick:8)	; F44B68  ld A,(0x93)
 	ld	(13403:16), a	; F44B6B  ld (0x345b),A
-	m_ld_rm MW8, 0x91, 0	; F44B6F  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F44B6F  ld WA,(0x91)
 	ld	xix, 13290	; F44B72  ld XIX,0x000033ea
 	xor	bc, bc	; F44B77  xor BC,BC
 	ld	c, 17:opc	; F44B79  ld C,0x11
@@ -92830,7 +92850,7 @@ sub_F44B2D_Return:
 ; --------------------------------------------------------------------------
 sub_F44B95:
 	ld	(13403:16), 0	; F44B95  ld (0x345b),0x00
-	ldw	(145:8), 0:io	; F44B9A  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F44B9A  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F44B9E  ld (0x93),0x00
 	xor	wa, wa	; F44BA1  xor WA,WA
 	ld	xix, 13290	; F44BA3  ld XIX,0x000033ea
@@ -92838,7 +92858,7 @@ sub_F44B95:
 	ld	c, 17:opc	; F44BAA  ld C,0x11
 	ld	(xix+), wa	; F44BAC  ld (XIX+),WA
 	djnz16	bc, -6	; F44BAF  djnz BC,0xf44bac
-	ld	a, (6311936:24)	; F44BB2  ld A,(0x605000)
+	ld	a, (TransportA_BeatsPerBar:24)	; F44BB2  ld A,(0x605000)
 	ld	(13400:16), a	; F44BB7  ld (0x3458),A
 	ldw	(13398:16), 0	; F44BBB  ld (0x3456),0x0000
 	m_bit 1, MD16, 0x34d9	; F44BC1  bit 1,(0x34d9)
@@ -92986,7 +93006,7 @@ sub_F44CA7:
 	jr	nz, sub_F44CA7_Return	; F44CAB  jr NZ,0xf44ce9
 	m_bit 2, MD16, 0x7f34	; F44CAD  bit 2,(0x7f34)
 	jr	z, sub_F44CA7_Return	; F44CB1  jr Z,0xf44ce9
-	m_ld_rm MW8, 0x91, 2	; F44CB3  ld DE,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 2	; F44CB3  ld DE,(0x91)
 	sla	de, 2	; F44CB6  sla 0x02,DE
 	xor	w, w	; F44CB9  xor W,W
 	ld	a, (Seq_BeatTick:8)	; F44CBB  ld A,(0x93)
@@ -93024,7 +93044,7 @@ sub_F44CA7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44CEA:
-	bit	2, (0x96:8)	; F44CEA  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44CEA  bit 2,(0x96)
 	jr	z, sub_F44CEA_Skip	; F44CED  jr Z,0xf44cf1
 	jr	sub_F44CEA_Join	; F44CEF  jr T,0xf44d2b
 sub_F44CEA_Skip:
@@ -93036,7 +93056,7 @@ sub_F44CEA_Skip:
 	jr	nz, sub_F44CEA_Join	; F44D01  jr NZ,0xf44d2b
 	m_cp_mi8 MB16, 0x3459, 0x00	; F44D03  cp (0x3459),0x00
 	jrl	nz, sub_F44CEA_Join2	; F44D08  jrl NZ,0xf44d7a
-	m_cp_mi8 MB24, 0x605002, 0x01	; F44D0B  cp (0x605002),0x01
+	m_cp_mi8 MB24, TransportA_Bar, 0x01	; F44D0B  cp (0x605002),0x01
 	jr	nz, sub_F44CEA_Join2	; F44D11  jr NZ,0xf44d7a
 	ldw	(13650:16), 32769	; F44D13  ld (0x3552),0x8001
 	calr	sub_F45FE5	; F44D19  calr 0xf45fe5
@@ -93080,7 +93100,7 @@ sub_F44CEA_Join2:
 	jr	z, sub_F44CEA_Skip6	; F44D83  jr Z,0xf44d8a
 	m_or_mi8 MB16, 0x34d9, 0x80	; F44D85  or (0x34d9),0x80
 sub_F44CEA_Skip6:
-	ld	a, (6311938:24)	; F44D8A  ld A,(0x605002)
+	ld	a, (TransportA_Bar:24)	; F44D8A  ld A,(0x605002)
 	ld	(13401:16), a	; F44D8F  ld (0x3459),A
 	ret	; F44D93  ret
 
@@ -93117,9 +93137,9 @@ sub_F44D94_Skip:
 	jr	nz, sub_F44D94_Skip2	; F44DD5  jr NZ,0xf44ddc
 	m_or_mi8 MB16, 0x34d4, 0x04	; F44DD7  or (0x34d4),0x04
 sub_F44D94_Skip2:
-	bit	3, (0x94:8)	; F44DDC  bit 3,(0x94)
+	bit	3, (TransportA_State:8)	; F44DDC  bit 3,(0x94)
 	jr	nz, sub_F44D94_Skip3	; F44DDF  jr NZ,0xf44de6
-	bit	2, (0x94:8)	; F44DE1  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F44DE1  bit 2,(0x94)
 	jr	nz, sub_F44D94_Skip4	; F44DE4  jr NZ,0xf44dec
 sub_F44D94_Skip3:
 	call	T_F409AC	; F44DE6  call 0xf409ac
@@ -93244,7 +93264,7 @@ sub_F44E8E_Skip:
 	m_rd_stcf_a RW+r6	; F44EBE  stcf A,IZ
 	ld	(14138:16), iz	; F44EC0  ld (0x373a),IZ
 sub_F44E8E_Join:
-	bit	2, (0x96:8)	; F44EC4  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44EC4  bit 2,(0x96)
 	jrl	nz, sub_F44E8E_Return	; F44EC7  jrl NZ,0xf44f66
 	ld	xwa, (6304798:24)	; F44ECA  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44ECF  cp XWA,0x00000000
@@ -93335,7 +93355,7 @@ sub_F44E8E_Skip5:
 	m_rd_stcf_a RW+r6	; F44F97  stcf A,IZ
 	ld	(14138:16), iz	; F44F99  ld (0x373a),IZ
 sub_F44E8E_Join3:
-	bit	2, (0x96:8)	; F44F9D  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F44F9D  bit 2,(0x96)
 	jrl	nz, sub_F44E8E_Return2	; F44FA0  jrl NZ,0xf4503c
 	ld	xwa, (6304798:24)	; F44FA3  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44FA8  cp XWA,0x00000000
@@ -93637,9 +93657,9 @@ sub_F45119_Skip5:
 	ldw	(13398:16), 0	; F45222  ld (0x3456),0x0000
 	calr	sub_F45FE5	; F45228  calr 0xf45fe5
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
-	ldw	(145:8), 0:io	; F45230  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F45230  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F45234  ld (0x93),0x00
-	ld	a, (6311936:24)	; F45237  ld A,(0x605000)
+	ld	a, (TransportA_BeatsPerBar:24)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
 	ld	xwa, (6304798:24)	; F45240  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45245  cp XWA,0x00000000
@@ -93720,7 +93740,7 @@ sub_F45263_Loop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F452D3:		; <- T_F409D4
-	bit	2, (0x96:8)	; F452D3  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F452D3  bit 2,(0x96)
 	jr	nz, sub_F45263_Skip2	; F452D6  jr NZ,0xf4530a
 	cpl	wa	; F452D8  cpl WA
 	cpl	qwa	; F452DA  cpl QWA
@@ -93893,7 +93913,7 @@ sub_F4542D:		; <- T_F409E0
 	ld	xwa, (6304798:24)	; F4542D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45432  cp XWA,0x00000000
 	jr	z, sub_F4542D_Return	; F45438  jr Z,0xf45444
-	bit	2, (0x96:8)	; F4543A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4543A  bit 2,(0x96)
 	jr	nz, sub_F4542D_Return	; F4543D  jr NZ,0xf45444
 	m_or_mi8 MB16, 0x34d3, 0x01	; F4543F  or (0x34d3),0x01
 sub_F4542D_Return:
@@ -94419,7 +94439,7 @@ sub_F456F0:
 	ld	xwa, (12288:16)	; F456FD  ld XWA,(0x3000)
 	cp	xwa, 0	; F45701  cp XWA,0x00000000
 	jr	z, sub_F456F0_Return	; F45707  jr Z,0xf45760
-	ld	a, (0x96:8)	; F45709  ld A,(0x96)
+	ld	a, (TransportB_State:8)	; F45709  ld A,(0x96)
 	and	a, 5	; F4570C  and A,0x05
 	jr	z, sub_F456F0_Skip	; F4570F  jr Z,0xf45713
 	jr	sub_F456F0_Return	; F45711  jr T,0xf45760
@@ -94439,7 +94459,7 @@ sub_F456F0_Skip:
 	calr	Var20A9_SetBits01	; F45740  calr 0xf45fae
 	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
-	ldw	(145:8), 0:io	; F4574A  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F4574A  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F4574E  ld (0x93),0x00
 	ei	0	; F45751  ei 0x00
 	call	T_F409B4	; F45753  call 0xf409b4
@@ -94632,14 +94652,14 @@ sub_F45812_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F458EA:
-	ld	(149:8), 6:io	; F458EA  ld (0x95),0x06
-	bit	0, (0x94:8)	; F458ED  bit 0,(0x94)
+	ld	(TransportC_State:8), 6:io	; F458EA  ld (0x95),0x06
+	bit	0, (TransportA_State:8)	; F458ED  bit 0,(0x94)
 	jr	z, sub_F458EA_Skip	; F458F0  jr Z,0xf458f5
-	ld	(148:8), 6:io	; F458F2  ld (0x94),0x06
+	ld	(TransportA_State:8), 6:io	; F458F2  ld (0x94),0x06
 sub_F458EA_Skip:
-	bit	0, (0x96:8)	; F458F5  bit 0,(0x96)
+	bit	0, (TransportB_State:8)	; F458F5  bit 0,(0x96)
 	jr	z, sub_F458EA_Return	; F458F8  jr Z,0xf458fd
-	ld	(150:8), 6:io	; F458FA  ld (0x96),0x06
+	ld	(TransportB_State:8), 6:io	; F458FA  ld (0x96),0x06
 sub_F458EA_Return:
 	ret	; F458FD  ret
 
@@ -94733,15 +94753,15 @@ sub_F45975:		; <- T_F40A10
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4598A:
-	m_and_mi8 MB8, 0x95, 0xed	; F4598A  and (0x95),0xed
-	m_and_mi8 MB8, 0x94, 0xed	; F4598E  and (0x94),0xed
+	m_and_mi8 MB8, TransportC_State, 0xed	; F4598A  and (0x95),0xed
+	m_and_mi8 MB8, TransportA_State, 0xed	; F4598E  and (0x94),0xed
 	m_bit 5, MD16, 0x34d0	; F45992  bit 5,(0x34d0)
 	jr	nz, sub_F4598A_Skip2	; F45996  jr NZ,0xf459a6
-	bit	2, (0x96:8)	; F45998  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F45998  bit 2,(0x96)
 	jr	z, sub_F4598A_Skip	; F4599B  jr Z,0xf4599f
 	jr	sub_F4598A_Return	; F4599D  jr T,0xf459a9
 sub_F4598A_Skip:
-	bit	2, (0x94:8)	; F4599F  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F4599F  bit 2,(0x94)
 	jr	z, sub_F4598A_Skip2	; F459A2  jr Z,0xf459a6
 	jr	sub_F4598A_Return	; F459A4  jr T,0xf459a9
 sub_F4598A_Skip2:
@@ -94943,7 +94963,7 @@ sub_F45B0A:		; <- T_F40A14
 ; --------------------------------------------------------------------------
 sub_F45B1F:
 	ei	6	; F45B1F  ei 0x06
-	ldw	(145:8), 0:io	; F45B21  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F45B21  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F45B25  ld (0x93),0x00
 	ei	0	; F45B28  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B2A  bit 5,(0x34d0)
@@ -94972,7 +94992,7 @@ sub_F45B1F_Join:
 ; --------------------------------------------------------------------------
 sub_F45B48:
 	ei	6	; F45B48  ei 0x06
-	ldw	(145:8), 0:io	; F45B4A  ld (0x91),0x0000
+	ldw	(TransportB_Beat:8), 0:io	; F45B4A  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F45B4E  ld (0x93),0x00
 	ei	0	; F45B51  ei 0x00
 	m_bit 5, MD16, 0x34d0	; F45B53  bit 5,(0x34d0)
@@ -95108,7 +95128,7 @@ sub_F45BD3_Loop:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00	; F45C26  cp (0x0d4a),0x00
 	jr	nz, sub_F45BD3_Skip7	; F45C2B  jr NZ,0xf45c82
 	ld	(13400:16), a	; F45C2D  ld (0x3458),A
-	ld	(6311936:24), a	; F45C31  ld (0x605000),A
+	ld	(TransportA_BeatsPerBar:24), a	; F45C31  ld (0x605000),A
 	ld	(0xc3:8), a	; F45C36  ld (0xc3),A
 	ld	(6304983:24), a	; F45C39  ld (0x6034d7),A
 	m_bit 0, MD16, 0x3735	; F45C3E  bit 0,(0x3735)
@@ -95116,7 +95136,7 @@ sub_F45BD3_Loop:
 	ld	(14169:16), a	; F45C44  ld (0x3759),A
 sub_F45BD3_Skip5:
 	ld	(BStore_CursorOffset:16), iy	; F45C48  ld (0x345e),IY
-	ld	(0x91:8), ix	; F45C4C  ld (0x91),IX
+	ld	(TransportB_Beat:8), ix	; F45C4C  ld (0x91),IX
 	ld	(13398:16), ix	; F45C4F  ld (0x3456),IX
 	ld	(Seq_BeatTick:8), 0:io	; F45C53  ld (0x93),0x00
 	ld	c, (13471:16)	; F45C56  ld C,(0x349f)
@@ -95576,7 +95596,7 @@ Dispatch_3629_Nop3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45EAF:
-	bit	2, (0x96:8)	; F45EAF  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F45EAF  bit 2,(0x96)
 	jr	nz, sub_F45EAF_Return	; F45EB2  jr NZ,0xf45ed1
 	ld	a, (14038:16)	; F45EB4  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EB8  ld (0x349f),A
@@ -95603,7 +95623,7 @@ sub_F45EAF_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45ED2:
-	bit	2, (0x96:8)	; F45ED2  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F45ED2  bit 2,(0x96)
 	jr	nz, sub_F45ED2_Return	; F45ED5  jr NZ,0xf45ef1
 	ld	a, (14038:16)	; F45ED7  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EDB  ld (0x349f),A
@@ -95629,7 +95649,7 @@ sub_F45ED2_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45EF2:
-	bit	2, (0x96:8)	; F45EF2  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F45EF2  bit 2,(0x96)
 	jr	nz, sub_F45EF2_Return	; F45EF5  jr NZ,0xf45f18
 	ld	a, (14038:16)	; F45EF7  ld A,(0x36d6)
 	ld	(13471:16), a	; F45EFB  ld (0x349f),A
@@ -95664,10 +95684,10 @@ sub_F45F19:
 	cp	xwa, 0	; F45F29  cp XWA,0x00000000
 	jr	z, sub_F45F19_Return	; F45F2F  jr Z,0xf45f4a
 sub_F45F19_Skip:
-	m_ld_rm MW8, 0x91, 0	; F45F31  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F45F31  ld WA,(0x91)
 	m_cp_rm MW16, 0x3456, 0	; F45F34  cp WA,(0x3456)
 	jr	c, sub_F45F19_Return	; F45F38  jr C,0xf45f4a
-	m_ld_rm MW8, 0x91, 0	; F45F3A  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F45F3A  ld WA,(0x91)
 	m_sub_rm MW16, 0x3456, 0	; F45F3D  sub WA,(0x3456)
 	cp	(13400:16), a	; F45F41  cp (0x3458),A
 	jr	ugt, sub_F45F19_Return	; F45F45  jr UGT,0xf45f4a
@@ -95719,7 +95739,7 @@ sub_F45F4B_Join:
 	ld	wa, (13650:16)	; F45F9F  ld WA,(0x3552)
 	calr	sub_F45FE5	; F45FA3  calr 0xf45fe5
 sub_F45F4B_Skip3:
-	m_ld_rm MW8, 0x91, 0	; F45FA6  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F45FA6  ld WA,(0x91)
 	ld	(13398:16), wa	; F45FA9  ld (0x3456),WA
 	ret	; F45FAD  ret
 
@@ -95893,15 +95913,15 @@ sub_F4603C:		; <- T_F40AC0
 	m_and_mi8 MB16, 0x3754, 0x7f	; F46042  and (0x3754),0x7f
 	ld	a, (14164:16)	; F46047  ld A,(0x3754)
 	inc	1, a	; F4604B  inc 1,A
-	ld	(6311936:24), a	; F4604D  ld (0x605000),A
+	ld	(TransportA_BeatsPerBar:24), a	; F4604D  ld (0x605000),A
 	ld	(13400:16), a	; F46052  ld (0x3458),A
 	ld	(3555:16), a	; F46056  ld (0x0de3),A
 	ld	(6304983:24), a	; F4605A  ld (0x6034d7),A
-	bit	2, (0x94:8)	; F4605F  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F4605F  bit 2,(0x94)
 	jr	z, sub_F4603C_Skip	; F46062  jr Z,0xf46070
-	m_cp_mi8 MB8, 0x8c, 0x00	; F46064  cp (0x8c),0x00
+	m_cp_mi8 MB8, TransportA_Beat, 0x00	; F46064  cp (0x8c),0x00
 	jr	nz, sub_F4603C_Return	; F46068  jr NZ,0xf46073
-	m_cp_mi8 MB8, 0x8b, 0x5f	; F4606A  cp (0x8b),0x5f
+	m_cp_mi8 MB8, TransportA_Tick, 0x5f	; F4606A  cp (0x8b),0x5f
 	jr	nc, sub_F4603C_Return	; F4606E  jr NC,0xf46073
 sub_F4603C_Skip:
 	ld	(0xc3:8), a	; F46070  ld (0xc3),A
@@ -96184,7 +96204,7 @@ sub_F47816_Join:
 sub_F4783A:
 	m_and_mi8 MB16, 0x34d1, 0xfb	; F4783A  and (0x34d1),0xfb
 	ei	6	; F4783F  ei 0x06
-	m_ld_rm MW8, 0x91, 0	; F47841  ld WA,(0x91)
+	m_ld_rm MW8, TransportB_Beat, 0	; F47841  ld WA,(0x91)
 	ld	(13394:16), wa	; F47844  ld (0x3452),WA
 	ld	a, (Seq_BeatTick:8)	; F47848  ld A,(0x93)
 	ld	(13396:16), a	; F4784B  ld (0x3454),A
@@ -96256,7 +96276,7 @@ sub_F4783A_Join3:
 	jrl	ugt, sub_F4783A_Return	; F478FC  jrl UGT,0xf479a1
 sub_F4783A_Skip7:
 	calr	sub_F47C25	; F478FF  calr 0xf47c25
-	bit	2, (0x96:8)	; F47902  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F47902  bit 2,(0x96)
 	jr	nz, sub_F4783A_Skip8	; F47905  jr NZ,0xf4790d
 	m_bit 5, MD16, 0x34d4	; F47907  bit 5,(0x34d4)
 	jr	z, sub_F4783A_Skip12	; F4790B  jr Z,0xf47978
@@ -101545,7 +101565,7 @@ sub_F4A8F0:
 	inc	1, wa	; F4A8F6  inc 1,WA
 	m_sub_rm MW16, 0x3622, 0	; F4A8F8  sub WA,(0x3622)
 	xor	bc, bc	; F4A8FC  xor BC,BC
-	ld	c, (6311936:24)	; F4A8FE  ld C,(0x605000)
+	ld	c, (TransportA_BeatsPerBar:24)	; F4A8FE  ld C,(0x605000)
 	mul	xwa, bc	; F4A903  mul XWA,BC
 	ld	(14066:16), wa	; F4A905  ld (0x36f2),WA
 	ret	; F4A909  ret
@@ -102364,7 +102384,7 @@ sub_F4AF51:		; <- T_F40BFC
 	call	T_F40A60	; F4AF5E  call 0xf40a60
 	call	T_F413C8	; F4AF62  call 0xf413c8
 	call	T_F41F18	; F4AF66  call 0xf41f18
-	bit	2, (0x96:8)	; F4AF6A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4AF6A  bit 2,(0x96)
 	jr	nz, sub_F4AEEE_Skip2	; F4AF6D  jr NZ,0xf4af7d
 	ld	xwa, (12288:16)	; F4AF6F  ld XWA,(0x3000)
 	cp	xwa, 0	; F4AF73  cp XWA,0x00000000
@@ -102771,7 +102791,7 @@ sub_F4B295:
 	ld	wa, (13860:16)	; F4B297  ld WA,(0x3624)
 	inc	1, wa	; F4B29B  inc 1,WA
 	xor	bc, bc	; F4B29D  xor BC,BC
-	ld	c, (6311936:24)	; F4B29F  ld C,(0x605000)
+	ld	c, (TransportA_BeatsPerBar:24)	; F4B29F  ld C,(0x605000)
 	mul	xwa, bc	; F4B2A4  mul XWA,BC
 	ld	(14068:16), wa	; F4B2A6  ld (0x36f4),WA
 	ret	; F4B2AA  ret
@@ -106465,7 +106485,7 @@ sub_F4E05B_Skip2:
 	m_rd_xorcf_a RW+r2	; F4E0A8  xorcf A,DE
 	jr	c, sub_F4E05B_Skip4	; F4E0AA  jr C,0xf4e0bf
 sub_F4E05B_Join:
-	bit	2, (0x96:8)	; F4E0AC  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E0AC  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip3	; F4E0AF  jr Z,0xf4e0b4
 	jrl	sub_F4E05B_Return	; F4E0B1  jrl T,0xf4e150
 sub_F4E05B_Skip3:
@@ -106492,7 +106512,7 @@ sub_F4E05B_Skip5:
 	m_rd_xorcf_a RW+r2	; F4E0E1  xorcf A,DE
 	jr	c, sub_F4E05B_Skip7	; F4E0E3  jr C,0xf4e0f6
 sub_F4E05B_Join2:
-	bit	2, (0x96:8)	; F4E0E5  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E0E5  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip6	; F4E0E8  jr Z,0xf4e0ec
 	jr	sub_F4E05B_Return	; F4E0EA  jr T,0xf4e150
 sub_F4E05B_Skip6:
@@ -106502,7 +106522,7 @@ sub_F4E05B_Skip6:
 	popw	bc	; F4E0F3  pop BC
 	jr	sub_F4E05B_Return	; F4E0F4  jr T,0xf4e150
 sub_F4E05B_Skip7:
-	bit	2, (0x96:8)	; F4E0F6  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E0F6  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip8	; F4E0F9  jr Z,0xf4e0fd
 	jr	sub_F4E05B_Return	; F4E0FB  jr T,0xf4e150
 sub_F4E05B_Skip8:
@@ -106528,7 +106548,7 @@ sub_F4E05B_Skip10:
 	m_rd_xorcf_a RW+r2	; F4E126  xorcf A,DE
 	jr	c, sub_F4E05B_Skip12	; F4E128  jr C,0xf4e139
 sub_F4E05B_Join3:
-	bit	2, (0x96:8)	; F4E12A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E12A  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip11	; F4E12D  jr Z,0xf4e134
 	calr	sub_F4E390	; F4E12F  calr 0xf4e390
 	jr	sub_F4E05B_Return	; F4E132  jr T,0xf4e150
@@ -106536,7 +106556,7 @@ sub_F4E05B_Skip11:
 	calr	sub_F4E32A	; F4E134  calr 0xf4e32a
 	jr	sub_F4E05B_Return	; F4E137  jr T,0xf4e150
 sub_F4E05B_Skip12:
-	bit	2, (0x96:8)	; F4E139  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E139  bit 2,(0x96)
 	jr	z, sub_F4E05B_Skip13	; F4E13C  jr Z,0xf4e143
 	calr	sub_F4E478	; F4E13E  calr 0xf4e478
 	jr	sub_F4E05B_Return	; F4E141  jr T,0xf4e150
@@ -106785,7 +106805,7 @@ sub_F4E259_Skip5:
 sub_F4E259_Skip6:
 	call	T_F411B8	; F4E2FB  call 0xf411b8
 sub_F4E259_Join3:
-	ld	a, (0x95:8)	; F4E2FF  ld A,(0x95)
+	ld	a, (TransportC_State:8)	; F4E2FF  ld A,(0x95)
 	and	a, 5	; F4E302  and A,0x05
 	jr	nz, sub_F4E259_Skip7	; F4E305  jr NZ,0xf4e30b
 	call	T_F409AC	; F4E307  call 0xf409ac
@@ -106913,7 +106933,7 @@ sub_F4E390_Join:
 	ld	xwa, (6304798:24)	; F4E3C2  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E3C7  cp XWA,0x00000000
 	jr	nz, sub_F4E390_Join2	; F4E3CD  jr NZ,0xf4e3e2
-	bit	2, (0x94:8)	; F4E3CF  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F4E3CF  bit 2,(0x94)
 	jr	nz, sub_F4E390_Skip2	; F4E3D2  jr NZ,0xf4e3dc
 	pushw	bc	; F4E3D4  push BC
 	call	T_F409AC	; F4E3D5  call 0xf409ac
@@ -107174,12 +107194,12 @@ sub_F4E545:
 	ld	xwa, (6304798:24)	; F4E545  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E54A  cp XWA,0x00000000
 	jr	z, sub_F4E545_Return	; F4E550  jr Z,0xf4e56e
-	bit	2, (0x96:8)	; F4E552  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4E552  bit 2,(0x96)
 	jr	nz, sub_F4E545_Return	; F4E555  jr NZ,0xf4e56e
 	ld	xwa, (12288:16)	; F4E557  ld XWA,(0x3000)
 	cp	xwa, 0	; F4E55B  cp XWA,0x00000000
 	jr	nz, sub_F4E545_Return	; F4E561  jr NZ,0xf4e56e
-	bit	2, (0x94:8)	; F4E563  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F4E563  bit 2,(0x94)
 	jr	nz, sub_F4E545_Return	; F4E566  jr NZ,0xf4e56e
 	pushw	iy	; F4E568  push IY
 	call	T_F409E0	; F4E569  call 0xf409e0
@@ -107353,7 +107373,7 @@ sub_F4EC00:		; <- T_F40CE0
 	ld	xwa, (12288:16)	; F4EC0D  ld XWA,(0x3000)
 	cp	xwa, 0	; F4EC11  cp XWA,0x00000000
 	jr	nz, sub_F4EC00_Return	; F4EC17  jr NZ,0xf4ec24
-	bit	2, (0x96:8)	; F4EC19  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4EC19  bit 2,(0x96)
 	jr	z, sub_F4EC00_Return	; F4EC1C  jr Z,0xf4ec24
 	ldw	(UI_Request:16), 520	; F4EC1E  ld (0x2070),0x0208
 sub_F4EC00_Return:
@@ -107561,7 +107581,7 @@ sub_F4ED0C:		; <- T_F40D14
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4ED10:
-	bit	2, (0x95:8)	; F4ED10  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F4ED10  bit 2,(0x95)
 	jr	z, sub_F4ED10_Skip	; F4ED13  jr Z,0xf4ed17
 	jr	sub_F4ED10_Return	; F4ED15  jr T,0xf4ed83
 sub_F4ED10_Skip:
@@ -107665,7 +107685,7 @@ sub_F4EDC6:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EDD8  ld DE,QHL3
 	jr	z, sub_F4EDC6_Skip	; F4EDDB  jr Z,0xf4eddd
 sub_F4EDC6_Skip:
-	bit	2, (0x95:8)	; F4EDDD  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F4EDDD  bit 2,(0x95)
 	jrl	nz, sub_F4EDC6_Skip2	; F4EDE0  jrl NZ,0xf4ee64
 	m_bit 2, MD16, 0x34d9	; F4EDE3  bit 2,(0x34d9)
 	jrl	nz, sub_F4EDC6_Skip2	; F4EDE7  jrl NZ,0xf4ee64
@@ -107710,7 +107730,7 @@ sub_F4ED10_Join3:
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F4EE59  or (0x2075),0x09
 	ldw	(PanelDial_DownButton:16), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 sub_F4EDC6_Skip2:
-	bit	2, (0x96:8)	; F4EE64  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4EE64  bit 2,(0x96)
 	jr	z, sub_F4ED10_Return3	; F4EE67  jr Z,0xf4ee6e
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F4EE69  and (0x2075),0xf6
 sub_F4ED10_Return3:
@@ -107751,7 +107771,7 @@ sub_F4EE73:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F4EE84  ld DE,QHL3
 	jr	nz, sub_F4EE73_Return	; F4EE87  jr NZ,0xf4eeac
 sub_F4EE73_Skip:
-	bit	2, (0x94:8)	; F4EE89  bit 2,(0x94)
+	bit	2, (TransportA_State:8)	; F4EE89  bit 2,(0x94)
 	jr	z, sub_F4EE73_Skip2	; F4EE8C  jr Z,0xf4ee9a
 	m_bit 0, MD16, 0x34d9	; F4EE8E  bit 0,(0x34d9)
 	jr	nz, sub_F4EE73_Skip2	; F4EE92  jr NZ,0xf4ee9a
@@ -107801,7 +107821,7 @@ sub_F4EEBC:		; <- T_F40D08
 	ld	xwa, (6304798:24)	; F4EEBC  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4EEC1  cp XWA,0x00000000
 	jr	z, sub_F4EE73_Return3	; F4EEC7  jr Z,0xf4eed8
-	bit	2, (0x96:8)	; F4EEC9  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F4EEC9  bit 2,(0x96)
 	jr	nz, sub_F4EE73_Return3	; F4EECC  jr NZ,0xf4eed8
 	call	T_F409E0	; F4EECE  call 0xf409e0
 	ldw	(13650:16), 1	; F4EED2  ld (0x3552),0x0001
@@ -117523,7 +117543,7 @@ sub_F56058:
 sub_F56058_Skip:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x08	; F56073  cp (0x207b),0x08
 	jr	z, sub_F56058_Skip4	; F56078  jr Z,0xf560bb
-	bit	2, (0x96:8)	; F5607A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F5607A  bit 2,(0x96)
 	jr	nz, sub_F56058_Skip3	; F5607D  jr NZ,0xf560a1
 	call	T_CallbackQueue_ResetAndRestartTask2	; F5607F  call 0xf42e80
 	call	T_F40CF8	; F56083  call 0xf40cf8
@@ -118152,7 +118172,7 @@ sub_F56129_Skip19:
 	call	T_Kernel_SemaSignal	; F5637A  call 0xf42d88
 	jr	sub_F56129_Return2	; F5637E  jr T,0xf563dc
 sub_F56129_Skip20:
-	bit	2, (0x96:8)	; F56380  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56380  bit 2,(0x96)
 	jr	nz, sub_F56129_Return2	; F56383  jr NZ,0xf563dc
 	m_bit 2, MD16, 0x34d9	; F56385  bit 2,(0x34d9)
 	jr	nz, sub_F56129_Return2	; F56389  jr NZ,0xf563dc
@@ -118198,7 +118218,7 @@ sub_F56129_Return2:
 sub_F563DD:
 	bit	7, w	; F563DD  bit 0x07,W
 	jr	nz, sub_F56129_Skip23	; F563E0  jr NZ,0xf5645c
-	bit	2, (0x96:8)	; F563E2  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F563E2  bit 2,(0x96)
 	jrl	nz, sub_F56129_Return3	; F563E5  jrl NZ,0xf56473
 	m_bit 2, MD16, 0x34d9	; F563E8  bit 2,(0x34d9)
 	jrl	nz, sub_F56129_Return3	; F563EC  jrl NZ,0xf56473
@@ -118240,7 +118260,7 @@ sub_F56129_Skip23:
 	jr	nz, sub_F56129_Skip24	; F56460  jr NZ,0xf56464
 	jr	sub_F56129_Return3	; F56462  jr T,0xf56473
 sub_F56129_Skip24:
-	bit	2, (0x96:8)	; F56464  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56464  bit 2,(0x96)
 	jr	nz, sub_F56129_Skip25	; F56467  jr NZ,0xf5646f
 	m_bit 2, MD16, 0x34d9	; F56469  bit 2,(0x34d9)
 	jr	nz, sub_F56129_Return3	; F5646D  jr NZ,0xf56473
@@ -118285,7 +118305,7 @@ sub_F56129_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56492:
-	bit	2, (0x96:8)	; F56492  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56492  bit 2,(0x96)
 	jr	nz, sub_F56492_Return	; F56495  jr NZ,0xf5650f
 	m_bit 2, MD16, 0x34d9	; F56497  bit 2,(0x34d9)
 	jr	nz, sub_F56492_Return	; F5649B  jr NZ,0xf5650f
@@ -118309,7 +118329,7 @@ sub_F56492_Skip2:
 	ld	(6304983:24), 1	; F564D0  ld (0x6034d7),0x01
 sub_F56492_Join:
 	ld	a, (6304983:24)	; F564D6  ld A,(0x6034d7)
-	ld	(6311936:24), a	; F564DB  ld (0x605000),A
+	ld	(TransportA_BeatsPerBar:24), a	; F564DB  ld (0x605000),A
 	ld	(0xc3:8), a	; F564E0  ld (0xc3),A
 	ld	(13400:16), a	; F564E3  ld (0x3458),A
 	pushw	wa	; F564E7  push WA
@@ -118361,7 +118381,7 @@ Nop_Ret_F56510:
 sub_F56511:
 	bit	7, w	; F56511  bit 0x07,W
 	jr	nz, sub_F56492_Return2	; F56514  jr NZ,0xf56523
-	bit	2, (0x96:8)	; F56516  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56516  bit 2,(0x96)
 	jr	nz, sub_F56492_Return2	; F56519  jr NZ,0xf56523
 	ldw	(UI_Request:16), 515	; F5651B  ld (0x2070),0x0203
 	jr	sub_F56492_Return2	; F56521  jr T,0xf56523
@@ -118439,7 +118459,7 @@ Nop_Ret_F56524_Join:
 sub_F56579:
 	call	T_F409AC	; F56579  call 0xf409ac
 	ldw	wa, 65535	; F5657D  ld WA,0xffff
-	bit	2, (0x95:8)	; F56580  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F56580  bit 2,(0x95)
 	jr	z, sub_F56579_Return	; F56583  jr Z,0xf5658b
 	nop	; F56585  nop
 	nop	; F56586  nop
@@ -118637,7 +118657,7 @@ sub_F5664A:
 	m_bit 4, MD16, UI_ScreenFlags	; F5665E  bit 4,(0x2095)
 	jr	nz, sub_F5664A_Skip6	; F56662  jr NZ,0xf566c6
 sub_F5664A_Skip:
-	bit	2, (0x96:8)	; F56664  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56664  bit 2,(0x96)
 	jr	nz, sub_F5664A_Skip3	; F56667  jr NZ,0xf5668f
 	call	T_CallbackQueue_ResetAndRestartTask2	; F56669  call 0xf42e80
 	ld	wa, (13858:16)	; F5666D  ld WA,(0x3622)
@@ -118792,7 +118812,7 @@ sub_F5670C_Return2:
 sub_F56752:
 	bit	7, w	; F56752  bit 0x07,W
 	jr	nz, sub_F5670C_Skip3	; F56755  jr NZ,0xf56767
-	bit	2, (0x96:8)	; F56757  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56757  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return3	; F5675A  jr NZ,0xf5676a
 	m_bit 2, MD16, 0x34d9	; F5675C  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return3	; F56760  jr NZ,0xf5676a
@@ -118817,7 +118837,7 @@ sub_F5670C_Return3:
 sub_F5676B:
 	bit	7, w	; F5676B  bit 0x07,W
 	jr	nz, sub_F5670C_Skip5	; F5676E  jr NZ,0xf5678d
-	bit	2, (0x96:8)	; F56770  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56770  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return4	; F56773  jr NZ,0xf56790
 	m_bit 2, MD16, 0x34d9	; F56775  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return4	; F56779  jr NZ,0xf56790
@@ -118873,7 +118893,7 @@ sub_F5679B:
 sub_F5670C_Skip7:
 	call	T_Blink_Stop	; F567AF  call 0xf42e24
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F567B3  or (0x2095),0x10
-	bit	2, (0x96:8)	; F567B8  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F567B8  bit 2,(0x96)
 	jr	nz, sub_F5670C_Skip8	; F567BB  jr NZ,0xf567c3
 	m_bit 2, MD16, 0x34d9	; F567BD  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return5	; F567C1  jr NZ,0xf567c7
@@ -118933,7 +118953,7 @@ sub_F5670C_Return6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F567DE:
-	bit	2, (0x96:8)	; F567DE  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F567DE  bit 2,(0x96)
 	jr	nz, sub_F5670C_Return7	; F567E1  jr NZ,0xf5684f
 	m_bit 2, MD16, 0x34d9	; F567E3  bit 2,(0x34d9)
 	jr	nz, sub_F5670C_Return7	; F567E7  jr NZ,0xf5684f
@@ -119252,7 +119272,7 @@ sub_F5696D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5698E:
-	bit	2, (0x96:8)	; F5698E  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F5698E  bit 2,(0x96)
 	jr	nz, sub_F5696D_Return	; F56991  jr NZ,0xf569ae
 	call	T_Blink_Stop	; F56993  call 0xf42e24
 	m_cp_mi16 MW16, 0x3622, 0x03e7	; F56997  cp (0x3622),0x03e7
@@ -119337,7 +119357,7 @@ sub_F569FA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56A1D:
-	bit	2, (0x96:8)	; F56A1D  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56A1D  bit 2,(0x96)
 	jr	nz, sub_F569FA_Return	; F56A20  jr NZ,0xf56a5e
 	call	T_Blink_Stop	; F56A22  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x03e7	; F56A26  cp (0x3624),0x03e7
@@ -119452,7 +119472,7 @@ sub_F56A8D_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56AB1:
-	bit	2, (0x96:8)	; F56AB1  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56AB1  bit 2,(0x96)
 	jr	nz, sub_F56AB1_Return	; F56AB4  jr NZ,0xf56af2
 	call	T_Blink_Stop	; F56AB6  call 0xf42e24
 	m_cp_mi16 MW16, 0x3622, 0x0001	; F56ABA  cp (0x3622),0x0001
@@ -119487,7 +119507,7 @@ sub_F56AB1_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56AF3:
-	bit	2, (0x96:8)	; F56AF3  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56AF3  bit 2,(0x96)
 	jr	nz, sub_F56AF3_Return	; F56AF6  jr NZ,0xf56b13
 	call	T_Blink_Stop	; F56AF8  call 0xf42e24
 	m_cp_mi16 MW16, 0x3624, 0x0001	; F56AFC  cp (0x3624),0x0001
@@ -119607,7 +119627,7 @@ sub_F56B95_Skip:
 	call	T_F40D04	; F56BBA  call 0xf40d04
 	m_bit 0, MD16, 0x360b	; F56BBE  bit 0,(0x360b)
 	jr	z, sub_F56B95_Join	; F56BC2  jr Z,0xf56bdc
-	bit	2, (0x96:8)	; F56BC4  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56BC4  bit 2,(0x96)
 	jr	z, sub_F56B95_Skip2	; F56BC7  jr Z,0xf56bd0
 	m_and_mi8 MB16, 0x360b, 0xfe	; F56BC9  and (0x360b),0xfe
 	jr	sub_F56B95_Join	; F56BCE  jr T,0xf56bdc
@@ -119666,7 +119686,7 @@ sub_F56C35_Skip:
 	jr	z, sub_F56C35_Skip2	; F56C46  jr Z,0xf56c4d
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F56C48  and (0x20a9),0xfe
 sub_F56C35_Skip2:
-	bit	2, (0x96:8)	; F56C4D  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56C4D  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return	; F56C50  jr NZ,0xf56c56
 	call	T_F40D18	; F56C52  call 0xf40d18
 sub_F56C35_Return:
@@ -119690,7 +119710,7 @@ sub_F56C57:
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56C5C  and (0x2075),0xf6
 	m_bit 0, MD16, 0x360b	; F56C61  bit 0,(0x360b)
 	jr	nz, sub_F56C35_Skip3	; F56C65  jr NZ,0xf56c7d
-	bit	2, (0x96:8)	; F56C67  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56C67  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return2	; F56C6A  jr NZ,0xf56cd5
 	m_set 0, MD16, 0x360b	; F56C6C  set 0,(0x360b)
 	ld	(13863:16), 1	; F56C70  ld (0x3627),0x01
@@ -119742,7 +119762,7 @@ sub_F56CD6:
 	bit	7, w	; F56CD6  bit 0x07,W
 	jr	nz, sub_F56C35_Skip5	; F56CD9  jr NZ,0xf56cf7
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F56CDB  and (0x2075),0xf6
-	bit	2, (0x96:8)	; F56CE0  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56CE0  bit 2,(0x96)
 	jr	nz, sub_F56C35_Return3	; F56CE3  jr NZ,0xf56d1c
 	xor	xwa, xwa	; F56CE5  xor XWA,XWA
 	ld	(12296:16), xwa	; F56CE7  ld (0x3008),XWA
@@ -119777,7 +119797,7 @@ sub_F56C35_Return3:
 sub_F56D1D:
 	bit	7, w	; F56D1D  bit 0x07,W
 	jr	nz, sub_F56C35_Skip7	; F56D20  jr NZ,0xf56d32
-	bit	2, (0x96:8)	; F56D22  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56D22  bit 2,(0x96)
 	jr	z, sub_F56C35_Skip6	; F56D25  jr Z,0xf56d2d
 	m_bit 0, MD16, 0x360b	; F56D27  bit 0,(0x360b)
 	jr	nz, sub_F56C35_Return4	; F56D2B  jr NZ,0xf56d45
@@ -119840,7 +119860,7 @@ sub_F56D7E:
 	ld	(14162:16), 1	; F56D7E  ld (0x3752),0x01
 	ld	xwa, 65536	; F56D83  ld XWA,0x00010000
 	m_or_mr ML16, 0x360c, 0	; F56D88  or (0x360c),XWA
-	bit	2, (0x96:8)	; F56D8C  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56D8C  bit 2,(0x96)
 	jr	z, sub_F56D7E_Skip	; F56D8F  jr Z,0xf56d9d
 	ld	c, 16:opc	; F56D91  ld C,0x10
 	ld	(14134:16), c	; F56D93  ld (0x3736),C
@@ -119868,7 +119888,7 @@ sub_F56DA8:
 	ld	xwa, 65536	; F56DAD  ld XWA,0x00010000
 	xor	xwa, 4294967295	; F56DB2  xor XWA,0xffffffff
 	m_and_mr ML16, 0x360c, 0	; F56DB8  and (0x360c),XWA
-	bit	2, (0x96:8)	; F56DBC  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56DBC  bit 2,(0x96)
 	jr	z, sub_F56DA8_Skip	; F56DBF  jr Z,0xf56dcd
 	ld	c, 16:opc	; F56DC1  ld C,0x10
 	ld	(14134:16), c	; F56DC3  ld (0x3736),C
@@ -119913,7 +119933,7 @@ Nop_Ret_F56DD8:
 sub_F56DD9:
 	bit	7, w	; F56DD9  bit 0x07,W
 	jr	nz, sub_F56DA8_Return2	; F56DDC  jr NZ,0xf56def
-	bit	2, (0x96:8)	; F56DDE  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56DDE  bit 2,(0x96)
 	jr	nz, sub_F56DA8_Return2	; F56DE1  jr NZ,0xf56def
 	call	T_F40D18	; F56DE3  call 0xf40d18
 	ldw	(UI_Request:16), 513	; F56DE7  ld (0x2070),0x0201
@@ -119962,7 +119982,7 @@ sub_F56DF1:
 	m_bit 4, MD16, UI_ScreenFlags	; F56E05  bit 4,(0x2095)
 	jr	nz, sub_F56DF1_Skip5	; F56E09  jr NZ,0xf56e50
 sub_F56DF1_Skip:
-	bit	2, (0x96:8)	; F56E0B  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56E0B  bit 2,(0x96)
 	jr	nz, sub_F56DF1_Skip4	; F56E0E  jr NZ,0xf56e3e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F56E10  call 0xf42e80
 	m_cp_mi8 MB16, 0x3627, 0x03	; F56E14  cp (0x3627),0x03
@@ -120200,7 +120220,7 @@ sub_F56ED4_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F56F09:
-	bit	2, (0x96:8)	; F56F09  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F56F09  bit 2,(0x96)
 	jr	nz, sub_F56F09_Return	; F56F0C  jr NZ,0xf56f7a
 	m_bit 2, MD16, 0x34d9	; F56F0E  bit 2,(0x34d9)
 	jr	nz, sub_F56F09_Return	; F56F12  jr NZ,0xf56f7a
@@ -120461,7 +120481,7 @@ StateDispatchTable_F5706A:
 sub_F5707E:
 	m_bit 0, MD16, 0x360b	; F5707E  bit 0,(0x360b)
 	jr	nz, sub_F5707E_Return	; F57082  jr NZ,0xf5709c
-	bit	2, (0x96:8)	; F57084  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F57084  bit 2,(0x96)
 	jr	nz, sub_F5707E_Return	; F57087  jr NZ,0xf5709c
 	m_set 0, MD16, 0x360b	; F57089  set 0,(0x360b)
 	calr	sub_F5709D	; F5708D  calr 0xf5709d
@@ -120505,7 +120525,7 @@ sub_F5709D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F570BB:
-	bit	2, (0x96:8)	; F570BB  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F570BB  bit 2,(0x96)
 	jr	nz, sub_F5709D_Return	; F570BE  jr NZ,0xf570db
 	call	T_Blink_Stop	; F570C0  call 0xf42e24
 	m_cp_mi16 MW16, 0x361e, 0x03e7	; F570C4  cp (0x361e),0x03e7
@@ -120590,7 +120610,7 @@ sub_F57127:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5714A:
-	bit	2, (0x96:8)	; F5714A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F5714A  bit 2,(0x96)
 	jr	nz, sub_F57127_Return	; F5714D  jr NZ,0xf5718b
 	call	T_Blink_Stop	; F5714F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x03e7	; F57153  cp (0x3620),0x03e7
@@ -120704,7 +120724,7 @@ sub_F571BA_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F571D8:
-	bit	2, (0x96:8)	; F571D8  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F571D8  bit 2,(0x96)
 	jr	nz, sub_F571D8_Return	; F571DB  jr NZ,0xf57219
 	call	T_Blink_Stop	; F571DD  call 0xf42e24
 	m_cp_mi16 MW16, 0x361e, 0x0001	; F571E1  cp (0x361e),0x0001
@@ -120739,7 +120759,7 @@ sub_F571D8_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5721A:
-	bit	2, (0x96:8)	; F5721A  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F5721A  bit 2,(0x96)
 	jr	nz, sub_F5721A_Return	; F5721D  jr NZ,0xf5723a
 	call	T_Blink_Stop	; F5721F  call 0xf42e24
 	m_cp_mi16 MW16, 0x3620, 0x0001	; F57223  cp (0x3620),0x0001
@@ -120867,7 +120887,7 @@ sub_F57311:
 	jr	sub_F57311_Return	; F5731B  jr T,0xf57336
 sub_F57311_Skip:
 	ld	(13864:16), 0	; F5731D  ld (0x3628),0x00
-	bit	2, (0x96:8)	; F57322  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F57322  bit 2,(0x96)
 	jr	z, sub_F57311_Skip2	; F57325  jr Z,0xf57332
 	calr	sub_F56579	; F57327  calr 0xf56579
 	call	T_F413C8	; F5732A  call 0xf413c8
@@ -143444,7 +143464,7 @@ sub_F65DD3_Return:
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol4: the SoftKeyCol4 action of TrackAssign_StageZero -- called only by SoftKeyCol4_TrackAssign_StageZero.
 TrackAssign_StageZero_SoftKeyCol4:		; <- T_TrackAssign_StageZero_SoftKeyCol4
-	bit	2, (0x96:8)	; F65DF8  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F65DF8  bit 2,(0x96)
 	jr	z, sub_F65DF8_Skip	; F65DFB  jr Z,0xf65dfe
 	ret	; F65DFD  ret
 sub_F65DF8_Skip:
@@ -143540,7 +143560,7 @@ TrackAssign_StageZero_LcdKeyRow3:		; <- T_TrackAssign_StageZero_LcdKeyRow3
 ; --------------------------------------------------------------------------
 sub_F65E98:
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F65E98  and (0x2075),0xf7
-	bit	2, (0x95:8)	; F65E9D  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F65E9D  bit 2,(0x95)
 	jr	z, sub_F65E98_Skip	; F65EA0  jr Z,0xf65ea3
 	ret	; F65EA2  ret
 sub_F65E98_Skip:
@@ -143634,7 +143654,7 @@ MaskTable_F65F5C:
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol5: the SoftKeyCol5 action of TrackAssign_StageZero -- called only by SoftKeyCol5_TrackAssign_StageZero.
 TrackAssign_StageZero_SoftKeyCol5:		; <- T_TrackAssign_StageZero_SoftKeyCol5
-	bit	2, (0x96:8)	; F65F7C  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F65F7C  bit 2,(0x96)
 	jr	nz, sub_F65F7C_Return	; F65F7F  jr NZ,0xf65fdc
 	ld	c, (3075:16)	; F65F81  ld C,(0x0c03)
 	ld	wa, (6304852:24)	; F65F85  ld WA,(0x603454)
@@ -143685,7 +143705,7 @@ sub_F65F7C_Return:
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol7: the SoftKeyCol7 action of TrackAssign_StageZero -- called only by SoftKeyCol7_TrackAssign_StageZero.
 TrackAssign_StageZero_SoftKeyCol7:		; <- T_TrackAssign_StageZero_SoftKeyCol7
-	bit	2, (0x96:8)	; F65FDD  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F65FDD  bit 2,(0x96)
 	jr	nz, sub_F65FDD_Return	; F65FE0  jr NZ,0xf6601f
 	ld	xhl, 6304819	; F65FE2  ld XHL,0x00603433
 	xor	bc, bc	; F65FE7  xor BC,BC
@@ -143729,7 +143749,7 @@ sub_F65FDD_Return:
 ; TrackAssign_StageNonZero_LcdKeyRow2: the LcdKeyRow2 action of TrackAssign_StageNonZero -- called only by LcdKeyRow2_TrackAssign_StageNonZero.
 TrackAssign_StageNonZero_LcdKeyRow2:		; <- T_TrackAssign_StageNonZero_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66020  and (0x2075),0xf7
-	bit	2, (0x95:8)	; F66025  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F66025  bit 2,(0x95)
 	jr	z, sub_F66020_Skip	; F66028  jr Z,0xf6602b
 	ret	; F6602A  ret
 sub_F66020_Skip:
@@ -143772,7 +143792,7 @@ sub_F66020_Skip:
 ;   LcdKeyRow3_TrackAssign_StageNonZero.
 TrackAssign_ReturnToStageZero:		; <- T_TrackAssign_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66081  and (0x2075),0xf7
-	bit	2, (0x95:8)	; F66086  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F66086  bit 2,(0x95)
 	jr	z, sub_F66081_Skip	; F66089  jr Z,0xf6608c
 	ret	; F6608B  ret
 sub_F66081_Skip:
@@ -144173,7 +144193,7 @@ sub_F66201_Return3:
 ; SequencerMedley_StepFirstSong: unless (0x95) bit 2: W bit 7 set -> Medley_FirstSong - 1 (floor 0); clear -> + 1 up to 9 (INT), 19 (disk, NORM file)
 ;   or 99 (MIDI file); then the range fix-up 0xF662D7 and repaint bit 3.
 SequencerMedley_StepFirstSong:
-	bit	2, (0x95:8)	; F66294  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F66294  bit 2,(0x95)
 	jr	z, sub_F66294_Skip	; F66297  jr Z,0xf6629a
 	ret	; F66299  ret
 sub_F66294_Skip:
@@ -144242,7 +144262,7 @@ sub_F662D7_Return:
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StepLastSong: the same as SequencerMedley_StepFirstSong on Medley_LastSong.
 SequencerMedley_StepLastSong:
-	bit	2, (0x95:8)	; F662F7  bit 2,(0x95)
+	bit	2, (TransportC_State:8)	; F662F7  bit 2,(0x95)
 	jr	z, sub_F662F7_Skip	; F662FA  jr Z,0xf662fd
 	ret	; F662FC  ret
 sub_F662F7_Skip:
@@ -153464,7 +153484,7 @@ sub_F6A9E3_Skip10:
 	calr	sub_F6B01E	; F6AB31  calr 0xf6b01e
 sub_F6A9E3_Join:
 	calr	sub_F6ADC2	; F6AB34  calr 0xf6adc2
-	bit	2, (0x96:8)	; F6AB37  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F6AB37  bit 2,(0x96)
 	jr	z, sub_F6A9E3_Skip11	; F6AB3A  jr Z,0xf6ab40
 	call	T_F40A20	; F6AB3C  call 0xf40a20
 sub_F6A9E3_Skip11:
@@ -187923,7 +187943,7 @@ sub_F7BF74_Skip2:
 	jr	nz, sub_F7BF74_Return2	; F7C088  jr NZ,0xf7c0ae
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7C08A  cp (0x133f),0x1a
 	jr	z, sub_F7BF74_Skip3	; F7C08F  jr Z,0xf7c0a8
-	bit	2, (0x96:8)	; F7C091  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F7C091  bit 2,(0x96)
 	jr	nz, sub_F7BF74_Return2	; F7C094  jr NZ,0xf7c0ae
 	xor	xwa, xwa	; F7C096  xor XWA,XWA
 	ld	(12296:16), xwa	; F7C098  ld (0x3008),XWA
@@ -199387,7 +199407,7 @@ ExitKey_Quantize_StageZero:
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip:
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7F728  cp (0x133f),0x1a
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Skip2	; F7F72D  jr Z,0xf7f746
-	bit	2, (0x96:8)	; F7F72F  bit 2,(0x96)
+	bit	2, (TransportB_State:8)	; F7F72F  bit 2,(0x96)
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return2	; F7F732  jr NZ,0xf7f74c
 	xor	xwa, xwa	; F7F734  xor XWA,XWA
 	ld	(12296:16), xwa	; F7F736  ld (0x3008),XWA

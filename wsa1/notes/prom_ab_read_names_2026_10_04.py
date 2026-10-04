@@ -364,6 +364,35 @@ ROWS = [
      "0xFFFF), Disk_SetDriveGeometry, Fdc_Request op 10 (controller present) then op 0 (reset + identify media); on a\n"
      "floppy, Disk_DetectFloppyFormat up to three times.  HL = its format code when it recognises the disk, 0 for a\n"
      "type-1 drive or a passing DiskCmd_CheckMediaId, 1 no medium (0xFFFE, or status 0x30 / 0x31), 2 or 3 failure."),
+    # prom_b 0xF000B9-0xF00320: the three transports' start / stop.  TransportA/B/C_State: bit 2 running,
+    # 0x01 a start request, 0x0C a stop request (INTTR4_SequencerTick header; wsa1_ram.inc).
+    ("F000B9", "Transport_StopAllRunning",
+     "with interrupts at level 6, builds a mask of which transports run (A bit 2 -> 4, B -> 8, C -> 0x10) and calls\n"
+     "Transport_StopByRunningMask[mask]; every handler there writes 0x0C to exactly the running transports' states."),
+    ("F002C9", "TransportB_Stop", "TransportB_State = 0x0C.  Transport_StopByRunningMask's entry 2 (only B runs)."),
+    ("F00280", "Transport_StopCAndA",
+     "TransportC_State = 0x0C if C runs and has no stop pending (bit 3), then TransportA_State = 0x0C.  Entry 5 (A and C)."),
+    ("F002F4", "TransportC_ResetCounters", "TransportC_Tick = 0, TransportC_Beat = 0, at interrupt level 6."),
+    ("F00301", "TransportA_ResetCounters", "TransportA_Tick, TransportA_Beat and TransportA_Bar = 0, at interrupt level 6."),
+    ("F00313", "TransportB_ResetCounters", "TransportB_Beat = 0, Seq_BeatTick (B's tick) = 0, at interrupt level 6."),
+    ("F00320", "Transport_QueueMidiStartOrContinue",
+     "when MIDI setting (0x7F34) bit 2 is set: MidiTx_RealtimePending bit 2 (FB CONTINUE) if (0x34BB) bit 3, else bit 1\n"
+     "(FA START), then T_MIDI_PostSendWork."),
+    ("F00293", "Transport_StartCAndB",
+     "TransportC_State = 1, Transport_QueueMidiStartOrContinue, TransportB_State = 1."),
+    ("F001B5", "Transport_ToggleCAndB",
+     "if transport C runs, Transport_StopAllRunning; else Transport_StartCAndB at interrupt level 6."),
+    ("F001C9", "Transport_StartAllFromZero",
+     "unless C is starting or running: either a count-in (TransportA_State = 0x80, (0x34D9) |= 4, when (0x34D9) bit 1\n"
+     "is set and bit 2 clear) or TransportC_State = 1 with TransportC_ResetCounters and the MIDI start; then\n"
+     "TransportB_State = 1 + TransportB_ResetCounters and TransportA_State = 1 + TransportA_ResetCounters."),
+    ("F00244", "Transport_StartAllContinue",
+     "the same start without resetting C's or B's counters (only TransportA_ResetCounters)."),
+    ("F0017D", "Transport_StartStopFromZero",
+     "if C does not run, Transport_StartAllFromZero; if B runs and (0x3000) is non-zero, T_F40E18 with (0x60501B) bit 0\n"
+     "set around it; otherwise Transport_StopAllRunning."),
+    ("F0020B", "Transport_StartStopContinue",
+     "the same with Transport_StartAllContinue for the start."),
 ]
 
 

@@ -197,7 +197,7 @@ its reason and its check.  `--check` is 95 assertions and must print 0 failures.
 
     ld XWA,0x00F000E5 / add XHL,XWA / ld XWA,(XHL) / call XWA
 
-so `Data_F000E5` is a **call-dispatch table**, not a blob.  Its eight entries are
+so `Transport_StopByRunningMask` is a **call-dispatch table**, not a blob.  Its eight entries are
 0x00F00105 0x00F0028D 0x00F002C9 0x00F002EB 0x00F002B9 0x00F00280 0x00F002B6
 0x00F002B3 -- and **all eight land on an instruction boundary** inside the three
 code spans this lane converted at 0xF00280 / 0xF0029D / 0xF002CD.  The table

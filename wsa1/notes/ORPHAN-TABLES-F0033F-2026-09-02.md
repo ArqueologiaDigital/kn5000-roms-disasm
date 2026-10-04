@@ -199,7 +199,7 @@ images, in either width — searched the same way as the tables.  So run 1 has a
 consumer, but that consumer has no caller that can be found.  ★ Two of the four
 dispatchers, moreover, aim at records that **do not exist**: `0xF002AC` and
 `0xF002F4` are records −2 and −1 relative to `0xF0033C`, and both land inside
-live code (`sub_F002C9`, `sub_F002F4`).  Whatever happened to this span
+live code (`TransportB_Stop`, `TransportC_ResetCounters`).  Whatever happened to this span
 happened to the code around it too.
 
 ---

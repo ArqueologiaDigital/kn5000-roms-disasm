@@ -2690,6 +2690,20 @@ RENAMES = {
     "sub_FE30DD": "Disk_SetDriveGeometry",
     "sub_FE35F9": "Disk_DetectFloppyFormat",
     "sub_FE370A": "DiskCmd_MountDrive",
+    "sub_F000B9": "Transport_StopAllRunning",
+    "sub_F002C9": "TransportB_Stop",
+    "sub_F00280": "Transport_StopCAndA",
+    "sub_F002F4": "TransportC_ResetCounters",
+    "sub_F00301": "TransportA_ResetCounters",
+    "sub_F00313": "TransportB_ResetCounters",
+    "sub_F00320": "Transport_QueueMidiStartOrContinue",
+    "sub_F00293": "Transport_StartCAndB",
+    "sub_F001B5": "Transport_ToggleCAndB",
+    "sub_F001C9": "Transport_StartAllFromZero",
+    "sub_F00244": "Transport_StartAllContinue",
+    "sub_F0017D": "Transport_StartStopFromZero",
+    "sub_F0020B": "Transport_StartStopContinue",
+    "Data_F000E5": "Transport_StopByRunningMask",
 }
 
 

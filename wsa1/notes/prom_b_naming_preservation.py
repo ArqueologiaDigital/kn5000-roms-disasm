@@ -157,6 +157,15 @@ def main():
         m = EQU.match(l)
         if m:
             byval[int(m.group(2), 0)].append(m.group(1))
+    # 2026-10-04: and the RAM equates prom_b includes -- scripts/tools/name_wsa1_ram.py turns
+    # `bit 2,(148:8)` into `bit 2,(TransportA_State:8)` with a `.equ` in wsa1/include/wsa1_ram.inc.
+    RAMEQU = re.compile(r"^\s*\.equ\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+|\d+)")
+    inc = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "include", "wsa1_ram.inc")
+    if os.path.exists(inc):
+        for l in open(inc, "rb").read().decode("latin-1").split("\n"):
+            m = RAMEQU.match(l)
+            if m:
+                byval[int(m.group(2), 0)].append(m.group(1))
     NUM = re.compile(r"(?<![\w.$])(0x[0-9A-Fa-f]+|\d+)(?![\w.$])")
 
     def symbolized(line):

@@ -202,7 +202,7 @@ with interpreter records and 8-byte-entry arrays whose base something NAMES; it
 finds a unique decomposition for **1 of the 18** spans this lane could not
 otherwise frame, which is why that one (0xF0D9A4) is converted and the other 17
 are not. The strongest of them is mutual: all eight entries of the pointer
-array `Data_F000E5` land on an instruction boundary inside the three code spans
+array `Transport_StopByRunningMask` land on an instruction boundary inside the three code spans
 this lane converted at 0xF00280/0xF0029D/0xF002CD -- the table proves the code is
 code, and the code proves the table is a table.
 

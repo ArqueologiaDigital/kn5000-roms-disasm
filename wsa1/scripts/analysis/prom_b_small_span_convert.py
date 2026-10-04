@@ -87,9 +87,9 @@ V = [
   "by the two routines they name.  Every jump target is inside the span."),
  (0xF0003A, 0x02, "TRAILER", None, "after T_F409B0_Nop's `ret`, before sub_F0003C"),
  (0xF00097, 0x02, "TRAILER", None, "after sub_F0003C's `ret`, before sub_F00099"),
- (0xF000E3, 0x02, "TRAILER", None, "after sub_F00099's `ret`, before Data_F000E5"),
+ (0xF000E3, 0x02, "TRAILER", None, "after sub_F00099's `ret`, before Transport_StopByRunningMask"),
  (0xF000E6, 0x22, "PTRTAB4", (0xF000E5, 0xF00105),
-  "the rest of the 8-entry CALL-DISPATCH array Data_F000E5.  sub_F00099 "
+  "the rest of the 8-entry CALL-DISPATCH array Transport_StopByRunningMask.  sub_F00099 "
   "ends `ld XWA,0x00F000E5` / `add XHL,XWA` / `ld XWA,(XHL)` / `call XWA` "
   "at 0xF000D5-0xF000DE, so the object is a table of routine pointers "
   "reached by an index.  Its eight targets are 0x00F00105 0x00F0028D "
@@ -99,15 +99,15 @@ V = [
   "makes both the table and those spans safe.  The 3 bytes after the array "
   "are 0xF00105 (a bare 0x0E `ret`, the array's entry 0) and a `00 00` "
   "trailer."),
- (0xF0017B, 0x02, "TRAILER", None, "after sub_F00108's `ret`, before sub_F0017D"),
- (0xF001AE, 0x02, "TRAILER", None, "after sub_F0017D's `ret`, before sub_F001B0"),
+ (0xF0017B, 0x02, "TRAILER", None, "after sub_F00108's `ret`, before Transport_StartStopFromZero"),
+ (0xF001AE, 0x02, "TRAILER", None, "after Transport_StartStopFromZero's `ret`, before sub_F001B0"),
  (0xF001B4, 0x01, "TRAILER", None,
   "one 0x0E byte after sub_F001B0's `ret`: the 0x0E (`ret`) pad this build uses, "
   "already asserted as `.fill ..., 0x0E` in eight other places in this file"),
- (0xF001C7, 0x02, "TRAILER", None, "after sub_F001B5's `ret`, before sub_F001C9"),
- (0xF00280, 0x13, "CODE", None, "entry 0x00F00280 (and 0x00F0028D) of the array Data_F000E5"),
- (0xF0029D, 0x2C, "CODE", None, "entries 0x00F002B9 0x00F002B6 0x00F002B3 of Data_F000E5"),
- (0xF002CD, 0x27, "CODE", None, "entry 0x00F002EB of Data_F000E5"),
+ (0xF001C7, 0x02, "TRAILER", None, "after Transport_ToggleCAndB's `ret`, before Transport_StartAllFromZero"),
+ (0xF00280, 0x13, "CODE", None, "entry 0x00F00280 (and 0x00F0028D) of the array Transport_StopByRunningMask"),
+ (0xF0029D, 0x2C, "CODE", None, "entries 0x00F002B9 0x00F002B6 0x00F002B3 of Transport_StopByRunningMask"),
+ (0xF002CD, 0x27, "CODE", None, "entry 0x00F002EB of Transport_StopByRunningMask"),
  (0xF02FFE, 0x2C, "REFUSE", None,
   # ⚠ OVERTURNED 2026-09-02 by lane res02f (notes/gen_res02f_spans.py), which
   # converted this span.  The reason below is kept verbatim because it is what
@@ -277,19 +277,19 @@ def check(verbose=True):
             lines = transcribe(a, ln)
             c(tag + ": the linear decode consumes the span exactly",
               addr_of(lines[-1]) is not None)
-    # the mutual check: every Data_F000E5 entry lands on an instruction boundary
+    # the mutual check: every Transport_StopByRunningMask entry lands on an instruction boundary
     starts = set()
     for a, ln, kind, _arg, _n in V:
         if kind == "CODE":
             starts |= set(addr_of(l) for l in transcribe(a, ln))
     starts.add(0xF00105)               # the array's own `ret` stub, a TRAILER byte
-    starts.add(0xF002C9)               # sub_F002C9, converted before this lane
+    starts.add(0xF002C9)               # TransportB_Stop, converted before this lane
     c("sub_F00099 loads 0x00F000E5 as a 32-bit immediate at 0xF000D6 and CALLs "
       "through it -- the array is a call-dispatch table",
       w(0, d, 0xF000D6, 4) == 0x00F000E5)
     for k in range(8):
         t = w(0, d, 0xF000E5 + 4 * k, 3)
-        c("Data_F000E5 entry %d = 0x00%06X lands on an instruction boundary" % (k, t),
+        c("Transport_StopByRunningMask entry %d = 0x00%06X lands on an instruction boundary" % (k, t),
           t in starts)
     print("\n%d checks, %d failures" % (n, len(fails)))
     return not fails

@@ -356,6 +356,23 @@ GROUPS = [
         0x600A12: ("SeqBuf_RingFree", "the ring's free count", "SeqBuf_PutByte"),
         0x60080A: ("TimedEvents_Ring", "the timed-event ring", "Ring60080A_*, TimedEvents_DrainDue"),
     }),
+    # 2026-10-04: the three transports INTTR4_SequencerTick advances.  Which three things they are is not
+    # established, so they keep the header's letters A, B, C.
+    ("wsa1/prom_a/wsa1_prom_a.s", "INTTR4_SequencerTick header: THREE TRANSPORTS, NOT ONE", {
+        0x0094: ("TransportA_State", "transport A's state: bit 2 running; 0x01 start, 0x0C stop request", "INTTR4_SequencerTick, Transport_StopAllRunning"),
+        0x0096: ("TransportB_State", "transport B's state, same bits", "INTTR4_SequencerTick, Transport_StopAllRunning"),
+        0x0095: ("TransportC_State", "transport C's state, same bits; also the MIDI clock source", "INTTR4_SequencerTick, MIDI_RT_Start_ResetCounters"),
+        0x008B: ("TransportA_Tick", "transport A's tick, 0..95", "INTTR4_SequencerTick"),
+        0x008C: ("TransportA_Beat", "transport A's beat in the bar", "INTTR4_SequencerTick wraps it at TransportA_BeatsPerBar"),
+        0x605000: ("TransportA_BeatsPerBar", "beats per bar for transport A", "INTTR4_SequencerTick"),
+        0x605002: ("TransportA_Bar", "transport A's bar counter (word)", "INTTR4_SequencerTick"),
+        0x0091: ("TransportB_Beat", "transport B's beat counter (word); its tick is Seq_BeatTick", "INTTR4_SequencerTick"),
+        0x008D: ("TransportC_Tick", "transport C's tick, 0..95", "INTTR4_SequencerTick"),
+        0x008E: ("TransportC_Beat", "transport C's beat counter (word)", "INTTR4_SequencerTick"),
+    }),
+    ("wsa1/prom_a/wsa1_prom_a.s", "MIDI_TX_Ready header: the real-time requests", {
+        0x00A0: ("MidiTx_RealtimePending", "bits 0-4 queue F8 clock, FA start, FB continue, FC stop, FE active sensing", "MIDI_TX_Ready"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),

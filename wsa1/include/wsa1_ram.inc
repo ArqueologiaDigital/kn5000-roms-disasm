@@ -304,6 +304,21 @@
 	.equ SeqBuf_RingFree,				0x600a12	; the ring's free count -- SeqBuf_PutByte
 	.equ SeqBuf_Ring,				0x600a14	; the 0x200-byte sequencer ring; descriptor below it -- Ring600A14_*, SeqBuf_PutByte
 
+; ---- wsa1/prom_a/wsa1_prom_a.s -- "INTTR4_SequencerTick header: THREE TRANSPORTS, NOT ONE"
+	.equ TransportA_Tick,				0x008b	; transport A's tick, 0..95 -- INTTR4_SequencerTick
+	.equ TransportA_Beat,				0x008c	; transport A's beat in the bar -- INTTR4_SequencerTick wraps it at TransportA_BeatsPerBar
+	.equ TransportC_Tick,				0x008d	; transport C's tick, 0..95 -- INTTR4_SequencerTick
+	.equ TransportC_Beat,				0x008e	; transport C's beat counter (word) -- INTTR4_SequencerTick
+	.equ TransportB_Beat,				0x0091	; transport B's beat counter (word); its tick is Seq_BeatTick -- INTTR4_SequencerTick
+	.equ TransportA_State,				0x0094	; transport A's state: bit 2 running; 0x01 start, 0x0C stop request -- INTTR4_SequencerTick, Transport_StopAllRunning
+	.equ TransportC_State,				0x0095	; transport C's state, same bits; also the MIDI clock source -- INTTR4_SequencerTick, MIDI_RT_Start_ResetCounters
+	.equ TransportB_State,				0x0096	; transport B's state, same bits -- INTTR4_SequencerTick, Transport_StopAllRunning
+	.equ TransportA_BeatsPerBar,			0x605000	; beats per bar for transport A -- INTTR4_SequencerTick
+	.equ TransportA_Bar,				0x605002	; transport A's bar counter (word) -- INTTR4_SequencerTick
+
+; ---- wsa1/prom_a/wsa1_prom_a.s -- "MIDI_TX_Ready header: the real-time requests"
+	.equ MidiTx_RealtimePending,			0x00a0	; bits 0-4 queue F8 clock, FA start, FB continue, FC stop, FE active sensing -- MIDI_TX_Ready
+
 ; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "2. The MIDI-in rings"
 	.equ MidiIn_PortARing,				0x600c1e	; MIDI port A's received-byte ring (0x400) -- MidiIn_PumpPortA, MidiIn_RoutePortA
 	.equ MidiIn_PortBRing,				0x601028	; MIDI port B's received-byte ring (0x400) -- MidiIn_PumpPortB, MidiIn_RoutePortB

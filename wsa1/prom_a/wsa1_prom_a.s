@@ -4726,7 +4726,7 @@ LcdKeyRow3_SequencerMedley:
 	jr nz, .LF811FE                                      ; F811E5  6e 17
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811E7  c1 c1 0d 3f 01
 	jr nz, .LF811FE                                      ; F811EC  6e 10
-	bit	2, (0x95:8)                                   ; F811EE  f0 95 ca
+	bit	2, (TransportC_State:8)                                   ; F811EE  f0 95 ca
 	jr z, .LF811FE                                       ; F811F1  66 0b
 	calr Blink_EnableThenStop_Copy                                          ; F811F3  1e 41 e0
 	call T_SequencerMedley_StopPlayback                                        ; F811F6  1d d8 2b f4
@@ -6579,7 +6579,7 @@ TimedEvents_DrainDue:
 	ld XIX,TimedEvents_Ring                                    ; F82407  44 0a 08 60 00
 	m_bit 6, MD16, 0x34d4                                ; F8240C  f1 d4 34 ce
 	jr nz, .LF82417                                      ; F82410  6e 05
-	bit	2, (0x96:8)                                   ; F82412  f0 96 ca
+	bit	2, (TransportB_State:8)                                   ; F82412  f0 96 ca
 	jr z, .LF82426                                       ; F82415  66 0f
 .LF82417:
 	ld wa, (xix-4)                                       ; F82417  9c fc 20
@@ -8052,7 +8052,7 @@ INTT1_Tick:
 	cp W,0x86                                     ; F82D38  c8 cf 86
 	jr ULE,.LF82D47                               ; F82D3B  63 0a
 	ld w, 0x00:opc                                   ; F82D3D  20 00
-	m_or_mi8 MB8, 0xa0, 0x10                      ; F82D3F  c0 a0 3e 10
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x10                      ; F82D3F  c0 a0 3e 10
 	call T_MIDI_PostSendWork                      ; F82D43  1d 24 07 f4
 .LF82D47:
 	ld	(0x9d:8), w                               ; F82D47  f0 9d 40
@@ -8067,16 +8067,16 @@ INTT1_Tick:
 	m_bit 2, MD16, MidiCfg_ModeBits                         ; F82D5B  f1 32 7f ca
 	jr NZ,.LF82DCB                                ; F82D5F  6e 6a
 	m_inc 1, MB8, 0x90                            ; F82D61  c0 90 61
-	bit	0, (0x95:8)                            ; F82D64  f0 95 c8
+	bit	0, (TransportC_State:8)                            ; F82D64  f0 95 c8
 	jr NZ,.LF82D9D                                ; F82D67  6e 34
-	bit	5, (0x95:8)                            ; F82D69  f0 95 cd
+	bit	5, (TransportC_State:8)                            ; F82D69  f0 95 cd
 	jr NZ,.LF82D73                                ; F82D6C  6e 05
 	ld (0x90:8), 0x00:io                               ; F82D6E  08 90 00
 	jr T,.LF82DE5                                 ; F82D71  68 72
 .LF82D73:
 	m_cp_mi8 MB8, 0x90, 0x01                      ; F82D73  c0 90 3f 01
 	jr NC,.LF82DE5                                ; F82D77  6f 6c
-	ld (0x95:8), 0x10:io                               ; F82D79  08 95 10
+	ld (TransportC_State:8), 0x10:io                               ; F82D79  08 95 10
 .LF82D7C:
 	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82D7C  c1 78 20 3f 0d
 	jr Z,.LF82D9B                                 ; F82D81  66 18
@@ -8086,7 +8086,7 @@ INTT1_Tick:
 	jr NZ,.LF82D9B                                ; F82D8D  6e 0c
 	push SR                                       ; F82D8F  02
 	ei 0x06                                       ; F82D90  06 06
-	m_or_mi8 MB8, 0xa0, 0x08                      ; F82D92  c0 a0 3e 08
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x08                      ; F82D92  c0 a0 3e 08
 	call T_MIDI_PostSendWork                      ; F82D96  1d 24 07 f4
 	pop SR                                        ; F82D9A  03
 .LF82D9B:
@@ -8094,36 +8094,36 @@ INTT1_Tick:
 .LF82D9D:
 	m_cp_mi8 MB8, 0x90, 0x01                      ; F82D9D  c0 90 3f 01
 	jr ULE,.LF82DE5                               ; F82DA1  63 42
-	ld (0x95:8), 0x06:io                               ; F82DA3  08 95 06
-	bit	0, (0x94:8)                            ; F82DA6  f0 94 c8
+	ld (TransportC_State:8), 0x06:io                               ; F82DA3  08 95 06
+	bit	0, (TransportA_State:8)                            ; F82DA6  f0 94 c8
 	jr Z,.LF82DAE                                 ; F82DA9  66 03
-	ld (0x94:8), 0x06:io                               ; F82DAB  08 94 06
+	ld (TransportA_State:8), 0x06:io                               ; F82DAB  08 94 06
 .LF82DAE:
-	bit	0, (0x96:8)                            ; F82DAE  f0 96 c8
+	bit	0, (TransportB_State:8)                            ; F82DAE  f0 96 c8
 	jr Z,.LF82DB6                                 ; F82DB1  66 03
-	ld (0x96:8), 0x06:io                               ; F82DB3  08 96 06
+	ld (TransportB_State:8), 0x06:io                               ; F82DB3  08 96 06
 .LF82DB6:
 	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82DB6  c1 78 20 3f 0d
 	jr Z,.LF82DC9                                 ; F82DBB  66 0c
 	push SR                                       ; F82DBD  02
 	ei 0x06                                       ; F82DBE  06 06
-	m_or_mi8 MB8, 0xa0, 0x01                      ; F82DC0  c0 a0 3e 01
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x01                      ; F82DC0  c0 a0 3e 01
 	call T_MIDI_PostSendWork                      ; F82DC4  1d 24 07 f4
 	pop SR                                        ; F82DC8  03
 .LF82DC9:
 	jr T,.LF82DE5                                 ; F82DC9  68 1a
 .LF82DCB:
-	bit	3, (0x94:8)                            ; F82DCB  f0 94 cb
+	bit	3, (TransportA_State:8)                            ; F82DCB  f0 94 cb
 	jr Z,.LF82DD3                                 ; F82DCE  66 03
-	ld (0x94:8), 0x10:io                               ; F82DD0  08 94 10
+	ld (TransportA_State:8), 0x10:io                               ; F82DD0  08 94 10
 .LF82DD3:
-	bit	3, (0x96:8)                            ; F82DD3  f0 96 cb
+	bit	3, (TransportB_State:8)                            ; F82DD3  f0 96 cb
 	jr Z,.LF82DDB                                 ; F82DD6  66 03
-	ld (0x96:8), 0x10:io                               ; F82DD8  08 96 10
+	ld (TransportB_State:8), 0x10:io                               ; F82DD8  08 96 10
 .LF82DDB:
-	bit	3, (0x95:8)                            ; F82DDB  f0 95 cb
+	bit	3, (TransportC_State:8)                            ; F82DDB  f0 95 cb
 	jr Z,.LF82DE5                                 ; F82DDE  66 05
-	ld (0x95:8), 0x10:io                               ; F82DE0  08 95 10
+	ld (TransportC_State:8), 0x10:io                               ; F82DE0  08 95 10
 	jr T,.LF82D7C                                 ; F82DE3  68 97
 .LF82DE5:
 	ld	a, (0x86:8)                               ; F82DE5  c0 86 21
@@ -8318,71 +8318,71 @@ INTTR4_SequencerTick:
 	jr z, .LF82EC3                                ; F82EBD  66 04
 	jp INTTR4_SequencerTick_Alt                                   ; F82EBF  1b 20 31 f8
 .LF82EC3:
-	bit	2, (0x95:8)                            ; F82EC3  f0 95 ca   transport C running?
+	bit	2, (TransportC_State:8)                            ; F82EC3  f0 95 ca   transport C running?
 	jr z, .LF82EDA                                ; F82EC6  66 12
-	ld	a, (0x8d:8)                               ; F82EC8  c0 8d 21
+	ld	a, (TransportC_Tick:8)                               ; F82EC8  c0 8d 21
 	inc 1,A                                       ; F82ECB  c9 61   (0x8D) = its tick, 0..95
 	cp A,0x60                                     ; F82ECD  c9 cf 60
 	jr lt, .LF82ED7                               ; F82ED0  61 05
 	xor A,A                                       ; F82ED2  c9 d1
-	m_inc 1, MW8, 0x8e                            ; F82ED4  d0 8e 61   (0x8E) = its beat, 16-bit
+	m_inc 1, MW8, TransportC_Beat                            ; F82ED4  d0 8e 61   (0x8E) = its beat, 16-bit
 .LF82ED7:
-	ld	(0x8d:8), a                               ; F82ED7  f0 8d 41
+	ld	(TransportC_Tick:8), a                               ; F82ED7  f0 8d 41
 .LF82EDA:
-	bit	2, (0x94:8)                            ; F82EDA  f0 94 ca   transport A running?
+	bit	2, (TransportA_State:8)                            ; F82EDA  f0 94 ca   transport A running?
 	jr z, .LF82F05                                ; F82EDD  66 26
-	m_inc 1, MB8, 0x8b                            ; F82EDF  c0 8b 61   (0x8B) = its tick, 0..95
-	m_cp_mi8 MB8, 0x8b, 0x60                      ; F82EE2  c0 8b 3f 60
+	m_inc 1, MB8, TransportA_Tick                            ; F82EDF  c0 8b 61   (0x8B) = its tick, 0..95
+	m_cp_mi8 MB8, TransportA_Tick, 0x60                      ; F82EE2  c0 8b 3f 60
 	jr c, .LF82F05                                ; F82EE6  67 1d
-	ld (0x8b:8), 0x00:io                               ; F82EE8  08 8b 00
-	m_inc 1, MB8, 0x8c                            ; F82EEB  c0 8c 61   (0x8C) = its beat
-	ld	a, (0x8c:8)                               ; F82EEE  c0 8c 21
-	ld w, (0x605000:24)                          ; F82EF1  c2 00 50 60 20   (0x605000) = beats per bar
+	ld (TransportA_Tick:8), 0x00:io                               ; F82EE8  08 8b 00
+	m_inc 1, MB8, TransportA_Beat                            ; F82EEB  c0 8c 61   (0x8C) = its beat
+	ld	a, (TransportA_Beat:8)                               ; F82EEE  c0 8c 21
+	ld w, (TransportA_BeatsPerBar:24)                          ; F82EF1  c2 00 50 60 20   (0x605000) = beats per bar
 	m_ex_mr MB8, 0xc3, r0                         ; F82EF6  c0 c3 30
 	cp A,W                                        ; F82EF9  c8 f1
 	jr c, .LF82F05                                ; F82EFB  67 08
-	ld (0x8c:8), 0x00:io                               ; F82EFD  08 8c 00
-	inc 0x01, (0x605002:24)                    ; F82F00  c2 02 50 60 61   (0x605002) = the bar counter, 16-bit
+	ld (TransportA_Beat:8), 0x00:io                               ; F82EFD  08 8c 00
+	inc 0x01, (TransportA_Bar:24)                    ; F82F00  c2 02 50 60 61   (0x605002) = the bar counter, 16-bit
 .LF82F05:
-	bit	2, (0x96:8)                            ; F82F05  f0 96 ca   transport B running?
+	bit	2, (TransportB_State:8)                            ; F82F05  f0 96 ca   transport B running?
 	jr z, .LF82F24                                ; F82F08  66 1a
 	m_inc 1, MB8, Seq_BeatTick                            ; F82F0A  c0 93 61   (0x93) = its tick
 	m_cp_mi8 MB8, Seq_BeatTick, 0x60                      ; F82F0D  c0 93 3f 60
 	jr lt, .LF82F24                               ; F82F11  61 11
 	ld (Seq_BeatTick:8), 0x00:io                               ; F82F13  08 93 00
-	m_inc 1, MW8, 0x91                            ; F82F16  d0 91 61
+	m_inc 1, MW8, TransportB_Beat                            ; F82F16  d0 91 61
 	xor XHL,XHL                                   ; F82F19  eb d3
 	cp (0x3004:16), xhl                          ; F82F1B  e1 04 30 fb
 	jr z, .LF82F24                                ; F82F1F  66 03
 	calr SeqBuf_AppendMarker                                 ; F82F21  1e 10 01
 .LF82F24:
-	bit	2, (0x95:8)                            ; F82F24  f0 95 ca
+	bit	2, (TransportC_State:8)                            ; F82F24  f0 95 ca
 	jr z, .LF82F3B                                ; F82F27  66 12
-	bit	0, (0x94:8)                            ; F82F29  f0 94 c8
+	bit	0, (TransportA_State:8)                            ; F82F29  f0 94 c8
 	jr z, .LF82F31                                ; F82F2C  66 03
-	ld (0x94:8), 0x06:io                               ; F82F2E  08 94 06
+	ld (TransportA_State:8), 0x06:io                               ; F82F2E  08 94 06
 .LF82F31:
-	bit	0, (0x96:8)                            ; F82F31  f0 96 c8
+	bit	0, (TransportB_State:8)                            ; F82F31  f0 96 c8
 	jr z, .LF82F39                                ; F82F34  66 03
-	ld (0x96:8), 0x06:io                               ; F82F36  08 96 06
+	ld (TransportB_State:8), 0x06:io                               ; F82F36  08 96 06
 .LF82F39:
 	jr .LF82F8B                                   ; F82F39  68 50
 .LF82F3B:
-	bit	7, (0x94:8)                            ; F82F3B  f0 94 cf
+	bit	7, (TransportA_State:8)                            ; F82F3B  f0 94 cf
 	jr z, .LF82F8B                                ; F82F3E  66 4b
-	bit	2, (0x94:8)                            ; F82F40  f0 94 ca
+	bit	2, (TransportA_State:8)                            ; F82F40  f0 94 ca
 	jr z, .LF82F88                                ; F82F43  66 43
-	m_cp_mi8 MB8, 0x8b, 0x5f                      ; F82F45  c0 8b 3f 5f
+	m_cp_mi8 MB8, TransportA_Tick, 0x5f                      ; F82F45  c0 8b 3f 5f
 	jr c, .LF82F86                                ; F82F49  67 3b
-	m_cp_mi8 MB24, 0x605002, 0x01                 ; F82F4B  c2 02 50 60 3f 01
+	m_cp_mi8 MB24, TransportA_Bar, 0x01                 ; F82F4B  c2 02 50 60 3f 01
 	jr c, .LF82F86                                ; F82F51  67 33
-	ld a, (0x605000:24)                          ; F82F53  c2 00 50 60 21
+	ld a, (TransportA_BeatsPerBar:24)                          ; F82F53  c2 00 50 60 21
 	dec 1,A                                       ; F82F58  c9 69
-	m_cp_mr MB8, 0x8c, r1                         ; F82F5A  c0 8c f9
+	m_cp_mr MB8, TransportA_Beat, r1                         ; F82F5A  c0 8c f9
 	jr c, .LF82F86                                ; F82F5D  67 27
 	ld a, 0x01:opc                                   ; F82F5F  21 01
-	ld	(0x95:8), a                               ; F82F61  f0 95 41
-	ld	(0x96:8), a                               ; F82F64  f0 96 41
+	ld	(TransportC_State:8), a                               ; F82F61  f0 95 41
+	ld	(TransportB_State:8), a                               ; F82F64  f0 96 41
 	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82F67  c1 78 20 3f 0d
 	jr z, .LF82F86                                ; F82F6C  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82F6E  f1 34 7f ca
@@ -8391,17 +8391,17 @@ INTTR4_SequencerTick:
 	jr nz, .LF82F86                               ; F82F78  6e 0c
 	push SR                                       ; F82F7A  02
 	ei 0x06                                       ; F82F7B  06 06
-	m_or_mi8 MB8, 0xa0, 0x02                      ; F82F7D  c0 a0 3e 02
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x02                      ; F82F7D  c0 a0 3e 02
 	call T_MIDI_PostSendWork                      ; F82F81  1d 24 07 f4
 	pop SR                                        ; F82F85  03
 .LF82F86:
 	jr .LF82F8B                                   ; F82F86  68 03
 .LF82F88:
-	ld (0x94:8), 0x86:io                               ; F82F88  08 94 86
+	ld (TransportA_State:8), 0x86:io                               ; F82F88  08 94 86
 .LF82F8B:
-	bit	3, (0x95:8)                            ; F82F8B  f0 95 cb
+	bit	3, (TransportC_State:8)                            ; F82F8B  f0 95 cb
 	jr z, .LF82FCA                                ; F82F8E  66 3a
-	ld	a, (0x8d:8)                               ; F82F90  c0 8d 21
+	ld	a, (TransportC_Tick:8)                               ; F82F90  c0 8d 21
 	cp a, 0x00:i3                                   ; F82F93  c9 d8
 	jr z, .LF82FA8                                ; F82F95  66 11
 	cp A,0x18                                     ; F82F97  c9 cf 18
@@ -8412,7 +8412,7 @@ INTTR4_SequencerTick:
 	jr z, .LF82FA8                                ; F82FA4  66 02
 	jr .LF82FDA                                   ; F82FA6  68 32
 .LF82FA8:
-	ld (0x95:8), 0x10:io                               ; F82FA8  08 95 10
+	ld (TransportC_State:8), 0x10:io                               ; F82FA8  08 95 10
 	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82FAB  c1 78 20 3f 0d
 	jr z, .LF82FCA                                ; F82FB0  66 18
 	m_bit 2, MD16, 0x7f34                         ; F82FB2  f1 34 7f ca
@@ -8421,46 +8421,46 @@ INTTR4_SequencerTick:
 	jr nz, .LF82FCA                               ; F82FBC  6e 0c
 	push SR                                       ; F82FBE  02
 	ei 0x06                                       ; F82FBF  06 06
-	m_or_mi8 MB8, 0xa0, 0x08                      ; F82FC1  c0 a0 3e 08   queue 0xFC STOP
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x08                      ; F82FC1  c0 a0 3e 08   queue 0xFC STOP
 	call T_MIDI_PostSendWork                      ; F82FC5  1d 24 07 f4
 	pop SR                                        ; F82FC9  03
 .LF82FCA:
-	bit	3, (0x94:8)                            ; F82FCA  f0 94 cb
+	bit	3, (TransportA_State:8)                            ; F82FCA  f0 94 cb
 	jr z, .LF82FD2                                ; F82FCD  66 03
-	ld (0x94:8), 0x10:io                               ; F82FCF  08 94 10
+	ld (TransportA_State:8), 0x10:io                               ; F82FCF  08 94 10
 .LF82FD2:
-	bit	3, (0x96:8)                            ; F82FD2  f0 96 cb
+	bit	3, (TransportB_State:8)                            ; F82FD2  f0 96 cb
 	jr z, .LF82FDA                                ; F82FD5  66 03
-	ld (0x96:8), 0x10:io                               ; F82FD7  08 96 10
+	ld (TransportB_State:8), 0x10:io                               ; F82FD7  08 96 10
 .LF82FDA:
-	bit	2, (0x95:8)                            ; F82FDA  f0 95 ca
+	bit	2, (TransportC_State:8)                            ; F82FDA  f0 95 ca
 	jr z, .LF82FFA                                ; F82FDD  66 1b
-	ld	a, (0x8d:8)                               ; F82FDF  c0 8d 21   (0x8D) mod 4 -- 96 ticks/beat / 4 = 24, the MIDI clock rate
+	ld	a, (TransportC_Tick:8)                               ; F82FDF  c0 8d 21   (0x8D) mod 4 -- 96 ticks/beat / 4 = 24, the MIDI clock rate
 	and A,0x03                                    ; F82FE2  c9 cc 03
 	jr nz, .LF82FFA                               ; F82FE5  6e 13
 	m_cp_mi8 MB16, PanelMode, 0x0d                   ; F82FE7  c1 78 20 3f 0d
 	jr z, .LF82FFA                                ; F82FEC  66 0c
 	push SR                                       ; F82FEE  02
 	ei 0x06                                       ; F82FEF  06 06
-	m_or_mi8 MB8, 0xa0, 0x01                      ; F82FF1  c0 a0 3e 01   queue 0xF8 TIMING CLOCK
+	m_or_mi8 MB8, MidiTx_RealtimePending, 0x01                      ; F82FF1  c0 a0 3e 01   queue 0xF8 TIMING CLOCK
 	call T_MIDI_PostSendWork                      ; F82FF5  1d 24 07 f4
 	pop SR                                        ; F82FF9  03
 .LF82FFA:
-	bit	2, (0x96:8)                            ; F82FFA  f0 96 ca
+	bit	2, (TransportB_State:8)                            ; F82FFA  f0 96 ca
 	jr z, .LF83024                                ; F82FFD  66 25
 	ld	a, (Seq_BeatTick:8)                               ; F82FFF  c0 93 21
 	bit	3, (0xa8:8)                            ; F83002  f0 a8 cb
 	jr z, .LF83013                                ; F83005  66 0c
 	m_cp_mr MB8, 0xa7, r1                         ; F83007  c0 a7 f9   a scheduled tick for transport A, armed by (0xA8) bit 3
 	jr nz, .LF83013                               ; F8300A  6e 07
-	ld (0x94:8), 0x08:io                               ; F8300C  08 94 08
+	ld (TransportA_State:8), 0x08:io                               ; F8300C  08 94 08
 	m_and_mi8 MB8, 0xa8, 0xf7                     ; F8300F  c0 a8 3c f7
 .LF83013:
 	bit	0, (0xa8:8)                            ; F83013  f0 a8 c8
 	jr z, .LF83024                                ; F83016  66 0c
 	m_cp_mr MB8, 0xa6, r1                         ; F83018  c0 a6 f9   a scheduled tick for transport A, armed by (0xA8) bit 0
 	jr nz, .LF83024                               ; F8301B  6e 07
-	ld (0x94:8), 0x01:io                               ; F8301D  08 94 01
+	ld (TransportA_State:8), 0x01:io                               ; F8301D  08 94 01
 	m_and_mi8 MB8, 0xa8, 0xfe                     ; F83020  c0 a8 3c fe
 .LF83024:
 	m_cp_mi8 MB8, MainTask_TickCountdown, 0x00                      ; F83024  c0 c2 3f 00   (0xC2) is a plain countdown, decremented once per tick
@@ -8786,7 +8786,7 @@ SeqBuf_AppendEvent__trace:
 ;          also unexplained.
 ; ---------------------------------------------------------------------
 INTTR4_SequencerTick_Alt:
-	bit	2, (0x96:8)                                   ; F83120  f0 96 ca
+	bit	2, (TransportB_State:8)                                   ; F83120  f0 96 ca
 	jr z, .LF83133                                       ; F83123  66 0e
 	ld	a, (Seq_BeatTick:8)                                      ; F83125  c0 93 21
 	xor A,0x03                                           ; F83128  c9 cd 03
@@ -8794,31 +8794,31 @@ INTTR4_SequencerTick_Alt:
 	jr z, .LF83133                                       ; F8312E  66 03
 	m_inc 1, MB8, Seq_BeatTick                                   ; F83130  c0 93 61
 .LF83133:
-	bit	2, (0x95:8)                                   ; F83133  f0 95 ca
+	bit	2, (TransportC_State:8)                                   ; F83133  f0 95 ca
 	jr z, .LF83146                                       ; F83136  66 0e
-	ld	a, (0x8d:8)                                      ; F83138  c0 8d 21
+	ld	a, (TransportC_Tick:8)                                      ; F83138  c0 8d 21
 	xor A,0x03                                           ; F8313B  c9 cd 03
 	and A,0x03                                           ; F8313E  c9 cc 03
 	jr z, .LF83146                                       ; F83141  66 03
-	m_inc 1, MB8, 0x8d                                   ; F83143  c0 8d 61
+	m_inc 1, MB8, TransportC_Tick                                   ; F83143  c0 8d 61
 .LF83146:
-	bit	2, (0x94:8)                                   ; F83146  f0 94 ca
+	bit	2, (TransportA_State:8)                                   ; F83146  f0 94 ca
 	jr z, .LF83159                                       ; F83149  66 0e
-	ld	a, (0x8b:8)                                      ; F8314B  c0 8b 21
+	ld	a, (TransportA_Tick:8)                                      ; F8314B  c0 8b 21
 	xor A,0x03                                           ; F8314E  c9 cd 03
 	and A,0x03                                           ; F83151  c9 cc 03
 	jr z, .LF83159                                       ; F83154  66 03
-	m_inc 1, MB8, 0x8b                                   ; F83156  c0 8b 61
+	m_inc 1, MB8, TransportA_Tick                                   ; F83156  c0 8b 61
 .LF83159:
-	bit	2, (0x95:8)                                   ; F83159  f0 95 ca
+	bit	2, (TransportC_State:8)                                   ; F83159  f0 95 ca
 	jr z, .LF8316E                                       ; F8315C  66 10
-	bit	0, (0x94:8)                                   ; F8315E  f0 94 c8
+	bit	0, (TransportA_State:8)                                   ; F8315E  f0 94 c8
 	jr z, .LF83166                                       ; F83161  66 03
-	ld (0x94:8), 0x06:io                                      ; F83163  08 94 06
+	ld (TransportA_State:8), 0x06:io                                      ; F83163  08 94 06
 .LF83166:
-	bit	0, (0x96:8)                                   ; F83166  f0 96 c8
+	bit	0, (TransportB_State:8)                                   ; F83166  f0 96 c8
 	jr z, .LF8316E                                       ; F83169  66 03
-	ld (0x96:8), 0x06:io                                      ; F8316B  08 96 06
+	ld (TransportB_State:8), 0x06:io                                      ; F8316B  08 96 06
 .LF8316E:
 	jrl .LF82FFA                                             ; F8316E  78 89 fe
 ; ---------------------------------------------------------------------
@@ -23730,11 +23730,11 @@ PanelLed_ShowBlinkEnable:   ; entry: DispatchTable_F8C2B2 id=0x0200
 	ret                                           ; F8C7DA  0e
 	cp	(Variant_Flag:8), 0x02                       ; F8C7DB  c0 c4 3f 02
 	jr z, .LF8C7F8                                ; F8C7DF  66 17
-	bit	2, (0x94:8)                            ; F8C7E1  f0 94 ca
+	bit	2, (TransportA_State:8)                            ; F8C7E1  f0 94 ca
 	jr nz, .LF8C7F8                               ; F8C7E4  6e 12
 	ld XIX,PanelLed_Shadow                             ; F8C7E6  44 d0 20 00 00
 	and (XIX+0x04),0xbf                           ; F8C7EB  8c 04 3c bf
-	bit	2, (0x96:8)                            ; F8C7EF  f0 96 ca
+	bit	2, (TransportB_State:8)                            ; F8C7EF  f0 96 ca
 	jr z, .LF8C7F8                                ; F8C7F2  66 04
 	or (XIX+0x04),0x40                            ; F8C7F4  8c 04 3e 40
 .LF8C7F8:
@@ -23859,7 +23859,7 @@ PanelLed_FlashTransportBeat:   ; entry: prom_b routine directory
 	m_or_rm MW16, 0x212c, r0                             ; F8C8E7  d1 2c 21 e0
 	and WA,0x0020                                        ; F8C8EB  d8 cc 20 00
 	jr nz, .LF8C92F                                      ; F8C8EF  6e 3e
-	bit	2, (0x94:8)                                   ; F8C8F1  f0 94 ca
+	bit	2, (TransportA_State:8)                                   ; F8C8F1  f0 94 ca
 	jr nz, .LF8C902                                      ; F8C8F4  6e 0c
 .LF8C8F6:
 	bit 1,(XIY)                                          ; F8C8F6  b5 c9
@@ -23868,9 +23868,9 @@ PanelLed_FlashTransportBeat:   ; entry: prom_b routine directory
 	and (XIX),0x3f                                       ; F8C8FD  84 3c 3f
 	jr .LF8C92F                                          ; F8C900  68 2d
 .LF8C902:
-	ld	c, (0x8c:8)                                      ; F8C902  c0 8c 23
-	ld l, (0x605000:24)                                 ; F8C905  c2 00 50 60 27
-	ld	a, (0x8b:8)                                      ; F8C90A  c0 8b 21
+	ld	c, (TransportA_Beat:8)                                      ; F8C902  c0 8c 23
+	ld l, (TransportA_BeatsPerBar:24)                                 ; F8C905  c2 00 50 60 27
+	ld	a, (TransportA_Tick:8)                                      ; F8C90A  c0 8b 21
 	and A,0x60                                           ; F8C90D  c9 cc 60
 	jr nz, .LF8C8F6                                      ; F8C910  6e e4
 	m_or_mi8 MBI+r5, 0, 0x02                             ; F8C912  85 3e 02
@@ -67727,7 +67727,7 @@ MIDI_RX_ErrorReset:
 ; ---------------------------------------------------------------------
 MIDI_TX_Ready:
 	pushw wa                                      ; FA542F  28
-	ld	a, (0xa0:8)                               ; FA5430  c0 a0 21   the pending-transmit bitmap; INTT1 and INTTR4 set its bits
+	ld	a, (MidiTx_RealtimePending:8)                               ; FA5430  c0 a0 21   the pending-transmit bitmap; INTT1 and INTTR4 set its bits
 	bit 0x00,A                                    ; FA5433  c9 33 00
 	jr nz, .LFA5454                               ; FA5436  6e 1c
 	bit 0x04,A                                    ; FA5438  c9 33 04
@@ -67738,23 +67738,23 @@ MIDI_TX_Ready:
 	jr nz, .LFA546C                               ; FA5445  6e 25
 	bit 0x03,A                                    ; FA5447  c9 33 03
 	jr z, .LFA5474                                ; FA544A  66 28
-	res	3, (0xa0:8)                            ; FA544C  f0 a0 b3
+	res	3, (MidiTx_RealtimePending:8)                            ; FA544C  f0 a0 b3
 	ld (SC0BUF:8), 0xfc:io                               ; FA544F  08 50 fc   bit 3 -> 0xFC  MIDI System Real Time STOP
 	jr .LFA5481                                   ; FA5452  68 2d
 .LFA5454:
-	res	0, (0xa0:8)                            ; FA5454  f0 a0 b0
+	res	0, (MidiTx_RealtimePending:8)                            ; FA5454  f0 a0 b0
 	ld (SC0BUF:8), 0xf8:io                               ; FA5457  08 50 f8   bit 0 -> 0xF8  MIDI System Real Time TIMING CLOCK
 	jr .LFA5481                                   ; FA545A  68 25
 .LFA545C:
-	res	4, (0xa0:8)                            ; FA545C  f0 a0 b4
+	res	4, (MidiTx_RealtimePending:8)                            ; FA545C  f0 a0 b4
 	ld (SC0BUF:8), 0xfe:io                               ; FA545F  08 50 fe   bit 4 -> 0xFE  MIDI System Real Time ACTIVE SENSING
 	jr .LFA5481                                   ; FA5462  68 1d
 .LFA5464:
-	res	1, (0xa0:8)                            ; FA5464  f0 a0 b1
+	res	1, (MidiTx_RealtimePending:8)                            ; FA5464  f0 a0 b1
 	ld (SC0BUF:8), 0xfa:io                               ; FA5467  08 50 fa   bit 1 -> 0xFA  MIDI System Real Time START
 	jr .LFA5481                                   ; FA546A  68 15
 .LFA546C:
-	res	2, (0xa0:8)                            ; FA546C  f0 a0 b2
+	res	2, (MidiTx_RealtimePending:8)                            ; FA546C  f0 a0 b2
 	ld (SC0BUF:8), 0xfb:io                               ; FA546F  08 50 fb   bit 2 -> 0xFB  MIDI System Real Time CONTINUE
 	jr .LFA5481                                   ; FA5472  68 0d
 .LFA5474:
@@ -67763,7 +67763,7 @@ MIDI_TX_Ready:
 	jr z, .LFA5481                                ; FA547C  66 03
 	st_dd8b a, SC0BUF                               ; FA547E  f0 50 41
 .LFA5481:
-	ld	a, (0xa0:8)                               ; FA5481  c0 a0 21
+	ld	a, (MidiTx_RealtimePending:8)                               ; FA5481  c0 a0 21
 	and A,0x1f                                    ; FA5484  c9 cc 1f   any of the five real-time bits still set?
 	jr nz, .LFA5494                               ; FA5487  6e 0b
 	call T_Ring601432_IsEmpty                     ; FA5489  1d fc 1d f4
@@ -67967,7 +67967,7 @@ MIDI_Clock_SetTempo:
 	ld	(TREG5L:8), wa                              ; FA555C  f0 32 50
 	ld (0xa1:8), 0x00:io                               ; FA555F  08 a1 00
 MIDI_RT_NotClock:
-	ld	a, (0x95:8)                               ; FA5562  c0 95 21
+	ld	a, (TransportC_State:8)                               ; FA5562  c0 95 21
 	pushw wa                                      ; FA5565  28
 	and A,0x15                                    ; FA5566  c9 cc 15
 	popw wa                                       ; FA5569  48
@@ -67976,30 +67976,30 @@ MIDI_RT_NotClock:
 	jr nz, .LFA55C1                               ; FA5570  6e 4f
 	bit 0x00,A                                    ; FA5572  c9 33 00
 	jr z, .LFA5584                                ; FA5575  66 0d
-	ld (0x95:8), 0x06:io                               ; FA5577  08 95 06
-	bit	0, (0x96:8)                            ; FA557A  f0 96 c8
+	ld (TransportC_State:8), 0x06:io                               ; FA5577  08 95 06
+	bit	0, (TransportB_State:8)                            ; FA557A  f0 96 c8
 	jr z, .LFA5582                                ; FA557D  66 03
-	ld (0x96:8), 0x06:io                               ; FA557F  08 96 06
+	ld (TransportB_State:8), 0x06:io                               ; FA557F  08 96 06
 .LFA5582:
 	jr .LFA55C1                                   ; FA5582  68 3d
 .LFA5584:
 	bit 0x02,A                                    ; FA5584  c9 33 02
 	jr z, .LFA559C                                ; FA5587  66 13
-	m_and_mi8 MB8, 0x8d, 0xfc                     ; FA5589  c0 8d 3c fc
-	m_inc 4, MB8, 0x8d                            ; FA558D  c0 8d 64
-	m_cp_mi8 MB8, 0x8d, 0x60                      ; FA5590  c0 8d 3f 60
+	m_and_mi8 MB8, TransportC_Tick, 0xfc                     ; FA5589  c0 8d 3c fc
+	m_inc 4, MB8, TransportC_Tick                            ; FA558D  c0 8d 64
+	m_cp_mi8 MB8, TransportC_Tick, 0x60                      ; FA5590  c0 8d 3f 60
 	jr nz, .LFA559C                               ; FA5594  6e 06
-	ld (0x8d:8), 0x00:io                               ; FA5596  08 8d 00
-	m_inc 1, MW8, 0x8e                            ; FA5599  d0 8e 61
+	ld (TransportC_Tick:8), 0x00:io                               ; FA5596  08 8d 00
+	m_inc 1, MW8, TransportC_Beat                            ; FA5599  d0 8e 61
 .LFA559C:
-	bit	2, (0x96:8)                            ; FA559C  f0 96 ca
+	bit	2, (TransportB_State:8)                            ; FA559C  f0 96 ca
 	jr z, .LFA55C1                                ; FA559F  66 20
 	m_and_mi8 MB8, Seq_BeatTick, 0xfc                     ; FA55A1  c0 93 3c fc
 	m_inc 4, MB8, Seq_BeatTick                            ; FA55A5  c0 93 64   +4 ticks per MIDI clock, and 96/24 = 4
 	m_cp_mi8 MB8, Seq_BeatTick, 0x60                      ; FA55A8  c0 93 3f 60
 	jr nz, .LFA55DB                               ; FA55AC  6e 2d
 	ld (Seq_BeatTick:8), 0x00:io                               ; FA55AE  08 93 00
-	m_inc 1, MW8, 0x91                            ; FA55B1  d0 91 61
+	m_inc 1, MW8, TransportB_Beat                            ; FA55B1  d0 91 61
 	push XWA                                      ; FA55B4  38
 	xor XWA,XWA                                   ; FA55B5  e8 d0
 	cp (0x3004:16), xwa                          ; FA55B7  e1 04 30 f8
@@ -68012,11 +68012,11 @@ MIDI_RT_NotClock:
 	cp D,0xfc                                     ; FA55C7  cc cf fc
 	jr nz, .LFA55DB                               ; FA55CA  6e 0f
 	m_set 7, MD16, 0x34bb                         ; FA55CC  f1 bb 34 bf   (0x34BB) bit 7 -- 'stopped by an external 0xFC'
-	ld (0x95:8), 0x10:io                               ; FA55D0  08 95 10
+	ld (TransportC_State:8), 0x10:io                               ; FA55D0  08 95 10
 .LFA55D3:
-	bit	2, (0x96:8)                            ; FA55D3  f0 96 ca
+	bit	2, (TransportB_State:8)                            ; FA55D3  f0 96 ca
 	jr z, .LFA55DB                                ; FA55D6  66 03
-	ld (0x96:8), 0x10:io                               ; FA55D8  08 96 10
+	ld (TransportB_State:8), 0x10:io                               ; FA55D8  08 96 10
 .LFA55DB:
 	ret                                           ; FA55DB  0e
 .LFA55DC:
@@ -68056,39 +68056,39 @@ MIDI_RT_Start:
 	jr nz, .LFA563A                               ; FA561C  6e 1c
 MIDI_RT_Start_ResetCounters:
 	xor WA,WA                                     ; FA561E  d8 d0
-	ld	(0x8d:8), a                               ; FA5620  f0 8d 41   START rewinds transport C to bar 0 beat 0 tick 0
-	ld	(0x8e:8), wa                              ; FA5623  f0 8e 50
-	ld (0x95:8), 0x01:io                               ; FA5626  08 95 01   and puts it in state 0x01
+	ld	(TransportC_Tick:8), a                               ; FA5620  f0 8d 41   START rewinds transport C to bar 0 beat 0 tick 0
+	ld	(TransportC_Beat:8), wa                              ; FA5623  f0 8e 50
+	ld (TransportC_State:8), 0x01:io                               ; FA5626  08 95 01   and puts it in state 0x01
 	m_bit 0, MD16, 0x34bb                         ; FA5629  f1 bb 34 c8
 	jr z, .LFA563A                                ; FA562D  66 0b
 	xor WA,WA                                     ; FA562F  d8 d0
 	ld	(Seq_BeatTick:8), a                               ; FA5631  f0 93 41
-	ld	(0x91:8), wa                              ; FA5634  f0 91 50
-	ld (0x96:8), 0x01:io                               ; FA5637  08 96 01
+	ld	(TransportB_Beat:8), wa                              ; FA5634  f0 91 50
+	ld (TransportB_State:8), 0x01:io                               ; FA5637  08 96 01
 .LFA563A:
 	ret                                           ; FA563A  0e
 MIDI_Clock_CatchUp:
 	m_cp_mi8 MB16, 0x091e, 0x00                   ; FA563B  c1 1e 09 3f 00
 	jr z, MIDI_Clock_CatchUp_Done                                ; FA5640  66 1f
-	bit	0, (0x95:8)                            ; FA5642  f0 95 c8
+	bit	0, (TransportC_State:8)                            ; FA5642  f0 95 c8
 	jr z, MIDI_Clock_CatchUp_Done                                ; FA5645  66 1a
-	ld (0x95:8), 0x06:io                               ; FA5647  08 95 06
+	ld (TransportC_State:8), 0x06:io                               ; FA5647  08 95 06
 	ld a, (0x091e:16)                            ; FA564A  c1 1e 09 21
 	dec 1,A                                       ; FA564E  c9 69
 	sll a, 0x02                                   ; FA5650  c9 ee 02
-	m_add_mr MB8, 0x8d, r1                        ; FA5653  c0 8d 89
-	bit	0, (0x96:8)                            ; FA5656  f0 96 c8
+	m_add_mr MB8, TransportC_Tick, r1                        ; FA5653  c0 8d 89
+	bit	0, (TransportB_State:8)                            ; FA5656  f0 96 c8
 	jr z, MIDI_Clock_CatchUp_Done                                ; FA5659  66 06
-	ld (0x96:8), 0x06:io                               ; FA565B  08 96 06
+	ld (TransportB_State:8), 0x06:io                               ; FA565B  08 96 06
 	m_add_mr MB8, Seq_BeatTick, r1                        ; FA565E  c0 93 89
 MIDI_Clock_CatchUp_Done:
 	ld (0x091e:16), 0x00                          ; FA5661  f1 1e 09 00 00
 	ret                                           ; FA5666  0e
 MIDI_RT_Continue:
-	ld (0x95:8), 0x06:io                               ; FA5667  08 95 06
+	ld (TransportC_State:8), 0x06:io                               ; FA5667  08 95 06
 	m_bit 0, MD16, 0x34bb                         ; FA566A  f1 bb 34 c8
 	jr z, .LFA5673                                ; FA566E  66 03
-	ld (0x96:8), 0x06:io                               ; FA5670  08 96 06
+	ld (TransportB_State:8), 0x06:io                               ; FA5670  08 96 06
 .LFA5673:
 	ret                                           ; FA5673  0e
 
@@ -68115,7 +68115,7 @@ MIDI_RT_Continue:
 MIDI_RT_ExternalOff:
 	ld (0xa1:8), 0x00:io                               ; FA5674  08 a1 00
 	pushw wa                                      ; FA5677  28
-	ld	a, (0x95:8)                               ; FA5678  c0 95 21
+	ld	a, (TransportC_State:8)                               ; FA5678  c0 95 21
 	and A,0x05                                    ; FA567B  c9 cc 05
 	popw wa                                       ; FA567E  48
 	jr z, .LFA569C                                ; FA567F  66 1b
@@ -68124,10 +68124,10 @@ MIDI_RT_ExternalOff:
 	cp D,0xfc                                     ; FA5687  cc cf fc
 	jr nz, .LFA569B                               ; FA568A  6e 0f
 	m_set 7, MD16, 0x34bb                         ; FA568C  f1 bb 34 bf
-	ld (0x95:8), 0x0c:io                               ; FA5690  08 95 0c
-	bit	2, (0x96:8)                            ; FA5693  f0 96 ca
+	ld (TransportC_State:8), 0x0c:io                               ; FA5690  08 95 0c
+	bit	2, (TransportB_State:8)                            ; FA5693  f0 96 ca
 	jr z, .LFA569B                                ; FA5696  66 03
-	ld (0x96:8), 0x0c:io                               ; FA5698  08 96 0c
+	ld (TransportB_State:8), 0x0c:io                               ; FA5698  08 96 0c
 .LFA569B:
 	ret                                           ; FA569B  0e
 .LFA569C:
@@ -68142,13 +68142,13 @@ MIDI_RT_ExternalOff:
 .LFA56B2:
 	ret                                           ; FA56B2  0e
 .LFA56B3:
-	set	1, (0xa0:8)                            ; FA56B3  f0 a0 b9
+	set	1, (MidiTx_RealtimePending:8)                            ; FA56B3  f0 a0 b9
 	ld (INTES0:8), 0xdd:io                               ; FA56B6  08 77 dd
 	jrl MIDI_RT_Start                                  ; FA56B9  78 4e ff
 .LFA56BC:
 	m_bit 0, MD16, 0x34bb                         ; FA56BC  f1 bb 34 c8
 	jr z, .LFA56CA                                ; FA56C0  66 08
-	set	2, (0xa0:8)                            ; FA56C2  f0 a0 ba
+	set	2, (MidiTx_RealtimePending:8)                            ; FA56C2  f0 a0 ba
 	ld (INTES0:8), 0xdd:io                               ; FA56C5  08 77 dd
 	jr MIDI_RT_Continue                                   ; FA56C8  68 9d
 .LFA56CA:
@@ -68741,7 +68741,7 @@ MIDI_PostSendWork:
 	ret                                           ; FA591C  0e
 .LFA591D:
 	call T_Ring601432_Init                        ; FA591D  1d 00 1e f4
-	ld (0xa0:8), 0x00:io                               ; FA5921  08 a0 00   drop every pending real-time request
+	ld (MidiTx_RealtimePending:8), 0x00:io                               ; FA5921  08 a0 00   drop every pending real-time request
 	pop SR                                        ; FA5924  03
 	ret                                           ; FA5925  0e
 
@@ -85416,7 +85416,7 @@ sub_FAE872:
 	m_and_mi8 MB24, 0x60f020, 0xf3
 	jr .LFAE8BF
 .LFAE89A:
-	bit	2, (0x96:8)
+	bit	2, (TransportB_State:8)
 	jr z, .LFAE8BF
 	ld xwa, (0x3000:16)
 	m_set 2, MD24, 0x60f020
@@ -99972,7 +99972,7 @@ sub_FB90FE:
 ; SeqClock_ResetBeatAndTick: with interrupts masked (ei 6 ... ei 0): the beat word (0x91) = 0 and Seq_BeatTick = 0.
 SeqClock_ResetBeatAndTick:
 	ei 0x06                                              ; FB916A  06 06
-	ldw (0x91:8), 0x00:io                                     ; FB916C  0a 91 00 00
+	ldw (TransportB_Beat:8), 0x00:io                                     ; FB916C  0a 91 00 00
 	ld (Seq_BeatTick:8), 0x00:io                                      ; FB9170  08 93 00
 	ei 0x00                                              ; FB9173  06 00
 	ret                                                  ; FB9175  0e
@@ -99990,7 +99990,7 @@ sub_FB9176:
 	call sub_FB9060                                      ; FB9193  1d 60 90 fb
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
 	call sub_FB9046                                      ; FB919A  1d 46 90 fb
-	ld	d, (0x96:8)                                      ; FB919E  c0 96 24
+	ld	d, (TransportB_State:8)                                      ; FB919E  c0 96 24
 	and D,0x04                                           ; FB91A1  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91A4  33 ff 7f
 .LFB91A7:
@@ -100027,7 +100027,7 @@ MidiFilePlay_Stop:
 sub_FB91EE:
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB91EE  1e ab 00
 	call sub_FB9046                                      ; FB91F1  1d 46 90 fb
-	ld	d, (0x96:8)                                      ; FB91F5  c0 96 24
+	ld	d, (TransportB_State:8)                                      ; FB91F5  c0 96 24
 	and D,0x04                                           ; FB91F8  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91FB  33 ff 7f
 sub_FB91EE_Loop:
@@ -101357,7 +101357,7 @@ sub_FB9DA0:
 	push XIX                                             ; FB9DA0  3c
 	lda xix, (0x60505e:24)                               ; FB9DA1  f2 5e 50 60 34
 	ld (0x605147:24), 0x00                             ; FB9DA6  f2 47 51 60 00 00
-	ld	c, (0x96:8)                                      ; FB9DAC  c0 96 23
+	ld	c, (TransportB_State:8)                                      ; FB9DAC  c0 96 23
 	and C,0x04                                           ; FB9DAF  cb cc 04
 	jr nz, .LFB9DE9                                      ; FB9DB2  6e 35
 	m_res 2, MD16, 0x34bb                                ; FB9DB4  f1 bb 34 b2
@@ -101391,7 +101391,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 	push XIX                                             ; FB9DFE  3c
 	lda xix, (0x605147:24)                               ; FB9DFF  f2 47 51 60 34
 	ld (XIX),0x00                                        ; FB9E04  b4 00 00
-	ld	c, (0x96:8)                                      ; FB9E07  c0 96 23
+	ld	c, (TransportB_State:8)                                      ; FB9E07  c0 96 23
 	and C,0x04                                           ; FB9E0A  cb cc 04
 	jr nz, .LFB9E36                                      ; FB9E0D  6e 27
 	m_res 2, MD16, 0x34bb                                ; FB9E0F  f1 bb 34 b2
@@ -101496,7 +101496,7 @@ SequencerMedley_MidiFileTick:
 	jrl .LFB9FDC                                         ; FB9F07  78 d2 00
 .LFB9F0A:
 	ei 0x06                                              ; FB9F0A  06 06
-	ldw	(0x3452:16), (0x91:8)                ; FB9F0C  d0 91 19 52 34
+	ldw	(0x3452:16), (TransportB_Beat:8)                ; FB9F0C  d0 91 19 52 34
 	ld	(0x3454:16), (Seq_BeatTick:8)                ; FB9F11  c0 93 19 54 34
 	ei 0x00                                              ; FB9F16  06 00
 	lda xix, (0x605040:24)                               ; FB9F18  f2 40 50 60 34
@@ -101607,7 +101607,7 @@ MidiFileDirectPlay_Tick:
 	jrl .LFBA108                                         ; FBA037  78 ce 00
 .LFBA03A:
 	ei 0x06                                              ; FBA03A  06 06
-	ldw	(0x3452:16), (0x91:8)                ; FBA03C  d0 91 19 52 34
+	ldw	(0x3452:16), (TransportB_Beat:8)                ; FBA03C  d0 91 19 52 34
 	ld	(0x3454:16), (Seq_BeatTick:8)                ; FBA041  c0 93 19 54 34
 	ei 0x00                                              ; FBA046  06 00
 	lda xix, (0x605040:24)                               ; FBA048  f2 40 50 60 34
@@ -161312,7 +161312,7 @@ Delay_Ticks:
 sub_FE144E:
 	push XHL                                             ; FE144E  3b
 	push XIX                                             ; FE144F  3c
-	ld	c, (0x95:8)                                      ; FE1450  c0 95 23
+	ld	c, (TransportC_State:8)                                      ; FE1450  c0 95 23
 	and C,0x04                                           ; FE1453  cb cc 04
 sub_FE1456:
 	jrl nz, .LFE14CC                                         ; FE1456  7e 73 00
@@ -173944,12 +173944,12 @@ sub_FE8005:
 sub_FE8026:
 	ei 0x06                                              ; FE8026  06 06
 	xor WA,WA                                            ; FE8028  d8 d0
-	ld	(0x91:8), wa                                     ; FE802A  f0 91 50
+	ld	(TransportB_Beat:8), wa                                     ; FE802A  f0 91 50
 	ld	(Seq_BeatTick:8), a                                      ; FE802D  f0 93 41
-	ld	(0x8e:8), wa                                     ; FE8030  f0 8e 50
-	ld	(0x8d:8), a                                      ; FE8033  f0 8d 41
-	ld (0x96:8), 0x01:io                                      ; FE8036  08 96 01
-	ld (0x95:8), 0x01:io                                      ; FE8039  08 95 01
+	ld	(TransportC_Beat:8), wa                                     ; FE8030  f0 8e 50
+	ld	(TransportC_Tick:8), a                                      ; FE8033  f0 8d 41
+	ld (TransportB_State:8), 0x01:io                                      ; FE8036  08 96 01
+	ld (TransportC_State:8), 0x01:io                                      ; FE8039  08 95 01
 	ei 0x00                                              ; FE803C  06 00
 	ret                                                  ; FE803E  0e
 sub_FE9CFC_Nop:
@@ -175287,9 +175287,9 @@ EditScreen_EnterNoteEdit:
 	m_and_mi8 MB16, 0x3614, 0xfe                         ; FE890C  c1 14 36 3c fe
 	ret                                                  ; FE8911  0e
 .LFE8912:
-	m_cp_mi8 MB24, 0x605000, 0x00                        ; FE8912  c2 00 50 60 3f 00
+	m_cp_mi8 MB24, TransportA_BeatsPerBar, 0x00                        ; FE8912  c2 00 50 60 3f 00
 	jr nz, .LFE8920                                      ; FE8918  6e 06
-	ld (0x605000:24), 0x04                             ; FE891A  f2 00 50 60 00 04
+	ld (TransportA_BeatsPerBar:24), 0x04                             ; FE891A  f2 00 50 60 00 04
 .LFE8920:
 	m_or_mi8 MB16, 0x3614, 0x01                          ; FE8920  c1 14 36 3e 01
 	m_or_mi8 MB16, 0x0db5, 0x01                          ; FE8925  c1 b5 0d 3e 01
