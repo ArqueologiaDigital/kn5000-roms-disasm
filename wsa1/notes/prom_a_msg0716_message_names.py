@@ -100,7 +100,8 @@ def plan():
         if not re.match(r'^sub_FC0[0-9A-F]{3}$', n):
             continue
         t = " | ".join(b)
-        m = re.match(r'^ld A,\(XIZ\+0x06\) \| ld \(XIX\+0x01\),A \| calr (\w+) \| ret$', t)
+        # trailing bare `ret`s after the first are the module's padding (2026-10-04)
+        m = re.match(r'^ld A,\(XIZ\+0x06\) \| ld \(XIX\+0x01\),A \| calr (\w+) \| ret(?: \| ret)*$', t)
         if m and m.group(1) in built:
             new = "Msg0716_Part" + built[m.group(1)]
             rows.append((n, new, "%s: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then\\n"

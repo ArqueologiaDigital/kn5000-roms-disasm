@@ -227,6 +227,8 @@ GROUPS = [
         0x601F4D: ("EditField_Inc", "the INC field (word): the cursor step in ticks, 1..0x60, 0x30 by default", "EditField_IncUp / _Down / _Up5 / _Down5"),
         0x601F71: ("DrumEdit_TopRowNote", "the note number of DRUM EDIT's top row; row k shows it + k; 0x28 by default", "DrumEdit_DrawRowNote0..11; EditScreen_BootPhase2And4 sets 0x28"),
         0x601F73: ("EditScreen_CursorRow", "the left column's highlighted row, 0..11 (y = row * 10 + 0x2A); 5 by default", "EditScreen_HighlightCursorRow; EditScreen_BootPhase2And4 sets 5"),
+        0x601F54: ("EditCursor_TickInMeasure", "the cursor's position in ticks from the start of the measure (word), below EditMeasure_Beats * 96", "EditCursor_NextBeat compares it with EditMeasure_Beats * 0x60 - 1; EditCursor_MeasureChanged zeroes it with the beat and tick"),
+        0x601F75: ("EditMeasure_Beats", "beats in the measure being edited; * 0x60 = its length in ticks", "EditCursor_NextBeat, EditScreen_CursorRight"),
         0x601F70: ("EditScreen_Mode", "bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A", "ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it"),
     }),
     ("wsa1/notes/FINDINGS-prom_a-panel-state-variables.md", "1. The mode / screen latches; 2. The dial's button pair", {

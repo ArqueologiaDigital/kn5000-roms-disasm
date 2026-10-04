@@ -177,9 +177,11 @@
 	.equ EditField_Velocity,			0x601f46	; the VEL field, 1..127, 100 by default -- EditField_VelocityUp / _Down / _Up5 / _Down5; 0xFE833F sets 100
 	.equ EditField_Length,				0x601f47	; the LEN field (word), 1..0x2FFF, when (0x601F5B) bit 0 is set -- EditField_LengthUp / _Down / _Up12 / _Down12
 	.equ EditField_Inc,				0x601f4d	; the INC field (word): the cursor step in ticks, 1..0x60, 0x30 by default -- EditField_IncUp / _Down / _Up5 / _Down5
+	.equ EditCursor_TickInMeasure,			0x601f54	; the cursor's position in ticks from the start of the measure (word), below EditMeasure_Beats * 96 -- EditCursor_NextBeat compares it with EditMeasure_Beats * 0x60 - 1; EditCursor_MeasureChanged zeroes it with the beat and tick
 	.equ EditScreen_Mode,				0x601f70	; bit 0: 1 = DRUM EDIT, 0 = NOTE EDIT; selects the layout tables ScreenDrawPtrs_FEF9FA / _FEFA2A -- ShowScreen_DrumEditPartSelect / sub_FE8868 set it, ShowScreen_NoteEditPartSelect / sub_FE88AA clear it
 	.equ DrumEdit_TopRowNote,			0x601f71	; the note number of DRUM EDIT's top row; row k shows it + k; 0x28 by default -- DrumEdit_DrawRowNote0..11; EditScreen_BootPhase2And4 sets 0x28
 	.equ EditScreen_CursorRow,			0x601f73	; the left column's highlighted row, 0..11 (y = row * 10 + 0x2A); 5 by default -- EditScreen_HighlightCursorRow; EditScreen_BootPhase2And4 sets 5
+	.equ EditMeasure_Beats,				0x601f75	; beats in the measure being edited; * 0x60 = its length in ticks -- EditCursor_NextBeat, EditScreen_CursorRight
 
 ; ---- wsa1/notes/FINDINGS-prom_a-panel-state-variables.md -- "1. The mode / screen latches; 2. The dial's button pair"
 	.equ PanelMode,					0x2078	; the panel mode; PanelMode_ToScreenId maps it to a screen -- PanelState_LatchPrevious, PanelMode_ToScreenId

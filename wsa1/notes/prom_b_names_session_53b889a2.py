@@ -2780,4 +2780,5 @@ RENAMES = [
     ("sub_FADF08", "Msg0716_AllPartsResetBendAndModulation_Call"),
     ("sub_FB9060", "Msg0716_AllPartsResetBendAndModulation_SaveRegs"),
     ("sub_FC0197", "DrumMap_ResetToDefault_Call"),
+    ("sub_FC0CED", "Msg0716_PartPostCtrlInt99"),
 ]

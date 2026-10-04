@@ -111808,7 +111808,7 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A62  [ 37]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A66  [ 38]
 	.long sub_FC0CE3                                 ; FC0A6A  [ 39]
-	.long sub_FC0CED                                 ; FC0A6E  [ 40]
+	.long Msg0716_PartPostCtrlInt99                                 ; FC0A6E  [ 40]
 	.long Msg0716_HandlerTables_Nop41                                 ; FC0A72  [ 41]
 	.long Msg0716_SetPendingBit4                                 ; FC0A76  [ 42]
 	.long Msg0716_SetPendingBit4                                 ; FC0A7A  [ 43]
@@ -112042,7 +112042,9 @@ sub_FC0CE3:   ; entry: named by 1 `.long` operand, first at 0xFC0A6A
 	calr Msg0716_PostCtrlInt9A                                          ; FC0CE9  1e e8 09
 sub_FC0CEC:
 	ret                                                  ; FC0CEC  0e
-sub_FC0CED:   ; entry: named by 1 `.long` operand, first at 0xFC0A6E
+; Msg0716_PartPostCtrlInt99: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then
+;   Msg0716_PostCtrlInt99 (notes/prom_a_msg0716_message_names.py).
+Msg0716_PartPostCtrlInt99:   ; entry: named by 1 `.long` operand, first at 0xFC0A6E
 	ld A,(XIZ+0x06)                                      ; FC0CED  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CF0  bc 01 41
 	calr Msg0716_PostCtrlInt99                                          ; FC0CF3  1e eb 09
@@ -163158,7 +163160,7 @@ DiskLoad_SoundRemap:
 	ldw de, 0x0650                                       ; FE23DA  32 50 06
 .LFE23DD:
 	pushw de                                             ; FE23DD  2a
-	pushw 0x5210                                         ; FE23DE  0b 10 52
+	pushw SoundRemap_Ram                                         ; FE23DE  0b 10 52
 	calr DiskLoad_CopyBufferWords                                            ; FE23E1  1e da 00
 	pop XIY                                              ; FE23E4  5d
 .LFE23E5:
@@ -163182,7 +163184,7 @@ DiskLoad_CombiRemap:
 	ldw de, 0x0650                                       ; FE2407  32 50 06
 .LFE240A:
 	pushw de                                             ; FE240A  2a
-	pushw 0x5860                                         ; FE240B  0b 60 58
+	pushw CombiRemap_Ram                                         ; FE240B  0b 60 58
 	calr DiskLoad_CopyBufferWords                                            ; FE240E  1e ad 00
 	pop XIY                                              ; FE2411  5d
 .LFE2412:
@@ -163197,7 +163199,7 @@ DiskLoad_DrumMap:
 	calr DiskLoad_ReadRemapFile                                            ; FE241D  1e 64 00
 	ld H,A                                               ; FE2420  c9 8e
 	pushw 0x01d0                                         ; FE2422  0b d0 01
-	pushw 0x5eb0                                         ; FE2425  0b b0 5e
+	pushw DrumMap_Ram                                         ; FE2425  0b b0 5e
 	calr DiskLoad_CopyBufferWords                                            ; FE2428  1e 93 00
 	pop XIY                                              ; FE242B  5d
 	ld A,H                                               ; FE242C  ce 89
@@ -163691,7 +163693,7 @@ DiskSave_MidiSetting:
 ; DiskSave_SoundRemap: content type 6: extension 'S', then DiskSave_WriteRemapFile.
 DiskSave_SoundRemap:
 	pushw 0x0650                                         ; FE2863  0b 50 06
-	pushw 0x5210                                         ; FE2866  0b 10 52
+	pushw SoundRemap_Ram                                         ; FE2866  0b 10 52
 	calr DiskSave_CopyWordsToBuffer                                            ; FE2869  1e c1 00
 	ld (Disk_FileName+8:16), 0x53                                 ; FE286C  f1 d0 21 00 53
 	ld (0x60a70f:24), 0x31                             ; FE2871  f2 0f a7 60 00 31
@@ -163704,7 +163706,7 @@ DiskSave_SoundRemap:
 ; DiskSave_CombiRemap: content type 7: extension 'C', then DiskSave_WriteRemapFile.
 DiskSave_CombiRemap:
 	pushw 0x0650                                         ; FE288B  0b 50 06
-	pushw 0x5860                                         ; FE288E  0b 60 58
+	pushw CombiRemap_Ram                                         ; FE288E  0b 60 58
 	calr DiskSave_CopyWordsToBuffer                                            ; FE2891  1e 99 00
 	ld (Disk_FileName+8:16), 0x43                                 ; FE2894  f1 d0 21 00 43
 	ld (0x60a70f:24), 0x31                             ; FE2899  f2 0f a7 60 00 31
@@ -163717,7 +163719,7 @@ DiskSave_CombiRemap:
 ; DiskSave_DrumMap: content type 8: extension 'D', then DiskSave_WriteRemapFile.
 DiskSave_DrumMap:
 	pushw 0x01d0                                         ; FE28B3  0b d0 01
-	pushw 0x5eb0                                         ; FE28B6  0b b0 5e
+	pushw DrumMap_Ram                                         ; FE28B6  0b b0 5e
 	calr DiskSave_CopyWordsToBuffer                                            ; FE28B9  1e 71 00
 	ld (Disk_FileName+8:16), 0x44                                 ; FE28BC  f1 d0 21 00 44
 	lda xbc, (0x60a700:24)                               ; FE28C1  f2 00 a7 60 31
@@ -175335,7 +175337,7 @@ EditScreen_EnterDrumEdit:
 	ld wa, (0x601f51:24)                                ; FE888D  d2 51 1f 60 20
 	ld (EditField_Inc:24), wa                                ; FE8892  f2 4d 1f 60 50
 	m_set 0, MD24, EditScreen_Mode                              ; FE8897  f2 70 1f 60 b8
-	ld (0x601f75:24), 0x07                             ; FE889C  f2 75 1f 60 00 07
+	ld (EditMeasure_Beats:24), 0x07                             ; FE889C  f2 75 1f 60 00 07
 	ld (0x601f76:24), 0x08                             ; FE88A2  f2 76 1f 60 00 08
 	jr .LFE88D3                                          ; FE88A8  68 29
 ; EditScreen_EnterNoteEdit: clear EditScreen_Mode bit 0 (NOTE EDIT), (0x601F4D) = (0x601F4F), (0x601F49) = (0x601F4B), (0x601F75) = 10,
@@ -175347,7 +175349,7 @@ EditScreen_EnterNoteEdit:
 	ld wa, (0x601f4b:24)                                ; FE88B8  d2 4b 1f 60 20
 	ld (0x601f49:24), wa                                ; FE88BD  f2 49 1f 60 50
 	m_res 0, MD24, EditScreen_Mode                              ; FE88C2  f2 70 1f 60 b0
-	ld (0x601f75:24), 0x0a                             ; FE88C7  f2 75 1f 60 00 0a
+	ld (EditMeasure_Beats:24), 0x0a                             ; FE88C7  f2 75 1f 60 00 0a
 	ld (0x601f76:24), 0x0b                             ; FE88CD  f2 76 1f 60 00 0b
 .LFE88D3:
 	m_cp_mi16 MW24, EditField_Inc, 0x0000                     ; FE88D3  d2 4d 1f 60 3f 00 00
@@ -175463,7 +175465,7 @@ EditScreen_EnterNoteEdit:
 	calr sub_FE8BD4                                      ; FE8A54  1e 7d 01
 	ret                                                  ; FE8A57  0e
 .LFE8A58:
-	ldw (0x601f54:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
+	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
 	calr BStore_CursorSlot_RestoreMark                                      ; FE8A5F  1e 96 01
 	calr sub_FEAFB7                                          ; FE8A62  1e 52 25
 	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
@@ -175966,7 +175968,7 @@ sub_FE8F11:
 	calr sub_FEA628                                          ; FE8F17  1e 0e 17
 	sub XWA,XBC                                          ; FE8F1A  e9 a0
 	xor XBC,XBC                                          ; FE8F1C  e9 d1
-	ld bc, (0x601f54:24)                                ; FE8F1E  d2 54 1f 60 21
+	ld bc, (EditCursor_TickInMeasure:24)                                ; FE8F1E  d2 54 1f 60 21
 	cp XWA,XBC                                           ; FE8F23  e9 f0
 	jr nz, .LFE8F96                                      ; FE8F25  6e 6f
 	call BStoreCursor_ReadByte                                        ; FE8F27  1d 32 22 ff
@@ -176233,7 +176235,7 @@ sub_FE91D2:
 	calr sub_FE9223                                      ; FE91D2  1e 4e 00
 	ld XIY,0x00601f16                                    ; FE91D5  45 16 1f 60 00
 	ld (xiy+), 0x90                                  ; FE91DA  f5 f4 00 90
-	ld wa, (0x601f54:24)                                ; FE91DE  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FE91DE  d2 54 1f 60 20
 	div A,0x60                                           ; FE91E3  c9 0a 60
 	ld (xiy+), w                                    ; FE91E6  f5 f4 40
 	ld a, (0x601f34:24)                                 ; FE91E9  c2 34 1f 60 21
@@ -176255,7 +176257,7 @@ sub_FE91D2:
 	ret                                                  ; FE9222  0e
 sub_FE9223:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9223  1e d2 f9
-	m_cp_mi16 MW24, 0x601f54, 0x0000                     ; FE9226  d2 54 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_TickInMeasure, 0x0000                     ; FE9226  d2 54 1f 60 3f 00 00
 	jr z, .LFE9275                                       ; FE922D  66 46
 .LFE922F:
 	call BStoreCursor_ReadByte                                        ; FE922F  1d 32 22 ff
@@ -176267,7 +176269,7 @@ sub_FE9223:
 	calr sub_FEA628                                          ; FE9240  1e e5 13
 	sub XWA,XBC                                          ; FE9243  e9 a0
 	xor XBC,XBC                                          ; FE9245  e9 d1
-	ld bc, (0x601f54:24)                                ; FE9247  d2 54 1f 60 21
+	ld bc, (EditCursor_TickInMeasure:24)                                ; FE9247  d2 54 1f 60 21
 	cp XWA,XBC                                           ; FE924C  e9 f0
 	jr ugt, .LFE9275                                     ; FE924E  6b 25
 .LFE9250:
@@ -176279,14 +176281,14 @@ sub_FE9223:
 	calr sub_FEA628                                          ; FE9263  1e c2 13
 	sub XWA,XBC                                          ; FE9266  e9 a0
 	xor XBC,XBC                                          ; FE9268  e9 d1
-	ld bc, (0x601f54:24)                                ; FE926A  d2 54 1f 60 21
+	ld bc, (EditCursor_TickInMeasure:24)                                ; FE926A  d2 54 1f 60 21
 	cp XWA,XBC                                           ; FE926F  e9 f0
 	jr ugt, .LFE9275                                     ; FE9271  6b 02
 	jr .LFE9250                                          ; FE9273  68 db
 .LFE9275:
 	ret                                                  ; FE9275  0e
 sub_FE9276:
-	ld wa, (0x601f54:24)                                ; FE9276  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FE9276  d2 54 1f 60 20
 	div A,0x60                                           ; FE927B  c9 0a 60
 	ld (0x601f07:24), w                                 ; FE927E  f2 07 1f 60 40
 	xor W,W                                              ; FE9283  c8 d0
@@ -176298,9 +176300,9 @@ sub_FE9290:
 	calr sub_FEA64D                                          ; FE9293  1e b7 13
 	m_bit 2, MD24, 0x601f5b                              ; FE9296  f2 5b 1f 60 ca
 	jr nz, .LFE92BD                                      ; FE929B  6e 20
-	ld a, (0x601f75:24)                                 ; FE929D  c2 75 1f 60 21
+	ld a, (EditMeasure_Beats:24)                                 ; FE929D  c2 75 1f 60 21
 	mul A,0x60                                           ; FE92A2  c9 08 60
-	cp (0x601f54:24), wa                             ; FE92A5  d2 54 1f 60 f8
+	cp (EditCursor_TickInMeasure:24), wa                             ; FE92A5  d2 54 1f 60 f8
 	jr nc, .LFE92B9                                      ; FE92AA  6f 0d
 	calr sub_FEA743                                          ; FE92AC  1e 94 14
 	calr sub_FEF778                                          ; FE92AF  1e c6 64
@@ -176506,7 +176508,7 @@ sub_FE9492:
 	xor DE,DE                                            ; FE949E  da d2
 	ld e, (EditCursor_Tick:24)                                 ; FE94A0  c2 43 1f 60 25
 	add WA,DE                                            ; FE94A5  da 80
-	ld (0x601f54:24), wa                                ; FE94A7  f2 54 1f 60 50
+	ld (EditCursor_TickInMeasure:24), wa                                ; FE94A7  f2 54 1f 60 50
 	ret                                                  ; FE94AC  0e
 	ld wa, (0x601f05:24)                                ; FE94AD  d2 05 1f 60 20
 	ld (0x601f78:24), wa                                ; FE94B2  f2 78 1f 60 50
@@ -176618,8 +176620,8 @@ sub_FE95C8:
 	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE95DF  d2 3f 1f 60 38 01 00
 	ldw (EditCursor_Beat:24), 0x00                             ; FE95E6  f2 41 1f 60 02 00 00
 .LFE95ED:
-	ld wa, (0x601f54:24)                                ; FE95ED  d2 54 1f 60 20
-	ld c, (0x601f75:24)                                 ; FE95F2  c2 75 1f 60 23
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FE95ED  d2 54 1f 60 20
+	ld c, (EditMeasure_Beats:24)                                 ; FE95F2  c2 75 1f 60 23
 	mul C,0x60                                           ; FE95F7  cb 08 60
 	sub WA,BC                                            ; FE95FA  d9 a0
 	ld (EditCursor_Tick:24), a                                 ; FE95FC  f2 43 1f 60 41
@@ -176724,7 +176726,7 @@ sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FEFEBF                                          ; FE971A  1e a2 67
 	calr sub_FEA628                                          ; FE971D  1e 08 0f
 	sub XWA,XBC                                          ; FE9720  e9 a0
-	ld (0x601f54:24), wa                                ; FE9722  f2 54 1f 60 50
+	ld (EditCursor_TickInMeasure:24), wa                                ; FE9722  f2 54 1f 60 50
 	calr sub_FEFD8A                                          ; FE9727  1e 60 66
 	ret                                                  ; FE972A  0e
 sub_FE972B:   ; entry: named by 1 `.long` operand, first at 0xFE9319
@@ -177389,7 +177391,7 @@ EditCursor_MeasureChanged:
 	calr sub_FEF778                                          ; FE9D2E  1e 47 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D31  1e 55 6c
 	calr sub_FEF796                                          ; FE9D34  1e 5f 5a
-	ldw (0x601f54:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
+	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D3E  1e 73 5a
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D41  1e 8e 5a
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D44  1e 12 5b
@@ -177404,7 +177406,7 @@ EditCursor_MeasureChangedByCursor:
 	calr sub_FEF778                                          ; FE9D60  1e 15 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D63  1e 23 6c
 	calr sub_FEF796                                          ; FE9D66  1e 2d 5a
-	ldw (0x601f54:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
+	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
 	calr sub_FEF7B4                                          ; FE9D70  1e 41 5a
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9D73  1e 5c 5a
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE9D76  1e e0 5a
@@ -177468,27 +177470,27 @@ sub_FE9E00:
 ; EditCursor_NextBeat: tick 0 and beat + 1, or beat 0 and measure + 1 once the beat reaches EditCursor_BeatsInMeasure;
 ;   first, when (0x601F54) reaches (0x601F75) * 0x60 - 1, it scrolls instead.
 EditCursor_NextBeat:
-	ld c, (0x601f75:24)                                 ; FE9E04  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FE9E04  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9E09  cb 08 60
 	dec 1,BC                                             ; FE9E0C  d9 69
-	cp (0x601f54:24), bc                             ; FE9E0E  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FE9E0E  d2 54 1f 60 f9
 	jr nc, .LFE9E17                                      ; FE9E13  6f 02
 	jr .LFE9E4C                                          ; FE9E15  68 35
 .LFE9E17:
 	m_bit 0, MD24, 0x601f5b                              ; FE9E17  f2 5b 1f 60 c8
 	jr z, .LFE9E3B                                       ; FE9E1C  66 1d
-	ld c, (0x601f75:24)                                 ; FE9E1E  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FE9E1E  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9E23  cb 08 60
-	ld (0x601f54:24), bc                                ; FE9E26  f2 54 1f 60 51
+	ld (EditCursor_TickInMeasure:24), bc                                ; FE9E26  f2 54 1f 60 51
 	calr sub_FE9492                                          ; FE9E2B  1e 64 f6
 	ld (0x601f58:24), 0x00                             ; FE9E2E  f2 58 1f 60 00 00
 	calr sub_FE9762                                          ; FE9E34  1e 2b f9
 	calr sub_FE94FB                                          ; FE9E37  1e c1 f6
 	ret                                                  ; FE9E3A  0e
 .LFE9E3B:
-	ld c, (0x601f75:24)                                 ; FE9E3B  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FE9E3B  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9E40  cb 08 60
-	ld (0x601f54:24), bc                                ; FE9E43  f2 54 1f 60 51
+	ld (EditCursor_TickInMeasure:24), bc                                ; FE9E43  f2 54 1f 60 51
 	calr sub_FE955D                                          ; FE9E48  1e 12 f7
 	ret                                                  ; FE9E4B  0e
 .LFE9E4C:
@@ -177530,9 +177532,9 @@ EditCursor_NextBeat:
 	ret                                                  ; FE9EBA  0e
 sub_FE9EBB:
 	calr sub_FE9EDA                                      ; FE9EBB  1e 1c 00
-	ld c, (0x601f75:24)                                 ; FE9EBE  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FE9EBE  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9EC3  cb 08 60
-	cp (0x601f54:24), bc                             ; FE9EC6  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FE9EC6  d2 54 1f 60 f9
 	jr nc, .LFE9ED9                                      ; FE9ECB  6f 0c
 	calr sub_FEF796                                          ; FE9ECD  1e c6 58
 	calr sub_FEFDAC                                          ; FE9ED0  1e d9 5e
@@ -177565,7 +177567,7 @@ sub_FE9EDA:
 	xor HL,HL                                            ; FE9F14  db d3
 	ld l, (EditCursor_Tick:24)                                 ; FE9F16  c2 43 1f 60 27
 	add WA,HL                                            ; FE9F1B  db 80
-	ld (0x601f54:24), wa                                ; FE9F1D  f2 54 1f 60 50
+	ld (EditCursor_TickInMeasure:24), wa                                ; FE9F1D  f2 54 1f 60 50
 	ret                                                  ; FE9F22  0e
 ; EditCursor_BeatsInMeasure: A = the beat count of EditCursor_Measure, looked up in the table at 0x601F5F
 ;   ((0x601F76) entries, from measure (0x601F5D)); 0xFF when not found.
@@ -178022,12 +178024,12 @@ EditScreen_CursorRight:
 .LFEA374:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA374  c1 75 20 3e 08
 	calr BStore_CursorSlot_Save                                          ; FEA379  1e 72 e9
-	ld wa, (0x601f54:24)                                ; FEA37C  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA37C  d2 54 1f 60 20
 	ld (0x601f56:24), wa                                ; FEA381  f2 56 1f 60 50
 	calr sub_FEA709                                      ; FEA386  1e 80 03
-	ld c, (0x601f75:24)                                 ; FEA389  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FEA389  c2 75 1f 60 23
 	mul C,0x60                                           ; FEA38E  cb 08 60
-	cp (0x601f54:24), bc                             ; FEA391  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FEA391  d2 54 1f 60 f9
 	jr c, .LFEA39A                                       ; FEA396  67 02
 	jr .LFEA39D                                          ; FEA398  68 03
 .LFEA39A:
@@ -178046,7 +178048,7 @@ EditScreen_CursorRight:
 	calr sub_FEA628                                      ; FEA3BA  1e 6b 02
 	sub XWA,XBC                                          ; FEA3BD  e9 a0
 	xor XHL,XHL                                          ; FEA3BF  eb d3
-	ld hl, (0x601f54:24)                                ; FEA3C1  d2 54 1f 60 23
+	ld hl, (EditCursor_TickInMeasure:24)                                ; FEA3C1  d2 54 1f 60 23
 	cp XWA,XHL                                           ; FEA3C6  eb f0
 	jr ule, .LFEA400                                     ; FEA3C8  63 36
 	m_bit 1, MD24, 0x601f5b                              ; FEA3CA  f2 5b 1f 60 c9
@@ -178066,7 +178068,7 @@ EditScreen_CursorRight:
 .LFEA3F0:
 	calr sub_FEA628                                      ; FEA3F0  1e 35 02
 	xor XHL,XHL                                          ; FEA3F3  eb d3
-	ld hl, (0x601f54:24)                                ; FEA3F5  d2 54 1f 60 23
+	ld hl, (EditCursor_TickInMeasure:24)                                ; FEA3F5  d2 54 1f 60 23
 	add XBC,XHL                                          ; FEA3FA  eb 81
 	cp XWA,XBC                                           ; FEA3FC  e9 f0
 	jr UGT,.LFEA404                                      ; FEA3FE  6b 04
@@ -178169,10 +178171,10 @@ sub_FEA47F:
 sub_FEA4DC:
 	calr sub_FEA628                                      ; FEA4DC  1e 49 01
 	sub XWA,XBC                                          ; FEA4DF  e9 a0
-	ld (0x601f54:24), wa                                ; FEA4E1  f2 54 1f 60 50
-	ld c, (0x601f75:24)                                 ; FEA4E6  c2 75 1f 60 23
+	ld (EditCursor_TickInMeasure:24), wa                                ; FEA4E1  f2 54 1f 60 50
+	ld c, (EditMeasure_Beats:24)                                 ; FEA4E6  c2 75 1f 60 23
 	mul C,0x60                                           ; FEA4EB  cb 08 60
-	cp (0x601f54:24), bc                             ; FEA4EE  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FEA4EE  d2 54 1f 60 f9
 	jr c, .LFEA4F9                                       ; FEA4F3  67 04
 	calr sub_FE955D                                          ; FEA4F5  1e 65 f0
 	ret                                                  ; FEA4F8  0e
@@ -178185,9 +178187,9 @@ sub_FEA4DC:
 	calr sub_FEA535                                      ; FEA508  1e 2a 00
 	ret                                                  ; FEA50B  0e
 sub_FEA50C:
-	ld c, (0x601f75:24)                                 ; FEA50C  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FEA50C  c2 75 1f 60 23
 	mul C,0x60                                           ; FEA511  cb 08 60
-	cp (0x601f54:24), bc                             ; FEA514  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FEA514  d2 54 1f 60 f9
 	jr c, .LFEA51F                                       ; FEA519  67 04
 	calr sub_FE955D                                          ; FEA51B  1e 3f f0
 	ret                                                  ; FEA51E  0e
@@ -178315,7 +178317,7 @@ sub_FEA64D:
 	pushw bc                                             ; FEA656  29
 	m_res 2, MD24, 0x601f5b                              ; FEA657  f2 5b 1f 60 b2
 	calr sub_FEA6B1                                      ; FEA65C  1e 52 00
-	ld wa, (0x601f54:24)                                ; FEA65F  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA65F  d2 54 1f 60 20
 	div A,0x60                                           ; FEA664  c9 0a 60
 	xor W,W                                              ; FEA667  c8 d0
 	add WA,0x0001                                        ; FEA669  d8 c8 01 00
@@ -178376,7 +178378,7 @@ sub_FEA6D7:
 .LFEA6F5:
 	incw 0x01, (0x601f6c:24)                          ; FEA6F5  d2 6c 1f 60 61
 	xor WA,WA                                            ; FEA6FA  d8 d0
-	ld a, (0x601f75:24)                                 ; FEA6FC  c2 75 1f 60 21
+	ld a, (EditMeasure_Beats:24)                                 ; FEA6FC  c2 75 1f 60 21
 	cp (0x601f6c:24), wa                             ; FEA701  d2 6c 1f 60 f8
 	jr ule, .LFEA6EF                                     ; FEA706  63 e7
 .LFEA708:
@@ -178384,29 +178386,29 @@ sub_FEA6D7:
 sub_FEA709:
 	xor WA,WA                                            ; FEA709  d8 d0
 .LFEA70B:
-	m_cp_rm MW24, 0x601f54, r0                           ; FEA70B  d2 54 1f 60 f0
+	m_cp_rm MW24, EditCursor_TickInMeasure, r0                           ; FEA70B  d2 54 1f 60 f0
 	jr ugt, .LFEA719                                     ; FEA710  6b 07
 	add wa, (EditField_Inc:24)                            ; FEA712  d2 4d 1f 60 80
 	jr .LFEA70B                                          ; FEA717  68 f2
 .LFEA719:
-	ld (0x601f54:24), wa                                ; FEA719  f2 54 1f 60 50
+	ld (EditCursor_TickInMeasure:24), wa                                ; FEA719  f2 54 1f 60 50
 	ret                                                  ; FEA71E  0e
 sub_FEA71F:
-	m_cp_mi16 MW24, 0x601f54, 0x0000                     ; FEA71F  d2 54 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_TickInMeasure, 0x0000                     ; FEA71F  d2 54 1f 60 3f 00 00
 	jr z, .LFEA742                                       ; FEA726  66 1a
 	xor WA,WA                                            ; FEA728  d8 d0
 .LFEA72A:
-	m_cp_rm MW24, 0x601f54, r0                           ; FEA72A  d2 54 1f 60 f0
+	m_cp_rm MW24, EditCursor_TickInMeasure, r0                           ; FEA72A  d2 54 1f 60 f0
 	jr nc, .LFEA738                                      ; FEA72F  6f 07
 	add wa, (EditField_Inc:24)                            ; FEA731  d2 4d 1f 60 80
 	jr .LFEA72A                                          ; FEA736  68 f2
 .LFEA738:
 	sub wa, (EditField_Inc:24)                            ; FEA738  d2 4d 1f 60 a0
-	ld (0x601f54:24), wa                                ; FEA73D  f2 54 1f 60 50
+	ld (EditCursor_TickInMeasure:24), wa                                ; FEA73D  f2 54 1f 60 50
 .LFEA742:
 	ret                                                  ; FEA742  0e
 sub_FEA743:
-	ld wa, (0x601f54:24)                                ; FEA743  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA743  d2 54 1f 60 20
 	div A,0x60                                           ; FEA748  c9 0a 60
 	xor E,E                                              ; FEA74B  cd d5
 	xor W,W                                              ; FEA74D  c8 d0
@@ -178432,13 +178434,13 @@ sub_FEA743:
 	jr .LFEA75F                                          ; FEA783  68 da
 .LFEA785:
 	ld (EditCursor_Beat:24), e                                 ; FEA785  f2 41 1f 60 45
-	ld wa, (0x601f54:24)                                ; FEA78A  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA78A  d2 54 1f 60 20
 	div A,0x60                                           ; FEA78F  c9 0a 60
 	ld (EditCursor_Tick:24), w                                 ; FEA792  f2 43 1f 60 40
 	calr sub_FEA79B                                      ; FEA797  1e 01 00
 	ret                                                  ; FEA79A  0e
 sub_FEA79B:
-	ld wa, (0x601f54:24)                                ; FEA79B  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA79B  d2 54 1f 60 20
 	div A,0x60                                           ; FEA7A0  c9 0a 60
 	xor E,E                                              ; FEA7A3  cd d5
 	xor W,W                                              ; FEA7A5  c8 d0
@@ -178498,7 +178500,7 @@ sub_FEA7E7:
 	ld wa, (0x601f05:24)                                ; FEA833  d2 05 1f 60 20
 	sub wa, (0x601f0f:24)                            ; FEA838  d2 0f 1f 60 a0
 	xor BC,BC                                            ; FEA83D  d9 d1
-	ld c, (0x601f75:24)                                 ; FEA83F  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FEA83F  c2 75 1f 60 23
 	cp WA,BC                                             ; FEA844  d9 f0
 	jr c, .LFEA7FA                                       ; FEA846  67 b2
 	m_or_mi8 MB24, 0x601f5b, 0x10                        ; FEA848  c2 5b 1f 60 3e 10
@@ -178524,7 +178526,7 @@ EditScreen_CursorLeft:
 .LFEA877:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEA877  c1 75 20 3e 08
 	calr BStore_CursorSlot_Save                                          ; FEA87C  1e 6f e4
-	ld wa, (0x601f54:24)                                ; FEA87F  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA87F  d2 54 1f 60 20
 	ld (0x601f56:24), wa                                ; FEA884  f2 56 1f 60 50
 	calr sub_FEA71F                                      ; FEA889  1e 93 fe
 	calr sub_FEA743                                      ; FEA88C  1e b4 fe
@@ -178554,7 +178556,7 @@ EditScreen_CursorLeft:
 	calr sub_FEA628                                      ; FEA8D5  1e 50 fd
 	sub XWA,XBC                                          ; FEA8D8  e9 a0
 	xor XHL,XHL                                          ; FEA8DA  eb d3
-	ld hl, (0x601f54:24)                                ; FEA8DC  d2 54 1f 60 23
+	ld hl, (EditCursor_TickInMeasure:24)                                ; FEA8DC  d2 54 1f 60 23
 	cp XWA,XHL                                           ; FEA8E1  eb f0
 	jr nc, .LFEA905                                      ; FEA8E3  6f 20
 .LFEA8E5:
@@ -178565,7 +178567,7 @@ EditScreen_CursorLeft:
 	cp XWA,XBC                                           ; FEA8F2  e9 f0
 	jr c, .LFEA909                                       ; FEA8F4  67 13
 	xor XHL,XHL                                          ; FEA8F6  eb d3
-	ld hl, (0x601f54:24)                                ; FEA8F8  d2 54 1f 60 23
+	ld hl, (EditCursor_TickInMeasure:24)                                ; FEA8F8  d2 54 1f 60 23
 	add XBC,XHL                                          ; FEA8FD  eb 81
 	cp XWA,XBC                                           ; FEA8FF  e9 f0
 	jr nc, .LFEA905                                      ; FEA901  6f 02
@@ -179087,9 +179089,9 @@ sub_FEADFB:
 	calr sub_FEA709                                      ; FEAE1B  1e eb f8
 	popw wa                                              ; FEAE1E  48
 	ld (EditField_Inc:24), wa                                ; FEAE1F  f2 4d 1f 60 50
-	ld c, (0x601f75:24)                                 ; FEAE24  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FEAE24  c2 75 1f 60 23
 	mul C,0x60                                           ; FEAE29  cb 08 60
-	cp (0x601f54:24), bc                             ; FEAE2C  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FEAE2C  d2 54 1f 60 f9
 	jr nc, .LFEAE54                                      ; FEAE31  6f 21
 	calr sub_FEA743                                      ; FEAE33  1e 0d f9
 	calr BStore_CursorSlot_Save                                          ; FEAE36  1e b5 de
@@ -179114,7 +179116,7 @@ sub_FEAE58:
 .LFEAE60:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAE60  c1 75 20 3e 08
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAE65  c2 5b 1f 60 3c fe
-	m_cp_mi16 MW24, 0x601f54, 0x0000                     ; FEAE6B  d2 54 1f 60 3f 00 00
+	m_cp_mi16 MW24, EditCursor_TickInMeasure, 0x0000                     ; FEAE6B  d2 54 1f 60 3f 00 00
 	jr nz, .LFEAE78                                      ; FEAE72  6e 04
 	calr sub_FE9648                                          ; FEAE74  1e d1 e7
 	ret                                                  ; FEAE77  0e
@@ -182370,7 +182372,7 @@ sub_FEF938:
 	add HL,0x0001                                        ; FEF984  db c8 01 00
 	add E,0x01                                           ; FEF988  cd c8 01
 	add XIX,0x00000001                                   ; FEF98B  ec c8 01 00 00 00
-	m_cp_rm MB24, 0x601f75, r5                           ; FEF991  c2 75 1f 60 f5
+	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FEF991  c2 75 1f 60 f5
 	jr ule, .LFEF944                                     ; FEF996  63 ac
 	ret                                                  ; FEF998  0e
 ; ---------------------------------------------------------------------
@@ -182419,7 +182421,7 @@ EditScreen_DrawMeasureNumbers:
 .LFEF9E9:
 	add E,0x01                                           ; FEF9E9  cd c8 01
 	add XIX,0x00000001                                   ; FEF9EC  ec c8 01 00 00 00
-	m_cp_rm MB24, 0x601f75, r5                           ; FEF9F2  c2 75 1f 60 f5
+	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FEF9F2  c2 75 1f 60 f5
 	jr ule, .LFEF9B7                                     ; FEF9F7  63 be
 	ret                                                  ; FEF9F9  0e
 ; ---------------------------------------------------------------------
@@ -182817,9 +182819,9 @@ DisplayList_FEFD80:
 	.ascii " ?"                                 ; FEFD86
 	.byte 0x03, 0x02                   ; FEFD88
 sub_FEFD8A:
-	ld c, (0x601f75:24)                                 ; FEFD8A  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FEFD8A  c2 75 1f 60 23
 	mul C,0x60                                           ; FEFD8F  cb 08 60
-	cp (0x601f54:24), bc                             ; FEFD92  d2 54 1f 60 f9
+	cp (EditCursor_TickInMeasure:24), bc                             ; FEFD92  d2 54 1f 60 f9
 	jr nc, .LFEFDAB                                      ; FEFD97  6f 12
 	calr sub_FEF796                                          ; FEFD99  1e fa f9
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEFD9C  1e ba fa
@@ -182831,7 +182833,7 @@ sub_FEFD8A:
 	ret                                                  ; FEFDAB  0e
 sub_FEFDAC:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFDAC  f1 40 25 00 01
-	ld wa, (0x601f54:24)                                ; FEFDB1  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEFDB1  d2 54 1f 60 20
 	div A,0x04                                           ; FEFDB6  c9 0a 04
 	xor W,W                                              ; FEFDB9  c8 d0
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFDBB  f2 70 1f 60 c8
@@ -182877,7 +182879,7 @@ sub_FEFDE5:
 	ld (0x601f05:24), ix                                ; FEFE0A  f2 05 1f 60 54
 	ld (0x601f07:24), h                                 ; FEFE0F  f2 07 1f 60 46
 	xor WA,WA                                            ; FEFE14  d8 d0
-	ld a, (0x601f75:24)                                 ; FEFE16  c2 75 1f 60 21
+	ld a, (EditMeasure_Beats:24)                                 ; FEFE16  c2 75 1f 60 21
 	cp (0x601f6c:24), wa                             ; FEFE1B  d2 6c 1f 60 f8
 	jr ugt, .LFEFE57                                     ; FEFE20  6b 35
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFE22  f1 40 25 00 01
@@ -182943,7 +182945,7 @@ LCD_DrawVRuleLeft_Layer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFE69  f1 40 25 00 01
 	ldw (LCD_Y0:16), 0x29                                ; FEFE6E  f1 32 25 02 29 00
 	ldw (LCD_Y1:16), 0xa8                                ; FEFE74  f1 36 25 02 a8 00
-	ld wa, (0x601f54:24)                                ; FEFE7A  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEFE7A  d2 54 1f 60 20
 	div A,0x04                                           ; FEFE7F  c9 0a 04
 	xor W,W                                              ; FEFE82  c8 d0
 	add WA,0x0010                                        ; FEFE84  d8 c8 10 00
@@ -182969,7 +182971,7 @@ LCD_DrawVRuleRight_Layer1:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFE94  f1 40 25 00 01
 	ldw (LCD_Y0:16), 0x2a                                ; FEFE99  f1 32 25 02 2a 00
 	ldw (LCD_Y1:16), 0xa1                                ; FEFE9F  f1 36 25 02 a1 00
-	ld wa, (0x601f54:24)                                ; FEFEA5  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FEFEA5  d2 54 1f 60 20
 	div A,0x04                                           ; FEFEAA  c9 0a 04
 	xor W,W                                              ; FEFEAD  c8 d0
 	add WA,0x0059                                        ; FEFEAF  d8 c8 59 00
@@ -183014,7 +183016,7 @@ sub_FEFEBF:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FEFF0B  d2 6c 1f 60 38 01 00
 	m_add_mi16 MW24, 0x601f05, 0x0001                    ; FEFF12  d2 05 1f 60 38 01 00
 	xor WA,WA                                            ; FEFF19  d8 d0
-	ld a, (0x601f75:24)                                 ; FEFF1B  c2 75 1f 60 21
+	ld a, (EditMeasure_Beats:24)                                 ; FEFF1B  c2 75 1f 60 21
 	cp (0x601f6c:24), wa                             ; FEFF20  d2 6c 1f 60 f8
 	jr nc, .LFEFF29                                      ; FEFF25  6f 02
 	jr .LFEFEE1                                          ; FEFF27  68 b8
@@ -183065,7 +183067,7 @@ sub_FEFF2D:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FEFF92  d2 6c 1f 60 38 01 00
 	m_add_mi16 MW24, 0x601f05, 0x0001                    ; FEFF99  d2 05 1f 60 38 01 00
 	xor WA,WA                                            ; FEFFA0  d8 d0
-	ld a, (0x601f75:24)                                 ; FEFFA2  c2 75 1f 60 21
+	ld a, (EditMeasure_Beats:24)                                 ; FEFFA2  c2 75 1f 60 21
 	cp (0x601f6c:24), wa                             ; FEFFA7  d2 6c 1f 60 f8
 	jr nc, .LFEFFB0                                      ; FEFFAC  6f 02
 	jr .LFEFF50                                          ; FEFFAE  68 a0
@@ -183340,7 +183342,7 @@ sub_FF0243:
 	calr sub_FEFFB4                                          ; FF024A  1e 67 fd
 	ld l, (0x601f44:24)                                 ; FF024D  c2 44 1f 60 27
 	calr sub_FF02F5                                      ; FF0252  1e a0 00
-	ld wa, (0x601f54:24)                                ; FF0255  d2 54 1f 60 20
+	ld wa, (EditCursor_TickInMeasure:24)                                ; FF0255  d2 54 1f 60 20
 	ld (0x601f38:24), wa                                ; FF025A  f2 38 1f 60 50
 	m_bit 0, MD24, EditScreen_Mode                              ; FF025F  f2 70 1f 60 c8
 	jr z, .LFF026F                                       ; FF0264  66 09
@@ -183390,7 +183392,7 @@ sub_FF0294:
 	ret                                                  ; FF02D4  0e
 sub_FF02D5:
 	add wa, (0x601f38:24)                            ; FF02D5  d2 38 1f 60 80
-	ld c, (0x601f75:24)                                 ; FF02DA  c2 75 1f 60 23
+	ld c, (EditMeasure_Beats:24)                                 ; FF02DA  c2 75 1f 60 23
 	mul C,0x60                                           ; FF02DF  cb 08 60
 	dec 1,BC                                             ; FF02E2  d9 69
 	cp WA,BC                                             ; FF02E4  d9 f0
@@ -184005,7 +184007,7 @@ sub_FF0850:
 	swi 7                                                ; FF089D  ff
 	popw de                                              ; FF089E  4a
 	add E,0x01                                           ; FF089F  cd c8 01
-	m_cp_rm MB24, 0x601f75, r5                           ; FF08A2  c2 75 1f 60 f5
+	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FF08A2  c2 75 1f 60 f5
 	jr c, .LFF0857                                       ; FF08A7  67 ae
 	ret                                                  ; FF08A9  0e
 sub_FF08AA:
@@ -184028,7 +184030,7 @@ sub_FF08AA:
 	calr sub_FF08E5                                      ; FF08D6  1e 0c 00
 	popw de                                              ; FF08D9  4a
 	add E,0x01                                           ; FF08DA  cd c8 01
-	m_cp_rm MB24, 0x601f75, r5                           ; FF08DD  c2 75 1f 60 f5
+	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FF08DD  c2 75 1f 60 f5
 	jr c, .LFF08B1                                       ; FF08E2  67 cd
 	ret                                                  ; FF08E4  0e
 sub_FF08E5:
