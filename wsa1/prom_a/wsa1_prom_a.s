@@ -99948,7 +99948,8 @@ sub_FB90FE:
 	call T_F40794                                        ; FB9164  1d 94 07 f4
 	ret                                                  ; FB9168  0e
 	ret                                                  ; FB9169  0e
-sub_FB916A:
+; SeqClock_ResetBeatAndTick: with interrupts masked (ei 6 ... ei 0): the beat word (0x91) = 0 and Seq_BeatTick = 0.
+SeqClock_ResetBeatAndTick:
 	ei 0x06                                              ; FB916A  06 06
 	ldw (0x91:8), 0x00:io                                     ; FB916C  0a 91 00 00
 	ld (Seq_BeatTick:8), 0x00:io                                      ; FB9170  08 93 00
@@ -99962,8 +99963,8 @@ sub_FB9176:
 	and (XIX),0xfe                                       ; FB917E  84 3c fe
 	ld (0x60504c:24), 0x00                             ; FB9181  f2 4c 50 60 00 00
 	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB9187  1e 92 00
-	calr sub_FB991B                                      ; FB918A  1e 8e 07
-	calr sub_FB9E61                                      ; FB918D  1e d1 0c
+	calr MidiFilePlay_ClearPosition                                      ; FB918A  1e 8e 07
+	calr MidiFilePlay_ClearPosition_Copy                                      ; FB918D  1e d1 0c
 	calr sub_FB9E69                                      ; FB9190  1e d6 0c
 	call sub_FB9060                                      ; FB9193  1d 60 90 fb
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
@@ -99978,7 +99979,7 @@ sub_FB9176:
 	cp hl, 0x00:i3                                         ; FB91AD  db d8
 	jr nz, .LFB91A7                                      ; FB91AF  6e f6
 .LFB91B1:
-	calr sub_FB916A                                      ; FB91B1  1e b6 ff
+	calr SeqClock_ResetBeatAndTick                                      ; FB91B1  1e b6 ff
 	m_set 4, MD16, UI_ScreenFlags                                ; FB91B4  f1 95 20 bc
 	call T_F42620                                        ; FB91B8  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB91BC  84 3c fd
@@ -99987,7 +99988,9 @@ sub_FB9176:
 	popw de                                              ; FB91C6  4a
 	popw hl                                              ; FB91C7  4b
 	ret                                                  ; FB91C8  0e
-sub_FB91C9:
+; MidiFilePlay_Stop: clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_F413C0, then clears the
+;   position (0x605040) and (0x605044) / (0x605048).  Called by MidiFileDirectPlay_LcdKeyRow1, both ticks, and the leave.
+MidiFilePlay_Stop:
 	pushw hl                                             ; FB91C9  2b
 	pushw de                                             ; FB91CA  2a
 	push XIX                                             ; FB91CB  3c
@@ -99996,8 +99999,8 @@ sub_FB91C9:
 	ld (0x60504c:24), 0x00                             ; FB91D4  f2 4c 50 60 00 00
 	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB91DA  1e 3f 00
 	call T_F413C0                                        ; FB91DD  1d c0 13 f4
-	calr sub_FB991B                                      ; FB91E1  1e 37 07
-	calr sub_FB9E61                                      ; FB91E4  1e 7a 0c
+	calr MidiFilePlay_ClearPosition                                      ; FB91E1  1e 37 07
+	calr MidiFilePlay_ClearPosition_Copy                                      ; FB91E4  1e 7a 0c
 	calr sub_FB9E69                                      ; FB91E7  1e 7f 0c
 	call sub_FB9060                                      ; FB91EA  1d 60 90 fb
 sub_FB91EE:
@@ -100013,7 +100016,7 @@ sub_FB91EE_Loop:
 	cp hl, 0x00:i3                                         ; FB9204  db d8
 	jr nz, sub_FB91EE_Loop                                    ; FB9206  6e f6
 .LFB9208:
-	calr sub_FB916A                                      ; FB9208  1e 5f ff
+	calr SeqClock_ResetBeatAndTick                                      ; FB9208  1e 5f ff
 	call T_F42620                                        ; FB920B  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB920F  84 3c fd
 	ld (0x605148:24), 0x00                             ; FB9212  f2 48 51 60 00 00
@@ -100602,8 +100605,8 @@ sub_FB9635:
 ; ---------------------------------------------------------------------
 ; sub_FB9697 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a sub_FB9E96 (`calr`) at 0xFB9EC9
-;          prom_a sub_FB9FE1 (`calr`) at 0xFBA004
+; Called from: prom_a SequencerMedley_MidiFileTick (`calr`) at 0xFB9EC9
+;          prom_a MidiFileDirectPlay_Tick (`calr`) at 0xFBA004
 ;
 ;     0xFB96A3 loads 0xFBA169, where the ROM reads:
 ;        "MThdMTrk~"
@@ -100800,7 +100803,7 @@ sub_FB9697:
 	ld xiy, (xiz-16)                                     ; FB987C  ae f0 25
 	srl xiy, 0x01                                        ; FB987F  ed ef 01
 	ld (0x60506e:24), xiy                               ; FB9882  f2 6e 50 60 65
-	calr sub_FB991B                                      ; FB9887  1e 91 00
+	calr MidiFilePlay_ClearPosition                                      ; FB9887  1e 91 00
 	ld h, 0x00:opc                                          ; FB988A  26 00
 .LFB988C:
 	call T_F4261C                                        ; FB988C  1d 1c 26 f4
@@ -100863,7 +100866,8 @@ sub_FB9697:
 	popw hl                                              ; FB9917  4b
 	unlk XIZ                                             ; FB9918  ee 0d
 	ret                                                  ; FB991A  0e
-sub_FB991B:
+; MidiFilePlay_ClearPosition: (0x605040) = 0: the 32-bit song position the ticks build as beat * 96 + tick.
+MidiFilePlay_ClearPosition:
 	sub XBC,XBC                                          ; FB991B  e9 a1
 	ld (0x605040:24), xbc                               ; FB991D  f2 40 50 60 61
 	ret                                                  ; FB9922  0e
@@ -101077,7 +101081,9 @@ sub_FB9B30:
 	calr sub_FB9575                                      ; FB9B3A  1e 38 fa
 	calr sub_FB99F5                                      ; FB9B3D  1e b5 fe
 	ret                                                  ; FB9B40  0e
-sub_FB9B41:
+; MidiFileDirectPlay_InitOnEntry: (0x605069) bit 7 set; saves (0x60341E) in (0x605072) and clears it; (0x34BB) bit 2 cleared; (0x60505E) = 0;
+;   (0x605144) = the byte at 0x7F4D; then 0xFB9089.  Called by Paint_MidiFileDirectPlay, the screen's enter.
+MidiFileDirectPlay_InitOnEntry:
 	m_set 7, MD24, 0x605069                              ; FB9B41  f2 69 50 60 bf
 	ld xbc, (0x60341e:24)                               ; FB9B46  e2 1e 34 60 21
 	ld (0x605072:24), xbc                               ; FB9B4B  f2 72 50 60 61
@@ -101091,12 +101097,15 @@ sub_FB9B41:
 	ld (0x605144:24), a                                 ; FB9B69  f2 44 51 60 41
 	call sub_FB9089                                      ; FB9B6E  1d 89 90 fb
 	ret                                                  ; FB9B72  0e
-sub_FB9B73:
+; MidiFileDirectPlay_RestoreOnLeave: (0x605068) = 0; restores (0x60341E) from (0x605072); MidiFilePlay_Stop; (0x60505E) = 0; then 0xFB9C52 or, when
+;   (0x605144) bit 2, 0xFB9BA4 (which installs the 17-byte part map from MidiFile_Tables_FBA169 into 0x603422).
+;   Called by ScreenLeave_MidiFileDirectPlay.
+MidiFileDirectPlay_RestoreOnLeave:
 	ldw (0x605068:24), 0x00                             ; FB9B73  f2 68 50 60 02 00 00
 	ld xbc, (0x605072:24)                               ; FB9B7A  e2 72 50 60 21
 	ld (0x60341e:24), xbc                               ; FB9B7F  f2 1e 34 60 61
 	m_res 2, MD16, 0x34bb                                ; FB9B84  f1 bb 34 b2
-	calr sub_FB91C9                                      ; FB9B88  1e 3e f6
+	calr MidiFilePlay_Stop                                      ; FB9B88  1e 3e f6
 	ld (0x60505e:24), 0x00                             ; FB9B8B  f2 5e 50 60 00 00
 	ld c, (0x605144:24)                                 ; FB9B91  c2 44 51 60 23
 	and C,0x04                                           ; FB9B96  cb cc 04
@@ -101348,7 +101357,7 @@ sub_FB9DA0:
 	calr sub_FB9D88                                      ; FB9DE4  1e a1 ff
 	jr .LFB9DFC                                          ; FB9DE7  68 13
 .LFB9DE9:
-	calr sub_FB91C9                                      ; FB9DE9  1e dd f3
+	calr MidiFilePlay_Stop                                      ; FB9DE9  1e dd f3
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9DEC  f1 95 20 bc
 	ld xbc, (0x3010:16)                                 ; FB9DF0  e1 10 30 21
 	ld (0x60341e:24), xbc                               ; FB9DF4  f2 1e 34 60 61
@@ -101378,7 +101387,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 	calr sub_FB9D88                                      ; FB9E31  1e 54 ff
 	jr .LFB9E3D                                          ; FB9E34  68 07
 .LFB9E36:
-	calr sub_FB91C9                                      ; FB9E36  1e 90 f3
+	calr MidiFilePlay_Stop                                      ; FB9E36  1e 90 f3
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9E39  f1 95 20 bc
 .LFB9E3D:
 	pop XIX                                              ; FB9E3D  5c
@@ -101386,7 +101395,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 sub_FB9E3F:
 	push XIX                                             ; FB9E3F  3c
 	lda xix, (0x34d9:16)                                ; FB9E40  f1 d9 34 34
-	calr sub_FB916A                                      ; FB9E44  1e 23 f3
+	calr SeqClock_ResetBeatAndTick                                      ; FB9E44  1e 23 f3
 	and (XIX),0xfd                                       ; FB9E47  84 3c fd
 	and (XIX),0xfb                                       ; FB9E4A  84 3c fb
 	m_res 3, MD16, 0x34bb                                ; FB9E4D  f1 bb 34 b3
@@ -101395,7 +101404,8 @@ sub_FB9E3F:
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9E5B  f1 95 20 bc
 	pop XIX                                              ; FB9E5F  5c
 	ret                                                  ; FB9E60  0e
-sub_FB9E61:
+; MidiFilePlay_ClearPosition_Copy: byte-for-byte MidiFilePlay_ClearPosition.
+MidiFilePlay_ClearPosition_Copy:
 	sub XBC,XBC                                          ; FB9E61  e9 a1
 	ld (0x605040:24), xbc                               ; FB9E63  f2 40 50 60 61
 	ret                                                  ; FB9E68  0e
@@ -101406,7 +101416,9 @@ sub_FB9E69:
 	ld (0x605048:24), xwa                               ; FB9E72  f2 48 50 60 60
 	ret                                                  ; FB9E77  0e
 	ret                                                  ; FB9E78  0e
-sub_FB9E79:
+; MidiFilePlay_Tick: UI_ScreenLatch 0x13 (SequencerMedley) -> SequencerMedley_MidiFileTick; 0x45 (MidiFileDirectPlay) ->
+;   MidiFileDirectPlay_Tick; anything else, nothing.  Reached from the table at Data_F82000.
+MidiFilePlay_Tick:
 	ld bc, (UI_ScreenLatch:16)                                 ; FB9E79  d1 7a 20 21
 	extz BC                                              ; FB9E7D  d9 12
 	cp BC,0x0013                                         ; FB9E7F  d9 cf 13 00
@@ -101415,13 +101427,16 @@ sub_FB9E79:
 	jr z, .LFB9E8D                                       ; FB9E89  66 02
 	jr .LFB9E95                                          ; FB9E8B  68 08
 .LFB9E8D:
-	calr sub_FB9FE1                                      ; FB9E8D  1e 51 01
+	calr MidiFileDirectPlay_Tick                                      ; FB9E8D  1e 51 01
 	jr .LFB9E95                                          ; FB9E90  68 03
 .LFB9E92:
-	calr sub_FB9E96                                      ; FB9E92  1e 01 00
+	calr SequencerMedley_MidiFileTick                                      ; FB9E92  1e 01 00
 .LFB9E95:
 	ret                                                  ; FB9E95  0e
-sub_FB9E96:
+; SequencerMedley_MidiFileTick: acts only on screen 0x13 with Medley_Source 1 (FD) and Medley_FileType 1 (MIDI FILE) and (0x60505E) bit 1;
+;   unless bit 0, runs 0xFB9697; a pending stop (0x605147 bit 0) -> MidiFilePlay_Stop; otherwise builds the song
+;   position (0x605040) = beat (0x91) * 96 + Seq_BeatTick.
+SequencerMedley_MidiFileTick:
 	link XIZ,0xfff8                                      ; FB9E96  ee 0c f8 ff
 	pushw hl                                             ; FB9E9A  2b
 	push XIX                                             ; FB9E9B  3c
@@ -101443,14 +101458,14 @@ sub_FB9E96:
 	and C,0x01                                           ; FB9ED1  cb cc 01
 	jr z, .LFB9EE4                                       ; FB9ED4  66 0e
 	m_res 0, MD24, 0x605147                              ; FB9ED6  f2 47 51 60 b0
-	calr sub_FB91C9                                      ; FB9EDB  1e eb f2
+	calr MidiFilePlay_Stop                                      ; FB9EDB  1e eb f2
 	call sub_FB906D                                      ; FB9EDE  1d 6d 90 fb
 	jr .LFB9F03                                          ; FB9EE2  68 1f
 .LFB9EE4:
 	ld c, (0x60505a:24)                                 ; FB9EE4  c2 5a 50 60 23
 	cp c, 0x00:i3                                          ; FB9EE9  cb d8
 	jr z, .LFB9F0A                                       ; FB9EEB  66 1d
-	calr sub_FB91C9                                      ; FB9EED  1e d9 f2
+	calr MidiFilePlay_Stop                                      ; FB9EED  1e d9 f2
 	call sub_FB906D                                      ; FB9EF0  1d 6d 90 fb
 	ld (UI_Request:16), 0xab                                 ; FB9EF4  f1 70 20 00 ab
 	ld (UI_Request_Hi:16), 0x40                                 ; FB9EF9  f1 71 20 00 40
@@ -101496,7 +101511,7 @@ sub_FB9E96:
 	and C,0x01                                           ; FB9F70  cb cc 01
 	jr z, .LFB9F87                                       ; FB9F73  66 12
 	m_res 0, MD24, 0x605147                              ; FB9F75  f2 47 51 60 b0
-	calr sub_FB91C9                                      ; FB9F7A  1e 4c f2
+	calr MidiFilePlay_Stop                                      ; FB9F7A  1e 4c f2
 	call sub_FB906D                                      ; FB9F7D  1d 6d 90 fb
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9F81  f1 95 20 bc
 	jr .LFB9FDC                                          ; FB9F85  68 55
@@ -101539,7 +101554,8 @@ sub_FB9E96:
 	popw hl                                              ; FB9FDD  4b
 	unlk XIZ                                             ; FB9FDE  ee 0d
 	ret                                                  ; FB9FE0  0e
-sub_FB9FE1:
+; MidiFileDirectPlay_Tick: the same as SequencerMedley_MidiFileTick for screen 0x45 (no medley-source test).
+MidiFileDirectPlay_Tick:
 	link XIZ,0xfff8                                      ; FB9FE1  ee 0c f8 ff
 	pushw hl                                             ; FB9FE5  2b
 	push XIX                                             ; FB9FE6  3c
@@ -101557,13 +101573,13 @@ sub_FB9FE1:
 	and C,0x01                                           ; FBA00C  cb cc 01
 	jr z, .LFBA01C                                       ; FBA00F  66 0b
 	m_res 0, MD24, 0x605147                              ; FBA011  f2 47 51 60 b0
-	calr sub_FB91C9                                      ; FBA016  1e b0 f1
+	calr MidiFilePlay_Stop                                      ; FBA016  1e b0 f1
 	jrl .LFBA108                                         ; FBA019  78 ec 00
 .LFBA01C:
 	ld c, (0x60505a:24)                                 ; FBA01C  c2 5a 50 60 23
 	cp c, 0x00:i3                                          ; FBA021  cb d8
 	jr z, .LFBA03A                                       ; FBA023  66 15
-	calr sub_FB91C9                                      ; FBA025  1e a1 f1
+	calr MidiFilePlay_Stop                                      ; FBA025  1e a1 f1
 	ld (UI_Request:16), 0xab                                 ; FBA028  f1 70 20 00 ab
 	ld (UI_Request_Hi:16), 0x40                                 ; FBA02D  f1 71 20 00 40
 	ld (UI_StatusCode:16), 0x3f                                 ; FBA032  f1 80 28 00 3f
@@ -101605,7 +101621,7 @@ sub_FB9FE1:
 	and C,0x01                                           ; FBA09C  cb cc 01
 	jr z, .LFBA0AB                                       ; FBA09F  66 0a
 	m_res 0, MD24, 0x605147                              ; FBA0A1  f2 47 51 60 b0
-	calr sub_FB91C9                                      ; FBA0A6  1e 20 f1
+	calr MidiFilePlay_Stop                                      ; FBA0A6  1e 20 f1
 	jr .LFBA108                                          ; FBA0A9  68 5d
 .LFBA0AB:
 	ld XBC,(XIX)                                         ; FBA0AB  a4 21

@@ -1090,15 +1090,15 @@
 	.set	sub_FB5EE9, 0xFB5EE9
 	.set	SysEx_Checksum, 0xFB7A90
 	.set	SysExTx_SendBytes, 0xFB7AC2
-	.set	sub_FB9B41, 0xFB9B41
-	.set	sub_FB9B73, 0xFB9B73
+	.set	MidiFileDirectPlay_InitOnEntry, 0xFB9B41
+	.set	MidiFileDirectPlay_RestoreOnLeave, 0xFB9B73
 	.set	sub_FB9BA4, 0xFB9BA4
 	.set	sub_FB9C52, 0xFB9C52
 	.set	sub_FB9D2C, 0xFB9D2C
 	.set	sub_FB9D43, 0xFB9D43
 	.set	sub_FB9DA0, 0xFB9DA0
 	.set	MidiFileDirectPlay_LcdKeyRow1, 0xFB9DFE
-	.set	sub_FB9E79, 0xFB9E79
+	.set	MidiFilePlay_Tick, 0xFB9E79
 	.set	sub_FBAC00, 0xFBAC00
 	.set	sub_FBAE5A, 0xFBAE5A
 	.set	sub_FBB392, 0xFBB392
@@ -88557,10 +88557,10 @@ T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
 T_SysEx_Checksum:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
 T_SysExTx_SendBytes:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
-T_F40950:	jp sub_FB9E79  ; -> prom_a 0x39E79   x1
+T_F40950:	jp MidiFilePlay_Tick  ; -> prom_a 0x39E79   x1
 T_MidiFileDirectPlay_LcdKeyRow1:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
-T_F40958:	jp sub_FB9B41  ; -> prom_a 0x39B41   x1
-T_F4095C:	jp sub_FB9B73  ; -> prom_a 0x39B73   x1
+T_F40958:	jp MidiFileDirectPlay_InitOnEntry  ; -> prom_a 0x39B41   x1
+T_F4095C:	jp MidiFileDirectPlay_RestoreOnLeave  ; -> prom_a 0x39B73   x1
 T_F40960:	jp sub_FB9BA4  ; -> prom_a 0x39BA4
 T_F40964:	jp sub_FB9C52  ; -> prom_a 0x39C52
 	.fill 0x8, 1, 0x0E  ; 0xF40968: 8 x ret

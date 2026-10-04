@@ -2450,4 +2450,13 @@ RENAMES = [
     ("T_F43480", "T_ToneMsg80_Id01"),
     ("T_F4348C", "T_ToneMsg80_Id16"),
     ("T_F434E4", "T_UI_RequestBits_ClearBit7"),
+    ("sub_FB9E79", "MidiFilePlay_Tick"),
+    ("sub_FB9E96", "SequencerMedley_MidiFileTick"),
+    ("sub_FB9FE1", "MidiFileDirectPlay_Tick"),
+    ("sub_FB91C9", "MidiFilePlay_Stop"),
+    ("sub_FB991B", "MidiFilePlay_ClearPosition"),
+    ("sub_FB9E61", "MidiFilePlay_ClearPosition_Copy"),
+    ("sub_FB916A", "SeqClock_ResetBeatAndTick"),
+    ("sub_FB9B41", "MidiFileDirectPlay_InitOnEntry"),
+    ("sub_FB9B73", "MidiFileDirectPlay_RestoreOnLeave"),
 ]

@@ -11,6 +11,8 @@ RUN
   python3 notes/prom_ab_read_names_2026_10_04.py          # the table
   python3 notes/prom_ab_read_names_2026_10_04.py --args   # 'old=new|header' for the rename helper
 """
+import os
+import re
 import sys
 
 # the old label is kept as its bare address: the rename helper rewrites every old LABEL token in wsa1/notes
@@ -62,12 +64,43 @@ ROWS = [
     ("F65CD6", "TrackAssign_SelectTrackGroup",
      "BC = 10 (LcdKeyRow3) clears (0x0C07) bit 0 and sets (0x0C03) = 0; BC = 11 (LcdKeyRow4) sets the bit and (0x0C03) = 8;\n"
      "then (0x0C06) = the byte map 0x603422[(0x0C03)].  Called by LcdKeyRow3/4_TrackAssign_StageZero."),
+    # prom_a 0xFB9000-0xFBA1FF: the MIDI-file player (screens 0x13 SequencerMedley and 0x45 MidiFileDirectPlay)
+    ("FB9E79", "MidiFilePlay_Tick",
+     "UI_ScreenLatch 0x13 (SequencerMedley) -> SequencerMedley_MidiFileTick; 0x45 (MidiFileDirectPlay) ->\n"
+     "MidiFileDirectPlay_Tick; anything else, nothing.  Reached from the table at Data_F82000."),
+    ("FB9E96", "SequencerMedley_MidiFileTick",
+     "acts only on screen 0x13 with Medley_Source 1 (FD) and Medley_FileType 1 (MIDI FILE) and (0x60505E) bit 1;\n"
+     "unless bit 0, runs 0xFB9697; a pending stop (0x605147 bit 0) -> MidiFilePlay_Stop; otherwise builds the song\n"
+     "position (0x605040) = beat (0x91) * 96 + Seq_BeatTick."),
+    ("FB9FE1", "MidiFileDirectPlay_Tick",
+     "the same as SequencerMedley_MidiFileTick for screen 0x45 (no medley-source test)."),
+    ("FB91C9", "MidiFilePlay_Stop",
+     "clears (0x60505E) bit 0 and (0x60504C), MidiInQueue_InjectAllNotesOff_AllChannels, T_F413C0, then clears the\n"
+     "position (0x605040) and (0x605044) / (0x605048).  Called by MidiFileDirectPlay_LcdKeyRow1, both ticks, and the leave."),
+    ("FB991B", "MidiFilePlay_ClearPosition",
+     "(0x605040) = 0: the 32-bit song position the ticks build as beat * 96 + tick."),
+    ("FB9E61", "MidiFilePlay_ClearPosition_Copy",
+     "byte-for-byte MidiFilePlay_ClearPosition."),
+    ("FB916A", "SeqClock_ResetBeatAndTick",
+     "with interrupts masked (ei 6 ... ei 0): the beat word (0x91) = 0 and Seq_BeatTick = 0."),
+    ("FB9B41", "MidiFileDirectPlay_InitOnEntry",
+     "(0x605069) bit 7 set; saves (0x60341E) in (0x605072) and clears it; (0x34BB) bit 2 cleared; (0x60505E) = 0;\n"
+     "(0x605144) = the byte at 0x7F4D; then 0xFB9089.  Called by Paint_MidiFileDirectPlay, the screen's enter."),
+    ("FB9B73", "MidiFileDirectPlay_RestoreOnLeave",
+     "(0x605068) = 0; restores (0x60341E) from (0x605072); MidiFilePlay_Stop; (0x60505E) = 0; then 0xFB9C52 or, when\n"
+     "(0x605144) bit 2, 0xFB9BA4 (which installs the 17-byte part map from MidiFile_Tables_FBA169 into 0x603422).\n"
+     "Called by ScreenLeave_MidiFileDirectPlay."),
 ]
 
 
 def main():
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    src = "".join(open(os.path.join(here, p), "rb").read().decode("latin-1")
+                  for p in ("prom_a/wsa1_prom_a.s", "prom_b/wsa1_prom_b.s"))
     for o, n, ev in ROWS:
         if "--args" in sys.argv:
+            if not re.search(r'^sub_%s:' % o, src, re.M):
+                continue                          # applied already
             print("sub_%s=%s|%s: %s" % (o, n, n, ev.replace("\n", "\\n  ")))
         else:
             print("sub_%-7s -> %s" % (o, n))
