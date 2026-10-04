@@ -1777,16 +1777,16 @@ RING_NAMES = [
      "Init entries are called, which is checked, and nothing about whether "
      "fourteen is all the machine has"),
     ("sub_F825C7", "Ring601850_ServiceIfNotEmpty",
-     "runs sub_FC87AE exactly when ring 0x601850 holds data",
+     "runs Ring601850_ProcessNoteEvents exactly when ring 0x601850 holds data",
      "0xF825C7 `call 0xF41E68` = prom_b slot T_Ring601850_IsEmpty; 0xF825CB "
      "`and WA,WA` and 0xF825CD `jr z,.LF825D3` skip the body when it returns "
      "zero; 0xF825CF `call 0xF413B8` = prom_b slot T_F413B8 -> prom_a "
-     "sub_FC87AE runs when it does not. ★ POLARITY, and it is the opposite of "
+     "Ring601850_ProcessNoteEvents runs when it does not. ★ POLARITY, and it is the opposite of "
      "what the callee's name suggests: Ring601850_IsEmpty (0xF84B6E) loads "
      "WA=0, compares the read cursor (0x601848) with the write cursor "
      "(0x60184C) and loads 0xFFFF only when they DIFFER -- so it returns ZERO "
      "when the ring IS empty. Reached only through prom_b slot T_F40020",
-     "what sub_FC87AE does with the ring and what the ring carries. ⚠ AND THE "
+     "what Ring601850_ProcessNoteEvents does with the ring and what the ring carries. ⚠ AND THE "
      "POLARITY ABOVE IS A FACT ABOUT ALL FOURTEEN `Ring*_IsEmpty` ROUTINES, "
      "not just this one; none of them is renamed here, because renaming "
      "fourteen prom_a labels and their fourteen prom_b slots is a mass rename "

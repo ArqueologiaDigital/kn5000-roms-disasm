@@ -171,7 +171,7 @@ is the one the directory publishes, as **T_F413D0**; the full initialiser is
 published by no slot at all.
 
 **⚠ A correction made before this shipped.** The first draft of that paragraph
-said T_F413B4 and called it "the module's highest reference count". T_F413B4 is
+said T_MidiInA_ProcessRing and called it "the module's highest reference count". T_MidiInA_ProcessRing is
 the module's *first* slot and targets 0xFC80E2; T_F413D0 is the one that targets
 0xFC807D, and its bound is 1. The 52 that `--modules` ranks by is the module
 *total*; the busiest single slot is T_F413C8 at 11. The check script now pins

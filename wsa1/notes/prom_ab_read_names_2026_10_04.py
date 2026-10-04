@@ -1918,6 +1918,25 @@ ROWS = [
     ("FE7A49", "Medley_ScheduleNextMidiFile",
      "T_Medley_ScheduleNextMidiFile: with an FD MIDI-file medley playing, (0x22D0) = 10."),
     ("FE7A73", "Disk_BlankFileNameBase", "Disk_FileName[0..7] = eight spaces."),
+    # the note-frame processors (FINDINGS-prom_a-note-frames.md)
+    ("FC80E2", "MidiInA_ProcessRing",
+     "T_MidiInA_ProcessRing: T_MidiInARing_ScanRewind, then MidiInA_GatherFrame in a loop; a 0x90 frame through the note stages\n"
+     "(sub_FCB269, sub_FC9C1D, sub_FC9EA3 ...), a 0xB0 frame through the control-change path."),
+    ("FC8448", "MidiInB_ProcessRing", "the same for MIDI IN B (T_MidiInBRing_ScanRewind, MidiInB_GatherFrame)."),
+    ("FC8960", "TimedEvents_ProcessRing",
+     "T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a\n"
+     "part through 0x603422 (0xFF = skip), then sub_FCB1BB, sub_FC9F8B, sub_FCA6BB; 0xB0 frames to the CC path."),
+    ("FC87AE", "Ring601850_ProcessNoteEvents",
+     "T_F413B8: Ring601850_GatherFrame in a loop, each frame through sub_FC9C1D, sub_FC9EA3, sub_FCAE76,\n"
+     "sub_FC9F8B, sub_FCA6BB."),
+    ("FC915C", "MidiInA_GatherFrame",
+     "(pending, frame): frame = {count, kind 0x90 / 0xB0, 1, channel, entries of 9 bytes from +7: note, velocity};\n"
+     "consecutive note on / off messages on one channel, up to 0x20, or one control change; a message on another\n"
+     "channel stays in the 5-byte pending record (0 = none, 0xFF = the ring is empty).  A = the entry count."),
+    ("FC9343", "MidiInB_GatherFrame", "MidiInA_GatherFrame for MIDI IN B (T_MidiInBRing_Scan)."),
+    ("FC9528", "TimedEvents_GatherFrame", "MidiInA_GatherFrame's shape over T_TimedEventRing_Scan."),
+    ("FC9099", "Ring601850_GatherFrame",
+     "up to 16 (note, velocity) pairs from T_Ring601850_Get into the frame's entries; the pending record as above."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

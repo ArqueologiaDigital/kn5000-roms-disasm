@@ -499,6 +499,9 @@
 	.equ Medley_Countdown,				0x22d0	; ticks until the medley's next step: 10 after a song is set up; INT starts at 5, MIDI files move on at 0 -- Medley_LoadInternalSong / _SkipToNextMidiFile / _ScheduleNextMidiFile set it; Medley_Tick counts it
 	.equ BStore_SongName,				0x6034ca	; workspace +0xCA: the bank's 6-character song name -- SongName_Draw6Chars / _StoreCharAtCursor / _ResetToUnderscores; Medley_LoadInternalSong copies it
 
+; ---- wsa1/notes/FINDINGS-prom_a-note-frames.md -- "2. The frame"
+	.equ BStore_TrackToPart,			0x603422	; workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none -- TimedEvents_ProcessRing maps a frame's channel through it; EditPartSelect_DrawPartLabels draws it
+
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
 	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank
 

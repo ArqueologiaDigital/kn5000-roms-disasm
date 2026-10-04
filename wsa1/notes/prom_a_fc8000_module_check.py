@@ -139,9 +139,9 @@ def sec_init():
           a(0xFC8020, 46) == a(0xFC807D, 46), True)
     check("...and 46 is maximal: byte 47 differs",
           (a(0xFC8020 + 46, 1).hex(), a(0xFC807D + 46, 1).hex()), ("41", "0e"))
-    check("the short copy is published as T_F413D0 -- NOT T_F413B4",
+    check("the short copy is published as T_F413D0 -- NOT T_MidiInA_ProcessRing",
           [hex(s) for s in thunk_slots().get(0xFC807D, [])], ['0xf413d0'])
-    check("...and T_F413B4, the module's first slot, targets 0xFC80E2",
+    check("...and T_MidiInA_ProcessRing, the module's first slot, targets 0xFC80E2",
           hex(int.from_bytes(B[0x413B4 + 1:0x413B4 + 4], "little")), hex(0xFC80E2))
     check("the full initialiser is published by NO slot",
           thunk_slots().get(0xFC8020, []), [])

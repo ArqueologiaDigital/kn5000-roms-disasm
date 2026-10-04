@@ -571,6 +571,10 @@ GROUPS = [
         0x6034CA: ("BStore_SongName", "workspace +0xCA: the bank's 6-character song name",
                    "SongName_Draw6Chars / _StoreCharAtCursor / _ResetToUnderscores; Medley_LoadInternalSong copies it"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-note-frames.md", "2. The frame", {
+        0x603422: ("BStore_TrackToPart", "workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none",
+                   "TimedEvents_ProcessRing maps a frame's channel through it; EditPartSelect_DrawPartLabels draws it"),
+    }),
     ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ", {
         0x272B: ("Disk_SeqBank", "the sequencer bank 0..9 a disk load goes into / a save comes from",
                  "LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank"),

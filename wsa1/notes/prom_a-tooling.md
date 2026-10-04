@@ -569,7 +569,7 @@ What they are for, beyond re-checking numbers:
 
 They caught real defects in headers written minutes earlier, and those are worth
 naming because they are the kinds this tree keeps making: a slot cited as
-`T_F413B4` that is actually `T_F413D0`; a module-total reference bound (52)
+`T_MidiInA_ProcessRing` that is actually `T_F413D0`; a module-total reference bound (52)
 quoted as one entry's; `MIDI_PostSendWork` given prom_a 0xF8590F when it is at
 0xFA590F; "24 published targets are a bare `ret`" when it is 34; "12 times in a
 row" when it is 20.

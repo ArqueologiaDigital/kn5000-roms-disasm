@@ -1475,9 +1475,9 @@
 	.set T_F41260,                                                                      0x00F41260
 	.set T_F41264,                                                                      0x00F41264
 	.set T_Ram3800_Start_Entry,                                                                      0x00F413B0
-	.set T_F413B4,                                                                      0x00F413B4
+	.set T_MidiInA_ProcessRing,                                                                      0x00F413B4
 	.set T_F413B8,                                                                      0x00F413B8
-	.set T_F413BC,                                                                      0x00F413BC
+	.set T_TimedEvents_ProcessRing,                                                                      0x00F413BC
 	.set T_F413C0,                                                                      0x00F413C0
 	.set T_F413C4,                                                                      0x00F413C4
 	.set T_F413C8,                                                                      0x00F413C8
@@ -1486,7 +1486,7 @@
 	.set T_F413D4,                                                                      0x00F413D4
 	.set T_F413DC,                                                                      0x00F413DC
 	.set T_F413E0,                                                                      0x00F413E0
-	.set T_F413F8,                                                                      0x00F413F8
+	.set T_MidiInB_ProcessRing,                                                                      0x00F413F8
 	.set T_F413FC,                                                                      0x00F413FC
 	.set T_F41400,                                                                      0x00F41400
 	.set T_F414B0,                                                                      0x00F414B0
@@ -5489,7 +5489,7 @@ sub_F81948:   ; entry: named by 3 `ld` operands, first at 0xF818EF
 	ldw bc, 0x08                                         ; F81969  31 08 00
 	xor WA,WA                                            ; F8196C  d8 d0
 	ld a, (0x0e03:16)                                   ; F8196E  c1 03 0e 21
-	ld XIY,0x00603422                                    ; F81972  45 22 34 60 00
+	ld XIY,BStore_TrackToPart                                    ; F81972  45 22 34 60 00
 	mx_lda32 MXD, ra_IY, ra_WA, r5                       ; F81977  f3 07 f4 e0 35
 	ld XIX,UI_DrawScratch+8                                    ; F8197C  44 48 26 00 00
 	ldir85                                               ; F81981  85 11
@@ -6323,7 +6323,7 @@ MainTask_PanelTimersTick:
 	m_and_mi8 MB16, 0x34d0, 0xfd                         ; F821FE  c1 d0 34 3c fd
 	ret                                                  ; F82203  0e
 ; MidiIn_RoutePortA -- split pending MIDI IN port A bytes into a run of note-class messages or a run of other messages, and hand the run to its consumer
-; Evidence: ring 0x600C1E (MidiIn_PumpPortA's), scanned from (ring-8) to (ring-4) mod 0x400.  Note class = status 0x8n, 0x9n, or 0xBn whose next byte is >=0x7B (cp 0x7B at 0xF8224A/0xF82280).  At the first class change it stores the position in (ring-6) and calls T_F413B4 (prom_a sub_FC80E2) for a note run, or MidiIn_PumpPortA + T_F41F14 + Queue2C00_DrainPassAB otherwise; then (ring-8)=(ring-6) and (ring-2) += bytes consumed.
+; Evidence: ring 0x600C1E (MidiIn_PumpPortA's), scanned from (ring-8) to (ring-4) mod 0x400.  Note class = status 0x8n, 0x9n, or 0xBn whose next byte is >=0x7B (cp 0x7B at 0xF8224A/0xF82280).  At the first class change it stores the position in (ring-6) and calls T_MidiInA_ProcessRing (prom_a MidiInA_ProcessRing) for a note run, or MidiIn_PumpPortA + T_F41F14 + Queue2C00_DrainPassAB otherwise; then (ring-8)=(ring-6) and (ring-2) += bytes consumed.
 ; Called from MainTask_Loop 0xF82089 when (0x89)!=0xFF and the ring is not empty.
 MidiIn_RoutePortA:
 	ld XHL,MidiIn_PortARing                                    ; F82204  43 1e 0c 60 00
@@ -6399,7 +6399,7 @@ MidiIn_RoutePortA:
 .LF822AB:
 	pushw iz                                             ; F822AB  2e
 	ld (xhl-6), iy                                       ; F822AC  bb fa 55
-	call T_F413B4                                        ; F822AF  1d b4 13 f4
+	call T_MidiInA_ProcessRing                                        ; F822AF  1d b4 13 f4
 	jr .LF822C4                                          ; F822B3  68 0f
 .LF822B5:
 	pushw iz                                             ; F822B5  2e
@@ -6415,7 +6415,7 @@ MidiIn_RoutePortA:
 	add (xhl-2), wa                                      ; F822D0  9b fe 88
 	ret                                                  ; F822D3  0e
 ; MidiIn_RoutePortB -- MidiIn_RoutePortA for MIDI IN port B
-; Evidence: the same code on ring 0x601028; the note run goes to T_F413F8 (prom_a sub_FC8448), the rest to T_MidiIn_PumpPortB + T_F41F14 + Queue2C00_DrainPassAB (0xF8237F-0xF82391).  Called from MainTask_Loop 0xF82094.
+; Evidence: the same code on ring 0x601028; the note run goes to T_MidiInB_ProcessRing (prom_a MidiInB_ProcessRing), the rest to T_MidiIn_PumpPortB + T_F41F14 + Queue2C00_DrainPassAB (0xF8237F-0xF82391).  Called from MainTask_Loop 0xF82094.
 MidiIn_RoutePortB:
 	ld XHL,MidiIn_PortBRing                                    ; F822D4  43 28 10 60 00
 	ld iy, (xhl-8)                                       ; F822D9  9b f8 25
@@ -6490,7 +6490,7 @@ MidiIn_RoutePortB:
 .LF8237B:
 	pushw iz                                             ; F8237B  2e
 	ld (xhl-6), iy                                       ; F8237C  bb fa 55
-	call T_F413F8                                        ; F8237F  1d f8 13 f4
+	call T_MidiInB_ProcessRing                                        ; F8237F  1d f8 13 f4
 	jr .LF82394                                          ; F82383  68 0f
 .LF82385:
 	pushw iz                                             ; F82385  2e
@@ -6598,7 +6598,7 @@ TimedEvents_DrainDue:
 .LF82426:
 	ret                                                  ; F82426  0e
 ; TimedEvents_DispatchDueRun -- take the next run of same-class, due events off ring 0x60080A and hand it to that class's consumer
-; Evidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_F413BC, 2 -> T_F411BC, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.
+; Evidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_TimedEvents_ProcessRing, 2 -> T_F411BC, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.
 ; Out: IZ = bytes consumed.  What the classes are is not established.
 TimedEvents_DispatchDueRun:
 	ld XHL,TimedEvents_Ring                                    ; F82427  43 0a 08 60 00
@@ -6687,7 +6687,7 @@ TimedEvents_DispatchDueRun:
 .LF824E9:
 	pushw iz                                             ; F824E9  2e
 	ld (xhl-6), iy                                       ; F824EA  bb fa 55
-	call T_F413BC                                        ; F824ED  1d bc 13 f4
+	call T_TimedEvents_ProcessRing                                        ; F824ED  1d bc 13 f4
 	jr .LF82512                                          ; F824F1  68 1f
 .LF824F3:
 	pushw iz                                             ; F824F3  2e
@@ -6802,19 +6802,19 @@ SeqBuf_PutByte:
 	pop XIX                                              ; F825C5  5c
 	ret                                                  ; F825C6  0e
 ; ---------------------------------------------------------------------
-; Ring601850_ServiceIfNotEmpty -- runs sub_FC87AE exactly when ring 0x601850 holds data
+; Ring601850_ServiceIfNotEmpty -- runs Ring601850_ProcessNoteEvents exactly when ring 0x601850 holds data
 ;
 ; Evidence: 0xF825C7 `call 0xF41E68` = prom_b slot T_Ring601850_IsEmpty;
 ;           0xF825CB `and WA,WA` and 0xF825CD `jr z,.LF825D3` skip the
 ;           body when it returns zero; 0xF825CF `call 0xF413B8` = prom_b
-;           slot T_F413B8 -> prom_a sub_FC87AE runs when it does not. ★
+;           slot T_F413B8 -> prom_a Ring601850_ProcessNoteEvents runs when it does not. ★
 ;           POLARITY, and it is the opposite of what the callee's name
 ;           suggests: Ring601850_IsEmpty (0xF84B6E) loads WA=0, compares
 ;           the read cursor (0x601848) with the write cursor (0x60184C)
 ;           and loads 0xFFFF only when they DIFFER -- so it returns ZERO
 ;           when the ring IS empty. Reached only through prom_b slot
 ;           T_F40020
-; Unknown:  what sub_FC87AE does with the ring and what the ring
+; Unknown:  what Ring601850_ProcessNoteEvents does with the ring and what the ring
 ;           carries. ⚠ AND THE POLARITY ABOVE IS A FACT ABOUT ALL
 ;           FOURTEEN `Ring*_IsEmpty` ROUTINES, not just this one; none
 ;           of them is renamed here, because renaming fourteen prom_a
@@ -86447,7 +86447,7 @@ SeqBuf_LoadSlotKeyList:
 	jr nc, .LFAEC0E
 	extz HL
 	ld l, (0x60f31c:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r7
 	sll hl, 0x02
 	ld XIX,KeyValueListPtrs_A
@@ -86522,7 +86522,7 @@ sub_FAEC8A:
 	jr nc, .LFAECC8
 	extz HL
 	ld L,C
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	ld (0x60f322:24), a
 	calr .LFAED1B
@@ -86576,7 +86576,7 @@ sub_FAEC8A:
 	ld (xix+), wa
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIY,0x00603422
+	ld XIY,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IY, ra_HL, r7
 	ld XIY,IdentityMap32_FAF7A6
 	mx_ld_rm MXB, ra_IY, ra_HL, r0
@@ -86755,7 +86755,7 @@ SeqEvt_WriteRecordField:   ; entry: pointer-table entry
 .LFAEEED:
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	ld XIX,0x00603433
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
@@ -86774,7 +86774,7 @@ SeqEvt_ShadowPartVolume:   ; entry: pointer-table entry
 	ld e, (0x60f30c:24)
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	set 0x07,E
 	ld XIX,SeqEvt_VolumeShadow
 	mx_st_mr8 MXD, ra_IX, ra_HL, r5
@@ -86784,7 +86784,7 @@ SeqEvt_ShadowPartVolume:   ; entry: pointer-table entry
 SeqEvt_PostPartVolume:
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r7
 	ld XIX,IdentityMap32_FAF7A6
 	mx_ld_rm MXB, ra_IX, ra_HL, r3
@@ -86799,7 +86799,7 @@ SeqEvt_PostPartVolume:
 .LFAEF7A:
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	ld XIX,0x00603433
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
@@ -86944,7 +86944,7 @@ SeqEvt_LookupParamType:
 	ld (0x60f330:24), 0xff
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r7
 	sll hl, 0x02
 	ld XIX,KeyValueListPtrs_B
@@ -87023,7 +87023,7 @@ SeqEvt_ShadowChanPressure:   ; entry: pointer-table entry
 ; Evidence: `ld C,0xb4`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF196-0xFAF20A).  0xB4 is ParamMsg_B4_ChannelPressure.  Called from SeqEvt_FlushShadows' 0x60F630 sweep.
 SeqEvt_PostChanPressure:
 	ld c, 0xb4:opc
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld l, (0x60f31d:24)
 	mx8_ld_rm MXB, ra_IX, rb_L, r7
 	ld XIX,IdentityMap32_FAF7A6
@@ -87040,7 +87040,7 @@ SeqEvt_PostChanPressure:
 	call T_Queue2C00_PublishStagedIfPending
 .LFAF1DB:
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld XIX,0x00603433
 	mx8_ld_rm MXB, ra_IX, rb_L, r1
 	cp A,0x20
@@ -87066,7 +87066,7 @@ SeqEvt_ShadowModulation:   ; entry: pointer-table entry
 ; Evidence: `ld C,0xb2`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF225-0xFAF299).  0xB2 is ParamMsg_B2_CC01_Modulation.  Called from SeqEvt_FlushShadows' 0x60F5B0 sweep.
 SeqEvt_PostModulation:
 	ld c, 0xb2:opc
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld l, (0x60f31d:24)
 	mx8_ld_rm MXB, ra_IX, rb_L, r7
 	ld XIX,IdentityMap32_FAF7A6
@@ -87083,7 +87083,7 @@ SeqEvt_PostModulation:
 	call T_Queue2C00_PublishStagedIfPending
 .LFAF26A:
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld XIX,0x00603433
 	mx8_ld_rm MXB, ra_IX, rb_L, r1
 	cp A,0x20
@@ -87111,7 +87111,7 @@ SeqEvt_ShadowPitchBend:   ; entry: pointer-table entry
 ; Evidence: `ld C,0xb1`, `and DE,0x7f7f`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedDrainPassB, T_ParamChange_Notify (0xFAF2BB-0xFAF331).  0xB1 is ParamMsg_B1_PitchBend.  Called from SeqEvt_FlushShadows' 0x60F5D0 sweep.
 SeqEvt_PostPitchBend:
 	ld c, 0xb1:opc
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld l, (0x60f31d:24)
 	mx8_ld_rm MXB, ra_IX, rb_L, r7
 	ld XIX,IdentityMap32_FAF7A6
@@ -87128,7 +87128,7 @@ SeqEvt_PostPitchBend:
 	call T_Queue2C00_PublishStagedDrainPassB
 .LFAF302:
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	ld XIX,0x00603433
 	mx8_ld_rm MXB, ra_IX, rb_L, r1
 	cp A,0x20
@@ -87156,7 +87156,7 @@ SeqEvt_ShadowExpression:   ; entry: pointer-table entry
 	ldw bc, 0x01b0
 	extz HL
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	ld c, 0xb3:opc
 	ld XIX,IdentityMap32_FAF7A6
@@ -87287,7 +87287,7 @@ sub_FAF453:   ; entry: pointer-table entry
 	cp XBC,0x00000000
 	jr z, .LFAF488
 	ld (0x60f31d:24), l
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r0
 	ld (0x60f322:24), w
 .LFAF47E:
@@ -87489,7 +87489,7 @@ SeqEvt_ApplyProgramEvent:   ; entry: pointer-table entry
 .LFAF676:
 	xor H,H
 	ld l, (0x60f31d:24)
-	ld XIX,0x00603422
+	ld XIX,BStore_TrackToPart
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	ld XIX,0x00603433
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
@@ -102102,7 +102102,7 @@ sub_FB9BA4:
 	ld XIX,XBC                                           ; FB9BDD  e9 8c
 	add XBC,XIZ                                          ; FB9BDF  ee 81
 	ld a, (xbc-17)                                       ; FB9BE1  89 ef 21
-	lda xbc, (0x603422:24)                               ; FB9BE4  f2 22 34 60 31
+	lda xbc, (BStore_TrackToPart:24)                               ; FB9BE4  f2 22 34 60 31
 	add XBC,XIX                                          ; FB9BE9  ec 81
 	ld (XBC),A                                           ; FB9BEB  b1 41
 	ld XBC,XIX                                           ; FB9BED  ec 89
@@ -102173,7 +102173,7 @@ sub_FB9C52:
 	ld XIX,XBC                                           ; FB9C8B  e9 8c
 	add XBC,XIZ                                          ; FB9C8D  ee 81
 	ld a, (xbc-17)                                       ; FB9C8F  89 ef 21
-	lda xbc, (0x603422:24)                               ; FB9C92  f2 22 34 60 31
+	lda xbc, (BStore_TrackToPart:24)                               ; FB9C92  f2 22 34 60 31
 	add XBC,XIX                                          ; FB9C97  ec 81
 	ld (XBC),A                                           ; FB9C99  b1 41
 	ld XBC,XIX                                           ; FB9C9B  ec 89
@@ -119843,7 +119843,7 @@ sub_FC61A6:
 	ld ix, (xiz-21)                                      ; FC6220  9e eb 24
 	extz IX                                              ; FC6223  dc 12
 	extz XIX                                             ; FC6225  ec 12
-	lda xbc, (0x603422:24)                               ; FC6227  f2 22 34 60 31
+	lda xbc, (BStore_TrackToPart:24)                               ; FC6227  f2 22 34 60 31
 	add XBC,XIX                                          ; FC622C  ec 81
 	ld L,(XBC)                                           ; FC622E  81 27
 	lda xbc, (0x603433:24)                               ; FC6230  f2 33 34 60 31
@@ -120322,8 +120322,8 @@ MixedTables_FC6626:
 ;   copy that the directory publishes -- as T_Ram3800_InitDataImage (T_F413D0) -- while 0xFC8020, the full
 ;   one, is reached only by `calr` from the module's own entry.  So a caller can
 ;   reset the 0x3800 image WITHOUT touching 0x602000.
-;   ⚠ Corrected before it shipped: this paragraph first said T_F413B4 and called
-;   it the module's highest reference count.  T_F413B4 is the module's FIRST
+;   ⚠ Corrected before it shipped: this paragraph first said T_MidiInA_ProcessRing and called
+;   it the module's highest reference count.  T_MidiInA_ProcessRing is the module's FIRST
 ;   slot and it targets 0xFC80E2; T_Ram3800_InitDataImage (T_F413D0) is the one that targets 0xFC807D, and
 ;   its reference upper bound is 1.  The module's busiest single slot is
 ;   T_F413C8 at 11, targeting 0xFC8CE0.  52 is the module TOTAL, which is what
@@ -120481,13 +120481,13 @@ Ram3800_InitAll:
 ; Ram3800_InitDataImage -- reload the 0x3800 image only, and return
 ;
 ; Called from: directory slot T_Ram3800_InitDataImage (T_F413D0) (reference upper bound 1).  ⚠ NOT
-;          T_F413B4, which is this module's first slot and targets 0xFC80E2;
+;          T_MidiInA_ProcessRing, which is this module's first slot and targets 0xFC80E2;
 ;          and 52 is the whole module's summed bound, not this entry's.
 ; Inputs:  none.  Outputs: RAM 0x003800-0x004365 reloaded from ROM 0xFCB3D3.
 ; Evidence: byte-identical to Ram3800_InitAll over 46 bytes and no further --
 ;          byte 47 is 0x41 (`ld XBC,0x000000a0`, the next block) there and 0x0E
 ;          (`ret`) here.  Both figures are checked.
-; Unknown: who calls it and when.  T_F413B4's 52 is an opcode-anchored upper
+; Unknown: who calls it and when.  T_MidiInA_ProcessRing's 52 is an opcode-anchored upper
 ;          bound, not a call count.
 ; ---------------------------------------------------------------------
 Ram3800_InitDataImage:
@@ -120551,7 +120551,9 @@ T_F413F4_Nop:
 	ret                                                  ; FC80E0  0e
 Ram3800_Start_Nop:
 	ret                                                  ; FC80E1  0e
-sub_FC80E2:
+; MidiInA_ProcessRing: T_MidiInA_ProcessRing: T_MidiInARing_ScanRewind, then MidiInA_GatherFrame in a loop; a 0x90 frame through the note stages
+;   (sub_FCB269, sub_FC9C1D, sub_FC9EA3 ...), a 0xB0 frame through the control-change path.
+MidiInA_ProcessRing:
 	link XIZ,0xfd2c                                      ; FC80E2  ee 0c 2c fd
 	pushw hl                                             ; FC80E6  2b
 	pushw de                                             ; FC80E7  2a
@@ -120563,7 +120565,7 @@ sub_FC80E2:
 	push XBC                                             ; FC80F6  39
 	lda xwa, (xiz-6)                                     ; FC80F7  be fa 30
 	push XWA                                             ; FC80FA  38
-	call sub_FC915C                                      ; FC80FB  1d 5c 91 fc
+	call MidiInA_GatherFrame                                      ; FC80FB  1d 5c 91 fc
 	inc 8,XSP                                            ; FC80FF  ef 60
 	cp a, 0x00:i3                                          ; FC8101  c9 d8
 	jrl z, .LFC8442                                      ; FC8103  76 3c 03
@@ -120883,7 +120885,8 @@ sub_FC80E2:
 	popw hl                                              ; FC8444  4b
 	unlk XIZ                                             ; FC8445  ee 0d
 	ret                                                  ; FC8447  0e
-sub_FC8448:
+; MidiInB_ProcessRing: the same for MIDI IN B (T_MidiInBRing_ScanRewind, MidiInB_GatherFrame).
+MidiInB_ProcessRing:
 	link XIZ,0xfd2c                                      ; FC8448  ee 0c 2c fd
 	pushw hl                                             ; FC844C  2b
 	pushw de                                             ; FC844D  2a
@@ -120895,7 +120898,7 @@ sub_FC8448:
 	push XBC                                             ; FC845C  39
 	lda xwa, (xiz-6)                                     ; FC845D  be fa 30
 	push XWA                                             ; FC8460  38
-	call sub_FC9343                                      ; FC8461  1d 43 93 fc
+	call MidiInB_GatherFrame                                      ; FC8461  1d 43 93 fc
 	inc 8,XSP                                            ; FC8465  ef 60
 	cp a, 0x00:i3                                          ; FC8467  c9 d8
 	jrl z, .LFC87A8                                      ; FC8469  76 3c 03
@@ -121215,7 +121218,9 @@ sub_FC8448:
 	popw hl                                              ; FC87AA  4b
 	unlk XIZ                                             ; FC87AB  ee 0d
 	ret                                                  ; FC87AD  0e
-sub_FC87AE:
+; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through sub_FC9C1D, sub_FC9EA3, sub_FCAE76,
+;   sub_FC9F8B, sub_FCA6BB.
+Ring601850_ProcessNoteEvents:
 	link XIZ,0xfe3a                                      ; FC87AE  ee 0c 3a fe
 	pushw hl                                             ; FC87B2  2b
 	pushw de                                             ; FC87B3  2a
@@ -121226,7 +121231,7 @@ sub_FC87AE:
 	push XBC                                             ; FC87BC  39
 	lda xwa, (xiz-12)                                    ; FC87BD  be f4 30
 	push XWA                                             ; FC87C0  38
-	call sub_FC9099                                      ; FC87C1  1d 99 90 fc
+	call Ring601850_GatherFrame                                      ; FC87C1  1d 99 90 fc
 	inc 8,XSP                                            ; FC87C5  ef 60
 	cp a, 0x00:i3                                          ; FC87C7  c9 d8
 	jrl z, .LFC895A                                      ; FC87C9  76 8e 01
@@ -121372,7 +121377,9 @@ sub_FC87AE:
 	popw hl                                              ; FC895C  4b
 	unlk XIZ                                             ; FC895D  ee 0d
 	ret                                                  ; FC895F  0e
-sub_FC8960:
+; TimedEvents_ProcessRing: T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a
+;   part through 0x603422 (0xFF = skip), then sub_FCB1BB, sub_FC9F8B, sub_FCA6BB; 0xB0 frames to the CC path.
+TimedEvents_ProcessRing:
 	link XIZ,0xfec6                                      ; FC8960  ee 0c c6 fe
 	pushw hl                                             ; FC8964  2b
 	push XIX                                             ; FC8965  3c
@@ -121383,7 +121390,7 @@ sub_FC8960:
 	push XIX                                             ; FC8973  3c
 	lda xbc, (xiz-6)                                     ; FC8974  be fa 31
 	push XBC                                             ; FC8977  39
-	call sub_FC9528                                      ; FC8978  1d 28 95 fc
+	call TimedEvents_GatherFrame                                      ; FC8978  1d 28 95 fc
 	inc 8,XSP                                            ; FC897C  ef 60
 	cp a, 0x00:i3                                          ; FC897E  c9 d8
 	jrl z, .LFC8A88                                      ; FC8980  76 05 01
@@ -121399,7 +121406,7 @@ sub_FC8960:
 	ld C,L                                               ; FC8999  cf 8b
 	extz BC                                              ; FC899B  d9 12
 	extz XBC                                             ; FC899D  e9 12
-	add XBC,0x00603422                                   ; FC899F  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FC899F  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FC89A5  81 26
 	cp H,0xff                                            ; FC89A7  ce cf ff
 	jr z, .LFC8973                                       ; FC89AA  66 c7
@@ -121443,7 +121450,7 @@ sub_FC8960:
 	ld C,H                                               ; FC8A02  ce 8b
 	extz BC                                              ; FC8A04  d9 12
 	extz XBC                                             ; FC8A06  e9 12
-	add XBC,0x00603422                                   ; FC8A08  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FC8A08  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FC8A0E  81 26
 	cp H,0xff                                            ; FC8A10  ce cf ff
 	jr z, .LFC8A3D                                       ; FC8A13  66 28
@@ -121475,7 +121482,7 @@ sub_FC8960:
 	ld C,H                                               ; FC8A45  ce 8b
 	extz BC                                              ; FC8A47  d9 12
 	extz XBC                                             ; FC8A49  e9 12
-	add XBC,0x00603422                                   ; FC8A4B  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FC8A4B  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FC8A51  81 26
 	cp H,0xff                                            ; FC8A53  ce cf ff
 	jrl z, .LFC8973                                      ; FC8A56  76 1a ff
@@ -121737,7 +121744,7 @@ sub_FC8CE0:
 	ld C,H                                               ; FC8CFD  ce 8b
 	extz BC                                              ; FC8CFF  d9 12
 	extz XBC                                             ; FC8D01  e9 12
-	add XBC,0x00603422                                   ; FC8D03  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FC8D03  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FC8D09  81 26
 	cp H,0xff                                            ; FC8D0B  ce cf ff
 	jr z, .LFC8D38                                       ; FC8D0E  66 28
@@ -122175,7 +122182,8 @@ sub_FC9016:
 	popw hl                                              ; FC9095  4b
 	unlk XIZ                                             ; FC9096  ee 0d
 	ret                                                  ; FC9098  0e
-sub_FC9099:
+; Ring601850_GatherFrame: up to 16 (note, velocity) pairs from T_Ring601850_Get into the frame's entries; the pending record as above.
+Ring601850_GatherFrame:
 	link XIZ,0xfffc                                      ; FC9099  ee 0c fc ff
 	pushw hl                                             ; FC909D  2b
 	pushw de                                             ; FC909E  2a
@@ -122257,7 +122265,10 @@ sub_FC9099:
 	popw hl                                              ; FC9158  4b
 	unlk XIZ                                             ; FC9159  ee 0d
 	ret                                                  ; FC915B  0e
-sub_FC915C:
+; MidiInA_GatherFrame: (pending, frame): frame = {count, kind 0x90 / 0xB0, 1, channel, entries of 9 bytes from +7: note, velocity};
+;   consecutive note on / off messages on one channel, up to 0x20, or one control change; a message on another
+;   channel stays in the 5-byte pending record (0 = none, 0xFF = the ring is empty).  A = the entry count.
+MidiInA_GatherFrame:
 	link XIZ,0xfff8                                      ; FC915C  ee 0c f8 ff
 	pushw hl                                             ; FC9160  2b
 	pushw de                                             ; FC9161  2a
@@ -122456,7 +122467,8 @@ sub_FC915C:
 	popw hl                                              ; FC933F  4b
 	unlk XIZ                                             ; FC9340  ee 0d
 	ret                                                  ; FC9342  0e
-sub_FC9343:
+; MidiInB_GatherFrame: MidiInA_GatherFrame for MIDI IN B (T_MidiInBRing_Scan).
+MidiInB_GatherFrame:
 	link XIZ,0xfff8                                      ; FC9343  ee 0c f8 ff
 	pushw hl                                             ; FC9347  2b
 	pushw de                                             ; FC9348  2a
@@ -122654,7 +122666,8 @@ sub_FC9343:
 	popw hl                                              ; FC9524  4b
 	unlk XIZ                                             ; FC9525  ee 0d
 	ret                                                  ; FC9527  0e
-sub_FC9528:
+; TimedEvents_GatherFrame: MidiInA_GatherFrame's shape over T_TimedEventRing_Scan.
+TimedEvents_GatherFrame:
 	link XIZ,0xfff0                                      ; FC9528  ee 0c f0 ff
 	pushw hl                                             ; FC952C  2b
 	pushw de                                             ; FC952D  2a
@@ -122967,7 +122980,7 @@ sub_FC97F1:
 	ld BC,(XIZ+0x08)                                     ; FC9814  9e 08 21
 	extz BC                                              ; FC9817  d9 12
 	extz XBC                                             ; FC9819  e9 12
-	add XBC,0x00603422                                   ; FC981B  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FC981B  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FC9821  81 26
 	cp H,0xff                                            ; FC9823  ce cf ff
 	jr z, .LFC984E                                       ; FC9826  66 26
@@ -174449,7 +174462,7 @@ sub_FE6E84:
 	ld C,D                                               ; FE6FB6  cc 8b
 	extz BC                                              ; FE6FB8  d9 12
 	extz XBC                                             ; FE6FBA  e9 12
-	add XBC,0x00603422                                   ; FE6FBC  e9 c8 22 34 60 00
+	add XBC,BStore_TrackToPart                                   ; FE6FBC  e9 c8 22 34 60 00
 	ld H,(XBC)                                           ; FE6FC2  81 26
 	cp h, 0x07:i3                                          ; FE6FC4  ce df
 	jr ugt, .LFE6FDC                                         ; FE6FC6  6b 14
@@ -175632,7 +175645,7 @@ sub_FE8005:
 	jr nz, .LFE801C                                      ; FE800A  6e 10
 	xor BC,BC                                            ; FE800C  d9 d1
 	ld c, 0x10:opc                                          ; FE800E  23 10
-	ld XIX,0x00603422                                    ; FE8010  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FE8010  44 22 34 60 00
 	ld XIY,0x000034bc                                    ; FE8015  45 bc 34 00 00
 	ldir85                                               ; FE801A  85 11
 .LFE801C:
@@ -176487,7 +176500,7 @@ Paint_DrumEditPartSelect:
 ; EditPartSelect_DrawPartLabels: the 16 bytes at 0x603422 copied to DisplayListB_Stage, then DisplayList_FE8405 with PartLabels_FE84F5.  Called
 ;   by ShowScreen_NoteEditPartSelect / _DrumEditPartSelect.
 EditPartSelect_DrawPartLabels:
-	ld XIY,0x00603422                                    ; FE83DC  45 22 34 60 00
+	ld XIY,BStore_TrackToPart                                    ; FE83DC  45 22 34 60 00
 	ld XIX,DisplayListB_Stage                                    ; FE83E1  44 f6 12 00 00
 	ld c, 0x10:opc                                          ; FE83E6  23 10
 .LFE83E8:
@@ -176910,7 +176923,7 @@ EditPartSelect_SelectUiPart:
 	cp C,0x11                                            ; FE87FC  cb cf 11
 	jr c, .LFE87EA                                       ; FE87FF  67 e9
 .LFE8801:
-	ld XHL,0x00603422                                    ; FE8801  43 22 34 60 00
+	ld XHL,BStore_TrackToPart                                    ; FE8801  43 22 34 60 00
 	ld IY,BC                                             ; FE8806  d9 8d
 	mx_ld_rm MXB, ra_HL, ra_IY, r1                       ; FE8808  c3 07 ec f4 21
 	xor W,W                                              ; FE880D  c8 d0
@@ -176929,7 +176942,7 @@ EditPartSelect_SelectUiPart:
 ;   0x28, 0x29 or 0x30 -- the User 1 / User 2 / Ext codes of KitCategoryLegend_SelectByKitCode -- else 0xFF.
 ;   Called by EditScreen_EnterDrumEdit.
 EditScreen_PartKitIsUserOrExt:
-	ld XIX,0x00603422                                    ; FE8830  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FE8830  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FE8835  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FE883A  c3 03 f0 e0 21
 	ld XIY,RecordPtrs_RAM76A2                            ; FE883F  45 30 b3 fe 00
@@ -181549,7 +181562,7 @@ DrumEdit_DrawRowName:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEB290  f1 40 25 00 00
 	ld hl, (DrumEdit_TopRowNote:24)                                ; FEB295  d2 71 1f 60 23
 	add HL,DE                                            ; FEB29A  da 83
-	ld XIX,0x00603422                                    ; FEB29C  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FEB29C  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FEB2A1  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r2                       ; FEB2A6  c3 03 f0 e0 22
 	ld A,L                                               ; FEB2AB  cf 89
@@ -181598,7 +181611,7 @@ DrumEdit_DrawRowName:
 ; Was `sub_FEB2D4`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------
 RecordNameSource_Select:
-	ld XIX,0x00603422                                    ; FEB2D4  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FEB2D4  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FEB2D9  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FEB2DE  c3 03 f0 e0 21
 	ld XIY,RecordPtrs_RAM76A2                            ; FEB2E3  45 30 b3 fe 00
@@ -185494,7 +185507,7 @@ Screen_DrawKitCategoryLegend:
 ; Unknown:  what types 0x28/0x29/0x30 mean beyond their own legends.
 ; ---------------------------------------------------------------------
 KitCategoryLegend_SelectBase:
-	ld XIX,0x00603422                                    ; FF03E9  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FF03E9  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FF03EE  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FF03F3  c3 03 f0 e0 21
 	ld XIY,RecordPtrs_RAM76A2                            ; FF03F8  45 30 b3 fe 00
@@ -185555,7 +185568,7 @@ KitCategoryLegend_SelectByKitCode:
 ; Unknown:  nothing here.
 ; ---------------------------------------------------------------------
 KitCategoryLegend_Index:
-	ld XIX,0x00603422                                    ; FF043C  44 22 34 60 00
+	ld XIX,BStore_TrackToPart                                    ; FF043C  44 22 34 60 00
 	ld a, (EditScreen_Part:24)                                 ; FF0441  c2 00 1f 60 21
 	mx8_ld_rm MXB, ra_IX, rb_A, r1                       ; FF0446  c3 03 f0 e0 21
 	ld XIY,RecordPtrs_RAM76A2                            ; FF044B  45 30 b3 fe 00

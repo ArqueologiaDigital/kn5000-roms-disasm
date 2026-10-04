@@ -1575,10 +1575,10 @@
 	.set	T_F413EC_Nop, 0xFC80DE
 	.set	T_F413F0_Nop, 0xFC80DF
 	.set	T_F413F4_Nop, 0xFC80E0
-	.set	sub_FC80E2, 0xFC80E2
-	.set	sub_FC8448, 0xFC8448
-	.set	sub_FC87AE, 0xFC87AE
-	.set	sub_FC8960, 0xFC8960
+	.set	MidiInA_ProcessRing, 0xFC80E2
+	.set	MidiInB_ProcessRing, 0xFC8448
+	.set	Ring601850_ProcessNoteEvents, 0xFC87AE
+	.set	TimedEvents_ProcessRing, 0xFC8960
 	.set	sub_FC8A8D, 0xFC8A8D
 	.set	sub_FC8B36, 0xFC8B36
 	.set	sub_FC8CE0, 0xFC8CE0
@@ -77349,7 +77349,7 @@ Divide32_Unsigned_Remainder_Loop2:
 	ld	c, d	; F388BA  ld C,D
 	extz	bc	; F388BC  extz BC
 	extz	xbc	; F388BE  extz XBC
-	add	xbc, 6304802	; F388C0  add XBC,0x00603422
+	add	xbc, BStore_TrackToPart	; F388C0  add XBC,0x00603422
 	ld	h, (xbc)	; F388C6  ld H,(XBC)
 	cp	h, 7:i3	; F388C8  cp H,7
 	jr	ugt, Divide32_Unsigned_Remainder_Skip3	; F388CA  jr UGT,0xf388e0
@@ -89757,9 +89757,13 @@ T_F41260:	jp sub_F37DAE  ; -> prom_b 0x37DAE   x3
 T_F41264:	jp sub_F37E1C  ; -> prom_b 0x37E1C   x1
 	.fill 0x148, 1, 0x0E  ; 0xF41268: 328 x ret
 T_Ram3800_Start_Entry:	.long Ram3800_Start_Entry	; ptr -> 0xFC8000 (prom_a 0x48000)
-T_F413B4:	jp sub_FC80E2  ; -> prom_a 0x480E2   x1
-T_F413B8:	jp sub_FC87AE  ; -> prom_a 0x487AE   x4
-T_F413BC:	jp sub_FC8960  ; -> prom_a 0x48960   x1
+; Evidence: slot 0xF413B4 is `jp 0xFC80E2`; prom_a 0xFC80E2 carries the label
+;           MidiInA_ProcessRing (graded CONTENT).  DERIVATIVE name.
+T_MidiInA_ProcessRing:	jp MidiInA_ProcessRing  ; F413B4 (was T_F413B4) -> prom_a 0x480E2   x1
+T_F413B8:	jp Ring601850_ProcessNoteEvents  ; -> prom_a 0x487AE   x4
+; Evidence: slot 0xF413BC is `jp 0xFC8960`; prom_a 0xFC8960 carries the label
+;           TimedEvents_ProcessRing (graded CONTENT).  DERIVATIVE name.
+T_TimedEvents_ProcessRing:	jp TimedEvents_ProcessRing  ; F413BC (was T_F413BC) -> prom_a 0x48960   x1
 T_F413C0:	jp sub_FC8A8D  ; -> prom_a 0x48A8D   x6
 T_F413C4:	jp sub_FC8B36  ; -> prom_a 0x48B36   x3
 T_F413C8:	jp sub_FC8CE0  ; -> prom_a 0x48CE0   x11
@@ -89776,7 +89780,9 @@ T_F413E8:	jp T_F413E8_Nop  ; -> prom_a 0x480DD   x1
 T_F413EC:	jp T_F413EC_Nop  ; -> prom_a 0x480DE
 T_F413F0:	jp T_F413F0_Nop  ; -> prom_a 0x480DF
 T_F413F4:	jp T_F413F4_Nop  ; -> prom_a 0x480E0
-T_F413F8:	jp sub_FC8448  ; -> prom_a 0x48448   x1
+; Evidence: slot 0xF413F8 is `jp 0xFC8448`; prom_a 0xFC8448 carries the label
+;           MidiInB_ProcessRing (graded CONTENT).  DERIVATIVE name.
+T_MidiInB_ProcessRing:	jp MidiInB_ProcessRing  ; F413F8 (was T_F413F8) -> prom_a 0x48448   x1
 T_F413FC:	jp sub_FC8FD7  ; -> prom_a 0x48FD7   x8
 T_F41400:	jp sub_FC9016  ; -> prom_a 0x49016   x4
 	.fill 0xAC, 1, 0x0E  ; 0xF41404: 172 x ret
@@ -92881,7 +92887,7 @@ sub_F443CC_Join:
 ; --------------------------------------------------------------------------
 sub_F444E4:
 	push	xix	; F444E4  push XIX
-	ld	xhl, 6304802	; F444E5  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F444E5  ld XHL,0x00603422
 	xor	iy, iy	; F444EA  xor IY,IY
 	ld	xix, WorkspaceDefaults + 0x1C	; F444EC  ld XIX,0x00f46090
 sub_F444E4_Loop:
@@ -94393,7 +94399,7 @@ sub_F450B2:		; <- T_F40A4C
 	xor	wa, wa	; F450B2  xor WA,WA
 	ld	a, (13471:16)	; F450B4  ld A,(0x349f)
 	ld	iy, wa	; F450B8  ld IY,WA
-	ld	xix, 6304802	; F450BA  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F450BA  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F450BF  ld A,(XIX+IY)
 	cp	a, 32	; F450C4  cp A,0x20
 	jr	z, sub_F450B2_Return	; F450C7  jr Z,0xf450f6
@@ -94893,7 +94899,7 @@ sub_F4545F:		; <- T_F409EC
 ; --------------------------------------------------------------------------
 sub_F45463:
 	ld	xix, 13500	; F45463  ld XIX,0x000034bc
-	ld	xiy, 6304802	; F45468  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F45468  ld XIY,0x00603422
 	xor	bc, bc	; F4546D  xor BC,BC
 	ld	c, 17:opc	; F4546F  ld C,0x11
 	ldir85	; F45471  ldir
@@ -94927,7 +94933,7 @@ sub_F45474:		; <- T_F409F0
 ; --------------------------------------------------------------------------
 sub_F45478:
 	ld	xiy, 13500	; F45478  ld XIY,0x000034bc
-	ld	xix, 6304802	; F4547D  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F4547D  ld XIX,0x00603422
 	xor	bc, bc	; F45482  xor BC,BC
 	ld	c, 17:opc	; F45484  ld C,0x11
 	ldir85	; F45486  ldir
@@ -95180,7 +95186,7 @@ sub_F455CC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F455E6:		; <- T_F40AA8
-	ld	xix, 6304802	; F455E6  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F455E6  ld XIX,0x00603422
 	xor	bc, bc	; F455EB  xor BC,BC
 	ld	c, 17:opc	; F455ED  ld C,0x11
 	ld	a, 32:opc	; F455EF  ld A,0x20
@@ -95254,7 +95260,7 @@ sub_F455E6_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4566A:		; <- T_F40A70
-	ld	xix, 6304802	; F4566A  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F4566A  ld XIX,0x00603422
 	xor	bc, bc	; F4566F  xor BC,BC
 	ld	c, 17:opc	; F45671  ld C,0x11
 	ld	a, 32:opc	; F45673  ld A,0x20
@@ -96190,7 +96196,7 @@ sub_F45D19:		; <- T_F40A2C
 	push	xix	; F45D23  push XIX
 	push	xiy	; F45D24  push XIY
 	push	xiz	; F45D25  push XIZ
-	ld	xhl, 6304802	; F45D26  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F45D26  ld XHL,0x00603422
 	xor	iy, iy	; F45D2B  xor IY,IY
 sub_F45D19_Loop:
 	ld	xix, WorkspaceDefaults + 0x2D	; F45D2D  ld XIX,0x00f460a1
@@ -96301,7 +96307,7 @@ sub_F45D9B_Skip:
 	jr	c, sub_F45D9B_Skip2	; F45DCE  jr C,0xf45e05
 sub_F45D9B_Join:
 	ld	iy, bc	; F45DD0  ld IY,BC
-	ld	xix, 6304802	; F45DD2  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F45DD2  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IY, 0x20	; F45DD7  cp (XIX+IY),0x20
 	jr	z, sub_F45D9B_Skip2	; F45DDD  jr Z,0xf45e05
 	ld	a, 211:opc	; F45DDF  ld A,0xd3
@@ -98453,7 +98459,7 @@ sub_F482B0_Return:
 sub_F482C0:
 	ld	l, (13471:16)	; F482C0  ld L,(0x349f)
 	xor	h, h	; F482C4  xor H,H
-	ld	xiy, 6304802	; F482C6  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F482C6  ld XIY,0x00603422
 	mx_ld_rm MXB, ra_IY, ra_HL, 1	; F482CB  ld A,(XIY+HL)
 	cp	a, 32	; F482D0  cp A,0x20
 	jr	nz, sub_F482C0_Skip	; F482D3  jr NZ,0xf48305
@@ -101896,7 +101902,7 @@ sub_F4A50E_Join:
 	xor	wa, wa	; F4A51F  xor WA,WA
 	ld	a, (13471:16)	; F4A521  ld A,(0x349f)
 	ld	iy, wa	; F4A525  ld IY,WA
-	ld	xix, 6304802	; F4A527  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F4A527  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F4A52C  ld A,(XIX+IY)
 	ld	iy, wa	; F4A531  ld IY,WA
 	ld	xix, IdentityMap_F4B7AD	; F4A533  ld XIX,0x00f4b7ad
@@ -107630,7 +107636,7 @@ sub_F4E1B6_Skip3:
 	jr	c, sub_F4E1B6_Loop	; F4E216  jr C,0xf4e1c3
 	jr	sub_F4E1B6_Join5	; F4E218  jr T,0xf4e256
 sub_F4E1B6_Join3:
-	ld	xhl, 6304802	; F4E21A  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F4E21A  ld XHL,0x00603422
 	ld	iy, bc	; F4E21F  ld IY,BC
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F4E221  ld A,(XHL+IY)
 	cp	a, 32	; F4E226  cp A,0x20
@@ -108014,7 +108020,7 @@ sub_F4E4C8:
 	jr	nz, sub_F4E4C8_Return	; F4E4CD  jr NZ,0xf4e4f5
 	m_cp_mi8 MB16, UI_ScreenId, 0x0f	; F4E4CF  cp (0x207c),0x0f
 	jr	nz, sub_F4E4C8_Return	; F4E4D4  jr NZ,0xf4e4f5
-	ld	xhl, 6304802	; F4E4D6  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F4E4D6  ld XHL,0x00603422
 	xor	b, b	; F4E4DB  xor B,B
 	ld	iy, bc	; F4E4DD  ld IY,BC
 	ld	e, c	; F4E4DF  ld E,C
@@ -118763,7 +118769,7 @@ sub_F55D3D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F55D67:
-	ld	xiy, 6304802	; F55D67  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F55D67  ld XIY,0x00603422
 	ld	xix, DisplayListB_Stage	; F55D6C  ld XIX,0x000012f6
 	ld	c, 16:opc	; F55D71  ld C,0x10
 sub_F55D67_Join:
@@ -132887,7 +132893,7 @@ sub_F5DAA2_Skip3:
 	ld	l, (3184:16)	; F5DB13  ld L,(0x0c70)
 	dec	1, l	; F5DB17  dec 1,L
 	push	xix	; F5DB19  push XIX
-	ld	xix, 6304802	; F5DB1A  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5DB1A  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5DB1F  ld A,(XIX+HL)
 	pop	xix	; F5DB24  pop XIX
 	cp	a, 32	; F5DB25  cp A,0x20
@@ -132910,7 +132916,7 @@ sub_F5DAA2_Join:
 	push	xhl	; F5DB50  push XHL
 	push	xix	; F5DB51  push XIX
 	xor	h, h	; F5DB52  xor H,H
-	ld	xix, 6304802	; F5DB54  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5DB54  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5DB59  ld A,(XIX+HL)
 	pop	xix	; F5DB5E  pop XIX
 	pop	xhl	; F5DB5F  pop XHL
@@ -133914,7 +133920,7 @@ sub_F5E370_Skip6:
 	ld	l, (3184:16)	; F5E42B  ld L,(0x0c70)
 	dec	1, l	; F5E42F  dec 1,L
 	push	xix	; F5E431  push XIX
-	ld	xix, 6304802	; F5E432  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E432  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E437  ld A,(XIX+HL)
 	pop	xix	; F5E43C  pop XIX
 	cp	a, 32	; F5E43D  cp A,0x20
@@ -133934,7 +133940,7 @@ sub_F5E370_Skip7:
 	ld	l, a	; F5E469  ld L,A
 	dec	1, hl	; F5E46B  dec 1,HL
 	push	xix	; F5E46D  push XIX
-	ld	xix, 6304802	; F5E46E  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E46E  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5E473  cp (XIX+HL),0x20
 	pop	xix	; F5E479  pop XIX
 	jr	nz, sub_F5E370_Skip8	; F5E47A  jr NZ,0xf5e480
@@ -133954,7 +133960,7 @@ sub_F5E370_Join2:
 	m_cp_rm MB16, 0x0ca3, 7	; F5E49F  cp L,(0x0ca3)
 	jr	ugt, sub_F5E370_Skip10	; F5E4A3  jr UGT,0xf5e4d3
 	push	xix	; F5E4A5  push XIX
-	ld	xix, 6304802	; F5E4A6  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E4A6  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E4AB  ld A,(XIX+HL)
 	pop	xix	; F5E4B0  pop XIX
 	cp	a, 32	; F5E4B1  cp A,0x20
@@ -133989,7 +133995,7 @@ sub_F5E370_Join3:
 	ld	l, a	; F5E4FB  ld L,A
 	dec	1, hl	; F5E4FD  dec 1,HL
 	push	xix	; F5E4FF  push XIX
-	ld	xix, 6304802	; F5E500  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E500  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5E505  cp (XIX+HL),0x20
 	pop	xix	; F5E50B  pop XIX
 	jr	nz, sub_F5E370_Skip12	; F5E50C  jr NZ,0xf5e519
@@ -134232,7 +134238,7 @@ sub_F5E570_Skip14:
 	ld	l, (3184:16)	; F5E768  ld L,(0x0c70)
 	dec	1, l	; F5E76C  dec 1,L
 	push	xix	; F5E76E  push XIX
-	ld	xix, 6304802	; F5E76F  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E76F  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E774  ld A,(XIX+HL)
 	pop	xix	; F5E779  pop XIX
 	cp	a, 32	; F5E77A  cp A,0x20
@@ -134255,7 +134261,7 @@ sub_F5E570_Join4:
 	m_cp_rm MB16, 0x0ca3, 7	; F5E7AB  cp L,(0x0ca3)
 	jr	ugt, sub_F5E570_Skip17	; F5E7AF  jr UGT,0xf5e7de
 	push	xix	; F5E7B1  push XIX
-	ld	xix, 6304802	; F5E7B2  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5E7B2  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5E7B7  ld A,(XIX+HL)
 	pop	xix	; F5E7BC  pop XIX
 	cp	a, 32	; F5E7BD  cp A,0x20
@@ -134830,7 +134836,7 @@ sub_F5EBD4_Skip4:
 	ld	l, (3184:16)	; F5EC93  ld L,(0x0c70)
 	dec	1, l	; F5EC97  dec 1,L
 	push	xix	; F5EC99  push XIX
-	ld	xix, 6304802	; F5EC9A  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5EC9A  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5EC9F  ld A,(XIX+HL)
 	pop	xix	; F5ECA4  pop XIX
 	cp	a, 32	; F5ECA5  cp A,0x20
@@ -134838,7 +134844,7 @@ sub_F5EBD4_Skip4:
 	ld	l, (3185:16)	; F5ECAA  ld L,(0x0c71)
 	dec	1, l	; F5ECAE  dec 1,L
 	push	xix	; F5ECB0  push XIX
-	ld	xix, 6304802	; F5ECB1  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ECB1  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5ECB6  ld A,(XIX+HL)
 	pop	xix	; F5ECBB  pop XIX
 	cp	a, 32	; F5ECBC  cp A,0x20
@@ -134850,7 +134856,7 @@ sub_F5EBD4_Skip5:
 sub_F5EBD4_Skip6:
 	dec	1, l	; F5ECCB  dec 1,L
 	push	xix	; F5ECCD  push XIX
-	ld	xix, 6304802	; F5ECCE  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ECCE  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5ECD3  ld A,(XIX+HL)
 	pop	xix	; F5ECD8  pop XIX
 	cp	a, 32	; F5ECD9  cp A,0x20
@@ -134876,19 +134882,19 @@ sub_F5EBD4_Join2:
 	ld	l, (3184:16)	; F5ED15  ld L,(0x0c70)
 	dec	1, hl	; F5ED19  dec 1,HL
 	push	xix	; F5ED1B  push XIX
-	ld	xix, 6304802	; F5ED1C  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ED1C  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5ED21  ld A,(XIX+HL)
 	pop	xix	; F5ED26  pop XIX
 	ld	l, (3185:16)	; F5ED27  ld L,(0x0c71)
 	dec	1, hl	; F5ED2B  dec 1,HL
 	push	xix	; F5ED2D  push XIX
-	ld	xix, 6304802	; F5ED2E  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ED2E  ld XIX,0x00603422
 	mx_cp_rm MXB, ra_IX, ra_HL, 1	; F5ED33  cp A,(XIX+HL)
 	pop	xix	; F5ED38  pop XIX
 	jr	z, sub_F5EBD4_Skip8	; F5ED39  jr Z,0xf5ed66
 	ld	(3203:16), l	; F5ED3B  ld (0x0c83),L
 	push	xix	; F5ED3F  push XIX
-	ld	xix, 6304802	; F5ED40  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ED40  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F5ED45  ld L,(XIX+HL)
 	ld	(3535:16), l	; F5ED4A  ld (0x0dcf),L
 	pop	xix	; F5ED4E  pop XIX
@@ -134911,7 +134917,7 @@ sub_F5EBD4_Join3:
 	ld	l, a	; F5ED7D  ld L,A
 	dec	1, hl	; F5ED7F  dec 1,HL
 	push	xix	; F5ED81  push XIX
-	ld	xix, 6304802	; F5ED82  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5ED82  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5ED87  cp (XIX+HL),0x20
 	pop	xix	; F5ED8D  pop XIX
 	jr	nz, sub_F5EBD4_Skip9	; F5ED8E  jr NZ,0xf5ed9c
@@ -134928,7 +134934,7 @@ sub_F5EBD4_Join4:
 	m_cp_rm MB16, 0x0ca3, 7	; F5EDA9  cp L,(0x0ca3)
 	jr	ugt, sub_F5EBD4_Skip12	; F5EDAD  jr UGT,0xf5eddd
 	push	xix	; F5EDAF  push XIX
-	ld	xix, 6304802	; F5EDB0  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5EDB0  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5EDB5  ld A,(XIX+HL)
 	pop	xix	; F5EDBA  pop XIX
 	cp	a, 32	; F5EDBB  cp A,0x20
@@ -134964,7 +134970,7 @@ sub_F5EBD4_Join5:
 	ld	l, a	; F5EE08  ld L,A
 	dec	1, hl	; F5EE0A  dec 1,HL
 	push	xix	; F5EE0C  push XIX
-	ld	xix, 6304802	; F5EE0D  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5EE0D  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5EE12  cp (XIX+HL),0x20
 	pop	xix	; F5EE18  pop XIX
 	jr	nz, sub_F5EBD4_Skip14	; F5EE19  jr NZ,0xf5ee2d
@@ -135395,7 +135401,7 @@ sub_F5F02C_Skip6:
 sub_F5F02C_Skip7:
 	dec	1, l	; F5F2A6  dec 1,L
 	push	xix	; F5F2A8  push XIX
-	ld	xix, 6304802	; F5F2A9  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F2A9  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5F2AE  ld A,(XIX+HL)
 	pop	xix	; F5F2B3  pop XIX
 	cp	a, 32	; F5F2B4  cp A,0x20
@@ -135413,7 +135419,7 @@ sub_F5F02C_Join:
 	ld	l, (3184:16)	; F5F2D5  ld L,(0x0c70)
 	dec	1, l	; F5F2D9  dec 1,L
 	push	xix	; F5F2DB  push XIX
-	ld	xix, 6304802	; F5F2DC  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F2DC  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F5F2E1  ld L,(XIX+HL)
 	pop	xix	; F5F2E6  pop XIX
 	cp	l, 32	; F5F2E7  cp L,0x20
@@ -135421,7 +135427,7 @@ sub_F5F02C_Join:
 	ld	l, (3185:16)	; F5F2EC  ld L,(0x0c71)
 	dec	1, l	; F5F2F0  dec 1,L
 	push	xix	; F5F2F2  push XIX
-	ld	xix, 6304802	; F5F2F3  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F2F3  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F5F2F8  ld L,(XIX+HL)
 	pop	xix	; F5F2FD  pop XIX
 	cp	l, 32	; F5F2FE  cp L,0x20
@@ -135442,17 +135448,17 @@ sub_F5F02C_Join2:
 	ld	l, (3184:16)	; F5F329  ld L,(0x0c70)
 	dec	1, hl	; F5F32D  dec 1,HL
 	push	xix	; F5F32F  push XIX
-	ld	xix, 6304802	; F5F330  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F330  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5F335  ld A,(XIX+HL)
 	ld	l, (3185:16)	; F5F33A  ld L,(0x0c71)
 	dec	1, hl	; F5F33E  dec 1,HL
-	ld	xix, 6304802	; F5F340  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F340  ld XIX,0x00603422
 	mx_cp_rm MXB, ra_IX, ra_HL, 1	; F5F345  cp A,(XIX+HL)
 	pop	xix	; F5F34A  pop XIX
 	jr	z, sub_F5F02C_Skip10	; F5F34B  jr Z,0xf5f376
 	ld	(3203:16), l	; F5F34D  ld (0x0c83),L
 	push	xix	; F5F351  push XIX
-	ld	xix, 6304802	; F5F352  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F352  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F5F357  ld L,(XIX+HL)
 	ld	(3535:16), l	; F5F35C  ld (0x0dcf),L
 	ld	xix, IdentityMap_0_31	; F5F360  ld XIX,0x00f5ee75
@@ -135473,7 +135479,7 @@ sub_F5F02C_Join3:
 	ld	l, a	; F5F38D  ld L,A
 	dec	1, hl	; F5F38F  dec 1,HL
 	push	xix	; F5F391  push XIX
-	ld	xix, 6304802	; F5F392  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F392  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5F397  cp (XIX+HL),0x20
 	pop	xix	; F5F39D  pop XIX
 	jr	nz, sub_F5F02C_Skip11	; F5F39E  jr NZ,0xf5f3ac
@@ -135489,7 +135495,7 @@ sub_F5F02C_Join5:
 	m_cp_rm MB16, 0x0ca3, 7	; F5F3B4  cp L,(0x0ca3)
 	jr	ugt, sub_F5F02C_Skip13	; F5F3B8  jr UGT,0xf5f3e8
 	push	xix	; F5F3BA  push XIX
-	ld	xix, 6304802	; F5F3BB  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F3BB  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F5F3C0  ld A,(XIX+HL)
 	pop	xix	; F5F3C5  pop XIX
 	cp	a, 32	; F5F3C6  cp A,0x20
@@ -135525,7 +135531,7 @@ sub_F5F02C_Join6:
 	ld	l, a	; F5F413  ld L,A
 	dec	1, hl	; F5F415  dec 1,HL
 	push	xix	; F5F417  push XIX
-	ld	xix, 6304802	; F5F418  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F5F418  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F5F41D  cp (XIX+HL),0x20
 	pop	xix	; F5F423  pop XIX
 	jr	nz, sub_F5F02C_Skip15	; F5F424  jr NZ,0xf5f438
@@ -136602,7 +136608,7 @@ sub_F5FB04_Skip28:
 	ld	l, (3184:16)	; F6005A  ld L,(0x0c70)
 	dec	1, hl	; F6005E  dec 1,HL
 	push	xix	; F60060  push XIX
-	ld	xix, 6304802	; F60061  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60061  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60066  ld A,(XIX+HL)
 	pop	xix	; F6006B  pop XIX
 	cp	a, 32	; F6006C  cp A,0x20
@@ -136612,7 +136618,7 @@ sub_F5FB04_Skip28:
 	ld	l, (3185:16)	; F60077  ld L,(0x0c71)
 	dec	1, hl	; F6007B  dec 1,HL
 	push	xix	; F6007D  push XIX
-	ld	xix, 6304802	; F6007E  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6007E  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60083  ld A,(XIX+HL)
 	pop	xix	; F60088  pop XIX
 	cp	a, 32	; F60089  cp A,0x20
@@ -136626,7 +136632,7 @@ sub_F5FB04_Skip30:
 	ld	l, (3184:16)	; F6009D  ld L,(0x0c70)
 	dec	1, hl	; F600A1  dec 1,HL
 	push	xix	; F600A3  push XIX
-	ld	xix, 6304802	; F600A4  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F600A4  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F600A9  ld A,(XIX+HL)
 	ld	l, (3185:16)	; F600AE  ld L,(0x0c71)
 	dec	1, hl	; F600B2  dec 1,HL
@@ -136638,7 +136644,7 @@ sub_F5FB04_Skip30:
 	ld	l, (3185:16)	; F600C2  ld L,(0x0c71)
 	dec	1, l	; F600C6  dec 1,L
 	push	xix	; F600C8  push XIX
-	ld	xix, 6304802	; F600C9  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F600C9  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F600CE  ld L,(XIX+HL)
 	ld	(3078:16), l	; F600D3  ld (0x0c06),L
 	pop	xix	; F600D7  pop XIX
@@ -136715,7 +136721,7 @@ sub_F5FB04_Join11:
 	dec	1, hl	; F601AC  dec 1,HL
 	ld	a, (3220:16)	; F601AE  ld A,(0x0c94)
 	push	xix	; F601B2  push XIX
-	ld	xix, 6304802	; F601B3  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F601B3  ld XIX,0x00603422
 	mx_st_mr8 MXD, ra_IX, ra_HL, 1	; F601B8  ld (XIX+HL),A
 	pop	xix	; F601BD  pop XIX
 	muls	hl, 3	; F601BE  muls HL,0x0003
@@ -137275,7 +137281,7 @@ sub_F60548_Skip4:
 	ld	l, (3184:16)	; F6060A  ld L,(0x0c70)
 	dec	1, l	; F6060E  dec 1,L
 	push	xix	; F60610  push XIX
-	ld	xix, 6304802	; F60611  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60611  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60616  ld A,(XIX+HL)
 	pop	xix	; F6061B  pop XIX
 	cp	a, 32	; F6061C  cp A,0x20
@@ -137298,7 +137304,7 @@ sub_F60548_Join3:
 	pushw	hl	; F60647  push HL
 	push	xix	; F60648  push XIX
 	xor	h, h	; F60649  xor H,H
-	ld	xix, 6304802	; F6064B  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6064B  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60650  ld A,(XIX+HL)
 	pop	xix	; F60655  pop XIX
 	popw	hl	; F60656  pop HL
@@ -137845,7 +137851,7 @@ sub_F609B6_Join:
 	ld	l, (3184:16)	; F60B94  ld L,(0x0c70)
 	dec	1, hl	; F60B98  dec 1,HL
 	push	xix	; F60B9A  push XIX
-	ld	xix, 6304802	; F60B9B  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60B9B  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60BA0  ld A,(XIX+HL)
 	pop	xix	; F60BA5  pop XIX
 	cp	a, 32	; F60BA6  cp A,0x20
@@ -137871,7 +137877,7 @@ sub_F609B6_Join3:
 	xor	h, h	; F60BD8  xor H,H
 	push	xhl	; F60BDA  push XHL
 	push	xix	; F60BDB  push XIX
-	ld	xix, 6304802	; F60BDC  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60BDC  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60BE1  ld A,(XIX+HL)
 	pop	xix	; F60BE6  pop XIX
 	pop	xhl	; F60BE7  pop XHL
@@ -138069,7 +138075,7 @@ sub_F60C2C_Skip7:
 	ld	l, (3184:16)	; F60DA7  ld L,(0x0c70)
 	dec	1, hl	; F60DAB  dec 1,HL
 	push	xix	; F60DAD  push XIX
-	ld	xix, 6304802	; F60DAE  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60DAE  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60DB3  ld A,(XIX+HL)
 	pop	xix	; F60DB8  pop XIX
 	cp	a, 32	; F60DB9  cp A,0x20
@@ -138095,7 +138101,7 @@ sub_F60C2C_Join6:
 	xor	h, h	; F60DEC  xor H,H
 	push	xhl	; F60DEE  push XHL
 	push	xix	; F60DEF  push XIX
-	ld	xix, 6304802	; F60DF0  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F60DF0  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F60DF5  ld A,(XIX+HL)
 	pop	xix	; F60DFA  pop XIX
 	pop	xhl	; F60DFB  pop XHL
@@ -138534,7 +138540,7 @@ sub_F610E3_Skip4:
 	dec	1, c	; F61232  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F61234  cp C,(0x360a)
 	jr	nz, sub_F610E3_Skip5	; F61238  jr NZ,0xf6123f
-	ld	xhl, 6304802	; F6123A  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F6123A  ld XHL,0x00603422
 sub_F610E3_Skip5:
 	xor	bc, bc	; F6123F  xor BC,BC
 	ld	c, (S0ngC0py_FromTrack:16)	; F61241  ld C,(0x0e0e)
@@ -138560,7 +138566,7 @@ sub_F610E3_Skip5:
 	dec	1, a	; F6127F  dec 1,A
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F61281  cp A,(0x360a)
 	jr	nz, sub_F610E3_Skip6	; F61285  jr NZ,0xf6128c
-	ld	xhl, 6304802	; F61287  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F61287  ld XHL,0x00603422
 sub_F610E3_Skip6:
 	xor	wa, wa	; F6128C  xor WA,WA
 	ld	a, (S0ngC0py_ToTrack:16)	; F6128E  ld A,(0x0e0f)
@@ -138757,7 +138763,7 @@ sub_F610E3_Entry:
 	dec	1, c	; F614CC  dec 1,C
 	m_cp_rm MB16, BStore_CurrentBank, 3	; F614CE  cp C,(0x360a)
 	jr	nz, sub_F610E3_Skip14	; F614D2  jr NZ,0xf614d9
-	ld	xhl, 6304802	; F614D4  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F614D4  ld XHL,0x00603422
 sub_F610E3_Skip14:
 	ld	c, (S0ngC0py_ToTrack:16)	; F614D9  ld C,(0x0e0f)
 	dec	1, c	; F614DD  dec 1,C
@@ -138782,7 +138788,7 @@ sub_F610E3_Skip14:
 	dec	1, w	; F61515  dec 1,W
 	m_cp_rm MB16, BStore_CurrentBank, 0	; F61517  cp W,(0x360a)
 	jrl	nz, sub_F610E3_Skip15	; F6151B  jrl NZ,0xf61528
-	ld	xhl, 6304802	; F6151E  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F6151E  ld XHL,0x00603422
 	mx_st_mr8 MXD, ra_HL, ra_BC, 1	; F61523  ld (XHL+BC),A
 sub_F610E3_Skip15:
 	ld	xde, 6356992	; F61528  ld XDE,0x00610000
@@ -139021,7 +139027,7 @@ sub_F615C2_Skip5:
 	dec	1, a	; F61794  dec 1,A
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F61796  cp A,(0x360a)
 	jr	nz, sub_F615C2_Skip6	; F6179A  jr NZ,0xf617a1
-	ld	xiy, 6304802	; F6179C  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F6179C  ld XIY,0x00603422
 sub_F615C2_Skip6:
 	push	xbc	; F617A1  push XBC
 	xor	xbc, xbc	; F617A2  xor XBC,XBC
@@ -139043,7 +139049,7 @@ sub_F615C2_Skip6:
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F617CC  cp A,(0x360a)
 	jr	nz, sub_F615C2_Skip7	; F617D0  jr NZ,0xf617e2
 	sub	xiy, 17	; F617D2  sub XIY,0x00000011
-	ld	xix, 6304802	; F617D8  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F617D8  ld XIX,0x00603422
 	ldw	bc, 17	; F617DD  ld BC,0x0011
 	ldir85	; F617E0  ldir
 sub_F615C2_Skip7:
@@ -139315,7 +139321,7 @@ sub_F61907_Join:
 	ld	l, (3184:16)	; F61A6B  ld L,(0x0c70)
 	dec	1, l	; F61A6F  dec 1,L
 	push	xix	; F61A71  push XIX
-	ld	xix, 6304802	; F61A72  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F61A72  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F61A77  ld A,(XIX+HL)
 	pop	xix	; F61A7C  pop XIX
 	cp	a, 32	; F61A7D  cp A,0x20
@@ -139338,7 +139344,7 @@ sub_F61907_Join2:
 	push	xhl	; F61AAA  push XHL
 	push	xix	; F61AAB  push XIX
 	xor	h, h	; F61AAC  xor H,H
-	ld	xix, 6304802	; F61AAE  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F61AAE  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F61AB3  ld A,(XIX+HL)
 	pop	xix	; F61AB8  pop XIX
 	pop	xhl	; F61AB9  pop XHL
@@ -141665,7 +141671,7 @@ sub_F6360E_Join:
 	jr	sub_F6360E_Return	; F63626  jr T,0xf6364c
 sub_F6360E_Skip:
 	push	xix	; F63628  push XIX
-	ld	xix, 6304802	; F63629  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F63629  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F6362E  cp (XIX+HL),0x20
 	pop	xix	; F63634  pop XIX
 	jr	nz, sub_F6360E_Skip2	; F63635  jr NZ,0xf63648
@@ -142348,7 +142354,7 @@ sub_F63C41:		; <- T_F427CC
 	xor	hl, hl	; F63C65  xor HL,HL
 	ld	l, (3203:16)	; F63C67  ld L,(0x0c83)
 	push	xde	; F63C6B  push XDE
-	ld	xde, 6304802	; F63C6C  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F63C6C  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_HL, 1	; F63C71  ld A,(XDE+HL)
 	pop	xde	; F63C76  pop XDE
 	m_cp_rm MB16, 0x0c06, 1	; F63C77  cp A,(0x0c06)
@@ -142356,7 +142362,7 @@ sub_F63C41:		; <- T_F427CC
 	ld	l, (3203:16)	; F63C7D  ld L,(0x0c83)
 	xor	h, h	; F63C81  xor H,H
 	push	xde	; F63C83  push XDE
-	ld	xde, 6304802	; F63C84  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F63C84  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_HL, 7	; F63C89  ld L,(XDE+HL)
 	pop	xde	; F63C8E  pop XDE
 	xor	h, h	; F63C8F  xor H,H
@@ -142710,7 +142716,7 @@ sub_F63F90_Skip:
 	xor	hl, hl	; F64015  xor HL,HL
 	ld	l, (3203:16)	; F64017  ld L,(0x0c83)
 	push	xde	; F6401B  push XDE
-	ld	xde, 6304802	; F6401C  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F6401C  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_HL, 7	; F64021  ld L,(XDE+HL)
 	pop	xde	; F64026  pop XDE
 	ld	(3537:16), l	; F64027  ld (0x0dd1),L
@@ -142850,7 +142856,7 @@ sub_F6418E:		; <- T_F42804
 	push	xde	; F6419B  push XDE
 	push	xhl	; F6419C  push XHL
 	xor	hl, hl	; F6419D  xor HL,HL
-	ld	xde, 6304802	; F6419F  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F6419F  ld XDE,0x00603422
 	ld	l, (3184:16)	; F641A4  ld L,(0x0c70)
 	dec	1, l	; F641A8  dec 1,L
 	mx_ld_rm MXB, ra_DE, ra_HL, 7	; F641AA  ld L,(XDE+HL)
@@ -143455,7 +143461,7 @@ sub_F647DD:		; <- T_F427DC
 	ld	l, (3214:16)	; F647DF  ld L,(0x0c8e)
 	dec	1, hl	; F647E3  dec 1,HL
 	push	xde	; F647E5  push XDE
-	ld	xde, 6304802	; F647E6  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F647E6  ld XDE,0x00603422
 	mx_cp_mi8 MXB, ra_DE, ra_HL, 0x20	; F647EB  cp (XDE+HL),0x20
 	pop	xde	; F647F1  pop XDE
 	jr	nz, sub_F647DD_Skip	; F647F2  jr NZ,0xf647fa
@@ -144897,7 +144903,7 @@ sub_F65C5E_Skip:
 	inc	1, a	; F65C7D  inc 1,A
 sub_F65C5E_Join:
 	ld	(3075:16), a	; F65C7F  ld (0x0c03),A
-	ld	xhl, 6304802	; F65C83  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65C83  ld XHL,0x00603422
 	xor	wa, wa	; F65C88  xor WA,WA
 	ld	a, (3075:16)	; F65C8A  ld A,(0x0c03)
 	ld	iy, wa	; F65C8E  ld IY,WA
@@ -144934,7 +144940,7 @@ sub_F65C9A_Skip:
 	dec	1, a	; F65CB9  dec 1,A
 sub_F65C9A_Join:
 	ld	(3075:16), a	; F65CBB  ld (0x0c03),A
-	ld	xhl, 6304802	; F65CBF  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65CBF  ld XHL,0x00603422
 	xor	wa, wa	; F65CC4  xor WA,WA
 	ld	a, (3075:16)	; F65CC6  ld A,(0x0c03)
 	ld	iy, wa	; F65CCA  ld IY,WA
@@ -144977,7 +144983,7 @@ sub_F65CD6_Join:
 	jr	z, sub_F65CD6_Skip3	; F65D08  jr Z,0xf65d0f
 	ld	(3075:16), 8	; F65D0A  ld (0x0c03),0x08
 sub_F65CD6_Skip3:
-	ld	xhl, 6304802	; F65D0F  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65D0F  ld XHL,0x00603422
 	xor	wa, wa	; F65D14  xor WA,WA
 	ld	a, (3075:16)	; F65D16  ld A,(0x0c03)
 	ld	iy, wa	; F65D1A  ld IY,WA
@@ -145001,7 +145007,7 @@ sub_F65D26:
 	ld	a, (3075:16)	; F65D28  ld A,(0x0c03)
 	ld	iy, wa	; F65D2C  ld IY,WA
 	push	xde	; F65D2E  push XDE
-	ld	xde, 6304802	; F65D2F  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F65D2F  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D34  ld A,(XDE+IY)
 	pop	xde	; F65D39  pop XDE
 	m_cp_rm MB16, 0x0c06, 1	; F65D3A  cp A,(0x0c06)
@@ -145016,7 +145022,7 @@ sub_F65D26_Skip:
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65D4F  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65D54  ld A,(0x0c03)
 	ld	iy, wa	; F65D58  ld IY,WA
-	ld	xde, 6304802	; F65D5A  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F65D5A  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65D5F  ld A,(XDE+IY)
 	ld	iy, wa	; F65D64  ld IY,WA
 	ld	xde, MaskTable_F65F5C	; F65D66  ld XDE,0x00f65f5c
@@ -145029,7 +145035,7 @@ sub_F65D26_Skip:
 sub_F65D26_Return:
 	ret	; F65D79  ret
 sub_F65D26_Join:
-	ld	xhl, 6304802	; F65D7A  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65D7A  ld XHL,0x00603422
 	xor	wa, wa	; F65D7F  xor WA,WA
 	ld	a, (3075:16)	; F65D81  ld A,(0x0c03)
 	ld	iy, wa	; F65D85  ld IY,WA
@@ -145058,7 +145064,7 @@ sub_F65D26_Join:
 sub_F65DAE:		; <- T_F42B98
 	m_cp_rm MB16, 0x0c03, 1	; F65DAE  cp A,(0x0c03)
 	jr	z, sub_F65D26_Skip2	; F65DB2  jr Z,0xf65dc4
-	ld	xhl, 6304802	; F65DB4  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65DB4  ld XHL,0x00603422
 	xor	w, w	; F65DB9  xor W,W
 	ld	iy, wa	; F65DBB  ld IY,WA
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F65DBD  ld A,(XHL+IY)
@@ -145098,7 +145104,7 @@ sub_F65DAE_Return:
 sub_F65DD3:		; <- T_F42B9C
 	m_cp_rm MB16, 0x0c03, 1	; F65DD3  cp A,(0x0c03)
 	jr	z, sub_F65DD3_Skip	; F65DD7  jr Z,0xf65de9
-	ld	xhl, 6304802	; F65DD9  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65DD9  ld XHL,0x00603422
 	xor	w, w	; F65DDE  xor W,W
 	ld	iy, wa	; F65DE0  ld IY,WA
 	mx_ld_rm MXB, ra_HL, ra_IY, 1	; F65DE2  ld A,(XHL+IY)
@@ -145165,7 +145171,7 @@ sub_F65DF8_Skip2:
 	ld	(3078:16), a	; F65E3B  ld (0x0c06),A
 sub_F65DF8_Join:
 	ld	(3520:16), 0	; F65E3F  ld (0x0dc0),0x00
-	ld	xhl, 6304802	; F65E44  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65E44  ld XHL,0x00603422
 	xor	w, w	; F65E49  xor W,W
 	ld	a, (3075:16)	; F65E4B  ld A,(0x0c03)
 	ld	iy, wa	; F65E4F  ld IY,WA
@@ -145239,7 +145245,7 @@ sub_F65E98_Skip:
 	ld	a, (3075:16)	; F65EA5  ld A,(0x0c03)
 	ld	iy, wa	; F65EA9  ld IY,WA
 	push	xde	; F65EAB  push XDE
-	ld	xde, 6304802	; F65EAC  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F65EAC  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EB1  ld A,(XDE+IY)
 	pop	xde	; F65EB6  pop XDE
 	m_cp_rm MB16, 0x0c06, 1	; F65EB7  cp A,(0x0c06)
@@ -145256,7 +145262,7 @@ sub_F65E98_Return:
 	mx_ld_rm MXB, ra_DE, ra_IY, 3	; F65ED4  ld C,(XDE+IY)
 	ld	a, (3075:16)	; F65ED9  ld A,(0x0c03)
 	ld	iy, wa	; F65EDD  ld IY,WA
-	ld	xde, 6304802	; F65EDF  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F65EDF  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65EE4  ld A,(XDE+IY)
 	ld	(3085:16), a	; F65EE9  ld (0x0c0d),A
 	ld	iy, wa	; F65EED  ld IY,WA
@@ -145271,7 +145277,7 @@ sub_F65E98_Skip2:
 	ld	a, (3075:16)	; F65F02  ld A,(0x0c03)
 	ld	iy, wa	; F65F06  ld IY,WA
 	push	xde	; F65F08  push XDE
-	ld	xde, 6304802	; F65F09  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F65F09  ld XDE,0x00603422
 	mx_ld_rm MXB, ra_DE, ra_IY, 1	; F65F0E  ld A,(XDE+IY)
 	pop	xde	; F65F13  pop XDE
 	ld	(3085:16), a	; F65F14  ld (0x0c0d),A
@@ -145279,7 +145285,7 @@ sub_F65E98_Skip2:
 	m_or_mi8 MB16, UI_Request_Hi, 0x10	; F65F1D  or (0x2071),0x10
 	ret	; F65F22  ret
 sub_F65E98_Join:
-	ld	xhl, 6304802	; F65F23  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F65F23  ld XHL,0x00603422
 	xor	wa, wa	; F65F28  xor WA,WA
 	ld	a, (3075:16)	; F65F2A  ld A,(0x0c03)
 	ld	iy, wa	; F65F2E  ld IY,WA
@@ -145441,7 +145447,7 @@ sub_F66020_Skip:
 	ld	iy, wa	; F66064  ld IY,WA
 	ld	a, (3078:16)	; F66066  ld A,(0x0c06)
 	push	xde	; F6606A  push XDE
-	ld	xde, 6304802	; F6606B  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F6606B  ld XDE,0x00603422
 	mx_st_mr8 MXD, ra_DE, ra_IY, 1	; F66070  ld (XDE+IY),A
 	pop	xde	; F66075  pop XDE
 	ld	(UI_ScreenStage:16), 0	; F66076  ld (0x207e),0x00
@@ -146292,7 +146298,7 @@ sub_F66522_Join:		; <- T_F42BE4
 	call	T_Transport_StopAllRunning	; F6653D  call 0xf409ac
 	m_or_mi8 MB16, 0x34bb, 0x04	; F66541  or (0x34bb),0x04
 sub_F662F7_Skip17:
-	ld	xhl, 6304802	; F66546  ld XHL,0x00603422
+	ld	xhl, BStore_TrackToPart	; F66546  ld XHL,0x00603422
 	xor	wa, wa	; F6654B  xor WA,WA
 	ld	a, (3075:16)	; F6654D  ld A,(0x0c03)
 	ld	iy, wa	; F66551  ld IY,WA
@@ -146678,7 +146684,7 @@ sub_F66668_Skip2:
 	m_cp_rm MB16, BStore_CurrentBank, 1	; F66714  cp A,(0x360a)
 	jr	nz, sub_F66668_Skip4	; F66718  jr NZ,0xf6673c
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F6671A  lda XIY,XDE+HL
-	ld	xix, 6304802	; F6671F  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6671F  ld XIX,0x00603422
 	ldw	bc, 16	; F66724  ld BC,0x0010
 	ldir85	; F66727  ldir
 	ld	(xix), 32	; F66729  ld (XIX),0x20
@@ -146786,7 +146792,7 @@ sub_F6682C:
 	sla	l, 4	; F6683C  sla 0x04,L
 	ld	xde, IndexMap_F667CC	; F6683F  ld XDE,0x00f667cc
 	mx_lda32 MXD, ra_DE, ra_HL, 5	; F66844  lda XIY,XDE+HL
-	ld	xix, 6304802	; F66849  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F66849  ld XIX,0x00603422
 	ldw	bc, 16	; F6684E  ld BC,0x0010
 	ldir85	; F66851  ldir
 	ld	(xix), 32	; F66853  ld (XIX),0x20
@@ -148813,7 +148819,7 @@ SoftKeyCol5_StepRecordSub09:
 	dec	1, l	; F67E81  dec 1,L
 	xor	h, h	; F67E83  xor H,H
 	push	xix	; F67E85  push XIX
-	ld	xix, 6304802	; F67E86  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F67E86  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F67E8B  ld L,(XIX+HL)
 	sla	hl, 2	; F67E90  sla 0x02,HL
 	ld	xix, RamPtrTable_F67EE8	; F67E93  ld XIX,0x00f67ee8
@@ -151824,7 +151830,7 @@ sub_F69240_Loop3:
 	calr	BStore_DirEntryOffsetX2	; F69351  calr 0xf6bbd4
 	srl	xiz, 1	; F69354  srl 0x01,XIZ
 	push	xix	; F69357  push XIX
-	ld	xix, 6304802	; F69358  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F69358  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x20	; F6935D  cp (XIX+IZ),0x20
 	pop	xix	; F69363  pop XIX
 	jr	z, sub_F69240_Loop3	; F69364  jr Z,0xf69341
@@ -152361,7 +152367,7 @@ sub_F69697_Loop:
 	srl	xiz, 1	; F696E1  srl 0x01,XIZ
 	popw	wa	; F696E4  pop WA
 	push	xix	; F696E5  push XIX
-	ld	xix, 6304802	; F696E6  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F696E6  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x09	; F696EB  cp (XIX+IZ),0x09
 	pop	xix	; F696F1  pop XIX
 	jr	nz, sub_F69697_Join	; F696F2  jr NZ,0xf69704
@@ -152643,7 +152649,7 @@ sub_F69887_Skip:
 	calr	BStore_DirEntryOffsetX2	; F698D3  calr 0xf6bbd4
 	sra	iz, 1	; F698D6  sra 0x01,IZ
 	push	xde	; F698D9  push XDE
-	ld	xde, 6304802	; F698DA  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F698DA  ld XDE,0x00603422
 	mx_cp_mi8 MXB, ra_DE, ra_IZ, 0x0f	; F698DF  cp (XDE+IZ),0x0f
 	pop	xde	; F698E5  pop XDE
 	jr	nz, sub_F69887_Skip2	; F698E6  jr NZ,0xf698f8
@@ -152682,7 +152688,7 @@ sub_F69910:
 	srl	xiz, 1	; F69914  srl 0x01,XIZ
 	popw	wa	; F69917  pop WA
 	push	xix	; F69918  push XIX
-	ld	xix, 6304802	; F69919  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F69919  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x09	; F6991E  cp (XIX+IZ),0x09
 	pop	xix	; F69924  pop XIX
 	jr	nz, sub_F69910_Return	; F69925  jr NZ,0xf69937
@@ -152712,7 +152718,7 @@ sub_F69938:
 	srl	xiz, 1	; F6993C  srl 0x01,XIZ
 	popw	wa	; F6993F  pop WA
 	push	xix	; F69940  push XIX
-	ld	xix, 6304802	; F69941  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F69941  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x09	; F69946  cp (XIX+IZ),0x09
 	pop	xix	; F6994C  pop XIX
 	jr	nz, sub_F69938_Return	; F6994D  jr NZ,0xf6995f
@@ -155410,7 +155416,7 @@ sub_F6AC7E:
 	calr	BStore_DirEntryOffsetX2	; F6AC86  calr 0xf6bbd4
 	srl	xiz, 1	; F6AC89  srl 0x01,XIZ
 	push	xix	; F6AC8C  push XIX
-	ld	xix, 6304802	; F6AC8D  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6AC8D  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IZ, 1	; F6AC92  ld A,(XIX+IZ)
 	pop	xix	; F6AC97  pop XIX
 	ld	xhl, Map_0E63_F6ACA7	; F6AC98  ld XHL,0x00f6aca7
@@ -155449,7 +155455,7 @@ sub_F6ACC8:
 	calr	BStore_DirEntryOffsetX2	; F6ACC8  calr 0xf6bbd4
 	srl	xiz, 1	; F6ACCB  srl 0x01,XIZ
 	push	xix	; F6ACCE  push XIX
-	ld	xix, 6304802	; F6ACCF  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6ACCF  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IZ, 1	; F6ACD4  ld A,(XIX+IZ)
 	pop	xix	; F6ACD9  pop XIX
 	cp	a, 32	; F6ACDA  cp A,0x20
@@ -157831,7 +157837,7 @@ sub_F6BC89_Skip6:
 	srl	iz, 1	; F6BD32  srl 0x01,IZ
 	popw	wa	; F6BD35  pop WA
 	push	xix	; F6BD36  push XIX
-	ld	xix, 6304802	; F6BD37  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6BD37  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_IZ, 0x09	; F6BD3C  cp (XIX+IZ),0x09
 	pop	xix	; F6BD42  pop XIX
 	jr	nz, sub_F6BC89_Join	; F6BD43  jr NZ,0xf6bd55
@@ -159240,7 +159246,7 @@ sub_F6C736_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6C786:
-	ld	xix, 6304802	; F6C786  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6C786  ld XIX,0x00603422
 	xor	bc, bc	; F6C78B  xor BC,BC
 	ld	c, 17:opc	; F6C78D  ld C,0x11
 	ld	a, 32:opc	; F6C78F  ld A,0x20
@@ -159504,7 +159510,7 @@ sub_F6C984:
 	xor	hl, hl	; F6C985  xor HL,HL
 	ld	l, (3676:16)	; F6C987  ld L,(0x0e5c)
 	dec	1, l	; F6C98B  dec 1,L
-	ld	xix, 6304802	; F6C98D  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6C98D  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F6C992  ld L,(XIX+HL)
 	sla	hl, 2	; F6C997  sla 0x02,HL
 	ld	xix, RamPtrTable_F6CA63	; F6C99A  ld XIX,0x00f6ca63
@@ -160158,7 +160164,7 @@ sub_F6CE77:
 	dec	1, a	; F6CEA4  dec 1,A
 	xor	w, w	; F6CEA6  xor W,W
 	push	xix	; F6CEA8  push XIX
-	ld	xix, 6304802	; F6CEA9  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6CEA9  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6CEAE  ld A,(XIX+WA)
 	pop	xix	; F6CEB3  pop XIX
 	ld	(xiy+3), a	; F6CEB4  ld (XIY+0x03),A
@@ -160246,7 +160252,7 @@ sub_F6CF21:
 	dec	1, a	; F6CF4E  dec 1,A
 	xor	w, w	; F6CF50  xor W,W
 	push	xix	; F6CF52  push XIX
-	ld	xix, 6304802	; F6CF53  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6CF53  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6CF58  ld A,(XIX+WA)
 	pop	xix	; F6CF5D  pop XIX
 	ld	(xiy+3), a	; F6CF5E  ld (XIY+0x03),A
@@ -160333,7 +160339,7 @@ sub_F6CFCB:
 	dec	1, a	; F6CFF8  dec 1,A
 	xor	w, w	; F6CFFA  xor W,W
 	push	xix	; F6CFFC  push XIX
-	ld	xix, 6304802	; F6CFFD  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6CFFD  ld XIX,0x00603422
 
 ; ==============================================================================
 ; 0xF6D002-0xF77FFF -- THE PERFORMANCE / ACCOMPANIMENT SCREEN LAYER
@@ -160608,7 +160614,7 @@ sub_F6D075:
 	dec	1, a	; F6D0A2  dec 1,A
 	xor	w, w	; F6D0A4  xor W,W
 	push	xix	; F6D0A6  push XIX
-	ld	xix, 6304802	; F6D0A7  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D0A7  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D0AC  ld A,(XIX+WA)
 	pop	xix	; F6D0B1  pop XIX
 	ld	(xiy+3), a	; F6D0B2  ld (XIY+0x03),A
@@ -160710,7 +160716,7 @@ sub_F6D11F:
 	dec	1, a	; F6D14C  dec 1,A
 	xor	w, w	; F6D14E  xor W,W
 	push	xix	; F6D150  push XIX
-	ld	xix, 6304802	; F6D151  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D151  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D156  ld A,(XIX+WA)
 	pop	xix	; F6D15B  pop XIX
 	ld	(xiy+3), a	; F6D15C  ld (XIY+0x03),A
@@ -160812,7 +160818,7 @@ sub_F6D1C9:
 	dec	1, a	; F6D1F6  dec 1,A
 	xor	w, w	; F6D1F8  xor W,W
 	push	xix	; F6D1FA  push XIX
-	ld	xix, 6304802	; F6D1FB  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D1FB  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D200  ld A,(XIX+WA)
 	pop	xix	; F6D205  pop XIX
 	ld	(xiy+3), a	; F6D206  ld (XIY+0x03),A
@@ -160914,7 +160920,7 @@ sub_F6D273:
 	dec	1, a	; F6D2A0  dec 1,A
 	xor	w, w	; F6D2A2  xor W,W
 	push	xix	; F6D2A4  push XIX
-	ld	xix, 6304802	; F6D2A5  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D2A5  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D2AA  ld A,(XIX+WA)
 	pop	xix	; F6D2AF  pop XIX
 	ld	(xiy+3), a	; F6D2B0  ld (XIY+0x03),A
@@ -161010,7 +161016,7 @@ sub_F6D320:
 	dec	1, a	; F6D33B  dec 1,A
 	xor	w, w	; F6D33D  xor W,W
 	push	xix	; F6D33F  push XIX
-	ld	xix, 6304802	; F6D340  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D340  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D345  ld A,(XIX+WA)
 	pop	xix	; F6D34A  pop XIX
 	ld	(xiy+2), a	; F6D34B  ld (XIY+0x02),A
@@ -161108,7 +161114,7 @@ sub_F6D3C0:
 	dec	1, a	; F6D3DB  dec 1,A
 	xor	w, w	; F6D3DD  xor W,W
 	push	xix	; F6D3DF  push XIX
-	ld	xix, 6304802	; F6D3E0  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6D3E0  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_WA, 1	; F6D3E5  ld A,(XIX+WA)
 	pop	xix	; F6D3EA  pop XIX
 	ld	(xiy+2), a	; F6D3EB  ld (XIY+0x02),A
@@ -165931,7 +165937,7 @@ sub_F6EC6A_Join:
 	cp	hl, 16	; F6EC74  cp HL,0x0010
 	jr	ugt, sub_F6EC6A_Return	; F6EC78  jr UGT,0xf6ec9f
 	push	xde	; F6EC7A  push XDE
-	ld	xde, 6304802	; F6EC7B  ld XDE,0x00603422
+	ld	xde, BStore_TrackToPart	; F6EC7B  ld XDE,0x00603422
 	mx_cp_mi8 MXB, ra_DE, ra_HL, 0x20	; F6EC80  cp (XDE+HL),0x20
 	pop	xde	; F6EC86  pop XDE
 	jr	nz, sub_F6EC6A_Skip	; F6EC87  jr NZ,0xf6ec8f
@@ -167150,7 +167156,7 @@ sub_F6F94E:
 	jr	z, sub_F6F94E_Skip	; F6F958  jr Z,0xf6f95f
 	ld	xiy, ByteMap_F6F996	; F6F95A  ld XIY,0x00f6f996
 sub_F6F94E_Skip:
-	ld	xix, 6304802	; F6F95F  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F6F95F  ld XIX,0x00603422
 	ldw	bc, 17	; F6F964  ld BC,0x0011
 	ldir85	; F6F967  ldir
 	ld	xiy, ByteMap_F6F9A7	; F6F969  ld XIY,0x00f6f9a7
@@ -175940,7 +175946,7 @@ sub_F735F7_Skip:
 	xor	b, b	; F7362C  xor B,B
 	ld	iy, bc	; F7362E  ld IY,BC
 	push	xix	; F73630  push XIX
-	ld	xix, 6304802	; F73631  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73631  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_IY, 1	; F73636  ld A,(XIX+IY)
 	pop	xix	; F7363B  pop XIX
 	ld	(3184:16), c	; F7363C  ld (0x0c70),C
@@ -176316,7 +176322,7 @@ Smf_WriteFile_Skip2:
 	ld	l, c	; F738A9  ld L,C
 	xor	h, h	; F738AB  xor H,H
 	push	xix	; F738AD  push XIX
-	ld	xix, 6304802	; F738AE  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F738AE  ld XIX,0x00603422
 	mx_cp_mi8 MXB, ra_IX, ra_HL, 0x20	; F738B3  cp (XIX+HL),0x20
 	pop	xix	; F738B9  pop XIX
 	jr	z, Smf_WriteFile_Skip3	; F738BA  jr Z,0xf738d1
@@ -176539,7 +176545,7 @@ Smf_WriteFile_Loop4:
 	m_rd_xorcf_a RW+r2	; F73B4C  xorcf A,DE
 	jrl	c, Smf_WriteFile_Skip13	; F73B4E  jrl C,0xf73eac
 	push	xix	; F73B51  push XIX
-	ld	xix, 6304802	; F73B52  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73B52  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73B57  ld L,(XIX+HL)
 	pop	xix	; F73B5C  pop XIX
 	ld	b, l	; F73B5D  ld B,L
@@ -176577,7 +176583,7 @@ Smf_WriteFile_Join2:
 	ld	l, (3184:16)	; F73BAF  ld L,(0x0c70)
 	xor	h, h	; F73BB3  xor H,H
 	push	xix	; F73BB5  push XIX
-	ld	xix, 6304802	; F73BB6  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73BB6  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73BBB  ld L,(XIX+HL)
 	pop	xix	; F73BC0  pop XIX
 	m_cp_mi8 MB16, 0x1239, 0xff	; F73BC1  cp (0x1239),0xff
@@ -176706,7 +176712,7 @@ Smf_WriteFile_Join3:
 	ld	l, (3184:16)	; F73CF3  ld L,(0x0c70)
 	xor	h, h	; F73CF7  xor H,H
 	push	xix	; F73CF9  push XIX
-	ld	xix, 6304802	; F73CFA  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73CFA  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73CFF  ld L,(XIX+HL)
 	pop	xix	; F73D04  pop XIX
 	ld	b, l	; F73D05  ld B,L
@@ -176751,7 +176757,7 @@ Smf_WriteFile_Join3:
 	ld	l, (3184:16)	; F73D6E  ld L,(0x0c70)
 	xor	h, h	; F73D72  xor H,H
 	push	xix	; F73D74  push XIX
-	ld	xix, 6304802	; F73D75  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73D75  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73D7A  ld L,(XIX+HL)
 	sla	hl, 1	; F73D7F  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F74960	; F73D82  ld XIX,0x00f74960
@@ -176797,7 +176803,7 @@ Smf_WriteFile_Join3:
 	ld	l, (3184:16)	; F73DEC  ld L,(0x0c70)
 	xor	h, h	; F73DF0  xor H,H
 	push	xix	; F73DF2  push XIX
-	ld	xix, 6304802	; F73DF3  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73DF3  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73DF8  ld L,(XIX+HL)
 	sla	l, 1	; F73DFD  sla 0x01,L
 	ld	xix, SmfPartOffsets_F74960	; F73E00  ld XIX,0x00f74960
@@ -176838,7 +176844,7 @@ Smf_WriteFile_Join3:
 	ld	l, (3184:16)	; F73E60  ld L,(0x0c70)
 	xor	h, h	; F73E64  xor H,H
 	push	xix	; F73E66  push XIX
-	ld	xix, 6304802	; F73E67  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F73E67  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F73E6C  ld L,(XIX+HL)
 	sla	l, 1	; F73E71  sla 0x01,L
 	ld	xix, SmfPartOffsets_F74960	; F73E74  ld XIX,0x00f74960
@@ -177129,7 +177135,7 @@ Smf_WriteFile_Skip25:
 	push	xix	; F741A3  push XIX
 	xor	hl, hl	; F741A4  xor HL,HL
 	ld	l, (4506:16)	; F741A6  ld L,(0x119a)
-	ld	xix, 6304802	; F741AA  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F741AA  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F741AF  ld L,(XIX+HL)
 	ld	xix, ByteMap_F7484A	; F741B4  ld XIX,0x00f7484a
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F741B9  ld L,(XIX+HL)
@@ -179345,7 +179351,7 @@ sub_F75685_Loop2:
 	m_rd_xorcf_a RW+r2	; F757C5  xorcf A,DE
 	jrl	c, sub_F75685_Skip5	; F757C7  jrl C,0xf75a5e
 	push	xix	; F757CA  push XIX
-	ld	xix, 6304802	; F757CB  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F757CB  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F757D0  ld L,(XIX+HL)
 	pop	xix	; F757D5  pop XIX
 	ld	b, l	; F757D6  ld B,L
@@ -179487,7 +179493,7 @@ sub_F75685_Join3:
 	ld	l, (3184:16)	; F7590F  ld L,(0x0c70)
 	xor	h, h	; F75913  xor H,H
 	push	xix	; F75915  push XIX
-	ld	xix, 6304802	; F75916  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F75916  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F7591B  ld L,(XIX+HL)
 	pop	xix	; F75920  pop XIX
 	ld	b, l	; F75921  ld B,L
@@ -179524,7 +179530,7 @@ sub_F75685_Join3:
 	ld	l, (3184:16)	; F75970  ld L,(0x0c70)
 	xor	h, h	; F75974  xor H,H
 	push	xix	; F75976  push XIX
-	ld	xix, 6304802	; F75977  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F75977  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F7597C  ld L,(XIX+HL)
 	sla	hl, 1	; F75981  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F760E0	; F75984  ld XIX,0x00f760e0
@@ -179562,7 +179568,7 @@ sub_F75685_Join3:
 	ld	l, (3184:16)	; F759CE  ld L,(0x0c70)
 	xor	h, h	; F759D2  xor H,H
 	push	xix	; F759D4  push XIX
-	ld	xix, 6304802	; F759D5  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F759D5  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F759DA  ld L,(XIX+HL)
 	sla	hl, 1	; F759DF  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F760E0	; F759E2  ld XIX,0x00f760e0
@@ -179595,7 +179601,7 @@ sub_F75685_Join3:
 	ld	l, (3184:16)	; F75A22  ld L,(0x0c70)
 	xor	h, h	; F75A26  xor H,H
 	push	xix	; F75A28  push XIX
-	ld	xix, 6304802	; F75A29  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F75A29  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F75A2E  ld L,(XIX+HL)
 	sla	hl, 1	; F75A33  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F760E0	; F75A36  ld XIX,0x00f760e0
@@ -179866,7 +179872,7 @@ sub_F75685_Skip18:
 	push	xix	; F75D14  push XIX
 	xor	hl, hl	; F75D15  xor HL,HL
 	ld	l, (4506:16)	; F75D17  ld L,(0x119a)
-	ld	xix, 6304802	; F75D1B  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F75D1B  ld XIX,0x00603422
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F75D20  ld L,(XIX+HL)
 	ld	xix, ByteMap_F7609E	; F75D25  ld XIX,0x00f7609e
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F75D2A  ld L,(XIX+HL)
@@ -182313,7 +182319,7 @@ sub_F76E74_Loop2:
 	.byte 0xDA, 0x2A	; F76FA0  xorcf A,DE   [llvm-mc cannot encode this]
 	jrl	c, sub_F76E74_Skip4	; F76FA2  jrl C,0xf77239
 	push	xix	; F76FA5  push XIX
-	ld	xix, 6304802	; F76FA6  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F76FA6  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F76FAB  ld L,(XIX+HL)
 	pop	xix	; F76FB0  pop XIX
 	ld	b, l	; F76FB1  ld B,L
@@ -182455,7 +182461,7 @@ sub_F76E74_Join3:
 	ld	l, (3184:16)	; F770EA  ld L,(0x0c70)
 	xor	h, h	; F770EE  xor H,H
 	push	xix	; F770F0  push XIX
-	ld	xix, 6304802	; F770F1  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F770F1  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F770F6  ld L,(XIX+HL)
 	pop	xix	; F770FB  pop XIX
 	ld	b, l	; F770FC  ld B,L
@@ -182492,7 +182498,7 @@ sub_F76E74_Join3:
 	ld	l, (3184:16)	; F7714B  ld L,(0x0c70)
 	xor	h, h	; F7714F  xor H,H
 	push	xix	; F77151  push XIX
-	ld	xix, 6304802	; F77152  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F77152  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F77157  ld L,(XIX+HL)
 	sla	hl, 1	; F7715C  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F77857	; F7715F  ld XIX,0x00f77857
@@ -182530,7 +182536,7 @@ sub_F76E74_Join3:
 	ld	l, (3184:16)	; F771A9  ld L,(0x0c70)
 	xor	h, h	; F771AD  xor H,H
 	push	xix	; F771AF  push XIX
-	ld	xix, 6304802	; F771B0  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F771B0  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F771B5  ld L,(XIX+HL)
 	sla	hl, 1	; F771BA  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F77857	; F771BD  ld XIX,0x00f77857
@@ -182563,7 +182569,7 @@ sub_F76E74_Join3:
 	ld	l, (3184:16)	; F771FD  ld L,(0x0c70)
 	xor	h, h	; F77201  xor H,H
 	push	xix	; F77203  push XIX
-	ld	xix, 6304802	; F77204  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F77204  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F77209  ld L,(XIX+HL)
 	sla	hl, 1	; F7720E  sla 0x01,HL
 	ld	xix, SmfPartOffsets_F77857	; F77211  ld XIX,0x00f77857
@@ -182824,7 +182830,7 @@ sub_F76E74_Skip15:
 	push	xix	; F774CD  push XIX
 	xor	hl, hl	; F774CE  xor HL,HL
 	ld	l, (4506:16)	; F774D0  ld L,(0x119a)
-	ld	xix, 6304802	; F774D4  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F774D4  ld XIX,0x00603422
 	ld	l, (xix+hl)	; F774D9  ld L,(XIX+HL)
 	ld	xix, ByteMap_F77815	; F774DE  ld XIX,0x00f77815
 	ld	l, (xix+hl)	; F774E3  ld L,(XIX+HL)
@@ -195414,7 +195420,7 @@ sub_F7E2FC_Return:
 ; Evidence: reached from call from prom_b 0xF7EC9C; call from prom_b
 ;           0xF7ECD5, and from nothing else the scans see.
 sub_F7E354:
-	ld	xiy, 6304802	; F7E354  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F7E354  ld XIY,0x00603422
 	ld	xix, DisplayListB_Stage	; F7E359  ld XIX,0x000012f6
 	ld	c, 16:opc	; F7E35E  ld C,0x10
 sub_F7E354_Join:
@@ -195591,7 +195597,7 @@ Paint_TrackAssign_Skip4:
 	ld	(DisplayListB_Stage:16), a	; F7E4C3  ld (0x12f6),A
 	push	xix	; F7E4C7  push XIX
 	pushw	hl	; F7E4C8  push HL
-	ld	xix, 6304802	; F7E4C9  ld XIX,0x00603422
+	ld	xix, BStore_TrackToPart	; F7E4C9  ld XIX,0x00603422
 	xor	hl, hl	; F7E4CE  xor HL,HL
 	ld	l, (3075:16)	; F7E4D0  ld L,(0x0c03)
 	mx_ld_rm MXB, ra_IX, ra_HL, 1	; F7E4D4  ld A,(XIX+HL)
@@ -197148,7 +197154,7 @@ Paint_TrackLabels9To16:
 sub_F7E8CD:
 	ld	(LCD_CurrentLayer:16), 0	; F7E8CD  ld (0x2540),0x00
 	calr	sub_F7E39F_Nop	; F7E8D2  calr 0xf7e2d8
-	ld	xiy, 6304802	; F7E8D5  ld XIY,0x00603422
+	ld	xiy, BStore_TrackToPart	; F7E8D5  ld XIY,0x00603422
 	ld	xix, UI_DrawScratch+1	; F7E8DA  ld XIX,0x00002641
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
 	ldir85	; F7E8E2  ldir
