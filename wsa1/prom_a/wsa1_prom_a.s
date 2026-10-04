@@ -177083,13 +177083,13 @@ SoftKeyCol6_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A5E
 SoftKeyCol7_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A62
 	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B1E  f1 9c 20 00 07
 	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B23  f1 9b 20 00 06
-	calr sub_FEA86F                                          ; FE9B28  1e 44 0d
+	calr EditScreen_CursorLeft                                          ; FE9B28  1e 44 0d
 	ret                                                  ; FE9B2B  0e
 ; SoftKeyCol8_NoteEdit: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x07.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol8_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A66
 	ld (PanelDial_UpButton:16), 0x07                                 ; FE9B2C  f1 9c 20 00 07
 	ld (PanelDial_DownButton:16), 0x06                                 ; FE9B31  f1 9b 20 00 06
-	calr sub_FEA36C                                          ; FE9B36  1e 33 08
+	calr EditScreen_CursorRight                                          ; FE9B36  1e 33 08
 	ret                                                  ; FE9B39  0e
 ; LcdKeyRow1_NoteEdit: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); NoteEdit_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
 LcdKeyRow1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A6A
@@ -177252,13 +177252,13 @@ SoftKeyCol5_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB4
 SoftKeyCol6_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BB8
 	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C6A  f1 9c 20 00 06
 	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C6F  f1 9b 20 00 05
-	calr sub_FEA86F                                      ; FE9C74  1e f8 0b
+	calr EditScreen_CursorLeft                                      ; FE9C74  1e f8 0b
 	ret                                                  ; FE9C77  0e
 ; SoftKeyCol7_DrumEdit: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x06.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol7_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BBC
 	ld (PanelDial_UpButton:16), 0x06                                 ; FE9C78  f1 9c 20 00 06
 	ld (PanelDial_DownButton:16), 0x05                                 ; FE9C7D  f1 9b 20 00 05
-	calr sub_FEA36C                                      ; FE9C82  1e e7 06
+	calr EditScreen_CursorRight                                      ; FE9C82  1e e7 06
 	ret                                                  ; FE9C85  0e
 ; SoftKeyCol8_DrumEdit: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x07.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol8_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BC0
@@ -177345,32 +177345,36 @@ EditScreen_SoftKeyCol1:
 .LFE9CEF:
 	bit 0x07,W                                           ; FE9CEF  c8 33 07
 	jr nz, .LFE9CF8                                      ; FE9CF2  6e 04
-	calr sub_FE9CFC                                      ; FE9CF4  1e 05 00
+	calr EditCursor_MeasurePlus1                                      ; FE9CF4  1e 05 00
 	ret                                                  ; FE9CF7  0e
 .LFE9CF8:
-	calr sub_FE9D16                                      ; FE9CF8  1e 1b 00
+	calr EditCursor_MeasureMinus1                                      ; FE9CF8  1e 1b 00
 	ret                                                  ; FE9CFB  0e
-sub_FE9CFC:
+; EditCursor_MeasurePlus1: EditCursor_Measure + 1 unless it is above 999, then EditCursor_MeasureChanged.  EditScreen_SoftKeyCol1 (MEAS), bit 7 clear.
+EditCursor_MeasurePlus1:
 	ld wa, (EditCursor_Measure:24)                                ; FE9CFC  d2 3f 1f 60 20
 	cp WA,0x03e7                                         ; FE9D01  d8 cf e7 03
 	jr ugt, .LFE9D12                                     ; FE9D05  6b 0b
 	m_add_mi16 MW24, EditCursor_Measure, 0x0001                    ; FE9D07  d2 3f 1f 60 38 01 00
-	calr sub_FE9D2E                                      ; FE9D0E  1e 1d 00
+	calr EditCursor_MeasureChanged                                      ; FE9D0E  1e 1d 00
 	ret                                                  ; FE9D11  0e
 .LFE9D12:
 	calr sub_FE9CFC_Nop                                          ; FE9D12  1e 2a e3
 	ret                                                  ; FE9D15  0e
-sub_FE9D16:
+; EditCursor_MeasureMinus1: EditCursor_Measure - 1 unless it is 1, then EditCursor_MeasureChanged.  EditScreen_SoftKeyCol1 (MEAS), bit 7 set.
+EditCursor_MeasureMinus1:
 	ld wa, (EditCursor_Measure:24)                                ; FE9D16  d2 3f 1f 60 20
 	cp wa, 0x01:i3                                         ; FE9D1B  d8 d9
 	jr z, .LFE9D2A                                       ; FE9D1D  66 0b
 	subw	(EditCursor_Measure:24), 0x0001                ; FE9D1F  d2 3f 1f 60 3a 01 00
-	calr sub_FE9D2E                                      ; FE9D26  1e 05 00
+	calr EditCursor_MeasureChanged                                      ; FE9D26  1e 05 00
 	ret                                                  ; FE9D29  0e
 .LFE9D2A:
 	calr sub_FE9CFC_Nop                                          ; FE9D2A  1e 12 e3
 	ret                                                  ; FE9D2D  0e
-sub_FE9D2E:
+; EditCursor_MeasureChanged: redraws the measure (EditScreen_DrawMeasure between the bottom-row erases), (0x601F54) = 0, erases the edit area on
+;   both layers, EditCursor_Beat = EditCursor_Tick = 0, (0x601F58) = 0x82, (0x601F59) = 0.  Called by the MEAS +-1 / +-10 steps.
+EditCursor_MeasureChanged:
 	calr sub_FEF778                                          ; FE9D2E  1e 47 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D31  1e 55 6c
 	calr sub_FEF796                                          ; FE9D34  1e 5f 5a
@@ -177384,7 +177388,8 @@ sub_FE9D2E:
 	ld (0x601f58:24), 0x82                             ; FE9D53  f2 58 1f 60 00 82
 	ld (0x601f59:24), 0x00                             ; FE9D59  f2 59 1f 60 00 00
 	ret                                                  ; FE9D5F  0e
-sub_FE9D60:
+; EditCursor_MeasureChangedByCursor: the same with (0x601F58) = 0x81; called only by EditScreen_CursorRight.
+EditCursor_MeasureChangedByCursor:
 	calr sub_FEF778                                          ; FE9D60  1e 15 5a
 	calr EditScreen_DrawMeasure                                          ; FE9D63  1e 23 6c
 	calr sub_FEF796                                          ; FE9D66  1e 2d 5a
@@ -177412,7 +177417,7 @@ EditScreen_SoftKeyCol2:
 	calr EditCursor_TickPlus1                                      ; FE9DAC  1e 05 00
 	ret                                                  ; FE9DAF  0e
 .LFE9DB0:
-	calr sub_FE9F74                                      ; FE9DB0  1e c1 01
+	calr EditCursor_TickMinus1                                      ; FE9DB0  1e c1 01
 	ret                                                  ; FE9DB3  0e
 ; EditCursor_TickPlus1: EditCursor_Tick + 1; at 0x5F, EditCursor_NextBeat instead.
 EditCursor_TickPlus1:
@@ -177588,12 +177593,14 @@ EditCursor_BeatsInMeasure:
 	ret                                                  ; FE9F72  0e
 .LFE9F73:
 	ret                                                  ; FE9F73  0e
-sub_FE9F74:
+; EditCursor_TickMinus1: EditCursor_Tick - 1, or EditCursor_PrevBeat at tick 0; then EditScreen_DrawTick and the redraws.  EditScreen_SoftKeyCol2
+;   (POS) with bit 7 set -- the counterpart of EditCursor_TickPlus1.
+EditCursor_TickMinus1:
 	m_cp_mi8 MB24, EditCursor_Tick, 0x00                        ; FE9F74  c2 43 1f 60 3f 00
 	jr z, .LFE9F7E                                       ; FE9F7A  66 02
 	jr .LFE9F82                                          ; FE9F7C  68 04
 .LFE9F7E:
-	calr sub_FE9FC7                                      ; FE9F7E  1e 46 00
+	calr EditCursor_PrevBeat                                      ; FE9F7E  1e 46 00
 	ret                                                  ; FE9F81  0e
 .LFE9F82:
 	sub	(EditCursor_Tick:24), 0x01                  ; FE9F82  c2 43 1f 60 3a 01
@@ -177602,12 +177609,13 @@ sub_FE9F74:
 	calr sub_FF0205                                          ; FE9F8E  1e 74 62
 	calr sub_FEA082                                      ; FE9F91  1e ee 00
 	ret                                                  ; FE9F94  0e
-sub_FE9F95:
+; EditCursor_TickMinus5: EditCursor_Tick - 5, floored at 0 (EditCursor_PrevBeat at tick 0) -- the counterpart of EditCursor_TickPlus5.
+EditCursor_TickMinus5:
 	m_cp_mi8 MB24, EditCursor_Tick, 0x00                        ; FE9F95  c2 43 1f 60 3f 00
 	jr z, .LFE9F9F                                       ; FE9F9B  66 02
 	jr .LFE9FA3                                          ; FE9F9D  68 04
 .LFE9F9F:
-	calr sub_FE9FC7                                      ; FE9F9F  1e 25 00
+	calr EditCursor_PrevBeat                                      ; FE9F9F  1e 25 00
 	ret                                                  ; FE9FA2  0e
 .LFE9FA3:
 	ld a, (EditCursor_Tick:24)                                 ; FE9FA3  c2 43 1f 60 21
@@ -177623,7 +177631,10 @@ sub_FE9F95:
 .LFE9FBF:
 	ld (EditCursor_Tick:24), 0x00                             ; FE9FBF  f2 43 1f 60 00 00
 	jr .LFE9FB2                                          ; FE9FC5  68 eb
-sub_FE9FC7:
+; EditCursor_PrevBeat: at beat > 0: EditCursor_Beat - 1 with EditCursor_Tick = 0x5F (the beat's last of 96 ticks); at beat 0, the previous
+;   measure's last tick (EditCursor_Measure - 1) or the boundary handling of (0x601F5D) / (0x601F5B).  The counterpart of
+;   EditCursor_NextBeat.
+EditCursor_PrevBeat:
 	m_cp_mi16 MW24, EditCursor_Beat, 0x0000                     ; FE9FC7  d2 41 1f 60 3f 00 00
 	jr z, .LFE9FEA                                       ; FE9FCE  66 1a
 	ld (EditCursor_Tick:24), 0x5f                             ; FE9FD0  f2 43 1f 60 00 5f
@@ -177992,7 +178003,8 @@ EditField_IncDown5:
 .LFEA363:
 	ldw (EditField_Inc:24), 0x01                             ; FEA363  f2 4d 1f 60 02 01 00
 	jr .LFEA35F                                          ; FEA36A  68 f3
-sub_FEA36C:
+; EditScreen_CursorRight: the 'CURSOR >' key: SoftKeyCol8_NoteEdit and SoftKeyCol7_DrumEdit call it (DRUM EDIT has one column fewer).
+EditScreen_CursorRight:
 	m_bit 7, MD24, 0x601f58                              ; FEA36C  f2 58 1f 60 cf
 	jr z, .LFEA374                                       ; FEA371  66 01
 	ret                                                  ; FEA373  0e
@@ -178075,7 +178087,7 @@ sub_FEA36C:
 	ld wa, (0x601f5d:24)                                ; FEA435  d2 5d 1f 60 20
 	add WA,BC                                            ; FEA43A  d9 80
 	ld (EditCursor_Measure:24), wa                                ; FEA43C  f2 3f 1f 60 50
-	calr sub_FE9D60                                      ; FEA441  1e 1c f9
+	calr EditCursor_MeasureChangedByCursor                                      ; FEA441  1e 1c f9
 	ret                                                  ; FEA444  0e
 .LFEA445:
 	ld C,A                                               ; FEA445  c9 8b
@@ -178493,7 +178505,8 @@ sub_FEA84F:
 	ld (BStore_CursorBlock:16), wa                                  ; FEA866  f1 5c 34 50
 	ld (BStore_CursorOffset:16), bc                                  ; FEA86A  f1 5e 34 51
 	ret                                                  ; FEA86E  0e
-sub_FEA86F:
+; EditScreen_CursorLeft: the 'CURSOR <' key: SoftKeyCol7_NoteEdit and SoftKeyCol6_DrumEdit call it.
+EditScreen_CursorLeft:
 	m_bit 7, MD24, 0x601f58                              ; FEA86F  f2 58 1f 60 cf
 	jr z, .LFEA877                                       ; FEA874  66 01
 	ret                                                  ; FEA876  0e
@@ -178732,7 +178745,7 @@ EditCursor_MeasurePlus10:
 	jr ule, .LFEAAD8                                     ; FEAACF  63 07
 	ldw (EditCursor_Measure:24), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
 .LFEAAD8:
-	calr sub_FE9D2E                                      ; FEAAD8  1e 53 f2
+	calr EditCursor_MeasureChanged                                      ; FEAAD8  1e 53 f2
 sub_FEAADB:
 	ret                                                  ; FEAADB  0e
 .LFEAADC:
@@ -178750,7 +178763,7 @@ EditCursor_MeasureMinus10:
 	jr c, .LFEAB01                                       ; FEAAF6  67 09
 	ld (EditCursor_Measure:24), wa                                ; FEAAF8  f2 3f 1f 60 50
 .LFEAAFD:
-	calr sub_FE9D2E                                      ; FEAAFD  1e 2e f2
+	calr EditCursor_MeasureChanged                                      ; FEAAFD  1e 2e f2
 	ret                                                  ; FEAB00  0e
 .LFEAB01:
 	ldw (EditCursor_Measure:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
@@ -178771,7 +178784,7 @@ sub_FEAB0E:
 	calr EditCursor_TickPlus5                                      ; FEAB28  1e aa f2
 	ret                                                  ; FEAB2B  0e
 .LFEAB2C:
-	calr sub_FE9F95                                      ; FEAB2C  1e 66 f4
+	calr EditCursor_TickMinus5                                      ; FEAB2C  1e 66 f4
 	ret                                                  ; FEAB2F  0e
 sub_FEAB30:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAB30  c1 75 20 3e 08

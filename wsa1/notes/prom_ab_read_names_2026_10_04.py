@@ -564,6 +564,32 @@ ROWS = [
     ("FEB258", "DrumEdit_DrawRowNote11",
      "(0x601F71) + 11 to the interpreter-B variable 0x26B0, then a one-record list (op 0A, a decimal readout,\n"
      "handler 0xF31C14) -- row 11's note number."),
+    # prom_a 0xFE9CFC-0xFEA86F: the NOTE / DRUM EDIT soft keys.  DisplayList_NoteEditTrackSong's text at row 199 labels the
+    # columns MEAS, POS, NOTE, VEL, LEN, INC, then '- CURSOR' with '<' (col 32) and '>' (col 37) on row 220; DRUM EDIT's
+    # list reads MEAS, POS, SND, VEL, INC, '- CURSOR' '<' (27) '>' (32), ENTER (35).  Up / down arrows sit above / below
+    # the first five or six columns (bit 7 of the code picks which).
+    ("FEA36C", "EditScreen_CursorRight",
+     "the 'CURSOR >' key: SoftKeyCol8_NoteEdit and SoftKeyCol7_DrumEdit call it (DRUM EDIT has one column fewer)."),
+    ("FEA86F", "EditScreen_CursorLeft",
+     "the 'CURSOR <' key: SoftKeyCol7_NoteEdit and SoftKeyCol6_DrumEdit call it."),
+    ("FE9CFC", "EditCursor_MeasurePlus1",
+     "EditCursor_Measure + 1 unless it is above 999, then EditCursor_MeasureChanged.  EditScreen_SoftKeyCol1 (MEAS), bit 7 clear."),
+    ("FE9D16", "EditCursor_MeasureMinus1",
+     "EditCursor_Measure - 1 unless it is 1, then EditCursor_MeasureChanged.  EditScreen_SoftKeyCol1 (MEAS), bit 7 set."),
+    ("FE9D2E", "EditCursor_MeasureChanged",
+     "redraws the measure (EditScreen_DrawMeasure between the bottom-row erases), (0x601F54) = 0, erases the edit area on\n"
+     "both layers, EditCursor_Beat = EditCursor_Tick = 0, (0x601F58) = 0x82, (0x601F59) = 0.  Called by the MEAS +-1 / +-10 steps."),
+    ("FE9D60", "EditCursor_MeasureChangedByCursor",
+     "the same with (0x601F58) = 0x81; called only by EditScreen_CursorRight."),
+    ("FE9F74", "EditCursor_TickMinus1",
+     "EditCursor_Tick - 1, or EditCursor_PrevBeat at tick 0; then EditScreen_DrawTick and the redraws.  EditScreen_SoftKeyCol2\n"
+     "(POS) with bit 7 set -- the counterpart of EditCursor_TickPlus1."),
+    ("FE9F95", "EditCursor_TickMinus5",
+     "EditCursor_Tick - 5, floored at 0 (EditCursor_PrevBeat at tick 0) -- the counterpart of EditCursor_TickPlus5."),
+    ("FE9FC7", "EditCursor_PrevBeat",
+     "at beat > 0: EditCursor_Beat - 1 with EditCursor_Tick = 0x5F (the beat's last of 96 ticks); at beat 0, the previous\n"
+     "measure's last tick (EditCursor_Measure - 1) or the boundary handling of (0x601F5D) / (0x601F5B).  The counterpart of\n"
+     "EditCursor_NextBeat."),
 ]
 
 

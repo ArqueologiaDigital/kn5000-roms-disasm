@@ -2759,4 +2759,13 @@ RENAMES = [
     ("sub_FEB208", "DrumEdit_DrawRowNote9"),
     ("sub_FEB230", "DrumEdit_DrawRowNote10"),
     ("sub_FEB258", "DrumEdit_DrawRowNote11"),
+    ("sub_FEA36C", "EditScreen_CursorRight"),
+    ("sub_FEA86F", "EditScreen_CursorLeft"),
+    ("sub_FE9CFC", "EditCursor_MeasurePlus1"),
+    ("sub_FE9D16", "EditCursor_MeasureMinus1"),
+    ("sub_FE9D2E", "EditCursor_MeasureChanged"),
+    ("sub_FE9D60", "EditCursor_MeasureChangedByCursor"),
+    ("sub_FE9F74", "EditCursor_TickMinus1"),
+    ("sub_FE9F95", "EditCursor_TickMinus5"),
+    ("sub_FE9FC7", "EditCursor_PrevBeat"),
 ]
