@@ -376,8 +376,8 @@ RENAMES = {
     "sub_FDE70F": "ScreenButton_SoundEditFilterLfo",
     "sub_FD644D": "ToneMsg80_Id00",
     "sub_FD649A": "ToneMsg80_Id04",
-    "sub_FEAA86": "UI_GotoScreen24",
-    "sub_FEAA8D": "UI_GotoScreen27",
+    "sub_FEAA86": "UI_GotoNoteEditPartSelect",
+    "sub_FEAA8D": "UI_GotoDrumEditPartSelect",
     "sub_FE8CEE": "BStore_CursorSlot_Save",
     "sub_FE8D15": "BStore_CursorSlot_Restore",
     "sub_FE8BF8": "BStore_CursorSlot_RestoreMark",
@@ -489,7 +489,7 @@ RENAMES = {
     "sub_FB7748": "SysExDump_SequencerUsedBytes",
     "sub_FB7DFE": "SysExDump_ShowResult",
     "sub_FB7E29": "SysExDump_ShowCompleted",
-    "sub_FB7E38": "SysExDump_ShowScreenB3",
+    "sub_FB7E38": "SysExDump_ShowWriteProtectError",
     "sub_FB7E43": "SysExDump_ShowStatusMessage",
     "AsciiRun_F511C7": "SysExStatus_MessageIdMap",
     "sub_FB8156": "SysEx_ResetSession",
@@ -2982,6 +2982,9 @@ RENAMES = {
     "ScreenCode33_Handler": "ScreenEnter_CombiEditMenuRedirect",
     "ScreenCodeB0_Handler": "ScreenEnter_CombiEditPartMenu",
     "ScreenButton_CodeB0": "ScreenButton_CombiEditPartMenu",
+    "UI_GotoScreen24": "UI_GotoNoteEditPartSelect",
+    "UI_GotoScreen27": "UI_GotoDrumEditPartSelect",
+    "SysExDump_ShowScreenB3": "SysExDump_ShowWriteProtectError",
 }
 
 

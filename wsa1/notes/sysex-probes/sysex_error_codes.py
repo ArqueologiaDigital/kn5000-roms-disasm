@@ -14,7 +14,7 @@ THE CHAIN, AND WHERE EACH LINK IS READ
 
     (2) At the end of a session prom_a SysExDump_ShowResult (0xFB7DFE) reads field 4:
               == 0x00 -> SysExDump_ShowCompleted: message 0x23 ("COMPLETED!")
-              == 0x21 -> SysExDump_ShowScreenB3: screen 0xB3, NO popup
+              == 0x21 -> SysExDump_ShowWriteProtectError: screen 0xB3, NO popup
               else    -> SysExDump_ShowStatusMessage: message := STATUS_MAP[field4]
         STATUS_MAP is prom_b 0xF511C7, named by the single instruction
         `add XWA,0x00f511c7` at prom_a 0xFB7E54.  The message id goes to

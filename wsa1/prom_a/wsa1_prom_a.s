@@ -94226,7 +94226,7 @@ SysExCmd_GmSystemOff:
 	add XSP,0x00000026                                   ; FB535C  ef c8 26 00 00 00
 	jr .LFB5368                                          ; FB5362  68 04
 .LFB5364:
-	call SysExDump_ShowScreenB3                                      ; FB5364  1d 38 7e fb
+	call SysExDump_ShowWriteProtectError                                      ; FB5364  1d 38 7e fb
 .LFB5368:
 	pop XIX                                              ; FB5368  5c
 	popw hl                                              ; FB5369  4b
@@ -99072,7 +99072,7 @@ sub_FB7D91:
 .LFB7DFC:
 	pop XIX                                              ; FB7DFC  5c
 	ret                                                  ; FB7DFD  0e
-; SysExDump_ShowResult: status (field 4) 0 -> SysExDump_ShowCompleted; 0x21 -> SysExDump_ShowScreenB3; else SysExDump_ShowStatusMessage.
+; SysExDump_ShowResult: status (field 4) 0 -> SysExDump_ShowCompleted; 0x21 -> SysExDump_ShowWriteProtectError; else SysExDump_ShowStatusMessage.
 SysExDump_ShowResult:
 	pushw 0x04                                           ; FB7DFE  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7E01  e2 d8 fc 60 21
@@ -99089,7 +99089,7 @@ SysExDump_ShowResult:
 	calr SysExDump_ShowCompleted                                      ; FB7E1B  1e 0b 00
 	jr .LFB7E28                                          ; FB7E1E  68 08
 .LFB7E20:
-	calr SysExDump_ShowScreenB3                                      ; FB7E20  1e 15 00
+	calr SysExDump_ShowWriteProtectError                                      ; FB7E20  1e 15 00
 	jr .LFB7E28                                          ; FB7E23  68 03
 .LFB7E25:
 	calr SysExDump_ShowStatusMessage                                      ; FB7E25  1e 1b 00
@@ -99101,8 +99101,10 @@ SysExDump_ShowCompleted:
 	ld (UI_Request:16), 0xab                                 ; FB7E2E  f1 70 20 00 ab
 	m_set 6, MD16, UI_Request_Hi                                ; FB7E33  f1 71 20 be
 	ret                                                  ; FB7E37  0e
-; SysExDump_ShowScreenB3: UI_Request = 0xB3, no popup.
-SysExDump_ShowScreenB3:
+; SysExDump_ShowWriteProtectError: UI_Request = 0xB3, no popup.
+; SysExDump_ShowWriteProtectError: requests screen 0xB3 -- ScreenEnter_WriteProtectError ("The S0UND or C0MBINATI0N memories
+;   are write protected").
+SysExDump_ShowWriteProtectError:
 	ld (UI_Request:16), 0xb3                                 ; FB7E38  f1 70 20 00 b3
 	ld (UI_Request_Hi:16), 0x40                                 ; FB7E3D  f1 71 20 00 40
 	ret                                                  ; FB7E42  0e
@@ -177224,7 +177226,7 @@ ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0x
 ExitKey_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	bit 0x07,W                                           ; FE9B5F  c8 33 07
 	jr nz, .LFE9B68                                      ; FE9B62  6e 04
-	calr UI_GotoScreen24                                          ; FE9B64  1e 1f 0f
+	calr UI_GotoNoteEditPartSelect                                          ; FE9B64  1e 1f 0f
 	ret                                                  ; FE9B67  0e
 .LFE9B68:
 	calr sub_FE81D4_Nop                                          ; FE9B68  1e 7b e6
@@ -177397,7 +177399,7 @@ ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0x
 ExitKey_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	bit 0x07,W                                           ; FE9CAF  c8 33 07
 	jr nz, .LFE9CB8                                      ; FE9CB2  6e 04
-	calr UI_GotoScreen27                                      ; FE9CB4  1e d6 0d
+	calr UI_GotoDrumEditPartSelect                                      ; FE9CB4  1e d6 0d
 	ret                                                  ; FE9CB7  0e
 .LFE9CB8:
 	calr sub_FE81D4_Nop                                          ; FE9CB8  1e 2b e5
@@ -178823,10 +178825,13 @@ EditScreen_LcdKeyRow4:
 .LFEAA7D:
 	m_add_mi16 MW24, 0x601f05, 0x0001                    ; FEAA7D  d2 05 1f 60 38 01 00
 	jr .LFEAA5F                                          ; FEAA84  68 d9
-UI_GotoScreen24:
+; UI_GotoNoteEditPartSelect: UI_Request = 0x8024 -- go to screen 0x24, NOTE EDIT's part select (ScreenLeave_NoteEditPartSelect's
+;   header: PanelScreen_VtableTable entry 0x44 = screen id 0x24).
+UI_GotoNoteEditPartSelect:
 	ldw (UI_Request:16), 0x8024                              ; FEAA86  f1 70 20 02 24 80
 	ret                                                  ; FEAA8C  0e
-UI_GotoScreen27:
+; UI_GotoDrumEditPartSelect: UI_Request = 0x8027 -- go to screen 0x27, DRUM EDIT's part select.
+UI_GotoDrumEditPartSelect:
 	ldw (UI_Request:16), 0x8027                              ; FEAA8D  f1 70 20 02 27 80
 	ret                                                  ; FEAA93  0e
 sub_FEAA94:
