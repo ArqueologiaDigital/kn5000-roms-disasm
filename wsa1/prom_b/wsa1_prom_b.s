@@ -122455,7 +122455,7 @@ sub_F57286_Skip:
 	ld	xwa, (13836:16)	; F572A5  ld XWA,(0x360c)
 	m_cp_mi8 MB16, 0x3626, 0x00	; F572A9  cp (0x3626),0x00
 	jr	z, sub_F57286_Skip2	; F572AE  jr Z,0xf572b5
-	ld	xwa, (6299393:24)	; F572B0  ld XWA,(0x601f01)
+	ld	xwa, (EditScreen_PartMask:24)	; F572B0  ld XWA,(0x601f01)
 sub_F57286_Skip2:
 	ld	(6304798:24), xwa	; F572B5  ld (0x60341e),XWA
 	call	T_F411B8	; F572BA  call 0xf411b8
@@ -122759,7 +122759,7 @@ sub_F573BA:
 	m_cp_mi8 MB16, 0x3626, 0x01	; F573BA  cp (0x3626),0x01
 	jr	z, sub_F5739C_Return2	; F573BF  jr Z,0xf573d7
 	ld	(13862:16), 1	; F573C1  ld (0x3626),0x01
-	ld	xwa, (6299393:24)	; F573C6  ld XWA,(0x601f01)
+	ld	xwa, (EditScreen_PartMask:24)	; F573C6  ld XWA,(0x601f01)
 	ld	(6304798:24), xwa	; F573CB  ld (0x60341e),XWA
 	call	T_F411B8	; F573D0  call 0xf411b8
 	calr	sub_F573D8	; F573D4  calr 0xf573d8

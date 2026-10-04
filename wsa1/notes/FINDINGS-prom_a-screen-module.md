@@ -254,5 +254,17 @@ step them pin each cell (`notes/prom_ab_read_names_2026_10_04.py`):
 (0x601F49) is the length cell the same routines step when (0x601F5B) bit 0 is clear. NOTE
 EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not established.
 
+**The edited part and the note row (2026-10-04).**
+- `(0x601F00)` is `EditScreen_Part`, the part being edited. `EditPartSelect_OpenEditor`, the action of
+  SoftKeyCol1..6_EditPartSelect, stores the key's index there and the part's bit mask from
+  `EditPartSelect_PartBitMask` at 0x601F01 (`EditScreen_PartMask`). Its block-store chain is entry part + 1.
+  `EditScreen_SaveTrackCursor` keeps the cursor per part at 0x3460 / 0x3482.
+- `(0x601F44)` is `EditCursor_Note`, the cursor's note row, 1..127.
+  - It is stepped by 1 (`EditCursor_NoteUp` / `_NoteDown`, from EditScreen_SoftKeyCol3) or by 6
+    (`EditCursor_NoteUp6` / `_NoteDown6`).
+  - In DRUM EDIT, each step also scrolls the row list (sub_FEAEBC / sub_FEAF4A).
+  - In DRUM EDIT it filters the events too: `DrumEdit_IsOtherNote` returns 0xFF for a note-on whose note
+    differs from it, and 0 otherwise or in NOTE EDIT.
+
 Census of every 0x601F00-0x601F7D operand with its form and routine:
 `python3 notes/wsa1_601f_census.py` (in the repository's wsa1/ directory).

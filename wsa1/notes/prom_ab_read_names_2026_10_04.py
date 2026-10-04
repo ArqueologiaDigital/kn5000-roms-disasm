@@ -1433,6 +1433,22 @@ ROWS = [
      "cursor -- offset byte 0x6034A0[A-1], 5..255, else error 11; block word 0x60347E[A-1], <= BStore_BlockLimit,\n"
      "else error 10 -- becomes BStore_CursorBlock (BStore_SeekBlock); the block must be allocated (bit 7, else 11)\n"
      "and the byte at the offset not tag 0x84 (else error 6)."),
+    # NOTE / DRUM EDIT: the edited part and the cursor's note row (FINDINGS-prom_a-screen-module.md section 8)
+    ("FEA0CF", "EditCursor_NoteUp",
+     "EditScreen_SoftKeyCol3's up arm: (0x601F44) + 1 below 0x7F; in DRUM EDIT sub_FEAEBC; then sub_FE9997,\n"
+     "sub_FF0A7B, sub_FEA12D and (0x601F58) = 0x83, (0x601F59) = 2."),
+    ("FEA0FE", "EditCursor_NoteDown", "the down arm: (0x601F44) - 1 above 1; in DRUM EDIT sub_FEAF4A; the same refresh."),
+    ("FEAB68", "EditCursor_NoteUp6", "(0x601F44) + 6, clamped to 0x7F, with EditCursor_NoteUp's tail.  Called by sub_FEAB30."),
+    ("FEABA5", "EditCursor_NoteDown6", "(0x601F44) - 6, floored at 1, with EditCursor_NoteDown's tail.  Called by sub_FEAB30."),
+    ("FE8AB3", "DrumEdit_IsOtherNote",
+     "in DRUM EDIT (EditScreen_Mode bit 0) reads the note two bytes into the event at the cursor (cursor restored)\n"
+     "and returns 0xFF when it differs from (0x601F44); 0 when it matches, and always 0 in NOTE EDIT."),
+    ("FE8BA8", "EditScreen_SaveTrackCursor",
+     "BStore_CursorBlock -> word 0x3460[(0x601F00)], BStore_CursorOffset -> byte 0x3482[(0x601F00)]: the edited\n"
+     "part's saved block-store cursor."),
+    ("FE8B89", "EditScreen_AppendBeatMarker",
+     "EditScreen_SaveTrackCursor, then one 0x81 byte (from 0x601F37) appended to chain (0x601F00) + 1 with\n"
+     "BStore_AppendBytes."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

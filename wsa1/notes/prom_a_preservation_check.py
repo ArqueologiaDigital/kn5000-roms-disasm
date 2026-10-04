@@ -3986,6 +3986,13 @@ RENAMES = {
     "sub_F63489": "BStore_OpenChainAtSavedCursor",
     "T_F418CC": "T_CombiEdit_RunPendingRepaint",
     "T_F42790": "T_BStore_OpenChainAtSavedCursor",
+    "sub_FEA0CF": "EditCursor_NoteUp",
+    "sub_FEA0FE": "EditCursor_NoteDown",
+    "sub_FEAB68": "EditCursor_NoteUp6",
+    "sub_FEABA5": "EditCursor_NoteDown6",
+    "sub_FE8AB3": "DrumEdit_IsOtherNote",
+    "sub_FE8BA8": "EditScreen_SaveTrackCursor",
+    "sub_FE8B89": "EditScreen_AppendBeatMarker",
 }
 
 

@@ -467,6 +467,11 @@
 ; ---- wsa1/notes/FINDINGS-prom_a-initial.md -- "1. The screen: seven items, one table"
 	.equ Initial_SelectedItem,			0x26f2	; the INITIAL screen's item, 0..6: TOTAL, PART SETTING, SYSTEM, MIDI SETTING, RE-MAP, DRUMS MAP, SEQUENCER -- Initial_ExecuteSelected bounds it (cp BC,6) and jumps through Initial_ItemTable
 
+; ---- wsa1/notes/FINDINGS-prom_a-screen-module.md -- "8. The NOTE / DRUM EDIT state in work DRAM -- the edited part and the note row"
+	.equ EditScreen_Part,				0x601f00	; the part being edited, the EDIT PART SELECT soft key's index; its chain is entry part + 1 -- EditPartSelect_OpenEditor stores it; EditScreen_SaveTrackCursor indexes 0x3460 / 0x3482 with it
+	.equ EditScreen_PartMask,			0x601f01	; the edited part's bit (EditPartSelect_PartBitMask[part]) -- EditPartSelect_OpenEditor
+	.equ EditCursor_Note,				0x601f44	; the cursor's note row, 1..127; DRUM EDIT shows only events on it -- EditCursor_NoteUp / _Down / _Up6 / _Down6; DrumEdit_IsOtherNote
+
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
 	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank
 
