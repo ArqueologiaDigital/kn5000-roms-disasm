@@ -1990,6 +1990,22 @@ ROWS = [
     ("FC9E46", "NoteList_BuildReleaseAllFrame",
      "(frame with the source at +1): every node of that source's list copied into the frame with velocity 0 -- a\n"
      "note-off for each sounding note; A = the low byte of their ORed voice masks."),
+    ("FC54C6", "NoteRouting_RebuildForSong",
+     "T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then\n"
+     "block +0 = (0x4C22) | (0x4C21), Dispatch32_FC6546[PanelMode] with 0, NoteRouting_UpdateActivePartMask,\n"
+     "NoteRouting_RebuildOutputs."),
+    ("FC5518", "NoteRouting_Rebuild",
+     "T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without\n"
+     "sub_FC61A6, the per-mode builder called with 1."),
+    ("FC5566", "NoteRouting_SetSoloAndRebuild",
+     "T_NoteRouting_SetSoloAndRebuild: (0x602498) bit 5 = the argument (LcdKeyRow1_C0mbinati0nM0de_Page2 -- the SOLO key --,\n"
+     "ScreenLeaveBody_C0mbinati0nM0de, CombiEdit_CompareOn), then the rebuild with 0."),
+    ("FC5C7C", "NoteRouting_RebuildOutputs",
+     "by (0x4C04): bits 0xA0 sub_FC5D30, 0xC0 sub_FC5F19, 0x20 sub_FC5FAC and sub_FC6065, 0x40 sub_FC610F; then\n"
+     "T_F413D4, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0."),
+    ("FC6153", "NoteRouting_UpdateActivePartMask",
+     "(0x4C06) = BitMask32_Table_FC64C6[block +1], or block +0 when +1 is 0xFF; when it changed,\n"
+     "T_ParamMsg_RefreshPartMasks."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

@@ -102,6 +102,22 @@ why a DRUM EDIT row audition sounds the row's drum.
 
 A missing output points at the default record 0x602ACA.
 
+**Rebuilding it.** Three entry points rebuild the block:
+- `NoteRouting_RebuildForSong` (`T_NoteRouting_RebuildForSong`): boot, leaving SONG SELECT, CYCLE PLAY EDIT.
+- `NoteRouting_Rebuild` (`T_NoteRouting_Rebuild`): COMBINATION MODE's part step, mode changes.
+- `NoteRouting_SetSoloAndRebuild` (`T_NoteRouting_SetSoloAndRebuild`): COMBINATION MODE's SOLO key, the screen's leave, COMPARE.
+  It sets or clears `NoteRouting_Mode` (0x602498) bit 5, the solo flag. Bit 6 forces the tone-generator
+  outputs on, and bit 7 means recording.
+
+Each entry point:
+1. sets byte +0 = (0x4C22) | (0x4C21);
+2. runs the per-mode builder `Dispatch32_FC6546[PanelMode]`;
+3. refreshes `NoteRouting_ActivePartMask` (0x4C06), which is `BitMask32_Table_FC64C6[+1]`, or the +0 byte
+   when +1 is 0xFF; the part masks are re-sent when it changes;
+4. runs `NoteRouting_RebuildOutputs`, which rebuilds the output tables `NoteRouting_RebuildFlags` (0x4C04)
+   selects and copies the block to `NoteRouting_Previous`
+   (0x602600). The output rebuilders read that previous copy.
+
 ## 6. Not established yet
 
 - What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `PartNotes_ApplyFrame`, `PartFrame_SendToToneGen`, `NoteRouting_ForPart`, `NoteRouting_ForTrack`)

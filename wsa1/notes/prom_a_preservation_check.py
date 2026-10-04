@@ -4223,6 +4223,15 @@ RENAMES = {
     "sub_FCAE76": "NoteRouting_ForPart",
     "sub_FCB1BB": "NoteRouting_ForTrack",
     "sub_FC9E46": "NoteList_BuildReleaseAllFrame",
+    "sub_FC54C6": "NoteRouting_RebuildForSong",
+    "sub_FC5518": "NoteRouting_Rebuild",
+    "sub_FC5566": "NoteRouting_SetSoloAndRebuild",
+    "sub_FC5C7C": "NoteRouting_RebuildOutputs",
+    "sub_FC6153": "NoteRouting_UpdateActivePartMask",
+    "T_F411B8": "T_NoteRouting_RebuildForSong",
+    "T_F411BC": "T_NoteRouting_Rebuild",
+    "T_F411EC": "T_NoteRouting_SetSoloAndRebuild",
+    "sub_FE8040": "NoteRouting_RebuildForSong_Call",
 }
 
 

@@ -1449,8 +1449,8 @@
 	.set T_Msg0716_EventPartPostCC78_AllSoundOff,                                                                      0x00F41180
 	.set T_F411B0,                                                                      0x00F411B0
 	.set T_F411B4,                                                                      0x00F411B4
-	.set T_F411B8,                                                                      0x00F411B8
-	.set T_F411BC,                                                                      0x00F411BC
+	.set T_NoteRouting_RebuildForSong,                                                                      0x00F411B8
+	.set T_NoteRouting_Rebuild,                                                                      0x00F411BC
 	.set T_F411C0,                                                                      0x00F411C0
 	.set T_F411C4,                                                                      0x00F411C4
 	.set T_F411C8,                                                                      0x00F411C8
@@ -1462,7 +1462,7 @@
 	.set T_F411E0,                                                                      0x00F411E0
 	.set T_F411E4,                                                                      0x00F411E4
 	.set T_F411E8,                                                                      0x00F411E8
-	.set T_F411EC,                                                                      0x00F411EC
+	.set T_NoteRouting_SetSoloAndRebuild,                                                                      0x00F411EC
 	.set T_Link_SendCommandE4,                                                          0x00F41230
 	.set T_Link_SendCommand3_WaitTicks,                                                 0x00F41234
 	.set T_Link_SendCommand5_WaitDone,                                                  0x00F41238
@@ -5348,12 +5348,12 @@ S0ngSelectName_PrepareValues:
 	ld (DisplayListB_Stage+9:16), a                                   ; F817F2  f1 ff 12 41
 	ret                                                  ; F817F6  0e
 ; S0ngSelectName_Leave -- the work of the S0ngSelectName Leave method
-; Evidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_F411B8, (0x0E45)=0.
+; Evidence: only caller is ScreenLeaveBody_S0ngSelectName.  Unless (0x207A)=0x0D: and (0x34BB),0xFB (undoing S0ngSelectName_PrepareValues' or), call T_NoteRouting_RebuildForSong, (0x0E45)=0.
 S0ngSelectName_Leave:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x0d                          ; F817F7  c1 7a 20 3f 0d
 	jr z, .LF8180C                                       ; F817FC  66 0e
 	m_and_mi8 MB16, 0x34bb, 0xfb                         ; F817FE  c1 bb 34 3c fb
-	call T_F411B8                                        ; F81803  1d b8 11 f4
+	call T_NoteRouting_RebuildForSong                                        ; F81803  1d b8 11 f4
 	ld (0x0e45:16), 0x00                                 ; F81807  f1 45 0e 00 00
 .LF8180C:
 	ret                                                  ; F8180C  0e
@@ -6230,7 +6230,7 @@ MainTask_Loop:
 	ld a, (UI_ScreenLatch:16)                                   ; F82112  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F82116  c1 7b 20 f1
 	jr z, .LF82120                                       ; F8211A  66 04
-	call T_F411BC                                        ; F8211C  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F8211C  1d bc 11 f4
 .LF82120:
 	call MainTask_RunUiPassC                                      ; F82120  1d d7 21 f8
 	calr MainTask_ServiceTimedEvents                                      ; F82124  1e 7d 02
@@ -6598,7 +6598,7 @@ TimedEvents_DrainDue:
 .LF82426:
 	ret                                                  ; F82426  0e
 ; TimedEvents_DispatchDueRun -- take the next run of same-class, due events off ring 0x60080A and hand it to that class's consumer
-; Evidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_TimedEvents_ProcessRing, 2 -> T_F411BC, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.
+; Evidence: finds the first status byte (bit 7), classifies it (TimedEvents_ClassifyStatus); unless (0x34D4) bit 6, a following byte <0x60 is a stamp compared with the tick (0x93) and a not-yet-due head returns IZ=0 (0xF8246C-0xF82481).  The run grows over same-class events until a class change or a not-yet-due stamp (TimedEvents_IsNotYetDue); (ring-6)=end, then class 1 -> T_TimedEvents_ProcessRing, 2 -> T_NoteRouting_Rebuild, 3 -> T_F40A0C, 0 -> T_F41F10 + Queue2C00_DrainPassAB; commit (ring-8)=(ring-6), (ring-2)+=IZ.
 ; Out: IZ = bytes consumed.  What the classes are is not established.
 TimedEvents_DispatchDueRun:
 	ld XHL,TimedEvents_Ring                                    ; F82427  43 0a 08 60 00
@@ -6692,7 +6692,7 @@ TimedEvents_DispatchDueRun:
 .LF824F3:
 	pushw iz                                             ; F824F3  2e
 	ld (xhl-6), iy                                       ; F824F4  bb fa 55
-	call T_F411BC                                        ; F824F7  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F824F7  1d bc 11 f4
 	jr .LF82512                                          ; F824FB  68 15
 .LF824FD:
 	pushw iz                                             ; F824FD  2e
@@ -34502,12 +34502,12 @@ C0mbinati0nM0de_RepaintPage1Fields:   ; entry: named by 2 `ld` operands, first a
 	ret                                                  ; F91E3B  0e
 ; ScreenLeaveBody_C0mbinati0nM0de -- the whole body of the COMBINATION MODE screen's Leave method: switches SOLO off
 ; Evidence: called only by sub_F914DD, the +4 slot of screen object T_InstallPainter_C0mbinati0nM0de_Entry (PanelScreen_VtableTable_ViewB entry 2, screen id 2), whose +0 Enter sub_F914D9 -> sub_F915FB installs the "C0MBINATI0N M0DE" painters.
-; Body: `and (0x267D),0xFE`, then push 0 / call T_F411EC (sub_FC5566 clears bit 5 of (0x602498)) -- the same pair LcdKeyRow1_C0mbinati0nM0de_Page2 uses for its SOLO-off arm.
+; Body: `and (0x267D),0xFE`, then push 0 / call T_NoteRouting_SetSoloAndRebuild (NoteRouting_SetSoloAndRebuild clears bit 5 of (0x602498)) -- the same pair LcdKeyRow1_C0mbinati0nM0de_Page2 uses for its SOLO-off arm.
 ScreenLeaveBody_C0mbinati0nM0de:
 	m_and_mi8 MB16, CombinationMode_Solo, 0xfe                         ; F91E3C  c1 7d 26 3c fe
 	ld a, 0x00:opc                                          ; F91E41  21 00
 	push_a                                               ; F91E43  14
-	call T_F411EC                                        ; F91E44  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; F91E44  1d ec 11 f4
 	inc 1,XSP                                            ; F91E48  ef 61
 	ret                                                  ; F91E4A  0e
 ; SoftKeyCol1_C0mbinati0nM0de_Page2 -- SOFT KEY column 1 on COMBINATION MODE page 2: select part 1, or step its value if it is already selected
@@ -34533,7 +34533,7 @@ SoftKeyCol1_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F91E7A  24 10
 	ld w, 0xff:opc                                          ; F91E7C  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91E7E  1d 3c 0f f4
-	call T_F411BC                                        ; F91E82  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F91E82  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F91E86  40 e5 18 f9 00
 	push XWA                                             ; F91E8B  38
 	call T_CallbackQueue_Post                            ; F91E8C  1d 84 2e f4
@@ -34570,7 +34570,7 @@ SoftKeyCol2_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F91ED8  24 10
 	ld w, 0xff:opc                                          ; F91EDA  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91EDC  1d 3c 0f f4
-	call T_F411BC                                        ; F91EE0  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F91EE0  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F91EE4  40 e5 18 f9 00
 	push XWA                                             ; F91EE9  38
 	call T_CallbackQueue_Post                            ; F91EEA  1d 84 2e f4
@@ -34607,7 +34607,7 @@ SoftKeyCol3_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F91F36  24 10
 	ld w, 0xff:opc                                          ; F91F38  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91F3A  1d 3c 0f f4
-	call T_F411BC                                        ; F91F3E  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F91F3E  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F91F42  40 e5 18 f9 00
 	push XWA                                             ; F91F47  38
 	call T_CallbackQueue_Post                            ; F91F48  1d 84 2e f4
@@ -34644,7 +34644,7 @@ SoftKeyCol4_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F91F95  24 10
 	ld w, 0xff:opc                                          ; F91F97  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91F99  1d 3c 0f f4
-	call T_F411BC                                        ; F91F9D  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F91F9D  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F91FA1  40 e5 18 f9 00
 	push XWA                                             ; F91FA6  38
 	call T_CallbackQueue_Post                            ; F91FA7  1d 84 2e f4
@@ -34681,7 +34681,7 @@ SoftKeyCol5_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F91FF4  24 10
 	ld w, 0xff:opc                                          ; F91FF6  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91FF8  1d 3c 0f f4
-	call T_F411BC                                        ; F91FFC  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F91FFC  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F92000  40 e5 18 f9 00
 	push XWA                                             ; F92005  38
 	call T_CallbackQueue_Post                            ; F92006  1d 84 2e f4
@@ -34718,7 +34718,7 @@ SoftKeyCol6_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F92053  24 10
 	ld w, 0xff:opc                                          ; F92055  20 ff
 	call T_Queue2E00_AppendRegs                          ; F92057  1d 3c 0f f4
-	call T_F411BC                                        ; F9205B  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F9205B  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F9205F  40 e5 18 f9 00
 	push XWA                                             ; F92064  38
 	call T_CallbackQueue_Post                            ; F92065  1d 84 2e f4
@@ -34755,7 +34755,7 @@ SoftKeyCol7_C0mbinati0nM0de_Page2_Join:
 	ld d, 0x10:opc                                          ; F920B2  24 10
 	ld w, 0xff:opc                                          ; F920B4  20 ff
 	call T_Queue2E00_AppendRegs                          ; F920B6  1d 3c 0f f4
-	call T_F411BC                                        ; F920BA  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F920BA  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F920BE  40 e5 18 f9 00
 	push XWA                                             ; F920C3  38
 	call T_CallbackQueue_Post                            ; F920C4  1d 84 2e f4
@@ -34794,7 +34794,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 	ld d, 0x10:opc                                          ; F92118  24 10
 	ld w, 0xff:opc                                          ; F9211A  20 ff
 	call T_Queue2E00_AppendRegs                          ; F9211C  1d 3c 0f f4
-	call T_F411BC                                        ; F92120  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F92120  1d bc 11 f4
 	ld XWA,sub_F918E5                                    ; F92124  40 e5 18 f9 00
 	push XWA                                             ; F92129  38
 	call T_CallbackQueue_Post                            ; F9212A  1d 84 2e f4
@@ -34812,7 +34812,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 .LF9214B:
 	ret                                                  ; F9214B  0e
 ; C0mbinati0nM0de_StepSelectedPart -- COMBINATION MODE page 1 PART down/up: steps the selected part (0x2250) by the key's signed step, clamped to 0..7, and repaints page 1
-; Evidence: A = (0x2250), B = 7, C = 0, call T_Value_ApplyNibbleDeltaClamped (sub_F8BD73: A + SignedNibbleDelta_Table[W], clamped to [C,B]). If changed: (0x2250) = A, T_Queue2E00_AppendRegs {E=0x90, D=0x10, A, W=0xFF}, T_F411BC,
+; Evidence: A = (0x2250), B = 7, C = 0, call T_Value_ApplyNibbleDeltaClamped (sub_F8BD73: A + SignedNibbleDelta_Table[W], clamped to [C,B]). If changed: (0x2250) = A, T_Queue2E00_AppendRegs {E=0x90, D=0x10, A, W=0xFF}, T_NoteRouting_Rebuild,
 ; (0x2676) |= 0xFF and (0x2677) |= 0x07 (every page-1 field dirty), T_CallbackQueue_ResetAndRestartTask2, post C0mbinati0nM0de_RepaintPage1Fields.
 ; Called only by C0mbinati0nM0de_SelectOrEditPart8OrStepPart when (0x2687) == 0; page 1's lists carry the caption "PART".
 C0mbinati0nM0de_StepSelectedPart:
@@ -34832,7 +34832,7 @@ C0mbinati0nM0de_StepSelectedPart:
 	ld d, 0x10:opc                                          ; F92171  24 10
 	ld w, 0xff:opc                                          ; F92173  20 ff
 	call T_Queue2E00_AppendRegs                          ; F92175  1d 3c 0f f4
-	call T_F411BC                                        ; F92179  1d bc 11 f4
+	call T_NoteRouting_Rebuild                                        ; F92179  1d bc 11 f4
 	m_or_mi8 MB16, ModeScreen_DirtyFields, 0xff                          ; F9217D  c1 76 26 3e ff
 	m_or_mi8 MB16, ModeScreen_DirtyFields2, 0x07                          ; F92182  c1 77 26 3e 07
 	call T_CallbackQueue_ResetAndRestartTask2            ; F92187  1d 80 2e f4
@@ -34846,7 +34846,7 @@ C0mbinati0nM0de_StepSelectedPart:
 	ret                                                  ; F9219D  0e
 ; LcdKeyRow1_C0mbinati0nM0de_Page2 -- LCD row-1 keys on COMBINATION MODE page 2: the left key selects the SOUND row, the right key toggles SOLO
 ; Evidence: slot [8] (code 0x08 = LCD row 1) of DisplayListPtrs_F9157B. W bit 7 set (pair position 0 = LEFT): (0x2678) = 1, post C0mbinati0nM0de_HighlightSoundRow.
-; W bit 7 clear (RIGHT): toggle (0x267D) bit 0, T_F411EC with the new state (sub_FC5566 sets/clears bit 5 of (0x602498)), post C0mbinati0nM0de_SoloIndicatorOff or C0mbinati0nM0de_SoloIndicatorOn.
+; W bit 7 clear (RIGHT): toggle (0x267D) bit 0, T_NoteRouting_SetSoloAndRebuild with the new state (NoteRouting_SetSoloAndRebuild sets/clears bit 5 of (0x602498)), post C0mbinati0nM0de_SoloIndicatorOff or C0mbinati0nM0de_SoloIndicatorOn.
 ; Page 2's list draws "SOUND" at (0x07,0x22) on the left and "SOLO" at (0x121,0x22) on the right of LCD row 1.
 LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first at 0xF9159B
 	bit 0x07,W                                           ; F9219E  c8 33 07
@@ -34866,7 +34866,7 @@ LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first a
 	m_and_mi8 MB16, CombinationMode_Solo, 0xfe                         ; F921C7  c1 7d 26 3c fe
 	ld a, 0x00:opc                                          ; F921CC  21 00
 	push_a                                               ; F921CE  14
-	call T_F411EC                                        ; F921CF  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; F921CF  1d ec 11 f4
 	inc 1,XSP                                            ; F921D3  ef 61
 	ld XWA,C0mbinati0nM0de_SoloIndicatorOff                                    ; F921D5  40 2c 22 f9 00
 	push XWA                                             ; F921DA  38
@@ -34879,7 +34879,7 @@ LcdKeyRow1_C0mbinati0nM0de_Page2:   ; entry: named by 1 `.long` operand, first a
 	m_or_mi8 MB16, CombinationMode_Solo, 0x01                          ; F921E9  c1 7d 26 3e 01
 	ld a, 0x01:opc                                          ; F921EE  21 01
 	push_a                                               ; F921F0  14
-	call T_F411EC                                        ; F921F1  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; F921F1  1d ec 11 f4
 	inc 1,XSP                                            ; F921F5  ef 61
 	ld XWA,C0mbinati0nM0de_SoloIndicatorOn                                    ; F921F7  40 40 22 f9 00
 	push XWA                                             ; F921FC  38
@@ -74884,7 +74884,7 @@ sub_FA7E0C:   ; entry: prom_b directory slot T_F40760
 sub_FA7E1E:   ; entry: call from 0xFA7E0C
 	ld xwa, (0x19e0:16)                          ; FA7E1E  e1 e0 19 20   ld XWA,(0x19e0)
 	ld (0x19e4:16), xwa                          ; FA7E22  f1 e4 19 60   ld (0x19e4),XWA
-	ld xwa, (0x4c06:16)                          ; FA7E26  e1 06 4c 20   ld XWA,(0x4c06)
+	ld xwa, (NoteRouting_ActivePartMask:16)                          ; FA7E26  e1 06 4c 20   ld XWA,(0x4c06)
 	ld (0x19e0:16), xwa                          ; FA7E2A  f1 e0 19 60   ld (0x19e0),XWA
 	m_xor_rm ML16, 0x19e4, r0                     ; FA7E2E  e1 e4 19 d0   xor XWA,(0x19e4)
 	ld (0x19e8:16), xwa                          ; FA7E32  f1 e8 19 60   ld (0x19e8),XWA
@@ -81951,7 +81951,7 @@ ParamMsg_ComputePartMasks:
 	add (xiz-4), xbc                                     ; FAC12C  ae fc 89
 	jr .LFAC10D                                          ; FAC12F  68 dc
 .LFAC131:
-	ld xbc, (0x4c06:16)                                 ; FAC131  e1 06 4c 21
+	ld xbc, (NoteRouting_ActivePartMask:16)                                 ; FAC131  e1 06 4c 21
 	ld (xiz-8), xbc                                      ; FAC135  be f8 61
 	ld XIX,0x00000000                                    ; FAC138  44 00 00 00 00
 	ld h, 0x00:opc                                          ; FAC13D  26 00
@@ -109594,7 +109594,7 @@ sub_FBECC3:
 	inc 1,C                                              ; FBECEA  cb 61
 	ld (0x2766:16), c                                   ; FBECEC  f1 66 27 43
 	pushw 0x00                                           ; FBECF0  0b 00 00
-	call T_F411EC                                        ; FBECF3  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; FBECF3  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBECF7  f1 6f 27 00 00
 	calr sub_FBED21                                      ; FBECFC  1e 22 00
 	popw bc                                              ; FBECFF  49
@@ -109605,7 +109605,7 @@ sub_FBED02:
 	ld	(UI_PartIndex:16), (0x276d:16)             ; FBED06  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBED0C  1d 9c 2c f4
 	pushw 0x00                                           ; FBED10  0b 00 00
-	call T_F411EC                                        ; FBED13  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; FBED13  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBED17  f1 6f 27 00 00
 	calr CombiEdit_CompareOff                                      ; FBED1C  1e 58 00
 	popw bc                                              ; FBED1F  49
@@ -109660,7 +109660,7 @@ CombiEdit_CompareOff:
 	m_set 4, MD16, UI_ScreenFlags                                ; FBED8F  f1 95 20 bc
 .LFBED93:
 	ret                                                  ; FBED93  0e
-; CombiEdit_CompareOn: when (0x277F) is 0: (0x277F) = 1, (0x216E) = 1, (0x213B) bit 2, sub_FBEDD5, T_F411EC(0), (0x276F) = 0, a repaint.
+; CombiEdit_CompareOn: when (0x277F) is 0: (0x277F) = 1, (0x216E) = 1, (0x213B) bit 2, sub_FBEDD5, T_NoteRouting_SetSoloAndRebuild(0), (0x276F) = 0, a repaint.
 CombiEdit_CompareOn:
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x00                          ; FBED94  c1 7f 27 3f 00
 	jr nz, .LFBEDBD                                      ; FBED99  6e 22
@@ -109669,7 +109669,7 @@ CombiEdit_CompareOn:
 	m_set 2, MD16, 0x213b                                ; FBEDA5  f1 3b 21 ba
 	calr sub_FBEDD5                                      ; FBEDA9  1e 29 00
 	pushw 0x00                                           ; FBEDAC  0b 00 00
-	call T_F411EC                                        ; FBEDAF  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; FBEDAF  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBEDB3  f1 6f 27 00 00
 	m_set 4, MD16, UI_ScreenFlags                                ; FBEDB8  f1 95 20 bc
 	popw bc                                              ; FBEDBC  49
@@ -111418,7 +111418,7 @@ sub_FBFC32:
 .LFBFC45:
 	ld C,(XIX)                                           ; FBFC45  84 23
 	pushw bc                                             ; FBFC47  29
-	call T_F411EC                                        ; FBFC48  1d ec 11 f4
+	call T_NoteRouting_SetSoloAndRebuild                                        ; FBFC48  1d ec 11 f4
 	m_set 4, MD16, UI_ScreenFlags                                ; FBFC4C  f1 95 20 bc
 	popw bc                                              ; FBFC50  49
 	pop XIX                                              ; FBFC51  5c
@@ -118423,7 +118423,7 @@ sub_FC5420:
 sub_FC546A:
 	link XIZ,0xfffc                                      ; FC546A  ee 0c fc ff
 	push XIX                                             ; FC546E  3c
-	ld bc, (0x4c04:16)                                 ; FC546F  d1 04 4c 21
+	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC546F  d1 04 4c 21
 	and BC,0x8000                                        ; FC5473  d9 cc 00 80
 	jr z, .LFC54C2                                       ; FC5477  66 49
 	m_res 7, MD16, 0x4c01                                ; FC5479  f1 01 4c b7
@@ -118445,15 +118445,18 @@ sub_FC546A:
 	push XIY                                             ; FC54B2  3d
 	jp (xix)                                             ; FC54B3  b4 d8
 .LFC54B5:
-	call sub_FC6153                                      ; FC54B5  1d 53 61 fc
+	call NoteRouting_UpdateActivePartMask                                      ; FC54B5  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC54B9  1d a5 61 fc
-	call sub_FC5C7C                                      ; FC54BD  1d 7c 5c fc
+	call NoteRouting_RebuildOutputs                                      ; FC54BD  1d 7c 5c fc
 	popw bc                                              ; FC54C1  49
 .LFC54C2:
 	pop XIX                                              ; FC54C2  5c
 	unlk XIZ                                             ; FC54C3  ee 0d
 	ret                                                  ; FC54C5  0e
-sub_FC54C6:
+; NoteRouting_RebuildForSong: T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then
+;   block +0 = (0x4C22) | (0x4C21), Dispatch32_FC6546[PanelMode] with 0, NoteRouting_UpdateActivePartMask,
+;   NoteRouting_RebuildOutputs.
+NoteRouting_RebuildForSong:
 	link XIZ,0xfffc                                      ; FC54C6  ee 0c fc ff
 	push XIX                                             ; FC54CA  3c
 	call sub_FC61A6                                      ; FC54CB  1d a6 61 fc
@@ -118475,15 +118478,17 @@ sub_FC54C6:
 	push XIY                                             ; FC5504  3d
 	jp (xix)                                             ; FC5505  b4 d8
 .LFC5507:
-	call sub_FC6153                                      ; FC5507  1d 53 61 fc
+	call NoteRouting_UpdateActivePartMask                                      ; FC5507  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC550B  1d a5 61 fc
-	call sub_FC5C7C                                      ; FC550F  1d 7c 5c fc
+	call NoteRouting_RebuildOutputs                                      ; FC550F  1d 7c 5c fc
 	popw bc                                              ; FC5513  49
 .LFC5514:
 	pop XIX                                              ; FC5514  5c
 	unlk XIZ                                             ; FC5515  ee 0d
 	ret                                                  ; FC5517  0e
-sub_FC5518:
+; NoteRouting_Rebuild: T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without
+;   sub_FC61A6, the per-mode builder called with 1.
+NoteRouting_Rebuild:
 	link XIZ,0xfffc                                      ; FC5518  ee 0c fc ff
 	push XIX                                             ; FC551C  3c
 	ld c, (0x4c22:24)                                   ; FC551D  c2 22 4c 00 23
@@ -118504,23 +118509,25 @@ sub_FC5518:
 	push XIY                                             ; FC5552  3d
 	jp (xix)                                             ; FC5553  b4 d8
 .LFC5555:
-	call sub_FC6153                                      ; FC5555  1d 53 61 fc
+	call NoteRouting_UpdateActivePartMask                                      ; FC5555  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC5559  1d a5 61 fc
-	call sub_FC5C7C                                      ; FC555D  1d 7c 5c fc
+	call NoteRouting_RebuildOutputs                                      ; FC555D  1d 7c 5c fc
 	popw bc                                              ; FC5561  49
 .LFC5562:
 	pop XIX                                              ; FC5562  5c
 	unlk XIZ                                             ; FC5563  ee 0d
 	ret                                                  ; FC5565  0e
-sub_FC5566:
+; NoteRouting_SetSoloAndRebuild: T_NoteRouting_SetSoloAndRebuild: (0x602498) bit 5 = the argument (LcdKeyRow1_C0mbinati0nM0de_Page2 -- the SOLO key --,
+;   ScreenLeaveBody_C0mbinati0nM0de, CombiEdit_CompareOn), then the rebuild with 0.
+NoteRouting_SetSoloAndRebuild:
 	link XIZ,0xfffc                                      ; FC5566  ee 0c fc ff
 	push XIX                                             ; FC556A  3c
 	cp (XIZ+0x08),0x00                                   ; FC556B  8e 08 3f 00
 	jr nz, .LFC557A                                      ; FC556F  6e 09
-	andw	(0x602498:24), 0xffdf                ; FC5571  d2 98 24 60 3c df ff
+	andw	(NoteRouting_Mode:24), 0xffdf                ; FC5571  d2 98 24 60 3c df ff
 	jr .LFC5581                                          ; FC5578  68 07
 .LFC557A:
-	orw	(0x602498:24), 0x0020                ; FC557A  d2 98 24 60 3e 20 00
+	orw	(NoteRouting_Mode:24), 0x0020                ; FC557A  d2 98 24 60 3e 20 00
 .LFC5581:
 	ld c, (0x4c22:24)                                   ; FC5581  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC5586  c2 21 4c 00 e3
@@ -118540,9 +118547,9 @@ sub_FC5566:
 	push XIY                                             ; FC55B6  3d
 	jp (xix)                                             ; FC55B7  b4 d8
 .LFC55B9:
-	call sub_FC6153                                      ; FC55B9  1d 53 61 fc
+	call NoteRouting_UpdateActivePartMask                                      ; FC55B9  1d 53 61 fc
 	call sub_FC546A_Nop                                      ; FC55BD  1d a5 61 fc
-	call sub_FC5C7C                                      ; FC55C1  1d 7c 5c fc
+	call NoteRouting_RebuildOutputs                                      ; FC55C1  1d 7c 5c fc
 	popw bc                                              ; FC55C5  49
 .LFC55C6:
 	pop XIX                                              ; FC55C6  5c
@@ -118637,7 +118644,7 @@ sub_FC55CA:
 	add XWA,NoteRouting                                   ; FC56C4  e8 c8 00 22 60 00
 	ld (XWA),XBC                                         ; FC56CA  b0 61
 	ld BC,DE                                             ; FC56CC  da 89
-	or	(0x4c04:16), bc                      ; FC56CE  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC56CE  d1 04 4c e9
 	inc 6,XSP                                            ; FC56D2  ef 66
 .LFC56D4:
 	ld c, (UiEvent_Byte3:16)                                   ; FC56D4  c1 ba 20 23
@@ -118678,7 +118685,7 @@ sub_FC55CA:
 	ld A,(XBC)                                           ; FC5739  81 21
 	or (0x4c21:24), a                                 ; FC573B  c2 21 4c 00 e9
 .LFC5740:
-	orw	(0x4c04:16), 0x8004                  ; FC5740  d1 04 4c 3e 04 80
+	orw	(NoteRouting_RebuildFlags:16), 0x8004                  ; FC5740  d1 04 4c 3e 04 80
 .LFC5746:
 	ld c, (UiEvent_Byte3:16)                                   ; FC5746  c1 ba 20 23
 	and C,0x40                                           ; FC574A  cb cc 40
@@ -118719,7 +118726,7 @@ sub_FC55CA:
 	or (0x4c22:24), a                                 ; FC57AD  c2 22 4c 00 e9
 .LFC57B2:
 	ld BC,DE                                             ; FC57B2  da 89
-	or	(0x4c04:16), bc                      ; FC57B4  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC57B4  d1 04 4c e9
 .LFC57B8:
 	ld c, (UiEvent_Byte3:16)                                   ; FC57B8  c1 ba 20 23
 	and C,0x80                                           ; FC57BC  cb cc 80
@@ -118739,7 +118746,7 @@ sub_FC55CA:
 	set 6,(XIX)                                          ; FC57E2  b4 be
 .LFC57E4:
 	ld BC,DE                                             ; FC57E4  da 89
-	or	(0x4c04:16), bc                      ; FC57E6  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC57E6  d1 04 4c e9
 .LFC57EA:
 	pop XIX                                              ; FC57EA  5c
 	popw de                                              ; FC57EB  4a
@@ -118995,7 +119002,7 @@ sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	set 7,(XIX+0x0293)                                   ; FC5A3C  f3 f1 93 02 bf
 .LFC5A41:
 	ld BC,DE                                             ; FC5A41  da 89
-	or	(0x4c04:16), bc                      ; FC5A43  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A43  d1 04 4c e9
 .LFC5A47:
 	ld C,H                                               ; FC5A47  ce 8b
 	and C,0xf0                                           ; FC5A49  cb cc f0
@@ -119015,7 +119022,7 @@ sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	set 5,(XIX+0x0293)                                   ; FC5A6A  f3 f1 93 02 bd
 .LFC5A6F:
 	ld BC,DE                                             ; FC5A6F  da 89
-	or	(0x4c04:16), bc                      ; FC5A71  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A71  d1 04 4c e9
 	jr .LFC5AC6                                          ; FC5A75  68 4f
 sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 	ld C,H                                               ; FC5A77  ce 8b
@@ -119025,7 +119032,7 @@ sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 	and C,0x1f                                           ; FC5A80  cb cc 1f
 	ld (XIX+0x0292),C                                    ; FC5A83  f3 f1 92 02 43
 	ld BC,DE                                             ; FC5A88  da 89
-	or	(0x4c04:16), bc                      ; FC5A8A  d1 04 4c e9
+	or	(NoteRouting_RebuildFlags:16), bc                      ; FC5A8A  d1 04 4c e9
 .LFC5A8E:
 	ld C,H                                               ; FC5A8E  ce 8b
 	and C,0xe0                                           ; FC5A90  cb cc e0
@@ -119045,10 +119052,10 @@ sub_FC5AAE:   ; entry: named by 1 `.long` operand, first at 0xFC59FF
 	ld C,L                                               ; FC5AB5  cf 8b
 	and C,0x80                                           ; FC5AB7  cb cc 80
 	jr z, .LFC5AC2                                       ; FC5ABA  66 06
-	m_set 3, MD16, 0x4c04                                ; FC5ABC  f1 04 4c bb
+	m_set 3, MD16, NoteRouting_RebuildFlags                                ; FC5ABC  f1 04 4c bb
 	jr .LFC5AC6                                          ; FC5AC0  68 04
 .LFC5AC2:
-	m_res 3, MD16, 0x4c04                                ; FC5AC2  f1 04 4c b3
+	m_res 3, MD16, NoteRouting_RebuildFlags                                ; FC5AC2  f1 04 4c b3
 .LFC5AC6:
 	pop XIX                                              ; FC5AC6  5c
 	popw de                                              ; FC5AC7  4a
@@ -119060,7 +119067,7 @@ T_F411DC_Nop:
 	ret                                                  ; FC5ACB  0e
 sub_FC5ACC:
 	push XIX                                             ; FC5ACC  3c
-	lda xix, (0x4c04:16)                                ; FC5ACD  f1 04 4c 34
+	lda xix, (NoteRouting_RebuildFlags:16)                                ; FC5ACD  f1 04 4c 34
 	ld bc, (UiEvent_Byte1:16)                                 ; FC5AD1  d1 b8 20 21
 	extz BC                                              ; FC5AD5  d9 12
 	cp BC,0x0010                                         ; FC5AD7  d9 cf 10 00
@@ -119133,19 +119140,19 @@ sub_FC5B26:
 	ld A,(XBC)                                           ; FC5B7B  81 21
 	ld (XIX+0x01),A                                      ; FC5B7D  bc 01 41
 .LFC5B80:
-	orw	(0x4c04:16), 0x0003                  ; FC5B80  d1 04 4c 3e 03 00
+	orw	(NoteRouting_RebuildFlags:16), 0x0003                  ; FC5B80  d1 04 4c 3e 03 00
 	pop XIX                                              ; FC5B86  5c
 	popw de                                              ; FC5B87  4a
 	popw hl                                              ; FC5B88  4b
 	ret                                                  ; FC5B89  0e
 sub_FC5B8A:   ; entry: named by 4 `.long` operands, first at 0xFC6552
 	link XIZ,0x0000                                      ; FC5B8A  ee 0c 00 00
-	ld bc, (0x602498:24)                                ; FC5B8E  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FC5B8E  d2 98 24 60 21
 	and BC,0x0040                                        ; FC5B93  d9 cc 40 00
 	jr z, .LFC5BA9                                       ; FC5B97  66 10
 	ld c, (0x4c20:24)                                   ; FC5B99  c2 20 4c 00 23
 	ld (0x602201:24), c                                 ; FC5B9E  f2 01 22 60 43
-	m_set 1, MD16, 0x4c04                                ; FC5BA3  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5BA3  f1 04 4c b9
 	jr .LFC5BB2                                          ; FC5BA7  68 09
 .LFC5BA9:
 	push 0x00                                            ; FC5BA9  09 00
@@ -119157,7 +119164,7 @@ sub_FC5B8A:   ; entry: named by 4 `.long` operands, first at 0xFC6552
 	ret                                                  ; FC5BB4  0e
 sub_FC5BB5:   ; entry: named by 1 `.long` operand, first at 0xFC657A
 	link XIZ,0x0000                                      ; FC5BB5  ee 0c 00 00
-	orw	(0x602498:24), 0x0004                ; FC5BB9  d2 98 24 60 3e 04 00
+	orw	(NoteRouting_Mode:24), 0x0004                ; FC5BB9  d2 98 24 60 3e 04 00
 	push 0x00                                            ; FC5BC0  09 00
 	m_push MBD+r6, 0x08                                  ; FC5BC2  8e 08 04
 	calr sub_FC5B26                                      ; FC5BC5  1e 5e ff
@@ -119180,7 +119187,7 @@ sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 	ld (0x602201:24), h                                 ; FC5BEF  f2 01 22 60 46
 	cp H,0xff                                            ; FC5BF4  ce cf ff
 	jr z, .LFC5BFF                                       ; FC5BF7  66 06
-	m_set 1, MD16, 0x4c04                                ; FC5BF9  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5BF9  f1 04 4c b9
 	jr .LFC5C08                                          ; FC5BFD  68 09
 .LFC5BFF:
 	push 0x00                                            ; FC5BFF  09 00
@@ -119206,7 +119213,7 @@ sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 	ld (0x602201:24), h                                 ; FC5C2F  f2 01 22 60 46
 	cp H,0xff                                            ; FC5C34  ce cf ff
 	jr z, .LFC5C3F                                       ; FC5C37  66 06
-	m_set 1, MD16, 0x4c04                                ; FC5C39  f1 04 4c b9
+	m_set 1, MD16, NoteRouting_RebuildFlags                                ; FC5C39  f1 04 4c b9
 	jr .LFC5C48                                          ; FC5C3D  68 09
 .LFC5C3F:
 	push 0x00                                            ; FC5C3F  09 00
@@ -119241,9 +119248,11 @@ sub_FC5C5C:   ; entry: named by 5 `.long` operands, first at 0xFC65A2
 	popw bc                                              ; FC5C78  49
 	unlk XIZ                                             ; FC5C79  ee 0d
 	ret                                                  ; FC5C7B  0e
-sub_FC5C7C:
+; NoteRouting_RebuildOutputs: by (0x4C04): bits 0xA0 sub_FC5D30, 0xC0 sub_FC5F19, 0x20 sub_FC5FAC and sub_FC6065, 0x40 sub_FC610F; then
+;   T_F413D4, the 0x29A-byte block copied to 0x602600, (0x4C04) = 0.
+NoteRouting_RebuildOutputs:
 	push XIX                                             ; FC5C7C  3c
-	lda xix, (0x4c04:16)                                ; FC5C7D  f1 04 4c 34
+	lda xix, (NoteRouting_RebuildFlags:16)                                ; FC5C7D  f1 04 4c 34
 	ldw (0x602a00:24), 0x00                             ; FC5C81  f2 00 2a 60 02 00 00
 	ld BC,(XIX)                                          ; FC5C88  94 21
 	and BC,0x00a0                                        ; FC5C8A  d9 cc a0 00
@@ -119274,7 +119283,7 @@ sub_FC5C7C:
 	push XIX                                             ; FC5CC3  3c
 	ldw bc, 0x014d                                       ; FC5CC4  31 4d 01
 	lda xiy, (NoteRouting:24)                               ; FC5CC7  f2 00 22 60 35
-	lda xix, (0x602600:24)                               ; FC5CCC  f2 00 26 60 34
+	lda xix, (NoteRouting_Previous:24)                               ; FC5CCC  f2 00 26 60 34
 	ldirw                                                ; FC5CD1  95 11
 	pop XIX                                              ; FC5CD3  5c
 	m_ld_mi16 MDI+r4, 0, 0x0000                          ; FC5CD4  b4 02 00 00
@@ -119320,7 +119329,7 @@ sub_FC5D30:
 	pushw hl                                             ; FC5D34  2b
 	pushw de                                             ; FC5D35  2a
 	push XIX                                             ; FC5D36  3c
-	ld bc, (0x4c04:16)                                 ; FC5D37  d1 04 4c 21
+	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC5D37  d1 04 4c 21
 	and BC,0x0020                                        ; FC5D3B  d9 cc 20 00
 	jrl z, .LFC5F13                                      ; FC5D3F  76 d1 01
 	ld c, (0x602893:24)                                 ; FC5D42  c2 93 28 60 23
@@ -119449,7 +119458,7 @@ sub_FC5D30:
 	ld (xiz-4), xbc                                      ; FC5E7D  be fc 61
 	ld h, 0x00:opc                                          ; FC5E80  26 00
 .LFC5E82:
-	lda xbc, (0x602600:24)                               ; FC5E82  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC5E82  f2 00 26 60 31
 	add XBC,XIX                                          ; FC5E87  ec 81
 	ld D,(XBC)                                           ; FC5E89  81 24
 	lda xbc, (NoteRouting:24)                               ; FC5E8B  f2 00 22 60 31
@@ -119458,7 +119467,7 @@ sub_FC5D30:
 	ld (xiz-8), xix                                      ; FC5E94  be f8 64
 	cp L,D                                               ; FC5E97  cc f7
 	jr z, .LFC5EA9                                       ; FC5E99  66 0e
-	lda xbc, (0x602600:24)                               ; FC5E9B  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC5E9B  f2 00 26 60 31
 	m_add_rm MLD+r6, 0xf8, r1                            ; FC5EA0  ae f8 81
 	ld A,(XBC)                                           ; FC5EA3  81 21
 	pushw wa                                             ; FC5EA5  28
@@ -119473,7 +119482,7 @@ sub_FC5D30:
 	ld xbc, (xiz-4)                                      ; FC5EB8  ae fc 21
 	add XBC,0x00000152                                   ; FC5EBB  e9 c8 52 01 00 00
 	ld (xiz-12), xbc                                     ; FC5EC1  be f4 61
-	add XBC,0x00602600                                   ; FC5EC4  e9 c8 00 26 60 00
+	add XBC,NoteRouting_Previous                                   ; FC5EC4  e9 c8 00 26 60 00
 	ld A,(XBC)                                           ; FC5ECA  81 21
 	and A,0x40                                           ; FC5ECC  c9 cc 40
 	srl a, 0x06                                          ; FC5ECF  c9 ef 06
@@ -119514,7 +119523,7 @@ sub_FC5F19:
 	pushw hl                                             ; FC5F1D  2b
 	pushw de                                             ; FC5F1E  2a
 	push XIX                                             ; FC5F1F  3c
-	ld bc, (0x4c04:16)                                 ; FC5F20  d1 04 4c 21
+	ld bc, (NoteRouting_RebuildFlags:16)                                 ; FC5F20  d1 04 4c 21
 	and BC,0x00c0                                        ; FC5F24  d9 cc c0 00
 	jrl z, .LFC5FA6                                      ; FC5F28  76 7b 00
 	ld XBC,0x00000052                                    ; FC5F2B  41 52 00 00 00
@@ -119522,7 +119531,7 @@ sub_FC5F19:
 	ld XIX,0x00000042                                    ; FC5F33  44 42 00 00 00
 	ld d, 0x00:opc                                          ; FC5F38  24 00
 .LFC5F3A:
-	lda xbc, (0x602600:24)                               ; FC5F3A  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC5F3A  f2 00 26 60 31
 	m_add_rm MLD+r6, 0xfc, r1                            ; FC5F3F  ae fc 81
 	ld H,(XBC)                                           ; FC5F42  81 26
 	and H,0x1f                                           ; FC5F44  ce cc 1f
@@ -119541,7 +119550,7 @@ sub_FC5F19:
 	calr sub_FC5CDA                                      ; FC5F64  1e 73 fd
 	inc 8,XSP                                            ; FC5F67  ef 60
 .LFC5F69:
-	lda xbc, (0x602600:24)                               ; FC5F69  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC5F69  f2 00 26 60 31
 	add XBC,XIX                                          ; FC5F6E  ec 81
 	ld H,(XBC)                                           ; FC5F70  81 26
 	and H,0x1f                                           ; FC5F72  ce cc 1f
@@ -119576,7 +119585,7 @@ sub_FC5F19:
 sub_FC5FAC:
 	pushw hl                                             ; FC5FAC  2b
 	push XIX                                             ; FC5FAD  3c
-	lda xix, (0x602600:24)                               ; FC5FAE  f2 00 26 60 34
+	lda xix, (NoteRouting_Previous:24)                               ; FC5FAE  f2 00 26 60 34
 	ld C,(XIX+0x0293)                                    ; FC5FB3  c3 f1 93 02 23
 	and C,0x20                                           ; FC5FB8  cb cc 20
 	srl c, 0x05                                          ; FC5FBB  cb ef 05
@@ -119627,7 +119636,7 @@ sub_FC5FAC:
 	ld XIX,0x00000002                                    ; FC602A  44 02 00 00 00
 	ld h, 0x00:opc                                          ; FC602F  26 00
 .LFC6031:
-	lda xbc, (0x602600:24)                               ; FC6031  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC6031  f2 00 26 60 31
 	add XBC,XIX                                          ; FC6036  ec 81
 	ld L,(XBC)                                           ; FC6038  81 27
 	lda xbc, (NoteRouting:24)                               ; FC603A  f2 00 22 60 31
@@ -119664,7 +119673,7 @@ sub_FC6065:
 	ld (xiz-4), xbc                                      ; FC6073  be fc 61
 	ld h, 0x00:opc                                          ; FC6076  26 00
 .LFC6078:
-	lda xbc, (0x602600:24)                               ; FC6078  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC6078  f2 00 26 60 31
 	add XBC,XIX                                          ; FC607D  ec 81
 	ld D,(XBC)                                           ; FC607F  81 24
 	lda xbc, (NoteRouting:24)                               ; FC6081  f2 00 22 60 31
@@ -119673,7 +119682,7 @@ sub_FC6065:
 	ld (xiz-8), xix                                      ; FC608A  be f8 64
 	cp L,D                                               ; FC608D  cc f7
 	jr z, .LFC609F                                       ; FC608F  66 0e
-	lda xbc, (0x602600:24)                               ; FC6091  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC6091  f2 00 26 60 31
 	m_add_rm MLD+r6, 0xf8, r1                            ; FC6096  ae f8 81
 	ld A,(XBC)                                           ; FC6099  81 21
 	pushw wa                                             ; FC609B  28
@@ -119688,7 +119697,7 @@ sub_FC6065:
 	ld xbc, (xiz-4)                                      ; FC60AE  ae fc 21
 	add XBC,0x00000152                                   ; FC60B1  e9 c8 52 01 00 00
 	ld (xiz-12), xbc                                     ; FC60B7  be f4 61
-	add XBC,0x00602600                                   ; FC60BA  e9 c8 00 26 60 00
+	add XBC,NoteRouting_Previous                                   ; FC60BA  e9 c8 00 26 60 00
 	ld A,(XBC)                                           ; FC60C0  81 21
 	and A,0x20                                           ; FC60C2  c9 cc 20
 	srl a, 0x05                                          ; FC60C5  c9 ef 05
@@ -119730,7 +119739,7 @@ sub_FC610F:
 	ld XIX,0x00000042                                    ; FC6112  44 42 00 00 00
 	ld h, 0x00:opc                                          ; FC6117  26 00
 .LFC6119:
-	lda xbc, (0x602600:24)                               ; FC6119  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC6119  f2 00 26 60 31
 	add XBC,XIX                                          ; FC611E  ec 81
 	ld L,(XBC)                                           ; FC6120  81 27
 	and L,0x1f                                           ; FC6122  cf cc 1f
@@ -119757,11 +119766,13 @@ sub_FC610F:
 	popw de                                              ; FC6150  4a
 	popw hl                                              ; FC6151  4b
 	ret                                                  ; FC6152  0e
-sub_FC6153:
+; NoteRouting_UpdateActivePartMask: (0x4C06) = BitMask32_Table_FC64C6[block +1], or block +0 when +1 is 0xFF; when it changed,
+;   T_ParamMsg_RefreshPartMasks.
+NoteRouting_UpdateActivePartMask:
 	link XIZ,0xfffc                                      ; FC6153  ee 0c fc ff
 	pushw hl                                             ; FC6157  2b
 	push XIX                                             ; FC6158  3c
-	lda xix, (0x4c06:16)                                ; FC6159  f1 06 4c 34
+	lda xix, (NoteRouting_ActivePartMask:16)                                ; FC6159  f1 06 4c 34
 	ld XBC,(XIX)                                         ; FC615D  a4 21
 	ld (xiz-4), xbc                                      ; FC615F  be fc 61
 	sub XWA,XWA                                          ; FC6162  e8 a0
@@ -119807,27 +119818,27 @@ sub_FC61A6:
 	pushw de                                             ; FC61AB  2a
 	push XIX                                             ; FC61AC  3c
 	m_ld_mi16 MDD+r6, 0xf0, 0x0000                       ; FC61AD  be f0 02 00 00
-	andw	(0x602498:24), 0xfe3f                ; FC61B2  d2 98 24 60 3c 3f fe
+	andw	(NoteRouting_Mode:24), 0xfe3f                ; FC61B2  d2 98 24 60 3c 3f fe
 	ld (0x4c20:24), 0xff                               ; FC61B9  f2 20 4c 00 00 ff
 	ld hl, (0x133a:16)                                 ; FC61BF  d1 3a 13 23
 	ld bc, (0x60341e:24)                                ; FC61C3  d2 1e 34 60 21
 	or BC,HL                                             ; FC61C8  db e1
 	ld (xiz-18), bc                                      ; FC61CA  be ee 51
 	jr z, .LFC61D8                                       ; FC61CD  66 09
-	orw	(0x602498:24), 0x0100                ; FC61CF  d2 98 24 60 3e 00 01
+	orw	(NoteRouting_Mode:24), 0x0100                ; FC61CF  d2 98 24 60 3e 00 01
 	jr .LFC61DF                                          ; FC61D6  68 07
 .LFC61D8:
-	andw	(0x602498:24), 0xfeff                ; FC61D8  d2 98 24 60 3c ff fe
+	andw	(NoteRouting_Mode:24), 0xfeff                ; FC61D8  d2 98 24 60 3c ff fe
 .LFC61DF:
 	ld hl, (0x1336:16)                                 ; FC61DF  d1 36 13 23
 	ld bc, (0x3000:16)                                 ; FC61E3  d1 00 30 21
 	or BC,HL                                             ; FC61E7  db e1
 	ld (xiz-20), bc                                      ; FC61E9  be ec 51
 	jr z, .LFC61F7                                       ; FC61EC  66 09
-	orw	(0x602498:24), 0x0080                ; FC61EE  d2 98 24 60 3e 80 00
+	orw	(NoteRouting_Mode:24), 0x0080                ; FC61EE  d2 98 24 60 3e 80 00
 	jr .LFC61FE                                          ; FC61F5  68 07
 .LFC61F7:
-	andw	(0x602498:24), 0xff7f                ; FC61F7  d2 98 24 60 3c 7f ff
+	andw	(NoteRouting_Mode:24), 0xff7f                ; FC61F7  d2 98 24 60 3c 7f ff
 .LFC61FE:
 	ld (xiz-21), 0x00                                    ; FC61FE  be eb 00 00
 	ld bc, (xiz-20)                                      ; FC6202  9e ec 21
@@ -119881,7 +119892,7 @@ sub_FC61A6:
 	ld (XBC),0xff                                        ; FC6280  b1 00 ff
 	jrl .LFC6343                                         ; FC6283  78 bd 00
 .LFC6286:
-	ld bc, (0x602498:24)                                ; FC6286  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FC6286  d2 98 24 60 21
 	and BC,0x0100                                        ; FC628B  d9 cc 00 01
 	jr z, .LFC62E8                                       ; FC628F  66 57
 	ld bc, (xiz-18)                                      ; FC6291  9e ee 21
@@ -119919,7 +119930,7 @@ sub_FC61A6:
 	ld a, (xiz-1)                                        ; FC62E3  8e ff 21
 	ld (XBC),A                                           ; FC62E6  b1 41
 .LFC62E8:
-	ld bc, (0x602498:24)                                ; FC62E8  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FC62E8  d2 98 24 60 21
 	and BC,0x0080                                        ; FC62ED  d9 cc 80 00
 	jr z, .LFC6343                                       ; FC62F1  66 50
 	ld BC,DE                                             ; FC62F3  da 89
@@ -119951,7 +119962,7 @@ sub_FC61A6:
 	m_add_rm MLD+r6, 0xf6, r1                            ; FC633E  ae f6 81
 	ld (XBC),A                                           ; FC6341  b1 41
 .LFC6343:
-	orw	(0x4c04:16), 0x00c0                  ; FC6343  d1 04 4c 3e c0 00
+	orw	(NoteRouting_RebuildFlags:16), 0x00c0                  ; FC6343  d1 04 4c 3e c0 00
 	inc 4,DE                                             ; FC6349  da 64
 	sub XBC,XBC                                          ; FC634B  e9 a1
 	inc 1,XBC                                            ; FC634D  e9 61
@@ -119962,14 +119973,14 @@ sub_FC61A6:
 	jrl c, .LFC6220                                      ; FC635C  77 c1 fe
 	m_cp_mi16 MWD+r6, 0xf0, 0x0000                       ; FC635F  9e f0 3f 00 00
 	jr z, .LFC637F                                       ; FC6364  66 19
-	orw	(0x602498:24), 0x0040                ; FC6366  d2 98 24 60 3e 40 00
+	orw	(NoteRouting_Mode:24), 0x0040                ; FC6366  d2 98 24 60 3e 40 00
 	ld c, (0x34d4:16)                                   ; FC636D  c1 d4 34 23
 	and C,0x08                                           ; FC6371  cb cc 08
 	jr z, .LFC6386                                       ; FC6374  66 10
-	andw	(0x602498:24), 0xff7f                ; FC6376  d2 98 24 60 3c 7f ff
+	andw	(NoteRouting_Mode:24), 0xff7f                ; FC6376  d2 98 24 60 3c 7f ff
 	jr .LFC6386                                          ; FC637D  68 07
 .LFC637F:
-	andw	(0x602498:24), 0xffbf                ; FC637F  d2 98 24 60 3c bf ff
+	andw	(NoteRouting_Mode:24), 0xffbf                ; FC637F  d2 98 24 60 3c bf ff
 .LFC6386:
 	pop XIX                                              ; FC6386  5c
 	popw de                                              ; FC6387  4a
@@ -120057,7 +120068,7 @@ sub_FC6393:
 	m_set 4, MD24, 0x602493                              ; FC648D  f2 93 24 60 bc
 	sub XBC,XBC                                          ; FC6492  e9 a1
 	ld (0x602494:24), xbc                               ; FC6494  f2 94 24 60 61
-	ldw (0x602498:24), 0x00                             ; FC6499  f2 98 24 60 02 00 00
+	ldw (NoteRouting_Mode:24), 0x00                             ; FC6499  f2 98 24 60 02 00 00
 	pop XIX                                              ; FC64A0  5c
 	popw hl                                              ; FC64A1  4b
 	unlk XIZ                                             ; FC64A2  ee 0d
@@ -123134,7 +123145,7 @@ sub_FC9933:
 	jrl z, .LFC99F7                                      ; FC9967  76 8d 00
 	push 0x00                                            ; FC996A  09 00
 	push H                                               ; FC996C  ce 04
-	lda xbc, (0x602600:24)                               ; FC996E  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC996E  f2 00 26 60 31
 	push XBC                                             ; FC9973  39
 	lda xwa, (xiz-114)                                   ; FC9974  be 8e 30
 	push XWA                                             ; FC9977  38
@@ -123147,7 +123158,7 @@ sub_FC9933:
 	jr z, .LFC99F7                                       ; FC9988  66 6d
 	push 0x00                                            ; FC998A  09 00
 	push H                                               ; FC998C  ce 04
-	lda xbc, (0x602600:24)                               ; FC998E  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC998E  f2 00 26 60 31
 	push XBC                                             ; FC9993  39
 	lda xwa, (xiz-422)                                   ; FC9994  f3 f9 5a fe 30
 	push XWA                                             ; FC9999  38
@@ -123203,7 +123214,7 @@ sub_FC9933:
 	ld XIX,0x00000022                                    ; FC9A1F  44 22 00 00 00
 	ldw de, 0x00                                         ; FC9A24  32 00 00
 .LFC9A27:
-	lda xbc, (0x602600:24)                               ; FC9A27  f2 00 26 60 31
+	lda xbc, (NoteRouting_Previous:24)                               ; FC9A27  f2 00 26 60 31
 	add XBC,XIX                                          ; FC9A2C  ec 81
 	ld L,(XBC)                                           ; FC9A2E  81 27
 	ld a, (xiz-407)                                      ; FC9A30  c3 f9 69 fe 21
@@ -123212,7 +123223,7 @@ sub_FC9933:
 	ld BC,DE                                             ; FC9A39  da 89
 	extz XBC                                             ; FC9A3B  e9 12
 	add XBC,0x00000152                                   ; FC9A3D  e9 c8 52 01 00 00
-	add XBC,0x00602600                                   ; FC9A43  e9 c8 00 26 60 00
+	add XBC,NoteRouting_Previous                                   ; FC9A43  e9 c8 00 26 60 00
 	bit 6,(XBC)                                          ; FC9A49  b1 ce
 	jr z, .LFC9A8E                                       ; FC9A4B  66 41
 	ld (xiz-410), 0x00                                   ; FC9A4D  f3 f9 66 fe 00 00
@@ -125081,7 +125092,7 @@ PartFrame_SendToMidiOut:
 	add (xiz-4), xbc                                     ; FCABC5  ae fc 89
 	jrl .LFCAAAC                                         ; FCABC8  78 e1 fe
 .LFCABCB:
-	ld bc, (0x602498:24)                                ; FCABCB  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCABCB  d2 98 24 60 21
 	and BC,0x0008                                        ; FCABD0  d9 cc 08 00
 	jrl z, .LFCACA4                                      ; FCABD4  76 cd 00
 	ld XBC,0x00000009                                    ; FCABD7  41 09 00 00 00
@@ -125425,7 +125436,7 @@ NoteRouting_ForPart:
 	add XBC,XWA                                          ; FCAEAF  e8 81
 	bit 5,(XBC)                                          ; FCAEB1  b1 cd
 	jr nz, .LFCAEC0                                      ; FCAEB3  6e 0b
-	ld bc, (0x602498:24)                                ; FCAEB5  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCAEB5  d2 98 24 60 21
 	and BC,0x0040                                        ; FCAEBA  d9 cc 40 00
 	jr z, .LFCAEE3                                       ; FCAEBE  66 23
 .LFCAEC0:
@@ -125502,7 +125513,7 @@ NoteRouting_ForPart:
 	lda xbc, (0x602aca:24)                               ; FCAF75  f2 ca 2a 60 31
 	ld (XIX+0x07),XBC                                    ; FCAF7A  bc 07 61
 .LFCAF7D:
-	ld bc, (0x602498:24)                                ; FCAF7D  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCAF7D  d2 98 24 60 21
 	and BC,0x0080                                        ; FCAF82  d9 cc 80 00
 	jr z, .LFCAFBF                                       ; FCAF86  66 37
 	ld (XIX+0x02),0x00                                   ; FCAF88  bc 02 00 00
@@ -125558,7 +125569,7 @@ sub_FCAFC9:
 	add XBC,(XIZ+0x0c)                                   ; FCAFF4  ae 0c 81
 	bit 5,(XBC)                                          ; FCAFF7  b1 cd
 	jr nz, .LFCB006                                      ; FCAFF9  6e 0b
-	ld bc, (0x602498:24)                                ; FCAFFB  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCAFFB  d2 98 24 60 21
 	and BC,0x0040                                        ; FCB000  d9 cc 40 00
 	jr z, .LFCB029                                       ; FCB004  66 23
 .LFCB006:
@@ -125642,7 +125653,7 @@ sub_FCAFC9:
 	lda xbc, (0x602aca:24)                               ; FCB0D2  f2 ca 2a 60 31
 	ld (XIX+0x07),XBC                                    ; FCB0D7  bc 07 61
 .LFCB0DA:
-	ld bc, (0x602498:24)                                ; FCB0DA  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCB0DA  d2 98 24 60 21
 	and BC,0x0080                                        ; FCB0DF  d9 cc 80 00
 	jr z, .LFCB11C                                       ; FCB0E3  66 37
 	ld (XIX+0x02),0x00                                   ; FCB0E5  bc 02 00 00
@@ -125706,7 +125717,7 @@ sub_FCB126:
 	lda xbc, (0x602aca:24)                               ; FCB167  f2 ca 2a 60 31
 	ld (XIX+0x03),XBC                                    ; FCB16C  bc 03 61
 .LFCB16F:
-	ld bc, (0x602498:24)                                ; FCB16F  d2 98 24 60 21
+	ld bc, (NoteRouting_Mode:24)                                ; FCB16F  d2 98 24 60 21
 	and BC,0x0080                                        ; FCB174  d9 cc 80 00
 	jr z, .LFCB1B1                                       ; FCB178  66 37
 	ld (XIX+0x02),0x00                                   ; FCB17A  bc 02 00 00
@@ -175703,8 +175714,9 @@ sub_FE8026:
 	ret                                                  ; FE803E  0e
 sub_FE9CFC_Nop:
 	ret                                                  ; FE803F  0e
-sub_FE8040:
-	call T_F411B8                                        ; FE8040  1d b8 11 f4
+; NoteRouting_RebuildForSong_Call: calls T_NoteRouting_RebuildForSong and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+NoteRouting_RebuildForSong_Call:
+	call T_NoteRouting_RebuildForSong                                        ; FE8040  1d b8 11 f4
 	ret                                                  ; FE8044  0e
 ; ---------------------------------------------------------------------
 ; ScreenLeave_DrumEditPartSelect -- the LEAVE method of the screen object at
@@ -177158,7 +177170,7 @@ EditScreen_EnterNoteEdit:
 	ld (EditCursor_Tick:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
 	calr EditScreen_BuildBeatTable                                      ; FE8A7B  1e 6b 00
 .LFE8A7E:
-	calr sub_FE8040                                          ; FE8A7E  1e bf f5
+	calr NoteRouting_RebuildForSong_Call                                          ; FE8A7E  1e bf f5
 	xor C,C                                              ; FE8A81  cb d3
 	ld a, 0x0c:opc                                          ; FE8A83  21 0c
 	swi 7                                                ; FE8A85  ff
@@ -177367,7 +177379,7 @@ ScreenLeave_NoteEdit:
 	ld wa, (EditCursor_Measure:24)                                ; FE8C81  d2 3f 1f 60 20
 	ld (0x3552:16), wa                                  ; FE8C86  f1 52 35 50
 	m_and_mi8 MB16, UI_RequestBits, 0xfe                         ; FE8C8A  c1 75 20 3c fe
-	call sub_FE8040                                      ; FE8C8F  1d 40 80 fe
+	call NoteRouting_RebuildForSong_Call                                      ; FE8C8F  1d 40 80 fe
 	res	0, (0xc6:8)                                   ; FE8C93  f0 c6 b0
 	ret                                                  ; FE8C96  0e
 Queue2E00_AppendRegs_0_255_4240:
@@ -181032,7 +181044,7 @@ DrumEdit_RowFollowNoteUp:
 	calr EditScreen_DrawFields                                          ; FEAEE5  1e ee 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAEE8  1e 9f 4e
 	calr DrumEdit_AuditionRow                                      ; FEAEEB  1e 54 f6
-	calr sub_FE8040                                          ; FEAEEE  1e 4f d1
+	calr NoteRouting_RebuildForSong_Call                                          ; FEAEEE  1e 4f d1
 	ret                                                  ; FEAEF1  0e
 .LFEAEF2:
 	m_cp_mi16 MW24, DrumEdit_TopRowNote, 0x0074                     ; FEAEF2  d2 71 1f 60 3f 74 00
@@ -181048,7 +181060,7 @@ DrumEdit_RowFollowNoteUp:
 	calr EditScreen_DrawFields                                          ; FEAF1B  1e b8 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAF1E  1e 69 4e
 	calr DrumEdit_AuditionRow                                      ; FEAF21  1e 1e f6
-	calr sub_FE8040                                          ; FEAF24  1e 19 d1
+	calr NoteRouting_RebuildForSong_Call                                          ; FEAF24  1e 19 d1
 .LFEAF27:
 	ret                                                  ; FEAF27  0e
 .LFEAF28:
@@ -181082,7 +181094,7 @@ DrumEdit_RowFollowNoteDown:
 	calr EditScreen_DrawFields                                          ; FEAF73  1e 60 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAF76  1e 11 4e
 	calr DrumEdit_AuditionRow                                      ; FEAF79  1e c6 f5
-	calr sub_FE8040                                          ; FEAF7C  1e c1 d0
+	calr NoteRouting_RebuildForSong_Call                                          ; FEAF7C  1e c1 d0
 	ret                                                  ; FEAF7F  0e
 .LFEAF80:
 	m_cp_mi16 MW24, DrumEdit_TopRowNote, 0x0001                     ; FEAF80  d2 71 1f 60 3f 01 00
@@ -181098,7 +181110,7 @@ DrumEdit_RowFollowNoteDown:
 	calr EditScreen_DrawFields                                          ; FEAFA9  1e 2a 49
 	calr EditScreen_RedrawCursorLayer                                          ; FEAFAC  1e db 4d
 	calr DrumEdit_AuditionRow                                      ; FEAFAF  1e 90 f5
-	calr sub_FE8040                                          ; FEAFB2  1e 8b d0
+	calr NoteRouting_RebuildForSong_Call                                          ; FEAFB2  1e 8b d0
 .LFEAFB5:
 	ret                                                  ; FEAFB5  0e
 .LFEAFB6:

@@ -504,8 +504,12 @@
 	.equ NoteList_FreeCount,			0x3820	; 3 bytes: each source's remaining notes, 16 at start (0 Ring601850, 1 MIDI IN, 2 timed events) -- NoteList_ApplyFrame; Ram3800_Img_QueueBudget
 	.equ NoteList_Heads,				0x3823	; three self-linked 13-byte heads, one per source; the free nodes are the 33-node ring at 0x384A -- NoteList_ApplyFrame / _MoveNode; Ram3800_Img_QueueHeads
 	.equ PartNoteList_Heads,			0x39f7	; 32 self-linked 15-byte heads, one per part; the 129-node pool follows at 0x3BD7 -- PartNotes_ApplyFrame; PartNoteList_MoveNode
+	.equ NoteRouting_RebuildFlags,			0x4c04	; word: which output tables NoteRouting_RebuildOutputs rebuilds (bits 5..7) -- NoteRouting_RebuildOutputs
+	.equ NoteRouting_ActivePartMask,		0x4c06	; 32-bit: the parts the routing makes active -- NoteRouting_UpdateActivePartMask
 	.equ Part_VoiceMasks,				0x602054	; a 32-bit voice mask per part -- NoteList_ApplyFrame; NoteFrame_SelectForPart; Ram3800_InitAll
 	.equ NoteRouting,				0x602200	; the routing block: part -> tone-generator part / MIDI OUT channel, track -> part, the ranges and output records (FINDINGS section 5) -- NoteRouting_ForPart / _ForTrack; every note processor passes it
+	.equ NoteRouting_Mode,				0x602498	; word: bit 5 solo, bit 6 every tone-generator output on, bit 7 recording -- NoteRouting_SetSoloAndRebuild; NoteRouting_ForPart
+	.equ NoteRouting_Previous,			0x602600	; the block as the last rebuild left it (0x29A bytes); the output rebuilders read it -- NoteRouting_RebuildOutputs copies it at the end
 	.equ BStore_TrackToPart,			0x603422	; workspace +0x22: 16 bytes, the part each sequencer channel plays, 0xFF = none -- TimedEvents_ProcessRing maps a frame's channel through it; EditPartSelect_DrawPartLabels draws it
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"

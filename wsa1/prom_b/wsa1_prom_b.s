@@ -1554,9 +1554,9 @@
 	.set	DisplayList_FC52AA_End, 0xFC52B4
 	.set	sub_FC5400, 0xFC5400
 	.set	sub_FC546A, 0xFC546A
-	.set	sub_FC54C6, 0xFC54C6
-	.set	sub_FC5518, 0xFC5518
-	.set	sub_FC5566, 0xFC5566
+	.set	NoteRouting_RebuildForSong, 0xFC54C6
+	.set	NoteRouting_Rebuild, 0xFC5518
+	.set	NoteRouting_SetSoloAndRebuild, 0xFC5566
 	.set	sub_FC55CA, 0xFC55CA
 	.set	sub_FC57F0, 0xFC57F0
 	.set	T_F411E8_Nop, 0xFC596C
@@ -89720,8 +89720,12 @@ T_Msg0716_DispatchIndex_26:	jp Msg0716_DispatchIndex_26  ; -> prom_a 0x4046A
 	.fill 0xC, 1, 0x0E  ; 0xF411A4: 12 x ret
 T_F411B0:	.long sub_FC5400	; ptr -> 0xFC5400 (prom_a 0x45400)
 T_F411B4:	jp sub_FC546A  ; -> prom_a 0x4546A
-T_F411B8:	jp sub_FC54C6  ; -> prom_a 0x454C6   x43
-T_F411BC:	jp sub_FC5518  ; -> prom_a 0x45518   x15
+; Evidence: slot 0xF411B8 is `jp 0xFC54C6`; prom_a 0xFC54C6 carries the label
+;           NoteRouting_RebuildForSong (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_RebuildForSong:	jp NoteRouting_RebuildForSong  ; F411B8 (was T_F411B8) -> prom_a 0x454C6   x43
+; Evidence: slot 0xF411BC is `jp 0xFC5518`; prom_a 0xFC5518 carries the label
+;           NoteRouting_Rebuild (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_Rebuild:	jp NoteRouting_Rebuild  ; F411BC (was T_F411BC) -> prom_a 0x45518   x15
 T_F411C0:	jp sub_FC55CA  ; -> prom_a 0x455CA
 T_F411C4:	jp sub_FC57F0  ; -> prom_a 0x457F0
 T_F411C8:	jp T_F411C8_Nop  ; -> prom_a 0x4596D
@@ -89733,7 +89737,9 @@ T_F411DC:	jp T_F411DC_Nop  ; -> prom_a 0x45ACB
 T_F411E0:	jp sub_FC5ACC  ; -> prom_a 0x45ACC
 T_F411E4:	jp T_F411E4_Nop  ; -> prom_a 0x45B25
 T_F411E8:	jp T_F411E8_Nop  ; -> prom_a 0x4596C
-T_F411EC:	jp sub_FC5566  ; -> prom_a 0x45566   x7
+; Evidence: slot 0xF411EC is `jp 0xFC5566`; prom_a 0xFC5566 carries the label
+;           NoteRouting_SetSoloAndRebuild (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_SetSoloAndRebuild:	jp NoteRouting_SetSoloAndRebuild  ; F411EC (was T_F411EC) -> prom_a 0x45566   x7
 	.fill 0x40, 1, 0x0E  ; 0xF411F0: 64 x ret
 ; Evidence: slot 0xF41230 is `jp 0xF8E320`; prom_a 0xF8E320 carries the label
 ;           Link_SendCommandE4 (graded CONTENT).  DERIVATIVE name.
@@ -92425,7 +92431,7 @@ sub_F440A0_Loop:
 ; Called from: T_BStore_BootPhase3 (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
 ; Calls:   TimedEventRing_Discard SeqBufRing_Discard sub_F4542D T_BStore_LoadGeometry_Call T_F427B8 T_BStore_LatchHeapBase_Veneer
-;          sub_F44505 T_F411B8 sub_F44143 BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 sub_F44237 +1
+;          sub_F44505 T_NoteRouting_RebuildForSong sub_F44143 BStore_ClearPasswordProtectedBanks T_EditScreen_BootPhase2And4 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_BStore_BootPhase3 holds `jp 0x00F440C4`, and 0xF440C4 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -92456,7 +92462,7 @@ sub_F440A0_Skip2:
 	call	T_F427B8	; F440F8  call 0xf427b8
 	call	T_BStore_LatchHeapBase_Veneer	; F440FC  call 0xf42890
 	calr	sub_F44505	; F44100  calr 0xf44505
-	call	T_F411B8	; F44103  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44103  call 0xf411b8
 	ld	(6304982:24), 0	; F44107  ld (0x6034d6),0x00
 	calr	sub_F44143	; F4410D  calr 0xf44143
 	ld	a, (6304981:24)	; F44110  ld A,(0x6034d5)
@@ -92648,7 +92654,7 @@ T_F44004_Nop:		; <- T_F44004
 ; Called from: in-module: 0xF44095 0xF455A0
 ; Touches: (0x20A9) (0x34D9) (0x3552) (0x360A) (0x360C)
 ; Calls:   sub_F45D19 sub_F45D80 sub_F44367 sub_F443CC T_F40C70 T_F40CB4
-;          T_F411B8 sub_F442C4 sub_F44131 sub_F44237 T_EditScreen_BootPhase2And4
+;          T_NoteRouting_RebuildForSong sub_F442C4 sub_F44131 sub_F44237 T_EditScreen_BootPhase2And4
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44260 is an instruction boundary.
 ;           The name IS the address.
@@ -92668,7 +92674,7 @@ sub_F44260:
 	ld	(6304798:24), xwa	; F44283  ld (0x60341e),XWA
 	ld	(13836:16), xwa	; F44288  ld (0x360c),XWA
 	call	T_F40CB4	; F4428C  call 0xf40cb4
-	call	T_F411B8	; F44290  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44290  call 0xf411b8
 	ld	(13529:16), 0	; F44294  ld (0x34d9),0x00
 	calr	sub_F442C4	; F44299  calr 0xf442c4
 	ld	(6304981:24), 0	; F4429C  ld (0x6034d5),0x00
@@ -93056,7 +93062,7 @@ sub_F44516_Skip7:
 ; sub_F44623
 ; Called from: in-module: 0xF445BC
 ; Touches: (0x207A) (0x3456) (0x34D4) (0x34D9) (0x3552)
-; Calls:   T_F411B8
+; Calls:   T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44623 is an instruction boundary.
 ;           The name IS the address.
@@ -93086,7 +93092,7 @@ sub_F44623:
 	m_ld_rm MW8, TransportB_Beat, 0	; F4465C  ld WA,(0x91)
 	ld	(13398:16), wa	; F4465F  ld (0x3456),WA
 	m_and_mi8 MB16, 0x34d4, 0xf7	; F44663  and (0x34d4),0xf7
-	call	T_F411B8	; F44668  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44668  call 0xf411b8
 sub_F44623_Return:
 	ret	; F4466C  ret
 
@@ -93493,7 +93499,7 @@ sub_F4495A_Epilogue:
 ; Called from: in-module: 0xF445DA
 ; Touches: (0x225A) (0x3000) (0x3004) (0x345A) (0x34D4) (0x34D9) (0x3552)
 ;          (0x360B)  |  0x000000
-; Calls:   sub_F4598A sub_F45348 T_F411B8 sub_F44ADA T_F42574 sub_F44A3B
+; Calls:   sub_F4598A sub_F45348 T_NoteRouting_RebuildForSong sub_F44ADA T_F42574 sub_F44A3B
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44964 is an instruction boundary.
 ;           The name IS the address.
@@ -93543,14 +93549,14 @@ sub_F44964_Skip5:
 	jr	z, sub_F44964_Skip6	; F449DF  jr Z,0xf449e6
 	m_or_mi8 MB16, 0x34d4, 0x08	; F449E1  or (0x34d4),0x08
 sub_F44964_Skip6:
-	call	T_F411B8	; F449E6  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F449E6  call 0xf411b8
 sub_F44964_Skip7:
 	m_cp_mi16 MW16, 0x3552, 0x8001	; F449EA  cp (0x3552),0x8001
 	jr	z, sub_F44964_Skip8	; F449F0  jr Z,0xf44a01
 	m_bit 1, MD16, 0x360b	; F449F2  bit 1,(0x360b)
 	jr	z, sub_F44964_Skip8	; F449F6  jr Z,0xf44a01
 	m_or_mi8 MB16, 0x34d4, 0x08	; F449F8  or (0x34d4),0x08
-	call	T_F411B8	; F449FD  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F449FD  call 0xf411b8
 sub_F44964_Skip8:
 	m_bit 1, MD16, 0x345a	; F44A01  bit 1,(0x345a)
 	jr	z, sub_F44964_Skip11	; F44A05  jr Z,0xf44a28
@@ -93561,7 +93567,7 @@ sub_F44964_Skip8:
 	jr	z, sub_F44964_Skip10	; F44A18  jr Z,0xf44a23
 sub_F44964_Skip9:
 	m_and_mi8 MB16, 0x34d4, 0xf7	; F44A1A  and (0x34d4),0xf7
-	call	T_F411B8	; F44A1F  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44A1F  call 0xf411b8
 sub_F44964_Skip10:
 	calr	sub_F44ADA	; F44A23  calr 0xf44ada
 	jr	sub_F44964_Join	; F44A26  jr T,0xf44a37
@@ -93867,7 +93873,7 @@ sub_F44C37_Return:
 ; Called from: in-module: 0xF44A6B
 ; Touches: (0x207A) (0x3008) (0x349A) (0x34BB) (0x34D1) (0x34D2) (0x34D8)
 ;          (0x3550)
-; Calls:   T_F413C8 T_F41F18 sub_F44CA7 T_F411B8
+; Calls:   T_F413C8 T_F41F18 sub_F44CA7 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44C51 is an instruction boundary.
 ;           The name IS the address.
@@ -93902,7 +93908,7 @@ sub_F44C51_Join:
 sub_F44C51_Join2:
 	calr	sub_F44CA7	; F44C9C  calr 0xf44ca7
 	ld	(168:8), 0:io	; F44C9F  ld (0xa8),0x00
-	call	T_F411B8	; F44CA2  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44CA2  call 0xf411b8
 	ret	; F44CA6  ret
 
 ; --------------------------------------------------------------------------
@@ -94124,7 +94130,7 @@ sub_F44E58:
 ; sub_F44E6B
 ; Called from: in-module: 0xF445E4 0xF44EED 0xF44F24 0xF44FC6 0xF44FFD
 ; Touches: (0x34D2)
-; Calls:   T_F413C8 T_F41F18 T_F40CB4 T_F411B8
+; Calls:   T_F413C8 T_F41F18 T_F40CB4 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44E6B is an instruction boundary.
 ;           The name IS the address.
@@ -94140,7 +94146,7 @@ sub_F44E6B:
 	xor	xwa, xwa	; F44E7E  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44E80  ld (0x60341e),XWA
 	call	T_F40CB4	; F44E85  call 0xf40cb4
-	call	T_F411B8	; F44E89  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F44E89  call 0xf411b8
 sub_F44E6B_Return:
 	ret	; F44E8D  ret
 
@@ -94420,7 +94426,7 @@ sub_F450B2_Return:
 ; sub_F450F7
 ; Called from: T_F409CC (x4)
 ; Touches: (0x3008) (0x300C) (0x34BB) (0x34D4)
-; Calls:   sub_F45119 sub_F44B95 sub_F4598A T_F411B8
+; Calls:   sub_F45119 sub_F44B95 sub_F4598A T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F409CC holds `jp 0x00F450F7`, and 0xF450F7 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94437,7 +94443,7 @@ sub_F450F7:		; <- T_F409CC
 	m_and_mi8 MB16, 0x34d4, 0xfb	; F45109  and (0x34d4),0xfb
 	calr	sub_F44B95	; F4510E  calr 0xf44b95
 	calr	sub_F4598A	; F45111  calr 0xf4598a
-	call	T_F411B8	; F45114  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F45114  call 0xf411b8
 	ret	; F45118  ret
 
 ; --------------------------------------------------------------------------
@@ -94543,7 +94549,7 @@ sub_F45119_Loop3:
 ; Called from: T_F409D0 (x4)
 ; Touches: (0x3008) (0x3456) (0x3458) (0x34BB) (0x34D4) (0x34D9) (0x3552)
 ;          (0x360B) (0x36D4)  |  0x000000
-; Calls:   sub_F45263 sub_F45FE5 TimedEventRing_Discard T_F411B8 SeqBufRing_Discard T_F42574
+; Calls:   sub_F45263 sub_F45FE5 TimedEventRing_Discard T_NoteRouting_RebuildForSong SeqBufRing_Discard T_F42574
 ; Evidence: thunk slot T_F409D0 holds `jp 0x00F451E6`, and 0xF451E6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94584,7 +94590,7 @@ sub_F45119_Skip5:
 sub_F45119_Skip6:
 	calr	TimedEventRing_Discard	; F45254  calr 0xf45b0a
 sub_F45119_Join2:
-	call	T_F411B8	; F45257  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F45257  call 0xf411b8
 	calr	SeqBufRing_Discard	; F4525B  calr 0xf45975
 	call	T_F42574	; F4525E  call 0xf42574
 	ret	; F45262  ret
@@ -94646,7 +94652,7 @@ sub_F45263_Loop3:
 ; sub_F452D3
 ; Called from: T_F409D4 (x2)
 ; Touches: (0x3008) (0x300C) (0x349F) (0x34D1)  |  0x000000
-; Calls:   TimedEventRing_Discard T_F411B8 sub_F44E8E
+; Calls:   TimedEventRing_Discard T_NoteRouting_RebuildForSong sub_F44E8E
 ; Evidence: thunk slot T_F409D4 holds `jp 0x00F452D3`, and 0xF452D3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94670,7 +94676,7 @@ sub_F452D3:		; <- T_F409D4
 	m_and_mi8 MB16, 0x34d1, 0x7f	; F452FC  and (0x34d1),0x7f
 	calr	TimedEventRing_Discard	; F45301  calr 0xf45b0a
 sub_F45263_Skip:
-	call	T_F411B8	; F45304  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F45304  call 0xf411b8
 	jr	sub_F45263_Return	; F45308  jr T,0xf45347
 sub_F45263_Skip2:
 	ld	(13471:16), 0	; F4530A  ld (0x349f),0x00
@@ -94711,7 +94717,7 @@ sub_F45263_Return:
 ; Called from: T_F409D8 (x1); in-module: 0xF4499C
 ; Touches: (0x3000) (0x3004) (0x3008) (0x300C) (0x34D0) (0x34D2) (0x34D4)
 ;          (0x34D9) (0x3552) (0x3610) +1 more  |  0x000000
-; Calls:   T_F411B8 sub_F44903 T_F40C04 T_F40BF4 T_F40BF8 T_F40BF0 T_F40BCC
+; Calls:   T_NoteRouting_RebuildForSong sub_F44903 T_F40C04 T_F40BF4 T_F40BF8 T_F40BF0 T_F40BCC
 ;          sub_F453E9 sub_F45942 sub_F459D9 T_Transport_StopAllRunning UiRequest_Post08
 ; Evidence: thunk slot T_F409D8 holds `jp 0x00F45348`, and 0xF45348 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -94737,7 +94743,7 @@ sub_F45348_Skip:
 	ld	(12296:16), xwa	; F45379  ld (0x3008),XWA
 	ld	(12300:16), xwa	; F4537D  ld (0x300c),XWA
 	ld	(12288:16), xwa	; F45381  ld (0x3000),XWA
-	call	T_F411B8	; F45385  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F45385  call 0xf411b8
 	calr	sub_F44903	; F45389  calr 0xf44903
 	cp	a, 0:i3	; F4538C  cp A,0
 	jr	nz, sub_F45348_Join2	; F4538E  jr NZ,0xf453e4
@@ -94943,7 +94949,7 @@ sub_F45478:
 ; sub_F45489
 ; Called from: T_F409F4 (x2)
 ; Touches: (0x3010)  |  0x000000
-; Calls:   T_F40CB4 sub_F45B1F T_F411B8
+; Calls:   T_F40CB4 sub_F45B1F T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F409F4 holds `jp 0x00F45489`, and 0xF45489 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94958,7 +94964,7 @@ sub_F45489:		; <- T_F409F4
 	cp	xwa, 0	; F45496  cp XWA,0x00000000
 	jr	z, sub_F45478_Return	; F4549C  jr Z,0xf454a5
 	calr	sub_F45B1F	; F4549E  calr 0xf45b1f
-	call	T_F411B8	; F454A1  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F454A1  call 0xf411b8
 sub_F45478_Return:
 	ret	; F454A5  ret
 
@@ -95468,7 +95474,7 @@ sub_F45761_Return:
 ; Called from: in-module: 0xF457DA
 ; Touches: (0x20A9) (0x3000) (0x3004) (0x3006) (0x349F) (0x34D1) (0x3608)  |
 ;          0x00340C 0x00342E 0x603500
-; Calls:   T_F40BE4 T_F40C88 T_F40C84 T_F411B8 T_F40BC8 Var34D1_SetBits20
+; Calls:   T_F40BE4 T_F40C88 T_F40C84 T_NoteRouting_RebuildForSong T_F40BC8 Var34D1_SetBits20
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45812 is an instruction boundary.
 ;           The name IS the address.
@@ -95549,7 +95555,7 @@ sub_F45812_Skip3:
 	xor	xwa, xwa	; F458CA  xor XWA,XWA
 	ld	(12288:16), xwa	; F458CC  ld (0x3000),XWA
 	ld	(12292:16), xwa	; F458D0  ld (0x3004),XWA
-	call	T_F411B8	; F458D4  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F458D4  call 0xf411b8
 	call	T_F40BC8	; F458D8  call 0xf40bc8
 	calr	Var34D1_SetBits20	; F458DC  calr 0xf45fc4
 	m_and_mi8 MB16, 0x20a9, 0xfe	; F458DF  and (0x20a9),0xfe
@@ -95615,7 +95621,7 @@ sub_F458FE:
 ; sub_F45942
 ; Called from: in-module: 0xF453B7
 ; Touches: (0x3000) (0x3004) (0x34BB) (0x34D0) (0x34D2) (0x34D4)
-; Calls:   T_F40CB4 TimedEventRing_Discard T_F411B8
+; Calls:   T_F40CB4 TimedEventRing_Discard T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF45942 is an instruction boundary.
 ;           The name IS the address.
@@ -95634,7 +95640,7 @@ sub_F45942:
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F45963  and (0x34bb),0xf7
 	calr	TimedEventRing_Discard	; F45968  calr 0xf45b0a
 	m_or_mi8 MB16, 0x34d0, 0x02	; F4596B  or (0x34d0),0x02
-	call	T_F411B8	; F45970  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F45970  call 0xf411b8
 	ret	; F45974  ret
 
 ; --------------------------------------------------------------------------
@@ -102104,7 +102110,7 @@ sub_F4A5B5_Return:
 ; sub_F4A661
 ; Called from: T_F40BE0 (x2)
 ; Touches: (0x3000) (0x3002) (0x34D4) (0x34D9)
-; Calls:   sub_F4A6CF sub_F4A6E7 T_F409D0 T_F411B8
+; Calls:   sub_F4A6CF sub_F4A6E7 T_F409D0 T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F40BE0 holds `jp 0x00F4A661`, and 0xF4A661 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -102160,7 +102166,7 @@ sub_F4A5B5_Skip8:
 sub_F4A5B5_Join6:
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4A6C1  or (0x34d4),0x10
 	call	T_F409D0	; F4A6C6  call 0xf409d0
-	call	T_F411B8	; F4A6CA  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4A6CA  call 0xf411b8
 	ret	; F4A6CE  ret
 
 ; --------------------------------------------------------------------------
@@ -107508,7 +107514,7 @@ sub_F4E05B_Return:
 ; sub_F4E151
 ; Called from: in-module: 0xF4E0B5 0xF4E0F0 0xF4E5D5
 ; Touches: (0x0C05) (0x2078) (0x3000) (0x3002) (0x3736)  |  0x000000
-; Calls:   T_F40E10 T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_F40BDC T_F411B8
+; Calls:   T_F40E10 T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_F40BDC T_NoteRouting_RebuildForSong
 ;          sub_F4E1B6
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E151 is an instruction boundary.
@@ -107551,7 +107557,7 @@ sub_F4E151_Skip3:
 	jr	nz, sub_F4E151_Skip4	; F4E1A4  jr NZ,0xf4e1aa
 	call	T_F40BDC	; F4E1A6  call 0xf40bdc
 sub_F4E151_Skip4:
-	call	T_F411B8	; F4E1AA  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4E1AA  call 0xf411b8
 sub_F4E151_Join2:
 	calr	sub_F4E1B6	; F4E1AE  calr 0xf4e1b6
 	ret	; F4E1B1  ret
@@ -107667,7 +107673,7 @@ sub_F4E1B6_Return:
 ; Called from: in-module: 0xF4E0FE
 ; Touches: (0x0C05) (0x2078) (0x207A) (0x3000) (0x3002) (0x34BB) (0x34D4)
 ;          (0x360B) (0x3736)  |  0x000000
-; Calls:   T_F40E10 T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_F40BDC T_F411B8 T_Transport_StopAllRunning
+; Calls:   T_F40E10 T_TimedEventRing_Discard T_F409D0 sub_F4E30F T_F40BDC T_NoteRouting_RebuildForSong T_Transport_StopAllRunning
 ;          sub_F4E1B6
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4E259 is an instruction boundary.
@@ -107736,7 +107742,7 @@ sub_F4E259_Skip5:
 	jr	nz, sub_F4E259_Skip6	; F4E2F5  jr NZ,0xf4e2fb
 	call	T_F40BDC	; F4E2F7  call 0xf40bdc
 sub_F4E259_Skip6:
-	call	T_F411B8	; F4E2FB  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4E2FB  call 0xf411b8
 sub_F4E259_Join3:
 	ld	a, (TransportC_State:8)	; F4E2FF  ld A,(0x95)
 	and	a, 5	; F4E302  and A,0x05
@@ -107777,7 +107783,7 @@ sub_F4E30F_Epilogue:
 ; sub_F4E32A
 ; Called from: T_F40D64 (x1); in-module: 0xF4E0EC 0xF4E134
 ; Touches: (0x34D4) (0x3736)
-; Calls:   T_F40E10 T_F411B8 T_F409D4
+; Calls:   T_F40E10 T_NoteRouting_RebuildForSong T_F409D4
 ; Evidence: thunk slot T_F40D64 holds `jp 0x00F4E32A`, and 0xF4E32A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -107806,7 +107812,7 @@ sub_F4E32A_Join:
 	call	T_F40E10	; F4E356  call 0xf40e10
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4E35A  or (0x34d4),0x10
 	pushw	bc	; F4E35F  push BC
-	call	T_F411B8	; F4E360  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4E360  call 0xf411b8
 	popw	bc	; F4E364  pop BC
 	ld	c, (14134:16)	; F4E365  ld C,(0x3736)
 	xor	xwa, xwa	; F4E369  xor XWA,XWA
@@ -107911,7 +107917,7 @@ sub_F4E390_Join3:
 ; sub_F4E426
 ; Called from: T_F40D60 (x1); in-module: 0xF4E0B9 0xF4E143
 ; Touches: (0x34BB) (0x34D4) (0x3736)  |  0x000000
-; Calls:   T_Transport_StopAllRunning T_F40E10 T_F411B8
+; Calls:   T_Transport_StopAllRunning T_F40E10 T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F40D60 holds `jp 0x00F4E426`, and 0xF4E426 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -107947,14 +107953,14 @@ sub_F4E426_Skip2:
 	ld	(6304800:24), de	; F4E46A  ld (0x603420),DE
 sub_F4E426_Join:
 	call	T_F40E10	; F4E46F  call 0xf40e10
-	call	T_F411B8	; F4E473  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4E473  call 0xf411b8
 	ret	; F4E477  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F4E478
 ; Called from: T_F40D68 (x1); in-module: 0xF4E13E
 ; Touches: (0x34BB) (0x34D4) (0x3736)  |  0x000000
-; Calls:   T_F40E10 T_F411B8
+; Calls:   T_F40E10 T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F40D68 holds `jp 0x00F4E478`, and 0xF4E478 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -107987,7 +107993,7 @@ sub_F4E478_Skip2:
 	ld	(6304800:24), de	; F4E4B6  ld (0x603420),DE
 sub_F4E478_Join:
 	call	T_F40E10	; F4E4BB  call 0xf40e10
-	call	T_F411B8	; F4E4BF  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4E4BF  call 0xf411b8
 	ret	; F4E4C3  ret
 
 ; --------------------------------------------------------------------------
@@ -108436,7 +108442,7 @@ sub_F4EC2F_Return:
 ; sub_F4ECA9
 ; Called from: T_F40CF8 (x1)
 ; Touches: (0x0C11) (0x0DE4) (0x207D) (0x3000) (0x3002) (0x34D4)
-; Calls:   T_F409D0 T_F411B8 T_F40CC0
+; Calls:   T_F409D0 T_NoteRouting_RebuildForSong T_F40CC0
 ; Evidence: thunk slot T_F40CF8 holds `jp 0x00F4ECA9`, and 0xF4ECA9 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -108482,7 +108488,7 @@ sub_F4EC2F_Join:
 	jr	ule, sub_F4EC2F_Loop	; F4ECF8  jr ULE,0xf4ecc6
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4ECFA  or (0x34d4),0x10
 	call	T_F409D0	; F4ECFF  call 0xf409d0
-	call	T_F411B8	; F4ED03  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F4ED03  call 0xf411b8
 	call	T_F40CC0	; F4ED07  call 0xf40cc0
 sub_F4EC2F_Return2:
 	ret	; F4ED0B  ret
@@ -117426,7 +117432,7 @@ IndexedTable_GetByte_Join16:
 ; sub_F556D2
 ; Called from: T_F42C9C (0xF42C9C, x13)
 ; Touches: (0x2250)
-; Calls:   0xF55231 T_F411BC
+; Calls:   0xF55231 T_NoteRouting_Rebuild
 ; Evidence: thunk slot T_F42C9C holds `jp 0x00F556D2`, and 0xF556D2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -117440,7 +117446,7 @@ sub_F556D2:		; <- T_F42C9C
 	pushw	16	; F556DA  push 0x0010
 	pushw	144	; F556DD  push 0x0090
 	calr	Queue2C00_Append4	; F556E0  calr 0xf55231
-	call	T_F411BC	; F556E3  call 0xf411bc
+	call	T_NoteRouting_Rebuild	; F556E3  call 0xf411bc
 	inc	8, xsp	; F556E7  inc 0,XSP
 	ret	; F556E9  ret
 
@@ -119088,7 +119094,7 @@ ModeLeave_RealtimeRecord:
 ; Touches: (0x2070) (0x2071) (0x207A) (0x207B) (0x207C) (0x207D) (0x2095)
 ;          (0x2250) (0x34D1) (0x34D9) +5 more
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40CF8 T_F40B60 T_F40B5C
-;          T_F40AC4 T_F40BDC T_F40D00 T_Queue2E00_AppendRegs T_F411BC
+;          T_F40AC4 T_F40BDC T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
 ;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56058 is an instruction boundary.
@@ -119136,7 +119142,7 @@ sub_F56058_Skip4:
 	ld	w, 255:opc	; F560CE  ld W,0xff
 	ldw	de, 4240	; F560D0  ld DE,0x1090
 	call	T_Queue2E00_AppendRegs	; F560D3  call 0xf40f3c
-	call	T_F411BC	; F560D7  call 0xf411bc
+	call	T_NoteRouting_Rebuild	; F560D7  call 0xf411bc
 sub_F56058_Skip5:
 	m_bit 2, MD16, MidiCfg_ModeBits	; F560DB  bit 2,(0x7f32)
 	jr	z, sub_F56058_Skip6	; F560DF  jr Z,0xf560e6
@@ -120014,7 +120020,7 @@ Nop_Ret_F56524:
 ; sub_F56525
 ; Called from: T_F40E18 (0xF40E18, x2)
 ; Touches: (0x34D3) (0x34D4) (0x3614)
-; Calls:   T_F40CEC sub_F56579 T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_F411B8
+; Calls:   T_F40CEC sub_F56579 T_F42578 T_F409C8 T_F40CCC T_F40BD8 T_NoteRouting_RebuildForSong
 ;          T_F40B60 T_F40B5C T_F40AC4 sub_F55D90
 ; Evidence: thunk slot T_F40E18 holds `jp 0x00F56525`, and 0xF56525 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -120035,7 +120041,7 @@ sub_F56525:		; <- T_F40E18
 	m_set 1, MD16, 0x34d3	; F56544  set 1,(0x34d3)
 	call	T_F40BD8	; F56548  call 0xf40bd8
 	m_or_mi8 MB16, 0x34d4, 0x10	; F5654C  or (0x34d4),0x10
-	call	T_F411B8	; F56551  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F56551  call 0xf411b8
 	jr	Nop_Ret_F56524_Join	; F56555  jr T,0xf56574
 Nop_Ret_F56524_Skip:
 	m_set 1, MD16, 0x34d3	; F56557  set 1,(0x34d3)
@@ -120044,7 +120050,7 @@ Nop_Ret_F56524_Skip:
 	call	T_F40B60	; F56564  call 0xf40b60
 	call	T_F40B5C	; F56568  call 0xf40b5c
 	call	T_F40AC4	; F5656C  call 0xf40ac4
-	call	T_F411B8	; F56570  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F56570  call 0xf411b8
 Nop_Ret_F56524_Join:
 	call	sub_F55D90	; F56574  call 0xf55d90
 	ret	; F56578  ret
@@ -121196,7 +121202,7 @@ ModeEnter_SeqPlay:
 ; ModeLeave_SeqPlay
 ; Called from: in-module: 0xF5580C
 ; Touches: (0x2250) (0x36C6) (0x36CA) (0x3757) (0x3758)
-; Calls:   sub_F57443 T_Queue2E00_AppendRegs T_F411BC
+; Calls:   sub_F57443 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56B67 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -121216,7 +121222,7 @@ ModeLeave_SeqPlay:
 	ld	w, 255:opc	; F56B87  ld W,0xff
 	ldw	de, 4240	; F56B89  ld DE,0x1090
 	call	T_Queue2E00_AppendRegs	; F56B8C  call 0xf40f3c
-	call	T_F411BC	; F56B90  call 0xf411bc
+	call	T_NoteRouting_Rebuild	; F56B90  call 0xf411bc
 sub_F56B67_Return:
 	ret	; F56B94  ret
 
@@ -121226,7 +121232,7 @@ sub_F56B67_Return:
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x2250) (0x2666)
 ;          (0x266A) (0x360B) (0x3757) +1 more
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F40D04 T_F40B60 T_F40B5C
-;          T_F40AC4 T_F40D00 T_Queue2E00_AppendRegs T_F411BC
+;          T_F40AC4 T_F40D00 T_Queue2E00_AppendRegs T_NoteRouting_Rebuild
 ;          T_CallbackQueue_Post T_Kernel_SemaSignal T_F42704
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56B95 is an instruction boundary.
@@ -121271,7 +121277,7 @@ sub_F56B95_Skip3:
 	ld	w, 255:opc	; F56BFF  ld W,0xff
 	ldw	de, 4240	; F56C01  ld DE,0x1090
 	call	T_Queue2E00_AppendRegs	; F56C04  call 0xf40f3c
-	call	T_F411BC	; F56C08  call 0xf411bc
+	call	T_NoteRouting_Rebuild	; F56C08  call 0xf411bc
 sub_F56B95_Skip4:
 	ld	xwa, Draw_SequencerPlayS0ngCycleMeasure	; F56C0C  ld XWA,0x00f55c61
 	push	xwa	; F56C11  push XWA
@@ -121444,7 +121450,7 @@ sub_F56C35_Return4:
 ; Called from: in-module: 0xF56D2D
 ; Touches: (0x360B) (0x3752)
 ; Calls:   sub_F56D7E sub_F56DA8 T_CallbackQueue_Post T_Kernel_SemaSignal
-;          T_F411B8 T_F40B60 T_F40B5C T_F40AC4
+;          T_NoteRouting_RebuildForSong T_F40B60 T_F40B5C T_F40AC4
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF56D46 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -121465,7 +121471,7 @@ sub_F56D46_Join:
 	inc	4, xsp	; F56D5F  inc 4,XSP
 	ld	a, 1:opc	; F56D61  ld A,0x01
 	call	T_Kernel_SemaSignal	; F56D63  call 0xf42d88
-	call	T_F411B8	; F56D67  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F56D67  call 0xf411b8
 	m_bit 0, MD16, 0x360b	; F56D6B  bit 0,(0x360b)
 	jr	z, sub_F56D46_Return	; F56D6F  jr Z,0xf56d7d
 	call	T_F40B60	; F56D71  call 0xf40b60
@@ -122454,7 +122460,7 @@ sub_F5723B_Return:
 ; Called from: in-module: 0xF55882 0xF57410
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2095) (0x360C) (0x361E)
 ;          (0x3620) (0x3626) (0x3627)
-; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_F411B8 T_F40B60 T_F40B5C
+; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_NoteRouting_RebuildForSong T_F40B60 T_F40B5C
 ;          T_F40AC4 T_CallbackQueue_Post T_Kernel_SemaSignal sub_F56E66
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57286 is an instruction boundary.
@@ -122480,7 +122486,7 @@ sub_F57286_Skip:
 	ld	xwa, (EditScreen_PartMask:24)	; F572B0  ld XWA,(0x601f01)
 sub_F57286_Skip2:
 	ld	(6304798:24), xwa	; F572B5  ld (0x60341e),XWA
-	call	T_F411B8	; F572BA  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F572BA  call 0xf411b8
 	pop	xwa	; F572BE  pop XWA
 	m_cp_mi8 MB16, 0x3627, 0x00	; F572BF  cp (0x3627),0x00
 	jr	nz, sub_F57286_Skip3	; F572C4  jr NZ,0xf572cb
@@ -122516,7 +122522,7 @@ sub_F57286_Skip6:
 ; ScreenLeave_CyclePlayEditScreen
 ; Called from: in-module: 0xF55886 0xF57414
 ; Touches: (0x207A) (0x207B) (0x3628)
-; Calls:   sub_F56579 T_F413C8 T_F41F18 T_F411B8
+; Calls:   sub_F56579 T_F413C8 T_F41F18 T_NoteRouting_RebuildForSong
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57311 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -122536,7 +122542,7 @@ sub_F57311_Skip:
 	call	T_F413C8	; F5732A  call 0xf413c8
 	call	T_F41F18	; F5732E  call 0xf41f18
 sub_F57311_Skip2:
-	call	T_F411B8	; F57332  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F57332  call 0xf411b8
 sub_F57311_Return:
 	ret	; F57336  ret
 
@@ -122770,7 +122776,7 @@ sub_F5739C_Return:
 ; sub_F573BA
 ; Called from: table 0xF5706A[3]
 ; Touches: (0x3626)
-; Calls:   T_F411B8 sub_F573D8
+; Calls:   T_NoteRouting_RebuildForSong sub_F573D8
 ; Evidence: entry [3] of the table at 0xF5706A reads 0x00F573BA, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF573BA
 ;           is an instruction boundary of this transcription.
@@ -122783,7 +122789,7 @@ sub_F573BA:
 	ld	(13862:16), 1	; F573C1  ld (0x3626),0x01
 	ld	xwa, (EditScreen_PartMask:24)	; F573C6  ld XWA,(0x601f01)
 	ld	(6304798:24), xwa	; F573CB  ld (0x60341e),XWA
-	call	T_F411B8	; F573D0  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F573D0  call 0xf411b8
 	calr	sub_F573D8	; F573D4  calr 0xf573d8
 sub_F5739C_Return2:
 	ret	; F573D7  ret
@@ -122813,7 +122819,7 @@ sub_F573D8:
 ; sub_F573F3
 ; Called from: table 0xF571A6[3]
 ; Touches: (0x360C) (0x3626)
-; Calls:   T_F411B8 sub_F573D8
+; Calls:   T_NoteRouting_RebuildForSong sub_F573D8
 ; Evidence: entry [3] of the table at 0xF571A6 reads 0x00F573F3, that table is
 ;           entered with `call XIX` after a bounds-checked index, and 0xF573F3
 ;           is an instruction boundary of this transcription.
@@ -122826,7 +122832,7 @@ sub_F573F3:
 	ld	(13862:16), 0	; F573FA  ld (0x3626),0x00
 	ld	xwa, (13836:16)	; F573FF  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F57403  ld (0x60341e),XWA
-	call	T_F411B8	; F57408  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F57408  call 0xf411b8
 	calr	sub_F573D8	; F5740C  calr 0xf573d8
 sub_F573D8_Return:
 	ret	; F5740F  ret
@@ -123046,7 +123052,7 @@ Nop_Ret_F57432:
 ; sub_F57433
 ; Called from: in-module: 0xF56030 0xF56B5F
 ; Touches: (0x360C)
-; Calls:   T_F411B8
+; Calls:   T_NoteRouting_RebuildForSong
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57433 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -123057,14 +123063,14 @@ sub_F57433:
 	ld	xwa, (13836:16)	; F57434  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F57438  ld (0x60341e),XWA
 	pop	xwa	; F5743D  pop XWA
-	call	T_F411B8	; F5743E  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F5743E  call 0xf411b8
 	ret	; F57442  ret
 
 ; --------------------------------------------------------------------------
 ; sub_F57443
 ; Called from: in-module: 0xF5604F 0xF56B71
 ; Touches: (0x360C)
-; Calls:   T_F411B8
+; Calls:   T_NoteRouting_RebuildForSong
 ; Evidence: reached by a branch decoded in this transcription (the sites are
 ;           listed above), so 0xF57443 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -123075,7 +123081,7 @@ sub_F57443:
 	ld	xwa, (6304798:24)	; F57444  ld XWA,(0x60341e)
 	ld	(13836:16), xwa	; F57449  ld (0x360c),XWA
 	pop	xwa	; F5744D  pop XWA
-	call	T_F411B8	; F5744E  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F5744E  call 0xf411b8
 	ret	; F57452  ret
 
 ; ==========================================================================
@@ -143859,7 +143865,7 @@ sub_F64B7A_Join:
 	call	T_Queue2C00_AppendRegs	; F64BA9  call 0xf40f38
 	call	T_Queue2C00_DrainPassAB	; F64BAD  call 0xf40018
 sub_F64B7A_Skip2:
-	call	T_F411B8	; F64BB1  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F64BB1  call 0xf411b8
 	ret	; F64BB5  ret
 ; BStore_MoveWorkspaceToNextBank: (0x0E2B) / (0x0E2D) = BStore_FreeHead / FreeCount; unless BStore_CurrentBank is 0 the workspace goes back
 ;   to bank CurrentBank-1 (BStore_Workspace_SaveToBank); then bank CurrentBank is loaded
@@ -144995,7 +145001,7 @@ sub_F65CD6_Skip3:
 ; sub_F65D26
 ; Called from: in-module: 0xF65C5E 0xF65C9A 0xF65CE3 0xF65CF7 0xF66564
 ; Touches: (0x0C03) (0x0C06) (0x0C83) (0x0DCF)  |  0x603422
-; Calls:   T_BStore_Veneers T_F411B8
+; Calls:   T_BStore_Veneers T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65D26 is an instruction
 ;           boundary.  The name IS the address.
@@ -145047,7 +145053,7 @@ sub_F65D26_Join:
 	ld	a, (3075:16)	; F65D9D  ld A,(0x0c03)
 	ld	(3203:16), a	; F65DA1  ld (0x0c83),A
 	call	T_BStore_Veneers	; F65DA5  call 0xf42800
-	call	T_F411B8	; F65DA9  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F65DA9  call 0xf411b8
 	ret	; F65DAD  ret
 
 ; --------------------------------------------------------------------------
@@ -145228,7 +145234,7 @@ TrackAssign_StageZero_LcdKeyRow3:		; <- T_TrackAssign_StageZero_LcdKeyRow3
 ; Called from: in-module: 0xF65E94
 ; Touches: (0x0C03) (0x0C06) (0x0C0D) (0x0C83) (0x0DCF) (0x2071) (0x2075)
 ;          (0x207E)  |  0x603422
-; Calls:   T_BStore_Veneers T_F411B8
+; Calls:   T_BStore_Veneers T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF65E98 is an instruction
 ;           boundary.  The name IS the address.
@@ -145297,7 +145303,7 @@ sub_F65E98_Join:
 	ld	a, (3075:16)	; F65F46  ld A,(0x0c03)
 	ld	(3203:16), a	; F65F4A  ld (0x0c83),A
 	call	T_BStore_Veneers	; F65F4E  call 0xf42800
-	call	T_F411B8	; F65F52  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F65F52  call 0xf411b8
 	ld	(UI_ScreenStage:16), 0	; F65F56  ld (0x207e),0x00
 	ret	; F65F5B  ret
 ; --------------------------------------------------------------------------
@@ -145321,7 +145327,7 @@ MaskTable_F65F5C:
 ; TrackAssign_StageZero_SoftKeyCol5
 ; Called from: T_TrackAssign_StageZero_SoftKeyCol5 (x1)
 ; Touches: (0x0C03) (0x2075)
-; Calls:   T_F411B8
+; Calls:   T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_TrackAssign_StageZero_SoftKeyCol5 holds `jp 0x00F65F7C`, and 0xF65F7C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145364,7 +145370,7 @@ sub_F65F7C_Entry:
 	m_rd_ld_rrx RWX, 0x3E, r2	; F65FD0  ld DE,QHL3
 sub_F65F7C_Join:
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F65FD3  and (0x2075),0xf7
-	call	T_F411B8	; F65FD8  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F65FD8  call 0xf411b8
 sub_F65F7C_Return:
 	ret	; F65FDC  ret
 
@@ -145372,7 +145378,7 @@ sub_F65F7C_Return:
 ; TrackAssign_StageZero_SoftKeyCol7
 ; Called from: T_TrackAssign_StageZero_SoftKeyCol7 (x1)
 ; Touches: (0x0C03) (0x2075)  |  0x603433
-; Calls:   T_F411B8
+; Calls:   T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_TrackAssign_StageZero_SoftKeyCol7 holds `jp 0x00F65FDD`, and 0xF65FDD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145406,7 +145412,7 @@ sub_F65FDD_Skip2:
 	jr	sub_F65FDD_Join	; F66014  jr T,0xf66016
 sub_F65FDD_Join:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66016  or (0x2075),0x08
-	call	T_F411B8	; F6601B  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F6601B  call 0xf411b8
 sub_F65FDD_Return:
 	ret	; F6601F  ret
 
@@ -145620,7 +145626,7 @@ BStore_LoadBankDirectory:
 ; SequencerMedley_OnLeave
 ; Called from: T_SequencerMedley_OnLeave (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
-; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
+; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_SequencerMedley_OnLeave holds `jp 0x00F6614E`, and 0xF6614E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -145648,7 +145654,7 @@ sub_F66123_Skip:
 sub_F66123_Join:
 	call	T_F42414	; F66183  call 0xf42414
 	ld	(Medley_Playing:16), 0	; F66187  ld (0x0dc1),0x00
-	call	T_F411B8	; F6618C  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F6618C  call 0xf411b8
 sub_F66123_Return:
 	ret	; F66190  ret
 
@@ -146612,7 +146618,7 @@ TrackAssignPresets_SoftKeyCol6:		; <- T_TrackAssignPresets_SoftKeyCol6
 ; Called from: in-module: 0xF66658
 ; Touches: (0x0DFD) (0x0DFE) (0x0E02) (0x124C) (0x360A) (0x7F4D)  |
 ;          0x603422 0x603433 0x610000
-; Calls:   sub_F6682C T_SongClear_ClearBank T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_F411B8
+; Calls:   sub_F6682C T_SongClear_ClearBank T_Queue2C00_AppendRegs T_Queue2C00_DrainPassAB T_NoteRouting_RebuildForSong
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF66668 is an instruction
 ;           boundary.  The name IS the address.
@@ -146740,7 +146746,7 @@ sub_F66668_Join:
 	call	T_Queue2C00_AppendRegs	; F667BF  call 0xf40f38
 	call	T_Queue2C00_DrainPassAB	; F667C3  call 0xf40018
 sub_F66668_Join2:
-	call	T_F411B8	; F667C7  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F667C7  call 0xf411b8
 	ret	; F667CB  ret
 
 ; --------------------------------------------------------------------------
@@ -155152,7 +155158,7 @@ sub_F6A9E3_Entry4:
 	ldw	(8542:16), 0	; F6AB09  ld (0x215e),0x0000
 	m_or_mi16 MW16, 0x212e, 0x0100	; F6AB0F  or (0x212e),0x0100
 	ldw	(4210:16), 65535	; F6AB15  ld (0x1072),0xffff
-	call	T_F411B8	; F6AB1B  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F6AB1B  call 0xf411b8
 	calr	sub_F6C4A5	; F6AB1F  calr 0xf6c4a5
 	cp	w, 0:i3	; F6AB22  cp W,0
 	jr	z, sub_F6A9E3_Skip10	; F6AB24  jr Z,0xf6ab31
@@ -155693,7 +155699,7 @@ sub_F6ADC2:
 ; Touches: (0x0DC7) (0x0E4E) (0x0E4F) (0x0E50) (0x0E63) (0x0E64) (0x0E65)
 ;          (0x1008) (0x106E) (0x1071) +16 more
 ; Calls:   0xF6D6D6 sub_F6A304 sub_F6A908 sub_F6C4A5 T_F40CB4 T_F42578
-;          sub_F6ACF5 sub_F6AE4B_Nop T_F411B8 T_F40A1C sub_F6B276 sub_F67434_Nop
+;          sub_F6ACF5 sub_F6AE4B_Nop T_NoteRouting_RebuildForSong T_F40A1C sub_F6B276 sub_F67434_Nop
 ; Evidence: thunk slot T_StepRecord_OnLeave holds `jp 0x00F6AE4B`, and 0xF6AE4B is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -155770,7 +155776,7 @@ sub_F6ADC2_Join:
 	calr	sub_F6AE4B_Nop	; F6AF11  calr 0xf6af57
 	ld	wa, (6304852:24)	; F6AF14  ld WA,(0x603454)
 	ld	(4210:16), wa	; F6AF19  ld (0x1072),WA
-	call	T_F411B8	; F6AF1D  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F6AF1D  call 0xf411b8
 	call	T_F40A1C	; F6AF21  call 0xf40a1c
 	ld	xwa, (13836:16)	; F6AF25  ld XWA,(0x360c)
 	ld	(6304798:24), xwa	; F6AF29  ld (0x60341e),XWA
@@ -167016,7 +167022,7 @@ Smf_ReadFile_Join7:
 	call	T_F409E0	; F6F887  call 0xf409e0
 	calr	sub_F6F8C7	; F6F88B  calr 0xf6f8c7
 	ldw	(BStore_Password:24), 0	; F6F88E  ld (0x60341c),0x0000
-	call	T_F411B8	; F6F895  call 0xf411b8
+	call	T_NoteRouting_RebuildForSong	; F6F895  call 0xf411b8
 	ldw	(UI_Request:16), 520	; F6F899  ld (0x2070),0x0208
 Smf_ReadFile_Join8:
 	m_and_mi8 MB16, 0x21e8, 0x7f	; F6F89F  and (0x21e8),0x7f
