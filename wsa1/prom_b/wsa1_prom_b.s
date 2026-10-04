@@ -1161,13 +1161,64 @@
 	.set	PartParam_StepEffect2, 0xFBBBAB
 	.set	PartParam_StepReverbSend, 0xFBBC2B
 	.set	PartParam_EnterReverbSend, 0xFBBC43
+	.set	PartParam_StepLocalControl, 0xFBBC5B
+	.set	PartParam_StepMidiOutSetting, 0xFBBC73
+	.set	PartParam_StepMidiInSetting, 0xFBBC8B
+	.set	PartParam_StepIgnored, 0xFBBCA3
+	.set	PartParam_StepKeyScaling, 0xFBBCA4
 	.set	sub_FBBCBC, 0xFBBCBC
 	.set	PartParam_StepAssignMode, 0xFBBDF9
 	.set	PartParam_StepVelocityOffset, 0xFBBE11
 	.set	PartParam_EnterVelocityOffset, 0xFBBE29
 	.set	PartParam_StepBasicChannel, 0xFBBE41
+	.set	PartParam_StepKeyLayerLow, 0xFBBE59
+	.set	PartParam_StepKeyLayerHigh, 0xFBBE94
+	.set	PartParam_StepVelocityLayerLow, 0xFBBECF
+	.set	PartParam_StepVelocityLayerHigh, 0xFBBF0A
+	.set	PartParam_StepControllerInternalFilterPitchBend, 0xFBBF45
+	.set	PartParam_StepControllerInternalFilterModulation1, 0xFBBF5D
+	.set	PartParam_StepControllerInternalFilterModulation2, 0xFBBF75
+	.set	PartParam_StepControllerInternalFilterRealTimeCreatorX, 0xFBBF8D
+	.set	PartParam_StepControllerInternalFilterRealTimeCreatorY, 0xFBBFA5
+	.set	PartParam_StepControllerInternalFilterRealTimeControllerX, 0xFBBFBD
+	.set	PartParam_StepControllerInternalFilterRealTimeControllerY, 0xFBBFD5
+	.set	PartParam_StepControllerInternalFilterHold1, 0xFBBFED
+	.set	PartParam_StepControllerInternalFilterControlPedal, 0xFBC005
+	.set	PartParam_StepControllerInternalFilterAfterTouch, 0xFBC01D
+	.set	PartParam_StepMidiInputFilterProgramChange, 0xFBC035
+	.set	PartParam_StepMidiInputFilterBankSelect, 0xFBC04D
+	.set	PartParam_StepMidiInputFilterVolume, 0xFBC065
+	.set	PartParam_StepMidiOutputFilterProgramChange, 0xFBC07D
+	.set	PartParam_StepMidiOutputFilterBankSelect, 0xFBC095
+	.set	PartParam_StepMidiOutputFilterVolume, 0xFBC0AD
+	.set	PartParam_StepMidiOutputFilterPanpot, 0xFBC0C5
+	.set	PartParam_StepMidiOutputFilterEffectDepth_FBC0DD, 0xFBC0DD
+	.set	PartParam_StepMidiOutputFilterEffectDepth_FBC0F5, 0xFBC0F5
 	.set	PartParam_StepMidiOutKeyTranspose_F1ADAC, 0xFBC10D
 	.set	PartParam_EnterMidiOutKeyTranspose_F1ADAC, 0xFBC125
+	.set	PartParam_StepMidiOutputFilterPitchBend, 0xFBC13D
+	.set	PartParam_StepMidiOutputFilterModulation1, 0xFBC155
+	.set	PartParam_StepMidiOutputFilterModulation2, 0xFBC16D
+	.set	PartParam_StepMidiOutputFilterRealTimeCreatorX, 0xFBC185
+	.set	PartParam_StepMidiOutputFilterRealTimeCreatorY, 0xFBC19D
+	.set	PartParam_StepMidiOutputFilterRealTimeControllerX, 0xFBC1B5
+	.set	PartParam_StepMidiOutputFilterRealTimeControllerY, 0xFBC1CD
+	.set	PartParam_StepMidiOutputFilterHold1, 0xFBC1E5
+	.set	PartParam_StepMidiOutputFilterControlPedal, 0xFBC1FD
+	.set	PartParam_StepMidiOutputFilterAfterTouch, 0xFBC215
+	.set	PartParam_StepMidiMultipleMessagesOutputProgramChange, 0xFBC2FF
+	.set	PartParam_EnterMidiMultipleMessagesOutputProgramChange, 0xFBC316
+	.set	PartParam_StepMidiMultipleMessagesOutputBankSelectMsb, 0xFBC352
+	.set	PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb, 0xFBC38F
+	.set	PartParam_StepMidiMultipleMessagesOutputBankSelectLsb, 0xFBC3D8
+	.set	PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb, 0xFBC3EF
+	.set	PartParam_StepMidiMultipleMessagesOutputVolume, 0xFBC42B
+	.set	PartParam_EnterMidiMultipleMessagesOutputVolume, 0xFBC442
+	.set	PartParam_StepMidiMultipleMessagesOutputPanpot, 0xFBC47E
+	.set	PartParam_StepMidiMultipleMessagesOutputReverbDepth, 0xFBC495
+	.set	PartParam_EnterMidiMultipleMessagesOutputReverbDepth, 0xFBC4AC
+	.set	PartParam_StepMidiMultipleMessagesOutputChorusDepth, 0xFBC4E8
+	.set	PartParam_EnterMidiMultipleMessagesOutputChorusDepth, 0xFBC4FF
 	.set	PartParam_StepMidiOutKeyTranspose_F1AE12, 0xFBC53B
 	.set	PartParam_EnterMidiOutKeyTranspose_F1AE12, 0xFBC553
 	.set	ScreenEnter_CombiEditConfigure_B2, 0xFBC56B
@@ -50462,31 +50513,35 @@ DL_Err0rTheS0undOrC0mbinati0n:
 	.byte 0x16, 0x01, 0x94, 0x00, 0x32, 0x01, 0xa3, 0x00	; +2  '....2...'
 
 ; --------------------------------------------------------------------------
-; Record_F1AA7C -- record, 0xF1AA7C-0xF1AA84 (9 bytes)
+; PartParamField_KeyLayerLow -- record, 0xF1AA7C-0xF1AA84 (9 bytes)
 ; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBE61
 ; --------------------------------------------------------------------------
-Record_F1AA7C:
+; PartParamField_KeyLayerLow: the 9-byte template: record set 32 (+7 = 0x10), offset 7, mask 0x7F, 0..127: KEY LAYER LOW (notes/prom_ab_part_param_switches.py)
+PartParamField_KeyLayerLow:
 	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0c, 0x10, 0x00   ; F1AA7C  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AA85 -- record, 0xF1AA85-0xF1AA8D (9 bytes)
+; PartParamField_KeyLayerHigh -- record, 0xF1AA85-0xF1AA8D (9 bytes)
 ; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBE9C
 ; --------------------------------------------------------------------------
-Record_F1AA85:
+; PartParamField_KeyLayerHigh: the 9-byte template: record set 32 (+7 = 0x10), offset 8, mask 0x7F, 0..127: KEY LAYER HIGH (notes/prom_ab_part_param_switches.py)
+PartParamField_KeyLayerHigh:
 	.byte 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0c, 0x10, 0x00   ; F1AA85  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AA8E -- record, 0xF1AA8E-0xF1AA96 (9 bytes)
+; PartParamField_VelocityLayerLow -- record, 0xF1AA8E-0xF1AA96 (9 bytes)
 ; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBED7
 ; --------------------------------------------------------------------------
-Record_F1AA8E:
+; PartParamField_VelocityLayerLow: the 9-byte template: record set 32 (+7 = 0x10), offset 9, mask 0x7F, 0..127: VELOCITY LAYER LOW (notes/prom_ab_part_param_switches.py)
+PartParamField_VelocityLayerLow:
 	.byte 0x09, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x10, 0x00   ; F1AA8E  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AA97 -- record, 0xF1AA97-0xF1AA9F (9 bytes)
+; PartParamField_VelocityLayerHigh -- record, 0xF1AA97-0xF1AA9F (9 bytes)
 ; Evidence: 9 bytes, stated by `ldw BC` at prom_a 0xFBBF12
 ; --------------------------------------------------------------------------
-Record_F1AA97:
+; PartParamField_VelocityLayerHigh: the 9-byte template: record set 32 (+7 = 0x10), offset 10, mask 0x7F, 0..127: VELOCITY LAYER HIGH (notes/prom_ab_part_param_switches.py)
+PartParamField_VelocityLayerHigh:
 	.byte 0x0a, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x10, 0x00   ; F1AA97  .........
 
 ; --------------------------------------------------------------------------
@@ -50559,11 +50614,11 @@ PtrTable_F1AB13:
 	.long PartParam_StepEffect1Send                       ; F1AB2B  [6]   -> prom_a 0xFBBB7B
 	.long PartParam_StepEffect2                       ; F1AB2F  [7]   -> prom_a 0xFBBBAB
 	.long PartParam_StepReverbSend                       ; F1AB33  [8]   -> prom_a 0xFBBC2B
-	.long 0x00FBBC5B                       ; F1AB37  [9]   -> prom_a 0xFBBC5B
-	.long 0x00FBBC73                       ; F1AB3B  [10]   -> prom_a 0xFBBC73
-	.long 0x00FBBC8B                       ; F1AB3F  [11]   -> prom_a 0xFBBC8B
-	.long 0x00FBBCA3                       ; F1AB43  [12]   -> prom_a 0xFBBCA3
-	.long 0x00FBBCA4                       ; F1AB47  [13]   -> prom_a 0xFBBCA4
+	.long PartParam_StepLocalControl                       ; F1AB37  [9]   -> prom_a 0xFBBC5B
+	.long PartParam_StepMidiOutSetting                       ; F1AB3B  [10]   -> prom_a 0xFBBC73
+	.long PartParam_StepMidiInSetting                       ; F1AB3F  [11]   -> prom_a 0xFBBC8B
+	.long PartParam_StepIgnored                       ; F1AB43  [12]   -> prom_a 0xFBBCA3
+	.long PartParam_StepKeyScaling                       ; F1AB47  [13]   -> prom_a 0xFBBCA4
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AB4B -- pointer table, 0xF1AB4B-0xF1AB6E (36 bytes)
@@ -50577,10 +50632,10 @@ PtrTable_F1AB4B:
 	.long PartParam_StepAssignMode                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
 	.long PartParam_StepVelocityOffset                       ; F1AB57  [3]   -> prom_a 0xFBBE11
 	.long PartParam_StepBasicChannel                       ; F1AB5B  [4]   -> prom_a 0xFBBE41
-	.long 0x00FBBE59                       ; F1AB5F  [5]   -> prom_a 0xFBBE59
-	.long 0x00FBBE94                       ; F1AB63  [6]   -> prom_a 0xFBBE94
-	.long 0x00FBBECF                       ; F1AB67  [7]   -> prom_a 0xFBBECF
-	.long 0x00FBBF0A                       ; F1AB6B  [8]   -> prom_a 0xFBBF0A
+	.long PartParam_StepKeyLayerLow                       ; F1AB5F  [5]   -> prom_a 0xFBBE59
+	.long PartParam_StepKeyLayerHigh                       ; F1AB63  [6]   -> prom_a 0xFBBE94
+	.long PartParam_StepVelocityLayerLow                       ; F1AB67  [7]   -> prom_a 0xFBBECF
+	.long PartParam_StepVelocityLayerHigh                       ; F1AB6B  [8]   -> prom_a 0xFBBF0A
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AB6F -- pointer table, 0xF1AB6F-0xF1AB96 (40 bytes)
@@ -50589,16 +50644,16 @@ PtrTable_F1AB4B:
 ; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBB8CA
 ; --------------------------------------------------------------------------
 PtrTable_F1AB6F:
-	.long 0x00FBBF45                       ; F1AB6F  [0]   -> prom_a 0xFBBF45
-	.long 0x00FBBF5D                       ; F1AB73  [1]   -> prom_a 0xFBBF5D
-	.long 0x00FBBF75                       ; F1AB77  [2]   -> prom_a 0xFBBF75
-	.long 0x00FBBF8D                       ; F1AB7B  [3]   -> prom_a 0xFBBF8D
-	.long 0x00FBBFA5                       ; F1AB7F  [4]   -> prom_a 0xFBBFA5
-	.long 0x00FBBFBD                       ; F1AB83  [5]   -> prom_a 0xFBBFBD
-	.long 0x00FBBFD5                       ; F1AB87  [6]   -> prom_a 0xFBBFD5
-	.long 0x00FBBFED                       ; F1AB8B  [7]   -> prom_a 0xFBBFED
-	.long 0x00FBC005                       ; F1AB8F  [8]   -> prom_a 0xFBC005
-	.long 0x00FBC01D                       ; F1AB93  [9]   -> prom_a 0xFBC01D
+	.long PartParam_StepControllerInternalFilterPitchBend                       ; F1AB6F  [0]   -> prom_a 0xFBBF45
+	.long PartParam_StepControllerInternalFilterModulation1                       ; F1AB73  [1]   -> prom_a 0xFBBF5D
+	.long PartParam_StepControllerInternalFilterModulation2                       ; F1AB77  [2]   -> prom_a 0xFBBF75
+	.long PartParam_StepControllerInternalFilterRealTimeCreatorX                       ; F1AB7B  [3]   -> prom_a 0xFBBF8D
+	.long PartParam_StepControllerInternalFilterRealTimeCreatorY                       ; F1AB7F  [4]   -> prom_a 0xFBBFA5
+	.long PartParam_StepControllerInternalFilterRealTimeControllerX                       ; F1AB83  [5]   -> prom_a 0xFBBFBD
+	.long PartParam_StepControllerInternalFilterRealTimeControllerY                       ; F1AB87  [6]   -> prom_a 0xFBBFD5
+	.long PartParam_StepControllerInternalFilterHold1                       ; F1AB8B  [7]   -> prom_a 0xFBBFED
+	.long PartParam_StepControllerInternalFilterControlPedal                       ; F1AB8F  [8]   -> prom_a 0xFBC005
+	.long PartParam_StepControllerInternalFilterAfterTouch                       ; F1AB93  [9]   -> prom_a 0xFBC01D
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AB97 -- pointer table, 0xF1AB97-0xF1ABA2 (12 bytes)
@@ -50607,9 +50662,9 @@ PtrTable_F1AB6F:
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBB8E9
 ; --------------------------------------------------------------------------
 PtrTable_F1AB97:
-	.long 0x00FBC035                       ; F1AB97  [0]   -> prom_a 0xFBC035
-	.long 0x00FBC04D                       ; F1AB9B  [1]   -> prom_a 0xFBC04D
-	.long 0x00FBC065                       ; F1AB9F  [2]   -> prom_a 0xFBC065
+	.long PartParam_StepMidiInputFilterProgramChange                       ; F1AB97  [0]   -> prom_a 0xFBC035
+	.long PartParam_StepMidiInputFilterBankSelect                       ; F1AB9B  [1]   -> prom_a 0xFBC04D
+	.long PartParam_StepMidiInputFilterVolume                       ; F1AB9F  [2]   -> prom_a 0xFBC065
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1ABA3 -- pointer table, 0xF1ABA3-0xF1ABE6 (68 bytes)
@@ -50618,23 +50673,23 @@ PtrTable_F1AB97:
 ; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBB908
 ; --------------------------------------------------------------------------
 PtrTable_F1ABA3:
-	.long 0x00FBC07D                       ; F1ABA3  [0]   -> prom_a 0xFBC07D
-	.long 0x00FBC095                       ; F1ABA7  [1]   -> prom_a 0xFBC095
-	.long 0x00FBC0AD                       ; F1ABAB  [2]   -> prom_a 0xFBC0AD
-	.long 0x00FBC0C5                       ; F1ABAF  [3]   -> prom_a 0xFBC0C5
-	.long 0x00FBC0DD                       ; F1ABB3  [4]   -> prom_a 0xFBC0DD
-	.long 0x00FBC0F5                       ; F1ABB7  [5]   -> prom_a 0xFBC0F5
+	.long PartParam_StepMidiOutputFilterProgramChange                       ; F1ABA3  [0]   -> prom_a 0xFBC07D
+	.long PartParam_StepMidiOutputFilterBankSelect                       ; F1ABA7  [1]   -> prom_a 0xFBC095
+	.long PartParam_StepMidiOutputFilterVolume                       ; F1ABAB  [2]   -> prom_a 0xFBC0AD
+	.long PartParam_StepMidiOutputFilterPanpot                       ; F1ABAF  [3]   -> prom_a 0xFBC0C5
+	.long PartParam_StepMidiOutputFilterEffectDepth_FBC0DD                       ; F1ABB3  [4]   -> prom_a 0xFBC0DD
+	.long PartParam_StepMidiOutputFilterEffectDepth_FBC0F5                       ; F1ABB7  [5]   -> prom_a 0xFBC0F5
 	.long PartParam_StepMidiOutKeyTranspose_F1ADAC                       ; F1ABBB  [6]   -> prom_a 0xFBC10D
-	.long 0x00FBC13D                       ; F1ABBF  [7]   -> prom_a 0xFBC13D
-	.long 0x00FBC155                       ; F1ABC3  [8]   -> prom_a 0xFBC155
-	.long 0x00FBC16D                       ; F1ABC7  [9]   -> prom_a 0xFBC16D
-	.long 0x00FBC185                       ; F1ABCB  [10]   -> prom_a 0xFBC185
-	.long 0x00FBC19D                       ; F1ABCF  [11]   -> prom_a 0xFBC19D
-	.long 0x00FBC1B5                       ; F1ABD3  [12]   -> prom_a 0xFBC1B5
-	.long 0x00FBC1CD                       ; F1ABD7  [13]   -> prom_a 0xFBC1CD
-	.long 0x00FBC1E5                       ; F1ABDB  [14]   -> prom_a 0xFBC1E5
-	.long 0x00FBC1FD                       ; F1ABDF  [15]   -> prom_a 0xFBC1FD
-	.long 0x00FBC215                       ; F1ABE3  [16]   -> prom_a 0xFBC215
+	.long PartParam_StepMidiOutputFilterPitchBend                       ; F1ABBF  [7]   -> prom_a 0xFBC13D
+	.long PartParam_StepMidiOutputFilterModulation1                       ; F1ABC3  [8]   -> prom_a 0xFBC155
+	.long PartParam_StepMidiOutputFilterModulation2                       ; F1ABC7  [9]   -> prom_a 0xFBC16D
+	.long PartParam_StepMidiOutputFilterRealTimeCreatorX                       ; F1ABCB  [10]   -> prom_a 0xFBC185
+	.long PartParam_StepMidiOutputFilterRealTimeCreatorY                       ; F1ABCF  [11]   -> prom_a 0xFBC19D
+	.long PartParam_StepMidiOutputFilterRealTimeControllerX                       ; F1ABD3  [12]   -> prom_a 0xFBC1B5
+	.long PartParam_StepMidiOutputFilterRealTimeControllerY                       ; F1ABD7  [13]   -> prom_a 0xFBC1CD
+	.long PartParam_StepMidiOutputFilterHold1                       ; F1ABDB  [14]   -> prom_a 0xFBC1E5
+	.long PartParam_StepMidiOutputFilterControlPedal                       ; F1ABDF  [15]   -> prom_a 0xFBC1FD
+	.long PartParam_StepMidiOutputFilterAfterTouch                       ; F1ABE3  [16]   -> prom_a 0xFBC215
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1ABE7 -- pointer table, 0xF1ABE7-0xF1AC06 (32 bytes)
@@ -50643,13 +50698,13 @@ PtrTable_F1ABA3:
 ; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBB927
 ; --------------------------------------------------------------------------
 PtrTable_F1ABE7:
-	.long 0x00FBC2FF                       ; F1ABE7  [0]   -> prom_a 0xFBC2FF
-	.long 0x00FBC352                       ; F1ABEB  [1]   -> prom_a 0xFBC352
-	.long 0x00FBC3D8                       ; F1ABEF  [2]   -> prom_a 0xFBC3D8
-	.long 0x00FBC42B                       ; F1ABF3  [3]   -> prom_a 0xFBC42B
-	.long 0x00FBC47E                       ; F1ABF7  [4]   -> prom_a 0xFBC47E
-	.long 0x00FBC495                       ; F1ABFB  [5]   -> prom_a 0xFBC495
-	.long 0x00FBC4E8                       ; F1ABFF  [6]   -> prom_a 0xFBC4E8
+	.long PartParam_StepMidiMultipleMessagesOutputProgramChange                       ; F1ABE7  [0]   -> prom_a 0xFBC2FF
+	.long PartParam_StepMidiMultipleMessagesOutputBankSelectMsb                       ; F1ABEB  [1]   -> prom_a 0xFBC352
+	.long PartParam_StepMidiMultipleMessagesOutputBankSelectLsb                       ; F1ABEF  [2]   -> prom_a 0xFBC3D8
+	.long PartParam_StepMidiMultipleMessagesOutputVolume                       ; F1ABF3  [3]   -> prom_a 0xFBC42B
+	.long PartParam_StepMidiMultipleMessagesOutputPanpot                       ; F1ABF7  [4]   -> prom_a 0xFBC47E
+	.long PartParam_StepMidiMultipleMessagesOutputReverbDepth                       ; F1ABFB  [5]   -> prom_a 0xFBC495
+	.long PartParam_StepMidiMultipleMessagesOutputChorusDepth                       ; F1ABFF  [6]   -> prom_a 0xFBC4E8
 	.long PartParam_StepMidiOutKeyTranspose_F1AE12                       ; F1AC03  [7]   -> prom_a 0xFBC53B
 
 ; --------------------------------------------------------------------------
@@ -50752,13 +50807,13 @@ PtrTable_F1AC97:
 ; Evidence: 8 entries of 4 bytes; base and width from prom_a 0xFBBA69
 ; --------------------------------------------------------------------------
 PtrTable_F1ACDB:
-	.long 0x00FBC316                       ; F1ACDB  [0]   -> prom_a 0xFBC316
-	.long 0x00FBC38F                       ; F1ACDF  [1]   -> prom_a 0xFBC38F
-	.long 0x00FBC3EF                       ; F1ACE3  [2]   -> prom_a 0xFBC3EF
-	.long 0x00FBC442                       ; F1ACE7  [3]   -> prom_a 0xFBC442
+	.long PartParam_EnterMidiMultipleMessagesOutputProgramChange                       ; F1ACDB  [0]   -> prom_a 0xFBC316
+	.long PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb                       ; F1ACDF  [1]   -> prom_a 0xFBC38F
+	.long PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb                       ; F1ACE3  [2]   -> prom_a 0xFBC3EF
+	.long PartParam_EnterMidiMultipleMessagesOutputVolume                       ; F1ACE7  [3]   -> prom_a 0xFBC442
 	.long PartParam_RefuseNumberEntry                       ; F1ACEB  [4]   -> prom_a 0xFBBA83
-	.long 0x00FBC4AC                       ; F1ACEF  [5]   -> prom_a 0xFBC4AC
-	.long 0x00FBC4FF                       ; F1ACF3  [6]   -> prom_a 0xFBC4FF
+	.long PartParam_EnterMidiMultipleMessagesOutputReverbDepth                       ; F1ACEF  [5]   -> prom_a 0xFBC4AC
+	.long PartParam_EnterMidiMultipleMessagesOutputChorusDepth                       ; F1ACF3  [6]   -> prom_a 0xFBC4FF
 	.long PartParam_EnterMidiOutKeyTranspose_F1AE12                       ; F1ACF7  [7]   -> prom_a 0xFBC553
 
 ; --------------------------------------------------------------------------
@@ -50818,31 +50873,35 @@ PartParamField_ReverbSend:
 	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD31  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD3A -- record, 0xF1AD3A-0xF1AD3C (3 bytes)
+; PartParamField_LocalControl -- record, 0xF1AD3A-0xF1AD3C (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC5F
 ; --------------------------------------------------------------------------
-Record_F1AD3A:
+; PartParamField_LocalControl: record set 0 (selector +2 = 0x01), offset 13, mask 0x20: the only PART parameter with that bit is LOCAL CONTROL (notes/prom_ab_part_param_switches.py)
+PartParamField_LocalControl:
 	.byte 0x0d, 0x20, 0x01   ; F1AD3A  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1AD3D -- record, 0xF1AD3D-0xF1AD3F (3 bytes)
+; PartParamField_MidiOutSetting -- record, 0xF1AD3D-0xF1AD3F (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC77
 ; --------------------------------------------------------------------------
-Record_F1AD3D:
+; PartParamField_MidiOutSetting: record set 0 (selector +2 = 0x01), offset 13, mask 0x40: the only PART parameter with that bit is MIDI OUT SETTING (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutSetting:
 	.byte 0x0d, 0x40, 0x01   ; F1AD3D  .@.
 
 ; --------------------------------------------------------------------------
-; Record_F1AD40 -- record, 0xF1AD40-0xF1AD42 (3 bytes)
+; PartParamField_MidiInSetting -- record, 0xF1AD40-0xF1AD42 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBC8F
 ; --------------------------------------------------------------------------
-Record_F1AD40:
+; PartParamField_MidiInSetting: record set 0 (selector +2 = 0x01), offset 13, mask 0x80: the only PART parameter with that bit is MIDI IN SETTING (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiInSetting:
 	.byte 0x0d, 0x80, 0x01   ; F1AD40  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD43 -- record, 0xF1AD43-0xF1AD45 (3 bytes)
+; PartParamField_KeyScaling -- record, 0xF1AD43-0xF1AD45 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBCA8
 ; --------------------------------------------------------------------------
-Record_F1AD43:
+; PartParamField_KeyScaling: record set 0 (selector +2 = 0x00), offset 12, mask 0x08: the only PART parameter with that bit is KEY SCALING (notes/prom_ab_part_param_switches.py)
+PartParamField_KeyScaling:
 	.byte 0x0c, 0x08, 0x00   ; F1AD43  ...
 
 ; --------------------------------------------------------------------------
@@ -50886,136 +50945,155 @@ PartParamField_BasicChannel:
 	.byte 0x0d, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AD6A  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD73 -- record, 0xF1AD73-0xF1AD75 (3 bytes)
+; PartParamField_ControllerInternalFilterPitchBend -- record, 0xF1AD73-0xF1AD75 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF49
 ; --------------------------------------------------------------------------
-Record_F1AD73:
+; PartParamField_ControllerInternalFilterPitchBend: record set 32 (selector +2 = 0x10), offset 11, mask 0x40: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: PITCH BEND (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterPitchBend:
 	.byte 0x0b, 0x40, 0x10   ; F1AD73  .@.
 
 ; --------------------------------------------------------------------------
-; Record_F1AD76 -- record, 0xF1AD76-0xF1AD78 (3 bytes)
+; PartParamField_ControllerInternalFilterModulation1 -- record, 0xF1AD76-0xF1AD78 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF61
 ; --------------------------------------------------------------------------
-Record_F1AD76:
+; PartParamField_ControllerInternalFilterModulation1: record set 32 (selector +2 = 0x10), offset 12, mask 0x02: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: MODULATION1 (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterModulation1:
 	.byte 0x0c, 0x02, 0x10   ; F1AD76  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD79 -- record, 0xF1AD79-0xF1AD7B (3 bytes)
+; PartParamField_ControllerInternalFilterModulation2 -- record, 0xF1AD79-0xF1AD7B (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF79
 ; --------------------------------------------------------------------------
-Record_F1AD79:
+; PartParamField_ControllerInternalFilterModulation2: record set 32 (selector +2 = 0x10), offset 14, mask 0x10: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: MODULATION2 (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterModulation2:
 	.byte 0x0e, 0x10, 0x10   ; F1AD79  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD7C -- record, 0xF1AD7C-0xF1AD7E (3 bytes)
+; PartParamField_ControllerInternalFilterRealTimeCreatorX -- record, 0xF1AD7C-0xF1AD7E (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBF91
 ; --------------------------------------------------------------------------
-Record_F1AD7C:
+; PartParamField_ControllerInternalFilterRealTimeCreatorX: record set 32 (selector +2 = 0x10), offset 14, mask 0x01: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterRealTimeCreatorX:
 	.byte 0x0e, 0x01, 0x10   ; F1AD7C  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD7F -- record, 0xF1AD7F-0xF1AD81 (3 bytes)
+; PartParamField_ControllerInternalFilterRealTimeCreatorY -- record, 0xF1AD7F-0xF1AD81 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFA9
 ; --------------------------------------------------------------------------
-Record_F1AD7F:
+; PartParamField_ControllerInternalFilterRealTimeCreatorY: record set 32 (selector +2 = 0x10), offset 14, mask 0x02: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterRealTimeCreatorY:
 	.byte 0x0e, 0x02, 0x10   ; F1AD7F  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD82 -- record, 0xF1AD82-0xF1AD84 (3 bytes)
+; PartParamField_ControllerInternalFilterRealTimeControllerX -- record, 0xF1AD82-0xF1AD84 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFC1
 ; --------------------------------------------------------------------------
-Record_F1AD82:
+; PartParamField_ControllerInternalFilterRealTimeControllerX: record set 32 (selector +2 = 0x10), offset 14, mask 0x04: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterRealTimeControllerX:
 	.byte 0x0e, 0x04, 0x10   ; F1AD82  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD85 -- record, 0xF1AD85-0xF1AD87 (3 bytes)
+; PartParamField_ControllerInternalFilterRealTimeControllerY -- record, 0xF1AD85-0xF1AD87 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFD9
 ; --------------------------------------------------------------------------
-Record_F1AD85:
+; PartParamField_ControllerInternalFilterRealTimeControllerY: record set 32 (selector +2 = 0x10), offset 14, mask 0x08: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterRealTimeControllerY:
 	.byte 0x0e, 0x08, 0x10   ; F1AD85  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD88 -- record, 0xF1AD88-0xF1AD8A (3 bytes)
+; PartParamField_ControllerInternalFilterHold1 -- record, 0xF1AD88-0xF1AD8A (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBBFF1
 ; --------------------------------------------------------------------------
-Record_F1AD88:
+; PartParamField_ControllerInternalFilterHold1: record set 32 (selector +2 = 0x10), offset 12, mask 0x01: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: HOLD1 (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterHold1:
 	.byte 0x0c, 0x01, 0x10   ; F1AD88  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD8B -- record, 0xF1AD8B-0xF1AD8D (3 bytes)
+; PartParamField_ControllerInternalFilterControlPedal -- record, 0xF1AD8B-0xF1AD8D (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC009
 ; --------------------------------------------------------------------------
-Record_F1AD8B:
+; PartParamField_ControllerInternalFilterControlPedal: record set 32 (selector +2 = 0x10), offset 14, mask 0x20: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: CONTROL PEDAL (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterControlPedal:
 	.byte 0x0e, 0x20, 0x10   ; F1AD8B  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1AD8E -- record, 0xF1AD8E-0xF1AD90 (3 bytes)
+; PartParamField_ControllerInternalFilterAfterTouch -- record, 0xF1AD8E-0xF1AD90 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC021
 ; --------------------------------------------------------------------------
-Record_F1AD8E:
+; PartParamField_ControllerInternalFilterAfterTouch: record set 32 (selector +2 = 0x10), offset 11, mask 0x20: the only PART parameter with that bit is CONTROLLER INTERNAL FILTER: AFTER TOUCH (notes/prom_ab_part_param_switches.py)
+PartParamField_ControllerInternalFilterAfterTouch:
 	.byte 0x0b, 0x20, 0x10   ; F1AD8E  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1AD91 -- record, 0xF1AD91-0xF1AD93 (3 bytes)
+; PartParamField_MidiInputFilterProgramChange -- record, 0xF1AD91-0xF1AD93 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC039
 ; --------------------------------------------------------------------------
-Record_F1AD91:
+; PartParamField_MidiInputFilterProgramChange: record set 32 (selector +2 = 0x10), offset 15, mask 0x10: the only PART parameter with that bit is MIDI INPUT FILTER: PROGRAM CHANGE (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiInputFilterProgramChange:
 	.byte 0x0f, 0x10, 0x10   ; F1AD91  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD94 -- record, 0xF1AD94-0xF1AD96 (3 bytes)
+; PartParamField_MidiInputFilterBankSelect -- record, 0xF1AD94-0xF1AD96 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC051
 ; --------------------------------------------------------------------------
-Record_F1AD94:
+; PartParamField_MidiInputFilterBankSelect: record set 32 (selector +2 = 0x10), offset 16, mask 0x80: the only PART parameter with that bit is MIDI INPUT FILTER: BANK SELECT (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiInputFilterBankSelect:
 	.byte 0x10, 0x80, 0x10   ; F1AD94  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD97 -- record, 0xF1AD97-0xF1AD99 (3 bytes)
+; PartParamField_MidiInputFilterVolume -- record, 0xF1AD97-0xF1AD99 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC069
 ; --------------------------------------------------------------------------
-Record_F1AD97:
+; PartParamField_MidiInputFilterVolume: record set 32 (selector +2 = 0x10), offset 16, mask 0x04: the only PART parameter with that bit is MIDI INPUT FILTER: VOLUME (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiInputFilterVolume:
 	.byte 0x10, 0x04, 0x10   ; F1AD97  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD9A -- record, 0xF1AD9A-0xF1AD9C (3 bytes)
+; PartParamField_MidiOutputFilterProgramChange -- record, 0xF1AD9A-0xF1AD9C (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC081
 ; --------------------------------------------------------------------------
-Record_F1AD9A:
+; PartParamField_MidiOutputFilterProgramChange: record set 32 (selector +2 = 0x10), offset 19, mask 0x10: the only PART parameter with that bit is MIDI OUTPUT FILTER: PROGRAM CHANGE (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterProgramChange:
 	.byte 0x13, 0x10, 0x10   ; F1AD9A  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD9D -- record, 0xF1AD9D-0xF1AD9F (3 bytes)
+; PartParamField_MidiOutputFilterBankSelect -- record, 0xF1AD9D-0xF1AD9F (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC099
 ; --------------------------------------------------------------------------
-Record_F1AD9D:
+; PartParamField_MidiOutputFilterBankSelect: record set 32 (selector +2 = 0x10), offset 20, mask 0x80: the only PART parameter with that bit is MIDI OUTPUT FILTER: BANK SELECT (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterBankSelect:
 	.byte 0x14, 0x80, 0x10   ; F1AD9D  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADA0 -- record, 0xF1ADA0-0xF1ADA2 (3 bytes)
+; PartParamField_MidiOutputFilterVolume -- record, 0xF1ADA0-0xF1ADA2 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0B1
 ; --------------------------------------------------------------------------
-Record_F1ADA0:
+; PartParamField_MidiOutputFilterVolume: record set 32 (selector +2 = 0x10), offset 20, mask 0x04: the only PART parameter with that bit is MIDI OUTPUT FILTER: VOLUME (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterVolume:
 	.byte 0x14, 0x04, 0x10   ; F1ADA0  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADA3 -- record, 0xF1ADA3-0xF1ADA5 (3 bytes)
+; PartParamField_MidiOutputFilterPanpot -- record, 0xF1ADA3-0xF1ADA5 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0C9
 ; --------------------------------------------------------------------------
-Record_F1ADA3:
+; PartParamField_MidiOutputFilterPanpot: record set 32 (selector +2 = 0x10), offset 20, mask 0x10: the only PART parameter with that bit is MIDI OUTPUT FILTER: PANPOT (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterPanpot:
 	.byte 0x14, 0x10, 0x10   ; F1ADA3  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADA6 -- record, 0xF1ADA6-0xF1ADA8 (3 bytes)
+; PartParamField_MidiOutputFilterEffectDepth_F1ADA6 -- record, 0xF1ADA6-0xF1ADA8 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0E1
 ; --------------------------------------------------------------------------
-Record_F1ADA6:
+; PartParamField_MidiOutputFilterEffectDepth_F1ADA6: record set 32 (selector +2 = 0x10), offset 20, mask 0x20: the only PART parameter with that bit is MIDI OUTPUT FILTER: EFFECT DEPTH (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterEffectDepth_F1ADA6:
 	.byte 0x14, 0x20, 0x10   ; F1ADA6  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1ADA9 -- record, 0xF1ADA9-0xF1ADAB (3 bytes)
+; PartParamField_MidiOutputFilterEffectDepth_F1ADA9 -- record, 0xF1ADA9-0xF1ADAB (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC0F9
 ; --------------------------------------------------------------------------
-Record_F1ADA9:
+; PartParamField_MidiOutputFilterEffectDepth_F1ADA9: record set 32 (selector +2 = 0x10), offset 20, mask 0x20: the only PART parameter with that bit is MIDI OUTPUT FILTER: EFFECT DEPTH (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterEffectDepth_F1ADA9:
 	.byte 0x14, 0x20, 0x10   ; F1ADA9  . .
 
 ; --------------------------------------------------------------------------
@@ -51027,73 +51105,83 @@ PartParamField_MidiOutKeyTranspose_F1ADAC:
 	.byte 0x17, 0xff, 0x00, 0x64, 0x1c, 0x01, 0x01, 0x10, 0x12   ; F1ADAC  ...d.....
 
 ; --------------------------------------------------------------------------
-; Record_F1ADB5 -- record, 0xF1ADB5-0xF1ADB7 (3 bytes)
+; PartParamField_MidiOutputFilterPitchBend -- record, 0xF1ADB5-0xF1ADB7 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC141
 ; --------------------------------------------------------------------------
-Record_F1ADB5:
+; PartParamField_MidiOutputFilterPitchBend: record set 32 (selector +2 = 0x10), offset 19, mask 0x40: the only PART parameter with that bit is MIDI OUTPUT FILTER: PITCH BEND (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterPitchBend:
 	.byte 0x13, 0x40, 0x10   ; F1ADB5  .@.
 
 ; --------------------------------------------------------------------------
-; Record_F1ADB8 -- record, 0xF1ADB8-0xF1ADBA (3 bytes)
+; PartParamField_MidiOutputFilterModulation1 -- record, 0xF1ADB8-0xF1ADBA (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC159
 ; --------------------------------------------------------------------------
-Record_F1ADB8:
+; PartParamField_MidiOutputFilterModulation1: record set 32 (selector +2 = 0x10), offset 20, mask 0x02: the only PART parameter with that bit is MIDI OUTPUT FILTER: MODULATION1 (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterModulation1:
 	.byte 0x14, 0x02, 0x10   ; F1ADB8  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADBB -- record, 0xF1ADBB-0xF1ADBD (3 bytes)
+; PartParamField_MidiOutputFilterModulation2 -- record, 0xF1ADBB-0xF1ADBD (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC171
 ; --------------------------------------------------------------------------
-Record_F1ADBB:
+; PartParamField_MidiOutputFilterModulation2: record set 32 (selector +2 = 0x10), offset 22, mask 0x10: the only PART parameter with that bit is MIDI OUTPUT FILTER: MODULATION2 (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterModulation2:
 	.byte 0x16, 0x10, 0x10   ; F1ADBB  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADBE -- record, 0xF1ADBE-0xF1ADC0 (3 bytes)
+; PartParamField_MidiOutputFilterRealTimeCreatorX -- record, 0xF1ADBE-0xF1ADC0 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC189
 ; --------------------------------------------------------------------------
-Record_F1ADBE:
+; PartParamField_MidiOutputFilterRealTimeCreatorX: record set 32 (selector +2 = 0x10), offset 22, mask 0x01: the only PART parameter with that bit is MIDI OUTPUT FILTER: REAL-TIME CREATOR-X (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterRealTimeCreatorX:
 	.byte 0x16, 0x01, 0x10   ; F1ADBE  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADC1 -- record, 0xF1ADC1-0xF1ADC3 (3 bytes)
+; PartParamField_MidiOutputFilterRealTimeCreatorY -- record, 0xF1ADC1-0xF1ADC3 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1A1
 ; --------------------------------------------------------------------------
-Record_F1ADC1:
+; PartParamField_MidiOutputFilterRealTimeCreatorY: record set 32 (selector +2 = 0x10), offset 22, mask 0x02: the only PART parameter with that bit is MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterRealTimeCreatorY:
 	.byte 0x16, 0x02, 0x10   ; F1ADC1  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADC4 -- record, 0xF1ADC4-0xF1ADC6 (3 bytes)
+; PartParamField_MidiOutputFilterRealTimeControllerX -- record, 0xF1ADC4-0xF1ADC6 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1B9
 ; --------------------------------------------------------------------------
-Record_F1ADC4:
+; PartParamField_MidiOutputFilterRealTimeControllerX: record set 32 (selector +2 = 0x10), offset 22, mask 0x04: the only PART parameter with that bit is MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterRealTimeControllerX:
 	.byte 0x16, 0x04, 0x10   ; F1ADC4  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADC7 -- record, 0xF1ADC7-0xF1ADC9 (3 bytes)
+; PartParamField_MidiOutputFilterRealTimeControllerY -- record, 0xF1ADC7-0xF1ADC9 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1D1
 ; --------------------------------------------------------------------------
-Record_F1ADC7:
+; PartParamField_MidiOutputFilterRealTimeControllerY: record set 32 (selector +2 = 0x10), offset 22, mask 0x08: the only PART parameter with that bit is MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterRealTimeControllerY:
 	.byte 0x16, 0x08, 0x10   ; F1ADC7  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADCA -- record, 0xF1ADCA-0xF1ADCC (3 bytes)
+; PartParamField_MidiOutputFilterHold1 -- record, 0xF1ADCA-0xF1ADCC (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC1E9
 ; --------------------------------------------------------------------------
-Record_F1ADCA:
+; PartParamField_MidiOutputFilterHold1: record set 32 (selector +2 = 0x10), offset 20, mask 0x01: the only PART parameter with that bit is MIDI OUTPUT FILTER: HOLD1 (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterHold1:
 	.byte 0x14, 0x01, 0x10   ; F1ADCA  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1ADCD -- record, 0xF1ADCD-0xF1ADCF (3 bytes)
+; PartParamField_MidiOutputFilterControlPedal -- record, 0xF1ADCD-0xF1ADCF (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC201
 ; --------------------------------------------------------------------------
-Record_F1ADCD:
+; PartParamField_MidiOutputFilterControlPedal: record set 32 (selector +2 = 0x10), offset 22, mask 0x20: the only PART parameter with that bit is MIDI OUTPUT FILTER: CONTROL PEDAL (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterControlPedal:
 	.byte 0x16, 0x20, 0x10   ; F1ADCD  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1ADD0 -- record, 0xF1ADD0-0xF1ADD2 (3 bytes)
+; PartParamField_MidiOutputFilterAfterTouch -- record, 0xF1ADD0-0xF1ADD2 (3 bytes)
 ; Evidence: descriptor, 3 bytes to the next anchor; prom_a 0xFBC219
 ; --------------------------------------------------------------------------
-Record_F1ADD0:
+; PartParamField_MidiOutputFilterAfterTouch: record set 32 (selector +2 = 0x10), offset 19, mask 0x20: the only PART parameter with that bit is MIDI OUTPUT FILTER: AFTER TOUCH (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiOutputFilterAfterTouch:
 	.byte 0x13, 0x20, 0x10   ; F1ADD0  . .
 
 ; --------------------------------------------------------------------------
@@ -51105,45 +51193,51 @@ PartParamField_MidiMultipleMessagesOutputProgramChange:
 	.byte 0x0e, 0xff, 0x00, 0x81, 0x00, 0x04, 0x0a, 0x00, 0x00   ; F1ADD3  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1ADDC -- record, 0xF1ADDC-0xF1ADE4 (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputProgramChangeValue -- record, 0xF1ADDC-0xF1ADE4 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC31E
 ; --------------------------------------------------------------------------
-Record_F1ADDC:
+; PartParamField_MidiMultipleMessagesOutputProgramChangeValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT ProgramChange: offset 14, mask 0xFF (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputProgramChangeValue:
 	.byte 0x0e, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x80, 0x03   ; F1ADDC  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1ADE5 -- record, 0xF1ADE5-0xF1ADED (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue -- record, 0xF1ADE5-0xF1ADED (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC37A
 ; --------------------------------------------------------------------------
-Record_F1ADE5:
+; PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT BankSelectMsb: offset 16, mask 0x7F (BANK SELECT's byte 16: SysExParam_SetMidiMultipleMessagesOutputBankSelect) (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue:
 	.byte 0x10, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADE5  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1ADEE -- record, 0xF1ADEE-0xF1ADF6 (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue -- record, 0xF1ADEE-0xF1ADF6 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC3F7
 ; --------------------------------------------------------------------------
-Record_F1ADEE:
+; PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT BankSelectLsb: offset 15, mask 0xFF (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue:
 	.byte 0x0f, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADEE  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1ADF7 -- record, 0xF1ADF7-0xF1ADFF (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputVolumeValue -- record, 0xF1ADF7-0xF1ADFF (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC44A
 ; --------------------------------------------------------------------------
-Record_F1ADF7:
+; PartParamField_MidiMultipleMessagesOutputVolumeValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT Volume: offset 17, mask 0xFF (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputVolumeValue:
 	.byte 0x11, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1ADF7  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AE00 -- record, 0xF1AE00-0xF1AE08 (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputReverbDepthValue -- record, 0xF1AE00-0xF1AE08 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC4B4
 ; --------------------------------------------------------------------------
-Record_F1AE00:
+; PartParamField_MidiMultipleMessagesOutputReverbDepthValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT ReverbDepth: offset 20, mask 0xFF (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputReverbDepthValue:
 	.byte 0x14, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1AE00  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AE09 -- record, 0xF1AE09-0xF1AE11 (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputChorusDepthValue -- record, 0xF1AE09-0xF1AE11 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC507
 ; --------------------------------------------------------------------------
-Record_F1AE09:
+; PartParamField_MidiMultipleMessagesOutputChorusDepthValue: the 0..127 value of MULTIPLE MESSAGES OUTPUT ChorusDepth: offset 19, mask 0xFF (notes/prom_ab_part_param_switches.py)
+PartParamField_MidiMultipleMessagesOutputChorusDepthValue:
 	.byte 0x13, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1AE09  .........
 
 ; --------------------------------------------------------------------------

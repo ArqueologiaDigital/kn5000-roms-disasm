@@ -664,10 +664,10 @@
 	.set DL_F1A84F,                               0x00F1A84F
 	.set DL_F1A8EF,                               0x00F1A8EF
 	.set DL_Err0rTheS0undOrC0mbinati0n,           0x00F1A999
-	.set Record_F1AA7C,                           0x00F1AA7C
-	.set Record_F1AA85,                           0x00F1AA85
-	.set Record_F1AA8E,                           0x00F1AA8E
-	.set Record_F1AA97,                           0x00F1AA97
+	.set PartParamField_KeyLayerLow,                           0x00F1AA7C
+	.set PartParamField_KeyLayerHigh,                           0x00F1AA85
+	.set PartParamField_VelocityLayerLow,                           0x00F1AA8E
+	.set PartParamField_VelocityLayerHigh,                           0x00F1AA97
 	.set Record_F1AAA0,                           0x00F1AAA0
 	.set Record_F1AAA9,                           0x00F1AAA9
 	.set Record_F1AAB5,                           0x00F1AAB5
@@ -694,52 +694,52 @@
 	.set PartParamField_PitchBendRange,                           0x00F1AD1F
 	.set PartParamField_Effect1Send,                           0x00F1AD28
 	.set PartParamField_ReverbSend,                           0x00F1AD31
-	.set Record_F1AD3A,                           0x00F1AD3A
-	.set Record_F1AD3D,                           0x00F1AD3D
-	.set Record_F1AD40,                           0x00F1AD40
-	.set Record_F1AD43,                           0x00F1AD43
+	.set PartParamField_LocalControl,                           0x00F1AD3A
+	.set PartParamField_MidiOutSetting,                           0x00F1AD3D
+	.set PartParamField_MidiInSetting,                           0x00F1AD40
+	.set PartParamField_KeyScaling,                           0x00F1AD43
 	.set PartParamField_MainOut,                           0x00F1AD46
 	.set PartParamField_SubOut,                           0x00F1AD4F
 	.set PartParamField_AssignMode,                           0x00F1AD58
 	.set PartParamField_VelocityOffset,                           0x00F1AD61
 	.set PartParamField_BasicChannel,                           0x00F1AD6A
-	.set Record_F1AD73,                           0x00F1AD73
-	.set Record_F1AD76,                           0x00F1AD76
-	.set Record_F1AD79,                           0x00F1AD79
-	.set Record_F1AD7C,                           0x00F1AD7C
-	.set Record_F1AD7F,                           0x00F1AD7F
-	.set Record_F1AD82,                           0x00F1AD82
-	.set Record_F1AD85,                           0x00F1AD85
-	.set Record_F1AD88,                           0x00F1AD88
-	.set Record_F1AD8B,                           0x00F1AD8B
-	.set Record_F1AD8E,                           0x00F1AD8E
-	.set Record_F1AD91,                           0x00F1AD91
-	.set Record_F1AD94,                           0x00F1AD94
-	.set Record_F1AD97,                           0x00F1AD97
-	.set Record_F1AD9A,                           0x00F1AD9A
-	.set Record_F1AD9D,                           0x00F1AD9D
-	.set Record_F1ADA0,                           0x00F1ADA0
-	.set Record_F1ADA3,                           0x00F1ADA3
-	.set Record_F1ADA6,                           0x00F1ADA6
-	.set Record_F1ADA9,                           0x00F1ADA9
+	.set PartParamField_ControllerInternalFilterPitchBend,                           0x00F1AD73
+	.set PartParamField_ControllerInternalFilterModulation1,                           0x00F1AD76
+	.set PartParamField_ControllerInternalFilterModulation2,                           0x00F1AD79
+	.set PartParamField_ControllerInternalFilterRealTimeCreatorX,                           0x00F1AD7C
+	.set PartParamField_ControllerInternalFilterRealTimeCreatorY,                           0x00F1AD7F
+	.set PartParamField_ControllerInternalFilterRealTimeControllerX,                           0x00F1AD82
+	.set PartParamField_ControllerInternalFilterRealTimeControllerY,                           0x00F1AD85
+	.set PartParamField_ControllerInternalFilterHold1,                           0x00F1AD88
+	.set PartParamField_ControllerInternalFilterControlPedal,                           0x00F1AD8B
+	.set PartParamField_ControllerInternalFilterAfterTouch,                           0x00F1AD8E
+	.set PartParamField_MidiInputFilterProgramChange,                           0x00F1AD91
+	.set PartParamField_MidiInputFilterBankSelect,                           0x00F1AD94
+	.set PartParamField_MidiInputFilterVolume,                           0x00F1AD97
+	.set PartParamField_MidiOutputFilterProgramChange,                           0x00F1AD9A
+	.set PartParamField_MidiOutputFilterBankSelect,                           0x00F1AD9D
+	.set PartParamField_MidiOutputFilterVolume,                           0x00F1ADA0
+	.set PartParamField_MidiOutputFilterPanpot,                           0x00F1ADA3
+	.set PartParamField_MidiOutputFilterEffectDepth_F1ADA6,                           0x00F1ADA6
+	.set PartParamField_MidiOutputFilterEffectDepth_F1ADA9,                           0x00F1ADA9
 	.set PartParamField_MidiOutKeyTranspose_F1ADAC,                           0x00F1ADAC
-	.set Record_F1ADB5,                           0x00F1ADB5
-	.set Record_F1ADB8,                           0x00F1ADB8
-	.set Record_F1ADBB,                           0x00F1ADBB
-	.set Record_F1ADBE,                           0x00F1ADBE
-	.set Record_F1ADC1,                           0x00F1ADC1
-	.set Record_F1ADC4,                           0x00F1ADC4
-	.set Record_F1ADC7,                           0x00F1ADC7
-	.set Record_F1ADCA,                           0x00F1ADCA
-	.set Record_F1ADCD,                           0x00F1ADCD
-	.set Record_F1ADD0,                           0x00F1ADD0
+	.set PartParamField_MidiOutputFilterPitchBend,                           0x00F1ADB5
+	.set PartParamField_MidiOutputFilterModulation1,                           0x00F1ADB8
+	.set PartParamField_MidiOutputFilterModulation2,                           0x00F1ADBB
+	.set PartParamField_MidiOutputFilterRealTimeCreatorX,                           0x00F1ADBE
+	.set PartParamField_MidiOutputFilterRealTimeCreatorY,                           0x00F1ADC1
+	.set PartParamField_MidiOutputFilterRealTimeControllerX,                           0x00F1ADC4
+	.set PartParamField_MidiOutputFilterRealTimeControllerY,                           0x00F1ADC7
+	.set PartParamField_MidiOutputFilterHold1,                           0x00F1ADCA
+	.set PartParamField_MidiOutputFilterControlPedal,                           0x00F1ADCD
+	.set PartParamField_MidiOutputFilterAfterTouch,                           0x00F1ADD0
 	.set PartParamField_MidiMultipleMessagesOutputProgramChange,                           0x00F1ADD3
-	.set Record_F1ADDC,                           0x00F1ADDC
-	.set Record_F1ADE5,                           0x00F1ADE5
-	.set Record_F1ADEE,                           0x00F1ADEE
-	.set Record_F1ADF7,                           0x00F1ADF7
-	.set Record_F1AE00,                           0x00F1AE00
-	.set Record_F1AE09,                           0x00F1AE09
+	.set PartParamField_MidiMultipleMessagesOutputProgramChangeValue,                           0x00F1ADDC
+	.set PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue,                           0x00F1ADE5
+	.set PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue,                           0x00F1ADEE
+	.set PartParamField_MidiMultipleMessagesOutputVolumeValue,                           0x00F1ADF7
+	.set PartParamField_MidiMultipleMessagesOutputReverbDepthValue,                           0x00F1AE00
+	.set PartParamField_MidiMultipleMessagesOutputChorusDepthValue,                           0x00F1AE09
 	.set PartParamField_MidiOutKeyTranspose_F1AE12,                           0x00F1AE12
 	.set Record_F1AE1B,                           0x00F1AE1B
 	.set Record_F1AE24,                           0x00F1AE24
@@ -103904,8 +103904,10 @@ PartParam_EnterReverbSend:
 	inc 6,XSP                                            ; FBBC56  ef 66
 	unlk XIZ                                             ; FBBC58  ee 0d
 	ret                                                  ; FBBC5A  0e
+; PartParam_StepLocalControl: LOCAL CONTROL: forces bit 0x20 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_LocalControl); PtrTable_F1AB13[9] (notes/prom_ab_part_param_switches.py)
+PartParam_StepLocalControl:
 	link XIZ,0x0000                                      ; FBBC5B  ee 0c 00 00
-	lda xbc, (Record_F1AD3A:24)                          ; FBBC5F  f2 3a ad f1 31
+	lda xbc, (PartParamField_LocalControl:24)                          ; FBBC5F  f2 3a ad f1 31
 	push XBC                                             ; FBBC64  39
 	push 0x00                                            ; FBBC65  09 00
 	m_push MBD+r6, 0x08                                  ; FBBC67  8e 08 04
@@ -103913,8 +103915,10 @@ PartParam_EnterReverbSend:
 	inc 6,XSP                                            ; FBBC6E  ef 66
 	unlk XIZ                                             ; FBBC70  ee 0d
 	ret                                                  ; FBBC72  0e
+; PartParam_StepMidiOutSetting: MIDI OUT SETTING: forces bit 0x40 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutSetting); PtrTable_F1AB13[10] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutSetting:
 	link XIZ,0x0000                                      ; FBBC73  ee 0c 00 00
-	lda xbc, (Record_F1AD3D:24)                          ; FBBC77  f2 3d ad f1 31
+	lda xbc, (PartParamField_MidiOutSetting:24)                          ; FBBC77  f2 3d ad f1 31
 	push XBC                                             ; FBBC7C  39
 	push 0x00                                            ; FBBC7D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBC7F  8e 08 04
@@ -103922,8 +103926,10 @@ PartParam_EnterReverbSend:
 	inc 6,XSP                                            ; FBBC86  ef 66
 	unlk XIZ                                             ; FBBC88  ee 0d
 	ret                                                  ; FBBC8A  0e
+; PartParam_StepMidiInSetting: MIDI IN SETTING: forces bit 0x80 of byte 13 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInSetting); PtrTable_F1AB13[11] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiInSetting:
 	link XIZ,0x0000                                      ; FBBC8B  ee 0c 00 00
-	lda xbc, (Record_F1AD40:24)                          ; FBBC8F  f2 40 ad f1 31
+	lda xbc, (PartParamField_MidiInSetting:24)                          ; FBBC8F  f2 40 ad f1 31
 	push XBC                                             ; FBBC94  39
 	push 0x00                                            ; FBBC95  09 00
 	m_push MBD+r6, 0x08                                  ; FBBC97  8e 08 04
@@ -103931,9 +103937,13 @@ PartParam_EnterReverbSend:
 	inc 6,XSP                                            ; FBBC9E  ef 66
 	unlk XIZ                                             ; FBBCA0  ee 0d
 	ret                                                  ; FBBCA2  0e
+; PartParam_StepIgnored: PtrTable_F1AB13[12]: a bare `ret` -- field id 12 has no adjust action (notes/prom_ab_part_param_switches.py)
+PartParam_StepIgnored:
 	ret                                                  ; FBBCA3  0e
+; PartParam_StepKeyScaling: KEY SCALING: forces bit 0x08 of byte 12 of part record E by the step direction (T_IndexedParam_SetBit, PartParamField_KeyScaling); PtrTable_F1AB13[13] (notes/prom_ab_part_param_switches.py)
+PartParam_StepKeyScaling:
 	link XIZ,0x0000                                      ; FBBCA4  ee 0c 00 00
-	lda xbc, (Record_F1AD43:24)                          ; FBBCA8  f2 43 ad f1 31
+	lda xbc, (PartParamField_KeyScaling:24)                          ; FBBCA8  f2 43 ad f1 31
 	push XBC                                             ; FBBCAD  39
 	push 0x00                                            ; FBBCAE  09 00
 	m_push MBD+r6, 0x08                                  ; FBBCB0  8e 08 04
@@ -104121,10 +104131,13 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBE54  ef 66
 	unlk XIZ                                             ; FBBE56  ee 0d
 	ret                                                  ; FBBE58  0e
+; PartParam_StepKeyLayerLow: KEY LAYER LOW: steps byte 7 of part record E+0x20 with its maximum replaced by byte 8 (the HIGH end), so the pair cannot
+;   cross; template PartParamField_KeyLayerLow; PtrTable_F1AB4B[5] (notes/prom_ab_part_param_switches.py)
+PartParam_StepKeyLayerLow:
 	link XIZ,0xfff7                                      ; FBBE59  ee 0c f7 ff
 	push XIX                                             ; FBBE5D  3c
 	ldw bc, 0x09                                         ; FBBE5E  31 09 00
-	lda xiy, (Record_F1AA7C:24)                          ; FBBE61  f2 7c aa f1 35
+	lda xiy, (PartParamField_KeyLayerLow:24)                          ; FBBE61  f2 7c aa f1 35
 	lda xix, (xiz-9)                                     ; FBBE66  be f7 34
 	ldir85                                               ; FBBE69  85 11
 	pushw 0x08                                           ; FBBE6B  0b 08 00
@@ -104144,10 +104157,13 @@ PartParam_StepBasicChannel:
 	pop XIX                                              ; FBBE90  5c
 	unlk XIZ                                             ; FBBE91  ee 0d
 	ret                                                  ; FBBE93  0e
+; PartParam_StepKeyLayerHigh: KEY LAYER HIGH: steps byte 8 of part record E+0x20 with its minimum replaced by byte 7 (the LOW end), so the pair cannot
+;   cross; template PartParamField_KeyLayerHigh; PtrTable_F1AB4B[6] (notes/prom_ab_part_param_switches.py)
+PartParam_StepKeyLayerHigh:
 	link XIZ,0xfff7                                      ; FBBE94  ee 0c f7 ff
 	push XIX                                             ; FBBE98  3c
 	ldw bc, 0x09                                         ; FBBE99  31 09 00
-	lda xiy, (Record_F1AA85:24)                          ; FBBE9C  f2 85 aa f1 35
+	lda xiy, (PartParamField_KeyLayerHigh:24)                          ; FBBE9C  f2 85 aa f1 35
 	lda xix, (xiz-9)                                     ; FBBEA1  be f7 34
 	ldir85                                               ; FBBEA4  85 11
 	pushw 0x07                                           ; FBBEA6  0b 07 00
@@ -104167,10 +104183,13 @@ PartParam_StepBasicChannel:
 	pop XIX                                              ; FBBECB  5c
 	unlk XIZ                                             ; FBBECC  ee 0d
 	ret                                                  ; FBBECE  0e
+; PartParam_StepVelocityLayerLow: VELOCITY LAYER LOW: steps byte 9 of part record E+0x20 with its maximum replaced by byte 10 (the HIGH end), so the pair cannot
+;   cross; template PartParamField_VelocityLayerLow; PtrTable_F1AB4B[7] (notes/prom_ab_part_param_switches.py)
+PartParam_StepVelocityLayerLow:
 	link XIZ,0xfff7                                      ; FBBECF  ee 0c f7 ff
 	push XIX                                             ; FBBED3  3c
 	ldw bc, 0x09                                         ; FBBED4  31 09 00
-	lda xiy, (Record_F1AA8E:24)                          ; FBBED7  f2 8e aa f1 35
+	lda xiy, (PartParamField_VelocityLayerLow:24)                          ; FBBED7  f2 8e aa f1 35
 	lda xix, (xiz-9)                                     ; FBBEDC  be f7 34
 	ldir85                                               ; FBBEDF  85 11
 	pushw 0x0a                                           ; FBBEE1  0b 0a 00
@@ -104190,10 +104209,13 @@ PartParam_StepBasicChannel:
 	pop XIX                                              ; FBBF06  5c
 	unlk XIZ                                             ; FBBF07  ee 0d
 	ret                                                  ; FBBF09  0e
+; PartParam_StepVelocityLayerHigh: VELOCITY LAYER HIGH: steps byte 10 of part record E+0x20 with its minimum replaced by byte 9 (the LOW end), so the pair cannot
+;   cross; template PartParamField_VelocityLayerHigh; PtrTable_F1AB4B[8] (notes/prom_ab_part_param_switches.py)
+PartParam_StepVelocityLayerHigh:
 	link XIZ,0xfff7                                      ; FBBF0A  ee 0c f7 ff
 	push XIX                                             ; FBBF0E  3c
 	ldw bc, 0x09                                         ; FBBF0F  31 09 00
-	lda xiy, (Record_F1AA97:24)                          ; FBBF12  f2 97 aa f1 35
+	lda xiy, (PartParamField_VelocityLayerHigh:24)                          ; FBBF12  f2 97 aa f1 35
 	lda xix, (xiz-9)                                     ; FBBF17  be f7 34
 	ldir85                                               ; FBBF1A  85 11
 	pushw 0x09                                           ; FBBF1C  0b 09 00
@@ -104213,8 +104235,10 @@ PartParam_StepBasicChannel:
 	pop XIX                                              ; FBBF41  5c
 	unlk XIZ                                             ; FBBF42  ee 0d
 	ret                                                  ; FBBF44  0e
+; PartParam_StepControllerInternalFilterPitchBend: CONTROLLER INTERNAL FILTER: PITCH BEND: forces bit 0x40 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterPitchBend); PtrTable_F1AB6F[0] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterPitchBend:
 	link XIZ,0x0000                                      ; FBBF45  ee 0c 00 00
-	lda xbc, (Record_F1AD73:24)                          ; FBBF49  f2 73 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterPitchBend:24)                          ; FBBF49  f2 73 ad f1 31
 	push XBC                                             ; FBBF4E  39
 	push 0x00                                            ; FBBF4F  09 00
 	m_push MBD+r6, 0x08                                  ; FBBF51  8e 08 04
@@ -104222,8 +104246,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBF58  ef 66
 	unlk XIZ                                             ; FBBF5A  ee 0d
 	ret                                                  ; FBBF5C  0e
+; PartParam_StepControllerInternalFilterModulation1: CONTROLLER INTERNAL FILTER: MODULATION1: forces bit 0x02 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation1); PtrTable_F1AB6F[1] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterModulation1:
 	link XIZ,0x0000                                      ; FBBF5D  ee 0c 00 00
-	lda xbc, (Record_F1AD76:24)                          ; FBBF61  f2 76 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterModulation1:24)                          ; FBBF61  f2 76 ad f1 31
 	push XBC                                             ; FBBF66  39
 	push 0x00                                            ; FBBF67  09 00
 	m_push MBD+r6, 0x08                                  ; FBBF69  8e 08 04
@@ -104231,8 +104257,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBF70  ef 66
 	unlk XIZ                                             ; FBBF72  ee 0d
 	ret                                                  ; FBBF74  0e
+; PartParam_StepControllerInternalFilterModulation2: CONTROLLER INTERNAL FILTER: MODULATION2: forces bit 0x10 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterModulation2); PtrTable_F1AB6F[2] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterModulation2:
 	link XIZ,0x0000                                      ; FBBF75  ee 0c 00 00
-	lda xbc, (Record_F1AD79:24)                          ; FBBF79  f2 79 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterModulation2:24)                          ; FBBF79  f2 79 ad f1 31
 	push XBC                                             ; FBBF7E  39
 	push 0x00                                            ; FBBF7F  09 00
 	m_push MBD+r6, 0x08                                  ; FBBF81  8e 08 04
@@ -104240,8 +104268,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBF88  ef 66
 	unlk XIZ                                             ; FBBF8A  ee 0d
 	ret                                                  ; FBBF8C  0e
+; PartParam_StepControllerInternalFilterRealTimeCreatorX: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorX); PtrTable_F1AB6F[3] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterRealTimeCreatorX:
 	link XIZ,0x0000                                      ; FBBF8D  ee 0c 00 00
-	lda xbc, (Record_F1AD7C:24)                          ; FBBF91  f2 7c ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterRealTimeCreatorX:24)                          ; FBBF91  f2 7c ad f1 31
 	push XBC                                             ; FBBF96  39
 	push 0x00                                            ; FBBF97  09 00
 	m_push MBD+r6, 0x08                                  ; FBBF99  8e 08 04
@@ -104249,8 +104279,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBFA0  ef 66
 	unlk XIZ                                             ; FBBFA2  ee 0d
 	ret                                                  ; FBBFA4  0e
+; PartParam_StepControllerInternalFilterRealTimeCreatorY: CONTROLLER INTERNAL FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeCreatorY); PtrTable_F1AB6F[4] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterRealTimeCreatorY:
 	link XIZ,0x0000                                      ; FBBFA5  ee 0c 00 00
-	lda xbc, (Record_F1AD7F:24)                          ; FBBFA9  f2 7f ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterRealTimeCreatorY:24)                          ; FBBFA9  f2 7f ad f1 31
 	push XBC                                             ; FBBFAE  39
 	push 0x00                                            ; FBBFAF  09 00
 	m_push MBD+r6, 0x08                                  ; FBBFB1  8e 08 04
@@ -104258,8 +104290,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBFB8  ef 66
 	unlk XIZ                                             ; FBBFBA  ee 0d
 	ret                                                  ; FBBFBC  0e
+; PartParam_StepControllerInternalFilterRealTimeControllerX: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerX); PtrTable_F1AB6F[5] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterRealTimeControllerX:
 	link XIZ,0x0000                                      ; FBBFBD  ee 0c 00 00
-	lda xbc, (Record_F1AD82:24)                          ; FBBFC1  f2 82 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterRealTimeControllerX:24)                          ; FBBFC1  f2 82 ad f1 31
 	push XBC                                             ; FBBFC6  39
 	push 0x00                                            ; FBBFC7  09 00
 	m_push MBD+r6, 0x08                                  ; FBBFC9  8e 08 04
@@ -104267,8 +104301,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBFD0  ef 66
 	unlk XIZ                                             ; FBBFD2  ee 0d
 	ret                                                  ; FBBFD4  0e
+; PartParam_StepControllerInternalFilterRealTimeControllerY: CONTROLLER INTERNAL FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterRealTimeControllerY); PtrTable_F1AB6F[6] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterRealTimeControllerY:
 	link XIZ,0x0000                                      ; FBBFD5  ee 0c 00 00
-	lda xbc, (Record_F1AD85:24)                          ; FBBFD9  f2 85 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterRealTimeControllerY:24)                          ; FBBFD9  f2 85 ad f1 31
 	push XBC                                             ; FBBFDE  39
 	push 0x00                                            ; FBBFDF  09 00
 	m_push MBD+r6, 0x08                                  ; FBBFE1  8e 08 04
@@ -104276,8 +104312,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBBFE8  ef 66
 	unlk XIZ                                             ; FBBFEA  ee 0d
 	ret                                                  ; FBBFEC  0e
+; PartParam_StepControllerInternalFilterHold1: CONTROLLER INTERNAL FILTER: HOLD1: forces bit 0x01 of byte 12 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterHold1); PtrTable_F1AB6F[7] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterHold1:
 	link XIZ,0x0000                                      ; FBBFED  ee 0c 00 00
-	lda xbc, (Record_F1AD88:24)                          ; FBBFF1  f2 88 ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterHold1:24)                          ; FBBFF1  f2 88 ad f1 31
 	push XBC                                             ; FBBFF6  39
 	push 0x00                                            ; FBBFF7  09 00
 	m_push MBD+r6, 0x08                                  ; FBBFF9  8e 08 04
@@ -104285,8 +104323,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC000  ef 66
 	unlk XIZ                                             ; FBC002  ee 0d
 	ret                                                  ; FBC004  0e
+; PartParam_StepControllerInternalFilterControlPedal: CONTROLLER INTERNAL FILTER: CONTROL PEDAL: forces bit 0x20 of byte 14 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterControlPedal); PtrTable_F1AB6F[8] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterControlPedal:
 	link XIZ,0x0000                                      ; FBC005  ee 0c 00 00
-	lda xbc, (Record_F1AD8B:24)                          ; FBC009  f2 8b ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterControlPedal:24)                          ; FBC009  f2 8b ad f1 31
 	push XBC                                             ; FBC00E  39
 	push 0x00                                            ; FBC00F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC011  8e 08 04
@@ -104294,8 +104334,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC018  ef 66
 	unlk XIZ                                             ; FBC01A  ee 0d
 	ret                                                  ; FBC01C  0e
+; PartParam_StepControllerInternalFilterAfterTouch: CONTROLLER INTERNAL FILTER: AFTER TOUCH: forces bit 0x20 of byte 11 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_ControllerInternalFilterAfterTouch); PtrTable_F1AB6F[9] (notes/prom_ab_part_param_switches.py)
+PartParam_StepControllerInternalFilterAfterTouch:
 	link XIZ,0x0000                                      ; FBC01D  ee 0c 00 00
-	lda xbc, (Record_F1AD8E:24)                          ; FBC021  f2 8e ad f1 31
+	lda xbc, (PartParamField_ControllerInternalFilterAfterTouch:24)                          ; FBC021  f2 8e ad f1 31
 	push XBC                                             ; FBC026  39
 	push 0x00                                            ; FBC027  09 00
 	m_push MBD+r6, 0x08                                  ; FBC029  8e 08 04
@@ -104303,8 +104345,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC030  ef 66
 	unlk XIZ                                             ; FBC032  ee 0d
 	ret                                                  ; FBC034  0e
+; PartParam_StepMidiInputFilterProgramChange: MIDI INPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 15 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterProgramChange); PtrTable_F1AB97[0] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiInputFilterProgramChange:
 	link XIZ,0x0000                                      ; FBC035  ee 0c 00 00
-	lda xbc, (Record_F1AD91:24)                          ; FBC039  f2 91 ad f1 31
+	lda xbc, (PartParamField_MidiInputFilterProgramChange:24)                          ; FBC039  f2 91 ad f1 31
 	push XBC                                             ; FBC03E  39
 	push 0x00                                            ; FBC03F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC041  8e 08 04
@@ -104312,8 +104356,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC048  ef 66
 	unlk XIZ                                             ; FBC04A  ee 0d
 	ret                                                  ; FBC04C  0e
+; PartParam_StepMidiInputFilterBankSelect: MIDI INPUT FILTER: BANK SELECT: forces bit 0x80 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterBankSelect); PtrTable_F1AB97[1] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiInputFilterBankSelect:
 	link XIZ,0x0000                                      ; FBC04D  ee 0c 00 00
-	lda xbc, (Record_F1AD94:24)                          ; FBC051  f2 94 ad f1 31
+	lda xbc, (PartParamField_MidiInputFilterBankSelect:24)                          ; FBC051  f2 94 ad f1 31
 	push XBC                                             ; FBC056  39
 	push 0x00                                            ; FBC057  09 00
 	m_push MBD+r6, 0x08                                  ; FBC059  8e 08 04
@@ -104321,8 +104367,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC060  ef 66
 	unlk XIZ                                             ; FBC062  ee 0d
 	ret                                                  ; FBC064  0e
+; PartParam_StepMidiInputFilterVolume: MIDI INPUT FILTER: VOLUME: forces bit 0x04 of byte 16 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiInputFilterVolume); PtrTable_F1AB97[2] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiInputFilterVolume:
 	link XIZ,0x0000                                      ; FBC065  ee 0c 00 00
-	lda xbc, (Record_F1AD97:24)                          ; FBC069  f2 97 ad f1 31
+	lda xbc, (PartParamField_MidiInputFilterVolume:24)                          ; FBC069  f2 97 ad f1 31
 	push XBC                                             ; FBC06E  39
 	push 0x00                                            ; FBC06F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC071  8e 08 04
@@ -104330,8 +104378,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC078  ef 66
 	unlk XIZ                                             ; FBC07A  ee 0d
 	ret                                                  ; FBC07C  0e
+; PartParam_StepMidiOutputFilterProgramChange: MIDI OUTPUT FILTER: PROGRAM CHANGE: forces bit 0x10 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterProgramChange); PtrTable_F1ABA3[0] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterProgramChange:
 	link XIZ,0x0000                                      ; FBC07D  ee 0c 00 00
-	lda xbc, (Record_F1AD9A:24)                          ; FBC081  f2 9a ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterProgramChange:24)                          ; FBC081  f2 9a ad f1 31
 	push XBC                                             ; FBC086  39
 	push 0x00                                            ; FBC087  09 00
 	m_push MBD+r6, 0x08                                  ; FBC089  8e 08 04
@@ -104339,8 +104389,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC090  ef 66
 	unlk XIZ                                             ; FBC092  ee 0d
 	ret                                                  ; FBC094  0e
+; PartParam_StepMidiOutputFilterBankSelect: MIDI OUTPUT FILTER: BANK SELECT: forces bit 0x80 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterBankSelect); PtrTable_F1ABA3[1] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterBankSelect:
 	link XIZ,0x0000                                      ; FBC095  ee 0c 00 00
-	lda xbc, (Record_F1AD9D:24)                          ; FBC099  f2 9d ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterBankSelect:24)                          ; FBC099  f2 9d ad f1 31
 	push XBC                                             ; FBC09E  39
 	push 0x00                                            ; FBC09F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC0A1  8e 08 04
@@ -104348,8 +104400,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC0A8  ef 66
 	unlk XIZ                                             ; FBC0AA  ee 0d
 	ret                                                  ; FBC0AC  0e
+; PartParam_StepMidiOutputFilterVolume: MIDI OUTPUT FILTER: VOLUME: forces bit 0x04 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterVolume); PtrTable_F1ABA3[2] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterVolume:
 	link XIZ,0x0000                                      ; FBC0AD  ee 0c 00 00
-	lda xbc, (Record_F1ADA0:24)                          ; FBC0B1  f2 a0 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterVolume:24)                          ; FBC0B1  f2 a0 ad f1 31
 	push XBC                                             ; FBC0B6  39
 	push 0x00                                            ; FBC0B7  09 00
 	m_push MBD+r6, 0x08                                  ; FBC0B9  8e 08 04
@@ -104357,8 +104411,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC0C0  ef 66
 	unlk XIZ                                             ; FBC0C2  ee 0d
 	ret                                                  ; FBC0C4  0e
+; PartParam_StepMidiOutputFilterPanpot: MIDI OUTPUT FILTER: PANPOT: forces bit 0x10 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPanpot); PtrTable_F1ABA3[3] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterPanpot:
 	link XIZ,0x0000                                      ; FBC0C5  ee 0c 00 00
-	lda xbc, (Record_F1ADA3:24)                          ; FBC0C9  f2 a3 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterPanpot:24)                          ; FBC0C9  f2 a3 ad f1 31
 	push XBC                                             ; FBC0CE  39
 	push 0x00                                            ; FBC0CF  09 00
 	m_push MBD+r6, 0x08                                  ; FBC0D1  8e 08 04
@@ -104366,8 +104422,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC0D8  ef 66
 	unlk XIZ                                             ; FBC0DA  ee 0d
 	ret                                                  ; FBC0DC  0e
+; PartParam_StepMidiOutputFilterEffectDepth_FBC0DD: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA6); PtrTable_F1ABA3[4] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterEffectDepth_FBC0DD:
 	link XIZ,0x0000                                      ; FBC0DD  ee 0c 00 00
-	lda xbc, (Record_F1ADA6:24)                          ; FBC0E1  f2 a6 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterEffectDepth_F1ADA6:24)                          ; FBC0E1  f2 a6 ad f1 31
 	push XBC                                             ; FBC0E6  39
 	push 0x00                                            ; FBC0E7  09 00
 	m_push MBD+r6, 0x08                                  ; FBC0E9  8e 08 04
@@ -104375,8 +104433,10 @@ PartParam_StepBasicChannel:
 	inc 6,XSP                                            ; FBC0F0  ef 66
 	unlk XIZ                                             ; FBC0F2  ee 0d
 	ret                                                  ; FBC0F4  0e
+; PartParam_StepMidiOutputFilterEffectDepth_FBC0F5: MIDI OUTPUT FILTER: EFFECT DEPTH: forces bit 0x20 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterEffectDepth_F1ADA9); PtrTable_F1ABA3[5] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterEffectDepth_FBC0F5:
 	link XIZ,0x0000                                      ; FBC0F5  ee 0c 00 00
-	lda xbc, (Record_F1ADA9:24)                          ; FBC0F9  f2 a9 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterEffectDepth_F1ADA9:24)                          ; FBC0F9  f2 a9 ad f1 31
 	push XBC                                             ; FBC0FE  39
 	push 0x00                                            ; FBC0FF  09 00
 	m_push MBD+r6, 0x08                                  ; FBC101  8e 08 04
@@ -104406,8 +104466,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC138  ef 66
 	unlk XIZ                                             ; FBC13A  ee 0d
 	ret                                                  ; FBC13C  0e
+; PartParam_StepMidiOutputFilterPitchBend: MIDI OUTPUT FILTER: PITCH BEND: forces bit 0x40 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterPitchBend); PtrTable_F1ABA3[7] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterPitchBend:
 	link XIZ,0x0000                                      ; FBC13D  ee 0c 00 00
-	lda xbc, (Record_F1ADB5:24)                          ; FBC141  f2 b5 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterPitchBend:24)                          ; FBC141  f2 b5 ad f1 31
 	push XBC                                             ; FBC146  39
 	push 0x00                                            ; FBC147  09 00
 	m_push MBD+r6, 0x08                                  ; FBC149  8e 08 04
@@ -104415,8 +104477,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC150  ef 66
 	unlk XIZ                                             ; FBC152  ee 0d
 	ret                                                  ; FBC154  0e
+; PartParam_StepMidiOutputFilterModulation1: MIDI OUTPUT FILTER: MODULATION1: forces bit 0x02 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation1); PtrTable_F1ABA3[8] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterModulation1:
 	link XIZ,0x0000                                      ; FBC155  ee 0c 00 00
-	lda xbc, (Record_F1ADB8:24)                          ; FBC159  f2 b8 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterModulation1:24)                          ; FBC159  f2 b8 ad f1 31
 	push XBC                                             ; FBC15E  39
 	push 0x00                                            ; FBC15F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC161  8e 08 04
@@ -104424,8 +104488,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC168  ef 66
 	unlk XIZ                                             ; FBC16A  ee 0d
 	ret                                                  ; FBC16C  0e
+; PartParam_StepMidiOutputFilterModulation2: MIDI OUTPUT FILTER: MODULATION2: forces bit 0x10 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterModulation2); PtrTable_F1ABA3[9] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterModulation2:
 	link XIZ,0x0000                                      ; FBC16D  ee 0c 00 00
-	lda xbc, (Record_F1ADBB:24)                          ; FBC171  f2 bb ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterModulation2:24)                          ; FBC171  f2 bb ad f1 31
 	push XBC                                             ; FBC176  39
 	push 0x00                                            ; FBC177  09 00
 	m_push MBD+r6, 0x08                                  ; FBC179  8e 08 04
@@ -104433,8 +104499,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC180  ef 66
 	unlk XIZ                                             ; FBC182  ee 0d
 	ret                                                  ; FBC184  0e
+; PartParam_StepMidiOutputFilterRealTimeCreatorX: MIDI OUTPUT FILTER: REAL-TIME CREATOR-X: forces bit 0x01 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorX); PtrTable_F1ABA3[10] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterRealTimeCreatorX:
 	link XIZ,0x0000                                      ; FBC185  ee 0c 00 00
-	lda xbc, (Record_F1ADBE:24)                          ; FBC189  f2 be ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterRealTimeCreatorX:24)                          ; FBC189  f2 be ad f1 31
 	push XBC                                             ; FBC18E  39
 	push 0x00                                            ; FBC18F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC191  8e 08 04
@@ -104442,8 +104510,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC198  ef 66
 	unlk XIZ                                             ; FBC19A  ee 0d
 	ret                                                  ; FBC19C  0e
+; PartParam_StepMidiOutputFilterRealTimeCreatorY: MIDI OUTPUT FILTER: REAL-TIME CREATOR-Y: forces bit 0x02 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeCreatorY); PtrTable_F1ABA3[11] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterRealTimeCreatorY:
 	link XIZ,0x0000                                      ; FBC19D  ee 0c 00 00
-	lda xbc, (Record_F1ADC1:24)                          ; FBC1A1  f2 c1 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterRealTimeCreatorY:24)                          ; FBC1A1  f2 c1 ad f1 31
 	push XBC                                             ; FBC1A6  39
 	push 0x00                                            ; FBC1A7  09 00
 	m_push MBD+r6, 0x08                                  ; FBC1A9  8e 08 04
@@ -104451,8 +104521,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC1B0  ef 66
 	unlk XIZ                                             ; FBC1B2  ee 0d
 	ret                                                  ; FBC1B4  0e
+; PartParam_StepMidiOutputFilterRealTimeControllerX: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-X: forces bit 0x04 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerX); PtrTable_F1ABA3[12] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterRealTimeControllerX:
 	link XIZ,0x0000                                      ; FBC1B5  ee 0c 00 00
-	lda xbc, (Record_F1ADC4:24)                          ; FBC1B9  f2 c4 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterRealTimeControllerX:24)                          ; FBC1B9  f2 c4 ad f1 31
 	push XBC                                             ; FBC1BE  39
 	push 0x00                                            ; FBC1BF  09 00
 	m_push MBD+r6, 0x08                                  ; FBC1C1  8e 08 04
@@ -104460,8 +104532,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC1C8  ef 66
 	unlk XIZ                                             ; FBC1CA  ee 0d
 	ret                                                  ; FBC1CC  0e
+; PartParam_StepMidiOutputFilterRealTimeControllerY: MIDI OUTPUT FILTER: REAL-TIME CONTROLLER-Y: forces bit 0x08 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterRealTimeControllerY); PtrTable_F1ABA3[13] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterRealTimeControllerY:
 	link XIZ,0x0000                                      ; FBC1CD  ee 0c 00 00
-	lda xbc, (Record_F1ADC7:24)                          ; FBC1D1  f2 c7 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterRealTimeControllerY:24)                          ; FBC1D1  f2 c7 ad f1 31
 	push XBC                                             ; FBC1D6  39
 	push 0x00                                            ; FBC1D7  09 00
 	m_push MBD+r6, 0x08                                  ; FBC1D9  8e 08 04
@@ -104469,8 +104543,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC1E0  ef 66
 	unlk XIZ                                             ; FBC1E2  ee 0d
 	ret                                                  ; FBC1E4  0e
+; PartParam_StepMidiOutputFilterHold1: MIDI OUTPUT FILTER: HOLD1: forces bit 0x01 of byte 20 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterHold1); PtrTable_F1ABA3[14] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterHold1:
 	link XIZ,0x0000                                      ; FBC1E5  ee 0c 00 00
-	lda xbc, (Record_F1ADCA:24)                          ; FBC1E9  f2 ca ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterHold1:24)                          ; FBC1E9  f2 ca ad f1 31
 	push XBC                                             ; FBC1EE  39
 	push 0x00                                            ; FBC1EF  09 00
 	m_push MBD+r6, 0x08                                  ; FBC1F1  8e 08 04
@@ -104478,8 +104554,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC1F8  ef 66
 	unlk XIZ                                             ; FBC1FA  ee 0d
 	ret                                                  ; FBC1FC  0e
+; PartParam_StepMidiOutputFilterControlPedal: MIDI OUTPUT FILTER: CONTROL PEDAL: forces bit 0x20 of byte 22 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterControlPedal); PtrTable_F1ABA3[15] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterControlPedal:
 	link XIZ,0x0000                                      ; FBC1FD  ee 0c 00 00
-	lda xbc, (Record_F1ADCD:24)                          ; FBC201  f2 cd ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterControlPedal:24)                          ; FBC201  f2 cd ad f1 31
 	push XBC                                             ; FBC206  39
 	push 0x00                                            ; FBC207  09 00
 	m_push MBD+r6, 0x08                                  ; FBC209  8e 08 04
@@ -104487,8 +104565,10 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC210  ef 66
 	unlk XIZ                                             ; FBC212  ee 0d
 	ret                                                  ; FBC214  0e
+; PartParam_StepMidiOutputFilterAfterTouch: MIDI OUTPUT FILTER: AFTER TOUCH: forces bit 0x20 of byte 19 of part record E+0x20 by the step direction (T_IndexedParam_SetBit, PartParamField_MidiOutputFilterAfterTouch); PtrTable_F1ABA3[16] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiOutputFilterAfterTouch:
 	link XIZ,0x0000                                      ; FBC215  ee 0c 00 00
-	lda xbc, (Record_F1ADD0:24)                          ; FBC219  f2 d0 ad f1 31
+	lda xbc, (PartParamField_MidiOutputFilterAfterTouch:24)                          ; FBC219  f2 d0 ad f1 31
 	push XBC                                             ; FBC21E  39
 	push 0x00                                            ; FBC21F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC221  8e 08 04
@@ -104496,7 +104576,11 @@ PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	inc 6,XSP                                            ; FBC228  ef 66
 	unlk XIZ                                             ; FBC22A  ee 0d
 	ret                                                  ; FBC22C  0e
-sub_FBC22D:
+; PartParam_StepMultipleMessagesOutputItem(part, 0, offset, bit): the common stepper of a MULTIPLE
+;   MESSAGES OUTPUT item.  Index = 0 when bit <bit> of byte 0x15 is set, 1 when the byte at <offset> has bit
+;   7, else byte+2; stepped within PartParamField_MidiMultipleMessagesOutputProgramChange's 0..129 (T_F42C78)
+;   and written back the same way, both bytes posted to Queue2C00 (notes/prom_ab_part_param_switches.py)
+PartParam_StepMultipleMessagesOutputItem:
 	link XIZ,0xfff3                                      ; FBC22D  ee 0c f3 ff
 	pushw hl                                             ; FBC231  2b
 	pushw de                                             ; FBC232  2a
@@ -104593,19 +104677,24 @@ sub_FBC22D:
 	popw hl                                              ; FBC2FB  4b
 	unlk XIZ                                             ; FBC2FC  ee 0d
 	ret                                                  ; FBC2FE  0e
+; PartParam_StepMidiMultipleMessagesOutputProgramChange: MULTIPLE MESSAGES OUTPUT ProgramChange: PartParam_StepMultipleMessagesOutputItem on byte 14, enable bit 0x01 of
+;   byte 0x15; PtrTable_F1ABE7[0] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputProgramChange:
 	link XIZ,0x0000                                      ; FBC2FF  ee 0c 00 00
 	pushw 0x01                                           ; FBC303  0b 01 00
 	pushw 0x0e                                           ; FBC306  0b 0e 00
 	push 0x00                                            ; FBC309  09 00
 	m_push MBD+r6, 0x08                                  ; FBC30B  8e 08 04
-	calr sub_FBC22D                                      ; FBC30E  1e 1c ff
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC30E  1e 1c ff
 	inc 6,XSP                                            ; FBC311  ef 66
 	unlk XIZ                                             ; FBC313  ee 0d
 	ret                                                  ; FBC315  0e
+; PartParam_EnterMidiMultipleMessagesOutputProgramChange: MULTIPLE MESSAGES OUTPUT ProgramChange: number entry into PartParamField_MidiMultipleMessagesOutputProgramChangeValue; PtrTable_F1ACDB[0] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputProgramChange:
 	link XIZ,0x0000                                      ; FBC316  ee 0c 00 00
 	pushw hl                                             ; FBC31A  2b
 	ld L,(XIZ+0x08)                                      ; FBC31B  8e 08 27
-	lda xbc, (Record_F1ADDC:24)                          ; FBC31E  f2 dc ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputProgramChangeValue:24)                          ; FBC31E  f2 dc ad f1 31
 	push XBC                                             ; FBC323  39
 	pushw hl                                             ; FBC324  2b
 	call T_IndexedParam_SetFieldFromAsciiEntry           ; FBC325  1d a8 2c f4
@@ -104628,6 +104717,8 @@ sub_FBC22D:
 	popw hl                                              ; FBC34E  4b
 	unlk XIZ                                             ; FBC34F  ee 0d
 	ret                                                  ; FBC351  0e
+; PartParam_StepMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: T_IndexedParam_AdjustField on PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PtrTable_F1ABE7[1] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputBankSelectMsb:
 	link XIZ,0x0000                                      ; FBC352  ee 0c 00 00
 	push XIX                                             ; FBC356  3c
 	push 0x00                                            ; FBC357  09 00
@@ -104643,7 +104734,7 @@ sub_FBC22D:
 	ld C,(XIY+0x06)                                      ; FBC372  8d 06 23
 	and C,0x20                                           ; FBC375  cb cc 20
 	jr nz, .LFBC38B                                      ; FBC378  6e 11
-	lda xbc, (Record_F1ADE5:24)                          ; FBC37A  f2 e5 ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue:24)                          ; FBC37A  f2 e5 ad f1 31
 	push XBC                                             ; FBC37F  39
 	push 0x00                                            ; FBC380  09 00
 	m_push MBD+r6, 0x08                                  ; FBC382  8e 08 04
@@ -104653,6 +104744,8 @@ sub_FBC22D:
 	pop XIX                                              ; FBC38B  5c
 	unlk XIZ                                             ; FBC38C  ee 0d
 	ret                                                  ; FBC38E  0e
+; PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb: MULTIPLE MESSAGES OUTPUT BankSelectMsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue, only while byte 15 holds a value (bit 7 clear) and BANK SELECT's enable bit 0x20 of byte 0x15 is clear; PtrTable_F1ACDB[1] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputBankSelectMsb:
 	link XIZ,0x0000                                      ; FBC38F  ee 0c 00 00
 	push XIX                                             ; FBC393  3c
 	push 0x00                                            ; FBC394  09 00
@@ -104668,7 +104761,7 @@ sub_FBC22D:
 	ld C,(XIY+0x06)                                      ; FBC3AF  8d 06 23
 	and C,0x20                                           ; FBC3B2  cb cc 20
 	jr nz, .LFBC3CA                                      ; FBC3B5  6e 13
-	lda xbc, (Record_F1ADE5:24)                          ; FBC3B7  f2 e5 ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputBankSelectMsbValue:24)                          ; FBC3B7  f2 e5 ad f1 31
 	push XBC                                             ; FBC3BC  39
 	push 0x00                                            ; FBC3BD  09 00
 	m_push MBD+r6, 0x08                                  ; FBC3BF  8e 08 04
@@ -104684,19 +104777,24 @@ sub_FBC22D:
 	pop XIX                                              ; FBC3D4  5c
 	unlk XIZ                                             ; FBC3D5  ee 0d
 	ret                                                  ; FBC3D7  0e
+; PartParam_StepMidiMultipleMessagesOutputBankSelectLsb: MULTIPLE MESSAGES OUTPUT BankSelectLsb: PartParam_StepMultipleMessagesOutputItem on byte 15, enable bit 0x20 of
+;   byte 0x15; PtrTable_F1ABE7[2] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputBankSelectLsb:
 	link XIZ,0x0000                                      ; FBC3D8  ee 0c 00 00
 	pushw 0x20                                           ; FBC3DC  0b 20 00
 	pushw 0x0f                                           ; FBC3DF  0b 0f 00
 	push 0x00                                            ; FBC3E2  09 00
 	m_push MBD+r6, 0x08                                  ; FBC3E4  8e 08 04
-	calr sub_FBC22D                                      ; FBC3E7  1e 43 fe
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC3E7  1e 43 fe
 	inc 6,XSP                                            ; FBC3EA  ef 66
 	unlk XIZ                                             ; FBC3EC  ee 0d
 	ret                                                  ; FBC3EE  0e
+; PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb: MULTIPLE MESSAGES OUTPUT BankSelectLsb: number entry into PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue; PtrTable_F1ACDB[2] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputBankSelectLsb:
 	link XIZ,0x0000                                      ; FBC3EF  ee 0c 00 00
 	pushw hl                                             ; FBC3F3  2b
 	ld L,(XIZ+0x08)                                      ; FBC3F4  8e 08 27
-	lda xbc, (Record_F1ADEE:24)                          ; FBC3F7  f2 ee ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputBankSelectLsbValue:24)                          ; FBC3F7  f2 ee ad f1 31
 	push XBC                                             ; FBC3FC  39
 	pushw hl                                             ; FBC3FD  2b
 	call T_IndexedParam_SetFieldFromAsciiEntry           ; FBC3FE  1d a8 2c f4
@@ -104719,19 +104817,24 @@ sub_FBC22D:
 	popw hl                                              ; FBC427  4b
 	unlk XIZ                                             ; FBC428  ee 0d
 	ret                                                  ; FBC42A  0e
+; PartParam_StepMidiMultipleMessagesOutputVolume: MULTIPLE MESSAGES OUTPUT Volume: PartParam_StepMultipleMessagesOutputItem on byte 17, enable bit 0x02 of
+;   byte 0x15; PtrTable_F1ABE7[3] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputVolume:
 	link XIZ,0x0000                                      ; FBC42B  ee 0c 00 00
 	pushw 0x02                                           ; FBC42F  0b 02 00
 	pushw 0x11                                           ; FBC432  0b 11 00
 	push 0x00                                            ; FBC435  09 00
 	m_push MBD+r6, 0x08                                  ; FBC437  8e 08 04
-	calr sub_FBC22D                                      ; FBC43A  1e f0 fd
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC43A  1e f0 fd
 	inc 6,XSP                                            ; FBC43D  ef 66
 	unlk XIZ                                             ; FBC43F  ee 0d
 	ret                                                  ; FBC441  0e
+; PartParam_EnterMidiMultipleMessagesOutputVolume: MULTIPLE MESSAGES OUTPUT Volume: number entry into PartParamField_MidiMultipleMessagesOutputVolumeValue; PtrTable_F1ACDB[3] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputVolume:
 	link XIZ,0x0000                                      ; FBC442  ee 0c 00 00
 	pushw hl                                             ; FBC446  2b
 	ld L,(XIZ+0x08)                                      ; FBC447  8e 08 27
-	lda xbc, (Record_F1ADF7:24)                          ; FBC44A  f2 f7 ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputVolumeValue:24)                          ; FBC44A  f2 f7 ad f1 31
 	push XBC                                             ; FBC44F  39
 	pushw hl                                             ; FBC450  2b
 	call T_IndexedParam_SetFieldFromAsciiEntry           ; FBC451  1d a8 2c f4
@@ -104754,28 +104857,36 @@ sub_FBC22D:
 	popw hl                                              ; FBC47A  4b
 	unlk XIZ                                             ; FBC47B  ee 0d
 	ret                                                  ; FBC47D  0e
+; PartParam_StepMidiMultipleMessagesOutputPanpot: MULTIPLE MESSAGES OUTPUT Panpot: PartParam_StepMultipleMessagesOutputItem on byte 18, enable bit 0x04 of
+;   byte 0x15; PtrTable_F1ABE7[4] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputPanpot:
 	link XIZ,0x0000                                      ; FBC47E  ee 0c 00 00
 	pushw 0x04                                           ; FBC482  0b 04 00
 	pushw 0x12                                           ; FBC485  0b 12 00
 	push 0x00                                            ; FBC488  09 00
 	m_push MBD+r6, 0x08                                  ; FBC48A  8e 08 04
-	calr sub_FBC22D                                      ; FBC48D  1e 9d fd
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC48D  1e 9d fd
 	inc 6,XSP                                            ; FBC490  ef 66
 	unlk XIZ                                             ; FBC492  ee 0d
 	ret                                                  ; FBC494  0e
+; PartParam_StepMidiMultipleMessagesOutputReverbDepth: MULTIPLE MESSAGES OUTPUT ReverbDepth: PartParam_StepMultipleMessagesOutputItem on byte 20, enable bit 0x10 of
+;   byte 0x15; PtrTable_F1ABE7[5] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputReverbDepth:
 	link XIZ,0x0000                                      ; FBC495  ee 0c 00 00
 	pushw 0x10                                           ; FBC499  0b 10 00
 	pushw 0x14                                           ; FBC49C  0b 14 00
 	push 0x00                                            ; FBC49F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC4A1  8e 08 04
-	calr sub_FBC22D                                      ; FBC4A4  1e 86 fd
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC4A4  1e 86 fd
 	inc 6,XSP                                            ; FBC4A7  ef 66
 	unlk XIZ                                             ; FBC4A9  ee 0d
 	ret                                                  ; FBC4AB  0e
+; PartParam_EnterMidiMultipleMessagesOutputReverbDepth: MULTIPLE MESSAGES OUTPUT ReverbDepth: number entry into PartParamField_MidiMultipleMessagesOutputReverbDepthValue; PtrTable_F1ACDB[5] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputReverbDepth:
 	link XIZ,0x0000                                      ; FBC4AC  ee 0c 00 00
 	pushw hl                                             ; FBC4B0  2b
 	ld L,(XIZ+0x08)                                      ; FBC4B1  8e 08 27
-	lda xbc, (Record_F1AE00:24)                          ; FBC4B4  f2 00 ae f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputReverbDepthValue:24)                          ; FBC4B4  f2 00 ae f1 31
 	push XBC                                             ; FBC4B9  39
 	pushw hl                                             ; FBC4BA  2b
 	call T_IndexedParam_SetFieldFromAsciiEntry           ; FBC4BB  1d a8 2c f4
@@ -104798,19 +104909,24 @@ sub_FBC22D:
 	popw hl                                              ; FBC4E4  4b
 	unlk XIZ                                             ; FBC4E5  ee 0d
 	ret                                                  ; FBC4E7  0e
+; PartParam_StepMidiMultipleMessagesOutputChorusDepth: MULTIPLE MESSAGES OUTPUT ChorusDepth: PartParam_StepMultipleMessagesOutputItem on byte 19, enable bit 0x08 of
+;   byte 0x15; PtrTable_F1ABE7[6] (notes/prom_ab_part_param_switches.py)
+PartParam_StepMidiMultipleMessagesOutputChorusDepth:
 	link XIZ,0x0000                                      ; FBC4E8  ee 0c 00 00
 	pushw 0x08                                           ; FBC4EC  0b 08 00
 	pushw 0x13                                           ; FBC4EF  0b 13 00
 	push 0x00                                            ; FBC4F2  09 00
 	m_push MBD+r6, 0x08                                  ; FBC4F4  8e 08 04
-	calr sub_FBC22D                                      ; FBC4F7  1e 33 fd
+	calr PartParam_StepMultipleMessagesOutputItem                                      ; FBC4F7  1e 33 fd
 	inc 6,XSP                                            ; FBC4FA  ef 66
 	unlk XIZ                                             ; FBC4FC  ee 0d
 	ret                                                  ; FBC4FE  0e
+; PartParam_EnterMidiMultipleMessagesOutputChorusDepth: MULTIPLE MESSAGES OUTPUT ChorusDepth: number entry into PartParamField_MidiMultipleMessagesOutputChorusDepthValue; PtrTable_F1ACDB[6] (notes/prom_ab_part_param_switches.py)
+PartParam_EnterMidiMultipleMessagesOutputChorusDepth:
 	link XIZ,0x0000                                      ; FBC4FF  ee 0c 00 00
 	pushw hl                                             ; FBC503  2b
 	ld L,(XIZ+0x08)                                      ; FBC504  8e 08 27
-	lda xbc, (Record_F1AE09:24)                          ; FBC507  f2 09 ae f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputChorusDepthValue:24)                          ; FBC507  f2 09 ae f1 31
 	push XBC                                             ; FBC50C  39
 	pushw hl                                             ; FBC50D  2b
 	call T_IndexedParam_SetFieldFromAsciiEntry           ; FBC50E  1d a8 2c f4
@@ -111511,7 +111627,7 @@ LcdKeyRow3_WriteProtectError:
 .LFBFF40:
 	call T_F42E10                                        ; FBFF40  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBFF44  f1 40 25 00 00
-	lda xbc, (Record_F1AA7C:24)                          ; FBFF49  f2 7c aa f1 31
+	lda xbc, (PartParamField_KeyLayerLow:24)                          ; FBFF49  f2 7c aa f1 31
 	push XBC                                             ; FBFF4E  39
 	lda xwa, (DL_Err0rTheS0undOrC0mbinati0n:24)          ; FBFF4F  f2 99 a9 f1 30
 	push XWA                                             ; FBFF54  38
