@@ -486,7 +486,8 @@
 	.equ EditScreen_ActionIndex,			0x601f59	; the deferred action to run -- EditScreen_RunDueAction
 	.equ EditScreen_ActionTimer2,			0x601f5a	; the second countdown (its action is sub_FE9738) -- EditScreen_CountDownAction2 / _RunDueAction2
 	.equ EditScreen_CursorFlags,			0x601f5b	; bit 0: a note-on is selected at the cursor (its velocity in EditField_EventVelocity); bits 1..4 are tested by the cursor moves, not read here -- EditScreen_SelectEventAtCursor sets / clears it; EditScreen_SoftKeyCol4 tests it
-	.equ EditScreen_BeatTable,			0x601f5f	; per-measure bytes for the measures shown, from EditCursor_Measure -- EditScreen_BuildBeatTable fills it; EditCursor_BeatsInMeasure / _WrapPastMeasureEnd read it
+	.equ EditScreen_FirstMeasure,			0x601f5d	; the first measure the view shows (word) -- EditScreen_BuildBeatTable sets it to EditCursor_Measure; EditCursor_ComputeTickInView
+	.equ EditScreen_BeatTable,			0x601f5f	; one byte per beat column shown: the 1-based measure (from EditScreen_FirstMeasure) the column belongs to, 0 = none -- EditScreen_BuildBeatTable fills it; EditCursor_BeatsInMeasure / _WrapPastMeasureEnd read it
 	.equ EditScreen_BeatCounter,			0x601f6c	; the walks' beat counter: markers counted, or still to append -- EditScreen_CountBeatMarkersToEnd / _CountBeatsInMeasure; EditScreen_AppendMissingBeatMarkers
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"

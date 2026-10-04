@@ -227,9 +227,10 @@ def main():
         # a RAM equate of wsa1/include/wsa1_ram.inc whose NAME is declared renamed and whose address is unchanged:
         # the include is generated from scripts/tools/name_wsa1_ram.py GROUPS, and a rename there may correct the
         # description too (2026-10-04: EditField_Note -> EditField_EventVelocity, the old text kept in the FINDINGS)
+        # ... and one re-described under the SAME name (a GROUPS description corrected, 2026-10-04)
         me = re.match(r"^\s*\.equ\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+)", ln)
-        if me and me.group(1) in ren:
-            hit = next((c for c in equ_new.get((ren[me.group(1)], int(me.group(2), 16)), ()) if have[c] > 0), None)
+        if me:
+            hit = next((c for c in equ_new.get((ren.get(me.group(1), me.group(1)), int(me.group(2), 16)), ()) if have[c] > 0), None)
             if hit is not None:
                 have[hit] -= 1
                 renamed += 1

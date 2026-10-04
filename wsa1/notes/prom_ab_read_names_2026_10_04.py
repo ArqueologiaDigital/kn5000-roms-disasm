@@ -1612,6 +1612,18 @@ ROWS = [
      "is set, else one beat more; EditCursor_Tick = TickInMeasure - EditMeasure_Beats x 0x60."),
     ("FE9492", "EditCursor_WrapAndRecompute",
      "EditCursor_WrapPastMeasureEnd, then EditCursor_TickInMeasure = EditCursor_Beat x 0x60 + EditCursor_Tick."),
+    ("FE9EDA", "EditCursor_ComputeTickInView",
+     "EditCursor_TickInMeasure = (EditCursor_Beat + the first column of the cursor's measure) x 0x60 +\n"
+     "EditCursor_Tick, the column found as the first EditScreen_BeatTable entry equal to EditCursor_Measure -\n"
+     "(0x601F5D) + 1.  So the table holds, per beat column shown, the 1-based measure the column belongs to."),
+    ("FE9EBB", "EditCursor_RecomputeAndRedraw",
+     "EditCursor_ComputeTickInView; inside the view: the cursor layer erased (sub_FEF796),\n"
+     "EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5.  Called by every EditCursor_Tick* / *Beat move."),
+    ("FEA082", "EditScreen_QueueRelocateAfterMove",
+     "with an event selected: EditScreen_ActionTimer = 0x85, EditScreen_ActionIndex = 1 -- deferred action 1 five\n"
+     "ticks later."),
+    ("FEA84F", "EditPos_LoadEventTick",
+     "EditPos_Tick = byte +1 of the event at the block-store cursor (the cursor is restored)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

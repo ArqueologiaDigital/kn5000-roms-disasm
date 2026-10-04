@@ -177057,7 +177057,7 @@ sub_FE8A9B:
 	calr DrumEdit_IsOtherNote                                      ; FE8AA8  1e 08 00
 	cp a, 0x00:i3                                          ; FE8AAB  c9 d8
 	jr nz, .LFE8AB2                                      ; FE8AAD  6e 03
-	calr sub_FEA84F                                          ; FE8AAF  1e 9d 1d
+	calr EditPos_LoadEventTick                                          ; FE8AAF  1e 9d 1d
 .LFE8AB2:
 	ret                                                  ; FE8AB2  0e
 ; DrumEdit_IsOtherNote: in DRUM EDIT (EditScreen_Mode bit 0) reads the note two bytes into the event at the cursor (cursor restored)
@@ -177090,7 +177090,7 @@ DrumEdit_IsOtherNote:
 EditScreen_BuildBeatTable:
 	calr BStore_CursorSlot_Save                                      ; FE8AE9  1e 02 02
 	ld wa, (EditCursor_Measure:24)                                ; FE8AEC  d2 3f 1f 60 20
-	ld (0x601f5d:24), wa                                ; FE8AF1  f2 5d 1f 60 50
+	ld (EditScreen_FirstMeasure:24), wa                                ; FE8AF1  f2 5d 1f 60 50
 	ld (0x0c90:16), wa                                  ; FE8AF6  f1 90 0c 50
 	ld XIX,EditScreen_BeatTable                                    ; FE8AFA  44 5f 1f 60 00
 	xor E,E                                              ; FE8AFF  cd d5
@@ -177859,7 +177859,7 @@ NoteEdit_SeekInsertPoint:
 	jr z, .LFE9256                                       ; FE9236  66 1e
 	cp A,0x82                                            ; FE9238  c9 cf 82
 	jr z, .LFE9275                                       ; FE923B  66 38
-	calr sub_FEA84F                                          ; FE923D  1e 0f 16
+	calr EditPos_LoadEventTick                                          ; FE923D  1e 0f 16
 	calr EditScreen_PositionAndMeasureStartTicks                                          ; FE9240  1e e5 13
 	sub XWA,XBC                                          ; FE9243  e9 a0
 	xor XBC,XBC                                          ; FE9245  e9 d1
@@ -178278,7 +178278,7 @@ sub_FE9648:
 	ld (EditCursor_Beat:24), wa                                ; FE966B  f2 41 1f 60 50
 	ld (EditCursor_Tick:24), a                                 ; FE9670  f2 43 1f 60 41
 	calr EditScreen_SeekCursorMeasureStart                                          ; FE9675  1e 5b f8
-	calr sub_FE9EDA                                          ; FE9678  1e 5f 08
+	calr EditCursor_ComputeTickInView                                          ; FE9678  1e 5f 08
 	calr EditScreen_SelectEventAtCursor                                          ; FE967B  1e 93 f8
 	calr sub_FEF7B4                                          ; FE967E  1e 33 61
 	calr sub_FEF926                                          ; FE9681  1e a2 62
@@ -178302,7 +178302,7 @@ sub_FE9694:
 	ld (EditCursor_Beat:24), wa                                ; FE96B7  f2 41 1f 60 50
 	ld (EditCursor_Tick:24), a                                 ; FE96BC  f2 43 1f 60 41
 	calr EditScreen_SeekCursorMeasureStart                                          ; FE96C1  1e 0f f8
-	calr sub_FE9EDA                                          ; FE96C4  1e 13 08
+	calr EditCursor_ComputeTickInView                                          ; FE96C4  1e 13 08
 	calr EditCursor_SeekToTick                                      ; FE96C7  1e 1d 02
 	calr EditScreen_SelectEventAtCursor                                          ; FE96CA  1e 44 f8
 	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
@@ -179076,9 +179076,9 @@ EditCursor_TickPlus1:
 .LFE9DC2:
 	m_add_mi8 MB24, EditCursor_Tick, 0x01                       ; FE9DC2  c2 43 1f 60 38 01
 	calr EditScreen_DrawTick                                          ; FE9DC8  1e 87 6c
-	calr sub_FE9EBB                                      ; FE9DCB  1e ed 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9DCB  1e ed 00
 	calr sub_FF0205                                          ; FE9DCE  1e 34 64
-	calr sub_FEA082                                      ; FE9DD1  1e ae 02
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9DD1  1e ae 02
 	ret                                                  ; FE9DD4  0e
 ; EditCursor_TickPlus5: EditCursor_Tick + 5, clamped to 0x5F; at 0x5F, EditCursor_NextBeat instead.
 EditCursor_TickPlus5:
@@ -179095,10 +179095,11 @@ EditCursor_TickPlus5:
 	ld (EditCursor_Tick:24), 0x5f                             ; FE9DF1  f2 43 1f 60 00 5f
 .LFE9DF7:
 	calr EditScreen_DrawTick                                          ; FE9DF7  1e 58 6c
-	calr sub_FE9EBB                                      ; FE9DFA  1e be 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9DFA  1e be 00
 	calr sub_FF0205                                          ; FE9DFD  1e 05 64
-sub_FE9E00:
-	calr sub_FEA082                                      ; FE9E00  1e 7f 02
+; EditScreen_QueueRelocateAfterMove_Call: calls EditScreen_QueueRelocateAfterMove and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+EditScreen_QueueRelocateAfterMove_Call:
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9E00  1e 7f 02
 	ret                                                  ; FE9E03  0e
 ; EditCursor_NextBeat: tick 0 and beat + 1, or beat 0 and measure + 1 once the beat reaches EditCursor_BeatsInMeasure;
 ;   first, when (0x601F54) reaches (0x601F75) * 0x60 - 1, it scrolls instead.
@@ -179137,13 +179138,13 @@ EditCursor_NextBeat:
 	m_add_mi16 MW24, EditCursor_Beat, 0x0001                    ; FE9E61  d2 41 1f 60 38 01 00
 	calr EditScreen_DrawTick                                          ; FE9E68  1e e7 6b
 	calr EditScreen_DrawBeat                                          ; FE9E6B  1e 96 6b
-	calr sub_FE9EBB                                      ; FE9E6E  1e 4a 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9E6E  1e 4a 00
 	calr BStore_CursorSlot_Save                                          ; FE9E71  1e 7a ee
 	calr EditCursor_SeekPastTick                                          ; FE9E74  1e d4 f9
 	calr BStore_CursorSlot_Restore                                          ; FE9E77  1e 9b ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9E7A  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9E7F  6e 04
-	calr sub_FEA082                                      ; FE9E81  1e fe 01
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9E81  1e fe 01
 	ret                                                  ; FE9E84  0e
 .LFE9E85:
 	calr sub_FE8BD4                                          ; FE9E85  1e 4c ed
@@ -179155,16 +179156,18 @@ EditCursor_NextBeat:
 	calr EditScreen_DrawMeasure                                          ; FE9E9B  1e eb 6a
 	calr EditScreen_DrawTick                                          ; FE9E9E  1e b1 6b
 	calr EditScreen_DrawBeat                                          ; FE9EA1  1e 60 6b
-	calr sub_FE9EBB                                      ; FE9EA4  1e 14 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9EA4  1e 14 00
 	calr BStore_CursorSlot_Save                                          ; FE9EA7  1e 44 ee
 	calr EditCursor_SeekPastTick                                          ; FE9EAA  1e 9e f9
 	calr BStore_CursorSlot_Restore                                          ; FE9EAD  1e 65 ee
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9EB0  c1 4a 0d 3f 00
 	jr nz, .LFE9E85                                      ; FE9EB5  6e ce
-	calr sub_FEA082                                      ; FE9EB7  1e c8 01
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9EB7  1e c8 01
 	ret                                                  ; FE9EBA  0e
-sub_FE9EBB:
-	calr sub_FE9EDA                                      ; FE9EBB  1e 1c 00
+; EditCursor_RecomputeAndRedraw: EditCursor_ComputeTickInView; inside the view: the cursor layer erased (sub_FEF796),
+;   EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5.  Called by every EditCursor_Tick* / *Beat move.
+EditCursor_RecomputeAndRedraw:
+	calr EditCursor_ComputeTickInView                                      ; FE9EBB  1e 1c 00
 	ld c, (EditMeasure_Beats:24)                                 ; FE9EBE  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9EC3  cb 08 60
 	cp (EditCursor_TickInMeasure:24), bc                             ; FE9EC6  d2 54 1f 60 f9
@@ -179175,9 +179178,12 @@ sub_FE9EBB:
 	calr sub_FEFDE5                                          ; FE9ED6  1e 0c 5f
 .LFE9ED9:
 	ret                                                  ; FE9ED9  0e
-sub_FE9EDA:
+; EditCursor_ComputeTickInView: EditCursor_TickInMeasure = (EditCursor_Beat + the first column of the cursor's measure) x 0x60 +
+;   EditCursor_Tick, the column found as the first EditScreen_BeatTable entry equal to EditCursor_Measure -
+;   (0x601F5D) + 1.  So the table holds, per beat column shown, the 1-based measure the column belongs to.
+EditCursor_ComputeTickInView:
 	ld wa, (EditCursor_Measure:24)                                ; FE9EDA  d2 3f 1f 60 20
-	sub wa, (0x601f5d:24)                            ; FE9EDF  d2 5d 1f 60 a0
+	sub wa, (EditScreen_FirstMeasure:24)                            ; FE9EDF  d2 5d 1f 60 a0
 	add A,0x01                                           ; FE9EE4  c9 c8 01
 	ld E,A                                               ; FE9EE7  c9 8d
 	xor BC,BC                                            ; FE9EE9  d9 d1
@@ -179206,7 +179212,7 @@ sub_FE9EDA:
 ;   ((0x601F76) entries, from measure (0x601F5D)); 0xFF when not found.
 EditCursor_BeatsInMeasure:
 	ld wa, (EditCursor_Measure:24)                                ; FE9F23  d2 3f 1f 60 20
-	sub wa, (0x601f5d:24)                            ; FE9F28  d2 5d 1f 60 a0
+	sub wa, (EditScreen_FirstMeasure:24)                            ; FE9F28  d2 5d 1f 60 a0
 	inc 1,WA                                             ; FE9F2D  d8 61
 	ld XIX,EditScreen_BeatTable                                    ; FE9F2F  44 5f 1f 60 00
 .LFE9F34:
@@ -179251,9 +179257,9 @@ EditCursor_TickMinus1:
 .LFE9F82:
 	sub	(EditCursor_Tick:24), 0x01                  ; FE9F82  c2 43 1f 60 3a 01
 	calr EditScreen_DrawTick                                          ; FE9F88  1e c7 6a
-	calr sub_FE9EBB                                      ; FE9F8B  1e 2d ff
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9F8B  1e 2d ff
 	calr sub_FF0205                                          ; FE9F8E  1e 74 62
-	calr sub_FEA082                                      ; FE9F91  1e ee 00
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9F91  1e ee 00
 	ret                                                  ; FE9F94  0e
 ; EditCursor_TickMinus5: EditCursor_Tick - 5, floored at 0 (EditCursor_PrevBeat at tick 0) -- the counterpart of EditCursor_TickPlus5.
 EditCursor_TickMinus5:
@@ -179270,9 +179276,9 @@ EditCursor_TickMinus5:
 	ld (EditCursor_Tick:24), a                                 ; FE9FAD  f2 43 1f 60 41
 .LFE9FB2:
 	calr EditScreen_DrawTick                                          ; FE9FB2  1e 9d 6a
-	calr sub_FE9EBB                                      ; FE9FB5  1e 03 ff
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9FB5  1e 03 ff
 	calr sub_FF0205                                          ; FE9FB8  1e 4a 62
-	calr sub_FEA082                                      ; FE9FBB  1e c4 00
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9FBB  1e c4 00
 	ret                                                  ; FE9FBE  0e
 .LFE9FBF:
 	ld (EditCursor_Tick:24), 0x00                             ; FE9FBF  f2 43 1f 60 00 00
@@ -179287,12 +179293,12 @@ EditCursor_PrevBeat:
 	subw	(EditCursor_Beat:24), 0x0001                ; FE9FD6  d2 41 1f 60 3a 01 00
 	calr EditScreen_DrawTick                                          ; FE9FDD  1e 72 6a
 	calr EditScreen_DrawBeat                                          ; FE9FE0  1e 21 6a
-	calr sub_FE9EBB                                      ; FE9FE3  1e d5 fe
-	calr sub_FEA082                                      ; FE9FE6  1e 99 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FE9FE3  1e d5 fe
+	calr EditScreen_QueueRelocateAfterMove                                      ; FE9FE6  1e 99 00
 	ret                                                  ; FE9FE9  0e
 .LFE9FEA:
 	ld wa, (EditCursor_Measure:24)                                ; FE9FEA  d2 3f 1f 60 20
-	m_cp_rm MW24, 0x601f5d, r0                           ; FE9FEF  d2 5d 1f 60 f0
+	m_cp_rm MW24, EditScreen_FirstMeasure, r0                           ; FE9FEF  d2 5d 1f 60 f0
 	jr nz, .LFEA017                                      ; FE9FF4  6e 21
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9FF6  f2 5b 1f 60 c8
 	jr z, .LFEA013                                       ; FE9FFB  66 16
@@ -179313,12 +179319,12 @@ EditCursor_PrevBeat:
 	calr EditScreen_DrawMeasure                                          ; FEA027  1e 5f 69
 	calr EditScreen_DrawTick                                          ; FEA02A  1e 25 6a
 	calr EditScreen_DrawBeat                                          ; FEA02D  1e d4 69
-	calr sub_FE9EBB                                      ; FEA030  1e 88 fe
-	calr sub_FEA082                                      ; FEA033  1e 4c 00
+	calr EditCursor_RecomputeAndRedraw                                      ; FEA030  1e 88 fe
+	calr EditScreen_QueueRelocateAfterMove                                      ; FEA033  1e 4c 00
 	ret                                                  ; FEA036  0e
 sub_FEA037:
 	ld wa, (EditCursor_Measure:24)                                ; FEA037  d2 3f 1f 60 20
-	sub wa, (0x601f5d:24)                            ; FEA03C  d2 5d 1f 60 a0
+	sub wa, (EditScreen_FirstMeasure:24)                            ; FEA03C  d2 5d 1f 60 a0
 	inc 1,WA                                             ; FEA041  d8 61
 	ld XIX,EditScreen_BeatTable                                    ; FEA043  44 5f 1f 60 00
 .LFEA048:
@@ -179347,7 +179353,9 @@ sub_FEA037:
 .LFEA07C:
 	ld (EditCursor_Beat:24), wa                                ; FEA07C  f2 41 1f 60 50
 	ret                                                  ; FEA081  0e
-sub_FEA082:
+; EditScreen_QueueRelocateAfterMove: with an event selected: EditScreen_ActionTimer = 0x85, EditScreen_ActionIndex = 1 -- deferred action 1 five
+;   ticks later.
+EditScreen_QueueRelocateAfterMove:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA082  f2 5b 1f 60 c8
 	jr nz, .LFEA08A                                      ; FEA087  6e 01
 	ret                                                  ; FEA089  0e
@@ -179745,7 +179753,7 @@ EditScreen_CursorRight:
 	jr c, .LFEA417                                       ; FEA42F  67 e6
 	dec 1,C                                              ; FEA431  cb 69
 	xor B,B                                              ; FEA433  ca d2
-	ld wa, (0x601f5d:24)                                ; FEA435  d2 5d 1f 60 20
+	ld wa, (EditScreen_FirstMeasure:24)                                ; FEA435  d2 5d 1f 60 20
 	add WA,BC                                            ; FEA43A  d9 80
 	ld (EditCursor_Measure:24), wa                                ; FEA43C  f2 3f 1f 60 50
 	calr EditCursor_MeasureChangedByCursor                                      ; FEA441  1e 1c f9
@@ -180129,7 +180137,7 @@ sub_FEA79B:
 	inc 1,E                                              ; FEA7D4  cd 61
 	jr .LFEA7BC                                          ; FEA7D6  68 e4
 .LFEA7D8:
-	ld wa, (0x601f5d:24)                                ; FEA7D8  d2 5d 1f 60 20
+	ld wa, (EditScreen_FirstMeasure:24)                                ; FEA7D8  d2 5d 1f 60 20
 	xor D,D                                              ; FEA7DD  cc d4
 	add WA,DE                                            ; FEA7DF  da 80
 	ld (EditCursor_Measure:24), wa                                ; FEA7E1  f2 3f 1f 60 50
@@ -180156,7 +180164,7 @@ sub_FEA7E7:
 	calr DrumEdit_IsOtherNote                                          ; FEA814  1e 9c e2
 	cp a, 0x00:i3                                          ; FEA817  c9 d8
 	jr nz, .LFEA7FA                                      ; FEA819  6e df
-	calr sub_FEA84F                                      ; FEA81B  1e 31 00
+	calr EditPos_LoadEventTick                                      ; FEA81B  1e 31 00
 	ret                                                  ; FEA81E  0e
 .LFEA81F:
 	m_or_mi8 MB24, EditScreen_CursorFlags, 0x02                        ; FEA81F  c2 5b 1f 60 3e 02
@@ -180172,7 +180180,8 @@ sub_FEA7E7:
 	jr c, .LFEA7FA                                       ; FEA846  67 b2
 	m_or_mi8 MB24, EditScreen_CursorFlags, 0x10                        ; FEA848  c2 5b 1f 60 3e 10
 	ret                                                  ; FEA84E  0e
-sub_FEA84F:
+; EditPos_LoadEventTick: EditPos_Tick = byte +1 of the event at the block-store cursor (the cursor is restored).
+EditPos_LoadEventTick:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEA84F  d1 5c 34 20
 	ld bc, (BStore_CursorOffset:16)                                 ; FEA853  d1 5e 34 21
 	pushw wa                                             ; FEA857  28
@@ -180272,7 +180281,7 @@ sub_FEA923:
 	calr DrumEdit_IsOtherNote                                          ; FEA94D  1e 63 e1
 	cp a, 0x00:i3                                          ; FEA950  c9 d8
 	jr nz, .LFEA931                                      ; FEA952  6e dd
-	calr sub_FEA84F                                      ; FEA954  1e f8 fe
+	calr EditPos_LoadEventTick                                      ; FEA954  1e f8 fe
 	calr EditScreen_PositionAndMeasureStartTicks                                      ; FEA957  1e ce fc
 	cp XWA,XBC                                           ; FEA95A  e9 f0
 	jr c, .LFEA978                                       ; FEA95C  67 1a
@@ -184084,7 +184093,7 @@ EditScreen_DrawMeasureNumbers:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF9A6  f1 40 25 00 00
 	ld XIX,EditScreen_BeatTable                                    ; FEF9AB  44 5f 1f 60 00
 	xor E,E                                              ; FEF9B0  cd d5
-	ld bc, (0x601f5d:24)                                ; FEF9B2  d2 5d 1f 60 21
+	ld bc, (EditScreen_FirstMeasure:24)                                ; FEF9B2  d2 5d 1f 60 21
 .LFEF9B7:
 	ld A,(XIX)                                           ; FEF9B7  84 21
 	cp a, 0x00:i3                                          ; FEF9B9  c9 d8

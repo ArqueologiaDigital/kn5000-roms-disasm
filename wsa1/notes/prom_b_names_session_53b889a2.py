@@ -3890,4 +3890,9 @@ RENAMES = [
     ("sub_FE8AE9", "EditScreen_BuildBeatTable"),
     ("sub_FE95C8", "EditCursor_WrapPastMeasureEnd"),
     ("sub_FE9492", "EditCursor_WrapAndRecompute"),
+    ("sub_FE9EDA", "EditCursor_ComputeTickInView"),
+    ("sub_FE9EBB", "EditCursor_RecomputeAndRedraw"),
+    ("sub_FEA082", "EditScreen_QueueRelocateAfterMove"),
+    ("sub_FEA84F", "EditPos_LoadEventTick"),
+    ("sub_FE9E00", "EditScreen_QueueRelocateAfterMove_Call"),
 ]
