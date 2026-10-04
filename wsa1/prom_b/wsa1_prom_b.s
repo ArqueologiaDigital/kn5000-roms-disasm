@@ -1174,9 +1174,9 @@
 	.set	T_F41A0C_Nop, 0xFBEEE3
 	.set	T_F41A10_Nop, 0xFBEEE4
 	.set	T_F41A14_Nop, 0xFBEEE5
-	.set	ScreenCode39_Handler, 0xFBEEE6
+	.set	ScreenEnter_CombiEditDspEffect, 0xFBEEE6
 	.set	T_F41A6C_Nop, 0xFBEEEB
-	.set	ScreenButton_Code39, 0xFBEEEC
+	.set	ScreenButton_CombiEditDspEffect, 0xFBEEEC
 	.set	T_F41A74_Nop, 0xFBEF1B
 	.set	Screen_CombinationNaming_Enter, 0xFBEF1C
 	.set	Screen_CombinationNaming_Leave, 0xFBEF75
@@ -1594,7 +1594,7 @@
 	.set	ScreenEnter_SoundEditNaming, 0xFDCFEB
 	.set	ScreenEnter_SoundEditDigitalEffect, 0xFDD02D
 	.set	ScreenEnter_SoundEditCopy, 0xFDD0D4
-	.set	ScreenCodeCA_Handler, 0xFDD272
+	.set	ScreenEnter_SoundEditDspEffect, 0xFDD272
 	.set	ScreenEnter_SoundEditDrumMenu, 0xFDD27F
 	.set	T_F42340_Nop, 0xFDD436
 	.set	ToneEditPage_A0_ModelingTop, 0xFDD437
@@ -1670,7 +1670,7 @@
 	.set	T_F433DC_Nop, 0xFDE2F9
 	.set	ScreenLeave_SoundEditCopy, 0xFDE2FA
 	.set	T_F4235C_Nop, 0xFDE307
-	.set	ScreenLeave_CodeCA, 0xFDE308
+	.set	ScreenLeave_SoundEditDspEffect, 0xFDE308
 	.set	T_F4232C_Nop, 0xFDE315
 	.set	ScreenLeave_SoundEditDrumMenu, 0xFDE316
 	.set	T_F4233C_Nop, 0xFDE323
@@ -20264,7 +20264,7 @@ T_F433E8_Nop:		; <- T_F433E8
 	ret	; F0AAB2  ret
 
 ; --------------------------------------------------------------------------
-; ScreenButton_CodeCA
+; ScreenButton_SoundEditDspEffect
 ; Called from: T_F42328 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7905 0xFD6104 T_F42F50 0xFD60B9 0xFD6447
@@ -20274,9 +20274,9 @@ T_F433E8_Nop:		; <- T_F433E8
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_CodeCA: the +8 BUTTON method of the screen object for screen id 0xCA -- PanelScreen_VtableTable entry 0xEA
+; ScreenButton_SoundEditDspEffect: the +8 BUTTON method of the screen object for screen id 0xCA -- PanelScreen_VtableTable entry 0xEA
 ;   (ViewB entry 0xCA) points at the thunk triple starting at T_F42320, and slot T_F42328 jumps here.
-ScreenButton_CodeCA:		; <- T_F42328
+ScreenButton_SoundEditDspEffect:		; <- T_F42328
 	link XIZ,0xfffc	; F0AAB3  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAB7  lda XBC,XIZ+0xfe
 	push	xbc	; F0AABA  push XBC
@@ -89420,9 +89420,9 @@ T_F41A58:	jp ScreenCode38_Handler  ; -> prom_a 0x3CDF8
 T_F41A5C:	jp ScreenLeave_Code38  ; -> prom_a 0x3CEF3
 T_F41A60:	jp ScreenButton_Code38  ; -> prom_a 0x3CF2B
 T_F41A64:	jp T_F41A64_Nop  ; -> prom_a 0x3CF80
-T_F41A68:	jp ScreenCode39_Handler  ; -> prom_a 0x3EEE6
+T_F41A68:	jp ScreenEnter_CombiEditDspEffect  ; -> prom_a 0x3EEE6
 T_F41A6C:	jp T_F41A6C_Nop  ; -> prom_a 0x3EEEB
-T_F41A70:	jp ScreenButton_Code39  ; -> prom_a 0x3EEEC
+T_F41A70:	jp ScreenButton_CombiEditDspEffect  ; -> prom_a 0x3EEEC
 T_F41A74:	jp T_F41A74_Nop  ; -> prom_a 0x3EF1B
 T_F41A78:	jp ScreenCode3A_Handler  ; -> prom_a 0x3DB91
 T_F41A7C:	jp ScreenLeave_Code3A  ; -> prom_a 0x3DD0D
@@ -90044,9 +90044,9 @@ T_ScreenLeave_MidiFileDirectPlay:	jp ScreenLeave_MidiFileDirectPlay  ; -> prom_a
 T_PanelButtonDispatch_MidiFileDirectPlay:	jp PanelButtonDispatch_MidiFileDirectPlay  ; -> prom_a 0x74596
 T_F42280:	jp T_F42280_Nop  ; -> prom_a 0x7475B
 	.fill 0x9C, 1, 0x0E  ; 0xF42284: 156 x ret
-T_F42320:	jp ScreenCodeCA_Handler  ; -> prom_a 0x5D272
-T_F42324:	jp ScreenLeave_CodeCA  ; -> prom_a 0x5E308
-T_F42328:	jp ScreenButton_CodeCA  ; -> prom_b 0x0AAB3
+T_F42320:	jp ScreenEnter_SoundEditDspEffect  ; -> prom_a 0x5D272
+T_F42324:	jp ScreenLeave_SoundEditDspEffect  ; -> prom_a 0x5E308
+T_F42328:	jp ScreenButton_SoundEditDspEffect  ; -> prom_b 0x0AAB3
 T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
 T_ScreenEnter_SoundEditDrumMenu:	jp ScreenEnter_SoundEditDrumMenu  ; -> prom_a 0x5D27F
 T_ScreenLeave_SoundEditDrumMenu:	jp ScreenLeave_SoundEditDrumMenu  ; -> prom_a 0x5E316

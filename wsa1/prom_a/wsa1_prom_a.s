@@ -108639,16 +108639,19 @@ T_F41A10_Nop:
 	ret                                                  ; FBEEE4  0e
 T_F41A14_Nop:
 	ret                                                  ; FBEEE5  0e
-; ScreenCode39_Handler: the +0 ENTER method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
+; ScreenEnter_CombiEditDspEffect: the +0 ENTER method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
 ;   (ViewB entry 0x39) points at the thunk triple starting at T_F41A68, and slot T_F41A68 jumps here.
-ScreenCode39_Handler:
+; ScreenEnter_CombiEditDspEffect: screen 0x39's +0 ENTER.  0x39 is the DSP EFFECT page of the COMBINATION EDIT group
+;   (0x34-0x3A): it calls T_F42F4C, the enter code of DSP EFFECT (screen 0x66, Screen_DspEffect_Enter), and its button
+;   method calls T_F42F50 as Screen_DspEffect_Button does (2026-10-04).
+ScreenEnter_CombiEditDspEffect:
 	call T_F42F4C                                        ; FBEEE6  1d 4c 2f f4
 	ret                                                  ; FBEEEA  0e
 T_F41A6C_Nop:
 	ret                                                  ; FBEEEB  0e
-; ScreenButton_Code39: the +8 BUTTON method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
+; ScreenButton_CombiEditDspEffect: the +8 BUTTON method of the screen object for screen id 0x39 -- PanelScreen_VtableTable entry 0x59
 ;   (ViewB entry 0x39) points at the thunk triple starting at T_F41A68, and slot T_F41A70 jumps here.
-ScreenButton_Code39:
+ScreenButton_CombiEditDspEffect:
 	link XIZ,0x0000                                      ; FBEEEC  ee 0c 00 00
 	pushw hl                                             ; FBEEF0  2b
 	ld HL,(XIZ+0x08)                                     ; FBEEF1  9e 08 23
@@ -127172,7 +127175,7 @@ ScreenCodeC0_Handlers:
 	.long ToneEditPage_A7_ResoModeKeyFollow       ; FCFD83  [ 7]
 	.long ToneEditPage_A8_SerialParallel                              ; FCFD87  [ 8]
 	.long ScreenCode_Nop                          ; FCFD8B  [ 9]
-	.long ScreenCodeCA_Handler                              ; FCFD8F  [10]
+	.long ScreenEnter_SoundEditDspEffect                              ; FCFD8F  [10]
 	.long ScreenEnter_SoundEditDrumMenu                              ; FCFD93  [11]
 	.long T_F42340_Nop                              ; FCFD97  [12]
 	.long ScreenEnter_SoundEditControllerPage1                              ; FCFD9B  [13]
@@ -152938,7 +152941,9 @@ sub_FDD168:
 	popw hl                                              ; FDD26E  4b
 	unlk XIZ                                             ; FDD26F  ee 0d
 	ret                                                  ; FDD271  0e
-ScreenCodeCA_Handler:
+; ScreenEnter_SoundEditDspEffect: screen 0xCA's +0 ENTER.  0xCA is DSP EFFECT reached from SOUND EDIT: T_F42F4C (the
+;   DSP EFFECT enter code), then ToneMsg80_Id00(0x10), a tone-edit message; its button method also calls T_F42F50.
+ScreenEnter_SoundEditDspEffect:
 	call T_F42F4C                                        ; FDD272  1d 4c 2f f4
 	pushw 0x10                                           ; FDD276  0b 10 00
 	call ToneMsg80_Id00                                      ; FDD279  1d 47 64 fd
@@ -154916,7 +154921,7 @@ ScreenLeave_SoundEditCopy:
 	ret                                                  ; FDE306  0e
 T_F4235C_Nop:
 	ret                                                  ; FDE307  0e
-ScreenLeave_CodeCA:
+ScreenLeave_SoundEditDspEffect:
 	pushw 0x00                                           ; FDE308  0b 00 00
 	call Var27DA_Set                                      ; FDE30B  1d 05 77 fd
 	call Var27DB_Clear                                      ; FDE30F  1d 13 77 fd
