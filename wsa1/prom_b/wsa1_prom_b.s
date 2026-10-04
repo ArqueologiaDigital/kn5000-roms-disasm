@@ -74857,7 +74857,7 @@ ClampParamValueById_From541:
 	call	Divide32_Unsigned_Remainder	; F3708D  call 0xf37f91
 	extz	xiy	; F37091  extz XIY
 	cp	iy, 41	; F37093  cp IY,0x0029
-	jrl	ugt, sub_F3758D	; F37097  jrl UGT,0xf3758d
+	jrl	ugt, ClampParamValueById_Unchanged	; F37097  jrl UGT,0xf3758d
 	sll	iy, 2	; F3709A  sll 0x02,IY
 	add	xiy, ParamRangeArms_F370A7	; F3709D  add XIY,0x00f370a7
 	ld	xiy, (xiy)	; F370A3  ld XIY,(XIY)
@@ -74885,52 +74885,52 @@ ClampParamValueById_From541:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F370A7:
-	.long	sub_F3754F	; F370A7  [0] -> sub_F3754F
-	.long	sub_F3754F	; F370AB  [1] -> sub_F3754F
-	.long	sub_F3754F	; F370AF  [2] -> sub_F3754F
-	.long	sub_F3754F	; F370B3  [3] -> sub_F3754F
-	.long	sub_F3758D	; F370B7  [4] -> sub_F3758D
-	.long	sub_F3754F	; F370BB  [5] -> sub_F3754F
-	.long	sub_F3758D	; F370BF  [6] -> sub_F3758D
-	.long	sub_F3754F	; F370C3  [7] -> sub_F3754F
-	.long	sub_F3758D	; F370C7  [8] -> sub_F3758D
-	.long	sub_F3754F	; F370CB  [9] -> sub_F3754F
-	.long	sub_F3758D	; F370CF  [10] -> sub_F3758D
-	.long	sub_F3714F	; F370D3  [11] -> sub_F3714F
-	.long	sub_F37158	; F370D7  [12] -> sub_F37158
-	.long	sub_F3758D	; F370DB  [13] -> sub_F3758D
-	.long	sub_F3758D	; F370DF  [14] -> sub_F3758D
-	.long	sub_F3758D	; F370E3  [15] -> sub_F3758D
-	.long	sub_F372E7	; F370E7  [16] -> sub_F372E7
-	.long	sub_F372D0	; F370EB  [17] -> sub_F372D0
-	.long	sub_F37565	; F370EF  [18] -> sub_F37565
-	.long	sub_F3754F	; F370F3  [19] -> sub_F3754F
-	.long	sub_F3754F	; F370F7  [20] -> sub_F3754F
-	.long	sub_F3758D	; F370FB  [21] -> sub_F3758D
-	.long	sub_F372E7	; F370FF  [22] -> sub_F372E7
-	.long	sub_F372E7	; F37103  [23] -> sub_F372E7
-	.long	sub_F3758D	; F37107  [24] -> sub_F3758D
-	.long	sub_F3758D	; F3710B  [25] -> sub_F3758D
-	.long	sub_F3754F	; F3710F  [26] -> sub_F3754F
-	.long	sub_F3754F	; F37113  [27] -> sub_F3754F
-	.long	sub_F372E7	; F37117  [28] -> sub_F372E7
-	.long	sub_F37161	; F3711B  [29] -> sub_F37161
-	.long	sub_F3758D	; F3711F  [30] -> sub_F3758D
-	.long	sub_F3758D	; F37123  [31] -> sub_F3758D
-	.long	sub_F372E7	; F37127  [32] -> sub_F372E7
-	.long	sub_F3758D	; F3712B  [33] -> sub_F3758D
-	.long	sub_F372E7	; F3712F  [34] -> sub_F372E7
-	.long	sub_F3758D	; F37133  [35] -> sub_F3758D
-	.long	sub_F372E7	; F37137  [36] -> sub_F372E7
-	.long	sub_F3758D	; F3713B  [37] -> sub_F3758D
-	.long	sub_F3754F	; F3713F  [38] -> sub_F3754F
-	.long	sub_F3754F	; F37143  [39] -> sub_F3754F
-	.long	sub_F372E7	; F37147  [40] -> sub_F372E7
-	.long	sub_F37161	; F3714B  [41] -> sub_F37161
+	.long	ClampArm541_0To127_MaskFFFF	; F370A7  [0] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F370AB  [1] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F370AF  [2] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F370B3  [3] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370B7  [4] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F370BB  [5] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370BF  [6] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F370C3  [7] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370C7  [8] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F370CB  [9] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370CF  [10] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To63_Mask3F	; F370D3  [11] -> ClampArm541_0To63_Mask3F
+	.long	ClampArm541_0To63_MaskFFFF	; F370D7  [12] -> ClampArm541_0To63_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370DB  [13] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F370DF  [14] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F370E3  [15] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F370E7  [16] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To50_MaskFFFF	; F370EB  [17] -> ClampArm541_0To50_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F370EF  [18] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F370F3  [19] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F370F7  [20] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F370FB  [21] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F370FF  [22] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37103  [23] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37107  [24] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F3710B  [25] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F3710F  [26] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37113  [27] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37117  [28] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M60To60_MaskFFFF	; F3711B  [29] -> ClampArm541_M60To60_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3711F  [30] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F37123  [31] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F37127  [32] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3712B  [33] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F3712F  [34] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37133  [35] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F37137  [36] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3713B  [37] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F3713F  [38] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37143  [39] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37147  [40] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M60To60_MaskFFFF	; F3714B  [41] -> ClampArm541_M60To60_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F3714F
+; ClampArm541_0To63_Mask3F
 ; Called from: arm table 0xF370A7[11]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [11] of the arm table at 0xF370A7 reads 0x00F3714F, that
@@ -74939,13 +74939,15 @@ ParamRangeArms_F370A7:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3714F:
+; ClampArm541_0To63_Mask3F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x3F, shift 0, max 63, min 0), a signed
+;   clamp of the masked field to 0..63 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To63_Mask3F:
 	pushw	0	; F3714F  push 0x0000
 	pushw	63	; F37152  push 0x003f
 	jrl	sub_F37573_Join	; F37155  jrl T,0xf37579
 
 ; --------------------------------------------------------------------------
-; sub_F37158
+; ClampArm541_0To63_MaskFFFF
 ; Called from: arm table 0xF370A7[12]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [12] of the arm table at 0xF370A7 reads 0x00F37158, that
@@ -74954,13 +74956,15 @@ sub_F3714F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37158:
+; ClampArm541_0To63_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 63, min 0), a signed
+;   clamp of the masked field to 0..63 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To63_MaskFFFF:
 	pushw	0	; F37158  push 0x0000
 	pushw	63	; F3715B  push 0x003f
 	jrl	sub_F37557_Join	; F3715E  jrl T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F37161
+; ClampArm541_M60To60_MaskFFFF
 ; Called from: arm table 0xF370A7[29], 0xF370A7[41]
 ; Touches: nothing with an absolute address
 ; Calls:   Divide32_Unsigned_Remainder
@@ -74970,7 +74974,9 @@ sub_F37158:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37161:
+; ClampArm541_M60To60_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 60, min -60), a signed
+;   clamp of the masked field to -60..60 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_M60To60_MaskFFFF:
 	pushw	65476	; F37161  push 0xffc4
 	pushw	60	; F37164  push 0x003c
 	jrl	sub_F37557_Join	; F37167  jrl T,0xf3755d
@@ -74985,7 +74991,7 @@ sub_F37161_Skip:
 	call	Divide32_Unsigned_Remainder	; F37182  call 0xf37f91
 	extz	xiy	; F37186  extz XIY
 	cp	iy, 76	; F37188  cp IY,0x004c
-	jrl	ugt, sub_F3758D	; F3718C  jrl UGT,0xf3758d
+	jrl	ugt, ClampParamValueById_Unchanged	; F3718C  jrl UGT,0xf3758d
 	sll	iy, 2	; F3718F  sll 0x02,IY
 	add	xiy, ParamRangeArms_F3719C	; F37192  add XIY,0x00f3719c
 	ld	xiy, (xiy)	; F37198  ld XIY,(XIY)
@@ -75013,87 +75019,87 @@ sub_F37161_Skip:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F3719C:
-	.long	sub_F372D0	; F3719C  [0] -> sub_F372D0
-	.long	sub_F372D5	; F371A0  [1] -> sub_F372D5
-	.long	sub_F3754F	; F371A4  [2] -> sub_F3754F
-	.long	sub_F3758D	; F371A8  [3] -> sub_F3758D
-	.long	sub_F372DE	; F371AC  [4] -> sub_F372DE
-	.long	sub_F3758D	; F371B0  [5] -> sub_F3758D
-	.long	sub_F3758D	; F371B4  [6] -> sub_F3758D
-	.long	sub_F372E7	; F371B8  [7] -> sub_F372E7
-	.long	sub_F372E7	; F371BC  [8] -> sub_F372E7
-	.long	sub_F372F0	; F371C0  [9] -> sub_F372F0
-	.long	sub_F372E7	; F371C4  [10] -> sub_F372E7
-	.long	sub_F372F0	; F371C8  [11] -> sub_F372F0
-	.long	sub_F372E7	; F371CC  [12] -> sub_F372E7
-	.long	sub_F372F0	; F371D0  [13] -> sub_F372F0
-	.long	sub_F372E7	; F371D4  [14] -> sub_F372E7
-	.long	sub_F372F0	; F371D8  [15] -> sub_F372F0
-	.long	sub_F372E7	; F371DC  [16] -> sub_F372E7
-	.long	sub_F372E7	; F371E0  [17] -> sub_F372E7
-	.long	sub_F372E7	; F371E4  [18] -> sub_F372E7
-	.long	sub_F3754F	; F371E8  [19] -> sub_F3754F
-	.long	sub_F372E7	; F371EC  [20] -> sub_F372E7
-	.long	sub_F372E7	; F371F0  [21] -> sub_F372E7
-	.long	sub_F372E7	; F371F4  [22] -> sub_F372E7
-	.long	sub_F3754F	; F371F8  [23] -> sub_F3754F
-	.long	sub_F372E7	; F371FC  [24] -> sub_F372E7
-	.long	sub_F3758D	; F37200  [25] -> sub_F3758D
-	.long	sub_F3754F	; F37204  [26] -> sub_F3754F
-	.long	sub_F3754F	; F37208  [27] -> sub_F3754F
-	.long	sub_F3754F	; F3720C  [28] -> sub_F3754F
-	.long	sub_F372E7	; F37210  [29] -> sub_F372E7
-	.long	sub_F3754F	; F37214  [30] -> sub_F3754F
-	.long	sub_F3754F	; F37218  [31] -> sub_F3754F
-	.long	sub_F3754F	; F3721C  [32] -> sub_F3754F
-	.long	sub_F3754F	; F37220  [33] -> sub_F3754F
-	.long	sub_F3754F	; F37224  [34] -> sub_F3754F
-	.long	sub_F3754F	; F37228  [35] -> sub_F3754F
-	.long	sub_F3754F	; F3722C  [36] -> sub_F3754F
-	.long	sub_F3754F	; F37230  [37] -> sub_F3754F
-	.long	sub_F3758D	; F37234  [38] -> sub_F3758D
-	.long	sub_F372F0	; F37238  [39] -> sub_F372F0
-	.long	sub_F372F0	; F3723C  [40] -> sub_F372F0
-	.long	sub_F372F0	; F37240  [41] -> sub_F372F0
-	.long	sub_F372F0	; F37244  [42] -> sub_F372F0
-	.long	sub_F372F0	; F37248  [43] -> sub_F372F0
-	.long	sub_F372F0	; F3724C  [44] -> sub_F372F0
-	.long	sub_F372F0	; F37250  [45] -> sub_F372F0
-	.long	sub_F372E7	; F37254  [46] -> sub_F372E7
-	.long	sub_F372E7	; F37258  [47] -> sub_F372E7
-	.long	sub_F3754F	; F3725C  [48] -> sub_F3754F
-	.long	sub_F3754F	; F37260  [49] -> sub_F3754F
-	.long	sub_F3754F	; F37264  [50] -> sub_F3754F
-	.long	sub_F372E7	; F37268  [51] -> sub_F372E7
-	.long	sub_F372E7	; F3726C  [52] -> sub_F372E7
-	.long	sub_F372E7	; F37270  [53] -> sub_F372E7
-	.long	sub_F3758D	; F37274  [54] -> sub_F3758D
-	.long	sub_F372D0	; F37278  [55] -> sub_F372D0
-	.long	sub_F3758D	; F3727C  [56] -> sub_F3758D
-	.long	sub_F3754F	; F37280  [57] -> sub_F3754F
-	.long	sub_F3754F	; F37284  [58] -> sub_F3754F
-	.long	sub_F3754F	; F37288  [59] -> sub_F3754F
-	.long	sub_F372E7	; F3728C  [60] -> sub_F372E7
-	.long	sub_F372E7	; F37290  [61] -> sub_F372E7
-	.long	sub_F372E7	; F37294  [62] -> sub_F372E7
-	.long	sub_F372F0	; F37298  [63] -> sub_F372F0
-	.long	sub_F372E7	; F3729C  [64] -> sub_F372E7
-	.long	sub_F372F0	; F372A0  [65] -> sub_F372F0
-	.long	sub_F372E7	; F372A4  [66] -> sub_F372E7
-	.long	sub_F372F0	; F372A8  [67] -> sub_F372F0
-	.long	sub_F372E7	; F372AC  [68] -> sub_F372E7
-	.long	sub_F372F0	; F372B0  [69] -> sub_F372F0
-	.long	sub_F372E7	; F372B4  [70] -> sub_F372E7
-	.long	sub_F372E7	; F372B8  [71] -> sub_F372E7
-	.long	sub_F372E7	; F372BC  [72] -> sub_F372E7
-	.long	sub_F3754F	; F372C0  [73] -> sub_F3754F
-	.long	sub_F372E7	; F372C4  [74] -> sub_F372E7
-	.long	sub_F372E7	; F372C8  [75] -> sub_F372E7
-	.long	sub_F372E7	; F372CC  [76] -> sub_F372E7
+	.long	ClampArm541_0To50_MaskFFFF	; F3719C  [0] -> ClampArm541_0To50_MaskFFFF
+	.long	ClampArm541_0To128_MaskFFFF	; F371A0  [1] -> ClampArm541_0To128_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F371A4  [2] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F371A8  [3] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M24To24_MaskFFFF	; F371AC  [4] -> ClampArm541_M24To24_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F371B0  [5] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F371B4  [6] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_M50To50_MaskFFFF	; F371B8  [7] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371BC  [8] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F371C0  [9] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371C4  [10] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F371C8  [11] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371CC  [12] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F371D0  [13] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371D4  [14] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F371D8  [15] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371DC  [16] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371E0  [17] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371E4  [18] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F371E8  [19] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371EC  [20] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371F0  [21] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371F4  [22] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F371F8  [23] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F371FC  [24] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37200  [25] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F37204  [26] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37208  [27] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F3720C  [28] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37210  [29] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37214  [30] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37218  [31] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F3721C  [32] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37220  [33] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37224  [34] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37228  [35] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F3722C  [36] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37230  [37] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37234  [38] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To100_MaskFFFF	; F37238  [39] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F3723C  [40] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F37240  [41] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F37244  [42] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F37248  [43] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F3724C  [44] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F37250  [45] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37254  [46] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37258  [47] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F3725C  [48] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37260  [49] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37264  [50] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37268  [51] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F3726C  [52] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37270  [53] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37274  [54] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To50_MaskFFFF	; F37278  [55] -> ClampArm541_0To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3727C  [56] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F37280  [57] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37284  [58] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37288  [59] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F3728C  [60] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37290  [61] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F37294  [62] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F37298  [63] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F3729C  [64] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F372A0  [65] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372A4  [66] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F372A8  [67] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372AC  [68] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To100_MaskFFFF	; F372B0  [69] -> ClampArm541_0To100_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372B4  [70] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372B8  [71] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372BC  [72] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F372C0  [73] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372C4  [74] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372C8  [75] -> ClampArm541_M50To50_MaskFFFF
+	.long	ClampArm541_M50To50_MaskFFFF	; F372CC  [76] -> ClampArm541_M50To50_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F372D0
+; ClampArm541_0To50_MaskFFFF
 ; Called from: arm table 0xF370A7[17], 0xF3719C[0], 0xF3719C[55]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [17] of the arm table at 0xF370A7 reads 0x00F372D0, that
@@ -75102,12 +75108,14 @@ ParamRangeArms_F3719C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F372D0:
+; ClampArm541_0To50_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 50, min 0), a signed
+;   clamp of the masked field to 0..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To50_MaskFFFF:
 	pushw	0	; F372D0  push 0x0000
 	jr	sub_F372D0_Skip	; F372D3  jr T,0xf372ea
 
 ; --------------------------------------------------------------------------
-; sub_F372D5
+; ClampArm541_0To128_MaskFFFF
 ; Called from: arm table 0xF3719C[1]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [1] of the arm table at 0xF3719C reads 0x00F372D5, that
@@ -75116,13 +75124,15 @@ sub_F372D0:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F372D5:
+; ClampArm541_0To128_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 128, min 0), a signed
+;   clamp of the masked field to 0..128 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To128_MaskFFFF:
 	pushw	0	; F372D5  push 0x0000
 	pushw	128	; F372D8  push 0x0080
 	jrl	sub_F37557_Join	; F372DB  jrl T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F372DE
+; ClampArm541_M24To24_MaskFFFF
 ; Called from: arm table 0xF3719C[4]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [4] of the arm table at 0xF3719C reads 0x00F372DE, that
@@ -75131,13 +75141,15 @@ sub_F372D5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F372DE:
+; ClampArm541_M24To24_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 24, min -24), a signed
+;   clamp of the masked field to -24..24 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_M24To24_MaskFFFF:
 	pushw	65512	; F372DE  push 0xffe8
 	pushw	24	; F372E1  push 0x0018
 	jrl	sub_F37557_Join	; F372E4  jrl T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F372E7
+; ClampArm541_M50To50_MaskFFFF
 ; Called from: arm table 0xF370A7[16], 0xF370A7[22], 0xF370A7[23],
 ;              0xF370A7[28], 0xF370A7[32], 0xF370A7[34] +32 more
 ; Touches: nothing with an absolute address
@@ -75147,14 +75159,16 @@ sub_F372DE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F372E7:
+; ClampArm541_M50To50_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 50, min -50), a signed
+;   clamp of the masked field to -50..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_M50To50_MaskFFFF:
 	pushw	65486	; F372E7  push 0xffce
 sub_F372D0_Skip:
 	pushw	50	; F372EA  push 0x0032
 	jrl	sub_F37557_Join	; F372ED  jrl T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F372F0
+; ClampArm541_0To100_MaskFFFF
 ; Called from: arm table 0xF3719C[9], 0xF3719C[11], 0xF3719C[13],
 ;              0xF3719C[15], 0xF3719C[39], 0xF3719C[40] +9 more
 ; Touches: nothing with an absolute address
@@ -75164,7 +75178,9 @@ sub_F372D0_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F372F0:
+; ClampArm541_0To100_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 100, min 0), a signed
+;   clamp of the masked field to 0..100 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To100_MaskFFFF:
 	pushw	0	; F372F0  push 0x0000
 	pushw	100	; F372F3  push 0x0064
 	jrl	sub_F37557_Join	; F372F6  jrl T,0xf3755d
@@ -75172,7 +75188,7 @@ sub_F372F0_Skip:
 	ld	bc, (xiz+8)	; F372F9  ld BC,(XIZ+0x08)
 	extz	xbc	; F372FC  extz XBC
 	cp	bc, 137	; F372FE  cp BC,0x0089
-	jrl	ugt, sub_F3758D	; F37302  jrl UGT,0xf3758d
+	jrl	ugt, ClampParamValueById_Unchanged	; F37302  jrl UGT,0xf3758d
 	sll	bc, 2	; F37305  sll 0x02,BC
 	add	xbc, ParamRangeArms_F37312	; F37308  add XBC,0x00f37312
 	ld	xbc, (xbc)	; F3730E  ld XBC,(XBC)
@@ -75200,148 +75216,148 @@ sub_F372F0_Skip:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F37312:
-	.long	sub_F3753A	; F37312  [0] -> sub_F3753A
-	.long	sub_F3753A	; F37316  [1] -> sub_F3753A
-	.long	sub_F3753A	; F3731A  [2] -> sub_F3753A
-	.long	sub_F3753A	; F3731E  [3] -> sub_F3753A
-	.long	sub_F3753A	; F37322  [4] -> sub_F3753A
-	.long	sub_F3753A	; F37326  [5] -> sub_F3753A
-	.long	sub_F3753A	; F3732A  [6] -> sub_F3753A
-	.long	sub_F3753A	; F3732E  [7] -> sub_F3753A
-	.long	sub_F3753A	; F37332  [8] -> sub_F3753A
-	.long	sub_F3753A	; F37336  [9] -> sub_F3753A
-	.long	sub_F3753A	; F3733A  [10] -> sub_F3753A
-	.long	sub_F3753A	; F3733E  [11] -> sub_F3753A
-	.long	sub_F3753A	; F37342  [12] -> sub_F3753A
-	.long	sub_F3753A	; F37346  [13] -> sub_F3753A
-	.long	sub_F3753A	; F3734A  [14] -> sub_F3753A
-	.long	sub_F3753A	; F3734E  [15] -> sub_F3753A
-	.long	sub_F3758D	; F37352  [16] -> sub_F3758D
-	.long	sub_F3758D	; F37356  [17] -> sub_F3758D
-	.long	sub_F3758D	; F3735A  [18] -> sub_F3758D
-	.long	sub_F3753F	; F3735E  [19] -> sub_F3753F
-	.long	sub_F3758D	; F37362  [20] -> sub_F3758D
-	.long	sub_F37547	; F37366  [21] -> sub_F37547
-	.long	sub_F3754F	; F3736A  [22] -> sub_F3754F
-	.long	sub_F3758D	; F3736E  [23] -> sub_F3758D
-	.long	sub_F37547	; F37372  [24] -> sub_F37547
-	.long	sub_F3754F	; F37376  [25] -> sub_F3754F
-	.long	sub_F3758D	; F3737A  [26] -> sub_F3758D
-	.long	sub_F37547	; F3737E  [27] -> sub_F37547
-	.long	sub_F3754F	; F37382  [28] -> sub_F3754F
-	.long	sub_F3758D	; F37386  [29] -> sub_F3758D
-	.long	sub_F37547	; F3738A  [30] -> sub_F37547
-	.long	sub_F3754F	; F3738E  [31] -> sub_F3754F
-	.long	sub_F3758D	; F37392  [32] -> sub_F3758D
-	.long	sub_F37547	; F37396  [33] -> sub_F37547
-	.long	sub_F3754F	; F3739A  [34] -> sub_F3754F
-	.long	sub_F3758D	; F3739E  [35] -> sub_F3758D
-	.long	sub_F3758D	; F373A2  [36] -> sub_F3758D
-	.long	sub_F3758D	; F373A6  [37] -> sub_F3758D
-	.long	sub_F37547	; F373AA  [38] -> sub_F37547
-	.long	sub_F3754F	; F373AE  [39] -> sub_F3754F
-	.long	sub_F3758D	; F373B2  [40] -> sub_F3758D
-	.long	sub_F37547	; F373B6  [41] -> sub_F37547
-	.long	sub_F3754F	; F373BA  [42] -> sub_F3754F
-	.long	sub_F3758D	; F373BE  [43] -> sub_F3758D
-	.long	sub_F37547	; F373C2  [44] -> sub_F37547
-	.long	sub_F3754F	; F373C6  [45] -> sub_F3754F
-	.long	sub_F3758D	; F373CA  [46] -> sub_F3758D
-	.long	sub_F37547	; F373CE  [47] -> sub_F37547
-	.long	sub_F3754F	; F373D2  [48] -> sub_F3754F
-	.long	sub_F3758D	; F373D6  [49] -> sub_F3758D
-	.long	sub_F37547	; F373DA  [50] -> sub_F37547
-	.long	sub_F3754F	; F373DE  [51] -> sub_F3754F
-	.long	sub_F3758D	; F373E2  [52] -> sub_F3758D
-	.long	sub_F37547	; F373E6  [53] -> sub_F37547
-	.long	sub_F3754F	; F373EA  [54] -> sub_F3754F
-	.long	sub_F3758D	; F373EE  [55] -> sub_F3758D
-	.long	sub_F37547	; F373F2  [56] -> sub_F37547
-	.long	sub_F3754F	; F373F6  [57] -> sub_F3754F
-	.long	sub_F3758D	; F373FA  [58] -> sub_F3758D
-	.long	sub_F37547	; F373FE  [59] -> sub_F37547
-	.long	sub_F3754F	; F37402  [60] -> sub_F3754F
-	.long	sub_F3758D	; F37406  [61] -> sub_F3758D
-	.long	sub_F37547	; F3740A  [62] -> sub_F37547
-	.long	sub_F3754F	; F3740E  [63] -> sub_F3754F
-	.long	sub_F3758D	; F37412  [64] -> sub_F3758D
-	.long	sub_F37547	; F37416  [65] -> sub_F37547
-	.long	sub_F3754F	; F3741A  [66] -> sub_F3754F
-	.long	sub_F3758D	; F3741E  [67] -> sub_F3758D
-	.long	sub_F37547	; F37422  [68] -> sub_F37547
-	.long	sub_F3754F	; F37426  [69] -> sub_F3754F
-	.long	sub_F3758D	; F3742A  [70] -> sub_F3758D
-	.long	sub_F37547	; F3742E  [71] -> sub_F37547
-	.long	sub_F3754F	; F37432  [72] -> sub_F3754F
-	.long	sub_F3758D	; F37436  [73] -> sub_F3758D
-	.long	sub_F37547	; F3743A  [74] -> sub_F37547
-	.long	sub_F3754F	; F3743E  [75] -> sub_F3754F
-	.long	sub_F3758D	; F37442  [76] -> sub_F3758D
-	.long	sub_F37547	; F37446  [77] -> sub_F37547
-	.long	sub_F3754F	; F3744A  [78] -> sub_F3754F
-	.long	sub_F3758D	; F3744E  [79] -> sub_F3758D
-	.long	sub_F37547	; F37452  [80] -> sub_F37547
-	.long	sub_F3754F	; F37456  [81] -> sub_F3754F
-	.long	sub_F3758D	; F3745A  [82] -> sub_F3758D
-	.long	sub_F37547	; F3745E  [83] -> sub_F37547
-	.long	sub_F3754F	; F37462  [84] -> sub_F3754F
-	.long	sub_F37557	; F37466  [85] -> sub_F37557
-	.long	sub_F3758D	; F3746A  [86] -> sub_F3758D
-	.long	sub_F3754F	; F3746E  [87] -> sub_F3754F
-	.long	sub_F3754F	; F37472  [88] -> sub_F3754F
-	.long	sub_F37565	; F37476  [89] -> sub_F37565
-	.long	sub_F37573	; F3747A  [90] -> sub_F37573
-	.long	sub_F3754F	; F3747E  [91] -> sub_F3754F
-	.long	sub_F3754F	; F37482  [92] -> sub_F3754F
-	.long	sub_F37565	; F37486  [93] -> sub_F37565
-	.long	sub_F37573	; F3748A  [94] -> sub_F37573
-	.long	sub_F3754F	; F3748E  [95] -> sub_F3754F
-	.long	sub_F3754F	; F37492  [96] -> sub_F3754F
-	.long	sub_F37565	; F37496  [97] -> sub_F37565
-	.long	sub_F37573	; F3749A  [98] -> sub_F37573
-	.long	sub_F3754F	; F3749E  [99] -> sub_F3754F
-	.long	sub_F3754F	; F374A2  [100] -> sub_F3754F
-	.long	sub_F37565	; F374A6  [101] -> sub_F37565
-	.long	sub_F37573	; F374AA  [102] -> sub_F37573
-	.long	sub_F3754F	; F374AE  [103] -> sub_F3754F
-	.long	sub_F3754F	; F374B2  [104] -> sub_F3754F
-	.long	sub_F37565	; F374B6  [105] -> sub_F37565
-	.long	sub_F37573	; F374BA  [106] -> sub_F37573
-	.long	sub_F3754F	; F374BE  [107] -> sub_F3754F
-	.long	sub_F3754F	; F374C2  [108] -> sub_F3754F
-	.long	sub_F37565	; F374C6  [109] -> sub_F37565
-	.long	sub_F37573	; F374CA  [110] -> sub_F37573
-	.long	sub_F3754F	; F374CE  [111] -> sub_F3754F
-	.long	sub_F3754F	; F374D2  [112] -> sub_F3754F
-	.long	sub_F37565	; F374D6  [113] -> sub_F37565
-	.long	sub_F37573	; F374DA  [114] -> sub_F37573
-	.long	sub_F3754F	; F374DE  [115] -> sub_F3754F
-	.long	sub_F3754F	; F374E2  [116] -> sub_F3754F
-	.long	sub_F37565	; F374E6  [117] -> sub_F37565
-	.long	sub_F37573	; F374EA  [118] -> sub_F37573
-	.long	sub_F3754F	; F374EE  [119] -> sub_F3754F
-	.long	sub_F3754F	; F374F2  [120] -> sub_F3754F
-	.long	sub_F37565	; F374F6  [121] -> sub_F37565
-	.long	sub_F37573	; F374FA  [122] -> sub_F37573
-	.long	sub_F3754F	; F374FE  [123] -> sub_F3754F
-	.long	sub_F3754F	; F37502  [124] -> sub_F3754F
-	.long	sub_F37565	; F37506  [125] -> sub_F37565
-	.long	sub_F37573	; F3750A  [126] -> sub_F37573
-	.long	sub_F3754F	; F3750E  [127] -> sub_F3754F
-	.long	sub_F3754F	; F37512  [128] -> sub_F3754F
-	.long	sub_F37565	; F37516  [129] -> sub_F37565
-	.long	sub_F37573	; F3751A  [130] -> sub_F37573
-	.long	sub_F3754F	; F3751E  [131] -> sub_F3754F
-	.long	sub_F3754F	; F37522  [132] -> sub_F3754F
-	.long	sub_F37565	; F37526  [133] -> sub_F37565
-	.long	sub_F37573	; F3752A  [134] -> sub_F37573
-	.long	sub_F3758D	; F3752E  [135] -> sub_F3758D
-	.long	sub_F3754F	; F37532  [136] -> sub_F3754F
-	.long	sub_F3754F	; F37536  [137] -> sub_F3754F
+	.long	ClampArm541_32To127_MaskFFFF	; F37312  [0] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37316  [1] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3731A  [2] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3731E  [3] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37322  [4] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37326  [5] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3732A  [6] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3732E  [7] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37332  [8] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37336  [9] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3733A  [10] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3733E  [11] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37342  [12] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F37346  [13] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3734A  [14] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampArm541_32To127_MaskFFFF	; F3734E  [15] -> ClampArm541_32To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37352  [16] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F37356  [17] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F3735A  [18] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To66_MaskFFFF	; F3735E  [19] -> ClampArm541_0To66_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37362  [20] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37366  [21] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3736A  [22] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3736E  [23] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37372  [24] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37376  [25] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3737A  [26] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3737E  [27] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37382  [28] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37386  [29] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3738A  [30] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3738E  [31] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37392  [32] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37396  [33] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3739A  [34] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3739E  [35] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F373A2  [36] -> ClampParamValueById_Unchanged
+	.long	ClampParamValueById_Unchanged	; F373A6  [37] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373AA  [38] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373AE  [39] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373B2  [40] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373B6  [41] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373BA  [42] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373BE  [43] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373C2  [44] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373C6  [45] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373CA  [46] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373CE  [47] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373D2  [48] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373D6  [49] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373DA  [50] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373DE  [51] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373E2  [52] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373E6  [53] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373EA  [54] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373EE  [55] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373F2  [56] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F373F6  [57] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F373FA  [58] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F373FE  [59] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37402  [60] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37406  [61] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3740A  [62] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3740E  [63] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37412  [64] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37416  [65] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3741A  [66] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3741E  [67] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37422  [68] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37426  [69] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3742A  [70] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3742E  [71] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37432  [72] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37436  [73] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3743A  [74] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3743E  [75] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F37442  [76] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37446  [77] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F3744A  [78] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3744E  [79] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F37452  [80] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37456  [81] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3745A  [82] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To49_Mask7F	; F3745E  [83] -> ClampArm541_0To49_Mask7F
+	.long	ClampArm541_0To127_MaskFFFF	; F37462  [84] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_6To10_MaskFFFF	; F37466  [85] -> ClampArm541_6To10_MaskFFFF
+	.long	ClampParamValueById_Unchanged	; F3746A  [86] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F3746E  [87] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37472  [88] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37476  [89] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3747A  [90] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F3747E  [91] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37482  [92] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37486  [93] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3748A  [94] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F3748E  [95] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37492  [96] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37496  [97] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3749A  [98] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F3749E  [99] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374A2  [100] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374A6  [101] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374AA  [102] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374AE  [103] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374B2  [104] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374B6  [105] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374BA  [106] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374BE  [107] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374C2  [108] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374C6  [109] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374CA  [110] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374CE  [111] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374D2  [112] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374D6  [113] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374DA  [114] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374DE  [115] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374E2  [116] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374E6  [117] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374EA  [118] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374EE  [119] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F374F2  [120] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F374F6  [121] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F374FA  [122] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F374FE  [123] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37502  [124] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37506  [125] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3750A  [126] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F3750E  [127] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37512  [128] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37516  [129] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3751A  [130] -> ClampArm541_0To30_Mask3F
+	.long	ClampArm541_0To127_MaskFFFF	; F3751E  [131] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37522  [132] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To50_Mask7F	; F37526  [133] -> ClampArm541_0To50_Mask7F
+	.long	ClampArm541_0To30_Mask3F	; F3752A  [134] -> ClampArm541_0To30_Mask3F
+	.long	ClampParamValueById_Unchanged	; F3752E  [135] -> ClampParamValueById_Unchanged
+	.long	ClampArm541_0To127_MaskFFFF	; F37532  [136] -> ClampArm541_0To127_MaskFFFF
+	.long	ClampArm541_0To127_MaskFFFF	; F37536  [137] -> ClampArm541_0To127_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F3753A
+; ClampArm541_32To127_MaskFFFF
 ; Called from: arm table 0xF37312[0], 0xF37312[1], 0xF37312[2], 0xF37312[3],
 ;              0xF37312[4], 0xF37312[5] +10 more
 ; Touches: nothing with an absolute address
@@ -75351,12 +75367,14 @@ ParamRangeArms_F37312:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3753A:
+; ClampArm541_32To127_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 127, min 32), a signed
+;   clamp of the masked field to 32..127 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_32To127_MaskFFFF:
 	pushw	32	; F3753A  push 0x0020
 	jr	sub_F3753A_Skip	; F3753D  jr T,0xf37552
 
 ; --------------------------------------------------------------------------
-; sub_F3753F
+; ClampArm541_0To66_MaskFFFF
 ; Called from: arm table 0xF37312[19]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [19] of the arm table at 0xF37312 reads 0x00F3753F, that
@@ -75365,13 +75383,15 @@ sub_F3753A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3753F:
+; ClampArm541_0To66_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 66, min 0), a signed
+;   clamp of the masked field to 0..66 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To66_MaskFFFF:
 	pushw	0	; F3753F  push 0x0000
 	pushw	66	; F37542  push 0x0042
 	jr	sub_F37557_Join	; F37545  jr T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F37547
+; ClampArm541_0To49_Mask7F
 ; Called from: arm table 0xF37312[21], 0xF37312[24], 0xF37312[27],
 ;              0xF37312[30], 0xF37312[33], 0xF37312[38] +15 more
 ; Touches: nothing with an absolute address
@@ -75381,13 +75401,15 @@ sub_F3753F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37547:
+; ClampArm541_0To49_Mask7F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x7F, shift 0, max 49, min 0), a signed
+;   clamp of the masked field to 0..49 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To49_Mask7F:
 	pushw	0	; F37547  push 0x0000
 	pushw	49	; F3754A  push 0x0031
 	jr	sub_F37565_Join	; F3754D  jr T,0xf3756b
 
 ; --------------------------------------------------------------------------
-; sub_F3754F
+; ClampArm541_0To127_MaskFFFF
 ; Called from: arm table 0xF370A7[0], 0xF370A7[1], 0xF370A7[2], 0xF370A7[3],
 ;              0xF370A7[5], 0xF370A7[7] +75 more
 ; Touches: nothing with an absolute address
@@ -75397,14 +75419,16 @@ sub_F37547:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3754F:
+; ClampArm541_0To127_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 127, min 0), a signed
+;   clamp of the masked field to 0..127 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To127_MaskFFFF:
 	pushw	0	; F3754F  push 0x0000
 sub_F3753A_Skip:
 	pushw	127	; F37552  push 0x007f
 	jr	sub_F37557_Join	; F37555  jr T,0xf3755d
 
 ; --------------------------------------------------------------------------
-; sub_F37557
+; ClampArm541_6To10_MaskFFFF
 ; Called from: arm table 0xF37312[85]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [85] of the arm table at 0xF37312 reads 0x00F37557, that
@@ -75413,7 +75437,9 @@ sub_F3753A_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37557:
+; ClampArm541_6To10_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 10, min 6), a signed
+;   clamp of the masked field to 6..10 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_6To10_MaskFFFF:
 	pushw	6	; F37557  push 0x0006
 	pushw	10	; F3755A  push 0x000a
 sub_F37557_Join:
@@ -75422,7 +75448,7 @@ sub_F37557_Join:
 	jr	sub_F37573_Join2	; F37563  jr T,0xf3757f
 
 ; --------------------------------------------------------------------------
-; sub_F37565
+; ClampArm541_0To50_Mask7F
 ; Called from: arm table 0xF370A7[18], 0xF37312[89], 0xF37312[93],
 ;              0xF37312[97], 0xF37312[101], 0xF37312[105] +7 more
 ; Touches: nothing with an absolute address
@@ -75432,7 +75458,9 @@ sub_F37557_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37565:
+; ClampArm541_0To50_Mask7F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x7F, shift 0, max 50, min 0), a signed
+;   clamp of the masked field to 0..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To50_Mask7F:
 	pushw	0	; F37565  push 0x0000
 	pushw	50	; F37568  push 0x0032
 sub_F37565_Join:
@@ -75441,7 +75469,7 @@ sub_F37565_Join:
 	jr	sub_F37573_Join2	; F37571  jr T,0xf3757f
 
 ; --------------------------------------------------------------------------
-; sub_F37573
+; ClampArm541_0To30_Mask3F
 ; Called from: arm table 0xF37312[90], 0xF37312[94], 0xF37312[98],
 ;              0xF37312[102], 0xF37312[106], 0xF37312[110] +6 more
 ; Touches: nothing with an absolute address
@@ -75452,7 +75480,9 @@ sub_F37565_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37573:
+; ClampArm541_0To30_Mask3F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x3F, shift 0, max 30, min 0), a signed
+;   clamp of the masked field to 0..30 (notes/prom_b_param_range_arm_names.py).
+ClampArm541_0To30_Mask3F:
 	pushw	0	; F37573  push 0x0000
 	pushw	30	; F37576  push 0x001e
 sub_F37573_Join:
@@ -75468,7 +75498,7 @@ sub_F37573_Join2:
 	inc	2, xsp	; F3758B  inc 2,XSP
 
 ; --------------------------------------------------------------------------
-; sub_F3758D
+; ClampParamValueById_Unchanged
 ; Called from: arm table 0xF370A7[4], 0xF370A7[6], 0xF370A7[8], 0xF370A7[10],
 ;              0xF370A7[13], 0xF370A7[14] +44 more
 ; Touches: nothing with an absolute address
@@ -75478,7 +75508,9 @@ sub_F37573_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3758D:
+; ClampParamValueById_Unchanged: the out-of-range exit of a ParamRangeArms table -- returns the value unclamped
+;   (notes/prom_b_param_range_arm_names.py).
+ClampParamValueById_Unchanged:
 	ld	a, h	; F3758D  ld A,H
 	pop	xix	; F3758F  pop XIX
 	popw	hl	; F37590  pop HL
@@ -75541,7 +75573,7 @@ ClampParamValueById_From408:
 	call	Divide32_Unsigned_Remainder	; F375F4  call 0xf37f91
 	extz	xiy	; F375F8  extz XIY
 	cp	iy, 41	; F375FA  cp IY,0x0029
-	jrl	ugt, sub_F379A3	; F375FE  jrl UGT,0xf379a3
+	jrl	ugt, ClampParamValueById_Unchanged2	; F375FE  jrl UGT,0xf379a3
 	sll	iy, 2	; F37601  sll 0x02,IY
 	add	xiy, ParamRangeArms_F3760E	; F37604  add XIY,0x00f3760e
 	ld	xiy, (xiy)	; F3760A  ld XIY,(XIY)
@@ -75569,52 +75601,52 @@ ClampParamValueById_From408:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F3760E:
-	.long	sub_F37989	; F3760E  [0] -> sub_F37989
-	.long	sub_F37989	; F37612  [1] -> sub_F37989
-	.long	sub_F37989	; F37616  [2] -> sub_F37989
-	.long	sub_F37989	; F3761A  [3] -> sub_F37989
-	.long	sub_F379A3	; F3761E  [4] -> sub_F379A3
-	.long	sub_F37989	; F37622  [5] -> sub_F37989
-	.long	sub_F379A3	; F37626  [6] -> sub_F379A3
-	.long	sub_F37989	; F3762A  [7] -> sub_F37989
-	.long	sub_F379A3	; F3762E  [8] -> sub_F379A3
-	.long	sub_F37989	; F37632  [9] -> sub_F37989
-	.long	sub_F379A3	; F37636  [10] -> sub_F379A3
-	.long	sub_F376B6	; F3763A  [11] -> sub_F376B6
-	.long	sub_F376C5	; F3763E  [12] -> sub_F376C5
-	.long	sub_F379A3	; F37642  [13] -> sub_F379A3
-	.long	sub_F379A3	; F37646  [14] -> sub_F379A3
-	.long	sub_F379A3	; F3764A  [15] -> sub_F379A3
-	.long	sub_F37803	; F3764E  [16] -> sub_F37803
-	.long	sub_F377F5	; F37652  [17] -> sub_F377F5
-	.long	sub_F376CE	; F37656  [18] -> sub_F376CE
-	.long	sub_F37989	; F3765A  [19] -> sub_F37989
-	.long	sub_F37989	; F3765E  [20] -> sub_F37989
-	.long	sub_F379A3	; F37662  [21] -> sub_F379A3
-	.long	sub_F37803	; F37666  [22] -> sub_F37803
-	.long	sub_F37803	; F3766A  [23] -> sub_F37803
-	.long	sub_F379A3	; F3766E  [24] -> sub_F379A3
-	.long	sub_F379A3	; F37672  [25] -> sub_F379A3
-	.long	sub_F37989	; F37676  [26] -> sub_F37989
-	.long	sub_F37989	; F3767A  [27] -> sub_F37989
-	.long	sub_F37803	; F3767E  [28] -> sub_F37803
-	.long	sub_F376D7	; F37682  [29] -> sub_F376D7
-	.long	sub_F379A3	; F37686  [30] -> sub_F379A3
-	.long	sub_F379A3	; F3768A  [31] -> sub_F379A3
-	.long	sub_F37803	; F3768E  [32] -> sub_F37803
-	.long	sub_F379A3	; F37692  [33] -> sub_F379A3
-	.long	sub_F37803	; F37696  [34] -> sub_F37803
-	.long	sub_F379A3	; F3769A  [35] -> sub_F379A3
-	.long	sub_F37803	; F3769E  [36] -> sub_F37803
-	.long	sub_F379A3	; F376A2  [37] -> sub_F379A3
-	.long	sub_F37989	; F376A6  [38] -> sub_F37989
-	.long	sub_F37989	; F376AA  [39] -> sub_F37989
-	.long	sub_F37803	; F376AE  [40] -> sub_F37803
-	.long	sub_F376D7	; F376B2  [41] -> sub_F376D7
+	.long	ClampArm408_0To127_MaskFFFF	; F3760E  [0] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F37612  [1] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F37616  [2] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F3761A  [3] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3761E  [4] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F37622  [5] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37626  [6] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F3762A  [7] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3762E  [8] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F37632  [9] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37636  [10] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To63_Mask3F	; F3763A  [11] -> ClampArm408_0To63_Mask3F
+	.long	ClampArm408_0To63_MaskFFFF	; F3763E  [12] -> ClampArm408_0To63_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37642  [13] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F37646  [14] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F3764A  [15] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F3764E  [16] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_0To50_MaskFFFF	; F37652  [17] -> ClampArm408_0To50_MaskFFFF
+	.long	ClampArm408_0To50_Mask7F	; F37656  [18] -> ClampArm408_0To50_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3765A  [19] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F3765E  [20] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37662  [21] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F37666  [22] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F3766A  [23] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3766E  [24] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F37672  [25] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F37676  [26] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F3767A  [27] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F3767E  [28] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_M60To60_MaskFFFF	; F37682  [29] -> ClampArm408_M60To60_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37686  [30] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F3768A  [31] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F3768E  [32] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37692  [33] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F37696  [34] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3769A  [35] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F3769E  [36] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F376A2  [37] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F376A6  [38] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F376AA  [39] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F376AE  [40] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_M60To60_MaskFFFF	; F376B2  [41] -> ClampArm408_M60To60_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F376B6
+; ClampArm408_0To63_Mask3F
 ; Called from: arm table 0xF3760E[11]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [11] of the arm table at 0xF3760E reads 0x00F376B6, that
@@ -75623,7 +75655,9 @@ ParamRangeArms_F3760E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F376B6:
+; ClampArm408_0To63_Mask3F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x3F, shift 0, max 63, min 0), a signed
+;   clamp of the masked field to 0..63 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To63_Mask3F:
 	pushw	0	; F376B6  push 0x0000
 	pushw	63	; F376B9  push 0x003f
 	pushw	0	; F376BC  push 0x0000
@@ -75631,7 +75665,7 @@ sub_F376B6:
 	jrl	sub_F37989_Join2	; F376C2  jrl T,0xf37995
 
 ; --------------------------------------------------------------------------
-; sub_F376C5
+; ClampArm408_0To63_MaskFFFF
 ; Called from: arm table 0xF3760E[12]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [12] of the arm table at 0xF3760E reads 0x00F376C5, that
@@ -75640,13 +75674,15 @@ sub_F376B6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F376C5:
+; ClampArm408_0To63_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 63, min 0), a signed
+;   clamp of the masked field to 0..63 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To63_MaskFFFF:
 	pushw	0	; F376C5  push 0x0000
 	pushw	63	; F376C8  push 0x003f
 	jrl	sub_F37989_Join	; F376CB  jrl T,0xf3798f
 
 ; --------------------------------------------------------------------------
-; sub_F376CE
+; ClampArm408_0To50_Mask7F
 ; Called from: arm table 0xF3760E[18]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [18] of the arm table at 0xF3760E reads 0x00F376CE, that
@@ -75655,13 +75691,15 @@ sub_F376C5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F376CE:
+; ClampArm408_0To50_Mask7F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x7F, shift 0, max 50, min 0), a signed
+;   clamp of the masked field to 0..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To50_Mask7F:
 	pushw	0	; F376CE  push 0x0000
 	pushw	50	; F376D1  push 0x0032
 	jrl	sub_F3797B_Join	; F376D4  jrl T,0xf37981
 
 ; --------------------------------------------------------------------------
-; sub_F376D7
+; ClampArm408_M60To60_MaskFFFF
 ; Called from: arm table 0xF3760E[29], 0xF3760E[41]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [29] of the arm table at 0xF3760E reads 0x00F376D7, that
@@ -75670,7 +75708,9 @@ sub_F376CE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F376D7:
+; ClampArm408_M60To60_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 60, min -60), a signed
+;   clamp of the masked field to -60..60 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_M60To60_MaskFFFF:
 	pushw	65476	; F376D7  push 0xffc4
 	pushw	60	; F376DA  push 0x003c
 	jrl	sub_F37989_Join	; F376DD  jrl T,0xf3798f
@@ -75682,7 +75722,7 @@ sub_F376D7_Skip:
 	sub	xwa, xbc	; F376ED  sub XWA,XBC
 	extz	xwa	; F376EF  extz XWA
 	cp	wa, 59	; F376F1  cp WA,0x003b
-	jrl	ugt, sub_F379A3	; F376F5  jrl UGT,0xf379a3
+	jrl	ugt, ClampParamValueById_Unchanged2	; F376F5  jrl UGT,0xf379a3
 	sll	wa, 2	; F376F8  sll 0x02,WA
 	add	xwa, ParamRangeArms_F37705	; F376FB  add XWA,0x00f37705
 	ld	xwa, (xwa)	; F37701  ld XWA,(XWA)
@@ -75710,70 +75750,70 @@ sub_F376D7_Skip:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F37705:
-	.long	sub_F37976	; F37705  [0] -> sub_F37976
-	.long	sub_F37976	; F37709  [1] -> sub_F37976
-	.long	sub_F37976	; F3770D  [2] -> sub_F37976
-	.long	sub_F37976	; F37711  [3] -> sub_F37976
-	.long	sub_F37976	; F37715  [4] -> sub_F37976
-	.long	sub_F37976	; F37719  [5] -> sub_F37976
-	.long	sub_F37976	; F3771D  [6] -> sub_F37976
-	.long	sub_F37976	; F37721  [7] -> sub_F37976
-	.long	sub_F37976	; F37725  [8] -> sub_F37976
-	.long	sub_F37976	; F37729  [9] -> sub_F37976
-	.long	sub_F37976	; F3772D  [10] -> sub_F37976
-	.long	sub_F37976	; F37731  [11] -> sub_F37976
-	.long	sub_F37976	; F37735  [12] -> sub_F37976
-	.long	sub_F379A3	; F37739  [13] -> sub_F379A3
-	.long	sub_F379A3	; F3773D  [14] -> sub_F379A3
-	.long	sub_F379A3	; F37741  [15] -> sub_F379A3
-	.long	sub_F37989	; F37745  [16] -> sub_F37989
-	.long	sub_F37989	; F37749  [17] -> sub_F37989
-	.long	sub_F377F5	; F3774D  [18] -> sub_F377F5
-	.long	sub_F377FA	; F37751  [19] -> sub_F377FA
-	.long	sub_F37989	; F37755  [20] -> sub_F37989
-	.long	sub_F379A3	; F37759  [21] -> sub_F379A3
-	.long	sub_F37803	; F3775D  [22] -> sub_F37803
-	.long	sub_F379A3	; F37761  [23] -> sub_F379A3
-	.long	sub_F37989	; F37765  [24] -> sub_F37989
-	.long	sub_F37803	; F37769  [25] -> sub_F37803
-	.long	sub_F379A3	; F3776D  [26] -> sub_F379A3
-	.long	sub_F3780C	; F37771  [27] -> sub_F3780C
-	.long	sub_F3780C	; F37775  [28] -> sub_F3780C
-	.long	sub_F3780C	; F37779  [29] -> sub_F3780C
-	.long	sub_F3780C	; F3777D  [30] -> sub_F3780C
-	.long	sub_F3780C	; F37781  [31] -> sub_F3780C
-	.long	sub_F3780C	; F37785  [32] -> sub_F3780C
-	.long	sub_F37803	; F37789  [33] -> sub_F37803
-	.long	sub_F37803	; F3778D  [34] -> sub_F37803
-	.long	sub_F379A3	; F37791  [35] -> sub_F379A3
-	.long	sub_F377F5	; F37795  [36] -> sub_F377F5
-	.long	sub_F379A3	; F37799  [37] -> sub_F379A3
-	.long	sub_F379A3	; F3779D  [38] -> sub_F379A3
-	.long	sub_F379A3	; F377A1  [39] -> sub_F379A3
-	.long	sub_F379A3	; F377A5  [40] -> sub_F379A3
-	.long	sub_F377F5	; F377A9  [41] -> sub_F377F5
-	.long	sub_F377FA	; F377AD  [42] -> sub_F377FA
-	.long	sub_F37989	; F377B1  [43] -> sub_F37989
-	.long	sub_F379A3	; F377B5  [44] -> sub_F379A3
-	.long	sub_F37803	; F377B9  [45] -> sub_F37803
-	.long	sub_F379A3	; F377BD  [46] -> sub_F379A3
-	.long	sub_F37989	; F377C1  [47] -> sub_F37989
-	.long	sub_F37803	; F377C5  [48] -> sub_F37803
-	.long	sub_F379A3	; F377C9  [49] -> sub_F379A3
-	.long	sub_F3780C	; F377CD  [50] -> sub_F3780C
-	.long	sub_F3780C	; F377D1  [51] -> sub_F3780C
-	.long	sub_F3780C	; F377D5  [52] -> sub_F3780C
-	.long	sub_F3780C	; F377D9  [53] -> sub_F3780C
-	.long	sub_F3780C	; F377DD  [54] -> sub_F3780C
-	.long	sub_F3780C	; F377E1  [55] -> sub_F3780C
-	.long	sub_F37803	; F377E5  [56] -> sub_F37803
-	.long	sub_F37803	; F377E9  [57] -> sub_F37803
-	.long	sub_F379A3	; F377ED  [58] -> sub_F379A3
-	.long	sub_F377F5	; F377F1  [59] -> sub_F377F5
+	.long	ClampArm408_32To127_MaskFFFF	; F37705  [0] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37709  [1] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3770D  [2] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37711  [3] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37715  [4] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37719  [5] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3771D  [6] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37721  [7] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37725  [8] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37729  [9] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3772D  [10] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37731  [11] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37735  [12] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37739  [13] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F3773D  [14] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F37741  [15] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F37745  [16] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F37749  [17] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_0To50_MaskFFFF	; F3774D  [18] -> ClampArm408_0To50_MaskFFFF
+	.long	ClampArm408_0To128_MaskFFFF	; F37751  [19] -> ClampArm408_0To128_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F37755  [20] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37759  [21] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F3775D  [22] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37761  [23] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F37765  [24] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F37769  [25] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3776D  [26] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To100_MaskFFFF	; F37771  [27] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F37775  [28] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F37779  [29] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F3777D  [30] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F37781  [31] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F37785  [32] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F37789  [33] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F3778D  [34] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37791  [35] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To50_MaskFFFF	; F37795  [36] -> ClampArm408_0To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37799  [37] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F3779D  [38] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F377A1  [39] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F377A5  [40] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To50_MaskFFFF	; F377A9  [41] -> ClampArm408_0To50_MaskFFFF
+	.long	ClampArm408_0To128_MaskFFFF	; F377AD  [42] -> ClampArm408_0To128_MaskFFFF
+	.long	ClampArm408_0To127_MaskFFFF	; F377B1  [43] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F377B5  [44] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_M50To50_MaskFFFF	; F377B9  [45] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F377BD  [46] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To127_MaskFFFF	; F377C1  [47] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F377C5  [48] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F377C9  [49] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To100_MaskFFFF	; F377CD  [50] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F377D1  [51] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F377D5  [52] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F377D9  [53] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F377DD  [54] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_0To100_MaskFFFF	; F377E1  [55] -> ClampArm408_0To100_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F377E5  [56] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampArm408_M50To50_MaskFFFF	; F377E9  [57] -> ClampArm408_M50To50_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F377ED  [58] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To50_MaskFFFF	; F377F1  [59] -> ClampArm408_0To50_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F377F5
+; ClampArm408_0To50_MaskFFFF
 ; Called from: arm table 0xF3760E[17], 0xF37705[18], 0xF37705[36],
 ;              0xF37705[41], 0xF37705[59]
 ; Touches: nothing with an absolute address
@@ -75783,12 +75823,14 @@ ParamRangeArms_F37705:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F377F5:
+; ClampArm408_0To50_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 50, min 0), a signed
+;   clamp of the masked field to 0..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To50_MaskFFFF:
 	pushw	0	; F377F5  push 0x0000
 	jr	sub_F377F5_Skip	; F377F8  jr T,0xf37806
 
 ; --------------------------------------------------------------------------
-; sub_F377FA
+; ClampArm408_0To128_MaskFFFF
 ; Called from: arm table 0xF37705[19], 0xF37705[42]
 ; Touches: nothing with an absolute address
 ; Evidence: entry [19] of the arm table at 0xF37705 reads 0x00F377FA, that
@@ -75797,13 +75839,15 @@ sub_F377F5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F377FA:
+; ClampArm408_0To128_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 128, min 0), a signed
+;   clamp of the masked field to 0..128 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To128_MaskFFFF:
 	pushw	0	; F377FA  push 0x0000
 	pushw	128	; F377FD  push 0x0080
 	jrl	sub_F37989_Join	; F37800  jrl T,0xf3798f
 
 ; --------------------------------------------------------------------------
-; sub_F37803
+; ClampArm408_M50To50_MaskFFFF
 ; Called from: arm table 0xF3760E[16], 0xF3760E[22], 0xF3760E[23],
 ;              0xF3760E[28], 0xF3760E[32], 0xF3760E[34] +10 more
 ; Touches: nothing with an absolute address
@@ -75813,14 +75857,16 @@ sub_F377FA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37803:
+; ClampArm408_M50To50_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 50, min -50), a signed
+;   clamp of the masked field to -50..50 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_M50To50_MaskFFFF:
 	pushw	65486	; F37803  push 0xffce
 sub_F377F5_Skip:
 	pushw	50	; F37806  push 0x0032
 	jrl	sub_F37989_Join	; F37809  jrl T,0xf3798f
 
 ; --------------------------------------------------------------------------
-; sub_F3780C
+; ClampArm408_0To100_MaskFFFF
 ; Called from: arm table 0xF37705[27], 0xF37705[28], 0xF37705[29],
 ;              0xF37705[30], 0xF37705[31], 0xF37705[32] +6 more
 ; Touches: nothing with an absolute address
@@ -75830,7 +75876,9 @@ sub_F377F5_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3780C:
+; ClampArm408_0To100_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 100, min 0), a signed
+;   clamp of the masked field to 0..100 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To100_MaskFFFF:
 	pushw	0	; F3780C  push 0x0000
 	pushw	100	; F3780F  push 0x0064
 	jrl	sub_F37989_Join	; F37812  jrl T,0xf3798f
@@ -75838,7 +75886,7 @@ sub_F3780C_Skip:
 	ld	bc, (xiz+8)	; F37815  ld BC,(XIZ+0x08)
 	extz	xbc	; F37818  extz XBC
 	cp	bc, 81	; F3781A  cp BC,0x0051
-	jrl	ugt, sub_F379A3	; F3781E  jrl UGT,0xf379a3
+	jrl	ugt, ClampParamValueById_Unchanged2	; F3781E  jrl UGT,0xf379a3
 	sll	bc, 2	; F37821  sll 0x02,BC
 	add	xbc, ParamRangeArms_F3782E	; F37824  add XBC,0x00f3782e
 	ld	xbc, (xbc)	; F3782A  ld XBC,(XBC)
@@ -75866,92 +75914,92 @@ sub_F3780C_Skip:
 ;          range as two immediates.
 ; --------------------------------------------------------------------------
 ParamRangeArms_F3782E:
-	.long	sub_F37976	; F3782E  [0] -> sub_F37976
-	.long	sub_F37976	; F37832  [1] -> sub_F37976
-	.long	sub_F37976	; F37836  [2] -> sub_F37976
-	.long	sub_F37976	; F3783A  [3] -> sub_F37976
-	.long	sub_F37976	; F3783E  [4] -> sub_F37976
-	.long	sub_F37976	; F37842  [5] -> sub_F37976
-	.long	sub_F37976	; F37846  [6] -> sub_F37976
-	.long	sub_F37976	; F3784A  [7] -> sub_F37976
-	.long	sub_F37976	; F3784E  [8] -> sub_F37976
-	.long	sub_F37976	; F37852  [9] -> sub_F37976
-	.long	sub_F37976	; F37856  [10] -> sub_F37976
-	.long	sub_F37976	; F3785A  [11] -> sub_F37976
-	.long	sub_F37976	; F3785E  [12] -> sub_F37976
-	.long	sub_F37976	; F37862  [13] -> sub_F37976
-	.long	sub_F37976	; F37866  [14] -> sub_F37976
-	.long	sub_F37976	; F3786A  [15] -> sub_F37976
-	.long	sub_F379A3	; F3786E  [16] -> sub_F379A3
-	.long	sub_F379A3	; F37872  [17] -> sub_F379A3
-	.long	sub_F3797B	; F37876  [18] -> sub_F3797B
-	.long	sub_F37989	; F3787A  [19] -> sub_F37989
-	.long	sub_F379A3	; F3787E  [20] -> sub_F379A3
-	.long	sub_F3797B	; F37882  [21] -> sub_F3797B
-	.long	sub_F37989	; F37886  [22] -> sub_F37989
-	.long	sub_F379A3	; F3788A  [23] -> sub_F379A3
-	.long	sub_F3797B	; F3788E  [24] -> sub_F3797B
-	.long	sub_F37989	; F37892  [25] -> sub_F37989
-	.long	sub_F379A3	; F37896  [26] -> sub_F379A3
-	.long	sub_F3797B	; F3789A  [27] -> sub_F3797B
-	.long	sub_F37989	; F3789E  [28] -> sub_F37989
-	.long	sub_F379A3	; F378A2  [29] -> sub_F379A3
-	.long	sub_F3797B	; F378A6  [30] -> sub_F3797B
-	.long	sub_F37989	; F378AA  [31] -> sub_F37989
-	.long	sub_F379A3	; F378AE  [32] -> sub_F379A3
-	.long	sub_F379A3	; F378B2  [33] -> sub_F379A3
-	.long	sub_F379A3	; F378B6  [34] -> sub_F379A3
-	.long	sub_F3797B	; F378BA  [35] -> sub_F3797B
-	.long	sub_F37989	; F378BE  [36] -> sub_F37989
-	.long	sub_F379A3	; F378C2  [37] -> sub_F379A3
-	.long	sub_F3797B	; F378C6  [38] -> sub_F3797B
-	.long	sub_F37989	; F378CA  [39] -> sub_F37989
-	.long	sub_F379A3	; F378CE  [40] -> sub_F379A3
-	.long	sub_F3797B	; F378D2  [41] -> sub_F3797B
-	.long	sub_F37989	; F378D6  [42] -> sub_F37989
-	.long	sub_F379A3	; F378DA  [43] -> sub_F379A3
-	.long	sub_F3797B	; F378DE  [44] -> sub_F3797B
-	.long	sub_F37989	; F378E2  [45] -> sub_F37989
-	.long	sub_F379A3	; F378E6  [46] -> sub_F379A3
-	.long	sub_F3797B	; F378EA  [47] -> sub_F3797B
-	.long	sub_F37989	; F378EE  [48] -> sub_F37989
-	.long	sub_F379A3	; F378F2  [49] -> sub_F379A3
-	.long	sub_F3797B	; F378F6  [50] -> sub_F3797B
-	.long	sub_F37989	; F378FA  [51] -> sub_F37989
-	.long	sub_F379A3	; F378FE  [52] -> sub_F379A3
-	.long	sub_F3797B	; F37902  [53] -> sub_F3797B
-	.long	sub_F37989	; F37906  [54] -> sub_F37989
-	.long	sub_F379A3	; F3790A  [55] -> sub_F379A3
-	.long	sub_F3797B	; F3790E  [56] -> sub_F3797B
-	.long	sub_F37989	; F37912  [57] -> sub_F37989
-	.long	sub_F379A3	; F37916  [58] -> sub_F379A3
-	.long	sub_F3797B	; F3791A  [59] -> sub_F3797B
-	.long	sub_F37989	; F3791E  [60] -> sub_F37989
-	.long	sub_F379A3	; F37922  [61] -> sub_F379A3
-	.long	sub_F3797B	; F37926  [62] -> sub_F3797B
-	.long	sub_F37989	; F3792A  [63] -> sub_F37989
-	.long	sub_F379A3	; F3792E  [64] -> sub_F379A3
-	.long	sub_F3797B	; F37932  [65] -> sub_F3797B
-	.long	sub_F37989	; F37936  [66] -> sub_F37989
-	.long	sub_F379A3	; F3793A  [67] -> sub_F379A3
-	.long	sub_F3797B	; F3793E  [68] -> sub_F3797B
-	.long	sub_F37989	; F37942  [69] -> sub_F37989
-	.long	sub_F379A3	; F37946  [70] -> sub_F379A3
-	.long	sub_F3797B	; F3794A  [71] -> sub_F3797B
-	.long	sub_F37989	; F3794E  [72] -> sub_F37989
-	.long	sub_F379A3	; F37952  [73] -> sub_F379A3
-	.long	sub_F3797B	; F37956  [74] -> sub_F3797B
-	.long	sub_F37989	; F3795A  [75] -> sub_F37989
-	.long	sub_F379A3	; F3795E  [76] -> sub_F379A3
-	.long	sub_F3797B	; F37962  [77] -> sub_F3797B
-	.long	sub_F37989	; F37966  [78] -> sub_F37989
-	.long	sub_F379A3	; F3796A  [79] -> sub_F379A3
-	.long	sub_F3797B	; F3796E  [80] -> sub_F3797B
-	.long	sub_F37989	; F37972  [81] -> sub_F37989
+	.long	ClampArm408_32To127_MaskFFFF	; F3782E  [0] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37832  [1] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37836  [2] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3783A  [3] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3783E  [4] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37842  [5] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37846  [6] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3784A  [7] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3784E  [8] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37852  [9] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37856  [10] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3785A  [11] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3785E  [12] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37862  [13] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F37866  [14] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampArm408_32To127_MaskFFFF	; F3786A  [15] -> ClampArm408_32To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3786E  [16] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F37872  [17] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37876  [18] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3787A  [19] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3787E  [20] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37882  [21] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37886  [22] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3788A  [23] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3788E  [24] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37892  [25] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37896  [26] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3789A  [27] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3789E  [28] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378A2  [29] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378A6  [30] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378AA  [31] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378AE  [32] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F378B2  [33] -> ClampParamValueById_Unchanged2
+	.long	ClampParamValueById_Unchanged2	; F378B6  [34] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378BA  [35] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378BE  [36] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378C2  [37] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378C6  [38] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378CA  [39] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378CE  [40] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378D2  [41] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378D6  [42] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378DA  [43] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378DE  [44] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378E2  [45] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378E6  [46] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378EA  [47] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378EE  [48] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378F2  [49] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F378F6  [50] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F378FA  [51] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F378FE  [52] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37902  [53] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37906  [54] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3790A  [55] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3790E  [56] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37912  [57] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37916  [58] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3791A  [59] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3791E  [60] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37922  [61] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37926  [62] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3792A  [63] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3792E  [64] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37932  [65] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37936  [66] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3793A  [67] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3793E  [68] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37942  [69] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37946  [70] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3794A  [71] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3794E  [72] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F37952  [73] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37956  [74] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F3795A  [75] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3795E  [76] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F37962  [77] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37966  [78] -> ClampArm408_0To127_MaskFFFF
+	.long	ClampParamValueById_Unchanged2	; F3796A  [79] -> ClampParamValueById_Unchanged2
+	.long	ClampArm408_0To49_Mask7F	; F3796E  [80] -> ClampArm408_0To49_Mask7F
+	.long	ClampArm408_0To127_MaskFFFF	; F37972  [81] -> ClampArm408_0To127_MaskFFFF
 
 
 ; --------------------------------------------------------------------------
-; sub_F37976
+; ClampArm408_32To127_MaskFFFF
 ; Called from: arm table 0xF37705[0], 0xF37705[1], 0xF37705[2], 0xF37705[3],
 ;              0xF37705[4], 0xF37705[5] +23 more
 ; Touches: nothing with an absolute address
@@ -75961,12 +76009,14 @@ ParamRangeArms_F3782E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37976:
+; ClampArm408_32To127_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 127, min 32), a signed
+;   clamp of the masked field to 32..127 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_32To127_MaskFFFF:
 	pushw	32	; F37976  push 0x0020
 	jr	sub_F37976_Skip	; F37979  jr T,0xf3798c
 
 ; --------------------------------------------------------------------------
-; sub_F3797B
+; ClampArm408_0To49_Mask7F
 ; Called from: arm table 0xF3782E[18], 0xF3782E[21], 0xF3782E[24],
 ;              0xF3782E[27], 0xF3782E[30], 0xF3782E[35] +15 more
 ; Touches: nothing with an absolute address
@@ -75976,7 +76026,9 @@ sub_F37976:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F3797B:
+; ClampArm408_0To49_Mask7F: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0x7F, shift 0, max 49, min 0), a signed
+;   clamp of the masked field to 0..49 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To49_Mask7F:
 	pushw	0	; F3797B  push 0x0000
 	pushw	49	; F3797E  push 0x0031
 sub_F3797B_Join:
@@ -75985,7 +76037,7 @@ sub_F3797B_Join:
 	jr	sub_F37989_Join2	; F37987  jr T,0xf37995
 
 ; --------------------------------------------------------------------------
-; sub_F37989
+; ClampArm408_0To127_MaskFFFF
 ; Called from: arm table 0xF3760E[0], 0xF3760E[1], 0xF3760E[2], 0xF3760E[3],
 ;              0xF3760E[5], 0xF3760E[7] +34 more
 ; Touches: nothing with an absolute address
@@ -75996,7 +76048,9 @@ sub_F3797B_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F37989:
+; ClampArm408_0To127_MaskFFFF: a ParamRangeArms arm -- ClampFieldToRange(value, mask 0xFFFF, shift 0, max 127, min 0), a signed
+;   clamp of the masked field to 0..127 (notes/prom_b_param_range_arm_names.py).
+ClampArm408_0To127_MaskFFFF:
 	pushw	0	; F37989  push 0x0000
 sub_F37976_Skip:
 	pushw	127	; F3798C  push 0x007f
@@ -76013,7 +76067,7 @@ sub_F37989_Join2:
 	inc	2, xsp	; F379A1  inc 2,XSP
 
 ; --------------------------------------------------------------------------
-; sub_F379A3
+; ClampParamValueById_Unchanged2
 ; Called from: arm table 0xF3760E[4], 0xF3760E[6], 0xF3760E[8], 0xF3760E[10],
 ;              0xF3760E[13], 0xF3760E[14] +48 more
 ; Touches: nothing with an absolute address
@@ -76023,7 +76077,9 @@ sub_F37989_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F379A3:
+; ClampParamValueById_Unchanged2: the out-of-range exit of a ParamRangeArms table -- returns the value unclamped
+;   (notes/prom_b_param_range_arm_names.py).
+ClampParamValueById_Unchanged2:
 	ld	a, d	; F379A3  ld A,D
 	pop	xix	; F379A5  pop XIX
 	popw	de	; F379A6  pop DE
