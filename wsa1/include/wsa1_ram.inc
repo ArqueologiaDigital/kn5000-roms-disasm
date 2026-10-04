@@ -513,3 +513,11 @@
 	.equ MidiFileStream_State,			0x170e	; 1 = streaming, 2 = ended or failed -- MidiFileStream_Open / _GetByte / _Close
 	.equ Disk_Fcb,					0x178e	; the file-control block every DiskFile_* call passes (DOS layout: +1..+11 the 8.3 name, +0x10 the size) -- DiskFile_SetFcbName copies Disk_FileName to +1; DiskFile_Open / _Close / _ReadBlock / ... push it; the stream uses it too
 	.equ MidiFileStream_TaskRunning,		0x17b7	; 1 while the reader task runs -- MidiFileStream_ReaderTask sets / clears it; _Close waits on it
+	.equ SmfPlay_NextEventTime,			0x605044	; the next event's time in ticks (32-bit) -- SmfPlay_AdvanceEventTime; SmfPlay_ClearEventTimes
+	.equ SmfPlay_LastByte,				0x605056	; the last byte read -- SmfPlay_ReadChannelEvent tests its bit 7
+	.equ SmfPlay_VlqValue,				0x60505f	; the last variable-length value read: a delta time or an event length (32-bit) -- SmfPlay_DecodeVlq1/2/3; SmfPlay_SkipBytes
+	.equ SmfPlay_TempoMicros,			0x605063	; the last tempo event's three bytes, microseconds per quarter -- SmfPlay_ReadTempoEvent; SmfPlay_ApplyTempoAsBpm
+	.equ SmfPlay_Division,				0x605066	; the file's ticks per quarter (word) -- SmfPlay_ScaleDeltaTo96Ppq
+	.equ SmfPlay_LastRead,				0x605145	; the last MidiFileStream_GetByte result (word, negative at the end) -- the SmfPlay_* readers
+	.equ SmfPlay_StreamFlags,			0x605147	; bit 0: the stream ended (a negative read) -- every SmfPlay_* reader sets it; MidiFileDirectPlay_Tick tests it
+	.equ SmfPlay_Playing,				0x605148	; 1 while the file plays -- SmfPlay_StartPlayback sets it; SmfPlay_StopAtEndOfTrack clears it

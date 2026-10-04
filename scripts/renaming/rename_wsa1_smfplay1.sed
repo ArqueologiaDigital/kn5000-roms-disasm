@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_FB93D0\b/SmfPlay_ReadVlqBytes/g
+s/\bsub_FB9532\b/SmfPlay_ReadVlqBytes_Copy/g
+s/\bsub_FB9437\b/SmfPlay_DecodeVlq1/g
+s/\bsub_FB9448\b/SmfPlay_DecodeVlq2/g
+s/\bsub_FB9490\b/SmfPlay_DecodeVlq3/g
+s/\bsub_FB9413\b/SmfPlay_ReadDeltaTime/g
+s/\bsub_FB9575\b/SmfPlay_ReadVlqValue/g
+s/\bsub_FB951B\b/SmfPlay_ClearVlqBytes/g
+s/\bsub_FB9510\b/SmfPlay_AdvanceEventTime/g
+s/\bsub_FB9599\b/SmfPlay_SkipBytes/g
+s/\bsub_FB9098\b/SmfPlay_ScaleDeltaTo96Ppq/g
+s/\bsub_FB92DC\b/SmfPlay_ReadChannelEvent/g
+s/\bsub_FB9345\b/SmfPlay_ReadEventWithStatus/g
+s/\bsub_FB92EF\b/SmfPlay_ReadEventRunningStatus/g
+s/\bsub_FB95D9\b/SmfPlay_SendChannelEvent/g
+s/\bsub_FB9923\b/SmfPlay_HandleMetaEvent/g
+s/\bsub_FB9635\b/SmfPlay_ReadTempoEvent/g
+s/\bsub_FB90EB\b/SmfPlay_ApplyTempo_SaveAll/g
+s/\bsub_FB90FE\b/SmfPlay_ApplyTempoAsBpm/g
+s/\bsub_FB9176\b/SmfPlay_StopAtEndOfTrack/g
+s/\bsub_FB9697\b/SmfPlay_ReadHeader/g
+s/\bsub_FB99F5\b/SmfPlay_HandleSysExEvent/g
+s/\bsub_FB99AB\b/SmfPlay_ForwardGmSystemOn/g
+s/\bsub_FB9B30\b/SmfPlay_ReadSysExEvent/g
+s/\bsub_FB9E3F\b/SmfPlay_StartPlayback/g
+s/\bsub_FB9E69\b/SmfPlay_ClearEventTimes/g

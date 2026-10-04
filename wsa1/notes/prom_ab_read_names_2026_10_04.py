@@ -1821,6 +1821,62 @@ ROWS = [
      "byte (+1) is 0, backed onto its tag; otherwise the cursor is restored."),
     ("FE8A9B", "EditPos_LoadTickIfShownNote",
      "EditPos_LoadEventTick when the event at the cursor is a note-on DrumEdit_IsOtherNote passes."),
+    # the SMF player behind MIDI FILE DIRECT PLAY / the medley (FINDINGS-prom_b-disk-and-file-menus.md)
+    ("FB93D0", "SmfPlay_ReadVlqBytes",
+     "reads bytes (MidiFileStream_GetByte) into Smf_VlqBytes until one has bit 7 clear; A = the count; a negative\n"
+     "read (end of stream) sets (0x605147) bit 0."),
+    ("FB9532", "SmfPlay_ReadVlqBytes_Copy", "a byte-for-byte copy of SmfPlay_ReadVlqBytes, used by SmfPlay_ReadVlqValue."),
+    ("FB9437", "SmfPlay_DecodeVlq1", "(0x60505F) = Smf_VlqBytes[0] & 0x7F."),
+    ("FB9448", "SmfPlay_DecodeVlq2", "(0x60505F) = the 14-bit value of two VLQ bytes."),
+    ("FB9490", "SmfPlay_DecodeVlq3", "(0x60505F) = the 21-bit value of three VLQ bytes."),
+    ("FB9413", "SmfPlay_ReadDeltaTime",
+     "(0x60505F) = 0, SmfPlay_ReadVlqBytes, then the decoder for 1 / 2 / 3 bytes."),
+    ("FB9575", "SmfPlay_ReadVlqValue", "the same through SmfPlay_ReadVlqBytes_Copy -- event lengths."),
+    ("FB951B", "SmfPlay_ClearVlqBytes", "Smf_VlqBytes[0..5] = 0."),
+    ("FB9510", "SmfPlay_AdvanceEventTime", "(0x605044) += (0x60505F): the next event's time."),
+    ("FB9599", "SmfPlay_SkipBytes",
+     "reads and drops (0x60505F) bytes (the last kept in (0x605056)); (0x60505F) = 0."),
+    ("FB9098", "SmfPlay_ScaleDeltaTo96Ppq",
+     "when the file's division (0x605066) is not 0x60: (0x60505F) = delta x 0x60 / division, + 1 when the\n"
+     "remainder checks against (0x60506A) / (0x60506E) say so."),
+    ("FB92DC", "SmfPlay_ReadChannelEvent",
+     "SmfPlay_ReadEventWithStatus when the byte just read (0x605056) has bit 7, else SmfPlay_ReadEventRunningStatus."),
+    ("FB9345", "SmfPlay_ReadEventWithStatus",
+     "Smf_RunningStatus = Smf_EventStatus = the status; one data byte for 0xCn / 0xDn, two otherwise;\n"
+     "SmfPlay_SendChannelEvent."),
+    ("FB92EF", "SmfPlay_ReadEventRunningStatus",
+     "status = Smf_RunningStatus, the byte just read is data 1, data 2 read unless 0xCn / 0xDn;\n"
+     "SmfPlay_SendChannelEvent."),
+    ("FB95D9", "SmfPlay_SendChannelEvent",
+     "data bytes clamped to 0x7F; the 2-byte (0xCn / 0xDn) or 3-byte message at Smf_EventStatus put on the MIDI\n"
+     "input ring (T_MidiInARing_PutBlock) with interrupts held."),
+    ("FB9923", "SmfPlay_HandleMetaEvent",
+     "meta type: 0x2F -> its length byte, (0x10CB) = 0xFF, SmfPlay_StopAtEndOfTrack; 0x51 -> its length byte,\n"
+     "SmfPlay_ReadTempoEvent; anything else skipped by its VLQ length."),
+    ("FB9635", "SmfPlay_ReadTempoEvent",
+     "the three tempo bytes to 0x605063..0x605065, then SmfPlay_ApplyTempo_SaveAll."),
+    ("FB90EB", "SmfPlay_ApplyTempo_SaveAll", "SmfPlay_ApplyTempoAsBpm with every register pair saved."),
+    ("FB90FE", "SmfPlay_ApplyTempoAsBpm",
+     "BPM = 0x39387 (60,000,000 / 256) / ((0x605063) << 8 | (0x605064)), clamped 40..300; to (0x7EE2); queued as\n"
+     "parameter 0x7A (Queue2C00); T_Tempo_ApplyBpm."),
+    ("FB9176", "SmfPlay_StopAtEndOfTrack",
+     "(0x60505E) bit 0 cleared; all notes off and hold off injected on every channel, positions cleared, bend /\n"
+     "modulation reset, transports stopped (waits for TransportB), clock reset, T_MidiFileStream_Close,\n"
+     "(0x60505E) bit 1 and (0x605148) cleared."),
+    ("FB9697", "SmfPlay_ReadHeader",
+     "reads four bytes and compares them with 'MThd' (MidiFile_Tables_FBA169); when they differ, 0x7C more bytes\n"
+     "are skipped before it reads on -- a 0x80-byte prefix is tolerated."),
+    ("FB99F5", "SmfPlay_HandleSysExEvent",
+     "length (0x60505F) = 5 and the body starting 7E 7F 09 (GM System On) -> SmfPlay_ForwardGmSystemOn; length 16\n"
+     "with first byte 0x50 -> F0 + the 16 bytes to Ring601646; other lengths skipped."),
+    ("FB99AB", "SmfPlay_ForwardGmSystemOn",
+     "unless (0x605053) already matches the mode (0x7F4D) bit 2 implies: waits for the MIDI SysEx receiver to be idle\n"
+     "and puts the 6-byte F0 7E 7F 09 .. F7 on Ring601646."),
+    ("FB9B30", "SmfPlay_ReadSysExEvent",
+     "(0x605149) = 0, SmfPlay_ClearVlqBytes, SmfPlay_ReadVlqValue (the length), SmfPlay_HandleSysExEvent."),
+    ("FB9E3F", "SmfPlay_StartPlayback",
+     "clock reset, flags in (0x34D9) / (0x34BB) cleared, (0x605148) = 1, Transport_StartCAndB, repaint."),
+    ("FB9E69", "SmfPlay_ClearEventTimes", "(0x605044) = 0, (0x605048) = 0."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

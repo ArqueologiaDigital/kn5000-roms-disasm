@@ -100759,7 +100759,7 @@ sub_FB906D:
 	push XHL                                             ; FB907C  3b
 	push XDE                                             ; FB907D  3a
 	push XWA                                             ; FB907E  38
-	call sub_FB9098                                      ; FB907F  1d 98 90 fb
+	call SmfPlay_ScaleDeltaTo96Ppq                                      ; FB907F  1d 98 90 fb
 	pop XWA                                              ; FB9083  58
 	pop XDE                                              ; FB9084  5a
 	pop XHL                                              ; FB9085  5b
@@ -100780,34 +100780,37 @@ TimedEventRing_Discard_SaveRegs_B:
 	pop XIZ                                              ; FB9095  5e
 	pop XIX                                              ; FB9096  5c
 	ret                                                  ; FB9097  0e
-sub_FB9098:
+; SmfPlay_ScaleDeltaTo96Ppq: when the file's division (0x605066) is not 0x60: (0x60505F) = delta x 0x60 / division, + 1 when the
+;   remainder checks against (0x60506A) / (0x60506E) say so.
+SmfPlay_ScaleDeltaTo96Ppq:
 	xor XWA,XWA                                          ; FB9098  e8 d0
 	xor XHL,XHL                                          ; FB909A  eb d3
 	xor XDE,XDE                                          ; FB909C  ea d2
-	ld wa, (0x605066:24)                                ; FB909E  d2 66 50 60 20
+	ld wa, (SmfPlay_Division:24)                                ; FB909E  d2 66 50 60 20
 	cp WA,0x0060                                         ; FB90A3  d8 cf 60 00
 	jr z, .LFB90EA                                       ; FB90A7  66 41
-	ld xwa, (0x60505f:24)                               ; FB90A9  e2 5f 50 60 20
+	ld xwa, (SmfPlay_VlqValue:24)                               ; FB90A9  e2 5f 50 60 20
 	ldw hl, 0x60                                         ; FB90AE  33 60 00
 	mul xwa, hl                                         ; FB90B1  db 40
-	ld hl, (0x605066:24)                                ; FB90B3  d2 66 50 60 23
+	ld hl, (SmfPlay_Division:24)                                ; FB90B3  d2 66 50 60 23
 	div xwa, hl                                         ; FB90B8  db 50
 	xor XDE,XDE                                          ; FB90BA  ea d2
 	ld DE,QWA                                            ; FB90BC  d7 e2 8a
 	xor HL,HL                                            ; FB90BF  db d3
 	ld QWA,HL                                            ; FB90C1  d7 e2 9b
-	ld (0x60505f:24), xwa                               ; FB90C4  f2 5f 50 60 60
-	m_cp_mi16 MW24, 0x605066, 0x0060                     ; FB90C9  d2 66 50 60 3f 60 00
+	ld (SmfPlay_VlqValue:24), xwa                               ; FB90C4  f2 5f 50 60 60
+	m_cp_mi16 MW24, SmfPlay_Division, 0x0060                     ; FB90C9  d2 66 50 60 3f 60 00
 	jr ule, .LFB90EA                                     ; FB90D0  63 18
 	m_cp_rm ML24, 0x60506a, r0                           ; FB90D2  e2 6a 50 60 f0
 	jr nc, .LFB90EA                                      ; FB90D7  6f 11
 	m_cp_rm ML24, 0x60506e, r0                           ; FB90D9  e2 6e 50 60 f0
 	jr ule, .LFB90EA                                     ; FB90DE  63 0a
 	ld XIZ,0x00000001                                    ; FB90E0  46 01 00 00 00
-	add (0x60505f:24), xiz                              ; FB90E5  e2 5f 50 60 8e
+	add (SmfPlay_VlqValue:24), xiz                              ; FB90E5  e2 5f 50 60 8e
 .LFB90EA:
 	ret                                                  ; FB90EA  0e
-sub_FB90EB:
+; SmfPlay_ApplyTempo_SaveAll: SmfPlay_ApplyTempoAsBpm with every register pair saved.
+SmfPlay_ApplyTempo_SaveAll:
 	push XIX                                             ; FB90EB  3c
 	push XIZ                                             ; FB90EC  3e
 	push XHL                                             ; FB90ED  3b
@@ -100815,7 +100818,7 @@ sub_FB90EB:
 	push XWA                                             ; FB90EF  38
 	push XIY                                             ; FB90F0  3d
 	push XBC                                             ; FB90F1  39
-	call sub_FB90FE                                      ; FB90F2  1d fe 90 fb
+	call SmfPlay_ApplyTempoAsBpm                                      ; FB90F2  1d fe 90 fb
 	pop XBC                                              ; FB90F6  59
 	pop XIY                                              ; FB90F7  5d
 	pop XWA                                              ; FB90F8  58
@@ -100824,9 +100827,11 @@ sub_FB90EB:
 	pop XIZ                                              ; FB90FB  5e
 	pop XIX                                              ; FB90FC  5c
 	ret                                                  ; FB90FD  0e
-sub_FB90FE:
+; SmfPlay_ApplyTempoAsBpm: BPM = 0x39387 (60,000,000 / 256) / ((0x605063) << 8 | (0x605064)), clamped 40..300; to (0x7EE2); queued as
+;   parameter 0x7A (Queue2C00); T_Tempo_ApplyBpm.
+SmfPlay_ApplyTempoAsBpm:
 	xor XWA,XWA                                          ; FB90FE  e8 d0
-	ld h, (0x605063:24)                                 ; FB9100  c2 63 50 60 26
+	ld h, (SmfPlay_TempoMicros:24)                                 ; FB9100  c2 63 50 60 26
 	ld l, (0x605064:24)                                 ; FB9105  c2 64 50 60 27
 	ldw wa, 0x9387                                       ; FB910A  30 87 93
 	ldw de, 0x03                                         ; FB910D  32 03 00
@@ -100870,7 +100875,10 @@ SeqClock_ResetBeatAndTick:
 	ld (Seq_BeatTick:8), 0x00:io                                      ; FB9170  08 93 00
 	ei 0x00                                              ; FB9173  06 00
 	ret                                                  ; FB9175  0e
-sub_FB9176:
+; SmfPlay_StopAtEndOfTrack: (0x60505E) bit 0 cleared; all notes off and hold off injected on every channel, positions cleared, bend /
+;   modulation reset, transports stopped (waits for TransportB), clock reset, T_MidiFileStream_Close,
+;   (0x60505E) bit 1 and (0x605148) cleared.
+SmfPlay_StopAtEndOfTrack:
 	pushw hl                                             ; FB9176  2b
 	pushw de                                             ; FB9177  2a
 	push XIX                                             ; FB9178  3c
@@ -100880,7 +100888,7 @@ sub_FB9176:
 	calr MidiInQueue_InjectAllNotesOff_AllChannels                                      ; FB9187  1e 92 00
 	calr MidiFilePlay_ClearPosition                                      ; FB918A  1e 8e 07
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB918D  1e d1 0c
-	calr sub_FB9E69                                      ; FB9190  1e d6 0c
+	calr SmfPlay_ClearEventTimes                                      ; FB9190  1e d6 0c
 	call Msg0716_AllPartsResetBendAndModulation_SaveRegs                                      ; FB9193  1d 60 90 fb
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
 	call Transport_StopAllRunning_SaveRegs                                      ; FB919A  1d 46 90 fb
@@ -100898,7 +100906,7 @@ sub_FB9176:
 	m_set 4, MD16, UI_ScreenFlags                                ; FB91B4  f1 95 20 bc
 	call T_MidiFileStream_Close                                        ; FB91B8  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB91BC  84 3c fd
-	ld (0x605148:24), 0x00                             ; FB91BF  f2 48 51 60 00 00
+	ld (SmfPlay_Playing:24), 0x00                             ; FB91BF  f2 48 51 60 00 00
 	pop XIX                                              ; FB91C5  5c
 	popw de                                              ; FB91C6  4a
 	popw hl                                              ; FB91C7  4b
@@ -100916,7 +100924,7 @@ MidiFilePlay_Stop:
 	call T_F413C0                                        ; FB91DD  1d c0 13 f4
 	calr MidiFilePlay_ClearPosition                                      ; FB91E1  1e 37 07
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB91E4  1e 7a 0c
-	calr sub_FB9E69                                      ; FB91E7  1e 7f 0c
+	calr SmfPlay_ClearEventTimes                                      ; FB91E7  1e 7f 0c
 	call Msg0716_AllPartsResetBendAndModulation_SaveRegs                                      ; FB91EA  1d 60 90 fb
 ; (sub_FB91EE removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiFilePlay_Stop;
 ;  notes/prom_a_stray_label_removal.py)
@@ -100935,7 +100943,7 @@ sub_FB91EE_Loop:
 	calr SeqClock_ResetBeatAndTick                                      ; FB9208  1e 5f ff
 	call T_MidiFileStream_Close                                        ; FB920B  1d 20 26 f4
 	and (XIX),0xfd                                       ; FB920F  84 3c fd
-	ld (0x605148:24), 0x00                             ; FB9212  f2 48 51 60 00 00
+	ld (SmfPlay_Playing:24), 0x00                             ; FB9212  f2 48 51 60 00 00
 	pop XIX                                              ; FB9218  5c
 	popw de                                              ; FB9219  4a
 	popw hl                                              ; FB921A  4b
@@ -101092,17 +101100,20 @@ MidiInQueue_InjectHoldPedalOff_AllChannels:
 	pop XIX                                              ; FB92D9  5c
 	popw hl                                              ; FB92DA  4b
 	ret                                                  ; FB92DB  0e
-sub_FB92DC:
-	ld c, (0x605056:24)                                 ; FB92DC  c2 56 50 60 23
+; SmfPlay_ReadChannelEvent: SmfPlay_ReadEventWithStatus when the byte just read (0x605056) has bit 7, else SmfPlay_ReadEventRunningStatus.
+SmfPlay_ReadChannelEvent:
+	ld c, (SmfPlay_LastByte:24)                                 ; FB92DC  c2 56 50 60 23
 	and C,0x80                                           ; FB92E1  cb cc 80
 	jr z, .LFB92EB                                       ; FB92E4  66 05
-	calr sub_FB9345                                      ; FB92E6  1e 5c 00
+	calr SmfPlay_ReadEventWithStatus                                      ; FB92E6  1e 5c 00
 	jr .LFB92EE                                          ; FB92E9  68 03
 .LFB92EB:
-	calr sub_FB92EF                                      ; FB92EB  1e 01 00
+	calr SmfPlay_ReadEventRunningStatus                                      ; FB92EB  1e 01 00
 .LFB92EE:
 	ret                                                  ; FB92EE  0e
-sub_FB92EF:
+; SmfPlay_ReadEventRunningStatus: status = Smf_RunningStatus, the byte just read is data 1, data 2 read unless 0xCn / 0xDn;
+;   SmfPlay_SendChannelEvent.
+SmfPlay_ReadEventRunningStatus:
 	pushw hl                                             ; FB92EF  2b
 	push XIX                                             ; FB92F0  3c
 	lda xix, (Smf_EventStatus:16)                                ; FB92F1  f1 d0 10 34
@@ -101110,7 +101121,7 @@ sub_FB92EF:
 	ld (XIX),C                                           ; FB92F9  b4 43
 	ld h, (Smf_RunningStatus:16)                                   ; FB92FB  c1 cc 10 26
 	extz XIX                                             ; FB92FF  ec 12
-	ld c, (0x605056:24)                                 ; FB9301  c2 56 50 60 23
+	ld c, (SmfPlay_LastByte:24)                                 ; FB9301  c2 56 50 60 23
 	ld (XIX+0x01),C                                      ; FB9306  bc 01 43
 	ld C,H                                               ; FB9309  ce 8b
 	and C,0xf0                                           ; FB930B  cb cc f0
@@ -101121,30 +101132,32 @@ sub_FB92EF:
 	jr z, .LFB933F                                       ; FB931A  66 23
 	call T_MidiFileStream_GetByte                                        ; FB931C  1d 1c 26 f4
 	ld HL,WA                                             ; FB9320  d8 8b
-	ld (0x605145:24), wa                                ; FB9322  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9322  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9327  db d8
 	jr ge, .LFB9330                                      ; FB9329  69 05
-	m_set 0, MD24, 0x605147                              ; FB932B  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB932B  f2 47 51 60 b8
 .LFB9330:
-	ld h, (0x605145:24)                                 ; FB9330  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9335  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB9330  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9335  f2 56 50 60 46
 	extz XIX                                             ; FB933A  ec 12
 	ld (XIX+0x02),H                                      ; FB933C  bc 02 46
 .LFB933F:
-	calr sub_FB95D9                                      ; FB933F  1e 97 02
+	calr SmfPlay_SendChannelEvent                                      ; FB933F  1e 97 02
 	pop XIX                                              ; FB9342  5c
 	popw hl                                              ; FB9343  4b
 	ret                                                  ; FB9344  0e
-sub_FB9345:
+; SmfPlay_ReadEventWithStatus: Smf_RunningStatus = Smf_EventStatus = the status; one data byte for 0xCn / 0xDn, two otherwise;
+;   SmfPlay_SendChannelEvent.
+SmfPlay_ReadEventWithStatus:
 	link XIZ,0xfffc                                      ; FB9345  ee 0c fc ff
 	pushw hl                                             ; FB9349  2b
 	pushw de                                             ; FB934A  2a
 	pushw ix                                             ; FB934B  2c
-	ld c, (0x605056:24)                                 ; FB934C  c2 56 50 60 23
+	ld c, (SmfPlay_LastByte:24)                                 ; FB934C  c2 56 50 60 23
 	ld (Smf_RunningStatus:16), c                                   ; FB9351  f1 cc 10 43
-	ld a, (0x605056:24)                                 ; FB9355  c2 56 50 60 21
+	ld a, (SmfPlay_LastByte:24)                                 ; FB9355  c2 56 50 60 21
 	ld (Smf_EventStatus:16), a                                   ; FB935A  f1 d0 10 41
-	ld c, (0x605056:24)                                 ; FB935E  c2 56 50 60 23
+	ld c, (SmfPlay_LastByte:24)                                 ; FB935E  c2 56 50 60 23
 	and C,0xf0                                           ; FB9363  cb cc f0
 	extz BC                                              ; FB9366  d9 12
 	cp BC,0x00c0                                         ; FB9368  d9 cf c0 00
@@ -101165,14 +101178,14 @@ sub_FB9345:
 .LFB9388:
 	call T_MidiFileStream_GetByte                                        ; FB9388  1d 1c 26 f4
 	ld (xiz-2), wa                                       ; FB938C  be fe 50
-	ld (0x605145:24), wa                                ; FB938F  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB938F  f2 45 51 60 50
 	m_cp_mi16 MWD+r6, 0xfe, 0x0000                       ; FB9394  9e fe 3f 00 00
 	jr ge, .LFB93A0                                      ; FB9399  69 05
-	m_set 0, MD24, 0x605147                              ; FB939B  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB939B  f2 47 51 60 b8
 .LFB93A0:
-	ld c, (0x605145:24)                                 ; FB93A0  c2 45 51 60 23
+	ld c, (SmfPlay_LastRead:24)                                 ; FB93A0  c2 45 51 60 23
 	ld (xiz-2), c                                        ; FB93A5  be fe 43
-	ld (0x605056:24), c                                 ; FB93A8  f2 56 50 60 43
+	ld (SmfPlay_LastByte:24), c                                 ; FB93A8  f2 56 50 60 43
 	ld (xiz-4), hl                                       ; FB93AD  be fc 53
 	ld bc, (xiz-4)                                       ; FB93B0  9e fc 21
 	extz XBC                                             ; FB93B3  e9 12
@@ -101184,17 +101197,19 @@ sub_FB9345:
 	cp DE,IX                                             ; FB93C3  dc f2
 	jr c, .LFB9388                                       ; FB93C5  67 c1
 .LFB93C7:
-	calr sub_FB95D9                                      ; FB93C7  1e 0f 02
+	calr SmfPlay_SendChannelEvent                                      ; FB93C7  1e 0f 02
 	popw ix                                              ; FB93CA  4c
 	popw de                                              ; FB93CB  4a
 	popw hl                                              ; FB93CC  4b
 	unlk XIZ                                             ; FB93CD  ee 0d
 	ret                                                  ; FB93CF  0e
-sub_FB93D0:
+; SmfPlay_ReadVlqBytes: reads bytes (MidiFileStream_GetByte) into Smf_VlqBytes until one has bit 7 clear; A = the count; a negative
+;   read (end of stream) sets (0x605147) bit 0.
+SmfPlay_ReadVlqBytes:
 	pushw hl                                             ; FB93D0  2b
 	push XDE                                             ; FB93D1  3a
 	push XIX                                             ; FB93D2  3c
-	lda xix, (0x605145:24)                               ; FB93D3  f2 45 51 60 34
+	lda xix, (SmfPlay_LastRead:24)                               ; FB93D3  f2 45 51 60 34
 	ld h, 0x01:opc                                          ; FB93D8  26 01
 .LFB93DA:
 	call T_MidiFileStream_GetByte                                        ; FB93DA  1d 1c 26 f4
@@ -101218,17 +101233,18 @@ sub_FB93D0:
 	ld BC,(XIX)                                          ; FB9402  94 21
 	cp bc, 0x00:i3                                         ; FB9404  d9 d8
 	jr ge, .LFB940D                                      ; FB9406  69 05
-	m_set 0, MD24, 0x605147                              ; FB9408  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB9408  f2 47 51 60 b8
 .LFB940D:
 	ld A,H                                               ; FB940D  ce 89
 	pop XIX                                              ; FB940F  5c
 	pop XDE                                              ; FB9410  5a
 	popw hl                                              ; FB9411  4b
 	ret                                                  ; FB9412  0e
-sub_FB9413:
+; SmfPlay_ReadDeltaTime: (0x60505F) = 0, SmfPlay_ReadVlqBytes, then the decoder for 1 / 2 / 3 bytes.
+SmfPlay_ReadDeltaTime:
 	sub XBC,XBC                                          ; FB9413  e9 a1
-	ld (0x60505f:24), xbc                               ; FB9415  f2 5f 50 60 61
-	calr sub_FB93D0                                      ; FB941A  1e b3 ff
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB9415  f2 5f 50 60 61
+	calr SmfPlay_ReadVlqBytes                                      ; FB941A  1e b3 ff
 	extz WA                                              ; FB941D  d8 12
 	cp wa, 0x01:i3                                         ; FB941F  d8 d9
 	jr z, .LFB9429                                       ; FB9421  66 06
@@ -101236,23 +101252,25 @@ sub_FB9413:
 	jr z, .LFB942E                                       ; FB9425  66 07
 	jr .LFB9433                                          ; FB9427  68 0a
 .LFB9429:
-	calr sub_FB9437                                      ; FB9429  1e 0b 00
+	calr SmfPlay_DecodeVlq1                                      ; FB9429  1e 0b 00
 	jr .LFB9436                                          ; FB942C  68 08
 .LFB942E:
-	calr sub_FB9448                                      ; FB942E  1e 17 00
+	calr SmfPlay_DecodeVlq2                                      ; FB942E  1e 17 00
 	jr .LFB9436                                          ; FB9431  68 03
 .LFB9433:
-	calr sub_FB9490                                      ; FB9433  1e 5a 00
+	calr SmfPlay_DecodeVlq3                                      ; FB9433  1e 5a 00
 .LFB9436:
 	ret                                                  ; FB9436  0e
-sub_FB9437:
+; SmfPlay_DecodeVlq1: (0x60505F) = Smf_VlqBytes[0] & 0x7F.
+SmfPlay_DecodeVlq1:
 	ld c, (Smf_VlqBytes:16)                                   ; FB9437  c1 93 11 23
 	res 0x07,C                                           ; FB943B  cb 30 07
 	extz BC                                              ; FB943E  d9 12
 	extz XBC                                             ; FB9440  e9 12
-	ld (0x60505f:24), xbc                               ; FB9442  f2 5f 50 60 61
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB9442  f2 5f 50 60 61
 	ret                                                  ; FB9447  0e
-sub_FB9448:
+; SmfPlay_DecodeVlq2: (0x60505F) = the 14-bit value of two VLQ bytes.
+SmfPlay_DecodeVlq2:
 	pushw hl                                             ; FB9448  2b
 	pushw de                                             ; FB9449  2a
 	push XIX                                             ; FB944A  3c
@@ -101274,22 +101292,23 @@ sub_FB9448:
 	extz BC                                              ; FB9472  d9 12
 	mul BC,0x0100                                        ; FB9474  d9 08 00 01
 	ld XIX,XBC                                           ; FB9478  e9 8c
-	ld (0x60505f:24), xbc                               ; FB947A  f2 5f 50 60 61
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB947A  f2 5f 50 60 61
 	ld A,L                                               ; FB947F  cf 89
 	extz WA                                              ; FB9481  d8 12
 	extz XWA                                             ; FB9483  e8 12
 	add XWA,XIX                                          ; FB9485  ec 80
-	ld (0x60505f:24), xwa                               ; FB9487  f2 5f 50 60 60
+	ld (SmfPlay_VlqValue:24), xwa                               ; FB9487  f2 5f 50 60 60
 	pop XIX                                              ; FB948C  5c
 	popw de                                              ; FB948D  4a
 	popw hl                                              ; FB948E  4b
 	ret                                                  ; FB948F  0e
-sub_FB9490:
+; SmfPlay_DecodeVlq3: (0x60505F) = the 21-bit value of three VLQ bytes.
+SmfPlay_DecodeVlq3:
 	link XIZ,0xfff4                                      ; FB9490  ee 0c f4 ff
 	pushw hl                                             ; FB9494  2b
 	pushw de                                             ; FB9495  2a
 	push XIX                                             ; FB9496  3c
-	lda xix, (0x60505f:24)                               ; FB9497  f2 5f 50 60 34
+	lda xix, (SmfPlay_VlqValue:24)                               ; FB9497  f2 5f 50 60 34
 	ld h, (Smf_VlqBytes:16)                                   ; FB949C  c1 93 11 26
 	ld L,H                                               ; FB94A0  ce 8f
 	res 0x07,L                                           ; FB94A2  cf 30 07
@@ -101313,7 +101332,7 @@ sub_FB9490:
 	ld D,E                                               ; FB94D4  cd 8c
 	sll d, 0x07                                          ; FB94D6  cc ee 07
 	ld E,B                                               ; FB94D9  ca 8d
-; (sub_FB94DB removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FB9490;
+; (sub_FB94DB removed 2026-10-04: no code names it and the line above falls through into it -- part of SmfPlay_DecodeVlq3;
 ;  notes/prom_a_stray_label_removal.py)
 	or E,L                                               ; FB94DB  cf e5
 	ld L,C                                               ; FB94DD  cb 8f
@@ -101340,11 +101359,13 @@ sub_FB9490:
 	popw hl                                              ; FB950C  4b
 	unlk XIZ                                             ; FB950D  ee 0d
 	ret                                                  ; FB950F  0e
-sub_FB9510:
-	ld xbc, (0x60505f:24)                               ; FB9510  e2 5f 50 60 21
-	add (0x605044:24), xbc                              ; FB9515  e2 44 50 60 89
+; SmfPlay_AdvanceEventTime: (0x605044) += (0x60505F): the next event's time.
+SmfPlay_AdvanceEventTime:
+	ld xbc, (SmfPlay_VlqValue:24)                               ; FB9510  e2 5f 50 60 21
+	add (SmfPlay_NextEventTime:24), xbc                              ; FB9515  e2 44 50 60 89
 	ret                                                  ; FB951A  0e
-sub_FB951B:
+; SmfPlay_ClearVlqBytes: Smf_VlqBytes[0..5] = 0.
+SmfPlay_ClearVlqBytes:
 	pushw hl                                             ; FB951B  2b
 	ld h, 0x00:opc                                          ; FB951C  26 00
 .LFB951E:
@@ -101357,11 +101378,12 @@ sub_FB951B:
 	jr ule, .LFB951E                                     ; FB952E  63 ee
 	popw hl                                              ; FB9530  4b
 	ret                                                  ; FB9531  0e
-sub_FB9532:
+; SmfPlay_ReadVlqBytes_Copy: a byte-for-byte copy of SmfPlay_ReadVlqBytes, used by SmfPlay_ReadVlqValue.
+SmfPlay_ReadVlqBytes_Copy:
 	pushw hl                                             ; FB9532  2b
 	push XDE                                             ; FB9533  3a
 	push XIX                                             ; FB9534  3c
-	lda xix, (0x605145:24)                               ; FB9535  f2 45 51 60 34
+	lda xix, (SmfPlay_LastRead:24)                               ; FB9535  f2 45 51 60 34
 	ld h, 0x01:opc                                          ; FB953A  26 01
 .LFB953C:
 	call T_MidiFileStream_GetByte                                        ; FB953C  1d 1c 26 f4
@@ -101385,17 +101407,18 @@ sub_FB9532:
 	ld BC,(XIX)                                          ; FB9564  94 21
 	cp bc, 0x00:i3                                         ; FB9566  d9 d8
 	jr ge, .LFB956F                                      ; FB9568  69 05
-	m_set 0, MD24, 0x605147                              ; FB956A  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB956A  f2 47 51 60 b8
 .LFB956F:
 	ld A,H                                               ; FB956F  ce 89
 	pop XIX                                              ; FB9571  5c
 	pop XDE                                              ; FB9572  5a
 	popw hl                                              ; FB9573  4b
 	ret                                                  ; FB9574  0e
-sub_FB9575:
+; SmfPlay_ReadVlqValue: the same through SmfPlay_ReadVlqBytes_Copy -- event lengths.
+SmfPlay_ReadVlqValue:
 	sub XBC,XBC                                          ; FB9575  e9 a1
-	ld (0x60505f:24), xbc                               ; FB9577  f2 5f 50 60 61
-	calr sub_FB9532                                      ; FB957C  1e b3 ff
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB9577  f2 5f 50 60 61
+	calr SmfPlay_ReadVlqBytes_Copy                                      ; FB957C  1e b3 ff
 	extz WA                                              ; FB957F  d8 12
 	cp wa, 0x01:i3                                         ; FB9581  d8 d9
 	jr z, .LFB958B                                       ; FB9583  66 06
@@ -101403,20 +101426,21 @@ sub_FB9575:
 	jr z, .LFB9590                                       ; FB9587  66 07
 	jr .LFB9595                                          ; FB9589  68 0a
 .LFB958B:
-	calr sub_FB9437                                      ; FB958B  1e a9 fe
+	calr SmfPlay_DecodeVlq1                                      ; FB958B  1e a9 fe
 	jr .LFB9598                                          ; FB958E  68 08
 .LFB9590:
-	calr sub_FB9448                                      ; FB9590  1e b5 fe
+	calr SmfPlay_DecodeVlq2                                      ; FB9590  1e b5 fe
 	jr .LFB9598                                          ; FB9593  68 03
 .LFB9595:
-	calr sub_FB9490                                      ; FB9595  1e f8 fe
+	calr SmfPlay_DecodeVlq3                                      ; FB9595  1e f8 fe
 .LFB9598:
 	ret                                                  ; FB9598  0e
-sub_FB9599:
+; SmfPlay_SkipBytes: reads and drops (0x60505F) bytes (the last kept in (0x605056)); (0x60505F) = 0.
+SmfPlay_SkipBytes:
 	pushw hl                                             ; FB9599  2b
 	pushw de                                             ; FB959A  2a
 	pushw ix                                             ; FB959B  2c
-	ld ix, (0x60505f:24)                                ; FB959C  d2 5f 50 60 24
+	ld ix, (SmfPlay_VlqValue:24)                                ; FB959C  d2 5f 50 60 24
 	ldw hl, 0x00                                         ; FB95A1  33 00 00
 	ld DE,IX                                             ; FB95A4  dc 8a
 	dec 1,DE                                             ; FB95A6  da 69
@@ -101425,23 +101449,25 @@ sub_FB9599:
 	jr ugt, .LFB95CE                                     ; FB95AA  6b 22
 	call T_MidiFileStream_GetByte                                        ; FB95AC  1d 1c 26 f4
 	ld IX,WA                                             ; FB95B0  d8 8c
-	ld (0x605145:24), wa                                ; FB95B2  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB95B2  f2 45 51 60 50
 	cp ix, 0x00:i3                                         ; FB95B7  dc d8
 	jr ge, .LFB95C0                                      ; FB95B9  69 05
-	m_set 0, MD24, 0x605147                              ; FB95BB  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB95BB  f2 47 51 60 b8
 .LFB95C0:
-	ld c, (0x605145:24)                                 ; FB95C0  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB95C5  f2 56 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB95C0  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB95C5  f2 56 50 60 43
 	inc 1,HL                                             ; FB95CA  db 61
 	jr .LFB95A8                                          ; FB95CC  68 da
 .LFB95CE:
 	sub XBC,XBC                                          ; FB95CE  e9 a1
-	ld (0x60505f:24), xbc                               ; FB95D0  f2 5f 50 60 61
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB95D0  f2 5f 50 60 61
 	popw ix                                              ; FB95D5  4c
 	popw de                                              ; FB95D6  4a
 	popw hl                                              ; FB95D7  4b
 	ret                                                  ; FB95D8  0e
-sub_FB95D9:
+; SmfPlay_SendChannelEvent: data bytes clamped to 0x7F; the 2-byte (0xCn / 0xDn) or 3-byte message at Smf_EventStatus put on the MIDI
+;   input ring (T_MidiInARing_PutBlock) with interrupts held.
+SmfPlay_SendChannelEvent:
 	pushw hl                                             ; FB95D9  2b
 	push XIX                                             ; FB95DA  3c
 	lda xix, (Smf_EventStatus:16)                                ; FB95DB  f1 d0 10 34
@@ -101484,43 +101510,44 @@ sub_FB95D9:
 	pop XIX                                              ; FB9632  5c
 	popw hl                                              ; FB9633  4b
 	ret                                                  ; FB9634  0e
-sub_FB9635:
+; SmfPlay_ReadTempoEvent: the three tempo bytes to 0x605063..0x605065, then SmfPlay_ApplyTempo_SaveAll.
+SmfPlay_ReadTempoEvent:
 	pushw hl                                             ; FB9635  2b
 	push XIX                                             ; FB9636  3c
-	lda xix, (0x605147:24)                               ; FB9637  f2 47 51 60 34
+	lda xix, (SmfPlay_StreamFlags:24)                               ; FB9637  f2 47 51 60 34
 	call T_MidiFileStream_GetByte                                        ; FB963C  1d 1c 26 f4
 	ld HL,WA                                             ; FB9640  d8 8b
-	ld (0x605145:24), wa                                ; FB9642  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9642  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9647  db d8
 	jr ge, .LFB964E                                      ; FB9649  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB964B  84 3e 01
 .LFB964E:
-	ld c, (0x605145:24)                                 ; FB964E  c2 45 51 60 23
-	ld (0x605063:24), c                                 ; FB9653  f2 63 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB964E  c2 45 51 60 23
+	ld (SmfPlay_TempoMicros:24), c                                 ; FB9653  f2 63 50 60 43
 	call T_MidiFileStream_GetByte                                        ; FB9658  1d 1c 26 f4
 	ld HL,WA                                             ; FB965C  d8 8b
-	ld (0x605145:24), wa                                ; FB965E  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB965E  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9663  db d8
 	jr ge, .LFB966A                                      ; FB9665  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9667  84 3e 01
 .LFB966A:
-	ld c, (0x605145:24)                                 ; FB966A  c2 45 51 60 23
+	ld c, (SmfPlay_LastRead:24)                                 ; FB966A  c2 45 51 60 23
 	ld (0x605064:24), c                                 ; FB966F  f2 64 50 60 43
 	call T_MidiFileStream_GetByte                                        ; FB9674  1d 1c 26 f4
 	ld HL,WA                                             ; FB9678  d8 8b
-	ld (0x605145:24), wa                                ; FB967A  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB967A  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB967F  db d8
 	jr ge, .LFB9686                                      ; FB9681  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9683  84 3e 01
 .LFB9686:
-	ld c, (0x605145:24)                                 ; FB9686  c2 45 51 60 23
+	ld c, (SmfPlay_LastRead:24)                                 ; FB9686  c2 45 51 60 23
 	ld (0x605065:24), c                                 ; FB968B  f2 65 50 60 43
-	call sub_FB90EB                                      ; FB9690  1d eb 90 fb
+	call SmfPlay_ApplyTempo_SaveAll                                      ; FB9690  1d eb 90 fb
 	pop XIX                                              ; FB9694  5c
 	popw hl                                              ; FB9695  4b
 	ret                                                  ; FB9696  0e
 ; ---------------------------------------------------------------------
-; sub_FB9697 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; SmfPlay_ReadHeader -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: prom_a SequencerMedley_MidiFileTick (`calr`) at 0xFB9EC9
 ;          prom_a MidiFileDirectPlay_Tick (`calr`) at 0xFBA004
@@ -101538,12 +101565,14 @@ sub_FB9635:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FB9697:
+; SmfPlay_ReadHeader: reads four bytes and compares them with 'MThd' (MidiFile_Tables_FBA169); when they differ, 0x7C more bytes
+;   are skipped before it reads on -- a 0x80-byte prefix is tolerated.
+SmfPlay_ReadHeader:
 	link XIZ,0xfff0                                      ; FB9697  ee 0c f0 ff
 	pushw hl                                             ; FB969B  2b
 	pushw de                                             ; FB969C  2a
 	push XIX                                             ; FB969D  3c
-	lda xix, (0x605147:24)                               ; FB969E  f2 47 51 60 34
+	lda xix, (SmfPlay_StreamFlags:24)                               ; FB969E  f2 47 51 60 34
 	ld xbc, (MidiFile_Tables_FBA169:24)                               ; FB96A3  e2 69 a1 fb 21
 	ld (xiz-4), xbc                                      ; FB96A8  be fc 61
 	ld xwa, (MidiFile_Tables_FBA169+4:24)                               ; FB96AB  e2 6d a1 fb 20
@@ -101552,13 +101581,13 @@ sub_FB9697:
 .LFB96B5:
 	call T_MidiFileStream_GetByte                                        ; FB96B5  1d 1c 26 f4
 	ld DE,WA                                             ; FB96B9  d8 8a
-	ld (0x605145:24), wa                                ; FB96BB  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB96BB  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB96C0  da d8
 	jr ge, .LFB96C7                                      ; FB96C2  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB96C4  84 3e 01
 .LFB96C7:
-	ld l, (0x605145:24)                                 ; FB96C7  c2 45 51 60 27
-	ld (0x605056:24), l                                 ; FB96CC  f2 56 50 60 47
+	ld l, (SmfPlay_LastRead:24)                                 ; FB96C7  c2 45 51 60 27
+	ld (SmfPlay_LastByte:24), l                                 ; FB96CC  f2 56 50 60 47
 	ld C,H                                               ; FB96D1  ce 8b
 	extz BC                                              ; FB96D3  d9 12
 	extz XBC                                             ; FB96D5  e9 12
@@ -101589,13 +101618,13 @@ sub_FB9697:
 .LFB970A:
 	call T_MidiFileStream_GetByte                                        ; FB970A  1d 1c 26 f4
 	ld DE,WA                                             ; FB970E  d8 8a
-	ld (0x605145:24), wa                                ; FB9710  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9710  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9715  da d8
 	jr ge, .LFB971C                                      ; FB9717  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9719  84 3e 01
 .LFB971C:
-	ld c, (0x605145:24)                                 ; FB971C  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB9721  f2 56 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB971C  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB9721  f2 56 50 60 43
 	dec 1,H                                              ; FB9726  ce 69
 	cp h, 0x00:i3                                          ; FB9728  ce d8
 	jr nz, .LFB970A                                      ; FB972A  6e de
@@ -101603,13 +101632,13 @@ sub_FB9697:
 .LFB972E:
 	call T_MidiFileStream_GetByte                                        ; FB972E  1d 1c 26 f4
 	ld DE,WA                                             ; FB9732  d8 8a
-	ld (0x605145:24), wa                                ; FB9734  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9734  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9739  da d8
 	jr ge, .LFB9740                                      ; FB973B  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB973D  84 3e 01
 .LFB9740:
-	ld l, (0x605145:24)                                 ; FB9740  c2 45 51 60 27
-	ld (0x605056:24), l                                 ; FB9745  f2 56 50 60 47
+	ld l, (SmfPlay_LastRead:24)                                 ; FB9740  c2 45 51 60 27
+	ld (SmfPlay_LastByte:24), l                                 ; FB9745  f2 56 50 60 47
 	ld C,H                                               ; FB974A  ce 8b
 	extz BC                                              ; FB974C  d9 12
 	extz XBC                                             ; FB974E  e9 12
@@ -101637,81 +101666,81 @@ sub_FB9697:
 	cp hl, 0x04:i3                                         ; FB977C  db dc
 	jrl nz, .LFB9915                                     ; FB977E  7e 94 01
 .LFB9781:
-	calr sub_FB9E3F                                      ; FB9781  1e bb 06
+	calr SmfPlay_StartPlayback                                      ; FB9781  1e bb 06
 	ld h, 0x05:opc                                          ; FB9784  26 05
 .LFB9786:
 	call T_MidiFileStream_GetByte                                        ; FB9786  1d 1c 26 f4
 	ld DE,WA                                             ; FB978A  d8 8a
-	ld (0x605145:24), wa                                ; FB978C  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB978C  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9791  da d8
 	jr ge, .LFB9798                                      ; FB9793  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9795  84 3e 01
 .LFB9798:
-	ld c, (0x605145:24)                                 ; FB9798  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB979D  f2 56 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB9798  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB979D  f2 56 50 60 43
 	dec 1,H                                              ; FB97A2  ce 69
 	cp h, 0x00:i3                                          ; FB97A4  ce d8
 	jr nz, .LFB9786                                      ; FB97A6  6e de
 	call T_MidiFileStream_GetByte                                        ; FB97A8  1d 1c 26 f4
 	ld HL,WA                                             ; FB97AC  d8 8b
-	ld (0x605145:24), wa                                ; FB97AE  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB97AE  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97B3  db d8
 	jr ge, .LFB97BA                                      ; FB97B5  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB97B7  84 3e 01
 .LFB97BA:
-	ld h, (0x605145:24)                                 ; FB97BA  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB97BF  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB97BA  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB97BF  f2 56 50 60 46
 	ld (0x60505a:24), h                                 ; FB97C4  f2 5a 50 60 46
 	cp h, 0x00:i3                                          ; FB97C9  ce d8
 	jrl nz, .LFB9915                                     ; FB97CB  7e 47 01
 	call T_MidiFileStream_GetByte                                        ; FB97CE  1d 1c 26 f4
 	ld HL,WA                                             ; FB97D2  d8 8b
-	ld (0x605145:24), wa                                ; FB97D4  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB97D4  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97D9  db d8
 	jr ge, .LFB97E0                                      ; FB97DB  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB97DD  84 3e 01
 .LFB97E0:
-	ld h, (0x605145:24)                                 ; FB97E0  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB97E5  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB97E0  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB97E5  f2 56 50 60 46
 	ld (0x605059:24), h                                 ; FB97EA  f2 59 50 60 46
 	call T_MidiFileStream_GetByte                                        ; FB97EF  1d 1c 26 f4
 	ld HL,WA                                             ; FB97F3  d8 8b
-	ld (0x605145:24), wa                                ; FB97F5  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB97F5  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB97FA  db d8
 	jr ge, .LFB9801                                      ; FB97FC  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB97FE  84 3e 01
 .LFB9801:
-	ld h, (0x605145:24)                                 ; FB9801  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9806  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB9801  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9806  f2 56 50 60 46
 	ld (0x605058:24), h                                 ; FB980B  f2 58 50 60 46
 	call T_MidiFileStream_GetByte                                        ; FB9810  1d 1c 26 f4
 	ld HL,WA                                             ; FB9814  d8 8b
-	ld (0x605145:24), wa                                ; FB9816  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9816  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB981B  db d8
 	jr ge, .LFB9822                                      ; FB981D  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB981F  84 3e 01
 .LFB9822:
-	ld h, (0x605145:24)                                 ; FB9822  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9827  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB9822  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9827  f2 56 50 60 46
 	ld (0x60505d:24), h                                 ; FB982C  f2 5d 50 60 46
 	ld C,H                                               ; FB9831  ce 8b
 	extz BC                                              ; FB9833  d9 12
 	sll bc, 0x08                                         ; FB9835  d9 ee 08
-	ld (0x605066:24), bc                                ; FB9838  f2 66 50 60 51
+	ld (SmfPlay_Division:24), bc                                ; FB9838  f2 66 50 60 51
 	call T_MidiFileStream_GetByte                                        ; FB983D  1d 1c 26 f4
 	ld HL,WA                                             ; FB9841  d8 8b
-	ld (0x605145:24), wa                                ; FB9843  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9843  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9848  db d8
 	jr ge, .LFB984F                                      ; FB984A  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB984C  84 3e 01
 .LFB984F:
-	ld h, (0x605145:24)                                 ; FB984F  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9854  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB984F  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9854  f2 56 50 60 46
 	ld (0x60505c:24), h                                 ; FB9859  f2 5c 50 60 46
 	ld C,H                                               ; FB985E  ce 8b
 	extz BC                                              ; FB9860  d9 12
-	add (0x605066:24), bc                            ; FB9862  d2 66 50 60 89
-	ld bc, (0x605066:24)                                ; FB9867  d2 66 50 60 21
+	add (SmfPlay_Division:24), bc                            ; FB9862  d2 66 50 60 89
+	ld bc, (SmfPlay_Division:24)                                ; FB9867  d2 66 50 60 21
 	extz XBC                                             ; FB986C  e9 12
 	div BC,0x0060                                        ; FB986E  d9 0a 60 00
 	extz XBC                                             ; FB9872  e9 12
@@ -101725,13 +101754,13 @@ sub_FB9697:
 .LFB988C:
 	call T_MidiFileStream_GetByte                                        ; FB988C  1d 1c 26 f4
 	ld DE,WA                                             ; FB9890  d8 8a
-	ld (0x605145:24), wa                                ; FB9892  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9892  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9897  da d8
 	jr ge, .LFB989E                                      ; FB9899  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB989B  84 3e 01
 .LFB989E:
-	ld l, (0x605145:24)                                 ; FB989E  c2 45 51 60 27
-	ld (0x605056:24), l                                 ; FB98A3  f2 56 50 60 47
+	ld l, (SmfPlay_LastRead:24)                                 ; FB989E  c2 45 51 60 27
+	ld (SmfPlay_LastByte:24), l                                 ; FB98A3  f2 56 50 60 47
 	ld C,H                                               ; FB98A8  ce 8b
 	extz BC                                              ; FB98AA  d9 12
 	extz XBC                                             ; FB98AC  e9 12
@@ -101762,21 +101791,21 @@ sub_FB9697:
 .LFB98E0:
 	call T_MidiFileStream_GetByte                                        ; FB98E0  1d 1c 26 f4
 	ld DE,WA                                             ; FB98E4  d8 8a
-	ld (0x605145:24), wa                                ; FB98E6  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB98E6  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB98EB  da d8
 	jr ge, .LFB98F2                                      ; FB98ED  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB98EF  84 3e 01
 .LFB98F2:
-	ld c, (0x605145:24)                                 ; FB98F2  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB98F7  f2 56 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB98F2  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB98F7  f2 56 50 60 43
 	dec 1,H                                              ; FB98FC  ce 69
 	cp h, 0x00:i3                                          ; FB98FE  ce d8
 	jr nz, .LFB98E0                                      ; FB9900  6e de
 	ld (0x10cb:16), 0x00                                 ; FB9902  f1 cb 10 00 00
-	calr sub_FB9E69                                      ; FB9907  1e 5f 05
+	calr SmfPlay_ClearEventTimes                                      ; FB9907  1e 5f 05
 	m_set 0, MD24, 0x60505e                              ; FB990A  f2 5e 50 60 b8
-	calr sub_FB9413                                      ; FB990F  1e 01 fb
-	calr sub_FB9510                                      ; FB9912  1e fb fb
+	calr SmfPlay_ReadDeltaTime                                      ; FB990F  1e 01 fb
+	calr SmfPlay_AdvanceEventTime                                      ; FB9912  1e fb fb
 .LFB9915:
 	pop XIX                                              ; FB9915  5c
 	popw de                                              ; FB9916  4a
@@ -101788,19 +101817,21 @@ MidiFilePlay_ClearPosition:
 	sub XBC,XBC                                          ; FB991B  e9 a1
 	ld (0x605040:24), xbc                               ; FB991D  f2 40 50 60 61
 	ret                                                  ; FB9922  0e
-sub_FB9923:
+; SmfPlay_HandleMetaEvent: meta type: 0x2F -> its length byte, (0x10CB) = 0xFF, SmfPlay_StopAtEndOfTrack; 0x51 -> its length byte,
+;   SmfPlay_ReadTempoEvent; anything else skipped by its VLQ length.
+SmfPlay_HandleMetaEvent:
 	pushw hl                                             ; FB9923  2b
 	push XIX                                             ; FB9924  3c
-	lda xix, (0x605147:24)                               ; FB9925  f2 47 51 60 34
+	lda xix, (SmfPlay_StreamFlags:24)                               ; FB9925  f2 47 51 60 34
 	call T_MidiFileStream_GetByte                                        ; FB992A  1d 1c 26 f4
 	ld HL,WA                                             ; FB992E  d8 8b
-	ld (0x605145:24), wa                                ; FB9930  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9930  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9935  db d8
 	jr ge, .LFB993C                                      ; FB9937  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9939  84 3e 01
 .LFB993C:
-	ld h, (0x605145:24)                                 ; FB993C  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9941  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB993C  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9941  f2 56 50 60 46
 	ld C,H                                               ; FB9946  ce 8b
 	extz BC                                              ; FB9948  d9 12
 	cp BC,0x002f                                         ; FB994A  d9 cf 2f 00
@@ -101811,37 +101842,39 @@ sub_FB9923:
 .LFB9958:
 	call T_MidiFileStream_GetByte                                        ; FB9958  1d 1c 26 f4
 	ld HL,WA                                             ; FB995C  d8 8b
-	ld (0x605145:24), wa                                ; FB995E  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB995E  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9963  db d8
 	jr ge, .LFB996A                                      ; FB9965  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB9967  84 3e 01
 .LFB996A:
-	ld c, (0x605145:24)                                 ; FB996A  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB996F  f2 56 50 60 43
+	ld c, (SmfPlay_LastRead:24)                                 ; FB996A  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB996F  f2 56 50 60 43
 	ld (0x10cb:16), 0xff                                 ; FB9974  f1 cb 10 00 ff
-	calr sub_FB9176                                      ; FB9979  1e fa f7
+	calr SmfPlay_StopAtEndOfTrack                                      ; FB9979  1e fa f7
 	jr .LFB99A8                                          ; FB997C  68 2a
 .LFB997E:
 	call T_MidiFileStream_GetByte                                        ; FB997E  1d 1c 26 f4
 	ld HL,WA                                             ; FB9982  d8 8b
-	ld (0x605145:24), wa                                ; FB9984  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9984  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9989  db d8
 	jr ge, .LFB9990                                      ; FB998B  69 03
 	m_or_mi8 MBI+r4, 0, 0x01                             ; FB998D  84 3e 01
 .LFB9990:
-	ld c, (0x605145:24)                                 ; FB9990  c2 45 51 60 23
-	ld (0x605056:24), c                                 ; FB9995  f2 56 50 60 43
-	calr sub_FB9635                                      ; FB999A  1e 98 fc
+	ld c, (SmfPlay_LastRead:24)                                 ; FB9990  c2 45 51 60 23
+	ld (SmfPlay_LastByte:24), c                                 ; FB9995  f2 56 50 60 43
+	calr SmfPlay_ReadTempoEvent                                      ; FB999A  1e 98 fc
 	jr .LFB99A8                                          ; FB999D  68 09
 .LFB999F:
-	calr sub_FB951B                                      ; FB999F  1e 79 fb
-	calr sub_FB9575                                      ; FB99A2  1e d0 fb
-	calr sub_FB9599                                      ; FB99A5  1e f1 fb
+	calr SmfPlay_ClearVlqBytes                                      ; FB999F  1e 79 fb
+	calr SmfPlay_ReadVlqValue                                      ; FB99A2  1e d0 fb
+	calr SmfPlay_SkipBytes                                      ; FB99A5  1e f1 fb
 .LFB99A8:
 	pop XIX                                              ; FB99A8  5c
 	popw hl                                              ; FB99A9  4b
 	ret                                                  ; FB99AA  0e
-sub_FB99AB:
+; SmfPlay_ForwardGmSystemOn: unless (0x605053) already matches the mode (0x7F4D) bit 2 implies: waits for the MIDI SysEx receiver to be idle
+;   and puts the 6-byte F0 7E 7F 09 .. F7 on Ring601646.
+SmfPlay_ForwardGmSystemOn:
 	pushw hl                                             ; FB99AB  2b
 	ldw bc, 0x7f4a                                       ; FB99AC  31 4a 7f
 	extz XBC                                             ; FB99AF  e9 12
@@ -101874,7 +101907,9 @@ sub_FB99AB:
 .LFB99F3:
 	popw hl                                              ; FB99F3  4b
 	ret                                                  ; FB99F4  0e
-sub_FB99F5:
+; SmfPlay_HandleSysExEvent: length (0x60505F) = 5 and the body starting 7E 7F 09 (GM System On) -> SmfPlay_ForwardGmSystemOn; length 16
+;   with first byte 0x50 -> F0 + the 16 bytes to Ring601646; other lengths skipped.
+SmfPlay_HandleSysExEvent:
 	link XIZ,0xfff9                                      ; FB99F5  ee 0c f9 ff
 	pushw hl                                             ; FB99F9  2b
 	pushw de                                             ; FB99FA  2a
@@ -101883,7 +101918,7 @@ sub_FB99F5:
 	lda xiy, (MidiFile_Tables_FBA169+0x8:24)             ; FB99FF  f2 71 a1 fb 35
 	lda xix, (xiz-3)                                     ; FB9A04  be fd 34
 	ldir85                                               ; FB9A07  85 11
-	ld hl, (0x60505f:24)                                ; FB9A09  d2 5f 50 60 23
+	ld hl, (SmfPlay_VlqValue:24)                                ; FB9A09  d2 5f 50 60 23
 	ld (0x605149:24), hl                                ; FB9A0E  f2 49 51 60 53
 	cp hl, 0x05:i3                                         ; FB9A13  db dd
 	jrl nz, .LFB9A96                                     ; FB9A15  7e 7e 00
@@ -101896,13 +101931,13 @@ sub_FB99F5:
 	jr ugt, .LFB9A5F                                     ; FB9A29  6b 34
 	call T_MidiFileStream_GetByte                                        ; FB9A2B  1d 1c 26 f4
 	ld DE,WA                                             ; FB9A2F  d8 8a
-	ld (0x605145:24), wa                                ; FB9A31  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9A31  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9A36  da d8
 	jr ge, .LFB9A3F                                      ; FB9A38  69 05
-	m_set 0, MD24, 0x605147                              ; FB9A3A  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB9A3A  f2 47 51 60 b8
 .LFB9A3F:
-	ld d, (0x605145:24)                                 ; FB9A3F  c2 45 51 60 24
-	ld (0x605056:24), d                                 ; FB9A44  f2 56 50 60 44
+	ld d, (SmfPlay_LastRead:24)                                 ; FB9A3F  c2 45 51 60 24
+	ld (SmfPlay_LastByte:24), d                                 ; FB9A44  f2 56 50 60 44
 	ld (xiz-7), xix                                      ; FB9A49  be f9 64
 	lda xbc, (0x60504f:24)                               ; FB9A4C  f2 4f 50 60 31
 	m_add_rm MLD+r6, 0xf9, r1                            ; FB9A51  ae f9 81
@@ -101932,7 +101967,7 @@ sub_FB99F5:
 	cp hl, 0x03:i3                                         ; FB9A85  db db
 	jrl nz, .LFB9B2A                                     ; FB9A87  7e a0 00
 	ld (0x60504f:24), 0xf0                             ; FB9A8A  f2 4f 50 60 00 f0
-	calr sub_FB99AB                                      ; FB9A90  1e 18 ff
+	calr SmfPlay_ForwardGmSystemOn                                      ; FB9A90  1e 18 ff
 	jrl .LFB9B23                                         ; FB9A93  78 8d 00
 .LFB9A96:
 	m_cp_mi16 MW24, 0x605149, 0x0010                     ; FB9A96  d2 49 51 60 3f 10 00
@@ -101946,13 +101981,13 @@ sub_FB99F5:
 	jr ugt, .LFB9AE7                                     ; FB9AB1  6b 34
 	call T_MidiFileStream_GetByte                                        ; FB9AB3  1d 1c 26 f4
 	ld DE,WA                                             ; FB9AB7  d8 8a
-	ld (0x605145:24), wa                                ; FB9AB9  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9AB9  f2 45 51 60 50
 	cp de, 0x00:i3                                         ; FB9ABE  da d8
 	jr ge, .LFB9AC7                                      ; FB9AC0  69 05
-	m_set 0, MD24, 0x605147                              ; FB9AC2  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB9AC2  f2 47 51 60 b8
 .LFB9AC7:
-	ld d, (0x605145:24)                                 ; FB9AC7  c2 45 51 60 24
-	ld (0x605056:24), d                                 ; FB9ACC  f2 56 50 60 44
+	ld d, (SmfPlay_LastRead:24)                                 ; FB9AC7  c2 45 51 60 24
+	ld (SmfPlay_LastByte:24), d                                 ; FB9ACC  f2 56 50 60 44
 	ld (xiz-7), xix                                      ; FB9AD1  be f9 64
 	lda xbc, (0x60514d:24)                               ; FB9AD4  f2 4d 51 60 31
 	m_add_rm MLD+r6, 0xf9, r1                            ; FB9AD9  ae f9 81
@@ -101982,21 +102017,22 @@ sub_FB99F5:
 	ei 0x00                                              ; FB9B1C  06 00
 	jr .LFB9B23                                          ; FB9B1E  68 03
 .LFB9B20:
-	calr sub_FB9599                                      ; FB9B20  1e 76 fa
+	calr SmfPlay_SkipBytes                                      ; FB9B20  1e 76 fa
 .LFB9B23:
 	sub XBC,XBC                                          ; FB9B23  e9 a1
-	ld (0x60505f:24), xbc                               ; FB9B25  f2 5f 50 60 61
+	ld (SmfPlay_VlqValue:24), xbc                               ; FB9B25  f2 5f 50 60 61
 .LFB9B2A:
 	pop XIX                                              ; FB9B2A  5c
 	popw de                                              ; FB9B2B  4a
 	popw hl                                              ; FB9B2C  4b
 	unlk XIZ                                             ; FB9B2D  ee 0d
 	ret                                                  ; FB9B2F  0e
-sub_FB9B30:
+; SmfPlay_ReadSysExEvent: (0x605149) = 0, SmfPlay_ClearVlqBytes, SmfPlay_ReadVlqValue (the length), SmfPlay_HandleSysExEvent.
+SmfPlay_ReadSysExEvent:
 	ldw (0x605149:24), 0x00                             ; FB9B30  f2 49 51 60 02 00 00
-	calr sub_FB951B                                      ; FB9B37  1e e1 f9
-	calr sub_FB9575                                      ; FB9B3A  1e 38 fa
-	calr sub_FB99F5                                      ; FB9B3D  1e b5 fe
+	calr SmfPlay_ClearVlqBytes                                      ; FB9B37  1e e1 f9
+	calr SmfPlay_ReadVlqValue                                      ; FB9B3A  1e 38 fa
+	calr SmfPlay_HandleSysExEvent                                      ; FB9B3D  1e b5 fe
 	ret                                                  ; FB9B40  0e
 ; MidiFileDirectPlay_InitOnEntry: (0x605069) bit 7 set; saves (0x60341E) in (0x605072) and clears it; (0x34BB) bit 2 cleared; (0x60505E) = 0;
 ;   (0x605144) = the byte at 0x7F4D; then 0xFB9089.  Called by Paint_MidiFileDirectPlay, the screen's enter.
@@ -102252,7 +102288,7 @@ sub_FB9D88:
 sub_FB9DA0:
 	push XIX                                             ; FB9DA0  3c
 	lda xix, (0x60505e:24)                               ; FB9DA1  f2 5e 50 60 34
-	ld (0x605147:24), 0x00                             ; FB9DA6  f2 47 51 60 00 00
+	ld (SmfPlay_StreamFlags:24), 0x00                             ; FB9DA6  f2 47 51 60 00 00
 	ld	c, (TransportB_State:8)                                      ; FB9DAC  c0 96 23
 	and C,0x04                                           ; FB9DAF  cb cc 04
 	jr nz, .LFB9DE9                                      ; FB9DB2  6e 35
@@ -102265,7 +102301,7 @@ sub_FB9DA0:
 	call T_MidiFileStream_Open                                        ; FB9DCB  1d 18 26 f4
 	cp wa, 0x00:i3                                         ; FB9DCF  d8 d8
 	jr ge, .LFB9DDE                                      ; FB9DD1  69 0b
-	m_set 0, MD24, 0x605147                              ; FB9DD3  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB9DD3  f2 47 51 60 b8
 	call sub_FB906D                                      ; FB9DD8  1d 6d 90 fb
 	jr .LFB9DFC                                          ; FB9DDC  68 1e
 .LFB9DDE:
@@ -102285,7 +102321,7 @@ sub_FB9DA0:
 ; MidiFileDirectPlay_LcdKeyRow1: the LcdKeyRow1 action of MidiFileDirectPlay -- called only by LcdKeyRow1_MidiFileDirectPlay.
 MidiFileDirectPlay_LcdKeyRow1:
 	push XIX                                             ; FB9DFE  3c
-	lda xix, (0x605147:24)                               ; FB9DFF  f2 47 51 60 34
+	lda xix, (SmfPlay_StreamFlags:24)                               ; FB9DFF  f2 47 51 60 34
 	ld (XIX),0x00                                        ; FB9E04  b4 00 00
 	ld	c, (TransportB_State:8)                                      ; FB9E07  c0 96 23
 	and C,0x04                                           ; FB9E0A  cb cc 04
@@ -102298,7 +102334,7 @@ MidiFileDirectPlay_LcdKeyRow1:
 	jr .LFB9E3D                                          ; FB9E1E  68 1d
 .LFB9E20:
 	m_set 1, MD24, 0x60505e                              ; FB9E20  f2 5e 50 60 b9
-	ld (0x605148:24), 0x00                             ; FB9E25  f2 48 51 60 00 00
+	ld (SmfPlay_Playing:24), 0x00                             ; FB9E25  f2 48 51 60 00 00
 	calr MidiInQueue_InjectController0_AllChannels                                      ; FB9E2B  1e 2e f4
 	calr sub_FB9D5A                                      ; FB9E2E  1e 29 ff
 	calr sub_FB9D88                                      ; FB9E31  1e 54 ff
@@ -102309,14 +102345,15 @@ MidiFileDirectPlay_LcdKeyRow1:
 .LFB9E3D:
 	pop XIX                                              ; FB9E3D  5c
 	ret                                                  ; FB9E3E  0e
-sub_FB9E3F:
+; SmfPlay_StartPlayback: clock reset, flags in (0x34D9) / (0x34BB) cleared, (0x605148) = 1, Transport_StartCAndB, repaint.
+SmfPlay_StartPlayback:
 	push XIX                                             ; FB9E3F  3c
 	lda xix, (0x34d9:16)                                ; FB9E40  f1 d9 34 34
 	calr SeqClock_ResetBeatAndTick                                      ; FB9E44  1e 23 f3
 	and (XIX),0xfd                                       ; FB9E47  84 3c fd
 	and (XIX),0xfb                                       ; FB9E4A  84 3c fb
 	m_res 3, MD16, 0x34bb                                ; FB9E4D  f1 bb 34 b3
-	ld (0x605148:24), 0x01                             ; FB9E51  f2 48 51 60 00 01
+	ld (SmfPlay_Playing:24), 0x01                             ; FB9E51  f2 48 51 60 00 01
 	call Transport_StartCAndB_SaveRegs                                      ; FB9E57  1d 53 90 fb
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9E5B  f1 95 20 bc
 	pop XIX                                              ; FB9E5F  5c
@@ -102326,9 +102363,10 @@ MidiFilePlay_ClearPosition_Copy:
 	sub XBC,XBC                                          ; FB9E61  e9 a1
 	ld (0x605040:24), xbc                               ; FB9E63  f2 40 50 60 61
 	ret                                                  ; FB9E68  0e
-sub_FB9E69:
+; SmfPlay_ClearEventTimes: (0x605044) = 0, (0x605048) = 0.
+SmfPlay_ClearEventTimes:
 	sub XBC,XBC                                          ; FB9E69  e9 a1
-	ld (0x605044:24), xbc                               ; FB9E6B  f2 44 50 60 61
+	ld (SmfPlay_NextEventTime:24), xbc                               ; FB9E6B  f2 44 50 60 61
 	sub XWA,XWA                                          ; FB9E70  e8 a0
 	ld (0x605048:24), xwa                               ; FB9E72  f2 48 50 60 60
 	ret                                                  ; FB9E77  0e
@@ -102369,12 +102407,12 @@ SequencerMedley_MidiFileTick:
 	ld c, (0x60505e:24)                                 ; FB9EBF  c2 5e 50 60 23
 	and C,0x01                                           ; FB9EC4  cb cc 01
 	jr nz, .LFB9ECC                                      ; FB9EC7  6e 03
-	calr sub_FB9697                                      ; FB9EC9  1e cb f7
+	calr SmfPlay_ReadHeader                                      ; FB9EC9  1e cb f7
 .LFB9ECC:
-	ld c, (0x605147:24)                                 ; FB9ECC  c2 47 51 60 23
+	ld c, (SmfPlay_StreamFlags:24)                                 ; FB9ECC  c2 47 51 60 23
 	and C,0x01                                           ; FB9ED1  cb cc 01
 	jr z, .LFB9EE4                                       ; FB9ED4  66 0e
-	m_res 0, MD24, 0x605147                              ; FB9ED6  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FB9ED6  f2 47 51 60 b0
 	calr MidiFilePlay_Stop                                      ; FB9EDB  1e eb f2
 	call sub_FB906D                                      ; FB9EDE  1d 6d 90 fb
 	jr .LFB9F03                                          ; FB9EE2  68 1f
@@ -102406,7 +102444,7 @@ SequencerMedley_MidiFileTick:
 	m_add_rm MLD+r6, 0xfc, r1                            ; FB9F31  ae fc 81
 	ld (xiz-8), xbc                                      ; FB9F34  be f8 61
 	ld (XIX),XBC                                         ; FB9F37  b4 61
-	ld bc, (0x605066:24)                                ; FB9F39  d2 66 50 60 21
+	ld bc, (SmfPlay_Division:24)                                ; FB9F39  d2 66 50 60 21
 	extz XBC                                             ; FB9F3E  e9 12
 	push XBC                                             ; FB9F40  39
 	m_push MWD+r6, 0xfa                                  ; FB9F41  9e fa 04
@@ -102420,31 +102458,31 @@ SequencerMedley_MidiFileTick:
 .LFB9F58:
 	m_cp_mi8 MB16, 0x10cb, 0xff                          ; FB9F58  c1 cb 10 3f ff
 	jr nz, .LFB9F6B                                      ; FB9F5D  6e 0c
-	m_res 0, MD24, 0x605147                              ; FB9F5F  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FB9F5F  f2 47 51 60 b0
 	call sub_FB906D                                      ; FB9F64  1d 6d 90 fb
 	jrl .LFB9FDC                                         ; FB9F68  78 71 00
 .LFB9F6B:
-	ld c, (0x605147:24)                                 ; FB9F6B  c2 47 51 60 23
+	ld c, (SmfPlay_StreamFlags:24)                                 ; FB9F6B  c2 47 51 60 23
 	and C,0x01                                           ; FB9F70  cb cc 01
 	jr z, .LFB9F87                                       ; FB9F73  66 12
-	m_res 0, MD24, 0x605147                              ; FB9F75  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FB9F75  f2 47 51 60 b0
 	calr MidiFilePlay_Stop                                      ; FB9F7A  1e 4c f2
 	call sub_FB906D                                      ; FB9F7D  1d 6d 90 fb
 	m_set 4, MD16, UI_ScreenFlags                                ; FB9F81  f1 95 20 bc
 	jr .LFB9FDC                                          ; FB9F85  68 55
 .LFB9F87:
 	ld XBC,(XIX)                                         ; FB9F87  a4 21
-	m_cp_rm ML24, 0x605044, r1                           ; FB9F89  e2 44 50 60 f1
+	m_cp_rm ML24, SmfPlay_NextEventTime, r1                           ; FB9F89  e2 44 50 60 f1
 	jr c, .LFB9FDC                                       ; FB9F8E  67 4c
 	call T_MidiFileStream_GetByte                                        ; FB9F90  1d 1c 26 f4
 	ld HL,WA                                             ; FB9F94  d8 8b
-	ld (0x605145:24), wa                                ; FB9F96  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FB9F96  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FB9F9B  db d8
 	jr ge, .LFB9FA4                                      ; FB9F9D  69 05
-	m_set 0, MD24, 0x605147                              ; FB9F9F  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FB9F9F  f2 47 51 60 b8
 .LFB9FA4:
-	ld h, (0x605145:24)                                 ; FB9FA4  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FB9FA9  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FB9FA4  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FB9FA9  f2 56 50 60 46
 	ld C,H                                               ; FB9FAE  ce 8b
 	extz BC                                              ; FB9FB0  d9 12
 	cp BC,0x00f0                                         ; FB9FB2  d9 cf f0 00
@@ -102455,16 +102493,16 @@ SequencerMedley_MidiFileTick:
 	jr z, .LFB9FC6                                       ; FB9FC2  66 02
 	jr .LFB9FD0                                          ; FB9FC4  68 0a
 .LFB9FC6:
-	calr sub_FB9923                                      ; FB9FC6  1e 5a f9
+	calr SmfPlay_HandleMetaEvent                                      ; FB9FC6  1e 5a f9
 	jr .LFB9FD3                                          ; FB9FC9  68 08
 .LFB9FCB:
-	calr sub_FB9B30                                      ; FB9FCB  1e 62 fb
+	calr SmfPlay_ReadSysExEvent                                      ; FB9FCB  1e 62 fb
 	jr .LFB9FD3                                          ; FB9FCE  68 03
 .LFB9FD0:
-	calr sub_FB92DC                                      ; FB9FD0  1e 09 f3
+	calr SmfPlay_ReadChannelEvent                                      ; FB9FD0  1e 09 f3
 .LFB9FD3:
-	calr sub_FB9413                                      ; FB9FD3  1e 3d f4
-	calr sub_FB9510                                      ; FB9FD6  1e 37 f5
+	calr SmfPlay_ReadDeltaTime                                      ; FB9FD3  1e 3d f4
+	calr SmfPlay_AdvanceEventTime                                      ; FB9FD6  1e 37 f5
 	jrl .LFB9F58                                         ; FB9FD9  78 7c ff
 .LFB9FDC:
 	pop XIX                                              ; FB9FDC  5c
@@ -102484,12 +102522,12 @@ MidiFileDirectPlay_Tick:
 	ld c, (0x60505e:24)                                 ; FB9FFA  c2 5e 50 60 23
 	and C,0x01                                           ; FB9FFF  cb cc 01
 	jr nz, .LFBA007                                      ; FBA002  6e 03
-	calr sub_FB9697                                      ; FBA004  1e 90 f6
+	calr SmfPlay_ReadHeader                                      ; FBA004  1e 90 f6
 .LFBA007:
-	ld c, (0x605147:24)                                 ; FBA007  c2 47 51 60 23
+	ld c, (SmfPlay_StreamFlags:24)                                 ; FBA007  c2 47 51 60 23
 	and C,0x01                                           ; FBA00C  cb cc 01
 	jr z, .LFBA01C                                       ; FBA00F  66 0b
-	m_res 0, MD24, 0x605147                              ; FBA011  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FBA011  f2 47 51 60 b0
 	calr MidiFilePlay_Stop                                      ; FBA016  1e b0 f1
 	jrl .LFBA108                                         ; FBA019  78 ec 00
 .LFBA01C:
@@ -102517,7 +102555,7 @@ MidiFileDirectPlay_Tick:
 	m_add_rm MLD+r6, 0xfc, r1                            ; FBA061  ae fc 81
 	ld (xiz-8), xbc                                      ; FBA064  be f8 61
 	ld (XIX),XBC                                         ; FBA067  b4 61
-	ld bc, (0x605066:24)                                ; FBA069  d2 66 50 60 21
+	ld bc, (SmfPlay_Division:24)                                ; FBA069  d2 66 50 60 21
 	extz XBC                                             ; FBA06E  e9 12
 	push XBC                                             ; FBA070  39
 	m_push MWD+r6, 0xfa                                  ; FBA071  9e fa 04
@@ -102531,31 +102569,31 @@ MidiFileDirectPlay_Tick:
 .LFBA088:
 	m_cp_mi8 MB16, 0x10cb, 0xff                          ; FBA088  c1 cb 10 3f ff
 	jr nz, .LFBA097                                      ; FBA08D  6e 08
-	m_res 0, MD24, 0x605147                              ; FBA08F  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FBA08F  f2 47 51 60 b0
 	jrl .LFBA108                                         ; FBA094  78 71 00
 .LFBA097:
-	ld c, (0x605147:24)                                 ; FBA097  c2 47 51 60 23
+	ld c, (SmfPlay_StreamFlags:24)                                 ; FBA097  c2 47 51 60 23
 	and C,0x01                                           ; FBA09C  cb cc 01
 	jr z, .LFBA0AB                                       ; FBA09F  66 0a
-	m_res 0, MD24, 0x605147                              ; FBA0A1  f2 47 51 60 b0
+	m_res 0, MD24, SmfPlay_StreamFlags                              ; FBA0A1  f2 47 51 60 b0
 	calr MidiFilePlay_Stop                                      ; FBA0A6  1e 20 f1
 	jr .LFBA108                                          ; FBA0A9  68 5d
 .LFBA0AB:
 	ld XBC,(XIX)                                         ; FBA0AB  a4 21
-	m_cp_rm ML24, 0x605044, r1                           ; FBA0AD  e2 44 50 60 f1
+	m_cp_rm ML24, SmfPlay_NextEventTime, r1                           ; FBA0AD  e2 44 50 60 f1
 	jr nc, .LFBA0BD                                      ; FBA0B2  6f 09
 	ldw (0x60514b:24), 0x00                             ; FBA0B4  f2 4b 51 60 02 00 00
 	jr .LFBA108                                          ; FBA0BB  68 4b
 .LFBA0BD:
 	call T_MidiFileStream_GetByte                                        ; FBA0BD  1d 1c 26 f4
 	ld HL,WA                                             ; FBA0C1  d8 8b
-	ld (0x605145:24), wa                                ; FBA0C3  f2 45 51 60 50
+	ld (SmfPlay_LastRead:24), wa                                ; FBA0C3  f2 45 51 60 50
 	cp hl, 0x00:i3                                         ; FBA0C8  db d8
 	jr ge, .LFBA0D1                                      ; FBA0CA  69 05
-	m_set 0, MD24, 0x605147                              ; FBA0CC  f2 47 51 60 b8
+	m_set 0, MD24, SmfPlay_StreamFlags                              ; FBA0CC  f2 47 51 60 b8
 .LFBA0D1:
-	ld h, (0x605145:24)                                 ; FBA0D1  c2 45 51 60 26
-	ld (0x605056:24), h                                 ; FBA0D6  f2 56 50 60 46
+	ld h, (SmfPlay_LastRead:24)                                 ; FBA0D1  c2 45 51 60 26
+	ld (SmfPlay_LastByte:24), h                                 ; FBA0D6  f2 56 50 60 46
 	ld C,H                                               ; FBA0DB  ce 8b
 	extz BC                                              ; FBA0DD  d9 12
 	cp BC,0x00f0                                         ; FBA0DF  d9 cf f0 00
@@ -102566,16 +102604,16 @@ MidiFileDirectPlay_Tick:
 	jr z, .LFBA0F3                                       ; FBA0EF  66 02
 	jr .LFBA0FD                                          ; FBA0F1  68 0a
 .LFBA0F3:
-	calr sub_FB9923                                      ; FBA0F3  1e 2d f8
+	calr SmfPlay_HandleMetaEvent                                      ; FBA0F3  1e 2d f8
 	jr .LFBA100                                          ; FBA0F6  68 08
 .LFBA0F8:
-	calr sub_FB9B30                                      ; FBA0F8  1e 35 fa
+	calr SmfPlay_ReadSysExEvent                                      ; FBA0F8  1e 35 fa
 	jr .LFBA100                                          ; FBA0FB  68 03
 .LFBA0FD:
-	calr sub_FB92DC                                      ; FBA0FD  1e dc f1
+	calr SmfPlay_ReadChannelEvent                                      ; FBA0FD  1e dc f1
 .LFBA100:
-	calr sub_FB9413                                      ; FBA100  1e 10 f3
-	calr sub_FB9510                                      ; FBA103  1e 0a f4
+	calr SmfPlay_ReadDeltaTime                                      ; FBA100  1e 10 f3
+	calr SmfPlay_AdvanceEventTime                                      ; FBA103  1e 0a f4
 	jr .LFBA088                                          ; FBA106  68 80
 .LFBA108:
 	pop XIX                                              ; FBA108  5c

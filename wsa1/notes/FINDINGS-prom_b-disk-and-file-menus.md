@@ -307,6 +307,31 @@ DIRECT PLAY does not load a `.MID` file. It streams it:
 - **Close.** `MidiFileStream_Close` (`T_MidiFileStream_Close`, `MidiFilePlay_Stop`) posts a stop request on queue 2 and
   waits until 0x17B7 is clear. It then drains both queues and blanks `Disk_FileName`.
 
+### 2026-10-04: the SMF player behind DIRECT PLAY -- events go in as MIDI input
+
+prom_a 0xFB906D-0xFB9E6E reads the stream byte by byte (`MidiFileStream_GetByte`). It does not interpret
+channel events itself. It hands them to the MIDI input path, so a file plays exactly as an external
+sequencer would.
+- **Header.** `SmfPlay_ReadHeader` expects "MThd" (`MidiFile_Tables_FBA169`). When the first four bytes
+  differ, it skips 0x7C more and reads on, which allows a 0x80-byte prefix before the SMF.
+- **Timing.**
+  - `SmfPlay_ReadDeltaTime` reads a variable-length quantity (`SmfPlay_ReadVlqBytes`, then
+    `SmfPlay_DecodeVlq1/2/3`). `SmfPlay_AdvanceEventTime` adds it to `SmfPlay_NextEventTime`.
+  - `SmfPlay_ScaleDeltaTo96Ppq` rescales deltas when the file's division (`SmfPlay_Division`) is not 96,
+    the instrument's clock.
+- **Channel events.** `SmfPlay_ReadChannelEvent` handles a new status byte or running status. It clamps the
+  data bytes to 0x7F, and `SmfPlay_SendChannelEvent` puts the 2- or 3-byte message on `MidiInARing`.
+- **Meta events** (`SmfPlay_HandleMetaEvent`):
+  - 0x51 set tempo becomes BPM = 60,000,000 / tempo (computed as 0x39387 / the tempo's top 16 bits),
+    clamped to 40..300, and is applied as parameter 0x7A at 0x7EE2 (`SmfPlay_ApplyTempoAsBpm`).
+  - 0x2F end of track stops everything (`SmfPlay_StopAtEndOfTrack`: all notes off, hold off, transports
+    stopped, stream closed).
+  - Any other meta event is skipped.
+- **SysEx** (`SmfPlay_HandleSysExEvent`) is skipped unless it is one of two kinds:
+  - GM System On (5 bytes, 7E 7F 09 ..), forwarded when the GM state differs;
+  - a 16-byte message with manufacturer 0x50, the ID this firmware uses.
+  Both are forwarded to `Ring601646` with their F0.
+
 ### `L0AD` is not a typo in this note
 
 Many of these labels spell capital **O** with character code **0x30**, the digit

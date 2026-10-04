@@ -3409,7 +3409,7 @@ RENAMES = {
     "sub_FB7B3F": "sub_FB7B0B",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FB7E7C": "sub_FB7E6C",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FB91EE": "MidiFilePlay_Stop",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FB94DB": "sub_FB9490",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FB94DB": "SmfPlay_DecodeVlq3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBE985": "sub_FBE92B",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBFB8A": "ScreenButton_CombiEditMenu",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBFDFB": "ScreenButtonBody_Effect2OutputConflict",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4148,6 +4148,32 @@ RENAMES = {
     "sub_FEB290": "DrumEdit_DrawRowName",
     "sub_FE8CB4": "EditPos_SeekShownNoteAtTickZero",
     "sub_FE8A9B": "EditPos_LoadTickIfShownNote",
+    "sub_FB93D0": "SmfPlay_ReadVlqBytes",
+    "sub_FB9532": "SmfPlay_ReadVlqBytes_Copy",
+    "sub_FB9437": "SmfPlay_DecodeVlq1",
+    "sub_FB9448": "SmfPlay_DecodeVlq2",
+    "sub_FB9490": "SmfPlay_DecodeVlq3",
+    "sub_FB9413": "SmfPlay_ReadDeltaTime",
+    "sub_FB9575": "SmfPlay_ReadVlqValue",
+    "sub_FB951B": "SmfPlay_ClearVlqBytes",
+    "sub_FB9510": "SmfPlay_AdvanceEventTime",
+    "sub_FB9599": "SmfPlay_SkipBytes",
+    "sub_FB9098": "SmfPlay_ScaleDeltaTo96Ppq",
+    "sub_FB92DC": "SmfPlay_ReadChannelEvent",
+    "sub_FB9345": "SmfPlay_ReadEventWithStatus",
+    "sub_FB92EF": "SmfPlay_ReadEventRunningStatus",
+    "sub_FB95D9": "SmfPlay_SendChannelEvent",
+    "sub_FB9923": "SmfPlay_HandleMetaEvent",
+    "sub_FB9635": "SmfPlay_ReadTempoEvent",
+    "sub_FB90EB": "SmfPlay_ApplyTempo_SaveAll",
+    "sub_FB90FE": "SmfPlay_ApplyTempoAsBpm",
+    "sub_FB9176": "SmfPlay_StopAtEndOfTrack",
+    "sub_FB9697": "SmfPlay_ReadHeader",
+    "sub_FB99F5": "SmfPlay_HandleSysExEvent",
+    "sub_FB99AB": "SmfPlay_ForwardGmSystemOn",
+    "sub_FB9B30": "SmfPlay_ReadSysExEvent",
+    "sub_FB9E3F": "SmfPlay_StartPlayback",
+    "sub_FB9E69": "SmfPlay_ClearEventTimes",
 }
 
 
