@@ -11,7 +11,7 @@ rebuilds the ROM and is blind to every sentence in this file.
 `python3 notes/prom_a_module_frontier.py` — new this round, the prom_a twin of
 `notes/prom_b_module_frontier.py` — ranks prom_a's thunk RUNS by how many bytes
 of contiguous still-`.incbin` target range they publish. The run
-`T_F408E4-T_F40910` came third (12 slots, 23,200 bytes, reference upper bound
+`T_F408E4-T_SysExTx_SendBytes` came third (12 slots, 23,200 bytes, reference upper bound
 10), and every one of its targets is in `0xFB2022-0xFB7AC2`.
 
 That run is also where **emulation gap D** lives: the gaps file

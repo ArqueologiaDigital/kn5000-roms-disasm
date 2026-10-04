@@ -12,7 +12,7 @@ QUESTION IT ANSWERS
       the step editor's fields and soft keys: "MEAS NOTE VEL LENGTH PHRS CURSOR", "MIX ERS CTL REST",
       "VALUE", "TIME SIG.", "TEMPO", "REP END", "TRACK CLR"; sub-screen 18 is DL_StepRecordTrackTrackClrMeas
       / DL_MasterTrackClearAttention ("MASTER TRACK CLEAR ... Are You Sure?").
-    * its +8 BUTTON method (T_F43168 -> ScreenButton_Code0E) calls T_F42EC8 = prom_b 0xF675CC, which
+    * its +8 BUTTON method (T_ScreenButton_StepRecord -> ScreenButton_Code0E) calls T_StepRecord_ButtonByTrackKind = prom_b 0xF675CC, which
       selects by (0x0E63) & 3 from DispatchTable_F675F3: kind 0 a no-op, kinds 1 and 2 0xF676B6, kind 3
       0xF6776F.  Those two index the 19-entry tables DispatchTable_F67723 / _F67789 by
       UI_Screen0E_SubScreen -- the tables whose entries round 12 named Screen0ESub<NN>_ButtonDispatch.
@@ -43,19 +43,19 @@ EXPLICIT = [
     ("ScreenButton_Code0E", "ScreenButton_StepRecord", ""),
     ("sub_F8101E", "ScreenEnterBody_StepRecord",
      "ScreenEnterBody_StepRecord: the body of STEP RECORD's +0 ENTER method -- restarts callback task 2,\\n"
-     "  and runs prom_b 0xF6A9CA (T_F42EC0) between LCD_ScreenRedraw_Begin / _End.\\n" + SHARED15),
+     "  and runs prom_b 0xF6A9CA (T_StepRecord_OnEnter) between LCD_ScreenRedraw_Begin / _End.\\n" + SHARED15),
     ("sub_F81039", "ScreenLeaveBody_StepRecord",
-     "ScreenLeaveBody_StepRecord: the body of STEP RECORD's +4 LEAVE method -- runs prom_b 0xF6AE4B (T_F42EC4).\\n" + SHARED15),
+     "ScreenLeaveBody_StepRecord: the body of STEP RECORD's +4 LEAVE method -- runs prom_b 0xF6AE4B (T_StepRecord_OnLeave).\\n" + SHARED15),
     ("sub_F6A9CA", "StepRecord_OnEnter",
-     "StepRecord_OnEnter: the prom_b part of STEP RECORD's ENTER -- reached only from ScreenEnterBody_StepRecord, through T_F42EC0."),
+     "StepRecord_OnEnter: the prom_b part of STEP RECORD's ENTER -- reached only from ScreenEnterBody_StepRecord, through T_StepRecord_OnEnter."),
     ("sub_F6AE4B", "StepRecord_OnLeave",
-     "StepRecord_OnLeave: the prom_b part of STEP RECORD's LEAVE -- reached only from ScreenLeaveBody_StepRecord, through T_F42EC4."),
+     "StepRecord_OnLeave: the prom_b part of STEP RECORD's LEAVE -- reached only from ScreenLeaveBody_StepRecord, through T_StepRecord_OnLeave."),
     ("sub_F81ACB", "Paint_StepRecord",
      "Paint_StepRecord: returns unless (UI_ScreenId) = 0x0E; draws \"STEP RECORD:\" / \"TRACK:\" (or\\n"
      "  \"MASTER STEP RECORD\" when (0x0E63) = 2) and the page list StepSelectAddrTable_F3D089 gives for\\n"
      "  UI_StepRecord_SubScreen (sub-screen 18: the MASTER TRACK CLEAR / TRACK CLR confirmation)."),
     ("sub_F675CC", "StepRecord_ButtonByTrackKind",
-     "StepRecord_ButtonByTrackKind: STEP RECORD's button handling (T_F42EC8, called by the +8 method with the\\n"
+     "StepRecord_ButtonByTrackKind: STEP RECORD's button handling (T_StepRecord_ButtonByTrackKind, called by the +8 method with the\\n"
      "  panel code in BC, saved at (0x0D10)); selects by (0x0E63) & 3 from StepRecord_TrackKindButtonTable --\\n"
      "  (0x0E63) is 1 for a song track and 2 for the master track (Map_0E63_F6ACA7).\\n" + SHARED15),
     ("DispatchTable_F675F3", "StepRecord_TrackKindButtonTable", ""),

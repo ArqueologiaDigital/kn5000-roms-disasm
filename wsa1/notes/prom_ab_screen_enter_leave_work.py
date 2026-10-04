@@ -5,7 +5,7 @@ QUESTION IT ANSWERS
   A screen object's +0 ENTER and +4 LEAVE methods (PanelScreen_VtableTable; their names are
   ScreenEnter_<Screen> / ScreenLeave_<Screen>, or the ScreenEnterBody_ / ScreenLeaveBody_<Screen> they
   call) mostly do their work in one routine of the other image, reached through the thunk directory:
-  ScreenLeaveBody_MeasureDelete is `call T_F42960 / ret`, and T_F42960 is `jp MeasureDelete_OnLeave`.  When
+  ScreenLeaveBody_MeasureDelete is `call T_MeasureDelete_OnLeave / ret`, and T_MeasureDelete_OnLeave is `jp MeasureDelete_OnLeave`.  When
       the method body (the lines between its label and the next label) calls exactly ONE still-unnamed
       `sub_` (directly or through a T_F4xxxx thunk), and
       every caller of that sub_ is a method of the SAME role (Enter / Leave),

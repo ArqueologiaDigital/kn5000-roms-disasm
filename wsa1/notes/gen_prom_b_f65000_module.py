@@ -13,8 +13,8 @@ WHY THIS BLOCK (round 4, chosen with the frontier tool, not by address order)
     unconverted target extent.  Its top four runs by that measure all point into
     this one `.incbin` span:
         T_F42ED0-T_F42F04  14 slots  extent 20,977  targets 0xF67434-0xF6C625
-        T_F42EC0-T_F42EC8   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
-        T_F42B70-T_F42C2C  48 slots  extent  2,648  targets 0xF65C00-0xF66658
+        T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
+        T_F42B70-T_SequencerMedley_LcdKeyRow4  48 slots  extent  2,648  targets 0xF65C00-0xF66658
         T_F432C0-T_F432CC   4 slots  extent      9  targets 0xF65000-0xF65009
     69 slots between them.  Converting 0xF65000-0xF6D001 as one span retires all
     four: every one of their targets is inside it.
@@ -697,8 +697,8 @@ def checks(verbose=True):
     c("thunk slots of 0xF40000 landing in this block",
       sum(len(v) for v in th.values()), 69, verbose)
     for run, lo_, hi_ in (("T_F432C0-T_F432CC", 0xF432C0, 0xF432CC),
-                          ("T_F42B70-T_F42C2C", 0xF42B70, 0xF42C2C),
-                          ("T_F42EC0-T_F42EC8", 0xF42EC0, 0xF42EC8),
+                          ("T_F42B70-T_SequencerMedley_LcdKeyRow4", 0xF42B70, 0xF42C2C),
+                          ("T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind", 0xF42EC0, 0xF42EC8),
                           ("T_F42ED0-T_F42F04", 0xF42ED0, 0xF42F04)):
         tg = [w32(x) >> 8 for x in range(lo_, hi_ + 4, 4)]   # `1B lo mid hi`
         c("  every target of %s is inside this block" % run,
@@ -808,8 +808,8 @@ def banner():
 ; into this one `.incbin` span:
 ;
 ;   T_F42ED0-T_F42F04  14 slots  extent 20,977  targets 0xF67434-0xF6C625
-;   T_F42EC0-T_F42EC8   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
-;   T_F42B70-T_F42C2C  48 slots  extent  2,648  targets 0xF65C00-0xF66658
+;   T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
+;   T_F42B70-T_SequencerMedley_LcdKeyRow4  48 slots  extent  2,648  targets 0xF65C00-0xF66658
 ;   T_F432C0-T_F432CC   4 slots  extent      9  targets 0xF65000-0xF65009
 ;
 ; %d slots.  Every target of all four is inside 0xF65000-0xF6D001, which is what

@@ -37,7 +37,7 @@ unconverted extent of their targets. On this tree its top rows were
 | `T_F41F54-T_F421A8` | 5 of 150 | 2,657 | 0xF0A000-0xF0AA61 |
 | `T_F42F80-T_F42FAC` | 11 of 12 | 1,512 | 0xF0B91C-0xF0BF04 |
 | … | | | |
-| `T_F43380-T_F43384` | 2 | **4** | 0xF6F400-0xF6F404 |
+| `T_MidiFileL0ad_LcdKeyRow1-T_F43384` | 2 | **4** | 0xF6F400-0xF6F404 |
 
 The last row is this module. The tool is not wrong; it is answering a different
 question. **This block is entered by DIRECT CALL, not through the 0xF40000
@@ -417,7 +417,7 @@ result is checked, not asserted:
 `python3 notes/prom_b_round6_frontier_delta.py`
 
 The honest headline is that **the thunk frontier barely moves**: one run,
-`T_F43380-T_F43384`, two slots. That is stated rather than omitted, because it is
+`T_MidiFileL0ad_LcdKeyRow1-T_F43384`, two slots. That is stated rather than omitted, because it is
 the direct consequence of §1 — a module the directory does not name cannot retire
 much of the directory. The measure that ranked the span is
 `notes/prom_b_span_frontier.py`, and there the span goes from the top row to gone.

@@ -17,7 +17,7 @@ than last.
 `notes/prom_a_module_frontier.py` at the start of the round ranked 31 thunk runs
 by contiguous unconverted extent. Five of the top twelve landed in
 `0xF99021-0xFA1403` — `T_F41910-T_F419C4` (46 slots, 20,106 bytes, rank 1),
-`T_F42670-T_F426BC` (20, rank 2), `T_F434C0-T_F434D4` (6, rank 6),
+`T_Screen_Initial_Enter-T_F426BC` (20, rank 2), `T_F434C0-T_F434D4` (6, rank 6),
 `T_F41640-T_F41768` (75, rank 9) and `T_F43400-T_F43420` (9, rank 12) — and two
 more in `0xF92C62-0xF96017`: `T_F40144-T_F40174` (rank 17) and
 `T_F400D0-T_F4013C` (rank 18).

@@ -189,7 +189,7 @@ assert WSEL_AT + 4 * WSEL_SIZE == A_LEN, "the melodic region does not end on its
 assert [s for _, s in WAVESEL] == [0x41, 0x31, 0x21, 0x11]
 assert [s for _, s in ELEMENT] == [4, 3, 2, 1]
 assert le(b(0xF37B9D + 1, 3)) == 0xF43470, "the melodic setter moved"
-assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_F43470 -> prom_a 0xFD616A"
+assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_ToneMsg_SendParam -> prom_a 0xFD616A"
 
 # Inside the common block, one span is served by prom_b itself (thunk T_DspParam_WriteByNumber)
 # and never leaves the panel processor; everything else goes out to CPU 2.
@@ -226,7 +226,7 @@ RECORDS, rem = divmod(B_LEN - KIT_COMMON, REC_SIZE)
 assert rem == 0, "the drum region is not a whole number of records"
 assert RECORDS == 128, "%d records" % RECORDS
 assert le(b(0xF37D03 + 1, 3)) == 0xF43478, "the drum setter moved"
-assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_F43478 -> prom_a 0xFD6704"
+assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_ToneMsg8D_SendParam -> prom_a 0xFD6704"
 
 # Each record access is preceded by a `select this record` message to CPU 2.
 assert le(b(0xF37C05 + 1, 3)) == 0xF43488

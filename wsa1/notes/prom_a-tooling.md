@@ -744,7 +744,7 @@ only things that survive a conversion, and cross-checks its own `.incbin` total
 against `scripts/analysis/source_coverage.py` — an earlier draft compared that
 total against itself, which is a check that cannot fail.
 
-This is the tool that chose round 2's two targets: the run `T_F408E4-T_F40910`
+This is the tool that chose round 2's two targets: the run `T_F408E4-T_SysExTx_SendBytes`
 (third by extent, and the one holding emulation gap D's `0xFB24D3`) and
 `T_F41F54-T_F421A8` (first by extent, 145 unconverted slots).
 

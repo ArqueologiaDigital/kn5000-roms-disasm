@@ -33,7 +33,7 @@ target of the next round:
 |---:|---|---:|---:|---|---|
 | 1 | `T_F42E80-T_F42E88` | 329 | 3 | `0xF8DA00-0xF8DA83` | the callback queue, §4 |
 | 2 | `T_F41CD0-T_F41EC4` | 245 | 126 | `0xF842DF-0xF84BBC` | the ring instance bank, §2 |
-| 3 | `T_F42574-T_F42634` | 171 | 49 | `0xFE0391-0xFE1CE4` | inside the 21 KB span of §6 |
+| 3 | `T_F42574-T_MidiFileSave_Page3_LcdKeyRow3` | 171 | 49 | `0xFE0391-0xFE1CE4` | inside the 21 KB span of §6 |
 | 4 | `T_F4078C-T_F40810` | 171 | 34 | `0xFAA418-0xFAC786` | **not converted this round** |
 | 5 | `T_F41AF0-T_F41B18` | 146 | 11 | `0xF8BC00-0xF8BDF8` | the ASCII numeric field, §5 |
 

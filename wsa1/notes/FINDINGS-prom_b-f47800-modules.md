@@ -232,7 +232,7 @@ landed. Its last row was
 
 and T_F40C50 is one of the eight runs round 3 converted. The script's own
 docstring already warned about this shape — *"an earlier draft hard-coded the
-then-top run (T_F428B0) and would have started FAILING the moment that run was
+then-top run (T_BStore_AppendBytes_Join3_Veneer) and would have started FAILING the moment that run was
 converted"* — and it had the defect again in a different row.
 
 Fixed 2026-08-25: the presence check now takes the **last** `jp` slot in table

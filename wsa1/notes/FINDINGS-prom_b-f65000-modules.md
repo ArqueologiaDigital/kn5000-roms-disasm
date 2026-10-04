@@ -18,8 +18,8 @@ unconverted extent of their targets. Its top four runs all pointed into one
 | run | slots | extent | targets |
 |---|---|---|---|
 | `T_F42ED0-T_F42F04` | 14 | 20,977 | 0xF67434-0xF6C625 |
-| `T_F42EC0-T_F42EC8` | 3 | 14,463 | 0xF675CC-0xF6AE4B |
-| `T_F42B70-T_F42C2C` | 48 | 2,648 | 0xF65C00-0xF66658 |
+| `T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind` | 3 | 14,463 | 0xF675CC-0xF6AE4B |
+| `T_F42B70-T_SequencerMedley_LcdKeyRow4` | 48 | 2,648 | 0xF65C00-0xF66658 |
 | `T_F432C0-T_F432CC` | 4 | 9 | 0xF65000-0xF65009 |
 
 **69 slots.** All four are gone from the frontier now, and no other run went with
@@ -253,7 +253,7 @@ the same refusal.
   not have: at 20 bytes the rule misses most of those runs, at 10 it has three
   false positives. That is the next round's problem and it is a real one.
 * Above that, exactly **two** thunk slots point anywhere into 0xF6D002-0xF77FFF
-  (`T_F43380 -> 0xF6F400`, `T_F43384 -> 0xF6F404`), so a split there would rest
+  (`T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400`, `T_F43384 -> 0xF6F404`), so a split there would rest
   on a linear decode — which §2 shows is not a test.
 
 ---

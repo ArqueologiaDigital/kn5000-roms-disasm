@@ -86,7 +86,7 @@ WHAT IS IN THE SPAN
   `--screens4` prints why, per screen, from the ROM:
 
     0xF43040  Enter -> 0xF7E971, IN THIS SPAN and now converted.  Three
-              instructions: `or (0x2134),0x0002 / call T_F428B0 / ret`.  ZERO
+              instructions: `or (0x2134),0x0002 / call T_BStore_AppendBytes_Join3_Veneer / ret`.  ZERO
               display-list calls, so there is no title to read.
     0xF43048  Enter -> prom_a 0xF80F3A (`sub_F80F3A`).  Zero display-list calls
               in its extent.

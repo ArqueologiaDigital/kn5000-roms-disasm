@@ -56,8 +56,8 @@ WHERE THE SIGNAL IS  (prom_b at 0xF00000, prom_a at 0xF80000, prom_c at 0xF80000
     (0xF41DF8/0xF40724 and 0xF41E1C/0xF40730).
   * THE CHECKSUM is prom_a SysEx_Checksum: `inc 1,XIX / dec 1,HL` before the sum,
     so the leading 0xF0 is skipped, then `sub WA,WA / sub WA,BC / res 7,A`.
-  * THE DESTINATION.  The write ladder ends in T_F43470 -> prom_a 0xFD616A
-    (melodic) and T_F43478 -> prom_a 0xFD6704 (drum).  Those are the two
+  * THE DESTINATION.  The write ladder ends in T_ToneMsg_SendParam -> prom_a 0xFD616A
+    (melodic) and T_ToneMsg8D_SendParam -> prom_a 0xFD6704 (drum).  Those are the two
     routines ToneEdit_CommitField (0xFD7435) calls when the player turns the
     DATA dial (notes/FINDINGS-l7a1429-field-editors.md section 1c).
   * ⚠ NOT REACHABLE FROM THE PANEL.  The whole transfer lives in the state
@@ -450,9 +450,9 @@ print()
 
 
 # ------------------------------------------------------------ 6. which port
-# The reply path: prom_b T_F40910 -> prom_a SysExTx_SendBytes -> SysExTx_Append + SysExTx_SendFrameMidi1.
-assert b(0xF40910, 4) == bytes([0x1B, 0xC2, 0x7A, 0xFB]), "T_F40910"
-assert b(0xF4090C, 4) == bytes([0x1B, 0x90, 0x7A, 0xFB]), "T_F4090C"
+# The reply path: prom_b T_SysExTx_SendBytes -> prom_a SysExTx_SendBytes -> SysExTx_Append + SysExTx_SendFrameMidi1.
+assert b(0xF40910, 4) == bytes([0x1B, 0xC2, 0x7A, 0xFB]), "T_SysExTx_SendBytes"
+assert b(0xF4090C, 4) == bytes([0x1B, 0x90, 0x7A, 0xFB]), "T_SysEx_Checksum"
 assert a(0xFB7ACD, 3) == bytes([0x1E, 0x54, 0xF4]), "calr SysExTx_Append from FB7AC2"
 assert a(0xFB7AD6, 3) == bytes([0x1E, 0x8C, 0xF6]), "calr SysExTx_SendFrameMidi1 from FB7AC2"
 # The refusal path: prom_a 0xFB34B3 SysExTx_Append, 0xFB34BD SysExTx_SendFrameBothPorts.
@@ -537,8 +537,8 @@ DRM_LOCAL = (imm32_at(0xF37CAE), imm32_at(0xF37CD6))
 assert DRM_LOCAL == (82, 151)
 
 # where a write finally lands
-assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_F43470 -> 0xFD616A"
-assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_F43478 -> 0xFD6704"
+assert b(0xF43470, 4) == bytes([0x1B, 0x6A, 0x61, 0xFD]), "T_ToneMsg_SendParam -> 0xFD616A"
+assert b(0xF43478, 4) == bytes([0x1B, 0x04, 0x67, 0xFD]), "T_ToneMsg8D_SendParam -> 0xFD6704"
 assert b(0xF434A0, 4) == bytes([0x1B, 0x30, 0x1C, 0xF1]), "T_DspParam_WriteByNumber -> prom_b 0xF11C30"
 # and prom_c's own arithmetic on the same image, which no byte of prom_b knows
 assert c(0xFB459E, 6) == bytes([0xE8, 0xC8, 0xA1, 0x04, 0x00, 0x00])

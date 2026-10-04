@@ -141,7 +141,7 @@ Output at resume, truncated to the spans a wave would plausibly pick:
         <- T_F41F54-T_F421A8    150 slots,   5 unconverted, extent   2657,    0 refs
         <- T_F42F80-T_F42FAC     12 slots,  11 unconverted, extent   1512,   40 refs
         <- T_F42320-T_F42380     25 slots,   6 unconverted, extent    572,    0 refs
-        <- T_F433D0-T_F433EC      8 slots,   2 unconverted, extent    162,    0 refs
+        <- T_ScreenEnter_SoundEditDigitalEffect-T_F433EC      8 slots,   2 unconverted, extent    162,    0 refs
     0xF353AB-0xF3934C  file 0x353AB     16,289 bytes
         <- T_F41250-T_F41264      6 slots,   6 unconverted, extent   4091,    8 refs
         <- T_F42660-T_F42664      2 slots,   2 unconverted, extent     67,    2 refs

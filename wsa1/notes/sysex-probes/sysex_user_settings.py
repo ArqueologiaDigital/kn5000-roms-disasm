@@ -630,12 +630,12 @@ GM_CALLERS = [s for s in scan(A, PROM_A_BASE, bytes([0x1D, 0xAE, 0x4C, 0xFB]))
 assert GM_CALLERS == [0xFB5F5C], GM_CALLERS
 assert bl(EMIT_TABLE + 4 * 0xB0) == 0x00FB4CAE
 
-# 0xFB4B7D itself is reached only through prom_b thunk T_F40900
-assert b(0xF40900, 4) == bytes([0x1B, 0x7D, 0x4B, 0xFB]), "T_F40900 moved"
+# 0xFB4B7D itself is reached only through prom_b thunk T_SysExTx_EmitStagedParams
+assert b(0xF40900, 4) == bytes([0x1B, 0x7D, 0x4B, 0xFB]), "T_SysExTx_EmitStagedParams moved"
 assert scan(A, PROM_A_BASE, bytes([0x1D, 0x7D, 0x4B, 0xFB])) == [], \
     "something calls 0xFB4B7D directly"
 assert scan(A, PROM_A_BASE, bytes([0x1D, 0x00, 0x09, 0xF4])) == [0xFAB811], \
-    "T_F40900 has more than one caller"
+    "T_SysExTx_EmitStagedParams has more than one caller"
 
 
 # ====================================================================== 6

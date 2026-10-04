@@ -4,14 +4,14 @@ and the SONG-STORE COMMAND module that sits on top of it.
 
 QUESTION IT ANSWERS
     "What is the assembly text for the two thunk-table runs T_F42880-T_F42894
-     (6 slots) and T_F428B0-T_F42ABC (132 slots), in a form the byte gate
+     (6 slots) and T_BStore_AppendBytes_Join3_Veneer-T_F42ABC (132 slots), in a form the byte gate
      accepts, with every label and header attached to the right address?"
     This is the emitter whose output is pasted into prom_b/wsa1_prom_b.s.
 
 WHY THIS BLOCK
     notes/prom_b_module_frontier.py joins notes/prom_b_thunk_modules.py's run
     decomposition with notes/prom_b_call_graph.py's converted/unconverted split.
-    T_F428B0-T_F42ABC is the run with the most unconverted prom_b targets in the
+    T_BStore_AppendBytes_Join3_Veneer-T_F42ABC is the run with the most unconverted prom_b targets in the
     image -- 132 of them, all inside ONE .incbin span, 8,906 bytes of target
     extent, summed reference upper bound 172.  T_F42880-T_F42894 is the run
     immediately below it in the same span, and notes/FINDINGS-prom_b-block-store.md
@@ -674,7 +674,7 @@ BANNER = """
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py joins the thunk table's run
 ; decomposition (notes/prom_b_thunk_modules.py) with the converted/unconverted
 ; split (notes/prom_b_call_graph.py) and ranks runs by contiguous unconverted
-; target extent.  T_F428B0-T_F42ABC comes out with the most unconverted prom_b
+; target extent.  T_BStore_AppendBytes_Join3_Veneer-T_F42ABC comes out with the most unconverted prom_b
 ; targets of any run in the image -- 132, every one of them inside ONE .incbin
 ; span, 8,906 bytes of extent, summed reference upper bound 172.  Immediately
 ; below it in the same span sits T_F42880-T_F42894 (6 slots), whose target

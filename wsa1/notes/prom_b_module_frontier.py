@@ -133,7 +133,7 @@ def main():
 def selftest():
     """Asserts on the LAST element of every list it builds, not the first, and
     on invariants that survive a conversion -- an earlier draft hard-coded the
-    then-top run (T_F428B0) and would have started FAILING the moment that run
+    then-top run (T_BStore_AppendBytes_Join3_Veneer) and would have started FAILING the moment that run
     was converted, which is the opposite of what a self-test is for."""
     sp = spans()
     rows = survey()
@@ -171,7 +171,7 @@ def selftest():
     # ...and a run that IS unconverted must be PRESENT.
     # ⚠ DERIVED, never typed.  The previous draft named T_F40C50 here and started
     # FAILING the moment round 3 converted it -- the same defect the docstring
-    # above says an earlier draft already had with T_F428B0.  A self-test that
+    # above says an earlier draft already had with T_BStore_AppendBytes_Join3_Veneer.  A self-test that
     # breaks on success is the opposite of one, so this now takes the LAST `jp`
     # slot in table order whose target is still inside an `.incbin` and asserts
     # that survey() reports the run owning it.  It can only stop discriminating

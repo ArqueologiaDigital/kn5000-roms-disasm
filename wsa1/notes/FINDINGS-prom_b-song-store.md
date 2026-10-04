@@ -22,14 +22,14 @@ fragmented work. Top of that list:
 run                    slots   unc    extent    1span  spans   refs
 T_F42ED0-T_F42F04    14    14     20977    20977      1      6   0xF67434-0xF6C625
 T_F426E0-T_F42720    17    17     16244    16244      1     62   0xF5DAA2-0xF61A16
-T_F42EC0-T_F42EC8     3     3     14463    14463      1      4   0xF675CC-0xF6AE4B
+T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind     3     3     14463    14463      1      4   0xF675CC-0xF6AE4B
 T_F42F40-T_F42F6C    12    12     13084    13084      1     20   0xF0F018-0xF12334
-T_F428B0-T_F42ABC   132   132      8906     8906      1    172   0xF7AA00-0xF7CCCA
+T_BStore_AppendBytes_Join3_Veneer-T_F42ABC   132   132      8906     8906      1    172   0xF7AA00-0xF7CCCA
 ```
 
 The first four are **sparse**: 1,498 / 955 / 4,821 / 1,090 bytes of extent per
 entry point, i.e. most of what lies between their targets is named by nothing.
-`T_F428B0-T_F42ABC` is 67 bytes per entry point — the densest run in the image —
+`T_BStore_AppendBytes_Join3_Veneer-T_F42ABC` is 67 bytes per entry point — the densest run in the image —
 so converting it converts a module rather than a scatter. It also retires more
 unconverted targets than any other run (132 of 502), has the highest summed
 reference bound (172), and sits entirely in one `.incbin` span.

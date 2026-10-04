@@ -1181,18 +1181,18 @@
 	.set T_F402A4,                                                                      0x00F402A4
 	.set T_Paint_Sequencer,                                                             0x00F402AC
 	.set T_ShowScreen_NoteEditPartSelect,                                               0x00F402BC
-	.set T_F402CC,                                                                      0x00F402CC
+	.set T_EditScreen_EnterNoteEdit,                                                                      0x00F402CC
 	.set T_ShowScreen_DrumEditPartSelect,                                               0x00F402DC
-	.set T_F402EC,                                                                      0x00F402EC
+	.set T_EditScreen_EnterDrumEdit,                                                                      0x00F402EC
 	.set T_F40304,                                                                      0x00F40304
 	.set T_F40308,                                                                      0x00F40308
 	.set T_F4030C,                                                                      0x00F4030C
 	.set T_Ctrl_Normalise,                                                              0x00F405F0
-	.set T_F40610,                                                                      0x00F40610
+	.set T_PanelWire_EntryThunks,                                                                      0x00F40610
 	.set T_PanelWire_Service,                                                           0x00F40614
 	.set T_F40630,                                                                      0x00F40630
 	.set T_PanelEvent_Service,                                                          0x00F40634
-	.set T_F40660,                                                                      0x00F40660
+	.set T_PanelLed_PhaseVector,                                                                      0x00F40660
 	.set T_PanelLed_ProcessRequests,                                                    0x00F40664
 	.set T_PanelLed_Refresh,                                                            0x00F40668
 	.set T_PanelLed_SendByteUnconditional,                                              0x00F40670
@@ -1211,7 +1211,7 @@
 	.set T_MIDI_EntryThunks,                                                            0x00F40710
 	.set T_MIDI_RX_Byte,                                                                0x00F40714
 	.set T_MIDI_TX_Ready,                                                               0x00F40718
-	.set T_F40720,                                                                      0x00F40720
+	.set T_MIDI_Clock_CatchUpIfAnySlot,                                                                      0x00F40720
 	.set T_MIDI_PostSendWork,                                                           0x00F40724
 	.set T_MIDI_DrainQueue,                                                             0x00F40728
 	.set T_MIDI_SendBankAndProgram,                                                     0x00F4072C
@@ -1224,7 +1224,7 @@
 	.set T_MidiIn_ServiceDeferred,                                                      0x00F40758
 	.set T_F4075C,                                                                      0x00F4075C
 	.set T_F40760,                                                                      0x00F40760
-	.set T_F40770,                                                                      0x00F40770
+	.set T_ParamModule_PhaseVector,                                                                      0x00F40770
 	.set T_F40774,                                                                      0x00F40774
 	.set T_F4077C,                                                                      0x00F4077C
 	.set T_F40780,                                                                      0x00F40780
@@ -1269,16 +1269,16 @@
 	.set T_F40894,                                                                      0x00F40894
 	.set T_ParamShadow_FlushAll,                                                        0x00F40898
 	.set T_ParamApply_OneHotOfSix,                                                      0x00F4089C
-	.set T_F408E0,                                                                      0x00F408E0
+	.set T_SysExModule_EntryThunks,                                                                      0x00F408E0
 	.set T_SysExDump_RunSendJob,                                                        0x00F408E4
-	.set T_F408E8,                                                                      0x00F408E8
+	.set T_SysExRx_PollRing601646,                                                                      0x00F408E8
 	.set T_F408EC,                                                                      0x00F408EC
 	.set T_F408F0,                                                                      0x00F408F0
 	.set T_F408F4,                                                                      0x00F408F4
-	.set T_F40900,                                                                      0x00F40900
-	.set T_F40904,                                                                      0x00F40904
+	.set T_SysExTx_EmitStagedParams,                                                                      0x00F40900
+	.set T_SysExRx_PollRing601C6E,                                                                      0x00F40904
 	.set T_F40950,                                                                      0x00F40950
-	.set T_F40954,                                                                      0x00F40954
+	.set T_MidiFileDirectPlay_LcdKeyRow1,                                                                      0x00F40954
 	.set T_F40958,                                                                      0x00F40958
 	.set T_F4095C,                                                                      0x00F4095C
 	.set T_F409A0,                                                                      0x00F409A0
@@ -1294,7 +1294,7 @@
 	.set T_F409F0,                                                                      0x00F409F0
 	.set T_F409FC,                                                                      0x00F409FC
 	.set T_F40A00,                                                                      0x00F40A00
-	.set T_F40A08,                                                                      0x00F40A08
+	.set T_Var34D1_SetBits20,                                                                      0x00F40A08
 	.set T_F40A0C,                                                                      0x00F40A0C
 	.set T_F40A10,                                                                      0x00F40A10
 	.set T_F40A14,                                                                      0x00F40A14
@@ -1348,7 +1348,7 @@
 	.set T_UiEventList_RunPassB,                                                        0x00F40F60
 	.set T_UiEventList_RunPassC,                                                        0x00F40F64
 	.set T_PanelHold_Tick,                                                              0x00F40F74
-	.set T_F40FB0,                                                                      0x00F40FB0
+	.set T_Msg0716_InitAllRecords_Entry,                                                                      0x00F40FB0
 	.set T_F40FB4,                                                                      0x00F40FB4
 	.set T_F40FD0,                                                                      0x00F40FD0
 	.set T_F40FDC,                                                                      0x00F40FDC
@@ -1418,10 +1418,10 @@
 	.set T_F41104,                                                                      0x00F41104
 	.set T_F41108,                                                                      0x00F41108
 	.set T_F4110C,                                                                      0x00F4110C
-	.set T_F41110,                                                                      0x00F41110
-	.set T_F41114,                                                                      0x00F41114
-	.set T_F41118,                                                                      0x00F41118
-	.set T_F4111C,                                                                      0x00F4111C
+	.set T_Msg0716_SetPendingBit0,                                                                      0x00F41110
+	.set T_Msg0716_SetPendingBit1,                                                                      0x00F41114
+	.set T_Msg0716_SetPendingBit2,                                                                      0x00F41118
+	.set T_Msg0716_SetPendingBit3,                                                                      0x00F4111C
 	.set T_F41120,                                                                      0x00F41120
 	.set T_F41124,                                                                      0x00F41124
 	.set T_F41128,                                                                      0x00F41128
@@ -1474,7 +1474,7 @@
 	.set T_F4125C,                                                                      0x00F4125C
 	.set T_F41260,                                                                      0x00F41260
 	.set T_F41264,                                                                      0x00F41264
-	.set T_F413B0,                                                                      0x00F413B0
+	.set T_Ram3800_Start_Entry,                                                                      0x00F413B0
 	.set T_F413B4,                                                                      0x00F413B4
 	.set T_F413B8,                                                                      0x00F413B8
 	.set T_F413BC,                                                                      0x00F413BC
@@ -1563,8 +1563,8 @@
 	.set T_PanelMode_System_Enter,                                                      0x00F41910
 	.set T_Screen_System_Enter,                                                         0x00F41918
 	.set T_Screen_TuneScale_Enter,                                                      0x00F41928
-	.set T_F41938,                                                                      0x00F41938
-	.set T_F41948,                                                                      0x00F41948
+	.set T_Screen_TouchSensitivityOrTest_Enter,                                                                      0x00F41938
+	.set T_Screen_ControllerAssign_Enter,                                                                      0x00F41948
 	.set T_Screen_MainOutEqualizer_Enter,                                               0x00F41958
 	.set T_Screen_ReMapEdit_Enter,                                                      0x00F41968
 	.set T_Screen_SoundCombinationManager_Enter,                                        0x00F41978
@@ -1663,8 +1663,8 @@
 	.set T_F41F30,                                                                      0x00F41F30
 	.set T_F41F34,                                                                      0x00F41F34
 	.set T_F41F54,                                                                      0x00F41F54
-	.set T_F41F5C,                                                                      0x00F41F5C
-	.set T_F41F6C,                                                                      0x00F41F6C
+	.set T_ScreenEnter_SoundEditMenu,                                                                      0x00F41F5C
+	.set T_ToneEditPage_A0_ModelingTop,                                                                      0x00F41F6C
 	.set T_F41F7C,                                                                      0x00F41F7C
 	.set T_F41F8C,                                                                      0x00F41F8C
 	.set T_ToneEditPage_A3_PositionParameter,                                           0x00F41F9C
@@ -1672,45 +1672,45 @@
 	.set T_ToneEditPage_A5_FittingMutingTuning,                                         0x00F41FBC
 	.set T_ToneEditPage_A6_TouchDepth,                                                  0x00F41FCC
 	.set T_ToneEditPage_A7_ResoModeKeyFollow,                                           0x00F41FDC
-	.set T_F41FEC,                                                                      0x00F41FEC
-	.set T_F41FFC,                                                                      0x00F41FFC
-	.set T_F4200C,                                                                      0x00F4200C
-	.set T_F4201C,                                                                      0x00F4201C
-	.set T_F4202C,                                                                      0x00F4202C
-	.set T_F4203C,                                                                      0x00F4203C
-	.set T_F4204C,                                                                      0x00F4204C
-	.set T_F4205C,                                                                      0x00F4205C
-	.set T_F4206C,                                                                      0x00F4206C
-	.set T_F4207C,                                                                      0x00F4207C
-	.set T_F4208C,                                                                      0x00F4208C
-	.set T_F4209C,                                                                      0x00F4209C
-	.set T_F420AC,                                                                      0x00F420AC
-	.set T_F420BC,                                                                      0x00F420BC
-	.set T_F420CC,                                                                      0x00F420CC
-	.set T_F420DC,                                                                      0x00F420DC
-	.set T_F420EC,                                                                      0x00F420EC
-	.set T_F420FC,                                                                      0x00F420FC
-	.set T_F4210C,                                                                      0x00F4210C
-	.set T_F4211C,                                                                      0x00F4211C
-	.set T_F4212C,                                                                      0x00F4212C
-	.set T_F4213C,                                                                      0x00F4213C
-	.set T_F4214C,                                                                      0x00F4214C
-	.set T_F4215C,                                                                      0x00F4215C
-	.set T_F4216C,                                                                      0x00F4216C
-	.set T_F4217C,                                                                      0x00F4217C
-	.set T_F4218C,                                                                      0x00F4218C
-	.set T_F4219C,                                                                      0x00F4219C
+	.set T_ToneEditPage_A8_SerialParallel,                                                                      0x00F41FEC
+	.set T_ScreenEnter_SoundEditPitchTune,                                                                      0x00F41FFC
+	.set T_ScreenEnter_SoundEditPitchEnvelope1,                                                                      0x00F4200C
+	.set T_ScreenEnter_SoundEditPitchEnvelope2,                                                                      0x00F4201C
+	.set T_ScreenEnter_SoundEditPitchLfo,                                                                      0x00F4202C
+	.set T_ScreenEnter_SoundEditAmpLevel1,                                                                      0x00F4203C
+	.set T_ScreenEnter_SoundEditAmpLevel2,                                                                      0x00F4204C
+	.set T_ScreenEnter_SoundEditAmpEnvelope1,                                                                      0x00F4205C
+	.set T_ScreenEnter_SoundEditAmpEnvelope2,                                                                      0x00F4206C
+	.set T_ScreenEnter_SoundEditAmpLfo,                                                                      0x00F4207C
+	.set T_ScreenEnter_SoundEditControllerPage1,                                                                      0x00F4208C
+	.set T_ScreenEnter_SoundEditControllerPage2,                                                                      0x00F4209C
+	.set T_ScreenEnter_SoundEditDigitalEffectFromMenu,                                                                      0x00F420AC
+	.set T_ScreenEnter_SoundEditFilterLpf12,                                                                      0x00F420BC
+	.set T_ScreenEnter_SoundEditFilterHpf12,                                                                      0x00F420CC
+	.set T_ScreenEnter_SoundEditFilterLpf24,                                                                      0x00F420DC
+	.set T_ScreenEnter_SoundEditFilterHpf24,                                                                      0x00F420EC
+	.set T_ScreenEnter_SoundEditFilterBpf,                                                                      0x00F420FC
+	.set T_ScreenEnter_SoundEditFilterThrough,                                                                      0x00F4210C
+	.set T_ScreenEnter_SoundEditFilterKeyFollow,                                                                      0x00F4211C
+	.set T_ScreenEnter_SoundEditFilterEnvelope1,                                                                      0x00F4212C
+	.set T_ScreenEnter_SoundEditFilterEnvelope2,                                                                      0x00F4213C
+	.set T_ScreenEnter_SoundEditFilterLfo,                                                                      0x00F4214C
+	.set T_ScreenEnter_SoundEditModelingToneTemplate,                                                                      0x00F4215C
+	.set T_ScreenEnter_SoundEditToneLayerPanning,                                                                      0x00F4216C
+	.set T_ScreenEnter_SoundEditToneLayerKeyLayer,                                                                      0x00F4217C
+	.set T_ScreenEnter_SoundEditToneLayerVelocityLayer,                                                                      0x00F4218C
+	.set T_ScreenEnter_SoundEditModelingDriverWaveform,                                                                      0x00F4219C
 	.set T_F42250,                                                                      0x00F42250
 	.set T_F42254,                                                                      0x00F42254
 	.set T_F4225C,                                                                      0x00F4225C
 	.set T_Paint_DiskMenu,                                                              0x00F42264
 	.set T_Paint_MidiFileDirectPlay,                                                    0x00F42274
 	.set T_F42320,                                                                      0x00F42320
-	.set T_F42330,                                                                      0x00F42330
+	.set T_ScreenEnter_SoundEditDrumMenu,                                                                      0x00F42330
 	.set T_F42340,                                                                      0x00F42340
-	.set T_F42350,                                                                      0x00F42350
-	.set T_F42360,                                                                      0x00F42360
-	.set T_F42370,                                                                      0x00F42370
+	.set T_ScreenEnter_SoundEditCopy,                                                                      0x00F42350
+	.set T_ScreenEnter_SoundEditMemoryWrite,                                                                      0x00F42360
+	.set T_ScreenEnter_SoundEditNaming,                                                                      0x00F42370
 	.set T_Ring608A0A_DrainAll,                                                         0x00F42380
 	.set T_Paint_DiskL0adFile,                                                          0x00F423A0
 	.set T_PageDispatch_DiskSaveFile,                                                   0x00F423B0
@@ -1782,13 +1782,13 @@
 	.set T_F425C4,                                                                      0x00F425C4
 	.set T_F425C8,                                                                      0x00F425C8
 	.set T_F425CC,                                                                      0x00F425CC
-	.set T_F425D0,                                                                      0x00F425D0
+	.set T_MidiFileSave_Page5_LcdKeyRow3,                                                                      0x00F425D0
 	.set T_F425D4,                                                                      0x00F425D4
 	.set T_F425D8,                                                                      0x00F425D8
 	.set T_F425DC,                                                                      0x00F425DC
 	.set T_F425E4,                                                                      0x00F425E4
 	.set T_F425E8,                                                                      0x00F425E8
-	.set T_F425F4,                                                                      0x00F425F4
+	.set T_DiskSaveFile_Page5_LcdKeyRow3,                                                                      0x00F425F4
 	.set T_F425F8,                                                                      0x00F425F8
 	.set T_F42608,                                                                      0x00F42608
 	.set T_F4260C,                                                                      0x00F4260C
@@ -1800,10 +1800,10 @@
 	.set T_F42624,                                                                      0x00F42624
 	.set T_F42628,                                                                      0x00F42628
 	.set T_F4262C,                                                                      0x00F4262C
-	.set T_F42634,                                                                      0x00F42634
+	.set T_MidiFileSave_Page3_LcdKeyRow3,                                                                      0x00F42634
 	.set T_F42660,                                                                      0x00F42660
 	.set T_F42664,                                                                      0x00F42664
-	.set T_F42670,                                                                      0x00F42670
+	.set T_Screen_Initial_Enter,                                                                      0x00F42670
 	.set T_Screen_SoundGroupNaming_Enter,                                               0x00F42680
 	.set T_Screen_CombinationGroupNaming_Enter,                                         0x00F42690
 	.set T_Screen_SoundCopy_Enter,                                                      0x00F426A0
@@ -1813,79 +1813,79 @@
 	.set T_F4282C,                                                                      0x00F4282C
 	.set T_BStore_AppendBytes_Veneer,                                                   0x00F42894
 	.set T_F429A8,                                                                      0x00F429A8
-	.set T_F429AC,                                                                      0x00F429AC
-	.set T_F429B0,                                                                      0x00F429B0
-	.set T_F429B4,                                                                      0x00F429B4
-	.set T_F429B8,                                                                      0x00F429B8
-	.set T_F429BC,                                                                      0x00F429BC
-	.set T_F429C0,                                                                      0x00F429C0
-	.set T_F429C4,                                                                      0x00F429C4
+	.set T_MeasureInsert_OnLeave,                                                                      0x00F429AC
+	.set T_MeasureInsert_SelectField1,                                                                      0x00F429B0
+	.set T_MeasureInsert_SelectField2,                                                                      0x00F429B4
+	.set T_MeasureInsert_SelectField3,                                                                      0x00F429B8
+	.set T_MeasureInsert_SelectField4,                                                                      0x00F429BC
+	.set T_MeasureInsert_SelectField5,                                                                      0x00F429C0
+	.set T_MeasureInsert_SelectField6,                                                                      0x00F429C4
 	.set T_F429C8,                                                                      0x00F429C8
 	.set T_F429CC,                                                                      0x00F429CC
 	.set T_F429D0,                                                                      0x00F429D0
-	.set T_F429D4,                                                                      0x00F429D4
+	.set T_MeasureInsert_LcdKeyRow1,                                                                      0x00F429D4
 	.set T_F429D8,                                                                      0x00F429D8
-	.set T_F429DC,                                                                      0x00F429DC
-	.set T_F429E0,                                                                      0x00F429E0
-	.set T_F429E4,                                                                      0x00F429E4
-	.set T_F429E8,                                                                      0x00F429E8
-	.set T_F429EC,                                                                      0x00F429EC
-	.set T_F429F0,                                                                      0x00F429F0
-	.set T_F429F4,                                                                      0x00F429F4
+	.set T_MeasureC0py_OnLeave,                                                                      0x00F429DC
+	.set T_MeasureC0py_SelectField1,                                                                      0x00F429E0
+	.set T_MeasureC0py_SelectField2,                                                                      0x00F429E4
+	.set T_MeasureC0py_SelectField3,                                                                      0x00F429E8
+	.set T_MeasureC0py_SelectField4,                                                                      0x00F429EC
+	.set T_MeasureC0py_SelectField5,                                                                      0x00F429F0
+	.set T_MeasureC0py_SelectField6,                                                                      0x00F429F4
 	.set T_F429F8,                                                                      0x00F429F8
 	.set T_F429FC,                                                                      0x00F429FC
 	.set T_F42A00,                                                                      0x00F42A00
-	.set T_F42A04,                                                                      0x00F42A04
+	.set T_MeasureC0py_LcdKeyRow1,                                                                      0x00F42A04
 	.set T_F42A08,                                                                      0x00F42A08
-	.set T_F42A10,                                                                      0x00F42A10
-	.set T_F42A14,                                                                      0x00F42A14
-	.set T_F42A18,                                                                      0x00F42A18
-	.set T_F42A1C,                                                                      0x00F42A1C
-	.set T_F42A20,                                                                      0x00F42A20
-	.set T_F42A24,                                                                      0x00F42A24
-	.set T_F42A28,                                                                      0x00F42A28
-	.set T_F42A2C,                                                                      0x00F42A2C
-	.set T_F42A30,                                                                      0x00F42A30
+	.set T_S0ngC0py_StageZero_SoftKeyCol2,                                                                      0x00F42A10
+	.set T_S0ngC0py_StageZero_SoftKeyCol1,                                                                      0x00F42A14
+	.set T_S0ngC0py_StageZero_SoftKeyCol4,                                                                      0x00F42A18
+	.set T_S0ngC0py_StageZero_SoftKeyCol3,                                                                      0x00F42A1C
+	.set T_S0ngC0py_StageZero_SoftKeyCol6,                                                                      0x00F42A20
+	.set T_S0ngC0py_StageZero_SoftKeyCol5,                                                                      0x00F42A24
+	.set T_S0ngC0py_StageZero_SoftKeyCol8,                                                                      0x00F42A28
+	.set T_S0ngC0py_StageZero_SoftKeyCol7,                                                                      0x00F42A2C
+	.set T_S0ngC0py_LcdKeyRow2,                                                                      0x00F42A30
 	.set T_F42A34,                                                                      0x00F42A34
-	.set T_F42A68,                                                                      0x00F42A68
-	.set T_F42A6C,                                                                      0x00F42A6C
-	.set T_F42A70,                                                                      0x00F42A70
-	.set T_F42A74,                                                                      0x00F42A74
+	.set T_AdvanceDelay_SelectField1,                                                                      0x00F42A68
+	.set T_AdvanceDelay_SelectField2,                                                                      0x00F42A6C
+	.set T_AdvanceDelay_SelectField3,                                                                      0x00F42A70
+	.set T_AdvanceDelay_SelectField4,                                                                      0x00F42A74
 	.set T_F42A78,                                                                      0x00F42A78
 	.set T_F42A7C,                                                                      0x00F42A7C
-	.set T_F42A80,                                                                      0x00F42A80
+	.set T_AdvanceDelay_LcdKeyRow3,                                                                      0x00F42A80
 	.set T_F42A84,                                                                      0x00F42A84
 	.set T_F42A88,                                                                      0x00F42A88
-	.set T_F42A8C,                                                                      0x00F42A8C
-	.set T_F42A90,                                                                      0x00F42A90
-	.set T_F42A94,                                                                      0x00F42A94
-	.set T_F42A98,                                                                      0x00F42A98
-	.set T_F42A9C,                                                                      0x00F42A9C
-	.set T_F42AA0,                                                                      0x00F42AA0
+	.set T_N0teChange_OnLeave,                                                                      0x00F42A8C
+	.set T_N0teChange_SelectField1,                                                                      0x00F42A90
+	.set T_N0teChange_SelectField2,                                                                      0x00F42A94
+	.set T_N0teChange_SelectField3,                                                                      0x00F42A98
+	.set T_N0teChange_SelectField4,                                                                      0x00F42A9C
+	.set T_N0teChange_SelectField5,                                                                      0x00F42AA0
 	.set T_F42AA4,                                                                      0x00F42AA4
 	.set T_F42AA8,                                                                      0x00F42AA8
-	.set T_F42AAC,                                                                      0x00F42AAC
+	.set T_N0teChange_LcdKeyRow4,                                                                      0x00F42AAC
 	.set T_F42AB0,                                                                      0x00F42AB0
 	.set T_F42B70,                                                                      0x00F42B70
-	.set T_F42B7C,                                                                      0x00F42B7C
-	.set T_F42B80,                                                                      0x00F42B80
-	.set T_F42B84,                                                                      0x00F42B84
-	.set T_F42B88,                                                                      0x00F42B88
+	.set T_Medley_SelectField1,                                                                      0x00F42B7C
+	.set T_Medley_SelectField2,                                                                      0x00F42B80
+	.set T_SequencerMedley_StepFieldUp,                                                                      0x00F42B84
+	.set T_SequencerMedley_StepFieldDown,                                                                      0x00F42B88
 	.set T_F42B9C,                                                                      0x00F42B9C
 	.set T_F42BB4,                                                                      0x00F42BB4
 	.set T_F42BB8,                                                                      0x00F42BB8
-	.set T_F42BBC,                                                                      0x00F42BBC
-	.set T_F42BC4,                                                                      0x00F42BC4
-	.set T_F42BC8,                                                                      0x00F42BC8
-	.set T_F42BCC,                                                                      0x00F42BCC
-	.set T_F42BD0,                                                                      0x00F42BD0
-	.set T_F42BD4,                                                                      0x00F42BD4
-	.set T_F42BD8,                                                                      0x00F42BD8
-	.set T_F42C18,                                                                      0x00F42C18
-	.set T_F42C1C,                                                                      0x00F42C1C
-	.set T_F42C24,                                                                      0x00F42C24
-	.set T_F42C28,                                                                      0x00F42C28
-	.set T_F42C2C,                                                                      0x00F42C2C
+	.set T_StepRecordPartSelect_OpenStepRecord,                                                                      0x00F42BBC
+	.set T_StepRecordPartSelect_ResetOnEntry,                                                                      0x00F42BC4
+	.set T_StepRecordPartSelect_OnLeave,                                                                      0x00F42BC8
+	.set T_SequencerMedley_InitOnEntry,                                                                      0x00F42BCC
+	.set T_SequencerMedley_OnLeave,                                                                      0x00F42BD0
+	.set T_SequencerMedley_LcdKeyRow2,                                                                      0x00F42BD4
+	.set T_SequencerMedley_StopPlayback,                                                                      0x00F42BD8
+	.set T_SequencerMedley_SetSourceInternal,                                                                      0x00F42C18
+	.set T_SequencerMedley_SoftKeyCol3,                                                                      0x00F42C1C
+	.set T_SequencerMedley_SoftKeyCol7,                                                                      0x00F42C24
+	.set T_SequencerMedley_SoftKeyCol8,                                                                      0x00F42C28
+	.set T_SequencerMedley_LcdKeyRow4,                                                                      0x00F42C2C
 	.set T_PanelCode_ToSlotAndFlags,                                                    0x00F42C74
 	.set T_F42C78,                                                                      0x00F42C78
 	.set T_Queue2C00_Append4,                                                           0x00F42C80
@@ -1923,7 +1923,7 @@
 	.set T_DisplayList_RunOne_Stack,                                                    0x00F42E08
 	.set T_DisplayListB_RunOne_Stack,                                                   0x00F42E0C
 	.set T_F42E10,                                                                      0x00F42E10
-	.set T_F42E14,                                                                      0x00F42E14
+	.set T_LCD_ShowAllLayers_StackFrame_Copy,                                                                      0x00F42E14
 	.set T_F42E18,                                                                      0x00F42E18
 	.set T_Blink_Command,                                                               0x00F42E20
 	.set T_Blink_Stop,                                                                  0x00F42E24
@@ -1938,8 +1938,8 @@
 	.set T_F42E6C,                                                                      0x00F42E6C
 	.set T_CallbackQueue_Post,                                                          0x00F42E84
 	.set T_F42E90,                                                                      0x00F42E90
-	.set T_F42EC0,                                                                      0x00F42EC0
-	.set T_F42EC4,                                                                      0x00F42EC4
+	.set T_StepRecord_OnEnter,                                                                      0x00F42EC0
+	.set T_StepRecord_OnLeave,                                                                      0x00F42EC4
 	.set T_F42ED0,                                                                      0x00F42ED0
 	.set T_F42EDC,                                                                      0x00F42EDC
 	.set T_F42F00,                                                                      0x00F42F00
@@ -1952,16 +1952,16 @@
 	.set T_F42F68,                                                                      0x00F42F68
 	.set T_F42F6C,                                                                      0x00F42F6C
 	.set T_F42F80,                                                                      0x00F42F80
-	.set T_F42F84,                                                                      0x00F42F84
-	.set T_F42F88,                                                                      0x00F42F88
-	.set T_F42F8C,                                                                      0x00F42F8C
-	.set T_F42F90,                                                                      0x00F42F90
-	.set T_F42F94,                                                                      0x00F42F94
-	.set T_F42F98,                                                                      0x00F42F98
+	.set T_SoundEditNaming_SoftKeyCol1,                                                                      0x00F42F84
+	.set T_SoundEditNaming_SoftKeyCol2,                                                                      0x00F42F88
+	.set T_SoundEditNaming_SoftKeyCol3,                                                                      0x00F42F8C
+	.set T_SoundEditNaming_SoftKeyCol4,                                                                      0x00F42F90
+	.set T_SoundEditNaming_SoftKeyCol5,                                                                      0x00F42F94
+	.set T_SoundEditNaming_SoftKeyCol6,                                                                      0x00F42F98
 	.set T_F42F9C,                                                                      0x00F42F9C
-	.set T_F42FA0,                                                                      0x00F42FA0
-	.set T_F42FA4,                                                                      0x00F42FA4
-	.set T_F42FA8,                                                                      0x00F42FA8
+	.set T_SoundEditNaming_SoftKeyCol8,                                                                      0x00F42FA0
+	.set T_SoundEditNaming_LcdKeyRow1,                                                                      0x00F42FA4
+	.set T_SoundEditNaming_LcdKeyRow2,                                                                      0x00F42FA8
 	.set T_F42FAC,                                                                      0x00F42FAC
 	.set T_F43020,                                                                      0x00F43020
 	.set T_F43028,                                                                      0x00F43028
@@ -1984,7 +1984,7 @@
 	.set T_ScreenEnter_PanelWrite,                                                      0x00F43130
 	.set T_ScreenEnter_TrackAssign,                                                     0x00F43140
 	.set T_ScreenEnter_SequencerMedley,                                                 0x00F43150
-	.set T_F43160,                                                                      0x00F43160
+	.set T_ScreenEnter_StepRecord,                                                                      0x00F43160
 	.set T_ScreenEnter_StepRecordPartSelect,                                            0x00F43170
 	.set T_ScreenEnter_AfterT0uchSetting,                                               0x00F43180
 	.set T_ScreenEnter_TrackAssignPresets,                                              0x00F43190
@@ -1997,9 +1997,9 @@
 	.set T_MidiIn_ReqListRebuild_Msg13_16,                                              0x00F43350
 	.set T_MidiIn_ReqRebuild_Msg03_0A,                                                  0x00F43354
 	.set T_MidiIn_PumpPortB,                                                            0x00F43358
-	.set T_F43380,                                                                      0x00F43380
+	.set T_MidiFileL0ad_LcdKeyRow1,                                                                      0x00F43380
 	.set T_F43384,                                                                      0x00F43384
-	.set T_F433D0,                                                                      0x00F433D0
+	.set T_ScreenEnter_SoundEditDigitalEffect,                                                                      0x00F433D0
 	.set T_F433E0,                                                                      0x00F433E0
 	.set T_SoundName_CopyToBuffer,                                                      0x00F43400
 	.set T_SoundGroupName_CopyToBuffer,                                                 0x00F43404
@@ -2234,21 +2234,21 @@ wsa1_prom_a:
 ; ==============================================================================
 ; AdvanceDelay_SelectField1 -- the prom_a half of prom_b's LcdKeyRow1_AdvanceDelay_StageZero: select field 1 of the ADVANCE/DELAY screen
 ; Evidence: that handler's last instructions `bit 7,W / jr Z,0xF80019` (0xF7FFFB-0xF7FFFF) fall through the chip boundary into 0xF80000; nothing calls or names 0xF80000 (24-bit scan of prom_a/b/c).
-; Body: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_F42A68 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.
-; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_StageZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_F42A6C/70/74.
+; Body: if (0x0DE5)!=1, calr 0xF7F245 (Blink_SetEnable(0) + Blink_Stop); or (0x2075),1; T_AdvanceDelay_SelectField1 = prom_b 0xF7CB1E sets (0x0DE5)=(0x12FC)=1; AdvanceDelay_DrawValues; AdvanceDelay_DrawFieldCursor.
+; Rows 2-4 (slots 9-11 of ButtonTable_AdvanceDelay_StageZero, 0xF8003A/0xF80059/0xF8009D) select fields 2-4 the same way through T_AdvanceDelay_SelectField2/70/74.
 AdvanceDelay_SelectField1:
 	m_cp_mi8 MB16, AdvanceDelay_Field, 0x01                          ; F80000  c1 e5 0d 3f 01
 	jr z, AdvanceDelay_SelectField1_Ret                                       ; F80005  66 12
 	calr sub_F7F245                                          ; F80007  1e 3b f2
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F8000A  c1 75 20 3e 01
-	call T_F42A68                                        ; F8000F  1d 68 2a f4
+	call T_AdvanceDelay_SelectField1                                        ; F8000F  1d 68 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80013  1e 70 00
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80016  1e 01 00
 AdvanceDelay_SelectField1_Ret:
 	ret                                                  ; F80019  0e
 ; AdvanceDelay_DrawFieldCursor -- clear LCD layer 1, then fill the box of the ADVANCE/DELAY field (0x12FC) selects
 ; Evidence: (0x2540)=1; site 0xF8002C runs DL_F39551-0xF39559 (interpreter A), one op-0E record = svc 0x0E LCD_Svc_0E_ClearColumns with IY=0, BC=0x28, HL=0xF0 (40 columns x 240 rows); then T_F4181C (jp DLB_Handler_Array8) on the op-03 record 0xF3B3A7: (0x12FC)&7 indexes DLBoxes_F3B3B2, swi 5 = LCD_Svc_05_FillRect.
-; Screen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_StageZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_F42A68..T_F42A74.
+; Screen: ADVANCE/DELAY -- callers are AdvanceDelay_SelectField1 and the row-key handlers of ButtonTable_AdvanceDelay_StageZero at 0xF8003A-0xF800BB; (0x12FC) is written with (0x0DE5) by T_AdvanceDelay_SelectField1..T_AdvanceDelay_SelectField4.
 ; calr 0xF7E2D8 at 0xF8001F is a bare `ret` in prom_b.
 AdvanceDelay_DrawFieldCursor:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F8001A  f1 40 25 00 01
@@ -2269,7 +2269,7 @@ LcdKeyRow2_AdvanceDelay_StageZero:
 	jr z, .LF80058                                       ; F80044  66 12
 	calr sub_F7F237                                          ; F80046  1e ee f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80049  c1 75 20 3e 01
-	call T_F42A6C                                        ; F8004E  1d 6c 2a f4
+	call T_AdvanceDelay_SelectField2                                        ; F8004E  1d 6c 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80052  1e 31 00
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80055  1e c2 ff
 .LF80058:
@@ -2284,14 +2284,14 @@ LcdKeyRow3_AdvanceDelay_StageZero:
 	jr z, .LF80085                                       ; F80063  66 20
 	calr sub_F7F237                                          ; F80065  1e cf f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F80068  c1 75 20 3e 01
-	call T_F42A70                                        ; F8006D  1d 70 2a f4
+	call T_AdvanceDelay_SelectField3                                        ; F8006D  1d 70 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F80071  1e 12 00
 	calr AdvanceDelay_DrawFieldCursor                                      ; F80074  1e a3 ff
 	jr .LF80085                                          ; F80077  68 0c
 .LF80079:
 	calr sub_F7F245                                          ; F80079  1e c9 f1
 	m_and_mi8 MB16, UI_RequestBits, 0xf6                         ; F8007C  c1 75 20 3c f6
-	call T_F42A80                                        ; F80081  1d 80 2a f4
+	call T_AdvanceDelay_LcdKeyRow3                                        ; F80081  1d 80 2a f4
 .LF80085:
 	ret                                                  ; F80085  0e
 ; AdvanceDelay_DrawValues -- redraw the live values of the ADVANCE/DELAY screen on layer 0
@@ -2315,7 +2315,7 @@ LcdKeyRow4_AdvanceDelay_StageZero:
 	jr z, .LF800BD                                       ; F800A7  66 14
 	calr sub_F7F237                                          ; F800A9  1e 8b f1
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F800AC  c1 75 20 3e 01
-	call T_F42A74                                        ; F800B1  1d 74 2a f4
+	call T_AdvanceDelay_SelectField4                                        ; F800B1  1d 74 2a f4
 	calr AdvanceDelay_DrawValues                                      ; F800B5  1e ce ff
 	calr AdvanceDelay_DrawFieldCursor                                      ; F800B8  1e 5f ff
 	jr .LF800BD                                          ; F800BB  68 00
@@ -2414,7 +2414,7 @@ LcdKeyRow3_AdvanceDelay_StageNonZero:
 	bit 0x07,W                                           ; F80107  c8 33 07
 	jr nz, .LF80115                                      ; F8010A  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F8010C  c1 75 20 3c 6f
-	call T_F42A80                                        ; F80111  1d 80 2a f4
+	call T_AdvanceDelay_LcdKeyRow3                                        ; F80111  1d 80 2a f4
 .LF80115:
 	ret                                                  ; F80115  0e
 ; LcdKeyRow4_AdvanceDelay_StageNonZero: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks
@@ -2662,7 +2662,7 @@ Paint_S0ngC0py:
 	ret                                                  ; F802EB  0e
 ; S0ngC0py_DrawFromSong -- redraw the FROM song number and its six-character name on the SONG COPY screen
 ; Evidence: (0x12F6)=(0x0E0C); site 0xF80301 runs B record 0xF3C199 ((0x12F6) at IX 0x0A84, x=12 beside 'SONG ' x=7 under 'FROM' x=8 in DL_S0ngC0pyFromToSongSongOk); ldir 6 bytes from 0x610000+((0x0E0C)-1)*0xC00+0xCA (song bank name, FINDINGS-prom_b-block-store.md) to 0x12F8; site 0xF80333 runs DL_F3C15D (string 0x12F8 at IX 0x0DA0).
-; Callers: Paint_S0ngC0py and the SoftKeyCol1/2 slot handlers (0xF803C9/0xF803D2) after T_F42A14/T_F42A10 step (0x0E0C) down/up in 1..10.
+; Callers: Paint_S0ngC0py and the SoftKeyCol1/2 slot handlers (0xF803C9/0xF803D2) after T_S0ngC0py_StageZero_SoftKeyCol1/T_S0ngC0py_StageZero_SoftKeyCol2 step (0x0E0C) down/up in 1..10.
 S0ngC0py_DrawFromSong:
 	xor XWA,XWA                                          ; F802EC  e8 d0
 	ld a, (S0ngC0py_FromSong:16)                                   ; F802EE  c1 0c 0e 21
@@ -2690,7 +2690,7 @@ S0ngC0py_DrawFromSong:
 	ret                                                  ; F80337  0e
 ; S0ngC0py_DrawToSong -- redraw the TO song number and name on the SONG COPY screen
 ; Evidence: (0x12F7)=(0x0E0D); site 0xF8034D runs B record 0xF3C1A3 (IX 0x0A95, x=29 under 'TO' x=26); name of bank (0x0E0D)-1 copied to 0x12FE; site 0xF8037F runs DL_F3C16C (IX 0x0DB1).
-; Callers: Paint_S0ngC0py and the SoftKeyCol5/6 slot handlers (0xF803ED/0xF803F6) after T_F42A24/T_F42A20.
+; Callers: Paint_S0ngC0py and the SoftKeyCol5/6 slot handlers (0xF803ED/0xF803F6) after T_S0ngC0py_StageZero_SoftKeyCol5/T_S0ngC0py_StageZero_SoftKeyCol6.
 S0ngC0py_DrawToSong:
 	xor XWA,XWA                                          ; F80338  e8 d0
 	ld a, (S0ngC0py_ToSong:16)                                   ; F8033A  c1 0d 0e 21
@@ -2717,7 +2717,7 @@ S0ngC0py_DrawToSong:
 	ret                                                  ; F80383  0e
 ; S0ngC0py_DrawTracks -- redraw the FROM and TO track fields of the SONG COPY screen
 ; Evidence: (0x0E0E)=0x12 draws DL_AllAll ('  ALL   ' at both columns); otherwise (0x1304)=(0x0E0E), (0x1305)=(0x0E0F), DLB DL_F3C17B (two DLText_0To17All readouts at IX 0x1344/0x1355) and DL_TrackTrack.
-; Callers: Paint_S0ngC0py and SoftKeyCol3/4/7/8 handlers after T_F42A1C/18/2C/28 step (0x0E0E)/(0x0E0F) in 1..0x12.
+; Callers: Paint_S0ngC0py and SoftKeyCol3/4/7/8 handlers after T_S0ngC0py_StageZero_SoftKeyCol3/18/2C/28 step (0x0E0E)/(0x0E0F) in 1..0x12.
 S0ngC0py_DrawTracks:
 	m_cp_mi8 MB16, S0ngC0py_FromTrack, 0x12                          ; F80384  c1 0e 0e 3f 12
 	jr nz, .LF8039B                                      ; F80389  6e 10
@@ -2744,56 +2744,56 @@ ScreenLeave_S0ngC0py_Nop:
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x00, 0x11.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol1_S0ngC0py_StageZero:
-	call T_F42A14                                        ; F803C9  1d 14 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol1                                        ; F803C9  1d 14 2a f4
 	call S0ngC0py_DrawFromSong                                      ; F803CD  1d ec 02 f8
 	ret                                                  ; F803D1  0e
 ; SoftKeyCol2_S0ngC0py_StageZero: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x01, 0x12.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol2_S0ngC0py_StageZero:
-	call T_F42A10                                        ; F803D2  1d 10 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol2                                        ; F803D2  1d 10 2a f4
 	call S0ngC0py_DrawFromSong                                      ; F803D6  1d ec 02 f8
 	ret                                                  ; F803DA  0e
 ; SoftKeyCol3_S0ngC0py_StageZero: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x02, 0x13.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol3_S0ngC0py_StageZero:
-	call T_F42A1C                                        ; F803DB  1d 1c 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol3                                        ; F803DB  1d 1c 2a f4
 	call S0ngC0py_DrawTracks                                      ; F803DF  1d 84 03 f8
 	ret                                                  ; F803E3  0e
 ; SoftKeyCol4_S0ngC0py_StageZero: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x03, 0x14.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol4_S0ngC0py_StageZero:
-	call T_F42A18                                        ; F803E4  1d 18 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol4                                        ; F803E4  1d 18 2a f4
 	call S0ngC0py_DrawTracks                                      ; F803E8  1d 84 03 f8
 	ret                                                  ; F803EC  0e
 ; SoftKeyCol5_S0ngC0py_StageZero: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x04, 0x15.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol5_S0ngC0py_StageZero:
-	call T_F42A24                                        ; F803ED  1d 24 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol5                                        ; F803ED  1d 24 2a f4
 	call S0ngC0py_DrawToSong                                      ; F803F1  1d 38 03 f8
 	ret                                                  ; F803F5  0e
 ; SoftKeyCol6_S0ngC0py_StageZero: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x05, 0x16.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol6_S0ngC0py_StageZero:
-	call T_F42A20                                        ; F803F6  1d 20 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol6                                        ; F803F6  1d 20 2a f4
 	call S0ngC0py_DrawToSong                                      ; F803FA  1d 38 03 f8
 	ret                                                  ; F803FE  0e
 ; SoftKeyCol7_S0ngC0py_StageZero: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x06, 0x17.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol7_S0ngC0py_StageZero:
-	call T_F42A2C                                        ; F803FF  1d 2c 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol7                                        ; F803FF  1d 2c 2a f4
 	call S0ngC0py_DrawTracks                                      ; F80403  1d 84 03 f8
 	ret                                                  ; F80407  0e
 ; SoftKeyCol8_S0ngC0py_StageZero: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_S0ngC0py_StageZero slots 0x07, 0x18.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol8_S0ngC0py_StageZero:
-	call T_F42A28                                        ; F80408  1d 28 2a f4
+	call T_S0ngC0py_StageZero_SoftKeyCol8                                        ; F80408  1d 28 2a f4
 	call S0ngC0py_DrawTracks                                      ; F8040C  1d 84 03 f8
 	ret                                                  ; F80410  0e
 ; ButtonTable_S0ngC0py_StageZero_Nop8: a bare ret -- ButtonTable_S0ngC0py_StageZero slot 0x08.
@@ -2803,7 +2803,7 @@ ButtonTable_S0ngC0py_StageZero_Nop8:
 ;   side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageZero slot 0x09.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 LcdKeyRow2_S0ngC0py_StageZero:
-	call T_F42A30                                        ; F80412  1d 30 2a f4
+	call T_S0ngC0py_LcdKeyRow2                                        ; F80412  1d 30 2a f4
 	ret                                                  ; F80416  0e
 ; ButtonTable_S0ngC0py_StageZero_Nop10: a bare ret -- ButtonTable_S0ngC0py_StageZero slots 0x0A, 0x0B, 0x0C,
 ;   0x0D, 0x0E.
@@ -2830,7 +2830,7 @@ ButtonTable_S0ngC0py_StageNonZero_Nop0:
 ;   CP2 side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageNonZero slot 0x09.
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 LcdKeyRow2_S0ngC0py_StageNonZero:
-	call T_F42A30                                        ; F80428  1d 30 2a f4
+	call T_S0ngC0py_LcdKeyRow2                                        ; F80428  1d 30 2a f4
 	ret                                                  ; F8042C  0e
 ; LcdKeyRow3_S0ngC0py_StageNonZero: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the
 ;   CP2 side (set) or the CP1 side (clear); ButtonTable_S0ngC0py_StageNonZero slot 0x0A.
@@ -2930,9 +2930,9 @@ Paint_N0teChange:
 	calr PromB_LCD_ScreenRedraw_End                                          ; F804E8  1e fc dd
 	ret                                                  ; F804EB  0e
 ; ScreenLeaveBody_N0teChange -- the whole body of the N0teChange screen's Leave method
-; Evidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_F42A8C / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_F409E0.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay.
+; Evidence: prom_b ScreenLeave_N0teChange (0xF7D21C) is `call 0xF804EC / ret` (+4 of screen object 0xF43120); body `call T_N0teChange_OnLeave / ret` -- prom_b 0xF7C8BC: unless (0x207A)=0x2D, call T_F409E0.  Same shape as prom_b ScreenLeaveBody_AdvanceDelay.
 ScreenLeaveBody_N0teChange:
-	call T_F42A8C                                        ; F804EC  1d 8c 2a f4
+	call T_N0teChange_OnLeave                                        ; F804EC  1d 8c 2a f4
 	ret                                                  ; F804F0  0e
 ; ButtonTable_N0teChange_StageZero_Nop0: a bare ret -- ButtonTable_N0teChange_StageZero slot 0x00.
 ButtonTable_N0teChange_StageZero_Nop0:
@@ -2982,13 +2982,13 @@ LcdKeyRow2_N0teChange_StageZero:
 	m_cp_mi8 MB16, N0teChange_Field, 0x01                          ; F80524  c1 ed 0d 3f 01
 	jr z, .LF80548                                       ; F80529  66 1d
 	calr sub_F7F245                                          ; F8052B  1e 17 ed
-	call T_F42A90                                        ; F8052E  1d 90 2a f4
+	call T_N0teChange_SelectField1                                        ; F8052E  1d 90 2a f4
 	jr .LF80542                                          ; F80532  68 0e
 .LF80534:
 	m_cp_mi8 MB16, N0teChange_Field, 0x04                          ; F80534  c1 ed 0d 3f 04
 	jr z, .LF80548                                       ; F80539  66 0d
 	calr sub_F7F237                                          ; F8053B  1e f9 ec
-	call T_F42A9C                                        ; F8053E  1d 9c 2a f4
+	call T_N0teChange_SelectField4                                        ; F8053E  1d 9c 2a f4
 .LF80542:
 	calr N0teChange_DrawValues                                      ; F80542  1e 73 00
 	calr N0teChange_DrawFieldCursor                                      ; F80545  1e 01 00
@@ -3015,13 +3015,13 @@ LcdKeyRow3_N0teChange_StageZero:
 	m_cp_mi8 MB16, N0teChange_Field, 0x02                          ; F8056E  c1 ed 0d 3f 02
 	jr z, .LF80594                                       ; F80573  66 1f
 	calr sub_F7F237                                          ; F80575  1e bf ec
-	call T_F42A94                                        ; F80578  1d 94 2a f4
+	call T_N0teChange_SelectField2                                        ; F80578  1d 94 2a f4
 	jr .LF8058C                                          ; F8057C  68 0e
 .LF8057E:
 	m_cp_mi8 MB16, N0teChange_Field, 0x05                          ; F8057E  c1 ed 0d 3f 05
 	jr z, .LF80594                                       ; F80583  66 0f
 	calr sub_F7F237                                          ; F80585  1e af ec
-	call T_F42AA0                                        ; F80588  1d a0 2a f4
+	call T_N0teChange_SelectField5                                        ; F80588  1d a0 2a f4
 .LF8058C:
 	calr N0teChange_DrawValues                                      ; F8058C  1e 29 00
 	calr N0teChange_DrawFieldCursor                                      ; F8058F  1e b7 ff
@@ -3037,13 +3037,13 @@ LcdKeyRow4_N0teChange_StageZero:
 	m_cp_mi8 MB16, N0teChange_Field, 0x03                          ; F8059A  c1 ed 0d 3f 03
 	jr z, .LF805B7                                       ; F8059F  66 16
 	calr sub_F7F237                                          ; F805A1  1e 93 ec
-	call T_F42A98                                        ; F805A4  1d 98 2a f4
+	call T_N0teChange_SelectField3                                        ; F805A4  1d 98 2a f4
 	calr N0teChange_DrawValues                                      ; F805A8  1e 0d 00
 	calr N0teChange_DrawFieldCursor                                      ; F805AB  1e 9b ff
 	jr .LF805B7                                          ; F805AE  68 07
 .LF805B0:
 	calr sub_F7F245                                          ; F805B0  1e 92 ec
-	call T_F42AAC                                        ; F805B3  1d ac 2a f4
+	call T_N0teChange_LcdKeyRow4                                        ; F805B3  1d ac 2a f4
 .LF805B7:
 	ret                                                  ; F805B7  0e
 ; N0teChange_DrawValues -- redraw the live values of the NOTE CHANGE screen on layer 0
@@ -3121,7 +3121,7 @@ ButtonTable_N0teChange_StageNonZero_Nop0:
 LcdKeyRow4_N0teChange_StageNonZero:
 	bit 0x07,W                                           ; F8060F  c8 33 07
 	jr nz, .LF80618                                      ; F80612  6e 04
-	call T_F42AAC                                        ; F80614  1d ac 2a f4
+	call T_N0teChange_LcdKeyRow4                                        ; F80614  1d ac 2a f4
 .LF80618:
 	ret                                                  ; F80618  0e
 ; LcdKeyRow5_N0teChange_StageNonZero: row 5 of the five key pairs flanking the LCD; bit 7 of the code picks the
@@ -3352,9 +3352,9 @@ Paint_MeasureC0py:
 Paint_MeasureC0py_Nop:
 	ret                                                  ; F80808  0e
 ; ScreenLeaveBody_MeasureC0py -- the whole body of the MeasureC0py screen's Leave method
-; Evidence: prom_b ScreenLeave_MeasureC0py (0xF7D23D) is `call 0xF80809 / ret` (+4 of screen object 0xF430C0); body `call T_F429DC / ret`.  Bytes after it are ButtonTable_MeasureC0py slot handlers.
+; Evidence: prom_b ScreenLeave_MeasureC0py (0xF7D23D) is `call 0xF80809 / ret` (+4 of screen object 0xF430C0); body `call T_MeasureC0py_OnLeave / ret`.  Bytes after it are ButtonTable_MeasureC0py slot handlers.
 ScreenLeaveBody_MeasureC0py:
-	call T_F429DC                                        ; F80809  1d dc 29 f4
+	call T_MeasureC0py_OnLeave                                        ; F80809  1d dc 29 f4
 	ret                                                  ; F8080D  0e
 ; ButtonTable_MeasureC0py_StageZero_Nop0: a bare ret -- ButtonTable_MeasureC0py_StageZero slot 0x00.
 ButtonTable_MeasureC0py_StageZero_Nop0:
@@ -3407,7 +3407,7 @@ LcdKeyRow1_MeasureC0py_StageZero:
 	bit 0x07,W                                           ; F8084F  c8 33 07
 	jr nz, .LF8085B                                      ; F80852  6e 07
 	calr sub_F7F245                                          ; F80854  1e ee e9
-	call T_F42A04                                        ; F80857  1d 04 2a f4
+	call T_MeasureC0py_LcdKeyRow1                                        ; F80857  1d 04 2a f4
 .LF8085B:
 	ret                                                  ; F8085B  0e
 ; LcdKeyRow2_MeasureC0py_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
@@ -3419,13 +3419,13 @@ LcdKeyRow2_MeasureC0py_StageZero:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x01                          ; F80861  c1 bc 0d 3f 01
 	jr z, .LF80890                                       ; F80866  66 28
 	calr sub_F7F245                                          ; F80868  1e da e9
-	call T_F429E0                                        ; F8086B  1d e0 29 f4
+	call T_MeasureC0py_SelectField1                                        ; F8086B  1d e0 29 f4
 	jr .LF8087F                                          ; F8086F  68 0e
 .LF80871:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x04                          ; F80871  c1 bc 0d 3f 04
 	jr z, .LF80890                                       ; F80876  66 18
 	calr sub_F7F245                                          ; F80878  1e ca e9
-	call T_F429EC                                        ; F8087B  1d ec 29 f4
+	call T_MeasureC0py_SelectField4                                        ; F8087B  1d ec 29 f4
 .LF8087F:
 	ld a, (MeasureC0py_Field:16)                                   ; F8087F  c1 bc 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F80883  f1 ff 12 41
@@ -3454,13 +3454,13 @@ LcdKeyRow3_MeasureC0py_StageZero:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x05                          ; F808B6  c1 bc 0d 3f 05
 	jr z, .LF808E5                                       ; F808BB  66 28
 	calr sub_F7F237                                          ; F808BD  1e 77 e9
-	call T_F429F0                                        ; F808C0  1d f0 29 f4
+	call T_MeasureC0py_SelectField5                                        ; F808C0  1d f0 29 f4
 	jr .LF808D4                                          ; F808C4  68 0e
 .LF808C6:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x02                          ; F808C6  c1 bc 0d 3f 02
 	jr z, .LF808E5                                       ; F808CB  66 18
 	calr sub_F7F237                                          ; F808CD  1e 67 e9
-	call T_F429E4                                        ; F808D0  1d e4 29 f4
+	call T_MeasureC0py_SelectField2                                        ; F808D0  1d e4 29 f4
 .LF808D4:
 	ld a, (MeasureC0py_Field:16)                                   ; F808D4  c1 bc 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F808D8  f1 ff 12 41
@@ -3478,13 +3478,13 @@ LcdKeyRow4_MeasureC0py_StageZero:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x03                          ; F808EB  c1 bc 0d 3f 03
 	jr z, .LF8091A                                       ; F808F0  66 28
 	calr sub_F7F237                                          ; F808F2  1e 42 e9
-	call T_F429E8                                        ; F808F5  1d e8 29 f4
+	call T_MeasureC0py_SelectField3                                        ; F808F5  1d e8 29 f4
 	jr .LF80909                                          ; F808F9  68 0e
 .LF808FB:
 	m_cp_mi8 MB16, MeasureC0py_Field, 0x06                          ; F808FB  c1 bc 0d 3f 06
 	jr z, .LF8091A                                       ; F80900  66 18
 	calr sub_F7F245                                          ; F80902  1e 40 e9
-	call T_F429F4                                        ; F80905  1d f4 29 f4
+	call T_MeasureC0py_SelectField6                                        ; F80905  1d f4 29 f4
 .LF80909:
 	ld a, (MeasureC0py_Field:16)                                   ; F80909  c1 bc 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F8090D  f1 ff 12 41
@@ -3584,7 +3584,7 @@ LcdKeyRow1_MeasureC0py_StageNonZero:
 	bit 0x07,W                                           ; F80975  c8 33 07
 	jr nz, .LF80983                                      ; F80978  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F8097A  c1 75 20 3c 6f
-	call T_F42A04                                        ; F8097F  1d 04 2a f4
+	call T_MeasureC0py_LcdKeyRow1                                        ; F8097F  1d 04 2a f4
 .LF80983:
 	ret                                                  ; F80983  0e
 ; ButtonTable_MeasureC0py_StageNonZero_Nop9: a bare ret -- ButtonTable_MeasureC0py_StageNonZero slot 0x09.
@@ -3821,9 +3821,9 @@ Paint_MeasureInsert:
 Paint_MeasureInsert_Nop:
 	ret                                                  ; F80B65  0e
 ; ScreenLeaveBody_MeasureInsert -- the whole body of the MeasureInsert screen's Leave method
-; Evidence: prom_b ScreenLeave_MeasureInsert (0xF7D25E) is `call 0xF80B66 / ret` (+4 of screen object 0xF430D0); body `call T_F429AC / ret`.
+; Evidence: prom_b ScreenLeave_MeasureInsert (0xF7D25E) is `call 0xF80B66 / ret` (+4 of screen object 0xF430D0); body `call T_MeasureInsert_OnLeave / ret`.
 ScreenLeaveBody_MeasureInsert:
-	call T_F429AC                                        ; F80B66  1d ac 29 f4
+	call T_MeasureInsert_OnLeave                                        ; F80B66  1d ac 29 f4
 	ret                                                  ; F80B6A  0e
 ; ButtonTable_MeasureInsert_StageZero_Nop0: a bare ret -- ButtonTable_MeasureInsert_StageZero slot 0x00.
 ButtonTable_MeasureInsert_StageZero_Nop0:
@@ -3876,7 +3876,7 @@ LcdKeyRow1_MeasureInsert_StageZero:
 	bit 0x07,W                                           ; F80BAC  c8 33 07
 	jr nz, .LF80BB8                                      ; F80BAF  6e 07
 	calr sub_F7F245                                          ; F80BB1  1e 91 e6
-	call T_F429D4                                        ; F80BB4  1d d4 29 f4
+	call T_MeasureInsert_LcdKeyRow1                                        ; F80BB4  1d d4 29 f4
 .LF80BB8:
 	ret                                                  ; F80BB8  0e
 ; LcdKeyRow2_MeasureInsert_StageZero: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the
@@ -3888,13 +3888,13 @@ LcdKeyRow2_MeasureInsert_StageZero:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x01                          ; F80BBE  c1 da 0d 3f 01
 	jr z, .LF80BED                                       ; F80BC3  66 28
 	calr sub_F7F245                                          ; F80BC5  1e 7d e6
-	call T_F429B0                                        ; F80BC8  1d b0 29 f4
+	call T_MeasureInsert_SelectField1                                        ; F80BC8  1d b0 29 f4
 	jr .LF80BDC                                          ; F80BCC  68 0e
 .LF80BCE:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x04                          ; F80BCE  c1 da 0d 3f 04
 	jr z, .LF80BED                                       ; F80BD3  66 18
 	calr sub_F7F245                                          ; F80BD5  1e 6d e6
-	call T_F429BC                                        ; F80BD8  1d bc 29 f4
+	call T_MeasureInsert_SelectField4                                        ; F80BD8  1d bc 29 f4
 .LF80BDC:
 	ld a, (MeasureInsert_Field:16)                                   ; F80BDC  c1 da 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F80BE0  f1 ff 12 41
@@ -3924,13 +3924,13 @@ LcdKeyRow3_MeasureInsert_StageZero:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x05                          ; F80C13  c1 da 0d 3f 05
 	jr z, .LF80C42                                       ; F80C18  66 28
 	calr sub_F7F237                                          ; F80C1A  1e 1a e6
-	call T_F429C0                                        ; F80C1D  1d c0 29 f4
+	call T_MeasureInsert_SelectField5                                        ; F80C1D  1d c0 29 f4
 	jr .LF80C31                                          ; F80C21  68 0e
 .LF80C23:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x02                          ; F80C23  c1 da 0d 3f 02
 	jr z, .LF80C42                                       ; F80C28  66 18
 	calr sub_F7F237                                          ; F80C2A  1e 0a e6
-	call T_F429B4                                        ; F80C2D  1d b4 29 f4
+	call T_MeasureInsert_SelectField2                                        ; F80C2D  1d b4 29 f4
 .LF80C31:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C31  c1 da 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F80C35  f1 ff 12 41
@@ -3948,13 +3948,13 @@ LcdKeyRow4_MeasureInsert_StageZero:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x03                          ; F80C48  c1 da 0d 3f 03
 	jr z, .LF80C77                                       ; F80C4D  66 28
 	calr sub_F7F237                                          ; F80C4F  1e e5 e5
-	call T_F429B8                                        ; F80C52  1d b8 29 f4
+	call T_MeasureInsert_SelectField3                                        ; F80C52  1d b8 29 f4
 	jr .LF80C66                                          ; F80C56  68 0e
 .LF80C58:
 	m_cp_mi8 MB16, MeasureInsert_Field, 0x06                          ; F80C58  c1 da 0d 3f 06
 	jr z, .LF80C77                                       ; F80C5D  66 18
 	calr sub_F7F245                                          ; F80C5F  1e e3 e5
-	call T_F429C4                                        ; F80C62  1d c4 29 f4
+	call T_MeasureInsert_SelectField6                                        ; F80C62  1d c4 29 f4
 .LF80C66:
 	ld a, (MeasureInsert_Field:16)                                   ; F80C66  c1 da 0d 21
 	ld (DisplayListB_Stage+9:16), a                                   ; F80C6A  f1 ff 12 41
@@ -4054,7 +4054,7 @@ LcdKeyRow1_MeasureInsert_StageNonZero:
 	bit 0x07,W                                           ; F80CD2  c8 33 07
 	jr nz, .LF80CE0                                      ; F80CD5  6e 09
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; F80CD7  c1 75 20 3c 6f
-	call T_F429D4                                        ; F80CDC  1d d4 29 f4
+	call T_MeasureInsert_LcdKeyRow1                                        ; F80CDC  1d d4 29 f4
 .LF80CE0:
 	ret                                                  ; F80CE0  0e
 ; ButtonTable_MeasureInsert_StageNonZero_Nop9: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x09.
@@ -4389,7 +4389,7 @@ Paint_StepRecordPartSelect:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F80F5A  1d 80 2e f4
 	m_bit 4, MD16, UI_ScreenFlags                                ; F80F5E  f1 95 20 cc
 	jr nz, .LF80F8F                                      ; F80F62  6e 2b
-	call T_F42BC4                                        ; F80F64  1d c4 2b f4
+	call T_StepRecordPartSelect_ResetOnEntry                                        ; F80F64  1d c4 2b f4
 	calr PromB_LCD_ScreenRedraw_Begin                                          ; F80F68  1e 6e d3
 	ld XIY,DL_StepRecordPartSelectPressTheUpDownButton   ; F80F6B  45 a7 c8 f3 00
 	ld XIX,DL_F3C947                                     ; F80F70  44 47 c9 f3 00
@@ -4416,9 +4416,9 @@ Paint_StepRecordPartSelect:
 	calr PromB_LCD_ScreenRedraw_End                                          ; F80FBC  1e 28 d3
 	ret                                                  ; F80FBF  0e
 ; ScreenLeaveBody_StepRecordPartSelect -- the Leave method body of the StepRecordPartSelect screen
-; Evidence: prom_b ScreenLeave_StepRecordPartSelect (0xF7D28F) is `call 0xF80FC0 / ret` (+4 of screen object 0xF43170); body `call T_F42BC8 / ret` (prom_b 0xF6650F: (0x60341E)=(0x3010), T_F40CB4, and (0x34BB),0xFB).
+; Evidence: prom_b ScreenLeave_StepRecordPartSelect (0xF7D28F) is `call 0xF80FC0 / ret` (+4 of screen object 0xF43170); body `call T_StepRecordPartSelect_OnLeave / ret` (prom_b 0xF6650F: (0x60341E)=(0x3010), T_F40CB4, and (0x34BB),0xFB).
 ScreenLeaveBody_StepRecordPartSelect:
-	call T_F42BC8                                        ; F80FC0  1d c8 2b f4
+	call T_StepRecordPartSelect_OnLeave                                        ; F80FC0  1d c8 2b f4
 	ret                                                  ; F80FC4  0e
 ; SoftKeyCol1_StepRecordPartSelect: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x00,
@@ -4426,7 +4426,7 @@ ScreenLeaveBody_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol1_StepRecordPartSelect:
 	call SoftKeyCol1_TrackClear_StageZero                 ; F80FC5  1d ff ec f7
-	call T_F42BBC                                        ; F80FC9  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FC9  1d bc 2b f4
 	ret                                                  ; F80FCD  0e
 ; SoftKeyCol2_StepRecordPartSelect: the 2nd of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x01,
@@ -4434,7 +4434,7 @@ SoftKeyCol1_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol2_StepRecordPartSelect:
 	call SoftKeyCol2_TrackClear_StageZero                 ; F80FCE  1d 18 ed f7
-	call T_F42BBC                                        ; F80FD2  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FD2  1d bc 2b f4
 	ret                                                  ; F80FD6  0e
 ; SoftKeyCol3_StepRecordPartSelect: the 3rd of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x02,
@@ -4442,7 +4442,7 @@ SoftKeyCol2_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol3_StepRecordPartSelect:
 	call SoftKeyCol3_TrackClear_StageZero                 ; F80FD7  1d 31 ed f7
-	call T_F42BBC                                        ; F80FDB  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FDB  1d bc 2b f4
 	ret                                                  ; F80FDF  0e
 ; SoftKeyCol4_StepRecordPartSelect: the 4th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x03,
@@ -4450,7 +4450,7 @@ SoftKeyCol3_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol4_StepRecordPartSelect:
 	call SoftKeyCol4_TrackClear_StageZero                 ; F80FE0  1d 4a ed f7
-	call T_F42BBC                                        ; F80FE4  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FE4  1d bc 2b f4
 	ret                                                  ; F80FE8  0e
 ; SoftKeyCol5_StepRecordPartSelect: the 5th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x04,
@@ -4458,7 +4458,7 @@ SoftKeyCol4_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol5_StepRecordPartSelect:
 	call SoftKeyCol5_TrackClear_StageZero                 ; F80FE9  1d 63 ed f7
-	call T_F42BBC                                        ; F80FED  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FED  1d bc 2b f4
 	ret                                                  ; F80FF1  0e
 ; SoftKeyCol6_StepRecordPartSelect: the 6th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x05,
@@ -4466,7 +4466,7 @@ SoftKeyCol5_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol6_StepRecordPartSelect:
 	call SoftKeyCol6_TrackClear_StageZero                 ; F80FF2  1d 7c ed f7
-	call T_F42BBC                                        ; F80FF6  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FF6  1d bc 2b f4
 	ret                                                  ; F80FFA  0e
 ; SoftKeyCol7_StepRecordPartSelect: the 7th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x06,
@@ -4474,7 +4474,7 @@ SoftKeyCol6_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol7_StepRecordPartSelect:
 	call SoftKeyCol7_TrackClear_StageZero                 ; F80FFB  1d 95 ed f7
-	call T_F42BBC                                        ; F80FFF  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F80FFF  1d bc 2b f4
 	ret                                                  ; F81003  0e
 ; SoftKeyCol8_StepRecordPartSelect: the 8th of the eight soft keys under the LCD; bit 7 of the code picks the
 ;   LOWER (set) or UPPER (clear) of the column's two switches; ButtonTable_StepRecordPartSelect slots 0x07,
@@ -4482,7 +4482,7 @@ SoftKeyCol7_StepRecordPartSelect:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 SoftKeyCol8_StepRecordPartSelect:
 	call SoftKeyCol8_TrackClear_StageZero                 ; F81004  1d ae ed f7
-	call T_F42BBC                                        ; F81008  1d bc 2b f4
+	call T_StepRecordPartSelect_OpenStepRecord                                        ; F81008  1d bc 2b f4
 	ret                                                  ; F8100C  0e
 ; ButtonTable_StepRecordPartSelect_Nop8: a bare ret -- ButtonTable_StepRecordPartSelect slot 0x08.
 ButtonTable_StepRecordPartSelect_Nop8:
@@ -4505,20 +4505,20 @@ ExitKey_StepRecordPartSelect:
 ButtonTable_StepRecordPartSelect_Nop16:
 	ret                                                  ; F8101D  0e
 ; ScreenEnterBody_StepRecord: the body of STEP RECORD's +0 ENTER method -- restarts callback task 2,
-;   and runs prom_b 0xF6A9CA (T_F42EC0) between LCD_ScreenRedraw_Begin / _End.
+;   and runs prom_b 0xF6A9CA (T_StepRecord_OnEnter) between LCD_ScreenRedraw_Begin / _End.
 ;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
 ScreenEnterBody_StepRecord:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F8101E  1d 80 2e f4
 	ldw (0x2666:16), 0xffff                              ; F81022  f1 66 26 02 ff ff
 	ldw (0x266a:16), 0xffff                              ; F81028  f1 6a 26 02 ff ff
 	calr PromB_LCD_ScreenRedraw_Begin                                          ; F8102E  1e a8 d2
-	call T_F42EC0                                        ; F81031  1d c0 2e f4
+	call T_StepRecord_OnEnter                                        ; F81031  1d c0 2e f4
 	calr PromB_LCD_ScreenRedraw_End                                          ; F81035  1e af d2
 	ret                                                  ; F81038  0e
-; ScreenLeaveBody_StepRecord: the body of STEP RECORD's +4 LEAVE method -- runs prom_b 0xF6AE4B (T_F42EC4).
+; ScreenLeaveBody_StepRecord: the body of STEP RECORD's +4 LEAVE method -- runs prom_b 0xF6AE4B (T_StepRecord_OnLeave).
 ;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
 ScreenLeaveBody_StepRecord:
-	call T_F42EC4                                        ; F81039  1d c4 2e f4
+	call T_StepRecord_OnLeave                                        ; F81039  1d c4 2e f4
 	ld a, (UI_ScreenLatch:16)                                   ; F8103D  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F81041  c1 7b 20 f1
 	jr z, .LF81047                                       ; F81045  66 00
@@ -4553,16 +4553,16 @@ Paint_SequencerMedley:
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x13                          ; F8104C  c1 7b 20 3f 13
 	jr z, .LF81073                                       ; F81051  66 20
 	call T_Disk_PortA3_Release_Call_Call                                        ; F81053  1d 90 25 f4
-	call T_F42C18                                        ; F81057  1d 18 2c f4
+	call T_SequencerMedley_SetSourceInternal                                        ; F81057  1d 18 2c f4
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F8105B  c1 c1 0d 3f 01
 	jr z, .LF81065                                       ; F81060  66 03
 	calr sub_F7F237                                          ; F81062  1e d2 e1
 .LF81065:
 	m_or_mi8 MB16, 0x2094, 0x40                          ; F81065  c1 94 20 3e 40
 	m_and_mi8 MB16, Medley_Playing, 0xfe                         ; F8106A  c1 c1 0d 3c fe
-	call T_F42B7C                                        ; F8106F  1d 7c 2b f4
+	call T_Medley_SelectField1                                        ; F8106F  1d 7c 2b f4
 .LF81073:
-	call T_F42BCC                                        ; F81073  1d cc 2b f4
+	call T_SequencerMedley_InitOnEntry                                        ; F81073  1d cc 2b f4
 	m_bit 4, MD16, UI_ScreenFlags                                ; F81077  f1 95 20 cc
 	jr z, .LF81084                                       ; F8107B  66 07
 	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F8107D  c1 0b 22 3f 01
@@ -4599,13 +4599,13 @@ Paint_SequencerMedley:
 	calr PromB_LCD_ScreenRedraw_End                                          ; F810EC  1e f8 d1
 	ret                                                  ; F810EF  0e
 ; ScreenLeaveBody_SequencerMedley -- the Leave method body of the SequencerMedley screen
-; Evidence: prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret` (+4 of screen object 0xF43150).  Unless (0x207A)=0x13 it clears (0x2094) bit 6, which Paint_SequencerMedley sets; then call T_F42BD0 (prom_b 0xF6614E).  Bytes after the `ret` are ButtonTable_SequencerMedley slot handlers.
+; Evidence: prom_b ScreenLeave_SequencerMedley (0xF7D2A4) is `call 0xF810F0 / ret` (+4 of screen object 0xF43150).  Unless (0x207A)=0x13 it clears (0x2094) bit 6, which Paint_SequencerMedley sets; then call T_SequencerMedley_OnLeave (prom_b 0xF6614E).  Bytes after the `ret` are ButtonTable_SequencerMedley slot handlers.
 ScreenLeaveBody_SequencerMedley:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13                          ; F810F0  c1 7a 20 3f 13
 	jr z, .LF810FC                                       ; F810F5  66 05
 	m_and_mi8 MB16, 0x2094, 0xbf                         ; F810F7  c1 94 20 3c bf
 .LF810FC:
-	call T_F42BD0                                        ; F810FC  1d d0 2b f4
+	call T_SequencerMedley_OnLeave                                        ; F810FC  1d d0 2b f4
 	ret                                                  ; F81100  0e
 ; ButtonTable_SequencerMedley_Nop0: a bare ret -- ButtonTable_SequencerMedley slot 0x00.
 ButtonTable_SequencerMedley_Nop0:
@@ -4617,7 +4617,7 @@ SoftKeyCol2_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F81102  c1 0b 22 3f 00
 	jr z, .LF8111D                                       ; F81107  66 14
 	call T_Blink_Stop                                    ; F81109  1d 24 2e f4
-	call T_F42C18                                        ; F8110D  1d 18 2c f4
+	call T_SequencerMedley_SetSourceInternal                                        ; F8110D  1d 18 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F81111  1d bf 13 f8
 	call SequencerMedley_DrawSourceBox                                      ; F81115  1d ff 13 f8
 	call SequencerMedley_DrawFileTypeBox                                      ; F81119  1d 1c 14 f8
@@ -4630,7 +4630,7 @@ SoftKeyCol3_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Source, 0x01                          ; F8111E  c1 0b 22 3f 01
 	jr z, .LF81135                                       ; F81123  66 10
 	call T_Blink_Stop                                    ; F81125  1d 24 2e f4
-	call T_F42C1C                                        ; F81129  1d 1c 2c f4
+	call T_SequencerMedley_SoftKeyCol3                                        ; F81129  1d 1c 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F8112D  1d bf 13 f8
 	call SequencerMedley_DrawSourceBox                                      ; F81131  1d ff 13 f8
 .LF81135:
@@ -4648,10 +4648,10 @@ SoftKeyCol5_SequencerMedley:
 .LF81141:
 	bit 0x07,W                                           ; F81141  c8 33 07
 	jr nz, .LF8114C                                      ; F81144  6e 06
-	call T_F42B84                                        ; F81146  1d 84 2b f4
+	call T_SequencerMedley_StepFieldUp                                        ; F81146  1d 84 2b f4
 	jr .LF81150                                          ; F8114A  68 04
 .LF8114C:
-	call T_F42B88                                        ; F8114C  1d 88 2b f4
+	call T_SequencerMedley_StepFieldDown                                        ; F8114C  1d 88 2b f4
 .LF81150:
 	ld a, (Medley_FirstSong:16)                                   ; F81150  c1 08 22 21
 	ld (DisplayListB_Stage+8:16), a                                   ; F81154  f1 fe 12 41
@@ -4671,7 +4671,7 @@ SoftKeyCol7_SequencerMedley:
 	m_cp_mi8 MB16, Medley_FileType, 0x01                          ; F8116D  c1 35 0e 3f 01
 	jr z, .LF81184                                       ; F81172  66 10
 	call T_Blink_Stop                                    ; F81174  1d 24 2e f4
-	call T_F42C24                                        ; F81178  1d 24 2c f4
+	call T_SequencerMedley_SoftKeyCol7                                        ; F81178  1d 24 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F8117C  1d bf 13 f8
 	call SequencerMedley_DrawFileTypeBox                                      ; F81180  1d 1c 14 f8
 .LF81184:
@@ -4683,7 +4683,7 @@ SoftKeyCol8_SequencerMedley:
 	m_cp_mi8 MB16, Medley_FileType, 0x00                          ; F81185  c1 35 0e 3f 00
 	jr z, .LF8119C                                       ; F8118A  66 10
 	call T_Blink_Stop                                    ; F8118C  1d 24 2e f4
-	call T_F42C28                                        ; F81190  1d 28 2c f4
+	call T_SequencerMedley_SoftKeyCol8                                        ; F81190  1d 28 2c f4
 	call Draw_FirstS0ngLastS0ng                                      ; F81194  1d bf 13 f8
 	call SequencerMedley_DrawFileTypeBox                                      ; F81198  1d 1c 14 f8
 .LF8119C:
@@ -4700,7 +4700,7 @@ LcdKeyRow2_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F811A3  c1 c1 0d 3f 01
 	jr z, .LF811E1                                       ; F811A8  66 37
 	calr sub_F7F245                                          ; F811AA  1e 98 e0
-	call T_F42BD4                                        ; F811AD  1d d4 2b f4
+	call T_SequencerMedley_LcdKeyRow2                                        ; F811AD  1d d4 2b f4
 	m_cp_mi8 MB16, UI_ScreenId, 0x13                          ; F811B1  c1 7c 20 3f 13
 	jr nz, .LF811E1                                      ; F811B6  6e 29
 	m_cp_mi8 MB16, Medley_Source, 0x00                          ; F811B8  c1 0b 22 3f 00
@@ -4714,7 +4714,7 @@ LcdKeyRow2_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Field, 0x01                          ; F811CF  c1 0f 0c 3f 01
 	jr z, .LF811E1                                       ; F811D4  66 0b
 	calr sub_F7F237                                          ; F811D6  1e 5e e0
-	call T_F42B7C                                        ; F811D9  1d 7c 2b f4
+	call T_Medley_SelectField1                                        ; F811D9  1d 7c 2b f4
 	call SequencerMedley_DrawFieldBox                                      ; F811DD  1d e7 13 f8
 .LF811E1:
 	ret                                                  ; F811E1  0e
@@ -4729,7 +4729,7 @@ LcdKeyRow3_SequencerMedley:
 	bit	2, (0x95:8)                                   ; F811EE  f0 95 ca
 	jr z, .LF811FE                                       ; F811F1  66 0b
 	calr sub_F7F237                                          ; F811F3  1e 41 e0
-	call T_F42BD8                                        ; F811F6  1d d8 2b f4
+	call T_SequencerMedley_StopPlayback                                        ; F811F6  1d d8 2b f4
 	call SequencerMedley_DrawPlayState                                      ; F811FA  1d 50 13 f8
 .LF811FE:
 	ret                                                  ; F811FE  0e
@@ -4739,7 +4739,7 @@ LcdKeyRow3_SequencerMedley:
 LcdKeyRow4_SequencerMedley:
 	bit 0x07,W                                           ; F811FF  c8 33 07
 	jr nz, .LF8120A                                      ; F81202  6e 06
-	call T_F42C2C                                        ; F81204  1d 2c 2c f4
+	call T_SequencerMedley_LcdKeyRow4                                        ; F81204  1d 2c 2c f4
 	jr .LF81223                                          ; F81208  68 19
 .LF8120A:
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F8120A  c1 c1 0d 3f 01
@@ -4747,7 +4747,7 @@ LcdKeyRow4_SequencerMedley:
 	m_cp_mi8 MB16, Medley_Field, 0x02                          ; F81211  c1 0f 0c 3f 02
 	jr z, .LF81223                                       ; F81216  66 0b
 	calr sub_F7F237                                          ; F81218  1e 1c e0
-	call T_F42B80                                        ; F8121B  1d 80 2b f4
+	call T_Medley_SelectField2                                        ; F8121B  1d 80 2b f4
 	call SequencerMedley_DrawFieldBox                                      ; F8121F  1d e7 13 f8
 .LF81223:
 	ret                                                  ; F81223  0e
@@ -4773,7 +4773,7 @@ NumberPadKey_SequencerMedley:
 ButtonTable_SequencerMedley_Nop28:
 	ret                                                  ; F81235  0e
 ; SequencerMedley_NumberPad -- NUMBER PAD key on the SEQUENCER MEDLEY screen: dispatch on (0x2267)
-; Evidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_F42BD4); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField.
+; Evidence: reached only by `calr` at 0xF81231, slot 27 of ButtonTable_SequencerMedley; returns at once while (0x0DC1)=1 (set by the START arm through T_SequencerMedley_LcdKeyRow2); digit / 0x0F / 0x80 arms then SequencerMedley_BlinkSelectedField.
 SequencerMedley_NumberPad:
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F81236  c1 c1 0d 3f 01
 	jr z, .LF8125F                                       ; F8123B  66 22
@@ -4910,7 +4910,7 @@ BlinkArgPtrs_F81344:
 	.long 0x00f3c782                                 ; F8134C  [  2]
 ; SequencerMedley_DrawPlayState -- draw or erase the NOW PLAYING line and move the START/STOP box
 ; Evidence: (0x0DC1)!=1: site 0xF81366 runs DL_F3C86B (op 0E ClearColumns at 0x05CC, 0x21 x 0x10); (0x0DC1)=1: T_DLHandler_IX_Text on 0xF3C873 ('N0W PLAYING S0NG ') and 0xF3C888 (' :'), (0x12F6)=(0x220A)+1 drawn by site 0xF81392 (DL_F3C89D, 3 digits), string record 0xF3C88E.
-; Then layer 1: EraseRect record 0xF3C7D8 and FillRect record 0xF3C7AD on (0x1305)=(0x0DC1); box 1 (0x106,0x46)-(0x132,0x55) encloses 'START', box 0 (0x106,0x70)-(0x132,0x7F) 'STOP'.  (0x0DC1)=1 is set by T_F42BD4 (prom_b 0xF66191) and cleared by T_F42BD8 (0xF66201).
+; Then layer 1: EraseRect record 0xF3C7D8 and FillRect record 0xF3C7AD on (0x1305)=(0x0DC1); box 1 (0x106,0x46)-(0x132,0x55) encloses 'START', box 0 (0x106,0x70)-(0x132,0x7F) 'STOP'.  (0x0DC1)=1 is set by T_SequencerMedley_LcdKeyRow2 (prom_b 0xF66191) and cleared by T_SequencerMedley_StopPlayback (0xF66201).
 SequencerMedley_DrawPlayState:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F81350  f1 40 25 00 00
 	m_cp_mi8 MB16, Medley_Playing, 0x01                          ; F81355  c1 c1 0d 3f 01
@@ -4955,7 +4955,7 @@ Draw_FirstS0ngLastS0ng:
 	ret                                                  ; F813E6  0e
 ; SequencerMedley_DrawFieldBox -- move the layer-1 highlight to the FIRST or LAST song field
 ; Evidence: (0x2540)=1; T_F41820 on record 0xF3C7B8 (swi 0x1B LCD_Svc_1B_EraseRect, array 0xF3C833) then T_F4181C on 0xF3C78C (swi 5 FillRect, Data_F3C7E3), both indexed by (0x1302); entries 1/2 are the FIRST S0NG box (0x0B,0x43)-(0xC2,0x62) and the LAST S0NG box (0x0B,0x8F)-(0xC2,0xAE), in opposite order in the two arrays.
-; (0x1302)=(0x0C0F) is written by T_F42B7C / T_F42B80 (prom_b 0xF66246 / 0xF66251) just before both calls.
+; (0x1302)=(0x0C0F) is written by T_Medley_SelectField1 / T_Medley_SelectField2 (prom_b 0xF66246 / 0xF66251) just before both calls.
 SequencerMedley_DrawFieldBox:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F813E7  f1 40 25 00 01
 	ld XIY,0x00f3c7b8                                    ; F813EC  45 b8 c7 f3 00
@@ -6157,7 +6157,7 @@ MainTask_Loop:
 	call T_F40894                                        ; F82071  1d 94 08 f4
 .LF82075:
 	ei 0x00                                              ; F82075  06 00
-	call T_F408E8                                        ; F82077  1d e8 08 f4
+	call T_SysExRx_PollRing601646                                        ; F82077  1d e8 08 f4
 	m_cp_mi8 MB8, 0x89, 0xff                             ; F8207B  c0 89 3f ff
 	jr z, .LF8208C                                       ; F8207F  66 0b
 	call T_MidiInARing_IsEmpty                            ; F82081  1d b4 1d f4
@@ -6196,7 +6196,7 @@ MainTask_Loop:
 	call T_Ring601C6E_IsEmpty                            ; F820CB  1d b0 1e f4
 	and WA,WA                                            ; F820CF  d8 c0
 	jr z, .LF820D7                                       ; F820D1  66 04
-	call T_F40904                                        ; F820D3  1d 04 09 f4
+	call T_SysExRx_PollRing601C6E                                        ; F820D3  1d 04 09 f4
 .LF820D7:
 	call T_Ring60000C_IsEmpty                            ; F820D7  1d 8c 1e f4
 	and WA,WA                                            ; F820DB  d8 c0
@@ -6555,13 +6555,13 @@ Queue2C00_DrainPassB:
 	ret                                                  ; F823E0  0e
 	ret                                                  ; F823E1  0e
 ; TimedEvents_Service -- service the time-stamped event ring 0x60080A
-; Evidence: (0x34D0) bit 5 set -> T_F409E4 and T_F40720 instead; otherwise (ring-4)!=(ring-8) -> TimedEvents_DrainDue, else res 6,(0x34D4).  Called from MainTask_ServiceTimedEvents and MainTask_Loop 0xF820BC/0xF82127.
+; Evidence: (0x34D0) bit 5 set -> T_F409E4 and T_MIDI_Clock_CatchUpIfAnySlot instead; otherwise (ring-4)!=(ring-8) -> TimedEvents_DrainDue, else res 6,(0x34D4).  Called from MainTask_ServiceTimedEvents and MainTask_Loop 0xF820BC/0xF82127.
 ; Ring 0x60080A (capacity 0x200, FINDINGS-prom_a-ring-buffers.md) is filled at 0xFEA57C/0xFEA585; why its bytes are time-stamped is TimedEvents_DispatchDueRun's evidence.
 TimedEvents_Service:
 	m_bit 5, MD16, 0x34d0                                ; F823E2  f1 d0 34 cd
 	jr z, .LF823F1                                       ; F823E6  66 09
 	call T_F409E4                                        ; F823E8  1d e4 09 f4
-	call T_F40720                                        ; F823EC  1d 20 07 f4
+	call T_MIDI_Clock_CatchUpIfAnySlot                                        ; F823EC  1d 20 07 f4
 	ret                                                  ; F823F0  0e
 .LF823F1:
 	ld XIX,TimedEvents_Ring                                    ; F823F1  44 0a 08 60 00
@@ -6942,15 +6942,15 @@ ModuleInitDirectory_F82641:
 	.long T_F40000                                   ; F82641  [  0]
 	.long T_SC1_Vtable                               ; F82645  [  1]
 	.long T_RingPutBlock_EntryThunks                 ; F82649  [  2]
-	.long T_F40610                                   ; F8264D  [  3]
+	.long T_PanelWire_EntryThunks                                   ; F8264D  [  3]
 	.long T_F40630                                   ; F82651  [  4]
-	.long T_F40660                                   ; F82655  [  5]
+	.long T_PanelLed_PhaseVector                                   ; F82655  [  5]
 	.long T_F41B30                                   ; F82659  [  6]
 	.long T_MIDI_EntryThunks                         ; F8265D  [  7]
 	.long T_MidiIn_EntryThunks                       ; F82661  [  8]
 	.long T_F4176C                                   ; F82665  [  9]
-	.long T_F408E0                                   ; F82669  [ 10]
-	.long T_F40770                                   ; F8266D  [ 11]
+	.long T_SysExModule_EntryThunks                                   ; F82669  [ 10]
+	.long T_ParamModule_PhaseVector                                   ; F8266D  [ 11]
 	.long T_PanelTask_EntryVectors                   ; F82671  [ 12]
 	.long T_LCD_EntryThunks                          ; F82675  [ 13]
 	.long T_F40240                                   ; F82679  [ 14]
@@ -6959,9 +6959,9 @@ ModuleInitDirectory_F82641:
 	.long T_F40140                                   ; F82685  [ 17]
 	.long T_F42250                                   ; F82689  [ 18]
 	.long T_F409C0                                   ; F8268D  [ 19]
-	.long T_F40FB0                                   ; F82691  [ 20]
+	.long T_Msg0716_InitAllRecords_Entry                                   ; F82691  [ 20]
 	.long T_F411B0                                   ; F82695  [ 21]
-	.long T_F413B0                                   ; F82699  [ 22]
+	.long T_Ram3800_Start_Entry                                   ; F82699  [ 22]
 	.long T_F42570                                   ; F8269D  [ 23]
 	.long T_F402A0                                   ; F826A1  [ 24]
 	.long 0xffffffff                                 ; F826A5  [ 25]
@@ -7752,7 +7752,7 @@ VersionScreen_Show:
 	push XHL                                             ; F82AE7  3b
 	call T_DisplayListB_Run_Stack                        ; F82AE8  1d 04 2e f4
 	inc 8,XSP                                            ; F82AEC  ef 60
-	call T_F42E14                                        ; F82AEE  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F82AEE  1d 14 2e f4
 	ld XDE,0x00400000                                    ; F82AF2  42 00 00 40 00
 .LF82AF7:
 	nop                                                  ; F82AF7  00
@@ -13822,7 +13822,7 @@ PanelScreen_VtableTable_ViewB:
 	.long T_ScreenEnter_AfterT0uchSetting       ; F86F6D  [11]   -> 0xF43180
 	.long T_F40E00                              ; F86F71  [12]   -> 0xF40E00
 	.long T_ScreenEnter_S0ngSelectName          ; F86F75  [13]   -> 0xF431A0
-	.long T_F43160                              ; F86F79  [14]   -> 0xF43160
+	.long T_ScreenEnter_StepRecord                              ; F86F79  [14]   -> 0xF43160
 	.long T_ScreenEnter_StepRecordPartSelect    ; F86F7D  [15]   -> 0xF43170
 	.long T_ScreenEnter_TrackAssign             ; F86F81  [16]   -> 0xF43140
 	.long T_ScreenEnter_TrackAssignPresets      ; F86F85  [17]   -> 0xF43190
@@ -13845,10 +13845,10 @@ PanelScreen_VtableTable_ViewB:
 	.long T_ScreenEnter_MeasureInsert           ; F86FC9  [34]   -> 0xF430D0
 	.long T_ScreenEnter_MeasureDelete           ; F86FCD  [35]   -> 0xF430E0
 	.long T_ShowScreen_NoteEditPartSelect       ; F86FD1  [36]   -> 0xF402BC
-	.long T_F402CC                              ; F86FD5  [37]   -> 0xF402CC
+	.long T_EditScreen_EnterNoteEdit                              ; F86FD5  [37]   -> 0xF402CC
 	.long T_F40DE0                              ; F86FD9  [38]   -> 0xF40DE0
 	.long T_ShowScreen_DrumEditPartSelect       ; F86FDD  [39]   -> 0xF402DC
-	.long T_F402EC                              ; F86FE1  [40]   -> 0xF402EC
+	.long T_EditScreen_EnterDrumEdit                              ; F86FE1  [40]   -> 0xF402EC
 	.long T_F40DF0                              ; F86FE5  [41]   -> 0xF40DF0
 	.long T_ScreenEnter_S0ngC0py                ; F86FE9  [42]   -> 0xF430F0
 	.long T_ScreenEnter_Transp0se               ; F86FED  [43]   -> 0xF43100
@@ -13908,13 +13908,13 @@ PanelScreen_VtableTable_ViewB:
 	.long T_Screen_DataLoadFilter_Enter                              ; F870C5  [97]   -> 0xF41998
 	.long T_Screen_TuneScale_Enter                              ; F870C9  [98]   -> 0xF41928
 	.long PanelScreen_NullVtable                ; F870CD  [99]   -> PanelScreen_NullVtable
-	.long T_F41938                              ; F870D1  [100]   -> 0xF41938
-	.long T_F41948                              ; F870D5  [101]   -> 0xF41948
+	.long T_Screen_TouchSensitivityOrTest_Enter                              ; F870D1  [100]   -> 0xF41938
+	.long T_Screen_ControllerAssign_Enter                              ; F870D5  [101]   -> 0xF41948
 	.long T_Screen_DspEffect_Enter                              ; F870D9  [102]   -> 0xF419A8
 	.long T_Screen_DrumsMapNaming_Enter                              ; F870DD  [103]   -> 0xF419B8
 	.long PanelScreen_NullVtable                ; F870E1  [104]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F870E5  [105]   -> PanelScreen_NullVtable
-	.long T_F42670                              ; F870E9  [106]   -> 0xF42670
+	.long T_Screen_Initial_Enter                              ; F870E9  [106]   -> 0xF42670
 	.long T_Screen_MainOutEqualizer_Enter                              ; F870ED  [107]   -> 0xF41958
 	.long T_Screen_ReMapEdit_Enter                              ; F870F1  [108]   -> 0xF41968
 	.long T_Screen_SoundCombinationManager_Enter                              ; F870F5  [109]   -> 0xF41978
@@ -13936,38 +13936,38 @@ PanelScreen_VtableTable_ViewB:
 	.long T_Paint_MidiTotalMode                 ; F87135  [125]   -> 0xF4173C
 	.long T_Paint_MidiInputOutputFilter         ; F87139  [126]   -> 0xF4174C
 	.long T_Paint_MidiOutProgramChange          ; F8713D  [127]   -> 0xF4175C
-	.long T_F41F5C                              ; F87141  [128]   -> 0xF41F5C
+	.long T_ScreenEnter_SoundEditMenu                              ; F87141  [128]   -> 0xF41F5C
 	.long PanelScreen_NullVtable                ; F87145  [129]   -> PanelScreen_NullVtable
-	.long T_F4215C                              ; F87149  [130]   -> 0xF4215C
-	.long T_F4216C                              ; F8714D  [131]   -> 0xF4216C
-	.long T_F4217C                              ; F87151  [132]   -> 0xF4217C
-	.long T_F4218C                              ; F87155  [133]   -> 0xF4218C
-	.long T_F4219C                              ; F87159  [134]   -> 0xF4219C
-	.long T_F41FFC                              ; F8715D  [135]   -> 0xF41FFC
-	.long T_F4200C                              ; F87161  [136]   -> 0xF4200C
-	.long T_F4201C                              ; F87165  [137]   -> 0xF4201C
-	.long T_F4202C                              ; F87169  [138]   -> 0xF4202C
-	.long T_F4203C                              ; F8716D  [139]   -> 0xF4203C
-	.long T_F4204C                              ; F87171  [140]   -> 0xF4204C
-	.long T_F4205C                              ; F87175  [141]   -> 0xF4205C
-	.long T_F4206C                              ; F87179  [142]   -> 0xF4206C
-	.long T_F4207C                              ; F8717D  [143]   -> 0xF4207C
-	.long T_F420BC                              ; F87181  [144]   -> 0xF420BC
-	.long T_F420CC                              ; F87185  [145]   -> 0xF420CC
-	.long T_F420DC                              ; F87189  [146]   -> 0xF420DC
-	.long T_F420EC                              ; F8718D  [147]   -> 0xF420EC
-	.long T_F420FC                              ; F87191  [148]   -> 0xF420FC
-	.long T_F4210C                              ; F87195  [149]   -> 0xF4210C
-	.long T_F4211C                              ; F87199  [150]   -> 0xF4211C
-	.long T_F4212C                              ; F8719D  [151]   -> 0xF4212C
-	.long T_F4213C                              ; F871A1  [152]   -> 0xF4213C
-	.long T_F4214C                              ; F871A5  [153]   -> 0xF4214C
-	.long T_F433D0                              ; F871A9  [154]   -> 0xF433D0
-	.long T_F4209C                              ; F871AD  [155]   -> 0xF4209C
-	.long T_F420AC                              ; F871B1  [156]   -> 0xF420AC
-	.long T_F42350                              ; F871B5  [157]   -> 0xF42350
-	.long T_F42360                              ; F871B9  [158]   -> 0xF42360
-	.long T_F42370                              ; F871BD  [159]   -> 0xF42370
+	.long T_ScreenEnter_SoundEditModelingToneTemplate                              ; F87149  [130]   -> 0xF4215C
+	.long T_ScreenEnter_SoundEditToneLayerPanning                              ; F8714D  [131]   -> 0xF4216C
+	.long T_ScreenEnter_SoundEditToneLayerKeyLayer                              ; F87151  [132]   -> 0xF4217C
+	.long T_ScreenEnter_SoundEditToneLayerVelocityLayer                              ; F87155  [133]   -> 0xF4218C
+	.long T_ScreenEnter_SoundEditModelingDriverWaveform                              ; F87159  [134]   -> 0xF4219C
+	.long T_ScreenEnter_SoundEditPitchTune                              ; F8715D  [135]   -> 0xF41FFC
+	.long T_ScreenEnter_SoundEditPitchEnvelope1                              ; F87161  [136]   -> 0xF4200C
+	.long T_ScreenEnter_SoundEditPitchEnvelope2                              ; F87165  [137]   -> 0xF4201C
+	.long T_ScreenEnter_SoundEditPitchLfo                              ; F87169  [138]   -> 0xF4202C
+	.long T_ScreenEnter_SoundEditAmpLevel1                              ; F8716D  [139]   -> 0xF4203C
+	.long T_ScreenEnter_SoundEditAmpLevel2                              ; F87171  [140]   -> 0xF4204C
+	.long T_ScreenEnter_SoundEditAmpEnvelope1                              ; F87175  [141]   -> 0xF4205C
+	.long T_ScreenEnter_SoundEditAmpEnvelope2                              ; F87179  [142]   -> 0xF4206C
+	.long T_ScreenEnter_SoundEditAmpLfo                              ; F8717D  [143]   -> 0xF4207C
+	.long T_ScreenEnter_SoundEditFilterLpf12                              ; F87181  [144]   -> 0xF420BC
+	.long T_ScreenEnter_SoundEditFilterHpf12                              ; F87185  [145]   -> 0xF420CC
+	.long T_ScreenEnter_SoundEditFilterLpf24                              ; F87189  [146]   -> 0xF420DC
+	.long T_ScreenEnter_SoundEditFilterHpf24                              ; F8718D  [147]   -> 0xF420EC
+	.long T_ScreenEnter_SoundEditFilterBpf                              ; F87191  [148]   -> 0xF420FC
+	.long T_ScreenEnter_SoundEditFilterThrough                              ; F87195  [149]   -> 0xF4210C
+	.long T_ScreenEnter_SoundEditFilterKeyFollow                              ; F87199  [150]   -> 0xF4211C
+	.long T_ScreenEnter_SoundEditFilterEnvelope1                              ; F8719D  [151]   -> 0xF4212C
+	.long T_ScreenEnter_SoundEditFilterEnvelope2                              ; F871A1  [152]   -> 0xF4213C
+	.long T_ScreenEnter_SoundEditFilterLfo                              ; F871A5  [153]   -> 0xF4214C
+	.long T_ScreenEnter_SoundEditDigitalEffect                              ; F871A9  [154]   -> 0xF433D0
+	.long T_ScreenEnter_SoundEditControllerPage2                              ; F871AD  [155]   -> 0xF4209C
+	.long T_ScreenEnter_SoundEditDigitalEffectFromMenu                              ; F871B1  [156]   -> 0xF420AC
+	.long T_ScreenEnter_SoundEditCopy                              ; F871B5  [157]   -> 0xF42350
+	.long T_ScreenEnter_SoundEditMemoryWrite                              ; F871B9  [158]   -> 0xF42360
+	.long T_ScreenEnter_SoundEditNaming                              ; F871BD  [159]   -> 0xF42370
 	.long T_InstallPainter_SoundGroupMenu_Entry                              ; F871C1  [160]   -> 0xF41540
 	.long T_InstallPainter_GroupSoundDisplayHold_Entry                              ; F871C5  [161]   -> 0xF41550
 	.long T_InstallPainter_CombinationGroupMenu_Entry                              ; F871C9  [162]   -> 0xF41560
@@ -14000,7 +14000,7 @@ PanelScreen_VtableTable_ViewB:
 	.long PanelScreen_NullVtable                ; F87235  [189]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F87239  [190]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F8723D  [191]   -> PanelScreen_NullVtable
-	.long T_F41F6C                              ; F87241  [192]   -> 0xF41F6C
+	.long T_ToneEditPage_A0_ModelingTop                              ; F87241  [192]   -> 0xF41F6C
 	.long T_F41F7C                              ; F87245  [193]   -> 0xF41F7C
 	.long T_F41F8C                              ; F87249  [194]   -> 0xF41F8C
 	.long T_ToneEditPage_A3_PositionParameter                              ; F8724D  [195]   -> 0xF41F9C
@@ -14008,12 +14008,12 @@ PanelScreen_VtableTable_ViewB:
 	.long T_ToneEditPage_A5_FittingMutingTuning                              ; F87255  [197]   -> 0xF41FBC
 	.long T_ToneEditPage_A6_TouchDepth                              ; F87259  [198]   -> 0xF41FCC
 	.long T_ToneEditPage_A7_ResoModeKeyFollow                              ; F8725D  [199]   -> 0xF41FDC
-	.long T_F41FEC                              ; F87261  [200]   -> 0xF41FEC
+	.long T_ToneEditPage_A8_SerialParallel                              ; F87261  [200]   -> 0xF41FEC
 	.long PanelScreen_NullVtable                ; F87265  [201]   -> PanelScreen_NullVtable
 	.long T_F42320                              ; F87269  [202]   -> 0xF42320
-	.long T_F42330                              ; F8726D  [203]   -> 0xF42330
+	.long T_ScreenEnter_SoundEditDrumMenu                              ; F8726D  [203]   -> 0xF42330
 	.long T_F42340                              ; F87271  [204]   -> 0xF42340
-	.long T_F4208C                              ; F87275  [205]   -> 0xF4208C
+	.long T_ScreenEnter_SoundEditControllerPage1                              ; F87275  [205]   -> 0xF4208C
 	.long T_F433E0                              ; F87279  [206]   -> 0xF433E0
 	.long PanelScreen_NullVtable                ; F8727D  [207]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F87281  [208]   -> PanelScreen_NullVtable
@@ -16587,7 +16587,7 @@ UiListB_Class54:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class60:
-	.long T_F41110                              ; F88AF2  [0]   -> 0xF41110
+	.long T_Msg0716_SetPendingBit0                              ; F88AF2  [0]   -> 0xF41110
 	.long T_F42F54                              ; F88AF6  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88AFA  [2]   end of list
 
@@ -16604,7 +16604,7 @@ UiListB_Class60:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class61:
-	.long T_F41114                              ; F88AFE  [0]   -> 0xF41114
+	.long T_Msg0716_SetPendingBit1                              ; F88AFE  [0]   -> 0xF41114
 	.long T_F42F54                              ; F88B02  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B06  [2]   end of list
 
@@ -16621,7 +16621,7 @@ UiListB_Class61:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class62:
-	.long T_F41118                              ; F88B0A  [0]   -> 0xF41118
+	.long T_Msg0716_SetPendingBit2                              ; F88B0A  [0]   -> 0xF41118
 	.long T_F42F54                              ; F88B0E  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B12  [2]   end of list
 
@@ -16638,7 +16638,7 @@ UiListB_Class62:
 ;          the index; what the handlers DO is not claimed here.
 ; ---------------------------------------------------------------------
 UiListB_Class63:
-	.long T_F4111C                              ; F88B16  [0]   -> 0xF4111C
+	.long T_Msg0716_SetPendingBit3                              ; F88B16  [0]   -> 0xF4111C
 	.long T_F42F54                              ; F88B1A  [1]   -> 0xF42F54
 	.long 0xFFFFFFFF                            ; F88B1E  [2]   end of list
 ; Evidence: UiEventClass_ListTable_B[0x64], the LE32 at 0xF88021, holds 0xF88B22.  GENERATED name.
@@ -18795,7 +18795,7 @@ Ctrl_SpanTable:
 ; ==============================================================================
 
 ; PanelWire_EntryThunks -- the panel wire-to-group module's six-slot phase vector
-; Evidence: ModuleInitDirectory_F82641[3] = T_F40610, whose word is .long 0xF8A000; slot 0 (phase 0) is `jp PanelWire_ModuleReset`, slots 1-5 are `ret` + 3 pad bytes.  Same layout as MidiIn_EntryThunks.  Not a routine.
+; Evidence: ModuleInitDirectory_F82641[3] = T_PanelWire_EntryThunks, whose word is .long 0xF8A000; slot 0 (phase 0) is `jp PanelWire_ModuleReset`, slots 1-5 are `ret` + 3 pad bytes.  Same layout as MidiIn_EntryThunks.  Not a routine.
 PanelWire_EntryThunks:
 	jp PanelWire_EntryThunks_Join                                        ; F8A000  1b 18 a0 f8
 	ret                                                  ; F8A004  0e
@@ -22893,7 +22893,7 @@ PendingEventQueue_AppendStackArgs_Body:
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
 ; PanelLed_PhaseVector -- the LED module's boot phase vector: phase 0 initialises, phases 1-5 are bare ret
-; Evidence: ModuleInitDirectory_F82641[5] = T_F40660, whose word is `.long PanelLed_PhaseVector`; the walker calls vector +
+; Evidence: ModuleInitDirectory_F82641[5] = T_PanelLed_PhaseVector, whose word is `.long PanelLed_PhaseVector`; the walker calls vector +
 ;   phase (0,4,8,0xC,0x10).  Slot 0 `jp 0xF8C018` stores 5 into (0x2143)-(0x2147) (no other reader found in
 ;   prom_a/prom_b); slots 1-5 are `ret`.  The module's other directory slots T_PanelLed_ProcessRequests-T_PanelLed_ToggleActivityLed are the PanelLed_*
 ;   routines below.
@@ -46259,7 +46259,7 @@ LCD_ShowAllLayers_StackFrame:   ; entry: branch/call in converted code
 ;
 ; Converted 2026-08-25 (wave 5 round 3).  The frontier tool
 ; (notes/prom_a_module_frontier.py) ranked five of its runs in the top twelve --
-; T_PanelMode_System_Enter-T_F419C4 (46 slots), T_F42670-T_F426BC (20), T_Screen_SoundMute_Enter-T_F434D4 (6),
+; T_PanelMode_System_Enter-T_F419C4 (46 slots), T_Screen_Initial_Enter-T_F426BC (20), T_Screen_SoundMute_Enter-T_F434D4 (6),
 ; T_PanelMode_MidiEnter-T_F41768 (75) and T_SoundName_CopyToBuffer-T_TuneScale_KeyScalingCodeToIndex (9) -- and they all land here.
 ; 132 prom_b directory slots point into it, and ALL 132 land on an instruction
 ; boundary of one linear decode from 0xF99021 (which is itself a directory
@@ -47911,7 +47911,7 @@ Paint_MidiMenu:
 	push XWA                                             ; F99F50  38
 .LF99F51:
 	call T_DisplayList_Run_Stack                         ; F99F51  1d 00 2e f4
-	call T_F42E14                                        ; F99F55  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F99F55  1d 14 2e f4
 	inc 8,XSP                                            ; F99F59  ef 60
 	ret                                                  ; F99F5B  0e
 T_F41654_Nop:
@@ -48347,7 +48347,7 @@ Paint_MidiTotalMode:
 	call T_DisplayListB_Run_Stack                        ; F9A257  1d 04 2e f4
 	ld c, (UI_ScreenItem:16)                                   ; F9A25B  c1 20 27 23
 	ld (0x2721:16), c                                   ; F9A25F  f1 21 27 43
-	call T_F42E14                                        ; F9A263  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9A263  1d 14 2e f4
 	inc 8,XSP                                            ; F9A267  ef 60
 	pop XIX                                              ; F9A269  5c
 	unlk XIZ                                             ; F9A26A  ee 0d
@@ -49037,7 +49037,7 @@ Paint_MidiRealtimeMessages:
 .LF9A71B:
 	calr MidiRealtimeMessages_PaintClockKeyGlyphs                                      ; F9A71B  1e 1e 00
 .LF9A71E:
-	call T_F42E14                                        ; F9A71E  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9A71E  1d 14 2e f4
 	pop XIX                                              ; F9A722  5c
 	ret                                                  ; F9A723  0e
 ; ---------------------------------------------------------------------
@@ -49457,7 +49457,7 @@ Paint_MidiInputOutputFilter:
 	call T_DisplayListB_Run_Stack                        ; F9AA39  1d 04 2e f4
 	ld c, (UI_ScreenItem:16)                                   ; F9AA3D  c1 20 27 23
 	ld (0x2721:16), c                                   ; F9AA41  f1 21 27 43
-	call T_F42E14                                        ; F9AA45  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9AA45  1d 14 2e f4
 	inc 8,XSP                                            ; F9AA49  ef 60
 	pop XIX                                              ; F9AA4B  5c
 	unlk XIZ                                             ; F9AA4C  ee 0d
@@ -50310,7 +50310,7 @@ Paint_MidiOutProgramChange:
 	push 0x00                                            ; F9B049  09 00
 	m_push MB16, UI_ScreenItem                                  ; F9B04B  c1 20 27 04
 	calr MidiOutProgramChange_EnableBlinkForItem                                          ; F9B04F  1e 00 06
-	call T_F42E14                                        ; F9B052  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9B052  1d 14 2e f4
 	inc 8,XSP                                            ; F9B056  ef 60
 	inc 2,XSP                                            ; F9B058  ef 62
 	pop XIX                                              ; F9B05A  5c
@@ -51792,7 +51792,7 @@ Paint_ReMapEdit:
 	lda xwa, (DisplayList_FA30A6:24)                     ; F9C51A  f2 a6 30 fa 30
 	push XWA                                             ; F9C51F  38
 	call T_DisplayList_Run_Stack                         ; F9C520  1d 00 2e f4
-	call T_F42E14                                        ; F9C524  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9C524  1d 14 2e f4
 	inc 8,XSP                                            ; F9C528  ef 60
 	inc 4,XSP                                            ; F9C52A  ef 64
 	ret                                                  ; F9C52C  0e
@@ -52435,7 +52435,7 @@ T_F41984_Nop:
 	lda xwa, (DL_SoundCombinationManagerSystem:24)                     ; F9CAEF  f2 3b 35 fa 30
 	push XWA                                             ; F9CAF4  38
 	call T_DisplayList_Run_Stack                         ; F9CAF5  1d 00 2e f4
-	call T_F42E14                                        ; F9CAF9  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9CAF9  1d 14 2e f4
 	inc 8,XSP                                            ; F9CAFD  ef 60
 	ret                                                  ; F9CAFF  0e
 ; ---------------------------------------------------------------------
@@ -52605,7 +52605,7 @@ SoundGroupNaming_AdjustBank:
 .LF9CBAA:
 	calr PanelFlags_PairBitAsWord                                          ; F9CBAA  1e 5a 2f
 	pushw wa                                             ; F9CBAD  28
-	call T_F42F84                                        ; F9CBAE  1d 84 2f f4
+	call T_SoundEditNaming_SoftKeyCol1                                        ; F9CBAE  1d 84 2f f4
 	popw bc                                              ; F9CBB2  49
 .LF9CBB3:
 	ret                                                  ; F9CBB3  0e
@@ -52622,7 +52622,7 @@ SoundGroupNaming_AdjustBank:
 .LF9CBC9:
 	calr PanelFlags_PairBitAsWord                                          ; F9CBC9  1e 3b 2f
 	pushw wa                                             ; F9CBCC  28
-	call T_F42F88                                        ; F9CBCD  1d 88 2f f4
+	call T_SoundEditNaming_SoftKeyCol2                                        ; F9CBCD  1d 88 2f f4
 	popw bc                                              ; F9CBD1  49
 .LF9CBD2:
 	ret                                                  ; F9CBD2  0e
@@ -52639,7 +52639,7 @@ SoundGroupNaming_AdjustBank:
 .LF9CBE8:
 	calr PanelFlags_PairBitAsWord                                          ; F9CBE8  1e 1c 2f
 	pushw wa                                             ; F9CBEB  28
-	call T_F42F8C                                        ; F9CBEC  1d 8c 2f f4
+	call T_SoundEditNaming_SoftKeyCol3                                        ; F9CBEC  1d 8c 2f f4
 	popw bc                                              ; F9CBF0  49
 .LF9CBF1:
 	ret                                                  ; F9CBF1  0e
@@ -52657,7 +52657,7 @@ sub_F9CBF6:
 .LF9CC07:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC07  1e fd 2e
 	pushw wa                                             ; F9CC0A  28
-	call T_F42F90                                        ; F9CC0B  1d 90 2f f4
+	call T_SoundEditNaming_SoftKeyCol4                                        ; F9CC0B  1d 90 2f f4
 	popw bc                                              ; F9CC0F  49
 .LF9CC10:
 	ret                                                  ; F9CC10  0e
@@ -52689,7 +52689,7 @@ SoundGroupNaming_AdjustGroup:
 .LF9CC3F:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC3F  1e c5 2e
 	pushw wa                                             ; F9CC42  28
-	call T_F42F94                                        ; F9CC43  1d 94 2f f4
+	call T_SoundEditNaming_SoftKeyCol5                                        ; F9CC43  1d 94 2f f4
 	popw bc                                              ; F9CC47  49
 .LF9CC48:
 	ret                                                  ; F9CC48  0e
@@ -52706,7 +52706,7 @@ SoundGroupNaming_AdjustGroup:
 .LF9CC5E:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC5E  1e a6 2e
 	pushw wa                                             ; F9CC61  28
-	call T_F42F98                                        ; F9CC62  1d 98 2f f4
+	call T_SoundEditNaming_SoftKeyCol6                                        ; F9CC62  1d 98 2f f4
 	popw bc                                              ; F9CC66  49
 .LF9CC67:
 	ret                                                  ; F9CC67  0e
@@ -52741,7 +52741,7 @@ SoundGroupNaming_AdjustGroup:
 	calr PanelFlags_PairBitAsWord                                          ; F9CC9C  1e 68 2e
 sub_F9CC9F:
 	pushw wa                                             ; F9CC9F  28
-	call T_F42FA0                                        ; F9CCA0  1d a0 2f f4
+	call T_SoundEditNaming_SoftKeyCol8                                        ; F9CCA0  1d a0 2f f4
 	popw bc                                              ; F9CCA4  49
 .LF9CCA5:
 	ret                                                  ; F9CCA5  0e
@@ -52791,7 +52791,7 @@ sub_F9CC9F:
 	jr nz, .LF9CD20                                      ; F9CD12  6e 0c
 	calr PanelFlags_PairBitAsWord                                          ; F9CD14  1e f0 2d
 	pushw wa                                             ; F9CD17  28
-	call T_F42FA4                                        ; F9CD18  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; F9CD18  1d a4 2f f4
 	popw bc                                              ; F9CD1C  49
 	jrl .LF9CD83                                         ; F9CD1D  78 63 00
 .LF9CD20:
@@ -52842,7 +52842,7 @@ sub_F9CC9F:
 .LF9CD98:
 	calr PanelFlags_PairBitAsWord                                          ; F9CD98  1e 6c 2d
 	pushw wa                                             ; F9CD9B  28
-	call T_F42FA8                                        ; F9CD9C  1d a8 2f f4
+	call T_SoundEditNaming_LcdKeyRow2                                        ; F9CD9C  1d a8 2f f4
 	popw bc                                              ; F9CDA0  49
 .LF9CDA1:
 	ret                                                  ; F9CDA1  0e
@@ -52917,7 +52917,7 @@ Paint_SoundGroupNaming:
 	lda xwa, (DL_SystemNamingBankGroup:24)                     ; F9CE08  f2 e0 36 fa 30
 	push XWA                                             ; F9CE0D  38
 	call T_DisplayList_Run_Stack                         ; F9CE0E  1d 00 2e f4
-	call T_F42E14                                        ; F9CE12  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9CE12  1d 14 2e f4
 	inc 8,XSP                                            ; F9CE16  ef 60
 	inc 8,XSP                                            ; F9CE18  ef 60
 	ret                                                  ; F9CE1A  0e
@@ -53255,7 +53255,7 @@ CombinationGroupNaming_AdjustBank:
 .LF9D012:
 	calr PanelFlags_PairBitAsWord                                          ; F9D012  1e f2 2a
 	pushw wa                                             ; F9D015  28
-	call T_F42F84                                        ; F9D016  1d 84 2f f4
+	call T_SoundEditNaming_SoftKeyCol1                                        ; F9D016  1d 84 2f f4
 	popw bc                                              ; F9D01A  49
 .LF9D01B:
 	ret                                                  ; F9D01B  0e
@@ -53272,7 +53272,7 @@ CombinationGroupNaming_AdjustBank:
 .LF9D031:
 	calr PanelFlags_PairBitAsWord                                          ; F9D031  1e d3 2a
 	pushw wa                                             ; F9D034  28
-	call T_F42F88                                        ; F9D035  1d 88 2f f4
+	call T_SoundEditNaming_SoftKeyCol2                                        ; F9D035  1d 88 2f f4
 	popw bc                                              ; F9D039  49
 .LF9D03A:
 	ret                                                  ; F9D03A  0e
@@ -53289,7 +53289,7 @@ CombinationGroupNaming_AdjustBank:
 .LF9D050:
 	calr PanelFlags_PairBitAsWord                                          ; F9D050  1e b4 2a
 	pushw wa                                             ; F9D053  28
-	call T_F42F8C                                        ; F9D054  1d 8c 2f f4
+	call T_SoundEditNaming_SoftKeyCol3                                        ; F9D054  1d 8c 2f f4
 	popw bc                                              ; F9D058  49
 .LF9D059:
 	ret                                                  ; F9D059  0e
@@ -53306,7 +53306,7 @@ CombinationGroupNaming_AdjustBank:
 .LF9D06F:
 	calr PanelFlags_PairBitAsWord                                          ; F9D06F  1e 95 2a
 	pushw wa                                             ; F9D072  28
-	call T_F42F90                                        ; F9D073  1d 90 2f f4
+	call T_SoundEditNaming_SoftKeyCol4                                        ; F9D073  1d 90 2f f4
 	popw bc                                              ; F9D077  49
 .LF9D078:
 	ret                                                  ; F9D078  0e
@@ -53338,7 +53338,7 @@ CombinationGroupNaming_AdjustGroup:
 .LF9D0A7:
 	calr PanelFlags_PairBitAsWord                                          ; F9D0A7  1e 5d 2a
 	pushw wa                                             ; F9D0AA  28
-	call T_F42F94                                        ; F9D0AB  1d 94 2f f4
+	call T_SoundEditNaming_SoftKeyCol5                                        ; F9D0AB  1d 94 2f f4
 	popw bc                                              ; F9D0AF  49
 .LF9D0B0:
 	ret                                                  ; F9D0B0  0e
@@ -53355,7 +53355,7 @@ CombinationGroupNaming_AdjustGroup:
 .LF9D0C6:
 	calr PanelFlags_PairBitAsWord                                          ; F9D0C6  1e 3e 2a
 	pushw wa                                             ; F9D0C9  28
-	call T_F42F98                                        ; F9D0CA  1d 98 2f f4
+	call T_SoundEditNaming_SoftKeyCol6                                        ; F9D0CA  1d 98 2f f4
 	popw bc                                              ; F9D0CE  49
 .LF9D0CF:
 	ret                                                  ; F9D0CF  0e
@@ -53389,7 +53389,7 @@ CombinationGroupNaming_AdjustGroup:
 .LF9D104:
 	calr PanelFlags_PairBitAsWord                                          ; F9D104  1e 00 2a
 	pushw wa                                             ; F9D107  28
-	call T_F42FA0                                        ; F9D108  1d a0 2f f4
+	call T_SoundEditNaming_SoftKeyCol8                                        ; F9D108  1d a0 2f f4
 	popw bc                                              ; F9D10C  49
 .LF9D10D:
 	ret                                                  ; F9D10D  0e
@@ -53439,7 +53439,7 @@ CombinationGroupNaming_AdjustGroup:
 	jr nz, .LF9D188                                      ; F9D17A  6e 0c
 	calr PanelFlags_PairBitAsWord                                          ; F9D17C  1e 88 29
 	pushw wa                                             ; F9D17F  28
-	call T_F42FA4                                        ; F9D180  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; F9D180  1d a4 2f f4
 	popw bc                                              ; F9D184  49
 	jrl .LF9D1EB                                         ; F9D185  78 63 00
 .LF9D188:
@@ -53490,7 +53490,7 @@ CombinationGroupNaming_AdjustGroup:
 .LF9D200:
 	calr PanelFlags_PairBitAsWord                                          ; F9D200  1e 04 29
 	pushw wa                                             ; F9D203  28
-	call T_F42FA8                                        ; F9D204  1d a8 2f f4
+	call T_SoundEditNaming_LcdKeyRow2                                        ; F9D204  1d a8 2f f4
 	popw bc                                              ; F9D208  49
 .LF9D209:
 	ret                                                  ; F9D209  0e
@@ -53565,7 +53565,7 @@ Paint_CombinationGroupNaming:
 	lda xwa, (DL_SystemNamingBankGroup:24)                     ; F9D270  f2 e0 36 fa 30
 	push XWA                                             ; F9D275  38
 	call T_DisplayList_Run_Stack                         ; F9D276  1d 00 2e f4
-	call T_F42E14                                        ; F9D27A  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9D27A  1d 14 2e f4
 	inc 8,XSP                                            ; F9D27E  ef 60
 	inc 8,XSP                                            ; F9D280  ef 60
 	ret                                                  ; F9D282  0e
@@ -54356,7 +54356,7 @@ SoundCopy_AdjustDestBank:
 	pop XIX                                              ; F9D941  5c
 	ret                                                  ; F9D942  0e
 ; Paint_SoundCopy -- paints the SOUND COPY page for the current state (0x269A) through JumpTable_F9D966: GROUP, SINGLE, overwrite confirmation, or drum-kit error
-; Evidence: T_F42E10, bound `cp BC,7`, JumpTable_F9D966 = {Paint_SoundCopyGroup, Paint_SoundCopySingle, Paint_SoundCopyAreYouSure x2, Paint_ErrorImpossibleCopyDrumKit x4}; XIX = 0x2540 (layer); exits through T_F42E14.
+; Evidence: T_F42E10, bound `cp BC,7`, JumpTable_F9D966 = {Paint_SoundCopyGroup, Paint_SoundCopySingle, Paint_SoundCopyAreYouSure x2, Paint_ErrorImpossibleCopyDrumKit x4}; XIX = 0x2540 (layer); exits through T_LCD_ShowAllLayers_StackFrame_Copy.
 ; Called from Screen_SoundCopy_Enter 0xF9D3EA.
 Paint_SoundCopy:
 	push XIX                                             ; F9D943  3c
@@ -54449,7 +54449,7 @@ Paint_ErrorImpossibleCopyDrumKit:   ; entry: named by 4 `.long` operands, first 
 	call T_DisplayList_Run_Stack                         ; F9DA04  1d 00 2e f4
 	inc 8,XSP                                            ; F9DA08  ef 60
 .LF9DA0A:
-	call T_F42E14                                        ; F9DA0A  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9DA0A  1d 14 2e f4
 	pop XIX                                              ; F9DA0E  5c
 	ret                                                  ; F9DA0F  0e
 ; SoundCopy_LoadNameBuffers -- fills the name buffers the SOUND COPY lists print, according to the mode (0x269A)
@@ -55743,7 +55743,7 @@ Paint_CombinationCopy:
 .LF9E5F5:
 	inc 8,XSP                                            ; F9E5F5  ef 60
 .LF9E5F7:
-	call T_F42E14                                        ; F9E5F7  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9E5F7  1d 14 2e f4
 	pop XIX                                              ; F9E5FB  5c
 	ret                                                  ; F9E5FC  0e
 ; CombinationCopy_LoadNameBuffers -- fills the name buffers the COMBINATION COPY lists print, according to (0x269A)
@@ -56525,7 +56525,7 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	lda xwa, (DL_DataLoadFilterSystemOverall:24)                     ; F9ECEF  f2 7b 42 fa 30
 	push XWA                                             ; F9ECF4  38
 	call T_DisplayList_Run_Stack                         ; F9ECF5  1d 00 2e f4
-	call T_F42E14                                        ; F9ECF9  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9ECF9  1d 14 2e f4
 	inc 8,XSP                                            ; F9ECFD  ef 60
 	ret                                                  ; F9ECFF  0e
 .LF9ED00:
@@ -56684,7 +56684,7 @@ T_F41994_Nop:
 	lda xwa, (DL_MemoryProtectSystemSound:24)                     ; F9EE66  f2 e8 44 fa 30
 	push XWA                                             ; F9EE6B  38
 	call T_DisplayList_Run_Stack                         ; F9EE6C  1d 00 2e f4
-	call T_F42E14                                        ; F9EE70  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9EE70  1d 14 2e f4
 	inc 8,XSP                                            ; F9EE74  ef 60
 	ret                                                  ; F9EE76  0e
 .LF9EE77:
@@ -56777,7 +56777,7 @@ T_F434CC_Nop:
 	lda xwa, (DL_SoundMuteSystemIfYouWantHeldNotesToContinue:24)                     ; F9EF4A  f2 d2 45 fa 30
 	push XWA                                             ; F9EF4F  38
 	call T_DisplayList_Run_Stack                         ; F9EF50  1d 00 2e f4
-	call T_F42E14                                        ; F9EF54  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9EF54  1d 14 2e f4
 	inc 8,XSP                                            ; F9EF58  ef 60
 	ret                                                  ; F9EF5A  0e
 .LF9EF5B:
@@ -56985,7 +56985,7 @@ DrumsMap_AdjustMap:
 .LF9F06C:
 	calr PanelFlags_PairBitAsWord                                      ; F9F06C  1e 98 0a
 	pushw wa                                             ; F9F06F  28
-	call T_F42F84                                        ; F9F070  1d 84 2f f4
+	call T_SoundEditNaming_SoftKeyCol1                                        ; F9F070  1d 84 2f f4
 	popw bc                                              ; F9F074  49
 .LF9F075:
 	ret                                                  ; F9F075  0e
@@ -57002,7 +57002,7 @@ DrumsMap_AdjustMap:
 .LF9F08B:
 	calr PanelFlags_PairBitAsWord                                      ; F9F08B  1e 79 0a
 	pushw wa                                             ; F9F08E  28
-	call T_F42F88                                        ; F9F08F  1d 88 2f f4
+	call T_SoundEditNaming_SoftKeyCol2                                        ; F9F08F  1d 88 2f f4
 	popw bc                                              ; F9F093  49
 .LF9F094:
 	ret                                                  ; F9F094  0e
@@ -57091,7 +57091,7 @@ DrumsMap_MoveRowCursor:
 .LF9F140:
 	calr PanelFlags_PairBitAsWord                                      ; F9F140  1e c4 09
 	pushw wa                                             ; F9F143  28
-	call T_F42F8C                                        ; F9F144  1d 8c 2f f4
+	call T_SoundEditNaming_SoftKeyCol3                                        ; F9F144  1d 8c 2f f4
 	popw bc                                              ; F9F148  49
 .LF9F149:
 	ret                                                  ; F9F149  0e
@@ -57108,7 +57108,7 @@ DrumsMap_MoveRowCursor:
 .LF9F15F:
 	calr PanelFlags_PairBitAsWord                                      ; F9F15F  1e a5 09
 	pushw wa                                             ; F9F162  28
-	call T_F42F90                                        ; F9F163  1d 90 2f f4
+	call T_SoundEditNaming_SoftKeyCol4                                        ; F9F163  1d 90 2f f4
 	popw bc                                              ; F9F167  49
 .LF9F168:
 	ret                                                  ; F9F168  0e
@@ -57125,7 +57125,7 @@ DrumsMap_MoveRowCursor:
 .LF9F17E:
 	calr PanelFlags_PairBitAsWord                                      ; F9F17E  1e 86 09
 	pushw wa                                             ; F9F181  28
-	call T_F42F94                                        ; F9F182  1d 94 2f f4
+	call T_SoundEditNaming_SoftKeyCol5                                        ; F9F182  1d 94 2f f4
 	popw bc                                              ; F9F186  49
 .LF9F187:
 	ret                                                  ; F9F187  0e
@@ -57195,7 +57195,7 @@ DrumsMap_AdjustRowSound:
 .LF9F20D:
 	calr PanelFlags_PairBitAsWord                                      ; F9F20D  1e f7 08
 	pushw wa                                             ; F9F210  28
-	call T_F42F98                                        ; F9F211  1d 98 2f f4
+	call T_SoundEditNaming_SoftKeyCol6                                        ; F9F211  1d 98 2f f4
 	popw bc                                              ; F9F215  49
 .LF9F216:
 	ret                                                  ; F9F216  0e
@@ -57229,7 +57229,7 @@ DrumsMap_AdjustRowSound:
 .LF9F24B:
 	calr PanelFlags_PairBitAsWord                                      ; F9F24B  1e b9 08
 	pushw wa                                             ; F9F24E  28
-	call T_F42FA0                                        ; F9F24F  1d a0 2f f4
+	call T_SoundEditNaming_SoftKeyCol8                                        ; F9F24F  1d a0 2f f4
 	popw bc                                              ; F9F253  49
 .LF9F254:
 	ret                                                  ; F9F254  0e
@@ -57280,7 +57280,7 @@ DrumsMap_AdjustRowSound:
 	jr nz, .LF9F2CE                                      ; F9F2C1  6e 0b
 	calr PanelFlags_PairBitAsWord                                      ; F9F2C3  1e 41 08
 	pushw wa                                             ; F9F2C6  28
-	call T_F42FA4                                        ; F9F2C7  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; F9F2C7  1d a4 2f f4
 	popw bc                                              ; F9F2CB  49
 	jr .LF9F306                                          ; F9F2CC  68 38
 .LF9F2CE:
@@ -57322,7 +57322,7 @@ DrumsMap_AdjustRowSound:
 .LF9F31B:
 	calr PanelFlags_PairBitAsWord                                      ; F9F31B  1e e9 07
 	pushw wa                                             ; F9F31E  28
-	call T_F42FA8                                        ; F9F31F  1d a8 2f f4
+	call T_SoundEditNaming_LcdKeyRow2                                        ; F9F31F  1d a8 2f f4
 	popw bc                                              ; F9F323  49
 .LF9F324:
 	ret                                                  ; F9F324  0e
@@ -57414,7 +57414,7 @@ Paint_DrumsMapNaming:
 	lda xwa, (DL_DrumsMapSystemMapNamingDrumsMap:24)                     ; F9F3AB  f2 c3 46 fa 30
 	push XWA                                             ; F9F3B0  38
 	call T_DisplayList_Run_Stack                         ; F9F3B1  1d 00 2e f4
-	call T_F42E14                                        ; F9F3B5  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9F3B5  1d 14 2e f4
 	inc 8,XSP                                            ; F9F3B9  ef 60
 	ret                                                  ; F9F3BB  0e
 ; ---------------------------------------------------------------------
@@ -57489,7 +57489,7 @@ Paint_ErrorImpossibleDrumMap:
 	lda xwa, (DL_ErrorItIsImpossibleToSetADrumMapFor:24)                     ; F9F3E3  f2 fe 47 fa 30
 	push XWA                                             ; F9F3E8  38
 	call T_DisplayList_Run_Stack                         ; F9F3E9  1d 00 2e f4
-	call T_F42E14                                        ; F9F3ED  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; F9F3ED  1d 14 2e f4
 	inc 8,XSP                                            ; F9F3F1  ef 60
 	ret                                                  ; F9F3F3  0e
 ; DrumsMap_DrawFields -- draws the DRUMS MAP selector and name and the 12 rows' note number, note name and octave
@@ -58315,7 +58315,7 @@ Link_ReadRemoteBlock:
 	unlk XIZ                                             ; F9FB04  ee 0d
 	ret                                                  ; F9FB06  0e
 ; PanelFlags_PairBitAsWord -- returns WA = 0x8080 when bit 0 of (0x28B0) is set and 0 otherwise
-; Evidence: bit 0 of (0x28B0) is the pair position PanelCode_ToSlotAndFlags copies from bit 7 of the button's flag argument; every caller does `pushw wa` into one of T_F42F84..T_F42FA8 in the naming states ((0x2694)/(0x2697)/(0x2700) = 1), rebuilding that flag word.
+; Evidence: bit 0 of (0x28B0) is the pair position PanelCode_ToSlotAndFlags copies from bit 7 of the button's flag argument; every caller does `pushw wa` into one of T_SoundEditNaming_SoftKeyCol1..T_SoundEditNaming_LcdKeyRow2 in the naming states ((0x2694)/(0x2697)/(0x2700) = 1), rebuilding that flag word.
 PanelFlags_PairBitAsWord:
 	ld c, (PanelEvent_Flags:16)                                   ; F9FB07  c1 b0 28 23
 	and C,0x01                                           ; F9FB0B  cb cc 01
@@ -58862,7 +58862,7 @@ T_F41924_Nop:
 	push XWA                                             ; FA0048  38
 .LFA0049:
 	call T_DisplayList_Run_Stack                         ; FA0049  1d 00 2e f4
-	call T_F42E14                                        ; FA004D  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA004D  1d 14 2e f4
 	inc 8,XSP                                            ; FA0051  ef 60
 	ret                                                  ; FA0053  0e
 ; TuneScale_KeyScalingCodeToIndex -- returns in A the position of a key-scaling type code within ByteTable16_FA1C4C (15 if absent)
@@ -59525,7 +59525,7 @@ TuneScale_LoadFields:
 	lda xwa, (DisplayList_FA2479:24)                     ; FA062B  f2 79 24 fa 30
 	push XWA                                             ; FA0630  38
 	call T_DisplayListB_Run_Stack                        ; FA0631  1d 04 2e f4
-	call T_F42E14                                        ; FA0635  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA0635  1d 14 2e f4
 	inc 8,XSP                                            ; FA0639  ef 60
 	jr .LFA064F                                          ; FA063B  68 12
 .LFA063D:
@@ -59559,7 +59559,7 @@ TuneScale_LoadFields:
 	inc 8,XSP                                            ; FA0686  ef 60
 	ret                                                  ; FA0688  0e
 ; Screen_TouchSensitivityOrTest_Enter: the +0 ENTER method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
-;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41938 jumps here.
+;   (ViewB entry 0x64) points at the thunk triple starting at T_Screen_TouchSensitivityOrTest_Enter, and slot T_Screen_TouchSensitivityOrTest_Enter jumps here.
 ; Screen_TouchSensitivityOrTest_Enter: the ENTER method of screen 0x64, the SYSTEM menu item 0VERALL T0UCH SENSITIVITY (variant 1, SX-WSA1) / TEST (variant 2, SX-WSA1R)
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_TouchSensitivityOrTest_Enter:
@@ -59663,7 +59663,7 @@ Screen_TouchSensitivityOrTest_Enter:
 T_F4193C_Nop:
 	ret                                                  ; FA07A1  0e
 ; Screen_TouchSensitivityOrTest_Button: the +8 BUTTON method of the screen object for screen id 0x64 -- PanelScreen_VtableTable entry 0x84
-;   (ViewB entry 0x64) points at the thunk triple starting at T_F41938, and slot T_F41940 jumps here.
+;   (ViewB entry 0x64) points at the thunk triple starting at T_Screen_TouchSensitivityOrTest_Enter, and slot T_Screen_TouchSensitivityOrTest_Button jumps here.
 ; Screen_TouchSensitivityOrTest_Button: the BUTTON method of screen 0x64, the SYSTEM menu item 0VERALL T0UCH SENSITIVITY (variant 1, SX-WSA1) / TEST (variant 2, SX-WSA1R)
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_TouchSensitivityOrTest_Button:
@@ -60018,7 +60018,7 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 	lda xwa, (DL_TouchSensitivitySystemVelocityCurve:24)                     ; FA0ABB  f2 2c 25 fa 30
 	push XWA                                             ; FA0AC0  38
 	call T_DisplayList_Run_Stack                         ; FA0AC1  1d 00 2e f4
-	call T_F42E14                                        ; FA0AC5  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA0AC5  1d 14 2e f4
 	inc 8,XSP                                            ; FA0AC9  ef 60
 	ret                                                  ; FA0ACB  0e
 .LFA0ACC:
@@ -60029,7 +60029,7 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 	lda xwa, (DL_TestSystemTestModeNoteVelocity:24)                     ; FA0ADB  f2 34 4c fa 30
 	push XWA                                             ; FA0AE0  38
 	call T_DisplayList_Run_Stack                         ; FA0AE1  1d 00 2e f4
-	call T_F42E14                                        ; FA0AE5  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA0AE5  1d 14 2e f4
 	inc 8,XSP                                            ; FA0AE9  ef 60
 	ret                                                  ; FA0AEB  0e
 .LFA0AEC:
@@ -60347,7 +60347,7 @@ sub_FA0DCC:
 	popw hl                                              ; FA0DF1  4b
 	ret                                                  ; FA0DF2  0e
 ; Screen_ControllerAssign_Enter: the +0 ENTER method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
-;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41948 jumps here.
+;   (ViewB entry 0x65) points at the thunk triple starting at T_Screen_ControllerAssign_Enter, and slot T_Screen_ControllerAssign_Enter jumps here.
 ; Screen_ControllerAssign_Enter: the ENTER method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_ControllerAssign_Enter:
@@ -60380,7 +60380,7 @@ Screen_ControllerAssign_Enter:
 	inc 6,XSP                                            ; FA0E4A  ef 66
 	ret                                                  ; FA0E4C  0e
 ; Screen_ControllerAssign_Leave: the +4 LEAVE method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
-;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F4194C jumps here.
+;   (ViewB entry 0x65) points at the thunk triple starting at T_Screen_ControllerAssign_Enter, and slot T_Screen_ControllerAssign_Leave jumps here.
 ; Screen_ControllerAssign_Leave: the LEAVE method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_ControllerAssign_Leave:
@@ -60439,7 +60439,7 @@ sub_FA0E51:
 	unlk XIZ                                             ; FA0EE7  ee 0d
 	ret                                                  ; FA0EE9  0e
 ; Screen_ControllerAssign_Button: the +8 BUTTON method of the screen object for screen id 0x65 -- PanelScreen_VtableTable entry 0x85
-;   (ViewB entry 0x65) points at the thunk triple starting at T_F41948, and slot T_F41950 jumps here.
+;   (ViewB entry 0x65) points at the thunk triple starting at T_Screen_ControllerAssign_Enter, and slot T_Screen_ControllerAssign_Button jumps here.
 ; Screen_ControllerAssign_Button: the BUTTON method of screen 0x65, the SYSTEM menu item C0NTR0LLER ASSIGN
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_ControllerAssign_Button:
@@ -60757,7 +60757,7 @@ sub_FA10CD:
 	call T_DisplayList_Run_Stack                         ; FA11AE  1d 00 2e f4
 .LFA11B2:
 	inc 8,XSP                                            ; FA11B2  ef 60
-	call T_F42E14                                        ; FA11B4  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA11B4  1d 14 2e f4
 	ret                                                  ; FA11B8  0e
 .LFA11B9:
 	push XIX                                             ; FA11B9  3c
@@ -60858,7 +60858,7 @@ sub_FA10CD:
 	pop XIX                                              ; FA129B  5c
 	ret                                                  ; FA129C  0e
 ; Screen_Initial_Enter: the +0 ENTER method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
-;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42670 jumps here.
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_Screen_Initial_Enter, and slot T_Screen_Initial_Enter jumps here.
 ; Screen_Initial_Enter: the ENTER method of screen 0x6A, the SYSTEM menu item INITIAL
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_Initial_Enter:
@@ -60884,7 +60884,7 @@ Screen_Initial_Enter:
 	pop XIX                                              ; FA12CC  5c
 	ret                                                  ; FA12CD  0e
 ; Screen_Initial_Leave: the +4 LEAVE method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
-;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42674 jumps here.
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_Screen_Initial_Enter, and slot T_Screen_Initial_Leave jumps here.
 ; Screen_Initial_Leave: the LEAVE method of screen 0x6A, the SYSTEM menu item INITIAL
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_Initial_Leave:
@@ -60895,7 +60895,7 @@ Screen_Initial_Leave:
 .LFA12DC:
 	ret                                                  ; FA12DC  0e
 ; Screen_Initial_Button: the +8 BUTTON method of the screen object for screen id 0x6A -- PanelScreen_VtableTable entry 0x8A
-;   (ViewB entry 0x6A) points at the thunk triple starting at T_F42670, and slot T_F42678 jumps here.
+;   (ViewB entry 0x6A) points at the thunk triple starting at T_Screen_Initial_Enter, and slot T_Screen_Initial_Button jumps here.
 ; Screen_Initial_Button: the BUTTON method of screen 0x6A, the SYSTEM menu item INITIAL
 ;   (notes/prom_a_system_menu_screens.py decodes the menu text and pairs it with Screen_System_Button).
 Screen_Initial_Button:
@@ -61004,7 +61004,7 @@ T_F4267C_Nop:
 	lda xbc, (DisplayList_FA2F64:24)                     ; FA13CA  f2 64 2f fa 31
 	push XBC                                             ; FA13CF  39
 	call T_DisplayListB_RunOne_Stack                     ; FA13D0  1d 0c 2e f4
-	call T_F42E14                                        ; FA13D4  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA13D4  1d 14 2e f4
 	pop XBC                                              ; FA13D8  59
 	ret                                                  ; FA13D9  0e
 	call T_CallbackQueue_ResetAndRestartTask2            ; FA13DA  1d 80 2e f4
@@ -61058,7 +61058,7 @@ sub_FA1404:   ; entry: reachable-run entry
 	lda xwa, (DisplayList_FA302F:24)                     ; FA1415  f2 2f 30 fa 30
 	push XWA                                             ; FA141A  38
 	call T_DisplayList_Run_Stack                         ; FA141B  1d 00 2e f4
-	call T_F42E14                                        ; FA141F  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FA141F  1d 14 2e f4
 	inc 8,XSP                                            ; FA1423  ef 60
 	inc 8,XSP                                            ; FA1425  ef 60
 	ret                                                  ; FA1427  0e
@@ -68031,7 +68031,7 @@ MIDI_RT_NotClock:
 .LFA55F3:
 	ret                                           ; FA55F3  0e
 ; MIDI_Clock_CatchUpIfAnySlot -- when the slot mask (0x60341E) is non-zero: MIDI_RT_Start_ResetCounters and
-;          MIDI_Clock_CatchUp at interrupt level 6.  prom_b directory slot T_F40720; MainTask's timed-event
+;          MIDI_Clock_CatchUp at interrupt level 6.  prom_b directory slot T_MIDI_Clock_CatchUpIfAnySlot; MainTask's timed-event
 ;          service calls it when bit 5 of (0x34D0) is set (0xF823EC).
 MIDI_Clock_CatchUpIfAnySlot:
 	push XWA                                      ; FA55F4  38
@@ -77157,7 +77157,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; (and this is the reason the decode check cannot be made to pass over it).
 ; Corrected 2026-10-03: this said 0xFAA000-0xFAA417 and 0xFAA418-0xFAA82F.  Both blocks
 ; open with a five-slot vector, and 0xFAA400's is the LIVE one -- prom_b's pointer slot
-; T_F40770 publishes it.  The copy's last instruction is cut off at 0xFAA3FF; decoded
+; T_ParamModule_PhaseVector publishes it.  The copy's last instruction is cut off at 0xFAA3FF; decoded
 ; as one instruction with 0xFAA400, it had hidden the live vector's first slot.
 ;   * 0xFAA018-0xFAA3FF and 0xFAA418-0xFAA7FF are 1000 bytes that differ in
 ;     exactly TEN positions.  Measured, not sampled.
@@ -77696,7 +77696,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	.byte	0xf2, 0x76                                      ; FAA3FE  f2 76
 ; ---------------------------------------------------------------------
 ; ParamModule_PhaseVector -- this module's boot phase vector, five `jp` slots and a `ret`.
-; Evidence: ModuleInitDirectory_F82641[11] = T_F40770, whose word in prom_b is `.long ParamModule_PhaseVector`;
+; Evidence: ModuleInitDirectory_F82641[11] = T_ParamModule_PhaseVector, whose word in prom_b is `.long ParamModule_PhaseVector`;
 ;          the walker calls vector + phase.  SysExSession_OnAbort_SystemPartMidi also reads that word, adds 8 and jumps: slot 2.
 ;          Was decoded as `tset 0,(0x2a1b76)` + `swi 2`, the copy's cut-off instruction run on into it.
 ; ---------------------------------------------------------------------
@@ -80057,7 +80057,7 @@ sub_FAB7F9:
 	call T_F41F30                                        ; FAB805  1d 30 1f f4
 	call T_F41F34                                        ; FAB809  1d 34 1f f4
 	call T_Evt2030_RunList                                        ; FAB80D  1d 50 08 f4
-	call T_F40900                                        ; FAB811  1d 00 09 f4
+	call T_SysExTx_EmitStagedParams                                        ; FAB811  1d 00 09 f4
 	pop XIZ                                              ; FAB815  5e
 	pop XIX                                              ; FAB816  5c
 	pop XHL                                              ; FAB817  5b
@@ -88300,7 +88300,7 @@ PatchList_RecordBytes2B_Ptr:
 ; routine, and everything else is deliberately unnamed.
 ;
 ; WHY THIS SPAN.  `python3 notes/prom_a_module_frontier.py` ranks the thunk RUN
-; T_SysExDump_RunSendJob-T_F40910 third in prom_a by contiguous unconverted extent (12 slots,
+; T_SysExDump_RunSendJob-T_SysExTx_SendBytes third in prom_a by contiguous unconverted extent (12 slots,
 ; 23,200 bytes, reference upper bound 10), and that run's targets are all in
 ; 0xFB2022-0xFB7AC2.  ★ And it is where emulation gap D lives: the caller the
 ; gaps file names, `0xFB24D3`, is inside it.
@@ -88417,7 +88417,7 @@ PatchList_RecordBytes2B_Ptr:
 ; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
 ; ==============================================================================
 ; SysExModule_EntryThunks -- module 10 of ModuleInitDirectory_F82641: the 4-byte phase slots the boot walker calls; slot 0 is `jp SysExModule_Phase0_ResetState`, slot 3 (0xFB200C) is `jp SysExModule_Phase3_GmNormalReset`, the others are `ret` + three `nop`
-; Evidence: ModuleInitDirectory_F82641[10] = T_F408E0, which in prom_b is `.long 0xFB2000`; the walker at 0xF82846 adds the phase 0x00/04/08/0C/10 to that base and calls it -- the same slot idiom as MIDI_EntryThunks.
+; Evidence: ModuleInitDirectory_F82641[10] = T_SysExModule_EntryThunks, which in prom_b is `.long 0xFB2000`; the walker at 0xF82846 adds the phase 0x00/04/08/0C/10 to that base and calls it -- the same slot idiom as MIDI_EntryThunks.
 ; The module 0xFB2000-0xFB8CA5 holds SysExDump_RunSendJob (0xFB2049), the SysEx decode-tree walker at 0xFB63FC and the status reporter 0xFB7DFE (notes/sysex-probes/README.md), as well as the remote-flash reader.
 SysExModule_EntryThunks:
 	jp SysExModule_EntryThunks_Join                                        ; FB2000  1b 18 20 fb
@@ -99081,14 +99081,14 @@ MessageScreen_Paint_SaveRegs:
 	pop XHL                                              ; FB7EA5  5b
 	pop XDE                                              ; FB7EA6  5a
 	ret                                                  ; FB7EA7  0e
-; SysExSession_OnAbort_SystemPartMidi: the abort arm for steps 1-3; bit 4 of (0x60F020) around T_F40770 slot +8, T_F40774, T_F40794.
+; SysExSession_OnAbort_SystemPartMidi: the abort arm for steps 1-3; bit 4 of (0x60F020) around T_ParamModule_PhaseVector slot +8, T_F40774, T_F40794.
 SysExSession_OnAbort_SystemPartMidi:
 	m_set 4, MD24, 0x60f020                              ; FB7EA8  f2 20 f0 60 bc
 	push XDE                                             ; FB7EAD  3a
 	push XHL                                             ; FB7EAE  3b
 	push XIX                                             ; FB7EAF  3c
 	push XIZ                                             ; FB7EB0  3e
-	ld xbc, (T_F40770:24)                               ; FB7EB1  e2 70 07 f4 21
+	ld xbc, (T_ParamModule_PhaseVector:24)                               ; FB7EB1  e2 70 07 f4 21
 	inc 8,XBC                                            ; FB7EB6  e9 60
 	lda xiy, (.LFB7EC0:24)                               ; FB7EB8  f2 c0 7e fb 35
 	push XIY                                             ; FB7EBD  3d
@@ -104851,7 +104851,7 @@ sub_FBCCB1:
 	call T_DisplayListB_Run_Stack                        ; FBCDD9  1d 04 2e f4
 	add XSP,0x00000018                                   ; FBCDDD  ef c8 18 00 00 00
 .LFBCDE3:
-	call T_F42E14                                        ; FBCDE3  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBCDE3  1d 14 2e f4
 	pop XIX                                              ; FBCDE7  5c
 	popw hl                                              ; FBCDE8  4b
 	unlk XIZ                                             ; FBCDE9  ee 0d
@@ -105573,7 +105573,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	push XIY                                             ; FBD3DF  3d
 	jp (xbc)                                             ; FBD3E0  b1 d8
 .LFBD3E2:
-	call T_F42E14                                        ; FBD3E2  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBD3E2  1d 14 2e f4
 	popw hl                                              ; FBD3E6  4b
 	ret                                                  ; FBD3E7  0e
 	push XIX                                             ; FBD3E8  3c
@@ -107262,7 +107262,7 @@ sub_FBE2A4:
 	push XIY                                             ; FBE3E8  3d
 	jp (xbc)                                             ; FBE3E9  b1 d8
 .LFBE3EB:
-	call T_F42E14                                        ; FBE3EB  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBE3EB  1d 14 2e f4
 	pop XBC                                              ; FBE3EF  59
 	ret                                                  ; FBE3F0  0e
 	pushw hl                                             ; FBE3F1  2b
@@ -108897,7 +108897,7 @@ sub_FBF10A:
 	lda xiy, (DL_F19BBD:24)                              ; FBF176  f2 bd 9b f1 35
 	push XIY                                             ; FBF17B  3d
 	call T_DisplayListB_Run_Stack                        ; FBF17C  1d 04 2e f4
-	call T_F42E14                                        ; FBF180  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBF180  1d 14 2e f4
 	inc 8,XSP                                            ; FBF184  ef 60
 	pop XIX                                              ; FBF186  5c
 	popw hl                                              ; FBF187  4b
@@ -109018,7 +109018,7 @@ sub_FBF236:
 	jr .LFBF292                                          ; FBF288  68 08
 .LFBF28A:
 	m_push MWD+r6, 0x08                                  ; FBF28A  9e 08 04
-	call T_F42FA4                                        ; FBF28D  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; FBF28D  1d a4 2f f4
 	popw bc                                              ; FBF291  49
 .LFBF292:
 	unlk XIZ                                             ; FBF292  ee 0d
@@ -109027,7 +109027,7 @@ sub_FBF236:
 	m_cp_mi16 MWD+r6, 0x08, 0x0000                       ; FBF299  9e 08 3f 00 00
 	jr nz, .LFBF2A8                                      ; FBF29E  6e 08
 	m_push MWD+r6, 0x08                                  ; FBF2A0  9e 08 04
-	call T_F42FA8                                        ; FBF2A3  1d a8 2f f4
+	call T_SoundEditNaming_LcdKeyRow2                                        ; FBF2A3  1d a8 2f f4
 	popw bc                                              ; FBF2A7  49
 .LFBF2A8:
 	unlk XIZ                                             ; FBF2A8  ee 0d
@@ -109074,7 +109074,7 @@ Paint_CombinationNamingWrite:
 	lda xwa, (DL_CombinationNaming_F19BE5:24)            ; FBF2CD  f2 e5 9b f1 30
 	push XWA                                             ; FBF2D2  38
 	call T_DisplayList_Run_Stack                         ; FBF2D3  1d 00 2e f4
-	call T_F42E14                                        ; FBF2D7  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBF2D7  1d 14 2e f4
 	inc 8,XSP                                            ; FBF2DB  ef 60
 	ret                                                  ; FBF2DD  0e
 sub_FBF2DE:
@@ -109706,7 +109706,7 @@ sub_FBF79C:
 .LFBF922:
 	calr sub_FBFA4D                                      ; FBF922  1e 28 01
 .LFBF925:
-	call T_F42E14                                        ; FBF925  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBF925  1d 14 2e f4
 	ld (0x277e:16), 0x01                                 ; FBF929  f1 7e 27 00 01
 	ret                                                  ; FBF92E  0e
 sub_FBF92F:
@@ -110193,7 +110193,7 @@ sub_FBFC32:
 	lda xbc, (DL_F191F8:24)                              ; FBFDAA  f2 f8 91 f1 31
 	push XBC                                             ; FBFDAF  39
 	call T_DisplayListB_RunOne_Stack                     ; FBFDB0  1d 0c 2e f4
-	call T_F42E14                                        ; FBFDB4  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBFDB4  1d 14 2e f4
 	add XSP,0x0000001a                                   ; FBFDB8  ef c8 1a 00 00 00
 	pop XIX                                              ; FBFDBE  5c
 	ret                                                  ; FBFDBF  0e
@@ -110295,7 +110295,7 @@ sub_FBFE2C:
 	push XWA                                             ; FBFEAC  38
 .LFBFEAD:
 	call T_DisplayList_Run_Stack                         ; FBFEAD  1d 00 2e f4
-	call T_F42E14                                        ; FBFEB1  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBFEB1  1d 14 2e f4
 	inc 8,XSP                                            ; FBFEB5  ef 60
 	pop XIX                                              ; FBFEB7  5c
 	ret                                                  ; FBFEB8  0e
@@ -110372,7 +110372,7 @@ sub_FBFEDA:
 	lda xwa, (DL_Err0rTheS0undOrC0mbinati0n:24)          ; FBFF4F  f2 99 a9 f1 30
 	push XWA                                             ; FBFF54  38
 	call T_DisplayList_Run_Stack                         ; FBFF55  1d 00 2e f4
-	call T_F42E14                                        ; FBFF59  1d 14 2e f4
+	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBFF59  1d 14 2e f4
 	inc 8,XSP                                            ; FBFF5D  ef 60
 	ret                                                  ; FBFF5F  0e
 	xor (XDE),B                                          ; FBFF60  82 da
@@ -152455,7 +152455,7 @@ ScreenEnter_SoundEditNaming:
 	unlk XIZ                                             ; FDD02A  ee 0d
 	ret                                                  ; FDD02C  0e
 ; ScreenEnter_SoundEditDigitalEffect: the +0 ENTER method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
-;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D0 jumps here.
+;   (ViewB entry 0x9A) points at the thunk triple starting at T_ScreenEnter_SoundEditDigitalEffect, and slot T_ScreenEnter_SoundEditDigitalEffect jumps here.
 ScreenEnter_SoundEditDigitalEffect:
 	link XIZ,0xfff0                                      ; FDD02D  ee 0c f0 ff
 	pushw hl                                             ; FDD031  2b
@@ -154671,7 +154671,7 @@ T_F4237C_Nop:
 	ret                                                  ; FDE2EA  0e
 	ret                                                  ; FDE2EB  0e
 ; ScreenLeave_SoundEditDigitalEffect: the +4 LEAVE method of the screen object for screen id 0x9A -- PanelScreen_VtableTable entry 0xBA
-;   (ViewB entry 0x9A) points at the thunk triple starting at T_F433D0, and slot T_F433D4 jumps here.
+;   (ViewB entry 0x9A) points at the thunk triple starting at T_ScreenEnter_SoundEditDigitalEffect, and slot T_ScreenLeave_SoundEditDigitalEffect jumps here.
 ScreenLeave_SoundEditDigitalEffect:
 	pushw 0x00                                           ; FDE2EC  0b 00 00
 	call Var27DA_Set                                      ; FDE2EF  1d 05 77 fd
@@ -154723,7 +154723,7 @@ ToneEditPage_A0_Leave:
 T_F41F78_Nop:
 	ret                                                  ; FDE33F  0e
 ; ToneEditPage_A1_Leave: the +4 LEAVE method of the screen object for screen id 0xC1 -- PanelScreen_VtableTable entry 0xE1
-;   (ViewB entry 0xC1) points at the thunk triple starting at T_F41F7C, and slot T_F41F80 jumps here.
+;   (ViewB entry 0xC1) points at the thunk triple starting at T_F41F7C, and slot T_ToneEditPage_A1_Leave jumps here.
 ToneEditPage_A1_Leave:
 	pushw 0x00                                           ; FDE340  0b 00 00
 	call Var27DA_Set                                      ; FDE343  1d 05 77 fd
@@ -154733,7 +154733,7 @@ ToneEditPage_A1_Leave:
 T_F41F88_Nop:
 	ret                                                  ; FDE34D  0e
 ; ToneEditPage_A2_Leave: the +4 LEAVE method of the screen object for screen id 0xC2 -- PanelScreen_VtableTable entry 0xE2
-;   (ViewB entry 0xC2) points at the thunk triple starting at T_F41F8C, and slot T_F41F90 jumps here.
+;   (ViewB entry 0xC2) points at the thunk triple starting at T_F41F8C, and slot T_ToneEditPage_A2_Leave jumps here.
 ToneEditPage_A2_Leave:
 	pushw 0x00                                           ; FDE34E  0b 00 00
 	call Var27DA_Set                                      ; FDE351  1d 05 77 fd
@@ -175274,7 +175274,7 @@ sub_FE8BA8:
 	ret                                                  ; FE8BD3  0e
 sub_FE8BD4:
 	m_and_mi8 MB16, 0x20a9, 0xfe                         ; FE8BD4  c1 a9 20 3c fe
-	call T_F40A08                                        ; FE8BD9  1d 08 0a f4
+	call T_Var34D1_SetBits20                                        ; FE8BD9  1d 08 0a f4
 	m_or_mi8 MB16, 0x34d1, 0x10                          ; FE8BDD  c1 d1 34 3e 10
 	ret                                                  ; FE8BE2  0e
 sub_FE8BE3:
@@ -175298,7 +175298,7 @@ BStore_CursorSlot_RestoreMark:
 	ld (BStore_CursorOffset:16), wa                                  ; FE8C1A  f1 5e 34 50
 	ret                                                  ; FE8C1E  0e
 ; ScreenLeave_DrumEdit: the +4 LEAVE method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
-;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F0 jumps here.
+;   (ViewB entry 0x28) points at the thunk triple starting at T_EditScreen_EnterDrumEdit, and slot T_ScreenLeave_DrumEdit jumps here.
 ScreenLeave_DrumEdit:
 	ld wa, (0x601f4d:24)                                ; FE8C1F  d2 4d 1f 60 20
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
@@ -175309,7 +175309,7 @@ ScreenLeave_DrumEdit:
 .LFE8C38:
 	jr .LFE8C5D                                          ; FE8C38  68 23
 ; ScreenLeave_NoteEdit: the +4 LEAVE method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
-;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D0 jumps here.
+;   (ViewB entry 0x25) points at the thunk triple starting at T_EditScreen_EnterNoteEdit, and slot T_ScreenLeave_NoteEdit jumps here.
 ScreenLeave_NoteEdit:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x25                          ; FE8C3A  c1 7a 20 3f 25
 	jr z, .LFE8C49                                       ; FE8C3F  66 08
@@ -176660,7 +176660,7 @@ sub_FE9A07:
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
 	ret                                                  ; FE9A32  0e
 ; ScreenButton_NoteEdit: the +8 BUTTON method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
-;   (ViewB entry 0x25) points at the thunk triple starting at T_F402CC, and slot T_F402D4 jumps here.
+;   (ViewB entry 0x25) points at the thunk triple starting at T_EditScreen_EnterNoteEdit, and slot T_ScreenButton_NoteEdit jumps here.
 ScreenButton_NoteEdit:
 	cp HL,0x001f                                         ; FE9A33  db cf 1f 00
 	jr gt, .LFE9A49                                      ; FE9A37  6a 10
@@ -176836,7 +176836,7 @@ NoteEdit_Button24:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
 ScreenDispatch_FE9A4A_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
 	ret                                                  ; FE9B8C  0e
 ; ScreenButton_DrumEdit: the +8 BUTTON method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
-;   (ViewB entry 0x28) points at the thunk triple starting at T_F402EC, and slot T_F402F4 jumps here.
+;   (ViewB entry 0x28) points at the thunk triple starting at T_EditScreen_EnterDrumEdit, and slot T_ScreenButton_DrumEdit jumps here.
 ScreenButton_DrumEdit:
 	cp HL,0x001f                                         ; FE9B8D  db cf 1f 00
 	jr gt, .LFE9BA3                                      ; FE9B91  6a 10
@@ -185917,14 +185917,14 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3B9D  [ 93]
 	.long Text_FF42A1__FF42B1                                 ; FF3BA1  [ 94]
 	.long Text_FF42A1__FF42B1                                 ; FF3BA5  [ 95]
-	.long T_F42F84                                   ; FF3BA9  [ 96]
-	.long T_F42F88                                   ; FF3BAD  [ 97]
-	.long T_F42F8C                                   ; FF3BB1  [ 98]
-	.long T_F42F90                                   ; FF3BB5  [ 99]
-	.long T_F42F94                                   ; FF3BB9  [100]
-	.long T_F42F98                                   ; FF3BBD  [101]
+	.long T_SoundEditNaming_SoftKeyCol1                                   ; FF3BA9  [ 96]
+	.long T_SoundEditNaming_SoftKeyCol2                                   ; FF3BAD  [ 97]
+	.long T_SoundEditNaming_SoftKeyCol3                                   ; FF3BB1  [ 98]
+	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3BB5  [ 99]
+	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3BB9  [100]
+	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3BBD  [101]
 	.long T_F42F9C                                   ; FF3BC1  [102]
-	.long T_F42FA0                                   ; FF3BC5  [103]
+	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3BC5  [103]
 	.long LcdKeyRow1_DiskSaveFile_Page3              ; FF3BC9  [104]
 	.long Text_FF42A1__FF42B1                                 ; FF3BCD  [105]
 	.long Text_FF42A1__FF42B1                                 ; FF3BD1  [106]
@@ -185934,14 +185934,14 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3BE1  [110]
 	.long ExitKey_DiskSaveFile_Pages3_4              ; FF3BE5  [111]
 	.long Text_FF42A1__FF42B1                                 ; FF3BE9  [112]
-	.long T_F42F84                                   ; FF3BED  [113]
-	.long T_F42F88                                   ; FF3BF1  [114]
-	.long T_F42F8C                                   ; FF3BF5  [115]
-	.long T_F42F90                                   ; FF3BF9  [116]
-	.long T_F42F94                                   ; FF3BFD  [117]
-	.long T_F42F98                                   ; FF3C01  [118]
+	.long T_SoundEditNaming_SoftKeyCol1                                   ; FF3BED  [113]
+	.long T_SoundEditNaming_SoftKeyCol2                                   ; FF3BF1  [114]
+	.long T_SoundEditNaming_SoftKeyCol3                                   ; FF3BF5  [115]
+	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3BF9  [116]
+	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3BFD  [117]
+	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C01  [118]
 	.long T_F42F9C                                   ; FF3C05  [119]
-	.long T_F42FA0                                   ; FF3C09  [120]
+	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C09  [120]
 	.long Text_FF42A1__FF42B1                                 ; FF3C0D  [121]
 	.long Text_FF42A1__FF42B1                                 ; FF3C11  [122]
 	.long Text_FF42A1__FF42B1                                 ; FF3C15  [123]
@@ -185949,14 +185949,14 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3C1D  [125]
 	.long Text_FF42A1__FF42B1                                 ; FF3C21  [126]
 	.long Text_FF42A1__FF42B1                                 ; FF3C25  [127]
-	.long T_F42F84                                   ; FF3C29  [128]
-	.long T_F42F88                                   ; FF3C2D  [129]
-	.long T_F42F8C                                   ; FF3C31  [130]
-	.long T_F42F90                                   ; FF3C35  [131]
-	.long T_F42F94                                   ; FF3C39  [132]
-	.long T_F42F98                                   ; FF3C3D  [133]
+	.long T_SoundEditNaming_SoftKeyCol1                                   ; FF3C29  [128]
+	.long T_SoundEditNaming_SoftKeyCol2                                   ; FF3C2D  [129]
+	.long T_SoundEditNaming_SoftKeyCol3                                   ; FF3C31  [130]
+	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3C35  [131]
+	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3C39  [132]
+	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C3D  [133]
 	.long T_F42F9C                                   ; FF3C41  [134]
-	.long T_F42FA0                                   ; FF3C45  [135]
+	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C45  [135]
 	.long LcdKeyRow1_DiskSaveFile_Page4              ; FF3C49  [136]
 	.long Text_FF42A1__FF42B1                                 ; FF3C4D  [137]
 	.long Text_FF42A1__FF42B1                                 ; FF3C51  [138]
@@ -185966,14 +185966,14 @@ Dispatch_FF3A29:
 	.long Text_FF42A1__FF42B1                                 ; FF3C61  [142]
 	.long ExitKey_DiskSaveFile_Pages3_4              ; FF3C65  [143]
 	.long Text_FF42A1__FF42B1                                 ; FF3C69  [144]
-	.long T_F42F84                                   ; FF3C6D  [145]
-	.long T_F42F88                                   ; FF3C71  [146]
-	.long T_F42F8C                                   ; FF3C75  [147]
-	.long T_F42F90                                   ; FF3C79  [148]
-	.long T_F42F94                                   ; FF3C7D  [149]
-	.long T_F42F98                                   ; FF3C81  [150]
+	.long T_SoundEditNaming_SoftKeyCol1                                   ; FF3C6D  [145]
+	.long T_SoundEditNaming_SoftKeyCol2                                   ; FF3C71  [146]
+	.long T_SoundEditNaming_SoftKeyCol3                                   ; FF3C75  [147]
+	.long T_SoundEditNaming_SoftKeyCol4                                   ; FF3C79  [148]
+	.long T_SoundEditNaming_SoftKeyCol5                                   ; FF3C7D  [149]
+	.long T_SoundEditNaming_SoftKeyCol6                                   ; FF3C81  [150]
 	.long T_F42F9C                                   ; FF3C85  [151]
-	.long T_F42FA0                                   ; FF3C89  [152]
+	.long T_SoundEditNaming_SoftKeyCol8                                   ; FF3C89  [152]
 	.long Text_FF42A1__FF42B1                                 ; FF3C8D  [153]
 	.long Text_FF42A1__FF42B1                                 ; FF3C91  [154]
 	.long Text_FF42A1__FF42B1                                 ; FF3C95  [155]
@@ -187230,7 +187230,7 @@ LcdKeyRow1_MidiFileDirectPlay:
 	popw wa                                              ; FF45DC  48
 	cp C,0x20                                            ; FF45DD  cb cf 20
 	jr z, .LFF45F3                                       ; FF45E0  66 11
-	call T_F40954                                        ; FF45E2  1d 54 09 f4
+	call T_MidiFileDirectPlay_LcdKeyRow1                                        ; FF45E2  1d 54 09 f4
 	m_set 4, MD16, UI_ScreenFlags                                ; FF45E6  f1 95 20 bc
 	jr .LFF45F3                                          ; FF45EA  68 07
 .LFF45EC:
@@ -189046,7 +189046,7 @@ LcdKeyRow1_MidiFileL0ad:
 	popw wa                                              ; FF5291  48
 	cp C,0x20                                            ; FF5292  cb cf 20
 	jr z, .LFF52DD                                       ; FF5295  66 46
-	call T_F43380                                        ; FF5297  1d 80 33 f4
+	call T_MidiFileL0ad_LcdKeyRow1                                        ; FF5297  1d 80 33 f4
 	call sub_FF7959                                      ; FF529B  1d 59 79 ff
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; FF529F  c1 80 28 3f 23
 	jr z, .LFF52B0                                       ; FF52A4  66 0a
@@ -190399,7 +190399,7 @@ LcdKeyRow1_DiskSaveFile_Page3:
 	and BC,0x0080                                        ; FF5B3F  d9 cc 80 00
 	jr nz, .LFF5B4F                                      ; FF5B43  6e 0a
 	m_push MWD+r6, 0x08                                  ; FF5B45  9e 08 04
-	call T_F42FA4                                        ; FF5B48  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; FF5B48  1d a4 2f f4
 	popw bc                                              ; FF5B4C  49
 	jr .LFF5B53                                          ; FF5B4D  68 04
 .LFF5B4F:
@@ -190474,7 +190474,7 @@ LcdKeyRow1_DiskSaveFile_Page4:
 	and BC,0x0080                                        ; FF5B77  d9 cc 80 00
 	jr nz, .LFF5B87                                      ; FF5B7B  6e 0a
 	m_push MWD+r6, 0x08                                  ; FF5B7D  9e 08 04
-	call T_F42FA4                                        ; FF5B80  1d a4 2f f4
+	call T_SoundEditNaming_LcdKeyRow1                                        ; FF5B80  1d a4 2f f4
 	popw bc                                              ; FF5B84  49
 	jr .LFF5B90                                          ; FF5B85  68 09
 .LFF5B87:
@@ -190531,7 +190531,7 @@ LcdKeyRow3_DiskSaveFile_Page5:
 	push XWA                                             ; FF5BCE  38
 	call MemCpy_C                                      ; FF5BCF  1d b5 78 ff
 	calr sub_FF7084                                      ; FF5BD3  1e ae 14
-	call T_F425F4                                        ; FF5BD6  1d f4 25 f4
+	call T_DiskSaveFile_Page5_LcdKeyRow3                                        ; FF5BD6  1d f4 25 f4
 	pushw 0x0b                                           ; FF5BDA  0b 0b 00
 	lda xbc, (xiz-12)                                    ; FF5BDD  be f4 31
 	push XBC                                             ; FF5BE0  39
@@ -191788,7 +191788,7 @@ LcdKeyRow3_MidiFileSave_Page3:
 	ld (XIX+0x08),0x4d                                   ; FF64C8  bc 08 00 4d
 	ld (XIX+0x09),0x49                                   ; FF64CC  bc 09 00 49
 	ld (XIX+0x0a),0x44                                   ; FF64D0  bc 0a 00 44
-	call T_F42634                                        ; FF64D4  1d 34 26 f4
+	call T_MidiFileSave_Page3_LcdKeyRow3                                        ; FF64D4  1d 34 26 f4
 	pushw 0x0b                                           ; FF64D8  0b 0b 00
 	lda xbc, (xiz-12)                                    ; FF64DB  be f4 31
 	push XBC                                             ; FF64DE  39
@@ -192281,7 +192281,7 @@ LcdKeyRow3_MidiFileSave_Page5:
 	and BC,0x0080                                        ; FF66DC  d9 cc 80 00
 	jr nz, .LFF66F5                                      ; FF66E0  6e 13
 	ld (0x21fa:16), 0x00                                 ; FF66E2  f1 fa 21 00 00
-	call T_F425D0                                        ; FF66E7  1d d0 25 f4
+	call T_MidiFileSave_Page5_LcdKeyRow3                                        ; FF66E7  1d d0 25 f4
 	ld (UI_Request:16), 0x01                                 ; FF66EB  f1 70 20 00 01
 	ld (UI_Request_Hi:16), 0x02                                 ; FF66F0  f1 71 20 00 02
 .LFF66F5:

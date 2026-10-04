@@ -1480,7 +1480,7 @@ for _s, _st, _l, _lv in _INT:
           and int.from_bytes(a(_l + 1, 3), "little") == _lv
           and _lv - _st == 0x400)
 # The copy is 0xFAA000-0xFAA3FF: 0xFAA400 opens the LIVE block with its own five-slot
-# vector (the last check below), which prom_b publishes through the POINTER slot T_F40770.
+# vector (the last check below), which prom_b publishes through the POINTER slot T_ParamModule_PhaseVector.
 # (Until 2026-10-03 these two checks ran to 0xFAA417 and the pointer slot went unchecked.)
 check("stale veneer copy: ZERO directory jp slots point into 0xFAA000-0xFAA3FF",
       not any(0xFAA000 <= t < 0xFAA400 for t in _DIR))

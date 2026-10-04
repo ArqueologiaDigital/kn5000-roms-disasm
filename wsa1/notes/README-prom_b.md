@@ -814,7 +814,7 @@ one-span-extent/span-count/summed reference bound per run.
 `--selftest` asserts on the LAST slot of the top run (raw `jp` opcode, target and
 `.incbin` membership, all re-derived from the ROM), two ordering invariants, that
 the three runs this tree has already converted (`T_F42770` block store,
-`T_F42880`/`T_F428B0` allocator and song-store commands) are ABSENT, and that a
+`T_F42880`/`T_BStore_AppendBytes_Join3_Veneer` allocator and song-store commands) are ABSENT, and that a
 known-unconverted run (`T_F40C50`) is PRESENT.
 ⚠ Its first draft hard-coded the then-top run and would have begun FAILING the
 moment that run was converted — a self-test that breaks on success is the

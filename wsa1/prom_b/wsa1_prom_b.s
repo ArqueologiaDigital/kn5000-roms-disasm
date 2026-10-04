@@ -18184,17 +18184,17 @@ Unclaimed_F09E85:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditPitchTune
-; Called from: T_F42004 (x0)
+; Called from: T_ScreenButton_SoundEditPitchTune (x0)
 ; Touches:   |  0xFCF383
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42004 holds `jp 0x00F0A000`, and 0xF0A000 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditPitchTune holds `jp 0x00F0A000`, and 0xF0A000 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditPitchTune: the +8 BUTTON method of PanelScreen_VtableTable entry 0x87: that entry points at the thunk triple T_F41FFC (Enter) / T_F42000 (Leave) / T_F42004 (Button).
-ScreenButton_SoundEditPitchTune:		; <- T_F42004
+; ScreenButton_SoundEditPitchTune: the +8 BUTTON method of PanelScreen_VtableTable entry 0x87: that entry points at the thunk triple T_ScreenEnter_SoundEditPitchTune (Enter) / T_ScreenLeave_SoundEditPitchTune (Leave) / T_ScreenButton_SoundEditPitchTune (Button).
+ScreenButton_SoundEditPitchTune:		; <- T_ScreenButton_SoundEditPitchTune
 	link XIZ,0xfffc	; F0A000  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A004  lda XBC,XIZ+0xfe
 	push	xbc	; F0A007  push XBC
@@ -18232,17 +18232,17 @@ sub_F0A000_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditPitchEnvelope1
-; Called from: T_F42014 (x0)
+; Called from: T_ScreenButton_SoundEditPitchEnvelope1 (x0)
 ; Touches:   |  0xFCF3CB
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42014 holds `jp 0x00F0A051`, and 0xF0A051 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditPitchEnvelope1 holds `jp 0x00F0A051`, and 0xF0A051 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditPitchEnvelope1: the +8 BUTTON method of PanelScreen_VtableTable entry 0x88: that entry points at the thunk triple T_F4200C (Enter) / T_F42010 (Leave) / T_F42014 (Button).
-ScreenButton_SoundEditPitchEnvelope1:		; <- T_F42014
+; ScreenButton_SoundEditPitchEnvelope1: the +8 BUTTON method of PanelScreen_VtableTable entry 0x88: that entry points at the thunk triple T_ScreenEnter_SoundEditPitchEnvelope1 (Enter) / T_ScreenLeave_SoundEditPitchEnvelope1 (Leave) / T_ScreenButton_SoundEditPitchEnvelope1 (Button).
+ScreenButton_SoundEditPitchEnvelope1:		; <- T_ScreenButton_SoundEditPitchEnvelope1
 	link XIZ,0xfffc	; F0A051  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A055  lda XBC,XIZ+0xfe
 	push	xbc	; F0A058  push XBC
@@ -18284,17 +18284,17 @@ sub_F0A051_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditPitchEnvelope2
-; Called from: T_F42024 (x0)
+; Called from: T_ScreenButton_SoundEditPitchEnvelope2 (x0)
 ; Touches:   |  0xFCF413
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42024 holds `jp 0x00F0A0B1`, and 0xF0A0B1 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditPitchEnvelope2 holds `jp 0x00F0A0B1`, and 0xF0A0B1 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditPitchEnvelope2: the +8 BUTTON method of PanelScreen_VtableTable entry 0x89: that entry points at the thunk triple T_F4201C (Enter) / T_F42020 (Leave) / T_F42024 (Button).
-ScreenButton_SoundEditPitchEnvelope2:		; <- T_F42024
+; ScreenButton_SoundEditPitchEnvelope2: the +8 BUTTON method of PanelScreen_VtableTable entry 0x89: that entry points at the thunk triple T_ScreenEnter_SoundEditPitchEnvelope2 (Enter) / T_ScreenLeave_SoundEditPitchEnvelope2 (Leave) / T_ScreenButton_SoundEditPitchEnvelope2 (Button).
+ScreenButton_SoundEditPitchEnvelope2:		; <- T_ScreenButton_SoundEditPitchEnvelope2
 	link XIZ,0xfffc	; F0A0B1  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A0B5  lda XBC,XIZ+0xfe
 	push	xbc	; F0A0B8  push XBC
@@ -18336,17 +18336,17 @@ sub_F0A0B1_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditPitchLfo
-; Called from: T_F42034 (x0)
+; Called from: T_ScreenButton_SoundEditPitchLfo (x0)
 ; Touches:   |  0xFCF45B
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42034 holds `jp 0x00F0A111`, and 0xF0A111 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditPitchLfo holds `jp 0x00F0A111`, and 0xF0A111 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditPitchLfo: the +8 BUTTON method of PanelScreen_VtableTable entry 0x8A: that entry points at the thunk triple T_F4202C (Enter) / T_F42030 (Leave) / T_F42034 (Button).
-ScreenButton_SoundEditPitchLfo:		; <- T_F42034
+; ScreenButton_SoundEditPitchLfo: the +8 BUTTON method of PanelScreen_VtableTable entry 0x8A: that entry points at the thunk triple T_ScreenEnter_SoundEditPitchLfo (Enter) / T_ScreenLeave_SoundEditPitchLfo (Leave) / T_ScreenButton_SoundEditPitchLfo (Button).
+ScreenButton_SoundEditPitchLfo:		; <- T_ScreenButton_SoundEditPitchLfo
 	link XIZ,0xfffc	; F0A111  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A115  lda XBC,XIZ+0xfe
 	push	xbc	; F0A118  push XBC
@@ -19986,17 +19986,17 @@ sub_F0A8EE_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditCopy
-; Called from: T_F42358 (x0)
+; Called from: T_ScreenButton_SoundEditCopy (x0)
 ; Touches:   |  0xFCFC44
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42358 holds `jp 0x00F0A90E`, and 0xF0A90E is an
+; Evidence: thunk slot T_ScreenButton_SoundEditCopy holds `jp 0x00F0A90E`, and 0xF0A90E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditCopy: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9D: that entry points at the thunk triple T_F42350 (Enter) / T_F42354 (Leave) / T_F42358 (Button).
-ScreenButton_SoundEditCopy:		; <- T_F42358
+; ScreenButton_SoundEditCopy: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9D: that entry points at the thunk triple T_ScreenEnter_SoundEditCopy (Enter) / T_ScreenLeave_SoundEditCopy (Leave) / T_ScreenButton_SoundEditCopy (Button).
+ScreenButton_SoundEditCopy:		; <- T_ScreenButton_SoundEditCopy
 	link XIZ,0xfffc	; F0A90E  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A912  lda XBC,XIZ+0xfe
 	push	xbc	; F0A915  push XBC
@@ -20034,17 +20034,17 @@ sub_F0A90E_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditMemoryWrite
-; Called from: T_F42368 (x0)
+; Called from: T_ScreenButton_SoundEditMemoryWrite (x0)
 ; Touches:   |  0xFCFB6C
 ; Calls:   0xFD7905 0xFDAC5B 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42368 holds `jp 0x00F0A95F`, and 0xF0A95F is an
+; Evidence: thunk slot T_ScreenButton_SoundEditMemoryWrite holds `jp 0x00F0A95F`, and 0xF0A95F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditMemoryWrite: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9E: that entry points at the thunk triple T_F42360 (Enter) / T_F42364_Nop (Leave) / T_F42368 (Button).
-ScreenButton_SoundEditMemoryWrite:		; <- T_F42368
+; ScreenButton_SoundEditMemoryWrite: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9E: that entry points at the thunk triple T_ScreenEnter_SoundEditMemoryWrite (Enter) / T_F42364_Nop (Leave) / T_ScreenButton_SoundEditMemoryWrite (Button).
+ScreenButton_SoundEditMemoryWrite:		; <- T_ScreenButton_SoundEditMemoryWrite
 	link XIZ,0xfffc	; F0A95F  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A963  lda XBC,XIZ+0xfe
 	push	xbc	; F0A966  push XBC
@@ -20086,17 +20086,17 @@ sub_F0A95F_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditNaming
-; Called from: T_F42378 (x0)
+; Called from: T_ScreenButton_SoundEditNaming (x0)
 ; Touches:   |  0xFCFBB4
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42378 holds `jp 0x00F0A9BF`, and 0xF0A9BF is an
+; Evidence: thunk slot T_ScreenButton_SoundEditNaming holds `jp 0x00F0A9BF`, and 0xF0A9BF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditNaming: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9F: that entry points at the thunk triple T_F42370 (Enter) / T_F42374_Nop (Leave) / T_F42378 (Button).
-ScreenButton_SoundEditNaming:		; <- T_F42378
+; ScreenButton_SoundEditNaming: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9F: that entry points at the thunk triple T_ScreenEnter_SoundEditNaming (Enter) / T_F42374_Nop (Leave) / T_ScreenButton_SoundEditNaming (Button).
+ScreenButton_SoundEditNaming:		; <- T_ScreenButton_SoundEditNaming
 	link XIZ,0xfffc	; F0A9BF  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0A9C3  lda XBC,XIZ+0xfe
 	push	xbc	; F0A9C6  push XBC
@@ -20134,17 +20134,17 @@ sub_F0A9BF_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditDigitalEffect
-; Called from: T_F433D8 (x0)
+; Called from: T_ScreenButton_SoundEditDigitalEffect (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F433D8 holds `jp 0x00F0AA10`, and 0xF0AA10 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditDigitalEffect holds `jp 0x00F0AA10`, and 0xF0AA10 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditDigitalEffect: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_F433D0 (Enter) / T_F433D4 (Leave) / T_F433D8 (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
-ScreenButton_SoundEditDigitalEffect:		; <- T_F433D8
+; ScreenButton_SoundEditDigitalEffect: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9A: that entry points at the thunk triple T_ScreenEnter_SoundEditDigitalEffect (Enter) / T_ScreenLeave_SoundEditDigitalEffect (Leave) / T_ScreenButton_SoundEditDigitalEffect (Button). Screen 0x9A is SOUND EDIT DIGITAL EFFECT (DispatchTable_F5B8F8[0x9A]).
+ScreenButton_SoundEditDigitalEffect:		; <- T_ScreenButton_SoundEditDigitalEffect
 	link XIZ,0xfffc	; F0AA10  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA14  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA17  push XBC
@@ -20182,17 +20182,17 @@ sub_F0AA10_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditDigitalEffectFromMenu
-; Called from: T_F420B4 (x0)
+; Called from: T_ScreenButton_SoundEditDigitalEffectFromMenu (x0)
 ; Touches:   |  0xFCFBFC
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F420B4 holds `jp 0x00F0AA61`, and 0xF0AA61 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditDigitalEffectFromMenu holds `jp 0x00F0AA61`, and 0xF0AA61 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditDigitalEffectFromMenu: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9C: that entry points at the thunk triple T_F420AC (Enter) / T_F420B0 (Leave) / T_F420B4 (Button).
-ScreenButton_SoundEditDigitalEffectFromMenu:		; <- T_F420B4
+; ScreenButton_SoundEditDigitalEffectFromMenu: the +8 BUTTON method of PanelScreen_VtableTable entry 0x9C: that entry points at the thunk triple T_ScreenEnter_SoundEditDigitalEffectFromMenu (Enter) / T_ScreenLeave_SoundEditDigitalEffectFromMenu (Leave) / T_ScreenButton_SoundEditDigitalEffectFromMenu (Button).
+ScreenButton_SoundEditDigitalEffectFromMenu:		; <- T_ScreenButton_SoundEditDigitalEffectFromMenu
 	link XIZ,0xfffc	; F0AA61  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AA65  lda XBC,XIZ+0xfe
 	push	xbc	; F0AA68  push XBC
@@ -20285,17 +20285,17 @@ sub_F0AAB3_Skip:
 
 ; --------------------------------------------------------------------------
 ; ScreenButton_SoundEditDrumMenu
-; Called from: T_F42338 (x0)
+; Called from: T_ScreenButton_SoundEditDrumMenu (x0)
 ; Touches:   |  0xFCFC8C
 ; Calls:   0xFD7905 0xFD60B9 0xFD6447
-; Evidence: thunk slot T_F42338 holds `jp 0x00F0AAF9`, and 0xF0AAF9 is an
+; Evidence: thunk slot T_ScreenButton_SoundEditDrumMenu holds `jp 0x00F0AAF9`, and 0xF0AAF9 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; ScreenButton_SoundEditDrumMenu: the +8 BUTTON method of PanelScreen_VtableTable entry 0xCB: that entry points at the thunk triple T_F42330 (Enter) / T_F42334 (Leave) / T_F42338 (Button).
-ScreenButton_SoundEditDrumMenu:		; <- T_F42338
+; ScreenButton_SoundEditDrumMenu: the +8 BUTTON method of PanelScreen_VtableTable entry 0xCB: that entry points at the thunk triple T_ScreenEnter_SoundEditDrumMenu (Enter) / T_ScreenLeave_SoundEditDrumMenu (Leave) / T_ScreenButton_SoundEditDrumMenu (Button).
+ScreenButton_SoundEditDrumMenu:		; <- T_ScreenButton_SoundEditDrumMenu
 	link XIZ,0xfffc	; F0AAF9  link XIZ,0xfffc
 	lda	xbc, (xiz-2)	; F0AAFD  lda XBC,XIZ+0xfe
 	push	xbc	; F0AB00  push XBC
@@ -22727,17 +22727,17 @@ sub_F0B972_Resume:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol1
-; Called from: T_F42F84 (x3); in-module: 0xF0B70F
+; Called from: T_SoundEditNaming_SoftKeyCol1 (x3); in-module: 0xF0B70F
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F84 holds `jp 0x00F0B9B3`, and 0xF0B9B3 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol1 holds `jp 0x00F0B9B3`, and 0xF0B9B3 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol1: the SoftKeyCol1 action of SoundEditNaming -- called only by SoftKeyCol1_SoundEditNaming.
-SoundEditNaming_SoftKeyCol1:		; <- T_F42F84
+SoundEditNaming_SoftKeyCol1:		; <- T_SoundEditNaming_SoftKeyCol1
 	link XIZ,0xfffa	; F0B9B3  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0B9B7  lda XBC,XIZ+0xfe
 	push	xbc	; F0B9BA  push XBC
@@ -22782,17 +22782,17 @@ sub_F0B9B3_Skip:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol2
-; Called from: T_F42F88 (x3); in-module: 0xF0B713
+; Called from: T_SoundEditNaming_SoftKeyCol2 (x3); in-module: 0xF0B713
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7BA5 0xFD7C83 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F88 holds `jp 0x00F0BA20`, and 0xF0BA20 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol2 holds `jp 0x00F0BA20`, and 0xF0BA20 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol2: the SoftKeyCol2 action of SoundEditNaming -- called only by SoftKeyCol2_SoundEditNaming.
-SoundEditNaming_SoftKeyCol2:		; <- T_F42F88
+SoundEditNaming_SoftKeyCol2:		; <- T_SoundEditNaming_SoftKeyCol2
 	link XIZ,0xfff8	; F0BA20  link XIZ,0xfff8
 	pushw	hl	; F0BA24  push HL
 	lda	xbc, (xiz-2)	; F0BA25  lda XBC,XIZ+0xfe
@@ -22850,17 +22850,17 @@ sub_F0BA20_Skip:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol3
-; Called from: T_F42F8C (x3); in-module: 0xF0B717
+; Called from: T_SoundEditNaming_SoftKeyCol3 (x3); in-module: 0xF0B717
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F8C holds `jp 0x00F0BAA8`, and 0xF0BAA8 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol3 holds `jp 0x00F0BAA8`, and 0xF0BAA8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol3: the SoftKeyCol3 action of SoundEditNaming -- called only by SoftKeyCol3_SoundEditNaming.
-SoundEditNaming_SoftKeyCol3:		; <- T_F42F8C
+SoundEditNaming_SoftKeyCol3:		; <- T_SoundEditNaming_SoftKeyCol3
 	link XIZ,0xffde	; F0BAA8  link XIZ,0xffde
 	pushw	hl	; F0BAAC  push HL
 	pushw	de	; F0BAAD  push DE
@@ -22979,17 +22979,17 @@ sub_F0BAA8_Skip2:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol4
-; Called from: T_F42F90 (x3); in-module: 0xF0B71B
+; Called from: T_SoundEditNaming_SoftKeyCol4 (x3); in-module: 0xF0B71B
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F90 holds `jp 0x00F0BBB4`, and 0xF0BBB4 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol4 holds `jp 0x00F0BBB4`, and 0xF0BBB4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol4: the SoftKeyCol4 action of SoundEditNaming -- called only by SoftKeyCol4_SoundEditNaming.
-SoundEditNaming_SoftKeyCol4:		; <- T_F42F90
+SoundEditNaming_SoftKeyCol4:		; <- T_SoundEditNaming_SoftKeyCol4
 	link XIZ,0xffe4	; F0BBB4  link XIZ,0xffe4
 	pushw	hl	; F0BBB8  push HL
 	pushw	de	; F0BBB9  push DE
@@ -23091,17 +23091,17 @@ sub_F0BBB4_Skip:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol5
-; Called from: T_F42F94 (x3); in-module: 0xF0B71F
+; Called from: T_SoundEditNaming_SoftKeyCol5 (x3); in-module: 0xF0B71F
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD7B89 0xFD7C83 0xFD6C65 T_Dispatch_Code80
-; Evidence: thunk slot T_F42F94 holds `jp 0x00F0BC98`, and 0xF0BC98 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol5 holds `jp 0x00F0BC98`, and 0xF0BC98 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol5: the SoftKeyCol5 action of SoundEditNaming -- called only by SoftKeyCol5_SoundEditNaming.
-SoundEditNaming_SoftKeyCol5:		; <- T_F42F94
+SoundEditNaming_SoftKeyCol5:		; <- T_SoundEditNaming_SoftKeyCol5
 	link XIZ,0xfffa	; F0BC98  link XIZ,0xfffa
 	pushw	hl	; F0BC9C  push HL
 	push	xix	; F0BC9D  push XIX
@@ -23171,17 +23171,17 @@ sub_F0BC98_Skip2:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol6
-; Called from: T_F42F98 (x3); in-module: 0xF0B723
+; Called from: T_SoundEditNaming_SoftKeyCol6 (x3); in-module: 0xF0B723
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
-; Evidence: thunk slot T_F42F98 holds `jp 0x00F0BD31`, and 0xF0BD31 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol6 holds `jp 0x00F0BD31`, and 0xF0BD31 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol6: the SoftKeyCol6 action of SoundEditNaming -- called only by SoftKeyCol6_SoundEditNaming.
-SoundEditNaming_SoftKeyCol6:		; <- T_F42F98
+SoundEditNaming_SoftKeyCol6:		; <- T_SoundEditNaming_SoftKeyCol6
 	link XIZ,0xfffa	; F0BD31  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BD35  lda XBC,XIZ+0xfe
 	push	xbc	; F0BD38  push XBC
@@ -23304,17 +23304,17 @@ sub_F0BDAC_Skip3:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol8
-; Called from: T_F42FA0 (x3); in-module: 0xF0B747
+; Called from: T_SoundEditNaming_SoftKeyCol8 (x3); in-module: 0xF0B747
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD6C65 0xFD7C5A 0xFD7B89 0xFDAC5B T_Dispatch_Code80
-; Evidence: thunk slot T_F42FA0 holds `jp 0x00F0BE44`, and 0xF0BE44 is an
+; Evidence: thunk slot T_SoundEditNaming_SoftKeyCol8 holds `jp 0x00F0BE44`, and 0xF0BE44 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_SoftKeyCol8: the SoftKeyCol8 action of SoundEditNaming -- called only by SoftKeyCol8_SoundEditNaming.
-SoundEditNaming_SoftKeyCol8:		; <- T_F42FA0
+SoundEditNaming_SoftKeyCol8:		; <- T_SoundEditNaming_SoftKeyCol8
 	link XIZ,0xfffa	; F0BE44  link XIZ,0xfffa
 	lda	xbc, (xiz-2)	; F0BE48  lda XBC,XIZ+0xfe
 	push	xbc	; F0BE4B  push XBC
@@ -23363,17 +23363,17 @@ sub_F0BE44_Skip:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_LcdKeyRow1
-; Called from: T_F42FA4 (x6); in-module: 0xF0B757
+; Called from: T_SoundEditNaming_LcdKeyRow1 (x6); in-module: 0xF0B757
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7B89 0xFD6C65 T_Dispatch_Code80
-; Evidence: thunk slot T_F42FA4 holds `jp 0x00F0BEBF`, and 0xF0BEBF is an
+; Evidence: thunk slot T_SoundEditNaming_LcdKeyRow1 holds `jp 0x00F0BEBF`, and 0xF0BEBF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_LcdKeyRow1: the LcdKeyRow1 action of SoundEditNaming -- called only by LcdKeyRow1_SoundEditNaming.
-SoundEditNaming_LcdKeyRow1:		; <- T_F42FA4
+SoundEditNaming_LcdKeyRow1:		; <- T_SoundEditNaming_LcdKeyRow1
 	pushw	hl	; F0BEBF  push HL
 	ld	h, 0:opc	; F0BEC0  ld H,0x00
 sub_F0BEBF_Loop:
@@ -23405,17 +23405,17 @@ sub_F0BEBF_Loop:
 
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_LcdKeyRow2
-; Called from: T_F42FA8 (x4); in-module: 0xF0B817
+; Called from: T_SoundEditNaming_LcdKeyRow2 (x4); in-module: 0xF0B817
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD6C7B 0xFD7BA5 0xFD79DC 0xFD77B3 0xFD7C83 0xFD6C65 T_Dispatch_Code80
-; Evidence: thunk slot T_F42FA8 holds `jp 0x00F0BF04`, and 0xF0BF04 is an
+; Evidence: thunk slot T_SoundEditNaming_LcdKeyRow2 holds `jp 0x00F0BF04`, and 0xF0BF04 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SoundEditNaming_LcdKeyRow2: the LcdKeyRow2 action of SoundEditNaming -- called only by LcdKeyRow2_SoundEditNaming.
-SoundEditNaming_LcdKeyRow2:		; <- T_F42FA8
+SoundEditNaming_LcdKeyRow2:		; <- T_SoundEditNaming_LcdKeyRow2
 	link XIZ,0xffd4	; F0BF04  link XIZ,0xffd4
 	pushw	hl	; F0BF08  push HL
 	pushw	de	; F0BF09  push DE
@@ -31372,7 +31372,7 @@ sub_F0F788_Skip27:
 	inc	8, xsp	; F0FD24  inc 0,XSP
 	inc	4, xsp	; F0FD26  inc 4,XSP
 sub_F0F788_Skip28:
-	call	T_F42E14	; F0FD28  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F0FD28  call 0xf42e14
 	pop	xix	; F0FD2C  pop XIX
 	popw	hl	; F0FD2D  pop HL
 	ret	; F0FD2E  ret
@@ -31418,7 +31418,7 @@ sub_F0FD2F_Join:
 ; Touches: (0x2075) (0x2076) (0x209B) (0x209C) (0x2540) (0x2640) (0x2790)
 ;          (0x2791) (0x2797) (0x2799)
 ; Calls:   T_CallbackQueue_ResetAndRestartTask2 T_CallbackQueue_Post T_Kernel_SemaSignal_StackArg sub_F11329 T_F42E10 T_DisplayListB_RunOne_Stack T_DisplayListB_Run_Stack
-;          DspEffect_LoadEqGain DspEffect_LoadEqFc sub_F0FD2F EqGraph_Draw T_F42E14
+;          DspEffect_LoadEqGain DspEffect_LoadEqFc sub_F0FD2F EqGraph_Draw T_LCD_ShowAllLayers_StackFrame_Copy
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF0FD5F is an instruction boundary of this
@@ -31624,7 +31624,7 @@ EffectEditor_PaintJob4:
 	call	T_DisplayListB_Run_Stack	; F0FF29  call 0xf42e04
 	calr	sub_F0FD2F	; F0FF2D  calr 0xf0fd2f
 	calr	EqGraph_Draw	; F0FF30  calr 0xf0ff3f
-	call	T_F42E14	; F0FF33  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F0FF33  call 0xf42e14
 	inc	8, xsp	; F0FF37  inc 0,XSP
 	inc	8, xsp	; F0FF39  inc 0,XSP
 	pop	xix	; F0FF3B  pop XIX
@@ -33816,14 +33816,14 @@ EffectEditor_PaintJob6:
 ;          one bit each for EffectEditor_PaintJob0..7, and each job clears its
 ;          own bit and redraws with display lists.  All eight are checked by
 ;          python3 notes/promb-2026-09-25/effect_paint_jobs.py.
-; Body:    `calr sub_F0FD2F`, `calr sub_F10EE9`, `call T_F42E14`.
+; Body:    `calr sub_F0FD2F`, `calr sub_F10EE9`, `call T_LCD_ShowAllLayers_StackFrame_Copy`.
 ; ⚠ WAS the middle of `Data_F10E0F`.
 ; --------------------------------------------------------------------------
 EffectEditor_PaintJob7:
 	m_res 7, MD16, 0x2799	; F10EDA  res 7,(0x2799)
 	calr	sub_F0FD2F	; F10EDE  calr 0xf0fd2f
 	calr	sub_F10EE9	; F10EE1  calr 0xf10ee9
-	call	T_F42E14	; F10EE4  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F10EE4  call 0xf42e14
 	ret	; F10EE8  ret
 
 ; --------------------------------------------------------------------------
@@ -36695,7 +36695,7 @@ sub_F12398:
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2540) (0x2799)
 ; Calls:   sub_F103AB T_F42E10 T_DisplayList_Run_Stack DspEffect_LoadEqGain DspEffect_LoadEqFc T_DisplayListB_Run_Stack
-;          EqGraph_Draw T_F42E14
+;          EqGraph_Draw T_LCD_ShowAllLayers_StackFrame_Copy
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -36762,7 +36762,7 @@ sub_F123F4:
 	push	xwa	; F12446  push XWA
 	call	T_DisplayListB_Run_Stack	; F12447  call 0xf42e04
 	calr	EqGraph_Draw	; F1244B  calr 0xf0ff3f
-	call	T_F42E14	; F1244E  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F1244E  call 0xf42e14
 	inc	8, xsp	; F12452  inc 0,XSP
 	inc	8, xsp	; F12454  inc 0,XSP
 	pop	xix	; F12456  pop XIX
@@ -51272,14 +51272,14 @@ Record_F1B1A7:
 ; Evidence: 32 entries of 4 bytes; base and width from prom_a 0xFBF25E
 ; --------------------------------------------------------------------------
 PtrTable_F1B1B0:
-	.long T_F42F84                       ; F1B1B0  [0]   -> prom_b 0xF42F84
-	.long T_F42F88                       ; F1B1B4  [1]   -> prom_b 0xF42F88
-	.long T_F42F8C                       ; F1B1B8  [2]   -> prom_b 0xF42F8C
-	.long T_F42F90                       ; F1B1BC  [3]   -> prom_b 0xF42F90
-	.long T_F42F94                       ; F1B1C0  [4]   -> prom_b 0xF42F94
-	.long T_F42F98                       ; F1B1C4  [5]   -> prom_b 0xF42F98
+	.long T_SoundEditNaming_SoftKeyCol1                       ; F1B1B0  [0]   -> prom_b 0xF42F84
+	.long T_SoundEditNaming_SoftKeyCol2                       ; F1B1B4  [1]   -> prom_b 0xF42F88
+	.long T_SoundEditNaming_SoftKeyCol3                       ; F1B1B8  [2]   -> prom_b 0xF42F8C
+	.long T_SoundEditNaming_SoftKeyCol4                       ; F1B1BC  [3]   -> prom_b 0xF42F90
+	.long T_SoundEditNaming_SoftKeyCol5                       ; F1B1C0  [4]   -> prom_b 0xF42F94
+	.long T_SoundEditNaming_SoftKeyCol6                       ; F1B1C4  [5]   -> prom_b 0xF42F98
 	.long T_F42F9C                       ; F1B1C8  [6]   -> prom_b 0xF42F9C
-	.long T_F42FA0                       ; F1B1CC  [7]   -> prom_b 0xF42FA0
+	.long T_SoundEditNaming_SoftKeyCol8                       ; F1B1CC  [7]   -> prom_b 0xF42FA0
 	.long 0x00FBF274                       ; F1B1D0  [8]   -> prom_a 0xFBF274
 	.long 0x00FBF295                       ; F1B1D4  [9]   -> prom_a 0xFBF295
 	.long 0x00FBF235                       ; F1B1D8  [10]   -> prom_a 0xFBF235
@@ -51289,14 +51289,14 @@ PtrTable_F1B1B0:
 	.long 0x00FBF235                       ; F1B1E8  [14]   -> prom_a 0xFBF235
 	.long 0x00FBF2AB                       ; F1B1EC  [15]   -> prom_a 0xFBF2AB
 	.long 0x00FBF235                       ; F1B1F0  [16]   -> prom_a 0xFBF235
-	.long T_F42F84                       ; F1B1F4  [17]   -> prom_b 0xF42F84
-	.long T_F42F88                       ; F1B1F8  [18]   -> prom_b 0xF42F88
-	.long T_F42F8C                       ; F1B1FC  [19]   -> prom_b 0xF42F8C
-	.long T_F42F90                       ; F1B200  [20]   -> prom_b 0xF42F90
-	.long T_F42F94                       ; F1B204  [21]   -> prom_b 0xF42F94
-	.long T_F42F98                       ; F1B208  [22]   -> prom_b 0xF42F98
+	.long T_SoundEditNaming_SoftKeyCol1                       ; F1B1F4  [17]   -> prom_b 0xF42F84
+	.long T_SoundEditNaming_SoftKeyCol2                       ; F1B1F8  [18]   -> prom_b 0xF42F88
+	.long T_SoundEditNaming_SoftKeyCol3                       ; F1B1FC  [19]   -> prom_b 0xF42F8C
+	.long T_SoundEditNaming_SoftKeyCol4                       ; F1B200  [20]   -> prom_b 0xF42F90
+	.long T_SoundEditNaming_SoftKeyCol5                       ; F1B204  [21]   -> prom_b 0xF42F94
+	.long T_SoundEditNaming_SoftKeyCol6                       ; F1B208  [22]   -> prom_b 0xF42F98
 	.long T_F42F9C                       ; F1B20C  [23]   -> prom_b 0xF42F9C
-	.long T_F42FA0                       ; F1B210  [24]   -> prom_b 0xF42FA0
+	.long T_SoundEditNaming_SoftKeyCol8                       ; F1B210  [24]   -> prom_b 0xF42FA0
 	.long 0x00FBF235                       ; F1B214  [25]   -> prom_a 0xFBF235
 	.long 0x00FBF235                       ; F1B218  [26]   -> prom_a 0xFBF235
 	.long 0x00FBF235                       ; F1B21C  [27]   -> prom_a 0xFBF235
@@ -74502,8 +74502,8 @@ sub_F36CED_Join2:
 ; sub_F36E21
 ; Called from: T_F41250 (x1); far site 0xF41250
 ; Touches: nothing with an absolute address
-; Calls:   sub_F36938 sub_F36A06 T_F43474 sub_F36C5D T_DspParam_ReadByNumber sub_F37E1C
-;          sub_F36CED T_F4348C T_F43488 T_F4347C
+; Calls:   sub_F36938 sub_F36A06 T_ToneMsg80_SendParam sub_F36C5D T_DspParam_ReadByNumber sub_F37E1C
+;          sub_F36CED T_ToneMsg80_Id16 T_F43488 T_ToneMsg85_SendParam
 ; Evidence: thunk slot T_F41250 holds `jp 0x00F36E21`, and 0xF36E21 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -74550,7 +74550,7 @@ sub_F36CED_Skip7:
 	pushw	wa	; F36E93  push WA
 	ld	a, (2947:24)	; F36E94  ld A,(0x000b83)
 	pushw	wa	; F36E99  push WA
-	call	T_F43474	; F36E9A  call 0xf43474
+	call	T_ToneMsg80_SendParam	; F36E9A  call 0xf43474
 	add	xsp, 18	; F36E9E  add XSP,0x00000012
 	jrl	sub_F36CED_Join4	; F36EA4  jrl T,0xf36f7d
 sub_F36CED_Skip8:
@@ -74599,7 +74599,7 @@ sub_F36CED_Skip9:
 	ld	(2569:24), bc	; F36F27  ld (0x000a09),BC
 	ld	a, (2954:24)	; F36F2C  ld A,(0x000b8a)
 	pushw	wa	; F36F31  push WA
-	call	T_F4348C	; F36F32  call 0xf4348c
+	call	T_ToneMsg80_Id16	; F36F32  call 0xf4348c
 	inc	8, xsp	; F36F36  inc 0,XSP
 	inc	4, xsp	; F36F38  inc 4,XSP
 	jr	sub_F36CED_Join4	; F36F3A  jr T,0xf36f7d
@@ -74622,7 +74622,7 @@ sub_F36CED_Skip10:
 	pushw	bc	; F36F6C  push BC
 	ld	c, (2947:24)	; F36F6D  ld C,(0x000b83)
 	pushw	bc	; F36F72  push BC
-	call	T_F4347C	; F36F73  call 0xf4347c
+	call	T_ToneMsg85_SendParam	; F36F73  call 0xf4347c
 	add	xsp, 20	; F36F77  add XSP,0x00000014
 sub_F36CED_Join4:
 	m_res 2, MD24, 0x000a00	; F36F7D  res 2,(0x000a00)
@@ -75965,8 +75965,8 @@ sub_F379A3:
 ; Called from: T_F41258 (x1); far site 0xF41258
 ; Touches: nothing with an absolute address
 ; Calls:   Pack3x7BitFields_Bytes9To11 Pack3x7BitFields_Bytes6To8
-;          ClampParamValueById_From541 T_F43470 ClampParamValueById_From408
-;          Divide32_Unsigned_Quotient T_F43488 T_DspParam_WriteByNumber T_F43478
+;          ClampParamValueById_From541 T_ToneMsg_SendParam ClampParamValueById_From408
+;          Divide32_Unsigned_Quotient T_F43488 T_DspParam_WriteByNumber T_ToneMsg8D_SendParam
 ; Evidence: thunk slot T_F41258 holds `jp 0x00F379AB`, and 0xF379AB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -76140,7 +76140,7 @@ sub_F379AB_Skip11:
 	pushw	wa	; F37B99  push WA
 	pushw	0	; F37B9A  push 0x0000
 sub_F379AB_Join:
-	call	T_F43470	; F37B9D  call 0xf43470
+	call	T_ToneMsg_SendParam	; F37B9D  call 0xf43470
 	jrl	sub_F379AB_Join4	; F37BA1  jrl T,0xf37d07
 sub_F379AB_Skip12:
 	ld	xbc, (2563:24)	; F37BA4  ld XBC,(0x000a03)
@@ -76274,7 +76274,7 @@ sub_F379AB_Skip17:
 	pushw	wa	; F37CFF  push WA
 	pushw	3	; F37D00  push 0x0003
 sub_F379AB_Join3:
-	call	T_F43478	; F37D03  call 0xf43478
+	call	T_ToneMsg8D_SendParam	; F37D03  call 0xf43478
 sub_F379AB_Join4:
 	inc	8, xsp	; F37D07  inc 0,XSP
 	inc	2, xsp	; F37D09  inc 2,XSP
@@ -76293,7 +76293,7 @@ sub_F379AB_Join6:
 ; sub_F37D17
 ; Called from: T_F4125C (x1); far site 0xF4125C
 ; Touches: nothing with an absolute address
-; Calls:   T_F43480
+; Calls:   T_ToneMsg80_Id01
 ; Evidence: thunk slot T_F4125C holds `jp 0x00F37D17`, and 0xF37D17 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -76362,7 +76362,7 @@ sub_F37D17_Skip3:
 	add	bc, de	; F37D99  add BC,DE
 	pushw	bc	; F37D9B  push BC
 sub_F37D17_Join:
-	call	T_F43480	; F37D9C  call 0xf43480
+	call	T_ToneMsg80_Id01	; F37D9C  call 0xf43480
 	pop	xiy	; F37DA0  pop XIY
 	sub	wa, wa	; F37DA1  sub WA,WA
 	jr	sub_F37D17_Join2	; F37DA3  jr T,0xf37da8
@@ -76434,7 +76434,7 @@ sub_F37DB4:
 ; sub_F37E1C
 ; Called from: T_F41264 (x1); far site 0xF41264; in-module: 0xF36EF9
 ; Touches: nothing with an absolute address
-; Calls:   sub_F37DB4 T_F4090C T_F40910
+; Calls:   sub_F37DB4 T_SysEx_Checksum T_SysExTx_SendBytes
 ; Evidence: thunk slot T_F41264 holds `jp 0x00F37E1C`, and 0xF37E1C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
@@ -76514,7 +76514,7 @@ sub_F37E1C_Join3:
 	pushw	iy	; F37ED4  push IY
 	lda	xwa, (2571:24)	; F37ED5  lda XWA,0x000a0b
 	push	xwa	; F37EDA  push XWA
-	call	T_F4090C	; F37EDB  call 0xf4090c
+	call	T_SysEx_Checksum	; F37EDB  call 0xf4090c
 	ld	xbc, (xiz-4)	; F37EDF  ld XBC,(XIZ+0xfc)
 	ld	(xbc), a	; F37EE2  ld (XBC),A
 	ld	xbc, (xiz-4)	; F37EE4  ld XBC,(XIZ+0xfc)
@@ -76525,7 +76525,7 @@ sub_F37E1C_Join3:
 	pushw	bc	; F37EF6  push BC
 	lda	xbc, (2571:24)	; F37EF7  lda XBC,0x000a0b
 	push	xbc	; F37EFC  push XBC
-	call	T_F40910	; F37EFD  call 0xf40910
+	call	T_SysExTx_SendBytes	; F37EFD  call 0xf40910
 	ld	bc, (2569:24)	; F37F01  ld BC,(0x000a09)
 	sub	(2567:24), bc	; F37F06  sub (0x000a07),BC
 	exts	xbc	; F37F0B  exts XBC
@@ -88360,9 +88360,9 @@ T_ShowScreen_NoteEditPartSelect:	jp ShowScreen_NoteEditPartSelect  ; F402BC (was
 T_ScreenLeave_NoteEditPartSelect:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402C4:	jp ScreenButton_EditPartSelect  ; -> prom_a 0x68565
 T_ScreenLeave_NoteEditPartSelect_2:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
-T_F402CC:	jp EditScreen_EnterNoteEdit  ; -> prom_a 0x688AA
-T_F402D0:	jp ScreenLeave_NoteEdit  ; -> prom_a 0x68C3A
-T_F402D4:	jp ScreenButton_NoteEdit  ; -> prom_a 0x69A33
+T_EditScreen_EnterNoteEdit:	jp EditScreen_EnterNoteEdit  ; -> prom_a 0x688AA
+T_ScreenLeave_NoteEdit:	jp ScreenLeave_NoteEdit  ; -> prom_a 0x68C3A
+T_ScreenButton_NoteEdit:	jp ScreenButton_NoteEdit  ; -> prom_a 0x69A33
 T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
 ; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
 ;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
@@ -88370,9 +88370,9 @@ T_ShowScreen_DrumEditPartSelect:	jp ShowScreen_DrumEditPartSelect  ; F402DC (was
 T_ScreenLeave_DrumEditPartSelect:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402E4:	jp ScreenButton_EditPartSelect  ; -> prom_a 0x68565
 T_ScreenLeave_DrumEditPartSelect_2:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
-T_F402EC:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
-T_F402F0:	jp ScreenLeave_DrumEdit  ; -> prom_a 0x68C1F
-T_F402F4:	jp ScreenButton_DrumEdit  ; -> prom_a 0x69B8D
+T_EditScreen_EnterDrumEdit:	jp EditScreen_EnterDrumEdit  ; -> prom_a 0x68868
+T_ScreenLeave_DrumEdit:	jp ScreenLeave_DrumEdit  ; -> prom_a 0x68C1F
+T_ScreenButton_DrumEdit:	jp ScreenButton_DrumEdit  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
 T_F40300:	jp sub_FE833F  ; -> prom_a 0x6833F   x2
@@ -88387,14 +88387,14 @@ T_Ctrl_Normalise:	jp Ctrl_Normalise  ; F405F0 (was T_F405F0) -> prom_a 0x09800  
 ;           Ctrl_Nop_Ret, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Ctrl_Nop_Ret:	jp Ctrl_Nop_Ret  ; F405F4 (was T_F405F4) -> prom_a 0x09804
 	.fill 0x18, 1, 0x0E  ; 0xF405F8: 24 x ret
-T_F40610:	.long PanelWire_EntryThunks	; ptr -> 0xF8A000 (prom_a 0x0A000)
+T_PanelWire_EntryThunks:	.long PanelWire_EntryThunks	; ptr -> 0xF8A000 (prom_a 0x0A000)
 T_PanelWire_Service:	jp PanelWire_Service  ; -> prom_a 0x0A023   x1
 T_F40618:	jp T_F40618_Nop  ; -> prom_a 0x0A027
 	.fill 0x14, 1, 0x0E  ; 0xF4061C: 20 x ret
 T_F40630:	.long 0x00F8A800	; ptr -> 0xF8A800 (prom_a 0x0A800)
 T_PanelEvent_Service:	jp PanelEvent_Service  ; -> prom_a 0x0A81D   x1
 	.fill 0x28, 1, 0x0E  ; 0xF40638: 40 x ret
-T_F40660:	.long PanelLed_PhaseVector	; ptr -> 0xF8C000 (prom_a 0x0C000)
+T_PanelLed_PhaseVector:	.long PanelLed_PhaseVector	; ptr -> 0xF8C000 (prom_a 0x0C000)
 T_PanelLed_ProcessRequests:	jp PanelLed_ProcessRequests  ; -> prom_a 0x0C18B   x2
 T_PanelLed_Refresh:	jp PanelLed_Refresh  ; -> prom_a 0x0C338   x1
 T_F4066C:	jp T_F4066C_Nop  ; -> prom_a 0x0C8C2
@@ -88424,7 +88424,7 @@ T_MIDI_TX_Ready:	jp MIDI_TX_Ready  ; F40718 (was T_F40718) -> prom_a 0x2542F
 ; Evidence: slot 0xF4071C is `jp 0xFA5418`; prom_a 0xFA5418 carries the label
 ;           MIDI_RX_ErrorReset, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MIDI_RX_ErrorReset:	jp MIDI_RX_ErrorReset  ; F4071C (was T_F4071C) -> prom_a 0x25418
-T_F40720:	jp MIDI_Clock_CatchUpIfAnySlot  ; -> prom_a 0x255F4   x1
+T_MIDI_Clock_CatchUpIfAnySlot:	jp MIDI_Clock_CatchUpIfAnySlot  ; -> prom_a 0x255F4   x1
 ; Evidence: slot 0xF40724 is `jp 0xFA590F`; prom_a 0xFA590F carries the label
 ;           MIDI_PostSendWork, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MIDI_PostSendWork:	jp MIDI_PostSendWork  ; F40724 (was T_F40724) -> prom_a 0x2590F   x15
@@ -88465,7 +88465,7 @@ T_MidiIn_ServiceDeferred:	jp MidiIn_ServiceDeferred  ; F40758 (was T_F40758) -> 
 T_F4075C:	jp sub_FA7DA3  ; -> prom_a 0x27DA3   x1
 T_F40760:	jp sub_FA7E0C  ; -> prom_a 0x27E0C   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40764: 12 x ret
-T_F40770:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
+T_ParamModule_PhaseVector:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
 T_F40774:	jp sub_FAAAB1  ; -> prom_a 0x2AAB1   x2
 T_F40778:	jp sub_FAAA8F  ; -> prom_a 0x2AA8F
 T_F4077C:	jp sub_FAA967  ; -> prom_a 0x2A967   x2
@@ -88543,22 +88543,22 @@ T_F40894:	jp sub_FADF08  ; -> prom_a 0x2DF08   x1
 T_ParamShadow_FlushAll:	jp ParamShadow_FlushAll  ; -> prom_a 0x2DA26   x3
 T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 	.fill 0x40, 1, 0x0E  ; 0xF408A0: 64 x ret
-T_F408E0:	.long SysExModule_EntryThunks	; ptr -> 0xFB2000 (prom_a 0x32000)
+T_SysExModule_EntryThunks:	.long SysExModule_EntryThunks	; ptr -> 0xFB2000 (prom_a 0x32000)
 T_SysExDump_RunSendJob:	jp SysExDump_RunSendJob  ; -> prom_a 0x32049   x1
-T_F408E8:	jp SysExRx_PollRing601646  ; -> prom_a 0x320CE   x1
+T_SysExRx_PollRing601646:	jp SysExRx_PollRing601646  ; -> prom_a 0x320CE   x1
 T_F408EC:	jp sub_FB3355  ; -> prom_a 0x33355   x2
 T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
 T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
 T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
-T_F40900:	jp SysExTx_EmitStagedParams  ; -> prom_a 0x34B7D   x1
-T_F40904:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
+T_SysExTx_EmitStagedParams:	jp SysExTx_EmitStagedParams  ; -> prom_a 0x34B7D   x1
+T_SysExRx_PollRing601C6E:	jp SysExRx_PollRing601C6E  ; -> prom_a 0x321CB   x1
 T_F40908:	jp sub_FB585E  ; -> prom_a 0x3585E   x1
-T_F4090C:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
-T_F40910:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
+T_SysEx_Checksum:	jp SysEx_Checksum  ; -> prom_a 0x37A90   x2
+T_SysExTx_SendBytes:	jp SysExTx_SendBytes  ; -> prom_a 0x37AC2   x1
 	.fill 0x3C, 1, 0x0E  ; 0xF40914: 60 x ret
 T_F40950:	jp sub_FB9E79  ; -> prom_a 0x39E79   x1
-T_F40954:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
+T_MidiFileDirectPlay_LcdKeyRow1:	jp MidiFileDirectPlay_LcdKeyRow1  ; -> prom_a 0x39DFE   x1
 T_F40958:	jp sub_FB9B41  ; -> prom_a 0x39B41   x1
 T_F4095C:	jp sub_FB9B73  ; -> prom_a 0x39B73   x1
 T_F40960:	jp sub_FB9BA4  ; -> prom_a 0x39BA4
@@ -88596,7 +88596,7 @@ T_F409F8:	jp sub_F454A6  ; -> prom_b 0x454A6   x2
 T_F409FC:	jp T_F414B0  ; -> prom_b 0x414B0   x1
 T_F40A00:	jp T_F40C70  ; -> prom_b 0x40C70   x3
 T_F40A04:	jp T_F40C74  ; -> prom_b 0x40C74   x8
-T_F40A08:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
+T_Var34D1_SetBits20:	jp Var34D1_SetBits20  ; -> prom_b 0x45FC4   x2
 T_F40A0C:	jp sub_F45524  ; -> prom_b 0x45524   x1
 T_F40A10:	jp sub_F45975  ; -> prom_b 0x45975   x2
 T_F40A14:	jp sub_F45B0A  ; -> prom_b 0x45B0A   x8
@@ -88618,8 +88618,8 @@ T_F40A48:	jp sub_F44036  ; -> prom_b 0x44036
 T_F40A4C:	jp sub_F450B2  ; -> prom_b 0x450B2
 T_F40A50:	jp sub_F454B3  ; -> prom_b 0x454B3
 T_F40A54:	jp sub_F46015  ; -> prom_b 0x46015
-T_F40A58:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
-T_F40A5C:	jp UiStatus_ShowMessage0E  ; -> prom_b 0x45FB4   x3
+T_Var20A9_SetBits01:	jp Var20A9_SetBits01  ; -> prom_b 0x45FAE
+T_UiStatus_ShowMessage0E:	jp UiStatus_ShowMessage0E  ; -> prom_b 0x45FB4   x3
 T_F40A60:	jp sub_F4402A  ; -> prom_b 0x4402A   x1
 T_F40A64:	jp sub_F44030  ; -> prom_b 0x44030
 	.fill 0x4, 1, 0x00  ; 0xF40A68: 4 x nop
@@ -88628,11 +88628,11 @@ T_F40A70:	jp sub_F4566A  ; -> prom_b 0x4566A   x1
 T_F40A74:	jp sub_F4403F  ; -> prom_b 0x4403F
 T_F40A78:	jp sub_F4401B  ; -> prom_b 0x4401B   x1
 T_F40A7C:	jp sub_F4401E  ; -> prom_b 0x4401E   x1
-T_F40A80:	jp Var34D1_SetBits20_Veneer  ; -> prom_b 0x44021   x1
+T_Var34D1_SetBits20_Veneer:	jp Var34D1_SetBits20_Veneer  ; -> prom_b 0x44021   x1
 T_F40A84:	jp sub_F44024  ; -> prom_b 0x44024
 T_F40A88:	jp sub_F44027  ; -> prom_b 0x44027
 T_F40A8C:	jp sub_F44367  ; -> prom_b 0x44367   x1
-T_F40A90:	jp Nop_CallsEmptyDirectorySlot_Veneer  ; -> prom_b 0x44039   x1
+T_Nop_CallsEmptyDirectorySlot_Veneer:	jp Nop_CallsEmptyDirectorySlot_Veneer  ; -> prom_b 0x44039   x1
 T_F40A94:	jp sub_F4403C  ; -> prom_b 0x4403C
 T_F40A98:	jp sub_F44018  ; -> prom_b 0x44018   x1
 T_F40A9C:	jp sub_F45CC4  ; -> prom_b 0x45CC4   x3
@@ -88684,8 +88684,8 @@ T_F40C00:	jp sub_F4A5B5  ; -> prom_b 0x4A5B5   x3
 T_F40C04:	jp sub_F4B414  ; -> prom_b 0x4B414   x3
 	.fill 0x48, 1, 0x0E  ; 0xF40C08: 72 x ret
 T_F40C50:	jp sub_F4D02C  ; -> prom_b 0x4D02C   x15
-T_F40C54:	jp BStore_ReadCursorByte  ; -> prom_b 0x4D0DB   x18
-T_F40C58:	jp BStore_WriteCursorByte  ; -> prom_b 0x4D0FB   x14
+T_BStore_ReadCursorByte:	jp BStore_ReadCursorByte  ; -> prom_b 0x4D0DB   x18
+T_BStore_WriteCursorByte:	jp BStore_WriteCursorByte  ; -> prom_b 0x4D0FB   x14
 T_F40C5C:	jp sub_F4D690  ; -> prom_b 0x4D690   x7
 T_F40C60:	jp sub_F4D6F6  ; -> prom_b 0x4D6F6   x2
 T_F40C64:	jp sub_F4D000  ; -> prom_b 0x4D000   x9
@@ -88713,7 +88713,7 @@ T_F40CC8:	jp sub_F4E592  ; -> prom_b 0x4E592   x1
 T_F40CCC:	jp sub_F4E30F  ; -> prom_b 0x4E30F   x2
 	.fill 0x10, 1, 0x0E  ; 0xF40CD0: 16 x ret
 T_F40CE0:	jp sub_F4EC00  ; -> prom_b 0x4EC00
-T_F40CE4:	jp Var34BB_ClearBits04  ; -> prom_b 0x4EC25
+T_Var34BB_ClearBits04:	jp Var34BB_ClearBits04  ; -> prom_b 0x4EC25
 T_F40CE8:	jp sub_F4EC2B  ; -> prom_b 0x4EC2B   x1
 T_F40CEC:	jp sub_F4EC56  ; -> prom_b 0x4EC56   x2
 T_F40CF0:	jp sub_F4EC8A  ; -> prom_b 0x4EC8A   x1
@@ -88890,7 +88890,7 @@ T_PanelEvent_Code03:	jp PanelEvent_Code03  ; F40F90 (was T_F40F90) -> prom_a 0x0
 ;           PanelEvent_NoOp_T40F94, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_PanelEvent_NoOp_T40F94:	jp PanelEvent_NoOp_T40F94  ; F40F94 (was T_F40F94) -> prom_a 0x06C5B
 	.fill 0x18, 1, 0x0E  ; 0xF40F98: 24 x ret
-T_F40FB0:	.long Msg0716_InitAllRecords_Entry	; ptr -> 0xFC0000 (prom_a 0x40000)
+T_Msg0716_InitAllRecords_Entry:	.long Msg0716_InitAllRecords_Entry	; ptr -> 0xFC0000 (prom_a 0x40000)
 T_F40FB4:	jp sub_FC0E56  ; -> prom_a 0x40E56
 T_F40FB8:	jp T_F40FB8_Nop  ; -> prom_a 0x40FBD
 T_F40FBC:	jp T_F40FBC_Nop  ; -> prom_a 0x40FBE
@@ -88982,10 +88982,10 @@ T_F41100:	jp T_F41100_Nop  ; -> prom_a 0x40656
 T_F41104:	jp T_F41104_Nop  ; -> prom_a 0x40657
 T_F41108:	jp T_F41108_Nop  ; -> prom_a 0x40658
 T_F4110C:	jp T_F4110C_Nop  ; -> prom_a 0x40659
-T_F41110:	jp Msg0716_SetPendingBit0  ; -> prom_a 0x4065A
-T_F41114:	jp Msg0716_SetPendingBit1  ; -> prom_a 0x40663
-T_F41118:	jp Msg0716_SetPendingBit2  ; -> prom_a 0x4066C
-T_F4111C:	jp Msg0716_SetPendingBit3  ; -> prom_a 0x40675
+T_Msg0716_SetPendingBit0:	jp Msg0716_SetPendingBit0  ; -> prom_a 0x4065A
+T_Msg0716_SetPendingBit1:	jp Msg0716_SetPendingBit1  ; -> prom_a 0x40663
+T_Msg0716_SetPendingBit2:	jp Msg0716_SetPendingBit2  ; -> prom_a 0x4066C
+T_Msg0716_SetPendingBit3:	jp Msg0716_SetPendingBit3  ; -> prom_a 0x40675
 T_F41120:	jp T_F41120_Nop  ; -> prom_a 0x4067E
 T_F41124:	jp T_F41124_Nop  ; -> prom_a 0x4067F
 T_F41128:	jp T_F41128_Nop  ; -> prom_a 0x40680
@@ -89062,7 +89062,7 @@ T_F4125C:	jp sub_F37D17  ; -> prom_b 0x37D17   x1
 T_F41260:	jp sub_F37DAE  ; -> prom_b 0x37DAE   x3
 T_F41264:	jp sub_F37E1C  ; -> prom_b 0x37E1C   x1
 	.fill 0x148, 1, 0x0E  ; 0xF41268: 328 x ret
-T_F413B0:	.long Ram3800_Start_Entry	; ptr -> 0xFC8000 (prom_a 0x48000)
+T_Ram3800_Start_Entry:	.long Ram3800_Start_Entry	; ptr -> 0xFC8000 (prom_a 0x48000)
 T_F413B4:	jp sub_FC80E2  ; -> prom_a 0x480E2   x1
 T_F413B8:	jp sub_FC87AE  ; -> prom_a 0x487AE   x4
 T_F413BC:	jp sub_FC8960  ; -> prom_a 0x48960   x1
@@ -89155,7 +89155,7 @@ T_F41610:	jp T_F41610_Nop  ; -> prom_a 0x19097
 	.fill 0x2C, 1, 0x0E  ; 0xF41614: 44 x ret
 T_PanelMode_MidiEnter:	jp PanelMode_MidiEnter  ; -> prom_a 0x19F04
 T_PanelMode_MidiLeave:	jp PanelMode_MidiLeave  ; -> prom_a 0x19F15
-T_F41648:	jp Var2134_SetBit1  ; -> prom_a 0x19F1A
+T_Var2134_SetBit1:	jp Var2134_SetBit1  ; -> prom_a 0x19F1A
 T_F4164C:	jp Var2134_SetBit1_2  ; -> prom_a 0x19F1F
 T_Paint_MidiMenu:	jp Paint_MidiMenu  ; -> prom_a 0x19F24
 T_F41654:	jp T_F41654_Nop  ; -> prom_a 0x19F5C
@@ -89333,13 +89333,13 @@ T_Screen_TuneScale_Enter:	jp Screen_TuneScale_Enter  ; -> prom_a 0x20094
 T_F4192C:	jp T_F4192C_Nop  ; -> prom_a 0x200E9
 T_Screen_TuneScale_Button:	jp Screen_TuneScale_Button  ; -> prom_a 0x200EA
 T_F41934:	jp T_F41934_Nop  ; -> prom_a 0x20111
-T_F41938:	jp Screen_TouchSensitivityOrTest_Enter  ; -> prom_a 0x20689
+T_Screen_TouchSensitivityOrTest_Enter:	jp Screen_TouchSensitivityOrTest_Enter  ; -> prom_a 0x20689
 T_F4193C:	jp T_F4193C_Nop  ; -> prom_a 0x207A1
-T_F41940:	jp Screen_TouchSensitivityOrTest_Button  ; -> prom_a 0x207A2
+T_Screen_TouchSensitivityOrTest_Button:	jp Screen_TouchSensitivityOrTest_Button  ; -> prom_a 0x207A2
 T_F41944:	jp T_F41944_Nop  ; -> prom_a 0x207EA
-T_F41948:	jp Screen_ControllerAssign_Enter  ; -> prom_a 0x20DF3
-T_F4194C:	jp Screen_ControllerAssign_Leave  ; -> prom_a 0x20E4D
-T_F41950:	jp Screen_ControllerAssign_Button  ; -> prom_a 0x20EEA
+T_Screen_ControllerAssign_Enter:	jp Screen_ControllerAssign_Enter  ; -> prom_a 0x20DF3
+T_Screen_ControllerAssign_Leave:	jp Screen_ControllerAssign_Leave  ; -> prom_a 0x20E4D
+T_Screen_ControllerAssign_Button:	jp Screen_ControllerAssign_Button  ; -> prom_a 0x20EEA
 T_F41954:	jp T_F41954_Nop  ; -> prom_a 0x20F11
 T_Screen_MainOutEqualizer_Enter:	jp Screen_MainOutEqualizer_Enter  ; -> prom_a 0x1EF6C
 T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
@@ -89855,20 +89855,20 @@ T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop
 T_F41F54:	jp sub_FDAC6B  ; -> prom_a 0x5AC6B
 T_F41F58:	jp sub_FDACBD  ; -> prom_a 0x5ACBD
-T_F41F5C:	jp ScreenEnter_SoundEditMenu  ; -> prom_a 0x5AD44
-T_F41F60:	jp ScreenLeave_SoundEditMenu  ; -> prom_a 0x5E152
-T_F41F64:	jp ScreenButton_SoundEditMenu  ; -> prom_a 0x4FDA7
+T_ScreenEnter_SoundEditMenu:	jp ScreenEnter_SoundEditMenu  ; -> prom_a 0x5AD44
+T_ScreenLeave_SoundEditMenu:	jp ScreenLeave_SoundEditMenu  ; -> prom_a 0x5E152
+T_ScreenButton_SoundEditMenu:	jp ScreenButton_SoundEditMenu  ; -> prom_a 0x4FDA7
 T_F41F68:	jp T_F41F68_Nop  ; -> prom_a 0x5E15F
-T_F41F6C:	jp ToneEditPage_A0_ModelingTop  ; -> prom_a 0x5D437
-T_F41F70:	jp ToneEditPage_A0_Leave  ; -> prom_a 0x5E332
+T_ToneEditPage_A0_ModelingTop:	jp ToneEditPage_A0_ModelingTop  ; -> prom_a 0x5D437
+T_ToneEditPage_A0_Leave:	jp ToneEditPage_A0_Leave  ; -> prom_a 0x5E332
 T_ToneEditPage_A0_KeyDispatch:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
 T_F41F78:	jp T_F41F78_Nop  ; -> prom_a 0x5E33F
 T_F41F7C:	jp T_F41F7C_Nop  ; -> prom_a 0x5D7F7
-T_F41F80:	jp ToneEditPage_A1_Leave  ; -> prom_a 0x5E340
+T_ToneEditPage_A1_Leave:	jp ToneEditPage_A1_Leave  ; -> prom_a 0x5E340
 T_F41F84:	jp T_F41F84_Nop  ; -> prom_a 0x53DF8
 T_F41F88:	jp T_F41F88_Nop  ; -> prom_a 0x5E34D
 T_F41F8C:	jp T_F41F8C_Nop  ; -> prom_a 0x5D7F8
-T_F41F90:	jp ToneEditPage_A2_Leave  ; -> prom_a 0x5E34E
+T_ToneEditPage_A2_Leave:	jp ToneEditPage_A2_Leave  ; -> prom_a 0x5E34E
 T_F41F94:	jp T_F41F94_Nop  ; -> prom_a 0x53DF9
 T_F41F98:	jp T_F41F98_Nop  ; -> prom_a 0x5E35B
 T_ToneEditPage_A3_PositionParameter:	jp ToneEditPage_A3_PositionParameter  ; -> prom_a 0x5D7F9
@@ -89891,124 +89891,124 @@ T_ToneEditPage_A7_ResoModeKeyFollow:	jp ToneEditPage_A7_ResoModeKeyFollow  ; -> 
 T_ToneEditPage_A7_Leave:	jp ToneEditPage_A7_Leave  ; -> prom_a 0x5E394
 T_ToneEditPage_A7_KeyDispatch:	jp ToneEditPage_A7_KeyDispatch  ; -> prom_a 0x53F3E
 T_F41FE8:	jp T_F41FE8_Nop  ; -> prom_a 0x5E3A1
-T_F41FEC:	jp ToneEditPage_A8_SerialParallel  ; -> prom_a 0x5DF36
-T_F41FF0:	jp ToneEditPage_A8_Leave  ; -> prom_a 0x5E3A2
+T_ToneEditPage_A8_SerialParallel:	jp ToneEditPage_A8_SerialParallel  ; -> prom_a 0x5DF36
+T_ToneEditPage_A8_Leave:	jp ToneEditPage_A8_Leave  ; -> prom_a 0x5E3A2
 T_ToneEditPage_A8_KeyDispatch:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
 T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
-T_F41FFC:	jp ScreenEnter_SoundEditPitchTune  ; -> prom_a 0x5B22F
-T_F42000:	jp ScreenLeave_SoundEditPitchTune  ; -> prom_a 0x5E160
-T_F42004:	jp ScreenButton_SoundEditPitchTune  ; -> prom_b 0x0A000
+T_ScreenEnter_SoundEditPitchTune:	jp ScreenEnter_SoundEditPitchTune  ; -> prom_a 0x5B22F
+T_ScreenLeave_SoundEditPitchTune:	jp ScreenLeave_SoundEditPitchTune  ; -> prom_a 0x5E160
+T_ScreenButton_SoundEditPitchTune:	jp ScreenButton_SoundEditPitchTune  ; -> prom_b 0x0A000
 T_F42008:	jp T_F42008_Nop  ; -> prom_a 0x5E16D
-T_F4200C:	jp ScreenEnter_SoundEditPitchEnvelope1  ; -> prom_a 0x5B38C
-T_F42010:	jp ScreenLeave_SoundEditPitchEnvelope1  ; -> prom_a 0x5E16E
-T_F42014:	jp ScreenButton_SoundEditPitchEnvelope1  ; -> prom_b 0x0A051
+T_ScreenEnter_SoundEditPitchEnvelope1:	jp ScreenEnter_SoundEditPitchEnvelope1  ; -> prom_a 0x5B38C
+T_ScreenLeave_SoundEditPitchEnvelope1:	jp ScreenLeave_SoundEditPitchEnvelope1  ; -> prom_a 0x5E16E
+T_ScreenButton_SoundEditPitchEnvelope1:	jp ScreenButton_SoundEditPitchEnvelope1  ; -> prom_b 0x0A051
 T_F42018:	jp T_F42018_Nop  ; -> prom_a 0x5E17B
-T_F4201C:	jp ScreenEnter_SoundEditPitchEnvelope2  ; -> prom_a 0x5B44D
-T_F42020:	jp ScreenLeave_SoundEditPitchEnvelope2  ; -> prom_a 0x5E17C
-T_F42024:	jp ScreenButton_SoundEditPitchEnvelope2  ; -> prom_b 0x0A0B1
+T_ScreenEnter_SoundEditPitchEnvelope2:	jp ScreenEnter_SoundEditPitchEnvelope2  ; -> prom_a 0x5B44D
+T_ScreenLeave_SoundEditPitchEnvelope2:	jp ScreenLeave_SoundEditPitchEnvelope2  ; -> prom_a 0x5E17C
+T_ScreenButton_SoundEditPitchEnvelope2:	jp ScreenButton_SoundEditPitchEnvelope2  ; -> prom_b 0x0A0B1
 T_F42028:	jp T_F42028_Nop  ; -> prom_a 0x5E189
-T_F4202C:	jp ScreenEnter_SoundEditPitchLfo  ; -> prom_a 0x5B529
-T_F42030:	jp ScreenLeave_SoundEditPitchLfo  ; -> prom_a 0x5E18A
-T_F42034:	jp ScreenButton_SoundEditPitchLfo  ; -> prom_b 0x0A111
+T_ScreenEnter_SoundEditPitchLfo:	jp ScreenEnter_SoundEditPitchLfo  ; -> prom_a 0x5B529
+T_ScreenLeave_SoundEditPitchLfo:	jp ScreenLeave_SoundEditPitchLfo  ; -> prom_a 0x5E18A
+T_ScreenButton_SoundEditPitchLfo:	jp ScreenButton_SoundEditPitchLfo  ; -> prom_b 0x0A111
 T_F42038:	jp T_F42038_Nop  ; -> prom_a 0x5E197
-T_F4203C:	jp ScreenEnter_SoundEditAmpLevel1  ; -> prom_a 0x5B693
-T_F42040:	jp ScreenLeave_SoundEditAmpLevel1  ; -> prom_a 0x5E198
-T_F42044:	jp ScreenButton_SoundEditAmpLevel1  ; -> prom_a 0x52751
+T_ScreenEnter_SoundEditAmpLevel1:	jp ScreenEnter_SoundEditAmpLevel1  ; -> prom_a 0x5B693
+T_ScreenLeave_SoundEditAmpLevel1:	jp ScreenLeave_SoundEditAmpLevel1  ; -> prom_a 0x5E198
+T_ScreenButton_SoundEditAmpLevel1:	jp ScreenButton_SoundEditAmpLevel1  ; -> prom_a 0x52751
 T_F42048:	jp T_F42048_Nop  ; -> prom_a 0x5E1A5
-T_F4204C:	jp ScreenEnter_SoundEditAmpLevel2  ; -> prom_a 0x5B8D9
-T_F42050:	jp ScreenLeave_SoundEditAmpLevel2  ; -> prom_a 0x5E1A6
-T_F42054:	jp ScreenButton_SoundEditAmpLevel2  ; -> prom_a 0x527A2
+T_ScreenEnter_SoundEditAmpLevel2:	jp ScreenEnter_SoundEditAmpLevel2  ; -> prom_a 0x5B8D9
+T_ScreenLeave_SoundEditAmpLevel2:	jp ScreenLeave_SoundEditAmpLevel2  ; -> prom_a 0x5E1A6
+T_ScreenButton_SoundEditAmpLevel2:	jp ScreenButton_SoundEditAmpLevel2  ; -> prom_a 0x527A2
 T_F42058:	jp T_F42058_Nop  ; -> prom_a 0x5E1B3
-T_F4205C:	jp ScreenEnter_SoundEditAmpEnvelope1  ; -> prom_a 0x5B9AB
-T_F42060:	jp ScreenLeave_SoundEditAmpEnvelope1  ; -> prom_a 0x5E1B4
-T_F42064:	jp ScreenButton_SoundEditAmpEnvelope1  ; -> prom_a 0x527F2
+T_ScreenEnter_SoundEditAmpEnvelope1:	jp ScreenEnter_SoundEditAmpEnvelope1  ; -> prom_a 0x5B9AB
+T_ScreenLeave_SoundEditAmpEnvelope1:	jp ScreenLeave_SoundEditAmpEnvelope1  ; -> prom_a 0x5E1B4
+T_ScreenButton_SoundEditAmpEnvelope1:	jp ScreenButton_SoundEditAmpEnvelope1  ; -> prom_a 0x527F2
 T_F42068:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4206C:	jp ScreenEnter_SoundEditAmpEnvelope2  ; -> prom_a 0x5BAE7
-T_F42070:	jp ScreenLeave_SoundEditAmpEnvelope2  ; -> prom_a 0x5E1C2
-T_F42074:	jp ScreenButton_SoundEditAmpEnvelope2  ; -> prom_a 0x52852
+T_ScreenEnter_SoundEditAmpEnvelope2:	jp ScreenEnter_SoundEditAmpEnvelope2  ; -> prom_a 0x5BAE7
+T_ScreenLeave_SoundEditAmpEnvelope2:	jp ScreenLeave_SoundEditAmpEnvelope2  ; -> prom_a 0x5E1C2
+T_ScreenButton_SoundEditAmpEnvelope2:	jp ScreenButton_SoundEditAmpEnvelope2  ; -> prom_a 0x52852
 T_F42078:	jp T_F42078_Nop  ; -> prom_a 0x5E1CF
-T_F4207C:	jp ScreenEnter_SoundEditAmpLfo  ; -> prom_a 0x5BBC3
-T_F42080:	jp ScreenLeave_SoundEditAmpLfo  ; -> prom_a 0x5E1D0
-T_F42084:	jp ScreenButton_SoundEditAmpLfo  ; -> prom_a 0x528B2
+T_ScreenEnter_SoundEditAmpLfo:	jp ScreenEnter_SoundEditAmpLfo  ; -> prom_a 0x5BBC3
+T_ScreenLeave_SoundEditAmpLfo:	jp ScreenLeave_SoundEditAmpLfo  ; -> prom_a 0x5E1D0
+T_ScreenButton_SoundEditAmpLfo:	jp ScreenButton_SoundEditAmpLfo  ; -> prom_a 0x528B2
 T_F42088:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
-T_F4208C:	jp ScreenEnter_SoundEditControllerPage1  ; -> prom_a 0x5BBD6
-T_F42090:	jp ScreenLeave_SoundEditControllerPage1  ; -> prom_a 0x5E1DE
-T_F42094:	jp ScreenButton_SoundEditControllerPage1  ; -> prom_a 0x5053D
+T_ScreenEnter_SoundEditControllerPage1:	jp ScreenEnter_SoundEditControllerPage1  ; -> prom_a 0x5BBD6
+T_ScreenLeave_SoundEditControllerPage1:	jp ScreenLeave_SoundEditControllerPage1  ; -> prom_a 0x5E1DE
+T_ScreenButton_SoundEditControllerPage1:	jp ScreenButton_SoundEditControllerPage1  ; -> prom_a 0x5053D
 T_F42098:	jp T_F42098_Nop  ; -> prom_a 0x5E1EB
-T_F4209C:	jp ScreenEnter_SoundEditControllerPage2  ; -> prom_a 0x5BEDE
-T_F420A0:	jp ScreenLeave_SoundEditControllerPage2  ; -> prom_a 0x5E1EC
-T_F420A4:	jp ScreenButton_SoundEditControllerPage2  ; -> prom_a 0x5058E
+T_ScreenEnter_SoundEditControllerPage2:	jp ScreenEnter_SoundEditControllerPage2  ; -> prom_a 0x5BEDE
+T_ScreenLeave_SoundEditControllerPage2:	jp ScreenLeave_SoundEditControllerPage2  ; -> prom_a 0x5E1EC
+T_ScreenButton_SoundEditControllerPage2:	jp ScreenButton_SoundEditControllerPage2  ; -> prom_a 0x5058E
 T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
-T_F420AC:	jp ScreenEnter_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5C0E1
-T_F420B0:	jp ScreenLeave_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5E1FA
-T_F420B4:	jp ScreenButton_SoundEditDigitalEffectFromMenu  ; -> prom_b 0x0AA61
+T_ScreenEnter_SoundEditDigitalEffectFromMenu:	jp ScreenEnter_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5C0E1
+T_ScreenLeave_SoundEditDigitalEffectFromMenu:	jp ScreenLeave_SoundEditDigitalEffectFromMenu  ; -> prom_a 0x5E1FA
+T_ScreenButton_SoundEditDigitalEffectFromMenu:	jp ScreenButton_SoundEditDigitalEffectFromMenu  ; -> prom_b 0x0AA61
 T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
-T_F420BC:	jp ScreenEnter_SoundEditFilterLpf12  ; -> prom_a 0x5C0ED
-T_F420C0:	jp ScreenLeave_SoundEditFilterLpf12  ; -> prom_a 0x5E24E
-T_F420C4:	jp ScreenButton_SoundEditFilterLpf12  ; -> prom_a 0x5E3BE
+T_ScreenEnter_SoundEditFilterLpf12:	jp ScreenEnter_SoundEditFilterLpf12  ; -> prom_a 0x5C0ED
+T_ScreenLeave_SoundEditFilterLpf12:	jp ScreenLeave_SoundEditFilterLpf12  ; -> prom_a 0x5E24E
+T_ScreenButton_SoundEditFilterLpf12:	jp ScreenButton_SoundEditFilterLpf12  ; -> prom_a 0x5E3BE
 T_F420C8:	jp T_F420C8_Nop  ; -> prom_a 0x5E25B
-T_F420CC:	jp ScreenEnter_SoundEditFilterHpf12  ; -> prom_a 0x5C27B
-T_F420D0:	jp ScreenLeave_SoundEditFilterHpf12  ; -> prom_a 0x5E25C
-T_F420D4:	jp ScreenButton_SoundEditFilterHpf12  ; -> prom_a 0x5E41E
+T_ScreenEnter_SoundEditFilterHpf12:	jp ScreenEnter_SoundEditFilterHpf12  ; -> prom_a 0x5C27B
+T_ScreenLeave_SoundEditFilterHpf12:	jp ScreenLeave_SoundEditFilterHpf12  ; -> prom_a 0x5E25C
+T_ScreenButton_SoundEditFilterHpf12:	jp ScreenButton_SoundEditFilterHpf12  ; -> prom_a 0x5E41E
 T_F420D8:	jp T_F420D8_Nop  ; -> prom_a 0x5E269
-T_F420DC:	jp ScreenEnter_SoundEditFilterLpf24  ; -> prom_a 0x5C2A7
-T_F420E0:	jp ScreenLeave_SoundEditFilterLpf24  ; -> prom_a 0x5E26A
-T_F420E4:	jp ScreenButton_SoundEditFilterLpf24  ; -> prom_a 0x5E47E
+T_ScreenEnter_SoundEditFilterLpf24:	jp ScreenEnter_SoundEditFilterLpf24  ; -> prom_a 0x5C2A7
+T_ScreenLeave_SoundEditFilterLpf24:	jp ScreenLeave_SoundEditFilterLpf24  ; -> prom_a 0x5E26A
+T_ScreenButton_SoundEditFilterLpf24:	jp ScreenButton_SoundEditFilterLpf24  ; -> prom_a 0x5E47E
 T_F420E8:	jp T_F420E8_Nop  ; -> prom_a 0x5E277
-T_F420EC:	jp ScreenEnter_SoundEditFilterHpf24  ; -> prom_a 0x5C2CF
-T_F420F0:	jp ScreenLeave_SoundEditFilterHpf24  ; -> prom_a 0x5E278
-T_F420F4:	jp ScreenButton_SoundEditFilterHpf24  ; -> prom_a 0x5E4DE
+T_ScreenEnter_SoundEditFilterHpf24:	jp ScreenEnter_SoundEditFilterHpf24  ; -> prom_a 0x5C2CF
+T_ScreenLeave_SoundEditFilterHpf24:	jp ScreenLeave_SoundEditFilterHpf24  ; -> prom_a 0x5E278
+T_ScreenButton_SoundEditFilterHpf24:	jp ScreenButton_SoundEditFilterHpf24  ; -> prom_a 0x5E4DE
 T_F420F8:	jp T_F420F8_Nop  ; -> prom_a 0x5E285
-T_F420FC:	jp ScreenEnter_SoundEditFilterBpf  ; -> prom_a 0x5C2F7
-T_F42100:	jp ScreenLeave_SoundEditFilterBpf  ; -> prom_a 0x5E286
-T_F42104:	jp ScreenButton_SoundEditFilterBpf  ; -> prom_a 0x5E53E
+T_ScreenEnter_SoundEditFilterBpf:	jp ScreenEnter_SoundEditFilterBpf  ; -> prom_a 0x5C2F7
+T_ScreenLeave_SoundEditFilterBpf:	jp ScreenLeave_SoundEditFilterBpf  ; -> prom_a 0x5E286
+T_ScreenButton_SoundEditFilterBpf:	jp ScreenButton_SoundEditFilterBpf  ; -> prom_a 0x5E53E
 T_F42108:	jp T_F42108_Nop  ; -> prom_a 0x5E293
-T_F4210C:	jp ScreenEnter_SoundEditFilterThrough  ; -> prom_a 0x5C317
-T_F42110:	jp ScreenLeave_SoundEditFilterThrough  ; -> prom_a 0x5E294
-T_F42114:	jp ScreenButton_SoundEditFilterThrough  ; -> prom_a 0x5E59E
+T_ScreenEnter_SoundEditFilterThrough:	jp ScreenEnter_SoundEditFilterThrough  ; -> prom_a 0x5C317
+T_ScreenLeave_SoundEditFilterThrough:	jp ScreenLeave_SoundEditFilterThrough  ; -> prom_a 0x5E294
+T_ScreenButton_SoundEditFilterThrough:	jp ScreenButton_SoundEditFilterThrough  ; -> prom_a 0x5E59E
 T_F42118:	jp T_F42118_Nop  ; -> prom_a 0x5E2A1
-T_F4211C:	jp ScreenEnter_SoundEditFilterKeyFollow  ; -> prom_a 0x5C333
-T_F42120:	jp ScreenLeave_SoundEditFilterKeyFollow  ; -> prom_a 0x5E2A2
-T_F42124:	jp ScreenButton_SoundEditFilterKeyFollow  ; -> prom_a 0x5E5EF
+T_ScreenEnter_SoundEditFilterKeyFollow:	jp ScreenEnter_SoundEditFilterKeyFollow  ; -> prom_a 0x5C333
+T_ScreenLeave_SoundEditFilterKeyFollow:	jp ScreenLeave_SoundEditFilterKeyFollow  ; -> prom_a 0x5E2A2
+T_ScreenButton_SoundEditFilterKeyFollow:	jp ScreenButton_SoundEditFilterKeyFollow  ; -> prom_a 0x5E5EF
 T_F42128:	jp T_F42128_Nop  ; -> prom_a 0x5E2AF
-T_F4212C:	jp ScreenEnter_SoundEditFilterEnvelope1  ; -> prom_a 0x5C405
-T_F42130:	jp ScreenLeave_SoundEditFilterEnvelope1  ; -> prom_a 0x5E2B0
-T_F42134:	jp ScreenButton_SoundEditFilterEnvelope1  ; -> prom_a 0x5E64F
+T_ScreenEnter_SoundEditFilterEnvelope1:	jp ScreenEnter_SoundEditFilterEnvelope1  ; -> prom_a 0x5C405
+T_ScreenLeave_SoundEditFilterEnvelope1:	jp ScreenLeave_SoundEditFilterEnvelope1  ; -> prom_a 0x5E2B0
+T_ScreenButton_SoundEditFilterEnvelope1:	jp ScreenButton_SoundEditFilterEnvelope1  ; -> prom_a 0x5E64F
 T_F42138:	jp T_F42138_Nop  ; -> prom_a 0x5E2BD
-T_F4213C:	jp ScreenEnter_SoundEditFilterEnvelope2  ; -> prom_a 0x5C4C6
-T_F42140:	jp ScreenLeave_SoundEditFilterEnvelope2  ; -> prom_a 0x5E2BE
-T_F42144:	jp ScreenButton_SoundEditFilterEnvelope2  ; -> prom_a 0x5E6AF
+T_ScreenEnter_SoundEditFilterEnvelope2:	jp ScreenEnter_SoundEditFilterEnvelope2  ; -> prom_a 0x5C4C6
+T_ScreenLeave_SoundEditFilterEnvelope2:	jp ScreenLeave_SoundEditFilterEnvelope2  ; -> prom_a 0x5E2BE
+T_ScreenButton_SoundEditFilterEnvelope2:	jp ScreenButton_SoundEditFilterEnvelope2  ; -> prom_a 0x5E6AF
 T_F42148:	jp T_F42148_Nop  ; -> prom_a 0x5E2CB
-T_F4214C:	jp ScreenEnter_SoundEditFilterLfo  ; -> prom_a 0x5C5A2
-T_F42150:	jp ScreenLeave_SoundEditFilterLfo  ; -> prom_a 0x5E2CC
-T_F42154:	jp ScreenButton_SoundEditFilterLfo  ; -> prom_a 0x5E70F
+T_ScreenEnter_SoundEditFilterLfo:	jp ScreenEnter_SoundEditFilterLfo  ; -> prom_a 0x5C5A2
+T_ScreenLeave_SoundEditFilterLfo:	jp ScreenLeave_SoundEditFilterLfo  ; -> prom_a 0x5E2CC
+T_ScreenButton_SoundEditFilterLfo:	jp ScreenButton_SoundEditFilterLfo  ; -> prom_a 0x5E70F
 T_F42158:	jp T_F42158_Nop  ; -> prom_a 0x5E2D9
-T_F4215C:	jp ScreenEnter_SoundEditModelingToneTemplate  ; -> prom_a 0x5C5B5
-T_F42160:	jp ScreenLeave_SoundEditModelingToneTemplate  ; -> prom_a 0x5E208
-T_F42164:	jp ScreenButton_SoundEditModelingToneTemplate  ; -> prom_a 0x50AA5
+T_ScreenEnter_SoundEditModelingToneTemplate:	jp ScreenEnter_SoundEditModelingToneTemplate  ; -> prom_a 0x5C5B5
+T_ScreenLeave_SoundEditModelingToneTemplate:	jp ScreenLeave_SoundEditModelingToneTemplate  ; -> prom_a 0x5E208
+T_ScreenButton_SoundEditModelingToneTemplate:	jp ScreenButton_SoundEditModelingToneTemplate  ; -> prom_a 0x50AA5
 T_F42168:	jp T_F42168_Nop  ; -> prom_a 0x5E215
-T_F4216C:	jp ScreenEnter_SoundEditToneLayerPanning  ; -> prom_a 0x5C84C
-T_F42170:	jp ScreenLeave_SoundEditToneLayerPanning  ; -> prom_a 0x5E216
-T_F42174:	jp ScreenButton_SoundEditToneLayerPanning  ; -> prom_a 0x50AF6
+T_ScreenEnter_SoundEditToneLayerPanning:	jp ScreenEnter_SoundEditToneLayerPanning  ; -> prom_a 0x5C84C
+T_ScreenLeave_SoundEditToneLayerPanning:	jp ScreenLeave_SoundEditToneLayerPanning  ; -> prom_a 0x5E216
+T_ScreenButton_SoundEditToneLayerPanning:	jp ScreenButton_SoundEditToneLayerPanning  ; -> prom_a 0x50AF6
 T_F42178:	jp T_F42178_Nop  ; -> prom_a 0x5E223
-T_F4217C:	jp ScreenEnter_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5C95B
-T_F42180:	jp ScreenLeave_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5E224
-T_F42184:	jp ScreenButton_SoundEditToneLayerKeyLayer  ; -> prom_a 0x50B47
+T_ScreenEnter_SoundEditToneLayerKeyLayer:	jp ScreenEnter_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5C95B
+T_ScreenLeave_SoundEditToneLayerKeyLayer:	jp ScreenLeave_SoundEditToneLayerKeyLayer  ; -> prom_a 0x5E224
+T_ScreenButton_SoundEditToneLayerKeyLayer:	jp ScreenButton_SoundEditToneLayerKeyLayer  ; -> prom_a 0x50B47
 T_F42188:	jp T_F42188_Nop  ; -> prom_a 0x5E231
-T_F4218C:	jp ScreenEnter_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5CA77
-T_F42190:	jp ScreenLeave_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5E232
-T_F42194:	jp ScreenButton_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x50BA7
+T_ScreenEnter_SoundEditToneLayerVelocityLayer:	jp ScreenEnter_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5CA77
+T_ScreenLeave_SoundEditToneLayerVelocityLayer:	jp ScreenLeave_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x5E232
+T_ScreenButton_SoundEditToneLayerVelocityLayer:	jp ScreenButton_SoundEditToneLayerVelocityLayer  ; -> prom_a 0x50BA7
 T_F42198:	jp T_F42198_Nop  ; -> prom_a 0x5E23F
-T_F4219C:	jp ScreenEnter_SoundEditModelingDriverWaveform  ; -> prom_a 0x5CB93
-T_F421A0:	jp ScreenLeave_SoundEditModelingDriverWaveform  ; -> prom_a 0x5E240
-T_F421A4:	jp ScreenButton_SoundEditModelingDriverWaveform  ; -> prom_a 0x50C07
+T_ScreenEnter_SoundEditModelingDriverWaveform:	jp ScreenEnter_SoundEditModelingDriverWaveform  ; -> prom_a 0x5CB93
+T_ScreenLeave_SoundEditModelingDriverWaveform:	jp ScreenLeave_SoundEditModelingDriverWaveform  ; -> prom_a 0x5E240
+T_ScreenButton_SoundEditModelingDriverWaveform:	jp ScreenButton_SoundEditModelingDriverWaveform  ; -> prom_a 0x50C07
 T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
 T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
 T_F42258:	jp Var2134_SetBit1_3  ; -> prom_a 0x742C0
 T_F4225C:	jp sub_FF42C5  ; -> prom_a 0x742C5
-T_F42260:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
+T_Var2134_SetBit1_3_Call:	jp Var2134_SetBit1_3_Call  ; -> prom_a 0x742C9
 T_Paint_DiskMenu:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
 T_ScreenLeave_DiskMenu:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
 T_PanelButtonDispatch_DiskMenu:	jp PanelButtonDispatch_DiskMenu  ; -> prom_a 0x7431C
@@ -90024,25 +90024,25 @@ T_F42320:	jp ScreenCodeCA_Handler  ; -> prom_a 0x5D272
 T_F42324:	jp ScreenLeave_CodeCA  ; -> prom_a 0x5E308
 T_F42328:	jp ScreenButton_CodeCA  ; -> prom_b 0x0AAB3
 T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
-T_F42330:	jp ScreenEnter_SoundEditDrumMenu  ; -> prom_a 0x5D27F
-T_F42334:	jp ScreenLeave_SoundEditDrumMenu  ; -> prom_a 0x5E316
-T_F42338:	jp ScreenButton_SoundEditDrumMenu  ; -> prom_b 0x0AAF9
+T_ScreenEnter_SoundEditDrumMenu:	jp ScreenEnter_SoundEditDrumMenu  ; -> prom_a 0x5D27F
+T_ScreenLeave_SoundEditDrumMenu:	jp ScreenLeave_SoundEditDrumMenu  ; -> prom_a 0x5E316
+T_ScreenButton_SoundEditDrumMenu:	jp ScreenButton_SoundEditDrumMenu  ; -> prom_b 0x0AAF9
 T_F4233C:	jp T_F4233C_Nop  ; -> prom_a 0x5E323
 T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
 T_F42344:	jp ScreenLeave_CodeCC  ; -> prom_a 0x5E324
 T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
 T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
-T_F42350:	jp ScreenEnter_SoundEditCopy  ; -> prom_a 0x5D0D4
-T_F42354:	jp ScreenLeave_SoundEditCopy  ; -> prom_a 0x5E2FA
-T_F42358:	jp ScreenButton_SoundEditCopy  ; -> prom_b 0x0A90E
+T_ScreenEnter_SoundEditCopy:	jp ScreenEnter_SoundEditCopy  ; -> prom_a 0x5D0D4
+T_ScreenLeave_SoundEditCopy:	jp ScreenLeave_SoundEditCopy  ; -> prom_a 0x5E2FA
+T_ScreenButton_SoundEditCopy:	jp ScreenButton_SoundEditCopy  ; -> prom_b 0x0A90E
 T_F4235C:	jp T_F4235C_Nop  ; -> prom_a 0x5E307
-T_F42360:	jp ScreenEnter_SoundEditMemoryWrite  ; -> prom_a 0x5CDE0
+T_ScreenEnter_SoundEditMemoryWrite:	jp ScreenEnter_SoundEditMemoryWrite  ; -> prom_a 0x5CDE0
 T_F42364:	jp T_F42364_Nop  ; -> prom_a 0x5E2DA
-T_F42368:	jp ScreenButton_SoundEditMemoryWrite  ; -> prom_b 0x0A95F
+T_ScreenButton_SoundEditMemoryWrite:	jp ScreenButton_SoundEditMemoryWrite  ; -> prom_b 0x0A95F
 T_F4236C:	jp T_F4236C_Nop  ; -> prom_a 0x5E2DB
-T_F42370:	jp ScreenEnter_SoundEditNaming  ; -> prom_a 0x5CFEB
+T_ScreenEnter_SoundEditNaming:	jp ScreenEnter_SoundEditNaming  ; -> prom_a 0x5CFEB
 T_F42374:	jp T_F42374_Nop  ; -> prom_a 0x5E2DC
-T_F42378:	jp ScreenButton_SoundEditNaming  ; -> prom_b 0x0A9BF
+T_ScreenButton_SoundEditNaming:	jp ScreenButton_SoundEditNaming  ; -> prom_b 0x0A9BF
 T_F4237C:	jp T_F4237C_Nop  ; -> prom_a 0x5E2DD
 ; Evidence: slot 0xF42380 is `jp 0xFD2504`; prom_a 0xFD2504 carries the label
 ;           Ring608A0A_DrainAll (graded CONTENT).  DERIVATIVE name.
@@ -90158,12 +90158,12 @@ T_F425AC:	jp sub_FE1C4D  ; -> prom_a 0x61C4D   x14
 T_F425B0:	jp sub_FE1C55  ; -> prom_a 0x61C55   x11
 T_F425B4:	jp sub_FE1C5D  ; -> prom_a 0x61C5D   x3
 T_F425B8:	jp sub_FE1C67  ; -> prom_a 0x61C67   x2
-T_F425BC:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
+T_SysPartMidi_ResetBlock1Default_Call:	jp SysPartMidi_ResetBlock1Default_Call  ; -> prom_a 0x61BCA
 T_F425C0:	jp sub_FE1C71  ; -> prom_a 0x61C71
 T_F425C4:	jp sub_FE1C75  ; -> prom_a 0x61C75   x1
 T_F425C8:	jp sub_FE1C79  ; -> prom_a 0x61C79   x3
 T_F425CC:	jp sub_FE1C80  ; -> prom_a 0x61C80   x3
-T_F425D0:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
+T_MidiFileSave_Page5_LcdKeyRow3:	jp MidiFileSave_Page5_LcdKeyRow3  ; -> prom_a 0x61C98   x1
 T_F425D4:	jp sub_FE1C9F  ; -> prom_a 0x61C9F   x2
 T_F425D8:	jp sub_FE1CA3  ; -> prom_a 0x61CA3   x3
 T_F425DC:	jp sub_FE1CA7  ; -> prom_a 0x61CA7   x3
@@ -90172,10 +90172,10 @@ T_F425E4:	jp sub_FE1CAF  ; -> prom_a 0x61CAF   x5
 T_F425E8:	jp sub_FE1CB3  ; -> prom_a 0x61CB3   x5
 T_F425EC:	jp sub_FE1CC0  ; -> prom_a 0x61CC0
 T_Disk_PortA3_Release_Entry:	jp Disk_PortA3_Release_Entry  ; -> prom_a 0x61CC4   x1
-T_F425F4:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
+T_DiskSaveFile_Page5_LcdKeyRow3:	jp DiskSaveFile_Page5_LcdKeyRow3  ; -> prom_a 0x61CC8   x1
 T_F425F8:	jp sub_FE1CCC  ; -> prom_a 0x61CCC   x3
 T_F425FC:	jp sub_FE1CD0  ; -> prom_a 0x61CD0
-T_F42600:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
+T_Var2216_SetW145C_Call:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
 T_F42604:	jp sub_FE1CD8  ; -> prom_a 0x61CD8   x8
 T_F42608:	jp sub_FE1CDC  ; -> prom_a 0x61CDC   x1
 T_F4260C:	jp sub_FE1CE0  ; -> prom_a 0x61CE0   x1
@@ -90188,14 +90188,14 @@ T_F42624:	jp sub_FE1BEB  ; -> prom_a 0x61BEB   x1
 T_F42628:	jp sub_FE1BF3  ; -> prom_a 0x61BF3   x1
 T_F4262C:	jp sub_FE1BFB  ; -> prom_a 0x61BFB   x1
 T_F42630:	jp sub_FE1C03  ; -> prom_a 0x61C03
-T_F42634:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
+T_MidiFileSave_Page3_LcdKeyRow3:	jp MidiFileSave_Page3_LcdKeyRow3  ; -> prom_a 0x61C59   x1
 	.fill 0x28, 1, 0x0E  ; 0xF42638: 40 x ret
 T_F42660:	jp sub_F38800  ; -> prom_b 0x38800   x1
 T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
 	.fill 0x8, 1, 0x0E  ; 0xF42668: 8 x ret
-T_F42670:	jp Screen_Initial_Enter  ; -> prom_a 0x2129D
-T_F42674:	jp Screen_Initial_Leave  ; -> prom_a 0x212CE
-T_F42678:	jp Screen_Initial_Button  ; -> prom_a 0x212DD
+T_Screen_Initial_Enter:	jp Screen_Initial_Enter  ; -> prom_a 0x2129D
+T_Screen_Initial_Leave:	jp Screen_Initial_Leave  ; -> prom_a 0x212CE
+T_Screen_Initial_Button:	jp Screen_Initial_Button  ; -> prom_a 0x212DD
 T_F4267C:	jp T_F4267C_Nop  ; -> prom_a 0x21304
 T_Screen_SoundGroupNaming_Enter:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
 T_Screen_SoundGroupNaming_Leave:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
@@ -90240,7 +90240,7 @@ T_F42778:	jp sub_F62DC9  ; -> prom_b 0x62DC9   x8
 T_F4277C:	jp sub_F6306A  ; -> prom_b 0x6306A   x13
 T_F42780:	jp sub_F63317  ; -> prom_b 0x63317   x4
 T_F42784:	jp sub_F63383  ; -> prom_b 0x63383   x6
-T_F42788:	jp BStore_ReadBlockByteAtIX  ; -> prom_b 0x633F5
+T_BStore_ReadBlockByteAtIX:	jp BStore_ReadBlockByteAtIX  ; -> prom_b 0x633F5
 ; Evidence: slot 0xF4278C is `jp 0xF6342C`; prom_b 0xF6342C carries the label
 ;           BStore_ErrorToStatusByte, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_ErrorToStatusByte:	jp BStore_ErrorToStatusByte  ; F4278C (was T_F4278C) -> prom_b 0x6342C   x5
@@ -90308,139 +90308,139 @@ T_F42880:	jp sub_F7A400  ; -> prom_b 0x7A400   x2
 T_F42884:	jp sub_F7A402  ; -> prom_b 0x7A402   x17
 T_F42888:	jp sub_F7A404  ; -> prom_b 0x7A404   x7
 T_F4288C:	jp sub_F7A406  ; -> prom_b 0x7A406
-T_F42890:	jp BStore_LatchHeapBase_Veneer  ; -> prom_b 0x7A408   x1
+T_BStore_LatchHeapBase_Veneer:	jp BStore_LatchHeapBase_Veneer  ; -> prom_b 0x7A408   x1
 ; Evidence: slot 0xF42894 is `jp 0xF7A613`; prom_b 0xF7A613 carries the label
 ;           BStore_AppendBytes_Veneer, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_BStore_AppendBytes_Veneer:	jp BStore_AppendBytes_Veneer  ; F42894 (was T_F42894) -> prom_b 0x7A613   x8
 	.fill 0x18, 1, 0x0E  ; 0xF42898: 24 x ret
-T_F428B0:	jp BStore_AppendBytes_Join3_Veneer  ; -> prom_b 0x7AA00   x1
-T_F428B4:	jp BStore_AppendBytes_Join4_Veneer  ; -> prom_b 0x7AA02   x1
+T_BStore_AppendBytes_Join3_Veneer:	jp BStore_AppendBytes_Join3_Veneer  ; -> prom_b 0x7AA00   x1
+T_BStore_AppendBytes_Join4_Veneer:	jp BStore_AppendBytes_Join4_Veneer  ; -> prom_b 0x7AA02   x1
 T_F428B8:	jp sub_F7AA29  ; -> prom_b 0x7AA29   x1
 T_F428BC:	jp T_F428BC_Nop  ; -> prom_b 0x7AA88   x1
-T_F428C0:	jp SongClear_SoftKeyCol4  ; -> prom_b 0x7AA89   x1
-T_F428C4:	jp SongClear_SoftKeyCol3  ; -> prom_b 0x7AAAF   x1
-T_F428C8:	jp SongClear_LcdKeyRow5  ; -> prom_b 0x7AADD   x1
-T_F428CC:	jp SongClear_LcdKeyRow4  ; -> prom_b 0x7AAF0   x1
+T_SongClear_SoftKeyCol4:	jp SongClear_SoftKeyCol4  ; -> prom_b 0x7AA89   x1
+T_SongClear_SoftKeyCol3:	jp SongClear_SoftKeyCol3  ; -> prom_b 0x7AAAF   x1
+T_SongClear_LcdKeyRow5:	jp SongClear_LcdKeyRow5  ; -> prom_b 0x7AADD   x1
+T_SongClear_LcdKeyRow4:	jp SongClear_LcdKeyRow4  ; -> prom_b 0x7AAF0   x1
 T_F428D0:	jp sub_F7AB9C  ; -> prom_b 0x7AB9C   x1
-T_F428D4:	jp TrackClear_OnLeave  ; -> prom_b 0x7ABB9   x1
+T_TrackClear_OnLeave:	jp TrackClear_OnLeave  ; -> prom_b 0x7ABB9   x1
 T_F428D8:	jp sub_F7ABDC  ; -> prom_b 0x7ABDC   x2
-T_F428DC:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
+T_TrackClear_LcdKeyRow2:	jp TrackClear_LcdKeyRow2  ; -> prom_b 0x7AC07   x2
 T_F428E0:	jp sub_F7BCFD  ; -> prom_b 0x7BCFD   x1
-T_F428E4:	jp Vel0cityChange_OnLeave  ; -> prom_b 0x7BD24   x1
-T_F428E8:	jp Vel0cityChange_StageZero_LcdKeyRow1  ; -> prom_b 0x7BD30   x1
-T_F428EC:	jp Vel0cityChange_StageZero_LcdKeyRow2  ; -> prom_b 0x7BD40   x1
-T_F428F0:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
-T_F428F4:	jp Vel0cityChange_StageZero_LcdKeyRow4  ; -> prom_b 0x7BD6A   x1
+T_Vel0cityChange_OnLeave:	jp Vel0cityChange_OnLeave  ; -> prom_b 0x7BD24   x1
+T_Vel0cityChange_StageZero_LcdKeyRow1:	jp Vel0cityChange_StageZero_LcdKeyRow1  ; -> prom_b 0x7BD30   x1
+T_Vel0cityChange_StageZero_LcdKeyRow2:	jp Vel0cityChange_StageZero_LcdKeyRow2  ; -> prom_b 0x7BD40   x1
+T_Vel0cityChange_StageZero_LcdKeyRow3:	jp Vel0cityChange_StageZero_LcdKeyRow3  ; -> prom_b 0x7BD55   x1
+T_Vel0cityChange_StageZero_LcdKeyRow4:	jp Vel0cityChange_StageZero_LcdKeyRow4  ; -> prom_b 0x7BD6A   x1
 T_F428F8:	jp sub_F7BD7F  ; -> prom_b 0x7BD7F   x4
 T_F428FC:	jp sub_F7BDD4  ; -> prom_b 0x7BDD4   x2
-T_F42900:	jp Vel0cityChange_LcdKeyRow2  ; -> prom_b 0x7BEF4   x2
+T_Vel0cityChange_LcdKeyRow2:	jp Vel0cityChange_LcdKeyRow2  ; -> prom_b 0x7BEF4   x2
 T_F42904:	jp sub_F7BDC0  ; -> prom_b 0x7BDC0
 T_F42908:	jp sub_F7BFEA  ; -> prom_b 0x7BFEA   x1
-T_F4290C:	jp Quantize_OnLeave  ; -> prom_b 0x7C0AF   x1
-T_F42910:	jp Quantize_SelectField1  ; -> prom_b 0x7C0BB   x1
-T_F42914:	jp Quantize_SelectField2  ; -> prom_b 0x7C0C6   x1
-T_F42918:	jp Quantize_SelectField3  ; -> prom_b 0x7C0D6   x1
-T_F4291C:	jp Quantize_SelectField4  ; -> prom_b 0x7C0E6   x1
-T_F42920:	jp Quantize_SelectField5  ; -> prom_b 0x7C310   x1
-T_F42924:	jp Quantize_SelectField6  ; -> prom_b 0x7C31B   x1
+T_Quantize_OnLeave:	jp Quantize_OnLeave  ; -> prom_b 0x7C0AF   x1
+T_Quantize_SelectField1:	jp Quantize_SelectField1  ; -> prom_b 0x7C0BB   x1
+T_Quantize_SelectField2:	jp Quantize_SelectField2  ; -> prom_b 0x7C0C6   x1
+T_Quantize_SelectField3:	jp Quantize_SelectField3  ; -> prom_b 0x7C0D6   x1
+T_Quantize_SelectField4:	jp Quantize_SelectField4  ; -> prom_b 0x7C0E6   x1
+T_Quantize_SelectField5:	jp Quantize_SelectField5  ; -> prom_b 0x7C310   x1
+T_Quantize_SelectField6:	jp Quantize_SelectField6  ; -> prom_b 0x7C31B   x1
 T_F42928:	jp sub_F7C0F1  ; -> prom_b 0x7C0F1   x4
 T_F4292C:	jp sub_F7C17D  ; -> prom_b 0x7C17D   x2
-T_F42930:	jp Quantize_LcdKeyRow3  ; -> prom_b 0x7C326   x2
+T_Quantize_LcdKeyRow3:	jp Quantize_LcdKeyRow3  ; -> prom_b 0x7C326   x2
 T_F42934:	jp sub_F7C13E  ; -> prom_b 0x7C13E
 T_F42938:	jp sub_F7AC9D  ; -> prom_b 0x7AC9D   x1
-T_F4293C:	jp TrackMerge_OnLeave  ; -> prom_b 0x7ACA6   x1
-T_F42940:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
-T_F42944:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
-T_F42948:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
+T_TrackMerge_OnLeave:	jp TrackMerge_OnLeave  ; -> prom_b 0x7ACA6   x1
+T_TrackMerge_SelectField1:	jp TrackMerge_SelectField1  ; -> prom_b 0x7ACC5   x1
+T_TrackMerge_SelectField2:	jp TrackMerge_SelectField2  ; -> prom_b 0x7ACD0   x1
+T_TrackMerge_SelectField3:	jp TrackMerge_SelectField3  ; -> prom_b 0x7ACDB   x1
 T_F4294C:	jp sub_F7ACE6  ; -> prom_b 0x7ACE6   x1
-T_F42950:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
+T_TrackMerge_StageZero_SoftKeyCol5:	jp TrackMerge_StageZero_SoftKeyCol5  ; -> prom_b 0x7AD14   x1
 T_F42954:	jp sub_F7ADF5  ; -> prom_b 0x7ADF5   x2
-T_F42958:	jp TrackMerge_LcdKeyRow2  ; -> prom_b 0x7AE0C   x2
+T_TrackMerge_LcdKeyRow2:	jp TrackMerge_LcdKeyRow2  ; -> prom_b 0x7AE0C   x2
 T_F4295C:	jp sub_F7B000  ; -> prom_b 0x7B000   x1
-T_F42960:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
-T_F42964:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
-T_F42968:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
-T_F4296C:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
+T_MeasureDelete_OnLeave:	jp MeasureDelete_OnLeave  ; -> prom_b 0x7B00E   x1
+T_MeasureDelete_SelectField1:	jp MeasureDelete_SelectField1  ; -> prom_b 0x7B01A   x1
+T_MeasureDelete_SelectField2:	jp MeasureDelete_SelectField2  ; -> prom_b 0x7B025   x1
+T_MeasureDelete_SelectField3:	jp MeasureDelete_SelectField3  ; -> prom_b 0x7B035   x1
 T_F42970:	jp sub_F7B045  ; -> prom_b 0x7B045   x4
 T_F42974:	jp sub_F7B08B  ; -> prom_b 0x7B08B   x2
-T_F42978:	jp MeasureDelete_LcdKeyRow3  ; -> prom_b 0x7B162   x2
+T_MeasureDelete_LcdKeyRow3:	jp MeasureDelete_LcdKeyRow3  ; -> prom_b 0x7B162   x2
 T_F4297C:	jp sub_F7B07A  ; -> prom_b 0x7B07A
 T_F42980:	jp sub_F7B22C  ; -> prom_b 0x7B22C   x1
-T_F42984:	jp MeasureErase_OnLeave  ; -> prom_b 0x7B23A   x1
-T_F42988:	jp MeasureErase_SelectField1  ; -> prom_b 0x7B246   x1
-T_F4298C:	jp MeasureErase_SelectField2  ; -> prom_b 0x7B251   x1
-T_F42990:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
-T_F42994:	jp MeasureErase_SelectField4  ; -> prom_b 0x7B271   x1
+T_MeasureErase_OnLeave:	jp MeasureErase_OnLeave  ; -> prom_b 0x7B23A   x1
+T_MeasureErase_SelectField1:	jp MeasureErase_SelectField1  ; -> prom_b 0x7B246   x1
+T_MeasureErase_SelectField2:	jp MeasureErase_SelectField2  ; -> prom_b 0x7B251   x1
+T_MeasureErase_SelectField3:	jp MeasureErase_SelectField3  ; -> prom_b 0x7B261   x1
+T_MeasureErase_SelectField4:	jp MeasureErase_SelectField4  ; -> prom_b 0x7B271   x1
 T_F42998:	jp sub_F7B27C  ; -> prom_b 0x7B27C   x4
 T_F4299C:	jp sub_F7B2CE  ; -> prom_b 0x7B2CE   x2
-T_F429A0:	jp MeasureErase_LcdKeyRow2  ; -> prom_b 0x7B3E0   x2
+T_MeasureErase_LcdKeyRow2:	jp MeasureErase_LcdKeyRow2  ; -> prom_b 0x7B3E0   x2
 T_F429A4:	jp sub_F7B2BD  ; -> prom_b 0x7B2BD
 T_F429A8:	jp sub_F7B4BF  ; -> prom_b 0x7B4BF   x1
-T_F429AC:	jp MeasureInsert_OnLeave  ; -> prom_b 0x7B4CD   x1
-T_F429B0:	jp MeasureInsert_SelectField1  ; -> prom_b 0x7B4EC   x1
-T_F429B4:	jp MeasureInsert_SelectField2  ; -> prom_b 0x7B4F7   x1
-T_F429B8:	jp MeasureInsert_SelectField3  ; -> prom_b 0x7B507   x1
-T_F429BC:	jp MeasureInsert_SelectField4  ; -> prom_b 0x7B517   x1
-T_F429C0:	jp MeasureInsert_SelectField5  ; -> prom_b 0x7B522   x1
-T_F429C4:	jp MeasureInsert_SelectField6  ; -> prom_b 0x7B532   x1
+T_MeasureInsert_OnLeave:	jp MeasureInsert_OnLeave  ; -> prom_b 0x7B4CD   x1
+T_MeasureInsert_SelectField1:	jp MeasureInsert_SelectField1  ; -> prom_b 0x7B4EC   x1
+T_MeasureInsert_SelectField2:	jp MeasureInsert_SelectField2  ; -> prom_b 0x7B4F7   x1
+T_MeasureInsert_SelectField3:	jp MeasureInsert_SelectField3  ; -> prom_b 0x7B507   x1
+T_MeasureInsert_SelectField4:	jp MeasureInsert_SelectField4  ; -> prom_b 0x7B517   x1
+T_MeasureInsert_SelectField5:	jp MeasureInsert_SelectField5  ; -> prom_b 0x7B522   x1
+T_MeasureInsert_SelectField6:	jp MeasureInsert_SelectField6  ; -> prom_b 0x7B532   x1
 T_F429C8:	jp sub_F7B53D  ; -> prom_b 0x7B53D   x2
 T_F429CC:	jp sub_F7B58C  ; -> prom_b 0x7B58C   x2
 T_F429D0:	jp sub_F7B761  ; -> prom_b 0x7B761   x2
-T_F429D4:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
+T_MeasureInsert_LcdKeyRow1:	jp MeasureInsert_LcdKeyRow1  ; -> prom_b 0x7B771   x2
 T_F429D8:	jp sub_F7B8DC  ; -> prom_b 0x7B8DC   x1
-T_F429DC:	jp MeasureC0py_OnLeave  ; -> prom_b 0x7B8EA   x1
-T_F429E0:	jp MeasureC0py_SelectField1  ; -> prom_b 0x7B909   x1
-T_F429E4:	jp MeasureC0py_SelectField2  ; -> prom_b 0x7B914   x1
-T_F429E8:	jp MeasureC0py_SelectField3  ; -> prom_b 0x7B924   x1
-T_F429EC:	jp MeasureC0py_SelectField4  ; -> prom_b 0x7B934   x1
-T_F429F0:	jp MeasureC0py_SelectField5  ; -> prom_b 0x7B93F   x1
-T_F429F4:	jp MeasureC0py_SelectField6  ; -> prom_b 0x7B94F   x1
+T_MeasureC0py_OnLeave:	jp MeasureC0py_OnLeave  ; -> prom_b 0x7B8EA   x1
+T_MeasureC0py_SelectField1:	jp MeasureC0py_SelectField1  ; -> prom_b 0x7B909   x1
+T_MeasureC0py_SelectField2:	jp MeasureC0py_SelectField2  ; -> prom_b 0x7B914   x1
+T_MeasureC0py_SelectField3:	jp MeasureC0py_SelectField3  ; -> prom_b 0x7B924   x1
+T_MeasureC0py_SelectField4:	jp MeasureC0py_SelectField4  ; -> prom_b 0x7B934   x1
+T_MeasureC0py_SelectField5:	jp MeasureC0py_SelectField5  ; -> prom_b 0x7B93F   x1
+T_MeasureC0py_SelectField6:	jp MeasureC0py_SelectField6  ; -> prom_b 0x7B94F   x1
 T_F429F8:	jp sub_F7B95A  ; -> prom_b 0x7B95A   x2
 T_F429FC:	jp sub_F7B9AB  ; -> prom_b 0x7B9AB   x2
 T_F42A00:	jp sub_F7BB82  ; -> prom_b 0x7BB82   x2
-T_F42A04:	jp MeasureC0py_LcdKeyRow1  ; -> prom_b 0x7BB92   x2
+T_MeasureC0py_LcdKeyRow1:	jp MeasureC0py_LcdKeyRow1  ; -> prom_b 0x7BB92   x2
 T_F42A08:	jp sub_F7C3B2  ; -> prom_b 0x7C3B2   x1
 T_F42A0C:	jp sub_F7C3EE  ; -> prom_b 0x7C3EE
-T_F42A10:	jp S0ngC0py_StageZero_SoftKeyCol2  ; -> prom_b 0x7C41D   x1
-T_F42A14:	jp S0ngC0py_StageZero_SoftKeyCol1  ; -> prom_b 0x7C3FA   x1
-T_F42A18:	jp S0ngC0py_StageZero_SoftKeyCol4  ; -> prom_b 0x7C48C   x1
-T_F42A1C:	jp S0ngC0py_StageZero_SoftKeyCol3  ; -> prom_b 0x7C463   x1
-T_F42A20:	jp S0ngC0py_StageZero_SoftKeyCol6  ; -> prom_b 0x7C4DC   x1
-T_F42A24:	jp S0ngC0py_StageZero_SoftKeyCol5  ; -> prom_b 0x7C4B9   x1
-T_F42A28:	jp S0ngC0py_StageZero_SoftKeyCol8  ; -> prom_b 0x7C528   x1
-T_F42A2C:	jp S0ngC0py_StageZero_SoftKeyCol7  ; -> prom_b 0x7C4FF   x1
-T_F42A30:	jp S0ngC0py_LcdKeyRow2  ; -> prom_b 0x7C555   x2
+T_S0ngC0py_StageZero_SoftKeyCol2:	jp S0ngC0py_StageZero_SoftKeyCol2  ; -> prom_b 0x7C41D   x1
+T_S0ngC0py_StageZero_SoftKeyCol1:	jp S0ngC0py_StageZero_SoftKeyCol1  ; -> prom_b 0x7C3FA   x1
+T_S0ngC0py_StageZero_SoftKeyCol4:	jp S0ngC0py_StageZero_SoftKeyCol4  ; -> prom_b 0x7C48C   x1
+T_S0ngC0py_StageZero_SoftKeyCol3:	jp S0ngC0py_StageZero_SoftKeyCol3  ; -> prom_b 0x7C463   x1
+T_S0ngC0py_StageZero_SoftKeyCol6:	jp S0ngC0py_StageZero_SoftKeyCol6  ; -> prom_b 0x7C4DC   x1
+T_S0ngC0py_StageZero_SoftKeyCol5:	jp S0ngC0py_StageZero_SoftKeyCol5  ; -> prom_b 0x7C4B9   x1
+T_S0ngC0py_StageZero_SoftKeyCol8:	jp S0ngC0py_StageZero_SoftKeyCol8  ; -> prom_b 0x7C528   x1
+T_S0ngC0py_StageZero_SoftKeyCol7:	jp S0ngC0py_StageZero_SoftKeyCol7  ; -> prom_b 0x7C4FF   x1
+T_S0ngC0py_LcdKeyRow2:	jp S0ngC0py_LcdKeyRow2  ; -> prom_b 0x7C555   x2
 T_F42A34:	jp sub_F7C5C0  ; -> prom_b 0x7C5C0   x2
 T_F42A38:	jp sub_F7C606  ; -> prom_b 0x7C606   x1
-T_F42A3C:	jp Transp0se_OnLeave  ; -> prom_b 0x7C666   x1
-T_F42A40:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
-T_F42A44:	jp Transp0se_SelectField2  ; -> prom_b 0x7C682   x1
-T_F42A48:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
-T_F42A4C:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
+T_Transp0se_OnLeave:	jp Transp0se_OnLeave  ; -> prom_b 0x7C666   x1
+T_Transp0se_SelectField1:	jp Transp0se_SelectField1  ; -> prom_b 0x7C672   x1
+T_Transp0se_SelectField2:	jp Transp0se_SelectField2  ; -> prom_b 0x7C682   x1
+T_Transp0se_SelectField3:	jp Transp0se_SelectField3  ; -> prom_b 0x7C692   x1
+T_Transp0se_SelectField4:	jp Transp0se_SelectField4  ; -> prom_b 0x7C6A2   x1
 T_F42A50:	jp sub_F7C6B2  ; -> prom_b 0x7C6B2   x2
 T_F42A54:	jp sub_F7C6FB  ; -> prom_b 0x7C6FB   x2
-T_F42A58:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
+T_Transp0se_LcdKeyRow2:	jp Transp0se_LcdKeyRow2  ; -> prom_b 0x7C7F0   x2
 T_F42A5C:	jp sub_F7C843  ; -> prom_b 0x7C843   x2
 T_F42A60:	jp sub_F7CAD2  ; -> prom_b 0x7CAD2   x1
-T_F42A64:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
-T_F42A68:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
-T_F42A6C:	jp AdvanceDelay_SelectField2  ; -> prom_b 0x7CB29   x1
-T_F42A70:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
-T_F42A74:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F   x1
+T_AdvanceDelay_OnLeave:	jp AdvanceDelay_OnLeave  ; -> prom_b 0x7CB12   x1
+T_AdvanceDelay_SelectField1:	jp AdvanceDelay_SelectField1  ; -> prom_b 0x7CB1E   x1
+T_AdvanceDelay_SelectField2:	jp AdvanceDelay_SelectField2  ; -> prom_b 0x7CB29   x1
+T_AdvanceDelay_SelectField3:	jp AdvanceDelay_SelectField3  ; -> prom_b 0x7CB34   x1
+T_AdvanceDelay_SelectField4:	jp AdvanceDelay_SelectField4  ; -> prom_b 0x7CB3F   x1
 T_F42A78:	jp sub_F7CB4A  ; -> prom_b 0x7CB4A   x2
 T_F42A7C:	jp sub_F7CB90  ; -> prom_b 0x7CB90   x2
-T_F42A80:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
+T_AdvanceDelay_LcdKeyRow3:	jp AdvanceDelay_LcdKeyRow3  ; -> prom_b 0x7CC7C   x2
 T_F42A84:	jp sub_F7CCCA  ; -> prom_b 0x7CCCA   x2
 T_F42A88:	jp sub_F7C853  ; -> prom_b 0x7C853   x1
-T_F42A8C:	jp N0teChange_OnLeave  ; -> prom_b 0x7C8BC   x1
-T_F42A90:	jp N0teChange_SelectField1  ; -> prom_b 0x7C8C8   x1
-T_F42A94:	jp N0teChange_SelectField2  ; -> prom_b 0x7C8D8   x1
-T_F42A98:	jp N0teChange_SelectField3  ; -> prom_b 0x7C8E8   x1
-T_F42A9C:	jp N0teChange_SelectField4  ; -> prom_b 0x7C8F8   x1
-T_F42AA0:	jp N0teChange_SelectField5  ; -> prom_b 0x7C908   x1
+T_N0teChange_OnLeave:	jp N0teChange_OnLeave  ; -> prom_b 0x7C8BC   x1
+T_N0teChange_SelectField1:	jp N0teChange_SelectField1  ; -> prom_b 0x7C8C8   x1
+T_N0teChange_SelectField2:	jp N0teChange_SelectField2  ; -> prom_b 0x7C8D8   x1
+T_N0teChange_SelectField3:	jp N0teChange_SelectField3  ; -> prom_b 0x7C8E8   x1
+T_N0teChange_SelectField4:	jp N0teChange_SelectField4  ; -> prom_b 0x7C8F8   x1
+T_N0teChange_SelectField5:	jp N0teChange_SelectField5  ; -> prom_b 0x7C908   x1
 T_F42AA4:	jp sub_F7C918  ; -> prom_b 0x7C918   x2
 T_F42AA8:	jp sub_F7C964  ; -> prom_b 0x7C964   x2
-T_F42AAC:	jp N0teChange_LcdKeyRow4  ; -> prom_b 0x7CA6F   x2
+T_N0teChange_LcdKeyRow4:	jp N0teChange_LcdKeyRow4  ; -> prom_b 0x7CA6F   x2
 T_F42AB0:	jp sub_F7CAC2  ; -> prom_b 0x7CAC2   x2
 T_F42AB4:	jp sub_F7C5CB  ; -> prom_b 0x7C5CB   x1
 T_F42AB8:	jp sub_F7C5EA  ; -> prom_b 0x7C5EA
@@ -90450,51 +90450,51 @@ T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
 T_F42B70:	jp sub_F65C51  ; -> prom_b 0x65C51   x1
 T_F42B74:	jp sub_F6609C  ; -> prom_b 0x6609C
 T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
-T_F42B7C:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
-T_F42B80:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
-T_F42B84:	jp SequencerMedley_StepFieldUp  ; -> prom_b 0x6625C   x1
-T_F42B88:	jp SequencerMedley_StepFieldDown  ; -> prom_b 0x66278   x1
-T_F42B8C:	jp TrackAssign_StageZero_LcdKeyRow2  ; -> prom_b 0x65C5E   x1
-T_F42B90:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
-T_F42B94:	jp TrackAssign_SelectTrackGroup  ; -> prom_b 0x65CD6   x2
+T_Medley_SelectField1:	jp Medley_SelectField1  ; -> prom_b 0x66246   x2
+T_Medley_SelectField2:	jp Medley_SelectField2  ; -> prom_b 0x66251   x1
+T_SequencerMedley_StepFieldUp:	jp SequencerMedley_StepFieldUp  ; -> prom_b 0x6625C   x1
+T_SequencerMedley_StepFieldDown:	jp SequencerMedley_StepFieldDown  ; -> prom_b 0x66278   x1
+T_TrackAssign_StageZero_LcdKeyRow2:	jp TrackAssign_StageZero_LcdKeyRow2  ; -> prom_b 0x65C5E   x1
+T_TrackAssign_StageZero_LcdKeyRow1:	jp TrackAssign_StageZero_LcdKeyRow1  ; -> prom_b 0x65C9A   x1
+T_TrackAssign_SelectTrackGroup:	jp TrackAssign_SelectTrackGroup  ; -> prom_b 0x65CD6   x2
 T_F42B98:	jp sub_F65DAE  ; -> prom_b 0x65DAE   x1
 T_F42B9C:	jp sub_F65DD3  ; -> prom_b 0x65DD3   x2
-T_F42BA0:	jp TrackAssign_StageZero_SoftKeyCol4  ; -> prom_b 0x65DF8   x1
-T_F42BA4:	jp TrackAssign_StageZero_LcdKeyRow3  ; -> prom_b 0x65E94   x1
-T_F42BA8:	jp TrackAssign_StageZero_SoftKeyCol5  ; -> prom_b 0x65F7C   x1
-T_F42BAC:	jp TrackAssign_StageZero_SoftKeyCol7  ; -> prom_b 0x65FDD   x1
-T_F42BB0:	jp TrackAssign_StageNonZero_LcdKeyRow2  ; -> prom_b 0x66020   x1
+T_TrackAssign_StageZero_SoftKeyCol4:	jp TrackAssign_StageZero_SoftKeyCol4  ; -> prom_b 0x65DF8   x1
+T_TrackAssign_StageZero_LcdKeyRow3:	jp TrackAssign_StageZero_LcdKeyRow3  ; -> prom_b 0x65E94   x1
+T_TrackAssign_StageZero_SoftKeyCol5:	jp TrackAssign_StageZero_SoftKeyCol5  ; -> prom_b 0x65F7C   x1
+T_TrackAssign_StageZero_SoftKeyCol7:	jp TrackAssign_StageZero_SoftKeyCol7  ; -> prom_b 0x65FDD   x1
+T_TrackAssign_StageNonZero_LcdKeyRow2:	jp TrackAssign_StageNonZero_LcdKeyRow2  ; -> prom_b 0x66020   x1
 T_F42BB4:	jp sub_F65C00  ; -> prom_b 0x65C00   x1
 T_F42BB8:	jp sub_F65C0D  ; -> prom_b 0x65C0D   x1
-T_F42BBC:	jp StepRecordPartSelect_OpenStepRecord  ; -> prom_b 0x664AE   x8
-T_F42BC0:	jp TrackAssign_ReturnToStageZero  ; -> prom_b 0x66081   x2
-T_F42BC4:	jp StepRecordPartSelect_ResetOnEntry  ; -> prom_b 0x664D5   x1
-T_F42BC8:	jp StepRecordPartSelect_OnLeave  ; -> prom_b 0x6650F   x1
-T_F42BCC:	jp SequencerMedley_InitOnEntry  ; -> prom_b 0x660ED   x1
-T_F42BD0:	jp SequencerMedley_OnLeave  ; -> prom_b 0x6614E   x1
-T_F42BD4:	jp SequencerMedley_LcdKeyRow2  ; -> prom_b 0x66191   x1
-T_F42BD8:	jp SequencerMedley_StopPlayback  ; -> prom_b 0x66201   x1
+T_StepRecordPartSelect_OpenStepRecord:	jp StepRecordPartSelect_OpenStepRecord  ; -> prom_b 0x664AE   x8
+T_TrackAssign_ReturnToStageZero:	jp TrackAssign_ReturnToStageZero  ; -> prom_b 0x66081   x2
+T_StepRecordPartSelect_ResetOnEntry:	jp StepRecordPartSelect_ResetOnEntry  ; -> prom_b 0x664D5   x1
+T_StepRecordPartSelect_OnLeave:	jp StepRecordPartSelect_OnLeave  ; -> prom_b 0x6650F   x1
+T_SequencerMedley_InitOnEntry:	jp SequencerMedley_InitOnEntry  ; -> prom_b 0x660ED   x1
+T_SequencerMedley_OnLeave:	jp SequencerMedley_OnLeave  ; -> prom_b 0x6614E   x1
+T_SequencerMedley_LcdKeyRow2:	jp SequencerMedley_LcdKeyRow2  ; -> prom_b 0x66191   x1
+T_SequencerMedley_StopPlayback:	jp SequencerMedley_StopPlayback  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
 T_F42BE0:	jp T_F42BE0_Nop  ; -> prom_b 0x6656D
 T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
-T_F42BE8:	jp TrackAssign_OnLeave  ; -> prom_b 0x6655D   x1
+T_TrackAssign_OnLeave:	jp TrackAssign_OnLeave  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
-T_F42BF4:	jp TrackAssign_StageZero_LcdKeyRow5  ; -> prom_b 0x6656E   x1
-T_F42BF8:	jp TrackAssignPresets_InitFromCurrentBank  ; -> prom_b 0x665B4   x1
+T_TrackAssign_StageZero_LcdKeyRow5:	jp TrackAssign_StageZero_LcdKeyRow5  ; -> prom_b 0x6656E   x1
+T_TrackAssignPresets_InitFromCurrentBank:	jp TrackAssignPresets_InitFromCurrentBank  ; -> prom_b 0x665B4   x1
 T_F42BFC:	jp T_F42BFC_Nop  ; -> prom_b 0x665F1
-T_F42C00:	jp TrackAssignPresets_SelectField1  ; -> prom_b 0x665F2   x1
-T_F42C04:	jp TrackAssignPresets_SelectField2  ; -> prom_b 0x665FF   x1
-T_F42C08:	jp TrackAssignPresets_SelectField3  ; -> prom_b 0x6660C   x1
-T_F42C0C:	jp TrackAssignPresets_BankUp  ; -> prom_b 0x66619   x1
-T_F42C10:	jp TrackAssignPresets_BankDown  ; -> prom_b 0x66639   x1
-T_F42C14:	jp TrackAssignPresets_SoftKeyCol6  ; -> prom_b 0x66658   x1
-T_F42C18:	jp SequencerMedley_SetSourceInternal  ; -> prom_b 0x6633A   x2
-T_F42C1C:	jp SequencerMedley_SoftKeyCol3  ; -> prom_b 0x66382   x1
+T_TrackAssignPresets_SelectField1:	jp TrackAssignPresets_SelectField1  ; -> prom_b 0x665F2   x1
+T_TrackAssignPresets_SelectField2:	jp TrackAssignPresets_SelectField2  ; -> prom_b 0x665FF   x1
+T_TrackAssignPresets_SelectField3:	jp TrackAssignPresets_SelectField3  ; -> prom_b 0x6660C   x1
+T_TrackAssignPresets_BankUp:	jp TrackAssignPresets_BankUp  ; -> prom_b 0x66619   x1
+T_TrackAssignPresets_BankDown:	jp TrackAssignPresets_BankDown  ; -> prom_b 0x66639   x1
+T_TrackAssignPresets_SoftKeyCol6:	jp TrackAssignPresets_SoftKeyCol6  ; -> prom_b 0x66658   x1
+T_SequencerMedley_SetSourceInternal:	jp SequencerMedley_SetSourceInternal  ; -> prom_b 0x6633A   x2
+T_SequencerMedley_SoftKeyCol3:	jp SequencerMedley_SoftKeyCol3  ; -> prom_b 0x66382   x1
 T_F42C20:	jp T_F42C20_Nop  ; -> prom_b 0x663D6
-T_F42C24:	jp SequencerMedley_SoftKeyCol7  ; -> prom_b 0x66415   x1
-T_F42C28:	jp SequencerMedley_SoftKeyCol8  ; -> prom_b 0x663D7   x1
-T_F42C2C:	jp SequencerMedley_LcdKeyRow4  ; -> prom_b 0x6645A   x1
+T_SequencerMedley_SoftKeyCol7:	jp SequencerMedley_SoftKeyCol7  ; -> prom_b 0x66415   x1
+T_SequencerMedley_SoftKeyCol8:	jp SequencerMedley_SoftKeyCol8  ; -> prom_b 0x663D7   x1
+T_SequencerMedley_LcdKeyRow4:	jp SequencerMedley_LcdKeyRow4  ; -> prom_b 0x6645A   x1
 	.fill 0x40, 1, 0x0E  ; 0xF42C30: 64 x ret
 T_F42C70:	jp Stub_Ret_F55018  ; -> prom_b 0x55018   never CALLED, but the 4 bytes
 				; `70 2C F4 00` occur 397 times in prom_a+prom_b
@@ -90645,7 +90645,7 @@ T_DisplayList_RunOne_Stack:	jp DisplayList_RunOne_Stack  ; F42E08 (was T_F42E08)
 ;           DisplayListB_RunOne_Stack, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DisplayListB_RunOne_Stack:	jp DisplayListB_RunOne_Stack  ; F42E0C (was T_F42E0C) -> prom_b 0x3183D   x107
 T_F42E10:	jp sub_F31852  ; -> prom_b 0x31852   x37  services 0x0C and 0x10, C = 0
-T_F42E14:	jp LCD_ShowAllLayers_StackFrame_Copy  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
+T_LCD_ShowAllLayers_StackFrame_Copy:	jp LCD_ShowAllLayers_StackFrame_Copy  ; -> prom_b 0x31863   x39  service 0x0C, C = 7
 T_F42E18:	jp sub_F31899  ; -> prom_b 0x31899   x9
 T_F42E1C:	jp sub_F3190E  ; -> prom_b 0x3190E   x1
 ; Evidence: slot 0xF42E20 is `jp 0xF0E9CF`; prom_b 0xF0E9CF carries the label
@@ -90697,9 +90697,9 @@ T_F42E90:	jp sub_FB9DA0  ; -> prom_a 0x39DA0   x2
 T_F42E94:	jp sub_FB9D2C  ; -> prom_a 0x39D2C   x3
 T_F42E98:	jp sub_FB9D43  ; -> prom_a 0x39D43   x2
 	.fill 0x24, 1, 0x0E  ; 0xF42E9C: 36 x ret
-T_F42EC0:	jp StepRecord_OnEnter  ; -> prom_b 0x6A9CA   x1
-T_F42EC4:	jp StepRecord_OnLeave  ; -> prom_b 0x6AE4B   x1
-T_F42EC8:	jp StepRecord_ButtonByTrackKind  ; -> prom_b 0x675CC   x2
+T_StepRecord_OnEnter:	jp StepRecord_OnEnter  ; -> prom_b 0x6A9CA   x1
+T_StepRecord_OnLeave:	jp StepRecord_OnLeave  ; -> prom_b 0x6AE4B   x1
+T_StepRecord_ButtonByTrackKind:	jp StepRecord_ButtonByTrackKind  ; -> prom_b 0x675CC   x2
 	ret  ; 0xF42ECC: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF42ECD: 3 x nop
 T_F42ED0:	jp sub_F68951  ; -> prom_b 0x68951   x1
@@ -90712,7 +90712,7 @@ T_F42EE8:	jp sub_F67434  ; -> prom_b 0x67434
 T_F42EEC:	jp T_F42EEC_Nop  ; -> prom_b 0x687EC
 T_F42EF0:	jp T_F42EF0_Nop  ; -> prom_b 0x6AB8E
 T_F42EF4:	jp sub_F6C625  ; -> prom_b 0x6C625
-T_F42EF8:	jp BStore_DirEntryOffsetX2_Call  ; -> prom_b 0x6747D   x1
+T_BStore_DirEntryOffsetX2_Call:	jp BStore_DirEntryOffsetX2_Call  ; -> prom_b 0x6747D   x1
 T_F42EFC:	jp sub_F67479  ; -> prom_b 0x67479   x2
 T_F42F00:	jp sub_F67488  ; -> prom_b 0x67488
 T_F42F04:	jp sub_F693F6  ; -> prom_b 0x693F6   x1
@@ -90731,16 +90731,16 @@ T_F42F68:	jp sub_F122C5  ; -> prom_b 0x122C5   x1
 T_F42F6C:	jp sub_F12334  ; -> prom_b 0x12334   x1
 	.fill 0x10, 1, 0x0E  ; 0xF42F70: 16 x ret
 T_F42F80:	jp sub_F0B91C  ; -> prom_b 0x0B91C   x6
-T_F42F84:	jp SoundEditNaming_SoftKeyCol1  ; -> prom_b 0x0B9B3   x3
-T_F42F88:	jp SoundEditNaming_SoftKeyCol2  ; -> prom_b 0x0BA20   x3
-T_F42F8C:	jp SoundEditNaming_SoftKeyCol3  ; -> prom_b 0x0BAA8   x3
-T_F42F90:	jp SoundEditNaming_SoftKeyCol4  ; -> prom_b 0x0BBB4   x3
-T_F42F94:	jp SoundEditNaming_SoftKeyCol5  ; -> prom_b 0x0BC98   x3
-T_F42F98:	jp SoundEditNaming_SoftKeyCol6  ; -> prom_b 0x0BD31   x3
+T_SoundEditNaming_SoftKeyCol1:	jp SoundEditNaming_SoftKeyCol1  ; -> prom_b 0x0B9B3   x3
+T_SoundEditNaming_SoftKeyCol2:	jp SoundEditNaming_SoftKeyCol2  ; -> prom_b 0x0BA20   x3
+T_SoundEditNaming_SoftKeyCol3:	jp SoundEditNaming_SoftKeyCol3  ; -> prom_b 0x0BAA8   x3
+T_SoundEditNaming_SoftKeyCol4:	jp SoundEditNaming_SoftKeyCol4  ; -> prom_b 0x0BBB4   x3
+T_SoundEditNaming_SoftKeyCol5:	jp SoundEditNaming_SoftKeyCol5  ; -> prom_b 0x0BC98   x3
+T_SoundEditNaming_SoftKeyCol6:	jp SoundEditNaming_SoftKeyCol6  ; -> prom_b 0x0BD31   x3
 T_F42F9C:	jp sub_F0BDAC  ; -> prom_b 0x0BDAC   x3
-T_F42FA0:	jp SoundEditNaming_SoftKeyCol8  ; -> prom_b 0x0BE44   x3
-T_F42FA4:	jp SoundEditNaming_LcdKeyRow1  ; -> prom_b 0x0BEBF   x6
-T_F42FA8:	jp SoundEditNaming_LcdKeyRow2  ; -> prom_b 0x0BF04   x4
+T_SoundEditNaming_SoftKeyCol8:	jp SoundEditNaming_SoftKeyCol8  ; -> prom_b 0x0BE44   x3
+T_SoundEditNaming_LcdKeyRow1:	jp SoundEditNaming_LcdKeyRow1  ; -> prom_b 0x0BEBF   x6
+T_SoundEditNaming_LcdKeyRow2:	jp SoundEditNaming_LcdKeyRow2  ; -> prom_b 0x0BF04   x4
 T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
 	.fill 0x20, 1, 0x0E  ; 0xF42FB0: 32 x ret
 ; ⚠ T_F42FD0-T_DL_Pt1Pt2Pt3Pt4Pt5Pt6Pt7Pt8 -- THIRTEEN STALE DIRECTORY SLOTS (header added
@@ -90988,9 +90988,9 @@ T_ScreenButton_SequencerMedley:	jp ScreenButton_SequencerMedley  ; F43158 (was T
 ; Evidence: slot 0xF4315C is `jp 0xF7D2B3`; prom_b 0xF7D2B3 carries the label
 ;           ScreenNull_SequencerMedley (graded CONTENT).  DERIVATIVE name.
 T_ScreenNull_SequencerMedley:	jp ScreenNull_SequencerMedley  ; F4315C (was T_F4315C) -> prom_b 0x7D2B3
-T_F43160:	jp ScreenEnter_StepRecord  ; -> prom_b 0x7D2B4
-T_F43164:	jp ScreenLeave_StepRecord  ; -> prom_b 0x7D2B9
-T_F43168:	jp ScreenButton_StepRecord  ; -> prom_b 0x7D2BE
+T_ScreenEnter_StepRecord:	jp ScreenEnter_StepRecord  ; -> prom_b 0x7D2B4
+T_ScreenLeave_StepRecord:	jp ScreenLeave_StepRecord  ; -> prom_b 0x7D2B9
+T_ScreenButton_StepRecord:	jp ScreenButton_StepRecord  ; -> prom_b 0x7D2BE
 T_F4316C:	jp T_F4316C_Nop  ; -> prom_b 0x7D2C5
 ; Evidence: slot 0xF43170 is `jp 0xF7D28A`; prom_b 0xF7D28A carries the label
 ;           ScreenEnter_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
@@ -91080,14 +91080,14 @@ T_MidiIn_ReqRebuild_Msg03_0A:	jp MidiIn_ReqRebuild_Msg03_0A  ; F43354 (was T_F43
 ;           MidiIn_PumpPortB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_MidiIn_PumpPortB:	jp MidiIn_PumpPortB  ; F43358 (was T_F43358) -> prom_a 0x260C2   x1
 	.fill 0x24, 1, 0x0E  ; 0xF4335C: 36 x ret
-T_F43380:	jp MidiFileL0ad_LcdKeyRow1  ; -> prom_b 0x6F400   x1
+T_MidiFileL0ad_LcdKeyRow1:	jp MidiFileL0ad_LcdKeyRow1  ; -> prom_b 0x6F400   x1
 T_F43384:	jp sub_F6F404  ; -> prom_b 0x6F404   x2
 	.fill 0x38, 1, 0x0E  ; 0xF43388: 56 x ret
 T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
 	.fill 0xC, 1, 0x0E  ; 0xF433C4: 12 x ret
-T_F433D0:	jp ScreenEnter_SoundEditDigitalEffect  ; -> prom_a 0x5D02D
-T_F433D4:	jp ScreenLeave_SoundEditDigitalEffect  ; -> prom_a 0x5E2EC
-T_F433D8:	jp ScreenButton_SoundEditDigitalEffect  ; -> prom_b 0x0AA10
+T_ScreenEnter_SoundEditDigitalEffect:	jp ScreenEnter_SoundEditDigitalEffect  ; -> prom_a 0x5D02D
+T_ScreenLeave_SoundEditDigitalEffect:	jp ScreenLeave_SoundEditDigitalEffect  ; -> prom_a 0x5E2EC
+T_ScreenButton_SoundEditDigitalEffect:	jp ScreenButton_SoundEditDigitalEffect  ; -> prom_b 0x0AA10
 T_F433DC:	jp T_F433DC_Nop  ; -> prom_a 0x5E2F9
 T_F433E0:	jp T_F433E0_Nop  ; -> prom_a 0x5E151
 T_F433E4:	jp ScreenLeave_CodeCE  ; -> prom_a 0x5E3B0
@@ -91117,14 +91117,14 @@ T_Queue2E00_PostParam98Fields:	jp Queue2E00_PostParam98Fields  ; -> prom_a 0x2C8
 ;           Disk_FormatSelectedMedia, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Disk_FormatSelectedMedia:	jp Disk_FormatSelectedMedia  ; F43460 (was T_F43460) -> prom_a 0x67200   x1
 	.fill 0xC, 1, 0x0E  ; 0xF43464: 12 x ret
-T_F43470:	jp ToneMsg_SendParam  ; -> prom_a 0x5616A   x1
-T_F43474:	jp ToneMsg80_SendParam  ; -> prom_a 0x561CF   x1
-T_F43478:	jp ToneMsg8D_SendParam  ; -> prom_a 0x56704   x1
-T_F4347C:	jp ToneMsg85_SendParam  ; -> prom_a 0x563D7   x1
-T_F43480:	jp ToneMsg80_Id01  ; -> prom_a 0x5622B   x1
+T_ToneMsg_SendParam:	jp ToneMsg_SendParam  ; -> prom_a 0x5616A   x1
+T_ToneMsg80_SendParam:	jp ToneMsg80_SendParam  ; -> prom_a 0x561CF   x1
+T_ToneMsg8D_SendParam:	jp ToneMsg8D_SendParam  ; -> prom_a 0x56704   x1
+T_ToneMsg85_SendParam:	jp ToneMsg85_SendParam  ; -> prom_a 0x563D7   x1
+T_ToneMsg80_Id01:	jp ToneMsg80_Id01  ; -> prom_a 0x5622B   x1
 T_F43484:	jp sub_FDA911  ; -> prom_a 0x5A911   x1
 T_F43488:	jp sub_FD665C  ; -> prom_a 0x5665C   x2
-T_F4348C:	jp ToneMsg80_Id16  ; -> prom_a 0x56513   x1
+T_ToneMsg80_Id16:	jp ToneMsg80_Id16  ; -> prom_a 0x56513   x1
 	.fill 0x10, 1, 0x0E  ; 0xF43490: 16 x ret
 T_DspParam_WriteByNumber:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
 T_DspParam_ReadByNumber:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
@@ -91137,7 +91137,7 @@ T_SoundCopy_ReadExtGroupDrumFlag:	jp SoundCopy_ReadExtGroupDrumFlag  ; -> prom_a
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
 T_F434E0:	jp ScreenCodeAD_Handler  ; -> prom_b 0x4C46A
-T_F434E4:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
+T_UI_RequestBits_ClearBit7:	jp UI_RequestBits_ClearBit7  ; -> prom_b 0x4C4B0
 T_F434E8:	jp ScreenButton_CodeAD  ; -> prom_b 0x4C4B5
 T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
@@ -91243,9 +91243,9 @@ sub_F4401E:		; <- T_F40A7C
 
 ; --------------------------------------------------------------------------
 ; Var34D1_SetBits20_Veneer
-; Called from: T_F40A80 (x1)
+; Called from: T_Var34D1_SetBits20_Veneer (x1)
 ; Touches: nothing with an absolute address
-; Evidence: thunk slot T_F40A80 holds `jp 0x00F44021`, and 0xF44021 is an
+; Evidence: thunk slot T_Var34D1_SetBits20_Veneer holds `jp 0x00F44021`, and 0xF44021 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -91253,7 +91253,7 @@ sub_F4401E:		; <- T_F40A7C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Var34D1_SetBits20_Veneer: a jump to Var34D1_SetBits20 -- `jrl Var34D1_SetBits20`.
-Var34D1_SetBits20_Veneer:		; <- T_F40A80
+Var34D1_SetBits20_Veneer:		; <- T_Var34D1_SetBits20_Veneer
 	jrl	Var34D1_SetBits20	; F44021  jrl T,0xf45fc4
 
 ; --------------------------------------------------------------------------
@@ -91356,16 +91356,16 @@ sub_F44036:		; <- T_F40A48
 
 ; --------------------------------------------------------------------------
 ; Nop_CallsEmptyDirectorySlot_Veneer
-; Called from: T_F40A90 (x1); in-module: 0xF44773
+; Called from: T_Nop_CallsEmptyDirectorySlot_Veneer (x1); in-module: 0xF44773
 ; Touches: nothing with an absolute address
-; Evidence: thunk slot T_F40A90 holds `jp 0x00F44039`, and 0xF44039 is an
+; Evidence: thunk slot T_Nop_CallsEmptyDirectorySlot_Veneer holds `jp 0x00F44039`, and 0xF44039 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-Nop_CallsEmptyDirectorySlot_Veneer:		; <- T_F40A90
+Nop_CallsEmptyDirectorySlot_Veneer:		; <- T_Nop_CallsEmptyDirectorySlot_Veneer
 	jrl	Nop_CallsEmptyDirectorySlot	; F44039  jrl T,0xf45d04
 
 ; --------------------------------------------------------------------------
@@ -91488,7 +91488,7 @@ sub_F440A0_Loop:
 ; sub_F440C4
 ; Called from: T_F4400C (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
-; Calls:   sub_F45B0A sub_F45975 sub_F4542D T_F427FC T_F427B8 T_F42890
+; Calls:   sub_F45B0A sub_F45975 sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
 ;          sub_F44505 T_F411B8 sub_F44143 sub_F441AB T_F40300 sub_F44237 +1
 ;          more
 ; Evidence: thunk slot T_F4400C holds `jp 0x00F440C4`, and 0xF440C4 is an
@@ -91516,7 +91516,7 @@ sub_F440A0_Skip:
 sub_F440A0_Skip2:
 	call	T_F427FC	; F440F4  call 0xf427fc
 	call	T_F427B8	; F440F8  call 0xf427b8
-	call	T_F42890	; F440FC  call 0xf42890
+	call	T_BStore_LatchHeapBase_Veneer	; F440FC  call 0xf42890
 	calr	sub_F44505	; F44100  calr 0xf44505
 	call	T_F411B8	; F44103  call 0xf411b8
 	ld	(6304982:24), 0	; F44107  ld (0x6034d6),0x00
@@ -92262,7 +92262,7 @@ sub_F4466D_Join2:
 ; sub_F4477F
 ; Called from: in-module: 0xF44717
 ; Touches: (0x0D4A) (0x345C) (0x345E) (0x354B)
-; Calls:   T_F40C54 T_F40C50
+; Calls:   T_BStore_ReadCursorByte T_F40C50
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4477F is an instruction boundary.
 ;           The name IS the address.
@@ -92273,14 +92273,14 @@ sub_F4477F:
 	ld	(BStore_ErrorCode:16), 0	; F4477F  ld (0x0d4a),0x00
 	m_cp_mi8 MB16, 0x354b, 0x00	; F44784  cp (0x354b),0x00
 	jr	nz, sub_F4477F_Skip	; F44789  jr NZ,0xf4479b
-	call	T_F40C54	; F4478B  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4478B  call 0xf40c54
 	cp	a, 130	; F4478F  cp A,0x82
 	jr	z, sub_F4477F_Skip3	; F44792  jr Z,0xf44803
 	cp	a, 129	; F44794  cp A,0x81
 	jr	nz, sub_F4477F_Return	; F44797  jr NZ,0xf44808
 	jr	sub_F4477F_Join2	; F44799  jr T,0xf447a4
 sub_F4477F_Skip:
-	call	T_F40C54	; F4479B  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4479B  call 0xf40c54
 sub_F4477F_Join:
 	cp	a, 129	; F4479F  cp A,0x81
 	jr	nz, sub_F4477F_Skip2	; F447A2  jr NZ,0xf447c7
@@ -92290,7 +92290,7 @@ sub_F4477F_Join2:
 	pushw	de	; F447AC  push DE
 	pushw	bc	; F447AD  push BC
 	call	T_F40C50	; F447AE  call 0xf40c50
-	call	T_F40C54	; F447B2  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F447B2  call 0xf40c54
 	popw	bc	; F447B6  pop BC
 	popw	de	; F447B7  pop DE
 	cp	a, 130	; F447B8  cp A,0x82
@@ -92306,7 +92306,7 @@ sub_F4477F_Skip2:
 	pushw	de	; F447D4  push DE
 	pushw	bc	; F447D5  push BC
 	call	T_F40C50	; F447D6  call 0xf40c50
-	call	T_F40C54	; F447DA  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F447DA  call 0xf40c54
 	popw	bc	; F447DE  pop BC
 	popw	de	; F447DF  pop DE
 	m_cp_rm MB16, 0x354b, 1	; F447E0  cp A,(0x354b)
@@ -92318,7 +92318,7 @@ sub_F4477F_Loop:
 	pushw	de	; F447F0  push DE
 	pushw	bc	; F447F1  push BC
 	call	T_F40C50	; F447F2  call 0xf40c50
-	call	T_F40C54	; F447F6  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F447F6  call 0xf40c54
 	popw	bc	; F447FA  pop BC
 	popw	de	; F447FB  pop DE
 	bit	7, a	; F447FC  bit 0x07,A
@@ -94641,7 +94641,7 @@ sub_F458EA_Return:
 ; sub_F458FE
 ; Called from: in-module: 0xF45416
 ; Touches: (0x345C) (0x345E) (0x349F)  |  0x60347E 0x6034A0
-; Calls:   T_F40C58 T_F40C64
+; Calls:   T_BStore_WriteCursorByte T_F40C64
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF458FE is an instruction boundary.
 ;           The name IS the address.
@@ -94650,10 +94650,10 @@ sub_F458EA_Return:
 ; --------------------------------------------------------------------------
 sub_F458FE:
 	ld	a, 129:opc	; F458FE  ld A,0x81
-	call	T_F40C58	; F45900  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F45900  call 0xf40c58
 	call	T_F40C64	; F45904  call 0xf40c64
 	ld	a, 130:opc	; F45908  ld A,0x82
-	call	T_F40C58	; F4590A  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4590A  call 0xf40c58
 	m_ld_mi16 MDD+r3, 0x03, 0xffff	; F4590E  ld (XHL+0x03),0xffff
 	xor	hl, hl	; F45913  xor HL,HL
 	ld	l, (13471:16)	; F45915  ld L,(0x349f)
@@ -95719,9 +95719,9 @@ sub_F45F4B_Skip3:
 
 ; --------------------------------------------------------------------------
 ; Var20A9_SetBits01
-; Called from: T_F40A58 (x0); in-module: 0xF44ADA 0xF45740
+; Called from: T_Var20A9_SetBits01 (x0); in-module: 0xF44ADA 0xF45740
 ; Touches: (0x20A9)
-; Evidence: thunk slot T_F40A58 holds `jp 0x00F45FAE`, and 0xF45FAE is an
+; Evidence: thunk slot T_Var20A9_SetBits01 holds `jp 0x00F45FAE`, and 0xF45FAE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -95729,15 +95729,15 @@ sub_F45F4B_Skip3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Var20A9_SetBits01: m_or_mi8 MB16, 0x20a9, 0x01 (single-cell template; the cell's meaning is not established unless it is named)
-Var20A9_SetBits01:		; <- T_F40A58
+Var20A9_SetBits01:		; <- T_Var20A9_SetBits01
 	m_or_mi8 MB16, 0x20a9, 0x01	; F45FAE  or (0x20a9),0x01
 	ret	; F45FB3  ret
 
 ; --------------------------------------------------------------------------
 ; UiStatus_ShowMessage0E
-; Called from: T_F40A5C (x3)
+; Called from: T_UiStatus_ShowMessage0E (x3)
 ; Touches: (0x2070) (0x2071) (0x2880)
-; Evidence: thunk slot T_F40A5C holds `jp 0x00F45FB4`, and 0xF45FB4 is an
+; Evidence: thunk slot T_UiStatus_ShowMessage0E holds `jp 0x00F45FB4`, and 0xF45FB4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -95745,7 +95745,7 @@ Var20A9_SetBits01:		; <- T_F40A58
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; UiStatus_ShowMessage0E: UI_StatusCode = 14, UI_Request = 0xAB, UI_Request_Hi |= 0x40 (the status-message request SysExDump_ShowStatusMessage also makes).
-UiStatus_ShowMessage0E:		; <- T_F40A5C
+UiStatus_ShowMessage0E:		; <- T_UiStatus_ShowMessage0E
 	ld	(UI_StatusCode:16), 14	; F45FB4  ld (0x2880),0x0e
 	ld	(UI_Request:16), 171	; F45FB9  ld (0x2070),0xab
 	m_or_mi8 MB16, UI_Request_Hi, 0x40	; F45FBE  or (0x2071),0x40
@@ -95753,9 +95753,9 @@ UiStatus_ShowMessage0E:		; <- T_F40A5C
 
 ; --------------------------------------------------------------------------
 ; Var34D1_SetBits20
-; Called from: T_F40A08 (x2); in-module: 0xF458DC
+; Called from: T_Var34D1_SetBits20 (x2); in-module: 0xF458DC
 ; Touches: (0x34D1)
-; Evidence: thunk slot T_F40A08 holds `jp 0x00F45FC4`, and 0xF45FC4 is an
+; Evidence: thunk slot T_Var34D1_SetBits20 holds `jp 0x00F45FC4`, and 0xF45FC4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -95763,7 +95763,7 @@ UiStatus_ShowMessage0E:		; <- T_F40A5C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Var34D1_SetBits20: m_or_mi8 MB16, 0x34d1, 0x20 (single-cell template; the cell's meaning is not established unless it is named)
-Var34D1_SetBits20:		; <- T_F40A08
+Var34D1_SetBits20:		; <- T_Var34D1_SetBits20
 	m_or_mi8 MB16, 0x34d1, 0x20	; F45FC4  or (0x34d1),0x20
 	ret	; F45FC9  ret
 
@@ -96854,7 +96854,7 @@ sub_F47C7C_Join5:
 	jrl	sub_F47C7C_Return	; F47DC1  jrl T,0xf47f3d
 sub_F47C7C_Skip8:
 	call	T_F40A7C	; F47DC4  call 0xf40a7c
-	call	T_F40A5C	; F47DC8  call 0xf40a5c
+	call	T_UiStatus_ShowMessage0E	; F47DC8  call 0xf40a5c
 	call	T_F40BC8	; F47DCC  call 0xf40bc8
 	jrl	sub_F47C7C_Return	; F47DD0  jrl T,0xf47f3d
 sub_F47C7C_Skip9:
@@ -97280,7 +97280,7 @@ sub_F48107_Skip2:
 ; sub_F4812F
 ; Called from: in-module: 0xF47D6E
 ; Touches: (0x349E)
-; Calls:   T_F40BC8 T_F40A5C
+; Calls:   T_F40BC8 T_UiStatus_ShowMessage0E
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4812F is an instruction boundary.
 ;           The name IS the address.
@@ -97350,11 +97350,11 @@ sub_F4812F_Skip8:
 	jr	sub_F4812F_Join2	; F48199  jr T,0xf481a5
 sub_F4812F_Join:
 	call	T_F40BC8	; F4819B  call 0xf40bc8
-	call	T_F40A5C	; F4819F  call 0xf40a5c
+	call	T_UiStatus_ShowMessage0E	; F4819F  call 0xf40a5c
 	jr	sub_F4812F_Epilogue	; F481A3  jr T,0xf481ad
 sub_F4812F_Join2:
 	call	T_F40BC8	; F481A5  call 0xf40bc8
-	call	T_F40A5C	; F481A9  call 0xf40a5c
+	call	T_UiStatus_ShowMessage0E	; F481A9  call 0xf40a5c
 sub_F4812F_Epilogue:
 	pop	xiz	; F481AD  pop XIZ
 	pop	xiy	; F481AE  pop XIY
@@ -97699,7 +97699,7 @@ sub_F483B2_Return:
 ; sub_F4840E
 ; Called from: in-module: 0xF47C88 0xF47CA7 0xF4810C
 ; Touches: (0x345C) (0x345E)
-; Calls:   T_F40C54 sub_F4840E_Nop
+; Calls:   T_BStore_ReadCursorByte sub_F4840E_Nop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4840E is an instruction boundary.
 ;           The name IS the address.
@@ -97707,7 +97707,7 @@ sub_F483B2_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4840E:
-	call	T_F40C54	; F4840E  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4840E  call 0xf40c54
 	jr	sub_F4840E_Return	; F48412  jr T,0xf48414
 sub_F4840E_Return:
 	ret	; F48414  ret
@@ -97775,7 +97775,7 @@ sub_F4840E_Nop:
 ; Touches: (0x207A) (0x2095) (0x349A) (0x349C) (0x349F) (0x34D4) (0x3552)
 ;          (0x361E) (0x3622) (0x36C6) +2 more  |  0x003460 0x003482 0x00362A
 ;          0x00364C
-; Calls:   sub_F486D9 T_F40AB0 T_F40BE4 sub_F47804 T_F40A90 T_F413C8
+; Calls:   sub_F486D9 T_F40AB0 T_F40BE4 sub_F47804 T_Nop_CallsEmptyDirectorySlot_Veneer T_F413C8
 ;          T_F41F18
 ; Evidence: thunk slot T_F40B5C holds `jp 0x00F48464`, and 0xF48464 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -97879,7 +97879,7 @@ sub_F48463_Skip5:
 	ld	xde, 13900	; F48562  ld XDE,0x0000364c
 	ld	xhl, 13442	; F48567  ld XHL,0x00003482
 	ldir83	; F4856C  ldir
-	call	T_F40A90	; F4856E  call 0xf40a90
+	call	T_Nop_CallsEmptyDirectorySlot_Veneer	; F4856E  call 0xf40a90
 	call	T_F413C8	; F48572  call 0xf413c8
 	call	T_F41F18	; F48576  call 0xf41f18
 	m_or_mi8 MB16, 0x34d4, 0x10	; F4857A  or (0x34d4),0x10
@@ -97978,7 +97978,7 @@ sub_F485D7_Skip:
 ; sub_F48647
 ; Called from: T_F40B6C (x3); in-module: 0xF4860D
 ; Touches: (0x0D4A) (0x345C) (0x345E)  |  0x000001
-; Calls:   T_F40C54 BStore_GetHeapBase_B
+; Calls:   T_BStore_ReadCursorByte BStore_GetHeapBase_B
 ; Evidence: thunk slot T_F40B6C holds `jp 0x00F48647`, and 0xF48647 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -97993,7 +97993,7 @@ sub_F48647_Loop:
 	jr	ule, sub_F48647_Skip	; F48652  jr ULE,0xf48662
 	decw	1, (BStore_CursorOffset:16)	; F48654  decw 1,(0x345e)
 sub_F48647_Join:
-	call	T_F40C54	; F48658  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F48658  call 0xf40c54
 	bit	7, a	; F4865C  bit 0x07,A
 	jr	z, sub_F48647_Loop	; F4865F  jr Z,0xf4864c
 	ret	; F48661  ret
@@ -99993,7 +99993,7 @@ sub_F49CE6_Return:
 ; sub_F49D00
 ; Called from: in-module: 0xF499C5
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DE) (0x345E) (0x349F) (0x374C)
-; Calls:   sub_F49A3D sub_F4980D T_F40C58 T_F40C64 sub_F4A4F6 sub_F49838
+; Calls:   sub_F49A3D sub_F4980D T_BStore_WriteCursorByte T_F40C64 sub_F4A4F6 sub_F49838
 ;          sub_F4A53E sub_F4A56C sub_F49DE6
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49D00 is an instruction boundary.
@@ -100034,7 +100034,7 @@ sub_F49D00_Join:
 	jr	c, sub_F49D00_Skip3	; F49D4B  jr C,0xf49d59
 sub_F49D00_Skip2:
 	ld	a, 129:opc	; F49D4D  ld A,0x81
-	call	T_F40C58	; F49D4F  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F49D4F  call 0xf40c58
 	call	T_F40C64	; F49D53  call 0xf40c64
 	jr	sub_F49D00_Join3	; F49D57  jr T,0xf49d80
 sub_F49D00_Skip3:
@@ -100119,7 +100119,7 @@ sub_F49DE6:
 ; Called from: in-module: 0xF49DE6
 ; Touches: (0x33DD) (0x33DE) (0x33DF) (0x345C) (0x345E) (0x34AE) (0x374C)
 ;          (0x374D) (0x374E) (0x374F)  |  0x003014 0x003016
-; Calls:   sub_F4A56C sub_F49F15 T_F40C54 T_F40C50 T_F40C58
+; Calls:   sub_F4A56C sub_F49F15 T_BStore_ReadCursorByte T_F40C50 T_BStore_WriteCursorByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49DF8 is an instruction boundary.
 ;           The name IS the address.
@@ -100148,22 +100148,22 @@ sub_F49DF8:
 	ld	(BStore_CursorOffset:16), wa	; F49E2A  ld (0x345e),WA
 	calr	sub_F49F15	; F49E2E  calr 0xf49f15
 	calr	sub_F49F15	; F49E31  calr 0xf49f15
-	call	T_F40C54	; F49E34  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F49E34  call 0xf40c54
 	ld	(14157:16), a	; F49E38  ld (0x374d),A
 	call	T_F40C50	; F49E3C  call 0xf40c50
 	call	T_F40C50	; F49E40  call 0xf40c50
-	call	T_F40C54	; F49E44  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F49E44  call 0xf40c54
 	ld	(14158:16), a	; F49E48  ld (0x374e),A
 	call	T_F40C50	; F49E4C  call 0xf40c50
-	call	T_F40C54	; F49E50  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F49E50  call 0xf40c54
 	ld	(14159:16), a	; F49E54  ld (0x374f),A
 	call	T_F40C50	; F49E58  call 0xf40c50
 	popw	wa	; F49E5C  pop WA
 	and	a, 127	; F49E5D  and A,0x7f
-	call	T_F40C58	; F49E60  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F49E60  call 0xf40c58
 	call	T_F40C50	; F49E64  call 0xf40c50
 	ld	a, 127:opc	; F49E68  ld A,0x7f
-	call	T_F40C58	; F49E6A  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F49E6A  call 0xf40c58
 	pop	xhl	; F49E6E  pop XHL
 	m_cp_mi8 MB16, 0x33dd, 0x00	; F49E6F  cp (0x33dd),0x00
 	jr	z, sub_F49DF8_Skip	; F49E74  jr Z,0xf49e8a
@@ -100294,7 +100294,7 @@ sub_F49F46:
 ; Called from: in-module: 0xF49964 0xF49DF0
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DB) (0x33DE) (0x33DF) (0x345C)
 ;          (0x345E) (0x349F) (0x34AA) +4 more  |  0x003014 0x003016
-; Calls:   sub_F4980D sub_F4A56C sub_F4A4F6 T_F40C58 T_F40C64 sub_F4A53E
+; Calls:   sub_F4980D sub_F4A56C sub_F4A4F6 T_BStore_WriteCursorByte T_F40C64 sub_F4A53E
 ;          sub_F49838
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF49F6D is an instruction boundary.
@@ -100359,13 +100359,13 @@ sub_F49F6D_Skip3:
 	push	xhl	; F49FF4  push XHL
 	ld	a, (13482:16)	; F49FF5  ld A,(0x34aa)
 	and	a, 250	; F49FF9  and A,0xfa
-	call	T_F40C58	; F49FFC  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F49FFC  call 0xf40c58
 	call	T_F40C64	; F4A000  call 0xf40c64
 	ld	a, (13483:16)	; F4A004  ld A,(0x34ab)
-	call	T_F40C58	; F4A008  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A008  call 0xf40c58
 	call	T_F40C64	; F4A00C  call 0xf40c64
 	ld	a, (13484:16)	; F4A010  ld A,(0x34ac)
-	call	T_F40C58	; F4A014  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A014  call 0xf40c58
 	pop	xhl	; F4A018  pop XHL
 	ld	(xhl), a	; F4A019  ld (XHL),A
 	ld	(xhl+1), 0	; F4A01B  ld (XHL+0x01),0x00
@@ -100427,13 +100427,13 @@ sub_F49F6D_Skip5:
 sub_F49F6D_Skip6:
 	call	T_F40C64	; F4A0D3  call 0xf40c64
 	ld	a, (13485:16)	; F4A0D7  ld A,(0x34ad)
-	call	T_F40C58	; F4A0DB  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A0DB  call 0xf40c58
 	call	T_F40C64	; F4A0DF  call 0xf40c64
 	ld	a, 16:opc	; F4A0E3  ld A,0x10
-	call	T_F40C58	; F4A0E5  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A0E5  call 0xf40c58
 	call	T_F40C64	; F4A0E9  call 0xf40c64
 	ld	a, 0:opc	; F4A0ED  ld A,0x00
-	call	T_F40C58	; F4A0EF  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A0EF  call 0xf40c58
 	call	T_F40C64	; F4A0F3  call 0xf40c64
 sub_F49F6D_Join3:
 	ld	c, (13486:16)	; F4A0F7  ld C,(0x34ae)
@@ -100446,7 +100446,7 @@ sub_F49F6D_Return:
 ; Called from: in-module: 0xF4994F 0xF49C5A
 ; Touches: (0x3004) (0x3006) (0x33DA) (0x33DD) (0x33DE) (0x33DF) (0x345C)
 ;          (0x345E) (0x349F) (0x34AB) +2 more  |  0x003014 0x003016
-; Calls:   sub_F4A53E sub_F4A56C T_F40C50 T_F40C58
+; Calls:   sub_F4A53E sub_F4A56C T_F40C50 T_BStore_WriteCursorByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A0FF is an instruction boundary.
 ;           The name IS the address.
@@ -100519,12 +100519,12 @@ sub_F4A0FF_Skip3:
 	call	T_F40C50	; F4A19C  call 0xf40c50
 	popw	wa	; F4A1A0  pop WA
 	and	a, 127	; F4A1A1  and A,0x7f
-	call	T_F40C58	; F4A1A4  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A1A4  call 0xf40c58
 	call	T_F40C50	; F4A1A8  call 0xf40c50
 	popw	de	; F4A1AC  pop DE
 	ld	a, d	; F4A1AD  ld A,D
 	and	a, 127	; F4A1AF  and A,0x7f
-	call	T_F40C58	; F4A1B2  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4A1B2  call 0xf40c58
 	pop	xhl	; F4A1B6  pop XHL
 	m_cp_mi8 MB16, 0x33dd, 0x00	; F4A1B7  cp (0x33dd),0x00
 	jr	z, sub_F4A0FF_Skip4	; F4A1BC  jr Z,0xf4a1d2
@@ -100918,7 +100918,7 @@ sub_F4A4E3:
 ; sub_F4A4F6
 ; Called from: in-module: 0xF49D7D 0xF49FEE 0xF4A338 0xF4A449
 ; Touches: (0x349F) (0x34D1)
-; Calls:   T_F40A98 sub_F4A50E sub_F49861 T_F40A80
+; Calls:   T_F40A98 sub_F4A50E sub_F49861 T_Var34D1_SetBits20_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A4F6 is an instruction boundary.
 ;           The name IS the address.
@@ -100930,7 +100930,7 @@ sub_F4A4F6:
 	call	T_F40A98	; F4A4FA  call 0xf40a98
 	calr	sub_F4A50E	; F4A4FE  calr 0xf4a50e
 	calr	sub_F49861	; F4A501  calr 0xf49861
-	call	T_F40A80	; F4A504  call 0xf40a80
+	call	T_Var34D1_SetBits20_Veneer	; F4A504  call 0xf40a80
 	m_or_mi8 MB16, 0x34d1, 0x10	; F4A508  or (0x34d1),0x10
 	ret	; F4A50D  ret
 
@@ -101382,7 +101382,7 @@ sub_F4A756_Return:
 ; Called from: in-module: 0xF4A7FA 0xF4A886 0xF4ABE4 0xF4AC46 0xF4AC9F
 ;              0xF4AF3A 0xF4B156
 ; Touches: (0x0D4A) (0x34D1)
-; Calls:   sub_F4A6E7 sub_F4A6CF T_F40A08
+; Calls:   sub_F4A6E7 sub_F4A6CF T_Var34D1_SetBits20
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4A7FE is an instruction boundary.
 ;           The name IS the address.
@@ -101393,7 +101393,7 @@ sub_F4A7FE:
 	ld	(BStore_ErrorCode:16), 255	; F4A7FE  ld (0x0d4a),0xff
 	calr	sub_F4A6E7	; F4A803  calr 0xf4a6e7
 	calr	sub_F4A6CF	; F4A806  calr 0xf4a6cf
-	call	T_F40A08	; F4A809  call 0xf40a08
+	call	T_Var34D1_SetBits20	; F4A809  call 0xf40a08
 	m_or_mi8 MB16, 0x34d1, 0x10	; F4A80D  or (0x34d1),0x10
 	ret	; F4A812  ret
 
@@ -101715,7 +101715,7 @@ sub_F4A9D3_Skip:
 ; sub_F4AA59
 ; Called from: in-module: 0xF4A9BF
 ; Touches: (0x345C) (0x345E) (0x36F2) (0x36FC)
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AA59 is an instruction boundary.
 ;           The name IS the address.
@@ -101728,7 +101728,7 @@ sub_F4AA59:
 	ldw	(BStore_CursorOffset:16), 5	; F4AA61  ld (0x345e),0x0005
 	ldw	(14066:16), 0	; F4AA67  ld (0x36f2),0x0000
 sub_F4AA59_Join:
-	call	T_F40C54	; F4AA6D  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4AA6D  call 0xf40c54
 	cp	a, 129	; F4AA71  cp A,0x81
 	jr	z, sub_F4AA59_Skip	; F4AA74  jr Z,0xf4aa81
 	cp	a, 130	; F4AA76  cp A,0x82
@@ -101784,7 +101784,7 @@ sub_F4AA88_Join:
 ; sub_F4AADA
 ; Called from: in-module: 0xF4AACB
 ; Touches: (0x0C57) (0x345C) (0x345E) (0x36D6)  |  0x60347E 0x6034A0
-; Calls:   T_F40C58
+; Calls:   T_BStore_WriteCursorByte
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AADA is an instruction boundary.
 ;           The name IS the address.
@@ -101804,7 +101804,7 @@ sub_F4AADA:
 	mx_st_mr16 MXD, ra_DE, ra_HL, 0	; F4AAFC  ld (XDE+HL),WA
 	ld	(BStore_CursorBlock:16), wa	; F4AB01  ld (0x345c),WA
 	ld	a, 130:opc	; F4AB05  ld A,0x82
-	call	T_F40C58	; F4AB07  call 0xf40c58
+	call	T_BStore_WriteCursorByte	; F4AB07  call 0xf40c58
 	ret	; F4AB0B  ret
 
 ; --------------------------------------------------------------------------
@@ -102135,7 +102135,7 @@ sub_F4ACB1_Return:
 ; sub_F4ADCC
 ; Called from: in-module: 0xF4AA26 0xF4AC33
 ; Touches: (0x345C) (0x345E) (0x36D6) (0x36FC)  |  0x60347E 0x6034A0
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4ADCC is an instruction boundary.
 ;           The name IS the address.
@@ -102148,7 +102148,7 @@ sub_F4ADCC:
 sub_F4ADCC_Join:
 	ldw	(BStore_CursorOffset:16), 5	; F4ADD4  ld (0x345e),0x0005
 sub_F4ADCC_Join2:
-	call	T_F40C54	; F4ADDA  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4ADDA  call 0xf40c54
 	cp	a, 130	; F4ADDE  cp A,0x82
 	jr	z, sub_F4ADCC_Skip	; F4ADE1  jr Z,0xf4ade9
 	call	sub_F4AEDD	; F4ADE3  call 0xf4aedd
@@ -102175,7 +102175,7 @@ sub_F4ADCC_Skip:
 ; Called from: in-module: 0xF4AC36 0xF4AC8F
 ; Touches: (0x0D4A) (0x3452) (0x345C) (0x345E) (0x36D6) (0x36E9) (0x36F1)  |
 ;          0x0033EA 0x60347E 0x6034A0
-; Calls:   T_F40B6C sub_F4AB60 T_F40C54 sub_F4AEDD T_F40C50
+; Calls:   T_F40B6C sub_F4AB60 T_BStore_ReadCursorByte sub_F4AEDD T_F40C50
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4AE15 is an instruction boundary.
 ;           The name IS the address.
@@ -102205,7 +102205,7 @@ sub_F4AE15_Loop:
 	calr	sub_F4AB60	; F4AE4F  calr 0xf4ab60
 	ret	; F4AE52  ret
 sub_F4AE15_Skip:
-	call	T_F40C54	; F4AE53  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4AE53  call 0xf40c54
 	cp	a, 129	; F4AE57  cp A,0x81
 	jr	nz, sub_F4AE15_Skip4	; F4AE5A  jr NZ,0xf4ae91
 	ld	xhl, 13290	; F4AE5C  ld XHL,0x000033ea
@@ -102245,7 +102245,7 @@ sub_F4AE15_Join:
 	pushw	de	; F4AEBA  push DE
 	pushw	bc	; F4AEBB  push BC
 	call	T_F40C50	; F4AEBC  call 0xf40c50
-	call	T_F40C54	; F4AEC0  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4AEC0  call 0xf40c54
 	popw	bc	; F4AEC4  pop BC
 	popw	de	; F4AEC5  pop DE
 	ld	(BStore_CursorBlock:16), de	; F4AEC6  ld (0x345c),DE
@@ -102484,7 +102484,7 @@ sub_F4AFD5_Return:
 ; Called from: in-module: 0xF4AF8E
 ; Touches: (0x345C) (0x345E) (0x36D6) (0x36F2) (0x36FC)  |  0x003460
 ;          0x003482
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B08B is an instruction boundary.
 ;           The name IS the address.
@@ -102497,7 +102497,7 @@ sub_F4B08B:
 	ldw	(BStore_CursorOffset:16), 5	; F4B093  ld (0x345e),0x0005
 	incw	1, (14066:16)	; F4B099  incw 1,(0x36f2)
 sub_F4B08B_Join:
-	call	T_F40C54	; F4B09D  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4B09D  call 0xf40c54
 	cp	a, 129	; F4B0A1  cp A,0x81
 	jr	z, sub_F4B08B_Skip	; F4B0A4  jr Z,0xf4b0b1
 	cp	a, 130	; F4B0A6  cp A,0x82
@@ -102664,7 +102664,7 @@ sub_F4B160_Skip2:
 ; sub_F4B20D
 ; Called from: in-module: 0xF4B1E3
 ; Touches: (0x345C) (0x345E) (0x36D6) (0x36F2)  |  0x000001 0x603500
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B20D is an instruction boundary.
 ;           The name IS the address.
@@ -102687,7 +102687,7 @@ sub_F4B20D_Skip:
 	ldw	(BStore_CursorOffset:16), 5	; F4B231  ld (0x345e),0x0005
 	ldw	(14066:16), 0	; F4B237  ld (0x36f2),0x0000
 sub_F4B20D_Join:
-	call	T_F40C54	; F4B23D  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4B23D  call 0xf40c54
 	cp	a, 129	; F4B241  cp A,0x81
 	jr	z, sub_F4B20D_Skip2	; F4B244  jr Z,0xf4b251
 	cp	a, 130	; F4B246  cp A,0x82
@@ -102850,7 +102850,7 @@ sub_F4B2D5_Skip:
 ; sub_F4B342
 ; Called from: in-module: 0xF4B32B
 ; Touches: (0x0C61) (0x0C67) (0x0C6B) (0x345C) (0x345E)
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B342 is an instruction boundary.
 ;           The name IS the address.
@@ -102863,7 +102863,7 @@ sub_F4B342:
 	ld	wa, (3175:16)	; F4B34A  ld WA,(0x0c67)
 	ld	(BStore_CursorOffset:16), wa	; F4B34E  ld (0x345e),WA
 sub_F4B342_Join:
-	call	T_F40C54	; F4B352  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4B352  call 0xf40c54
 	cp	a, 130	; F4B356  cp A,0x82
 	jr	z, sub_F4B342_Skip	; F4B359  jr Z,0xf4b361
 	call	sub_F4AEDD	; F4B35B  call 0xf4aedd
@@ -102967,7 +102967,7 @@ sub_F4B414:		; <- T_F40C04
 ; sub_F4B433
 ; Called from: in-module: 0xF4AF83
 ; Touches: (0x345C) (0x345E) (0x36F2) (0x36FA)
-; Calls:   T_F40C54 sub_F4AEDD
+; Calls:   T_BStore_ReadCursorByte sub_F4AEDD
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4B433 is an instruction boundary.
 ;           The name IS the address.
@@ -102980,7 +102980,7 @@ sub_F4B433:
 	ldw	(BStore_CursorOffset:16), 5	; F4B43B  ld (0x345e),0x0005
 	ldw	(14066:16), 0	; F4B441  ld (0x36f2),0x0000
 sub_F4B433_Join:
-	call	T_F40C54	; F4B447  call 0xf40c54
+	call	T_BStore_ReadCursorByte	; F4B447  call 0xf40c54
 	cp	a, 129	; F4B44B  cp A,0x81
 	jr	z, sub_F4B433_Skip	; F4B44E  jr Z,0xf4b45b
 	cp	a, 130	; F4B450  cp A,0x82
@@ -104036,9 +104036,9 @@ sub_F4C46A_Skip2:
 
 ; --------------------------------------------------------------------------
 ; UI_RequestBits_ClearBit7
-; Called from: T_F434E4 (x0)
+; Called from: T_UI_RequestBits_ClearBit7 (x0)
 ; Touches: (0x2075)
-; Evidence: thunk slot T_F434E4 holds `jp 0x00F4C4B0`, and 0xF4C4B0 is an
+; Evidence: thunk slot T_UI_RequestBits_ClearBit7 holds `jp 0x00F4C4B0`, and 0xF4C4B0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -104046,7 +104046,7 @@ sub_F4C46A_Skip2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; UI_RequestBits_ClearBit7: m_res 7, MD16, UI_RequestBits (single-cell template; the cell's meaning is not established unless it is named)
-UI_RequestBits_ClearBit7:		; <- T_F434E4
+UI_RequestBits_ClearBit7:		; <- T_UI_RequestBits_ClearBit7
 	m_res 7, MD16, UI_RequestBits	; F4C4B0  res 7,(0x2075)
 	ret	; F4C4B4  ret
 
@@ -104086,7 +104086,7 @@ sub_F4C4B5_Resume:
 ; Called from: T_F434EC (x0)
 ; Touches: (0x2070) (0x2071) (0x2075) (0x2092) (0x209A) (0x2250) (0x2540)
 ;          (0x2640) (0x2870) (0x28B0) +1 more
-; Calls:   T_IndexedTable_GetPtr T_IndexedTable_GetByte T_List2030_Append4 T_F42E10 T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_F42E14
+; Calls:   T_IndexedTable_GetPtr T_IndexedTable_GetByte T_List2030_Append4 T_F42E10 T_DisplayList_Run_Stack T_DisplayListB_Run_Stack T_LCD_ShowAllLayers_StackFrame_Copy
 ; Evidence: thunk slot T_F434EC holds `jp 0x00F4C4DC`, and 0xF4C4DC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -104354,7 +104354,7 @@ sub_F4C5A2_Join3:
 	lda	xwa, (DLB_CreatorSelectController_Cursor:24)	; F4C671  lda XWA,0xf4c2b7
 	push	xwa	; F4C676  push XWA
 	call	T_DisplayListB_Run_Stack	; F4C677  call 0xf42e04
-	call	T_F42E14	; F4C67B  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F4C67B  call 0xf42e14
 	inc	8, xsp	; F4C67F  inc 0,XSP
 	pop	xix	; F4C681  pop XIX
 	popw	hl	; F4C682  pop HL
@@ -105328,9 +105328,9 @@ sub_F4D002_Join3:
 
 ; --------------------------------------------------------------------------
 ; BStore_ReadCursorByte
-; Called from: T_F40C54 (x18)
+; Called from: T_BStore_ReadCursorByte (x18)
 ; Touches: (0x345C) (0x345E) (0x3604)
-; Evidence: thunk slot T_F40C54 holds `jp 0x00F4D0DB`, and 0xF4D0DB is an
+; Evidence: thunk slot T_BStore_ReadCursorByte holds `jp 0x00F4D0DB`, and 0xF4D0DB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -105338,7 +105338,7 @@ sub_F4D002_Join3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; BStore_ReadCursorByte: A = the byte at BStore_HeapBase + (BStore_CursorBlock - 1) * 256 + BStore_CursorOffset.
-BStore_ReadCursorByte:		; <- T_F40C54
+BStore_ReadCursorByte:		; <- T_BStore_ReadCursorByte
 	push	xix	; F4D0DB  push XIX
 	xor	xhl, xhl	; F4D0DC  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F4D0DE  ld HL,(0x345c)
@@ -105354,11 +105354,11 @@ BStore_ReadCursorByte:		; <- T_F40C54
 
 ; --------------------------------------------------------------------------
 ; BStore_WriteCursorByte
-; Called from: T_F40C58 (x14)
+; Called from: T_BStore_WriteCursorByte (x14)
 ; Touches: (0x3010) (0x345C) (0x345E) (0x34D1) (0x3604) (0x360C)  |
 ;          0x600800 0x60080A 0x603500
 ; Calls:   sub_F4D7BD T_F40A8C sub_F4D1B8 sub_F4D238
-; Evidence: thunk slot T_F40C58 holds `jp 0x00F4D0FB`, and 0xF4D0FB is an
+; Evidence: thunk slot T_BStore_WriteCursorByte holds `jp 0x00F4D0FB`, and 0xF4D0FB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -105366,7 +105366,7 @@ BStore_ReadCursorByte:		; <- T_F40C54
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; BStore_WriteCursorByte(A): store A at the cursor address BStore_ReadCursorByte reads.
-BStore_WriteCursorByte:		; <- T_F40C58
+BStore_WriteCursorByte:		; <- T_BStore_WriteCursorByte
 	push	xix	; F4D0FB  push XIX
 	xor	xhl, xhl	; F4D0FC  xor XHL,XHL
 	ld	hl, (BStore_CursorBlock:16)	; F4D0FE  ld HL,(0x345c)
@@ -107355,9 +107355,9 @@ sub_F4EC00_Return:
 
 ; --------------------------------------------------------------------------
 ; Var34BB_ClearBits04
-; Called from: T_F40CE4 (x0)
+; Called from: T_Var34BB_ClearBits04 (x0)
 ; Touches: (0x34BB)
-; Evidence: thunk slot T_F40CE4 holds `jp 0x00F4EC25`, and 0xF4EC25 is an
+; Evidence: thunk slot T_Var34BB_ClearBits04 holds `jp 0x00F4EC25`, and 0xF4EC25 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -107365,7 +107365,7 @@ sub_F4EC00_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Var34BB_ClearBits04: m_and_mi8 MB16, 0x34bb, 0xfb (single-cell template; the cell's meaning is not established unless it is named)
-Var34BB_ClearBits04:		; <- T_F40CE4
+Var34BB_ClearBits04:		; <- T_Var34BB_ClearBits04
 	m_and_mi8 MB16, 0x34bb, 0xfb	; F4EC25  and (0x34bb),0xfb
 	ret	; F4EC2A  ret
 
@@ -112387,7 +112387,7 @@ PaintAllDrawbars_Entry:
 	call	T_DisplayListB_Run_Stack	; F538A5  call 0xf42e04
 	jr	PaintAllDrawbars_Join5	; F538A9  jr T,0xf53880
 PaintAllDrawbars_Join6:
-	call	T_F42E14	; F538AB  call 0xf42e14
+	call	T_LCD_ShowAllLayers_StackFrame_Copy	; F538AB  call 0xf42e14
 	ld	(10397:16), 1	; F538AF  ld (0x289d),0x01
 	popw	hl	; F538B4  pop HL
 	ret	; F538B5  ret
@@ -139699,7 +139699,7 @@ sub_F63383_Join3:
 sub_F63383_Return:
 	ret	; F633F4  ret
 ; BStore_ReadBlockByteAtIX: A = (BStore_CursorBlockAddr)[IX].
-BStore_ReadBlockByteAtIX:		; <- T_F42788
+BStore_ReadBlockByteAtIX:		; <- T_BStore_ReadBlockByteAtIX
 	ld	xhl, (BStore_CursorBlockAddr:16)	; F633F5  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F633F9  ld A,(XHL+IX)
 	ret	; F633FE  ret
@@ -142218,8 +142218,8 @@ BStore_Workspace_SaveToBank:
 ; into this one `.incbin` span:
 ;
 ;   T_F42ED0-T_F42F04  14 slots  extent 20,977  targets 0xF67434-0xF6C625
-;   T_F42EC0-T_F42EC8   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
-;   T_F42B70-T_F42C2C  48 slots  extent  2,648  targets 0xF65C00-0xF66658
+;   T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind   3 slots  extent 14,463  targets 0xF675CC-0xF6AE4B
+;   T_F42B70-T_SequencerMedley_LcdKeyRow4  48 slots  extent  2,648  targets 0xF65C00-0xF66658
 ;   T_F432C0-T_F432CC   4 slots  extent      9  targets 0xF65000-0xF65009
 ;
 ; 69 slots.  Every target of all four is inside 0xF65000-0xF6D001, which is what
@@ -142305,7 +142305,7 @@ BStore_Workspace_SaveToBank:
 ; from code there needs an ASCII rule with a null this round does not have (at
 ; 20 bytes the rule misses most of those runs; at 10 it has three false
 ; positives).  Above that, only 2 thunk slot(s) point anywhere into
-; 0xF6D002-0xF77FFF at all -- T_F43380 -> 0xF6F400, T_F43384 -> 0xF6F404, so a split there would rest on a linear decode.
+; 0xF6D002-0xF77FFF at all -- T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400, T_F43384 -> 0xF6F404, so a split there would rest on a linear decode.
 ;
 ; REGENERATE:  python3 notes/gen_prom_b_f65000_module.py
 ; CHECKS:      python3 notes/gen_prom_b_f65000_module.py --checks
@@ -143170,10 +143170,10 @@ sub_F65C51:		; <- T_F42B70
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow2
-; Called from: T_F42B8C (x1)
+; Called from: T_TrackAssign_StageZero_LcdKeyRow2 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
-; Evidence: thunk slot T_F42B8C holds `jp 0x00F65C5E`, and 0xF65C5E is an
+; Evidence: thunk slot T_TrackAssign_StageZero_LcdKeyRow2 holds `jp 0x00F65C5E`, and 0xF65C5E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143181,7 +143181,7 @@ sub_F65C51:		; <- T_F42B70
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow2: the LcdKeyRow2 action of TrackAssign_StageZero -- called only by LcdKeyRow2_TrackAssign_StageZero.
-TrackAssign_StageZero_LcdKeyRow2:		; <- T_F42B8C
+TrackAssign_StageZero_LcdKeyRow2:		; <- T_TrackAssign_StageZero_LcdKeyRow2
 	calr	sub_F65D26	; F65C5E  calr 0xf65d26
 	ld	(3520:16), 0	; F65C61  ld (0x0dc0),0x00
 	ld	a, (3075:16)	; F65C66  ld A,(0x0c03)
@@ -143207,10 +143207,10 @@ sub_F65C5E_Join:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow1
-; Called from: T_F42B90 (x1)
+; Called from: T_TrackAssign_StageZero_LcdKeyRow1 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
-; Evidence: thunk slot T_F42B90 holds `jp 0x00F65C9A`, and 0xF65C9A is an
+; Evidence: thunk slot T_TrackAssign_StageZero_LcdKeyRow1 holds `jp 0x00F65C9A`, and 0xF65C9A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143218,7 +143218,7 @@ sub_F65C5E_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow1: the LcdKeyRow1 action of TrackAssign_StageZero -- called only by LcdKeyRow1_TrackAssign_StageZero.
-TrackAssign_StageZero_LcdKeyRow1:		; <- T_F42B90
+TrackAssign_StageZero_LcdKeyRow1:		; <- T_TrackAssign_StageZero_LcdKeyRow1
 	calr	sub_F65D26	; F65C9A  calr 0xf65d26
 	ld	(3520:16), 0	; F65C9D  ld (0x0dc0),0x00
 	ld	a, (3075:16)	; F65CA2  ld A,(0x0c03)
@@ -143244,10 +143244,10 @@ sub_F65C9A_Join:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_SelectTrackGroup
-; Called from: T_F42B94 (x2)
+; Called from: T_TrackAssign_SelectTrackGroup (x2)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x0DC0)  |  0x603422
 ; Calls:   sub_F65D26
-; Evidence: thunk slot T_F42B94 holds `jp 0x00F65CD6`, and 0xF65CD6 is an
+; Evidence: thunk slot T_TrackAssign_SelectTrackGroup holds `jp 0x00F65CD6`, and 0xF65CD6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143256,7 +143256,7 @@ sub_F65C9A_Join:
 ; --------------------------------------------------------------------------
 ; TrackAssign_SelectTrackGroup: BC = 10 (LcdKeyRow3) clears (0x0C07) bit 0 and sets (0x0C03) = 0; BC = 11 (LcdKeyRow4) sets the bit and (0x0C03) = 8;
 ;   then (0x0C06) = the byte map 0x603422[(0x0C03)].  Called by LcdKeyRow3/4_TrackAssign_StageZero.
-TrackAssign_SelectTrackGroup:		; <- T_F42B94
+TrackAssign_SelectTrackGroup:		; <- T_TrackAssign_SelectTrackGroup
 	cp	bc, 10	; F65CD6  cp BC,0x000a
 	jr	z, sub_F65CD6_Skip	; F65CDA  jr Z,0xf65ce3
 	cp	bc, 11	; F65CDC  cp BC,0x000b
@@ -143424,9 +143424,9 @@ sub_F65DD3_Return:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol4
-; Called from: T_F42BA0 (x1)
+; Called from: T_TrackAssign_StageZero_SoftKeyCol4 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0DC0) (0x2075)  |  0x603422
-; Evidence: thunk slot T_F42BA0 holds `jp 0x00F65DF8`, and 0xF65DF8 is an
+; Evidence: thunk slot T_TrackAssign_StageZero_SoftKeyCol4 holds `jp 0x00F65DF8`, and 0xF65DF8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143434,7 +143434,7 @@ sub_F65DD3_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol4: the SoftKeyCol4 action of TrackAssign_StageZero -- called only by SoftKeyCol4_TrackAssign_StageZero.
-TrackAssign_StageZero_SoftKeyCol4:		; <- T_F42BA0
+TrackAssign_StageZero_SoftKeyCol4:		; <- T_TrackAssign_StageZero_SoftKeyCol4
 	bit	2, (0x96:8)	; F65DF8  bit 2,(0x96)
 	jr	z, sub_F65DF8_Skip	; F65DFB  jr Z,0xf65dfe
 	ret	; F65DFD  ret
@@ -143502,10 +143502,10 @@ ClampInc_0to31:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow3
-; Called from: T_F42BA4 (x1)
+; Called from: T_TrackAssign_StageZero_LcdKeyRow3 (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F65E98
-; Evidence: thunk slot T_F42BA4 holds `jp 0x00F65E94`, and 0xF65E94 is an
+; Evidence: thunk slot T_TrackAssign_StageZero_LcdKeyRow3 holds `jp 0x00F65E94`, and 0xF65E94 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143513,7 +143513,7 @@ ClampInc_0to31:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow3: the LcdKeyRow3 action of TrackAssign_StageZero -- called only by LcdKeyRow3_TrackAssign_StageZero.
-TrackAssign_StageZero_LcdKeyRow3:		; <- T_F42BA4
+TrackAssign_StageZero_LcdKeyRow3:		; <- T_TrackAssign_StageZero_LcdKeyRow3
 	calr	sub_F65E98	; F65E94  calr 0xf65e98
 	ret	; F65E97  ret
 
@@ -143613,10 +143613,10 @@ MaskTable_F65F5C:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol5
-; Called from: T_F42BA8 (x1)
+; Called from: T_TrackAssign_StageZero_SoftKeyCol5 (x1)
 ; Touches: (0x0C03) (0x2075)
 ; Calls:   T_F411B8
-; Evidence: thunk slot T_F42BA8 holds `jp 0x00F65F7C`, and 0xF65F7C is an
+; Evidence: thunk slot T_TrackAssign_StageZero_SoftKeyCol5 holds `jp 0x00F65F7C`, and 0xF65F7C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143624,7 +143624,7 @@ MaskTable_F65F5C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol5: the SoftKeyCol5 action of TrackAssign_StageZero -- called only by SoftKeyCol5_TrackAssign_StageZero.
-TrackAssign_StageZero_SoftKeyCol5:		; <- T_F42BA8
+TrackAssign_StageZero_SoftKeyCol5:		; <- T_TrackAssign_StageZero_SoftKeyCol5
 	bit	2, (0x96:8)	; F65F7C  bit 2,(0x96)
 	jr	nz, sub_F65F7C_Return	; F65F7F  jr NZ,0xf65fdc
 	ld	c, (3075:16)	; F65F81  ld C,(0x0c03)
@@ -143664,10 +143664,10 @@ sub_F65F7C_Return:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol7
-; Called from: T_F42BAC (x1)
+; Called from: T_TrackAssign_StageZero_SoftKeyCol7 (x1)
 ; Touches: (0x0C03) (0x2075)  |  0x603433
 ; Calls:   T_F411B8
-; Evidence: thunk slot T_F42BAC holds `jp 0x00F65FDD`, and 0xF65FDD is an
+; Evidence: thunk slot T_TrackAssign_StageZero_SoftKeyCol7 holds `jp 0x00F65FDD`, and 0xF65FDD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143675,7 +143675,7 @@ sub_F65F7C_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_SoftKeyCol7: the SoftKeyCol7 action of TrackAssign_StageZero -- called only by SoftKeyCol7_TrackAssign_StageZero.
-TrackAssign_StageZero_SoftKeyCol7:		; <- T_F42BAC
+TrackAssign_StageZero_SoftKeyCol7:		; <- T_TrackAssign_StageZero_SoftKeyCol7
 	bit	2, (0x96:8)	; F65FDD  bit 2,(0x96)
 	jr	nz, sub_F65FDD_Return	; F65FE0  jr NZ,0xf6601f
 	ld	xhl, 6304819	; F65FE2  ld XHL,0x00603433
@@ -143706,11 +143706,11 @@ sub_F65FDD_Return:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageNonZero_LcdKeyRow2
-; Called from: T_F42BB0 (x1)
+; Called from: T_TrackAssign_StageNonZero_LcdKeyRow2 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C70) (0x0DC0) (0x2071) (0x2075) (0x207E)
 ;          (0x212E) (0x215E) (0x3010)  |  0x603422
 ; Calls:   T_F40A04 T_F40CB4
-; Evidence: thunk slot T_F42BB0 holds `jp 0x00F66020`, and 0xF66020 is an
+; Evidence: thunk slot T_TrackAssign_StageNonZero_LcdKeyRow2 holds `jp 0x00F66020`, and 0xF66020 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143718,7 +143718,7 @@ sub_F65FDD_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageNonZero_LcdKeyRow2: the LcdKeyRow2 action of TrackAssign_StageNonZero -- called only by LcdKeyRow2_TrackAssign_StageNonZero.
-TrackAssign_StageNonZero_LcdKeyRow2:		; <- T_F42BB0
+TrackAssign_StageNonZero_LcdKeyRow2:		; <- T_TrackAssign_StageNonZero_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66020  and (0x2075),0xf7
 	bit	2, (0x95:8)	; F66025  bit 2,(0x95)
 	jr	z, sub_F66020_Skip	; F66028  jr Z,0xf6602b
@@ -143750,9 +143750,9 @@ sub_F66020_Skip:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_ReturnToStageZero
-; Called from: T_F42BC0 (x2)
+; Called from: T_TrackAssign_ReturnToStageZero (x2)
 ; Touches: (0x0DC0) (0x2071) (0x2075) (0x207E)
-; Evidence: thunk slot T_F42BC0 holds `jp 0x00F66081`, and 0xF66081 is an
+; Evidence: thunk slot T_TrackAssign_ReturnToStageZero holds `jp 0x00F66081`, and 0xF66081 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143761,7 +143761,7 @@ sub_F66020_Skip:
 ; --------------------------------------------------------------------------
 ; TrackAssign_ReturnToStageZero: unless (0x95) bit 2: (0x0DC0) = 0, UI_ScreenStage = 0, UI_Request_Hi |= 0x10.  Called by ExitKey_ and
 ;   LcdKeyRow3_TrackAssign_StageNonZero.
-TrackAssign_ReturnToStageZero:		; <- T_F42BC0
+TrackAssign_ReturnToStageZero:		; <- T_TrackAssign_ReturnToStageZero
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66081  and (0x2075),0xf7
 	bit	2, (0x95:8)	; F66086  bit 2,(0x95)
 	jr	z, sub_F66081_Skip	; F66089  jr Z,0xf6608c
@@ -143850,10 +143850,10 @@ T_F42B78_Nop:		; <- T_F42B78
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_InitOnEntry
-; Called from: T_F42BCC (x1)
+; Called from: T_SequencerMedley_InitOnEntry (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x207B) (0x22D0) (0x7F4D)
 ; Calls:   BStore_LoadBankDirectory T_F42410 Blink_EnableThenStop
-; Evidence: thunk slot T_F42BCC holds `jp 0x00F660ED`, and 0xF660ED is an
+; Evidence: thunk slot T_SequencerMedley_InitOnEntry holds `jp 0x00F660ED`, and 0xF660ED is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143862,7 +143862,7 @@ T_F42B78_Nop:		; <- T_F42B78
 ; --------------------------------------------------------------------------
 ; SequencerMedley_InitOnEntry: on a newly entered screen: (0x0E48) = (0x7F4D), Medley_Playing = 0, (0x22D0) = 0, (0x605068) |= 0x8000,
 ;   BStore_LoadBankDirectory, T_F42410; then Blink_EnableThenStop unless the medley plays.  Called by Paint_SequencerMedley.
-SequencerMedley_InitOnEntry:		; <- T_F42BCC
+SequencerMedley_InitOnEntry:		; <- T_SequencerMedley_InitOnEntry
 	ld	a, (UI_ScreenLatch:16)	; F660ED  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F660F1  cp A,(0x207b)
 	jr	z, sub_F660A0_Skip5	; F660F5  jr Z,0xf66118
@@ -143911,10 +143911,10 @@ BStore_LoadBankDirectory:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_OnLeave
-; Called from: T_F42BD0 (x1)
+; Called from: T_SequencerMedley_OnLeave (x1)
 ; Touches: (0x0DC1) (0x0E48) (0x207A) (0x22D0) (0x34BB) (0x34D0)
 ; Calls:   SequencerMedley_StopPlayback T_Disk_PortA3_Release_Entry T_F42E94 T_F42E98 T_F42414 T_F411B8
-; Evidence: thunk slot T_F42BD0 holds `jp 0x00F6614E`, and 0xF6614E is an
+; Evidence: thunk slot T_SequencerMedley_OnLeave holds `jp 0x00F6614E`, and 0xF6614E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143923,7 +143923,7 @@ BStore_LoadBankDirectory:
 ; --------------------------------------------------------------------------
 ; SequencerMedley_OnLeave: the LEAVE work of SequencerMedley -- the one unnamed routine ScreenLeaveBody_SequencerMedley calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-SequencerMedley_OnLeave:		; <- T_F42BD0
+SequencerMedley_OnLeave:		; <- T_SequencerMedley_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x13	; F6614E  cp (0x207a),0x13
 	jr	z, sub_F66123_Return	; F66153  jr Z,0xf66190
 	call	SequencerMedley_StopPlayback	; F66155  call 0xf66201
@@ -143947,10 +143947,10 @@ sub_F66123_Return:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_LcdKeyRow2
-; Called from: T_F42BD4 (x1)
+; Called from: T_SequencerMedley_LcdKeyRow2 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x2075) (0x220B) (0x2880)
 ; Calls:   T_F4302C T_F42E94 T_F4257C Blink_EnableThenStop
-; Evidence: thunk slot T_F42BD4 holds `jp 0x00F66191`, and 0xF66191 is an
+; Evidence: thunk slot T_SequencerMedley_LcdKeyRow2 holds `jp 0x00F66191`, and 0xF66191 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -143958,7 +143958,7 @@ sub_F66123_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_LcdKeyRow2: the LcdKeyRow2 action of SequencerMedley -- called only by LcdKeyRow2_SequencerMedley.
-SequencerMedley_LcdKeyRow2:		; <- T_F42BD4
+SequencerMedley_LcdKeyRow2:		; <- T_SequencerMedley_LcdKeyRow2
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66191  cp (0x0dc1),0x00
 	jr	nz, sub_F66123_Return2	; F66196  jr NZ,0xf661f2
 	m_and_mi8 MB16, UI_RequestBits, 0xf7	; F66198  and (0x2075),0xf7
@@ -144012,10 +144012,10 @@ Blink_EnableThenStop:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StopPlayback
-; Called from: T_F42BD8 (x1); in-module: 0xF66155
+; Called from: T_SequencerMedley_StopPlayback (x1); in-module: 0xF66155
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x0E48) (0x220B) (0x22D0)
 ; Calls:   T_F43030 T_F42E98 T_F4257C
-; Evidence: thunk slot T_F42BD8 holds `jp 0x00F66201`, and 0xF66201 is an
+; Evidence: thunk slot T_SequencerMedley_StopPlayback holds `jp 0x00F66201`, and 0xF66201 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144024,7 +144024,7 @@ Blink_EnableThenStop:
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StopPlayback: when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_F43030 and, unless
 ;   (0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_F4257C.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave.
-SequencerMedley_StopPlayback:		; <- T_F42BD8
+SequencerMedley_StopPlayback:		; <- T_SequencerMedley_StopPlayback
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F66201  cp (0x0dc1),0x01
 	jr	nz, sub_F66201_Return	; F66206  jr NZ,0xf66245
 	ld	(Medley_Playing:16), 0	; F66208  ld (0x0dc1),0x00
@@ -144053,10 +144053,10 @@ sub_F66201_Return:
 
 ; --------------------------------------------------------------------------
 ; Medley_SelectField1
-; Called from: T_F42B7C (x2)
+; Called from: T_Medley_SelectField1 (x2)
 ; Touches: (0x0C0F) (0x1302)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42B7C holds `jp 0x00F66246`, and 0xF66246 is an
+; Evidence: thunk slot T_Medley_SelectField1 holds `jp 0x00F66246`, and 0xF66246 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144066,7 +144066,7 @@ sub_F66201_Return:
 ;           Medley_Field is the Medley screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-Medley_SelectField1:		; <- T_F42B7C
+Medley_SelectField1:		; <- T_Medley_SelectField1
 	ld	a, 1:opc	; F66246  ld A,0x01
 	ld	(Medley_Field:16), a	; F66248  ld (0x0c0f),A
 	ld	(DisplayListB_Stage+12:16), a	; F6624C  ld (0x1302),A
@@ -144074,10 +144074,10 @@ Medley_SelectField1:		; <- T_F42B7C
 
 ; --------------------------------------------------------------------------
 ; Medley_SelectField2
-; Called from: T_F42B80 (x1)
+; Called from: T_Medley_SelectField2 (x1)
 ; Touches: (0x0C0F) (0x1302)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42B80 holds `jp 0x00F66251`, and 0xF66251 is an
+; Evidence: thunk slot T_Medley_SelectField2 holds `jp 0x00F66251`, and 0xF66251 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144087,7 +144087,7 @@ Medley_SelectField1:		; <- T_F42B7C
 ;           Medley_Field is the Medley screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-Medley_SelectField2:		; <- T_F42B80
+Medley_SelectField2:		; <- T_Medley_SelectField2
 	ld	a, 2:opc	; F66251  ld A,0x02
 	ld	(Medley_Field:16), a	; F66253  ld (0x0c0f),A
 	ld	(DisplayListB_Stage+12:16), a	; F66257  ld (0x1302),A
@@ -144095,10 +144095,10 @@ Medley_SelectField2:		; <- T_F42B80
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StepFieldUp
-; Called from: T_F42B84 (x1)
+; Called from: T_SequencerMedley_StepFieldUp (x1)
 ; Touches: (0x0C0F)
 ; Calls:   SequencerMedley_StepFirstSong SequencerMedley_StepLastSong
-; Evidence: thunk slot T_F42B84 holds `jp 0x00F6625C`, and 0xF6625C is an
+; Evidence: thunk slot T_SequencerMedley_StepFieldUp holds `jp 0x00F6625C`, and 0xF6625C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144106,7 +144106,7 @@ Medley_SelectField2:		; <- T_F42B80
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StepFieldUp: clears bit 7 of W, then SequencerMedley_StepFirstSong (Medley_Field 1) or _StepLastSong (2): the step goes UP.
-SequencerMedley_StepFieldUp:		; <- T_F42B84
+SequencerMedley_StepFieldUp:		; <- T_SequencerMedley_StepFieldUp
 	and	w, 127	; F6625C  and W,0x7f
 	m_cp_mi8 MB16, Medley_Field, 0x01	; F6625F  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip4	; F66264  jr Z,0xf6626f
@@ -144123,10 +144123,10 @@ sub_F66201_Return2:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StepFieldDown
-; Called from: T_F42B88 (x1)
+; Called from: T_SequencerMedley_StepFieldDown (x1)
 ; Touches: (0x0C0F)
 ; Calls:   SequencerMedley_StepFirstSong SequencerMedley_StepLastSong
-; Evidence: thunk slot T_F42B88 holds `jp 0x00F66278`, and 0xF66278 is an
+; Evidence: thunk slot T_SequencerMedley_StepFieldDown holds `jp 0x00F66278`, and 0xF66278 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144134,7 +144134,7 @@ sub_F66201_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_StepFieldDown: sets bit 7 of W, then the same dispatch on Medley_Field: the step goes DOWN.
-SequencerMedley_StepFieldDown:		; <- T_F42B88
+SequencerMedley_StepFieldDown:		; <- T_SequencerMedley_StepFieldDown
 	or	w, 128	; F66278  or W,0x80
 	m_cp_mi8 MB16, Medley_Field, 0x01	; F6627B  cp (0x0c0f),0x01
 	jr	z, sub_F66201_Skip6	; F66280  jr Z,0xf6628b
@@ -144262,10 +144262,10 @@ sub_F662F7_Join:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SetSourceInternal
-; Called from: T_F42C18 (x2)
+; Called from: T_SequencerMedley_SetSourceInternal (x2)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1303) (0x1304) (0x2208)
 ;          (0x2209) (0x220B)
-; Evidence: thunk slot T_F42C18 holds `jp 0x00F6633A`, and 0xF6633A is an
+; Evidence: thunk slot T_SequencerMedley_SetSourceInternal holds `jp 0x00F6633A`, and 0xF6633A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144274,7 +144274,7 @@ sub_F662F7_Join:
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SetSourceInternal: when not playing: Medley_Source = 0 (INT) and Medley_FileType = 0, each to its display stage, and both songs
 ;   clamped to 9 (an INT medley has ten songs).  Called by SoftKeyCol2_SequencerMedley and Paint_SequencerMedley.
-SequencerMedley_SetSourceInternal:		; <- T_F42C18
+SequencerMedley_SetSourceInternal:		; <- T_SequencerMedley_SetSourceInternal
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F6633A  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return	; F6633F  jr NZ,0xf66381
 	ld	a, 0:opc	; F66341  ld A,0x00
@@ -144302,10 +144302,10 @@ sub_F662F7_Return:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol3
-; Called from: T_F42C1C (x1)
+; Called from: T_SequencerMedley_SoftKeyCol3 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1303) (0x2208) (0x2209)
 ;          (0x220B)
-; Evidence: thunk slot T_F42C1C holds `jp 0x00F66382`, and 0xF66382 is an
+; Evidence: thunk slot T_SequencerMedley_SoftKeyCol3 holds `jp 0x00F66382`, and 0xF66382 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144313,7 +144313,7 @@ sub_F662F7_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol3: the SoftKeyCol3 action of SequencerMedley -- called only by SoftKeyCol3_SequencerMedley.
-SequencerMedley_SoftKeyCol3:		; <- T_F42C1C
+SequencerMedley_SoftKeyCol3:		; <- T_SequencerMedley_SoftKeyCol3
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66382  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return2	; F66387  jr NZ,0xf663d5
 	ld	a, 1:opc	; F66389  ld A,0x01
@@ -144364,9 +144364,9 @@ T_F42C20_Nop:		; <- T_F42C20
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol8
-; Called from: T_F42C28 (x1)
+; Called from: T_SequencerMedley_SoftKeyCol8 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1304) (0x2208) (0x2209)
-; Evidence: thunk slot T_F42C28 holds `jp 0x00F663D7`, and 0xF663D7 is an
+; Evidence: thunk slot T_SequencerMedley_SoftKeyCol8 holds `jp 0x00F663D7`, and 0xF663D7 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144374,7 +144374,7 @@ T_F42C20_Nop:		; <- T_F42C20
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol8: the SoftKeyCol8 action of SequencerMedley -- called only by SoftKeyCol8_SequencerMedley.
-SequencerMedley_SoftKeyCol8:		; <- T_F42C28
+SequencerMedley_SoftKeyCol8:		; <- T_SequencerMedley_SoftKeyCol8
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F663D7  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return3	; F663DC  jr NZ,0xf66414
 	ld	a, 0:opc	; F663DE  ld A,0x00
@@ -144399,10 +144399,10 @@ sub_F662F7_Return3:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol7
-; Called from: T_F42C24 (x1)
+; Called from: T_SequencerMedley_SoftKeyCol7 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x12FE) (0x1300) (0x1304) (0x2208) (0x2209)
 ;          (0x220B)
-; Evidence: thunk slot T_F42C24 holds `jp 0x00F66415`, and 0xF66415 is an
+; Evidence: thunk slot T_SequencerMedley_SoftKeyCol7 holds `jp 0x00F66415`, and 0xF66415 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144410,7 +144410,7 @@ sub_F662F7_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_SoftKeyCol7: the SoftKeyCol7 action of SequencerMedley -- called only by SoftKeyCol7_SequencerMedley.
-SequencerMedley_SoftKeyCol7:		; <- T_F42C24
+SequencerMedley_SoftKeyCol7:		; <- T_SequencerMedley_SoftKeyCol7
 	m_cp_mi8 MB16, Medley_Playing, 0x00	; F66415  cp (0x0dc1),0x00
 	jr	nz, sub_F662F7_Return4	; F6641A  jr NZ,0xf66459
 	m_cp_mi8 MB16, Medley_Source, 0x01	; F6641C  cp (0x220b),0x01
@@ -144437,10 +144437,10 @@ sub_F662F7_Return4:
 
 ; --------------------------------------------------------------------------
 ; SequencerMedley_LcdKeyRow4
-; Called from: T_F42C2C (x1)
+; Called from: T_SequencerMedley_LcdKeyRow4 (x1)
 ; Touches: (0x0DC1) (0x0E35) (0x0E36) (0x2071) (0x220B) (0x22D0) (0x2880)
 ; Calls:   T_F43034 T_F42E94 T_F4257C
-; Evidence: thunk slot T_F42C2C holds `jp 0x00F6645A`, and 0xF6645A is an
+; Evidence: thunk slot T_SequencerMedley_LcdKeyRow4 holds `jp 0x00F6645A`, and 0xF6645A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144448,7 +144448,7 @@ sub_F662F7_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SequencerMedley_LcdKeyRow4: the LcdKeyRow4 action of SequencerMedley -- called only by LcdKeyRow4_SequencerMedley.
-SequencerMedley_LcdKeyRow4:		; <- T_F42C2C
+SequencerMedley_LcdKeyRow4:		; <- T_SequencerMedley_LcdKeyRow4
 	m_cp_mi8 MB16, Medley_Playing, 0x01	; F6645A  cp (0x0dc1),0x01
 	jr	nz, sub_F662F7_Return5	; F6645F  jr NZ,0xf664ad
 	ld	a, (Medley_Source:16)	; F66461  ld A,(0x220b)
@@ -144481,9 +144481,9 @@ sub_F662F7_Return5:
 
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_OpenStepRecord
-; Called from: T_F42BBC (x8)
+; Called from: T_StepRecordPartSelect_OpenStepRecord (x8)
 ; Touches: (0x0C90) (0x0DC8) (0x0E5C) (0x12A0) (0x2070)
-; Evidence: thunk slot T_F42BBC holds `jp 0x00F664AE`, and 0xF664AE is an
+; Evidence: thunk slot T_StepRecordPartSelect_OpenStepRecord holds `jp 0x00F664AE`, and 0xF664AE is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144492,7 +144492,7 @@ sub_F662F7_Return5:
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_OpenStepRecord: (0x0C90) = 1, (0x0DC8) = 0, and when the chosen part (0x0E5C) is 1..0x11: (0x12A0) = 0 and UI_Request = 0x800E,
 ;   screen 0x0E = STEP RECORD.  Called by all eight SoftKeyColN_StepRecordPartSelect.
-StepRecordPartSelect_OpenStepRecord:		; <- T_F42BBC
+StepRecordPartSelect_OpenStepRecord:		; <- T_StepRecordPartSelect_OpenStepRecord
 	ldw	(3216:16), 1	; F664AE  ld (0x0c90),0x0001
 	ldw	(3528:16), 0	; F664B4  ld (0x0dc8),0x0000
 	m_cp_mi8 MB16, 0x0e5c, 0x00	; F664BA  cp (0x0e5c),0x00
@@ -144506,11 +144506,11 @@ sub_F662F7_Return6:
 
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_ResetOnEntry
-; Called from: T_F42BC4 (x1)
+; Called from: T_StepRecordPartSelect_ResetOnEntry (x1)
 ; Touches: (0x0C00) (0x0E5C) (0x207A) (0x207B) (0x2130) (0x215E) (0x2160)
 ;          (0x3010) (0x34BB)
 ; Calls:   T_F409AC
-; Evidence: thunk slot T_F42BC4 holds `jp 0x00F664D5`, and 0xF664D5 is an
+; Evidence: thunk slot T_StepRecordPartSelect_ResetOnEntry holds `jp 0x00F664D5`, and 0xF664D5 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144519,7 +144519,7 @@ sub_F662F7_Return6:
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_ResetOnEntry: (0x3010) = (0x60341E); on a newly entered screen (latch changed): chosen part (0x0E5C) = 0, (0x2130) |= 0x100,
 ;   (0x2160) = 0xFFFF, (0x215E) = 0, (0x0C00) = 0, T_F409AC; then (0x34BB) |= 4.  Called by Paint_StepRecordPartSelect.
-StepRecordPartSelect_ResetOnEntry:		; <- T_F42BC4
+StepRecordPartSelect_ResetOnEntry:		; <- T_StepRecordPartSelect_ResetOnEntry
 	ld	xwa, (6304798:24)	; F664D5  ld XWA,(0x60341e)
 	ld	(12304:16), xwa	; F664DA  ld (0x3010),XWA
 	ld	a, (UI_ScreenLatch:16)	; F664DE  ld A,(0x207a)
@@ -144537,10 +144537,10 @@ sub_F662F7_Skip16:
 
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_OnLeave
-; Called from: T_F42BC8 (x1)
+; Called from: T_StepRecordPartSelect_OnLeave (x1)
 ; Touches: (0x3010) (0x34BB)
 ; Calls:   T_F40CB4
-; Evidence: thunk slot T_F42BC8 holds `jp 0x00F6650F`, and 0xF6650F is an
+; Evidence: thunk slot T_StepRecordPartSelect_OnLeave holds `jp 0x00F6650F`, and 0xF6650F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144549,7 +144549,7 @@ sub_F662F7_Skip16:
 ; --------------------------------------------------------------------------
 ; StepRecordPartSelect_OnLeave: the LEAVE work of StepRecordPartSelect -- the one unnamed routine ScreenLeaveBody_StepRecordPartSelect calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-StepRecordPartSelect_OnLeave:		; <- T_F42BC8
+StepRecordPartSelect_OnLeave:		; <- T_StepRecordPartSelect_OnLeave
 	ld	xwa, (12304:16)	; F6650F  ld XWA,(0x3010)
 	ld	(6304798:24), xwa	; F66513  ld (0x60341e),XWA
 	call	T_F40CB4	; F66518  call 0xf40cb4
@@ -144601,10 +144601,10 @@ sub_F662F7_Skip17:
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_OnLeave
-; Called from: T_F42BE8 (x1)
+; Called from: T_TrackAssign_OnLeave (x1)
 ; Touches: (0x207A) (0x34BB)
 ; Calls:   sub_F65D26
-; Evidence: thunk slot T_F42BE8 holds `jp 0x00F6655D`, and 0xF6655D is an
+; Evidence: thunk slot T_TrackAssign_OnLeave holds `jp 0x00F6655D`, and 0xF6655D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144613,7 +144613,7 @@ sub_F662F7_Skip17:
 ; --------------------------------------------------------------------------
 ; TrackAssign_OnLeave: the LEAVE work of TrackAssign -- the one unnamed routine ScreenLeaveBody_TrackAssign calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-TrackAssign_OnLeave:		; <- T_F42BE8
+TrackAssign_OnLeave:		; <- T_TrackAssign_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x10	; F6655D  cp (0x207a),0x10
 	jr	z, sub_F662F7_Return7	; F66562  jr Z,0xf6656c
 	calr	sub_F65D26	; F66564  calr 0xf65d26
@@ -144637,9 +144637,9 @@ T_F42BE0_Nop:		; <- T_F42BE0
 
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow5
-; Called from: T_F42BF4 (x1)
+; Called from: T_TrackAssign_StageZero_LcdKeyRow5 (x1)
 ; Touches: (0x2070)
-; Evidence: thunk slot T_F42BF4 holds `jp 0x00F6656E`, and 0xF6656E is an
+; Evidence: thunk slot T_TrackAssign_StageZero_LcdKeyRow5 holds `jp 0x00F6656E`, and 0xF6656E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144647,7 +144647,7 @@ T_F42BE0_Nop:		; <- T_F42BE0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssign_StageZero_LcdKeyRow5: the LcdKeyRow5 action of TrackAssign_StageZero -- called only by LcdKeyRow5_TrackAssign_StageZero.
-TrackAssign_StageZero_LcdKeyRow5:		; <- T_F42BF4
+TrackAssign_StageZero_LcdKeyRow5:		; <- T_TrackAssign_StageZero_LcdKeyRow5
 	bit	7, w	; F6656E  bit 0x07,W
 	jr	z, sub_F662F7_Return8	; F66571  jr Z,0xf66579
 	ldw	(UI_Request:16), 32785	; F66573  ld (0x2070),0x8011
@@ -144717,10 +144717,10 @@ sub_F65C0D_Nop:
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_InitFromCurrentBank
-; Called from: T_F42BF8 (x1)
+; Called from: T_TrackAssignPresets_InitFromCurrentBank (x1)
 ; Touches: (0x0DFD) (0x0DFE) (0x12F6) (0x12F7) (0x12F8) (0x2070) (0x207B)
 ;          (0x2880) (0x34BB) (0x360A)
-; Evidence: thunk slot T_F42BF8 holds `jp 0x00F665B4`, and 0xF665B4 is an
+; Evidence: thunk slot T_TrackAssignPresets_InitFromCurrentBank holds `jp 0x00F665B4`, and 0xF665B4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144729,7 +144729,7 @@ sub_F65C0D_Nop:
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_InitFromCurrentBank: unless the previous screen latch is 0x11: (0x0DFD) = 1, (0x0DFE) = BStore_CurrentBank (+1 to the display stage),
 ;   UI_StatusCode = 0; then, if UI_StatusCode is 0x23, requests screen 0x10.  Called by Paint_TrackAssignPresets.
-TrackAssignPresets_InitFromCurrentBank:		; <- T_F42BF8
+TrackAssignPresets_InitFromCurrentBank:		; <- T_TrackAssignPresets_InitFromCurrentBank
 	m_cp_mi8 MB16, UI_ScreenLatch_Previous, 0x11	; F665B4  cp (0x207b),0x11
 	jr	z, sub_F662F7_Skip20	; F665B9  jr Z,0xf665e3
 	m_or_mi8 MB16, 0x34bb, 0x04	; F665BB  or (0x34bb),0x04
@@ -144766,10 +144766,10 @@ T_F42BFC_Nop:		; <- T_F42BFC
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_SelectField1
-; Called from: T_F42C00 (x1)
+; Called from: T_TrackAssignPresets_SelectField1 (x1)
 ; Touches: (0x0DFD) (0x12F6)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42C00 holds `jp 0x00F665F2`, and 0xF665F2 is an
+; Evidence: thunk slot T_TrackAssignPresets_SelectField1 holds `jp 0x00F665F2`, and 0xF665F2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144779,7 +144779,7 @@ T_F42BFC_Nop:		; <- T_F42BFC
 ;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-TrackAssignPresets_SelectField1:		; <- T_F42C00
+TrackAssignPresets_SelectField1:		; <- T_TrackAssignPresets_SelectField1
 	ld	a, 1:opc	; F665F2  ld A,0x01
 	ld	(3581:16), a	; F665F4  ld (0x0dfd),A
 	dec	1, a	; F665F8  dec 1,A
@@ -144788,10 +144788,10 @@ TrackAssignPresets_SelectField1:		; <- T_F42C00
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_SelectField2
-; Called from: T_F42C04 (x1)
+; Called from: T_TrackAssignPresets_SelectField2 (x1)
 ; Touches: (0x0DFD) (0x12F6)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42C04 holds `jp 0x00F665FF`, and 0xF665FF is an
+; Evidence: thunk slot T_TrackAssignPresets_SelectField2 holds `jp 0x00F665FF`, and 0xF665FF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144801,7 +144801,7 @@ TrackAssignPresets_SelectField1:		; <- T_F42C00
 ;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-TrackAssignPresets_SelectField2:		; <- T_F42C04
+TrackAssignPresets_SelectField2:		; <- T_TrackAssignPresets_SelectField2
 	ld	a, 2:opc	; F665FF  ld A,0x02
 	ld	(3581:16), a	; F66601  ld (0x0dfd),A
 	dec	1, a	; F66605  dec 1,A
@@ -144810,10 +144810,10 @@ TrackAssignPresets_SelectField2:		; <- T_F42C04
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_SelectField3
-; Called from: T_F42C08 (x1)
+; Called from: T_TrackAssignPresets_SelectField3 (x1)
 ; Touches: (0x0DFD) (0x12F6)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42C08 holds `jp 0x00F6660C`, and 0xF6660C is an
+; Evidence: thunk slot T_TrackAssignPresets_SelectField3 holds `jp 0x00F6660C`, and 0xF6660C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144823,7 +144823,7 @@ TrackAssignPresets_SelectField2:		; <- T_F42C04
 ;           ScreenLeaveBody_TrackAssignPresets, so it is the TrackAssignPresets screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-TrackAssignPresets_SelectField3:		; <- T_F42C08
+TrackAssignPresets_SelectField3:		; <- T_TrackAssignPresets_SelectField3
 	ld	a, 3:opc	; F6660C  ld A,0x03
 	ld	(3581:16), a	; F6660E  ld (0x0dfd),A
 	dec	1, a	; F66612  dec 1,A
@@ -144832,9 +144832,9 @@ TrackAssignPresets_SelectField3:		; <- T_F42C08
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_BankUp
-; Called from: T_F42C0C (x1)
+; Called from: T_TrackAssignPresets_BankUp (x1)
 ; Touches: (0x0DFE) (0x12F7) (0x2075)
-; Evidence: thunk slot T_F42C0C holds `jp 0x00F66619`, and 0xF66619 is an
+; Evidence: thunk slot T_TrackAssignPresets_BankUp holds `jp 0x00F66619`, and 0xF66619 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144843,7 +144843,7 @@ TrackAssignPresets_SelectField3:		; <- T_F42C08
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_BankUp: (0x0DFE) + 1, stopping at 10, and (0x0DFE) + 1 to DisplayListB_Stage+1; repaint bit 3.  (0x0DFE) is the bank
 ;   the page shows: TrackAssignPresets_InitFromCurrentBank loads it from BStore_CurrentBank.  Called by SoftKeyCol3_TrackAssignPresets.
-TrackAssignPresets_BankUp:		; <- T_F42C0C
+TrackAssignPresets_BankUp:		; <- T_TrackAssignPresets_BankUp
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66619  or (0x2075),0x08
 	m_and_mi8 MB16, UI_RequestBits, 0xfe	; F6661E  and (0x2075),0xfe
 	ld	a, (3582:16)	; F66623  ld A,(0x0dfe)
@@ -144858,9 +144858,9 @@ sub_F662F7_Skip21:
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_BankDown
-; Called from: T_F42C10 (x1)
+; Called from: T_TrackAssignPresets_BankDown (x1)
 ; Touches: (0x0DFE) (0x12F7) (0x2075)
-; Evidence: thunk slot T_F42C10 holds `jp 0x00F66639`, and 0xF66639 is an
+; Evidence: thunk slot T_TrackAssignPresets_BankDown holds `jp 0x00F66639`, and 0xF66639 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144868,7 +144868,7 @@ sub_F662F7_Skip21:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_BankDown: (0x0DFE) - 1, stopping at 0, mirrored +1 to DisplayListB_Stage+1.  Called by SoftKeyCol2_TrackAssignPresets.
-TrackAssignPresets_BankDown:		; <- T_F42C10
+TrackAssignPresets_BankDown:		; <- T_TrackAssignPresets_BankDown
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F66639  or (0x2075),0x08
 	m_and_mi8 MB16, UI_RequestBits, 0xfe	; F6663E  and (0x2075),0xfe
 	ld	a, (3582:16)	; F66643  ld A,(0x0dfe)
@@ -144883,10 +144883,10 @@ sub_F662F7_Skip22:
 
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_SoftKeyCol6
-; Called from: T_F42C14 (x1)
+; Called from: T_TrackAssignPresets_SoftKeyCol6 (x1)
 ; Touches: (0x2070) (0x2880)
 ; Calls:   sub_F66668
-; Evidence: thunk slot T_F42C14 holds `jp 0x00F66658`, and 0xF66658 is an
+; Evidence: thunk slot T_TrackAssignPresets_SoftKeyCol6 holds `jp 0x00F66658`, and 0xF66658 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -144894,7 +144894,7 @@ sub_F662F7_Skip22:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackAssignPresets_SoftKeyCol6: the SoftKeyCol6 action of TrackAssignPresets -- called only by SoftKeyCol6_TrackAssignPresets.
-TrackAssignPresets_SoftKeyCol6:		; <- T_F42C14
+TrackAssignPresets_SoftKeyCol6:		; <- T_TrackAssignPresets_SoftKeyCol6
 	call	sub_F66668	; F66658  call 0xf66668
 	ld	(UI_StatusCode:16), 35	; F6665C  ld (0x2880),0x23
 	ldw	(UI_Request:16), 16555	; F66661  ld (0x2070),0x40ab
@@ -145631,10 +145631,10 @@ sub_F67479:		; <- T_F42EFC
 
 ; --------------------------------------------------------------------------
 ; BStore_DirEntryOffsetX2_Call
-; Called from: T_F42EF8 (x1)
+; Called from: T_BStore_DirEntryOffsetX2_Call (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_DirEntryOffsetX2
-; Evidence: thunk slot T_F42EF8 holds `jp 0x00F6747D`, and 0xF6747D is an
+; Evidence: thunk slot T_BStore_DirEntryOffsetX2_Call holds `jp 0x00F6747D`, and 0xF6747D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -145642,7 +145642,7 @@ sub_F67479:		; <- T_F42EFC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; BStore_DirEntryOffsetX2_Call: calls BStore_DirEntryOffsetX2 and returns -- `calr BStore_DirEntryOffsetX2 / ret`.
-BStore_DirEntryOffsetX2_Call:		; <- T_F42EF8
+BStore_DirEntryOffsetX2_Call:		; <- T_BStore_DirEntryOffsetX2_Call
 	calr	BStore_DirEntryOffsetX2	; F6747D  calr 0xf6bbd4
 	ret	; F67480  ret
 
@@ -145885,20 +145885,20 @@ DispatchTable_F674CE_Nop0:
 
 ; --------------------------------------------------------------------------
 ; StepRecord_ButtonByTrackKind
-; Called from: T_F42EC8 (x2)
+; Called from: T_StepRecord_ButtonByTrackKind (x2)
 ; Touches: (0x0D10) (0x0E63) (0x2092)
-; Evidence: thunk slot T_F42EC8 holds `jp 0x00F675CC`, and 0xF675CC is an
+; Evidence: thunk slot T_StepRecord_ButtonByTrackKind holds `jp 0x00F675CC`, and 0xF675CC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_ButtonByTrackKind: STEP RECORD's button handling (T_F42EC8, called by the +8 method with the
+; StepRecord_ButtonByTrackKind: STEP RECORD's button handling (T_StepRecord_ButtonByTrackKind, called by the +8 method with the
 ;   panel code in BC, saved at (0x0D10)); selects by (0x0E63) & 3 from StepRecord_TrackKindButtonTable --
 ;   (0x0E63) is 1 for a song track and 2 for the master track (Map_0E63_F6ACA7).
 ;   Screen 0x15's method has the same body; nothing requests screen 0x15 (prom_ab_step_record_screen_names.py).
-StepRecord_ButtonByTrackKind:		; <- T_F42EC8
+StepRecord_ButtonByTrackKind:		; <- T_StepRecord_ButtonByTrackKind
 	m_bit 0, MD16, UI_ScreenHoldState	; F675CC  bit 0,(0x2092)
 	jr	nz, sub_F675CC_Return	; F675D0  jr NZ,0xf675f2
 	ld	e, (3683:16)	; F675D2  ld E,(0x0e63)
@@ -153295,18 +153295,18 @@ IndexMap_F6A9AA:
 
 ; --------------------------------------------------------------------------
 ; StepRecord_OnEnter
-; Called from: T_F42EC0 (x1)
+; Called from: T_StepRecord_OnEnter (x1)
 ; Touches: (0x126B) (0x207A) (0x207B) (0x2880)
 ; Calls:   sub_F6A2FF
-; Evidence: thunk slot T_F42EC0 holds `jp 0x00F6A9CA`, and 0xF6A9CA is an
+; Evidence: thunk slot T_StepRecord_OnEnter holds `jp 0x00F6A9CA`, and 0xF6A9CA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_OnEnter: the prom_b part of STEP RECORD's ENTER -- reached only from ScreenEnterBody_StepRecord, through T_F42EC0.
-StepRecord_OnEnter:		; <- T_F42EC0
+; StepRecord_OnEnter: the prom_b part of STEP RECORD's ENTER -- reached only from ScreenEnterBody_StepRecord, through T_StepRecord_OnEnter.
+StepRecord_OnEnter:		; <- T_StepRecord_OnEnter
 	ld	(4715:16), 0	; F6A9CA  ld (0x126b),0x00
 	ld	a, (UI_ScreenLatch:16)	; F6A9CF  ld A,(0x207a)
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F6A9D3  cp A,(0x207b)
@@ -153979,20 +153979,20 @@ sub_F6ADC2:
 
 ; --------------------------------------------------------------------------
 ; StepRecord_OnLeave
-; Called from: T_F42EC4 (x1)
+; Called from: T_StepRecord_OnLeave (x1)
 ; Touches: (0x0DC7) (0x0E4E) (0x0E4F) (0x0E50) (0x0E63) (0x0E64) (0x0E65)
 ;          (0x1008) (0x106E) (0x1071) +16 more
 ; Calls:   0xF6D6D6 sub_F6A304 sub_F6A908 sub_F6C4A5 T_F40CB4 T_F42578
 ;          sub_F6ACF5 sub_F6AE4B_Nop T_F411B8 T_F40A1C sub_F6B276 sub_F67434_Nop
-; Evidence: thunk slot T_F42EC4 holds `jp 0x00F6AE4B`, and 0xF6AE4B is an
+; Evidence: thunk slot T_StepRecord_OnLeave holds `jp 0x00F6AE4B`, and 0xF6AE4B is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; StepRecord_OnLeave: the prom_b part of STEP RECORD's LEAVE -- reached only from ScreenLeaveBody_StepRecord, through T_F42EC4.
-StepRecord_OnLeave:		; <- T_F42EC4
+; StepRecord_OnLeave: the prom_b part of STEP RECORD's LEAVE -- reached only from ScreenLeaveBody_StepRecord, through T_StepRecord_OnLeave.
+StepRecord_OnLeave:		; <- T_StepRecord_OnLeave
 	ld	(4775:16), 0	; F6AE4B  ld (0x12a7),0x00
 	call	sub_F6D6D6	; F6AE50  call 0xf6d6d6
 	ld	(3664:16), 255	; F6AE54  ld (0x0e50),0xff
@@ -158639,7 +158639,7 @@ sub_F6CFCB:
 ; notes/prom_b_module_frontier.py ranks whole thunk RUNS by the contiguous
 ; unconverted extent of their targets, and by that measure this span is
 ; THIRTEENTH of fourteen: it owns exactly two `jp` slots of the 0xF40000 routine
-; directory, T_F43380 -> 0xF6F400 and T_F43384 -> 0xF6F404, an extent of 4 bytes.
+; directory, T_MidiFileL0ad_LcdKeyRow1 -> 0xF6F400 and T_F43384 -> 0xF6F404, an extent of 4 bytes.
 ; That tool is blind to a module entered by DIRECT CALL, and this one is.
 ; notes/prom_b_span_frontier.py ranks the `.incbin` SPANS instead, by how many
 ; DISTINCT addresses inside them an ALREADY-TRANSCRIBED instruction calls or
@@ -164249,7 +164249,7 @@ sub_F6EC6A_Return:
 ; ==========================================================================
 ; 0xF6F000-0xF6F3FF -- AN OLDER BUILD'S COPY OF THE MODULE AT 0xF7AA00-0xF7ADFF
 ;   Byte for byte the live module this build enters through the routine-
-;   directory slots T_F428B0.. (BStore_AppendBytes_Join3_Veneer, BStore_AppendBytes_Join4_Veneer, sub_F7AA29,
+;   directory slots T_BStore_AppendBytes_Join3_Veneer.. (BStore_AppendBytes_Join3_Veneer, BStore_AppendBytes_Join4_Veneer, sub_F7AA29,
 ;   SongStore_LoadSongHeaderToDisplay, sub_F7AB3F, sub_F7AB9C ...), 0xBA00
 ;   lower, except at the nine bytes relocation changes: four `call`s inside
 ;   the block read the live target - 0xBA00, and the `calr` at 0xF6F3E4 calls
@@ -164719,11 +164719,11 @@ OldCopy_sub_F7ADF5:
 
 ; --------------------------------------------------------------------------
 ; MidiFileL0ad_LcdKeyRow1
-; Called from: T_F43380 (x1)
+; Called from: T_MidiFileL0ad_LcdKeyRow1 (x1)
 ; Touches: nothing with an absolute address
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
-;                   names it.  Only TWO slots reach this module -- T_F43380
+;                   names it.  Only TWO slots reach this module -- T_MidiFileL0ad_LcdKeyRow1
 ;                   and T_F43384 -- which is why the thunk-run frontier
 ;                   ranks it thirteenth and why it was chosen with a
 ;                   different tool.  0xF6F400 is an instruction boundary of
@@ -164733,7 +164733,7 @@ OldCopy_sub_F7ADF5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; MidiFileL0ad_LcdKeyRow1: the LcdKeyRow1 action of MidiFileL0ad -- called only by LcdKeyRow1_MidiFileL0ad.
-MidiFileL0ad_LcdKeyRow1:		; <- T_F43380
+MidiFileL0ad_LcdKeyRow1:		; <- T_MidiFileL0ad_LcdKeyRow1
 	jp	sub_F6F408	; F6F400  jp 0xf6f408
 
 ; --------------------------------------------------------------------------
@@ -164742,7 +164742,7 @@ MidiFileL0ad_LcdKeyRow1:		; <- T_F43380
 ; Touches: nothing with an absolute address
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
-;                   names it.  Only TWO slots reach this module -- T_F43380
+;                   names it.  Only TWO slots reach this module -- T_MidiFileL0ad_LcdKeyRow1
 ;                   and T_F43384 -- which is why the thunk-run frontier
 ;                   ranks it thirteenth and why it was chosen with a
 ;                   different tool.  0xF6F404 is an instruction boundary of
@@ -165033,7 +165033,7 @@ Smf_ReadFile:
 	ld	(UI_StatusCode:16), 38	; F6F578  ld (0x2880),0x26
 	call	T_MessageScreen_Paint	; F6F57D  call 0xf41600
 	ldw	(4680:16), 1	; F6F581  ld (0x1248),0x0001
-	call	T_F42600	; F6F587  call 0xf42600
+	call	T_Var2216_SetW145C_Call	; F6F587  call 0xf42600
 	call	T_F42604	; F6F58B  call 0xf42604
 	ld	xwa, 6334208	; F6F58F  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F6F594  ld (0x1088),XWA
@@ -174390,7 +174390,7 @@ Data_F73844:
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A480 0x60A700
-; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_F42600 T_F42604 SmfWrite_SaveFileName
+; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_Var2216_SetW145C_Call T_F42604 SmfWrite_SaveFileName
 ;          T_F425CC SmfWrite_RestoreFileName T_F425B0 sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
 ;          more
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -174480,7 +174480,7 @@ Smf_WriteFile_Join:
 	ld	(UI_StatusCode:16), 39	; F738FA  ld (0x2880),0x27
 	call	T_MessageScreen_Paint	; F738FF  call 0xf41600
 	ldw	(4680:16), 1	; F73903  ld (0x1248),0x0001
-	call	T_F42600	; F73909  call 0xf42600
+	call	T_Var2216_SetW145C_Call	; F73909  call 0xf42600
 	call	T_F42604	; F7390D  call 0xf42604
 	push	xix	; F73911  push XIX
 	push	xiy	; F73912  push XIY
@@ -176915,7 +176915,7 @@ SmfWrite_ClearPendingNoteOffs:
 ; SmfExport_WriteParamSysEx
 ; Called from: in-module: 0xF73B24
 ; Touches: (0x1088) (0x1238) (0x133E)
-; Calls:   T_F4090C SmfWrite_CommitOutputByte
+; Calls:   T_SysEx_Checksum SmfWrite_CommitOutputByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74EC5 is an instruction boundary of this
@@ -176927,7 +176927,7 @@ SmfWrite_ClearPendingNoteOffs:
 ;          the 74 parameter-change SysEx events of SmfExport_ParamSysExTemplates
 ;          into the SMF being exported: per record, template -> RAM 0x1351 and
 ;          (body) 0x1365, value nibbles from RamPtrTable_F7554D, checksum via
-;          T_F4090C (prom_a SysEx_Checksum), then 19 bytes to the (0x1088) cursor
+;          T_SysEx_Checksum (prom_a SysEx_Checksum), then 19 bytes to the (0x1088) cursor
 ;          through SmfWrite_CommitOutputByte; it stops early when SmfWrite_CommitOutputByte leaves (0x1238)
 ;          != 3.  python3 notes/promb-2026-09-25/smf_param_sysex_probe.py
 SmfExport_WriteParamSysEx:
@@ -177009,7 +177009,7 @@ SmfExport_WriteParamSysEx_Join:
 	push	xix	; F74F75  push XIX
 	pushw	15	; F74F76  push 0x000f
 	push	xhl	; F74F79  push XHL
-	call	T_F4090C	; F74F7A  call 0xf4090c
+	call	T_SysEx_Checksum	; F74F7A  call 0xf4090c
 	inc	6, xsp	; F74F7E  inc 6,XSP
 	pop	xix	; F74F80  pop XIX
 	pop	xbc	; F74F81  pop XBC
@@ -177105,7 +177105,7 @@ Data_F74FCF:
 ;   bytes to RAM 0x1351, reads one byte through RamPtrTable_F7554D[BC] (the
 ;   RAM byte that parameter lives in), stores its high and low NIBBLES at
 ;   record +14 and +15, computes a checksum with prom_a SysEx_Checksum (slot
-;   T_F4090C: the negated 7-bit sum of the bytes after the first) into +17,
+;   T_SysEx_Checksum: the negated 7-bit sum of the bytes after the first) into +17,
 ;   and writes all 19 bytes to the output cursor (0x1088) through SmfWrite_CommitOutputByte,
 ;   which flushes the 1 KiB window at 0x60A700 (notes/FINDINGS-prom_b-smf-
 ;   writer.md).  Record 0's delta is written as 0 unless bit 1 of (0x133E).
@@ -183816,7 +183816,7 @@ DLGlyph_118_F7A158:
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py joins the thunk table's run
 ; decomposition (notes/prom_b_thunk_modules.py) with the converted/unconverted
 ; split (notes/prom_b_call_graph.py) and ranks runs by contiguous unconverted
-; target extent.  T_F428B0-T_F42ABC comes out with the most unconverted prom_b
+; target extent.  T_BStore_AppendBytes_Join3_Veneer-T_F42ABC comes out with the most unconverted prom_b
 ; targets of any run in the image -- 132, every one of them inside ONE .incbin
 ; span, 8,906 bytes of extent, summed reference upper bound 172.  Immediately
 ; below it in the same span sits 0xF42880-0xF42894 (6 slots), whose target
@@ -183953,18 +183953,18 @@ sub_F7A406:		; <- T_F4288C
 
 ; --------------------------------------------------------------------------
 ; BStore_LatchHeapBase_Veneer
-; Called from: T_F42890 (x1)
+; Called from: T_BStore_LatchHeapBase_Veneer (x1)
 ; Touches: nothing with an absolute address
 ; Calls:   BStore_FreeList_Init BStore_AllocBlock BStore_FreeChain
 ;          BStore_SeekBlock_Alloc
-; Evidence: thunk slot T_F42890 holds `jp 0x00F7A408`, and 0xF7A408 is an
+; Evidence: thunk slot T_BStore_LatchHeapBase_Veneer holds `jp 0x00F7A408`, and 0xF7A408 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-BStore_LatchHeapBase_Veneer:		; <- T_F42890
+BStore_LatchHeapBase_Veneer:		; <- T_BStore_LatchHeapBase_Veneer
 	jr	BStore_LatchHeapBase	; F7A408  jr T,0xf7a41a
 sub_F7A400_Skip:
 	calr	BStore_FreeList_Init	; F7A40A  calr 0xf7a428
@@ -184287,7 +184287,7 @@ BStore_AppendBytes_Veneer:		; <- T_BStore_AppendBytes_Veneer
 ;          (0x2880) = 0x0F and returns without appending
 ; Touches: (0x0C57) (0x0C5D) (0x0C61) (0x0C67) (0x0C6B) (0x1008) (0x126E)
 ;          (0x1272) (0x2070) (0x2075) +1 more  |  0x003460 0x60347E 0x603500
-; Calls:   T_F42EF8 T_F427EC T_F42EFC BStore_AllocBlock
+; Calls:   T_BStore_DirEntryOffsetX2_Call T_F427EC T_F42EFC BStore_AllocBlock
 ;          BStore_SeekBlock_Alloc T_F41020
 ; Evidence: `ld (0x1272),XIY / ld (0x1008),A / ld C,W` at 0xF7A618-0xF7A620.
 ;           The cursor pair is indexed by the entry: XIZ = (n-1)*2 selects a
@@ -184313,7 +184313,7 @@ BStore_AppendBytes:
 	ld	(4722:16), xiy	; F7A618  ld (0x1272),XIY
 	ld	(BStore_DirEntry:16), a	; F7A61C  ld (0x1008),A
 	ld	c, w	; F7A620  ld C,W
-	call	T_F42EF8	; F7A622  call 0xf42ef8
+	call	T_BStore_DirEntryOffsetX2_Call	; F7A622  call 0xf42ef8
 	extz	xiz	; F7A626  extz XIZ
 	ld	xix, 6304894	; F7A628  ld XIX,0x0060347e
 	xor	b, b	; F7A62D  xor B,B
@@ -184493,31 +184493,31 @@ BStore_AppendBytes_Skip3:
 
 ; --------------------------------------------------------------------------
 ; BStore_AppendBytes_Join3_Veneer
-; Called from: T_F428B0 (x1)
+; Called from: T_BStore_AppendBytes_Join3_Veneer (x1)
 ; Touches: nothing with an absolute address
-; Evidence: thunk slot T_F428B0 holds `jp 0x00F7AA00`, and 0xF7AA00 is an
+; Evidence: thunk slot T_BStore_AppendBytes_Join3_Veneer holds `jp 0x00F7AA00`, and 0xF7AA00 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-BStore_AppendBytes_Join3_Veneer:		; <- T_F428B0
+BStore_AppendBytes_Join3_Veneer:		; <- T_BStore_AppendBytes_Join3_Veneer
 	jr	BStore_AppendBytes_Join3	; F7AA00  jr T,0xf7aa04
 
 ; --------------------------------------------------------------------------
 ; BStore_AppendBytes_Join4_Veneer
-; Called from: T_F428B4 (x1)
+; Called from: T_BStore_AppendBytes_Join4_Veneer (x1)
 ; Touches: (0x207E) (0x212E) (0x215E) (0x34BB)
 ; Calls:   T_F409F8 T_F409F4
-; Evidence: thunk slot T_F428B4 holds `jp 0x00F7AA02`, and 0xF7AA02 is an
+; Evidence: thunk slot T_BStore_AppendBytes_Join4_Veneer holds `jp 0x00F7AA02`, and 0xF7AA02 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-BStore_AppendBytes_Join4_Veneer:		; <- T_F428B4
+BStore_AppendBytes_Join4_Veneer:		; <- T_BStore_AppendBytes_Join4_Veneer
 	jr	BStore_AppendBytes_Join4	; F7AA02  jr T,0xf7aa1f
 BStore_AppendBytes_Join3:
 	call	T_F409F8	; F7AA04  call 0xf409f8
@@ -184614,10 +184614,10 @@ T_F428BC_Nop:		; <- T_F428BC
 
 ; --------------------------------------------------------------------------
 ; SongClear_SoftKeyCol4
-; Called from: T_F428C0 (x1)
+; Called from: T_SongClear_SoftKeyCol4 (x1)
 ; Touches: (0x0E02) (0x12F6) (0x2075) (0x207E)
 ; Calls:   SongStore_LoadSongHeaderToDisplay
-; Evidence: thunk slot T_F428C0 holds `jp 0x00F7AA89`, and 0xF7AA89 is an
+; Evidence: thunk slot T_SongClear_SoftKeyCol4 holds `jp 0x00F7AA89`, and 0xF7AA89 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184625,7 +184625,7 @@ T_F428BC_Nop:		; <- T_F428BC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SongClear_SoftKeyCol4: the SoftKeyCol4 action of SongClear -- called only by SoftKeyCol4_SongClear.
-SongClear_SoftKeyCol4:		; <- T_F428C0
+SongClear_SoftKeyCol4:		; <- T_SongClear_SoftKeyCol4
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AA89  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return	; F7AA8E  jr Z,0xf7aaae
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AA90  or (0x2075),0x09
@@ -184642,10 +184642,10 @@ SongStore_LoadSongHeaderToDisplay_Return:
 
 ; --------------------------------------------------------------------------
 ; SongClear_SoftKeyCol3
-; Called from: T_F428C4 (x1)
+; Called from: T_SongClear_SoftKeyCol3 (x1)
 ; Touches: (0x0E02) (0x12F6) (0x2075) (0x207E)
 ; Calls:   SongStore_LoadSongHeaderToDisplay
-; Evidence: thunk slot T_F428C4 holds `jp 0x00F7AAAF`, and 0xF7AAAF is an
+; Evidence: thunk slot T_SongClear_SoftKeyCol3 holds `jp 0x00F7AAAF`, and 0xF7AAAF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184653,7 +184653,7 @@ SongStore_LoadSongHeaderToDisplay_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SongClear_SoftKeyCol3: the SoftKeyCol3 action of SongClear -- called only by SoftKeyCol3_SongClear.
-SongClear_SoftKeyCol3:		; <- T_F428C4
+SongClear_SoftKeyCol3:		; <- T_SongClear_SoftKeyCol3
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAAF  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Return2	; F7AAB4  jr Z,0xf7aadc
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7AAB6  or (0x2075),0x09
@@ -184676,9 +184676,9 @@ SongStore_LoadSongHeaderToDisplay_Return2:
 
 ; --------------------------------------------------------------------------
 ; SongClear_LcdKeyRow5
-; Called from: T_F428C8 (x1)
+; Called from: T_SongClear_LcdKeyRow5 (x1)
 ; Touches: (0x2070) (0x207E)
-; Evidence: thunk slot T_F428C8 holds `jp 0x00F7AADD`, and 0xF7AADD is an
+; Evidence: thunk slot T_SongClear_LcdKeyRow5 holds `jp 0x00F7AADD`, and 0xF7AADD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184686,7 +184686,7 @@ SongStore_LoadSongHeaderToDisplay_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SongClear_LcdKeyRow5: the LcdKeyRow5 action of SongClear -- called only by LcdKeyRow5_SongClear.
-SongClear_LcdKeyRow5:		; <- T_F428C8
+SongClear_LcdKeyRow5:		; <- T_SongClear_LcdKeyRow5
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AADD  cp (0x207e),0x01
 	jr	nz, SongStore_LoadSongHeaderToDisplay_Return3	; F7AAE2  jr NZ,0xf7aaef
 	ld	(UI_ScreenStage:16), 0	; F7AAE4  ld (0x207e),0x00
@@ -184696,11 +184696,11 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 
 ; --------------------------------------------------------------------------
 ; SongClear_LcdKeyRow4
-; Called from: T_F428CC (x1)
+; Called from: T_SongClear_LcdKeyRow4 (x1)
 ; Touches: (0x0D4A) (0x0E02) (0x2070) (0x2071) (0x2075) (0x207E) (0x2880)
 ;          (0x3010) (0x360A) (0x360C)
 ; Calls:   T_F426E0 sub_F7AB3F
-; Evidence: thunk slot T_F428CC holds `jp 0x00F7AAF0`, and 0xF7AAF0 is an
+; Evidence: thunk slot T_SongClear_LcdKeyRow4 holds `jp 0x00F7AAF0`, and 0xF7AAF0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184708,7 +184708,7 @@ SongStore_LoadSongHeaderToDisplay_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; SongClear_LcdKeyRow4: the LcdKeyRow4 action of SongClear -- called only by LcdKeyRow4_SongClear.
-SongClear_LcdKeyRow4:		; <- T_F428CC
+SongClear_LcdKeyRow4:		; <- T_SongClear_LcdKeyRow4
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AAF0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AAF5  cp (0x207e),0x01
 	jr	z, SongStore_LoadSongHeaderToDisplay_Skip2	; F7AAFA  jr Z,0xf7ab08
@@ -184809,10 +184809,10 @@ sub_F7AB3F_Return2:
 
 ; --------------------------------------------------------------------------
 ; TrackClear_OnLeave
-; Called from: T_F428D4 (x1)
+; Called from: T_TrackClear_OnLeave (x1)
 ; Touches: (0x0E46) (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F428D4 holds `jp 0x00F7ABB9`, and 0xF7ABB9 is an
+; Evidence: thunk slot T_TrackClear_OnLeave holds `jp 0x00F7ABB9`, and 0xF7ABB9 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184821,7 +184821,7 @@ sub_F7AB3F_Return2:
 ; --------------------------------------------------------------------------
 ; TrackClear_OnLeave: the LEAVE work of TrackClear -- the one unnamed routine ScreenLeaveBody_TrackClear calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-TrackClear_OnLeave:		; <- T_F428D4
+TrackClear_OnLeave:		; <- T_TrackClear_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1c	; F7ABB9  cp (0x207a),0x1c
 	jr	z, sub_F7AB3F_Return3	; F7ABBE  jr Z,0xf7abdb
 	ld	wa, (3654:16)	; F7ABC0  ld WA,(0x0e46)
@@ -184861,11 +184861,11 @@ sub_F7AB3F_Return4:
 
 ; --------------------------------------------------------------------------
 ; TrackClear_LcdKeyRow2
-; Called from: T_F428DC (x2)
+; Called from: T_TrackClear_LcdKeyRow2 (x2)
 ; Touches: (0x0C70) (0x0D4A) (0x0DBE) (0x0E46) (0x2070) (0x2071) (0x2075)
 ;          (0x207E) (0x212E) (0x215E) +2 more
 ; Calls:   T_F426E4
-; Evidence: thunk slot T_F428DC holds `jp 0x00F7AC07`, and 0xF7AC07 is an
+; Evidence: thunk slot T_TrackClear_LcdKeyRow2 holds `jp 0x00F7AC07`, and 0xF7AC07 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184873,7 +184873,7 @@ sub_F7AB3F_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackClear_LcdKeyRow2: the LcdKeyRow2 action of TrackClear_StageNonZero, TrackClear_StageZero -- called only by LcdKeyRow2_TrackClear_StageNonZero, LcdKeyRow2_TrackClear_StageZero.
-TrackClear_LcdKeyRow2:		; <- T_F428DC
+TrackClear_LcdKeyRow2:		; <- T_TrackClear_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AC07  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AC0C  cp (0x207e),0x01
 	jr	z, sub_F7AB3F_Skip3	; F7AC11  jr Z,0xf7ac1e
@@ -184943,10 +184943,10 @@ sub_F7AC9D:		; <- T_F42938
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_OnLeave
-; Called from: T_F4293C (x1)
+; Called from: T_TrackMerge_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F4293C holds `jp 0x00F7ACA6`, and 0xF7ACA6 is an
+; Evidence: thunk slot T_TrackMerge_OnLeave holds `jp 0x00F7ACA6`, and 0xF7ACA6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184955,7 +184955,7 @@ sub_F7AC9D:		; <- T_F42938
 ; --------------------------------------------------------------------------
 ; TrackMerge_OnLeave: the LEAVE work of TrackMerge -- the one unnamed routine ScreenLeaveBody_TrackMerge calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-TrackMerge_OnLeave:		; <- T_F4293C
+TrackMerge_OnLeave:		; <- T_TrackMerge_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1f	; F7ACA6  cp (0x207a),0x1f
 	jr	z, sub_F7AB3F_Return6	; F7ACAB  jr Z,0xf7acc4
 	ld	xwa, (12304:16)	; F7ACAD  ld XWA,(0x3010)
@@ -184969,10 +184969,10 @@ sub_F7AB3F_Return6:
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_SelectField1
-; Called from: T_F42940 (x1)
+; Called from: T_TrackMerge_SelectField1 (x1)
 ; Touches: (0x0DBA) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42940 holds `jp 0x00F7ACC5`, and 0xF7ACC5 is an
+; Evidence: thunk slot T_TrackMerge_SelectField1 holds `jp 0x00F7ACC5`, and 0xF7ACC5 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -184982,17 +184982,17 @@ sub_F7AB3F_Return6:
 ;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-TrackMerge_SelectField1:		; <- T_F42940
+TrackMerge_SelectField1:		; <- T_TrackMerge_SelectField1
 	ld	(3514:16), 1	; F7ACC5  ld (0x0dba),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACCA  or (0x2075),0x09
 	ret	; F7ACCF  ret
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_SelectField2
-; Called from: T_F42944 (x1)
+; Called from: T_TrackMerge_SelectField2 (x1)
 ; Touches: (0x0DBA) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42944 holds `jp 0x00F7ACD0`, and 0xF7ACD0 is an
+; Evidence: thunk slot T_TrackMerge_SelectField2 holds `jp 0x00F7ACD0`, and 0xF7ACD0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185002,17 +185002,17 @@ TrackMerge_SelectField1:		; <- T_F42940
 ;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-TrackMerge_SelectField2:		; <- T_F42944
+TrackMerge_SelectField2:		; <- T_TrackMerge_SelectField2
 	ld	(3514:16), 2	; F7ACD0  ld (0x0dba),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACD5  or (0x2075),0x09
 	ret	; F7ACDA  ret
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_SelectField3
-; Called from: T_F42948 (x1)
+; Called from: T_TrackMerge_SelectField3 (x1)
 ; Touches: (0x0DBA) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42948 holds `jp 0x00F7ACDB`, and 0xF7ACDB is an
+; Evidence: thunk slot T_TrackMerge_SelectField3 holds `jp 0x00F7ACDB`, and 0xF7ACDB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185022,7 +185022,7 @@ TrackMerge_SelectField2:		; <- T_F42944
 ;           (0x0DBA) is read by LcdKeyRow2/3/4_TrackMerge_StageZero, so it is the TrackMerge screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-TrackMerge_SelectField3:		; <- T_F42948
+TrackMerge_SelectField3:		; <- T_TrackMerge_SelectField3
 	ld	(3514:16), 3	; F7ACDB  ld (0x0dba),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7ACE0  or (0x2075),0x09
 	ret	; F7ACE5  ret
@@ -185061,10 +185061,10 @@ sub_F7AB3F_Return7:
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_StageZero_SoftKeyCol5
-; Called from: T_F42950 (x1)
+; Called from: T_TrackMerge_StageZero_SoftKeyCol5 (x1)
 ; Touches: (0x0C4E) (0x0C4F) (0x0DBA)
 ; Calls:   sub_F7AD42 sub_F7AD8F sub_F7ADDC
-; Evidence: thunk slot T_F42950 holds `jp 0x00F7AD14`, and 0xF7AD14 is an
+; Evidence: thunk slot T_TrackMerge_StageZero_SoftKeyCol5 holds `jp 0x00F7AD14`, and 0xF7AD14 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185072,7 +185072,7 @@ sub_F7AB3F_Return7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackMerge_StageZero_SoftKeyCol5: the SoftKeyCol5 action of TrackMerge_StageZero -- called only by SoftKeyCol5_TrackMerge_StageZero.
-TrackMerge_StageZero_SoftKeyCol5:		; <- T_F42950
+TrackMerge_StageZero_SoftKeyCol5:		; <- T_TrackMerge_StageZero_SoftKeyCol5
 	ld	(3150:16), w	; F7AD14  ld (0x0c4e),W
 	and	w, 128	; F7AD18  and W,0x80
 	ld	(3151:16), w	; F7AD1B  ld (0x0c4f),W
@@ -185223,11 +185223,11 @@ sub_F7ADDC_Return:
 
 ; --------------------------------------------------------------------------
 ; TrackMerge_LcdKeyRow2
-; Called from: T_F42958 (x2)
+; Called from: T_TrackMerge_LcdKeyRow2 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C15) (0x0C70) (0x0C71) (0x0C72) (0x0D4A)
 ;          (0x2070) (0x2071) (0x2075) +5 more
 ; Calls:   T_F426E8
-; Evidence: thunk slot T_F42958 holds `jp 0x00F7AE0C`, and 0xF7AE0C is an
+; Evidence: thunk slot T_TrackMerge_LcdKeyRow2 holds `jp 0x00F7AE0C`, and 0xF7AE0C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185235,7 +185235,7 @@ sub_F7ADDC_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; TrackMerge_LcdKeyRow2: the LcdKeyRow2 action of TrackMerge_StageNonZero, TrackMerge_StageZero -- called only by LcdKeyRow2_TrackMerge_StageNonZero, LcdKeyRow2_TrackMerge_StageZero.
-TrackMerge_LcdKeyRow2:		; <- T_F42958
+TrackMerge_LcdKeyRow2:		; <- T_TrackMerge_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7AE0C  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7AE11  cp (0x207e),0x01
 	jr	z, sub_F7ADDC_Skip	; F7AE16  jr Z,0xf7ae25
@@ -185440,10 +185440,10 @@ sub_F7B000:		; <- T_F4295C
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_OnLeave
-; Called from: T_F42960 (x1)
+; Called from: T_MeasureDelete_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F42960 holds `jp 0x00F7B00E`, and 0xF7B00E is an
+; Evidence: thunk slot T_MeasureDelete_OnLeave holds `jp 0x00F7B00E`, and 0xF7B00E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185452,7 +185452,7 @@ sub_F7B000:		; <- T_F4295C
 ; --------------------------------------------------------------------------
 ; MeasureDelete_OnLeave: the LEAVE work of MeasureDelete -- the one unnamed routine ScreenLeaveBody_MeasureDelete calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-MeasureDelete_OnLeave:		; <- T_F42960
+MeasureDelete_OnLeave:		; <- T_MeasureDelete_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x23	; F7B00E  cp (0x207a),0x23
 	jr	z, sub_F7AFD8_Return	; F7B013  jr Z,0xf7b019
 	call	T_F409E0	; F7B015  call 0xf409e0
@@ -185461,10 +185461,10 @@ sub_F7AFD8_Return:
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_SelectField1
-; Called from: T_F42964 (x1)
+; Called from: T_MeasureDelete_SelectField1 (x1)
 ; Touches: (0x0DD4) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42964 holds `jp 0x00F7B01A`, and 0xF7B01A is an
+; Evidence: thunk slot T_MeasureDelete_SelectField1 holds `jp 0x00F7B01A`, and 0xF7B01A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185474,17 +185474,17 @@ sub_F7AFD8_Return:
 ;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureDelete_SelectField1:		; <- T_F42964
+MeasureDelete_SelectField1:		; <- T_MeasureDelete_SelectField1
 	ld	(3540:16), 1	; F7B01A  ld (0x0dd4),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B01F  or (0x2075),0x09
 	ret	; F7B024  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_SelectField2
-; Called from: T_F42968 (x1)
+; Called from: T_MeasureDelete_SelectField2 (x1)
 ; Touches: (0x0DD4) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42968 holds `jp 0x00F7B025`, and 0xF7B025 is an
+; Evidence: thunk slot T_MeasureDelete_SelectField2 holds `jp 0x00F7B025`, and 0xF7B025 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185494,7 +185494,7 @@ MeasureDelete_SelectField1:		; <- T_F42964
 ;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureDelete_SelectField2:		; <- T_F42968
+MeasureDelete_SelectField2:		; <- T_MeasureDelete_SelectField2
 	ld	(3540:16), 2	; F7B025  ld (0x0dd4),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B02A  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B02F  or (0x2075),0x01
@@ -185502,10 +185502,10 @@ MeasureDelete_SelectField2:		; <- T_F42968
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_SelectField3
-; Called from: T_F4296C (x1)
+; Called from: T_MeasureDelete_SelectField3 (x1)
 ; Touches: (0x0DD4) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F4296C holds `jp 0x00F7B035`, and 0xF7B035 is an
+; Evidence: thunk slot T_MeasureDelete_SelectField3 holds `jp 0x00F7B035`, and 0xF7B035 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185515,7 +185515,7 @@ MeasureDelete_SelectField2:		; <- T_F42968
 ;           (0x0DD4) is read by LcdKeyRow2/3/4_MeasureDelete_StageZero, so it is the MeasureDelete screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureDelete_SelectField3:		; <- T_F4296C
+MeasureDelete_SelectField3:		; <- T_MeasureDelete_SelectField3
 	ld	(3540:16), 3	; F7B035  ld (0x0dd4),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B03A  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B03F  or (0x2075),0x01
@@ -185697,11 +185697,11 @@ sub_F7B128_Skip:
 
 ; --------------------------------------------------------------------------
 ; MeasureDelete_LcdKeyRow3
-; Called from: T_F42978 (x2)
+; Called from: T_MeasureDelete_LcdKeyRow3 (x2)
 ; Touches: (0x0C13) (0x0C18) (0x0C1C) (0x0C35) (0x0C70) (0x0C73) (0x0C77)
 ;          (0x0D4A) (0x0DD6) (0x0DD8) +5 more
 ; Calls:   T_F426EC
-; Evidence: thunk slot T_F42978 holds `jp 0x00F7B162`, and 0xF7B162 is an
+; Evidence: thunk slot T_MeasureDelete_LcdKeyRow3 holds `jp 0x00F7B162`, and 0xF7B162 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185709,7 +185709,7 @@ sub_F7B128_Skip:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; MeasureDelete_LcdKeyRow3: the LcdKeyRow3 action of MeasureDelete_StageNonZero, MeasureDelete_StageZero -- called only by LcdKeyRow3_MeasureDelete_StageNonZero, LcdKeyRow3_MeasureDelete_StageZero.
-MeasureDelete_LcdKeyRow3:		; <- T_F42978
+MeasureDelete_LcdKeyRow3:		; <- T_MeasureDelete_LcdKeyRow3
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B162  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B167  cp (0x207e),0x01
 	jr	z, sub_F7B128_Skip2	; F7B16C  jr Z,0xf7b17a
@@ -185801,10 +185801,10 @@ sub_F7B22C:		; <- T_F42980
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_OnLeave
-; Called from: T_F42984 (x1)
+; Called from: T_MeasureErase_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F42984 holds `jp 0x00F7B23A`, and 0xF7B23A is an
+; Evidence: thunk slot T_MeasureErase_OnLeave holds `jp 0x00F7B23A`, and 0xF7B23A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185813,7 +185813,7 @@ sub_F7B22C:		; <- T_F42980
 ; --------------------------------------------------------------------------
 ; MeasureErase_OnLeave: the LEAVE work of MeasureErase -- the one unnamed routine ScreenLeaveBody_MeasureErase calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-MeasureErase_OnLeave:		; <- T_F42984
+MeasureErase_OnLeave:		; <- T_MeasureErase_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x20	; F7B23A  cp (0x207a),0x20
 	jr	z, sub_F7B1D1_Return2	; F7B23F  jr Z,0xf7b245
 	call	T_F409E0	; F7B241  call 0xf409e0
@@ -185822,10 +185822,10 @@ sub_F7B1D1_Return2:
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_SelectField1
-; Called from: T_F42988 (x1)
+; Called from: T_MeasureErase_SelectField1 (x1)
 ; Touches: (0x0DBB) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42988 holds `jp 0x00F7B246`, and 0xF7B246 is an
+; Evidence: thunk slot T_MeasureErase_SelectField1 holds `jp 0x00F7B246`, and 0xF7B246 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185835,17 +185835,17 @@ sub_F7B1D1_Return2:
 ;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureErase_SelectField1:		; <- T_F42988
+MeasureErase_SelectField1:		; <- T_MeasureErase_SelectField1
 	ld	(3515:16), 1	; F7B246  ld (0x0dbb),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B24B  or (0x2075),0x09
 	ret	; F7B250  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_SelectField2
-; Called from: T_F4298C (x1)
+; Called from: T_MeasureErase_SelectField2 (x1)
 ; Touches: (0x0DBB) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F4298C holds `jp 0x00F7B251`, and 0xF7B251 is an
+; Evidence: thunk slot T_MeasureErase_SelectField2 holds `jp 0x00F7B251`, and 0xF7B251 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185855,7 +185855,7 @@ MeasureErase_SelectField1:		; <- T_F42988
 ;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureErase_SelectField2:		; <- T_F4298C
+MeasureErase_SelectField2:		; <- T_MeasureErase_SelectField2
 	ld	(3515:16), 2	; F7B251  ld (0x0dbb),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B256  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B25B  or (0x2075),0x01
@@ -185863,10 +185863,10 @@ MeasureErase_SelectField2:		; <- T_F4298C
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_SelectField3
-; Called from: T_F42990 (x1)
+; Called from: T_MeasureErase_SelectField3 (x1)
 ; Touches: (0x0DBB) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42990 holds `jp 0x00F7B261`, and 0xF7B261 is an
+; Evidence: thunk slot T_MeasureErase_SelectField3 holds `jp 0x00F7B261`, and 0xF7B261 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185876,7 +185876,7 @@ MeasureErase_SelectField2:		; <- T_F4298C
 ;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureErase_SelectField3:		; <- T_F42990
+MeasureErase_SelectField3:		; <- T_MeasureErase_SelectField3
 	ld	(3515:16), 3	; F7B261  ld (0x0dbb),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B266  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B26B  or (0x2075),0x01
@@ -185884,10 +185884,10 @@ MeasureErase_SelectField3:		; <- T_F42990
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_SelectField4
-; Called from: T_F42994 (x1)
+; Called from: T_MeasureErase_SelectField4 (x1)
 ; Touches: (0x0DBB) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42994 holds `jp 0x00F7B271`, and 0xF7B271 is an
+; Evidence: thunk slot T_MeasureErase_SelectField4 holds `jp 0x00F7B271`, and 0xF7B271 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -185897,7 +185897,7 @@ MeasureErase_SelectField3:		; <- T_F42990
 ;           (0x0DBB) is read by LcdKeyRow1..4_MeasureErase_StageZero, so it is the MeasureErase screen's field cell.
 ; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-MeasureErase_SelectField4:		; <- T_F42994
+MeasureErase_SelectField4:		; <- T_MeasureErase_SelectField4
 	ld	(3515:16), 4	; F7B271  ld (0x0dbb),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B276  or (0x2075),0x09
 	ret	; F7B27B  ret
@@ -186121,11 +186121,11 @@ sub_F7B3B1_Join:
 
 ; --------------------------------------------------------------------------
 ; MeasureErase_LcdKeyRow2
-; Called from: T_F429A0 (x2)
+; Called from: T_MeasureErase_LcdKeyRow2 (x2)
 ; Touches: (0x0C13) (0x0C16) (0x0C18) (0x0C1C) (0x0C2A) (0x0C2C) (0x0C35)
 ;          (0x0C70) (0x0C73) (0x0C77) +7 more
 ; Calls:   T_F426F0
-; Evidence: thunk slot T_F429A0 holds `jp 0x00F7B3E0`, and 0xF7B3E0 is an
+; Evidence: thunk slot T_MeasureErase_LcdKeyRow2 holds `jp 0x00F7B3E0`, and 0xF7B3E0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186133,7 +186133,7 @@ sub_F7B3B1_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; MeasureErase_LcdKeyRow2: the LcdKeyRow2 action of MeasureErase_StageNonZero, MeasureErase_StageZero -- called only by LcdKeyRow2_MeasureErase_StageNonZero, LcdKeyRow2_MeasureErase_StageZero.
-MeasureErase_LcdKeyRow2:		; <- T_F429A0
+MeasureErase_LcdKeyRow2:		; <- T_MeasureErase_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B3E0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B3E5  cp (0x207e),0x01
 	jr	z, sub_F7B3B1_Skip3	; F7B3EA  jr Z,0xf7b3f8
@@ -186231,10 +186231,10 @@ sub_F7B4BF:		; <- T_F429A8
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_OnLeave
-; Called from: T_F429AC (x1)
+; Called from: T_MeasureInsert_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F429AC holds `jp 0x00F7B4CD`, and 0xF7B4CD is an
+; Evidence: thunk slot T_MeasureInsert_OnLeave holds `jp 0x00F7B4CD`, and 0xF7B4CD is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186243,7 +186243,7 @@ sub_F7B4BF:		; <- T_F429A8
 ; --------------------------------------------------------------------------
 ; MeasureInsert_OnLeave: the LEAVE work of MeasureInsert -- the one unnamed routine ScreenLeaveBody_MeasureInsert calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-MeasureInsert_OnLeave:		; <- T_F429AC
+MeasureInsert_OnLeave:		; <- T_MeasureInsert_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x22	; F7B4CD  cp (0x207a),0x22
 	jr	z, sub_F7B457_Return2	; F7B4D2  jr Z,0xf7b4eb
 	ld	xwa, (12304:16)	; F7B4D4  ld XWA,(0x3010)
@@ -186257,9 +186257,9 @@ sub_F7B457_Return2:
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField1
-; Called from: T_F429B0 (x1)
+; Called from: T_MeasureInsert_SelectField1 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429B0 holds `jp 0x00F7B4EC`, and 0xF7B4EC is an
+; Evidence: thunk slot T_MeasureInsert_SelectField1 holds `jp 0x00F7B4EC`, and 0xF7B4EC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186268,16 +186268,16 @@ sub_F7B457_Return2:
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField1: moves the MeasureInsert screen's cursor to field 1 -- stores 1 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField1:		; <- T_F429B0
+MeasureInsert_SelectField1:		; <- T_MeasureInsert_SelectField1
 	ld	(MeasureInsert_Field:16), 1	; F7B4EC  ld (0x0dda),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B4F1  or (0x2075),0x09
 	ret	; F7B4F6  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField2
-; Called from: T_F429B4 (x1)
+; Called from: T_MeasureInsert_SelectField2 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429B4 holds `jp 0x00F7B4F7`, and 0xF7B4F7 is an
+; Evidence: thunk slot T_MeasureInsert_SelectField2 holds `jp 0x00F7B4F7`, and 0xF7B4F7 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186286,7 +186286,7 @@ MeasureInsert_SelectField1:		; <- T_F429B0
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField2: moves the MeasureInsert screen's cursor to field 2 -- stores 2 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField2:		; <- T_F429B4
+MeasureInsert_SelectField2:		; <- T_MeasureInsert_SelectField2
 	ld	(MeasureInsert_Field:16), 2	; F7B4F7  ld (0x0dda),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B4FC  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B501  or (0x2075),0x01
@@ -186294,9 +186294,9 @@ MeasureInsert_SelectField2:		; <- T_F429B4
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField3
-; Called from: T_F429B8 (x1)
+; Called from: T_MeasureInsert_SelectField3 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429B8 holds `jp 0x00F7B507`, and 0xF7B507 is an
+; Evidence: thunk slot T_MeasureInsert_SelectField3 holds `jp 0x00F7B507`, and 0xF7B507 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186305,7 +186305,7 @@ MeasureInsert_SelectField2:		; <- T_F429B4
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField3: moves the MeasureInsert screen's cursor to field 3 -- stores 3 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField3:		; <- T_F429B8
+MeasureInsert_SelectField3:		; <- T_MeasureInsert_SelectField3
 	ld	(MeasureInsert_Field:16), 3	; F7B507  ld (0x0dda),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B50C  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B511  or (0x2075),0x01
@@ -186313,9 +186313,9 @@ MeasureInsert_SelectField3:		; <- T_F429B8
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField4
-; Called from: T_F429BC (x1)
+; Called from: T_MeasureInsert_SelectField4 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429BC holds `jp 0x00F7B517`, and 0xF7B517 is an
+; Evidence: thunk slot T_MeasureInsert_SelectField4 holds `jp 0x00F7B517`, and 0xF7B517 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186324,16 +186324,16 @@ MeasureInsert_SelectField3:		; <- T_F429B8
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField4: moves the MeasureInsert screen's cursor to field 4 -- stores 4 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField4:		; <- T_F429BC
+MeasureInsert_SelectField4:		; <- T_MeasureInsert_SelectField4
 	ld	(MeasureInsert_Field:16), 4	; F7B517  ld (0x0dda),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B51C  or (0x2075),0x09
 	ret	; F7B521  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField5
-; Called from: T_F429C0 (x1)
+; Called from: T_MeasureInsert_SelectField5 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429C0 holds `jp 0x00F7B522`, and 0xF7B522 is an
+; Evidence: thunk slot T_MeasureInsert_SelectField5 holds `jp 0x00F7B522`, and 0xF7B522 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186342,7 +186342,7 @@ MeasureInsert_SelectField4:		; <- T_F429BC
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField5: moves the MeasureInsert screen's cursor to field 5 -- stores 5 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField5:		; <- T_F429C0
+MeasureInsert_SelectField5:		; <- T_MeasureInsert_SelectField5
 	ld	(MeasureInsert_Field:16), 5	; F7B522  ld (0x0dda),0x05
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B527  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B52C  or (0x2075),0x01
@@ -186350,9 +186350,9 @@ MeasureInsert_SelectField5:		; <- T_F429C0
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField6
-; Called from: T_F429C4 (x1)
+; Called from: T_MeasureInsert_SelectField6 (x1)
 ; Touches: (0x0DDA) (0x2075)
-; Evidence: thunk slot T_F429C4 holds `jp 0x00F7B532`, and 0xF7B532 is an
+; Evidence: thunk slot T_MeasureInsert_SelectField6 holds `jp 0x00F7B532`, and 0xF7B532 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186361,7 +186361,7 @@ MeasureInsert_SelectField5:		; <- T_F429C0
 ; --------------------------------------------------------------------------
 ; MeasureInsert_SelectField6: moves the MeasureInsert screen's cursor to field 6 -- stores 6 into MeasureInsert_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureInsert_SelectField6:		; <- T_F429C4
+MeasureInsert_SelectField6:		; <- T_MeasureInsert_SelectField6
 	ld	(MeasureInsert_Field:16), 6	; F7B532  ld (0x0dda),0x06
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B537  or (0x2075),0x09
 	ret	; F7B53C  ret
@@ -186672,11 +186672,11 @@ sub_F7B761:		; <- T_F429D0
 
 ; --------------------------------------------------------------------------
 ; MeasureInsert_LcdKeyRow1
-; Called from: T_F429D4 (x2)
+; Called from: T_MeasureInsert_LcdKeyRow1 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C35) (0x0C70)
 ;          (0x0C71) (0x0C73) (0x0C75) +11 more
 ; Calls:   T_F426F4 sub_F7CDA0
-; Evidence: thunk slot T_F429D4 holds `jp 0x00F7B771`, and 0xF7B771 is an
+; Evidence: thunk slot T_MeasureInsert_LcdKeyRow1 holds `jp 0x00F7B771`, and 0xF7B771 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186684,7 +186684,7 @@ sub_F7B761:		; <- T_F429D0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; MeasureInsert_LcdKeyRow1: the LcdKeyRow1 action of MeasureInsert_StageNonZero, MeasureInsert_StageZero -- called only by LcdKeyRow1_MeasureInsert_StageNonZero, LcdKeyRow1_MeasureInsert_StageZero.
-MeasureInsert_LcdKeyRow1:		; <- T_F429D4
+MeasureInsert_LcdKeyRow1:		; <- T_MeasureInsert_LcdKeyRow1
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7B771  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7B776  cp (0x207e),0x01
 	jr	z, sub_F7B74C_Skip	; F7B77B  jr Z,0xf7b78a
@@ -186829,10 +186829,10 @@ sub_F7B8DC:		; <- T_F429D8
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_OnLeave
-; Called from: T_F429DC (x1)
+; Called from: T_MeasureC0py_OnLeave (x1)
 ; Touches: (0x207A) (0x3010) (0x360C)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F429DC holds `jp 0x00F7B8EA`, and 0xF7B8EA is an
+; Evidence: thunk slot T_MeasureC0py_OnLeave holds `jp 0x00F7B8EA`, and 0xF7B8EA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186841,7 +186841,7 @@ sub_F7B8DC:		; <- T_F429D8
 ; --------------------------------------------------------------------------
 ; MeasureC0py_OnLeave: the LEAVE work of MeasureC0py -- the one unnamed routine ScreenLeaveBody_MeasureC0py calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-MeasureC0py_OnLeave:		; <- T_F429DC
+MeasureC0py_OnLeave:		; <- T_MeasureC0py_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x21	; F7B8EA  cp (0x207a),0x21
 	jr	z, sub_F7B852_Return2	; F7B8EF  jr Z,0xf7b908
 	ld	xwa, (12304:16)	; F7B8F1  ld XWA,(0x3010)
@@ -186855,9 +186855,9 @@ sub_F7B852_Return2:
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField1
-; Called from: T_F429E0 (x1)
+; Called from: T_MeasureC0py_SelectField1 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429E0 holds `jp 0x00F7B909`, and 0xF7B909 is an
+; Evidence: thunk slot T_MeasureC0py_SelectField1 holds `jp 0x00F7B909`, and 0xF7B909 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186866,16 +186866,16 @@ sub_F7B852_Return2:
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField1: moves the MeasureC0py screen's cursor to field 1 -- stores 1 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField1:		; <- T_F429E0
+MeasureC0py_SelectField1:		; <- T_MeasureC0py_SelectField1
 	ld	(MeasureC0py_Field:16), 1	; F7B909  ld (0x0dbc),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B90E  or (0x2075),0x09
 	ret	; F7B913  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField2
-; Called from: T_F429E4 (x1)
+; Called from: T_MeasureC0py_SelectField2 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429E4 holds `jp 0x00F7B914`, and 0xF7B914 is an
+; Evidence: thunk slot T_MeasureC0py_SelectField2 holds `jp 0x00F7B914`, and 0xF7B914 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186884,7 +186884,7 @@ MeasureC0py_SelectField1:		; <- T_F429E0
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField2: moves the MeasureC0py screen's cursor to field 2 -- stores 2 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField2:		; <- T_F429E4
+MeasureC0py_SelectField2:		; <- T_MeasureC0py_SelectField2
 	ld	(MeasureC0py_Field:16), 2	; F7B914  ld (0x0dbc),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B919  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B91E  or (0x2075),0x01
@@ -186892,9 +186892,9 @@ MeasureC0py_SelectField2:		; <- T_F429E4
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField3
-; Called from: T_F429E8 (x1)
+; Called from: T_MeasureC0py_SelectField3 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429E8 holds `jp 0x00F7B924`, and 0xF7B924 is an
+; Evidence: thunk slot T_MeasureC0py_SelectField3 holds `jp 0x00F7B924`, and 0xF7B924 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186903,7 +186903,7 @@ MeasureC0py_SelectField2:		; <- T_F429E4
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField3: moves the MeasureC0py screen's cursor to field 3 -- stores 3 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField3:		; <- T_F429E8
+MeasureC0py_SelectField3:		; <- T_MeasureC0py_SelectField3
 	ld	(MeasureC0py_Field:16), 3	; F7B924  ld (0x0dbc),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B929  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B92E  or (0x2075),0x01
@@ -186911,9 +186911,9 @@ MeasureC0py_SelectField3:		; <- T_F429E8
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField4
-; Called from: T_F429EC (x1)
+; Called from: T_MeasureC0py_SelectField4 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429EC holds `jp 0x00F7B934`, and 0xF7B934 is an
+; Evidence: thunk slot T_MeasureC0py_SelectField4 holds `jp 0x00F7B934`, and 0xF7B934 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186922,16 +186922,16 @@ MeasureC0py_SelectField3:		; <- T_F429E8
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField4: moves the MeasureC0py screen's cursor to field 4 -- stores 4 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField4:		; <- T_F429EC
+MeasureC0py_SelectField4:		; <- T_MeasureC0py_SelectField4
 	ld	(MeasureC0py_Field:16), 4	; F7B934  ld (0x0dbc),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B939  or (0x2075),0x09
 	ret	; F7B93E  ret
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField5
-; Called from: T_F429F0 (x1)
+; Called from: T_MeasureC0py_SelectField5 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429F0 holds `jp 0x00F7B93F`, and 0xF7B93F is an
+; Evidence: thunk slot T_MeasureC0py_SelectField5 holds `jp 0x00F7B93F`, and 0xF7B93F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186940,7 +186940,7 @@ MeasureC0py_SelectField4:		; <- T_F429EC
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField5: moves the MeasureC0py screen's cursor to field 5 -- stores 5 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField5:		; <- T_F429F0
+MeasureC0py_SelectField5:		; <- T_MeasureC0py_SelectField5
 	ld	(MeasureC0py_Field:16), 5	; F7B93F  ld (0x0dbc),0x05
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7B944  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7B949  or (0x2075),0x01
@@ -186948,9 +186948,9 @@ MeasureC0py_SelectField5:		; <- T_F429F0
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField6
-; Called from: T_F429F4 (x1)
+; Called from: T_MeasureC0py_SelectField6 (x1)
 ; Touches: (0x0DBC) (0x2075)
-; Evidence: thunk slot T_F429F4 holds `jp 0x00F7B94F`, and 0xF7B94F is an
+; Evidence: thunk slot T_MeasureC0py_SelectField6 holds `jp 0x00F7B94F`, and 0xF7B94F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -186959,7 +186959,7 @@ MeasureC0py_SelectField5:		; <- T_F429F0
 ; --------------------------------------------------------------------------
 ; MeasureC0py_SelectField6: moves the MeasureC0py screen's cursor to field 6 -- stores 6 into MeasureC0py_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-MeasureC0py_SelectField6:		; <- T_F429F4
+MeasureC0py_SelectField6:		; <- T_MeasureC0py_SelectField6
 	ld	(MeasureC0py_Field:16), 6	; F7B94F  ld (0x0dbc),0x06
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7B954  or (0x2075),0x09
 	ret	; F7B959  ret
@@ -187272,11 +187272,11 @@ sub_F7BB82:		; <- T_F42A00
 
 ; --------------------------------------------------------------------------
 ; MeasureC0py_LcdKeyRow1
-; Called from: T_F42A04 (x2)
+; Called from: T_MeasureC0py_LcdKeyRow1 (x2)
 ; Touches: (0x0C13) (0x0C14) (0x0C18) (0x0C1A) (0x0C1C) (0x0C30) (0x0C32)
 ;          (0x0C35) (0x0C70) (0x0C71) +11 more
 ; Calls:   T_F426F8 sub_F7CE04
-; Evidence: thunk slot T_F42A04 holds `jp 0x00F7BB92`, and 0xF7BB92 is an
+; Evidence: thunk slot T_MeasureC0py_LcdKeyRow1 holds `jp 0x00F7BB92`, and 0xF7BB92 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187284,7 +187284,7 @@ sub_F7BB82:		; <- T_F42A00
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; MeasureC0py_LcdKeyRow1: the LcdKeyRow1 action of MeasureC0py_StageNonZero, MeasureC0py_StageZero -- called only by LcdKeyRow1_MeasureC0py_StageNonZero, LcdKeyRow1_MeasureC0py_StageZero.
-MeasureC0py_LcdKeyRow1:		; <- T_F42A04
+MeasureC0py_LcdKeyRow1:		; <- T_MeasureC0py_LcdKeyRow1
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BB92  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BB97  cp (0x207e),0x01
 	jr	z, sub_F7BB6D_Skip	; F7BB9C  jr Z,0xf7bbab
@@ -187434,10 +187434,10 @@ sub_F7BCFD:		; <- T_F428E0
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_OnLeave
-; Called from: T_F428E4 (x1)
+; Called from: T_Vel0cityChange_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F428E4 holds `jp 0x00F7BD24`, and 0xF7BD24 is an
+; Evidence: thunk slot T_Vel0cityChange_OnLeave holds `jp 0x00F7BD24`, and 0xF7BD24 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187446,7 +187446,7 @@ sub_F7BCFD:		; <- T_F428E0
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_OnLeave: the LEAVE work of Vel0cityChange -- the one unnamed routine ScreenLeaveBody_Vel0cityChange calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-Vel0cityChange_OnLeave:		; <- T_F428E4
+Vel0cityChange_OnLeave:		; <- T_Vel0cityChange_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1d	; F7BD24  cp (0x207a),0x1d
 	jr	z, sub_F7BC73_Return2	; F7BD29  jr Z,0xf7bd2f
 	call	T_F409E0	; F7BD2B  call 0xf409e0
@@ -187455,9 +187455,9 @@ sub_F7BC73_Return2:
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow1
-; Called from: T_F428E8 (x1)
+; Called from: T_Vel0cityChange_StageZero_LcdKeyRow1 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F428E8 holds `jp 0x00F7BD30`, and 0xF7BD30 is an
+; Evidence: thunk slot T_Vel0cityChange_StageZero_LcdKeyRow1 holds `jp 0x00F7BD30`, and 0xF7BD30 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187465,7 +187465,7 @@ sub_F7BC73_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow1: the LcdKeyRow1 action of Vel0cityChange_StageZero -- called only by LcdKeyRow1_Vel0cityChange_StageZero.
-Vel0cityChange_StageZero_LcdKeyRow1:		; <- T_F428E8
+Vel0cityChange_StageZero_LcdKeyRow1:		; <- T_Vel0cityChange_StageZero_LcdKeyRow1
 	ld	(3512:16), 1	; F7BD30  ld (0x0db8),0x01
 	ld	(DisplayListB_Stage+6:16), 1	; F7BD35  ld (0x12fc),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7BD3A  or (0x2075),0x09
@@ -187473,9 +187473,9 @@ Vel0cityChange_StageZero_LcdKeyRow1:		; <- T_F428E8
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow2
-; Called from: T_F428EC (x1)
+; Called from: T_Vel0cityChange_StageZero_LcdKeyRow2 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F428EC holds `jp 0x00F7BD40`, and 0xF7BD40 is an
+; Evidence: thunk slot T_Vel0cityChange_StageZero_LcdKeyRow2 holds `jp 0x00F7BD40`, and 0xF7BD40 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187483,7 +187483,7 @@ Vel0cityChange_StageZero_LcdKeyRow1:		; <- T_F428E8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow2: the LcdKeyRow2 action of Vel0cityChange_StageZero -- called only by LcdKeyRow2_Vel0cityChange_StageZero.
-Vel0cityChange_StageZero_LcdKeyRow2:		; <- T_F428EC
+Vel0cityChange_StageZero_LcdKeyRow2:		; <- T_Vel0cityChange_StageZero_LcdKeyRow2
 	ld	(3512:16), 2	; F7BD40  ld (0x0db8),0x02
 	ld	(DisplayListB_Stage+6:16), 2	; F7BD45  ld (0x12fc),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD4A  or (0x2075),0x08
@@ -187492,9 +187492,9 @@ Vel0cityChange_StageZero_LcdKeyRow2:		; <- T_F428EC
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow3
-; Called from: T_F428F0 (x1)
+; Called from: T_Vel0cityChange_StageZero_LcdKeyRow3 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F428F0 holds `jp 0x00F7BD55`, and 0xF7BD55 is an
+; Evidence: thunk slot T_Vel0cityChange_StageZero_LcdKeyRow3 holds `jp 0x00F7BD55`, and 0xF7BD55 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187502,7 +187502,7 @@ Vel0cityChange_StageZero_LcdKeyRow2:		; <- T_F428EC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow3: the LcdKeyRow3 action of Vel0cityChange_StageZero -- called only by LcdKeyRow3_Vel0cityChange_StageZero.
-Vel0cityChange_StageZero_LcdKeyRow3:		; <- T_F428F0
+Vel0cityChange_StageZero_LcdKeyRow3:		; <- T_Vel0cityChange_StageZero_LcdKeyRow3
 	ld	(3512:16), 3	; F7BD55  ld (0x0db8),0x03
 	ld	(DisplayListB_Stage+6:16), 3	; F7BD5A  ld (0x12fc),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD5F  or (0x2075),0x08
@@ -187511,9 +187511,9 @@ Vel0cityChange_StageZero_LcdKeyRow3:		; <- T_F428F0
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow4
-; Called from: T_F428F4 (x1)
+; Called from: T_Vel0cityChange_StageZero_LcdKeyRow4 (x1)
 ; Touches: (0x0DB8) (0x12FC) (0x2075)
-; Evidence: thunk slot T_F428F4 holds `jp 0x00F7BD6A`, and 0xF7BD6A is an
+; Evidence: thunk slot T_Vel0cityChange_StageZero_LcdKeyRow4 holds `jp 0x00F7BD6A`, and 0xF7BD6A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187521,7 +187521,7 @@ Vel0cityChange_StageZero_LcdKeyRow3:		; <- T_F428F0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_StageZero_LcdKeyRow4: the LcdKeyRow4 action of Vel0cityChange_StageZero -- called only by LcdKeyRow4_Vel0cityChange_StageZero.
-Vel0cityChange_StageZero_LcdKeyRow4:		; <- T_F428F4
+Vel0cityChange_StageZero_LcdKeyRow4:		; <- T_Vel0cityChange_StageZero_LcdKeyRow4
 	ld	(3512:16), 4	; F7BD6A  ld (0x0db8),0x04
 	ld	(DisplayListB_Stage+6:16), 4	; F7BD6F  ld (0x12fc),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7BD74  or (0x2075),0x08
@@ -187753,11 +187753,11 @@ sub_F7BEB3_Return:
 
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_LcdKeyRow2
-; Called from: T_F42900 (x2)
+; Called from: T_Vel0cityChange_LcdKeyRow2 (x2)
 ; Touches: (0x0C13) (0x0C1E) (0x0C20) (0x0C22) (0x0C35) (0x0C70) (0x0C73)
 ;          (0x0C77) (0x0C7A) (0x0C7B) +6 more
 ; Calls:   T_F426FC
-; Evidence: thunk slot T_F42900 holds `jp 0x00F7BEF4`, and 0xF7BEF4 is an
+; Evidence: thunk slot T_Vel0cityChange_LcdKeyRow2 holds `jp 0x00F7BEF4`, and 0xF7BEF4 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187765,7 +187765,7 @@ sub_F7BEB3_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Vel0cityChange_LcdKeyRow2: the LcdKeyRow2 action of Vel0cityChange_StageNonZero, Vel0cityChange_StageZero -- called only by LcdKeyRow2_Vel0cityChange_StageNonZero, LcdKeyRow2_Vel0cityChange_StageZero.
-Vel0cityChange_LcdKeyRow2:		; <- T_F42900
+Vel0cityChange_LcdKeyRow2:		; <- T_Vel0cityChange_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7BEF4  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7BEF9  cp (0x207e),0x01
 	jr	z, sub_F7BEB3_Skip3	; F7BEFE  jr Z,0xf7bf0c
@@ -187919,10 +187919,10 @@ sub_F7BF74_Return2:
 
 ; --------------------------------------------------------------------------
 ; Quantize_OnLeave
-; Called from: T_F4290C (x1)
+; Called from: T_Quantize_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F4290C holds `jp 0x00F7C0AF`, and 0xF7C0AF is an
+; Evidence: thunk slot T_Quantize_OnLeave holds `jp 0x00F7C0AF`, and 0xF7C0AF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187931,7 +187931,7 @@ sub_F7BF74_Return2:
 ; --------------------------------------------------------------------------
 ; Quantize_OnLeave: the LEAVE work of Quantize -- the one unnamed routine ScreenLeaveBody_Quantize calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-Quantize_OnLeave:		; <- T_F4290C
+Quantize_OnLeave:		; <- T_Quantize_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x1e	; F7C0AF  cp (0x207a),0x1e
 	jr	z, sub_F7BF74_Return3	; F7C0B4  jr Z,0xf7c0ba
 	call	T_F409E0	; F7C0B6  call 0xf409e0
@@ -187940,10 +187940,10 @@ sub_F7BF74_Return3:
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField1
-; Called from: T_F42910 (x1)
+; Called from: T_Quantize_SelectField1 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42910 holds `jp 0x00F7C0BB`, and 0xF7C0BB is an
+; Evidence: thunk slot T_Quantize_SelectField1 holds `jp 0x00F7C0BB`, and 0xF7C0BB is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187953,17 +187953,17 @@ sub_F7BF74_Return3:
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField1:		; <- T_F42910
+Quantize_SelectField1:		; <- T_Quantize_SelectField1
 	ld	(3513:16), 1	; F7C0BB  ld (0x0db9),0x01
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C0C0  or (0x2075),0x09
 	ret	; F7C0C5  ret
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField2
-; Called from: T_F42914 (x1)
+; Called from: T_Quantize_SelectField2 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42914 holds `jp 0x00F7C0C6`, and 0xF7C0C6 is an
+; Evidence: thunk slot T_Quantize_SelectField2 holds `jp 0x00F7C0C6`, and 0xF7C0C6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187973,7 +187973,7 @@ Quantize_SelectField1:		; <- T_F42910
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField2:		; <- T_F42914
+Quantize_SelectField2:		; <- T_Quantize_SelectField2
 	ld	(3513:16), 2	; F7C0C6  ld (0x0db9),0x02
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C0CB  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C0D0  or (0x2075),0x01
@@ -187981,10 +187981,10 @@ Quantize_SelectField2:		; <- T_F42914
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField3
-; Called from: T_F42918 (x1)
+; Called from: T_Quantize_SelectField3 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42918 holds `jp 0x00F7C0D6`, and 0xF7C0D6 is an
+; Evidence: thunk slot T_Quantize_SelectField3 holds `jp 0x00F7C0D6`, and 0xF7C0D6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -187994,7 +187994,7 @@ Quantize_SelectField2:		; <- T_F42914
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField3:		; <- T_F42918
+Quantize_SelectField3:		; <- T_Quantize_SelectField3
 	ld	(3513:16), 3	; F7C0D6  ld (0x0db9),0x03
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C0DB  or (0x2075),0x08
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C0E0  or (0x2075),0x01
@@ -188002,10 +188002,10 @@ Quantize_SelectField3:		; <- T_F42918
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField4
-; Called from: T_F4291C (x1)
+; Called from: T_Quantize_SelectField4 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F4291C holds `jp 0x00F7C0E6`, and 0xF7C0E6 is an
+; Evidence: thunk slot T_Quantize_SelectField4 holds `jp 0x00F7C0E6`, and 0xF7C0E6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188015,7 +188015,7 @@ Quantize_SelectField3:		; <- T_F42918
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField4:		; <- T_F4291C
+Quantize_SelectField4:		; <- T_Quantize_SelectField4
 	ld	(3513:16), 4	; F7C0E6  ld (0x0db9),0x04
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C0EB  or (0x2075),0x09
 	ret	; F7C0F0  ret
@@ -188374,10 +188374,10 @@ sub_F7C30B:
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField5
-; Called from: T_F42920 (x1)
+; Called from: T_Quantize_SelectField5 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42920 holds `jp 0x00F7C310`, and 0xF7C310 is an
+; Evidence: thunk slot T_Quantize_SelectField5 holds `jp 0x00F7C310`, and 0xF7C310 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188387,17 +188387,17 @@ sub_F7C30B:
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 5 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField5:		; <- T_F42920
+Quantize_SelectField5:		; <- T_Quantize_SelectField5
 	ld	(UI_RequestBits:16), 9	; F7C310  ld (0x2075),0x09
 	ld	(3513:16), 5	; F7C315  ld (0x0db9),0x05
 	ret	; F7C31A  ret
 
 ; --------------------------------------------------------------------------
 ; Quantize_SelectField6
-; Called from: T_F42924 (x1)
+; Called from: T_Quantize_SelectField6 (x1)
 ; Touches: (0x0DB9) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42924 holds `jp 0x00F7C31B`, and 0xF7C31B is an
+; Evidence: thunk slot T_Quantize_SelectField6 holds `jp 0x00F7C31B`, and 0xF7C31B is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188407,18 +188407,18 @@ Quantize_SelectField5:		; <- T_F42920
 ;           (0x0DB9) is read by LcdKeyRow3/4_Quantize_StageZero, so it is the Quantize screen's field cell.
 ; Unknown: what field 6 is on that screen.
 ; --------------------------------------------------------------------------
-Quantize_SelectField6:		; <- T_F42924
+Quantize_SelectField6:		; <- T_Quantize_SelectField6
 	ld	(UI_RequestBits:16), 9	; F7C31B  ld (0x2075),0x09
 	ld	(3513:16), 6	; F7C320  ld (0x0db9),0x06
 	ret	; F7C325  ret
 
 ; --------------------------------------------------------------------------
 ; Quantize_LcdKeyRow3
-; Called from: T_F42930 (x2)
+; Called from: T_Quantize_LcdKeyRow3 (x2)
 ; Touches: (0x0C26) (0x0C28) (0x0C35) (0x0C37) (0x0C70) (0x0C73) (0x0C77)
 ;          (0x0C7F) (0x0D4A) (0x2070) +4 more
 ; Calls:   T_F42700
-; Evidence: thunk slot T_F42930 holds `jp 0x00F7C326`, and 0xF7C326 is an
+; Evidence: thunk slot T_Quantize_LcdKeyRow3 holds `jp 0x00F7C326`, and 0xF7C326 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188426,7 +188426,7 @@ Quantize_SelectField6:		; <- T_F42924
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Quantize_LcdKeyRow3: the LcdKeyRow3 action of Quantize_StageNonZero, Quantize_StageZero -- called only by LcdKeyRow3_Quantize_StageNonZero, LcdKeyRow3_Quantize_StageZero.
-Quantize_LcdKeyRow3:		; <- T_F42930
+Quantize_LcdKeyRow3:		; <- T_Quantize_LcdKeyRow3
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C326  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C32B  cp (0x207e),0x01
 	jr	z, sub_F7C326_Skip	; F7C330  jr Z,0xf7c33f
@@ -188522,10 +188522,10 @@ sub_F7C3EE_Return:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol1
-; Called from: T_F42A14 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol1 (x1)
 ; Touches: (0x0E0C) (0x12F6) (0x2075)  |  0x0012F8
 ; Calls:   sub_F7C440
-; Evidence: thunk slot T_F42A14 holds `jp 0x00F7C3FA`, and 0xF7C3FA is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol1 holds `jp 0x00F7C3FA`, and 0xF7C3FA is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188533,7 +188533,7 @@ sub_F7C3EE_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol1: the SoftKeyCol1 action of S0ngC0py_StageZero -- called only by SoftKeyCol1_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol1:		; <- T_F42A14
+S0ngC0py_StageZero_SoftKeyCol1:		; <- T_S0ngC0py_StageZero_SoftKeyCol1
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C3FA  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromSong:16)	; F7C3FF  ld A,(0x0e0c)
 	ld	l, 1:opc	; F7C403  ld L,0x01
@@ -188549,10 +188549,10 @@ sub_F7C3FA_Return:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol2
-; Called from: T_F42A10 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol2 (x1)
 ; Touches: (0x0E0C) (0x12F6) (0x2075)  |  0x0012F8
 ; Calls:   sub_F7C440
-; Evidence: thunk slot T_F42A10 holds `jp 0x00F7C41D`, and 0xF7C41D is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol2 holds `jp 0x00F7C41D`, and 0xF7C41D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188560,7 +188560,7 @@ sub_F7C3FA_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol2: the SoftKeyCol2 action of S0ngC0py_StageZero -- called only by SoftKeyCol2_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol2:		; <- T_F42A10
+S0ngC0py_StageZero_SoftKeyCol2:		; <- T_S0ngC0py_StageZero_SoftKeyCol2
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C41D  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromSong:16)	; F7C422  ld A,(0x0e0c)
 	ld	l, 10:opc	; F7C426  ld L,0x0a
@@ -188602,9 +188602,9 @@ sub_F7C440:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol3
-; Called from: T_F42A1C (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol3 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
-; Evidence: thunk slot T_F42A1C holds `jp 0x00F7C463`, and 0xF7C463 is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol3 holds `jp 0x00F7C463`, and 0xF7C463 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188612,7 +188612,7 @@ sub_F7C440:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol3: the SoftKeyCol3 action of S0ngC0py_StageZero -- called only by SoftKeyCol3_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol3:		; <- T_F42A1C
+S0ngC0py_StageZero_SoftKeyCol3:		; <- T_S0ngC0py_StageZero_SoftKeyCol3
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C463  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromTrack:16)	; F7C468  ld A,(0x0e0e)
 	ld	l, 1:opc	; F7C46C  ld L,0x01
@@ -188630,9 +188630,9 @@ sub_F7C440_Return:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol4
-; Called from: T_F42A18 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol4 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
-; Evidence: thunk slot T_F42A18 holds `jp 0x00F7C48C`, and 0xF7C48C is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol4 holds `jp 0x00F7C48C`, and 0xF7C48C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188640,7 +188640,7 @@ sub_F7C440_Return:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol4: the SoftKeyCol4 action of S0ngC0py_StageZero -- called only by SoftKeyCol4_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol4:		; <- T_F42A18
+S0ngC0py_StageZero_SoftKeyCol4:		; <- T_S0ngC0py_StageZero_SoftKeyCol4
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C48C  or (0x2075),0x08
 	ld	a, (S0ngC0py_FromTrack:16)	; F7C491  ld A,(0x0e0e)
 	ld	l, 18:opc	; F7C495  ld L,0x12
@@ -188660,10 +188660,10 @@ sub_F7C440_Return2:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol5
-; Called from: T_F42A24 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol5 (x1)
 ; Touches: (0x0E0D) (0x12F7) (0x2075)  |  0x0012FE
 ; Calls:   sub_F7C440
-; Evidence: thunk slot T_F42A24 holds `jp 0x00F7C4B9`, and 0xF7C4B9 is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol5 holds `jp 0x00F7C4B9`, and 0xF7C4B9 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188671,7 +188671,7 @@ sub_F7C440_Return2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol5: the SoftKeyCol5 action of S0ngC0py_StageZero -- called only by SoftKeyCol5_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol5:		; <- T_F42A24
+S0ngC0py_StageZero_SoftKeyCol5:		; <- T_S0ngC0py_StageZero_SoftKeyCol5
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4B9  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToSong:16)	; F7C4BE  ld A,(0x0e0d)
 	ld	l, 1:opc	; F7C4C2  ld L,0x01
@@ -188687,10 +188687,10 @@ sub_F7C440_Return3:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol6
-; Called from: T_F42A20 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol6 (x1)
 ; Touches: (0x0E0D) (0x12F7) (0x2075)  |  0x0012FE
 ; Calls:   sub_F7C440
-; Evidence: thunk slot T_F42A20 holds `jp 0x00F7C4DC`, and 0xF7C4DC is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol6 holds `jp 0x00F7C4DC`, and 0xF7C4DC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188698,7 +188698,7 @@ sub_F7C440_Return3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol6: the SoftKeyCol6 action of S0ngC0py_StageZero -- called only by SoftKeyCol6_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol6:		; <- T_F42A20
+S0ngC0py_StageZero_SoftKeyCol6:		; <- T_S0ngC0py_StageZero_SoftKeyCol6
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4DC  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToSong:16)	; F7C4E1  ld A,(0x0e0d)
 	ld	l, 10:opc	; F7C4E5  ld L,0x0a
@@ -188714,9 +188714,9 @@ sub_F7C440_Return4:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol7
-; Called from: T_F42A2C (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol7 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
-; Evidence: thunk slot T_F42A2C holds `jp 0x00F7C4FF`, and 0xF7C4FF is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol7 holds `jp 0x00F7C4FF`, and 0xF7C4FF is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188724,7 +188724,7 @@ sub_F7C440_Return4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol7: the SoftKeyCol7 action of S0ngC0py_StageZero -- called only by SoftKeyCol7_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol7:		; <- T_F42A2C
+S0ngC0py_StageZero_SoftKeyCol7:		; <- T_S0ngC0py_StageZero_SoftKeyCol7
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C4FF  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToTrack:16)	; F7C504  ld A,(0x0e0f)
 	ld	l, 1:opc	; F7C508  ld L,0x01
@@ -188742,9 +188742,9 @@ sub_F7C440_Return5:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol8
-; Called from: T_F42A28 (x1)
+; Called from: T_S0ngC0py_StageZero_SoftKeyCol8 (x1)
 ; Touches: (0x0E0E) (0x0E0F) (0x1304) (0x1305) (0x2075)
-; Evidence: thunk slot T_F42A28 holds `jp 0x00F7C528`, and 0xF7C528 is an
+; Evidence: thunk slot T_S0ngC0py_StageZero_SoftKeyCol8 holds `jp 0x00F7C528`, and 0xF7C528 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188752,7 +188752,7 @@ sub_F7C440_Return5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_StageZero_SoftKeyCol8: the SoftKeyCol8 action of S0ngC0py_StageZero -- called only by SoftKeyCol8_S0ngC0py_StageZero.
-S0ngC0py_StageZero_SoftKeyCol8:		; <- T_F42A28
+S0ngC0py_StageZero_SoftKeyCol8:		; <- T_S0ngC0py_StageZero_SoftKeyCol8
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7C528  or (0x2075),0x08
 	ld	a, (S0ngC0py_ToTrack:16)	; F7C52D  ld A,(0x0e0f)
 	ld	l, 18:opc	; F7C531  ld L,0x12
@@ -188772,11 +188772,11 @@ sub_F7C440_Return6:
 
 ; --------------------------------------------------------------------------
 ; S0ngC0py_LcdKeyRow2
-; Called from: T_F42A30 (x2)
+; Called from: T_S0ngC0py_LcdKeyRow2 (x2)
 ; Touches: (0x0E0C) (0x0E0D) (0x0E0E) (0x0E34) (0x2070) (0x2071) (0x207E)  |
 ;          0x000022 0x610000
 ; Calls:   T_F4271C
-; Evidence: thunk slot T_F42A30 holds `jp 0x00F7C555`, and 0xF7C555 is an
+; Evidence: thunk slot T_S0ngC0py_LcdKeyRow2 holds `jp 0x00F7C555`, and 0xF7C555 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188784,7 +188784,7 @@ sub_F7C440_Return6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; S0ngC0py_LcdKeyRow2: the LcdKeyRow2 action of S0ngC0py_StageNonZero, S0ngC0py_StageZero -- called only by LcdKeyRow2_S0ngC0py_StageNonZero, LcdKeyRow2_S0ngC0py_StageZero.
-S0ngC0py_LcdKeyRow2:		; <- T_F42A30
+S0ngC0py_LcdKeyRow2:		; <- T_S0ngC0py_LcdKeyRow2
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7C555  cp (0x207e),0x00
 	jrl	nz, sub_F7C440_Skip2	; F7C55A  jrl NZ,0xf7c5b0
 	ld	(3636:16), 0	; F7C55D  ld (0x0e34),0x00
@@ -188956,10 +188956,10 @@ sub_F7C62D:
 
 ; --------------------------------------------------------------------------
 ; Transp0se_OnLeave
-; Called from: T_F42A3C (x1)
+; Called from: T_Transp0se_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F42A3C holds `jp 0x00F7C666`, and 0xF7C666 is an
+; Evidence: thunk slot T_Transp0se_OnLeave holds `jp 0x00F7C666`, and 0xF7C666 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188968,7 +188968,7 @@ sub_F7C62D:
 ; --------------------------------------------------------------------------
 ; Transp0se_OnLeave: the LEAVE work of Transp0se -- the one unnamed routine ScreenLeaveBody_Transp0se calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-Transp0se_OnLeave:		; <- T_F42A3C
+Transp0se_OnLeave:		; <- T_Transp0se_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2b	; F7C666  cp (0x207a),0x2b
 	jr	z, sub_F7C62D_Return	; F7C66B  jr Z,0xf7c671
 	call	T_F409E0	; F7C66D  call 0xf409e0
@@ -188977,10 +188977,10 @@ sub_F7C62D_Return:
 
 ; --------------------------------------------------------------------------
 ; Transp0se_SelectField1
-; Called from: T_F42A40 (x1)
+; Called from: T_Transp0se_SelectField1 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A40 holds `jp 0x00F7C672`, and 0xF7C672 is an
+; Evidence: thunk slot T_Transp0se_SelectField1 holds `jp 0x00F7C672`, and 0xF7C672 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -188990,7 +188990,7 @@ sub_F7C62D_Return:
 ;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-Transp0se_SelectField1:		; <- T_F42A40
+Transp0se_SelectField1:		; <- T_Transp0se_SelectField1
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C672  or (0x2075),0x01
 	ld	a, 1:opc	; F7C677  ld A,0x01
 	ld	(3574:16), a	; F7C679  ld (0x0df6),A
@@ -188999,10 +188999,10 @@ Transp0se_SelectField1:		; <- T_F42A40
 
 ; --------------------------------------------------------------------------
 ; Transp0se_SelectField2
-; Called from: T_F42A44 (x1)
+; Called from: T_Transp0se_SelectField2 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A44 holds `jp 0x00F7C682`, and 0xF7C682 is an
+; Evidence: thunk slot T_Transp0se_SelectField2 holds `jp 0x00F7C682`, and 0xF7C682 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189012,7 +189012,7 @@ Transp0se_SelectField1:		; <- T_F42A40
 ;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-Transp0se_SelectField2:		; <- T_F42A44
+Transp0se_SelectField2:		; <- T_Transp0se_SelectField2
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C682  or (0x2075),0x01
 	ld	a, 2:opc	; F7C687  ld A,0x02
 	ld	(3574:16), a	; F7C689  ld (0x0df6),A
@@ -189021,10 +189021,10 @@ Transp0se_SelectField2:		; <- T_F42A44
 
 ; --------------------------------------------------------------------------
 ; Transp0se_SelectField3
-; Called from: T_F42A48 (x1)
+; Called from: T_Transp0se_SelectField3 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A48 holds `jp 0x00F7C692`, and 0xF7C692 is an
+; Evidence: thunk slot T_Transp0se_SelectField3 holds `jp 0x00F7C692`, and 0xF7C692 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189034,7 +189034,7 @@ Transp0se_SelectField2:		; <- T_F42A44
 ;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-Transp0se_SelectField3:		; <- T_F42A48
+Transp0se_SelectField3:		; <- T_Transp0se_SelectField3
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C692  or (0x2075),0x01
 	ld	a, 3:opc	; F7C697  ld A,0x03
 	ld	(3574:16), a	; F7C699  ld (0x0df6),A
@@ -189043,10 +189043,10 @@ Transp0se_SelectField3:		; <- T_F42A48
 
 ; --------------------------------------------------------------------------
 ; Transp0se_SelectField4
-; Called from: T_F42A4C (x1)
+; Called from: T_Transp0se_SelectField4 (x1)
 ; Touches: (0x0DF6) (0x12FC) (0x2075)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A4C holds `jp 0x00F7C6A2`, and 0xF7C6A2 is an
+; Evidence: thunk slot T_Transp0se_SelectField4 holds `jp 0x00F7C6A2`, and 0xF7C6A2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189056,7 +189056,7 @@ Transp0se_SelectField3:		; <- T_F42A48
 ;           (0x0DF6) is read by Paint_Transp0se, so it is the Transp0se screen's field cell.
 ; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-Transp0se_SelectField4:		; <- T_F42A4C
+Transp0se_SelectField4:		; <- T_Transp0se_SelectField4
 	m_or_mi8 MB16, UI_RequestBits, 0x01	; F7C6A2  or (0x2075),0x01
 	ld	a, 4:opc	; F7C6A7  ld A,0x04
 	ld	(3574:16), a	; F7C6A9  ld (0x0df6),A
@@ -189327,11 +189327,11 @@ sub_F7C7BC_Join:
 
 ; --------------------------------------------------------------------------
 ; Transp0se_LcdKeyRow2
-; Called from: T_F42A58 (x2)
+; Called from: T_Transp0se_LcdKeyRow2 (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DF7) (0x0DF8) (0x0E00) (0x2070)
 ;          (0x2071) (0x2075) (0x207E) +1 more
 ; Calls:   T_F42714
-; Evidence: thunk slot T_F42A58 holds `jp 0x00F7C7F0`, and 0xF7C7F0 is an
+; Evidence: thunk slot T_Transp0se_LcdKeyRow2 holds `jp 0x00F7C7F0`, and 0xF7C7F0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189339,7 +189339,7 @@ sub_F7C7BC_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; Transp0se_LcdKeyRow2: the LcdKeyRow2 action of Transp0se_StageNonZero, Transp0se_StageZero -- called only by LcdKeyRow2_Transp0se_StageNonZero, LcdKeyRow2_Transp0se_StageZero.
-Transp0se_LcdKeyRow2:		; <- T_F42A58
+Transp0se_LcdKeyRow2:		; <- T_Transp0se_LcdKeyRow2
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7C7F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7C7F5  cp (0x207e),0x01
 	jr	z, sub_F7C7F0_Skip	; F7C7FA  jr Z,0xf7c808
@@ -189444,10 +189444,10 @@ sub_F7C869:
 
 ; --------------------------------------------------------------------------
 ; N0teChange_OnLeave
-; Called from: T_F42A8C (x1)
+; Called from: T_N0teChange_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F42A8C holds `jp 0x00F7C8BC`, and 0xF7C8BC is an
+; Evidence: thunk slot T_N0teChange_OnLeave holds `jp 0x00F7C8BC`, and 0xF7C8BC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189456,7 +189456,7 @@ sub_F7C869:
 ; --------------------------------------------------------------------------
 ; N0teChange_OnLeave: the LEAVE work of N0teChange -- the one unnamed routine ScreenLeaveBody_N0teChange calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-N0teChange_OnLeave:		; <- T_F42A8C
+N0teChange_OnLeave:		; <- T_N0teChange_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2d	; F7C8BC  cp (0x207a),0x2d
 	jr	z, sub_F7C869_Return	; F7C8C1  jr Z,0xf7c8c7
 	call	T_F409E0	; F7C8C3  call 0xf409e0
@@ -189465,9 +189465,9 @@ sub_F7C869_Return:
 
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField1
-; Called from: T_F42A90 (x1)
+; Called from: T_N0teChange_SelectField1 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
-; Evidence: thunk slot T_F42A90 holds `jp 0x00F7C8C8`, and 0xF7C8C8 is an
+; Evidence: thunk slot T_N0teChange_SelectField1 holds `jp 0x00F7C8C8`, and 0xF7C8C8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189476,7 +189476,7 @@ sub_F7C869_Return:
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField1: moves the N0teChange screen's cursor to field 1 -- stores 1 into N0teChange_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-N0teChange_SelectField1:		; <- T_F42A90
+N0teChange_SelectField1:		; <- T_N0teChange_SelectField1
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8C8  or (0x2075),0x09
 	ld	a, 1:opc	; F7C8CD  ld A,0x01
 	ld	(N0teChange_Field:16), a	; F7C8CF  ld (0x0ded),A
@@ -189485,9 +189485,9 @@ N0teChange_SelectField1:		; <- T_F42A90
 
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField2
-; Called from: T_F42A94 (x1)
+; Called from: T_N0teChange_SelectField2 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
-; Evidence: thunk slot T_F42A94 holds `jp 0x00F7C8D8`, and 0xF7C8D8 is an
+; Evidence: thunk slot T_N0teChange_SelectField2 holds `jp 0x00F7C8D8`, and 0xF7C8D8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189496,7 +189496,7 @@ N0teChange_SelectField1:		; <- T_F42A90
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField2: moves the N0teChange screen's cursor to field 2 -- stores 2 into N0teChange_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-N0teChange_SelectField2:		; <- T_F42A94
+N0teChange_SelectField2:		; <- T_N0teChange_SelectField2
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8D8  or (0x2075),0x09
 	ld	a, 2:opc	; F7C8DD  ld A,0x02
 	ld	(N0teChange_Field:16), a	; F7C8DF  ld (0x0ded),A
@@ -189505,9 +189505,9 @@ N0teChange_SelectField2:		; <- T_F42A94
 
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField3
-; Called from: T_F42A98 (x1)
+; Called from: T_N0teChange_SelectField3 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
-; Evidence: thunk slot T_F42A98 holds `jp 0x00F7C8E8`, and 0xF7C8E8 is an
+; Evidence: thunk slot T_N0teChange_SelectField3 holds `jp 0x00F7C8E8`, and 0xF7C8E8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189516,7 +189516,7 @@ N0teChange_SelectField2:		; <- T_F42A94
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField3: moves the N0teChange screen's cursor to field 3 -- stores 3 into N0teChange_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-N0teChange_SelectField3:		; <- T_F42A98
+N0teChange_SelectField3:		; <- T_N0teChange_SelectField3
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8E8  or (0x2075),0x09
 	ld	a, 3:opc	; F7C8ED  ld A,0x03
 	ld	(N0teChange_Field:16), a	; F7C8EF  ld (0x0ded),A
@@ -189525,9 +189525,9 @@ N0teChange_SelectField3:		; <- T_F42A98
 
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField4
-; Called from: T_F42A9C (x1)
+; Called from: T_N0teChange_SelectField4 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
-; Evidence: thunk slot T_F42A9C holds `jp 0x00F7C8F8`, and 0xF7C8F8 is an
+; Evidence: thunk slot T_N0teChange_SelectField4 holds `jp 0x00F7C8F8`, and 0xF7C8F8 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189536,7 +189536,7 @@ N0teChange_SelectField3:		; <- T_F42A98
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField4: moves the N0teChange screen's cursor to field 4 -- stores 4 into N0teChange_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-N0teChange_SelectField4:		; <- T_F42A9C
+N0teChange_SelectField4:		; <- T_N0teChange_SelectField4
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C8F8  or (0x2075),0x09
 	ld	a, 4:opc	; F7C8FD  ld A,0x04
 	ld	(N0teChange_Field:16), a	; F7C8FF  ld (0x0ded),A
@@ -189545,9 +189545,9 @@ N0teChange_SelectField4:		; <- T_F42A9C
 
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField5
-; Called from: T_F42AA0 (x1)
+; Called from: T_N0teChange_SelectField5 (x1)
 ; Touches: (0x0DED) (0x1301) (0x2075)
-; Evidence: thunk slot T_F42AA0 holds `jp 0x00F7C908`, and 0xF7C908 is an
+; Evidence: thunk slot T_N0teChange_SelectField5 holds `jp 0x00F7C908`, and 0xF7C908 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189556,7 +189556,7 @@ N0teChange_SelectField4:		; <- T_F42A9C
 ; --------------------------------------------------------------------------
 ; N0teChange_SelectField5: moves the N0teChange screen's cursor to field 5 -- stores 5 into N0teChange_Field
 ;   and requests the redraw, nothing else (notes/prom_b_select_field_names.py).
-N0teChange_SelectField5:		; <- T_F42AA0
+N0teChange_SelectField5:		; <- T_N0teChange_SelectField5
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7C908  or (0x2075),0x09
 	ld	a, 5:opc	; F7C90D  ld A,0x05
 	ld	(N0teChange_Field:16), a	; F7C90F  ld (0x0ded),A
@@ -189832,11 +189832,11 @@ SongStore_DispatchB_Case5:
 
 ; --------------------------------------------------------------------------
 ; N0teChange_LcdKeyRow4
-; Called from: T_F42AAC (x2)
+; Called from: T_N0teChange_LcdKeyRow4 (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DEE) (0x0DF0) (0x129E) (0x2070)
 ;          (0x2071) (0x2075) (0x207E) +1 more
 ; Calls:   T_F42718
-; Evidence: thunk slot T_F42AAC holds `jp 0x00F7CA6F`, and 0xF7CA6F is an
+; Evidence: thunk slot T_N0teChange_LcdKeyRow4 holds `jp 0x00F7CA6F`, and 0xF7CA6F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189844,7 +189844,7 @@ SongStore_DispatchB_Case5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; N0teChange_LcdKeyRow4: the LcdKeyRow4 action of N0teChange_StageNonZero, N0teChange_StageZero -- called only by LcdKeyRow4_N0teChange_StageNonZero, LcdKeyRow4_N0teChange_StageZero.
-N0teChange_LcdKeyRow4:		; <- T_F42AAC
+N0teChange_LcdKeyRow4:		; <- T_N0teChange_LcdKeyRow4
 	m_and_mi8 MB16, UI_RequestBits, 0xf6	; F7CA6F  and (0x2075),0xf6
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CA74  cp (0x207e),0x01
 	jr	z, sub_F7CA6F_Skip	; F7CA79  jr Z,0xf7ca87
@@ -189922,10 +189922,10 @@ sub_F7CAD2_Return:
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_OnLeave
-; Called from: T_F42A64 (x1)
+; Called from: T_AdvanceDelay_OnLeave (x1)
 ; Touches: (0x207A)
 ; Calls:   T_F409E0
-; Evidence: thunk slot T_F42A64 holds `jp 0x00F7CB12`, and 0xF7CB12 is an
+; Evidence: thunk slot T_AdvanceDelay_OnLeave holds `jp 0x00F7CB12`, and 0xF7CB12 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189934,7 +189934,7 @@ sub_F7CAD2_Return:
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_OnLeave: the LEAVE work of AdvanceDelay -- the one unnamed routine ScreenLeaveBody_AdvanceDelay calls, and nothing else calls it
 ;   (notes/prom_ab_screen_enter_leave_work.py).
-AdvanceDelay_OnLeave:		; <- T_F42A64
+AdvanceDelay_OnLeave:		; <- T_AdvanceDelay_OnLeave
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x2c	; F7CB12  cp (0x207a),0x2c
 	jr	z, sub_F7CB12_Return	; F7CB17  jr Z,0xf7cb1d
 	call	T_F409E0	; F7CB19  call 0xf409e0
@@ -189943,10 +189943,10 @@ sub_F7CB12_Return:
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_SelectField1
-; Called from: T_F42A68 (x1)
+; Called from: T_AdvanceDelay_SelectField1 (x1)
 ; Touches: (0x0DE5) (0x12FC)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A68 holds `jp 0x00F7CB1E`, and 0xF7CB1E is an
+; Evidence: thunk slot T_AdvanceDelay_SelectField1 holds `jp 0x00F7CB1E`, and 0xF7CB1E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189956,7 +189956,7 @@ sub_F7CB12_Return:
 ;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 1 is on that screen.
 ; --------------------------------------------------------------------------
-AdvanceDelay_SelectField1:		; <- T_F42A68
+AdvanceDelay_SelectField1:		; <- T_AdvanceDelay_SelectField1
 	ld	a, 1:opc	; F7CB1E  ld A,0x01
 	ld	(AdvanceDelay_Field:16), a	; F7CB20  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB24  ld (0x12fc),A
@@ -189964,10 +189964,10 @@ AdvanceDelay_SelectField1:		; <- T_F42A68
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_SelectField2
-; Called from: T_F42A6C (x1)
+; Called from: T_AdvanceDelay_SelectField2 (x1)
 ; Touches: (0x0DE5) (0x12FC)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A6C holds `jp 0x00F7CB29`, and 0xF7CB29 is an
+; Evidence: thunk slot T_AdvanceDelay_SelectField2 holds `jp 0x00F7CB29`, and 0xF7CB29 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189977,7 +189977,7 @@ AdvanceDelay_SelectField1:		; <- T_F42A68
 ;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 2 is on that screen.
 ; --------------------------------------------------------------------------
-AdvanceDelay_SelectField2:		; <- T_F42A6C
+AdvanceDelay_SelectField2:		; <- T_AdvanceDelay_SelectField2
 	ld	a, 2:opc	; F7CB29  ld A,0x02
 	ld	(AdvanceDelay_Field:16), a	; F7CB2B  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB2F  ld (0x12fc),A
@@ -189985,10 +189985,10 @@ AdvanceDelay_SelectField2:		; <- T_F42A6C
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_SelectField3
-; Called from: T_F42A70 (x1)
+; Called from: T_AdvanceDelay_SelectField3 (x1)
 ; Touches: (0x0DE5) (0x12FC)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A70 holds `jp 0x00F7CB34`, and 0xF7CB34 is an
+; Evidence: thunk slot T_AdvanceDelay_SelectField3 holds `jp 0x00F7CB34`, and 0xF7CB34 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -189998,7 +189998,7 @@ AdvanceDelay_SelectField2:		; <- T_F42A6C
 ;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 3 is on that screen.
 ; --------------------------------------------------------------------------
-AdvanceDelay_SelectField3:		; <- T_F42A70
+AdvanceDelay_SelectField3:		; <- T_AdvanceDelay_SelectField3
 	ld	a, 3:opc	; F7CB34  ld A,0x03
 	ld	(AdvanceDelay_Field:16), a	; F7CB36  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB3A  ld (0x12fc),A
@@ -190006,10 +190006,10 @@ AdvanceDelay_SelectField3:		; <- T_F42A70
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_SelectField4
-; Called from: T_F42A74 (x1)
+; Called from: T_AdvanceDelay_SelectField4 (x1)
 ; Touches: (0x0DE5) (0x12FC)
 ; Superseded 2026-10-03, when the routine was named; the earlier stanza, verbatim:
-; Evidence: thunk slot T_F42A74 holds `jp 0x00F7CB3F`, and 0xF7CB3F is an
+; Evidence: thunk slot T_AdvanceDelay_SelectField4 holds `jp 0x00F7CB3F`, and 0xF7CB3F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -190019,7 +190019,7 @@ AdvanceDelay_SelectField3:		; <- T_F42A70
 ;           AdvanceDelay_Field is the AdvanceDelay screen's field cell (named in wsa1_ram.inc).
 ; Unknown: what field 4 is on that screen.
 ; --------------------------------------------------------------------------
-AdvanceDelay_SelectField4:		; <- T_F42A74
+AdvanceDelay_SelectField4:		; <- T_AdvanceDelay_SelectField4
 	ld	a, 4:opc	; F7CB3F  ld A,0x04
 	ld	(AdvanceDelay_Field:16), a	; F7CB41  ld (0x0de5),A
 	ld	(DisplayListB_Stage+6:16), a	; F7CB45  ld (0x12fc),A
@@ -190270,11 +190270,11 @@ sub_F7CC54_Join:
 
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_LcdKeyRow3
-; Called from: T_F42A80 (x2)
+; Called from: T_AdvanceDelay_LcdKeyRow3 (x2)
 ; Touches: (0x0C70) (0x0C73) (0x0C77) (0x0DE6) (0x0DE8) (0x0E06) (0x2070)
 ;          (0x2071) (0x207E) (0x2880)
 ; Calls:   T_F42720
-; Evidence: thunk slot T_F42A80 holds `jp 0x00F7CC7C`, and 0xF7CC7C is an
+; Evidence: thunk slot T_AdvanceDelay_LcdKeyRow3 holds `jp 0x00F7CC7C`, and 0xF7CC7C is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
@@ -190282,7 +190282,7 @@ sub_F7CC54_Join:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 ; AdvanceDelay_LcdKeyRow3: the LcdKeyRow3 action of AdvanceDelay_StageNonZero, AdvanceDelay_StageZero -- called only by LcdKeyRow3_AdvanceDelay_StageNonZero, LcdKeyRow3_AdvanceDelay_StageZero.
-AdvanceDelay_LcdKeyRow3:		; <- T_F42A80
+AdvanceDelay_LcdKeyRow3:		; <- T_AdvanceDelay_LcdKeyRow3
 	m_cp_mi8 MB16, UI_ScreenStage, 0x01	; F7CC7C  cp (0x207e),0x01
 	jr	z, sub_F7CC7C_Skip	; F7CC81  jr Z,0xf7cc8f
 	ld	(UI_ScreenStage:16), 1	; F7CC83  ld (0x207e),0x01
@@ -191718,24 +191718,24 @@ ScreenNull_SequencerMedley:
 ; Evidence: the +0 word of screen object F43160, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86F79.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
 ; ScreenEnter_StepRecord: the +0 ENTER method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
-;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43160 jumps here.
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_ScreenEnter_StepRecord, and slot T_ScreenEnter_StepRecord jumps here.
 ScreenEnter_StepRecord:
 	call	ScreenEnterBody_StepRecord	; F7D2B4  call 0xf8101e
 	ret	; F7D2B8  ret
 ; Evidence: the +4 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF81039` then `ret`.  [round7-entrypoints]
 ; ScreenLeave_StepRecord: the +4 LEAVE method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
-;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43164 jumps here.
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_ScreenEnter_StepRecord, and slot T_ScreenLeave_StepRecord jumps here.
 ScreenLeave_StepRecord:
 	call	ScreenLeaveBody_StepRecord	; F7D2B9  call 0xf81039
 	ret	; F7D2BD  ret
 ; Evidence: the +8 word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
 ; ScreenButton_StepRecord: the +8 BUTTON method of the screen object for screen id 0x0E -- PanelScreen_VtableTable entry 0x2E
-;   (ViewB entry 0x0E) points at the thunk triple starting at T_F43160, and slot T_F43168 jumps here.
+;   (ViewB entry 0x0E) points at the thunk triple starting at T_ScreenEnter_StepRecord, and slot T_ScreenButton_StepRecord jumps here.
 ScreenButton_StepRecord:
 	ld	bc, hl	; F7D2BE  ld BC,HL
-	call	T_F42EC8	; F7D2C0  call 0xf42ec8
+	call	T_StepRecord_ButtonByTrackKind	; F7D2C0  call 0xf42ec8
 	ret	; F7D2C4  ret
 ; Evidence: the +0x0C word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
@@ -191761,7 +191761,7 @@ ScreenLeave_Code15:
 ;   (ViewB entry 0x15) points at the thunk triple starting at T_F431D0, and slot T_F431D8 jumps here.
 ScreenButton_Code15:
 	ld	bc, hl	; F7D2D0  ld BC,HL
-	call	T_F42EC8	; F7D2D2  call 0xf42ec8
+	call	T_StepRecord_ButtonByTrackKind	; F7D2D2  call 0xf42ec8
 	ret	; F7D2D6  ret
 ; Evidence: the +0x0C word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
@@ -193664,7 +193664,7 @@ Paint_TrackAssign_Return:
 ScreenLeaveBody_TrackAssign:
 	ld	(UI_ScreenStage:16), 0	; F7E4F9  ld (0x207e),0x00
 	m_and_mi8 MB16, 0x0dc0, 0xfe	; F7E4FE  and (0x0dc0),0xfe
-	call	T_F42BE8	; F7E503  call 0xf42be8
+	call	T_TrackAssign_OnLeave	; F7E503  call 0xf42be8
 	ret	; F7E507  ret
 ButtonTable_TrackAssign_StageZero_Nop0:
 	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
@@ -193727,7 +193727,7 @@ ScreenLeaveBody_TrackAssign_Skip:
 	m_cp_mi8 MB16, 0x0c06, 0x00	; F7E518  cp (0x0c06),0x00
 	jr	z, ScreenLeaveBody_TrackAssign_Return	; F7E51D  jr Z,0xf7e529
 ScreenLeaveBody_TrackAssign_Join:
-	call	T_F42BA0	; F7E51F  call 0xf42ba0
+	call	T_TrackAssign_StageZero_SoftKeyCol4	; F7E51F  call 0xf42ba0
 	calr	sub_F7E788	; F7E523  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E526  calr 0xf7e2fc
 ScreenLeaveBody_TrackAssign_Return:
@@ -193778,7 +193778,7 @@ ScreenLeaveBody_TrackAssign_Return:
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
 SoftKeyCol5_TrackAssign_StageZero:
-	call	T_F42BA8	; F7E52A  call 0xf42ba8
+	call	T_TrackAssign_StageZero_SoftKeyCol5	; F7E52A  call 0xf42ba8
 	calr	sub_F7E788	; F7E52E  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E531  calr 0xf7e2fc
 	ret	; F7E534  ret
@@ -193831,7 +193831,7 @@ ButtonTable_TrackAssign_StageZero_Nop5:
 ; ---------------------------------------------------------------------
 SoftKeyCol7_TrackAssign_StageZero:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7E536  or (0x2075),0x08
-	call	T_F42BAC	; F7E53B  call 0xf42bac
+	call	T_TrackAssign_StageZero_SoftKeyCol7	; F7E53B  call 0xf42bac
 	calr	sub_F7E788	; F7E53F  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E542  calr 0xf7e2fc
 	ret	; F7E545  ret
@@ -193880,7 +193880,7 @@ LcdKeyRow1_TrackAssign_StageZero:
 	m_cp_mi8 MB16, 0x0c03, 0x00	; F7E54C  cp (0x0c03),0x00
 	jr	z, ScreenLeaveBody_TrackAssign_Skip2	; F7E551  jr Z,0xf7e55f
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7E553  or (0x2075),0x09
-	call	T_F42B90	; F7E558  call 0xf42b90
+	call	T_TrackAssign_StageZero_LcdKeyRow1	; F7E558  call 0xf42b90
 	calr	sub_F7E788	; F7E55C  calr 0xf7e788
 ScreenLeaveBody_TrackAssign_Skip2:
 	calr	sub_F7E2FC	; F7E55F  calr 0xf7e2fc
@@ -193929,7 +193929,7 @@ LcdKeyRow2_TrackAssign_StageZero:
 	m_cp_mi8 MB16, 0x0c03, 0x0f	; F7E568  cp (0x0c03),0x0f
 	jr	z, ScreenLeaveBody_TrackAssign_Return3	; F7E56D  jr Z,0xf7e580
 	m_or_mi8 MB16, UI_RequestBits, 0x09	; F7E56F  or (0x2075),0x09
-	call	T_F42B8C	; F7E574  call 0xf42b8c
+	call	T_TrackAssign_StageZero_LcdKeyRow2	; F7E574  call 0xf42b8c
 	call	sub_F7E788	; F7E578  call 0xf7e788
 	call	sub_F7E2FC	; F7E57C  call 0xf7e2fc
 ScreenLeaveBody_TrackAssign_Return3:
@@ -193977,12 +193977,12 @@ LcdKeyRow3_TrackAssign_StageZero:
 	ld	l, (3520:16)	; F7E586  ld L,(0x0dc0)
 	and	l, 1	; F7E58A  and L,0x01
 	jr	z, ScreenLeaveBody_TrackAssign_Return4	; F7E58D  jr Z,0xf7e5a4
-	call	T_F42BA4	; F7E58F  call 0xf42ba4
+	call	T_TrackAssign_StageZero_LcdKeyRow3	; F7E58F  call 0xf42ba4
 	jr	ScreenLeaveBody_TrackAssign_Return4	; F7E593  jr T,0xf7e5a4
 ScreenLeaveBody_TrackAssign_Skip3:
 	m_cp_mi8 MB16, 0x0c03, 0x07	; F7E595  cp (0x0c03),0x07
 	jr	ule, ScreenLeaveBody_TrackAssign_Return4	; F7E59A  jr ULE,0xf7e5a4
-	call	T_F42B94	; F7E59C  call 0xf42b94
+	call	T_TrackAssign_SelectTrackGroup	; F7E59C  call 0xf42b94
 	call	sub_F7E788	; F7E5A0  call 0xf7e788
 ScreenLeaveBody_TrackAssign_Return4:
 	ret	; F7E5A4  ret
@@ -194028,7 +194028,7 @@ LcdKeyRow4_TrackAssign_StageZero:
 	jr	z, ScreenLeaveBody_TrackAssign_Return5	; F7E5A8  jr Z,0xf7e5b9
 	m_cp_mi8 MB16, 0x0c03, 0x07	; F7E5AA  cp (0x0c03),0x07
 	jr	ugt, ScreenLeaveBody_TrackAssign_Return5	; F7E5AF  jr UGT,0xf7e5b9
-	call	T_F42B94	; F7E5B1  call 0xf42b94
+	call	T_TrackAssign_SelectTrackGroup	; F7E5B1  call 0xf42b94
 	call	sub_F7E788	; F7E5B5  call 0xf7e788
 ScreenLeaveBody_TrackAssign_Return5:
 	ret	; F7E5B9  ret
@@ -194070,7 +194070,7 @@ ScreenLeaveBody_TrackAssign_Return5:
 LcdKeyRow5_TrackAssign_StageZero:
 	bit	7, w	; F7E5BA  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackAssign_Return6	; F7E5BD  jr Z,0xf7e5c3
-	call	T_F42BF4	; F7E5BF  call 0xf42bf4
+	call	T_TrackAssign_StageZero_LcdKeyRow5	; F7E5BF  call 0xf42bf4
 ScreenLeaveBody_TrackAssign_Return6:
 	ret	; F7E5C3  ret
 ButtonTable_TrackAssign_StageZero_Nop13:
@@ -194148,7 +194148,7 @@ LcdKeyRow2_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5D5  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Return8	; F7E5D8  jr NZ,0xf7e5e5
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7E5DA  and (0x2075),0x6f
-	call	T_F42BB0	; F7E5DF  call 0xf42bb0
+	call	T_TrackAssign_StageNonZero_LcdKeyRow2	; F7E5DF  call 0xf42bb0
 	jr	ScreenLeaveBody_TrackAssign_Return8	; F7E5E3  jr T,0xf7e5e5
 ScreenLeaveBody_TrackAssign_Return8:
 	ret	; F7E5E5  ret
@@ -194192,7 +194192,7 @@ ScreenLeaveBody_TrackAssign_Return8:
 LcdKeyRow3_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5E6  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackAssign_Return9	; F7E5E9  jr NZ,0xf7e5f1
-	call	T_F42BC0	; F7E5EB  call 0xf42bc0
+	call	T_TrackAssign_ReturnToStageZero	; F7E5EB  call 0xf42bc0
 	jr	ScreenLeaveBody_TrackAssign_Return9	; F7E5EF  jr T,0xf7e5f1
 ScreenLeaveBody_TrackAssign_Return9:
 	ret	; F7E5F1  ret
@@ -194222,7 +194222,7 @@ ButtonTable_TrackAssign_StageNonZero_Nop11:
 ExitKey_TrackAssign_StageNonZero:
 	bit	7, w	; F7E5F3  bit 0x07,W
 	jr	nz, ExitKey_TrackAssign_StageNonZero_Return	; F7E5F6  jr NZ,0xf7e5fe
-	call	T_F42BC0	; F7E5F8  call 0xf42bc0
+	call	T_TrackAssign_ReturnToStageZero	; F7E5F8  call 0xf42bc0
 	jr	ExitKey_TrackAssign_StageNonZero_Return	; F7E5FC  jr T,0xf7e5fe
 ExitKey_TrackAssign_StageNonZero_Return:
 	ret	; F7E5FE  ret
@@ -194252,7 +194252,7 @@ Paint_TrackAssignPresets:
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 1	; F7E609  cp A,(0x207b)
 	jr	z, Paint_TrackAssignPresets_Skip	; F7E60D  jr Z,0xf7e60f
 Paint_TrackAssignPresets_Skip:
-	call	T_F42BF8	; F7E60F  call 0xf42bf8
+	call	T_TrackAssignPresets_InitFromCurrentBank	; F7E60F  call 0xf42bf8
 	m_bit 4, MD16, UI_ScreenFlags	; F7E613  bit 4,(0x2095)
 	jr	nz, Paint_TrackAssignPresets_Skip2	; F7E617  jr NZ,0xf7e62b
 	call	LCD_ScreenRedraw_Begin	; F7E619  call 0xf7e2d9
@@ -194399,7 +194399,7 @@ SoftKeyCol2_TrackAssignPresets:
 	jr	nz, ScreenLeaveBody_TrackAssignPresets_Join	; F7E692  jr NZ,0xf7e696
 	jr	ScreenLeaveBody_TrackAssignPresets_Join	; F7E694  jr T,0xf7e696
 ScreenLeaveBody_TrackAssignPresets_Join:
-	call	T_F42C10	; F7E696  call 0xf42c10
+	call	T_TrackAssignPresets_BankDown	; F7E696  call 0xf42c10
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7E69A  or (0x2095),0x10
 	ret	; F7E69F  ret
 
@@ -194450,7 +194450,7 @@ SoftKeyCol3_TrackAssignPresets:
 	jr	nz, ScreenLeaveBody_TrackAssignPresets_Join2	; F7E6A3  jr NZ,0xf7e6a7
 	jr	ScreenLeaveBody_TrackAssignPresets_Join2	; F7E6A5  jr T,0xf7e6a7
 ScreenLeaveBody_TrackAssignPresets_Join2:
-	call	T_F42C0C	; F7E6A7  call 0xf42c0c
+	call	T_TrackAssignPresets_BankUp	; F7E6A7  call 0xf42c0c
 	m_or_mi8 MB16, UI_ScreenFlags, 0x10	; F7E6AB  or (0x2095),0x10
 	ret	; F7E6B0  ret
 
@@ -194595,7 +194595,7 @@ SoftKeyCol6_TrackAssignPresets:
 	jr	nz, ScreenLeaveBody_TrackAssignPresets_Join3	; F7E6C4  jr NZ,0xf7e6c8
 	jr	ScreenLeaveBody_TrackAssignPresets_Join3	; F7E6C6  jr T,0xf7e6c8
 ScreenLeaveBody_TrackAssignPresets_Join3:
-	call	T_F42C14	; F7E6C8  call 0xf42c14
+	call	T_TrackAssignPresets_SoftKeyCol6	; F7E6C8  call 0xf42c14
 	ret	; F7E6CC  ret
 
 ; ---------------------------------------------------------------------
@@ -194738,7 +194738,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip:
 	ld	a, (3581:16)	; F7E6EB  ld A,(0x0dfd)
 	dec	1, a	; F7E6EF  dec 1,A
 	ld	(DisplayListB_Stage+2:16), a	; F7E6F1  ld (0x12f8),A
-	call	T_F42C00	; F7E6F5  call 0xf42c00
+	call	T_TrackAssignPresets_SelectField1	; F7E6F5  call 0xf42c00
 	call	sub_F7E770	; F7E6F9  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return7:
 	ret	; F7E6FD  ret
@@ -194789,7 +194789,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip2:
 	ld	a, (3581:16)	; F7E70C  ld A,(0x0dfd)
 	dec	1, a	; F7E710  dec 1,A
 	ld	(DisplayListB_Stage+2:16), a	; F7E712  ld (0x12f8),A
-	call	T_F42C04	; F7E716  call 0xf42c04
+	call	T_TrackAssignPresets_SelectField2	; F7E716  call 0xf42c04
 	call	sub_F7E770	; F7E71A  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return8:
 	ret	; F7E71E  ret
@@ -194840,7 +194840,7 @@ ScreenLeaveBody_TrackAssignPresets_Skip3:
 	ld	a, (3581:16)	; F7E72D  ld A,(0x0dfd)
 	dec	1, a	; F7E731  dec 1,A
 	ld	(DisplayListB_Stage+2:16), a	; F7E733  ld (0x12f8),A
-	call	T_F42C08	; F7E737  call 0xf42c08
+	call	T_TrackAssignPresets_SelectField3	; F7E737  call 0xf42c08
 	call	sub_F7E770	; F7E73B  call 0xf7e770
 ScreenLeaveBody_TrackAssignPresets_Return9:
 	ret	; F7E73F  ret
@@ -195248,14 +195248,14 @@ sub_F7E941_Skip:
 ;           no titled list, so it has no name.
 sub_F7E971:
 	m_or_mi16 MW16, 0x2134, 0x0002	; F7E971  or (0x2134),0x0002
-	call	T_F428B0	; F7E977  call 0xf428b0
+	call	T_BStore_AppendBytes_Join3_Veneer	; F7E977  call 0xf428b0
 	ret	; F7E97B  ret
 
 ; Evidence: screen 0xF43040's Leave method body; that screen's Enter draws
 ;           no titled list, so it has no name.
 sub_F7E97C:
 	m_or_mi16 MW16, 0x2134, 0x0002	; F7E97C  or (0x2134),0x0002
-	call	T_F428B4	; F7E982  call 0xf428b4
+	call	T_BStore_AppendBytes_Join4_Veneer	; F7E982  call 0xf428b4
 	ret	; F7E986  ret
 
 ; ---------------------------------------------------------------------
@@ -196064,7 +196064,7 @@ ButtonTable_SongClear_Nop0:
 SoftKeyCol3_SongClear:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EBDE  cp (0x207e),0x00
 	jr	nz, SoftKeyCol3_SongClear_Return	; F7EBE3  jr NZ,0xf7ec0f
-	call	T_F428C4	; F7EBE5  call 0xf428c4
+	call	T_SongClear_SoftKeyCol3	; F7EBE5  call 0xf428c4
 	ld	a, (3586:16)	; F7EBE9  ld A,(0x0e02)
 	cp	a, 10	; F7EBED  cp A,0x0a
 	jr	z, SoftKeyCol3_SongClear_Skip	; F7EBF0  jr Z,0xf7ec0a
@@ -196128,7 +196128,7 @@ SoftKeyCol3_SongClear_Return:
 SoftKeyCol4_SongClear:
 	m_cp_mi8 MB16, UI_ScreenStage, 0x00	; F7EC10  cp (0x207e),0x00
 	jr	nz, SoftKeyCol4_SongClear_Return	; F7EC15  jr NZ,0xf7ec41
-	call	T_F428C0	; F7EC17  call 0xf428c0
+	call	T_SongClear_SoftKeyCol4	; F7EC17  call 0xf428c0
 	ld	a, (3586:16)	; F7EC1B  ld A,(0x0e02)
 	cp	a, 10	; F7EC1F  cp A,0x0a
 	jr	z, SoftKeyCol4_SongClear_Skip	; F7EC22  jr Z,0xf7ec3c
@@ -196185,7 +196185,7 @@ LcdKeyRow4_SongClear:
 	bit	7, w	; F7EC43  bit 0x07,W
 	jr	nz, ScreenLeaveBody_SongClear_Return	; F7EC46  jr NZ,0xf7ec53
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7EC48  and (0x2075),0x6f
-	call	T_F428CC	; F7EC4D  call 0xf428cc
+	call	T_SongClear_LcdKeyRow4	; F7EC4D  call 0xf428cc
 	jr	ScreenLeaveBody_SongClear_Return	; F7EC51  jr T,0xf7ec53
 ScreenLeaveBody_SongClear_Return:
 	ret	; F7EC53  ret
@@ -196227,7 +196227,7 @@ ScreenLeaveBody_SongClear_Return:
 LcdKeyRow5_SongClear:
 	bit	7, w	; F7EC54  bit 0x07,W
 	jr	nz, ScreenLeaveBody_SongClear_Return2	; F7EC57  jr NZ,0xf7ec5f
-	call	T_F428C8	; F7EC59  call 0xf428c8
+	call	T_SongClear_LcdKeyRow5	; F7EC59  call 0xf428c8
 	jr	ScreenLeaveBody_SongClear_Return2	; F7EC5D  jr T,0xf7ec5f
 ScreenLeaveBody_SongClear_Return2:
 	ret	; F7EC5F  ret
@@ -196334,7 +196334,7 @@ Paint_TrackClear_Return:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_TrackClear:
-	call	T_F428D4	; F7ECFA  call 0xf428d4
+	call	T_TrackClear_OnLeave	; F7ECFA  call 0xf428d4
 	ret	; F7ECFE  ret
 
 ; ---------------------------------------------------------------------
@@ -196834,7 +196834,7 @@ ButtonTable_TrackClear_StageZero_Nop8:
 LcdKeyRow2_TrackClear_StageZero:
 	bit	7, w	; F7EDC8  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return	; F7EDCB  jr NZ,0xf7edd1
-	call	T_F428DC	; F7EDCD  call 0xf428dc
+	call	T_TrackClear_LcdKeyRow2	; F7EDCD  call 0xf428dc
 ScreenLeaveBody_TrackClear_Return:
 	ret	; F7EDD1  ret
 ButtonTable_TrackClear_StageZero_Nop10:
@@ -196912,7 +196912,7 @@ LcdKeyRow2_TrackClear_StageNonZero:
 	bit	7, w	; F7EDE3  bit 0x07,W
 	jr	nz, ScreenLeaveBody_TrackClear_Return3	; F7EDE6  jr NZ,0xf7edf1
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7EDE8  and (0x2075),0x6f
-	call	T_F428DC	; F7EDED  call 0xf428dc
+	call	T_TrackClear_LcdKeyRow2	; F7EDED  call 0xf428dc
 ScreenLeaveBody_TrackClear_Return3:
 	ret	; F7EDF1  ret
 
@@ -197056,7 +197056,7 @@ Paint_TrackMerge_Join:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_TrackMerge:
-	call	T_F4293C	; F7EE96  call 0xf4293c
+	call	T_TrackMerge_OnLeave	; F7EE96  call 0xf4293c
 	ret	; F7EE9A  ret
 ButtonTable_TrackMerge_StageZero_Nop0:
 	ret	; F7EE9B  ret   <- button table 0xF7D6D8 entry 0 (TRACK MERGE)
@@ -197111,7 +197111,7 @@ SoftKeyCol5_TrackMerge_StageZero:
 	m_or_mi8 MB16, UI_RequestBits, 0x08	; F7EE9F  or (0x2075),0x08
 	bit	7, w	; F7EEA4  bit 0x07,W
 	jr	z, ScreenLeaveBody_TrackMerge_Skip	; F7EEA7  jr Z,0xf7eeaf
-	call	T_F42950	; F7EEA9  call 0xf42950
+	call	T_TrackMerge_StageZero_SoftKeyCol5	; F7EEA9  call 0xf42950
 	jr	ScreenLeaveBody_TrackMerge_Join	; F7EEAD  jr T,0xf7eeb3
 ScreenLeaveBody_TrackMerge_Skip:
 	call	T_F4294C	; F7EEAF  call 0xf4294c
@@ -197170,13 +197170,13 @@ LcdKeyRow2_TrackMerge_StageZero:
 	jr	z, ScreenLeaveBody_TrackMerge_Skip2	; F7EED0  jr Z,0xf7eeea
 	m_cp_mi8 MB16, 0x0dba, 0x01	; F7EED2  cp (0x0dba),0x01
 	jr	z, ScreenLeaveBody_TrackMerge_Return	; F7EED7  jr Z,0xf7eeee
-	call	T_F42940	; F7EED9  call 0xf42940
+	call	T_TrackMerge_SelectField1	; F7EED9  call 0xf42940
 	ld	a, (3514:16)	; F7EEDD  ld A,(0x0dba)
 	ld	(DisplayListB_Stage+3:16), a	; F7EEE1  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EEE5  calr 0xf7eeef
 	jr	ScreenLeaveBody_TrackMerge_Return	; F7EEE8  jr T,0xf7eeee
 ScreenLeaveBody_TrackMerge_Skip2:
-	call	T_F42958	; F7EEEA  call 0xf42958
+	call	T_TrackMerge_LcdKeyRow2	; F7EEEA  call 0xf42958
 ScreenLeaveBody_TrackMerge_Return:
 	ret	; F7EEEE  ret
 
@@ -197230,7 +197230,7 @@ LcdKeyRow3_TrackMerge_StageZero:
 	jr	nz, sub_F7EEEF_Return	; F7EF05  jr NZ,0xf7ef1d
 	m_cp_mi8 MB16, 0x0dba, 0x03	; F7EF07  cp (0x0dba),0x03
 	jr	z, sub_F7EEEF_Return	; F7EF0C  jr Z,0xf7ef1d
-	call	T_F42948	; F7EF0E  call 0xf42948
+	call	T_TrackMerge_SelectField3	; F7EF0E  call 0xf42948
 	ld	a, (3514:16)	; F7EF12  ld A,(0x0dba)
 	ld	(DisplayListB_Stage+3:16), a	; F7EF16  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EF1A  calr 0xf7eeef
@@ -197278,7 +197278,7 @@ LcdKeyRow4_TrackMerge_StageZero:
 	jr	z, sub_F7EEEF_Return2	; F7EF21  jr Z,0xf7ef39
 	m_cp_mi8 MB16, 0x0dba, 0x02	; F7EF23  cp (0x0dba),0x02
 	jr	z, sub_F7EEEF_Return2	; F7EF28  jr Z,0xf7ef39
-	call	T_F42944	; F7EF2A  call 0xf42944
+	call	T_TrackMerge_SelectField2	; F7EF2A  call 0xf42944
 	ld	a, (3514:16)	; F7EF2E  ld A,(0x0dba)
 	ld	(DisplayListB_Stage+3:16), a	; F7EF32  ld (0x12f9),A
 	calr	sub_F7EEEF	; F7EF36  calr 0xf7eeef
@@ -197378,7 +197378,7 @@ LcdKeyRow2_TrackMerge_StageNonZero:
 	bit	7, w	; F7EF54  bit 0x07,W
 	jr	nz, sub_F7EEEF_Return4	; F7EF57  jr NZ,0xf7ef62
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7EF59  and (0x2075),0x6f
-	call	T_F42958	; F7EF5E  call 0xf42958
+	call	T_TrackMerge_LcdKeyRow2	; F7EF5E  call 0xf42958
 sub_F7EEEF_Return4:
 	ret	; F7EF62  ret
 ButtonTable_TrackMerge_StageNonZero_Nop10:
@@ -197547,7 +197547,7 @@ Draw_LastMeasure:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_MeasureDelete:
-	call	T_F42960	; F7F031  call 0xf42960
+	call	T_MeasureDelete_OnLeave	; F7F031  call 0xf42960
 	ret	; F7F035  ret
 ButtonTable_MeasureDelete_StageZero_Nop0:
 	ret	; F7F036  ret   <- button table 0xF7D7D8 entry 0 (MEASURE DELETE)
@@ -197663,7 +197663,7 @@ LcdKeyRow2_MeasureDelete_StageZero:
 	m_cp_mi8 MB16, 0x0dd4, 0x01	; F7F069  cp (0x0dd4),0x01
 	jr	z, ScreenLeaveBody_MeasureDelete_Return	; F7F06E  jr Z,0xf7f087
 	calr	sub_F7F245	; F7F070  calr 0xf7f245
-	call	T_F42964	; F7F073  call 0xf42964
+	call	T_MeasureDelete_SelectField1	; F7F073  call 0xf42964
 	ld	a, (3540:16)	; F7F077  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F07B  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F07F  calr 0xf7f01a
@@ -197714,7 +197714,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	m_cp_mi8 MB16, 0x0dd4, 0x02	; F7F08D  cp (0x0dd4),0x02
 	jr	z, ScreenLeaveBody_MeasureDelete_Return2	; F7F092  jr Z,0xf7f0b2
 	calr	sub_F7F237	; F7F094  calr 0xf7f237
-	call	T_F42968	; F7F097  call 0xf42968
+	call	T_MeasureDelete_SelectField2	; F7F097  call 0xf42968
 	ld	a, (3540:16)	; F7F09B  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F09F  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0A3  calr 0xf7f01a
@@ -197722,7 +197722,7 @@ LcdKeyRow3_MeasureDelete_StageZero:
 	jr	ScreenLeaveBody_MeasureDelete_Return2	; F7F0A9  jr T,0xf7f0b2
 ScreenLeaveBody_MeasureDelete_Skip3:
 	calr	sub_F7F245	; F7F0AB  calr 0xf7f245
-	call	T_F42978	; F7F0AE  call 0xf42978
+	call	T_MeasureDelete_LcdKeyRow3	; F7F0AE  call 0xf42978
 ScreenLeaveBody_MeasureDelete_Return2:
 	ret	; F7F0B2  ret
 
@@ -197768,7 +197768,7 @@ LcdKeyRow4_MeasureDelete_StageZero:
 	m_cp_mi8 MB16, 0x0dd4, 0x03	; F7F0B8  cp (0x0dd4),0x03
 	jr	z, ScreenLeaveBody_MeasureDelete_Return3	; F7F0BD  jr Z,0xf7f0d4
 	calr	sub_F7F237	; F7F0BF  calr 0xf7f237
-	call	T_F4296C	; F7F0C2  call 0xf4296c
+	call	T_MeasureDelete_SelectField3	; F7F0C2  call 0xf4296c
 	ld	a, (3540:16)	; F7F0C6  ld A,(0x0dd4)
 	ld	(DisplayListB_Stage+5:16), a	; F7F0CA  ld (0x12fb),A
 	calr	Draw_LastMeasure	; F7F0CE  calr 0xf7f01a
@@ -198058,7 +198058,7 @@ LcdKeyRow3_MeasureDelete_StageNonZero:
 	bit	7, w	; F7F20E  bit 0x07,W
 	jr	nz, LcdKeyRow3_MeasureDelete_StageNonZero_Return	; F7F211  jr NZ,0xf7f21c
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F213  and (0x2075),0x6f
-	call	T_F42978	; F7F218  call 0xf42978
+	call	T_MeasureDelete_LcdKeyRow3	; F7F218  call 0xf42978
 LcdKeyRow3_MeasureDelete_StageNonZero_Return:
 	ret	; F7F21C  ret
 
@@ -198223,7 +198223,7 @@ Paint_MeasureErase_Join:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_MeasureErase:
-	call	T_F42984	; F7F2D5  call 0xf42984
+	call	T_MeasureErase_OnLeave	; F7F2D5  call 0xf42984
 	ret	; F7F2D9  ret
 ButtonTable_MeasureErase_StageZero_Nop0:
 	ret	; F7F2DA  ret   <- button table 0xF7D8D8 entry 0 (MEASURE ERASE)
@@ -198339,7 +198339,7 @@ LcdKeyRow1_MeasureErase_StageZero:
 	m_cp_mi8 MB16, 0x0dbb, 0x01	; F7F30D  cp (0x0dbb),0x01
 	jr	z, ScreenLeaveBody_MeasureErase_Return	; F7F312  jr Z,0xf7f329
 	calr	sub_F7F245	; F7F314  calr 0xf7f245
-	call	T_F42988	; F7F317  call 0xf42988
+	call	T_MeasureErase_SelectField1	; F7F317  call 0xf42988
 	ld	a, (3515:16)	; F7F31B  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F31F  ld (0x12fc),A
 	calr	sub_F7F397	; F7F323  calr 0xf7f397
@@ -198401,7 +198401,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	m_cp_mi8 MB16, 0x0dbb, 0x02	; F7F34F  cp (0x0dbb),0x02
 	jr	z, sub_F7F32A_Return	; F7F354  jr Z,0xf7f374
 	calr	sub_F7F237	; F7F356  calr 0xf7f237
-	call	T_F4298C	; F7F359  call 0xf4298c
+	call	T_MeasureErase_SelectField2	; F7F359  call 0xf4298c
 	ld	a, (3515:16)	; F7F35D  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F361  ld (0x12fc),A
 	calr	sub_F7F397	; F7F365  calr 0xf7f397
@@ -198409,7 +198409,7 @@ LcdKeyRow2_MeasureErase_StageZero:
 	jr	sub_F7F32A_Return	; F7F36B  jr T,0xf7f374
 sub_F7F32A_Skip:
 	calr	sub_F7F245	; F7F36D  calr 0xf7f245
-	call	T_F429A0	; F7F370  call 0xf429a0
+	call	T_MeasureErase_LcdKeyRow2	; F7F370  call 0xf429a0
 sub_F7F32A_Return:
 	ret	; F7F374  ret
 
@@ -198455,7 +198455,7 @@ LcdKeyRow3_MeasureErase_StageZero:
 	m_cp_mi8 MB16, 0x0dbb, 0x03	; F7F37A  cp (0x0dbb),0x03
 	jr	z, sub_F7F32A_Return2	; F7F37F  jr Z,0xf7f396
 	calr	sub_F7F237	; F7F381  calr 0xf7f237
-	call	T_F42990	; F7F384  call 0xf42990
+	call	T_MeasureErase_SelectField3	; F7F384  call 0xf42990
 	ld	a, (3515:16)	; F7F388  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F38C  ld (0x12fc),A
 	calr	sub_F7F397	; F7F390  calr 0xf7f397
@@ -198515,7 +198515,7 @@ LcdKeyRow4_MeasureErase_StageZero:
 	m_cp_mi8 MB16, 0x0dbb, 0x04	; F7F3B3  cp (0x0dbb),0x04
 	jr	z, sub_F7F397_Return	; F7F3B8  jr Z,0xf7f3cf
 	calr	sub_F7F245	; F7F3BA  calr 0xf7f245
-	call	T_F42994	; F7F3BD  call 0xf42994
+	call	T_MeasureErase_SelectField4	; F7F3BD  call 0xf42994
 	ld	a, (3515:16)	; F7F3C1  ld A,(0x0dbb)
 	ld	(DisplayListB_Stage+6:16), a	; F7F3C5  ld (0x12fc),A
 	calr	sub_F7F397	; F7F3C9  calr 0xf7f397
@@ -198682,7 +198682,7 @@ LcdKeyRow2_MeasureErase_StageNonZero:
 	bit	7, w	; F7F418  bit 0x07,W
 	jr	nz, sub_F7F397_Return3	; F7F41B  jr NZ,0xf7f426
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F41D  and (0x2075),0x6f
-	call	T_F429A0	; F7F422  call 0xf429a0
+	call	T_MeasureErase_LcdKeyRow2	; F7F422  call 0xf429a0
 sub_F7F397_Return3:
 	ret	; F7F426  ret
 
@@ -199021,7 +199021,7 @@ Paint_Quantize_Join:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_Quantize:
-	call	T_F4290C	; F7F603  call 0xf4290c
+	call	T_Quantize_OnLeave	; F7F603  call 0xf4290c
 	ret	; F7F607  ret
 ButtonTable_Quantize_StageZero_Nop0:
 	ret	; F7F608  ret   <- button table 0xF7D9D8 entry 0 (QUANTIZE)
@@ -199137,13 +199137,13 @@ LcdKeyRow1_Quantize_StageZero:
 	m_cp_mi8 MB16, 0x0db9, 0x01	; F7F63B  cp (0x0db9),0x01
 	jr	z, ScreenLeaveBody_Quantize_Return	; F7F640  jr Z,0xf7f667
 	calr	sub_F7F245	; F7F642  calr 0xf7f245
-	call	T_F42910	; F7F645  call 0xf42910
+	call	T_Quantize_SelectField1	; F7F645  call 0xf42910
 	jr	ScreenLeaveBody_Quantize_Join2	; F7F649  jr T,0xf7f659
 ScreenLeaveBody_Quantize_Skip3:
 	m_cp_mi8 MB16, 0x0db9, 0x05	; F7F64B  cp (0x0db9),0x05
 	jr	z, ScreenLeaveBody_Quantize_Return	; F7F650  jr Z,0xf7f667
 	calr	sub_F7F245	; F7F652  calr 0xf7f245
-	call	T_F42920	; F7F655  call 0xf42920
+	call	T_Quantize_SelectField5	; F7F655  call 0xf42920
 ScreenLeaveBody_Quantize_Join2:
 	ld	a, (3513:16)	; F7F659  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F65D  ld (0x12fe),A
@@ -199206,13 +199206,13 @@ LcdKeyRow2_Quantize_StageZero:
 	m_cp_mi8 MB16, 0x0db9, 0x02	; F7F68D  cp (0x0db9),0x02
 	jr	z, sub_F7F668_Return	; F7F692  jr Z,0xf7f6b9
 	calr	sub_F7F237	; F7F694  calr 0xf7f237
-	call	T_F42914	; F7F697  call 0xf42914
+	call	T_Quantize_SelectField2	; F7F697  call 0xf42914
 	jr	sub_F7F668_Join	; F7F69B  jr T,0xf7f6ab
 sub_F7F668_Skip:
 	m_cp_mi8 MB16, 0x0db9, 0x06	; F7F69D  cp (0x0db9),0x06
 	jr	z, sub_F7F668_Return	; F7F6A2  jr Z,0xf7f6b9
 	calr	sub_F7F245	; F7F6A4  calr 0xf7f245
-	call	T_F42924	; F7F6A7  call 0xf42924
+	call	T_Quantize_SelectField6	; F7F6A7  call 0xf42924
 sub_F7F668_Join:
 	ld	a, (3513:16)	; F7F6AB  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F6AF  ld (0x12fe),A
@@ -199263,7 +199263,7 @@ LcdKeyRow3_Quantize_StageZero:
 	m_cp_mi8 MB16, 0x0db9, 0x03	; F7F6BF  cp (0x0db9),0x03
 	jr	z, sub_F7F668_Return2	; F7F6C4  jr Z,0xf7f6e4
 	calr	sub_F7F237	; F7F6C6  calr 0xf7f237
-	call	T_F42918	; F7F6C9  call 0xf42918
+	call	T_Quantize_SelectField3	; F7F6C9  call 0xf42918
 	ld	a, (3513:16)	; F7F6CD  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F6D1  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6D5  calr 0xf7f6e5
@@ -199271,7 +199271,7 @@ LcdKeyRow3_Quantize_StageZero:
 	jr	sub_F7F668_Return2	; F7F6DB  jr T,0xf7f6e4
 sub_F7F668_Skip2:
 	calr	sub_F7F245	; F7F6DD  calr 0xf7f245
-	call	T_F42930	; F7F6E0  call 0xf42930
+	call	T_Quantize_LcdKeyRow3	; F7F6E0  call 0xf42930
 sub_F7F668_Return2:
 	ret	; F7F6E4  ret
 
@@ -199327,7 +199327,7 @@ LcdKeyRow4_Quantize_StageZero:
 	m_cp_mi8 MB16, 0x0db9, 0x04	; F7F701  cp (0x0db9),0x04
 	jr	z, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return	; F7F706  jr Z,0xf7f71d
 	calr	sub_F7F245	; F7F708  calr 0xf7f245
-	call	T_F4291C	; F7F70B  call 0xf4291c
+	call	T_Quantize_SelectField4	; F7F70B  call 0xf4291c
 	ld	a, (3513:16)	; F7F70F  ld A,(0x0db9)
 	ld	(DisplayListB_Stage+8:16), a	; F7F713  ld (0x12fe),A
 	calr	Draw_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F717  calr 0xf7f6e5
@@ -199503,7 +199503,7 @@ LcdKeyRow3_Quantize_StageNonZero:
 	bit	7, w	; F7F784  bit 0x07,W
 	jr	nz, Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3	; F7F787  jr NZ,0xf7f792
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7F789  and (0x2075),0x6f
-	call	T_F42930	; F7F78E  call 0xf42930
+	call	T_Quantize_LcdKeyRow3	; F7F78E  call 0xf42930
 Draw_TrackValueFirstMeasureLastMeasureStrengthWindow_Return3:
 	ret	; F7F792  ret
 
@@ -199791,7 +199791,7 @@ sub_F7F935:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_Vel0cityChange:
-	call	T_F428E4	; F7F94F  call 0xf428e4
+	call	T_Vel0cityChange_OnLeave	; F7F94F  call 0xf428e4
 	ret	; F7F953  ret
 ButtonTable_Vel0cityChange_StageZero_Nop0:
 	ret	; F7F954  ret   <- button table 0xF7DAD8 entry 0 (VEL0CITY CHANGE)
@@ -199907,7 +199907,7 @@ LcdKeyRow1_Vel0cityChange_StageZero:
 	m_cp_mi8 MB16, 0x0db8, 0x01	; F7F987  cp (0x0db8),0x01
 	jr	z, ScreenLeaveBody_Vel0cityChange_Return	; F7F98C  jr Z,0xf7f99b
 	calr	sub_F7F245	; F7F98E  calr 0xf7f245
-	call	T_F428E8	; F7F991  call 0xf428e8
+	call	T_Vel0cityChange_StageZero_LcdKeyRow1	; F7F991  call 0xf428e8
 	calr	sub_F7F9FB	; F7F995  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F998  calr 0xf7f99c
 ScreenLeaveBody_Vel0cityChange_Return:
@@ -199967,13 +199967,13 @@ LcdKeyRow2_Vel0cityChange_StageZero:
 	m_cp_mi8 MB16, 0x0db8, 0x02	; F7F9C1  cp (0x0db8),0x02
 	jr	z, sub_F7F99C_Return	; F7F9C6  jr Z,0xf7f9de
 	calr	sub_F7F237	; F7F9C8  calr 0xf7f237
-	call	T_F428EC	; F7F9CB  call 0xf428ec
+	call	T_Vel0cityChange_StageZero_LcdKeyRow2	; F7F9CB  call 0xf428ec
 	calr	sub_F7F9FB	; F7F9CF  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F9D2  calr 0xf7f99c
 	jr	sub_F7F99C_Return	; F7F9D5  jr T,0xf7f9de
 sub_F7F99C_Skip:
 	calr	sub_F7F245	; F7F9D7  calr 0xf7f245
-	call	T_F42900	; F7F9DA  call 0xf42900
+	call	T_Vel0cityChange_LcdKeyRow2	; F7F9DA  call 0xf42900
 sub_F7F99C_Return:
 	ret	; F7F9DE  ret
 
@@ -200019,7 +200019,7 @@ LcdKeyRow3_Vel0cityChange_StageZero:
 	m_cp_mi8 MB16, 0x0db8, 0x03	; F7F9E4  cp (0x0db8),0x03
 	jr	z, sub_F7F99C_Return2	; F7F9E9  jr Z,0xf7f9fa
 	calr	sub_F7F237	; F7F9EB  calr 0xf7f237
-	call	T_F428F0	; F7F9EE  call 0xf428f0
+	call	T_Vel0cityChange_StageZero_LcdKeyRow3	; F7F9EE  call 0xf428f0
 	calr	sub_F7F9FB	; F7F9F2  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7F9F5  calr 0xf7f99c
 	jr	sub_F7F99C_Return2	; F7F9F8  jr T,0xf7f9fa
@@ -200079,7 +200079,7 @@ LcdKeyRow4_Vel0cityChange_StageZero:
 	m_cp_mi8 MB16, 0x0db8, 0x04	; F7FA1A  cp (0x0db8),0x04
 	jr	z, sub_F7F9FB_Return	; F7FA1F  jr Z,0xf7fa30
 	calr	sub_F7F237	; F7FA21  calr 0xf7f237
-	call	T_F428F4	; F7FA24  call 0xf428f4
+	call	T_Vel0cityChange_StageZero_LcdKeyRow4	; F7FA24  call 0xf428f4
 	calr	sub_F7F9FB	; F7FA28  calr 0xf7f9fb
 	calr	sub_F7F99C	; F7FA2B  calr 0xf7f99c
 	jr	sub_F7F9FB_Return	; F7FA2E  jr T,0xf7fa30
@@ -200245,7 +200245,7 @@ LcdKeyRow2_Vel0cityChange_StageNonZero:
 	bit	7, w	; F7FA79  bit 0x07,W
 	jr	nz, sub_F7F9FB_Return3	; F7FA7C  jr NZ,0xf7fa87
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7FA7E  and (0x2075),0x6f
-	call	T_F42900	; F7FA83  call 0xf42900
+	call	T_Vel0cityChange_LcdKeyRow2	; F7FA83  call 0xf42900
 sub_F7F9FB_Return3:
 	ret	; F7FA87  ret
 
@@ -200564,7 +200564,7 @@ Paint_Transp0se_Join2:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_Transp0se:
-	call	T_F42A3C	; F7FC99  call 0xf42a3c
+	call	T_Transp0se_OnLeave	; F7FC99  call 0xf42a3c
 	ret	; F7FC9D  ret
 ButtonTable_Transp0se_StageZero_Nop0:
 	ret	; F7FC9E  ret   <- button table 0xF7DBD8 entry 0 (TRANSP0SE)
@@ -200680,7 +200680,7 @@ LcdKeyRow1_Transp0se_StageZero:
 	m_cp_mi8 MB16, 0x0df6, 0x01	; F7FCD1  cp (0x0df6),0x01
 	jr	z, ScreenLeaveBody_Transp0se_Return	; F7FCD6  jr Z,0xf7fce5
 	calr	sub_F7F245	; F7FCD8  calr 0xf7f245
-	call	T_F42A40	; F7FCDB  call 0xf42a40
+	call	T_Transp0se_SelectField1	; F7FCDB  call 0xf42a40
 	calr	sub_F7FD45	; F7FCDF  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FCE2  calr 0xf7fce6
 ScreenLeaveBody_Transp0se_Return:
@@ -200740,13 +200740,13 @@ LcdKeyRow2_Transp0se_StageZero:
 	m_cp_mi8 MB16, 0x0df6, 0x02	; F7FD0B  cp (0x0df6),0x02
 	jr	z, sub_F7FCE6_Return	; F7FD10  jr Z,0xf7fd28
 	calr	sub_F7F237	; F7FD12  calr 0xf7f237
-	call	T_F42A44	; F7FD15  call 0xf42a44
+	call	T_Transp0se_SelectField2	; F7FD15  call 0xf42a44
 	calr	sub_F7FD45	; F7FD19  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD1C  calr 0xf7fce6
 	jr	sub_F7FCE6_Return	; F7FD1F  jr T,0xf7fd28
 sub_F7FCE6_Skip:
 	calr	sub_F7F245	; F7FD21  calr 0xf7f245
-	call	T_F42A58	; F7FD24  call 0xf42a58
+	call	T_Transp0se_LcdKeyRow2	; F7FD24  call 0xf42a58
 sub_F7FCE6_Return:
 	ret	; F7FD28  ret
 
@@ -200792,7 +200792,7 @@ LcdKeyRow3_Transp0se_StageZero:
 	m_cp_mi8 MB16, 0x0df6, 0x03	; F7FD2E  cp (0x0df6),0x03
 	jr	z, sub_F7FCE6_Return2	; F7FD33  jr Z,0xf7fd44
 	calr	sub_F7F237	; F7FD35  calr 0xf7f237
-	call	T_F42A48	; F7FD38  call 0xf42a48
+	call	T_Transp0se_SelectField3	; F7FD38  call 0xf42a48
 	calr	sub_F7FD45	; F7FD3C  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD3F  calr 0xf7fce6
 	jr	sub_F7FCE6_Return2	; F7FD42  jr T,0xf7fd44
@@ -200851,7 +200851,7 @@ LcdKeyRow4_Transp0se_StageZero:
 	m_cp_mi8 MB16, 0x0df6, 0x04	; F7FD61  cp (0x0df6),0x04
 	jr	z, sub_F7FD45_Return	; F7FD66  jr Z,0xf7fd77
 	calr	sub_F7F237	; F7FD68  calr 0xf7f237
-	call	T_F42A4C	; F7FD6B  call 0xf42a4c
+	call	T_Transp0se_SelectField4	; F7FD6B  call 0xf42a4c
 	calr	sub_F7FD45	; F7FD6F  calr 0xf7fd45
 	calr	sub_F7FCE6	; F7FD72  calr 0xf7fce6
 	jr	sub_F7FD45_Return	; F7FD75  jr T,0xf7fd77
@@ -201016,7 +201016,7 @@ LcdKeyRow2_Transp0se_StageNonZero:
 	bit	7, w	; F7FDC0  bit 0x07,W
 	jr	nz, sub_F7FD45_Return3	; F7FDC3  jr NZ,0xf7fdce
 	m_and_mi8 MB16, UI_RequestBits, 0x6f	; F7FDC5  and (0x2075),0x6f
-	call	T_F42A58	; F7FDCA  call 0xf42a58
+	call	T_Transp0se_LcdKeyRow2	; F7FDCA  call 0xf42a58
 sub_F7FD45_Return3:
 	ret	; F7FDCE  ret
 
@@ -201330,7 +201330,7 @@ Paint_AdvanceDelay_Join2:
 ;           screen's own name is round 7's, from its title text.
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_AdvanceDelay:
-	call	T_F42A64	; F7FFC8  call 0xf42a64
+	call	T_AdvanceDelay_OnLeave	; F7FFC8  call 0xf42a64
 	ret	; F7FFCC  ret
 ButtonTable_AdvanceDelay_StageZero_Nop0:
 	ret	; F7FFCD  ret   <- button table 0xF7DCD8 entry 0 (ADVANCE/DELAY)
