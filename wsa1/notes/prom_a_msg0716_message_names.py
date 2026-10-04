@@ -92,6 +92,10 @@ def plan():
             built[n] = new[len("Msg0716_"):]
             rows.append((n, new, "%s: posts F0 50 %02X ... to CPU 2 -- a system-exclusive message, manufacturer ID 0x50 (Matsushita),\\n"
                          "  command 0x%02X, whose meaning is not established here (notes/prom_a_msg0716_message_names.py)." % (new, cmd, cmd)))
+    # builders named earlier (by this rule or by reading) count too (2026-10-04)
+    for n in labels:
+        if re.match(r'^Msg0716_Post(CC|CtrlInt|ChannelPressure|PitchBend|ProgramChange|SysEx50)', n) and not n.endswith("_Call"):
+            built.setdefault(n, n[len("Msg0716_"):])
     for n, b in labels.items():
         if not re.match(r'^sub_FC0[0-9A-F]{3}$', n):
             continue

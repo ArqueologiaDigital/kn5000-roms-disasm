@@ -111745,7 +111745,7 @@ Msg0716_HandlerTables:
 	.long sub_FC0C20                                 ; FC09DA  [  3]
 	.long sub_FC0C50                                 ; FC09DE  [  4]
 	.long Msg0716_PartPostCC5D_Effect3Depth                                 ; FC09E2  [  5]
-	.long sub_FC0C7A                                 ; FC09E6  [  6]
+	.long Msg0716_PartPostCtrlInt9B                                 ; FC09E6  [  6]
 	.long Msg0716_PartPostCC5B_Effect1Depth                                 ; FC09EA  [  7]
 	.long sub_FC0C8E                                 ; FC09EE  [  8]
 	.long Msg0716_PartPostCtrlInt82                                 ; FC09F2  [  9]
@@ -111756,8 +111756,8 @@ Msg0716_HandlerTables:
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A06  [ 14]
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A0A  [ 15]
 	.long Msg0716_HandlerTables_Nop14                                 ; FC0A0E  [ 16]
-	.long sub_FC0CD8                                 ; FC0A12  [ 17]
-	.long sub_FC0CD8                                 ; FC0A16  [ 18]
+	.long Msg0716_PartPostCtrlInt9B_Copy                                 ; FC0A12  [ 17]
+	.long Msg0716_PartPostCtrlInt9B_Copy                                 ; FC0A16  [ 18]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A1A  [ 19]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A1E  [ 20]
 	.long Msg0716_HandlerTables_Nop19                                 ; FC0A22  [ 21]
@@ -111940,7 +111940,8 @@ Msg0716_PartPostCC5D_Effect3Depth:   ; entry: named by 1 `.long` operand, first 
 	ld (XIX+0x01),A                                      ; FC0C73  bc 01 41
 	calr Msg0716_PostCC5D_Effect3Depth                                          ; FC0C76  1e 08 09
 	ret                                                  ; FC0C79  0e
-sub_FC0C7A:   ; entry: named by 1 `.long` operand, first at 0xFC09E6
+; Msg0716_PartPostCtrlInt9B: a Msg0716 handler-table entry -- byte 1 = the object record's +6, then Msg0716_PostCtrlInt9B.
+Msg0716_PartPostCtrlInt9B:   ; entry: named by 1 `.long` operand, first at 0xFC09E6
 	ld A,(XIZ+0x06)                                      ; FC0C7A  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0C7D  bc 01 41
 	calr Msg0716_PostCtrlInt9B                                          ; FC0C80  1e a3 0a
@@ -111998,7 +111999,8 @@ Msg0716_HandlerTables_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF
 	ret                                                  ; FC0CD6  0e
 Msg0716_HandlerTables_Nop14:   ; entry: named by 3 `.long` operands, first at 0xFC0A06
 	ret                                                  ; FC0CD7  0e
-sub_FC0CD8:   ; entry: named by 2 `.long` operands, first at 0xFC0A12
+; Msg0716_PartPostCtrlInt9B_Copy: byte-for-byte Msg0716_PartPostCtrlInt9B, at another handler-table slot.
+Msg0716_PartPostCtrlInt9B_Copy:   ; entry: named by 2 `.long` operands, first at 0xFC0A12
 	ld A,(XIZ+0x06)                                      ; FC0CD8  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CDB  bc 01 41
 	calr Msg0716_PostCtrlInt9B                                          ; FC0CDE  1e 45 0a

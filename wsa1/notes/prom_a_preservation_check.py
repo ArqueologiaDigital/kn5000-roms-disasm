@@ -2634,6 +2634,8 @@ RENAMES = {
     "Msg0716_Post_Trampoline_Wrap_2_Call": "Msg0716_PostSysEx50_B2_Call",
     "Msg0716_Post_Trampoline_Wrap_3": "Msg0716_PostPitchBendCenter",
     "Msg0716_Post_Trampoline_Wrap_4": "Msg0716_PostCC01_ModulationZero",
+    "sub_FC0C7A": "Msg0716_PartPostCtrlInt9B",
+    "sub_FC0CD8": "Msg0716_PartPostCtrlInt9B_Copy",
 }
 
 
