@@ -262,9 +262,15 @@ EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not establis
 - `(0x601F44)` is `EditCursor_Note`, the cursor's note row, 1..127.
   - It is stepped by 1 (`EditCursor_NoteUp` / `_NoteDown`, from EditScreen_SoftKeyCol3) or by 6
     (`EditCursor_NoteUp6` / `_NoteDown6`).
-  - In DRUM EDIT, each step also scrolls the row list (sub_FEAEBC / sub_FEAF4A).
+  - In DRUM EDIT, each step also scrolls the row list (DrumEdit_RowFollowNoteUp / DrumEdit_RowFollowNoteDown).
   - In DRUM EDIT it filters the events too: `DrumEdit_IsOtherNote` returns 0xFF for a note-on whose note
     differs from it, and 0 otherwise or in NOTE EDIT.
+  - Every step also writes it into a note-on under the cursor (`EditCursor_ApplyNoteToEvent`). So in
+    NOTE EDIT, moving the note row moves the selected event's pitch.
+  - Holding SoftKeyCol3 steps it by 6 (`EditCursor_NoteStepHeld`, slot 0x13 of the 32-slot tables: the
+    held variant of code 0x02). The direction is reversed in DRUM EDIT.
+  - It is shown as an octave and note name in NOTE EDIT, and as a number in DRUM EDIT
+    (`EditScreen_DrawCursorNote`).
 
 Census of every 0x601F00-0x601F7D operand with its form and routine:
 `python3 notes/wsa1_601f_census.py` (in the repository's wsa1/ directory).

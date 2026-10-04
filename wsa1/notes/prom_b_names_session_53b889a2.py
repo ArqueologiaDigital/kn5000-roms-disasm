@@ -3816,4 +3816,12 @@ RENAMES = [
     ("sub_FE8AB3", "DrumEdit_IsOtherNote"),
     ("sub_FE8BA8", "EditScreen_SaveTrackCursor"),
     ("sub_FE8B89", "EditScreen_AppendBeatMarker"),
+    ("sub_FE9997", "EditCursor_ApplyNoteToEvent"),
+    ("sub_FEAB30", "EditCursor_NoteStepHeld"),
+    ("sub_FF0A7B", "EditScreen_DrawCursorNote"),
+    ("sub_FF0A8F", "DrumEdit_DrawCursorNoteNumber"),
+    ("sub_FF0AB3", "NoteEdit_DrawCursorNoteName"),
+    ("sub_FEA12D", "EditScreen_RedrawEditArea"),
+    ("sub_FEAEBC", "DrumEdit_RowFollowNoteUp"),
+    ("sub_FEAF4A", "DrumEdit_RowFollowNoteDown"),
 ]

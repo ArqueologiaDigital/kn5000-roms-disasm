@@ -1435,11 +1435,11 @@ ROWS = [
      "and the byte at the offset not tag 0x84 (else error 6)."),
     # NOTE / DRUM EDIT: the edited part and the cursor's note row (FINDINGS-prom_a-screen-module.md section 8)
     ("FEA0CF", "EditCursor_NoteUp",
-     "EditScreen_SoftKeyCol3's up arm: (0x601F44) + 1 below 0x7F; in DRUM EDIT sub_FEAEBC; then sub_FE9997,\n"
-     "sub_FF0A7B, sub_FEA12D and (0x601F58) = 0x83, (0x601F59) = 2."),
-    ("FEA0FE", "EditCursor_NoteDown", "the down arm: (0x601F44) - 1 above 1; in DRUM EDIT sub_FEAF4A; the same refresh."),
-    ("FEAB68", "EditCursor_NoteUp6", "(0x601F44) + 6, clamped to 0x7F, with EditCursor_NoteUp's tail.  Called by sub_FEAB30."),
-    ("FEABA5", "EditCursor_NoteDown6", "(0x601F44) - 6, floored at 1, with EditCursor_NoteDown's tail.  Called by sub_FEAB30."),
+     "EditScreen_SoftKeyCol3's up arm: (0x601F44) + 1 below 0x7F; in DRUM EDIT DrumEdit_RowFollowNoteUp; then EditCursor_ApplyNoteToEvent,\n"
+     "EditScreen_DrawCursorNote, EditScreen_RedrawEditArea and (0x601F58) = 0x83, (0x601F59) = 2."),
+    ("FEA0FE", "EditCursor_NoteDown", "the down arm: (0x601F44) - 1 above 1; in DRUM EDIT DrumEdit_RowFollowNoteDown; the same refresh."),
+    ("FEAB68", "EditCursor_NoteUp6", "(0x601F44) + 6, clamped to 0x7F, with EditCursor_NoteUp's tail.  Called by EditCursor_NoteStepHeld."),
+    ("FEABA5", "EditCursor_NoteDown6", "(0x601F44) - 6, floored at 1, with EditCursor_NoteDown's tail.  Called by EditCursor_NoteStepHeld."),
     ("FE8AB3", "DrumEdit_IsOtherNote",
      "in DRUM EDIT (EditScreen_Mode bit 0) reads the note two bytes into the event at the cursor (cursor restored)\n"
      "and returns 0xFF when it differs from (0x601F44); 0 when it matches, and always 0 in NOTE EDIT."),
@@ -1449,6 +1449,27 @@ ROWS = [
     ("FE8B89", "EditScreen_AppendBeatMarker",
      "EditScreen_SaveTrackCursor, then one 0x81 byte (from 0x601F37) appended to chain (0x601F00) + 1 with\n"
      "BStore_AppendBytes."),
+    ("FE9997", "EditCursor_ApplyNoteToEvent",
+     "when the event at the block-store cursor is a note-on (0x9n), its note byte (+2) = EditCursor_Note (cursor\n"
+     "restored); then sub_FEA535.  Called by all four EditCursor_Note steppers."),
+    ("FEAB30", "EditCursor_NoteStepHeld",
+     "NoteEdit_Button19 / DrumEdit_Button19 -- slot 0x13, the held variant of SoftKeyCol3: with (0x601F5B) bit 0\n"
+     "and the edit area not busy ((0x601F58) bit 7 with (0x601F59) not 2), EditCursor_NoteUp6 or _NoteDown6 by W\n"
+     "bit 7, the sense reversed in DRUM EDIT; UI_RequestBits |= 8."),
+    ("FF0A7B", "EditScreen_DrawCursorNote",
+     "layer 0: DrumEdit_DrawCursorNoteNumber in DRUM EDIT, NoteEdit_DrawCursorNoteName in NOTE EDIT."),
+    ("FF0A8F", "DrumEdit_DrawCursorNoteNumber",
+     "(0x26B0) = EditCursor_Note and DisplayList_FF0AA9 run through T_DisplayListB_Run: the note as a number."),
+    ("FF0AB3", "NoteEdit_DrawCursorNoteName",
+     "EditCursor_Note split by `div A,0x0C`: the octave through DisplayList_FF0AEA, the note through NoteNames."),
+    ("FEA12D", "EditScreen_RedrawEditArea",
+     "with (0x601F58) bit 7: erase layer 1, sub_FF019D, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and\n"
+     "redraw the events (sub_FEFF2D) first."),
+    ("FEAEBC", "DrumEdit_RowFollowNoteUp",
+     "after EditCursor_Note + 1 in DRUM EDIT (unless (0x601F1C) bit 7): EditScreen_CursorRow + 1 below 11, with\n"
+     "the left column and highlight redrawn; at row 11 the list scrolls instead, DrumEdit_TopRowNote + 1 below 0x74."),
+    ("FEAF4A", "DrumEdit_RowFollowNoteDown",
+     "the mirror: EditScreen_CursorRow - 1 above 0, or DrumEdit_TopRowNote - 1 above 1."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
