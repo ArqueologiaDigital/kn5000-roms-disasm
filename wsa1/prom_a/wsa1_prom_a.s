@@ -111934,9 +111934,9 @@ Msg0716_HandlerTables:
 	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0ABA  [ 59]
 	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0ABE  [ 60]
 	.long Msg0716_ScaleTuningPostSemitone                                 ; FC0AC2  [ 61]
-	.long sub_FC0DC5                                 ; FC0AC6  [ 62]
+	.long Msg0716_PostStream3Op80IfChanged                                 ; FC0AC6  [ 62]
 	.long Msg0716_HandlerTables_Nop63                                 ; FC0ACA  [ 63]
-	.long sub_FC0DD3                                 ; FC0ACE  [ 64]
+	.long Msg0716_PostStream3Op90IfChanged                                 ; FC0ACE  [ 64]
 	.long Msg0716_HandlerTables_Nop65                                 ; FC0AD2  [ 65]
 	.long Msg0716_HandlerTables_Nop65                                 ; FC0AD6  [ 66]
 	.long Msg0716_HandlerTables_Nop65                                 ; FC0ADA  [ 67]
@@ -112325,20 +112325,22 @@ ScaleTuning_PostSemitoneFromUserRam:
 	ld (XIX+0x03),W                                      ; FC0DBE  bc 03 40
 	calr sub_FC17DF                                          ; FC0DC1  1e 1b 0a
 	ret                                                  ; FC0DC4  0e
-sub_FC0DC5:   ; entry: named by 1 `.long` operand, first at 0xFC0AC6
+; Msg0716_PostStream3Op80IfChanged: handler table 4 entry 0: Msg0716_PostStream3Op80 when UiEvent_Byte3 (the changed bits) & 0x0F.
+Msg0716_PostStream3Op80IfChanged:   ; entry: named by 1 `.long` operand, first at 0xFC0AC6
 	ld a, (UiEvent_Byte3:16)                                   ; FC0DC5  c1 ba 20 21
 	and A,0x0f                                           ; FC0DC9  c9 cc 0f
 	jr z, .LFC0DD1                                       ; FC0DCC  66 03
-	calr sub_FC1B34                                          ; FC0DCE  1e 63 0d
+	calr Msg0716_PostStream3Op80                                          ; FC0DCE  1e 63 0d
 .LFC0DD1:
 	ret                                                  ; FC0DD1  0e
 Msg0716_HandlerTables_Nop63:   ; entry: named by 1 `.long` operand, first at 0xFC0ACA
 	ret                                                  ; FC0DD2  0e
-sub_FC0DD3:   ; entry: named by 1 `.long` operand, first at 0xFC0ACE
+; Msg0716_PostStream3Op90IfChanged: handler table 4 entry 2: Msg0716_PostStream3Op90 when UiEvent_Byte3 & 0x7F.
+Msg0716_PostStream3Op90IfChanged:   ; entry: named by 1 `.long` operand, first at 0xFC0ACE
 	ld a, (UiEvent_Byte3:16)                                   ; FC0DD3  c1 ba 20 21
 	and A,0x7f                                           ; FC0DD7  c9 cc 7f
 	jr z, .LFC0DDF                                       ; FC0DDA  66 03
-	calr sub_FC1B4D                                          ; FC0DDC  1e 6e 0d
+	calr Msg0716_PostStream3Op90                                          ; FC0DDC  1e 6e 0d
 .LFC0DDF:
 	ret                                                  ; FC0DDF  0e
 Msg0716_HandlerTables_Nop65:   ; entry: named by 5 `.long` operands, first at 0xFC0AD2
@@ -112438,9 +112440,9 @@ Msg0716_FlushIfPending:
 Msg0716_FlushPending:
 	m_cp_mi8 MB16, 0x070e, 0x00                          ; FC0E6B  c1 0e 07 3f 00
 	jr z, .LFC0E7B                                       ; FC0E70  66 09
-	calr sub_FC0FC5                                      ; FC0E72  1e 50 01
+	calr Msg0716_FlushPendingBlocks                                      ; FC0E72  1e 50 01
 	calr sub_FC1042                                      ; FC0E75  1e ca 01
-	calr sub_FC0FF3                                      ; FC0E78  1e 78 01
+	calr Msg0716_AllSoundOffParts0to7                                      ; FC0E78  1e 78 01
 .LFC0E7B:
 	m_cp_mi16 MW16, 0x0700, 0x0000                       ; FC0E7B  d1 00 07 3f 00 00
 	jr z, .LFC0E92                                       ; FC0E81  66 0f
@@ -112567,29 +112569,34 @@ T_F40FBC_Nop:
 	ret                                                  ; FC0FC2  0e
 	ret                                                  ; FC0FC3  0e
 	ret                                                  ; FC0FC4  0e
-sub_FC0FC5:
+; Msg0716_FlushPendingBlocks: (0x070E) bit 4 -> Msg0716_PostOp87_Bytes78B3, bit 0 -> Msg0716_PostOp80_Byte7634, bits 1..3 ->
+;   Msg0716_PostOp81_EffectBlock97 / Op82_EffectBlock98 / Op83_EffectBlock99 -- the bits Msg0716_SetPendingBit0..4 set.
+;   Called first by Msg0716_FlushPending.
+Msg0716_FlushPendingBlocks:
 	m_bit 4, MD16, 0x070e                                ; FC0FC5  f1 0e 07 cc
 	jr z, .LFC0FCE                                       ; FC0FC9  66 03
-	calr sub_FC1AD5                                          ; FC0FCB  1e 07 0b
+	calr Msg0716_PostOp87_Bytes78B3                                          ; FC0FCB  1e 07 0b
 .LFC0FCE:
 	m_bit 0, MD16, 0x070e                                ; FC0FCE  f1 0e 07 c8
 	jr z, .LFC0FD7                                       ; FC0FD2  66 03
-	calr sub_FC1A35                                          ; FC0FD4  1e 5e 0a
+	calr Msg0716_PostOp80_Byte7634                                          ; FC0FD4  1e 5e 0a
 .LFC0FD7:
 	m_bit 1, MD16, 0x070e                                ; FC0FD7  f1 0e 07 c9
 	jr z, .LFC0FE0                                       ; FC0FDB  66 03
-	calr sub_FC1A5D                                          ; FC0FDD  1e 7d 0a
+	calr Msg0716_PostOp81_EffectBlock97                                          ; FC0FDD  1e 7d 0a
 .LFC0FE0:
 	m_bit 2, MD16, 0x070e                                ; FC0FE0  f1 0e 07 ca
 	jr z, .LFC0FE9                                       ; FC0FE4  66 03
-	calr sub_FC1A85                                          ; FC0FE6  1e 9c 0a
+	calr Msg0716_PostOp82_EffectBlock98                                          ; FC0FE6  1e 9c 0a
 .LFC0FE9:
 	m_bit 3, MD16, 0x070e                                ; FC0FE9  f1 0e 07 cb
 	jr z, .LFC0FF2                                       ; FC0FED  66 03
-	calr sub_FC1AAD                                          ; FC0FEF  1e bb 0a
+	calr Msg0716_PostOp83_EffectBlock99                                          ; FC0FEF  1e bb 0a
 .LFC0FF2:
 	ret                                                  ; FC0FF2  0e
-sub_FC0FF3:
+; Msg0716_AllSoundOffParts0to7: unless (0x7F0B) bit 0, and only when (0x070E) bit 5 or 6 is set: Msg0716_PostCC78_AllSoundOff for parts 0..7 --
+;   the parts Msg0716_PartPostCC78_AllSoundOff skips in that case.  Called last by Msg0716_FlushPending's group posts.
+Msg0716_AllSoundOffParts0to7:
 	m_bit 0, MD16, 0x7f0b                                ; FC0FF3  f1 0b 7f c8
 	jr nz, .LFC101D                                      ; FC0FF7  6e 24
 	m_bit 5, MD16, 0x070e                                ; FC0FF9  f1 0e 07 cd
@@ -113846,7 +113853,8 @@ Msg0716_Post:
 	add XSP,0x00000008                                   ; FC1A2D  ef c8 08 00 00 00
 	pop XIX                                              ; FC1A33  5c
 	ret                                                  ; FC1A34  0e
-sub_FC1A35:
+; Msg0716_PostOp80_Byte7634: Msg0716_DefaultMessages record 0 (80 00 01), Msg0716_BiasOpcodeByMode, then the byte at 0x7634: 4 bytes on stream 1.
+Msg0716_PostOp80_Byte7634:
 	ld XIY,Msg0716_DefaultMessages                       ; FC1A35  45 fa 1a fc 00
 	ld XIX,0x00000716                                    ; FC1A3A  44 16 07 00 00
 	ldw bc, 0x03                                         ; FC1A3F  31 03 00
@@ -113859,7 +113867,9 @@ sub_FC1A35:
 	ldw bc, 0x04                                         ; FC1A56  31 04 00
 	calr Msg0716_PostFromXIX_Stream1                                            ; FC1A59  1e ad 00
 	ret                                                  ; FC1A5C  0e
-sub_FC1A5D:
+; Msg0716_PostOp81_EffectBlock97: record 1 (81 00 18), the opcode bias, then the 24 bytes at 0x7642 -- effect block 97's payload, the one
+;   ParamImage_SanitizeAll hands DspEffect_SanitizeBlock: 27 bytes on stream 1.
+Msg0716_PostOp81_EffectBlock97:
 	ld XIY,Msg0716_DefaultMessages+0x3                   ; FC1A5D  45 fd 1a fc 00
 	ld XIX,0x00000716                                    ; FC1A62  44 16 07 00 00
 	ldw bc, 0x03                                         ; FC1A67  31 03 00
@@ -113872,7 +113882,8 @@ sub_FC1A5D:
 	ldw bc, 0x1b                                         ; FC1A7E  31 1b 00
 	calr Msg0716_PostFromXIX_Stream1                                            ; FC1A81  1e 85 00
 	ret                                                  ; FC1A84  0e
-sub_FC1A85:
+; Msg0716_PostOp82_EffectBlock98: record 2 (82 00 18), then the 24 bytes at 0x7662, effect block 98: 27 bytes on stream 1.
+Msg0716_PostOp82_EffectBlock98:
 	ld XIY,Msg0716_DefaultMessages+0x6                   ; FC1A85  45 00 1b fc 00
 	ld XIX,0x00000716                                    ; FC1A8A  44 16 07 00 00
 	ldw bc, 0x03                                         ; FC1A8F  31 03 00
@@ -113885,7 +113896,8 @@ sub_FC1A85:
 	ldw bc, 0x1b                                         ; FC1AA6  31 1b 00
 	calr Msg0716_PostFromXIX_Stream1                                            ; FC1AA9  1e 5d 00
 	ret                                                  ; FC1AAC  0e
-sub_FC1AAD:
+; Msg0716_PostOp83_EffectBlock99: record 3 (83 00 18), then the 24 bytes at 0x7682, effect block 99: 27 bytes on stream 1.
+Msg0716_PostOp83_EffectBlock99:
 	ld XIY,Msg0716_DefaultMessages+0x9                   ; FC1AAD  45 03 1b fc 00
 	ld XIX,0x00000716                                    ; FC1AB2  44 16 07 00 00
 	ldw bc, 0x03                                         ; FC1AB7  31 03 00
@@ -113898,7 +113910,8 @@ sub_FC1AAD:
 	ldw bc, 0x1b                                         ; FC1ACE  31 1b 00
 	calr Msg0716_PostFromXIX_Stream1                                            ; FC1AD1  1e 35 00
 	ret                                                  ; FC1AD4  0e
-sub_FC1AD5:
+; Msg0716_PostOp87_Bytes78B3: record 4 (87 00 04), no bias, then the 4 bytes at 0x78B3: 7 bytes on stream 1.
+Msg0716_PostOp87_Bytes78B3:
 	ld XIY,Msg0716_DefaultMessages+0xC                   ; FC1AD5  45 06 1b fc 00
 	ld XIX,0x00000716                                    ; FC1ADA  44 16 07 00 00
 	ldw bc, 0x03                                         ; FC1ADF  31 03 00
@@ -113934,6 +113947,10 @@ sub_FC1AD5:
 ; Unknown: what bytes +1 and +2 mean.  +0 is the message opcode, the one
 ; Msg0716_BiasOpcodeByMode may add 8 to on the very next instruction of four of
 ; the five callers.
+; ANSWERED 2026-10-04: +1..+2 is the PAYLOAD LENGTH, big-endian.  0x0001, 0x0018,
+;   0x0018, 0x0018, 0x0004 are exactly the byte counts each loader copies after the
+;   record (1 from 0x7634, 24 from each of the effect blocks 0x7642 / 0x7662 /
+;   0x7682, 4 from 0x78B3) -- Msg0716_PostOp80_Byte7634 .. Msg0716_PostOp87_Bytes78B3.
 ; ---------------------------------------------------------------------
 Msg0716_DefaultMessages:
 	.byte 0x80, 0x00, 0x01, 0x81, 0x00, 0x18, 0x82, 0x00, 0x18, 0x83, 0x00, 0x18, 0x87, 0x00, 0x04  ; FC1AFA
@@ -113986,25 +114003,28 @@ Msg0716_BiasOpcodeByMode:
 	m_add_mi8 MB16, 0x0716, 0x08                         ; FC1B2E  c1 16 07 38 08
 .LFC1B33:
 	ret                                                  ; FC1B33  0e
-sub_FC1B34:
+; Msg0716_PostStream3Op80: 80 <UiEvent_Byte2 & 0x0F>, 2 bytes, on stream 3.
+Msg0716_PostStream3Op80:
 	ld XIX,0x00000716                                    ; FC1B34  44 16 07 00 00
 	ld (XIX),0x80                                        ; FC1B39  b4 00 80
 	ld a, (UiEvent_Byte2:16)                                   ; FC1B3C  c1 b9 20 21
 	and A,0x0f                                           ; FC1B40  c9 cc 0f
 	ld (XIX+0x01),A                                      ; FC1B43  bc 01 41
 	ldw bc, 0x02                                         ; FC1B46  31 02 00
-	calr sub_FC1B66                                      ; FC1B49  1e 1a 00
+	calr Msg0716_PostFromXIX_Stream3                                      ; FC1B49  1e 1a 00
 	ret                                                  ; FC1B4C  0e
-sub_FC1B4D:
+; Msg0716_PostStream3Op90: 90 <UiEvent_Byte2 & 0x7F>, 2 bytes, on stream 3.
+Msg0716_PostStream3Op90:
 	ld XIX,0x00000716                                    ; FC1B4D  44 16 07 00 00
 	ld (XIX),0x90                                        ; FC1B52  b4 00 90
 	ld a, (UiEvent_Byte2:16)                                   ; FC1B55  c1 b9 20 21
 	and A,0x7f                                           ; FC1B59  c9 cc 7f
 	ld (XIX+0x01),A                                      ; FC1B5C  bc 01 41
 	ldw bc, 0x02                                         ; FC1B5F  31 02 00
-	calr sub_FC1B66                                      ; FC1B62  1e 01 00
+	calr Msg0716_PostFromXIX_Stream3                                      ; FC1B62  1e 01 00
 	ret                                                  ; FC1B65  0e
-sub_FC1B66:
+; Msg0716_PostFromXIX_Stream3: Msg0716_PostFromXIX_Stream1 with stream word 3: push XIX / push BC / push 3 / T_Link_SendBlockIn32ByteChunks.
+Msg0716_PostFromXIX_Stream3:
 	push XIX                                             ; FC1B66  3c
 	pushw bc                                             ; FC1B67  29
 	ldw wa, 0x03                                         ; FC1B68  30 03 00

@@ -956,6 +956,35 @@ ROWS = [
     ("FC0E56", "Msg0716_FlushIfPending",
      "when (0x070F) bit 0 is set -- the bit every Msg0716_PartSetProgram* sets -- Msg0716_FlushPending and clear it; then\n"
      "(0x60F021) bit 5 is cleared."),
+    # prom_a 0xFC0FC5-0xFC1B66: the (0x070E) block posts and link stream 3
+    ("FC0FC5", "Msg0716_FlushPendingBlocks",
+     "(0x070E) bit 4 -> Msg0716_PostOp87_Bytes78B3, bit 0 -> Msg0716_PostOp80_Byte7634, bits 1..3 ->\n"
+     "Msg0716_PostOp81_EffectBlock97 / Op82_EffectBlock98 / Op83_EffectBlock99 -- the bits Msg0716_SetPendingBit0..4 set.\n"
+     "Called first by Msg0716_FlushPending."),
+    ("FC1A35", "Msg0716_PostOp80_Byte7634",
+     "Msg0716_DefaultMessages record 0 (80 00 01), Msg0716_BiasOpcodeByMode, then the byte at 0x7634: 4 bytes on stream 1."),
+    ("FC1A5D", "Msg0716_PostOp81_EffectBlock97",
+     "record 1 (81 00 18), the opcode bias, then the 24 bytes at 0x7642 -- effect block 97's payload, the one\n"
+     "ParamImage_SanitizeAll hands DspEffect_SanitizeBlock: 27 bytes on stream 1."),
+    ("FC1A85", "Msg0716_PostOp82_EffectBlock98",
+     "record 2 (82 00 18), then the 24 bytes at 0x7662, effect block 98: 27 bytes on stream 1."),
+    ("FC1AAD", "Msg0716_PostOp83_EffectBlock99",
+     "record 3 (83 00 18), then the 24 bytes at 0x7682, effect block 99: 27 bytes on stream 1."),
+    ("FC1AD5", "Msg0716_PostOp87_Bytes78B3",
+     "record 4 (87 00 04), no bias, then the 4 bytes at 0x78B3: 7 bytes on stream 1."),
+    ("FC1B66", "Msg0716_PostFromXIX_Stream3",
+     "Msg0716_PostFromXIX_Stream1 with stream word 3: push XIX / push BC / push 3 / T_Link_SendBlockIn32ByteChunks."),
+    ("FC1B34", "Msg0716_PostStream3Op80",
+     "80 <UiEvent_Byte2 & 0x0F>, 2 bytes, on stream 3."),
+    ("FC1B4D", "Msg0716_PostStream3Op90",
+     "90 <UiEvent_Byte2 & 0x7F>, 2 bytes, on stream 3."),
+    ("FC0DC5", "Msg0716_PostStream3Op80IfChanged",
+     "handler table 4 entry 0: Msg0716_PostStream3Op80 when UiEvent_Byte3 (the changed bits) & 0x0F."),
+    ("FC0DD3", "Msg0716_PostStream3Op90IfChanged",
+     "handler table 4 entry 2: Msg0716_PostStream3Op90 when UiEvent_Byte3 & 0x7F."),
+    ("FC0FF3", "Msg0716_AllSoundOffParts0to7",
+     "unless (0x7F0B) bit 0, and only when (0x070E) bit 5 or 6 is set: Msg0716_PostCC78_AllSoundOff for parts 0..7 --\n"
+     "the parts Msg0716_PartPostCC78_AllSoundOff skips in that case.  Called last by Msg0716_FlushPending's group posts."),
 ]
 
 
