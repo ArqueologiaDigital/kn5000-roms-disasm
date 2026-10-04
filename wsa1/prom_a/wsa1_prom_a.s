@@ -111436,7 +111436,9 @@ sub_FC06FF:
 	calr sub_FC170D                                          ; FC0720  1e ea 0f
 .LFC0723:
 	ret                                                  ; FC0723  0e
-sub_FC0724:
+; Msg0716_EventPartPostCC01_ModulationIfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 1 of its record's +0x2c (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC01_Modulation
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC01_ModulationIfEnabled:
 	ld XIX,0x00000716                                    ; FC0724  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC0729  c1 b8 20 27
 	cp L,0x20                                            ; FC072D  cf cf 20
@@ -111450,7 +111452,9 @@ sub_FC0724:
 	calr Msg0716_PostCC01_Modulation                                          ; FC0745  1e 24 0f
 .LFC0748:
 	ret                                                  ; FC0748  0e
-sub_FC0749:
+; Msg0716_EventPartPostCC0B_Expression: for the part UiEvent_Byte1 (< 0x20), byte 1 = it and Msg0716_PostCC0B_Expression
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC0B_Expression:
 	ld XIX,0x00000716                                    ; FC0749  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC074E  c1 b8 20 27
 	cp L,0x20                                            ; FC0752  cf cf 20
@@ -111493,7 +111497,9 @@ T_F42508_Nop:
 	ret                                                  ; FC07AF  0e
 T_F4250C_Nop:
 	ret                                                  ; FC07B0  0e
-sub_FC07B1:
+; Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 0 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC10_GeneralPurpose1
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled:
 	ld XIX,0x00000716                                    ; FC07B1  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC07B6  c1 b8 20 27
 	cp L,0x20                                            ; FC07BA  cf cf 20
@@ -111507,7 +111513,9 @@ sub_FC07B1:
 	calr Msg0716_PostCC10_GeneralPurpose1                                          ; FC07D2  1e b1 0e
 .LFC07D5:
 	ret                                                  ; FC07D5  0e
-sub_FC07D6:
+; Msg0716_EventPartPostCC11_GeneralPurpose2IfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 1 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC11_GeneralPurpose2
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC11_GeneralPurpose2IfEnabled:
 	ld XIX,0x00000716                                    ; FC07D6  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC07DB  c1 b8 20 27
 	cp L,0x20                                            ; FC07DF  cf cf 20
@@ -111521,7 +111529,9 @@ sub_FC07D6:
 	calr Msg0716_PostCC11_GeneralPurpose2                                          ; FC07F7  1e 99 0e
 .LFC07FA:
 	ret                                                  ; FC07FA  0e
-sub_FC07FB:
+; Msg0716_EventPartPostCC12_GeneralPurpose3IfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 2 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC12_GeneralPurpose3
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC12_GeneralPurpose3IfEnabled:
 	ld XIX,0x00000716                                    ; FC07FB  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC0800  c1 b8 20 27
 	cp L,0x20                                            ; FC0804  cf cf 20
@@ -111535,7 +111545,9 @@ sub_FC07FB:
 	calr Msg0716_PostCC12_GeneralPurpose3                                          ; FC081C  1e 81 0e
 .LFC081F:
 	ret                                                  ; FC081F  0e
-sub_FC0820:
+; Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 3 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC13_GeneralPurpose4
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled:
 	ld XIX,0x00000716                                    ; FC0820  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC0825  c1 b8 20 27
 	cp L,0x20                                            ; FC0829  cf cf 20
@@ -111549,7 +111561,9 @@ sub_FC0820:
 	calr Msg0716_PostCC13_GeneralPurpose4                                          ; FC0841  1e 69 0e
 .LFC0844:
 	ret                                                  ; FC0844  0e
-sub_FC0845:
+; Msg0716_EventPartPostCC02_BreathIfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 4 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC02_Breath
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC02_BreathIfEnabled:
 	ld XIX,0x00000716                                    ; FC0845  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC084A  c1 b8 20 27
 	cp L,0x20                                            ; FC084E  cf cf 20
@@ -111563,7 +111577,9 @@ sub_FC0845:
 	calr Msg0716_PostCC02_Breath                                          ; FC0866  1e 51 0e
 .LFC0869:
 	ret                                                  ; FC0869  0e
-sub_FC086A:
+; Msg0716_EventPartPostCC04_FootIfEnabled: for the part UiEvent_Byte1 (< 0x20), when bit 5 of its record's +0x2e (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller, byte 1 = it and Msg0716_PostCC04_Foot
+;   (notes/prom_a_msg0716_message_names.py).
+Msg0716_EventPartPostCC04_FootIfEnabled:
 	ld XIX,0x00000716                                    ; FC086A  44 16 07 00 00
 	ld l, (UiEvent_Byte1:16)                                   ; FC086F  c1 b8 20 27
 	cp L,0x20                                            ; FC0873  cf cf 20

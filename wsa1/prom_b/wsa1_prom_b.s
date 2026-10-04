@@ -1301,18 +1301,18 @@
 	.set	sub_FC06DF, 0xFC06DF
 	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17, 0xFC06F4
 	.set	sub_FC06FF, 0xFC06FF
-	.set	sub_FC0724, 0xFC0724
-	.set	sub_FC0749, 0xFC0749
+	.set	Msg0716_EventPartPostCC01_ModulationIfEnabled, 0xFC0724
+	.set	Msg0716_EventPartPostCC0B_Expression, 0xFC0749
 	.set	sub_FC075E, 0xFC075E
 	.set	sub_FC078A, 0xFC078A
 	.set	T_F42508_Nop, 0xFC07AF
 	.set	T_F4250C_Nop, 0xFC07B0
-	.set	sub_FC07B1, 0xFC07B1
-	.set	sub_FC07D6, 0xFC07D6
-	.set	sub_FC07FB, 0xFC07FB
-	.set	sub_FC0820, 0xFC0820
-	.set	sub_FC0845, 0xFC0845
-	.set	sub_FC086A, 0xFC086A
+	.set	Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled, 0xFC07B1
+	.set	Msg0716_EventPartPostCC11_GeneralPurpose2IfEnabled, 0xFC07D6
+	.set	Msg0716_EventPartPostCC12_GeneralPurpose3IfEnabled, 0xFC07FB
+	.set	Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled, 0xFC0820
+	.set	Msg0716_EventPartPostCC02_BreathIfEnabled, 0xFC0845
+	.set	Msg0716_EventPartPostCC04_FootIfEnabled, 0xFC086A
 	.set	sub_FC0E56, 0xFC0E56
 	.set	sub_FC0E6B, 0xFC0E6B
 	.set	T_F40FB8_Nop, 0xFC0FBD
@@ -90126,18 +90126,18 @@ T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26:	j
 T_Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40641
 T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17  ; -> prom_a 0x406F4
 T_F424F4:	jp sub_FC06FF  ; -> prom_a 0x406FF
-T_F424F8:	jp sub_FC0724  ; -> prom_a 0x40724
-T_F424FC:	jp sub_FC0749  ; -> prom_a 0x40749
+T_F424F8:	jp Msg0716_EventPartPostCC01_ModulationIfEnabled  ; -> prom_a 0x40724
+T_F424FC:	jp Msg0716_EventPartPostCC0B_Expression  ; -> prom_a 0x40749
 T_F42500:	jp sub_FC075E  ; -> prom_a 0x4075E
 T_F42504:	jp sub_FC078A  ; -> prom_a 0x4078A
 T_F42508:	jp T_F42508_Nop  ; -> prom_a 0x407AF
 T_F4250C:	jp T_F4250C_Nop  ; -> prom_a 0x407B0
-T_F42510:	jp sub_FC07B1  ; -> prom_a 0x407B1
-T_F42514:	jp sub_FC07D6  ; -> prom_a 0x407D6
-T_F42518:	jp sub_FC07FB  ; -> prom_a 0x407FB
-T_F4251C:	jp sub_FC0820  ; -> prom_a 0x40820
-T_F42520:	jp sub_FC0845  ; -> prom_a 0x40845
-T_F42524:	jp sub_FC086A  ; -> prom_a 0x4086A
+T_F42510:	jp Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled  ; -> prom_a 0x407B1
+T_F42514:	jp Msg0716_EventPartPostCC11_GeneralPurpose2IfEnabled  ; -> prom_a 0x407D6
+T_F42518:	jp Msg0716_EventPartPostCC12_GeneralPurpose3IfEnabled  ; -> prom_a 0x407FB
+T_F4251C:	jp Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled  ; -> prom_a 0x40820
+T_F42520:	jp Msg0716_EventPartPostCC02_BreathIfEnabled  ; -> prom_a 0x40845
+T_F42524:	jp Msg0716_EventPartPostCC04_FootIfEnabled  ; -> prom_a 0x4086A
 	.fill 0x48, 1, 0x0E  ; 0xF42528: 72 x ret
 T_F42570:	.long sub_FE0000	; ptr -> 0xFE0000 (prom_a 0x60000)
 T_F42574:	jp sub_FE1BCE  ; -> prom_a 0x61BCE   x8

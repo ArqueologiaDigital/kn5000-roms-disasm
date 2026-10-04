@@ -2560,4 +2560,12 @@ RENAMES = [
     ("sub_FC0CA8", "Msg0716_PartPostCtrlInt82"),
     ("sub_FC0CB2", "Msg0716_PartPostCtrlInt81"),
     ("sub_FC0CBC", "Msg0716_PartPostCtrlInt80"),
+    ("sub_FC0724", "Msg0716_EventPartPostCC01_ModulationIfEnabled"),
+    ("sub_FC0749", "Msg0716_EventPartPostCC0B_Expression"),
+    ("sub_FC07B1", "Msg0716_EventPartPostCC10_GeneralPurpose1IfEnabled"),
+    ("sub_FC07D6", "Msg0716_EventPartPostCC11_GeneralPurpose2IfEnabled"),
+    ("sub_FC07FB", "Msg0716_EventPartPostCC12_GeneralPurpose3IfEnabled"),
+    ("sub_FC0820", "Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled"),
+    ("sub_FC0845", "Msg0716_EventPartPostCC02_BreathIfEnabled"),
+    ("sub_FC086A", "Msg0716_EventPartPostCC04_FootIfEnabled"),
 ]

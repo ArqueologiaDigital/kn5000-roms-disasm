@@ -41,8 +41,8 @@ A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "rb").read().decode("lat
 CC = {0x01: "Modulation", 0x02: "Breath", 0x04: "Foot", 0x07: "Volume", 0x0B: "Expression",
       0x10: "GeneralPurpose1", 0x11: "GeneralPurpose2", 0x12: "GeneralPurpose3", 0x13: "GeneralPurpose4",
       0x40: "Sustain", 0x5B: "Effect1Depth", 0x5D: "Effect3Depth"}
-TAILS = {"Msg0716_PostValueMasked": "Msg0716_PostValueMasked", "Msg0716_PostValueAsSwitch": "Msg0716_PostValueAsSwitch",
-         "Msg0716_PostValueClamped": "Msg0716_PostValueClamped"}
+TAILS = {"sub_FC18CC": "Msg0716_PostValueMasked", "sub_FC18DC": "Msg0716_PostValueAsSwitch",
+         "sub_FC18F7": "Msg0716_PostValueClamped"}
 TAILDOC = {"Msg0716_PostValueMasked": "value = UiEvent_Byte2 AND C", "Msg0716_PostValueAsSwitch": "value = 0x7F if UiEvent_Byte2 AND C, else 0",
            "Msg0716_PostValueClamped": "value = min(UiEvent_Byte2, C)"}
 
@@ -101,6 +101,25 @@ def plan():
             new = "Msg0716_Part" + built[m.group(1)]
             rows.append((n, new, "%s: a Msg0716 handler-table entry -- byte 1 = the object record's +6 (its number), then\\n"
                          "  Msg0716_%s (notes/prom_a_msg0716_message_names.py)." % (new, built[m.group(1)])))
+    # 2026-10-04, second rule: an event handler takes the part from UiEvent_Byte1 (< 0x20) and, when the
+    # part's record (Msg0716_GetRecordPtrByIndex + 0x20) has the controller's enable bit, posts it.
+    cur = dict(bodies())
+    named = {n: n[len("Msg0716_"):] for n in cur if re.match(r'^Msg0716_Post(CC|CtrlInt|ChannelPressure)', n)}
+    for n, b in cur.items():
+        if not re.match(r'^sub_FC0[0-9A-F]{3}$', n):
+            continue
+        t = " | ".join(b)
+        m = re.match(r'^ld XIX,0x00000716 \| ld l, \(UiEvent_Byte1:16\) \| cp L,0x20 \| jr nc, \.L\w+ \| '
+                     r'(?:ld W,L \| calr Msg0716_GetRecordPtrByIndex \| add XIY,0x00000020 \| bit (\d),\(XIY\+0x(0[0-9a-f])\) \| jr z, \.L\w+ \| )?'
+                     r'ld \(XIX\+0x01\),L \| calr (\w+)', t)
+        if not m or m.group(3) not in named:
+            continue
+        cond = m.group(1) is not None
+        new = "Msg0716_EventPart" + named[m.group(3)] + ("IfEnabled" if cond else "")
+        rows.append((n, new, "%s: for the part UiEvent_Byte1 (< 0x20)%s, byte 1 = it and Msg0716_%s\\n"
+                     "  (notes/prom_a_msg0716_message_names.py)." % (
+                         new, (", when bit %s of its record's +0x2%s (Msg0716_GetRecordPtrByIndex + 0x20) enables the controller"
+                               % (m.group(1), m.group(2)[1])) if cond else "", named[m.group(3)])))
     return rows
 
 
