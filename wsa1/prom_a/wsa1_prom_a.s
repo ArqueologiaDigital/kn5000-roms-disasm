@@ -120446,7 +120446,7 @@ Ram3800_InitAll:
 	and XBC,XBC                                          ; FC8025  e9 c1
 	jr z, .LFC8035                                       ; FC8027  66 0c
 	lda xiy, (Ram3800_DataImage:24)                      ; FC8029  f2 d3 b3 fc 35
-	lda xix, (0x3800:24)                                 ; FC802E  f2 00 38 00 34
+	lda xix, (PartNote_Budget:24)                                 ; FC802E  f2 00 38 00 34
 	ldir85                                               ; FC8033  85 11
 .LFC8035:
 	ld XBC,0x00000000                                    ; FC8035  41 00 00 00 00
@@ -120495,7 +120495,7 @@ Ram3800_InitDataImage:
 	and XBC,XBC                                          ; FC8082  e9 c1
 	jr z, .LFC8092                                       ; FC8084  66 0c
 	lda xiy, (Ram3800_DataImage:24)                      ; FC8086  f2 d3 b3 fc 35
-	lda xix, (0x3800:24)                                 ; FC808B  f2 00 38 00 34
+	lda xix, (PartNote_Budget:24)                                 ; FC808B  f2 00 38 00 34
 	ldir85                                               ; FC8090  85 11
 .LFC8092:
 	ld XBC,0x00000000                                    ; FC8092  41 00 00 00 00
@@ -120639,7 +120639,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC81C0  39
 	lda xwa, (xiz-712)                                   ; FC81C1  f3 f9 38 fd 30
 	push XWA                                             ; FC81C6  38
-	call sub_FC9F8B                                      ; FC81C7  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC81C7  1d 8b 9f fc
 	ld E,A                                               ; FC81CB  c9 8d
 	and A,0x01                                           ; FC81CD  c9 cc 01
 	add XSP,0x00000014                                   ; FC81D0  ef c8 14 00 00 00
@@ -120647,7 +120647,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC81E5                                       ; FC81D8  66 0b
 	lda xbc, (xiz-712)                                   ; FC81DA  f3 f9 38 fd 31
 	push XBC                                             ; FC81DF  39
-	call sub_FCA6BB                                      ; FC81E0  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC81E0  1d bb a6 fc
 	pop XIY                                              ; FC81E4  5d
 .LFC81E5:
 	ld C,E                                               ; FC81E5  cd 8b
@@ -120657,7 +120657,7 @@ MidiInA_ProcessRing:
 	jr nz, .LFC81FE                                      ; FC81F1  6e 0b
 	lda xbc, (xiz-712)                                   ; FC81F3  f3 f9 38 fd 31
 	push XBC                                             ; FC81F8  39
-	call sub_FCAA98                                      ; FC81F9  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC81F9  1d 98 aa fc
 	pop XIY                                              ; FC81FD  5d
 .LFC81FE:
 	ld C,E                                               ; FC81FE  cd 8b
@@ -120665,7 +120665,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC8210                                       ; FC8203  66 0b
 	lda xbc, (xiz-712)                                   ; FC8205  f3 f9 38 fd 31
 	push XBC                                             ; FC820A  39
-	call sub_FCACAA                                      ; FC820B  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC820B  1d aa ac fc
 	pop XIY                                              ; FC820F  5d
 .LFC8210:
 	inc 1,D                                              ; FC8210  cc 61
@@ -120705,7 +120705,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC826F  39
 	lda xwa, (xiz-302)                                   ; FC8270  f3 f9 d2 fe 30
 	push XWA                                             ; FC8275  38
-	call sub_FC9F8B                                      ; FC8276  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC8276  1d 8b 9f fc
 	ld E,A                                               ; FC827A  c9 8d
 	and A,0x01                                           ; FC827C  c9 cc 01
 	add XSP,0x00000014                                   ; FC827F  ef c8 14 00 00 00
@@ -120713,7 +120713,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC8294                                       ; FC8287  66 0b
 	lda xbc, (xiz-302)                                   ; FC8289  f3 f9 d2 fe 31
 	push XBC                                             ; FC828E  39
-	call sub_FCA6BB                                      ; FC828F  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC828F  1d bb a6 fc
 	pop XIY                                              ; FC8293  5d
 .LFC8294:
 	ld C,E                                               ; FC8294  cd 8b
@@ -120721,7 +120721,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC82A6                                       ; FC8299  66 0b
 	lda xbc, (xiz-302)                                   ; FC829B  f3 f9 d2 fe 31
 	push XBC                                             ; FC82A0  39
-	call sub_FCACAA                                      ; FC82A1  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC82A1  1d aa ac fc
 	pop XIY                                              ; FC82A5  5d
 .LFC82A6:
 	inc 1,XIX                                            ; FC82A6  ec 61
@@ -120793,7 +120793,7 @@ MidiInA_ProcessRing:
 	push XBC                                             ; FC8359  39
 	lda xwa, (xiz-712)                                   ; FC835A  f3 f9 38 fd 30
 	push XWA                                             ; FC835F  38
-	call sub_FC9F8B                                      ; FC8360  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC8360  1d 8b 9f fc
 	ld E,A                                               ; FC8364  c9 8d
 	and A,0x01                                           ; FC8366  c9 cc 01
 	add XSP,0x00000014                                   ; FC8369  ef c8 14 00 00 00
@@ -120801,7 +120801,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC837E                                       ; FC8371  66 0b
 	lda xbc, (xiz-712)                                   ; FC8373  f3 f9 38 fd 31
 	push XBC                                             ; FC8378  39
-	call sub_FCA6BB                                      ; FC8379  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8379  1d bb a6 fc
 	pop XIY                                              ; FC837D  5d
 .LFC837E:
 	ld C,E                                               ; FC837E  cd 8b
@@ -120811,7 +120811,7 @@ MidiInA_ProcessRing:
 	jr nz, .LFC8397                                      ; FC838A  6e 0b
 	lda xbc, (xiz-712)                                   ; FC838C  f3 f9 38 fd 31
 	push XBC                                             ; FC8391  39
-	call sub_FCAA98                                      ; FC8392  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8392  1d 98 aa fc
 	pop XIY                                              ; FC8396  5d
 .LFC8397:
 	ld C,E                                               ; FC8397  cd 8b
@@ -120819,7 +120819,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC83A9                                       ; FC839C  66 0b
 	lda xbc, (xiz-712)                                   ; FC839E  f3 f9 38 fd 31
 	push XBC                                             ; FC83A3  39
-	call sub_FCACAA                                      ; FC83A4  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC83A4  1d aa ac fc
 	pop XIY                                              ; FC83A8  5d
 .LFC83A9:
 	inc 1,D                                              ; FC83A9  cc 61
@@ -120861,7 +120861,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC841A                                       ; FC840D  66 0b
 	lda xbc, (xiz-302)                                   ; FC840F  f3 f9 d2 fe 31
 	push XBC                                             ; FC8414  39
-	call sub_FCA6BB                                      ; FC8415  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8415  1d bb a6 fc
 	pop XIY                                              ; FC8419  5d
 .LFC841A:
 	ld C,E                                               ; FC841A  cd 8b
@@ -120869,7 +120869,7 @@ MidiInA_ProcessRing:
 	jr z, .LFC842C                                       ; FC841F  66 0b
 	lda xbc, (xiz-302)                                   ; FC8421  f3 f9 d2 fe 31
 	push XBC                                             ; FC8426  39
-	call sub_FCACAA                                      ; FC8427  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC8427  1d aa ac fc
 	pop XIY                                              ; FC842B  5d
 .LFC842C:
 	inc 1,XIX                                            ; FC842C  ec 61
@@ -120972,7 +120972,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC8526  39
 	lda xwa, (xiz-712)                                   ; FC8527  f3 f9 38 fd 30
 	push XWA                                             ; FC852C  38
-	call sub_FC9F8B                                      ; FC852D  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC852D  1d 8b 9f fc
 	ld E,A                                               ; FC8531  c9 8d
 	and A,0x01                                           ; FC8533  c9 cc 01
 	add XSP,0x00000014                                   ; FC8536  ef c8 14 00 00 00
@@ -120980,7 +120980,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC854B                                       ; FC853E  66 0b
 	lda xbc, (xiz-712)                                   ; FC8540  f3 f9 38 fd 31
 	push XBC                                             ; FC8545  39
-	call sub_FCA6BB                                      ; FC8546  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8546  1d bb a6 fc
 	pop XIY                                              ; FC854A  5d
 .LFC854B:
 	ld C,E                                               ; FC854B  cd 8b
@@ -120990,7 +120990,7 @@ MidiInB_ProcessRing:
 	jr nz, .LFC8564                                      ; FC8557  6e 0b
 	lda xbc, (xiz-712)                                   ; FC8559  f3 f9 38 fd 31
 	push XBC                                             ; FC855E  39
-	call sub_FCAA98                                      ; FC855F  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC855F  1d 98 aa fc
 	pop XIY                                              ; FC8563  5d
 .LFC8564:
 	ld C,E                                               ; FC8564  cd 8b
@@ -120998,7 +120998,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC8576                                       ; FC8569  66 0b
 	lda xbc, (xiz-712)                                   ; FC856B  f3 f9 38 fd 31
 	push XBC                                             ; FC8570  39
-	call sub_FCACAA                                      ; FC8571  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC8571  1d aa ac fc
 	pop XIY                                              ; FC8575  5d
 .LFC8576:
 	inc 1,D                                              ; FC8576  cc 61
@@ -121038,7 +121038,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC85D5  39
 	lda xwa, (xiz-302)                                   ; FC85D6  f3 f9 d2 fe 30
 	push XWA                                             ; FC85DB  38
-	call sub_FC9F8B                                      ; FC85DC  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC85DC  1d 8b 9f fc
 	ld E,A                                               ; FC85E0  c9 8d
 	and A,0x01                                           ; FC85E2  c9 cc 01
 	add XSP,0x00000014                                   ; FC85E5  ef c8 14 00 00 00
@@ -121046,7 +121046,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC85FA                                       ; FC85ED  66 0b
 	lda xbc, (xiz-302)                                   ; FC85EF  f3 f9 d2 fe 31
 	push XBC                                             ; FC85F4  39
-	call sub_FCA6BB                                      ; FC85F5  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC85F5  1d bb a6 fc
 	pop XIY                                              ; FC85F9  5d
 .LFC85FA:
 	ld C,E                                               ; FC85FA  cd 8b
@@ -121054,7 +121054,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC860C                                       ; FC85FF  66 0b
 	lda xbc, (xiz-302)                                   ; FC8601  f3 f9 d2 fe 31
 	push XBC                                             ; FC8606  39
-	call sub_FCACAA                                      ; FC8607  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC8607  1d aa ac fc
 	pop XIY                                              ; FC860B  5d
 .LFC860C:
 	inc 1,XIX                                            ; FC860C  ec 61
@@ -121126,7 +121126,7 @@ MidiInB_ProcessRing:
 	push XBC                                             ; FC86BF  39
 	lda xwa, (xiz-712)                                   ; FC86C0  f3 f9 38 fd 30
 	push XWA                                             ; FC86C5  38
-	call sub_FC9F8B                                      ; FC86C6  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC86C6  1d 8b 9f fc
 	ld E,A                                               ; FC86CA  c9 8d
 	and A,0x01                                           ; FC86CC  c9 cc 01
 	add XSP,0x00000014                                   ; FC86CF  ef c8 14 00 00 00
@@ -121134,7 +121134,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC86E4                                       ; FC86D7  66 0b
 	lda xbc, (xiz-712)                                   ; FC86D9  f3 f9 38 fd 31
 	push XBC                                             ; FC86DE  39
-	call sub_FCA6BB                                      ; FC86DF  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC86DF  1d bb a6 fc
 	pop XIY                                              ; FC86E3  5d
 .LFC86E4:
 	ld C,E                                               ; FC86E4  cd 8b
@@ -121144,7 +121144,7 @@ MidiInB_ProcessRing:
 	jr nz, .LFC86FD                                      ; FC86F0  6e 0b
 	lda xbc, (xiz-712)                                   ; FC86F2  f3 f9 38 fd 31
 	push XBC                                             ; FC86F7  39
-	call sub_FCAA98                                      ; FC86F8  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC86F8  1d 98 aa fc
 	pop XIY                                              ; FC86FC  5d
 .LFC86FD:
 	ld C,E                                               ; FC86FD  cd 8b
@@ -121152,7 +121152,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC870F                                       ; FC8702  66 0b
 	lda xbc, (xiz-712)                                   ; FC8704  f3 f9 38 fd 31
 	push XBC                                             ; FC8709  39
-	call sub_FCACAA                                      ; FC870A  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC870A  1d aa ac fc
 	pop XIY                                              ; FC870E  5d
 .LFC870F:
 	inc 1,D                                              ; FC870F  cc 61
@@ -121194,7 +121194,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC8780                                       ; FC8773  66 0b
 	lda xbc, (xiz-302)                                   ; FC8775  f3 f9 d2 fe 31
 	push XBC                                             ; FC877A  39
-	call sub_FCA6BB                                      ; FC877B  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC877B  1d bb a6 fc
 	pop XIY                                              ; FC877F  5d
 .LFC8780:
 	ld C,E                                               ; FC8780  cd 8b
@@ -121202,7 +121202,7 @@ MidiInB_ProcessRing:
 	jr z, .LFC8792                                       ; FC8785  66 0b
 	lda xbc, (xiz-302)                                   ; FC8787  f3 f9 d2 fe 31
 	push XBC                                             ; FC878C  39
-	call sub_FCACAA                                      ; FC878D  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC878D  1d aa ac fc
 	pop XIY                                              ; FC8791  5d
 .LFC8792:
 	inc 1,XIX                                            ; FC8792  ec 61
@@ -121219,7 +121219,7 @@ MidiInB_ProcessRing:
 	unlk XIZ                                             ; FC87AB  ee 0d
 	ret                                                  ; FC87AD  0e
 ; Ring601850_ProcessNoteEvents: T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,
-;   sub_FC9F8B, sub_FCA6BB.
+;   PartNotes_ApplyFrame, PartFrame_SendToToneGen.
 Ring601850_ProcessNoteEvents:
 	link XIZ,0xfe3a                                      ; FC87AE  ee 0c 3a fe
 	pushw hl                                             ; FC87B2  2b
@@ -121278,7 +121278,7 @@ Ring601850_ProcessNoteEvents:
 	push XBC                                             ; FC8834  39
 	lda xwa, (xiz-422)                                   ; FC8835  f3 f9 5a fe 30
 	push XWA                                             ; FC883A  38
-	call sub_FC9F8B                                      ; FC883B  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC883B  1d 8b 9f fc
 	ld L,A                                               ; FC883F  c9 8f
 	and A,0x01                                           ; FC8841  c9 cc 01
 	add XSP,0x00000014                                   ; FC8844  ef c8 14 00 00 00
@@ -121286,7 +121286,7 @@ Ring601850_ProcessNoteEvents:
 	jr z, .LFC8859                                       ; FC884C  66 0b
 	lda xbc, (xiz-422)                                   ; FC884E  f3 f9 5a fe 31
 	push XBC                                             ; FC8853  39
-	call sub_FCA6BB                                      ; FC8854  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8854  1d bb a6 fc
 	pop XIY                                              ; FC8858  5d
 .LFC8859:
 	ld C,L                                               ; FC8859  cf 8b
@@ -121296,7 +121296,7 @@ Ring601850_ProcessNoteEvents:
 	jr nz, .LFC8872                                      ; FC8865  6e 0b
 	lda xbc, (xiz-422)                                   ; FC8867  f3 f9 5a fe 31
 	push XBC                                             ; FC886C  39
-	call sub_FCAA98                                      ; FC886D  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC886D  1d 98 aa fc
 	pop XIY                                              ; FC8871  5d
 .LFC8872:
 	ld C,L                                               ; FC8872  cf 8b
@@ -121304,7 +121304,7 @@ Ring601850_ProcessNoteEvents:
 	jr z, .LFC8884                                       ; FC8877  66 0b
 	lda xbc, (xiz-422)                                   ; FC8879  f3 f9 5a fe 31
 	push XBC                                             ; FC887E  39
-	call sub_FCACAA                                      ; FC887F  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC887F  1d aa ac fc
 	pop XIY                                              ; FC8883  5d
 .LFC8884:
 	inc 1,H                                              ; FC8884  ce 61
@@ -121368,7 +121368,7 @@ Ring601850_ProcessNoteEvents:
 .LFC894C:
 	lda xbc, (xiz-422)                                   ; FC894C  f3 f9 5a fe 31
 	push XBC                                             ; FC8951  39
-	call sub_FCAA98                                      ; FC8952  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8952  1d 98 aa fc
 	pop XIY                                              ; FC8956  5d
 	jrl .LFC87B9                                         ; FC8957  78 5f fe
 .LFC895A:
@@ -121378,7 +121378,7 @@ Ring601850_ProcessNoteEvents:
 	unlk XIZ                                             ; FC895D  ee 0d
 	ret                                                  ; FC895F  0e
 ; TimedEvents_ProcessRing: T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a
-;   part through 0x603422 (0xFF = skip), then sub_FCB1BB, sub_FC9F8B, sub_FCA6BB; 0xB0 frames to the CC path.
+;   part through 0x603422 (0xFF = skip), then sub_FCB1BB, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path.
 TimedEvents_ProcessRing:
 	link XIZ,0xfec6                                      ; FC8960  ee 0c c6 fe
 	pushw hl                                             ; FC8964  2b
@@ -121423,14 +121423,14 @@ TimedEvents_ProcessRing:
 	lda xbc, (xiz-18)                                    ; FC89C3  be ee 31
 	push XBC                                             ; FC89C6  39
 	push XIX                                             ; FC89C7  3c
-	call sub_FC9F8B                                      ; FC89C8  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC89C8  1d 8b 9f fc
 	ld H,A                                               ; FC89CC  c9 8e
 	and A,0x01                                           ; FC89CE  c9 cc 01
 	add XSP,0x00000016                                   ; FC89D1  ef c8 16 00 00 00
 	cp a, 0x00:i3                                          ; FC89D7  c9 d8
 	jr z, .LFC89E1                                       ; FC89D9  66 06
 	push XIX                                             ; FC89DB  3c
-	call sub_FCA6BB                                      ; FC89DC  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC89DC  1d bb a6 fc
 	pop XIY                                              ; FC89E0  5d
 .LFC89E1:
 	ld C,H                                               ; FC89E1  ce 8b
@@ -121464,14 +121464,14 @@ TimedEvents_ProcessRing:
 	inc 8,XSP                                            ; FC8A26  ef 60
 	jr z, .LFC8A30                                       ; FC8A28  66 06
 	push XIX                                             ; FC8A2A  3c
-	call sub_FCA6BB                                      ; FC8A2B  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8A2B  1d bb a6 fc
 	pop XIY                                              ; FC8A2F  5d
 .LFC8A30:
 	ld C,H                                               ; FC8A30  ce 8b
 	and C,0x02                                           ; FC8A32  cb cc 02
 	jr z, .LFC8A3D                                       ; FC8A35  66 06
 	push XIX                                             ; FC8A37  3c
-	call sub_FCAA98                                      ; FC8A38  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8A38  1d 98 aa fc
 	pop XIY                                              ; FC8A3C  5d
 .LFC8A3D:
 	incm8 0x01, (xix+0x03)                               ; FC8A3D  8c 03 61
@@ -121497,7 +121497,7 @@ TimedEvents_ProcessRing:
 	inc 8,XSP                                            ; FC8A6D  ef 60
 	jr z, .LFC8A77                                       ; FC8A6F  66 06
 	push XIX                                             ; FC8A71  3c
-	call sub_FCA6BB                                      ; FC8A72  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8A72  1d bb a6 fc
 	pop XIY                                              ; FC8A76  5d
 .LFC8A77:
 	ld C,H                                               ; FC8A77  ce 8b
@@ -121505,7 +121505,7 @@ TimedEvents_ProcessRing:
 	jrl z, .LFC8973                                      ; FC8A7C  76 f4 fe
 .LFC8A7F:
 	push XIX                                             ; FC8A7F  3c
-	call sub_FCAA98                                      ; FC8A80  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8A80  1d 98 aa fc
 	pop XIY                                              ; FC8A84  5d
 	jrl .LFC8973                                         ; FC8A85  78 eb fe
 .LFC8A88:
@@ -121552,7 +121552,7 @@ sub_FC8A8D:
 	jr z, .LFC8B03                                       ; FC8AF6  66 0b
 	lda xbc, (xiz-296)                                   ; FC8AF8  f3 f9 d8 fe 31
 	push XBC                                             ; FC8AFD  39
-	call sub_FCA6BB                                      ; FC8AFE  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8AFE  1d bb a6 fc
 	pop XIY                                              ; FC8B02  5d
 .LFC8B03:
 	ld C,D                                               ; FC8B03  cc 8b
@@ -121560,7 +121560,7 @@ sub_FC8A8D:
 	jr z, .LFC8B15                                       ; FC8B08  66 0b
 	lda xbc, (xiz-296)                                   ; FC8B0A  f3 f9 d8 fe 31
 	push XBC                                             ; FC8B0F  39
-	call sub_FCACAA                                      ; FC8B10  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC8B10  1d aa ac fc
 	pop XIY                                              ; FC8B14  5d
 .LFC8B15:
 	inc 1,XIX                                            ; FC8B15  ec 61
@@ -121633,7 +121633,7 @@ sub_FC8B36:
 	push XBC                                             ; FC8BC1  39
 	lda xwa, (xiz-416)                                   ; FC8BC2  f3 f9 60 fe 30
 	push XWA                                             ; FC8BC7  38
-	call sub_FC9F8B                                      ; FC8BC8  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC8BC8  1d 8b 9f fc
 	ld H,A                                               ; FC8BCC  c9 8e
 	and A,0x01                                           ; FC8BCE  c9 cc 01
 	add XSP,0x00000014                                   ; FC8BD1  ef c8 14 00 00 00
@@ -121641,7 +121641,7 @@ sub_FC8B36:
 	jr z, .LFC8BE6                                       ; FC8BD9  66 0b
 	lda xbc, (xiz-416)                                   ; FC8BDB  f3 f9 60 fe 31
 	push XBC                                             ; FC8BE0  39
-	call sub_FCA6BB                                      ; FC8BE1  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8BE1  1d bb a6 fc
 	pop XIY                                              ; FC8BE5  5d
 .LFC8BE6:
 	ld C,H                                               ; FC8BE6  ce 8b
@@ -121649,7 +121649,7 @@ sub_FC8B36:
 	jr z, .LFC8BF8                                       ; FC8BEB  66 0b
 	lda xbc, (xiz-416)                                   ; FC8BED  f3 f9 60 fe 31
 	push XBC                                             ; FC8BF2  39
-	call sub_FCAA98                                      ; FC8BF3  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8BF3  1d 98 aa fc
 	pop XIY                                              ; FC8BF7  5d
 .LFC8BF8:
 	ld C,H                                               ; FC8BF8  ce 8b
@@ -121657,7 +121657,7 @@ sub_FC8B36:
 	jr z, .LFC8C0A                                       ; FC8BFD  66 0b
 	lda xbc, (xiz-416)                                   ; FC8BFF  f3 f9 60 fe 31
 	push XBC                                             ; FC8C04  39
-	call sub_FCACAA                                      ; FC8C05  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC8C05  1d aa ac fc
 	pop XIY                                              ; FC8C09  5d
 .LFC8C0A:
 	incm8 0x01, (xiz-5)                                  ; FC8C0A  8e fb 61
@@ -121721,7 +121721,7 @@ sub_FC8B36:
 .LFC8CCF:
 	lda xbc, (xiz-416)                                   ; FC8CCF  f3 f9 60 fe 31
 	push XBC                                             ; FC8CD4  39
-	call sub_FCAA98                                      ; FC8CD5  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8CD5  1d 98 aa fc
 	pop XIY                                              ; FC8CD9  5d
 .LFC8CDA:
 	pop XIX                                              ; FC8CDA  5c
@@ -121758,14 +121758,14 @@ sub_FC8CE0:
 	inc 8,XSP                                            ; FC8D21  ef 60
 	jr z, .LFC8D2B                                       ; FC8D23  66 06
 	push XIX                                             ; FC8D25  3c
-	call sub_FCA6BB                                      ; FC8D26  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC8D26  1d bb a6 fc
 	pop XIY                                              ; FC8D2A  5d
 .LFC8D2B:
 	ld C,H                                               ; FC8D2B  ce 8b
 	and C,0x02                                           ; FC8D2D  cb cc 02
 	jr z, .LFC8D38                                       ; FC8D30  66 06
 	push XIX                                             ; FC8D32  3c
-	call sub_FCAA98                                      ; FC8D33  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC8D33  1d 98 aa fc
 	pop XIY                                              ; FC8D37  5d
 .LFC8D38:
 	incm8 0x01, (xix+0x03)                               ; FC8D38  8c 03 61
@@ -121939,7 +121939,7 @@ sub_FC8E7B:
 	ld c, 0x0f:opc                                          ; FC8E8C  23 0f
 	m_mul MBD+r6, 0x08, 3                                ; FC8E8E  8e 08 43
 	ld HL,BC                                             ; FC8E91  d9 8b
-	ldw wa, 0x39f7                                       ; FC8E93  30 f7 39
+	ldw wa, PartNoteList_Heads                                       ; FC8E93  30 f7 39
 	add WA,BC                                            ; FC8E96  d9 80
 	ld (0x602052:24), wa                                ; FC8E98  f2 52 20 60 50
 	extz XWA                                             ; FC8E9D  e8 12
@@ -122898,21 +122898,21 @@ sub_FC9727:
 	inc 8,XSP                                            ; FC976D  ef 60
 	jr z, .LFC9777                                       ; FC976F  66 06
 	push XIX                                             ; FC9771  3c
-	call sub_FCA6BB                                      ; FC9772  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC9772  1d bb a6 fc
 	pop XIY                                              ; FC9776  5d
 .LFC9777:
 	ld C,H                                               ; FC9777  ce 8b
 	and C,0x02                                           ; FC9779  cb cc 02
 	jr z, .LFC9784                                       ; FC977C  66 06
 	push XIX                                             ; FC977E  3c
-	call sub_FCAA98                                      ; FC977F  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC977F  1d 98 aa fc
 	pop XIY                                              ; FC9783  5d
 .LFC9784:
 	ld C,H                                               ; FC9784  ce 8b
 	and C,0x04                                           ; FC9786  cb cc 04
 	jr z, .LFC9791                                       ; FC9789  66 06
 	push XIX                                             ; FC978B  3c
-	call sub_FCACAA                                      ; FC978C  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC978C  1d aa ac fc
 	pop XIY                                              ; FC9790  5d
 .LFC9791:
 	pop XIX                                              ; FC9791  5c
@@ -122948,14 +122948,14 @@ sub_FC9796:
 	inc 8,XSP                                            ; FC97D5  ef 60
 	jr z, .LFC97DF                                       ; FC97D7  66 06
 	push XIX                                             ; FC97D9  3c
-	call sub_FCA6BB                                      ; FC97DA  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC97DA  1d bb a6 fc
 	pop XIY                                              ; FC97DE  5d
 .LFC97DF:
 	ld C,H                                               ; FC97DF  ce 8b
 	and C,0x02                                           ; FC97E1  cb cc 02
 	jr z, .LFC97EC                                       ; FC97E4  66 06
 	push XIX                                             ; FC97E6  3c
-	call sub_FCAA98                                      ; FC97E7  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC97E7  1d 98 aa fc
 	pop XIY                                              ; FC97EB  5d
 .LFC97EC:
 	pop XIX                                              ; FC97EC  5c
@@ -122997,7 +122997,7 @@ sub_FC97F1:
 	inc 8,XSP                                            ; FC9844  ef 60
 	jr z, .LFC984E                                       ; FC9846  66 06
 	push XIX                                             ; FC9848  3c
-	call sub_FCAA98                                      ; FC9849  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC9849  1d 98 aa fc
 	pop XIY                                              ; FC984D  5d
 .LFC984E:
 	pop XIX                                              ; FC984E  5c
@@ -123039,7 +123039,7 @@ sub_FC9854:
 	inc 8,XSP                                            ; FC989B  ef 60
 	jr z, .LFC98A5                                       ; FC989D  66 06
 	push XIX                                             ; FC989F  3c
-	call sub_FCAA98                                      ; FC98A0  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC98A0  1d 98 aa fc
 	pop XIY                                              ; FC98A4  5d
 .LFC98A5:
 	cp L,0xff                                            ; FC98A5  cf cf ff
@@ -123066,7 +123066,7 @@ sub_FC9854:
 	inc 8,XSP                                            ; FC98D7  ef 60
 	jr z, .LFC98E1                                       ; FC98D9  66 06
 	push XIX                                             ; FC98DB  3c
-	call sub_FCAA98                                      ; FC98DC  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC98DC  1d 98 aa fc
 	pop XIY                                              ; FC98E0  5d
 .LFC98E1:
 	pop XIX                                              ; FC98E1  5c
@@ -123102,7 +123102,7 @@ sub_FC98E7:
 	inc 8,XSP                                            ; FC9924  ef 60
 	jr z, .LFC992E                                       ; FC9926  66 06
 	push XIX                                             ; FC9928  3c
-	call sub_FCACAA                                      ; FC9929  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC9929  1d aa ac fc
 	pop XIY                                              ; FC992D  5d
 .LFC992E:
 	pop XIX                                              ; FC992E  5c
@@ -123158,7 +123158,7 @@ sub_FC9933:
 	push XBC                                             ; FC99A7  39
 	lda xwa, (xiz-410)                                   ; FC99A8  f3 f9 66 fe 30
 	push XWA                                             ; FC99AD  38
-	call sub_FC9F8B                                      ; FC99AE  1d 8b 9f fc
+	call PartNotes_ApplyFrame                                      ; FC99AE  1d 8b 9f fc
 	ld L,A                                               ; FC99B2  c9 8f
 	and A,0x01                                           ; FC99B4  c9 cc 01
 	add XSP,0x00000014                                   ; FC99B7  ef c8 14 00 00 00
@@ -123166,7 +123166,7 @@ sub_FC9933:
 	jr z, .LFC99CC                                       ; FC99BF  66 0b
 	lda xbc, (xiz-410)                                   ; FC99C1  f3 f9 66 fe 31
 	push XBC                                             ; FC99C6  39
-	call sub_FCA6BB                                      ; FC99C7  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC99C7  1d bb a6 fc
 	pop XIY                                              ; FC99CB  5d
 .LFC99CC:
 	ld C,L                                               ; FC99CC  cf 8b
@@ -123176,7 +123176,7 @@ sub_FC9933:
 	jr nz, .LFC99E5                                      ; FC99D8  6e 0b
 	lda xbc, (xiz-410)                                   ; FC99DA  f3 f9 66 fe 31
 	push XBC                                             ; FC99DF  39
-	call sub_FCAA98                                      ; FC99E0  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC99E0  1d 98 aa fc
 	pop XIY                                              ; FC99E4  5d
 .LFC99E5:
 	ld C,L                                               ; FC99E5  cf 8b
@@ -123184,7 +123184,7 @@ sub_FC9933:
 	jr z, .LFC99F7                                       ; FC99EA  66 0b
 	lda xbc, (xiz-410)                                   ; FC99EC  f3 f9 66 fe 31
 	push XBC                                             ; FC99F1  39
-	call sub_FCACAA                                      ; FC99F2  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC99F2  1d aa ac fc
 	pop XIY                                              ; FC99F6  5d
 .LFC99F7:
 	inc 1,H                                              ; FC99F7  ce 61
@@ -123230,7 +123230,7 @@ sub_FC9933:
 	jr z, .LFC9A7C                                       ; FC9A6F  66 0b
 	lda xbc, (xiz-410)                                   ; FC9A71  f3 f9 66 fe 31
 	push XBC                                             ; FC9A76  39
-	call sub_FCA6BB                                      ; FC9A77  1d bb a6 fc
+	call PartFrame_SendToToneGen                                      ; FC9A77  1d bb a6 fc
 	pop XIY                                              ; FC9A7B  5d
 .LFC9A7C:
 	ld C,L                                               ; FC9A7C  cf 8b
@@ -123238,7 +123238,7 @@ sub_FC9933:
 	jr z, .LFC9A8E                                       ; FC9A81  66 0b
 	lda xbc, (xiz-410)                                   ; FC9A83  f3 f9 66 fe 31
 	push XBC                                             ; FC9A88  39
-	call sub_FCACAA                                      ; FC9A89  1d aa ac fc
+	call PartFrame_RecordToSeqBuf                                      ; FC9A89  1d aa ac fc
 	pop XIY                                              ; FC9A8D  5d
 .LFC9A8E:
 	inc 1,XIX                                            ; FC9A8E  ec 61
@@ -123283,7 +123283,7 @@ sub_FC9AA1:
 	jr z, .LFC9AFB                                       ; FC9AEE  66 0b
 	lda xbc, (xiz-414)                                   ; FC9AF0  f3 f9 62 fe 31
 	push XBC                                             ; FC9AF5  39
-	call sub_FCAA98                                      ; FC9AF6  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC9AF6  1d 98 aa fc
 	pop XIY                                              ; FC9AFA  5d
 .LFC9AFB:
 	inc 1,H                                              ; FC9AFB  ce 61
@@ -123341,7 +123341,7 @@ sub_FC9AA1:
 .LFC9BAE:
 	lda xbc, (xiz-414)                                   ; FC9BAE  f3 f9 62 fe 31
 	push XBC                                             ; FC9BB3  39
-	call sub_FCAA98                                      ; FC9BB4  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC9BB4  1d 98 aa fc
 	pop XIY                                              ; FC9BB8  5d
 .LFC9BB9:
 	ld (xiz-118), 0x00                                   ; FC9BB9  be 8a 00 00
@@ -123370,7 +123370,7 @@ sub_FC9AA1:
 	jr Z,.LFC9C0B                                        ; FC9BFE  66 0b
 	lda xbc, (xiz-414)                                   ; FC9C00  f3 f9 62 fe 31
 	push XBC                                             ; FC9C05  39
-	call sub_FCAA98                                      ; FC9C06  1d 98 aa fc
+	call PartFrame_SendToMidiOut                                      ; FC9C06  1d 98 aa fc
 	pop XIY                                              ; FC9C0A  5d
 .LFC9C0B:
 	inc 1,H                                              ; FC9C0B  ce 61
@@ -123772,7 +123772,13 @@ NoteFrame_SelectForPart:
 	popw hl                                              ; FC9F87  4b
 	unlk XIZ                                             ; FC9F88  ee 0d
 	ret                                                  ; FC9F8A  0e
-sub_FC9F8B:
+; PartNotes_ApplyFrame: (frame, part block, part): per entry -- note-on: a 15-byte node from the pool (head 0x39F7 + 0x1E0) while
+;   the part's budget (0x3800 + part) is above 0; up to three outputs from the part block: +0 with
+;   PartNote_MapForToneGen / _ApplyVelocityOffset (result bit 0), +1 with PartNote_TransposeForMidiOut (bit 1),
+;   +2 with the raw note (bit 2); the entry copied into the node, PartNoteList_MoveNode, budget - 1.  Note-off: the
+;   part's node with the same note, source and channel copied back with velocity 0, the same bits, the node
+;   freed, budget + 1.  A = the bits.
+PartNotes_ApplyFrame:
 	link XIZ,0xffef                                      ; FC9F8B  ee 0c ef ff
 	pushw hl                                             ; FC9F8F  2b
 	pushw de                                             ; FC9F90  2a
@@ -123781,7 +123787,7 @@ sub_FC9F8B:
 	ld c, 0x0f:opc                                          ; FC9F95  23 0f
 	mul bc, e                                          ; FC9F97  cd 43
 	ld HL,BC                                             ; FC9F99  d9 8b
-	ldw wa, 0x39f7                                       ; FC9F9B  30 f7 39
+	ldw wa, PartNoteList_Heads                                       ; FC9F9B  30 f7 39
 	ld (xiz-9), wa                                       ; FC9F9E  be f7 50
 	add WA,BC                                            ; FC9FA1  d9 80
 	ld (xiz-4), wa                                       ; FC9FA3  be fc 50
@@ -123819,7 +123825,7 @@ sub_FC9F8B:
 	ldfr_berp e, 0xf4                                      ; FC9FF7  c7 f4 9d   ld IYL,E
 	extz IY                                              ; FC9FFA  dd 12
 	extz XIY                                             ; FC9FFC  ed 12
-	add XIY,0x00003800                                   ; FC9FFE  ed c8 00 38 00 00
+	add XIY,PartNote_Budget                                   ; FC9FFE  ed c8 00 38 00 00
 	ld C,(XIY)                                           ; FCA004  85 23
 	cp c, 0x00:i3                                          ; FCA006  cb d8
 	jrl le, .LFCA176                                     ; FCA008  72 6b 01
@@ -123847,14 +123853,14 @@ sub_FC9F8B:
 	push XWA                                             ; FCA040  38
 	ld A,(XIX)                                           ; FCA041  84 21
 	pushw wa                                             ; FCA043  28
-	calr sub_FCADD5                                      ; FCA044  1e 8e 0d
+	calr PartNote_MapForToneGen                                      ; FCA044  1e 8e 0d
 	ld (XIX+0x03),A                                      ; FCA047  bc 03 41
 	ld XBC,(XIZ+0x0c)                                    ; FCA04A  ae 0c 21
 	ld XWA,(XBC+0x03)                                    ; FCA04D  a9 03 20
 	push XWA                                             ; FCA050  38
 	ld A,(XIX+0x01)                                      ; FCA051  8c 01 21
 	pushw wa                                             ; FCA054  28
-	calr sub_FCADFA                                      ; FCA055  1e a2 0d
+	calr PartNote_ApplyVelocityOffset                                      ; FCA055  1e a2 0d
 	ld (XIX+0x04),A                                      ; FCA058  bc 04 41
 	m_set 0, MDD+r6, 0xf9                                ; FCA05B  be f9 b8
 	inc 8,XSP                                            ; FCA05E  ef 60
@@ -123873,7 +123879,7 @@ sub_FC9F8B:
 	push XWA                                             ; FCA07C  38
 	ld A,(XIX)                                           ; FCA07D  84 21
 	pushw wa                                             ; FCA07F  28
-	calr sub_FCAE2D                                      ; FCA080  1e aa 0d
+	calr PartNote_TransposeForMidiOut                                      ; FCA080  1e aa 0d
 	ld (XIX+0x06),A                                      ; FCA083  bc 06 41
 	m_set 1, MDD+r6, 0xf9                                ; FCA086  be f9 b9
 	inc 6,XSP                                            ; FCA089  ef 66
@@ -123903,11 +123909,11 @@ sub_FC9F8B:
 	pop XIX                                              ; FCA0BE  5c
 	m_push MWD+r6, 0xfc                                  ; FCA0BF  9e fc 04
 	m_push MWD+r6, 0xfe                                  ; FCA0C2  9e fe 04
-	calr sub_FCA194                                      ; FCA0C5  1e cc 00
+	calr PartNoteList_MoveNode                                      ; FCA0C5  1e cc 00
 	ld C,E                                               ; FCA0C8  cd 8b
 	extz BC                                              ; FCA0CA  d9 12
 	extz XBC                                             ; FCA0CC  e9 12
-	add XBC,0x00003800                                   ; FCA0CE  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA0CE  e9 c8 00 38 00 00
 	decm8 0x01, (xbc)                                    ; FCA0D4  81 69
 	jrl .LFCA173                                         ; FCA0D6  78 9a 00
 .LFCA0D9:
@@ -123970,11 +123976,11 @@ sub_FC9F8B:
 .LFCA15C:
 	m_push MWD+r6, 0xfa                                  ; FCA15C  9e fa 04
 	m_push MWD+r6, 0xfe                                  ; FCA15F  9e fe 04
-	calr sub_FCA194                                      ; FCA162  1e 2f 00
+	calr PartNoteList_MoveNode                                      ; FCA162  1e 2f 00
 	ld C,E                                               ; FCA165  cd 8b
 	extz BC                                              ; FCA167  d9 12
 	extz XBC                                             ; FCA169  e9 12
-	add XBC,0x00003800                                   ; FCA16B  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA16B  e9 c8 00 38 00 00
 	incm8 0x01, (xbc)                                    ; FCA171  81 61
 .LFCA173:
 	pop XIY                                              ; FCA173  5d
@@ -123993,7 +123999,8 @@ sub_FC9F8B:
 	popw hl                                              ; FCA190  4b
 	unlk XIZ                                             ; FCA191  ee 0d
 	ret                                                  ; FCA193  0e
-sub_FCA194:
+; PartNoteList_MoveNode: NoteList_MoveNode for the 15-byte nodes (previous +0x0B, next +0x0D).
+PartNoteList_MoveNode:
 	link XIZ,0xfffa                                      ; FCA194  ee 0c fa ff
 	push XHL                                             ; FCA198  3b
 	push XDE                                             ; FCA199  3a
@@ -124047,7 +124054,7 @@ sub_FCA194:
 	ld c, 0x0f:opc                                          ; FCA210  23 0f
 	m_mul MBD+r6, 0x0e, 3                                ; FCA212  8e 0e 43
 	ld (xiz-5), bc                                       ; FCA215  be fb 51
-	ldw de, 0x39f7                                       ; FCA218  32 f7 39
+	ldw de, PartNoteList_Heads                                       ; FCA218  32 f7 39
 	add DE,BC                                            ; FCA21B  d9 82
 	extz XDE                                             ; FCA21D  ea 12
 	ld HL,(XDE+0x0d)                                     ; FCA21F  9a 0d 23
@@ -124099,7 +124106,7 @@ sub_FCA276:
 	ld c, 0x0f:opc                                          ; FCA27D  23 0f
 	m_mul MBD+r6, 0x0e, 3                                ; FCA27F  8e 0e 43
 	ld HL,BC                                             ; FCA282  d9 8b
-	ldw ix, 0x39f7                                       ; FCA284  34 f7 39
+	ldw ix, PartNoteList_Heads                                       ; FCA284  34 f7 39
 	add BC,IX                                            ; FCA287  dc 81
 	ld (xiz-2), bc                                       ; FCA289  be fe 51
 	ld WA,IX                                             ; FCA28C  dc 88
@@ -124181,11 +124188,11 @@ sub_FCA276:
 	jr nz, .LFCA36C                                      ; FCA34B  6e 1f
 	m_push MWD+r6, 0xfc                                  ; FCA34D  9e fc 04
 	pushw ix                                             ; FCA350  2c
-	calr sub_FCA194                                      ; FCA351  1e 40 fe
+	calr PartNoteList_MoveNode                                      ; FCA351  1e 40 fe
 	ld BC,(XIZ+0x0e)                                     ; FCA354  9e 0e 21
 	extz BC                                              ; FCA357  d9 12
 	extz XBC                                             ; FCA359  e9 12
-	add XBC,0x00003800                                   ; FCA35B  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA35B  e9 c8 00 38 00 00
 	incm8 0x01, (xbc)                                    ; FCA361  81 61
 	ld ix, (xiz-2)                                       ; FCA363  9e fe 24
 	ld IX,(XIX+0x0b)                                     ; FCA366  9c 0b 24
@@ -124275,11 +124282,11 @@ sub_FCA276:
 	jr nz, .LFCA44E                                      ; FCA42D  6e 1f
 	m_push MWD+r6, 0xfc                                  ; FCA42F  9e fc 04
 	pushw ix                                             ; FCA432  2c
-	calr sub_FCA194                                      ; FCA433  1e 5e fd
+	calr PartNoteList_MoveNode                                      ; FCA433  1e 5e fd
 	ld BC,(XIZ+0x0e)                                     ; FCA436  9e 0e 21
 	extz BC                                              ; FCA439  d9 12
 	extz XBC                                             ; FCA43B  e9 12
-	add XBC,0x00003800                                   ; FCA43D  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA43D  e9 c8 00 38 00 00
 	incm8 0x01, (xbc)                                    ; FCA443  81 61
 	ld ix, (xiz-2)                                       ; FCA445  9e fe 24
 	ld IX,(XIX+0x0b)                                     ; FCA448  9c 0b 24
@@ -124315,7 +124322,7 @@ sub_FCA475:
 	ld c, 0x0f:opc                                          ; FCA47C  23 0f
 	m_mul MBD+r6, 0x0e, 3                                ; FCA47E  8e 0e 43
 	ld HL,BC                                             ; FCA481  d9 8b
-	ldw ix, 0x39f7                                       ; FCA483  34 f7 39
+	ldw ix, PartNoteList_Heads                                       ; FCA483  34 f7 39
 	add BC,IX                                            ; FCA486  dc 81
 	ld (xiz-2), bc                                       ; FCA488  be fe 51
 	ld WA,IX                                             ; FCA48B  dc 88
@@ -124407,11 +124414,11 @@ sub_FCA475:
 	jr nz, .LFCA58B                                      ; FCA56A  6e 1f
 	m_push MWD+r6, 0xfc                                  ; FCA56C  9e fc 04
 	pushw ix                                             ; FCA56F  2c
-	calr sub_FCA194                                      ; FCA570  1e 21 fc
+	calr PartNoteList_MoveNode                                      ; FCA570  1e 21 fc
 	ld BC,(XIZ+0x0e)                                     ; FCA573  9e 0e 21
 	extz BC                                              ; FCA576  d9 12
 	extz XBC                                             ; FCA578  e9 12
-	add XBC,0x00003800                                   ; FCA57A  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA57A  e9 c8 00 38 00 00
 	incm8 0x01, (xbc)                                    ; FCA580  81 61
 	ld ix, (xiz-2)                                       ; FCA582  9e fe 24
 	ld IX,(XIX+0x0b)                                     ; FCA585  9c 0b 24
@@ -124515,11 +124522,11 @@ sub_FCA475:
 	jr nz, .LFCA694                                      ; FCA673  6e 1f
 	m_push MWD+r6, 0xfc                                  ; FCA675  9e fc 04
 	pushw ix                                             ; FCA678  2c
-	calr sub_FCA194                                      ; FCA679  1e 18 fb
+	calr PartNoteList_MoveNode                                      ; FCA679  1e 18 fb
 	ld BC,(XIZ+0x0e)                                     ; FCA67C  9e 0e 21
 	extz BC                                              ; FCA67F  d9 12
 	extz XBC                                             ; FCA681  e9 12
-	add XBC,0x00003800                                   ; FCA683  e9 c8 00 38 00 00
+	add XBC,PartNote_Budget                                   ; FCA683  e9 c8 00 38 00 00
 	incm8 0x01, (xbc)                                    ; FCA689  81 61
 	ld ix, (xiz-2)                                       ; FCA68B  9e fe 24
 	ld IX,(XIX+0x0b)                                     ; FCA68E  9c 0b 24
@@ -124547,7 +124554,8 @@ sub_FCA475:
 	popw hl                                              ; FCA6B7  4b
 	unlk XIZ                                             ; FCA6B8  ee 0d
 	ret                                                  ; FCA6BA  0e
-sub_FCA6BB:
+; PartFrame_SendToToneGen: result bit 0 of PartNotes_ApplyFrame: the frame to the tone generator (over the link).
+PartFrame_SendToToneGen:
 	link XIZ,0x0000                                      ; FCA6BB  ee 0c 00 00
 	pushw hl                                             ; FCA6BF  2b
 	push XIX                                             ; FCA6C0  3c
@@ -124731,12 +124739,12 @@ sub_FCA738:
 	ld c, 0x0f:opc                                          ; FCA878  23 0f
 	m_mul MBD+r6, 0x08, 3                                ; FCA87A  8e 08 43
 	ld HL,BC                                             ; FCA87D  d9 8b
-	ldw wa, 0x39f7                                       ; FCA87F  30 f7 39
+	ldw wa, PartNoteList_Heads                                       ; FCA87F  30 f7 39
 	add WA,BC                                            ; FCA882  d9 80
 	ld (xiz-6), wa                                       ; FCA884  be fa 50
 	add BC,0x000d                                        ; FCA887  d9 c8 0d 00
 	extz XBC                                             ; FCA88B  e9 12
-	ld IY,(XBC+0x39f7)                                   ; FCA88D  d3 e5 f7 39 25
+	ld IY,(XBC+PartNoteList_Heads)                                   ; FCA88D  d3 e5 f7 39 25
 	cp IY,WA                                             ; FCA892  d8 f5
 	jr nz, .LFCA8CB                                      ; FCA894  6e 35
 	cp E,0xff                                            ; FCA896  cd cf ff
@@ -124774,7 +124782,7 @@ sub_FCA8D4:
 	ld c, 0x0f:opc                                          ; FCA8DB  23 0f
 	m_mul MBD+r6, 0x08, 3                                ; FCA8DD  8e 08 43
 	ld HL,BC                                             ; FCA8E0  d9 8b
-	ldw ix, 0x39f7                                       ; FCA8E2  34 f7 39
+	ldw ix, PartNoteList_Heads                                       ; FCA8E2  34 f7 39
 	add IX,BC                                            ; FCA8E5  d9 84
 	lda xbc, (0x602000:24)                               ; FCA8E7  f2 00 20 60 31
 	ld (xiz-4), xbc                                      ; FCA8EC  be fc 61
@@ -124941,7 +124949,9 @@ sub_FCA8D4:
 	pop XHL                                              ; FCAA94  5b
 	unlk XIZ                                             ; FCAA95  ee 0d
 	ret                                                  ; FCAA97  0e
-sub_FCAA98:
+; PartFrame_SendToMidiOut: result bit 1, unless (0x602493) bit 5: the frame to the MIDI OUT rings (T_Ring601432 / T_Ring60153C,
+;   T_MIDI_PostSendWork).
+PartFrame_SendToMidiOut:
 	link XIZ,0xfff8                                      ; FCAA98  ee 0c f8 ff
 	pushw hl                                             ; FCAA9C  2b
 	pushw de                                             ; FCAA9D  2a
@@ -125078,13 +125088,13 @@ sub_FCAA98:
 	ld C,(XWA+0x03)                                      ; FCABE2  88 03 23
 	mul C,0x0f                                           ; FCABE5  cb 08 0f
 	ld HL,BC                                             ; FCABE8  d9 8b
-	ldw bc, 0x39f7                                       ; FCABEA  31 f7 39
+	ldw bc, PartNoteList_Heads                                       ; FCABEA  31 f7 39
 	ld DE,BC                                             ; FCABED  d9 8a
 	add DE,HL                                            ; FCABEF  db 82
 	ld BC,HL                                             ; FCABF1  db 89
 	add BC,0x000d                                        ; FCABF3  d9 c8 0d 00
 	extz XBC                                             ; FCABF7  e9 12
-	ld IY,(XBC+0x39f7)                                   ; FCABF9  d3 e5 f7 39 25
+	ld IY,(XBC+PartNoteList_Heads)                                   ; FCABF9  d3 e5 f7 39 25
 	cp IY,DE                                             ; FCABFE  da f5
 	jrl nz, .LFCACA4                                     ; FCAC00  7e a1 00
 	ld xbc, (xiz-4)                                      ; FCAC03  ae fc 21
@@ -125159,7 +125169,9 @@ sub_FCAA98:
 	popw hl                                              ; FCACA6  4b
 	unlk XIZ                                             ; FCACA7  ee 0d
 	ret                                                  ; FCACA9  0e
-sub_FCACAA:
+; PartFrame_RecordToSeqBuf: result bit 2: each entry as a 5-byte 0x90 event with Seq_BeatTick, staged at 0x602000 and put on SeqBufRing
+;   (SeqBuf_Flags bit 0 set).
+PartFrame_RecordToSeqBuf:
 	link XIZ,0xffec                                      ; FCACAA  ee 0c ec ff
 	pushw hl                                             ; FCACAE  2b
 	pushw de                                             ; FCACAF  2a
@@ -125293,7 +125305,9 @@ Note_TransposeFoldOctaves:
 	popw hl                                              ; FCADD1  4b
 	unlk XIZ                                             ; FCADD2  ee 0d
 	ret                                                  ; FCADD4  0e
-sub_FCADD5:
+; PartNote_MapForToneGen: on screen 0x28 the note is EditCursor_Note; then T_F41044 with the part block's +0x0E -- the note the tone
+;   generator gets.
+PartNote_MapForToneGen:
 	link XIZ,0x0000                                      ; FCADD5  ee 0c 00 00
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x28                          ; FCADD9  c1 7a 20 3f 28
 	jr nz, .LFCADE8                                      ; FCADDE  6e 08
@@ -125308,7 +125322,8 @@ sub_FCADD5:
 	pop XIY                                              ; FCADF6  5d
 	unlk XIZ                                             ; FCADF7  ee 0d
 	ret                                                  ; FCADF9  0e
-sub_FCADFA:
+; PartNote_ApplyVelocityOffset: velocity + the part block's signed offset (+1), clamped to 0 / 0x7F; unchanged when the offset is 0.
+PartNote_ApplyVelocityOffset:
 	link XIZ,0x0000                                      ; FCADFA  ee 0c 00 00
 	pushw hl                                             ; FCADFE  2b
 	pushw de                                             ; FCADFF  2a
@@ -125337,7 +125352,9 @@ sub_FCADFA:
 	popw hl                                              ; FCAE29  4b
 	unlk XIZ                                             ; FCAE2A  ee 0d
 	ret                                                  ; FCAE2C  0e
-sub_FCAE2D:
+; PartNote_TransposeForMidiOut: on screen 0x28 EditCursor_Note; otherwise the note + the block's transpose (+1), folded into 0..0x7F by
+;   octaves.
+PartNote_TransposeForMidiOut:
 	link XIZ,0x0000                                      ; FCAE2D  ee 0c 00 00
 	pushw hl                                             ; FCAE31  2b
 	ld H,(XIZ+0x08)                                      ; FCAE32  8e 08 26
@@ -125913,7 +125930,7 @@ sub_FCB2F0:
 	ld (XBC),0x80                                        ; FCB3C0  b1 00 80
 	lda xbc, (xiz-296)                                   ; FCB3C3  f3 f9 d8 fe 31
 	push XBC                                             ; FCB3C8  39
-	calr sub_FCA6BB                                      ; FCB3C9  1e ef f2
+	calr PartFrame_SendToToneGen                                      ; FCB3C9  1e ef f2
 	pop XIY                                              ; FCB3CC  5d
 .LFCB3CD:
 	pop XIX                                              ; FCB3CD  5c
@@ -125938,7 +125955,7 @@ sub_FCB2F0:
 ;   RAM 0x3800  32 x u8, all 24    a per-SLOT budget.  0xFC9FFE `add XIY,
 ;               0x00003800 / ld C,(XIY) / cp c,0 / jrl le` skips when it is
 ;               <= 0; 0xFCA0CE `decm8 0x01,(xbc)` spends one; five more `add
-;               XBC,0x00003800` in sub_FC9F8B/sub_FCA276/sub_FCA475.
+;               XBC,0x00003800` in PartNotes_ApplyFrame/sub_FCA276/sub_FCA475.
 ;   RAM 0x3820   3 x u8, all 16    the same per QUEUE (0xFC9CB3, 0xFC9D49).
 ;   RAM 0x3823   3 x 13-byte QUEUE HEADS.  0xFC8F7C `ldw DE,0x3823 / add
 ;               DE,13*k`.  Node layout: +0..+8 payload (+2 a key byte and

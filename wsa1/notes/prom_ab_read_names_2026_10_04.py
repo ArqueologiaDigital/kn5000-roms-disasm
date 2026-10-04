@@ -1925,10 +1925,10 @@ ROWS = [
     ("FC8448", "MidiInB_ProcessRing", "the same for MIDI IN B (T_MidiInBRing_ScanRewind, MidiInB_GatherFrame)."),
     ("FC8960", "TimedEvents_ProcessRing",
      "T_TimedEvents_ProcessRing: T_TimedEventRing_ScanRewind, TimedEvents_GatherFrame in a loop; a 0x90 frame's channel mapped to a\n"
-     "part through 0x603422 (0xFF = skip), then sub_FCB1BB, sub_FC9F8B, sub_FCA6BB; 0xB0 frames to the CC path."),
+     "part through 0x603422 (0xFF = skip), then sub_FCB1BB, PartNotes_ApplyFrame, PartFrame_SendToToneGen; 0xB0 frames to the CC path."),
     ("FC87AE", "Ring601850_ProcessNoteEvents",
      "T_F413B8: Ring601850_GatherFrame in a loop, each frame through NoteList_ApplyFrame, NoteFrame_SelectForPart, sub_FCAE76,\n"
-     "sub_FC9F8B, sub_FCA6BB."),
+     "PartNotes_ApplyFrame, PartFrame_SendToToneGen."),
     ("FC915C", "MidiInA_GatherFrame",
      "(pending, frame): frame = {count, kind 0x90 / 0xB0, 1, channel, entries of 9 bytes from +7: note, velocity};\n"
      "consecutive note on / off messages on one channel, up to 0x20, or one control change; a message on another\n"
@@ -1954,6 +1954,30 @@ ROWS = [
      "(out frame, note frame, part block, part): the entries whose voice mask overlaps 0x602054[part] and -- unless\n"
      "the block's +1 is not 0xFF -- whose note and velocity lie within the part's range record (6 bytes at\n"
      "+0x62 + part x 6: note low / high, velocity low / high) go to the out frame's +7 / +8; A = their count."),
+    ("FC9F8B", "PartNotes_ApplyFrame",
+     "(frame, part block, part): per entry -- note-on: a 15-byte node from the pool (head 0x39F7 + 0x1E0) while\n"
+     "the part's budget (0x3800 + part) is above 0; up to three outputs from the part block: +0 with\n"
+     "PartNote_MapForToneGen / _ApplyVelocityOffset (result bit 0), +1 with PartNote_TransposeForMidiOut (bit 1),\n"
+     "+2 with the raw note (bit 2); the entry copied into the node, PartNoteList_MoveNode, budget - 1.  Note-off: the\n"
+     "part's node with the same note, source and channel copied back with velocity 0, the same bits, the node\n"
+     "freed, budget + 1.  A = the bits."),
+    ("FCA194", "PartNoteList_MoveNode", "NoteList_MoveNode for the 15-byte nodes (previous +0x0B, next +0x0D)."),
+    ("FCADD5", "PartNote_MapForToneGen",
+     "on screen 0x28 the note is EditCursor_Note; then T_F41044 with the part block's +0x0E -- the note the tone\n"
+     "generator gets."),
+    ("FCADFA", "PartNote_ApplyVelocityOffset",
+     "velocity + the part block's signed offset (+1), clamped to 0 / 0x7F; unchanged when the offset is 0."),
+    ("FCAE2D", "PartNote_TransposeForMidiOut",
+     "on screen 0x28 EditCursor_Note; otherwise the note + the block's transpose (+1), folded into 0..0x7F by\n"
+     "octaves."),
+    ("FCA6BB", "PartFrame_SendToToneGen",
+     "result bit 0 of PartNotes_ApplyFrame: the frame to the tone generator (over the link)."),
+    ("FCAA98", "PartFrame_SendToMidiOut",
+     "result bit 1, unless (0x602493) bit 5: the frame to the MIDI OUT rings (T_Ring601432 / T_Ring60153C,\n"
+     "T_MIDI_PostSendWork)."),
+    ("FCACAA", "PartFrame_RecordToSeqBuf",
+     "result bit 2: each entry as a 5-byte 0x90 event with Seq_BeatTick, staged at 0x602000 and put on SeqBufRing\n"
+     "(SeqBuf_Flags bit 0 set)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

@@ -4035,4 +4035,12 @@ RENAMES = [
     ("sub_FC9D6E", "NoteList_MoveNode"),
     ("sub_FC9C1D", "NoteList_ApplyFrame"),
     ("sub_FC9EA3", "NoteFrame_SelectForPart"),
+    ("sub_FC9F8B", "PartNotes_ApplyFrame"),
+    ("sub_FCA194", "PartNoteList_MoveNode"),
+    ("sub_FCADD5", "PartNote_MapForToneGen"),
+    ("sub_FCADFA", "PartNote_ApplyVelocityOffset"),
+    ("sub_FCAE2D", "PartNote_TransposeForMidiOut"),
+    ("sub_FCA6BB", "PartFrame_SendToToneGen"),
+    ("sub_FCAA98", "PartFrame_SendToMidiOut"),
+    ("sub_FCACAA", "PartFrame_RecordToSeqBuf"),
 ]

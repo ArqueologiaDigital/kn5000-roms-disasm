@@ -63,11 +63,31 @@ of 0xFF means the ring is empty. The `Ring601850` gatherer takes up to 16 pairs.
 `Note_TransposeFoldOctaves` adds (shift - 0x40) to a note and folds the result back into 0..127 by
 octaves.
 
-## 4. Not established yet
+## 4. Parts and their three outputs (2026-10-04)
 
-- What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `sub_FC9F8B`, `sub_FCA6BB`, `sub_FCAE76`, `sub_FCB1BB`)
+Every processor walks the 32 parts in the frame's voice mask. For each part, `NoteFrame_SelectForPart` picks
+its entries, and `PartNotes_ApplyFrame` does the per-part bookkeeping:
+- `PartNote_Budget` (0x3800) is 32 bytes, 24 each at start.
+- `PartNoteList_Heads` (0x39F7) are 32 self-linked heads of 15-byte nodes, over the 129-node pool at 0x3BD7.
+- A note-on takes a node while the part's budget allows. A note-off finds the part's node by note, source
+  and channel, replays it with velocity 0, and frees it.
+
+Each entry goes to up to three outputs, given by the part block:
+
+| bit | output | the note sent | sender |
+|---|---|---|---|
+| 0 | the tone generator | `PartNote_MapForToneGen` (T_F41044), velocity + offset (`PartNote_ApplyVelocityOffset`) | `PartFrame_SendToToneGen` |
+| 1 | MIDI OUT (skipped while 0x602493 bit 5 is set) | `PartNote_TransposeForMidiOut`, octave-folded | `PartFrame_SendToMidiOut` |
+| 2 | the sequencer's record buffer | the note as received | `PartFrame_RecordToSeqBuf` |
+
+On screen 0x28 (DRUM EDIT) the tone-generator and MIDI OUT notes are replaced by `EditCursor_Note`. That is
+why a DRUM EDIT row audition sounds the row's drum.
+
+## 5. Not established yet
+
+- What the later stages (`NoteList_ApplyFrame`, `NoteFrame_SelectForPart`, `PartNotes_ApplyFrame`, `PartFrame_SendToToneGen`, `sub_FCAE76`, `sub_FCB1BB`)
   do with an entry.
 - What the state at 0x602200 / 0x6020D4 / 0x602492 / 0x602493 holds.
 - Three of the sinks are visible: the tone generator over the link (`T_Link_SendBlockIn32ByteChunks`), the
-  MIDI OUT rings 0x601432 / 0x60153C (`sub_FCAA98`), and the sequencer's record buffer (`sub_FCACAA` puts
+  MIDI OUT rings 0x601432 / 0x60153C (`PartFrame_SendToMidiOut`), and the sequencer's record buffer (`PartFrame_RecordToSeqBuf` puts
   5-byte 0x90 events on `SeqBufRing` with `Seq_BeatTick`).
