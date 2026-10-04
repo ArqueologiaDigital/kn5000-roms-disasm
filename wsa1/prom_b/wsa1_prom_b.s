@@ -166748,7 +166748,7 @@ sub_F70008_Return:
 ; --------------------------------------------------------------------------
 sub_F701F1:
 	push	xiy	; F701F1  push XIY
-	calr	sub_F702B8	; F701F2  calr 0xf702b8
+	calr	SmfPart_GetRecordPtr	; F701F2  calr 0xf702b8
 	m_cp_mi8 MB16, 0x1239, 0x00	; F701F5  cp (0x1239),0x00
 	jr	z, sub_F701F1_Skip	; F701FA  jr Z,0xf70257
 	push	xix	; F701FC  push XIX
@@ -166830,12 +166830,15 @@ sub_F701F1_Epilogue:
 ByteMap_F70298:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F70298  [0..15]
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F702A8  [16..31]
-sub_F702B8:
-	.byte	0xCE, 0xD6	; F702B8  [32..33]
+SmfPart_GetRecordPtr:
+	xor	h, h	; F702B8  xor H,H
+; ⚠ CORRECTED 2026-10-04: the block below was 118 bytes of `.byte` that no rule could split.  It is the rest of
+;   SmfPart_GetRecordPtr (three `calr` reach 0xF702B8; unidasm decodes it to the `ret` at 0xF702EF) and then two
+;   16-word tables.  Its old header, kept verbatim:
 
 
 ; --------------------------------------------------------------------------
-; Data_F702BA -- 118 bytes this block could not split.  No content rule
+; SmfPart_GetRecordPtr_ChannelIndex -- 118 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -166856,15 +166859,34 @@ sub_F702B8:
 ;           such.
 ; Unknown: everything about it except its bytes.
 ; --------------------------------------------------------------------------
-Data_F702BA:
-	.byte	0xC1, 0xD0, 0x10, 0x27, 0xCF, 0xCC, 0x0F, 0xDB, 0xEC, 0x01, 0xC1, 0x39, 0x12, 0x3F, 0xFF, 0x66	; F702BA  [0..15]
-	.byte	0x0E, 0x3C, 0x44, 0xF0, 0x02, 0xF7, 0x00, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0x5C, 0x68, 0x0C, 0x3C	; F702CA  [16..31]
-	.byte	0x44, 0x10, 0x03, 0xF7, 0x00, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0x5C, 0x45, 0xA0, 0x36, 0x60, 0x00	; F702DA  [32..47]
-	.byte	0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x0E, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01	; F702EA  [48..63]
-	.byte	0x40, 0x01, 0x80, 0x01, 0xC0, 0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03	; F702FA  [64..79]
-	.byte	0x80, 0x03, 0xC0, 0x03, 0x00, 0x04, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01	; F7030A  [80..95]
-	.byte	0x40, 0x01, 0x80, 0x01, 0xC0, 0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03	; F7031A  [96..111]
-	.byte	0x80, 0x03, 0xC0, 0x03, 0x00, 0x04	; F7032A  [112..117]
+SmfPart_GetRecordPtr_ChannelIndex:
+	ld	l, (Smf_EventStatus:16)	; F702BA  ld L,(0x10d0)
+	and	l, 15	; F702BE  and L,0x0f
+	sla	hl, 1	; F702C1  sla 0x01,HL
+	m_cp_mi8 MB16, 0x1239, 0xff	; F702C4  cp (0x1239),0xff
+	jr	z, SmfPart_GetRecordPtr_Skip	; F702C9  jr Z,0xf702d9
+	push	xix	; F702CB  push XIX
+	ld	xix, SmfPart_RecordOffsets	; F702CC  ld XIX,0x00f702f0
+	mx_ld_rm MXW, ra_IX, ra_HL, 3	; F702D1  ld HL,(XIX+HL)
+	pop	xix	; F702D6  pop XIX
+	jr	SmfPart_GetRecordPtr_Join	; F702D7  jr T,0xf702e5
+SmfPart_GetRecordPtr_Skip:
+	push	xix	; F702D9  push XIX
+	ld	xix, SmfPart_RecordOffsets_Alt	; F702DA  ld XIX,0x00f70310
+	mx_ld_rm MXW, ra_IX, ra_HL, 3	; F702DF  ld HL,(XIX+HL)
+	pop	xix	; F702E4  pop XIX
+SmfPart_GetRecordPtr_Join:
+	ld	xiy, 6305440	; F702E5  ld XIY,0x006036a0
+	mx_lda32 MXD, ra_IY, ra_HL, 5	; F702EA  lda XIY,XIY+HL
+	ret	; F702EF  ret
+; The byte offset of each MIDI channel's 64-byte part record from 0x6036A0.  Channels 8-15 skip offset 0x200, so they
+; use records 9-16.  SmfPart_GetRecordPtr reads the second table when (0x1239) is 0xFF; the two are identical.
+SmfPart_RecordOffsets:
+	.short	0x0000, 0x0040, 0x0080, 0x00c0, 0x0100, 0x0140, 0x0180, 0x01c0	; F702F0
+	.short	0x0240, 0x0280, 0x02c0, 0x0300, 0x0340, 0x0380, 0x03c0, 0x0400	; F70300
+SmfPart_RecordOffsets_Alt:
+	.short	0x0000, 0x0040, 0x0080, 0x00c0, 0x0100, 0x0140, 0x0180, 0x01c0	; F70310
+	.short	0x0240, 0x0280, 0x02c0, 0x0300, 0x0340, 0x0380, 0x03c0, 0x0400	; F70320
 
 
 ; --------------------------------------------------------------------------
@@ -167352,7 +167374,7 @@ sub_F705F7_Entry:
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F7067F sub_F70E1D
+; Calls:   sub_F71417 SmfPart_SetVolume sub_F70E1D
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -167377,7 +167399,7 @@ sub_F705F7_Skip2:
 sub_F705F7_Skip3:
 	m_bit 0, MD16, 0x11b1	; F7065B  bit 0,(0x11b1)
 	jr	nz, sub_F705F7_Skip4	; F7065F  jr NZ,0xf70669
-	calr	sub_F7067F	; F70661  calr 0xf7067f
+	calr	SmfPart_SetVolume	; F70661  calr 0xf7067f
 	ld	(4664:16), 0	; F70664  ld (0x1238),0x00
 sub_F705F7_Skip4:
 	ld	(4526:16), 3	; F70669  ld (0x11ae),0x03
@@ -167388,7 +167410,7 @@ sub_F705F7_Skip4:
 	ret	; F7067E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7067F
+; SmfPart_SetVolume
 ; Called from: in-module: 0xF70661 0xF724AD
 ; Touches: (0x10D2)
 ; Calls:   0xF702B8
@@ -167400,8 +167422,9 @@ sub_F705F7_Skip4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7067F:
-	calr	sub_F702B8	; F7067F  calr 0xf702b8
+; SmfPart_SetVolume: SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and sub_F724A7).
+SmfPart_SetVolume:
+	calr	SmfPart_GetRecordPtr	; F7067F  calr 0xf702b8
 	ld	a, (4306:16)	; F70682  ld A,(0x10d2)
 	ld	(xiy+5), a	; F70686  ld (XIY+0x05),A
 	ret	; F70689  ret
@@ -167817,7 +167840,7 @@ sub_F7039A_Nop2:
 ; Called from: in-module: 0xF7046B
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F709A3 sub_F70E1D
+; Calls:   sub_F71417 SmfPart_SetEffect3Depth sub_F70E1D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF70960 is an instruction boundary of this
@@ -167840,7 +167863,7 @@ sub_F70960_Skip:
 sub_F70960_Skip2:
 	m_bit 0, MD16, 0x11b1	; F7097F  bit 0,(0x11b1)
 	jr	nz, sub_F70960_Skip3	; F70983  jr NZ,0xf7098d
-	calr	sub_F709A3	; F70985  calr 0xf709a3
+	calr	SmfPart_SetEffect3Depth	; F70985  calr 0xf709a3
 	ld	(4664:16), 0	; F70988  ld (0x1238),0x00
 sub_F70960_Skip3:
 	ld	(4526:16), 5	; F7098D  ld (0x11ae),0x05
@@ -167851,7 +167874,7 @@ sub_F70960_Skip3:
 	ret	; F709A2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F709A3
+; SmfPart_SetEffect3Depth
 ; Called from: in-module: 0xF70985 0xF72684
 ; Touches: (0x10D2)
 ; Calls:   0xF702B8
@@ -167863,8 +167886,9 @@ sub_F70960_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F709A3:
-	calr	sub_F702B8	; F709A3  calr 0xf702b8
+; SmfPart_SetEffect3Depth: SmfPart_GetRecordPtr, then record +7 = data byte 2, keeping its bit 7.  Called by SmfCC_Effect3Depth.
+SmfPart_SetEffect3Depth:
+	calr	SmfPart_GetRecordPtr	; F709A3  calr 0xf702b8
 	ld	a, (4306:16)	; F709A6  ld A,(0x10d2)
 	ld	w, (xiy+7)	; F709AA  ld W,(XIY+0x07)
 	and	w, 128	; F709AD  and W,0x80
@@ -167876,7 +167900,7 @@ sub_F709A3:
 ; SmfCC_Effect4Depth
 ; Called from: in-module: 0xF70470
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F709DA sub_F70E1D
+; Calls:   SmfPart_SetEffect4Depth sub_F70E1D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF709B6 is an instruction boundary of this
@@ -167889,7 +167913,7 @@ sub_F709A3:
 SmfCC_Effect4Depth:
 	m_bit 0, MD16, 0x11b1	; F709B6  bit 0,(0x11b1)
 	jr	nz, sub_F709B6_Skip	; F709BA  jr NZ,0xf709c4
-	calr	sub_F709DA	; F709BC  calr 0xf709da
+	calr	SmfPart_SetEffect4Depth	; F709BC  calr 0xf709da
 	ld	(4664:16), 0	; F709BF  ld (0x1238),0x00
 sub_F709B6_Skip:
 	ld	(4526:16), 6	; F709C4  ld (0x11ae),0x06
@@ -167900,7 +167924,7 @@ sub_F709B6_Skip:
 	ret	; F709D9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F709DA
+; SmfPart_SetEffect4Depth
 ; Called from: in-module: 0xF709BC 0xF726A8
 ; Touches: (0x10D2)
 ; Calls:   0xF702B8
@@ -167912,8 +167936,9 @@ sub_F709B6_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F709DA:
-	calr	sub_F702B8	; F709DA  calr 0xf702b8
+; SmfPart_SetEffect4Depth: record +8 the same way.  Called by SmfCC_Effect4Depth.
+SmfPart_SetEffect4Depth:
+	calr	SmfPart_GetRecordPtr	; F709DA  calr 0xf702b8
 	ld	a, (4306:16)	; F709DD  ld A,(0x10d2)
 	ld	w, (xiy+8)	; F709E1  ld W,(XIY+0x08)
 	and	w, 128	; F709E4  and W,0x80
@@ -167926,7 +167951,7 @@ sub_F709DA:
 ; Called from: in-module: 0xF70466
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F70A30 sub_F70E1D
+; Calls:   sub_F71417 SmfPart_SetEffect1Depth sub_F70E1D
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF709ED is an instruction boundary of this
@@ -167949,7 +167974,7 @@ sub_F709ED_Skip:
 sub_F709ED_Skip2:
 	m_bit 0, MD16, 0x11b1	; F70A0C  bit 0,(0x11b1)
 	jr	nz, sub_F709ED_Skip3	; F70A10  jr NZ,0xf70a1a
-	calr	sub_F70A30	; F70A12  calr 0xf70a30
+	calr	SmfPart_SetEffect1Depth	; F70A12  calr 0xf70a30
 	ld	(4664:16), 0	; F70A15  ld (0x1238),0x00
 sub_F709ED_Skip3:
 	ld	(4526:16), 7	; F70A1A  ld (0x11ae),0x07
@@ -167960,7 +167985,7 @@ sub_F709ED_Skip3:
 	ret	; F70A2F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70A30
+; SmfPart_SetEffect1Depth
 ; Called from: in-module: 0xF70A12 0xF72660
 ; Touches: (0x10D2)
 ; Calls:   0xF702B8
@@ -167972,8 +167997,9 @@ sub_F709ED_Skip3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70A30:
-	calr	sub_F702B8	; F70A30  calr 0xf702b8
+; SmfPart_SetEffect1Depth: record +9 the same way.  Called by SmfCC_Effect1Depth.
+SmfPart_SetEffect1Depth:
+	calr	SmfPart_GetRecordPtr	; F70A30  calr 0xf702b8
 	ld	a, (4306:16)	; F70A33  ld A,(0x10d2)
 	ld	w, (xiy+9)	; F70A37  ld W,(XIY+0x09)
 	and	w, 128	; F70A3A  and W,0x80
@@ -171667,7 +171693,7 @@ Data_F72495:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F7067F sub_F726C6
+; Calls:   SmfPart_SetVolume sub_F726C6
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  This module
@@ -171681,7 +171707,7 @@ Data_F72495:
 sub_F724A7:
 	m_bit 0, MD16, 0x11b1	; F724A7  bit 0,(0x11b1)
 	jr	nz, sub_F724A7_Skip	; F724AB  jr NZ,0xf724b5
-	calr	sub_F7067F	; F724AD  calr 0xf7067f
+	calr	SmfPart_SetVolume	; F724AD  calr 0xf7067f
 	ld	(4664:16), 0	; F724B0  ld (0x1238),0x00
 sub_F724A7_Skip:
 	ld	(4526:16), 3	; F724B5  ld (0x11ae),0x03
@@ -171872,7 +171898,7 @@ sub_F725D9_Skip2:
 ; Called from: in-module: 0xF722FB
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F70A30 sub_F726C6
+; Calls:   sub_F71417 SmfPart_SetEffect1Depth sub_F726C6
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -171895,7 +171921,7 @@ sub_F7263A_Skip:
 sub_F7263A_Skip2:
 	m_bit 0, MD16, 0x11b1	; F7265A  bit 0,(0x11b1)
 	jr	nz, sub_F7263A_Skip3	; F7265E  jr NZ,0xf72668
-	calr	sub_F70A30	; F72660  calr 0xf70a30
+	calr	SmfPart_SetEffect1Depth	; F72660  calr 0xf70a30
 	ld	(4664:16), 0	; F72663  ld (0x1238),0x00
 sub_F7263A_Skip3:
 	ld	(4526:16), 7	; F72668  ld (0x11ae),0x07
@@ -171909,7 +171935,7 @@ sub_F7263A_Skip3:
 ; sub_F7267E
 ; Called from: in-module: 0xF72301
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F709A3 sub_F726C6
+; Calls:   SmfPart_SetEffect3Depth sub_F726C6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7267E is an instruction boundary of this
@@ -171921,7 +171947,7 @@ sub_F7263A_Skip3:
 sub_F7267E:
 	m_bit 0, MD16, 0x11b1	; F7267E  bit 0,(0x11b1)
 	jr	nz, sub_F7267E_Skip	; F72682  jr NZ,0xf7268c
-	calr	sub_F709A3	; F72684  calr 0xf709a3
+	calr	SmfPart_SetEffect3Depth	; F72684  calr 0xf709a3
 	ld	(4664:16), 0	; F72687  ld (0x1238),0x00
 sub_F7267E_Skip:
 	ld	(4526:16), 5	; F7268C  ld (0x11ae),0x05
@@ -171935,7 +171961,7 @@ sub_F7267E_Skip:
 ; sub_F726A2
 ; Called from: in-module: 0xF72306
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F709DA sub_F726C6
+; Calls:   SmfPart_SetEffect4Depth sub_F726C6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF726A2 is an instruction boundary of this
@@ -171947,7 +171973,7 @@ sub_F7267E_Skip:
 sub_F726A2:
 	m_bit 0, MD16, 0x11b1	; F726A2  bit 0,(0x11b1)
 	jr	nz, sub_F726A2_Skip	; F726A6  jr NZ,0xf726b0
-	calr	sub_F709DA	; F726A8  calr 0xf709da
+	calr	SmfPart_SetEffect4Depth	; F726A8  calr 0xf709da
 	ld	(4664:16), 0	; F726AB  ld (0x1238),0x00
 sub_F726A2_Skip:
 	ld	(4526:16), 6	; F726B0  ld (0x11ae),0x06

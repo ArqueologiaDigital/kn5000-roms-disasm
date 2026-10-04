@@ -190,6 +190,16 @@ def main():
             n = len([x for x in m.group(2).split(",") if x.strip()])
         a = int(m.group(3), 16)
         retyped.update(range(a, a + n))
+    newstarts = set()
+    for l in new:
+        m = re.search(r";\s*(F[0-9A-F]{5})\b", l)
+        if m and not l.lstrip().startswith(";") and not re.match(r"^\s*\.byte\b", l):
+            newstarts.add(int(m.group(1), 16))
+            mw = re.match(r"^\s*\.(short|long)\s+(.*?)\s*;", l)
+            if mw:                               # a word table covers all of its bytes
+                w = 2 if mw.group(1) == "short" else 4
+                n = len([x for x in mw.group(2).split(",") if x.strip()])
+                newstarts.update(range(int(m.group(1), 16), int(m.group(1), 16) + w * n))
     kept = renamed = retitled = quoted = converted = deleted = symbolic = 0
     missing = []
     for ln in old:
@@ -233,6 +243,15 @@ def main():
         if ma and not ln.lstrip().startswith((";", ".")) and int(ma.group(1), 16) in retyped:
             converted += 1
             continue
+        # and the reverse: a `.byte` row that was really code (or a word table) and whose bytes now start new
+        # instruction / .short / .long lines of the working tree (2026-10-04)
+        mb = re.match(r"^\s*\.byte\s+(.*?)\s*;\s*(F[0-9A-F]{5})\b", ln)
+        if mb:
+            a0 = int(mb.group(2), 16)
+            nb = len([x for x in mb.group(1).split(",") if x.strip()])
+            if any(a in newstarts for a in range(a0, a0 + nb)):
+                converted += 1
+                continue
         # a comment line whose TEXT is quoted verbatim inside a replacement
         body = re.sub(r"\s+", " ", ln.strip().lstrip(";").strip())
         if ln.lstrip().startswith(";") and len(body) > 12 and body in flat:

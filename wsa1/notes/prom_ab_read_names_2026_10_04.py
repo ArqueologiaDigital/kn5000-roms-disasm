@@ -710,6 +710,13 @@ ROWS = [
     ("F712B6", "Smf_AddDeltaToHeldNotes",
      "for each of the 33 seven-byte records at 0x305A whose bit 7 is set (a note still sounding), adds Smf_DeltaToPpq96 to\n"
      "its word at +5, saturating at 0x2FFF -- the largest note length (EditField_Length's limit)."),
+    # prom_b: the part-record setters behind the SMF controller handlers (SmfPart_GetRecordPtr: XIY = the event channel's
+    # 64-byte record at 0x6036A0 + SmfPart_RecordOffsets[channel]).
+    ("F7067F", "SmfPart_SetVolume", "SmfPart_GetRecordPtr, then record +5 = data byte 2.  Called by SmfCC_Volume (and sub_F724A7)."),
+    ("F709A3", "SmfPart_SetEffect3Depth",
+     "SmfPart_GetRecordPtr, then record +7 = data byte 2, keeping its bit 7.  Called by SmfCC_Effect3Depth."),
+    ("F709DA", "SmfPart_SetEffect4Depth", "record +8 the same way.  Called by SmfCC_Effect4Depth."),
+    ("F70A30", "SmfPart_SetEffect1Depth", "record +9 the same way.  Called by SmfCC_Effect1Depth."),
 ]
 
 

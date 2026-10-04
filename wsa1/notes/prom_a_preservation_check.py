@@ -2880,6 +2880,12 @@ RENAMES = {
     "sub_F6FD91": "Smf_SkipBytes",
     "sub_F712FB": "Smf_DeltaToPpq96",
     "sub_F712B6": "Smf_AddDeltaToHeldNotes",
+    "sub_F702B8": "SmfPart_GetRecordPtr",
+    "Data_F702BA": "SmfPart_GetRecordPtr_ChannelIndex",
+    "sub_F7067F": "SmfPart_SetVolume",
+    "sub_F709A3": "SmfPart_SetEffect3Depth",
+    "sub_F709DA": "SmfPart_SetEffect4Depth",
+    "sub_F70A30": "SmfPart_SetEffect1Depth",
 }
 
 
