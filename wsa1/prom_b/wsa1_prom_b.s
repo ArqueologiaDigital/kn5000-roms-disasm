@@ -166921,8 +166921,8 @@ sub_F70330_Return:
 ; SmfEvent_ControlChange
 ; Called from: in-module: 0xF6FFA0
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F7193F sub_F71978 sub_F719B1 sub_F719EA sub_F707AE
-;          sub_F70599 sub_F707E6 sub_F7039A_Nop2 sub_F7039A_Nop sub_F709ED sub_F70960
+; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 SmfCC_BankSelectLsb
+;          SmfCC_DataEntryLsb SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop SmfCC_Effect1Depth SmfCC_Effect3Depth
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -166990,31 +166990,31 @@ sub_F7039A_Skip3:
 	sla	l, 2	; F70422  sla 0x02,L
 	extz	xhl	; F70425  extz XHL
 	push	xix	; F70427  push XIX
-	ld	xix, DispatchTable_F7048D	; F70428  ld XIX,0x00f7048d
+	ld	xix, SmfCC_HandlersByNumber	; F70428  ld XIX,0x00f7048d
 	mx_ld_rm MXL, ra_IX, ra_HL, 3	; F7042D  ld XHL,(XIX+HL)
 	pop	xix	; F70432  pop XIX
 	call	(xhl)	; F70433  call T,XHL
 	jr	sub_F7039A_Return	; F70435  jr T,0xf7048c
 sub_F7039A_Skip4:
-	calr	sub_F7193F	; F70437  calr 0xf7193f
+	calr	SmfCC_GeneralPurpose1	; F70437  calr 0xf7193f
 	jr	sub_F7039A_Return	; F7043A  jr T,0xf7048c
 sub_F7039A_Skip5:
-	calr	sub_F71978	; F7043C  calr 0xf71978
+	calr	SmfCC_GeneralPurpose2	; F7043C  calr 0xf71978
 	jr	sub_F7039A_Return	; F7043F  jr T,0xf7048c
 sub_F7039A_Skip6:
-	calr	sub_F719B1	; F70441  calr 0xf719b1
+	calr	SmfCC_GeneralPurpose3	; F70441  calr 0xf719b1
 	jr	sub_F7039A_Return	; F70444  jr T,0xf7048c
 sub_F7039A_Skip7:
-	calr	sub_F719EA	; F70446  calr 0xf719ea
+	calr	SmfCC_GeneralPurpose4	; F70446  calr 0xf719ea
 	jr	sub_F7039A_Return	; F70449  jr T,0xf7048c
 sub_F7039A_Skip8:
-	calr	sub_F707AE	; F7044B  calr 0xf707ae
+	calr	SmfCC_BankSelectLsb	; F7044B  calr 0xf707ae
 	jr	sub_F7039A_Return	; F7044E  jr T,0xf7048c
 sub_F7039A_Skip9:
-	calr	sub_F70599	; F70450  calr 0xf70599
+	calr	SmfCC_DataEntryLsb	; F70450  calr 0xf70599
 	jr	sub_F7039A_Return	; F70453  jr T,0xf7048c
 sub_F7039A_Skip10:
-	calr	sub_F707E6	; F70455  calr 0xf707e6
+	calr	SmfCC_Sustain	; F70455  calr 0xf707e6
 	jr	sub_F7039A_Return	; F70458  jr T,0xf7048c
 sub_F7039A_Skip11:
 	call	sub_F7039A_Nop2	; F7045A  call 0xf7095e
@@ -167023,33 +167023,33 @@ sub_F7039A_Skip12:
 	call	sub_F7039A_Nop	; F70460  call 0xf7091d
 	jr	sub_F7039A_Return	; F70464  jr T,0xf7048c
 sub_F7039A_Skip13:
-	calr	sub_F709ED	; F70466  calr 0xf709ed
+	calr	SmfCC_Effect1Depth	; F70466  calr 0xf709ed
 	jr	sub_F7039A_Return	; F70469  jr T,0xf7048c
 sub_F7039A_Skip14:
-	calr	sub_F70960	; F7046B  calr 0xf70960
+	calr	SmfCC_Effect3Depth	; F7046B  calr 0xf70960
 	jr	sub_F7039A_Return	; F7046E  jr T,0xf7048c
 sub_F7039A_Skip15:
-	calr	sub_F709B6	; F70470  calr 0xf709b6
+	calr	SmfCC_Effect4Depth	; F70470  calr 0xf709b6
 	jr	sub_F7039A_Return	; F70473  jr T,0xf7048c
 sub_F7039A_Skip16:
-	calr	sub_F70A43	; F70475  calr 0xf70a43
+	calr	SmfCC_DataIncrement	; F70475  calr 0xf70a43
 	jr	sub_F7039A_Return	; F70478  jr T,0xf7048c
 sub_F7039A_Skip17:
-	calr	sub_F70A97	; F7047A  calr 0xf70a97
+	calr	SmfCC_DataDecrement	; F7047A  calr 0xf70a97
 	jr	sub_F7039A_Return	; F7047D  jr T,0xf7048c
 sub_F7039A_Skip18:
-	calr	sub_F70C6F	; F7047F  calr 0xf70c6f
+	calr	SmfCC_Nrpn	; F7047F  calr 0xf70c6f
 	jr	sub_F7039A_Return	; F70482  jr T,0xf7048c
 sub_F7039A_Skip19:
-	calr	sub_F70CBA	; F70484  calr 0xf70cba
+	calr	SmfCC_RpnMsb	; F70484  calr 0xf70cba
 	jr	sub_F7039A_Return	; F70487  jr T,0xf7048c
 sub_F7039A_Skip20:
-	calr	sub_F70D42	; F70489  calr 0xf70d42
+	calr	SmfCC_RpnLsb	; F70489  calr 0xf70d42
 sub_F7039A_Return:
 	ret	; F7048C  ret
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F7048D -- 16 32-bit words, every one an address in
+; SmfCC_HandlersByNumber -- 16 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  9
 ;                         distinct values.  notes/prom_b_f6d002_layout.py
 ;                         classes it TRANSFER.
@@ -167070,27 +167070,29 @@ sub_F7039A_Return:
 ;           (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F7048D:
-	.long	sub_F704CE	; F7048D  [0] -> sub_F704CE
-	.long	sub_F704E7	; F70491  [1] -> sub_F704E7
-	.long	sub_F71A23	; F70495  [2] -> sub_F71A23
-	.long	DispatchTable_F7048D_Nop3	; F70499  [3] -> DispatchTable_F7048D_Nop3
-	.long	sub_F71A5C	; F7049D  [4] -> sub_F71A5C
-	.long	DispatchTable_F7048D_Nop3	; F704A1  [5] -> DispatchTable_F7048D_Nop3
-	.long	sub_F7053F	; F704A5  [6] -> sub_F7053F
-	.long	sub_F7063C	; F704A9  [7] -> sub_F7063C
-	.long	DispatchTable_F7048D_Nop3	; F704AD  [8] -> DispatchTable_F7048D_Nop3
-	.long	DispatchTable_F7048D_Nop3	; F704B1  [9] -> DispatchTable_F7048D_Nop3
-	.long	sub_F7068A	; F704B5  [10] -> sub_F7068A
-	.long	sub_F70754	; F704B9  [11] -> sub_F70754
-	.long	DispatchTable_F7048D_Nop3	; F704BD  [12] -> DispatchTable_F7048D_Nop3
-	.long	DispatchTable_F7048D_Nop3	; F704C1  [13] -> DispatchTable_F7048D_Nop3
-	.long	DispatchTable_F7048D_Nop3	; F704C5  [14] -> DispatchTable_F7048D_Nop3
-	.long	DispatchTable_F7048D_Nop3	; F704C9  [15] -> DispatchTable_F7048D_Nop3
+; SmfCC_HandlersByNumber: SmfEvent_ControlChange's handlers for MIDI controllers 0-15, indexed by the controller number
+;   (notes/prom_ab_read_names_2026_10_04.py).
+SmfCC_HandlersByNumber:
+	.long	SmfCC_BankSelectMsb	; F7048D  [0] -> SmfCC_BankSelectMsb
+	.long	SmfCC_Modulation	; F70491  [1] -> SmfCC_Modulation
+	.long	SmfCC_Breath	; F70495  [2] -> SmfCC_Breath
+	.long	SmfCC_Ignore	; F70499  [3] -> SmfCC_Ignore
+	.long	SmfCC_Foot	; F7049D  [4] -> SmfCC_Foot
+	.long	SmfCC_Ignore	; F704A1  [5] -> SmfCC_Ignore
+	.long	SmfCC_DataEntryMsb	; F704A5  [6] -> SmfCC_DataEntryMsb
+	.long	SmfCC_Volume	; F704A9  [7] -> SmfCC_Volume
+	.long	SmfCC_Ignore	; F704AD  [8] -> SmfCC_Ignore
+	.long	SmfCC_Ignore	; F704B1  [9] -> SmfCC_Ignore
+	.long	SmfCC_Pan	; F704B5  [10] -> SmfCC_Pan
+	.long	SmfCC_Expression	; F704B9  [11] -> SmfCC_Expression
+	.long	SmfCC_Ignore	; F704BD  [12] -> SmfCC_Ignore
+	.long	SmfCC_Ignore	; F704C1  [13] -> SmfCC_Ignore
+	.long	SmfCC_Ignore	; F704C5  [14] -> SmfCC_Ignore
+	.long	SmfCC_Ignore	; F704C9  [15] -> SmfCC_Ignore
 
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F7048D_Nop3
+; SmfCC_Ignore
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -167101,14 +167103,14 @@ DispatchTable_F7048D:
 ;                   0xF72323.  0xF704CD is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F7048D_Nop3 after what reaches it
+; Purpose: none -- the entry is a lone `ret`.  Named SmfCC_Ignore after what reaches it
 ;          (was sub_F704CD; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-DispatchTable_F7048D_Nop3:
+SmfCC_Ignore:
 	ret	; F704CD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F704CE
+; SmfCC_BankSelectMsb
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
@@ -167122,7 +167124,8 @@ DispatchTable_F7048D_Nop3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F704CE:
+; SmfCC_BankSelectMsb: DispatchTable_F7048D[0]: SmfEvent_ControlChange's handler for MIDI controller 0.
+SmfCC_BankSelectMsb:
 	ld	iy, (Smf_EventStatus:16)	; F704CE  ld IY,(0x10d0)
 	and	iy, 15	; F704D2  and IY,0x000f
 	ld	a, (4306:16)	; F704D6  ld A,(0x10d2)
@@ -167133,7 +167136,7 @@ sub_F704CE:
 	ret	; F704E6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F704E7
+; SmfCC_Modulation
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
@@ -167148,7 +167151,8 @@ sub_F704CE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F704E7:
+; SmfCC_Modulation: DispatchTable_F7048D[1]: SmfEvent_ControlChange's handler for MIDI controller 1.
+SmfCC_Modulation:
 	ld	iy, (Smf_EventStatus:16)	; F704E7  ld IY,(0x10d0)
 	and	iy, 15	; F704EB  and IY,0x000f
 	push	xiy	; F704EF  push XIY
@@ -167185,7 +167189,7 @@ sub_F704E7_Return:
 	ret	; F7053E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7053F
+; SmfCC_DataEntryMsb
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2)
@@ -167200,7 +167204,8 @@ sub_F704E7_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7053F:
+; SmfCC_DataEntryMsb: DispatchTable_F7048D[6]: SmfEvent_ControlChange's handler for MIDI controller 6.
+SmfCC_DataEntryMsb:
 	ld	iy, (Smf_EventStatus:16)	; F7053F  ld IY,(0x10d0)
 	and	iy, 15	; F70543  and IY,0x000f
 	push	xix	; F70547  push XIX
@@ -167241,7 +167246,7 @@ sub_F7053F_Return:
 	ret	; F70598  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70599
+; SmfCC_DataEntryLsb
 ; Called from: in-module: 0xF70450
 ; Touches: (0x10D0) (0x10D2)
 ; Calls:   sub_F705F7 sub_F70AE9
@@ -167253,7 +167258,8 @@ sub_F7053F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70599:
+; SmfCC_DataEntryLsb: SmfEvent_ControlChange's arm for MIDI controller 38 (`cp a,38 / jr z`).
+SmfCC_DataEntryLsb:
 	ld	iy, (Smf_EventStatus:16)	; F70599  ld IY,(0x10d0)
 	and	iy, 15	; F7059D  and IY,0x000f
 	push	xix	; F705A1  push XIX
@@ -167334,7 +167340,7 @@ sub_F705F7_Entry:
 	ret	; F7063B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7063C
+; SmfCC_Volume
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
@@ -167350,7 +167356,8 @@ sub_F705F7_Entry:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7063C:
+; SmfCC_Volume: DispatchTable_F7048D[7]: SmfEvent_ControlChange's handler for MIDI controller 7.
+SmfCC_Volume:
 	m_bit 0, MD16, 0x124b	; F7063C  bit 0,(0x124b)
 	jr	nz, sub_F705F7_Skip3	; F70640  jr NZ,0xf7065b
 	ld	(4665:16), 255	; F70642  ld (0x1239),0xff
@@ -167393,7 +167400,7 @@ sub_F7067F:
 	ret	; F70689  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7068A
+; SmfCC_Pan
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238) (0x1239) (0x124B) (0x2732)
@@ -167408,7 +167415,8 @@ sub_F7067F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7068A:
+; SmfCC_Pan: DispatchTable_F7048D[10]: SmfEvent_ControlChange's handler for MIDI controller 10.
+SmfCC_Pan:
 	m_bit 0, MD16, 0x124b	; F7068A  bit 0,(0x124b)
 	jr	nz, sub_F7067F_Skip2	; F7068E  jr NZ,0xf706a9
 	ld	(4665:16), 255	; F70690  ld (0x1239),0xff
@@ -167486,7 +167494,7 @@ sub_F7067F_Return:
 	ret	; F70753  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70754
+; SmfCC_Expression
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x1238)
@@ -167501,7 +167509,8 @@ sub_F7067F_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70754:
+; SmfCC_Expression: DispatchTable_F7048D[11]: SmfEvent_ControlChange's handler for MIDI controller 11.
+SmfCC_Expression:
 	ld	iy, (Smf_EventStatus:16)	; F70754  ld IY,(0x10d0)
 	and	iy, 15	; F70758  and IY,0x000f
 	extz	xiy	; F7075C  extz XIY
@@ -167539,7 +167548,7 @@ sub_F7067F_Return2:
 	ret	; F707AD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F707AE
+; SmfCC_BankSelectLsb
 ; Called from: in-module: 0xF7044B
 ; Touches: (0x10D0) (0x10D2)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -167550,7 +167559,8 @@ sub_F7067F_Return2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F707AE:
+; SmfCC_BankSelectLsb: SmfEvent_ControlChange's arm for MIDI controller 32 (`cp a,32 / jr z`).
+SmfCC_BankSelectLsb:
 	ld	iy, (Smf_EventStatus:16)	; F707AE  ld IY,(0x10d0)
 	and	iy, 15	; F707B2  and IY,0x000f
 	extz	xiy	; F707B6  extz XIY
@@ -167573,7 +167583,7 @@ sub_F707AE:
 	ret	; F707E5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F707E6
+; SmfCC_Sustain
 ; Called from: in-module: 0xF70455 0xF722E9
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x124B)
 ;          (0x2732)
@@ -167587,7 +167597,8 @@ sub_F707AE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F707E6:
+; SmfCC_Sustain: SmfEvent_ControlChange's arm for MIDI controller 64 (`cp a,64 / jr z`).
+SmfCC_Sustain:
 	m_bit 0, MD16, 0x124b	; F707E6  bit 0,(0x124b)
 	jr	nz, sub_F707E6_Skip2	; F707EA  jr NZ,0xf70805
 	ld	(4665:16), 255	; F707EC  ld (0x1239),0xff
@@ -167795,7 +167806,7 @@ sub_F7039A_Nop2:
 	ret	; F7095F  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70960
+; SmfCC_Effect3Depth
 ; Called from: in-module: 0xF7046B
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
@@ -167808,7 +167819,8 @@ sub_F7039A_Nop2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70960:
+; SmfCC_Effect3Depth: SmfEvent_ControlChange's arm for MIDI controller 93 (`cp a,93 / jr z`).
+SmfCC_Effect3Depth:
 	m_bit 0, MD16, 0x124b	; F70960  bit 0,(0x124b)
 	jr	nz, sub_F70960_Skip2	; F70964  jr NZ,0xf7097f
 	ld	(4665:16), 255	; F70966  ld (0x1239),0xff
@@ -167854,7 +167866,7 @@ sub_F709A3:
 	ret	; F709B5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F709B6
+; SmfCC_Effect4Depth
 ; Called from: in-module: 0xF70470
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
 ; Calls:   sub_F709DA sub_F70E1D
@@ -167866,7 +167878,8 @@ sub_F709A3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F709B6:
+; SmfCC_Effect4Depth: SmfEvent_ControlChange's arm for MIDI controller 94 (`cp a,94 / jr z`).
+SmfCC_Effect4Depth:
 	m_bit 0, MD16, 0x11b1	; F709B6  bit 0,(0x11b1)
 	jr	nz, sub_F709B6_Skip	; F709BA  jr NZ,0xf709c4
 	calr	sub_F709DA	; F709BC  calr 0xf709da
@@ -167902,7 +167915,7 @@ sub_F709DA:
 	ret	; F709EC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F709ED
+; SmfCC_Effect1Depth
 ; Called from: in-module: 0xF70466
 ; Touches: (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238) (0x1239)
 ;          (0x124B) (0x2732)
@@ -167915,7 +167928,8 @@ sub_F709DA:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F709ED:
+; SmfCC_Effect1Depth: SmfEvent_ControlChange's arm for MIDI controller 91 (`cp a,91 / jr z`).
+SmfCC_Effect1Depth:
 	m_bit 0, MD16, 0x124b	; F709ED  bit 0,(0x124b)
 	jr	nz, sub_F709ED_Skip2	; F709F1  jr NZ,0xf70a0c
 	ld	(4665:16), 255	; F709F3  ld (0x1239),0xff
@@ -167961,7 +167975,7 @@ sub_F70A30:
 	ret	; F70A42  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70A43
+; SmfCC_DataIncrement
 ; Called from: in-module: 0xF70475 0xF7230B
 ; Touches: (0x10D0)
 ; Calls:   sub_F70AE9
@@ -167973,7 +167987,8 @@ sub_F70A30:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70A43:
+; SmfCC_DataIncrement: SmfEvent_ControlChange's arm for MIDI controller 96 (`cp a,96 / jr z`).
+SmfCC_DataIncrement:
 	ld	iy, (Smf_EventStatus:16)	; F70A43  ld IY,(0x10d0)
 	and	iy, 15	; F70A47  and IY,0x000f
 	push	xix	; F70A4B  push XIX
@@ -168008,7 +168023,7 @@ sub_F70A43_Return:
 	ret	; F70A96  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70A97
+; SmfCC_DataDecrement
 ; Called from: in-module: 0xF7047A 0xF72310
 ; Touches: (0x10D0)
 ; Calls:   sub_F70AE9
@@ -168020,7 +168035,8 @@ sub_F70A43_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70A97:
+; SmfCC_DataDecrement: SmfEvent_ControlChange's arm for MIDI controller 97 (`cp a,97 / jr z`).
+SmfCC_DataDecrement:
 	ld	iy, (Smf_EventStatus:16)	; F70A97  ld IY,(0x10d0)
 	and	iy, 15	; F70A9B  and IY,0x000f
 	push	xix	; F70A9F  push XIX
@@ -168312,26 +168328,28 @@ ByteMap_F70C5F:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F70C5F  [0..15]
 ; ⚠ CORRECTED 2026-09-25 (lane promb): the map is 16 bytes (0x00-0x0F), not
 ;   18.  Its last two "entries" (0xC1, 0xD0) are the first two bytes of
-;   sub_F70C6F's first instruction, `ld C,(0x10d0)`, which a `calr` at
+;   SmfCC_Nrpn's first instruction, `ld C,(0x10d0)`, which a `calr` at
 ;   0xF7047F reaches.
 
 
 ; --------------------------------------------------------------------------
-; sub_F70C6F -- 0xF70C6F-0xF70CB9 (converted 2026-09-25, lane promb; was the
+; SmfCC_Nrpn -- 0xF70C6F-0xF70CB9 (converted 2026-09-25, lane promb; was the
 ;   last two bytes of ByteMap_F70C5F and `Data_F70C71`, 73 bytes filed as
 ;   "everything about it except its bytes" unknown).
 ; Called from: 0xF7047F (`calr`).
 ; Does:    C = (0x10D0) AND 0x0F; clears bit C of the words at (0x11B4) and
 ;          (0x11B6) (`rcf` then `stcf A,DE`, with A = C, bank-3 registers
 ;          RL3/QHL3 holding A and DE across it); then writes 0xFF to
-;          (0x11D8 + C).  Its neighbour sub_F70CBA indexes (0x11B8) with the
+;          (0x11D8 + C).  Its neighbour SmfCC_RpnMsb indexes (0x11B8) with the
 ;          same (0x10D0) AND 0x0F.
 ; Evidence: MAME unidasm and llvm-mc agree on every instruction, the one call
 ;          site lands on the first, and it ends with `ret` right where
-;          sub_F70CBA, a routine two callers reach, begins.
+;          SmfCC_RpnMsb, a routine two callers reach, begins.
 ; Unknown: what the nibble of (0x10D0) and the three tables it indexes are.
 ; --------------------------------------------------------------------------
-sub_F70C6F:
+; SmfCC_Nrpn: SmfEvent_ControlChange's arm for controllers 98 and 99 (NRPN LSB / MSB): it clears the channel's bit in the
+;   mask at 0x11B4.
+SmfCC_Nrpn:
 	ld	c, (Smf_EventStatus:16)	; F70C6F  ld C,(0x10d0)
 	and	c, 15	; F70C73  and C,0x0f
 	m_rd_ld_rr2x RBX, 0x3C, r1	; F70C76  ld RL3,A
@@ -168362,7 +168380,7 @@ sub_F70C6F:
 
 
 ; --------------------------------------------------------------------------
-; sub_F70CBA
+; SmfCC_RpnMsb
 ; Called from: in-module: 0xF70484 0xF7231A
 ; Touches: (0x10D0) (0x10D2) (0x11B4) (0x11B6)
 ; Calls:   sub_F70DD6
@@ -168374,7 +168392,8 @@ sub_F70C6F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70CBA:
+; SmfCC_RpnMsb: SmfEvent_ControlChange's arm for MIDI controller 101 (`cp a,101 / jr z`).
+SmfCC_RpnMsb:
 	ld	iy, (Smf_EventStatus:16)	; F70CBA  ld IY,(0x10d0)
 	and	iy, 15	; F70CBE  and IY,0x000f
 	ld	a, (4306:16)	; F70CC2  ld A,(0x10d2)
@@ -168427,7 +168446,7 @@ sub_F70CBA_Return:
 	ret	; F70D41  ret
 
 ; --------------------------------------------------------------------------
-; sub_F70D42
+; SmfCC_RpnLsb
 ; Called from: in-module: 0xF70489 0xF7231F
 ; Touches: (0x10D0) (0x10D2) (0x11B4) (0x11B6)
 ; Calls:   sub_F70DD6
@@ -168439,7 +168458,8 @@ sub_F70CBA_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F70D42:
+; SmfCC_RpnLsb: SmfEvent_ControlChange's arm for MIDI controller 100 (`cp a,100 / jr z`).
+SmfCC_RpnLsb:
 	ld	iy, (Smf_EventStatus:16)	; F70D42  ld IY,(0x10d0)
 	and	iy, 15	; F70D46  and IY,0x000f
 	ld	a, (4306:16)	; F70D4A  ld A,(0x10d2)
@@ -170099,7 +170119,7 @@ SmfSysEx_Addr11_Targets:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7193F
+; SmfCC_GeneralPurpose1
 ; Called from: in-module: 0xF70437 0xF722CB
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
 ; Calls:   sub_F71A95
@@ -170111,7 +170131,8 @@ SmfSysEx_Addr11_Targets:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F7193F:
+; SmfCC_GeneralPurpose1: SmfEvent_ControlChange's arm for MIDI controller 16 (`cp a,16 / jr z`).
+SmfCC_GeneralPurpose1:
 	xor	h, h	; F7193F  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F71941  ld L,(0x10d0)
 	and	l, 15	; F71945  and L,0x0f
@@ -170130,7 +170151,7 @@ sub_F7193F_Skip:
 	ret	; F71977  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71978
+; SmfCC_GeneralPurpose2
 ; Called from: in-module: 0xF7043C 0xF722D0
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
 ; Calls:   sub_F71A95
@@ -170142,7 +170163,8 @@ sub_F7193F_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71978:
+; SmfCC_GeneralPurpose2: SmfEvent_ControlChange's arm for MIDI controller 17 (`cp a,17 / jr z`).
+SmfCC_GeneralPurpose2:
 	xor	h, h	; F71978  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F7197A  ld L,(0x10d0)
 	and	l, 15	; F7197E  and L,0x0f
@@ -170161,7 +170183,7 @@ sub_F71978_Skip:
 	ret	; F719B0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F719B1
+; SmfCC_GeneralPurpose3
 ; Called from: in-module: 0xF70441 0xF722D5
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
 ; Calls:   sub_F71A95
@@ -170173,7 +170195,8 @@ sub_F71978_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F719B1:
+; SmfCC_GeneralPurpose3: SmfEvent_ControlChange's arm for MIDI controller 18 (`cp a,18 / jr z`).
+SmfCC_GeneralPurpose3:
 	xor	h, h	; F719B1  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F719B3  ld L,(0x10d0)
 	and	l, 15	; F719B7  and L,0x0f
@@ -170192,7 +170215,7 @@ sub_F719B1_Skip:
 	ret	; F719E9  ret
 
 ; --------------------------------------------------------------------------
-; sub_F719EA
+; SmfCC_GeneralPurpose4
 ; Called from: in-module: 0xF70446 0xF722DA
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
 ; Calls:   sub_F71A95
@@ -170204,7 +170227,8 @@ sub_F719B1_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F719EA:
+; SmfCC_GeneralPurpose4: SmfEvent_ControlChange's arm for MIDI controller 19 (`cp a,19 / jr z`).
+SmfCC_GeneralPurpose4:
 	xor	h, h	; F719EA  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F719EC  ld L,(0x10d0)
 	and	l, 15	; F719F0  and L,0x0f
@@ -170223,7 +170247,7 @@ sub_F719EA_Skip:
 	ret	; F71A22  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71A23
+; SmfCC_Breath
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
@@ -170238,7 +170262,8 @@ sub_F719EA_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71A23:
+; SmfCC_Breath: DispatchTable_F7048D[2]: SmfEvent_ControlChange's handler for MIDI controller 2.
+SmfCC_Breath:
 	xor	h, h	; F71A23  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F71A25  ld L,(0x10d0)
 	and	l, 15	; F71A29  and L,0x0f
@@ -170257,7 +170282,7 @@ sub_F719EA_Skip2:
 	ret	; F71A5B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F71A5C
+; SmfCC_Foot
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x1239) (0x1381)
@@ -170272,7 +170297,8 @@ sub_F719EA_Skip2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F71A5C:
+; SmfCC_Foot: DispatchTable_F7048D[4]: SmfEvent_ControlChange's handler for MIDI controller 4.
+SmfCC_Foot:
 	xor	h, h	; F71A5C  xor H,H
 	ld	l, (Smf_EventStatus:16)	; F71A5E  ld L,(0x10d0)
 	and	l, 15	; F71A62  and L,0x0f
@@ -171232,8 +171258,8 @@ sub_F721A3_Return:
 ; sub_F7222D
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F7193F sub_F71978 sub_F719B1 sub_F719EA sub_F725D9
-;          sub_F7243B sub_F707E6 sub_F7039A_Nop2 sub_F7039A_Nop sub_F7263A sub_F7267E
+; Calls:   sub_F71417 SmfCC_GeneralPurpose1 SmfCC_GeneralPurpose2 SmfCC_GeneralPurpose3 SmfCC_GeneralPurpose4 sub_F725D9
+;          sub_F7243B SmfCC_Sustain sub_F7039A_Nop2 sub_F7039A_Nop sub_F7263A sub_F7267E
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -171306,16 +171332,16 @@ sub_F7222D_Skip3:
 	call	(xhl)	; F722C7  call T,XHL
 	jr	sub_F7222D_Return	; F722C9  jr T,0xf72322
 sub_F7222D_Skip4:
-	calr	sub_F7193F	; F722CB  calr 0xf7193f
+	calr	SmfCC_GeneralPurpose1	; F722CB  calr 0xf7193f
 	jr	sub_F7222D_Return	; F722CE  jr T,0xf72322
 sub_F7222D_Skip5:
-	calr	sub_F71978	; F722D0  calr 0xf71978
+	calr	SmfCC_GeneralPurpose2	; F722D0  calr 0xf71978
 	jr	sub_F7222D_Return	; F722D3  jr T,0xf72322
 sub_F7222D_Skip6:
-	calr	sub_F719B1	; F722D5  calr 0xf719b1
+	calr	SmfCC_GeneralPurpose3	; F722D5  calr 0xf719b1
 	jr	sub_F7222D_Return	; F722D8  jr T,0xf72322
 sub_F7222D_Skip7:
-	calr	sub_F719EA	; F722DA  calr 0xf719ea
+	calr	SmfCC_GeneralPurpose4	; F722DA  calr 0xf719ea
 	jr	sub_F7222D_Return	; F722DD  jr T,0xf72322
 sub_F7222D_Skip8:
 	calr	sub_F725D9	; F722DF  calr 0xf725d9
@@ -171324,7 +171350,7 @@ sub_F7222D_Skip9:
 	calr	sub_F7243B	; F722E4  calr 0xf7243b
 	jr	sub_F7222D_Return	; F722E7  jr T,0xf72322
 sub_F7222D_Skip10:
-	call	sub_F707E6	; F722E9  call 0xf707e6
+	call	SmfCC_Sustain	; F722E9  call 0xf707e6
 	jr	sub_F7222D_Return	; F722ED  jr T,0xf72322
 sub_F7222D_Skip11:
 	call	sub_F7039A_Nop2	; F722EF  call 0xf7095e
@@ -171342,19 +171368,19 @@ sub_F7222D_Skip15:
 	calr	sub_F726A2	; F72306  calr 0xf726a2
 	jr	sub_F7222D_Return	; F72309  jr T,0xf72322
 sub_F7222D_Skip16:
-	calr	sub_F70A43	; F7230B  calr 0xf70a43
+	calr	SmfCC_DataIncrement	; F7230B  calr 0xf70a43
 	jr	sub_F7222D_Return	; F7230E  jr T,0xf72322
 sub_F7222D_Skip17:
-	calr	sub_F70A97	; F72310  calr 0xf70a97
+	calr	SmfCC_DataDecrement	; F72310  calr 0xf70a97
 	jr	sub_F7222D_Return	; F72313  jr T,0xf72322
 sub_F7222D_Skip18:
-	calr	sub_F70C6F	; F72315  calr 0xf70c6f
+	calr	SmfCC_Nrpn	; F72315  calr 0xf70c6f
 	jr	sub_F7222D_Return	; F72318  jr T,0xf72322
 sub_F7222D_Skip19:
-	calr	sub_F70CBA	; F7231A  calr 0xf70cba
+	calr	SmfCC_RpnMsb	; F7231A  calr 0xf70cba
 	jr	sub_F7222D_Return	; F7231D  jr T,0xf72322
 sub_F7222D_Skip20:
-	calr	sub_F70D42	; F7231F  calr 0xf70d42
+	calr	SmfCC_RpnLsb	; F7231F  calr 0xf70d42
 sub_F7222D_Return:
 	ret	; F72322  ret
 
@@ -171383,9 +171409,9 @@ sub_F7222D_Return:
 DispatchTable_F72323:
 	.long	sub_F72364	; F72323  [0] -> sub_F72364
 	.long	sub_F7237D	; F72327  [1] -> sub_F7237D
-	.long	sub_F71A23	; F7232B  [2] -> sub_F71A23
+	.long	SmfCC_Breath	; F7232B  [2] -> SmfCC_Breath
 	.long	DispatchTable_F72323_Nop3	; F7232F  [3] -> DispatchTable_F72323_Nop3
-	.long	sub_F71A5C	; F72333  [4] -> sub_F71A5C
+	.long	SmfCC_Foot	; F72333  [4] -> SmfCC_Foot
 	.long	DispatchTable_F72323_Nop3	; F72337  [5] -> DispatchTable_F72323_Nop3
 	.long	sub_F723E1	; F7233B  [6] -> sub_F723E1
 	.long	sub_F724A7	; F7233F  [7] -> sub_F724A7

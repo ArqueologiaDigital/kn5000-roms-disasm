@@ -1,0 +1,26 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bsub_F704CE\b/SmfCC_BankSelectMsb/g
+s/\bsub_F704E7\b/SmfCC_Modulation/g
+s/\bsub_F71A23\b/SmfCC_Breath/g
+s/\bsub_F71A5C\b/SmfCC_Foot/g
+s/\bsub_F7053F\b/SmfCC_DataEntryMsb/g
+s/\bsub_F7063C\b/SmfCC_Volume/g
+s/\bsub_F7068A\b/SmfCC_Pan/g
+s/\bsub_F70754\b/SmfCC_Expression/g
+s/\bsub_F7193F\b/SmfCC_GeneralPurpose1/g
+s/\bsub_F71978\b/SmfCC_GeneralPurpose2/g
+s/\bsub_F719B1\b/SmfCC_GeneralPurpose3/g
+s/\bsub_F719EA\b/SmfCC_GeneralPurpose4/g
+s/\bsub_F707AE\b/SmfCC_BankSelectLsb/g
+s/\bsub_F70599\b/SmfCC_DataEntryLsb/g
+s/\bsub_F707E6\b/SmfCC_Sustain/g
+s/\bsub_F709ED\b/SmfCC_Effect1Depth/g
+s/\bsub_F70960\b/SmfCC_Effect3Depth/g
+s/\bsub_F709B6\b/SmfCC_Effect4Depth/g
+s/\bsub_F70A43\b/SmfCC_DataIncrement/g
+s/\bsub_F70A97\b/SmfCC_DataDecrement/g
+s/\bsub_F70C6F\b/SmfCC_Nrpn/g
+s/\bsub_F70CBA\b/SmfCC_RpnMsb/g
+s/\bsub_F70D42\b/SmfCC_RpnLsb/g
+s/\bDispatchTable_F7048D\b/SmfCC_HandlersByNumber/g
+s/\bDispatchTable_F7048D_Nop3\b/SmfCC_Ignore/g
