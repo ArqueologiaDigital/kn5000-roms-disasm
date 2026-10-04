@@ -4100,6 +4100,20 @@ RENAMES = {
     "sub_FF019D": "EditScreen_FillSelectedEventBar",
     "sub_FF0243": "EditScreen_DrawSelectionAtCursor",
     "sub_FF0205": "EditScreen_RedrawAfterTickMove",
+    "sub_FF031F": "EditScreen_PaintStaticLayer",
+    "sub_FF035E": "EditScreen_DrawTrackNumber",
+    "sub_FF0389": "EditScreen_DrawSongNumber",
+    "sub_FF03B3": "EditScreen_DrawRulersAndLegend",
+    "sub_FF07C5": "EditScreen_DrawMeasureStartLines",
+    "sub_FF0841": "EditScreen_DrawGridLines",
+    "sub_FF08AA": "DrumEdit_DrawBeatLines",
+    "sub_FF08E5": "DrumEdit_DrawDottedVLine",
+    "sub_FF090B": "EditScreen_DrawRowGuides",
+    "sub_FF091F": "NoteEdit_DrawRowGuides",
+    "sub_FF0937": "NoteEdit_DrawDottedHLine",
+    "sub_FF0954": "DrumEdit_DrawRowGuides",
+    "sub_FF096C": "DrumEdit_DrawDottedHLine",
+    "sub_FF0407": "KitCategoryLegend_SelectByKitCode",
 }
 
 

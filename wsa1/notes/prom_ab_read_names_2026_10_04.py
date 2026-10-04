@@ -1711,6 +1711,33 @@ ROWS = [
      "EditCursor_Tick* moves: with a selection, the other notes redrawn and the selection drawn at the cursor\n"
      "(EditScreen_DrawSelectionAtCursor while a deferred action is pending, else EditScreen_FillSelectedEventBar);\n"
      "without, all notes and EditScreen_DrawSelectedEventBar."),
+    # NOTE / DRUM EDIT: the static layer (2) -- titles, numbers, grid
+    ("FF031F", "EditScreen_PaintStaticLayer",
+     "layer 2: Paint_DrumEdit or Paint_NoteEdit, then EditScreen_DrawTrackNumber, _DrawSongNumber,\n"
+     "_DrawRowGuides and _DrawGridLines."),
+    ("FF035E", "EditScreen_DrawTrackNumber",
+     "(0x26B0) = EditScreen_Part + 1 through DisplayList_FF037F -- the TRACK value of 'NOTE EDIT  TRACK  SONG'."),
+    ("FF0389", "EditScreen_DrawSongNumber",
+     "(0x26B0) = BStore_CurrentBank + 1 through DisplayList_FF03A9 -- the SONG value."),
+    ("FF03B3", "EditScreen_DrawRulersAndLegend",
+     "layer 2: EditScreen_DrawMeasureStartLines, NoteEdit_DrawKeyboardRuler, Screen_DrawKitCategoryLegend."),
+    ("FF07C5", "EditScreen_DrawMeasureStartLines",
+     "layer 2: at each beat column whose EditScreen_BeatTable entry (from the second) is non-zero -- a measure\n"
+     "start -- a solid vertical line (SWI 7 2, LCD_Svc_02_DrawVLine): x = 0x10 + 24 n, y 0x29..0xA8 (NOTE EDIT) or\n"
+     "x = 0x59 + 24 n, y 0x2A..0xA1 (DRUM EDIT)."),
+    ("FF0841", "EditScreen_DrawGridLines", "DrumEdit_DrawBeatLines in DRUM EDIT, EditMeasure_DrawBeatLines in NOTE EDIT."),
+    ("FF08AA", "DrumEdit_DrawBeatLines",
+     "layer 2: for beats 1 .. EditMeasure_Beats-1 at x = 0x59 + 24 x beat: SWI 7 0x1B (EraseRect) over y 0x2A..0xA1,\n"
+     "then DrumEdit_DrawDottedVLine."),
+    ("FF08E5", "DrumEdit_DrawDottedVLine", "a point (SWI 7 0x0B, LCD_Svc_0B_PlotPoint) every second row from y 0x2B to 0xA0."),
+    ("FF090B", "EditScreen_DrawRowGuides", "layer 2: DrumEdit_DrawRowGuides or NoteEdit_DrawRowGuides."),
+    ("FF091F", "NoteEdit_DrawRowGuides", "16 dotted rows (NoteEdit_DrawDottedHLine), 8 pixels apart from y 0x29."),
+    ("FF0937", "NoteEdit_DrawDottedHLine", "a point (SWI 7 0x0B) every third pixel from x 0x10 to 0xFF on row HL."),
+    ("FF0954", "DrumEdit_DrawRowGuides", "12 dotted rows (DrumEdit_DrawDottedHLine), 10 pixels apart from y 0x29."),
+    ("FF096C", "DrumEdit_DrawDottedHLine", "a point every third pixel from x 0x59 to 0x100 on row HL."),
+    ("FF0407", "KitCategoryLegend_SelectByKitCode",
+     "XIY = the legend table for the kit code (XIX+1): 0x20 KitCategoryLegends_ByProgram, 0x28 _User1, 0x29 _User2,\n"
+     "0x30 _Ext, otherwise KitCategoryLegends.  No call to it is decoded."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

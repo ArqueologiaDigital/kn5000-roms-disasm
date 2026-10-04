@@ -86,8 +86,8 @@ check("...so 130 entries END at 0xFF0790, not 0xFF078B",
 check("the source says `ends at 0xFF078B`", "ends at 0xFF078B" in SRC_A, True)
 check("the generator says entry 130 starts at 0xFF0791",
       "0x%06X" % (0xFF0485 + 6 * 130), "0xFF0791")
-check("0xFF07C5 -- the stated inclusive END -- starts sub_FF07C5",
-      "sub_FF07C5:" in SRC_A, True)
+check("0xFF07C5 -- the stated inclusive END -- starts EditScreen_DrawMeasureStartLines",
+      "EditScreen_DrawMeasureStartLines:" in SRC_A, True)
 check("...so the stated range 0xFF078B-0xFF07C5 holds 59 bytes, not the stated 58",
       0xFF07C5 - 0xFF078B + 1, 59)
 # the table's OWN extent supports 132, not 130: next base is 0xFF079D

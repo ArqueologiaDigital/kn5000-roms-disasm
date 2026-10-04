@@ -55,7 +55,7 @@ def kit_category_legends():
     BASE   = 0xFF0485          # KitCategoryLegend_SelectBase 0xFF0424, type 0x20
     DFLT   = 0xFF047F          # the six-space arm at 0xFF041E
     NEXT   = 0xFF079D          # the "user1 " arm at 0xFF042A
-    END    = 0xFF07C5          # first byte of sub_FF07C5
+    END    = 0xFF07C5          # first byte of EditScreen_DrawMeasureStartLines
     check('index 0 is "STANDR"', rd(BASE, 6), b'STANDR')
     check('the default arm 0xFF047F is six spaces', rd(DFLT, 6), b'      ')
     check('0xFF047F is exactly one entry below index 0', BASE - DFLT, 6)
@@ -73,7 +73,7 @@ def kit_category_legends():
     check('so the table shows NO 130 boundary of its own',
           rd(BASE + 6 * 129, 6) == rd(BASE + 6 * 130, 6) == b'      ', True)
     check('residue 0xFF0791..0xFF07C4 is N bytes', END - 0xFF0791, 52)
-    check('0xFF07C5 is code, not table (first bytes of sub_FF07C5)',
+    check('0xFF07C5 is code, not table (first bytes of EditScreen_DrawMeasureStartLines)',
           rd(END, 5).hex(), 'f1402500 02'.replace(' ', ''))
     # the three switch bases and their duplicates
     for base, text in ((0xFF079D, b'user1 '), (0xFF07AB, b'user2 '), (0xFF07B9, b'ext   ')):
@@ -82,7 +82,7 @@ def kit_category_legends():
     check('...which is', 0xFF07AB - 0xFF079D, 14)
     check('base 1 block is the legend twice', rd(0xFF079D, 14), b'user1  user1  ')
     check('base 2 block is the legend twice', rd(0xFF07AB, 14), b'user2  user2  ')
-    check('base 3 block is 12 bytes, not 14 (it hits sub_FF07C5)',
+    check('base 3 block is 12 bytes, not 14 (it hits EditScreen_DrawMeasureStartLines)',
           rd(0xFF07B9, 12), b'ext   ext   ')
 
 # --------------------------------------------------------------- F3 ---------

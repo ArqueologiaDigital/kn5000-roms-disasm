@@ -184023,8 +184023,8 @@ sub_FEF8BE:
 	calr sub_FEF758                                          ; FEF8C7  1e 8e fe
 sub_FEF8CA:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FEF8CA  f1 40 25 00 02
-	calr sub_FF031F                                          ; FEF8CF  1e 4d 0a
-	calr sub_FF03B3                                          ; FEF8D2  1e de 0a
+	calr EditScreen_PaintStaticLayer                                          ; FEF8CF  1e 4d 0a
+	calr EditScreen_DrawRulersAndLegend                                          ; FEF8D2  1e de 0a
 	ret                                                  ; FEF8D5  0e
 sub_FEF8D6:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEF8D6  f2 70 1f 60 c8
@@ -184067,8 +184067,8 @@ sub_FEF926:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF926  f1 40 25 00 00
 	calr sub_FEF938                                      ; FEF92B  1e 0a 00
 	calr EditScreen_DrawMeasureNumbers                                            ; FEF92E  1e 75 00
-	calr sub_FF0841                                          ; FEF931  1e 0d 0f
-	calr sub_FF07C5                                          ; FEF934  1e 8e 0e
+	calr EditScreen_DrawGridLines                                          ; FEF931  1e 0d 0f
+	calr EditScreen_DrawMeasureStartLines                                          ; FEF934  1e 8e 0e
 	ret                                                  ; FEF937  0e
 sub_FEF938:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF938  f1 40 25 00 00
@@ -185185,7 +185185,9 @@ EditBar_SetRowFromNote:
 	m_add_mi8 MB24, EditBar_Row, 0x04                       ; FF0318  c2 3a 1f 60 38 04
 .LFF031E:
 	ret                                                  ; FF031E  0e
-sub_FF031F:
+; EditScreen_PaintStaticLayer: layer 2: Paint_DrumEdit or Paint_NoteEdit, then EditScreen_DrawTrackNumber, _DrawSongNumber,
+;   _DrawRowGuides and _DrawGridLines.
+EditScreen_PaintStaticLayer:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF031F  f1 40 25 00 02
 	m_bit 0, MD24, EditScreen_Mode                              ; FF0324  f2 70 1f 60 c8
 	jr z, .LFF0330                                       ; FF0329  66 05
@@ -185194,10 +185196,10 @@ sub_FF031F:
 .LFF0330:
 	calr Paint_NoteEdit                                      ; FF0330  1e 0d 00
 .LFF0333:
-	calr sub_FF035E                                      ; FF0333  1e 28 00
-	calr sub_FF0389                                            ; FF0336  1e 50 00
-	calr sub_FF090B                                          ; FF0339  1e cf 05
-	calr sub_FF0841                                          ; FF033C  1e 02 05
+	calr EditScreen_DrawTrackNumber                                      ; FF0333  1e 28 00
+	calr EditScreen_DrawSongNumber                                            ; FF0336  1e 50 00
+	calr EditScreen_DrawRowGuides                                          ; FF0339  1e cf 05
+	calr EditScreen_DrawGridLines                                          ; FF033C  1e 02 05
 	ret                                                  ; FF033F  0e
 ; Paint_NoteEdit -- paints the screen whose own text reads "NOTE EDIT", "TRACK", "SONG"
 ;
@@ -185253,7 +185255,7 @@ Paint_DrumEdit:
 	ld XIX,DisplayList_NoteEditPartSelect                ; FF0354  44 32 13 ff 00
 	call T_DisplayList_Run                               ; FF0359  1d f0 17 f4
 	ret                                                  ; FF035D  0e
-; sub_FF035E -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawTrackNumber -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 9
 ; instructions to its first `ret`:
@@ -185269,14 +185271,15 @@ Paint_DrumEdit:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF035E:
+; EditScreen_DrawTrackNumber: (0x26B0) = EditScreen_Part + 1 through DisplayList_FF037F -- the TRACK value of 'NOTE EDIT  TRACK  SONG'.
+EditScreen_DrawTrackNumber:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF035E  f1 40 25 00 02
 	xor WA,WA                                            ; FF0363  d8 d0
 	ld a, (EditScreen_Part:24)                                 ; FF0365  c2 00 1f 60 21
 	inc 1,A                                              ; FF036A  c9 61
 	ld (0x26b0:16), wa                                  ; FF036C  f1 b0 26 50
 	ld XIY,DisplayList_FF037F                            ; FF0370  45 7f 03 ff 00
-	ld XIX,sub_FF0389                                    ; FF0375  44 89 03 ff 00
+	ld XIX,EditScreen_DrawSongNumber                                    ; FF0375  44 89 03 ff 00
 	call T_DisplayListB_Run                              ; FF037A  1d f4 17 f4
 	ret                                                  ; FF037E  0e
 
@@ -185285,7 +185288,7 @@ sub_FF035E:
 DisplayList_FF037F:
 	.byte 0x06, 0x0A                               ; FF037F  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x8B, 0x00, 0x02  ; FF0381
-; sub_FF0389 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawSongNumber -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 9
 ; instructions to its first `ret`:
@@ -185301,14 +185304,15 @@ DisplayList_FF037F:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF0389:
+; EditScreen_DrawSongNumber: (0x26B0) = BStore_CurrentBank + 1 through DisplayList_FF03A9 -- the SONG value.
+EditScreen_DrawSongNumber:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF0389  f1 40 25 00 02
 	xor WA,WA                                            ; FF038E  d8 d0
 	ld a, (BStore_CurrentBank:16)                                   ; FF0390  c1 0a 36 21
 	inc 1,A                                              ; FF0394  c9 61
 	ld (0x26b0:16), wa                                  ; FF0396  f1 b0 26 50
 	ld XIY,DisplayList_FF03A9                            ; FF039A  45 a9 03 ff 00
-	ld XIX,sub_FF03B3                                    ; FF039F  44 b3 03 ff 00
+	ld XIX,EditScreen_DrawRulersAndLegend                                    ; FF039F  44 b3 03 ff 00
 	call T_DisplayListB_Run                              ; FF03A4  1d f4 17 f4
 	ret                                                  ; FF03A8  0e
 
@@ -185317,9 +185321,10 @@ sub_FF0389:
 DisplayList_FF03A9:
 	.byte 0x06, 0x0A                               ; FF03A9  op 06, 10 bytes, handler 0xF31BA1
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0x9C, 0x00, 0x02  ; FF03AB
-sub_FF03B3:
+; EditScreen_DrawRulersAndLegend: layer 2: EditScreen_DrawMeasureStartLines, NoteEdit_DrawKeyboardRuler, Screen_DrawKitCategoryLegend.
+EditScreen_DrawRulersAndLegend:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF03B3  f1 40 25 00 02
-	calr sub_FF07C5                                          ; FF03B8  1e 0a 04
+	calr EditScreen_DrawMeasureStartLines                                          ; FF03B8  1e 0a 04
 	calr NoteEdit_DrawKeyboardRuler                                          ; FF03BB  1e 7e 89
 	calr Screen_DrawKitCategoryLegend                    ; FF03BE  1e 01 00
 	ret                                                  ; FF03C1  0e
@@ -185381,7 +185386,7 @@ KitCategoryLegend_SelectBase:
 	sll wa, 0x02                                         ; FF03FF  d8 ee 02
 	mx8_ld_rm MXL, ra_IY, rb_A, r4                       ; FF0402  e3 03 f4 e0 24
 ; ---------------------------------------------------------------------
-; sub_FF0407 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; KitCategoryLegend_SelectByKitCode -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: nothing in either image names this address.
 ;
@@ -185396,7 +185401,9 @@ KitCategoryLegend_SelectBase:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FF0407:
+; KitCategoryLegend_SelectByKitCode: XIY = the legend table for the kit code (XIX+1): 0x20 KitCategoryLegends_ByProgram, 0x28 _User1, 0x29 _User2,
+;   0x30 _Ext, otherwise KitCategoryLegends.  No call to it is decoded.
+KitCategoryLegend_SelectByKitCode:
 	ld A,(XIX+0x01)                                      ; FF0407  8c 01 21
 	cp A,0x20                                            ; FF040A  c9 cf 20
 	jr z, .LFF0424                                       ; FF040D  66 15
@@ -185514,13 +185521,13 @@ KitCategoryLegend_Index:
 ;   `python3 notes/prom_a_round3_checks.py` (section KitCategoryLegends).
 ;
 ; ⚠ The last 52 bytes, 0xFF0791-0xFF07C4, are NOT on that 6-byte grid.  The
-;   run ENDS at 0xFF07C4: 0xFF07C5 is the first byte of sub_FF07C5, so an
+;   run ENDS at 0xFF07C4: 0xFF07C5 is the first byte of EditScreen_DrawMeasureStartLines, so an
 ;   inclusive range written "-0xFF07C5" would end on an instruction.
 ;   Twelve blank bytes, then the three literal legends the type switch points
 ;   at -- 0xFF079D "user1 ", 0xFF07AB "user2 ", 0xFF07B9 "ext   " -- on a
 ;   14-byte stride, and each of the three is stored TWICE:
 ;   "user1  user1  ", "user2  user2  ", "ext   ext   " (the third pair is 12
-;   bytes, not 14, because it runs into sub_FF07C5).
+;   bytes, not 14, because it runs into EditScreen_DrawMeasureStartLines).
 ;   ⚠ Unknown: why the duplicate.  It is NOT a second reader -- a 24-bit and
 ;   32-bit little-endian immediate scan of ALL FOUR ROM images finds the three
 ;   switch bases exactly once each -- as the OPERAND of the `ld XIY` at
@@ -185692,7 +185699,10 @@ KitCategoryLegend_User2:
 ;          header above KitCategoryLegends).
 KitCategoryLegend_Ext:
 	.ascii "ext   ext   "                        ; FF07B9
-sub_FF07C5:
+; EditScreen_DrawMeasureStartLines: layer 2: at each beat column whose EditScreen_BeatTable entry (from the second) is non-zero -- a measure
+;   start -- a solid vertical line (SWI 7 2, LCD_Svc_02_DrawVLine): x = 0x10 + 24 n, y 0x29..0xA8 (NOTE EDIT) or
+;   x = 0x59 + 24 n, y 0x2A..0xA1 (DRUM EDIT).
+EditScreen_DrawMeasureStartLines:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF07C5  f1 40 25 00 02
 	ld XIX,0x00601f60                                    ; FF07CA  44 60 1f 60 00
 	ld e, 0x01:opc                                          ; FF07CF  25 01
@@ -185737,10 +185747,11 @@ sub_FF07C5:
 	cp XIX,XHL                                           ; FF083C  eb f4
 	jr c, .LFF07D1                                       ; FF083E  67 91
 	ret                                                  ; FF0840  0e
-sub_FF0841:
+; EditScreen_DrawGridLines: DrumEdit_DrawBeatLines in DRUM EDIT, EditMeasure_DrawBeatLines in NOTE EDIT.
+EditScreen_DrawGridLines:
 	m_bit 0, MD24, EditScreen_Mode                              ; FF0841  f2 70 1f 60 c8
 	jr z, .LFF084C                                       ; FF0846  66 04
-	calr sub_FF08AA                                      ; FF0848  1e 5f 00
+	calr DrumEdit_DrawBeatLines                                      ; FF0848  1e 5f 00
 	ret                                                  ; FF084B  0e
 .LFF084C:
 	calr EditMeasure_DrawBeatLines                                      ; FF084C  1e 01 00
@@ -185779,7 +185790,9 @@ EditMeasure_DrawBeatLines:
 	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FF08A2  c2 75 1f 60 f5
 	jr c, .LFF0857                                       ; FF08A7  67 ae
 	ret                                                  ; FF08A9  0e
-sub_FF08AA:
+; DrumEdit_DrawBeatLines: layer 2: for beats 1 .. EditMeasure_Beats-1 at x = 0x59 + 24 x beat: SWI 7 0x1B (EraseRect) over y 0x2A..0xA1,
+;   then DrumEdit_DrawDottedVLine.
+DrumEdit_DrawBeatLines:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF08AA  f1 40 25 00 02
 	ld e, 0x01:opc                                          ; FF08AF  25 01
 .LFF08B1:
@@ -185796,13 +185809,14 @@ sub_FF08AA:
 	swi 7                                                ; FF08D3  ff
 	popw de                                              ; FF08D4  4a
 	pushw de                                             ; FF08D5  2a
-	calr sub_FF08E5                                      ; FF08D6  1e 0c 00
+	calr DrumEdit_DrawDottedVLine                                      ; FF08D6  1e 0c 00
 	popw de                                              ; FF08D9  4a
 	add E,0x01                                           ; FF08DA  cd c8 01
 	m_cp_rm MB24, EditMeasure_Beats, r5                           ; FF08DD  c2 75 1f 60 f5
 	jr c, .LFF08B1                                       ; FF08E2  67 cd
 	ret                                                  ; FF08E4  0e
-sub_FF08E5:
+; DrumEdit_DrawDottedVLine: a point (SWI 7 0x0B, LCD_Svc_0B_PlotPoint) every second row from y 0x2B to 0xA0.
+DrumEdit_DrawDottedVLine:
 	ldw bc, 0x2b                                         ; FF08E5  31 2b 00
 .LFF08E8:
 	ld A,E                                               ; FF08E8  cd 89
@@ -185820,22 +185834,24 @@ sub_FF08E5:
 	cp BC,0x00a1                                         ; FF0904  d9 cf a1 00
 	jr c, .LFF08E8                                       ; FF0908  67 de
 	ret                                                  ; FF090A  0e
-sub_FF090B:
+; EditScreen_DrawRowGuides: layer 2: DrumEdit_DrawRowGuides or NoteEdit_DrawRowGuides.
+EditScreen_DrawRowGuides:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FF090B  f1 40 25 00 02
 	m_bit 0, MD24, EditScreen_Mode                              ; FF0910  f2 70 1f 60 c8
 	jr z, .LFF091B                                       ; FF0915  66 04
-	calr sub_FF0954                                      ; FF0917  1e 3a 00
+	calr DrumEdit_DrawRowGuides                                      ; FF0917  1e 3a 00
 	ret                                                  ; FF091A  0e
 .LFF091B:
-	calr sub_FF091F                                      ; FF091B  1e 01 00
+	calr NoteEdit_DrawRowGuides                                      ; FF091B  1e 01 00
 	ret                                                  ; FF091E  0e
-sub_FF091F:
+; NoteEdit_DrawRowGuides: 16 dotted rows (NoteEdit_DrawDottedHLine), 8 pixels apart from y 0x29.
+NoteEdit_DrawRowGuides:
 	xor C,C                                              ; FF091F  cb d3
 	ldw hl, 0x29                                         ; FF0921  33 29 00
 .LFF0924:
 	pushw hl                                             ; FF0924  2b
 	pushw bc                                             ; FF0925  29
-	calr sub_FF0937                                      ; FF0926  1e 0e 00
+	calr NoteEdit_DrawDottedHLine                                      ; FF0926  1e 0e 00
 	popw bc                                              ; FF0929  49
 	popw hl                                              ; FF092A  4b
 	add HL,0x0008                                        ; FF092B  db c8 08 00
@@ -185843,7 +185859,8 @@ sub_FF091F:
 	cp C,0x10                                            ; FF0931  cb cf 10
 	jr c, .LFF0924                                       ; FF0934  67 ee
 	ret                                                  ; FF0936  0e
-sub_FF0937:
+; NoteEdit_DrawDottedHLine: a point (SWI 7 0x0B) every third pixel from x 0x10 to 0xFF on row HL.
+NoteEdit_DrawDottedHLine:
 	ldw de, 0x10                                         ; FF0937  32 10 00
 .LFF093A:
 	ld (LCD_X0:16), de                                  ; FF093A  f1 30 25 52
@@ -185858,13 +185875,14 @@ sub_FF0937:
 	cp DE,0x0100                                         ; FF094D  da cf 00 01
 	jr c, .LFF093A                                       ; FF0951  67 e7
 	ret                                                  ; FF0953  0e
-sub_FF0954:
+; DrumEdit_DrawRowGuides: 12 dotted rows (DrumEdit_DrawDottedHLine), 10 pixels apart from y 0x29.
+DrumEdit_DrawRowGuides:
 	xor C,C                                              ; FF0954  cb d3
 	ldw hl, 0x29                                         ; FF0956  33 29 00
 .LFF0959:
 	pushw hl                                             ; FF0959  2b
 	pushw bc                                             ; FF095A  29
-	calr sub_FF096C                                      ; FF095B  1e 0e 00
+	calr DrumEdit_DrawDottedHLine                                      ; FF095B  1e 0e 00
 	popw bc                                              ; FF095E  49
 	popw hl                                              ; FF095F  4b
 	add HL,0x000a                                        ; FF0960  db c8 0a 00
@@ -185872,7 +185890,8 @@ sub_FF0954:
 	cp C,0x0c                                            ; FF0966  cb cf 0c
 	jr c, .LFF0959                                       ; FF0969  67 ee
 	ret                                                  ; FF096B  0e
-sub_FF096C:
+; DrumEdit_DrawDottedHLine: a point every third pixel from x 0x59 to 0x100 on row HL.
+DrumEdit_DrawDottedHLine:
 	ldw de, 0x59                                         ; FF096C  32 59 00
 .LFF096F:
 	ld (LCD_X0:16), de                                  ; FF096F  f1 30 25 52
