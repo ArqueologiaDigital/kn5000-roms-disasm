@@ -62877,25 +62877,122 @@ Descriptor9_FA1F18:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA1F21:
-	.byte 0x20, 0x08, 0xfd, 0x11, 0x54, 0x45, 0x53, 0x54, 0x23, 0x05, 0x30, 0xe1, 0x10, 0x1c, 0x0c, 0x8d  ; FA1F21
-	.byte 0x00, 0x05, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x10, 0xa5, 0x05, 0x54, 0x55, 0x4e  ; FA1F31
-	.byte 0x45, 0x20, 0x26, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x45, 0x20, 0x0b, 0xb8, 0x05, 0x49, 0x4e, 0x49  ; FA1F41
-	.byte 0x54, 0x49, 0x41, 0x4c, 0x17, 0x07, 0x00, 0x00, 0x26, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0x26  ; FA1F51
-	.byte 0x00, 0x11, 0x20, 0x0e, 0xa5, 0x0a, 0x43, 0x30, 0x4e, 0x54, 0x52, 0x30, 0x4c, 0x4c, 0x45, 0x52  ; FA1F61
-	.byte 0x20, 0x0a, 0xd5, 0x0c, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x06, 0x0f, 0xd0, 0x0b, 0x52, 0x45  ; FA1F71
-	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x45, 0x44, 0x49, 0x54, 0x17, 0x07, 0x00, 0x00, 0x4d, 0x00, 0x10  ; FA1F81
-	.byte 0x17, 0x07, 0x3a, 0x01, 0x4d, 0x00, 0x11, 0x20, 0x0f, 0xd0, 0x10, 0x53, 0x30, 0x55, 0x4e, 0x44  ; FA1F91
-	.byte 0x2f, 0x43, 0x30, 0x4d, 0x42, 0x49, 0x20, 0x0b, 0x00, 0x13, 0x4d, 0x41, 0x4e, 0x41, 0x47, 0x45  ; FA1FA1
-	.byte 0x52, 0x17, 0x07, 0x3a, 0x01, 0x74, 0x00, 0x11, 0x20, 0x09, 0xed, 0x17, 0x4d, 0x49, 0x58, 0x45  ; FA1FB1
-	.byte 0x52, 0x20, 0x0d, 0x00, 0x18, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x17, 0x07  ; FA1FC1
-	.byte 0x00, 0x00, 0x9b, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0x9b, 0x00, 0x11, 0x20, 0x0c, 0x00, 0x1d  ; FA1FD1
-	.byte 0x4d, 0x41, 0x49, 0x4e, 0x20, 0x4f, 0x55, 0x54, 0x20, 0x0d, 0x30, 0x1f, 0x45, 0x51, 0x55, 0x41  ; FA1FE1
-	.byte 0x4c, 0x49, 0x5a, 0x45, 0x52, 0x20, 0x0e, 0x05, 0x1e, 0x44, 0x53, 0x50, 0x20, 0x45, 0x46, 0x46  ; FA1FF1
-	.byte 0x45, 0x43, 0x54, 0x17, 0x07, 0x00, 0x00, 0xc2, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0xc2, 0x00  ; FA2001
-	.byte 0x11, 0x23, 0x05, 0x06, 0x36, 0x00, 0x23, 0x05, 0x07, 0xb1, 0x04, 0x23, 0x05, 0x09, 0xc9, 0x0a  ; FA2011
-	.byte 0x23, 0x05, 0x05, 0xf9, 0x16, 0x23, 0x05, 0x0a, 0x11, 0x1d, 0x23, 0x05, 0x0c, 0xd4, 0x04, 0x23  ; FA2021
-	.byte 0x05, 0x0d, 0xec, 0x0a, 0x23, 0x05, 0x0e, 0x04, 0x11, 0x23, 0x05, 0x0f, 0x1c, 0x17, 0x23, 0x05  ; FA2031
-	.byte 0x69, 0x34, 0x1d, 0x17, 0x07, 0x00, 0x00, 0x74, 0x00, 0x10          ; FA2041
+	.byte 0x20, 0x08                                ; FA1F21  op 20, 8 bytes -> handler 0xF31A3A  text at row 115, col 5
+	.short 0x11fd                                   ; FA1F23
+	.ascii "TEST"                                   ; FA1F25
+	.byte 0x23, 0x05                                ; FA1F29  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x30                                      ; FA1F2B
+	.short 0x10e1                                   ; FA1F2C
+	.byte 0x1c, 0x0c                                ; FA1F2E  op 1c, 12 bytes -> handler 0xF31A52  text at row 3, col 21
+	.short 0x008d                                   ; FA1F30
+	.short 0x0005                                   ; FA1F32
+	.ascii "SYSTEM"                                 ; FA1F34
+	.byte 0x20, 0x10                                ; FA1F3A  op 20, 16 bytes -> handler 0xF31A3A  text at row 36, col 5
+	.short 0x05a5                                   ; FA1F3C
+	.ascii "TUNE & SCALE"                           ; FA1F3E
+	.byte 0x20, 0x0b                                ; FA1F4A  op 20, 11 bytes -> handler 0xF31A3A  text at row 36, col 24
+	.short 0x05b8                                   ; FA1F4C
+	.ascii "INITIAL"                                ; FA1F4E
+	.byte 0x17, 0x07                                ; FA1F55  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA1F57
+	.short 0x0026                                   ; FA1F59
+	.byte 0x10                                      ; FA1F5B  glyph codes below 0x20
+	.byte 0x17, 0x07                                ; FA1F5C  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA1F5E
+	.short 0x0026                                   ; FA1F60
+	.byte 0x11                                      ; FA1F62  glyph codes below 0x20
+	.byte 0x20, 0x0e                                ; FA1F63  op 20, 14 bytes -> handler 0xF31A3A  text at row 68, col 5
+	.short 0x0aa5                                   ; FA1F65
+	.ascii "C0NTR0LLER"                             ; FA1F67
+	.byte 0x20, 0x0a                                ; FA1F71  op 20, 10 bytes -> handler 0xF31A3A  text at row 82, col 5
+	.short 0x0cd5                                   ; FA1F73
+	.ascii "ASSIGN"                                 ; FA1F75
+	.byte 0x06, 0x0f                                ; FA1F7B  op 06, 15 bytes -> handler 0xF31A3A  text at row 75, col 24
+	.short 0x0bd0                                   ; FA1F7D
+	.ascii "RE-MAP EDIT"                            ; FA1F7F
+	.byte 0x17, 0x07                                ; FA1F8A  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA1F8C
+	.short 0x004d                                   ; FA1F8E
+	.byte 0x10                                      ; FA1F90  glyph codes below 0x20
+	.byte 0x17, 0x07                                ; FA1F91  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA1F93
+	.short 0x004d                                   ; FA1F95
+	.byte 0x11                                      ; FA1F97  glyph codes below 0x20
+	.byte 0x20, 0x0f                                ; FA1F98  op 20, 15 bytes -> handler 0xF31A3A  text at row 107, col 24
+	.short 0x10d0                                   ; FA1F9A
+	.ascii "S0UND/C0MBI"                            ; FA1F9C
+	.byte 0x20, 0x0b                                ; FA1FA7  op 20, 11 bytes -> handler 0xF31A3A  text at row 121, col 24
+	.short 0x1300                                   ; FA1FA9
+	.ascii "MANAGER"                                ; FA1FAB
+	.byte 0x17, 0x07                                ; FA1FB2  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA1FB4
+	.short 0x0074                                   ; FA1FB6
+	.byte 0x11                                      ; FA1FB8  glyph codes below 0x20
+	.byte 0x20, 0x09                                ; FA1FB9  op 20, 9 bytes -> handler 0xF31A3A  text at row 153, col 5
+	.short 0x17ed                                   ; FA1FBB
+	.ascii "MIXER"                                  ; FA1FBD
+	.byte 0x20, 0x0d                                ; FA1FC2  op 20, 13 bytes -> handler 0xF31A3A  text at row 153, col 24
+	.short 0x1800                                   ; FA1FC4
+	.ascii "DRUMS MAP"                              ; FA1FC6
+	.byte 0x17, 0x07                                ; FA1FCF  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA1FD1
+	.short 0x009b                                   ; FA1FD3
+	.byte 0x10                                      ; FA1FD5  glyph codes below 0x20
+	.byte 0x17, 0x07                                ; FA1FD6  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA1FD8
+	.short 0x009b                                   ; FA1FDA
+	.byte 0x11                                      ; FA1FDC  glyph codes below 0x20
+	.byte 0x20, 0x0c                                ; FA1FDD  op 20, 12 bytes -> handler 0xF31A3A  text at row 185, col 24
+	.short 0x1d00                                   ; FA1FDF
+	.ascii "MAIN OUT"                               ; FA1FE1
+	.byte 0x20, 0x0d                                ; FA1FE9  op 20, 13 bytes -> handler 0xF31A3A  text at row 199, col 24
+	.short 0x1f30                                   ; FA1FEB
+	.ascii "EQUALIZER"                              ; FA1FED
+	.byte 0x20, 0x0e                                ; FA1FF6  op 20, 14 bytes -> handler 0xF31A3A  text at row 192, col 5
+	.short 0x1e05                                   ; FA1FF8
+	.ascii "DSP EFFECT"                             ; FA1FFA
+	.byte 0x17, 0x07                                ; FA2004  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA2006
+	.short 0x00c2                                   ; FA2008
+	.byte 0x10                                      ; FA200A  glyph codes below 0x20
+	.byte 0x17, 0x07                                ; FA200B  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA200D
+	.short 0x00c2                                   ; FA200F
+	.byte 0x11                                      ; FA2011  glyph codes below 0x20
+	.byte 0x23, 0x05                                ; FA2012  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x06                                      ; FA2014
+	.short 0x0036                                   ; FA2015
+	.byte 0x23, 0x05                                ; FA2017  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x07                                      ; FA2019
+	.short 0x04b1                                   ; FA201A
+	.byte 0x23, 0x05                                ; FA201C  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x09                                      ; FA201E
+	.short 0x0ac9                                   ; FA201F
+	.byte 0x23, 0x05                                ; FA2021  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x05                                      ; FA2023
+	.short 0x16f9                                   ; FA2024
+	.byte 0x23, 0x05                                ; FA2026  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0a                                      ; FA2028
+	.short 0x1d11                                   ; FA2029
+	.byte 0x23, 0x05                                ; FA202B  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0c                                      ; FA202D
+	.short 0x04d4                                   ; FA202E
+	.byte 0x23, 0x05                                ; FA2030  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0d                                      ; FA2032
+	.short 0x0aec                                   ; FA2033
+	.byte 0x23, 0x05                                ; FA2035  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0e                                      ; FA2037
+	.short 0x1104                                   ; FA2038
+	.byte 0x23, 0x05                                ; FA203A  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0f                                      ; FA203C
+	.short 0x171c                                   ; FA203D
+	.byte 0x23, 0x05                                ; FA203F  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x69                                      ; FA2041
+	.short 0x1d34                                   ; FA2042
+	.byte 0x17, 0x07                                ; FA2044  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA2046
+	.short 0x0074                                   ; FA2048
+	.byte 0x10                                      ; FA204A  glyph codes below 0x20
 ; ---------------------------------------------------------------------
 ; DisplayList_FA204B -- 37 bytes, kind=display_list
 ;
@@ -62908,9 +63005,15 @@ DisplayList_FA1F21:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA204B:
-	.byte 0x20, 0x11, 0xbd, 0x10, 0x30, 0x56, 0x45, 0x52, 0x41, 0x4c, 0x4c, 0x20, 0x54, 0x30, 0x55, 0x43  ; FA204B
-	.byte 0x48, 0x20, 0x0f, 0xed, 0x12, 0x53, 0x45, 0x4e, 0x53, 0x49, 0x54, 0x49, 0x56, 0x49, 0x54, 0x59  ; FA205B
-	.byte 0x23, 0x05, 0x08, 0xe1, 0x10                                        ; FA206B
+	.byte 0x20, 0x11                                ; FA204B  op 20, 17 bytes -> handler 0xF31A3A  text at row 107, col 5
+	.short 0x10bd                                   ; FA204D
+	.ascii "0VERALL T0UCH"                          ; FA204F
+	.byte 0x20, 0x0f                                ; FA205C  op 20, 15 bytes -> handler 0xF31A3A  text at row 121, col 5
+	.short 0x12ed                                   ; FA205E
+	.ascii "SENSITIVITY"                            ; FA2060
+	.byte 0x23, 0x05                                ; FA206B  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x08                                      ; FA206D
+	.short 0x10e1                                   ; FA206E
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2070 -- 335 bytes, kind=display_list
 ;
@@ -62923,27 +63026,118 @@ DisplayList_FA204B:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA2070:
-	.byte 0x23, 0x05, 0x07, 0x30, 0x00, 0x1c, 0x12, 0x5f, 0x00, 0x05, 0x00, 0x54, 0x55, 0x4e, 0x45, 0x20  ; FA2070
-	.byte 0x26, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x45, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53  ; FA2080
-	.byte 0x54, 0x45, 0x4d, 0x07, 0x05, 0x4c, 0x05, 0x8d, 0x07, 0x05, 0x77, 0x05, 0xa9, 0x20, 0x18, 0xe3  ; FA2090
-	.byte 0x06, 0x4d, 0x41, 0x53, 0x54, 0x45, 0x52, 0x20, 0x54, 0x55, 0x4e, 0x45, 0x20, 0x20, 0x20, 0x20  ; FA20A0
-	.byte 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x0b, 0xf8, 0x06, 0x34, 0x20, 0x20, 0x2e, 0x20, 0x48, 0x7a  ; FA20B0
-	.byte 0x20, 0x08, 0x92, 0x08, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x18, 0xa3, 0x0a, 0x4b, 0x45, 0x59, 0x20  ; FA20C0
-	.byte 0x54, 0x52, 0x41, 0x4e, 0x53, 0x50, 0x4f, 0x53, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a  ; FA20D0
-	.byte 0x07, 0x05, 0x8c, 0x0b, 0x8e, 0x07, 0x05, 0x8f, 0x0b, 0xa9, 0x20, 0x18, 0x63, 0x0e, 0x4b, 0x45  ; FA20E0
-	.byte 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x4d, 0x4f, 0x44, 0x45, 0x20, 0x20  ; FA20F0
-	.byte 0x20, 0x3a, 0x07, 0x05, 0x7c, 0x11, 0x8d, 0x07, 0x05, 0xa7, 0x11, 0x11, 0x20, 0x18, 0x23, 0x12  ; FA2100
-	.byte 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x20, 0x4b, 0x45, 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e  ; FA2110
-	.byte 0x47, 0x20, 0x20, 0x3a, 0x20, 0x09, 0xc2, 0x14, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x20, 0x18, 0xe3  ; FA2120
-	.byte 0x15, 0x4b, 0x45, 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x53, 0x48, 0x49  ; FA2130
-	.byte 0x46, 0x54, 0x20, 0x20, 0x3a, 0x07, 0x05, 0xbc, 0x17, 0x8e, 0x07, 0x05, 0xbf, 0x17, 0x11, 0x20  ; FA2140
-	.byte 0x0c, 0x77, 0x18, 0x5b, 0x4b, 0x45, 0x59, 0x3a, 0x20, 0x20, 0x5d, 0x09, 0x0a, 0x04, 0x00, 0x04  ; FA2150
-	.byte 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x08, 0x00, 0x1e, 0x00, 0x06, 0x01, 0xab, 0x00, 0x09  ; FA2160
-	.byte 0x0a, 0x12, 0x01, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x20, 0x00, 0x33  ; FA2170
-	.byte 0x01, 0x2f, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x45, 0x00, 0x35, 0x01, 0x58, 0x00, 0x09, 0x0a, 0x14  ; FA2180
-	.byte 0x01, 0x47, 0x00, 0x33, 0x01, 0x56, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x6c, 0x00, 0x35, 0x01, 0x7f  ; FA2190
-	.byte 0x00, 0x09, 0x0a, 0x14, 0x01, 0x6e, 0x00, 0x33, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x93  ; FA21A0
-	.byte 0x00, 0x35, 0x01, 0xa6, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x95, 0x00, 0x33, 0x01, 0xa4, 0x00  ; FA21B0
+	.byte 0x23, 0x05                                ; FA2070  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x07                                      ; FA2072
+	.short 0x0030                                   ; FA2073
+	.byte 0x1c, 0x12                                ; FA2075  op 1c, 18 bytes -> handler 0xF31A52  text at row 2, col 15
+	.short 0x005f                                   ; FA2077
+	.short 0x0005                                   ; FA2079
+	.ascii "TUNE & SCALE"                           ; FA207B
+	.byte 0x17, 0x0c                                ; FA2087  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA2089
+	.short 0x0008                                   ; FA208B
+	.ascii "SYSTEM"                                 ; FA208D
+	.byte 0x07, 0x05                                ; FA2093  op 07, 5 bytes -> handler 0xF31A3A  text at row 33, col 36
+	.short 0x054c                                   ; FA2095
+	.byte 0x8d                                      ; FA2097  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2098  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 39
+	.short 0x0577                                   ; FA209A
+	.byte 0xa9                                      ; FA209C  glyph codes below 0x20
+	.byte 0x20, 0x18                                ; FA209D  op 20, 24 bytes -> handler 0xF31A3A  text at row 44, col 3
+	.short 0x06e3                                   ; FA209F
+	.ascii "MASTER TUNE        :"                   ; FA20A1
+	.byte 0x20, 0x0b                                ; FA20B5  op 20, 11 bytes -> handler 0xF31A3A  text at row 44, col 24
+	.short 0x06f8                                   ; FA20B7
+	.ascii "4  . Hz"                                ; FA20B9
+	.byte 0x20, 0x08                                ; FA20C0  op 20, 8 bytes -> handler 0xF31A3A  text at row 54, col 34
+	.short 0x0892                                   ; FA20C2
+	.ascii "ITEM"                                   ; FA20C4
+	.byte 0x20, 0x18                                ; FA20C8  op 20, 24 bytes -> handler 0xF31A3A  text at row 68, col 3
+	.short 0x0aa3                                   ; FA20CA
+	.ascii "KEY TRANSPOSE      :"                   ; FA20CC
+	.byte 0x07, 0x05                                ; FA20E0  op 07, 5 bytes -> handler 0xF31A3A  text at row 73, col 36
+	.short 0x0b8c                                   ; FA20E2
+	.byte 0x8e                                      ; FA20E4  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA20E5  op 07, 5 bytes -> handler 0xF31A3A  text at row 73, col 39
+	.short 0x0b8f                                   ; FA20E7
+	.byte 0xa9                                      ; FA20E9  glyph codes below 0x20
+	.byte 0x20, 0x18                                ; FA20EA  op 20, 24 bytes -> handler 0xF31A3A  text at row 92, col 3
+	.short 0x0e63                                   ; FA20EC
+	.ascii "KEY SCALING MODE   :"                   ; FA20EE
+	.byte 0x07, 0x05                                ; FA2102  op 07, 5 bytes -> handler 0xF31A3A  text at row 111, col 36
+	.short 0x117c                                   ; FA2104
+	.byte 0x8d                                      ; FA2106  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2107  op 07, 5 bytes -> handler 0xF31A3A  text at row 112, col 39
+	.short 0x11a7                                   ; FA2109
+	.byte 0x11                                      ; FA210B  glyph codes below 0x20
+	.byte 0x20, 0x18                                ; FA210C  op 20, 24 bytes -> handler 0xF31A3A  text at row 116, col 3
+	.short 0x1223                                   ; FA210E
+	.ascii "TOTAL KEY SCALING  :"                   ; FA2110
+	.byte 0x20, 0x09                                ; FA2124  op 20, 9 bytes -> handler 0xF31A3A  text at row 132, col 34
+	.short 0x14c2                                   ; FA2126
+	.ascii "VALUE"                                  ; FA2128
+	.byte 0x20, 0x18                                ; FA212D  op 20, 24 bytes -> handler 0xF31A3A  text at row 140, col 3
+	.short 0x15e3                                   ; FA212F
+	.ascii "KEY SCALING SHIFT  :"                   ; FA2131
+	.byte 0x07, 0x05                                ; FA2145  op 07, 5 bytes -> handler 0xF31A3A  text at row 151, col 36
+	.short 0x17bc                                   ; FA2147
+	.byte 0x8e                                      ; FA2149  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA214A  op 07, 5 bytes -> handler 0xF31A3A  text at row 151, col 39
+	.short 0x17bf                                   ; FA214C
+	.byte 0x11                                      ; FA214E  glyph codes below 0x20
+	.byte 0x20, 0x0c                                ; FA214F  op 20, 12 bytes -> handler 0xF31A3A  text at row 156, col 23
+	.short 0x1877                                   ; FA2151
+	.ascii "[KEY:  ]"                               ; FA2153
+	.byte 0x09, 0x0a                                ; FA215B  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA215D
+	.short 0x0004                                   ; FA215F
+	.short 0x002e                                   ; FA2161
+	.short 0x0012                                   ; FA2163
+	.byte 0x09, 0x0a                                ; FA2165  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0008                                   ; FA2167
+	.short 0x001e                                   ; FA2169
+	.short 0x0106                                   ; FA216B
+	.short 0x00ab                                   ; FA216D
+	.byte 0x09, 0x0a                                ; FA216F  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112                                   ; FA2171
+	.short 0x001e                                   ; FA2173
+	.short 0x0135                                   ; FA2175
+	.short 0x0031                                   ; FA2177
+	.byte 0x09, 0x0a                                ; FA2179  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA217B
+	.short 0x0020                                   ; FA217D
+	.short 0x0133                                   ; FA217F
+	.short 0x002f                                   ; FA2181
+	.byte 0x09, 0x0a                                ; FA2183  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112                                   ; FA2185
+	.short 0x0045                                   ; FA2187
+	.short 0x0135                                   ; FA2189
+	.short 0x0058                                   ; FA218B
+	.byte 0x09, 0x0a                                ; FA218D  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA218F
+	.short 0x0047                                   ; FA2191
+	.short 0x0133                                   ; FA2193
+	.short 0x0056                                   ; FA2195
+	.byte 0x09, 0x0a                                ; FA2197  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112                                   ; FA2199
+	.short 0x006c                                   ; FA219B
+	.short 0x0135                                   ; FA219D
+	.short 0x007f                                   ; FA219F
+	.byte 0x09, 0x0a                                ; FA21A1  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA21A3
+	.short 0x006e                                   ; FA21A5
+	.short 0x0133                                   ; FA21A7
+	.short 0x007d                                   ; FA21A9
+	.byte 0x09, 0x0a                                ; FA21AB  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112                                   ; FA21AD
+	.short 0x0093                                   ; FA21AF
+	.short 0x0135                                   ; FA21B1
+	.short 0x00a6                                   ; FA21B3
+	.byte 0x09, 0x0a                                ; FA21B5  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA21B7
+	.short 0x0095                                   ; FA21B9
+	.short 0x0133                                   ; FA21BB
+	.short 0x00a4                                   ; FA21BD
 ; ---------------------------------------------------------------------
 ; DisplayList_FA21BF -- 87 bytes, kind=display_list
 ;
@@ -63232,22 +63426,82 @@ DisplayList_FA2522:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA252C:
-	.byte 0x23, 0x05, 0x08, 0x2f, 0x00, 0x1c, 0x17, 0x58, 0x00, 0x05, 0x00, 0x54, 0x4f, 0x55, 0x43, 0x48  ; FA252C
-	.byte 0x20, 0x53, 0x45, 0x4e, 0x53, 0x49, 0x54, 0x49, 0x56, 0x49, 0x54, 0x59, 0x17, 0x0c, 0x07, 0x00  ; FA253C
-	.byte 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x1b, 0xa6, 0x0a, 0x56, 0x45, 0x4c, 0x4f  ; FA254C
-	.byte 0x43, 0x49, 0x54, 0x59, 0x20, 0x43, 0x55, 0x52, 0x56, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA255C
-	.byte 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x66, 0x0e, 0x56, 0x45, 0x4c, 0x4f, 0x43, 0x49, 0x54, 0x59, 0x20  ; FA256C
-	.byte 0x4f, 0x46, 0x46, 0x53, 0x45, 0x54, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b  ; FA257C
-	.byte 0x66, 0x13, 0x41, 0x46, 0x54, 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x43, 0x55  ; FA258C
-	.byte 0x52, 0x56, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x26, 0x17, 0x41, 0x46, 0x54  ; FA259C
-	.byte 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x54, 0x48, 0x52, 0x45, 0x53, 0x48, 0x4f  ; FA25AC
-	.byte 0x4c, 0x44, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20  ; FA25BC
-	.byte 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07  ; FA25CC
-	.byte 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92  ; FA25DC
-	.byte 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04  ; FA25EC
-	.byte 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x20, 0x00, 0x32, 0x00, 0x20, 0x01, 0xb2  ; FA25FC
-	.byte 0x00, 0x01, 0x0a, 0x20, 0x00, 0x72, 0x00, 0x20, 0x01, 0x72, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3  ; FA260C
-	.byte 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA261C
+	.byte 0x23, 0x05                                ; FA252C  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x08                                      ; FA252E
+	.short 0x002f                                   ; FA252F
+	.byte 0x1c, 0x17                                ; FA2531  op 1c, 23 bytes -> handler 0xF31A52  text at row 2, col 8
+	.short 0x0058                                   ; FA2533
+	.short 0x0005                                   ; FA2535
+	.ascii "TOUCH SENSITIVITY"                      ; FA2537
+	.byte 0x17, 0x0c                                ; FA2548  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA254A
+	.short 0x0008                                   ; FA254C
+	.ascii "SYSTEM"                                 ; FA254E
+	.byte 0x20, 0x1b                                ; FA2554  op 20, 27 bytes -> handler 0xF31A3A  text at row 68, col 6
+	.short 0x0aa6                                   ; FA2556
+	.ascii "VELOCITY CURVE        :"                ; FA2558
+	.byte 0x20, 0x1b                                ; FA256F  op 20, 27 bytes -> handler 0xF31A3A  text at row 92, col 6
+	.short 0x0e66                                   ; FA2571
+	.ascii "VELOCITY OFFSET       :"                ; FA2573
+	.byte 0x20, 0x1b                                ; FA258A  op 20, 27 bytes -> handler 0xF31A3A  text at row 124, col 6
+	.short 0x1366                                   ; FA258C
+	.ascii "AFTER TOUCH CURVE     :"                ; FA258E
+	.byte 0x20, 0x1b                                ; FA25A5  op 20, 27 bytes -> handler 0xF31A3A  text at row 148, col 6
+	.short 0x1726                                   ; FA25A7
+	.ascii "AFTER TOUCH THRESHOLD :"                ; FA25A9
+	.byte 0x20, 0x08                                ; FA25C0  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA25C2
+	.ascii "ITEM"                                   ; FA25C4
+	.byte 0x20, 0x09                                ; FA25C8  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA25CA
+	.ascii "VALUE"                                  ; FA25CC
+	.byte 0x07, 0x05                                ; FA25D1  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA25D3
+	.byte 0x8d                                      ; FA25D5  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA25D6  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA25D8
+	.byte 0x8d                                      ; FA25DA  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA25DB  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA25DD
+	.byte 0x8e                                      ; FA25DF  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA25E0  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA25E2
+	.byte 0x8e                                      ; FA25E4  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA25E5  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA25E7
+	.short 0x00da                                   ; FA25E9
+	.short 0x0092                                   ; FA25EB
+	.short 0x00ec                                   ; FA25ED
+	.byte 0x0a, 0x0a                                ; FA25EF  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA25F1
+	.short 0x00da                                   ; FA25F3
+	.short 0x013a                                   ; FA25F5
+	.short 0x00ec                                   ; FA25F7
+	.byte 0x09, 0x0a                                ; FA25F9  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA25FB
+	.short 0x0004                                   ; FA25FD
+	.short 0x002e                                   ; FA25FF
+	.short 0x0012                                   ; FA2601
+	.byte 0x09, 0x0a                                ; FA2603  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0020                                   ; FA2605
+	.short 0x0032                                   ; FA2607
+	.short 0x0120                                   ; FA2609
+	.short 0x00b2                                   ; FA260B
+	.byte 0x01, 0x0a                                ; FA260D  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0020                                   ; FA260F
+	.short 0x0072                                   ; FA2611
+	.short 0x0120                                   ; FA2613
+	.short 0x0072                                   ; FA2615
+	.byte 0x01, 0x0a                                ; FA2617  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA2619
+	.short 0x00e3                                   ; FA261B
+	.short 0x0094                                   ; FA261D
+	.short 0x00e3                                   ; FA261F
+	.byte 0x01, 0x0a                                ; FA2621  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA2623
+	.short 0x00e3                                   ; FA2625
+	.short 0x013c                                   ; FA2627
+	.short 0x00e3                                   ; FA2629
 ; ---------------------------------------------------------------------
 ; DisplayList_FA262B -- 40 bytes, kind=display_list
 ;
@@ -63315,43 +63569,224 @@ DisplayList_FA267E:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA2688:
-	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA2688
-	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x0b, 0x10, 0x01, 0x50, 0x41  ; FA2698
-	.byte 0x47, 0x45, 0x20, 0x2f, 0x32, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45  ; FA26A8
-	.byte 0x4d, 0x20, 0x18, 0xe2, 0x06, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x4f, 0x52  ; FA26B8
-	.byte 0x20, 0x20, 0x20, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09, 0x71, 0x09, 0x59, 0x28, 0x20  ; FA26C8
-	.byte 0x29, 0x3a, 0x20, 0x18, 0x22, 0x0d, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f  ; FA26D8
-	.byte 0x4c, 0x4c, 0x45, 0x52, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09, 0xb1, 0x0f, 0x59, 0x28  ; FA26E8
-	.byte 0x20, 0x29, 0x3a, 0x20, 0x18, 0x22, 0x12, 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f  ; FA26F8
-	.byte 0x4e, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x18, 0xa2, 0x14, 0x4d  ; FA2708
-	.byte 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2718
-	.byte 0x20, 0x20, 0x3a, 0x20, 0x18, 0x22, 0x17, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c, 0x20, 0x50  ; FA2728
-	.byte 0x45, 0x44, 0x41, 0x4c, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x18, 0xa2, 0x19, 0x46  ; FA2738
-	.byte 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2748
-	.byte 0x20, 0x20, 0x3a, 0x20, 0x18, 0x22, 0x1c, 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x20, 0x32  ; FA2758
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49  ; FA2768
-	.byte 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21  ; FA2778
-	.byte 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e  ; FA2788
-	.byte 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00  ; FA2798
-	.byte 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a  ; FA27A8
-	.byte 0x08, 0x00, 0x22, 0x00, 0x38, 0x01, 0xc7, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x30, 0x00, 0x86, 0x00  ; FA27B8
-	.byte 0x30, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x40, 0x00, 0x86, 0x00, 0x40, 0x00, 0x01, 0x0a, 0x82, 0x00  ; FA27C8
-	.byte 0x58, 0x00, 0x86, 0x00, 0x58, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x68, 0x00, 0x86, 0x00, 0x68, 0x00  ; FA27D8
-	.byte 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00  ; FA27E8
-	.byte 0x3c, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x82, 0x00, 0x30, 0x00, 0x82, 0x00, 0x40, 0x00, 0x02, 0x0a  ; FA27F8
-	.byte 0x82, 0x00, 0x58, 0x00, 0x82, 0x00, 0x68, 0x00, 0x01, 0x0a, 0x96, 0x00, 0x31, 0x00, 0xa0, 0x00  ; FA2808
-	.byte 0x31, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x31, 0x00, 0x98, 0x00, 0x2f, 0x00, 0x00, 0x0a, 0x96, 0x00  ; FA2818
-	.byte 0x31, 0x00, 0x98, 0x00, 0x33, 0x00, 0x00, 0x0a, 0x9e, 0x00, 0x2f, 0x00, 0xa0, 0x00, 0x31, 0x00  ; FA2828
-	.byte 0x00, 0x0a, 0x9e, 0x00, 0x33, 0x00, 0xa0, 0x00, 0x31, 0x00, 0x02, 0x0a, 0x9b, 0x00, 0x3c, 0x00  ; FA2838
-	.byte 0x9b, 0x00, 0x46, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x3c, 0x00, 0x9d, 0x00, 0x3e, 0x00, 0x00, 0x0a  ; FA2848
-	.byte 0x9b, 0x00, 0x3c, 0x00, 0x99, 0x00, 0x3e, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x46, 0x00, 0x99, 0x00  ; FA2858
-	.byte 0x44, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x46, 0x00, 0x9d, 0x00, 0x44, 0x00, 0x01, 0x0a, 0x96, 0x00  ; FA2868
-	.byte 0x59, 0x00, 0xa0, 0x00, 0x59, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x59, 0x00, 0x98, 0x00, 0x57, 0x00  ; FA2878
-	.byte 0x00, 0x0a, 0x96, 0x00, 0x59, 0x00, 0x98, 0x00, 0x5b, 0x00, 0x00, 0x0a, 0xa0, 0x00, 0x59, 0x00  ; FA2888
-	.byte 0x9e, 0x00, 0x5b, 0x00, 0x00, 0x0a, 0xa0, 0x00, 0x59, 0x00, 0x9e, 0x00, 0x57, 0x00, 0x02, 0x0a  ; FA2898
-	.byte 0x9b, 0x00, 0x64, 0x00, 0x9b, 0x00, 0x6e, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x64, 0x00, 0x99, 0x00  ; FA28A8
-	.byte 0x66, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x64, 0x00, 0x9d, 0x00, 0x66, 0x00, 0x00, 0x0a, 0x9b, 0x00  ; FA28B8
-	.byte 0x6e, 0x00, 0x99, 0x00, 0x6c, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9d, 0x00, 0x6c, 0x00  ; FA28C8
+	.byte 0x23, 0x05                                ; FA2688  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x09                                      ; FA268A
+	.short 0x002f                                   ; FA268B
+	.byte 0x07, 0x15                                ; FA268D  op 07, 21 bytes -> handler 0xF31A3A  text at row 6, col 12
+	.short 0x00fc                                   ; FA268F
+	.ascii "CONTROLLER ASSIGN"                      ; FA2691
+	.byte 0x20, 0x0b                                ; FA26A2  op 20, 11 bytes -> handler 0xF31A3A  text at row 6, col 32
+	.short 0x0110                                   ; FA26A4
+	.ascii "PAGE /2"                                ; FA26A6
+	.byte 0x17, 0x0c                                ; FA26AD  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA26AF
+	.short 0x0008                                   ; FA26B1
+	.ascii "SYSTEM"                                 ; FA26B3
+	.byte 0x20, 0x18                                ; FA26B9  op 20, 24 bytes -> handler 0xF31A3A  text at row 44, col 2
+	.short 0x06e2                                   ; FA26BB
+	.ascii "R.T.CREATOR    X( ):"                   ; FA26BD
+	.byte 0x20, 0x09                                ; FA26D1  op 20, 9 bytes -> handler 0xF31A3A  text at row 60, col 17
+	.short 0x0971                                   ; FA26D3
+	.ascii "Y( ):"                                  ; FA26D5
+	.byte 0x20, 0x18                                ; FA26DA  op 20, 24 bytes -> handler 0xF31A3A  text at row 84, col 2
+	.short 0x0d22                                   ; FA26DC
+	.ascii "R.T.CONTROLLER X( ):"                   ; FA26DE
+	.byte 0x20, 0x09                                ; FA26F2  op 20, 9 bytes -> handler 0xF31A3A  text at row 100, col 17
+	.short 0x0fb1                                   ; FA26F4
+	.ascii "Y( ):"                                  ; FA26F6
+	.byte 0x20, 0x18                                ; FA26FB  op 20, 24 bytes -> handler 0xF31A3A  text at row 116, col 2
+	.short 0x1222                                   ; FA26FD
+	.ascii "MODULATION 1       :"                   ; FA26FF
+	.byte 0x20, 0x18                                ; FA2713  op 20, 24 bytes -> handler 0xF31A3A  text at row 132, col 2
+	.short 0x14a2                                   ; FA2715
+	.ascii "MODULATION 2       :"                   ; FA2717
+	.byte 0x20, 0x18                                ; FA272B  op 20, 24 bytes -> handler 0xF31A3A  text at row 148, col 2
+	.short 0x1722                                   ; FA272D
+	.ascii "CONTROL PEDAL      :"                   ; FA272F
+	.byte 0x20, 0x18                                ; FA2743  op 20, 24 bytes -> handler 0xF31A3A  text at row 164, col 2
+	.short 0x19a2                                   ; FA2745
+	.ascii "FOOT SW 1          :"                   ; FA2747
+	.byte 0x20, 0x18                                ; FA275B  op 20, 24 bytes -> handler 0xF31A3A  text at row 180, col 2
+	.short 0x1c22                                   ; FA275D
+	.ascii "FOOT SW 2          :"                   ; FA275F
+	.byte 0x20, 0x08                                ; FA2773  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA2775
+	.ascii "ITEM"                                   ; FA2777
+	.byte 0x20, 0x09                                ; FA277B  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA277D
+	.ascii "VALUE"                                  ; FA277F
+	.byte 0x07, 0x05                                ; FA2784  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA2786
+	.byte 0x8d                                      ; FA2788  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2789  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA278B
+	.byte 0x8d                                      ; FA278D  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA278E  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA2790
+	.byte 0x8e                                      ; FA2792  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2793  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA2795
+	.byte 0x8e                                      ; FA2797  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA2798  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA279A
+	.short 0x00da                                   ; FA279C
+	.short 0x0092                                   ; FA279E
+	.short 0x00ec                                   ; FA27A0
+	.byte 0x0a, 0x0a                                ; FA27A2  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA27A4
+	.short 0x00da                                   ; FA27A6
+	.short 0x013a                                   ; FA27A8
+	.short 0x00ec                                   ; FA27AA
+	.byte 0x09, 0x0a                                ; FA27AC  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA27AE
+	.short 0x0004                                   ; FA27B0
+	.short 0x002e                                   ; FA27B2
+	.short 0x0012                                   ; FA27B4
+	.byte 0x09, 0x0a                                ; FA27B6  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0008                                   ; FA27B8
+	.short 0x0022                                   ; FA27BA
+	.short 0x0138                                   ; FA27BC
+	.short 0x00c7                                   ; FA27BE
+	.byte 0x01, 0x0a                                ; FA27C0  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA27C2
+	.short 0x0030                                   ; FA27C4
+	.short 0x0086                                   ; FA27C6
+	.short 0x0030                                   ; FA27C8
+	.byte 0x01, 0x0a                                ; FA27CA  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA27CC
+	.short 0x0040                                   ; FA27CE
+	.short 0x0086                                   ; FA27D0
+	.short 0x0040                                   ; FA27D2
+	.byte 0x01, 0x0a                                ; FA27D4  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA27D6
+	.short 0x0058                                   ; FA27D8
+	.short 0x0086                                   ; FA27DA
+	.short 0x0058                                   ; FA27DC
+	.byte 0x01, 0x0a                                ; FA27DE  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA27E0
+	.short 0x0068                                   ; FA27E2
+	.short 0x0086                                   ; FA27E4
+	.short 0x0068                                   ; FA27E6
+	.byte 0x01, 0x0a                                ; FA27E8  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA27EA
+	.short 0x00e3                                   ; FA27EC
+	.short 0x0094                                   ; FA27EE
+	.short 0x00e3                                   ; FA27F0
+	.byte 0x01, 0x0a                                ; FA27F2  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA27F4
+	.short 0x00e3                                   ; FA27F6
+	.short 0x013c                                   ; FA27F8
+	.short 0x00e3                                   ; FA27FA
+	.byte 0x02, 0x0a                                ; FA27FC  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA27FE
+	.short 0x0030                                   ; FA2800
+	.short 0x0082                                   ; FA2802
+	.short 0x0040                                   ; FA2804
+	.byte 0x02, 0x0a                                ; FA2806  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA2808
+	.short 0x0058                                   ; FA280A
+	.short 0x0082                                   ; FA280C
+	.short 0x0068                                   ; FA280E
+	.byte 0x01, 0x0a                                ; FA2810  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2812
+	.short 0x0031                                   ; FA2814
+	.short 0x00a0                                   ; FA2816
+	.short 0x0031                                   ; FA2818
+	.byte 0x00, 0x0a                                ; FA281A  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA281C
+	.short 0x0031                                   ; FA281E
+	.short 0x0098                                   ; FA2820
+	.short 0x002f                                   ; FA2822
+	.byte 0x00, 0x0a                                ; FA2824  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2826
+	.short 0x0031                                   ; FA2828
+	.short 0x0098                                   ; FA282A
+	.short 0x0033                                   ; FA282C
+	.byte 0x00, 0x0a                                ; FA282E  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009e                                   ; FA2830
+	.short 0x002f                                   ; FA2832
+	.short 0x00a0                                   ; FA2834
+	.short 0x0031                                   ; FA2836
+	.byte 0x00, 0x0a                                ; FA2838  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009e                                   ; FA283A
+	.short 0x0033                                   ; FA283C
+	.short 0x00a0                                   ; FA283E
+	.short 0x0031                                   ; FA2840
+	.byte 0x02, 0x0a                                ; FA2842  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2844
+	.short 0x003c                                   ; FA2846
+	.short 0x009b                                   ; FA2848
+	.short 0x0046                                   ; FA284A
+	.byte 0x00, 0x0a                                ; FA284C  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA284E
+	.short 0x003c                                   ; FA2850
+	.short 0x009d                                   ; FA2852
+	.short 0x003e                                   ; FA2854
+	.byte 0x00, 0x0a                                ; FA2856  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2858
+	.short 0x003c                                   ; FA285A
+	.short 0x0099                                   ; FA285C
+	.short 0x003e                                   ; FA285E
+	.byte 0x00, 0x0a                                ; FA2860  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2862
+	.short 0x0046                                   ; FA2864
+	.short 0x0099                                   ; FA2866
+	.short 0x0044                                   ; FA2868
+	.byte 0x00, 0x0a                                ; FA286A  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA286C
+	.short 0x0046                                   ; FA286E
+	.short 0x009d                                   ; FA2870
+	.short 0x0044                                   ; FA2872
+	.byte 0x01, 0x0a                                ; FA2874  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2876
+	.short 0x0059                                   ; FA2878
+	.short 0x00a0                                   ; FA287A
+	.short 0x0059                                   ; FA287C
+	.byte 0x00, 0x0a                                ; FA287E  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2880
+	.short 0x0059                                   ; FA2882
+	.short 0x0098                                   ; FA2884
+	.short 0x0057                                   ; FA2886
+	.byte 0x00, 0x0a                                ; FA2888  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA288A
+	.short 0x0059                                   ; FA288C
+	.short 0x0098                                   ; FA288E
+	.short 0x005b                                   ; FA2890
+	.byte 0x00, 0x0a                                ; FA2892  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x00a0                                   ; FA2894
+	.short 0x0059                                   ; FA2896
+	.short 0x009e                                   ; FA2898
+	.short 0x005b                                   ; FA289A
+	.byte 0x00, 0x0a                                ; FA289C  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x00a0                                   ; FA289E
+	.short 0x0059                                   ; FA28A0
+	.short 0x009e                                   ; FA28A2
+	.short 0x0057                                   ; FA28A4
+	.byte 0x02, 0x0a                                ; FA28A6  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA28A8
+	.short 0x0064                                   ; FA28AA
+	.short 0x009b                                   ; FA28AC
+	.short 0x006e                                   ; FA28AE
+	.byte 0x00, 0x0a                                ; FA28B0  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA28B2
+	.short 0x0064                                   ; FA28B4
+	.short 0x0099                                   ; FA28B6
+	.short 0x0066                                   ; FA28B8
+	.byte 0x00, 0x0a                                ; FA28BA  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA28BC
+	.short 0x0064                                   ; FA28BE
+	.short 0x009d                                   ; FA28C0
+	.short 0x0066                                   ; FA28C2
+	.byte 0x00, 0x0a                                ; FA28C4  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA28C6
+	.short 0x006e                                   ; FA28C8
+	.short 0x0099                                   ; FA28CA
+	.short 0x006c                                   ; FA28CC
+	.byte 0x00, 0x0a                                ; FA28CE  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA28D0
+	.short 0x006e                                   ; FA28D2
+	.short 0x009d                                   ; FA28D4
+	.short 0x006c                                   ; FA28D6
 ; ---------------------------------------------------------------------
 ; DisplayList_FA28D8 -- 200 bytes, kind=display_list
 ;
@@ -63364,19 +63799,73 @@ DisplayList_FA2688:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA28D8:
-	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA28D8
-	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x0b, 0x10, 0x01, 0x50, 0x41  ; FA28E8
-	.byte 0x47, 0x45, 0x20, 0x2f, 0x32, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45  ; FA28F8
-	.byte 0x4d, 0x20, 0x1b, 0x26, 0x0d, 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x31, 0x20, 0x50, 0x4f  ; FA2908
-	.byte 0x4c, 0x41, 0x52, 0x49, 0x54, 0x59, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x26, 0x12  ; FA2918
-	.byte 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x32, 0x20, 0x50, 0x4f, 0x4c, 0x41, 0x52, 0x49, 0x54  ; FA2928
-	.byte 0x59, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20  ; FA2938
-	.byte 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde  ; FA2948
-	.byte 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00  ; FA2958
-	.byte 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00  ; FA2968
-	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x20, 0x00, 0x42, 0x00  ; FA2978
-	.byte 0x20, 0x01, 0x92, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a  ; FA2988
-	.byte 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                      ; FA2998
+	.byte 0x23, 0x05                                ; FA28D8  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x09                                      ; FA28DA
+	.short 0x002f                                   ; FA28DB
+	.byte 0x07, 0x15                                ; FA28DD  op 07, 21 bytes -> handler 0xF31A3A  text at row 6, col 12
+	.short 0x00fc                                   ; FA28DF
+	.ascii "CONTROLLER ASSIGN"                      ; FA28E1
+	.byte 0x20, 0x0b                                ; FA28F2  op 20, 11 bytes -> handler 0xF31A3A  text at row 6, col 32
+	.short 0x0110                                   ; FA28F4
+	.ascii "PAGE /2"                                ; FA28F6
+	.byte 0x17, 0x0c                                ; FA28FD  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA28FF
+	.short 0x0008                                   ; FA2901
+	.ascii "SYSTEM"                                 ; FA2903
+	.byte 0x20, 0x1b                                ; FA2909  op 20, 27 bytes -> handler 0xF31A3A  text at row 84, col 6
+	.short 0x0d26                                   ; FA290B
+	.ascii "FOOT SW1 POLARITY     :"                ; FA290D
+	.byte 0x20, 0x1b                                ; FA2924  op 20, 27 bytes -> handler 0xF31A3A  text at row 116, col 6
+	.short 0x1226                                   ; FA2926
+	.ascii "FOOT SW2 POLARITY     :"                ; FA2928
+	.byte 0x20, 0x08                                ; FA293F  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA2941
+	.ascii "ITEM"                                   ; FA2943
+	.byte 0x20, 0x09                                ; FA2947  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA2949
+	.ascii "VALUE"                                  ; FA294B
+	.byte 0x07, 0x05                                ; FA2950  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA2952
+	.byte 0x8d                                      ; FA2954  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2955  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA2957
+	.byte 0x8d                                      ; FA2959  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA295A  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA295C
+	.byte 0x8e                                      ; FA295E  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA295F  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA2961
+	.byte 0x8e                                      ; FA2963  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA2964  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA2966
+	.short 0x00da                                   ; FA2968
+	.short 0x0092                                   ; FA296A
+	.short 0x00ec                                   ; FA296C
+	.byte 0x0a, 0x0a                                ; FA296E  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA2970
+	.short 0x00da                                   ; FA2972
+	.short 0x013a                                   ; FA2974
+	.short 0x00ec                                   ; FA2976
+	.byte 0x09, 0x0a                                ; FA2978  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA297A
+	.short 0x0004                                   ; FA297C
+	.short 0x002e                                   ; FA297E
+	.short 0x0012                                   ; FA2980
+	.byte 0x09, 0x0a                                ; FA2982  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0020                                   ; FA2984
+	.short 0x0042                                   ; FA2986
+	.short 0x0120                                   ; FA2988
+	.short 0x0092                                   ; FA298A
+	.byte 0x01, 0x0a                                ; FA298C  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA298E
+	.short 0x00e3                                   ; FA2990
+	.short 0x0094                                   ; FA2992
+	.short 0x00e3                                   ; FA2994
+	.byte 0x01, 0x0a                                ; FA2996  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA2998
+	.short 0x00e3                                   ; FA299A
+	.short 0x013c                                   ; FA299C
+	.short 0x00e3                                   ; FA299E
 ; ---------------------------------------------------------------------
 ; DisplayList_FA29A0 -- 298 bytes, kind=display_list
 ;
@@ -63389,25 +63878,135 @@ DisplayList_FA28D8:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA29A0:
-	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA29A0
-	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00  ; FA29B0
-	.byte 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x18, 0xb2, 0x0e, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52  ; FA29C0
-	.byte 0x45, 0x41, 0x54, 0x4f, 0x52, 0x20, 0x20, 0x20, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09  ; FA29D0
-	.byte 0x41, 0x11, 0x59, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20  ; FA29E0
-	.byte 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde  ; FA29F0
-	.byte 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00  ; FA2A00
-	.byte 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00  ; FA2A10
-	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x08, 0x00, 0x54, 0x00  ; FA2A20
-	.byte 0x38, 0x01, 0x84, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x62, 0x00, 0x86, 0x00, 0x62, 0x00, 0x01, 0x0a  ; FA2A30
-	.byte 0x82, 0x00, 0x72, 0x00, 0x86, 0x00, 0x72, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00  ; FA2A40
-	.byte 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x82, 0x00  ; FA2A50
-	.byte 0x62, 0x00, 0x82, 0x00, 0x72, 0x00, 0x01, 0x0a, 0x96, 0x00, 0x63, 0x00, 0xa0, 0x00, 0x63, 0x00  ; FA2A60
-	.byte 0x00, 0x0a, 0x96, 0x00, 0x63, 0x00, 0x98, 0x00, 0x61, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x63, 0x00  ; FA2A70
-	.byte 0x98, 0x00, 0x65, 0x00, 0x00, 0x0a, 0x9e, 0x00, 0x61, 0x00, 0xa0, 0x00, 0x63, 0x00, 0x00, 0x0a  ; FA2A80
-	.byte 0x9e, 0x00, 0x65, 0x00, 0xa0, 0x00, 0x63, 0x00, 0x02, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9b, 0x00  ; FA2A90
-	.byte 0x78, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9d, 0x00, 0x70, 0x00, 0x00, 0x0a, 0x9b, 0x00  ; FA2AA0
-	.byte 0x6e, 0x00, 0x99, 0x00, 0x70, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x78, 0x00, 0x99, 0x00, 0x76, 0x00  ; FA2AB0
-	.byte 0x00, 0x0a, 0x9b, 0x00, 0x78, 0x00, 0x9d, 0x00, 0x76, 0x00          ; FA2AC0
+	.byte 0x23, 0x05                                ; FA29A0  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x09                                      ; FA29A2
+	.short 0x002f                                   ; FA29A3
+	.byte 0x07, 0x15                                ; FA29A5  op 07, 21 bytes -> handler 0xF31A3A  text at row 6, col 12
+	.short 0x00fc                                   ; FA29A7
+	.ascii "CONTROLLER ASSIGN"                      ; FA29A9
+	.byte 0x17, 0x0c                                ; FA29BA  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA29BC
+	.short 0x0008                                   ; FA29BE
+	.ascii "SYSTEM"                                 ; FA29C0
+	.byte 0x20, 0x18                                ; FA29C6  op 20, 24 bytes -> handler 0xF31A3A  text at row 94, col 2
+	.short 0x0eb2                                   ; FA29C8
+	.ascii "R.T.CREATOR    X( ):"                   ; FA29CA
+	.byte 0x20, 0x09                                ; FA29DE  op 20, 9 bytes -> handler 0xF31A3A  text at row 110, col 17
+	.short 0x1141                                   ; FA29E0
+	.ascii "Y( ):"                                  ; FA29E2
+	.byte 0x20, 0x08                                ; FA29E7  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA29E9
+	.ascii "ITEM"                                   ; FA29EB
+	.byte 0x20, 0x09                                ; FA29EF  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA29F1
+	.ascii "VALUE"                                  ; FA29F3
+	.byte 0x07, 0x05                                ; FA29F8  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA29FA
+	.byte 0x8d                                      ; FA29FC  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA29FD  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA29FF
+	.byte 0x8d                                      ; FA2A01  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2A02  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA2A04
+	.byte 0x8e                                      ; FA2A06  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2A07  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA2A09
+	.byte 0x8e                                      ; FA2A0B  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA2A0C  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA2A0E
+	.short 0x00da                                   ; FA2A10
+	.short 0x0092                                   ; FA2A12
+	.short 0x00ec                                   ; FA2A14
+	.byte 0x0a, 0x0a                                ; FA2A16  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA2A18
+	.short 0x00da                                   ; FA2A1A
+	.short 0x013a                                   ; FA2A1C
+	.short 0x00ec                                   ; FA2A1E
+	.byte 0x09, 0x0a                                ; FA2A20  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA2A22
+	.short 0x0004                                   ; FA2A24
+	.short 0x002e                                   ; FA2A26
+	.short 0x0012                                   ; FA2A28
+	.byte 0x09, 0x0a                                ; FA2A2A  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0008                                   ; FA2A2C
+	.short 0x0054                                   ; FA2A2E
+	.short 0x0138                                   ; FA2A30
+	.short 0x0084                                   ; FA2A32
+	.byte 0x01, 0x0a                                ; FA2A34  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA2A36
+	.short 0x0062                                   ; FA2A38
+	.short 0x0086                                   ; FA2A3A
+	.short 0x0062                                   ; FA2A3C
+	.byte 0x01, 0x0a                                ; FA2A3E  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA2A40
+	.short 0x0072                                   ; FA2A42
+	.short 0x0086                                   ; FA2A44
+	.short 0x0072                                   ; FA2A46
+	.byte 0x01, 0x0a                                ; FA2A48  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA2A4A
+	.short 0x00e3                                   ; FA2A4C
+	.short 0x0094                                   ; FA2A4E
+	.short 0x00e3                                   ; FA2A50
+	.byte 0x01, 0x0a                                ; FA2A52  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA2A54
+	.short 0x00e3                                   ; FA2A56
+	.short 0x013c                                   ; FA2A58
+	.short 0x00e3                                   ; FA2A5A
+	.byte 0x02, 0x0a                                ; FA2A5C  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0082                                   ; FA2A5E
+	.short 0x0062                                   ; FA2A60
+	.short 0x0082                                   ; FA2A62
+	.short 0x0072                                   ; FA2A64
+	.byte 0x01, 0x0a                                ; FA2A66  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2A68
+	.short 0x0063                                   ; FA2A6A
+	.short 0x00a0                                   ; FA2A6C
+	.short 0x0063                                   ; FA2A6E
+	.byte 0x00, 0x0a                                ; FA2A70  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2A72
+	.short 0x0063                                   ; FA2A74
+	.short 0x0098                                   ; FA2A76
+	.short 0x0061                                   ; FA2A78
+	.byte 0x00, 0x0a                                ; FA2A7A  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x0096                                   ; FA2A7C
+	.short 0x0063                                   ; FA2A7E
+	.short 0x0098                                   ; FA2A80
+	.short 0x0065                                   ; FA2A82
+	.byte 0x00, 0x0a                                ; FA2A84  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009e                                   ; FA2A86
+	.short 0x0061                                   ; FA2A88
+	.short 0x00a0                                   ; FA2A8A
+	.short 0x0063                                   ; FA2A8C
+	.byte 0x00, 0x0a                                ; FA2A8E  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009e                                   ; FA2A90
+	.short 0x0065                                   ; FA2A92
+	.short 0x00a0                                   ; FA2A94
+	.short 0x0063                                   ; FA2A96
+	.byte 0x02, 0x0a                                ; FA2A98  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2A9A
+	.short 0x006e                                   ; FA2A9C
+	.short 0x009b                                   ; FA2A9E
+	.short 0x0078                                   ; FA2AA0
+	.byte 0x00, 0x0a                                ; FA2AA2  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2AA4
+	.short 0x006e                                   ; FA2AA6
+	.short 0x009d                                   ; FA2AA8
+	.short 0x0070                                   ; FA2AAA
+	.byte 0x00, 0x0a                                ; FA2AAC  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2AAE
+	.short 0x006e                                   ; FA2AB0
+	.short 0x0099                                   ; FA2AB2
+	.short 0x0070                                   ; FA2AB4
+	.byte 0x00, 0x0a                                ; FA2AB6  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2AB8
+	.short 0x0078                                   ; FA2ABA
+	.short 0x0099                                   ; FA2ABC
+	.short 0x0076                                   ; FA2ABE
+	.byte 0x00, 0x0a                                ; FA2AC0  op 00, 10 bytes -> handler 0xF31A75
+	.short 0x009b                                   ; FA2AC2
+	.short 0x0078                                   ; FA2AC4
+	.short 0x009d                                   ; FA2AC6
+	.short 0x0076                                   ; FA2AC8
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2ACA -- 30 bytes, kind=display_list
 ;
@@ -63627,28 +64226,105 @@ DisplayList_FA2DEB:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA2DFF:
-	.byte 0x23, 0x05, 0x0c, 0x34, 0x00, 0x1c, 0x0d, 0x7e, 0x00, 0x05, 0x00, 0x49, 0x4e, 0x49, 0x54, 0x49  ; FA2DFF
-	.byte 0x41, 0x4c, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x2a  ; FA2E0F
-	.byte 0x11, 0x04, 0x52, 0x65, 0x73, 0x65, 0x74, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x6f, 0x74, 0x61  ; FA2E1F
-	.byte 0x6c, 0x20, 0x6f, 0x72, 0x20, 0x69, 0x6e, 0x64, 0x69, 0x76, 0x69, 0x64, 0x75, 0x61, 0x6c, 0x20  ; FA2E2F
-	.byte 0x73, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x07, 0x24, 0x59, 0x07, 0x74, 0x6f, 0x20, 0x74  ; FA2E3F
-	.byte 0x68, 0x65, 0x20, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x6c, 0x20, 0x66, 0x61, 0x63, 0x74  ; FA2E4F
-	.byte 0x6f, 0x72, 0x79, 0x20, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x07, 0x26, 0xa1, 0x0a  ; FA2E5F
-	.byte 0x65, 0x78, 0x63, 0x65, 0x70, 0x74, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x61, 0x6e, 0x64  ; FA2E6F
-	.byte 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x61, 0x72, 0x65  ; FA2E7F
-	.byte 0x61, 0x2e, 0x07, 0x05, 0x57, 0x11, 0x11, 0x20, 0x06, 0x7b, 0x11, 0x4f, 0x4b, 0x07, 0x09, 0xe2  ; FA2E8F
-	.byte 0x0e, 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x07, 0x10, 0xdd, 0x11, 0x50, 0x41, 0x52, 0x54, 0x20, 0x53  ; FA2E9F
-	.byte 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47, 0x07, 0x0a, 0xd5, 0x14, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA2EAF
-	.byte 0x07, 0x10, 0xcd, 0x17, 0x4d, 0x49, 0x44, 0x49, 0x20, 0x53, 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47  ; FA2EBF
-	.byte 0x07, 0x0a, 0xc5, 0x1a, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x07, 0x0d, 0xbd, 0x1d, 0x44, 0x52  ; FA2ECF
-	.byte 0x55, 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x07, 0x0d, 0xb5, 0x20, 0x53, 0x45, 0x51, 0x55, 0x45  ; FA2EDF
-	.byte 0x4e, 0x43, 0x45, 0x52, 0x07, 0x05, 0x6c, 0x17, 0x8d, 0x07, 0x05, 0x97, 0x17, 0x11, 0x07, 0x05  ; FA2EEF
-	.byte 0xd4, 0x1d, 0x8e, 0x07, 0x05, 0xd7, 0x1d, 0x11, 0x0a, 0x0a, 0x3b, 0x00, 0x57, 0x00, 0xe7, 0x00  ; FA2EFF
-	.byte 0xe4, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0c, 0x01  ; FA2F0F
-	.byte 0x6a, 0x00, 0x34, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x0e, 0x01, 0x6c, 0x00, 0x32, 0x01, 0x7b, 0x00  ; FA2F1F
-	.byte 0x09, 0x0a, 0x14, 0x01, 0x92, 0x00, 0x34, 0x01, 0xa5, 0x00, 0x09, 0x0a, 0x16, 0x01, 0x94, 0x00  ; FA2F2F
-	.byte 0x32, 0x01, 0xa3, 0x00, 0x09, 0x0a, 0x14, 0x01, 0xba, 0x00, 0x34, 0x01, 0xcd, 0x00, 0x09, 0x0a  ; FA2F3F
-	.byte 0x16, 0x01, 0xbc, 0x00, 0x32, 0x01, 0xcb, 0x00                      ; FA2F4F
+	.byte 0x23, 0x05                                ; FA2DFF  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0c                                      ; FA2E01
+	.short 0x0034                                   ; FA2E02
+	.byte 0x1c, 0x0d                                ; FA2E04  op 1c, 13 bytes -> handler 0xF31A52  text at row 3, col 6
+	.short 0x007e                                   ; FA2E06
+	.short 0x0005                                   ; FA2E08
+	.ascii "INITIAL"                                ; FA2E0A
+	.byte 0x17, 0x0c                                ; FA2E11  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA2E13
+	.short 0x0008                                   ; FA2E15
+	.ascii "SYSTEM"                                 ; FA2E17
+	.byte 0x07, 0x2a                                ; FA2E1D  op 07, 42 bytes -> handler 0xF31A3A  text at row 26, col 1
+	.short 0x0411                                   ; FA2E1F
+	.ascii "Reset the total or individual sections" ; FA2E21
+	.byte 0x07, 0x24                                ; FA2E47  op 07, 36 bytes -> handler 0xF31A3A  text at row 47, col 1
+	.short 0x0759                                   ; FA2E49
+	.ascii "to the original factory settings"       ; FA2E4B
+	.byte 0x07, 0x26                                ; FA2E6B  op 07, 38 bytes -> handler 0xF31A3A  text at row 68, col 1
+	.short 0x0aa1                                   ; FA2E6D
+	.ascii "except SOUND and COMBINATION area."     ; FA2E6F
+	.byte 0x07, 0x05                                ; FA2E91  op 07, 5 bytes -> handler 0xF31A3A  text at row 110, col 39
+	.short 0x1157                                   ; FA2E93
+	.byte 0x11                                      ; FA2E95  glyph codes below 0x20
+	.byte 0x20, 0x06                                ; FA2E96  op 20, 6 bytes -> handler 0xF31A3A  text at row 111, col 35
+	.short 0x117b                                   ; FA2E98
+	.ascii "OK"                                     ; FA2E9A
+	.byte 0x07, 0x09                                ; FA2E9C  op 07, 9 bytes -> handler 0xF31A3A  text at row 95, col 10
+	.short 0x0ee2                                   ; FA2E9E
+	.ascii "TOTAL"                                  ; FA2EA0
+	.byte 0x07, 0x10                                ; FA2EA5  op 07, 16 bytes -> handler 0xF31A3A  text at row 114, col 13
+	.short 0x11dd                                   ; FA2EA7
+	.ascii "PART SETTING"                           ; FA2EA9
+	.byte 0x07, 0x0a                                ; FA2EB5  op 07, 10 bytes -> handler 0xF31A3A  text at row 133, col 13
+	.short 0x14d5                                   ; FA2EB7
+	.ascii "SYSTEM"                                 ; FA2EB9
+	.byte 0x07, 0x10                                ; FA2EBF  op 07, 16 bytes -> handler 0xF31A3A  text at row 152, col 13
+	.short 0x17cd                                   ; FA2EC1
+	.ascii "MIDI SETTING"                           ; FA2EC3
+	.byte 0x07, 0x0a                                ; FA2ECF  op 07, 10 bytes -> handler 0xF31A3A  text at row 171, col 13
+	.short 0x1ac5                                   ; FA2ED1
+	.ascii "RE-MAP"                                 ; FA2ED3
+	.byte 0x07, 0x0d                                ; FA2ED9  op 07, 13 bytes -> handler 0xF31A3A  text at row 190, col 13
+	.short 0x1dbd                                   ; FA2EDB
+	.ascii "DRUMS MAP"                              ; FA2EDD
+	.byte 0x07, 0x0d                                ; FA2EE6  op 07, 13 bytes -> handler 0xF31A3A  text at row 209, col 13
+	.short 0x20b5                                   ; FA2EE8
+	.ascii "SEQUENCER"                              ; FA2EEA
+	.byte 0x07, 0x05                                ; FA2EF3  op 07, 5 bytes -> handler 0xF31A3A  text at row 149, col 36
+	.short 0x176c                                   ; FA2EF5
+	.byte 0x8d                                      ; FA2EF7  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2EF8  op 07, 5 bytes -> handler 0xF31A3A  text at row 150, col 39
+	.short 0x1797                                   ; FA2EFA
+	.byte 0x11                                      ; FA2EFC  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2EFD  op 07, 5 bytes -> handler 0xF31A3A  text at row 190, col 36
+	.short 0x1dd4                                   ; FA2EFF
+	.byte 0x8e                                      ; FA2F01  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA2F02  op 07, 5 bytes -> handler 0xF31A3A  text at row 190, col 39
+	.short 0x1dd7                                   ; FA2F04
+	.byte 0x11                                      ; FA2F06  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA2F07  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x003b                                   ; FA2F09
+	.short 0x0057                                   ; FA2F0B
+	.short 0x00e7                                   ; FA2F0D
+	.short 0x00e4                                   ; FA2F0F
+	.byte 0x09, 0x0a                                ; FA2F11  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA2F13
+	.short 0x0004                                   ; FA2F15
+	.short 0x002e                                   ; FA2F17
+	.short 0x0012                                   ; FA2F19
+	.byte 0x09, 0x0a                                ; FA2F1B  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010c                                   ; FA2F1D
+	.short 0x006a                                   ; FA2F1F
+	.short 0x0134                                   ; FA2F21
+	.short 0x007d                                   ; FA2F23
+	.byte 0x09, 0x0a                                ; FA2F25  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010e                                   ; FA2F27
+	.short 0x006c                                   ; FA2F29
+	.short 0x0132                                   ; FA2F2B
+	.short 0x007b                                   ; FA2F2D
+	.byte 0x09, 0x0a                                ; FA2F2F  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA2F31
+	.short 0x0092                                   ; FA2F33
+	.short 0x0134                                   ; FA2F35
+	.short 0x00a5                                   ; FA2F37
+	.byte 0x09, 0x0a                                ; FA2F39  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0116                                   ; FA2F3B
+	.short 0x0094                                   ; FA2F3D
+	.short 0x0132                                   ; FA2F3F
+	.short 0x00a3                                   ; FA2F41
+	.byte 0x09, 0x0a                                ; FA2F43  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114                                   ; FA2F45
+	.short 0x00ba                                   ; FA2F47
+	.short 0x0134                                   ; FA2F49
+	.short 0x00cd                                   ; FA2F4B
+	.byte 0x09, 0x0a                                ; FA2F4D  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0116                                   ; FA2F4F
+	.short 0x00bc                                   ; FA2F51
+	.short 0x0132                                   ; FA2F53
+	.short 0x00cb                                   ; FA2F55
 ; ---------------------------------------------------------------------
 ; DisplayList_FA2F57 -- 13 bytes, kind=display_list
 ;
@@ -63716,14 +64392,25 @@ DisplayList_FA2FAF:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA2FB9:
-	.byte 0x23, 0x05, 0x0c, 0x34, 0x00, 0x1c, 0x0d, 0x7e, 0x00, 0x05, 0x00, 0x49, 0x4e, 0x49, 0x54, 0x49  ; FA2FB9
-	.byte 0x41, 0x4c, 0x06, 0x1e, 0x9b, 0x0d, 0x55, 0x73, 0x69, 0x6e, 0x67, 0x20, 0x49, 0x6e, 0x69, 0x74  ; FA2FC9
-	.byte 0x69, 0x61, 0x6c, 0x20, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x69, 0x6c, 0x6c  ; FA2FD9
-	.byte 0x06, 0x1c, 0xe3, 0x10, 0x72, 0x65, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x20, 0x61, 0x6e, 0x79, 0x20  ; FA2FE9
-	.byte 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x20, 0x64, 0x61, 0x74, 0x61, 0x06, 0x1d, 0x2b, 0x14  ; FA2FF9
-	.byte 0x77, 0x69, 0x74, 0x68, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61  ; FA3009
-	.byte 0x6c, 0x20, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x79, 0x06, 0x0d, 0x73, 0x17, 0x73, 0x65, 0x74  ; FA3019
-	.byte 0x74, 0x69, 0x6e, 0x67, 0x73, 0x21                                  ; FA3029
+	.byte 0x23, 0x05                                ; FA2FB9  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0c                                      ; FA2FBB
+	.short 0x0034                                   ; FA2FBC
+	.byte 0x1c, 0x0d                                ; FA2FBE  op 1c, 13 bytes -> handler 0xF31A52  text at row 3, col 6
+	.short 0x007e                                   ; FA2FC0
+	.short 0x0005                                   ; FA2FC2
+	.ascii "INITIAL"                                ; FA2FC4
+	.byte 0x06, 0x1e                                ; FA2FCB  op 06, 30 bytes -> handler 0xF31A3A  text at row 87, col 3
+	.short 0x0d9b                                   ; FA2FCD
+	.ascii "Using Initial Setting will"             ; FA2FCF
+	.byte 0x06, 0x1c                                ; FA2FE9  op 06, 28 bytes -> handler 0xF31A3A  text at row 108, col 3
+	.short 0x10e3                                   ; FA2FEB
+	.ascii "replace any current data"               ; FA2FED
+	.byte 0x06, 0x1d                                ; FA3005  op 06, 29 bytes -> handler 0xF31A3A  text at row 129, col 3
+	.short 0x142b                                   ; FA3007
+	.ascii "with the original factory"              ; FA3009
+	.byte 0x06, 0x0d                                ; FA3022  op 06, 13 bytes -> handler 0xF31A3A  text at row 150, col 3
+	.short 0x1773                                   ; FA3024
+	.ascii "settings!"                              ; FA3026
 ; ---------------------------------------------------------------------
 ; DisplayList_FA302F -- 119 bytes, kind=display_list
 ;
@@ -64062,26 +64749,117 @@ DisplayList_FA3531:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA353B:
-	.byte 0x23, 0x05, 0x0e, 0x2f, 0x00, 0x07, 0x1d, 0xfb, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43  ; FA353B
-	.byte 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x4d, 0x41, 0x4e, 0x41, 0x47  ; FA354B
-	.byte 0x45, 0x52, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x0f  ; FA355B
-	.byte 0x6b, 0x0b, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x0a, 0x4b  ; FA356B
-	.byte 0x0d, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x07, 0x00, 0x00, 0x4d, 0x00, 0x10, 0x20, 0x0d  ; FA357B
-	.byte 0x7f, 0x0b, 0x44, 0x41, 0x54, 0x41, 0x20, 0x4c, 0x4f, 0x41, 0x44, 0x20, 0x0a, 0x5f, 0x0d, 0x46  ; FA358B
-	.byte 0x49, 0x4c, 0x54, 0x45, 0x52, 0x17, 0x07, 0x3a, 0x01, 0x4d, 0x00, 0x11, 0x20, 0x0f, 0xab, 0x11  ; FA359B
-	.byte 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x2e, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x0a, 0x8b, 0x13, 0x4e  ; FA35AB
-	.byte 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x07, 0x00, 0x00, 0x74, 0x00, 0x10, 0x20, 0x12, 0xaf, 0x12  ; FA35BB
-	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59, 0x20, 0x50, 0x52, 0x4f, 0x54, 0x45, 0x43, 0x54, 0x17, 0x07  ; FA35CB
-	.byte 0x3a, 0x01, 0x74, 0x00, 0x11, 0x20, 0x0e, 0xdb, 0x18, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43  ; FA35DB
-	.byte 0x4f, 0x50, 0x59, 0x17, 0x07, 0x00, 0x00, 0x9b, 0x00, 0x10, 0x20, 0x0e, 0xef, 0x18, 0x53, 0x4f  ; FA35EB
-	.byte 0x55, 0x4e, 0x44, 0x20, 0x4d, 0x55, 0x54, 0x45, 0x17, 0x07, 0x3a, 0x01, 0x9b, 0x00, 0x11, 0x20  ; FA35FB
-	.byte 0x0f, 0x53, 0x1e, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x08  ; FA360B
-	.byte 0x33, 0x20, 0x43, 0x4f, 0x50, 0x59, 0x17, 0x07, 0x00, 0x00, 0xc2, 0x00, 0x10, 0x0a, 0x0a, 0x0b  ; FA361B
-	.byte 0x00, 0x44, 0x00, 0x98, 0x00, 0x63, 0x00, 0x0a, 0x0a, 0xab, 0x00, 0x44, 0x00, 0x32, 0x01, 0x63  ; FA362B
-	.byte 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0x6c, 0x00, 0x98, 0x00, 0x8b, 0x00, 0x0a, 0x0a, 0xab, 0x00, 0x6c  ; FA363B
-	.byte 0x00, 0x32, 0x01, 0x8b, 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0x94, 0x00, 0x98, 0x00, 0xb3, 0x00, 0x0a  ; FA364B
-	.byte 0x0a, 0xab, 0x00, 0x94, 0x00, 0x32, 0x01, 0xb3, 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0xbc, 0x00, 0x98  ; FA365B
-	.byte 0x00, 0xdb, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00  ; FA366B
+	.byte 0x23, 0x05                                ; FA353B  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0e                                      ; FA353D
+	.short 0x002f                                   ; FA353E
+	.byte 0x07, 0x1d                                ; FA3540  op 07, 29 bytes -> handler 0xF31A3A  text at row 6, col 11
+	.short 0x00fb                                   ; FA3542
+	.ascii "SOUND/COMBINATION MANAGER"              ; FA3544
+	.byte 0x17, 0x0c                                ; FA355D  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA355F
+	.short 0x0008                                   ; FA3561
+	.ascii "SYSTEM"                                 ; FA3563
+	.byte 0x20, 0x0f                                ; FA3569  op 20, 15 bytes -> handler 0xF31A3A  text at row 73, col 3
+	.short 0x0b6b                                   ; FA356B
+	.ascii "SOUND GROUP"                            ; FA356D
+	.byte 0x20, 0x0a                                ; FA3578  op 20, 10 bytes -> handler 0xF31A3A  text at row 85, col 3
+	.short 0x0d4b                                   ; FA357A
+	.ascii "NAMING"                                 ; FA357C
+	.byte 0x17, 0x07                                ; FA3582  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA3584
+	.short 0x004d                                   ; FA3586
+	.byte 0x10                                      ; FA3588  glyph codes below 0x20
+	.byte 0x20, 0x0d                                ; FA3589  op 20, 13 bytes -> handler 0xF31A3A  text at row 73, col 23
+	.short 0x0b7f                                   ; FA358B
+	.ascii "DATA LOAD"                              ; FA358D
+	.byte 0x20, 0x0a                                ; FA3596  op 20, 10 bytes -> handler 0xF31A3A  text at row 85, col 23
+	.short 0x0d5f                                   ; FA3598
+	.ascii "FILTER"                                 ; FA359A
+	.byte 0x17, 0x07                                ; FA35A0  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA35A2
+	.short 0x004d                                   ; FA35A4
+	.byte 0x11                                      ; FA35A6  glyph codes below 0x20
+	.byte 0x20, 0x0f                                ; FA35A7  op 20, 15 bytes -> handler 0xF31A3A  text at row 113, col 3
+	.short 0x11ab                                   ; FA35A9
+	.ascii "COMBI.GROUP"                            ; FA35AB
+	.byte 0x20, 0x0a                                ; FA35B6  op 20, 10 bytes -> handler 0xF31A3A  text at row 125, col 3
+	.short 0x138b                                   ; FA35B8
+	.ascii "NAMING"                                 ; FA35BA
+	.byte 0x17, 0x07                                ; FA35C0  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA35C2
+	.short 0x0074                                   ; FA35C4
+	.byte 0x10                                      ; FA35C6  glyph codes below 0x20
+	.byte 0x20, 0x12                                ; FA35C7  op 20, 18 bytes -> handler 0xF31A3A  text at row 119, col 23
+	.short 0x12af                                   ; FA35C9
+	.ascii "MEMORY PROTECT"                         ; FA35CB
+	.byte 0x17, 0x07                                ; FA35D9  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA35DB
+	.short 0x0074                                   ; FA35DD
+	.byte 0x11                                      ; FA35DF  glyph codes below 0x20
+	.byte 0x20, 0x0e                                ; FA35E0  op 20, 14 bytes -> handler 0xF31A3A  text at row 159, col 3
+	.short 0x18db                                   ; FA35E2
+	.ascii "SOUND COPY"                             ; FA35E4
+	.byte 0x17, 0x07                                ; FA35EE  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA35F0
+	.short 0x009b                                   ; FA35F2
+	.byte 0x10                                      ; FA35F4  glyph codes below 0x20
+	.byte 0x20, 0x0e                                ; FA35F5  op 20, 14 bytes -> handler 0xF31A3A  text at row 159, col 23
+	.short 0x18ef                                   ; FA35F7
+	.ascii "SOUND MUTE"                             ; FA35F9
+	.byte 0x17, 0x07                                ; FA3603  op 17, 7 bytes -> handler 0xF31A52  text at row 7, col 34
+	.short 0x013a                                   ; FA3605
+	.short 0x009b                                   ; FA3607
+	.byte 0x11                                      ; FA3609  glyph codes below 0x20
+	.byte 0x20, 0x0f                                ; FA360A  op 20, 15 bytes -> handler 0xF31A3A  text at row 194, col 3
+	.short 0x1e53                                   ; FA360C
+	.ascii "COMBINATION"                            ; FA360E
+	.byte 0x20, 0x08                                ; FA3619  op 20, 8 bytes -> handler 0xF31A3A  text at row 206, col 3
+	.short 0x2033                                   ; FA361B
+	.ascii "COPY"                                   ; FA361D
+	.byte 0x17, 0x07                                ; FA3621  op 17, 7 bytes -> handler 0xF31A52  text at row 0, col 0
+	.short 0x0000                                   ; FA3623
+	.short 0x00c2                                   ; FA3625
+	.byte 0x10                                      ; FA3627  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA3628  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA362A
+	.short 0x0044                                   ; FA362C
+	.short 0x0098                                   ; FA362E
+	.short 0x0063                                   ; FA3630
+	.byte 0x0a, 0x0a                                ; FA3632  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ab                                   ; FA3634
+	.short 0x0044                                   ; FA3636
+	.short 0x0132                                   ; FA3638
+	.short 0x0063                                   ; FA363A
+	.byte 0x0a, 0x0a                                ; FA363C  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA363E
+	.short 0x006c                                   ; FA3640
+	.short 0x0098                                   ; FA3642
+	.short 0x008b                                   ; FA3644
+	.byte 0x0a, 0x0a                                ; FA3646  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ab                                   ; FA3648
+	.short 0x006c                                   ; FA364A
+	.short 0x0132                                   ; FA364C
+	.short 0x008b                                   ; FA364E
+	.byte 0x0a, 0x0a                                ; FA3650  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3652
+	.short 0x0094                                   ; FA3654
+	.short 0x0098                                   ; FA3656
+	.short 0x00b3                                   ; FA3658
+	.byte 0x0a, 0x0a                                ; FA365A  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ab                                   ; FA365C
+	.short 0x0094                                   ; FA365E
+	.short 0x0132                                   ; FA3660
+	.short 0x00b3                                   ; FA3662
+	.byte 0x0a, 0x0a                                ; FA3664  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3666
+	.short 0x00bc                                   ; FA3668
+	.short 0x0098                                   ; FA366A
+	.short 0x00db                                   ; FA366C
+	.byte 0x09, 0x0a                                ; FA366E  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA3670
+	.short 0x0004                                   ; FA3672
+	.short 0x002e                                   ; FA3674
+	.short 0x0012                                   ; FA3676
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3678 -- 24 bytes, kind=display_list
 ;
@@ -64094,8 +64872,10 @@ DisplayList_FA353B:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA3678:
-	.byte 0x1c, 0x18, 0x3b, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55  ; FA3678
-	.byte 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47                      ; FA3688
+	.byte 0x1c, 0x18                                ; FA3678  op 1c, 24 bytes -> handler 0xF31A52  text at row 1, col 19
+	.short 0x003b                                   ; FA367A
+	.short 0x0005                                   ; FA367C
+	.ascii "SOUND GROUP NAMING"                     ; FA367E
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3690 -- 80 bytes, kind=display_list
 ;
@@ -64108,11 +64888,35 @@ DisplayList_FA3678:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA3690:
-	.byte 0x1c, 0x18, 0x3b, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55  ; FA3690
-	.byte 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59  ; FA36A0
-	.byte 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05, 0x10, 0x20, 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49  ; FA36B0
-	.byte 0x54, 0x45, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00  ; FA36C0
-	.byte 0x1e, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00  ; FA36D0
+	.byte 0x1c, 0x18                                ; FA3690  op 1c, 24 bytes -> handler 0xF31A52  text at row 1, col 19
+	.short 0x003b                                   ; FA3692
+	.short 0x0005                                   ; FA3694
+	.ascii "SOUND GROUP NAMING"                     ; FA3696
+	.byte 0x17, 0x0c                                ; FA36A8  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA36AA
+	.short 0x0008                                   ; FA36AC
+	.ascii "SYSTEM"                                 ; FA36AE
+	.byte 0x07, 0x05                                ; FA36B4  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 0
+	.short 0x0550                                   ; FA36B6
+	.byte 0x10                                      ; FA36B8  glyph codes below 0x20
+	.byte 0x20, 0x09                                ; FA36B9  op 20, 9 bytes -> handler 0xF31A3A  text at row 35, col 2
+	.short 0x057a                                   ; FA36BB
+	.ascii "WRITE"                                  ; FA36BD
+	.byte 0x09, 0x0a                                ; FA36C2  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA36C4
+	.short 0x0004                                   ; FA36C6
+	.short 0x002e                                   ; FA36C8
+	.short 0x0012                                   ; FA36CA
+	.byte 0x09, 0x0a                                ; FA36CC  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA36CE
+	.short 0x001e                                   ; FA36D0
+	.short 0x003d                                   ; FA36D2
+	.short 0x0031                                   ; FA36D4
+	.byte 0x09, 0x0a                                ; FA36D6  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000d                                   ; FA36D8
+	.short 0x0020                                   ; FA36DA
+	.short 0x003b                                   ; FA36DC
+	.short 0x002f                                   ; FA36DE
 ; ---------------------------------------------------------------------
 ; DisplayList_FA36E0 -- 154 bytes, kind=display_list
 ;
@@ -64125,16 +64929,79 @@ DisplayList_FA3690:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA36E0:
-	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x0a, 0x6f, 0x05  ; FA36E0
-	.byte 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x07, 0x05, 0x9f, 0x05, 0x11, 0x07, 0x05, 0xc9, 0x21, 0x8d  ; FA36F0
-	.byte 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x20  ; FA3700
-	.byte 0x08, 0x5f, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x20, 0x09, 0x74, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50  ; FA3710
-	.byte 0x0a, 0x0a, 0xee, 0x00, 0x1c, 0x00, 0x33, 0x01, 0x32, 0x00, 0x0a, 0x0a, 0x03, 0x00, 0x38, 0x00  ; FA3720
-	.byte 0x3c, 0x01, 0xc6, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a  ; FA3730
-	.byte 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00  ; FA3740
-	.byte 0x12, 0x00, 0x01, 0x0a, 0x03, 0x00, 0x4d, 0x00, 0x3e, 0x01, 0x4d, 0x00, 0x01, 0x0a, 0x05, 0x00  ; FA3750
-	.byte 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA3760
-	.byte 0x02, 0x0a, 0x9e, 0x00, 0x4d, 0x00, 0x9e, 0x00, 0xc8, 0x00          ; FA3770
+	.byte 0x17, 0x0c                                ; FA36E0  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA36E2
+	.short 0x0008                                   ; FA36E4
+	.ascii "SYSTEM"                                 ; FA36E6
+	.byte 0x20, 0x0a                                ; FA36EC  op 20, 10 bytes -> handler 0xF31A3A  text at row 34, col 31
+	.short 0x056f                                   ; FA36EE
+	.ascii "NAMING"                                 ; FA36F0
+	.byte 0x07, 0x05                                ; FA36F6  op 07, 5 bytes -> handler 0xF31A3A  text at row 35, col 39
+	.short 0x059f                                   ; FA36F8
+	.byte 0x11                                      ; FA36FA  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA36FB  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA36FD
+	.byte 0x8d                                      ; FA36FF  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3700  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA3702
+	.byte 0x8d                                      ; FA3704  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3705  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA3707
+	.byte 0x8e                                      ; FA3709  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA370A  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA370C
+	.byte 0x8e                                      ; FA370E  glyph codes below 0x20
+	.byte 0x20, 0x08                                ; FA370F  op 20, 8 bytes -> handler 0xF31A3A  text at row 207, col 7
+	.short 0x205f                                   ; FA3711
+	.ascii "BANK"                                   ; FA3713
+	.byte 0x20, 0x09                                ; FA3717  op 20, 9 bytes -> handler 0xF31A3A  text at row 207, col 28
+	.short 0x2074                                   ; FA3719
+	.ascii "GROUP"                                  ; FA371B
+	.byte 0x0a, 0x0a                                ; FA3720  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ee                                   ; FA3722
+	.short 0x001c                                   ; FA3724
+	.short 0x0133                                   ; FA3726
+	.short 0x0032                                   ; FA3728
+	.byte 0x0a, 0x0a                                ; FA372A  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0003                                   ; FA372C
+	.short 0x0038                                   ; FA372E
+	.short 0x013c                                   ; FA3730
+	.short 0x00c6                                   ; FA3732
+	.byte 0x0a, 0x0a                                ; FA3734  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA3736
+	.short 0x00da                                   ; FA3738
+	.short 0x0092                                   ; FA373A
+	.short 0x00ec                                   ; FA373C
+	.byte 0x0a, 0x0a                                ; FA373E  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA3740
+	.short 0x00da                                   ; FA3742
+	.short 0x013a                                   ; FA3744
+	.short 0x00ec                                   ; FA3746
+	.byte 0x09, 0x0a                                ; FA3748  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA374A
+	.short 0x0004                                   ; FA374C
+	.short 0x002e                                   ; FA374E
+	.short 0x0012                                   ; FA3750
+	.byte 0x01, 0x0a                                ; FA3752  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0003                                   ; FA3754
+	.short 0x004d                                   ; FA3756
+	.short 0x013e                                   ; FA3758
+	.short 0x004d                                   ; FA375A
+	.byte 0x01, 0x0a                                ; FA375C  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA375E
+	.short 0x00e3                                   ; FA3760
+	.short 0x0094                                   ; FA3762
+	.short 0x00e3                                   ; FA3764
+	.byte 0x01, 0x0a                                ; FA3766  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA3768
+	.short 0x00e3                                   ; FA376A
+	.short 0x013c                                   ; FA376C
+	.short 0x00e3                                   ; FA376E
+	.byte 0x02, 0x0a                                ; FA3770  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009e                                   ; FA3772
+	.short 0x004d                                   ; FA3774
+	.short 0x009e                                   ; FA3776
+	.short 0x00c8                                   ; FA3778
 ; ---------------------------------------------------------------------
 ; DisplayList_FA377A -- 112 bytes, kind=display_list
 ;
@@ -64262,8 +65129,10 @@ DisplayList_FA39D4:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA39DE:
-	.byte 0x1c, 0x1e, 0x33, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA39DE
-	.byte 0x4e, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47  ; FA39EE
+	.byte 0x1c, 0x1e                                ; FA39DE  op 1c, 30 bytes -> handler 0xF31A52  text at row 1, col 11
+	.short 0x0033                                   ; FA39E0
+	.short 0x0005                                   ; FA39E2
+	.ascii "COMBINATION GROUP NAMING"               ; FA39E4
 ; ---------------------------------------------------------------------
 ; DisplayList_FA39FC -- 86 bytes, kind=display_list
 ;
@@ -64276,12 +65145,35 @@ DisplayList_FA39DE:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA39FC:
-	.byte 0x1c, 0x1e, 0x33, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA39FC
-	.byte 0x4e, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x0c  ; FA3A0C
-	.byte 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05, 0x10, 0x20  ; FA3A1C
-	.byte 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49, 0x54, 0x45, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00  ; FA3A2C
-	.byte 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00  ; FA3A3C
-	.byte 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00                                  ; FA3A4C
+	.byte 0x1c, 0x1e                                ; FA39FC  op 1c, 30 bytes -> handler 0xF31A52  text at row 1, col 11
+	.short 0x0033                                   ; FA39FE
+	.short 0x0005                                   ; FA3A00
+	.ascii "COMBINATION GROUP NAMING"               ; FA3A02
+	.byte 0x17, 0x0c                                ; FA3A1A  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA3A1C
+	.short 0x0008                                   ; FA3A1E
+	.ascii "SYSTEM"                                 ; FA3A20
+	.byte 0x07, 0x05                                ; FA3A26  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 0
+	.short 0x0550                                   ; FA3A28
+	.byte 0x10                                      ; FA3A2A  glyph codes below 0x20
+	.byte 0x20, 0x09                                ; FA3A2B  op 20, 9 bytes -> handler 0xF31A3A  text at row 35, col 2
+	.short 0x057a                                   ; FA3A2D
+	.ascii "WRITE"                                  ; FA3A2F
+	.byte 0x09, 0x0a                                ; FA3A34  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA3A36
+	.short 0x0004                                   ; FA3A38
+	.short 0x002e                                   ; FA3A3A
+	.short 0x0012                                   ; FA3A3C
+	.byte 0x09, 0x0a                                ; FA3A3E  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3A40
+	.short 0x001e                                   ; FA3A42
+	.short 0x003d                                   ; FA3A44
+	.short 0x0031                                   ; FA3A46
+	.byte 0x09, 0x0a                                ; FA3A48  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000d                                   ; FA3A4A
+	.short 0x0020                                   ; FA3A4C
+	.short 0x003b                                   ; FA3A4E
+	.short 0x002f                                   ; FA3A50
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3A52 -- 26 bytes, kind=display_list
 ;
@@ -64326,23 +65218,134 @@ OperandTable_FA3A6C:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA3A9C:
-	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43, 0x4f, 0x50, 0x59  ; FA3A9C
-	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05  ; FA3AAC
-	.byte 0x10, 0x20, 0x06, 0x7a, 0x05, 0x4f, 0x4b, 0x08, 0x05, 0x7b, 0x15, 0x8a, 0x07, 0x05, 0xc4, 0x21  ; FA3ABC
-	.byte 0x8d, 0x07, 0x05, 0xce, 0x21, 0x8d, 0x07, 0x05, 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x54, 0x23, 0x8e  ; FA3ACC
-	.byte 0x07, 0x05, 0x5e, 0x23, 0x8e, 0x07, 0x05, 0x73, 0x23, 0x8e, 0x20, 0x08, 0x5b, 0x20, 0x42, 0x41  ; FA3ADC
-	.byte 0x4e, 0x4b, 0x20, 0x09, 0x64, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x09, 0x79, 0x20, 0x47  ; FA3AEC
-	.byte 0x52, 0x4f, 0x55, 0x50, 0x0a, 0x0a, 0x0b, 0x00, 0x38, 0x00, 0x94, 0x00, 0xcb, 0x00, 0x0a, 0x0a  ; FA3AFC
-	.byte 0xab, 0x00, 0x38, 0x00, 0x34, 0x01, 0xcb, 0x00, 0x0a, 0x0a, 0x09, 0x00, 0xda, 0x00, 0x3f, 0x00  ; FA3B0C
-	.byte 0xec, 0x00, 0x0a, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x8f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01  ; FA3B1C
-	.byte 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00  ; FA3B2C
-	.byte 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00  ; FA3B3C
-	.byte 0x23, 0x00, 0x2f, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x49, 0x00, 0x96, 0x00, 0x49, 0x00, 0x01, 0x0a  ; FA3B4C
-	.byte 0xab, 0x00, 0x49, 0x00, 0x36, 0x01, 0x49, 0x00, 0x01, 0x0a, 0x09, 0x00, 0xe3, 0x00, 0x41, 0x00  ; FA3B5C
-	.byte 0xe3, 0x00, 0x01, 0x0a, 0x59, 0x00, 0xe3, 0x00, 0x91, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x01, 0x01  ; FA3B6C
-	.byte 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00, 0x07, 0x05, 0xd9, 0x21, 0x8d, 0x07, 0x05, 0x69, 0x23, 0x8e  ; FA3B7C
-	.byte 0x20, 0x08, 0x70, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x0a, 0x0a, 0xb1, 0x00, 0xda, 0x00, 0xe7, 0x00  ; FA3B8C
-	.byte 0xec, 0x00, 0x01, 0x0a, 0xb1, 0x00, 0xe3, 0x00, 0xe9, 0x00, 0xe3, 0x00  ; FA3B9C
+	.byte 0x1c, 0x10                                ; FA3A9C  op 1c, 16 bytes -> handler 0xF31A52  text at row 2, col 18
+	.short 0x0062                                   ; FA3A9E
+	.short 0x0005                                   ; FA3AA0
+	.ascii "SOUND COPY"                             ; FA3AA2
+	.byte 0x17, 0x0c                                ; FA3AAC  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA3AAE
+	.short 0x0008                                   ; FA3AB0
+	.ascii "SYSTEM"                                 ; FA3AB2
+	.byte 0x07, 0x05                                ; FA3AB8  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 0
+	.short 0x0550                                   ; FA3ABA
+	.byte 0x10                                      ; FA3ABC  glyph codes below 0x20
+	.byte 0x20, 0x06                                ; FA3ABD  op 20, 6 bytes -> handler 0xF31A3A  text at row 35, col 2
+	.short 0x057a                                   ; FA3ABF
+	.ascii "OK"                                     ; FA3AC1
+	.byte 0x08, 0x05                                ; FA3AC3  op 08, 5 bytes -> handler 0xF31A3A  text at row 137, col 19
+	.short 0x157b                                   ; FA3AC5
+	.byte 0x8a                                      ; FA3AC7  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3AC8  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 4
+	.short 0x21c4                                   ; FA3ACA
+	.byte 0x8d                                      ; FA3ACC  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3ACD  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 14
+	.short 0x21ce                                   ; FA3ACF
+	.byte 0x8d                                      ; FA3AD1  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3AD2  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 35
+	.short 0x21e3                                   ; FA3AD4
+	.byte 0x8d                                      ; FA3AD6  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3AD7  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 4
+	.short 0x2354                                   ; FA3AD9
+	.byte 0x8e                                      ; FA3ADB  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3ADC  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 14
+	.short 0x235e                                   ; FA3ADE
+	.byte 0x8e                                      ; FA3AE0  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3AE1  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 35
+	.short 0x2373                                   ; FA3AE3
+	.byte 0x8e                                      ; FA3AE5  glyph codes below 0x20
+	.byte 0x20, 0x08                                ; FA3AE6  op 20, 8 bytes -> handler 0xF31A3A  text at row 207, col 3
+	.short 0x205b                                   ; FA3AE8
+	.ascii "BANK"                                   ; FA3AEA
+	.byte 0x20, 0x09                                ; FA3AEE  op 20, 9 bytes -> handler 0xF31A3A  text at row 207, col 12
+	.short 0x2064                                   ; FA3AF0
+	.ascii "GROUP"                                  ; FA3AF2
+	.byte 0x20, 0x09                                ; FA3AF7  op 20, 9 bytes -> handler 0xF31A3A  text at row 207, col 33
+	.short 0x2079                                   ; FA3AF9
+	.ascii "GROUP"                                  ; FA3AFB
+	.byte 0x0a, 0x0a                                ; FA3B00  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3B02
+	.short 0x0038                                   ; FA3B04
+	.short 0x0094                                   ; FA3B06
+	.short 0x00cb                                   ; FA3B08
+	.byte 0x0a, 0x0a                                ; FA3B0A  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ab                                   ; FA3B0C
+	.short 0x0038                                   ; FA3B0E
+	.short 0x0134                                   ; FA3B10
+	.short 0x00cb                                   ; FA3B12
+	.byte 0x0a, 0x0a                                ; FA3B14  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0009                                   ; FA3B16
+	.short 0x00da                                   ; FA3B18
+	.short 0x003f                                   ; FA3B1A
+	.short 0x00ec                                   ; FA3B1C
+	.byte 0x0a, 0x0a                                ; FA3B1E  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0059                                   ; FA3B20
+	.short 0x00da                                   ; FA3B22
+	.short 0x008f                                   ; FA3B24
+	.short 0x00ec                                   ; FA3B26
+	.byte 0x0a, 0x0a                                ; FA3B28  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0101                                   ; FA3B2A
+	.short 0x00da                                   ; FA3B2C
+	.short 0x0137                                   ; FA3B2E
+	.short 0x00ec                                   ; FA3B30
+	.byte 0x09, 0x0a                                ; FA3B32  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA3B34
+	.short 0x0004                                   ; FA3B36
+	.short 0x002e                                   ; FA3B38
+	.short 0x0012                                   ; FA3B3A
+	.byte 0x09, 0x0a                                ; FA3B3C  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3B3E
+	.short 0x001e                                   ; FA3B40
+	.short 0x0025                                   ; FA3B42
+	.short 0x0031                                   ; FA3B44
+	.byte 0x09, 0x0a                                ; FA3B46  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000d                                   ; FA3B48
+	.short 0x0020                                   ; FA3B4A
+	.short 0x0023                                   ; FA3B4C
+	.short 0x002f                                   ; FA3B4E
+	.byte 0x01, 0x0a                                ; FA3B50  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA3B52
+	.short 0x0049                                   ; FA3B54
+	.short 0x0096                                   ; FA3B56
+	.short 0x0049                                   ; FA3B58
+	.byte 0x01, 0x0a                                ; FA3B5A  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ab                                   ; FA3B5C
+	.short 0x0049                                   ; FA3B5E
+	.short 0x0136                                   ; FA3B60
+	.short 0x0049                                   ; FA3B62
+	.byte 0x01, 0x0a                                ; FA3B64  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0009                                   ; FA3B66
+	.short 0x00e3                                   ; FA3B68
+	.short 0x0041                                   ; FA3B6A
+	.short 0x00e3                                   ; FA3B6C
+	.byte 0x01, 0x0a                                ; FA3B6E  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0059                                   ; FA3B70
+	.short 0x00e3                                   ; FA3B72
+	.short 0x0091                                   ; FA3B74
+	.short 0x00e3                                   ; FA3B76
+	.byte 0x01, 0x0a                                ; FA3B78  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0101                                   ; FA3B7A
+	.short 0x00e3                                   ; FA3B7C
+	.short 0x0139                                   ; FA3B7E
+	.short 0x00e3                                   ; FA3B80
+	.byte 0x07, 0x05                                ; FA3B82  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 25
+	.short 0x21d9                                   ; FA3B84
+	.byte 0x8d                                      ; FA3B86  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA3B87  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 25
+	.short 0x2369                                   ; FA3B89
+	.byte 0x8e                                      ; FA3B8B  glyph codes below 0x20
+	.byte 0x20, 0x08                                ; FA3B8C  op 20, 8 bytes -> handler 0xF31A3A  text at row 207, col 24
+	.short 0x2070                                   ; FA3B8E
+	.ascii "BANK"                                   ; FA3B90
+	.byte 0x0a, 0x0a                                ; FA3B94  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00b1                                   ; FA3B96
+	.short 0x00da                                   ; FA3B98
+	.short 0x00e7                                   ; FA3B9A
+	.short 0x00ec                                   ; FA3B9C
+	.byte 0x01, 0x0a                                ; FA3B9E  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00b1                                   ; FA3BA0
+	.short 0x00e3                                   ; FA3BA2
+	.short 0x00e9                                   ; FA3BA4
+	.short 0x00e3                                   ; FA3BA6
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3BA8 -- 41 bytes, kind=display_list
 ;
@@ -64389,13 +65392,19 @@ DisplayList_FA3BD1:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA3C39:
-	.byte 0x1c, 0x0c, 0x7a, 0x00, 0x05, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x21, 0x07, 0x28, 0x72, 0x08  ; FA3C39
-	.byte 0x49, 0x74, 0x20, 0x69, 0x73, 0x20, 0x69, 0x6d, 0x70, 0x6f, 0x73, 0x73, 0x69, 0x62, 0x6c, 0x65  ; FA3C49
-	.byte 0x20, 0x74, 0x6f, 0x20, 0x63, 0x6f, 0x70, 0x79, 0x20, 0x61, 0x20, 0x44, 0x72, 0x75, 0x6d, 0x20  ; FA3C59
-	.byte 0x4b, 0x69, 0x74, 0x2e, 0x07, 0x26, 0x22, 0x0d, 0x50, 0x6c, 0x65, 0x61, 0x73, 0x65, 0x20, 0x73  ; FA3C69
-	.byte 0x65, 0x6c, 0x65, 0x63, 0x74, 0x20, 0x61, 0x20, 0x53, 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x6f, 0x74  ; FA3C79
-	.byte 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6e, 0x20, 0x61, 0x07, 0x0d, 0xd2, 0x11, 0x44, 0x72  ; FA3C89
-	.byte 0x75, 0x6d, 0x20, 0x4b, 0x69, 0x74, 0x2e                            ; FA3C99
+	.byte 0x1c, 0x0c                                ; FA3C39  op 1c, 12 bytes -> handler 0xF31A52  text at row 3, col 2
+	.short 0x007a                                   ; FA3C3B
+	.short 0x0005                                   ; FA3C3D
+	.ascii "ERROR!"                                 ; FA3C3F
+	.byte 0x07, 0x28                                ; FA3C45  op 07, 40 bytes -> handler 0xF31A3A  text at row 54, col 2
+	.short 0x0872                                   ; FA3C47
+	.ascii "It is impossible to copy a Drum Kit."   ; FA3C49
+	.byte 0x07, 0x26                                ; FA3C6D  op 07, 38 bytes -> handler 0xF31A3A  text at row 84, col 2
+	.short 0x0d22                                   ; FA3C6F
+	.ascii "Please select a Sound other than a"     ; FA3C71
+	.byte 0x07, 0x0d                                ; FA3C93  op 07, 13 bytes -> handler 0xF31A3A  text at row 114, col 2
+	.short 0x11d2                                   ; FA3C95
+	.ascii "Drum Kit."                              ; FA3C97
 ; ---------------------------------------------------------------------
 ; DisplayList_FA3CA0 -- 30 bytes, kind=display_list
 ;
@@ -64815,27 +65824,104 @@ DisplayList_FA4270:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA427B:
-	.byte 0x1c, 0x16, 0x3d, 0x00, 0x05, 0x00, 0x44, 0x41, 0x54, 0x41, 0x20, 0x4c, 0x4f, 0x41, 0x44, 0x20  ; FA427B
-	.byte 0x46, 0x49, 0x4c, 0x54, 0x45, 0x52, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54  ; FA428B
-	.byte 0x45, 0x4d, 0x20, 0x0b, 0x04, 0x05, 0x4f, 0x56, 0x45, 0x52, 0x41, 0x4c, 0x4c, 0x20, 0x15, 0x4e  ; FA429B
-	.byte 0x08, 0x45, 0x46, 0x46, 0x45, 0x43, 0x54, 0x20, 0x26, 0x20, 0x4f, 0x55, 0x54, 0x50, 0x55, 0x54  ; FA42AB
-	.byte 0x20, 0x3a, 0x20, 0x15, 0xce, 0x0a, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x4f  ; FA42BB
-	.byte 0x52, 0x20, 0x31, 0x5f, 0x36, 0x20, 0x3a, 0x20, 0x0f, 0x64, 0x0e, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA42CB
-	.byte 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x15, 0xae, 0x11, 0x4f, 0x43, 0x54, 0x41, 0x56, 0x45  ; FA42DB
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0x2e, 0x14, 0x4d  ; FA42EB
-	.byte 0x49, 0x44, 0x49, 0x20, 0x53, 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47, 0x20, 0x20, 0x20, 0x20, 0x3a  ; FA42FB
-	.byte 0x20, 0x15, 0xae, 0x16, 0x4b, 0x45, 0x59, 0x26, 0x56, 0x45, 0x4c, 0x20, 0x4c, 0x41, 0x59, 0x45  ; FA430B
-	.byte 0x52, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0x2e, 0x19, 0x4d, 0x41, 0x49, 0x4e, 0x20, 0x4f, 0x55  ; FA431B
-	.byte 0x54, 0x20, 0x45, 0x51, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0xae, 0x1b, 0x4b, 0x45  ; FA432B
-	.byte 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20  ; FA433B
-	.byte 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45  ; FA434B
-	.byte 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07  ; FA435B
-	.byte 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x1a, 0x00, 0x25, 0x01, 0xc2, 0x00, 0x0a, 0x0a  ; FA436B
-	.byte 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01  ; FA437B
-	.byte 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x01, 0x0a, 0x14, 0x00  ; FA438B
-	.byte 0x2f, 0x00, 0x27, 0x01, 0x2f, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x56, 0x00, 0x27, 0x01, 0x56, 0x00  ; FA439B
-	.byte 0x01, 0x0a, 0x14, 0x00, 0x6b, 0x00, 0x27, 0x01, 0x6b, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00  ; FA43AB
-	.byte 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA43BB
+	.byte 0x1c, 0x16                                ; FA427B  op 1c, 22 bytes -> handler 0xF31A52  text at row 1, col 21
+	.short 0x003d                                   ; FA427D
+	.short 0x0005                                   ; FA427F
+	.ascii "DATA LOAD FILTER"                       ; FA4281
+	.byte 0x17, 0x0c                                ; FA4291  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA4293
+	.short 0x0008                                   ; FA4295
+	.ascii "SYSTEM"                                 ; FA4297
+	.byte 0x20, 0x0b                                ; FA429D  op 20, 11 bytes -> handler 0xF31A3A  text at row 32, col 4
+	.short 0x0504                                   ; FA429F
+	.ascii "OVERALL"                                ; FA42A1
+	.byte 0x20, 0x15                                ; FA42A8  op 20, 21 bytes -> handler 0xF31A3A  text at row 53, col 6
+	.short 0x084e                                   ; FA42AA
+	.ascii "EFFECT & OUTPUT :"                      ; FA42AC
+	.byte 0x20, 0x15                                ; FA42BD  op 20, 21 bytes -> handler 0xF31A3A  text at row 69, col 6
+	.short 0x0ace                                   ; FA42BF
+	.ascii "R.T.CREATOR 1_6 :"                      ; FA42C1
+	.byte 0x20, 0x0f                                ; FA42D2  op 20, 15 bytes -> handler 0xF31A3A  text at row 92, col 4
+	.short 0x0e64                                   ; FA42D4
+	.ascii "COMBINATION"                            ; FA42D6
+	.byte 0x20, 0x15                                ; FA42E1  op 20, 21 bytes -> handler 0xF31A3A  text at row 113, col 6
+	.short 0x11ae                                   ; FA42E3
+	.ascii "OCTAVE          :"                      ; FA42E5
+	.byte 0x20, 0x15                                ; FA42F6  op 20, 21 bytes -> handler 0xF31A3A  text at row 129, col 6
+	.short 0x142e                                   ; FA42F8
+	.ascii "MIDI SETTING    :"                      ; FA42FA
+	.byte 0x20, 0x15                                ; FA430B  op 20, 21 bytes -> handler 0xF31A3A  text at row 145, col 6
+	.short 0x16ae                                   ; FA430D
+	.ascii "KEY&VEL LAYER   :"                      ; FA430F
+	.byte 0x20, 0x15                                ; FA4320  op 20, 21 bytes -> handler 0xF31A3A  text at row 161, col 6
+	.short 0x192e                                   ; FA4322
+	.ascii "MAIN OUT EQ     :"                      ; FA4324
+	.byte 0x20, 0x15                                ; FA4335  op 20, 21 bytes -> handler 0xF31A3A  text at row 177, col 6
+	.short 0x1bae                                   ; FA4337
+	.ascii "KEY SCALING     :"                      ; FA4339
+	.byte 0x20, 0x08                                ; FA434A  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA434C
+	.ascii "ITEM"                                   ; FA434E
+	.byte 0x20, 0x09                                ; FA4352  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA4354
+	.ascii "VALUE"                                  ; FA4356
+	.byte 0x07, 0x05                                ; FA435B  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA435D
+	.byte 0x8d                                      ; FA435F  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4360  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA4362
+	.byte 0x8d                                      ; FA4364  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4365  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA4367
+	.byte 0x8e                                      ; FA4369  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA436A  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA436C
+	.byte 0x8e                                      ; FA436E  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA436F  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4371
+	.short 0x001a                                   ; FA4373
+	.short 0x0125                                   ; FA4375
+	.short 0x00c2                                   ; FA4377
+	.byte 0x0a, 0x0a                                ; FA4379  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA437B
+	.short 0x00da                                   ; FA437D
+	.short 0x0092                                   ; FA437F
+	.short 0x00ec                                   ; FA4381
+	.byte 0x0a, 0x0a                                ; FA4383  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA4385
+	.short 0x00da                                   ; FA4387
+	.short 0x013a                                   ; FA4389
+	.short 0x00ec                                   ; FA438B
+	.byte 0x09, 0x0a                                ; FA438D  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA438F
+	.short 0x0004                                   ; FA4391
+	.short 0x002e                                   ; FA4393
+	.short 0x0012                                   ; FA4395
+	.byte 0x01, 0x0a                                ; FA4397  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4399
+	.short 0x002f                                   ; FA439B
+	.short 0x0127                                   ; FA439D
+	.short 0x002f                                   ; FA439F
+	.byte 0x01, 0x0a                                ; FA43A1  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA43A3
+	.short 0x0056                                   ; FA43A5
+	.short 0x0127                                   ; FA43A7
+	.short 0x0056                                   ; FA43A9
+	.byte 0x01, 0x0a                                ; FA43AB  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA43AD
+	.short 0x006b                                   ; FA43AF
+	.short 0x0127                                   ; FA43B1
+	.short 0x006b                                   ; FA43B3
+	.byte 0x01, 0x0a                                ; FA43B5  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA43B7
+	.short 0x00e3                                   ; FA43B9
+	.short 0x0094                                   ; FA43BB
+	.short 0x00e3                                   ; FA43BD
+	.byte 0x01, 0x0a                                ; FA43BF  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA43C1
+	.short 0x00e3                                   ; FA43C3
+	.short 0x013c                                   ; FA43C5
+	.short 0x00e3                                   ; FA43C7
 ; ---------------------------------------------------------------------
 ; DisplayList_FA43C9 -- 105 bytes, kind=display_list
 ;
@@ -64976,17 +66062,68 @@ OperandTable_FA44E2:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA44E8:
-	.byte 0x1c, 0x14, 0x4b, 0x00, 0x05, 0x00, 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59, 0x20, 0x50, 0x52, 0x4f  ; FA44E8
-	.byte 0x54, 0x45, 0x43, 0x54, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA44F8
-	.byte 0x07, 0x13, 0xf0, 0x0d, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA4508
-	.byte 0x20, 0x20, 0x3a, 0x07, 0x13, 0xb8, 0x13, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49  ; FA4518
-	.byte 0x4f, 0x4e, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09  ; FA4528
-	.byte 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21  ; FA4538
-	.byte 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x45  ; FA4548
-	.byte 0x00, 0x15, 0x01, 0x9e, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a  ; FA4558
-	.byte 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e  ; FA4568
-	.byte 0x00, 0x12, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad  ; FA4578
-	.byte 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                            ; FA4588
+	.byte 0x1c, 0x14                                ; FA44E8  op 1c, 20 bytes -> handler 0xF31A52  text at row 1, col 35
+	.short 0x004b                                   ; FA44EA
+	.short 0x0005                                   ; FA44EC
+	.ascii "MEMORY PROTECT"                         ; FA44EE
+	.byte 0x17, 0x0c                                ; FA44FC  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA44FE
+	.short 0x0008                                   ; FA4500
+	.ascii "SYSTEM"                                 ; FA4502
+	.byte 0x07, 0x13                                ; FA4508  op 07, 19 bytes -> handler 0xF31A3A  text at row 89, col 8
+	.short 0x0df0                                   ; FA450A
+	.ascii "SOUND         :"                        ; FA450C
+	.byte 0x07, 0x13                                ; FA451B  op 07, 19 bytes -> handler 0xF31A3A  text at row 126, col 8
+	.short 0x13b8                                   ; FA451D
+	.ascii "COMBINATION   :"                        ; FA451F
+	.byte 0x20, 0x08                                ; FA452E  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA4530
+	.ascii "ITEM"                                   ; FA4532
+	.byte 0x20, 0x09                                ; FA4536  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA4538
+	.ascii "VALUE"                                  ; FA453A
+	.byte 0x07, 0x05                                ; FA453F  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA4541
+	.byte 0x8d                                      ; FA4543  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4544  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA4546
+	.byte 0x8d                                      ; FA4548  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4549  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA454B
+	.byte 0x8e                                      ; FA454D  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA454E  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA4550
+	.byte 0x8e                                      ; FA4552  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA4553  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4555
+	.short 0x0045                                   ; FA4557
+	.short 0x0115                                   ; FA4559
+	.short 0x009e                                   ; FA455B
+	.byte 0x0a, 0x0a                                ; FA455D  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA455F
+	.short 0x00da                                   ; FA4561
+	.short 0x0092                                   ; FA4563
+	.short 0x00ec                                   ; FA4565
+	.byte 0x0a, 0x0a                                ; FA4567  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA4569
+	.short 0x00da                                   ; FA456B
+	.short 0x013a                                   ; FA456D
+	.short 0x00ec                                   ; FA456F
+	.byte 0x09, 0x0a                                ; FA4571  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA4573
+	.short 0x0004                                   ; FA4575
+	.short 0x002e                                   ; FA4577
+	.short 0x0012                                   ; FA4579
+	.byte 0x01, 0x0a                                ; FA457B  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA457D
+	.short 0x00e3                                   ; FA457F
+	.short 0x0094                                   ; FA4581
+	.short 0x00e3                                   ; FA4583
+	.byte 0x01, 0x0a                                ; FA4585  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA4587
+	.short 0x00e3                                   ; FA4589
+	.short 0x013c                                   ; FA458B
+	.short 0x00e3                                   ; FA458D
 ; ---------------------------------------------------------------------
 ; DisplayList_FA458F -- 30 bytes, kind=display_list
 ;
@@ -65052,21 +66189,58 @@ DisplayList_FA45C8:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA45D2:
-	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x4d, 0x55, 0x54, 0x45  ; FA45D2
-	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x26, 0x53, 0x05  ; FA45E2
-	.byte 0x49, 0x66, 0x20, 0x79, 0x6f, 0x75, 0x20, 0x77, 0x61, 0x6e, 0x74, 0x20, 0x68, 0x65, 0x6c, 0x64  ; FA45F2
-	.byte 0x20, 0x6e, 0x6f, 0x74, 0x65, 0x73, 0x20, 0x74, 0x6f, 0x20, 0x63, 0x6f, 0x6e, 0x74, 0x69, 0x6e  ; FA4602
-	.byte 0x75, 0x65, 0x07, 0x25, 0x73, 0x08, 0x73, 0x6f, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x77  ; FA4612
-	.byte 0x68, 0x65, 0x6e, 0x20, 0x79, 0x6f, 0x75, 0x20, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x20, 0x53  ; FA4622
-	.byte 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x6f, 0x72, 0x07, 0x10, 0x93, 0x0b, 0x43, 0x6f, 0x6d, 0x62, 0x69  ; FA4632
-	.byte 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x07, 0x1f, 0xb3, 0x0e, 0x50, 0x6c, 0x65, 0x61, 0x73  ; FA4642
-	.byte 0x65, 0x20, 0x74, 0x75, 0x72, 0x6e, 0x20, 0x6f, 0x66, 0x66, 0x20, 0x53, 0x6f, 0x75, 0x6e, 0x64  ; FA4652
-	.byte 0x20, 0x4d, 0x75, 0x74, 0x65, 0x2e, 0x07, 0x10, 0x8c, 0x16, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20  ; FA4662
-	.byte 0x4d, 0x55, 0x54, 0x45, 0x20, 0x3a, 0x07, 0x05, 0xd4, 0x21, 0x8d, 0x07, 0x05, 0x64, 0x23, 0x8e  ; FA4672
-	.byte 0x20, 0x0a, 0x42, 0x20, 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00  ; FA4682
-	.byte 0x2e, 0x00, 0x12, 0x00, 0x0a, 0x0a, 0x50, 0x00, 0x78, 0x00, 0xf0, 0x00, 0xb4, 0x00, 0x0a, 0x0a  ; FA4692
-	.byte 0x50, 0x00, 0xda, 0x00, 0xf0, 0x00, 0xec, 0x00, 0x01, 0x0a, 0x50, 0x00, 0xe3, 0x00, 0xf0, 0x00  ; FA46A2
-	.byte 0xe3, 0x00                                                          ; FA46B2
+	.byte 0x1c, 0x10                                ; FA45D2  op 1c, 16 bytes -> handler 0xF31A52  text at row 2, col 18
+	.short 0x0062                                   ; FA45D4
+	.short 0x0005                                   ; FA45D6
+	.ascii "SOUND MUTE"                             ; FA45D8
+	.byte 0x17, 0x0c                                ; FA45E2  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA45E4
+	.short 0x0008                                   ; FA45E6
+	.ascii "SYSTEM"                                 ; FA45E8
+	.byte 0x07, 0x26                                ; FA45EE  op 07, 38 bytes -> handler 0xF31A3A  text at row 34, col 3
+	.short 0x0553                                   ; FA45F0
+	.ascii "If you want held notes to continue"     ; FA45F2
+	.byte 0x07, 0x25                                ; FA4614  op 07, 37 bytes -> handler 0xF31A3A  text at row 54, col 3
+	.short 0x0873                                   ; FA4616
+	.ascii "sounding when you change Sound or"      ; FA4618
+	.byte 0x07, 0x10                                ; FA4639  op 07, 16 bytes -> handler 0xF31A3A  text at row 74, col 3
+	.short 0x0b93                                   ; FA463B
+	.ascii "Combination."                           ; FA463D
+	.byte 0x07, 0x1f                                ; FA4649  op 07, 31 bytes -> handler 0xF31A3A  text at row 94, col 3
+	.short 0x0eb3                                   ; FA464B
+	.ascii "Please turn off Sound Mute."            ; FA464D
+	.byte 0x07, 0x10                                ; FA4668  op 07, 16 bytes -> handler 0xF31A3A  text at row 144, col 12
+	.short 0x168c                                   ; FA466A
+	.ascii "SOUND MUTE :"                           ; FA466C
+	.byte 0x07, 0x05                                ; FA4678  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 20
+	.short 0x21d4                                   ; FA467A
+	.byte 0x8d                                      ; FA467C  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA467D  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 20
+	.short 0x2364                                   ; FA467F
+	.byte 0x8e                                      ; FA4681  glyph codes below 0x20
+	.byte 0x20, 0x0a                                ; FA4682  op 20, 10 bytes -> handler 0xF31A3A  text at row 206, col 18
+	.short 0x2042                                   ; FA4684
+	.ascii "ON/OFF"                                 ; FA4686
+	.byte 0x09, 0x0a                                ; FA468C  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA468E
+	.short 0x0004                                   ; FA4690
+	.short 0x002e                                   ; FA4692
+	.short 0x0012                                   ; FA4694
+	.byte 0x0a, 0x0a                                ; FA4696  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0050                                   ; FA4698
+	.short 0x0078                                   ; FA469A
+	.short 0x00f0                                   ; FA469C
+	.short 0x00b4                                   ; FA469E
+	.byte 0x0a, 0x0a                                ; FA46A0  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0050                                   ; FA46A2
+	.short 0x00da                                   ; FA46A4
+	.short 0x00f0                                   ; FA46A6
+	.short 0x00ec                                   ; FA46A8
+	.byte 0x01, 0x0a                                ; FA46AA  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0050                                   ; FA46AC
+	.short 0x00e3                                   ; FA46AE
+	.short 0x00f0                                   ; FA46B0
+	.short 0x00e3                                   ; FA46B2
 ; ---------------------------------------------------------------------
 ; DisplayList_FA46B4 -- 15 bytes, kind=display_list
 ;
@@ -65092,21 +66266,116 @@ DisplayList_FA46B4:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA46C3:
-	.byte 0x23, 0x05, 0x0f, 0x31, 0x00, 0x1c, 0x0f, 0x67, 0x00, 0x05, 0x00, 0x44, 0x52, 0x55, 0x4d, 0x53  ; FA46C3
-	.byte 0x20, 0x4d, 0x41, 0x50, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA46D3
-	.byte 0x20, 0x05, 0xec, 0x04, 0x3a, 0x20, 0x07, 0x2b, 0x05, 0x4d, 0x41, 0x50, 0x07, 0x05, 0x50, 0x05  ; FA46E3
-	.byte 0x10, 0x20, 0x0a, 0x5b, 0x07, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x07, 0x05, 0xc4, 0x21, 0x8d  ; FA46F3
-	.byte 0x07, 0x05, 0xd1, 0x21, 0x8d, 0x07, 0x05, 0xe0, 0x21, 0x8d, 0x07, 0x05, 0x54, 0x23, 0x8e, 0x07  ; FA4703
-	.byte 0x05, 0x61, 0x23, 0x8e, 0x07, 0x05, 0x70, 0x23, 0x8e, 0x20, 0x0d, 0x58, 0x20, 0x44, 0x52, 0x55  ; FA4713
-	.byte 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x20, 0x08, 0x67, 0x20, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x09  ; FA4723
-	.byte 0x76, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x0a, 0x0a, 0x0e, 0x00, 0x1d, 0x00, 0x54, 0x00, 0x3c  ; FA4733
-	.byte 0x00, 0x0a, 0x0a, 0x66, 0x00, 0x1b, 0x00, 0x36, 0x01, 0xcb, 0x00, 0x0a, 0x0a, 0x09, 0x00, 0xda  ; FA4743
-	.byte 0x00, 0x3f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x56, 0x00, 0xda, 0x00, 0xbf, 0x00, 0xec, 0x00, 0x0a  ; FA4753
-	.byte 0x0a, 0xce, 0x00, 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e  ; FA4763
-	.byte 0x00, 0x12, 0x00, 0x01, 0x0a, 0x66, 0x00, 0x2b, 0x00, 0x38, 0x01, 0x2b, 0x00, 0x01, 0x0a, 0x09  ; FA4773
-	.byte 0x00, 0xe3, 0x00, 0x41, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x56, 0x00, 0xe3, 0x00, 0xc1, 0x00, 0xe3  ; FA4783
-	.byte 0x00, 0x01, 0x0a, 0xce, 0x00, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x84, 0x00, 0x2b  ; FA4793
-	.byte 0x00, 0x84, 0x00, 0xcd, 0x00, 0x02, 0x0a, 0xac, 0x00, 0x2b, 0x00, 0xac, 0x00, 0xcd, 0x00  ; FA47A3
+	.byte 0x23, 0x05                                ; FA46C3  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0f                                      ; FA46C5
+	.short 0x0031                                   ; FA46C6
+	.byte 0x1c, 0x0f                                ; FA46C8  op 1c, 15 bytes -> handler 0xF31A52  text at row 2, col 23
+	.short 0x0067                                   ; FA46CA
+	.short 0x0005                                   ; FA46CC
+	.ascii "DRUMS MAP"                              ; FA46CE
+	.byte 0x17, 0x0c                                ; FA46D7  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA46D9
+	.short 0x0008                                   ; FA46DB
+	.ascii "SYSTEM"                                 ; FA46DD
+	.byte 0x20, 0x05                                ; FA46E3  op 20, 5 bytes -> handler 0xF31A3A  text at row 31, col 20
+	.short 0x04ec                                   ; FA46E5
+	.ascii ":"                                      ; FA46E7
+	.byte 0x20, 0x07                                ; FA46E8  op 20, 7 bytes -> handler 0xF31A3A  text at row 33, col 3
+	.short 0x052b                                   ; FA46EA
+	.ascii "MAP"                                    ; FA46EC
+	.byte 0x07, 0x05                                ; FA46EF  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 0
+	.short 0x0550                                   ; FA46F1
+	.byte 0x10                                      ; FA46F3  glyph codes below 0x20
+	.byte 0x20, 0x0a                                ; FA46F4  op 20, 10 bytes -> handler 0xF31A3A  text at row 47, col 3
+	.short 0x075b                                   ; FA46F6
+	.ascii "NAMING"                                 ; FA46F8
+	.byte 0x07, 0x05                                ; FA46FE  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 4
+	.short 0x21c4                                   ; FA4700
+	.byte 0x8d                                      ; FA4702  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4703  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 17
+	.short 0x21d1                                   ; FA4705
+	.byte 0x8d                                      ; FA4707  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4708  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 32
+	.short 0x21e0                                   ; FA470A
+	.byte 0x8d                                      ; FA470C  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA470D  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 4
+	.short 0x2354                                   ; FA470F
+	.byte 0x8e                                      ; FA4711  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4712  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 17
+	.short 0x2361                                   ; FA4714
+	.byte 0x8e                                      ; FA4716  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4717  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 32
+	.short 0x2370                                   ; FA4719
+	.byte 0x8e                                      ; FA471B  glyph codes below 0x20
+	.byte 0x20, 0x0d                                ; FA471C  op 20, 13 bytes -> handler 0xF31A3A  text at row 207, col 0
+	.short 0x2058                                   ; FA471E
+	.ascii "DRUMS MAP"                              ; FA4720
+	.byte 0x20, 0x08                                ; FA4729  op 20, 8 bytes -> handler 0xF31A3A  text at row 207, col 15
+	.short 0x2067                                   ; FA472B
+	.ascii "NOTE"                                   ; FA472D
+	.byte 0x20, 0x09                                ; FA4731  op 20, 9 bytes -> handler 0xF31A3A  text at row 207, col 30
+	.short 0x2076                                   ; FA4733
+	.ascii "SOUND"                                  ; FA4735
+	.byte 0x0a, 0x0a                                ; FA473A  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x000e                                   ; FA473C
+	.short 0x001d                                   ; FA473E
+	.short 0x0054                                   ; FA4740
+	.short 0x003c                                   ; FA4742
+	.byte 0x0a, 0x0a                                ; FA4744  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0066                                   ; FA4746
+	.short 0x001b                                   ; FA4748
+	.short 0x0136                                   ; FA474A
+	.short 0x00cb                                   ; FA474C
+	.byte 0x0a, 0x0a                                ; FA474E  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0009                                   ; FA4750
+	.short 0x00da                                   ; FA4752
+	.short 0x003f                                   ; FA4754
+	.short 0x00ec                                   ; FA4756
+	.byte 0x0a, 0x0a                                ; FA4758  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0056                                   ; FA475A
+	.short 0x00da                                   ; FA475C
+	.short 0x00bf                                   ; FA475E
+	.short 0x00ec                                   ; FA4760
+	.byte 0x0a, 0x0a                                ; FA4762  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ce                                   ; FA4764
+	.short 0x00da                                   ; FA4766
+	.short 0x0137                                   ; FA4768
+	.short 0x00ec                                   ; FA476A
+	.byte 0x09, 0x0a                                ; FA476C  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA476E
+	.short 0x0004                                   ; FA4770
+	.short 0x002e                                   ; FA4772
+	.short 0x0012                                   ; FA4774
+	.byte 0x01, 0x0a                                ; FA4776  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0066                                   ; FA4778
+	.short 0x002b                                   ; FA477A
+	.short 0x0138                                   ; FA477C
+	.short 0x002b                                   ; FA477E
+	.byte 0x01, 0x0a                                ; FA4780  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0009                                   ; FA4782
+	.short 0x00e3                                   ; FA4784
+	.short 0x0041                                   ; FA4786
+	.short 0x00e3                                   ; FA4788
+	.byte 0x01, 0x0a                                ; FA478A  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0056                                   ; FA478C
+	.short 0x00e3                                   ; FA478E
+	.short 0x00c1                                   ; FA4790
+	.short 0x00e3                                   ; FA4792
+	.byte 0x01, 0x0a                                ; FA4794  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ce                                   ; FA4796
+	.short 0x00e3                                   ; FA4798
+	.short 0x0139                                   ; FA479A
+	.short 0x00e3                                   ; FA479C
+	.byte 0x02, 0x0a                                ; FA479E  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0084                                   ; FA47A0
+	.short 0x002b                                   ; FA47A2
+	.short 0x0084                                   ; FA47A4
+	.short 0x00cd                                   ; FA47A6
+	.byte 0x02, 0x0a                                ; FA47A8  op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00ac                                   ; FA47AA
+	.short 0x002b                                   ; FA47AC
+	.short 0x00ac                                   ; FA47AE
+	.short 0x00cd                                   ; FA47B0
 ; ---------------------------------------------------------------------
 ; DisplayList_FA47B2 -- 76 bytes, kind=display_list
 ;
@@ -65119,11 +66388,38 @@ DisplayList_FA46C3:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA47B2:
-	.byte 0x23, 0x05, 0x0f, 0x31, 0x00, 0x1c, 0x0f, 0x67, 0x00, 0x05, 0x00, 0x44, 0x52, 0x55, 0x4d, 0x53  ; FA47B2
-	.byte 0x20, 0x4d, 0x41, 0x50, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA47C2
-	.byte 0x07, 0x05, 0x50, 0x05, 0x10, 0x20, 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49, 0x54, 0x45, 0x09, 0x0a  ; FA47D2
-	.byte 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x3d, 0x00  ; FA47E2
-	.byte 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00  ; FA47F2
+	.byte 0x23, 0x05                                ; FA47B2  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0f                                      ; FA47B4
+	.short 0x0031                                   ; FA47B5
+	.byte 0x1c, 0x0f                                ; FA47B7  op 1c, 15 bytes -> handler 0xF31A52  text at row 2, col 23
+	.short 0x0067                                   ; FA47B9
+	.short 0x0005                                   ; FA47BB
+	.ascii "DRUMS MAP"                              ; FA47BD
+	.byte 0x17, 0x0c                                ; FA47C6  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA47C8
+	.short 0x0008                                   ; FA47CA
+	.ascii "SYSTEM"                                 ; FA47CC
+	.byte 0x07, 0x05                                ; FA47D2  op 07, 5 bytes -> handler 0xF31A3A  text at row 34, col 0
+	.short 0x0550                                   ; FA47D4
+	.byte 0x10                                      ; FA47D6  glyph codes below 0x20
+	.byte 0x20, 0x09                                ; FA47D7  op 20, 9 bytes -> handler 0xF31A3A  text at row 35, col 2
+	.short 0x057a                                   ; FA47D9
+	.ascii "WRITE"                                  ; FA47DB
+	.byte 0x09, 0x0a                                ; FA47E0  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA47E2
+	.short 0x0004                                   ; FA47E4
+	.short 0x002e                                   ; FA47E6
+	.short 0x0012                                   ; FA47E8
+	.byte 0x09, 0x0a                                ; FA47EA  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000b                                   ; FA47EC
+	.short 0x001e                                   ; FA47EE
+	.short 0x003d                                   ; FA47F0
+	.short 0x0031                                   ; FA47F2
+	.byte 0x09, 0x0a                                ; FA47F4  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000d                                   ; FA47F6
+	.short 0x0020                                   ; FA47F8
+	.short 0x003b                                   ; FA47FA
+	.short 0x002f                                   ; FA47FC
 ; ---------------------------------------------------------------------
 ; DisplayList_FA47FE -- 131 bytes, kind=display_list
 ;
@@ -65136,15 +66432,19 @@ DisplayList_FA47B2:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA47FE:
-	.byte 0x1c, 0x0c, 0x7a, 0x00, 0x05, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x21, 0x07, 0x2a, 0x71, 0x08  ; FA47FE
-	.byte 0x49, 0x74, 0x20, 0x69, 0x73, 0x20, 0x69, 0x6d, 0x70, 0x6f, 0x73, 0x73, 0x69, 0x62, 0x6c, 0x65  ; FA480E
-	.byte 0x20, 0x74, 0x6f, 0x20, 0x73, 0x65, 0x74, 0x20, 0x61, 0x20, 0x64, 0x72, 0x75, 0x6d, 0x20, 0x6d  ; FA481E
-	.byte 0x61, 0x70, 0x20, 0x66, 0x6f, 0x72, 0x07, 0x22, 0x21, 0x0d, 0x61, 0x20, 0x53, 0x6f, 0x75, 0x6e  ; FA482E
-	.byte 0x64, 0x20, 0x6f, 0x74, 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6e, 0x20, 0x61, 0x20, 0x44  ; FA483E
-	.byte 0x72, 0x75, 0x6d, 0x20, 0x4b, 0x69, 0x74, 0x2e, 0x07, 0x2b, 0xd1, 0x11, 0x50, 0x6c, 0x65, 0x61  ; FA484E
-	.byte 0x73, 0x65, 0x20, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x20, 0x61, 0x20, 0x44, 0x72, 0x75, 0x6d  ; FA485E
-	.byte 0x20, 0x4b, 0x69, 0x74, 0x20, 0x61, 0x6e, 0x64, 0x20, 0x74, 0x72, 0x79, 0x20, 0x61, 0x67, 0x61  ; FA486E
-	.byte 0x69, 0x6e, 0x2e                                                    ; FA487E
+	.byte 0x1c, 0x0c                                ; FA47FE  op 1c, 12 bytes -> handler 0xF31A52  text at row 3, col 2
+	.short 0x007a                                   ; FA4800
+	.short 0x0005                                   ; FA4802
+	.ascii "ERROR!"                                 ; FA4804
+	.byte 0x07, 0x2a                                ; FA480A  op 07, 42 bytes -> handler 0xF31A3A  text at row 54, col 1
+	.short 0x0871                                   ; FA480C
+	.ascii "It is impossible to set a drum map for" ; FA480E
+	.byte 0x07, 0x22                                ; FA4834  op 07, 34 bytes -> handler 0xF31A3A  text at row 84, col 1
+	.short 0x0d21                                   ; FA4836
+	.ascii "a Sound other than a Drum Kit."         ; FA4838
+	.byte 0x07, 0x2b                                ; FA4856  op 07, 43 bytes -> handler 0xF31A3A  text at row 114, col 1
+	.short 0x11d1                                   ; FA4858
+	.ascii "Please select a Drum Kit and try again."; FA485A
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4881 -- 510 bytes, kind=display_list
 ;
@@ -65525,21 +66825,113 @@ DisplayList_FA4C2A:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA4C34:
-	.byte 0x23, 0x05, 0x30, 0x36, 0x00, 0x1c, 0x0a, 0x8d, 0x00, 0x05, 0x00, 0x54, 0x45, 0x53, 0x54, 0x17  ; FA4C34
-	.byte 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x08, 0x7f, 0x05, 0x54  ; FA4C44
-	.byte 0x45, 0x53, 0x54, 0x20, 0x05, 0x8d, 0x05, 0x3a, 0x20, 0x08, 0x8f, 0x09, 0x4d, 0x4f, 0x44, 0x45  ; FA4C54
-	.byte 0x20, 0x05, 0x9d, 0x09, 0x3a, 0x20, 0x08, 0x5b, 0x0d, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x0c, 0x63  ; FA4C64
-	.byte 0x0d, 0x56, 0x45, 0x4c, 0x4f, 0x43, 0x49, 0x54, 0x59, 0x20, 0x07, 0xaf, 0x11, 0x31, 0x73, 0x74  ; FA4C74
-	.byte 0x20, 0x05, 0xb6, 0x11, 0x3a, 0x20, 0x07, 0xcf, 0x14, 0x32, 0x6e, 0x64, 0x20, 0x05, 0xd6, 0x14  ; FA4C84
-	.byte 0x3a, 0x20, 0x07, 0xef, 0x17, 0x33, 0x72, 0x64, 0x20, 0x05, 0xf6, 0x17, 0x3a, 0x20, 0x07, 0x0f  ; FA4C94
-	.byte 0x1b, 0x34, 0x74, 0x68, 0x20, 0x05, 0x16, 0x1b, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45  ; FA4CA4
-	.byte 0x4d, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x1a  ; FA4CB4
-	.byte 0x00, 0x25, 0x01, 0xc2, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x09  ; FA4CC4
-	.byte 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x34, 0x00, 0x27  ; FA4CD4
-	.byte 0x01, 0x34, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x36, 0x00, 0x27, 0x01, 0x36, 0x00, 0x01, 0x0a, 0x14  ; FA4CE4
-	.byte 0x00, 0x4c, 0x00, 0x27, 0x01, 0x4c, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x4e, 0x00, 0x27, 0x01, 0x4e  ; FA4CF4
-	.byte 0x00, 0x01, 0x0a, 0x14, 0x00, 0x66, 0x00, 0x27, 0x01, 0x66, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3  ; FA4D04
-	.byte 0x00, 0x94, 0x00, 0xe3, 0x00                                        ; FA4D14
+	.byte 0x23, 0x05                                ; FA4C34  op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x30                                      ; FA4C36
+	.short 0x0036                                   ; FA4C37
+	.byte 0x1c, 0x0a                                ; FA4C39  op 1c, 10 bytes -> handler 0xF31A52  text at row 3, col 21
+	.short 0x008d                                   ; FA4C3B
+	.short 0x0005                                   ; FA4C3D
+	.ascii "TEST"                                   ; FA4C3F
+	.byte 0x17, 0x0c                                ; FA4C43  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
+	.short 0x0007                                   ; FA4C45
+	.short 0x0008                                   ; FA4C47
+	.ascii "SYSTEM"                                 ; FA4C49
+	.byte 0x20, 0x08                                ; FA4C4F  op 20, 8 bytes -> handler 0xF31A3A  text at row 35, col 7
+	.short 0x057f                                   ; FA4C51
+	.ascii "TEST"                                   ; FA4C53
+	.byte 0x20, 0x05                                ; FA4C57  op 20, 5 bytes -> handler 0xF31A3A  text at row 35, col 21
+	.short 0x058d                                   ; FA4C59
+	.ascii ":"                                      ; FA4C5B
+	.byte 0x20, 0x08                                ; FA4C5C  op 20, 8 bytes -> handler 0xF31A3A  text at row 61, col 7
+	.short 0x098f                                   ; FA4C5E
+	.ascii "MODE"                                   ; FA4C60
+	.byte 0x20, 0x05                                ; FA4C64  op 20, 5 bytes -> handler 0xF31A3A  text at row 61, col 21
+	.short 0x099d                                   ; FA4C66
+	.ascii ":"                                      ; FA4C68
+	.byte 0x20, 0x08                                ; FA4C69  op 20, 8 bytes -> handler 0xF31A3A  text at row 85, col 19
+	.short 0x0d5b                                   ; FA4C6B
+	.ascii "NOTE"                                   ; FA4C6D
+	.byte 0x20, 0x0c                                ; FA4C71  op 20, 12 bytes -> handler 0xF31A3A  text at row 85, col 27
+	.short 0x0d63                                   ; FA4C73
+	.ascii "VELOCITY"                               ; FA4C75
+	.byte 0x20, 0x07                                ; FA4C7D  op 20, 7 bytes -> handler 0xF31A3A  text at row 113, col 7
+	.short 0x11af                                   ; FA4C7F
+	.ascii "1st"                                    ; FA4C81
+	.byte 0x20, 0x05                                ; FA4C84  op 20, 5 bytes -> handler 0xF31A3A  text at row 113, col 14
+	.short 0x11b6                                   ; FA4C86
+	.ascii ":"                                      ; FA4C88
+	.byte 0x20, 0x07                                ; FA4C89  op 20, 7 bytes -> handler 0xF31A3A  text at row 133, col 7
+	.short 0x14cf                                   ; FA4C8B
+	.ascii "2nd"                                    ; FA4C8D
+	.byte 0x20, 0x05                                ; FA4C90  op 20, 5 bytes -> handler 0xF31A3A  text at row 133, col 14
+	.short 0x14d6                                   ; FA4C92
+	.ascii ":"                                      ; FA4C94
+	.byte 0x20, 0x07                                ; FA4C95  op 20, 7 bytes -> handler 0xF31A3A  text at row 153, col 7
+	.short 0x17ef                                   ; FA4C97
+	.ascii "3rd"                                    ; FA4C99
+	.byte 0x20, 0x05                                ; FA4C9C  op 20, 5 bytes -> handler 0xF31A3A  text at row 153, col 14
+	.short 0x17f6                                   ; FA4C9E
+	.ascii ":"                                      ; FA4CA0
+	.byte 0x20, 0x07                                ; FA4CA1  op 20, 7 bytes -> handler 0xF31A3A  text at row 173, col 7
+	.short 0x1b0f                                   ; FA4CA3
+	.ascii "4th"                                    ; FA4CA5
+	.byte 0x20, 0x05                                ; FA4CA8  op 20, 5 bytes -> handler 0xF31A3A  text at row 173, col 14
+	.short 0x1b16                                   ; FA4CAA
+	.ascii ":"                                      ; FA4CAC
+	.byte 0x20, 0x08                                ; FA4CAD  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 7
+	.short 0x200f                                   ; FA4CAF
+	.ascii "ITEM"                                   ; FA4CB1
+	.byte 0x07, 0x05                                ; FA4CB5  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 9
+	.short 0x21c9                                   ; FA4CB7
+	.byte 0x8d                                      ; FA4CB9  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4CBA  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 9
+	.short 0x2359                                   ; FA4CBC
+	.byte 0x8e                                      ; FA4CBE  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA4CBF  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4CC1
+	.short 0x001a                                   ; FA4CC3
+	.short 0x0125                                   ; FA4CC5
+	.short 0x00c2                                   ; FA4CC7
+	.byte 0x0a, 0x0a                                ; FA4CC9  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA4CCB
+	.short 0x00da                                   ; FA4CCD
+	.short 0x0092                                   ; FA4CCF
+	.short 0x00ec                                   ; FA4CD1
+	.byte 0x09, 0x0a                                ; FA4CD3  op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004                                   ; FA4CD5
+	.short 0x0004                                   ; FA4CD7
+	.short 0x002e                                   ; FA4CD9
+	.short 0x0012                                   ; FA4CDB
+	.byte 0x01, 0x0a                                ; FA4CDD  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4CDF
+	.short 0x0034                                   ; FA4CE1
+	.short 0x0127                                   ; FA4CE3
+	.short 0x0034                                   ; FA4CE5
+	.byte 0x01, 0x0a                                ; FA4CE7  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4CE9
+	.short 0x0036                                   ; FA4CEB
+	.short 0x0127                                   ; FA4CED
+	.short 0x0036                                   ; FA4CEF
+	.byte 0x01, 0x0a                                ; FA4CF1  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4CF3
+	.short 0x004c                                   ; FA4CF5
+	.short 0x0127                                   ; FA4CF7
+	.short 0x004c                                   ; FA4CF9
+	.byte 0x01, 0x0a                                ; FA4CFB  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4CFD
+	.short 0x004e                                   ; FA4CFF
+	.short 0x0127                                   ; FA4D01
+	.short 0x004e                                   ; FA4D03
+	.byte 0x01, 0x0a                                ; FA4D05  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0014                                   ; FA4D07
+	.short 0x0066                                   ; FA4D09
+	.short 0x0127                                   ; FA4D0B
+	.short 0x0066                                   ; FA4D0D
+	.byte 0x01, 0x0a                                ; FA4D0F  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005                                   ; FA4D11
+	.short 0x00e3                                   ; FA4D13
+	.short 0x0094                                   ; FA4D15
+	.short 0x00e3                                   ; FA4D17
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4D19 -- 39 bytes, kind=display_list
 ;
@@ -65552,9 +66944,25 @@ DisplayList_FA4C34:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA4D19:
-	.byte 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05  ; FA4D19
-	.byte 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x01, 0x0a, 0xad  ; FA4D29
-	.byte 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                            ; FA4D39
+	.byte 0x20, 0x09                                ; FA4D19  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
+	.short 0x2024                                   ; FA4D1B
+	.ascii "VALUE"                                  ; FA4D1D
+	.byte 0x07, 0x05                                ; FA4D22  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 30
+	.short 0x21de                                   ; FA4D24
+	.byte 0x8d                                      ; FA4D26  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4D27  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 30
+	.short 0x236e                                   ; FA4D29
+	.byte 0x8e                                      ; FA4D2B  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA4D2C  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA4D2E
+	.short 0x00da                                   ; FA4D30
+	.short 0x013a                                   ; FA4D32
+	.short 0x00ec                                   ; FA4D34
+	.byte 0x01, 0x0a                                ; FA4D36  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00ad                                   ; FA4D38
+	.short 0x00e3                                   ; FA4D3A
+	.short 0x013c                                   ; FA4D3C
+	.short 0x00e3                                   ; FA4D3E
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4D40 -- 80 bytes, kind=display_list
 ;
@@ -65567,11 +66975,44 @@ DisplayList_FA4D19:
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
 DisplayList_FA4D40:
-	.byte 0x20, 0x08, 0x1f, 0x20, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x0c, 0x28, 0x20, 0x56, 0x45, 0x4c, 0x4f  ; FA4D40
-	.byte 0x43, 0x49, 0x54, 0x59, 0x07, 0x05, 0xd9, 0x21, 0x8d, 0x07, 0x05, 0x69, 0x23, 0x8e, 0x07, 0x05  ; FA4D50
-	.byte 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x73, 0x23, 0x8e, 0x0a, 0x0a, 0xb1, 0x00, 0xda, 0x00, 0xe7, 0x00  ; FA4D60
-	.byte 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01, 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x01, 0x0a, 0xb1, 0x00  ; FA4D70
-	.byte 0xe3, 0x00, 0xe9, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x01, 0x01, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00  ; FA4D80
+	.byte 0x20, 0x08                                ; FA4D40  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 23
+	.short 0x201f                                   ; FA4D42
+	.ascii "NOTE"                                   ; FA4D44
+	.byte 0x20, 0x0c                                ; FA4D48  op 20, 12 bytes -> handler 0xF31A3A  text at row 205, col 32
+	.short 0x2028                                   ; FA4D4A
+	.ascii "VELOCITY"                               ; FA4D4C
+	.byte 0x07, 0x05                                ; FA4D54  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 25
+	.short 0x21d9                                   ; FA4D56
+	.byte 0x8d                                      ; FA4D58  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4D59  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 25
+	.short 0x2369                                   ; FA4D5B
+	.byte 0x8e                                      ; FA4D5D  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4D5E  op 07, 5 bytes -> handler 0xF31A3A  text at row 216, col 35
+	.short 0x21e3                                   ; FA4D60
+	.byte 0x8d                                      ; FA4D62  glyph codes below 0x20
+	.byte 0x07, 0x05                                ; FA4D63  op 07, 5 bytes -> handler 0xF31A3A  text at row 226, col 35
+	.short 0x2373                                   ; FA4D65
+	.byte 0x8e                                      ; FA4D67  glyph codes below 0x20
+	.byte 0x0a, 0x0a                                ; FA4D68  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x00b1                                   ; FA4D6A
+	.short 0x00da                                   ; FA4D6C
+	.short 0x00e7                                   ; FA4D6E
+	.short 0x00ec                                   ; FA4D70
+	.byte 0x0a, 0x0a                                ; FA4D72  op 0a, 10 bytes -> handler 0xF31A75
+	.short 0x0101                                   ; FA4D74
+	.short 0x00da                                   ; FA4D76
+	.short 0x0137                                   ; FA4D78
+	.short 0x00ec                                   ; FA4D7A
+	.byte 0x01, 0x0a                                ; FA4D7C  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00b1                                   ; FA4D7E
+	.short 0x00e3                                   ; FA4D80
+	.short 0x00e9                                   ; FA4D82
+	.short 0x00e3                                   ; FA4D84
+	.byte 0x01, 0x0a                                ; FA4D86  op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0101                                   ; FA4D88
+	.short 0x00e3                                   ; FA4D8A
+	.short 0x0139                                   ; FA4D8C
+	.short 0x00e3                                   ; FA4D8E
 ; ---------------------------------------------------------------------
 ; DisplayList_FA4D90 -- 10 bytes, kind=display_list
 ;
