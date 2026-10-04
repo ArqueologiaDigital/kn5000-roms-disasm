@@ -23,7 +23,7 @@ run                    slots   unc    extent    1span  spans   refs
 T_F42ED0-T_F42F04    14    14     20977    20977      1      6   0xF67434-0xF6C625
 T_F426E0-T_F42720    17    17     16244    16244      1     62   0xF5DAA2-0xF61A16
 T_StepRecord_OnEnter-T_StepRecord_ButtonByTrackKind     3     3     14463    14463      1      4   0xF675CC-0xF6AE4B
-T_F42F40-T_F42F6C    12    12     13084    13084      1     20   0xF0F018-0xF12334
+T_DspEffect_SetSection-T_F42F6C    12    12     13084    13084      1     20   0xF0F018-0xF12334
 T_BStore_AppendBytes_Join3_Veneer-T_F42ABC   132   132      8906     8906      1    172   0xF7AA00-0xF7CCCA
 ```
 

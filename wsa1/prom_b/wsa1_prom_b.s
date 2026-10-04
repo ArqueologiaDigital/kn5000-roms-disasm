@@ -27806,14 +27806,14 @@ Blink_CmdArm_Ret:
 
 ; ==============================================================================
 ; 0xF0EA9F-0xF13D33 -- THE BLOCK THE FRONTIER'S TOP RUN POINTS INTO
-;   T_F42F40-T_F42F6C (12 slots) and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2), converted as one
+;   T_DspEffect_SetSection-T_F42F6C (12 slots) and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2), converted as one
 ;   contiguous span of 21141 bytes
 ; ==============================================================================
 ;
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py ranks whole thunk RUNS by the
 ; CONTIGUOUS unconverted extent of their targets.  Its top run was
 ;
-;   T_F42F40-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
+;   T_DspEffect_SetSection-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
 ;
 ; and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (0xF11C30, 0xF1220B) points into the same span.  The
 ; block starts where the already-converted field-blink engine's last routine
@@ -28445,7 +28445,7 @@ OldBuild_ValueGlyph_Table:
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x5A0	; F0EEBC  [20] -> 0xF0F480
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x5E8	; F0EEC0  [21] -> 0xF0F4C8
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x630	; F0EEC4  [22] -> 0xF0F510
-	.long	OldBuild_ValueGlyph_Bitmaps + 0x678	; F0EEC8  [23] -> DispatchTable_F0F558
+	.long	OldBuild_ValueGlyph_Bitmaps + 0x678	; F0EEC8  [23] -> LcdKeyRow1_DspEffect_BySection
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x6C0	; F0EECC  [24] -> 0xF0F5A0
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x708	; F0EED0  [25] -> 0xF0F5E8
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x750	; F0EED4  [26] -> 0xF0F630
@@ -28500,7 +28500,7 @@ OldBuild_ValueGlyph_Bitmaps:
 
 ; --------------------------------------------------------------------------
 ; Data_F0F000 -- 0xF0F000-0xF0F017, 24 bytes: six little-endian words of
-;   0x0000000E, just before sub_F0F018 (a routine-directory target).  This is
+;   0x0000000E, just before DspEffect_SetSection (a routine-directory target).  This is
 ;   where this build's bytes resume after the older build's data above.
 ;   Nothing in prom_a or prom_b names 0xF0F000 (the older build's glyph
 ;   table does, as its glyph 4); purpose not established.
@@ -28520,10 +28520,10 @@ Data_F0F000:
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F018
-; Called from: T_F42F40 (x0); in-module: 0xF0F117
+; DspEffect_SetSection
+; Called from: T_DspEffect_SetSection (x0); in-module: 0xF0F117
 ; Touches: (0x2790) (0x2791)
-; Calls:   sub_F0F047
+; Calls:   DspEffect_SelectSectionBlock
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF0F018 is an instruction boundary of this
@@ -28532,19 +28532,21 @@ Data_F0F000:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F018:		; <- T_F42F40
+; DspEffect_SetSection: DspEffect_Section = the argument byte, DspEffect_SelectSectionBlock, then (0x2791) |= 0x80.  Thunk T_DspEffect_SetSection;
+;   called in-module by ScreenEnterBody_DspEffect.
+DspEffect_SetSection:		; <- T_DspEffect_SetSection
 	link XIZ,0x0000	; F0F018  link XIZ,0x0000
-	m_ld_m16m MBD+r6, 0x08, 0x2790	; F0F01C  ld (0x2790),(XIZ+0x08)
-	calr	sub_F0F047	; F0F021  calr 0xf0f047
+	m_ld_m16m MBD+r6, 0x08, DspEffect_Section	; F0F01C  ld (0x2790),(XIZ+0x08)
+	calr	DspEffect_SelectSectionBlock	; F0F021  calr 0xf0f047
 	m_set 7, MD16, 0x2791	; F0F024  set 7,(0x2791)
 	unlk XIZ	; F0F028  unlk XIZ
 	ret	; F0F02A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F02B
-; Called from: T_F42F44 (x0); in-module: 0xF0F27A 0xF0F61A 0xF0F680 0xF0F6E9
+; DspEffect_SetSectionAndRepaint
+; Called from: T_DspEffect_SetSectionAndRepaint (x0); in-module: 0xF0F27A 0xF0F61A 0xF0F680 0xF0F6E9
 ; Touches: (0x2071) (0x2790) (0x2791)
-; Calls:   sub_F0F047
+; Calls:   DspEffect_SelectSectionBlock
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF0F02B is an instruction boundary of this
@@ -28553,18 +28555,20 @@ sub_F0F018:		; <- T_F42F40
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F02B:		; <- T_F42F44
+; DspEffect_SetSectionAndRepaint: the same as DspEffect_SetSection, plus UI_Request_Hi bit 4 (repaint the current screen in place,
+;   FINDINGS-prom_ab-screen-stage-and-flags.md).  Called by the ExitKey / LcdKeyRow2..4 _DspEffect arms.
+DspEffect_SetSectionAndRepaint:		; <- T_DspEffect_SetSectionAndRepaint
 	link XIZ,0x0000	; F0F02B  link XIZ,0x0000
-	m_ld_m16m MBD+r6, 0x08, 0x2790	; F0F02F  ld (0x2790),(XIZ+0x08)
-	calr	sub_F0F047	; F0F034  calr 0xf0f047
+	m_ld_m16m MBD+r6, 0x08, DspEffect_Section	; F0F02F  ld (0x2790),(XIZ+0x08)
+	calr	DspEffect_SelectSectionBlock	; F0F034  calr 0xf0f047
 	m_set 7, MD16, 0x2791	; F0F037  set 7,(0x2791)
 	m_set 4, MD16, UI_Request_Hi	; F0F03B  set 4,(0x2071)
 	unlk XIZ	; F0F03F  unlk XIZ
 	ret	; F0F041  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F042
-; Called from: T_F42F48 (x0)
+; DspEffect_GetSection
+; Called from: T_DspEffect_GetSection (x0)
 ; Touches: (0x2790)
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
@@ -28574,12 +28578,13 @@ sub_F0F02B:		; <- T_F42F44
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F042:		; <- T_F42F48
-	ld	a, (10128:16)	; F0F042  ld A,(0x2790)
+; DspEffect_GetSection: `ld A,(DspEffect_Section) / ret`.  Thunk T_DspEffect_GetSection.
+DspEffect_GetSection:		; <- T_DspEffect_GetSection
+	ld	a, (DspEffect_Section:16)	; F0F042  ld A,(0x2790)
 	ret	; F0F046  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0F047
+; DspEffect_SelectSectionBlock
 ; Called from: in-module: 0xF0F021 0xF0F034
 ; Touches: (0x2790) (0x2797)
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -28590,10 +28595,12 @@ sub_F0F042:		; <- T_F42F48
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F047:
-	m_cp_mi8 MB16, 0x2790, 0x00	; F0F047  cp (0x2790),0x00
+; DspEffect_SelectSectionBlock: when DspEffect_Section is not 0: Effect_BlockIndex = EffectPage_BlockIndex[DspEffect_Section] -- the block
+;   (0..2, IndexedTable entry 97 + it) the section edits.
+DspEffect_SelectSectionBlock:
+	m_cp_mi8 MB16, DspEffect_Section, 0x00	; F0F047  cp (0x2790),0x00
 	jr	z, sub_F0F047_Return	; F0F04C  jr Z,0xf0f060
-	ld	bc, (10128:16)	; F0F04E  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F04E  ld BC,(0x2790)
 	extz	bc	; F0F052  extz BC
 	extz	xbc	; F0F054  extz XBC
 	add	xbc, EffectPage_BlockIndex	; F0F056  add XBC,0x00f135f7
@@ -28631,7 +28638,7 @@ sub_F0F047_Skip:
 	jr	z, sub_F0F047_Skip2	; F0F085  jr Z,0xf0f08a
 	jrl	sub_F0F0FF_Epilogue	; F0F087  jrl T,0xf0f103
 sub_F0F047_Skip2:
-	m_cp_mi8 MB16, 0x2790, 0x00	; F0F08A  cp (0x2790),0x00
+	m_cp_mi8 MB16, DspEffect_Section, 0x00	; F0F08A  cp (0x2790),0x00
 	jrl	nz, sub_F0F0FF_Epilogue	; F0F08F  jrl NZ,0xf0f103
 	jrl	sub_F0F0FF	; F0F092  jrl T,0xf0f0ff
 sub_F0F047_Skip3:
@@ -28647,7 +28654,7 @@ sub_F0F047_Skip3:
 	jr	z, sub_F0F047_Skip4	; F0F0B1  jr Z,0xf0f0b5
 	jr	sub_F0F0FF_Epilogue	; F0F0B3  jr T,0xf0f103
 sub_F0F047_Skip4:
-	ld	bc, (10128:16)	; F0F0B5  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F0B5  ld BC,(0x2790)
 	extz	bc	; F0F0B9  extz BC
 	extz	xbc	; F0F0BB  extz XBC
 	cp	bc, 5:i3	; F0F0BD  cp BC,5
@@ -28738,7 +28745,7 @@ sub_F0F0FF_Epilogue:
 ; ScreenEnterBody_DspEffect
 ; Called from: T_F42F4C (x3)
 ; Touches: (0x207A) (0x207B) (0x207C) (0x207D) (0x2790) (0x2797) (0x2798)
-; Calls:   sub_F0F018
+; Calls:   DspEffect_SetSection
 ; Evidence (THUNK): a `jp` slot of the 0xF40000 routine directory holds `jp`
 ;                   to this address, so the firmware's own routine table
 ;                   names it.  0xF0F105 is an instruction boundary of this
@@ -28749,7 +28756,7 @@ sub_F0F0FF_Epilogue:
 ; --------------------------------------------------------------------------
 ; ScreenEnterBody_DspEffect: the enter code of the DSP EFFECT screens (T_F42F4C) -- Screen_DspEffect_Enter (0x66),
 ;   ScreenEnter_CombiEditDspEffect (0x39) and ScreenEnter_SoundEditDspEffect (0xCA) all call it.  On a new screen it resets
-;   (0x2798) and clamps Effect_BlockIndex to 2, then dispatches on (0x2790) through DispatchTable_F0F152.
+;   (0x2798) and clamps Effect_BlockIndex to 2, then dispatches on (0x2790) through ScreenEnterBody_DspEffect_BySection.
 ScreenEnterBody_DspEffect:		; <- T_F42F4C
 	push	xix	; F0F105  push XIX
 	lda	xix, (10129:16)	; F0F106  lda XIX,0x2791
@@ -28757,7 +28764,7 @@ ScreenEnterBody_DspEffect:		; <- T_F42F4C
 	m_cp_rm MB16, UI_ScreenLatch_Previous, 3	; F0F10E  cp C,(0x207b)
 	jr	z, sub_F0F105_Skip2	; F0F112  jr Z,0xf0f12c
 	pushw	0	; F0F114  push 0x0000
-	calr	sub_F0F018	; F0F117  calr 0xf0f018
+	calr	DspEffect_SetSection	; F0F117  calr 0xf0f018
 	popw	bc	; F0F11A  pop BC
 	m_cp_mi8 MB16, Effect_BlockIndex, 0x02	; F0F11B  cp (0x2797),0x02
 	jr	ule, sub_F0F105_Skip	; F0F120  jr ULE,0xf0f127
@@ -28770,18 +28777,18 @@ sub_F0F105_Skip2:
 	jr	z, sub_F0F105_Skip3	; F0F134  jr Z,0xf0f139
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F136  or (XIX),0x80
 sub_F0F105_Skip3:
-	ld	bc, (10128:16)	; F0F139  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F139  ld BC,(0x2790)
 	extz	bc	; F0F13D  extz BC
 	extz	xbc	; F0F13F  extz XBC
 	cp	bc, 5:i3	; F0F141  cp BC,5
 	jr	ugt, sub_F0F174_Join	; F0F143  jr UGT,0xf0f177
 	sll	bc, 2	; F0F145  sll 0x02,BC
-	add	xbc, DispatchTable_F0F152	; F0F148  add XBC,0x00f0f152
+	add	xbc, ScreenEnterBody_DspEffect_BySection	; F0F148  add XBC,0x00f0f152
 	ld	xbc, (xbc)	; F0F14E  ld XBC,(XBC)
 	jp	(xbc)	; F0F150  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F152 -- 6 32-bit words, every one an address in
+; ScreenEnterBody_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -28802,17 +28809,19 @@ sub_F0F105_Skip3:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F152:
-	.long	sub_F0F16A	; F0F152  [0] -> sub_F0F16A
-	.long	sub_F0F16F	; F0F156  [1] -> sub_F0F16F
-	.long	sub_F0F16F	; F0F15A  [2] -> sub_F0F16F
-	.long	sub_F0F16F	; F0F15E  [3] -> sub_F0F16F
-	.long	sub_F0F174	; F0F162  [4] -> sub_F0F174
-	.long	sub_F0F174	; F0F166  [5] -> sub_F0F174
+; ScreenEnterBody_DspEffect_BySection: ScreenEnterBody_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ScreenEnterBody_DspEffect_BySection:
+	.long	ScreenEnterBody_DspEffect_Section0	; F0F152  [0] -> ScreenEnterBody_DspEffect_Section0
+	.long	ScreenEnterBody_DspEffect_ParamSections	; F0F156  [1] -> ScreenEnterBody_DspEffect_ParamSections
+	.long	ScreenEnterBody_DspEffect_ParamSections	; F0F15A  [2] -> ScreenEnterBody_DspEffect_ParamSections
+	.long	ScreenEnterBody_DspEffect_ParamSections	; F0F15E  [3] -> ScreenEnterBody_DspEffect_ParamSections
+	.long	ScreenEnterBody_DspEffect_EqSections	; F0F162  [4] -> ScreenEnterBody_DspEffect_EqSections
+	.long	ScreenEnterBody_DspEffect_EqSections	; F0F166  [5] -> ScreenEnterBody_DspEffect_EqSections
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F16A
+; ScreenEnterBody_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28827,12 +28836,14 @@ DispatchTable_F0F152:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F16A:
+; ScreenEnterBody_DspEffect_Section0: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ScreenEnterBody_DspEffect_Section0:
 	calr	sub_F0F788	; F0F16A  calr 0xf0f788
 	jr	sub_F0F174_Join	; F0F16D  jr T,0xf0f177
 
 ; --------------------------------------------------------------------------
-; sub_F0F16F
+; ScreenEnterBody_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28847,12 +28858,14 @@ sub_F0F16A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F16F:
+; ScreenEnterBody_DspEffect_ParamSections: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ScreenEnterBody_DspEffect_ParamSections:
 	calr	sub_F1008E	; F0F16F  calr 0xf1008e
 	jr	sub_F0F174_Join	; F0F172  jr T,0xf0f177
 
 ; --------------------------------------------------------------------------
-; sub_F0F174
+; ScreenEnterBody_DspEffect_EqSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28867,7 +28880,9 @@ sub_F0F16F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F174:
+; ScreenEnterBody_DspEffect_EqSections: an arm of ScreenEnterBody_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ScreenEnterBody_DspEffect_EqSections:
 	calr	sub_F0FD5F	; F0F174  calr 0xf0fd5f
 sub_F0F174_Join:
 	ld	(xix), 0	; F0F177  ld (XIX),0x00
@@ -28941,18 +28956,18 @@ ExitKey_DspEffect:
 	ld	c, (PanelEvent_Flags:16)	; F0F1C4  ld C,(0x28b0)
 	and	c, 1	; F0F1C8  and C,0x01
 	jrl	nz, sub_F0F277_Epilogue	; F0F1CB  jrl NZ,0xf0f27e
-	ld	bc, (10128:16)	; F0F1CE  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F1CE  ld BC,(0x2790)
 	extz	bc	; F0F1D2  extz BC
 	extz	xbc	; F0F1D4  extz XBC
 	cp	bc, 5:i3	; F0F1D6  cp BC,5
 	jrl	ugt, sub_F0F277_Epilogue	; F0F1D8  jrl UGT,0xf0f27e
 	sll	bc, 2	; F0F1DB  sll 0x02,BC
-	add	xbc, DispatchTable_F0F1E8	; F0F1DE  add XBC,0x00f0f1e8
+	add	xbc, ExitKey_DspEffect_BySection	; F0F1DE  add XBC,0x00f0f1e8
 	ld	xbc, (xbc)	; F0F1E4  ld XBC,(XBC)
 	jp	(xbc)	; F0F1E6  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F1E8 -- 6 32-bit words, every one an address in
+; ExitKey_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  4
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -28973,17 +28988,19 @@ ExitKey_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F1E8:
-	.long	sub_F0F200	; F0F1E8  [0] -> sub_F0F200
-	.long	sub_F0F26D	; F0F1EC  [1] -> sub_F0F26D
-	.long	sub_F0F26D	; F0F1F0  [2] -> sub_F0F26D
-	.long	sub_F0F26D	; F0F1F4  [3] -> sub_F0F26D
-	.long	sub_F0F272	; F0F1F8  [4] -> sub_F0F272
-	.long	sub_F0F277	; F0F1FC  [5] -> sub_F0F277
+; ExitKey_DspEffect_BySection: ExitKey_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ExitKey_DspEffect_BySection:
+	.long	ExitKey_DspEffect_Section0	; F0F1E8  [0] -> ExitKey_DspEffect_Section0
+	.long	ExitKey_DspEffect_ParamSections	; F0F1EC  [1] -> ExitKey_DspEffect_ParamSections
+	.long	ExitKey_DspEffect_ParamSections	; F0F1F0  [2] -> ExitKey_DspEffect_ParamSections
+	.long	ExitKey_DspEffect_ParamSections	; F0F1F4  [3] -> ExitKey_DspEffect_ParamSections
+	.long	ExitKey_DspEffect_Section4	; F0F1F8  [4] -> ExitKey_DspEffect_Section4
+	.long	ExitKey_DspEffect_Section5	; F0F1FC  [5] -> ExitKey_DspEffect_Section5
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F200
+; ExitKey_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2070) (0x2076) (0x207C)
@@ -28998,7 +29015,9 @@ DispatchTable_F0F1E8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F200:
+; ExitKey_DspEffect_Section0: an arm of ExitKey_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ExitKey_DspEffect_Section0:
 	m_cp_mi8 MB16, PanelModeGroup, 0x01	; F0F200  cp (0x2076),0x01
 	jr	nz, sub_F0F200_Skip	; F0F205  jr NZ,0xf0f20f
 	m_or_mi8 MBI+r4, 0, 0x80	; F0F207  or (XIX),0x80
@@ -29037,7 +29056,7 @@ sub_F0F200_Join:
 	jr	sub_F0F277_Epilogue	; F0F26B  jr T,0xf0f27e
 
 ; --------------------------------------------------------------------------
-; sub_F0F26D
+; ExitKey_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29051,12 +29070,14 @@ sub_F0F200_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F26D:
+; ExitKey_DspEffect_ParamSections: an arm of ExitKey_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ExitKey_DspEffect_ParamSections:
 	pushw	0	; F0F26D  push 0x0000
 	jr	sub_F0F277_Join	; F0F270  jr T,0xf0f27a
 
 ; --------------------------------------------------------------------------
-; sub_F0F272
+; ExitKey_DspEffect_Section4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29070,16 +29091,18 @@ sub_F0F26D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F272:
+; ExitKey_DspEffect_Section4: an arm of ExitKey_DspEffect_BySection -- what it does when DspEffect_Section is 4
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ExitKey_DspEffect_Section4:
 	pushw	1	; F0F272  push 0x0001
 	jr	sub_F0F277_Join	; F0F275  jr T,0xf0f27a
 
 ; --------------------------------------------------------------------------
-; sub_F0F277
+; ExitKey_DspEffect_Section5
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0F02B
+; Calls:   DspEffect_SetSectionAndRepaint
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29090,10 +29113,12 @@ sub_F0F272:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F277:
+; ExitKey_DspEffect_Section5: an arm of ExitKey_DspEffect_BySection -- what it does when DspEffect_Section is 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+ExitKey_DspEffect_Section5:
 	pushw	3	; F0F277  push 0x0003
 sub_F0F277_Join:
-	calr	sub_F0F02B	; F0F27A  calr 0xf0f02b
+	calr	DspEffect_SetSectionAndRepaint	; F0F27A  calr 0xf0f02b
 	popw	bc	; F0F27D  pop BC
 sub_F0F277_Epilogue:
 	pop	xix	; F0F27E  pop XIX
@@ -29118,18 +29143,18 @@ sub_F0F277_Epilogue:
 ; SoftKeyCol1_DspEffect: slot 0 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol1 handler (notes/prom_ab_slot23_button_names.py).
 SoftKeyCol1_DspEffect:
-	ld	bc, (10128:16)	; F0F281  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F281  ld BC,(0x2790)
 	extz	bc	; F0F285  extz BC
 	extz	xbc	; F0F287  extz XBC
 	cp	bc, 5:i3	; F0F289  cp BC,5
 	jr	ugt, DispatchTable_F0F29A_Nop4	; F0F28B  jr UGT,0xf0f2de
 	sll	bc, 2	; F0F28D  sll 0x02,BC
-	add	xbc, DispatchTable_F0F29A	; F0F290  add XBC,0x00f0f29a
+	add	xbc, SoftKeyCol1_DspEffect_BySection	; F0F290  add XBC,0x00f0f29a
 	ld	xbc, (xbc)	; F0F296  ld XBC,(XBC)
 	jp	(xbc)	; F0F298  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F29A -- 6 32-bit words, every one an address in
+; SoftKeyCol1_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29150,17 +29175,19 @@ SoftKeyCol1_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F29A:
-	.long	sub_F0F2B2	; F0F29A  [0] -> sub_F0F2B2
-	.long	sub_F0F2DB	; F0F29E  [1] -> sub_F0F2DB
-	.long	sub_F0F2DB	; F0F2A2  [2] -> sub_F0F2DB
-	.long	sub_F0F2DB	; F0F2A6  [3] -> sub_F0F2DB
+; SoftKeyCol1_DspEffect_BySection: SoftKeyCol1_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol1_DspEffect_BySection:
+	.long	SoftKeyCol1_DspEffect_Section0	; F0F29A  [0] -> SoftKeyCol1_DspEffect_Section0
+	.long	SoftKeyCol1_DspEffect_ParamSections	; F0F29E  [1] -> SoftKeyCol1_DspEffect_ParamSections
+	.long	SoftKeyCol1_DspEffect_ParamSections	; F0F2A2  [2] -> SoftKeyCol1_DspEffect_ParamSections
+	.long	SoftKeyCol1_DspEffect_ParamSections	; F0F2A6  [3] -> SoftKeyCol1_DspEffect_ParamSections
 	.long	DispatchTable_F0F29A_Nop4	; F0F2AA  [4] -> DispatchTable_F0F29A_Nop4
 	.long	DispatchTable_F0F29A_Nop4	; F0F2AE  [5] -> DispatchTable_F0F29A_Nop4
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F2B2
+; SoftKeyCol1_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2076) (0x209B) (0x209C) (0x2791) (0x2798)
@@ -29175,7 +29202,9 @@ DispatchTable_F0F29A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F2B2:
+; SoftKeyCol1_DspEffect_Section0: an arm of SoftKeyCol1_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol1_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F2B2  cp (0x2798),0x00
 	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2B7  jr NZ,0xf0f2de
 	m_cp_mi8 MB16, PanelModeGroup, 0x17	; F0F2B9  cp (0x2076),0x17
@@ -29190,7 +29219,7 @@ sub_F0F2B2:
 	jr	DispatchTable_F0F29A_Nop4	; F0F2D9  jr T,0xf0f2de
 
 ; --------------------------------------------------------------------------
-; sub_F0F2DB
+; SoftKeyCol1_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29205,7 +29234,9 @@ sub_F0F2B2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F2DB:
+; SoftKeyCol1_DspEffect_ParamSections: an arm of SoftKeyCol1_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol1_DspEffect_ParamSections:
 	calr	DspEffect_MoveCursor	; F0F2DB  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
@@ -29244,18 +29275,18 @@ DispatchTable_F0F29A_Nop4:
 ; SoftKeyCol2_DspEffect: slot 1 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol2 handler (notes/prom_ab_slot23_button_names.py).
 SoftKeyCol2_DspEffect:
-	ld	bc, (10128:16)	; F0F2DF  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F2DF  ld BC,(0x2790)
 	extz	bc	; F0F2E3  extz BC
 	extz	xbc	; F0F2E5  extz XBC
 	cp	bc, 5:i3	; F0F2E7  cp BC,5
 	jr	ugt, DispatchTable_F0F2F8_Nop0	; F0F2E9  jr UGT,0xf0f32d
 	sll	bc, 2	; F0F2EB  sll 0x02,BC
-	add	xbc, DispatchTable_F0F2F8	; F0F2EE  add XBC,0x00f0f2f8
+	add	xbc, SoftKeyCol2_DspEffect_BySection	; F0F2EE  add XBC,0x00f0f2f8
 	ld	xbc, (xbc)	; F0F2F4  ld XBC,(XBC)
 	jp	(xbc)	; F0F2F6  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F2F8 -- 6 32-bit words, every one an address in
+; SoftKeyCol2_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29276,17 +29307,19 @@ SoftKeyCol2_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F2F8:
+; SoftKeyCol2_DspEffect_BySection: SoftKeyCol2_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol2_DspEffect_BySection:
 	.long	DispatchTable_F0F2F8_Nop0	; F0F2F8  [0] -> DispatchTable_F0F2F8_Nop0
-	.long	sub_F0F310	; F0F2FC  [1] -> sub_F0F310
-	.long	sub_F0F310	; F0F300  [2] -> sub_F0F310
-	.long	sub_F0F310	; F0F304  [3] -> sub_F0F310
-	.long	sub_F0F315	; F0F308  [4] -> sub_F0F315
-	.long	sub_F0F315	; F0F30C  [5] -> sub_F0F315
+	.long	SoftKeyCol2_DspEffect_ParamSections	; F0F2FC  [1] -> SoftKeyCol2_DspEffect_ParamSections
+	.long	SoftKeyCol2_DspEffect_ParamSections	; F0F300  [2] -> SoftKeyCol2_DspEffect_ParamSections
+	.long	SoftKeyCol2_DspEffect_ParamSections	; F0F304  [3] -> SoftKeyCol2_DspEffect_ParamSections
+	.long	SoftKeyCol2_DspEffect_EqSections	; F0F308  [4] -> SoftKeyCol2_DspEffect_EqSections
+	.long	SoftKeyCol2_DspEffect_EqSections	; F0F30C  [5] -> SoftKeyCol2_DspEffect_EqSections
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F310
+; SoftKeyCol2_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29301,16 +29334,18 @@ DispatchTable_F0F2F8:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F310:
+; SoftKeyCol2_DspEffect_ParamSections: an arm of SoftKeyCol2_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol2_DspEffect_ParamSections:
 	calr	DspEffect_MoveCursor	; F0F310  calr 0xf105b8
 	jr	DispatchTable_F0F2F8_Nop0	; F0F313  jr T,0xf0f32d
 
 ; --------------------------------------------------------------------------
-; sub_F0F315
+; SoftKeyCol2_DspEffect_EqSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2791)
-; Calls:   sub_F10252
+; Calls:   DspEffect_StepEqBandFc
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29321,10 +29356,12 @@ sub_F0F310:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F315:
+; SoftKeyCol2_DspEffect_EqSections: an arm of SoftKeyCol2_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol2_DspEffect_EqSections:
 	pushw	17	; F0F315  push 0x0011
 	pushw	0	; F0F318  push 0x0000
-	calr	sub_F10252	; F0F31B  calr 0xf10252
+	calr	DspEffect_StepEqBandFc	; F0F31B  calr 0xf10252
 	m_set 0, MD16, 0x2791	; F0F31E  set 0,(0x2791)
 	ld	(PanelDial_DownButton:16), 129	; F0F322  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 1	; F0F327  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
@@ -29366,18 +29403,18 @@ DispatchTable_F0F2F8_Nop0:
 ; SoftKeyCol3_DspEffect: slot 2 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol3 handler (notes/prom_ab_slot23_button_names.py).
 SoftKeyCol3_DspEffect:
-	ld	bc, (10128:16)	; F0F32E  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F32E  ld BC,(0x2790)
 	extz	bc	; F0F332  extz BC
 	extz	xbc	; F0F334  extz XBC
 	cp	bc, 5:i3	; F0F336  cp BC,5
 	jr	ugt, sub_F0F37C_Return	; F0F338  jr UGT,0xf0f394
 	sll	bc, 2	; F0F33A  sll 0x02,BC
-	add	xbc, DispatchTable_F0F347	; F0F33D  add XBC,0x00f0f347
+	add	xbc, SoftKeyCol3_DspEffect_BySection	; F0F33D  add XBC,0x00f0f347
 	ld	xbc, (xbc)	; F0F343  ld XBC,(XBC)
 	jp	(xbc)	; F0F345  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F347 -- 6 32-bit words, every one an address in
+; SoftKeyCol3_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29398,17 +29435,19 @@ SoftKeyCol3_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F347:
-	.long	sub_F0F35F	; F0F347  [0] -> sub_F0F35F
-	.long	sub_F0F377	; F0F34B  [1] -> sub_F0F377
-	.long	sub_F0F377	; F0F34F  [2] -> sub_F0F377
-	.long	sub_F0F377	; F0F353  [3] -> sub_F0F377
-	.long	sub_F0F37C	; F0F357  [4] -> sub_F0F37C
-	.long	sub_F0F37C	; F0F35B  [5] -> sub_F0F37C
+; SoftKeyCol3_DspEffect_BySection: SoftKeyCol3_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol3_DspEffect_BySection:
+	.long	SoftKeyCol3_DspEffect_Section0	; F0F347  [0] -> SoftKeyCol3_DspEffect_Section0
+	.long	SoftKeyCol3_DspEffect_ParamSections	; F0F34B  [1] -> SoftKeyCol3_DspEffect_ParamSections
+	.long	SoftKeyCol3_DspEffect_ParamSections	; F0F34F  [2] -> SoftKeyCol3_DspEffect_ParamSections
+	.long	SoftKeyCol3_DspEffect_ParamSections	; F0F353  [3] -> SoftKeyCol3_DspEffect_ParamSections
+	.long	SoftKeyCol3_DspEffect_EqSections	; F0F357  [4] -> SoftKeyCol3_DspEffect_EqSections
+	.long	SoftKeyCol3_DspEffect_EqSections	; F0F35B  [5] -> SoftKeyCol3_DspEffect_EqSections
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F35F
+; SoftKeyCol3_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2798)
@@ -29423,7 +29462,9 @@ DispatchTable_F0F347:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F35F:
+; SoftKeyCol3_DspEffect_Section0: an arm of SoftKeyCol3_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol3_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F35F  cp (0x2798),0x00
 	jr	nz, sub_F0F35F_Skip	; F0F364  jr NZ,0xf0f36b
 	calr	DspEffect_StepAlgorithm	; F0F366  calr 0xf10476
@@ -29435,7 +29476,7 @@ sub_F0F35F_Skip:
 	jr	sub_F0F37C_Join	; F0F375  jr T,0xf0f385
 
 ; --------------------------------------------------------------------------
-; sub_F0F377
+; SoftKeyCol3_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29450,12 +29491,14 @@ sub_F0F35F_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F377:
+; SoftKeyCol3_DspEffect_ParamSections: an arm of SoftKeyCol3_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol3_DspEffect_ParamSections:
 	calr	DspEffect_MoveCursor	; F0F377  calr 0xf105b8
 	jr	sub_F0F37C_Return	; F0F37A  jr T,0xf0f394
 
 ; --------------------------------------------------------------------------
-; sub_F0F37C
+; SoftKeyCol3_DspEffect_EqSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2791)
@@ -29470,7 +29513,9 @@ sub_F0F377:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F37C:
+; SoftKeyCol3_DspEffect_EqSections: an arm of SoftKeyCol3_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol3_DspEffect_EqSections:
 	pushw	17	; F0F37C  push 0x0011
 	pushw	0	; F0F37F  push 0x0000
 	calr	sub_F103AB	; F0F382  calr 0xf103ab
@@ -29501,18 +29546,18 @@ sub_F0F37C_Return:
 ; SoftKeyCol4_DspEffect: slot 3 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol4 handler (notes/prom_ab_slot23_button_names.py).
 SoftKeyCol4_DspEffect:
-	ld	bc, (10128:16)	; F0F395  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F395  ld BC,(0x2790)
 	extz	bc	; F0F399  extz BC
 	extz	xbc	; F0F39B  extz XBC
 	cp	bc, 5:i3	; F0F39D  cp BC,5
 	jr	ugt, DispatchTable_F0F3AE_Nop4	; F0F39F  jr UGT,0xf0f3eb
 	sll	bc, 2	; F0F3A1  sll 0x02,BC
-	add	xbc, DispatchTable_F0F3AE	; F0F3A4  add XBC,0x00f0f3ae
+	add	xbc, SoftKeyCol4_DspEffect_BySection	; F0F3A4  add XBC,0x00f0f3ae
 	ld	xbc, (xbc)	; F0F3AA  ld XBC,(XBC)
 	jp	(xbc)	; F0F3AC  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F3AE -- 6 32-bit words, every one an address in
+; SoftKeyCol4_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29533,17 +29578,19 @@ SoftKeyCol4_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F3AE:
-	.long	sub_F0F3C6	; F0F3AE  [0] -> sub_F0F3C6
-	.long	sub_F0F3E8	; F0F3B2  [1] -> sub_F0F3E8
-	.long	sub_F0F3E8	; F0F3B6  [2] -> sub_F0F3E8
-	.long	sub_F0F3E8	; F0F3BA  [3] -> sub_F0F3E8
+; SoftKeyCol4_DspEffect_BySection: SoftKeyCol4_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol4_DspEffect_BySection:
+	.long	SoftKeyCol4_DspEffect_Section0	; F0F3AE  [0] -> SoftKeyCol4_DspEffect_Section0
+	.long	SoftKeyCol4_DspEffect_ParamSections	; F0F3B2  [1] -> SoftKeyCol4_DspEffect_ParamSections
+	.long	SoftKeyCol4_DspEffect_ParamSections	; F0F3B6  [2] -> SoftKeyCol4_DspEffect_ParamSections
+	.long	SoftKeyCol4_DspEffect_ParamSections	; F0F3BA  [3] -> SoftKeyCol4_DspEffect_ParamSections
 	.long	DispatchTable_F0F3AE_Nop4	; F0F3BE  [4] -> DispatchTable_F0F3AE_Nop4
 	.long	DispatchTable_F0F3AE_Nop4	; F0F3C2  [5] -> DispatchTable_F0F3AE_Nop4
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F3C6
+; SoftKeyCol4_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2791) (0x2798)
@@ -29558,7 +29605,9 @@ DispatchTable_F0F3AE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F3C6:
+; SoftKeyCol4_DspEffect_Section0: an arm of SoftKeyCol4_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol4_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F3C6  cp (0x2798),0x00
 	jr	z, DispatchTable_F0F3AE_Nop4	; F0F3CB  jr Z,0xf0f3eb
 	pushw	0	; F0F3CD  push 0x0000
@@ -29571,7 +29620,7 @@ sub_F0F3C6:
 	jr	DispatchTable_F0F3AE_Nop4	; F0F3E6  jr T,0xf0f3eb
 
 ; --------------------------------------------------------------------------
-; sub_F0F3E8
+; SoftKeyCol4_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29586,7 +29635,9 @@ sub_F0F3C6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F3E8:
+; SoftKeyCol4_DspEffect_ParamSections: an arm of SoftKeyCol4_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol4_DspEffect_ParamSections:
 	calr	DspEffect_MoveCursor	; F0F3E8  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
@@ -29627,18 +29678,18 @@ DispatchTable_F0F3AE_Nop4:
 SoftKeyCol5_DspEffect:
 	push	xix	; F0F3EC  push XIX
 	lda	xix, (10129:16)	; F0F3ED  lda XIX,0x2791
-	ld	bc, (10128:16)	; F0F3F1  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F3F1  ld BC,(0x2790)
 	extz	bc	; F0F3F5  extz BC
 	extz	xbc	; F0F3F7  extz XBC
 	cp	bc, 5:i3	; F0F3F9  cp BC,5
-	jr	ugt, sub_F0F441	; F0F3FB  jr UGT,0xf0f441
+	jr	ugt, SoftKeyCol5_DspEffect_Exit	; F0F3FB  jr UGT,0xf0f441
 	sll	bc, 2	; F0F3FD  sll 0x02,BC
-	add	xbc, DispatchTable_F0F40A	; F0F400  add XBC,0x00f0f40a
+	add	xbc, SoftKeyCol5_DspEffect_BySection	; F0F400  add XBC,0x00f0f40a
 	ld	xbc, (xbc)	; F0F406  ld XBC,(XBC)
 	jp	(xbc)	; F0F408  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F40A -- 6 32-bit words, every one an address in
+; SoftKeyCol5_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29659,17 +29710,19 @@ SoftKeyCol5_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F40A:
-	.long	sub_F0F441	; F0F40A  [0] -> sub_F0F441
-	.long	sub_F0F422	; F0F40E  [1] -> sub_F0F422
-	.long	sub_F0F422	; F0F412  [2] -> sub_F0F422
-	.long	sub_F0F422	; F0F416  [3] -> sub_F0F422
-	.long	sub_F0F42A	; F0F41A  [4] -> sub_F0F42A
-	.long	sub_F0F42A	; F0F41E  [5] -> sub_F0F42A
+; SoftKeyCol5_DspEffect_BySection: SoftKeyCol5_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol5_DspEffect_BySection:
+	.long	SoftKeyCol5_DspEffect_Exit	; F0F40A  [0] -> SoftKeyCol5_DspEffect_Exit
+	.long	SoftKeyCol5_DspEffect_ParamSections	; F0F40E  [1] -> SoftKeyCol5_DspEffect_ParamSections
+	.long	SoftKeyCol5_DspEffect_ParamSections	; F0F412  [2] -> SoftKeyCol5_DspEffect_ParamSections
+	.long	SoftKeyCol5_DspEffect_ParamSections	; F0F416  [3] -> SoftKeyCol5_DspEffect_ParamSections
+	.long	SoftKeyCol5_DspEffect_EqSections	; F0F41A  [4] -> SoftKeyCol5_DspEffect_EqSections
+	.long	SoftKeyCol5_DspEffect_EqSections	; F0F41E  [5] -> SoftKeyCol5_DspEffect_EqSections
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F422
+; SoftKeyCol5_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29684,17 +29737,19 @@ DispatchTable_F0F40A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F422:
+; SoftKeyCol5_DspEffect_ParamSections: an arm of SoftKeyCol5_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol5_DspEffect_ParamSections:
 	calr	DspEffect_StepCursorValue	; F0F422  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F425  or (XIX),0x01
-	jr	sub_F0F441	; F0F428  jr T,0xf0f441
+	jr	SoftKeyCol5_DspEffect_Exit	; F0F428  jr T,0xf0f441
 
 ; --------------------------------------------------------------------------
-; sub_F0F42A
+; SoftKeyCol5_DspEffect_EqSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
-; Calls:   sub_F10252
+; Calls:   DspEffect_StepEqBandFc
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -29705,17 +29760,19 @@ sub_F0F422:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F42A:
+; SoftKeyCol5_DspEffect_EqSections: an arm of SoftKeyCol5_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol5_DspEffect_EqSections:
 	pushw	19	; F0F42A  push 0x0013
 	pushw	1	; F0F42D  push 0x0001
-	calr	sub_F10252	; F0F430  calr 0xf10252
+	calr	DspEffect_StepEqBandFc	; F0F430  calr 0xf10252
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F433  or (XIX),0x01
 	ld	(PanelDial_DownButton:16), 132	; F0F436  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 4	; F0F43B  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F440  pop XIY
 
 ; --------------------------------------------------------------------------
-; sub_F0F441
+; SoftKeyCol5_DspEffect_Exit
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29729,7 +29786,9 @@ sub_F0F42A:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F441:
+; SoftKeyCol5_DspEffect_Exit: an arm of SoftKeyCol5_DspEffect_BySection -- the handler's epilogue: section(s) 0 do nothing on this key
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol5_DspEffect_Exit:
 	pop	xix	; F0F441  pop XIX
 	ret	; F0F442  ret
 
@@ -29753,18 +29812,18 @@ sub_F0F441:
 SoftKeyCol6_DspEffect:
 	push	xix	; F0F443  push XIX
 	lda	xix, (10129:16)	; F0F444  lda XIX,0x2791
-	ld	bc, (10128:16)	; F0F448  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F448  ld BC,(0x2790)
 	extz	bc	; F0F44C  extz BC
 	extz	xbc	; F0F44E  extz XBC
 	cp	bc, 5:i3	; F0F450  cp BC,5
 	jr	ugt, sub_F0F48D_Epilogue	; F0F452  jr UGT,0xf0f4a4
 	sll	bc, 2	; F0F454  sll 0x02,BC
-	add	xbc, DispatchTable_F0F461	; F0F457  add XBC,0x00f0f461
+	add	xbc, SoftKeyCol6_DspEffect_BySection	; F0F457  add XBC,0x00f0f461
 	ld	xbc, (xbc)	; F0F45D  ld XBC,(XBC)
 	jp	(xbc)	; F0F45F  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F461 -- 6 32-bit words, every one an address in
+; SoftKeyCol6_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29785,17 +29844,19 @@ SoftKeyCol6_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F461:
-	.long	sub_F0F479	; F0F461  [0] -> sub_F0F479
-	.long	sub_F0F485	; F0F465  [1] -> sub_F0F485
-	.long	sub_F0F485	; F0F469  [2] -> sub_F0F485
-	.long	sub_F0F485	; F0F46D  [3] -> sub_F0F485
-	.long	sub_F0F48D	; F0F471  [4] -> sub_F0F48D
-	.long	sub_F0F48D	; F0F475  [5] -> sub_F0F48D
+; SoftKeyCol6_DspEffect_BySection: SoftKeyCol6_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol6_DspEffect_BySection:
+	.long	SoftKeyCol6_DspEffect_Section0	; F0F461  [0] -> SoftKeyCol6_DspEffect_Section0
+	.long	SoftKeyCol6_DspEffect_ParamSections	; F0F465  [1] -> SoftKeyCol6_DspEffect_ParamSections
+	.long	SoftKeyCol6_DspEffect_ParamSections	; F0F469  [2] -> SoftKeyCol6_DspEffect_ParamSections
+	.long	SoftKeyCol6_DspEffect_ParamSections	; F0F46D  [3] -> SoftKeyCol6_DspEffect_ParamSections
+	.long	SoftKeyCol6_DspEffect_EqSections	; F0F471  [4] -> SoftKeyCol6_DspEffect_EqSections
+	.long	SoftKeyCol6_DspEffect_EqSections	; F0F475  [5] -> SoftKeyCol6_DspEffect_EqSections
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F479
+; SoftKeyCol6_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2798)
@@ -29810,14 +29871,16 @@ DispatchTable_F0F461:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F479:
+; SoftKeyCol6_DspEffect_Section0: an arm of SoftKeyCol6_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol6_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F479  cp (0x2798),0x00
 	jr	nz, sub_F0F48D_Epilogue	; F0F47E  jr NZ,0xf0f4a4
 	calr	sub_F101C8	; F0F480  calr 0xf101c8
 	jr	sub_F0F48D_Join	; F0F483  jr T,0xf0f497
 
 ; --------------------------------------------------------------------------
-; sub_F0F485
+; SoftKeyCol6_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29832,13 +29895,15 @@ sub_F0F479:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F485:
+; SoftKeyCol6_DspEffect_ParamSections: an arm of SoftKeyCol6_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol6_DspEffect_ParamSections:
 	calr	DspEffect_StepCursorValue	; F0F485  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F488  or (XIX),0x01
 	jr	sub_F0F48D_Epilogue	; F0F48B  jr T,0xf0f4a4
 
 ; --------------------------------------------------------------------------
-; sub_F0F48D
+; SoftKeyCol6_DspEffect_EqSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
@@ -29853,7 +29918,9 @@ sub_F0F485:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F48D:
+; SoftKeyCol6_DspEffect_EqSections: an arm of SoftKeyCol6_DspEffect_BySection -- what it does when DspEffect_Section is 4 or 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol6_DspEffect_EqSections:
 	pushw	19	; F0F48D  push 0x0013
 	pushw	1	; F0F490  push 0x0001
 	calr	sub_F103AB	; F0F493  calr 0xf103ab
@@ -29886,18 +29953,18 @@ sub_F0F48D_Epilogue:
 SoftKeyCol7_DspEffect:
 	push	xix	; F0F4A6  push XIX
 	lda	xix, (10129:16)	; F0F4A7  lda XIX,0x2791
-	ld	bc, (10128:16)	; F0F4AB  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F4AB  ld BC,(0x2790)
 	extz	bc	; F0F4AF  extz BC
 	extz	xbc	; F0F4B1  extz XBC
 	cp	bc, 5:i3	; F0F4B3  cp BC,5
-	jr	ugt, sub_F0F4FB	; F0F4B5  jr UGT,0xf0f4fb
+	jr	ugt, SoftKeyCol7_DspEffect_Exit	; F0F4B5  jr UGT,0xf0f4fb
 	sll	bc, 2	; F0F4B7  sll 0x02,BC
-	add	xbc, DispatchTable_F0F4C4	; F0F4BA  add XBC,0x00f0f4c4
+	add	xbc, SoftKeyCol7_DspEffect_BySection	; F0F4BA  add XBC,0x00f0f4c4
 	ld	xbc, (xbc)	; F0F4C0  ld XBC,(XBC)
 	jp	(xbc)	; F0F4C2  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F4C4 -- 6 32-bit words, every one an address in
+; SoftKeyCol7_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -29918,17 +29985,19 @@ SoftKeyCol7_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F4C4:
-	.long	sub_F0F4DC	; F0F4C4  [0] -> sub_F0F4DC
-	.long	sub_F0F4F5	; F0F4C8  [1] -> sub_F0F4F5
-	.long	sub_F0F4F5	; F0F4CC  [2] -> sub_F0F4F5
-	.long	sub_F0F4F5	; F0F4D0  [3] -> sub_F0F4F5
-	.long	sub_F0F4FB	; F0F4D4  [4] -> sub_F0F4FB
-	.long	sub_F0F4FB	; F0F4D8  [5] -> sub_F0F4FB
+; SoftKeyCol7_DspEffect_BySection: SoftKeyCol7_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol7_DspEffect_BySection:
+	.long	SoftKeyCol7_DspEffect_Section0	; F0F4C4  [0] -> SoftKeyCol7_DspEffect_Section0
+	.long	SoftKeyCol7_DspEffect_ParamSections	; F0F4C8  [1] -> SoftKeyCol7_DspEffect_ParamSections
+	.long	SoftKeyCol7_DspEffect_ParamSections	; F0F4CC  [2] -> SoftKeyCol7_DspEffect_ParamSections
+	.long	SoftKeyCol7_DspEffect_ParamSections	; F0F4D0  [3] -> SoftKeyCol7_DspEffect_ParamSections
+	.long	SoftKeyCol7_DspEffect_Exit	; F0F4D4  [4] -> SoftKeyCol7_DspEffect_Exit
+	.long	SoftKeyCol7_DspEffect_Exit	; F0F4D8  [5] -> SoftKeyCol7_DspEffect_Exit
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F4DC
+; SoftKeyCol7_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C) (0x2798)
@@ -29943,17 +30012,19 @@ DispatchTable_F0F4C4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F4DC:
+; SoftKeyCol7_DspEffect_Section0: an arm of SoftKeyCol7_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol7_DspEffect_Section0:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F4DC  cp (0x2798),0x00
-	jr	nz, sub_F0F4FB	; F0F4E1  jr NZ,0xf0f4fb
+	jr	nz, SoftKeyCol7_DspEffect_Exit	; F0F4E1  jr NZ,0xf0f4fb
 	calr	sub_F101E7	; F0F4E3  calr 0xf101e7
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F4E6  or (XIX),0x01
 	ld	(PanelDial_DownButton:16), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 6	; F0F4EE  ld (0x209c),0x06  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	jr	sub_F0F4FB	; F0F4F3  jr T,0xf0f4fb
+	jr	SoftKeyCol7_DspEffect_Exit	; F0F4F3  jr T,0xf0f4fb
 
 ; --------------------------------------------------------------------------
-; sub_F0F4F5
+; SoftKeyCol7_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29968,12 +30039,14 @@ sub_F0F4DC:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F4F5:
+; SoftKeyCol7_DspEffect_ParamSections: an arm of SoftKeyCol7_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol7_DspEffect_ParamSections:
 	calr	DspEffect_StepCursorValue	; F0F4F5  calr 0xf1069a
 	m_or_mi8 MBI+r4, 0, 0x01	; F0F4F8  or (XIX),0x01
 
 ; --------------------------------------------------------------------------
-; sub_F0F4FB
+; SoftKeyCol7_DspEffect_Exit
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29987,7 +30060,9 @@ sub_F0F4F5:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F4FB:
+; SoftKeyCol7_DspEffect_Exit: an arm of SoftKeyCol7_DspEffect_BySection -- the handler's epilogue: section(s) 4,5 do nothing on this key
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol7_DspEffect_Exit:
 	pop	xix	; F0F4FB  pop XIX
 	ret	; F0F4FC  ret
 
@@ -30009,18 +30084,18 @@ sub_F0F4FB:
 ; SoftKeyCol8_DspEffect: slot 7 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the SoftKeyCol8 handler (notes/prom_ab_slot23_button_names.py).
 SoftKeyCol8_DspEffect:
-	ld	bc, (10128:16)	; F0F4FD  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F4FD  ld BC,(0x2790)
 	extz	bc	; F0F501  extz BC
 	extz	xbc	; F0F503  extz XBC
 	cp	bc, 5:i3	; F0F505  cp BC,5
 	jr	ugt, DispatchTable_F0F516_Nop0	; F0F507  jr UGT,0xf0f535
 	sll	bc, 2	; F0F509  sll 0x02,BC
-	add	xbc, DispatchTable_F0F516	; F0F50C  add XBC,0x00f0f516
+	add	xbc, SoftKeyCol8_DspEffect_BySection	; F0F50C  add XBC,0x00f0f516
 	ld	xbc, (xbc)	; F0F512  ld XBC,(XBC)
 	jp	(xbc)	; F0F514  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F516 -- 6 32-bit words, every one an address in
+; SoftKeyCol8_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  2
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30041,17 +30116,19 @@ SoftKeyCol8_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F516:
+; SoftKeyCol8_DspEffect_BySection: SoftKeyCol8_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol8_DspEffect_BySection:
 	.long	DispatchTable_F0F516_Nop0	; F0F516  [0] -> DispatchTable_F0F516_Nop0
-	.long	sub_F0F52E	; F0F51A  [1] -> sub_F0F52E
-	.long	sub_F0F52E	; F0F51E  [2] -> sub_F0F52E
-	.long	sub_F0F52E	; F0F522  [3] -> sub_F0F52E
+	.long	SoftKeyCol8_DspEffect_ParamSections	; F0F51A  [1] -> SoftKeyCol8_DspEffect_ParamSections
+	.long	SoftKeyCol8_DspEffect_ParamSections	; F0F51E  [2] -> SoftKeyCol8_DspEffect_ParamSections
+	.long	SoftKeyCol8_DspEffect_ParamSections	; F0F522  [3] -> SoftKeyCol8_DspEffect_ParamSections
 	.long	DispatchTable_F0F516_Nop0	; F0F526  [4] -> DispatchTable_F0F516_Nop0
 	.long	DispatchTable_F0F516_Nop0	; F0F52A  [5] -> DispatchTable_F0F516_Nop0
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F52E
+; SoftKeyCol8_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791)
@@ -30066,7 +30143,9 @@ DispatchTable_F0F516:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F52E:
+; SoftKeyCol8_DspEffect_ParamSections: an arm of SoftKeyCol8_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+SoftKeyCol8_DspEffect_ParamSections:
 	calr	DspEffect_StepCursorValue	; F0F52E  calr 0xf1069a
 	m_set 0, MD16, 0x2791	; F0F531  set 0,(0x2791)
 
@@ -30109,18 +30188,18 @@ LcdKeyRow1_DspEffect:
 	ld	c, (PanelEvent_Flags:16)	; F0F536  ld C,(0x28b0)
 	and	c, 1	; F0F53A  and C,0x01
 	jr	z, sub_F0F579_Skip	; F0F53D  jr Z,0xf0f59b
-	ld	bc, (10128:16)	; F0F53F  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F53F  ld BC,(0x2790)
 	extz	bc	; F0F543  extz BC
 	extz	xbc	; F0F545  extz XBC
 	cp	bc, 5:i3	; F0F547  cp BC,5
 	jr	ugt, DispatchTable_F0F558_Nop4	; F0F549  jr UGT,0xf0f59e
 	sll	bc, 2	; F0F54B  sll 0x02,BC
-	add	xbc, DispatchTable_F0F558	; F0F54E  add XBC,0x00f0f558
+	add	xbc, LcdKeyRow1_DspEffect_BySection	; F0F54E  add XBC,0x00f0f558
 	ld	xbc, (xbc)	; F0F554  ld XBC,(XBC)
 	jp	(xbc)	; F0F556  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F558 -- 6 32-bit words, every one an address in
+; LcdKeyRow1_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30143,17 +30222,19 @@ LcdKeyRow1_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F558:
-	.long	sub_F0F570	; F0F558  [0] -> sub_F0F570
-	.long	sub_F0F579	; F0F55C  [1] -> sub_F0F579
-	.long	sub_F0F579	; F0F560  [2] -> sub_F0F579
-	.long	sub_F0F579	; F0F564  [3] -> sub_F0F579
+; LcdKeyRow1_DspEffect_BySection: LcdKeyRow1_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow1_DspEffect_BySection:
+	.long	LcdKeyRow1_DspEffect_Section0	; F0F558  [0] -> LcdKeyRow1_DspEffect_Section0
+	.long	LcdKeyRow1_DspEffect_ParamSections	; F0F55C  [1] -> LcdKeyRow1_DspEffect_ParamSections
+	.long	LcdKeyRow1_DspEffect_ParamSections	; F0F560  [2] -> LcdKeyRow1_DspEffect_ParamSections
+	.long	LcdKeyRow1_DspEffect_ParamSections	; F0F564  [3] -> LcdKeyRow1_DspEffect_ParamSections
 	.long	DispatchTable_F0F558_Nop4	; F0F568  [4] -> DispatchTable_F0F558_Nop4
 	.long	DispatchTable_F0F558_Nop4	; F0F56C  [5] -> DispatchTable_F0F558_Nop4
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F570
+; LcdKeyRow1_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791)
@@ -30168,13 +30249,15 @@ DispatchTable_F0F558:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F570:
+; LcdKeyRow1_DspEffect_Section0: an arm of LcdKeyRow1_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow1_DspEffect_Section0:
 	calr	sub_F10175	; F0F570  calr 0xf10175
 	m_set 0, MD16, 0x2791	; F0F573  set 0,(0x2791)
 	jr	DispatchTable_F0F558_Nop4	; F0F577  jr T,0xf0f59e
 
 ; --------------------------------------------------------------------------
-; sub_F0F579
+; LcdKeyRow1_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2797)
@@ -30189,7 +30272,9 @@ sub_F0F570:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F579:
+; LcdKeyRow1_DspEffect_ParamSections: an arm of LcdKeyRow1_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow1_DspEffect_ParamSections:
 	ld	bc, (Effect_BlockIndex:16)	; F0F579  ld BC,(0x2797)
 	extz	bc	; F0F57D  extz BC
 	add	bc, 97	; F0F57F  add BC,0x0061
@@ -30244,18 +30329,18 @@ DispatchTable_F0F558_Nop4:
 LcdKeyRow2_DspEffect:
 	pushw	hl	; F0F59F  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F5A0  ld H,(0x28b0)
-	ld	bc, (10128:16)	; F0F5A4  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F5A4  ld BC,(0x2790)
 	extz	bc	; F0F5A8  extz BC
 	extz	xbc	; F0F5AA  extz XBC
 	cp	bc, 5:i3	; F0F5AC  cp BC,5
-	jrl	ugt, sub_F0F61E	; F0F5AE  jrl UGT,0xf0f61e
+	jrl	ugt, LcdKeyRow2_DspEffect_Exit	; F0F5AE  jrl UGT,0xf0f61e
 	sll	bc, 2	; F0F5B1  sll 0x02,BC
-	add	xbc, DispatchTable_F0F5BE	; F0F5B4  add XBC,0x00f0f5be
+	add	xbc, LcdKeyRow2_DspEffect_BySection	; F0F5B4  add XBC,0x00f0f5be
 	ld	xbc, (xbc)	; F0F5BA  ld XBC,(XBC)
 	jp	(xbc)	; F0F5BC  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F5BE -- 6 32-bit words, every one an address in
+; LcdKeyRow2_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  6
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30276,17 +30361,19 @@ LcdKeyRow2_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F5BE:
-	.long	sub_F0F5D6	; F0F5BE  [0] -> sub_F0F5D6
-	.long	sub_F0F5ED	; F0F5C2  [1] -> sub_F0F5ED
-	.long	sub_F0F5F6	; F0F5C6  [2] -> sub_F0F5F6
-	.long	sub_F0F5FF	; F0F5CA  [3] -> sub_F0F5FF
-	.long	sub_F0F61E	; F0F5CE  [4] -> sub_F0F61E
-	.long	sub_F0F610	; F0F5D2  [5] -> sub_F0F610
+; LcdKeyRow2_DspEffect_BySection: LcdKeyRow2_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_BySection:
+	.long	LcdKeyRow2_DspEffect_Section0	; F0F5BE  [0] -> LcdKeyRow2_DspEffect_Section0
+	.long	LcdKeyRow2_DspEffect_Section1	; F0F5C2  [1] -> LcdKeyRow2_DspEffect_Section1
+	.long	LcdKeyRow2_DspEffect_Section2	; F0F5C6  [2] -> LcdKeyRow2_DspEffect_Section2
+	.long	LcdKeyRow2_DspEffect_Section3	; F0F5CA  [3] -> LcdKeyRow2_DspEffect_Section3
+	.long	LcdKeyRow2_DspEffect_Exit	; F0F5CE  [4] -> LcdKeyRow2_DspEffect_Exit
+	.long	LcdKeyRow2_DspEffect_Section5	; F0F5D2  [5] -> LcdKeyRow2_DspEffect_Section5
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F5D6
+; LcdKeyRow2_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2071) (0x2797) (0x2798)
@@ -30300,17 +30387,19 @@ DispatchTable_F0F5BE:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F5D6:
+; LcdKeyRow2_DspEffect_Section0: an arm of LcdKeyRow2_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Section0:
 	ld	c, h	; F0F5D6  ld C,H
 	and	c, 1	; F0F5D8  and C,0x01
 	jr	z, sub_F0F5FF_Skip	; F0F5DB  jr Z,0xf0f60b
 	ld	(Effect_BlockIndex:16), 0	; F0F5DD  ld (0x2797),0x00
 	m_set 4, MD16, UI_Request_Hi	; F0F5E2  set 4,(0x2071)
 	ld	(10136:16), 0	; F0F5E6  ld (0x2798),0x00
-	jr	sub_F0F61E	; F0F5EB  jr T,0xf0f61e
+	jr	LcdKeyRow2_DspEffect_Exit	; F0F5EB  jr T,0xf0f61e
 
 ; --------------------------------------------------------------------------
-; sub_F0F5ED
+; LcdKeyRow2_DspEffect_Section1
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30324,14 +30413,16 @@ sub_F0F5D6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F5ED:
+; LcdKeyRow2_DspEffect_Section1: an arm of LcdKeyRow2_DspEffect_BySection -- what it does when DspEffect_Section is 1
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Section1:
 	ld	c, h	; F0F5ED  ld C,H
 	and	c, 1	; F0F5EF  and C,0x01
-	jr	z, sub_F0F61E	; F0F5F2  jr Z,0xf0f61e
+	jr	z, LcdKeyRow2_DspEffect_Exit	; F0F5F2  jr Z,0xf0f61e
 	jr	sub_F0F610_Join	; F0F5F4  jr T,0xf0f617
 
 ; --------------------------------------------------------------------------
-; sub_F0F5F6
+; LcdKeyRow2_DspEffect_Section2
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30345,14 +30436,16 @@ sub_F0F5ED:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F5F6:
+; LcdKeyRow2_DspEffect_Section2: an arm of LcdKeyRow2_DspEffect_BySection -- what it does when DspEffect_Section is 2
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Section2:
 	ld	c, h	; F0F5F6  ld C,H
 	and	c, 1	; F0F5F8  and C,0x01
 	jr	z, sub_F0F5FF_Skip	; F0F5FB  jr Z,0xf0f60b
-	jr	sub_F0F61E	; F0F5FD  jr T,0xf0f61e
+	jr	LcdKeyRow2_DspEffect_Exit	; F0F5FD  jr T,0xf0f61e
 
 ; --------------------------------------------------------------------------
-; sub_F0F5FF
+; LcdKeyRow2_DspEffect_Section3
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30366,7 +30459,9 @@ sub_F0F5F6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F5FF:
+; LcdKeyRow2_DspEffect_Section3: an arm of LcdKeyRow2_DspEffect_BySection -- what it does when DspEffect_Section is 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Section3:
 	ld	c, h	; F0F5FF  ld C,H
 	and	c, 1	; F0F601  and C,0x01
 	jr	z, sub_F0F5FF_Skip	; F0F604  jr Z,0xf0f60b
@@ -30377,11 +30472,11 @@ sub_F0F5FF_Skip:
 	jr	sub_F0F610_Join2	; F0F60E  jr T,0xf0f61a
 
 ; --------------------------------------------------------------------------
-; sub_F0F610
+; LcdKeyRow2_DspEffect_Section5
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0F02B
+; Calls:   DspEffect_SetSectionAndRepaint
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30392,18 +30487,20 @@ sub_F0F5FF_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F610:
+; LcdKeyRow2_DspEffect_Section5: an arm of LcdKeyRow2_DspEffect_BySection -- what it does when DspEffect_Section is 5
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Section5:
 	ld	c, h	; F0F610  ld C,H
 	and	c, 1	; F0F612  and C,0x01
-	jr	nz, sub_F0F61E	; F0F615  jr NZ,0xf0f61e
+	jr	nz, LcdKeyRow2_DspEffect_Exit	; F0F615  jr NZ,0xf0f61e
 sub_F0F610_Join:
 	pushw	4	; F0F617  push 0x0004
 sub_F0F610_Join2:
-	calr	sub_F0F02B	; F0F61A  calr 0xf0f02b
+	calr	DspEffect_SetSectionAndRepaint	; F0F61A  calr 0xf0f02b
 	popw	bc	; F0F61D  pop BC
 
 ; --------------------------------------------------------------------------
-; sub_F0F61E
+; LcdKeyRow2_DspEffect_Exit
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30417,7 +30514,9 @@ sub_F0F610_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F61E:
+; LcdKeyRow2_DspEffect_Exit: an arm of LcdKeyRow2_DspEffect_BySection -- the handler's epilogue: section(s) 4 do nothing on this key
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow2_DspEffect_Exit:
 	popw	hl	; F0F61E  pop HL
 	ret	; F0F61F  ret
 
@@ -30441,18 +30540,18 @@ sub_F0F61E:
 LcdKeyRow3_DspEffect:
 	pushw	hl	; F0F620  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F621  ld H,(0x28b0)
-	ld	bc, (10128:16)	; F0F625  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F625  ld BC,(0x2790)
 	extz	bc	; F0F629  extz BC
 	extz	xbc	; F0F62B  extz XBC
 	cp	bc, 5:i3	; F0F62D  cp BC,5
-	jr	ugt, sub_F0F684	; F0F62F  jr UGT,0xf0f684
+	jr	ugt, LcdKeyRow3_DspEffect_Exit	; F0F62F  jr UGT,0xf0f684
 	sll	bc, 2	; F0F631  sll 0x02,BC
-	add	xbc, DispatchTable_F0F63E	; F0F634  add XBC,0x00f0f63e
+	add	xbc, LcdKeyRow3_DspEffect_BySection	; F0F634  add XBC,0x00f0f63e
 	ld	xbc, (xbc)	; F0F63A  ld XBC,(XBC)
 	jp	(xbc)	; F0F63C  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F63E -- 6 32-bit words, every one an address in
+; LcdKeyRow3_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  4
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30473,17 +30572,19 @@ LcdKeyRow3_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F63E:
-	.long	sub_F0F656	; F0F63E  [0] -> sub_F0F656
-	.long	sub_F0F66D	; F0F642  [1] -> sub_F0F66D
-	.long	sub_F0F684	; F0F646  [2] -> sub_F0F684
-	.long	sub_F0F676	; F0F64A  [3] -> sub_F0F676
-	.long	sub_F0F684	; F0F64E  [4] -> sub_F0F684
-	.long	sub_F0F684	; F0F652  [5] -> sub_F0F684
+; LcdKeyRow3_DspEffect_BySection: LcdKeyRow3_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow3_DspEffect_BySection:
+	.long	LcdKeyRow3_DspEffect_Section0	; F0F63E  [0] -> LcdKeyRow3_DspEffect_Section0
+	.long	LcdKeyRow3_DspEffect_Section1	; F0F642  [1] -> LcdKeyRow3_DspEffect_Section1
+	.long	LcdKeyRow3_DspEffect_Exit	; F0F646  [2] -> LcdKeyRow3_DspEffect_Exit
+	.long	LcdKeyRow3_DspEffect_Section3	; F0F64A  [3] -> LcdKeyRow3_DspEffect_Section3
+	.long	LcdKeyRow3_DspEffect_Exit	; F0F64E  [4] -> LcdKeyRow3_DspEffect_Exit
+	.long	LcdKeyRow3_DspEffect_Exit	; F0F652  [5] -> LcdKeyRow3_DspEffect_Exit
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F656
+; LcdKeyRow3_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2071) (0x2797) (0x2798)
@@ -30497,17 +30598,19 @@ DispatchTable_F0F63E:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F656:
+; LcdKeyRow3_DspEffect_Section0: an arm of LcdKeyRow3_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow3_DspEffect_Section0:
 	ld	c, h	; F0F656  ld C,H
 	and	c, 1	; F0F658  and C,0x01
 	jr	z, sub_F0F676_Skip	; F0F65B  jr Z,0xf0f67d
 	ld	(Effect_BlockIndex:16), 1	; F0F65D  ld (0x2797),0x01
 	ld	(10136:16), 0	; F0F662  ld (0x2798),0x00
 	m_set 4, MD16, UI_Request_Hi	; F0F667  set 4,(0x2071)
-	jr	sub_F0F684	; F0F66B  jr T,0xf0f684
+	jr	LcdKeyRow3_DspEffect_Exit	; F0F66B  jr T,0xf0f684
 
 ; --------------------------------------------------------------------------
-; sub_F0F66D
+; LcdKeyRow3_DspEffect_Section1
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30521,18 +30624,20 @@ sub_F0F656:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F66D:
+; LcdKeyRow3_DspEffect_Section1: an arm of LcdKeyRow3_DspEffect_BySection -- what it does when DspEffect_Section is 1
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow3_DspEffect_Section1:
 	ld	c, h	; F0F66D  ld C,H
 	and	c, 1	; F0F66F  and C,0x01
 	jr	z, sub_F0F676_Skip	; F0F672  jr Z,0xf0f67d
-	jr	sub_F0F684	; F0F674  jr T,0xf0f684
+	jr	LcdKeyRow3_DspEffect_Exit	; F0F674  jr T,0xf0f684
 
 ; --------------------------------------------------------------------------
-; sub_F0F676
+; LcdKeyRow3_DspEffect_Section3
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0F02B
+; Calls:   DspEffect_SetSectionAndRepaint
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30543,17 +30648,19 @@ sub_F0F66D:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F676:
+; LcdKeyRow3_DspEffect_Section3: an arm of LcdKeyRow3_DspEffect_BySection -- what it does when DspEffect_Section is 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow3_DspEffect_Section3:
 	ld	c, h	; F0F676  ld C,H
 	and	c, 1	; F0F678  and C,0x01
-	jr	nz, sub_F0F684	; F0F67B  jr NZ,0xf0f684
+	jr	nz, LcdKeyRow3_DspEffect_Exit	; F0F67B  jr NZ,0xf0f684
 sub_F0F676_Skip:
 	pushw	2	; F0F67D  push 0x0002
-	calr	sub_F0F02B	; F0F680  calr 0xf0f02b
+	calr	DspEffect_SetSectionAndRepaint	; F0F680  calr 0xf0f02b
 	popw	bc	; F0F683  pop BC
 
 ; --------------------------------------------------------------------------
-; sub_F0F684
+; LcdKeyRow3_DspEffect_Exit
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30567,7 +30674,9 @@ sub_F0F676_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F684:
+; LcdKeyRow3_DspEffect_Exit: an arm of LcdKeyRow3_DspEffect_BySection -- the handler's epilogue: section(s) 2,4,5 do nothing on this key
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow3_DspEffect_Exit:
 	popw	hl	; F0F684  pop HL
 	ret	; F0F685  ret
 
@@ -30591,18 +30700,18 @@ sub_F0F684:
 LcdKeyRow4_DspEffect:
 	pushw	hl	; F0F686  push HL
 	ld	h, (PanelEvent_Flags:16)	; F0F687  ld H,(0x28b0)
-	ld	bc, (10128:16)	; F0F68B  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F68B  ld BC,(0x2790)
 	extz	bc	; F0F68F  extz BC
 	extz	xbc	; F0F691  extz XBC
 	cp	bc, 5:i3	; F0F693  cp BC,5
-	jr	ugt, sub_F0F6ED	; F0F695  jr UGT,0xf0f6ed
+	jr	ugt, LcdKeyRow4_DspEffect_Exit	; F0F695  jr UGT,0xf0f6ed
 	sll	bc, 2	; F0F697  sll 0x02,BC
-	add	xbc, DispatchTable_F0F6A4	; F0F69A  add XBC,0x00f0f6a4
+	add	xbc, LcdKeyRow4_DspEffect_BySection	; F0F69A  add XBC,0x00f0f6a4
 	ld	xbc, (xbc)	; F0F6A0  ld XBC,(XBC)
 	jp	(xbc)	; F0F6A2  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F6A4 -- 6 32-bit words, every one an address in
+; LcdKeyRow4_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  4
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30623,17 +30732,19 @@ LcdKeyRow4_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F6A4:
-	.long	sub_F0F6BC	; F0F6A4  [0] -> sub_F0F6BC
-	.long	sub_F0F6D3	; F0F6A8  [1] -> sub_F0F6D3
-	.long	sub_F0F6D3	; F0F6AC  [2] -> sub_F0F6D3
-	.long	sub_F0F6ED	; F0F6B0  [3] -> sub_F0F6ED
-	.long	sub_F0F6DF	; F0F6B4  [4] -> sub_F0F6DF
-	.long	sub_F0F6ED	; F0F6B8  [5] -> sub_F0F6ED
+; LcdKeyRow4_DspEffect_BySection: LcdKeyRow4_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow4_DspEffect_BySection:
+	.long	LcdKeyRow4_DspEffect_Section0	; F0F6A4  [0] -> LcdKeyRow4_DspEffect_Section0
+	.long	LcdKeyRow4_DspEffect_Sections12	; F0F6A8  [1] -> LcdKeyRow4_DspEffect_Sections12
+	.long	LcdKeyRow4_DspEffect_Sections12	; F0F6AC  [2] -> LcdKeyRow4_DspEffect_Sections12
+	.long	LcdKeyRow4_DspEffect_Exit	; F0F6B0  [3] -> LcdKeyRow4_DspEffect_Exit
+	.long	LcdKeyRow4_DspEffect_Section4	; F0F6B4  [4] -> LcdKeyRow4_DspEffect_Section4
+	.long	LcdKeyRow4_DspEffect_Exit	; F0F6B8  [5] -> LcdKeyRow4_DspEffect_Exit
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F6BC
+; LcdKeyRow4_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2071) (0x2797) (0x2798)
@@ -30647,17 +30758,19 @@ DispatchTable_F0F6A4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F6BC:
+; LcdKeyRow4_DspEffect_Section0: an arm of LcdKeyRow4_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow4_DspEffect_Section0:
 	ld	c, h	; F0F6BC  ld C,H
 	and	c, 1	; F0F6BE  and C,0x01
 	jr	z, sub_F0F6D3_Skip	; F0F6C1  jr Z,0xf0f6da
 	ld	(Effect_BlockIndex:16), 2	; F0F6C3  ld (0x2797),0x02
 	m_set 4, MD16, UI_Request_Hi	; F0F6C8  set 4,(0x2071)
 	ld	(10136:16), 0	; F0F6CC  ld (0x2798),0x00
-	jr	sub_F0F6ED	; F0F6D1  jr T,0xf0f6ed
+	jr	LcdKeyRow4_DspEffect_Exit	; F0F6D1  jr T,0xf0f6ed
 
 ; --------------------------------------------------------------------------
-; sub_F0F6D3
+; LcdKeyRow4_DspEffect_Sections12
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30671,20 +30784,22 @@ sub_F0F6BC:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F6D3:
+; LcdKeyRow4_DspEffect_Sections12: an arm of LcdKeyRow4_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow4_DspEffect_Sections12:
 	ld	c, h	; F0F6D3  ld C,H
 	and	c, 1	; F0F6D5  and C,0x01
-	jr	nz, sub_F0F6ED	; F0F6D8  jr NZ,0xf0f6ed
+	jr	nz, LcdKeyRow4_DspEffect_Exit	; F0F6D8  jr NZ,0xf0f6ed
 sub_F0F6D3_Skip:
 	pushw	3	; F0F6DA  push 0x0003
 	jr	sub_F0F6DF_Join	; F0F6DD  jr T,0xf0f6e9
 
 ; --------------------------------------------------------------------------
-; sub_F0F6DF
+; LcdKeyRow4_DspEffect_Section4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F0F02B
+; Calls:   DspEffect_SetSectionAndRepaint
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -30695,17 +30810,19 @@ sub_F0F6D3_Skip:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F6DF:
+; LcdKeyRow4_DspEffect_Section4: an arm of LcdKeyRow4_DspEffect_BySection -- what it does when DspEffect_Section is 4
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow4_DspEffect_Section4:
 	ld	c, h	; F0F6DF  ld C,H
 	and	c, 1	; F0F6E1  and C,0x01
-	jr	nz, sub_F0F6ED	; F0F6E4  jr NZ,0xf0f6ed
+	jr	nz, LcdKeyRow4_DspEffect_Exit	; F0F6E4  jr NZ,0xf0f6ed
 	pushw	5	; F0F6E6  push 0x0005
 sub_F0F6DF_Join:
-	calr	sub_F0F02B	; F0F6E9  calr 0xf0f02b
+	calr	DspEffect_SetSectionAndRepaint	; F0F6E9  calr 0xf0f02b
 	popw	bc	; F0F6EC  pop BC
 
 ; --------------------------------------------------------------------------
-; sub_F0F6ED
+; LcdKeyRow4_DspEffect_Exit
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -30719,7 +30836,9 @@ sub_F0F6DF_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F6ED:
+; LcdKeyRow4_DspEffect_Exit: an arm of LcdKeyRow4_DspEffect_BySection -- the handler's epilogue: section(s) 3,5 do nothing on this key
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow4_DspEffect_Exit:
 	popw	hl	; F0F6ED  pop HL
 	ret	; F0F6EE  ret
 
@@ -30741,18 +30860,18 @@ sub_F0F6ED:
 ; LcdKeyRow5_DspEffect: slot 12 of DispatchTable_F135FD, the 23-slot button table ScreenButtonBody_DspEffect dispatches through
 ;   T_PanelCode_ToSlotAndFlags -- the LcdKeyRow5 handler (notes/prom_ab_slot23_button_names.py).
 LcdKeyRow5_DspEffect:
-	ld	bc, (10128:16)	; F0F6EF  ld BC,(0x2790)
+	ld	bc, (DspEffect_Section:16)	; F0F6EF  ld BC,(0x2790)
 	extz	bc	; F0F6F3  extz BC
 	extz	xbc	; F0F6F5  extz XBC
 	cp	bc, 5:i3	; F0F6F7  cp BC,5
 	jr	ugt, DispatchTable_F0F708_Nop4	; F0F6F9  jr UGT,0xf0f75a
 	sll	bc, 2	; F0F6FB  sll 0x02,BC
-	add	xbc, DispatchTable_F0F708	; F0F6FE  add XBC,0x00f0f708
+	add	xbc, LcdKeyRow5_DspEffect_BySection	; F0F6FE  add XBC,0x00f0f708
 	ld	xbc, (xbc)	; F0F704  ld XBC,(XBC)
 	jp	(xbc)	; F0F706  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F0F708 -- 6 32-bit words, every one an address in
+; LcdKeyRow5_DspEffect_BySection -- 6 32-bit words, every one an address in
 ;                         0x00F00000-0x00F7FFFF, i.e. inside this image.  3
 ;                         distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                         classes it TRANSFER.
@@ -30773,17 +30892,19 @@ LcdKeyRow5_DspEffect:
 ;           image (`--null-stride`).
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
-DispatchTable_F0F708:
-	.long	sub_F0F720	; F0F708  [0] -> sub_F0F720
-	.long	sub_F0F74A	; F0F70C  [1] -> sub_F0F74A
-	.long	sub_F0F74A	; F0F710  [2] -> sub_F0F74A
-	.long	sub_F0F74A	; F0F714  [3] -> sub_F0F74A
+; LcdKeyRow5_DspEffect_BySection: LcdKeyRow5_DspEffect's switch on DspEffect_Section (0..5), one arm per section
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow5_DspEffect_BySection:
+	.long	LcdKeyRow5_DspEffect_Section0	; F0F708  [0] -> LcdKeyRow5_DspEffect_Section0
+	.long	LcdKeyRow5_DspEffect_ParamSections	; F0F70C  [1] -> LcdKeyRow5_DspEffect_ParamSections
+	.long	LcdKeyRow5_DspEffect_ParamSections	; F0F710  [2] -> LcdKeyRow5_DspEffect_ParamSections
+	.long	LcdKeyRow5_DspEffect_ParamSections	; F0F714  [3] -> LcdKeyRow5_DspEffect_ParamSections
 	.long	DispatchTable_F0F708_Nop4	; F0F718  [4] -> DispatchTable_F0F708_Nop4
 	.long	DispatchTable_F0F708_Nop4	; F0F71C  [5] -> DispatchTable_F0F708_Nop4
 
 
 ; --------------------------------------------------------------------------
-; sub_F0F720
+; LcdKeyRow5_DspEffect_Section0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2071) (0x2076) (0x2798) (0x28B0)
@@ -30798,7 +30919,9 @@ DispatchTable_F0F708:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F720:
+; LcdKeyRow5_DspEffect_Section0: an arm of LcdKeyRow5_DspEffect_BySection -- what it does when DspEffect_Section is 0
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow5_DspEffect_Section0:
 	ld	c, (PanelEvent_Flags:16)	; F0F720  ld C,(0x28b0)
 	and	c, 1	; F0F724  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F727  jr Z,0xf0f75a
@@ -30814,7 +30937,7 @@ sub_F0F720:
 	jr	DispatchTable_F0F708_Nop4	; F0F748  jr T,0xf0f75a
 
 ; --------------------------------------------------------------------------
-; sub_F0F74A
+; LcdKeyRow5_DspEffect_ParamSections
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2791) (0x28B0)
@@ -30829,7 +30952,9 @@ sub_F0F720:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0F74A:
+; LcdKeyRow5_DspEffect_ParamSections: an arm of LcdKeyRow5_DspEffect_BySection -- what it does when DspEffect_Section is 1 or 2 or 3
+;   (notes/prom_b_dsp_effect_section_arms.py).
+LcdKeyRow5_DspEffect_ParamSections:
 	ld	c, (PanelEvent_Flags:16)	; F0F74A  ld C,(0x28b0)
 	and	c, 1	; F0F74E  and C,0x01
 	jr	z, DispatchTable_F0F708_Nop4	; F0F751  jr Z,0xf0f75a
@@ -31681,7 +31806,7 @@ sub_F0FE8F_Resume:
 	push	xbc	; F0FEAE  push XBC
 	call	T_DisplayListB_RunOne_Stack	; F0FEAF  call 0xf42e0c
 	ld	(LCD_CurrentLayer:16), 1	; F0FEB3  ld (0x2540),0x01
-	m_ld_m16m MB16, 0x2790, UI_DrawScratch	; F0FEB8  ld (0x2640),(0x2790)
+	m_ld_m16m MB16, DspEffect_Section, UI_DrawScratch	; F0FEB8  ld (0x2640),(0x2790)
 	lda	xbc, (DL_F146A6:24)	; F0FEBE  lda XBC,0xf146a6
 	push	xbc	; F0FEC3  push XBC
 	lda	xwa, (DL_F1469B:24)	; F0FEC4  lda XWA,0xf1469b
@@ -32173,7 +32298,7 @@ sub_F10222_Return:
 	ret	; F10251  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10252
+; DspEffect_StepEqBandFc
 ; Called from: in-module: 0xF0F31B 0xF0F430 0xF12374 0xF1239E
 ; Touches: (0x2075) (0x207C) (0x2797) (0x28B0)
 ; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
@@ -32185,7 +32310,11 @@ sub_F10222_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F10252:
+; DspEffect_StepEqBandFc: (which, offset 17 / 19): steps the Fc field (bits 6..10) of the EQ word at block+offset by 1, or 2 with
+;   PanelEvent_Flags bit 2, down with bit 0; limits max(Fc(+17), 8)..26 for the band at +19 (which = 1) or
+;   0..min(Fc(+19), 22) for the band at +17 (which = 0) -- the limits DspEffect_RepairEqBandFc checks.  Offsets 1 / 3 when UI_ScreenId is 0x6B.
+;   Called by SoftKeyCol2/5_DspEffect_EqSections.
+DspEffect_StepEqBandFc:
 	link XIZ,0xfff6	; F10252  link XIZ,0xfff6
 	pushw	hl	; F10256  push HL
 	pushw	de	; F10257  push DE
@@ -33833,7 +33962,7 @@ EffectEditor_PaintJob5_Resume2:
 EffectEditor_PaintJob5_Resume3:
 	inc	8, xsp	; F10E0F  inc 0,XSP
 	inc	8, xsp	; F10E11  inc 0,XSP
-	m_cp_mi8 MB16, 0x2790, 0x02	; F10E13  cp (0x2790),0x02
+	m_cp_mi8 MB16, DspEffect_Section, 0x02	; F10E13  cp (0x2790),0x02
 	jr	z, EffectEditor_PaintJob5_Join	; F10E18  jr Z,0xf10e30
 	lda	xbc, (Data_F13D48 + 0x184:24)	; F10E1A  lda XBC,0xf13ecc
 	push	xbc	; F10E1F  push XBC
@@ -33883,7 +34012,7 @@ EffectEditor_PaintJob5_Resume7:
 	jp	(xix)	; F10E93  jp T,XIX
 EffectEditor_PaintJob5_Resume8:
 	ld	(LCD_CurrentLayer:16), 1	; F10E95  ld (0x2540),0x01
-	m_ld_m16m MB16, 0x2790, UI_DrawScratch	; F10E9A  ld (0x2640),(0x2790)
+	m_ld_m16m MB16, DspEffect_Section, UI_DrawScratch	; F10E9A  ld (0x2640),(0x2790)
 	lda	xbc, (DL_F146A6:24)	; F10EA0  lda XBC,0xf146a6
 	push	xbc	; F10EA5  push XBC
 	lda	xwa, (DL_F1469B:24)	; F10EA6  lda XWA,0xf1469b
@@ -36764,7 +36893,7 @@ sub_F1195A_Return:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
-; Calls:   sub_F10252
+; Calls:   DspEffect_StepEqBandFc
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -36780,7 +36909,7 @@ sub_F1195A_Return:
 SoftKeyCol2_MainOutEqualizer:
 	pushw	1	; F1236E  push 0x0001
 	pushw	0	; F12371  push 0x0000
-	calr	sub_F10252	; F12374  calr 0xf10252
+	calr	DspEffect_StepEqBandFc	; F12374  calr 0xf10252
 	ld	(PanelDial_DownButton:16), 129	; F12377  ld (0x209b),0x81  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 1	; F1237C  ld (0x209c),0x01  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F12381  pop XBC
@@ -36818,7 +36947,7 @@ SoftKeyCol3_MainOutEqualizer:
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x209B) (0x209C)
-; Calls:   sub_F10252
+; Calls:   DspEffect_StepEqBandFc
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -36834,7 +36963,7 @@ SoftKeyCol3_MainOutEqualizer:
 SoftKeyCol5_MainOutEqualizer:
 	pushw	3	; F12398  push 0x0003
 	pushw	1	; F1239B  push 0x0001
-	calr	sub_F10252	; F1239E  calr 0xf10252
+	calr	DspEffect_StepEqBandFc	; F1239E  calr 0xf10252
 	ld	(PanelDial_DownButton:16), 132	; F123A1  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(PanelDial_UpButton:16), 4	; F123A6  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xbc	; F123AB  pop XBC
@@ -38620,7 +38749,7 @@ EffectPosToAlgo_Block99:
 	.byte	0xff	; F135F6  end of list
 ;--------------------------------------------------------------------------
 ; EffectPage_BlockIndex -- 0xF135F7, 6 bytes indexed by (0x2790).
-; Read by: sub_F0F047 (0xF0F047): when (0x2790) is non-zero, `add XBC,this /
+; Read by: DspEffect_SelectSectionBlock (0xF0F047): when (0x2790) is non-zero, `add XBC,this /
 ;   ld (0x2797),(XBC)` -- so the byte is the effect-block index (0..2, entry
 ;   97 + it) the page numbered (0x2790) edits.  Entry 0 is never read (the
 ;   routine returns first when (0x2790) is 0).
@@ -90931,9 +91060,9 @@ T_F42EFC:	jp sub_F67479  ; -> prom_b 0x67479   x2
 T_F42F00:	jp sub_F67488  ; -> prom_b 0x67488
 T_F42F04:	jp sub_F693F6  ; -> prom_b 0x693F6   x1
 	.fill 0x38, 1, 0x0E  ; 0xF42F08: 56 x ret
-T_F42F40:	jp sub_F0F018  ; -> prom_b 0x0F018
-T_F42F44:	jp sub_F0F02B  ; -> prom_b 0x0F02B
-T_F42F48:	jp sub_F0F042  ; -> prom_b 0x0F042
+T_DspEffect_SetSection:	jp DspEffect_SetSection  ; -> prom_b 0x0F018
+T_DspEffect_SetSectionAndRepaint:	jp DspEffect_SetSectionAndRepaint  ; -> prom_b 0x0F02B
+T_DspEffect_GetSection:	jp DspEffect_GetSection  ; -> prom_b 0x0F042
 T_F42F4C:	jp ScreenEnterBody_DspEffect  ; -> prom_b 0x0F105   x3
 T_F42F50:	jp ScreenButtonBody_DspEffect  ; -> prom_b 0x0F17C   x3
 T_F42F54:	jp sub_F0F061  ; -> prom_b 0x0F061

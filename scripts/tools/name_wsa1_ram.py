@@ -510,6 +510,10 @@ GROUPS = [
     ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "2. the descriptor table at 0xF12F24 is indexed by the effect algorithm number", {
         0x2796: ("Effect_Algorithm", "the effect algorithm number, 0..127: indexes the 128-entry tables at 0xF12F24 ...", "0xF10609 mul WA,(0x2796) / add XWA,0x00F12F24"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md", "7.1 `DspEffect_Section` (0x2790)", {
+        0x2790: ("DspEffect_Section", "the DSP EFFECT screen's section, 0..5: 0 no block opened, 1..3 block 0..2's parameters, 4 / 5 block 0 / 2's EQ",
+                 "every DSP EFFECT key handler switches on it (cp BC,5 / jp table); EffectPage_BlockIndex maps it to the block"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

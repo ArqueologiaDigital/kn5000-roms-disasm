@@ -46,7 +46,7 @@ unconverted extent of their targets. Its top run was
 
 | run | slots | extent | targets |
 |---|---:|---:|---|
-| `T_F42F40-T_F42F6C` | 12 | 13,084 | 0xF0F018-0xF12334 |
+| `T_DspEffect_SetSection-T_F42F6C` | 12 | 13,084 | 0xF0F018-0xF12334 |
 
 and `T_DspParam_WriteByNumber-T_DspParam_ReadByNumber` (2 slots, 0xF11C30 / 0xF1220B) points into the same
 span. The block's low end is not a guess either: `0xF0EA9F` is the target of
@@ -438,14 +438,14 @@ unconverted prom_b targets, headed by
 
 ```
   run                    slots   unc    extent    1span  spans   refs
-  T_F42F40-T_F42F6C    12    12     13084    13084      1     20   0xF0F018-0xF12334
+  T_DspEffect_SetSection-T_F42F6C    12    12     13084    13084      1     20   0xF0F018-0xF12334
   T_F42E40-T_F42E6C    12    12      4624     4624      1     16   0xF53000-0xF54210
   T_F41250-T_F41264     6     6      4091     4091      1      8   0xF36E21-0xF37E1C
   T_F40D90-T_F40E18    35    35      3365     3365      1      8   0xF55800-0xF56525
   T_F41F54-T_F421A8   150     5      2657     2657      1      0   0xF0A000-0xF0AA61
 ```
 
-The round claims exactly two runs — `T_F42F40-T_F42F6C` (12 slots) and
+The round claims exactly two runs — `T_DspEffect_SetSection-T_F42F6C` (12 slots) and
 `T_DspParam_WriteByNumber-T_DspParam_ReadByNumber` (2) — and
 
     python3 notes/prom_b_round5_frontier_delta.py

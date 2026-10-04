@@ -220,3 +220,75 @@ The generator's text and the 18 copies of it in `prom_b/wsa1_prom_b.s` were
 corrected **together**, in the same commit, so that regenerating reproduces what
 is in the source; `python3 notes/gen_prom_b_dsp_value_lists.py --selftest` still
 passes 105 checks and the byte gate still passes.
+
+## 7. The screen's selected SECTION, RAM 0x2790, and the sanitize pass (2026-10-04)
+
+### 7.1 `DspEffect_Section` (0x2790)
+
+Every key handler of the DSP EFFECT screen (`ScreenEnterBody_DspEffect`, `ExitKey_DspEffect`,
+`SoftKeyCol1..8_DspEffect`, `LcdKeyRow1..5_DspEffect`) starts with the same switch:
+
+    ld BC,(0x2790) / cp BC,5 / jr UGT <out> / sll 2,BC / add XBC,<table> / ld XBC,(XBC) / jp (XBC)
+
+So (0x2790) is a state of the screen with six values, and every key does something different in each
+one. The values:
+
+| value | what the code shows |
+|---|---|
+| 0 | no block is opened. `LcdKeyRow2/3/4_DspEffect`'s arm 0, with `PanelEvent_Flags` bit 0, sets `Effect_BlockIndex` to 0 / 1 / 2 and repaints. `SoftKeyCol3_DspEffect`'s arm 0 calls `DspEffect_StepAlgorithm`, so it steps that block's TYPE. |
+| 1..3 | the parameters of effect block 0, 1, 2. `EffectPage_BlockIndex[k]` is 0, 1, 2 (`DspEffect_SelectSectionBlock` stores it into `Effect_BlockIndex`). The arms for these sections are shared, and they call `DspEffect_MoveCursor` (SoftKeyCol2) and `DspEffect_StepCursorValue` (SoftKeyCol5): a parameter cursor. Block 0 / 1 / 2 prints as `EFF1` / `EFF2` / `REV` (`DL_F143AF`, indexed by `Effect_BlockIndex`); block 99 offers the twelve reverbs. |
+| 4, 5 | the EQ of block 0 and of block 2. `EffectPage_BlockIndex[4..5]` is 0, 2. The arms for these sections call `DspEffect_StepEqBandFc`, which steps the Fc field (bits 6..10) of the EQ word at block byte 17 or 19. Block 98, the only block without these sections, is also the block whose EQ bytes 17..20 `DspEffect_SetAlgorithm` skips. |
+
+The highlight agrees. `EffectEditor_PaintJob3` copies (0x2790) into `UI_DrawScratch`, and
+`DL_F1469B` / `DL_F146A6` then fill / erase rectangle *k* of the 8-byte table at 0xF146B1:
+
+    0: (0x29,0xDB)-(0x12A,0xE8)   1, 4: (0x10E,0x45)-(0x132,0x52)
+    2: (0x10E,0x6D)-(0x132,0x7A)  3, 5: (0x116,0x95)-(0x132,0xA2)
+
+Sections 1 and 4 share one rectangle, and so do 3 and 5. Each pair is one block (0 and 2), so the
+rectangle follows the block, not the section.
+
+The routines that write it:
+
+- `DspEffect_SetSection` (0xF0F018, thunk `T_DspEffect_SetSection`) stores the argument, runs
+  `DspEffect_SelectSectionBlock`, and sets bit 7 of (0x2791).
+- `DspEffect_SetSectionAndRepaint` (0xF0F02B) does the same and also sets `UI_Request_Hi` bit 4,
+  the in-place repaint (FINDINGS-prom_ab-screen-stage-and-flags.md).
+- `DspEffect_GetSection` (0xF0F042) returns it.
+
+⚠ Not established:
+- what section 0's bottom-row rectangle frames;
+- what `PanelEvent_Flags` bit 0 distinguishes on the LCD-row keys (it decides between "go to section 4 / 5" and "go to section 1" in `LcdKeyRow2_DspEffect`);
+- what (0x2791) bit 0 and (0x2798) are.
+
+The arms carry names by section set only, `<handler>_Section0` / `_ParamSections` / `_EqSections` /
+`_Section<k>` / `_Exit`, from `notes/prom_b_dsp_effect_section_arms.py`.
+
+### 7.2 The sanitize pass (`DspEffect_SanitizeBlock`)
+
+prom_a's `ParamImage_SanitizeAll` calls `T_DspEffect_SanitizeBlock` on records 0x61 and 0x63.
+
+- `DspEffect_SanitizeBlock` checks the block's algorithm against its `EffectAlgoToPos_BlockNN`.
+  - An algorithm the block does not offer falls back to 1 / 35 / 20 through
+    `DspEffect_CopyAlgorithmDefaults`, the unqueued copy `DspEffect_SetAlgorithm` makes.
+  - Otherwise `DspEffect_RepairParams` builds the algorithm's defaults in a local, then walks
+    `EffectParamDescriptors_F12F24[algorithm]` and calls `DspEffect_RepairValueTable[type]` for each
+    parameter.
+- That table is array 3 of the four type-indexed arrays. It has the same columns as the
+  `DspEffect_Step*` array and `DspEffect_LoadValueTable`.
+- Each repair routine compares the field with `EffectValueRanges[type]` (min, max) and, when it is
+  outside, copies the default's field.
+- After the per-parameter pass, `DspEffect_RepairEqBandFc` and `DspEffect_RepairEqBandGain` check the
+  two EQ words:
+  - the band at +17 may not pass the band at +19;
+  - the gain must be 0..48;
+  - if either check fails, all four bytes 17..20 are restored together.
+- Last, byte 22 must name one of the algorithm's parameters (descriptor byte +3), or it gets the
+  default.
+- Byte 21 above 99 becomes 35, and byte 23 above 1 becomes 0.
+  - Byte 23 is the block's on/off. `DL_F14432` prints `EFF1` / `EFF2` / `REV` / `EQ1` / `EQ2`, or
+    `----` in place of each, from bit 0 of 0x7659 / 0x7679 / 0x7699 / 0x7659 / 0x7699. Those are byte 23
+    of blocks 97 / 98 / 99 / 97 / 99, so `EQ1` shows block 0's switch and `EQ2` shows block 2's. That
+    is the same pairing as sections 4 and 5 in 7.1.
+
+Evidence per routine: the rows of `notes/prom_ab_read_names_2026_10_04.py`.

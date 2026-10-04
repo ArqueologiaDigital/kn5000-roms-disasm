@@ -828,6 +828,23 @@ ROWS = [
      "type 5 (G): the field word & 0x003F outside min..max is replaced by the defaults' field."),
     ("F11C10", "DspEffect_RepairSlowFast",
      "type 0x0B (SLOW/FAST): re-pushes its arguments and calls DspEffect_RepairU8."),
+    # prom_b 0xF0F018-0xF0F060 and 0xF10252: the DSP EFFECT screen's section (FINDINGS-prom_b-dsp-effect-parameters.md 7.1)
+    ("F0F018", "DspEffect_SetSection",
+     "DspEffect_Section = the argument byte, DspEffect_SelectSectionBlock, then (0x2791) |= 0x80.  Thunk T_DspEffect_SetSection;\n"
+     "called in-module by ScreenEnterBody_DspEffect."),
+    ("F0F02B", "DspEffect_SetSectionAndRepaint",
+     "the same as DspEffect_SetSection, plus UI_Request_Hi bit 4 (repaint the current screen in place,\n"
+     "FINDINGS-prom_ab-screen-stage-and-flags.md).  Called by the ExitKey / LcdKeyRow2..4 _DspEffect arms."),
+    ("F0F042", "DspEffect_GetSection",
+     "`ld A,(DspEffect_Section) / ret`.  Thunk T_DspEffect_GetSection."),
+    ("F0F047", "DspEffect_SelectSectionBlock",
+     "when DspEffect_Section is not 0: Effect_BlockIndex = EffectPage_BlockIndex[DspEffect_Section] -- the block\n"
+     "(0..2, IndexedTable entry 97 + it) the section edits."),
+    ("F10252", "DspEffect_StepEqBandFc",
+     "(which, offset 17 / 19): steps the Fc field (bits 6..10) of the EQ word at block+offset by 1, or 2 with\n"
+     "PanelEvent_Flags bit 2, down with bit 0; limits max(Fc(+17), 8)..26 for the band at +19 (which = 1) or\n"
+     "0..min(Fc(+19), 22) for the band at +17 (which = 0) -- the limits DspEffect_RepairEqBandFc checks.  Offsets 1 / 3 when UI_ScreenId is 0x6B.\n"
+     "Called by SoftKeyCol2/5_DspEffect_EqSections."),
 ]
 
 

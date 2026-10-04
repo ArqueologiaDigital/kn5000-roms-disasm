@@ -504,8 +504,8 @@ def build_reference_index():
 # POSITIVE: all eight of this audit's first-pass prom_b HIGH candidates
 # (0xF400D0, 0xF41500, 0xF41640, 0xF41910, 0xF42320, 0xF42470, 0xF42F40,
 # 0xF433C0) turned out to be TRAMPOLINE SLOTS INSIDE THIS EXACT RANGE --
-# confirmed by reading prom_b/wsa1_prom_b.s directly, e.g. `T_F42F40: jp
-# 0xF0F018` labelled "Called from: T_F42F40 (x0)" -- meaning the tree has
+# confirmed by reading prom_b/wsa1_prom_b.s directly, e.g. `T_DspEffect_SetSection: jp
+# 0xF0F018` labelled "Called from: T_DspEffect_SetSection (x0)" -- meaning the tree has
 # already proven that specific slot is real, named, structural code, and
 # simply has no CALLER converted yet, exactly like the other ~1,900 slots
 # with a known caller. A `jp imm24` trampoline is periodic in a way this
@@ -927,7 +927,7 @@ def selftest():
           not boundary_after)
 
     # 4c-ii. THE DIRECTORY-SLOT FALSE POSITIVE, measured on the REAL ROM:
-    #     prom_b 0xF42F40 is `T_F42F40: jp 0xF0F018`, a trampoline slot
+    #     prom_b 0xF42F40 is `T_DspEffect_SetSection: jp 0xF0F018`, a trampoline slot
     #     inside the verified 0xF40000-0xF44018 routine directory with (per
     #     the tree's own comment) zero converted callers -- exactly what
     #     made this audit's first pass report it HIGH. is_directory_slot()

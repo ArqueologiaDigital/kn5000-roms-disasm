@@ -3,7 +3,7 @@
 the frontier points into, and the biggest contiguous unconverted code in prom_b.
 
 QUESTION IT ANSWERS
-    "What is the assembly text for the twelve-slot thunk run T_F42F40-T_F42F6C
+    "What is the assembly text for the twelve-slot thunk run T_DspEffect_SetSection-T_F42F6C
      and everything reachable with it, in a form the byte gate accepts, with
      every label and header attached to the right address?"  This is the emitter
      whose output is pasted into prom_b/wsa1_prom_b.s.
@@ -11,7 +11,7 @@ QUESTION IT ANSWERS
 WHY THIS BLOCK (round 5, chosen with the frontier tool, not by address order)
     notes/prom_b_module_frontier.py ranks whole thunk RUNS by CONTIGUOUS
     unconverted target extent.  Its top run is
-        T_F42F40-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
+        T_DspEffect_SetSection-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
     and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2 slots, 0xF11C30 / 0xF1220B) points into the same
     span.  Both are inside 0xF0EA9F-0xF13D33.
 
@@ -509,7 +509,7 @@ def checks(verbose=True):
     th = G.thunks()
     c("thunk slots of 0xF40000 landing in this block",
       sum(len(v) for v in th.values()), 14, verbose)
-    for run, lo_, hi_ in (("T_F42F40-T_F42F6C", 0xF42F40, 0xF42F6C),
+    for run, lo_, hi_ in (("T_DspEffect_SetSection-T_F42F6C", 0xF42F40, 0xF42F6C),
                           ("T_DspParam_WriteByNumber-T_DspParam_ReadByNumber", 0xF434A0, 0xF434A4)):
         tg = [w32(x) >> 8 for x in range(lo_, hi_ + 4, 4)]
         c("  every target of %s is inside this block" % run,
@@ -595,14 +595,14 @@ def banner():
     return """
 ; ==============================================================================
 ; 0xF0EA9F-0xF13D33 -- THE BLOCK THE FRONTIER'S TOP RUN POINTS INTO
-;   T_F42F40-T_F42F6C (12 slots) and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2), converted as one
+;   T_DspEffect_SetSection-T_F42F6C (12 slots) and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (2), converted as one
 ;   contiguous span of %d bytes
 ; ==============================================================================
 ;
 ; WHY THIS BLOCK.  notes/prom_b_module_frontier.py ranks whole thunk RUNS by the
 ; CONTIGUOUS unconverted extent of their targets.  Its top run was
 ;
-;   T_F42F40-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
+;   T_DspEffect_SetSection-T_F42F6C  12 slots  extent 13,084  targets 0xF0F018-0xF12334
 ;
 ; and T_DspParam_WriteByNumber-T_DspParam_ReadByNumber (0xF11C30, 0xF1220B) points into the same span.  The
 ; block starts where the already-converted field-blink engine's last routine

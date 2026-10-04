@@ -27,7 +27,7 @@ QUESTION IT ANSWERS
   derived cannot be attributed to the wrong tool.
 
 WHAT IT ASSERTS (non-zero exit if any fails)
-    1. the two runs T_F42F40-T_F42F6C and T_F434A0-T_F434A4 are in BEFORE
+    1. the two runs T_DspEffect_SetSection-T_F42F6C and T_F434A0-T_F434A4 are in BEFORE
     2. neither is in AFTER
     3. no OTHER run disappeared -- a round must not be credited with a run some
        other change removed
@@ -60,7 +60,7 @@ SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 IMG = os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13")
 B_BASE = 0xF00000
 LO, HI = 0xF0EA9F, 0xF13D34
-CLAIMED = ["T_F42F40-T_F42F6C", "T_F434A0-T_F434A4"]
+CLAIMED = ["T_DspEffect_SetSection-T_F42F6C", "T_F434A0-T_F434A4"]
 
 FAIL = []
 
