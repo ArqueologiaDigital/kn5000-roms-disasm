@@ -86,8 +86,8 @@ def call_sites():
 H = "; ---------------------------------------------------------------------\n"
 
 TABLES = [
-    (0xFE8077, 0xFE80F7, "long", "ScreenDispatch_FE8077", H +
-     "; ScreenDispatch_FE8077 -- 32 pointers to routines in this module\n"
+    (0xFE8077, 0xFE80F7, "long", "Sequencer_ButtonTable", H +
+     "; Sequencer_ButtonTable -- 32 pointers to routines in this module\n"
      "; Read by: 0xFE8060 -- `cp HL,0x001F / jr ugt,<skip> / ld XIX,0x00FE8077 /\n"
      ";          sll HL,2 / extz XHL / add XIX,XHL / ld XIX,(XIX) / call (XIX)`.\n"
      "; ENTRY COUNT 32 is the READER'S OWN BOUND, not an extent: `cp HL,0x001F`\n"
@@ -266,9 +266,9 @@ def main():
                  for a in range(0xFE8077, 0xFE80F7, 4)]
         if (d8077[:8] != [0x00FE8165] * 8 or d8077[16:] != [0x00FE81E5] * 16
                 or len(set(d8077)) != 9):
-            sys.exit("REFUSED: ScreenDispatch_FE8077 is not 8 x 0xFE8165 + "
+            sys.exit("REFUSED: Sequencer_ButtonTable is not 8 x 0xFE8165 + "
                      "16 x 0xFE81E5 + 9 distinct targets in all")
-        print("ScreenDispatch_FE8077: entries 0..7 = 0x%06X, 16..31 = 0x%06X, "
+        print("Sequencer_ButtonTable: entries 0..7 = 0x%06X, 16..31 = 0x%06X, "
               "%d distinct targets in all"
               % (d8077[0], d8077[16], len(set(d8077))))
         # the two 37-entry tables, and their five aliases

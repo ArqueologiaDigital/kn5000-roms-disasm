@@ -849,8 +849,8 @@ def apply_():
         ])
         added_legends += 1
 
-    # ScreenDispatch_FE8077's stated Unknown -- an OBSERVATION, not an answer.
-    a3 = "; ScreenDispatch_FE8077 -- 32 pointers to routines in this module"
+    # Sequencer_ButtonTable's stated Unknown -- an OBSERVATION, not an answer.
+    a3 = "; Sequencer_ButtonTable -- 32 pointers to routines in this module"
     if a3 in src and not any("\u2605 A SHAPE THAT FITS" in ln for ln in src):
         i = src.index(a3)
         while i > 0 and src[i - 1].startswith("; ----"):

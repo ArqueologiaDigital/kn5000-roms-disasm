@@ -39,16 +39,23 @@ import wave7_panel_names_round11 as R11  # noqa: E402
 A = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), "rb").read().decode("latin-1")
 SPELL = {"Exit": "ExitKey", "NumberPad": "NumberPadKey", "Page": "PageKey"}
 TABLES = [("NoteEdit_ButtonTable", "NoteEdit"), ("DrumEdit_ButtonTable", "DrumEdit"),
-          ("EditPartSelect_ButtonTable", "EditPartSelect")]
+          ("EditPartSelect_ButtonTable", "EditPartSelect"),
+          # 2026-10-04: ScreenButton_Sequencer (the Sequencer screen object's +8 method) has the same
+          # `cp HL,0x1F / ... call (xix)` shape over this table
+          ("Sequencer_ButtonTable", "Sequencer")]
 FIXED = [("NoteEdit_ButtonTable", "NoteEdit_ButtonTable"), ("DrumEdit_ButtonTable", "DrumEdit_ButtonTable"),
          ("EditPartSelect_ButtonTable", "EditPartSelect_ButtonTable"),
          ("ScreenButton_NoteEdit", "ScreenButton_NoteEdit"), ("ScreenButton_DrumEdit", "ScreenButton_DrumEdit"),
          ("ScreenLeave_NoteEdit", "ScreenLeave_NoteEdit"), ("ScreenLeave_DrumEdit", "ScreenLeave_DrumEdit"),
-         ("ScreenButton_EditPartSelect", "ScreenButton_EditPartSelect")]
+         ("ScreenButton_EditPartSelect", "ScreenButton_EditPartSelect"),
+         ("Sequencer_ButtonTable", "Sequencer_ButtonTable"), ("Sequencer_ButtonTable_Nop13", "Sequencer_ButtonTable_Nop13"),
+         ("Sequencer_ButtonTable_Nop16", "Sequencer_ButtonTable_Nop16")]
 
 
 def entries(tab):
     L = A.split("\n")
+    if tab + ":" not in L:                       # not renamed yet: read it under its FIXED old name
+        tab = [o for o, n in FIXED if n == tab][0]
     i = L.index(tab + ":")
     out = []
     for l in L[i + 1:i + 40]:

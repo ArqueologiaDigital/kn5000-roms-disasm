@@ -172273,7 +172273,7 @@ ScreenButton_Sequencer:
 	cp HL,0x001f                                         ; FE8060  db cf 1f 00
 	jr gt, .LFE8076                                      ; FE8064  6a 10
 sub_FE8066:
-	ld XIX,ScreenDispatch_FE8077                         ; FE8066  44 77 80 fe 00
+	ld XIX,Sequencer_ButtonTable                         ; FE8066  44 77 80 fe 00
 	sll hl, 0x02                                         ; FE806B  db ee 02
 	extz XHL                                             ; FE806E  eb 12
 	add XIX,XHL                                          ; FE8070  eb 84
@@ -172301,7 +172301,7 @@ sub_FE8066:
 ;          reason. The shortest path to closing it is a caller of T_ScreenButton_Sequencer.
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
-; ScreenDispatch_FE8077 -- 32 pointers to routines in this module
+; Sequencer_ButtonTable -- 32 pointers to routines in this module
 ; Read by: 0xFE8060 -- `cp HL,0x001F / jr ugt,<skip> / ld XIX,0x00FE8077 /
 ;          sll HL,2 / extz XHL / add XIX,XHL / ld XIX,(XIX) / call (XIX)`.
 ; ENTRY COUNT 32 is the READER'S OWN BOUND, not an extent: `cp HL,0x001F`
@@ -172319,7 +172319,7 @@ sub_FE8066:
 ;          all.  Counted by `--check`, not by eye.
 ; ---------------------------------------------------------------------
 
-ScreenDispatch_FE8077:
+Sequencer_ButtonTable:
 	.long ScreenLeave_Sequencer                      ; FE8077  [  0]
 	.long ScreenLeave_Sequencer                      ; FE807B  [  1]
 	.long ScreenLeave_Sequencer                      ; FE807F  [  2]
@@ -172328,30 +172328,30 @@ ScreenDispatch_FE8077:
 	.long ScreenLeave_Sequencer                      ; FE808B  [  5]
 	.long ScreenLeave_Sequencer                      ; FE808F  [  6]
 	.long ScreenLeave_Sequencer                      ; FE8093  [  7]
-	.long sub_FE8166                                 ; FE8097  [  8]
-	.long sub_FE817E                                 ; FE809B  [  9]
-	.long sub_FE819B                                 ; FE809F  [ 10]
-	.long sub_FE81B3                                 ; FE80A3  [ 11]
-	.long sub_FE81CB                                 ; FE80A7  [ 12]
-	.long ScreenDispatch_FE8077_Nop13                                 ; FE80AB  [ 13]
-	.long ScreenDispatch_FE8077_Nop13                                 ; FE80AF  [ 14]
-	.long sub_FE81D4                                 ; FE80B3  [ 15]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80B7  [ 16]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80BB  [ 17]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80BF  [ 18]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80C3  [ 19]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80C7  [ 20]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80CB  [ 21]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80CF  [ 22]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80D3  [ 23]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80D7  [ 24]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80DB  [ 25]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80DF  [ 26]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80E3  [ 27]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80E7  [ 28]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80EB  [ 29]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80EF  [ 30]
-	.long ScreenDispatch_FE8077_Nop16                                 ; FE80F3  [ 31]
+	.long LcdKeyRow1_Sequencer                                 ; FE8097  [  8]
+	.long LcdKeyRow2_Sequencer                                 ; FE809B  [  9]
+	.long LcdKeyRow3_Sequencer                                 ; FE809F  [ 10]
+	.long LcdKeyRow4_Sequencer                                 ; FE80A3  [ 11]
+	.long LcdKeyRow5_Sequencer                                 ; FE80A7  [ 12]
+	.long Sequencer_ButtonTable_Nop13                                 ; FE80AB  [ 13]
+	.long Sequencer_ButtonTable_Nop13                                 ; FE80AF  [ 14]
+	.long ExitKey_Sequencer                                 ; FE80B3  [ 15]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80B7  [ 16]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80BB  [ 17]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80BF  [ 18]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80C3  [ 19]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80C7  [ 20]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80CB  [ 21]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80CF  [ 22]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80D3  [ 23]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80D7  [ 24]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80DB  [ 25]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80DF  [ 26]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80E3  [ 27]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80E7  [ 28]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80EB  [ 29]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80EF  [ 30]
+	.long Sequencer_ButtonTable_Nop16                                 ; FE80F3  [ 31]
 ; ---------------------------------------------------------------------
 ; LCD_ScreenRedraw_Begin_Copy -- a second, byte-identical copy of LCD_ScreenRedraw_Begin
 ;
@@ -172462,7 +172462,8 @@ Paint_Sequencer:
 ; ---------------------------------------------------------------------
 ScreenLeave_Sequencer:
 	ret                                                  ; FE8165  0e
-sub_FE8166:   ; entry: named by 1 `.long` operand, first at 0xFE8097
+; LcdKeyRow1_Sequencer: row 1 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Sequencer_ButtonTable slot 0x08.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow1_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE8097
 	bit 0x07,W                                           ; FE8166  c8 33 07
 	jr nz, .LFE8173                                      ; FE8169  6e 08
 	ldw (UI_Request:16), 0x0207                              ; FE816B  f1 70 20 02 07 02
@@ -172472,7 +172473,8 @@ sub_FE8166:   ; entry: named by 1 `.long` operand, first at 0xFE8097
 .LFE8179:
 	call T_F409AC                                        ; FE8179  1d ac 09 f4
 	ret                                                  ; FE817D  0e
-sub_FE817E:   ; entry: named by 1 `.long` operand, first at 0xFE809B
+; LcdKeyRow2_Sequencer: row 2 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Sequencer_ButtonTable slot 0x09.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow2_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE809B
 	bit 0x07,W                                           ; FE817E  c8 33 07
 	jr nz, .LFE818B                                      ; FE8181  6e 08
 	ldw (UI_Request:16), 0x8010                              ; FE8183  f1 70 20 02 10 80
@@ -172483,7 +172485,8 @@ sub_FE817E:   ; entry: named by 1 `.long` operand, first at 0xFE809B
 .LFE8196:
 	call T_F409AC                                        ; FE8196  1d ac 09 f4
 	ret                                                  ; FE819A  0e
-sub_FE819B:   ; entry: named by 1 `.long` operand, first at 0xFE809F
+; LcdKeyRow3_Sequencer: row 3 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Sequencer_ButtonTable slot 0x0A.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow3_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE809F
 	bit 0x07,W                                           ; FE819B  c8 33 07
 	jr nz, .LFE81A8                                      ; FE819E  6e 08
 	ldw (UI_Request:16), 0x8013                              ; FE81A0  f1 70 20 02 13 80
@@ -172493,7 +172496,8 @@ sub_FE819B:   ; entry: named by 1 `.long` operand, first at 0xFE809F
 .LFE81AE:
 	call T_F409AC                                        ; FE81AE  1d ac 09 f4
 	ret                                                  ; FE81B2  0e
-sub_FE81B3:   ; entry: named by 1 `.long` operand, first at 0xFE80A3
+; LcdKeyRow4_Sequencer: row 4 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Sequencer_ButtonTable slot 0x0B.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow4_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE80A3
 	bit 0x07,W                                           ; FE81B3  c8 33 07
 	jr nz, .LFE81C0                                      ; FE81B6  6e 08
 	ldw (UI_Request:16), 0x800b                              ; FE81B8  f1 70 20 02 0b 80
@@ -172503,15 +172507,17 @@ sub_FE81B3:   ; entry: named by 1 `.long` operand, first at 0xFE80A3
 .LFE81C6:
 	call T_F409AC                                        ; FE81C6  1d ac 09 f4
 	ret                                                  ; FE81CA  0e
-sub_FE81CB:   ; entry: named by 1 `.long` operand, first at 0xFE80A7
+; LcdKeyRow5_Sequencer: row 5 of the five key pairs flanking the LCD; bit 7 of the code picks the CP2 side (set) or the CP1 side (clear); Sequencer_ButtonTable slot 0x0C.  Slot -> control: wave7_panel_names_round11.CONTROL.
+LcdKeyRow5_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE80A7
 	bit 0x07,W                                           ; FE81CB  c8 33 07
 	jr nz, .LFE81D2                                      ; FE81CE  6e 02
 	jr .LFE81D2                                          ; FE81D0  68 00
 .LFE81D2:
 	ret                                                  ; FE81D2  0e
-ScreenDispatch_FE8077_Nop13:   ; entry: named by 2 `.long` operands, first at 0xFE80AB
+Sequencer_ButtonTable_Nop13:   ; entry: named by 2 `.long` operands, first at 0xFE80AB
 	ret                                                  ; FE81D3  0e
-sub_FE81D4:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
+; ExitKey_Sequencer: the EXIT key; Sequencer_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
+ExitKey_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
 	bit 0x07,W                                           ; FE81D4  c8 33 07
 	jr nz, .LFE81E1                                      ; FE81D7  6e 08
 	ldw (UI_Request:16), 0x0201                              ; FE81D9  f1 70 20 02 01 02
@@ -172520,7 +172526,7 @@ sub_FE81D4:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
 	calr sub_FE81D4_Nop                                      ; FE81E1  1e 02 00
 .LFE81E4:
 	ret                                                  ; FE81E4  0e
-ScreenDispatch_FE8077_Nop16:   ; entry: named by 16 `.long` operands, first at 0xFE80B7
+Sequencer_ButtonTable_Nop16:   ; entry: named by 16 `.long` operands, first at 0xFE80B7
 	ret                                                  ; FE81E5  0e
 sub_FE81D4_Nop:
 	ret                                                  ; FE81E6  0e

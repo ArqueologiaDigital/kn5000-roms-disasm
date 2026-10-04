@@ -2137,6 +2137,15 @@ RENAMES = {
     "sub_FE8E13": "KeyboardRuler_DrawStrip8",
     "sub_FE8E22": "KeyboardRuler_DrawStrip9",
     "sub_FE8D3C": "NoteEdit_DrawKeyboardRuler",
+    "ScreenDispatch_FE8077": "Sequencer_ButtonTable",
+    "ScreenDispatch_FE8077_Nop13": "Sequencer_ButtonTable_Nop13",
+    "ScreenDispatch_FE8077_Nop16": "Sequencer_ButtonTable_Nop16",
+    "sub_FE8166": "LcdKeyRow1_Sequencer",
+    "sub_FE817E": "LcdKeyRow2_Sequencer",
+    "sub_FE819B": "LcdKeyRow3_Sequencer",
+    "sub_FE81B3": "LcdKeyRow4_Sequencer",
+    "sub_FE81CB": "LcdKeyRow5_Sequencer",
+    "sub_FE81D4": "ExitKey_Sequencer",
 }
 
 

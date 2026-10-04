@@ -241,7 +241,7 @@ the gap closed.
 
 ## 5. One thing offered as an observation, not an answer
 
-`ScreenDispatch_FE8077`'s header says *"Unknown: what the index in HL selects"*.
+`Sequencer_ButtonTable`'s header says *"Unknown: what the index in HL selects"*.
 Its shape is exactly what this map predicts of a screen — `[00]-[07]` all one
 target, `[08]-[0C]` five distinct, `[0D]/[0E]` one, `[0F]` its own, `[10]-[1F]`
 all one. **That is not enough.** Its reader is published as prom_b thunk slot
