@@ -947,7 +947,7 @@ def mode_services():
     print("    sub_FF0178  TWO service-0x05 fills bracketing two `calr` sites this round")
     print("                did not trace; what the PAIR draws is not established, and one")
     print("                fill alone would be half the claim.")
-    print("    sub_FEFFF3  its service 0x09 box is preceded by a branch on bit 0 of")
+    print("    EditScreen_DrawEventBar  its service 0x09 box is preceded by a branch on bit 0 of")
     print("                (0x601F70) choosing between two unlabelled setups.")
     # the ordering claim behind ScreenRedraw_Begin/_End
     print("\n  the ordering check behind LCD_ScreenRedraw_Begin / _End:")

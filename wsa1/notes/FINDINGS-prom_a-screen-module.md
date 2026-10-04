@@ -277,6 +277,20 @@ step them pin each cell (`notes/prom_ab_read_names_2026_10_04.py`):
 - `NoteEdit_ScrollRulerToNote` moves the keyboard ruler, `NoteEdit_RulerPosition` (0x601F53) 0..9, until
   the note is in view.
 
+**Audition and redraw (2026-10-04).**
+- A change of the selected note or velocity is heard. `EditScreen_AuditionEvent` ends the previous
+  audition (`EditScreen_EndAudition`) and puts a 5-byte timed event on `TimedEvents_Ring`: 0x90, 0x7E,
+  `EditCursor_Note`, `EditField_EventVelocity`, `EditScreen_Part`.
+- It then sets `EditScreen_ActionTimer2` = 0x82. Two ticks later `EditScreen_RunDueAction2` puts the
+  closing event (0x90, 0x7F, 0x28, 0, part).
+- A DRUM EDIT row change auditions the row's note at velocity 0x50 (`DrumEdit_AuditionRow`).
+- The note grid is drawn by `EditScreen_DrawVisibleNotes`. It walks the measure beat by beat and draws
+  every note-on inside `EditScreen_VisibleNoteRange`: TopRowNote..+11 in DRUM EDIT, a per-ruler-position
+  word table in NOTE EDIT.
+- The selected event is highlighted on layer 1 (`EditScreen_DrawSelectedEventBar`).
+- The deferred actions are these redraws, with a re-selection (`EditScreen_DeferredReselectAndRedraw`)
+  or a chain extension (`EditScreen_DeferredRedrawAndExtend`).
+
 (0x601F49) is the length cell the same routines step when (0x601F5B) bit 0 is clear. NOTE
 EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not established.
 

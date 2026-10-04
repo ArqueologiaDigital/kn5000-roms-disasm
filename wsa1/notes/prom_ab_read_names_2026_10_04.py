@@ -1451,7 +1451,7 @@ ROWS = [
      "BStore_AppendBytes."),
     ("FE9997", "EditCursor_ApplyNoteToEvent",
      "when the event at the block-store cursor is a note-on (0x9n), its note byte (+2) = EditCursor_Note (cursor\n"
-     "restored); then sub_FEA535.  Called by all four EditCursor_Note steppers."),
+     "restored); then EditScreen_AuditionEvent.  Called by all four EditCursor_Note steppers."),
     ("FEAB30", "EditCursor_NoteStepHeld",
      "NoteEdit_Button19 / DrumEdit_Button19 -- slot 0x13, the held variant of SoftKeyCol3: with (0x601F5B) bit 0\n"
      "and the edit area not busy ((0x601F58) bit 7 with (0x601F59) not 2), EditCursor_NoteUp6 or _NoteDown6 by W\n"
@@ -1464,7 +1464,7 @@ ROWS = [
      "EditCursor_Note split by `div A,0x0C`: the octave through DisplayList_FF0AEA, the note through NoteNames."),
     ("FEA12D", "EditScreen_RedrawEditArea",
      "with (0x601F58) bit 7: erase layer 1, sub_FF019D, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and\n"
-     "redraw the events (sub_FEFF2D) first."),
+     "redraw the events (EditScreen_DrawVisibleNotesExceptSelected) first."),
     ("FEAEBC", "DrumEdit_RowFollowNoteUp",
      "after EditCursor_Note + 1 in DRUM EDIT (unless (0x601F1C) bit 7): EditScreen_CursorRow + 1 below 11, with\n"
      "the left column and highlight redrawn; at row 11 the list scrolls instead, DrumEdit_TopRowNote + 1 below 0x74."),
@@ -1472,7 +1472,7 @@ ROWS = [
      "the mirror: EditScreen_CursorRow - 1 above 0, or DrumEdit_TopRowNote - 1 above 1."),
     # NOTE / DRUM EDIT: the selected event, its velocity, keyboard input (FINDINGS-prom_a-screen-module.md section 8)
     ("FE9A07", "EditField_ApplyVelocityToEvent",
-     "when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then sub_FEA535.  Called by\n"
+     "when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then EditScreen_AuditionEvent.  Called by\n"
      "the four steppers of 0x601F45 -- which is therefore the selected event's VELOCITY."),
     ("FF0B46", "EditScreen_DrawEventVelocity",
      "(0x601F19) = (0x601F45), then the shared tail .LFF0B50: layer 0, the cell erased (sub_FEF81D), the value drawn\n"
@@ -1483,7 +1483,7 @@ ROWS = [
      "note-on that DrumEdit_IsOtherNote passes: bit 0 = 1, EditCursor_Note = +2, (0x601F45) = +3, EditField_Length =\n"
      "(+5 & 0x7F) x 0x60 + (+4 & 0x7F), (0x601F6F) = the note, NoteEdit_ScrollRulerToNote."),
     ("FE8F97", "NoteEdit_ScrollRulerToNote",
-     "NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range sub_FEFFB4\n"
+     "NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range EditScreen_VisibleNoteRange\n"
      "returns (A low, W high); when it moved, NoteEdit_DrawKeyboardRuler and the edit area redrawn."),
     ("FE8FFD", "NoteEdit_TakeKeyboardInput",
      "on screens 0x25 / 0x28, with the edit area idle and free blocks: drains the sequencer input ring\n"
@@ -1531,11 +1531,56 @@ ROWS = [
      "when (0x601F58) has reached 0x80: it is cleared and EditScreen_DeferredActions[(0x601F59)] runs.  The note\n"
      "steppers queue action 2 three ticks ahead (0x83 / 2), the DRUM EDIT scroll 5, the ruler scroll 4."),
     ("FE92D7", "EditScreen_CountDownAction2", "the same countdown on (0x601F5A)."),
-    ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, sub_FE9738 (sub_FEA54F)."),
+    ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, EditScreen_EndAudition_Call (EditScreen_EndAudition)."),
     ("FE933F", "EditScreen_ReloadMeasureView",
-     "EditScreen_DeferredActions[0] and [6]: sub_FEA54F, the measure reopened (sub_FE8EA9, moving on through\n"
+     "EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (sub_FE8EA9, moving on through\n"
      "sub_FE93CA), its beat table rebuilt (sub_FE8AE9), sub_FE938E, the event at the cursor selected\n"
      "(EditScreen_SelectEventAtCursor), and every part of the screen redrawn."),
+    # NOTE / DRUM EDIT: audition, note-grid drawing, the deferred redraws
+    ("FEA566", "EditScreen_AuditionEventNote",
+     "when (0x600808) >= 0x14: (0x34D4) |= 0x40 and the timed event 0x90, 0x7E, EditCursor_Note,\n"
+     "EditField_EventVelocity, EditScreen_Part on TimedEvents_Ring (T_TimedEventRing_Put, five bytes)."),
+    ("FEA5B0", "DrumEdit_AuditionRowNote", "the same with velocity 0x50 -- a DRUM EDIT row change."),
+    ("FEA5F7", "EditScreen_PutAuditionEnd",
+     "the timed event 0x90, 0x7F, 0x28, 0, EditScreen_Part: what EditScreen_EndAudition sends before each new\n"
+     "audition and two ticks after one."),
+    ("FEA54F", "EditScreen_EndAudition",
+     "when (0x600808) >= 10: (0x34D4) |= 0x40, EditScreen_PutAuditionEnd.  EditScreen_ActionTimer2's action\n"
+     "(through EditScreen_EndAudition_Call)."),
+    ("FEA535", "EditScreen_AuditionEvent",
+     "EditScreen_EndAudition, EditScreen_AuditionEventNote, EditScreen_ActionTimer2 = 0x82 (end it two ticks\n"
+     "later).  Called after the note or velocity of the selected event changes."),
+    ("FEA542", "DrumEdit_AuditionRow",
+     "EditScreen_EndAudition, DrumEdit_AuditionRowNote, EditScreen_ActionTimer2 = 0x82."),
+    ("FEFFB4", "EditScreen_VisibleNoteRange",
+     "A = the lowest, W = the highest note shown: DRUM EDIT DrumEdit_TopRowNote .. + 11; NOTE EDIT the word pair\n"
+     "WordTable_FEFFDD[NoteEdit_RulerPosition]."),
+    ("FEFFF3", "EditScreen_DrawEventBar",
+     "geometry from sub_FF0294, layer 0, the mode's shape (sub_FF0092 DRUM / sub_FF000E NOTE), SWI 7 service 9."),
+    ("FF00ED", "EditScreen_DrawSelectedEventBar",
+     "with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (sub_FF0178 /\n"
+     "sub_FF013F)."),
+    ("FEFDAC", "EditScreen_DrawCursorTickMarker",
+     "layer 1: Glyph_FEFDE4 at x = EditCursor_TickInMeasure / 4 + 0x0D (NOTE) or 0x56 (DRUM), y = 0x22."),
+    ("FEFEBF", "EditScreen_DrawVisibleNotes",
+     "walks the measure from its mark, counting 0x81 beat markers up to EditMeasure_Beats, and draws every note-on\n"
+     "whose note is inside EditScreen_VisibleNoteRange (EditScreen_DrawEventBar)."),
+    ("FEFF2D", "EditScreen_DrawVisibleNotesExceptSelected",
+     "the same walk, skipping the note-on at the selected position (0x601F0B / 0x601F0D)."),
+    ("FEFD8A", "EditScreen_RedrawCursorLayer",
+     "while the cursor is inside the measure: layer 1 erased, EditScreen_DrawSelectedEventBar,\n"
+     "EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5."),
+    ("FE972B", "EditScreen_DeferredReselectAndRedraw",
+     "EditScreen_DeferredActions[2] (queued by the note steppers): EditScreen_SelectEventAtCursor, layer 0 erased,\n"
+     "EditScreen_DrawVisibleNotes, EditScreen_RedrawCursorLayer."),
+    ("FEAFF1", "EditScreen_DeferredReselectAndRedraw5",
+     "EditScreen_DeferredActions[5] (queued by the DRUM EDIT scroll): the same four calls."),
+    ("FE975B", "EditScreen_DeferredRedraw",
+     "EditScreen_DeferredActions[4] (queued by the ruler scroll): EditScreen_DrawVisibleNotes,\n"
+     "EditScreen_RedrawCursorLayer."),
+    ("FE973C", "EditScreen_DeferredRedrawAndExtend",
+     "EditScreen_DeferredActions[3]: redraw; with an event selected, EditScreen_AppendMissingBeatMarkers first\n"
+     "(sub_FE8BD4 on a BStore error)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

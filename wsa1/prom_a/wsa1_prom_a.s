@@ -177007,7 +177007,7 @@ EditScreen_EnterNoteEdit:
 	ld wa, (0x3552:16)                                 ; FE8A1F  d1 52 35 20
 	ld (EditCursor_Measure:24), wa                                ; FE8A23  f2 3f 1f 60 50
 .LFE8A28:
-	calr sub_FEA54F                                          ; FE8A28  1e 24 1b
+	calr EditScreen_EndAudition                                          ; FE8A28  1e 24 1b
 	call T_SeqBufRing_Discard                                        ; FE8A2B  1d 10 0a f4
 	call T_TimedEventRing_Discard                                        ; FE8A2F  1d 14 0a f4
 	calr sub_FE9148                                          ; FE8A33  1e 12 07
@@ -177574,7 +177574,7 @@ EditScreen_SelectEventAtCursor:
 	calr NoteEdit_ScrollRulerToNote                                      ; FE8F93  1e 01 00
 .LFE8F96:
 	ret                                                  ; FE8F96  0e
-; NoteEdit_ScrollRulerToNote: NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range sub_FEFFB4
+; NoteEdit_ScrollRulerToNote: NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range EditScreen_VisibleNoteRange
 ;   returns (A low, W high); when it moved, NoteEdit_DrawKeyboardRuler and the edit area redrawn.
 NoteEdit_ScrollRulerToNote:
 	m_bit 0, MD24, EditScreen_Mode                              ; FE8F97  f2 70 1f 60 c8
@@ -177582,7 +177582,7 @@ NoteEdit_ScrollRulerToNote:
 	ld a, (NoteEdit_RulerPosition:24)                                 ; FE8F9E  c2 53 1f 60 21
 	ld (0x601f6e:24), a                                 ; FE8FA3  f2 6e 1f 60 41
 .LFE8FA8:
-	calr sub_FEFFB4                                          ; FE8FA8  1e 09 70
+	calr EditScreen_VisibleNoteRange                                          ; FE8FA8  1e 09 70
 	ld h, (0x601f6f:24)                                 ; FE8FAB  c2 6f 1f 60 26
 	cp H,A                                               ; FE8FB0  c9 f6
 	jr c, .LFE8FED                                       ; FE8FB2  67 39
@@ -177596,7 +177596,7 @@ NoteEdit_ScrollRulerToNote:
 	ld (EditScreen_ActionIndex:24), 0x04                             ; FE8FCD  f2 59 1f 60 00 04
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE8FD3  1e fc 67
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE8FD6  1e 80 68
-	calr sub_FEFEBF                                          ; FE8FD9  1e e3 6e
+	calr EditScreen_DrawVisibleNotes                                          ; FE8FD9  1e e3 6e
 .LFE8FDC:
 	ret                                                  ; FE8FDC  0e
 .LFE8FDD:
@@ -177678,7 +177678,7 @@ NoteEdit_TakeKeyboardInput:
 	calr EditScreen_StepCursorAfterEntry                                      ; FE909F  1e ee 01
 	calr sub_FE9148                                      ; FE90A2  1e a3 00
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE90A5  1e 2a 67
-	calr sub_FEFEBF                                          ; FE90A8  1e 14 6e
+	calr EditScreen_DrawVisibleNotes                                          ; FE90A8  1e 14 6e
 	jrl .LFE9027                                         ; FE90AB  78 79 ff
 .LFE90AE:
 	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FE90AE  c2 5b 1f 60 3c fe
@@ -177897,7 +177897,7 @@ EditScreen_StepCursorAfterEntry:
 	calr sub_FEA743                                          ; FE92AC  1e 94 14
 	calr sub_FEF778                                          ; FE92AF  1e c6 64
 	calr sub_FEF8D6                                          ; FE92B2  1e 21 66
-	calr sub_FEFD8A                                          ; FE92B5  1e d2 6a
+	calr EditScreen_RedrawCursorLayer                                          ; FE92B5  1e d2 6a
 	ret                                                  ; FE92B8  0e
 .LFE92B9:
 	calr sub_FE955D                                          ; FE92B9  1e a1 02
@@ -177963,12 +177963,12 @@ EditScreen_RunDueAction:
 EditScreen_DeferredActions:
 	.long EditScreen_ReloadMeasureView                                 ; FE9311  [  0]
 	.long sub_FE9711                                 ; FE9315  [  1]
-	.long sub_FE972B                                 ; FE9319  [  2]
-	.long sub_FE973C                                 ; FE931D  [  3]
-	.long sub_FE975B                                 ; FE9321  [  4]
-	.long sub_FEAFF1                                 ; FE9325  [  5]
+	.long EditScreen_DeferredReselectAndRedraw                                 ; FE9319  [  2]
+	.long EditScreen_DeferredRedrawAndExtend                                 ; FE931D  [  3]
+	.long EditScreen_DeferredRedraw                                 ; FE9321  [  4]
+	.long EditScreen_DeferredReselectAndRedraw5                                 ; FE9325  [  5]
 	.long EditScreen_ReloadMeasureView                                 ; FE9329  [  6]
-; EditScreen_RunDueAction2: when (0x601F5A) has reached 0x80: cleared, sub_FE9738 (sub_FEA54F).
+; EditScreen_RunDueAction2: when (0x601F5A) has reached 0x80: cleared, EditScreen_EndAudition_Call (EditScreen_EndAudition).
 EditScreen_RunDueAction2:
 	ld XIX,EditScreen_ActionTimer2                                    ; FE932D  44 5a 1f 60 00
 	cp (XIX),0x80                                        ; FE9332  84 3f 80
@@ -177976,13 +177976,13 @@ EditScreen_RunDueAction2:
 	ret                                                  ; FE9337  0e
 .LFE9338:
 	ld (XIX),0x00                                        ; FE9338  b4 00 00
-	calr sub_FE9738                                      ; FE933B  1e fa 03
+	calr EditScreen_EndAudition_Call                                      ; FE933B  1e fa 03
 	ret                                                  ; FE933E  0e
-; EditScreen_ReloadMeasureView: EditScreen_DeferredActions[0] and [6]: sub_FEA54F, the measure reopened (sub_FE8EA9, moving on through
+; EditScreen_ReloadMeasureView: EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (sub_FE8EA9, moving on through
 ;   sub_FE93CA), its beat table rebuilt (sub_FE8AE9), sub_FE938E, the event at the cursor selected
 ;   (EditScreen_SelectEventAtCursor), and every part of the screen redrawn.
 EditScreen_ReloadMeasureView:   ; entry: named by 2 `.long` operands, first at 0xFE9311
-	calr sub_FEA54F                                          ; FE933F  1e 0d 12
+	calr EditScreen_EndAudition                                          ; FE933F  1e 0d 12
 	calr sub_FE8EA9                                          ; FE9342  1e 64 fb
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9345  c1 4a 0d 3f 00
 	jr z, .LFE935F                                       ; FE934A  66 13
@@ -178006,8 +178006,8 @@ EditScreen_ReloadMeasureView:   ; entry: named by 2 `.long` operands, first at 0
 	calr EditScreen_SelectEventAtCursor                                          ; FE9378  1e 96 fb
 	calr sub_FEF7B4                                          ; FE937B  1e 36 64
 	calr sub_FEF926                                          ; FE937E  1e a5 65
-	calr sub_FEFD8A                                          ; FE9381  1e 06 6a
-	calr sub_FEFEBF                                          ; FE9384  1e 38 6b
+	calr EditScreen_RedrawCursorLayer                                          ; FE9381  1e 06 6a
+	calr EditScreen_DrawVisibleNotes                                          ; FE9384  1e 38 6b
 	calr sub_FEF778                                          ; FE9387  1e ee 63
 	calr sub_FEF8D6                                          ; FE938A  1e 49 65
 	ret                                                  ; FE938D  0e
@@ -178155,14 +178155,14 @@ sub_FE94FB:
 	calr EditScreen_SelectEventAtCursor                                          ; FE953A  1e d4 f9
 	calr sub_FEF7B4                                          ; FE953D  1e 74 62
 	calr sub_FEF926                                          ; FE9540  1e e3 63
-	calr sub_FEFD8A                                          ; FE9543  1e 44 68
+	calr EditScreen_RedrawCursorLayer                                          ; FE9543  1e 44 68
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9546  1e 89 62
-	calr sub_FEFEBF                                          ; FE9549  1e 73 69
+	calr EditScreen_DrawVisibleNotes                                          ; FE9549  1e 73 69
 	calr sub_FEF778                                          ; FE954C  1e 29 62
 	calr sub_FEF8D6                                          ; FE954F  1e 84 63
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9552  f2 5b 1f 60 c8
 	jr z, .LFE955C                                       ; FE9557  66 03
-	calr sub_FEA535                                          ; FE9559  1e d9 0f
+	calr EditScreen_AuditionEvent                                          ; FE9559  1e d9 0f
 .LFE955C:
 	ret                                                  ; FE955C  0e
 sub_FE955D:
@@ -178196,14 +178196,14 @@ sub_FE955D:
 	calr EditScreen_SelectEventAtCursor                                          ; FE95A5  1e 69 f9
 	calr sub_FEF7B4                                          ; FE95A8  1e 09 62
 	calr sub_FEF926                                          ; FE95AB  1e 78 63
-	calr sub_FEFD8A                                          ; FE95AE  1e d9 67
+	calr EditScreen_RedrawCursorLayer                                          ; FE95AE  1e d9 67
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE95B1  1e 1e 62
-	calr sub_FEFEBF                                          ; FE95B4  1e 08 69
+	calr EditScreen_DrawVisibleNotes                                          ; FE95B4  1e 08 69
 	calr sub_FEF778                                          ; FE95B7  1e be 61
 	calr sub_FEF8D6                                          ; FE95BA  1e 19 63
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE95BD  f2 5b 1f 60 c8
 	jr z, .LFE95C7                                       ; FE95C2  66 03
-	calr sub_FEA535                                          ; FE95C4  1e 6e 0f
+	calr EditScreen_AuditionEvent                                          ; FE95C4  1e 6e 0f
 .LFE95C7:
 	ret                                                  ; FE95C7  0e
 sub_FE95C8:
@@ -178271,9 +178271,9 @@ sub_FE9648:
 	calr EditScreen_SelectEventAtCursor                                          ; FE967B  1e 93 f8
 	calr sub_FEF7B4                                          ; FE967E  1e 33 61
 	calr sub_FEF926                                          ; FE9681  1e a2 62
-	calr sub_FEFD8A                                          ; FE9684  1e 03 67
+	calr EditScreen_RedrawCursorLayer                                          ; FE9684  1e 03 67
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9687  1e 48 61
-	calr sub_FEFEBF                                          ; FE968A  1e 32 68
+	calr EditScreen_DrawVisibleNotes                                          ; FE968A  1e 32 68
 	calr sub_FEF778                                          ; FE968D  1e e8 60
 	calr sub_FEF8D6                                          ; FE9690  1e 43 62
 	ret                                                  ; FE9693  0e
@@ -178296,9 +178296,9 @@ sub_FE9694:
 	calr EditScreen_SelectEventAtCursor                                          ; FE96CA  1e 44 f8
 	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
 	calr sub_FEF926                                          ; FE96D0  1e 53 62
-	calr sub_FEFD8A                                          ; FE96D3  1e b4 66
+	calr EditScreen_RedrawCursorLayer                                          ; FE96D3  1e b4 66
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE96D6  1e f9 60
-	calr sub_FEFEBF                                          ; FE96D9  1e e3 67
+	calr EditScreen_DrawVisibleNotes                                          ; FE96D9  1e e3 67
 	calr sub_FEF778                                          ; FE96DC  1e 99 60
 	calr sub_FEF8D6                                          ; FE96DF  1e f4 61
 	ret                                                  ; FE96E2  0e
@@ -178322,38 +178322,45 @@ sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FE9762                                      ; FE9711  1e 4e 00
 	calr EditScreen_SelectEventAtCursor                                          ; FE9714  1e fa f7
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9717  1e b8 60
-	calr sub_FEFEBF                                          ; FE971A  1e a2 67
+	calr EditScreen_DrawVisibleNotes                                          ; FE971A  1e a2 67
 	calr sub_FEA628                                          ; FE971D  1e 08 0f
 	sub XWA,XBC                                          ; FE9720  e9 a0
 	ld (EditCursor_TickInMeasure:24), wa                                ; FE9722  f2 54 1f 60 50
-	calr sub_FEFD8A                                          ; FE9727  1e 60 66
+	calr EditScreen_RedrawCursorLayer                                          ; FE9727  1e 60 66
 	ret                                                  ; FE972A  0e
-sub_FE972B:   ; entry: named by 1 `.long` operand, first at 0xFE9319
+; EditScreen_DeferredReselectAndRedraw: EditScreen_DeferredActions[2] (queued by the note steppers): EditScreen_SelectEventAtCursor, layer 0 erased,
+;   EditScreen_DrawVisibleNotes, EditScreen_RedrawCursorLayer.
+EditScreen_DeferredReselectAndRedraw:   ; entry: named by 1 `.long` operand, first at 0xFE9319
 	calr EditScreen_SelectEventAtCursor                                          ; FE972B  1e e3 f7
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE972E  1e a1 60
-	calr sub_FEFEBF                                          ; FE9731  1e 8b 67
-	calr sub_FEFD8A                                          ; FE9734  1e 53 66
+	calr EditScreen_DrawVisibleNotes                                          ; FE9731  1e 8b 67
+	calr EditScreen_RedrawCursorLayer                                          ; FE9734  1e 53 66
 	ret                                                  ; FE9737  0e
-sub_FE9738:
-	calr sub_FEA54F                                          ; FE9738  1e 14 0e
+; EditScreen_EndAudition_Call: calls EditScreen_EndAudition and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+EditScreen_EndAudition_Call:
+	calr EditScreen_EndAudition                                          ; FE9738  1e 14 0e
 	ret                                                  ; FE973B  0e
-sub_FE973C:   ; entry: named by 1 `.long` operand, first at 0xFE931D
+; EditScreen_DeferredRedrawAndExtend: EditScreen_DeferredActions[3]: redraw; with an event selected, EditScreen_AppendMissingBeatMarkers first
+;   (sub_FE8BD4 on a BStore error).
+EditScreen_DeferredRedrawAndExtend:   ; entry: named by 1 `.long` operand, first at 0xFE931D
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE973C  1e 93 60
-	calr sub_FEFEBF                                          ; FE973F  1e 7d 67
+	calr EditScreen_DrawVisibleNotes                                          ; FE973F  1e 7d 67
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9742  f2 5b 1f 60 c8
 	jr z, .LFE9753                                       ; FE9747  66 0a
 	calr EditScreen_AppendMissingBeatMarkers                                      ; FE9749  1e 93 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE974C  c1 4a 0d 3f 00
 	jr nz, .LFE9757                                      ; FE9751  6e 04
 .LFE9753:
-	calr sub_FEFD8A                                          ; FE9753  1e 34 66
+	calr EditScreen_RedrawCursorLayer                                          ; FE9753  1e 34 66
 	ret                                                  ; FE9756  0e
 .LFE9757:
 	calr sub_FE8BD4                                          ; FE9757  1e 7a f4
 	ret                                                  ; FE975A  0e
-sub_FE975B:   ; entry: named by 1 `.long` operand, first at 0xFE9321
-	calr sub_FEFEBF                                          ; FE975B  1e 61 67
-	calr sub_FEFD8A                                          ; FE975E  1e 29 66
+; EditScreen_DeferredRedraw: EditScreen_DeferredActions[4] (queued by the ruler scroll): EditScreen_DrawVisibleNotes,
+;   EditScreen_RedrawCursorLayer.
+EditScreen_DeferredRedraw:   ; entry: named by 1 `.long` operand, first at 0xFE9321
+	calr EditScreen_DrawVisibleNotes                                          ; FE975B  1e 61 67
+	calr EditScreen_RedrawCursorLayer                                          ; FE975E  1e 29 66
 	ret                                                  ; FE9761  0e
 sub_FE9762:
 	call BStoreCursor_Step                                        ; FE9762  1d 04 22 ff
@@ -178552,7 +178559,7 @@ sub_FE9983:
 	call T_F42F04                                        ; FE9992  1d 04 2f f4
 	ret                                                  ; FE9996  0e
 ; EditCursor_ApplyNoteToEvent: when the event at the block-store cursor is a note-on (0x9n), its note byte (+2) = EditCursor_Note (cursor
-;   restored); then sub_FEA535.  Called by all four EditCursor_Note steppers.
+;   restored); then EditScreen_AuditionEvent.  Called by all four EditCursor_Note steppers.
 EditCursor_ApplyNoteToEvent:
 	calr BStore_CursorSlot_Save                                          ; FE9997  1e 54 f3
 	call BStoreCursor_ReadByte                                        ; FE999A  1d 32 22 ff
@@ -178566,7 +178573,7 @@ EditCursor_ApplyNoteToEvent:
 	ld a, (EditCursor_Note:24)                                 ; FE99AF  c2 44 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE99B4  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE99B8  1e 5a f3
-	calr sub_FEA535                                          ; FE99BB  1e 77 0b
+	calr EditScreen_AuditionEvent                                          ; FE99BB  1e 77 0b
 	ret                                                  ; FE99BE  0e
 ; EditField_StoreLengthInNoteEvent: when the event at the block-store cursor is a note-on (0x9n), steps 4 bytes in and writes EditField_Length as
 ;   two 7-bit bytes, length mod 0x60 then length / 0x60 (`div A,0x60`); the cursor is saved and restored around it.
@@ -178595,7 +178602,7 @@ EditField_StoreLengthInNoteEvent:
 	call BStoreCursor_WriteByte                                        ; FE99FF  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE9A03  1e 0f f3
 	ret                                                  ; FE9A06  0e
-; EditField_ApplyVelocityToEvent: when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then sub_FEA535.  Called by
+; EditField_ApplyVelocityToEvent: when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then EditScreen_AuditionEvent.  Called by
 ;   the four steppers of 0x601F45 -- which is therefore the selected event's VELOCITY.
 EditField_ApplyVelocityToEvent:
 	calr BStore_CursorSlot_Save                                          ; FE9A07  1e e4 f2
@@ -178611,7 +178618,7 @@ EditField_ApplyVelocityToEvent:
 	ld a, (EditField_EventVelocity:24)                                 ; FE9A23  c2 45 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE9A28  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
-	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
+	calr EditScreen_AuditionEvent                                          ; FE9A2F  1e 03 0b
 	ret                                                  ; FE9A32  0e
 ; ScreenButton_NoteEdit: the +8 BUTTON method of the screen object for screen id 0x25 -- PanelScreen_VtableTable entry 0x45
 ;   (ViewB entry 0x25) points at the thunk triple starting at T_EditScreen_EnterNoteEdit, and slot T_ScreenButton_NoteEdit jumps here.
@@ -179150,7 +179157,7 @@ sub_FE9EBB:
 	cp (EditCursor_TickInMeasure:24), bc                             ; FE9EC6  d2 54 1f 60 f9
 	jr nc, .LFE9ED9                                      ; FE9ECB  6f 0c
 	calr sub_FEF796                                          ; FE9ECD  1e c6 58
-	calr sub_FEFDAC                                          ; FE9ED0  1e d9 5e
+	calr EditScreen_DrawCursorTickMarker                                          ; FE9ED0  1e d9 5e
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FE9ED3  1e 83 5f
 	calr sub_FEFDE5                                          ; FE9ED6  1e 0c 5f
 .LFE9ED9:
@@ -179398,7 +179405,7 @@ EditCursor_NoteDown:
 	ld (EditScreen_ActionIndex:24), 0x02                             ; FEA126  f2 59 1f 60 00 02
 	ret                                                  ; FEA12C  0e
 ; EditScreen_RedrawEditArea: with (0x601F58) bit 7: erase layer 1, sub_FF019D, LCD_DrawVRuleLeft_OrNothing; otherwise erase layer 0 and
-;   redraw the events (sub_FEFF2D) first.
+;   redraw the events (EditScreen_DrawVisibleNotesExceptSelected) first.
 EditScreen_RedrawEditArea:
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FEA12D  f2 58 1f 60 cf
 	jr z, .LFEA13E                                       ; FEA132  66 0a
@@ -179408,7 +179415,7 @@ EditScreen_RedrawEditArea:
 	ret                                                  ; FEA13D  0e
 .LFEA13E:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEA13E  1e 91 56
-	calr sub_FEFF2D                                          ; FEA141  1e e9 5d
+	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FEA141  1e e9 5d
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEA144  1e 12 57
 	calr sub_FF019D                                          ; FEA147  1e 53 60
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FEA14A  1e 0c 5d
@@ -179811,8 +179818,8 @@ sub_FEA4DC:
 	calr EditScreen_SelectEventAtCursor                                          ; FEA4FC  1e 12 ea
 	calr sub_FEF778                                          ; FEA4FF  1e 76 52
 	calr sub_FEF8D6                                          ; FEA502  1e d1 53
-	calr sub_FEFD8A                                          ; FEA505  1e 82 58
-	calr sub_FEA535                                      ; FEA508  1e 2a 00
+	calr EditScreen_RedrawCursorLayer                                          ; FEA505  1e 82 58
+	calr EditScreen_AuditionEvent                                      ; FEA508  1e 2a 00
 	ret                                                  ; FEA50B  0e
 sub_FEA50C:
 	ld c, (EditMeasure_Beats:24)                                 ; FEA50C  c2 75 1f 60 23
@@ -179824,31 +179831,38 @@ sub_FEA50C:
 .LFEA51F:
 	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEA51F  c2 5b 1f 60 3c fe
 	calr BStore_CursorSlot_Restore                                          ; FEA525  1e ed e7
-	calr sub_FEFD8A                                          ; FEA528  1e 5f 58
+	calr EditScreen_RedrawCursorLayer                                          ; FEA528  1e 5f 58
 	calr sub_FEA743                                      ; FEA52B  1e 15 02
 	calr sub_FEF778                                          ; FEA52E  1e 47 52
 	calr sub_FEF8D6                                          ; FEA531  1e a2 53
 	ret                                                  ; FEA534  0e
-sub_FEA535:
-	calr sub_FEA54F                                      ; FEA535  1e 17 00
-	calr sub_FEA566                                      ; FEA538  1e 2b 00
+; EditScreen_AuditionEvent: EditScreen_EndAudition, EditScreen_AuditionEventNote, EditScreen_ActionTimer2 = 0x82 (end it two ticks
+;   later).  Called after the note or velocity of the selected event changes.
+EditScreen_AuditionEvent:
+	calr EditScreen_EndAudition                                      ; FEA535  1e 17 00
+	calr EditScreen_AuditionEventNote                                      ; FEA538  1e 2b 00
 	ld (EditScreen_ActionTimer2:24), 0x82                             ; FEA53B  f2 5a 1f 60 00 82
 	ret                                                  ; FEA541  0e
-sub_FEA542:
-	calr sub_FEA54F                                      ; FEA542  1e 0a 00
-	calr sub_FEA5B0                                      ; FEA545  1e 68 00
+; DrumEdit_AuditionRow: EditScreen_EndAudition, DrumEdit_AuditionRowNote, EditScreen_ActionTimer2 = 0x82.
+DrumEdit_AuditionRow:
+	calr EditScreen_EndAudition                                      ; FEA542  1e 0a 00
+	calr DrumEdit_AuditionRowNote                                      ; FEA545  1e 68 00
 	ld (EditScreen_ActionTimer2:24), 0x82                             ; FEA548  f2 5a 1f 60 00 82
 	ret                                                  ; FEA54E  0e
-sub_FEA54F:
+; EditScreen_EndAudition: when (0x600808) >= 10: (0x34D4) |= 0x40, EditScreen_PutAuditionEnd.  EditScreen_ActionTimer2's action
+;   (through EditScreen_EndAudition_Call).
+EditScreen_EndAudition:
 	ld XHL,0x00600800                                    ; FEA54F  43 00 08 60 00
 	ld WA,(XHL+0x08)                                     ; FEA554  9b 08 20
 	cp WA,0x000a                                         ; FEA557  d8 cf 0a 00
 	jr c, .LFEA565                                       ; FEA55B  67 08
 	m_or_mi8 MB16, 0x34d4, 0x40                          ; FEA55D  c1 d4 34 3e 40
-	calr sub_FEA5F7                                      ; FEA562  1e 92 00
+	calr EditScreen_PutAuditionEnd                                      ; FEA562  1e 92 00
 .LFEA565:
 	ret                                                  ; FEA565  0e
-sub_FEA566:
+; EditScreen_AuditionEventNote: when (0x600808) >= 0x14: (0x34D4) |= 0x40 and the timed event 0x90, 0x7E, EditCursor_Note,
+;   EditField_EventVelocity, EditScreen_Part on TimedEvents_Ring (T_TimedEventRing_Put, five bytes).
+EditScreen_AuditionEventNote:
 	ld XHL,0x00600800                                    ; FEA566  43 00 08 60 00
 	ld WA,(XHL+0x08)                                     ; FEA56B  9b 08 20
 	cp WA,0x0014                                         ; FEA56E  d8 cf 14 00
@@ -179876,7 +179890,8 @@ sub_FEA566:
 	inc 2,XSP                                            ; FEA5AD  ef 62
 .LFEA5AF:
 	ret                                                  ; FEA5AF  0e
-sub_FEA5B0:
+; DrumEdit_AuditionRowNote: the same with velocity 0x50 -- a DRUM EDIT row change.
+DrumEdit_AuditionRowNote:
 	ld XHL,0x00600800                                    ; FEA5B0  43 00 08 60 00
 	ld WA,(XHL+0x08)                                     ; FEA5B5  9b 08 20
 	cp WA,0x0014                                         ; FEA5B8  d8 cf 14 00
@@ -179904,7 +179919,9 @@ sub_FEA5B0:
 	inc 2,XSP                                            ; FEA5F4  ef 62
 .LFEA5F6:
 	ret                                                  ; FEA5F6  0e
-sub_FEA5F7:
+; EditScreen_PutAuditionEnd: the timed event 0x90, 0x7F, 0x28, 0, EditScreen_Part: what EditScreen_EndAudition sends before each new
+;   audition and two ticks after one.
+EditScreen_PutAuditionEnd:
 	ld a, 0x90:opc                                          ; FEA5F7  21 90
 	pushw wa                                             ; FEA5F9  28
 	call T_TimedEventRing_Put                                ; FEA5FA  1d 64 1d f4
@@ -180350,8 +180367,8 @@ EditScreen_LcdKeyRow4:
 	calr sub_FEF778                                          ; FEAA65  1e 10 4d
 	calr sub_FEF8D6                                          ; FEAA68  1e 6b 4e
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAA6B  1e 64 4d
-	calr sub_FEFEBF                                          ; FEAA6E  1e 4e 54
-	calr sub_FEFD8A                                          ; FEAA71  1e 16 53
+	calr EditScreen_DrawVisibleNotes                                          ; FEAA6E  1e 4e 54
+	calr EditScreen_RedrawCursorLayer                                          ; FEAA71  1e 16 53
 	ret                                                  ; FEAA74  0e
 .LFEAA75:
 	ld (0x601f07:24), 0x00                             ; FEAA75  f2 07 1f 60 00 00
@@ -180752,7 +180769,7 @@ sub_FEADFB:
 	jr nz, .LFEAE50                                      ; FEAE44  6e 0a
 	calr sub_FEF778                                          ; FEAE46  1e 2f 49
 	calr sub_FEF8D6                                          ; FEAE49  1e 8a 4a
-	calr sub_FEFD8A                                          ; FEAE4C  1e 3b 4f
+	calr EditScreen_RedrawCursorLayer                                          ; FEAE4C  1e 3b 4f
 	ret                                                  ; FEAE4F  0e
 .LFEAE50:
 	calr sub_FE8BD4                                          ; FEAE50  1e 81 dd
@@ -180781,7 +180798,7 @@ sub_FEAE58:
 	calr sub_FEA743                                      ; FEAE8E  1e b2 f8
 	calr sub_FEF778                                          ; FEAE91  1e e4 48
 	calr sub_FEF8D6                                          ; FEAE94  1e 3f 4a
-	calr sub_FEFD8A                                          ; FEAE97  1e f0 4e
+	calr EditScreen_RedrawCursorLayer                                          ; FEAE97  1e f0 4e
 	ret                                                  ; FEAE9A  0e
 ; DrumEdit_LcdKeyRow3: the LcdKeyRow3 action of DrumEdit -- called only by LcdKeyRow3_DrumEdit.
 DrumEdit_LcdKeyRow3:
@@ -180811,8 +180828,8 @@ DrumEdit_RowFollowNoteUp:
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAEDF  1e 77 49
 	calr sub_FEF778                                          ; FEAEE2  1e 93 48
 	calr sub_FEF8D6                                          ; FEAEE5  1e ee 49
-	calr sub_FEFD8A                                          ; FEAEE8  1e 9f 4e
-	calr sub_FEA542                                      ; FEAEEB  1e 54 f6
+	calr EditScreen_RedrawCursorLayer                                          ; FEAEE8  1e 9f 4e
+	calr DrumEdit_AuditionRow                                      ; FEAEEB  1e 54 f6
 	calr sub_FE8040                                          ; FEAEEE  1e 4f d1
 	ret                                                  ; FEAEF1  0e
 .LFEAEF2:
@@ -180827,8 +180844,8 @@ DrumEdit_RowFollowNoteUp:
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF15  1e 41 49
 	calr sub_FEF778                                          ; FEAF18  1e 5d 48
 	calr sub_FEF8D6                                          ; FEAF1B  1e b8 49
-	calr sub_FEFD8A                                          ; FEAF1E  1e 69 4e
-	calr sub_FEA542                                      ; FEAF21  1e 1e f6
+	calr EditScreen_RedrawCursorLayer                                          ; FEAF1E  1e 69 4e
+	calr DrumEdit_AuditionRow                                      ; FEAF21  1e 1e f6
 	calr sub_FE8040                                          ; FEAF24  1e 19 d1
 .LFEAF27:
 	ret                                                  ; FEAF27  0e
@@ -180861,8 +180878,8 @@ DrumEdit_RowFollowNoteDown:
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAF6D  1e e9 48
 	calr sub_FEF778                                          ; FEAF70  1e 05 48
 	calr sub_FEF8D6                                          ; FEAF73  1e 60 49
-	calr sub_FEFD8A                                          ; FEAF76  1e 11 4e
-	calr sub_FEA542                                      ; FEAF79  1e c6 f5
+	calr EditScreen_RedrawCursorLayer                                          ; FEAF76  1e 11 4e
+	calr DrumEdit_AuditionRow                                      ; FEAF79  1e c6 f5
 	calr sub_FE8040                                          ; FEAF7C  1e c1 d0
 	ret                                                  ; FEAF7F  0e
 .LFEAF80:
@@ -180877,8 +180894,8 @@ DrumEdit_RowFollowNoteDown:
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEAFA3  1e b3 48
 	calr sub_FEF778                                          ; FEAFA6  1e cf 47
 	calr sub_FEF8D6                                          ; FEAFA9  1e 2a 49
-	calr sub_FEFD8A                                          ; FEAFAC  1e db 4d
-	calr sub_FEA542                                      ; FEAFAF  1e 90 f5
+	calr EditScreen_RedrawCursorLayer                                          ; FEAFAC  1e db 4d
+	calr DrumEdit_AuditionRow                                      ; FEAFAF  1e 90 f5
 	calr sub_FE8040                                          ; FEAFB2  1e 8b d0
 .LFEAFB5:
 	ret                                                  ; FEAFB5  0e
@@ -180910,11 +180927,12 @@ DrumEdit_LcdKeyRow1:
 	ret                                                  ; FEAFEF  0e
 .LFEAFF0:
 	ret                                                  ; FEAFF0  0e
-sub_FEAFF1:   ; entry: named by 1 `.long` operand, first at 0xFE9325
+; EditScreen_DeferredReselectAndRedraw5: EditScreen_DeferredActions[5] (queued by the DRUM EDIT scroll): the same four calls.
+EditScreen_DeferredReselectAndRedraw5:   ; entry: named by 1 `.long` operand, first at 0xFE9325
 	calr EditScreen_SelectEventAtCursor                                          ; FEAFF1  1e 1d df
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAFF4  1e db 47
-	calr sub_FEFEBF                                          ; FEAFF7  1e c5 4e
-	calr sub_FEFD8A                                          ; FEAFFA  1e 8d 4d
+	calr EditScreen_DrawVisibleNotes                                          ; FEAFF7  1e c5 4e
+	calr EditScreen_RedrawCursorLayer                                          ; FEAFFA  1e 8d 4d
 	ret                                                  ; FEAFFD  0e
 ; DrumEdit_SoftKeyCol8: the SoftKeyCol8 action of DrumEdit -- called only by SoftKeyCol8_DrumEdit.
 DrumEdit_SoftKeyCol8:
@@ -180930,10 +180948,10 @@ DrumEdit_SoftKeyCol8:
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEB026  1e 30 48
 	calr EditScreen_StepCursorAfterEntry                                          ; FEB029  1e 64 e2
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEB02C  1e a3 47
-	calr sub_FEFEBF                                          ; FEB02F  1e 8d 4e
+	calr EditScreen_DrawVisibleNotes                                          ; FEB02F  1e 8d 4e
 	ret                                                  ; FEB032  0e
 sub_FEB033:
-	calr sub_FEA535                                      ; FEB033  1e ff f4
+	calr EditScreen_AuditionEvent                                      ; FEB033  1e ff f4
 	ld (EditScreen_ActionTimer2:24), 0x82                             ; FEB036  f2 5a 1f 60 00 82
 	ret                                                  ; FEB03C  0e
 ; EditScreen_HighlightCursorRow: LCD_Svc_05_FillRect x 0..0x16, y = (0x601F73) * 10 + 0x2A .. +8: one 10-pixel row of the left column.  Called
@@ -183929,13 +183947,13 @@ sub_FEF8A9:   ; entry: named by 1 `ld` operand, first at 0xFEF895
 sub_FEF8AC:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF8AC  f1 40 25 00 00
 	calr sub_FEF8D6                                      ; FEF8B1  1e 22 00
-	calr sub_FEFEBF                                          ; FEF8B4  1e 08 06
+	calr EditScreen_DrawVisibleNotes                                          ; FEF8B4  1e 08 06
 	calr sub_FEF926                                      ; FEF8B7  1e 6c 00
 	ret                                                  ; FEF8BA  0e
 	calr sub_FEF74F                                          ; FEF8BB  1e 91 fe
 sub_FEF8BE:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEF8BE  f1 40 25 00 01
-	calr sub_FEFD8A                                          ; FEF8C3  1e c4 04
+	calr EditScreen_RedrawCursorLayer                                          ; FEF8C3  1e c4 04
 	ret                                                  ; FEF8C6  0e
 	calr sub_FEF758                                          ; FEF8C7  1e 8e fe
 sub_FEF8CA:
@@ -184455,7 +184473,7 @@ EditScreen_MeasureNumberAt11:   ; entry: named by 3 `.long`/`ld` operands, first
 	ret                                                  ; FEFD61  0e
 .LFEFD62:
 	ld XIY,DisplayList_FEFD80                            ; FEFD62  45 80 fd fe 00
-	ld XIX,sub_FEFD8A                                    ; FEFD67  44 8a fd fe 00
+	ld XIX,EditScreen_RedrawCursorLayer                                    ; FEFD67  44 8a fd fe 00
 	call T_DisplayListB_Run                              ; FEFD6C  1d f4 17 f4
 	ret                                                  ; FEFD70  0e
 
@@ -184472,20 +184490,23 @@ DisplayList_FEFD80:
 	.byte 0xB0, 0x26, 0xFF, 0x00       ; FEFD82
 	.ascii " ?"                                 ; FEFD86
 	.byte 0x03, 0x02                   ; FEFD88
-sub_FEFD8A:
+; EditScreen_RedrawCursorLayer: while the cursor is inside the measure: layer 1 erased, EditScreen_DrawSelectedEventBar,
+;   EditScreen_DrawCursorTickMarker, the left rule, sub_FEFDE5.
+EditScreen_RedrawCursorLayer:
 	ld c, (EditMeasure_Beats:24)                                 ; FEFD8A  c2 75 1f 60 23
 	mul C,0x60                                           ; FEFD8F  cb 08 60
 	cp (EditCursor_TickInMeasure:24), bc                             ; FEFD92  d2 54 1f 60 f9
 	jr nc, .LFEFDAB                                      ; FEFD97  6f 12
 	calr sub_FEF796                                          ; FEFD99  1e fa f9
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEFD9C  1e ba fa
-	calr sub_FF00ED                                          ; FEFD9F  1e 4b 03
-	calr sub_FEFDAC                                      ; FEFDA2  1e 07 00
+	calr EditScreen_DrawSelectedEventBar                                          ; FEFD9F  1e 4b 03
+	calr EditScreen_DrawCursorTickMarker                                      ; FEFDA2  1e 07 00
 	calr LCD_DrawVRuleLeft_OrNothing                                            ; FEFDA5  1e b1 00
 	calr sub_FEFDE5                                            ; FEFDA8  1e 3a 00
 .LFEFDAB:
 	ret                                                  ; FEFDAB  0e
-sub_FEFDAC:
+; EditScreen_DrawCursorTickMarker: layer 1: Glyph_FEFDE4 at x = EditCursor_TickInMeasure / 4 + 0x0D (NOTE) or 0x56 (DRUM), y = 0x22.
+EditScreen_DrawCursorTickMarker:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FEFDAC  f1 40 25 00 01
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FEFDB1  d2 54 1f 60 20
 	div A,0x04                                           ; FEFDB6  c9 0a 04
@@ -184634,7 +184655,9 @@ LCD_DrawVRuleRight_Layer1:
 	ld a, 0x02:opc                                          ; FEFEBB  21 02
 	swi 7                                                ; FEFEBD  ff
 	ret                                                  ; FEFEBE  0e
-sub_FEFEBF:
+; EditScreen_DrawVisibleNotes: walks the measure from its mark, counting 0x81 beat markers up to EditMeasure_Beats, and draws every note-on
+;   whose note is inside EditScreen_VisibleNoteRange (EditScreen_DrawEventBar).
+EditScreen_DrawVisibleNotes:
 	calr BStore_CursorSlot_Save                                          ; FEFEBF  1e 2c 8e
 	calr BStore_CursorSlot_RestoreMark                                          ; FEFEC2  1e 33 8d
 	ldw (0x601f6c:24), 0x00                             ; FEFEC5  f2 6c 1f 60 02 00 00
@@ -184658,13 +184681,13 @@ sub_FEFEBF:
 	calr BStoreCursor_ReadByte                                          ; FEFEF4  1e 3b 23
 	ld H,A                                               ; FEFEF7  c9 8e
 	pushw hl                                             ; FEFEF9  2b
-	calr sub_FEFFB4                                      ; FEFEFA  1e b7 00
+	calr EditScreen_VisibleNoteRange                                      ; FEFEFA  1e b7 00
 	popw hl                                              ; FEFEFD  4b
 	cp H,A                                               ; FEFEFE  c9 f6
 	jr c, .LFEFEE1                                       ; FEFF00  67 df
 	cp H,W                                               ; FEFF02  c8 f6
 	jr ugt, .LFEFEE1                                     ; FEFF04  6b db
-	calr sub_FEFFF3                                            ; FEFF06  1e ea 00
+	calr EditScreen_DrawEventBar                                            ; FEFF06  1e ea 00
 	jr .LFEFEE1                                          ; FEFF09  68 d6
 .LFEFF0B:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FEFF0B  d2 6c 1f 60 38 01 00
@@ -184677,7 +184700,8 @@ sub_FEFEBF:
 .LFEFF29:
 	calr BStore_CursorSlot_Restore                                          ; FEFF29  1e e9 8d
 	ret                                                  ; FEFF2C  0e
-sub_FEFF2D:
+; EditScreen_DrawVisibleNotesExceptSelected: the same walk, skipping the note-on at the selected position (0x601F0B / 0x601F0D).
+EditScreen_DrawVisibleNotesExceptSelected:
 	calr BStore_CursorSlot_Save                                          ; FEFF2D  1e be 8d
 	calr BStore_CursorSlot_RestoreMark                                          ; FEFF30  1e c5 8c
 	ldw (0x601f6c:24), 0x00                             ; FEFF33  f2 6c 1f 60 02 00 00
@@ -184709,13 +184733,13 @@ sub_FEFF2D:
 	calr BStoreCursor_ReadByte                                          ; FEFF7B  1e b4 22
 	ld H,A                                               ; FEFF7E  c9 8e
 	pushw hl                                             ; FEFF80  2b
-	calr sub_FEFFB4                                      ; FEFF81  1e 30 00
+	calr EditScreen_VisibleNoteRange                                      ; FEFF81  1e 30 00
 	popw hl                                              ; FEFF84  4b
 	cp H,A                                               ; FEFF85  c9 f6
 	jr c, .LFEFF50                                       ; FEFF87  67 c7
 	cp H,W                                               ; FEFF89  c8 f6
 	jr ugt, .LFEFF50                                     ; FEFF8B  6b c3
-	calr sub_FEFFF3                                            ; FEFF8D  1e 63 00
+	calr EditScreen_DrawEventBar                                            ; FEFF8D  1e 63 00
 	jr .LFEFF50                                          ; FEFF90  68 be
 .LFEFF92:
 	m_add_mi16 MW24, 0x601f6c, 0x0001                    ; FEFF92  d2 6c 1f 60 38 01 00
@@ -184728,7 +184752,9 @@ sub_FEFF2D:
 .LFEFFB0:
 	calr BStore_CursorSlot_Restore                                          ; FEFFB0  1e 62 8d
 	ret                                                  ; FEFFB3  0e
-sub_FEFFB4:
+; EditScreen_VisibleNoteRange: A = the lowest, W = the highest note shown: DRUM EDIT DrumEdit_TopRowNote .. + 11; NOTE EDIT the word pair
+;   WordTable_FEFFDD[NoteEdit_RulerPosition].
+EditScreen_VisibleNoteRange:
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFB4  f2 70 1f 60 c8
 	jr z, .LFEFFC6                                       ; FEFFB9  66 0b
 	ld wa, (DrumEdit_TopRowNote:24)                                ; FEFFBB  d2 71 1f 60 20
@@ -184757,7 +184783,8 @@ sub_FEFFB4:
 WordTable_FEFFDD:
 	.byte 0x01, 0x17, 0x09, 0x23, 0x15, 0x2f, 0x21, 0x3b, 0x2d, 0x47, 0x39, 0x53, 0x45, 0x5f, 0x51, 0x6b  ; FEFFDD
 	.byte 0x5d, 0x77, 0x69, 0x7f, 0x01, 0x01                                  ; FEFFED
-sub_FEFFF3:
+; EditScreen_DrawEventBar: geometry from sub_FF0294, layer 0, the mode's shape (sub_FF0092 DRUM / sub_FF000E NOTE), SWI 7 service 9.
+EditScreen_DrawEventBar:
 	calr sub_FF0294                                          ; FEFFF3  1e 9e 02
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEFFF6  f1 40 25 00 00
 	m_bit 0, MD24, EditScreen_Mode                              ; FEFFFB  f2 70 1f 60 c8
@@ -184838,7 +184865,9 @@ sub_FF0092:
 CoordTable_FF00D1:
 	.byte 0x9b, 0x00, 0x91, 0x00, 0x87, 0x00, 0x7d, 0x00, 0x73, 0x00, 0x69, 0x00, 0x5f, 0x00, 0x55, 0x00  ; FF00D1
 	.byte 0x4b, 0x00, 0x41, 0x00, 0x37, 0x00, 0x2d, 0x00, 0x00, 0x00, 0x00, 0x00  ; FF00E1
-sub_FF00ED:
+; EditScreen_DrawSelectedEventBar: with an event selected and its note in EditScreen_VisibleNoteRange: its bar on layer 1 (sub_FF0178 /
+;   sub_FF013F).
+EditScreen_DrawSelectedEventBar:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF00ED  f2 5b 1f 60 c8
 	jr z, .LFF013E                                       ; FF00F2  66 4a
 	calr BStore_CursorSlot_Save                                          ; FF00F4  1e f7 8b
@@ -184855,7 +184884,7 @@ sub_FF00ED:
 	calr BStoreCursor_ReadByte                                          ; FF0112  1e 1d 21
 	ld H,A                                               ; FF0115  c9 8e
 	pushw hl                                             ; FF0117  2b
-	calr sub_FEFFB4                                          ; FF0118  1e 99 fe
+	calr EditScreen_VisibleNoteRange                                          ; FF0118  1e 99 fe
 	popw hl                                              ; FF011B  4b
 	cp H,A                                               ; FF011C  c9 f6
 	jr c, .LFF013B                                       ; FF011E  67 1b
@@ -184924,7 +184953,7 @@ sub_FF019D:
 	calr BStoreCursor_ReadByte                                          ; FF01C2  1e 6d 20
 	ld H,A                                               ; FF01C5  c9 8e
 	pushw hl                                             ; FF01C7  2b
-	calr sub_FEFFB4                                          ; FF01C8  1e e9 fd
+	calr EditScreen_VisibleNoteRange                                          ; FF01C8  1e e9 fd
 	popw hl                                              ; FF01CB  4b
 	cp H,A                                               ; FF01CC  c9 f6
 	jr c, .LFF01EE                                       ; FF01CE  67 1e
@@ -184971,29 +185000,29 @@ sub_FF0205:
 	m_bit 7, MD24, EditScreen_ActionTimer                              ; FF020C  f2 58 1f 60 cf
 	jr z, .LFF0223                                       ; FF0211  66 10
 	calr EditScreen_EraseEditArea_Layer0                                          ; FF0213  1e bc f5
-	calr sub_FEFF2D                                          ; FF0216  1e 14 fd
+	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FF0216  1e 14 fd
 	calr EditScreen_EraseEditArea_Layer1                                          ; FF0219  1e 3d f6
 	calr sub_FF0243                                      ; FF021C  1e 24 00
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF021F  1e 37 fc
 	ret                                                  ; FF0222  0e
 .LFF0223:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FF0223  1e ac f5
-	calr sub_FEFF2D                                          ; FF0226  1e 04 fd
+	calr EditScreen_DrawVisibleNotesExceptSelected                                          ; FF0226  1e 04 fd
 	calr EditScreen_EraseEditArea_Layer1                                          ; FF0229  1e 2d f6
 	calr sub_FF019D                                      ; FF022C  1e 6e ff
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF022F  1e 27 fc
 	ret                                                  ; FF0232  0e
 .LFF0233:
 	calr EditScreen_EraseEditArea_Layer0                                          ; FF0233  1e 9c f5
-	calr sub_FEFEBF                                          ; FF0236  1e 86 fc
+	calr EditScreen_DrawVisibleNotes                                          ; FF0236  1e 86 fc
 	calr EditScreen_EraseEditArea_Layer1                                          ; FF0239  1e 1d f6
-	calr sub_FF00ED                                      ; FF023C  1e ae fe
+	calr EditScreen_DrawSelectedEventBar                                      ; FF023C  1e ae fe
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF023F  1e 17 fc
 	ret                                                  ; FF0242  0e
 sub_FF0243:
 	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF0243  f2 5b 1f 60 c8
 	jr z, .LFF0293                                       ; FF0248  66 49
-	calr sub_FEFFB4                                          ; FF024A  1e 67 fd
+	calr EditScreen_VisibleNoteRange                                          ; FF024A  1e 67 fd
 	ld l, (EditCursor_Note:24)                                 ; FF024D  c2 44 1f 60 27
 	calr sub_FF02F5                                      ; FF0252  1e a0 00
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FF0255  d2 54 1f 60 20
@@ -185025,7 +185054,7 @@ sub_FF0294:
 	calr BStoreCursor_ReadByte                                          ; FF029E  1e 91 1f
 	ld L,A                                               ; FF02A1  c9 8f
 	pushw hl                                             ; FF02A3  2b
-	calr sub_FEFFB4                                          ; FF02A4  1e 0d fd
+	calr EditScreen_VisibleNoteRange                                          ; FF02A4  1e 0d fd
 	popw hl                                              ; FF02A7  4b
 	calr sub_FF02F5                                      ; FF02A8  1e 4a 00
 	calr BStoreCursor_Step                                          ; FF02AB  1e 56 1f
