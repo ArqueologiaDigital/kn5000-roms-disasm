@@ -860,6 +860,48 @@ ROWS = [
      "IconOrigin = TouchCurve_BoxOrigins[(0x27A3)] (BoxOrigins3 when (0x27F5) is 1), TouchCurve_DrawThumbnail on\n"
      "ModelingPage_Fields+5 / +8 + (0x27A3), then the slot's TouchCurve_ListPtrs list.  Called by\n"
      "Draw_Page12LevelTouchCurveLevel and SoundEditAmpLevel1_RepaintField."),
+    # prom_a 0xFF6906-0xFF74C3: the LOAD SINGLE SOUND / COMBINATION pages' shared key handlers.  Dispatch_FF4049 holds
+    # L0adSingleS0und's two 32-slot pages, Dispatch_FF4151 L0adSingleC0mbination's (their ExitKey_ entries name them);
+    # a routine in both, or in two key slots, was refused by notes/prom_ab_button_table_siblings.py and is read here.
+    ("FF6906", "SoftKeyCol1_L0adSingle_AllPages",
+     "slot 0 (and its held form 0x11) of all four pages of both screens: PanelDial_SetButtonPair(0, 0x80),\n"
+     "UI_ScreenItem_StepByDial, Disk_FormatSelectedEntry_SaveRegs, then the string-table list DL_F5910F -- steps the\n"
+     "selected disk file entry."),
+    ("FF6BD2", "SoftKeyCols3_4_L0adSingleS0und_Page0",
+     "slots 2 and 3 of L0adSingleS0und page 0: steps (0x2735) down (argument bit 7 set) or up within 0..0x7F, 0..1 when\n"
+     "Var2728_Is2or3 (a drum bank), then L0adSingle_DrawBankAndNumber((0x2735))."),
+    ("FF6F86", "SoftKeyCols3_4_L0adSingleC0mbination_Page0",
+     "slots 2 and 3 of L0adSingleC0mbination page 0: the same step of (0x2735) within 0..0x7F, then\n"
+     "L0adSingle_DrawBankAndNumber((0x2735))."),
+    ("FF6C9E", "SoftKeyCol6_L0adSingle_Page0",
+     "slot 5 of page 0 of both screens: steps (0x2737) within 0..15 (forced 0 for a drum bank), then the group's name and\n"
+     "members -- L0adSingleS0und_DrawGroupName / _DrawGroupSounds when UI_ScreenLatch is 0x54, else the C0mbination pair."),
+    ("FF6CF0", "SoftKeyCols7_8_L0adSingleS0und_Page0",
+     "slots 6 and 7 of L0adSingleS0und page 0: steps (0x2738) within 0..T_SoundGroup_MaxMemberIndex_ByStack(bank\n"
+     "Table_FF4039[(0x2736)], group (0x2737)) and redraws the member highlight (DL_F591A6 / DL_F591B1, source 0x2738)."),
+    ("FF6FC0", "SoftKeyCols7_8_L0adSingleC0mbination_Page0",
+     "the same as SoftKeyCols7_8_L0adSingleS0und_Page0 with T_CombiGroup_MaxMemberIndex_ByStack."),
+    ("FF69B9", "SoftKeyCols3_4_L0adSingle_Page1",
+     "slots 2 and 3 of page 1 of both screens: steps (0x2727) within 0..15 (0..0 for a drum bank) and shows it 1-based\n"
+     "through (0x2730), the decimal readout of DL_F5910F's second record."),
+    ("FF6A17", "SoftKeyCols5_6_L0adSingleS0und_Page1",
+     "slots 4 and 5 of L0adSingleS0und page 1: (0x2736) = 0 / 1 (2 / 3 for a drum bank) by the argument's bit 7\n"
+     "(the direction) -- USER 1 / USER 2 (/ USER1 DRUM / USER2 DRUM) in DLText_F59128 -- then redraws the (0x2736) string-table record at 0xF59100."),
+    ("FF6A6C", "SoftKeyCols7_8_L0adSingle_Page1",
+     "slots 6 and 7 of page 1 of both screens: moves the cursor row (0x2739, 0..7) and scrolls the list top (0x273A, up to 8)\n"
+     "when the cursor is at an end; refused for a drum bank.  DL_F5915B is the row highlight (source 0x2739)."),
+    ("FF7436", "L0adSingle_DrawBankAndNumber",
+     "(n): Text_FF42A1[(0x2728)]'s 4 characters, then n + 1 in 1..3 digits, drawn at 0x19A5.  Called by the\n"
+     "SoftKeyCols3_4 page-0 handlers with (0x2735)."),
+    ("FF7224", "L0adSingleS0und_DrawGroupName",
+     "T_SoundGroupName_CopyToBuffer(bank Table_FF4039[(0x2736)], group (0x2737)) into 0x2940, drawn at 0x0C1E."),
+    ("FF725D", "L0adSingleC0mbination_DrawGroupName",
+     "the same with T_CombiGroupName_CopyToBuffer."),
+    ("FF7296", "L0adSingleS0und_DrawGroupSounds",
+     "eight lines from 0x0EEE, 0x208 apart: member k's name (T_SoundName_CopyToBuffer, bank Table_FF4039[(0x2736)],\n"
+     "group (0x2737)) up to T_SoundGroup_MaxMemberIndex_ByStack, Text_FF4291 after it."),
+    ("FF7399", "L0adSingleC0mbination_DrawGroupCombinations",
+     "the same over a combination group (T_CombiGroup_MaxMemberIndex_ByStack)."),
 ]
 
 

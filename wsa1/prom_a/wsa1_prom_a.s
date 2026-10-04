@@ -186866,14 +186866,14 @@ Dispatch_FF4041:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF4049:
-	.long sub_FF6906                                 ; FF4049  [  0]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF4049  [  0]
 	.long SoftKeyCol2_L0adSingleS0und_Page0                                 ; FF404D  [  1]
-	.long sub_FF6BD2                                 ; FF4051  [  2]
-	.long sub_FF6BD2                                 ; FF4055  [  3]
+	.long SoftKeyCols3_4_L0adSingleS0und_Page0                                 ; FF4051  [  2]
+	.long SoftKeyCols3_4_L0adSingleS0und_Page0                                 ; FF4055  [  3]
 	.long SoftKeyCol5_L0adSingleS0und_Page0                                 ; FF4059  [  4]
-	.long sub_FF6C9E                                 ; FF405D  [  5]
-	.long sub_FF6CF0                                 ; FF4061  [  6]
-	.long sub_FF6CF0                                 ; FF4065  [  7]
+	.long SoftKeyCol6_L0adSingle_Page0                                 ; FF405D  [  5]
+	.long SoftKeyCols7_8_L0adSingleS0und_Page0                                 ; FF4061  [  6]
+	.long SoftKeyCols7_8_L0adSingleS0und_Page0                                 ; FF4065  [  7]
 	.long LcdKeyRow1_L0adSingleS0und_Page0           ; FF4069  [  8]
 	.long Text_FF42A1__FF42B1                                 ; FF406D  [  9]
 	.long Text_FF42A1__FF42B1                                 ; FF4071  [ 10]
@@ -186883,14 +186883,14 @@ Dispatch_FF4049:
 	.long Text_FF42A1__FF42B1                                 ; FF4081  [ 14]
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4085  [ 15]
 	.long Text_FF42A1__FF42B1                                 ; FF4089  [ 16]
-	.long sub_FF6906                                 ; FF408D  [ 17]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF408D  [ 17]
 	.long SoftKeyCol2_L0adSingleS0und_Page0                                 ; FF4091  [ 18]
-	.long sub_FF6BD2                                 ; FF4095  [ 19]
-	.long sub_FF6BD2                                 ; FF4099  [ 20]
+	.long SoftKeyCols3_4_L0adSingleS0und_Page0                                 ; FF4095  [ 19]
+	.long SoftKeyCols3_4_L0adSingleS0und_Page0                                 ; FF4099  [ 20]
 	.long SoftKeyCol5_L0adSingleS0und_Page0                                 ; FF409D  [ 21]
-	.long sub_FF6C9E                                 ; FF40A1  [ 22]
-	.long sub_FF6CF0                                 ; FF40A5  [ 23]
-	.long sub_FF6CF0                                 ; FF40A9  [ 24]
+	.long SoftKeyCol6_L0adSingle_Page0                                 ; FF40A1  [ 22]
+	.long SoftKeyCols7_8_L0adSingleS0und_Page0                                 ; FF40A5  [ 23]
+	.long SoftKeyCols7_8_L0adSingleS0und_Page0                                 ; FF40A9  [ 24]
 	.long Text_FF42A1__FF42B1                                 ; FF40AD  [ 25]
 	.long Text_FF42A1__FF42B1                                 ; FF40B1  [ 26]
 	.long Text_FF42A1__FF42B1                                 ; FF40B5  [ 27]
@@ -186898,14 +186898,14 @@ Dispatch_FF4049:
 	.long Text_FF42A1__FF42B1                                 ; FF40BD  [ 29]
 	.long Text_FF42A1__FF42B1                                 ; FF40C1  [ 30]
 	.long Text_FF42A1__FF42B1                                 ; FF40C5  [ 31]
-	.long sub_FF6906                                 ; FF40C9  [ 32]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF40C9  [ 32]
 	.long SoftKeyCol2_L0adSingleS0und_Page1                                 ; FF40CD  [ 33]
-	.long sub_FF69B9                                 ; FF40D1  [ 34]
-	.long sub_FF69B9                                 ; FF40D5  [ 35]
-	.long sub_FF6A17                                 ; FF40D9  [ 36]
-	.long sub_FF6A17                                 ; FF40DD  [ 37]
-	.long sub_FF6A6C                                 ; FF40E1  [ 38]
-	.long sub_FF6A6C                                 ; FF40E5  [ 39]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF40D1  [ 34]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF40D5  [ 35]
+	.long SoftKeyCols5_6_L0adSingleS0und_Page1                                 ; FF40D9  [ 36]
+	.long SoftKeyCols5_6_L0adSingleS0und_Page1                                 ; FF40DD  [ 37]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF40E1  [ 38]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF40E5  [ 39]
 	.long LcdKeyRow1_L0adSingleS0und_Page1           ; FF40E9  [ 40]
 	.long Text_FF42A1__FF42B1                                 ; FF40ED  [ 41]
 	.long Text_FF42A1__FF42B1                                 ; FF40F1  [ 42]
@@ -186915,14 +186915,14 @@ Dispatch_FF4049:
 	.long Text_FF42A1__FF42B1                                 ; FF4101  [ 46]
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4105  [ 47]
 	.long Text_FF42A1__FF42B1                                 ; FF4109  [ 48]
-	.long sub_FF6906                                 ; FF410D  [ 49]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF410D  [ 49]
 	.long SoftKeyCol2_L0adSingleS0und_Page1                                 ; FF4111  [ 50]
-	.long sub_FF69B9                                 ; FF4115  [ 51]
-	.long sub_FF69B9                                 ; FF4119  [ 52]
-	.long sub_FF6A17                                 ; FF411D  [ 53]
-	.long sub_FF6A17                                 ; FF4121  [ 54]
-	.long sub_FF6A6C                                 ; FF4125  [ 55]
-	.long sub_FF6A6C                                 ; FF4129  [ 56]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF4115  [ 51]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF4119  [ 52]
+	.long SoftKeyCols5_6_L0adSingleS0und_Page1                                 ; FF411D  [ 53]
+	.long SoftKeyCols5_6_L0adSingleS0und_Page1                                 ; FF4121  [ 54]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF4125  [ 55]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF4129  [ 56]
 	.long Text_FF42A1__FF42B1                                 ; FF412D  [ 57]
 	.long Text_FF42A1__FF42B1                                 ; FF4131  [ 58]
 	.long Text_FF42A1__FF42B1                                 ; FF4135  [ 59]
@@ -186977,14 +186977,14 @@ Dispatch_FF4149:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF4151:
-	.long sub_FF6906                                 ; FF4151  [  0]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF4151  [  0]
 	.long Text_FF42A1__FF42B1                                 ; FF4155  [  1]
-	.long sub_FF6F86                                 ; FF4159  [  2]
-	.long sub_FF6F86                                 ; FF415D  [  3]
+	.long SoftKeyCols3_4_L0adSingleC0mbination_Page0                                 ; FF4159  [  2]
+	.long SoftKeyCols3_4_L0adSingleC0mbination_Page0                                 ; FF415D  [  3]
 	.long Text_FF42A1__FF42B1                                 ; FF4161  [  4]
-	.long sub_FF6C9E                                 ; FF4165  [  5]
-	.long sub_FF6FC0                                 ; FF4169  [  6]
-	.long sub_FF6FC0                                 ; FF416D  [  7]
+	.long SoftKeyCol6_L0adSingle_Page0                                 ; FF4165  [  5]
+	.long SoftKeyCols7_8_L0adSingleC0mbination_Page0                                 ; FF4169  [  6]
+	.long SoftKeyCols7_8_L0adSingleC0mbination_Page0                                 ; FF416D  [  7]
 	.long LcdKeyRow1_L0adSingleC0mbination_Page0     ; FF4171  [  8]
 	.long Text_FF42A1__FF42B1                                 ; FF4175  [  9]
 	.long Text_FF42A1__FF42B1                                 ; FF4179  [ 10]
@@ -186994,14 +186994,14 @@ Dispatch_FF4151:
 	.long Text_FF42A1__FF42B1                                 ; FF4189  [ 14]
 	.long ExitKey_L0adSingleC0mbination_Pages0_1     ; FF418D  [ 15]
 	.long Text_FF42A1__FF42B1                                 ; FF4191  [ 16]
-	.long sub_FF6906                                 ; FF4195  [ 17]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF4195  [ 17]
 	.long Text_FF42A1__FF42B1                                 ; FF4199  [ 18]
-	.long sub_FF6F86                                 ; FF419D  [ 19]
-	.long sub_FF6F86                                 ; FF41A1  [ 20]
+	.long SoftKeyCols3_4_L0adSingleC0mbination_Page0                                 ; FF419D  [ 19]
+	.long SoftKeyCols3_4_L0adSingleC0mbination_Page0                                 ; FF41A1  [ 20]
 	.long Text_FF42A1__FF42B1                                 ; FF41A5  [ 21]
-	.long sub_FF6C9E                                 ; FF41A9  [ 22]
-	.long sub_FF6FC0                                 ; FF41AD  [ 23]
-	.long sub_FF6FC0                                 ; FF41B1  [ 24]
+	.long SoftKeyCol6_L0adSingle_Page0                                 ; FF41A9  [ 22]
+	.long SoftKeyCols7_8_L0adSingleC0mbination_Page0                                 ; FF41AD  [ 23]
+	.long SoftKeyCols7_8_L0adSingleC0mbination_Page0                                 ; FF41B1  [ 24]
 	.long Text_FF42A1__FF42B1                                 ; FF41B5  [ 25]
 	.long Text_FF42A1__FF42B1                                 ; FF41B9  [ 26]
 	.long Text_FF42A1__FF42B1                                 ; FF41BD  [ 27]
@@ -187009,14 +187009,14 @@ Dispatch_FF4151:
 	.long Text_FF42A1__FF42B1                                 ; FF41C5  [ 29]
 	.long Text_FF42A1__FF42B1                                 ; FF41C9  [ 30]
 	.long Text_FF42A1__FF42B1                                 ; FF41CD  [ 31]
-	.long sub_FF6906                                 ; FF41D1  [ 32]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF41D1  [ 32]
 	.long Text_FF42A1__FF42B1                                 ; FF41D5  [ 33]
-	.long sub_FF69B9                                 ; FF41D9  [ 34]
-	.long sub_FF69B9                                 ; FF41DD  [ 35]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF41D9  [ 34]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF41DD  [ 35]
 	.long Text_FF42A1__FF42B1                                 ; FF41E1  [ 36]
 	.long Text_FF42A1__FF42B1                                 ; FF41E5  [ 37]
-	.long sub_FF6A6C                                 ; FF41E9  [ 38]
-	.long sub_FF6A6C                                 ; FF41ED  [ 39]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF41E9  [ 38]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF41ED  [ 39]
 	.long LcdKeyRow1_L0adSingleC0mbination_Page1     ; FF41F1  [ 40]
 	.long Text_FF42A1__FF42B1                                 ; FF41F5  [ 41]
 	.long Text_FF42A1__FF42B1                                 ; FF41F9  [ 42]
@@ -187026,14 +187026,14 @@ Dispatch_FF4151:
 	.long Text_FF42A1__FF42B1                                 ; FF4209  [ 46]
 	.long ExitKey_L0adSingleC0mbination_Pages0_1     ; FF420D  [ 47]
 	.long Text_FF42A1__FF42B1                                 ; FF4211  [ 48]
-	.long sub_FF6906                                 ; FF4215  [ 49]
+	.long SoftKeyCol1_L0adSingle_AllPages                                 ; FF4215  [ 49]
 	.long Text_FF42A1__FF42B1                                 ; FF4219  [ 50]
-	.long sub_FF69B9                                 ; FF421D  [ 51]
-	.long sub_FF69B9                                 ; FF4221  [ 52]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF421D  [ 51]
+	.long SoftKeyCols3_4_L0adSingle_Page1                                 ; FF4221  [ 52]
 	.long Text_FF42A1__FF42B1                                 ; FF4225  [ 53]
 	.long Text_FF42A1__FF42B1                                 ; FF4229  [ 54]
-	.long sub_FF6A6C                                 ; FF422D  [ 55]
-	.long sub_FF6A6C                                 ; FF4231  [ 56]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF422D  [ 55]
+	.long SoftKeyCols7_8_L0adSingle_Page1                                 ; FF4231  [ 56]
 	.long Text_FF42A1__FF42B1                                 ; FF4235  [ 57]
 	.long Text_FF42A1__FF42B1                                 ; FF4239  [ 58]
 	.long Text_FF42A1__FF42B1                                 ; FF423D  [ 59]
@@ -193004,11 +193004,11 @@ sub_FF674D:   ; entry: named by 1 `.long` operand, first at 0xFF4041
 	push XIY                                             ; FF67F3  3d
 	jp (xix)                                             ; FF67F4  b4 d8
 .LFF67F6:
-	calr sub_FF7224                                      ; FF67F6  1e 2b 0a
-	calr sub_FF7296                                      ; FF67F9  1e 9a 0a
+	calr L0adSingleS0und_DrawGroupName                                      ; FF67F6  1e 2b 0a
+	calr L0adSingleS0und_DrawGroupSounds                                      ; FF67F9  1e 9a 0a
 	push 0x00                                            ; FF67FC  09 00
 	m_push MB16, 0x2735                                  ; FF67FE  c1 35 27 04
-	calr sub_FF7436                                      ; FF6802  1e 31 0c
+	calr L0adSingle_DrawBankAndNumber                                      ; FF6802  1e 31 0c
 	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6805  1d 76 77 ff
 	lda xbc, (0xf5911e:24)                               ; FF6809  f2 1e 91 f5 31
 	push XBC                                             ; FF680E  39
@@ -193139,7 +193139,10 @@ PanelButtonDispatch_L0adSingleS0und:
 	popw hl                                              ; FF6902  4b
 	unlk XIZ                                             ; FF6903  ee 0d
 	ret                                                  ; FF6905  0e
-sub_FF6906:   ; entry: named by 8 `.long` operands, first at 0xFF4049
+; SoftKeyCol1_L0adSingle_AllPages: slot 0 (and its held form 0x11) of all four pages of both screens: PanelDial_SetButtonPair(0, 0x80),
+;   UI_ScreenItem_StepByDial, Disk_FormatSelectedEntry_SaveRegs, then the string-table list DL_F5910F -- steps the
+;   selected disk file entry.
+SoftKeyCol1_L0adSingle_AllPages:   ; entry: named by 8 `.long` operands, first at 0xFF4049
 	pushw 0x80                                           ; FF6906  0b 80 00
 	pushw 0x00                                           ; FF6909  0b 00 00
 	calr PanelDial_SetButtonPair                                      ; FF690C  1e 1b 08
@@ -193208,7 +193211,9 @@ SoftKeyCol2_L0adSingleS0und_Page1:   ; entry: named by 2 `.long` operands, first
 	pop XIX                                              ; FF69B5  5c
 	unlk XIZ                                             ; FF69B6  ee 0d
 	ret                                                  ; FF69B8  0e
-sub_FF69B9:   ; entry: named by 8 `.long` operands, first at 0xFF40D1
+; SoftKeyCols3_4_L0adSingle_Page1: slots 2 and 3 of page 1 of both screens: steps (0x2727) within 0..15 (0..0 for a drum bank) and shows it 1-based
+;   through (0x2730), the decimal readout of DL_F5910F's second record.
+SoftKeyCols3_4_L0adSingle_Page1:   ; entry: named by 8 `.long` operands, first at 0xFF40D1
 	link XIZ,0x0000                                      ; FF69B9  ee 0c 00 00
 	pushw hl                                             ; FF69BD  2b
 	pushw de                                             ; FF69BE  2a
@@ -193255,7 +193260,9 @@ sub_FF69B9:   ; entry: named by 8 `.long` operands, first at 0xFF40D1
 	popw hl                                              ; FF6A13  4b
 	unlk XIZ                                             ; FF6A14  ee 0d
 	ret                                                  ; FF6A16  0e
-sub_FF6A17:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
+; SoftKeyCols5_6_L0adSingleS0und_Page1: slots 4 and 5 of L0adSingleS0und page 1: (0x2736) = 0 / 1 (2 / 3 for a drum bank) by the argument's bit 7
+;   (the direction) -- USER 1 / USER 2 (/ USER1 DRUM / USER2 DRUM) in DLText_F59128 -- then redraws the (0x2736) string-table record at 0xF59100.
+SoftKeyCols5_6_L0adSingleS0und_Page1:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
 	link XIZ,0x0000                                      ; FF6A17  ee 0c 00 00
 	push XIX                                             ; FF6A1B  3c
 	lda xix, (0x2736:16)                                ; FF6A1C  f1 36 27 34
@@ -193293,7 +193300,9 @@ sub_FF6A17:   ; entry: named by 4 `.long` operands, first at 0xFF40D9
 	pop XIX                                              ; FF6A68  5c
 	unlk XIZ                                             ; FF6A69  ee 0d
 	ret                                                  ; FF6A6B  0e
-sub_FF6A6C:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
+; SoftKeyCols7_8_L0adSingle_Page1: slots 6 and 7 of page 1 of both screens: moves the cursor row (0x2739, 0..7) and scrolls the list top (0x273A, up to 8)
+;   when the cursor is at an end; refused for a drum bank.  DL_F5915B is the row highlight (source 0x2739).
+SoftKeyCols7_8_L0adSingle_Page1:   ; entry: named by 8 `.long` operands, first at 0xFF40E1
 	link XIZ,0x0000                                      ; FF6A6C  ee 0c 00 00
 	push XIX                                             ; FF6A70  3c
 	lda xix, (0x273a:16)                                ; FF6A71  f1 3a 27 34
@@ -193462,17 +193471,19 @@ SoftKeyCol2_L0adSingleS0und_Page0:   ; entry: named by 2 `.long` operands, first
 	lda xbc, (0xf59100:24)                               ; FF6BB2  f2 00 91 f5 31
 	push XBC                                             ; FF6BB7  39
 	call DLB_Handler_StringTable_Veneer                                      ; FF6BB8  1d 56 76 ff
-	calr sub_FF7224                                      ; FF6BBC  1e 65 06
-	calr sub_FF7296                                      ; FF6BBF  1e d4 06
+	calr L0adSingleS0und_DrawGroupName                                      ; FF6BBC  1e 65 06
+	calr L0adSingleS0und_DrawGroupSounds                                      ; FF6BBF  1e d4 06
 	push 0x00                                            ; FF6BC2  09 00
 	m_push MB16, 0x2735                                  ; FF6BC4  c1 35 27 04
-	calr sub_FF7436                                      ; FF6BC8  1e 6b 08
+	calr L0adSingle_DrawBankAndNumber                                      ; FF6BC8  1e 6b 08
 	inc 6,XSP                                            ; FF6BCB  ef 66
 	pop XIX                                              ; FF6BCD  5c
 	popw hl                                              ; FF6BCE  4b
 	unlk XIZ                                             ; FF6BCF  ee 0d
 	ret                                                  ; FF6BD1  0e
-sub_FF6BD2:   ; entry: named by 4 `.long` operands, first at 0xFF4051
+; SoftKeyCols3_4_L0adSingleS0und_Page0: slots 2 and 3 of L0adSingleS0und page 0: steps (0x2735) down (argument bit 7 set) or up within 0..0x7F, 0..1 when
+;   Var2728_Is2or3 (a drum bank), then L0adSingle_DrawBankAndNumber((0x2735)).
+SoftKeyCols3_4_L0adSingleS0und_Page0:   ; entry: named by 4 `.long` operands, first at 0xFF4051
 	link XIZ,0x0000                                      ; FF6BD2  ee 0c 00 00
 	pushw hl                                             ; FF6BD6  2b
 	pushw de                                             ; FF6BD7  2a
@@ -193509,7 +193520,7 @@ sub_FF6BD2:   ; entry: named by 4 `.long` operands, first at 0xFF4051
 .LFF6C17:
 	ld C,(XIX)                                           ; FF6C17  84 23
 	pushw bc                                             ; FF6C19  29
-	calr sub_FF7436                                      ; FF6C1A  1e 19 08
+	calr L0adSingle_DrawBankAndNumber                                      ; FF6C1A  1e 19 08
 	popw bc                                              ; FF6C1D  49
 	pop XIX                                              ; FF6C1E  5c
 	popw de                                              ; FF6C1F  4a
@@ -193550,7 +193561,7 @@ SoftKeyCol5_L0adSingleS0und_Page0:   ; entry: named by 2 `.long` operands, first
 	lda xbc, (0xf59100:24)                               ; FF6C61  f2 00 91 f5 31
 	push XBC                                             ; FF6C66  39
 	call DLB_Handler_StringTable_Veneer                                      ; FF6C67  1d 56 76 ff
-	calr sub_FF7224                                      ; FF6C6B  1e b6 05
+	calr L0adSingleS0und_DrawGroupName                                      ; FF6C6B  1e b6 05
 	ld C,(XIX)                                           ; FF6C6E  84 23
 	mul C,0x02                                           ; FF6C70  cb 08 02
 	extz XBC                                             ; FF6C73  e9 12
@@ -193566,12 +193577,14 @@ SoftKeyCol5_L0adSingleS0und_Page0:   ; entry: named by 2 `.long` operands, first
 	jr nc, .LFF6C96                                      ; FF6C90  6f 04
 	ld (0x2738:16), a                                   ; FF6C92  f1 38 27 41
 .LFF6C96:
-	calr sub_FF7296                                      ; FF6C96  1e fd 05
+	calr L0adSingleS0und_DrawGroupSounds                                      ; FF6C96  1e fd 05
 	pop XIX                                              ; FF6C99  5c
 	popw hl                                              ; FF6C9A  4b
 	unlk XIZ                                             ; FF6C9B  ee 0d
 	ret                                                  ; FF6C9D  0e
-sub_FF6C9E:   ; entry: named by 4 `.long` operands, first at 0xFF405D
+; SoftKeyCol6_L0adSingle_Page0: slot 5 of page 0 of both screens: steps (0x2737) within 0..15 (forced 0 for a drum bank), then the group's name and
+;   members -- L0adSingleS0und_DrawGroupName / _DrawGroupSounds when UI_ScreenLatch is 0x54, else the C0mbination pair.
+SoftKeyCol6_L0adSingle_Page0:   ; entry: named by 4 `.long` operands, first at 0xFF405D
 	link XIZ,0x0000                                      ; FF6C9E  ee 0c 00 00
 	push XIX                                             ; FF6CA2  3c
 	lda xix, (0x2737:16)                                ; FF6CA3  f1 37 27 34
@@ -193600,17 +193613,19 @@ sub_FF6C9E:   ; entry: named by 4 `.long` operands, first at 0xFF405D
 .LFF6CD7:
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x54                          ; FF6CD7  c1 7a 20 3f 54
 	jr nz, .LFF6CE6                                      ; FF6CDC  6e 08
-	calr sub_FF7296                                      ; FF6CDE  1e b5 05
-	calr sub_FF7224                                      ; FF6CE1  1e 40 05
+	calr L0adSingleS0und_DrawGroupSounds                                      ; FF6CDE  1e b5 05
+	calr L0adSingleS0und_DrawGroupName                                      ; FF6CE1  1e 40 05
 	jr .LFF6CEC                                          ; FF6CE4  68 06
 .LFF6CE6:
-	calr sub_FF7399                                      ; FF6CE6  1e b0 06
-	calr sub_FF725D                                      ; FF6CE9  1e 71 05
+	calr L0adSingleC0mbination_DrawGroupCombinations                                      ; FF6CE6  1e b0 06
+	calr L0adSingleC0mbination_DrawGroupName                                      ; FF6CE9  1e 71 05
 .LFF6CEC:
 	pop XIX                                              ; FF6CEC  5c
 	unlk XIZ                                             ; FF6CED  ee 0d
 	ret                                                  ; FF6CEF  0e
-sub_FF6CF0:   ; entry: named by 4 `.long` operands, first at 0xFF4061
+; SoftKeyCols7_8_L0adSingleS0und_Page0: slots 6 and 7 of L0adSingleS0und page 0: steps (0x2738) within 0..T_SoundGroup_MaxMemberIndex_ByStack(bank
+;   Table_FF4039[(0x2736)], group (0x2737)) and redraws the member highlight (DL_F591A6 / DL_F591B1, source 0x2738).
+SoftKeyCols7_8_L0adSingleS0und_Page0:   ; entry: named by 4 `.long` operands, first at 0xFF4061
 	link XIZ,0x0000                                      ; FF6CF0  ee 0c 00 00
 	pushw hl                                             ; FF6CF4  2b
 	push XIX                                             ; FF6CF5  3c
@@ -193649,7 +193664,7 @@ sub_FF6CF0:   ; entry: named by 4 `.long` operands, first at 0xFF4061
 	jr nc, .LFF6D50                                      ; FF6D49  6f 05
 	incm8 0x01, (xix)                                    ; FF6D4B  84 61
 .LFF6D4D:
-	calr sub_FF7296                                      ; FF6D4D  1e 46 05
+	calr L0adSingleS0und_DrawGroupSounds                                      ; FF6D4D  1e 46 05
 .LFF6D50:
 	lda xbc, (DL_F591A6:24)                              ; FF6D50  f2 a6 91 f5 31
 	push XBC                                             ; FF6D55  39
@@ -193818,11 +193833,11 @@ sub_FF6DD7:   ; entry: named by 1 `.long` operand, first at 0xFF4149
 	push XIY                                             ; FF6E54  3d
 	jp (xix)                                             ; FF6E55  b4 d8
 .LFF6E57:
-	calr sub_FF725D                                      ; FF6E57  1e 03 04
-	calr sub_FF7399                                      ; FF6E5A  1e 3c 05
+	calr L0adSingleC0mbination_DrawGroupName                                      ; FF6E57  1e 03 04
+	calr L0adSingleC0mbination_DrawGroupCombinations                                      ; FF6E5A  1e 3c 05
 	push 0x00                                            ; FF6E5D  09 00
 	m_push MB16, 0x2735                                  ; FF6E5F  c1 35 27 04
-	calr sub_FF7436                                      ; FF6E63  1e d0 05
+	calr L0adSingle_DrawBankAndNumber                                      ; FF6E63  1e d0 05
 	call Disk_FormatSelectedEntry_SaveRegs                                      ; FF6E66  1d 76 77 ff
 	lda xbc, (0xf5911e:24)                               ; FF6E6A  f2 1e 91 f5 31
 	push XBC                                             ; FF6E6F  39
@@ -193985,7 +194000,9 @@ LcdKeyRow1_L0adSingleC0mbination_Page1:
 .LFF6F83:
 	unlk XIZ                                             ; FF6F83  ee 0d
 	ret                                                  ; FF6F85  0e
-sub_FF6F86:   ; entry: named by 4 `.long` operands, first at 0xFF4159
+; SoftKeyCols3_4_L0adSingleC0mbination_Page0: slots 2 and 3 of L0adSingleC0mbination page 0: the same step of (0x2735) within 0..0x7F, then
+;   L0adSingle_DrawBankAndNumber((0x2735)).
+SoftKeyCols3_4_L0adSingleC0mbination_Page0:   ; entry: named by 4 `.long` operands, first at 0xFF4159
 	link XIZ,0x0000                                      ; FF6F86  ee 0c 00 00
 	push XIX                                             ; FF6F8A  3c
 	lda xix, (0x2735:16)                                ; FF6F8B  f1 35 27 34
@@ -194009,12 +194026,13 @@ sub_FF6F86:   ; entry: named by 4 `.long` operands, first at 0xFF4159
 .LFF6FB5:
 	ld C,(XIX)                                           ; FF6FB5  84 23
 	pushw bc                                             ; FF6FB7  29
-	calr sub_FF7436                                      ; FF6FB8  1e 7b 04
+	calr L0adSingle_DrawBankAndNumber                                      ; FF6FB8  1e 7b 04
 	popw bc                                              ; FF6FBB  49
 	pop XIX                                              ; FF6FBC  5c
 	unlk XIZ                                             ; FF6FBD  ee 0d
 	ret                                                  ; FF6FBF  0e
-sub_FF6FC0:   ; entry: named by 4 `.long` operands, first at 0xFF4169
+; SoftKeyCols7_8_L0adSingleC0mbination_Page0: the same as SoftKeyCols7_8_L0adSingleS0und_Page0 with T_CombiGroup_MaxMemberIndex_ByStack.
+SoftKeyCols7_8_L0adSingleC0mbination_Page0:   ; entry: named by 4 `.long` operands, first at 0xFF4169
 	link XIZ,0x0000                                      ; FF6FC0  ee 0c 00 00
 	pushw hl                                             ; FF6FC4  2b
 	push XIX                                             ; FF6FC5  3c
@@ -194342,7 +194360,8 @@ sub_FF7153:
 	popw hl                                              ; FF7220  4b
 	unlk XIZ                                             ; FF7221  ee 0d
 	ret                                                  ; FF7223  0e
-sub_FF7224:
+; L0adSingleS0und_DrawGroupName: T_SoundGroupName_CopyToBuffer(bank Table_FF4039[(0x2736)], group (0x2737)) into 0x2940, drawn at 0x0C1E.
+L0adSingleS0und_DrawGroupName:
 	lda xbc, (0x2940:16)                                ; FF7224  f1 40 29 31
 	push XBC                                             ; FF7228  39
 	ld a, 0x02:opc                                          ; FF7229  21 02
@@ -194362,7 +194381,8 @@ sub_FF7224:
 	call LCD_SwiTextCall_SaveRegs                                      ; FF7252  1d 95 78 ff
 	add XSP,0x00000012                                   ; FF7256  ef c8 12 00 00 00
 	ret                                                  ; FF725C  0e
-sub_FF725D:
+; L0adSingleC0mbination_DrawGroupName: the same with T_CombiGroupName_CopyToBuffer.
+L0adSingleC0mbination_DrawGroupName:
 	lda xbc, (0x2940:16)                                ; FF725D  f1 40 29 31
 	push XBC                                             ; FF7261  39
 	ld a, 0x02:opc                                          ; FF7262  21 02
@@ -194383,7 +194403,7 @@ sub_FF725D:
 	add XSP,0x00000012                                   ; FF728F  ef c8 12 00 00 00
 	ret                                                  ; FF7295  0e
 ; ---------------------------------------------------------------------
-; sub_FF7296 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; L0adSingleS0und_DrawGroupSounds -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: prom_a PageDispatch_L0adSingleS0und (`calr`) at 0xFF67F9
 ;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6BBF
@@ -194402,7 +194422,9 @@ sub_FF725D:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FF7296:
+; L0adSingleS0und_DrawGroupSounds: eight lines from 0x0EEE, 0x208 apart: member k's name (T_SoundName_CopyToBuffer, bank Table_FF4039[(0x2736)],
+;   group (0x2737)) up to T_SoundGroup_MaxMemberIndex_ByStack, Text_FF4291 after it.
+L0adSingleS0und_DrawGroupSounds:
 	link XIZ,0xfffe                                      ; FF7296  ee 0c fe ff
 	pushw hl                                             ; FF729A  2b
 	pushw de                                             ; FF729B  2a
@@ -194511,7 +194533,7 @@ sub_FF7333:
 	unlk XIZ                                             ; FF7396  ee 0d
 	ret                                                  ; FF7398  0e
 ; ---------------------------------------------------------------------
-; sub_FF7399 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; L0adSingleC0mbination_DrawGroupCombinations -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6CE6
 ;          prom_a PageDispatch_L0adSingleC0mbination (`calr`) at 0xFF6E5A
@@ -194527,7 +194549,8 @@ sub_FF7333:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FF7399:
+; L0adSingleC0mbination_DrawGroupCombinations: the same over a combination group (T_CombiGroup_MaxMemberIndex_ByStack).
+L0adSingleC0mbination_DrawGroupCombinations:
 	link XIZ,0xfffe                                      ; FF7399  ee 0c fe ff
 	pushw hl                                             ; FF739D  2b
 	pushw de                                             ; FF739E  2a
@@ -194595,7 +194618,7 @@ sub_FF7399:
 	unlk XIZ                                             ; FF7433  ee 0d
 	ret                                                  ; FF7435  0e
 ; ---------------------------------------------------------------------
-; sub_FF7436 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
+; L0adSingle_DrawBankAndNumber -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: prom_a PageDispatch_L0adSingleS0und (`calr`) at 0xFF6802
 ;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6BC8
@@ -194614,7 +194637,9 @@ sub_FF7399:
 ;          from evidence instead of a search.
 ; Recorded by notes/prom_a_understanding_round7.py --apply-strings.
 ; ---------------------------------------------------------------------
-sub_FF7436:
+; L0adSingle_DrawBankAndNumber: (n): Text_FF42A1[(0x2728)]'s 4 characters, then n + 1 in 1..3 digits, drawn at 0x19A5.  Called by the
+;   SoftKeyCols3_4 page-0 handlers with (0x2735).
+L0adSingle_DrawBankAndNumber:
 	link XIZ,0xfff6                                      ; FF7436  ee 0c f6 ff
 	pushw hl                                             ; FF743A  2b
 	pushw de                                             ; FF743B  2a
