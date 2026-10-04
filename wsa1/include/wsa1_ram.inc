@@ -456,3 +456,7 @@
 
 ; ---- wsa1/notes/FINDINGS-prom_b-dsp-effect-parameters.md -- "7.1 `DspEffect_Section` (0x2790)"
 	.equ DspEffect_Section,				0x2790	; the DSP EFFECT screen's section, 0..5: 0 no block opened, 1..3 block 0..2's parameters, 4 / 5 block 0 / 2's EQ -- every DSP EFFECT key handler switches on it (cp BC,5 / jp table); EffectPage_BlockIndex maps it to the block
+
+; ---- wsa1/notes/FINDINGS-image-files.md -- "9. The small-icon origin, RAM 0x2350 / 0x2352, and the four drawers that use it (2026-10-04)"
+	.equ IconOrigin_X,				0x2350	; X of the small icon being drawn (keyboard, touch-curve thumbnail) -- KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it
+	.equ IconOrigin_Y,				0x2352	; Y of the small icon being drawn -- KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it

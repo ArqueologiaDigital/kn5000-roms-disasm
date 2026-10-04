@@ -324,3 +324,31 @@ objects are not, in this build, where it says they are. `--layout` prints the
 grid. The question for the next lane is no longer *what is in the icon sheet*
 (119 icons) but **what these 216 slots indexed**, and there is no second build
 of this firmware to test the obvious "vestigial index" hypothesis against.
+
+## 9. The small-icon origin, RAM 0x2350 / 0x2352, and the four drawers that use it (2026-10-04)
+
+Every read of 0x2350 and 0x2352 in either image is in prom_b 0xF5BBE7-0xF5BEFA. They are read
+by four routines, each of which positions its whole picture relative to them.
+
+| routine | what it draws at (X, Y) = ((0x2350), (0x2352)) |
+|---|---|
+| `OctaveIcon_Draw` (0xF5BCE8) | one 28-pixel octave at (IX, IY). The outline is a FillRect-family box (service 0x09). It has six dividers (service 0x02, VLine) and the five black keys of `OctaveIcon_BlackKeyX`. |
+| `KeyboardIcon_Draw` (0xF5BBE7) | seven `OctaveIcon_Draw`s with IX stepping by 28 from (0x2350), then the closing top key at +196..+200 and the marks either side of it. |
+| `TouchCurve_DrawThumbnail` (0xF5BE5A) | the curve in bits 5..7 of the byte at XIZ. Curve 3 erases the 37 x 37 box at +1 (service 0x1B) and draws the diagonal from (+1, +38) to (+38, +1) (service 0x00, DrawLine). Any other curve blits `CurveBitmapSelector[curve]`, 40 x 40, at y*40 + x/8 (service 0x03). |
+| `TouchCurve_DrawCurrentSlot` (0xF5BDBB) | first stores the origin itself: (0x2350), (0x2352) = `TouchCurve_BoxOrigins[(0x27A3)]` (or `..._BoxOrigins3` when (0x27F5) is 1). Then `TouchCurve_DrawThumbnail` on `ModelingPage_Fields+5` / `+8` + (0x27A3), and the slot's `TouchCurve_ListPtrs` list. Called by `Draw_Page12LevelTouchCurveLevel` and `SoundEditAmpLevel1_RepaintField`. |
+
+The other writers set constants before `call KeyboardIcon_Draw`:
+
+- (56, 139) in the two KEY FOLLOW painters (`Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk`,
+  `..._TouchAttack`) and in `sub_F5C772`;
+- (47, 51) in `SoundEditToneLayerKeyLayer_Paint`, the KEY LAYER page, whose subject is a key range.
+
+The two words are named `IconOrigin_X` / `IconOrigin_Y` for that role.
+
+`TouchCurve_DrawThumbnail` is also the filler entry of the two 48-entry selector tables
+`DispatchTable_F5B8F8` / `DispatchTable_F5B9F8` (entries 1, 28, 41, 44, 46, 47, and entry 21 of the
+second). Those selectors have no page, and nothing here shows them being selected.
+
+⚠ Not established: the three-way value of (0x27F5). It is 1 or 2 from `ScreenEnter_SoundEditMenu`'s
+test of a record byte & 0xC0 (0x80 -> 1, 0x40 -> 2), and `SoundEditCopy_Paint` shows `DRUM KIT:` texts
+when it is 1. It is not named here.

@@ -514,6 +514,10 @@ GROUPS = [
         0x2790: ("DspEffect_Section", "the DSP EFFECT screen's section, 0..5: 0 no block opened, 1..3 block 0..2's parameters, 4 / 5 block 0 / 2's EQ",
                  "every DSP EFFECT key handler switches on it (cp BC,5 / jp table); EffectPage_BlockIndex maps it to the block"),
     }),
+    ("wsa1/notes/FINDINGS-image-files.md", "9. The small-icon origin, RAM 0x2350 / 0x2352, and the four drawers that use it (2026-10-04)", {
+        0x2350: ("IconOrigin_X", "X of the small icon being drawn (keyboard, touch-curve thumbnail)", "KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it"),
+        0x2352: ("IconOrigin_Y", "Y of the small icon being drawn", "KeyboardIcon_Draw and TouchCurve_DrawThumbnail draw relative to it"),
+    }),
 ]
 NAMES = {a: v for _, _, g in GROUPS for a, v in g.items()}
 MEM = re.compile(r'\((0x[0-9a-fA-F]+|\d+)(:8|:16|:24)?\)')   # :8 -- the direct page, `cp (0xc4:8), 2`

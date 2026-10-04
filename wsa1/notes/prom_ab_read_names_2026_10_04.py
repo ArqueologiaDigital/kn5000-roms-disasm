@@ -845,6 +845,21 @@ ROWS = [
      "PanelEvent_Flags bit 2, down with bit 0; limits max(Fc(+17), 8)..26 for the band at +19 (which = 1) or\n"
      "0..min(Fc(+19), 22) for the band at +17 (which = 0) -- the limits DspEffect_RepairEqBandFc checks.  Offsets 1 / 3 when UI_ScreenId is 0x6B.\n"
      "Called by SoftKeyCol2/5_DspEffect_EqSections."),
+    # prom_b 0xF5BBE7-0xF5BEFA: the small-icon drawers (FINDINGS-image-files.md section 9)
+    ("F5BCE8", "OctaveIcon_Draw",
+     "at (IX, IY): one 28-pixel octave -- a service-0x09 box 28 x 12, six VLines (service 0x02) and the five\n"
+     "OctaveIcon_BlackKeyX boxes.  Called seven times by KeyboardIcon_Draw."),
+    ("F5BBE7", "KeyboardIcon_Draw",
+     "seven OctaveIcon_Draw from (IconOrigin_X, IconOrigin_Y), IX + 28 each, then the closing key at +196..+200\n"
+     "and two marks.  Called after IconOrigin_X/Y = (47, 51) by SoundEditToneLayerKeyLayer_Paint, (56, 139) by the KEY FOLLOW painters."),
+    ("F5BE5A", "TouchCurve_DrawThumbnail",
+     "curve = (XIZ) >> 5: 3 erases the box at IconOrigin + 1 (service 0x1B) and draws the diagonal (service 0x00,\n"
+     "DrawLine); otherwise blits CurveBitmapSelector[curve], 40 x 40, at IconOrigin (service 0x03).  Also the filler\n"
+     "entry of DispatchTable_F5B8F8 / F5B9F8 at the selectors with no page."),
+    ("F5BDBB", "TouchCurve_DrawCurrentSlot",
+     "IconOrigin = TouchCurve_BoxOrigins[(0x27A3)] (BoxOrigins3 when (0x27F5) is 1), TouchCurve_DrawThumbnail on\n"
+     "ModelingPage_Fields+5 / +8 + (0x27A3), then the slot's TouchCurve_ListPtrs list.  Called by\n"
+     "Draw_Page12LevelTouchCurveLevel and SoundEditAmpLevel1_RepaintField."),
 ]
 
 

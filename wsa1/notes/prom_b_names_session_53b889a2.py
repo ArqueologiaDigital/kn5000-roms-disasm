@@ -3241,4 +3241,8 @@ RENAMES = [
     ("T_F42F40", "T_DspEffect_SetSection"),
     ("T_F42F44", "T_DspEffect_SetSectionAndRepaint"),
     ("T_F42F48", "T_DspEffect_GetSection"),
+    ("sub_F5BCE8", "OctaveIcon_Draw"),
+    ("sub_F5BBE7", "KeyboardIcon_Draw"),
+    ("sub_F5BE5A", "TouchCurve_DrawThumbnail"),
+    ("sub_F5BDBB", "TouchCurve_DrawCurrentSlot"),
 ]

@@ -10481,7 +10481,7 @@ DL_F04038:
 ; DL_TouchCurve_0..5 -- 0xF04042-0xF0413D, six interpreter-A lists of 42 bytes
 ;   (4 records each): the captions TOUCH and CURVE (op 0x17), a box (op 0x22)
 ;   and a line (op 0x01), the same picture at six places.  Run one at a time
-;   by sub_F5BDBB through TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld
+;   by TouchCurve_DrawCurrentSlot through TouchCurve_ListPtrs / TouchCurve_ListPtrs3 (`ld
 ;   XIY,(XIZ) / ld XIX,XIY / add XIX,42 / call T_DisplayList_Run` at
 ;   0xF5BE4B-0xF5BE55).  0xF04042 is also the END of the list before it (`ld
 ;   XIX,0x00F04042` at 0xF5BDCC).
@@ -128072,7 +128072,7 @@ SC1_Entry_F40F24_Body_Ret_Join:
 ;     next routine's first byte.  Entries for 0xC0.. re-use 0xA0.. ------------
 DispatchTable_F5B8F8:
 	.long SoundEditMenu_Paint	; [0x80]
-	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0x81]   (default `ret`)
 	.long Draw_ToneTemplateLevelKeyTune	; [0x82]
 	.long SoundEditToneLayerPanning_Paint	; [0x83]
 	.long SoundEditToneLayerKeyLayer_Paint	; [0x84]
@@ -128099,7 +128099,7 @@ DispatchTable_F5B8F8:
 	.long SoundEditFilterLfo_Paint	; [0x99]
 	.long SoundEditDigitalEffect_Paint	; [0x9A]
 	.long SoundEditController_PaintPage2	; [0x9B]
-	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_Paint	; [0x9D]
 	.long Draw_Mem0ryWriteSoundEditName	; [0x9E]
 	.long Draw_Write	; [0x9F]
@@ -128112,13 +128112,13 @@ DispatchTable_F5B8F8:
 	.long ToneEditPage_A6_Paint	; [0xA6]  <- also selector 0xC6
 	.long ToneEditPage_A7_Paint	; [0xA7]  <- also selector 0xC7
 	.long Draw_Serial	; [0xA8]  <- also selector 0xC8
-	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long DispatchTable_F5B8F8_Nop42	; [0xAA]  <- also selector 0xCA
 	.long SoundEditDrumMenu_Paint	; [0xAB]  <- also selector 0xCB
-	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_PaintPage1	; [0xAD]  <- also selector 0xCD
-	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
-	.long sub_F5BE5A + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
 
 ; ---------------------------------------------------------------------
 ; Dispatch_Code80 -- the same selector table mechanism, no display bracket
@@ -128169,7 +128169,7 @@ Dispatch_Code80_Join:
 ; --- 0xF5B9F8: 48 entries, one per selector 0x80..0xAF ---------------------
 DispatchTable_F5B9F8:
 	.long SoundEditMenu_RepaintField	; [0x80]
-	.long sub_F5BE5A + 0xBD	; [0x81]   (default `ret`)
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0x81]   (default `ret`)
 	.long SoundEditModelingToneTemplate_RepaintField	; [0x82]
 	.long SoundEditToneLayerPanning_RepaintField	; [0x83]
 	.long SoundEditToneLayerKeyLayer_RepaintField	; [0x84]
@@ -128189,14 +128189,14 @@ DispatchTable_F5B9F8:
 	.long SoundEditFilterLpf24_RepaintField	; [0x92]
 	.long SoundEditFilterHpf24_RepaintField	; [0x93]
 	.long SoundEditFilterBpf_RepaintField	; [0x94]
-	.long sub_F5BE5A + 0xBD	; [0x95]   (default `ret`)
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0x95]   (default `ret`)
 	.long SoundEditKeyFollow_RepaintField	; [0x96]
 	.long SoundEditEnvelope1_RepaintField	; [0x97]
 	.long SoundEditEnvelope2_RepaintField	; [0x98]
 	.long SoundEditLfo_RepaintField	; [0x99]
 	.long SoundEditDigitalEffect_RepaintField	; [0x9A]
 	.long SoundEditController_RepaintFieldPage2	; [0x9B]
-	.long sub_F5BE5A + 0xBD	; [0x9C]   (default `ret`)
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0x9C]   (default `ret`)
 	.long SoundEditCopy_RepaintField	; [0x9D]
 	.long SoundEditMemoryWrite_RepaintField	; [0x9E]
 	.long SoundEditNaming_RepaintField	; [0x9F]
@@ -128209,13 +128209,13 @@ DispatchTable_F5B9F8:
 	.long ToneEditPage_A6_RepaintField	; [0xA6]  <- also selector 0xC6
 	.long ToneEditPage_A7_RepaintField	; [0xA7]  <- also selector 0xC7
 	.long ToneEditPage_A8_RepaintField	; [0xA8]  <- also selector 0xC8
-	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
 	.long DispatchTable_F5B9F8_Nop42	; [0xAA]  <- also selector 0xCA
 	.long SoundEditDrumMenu_RepaintField	; [0xAB]  <- also selector 0xCB
-	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_RepaintFieldPage1	; [0xAD]  <- also selector 0xCD
-	.long sub_F5BE5A + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
-	.long sub_F5BE5A + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAE]   (default `ret`)  <- also selector 0xCE
+	.long TouchCurve_DrawThumbnail + 0xBD	; [0xAF]   (default `ret`)  <- also selector 0xCF
 
 ; --- 0xF5BAB8-0xF62BFF: not converted ---
 
@@ -128562,34 +128562,36 @@ Gfx_EraseRect:		; <- T_Gfx_EraseRect
 
 
 ; --------------------------------------------------------------------------
-; sub_F5BBE7
+; KeyboardIcon_Draw
 ; Called from: in-module: 0xF5C77E 0xF5C8AB 0xF5D4F9 0xF5D5F9
 ; Touches: (0x2350) (0x2352) (0x2530) (0x2532) (0x2534) (0x2536) (0x2540)
-; Calls:   sub_F5BCE8
+; Calls:   OctaveIcon_Draw
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5BBE7 is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BBE7:
+; KeyboardIcon_Draw: seven OctaveIcon_Draw from (IconOrigin_X, IconOrigin_Y), IX + 28 each, then the closing key at +196..+200
+;   and two marks.  Called after IconOrigin_X/Y = (47, 51) by SoundEditToneLayerKeyLayer_Paint, (56, 139) by the KEY FOLLOW painters.
+KeyboardIcon_Draw:
 	ld	(LCD_CurrentLayer:16), 0	; F5BBE7  ld (0x2540),0x00
 	ld	c, 7:opc	; F5BBEC  ld C,0x07
-	ld	ix, (9040:16)	; F5BBEE  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BBF2  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BBEE  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BBF2  ld IY,(0x2352)
 sub_F5BBE7_Loop:
 	pushw	ix	; F5BBF6  push IX
 	pushw	iy	; F5BBF7  push IY
 	push	c	; F5BBF8  push C
-	call	sub_F5BCE8	; F5BBFA  call 0xf5bce8
+	call	OctaveIcon_Draw	; F5BBFA  call 0xf5bce8
 	pop	c	; F5BBFE  pop C
 	popw	iy	; F5BC00  pop IY
 	popw	ix	; F5BC01  pop IX
 	add	ix, 28	; F5BC02  add IX,0x001c
 	dec	1, c	; F5BC06  dec 1,C
 	jr	nz, sub_F5BBE7_Loop	; F5BC08  jr NZ,0xf5bbf6
-	ld	ix, (9040:16)	; F5BC0A  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BC0E  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BC0A  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BC0E  ld IY,(0x2352)
 	ld	(LCD_X0:16), ix	; F5BC12  ld (0x2530),IX
 	m_add_mi16 MW16, LCD_X0, 0x00c4	; F5BC16  add (0x2530),0x00c4
 	ld	(LCD_X1:16), ix	; F5BC1C  ld (0x2534),IX
@@ -128599,8 +128601,8 @@ sub_F5BBE7_Loop:
 	m_add_mi16 MW16, LCD_Y1, 0x000c	; F5BC2E  add (0x2536),0x000c
 	ld	a, 9:opc	; F5BC34  ld A,0x09
 	swi	7	; F5BC36  swi 7
-	ld	ix, (9040:16)	; F5BC37  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BC3B  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BC37  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BC3B  ld IY,(0x2352)
 	add	ix, 196	; F5BC3F  add IX,0x00c4
 	ld	(LCD_X0:16), ix	; F5BC43  ld (0x2530),IX
 	ld	(LCD_X1:16), ix	; F5BC47  ld (0x2534),IX
@@ -128610,8 +128612,8 @@ sub_F5BBE7_Loop:
 	m_sub_mi16 MW16, LCD_Y1, 0x0001	; F5BC59  sub (0x2536),0x0001
 	ld	a, 9:opc	; F5BC5F  ld A,0x09
 	swi	7	; F5BC61  swi 7
-	ld	ix, (9040:16)	; F5BC62  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BC66  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BC62  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BC66  ld IY,(0x2352)
 	ld	(LCD_X0:16), ix	; F5BC6A  ld (0x2530),IX
 	m_sub_mi16 MW16, LCD_X0, 0x0008	; F5BC6E  sub (0x2530),0x0008
 	ld	(LCD_X1:16), ix	; F5BC74  ld (0x2534),IX
@@ -128620,8 +128622,8 @@ sub_F5BBE7_Loop:
 	m_add_mi16 MW16, LCD_Y1, 0x000c	; F5BC80  add (0x2536),0x000c
 	ld	a, 9:opc	; F5BC86  ld A,0x09
 	swi	7	; F5BC88  swi 7
-	ld	ix, (9040:16)	; F5BC89  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BC8D  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BC89  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BC8D  ld IY,(0x2352)
 	ld	(LCD_X0:16), ix	; F5BC91  ld (0x2530),IX
 	m_sub_mi16 MW16, LCD_X0, 0x0005	; F5BC95  sub (0x2530),0x0005
 	ld	(LCD_X1:16), ix	; F5BC9B  ld (0x2534),IX
@@ -128632,8 +128634,8 @@ sub_F5BBE7_Loop:
 	m_add_mi16 MW16, LCD_Y1, 0x0007	; F5BCB3  add (0x2536),0x0007
 	ld	a, 9:opc	; F5BCB9  ld A,0x09
 	swi	7	; F5BCBB  swi 7
-	ld	ix, (9040:16)	; F5BCBC  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BCC0  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BCBC  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BCC0  ld IY,(0x2352)
 	sub	ix, 4	; F5BCC4  sub IX,0x0004
 	ld	(LCD_X0:16), ix	; F5BCC8  ld (0x2530),IX
 	ld	(LCD_X1:16), ix	; F5BCCC  ld (0x2534),IX
@@ -128646,7 +128648,7 @@ sub_F5BBE7_Loop:
 	ret	; F5BCE7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5BCE8
+; OctaveIcon_Draw
 ; Called from: in-module: 0xF5BBFA
 ; Touches: (0x2530) (0x2532) (0x2534) (0x2536)  |  0x000004
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -128655,7 +128657,9 @@ sub_F5BBE7_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BCE8:
+; OctaveIcon_Draw: at (IX, IY): one 28-pixel octave -- a service-0x09 box 28 x 12, six VLines (service 0x02) and the five
+;   OctaveIcon_BlackKeyX boxes.  Called seven times by KeyboardIcon_Draw.
+OctaveIcon_Draw:
 	ld	(LCD_X0:16), ix	; F5BCE8  ld (0x2530),IX
 	ld	(LCD_X1:16), ix	; F5BCEC  ld (0x2534),IX
 	ld	(LCD_Y0:16), iy	; F5BCF0  ld (0x2532),IY
@@ -128731,7 +128735,7 @@ sub_F5BCE8_Loop2:
 ;   the left and right X offsets of the five BLACK KEYS of a one-octave
 ;   keyboard picture.  Converted 2026-09-25 (lane promb): the source framed
 ;   the 20 bytes as `pop SR`, `halt`, `reti`, `retd 0x1100`, `ldf` ...
-; Read by: sub_F5BCE8 (0xF5BCE8), the routine that draws the picture: its loop
+; Read by: OctaveIcon_Draw (0xF5BCE8), the routine that draws the picture: its loop
 ;   (`ld C,0x05`, `ld XIZ,0x00F5BDA7`, `ld HL,(XIZ)` / `ld DE,(XIZ+2)` /
 ;   `add XIZ,4`) sets X0 = IX + first word, X1 = IX + second word, Y0 = IY+1,
 ;   Y1 = IY+7 and calls SWI7 service 0x09, prom_a LCD_Svc_09_DrawBox.
@@ -128750,18 +128754,21 @@ OctaveIcon_BlackKeyX:
 	.short	23, 25	; F5BDB7  [4]
 
 ; --------------------------------------------------------------------------
-; sub_F5BDBB
+; TouchCurve_DrawCurrentSlot
 ; Called from: in-module: 0xF5C6F3 0xF5CFEE 0xF5CFF9
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A3) (0x27F5)  |  0x00002A
 ;          0x0027AB 0x0027AE 0xF0402E 0xF04038 0xF04042 +4 more
-; Calls:   T_DisplayList_Run sub_F5BE5A
+; Calls:   T_DisplayList_Run TouchCurve_DrawThumbnail
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5BDBB is an instruction boundary.
 ;           The name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BDBB:
+; TouchCurve_DrawCurrentSlot: IconOrigin = TouchCurve_BoxOrigins[(0x27A3)] (BoxOrigins3 when (0x27F5) is 1), TouchCurve_DrawThumbnail on
+;   ModelingPage_Fields+5 / +8 + (0x27A3), then the slot's TouchCurve_ListPtrs list.  Called by
+;   Draw_Page12LevelTouchCurveLevel and SoundEditAmpLevel1_RepaintField.
+TouchCurve_DrawCurrentSlot:
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BDBB  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip4	; F5BDC0  jr NZ,0xf5bdd7
 	ld	(LCD_CurrentLayer:16), 0	; F5BDC2  ld (0x2540),0x00
@@ -128788,9 +128795,9 @@ sub_F5BDBB_Join2:
 	push	xwa	; F5BE06  push XWA
 	add	xiz, xwa	; F5BE07  add XIZ,XWA
 	ld	wa, (xiz)	; F5BE09  ld WA,(XIZ)
-	ld	(9040:16), wa	; F5BE0B  ld (0x2350),WA
+	ld	(IconOrigin_X:16), wa	; F5BE0B  ld (0x2350),WA
 	ld	wa, (xiz+2)	; F5BE0F  ld WA,(XIZ+0x02)
-	ld	(9042:16), wa	; F5BE12  ld (0x2352),WA
+	ld	(IconOrigin_Y:16), wa	; F5BE12  ld (0x2352),WA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE16  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip2	; F5BE1B  jr NZ,0xf5be24
 	ld	xiz, ModelingPage_Fields+5	; F5BE1D  ld XIZ,0x000027ab
@@ -128801,7 +128808,7 @@ sub_F5BDBB_Join3:
 	xor	xwa, xwa	; F5BE29  xor XWA,XWA
 	ld	a, (10147:16)	; F5BE2B  ld A,(0x27a3)
 	add	xiz, xwa	; F5BE2F  add XIZ,XWA
-	call	sub_F5BE5A	; F5BE31  call 0xf5be5a
+	call	TouchCurve_DrawThumbnail	; F5BE31  call 0xf5be5a
 	pop	xwa	; F5BE35  pop XWA
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5BE36  cp (0x27f5),0x01
 	jr	nz, sub_F5BDBB_Skip3	; F5BE3B  jr NZ,0xf5be44
@@ -128818,7 +128825,7 @@ sub_F5BDBB_Join4:
 	ret	; F5BE59  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5BE5A
+; TouchCurve_DrawThumbnail
 ; Called from: in-module: 0xF5BE31
 ; Touches: (0x2350) (0x2352) (0x2530) (0x2532) (0x2534) (0x2536) (0x2540)
 ;          (0x27F5)  |  0xF01800 0xF01873 0xF0191A 0xF33BD8 0xF33F01
@@ -128830,14 +128837,17 @@ sub_F5BDBB_Join4:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5BE5A:
+; TouchCurve_DrawThumbnail: curve = (XIZ) >> 5: 3 erases the box at IconOrigin + 1 (service 0x1B) and draws the diagonal (service 0x00,
+;   DrawLine); otherwise blits CurveBitmapSelector[curve], 40 x 40, at IconOrigin (service 0x03).  Also the filler
+;   entry of DispatchTable_F5B8F8 / F5B9F8 at the selectors with no page.
+TouchCurve_DrawThumbnail:
 	ld	a, (xiz)	; F5BE5A  ld A,(XIZ)
 	and	a, 224	; F5BE5C  and A,0xe0
 	srl	a, 5	; F5BE5F  srl 0x05,A
 	cp	a, 3:i3	; F5BE62  cp A,3
 	jr	nz, sub_F5BE5A_Skip	; F5BE64  jr NZ,0xf5bece
-	ld	ix, (9040:16)	; F5BE66  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BE6A  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BE66  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BE6A  ld IY,(0x2352)
 	ld	(LCD_X0:16), ix	; F5BE6E  ld (0x2530),IX
 	m_add_mi16 MW16, LCD_X0, 0x0001	; F5BE72  add (0x2530),0x0001
 	ld	(LCD_X1:16), ix	; F5BE78  ld (0x2534),IX
@@ -128848,8 +128858,8 @@ sub_F5BE5A:
 	m_add_mi16 MW16, LCD_Y1, 0x0025	; F5BE90  add (0x2536),0x0025
 	ld	a, 27:opc	; F5BE96  ld A,0x1b
 	swi	7	; F5BE98  swi 7
-	ld	ix, (9040:16)	; F5BE99  ld IX,(0x2350)
-	ld	iy, (9042:16)	; F5BE9D  ld IY,(0x2352)
+	ld	ix, (IconOrigin_X:16)	; F5BE99  ld IX,(0x2350)
+	ld	iy, (IconOrigin_Y:16)	; F5BE9D  ld IY,(0x2352)
 	ld	(LCD_X0:16), ix	; F5BEA1  ld (0x2530),IX
 	m_add_mi16 MW16, LCD_X0, 0x0001	; F5BEA5  add (0x2530),0x0001
 	ld	(LCD_X1:16), ix	; F5BEAB  ld (0x2534),IX
@@ -128866,10 +128876,10 @@ sub_F5BE5A_Skip:
 	xor	w, w	; F5BED3  xor W,W
 	sll	wa, 2	; F5BED5  sll 0x02,WA
 	mx_ld_rm MXL, ra_IZ, ra_WA, 5	; F5BED8  ld XIY,(XIZ+WA)
-	ld	wa, (9040:16)	; F5BEDD  ld WA,(0x2350)
+	ld	wa, (IconOrigin_X:16)	; F5BEDD  ld WA,(0x2350)
 	div	a, 8	; F5BEE1  div A,0x08
 	xor	w, w	; F5BEE4  xor W,W
-	ld	hl, (9042:16)	; F5BEE6  ld HL,(0x2352)
+	ld	hl, (IconOrigin_Y:16)	; F5BEE6  ld HL,(0x2352)
 	mul	l, 40	; F5BEEA  mul L,0x28
 	add	hl, wa	; F5BEED  add HL,WA
 	ld	ix, hl	; F5BEEF  ld IX,HL
@@ -128887,7 +128897,7 @@ sub_F5BE5A_Return:
 ;   rows of "instructions" -- the mis-framing the 0xF01800 block's banner
 ;   records ("THE SELECTOR TABLE AT 0xF5BEFB IS ITSELF STILL MIS-FRAMED AS
 ;   CODE ... deliberately NOT touched here").
-; Read by: sub_F5BE5A at 0xF5BECE -- `ld XIZ,0x00F5BEFB`, index * 4,
+; Read by: TouchCurve_DrawThumbnail at 0xF5BECE -- `ld XIZ,0x00F5BEFB`, index * 4,
 ;   `ld XIY,(XIZ+WA)`, destination y*40 + x/8 from (0x2350)/(0x2352), BC = 5,
 ;   HL = 40, SWI7 service 0x03 (a 5-column x 40-row blit).
 ; Entry count: 7 -- 28 bytes, and every word is one of the six bitmaps; the
@@ -129639,7 +129649,7 @@ sub_F5C549_Join:
 ; Touches: (0x2540) (0x27F5)  |  0x000001 0x000007 0x00000A 0x000014
 ;          0x0027AB 0xF0417E +17 more
 ; Calls:   T_DisplayList_Run T_DisplayListB_RunOne sub_F5C727 sub_F5BFBD 0xF5BAB8 sub_F5C39C
-;          sub_F5BDBB T_DisplayListB_Run
+;          TouchCurve_DrawCurrentSlot T_DisplayListB_Run
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C5A5 is an instruction boundary.
 ;           The name IS the address.
@@ -129756,7 +129766,7 @@ sub_F5C5A5_Skip2:
 sub_F5C5A5_Join:
 	call	UiPaint_Solo	; F5C6EB  call 0xf5bab8
 	call	sub_F5C39C	; F5C6EF  call 0xf5c39c
-	call	sub_F5BDBB	; F5C6F3  call 0xf5bdbb
+	call	TouchCurve_DrawCurrentSlot	; F5C6F3  call 0xf5bdbb
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C6F7  cp (0x27f5),0x01
 	jr	z, sub_F5C5A5_Skip3	; F5C6FC  jr Z,0xf5c713
 	ld	(LCD_CurrentLayer:16), 0	; F5C6FE  ld (0x2540),0x00
@@ -129812,7 +129822,7 @@ Draw_Page22KeyFollowSlopeRange:
 ; Called from: in-module: 0xF5D5BF
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04358 0xF04370
 ;          0xF04415 0xF049DD 0xF049E7 0xF05063 +7 more
-; Calls:   sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run sub_F5C727 T_DisplayList_Run
+; Calls:   KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run sub_F5C727 T_DisplayList_Run
 ;          sub_F5C916 Draw_Keyoff
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C772 is an instruction boundary.
@@ -129821,9 +129831,9 @@ Draw_Page22KeyFollowSlopeRange:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5C772:
-	ldw	(9040:16), 56	; F5C772  ld (0x2350),0x0038
-	ldw	(9042:16), 139	; F5C778  ld (0x2352),0x008b
-	call	sub_F5BBE7	; F5C77E  call 0xf5bbe7
+	ldw	(IconOrigin_X:16), 56	; F5C772  ld (0x2350),0x0038
+	ldw	(IconOrigin_Y:16), 139	; F5C778  ld (0x2352),0x008b
+	call	KeyboardIcon_Draw	; F5C77E  call 0xf5bbe7
 	call	UiPaint_Solo	; F5C782  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C786  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C78A  ld (0x2540),0x00
@@ -129875,7 +129885,7 @@ sub_F5C772_Return:
 ; Called from: in-module: 0xF5C81E 0xF5D08A
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27A6) (0x27F5)  |  0xF04415
 ;          0xF04560 0xF04574 0xF0467D 0xF047CA 0xF047DF +11 more
-; Calls:   T_DisplayListB_Run T_DisplayList_Run sub_F5C727 sub_F5BFBD sub_F5BBE7 0xF5BAB8
+; Calls:   T_DisplayListB_Run T_DisplayList_Run sub_F5C727 sub_F5BFBD KeyboardIcon_Draw 0xF5BAB8
 ;          0xF5BB00 sub_F5C929 sub_F5C916 sub_F5C94B
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C823 is an instruction boundary.
@@ -129917,9 +129927,9 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAtk:
 	ld	xix, DL_F04574	; F5C892  ld XIX,0x00f04574
 	call	T_DisplayList_Run	; F5C897  call 0xf417f0
 	call	sub_F5BFBD	; F5C89B  call 0xf5bfbd
-	ldw	(9040:16), 56	; F5C89F  ld (0x2350),0x0038
-	ldw	(9042:16), 139	; F5C8A5  ld (0x2352),0x008b
-	call	sub_F5BBE7	; F5C8AB  call 0xf5bbe7
+	ldw	(IconOrigin_X:16), 56	; F5C89F  ld (0x2350),0x0038
+	ldw	(IconOrigin_Y:16), 139	; F5C8A5  ld (0x2352),0x008b
+	call	KeyboardIcon_Draw	; F5C8AB  call 0xf5bbe7
 	call	UiPaint_Solo	; F5C8AF  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5C8B3  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5C8B7  ld (0x2540),0x00
@@ -130591,7 +130601,7 @@ sub_F5CC64_Return6:
 ; Called from: in-module: 0xF5C531 0xF5CF21 0xF5CF7C
 ; Touches: (0x2540) (0x27A6) (0x27F5)  |  0x000014 0xF04D85 0xF04DA3
 ;          0xF04E32 0xF04E93 0xF04F32 +22 more
-; Calls:   T_DisplayList_Run sub_F5BDBB T_DisplayListB_Run 0xF09AE1 Draw_Keyoff sub_F5D199
+; Calls:   T_DisplayList_Run TouchCurve_DrawCurrentSlot T_DisplayListB_Run 0xF09AE1 Draw_Keyoff sub_F5D199
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5CFA4 is an instruction boundary.
 ;           The name IS the address.
@@ -130626,13 +130636,13 @@ sub_F5CFA4_Skip:
 	jr	c, sub_F5CFA4_Join	; F5CFEB  jr C,0xf5cff5
 sub_F5CFA4_Skip2:
 	push_a	; F5CFED  push A
-	call	sub_F5BDBB	; F5CFEE  call 0xf5bdbb
+	call	TouchCurve_DrawCurrentSlot	; F5CFEE  call 0xf5bdbb
 	pop_a	; F5CFF2  pop A
 	jr	sub_F5CFA4_Join3	; F5CFF3  jr T,0xf5d02a
 sub_F5CFA4_Join:
 	cp	a, 0:i3	; F5CFF5  cp A,0
 	jr	nz, sub_F5CFA4_Join3	; F5CFF7  jr NZ,0xf5d02a
-	call	sub_F5BDBB	; F5CFF9  call 0xf5bdbb
+	call	TouchCurve_DrawCurrentSlot	; F5CFF9  call 0xf5bdbb
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5CFFD  cp (0x27f5),0x01
 	jr	z, sub_F5CFA4_Skip3	; F5D002  jr Z,0xf5d015
 	ld	(LCD_CurrentLayer:16), 1	; F5D004  ld (0x2540),0x01
@@ -131115,7 +131125,7 @@ sub_F5D497_Loop:
 ; Called from: in-module: 0xF5D49A
 ; Touches: (0x2350) (0x2352) (0x2540)  |  0xF03F31 0xF03F77 0xF0426B
 ;          0xF04323 0xF04344 0xF04358 +11 more
-; Calls:   0xF09AE1 DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit T_DisplayList_Run sub_F5BBE7 0xF5BAB8 0xF5BB00
+; Calls:   0xF09AE1 DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit T_DisplayList_Run KeyboardIcon_Draw 0xF5BAB8 0xF5BB00
 ;          T_DisplayListB_Run Draw_PitchSoundEditEnvPitchLf0 sub_F5BFBD Draw_Page12EnvelopeKeyoffCurSor Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack sub_F5C929
 ;          +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -131147,9 +131157,9 @@ SoundEditToneLayerKeyLayer_Paint:
 	ld	xiy, DL_F060DA	; F5D4DF  ld XIY,0x00f060da
 	ld	xix, DL_F060E4	; F5D4E4  ld XIX,0x00f060e4
 	call	T_DisplayList_Run	; F5D4E9  call 0xf417f0
-	ldw	(9040:16), 47	; F5D4ED  ld (0x2350),0x002f
-	ldw	(9042:16), 51	; F5D4F3  ld (0x2352),0x0033
-	call	sub_F5BBE7	; F5D4F9  call 0xf5bbe7
+	ldw	(IconOrigin_X:16), 47	; F5D4ED  ld (0x2350),0x002f
+	ldw	(IconOrigin_Y:16), 51	; F5D4F3  ld (0x2352),0x0033
+	call	KeyboardIcon_Draw	; F5D4F9  call 0xf5bbe7
 	call	UiPaint_Solo	; F5D4FD  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5D501  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5D505  ld (0x2540),0x00
@@ -131214,7 +131224,7 @@ SoundEditFilterEnvelope2_Paint:
 ; Called from: in-module: 0xF5D57E
 ; Touches: (0x2350) (0x2352) (0x2540) (0x27F5)  |  0xF04B6C 0xF04CA9
 ;          0xF04CBD 0xF328DC 0xF32918 0xF3294B +18 more
-; Calls:   T_DisplayList_Run sub_F5BFBD sub_F5BBE7 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
+; Calls:   T_DisplayList_Run sub_F5BFBD KeyboardIcon_Draw 0xF5BAB8 0xF5BB00 T_DisplayListB_Run
 ;          sub_F5C929 Draw_Lf01Lf02Lf03Lf04Lf0WaveDelay sub_F5C727 sub_F5D497 sub_F5D46B 0xF09AE1
 ;          +2 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -131233,9 +131243,9 @@ Draw_Page22KeyFollowEnvelopeKeyFollowTouchAttack:
 	ld	xix, DLTable_ABCDEFGHIJKLMNOPQRSU	; F5D5E0  ld XIX,0x00f04cbd
 	call	T_DisplayList_Run	; F5D5E5  call 0xf417f0
 	call	sub_F5BFBD	; F5D5E9  call 0xf5bfbd
-	ldw	(9040:16), 56	; F5D5ED  ld (0x2350),0x0038
-	ldw	(9042:16), 139	; F5D5F3  ld (0x2352),0x008b
-	call	sub_F5BBE7	; F5D5F9  call 0xf5bbe7
+	ldw	(IconOrigin_X:16), 56	; F5D5ED  ld (0x2350),0x0038
+	ldw	(IconOrigin_Y:16), 139	; F5D5F3  ld (0x2352),0x008b
+	call	KeyboardIcon_Draw	; F5D5F9  call 0xf5bbe7
 	call	UiPaint_Solo	; F5D5FD  call 0xf5bab8
 	call	UiPaint_Ordinals	; F5D601  call 0xf5bb00
 	ld	(LCD_CurrentLayer:16), 0	; F5D605  ld (0x2540),0x00
