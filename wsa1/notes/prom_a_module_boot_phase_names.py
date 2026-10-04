@@ -16,7 +16,7 @@ QUESTION IT ANSWERS
   slots or vector are already called: ParamModule (ParamModule_PhaseVector), Msg0716
   (Msg0716_InitAllRecords is its phase 0), Disk (its vector is the 0xFE0000 disk module), EditScreen
   (0xFE8046, the NOTE / DRUM EDIT module, whose shared phase 2/4 handler stores the edit fields' defaults,
-  EditField_Velocity = 100 among them) and BStore for 0xF44000 (the module after the thunk table: its
+  EditField_NewNoteVelocity = 100 among them) and BStore for 0xF44000 (the module after the thunk table: its
   phase-0 handler seeds BStore_HeapBase's first six bytes from WorkspaceDefaults + 0x10, its phase-3
   handler calls BStore_LatchHeapBase_Veneer and stores BStore_CurrentBank).
   A vector still labelled sub_XXXXXX becomes <Module>_PhaseVector, and a `sub_..._Nop` bare `ret` that

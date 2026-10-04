@@ -176216,7 +176216,7 @@ DisplayList_FE82D2:
 	.byte 0x23, 0x05                               ; FE82D2  op 23, 5 bytes, handler 0xF31ACE
 	.byte 0x0F, 0x7E, 0x00             ; FE82D4
 sub_FE82D7:
-	calr sub_FE8FFD                                          ; FE82D7  1e 23 0d
+	calr NoteEdit_TakeKeyboardInput                                          ; FE82D7  1e 23 0d
 	calr sub_FE92C1                                          ; FE82DA  1e e4 0f
 	calr sub_FE92ED                                          ; FE82DD  1e 0d 10
 	calr sub_FE92D7                                          ; FE82E0  1e f4 0f
@@ -176277,10 +176277,10 @@ EditScreen_BootPhase2And4:
 	ldw (0x601f4f:24), 0x30                             ; FE833F  f2 4f 1f 60 02 30 00
 	ldw (0x601f51:24), 0x30                             ; FE8346  f2 51 1f 60 02 30 00
 	ldw (0x601f4b:24), 0x26                             ; FE834D  f2 4b 1f 60 02 26 00
-	ld (0x601f53:24), 0x05                             ; FE8354  f2 53 1f 60 00 05
+	ld (NoteEdit_RulerPosition:24), 0x05                             ; FE8354  f2 53 1f 60 00 05
 	ldw (DrumEdit_TopRowNote:24), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
 	ldw (EditScreen_CursorRow:24), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
-	ld (EditField_Velocity:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
+	ld (EditField_NewNoteVelocity:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
 	ret                                                  ; FE836E  0e
 ; ---------------------------------------------------------------------
 ; ShowScreen_NoteEditPartSelect -- blank, re-init the panel, run the NOTE EDIT part-select painter, show it
@@ -177025,7 +177025,7 @@ EditScreen_EnterNoteEdit:
 	calr sub_FEAFB7                                          ; FE8A62  1e 52 25
 	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
 	calr sub_FE8A9B                                      ; FE8A68  1e 30 00
-	calr sub_FE8F11                                          ; FE8A6B  1e a3 04
+	calr EditScreen_SelectEventAtCursor                                          ; FE8A6B  1e a3 04
 	ldw (EditCursor_Beat:24), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
 	ld (EditCursor_Tick:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
 	calr sub_FE8AE9                                      ; FE8A7B  1e 6b 00
@@ -177182,7 +177182,7 @@ sub_FE8BD4:
 	ret                                                  ; FE8BE2  0e
 sub_FE8BE3:
 	ld c, 0x08:opc                                          ; FE8BE3  23 08
-	ld XIX,0x00601f1c                                    ; FE8BE5  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FE8BE5  44 1c 1f 60 00
 	xor A,A                                              ; FE8BEA  c9 d1
 .LFE8BEC:
 	ld (XIX),A                                           ; FE8BEC  b4 41
@@ -177310,7 +177310,7 @@ NoteEdit_DrawKeyboardRuler:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FE8D43  f1 40 25 00 02
 	ld XIX,ScreenDispatch_FE8D6B                         ; FE8D48  44 6b 8d fe 00
 	xor XWA,XWA                                          ; FE8D4D  e8 d0
-	ld a, (0x601f53:24)                                 ; FE8D4F  c2 53 1f 60 21
+	ld a, (NoteEdit_RulerPosition:24)                                 ; FE8D4F  c2 53 1f 60 21
 	sll wa, 0x02                                         ; FE8D54  d8 ee 02
 	add XIX,XWA                                          ; FE8D57  e8 84
 	ld XIX,(XIX)                                         ; FE8D59  a4 24
@@ -177524,8 +177524,11 @@ sub_FE8EF3:
 sub_FE8F0C:
 	call T_F40A70                                        ; FE8F0C  1d 70 0a f4
 	ret                                                  ; FE8F10  0e
-sub_FE8F11:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FE8F11  c2 5b 1f 60 3c fe
+; EditScreen_SelectEventAtCursor: (0x601F5B) bit 0 = 0; when the event at the cursor sits on EditCursor_TickInMeasure (sub_FEA628) and is a
+;   note-on that DrumEdit_IsOtherNote passes: bit 0 = 1, EditCursor_Note = +2, (0x601F45) = +3, EditField_Length =
+;   (+5 & 0x7F) x 0x60 + (+4 & 0x7F), (0x601F6F) = the note, NoteEdit_ScrollRulerToNote.
+EditScreen_SelectEventAtCursor:
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FE8F11  c2 5b 1f 60 3c fe
 	calr sub_FEA628                                          ; FE8F17  1e 0e 17
 	sub XWA,XBC                                          ; FE8F1A  e9 a0
 	xor XBC,XBC                                          ; FE8F1C  e9 d1
@@ -177541,14 +177544,14 @@ sub_FE8F11:
 	calr DrumEdit_IsOtherNote                                          ; FE8F34  1e 7c fb
 	cp a, 0x00:i3                                          ; FE8F37  c9 d8
 	jr nz, .LFE8F96                                      ; FE8F39  6e 5b
-	m_or_mi8 MB24, 0x601f5b, 0x01                        ; FE8F3B  c2 5b 1f 60 3e 01
+	m_or_mi8 MB24, EditScreen_CursorFlags, 0x01                        ; FE8F3B  c2 5b 1f 60 3e 01
 	call BStoreCursor_Step                                        ; FE8F41  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE8F45  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE8F49  1d 32 22 ff
 	ld (EditCursor_Note:24), a                                 ; FE8F4D  f2 44 1f 60 41
 	call BStoreCursor_Step                                        ; FE8F52  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE8F56  1d 32 22 ff
-	ld (EditField_Note:24), a                                 ; FE8F5A  f2 45 1f 60 41
+	ld (EditField_EventVelocity:24), a                                 ; FE8F5A  f2 45 1f 60 41
 	call BStoreCursor_Step                                        ; FE8F5F  1d 04 22 ff
 	call BStoreCursor_ReadByte                                        ; FE8F63  1d 32 22 ff
 	xor BC,BC                                            ; FE8F67  d9 d1
@@ -177565,13 +177568,15 @@ sub_FE8F11:
 	calr BStoreCursor_SeekPrevTag                                          ; FE8F86  1e 62 f3
 	ld a, (EditCursor_Note:24)                                 ; FE8F89  c2 44 1f 60 21
 	ld (0x601f6f:24), a                                 ; FE8F8E  f2 6f 1f 60 41
-	calr sub_FE8F97                                      ; FE8F93  1e 01 00
+	calr NoteEdit_ScrollRulerToNote                                      ; FE8F93  1e 01 00
 .LFE8F96:
 	ret                                                  ; FE8F96  0e
-sub_FE8F97:
+; NoteEdit_ScrollRulerToNote: NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range sub_FEFFB4
+;   returns (A low, W high); when it moved, NoteEdit_DrawKeyboardRuler and the edit area redrawn.
+NoteEdit_ScrollRulerToNote:
 	m_bit 0, MD24, EditScreen_Mode                              ; FE8F97  f2 70 1f 60 c8
 	jr nz, .LFE8FDC                                      ; FE8F9C  6e 3e
-	ld a, (0x601f53:24)                                 ; FE8F9E  c2 53 1f 60 21
+	ld a, (NoteEdit_RulerPosition:24)                                 ; FE8F9E  c2 53 1f 60 21
 	ld (0x601f6e:24), a                                 ; FE8FA3  f2 6e 1f 60 41
 .LFE8FA8:
 	calr sub_FEFFB4                                          ; FE8FA8  1e 09 70
@@ -177581,7 +177586,7 @@ sub_FE8F97:
 	cp H,W                                               ; FE8FB4  c8 f6
 	jr ugt, .LFE8FDD                                     ; FE8FB6  6b 25
 	ld a, (0x601f6e:24)                                 ; FE8FB8  c2 6e 1f 60 21
-	m_cp_rm MB24, 0x601f53, r1                           ; FE8FBD  c2 53 1f 60 f1
+	m_cp_rm MB24, NoteEdit_RulerPosition, r1                           ; FE8FBD  c2 53 1f 60 f1
 	jr z, .LFE8FDC                                       ; FE8FC2  66 18
 	calr NoteEdit_DrawKeyboardRuler                                          ; FE8FC4  1e 75 fd
 	ld (0x601f58:24), 0x81                             ; FE8FC7  f2 58 1f 60 00 81
@@ -177592,16 +177597,20 @@ sub_FE8F97:
 .LFE8FDC:
 	ret                                                  ; FE8FDC  0e
 .LFE8FDD:
-	m_cp_mi8 MB24, 0x601f53, 0x09                        ; FE8FDD  c2 53 1f 60 3f 09
+	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x09                        ; FE8FDD  c2 53 1f 60 3f 09
 	jr nc, .LFE8FDC                                      ; FE8FE3  6f f7
-	m_add_mi8 MB24, 0x601f53, 0x01                       ; FE8FE5  c2 53 1f 60 38 01
+	m_add_mi8 MB24, NoteEdit_RulerPosition, 0x01                       ; FE8FE5  c2 53 1f 60 38 01
 	jr .LFE8FA8                                          ; FE8FEB  68 bb
 .LFE8FED:
-	m_cp_mi8 MB24, 0x601f53, 0x00                        ; FE8FED  c2 53 1f 60 3f 00
+	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x00                        ; FE8FED  c2 53 1f 60 3f 00
 	jr ule, .LFE8FDC                                     ; FE8FF3  63 e7
-	sub	(0x601f53:24), 0x01                  ; FE8FF5  c2 53 1f 60 3a 01
+	sub	(NoteEdit_RulerPosition:24), 0x01                  ; FE8FF5  c2 53 1f 60 3a 01
 	jr .LFE8FA8                                          ; FE8FFB  68 ab
-sub_FE8FFD:
+; NoteEdit_TakeKeyboardInput: on screens 0x25 / 0x28, with the edit area idle and free blocks: drains the sequencer input ring
+;   (T_SeqBufRing_Get); a note-on (0x9n) with velocity -> NoteEdit_HoldKey, velocity 0 -> NoteEdit_ReleaseKey; when
+;   no key is held any more (NoteEdit_AnyKeyHeld): selection cleared, NoteEdit_ScrollRulerToNote,
+;   NoteEdit_EnterHeldNotes, EditScreen_AppendMissingBeatMarkers, redraw.
+NoteEdit_TakeKeyboardInput:
 	call T_SeqBufRing_IsEmpty                            ; FE8FFD  1d 90 1d f4
 	cp wa, 0x00:i3                                         ; FE9001  d8 d8
 	jr nz, .LFE9006                                      ; FE9003  6e 01
@@ -177636,31 +177645,31 @@ sub_FE8FFD:
 .LFE9043:
 	call T_SeqBufRing_Get                                ; FE9043  1d 84 1d f4
 	call T_SeqBufRing_Get                                ; FE9047  1d 84 1d f4
-	ld (0x601f34:24), a                                 ; FE904B  f2 34 1f 60 41
+	ld (NoteEdit_InputNote:24), a                                 ; FE904B  f2 34 1f 60 41
 	call T_SeqBufRing_Get                                ; FE9050  1d 84 1d f4
-	ld (0x601f35:24), a                                 ; FE9054  f2 35 1f 60 41
+	ld (NoteEdit_InputVelocity:24), a                                 ; FE9054  f2 35 1f 60 41
 	call T_SeqBufRing_Get                                ; FE9059  1d 84 1d f4
-	ld a, (0x601f35:24)                                 ; FE905D  c2 35 1f 60 21
+	ld a, (NoteEdit_InputVelocity:24)                                 ; FE905D  c2 35 1f 60 21
 	cp a, 0x00:i3                                          ; FE9062  c9 d8
 	jr z, .LFE906B                                       ; FE9064  66 05
-	calr sub_FE90B8                                      ; FE9066  1e 4f 00
+	calr NoteEdit_HoldKey                                      ; FE9066  1e 4f 00
 	jr .LFE9027                                          ; FE9069  68 bc
 .LFE906B:
-	calr sub_FE90F8                                      ; FE906B  1e 8a 00
+	calr NoteEdit_ReleaseKey                                      ; FE906B  1e 8a 00
 	cp A,0xff                                            ; FE906E  c9 cf ff
 	jr z, .LFE9027                                       ; FE9071  66 b4
-	calr sub_FE912B                                      ; FE9073  1e b5 00
+	calr NoteEdit_AnyKeyHeld                                      ; FE9073  1e b5 00
 	cp a, 0x00:i3                                          ; FE9076  c9 d8
 	jr z, .LFE907C                                       ; FE9078  66 02
 	jr .LFE9027                                          ; FE907A  68 ab
 .LFE907C:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FE907C  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FE907C  c2 5b 1f 60 3c fe
 	calr EditScreen_EraseEditArea_Layer1                                          ; FE9082  1e d4 67
-	ld a, (0x601f34:24)                                 ; FE9085  c2 34 1f 60 21
+	ld a, (NoteEdit_InputNote:24)                                 ; FE9085  c2 34 1f 60 21
 	ld (0x601f6f:24), a                                 ; FE908A  f2 6f 1f 60 41
-	calr sub_FE8F97                                      ; FE908F  1e 05 ff
-	calr sub_FE915D                                      ; FE9092  1e c8 00
-	calr sub_FE97DF                                          ; FE9095  1e 47 07
+	calr NoteEdit_ScrollRulerToNote                                      ; FE908F  1e 05 ff
+	calr NoteEdit_EnterHeldNotes                                      ; FE9092  1e c8 00
+	calr EditScreen_AppendMissingBeatMarkers                                          ; FE9095  1e 47 07
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9098  c1 4a 0d 3f 00
 	jr nz, .LFE90AE                                      ; FE909D  6e 0f
 	calr sub_FE9290                                      ; FE909F  1e ee 01
@@ -177669,26 +177678,28 @@ sub_FE8FFD:
 	calr sub_FEFEBF                                          ; FE90A8  1e 14 6e
 	jrl .LFE9027                                         ; FE90AB  78 79 ff
 .LFE90AE:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FE90AE  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FE90AE  c2 5b 1f 60 3c fe
 	calr sub_FE8BD4                                          ; FE90B4  1e 1d fb
 	ret                                                  ; FE90B7  0e
-sub_FE90B8:
+; NoteEdit_HoldKey: the first free slot of 0x601F1C (8 x {flag 0x80, note, velocity}; 1 slot in DRUM EDIT) takes (0x601F34) /
+;   (0x601F35).
+NoteEdit_HoldKey:
 	ld c, 0x08:opc                                          ; FE90B8  23 08
 	m_bit 0, MD24, EditScreen_Mode                              ; FE90BA  f2 70 1f 60 c8
 	jr z, .LFE90C3                                       ; FE90BF  66 02
 	ld c, 0x01:opc                                          ; FE90C1  23 01
 .LFE90C3:
-	ld XIX,0x00601f1c                                    ; FE90C3  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FE90C3  44 1c 1f 60 00
 .LFE90C8:
 	ld A,(XIX)                                           ; FE90C8  84 21
 	bit 0x07,A                                           ; FE90CA  c9 33 07
 	jr nz, .LFE90EE                                      ; FE90CD  6e 1f
 	m_or_mi8 MBI+r4, 0, 0x80                             ; FE90CF  84 3e 80
 	add XIX,0x00000001                                   ; FE90D2  ec c8 01 00 00 00
-	ld a, (0x601f34:24)                                 ; FE90D8  c2 34 1f 60 21
+	ld a, (NoteEdit_InputNote:24)                                 ; FE90D8  c2 34 1f 60 21
 	ld (XIX),A                                           ; FE90DD  b4 41
 	add XIX,0x00000001                                   ; FE90DF  ec c8 01 00 00 00
-	ld a, (0x601f35:24)                                 ; FE90E5  c2 35 1f 60 21
+	ld a, (NoteEdit_InputVelocity:24)                                 ; FE90E5  c2 35 1f 60 21
 	ld (XIX),A                                           ; FE90EA  b4 41
 	jr .LFE90F7                                          ; FE90EC  68 09
 .LFE90EE:
@@ -177696,19 +177707,20 @@ sub_FE90B8:
 	djnz8 c, .LFE90C8                                    ; FE90F4  cb 1c d1
 .LFE90F7:
 	ret                                                  ; FE90F7  0e
-sub_FE90F8:
+; NoteEdit_ReleaseKey: clears the flag of the slot holding note (0x601F34); A = 0xFF when none does.
+NoteEdit_ReleaseKey:
 	ld c, 0x08:opc                                          ; FE90F8  23 08
 	m_bit 0, MD24, EditScreen_Mode                              ; FE90FA  f2 70 1f 60 c8
 	jr z, .LFE9103                                       ; FE90FF  66 02
 	ld c, 0x01:opc                                          ; FE9101  23 01
 .LFE9103:
-	ld XIX,0x00601f1c                                    ; FE9103  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FE9103  44 1c 1f 60 00
 .LFE9108:
 	bit 7,(XIX)                                          ; FE9108  b4 cf
 	jr z, .LFE9119                                       ; FE910A  66 0d
 	inc 1,XIX                                            ; FE910C  ec 61
 	ld A,(XIX)                                           ; FE910E  84 21
-	m_cp_rm MB24, 0x601f34, r1                           ; FE9110  c2 34 1f 60 f1
+	m_cp_rm MB24, NoteEdit_InputNote, r1                           ; FE9110  c2 34 1f 60 f1
 	jr z, .LFE9125                                       ; FE9115  66 0e
 	dec 1,XIX                                            ; FE9117  ec 69
 .LFE9119:
@@ -177720,9 +177732,10 @@ sub_FE90F8:
 	dec 1,XIX                                            ; FE9125  ec 69
 	and (XIX),0x7f                                       ; FE9127  84 3c 7f
 	ret                                                  ; FE912A  0e
-sub_FE912B:
+; NoteEdit_AnyKeyHeld: A = 0xFF when any of the 8 slots at 0x601F1C is flagged, else 0.
+NoteEdit_AnyKeyHeld:
 	ld c, 0x08:opc                                          ; FE912B  23 08
-	ld XIX,0x00601f1c                                    ; FE912D  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FE912D  44 1c 1f 60 00
 .LFE9132:
 	ld A,(XIX)                                           ; FE9132  84 21
 	bit 0x07,A                                           ; FE9134  c9 33 07
@@ -177743,14 +177756,16 @@ sub_FE9148:
 	add XIX,0x00000003                                   ; FE9153  ec c8 03 00 00 00
 	djnz8 c, .LFE9151                                    ; FE9159  cb 1c f5
 	ret                                                  ; FE915C  0e
-sub_FE915D:
+; NoteEdit_EnterHeldNotes: DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (sub_FE91C0); NOTE EDIT: every slot with a note
+;   through sub_FE91D2 then sub_FE9276, stopping on a BStore error (sub_FE8BD4).
+NoteEdit_EnterHeldNotes:
 	m_bit 0, MD24, EditScreen_Mode                              ; FE915D  f2 70 1f 60 c8
 	jr z, .LFE917E                                       ; FE9162  66 1a
 	ld a, (EditCursor_Note:24)                                 ; FE9164  c2 44 1f 60 21
-	ld (0x601f34:24), a                                 ; FE9169  f2 34 1f 60 41
+	ld (NoteEdit_InputNote:24), a                                 ; FE9169  f2 34 1f 60 41
 	ld XIX,0x00601f1e                                    ; FE916E  44 1e 1f 60 00
 	ld A,(XIX)                                           ; FE9173  84 21
-	ld (0x601f35:24), a                                 ; FE9175  f2 35 1f 60 41
+	ld (NoteEdit_InputVelocity:24), a                                 ; FE9175  f2 35 1f 60 41
 	calr sub_FE91C0                                      ; FE917A  1e 43 00
 	ret                                                  ; FE917D  0e
 .LFE917E:
@@ -177762,10 +177777,10 @@ sub_FE915D:
 	jr z, .LFE91B2                                       ; FE9189  66 27
 	push XIX                                             ; FE918B  3c
 	pushw bc                                             ; FE918C  29
-	ld (0x601f34:24), a                                 ; FE918D  f2 34 1f 60 41
+	ld (NoteEdit_InputNote:24), a                                 ; FE918D  f2 34 1f 60 41
 	add XIX,0x00000001                                   ; FE9192  ec c8 01 00 00 00
 	ld A,(XIX)                                           ; FE9198  84 21
-	ld (0x601f35:24), a                                 ; FE919A  f2 35 1f 60 41
+	ld (NoteEdit_InputVelocity:24), a                                 ; FE919A  f2 35 1f 60 41
 	calr sub_FE91D2                                      ; FE919F  1e 30 00
 	popw bc                                              ; FE91A2  49
 	pop XIX                                              ; FE91A3  5c
@@ -177799,9 +177814,9 @@ sub_FE91D2:
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FE91DE  d2 54 1f 60 20
 	div A,0x60                                           ; FE91E3  c9 0a 60
 	ld (xiy+), w                                    ; FE91E6  f5 f4 40
-	ld a, (0x601f34:24)                                 ; FE91E9  c2 34 1f 60 21
+	ld a, (NoteEdit_InputNote:24)                                 ; FE91E9  c2 34 1f 60 21
 	ld (xiy+), a                                    ; FE91EE  f5 f4 41
-	ld a, (0x601f35:24)                                 ; FE91F1  c2 35 1f 60 21
+	ld a, (NoteEdit_InputVelocity:24)                                 ; FE91F1  c2 35 1f 60 21
 	ld (xiy+), a                                    ; FE91F6  f5 f4 41
 	ld wa, (0x601f49:24)                                ; FE91F9  d2 49 1f 60 20
 	div A,0x60                                           ; FE91FE  c9 0a 60
@@ -177859,7 +177874,7 @@ sub_FE9276:
 sub_FE9290:
 	calr EditCursor_AdvanceToNextIncStep                                          ; FE9290  1e 76 14
 	calr sub_FEA64D                                          ; FE9293  1e b7 13
-	m_bit 2, MD24, 0x601f5b                              ; FE9296  f2 5b 1f 60 ca
+	m_bit 2, MD24, EditScreen_CursorFlags                              ; FE9296  f2 5b 1f 60 ca
 	jr nz, .LFE92BD                                      ; FE929B  6e 20
 	ld a, (EditMeasure_Beats:24)                                 ; FE929D  c2 75 1f 60 21
 	mul A,0x60                                           ; FE92A2  c9 08 60
@@ -177965,7 +177980,7 @@ sub_FE933F:   ; entry: named by 2 `.long` operands, first at 0xFE9311
 	calr sub_FEAFB7                                          ; FE936F  1e 45 1c
 	calr sub_FE8CB4                                          ; FE9372  1e 3f f9
 	calr sub_FE8A9B                                          ; FE9375  1e 23 f7
-	calr sub_FE8F11                                          ; FE9378  1e 96 fb
+	calr EditScreen_SelectEventAtCursor                                          ; FE9378  1e 96 fb
 	calr sub_FEF7B4                                          ; FE937B  1e 36 64
 	calr sub_FEF926                                          ; FE937E  1e a5 65
 	calr sub_FEFD8A                                          ; FE9381  1e 06 6a
@@ -178114,7 +178129,7 @@ sub_FE94FB:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9531  1e c4 f6
 	calr sub_FE8AE9                                          ; FE9534  1e b2 f5
 	calr EditCursor_SeekToTick                                      ; FE9537  1e ad 03
-	calr sub_FE8F11                                          ; FE953A  1e d4 f9
+	calr EditScreen_SelectEventAtCursor                                          ; FE953A  1e d4 f9
 	calr sub_FEF7B4                                          ; FE953D  1e 74 62
 	calr sub_FEF926                                          ; FE9540  1e e3 63
 	calr sub_FEFD8A                                          ; FE9543  1e 44 68
@@ -178122,7 +178137,7 @@ sub_FE94FB:
 	calr sub_FEFEBF                                          ; FE9549  1e 73 69
 	calr sub_FEF778                                          ; FE954C  1e 29 62
 	calr sub_FEF8D6                                          ; FE954F  1e 84 63
-	m_bit 0, MD24, 0x601f5b                              ; FE9552  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9552  f2 5b 1f 60 c8
 	jr z, .LFE955C                                       ; FE9557  66 03
 	calr sub_FEA535                                          ; FE9559  1e d9 0f
 .LFE955C:
@@ -178155,7 +178170,7 @@ sub_FE955D:
 	calr EditCursor_SeekToTick                                      ; FE959C  1e 48 03
 	calr sub_FE8CB4                                          ; FE959F  1e 12 f7
 	calr sub_FE8A9B                                          ; FE95A2  1e f6 f4
-	calr sub_FE8F11                                          ; FE95A5  1e 69 f9
+	calr EditScreen_SelectEventAtCursor                                          ; FE95A5  1e 69 f9
 	calr sub_FEF7B4                                          ; FE95A8  1e 09 62
 	calr sub_FEF926                                          ; FE95AB  1e 78 63
 	calr sub_FEFD8A                                          ; FE95AE  1e d9 67
@@ -178163,7 +178178,7 @@ sub_FE955D:
 	calr sub_FEFEBF                                          ; FE95B4  1e 08 69
 	calr sub_FEF778                                          ; FE95B7  1e be 61
 	calr sub_FEF8D6                                          ; FE95BA  1e 19 63
-	m_bit 0, MD24, 0x601f5b                              ; FE95BD  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE95BD  f2 5b 1f 60 c8
 	jr z, .LFE95C7                                       ; FE95C2  66 03
 	calr sub_FEA535                                          ; FE95C4  1e 6e 0f
 .LFE95C7:
@@ -178230,7 +178245,7 @@ sub_FE9648:
 	ld (EditCursor_Tick:24), a                                 ; FE9670  f2 43 1f 60 41
 	calr sub_FE8ED3                                          ; FE9675  1e 5b f8
 	calr sub_FE9EDA                                          ; FE9678  1e 5f 08
-	calr sub_FE8F11                                          ; FE967B  1e 93 f8
+	calr EditScreen_SelectEventAtCursor                                          ; FE967B  1e 93 f8
 	calr sub_FEF7B4                                          ; FE967E  1e 33 61
 	calr sub_FEF926                                          ; FE9681  1e a2 62
 	calr sub_FEFD8A                                          ; FE9684  1e 03 67
@@ -178255,7 +178270,7 @@ sub_FE9694:
 	calr sub_FE8ED3                                          ; FE96C1  1e 0f f8
 	calr sub_FE9EDA                                          ; FE96C4  1e 13 08
 	calr EditCursor_SeekToTick                                      ; FE96C7  1e 1d 02
-	calr sub_FE8F11                                          ; FE96CA  1e 44 f8
+	calr EditScreen_SelectEventAtCursor                                          ; FE96CA  1e 44 f8
 	calr sub_FEF7B4                                          ; FE96CD  1e e4 60
 	calr sub_FEF926                                          ; FE96D0  1e 53 62
 	calr sub_FEFD8A                                          ; FE96D3  1e b4 66
@@ -178282,7 +178297,7 @@ sub_FE96E3:
 	ret                                                  ; FE9710  0e
 sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FE9762                                      ; FE9711  1e 4e 00
-	calr sub_FE8F11                                          ; FE9714  1e fa f7
+	calr EditScreen_SelectEventAtCursor                                          ; FE9714  1e fa f7
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE9717  1e b8 60
 	calr sub_FEFEBF                                          ; FE971A  1e a2 67
 	calr sub_FEA628                                          ; FE971D  1e 08 0f
@@ -178291,7 +178306,7 @@ sub_FE9711:   ; entry: named by 1 `.long` operand, first at 0xFE9315
 	calr sub_FEFD8A                                          ; FE9727  1e 60 66
 	ret                                                  ; FE972A  0e
 sub_FE972B:   ; entry: named by 1 `.long` operand, first at 0xFE9319
-	calr sub_FE8F11                                          ; FE972B  1e e3 f7
+	calr EditScreen_SelectEventAtCursor                                          ; FE972B  1e e3 f7
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE972E  1e a1 60
 	calr sub_FEFEBF                                          ; FE9731  1e 8b 67
 	calr sub_FEFD8A                                          ; FE9734  1e 53 66
@@ -178302,9 +178317,9 @@ sub_FE9738:
 sub_FE973C:   ; entry: named by 1 `.long` operand, first at 0xFE931D
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE973C  1e 93 60
 	calr sub_FEFEBF                                          ; FE973F  1e 7d 67
-	m_bit 0, MD24, 0x601f5b                              ; FE9742  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9742  f2 5b 1f 60 c8
 	jr z, .LFE9753                                       ; FE9747  66 0a
-	calr sub_FE97DF                                      ; FE9749  1e 93 00
+	calr EditScreen_AppendMissingBeatMarkers                                      ; FE9749  1e 93 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE974C  c1 4a 0d 3f 00
 	jr nz, .LFE9757                                      ; FE9751  6e 04
 .LFE9753:
@@ -178345,14 +178360,16 @@ sub_FE9762:
 	ld w, 0x06:opc                                          ; FE97C5  20 06
 	ld XIY,0x00601f16                                    ; FE97C7  45 16 1f 60 00
 	call T_BStore_AppendBytes_Veneer                     ; FE97CC  1d 94 28 f4
-	calr sub_FE97DF                                      ; FE97D0  1e 0c 00
+	calr EditScreen_AppendMissingBeatMarkers                                      ; FE97D0  1e 0c 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE97D3  c1 4a 0d 3f 00
 	jr nz, .LFE97DB                                      ; FE97D8  6e 01
 	ret                                                  ; FE97DA  0e
 .LFE97DB:
 	calr sub_FE8BD4                                          ; FE97DB  1e f6 f3
 	ret                                                  ; FE97DE  0e
-sub_FE97DF:
+; EditScreen_AppendMissingBeatMarkers: appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count
+;   sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored.
+EditScreen_AppendMissingBeatMarkers:
 	ld (BStore_ErrorCode:16), 0x00                                 ; FE97DF  f1 4a 0d 00 00
 	calr BStore_CursorSlot_Save                                          ; FE97E4  1e 07 f5
 	calr sub_FE9830                                      ; FE97E7  1e 46 00
@@ -178555,7 +178572,9 @@ EditField_StoreLengthInNoteEvent:
 	call BStoreCursor_WriteByte                                        ; FE99FF  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE9A03  1e 0f f3
 	ret                                                  ; FE9A06  0e
-sub_FE9A07:
+; EditField_ApplyVelocityToEvent: when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then sub_FEA535.  Called by
+;   the four steppers of 0x601F45 -- which is therefore the selected event's VELOCITY.
+EditField_ApplyVelocityToEvent:
 	calr BStore_CursorSlot_Save                                          ; FE9A07  1e e4 f2
 	call BStoreCursor_ReadByte                                        ; FE9A0A  1d 32 22 ff
 	and A,0xf0                                           ; FE9A0E  c9 cc f0
@@ -178566,7 +178585,7 @@ sub_FE9A07:
 	call BStoreCursor_Step                                        ; FE9A17  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE9A1B  1d 04 22 ff
 	call BStoreCursor_Step                                        ; FE9A1F  1d 04 22 ff
-	ld a, (EditField_Note:24)                                 ; FE9A23  c2 45 1f 60 21
+	ld a, (EditField_EventVelocity:24)                                 ; FE9A23  c2 45 1f 60 21
 	call BStoreCursor_WriteByte                                        ; FE9A28  1d 4d 22 ff
 	calr BStore_CursorSlot_Restore                                          ; FE9A2C  1e e6 f2
 	calr sub_FEA535                                          ; FE9A2F  1e 03 0b
@@ -179048,7 +179067,7 @@ EditCursor_NextBeat:
 	jr nc, .LFE9E17                                      ; FE9E13  6f 02
 	jr .LFE9E4C                                          ; FE9E15  68 35
 .LFE9E17:
-	m_bit 0, MD24, 0x601f5b                              ; FE9E17  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9E17  f2 5b 1f 60 c8
 	jr z, .LFE9E3B                                       ; FE9E1C  66 1d
 	ld c, (EditMeasure_Beats:24)                                 ; FE9E1E  c2 75 1f 60 23
 	mul C,0x60                                           ; FE9E23  cb 08 60
@@ -179232,7 +179251,7 @@ EditCursor_PrevBeat:
 	ld wa, (EditCursor_Measure:24)                                ; FE9FEA  d2 3f 1f 60 20
 	m_cp_rm MW24, 0x601f5d, r0                           ; FE9FEF  d2 5d 1f 60 f0
 	jr nz, .LFEA017                                      ; FE9FF4  6e 21
-	m_bit 0, MD24, 0x601f5b                              ; FE9FF6  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FE9FF6  f2 5b 1f 60 c8
 	jr z, .LFEA013                                       ; FE9FFB  66 16
 	m_cp_mi16 MW24, EditCursor_Measure, 0x0001                     ; FE9FFD  d2 3f 1f 60 3f 01 00
 	jr z, .LFEA012                                       ; FEA004  66 0c
@@ -179286,7 +179305,7 @@ sub_FEA037:
 	ld (EditCursor_Beat:24), wa                                ; FEA07C  f2 41 1f 60 50
 	ret                                                  ; FEA081  0e
 sub_FEA082:
-	m_bit 0, MD24, 0x601f5b                              ; FEA082  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA082  f2 5b 1f 60 c8
 	jr nz, .LFEA08A                                      ; FEA087  6e 01
 	ret                                                  ; FEA089  0e
 .LFEA08A:
@@ -179302,7 +179321,7 @@ EditScreen_SoftKeyCol3:
 	jr z, .LFEA0AC                                       ; FEA0A9  66 01
 	ret                                                  ; FEA0AB  0e
 .LFEA0AC:
-	m_bit 0, MD24, 0x601f5b                              ; FEA0AC  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA0AC  f2 5b 1f 60 c8
 	jr nz, .LFEA0B4                                      ; FEA0B1  6e 01
 	ret                                                  ; FEA0B3  0e
 .LFEA0B4:
@@ -179379,62 +179398,72 @@ EditScreen_SoftKeyCol4:
 .LFEA15A:
 	ret                                                  ; FEA15A  0e
 .LFEA15B:
-	m_bit 0, MD24, 0x601f5b                              ; FEA15B  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA15B  f2 5b 1f 60 c8
 	jr nz, .LFEA176                                      ; FEA160  6e 14
 	m_bit 0, MD24, EditScreen_Mode                              ; FEA162  f2 70 1f 60 c8
 	jr z, .LFEA15A                                       ; FEA167  66 f1
 	bit 0x07,W                                           ; FEA169  c8 33 07
 	jr nz, .LFEA172                                      ; FEA16C  6e 04
-	calr EditField_VelocityUp                                      ; FEA16E  1e 3e 00
+	calr EditField_NewNoteVelocityUp                                      ; FEA16E  1e 3e 00
 	ret                                                  ; FEA171  0e
 .LFEA172:
-	calr EditField_VelocityDown                                      ; FEA172  1e 4d 00
+	calr EditField_NewNoteVelocityDown                                      ; FEA172  1e 4d 00
 	ret                                                  ; FEA175  0e
 .LFEA176:
 	bit 0x07,W                                           ; FEA176  c8 33 07
 	jr nz, .LFEA17F                                      ; FEA179  6e 04
-	calr EditField_NoteUp                                      ; FEA17B  1e 05 00
+	calr EditField_EventVelocityUp                                      ; FEA17B  1e 05 00
 	ret                                                  ; FEA17E  0e
 .LFEA17F:
-	calr EditField_NoteDown                                      ; FEA17F  1e 17 00
+	calr EditField_EventVelocityDown                                      ; FEA17F  1e 17 00
 	ret                                                  ; FEA182  0e
-; EditField_NoteUp: (0x601F45), the NOTE field, + 1 up to 0x7F; redraws (0xFF0B46, 0xFE9A07).  NOTE EDIT draws the fields MEAS POS NOTE VEL LEN INC (DisplayList_NoteEditTrackSong).
-EditField_NoteUp:
-	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEA183  c2 45 1f 60 3f 7f
+; EditField_EventVelocityUp: (0x601F45), the NOTE field, + 1 up to 0x7F; redraws (0xFF0B46, 0xFE9A07).  NOTE EDIT draws the fields MEAS POS NOTE VEL LEN INC (DisplayList_NoteEditTrackSong).
+; EditField_EventVelocityUp: CORRECTED 2026-10-04: 0x601F45 is the selected note-on's VELOCITY, byte +3 (EditField_ApplyVelocityToEvent writes it
+;   there; EditScreen_DrawEventVelocity draws it in the same cell as the new-note velocity), not the NOTE: the NOTE
+;   column is EditCursor_Note.  EditScreen_SoftKeyCol4 steps it while an event is selected ((0x601F5B) bit 0).
+EditField_EventVelocityUp:
+	m_cp_mi8 MB24, EditField_EventVelocity, 0x7f                        ; FEA183  c2 45 1f 60 3f 7f
 	jr c, .LFEA18C                                       ; FEA189  67 01
 	ret                                                  ; FEA18B  0e
 .LFEA18C:
-	m_add_mi8 MB24, EditField_Note, 0x01                       ; FEA18C  c2 45 1f 60 38 01
-	calr sub_FF0B46                                          ; FEA192  1e b1 69
-	calr sub_FE9A07                                          ; FEA195  1e 6f f8
+	m_add_mi8 MB24, EditField_EventVelocity, 0x01                       ; FEA18C  c2 45 1f 60 38 01
+	calr EditScreen_DrawEventVelocity                                          ; FEA192  1e b1 69
+	calr EditField_ApplyVelocityToEvent                                          ; FEA195  1e 6f f8
 	ret                                                  ; FEA198  0e
-; EditField_NoteDown: (0x601F45) - 1 down to 1; redraws.
-EditField_NoteDown:
-	m_cp_mi8 MB24, EditField_Note, 0x01                        ; FEA199  c2 45 1f 60 3f 01
+; EditField_EventVelocityDown: (0x601F45) - 1 down to 1; redraws.
+; EditField_EventVelocityDown: CORRECTED 2026-10-04: 0x601F45 is the selected note-on's VELOCITY, byte +3 (EditField_ApplyVelocityToEvent writes it
+;   there; EditScreen_DrawEventVelocity draws it in the same cell as the new-note velocity), not the NOTE: the NOTE
+;   column is EditCursor_Note.  EditScreen_SoftKeyCol4 steps it while an event is selected ((0x601F5B) bit 0).
+EditField_EventVelocityDown:
+	m_cp_mi8 MB24, EditField_EventVelocity, 0x01                        ; FEA199  c2 45 1f 60 3f 01
 	jr nz, .LFEA1A2                                      ; FEA19F  6e 01
 	ret                                                  ; FEA1A1  0e
 .LFEA1A2:
-	sub	(EditField_Note:24), 0x01                  ; FEA1A2  c2 45 1f 60 3a 01
-	calr sub_FF0B46                                          ; FEA1A8  1e 9b 69
-	calr sub_FE9A07                                          ; FEA1AB  1e 59 f8
+	sub	(EditField_EventVelocity:24), 0x01                  ; FEA1A2  c2 45 1f 60 3a 01
+	calr EditScreen_DrawEventVelocity                                          ; FEA1A8  1e 9b 69
+	calr EditField_ApplyVelocityToEvent                                          ; FEA1AB  1e 59 f8
 	ret                                                  ; FEA1AE  0e
-; EditField_VelocityUp: (0x601F46), the VEL field (1..127, 100 by default from 0xFE833F), + 1 up to 0x7F; redraws (0xFF0B3A).
-EditField_VelocityUp:
-	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEA1AF  c2 46 1f 60 3f 7f
+; EditField_NewNoteVelocityUp: (0x601F46), the VEL field (1..127, 100 by default from 0xFE833F), + 1 up to 0x7F; redraws (0xFF0B3A).
+; EditField_NewNoteVelocityUp: CORRECTED 2026-10-04: 0x601F46 is the velocity a NEW note gets (100 by default); EditScreen_SoftKeyCol4 steps it
+;   in DRUM EDIT when no event is selected, and EditScreen_DrawNewNoteVelocity shows it in the VEL cell.
+EditField_NewNoteVelocityUp:
+	m_cp_mi8 MB24, EditField_NewNoteVelocity, 0x7f                        ; FEA1AF  c2 46 1f 60 3f 7f
 	jr c, .LFEA1B8                                       ; FEA1B5  67 01
 	ret                                                  ; FEA1B7  0e
 .LFEA1B8:
-	m_add_mi8 MB24, EditField_Velocity, 0x01                       ; FEA1B8  c2 46 1f 60 38 01
-	calr sub_FF0B3A                                          ; FEA1BE  1e 79 69
+	m_add_mi8 MB24, EditField_NewNoteVelocity, 0x01                       ; FEA1B8  c2 46 1f 60 38 01
+	calr EditScreen_DrawNewNoteVelocity                                          ; FEA1BE  1e 79 69
 	ret                                                  ; FEA1C1  0e
-; EditField_VelocityDown: (0x601F46) - 1 down to 1; redraws.
-EditField_VelocityDown:
-	m_cp_mi8 MB24, EditField_Velocity, 0x01                        ; FEA1C2  c2 46 1f 60 3f 01
+; EditField_NewNoteVelocityDown: (0x601F46) - 1 down to 1; redraws.
+; EditField_NewNoteVelocityDown: CORRECTED 2026-10-04: 0x601F46 is the velocity a NEW note gets (100 by default); EditScreen_SoftKeyCol4 steps it
+;   in DRUM EDIT when no event is selected, and EditScreen_DrawNewNoteVelocity shows it in the VEL cell.
+EditField_NewNoteVelocityDown:
+	m_cp_mi8 MB24, EditField_NewNoteVelocity, 0x01                        ; FEA1C2  c2 46 1f 60 3f 01
 	jr nz, .LFEA1CB                                      ; FEA1C8  6e 01
 	ret                                                  ; FEA1CA  0e
 .LFEA1CB:
-	sub	(EditField_Velocity:24), 0x01                  ; FEA1CB  c2 46 1f 60 3a 01
-	calr sub_FF0B3A                                          ; FEA1D1  1e 66 69
+	sub	(EditField_NewNoteVelocity:24), 0x01                  ; FEA1CB  c2 46 1f 60 3a 01
+	calr EditScreen_DrawNewNoteVelocity                                          ; FEA1D1  1e 66 69
 	ret                                                  ; FEA1D4  0e
 ; NoteEdit_SoftKeyCol5: the SoftKeyCol5 action of NoteEdit -- called only by SoftKeyCol5_NoteEdit.
 NoteEdit_SoftKeyCol5:
@@ -179454,7 +179483,7 @@ NoteEdit_SoftKeyCol5:
 	ret                                                  ; FEA1F6  0e
 ; EditField_LengthUp: the LEN field + 1 up to 0x2FFF: (0x601F47), or (0x601F49) when (0x601F5B) bit 0 is clear; redraws.
 EditField_LengthUp:
-	m_bit 0, MD24, 0x601f5b                              ; FEA1F7  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA1F7  f2 5b 1f 60 c8
 	jr nz, .LFEA200                                      ; FEA1FC  6e 02
 	jr T,.LFEA227                                        ; FEA1FE  68 27
 .LFEA200:
@@ -179479,7 +179508,7 @@ EditField_LengthUp:
 	ret                                                  ; FEA23B  0e
 ; EditField_LengthDown: the LEN field - 1 down to 1 (0 becomes 1); redraws.
 EditField_LengthDown:
-	m_bit 0, MD24, 0x601f5b                              ; FEA23C  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA23C  f2 5b 1f 60 c8
 	jr nz, .LFEA245                                      ; FEA241  6e 02
 	jr .LFEA27E                                          ; FEA243  68 39
 .LFEA245:
@@ -179611,7 +179640,7 @@ EditScreen_CursorRight:
 .LFEA39A:
 	calr sub_FEA743                                      ; FEA39A  1e a6 03
 .LFEA39D:
-	m_bit 0, MD24, 0x601f5b                              ; FEA39D  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA39D  f2 5b 1f 60 c8
 	jr nz, .LFEA3D1                                      ; FEA3A2  6e 2d
 	calr sub_FEA449                                      ; FEA3A4  1e a2 00
 	call BStoreCursor_ReadByte                                        ; FEA3A7  1d 32 22 ff
@@ -179627,17 +179656,17 @@ EditScreen_CursorRight:
 	ld hl, (EditCursor_TickInMeasure:24)                                ; FEA3C1  d2 54 1f 60 23
 	cp XWA,XHL                                           ; FEA3C6  eb f0
 	jr ule, .LFEA400                                     ; FEA3C8  63 36
-	m_bit 1, MD24, 0x601f5b                              ; FEA3CA  f2 5b 1f 60 c9
+	m_bit 1, MD24, EditScreen_CursorFlags                              ; FEA3CA  f2 5b 1f 60 c9
 	jr nz, .LFEA3E2                                      ; FEA3CF  6e 11
 .LFEA3D1:
 	calr sub_FEA7E7                                      ; FEA3D1  1e 13 04
-	m_bit 4, MD24, 0x601f5b                              ; FEA3D4  f2 5b 1f 60 cc
+	m_bit 4, MD24, EditScreen_CursorFlags                              ; FEA3D4  f2 5b 1f 60 cc
 	jr nz, .LFEA404                                      ; FEA3D9  6e 29
-	m_bit 1, MD24, 0x601f5b                              ; FEA3DB  f2 5b 1f 60 c9
+	m_bit 1, MD24, EditScreen_CursorFlags                              ; FEA3DB  f2 5b 1f 60 c9
 	jr z, .LFEA3F0                                       ; FEA3E0  66 0e
 .LFEA3E2:
 	calr sub_FEA64D                                      ; FEA3E2  1e 68 02
-	m_bit 2, MD24, 0x601f5b                              ; FEA3E5  f2 5b 1f 60 ca
+	m_bit 2, MD24, EditScreen_CursorFlags                              ; FEA3E5  f2 5b 1f 60 ca
 	jr z, .LFEA404                                       ; FEA3EA  66 18
 	calr sub_FE8BD4                                          ; FEA3EC  1e e5 e7
 	ret                                                  ; FEA3EF  0e
@@ -179695,7 +179724,7 @@ sub_FEA449:
 	jr z, .LFEA46E                                       ; FEA462  66 0a
 .LFEA464:
 	calr sub_FEA7E7                                      ; FEA464  1e 80 03
-	m_bit 1, MD24, 0x601f5b                              ; FEA467  f2 5b 1f 60 c9
+	m_bit 1, MD24, EditScreen_CursorFlags                              ; FEA467  f2 5b 1f 60 c9
 	jr nz, .LFEA47E                                      ; FEA46C  6e 10
 .LFEA46E:
 	calr sub_FEA628                                      ; FEA46E  1e b7 01
@@ -179707,7 +179736,7 @@ sub_FEA449:
 .LFEA47E:
 	ret                                                  ; FEA47E  0e
 sub_FEA47F:
-	m_and_mi8 MB24, 0x601f5b, 0xf7                       ; FEA47F  c2 5b 1f 60 3c f7
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xf7                       ; FEA47F  c2 5b 1f 60 3c f7
 	m_cp_mi16 MW24, 0x601f56, 0x0000                     ; FEA485  d2 56 1f 60 3f 00 00
 	jr nz, .LFEA4B4                                      ; FEA48C  6e 26
 	call BStoreCursor_ReadByte                                        ; FEA48E  1d 32 22 ff
@@ -179741,7 +179770,7 @@ sub_FEA47F:
 	calr BStore_CursorSlot_Restore                                          ; FEA4D0  1e 42 e8
 	jr .LFEA4DB                                          ; FEA4D3  68 06
 .LFEA4D5:
-	m_or_mi8 MB24, 0x601f5b, 0x08                        ; FEA4D5  c2 5b 1f 60 3e 08
+	m_or_mi8 MB24, EditScreen_CursorFlags, 0x08                        ; FEA4D5  c2 5b 1f 60 3e 08
 .LFEA4DB:
 	ret                                                  ; FEA4DB  0e
 sub_FEA4DC:
@@ -179756,7 +179785,7 @@ sub_FEA4DC:
 	ret                                                  ; FEA4F8  0e
 .LFEA4F9:
 	calr sub_FEA743                                      ; FEA4F9  1e 47 02
-	calr sub_FE8F11                                          ; FEA4FC  1e 12 ea
+	calr EditScreen_SelectEventAtCursor                                          ; FEA4FC  1e 12 ea
 	calr sub_FEF778                                          ; FEA4FF  1e 76 52
 	calr sub_FEF8D6                                          ; FEA502  1e d1 53
 	calr sub_FEFD8A                                          ; FEA505  1e 82 58
@@ -179770,7 +179799,7 @@ sub_FEA50C:
 	calr sub_FE955D                                          ; FEA51B  1e 3f f0
 	ret                                                  ; FEA51E  0e
 .LFEA51F:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEA51F  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEA51F  c2 5b 1f 60 3c fe
 	calr BStore_CursorSlot_Restore                                          ; FEA525  1e ed e7
 	calr sub_FEFD8A                                          ; FEA528  1e 5f 58
 	calr sub_FEA743                                      ; FEA52B  1e 15 02
@@ -179814,7 +179843,7 @@ sub_FEA566:
 	pushw wa                                             ; FEA590  28
 	call T_TimedEventRing_Put                                ; FEA591  1d 64 1d f4
 	inc 2,XSP                                            ; FEA595  ef 62
-	ld a, (EditField_Note:24)                                 ; FEA597  c2 45 1f 60 21
+	ld a, (EditField_EventVelocity:24)                                 ; FEA597  c2 45 1f 60 21
 	pushw wa                                             ; FEA59C  28
 	call T_TimedEventRing_Put                                ; FEA59D  1d 64 1d f4
 	inc 2,XSP                                            ; FEA5A1  ef 62
@@ -179891,7 +179920,7 @@ sub_FEA64D:
 	ld bc, (BStore_CursorOffset:16)                                 ; FEA651  d1 5e 34 21
 	pushw wa                                             ; FEA655  28
 	pushw bc                                             ; FEA656  29
-	m_res 2, MD24, 0x601f5b                              ; FEA657  f2 5b 1f 60 b2
+	m_res 2, MD24, EditScreen_CursorFlags                              ; FEA657  f2 5b 1f 60 b2
 	calr sub_FEA6B1                                      ; FEA65C  1e 52 00
 	ld wa, (EditCursor_TickInMeasure:24)                                ; FEA65F  d2 54 1f 60 20
 	div A,0x60                                           ; FEA664  c9 0a 60
@@ -179914,7 +179943,7 @@ sub_FEA64D:
 	jr nz, .LFEA687                                      ; FEA69D  6e e8
 	jr .LFEA6A6                                          ; FEA69F  68 05
 .LFEA6A1:
-	m_set 2, MD24, 0x601f5b                              ; FEA6A1  f2 5b 1f 60 ba
+	m_set 2, MD24, EditScreen_CursorFlags                              ; FEA6A1  f2 5b 1f 60 ba
 .LFEA6A6:
 	popw bc                                              ; FEA6A6  49
 	popw wa                                              ; FEA6A7  48
@@ -180046,7 +180075,7 @@ sub_FEA79B:
 	ld (EditCursor_Measure:24), wa                                ; FEA7E1  f2 3f 1f 60 50
 	ret                                                  ; FEA7E6  0e
 sub_FEA7E7:
-	m_and_mi8 MB24, 0x601f5b, 0xed                       ; FEA7E7  c2 5b 1f 60 3c ed
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xed                       ; FEA7E7  c2 5b 1f 60 3c ed
 	calr BStoreCursor_ReadByte                                          ; FEA7ED  1e 42 7a
 	cp A,0x82                                            ; FEA7F0  c9 cf 82
 	jr z, .LFEA81F                                       ; FEA7F3  66 2a
@@ -180070,7 +180099,7 @@ sub_FEA7E7:
 	calr sub_FEA84F                                      ; FEA81B  1e 31 00
 	ret                                                  ; FEA81E  0e
 .LFEA81F:
-	m_or_mi8 MB24, 0x601f5b, 0x02                        ; FEA81F  c2 5b 1f 60 3e 02
+	m_or_mi8 MB24, EditScreen_CursorFlags, 0x02                        ; FEA81F  c2 5b 1f 60 3e 02
 	ld (0x601f07:24), 0x00                             ; FEA825  f2 07 1f 60 00 00
 	ret                                                  ; FEA82B  0e
 .LFEA82C:
@@ -180081,7 +180110,7 @@ sub_FEA7E7:
 	ld c, (EditMeasure_Beats:24)                                 ; FEA83F  c2 75 1f 60 23
 	cp WA,BC                                             ; FEA844  d9 f0
 	jr c, .LFEA7FA                                       ; FEA846  67 b2
-	m_or_mi8 MB24, 0x601f5b, 0x10                        ; FEA848  c2 5b 1f 60 3e 10
+	m_or_mi8 MB24, EditScreen_CursorFlags, 0x10                        ; FEA848  c2 5b 1f 60 3e 10
 	ret                                                  ; FEA84E  0e
 sub_FEA84F:
 	ld wa, (BStore_CursorBlock:16)                                 ; FEA84F  d1 5c 34 20
@@ -180108,10 +180137,10 @@ EditScreen_CursorLeft:
 	ld (0x601f56:24), wa                                ; FEA884  f2 56 1f 60 50
 	calr sub_FEA71F                                      ; FEA889  1e 93 fe
 	calr sub_FEA743                                      ; FEA88C  1e b4 fe
-	m_bit 0, MD24, 0x601f5b                              ; FEA88F  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEA88F  f2 5b 1f 60 c8
 	jr nz, .LFEA8E5                                      ; FEA894  6e 4f
 	calr sub_FEA47F                                      ; FEA896  1e e6 fb
-	m_bit 3, MD24, 0x601f5b                              ; FEA899  f2 5b 1f 60 cb
+	m_bit 3, MD24, EditScreen_CursorFlags                              ; FEA899  f2 5b 1f 60 cb
 	jrl nz, .LFEA90D                                     ; FEA89E  7e 6c 00
 	ld wa, (0x601f12:24)                                ; FEA8A1  d2 12 1f 60 20
 	m_cp_rm MW16, BStore_CursorBlock, r0                             ; FEA8A6  d1 5c 34 f0
@@ -180139,7 +180168,7 @@ EditScreen_CursorLeft:
 	jr nc, .LFEA905                                      ; FEA8E3  6f 20
 .LFEA8E5:
 	calr sub_FEA923                                      ; FEA8E5  1e 3b 00
-	m_bit 3, MD24, 0x601f5b                              ; FEA8E8  f2 5b 1f 60 cb
+	m_bit 3, MD24, EditScreen_CursorFlags                              ; FEA8E8  f2 5b 1f 60 cb
 	jr nz, .LFEA90D                                      ; FEA8ED  6e 1e
 	calr sub_FEA628                                      ; FEA8EF  1e 36 fd
 	cp XWA,XBC                                           ; FEA8F2  e9 f0
@@ -180164,7 +180193,7 @@ EditScreen_CursorLeft:
 	calr sub_FE9648                                          ; FEA91F  1e 26 ed
 	ret                                                  ; FEA922  0e
 sub_FEA923:
-	m_and_mi8 MB24, 0x601f5b, 0xf7                       ; FEA923  c2 5b 1f 60 3c f7
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xf7                       ; FEA923  c2 5b 1f 60 3c f7
 	calr BStoreCursor_ReadByte                                          ; FEA929  1e 06 79
 	cp A,0x81                                            ; FEA92C  c9 cf 81
 	jr z, .LFEA95F                                       ; FEA92F  66 2e
@@ -180197,11 +180226,11 @@ sub_FEA923:
 	jr c, .LFEA978                                       ; FEA974  67 02
 	jr .LFEA931                                          ; FEA976  68 b9
 .LFEA978:
-	m_or_mi8 MB24, 0x601f5b, 0x08                        ; FEA978  c2 5b 1f 60 3e 08
+	m_or_mi8 MB24, EditScreen_CursorFlags, 0x08                        ; FEA978  c2 5b 1f 60 3e 08
 	ret                                                  ; FEA97E  0e
 ; NoteEdit_LcdKeyRow1: the LcdKeyRow1 action of NoteEdit -- called only by LcdKeyRow1_NoteEdit.
 NoteEdit_LcdKeyRow1:
-	ld XIX,0x00601f1c                                    ; FEA97F  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FEA97F  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEA984  84 21
 	bit 0x07,A                                           ; FEA986  c9 33 07
 	jr nz, .LFEA992                                      ; FEA989  6e 07
@@ -180227,11 +180256,11 @@ NoteEdit_LcdKeyRow2:
 .LFEA9B5:
 	bit 0x07,W                                           ; FEA9B5  c8 33 07
 	jr nz, .LFEA9DF                                      ; FEA9B8  6e 25
-	m_cp_mi8 MB24, 0x601f53, 0x09                        ; FEA9BA  c2 53 1f 60 3f 09
+	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x09                        ; FEA9BA  c2 53 1f 60 3f 09
 	jr c, .LFEA9C3                                       ; FEA9C0  67 01
 	ret                                                  ; FEA9C2  0e
 .LFEA9C3:
-	m_add_mi8 MB24, 0x601f53, 0x01                       ; FEA9C3  c2 53 1f 60 38 01
+	m_add_mi8 MB24, NoteEdit_RulerPosition, 0x01                       ; FEA9C3  c2 53 1f 60 38 01
 	calr NoteEdit_DrawKeyboardRuler                                          ; FEA9C9  1e 70 e3
 	ld (0x601f58:24), 0x81                             ; FEA9CC  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEA9D2  f2 59 1f 60 00 04
@@ -180251,11 +180280,11 @@ NoteEdit_LcdKeyRow3:
 .LFEA9F5:
 	bit 0x07,W                                           ; FEA9F5  c8 33 07
 	jr nz, .LFEAA1F                                      ; FEA9F8  6e 25
-	m_cp_mi8 MB24, 0x601f53, 0x00                        ; FEA9FA  c2 53 1f 60 3f 00
+	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x00                        ; FEA9FA  c2 53 1f 60 3f 00
 	jr nz, .LFEAA03                                      ; FEAA00  6e 01
 	ret                                                  ; FEAA02  0e
 .LFEAA03:
-	sub	(0x601f53:24), 0x01                  ; FEAA03  c2 53 1f 60 3a 01
+	sub	(NoteEdit_RulerPosition:24), 0x01                  ; FEAA03  c2 53 1f 60 3a 01
 	calr NoteEdit_DrawKeyboardRuler                                          ; FEAA09  1e 30 e3
 	ld (0x601f58:24), 0x81                             ; FEAA0C  f2 58 1f 60 00 81
 	ld (0x601f59:24), 0x04                             ; FEAA12  f2 59 1f 60 00 04
@@ -180270,7 +180299,7 @@ EditScreen_LcdKeyRow4:
 	jr z, .LFEAA28                                       ; FEAA25  66 01
 	ret                                                  ; FEAA27  0e
 .LFEAA28:
-	m_bit 0, MD24, 0x601f5b                              ; FEAA28  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEAA28  f2 5b 1f 60 c8
 	jr nz, .LFEAA30                                      ; FEAA2D  6e 01
 	ret                                                  ; FEAA2F  0e
 .LFEAA30:
@@ -180292,7 +180321,7 @@ EditScreen_LcdKeyRow4:
 	ld (BStore_CursorBlock:16), wa                                  ; FEAA57  f1 5c 34 50
 	ld (BStore_CursorOffset:16), bc                                  ; FEAA5B  f1 5e 34 51
 .LFEAA5F:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAA5F  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAA5F  c2 5b 1f 60 3c fe
 	calr sub_FEF778                                          ; FEAA65  1e 10 4d
 	calr sub_FEF8D6                                          ; FEAA68  1e 6b 4e
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAA6B  1e 64 4d
@@ -180392,7 +180421,7 @@ EditCursor_NoteStepHeld:
 	jr z, .LFEAB45                                       ; FEAB42  66 01
 	ret                                                  ; FEAB44  0e
 .LFEAB45:
-	m_bit 0, MD24, 0x601f5b                              ; FEAB45  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEAB45  f2 5b 1f 60 c8
 	jr nz, .LFEAB4D                                      ; FEAB4A  6e 01
 	ret                                                  ; FEAB4C  0e
 .LFEAB4D:
@@ -180464,88 +180493,98 @@ sub_FEABE9:
 .LFEABF5:
 	ret                                                  ; FEABF5  0e
 .LFEABF6:
-	m_bit 0, MD24, 0x601f5b                              ; FEABF6  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEABF6  f2 5b 1f 60 c8
 	jr nz, .LFEAC11                                      ; FEABFB  6e 14
 	m_bit 0, MD24, EditScreen_Mode                              ; FEABFD  f2 70 1f 60 c8
 	jr z, .LFEABF5                                       ; FEAC02  66 f1
 	bit 0x07,W                                           ; FEAC04  c8 33 07
 	jr nz, .LFEAC0D                                      ; FEAC07  6e 04
-	calr EditField_VelocityUp5                                      ; FEAC09  1e 12 00
+	calr EditField_NewNoteVelocityUp5                                      ; FEAC09  1e 12 00
 	ret                                                  ; FEAC0C  0e
 .LFEAC0D:
-	calr EditField_VelocityDown5                                      ; FEAC0D  1e 2f 00
+	calr EditField_NewNoteVelocityDown5                                      ; FEAC0D  1e 2f 00
 	ret                                                  ; FEAC10  0e
 .LFEAC11:
 	bit 0x07,W                                           ; FEAC11  c8 33 07
 	jr nz, .LFEAC1A                                      ; FEAC14  6e 04
-	calr EditField_NoteUp5                                      ; FEAC16  1e 4e 00
+	calr EditField_EventVelocityUp5                                      ; FEAC16  1e 4e 00
 	ret                                                  ; FEAC19  0e
 .LFEAC1A:
-	calr EditField_NoteDown5                                      ; FEAC1A  1e 6e 00
+	calr EditField_EventVelocityDown5                                      ; FEAC1A  1e 6e 00
 	ret                                                  ; FEAC1D  0e
-; EditField_VelocityUp5: (0x601F46) + 5, clamped to 0x7F; redraws.
-EditField_VelocityUp5:
-	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEAC1E  c2 46 1f 60 3f 7f
+; EditField_NewNoteVelocityUp5: (0x601F46) + 5, clamped to 0x7F; redraws.
+; EditField_NewNoteVelocityUp5: CORRECTED 2026-10-04: 0x601F46 is the velocity a NEW note gets (100 by default); EditScreen_SoftKeyCol4 steps it
+;   in DRUM EDIT when no event is selected, and EditScreen_DrawNewNoteVelocity shows it in the VEL cell.
+EditField_NewNoteVelocityUp5:
+	m_cp_mi8 MB24, EditField_NewNoteVelocity, 0x7f                        ; FEAC1E  c2 46 1f 60 3f 7f
 	jr c, .LFEAC27                                       ; FEAC24  67 01
 	ret                                                  ; FEAC26  0e
 .LFEAC27:
-	m_add_mi8 MB24, EditField_Velocity, 0x05                       ; FEAC27  c2 46 1f 60 38 05
-	m_cp_mi8 MB24, EditField_Velocity, 0x7f                        ; FEAC2D  c2 46 1f 60 3f 7f
+	m_add_mi8 MB24, EditField_NewNoteVelocity, 0x05                       ; FEAC27  c2 46 1f 60 38 05
+	m_cp_mi8 MB24, EditField_NewNoteVelocity, 0x7f                        ; FEAC2D  c2 46 1f 60 3f 7f
 	jr ule, .LFEAC3B                                     ; FEAC33  63 06
-	ld (EditField_Velocity:24), 0x7f                             ; FEAC35  f2 46 1f 60 00 7f
+	ld (EditField_NewNoteVelocity:24), 0x7f                             ; FEAC35  f2 46 1f 60 00 7f
 .LFEAC3B:
-	calr sub_FF0B3A                                          ; FEAC3B  1e fc 5e
+	calr EditScreen_DrawNewNoteVelocity                                          ; FEAC3B  1e fc 5e
 	ret                                                  ; FEAC3E  0e
-; EditField_VelocityDown5: (0x601F46) - 5, clamped to 1; redraws.
-EditField_VelocityDown5:
-	m_cp_mi8 MB24, EditField_Velocity, 0x01                        ; FEAC3F  c2 46 1f 60 3f 01
+; EditField_NewNoteVelocityDown5: (0x601F46) - 5, clamped to 1; redraws.
+; EditField_NewNoteVelocityDown5: CORRECTED 2026-10-04: 0x601F46 is the velocity a NEW note gets (100 by default); EditScreen_SoftKeyCol4 steps it
+;   in DRUM EDIT when no event is selected, and EditScreen_DrawNewNoteVelocity shows it in the VEL cell.
+EditField_NewNoteVelocityDown5:
+	m_cp_mi8 MB24, EditField_NewNoteVelocity, 0x01                        ; FEAC3F  c2 46 1f 60 3f 01
 	jr nz, .LFEAC48                                      ; FEAC45  6e 01
 	ret                                                  ; FEAC47  0e
 .LFEAC48:
-	ld a, (EditField_Velocity:24)                                 ; FEAC48  c2 46 1f 60 21
+	ld a, (EditField_NewNoteVelocity:24)                                 ; FEAC48  c2 46 1f 60 21
 	sub A,0x05                                           ; FEAC4D  c9 ca 05
 	jr c, .LFEAC5F                                       ; FEAC50  67 0d
 	cp a, 0x01:i3                                          ; FEAC52  c9 d9
 	jr c, .LFEAC5F                                       ; FEAC54  67 09
-	ld (EditField_Velocity:24), a                                 ; FEAC56  f2 46 1f 60 41
+	ld (EditField_NewNoteVelocity:24), a                                 ; FEAC56  f2 46 1f 60 41
 .LFEAC5B:
-	calr sub_FF0B3A                                          ; FEAC5B  1e dc 5e
+	calr EditScreen_DrawNewNoteVelocity                                          ; FEAC5B  1e dc 5e
 	ret                                                  ; FEAC5E  0e
 .LFEAC5F:
-	ld (EditField_Velocity:24), 0x01                             ; FEAC5F  f2 46 1f 60 00 01
+	ld (EditField_NewNoteVelocity:24), 0x01                             ; FEAC5F  f2 46 1f 60 00 01
 	jr .LFEAC5B                                          ; FEAC65  68 f4
-; EditField_NoteUp5: (0x601F45) + 5, clamped to 0x7F; redraws.
-EditField_NoteUp5:
-	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEAC67  c2 45 1f 60 3f 7f
+; EditField_EventVelocityUp5: (0x601F45) + 5, clamped to 0x7F; redraws.
+; EditField_EventVelocityUp5: CORRECTED 2026-10-04: 0x601F45 is the selected note-on's VELOCITY, byte +3 (EditField_ApplyVelocityToEvent writes it
+;   there; EditScreen_DrawEventVelocity draws it in the same cell as the new-note velocity), not the NOTE: the NOTE
+;   column is EditCursor_Note.  EditScreen_SoftKeyCol4 steps it while an event is selected ((0x601F5B) bit 0).
+EditField_EventVelocityUp5:
+	m_cp_mi8 MB24, EditField_EventVelocity, 0x7f                        ; FEAC67  c2 45 1f 60 3f 7f
 	jr c, .LFEAC70                                       ; FEAC6D  67 01
 	ret                                                  ; FEAC6F  0e
 .LFEAC70:
-	m_add_mi8 MB24, EditField_Note, 0x05                       ; FEAC70  c2 45 1f 60 38 05
-	m_cp_mi8 MB24, EditField_Note, 0x7f                        ; FEAC76  c2 45 1f 60 3f 7f
+	m_add_mi8 MB24, EditField_EventVelocity, 0x05                       ; FEAC70  c2 45 1f 60 38 05
+	m_cp_mi8 MB24, EditField_EventVelocity, 0x7f                        ; FEAC76  c2 45 1f 60 3f 7f
 	jr ule, .LFEAC84                                     ; FEAC7C  63 06
-	ld (EditField_Note:24), 0x7f                             ; FEAC7E  f2 45 1f 60 00 7f
+	ld (EditField_EventVelocity:24), 0x7f                             ; FEAC7E  f2 45 1f 60 00 7f
 .LFEAC84:
-	calr sub_FF0B46                                          ; FEAC84  1e bf 5e
-	calr sub_FE9A07                                          ; FEAC87  1e 7d ed
+	calr EditScreen_DrawEventVelocity                                          ; FEAC84  1e bf 5e
+	calr EditField_ApplyVelocityToEvent                                          ; FEAC87  1e 7d ed
 	ret                                                  ; FEAC8A  0e
-; EditField_NoteDown5: (0x601F45) - 5, clamped to 1; redraws.
-EditField_NoteDown5:
-	m_cp_mi8 MB24, EditField_Note, 0x01                        ; FEAC8B  c2 45 1f 60 3f 01
+; EditField_EventVelocityDown5: (0x601F45) - 5, clamped to 1; redraws.
+; EditField_EventVelocityDown5: CORRECTED 2026-10-04: 0x601F45 is the selected note-on's VELOCITY, byte +3 (EditField_ApplyVelocityToEvent writes it
+;   there; EditScreen_DrawEventVelocity draws it in the same cell as the new-note velocity), not the NOTE: the NOTE
+;   column is EditCursor_Note.  EditScreen_SoftKeyCol4 steps it while an event is selected ((0x601F5B) bit 0).
+EditField_EventVelocityDown5:
+	m_cp_mi8 MB24, EditField_EventVelocity, 0x01                        ; FEAC8B  c2 45 1f 60 3f 01
 	jr nz, .LFEAC94                                      ; FEAC91  6e 01
 	ret                                                  ; FEAC93  0e
 .LFEAC94:
-	ld a, (EditField_Note:24)                                 ; FEAC94  c2 45 1f 60 21
+	ld a, (EditField_EventVelocity:24)                                 ; FEAC94  c2 45 1f 60 21
 	sub A,0x05                                           ; FEAC99  c9 ca 05
 	jr c, .LFEACAE                                       ; FEAC9C  67 10
 	cp a, 0x01:i3                                          ; FEAC9E  c9 d9
 	jr c, .LFEACAE                                       ; FEACA0  67 0c
-	ld (EditField_Note:24), a                                 ; FEACA2  f2 45 1f 60 41
+	ld (EditField_EventVelocity:24), a                                 ; FEACA2  f2 45 1f 60 41
 .LFEACA7:
-	calr sub_FF0B46                                          ; FEACA7  1e 9c 5e
-	calr sub_FE9A07                                          ; FEACAA  1e 5a ed
+	calr EditScreen_DrawEventVelocity                                          ; FEACA7  1e 9c 5e
+	calr EditField_ApplyVelocityToEvent                                          ; FEACAA  1e 5a ed
 	ret                                                  ; FEACAD  0e
 .LFEACAE:
-	ld (EditField_Note:24), 0x01                             ; FEACAE  f2 45 1f 60 00 01
+	ld (EditField_EventVelocity:24), 0x01                             ; FEACAE  f2 45 1f 60 00 01
 	jr .LFEACA7                                          ; FEACB4  68 f1
 ; EditField_StepLength12: repaint bit 3; unless (0x601F58) bit 7 with (0x601F59) not 3: W bit 7 clear -> EditField_LengthUp12, set -> _LengthDown12.
 EditField_StepLength12:
@@ -180565,7 +180604,7 @@ EditField_StepLength12:
 	ret                                                  ; FEACD7  0e
 ; EditField_LengthUp12: the LEN field + 12, clamped to 0x2FFF; redraws.
 EditField_LengthUp12:
-	m_bit 0, MD24, 0x601f5b                              ; FEACD8  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEACD8  f2 5b 1f 60 c8
 	jr nz, .LFEACE1                                      ; FEACDD  6e 02
 	jr .LFEAD18                                          ; FEACDF  68 37
 .LFEACE1:
@@ -180600,7 +180639,7 @@ EditField_LengthUp12:
 	ret                                                  ; FEAD48  0e
 ; EditField_LengthDown12: the LEN field - 12, clamped to 1; redraws.
 EditField_LengthDown12:
-	m_bit 0, MD24, 0x601f5b                              ; FEAD49  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEAD49  f2 5b 1f 60 c8
 	jr nz, .LFEAD52                                      ; FEAD4E  6e 02
 	jr .LFEADA1                                          ; FEAD50  68 4f
 .LFEAD52:
@@ -180669,7 +180708,7 @@ sub_FEADFB:
 	ret                                                  ; FEAE02  0e
 .LFEAE03:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAE03  c1 75 20 3e 08
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAE08  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAE08  c2 5b 1f 60 3c fe
 	ld wa, (EditField_Inc:24)                                ; FEAE0E  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE13  28
 	ldw (EditField_Inc:24), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
@@ -180702,7 +180741,7 @@ sub_FEAE58:
 	ret                                                  ; FEAE5F  0e
 .LFEAE60:
 	m_or_mi8 MB16, UI_RequestBits, 0x08                          ; FEAE60  c1 75 20 3e 08
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAE65  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAE65  c2 5b 1f 60 3c fe
 	m_cp_mi16 MW24, EditCursor_TickInMeasure, 0x0000                     ; FEAE6B  d2 54 1f 60 3f 00 00
 	jr nz, .LFEAE78                                      ; FEAE72  6e 04
 	calr sub_FE9648                                          ; FEAE74  1e d1 e7
@@ -180730,11 +180769,11 @@ DrumEdit_LcdKeyRow3:
 .LFEAEB0:
 	bit 0x07,W                                           ; FEAEB0  c8 33 07
 	jrl nz, .LFEAF28                                     ; FEAEB3  7e 72 00
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAEB6  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAEB6  c2 5b 1f 60 3c fe
 ; DrumEdit_RowFollowNoteUp: after EditCursor_Note + 1 in DRUM EDIT (unless (0x601F1C) bit 7): EditScreen_CursorRow + 1 below 11, with
 ;   the left column and highlight redrawn; at row 11 the list scrolls instead, DrumEdit_TopRowNote + 1 below 0x74.
 DrumEdit_RowFollowNoteUp:
-	ld XIX,0x00601f1c                                    ; FEAEBC  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FEAEBC  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEAEC1  84 21
 	bit 0x07,A                                           ; FEAEC3  c9 33 07
 	jr nz, .LFEAF27                                      ; FEAEC6  6e 5f
@@ -180781,10 +180820,10 @@ DrumEdit_LcdKeyRow2:
 .LFEAF3E:
 	bit 0x07,W                                           ; FEAF3E  c8 33 07
 	jrl nz, .LFEAFB6                                     ; FEAF41  7e 72 00
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAF44  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAF44  c2 5b 1f 60 3c fe
 ; DrumEdit_RowFollowNoteDown: the mirror: EditScreen_CursorRow - 1 above 0, or DrumEdit_TopRowNote - 1 above 1.
 DrumEdit_RowFollowNoteDown:
-	ld XIX,0x00601f1c                                    ; FEAF4A  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FEAF4A  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEAF4F  84 21
 	bit 0x07,A                                           ; FEAF51  c9 33 07
 	jr nz, .LFEAFB5                                      ; FEAF54  6e 5f
@@ -180831,7 +180870,7 @@ sub_FEAFB7:
 	ret                                                  ; FEAFCF  0e
 ; DrumEdit_LcdKeyRow1: the LcdKeyRow1 action of DrumEdit -- called only by LcdKeyRow1_DrumEdit.
 DrumEdit_LcdKeyRow1:
-	ld XIX,0x00601f1c                                    ; FEAFD0  44 1c 1f 60 00
+	ld XIX,NoteEdit_HeldKeys                                    ; FEAFD0  44 1c 1f 60 00
 	ld A,(XIX)                                           ; FEAFD5  84 21
 	bit 0x07,A                                           ; FEAFD7  c9 33 07
 	jr nz, .LFEAFE3                                      ; FEAFDA  6e 07
@@ -180847,20 +180886,20 @@ DrumEdit_LcdKeyRow1:
 .LFEAFF0:
 	ret                                                  ; FEAFF0  0e
 sub_FEAFF1:   ; entry: named by 1 `.long` operand, first at 0xFE9325
-	calr sub_FE8F11                                          ; FEAFF1  1e 1d df
+	calr EditScreen_SelectEventAtCursor                                          ; FEAFF1  1e 1d df
 	calr EditScreen_EraseEditArea_Layer0                                          ; FEAFF4  1e db 47
 	calr sub_FEFEBF                                          ; FEAFF7  1e c5 4e
 	calr sub_FEFD8A                                          ; FEAFFA  1e 8d 4d
 	ret                                                  ; FEAFFD  0e
 ; DrumEdit_SoftKeyCol8: the SoftKeyCol8 action of DrumEdit -- called only by SoftKeyCol8_DrumEdit.
 DrumEdit_SoftKeyCol8:
-	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAFFE  c2 5b 1f 60 3c fe
+	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FEAFFE  c2 5b 1f 60 3c fe
 	calr sub_FEAFB7                                      ; FEB004  1e b0 ff
 	ld a, (EditCursor_Note:24)                                 ; FEB007  c2 44 1f 60 21
-	ld (0x601f34:24), a                                 ; FEB00C  f2 34 1f 60 41
-	ld a, (EditField_Velocity:24)                                 ; FEB011  c2 46 1f 60 21
-	ld (0x601f35:24), a                                 ; FEB016  f2 35 1f 60 41
-	ld (EditField_Note:24), a                                 ; FEB01B  f2 45 1f 60 41
+	ld (NoteEdit_InputNote:24), a                                 ; FEB00C  f2 34 1f 60 41
+	ld a, (EditField_NewNoteVelocity:24)                                 ; FEB011  c2 46 1f 60 21
+	ld (NoteEdit_InputVelocity:24), a                                 ; FEB016  f2 35 1f 60 41
+	ld (EditField_EventVelocity:24), a                                 ; FEB01B  f2 45 1f 60 41
 	calr sub_FEB033                                      ; FEB020  1e 10 00
 	calr sub_FE91C0                                          ; FEB023  1e 9a e1
 	calr EditScreen_EraseEditArea_Layer1                                          ; FEB026  1e 30 48
@@ -183888,10 +183927,10 @@ sub_FEF8D6:
 	calr sub_FEF8E5                                      ; FEF8E1  1e 01 00
 	ret                                                  ; FEF8E4  0e
 sub_FEF8E5:
-	m_bit 0, MD24, 0x601f5b                              ; FEF8E5  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEF8E5  f2 5b 1f 60 c8
 	jr z, .LFEF8F7                                       ; FEF8EA  66 0b
 	calr EditScreen_DrawCursorNote                                          ; FEF8EC  1e 8c 11
-	calr sub_FF0B46                                          ; FEF8EF  1e 54 12
+	calr EditScreen_DrawEventVelocity                                          ; FEF8EF  1e 54 12
 	calr sub_FF0BF1                                      ; FEF8F2  1e fc 12
 	jr .LFEF8FA                                          ; FEF8F5  68 03
 .LFEF8F7:
@@ -183903,13 +183942,13 @@ sub_FEF8E5:
 	calr sub_FF0D03                                          ; FEF903  1e fd 13
 	ret                                                  ; FEF906  0e
 sub_FEF907:
-	m_bit 0, MD24, 0x601f5b                              ; FEF907  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FEF907  f2 5b 1f 60 c8
 	jr z, .LFEF916                                       ; FEF90C  66 08
 	calr EditScreen_DrawCursorNote                                          ; FEF90E  1e 6a 11
-	calr sub_FF0B46                                          ; FEF911  1e 32 12
+	calr EditScreen_DrawEventVelocity                                          ; FEF911  1e 32 12
 	jr .LFEF919                                          ; FEF914  68 03
 .LFEF916:
-	calr sub_FF0B3A                                          ; FEF916  1e 21 12
+	calr EditScreen_DrawNewNoteVelocity                                          ; FEF916  1e 21 12
 .LFEF919:
 	calr EditScreen_DrawMeasure                                          ; FEF919  1e 6d 10
 	calr EditScreen_DrawBeat                                          ; FEF91C  1e e5 10
@@ -184674,7 +184713,7 @@ sub_FEFFB4:
 .LFEFFC6:
 	ld XIX,WordTable_FEFFDD                              ; FEFFC6  44 dd ff fe 00
 	xor XWA,XWA                                          ; FEFFCB  e8 d0
-	ld a, (0x601f53:24)                                 ; FEFFCD  c2 53 1f 60 21
+	ld a, (NoteEdit_RulerPosition:24)                                 ; FEFFCD  c2 53 1f 60 21
 	sll wa, 0x01                                         ; FEFFD2  d8 ee 01
 	add XIX,XWA                                          ; FEFFD5  e8 84
 	ld a, (xix+)                                      ; FEFFD7  c5 f0 21
@@ -184775,7 +184814,7 @@ CoordTable_FF00D1:
 	.byte 0x9b, 0x00, 0x91, 0x00, 0x87, 0x00, 0x7d, 0x00, 0x73, 0x00, 0x69, 0x00, 0x5f, 0x00, 0x55, 0x00  ; FF00D1
 	.byte 0x4b, 0x00, 0x41, 0x00, 0x37, 0x00, 0x2d, 0x00, 0x00, 0x00, 0x00, 0x00  ; FF00E1
 sub_FF00ED:
-	m_bit 0, MD24, 0x601f5b                              ; FF00ED  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF00ED  f2 5b 1f 60 c8
 	jr z, .LFF013E                                       ; FF00F2  66 4a
 	calr BStore_CursorSlot_Save                                          ; FF00F4  1e f7 8b
 	calr BStoreCursor_ReadByte                                          ; FF00F7  1e 38 21
@@ -184844,7 +184883,7 @@ sub_FF0178:
 	swi 7                                                ; FF019B  ff
 	ret                                                  ; FF019C  0e
 sub_FF019D:
-	m_bit 0, MD24, 0x601f5b                              ; FF019D  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF019D  f2 5b 1f 60 c8
 	jr z, .LFF01F1                                       ; FF01A2  66 4d
 	calr BStore_CursorSlot_Save                                          ; FF01A4  1e 47 8b
 	calr BStoreCursor_ReadByte                                          ; FF01A7  1e 88 20
@@ -184902,7 +184941,7 @@ LCD_FillRect_Grown2Rows:
 	swi 7                                                ; FF0203  ff
 	ret                                                  ; FF0204  0e
 sub_FF0205:
-	m_bit 0, MD24, 0x601f5b                              ; FF0205  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF0205  f2 5b 1f 60 c8
 	jr z, .LFF0233                                       ; FF020A  66 27
 	m_bit 7, MD24, 0x601f58                              ; FF020C  f2 58 1f 60 cf
 	jr z, .LFF0223                                       ; FF0211  66 10
@@ -184927,7 +184966,7 @@ sub_FF0205:
 	calr LCD_DrawVRuleLeft_OrNothing                                          ; FF023F  1e 17 fc
 	ret                                                  ; FF0242  0e
 sub_FF0243:
-	m_bit 0, MD24, 0x601f5b                              ; FF0243  f2 5b 1f 60 c8
+	m_bit 0, MD24, EditScreen_CursorFlags                              ; FF0243  f2 5b 1f 60 c8
 	jr z, .LFF0293                                       ; FF0248  66 49
 	calr sub_FEFFB4                                          ; FF024A  1e 67 fd
 	ld l, (EditCursor_Note:24)                                 ; FF024D  c2 44 1f 60 27
@@ -185003,7 +185042,7 @@ sub_FF02F5:
 .LFF0309:
 	sub L,A                                              ; FF0309  c9 a7
 	ld (0x601f3a:24), l                                 ; FF030B  f2 3a 1f 60 47
-	m_cp_mi8 MB24, 0x601f53, 0x00                        ; FF0310  c2 53 1f 60 3f 00
+	m_cp_mi8 MB24, NoteEdit_RulerPosition, 0x00                        ; FF0310  c2 53 1f 60 3f 00
 	jr nz, .LFF031E                                      ; FF0316  6e 06
 	m_add_mi8 MB24, 0x601f3a, 0x04                       ; FF0318  c2 3a 1f 60 38 04
 .LFF031E:
@@ -185966,11 +186005,12 @@ NoteNames:
 OctaveNames:
 	.byte 0x2d, 0x32, 0x2d, 0x31, 0x30, 0x20, 0x31, 0x20, 0x32, 0x20, 0x33, 0x20, 0x34, 0x20, 0x35, 0x20  ; FF0B22
 	.byte 0x36, 0x20, 0x37, 0x20, 0x38, 0x20, 0x39, 0x20                      ; FF0B32
-sub_FF0B3A:
-	ld a, (EditField_Velocity:24)                                 ; FF0B3A  c2 46 1f 60 21
+; EditScreen_DrawNewNoteVelocity: (0x601F19) = (0x601F46), then the same tail -- the same cell.
+EditScreen_DrawNewNoteVelocity:
+	ld a, (EditField_NewNoteVelocity:24)                                 ; FF0B3A  c2 46 1f 60 21
 	ld (0x601f19:24), a                                 ; FF0B3F  f2 19 1f 60 41
 	jr .LFF0B50                                          ; FF0B44  68 0a
-; sub_FF0B46 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; EditScreen_DrawEventVelocity -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 2 time(s) in the 18
 ; instructions to its first `ret`:
@@ -185987,8 +186027,10 @@ sub_FF0B3A:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FF0B46:
-	ld a, (EditField_Note:24)                                 ; FF0B46  c2 45 1f 60 21
+; EditScreen_DrawEventVelocity: (0x601F19) = (0x601F45), then the shared tail .LFF0B50: layer 0, the cell erased (sub_FEF81D), the value drawn
+;   (below 100 with a leading blank, otherwise with Str_v).
+EditScreen_DrawEventVelocity:
+	ld a, (EditField_EventVelocity:24)                                 ; FF0B46  c2 45 1f 60 21
 	ld (0x601f19:24), a                                 ; FF0B4B  f2 19 1f 60 41
 .LFF0B50:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0B50  f1 40 25 00 00
@@ -186043,9 +186085,9 @@ DisplayList_FF0BD2:
 DisplayList_FF0BE1:
 	.byte 0x02, 0x0F                               ; FF0BE1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x07, 0x1C  ; FF0BE3
-; Str_v -- a one-entry string table.  Both op-02 records above point at it (+7, entry width 1), and sub_FF0B46
+; Str_v -- a one-entry string table.  Both op-02 records above point at it (+7, entry width 1), and EditScreen_DrawEventVelocity
 ;          zeroes their index (0x26B0) before each run, so they draw "v" before the value's digits.  It is also
-;          where DisplayList_FF0BE1 ends (sub_FF0B46's XIX).  Was decoded as `jrl z` with the routine below.
+;          where DisplayList_FF0BE1 ends (EditScreen_DrawEventVelocity's XIX).  Was decoded as `jrl z` with the routine below.
 Str_v:	.ascii	"v"	; FF0BF0
 sub_FF0BF1:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FF0BF1  f1 40 25 00 00

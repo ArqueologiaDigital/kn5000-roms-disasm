@@ -207,6 +207,11 @@ def main():
                 w = 2 if mw.group(1) == "short" else 4
                 n = len([x for x in mw.group(2).split(",") if x.strip()])
                 newstarts.update(range(int(m.group(1), 16), int(m.group(1), 16) + w * n))
+    equ_new = collections.defaultdict(list)
+    for l in new:
+        mq = re.match(r"^\s*\.equ\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+)", l)
+        if mq:
+            equ_new[(mq.group(1), int(mq.group(2), 16))].append(l)
     kept = renamed = retitled = quoted = converted = deleted = symbolic = marked = 0
     missing = []
     for ln in old:
@@ -219,6 +224,16 @@ def main():
             have[r] -= 1
             renamed += 1
             continue
+        # a RAM equate of wsa1/include/wsa1_ram.inc whose NAME is declared renamed and whose address is unchanged:
+        # the include is generated from scripts/tools/name_wsa1_ram.py GROUPS, and a rename there may correct the
+        # description too (2026-10-04: EditField_Note -> EditField_EventVelocity, the old text kept in the FINDINGS)
+        me = re.match(r"^\s*\.equ\s+([A-Za-z_]\w*)\s*,\s*(0x[0-9A-Fa-f]+)", ln)
+        if me and me.group(1) in ren:
+            hit = next((c for c in equ_new.get((ren[me.group(1)], int(me.group(2), 16)), ()) if have[c] > 0), None)
+            if hit is not None:
+                have[hit] -= 1
+                renamed += 1
+                continue
         # a renamed thunk slot that also gained the `XXXXXX (was T_XXXXXX)` marker in its comment, exactly as
         # notes/prom_b_thunks_round6.py --mark writes it (2026-10-04); nothing else on the line may differ
         mt = re.match(r"^(T_([0-9A-F]{6})):", ln)

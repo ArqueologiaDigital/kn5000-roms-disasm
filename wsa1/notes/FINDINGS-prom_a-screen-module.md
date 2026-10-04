@@ -246,10 +246,36 @@ step them pin each cell (`notes/prom_ab_read_names_2026_10_04.py`):
 
 | address | width | field | range, step |
 |---|---|---|---|
-| 0x601F45 | byte | NOTE (SND) | 1..127, by 1 or 5 (`EditField_Note*`) |
-| 0x601F46 | byte | VEL | 1..127, by 1 or 5; 100 by default (`EditField_Velocity*`) |
+| 0x601F45 | byte | NOTE (SND) | 1..127, by 1 or 5 (`EditField_EventVelocity*`) |
+| 0x601F46 | byte | VEL | 1..127, by 1 or 5; 100 by default (`EditField_NewNoteVelocity*`) |
 | 0x601F47 | word | LEN when (0x601F5B) bit 0 is set | 1..0x2FFF, by 1 or 12 (`EditField_Length*`) |
 | 0x601F4D | word | INC, the cursor step in ticks | 1..0x60, by 1 or 5; 0x30 by default (`EditField_Inc*`) |
+
+⚠ **CORRECTED the same day (2026-10-04): 0x601F45 is not the NOTE field.**
+- It is the selected note-on's VELOCITY, byte +3. `EditField_ApplyVelocityToEvent` writes it there, and
+  `EditScreen_SelectEventAtCursor` loads it from there.
+- The table row above, "NOTE (SND)", is wrong. Its routines are now
+  `EditField_EventVelocity{Up,Down,Up5,Down5}`, and the RAM name is `EditField_EventVelocity`.
+- 0x601F46 is the velocity a NEW note gets (`EditField_NewNoteVelocity`, 100 by default).
+- Both are drawn in the same VEL cell (`EditScreen_DrawEventVelocity` / `_DrawNewNoteVelocity`). The value
+  is 0x601F45 while an event is selected, 0x601F46 otherwise. EditScreen_SoftKeyCol4 steps whichever
+  applies; with no selection, only in DRUM EDIT.
+- The NOTE column is `EditCursor_Note`.
+
+**Selection and keyboard input (2026-10-04).**
+- `EditScreen_CursorFlags` (0x601F5B) bit 0 is set by `EditScreen_SelectEventAtCursor` when a note-on sits
+  exactly on the cursor's tick and passes the DRUM EDIT filter. That routine loads the event's note into
+  `EditCursor_Note`, its velocity into `EditField_EventVelocity`, and its length into `EditField_Length` as
+  `(+5 & 0x7F) * 0x60 + (+4 & 0x7F)`, the same split `EditField_StoreLengthInNoteEvent` writes.
+- The keyboard enters notes. `NoteEdit_TakeKeyboardInput` drains the sequencer input ring on screens 0x25 /
+  0x28:
+  - A note-on is held in `NoteEdit_HeldKeys` (0x601F1C: 8 slots of flag, note, velocity; one slot in
+    DRUM EDIT).
+  - A note-off releases its slot.
+  - When the last key is up, `NoteEdit_EnterHeldNotes` enters them at the cursor, after
+    `EditScreen_AppendMissingBeatMarkers` has extended the part's chain to the cursor's beat.
+- `NoteEdit_ScrollRulerToNote` moves the keyboard ruler, `NoteEdit_RulerPosition` (0x601F53) 0..9, until
+  the note is in view.
 
 (0x601F49) is the length cell the same routines step when (0x601F5B) bit 0 is clear. NOTE
 EDIT loads it from (0x601F4B) on entry. Its role beside 0x601F47 is not established.

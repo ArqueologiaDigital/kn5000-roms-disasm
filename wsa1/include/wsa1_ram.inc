@@ -173,8 +173,8 @@
 	.equ EditCursor_Measure,			0x601f3f	; the NOTE / DRUM EDIT cursor's measure, 1..999 (word) -- sub_FEAAB6 / sub_FEAAE0 clamp it; sub_FE9E04 carries the beat into it
 	.equ EditCursor_Beat,				0x601f41	; the cursor's beat within the measure, from 0 (word) -- sub_FE9E04 wraps it at sub_FE9F23's beat count
 	.equ EditCursor_Tick,				0x601f43	; the cursor's tick within the beat, 0..95 -- sub_FE9DB4 / sub_FE9DD5 step it and clamp to 0x5F
-	.equ EditField_Note,				0x601f45	; the NOTE field (DRUM EDIT: SND), 1..127 -- EditField_NoteUp / _Down / _Up5 / _Down5
-	.equ EditField_Velocity,			0x601f46	; the VEL field, 1..127, 100 by default -- EditField_VelocityUp / _Down / _Up5 / _Down5; 0xFE833F sets 100
+	.equ EditField_EventVelocity,			0x601f45	; the selected note-on's velocity (its byte +3), 1..127 -- CORRECTED 2026-10-04, was named EditField_Note -- EditField_NoteUp / _Down / _Up5 / _Down5
+	.equ EditField_NewNoteVelocity,			0x601f46	; the velocity a new note gets, 1..127, 100 by default -- was EditField_Velocity -- EditField_VelocityUp / _Down / _Up5 / _Down5; 0xFE833F sets 100
 	.equ EditField_Length,				0x601f47	; the LEN field (word), 1..0x2FFF, when (0x601F5B) bit 0 is set -- EditField_LengthUp / _Down / _Up12 / _Down12
 	.equ EditField_Inc,				0x601f4d	; the INC field (word): the cursor step in ticks, 1..0x60, 0x30 by default -- EditField_IncUp / _Down / _Up5 / _Down5
 	.equ EditCursor_TickInMeasure,			0x601f54	; the cursor's position in ticks from the start of the measure (word), below EditMeasure_Beats * 96 -- EditCursor_NextBeat compares it with EditMeasure_Beats * 0x60 - 1; EditCursor_MeasureChanged zeroes it with the beat and tick
@@ -470,7 +470,12 @@
 ; ---- wsa1/notes/FINDINGS-prom_a-screen-module.md -- "8. The NOTE / DRUM EDIT state in work DRAM -- the edited part and the note row"
 	.equ EditScreen_Part,				0x601f00	; the part being edited, the EDIT PART SELECT soft key's index; its chain is entry part + 1 -- EditPartSelect_OpenEditor stores it; EditScreen_SaveTrackCursor indexes 0x3460 / 0x3482 with it
 	.equ EditScreen_PartMask,			0x601f01	; the edited part's bit (EditPartSelect_PartBitMask[part]) -- EditPartSelect_OpenEditor
+	.equ NoteEdit_HeldKeys,				0x601f1c	; 8 slots of {flag 0x80, note, velocity}: the keys held during entry (1 slot in DRUM EDIT) -- NoteEdit_HoldKey / _ReleaseKey / _AnyKeyHeld / _EnterHeldNotes
+	.equ NoteEdit_InputNote,			0x601f34	; the note of the key event being taken -- NoteEdit_TakeKeyboardInput
+	.equ NoteEdit_InputVelocity,			0x601f35	; its velocity (0 = released) -- NoteEdit_TakeKeyboardInput
 	.equ EditCursor_Note,				0x601f44	; the cursor's note row, 1..127; DRUM EDIT shows only events on it -- EditCursor_NoteUp / _Down / _Up6 / _Down6; DrumEdit_IsOtherNote
+	.equ NoteEdit_RulerPosition,			0x601f53	; the keyboard ruler's position, 0..9 -- NoteEdit_ScrollRulerToNote
+	.equ EditScreen_CursorFlags,			0x601f5b	; bit 0: a note-on is selected at the cursor (its velocity in EditField_EventVelocity); bits 1..4 are tested by the cursor moves, not read here -- EditScreen_SelectEventAtCursor sets / clears it; EditScreen_SoftKeyCol4 tests it
 
 ; ---- wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md -- "2026-10-04: the SEQUENCER content type -- two files, SQF and SEQ"
 	.equ Disk_SeqBank,				0x272b	; the sequencer bank 0..9 a disk load goes into / a save comes from -- LcdKeyRow4 / LcdKeyRow5_DiskL0adFile step it 0..9; SeqFile_Load makes it BStore_CurrentBank

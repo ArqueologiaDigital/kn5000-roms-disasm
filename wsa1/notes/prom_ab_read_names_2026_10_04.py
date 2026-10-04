@@ -258,21 +258,21 @@ ROWS = [
     ("FC1927", "Msg0716_PostProgramChange",
      "C0 <part> <word from (XIY)> 00, five bytes: a program change carrying a 16-bit program number."),
     # prom_a: NOTE / DRUM EDIT's value fields (0x601F45 NOTE, 0x601F46 VEL, 0x601F47 / 0x601F49 LEN, 0x601F4D INC)
-    ("FEA183", "EditField_NoteUp",
+    ("FEA183", "EditField_EventVelocityUp",
      "(0x601F45), the NOTE field, + 1 up to 0x7F; redraws (0xFF0B46, 0xFE9A07).  NOTE EDIT draws the fields MEAS POS NOTE VEL LEN INC (DisplayList_NoteEditTrackSong)."),
-    ("FEA199", "EditField_NoteDown",
+    ("FEA199", "EditField_EventVelocityDown",
      "(0x601F45) - 1 down to 1; redraws."),
-    ("FEAC67", "EditField_NoteUp5",
+    ("FEAC67", "EditField_EventVelocityUp5",
      "(0x601F45) + 5, clamped to 0x7F; redraws."),
-    ("FEAC8B", "EditField_NoteDown5",
+    ("FEAC8B", "EditField_EventVelocityDown5",
      "(0x601F45) - 5, clamped to 1; redraws."),
-    ("FEA1AF", "EditField_VelocityUp",
+    ("FEA1AF", "EditField_NewNoteVelocityUp",
      "(0x601F46), the VEL field (1..127, 100 by default from 0xFE833F), + 1 up to 0x7F; redraws (0xFF0B3A)."),
-    ("FEA1C2", "EditField_VelocityDown",
+    ("FEA1C2", "EditField_NewNoteVelocityDown",
      "(0x601F46) - 1 down to 1; redraws."),
-    ("FEAC1E", "EditField_VelocityUp5",
+    ("FEAC1E", "EditField_NewNoteVelocityUp5",
      "(0x601F46) + 5, clamped to 0x7F; redraws."),
-    ("FEAC3F", "EditField_VelocityDown5",
+    ("FEAC3F", "EditField_NewNoteVelocityDown5",
      "(0x601F46) - 5, clamped to 1; redraws."),
     ("FEA1F7", "EditField_LengthUp",
      "the LEN field + 1 up to 0x2FFF: (0x601F47), or (0x601F49) when (0x601F5B) bit 0 is clear; redraws."),
@@ -1470,6 +1470,38 @@ ROWS = [
      "the left column and highlight redrawn; at row 11 the list scrolls instead, DrumEdit_TopRowNote + 1 below 0x74."),
     ("FEAF4A", "DrumEdit_RowFollowNoteDown",
      "the mirror: EditScreen_CursorRow - 1 above 0, or DrumEdit_TopRowNote - 1 above 1."),
+    # NOTE / DRUM EDIT: the selected event, its velocity, keyboard input (FINDINGS-prom_a-screen-module.md section 8)
+    ("FE9A07", "EditField_ApplyVelocityToEvent",
+     "when the event at the cursor is a note-on, byte +3 = (0x601F45) (cursor restored); then sub_FEA535.  Called by\n"
+     "the four steppers of 0x601F45 -- which is therefore the selected event's VELOCITY."),
+    ("FF0B46", "EditScreen_DrawEventVelocity",
+     "(0x601F19) = (0x601F45), then the shared tail .LFF0B50: layer 0, the cell erased (sub_FEF81D), the value drawn\n"
+     "(below 100 with a leading blank, otherwise with Str_v)."),
+    ("FF0B3A", "EditScreen_DrawNewNoteVelocity", "(0x601F19) = (0x601F46), then the same tail -- the same cell."),
+    ("FE8F11", "EditScreen_SelectEventAtCursor",
+     "(0x601F5B) bit 0 = 0; when the event at the cursor sits on EditCursor_TickInMeasure (sub_FEA628) and is a\n"
+     "note-on that DrumEdit_IsOtherNote passes: bit 0 = 1, EditCursor_Note = +2, (0x601F45) = +3, EditField_Length =\n"
+     "(+5 & 0x7F) x 0x60 + (+4 & 0x7F), (0x601F6F) = the note, NoteEdit_ScrollRulerToNote."),
+    ("FE8F97", "NoteEdit_ScrollRulerToNote",
+     "NOTE EDIT only: moves (0x601F53), 0..9, one step at a time until (0x601F6F) is inside the range sub_FEFFB4\n"
+     "returns (A low, W high); when it moved, NoteEdit_DrawKeyboardRuler and the edit area redrawn."),
+    ("FE8FFD", "NoteEdit_TakeKeyboardInput",
+     "on screens 0x25 / 0x28, with the edit area idle and free blocks: drains the sequencer input ring\n"
+     "(T_SeqBufRing_Get); a note-on (0x9n) with velocity -> NoteEdit_HoldKey, velocity 0 -> NoteEdit_ReleaseKey; when\n"
+     "no key is held any more (NoteEdit_AnyKeyHeld): selection cleared, NoteEdit_ScrollRulerToNote,\n"
+     "NoteEdit_EnterHeldNotes, EditScreen_AppendMissingBeatMarkers, redraw."),
+    ("FE90B8", "NoteEdit_HoldKey",
+     "the first free slot of 0x601F1C (8 x {flag 0x80, note, velocity}; 1 slot in DRUM EDIT) takes (0x601F34) /\n"
+     "(0x601F35)."),
+    ("FE90F8", "NoteEdit_ReleaseKey",
+     "clears the flag of the slot holding note (0x601F34); A = 0xFF when none does."),
+    ("FE912B", "NoteEdit_AnyKeyHeld", "A = 0xFF when any of the 8 slots at 0x601F1C is flagged, else 0."),
+    ("FE915D", "NoteEdit_EnterHeldNotes",
+     "DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (sub_FE91C0); NOTE EDIT: every slot with a note\n"
+     "through sub_FE91D2 then sub_FE9276, stopping on a BStore error (sub_FE8BD4)."),
+    ("FE97DF", "EditScreen_AppendMissingBeatMarkers",
+     "appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count\n"
+     "sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
