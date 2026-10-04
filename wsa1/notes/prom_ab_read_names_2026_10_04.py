@@ -1992,12 +1992,12 @@ ROWS = [
      "(frame with the source at +1): every node of that source's list copied into the frame with velocity 0 -- a\n"
      "note-off for each sounding note; A = the low byte of their ORed voice masks."),
     ("FC54C6", "NoteRouting_RebuildForSong",
-     "T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then\n"
+     "T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): NoteRouting_BuildTrackRouting first, then\n"
      "block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,\n"
      "NoteRouting_CommitChanges."),
     ("FC5518", "NoteRouting_Rebuild",
      "T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without\n"
-     "sub_FC61A6, the per-mode builder called with 1."),
+     "NoteRouting_BuildTrackRouting, the per-mode builder called with 1."),
     ("FC5566", "NoteRouting_SetSoloAndRebuild",
      "T_NoteRouting_SetSoloAndRebuild: (0x602498) bit 5 = the argument (LcdKeyRow1_C0mbinati0nM0de_Page2 -- the SOLO key --,\n"
      "ScreenLeaveBody_C0mbinati0nM0de, CombiEdit_CompareOn), then the rebuild with 0."),
@@ -2072,19 +2072,19 @@ ROWS = [
      "PartFrame_RecordToSeqBuf)."),
     ("FC9933", "NoteChange_ReleaseMidiInChannelNotes",
      "kind 7 (path, 0xFF, channel), queued when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or\n"
-     "NoteRouting_ListChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,\n"
+     "NoteRouting_SingleChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,\n"
      "source 1) is released through each part as NoteRouting_Previous routed it (NoteFrame_SelectForPart,\n"
      "NoteRouting_ForPartFromMidiIn, PartNotes_ApplyFrame; the three outputs, MIDI OUT unless +0x293 bit 5).  Path 0:\n"
      "each part that received on the channel (previous block: +0x22 = channel, record bit 6) releases its MIDI IN notes\n"
      "on it (PartNotes_BuildReleaseFrame; tone generator and record buffer)."),
     ("FC9AA1", "NoteChange_ReleaseOldMidiOutScheme",
-     "kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_ListChannel\n"
+     "kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_SingleChannel\n"
      "changed while it stays set.  When source 0's note list holds notes: with 0 (MIDI OUT was per part) each part's\n"
      "source-0 notes get MIDI OUT note-offs; with 1 (MIDI OUT carried source 0 on the one channel) the note list's\n"
      "note-offs go out on the old channel (PartFrame_SendToMidiOut).  With 0, each part's source-1 notes then get MIDI\n"
      "OUT note-offs too, when source 1's list holds notes."),
     ("FC5D30", "NoteRouting_QueueMidiInChanges",
-     "(NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_ListChannel\n"
+     "(NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_SingleChannel\n"
      "changed, a kind-7 record per channel whose MIDI IN path changes (1 = it took the note-list path before, 0 = the\n"
      "per-channel path); then for each of the 32 parts kind 0 (part, new, old) when its channel (+0x22) changed, or\n"
      "kind 0 (part, 0xFF, channel) when its receive bit (record +0x152 bit 6) changed."),
@@ -2092,7 +2092,7 @@ ROWS = [
      "(NoteRouting_ChangeFlags bit 6 or 7): for each of the 16 tracks, kind 2 (track, new, old) when its MIDI OUT\n"
      "channel (+0x52, low 5 bits) changed and kind 3 (track, new, old) when its part (+0x42, low 5 bits) changed."),
     ("FC5FAC", "NoteRouting_QueueMidiOutSchemeChange",
-     "(bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_ListChannel) when NoteRouting_MidiFlags bit 5\n"
+     "(bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_SingleChannel) when NoteRouting_MidiFlags bit 5\n"
      "changed, or when the channel changed while bit 5 is set."),
     ("FC6065", "NoteRouting_QueuePartTransmitChanges",
      "(bit 5): for each of the 32 parts, kind 5 (part, new, old) when its channel (+0x22) changed, or kind 5\n"
@@ -2124,7 +2124,7 @@ ROWS = [
      "leaves the list (NoteList_ApplyFrame); each part of the voice mask then takes it as a note frame does\n"
      "(NoteFrame_SelectForPart, NoteRouting_ForPart, PartNotes_ApplyFrame, the three outputs).  In MIDI IN mode 1 the\n"
      "note-offs also go out as one MIDI OUT frame.  Its entry +5 byte, which Ring601850_ProcessNoteEvents fills with\n"
-     "NoteRouting_ListChannel, is here the part loop's counter (XIZ-5) (0xFC8C61)."),
+     "NoteRouting_SingleChannel, is here the part loop's counter (XIZ-5) (0xFC8C61)."),
     ("FC8CE0", "PartNotes_ReleaseAllTrackNotes",
      "T_PartNotes_ReleaseAllTrackNotes: for each of the 16 tracks that has a part (BStore_TrackToPart), the track's notes on it (source 2,\n"
      "channel key = the track) become note-offs (PartNotes_BuildReleaseFrame, mask 7) sent to the tone generator and\n"
@@ -2135,7 +2135,7 @@ ROWS = [
      "is skipped.  When the part's note list is empty after a note went out, [0xB0, part, 0x7B, 0] follows and the\n"
      "state is 0x80.  A = the new state.  On screen 0xDA the part byte is SoundSel_Group | 0xF0.  Status bit 3 is set\n"
      "when (0x7F02) & 0xF0 is 0x10 and the frame came by the note-list path (source 0, or source 1 in mode 2 or on\n"
-     "NoteRouting_ListChannel in mode 1); what it means on the link is not established."),
+     "NoteRouting_SingleChannel in mode 1); what it means on the link is not established."),
     ("FCA8D4", "PartFrame_SendMonoToToneGen",
      "(part, state, frame), for a part whose tone-generator record has bit 6: one note at a time, the one at the tail of\n"
      "the part's note list (head +0x0D).  State 0x80 (silent): a note-on for it.  A different note sounding: its note-off\n"
@@ -2170,6 +2170,64 @@ ROWS = [
     ("F9565A", "PartNotes_ReleaseReceivedOnScreenChange",
      "when UI_ScreenLatch differs from UI_ScreenLatch_Previous (the screen just changed): T_PartNotes_ReleaseAllReceivedMidiIn.\n"
      "Called by Paint_SineWaveCheckMode and through its directory slot 0xF40160."),
+    # the routing block's inputs: parameter-record events and the init phase (FINDINGS-prom_a-note-frames.md section 9)
+    ("FC5400", "NoteRouting_PhaseVector",
+     "the address in slot 0xF411B0, ModuleInitDirectory_F82641[21]: a phase vector.  Phase 0 jumps to NoteRouting_InitRam\n"
+     "and then NoteRouting_InitDefaults; phases 1..5 are bare rets."),
+    ("FC5420", "NoteRouting_InitRam",
+     "an empty data copy (0 bytes from Bytes_00_to_1F_FC64A5 to address 0), the 3 bytes at 0x4C20 zeroed, and the\n"
+     "0x784 bytes from NoteRouting (0x602200..0x602983, the block and its previous copy) filled with 0xFF."),
+    ("FC6393", "NoteRouting_InitDefaults",
+     "each of the 32 parts plays tone-generator part = itself.  Its tone-generator record has bits 6-7 clear, velocity\n"
+     "offset (+1) 0 and pointer (+2) 0x602ACA.  Its MIDI record has bits 5 and 6 set (transmit, receive), bit 7 clear,\n"
+     "transpose (+1) 0 and pointers (+2, +6) 0x602ACA.  Then MIDI INPUT / OUTPUT MODE 0, NoteRouting_SingleChannel 0,\n"
+     "both MIDI OUT ports allowed, 0x602494 (32-bit) = 0, NoteRouting_Mode = 0."),
+    ("FC546A", "NoteRouting_RebuildIfPending",
+     "T_NoteRouting_RebuildIfPending, in UiEventPassB_TailList (run after the pass-B event lists): when NoteRouting_ChangeFlags bit 15 is set --\n"
+     "the parameter-event handlers set it -- block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode]\n"
+     "with 0 unless that is the stub .LFC5C6C, NoteRouting_UpdateActivePartMask, NoteRouting_CommitChanges.  The bit\n"
+     "it clears first is bit 7 of 0x4C01, not of 0x4C05 (0xFC5479); the commit clears the whole word anyway."),
+    ("FC55CA", "NoteRouting_OnPartMidiEvent",
+     "T_NoteRouting_OnPartMidiEvent, the pass-B handler of event classes 0x00-0x1F: the 32 parts' first parameter record (the class picks the\n"
+     "part through Bytes_00_to_1F_x3_FC65C6+0x40; payload: byte index, new value, changed bits -- see\n"
+     "notes/sysex-probes/README.md).  Byte 0 (PROGRAM CHANGE & BANK): the part's three record pointers reset\n"
+     "(T_NoteRouting_DefaultRecordPtrs), ChangeFlags bit 15.  Byte 13: bits 0-4 BASIC CHANNEL -> block +0x22 + part, pointers reset, flags\n"
+     "0x8020; bit 5 LOCAL CONTROL -> tone-generator record bit 5 = NOT the bit, parts 0-7 also in (0x4C21), flags\n"
+     "0x8004; bit 6 MIDI OUT SETTING -> MIDI record bit 5 = NOT the bit, (0x4C22), 0x8020; bit 7 MIDI IN SETTING ->\n"
+     "MIDI record bit 6 = NOT the bit, 0x8020.  Byte 12 is ignored.  Names: param_names.json, PART offsets 0 and 13."),
+    ("FC57F0", "NoteRouting_OnPartPlayParamEvent",
+     "T_NoteRouting_OnPartPlayParamEvent, classes 0x20-0x3F, the parts' second record (SysEx rec 32).  Byte 5 VELOCITY OFFSET -> tone-generator\n"
+     "record +1 = value - 0x18.  Byte 6 ASSIGN MODE -> record bit 6 = (value == 1), the mono bit\n"
+     "PartFrame_SendToToneGen tests.  Bytes 7 / 8 / 9 / 10 KEY LAYER LOW / HIGH and VELOCITY LAYER LOW / HIGH -> range\n"
+     "record +2 / +1 / +4 / +3, parts 0-7 only.  Byte 23 MIDI OUT KEY TRANSPOSE -> MIDI record +1 = value - 0x40.\n"
+     "Each sets ChangeFlags bit 15."),
+    ("FC596F", "NoteRouting_OnPlayModeRequest",
+     "T_NoteRouting_OnPlayModeRequest, class 0x98 byte 0 (PLAY MODE REQUEST, the high nibble): NoteRouting_Mode bit 4 = (nibble == 1);\n"
+     "ChangeFlags bit 15."),
+    ("FC59AC", "NoteRouting_OnMidiSystemEvent",
+     "T_NoteRouting_OnMidiSystemEvent, class 0x80 -- the MIDI system record (PROGRAM CHANGE MODE, MIDI INPUT / OUTPUT MODE, SINGLE CHANNEL,\n"
+     "LOCAL TOTAL): the byte index 0..9 through NoteRouting_MidiSystemByteCases (3, 4 and 9 have handlers) with\n"
+     "L = the new value, H = the changed bits, DE = 0x8020."),
+    ("FC5A03", "NoteRouting_SetMidiInOutModes",
+     "class 0x80 byte 3: MIDI INPUT MODE (low nibble 0 / 1 / 2) -> NoteRouting_MidiFlags bits 6-7 = 00 / 01 / 10;\n"
+     "MIDI OUTPUT MODE (high nibble 0 / 1) -> bit 5; ChangeFlags |= 0x8020."),
+    ("FC5A77", "NoteRouting_SetSingleChannelAndLocal",
+     "class 0x80 byte 4: SINGLE CHANNEL (bits 0-4) -> NoteRouting_SingleChannel, ChangeFlags |= 0x8020; LOCAL TOTAL\n"
+     "(bit 5) -> NoteRouting_Mode bit 9 (no tone-generator output), with no change flag."),
+    ("FC5AAE", "NoteRouting_OnMidiSystemByte9",
+     "class 0x80 byte 9, bit 7 -> NoteRouting_ChangeFlags bit 3 (set or clear).  No SysEx descriptor names byte 9."),
+    ("FC5ACC", "NoteRouting_SetMidiOutPorts",
+     "T_NoteRouting_SetMidiOutPorts, class 0xA8 byte 0x10: bit 0 -> NoteRouting_MidiFlags bit 4 (port A allowed) = NOT the bit, bit 1 ->\n"
+     "bit 3 (port B) = NOT the bit; ChangeFlags bit 15."),
+    ("FC61A6", "NoteRouting_BuildTrackRouting",
+     "the 16 tracks' entries for the song: block +0x42 + t = the track's part (BStore_TrackToPart through\n"
+     "Bytes_00_to_1F_FC64A5) and +0x52 + t = its MIDI OUT channel (0x603433 + t, 0x20 -> 0xFF), else 0xFF.  A track is\n"
+     "routed for playback while NoteRouting_Mode bit 8 ((0x133A) | (0x60341E) nonzero) and its bit is in that mask, and\n"
+     "for recording (part | 0x80, the first such part's code in (0x4C20)) while bit 7 ((0x1336) | (0x3000)).\n"
+     "ChangeFlags |= 0xC0 per track."),
+    ("FCAD7C", "NoteRouting_DefaultRecordPtrs",
+     "T_NoteRouting_DefaultRecordPtrs (out): the three 32-bit pointers at out +0 / +4 / +8 = 0x602ACA, the default output record.\n"
+     "NoteRouting_OnPartMidiEvent copies them to a part's tone-generator record +2 and MIDI record +2 / +6."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2210,6 +2268,13 @@ RELABEL = [
     ("FC8E6E", "NoteRouting_ApplyQueuedChanges_Return", ""),
     ("FC9726", "NoteChange_Kind1_Nop", ""),
     ("FC9853", "NoteChange_PartToneGen_Nop", ""),
+    ("FC59DB", "NoteRouting_MidiSystemByteCases",
+     "NoteRouting_MidiSystemByteCases: event class 0x80's byte index 0..9; 3 (MIDI INPUT / OUTPUT MODE), 4 (SINGLE\n"
+     "CHANNEL, LOCAL TOTAL) and 9 have handlers, the rest return."),
+    ("FC5418", "NoteRouting_PhaseVector_Join",
+     ""),
+    ("FC61A5", "NoteRouting_RebuildStep_Nop",
+     ""),
 ]
 
 

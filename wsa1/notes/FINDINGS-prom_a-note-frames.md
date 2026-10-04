@@ -109,7 +109,7 @@ why a DRUM EDIT row audition sounds the row's drum.
 - "+0x293 | ... bit 5 no tone-generator output". Bit 5 turns the per-part MIDI OUT off
   (`NoteRouting_ForPart` 0xFCAEEE sets out+1 = 0xFF). Instead, `Ring601850_ProcessNoteEvents` (0xFC8893) sends
   source 0's notes on the single channel +0x292. Bits 6-7 are the MIDI IN mode. +0x292 and +0x293 are now
-  `NoteRouting_ListChannel` and `NoteRouting_MidiFlags`.
+  `NoteRouting_SingleChannel` and `NoteRouting_MidiFlags`.
 
 Step 4 below also said `NoteRouting_RebuildOutputs` "rebuilds the output tables `NoteRouting_RebuildFlags`
 (0x4C04) selects" and that "the output rebuilders read that previous copy". There are no output tables. The
@@ -173,10 +173,10 @@ and sends them.
 | 8 | `NoteRouting_QueueMidiOutSchemeChange` (5) | old bit 5, 0xFF, old channel | `NoteChange_ReleaseOldMidiOutScheme`: source 0's notes, per part (0) or on the old channel (1) |
 
 **Two MIDI IN paths.** `MidiInA_ProcessRing` and `MidiInB_ProcessRing` handle a note frame in one of two ways.
-`NoteRouting_MidiFlags` bits 6-7 (the MIDI IN mode) and `NoteRouting_ListChannel` choose which:
+`NoteRouting_MidiFlags` bits 6-7 (the MIDI IN mode) and `NoteRouting_SingleChannel` choose which:
 - The **note-list path** is the one `Ring601850`'s notes take. It runs `NoteList_ApplyFrame`, then
   `NoteFrame_SelectForPart` by voice mask and range, then `NoteRouting_ForPartFromMidiIn`. Mode 2 sends every
-  channel this way. Mode 1 sends only the channel `NoteRouting_ListChannel`.
+  channel this way. Mode 1 sends only the channel `NoteRouting_SingleChannel`.
 - The **per-channel path** handles the other channels. Every part whose +0x22 is the frame's channel and whose
   record has bit 6 gets the frame. Its outputs come from `NoteRouting_ForReceivingPart`: the tone generator and
   the record buffer, never MIDI OUT.
@@ -191,7 +191,7 @@ kinds 5 and 6 find a part's note-list notes and kinds 2 and 3 find a track's not
 
 **Two MIDI OUT schemes.** `NoteRouting_MidiFlags` bit 5 chooses:
 - Clear: each part sends on its own +0x22 channel while its record has bit 5.
-- Set: per-part MIDI OUT is off. `Ring601850_ProcessNoteEvents` sends source 0's notes on `NoteRouting_ListChannel`.
+- Set: per-part MIDI OUT is off. `Ring601850_ProcessNoteEvents` sends source 0's notes on `NoteRouting_SingleChannel`.
 
 `NoteRouting_ForPartFromMidiIn` gives MIDI IN's note-list notes a MIDI OUT output only when `Variant_Flag` is 2,
 bit 5 is clear and the mode is 1.
@@ -260,3 +260,55 @@ values from 0x2890. What velocity bits 6-7 mean on the link is not established.
 switches is held. Each note goes both to the tone generator, through `ToneGen_SendSoundSelNote` (part byte
 `SoundSel_Group | 0xF0`), and to MIDI OUT channel 0, through `MidiOut_SendNote`. `MidiOut_SendNote` writes the
 3-byte message to the port A ring for channels 0-15 and to the port B ring for 16-31.
+
+## 9. Where the routing block's settings come from (2026-10-04)
+
+The block is filled from the instrument's parameter records. A parameter change posts a 4-byte event: class =
+the record id, then byte index, new value, changed-bit mask (notes/sysex-probes/README.md, the GM-mode
+section). Pass B of the event lists (`UiEventClass_ListTable_B`) calls these handlers. The parameter names
+are the Technics Reference Guide's (`notes/sysex-probes/param_names.json`, matched on record, offset and mask):
+
+| class | record byte | parameter | goes to | handler |
+|---|---|---|---|---|
+| 0x00-0x1F (part) | 0 | PROGRAM CHANGE & BANK | the part's three record pointers reset to 0x602ACA | `NoteRouting_OnPartMidiEvent` |
+| | 13 bits 0-4 | BASIC CHANNEL | +0x22 + part | |
+| | 13 bit 5 | LOCAL CONTROL | tone-generator record bit 5 = NOT the bit | |
+| | 13 bit 6 | MIDI OUT SETTING | MIDI record bit 5 = NOT the bit | |
+| | 13 bit 7 | MIDI IN SETTING | MIDI record bit 6 = NOT the bit | |
+| 0x20-0x3F (part, 2nd record) | 5 | VELOCITY OFFSET | tone-generator record +1 = value - 0x18 | `NoteRouting_OnPartPlayParamEvent` |
+| | 6 | ASSIGN MODE | tone-generator record bit 6 = (value == 1): mono | |
+| | 7 / 8 | KEY LAYER LOW / HIGH | range record +2 / +1 (parts 0-7 only) | |
+| | 9 / 10 | VELOCITY LAYER LOW / HIGH | range record +4 / +3 (parts 0-7 only) | |
+| | 23 | MIDI OUT KEY TRANSPOSE | MIDI record +1 = value - 0x40 | |
+| 0x80 (MIDI system) | 3 low nibble | MIDI INPUT MODE 0 / 1 / 2 | `NoteRouting_MidiFlags` bits 6-7 | `NoteRouting_SetMidiInOutModes` |
+| | 3 high nibble | MIDI OUTPUT MODE 0 / 1 | `NoteRouting_MidiFlags` bit 5 | |
+| | 4 bits 0-4 | SINGLE CHANNEL | `NoteRouting_SingleChannel` (+0x292) | `NoteRouting_SetSingleChannelAndLocal` |
+| | 4 bit 5 | LOCAL TOTAL | `NoteRouting_Mode` bit 9: no tone-generator output | |
+| | 9 bit 7 | (no descriptor) | `NoteRouting_ChangeFlags` bit 3 | `NoteRouting_OnMidiSystemByte9` |
+| 0x98 | 0 high nibble | PLAY MODE REQUEST | `NoteRouting_Mode` bit 4 | `NoteRouting_OnPlayModeRequest` |
+| 0xA8 | 0x10 bits 0 / 1 | (no descriptor) | `NoteRouting_MidiFlags` bit 4 / 3 = NOT the bit: MIDI OUT port A / B allowed | `NoteRouting_SetMidiOutPorts` |
+
+The part classes are indexed as `Bytes_00_to_1F_x3_FC65C6[0x40 + class]`.
+
+So the "MIDI IN mode" and the two "MIDI OUT schemes" of section 7 are the guide's MIDI INPUT MODE and MIDI OUTPUT
+MODE, and the "list channel" is SINGLE CHANNEL. Four settings store OFF as 1 and the handler stores the inverse:
+LOCAL CONTROL, MIDI OUT SETTING, MIDI IN SETTING, and LOCAL TOTAL, which sets a "no output" bit. That reading
+follows the code. The guide's value table has not been checked against it.
+
+The range record that `NoteFrame_SelectForPart` tests is +1 key high, +2 key low, +3 velocity high and
++4 velocity low.
+
+**When the block is rebuilt.** Each handler sets `NoteRouting_ChangeFlags` bit 15. Most also set a bit that
+selects a differ (section 7). `NoteRouting_RebuildIfPending` (`T_NoteRouting_RebuildIfPending`, in
+`UiEventPassB_TailList`) runs after the pass-B lists. When bit 15 is set, it runs the per-mode builder, then
+`NoteRouting_UpdateActivePartMask` and `NoteRouting_CommitChanges`.
+
+**Start-up.** `NoteRouting_PhaseVector` is entry 21 of `ModuleInitDirectory_F82641`. Its phase 0 runs:
+1. `NoteRouting_InitRam`: fills 0x784 bytes from 0x602200 with 0xFF and zeroes 0x4C20..0x4C22.
+2. `NoteRouting_InitDefaults`: every part plays its own tone-generator part, with transmit and receive on and
+   all pointers at 0x602ACA. Both MIDI OUT ports are allowed, every mode is 0 and the single channel is 0.
+
+**Tracks.** `NoteRouting_BuildTrackRouting` fills +0x42 / +0x52 for the 16 tracks from `BStore_TrackToPart`
+and the track MIDI channels at 0x603433. It sets `NoteRouting_Mode` bit 8 (playback) from (0x133A) | (0x60341E)
+and bit 7 (recording) from (0x1336) | (0x3000). Not established: what those four RAM words hold, beyond
+being track masks.

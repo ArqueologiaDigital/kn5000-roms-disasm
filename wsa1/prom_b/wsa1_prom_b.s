@@ -1552,21 +1552,21 @@
 	.set	DisplayList_FC517E_End, 0xFC527A
 	.set	DisplayList_FC52AA, 0xFC52AA
 	.set	DisplayList_FC52AA_End, 0xFC52B4
-	.set	sub_FC5400, 0xFC5400
-	.set	sub_FC546A, 0xFC546A
+	.set	NoteRouting_PhaseVector, 0xFC5400
+	.set	NoteRouting_RebuildIfPending, 0xFC546A
 	.set	NoteRouting_RebuildForSong, 0xFC54C6
 	.set	NoteRouting_Rebuild, 0xFC5518
 	.set	NoteRouting_SetSoloAndRebuild, 0xFC5566
-	.set	sub_FC55CA, 0xFC55CA
-	.set	sub_FC57F0, 0xFC57F0
+	.set	NoteRouting_OnPartMidiEvent, 0xFC55CA
+	.set	NoteRouting_OnPartPlayParamEvent, 0xFC57F0
 	.set	T_F411E8_Nop, 0xFC596C
 	.set	T_F411C8_Nop, 0xFC596D
 	.set	T_F411CC_Nop, 0xFC596E
-	.set	sub_FC596F, 0xFC596F
-	.set	sub_FC59AC, 0xFC59AC
+	.set	NoteRouting_OnPlayModeRequest, 0xFC596F
+	.set	NoteRouting_OnMidiSystemEvent, 0xFC59AC
 	.set	T_F411D8_Nop, 0xFC5ACA
 	.set	T_F411DC_Nop, 0xFC5ACB
-	.set	sub_FC5ACC, 0xFC5ACC
+	.set	NoteRouting_SetMidiOutPorts, 0xFC5ACC
 	.set	T_F411E4_Nop, 0xFC5B25
 	.set	Ram3800_Start_Entry, 0xFC8000
 	.set	Ram3800_InitDataImage, 0xFC807D
@@ -1587,7 +1587,7 @@
 	.set	sub_FC8E7B, 0xFC8E7B
 	.set	ToneGen_SendSoundSelNote, 0xFC8FD7
 	.set	MidiOut_SendNote, 0xFC9016
-	.set	sub_FCAD7C, 0xFCAD7C
+	.set	NoteRouting_DefaultRecordPtrs, 0xFCAD7C
 	.set	PartNotes_ResoundOnToneGen, 0xFCB2F0
 	.set	PanelOpTable_FCF383, 0xFCF383
 	.set	PanelOpTable_FCF3CB, 0xFCF3CB
@@ -89720,23 +89720,37 @@ T_F41198:	jp 0xFC0454  ; -> prom_a 0x40454
 T_Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26:	jp Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40455
 T_Msg0716_DispatchIndex_26:	jp Msg0716_DispatchIndex_26  ; -> prom_a 0x4046A
 	.fill 0xC, 1, 0x0E  ; 0xF411A4: 12 x ret
-T_F411B0:	.long sub_FC5400	; ptr -> 0xFC5400 (prom_a 0x45400)
-T_F411B4:	jp sub_FC546A  ; -> prom_a 0x4546A
+; Evidence: slot 0xF411B0 is `ptr 0xFC5400`; prom_a 0xFC5400 carries the label
+;           NoteRouting_PhaseVector (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_PhaseVector:	.long NoteRouting_PhaseVector	; F411B0 (was T_F411B0) ptr -> 0xFC5400 (prom_a 0x45400)
+; Evidence: slot 0xF411B4 is `jp 0xFC546A`; prom_a 0xFC546A carries the label
+;           NoteRouting_RebuildIfPending (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_RebuildIfPending:	jp NoteRouting_RebuildIfPending  ; F411B4 (was T_F411B4) -> prom_a 0x4546A
 ; Evidence: slot 0xF411B8 is `jp 0xFC54C6`; prom_a 0xFC54C6 carries the label
 ;           NoteRouting_RebuildForSong (graded CONTENT).  DERIVATIVE name.
 T_NoteRouting_RebuildForSong:	jp NoteRouting_RebuildForSong  ; F411B8 (was T_F411B8) -> prom_a 0x454C6   x43
 ; Evidence: slot 0xF411BC is `jp 0xFC5518`; prom_a 0xFC5518 carries the label
 ;           NoteRouting_Rebuild (graded CONTENT).  DERIVATIVE name.
 T_NoteRouting_Rebuild:	jp NoteRouting_Rebuild  ; F411BC (was T_F411BC) -> prom_a 0x45518   x15
-T_F411C0:	jp sub_FC55CA  ; -> prom_a 0x455CA
-T_F411C4:	jp sub_FC57F0  ; -> prom_a 0x457F0
+; Evidence: slot 0xF411C0 is `jp 0xFC55CA`; prom_a 0xFC55CA carries the label
+;           NoteRouting_OnPartMidiEvent (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_OnPartMidiEvent:	jp NoteRouting_OnPartMidiEvent  ; F411C0 (was T_F411C0) -> prom_a 0x455CA
+; Evidence: slot 0xF411C4 is `jp 0xFC57F0`; prom_a 0xFC57F0 carries the label
+;           NoteRouting_OnPartPlayParamEvent (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_OnPartPlayParamEvent:	jp NoteRouting_OnPartPlayParamEvent  ; F411C4 (was T_F411C4) -> prom_a 0x457F0
 T_F411C8:	jp T_F411C8_Nop  ; -> prom_a 0x4596D
 T_F411CC:	jp T_F411CC_Nop  ; -> prom_a 0x4596E
-T_F411D0:	jp sub_FC596F  ; -> prom_a 0x4596F
-T_F411D4:	jp sub_FC59AC  ; -> prom_a 0x459AC
+; Evidence: slot 0xF411D0 is `jp 0xFC596F`; prom_a 0xFC596F carries the label
+;           NoteRouting_OnPlayModeRequest (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_OnPlayModeRequest:	jp NoteRouting_OnPlayModeRequest  ; F411D0 (was T_F411D0) -> prom_a 0x4596F
+; Evidence: slot 0xF411D4 is `jp 0xFC59AC`; prom_a 0xFC59AC carries the label
+;           NoteRouting_OnMidiSystemEvent (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_OnMidiSystemEvent:	jp NoteRouting_OnMidiSystemEvent  ; F411D4 (was T_F411D4) -> prom_a 0x459AC
 T_F411D8:	jp T_F411D8_Nop  ; -> prom_a 0x45ACA
 T_F411DC:	jp T_F411DC_Nop  ; -> prom_a 0x45ACB
-T_F411E0:	jp sub_FC5ACC  ; -> prom_a 0x45ACC
+; Evidence: slot 0xF411E0 is `jp 0xFC5ACC`; prom_a 0xFC5ACC carries the label
+;           NoteRouting_SetMidiOutPorts (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_SetMidiOutPorts:	jp NoteRouting_SetMidiOutPorts  ; F411E0 (was T_F411E0) -> prom_a 0x45ACC
 T_F411E4:	jp T_F411E4_Nop  ; -> prom_a 0x45B25
 T_F411E8:	jp T_F411E8_Nop  ; -> prom_a 0x4596C
 ; Evidence: slot 0xF411EC is `jp 0xFC5566`; prom_a 0xFC5566 carries the label
@@ -89791,7 +89805,9 @@ T_NoteRouting_ApplyQueuedChanges:	jp NoteRouting_ApplyQueuedChanges  ; F413D4 (w
 ; Evidence: slot 0xF413D8 is `jp 0xFCB2F0`; prom_a 0xFCB2F0 carries the label
 ;           PartNotes_ResoundOnToneGen (graded CONTENT).  DERIVATIVE name.
 T_PartNotes_ResoundOnToneGen:	jp PartNotes_ResoundOnToneGen  ; F413D8 (was T_F413D8) -> prom_a 0x4B2F0   x1
-T_F413DC:	jp sub_FCAD7C  ; -> prom_a 0x4AD7C   x2
+; Evidence: slot 0xF413DC is `jp 0xFCAD7C`; prom_a 0xFCAD7C carries the label
+;           NoteRouting_DefaultRecordPtrs (graded CONTENT).  DERIVATIVE name.
+T_NoteRouting_DefaultRecordPtrs:	jp NoteRouting_DefaultRecordPtrs  ; F413DC (was T_F413DC) -> prom_a 0x4AD7C   x2
 T_F413E0:	jp sub_FC8E7B  ; -> prom_a 0x48E7B   x2
 T_F413E4:	jp T_F413E4_Nop  ; -> prom_a 0x480DC   x3
 T_F413E8:	jp T_F413E8_Nop  ; -> prom_a 0x480DD   x1

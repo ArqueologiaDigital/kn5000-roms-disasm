@@ -8,6 +8,8 @@ prom_b sees the prom_a ones through its `.set` imports.  The list is STATIC, wri
 so it outlives the sed files' application (the rule notes/prom_a_preservation_check.py states).
 """
 RENAMES = [
+    ("NoteRouting_ListChannel", "NoteRouting_SingleChannel"),   # 2026-10-04: the Reference Guide's SINGLE CHANNEL
+    ("NoteRouting_PreviousListChannel", "NoteRouting_PreviousSingleChannel"),   # 2026-10-04: with it
     ("NoteRouting_RebuildFlags", "NoteRouting_ChangeFlags"),   # 2026-10-04: RAM equate renamed (the builders' change bits, not outputs)
     ("EditField_Note", "EditField_EventVelocity"),   # 2026-10-04: RAM equate corrected (0x601F45 is the event velocity)
     ("EditField_Velocity", "EditField_NewNoteVelocity"),
@@ -4120,4 +4122,29 @@ RENAMES = [
     ("sub_FE1719", "Notes_ReleaseAllSources_Call"),
     ("sub_FE1C71", "Notes_ReleaseAllSources_Call_Call"),
     ("T_F425C0", "T_Notes_ReleaseAllSources_Call_Call"),
+    ("sub_FC5400", "NoteRouting_PhaseVector"),
+    ("sub_FC5420", "NoteRouting_InitRam"),
+    ("sub_FC6393", "NoteRouting_InitDefaults"),
+    ("sub_FC546A", "NoteRouting_RebuildIfPending"),
+    ("sub_FC55CA", "NoteRouting_OnPartMidiEvent"),
+    ("sub_FC57F0", "NoteRouting_OnPartPlayParamEvent"),
+    ("sub_FC596F", "NoteRouting_OnPlayModeRequest"),
+    ("sub_FC59AC", "NoteRouting_OnMidiSystemEvent"),
+    ("sub_FC5A03", "NoteRouting_SetMidiInOutModes"),
+    ("sub_FC5A77", "NoteRouting_SetSingleChannelAndLocal"),
+    ("sub_FC5AAE", "NoteRouting_OnMidiSystemByte9"),
+    ("sub_FC5ACC", "NoteRouting_SetMidiOutPorts"),
+    ("sub_FC61A6", "NoteRouting_BuildTrackRouting"),
+    ("sub_FCAD7C", "NoteRouting_DefaultRecordPtrs"),
+    ("JumpTable_FC59DB", "NoteRouting_MidiSystemByteCases"),
+    ("sub_FC5400_Join", "NoteRouting_PhaseVector_Join"),
+    ("sub_FC546A_Nop", "NoteRouting_RebuildStep_Nop"),
+    ("T_F411B0", "T_NoteRouting_PhaseVector"),
+    ("T_F411B4", "T_NoteRouting_RebuildIfPending"),
+    ("T_F411C0", "T_NoteRouting_OnPartMidiEvent"),
+    ("T_F411C4", "T_NoteRouting_OnPartPlayParamEvent"),
+    ("T_F411D0", "T_NoteRouting_OnPlayModeRequest"),
+    ("T_F411D4", "T_NoteRouting_OnMidiSystemEvent"),
+    ("T_F411E0", "T_NoteRouting_SetMidiOutPorts"),
+    ("T_F413DC", "T_NoteRouting_DefaultRecordPtrs"),
 ]

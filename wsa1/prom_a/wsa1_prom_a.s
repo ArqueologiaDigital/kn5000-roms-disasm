@@ -1447,19 +1447,19 @@
 	.set T_F41178,                                                                      0x00F41178
 	.set T_F4117C,                                                                      0x00F4117C
 	.set T_Msg0716_EventPartPostCC78_AllSoundOff,                                                                      0x00F41180
-	.set T_F411B0,                                                                      0x00F411B0
-	.set T_F411B4,                                                                      0x00F411B4
+	.set T_NoteRouting_PhaseVector,                                                                      0x00F411B0
+	.set T_NoteRouting_RebuildIfPending,                                                                      0x00F411B4
 	.set T_NoteRouting_RebuildForSong,                                                                      0x00F411B8
 	.set T_NoteRouting_Rebuild,                                                                      0x00F411BC
-	.set T_F411C0,                                                                      0x00F411C0
-	.set T_F411C4,                                                                      0x00F411C4
+	.set T_NoteRouting_OnPartMidiEvent,                                                                      0x00F411C0
+	.set T_NoteRouting_OnPartPlayParamEvent,                                                                      0x00F411C4
 	.set T_F411C8,                                                                      0x00F411C8
 	.set T_F411CC,                                                                      0x00F411CC
-	.set T_F411D0,                                                                      0x00F411D0
-	.set T_F411D4,                                                                      0x00F411D4
+	.set T_NoteRouting_OnPlayModeRequest,                                                                      0x00F411D0
+	.set T_NoteRouting_OnMidiSystemEvent,                                                                      0x00F411D4
 	.set T_F411D8,                                                                      0x00F411D8
 	.set T_F411DC,                                                                      0x00F411DC
-	.set T_F411E0,                                                                      0x00F411E0
+	.set T_NoteRouting_SetMidiOutPorts,                                                                      0x00F411E0
 	.set T_F411E4,                                                                      0x00F411E4
 	.set T_F411E8,                                                                      0x00F411E8
 	.set T_NoteRouting_SetSoloAndRebuild,                                                                      0x00F411EC
@@ -1484,7 +1484,7 @@
 	.set T_F413CC,                                                                      0x00F413CC
 	.set T_Ram3800_InitDataImage,                                                       0x00F413D0
 	.set T_NoteRouting_ApplyQueuedChanges,                                                                      0x00F413D4
-	.set T_F413DC,                                                                      0x00F413DC
+	.set T_NoteRouting_DefaultRecordPtrs,                                                                      0x00F413DC
 	.set T_F413E0,                                                                      0x00F413E0
 	.set T_MidiInB_ProcessRing,                                                                      0x00F413F8
 	.set T_ToneGen_SendSoundSelNote,                                                                      0x00F413FC
@@ -6967,7 +6967,7 @@ ModuleInitDirectory_F82641:
 	.long T_F42250                                   ; F82689  [ 18]
 	.long T_F409C0                                   ; F8268D  [ 19]
 	.long T_Msg0716_InitAllRecords_Entry                                   ; F82691  [ 20]
-	.long T_F411B0                                   ; F82695  [ 21]
+	.long T_NoteRouting_PhaseVector                                   ; F82695  [ 21]
 	.long T_Ram3800_Start_Entry                                   ; F82699  [ 22]
 	.long T_Disk_PhaseVector                                   ; F8269D  [ 23]
 	.long T_EditScreen_PhaseVector                                   ; F826A1  [ 24]
@@ -14978,7 +14978,7 @@ UiListB_Class00:
 	.long T_F415B0                              ; F8819E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881A2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881A6  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F881AA  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F881AA  [6]   -> 0xF411C0
 	.long T_F42E54                              ; F881AE  [7]   -> 0xF42E54
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881B2  [8]   -> 0xF40810
 	.long T_F42F54                              ; F881B6  [9]   -> 0xF42F54
@@ -15003,7 +15003,7 @@ UiListB_Class01:
 	.long T_F415B0                              ; F881CA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881CE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881D2  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F881D6  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F881D6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881DA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F881DE  [8]   end of list
 
@@ -15026,7 +15026,7 @@ UiListB_Class02:
 	.long T_F415B0                              ; F881EE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F881F2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F881F6  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F881FA  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F881FA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F881FE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88202  [8]   end of list
 
@@ -15049,7 +15049,7 @@ UiListB_Class03:
 	.long T_F415B0                              ; F88212  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88216  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8821A  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8821E  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8821E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88222  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88226  [8]   end of list
 
@@ -15072,7 +15072,7 @@ UiListB_Class04:
 	.long T_F415B0                              ; F88236  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8823A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8823E  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88242  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88242  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88246  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8824A  [8]   end of list
 
@@ -15095,7 +15095,7 @@ UiListB_Class05:
 	.long T_F415B0                              ; F8825A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8825E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88262  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88266  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88266  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8826A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8826E  [8]   end of list
 
@@ -15118,7 +15118,7 @@ UiListB_Class06:
 	.long T_F415B0                              ; F8827E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88282  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88286  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8828A  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8828A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8828E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88292  [8]   end of list
 
@@ -15141,7 +15141,7 @@ UiListB_Class07:
 	.long T_F415B0                              ; F882A2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882A6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882AA  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F882AE  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F882AE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882B2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882B6  [8]   end of list
 
@@ -15164,7 +15164,7 @@ UiListB_Class08:
 	.long T_F415B0                              ; F882C6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882CA  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882CE  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F882D2  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F882D2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882D6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882DA  [8]   end of list
 
@@ -15187,7 +15187,7 @@ UiListB_Class09:
 	.long T_F415B0                              ; F882EA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F882EE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F882F2  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F882F6  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F882F6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F882FA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F882FE  [8]   end of list
 
@@ -15210,7 +15210,7 @@ UiListB_Class0A:
 	.long T_F415B0                              ; F8830E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88312  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88316  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8831A  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8831A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8831E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88322  [8]   end of list
 
@@ -15233,7 +15233,7 @@ UiListB_Class0B:
 	.long T_F415B0                              ; F88332  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88336  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8833A  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8833E  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8833E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88342  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88346  [8]   end of list
 
@@ -15256,7 +15256,7 @@ UiListB_Class0C:
 	.long T_F415B0                              ; F88356  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8835A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8835E  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88362  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88362  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88366  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8836A  [8]   end of list
 
@@ -15279,7 +15279,7 @@ UiListB_Class0D:
 	.long T_F415B0                              ; F8837A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8837E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88382  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88386  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88386  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8838A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8838E  [8]   end of list
 
@@ -15302,7 +15302,7 @@ UiListB_Class0E:
 	.long T_F415B0                              ; F8839E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883A2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883A6  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F883AA  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F883AA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883AE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883B2  [8]   end of list
 
@@ -15325,7 +15325,7 @@ UiListB_Class0F:
 	.long T_F415B0                              ; F883C2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883C6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883CA  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F883CE  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F883CE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883D2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883D6  [8]   end of list
 
@@ -15348,7 +15348,7 @@ UiListB_Class10:
 	.long T_F415B0                              ; F883E6  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F883EA  [4]   -> 0xF40754
 	.long T_F418C8                              ; F883EE  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F883F2  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F883F2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F883F6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F883FA  [8]   end of list
 
@@ -15371,7 +15371,7 @@ UiListB_Class11:
 	.long T_F415B0                              ; F8840A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8840E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88412  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88416  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88416  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8841A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8841E  [8]   end of list
 
@@ -15394,7 +15394,7 @@ UiListB_Class12:
 	.long T_F415B0                              ; F8842E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88432  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88436  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8843A  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8843A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8843E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88442  [8]   end of list
 
@@ -15417,7 +15417,7 @@ UiListB_Class13:
 	.long T_F415B0                              ; F88452  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88456  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8845A  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8845E  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8845E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88462  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88466  [8]   end of list
 
@@ -15440,7 +15440,7 @@ UiListB_Class14:
 	.long T_F415B0                              ; F88476  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8847A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8847E  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88482  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88482  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88486  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8848A  [8]   end of list
 
@@ -15463,7 +15463,7 @@ UiListB_Class15:
 	.long T_F415B0                              ; F8849A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8849E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884A2  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F884A6  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F884A6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884AA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884AE  [8]   end of list
 
@@ -15486,7 +15486,7 @@ UiListB_Class16:
 	.long T_F415B0                              ; F884BE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884C2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884C6  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F884CA  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F884CA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884CE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884D2  [8]   end of list
 
@@ -15509,7 +15509,7 @@ UiListB_Class17:
 	.long T_F415B0                              ; F884E2  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F884E6  [4]   -> 0xF40754
 	.long T_F418C8                              ; F884EA  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F884EE  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F884EE  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F884F2  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F884F6  [8]   end of list
 
@@ -15532,7 +15532,7 @@ UiListB_Class18:
 	.long T_F415B0                              ; F88506  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8850A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8850E  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88512  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88512  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88516  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8851A  [8]   end of list
 
@@ -15555,7 +15555,7 @@ UiListB_Class19:
 	.long T_F415B0                              ; F8852A  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8852E  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88532  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F88536  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F88536  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8853A  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F8853E  [8]   end of list
 
@@ -15578,7 +15578,7 @@ UiListB_Class1A:
 	.long T_F415B0                              ; F8854E  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88552  [4]   -> 0xF40754
 	.long T_F418C8                              ; F88556  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8855A  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8855A  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8855E  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88562  [8]   end of list
 
@@ -15601,7 +15601,7 @@ UiListB_Class1B:
 	.long T_F415B0                              ; F88572  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88576  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8857A  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8857E  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8857E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88582  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88586  [8]   end of list
 
@@ -15624,7 +15624,7 @@ UiListB_Class1C:
 	.long T_F415B0                              ; F88596  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F8859A  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8859E  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F885A2  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F885A2  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885A6  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885AA  [8]   end of list
 
@@ -15647,7 +15647,7 @@ UiListB_Class1D:
 	.long T_F415B0                              ; F885BA  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885BE  [4]   -> 0xF40754
 	.long T_F418C8                              ; F885C2  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F885C6  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F885C6  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885CA  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885CE  [8]   end of list
 
@@ -15670,7 +15670,7 @@ UiListB_Class1E:
 	.long T_F415B0                              ; F885DE  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F885E2  [4]   -> 0xF40754
 	.long T_F418C8                              ; F885E6  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F885EA  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F885EA  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F885EE  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F885F2  [8]   end of list
 
@@ -15693,7 +15693,7 @@ UiListB_Class1F:
 	.long T_F415B0                              ; F88602  [3]   -> 0xF415B0
 	.long T_MidiIn_ReqRouteRebuild_Msg0D        ; F88606  [4]   -> 0xF40754
 	.long T_F418C8                              ; F8860A  [5]   -> 0xF418C8
-	.long T_F411C0                              ; F8860E  [6]   -> 0xF411C0
+	.long T_NoteRouting_OnPartMidiEvent                              ; F8860E  [6]   -> 0xF411C0
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88612  [7]   -> 0xF40810
 	.long 0xFFFFFFFF                            ; F88616  [8]   end of list
 
@@ -15714,7 +15714,7 @@ UiListB_Class20:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8861E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88622  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88626  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8862A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8862A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8862E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88632  [6]   -> 0xF40810
 	.long T_F42E54                              ; F88636  [7]   -> 0xF42E54
@@ -15739,7 +15739,7 @@ UiListB_Class21:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8864A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8864E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88652  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88656  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88656  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8865A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8865E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88662  [7]   -> 0xF434F4
@@ -15762,7 +15762,7 @@ UiListB_Class22:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8866E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88672  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88676  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8867A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8867A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8867E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88682  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88686  [7]   -> 0xF434F4
@@ -15785,7 +15785,7 @@ UiListB_Class23:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88692  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88696  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8869A  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8869E  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8869E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886A2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886A6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886AA  [7]   -> 0xF434F4
@@ -15808,7 +15808,7 @@ UiListB_Class24:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886B6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F886BA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886BE  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F886C2  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F886C2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886C6  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886CA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886CE  [7]   -> 0xF434F4
@@ -15831,7 +15831,7 @@ UiListB_Class25:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886DA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F886DE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F886E2  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F886E6  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F886E6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F886EA  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F886EE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F886F2  [7]   -> 0xF434F4
@@ -15854,7 +15854,7 @@ UiListB_Class26:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F886FE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88702  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88706  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8870A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8870A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8870E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88712  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88716  [7]   -> 0xF434F4
@@ -15877,7 +15877,7 @@ UiListB_Class27:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88722  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88726  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8872A  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8872E  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8872E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88732  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88736  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8873A  [7]   -> 0xF434F4
@@ -15900,7 +15900,7 @@ UiListB_Class28:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88746  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8874A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8874E  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88752  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88752  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88756  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8875A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8875E  [7]   -> 0xF434F4
@@ -15923,7 +15923,7 @@ UiListB_Class29:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8876A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8876E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88772  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88776  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88776  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8877A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8877E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88782  [7]   -> 0xF434F4
@@ -15946,7 +15946,7 @@ UiListB_Class2A:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8878E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88792  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88796  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8879A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8879A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8879E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887A2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887A6  [7]   -> 0xF434F4
@@ -15969,7 +15969,7 @@ UiListB_Class2B:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887B2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887B6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887BA  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F887BE  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F887BE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887C2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887C6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887CA  [7]   -> 0xF434F4
@@ -15992,7 +15992,7 @@ UiListB_Class2C:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887D6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887DA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F887DE  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F887E2  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F887E2  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F887E6  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F887EA  [6]   -> 0xF40810
 	.long T_F434F4                              ; F887EE  [7]   -> 0xF434F4
@@ -16015,7 +16015,7 @@ UiListB_Class2D:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F887FA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F887FE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88802  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88806  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88806  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8880A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8880E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88812  [7]   -> 0xF434F4
@@ -16038,7 +16038,7 @@ UiListB_Class2E:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8881E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88822  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88826  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8882A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8882A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8882E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88832  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88836  [7]   -> 0xF434F4
@@ -16061,7 +16061,7 @@ UiListB_Class2F:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88842  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88846  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8884A  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8884E  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8884E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88852  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88856  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8885A  [7]   -> 0xF434F4
@@ -16084,7 +16084,7 @@ UiListB_Class30:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88866  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8886A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8886E  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88872  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88872  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88876  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8887A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8887E  [7]   -> 0xF434F4
@@ -16107,7 +16107,7 @@ UiListB_Class31:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8888A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8888E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88892  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88896  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88896  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8889A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8889E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888A2  [7]   -> 0xF434F4
@@ -16130,7 +16130,7 @@ UiListB_Class32:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888AE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888B2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888B6  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F888BA  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F888BA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888BE  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888C2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888C6  [7]   -> 0xF434F4
@@ -16153,7 +16153,7 @@ UiListB_Class33:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888D2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888D6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888DA  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F888DE  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F888DE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F888E2  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F888E6  [6]   -> 0xF40810
 	.long T_F434F4                              ; F888EA  [7]   -> 0xF434F4
@@ -16176,7 +16176,7 @@ UiListB_Class34:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F888F6  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F888FA  [2]   -> 0xF40698
 	.long T_F418C8                              ; F888FE  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88902  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88902  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88906  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8890A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8890E  [7]   -> 0xF434F4
@@ -16199,7 +16199,7 @@ UiListB_Class35:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8891A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8891E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88922  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88926  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88926  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8892A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8892E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88932  [7]   -> 0xF434F4
@@ -16222,7 +16222,7 @@ UiListB_Class36:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F8893E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88942  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88946  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8894A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8894A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F8894E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88952  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88956  [7]   -> 0xF434F4
@@ -16245,7 +16245,7 @@ UiListB_Class37:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88962  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88966  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8896A  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F8896E  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F8896E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88972  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88976  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8897A  [7]   -> 0xF434F4
@@ -16268,7 +16268,7 @@ UiListB_Class38:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88986  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F8898A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F8898E  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88992  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88992  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88996  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F8899A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F8899E  [7]   -> 0xF434F4
@@ -16291,7 +16291,7 @@ UiListB_Class39:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889AA  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889AE  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889B2  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F889B6  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889B6  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889BA  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889BE  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889C2  [7]   -> 0xF434F4
@@ -16314,7 +16314,7 @@ UiListB_Class3A:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889CE  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889D2  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889D6  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F889DA  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889DA  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F889DE  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F889E2  [6]   -> 0xF40810
 	.long T_F434F4                              ; F889E6  [7]   -> 0xF434F4
@@ -16337,7 +16337,7 @@ UiListB_Class3B:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F889F2  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F889F6  [2]   -> 0xF40698
 	.long T_F418C8                              ; F889FA  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F889FE  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F889FE  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A02  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A06  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A0A  [7]   -> 0xF434F4
@@ -16360,7 +16360,7 @@ UiListB_Class3C:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A16  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A1A  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A1E  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88A22  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A22  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A26  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A2A  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A2E  [7]   -> 0xF434F4
@@ -16383,7 +16383,7 @@ UiListB_Class3D:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A3A  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A3E  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A42  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88A46  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A46  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A4A  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A4E  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A52  [7]   -> 0xF434F4
@@ -16406,7 +16406,7 @@ UiListB_Class3E:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A5E  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A62  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A66  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88A6A  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A6A  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A6E  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A72  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A76  [7]   -> 0xF434F4
@@ -16429,7 +16429,7 @@ UiListB_Class3F:
 	.long T_UiEvent_MarkRedrawFromClass20Block                              ; F88A82  [1]   -> 0xF415A0
 	.long T_PanelLed_OnClass20Event                              ; F88A86  [2]   -> 0xF40698
 	.long T_F418C8                              ; F88A8A  [3]   -> 0xF418C8
-	.long T_F411C4                              ; F88A8E  [4]   -> 0xF411C4
+	.long T_NoteRouting_OnPartPlayParamEvent                              ; F88A8E  [4]   -> 0xF411C4
 	.long T_MidiIn_ReqListRebuild_Msg13_16                              ; F88A92  [5]   -> 0xF43350
 	.long T_ParamMsg_RefreshMasksOnCtrlFieldChange                              ; F88A96  [6]   -> 0xF40810
 	.long T_F434F4                              ; F88A9A  [7]   -> 0xF434F4
@@ -16849,7 +16849,7 @@ UiListB_Class7A:
 UiListB_Class80:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2                              ; F88BA6  [0]   -> 0xF41148
 	.long T_F40688                              ; F88BAA  [1]   -> 0xF40688
-	.long T_F411D4                              ; F88BAE  [2]   -> 0xF411D4
+	.long T_NoteRouting_OnMidiSystemEvent                              ; F88BAE  [2]   -> 0xF411D4
 	.long T_F4079C                              ; F88BB2  [3]   -> 0xF4079C
 	.long T_MidiIn_ReqRebuild_Msg03_0A          ; F88BB6  [4]   -> 0xF43354
 	.long 0xFFFFFFFF                            ; F88BBA  [5]   end of list
@@ -16957,7 +16957,7 @@ UiListB_Class93:
 UiListB_Class98:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4                              ; F88C06  [0]   -> 0xF41160
 	.long T_PanelLed_OnClass98Event                              ; F88C0A  [1]   -> 0xF40694
-	.long T_F411D0                              ; F88C0E  [2]   -> 0xF411D0
+	.long T_NoteRouting_OnPlayModeRequest                              ; F88C0E  [2]   -> 0xF411D0
 	.long T_UiEvent_SyncSoundSelection                              ; F88C12  [3]   -> 0xF415A8
 	.long 0xFFFFFFFF                            ; F88C16  [4]   end of list
 
@@ -17009,7 +17009,7 @@ UiListB_ClassA8:
 	.long T_Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19                              ; F88C2A  [0]   -> 0xF4116C
 	.long T_UiEvent_SyncSoundSelection                              ; F88C2E  [1]   -> 0xF415A8
 	.long T_PanelLed_OnClassA8Event                              ; F88C32  [2]   -> 0xF4068C
-	.long T_F411E0                              ; F88C36  [3]   -> 0xF411E0
+	.long T_NoteRouting_SetMidiOutPorts                              ; F88C36  [3]   -> 0xF411E0
 	.long T_F409A0                              ; F88C3A  [4]   -> 0xF409A0
 	.long T_F40CBC                              ; F88C3E  [5]   -> 0xF40CBC
 	.long T_F434F0                              ; F88C42  [6]   -> 0xF434F0
@@ -17351,7 +17351,7 @@ UiListB_Shared:
 ; ---------------------------------------------------------------------
 UiEventPassB_TailList:
 	.long T_Msg0716_FlushIfPending                              ; F88E91  [0]   -> 0xF40FB4
-	.long T_F411B4                              ; F88E95  [1]   -> 0xF411B4
+	.long T_NoteRouting_RebuildIfPending                              ; F88E95  [1]   -> 0xF411B4
 	.long T_PanelScreen_RequestRedrawIfFieldQueued                              ; F88E99  [2]   -> 0xF40290
 	.long T_MidiIn_ServiceDeferred              ; F88E9D  [3]   -> 0xF40758
 	.long T_F42E60                              ; F88EA1  [4]   -> 0xF42E60
@@ -118351,7 +118351,7 @@ DisplayRecordPtrs_FC52B4:
 ;
 ; DECODE STATUS, per notes/prom_a_linear_decode_check.py:
 ;   0xFC5400-0xFC59DB  self-consistent  (11 directory slots, all on boundaries)
-;   0xFC59DB-0xFC5A03  JumpTable_FC59DB, declared as data
+;   0xFC59DB-0xFC5A03  NoteRouting_MidiSystemByteCases, declared as data
 ;   0xFC5A03-0xFC64A5  self-consistent  (4 directory slots, all on boundaries)
 ;   0xFC64A5-0xFC6844  data: five tables, four of them named by a reader
 ;   0xFC6844-0xFC6FFF  0x0E padding
@@ -118371,8 +118371,10 @@ DisplayRecordPtrs_FC52B4:
 ; means resolving those eight slots first; guessing the boundaries would put
 ; invented instructions in the file and the byte gate would not notice.
 ; =====================================================================
-sub_FC5400:
-	jp sub_FC5400_Join                                        ; FC5400  1b 18 54 fc
+; NoteRouting_PhaseVector: the address in slot 0xF411B0, ModuleInitDirectory_F82641[21]: a phase vector.  Phase 0 jumps to NoteRouting_InitRam
+;   and then NoteRouting_InitDefaults; phases 1..5 are bare rets.
+NoteRouting_PhaseVector:
+	jp NoteRouting_PhaseVector_Join                                        ; FC5400  1b 18 54 fc
 	ret                                                  ; FC5404  0e
 	nop                                                  ; FC5405  00
 	nop                                                  ; FC5406  00
@@ -118393,11 +118395,13 @@ sub_FC5400:
 	nop                                                  ; FC5415  00
 	nop                                                  ; FC5416  00
 	nop                                                  ; FC5417  00
-sub_FC5400_Join:
-	calr sub_FC5420                                      ; FC5418  1e 05 00
-	call sub_FC6393                                      ; FC541B  1d 93 63 fc
+NoteRouting_PhaseVector_Join:
+	calr NoteRouting_InitRam                                      ; FC5418  1e 05 00
+	call NoteRouting_InitDefaults                                      ; FC541B  1d 93 63 fc
 	ret                                                  ; FC541F  0e
-sub_FC5420:
+; NoteRouting_InitRam: an empty data copy (0 bytes from Bytes_00_to_1F_FC64A5 to address 0), the 3 bytes at 0x4C20 zeroed, and the
+;   0x784 bytes from NoteRouting (0x602200..0x602983, the block and its previous copy) filled with 0xFF.
+NoteRouting_InitRam:
 	ld XBC,0x00000000                                    ; FC5420  41 00 00 00 00
 	and XBC,XBC                                          ; FC5425  e9 c1
 	jr z, .LFC5435                                       ; FC5427  66 0c
@@ -118427,7 +118431,11 @@ sub_FC5420:
 .LFC5468:
 	ret                                                  ; FC5468  0e
 	ret                                                  ; FC5469  0e
-sub_FC546A:
+; NoteRouting_RebuildIfPending: T_NoteRouting_RebuildIfPending, in UiEventPassB_TailList (run after the pass-B event lists): when NoteRouting_ChangeFlags bit 15 is set --
+;   the parameter-event handlers set it -- block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode]
+;   with 0 unless that is the stub .LFC5C6C, NoteRouting_UpdateActivePartMask, NoteRouting_CommitChanges.  The bit
+;   it clears first is bit 7 of 0x4C01, not of 0x4C05 (0xFC5479); the commit clears the whole word anyway.
+NoteRouting_RebuildIfPending:
 	link XIZ,0xfffc                                      ; FC546A  ee 0c fc ff
 	push XIX                                             ; FC546E  3c
 	ld bc, (NoteRouting_ChangeFlags:16)                                 ; FC546F  d1 04 4c 21
@@ -118453,20 +118461,20 @@ sub_FC546A:
 	jp (xix)                                             ; FC54B3  b4 d8
 .LFC54B5:
 	call NoteRouting_UpdateActivePartMask                                      ; FC54B5  1d 53 61 fc
-	call sub_FC546A_Nop                                      ; FC54B9  1d a5 61 fc
+	call NoteRouting_RebuildStep_Nop                                      ; FC54B9  1d a5 61 fc
 	call NoteRouting_CommitChanges                                      ; FC54BD  1d 7c 5c fc
 	popw bc                                              ; FC54C1  49
 .LFC54C2:
 	pop XIX                                              ; FC54C2  5c
 	unlk XIZ                                             ; FC54C3  ee 0d
 	ret                                                  ; FC54C5  0e
-; NoteRouting_RebuildForSong: T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then
+; NoteRouting_RebuildForSong: T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): NoteRouting_BuildTrackRouting first, then
 ;   block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,
 ;   NoteRouting_CommitChanges.
 NoteRouting_RebuildForSong:
 	link XIZ,0xfffc                                      ; FC54C6  ee 0c fc ff
 	push XIX                                             ; FC54CA  3c
-	call sub_FC61A6                                      ; FC54CB  1d a6 61 fc
+	call NoteRouting_BuildTrackRouting                                      ; FC54CB  1d a6 61 fc
 	ld c, (0x4c22:24)                                   ; FC54CF  c2 22 4c 00 23
 	or c, (0x4c21:24)                                 ; FC54D4  c2 21 4c 00 e3
 	ld (NoteRouting:24), c                                 ; FC54D9  f2 00 22 60 43
@@ -118486,7 +118494,7 @@ NoteRouting_RebuildForSong:
 	jp (xix)                                             ; FC5505  b4 d8
 .LFC5507:
 	call NoteRouting_UpdateActivePartMask                                      ; FC5507  1d 53 61 fc
-	call sub_FC546A_Nop                                      ; FC550B  1d a5 61 fc
+	call NoteRouting_RebuildStep_Nop                                      ; FC550B  1d a5 61 fc
 	call NoteRouting_CommitChanges                                      ; FC550F  1d 7c 5c fc
 	popw bc                                              ; FC5513  49
 .LFC5514:
@@ -118494,7 +118502,7 @@ NoteRouting_RebuildForSong:
 	unlk XIZ                                             ; FC5515  ee 0d
 	ret                                                  ; FC5517  0e
 ; NoteRouting_Rebuild: T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without
-;   sub_FC61A6, the per-mode builder called with 1.
+;   NoteRouting_BuildTrackRouting, the per-mode builder called with 1.
 NoteRouting_Rebuild:
 	link XIZ,0xfffc                                      ; FC5518  ee 0c fc ff
 	push XIX                                             ; FC551C  3c
@@ -118517,7 +118525,7 @@ NoteRouting_Rebuild:
 	jp (xix)                                             ; FC5553  b4 d8
 .LFC5555:
 	call NoteRouting_UpdateActivePartMask                                      ; FC5555  1d 53 61 fc
-	call sub_FC546A_Nop                                      ; FC5559  1d a5 61 fc
+	call NoteRouting_RebuildStep_Nop                                      ; FC5559  1d a5 61 fc
 	call NoteRouting_CommitChanges                                      ; FC555D  1d 7c 5c fc
 	popw bc                                              ; FC5561  49
 .LFC5562:
@@ -118555,14 +118563,21 @@ NoteRouting_SetSoloAndRebuild:
 	jp (xix)                                             ; FC55B7  b4 d8
 .LFC55B9:
 	call NoteRouting_UpdateActivePartMask                                      ; FC55B9  1d 53 61 fc
-	call sub_FC546A_Nop                                      ; FC55BD  1d a5 61 fc
+	call NoteRouting_RebuildStep_Nop                                      ; FC55BD  1d a5 61 fc
 	call NoteRouting_CommitChanges                                      ; FC55C1  1d 7c 5c fc
 	popw bc                                              ; FC55C5  49
 .LFC55C6:
 	pop XIX                                              ; FC55C6  5c
 	unlk XIZ                                             ; FC55C7  ee 0d
 	ret                                                  ; FC55C9  0e
-sub_FC55CA:
+; NoteRouting_OnPartMidiEvent: T_NoteRouting_OnPartMidiEvent, the pass-B handler of event classes 0x00-0x1F: the 32 parts' first parameter record (the class picks the
+;   part through Bytes_00_to_1F_x3_FC65C6+0x40; payload: byte index, new value, changed bits -- see
+;   notes/sysex-probes/README.md).  Byte 0 (PROGRAM CHANGE & BANK): the part's three record pointers reset
+;   (T_NoteRouting_DefaultRecordPtrs), ChangeFlags bit 15.  Byte 13: bits 0-4 BASIC CHANNEL -> block +0x22 + part, pointers reset, flags
+;   0x8020; bit 5 LOCAL CONTROL -> tone-generator record bit 5 = NOT the bit, parts 0-7 also in (0x4C21), flags
+;   0x8004; bit 6 MIDI OUT SETTING -> MIDI record bit 5 = NOT the bit, (0x4C22), 0x8020; bit 7 MIDI IN SETTING ->
+;   MIDI record bit 6 = NOT the bit, 0x8020.  Byte 12 is ignored.  Names: param_names.json, PART offsets 0 and 13.
+NoteRouting_OnPartMidiEvent:
 	link XIZ,0xffee                                      ; FC55CA  ee 0c ee ff
 	pushw hl                                             ; FC55CE  2b
 	pushw de                                             ; FC55CF  2a
@@ -118590,7 +118605,7 @@ sub_FC55CA:
 	pushw hl                                             ; FC560A  2b
 	lda xbc, (xiz-12)                                    ; FC560B  be f4 31
 	push XBC                                             ; FC560E  39
-	call T_F413DC                                        ; FC560F  1d dc 13 f4
+	call T_NoteRouting_DefaultRecordPtrs                                        ; FC560F  1d dc 13 f4
 	ld xbc, (xiz-12)                                     ; FC5613  ae f4 21
 	ld XIX,XBC                                           ; FC5616  e9 8c
 	ld a, 0x06:opc                                          ; FC5618  21 06
@@ -118634,7 +118649,7 @@ sub_FC55CA:
 	pushw hl                                             ; FC5691  2b
 	lda xbc, (xiz-12)                                    ; FC5692  be f4 31
 	push XBC                                             ; FC5695  39
-	call T_F413DC                                        ; FC5696  1d dc 13 f4
+	call T_NoteRouting_DefaultRecordPtrs                                        ; FC5696  1d dc 13 f4
 	ld xbc, (xiz-8)                                      ; FC569A  ae f8 21
 	ld XIX,XBC                                           ; FC569D  e9 8c
 	ld a, 0x0a:opc                                          ; FC569F  21 0a
@@ -118760,7 +118775,12 @@ sub_FC55CA:
 	popw hl                                              ; FC57EC  4b
 	unlk XIZ                                             ; FC57ED  ee 0d
 	ret                                                  ; FC57EF  0e
-sub_FC57F0:
+; NoteRouting_OnPartPlayParamEvent: T_NoteRouting_OnPartPlayParamEvent, classes 0x20-0x3F, the parts' second record (SysEx rec 32).  Byte 5 VELOCITY OFFSET -> tone-generator
+;   record +1 = value - 0x18.  Byte 6 ASSIGN MODE -> record bit 6 = (value == 1), the mono bit
+;   PartFrame_SendToToneGen tests.  Bytes 7 / 8 / 9 / 10 KEY LAYER LOW / HIGH and VELOCITY LAYER LOW / HIGH -> range
+;   record +2 / +1 / +4 / +3, parts 0-7 only.  Byte 23 MIDI OUT KEY TRANSPOSE -> MIDI record +1 = value - 0x40.
+;   Each sets ChangeFlags bit 15.
+NoteRouting_OnPartPlayParamEvent:
 	pushw hl                                             ; FC57F0  2b
 	pushw de                                             ; FC57F1  2a
 	push XIX                                             ; FC57F2  3c
@@ -118914,7 +118934,9 @@ T_F411C8_Nop:
 	ret                                                  ; FC596D  0e
 T_F411CC_Nop:
 	ret                                                  ; FC596E  0e
-sub_FC596F:
+; NoteRouting_OnPlayModeRequest: T_NoteRouting_OnPlayModeRequest, class 0x98 byte 0 (PLAY MODE REQUEST, the high nibble): NoteRouting_Mode bit 4 = (nibble == 1);
+;   ChangeFlags bit 15.
+NoteRouting_OnPlayModeRequest:
 	push XIX                                             ; FC596F  3c
 	lda xix, (NoteRouting:24)                               ; FC5970  f2 00 22 60 34
 	ld bc, (UiEvent_Byte1:16)                                 ; FC5975  d1 b8 20 21
@@ -118939,7 +118961,10 @@ sub_FC596F:
 .LFC59AA:
 	pop XIX                                              ; FC59AA  5c
 	ret                                                  ; FC59AB  0e
-sub_FC59AC:
+; NoteRouting_OnMidiSystemEvent: T_NoteRouting_OnMidiSystemEvent, class 0x80 -- the MIDI system record (PROGRAM CHANGE MODE, MIDI INPUT / OUTPUT MODE, SINGLE CHANNEL,
+;   LOCAL TOTAL): the byte index 0..9 through NoteRouting_MidiSystemByteCases (3, 4 and 9 have handlers) with
+;   L = the new value, H = the changed bits, DE = 0x8020.
+NoteRouting_OnMidiSystemEvent:
 	pushw hl                                             ; FC59AC  2b
 	pushw de                                             ; FC59AD  2a
 	push XIX                                             ; FC59AE  3c
@@ -118953,11 +118978,11 @@ sub_FC59AC:
 	cp BC,0x0009                                         ; FC59C7  d9 cf 09 00
 	jrl ugt, .LFC5AC6                                        ; FC59CB  7b f8 00
 	sll bc, 0x02                                         ; FC59CE  d9 ee 02
-	add XBC,JumpTable_FC59DB                             ; FC59D1  e9 c8 db 59 fc 00
+	add XBC,NoteRouting_MidiSystemByteCases                             ; FC59D1  e9 c8 db 59 fc 00
 	ld XBC,(XBC)                                         ; FC59D7  a1 21
 	jp (xbc)                                             ; FC59D9  b1 d8
 ; ---------------------------------------------------------------------
-; JumpTable_FC59DB -- 10 LE32 branch targets
+; NoteRouting_MidiSystemByteCases -- 10 LE32 branch targets
 ;
 ; Read by: ONE site, `add XBC,0x00FC59DB / ld XBC,(XBC) / jp T,XBC` at
 ;          0xFC59D1-0xFC59D9.
@@ -118971,18 +118996,22 @@ sub_FC59AC:
 ;          count from its own `cp BC,0x0009`; re-derived by
 ;          notes/prom_a_byte_checks.py and notes/prom_a_jumptables.py.
 ; ---------------------------------------------------------------------
-JumpTable_FC59DB:
+; NoteRouting_MidiSystemByteCases: event class 0x80's byte index 0..9; 3 (MIDI INPUT / OUTPUT MODE), 4 (SINGLE
+;   CHANNEL, LOCAL TOTAL) and 9 have handlers, the rest return.
+NoteRouting_MidiSystemByteCases:
 	.long .LFC5AC6                                   ; FC59DB  [  0]
 	.long .LFC5AC6                                   ; FC59DF  [  1]
 	.long .LFC5AC6                                   ; FC59E3  [  2]
-	.long sub_FC5A03                                 ; FC59E7  [  3]
-	.long sub_FC5A77                                 ; FC59EB  [  4]
+	.long NoteRouting_SetMidiInOutModes                                 ; FC59E7  [  3]
+	.long NoteRouting_SetSingleChannelAndLocal                                 ; FC59EB  [  4]
 	.long .LFC5AC6                                   ; FC59EF  [  5]
 	.long .LFC5AC6                                   ; FC59F3  [  6]
 	.long .LFC5AC6                                   ; FC59F7  [  7]
 	.long .LFC5AC6                                   ; FC59FB  [  8]
-	.long sub_FC5AAE                                 ; FC59FF  [  9]
-sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
+	.long NoteRouting_OnMidiSystemByte9                                 ; FC59FF  [  9]
+; NoteRouting_SetMidiInOutModes: class 0x80 byte 3: MIDI INPUT MODE (low nibble 0 / 1 / 2) -> NoteRouting_MidiFlags bits 6-7 = 00 / 01 / 10;
+;   MIDI OUTPUT MODE (high nibble 0 / 1) -> bit 5; ChangeFlags |= 0x8020.
+NoteRouting_SetMidiInOutModes:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	ld C,H                                               ; FC5A03  ce 8b
 	and C,0x0f                                           ; FC5A05  cb cc 0f
 	jr z, .LFC5A47                                       ; FC5A08  66 3d
@@ -119031,7 +119060,9 @@ sub_FC5A03:   ; entry: named by 1 `.long` operand, first at 0xFC59E7
 	ld BC,DE                                             ; FC5A6F  da 89
 	or	(NoteRouting_ChangeFlags:16), bc                      ; FC5A71  d1 04 4c e9
 	jr .LFC5AC6                                          ; FC5A75  68 4f
-sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
+; NoteRouting_SetSingleChannelAndLocal: class 0x80 byte 4: SINGLE CHANNEL (bits 0-4) -> NoteRouting_SingleChannel, ChangeFlags |= 0x8020; LOCAL TOTAL
+;   (bit 5) -> NoteRouting_Mode bit 9 (no tone-generator output), with no change flag.
+NoteRouting_SetSingleChannelAndLocal:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 	ld C,H                                               ; FC5A77  ce 8b
 	and C,0x1f                                           ; FC5A79  cb cc 1f
 	jr z, .LFC5A8E                                       ; FC5A7C  66 10
@@ -119052,7 +119083,8 @@ sub_FC5A77:   ; entry: named by 1 `.long` operand, first at 0xFC59EB
 .LFC5AA5:
 	andw	(xix+664), 0xfdff                    ; FC5AA5  d3 f1 98 02 3c ff fd
 	jr .LFC5AC6                                          ; FC5AAC  68 18
-sub_FC5AAE:   ; entry: named by 1 `.long` operand, first at 0xFC59FF
+; NoteRouting_OnMidiSystemByte9: class 0x80 byte 9, bit 7 -> NoteRouting_ChangeFlags bit 3 (set or clear).  No SysEx descriptor names byte 9.
+NoteRouting_OnMidiSystemByte9:   ; entry: named by 1 `.long` operand, first at 0xFC59FF
 	ld C,H                                               ; FC5AAE  ce 8b
 	and C,0x80                                           ; FC5AB0  cb cc 80
 	jr z, .LFC5AC6                                       ; FC5AB3  66 11
@@ -119072,7 +119104,9 @@ T_F411D8_Nop:
 	ret                                                  ; FC5ACA  0e
 T_F411DC_Nop:
 	ret                                                  ; FC5ACB  0e
-sub_FC5ACC:
+; NoteRouting_SetMidiOutPorts: T_NoteRouting_SetMidiOutPorts, class 0xA8 byte 0x10: bit 0 -> NoteRouting_MidiFlags bit 4 (port A allowed) = NOT the bit, bit 1 ->
+;   bit 3 (port B) = NOT the bit; ChangeFlags bit 15.
+NoteRouting_SetMidiOutPorts:
 	push XIX                                             ; FC5ACC  3c
 	lda xix, (NoteRouting_ChangeFlags:16)                                ; FC5ACD  f1 04 4c 34
 	ld bc, (UiEvent_Byte1:16)                                 ; FC5AD1  d1 b8 20 21
@@ -119348,7 +119382,7 @@ NoteRouting_QueueChange:
 	pop XIX                                              ; FC5D2C  5c
 	unlk XIZ                                             ; FC5D2D  ee 0d
 	ret                                                  ; FC5D2F  0e
-; NoteRouting_QueueMidiInChanges: (NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_ListChannel
+; NoteRouting_QueueMidiInChanges: (NoteRouting_ChangeFlags bit 5): when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or NoteRouting_SingleChannel
 ;   changed, a kind-7 record per channel whose MIDI IN path changes (1 = it took the note-list path before, 0 = the
 ;   per-channel path); then for each of the 32 parts kind 0 (part, new, old) when its channel (+0x22) changed, or
 ;   kind 0 (part, 0xFF, channel) when its receive bit (record +0x152 bit 6) changed.
@@ -119376,7 +119410,7 @@ NoteRouting_QueueMidiInChanges:
 	jr nz, .LFC5DB2                                      ; FC5D6C  6e 44
 	ldw hl, 0x00                                         ; FC5D6E  33 00 00
 .LFC5D71:
-	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5D71  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousSingleChannel:24)                                 ; FC5D71  c2 92 28 60 23
 	extz BC                                              ; FC5D76  d9 12
 	cp BC,HL                                             ; FC5D78  db f1
 	jr nz, .LFC5D96                                      ; FC5D7A  6e 1a
@@ -119434,7 +119468,7 @@ NoteRouting_QueueMidiInChanges:
 	ld c, (NoteRouting_PreviousMidiFlags:24)                                 ; FC5DEE  c2 93 28 60 23
 	and C,0xc0                                           ; FC5DF3  cb cc c0
 	jr nz, .LFC5E06                                      ; FC5DF6  6e 0e
-	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5DF8  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousSingleChannel:24)                                 ; FC5DF8  c2 92 28 60 23
 	pushw bc                                             ; FC5DFD  29
 	pushw 0xff                                           ; FC5DFE  0b ff 00
 	pushw 0x00                                           ; FC5E01  0b 00 00
@@ -119448,7 +119482,7 @@ NoteRouting_QueueMidiInChanges:
 	srl c, 0x06                                          ; FC5E18  cb ef 06
 	cp c, 0x01:i3                                          ; FC5E1B  cb d9
 	jr nz, .LFC5E33                                      ; FC5E1D  6e 14
-	ld c, (NoteRouting_PreviousListChannel:24)                                 ; FC5E1F  c2 92 28 60 23
+	ld c, (NoteRouting_PreviousSingleChannel:24)                                 ; FC5E1F  c2 92 28 60 23
 	pushw bc                                             ; FC5E24  29
 	pushw 0xff                                           ; FC5E25  0b ff 00
 	pushw 0x01                                           ; FC5E28  0b 01 00
@@ -119457,8 +119491,8 @@ NoteRouting_QueueMidiInChanges:
 	calr NoteRouting_QueueChange                                      ; FC5E2E  1e a9 fe
 	inc 8,XSP                                            ; FC5E31  ef 60
 .LFC5E33:
-	ld h, (NoteRouting_PreviousListChannel:24)                                 ; FC5E33  c2 92 28 60 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC5E38  c2 92 24 60 23
+	ld h, (NoteRouting_PreviousSingleChannel:24)                                 ; FC5E33  c2 92 28 60 26
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC5E38  c2 92 24 60 23
 	cp C,H                                               ; FC5E3D  ce f3
 	jr z, .LFC5E76                                       ; FC5E3F  66 35
 	ld c, (NoteRouting_MidiFlags:24)                                 ; FC5E41  c2 93 24 60 23
@@ -119472,7 +119506,7 @@ NoteRouting_QueueMidiInChanges:
 	pushw 0x01                                           ; FC5E57  0b 01 00
 	pushw 0x07                                           ; FC5E5A  0b 07 00
 	calr NoteRouting_QueueChange                                      ; FC5E5D  1e 7a fe
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC5E60  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC5E60  c2 92 24 60 23
 	pushw bc                                             ; FC5E65  29
 	pushw 0xff                                           ; FC5E66  0b ff 00
 	pushw 0x00                                           ; FC5E69  0b 00 00
@@ -119612,7 +119646,7 @@ NoteRouting_QueueTrackChanges:
 	popw hl                                              ; FC5FA8  4b
 	unlk XIZ                                             ; FC5FA9  ee 0d
 	ret                                                  ; FC5FAB  0e
-; NoteRouting_QueueMidiOutSchemeChange: (bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_ListChannel) when NoteRouting_MidiFlags bit 5
+; NoteRouting_QueueMidiOutSchemeChange: (bit 5): kind 8 (previous bit 5, 0xFF, previous NoteRouting_SingleChannel) when NoteRouting_MidiFlags bit 5
 ;   changed, or when the channel changed while bit 5 is set.
 NoteRouting_QueueMidiOutSchemeChange:
 	pushw hl                                             ; FC5FAC  2b
@@ -119644,7 +119678,7 @@ NoteRouting_QueueMidiOutSchemeChange:
 	jr .LFC6010                                          ; FC5FF9  68 15
 .LFC5FFB:
 	ld H,(XIX+0x0292)                                    ; FC5FFB  c3 f1 92 02 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC6000  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC6000  c2 92 24 60 23
 	cp C,H                                               ; FC6005  ce f3
 	jr z, .LFC6024                                       ; FC6007  66 1b
 	bit 5,(XIX+0x0293)                                   ; FC6009  f3 f1 93 02 cd
@@ -119849,9 +119883,14 @@ NoteRouting_UpdateActivePartMask:
 	popw hl                                              ; FC61A1  4b
 	unlk XIZ                                             ; FC61A2  ee 0d
 	ret                                                  ; FC61A4  0e
-sub_FC546A_Nop:
+NoteRouting_RebuildStep_Nop:
 	ret                                                  ; FC61A5  0e
-sub_FC61A6:
+; NoteRouting_BuildTrackRouting: the 16 tracks' entries for the song: block +0x42 + t = the track's part (BStore_TrackToPart through
+;   Bytes_00_to_1F_FC64A5) and +0x52 + t = its MIDI OUT channel (0x603433 + t, 0x20 -> 0xFF), else 0xFF.  A track is
+;   routed for playback while NoteRouting_Mode bit 8 ((0x133A) | (0x60341E) nonzero) and its bit is in that mask, and
+;   for recording (part | 0x80, the first such part's code in (0x4C20)) while bit 7 ((0x1336) | (0x3000)).
+;   ChangeFlags |= 0xC0 per track.
+NoteRouting_BuildTrackRouting:
 	link XIZ,0xffeb                                      ; FC61A6  ee 0c eb ff
 	pushw hl                                             ; FC61AA  2b
 	pushw de                                             ; FC61AB  2a
@@ -119919,7 +119958,7 @@ sub_FC61A6:
 	ld XBC,(XBC)                                         ; FC6264  a1 21
 	ld XIX,XBC                                           ; FC6266  e9 8c
 	m_and_rm MLD+r6, 0xf2, r1                            ; FC6268  ae f2 c1
-; (sub_FC626B removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FC61A6;
+; (sub_FC626B removed 2026-10-04: no code names it and the line above falls through into it -- part of NoteRouting_BuildTrackRouting;
 ;  notes/prom_a_stray_label_removal.py)
 	jr nz, .LFC6286                                      ; FC626B  6e 19
 .LFC626D:
@@ -120033,7 +120072,11 @@ sub_FC61A6:
 	ret                                                  ; FC6390  0e
 	ret                                                  ; FC6391  0e
 	ret                                                  ; FC6392  0e
-sub_FC6393:
+; NoteRouting_InitDefaults: each of the 32 parts plays tone-generator part = itself.  Its tone-generator record has bits 6-7 clear, velocity
+;   offset (+1) 0 and pointer (+2) 0x602ACA.  Its MIDI record has bits 5 and 6 set (transmit, receive), bit 7 clear,
+;   transpose (+1) 0 and pointers (+2, +6) 0x602ACA.  Then MIDI INPUT / OUTPUT MODE 0, NoteRouting_SingleChannel 0,
+;   both MIDI OUT ports allowed, 0x602494 (32-bit) = 0, NoteRouting_Mode = 0.
+NoteRouting_InitDefaults:
 	link XIZ,0xffdc                                      ; FC6393  ee 0c dc ff
 	pushw hl                                             ; FC6397  2b
 	push XIX                                             ; FC6398  3c
@@ -120102,7 +120145,7 @@ sub_FC6393:
 	cp H,0x20                                            ; FC6476  ce cf 20
 	jrl c, .LFC63AA                                      ; FC6479  77 2e ff
 	m_and_mi8 MB24, NoteRouting_MidiFlags, 0x1f                       ; FC647C  c2 93 24 60 3c 1f
-	ld (NoteRouting_ListChannel:24), 0x00                             ; FC6482  f2 92 24 60 00 00
+	ld (NoteRouting_SingleChannel:24), 0x00                             ; FC6482  f2 92 24 60 00 00
 	m_set 3, MD24, NoteRouting_MidiFlags                              ; FC6488  f2 93 24 60 bb
 	m_set 4, MD24, NoteRouting_MidiFlags                              ; FC648D  f2 93 24 60 bc
 	sub XBC,XBC                                          ; FC6492  e9 a1
@@ -120634,7 +120677,7 @@ MidiInA_ProcessRing:
 	cp c, 0x01:i3                                          ; FC8127  cb d9
 	jr nz, .LFC8139                                      ; FC8129  6e 0e
 	ld h, (xiz-299)                                      ; FC812B  c3 f9 d5 fe 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC8130  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC8130  c2 92 24 60 23
 	cp C,H                                               ; FC8135  ce f3
 	jr z, .LFC8149                                       ; FC8137  66 10
 .LFC8139:
@@ -120788,7 +120831,7 @@ MidiInA_ProcessRing:
 	cp c, 0x01:i3                                          ; FC82C2  cb d9
 	jr nz, .LFC82D4                                      ; FC82C4  6e 0e
 	ld h, (xiz-299)                                      ; FC82C6  c3 f9 d5 fe 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC82CB  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC82CB  c2 92 24 60 23
 	cp C,H                                               ; FC82D0  ce f3
 	jr z, .LFC82E4                                       ; FC82D2  66 10
 .LFC82D4:
@@ -120967,7 +121010,7 @@ MidiInB_ProcessRing:
 	cp c, 0x01:i3                                          ; FC848D  cb d9
 	jr nz, .LFC849F                                      ; FC848F  6e 0e
 	ld h, (xiz-299)                                      ; FC8491  c3 f9 d5 fe 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC8496  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC8496  c2 92 24 60 23
 	cp C,H                                               ; FC849B  ce f3
 	jr z, .LFC84AF                                       ; FC849D  66 10
 .LFC849F:
@@ -121121,7 +121164,7 @@ MidiInB_ProcessRing:
 	cp c, 0x01:i3                                          ; FC8628  cb d9
 	jr nz, .LFC863A                                      ; FC862A  6e 0e
 	ld h, (xiz-299)                                      ; FC862C  c3 f9 d5 fe 26
-	ld c, (NoteRouting_ListChannel:24)                                 ; FC8631  c2 92 24 60 23
+	ld c, (NoteRouting_SingleChannel:24)                                 ; FC8631  c2 92 24 60 23
 	cp C,H                                               ; FC8636  ce f3
 	jr z, .LFC864A                                       ; FC8638  66 10
 .LFC863A:
@@ -121372,7 +121415,7 @@ Ring601850_ProcessNoteEvents:
 	ldw hl, 0x00                                         ; FC88A3  33 00 00
 	ld c, (xiz-126)                                      ; FC88A6  8e 82 23
 	ld (xiz-436), c                                      ; FC88A9  f3 f9 4c fe 43
-	ld a, (NoteRouting_ListChannel:24)                                 ; FC88AE  c2 92 24 60 21
+	ld a, (NoteRouting_SingleChannel:24)                                 ; FC88AE  c2 92 24 60 21
 	ld (xiz-1), a                                        ; FC88B3  be ff 41
 	extz BC                                              ; FC88B6  d9 12
 	ld DE,BC                                             ; FC88B8  d9 8a
@@ -121636,7 +121679,7 @@ PartNotes_ReleaseAllReceivedMidiIn:
 ;   leaves the list (NoteList_ApplyFrame); each part of the voice mask then takes it as a note frame does
 ;   (NoteFrame_SelectForPart, NoteRouting_ForPart, PartNotes_ApplyFrame, the three outputs).  In MIDI IN mode 1 the
 ;   note-offs also go out as one MIDI OUT frame.  Its entry +5 byte, which Ring601850_ProcessNoteEvents fills with
-;   NoteRouting_ListChannel, is here the part loop's counter (XIZ-5) (0xFC8C61).
+;   NoteRouting_SingleChannel, is here the part loop's counter (XIZ-5) (0xFC8C61).
 NoteList_ReleaseAllSource0:
 	link XIZ,0xfe40                                      ; FC8B36  ee 0c 40 fe
 	pushw hl                                             ; FC8B3A  2b
@@ -123209,7 +123252,7 @@ NoteChange_ReleaseRecordedNotesOfOldPart:
 	unlk XIZ                                             ; FC9930  ee 0d
 	ret                                                  ; FC9932  0e
 ; NoteChange_ReleaseMidiInChannelNotes: kind 7 (path, 0xFF, channel), queued when the MIDI IN mode (NoteRouting_MidiFlags bits 6-7) or
-;   NoteRouting_ListChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,
+;   NoteRouting_SingleChannel changed.  Path 1: every note MIDI IN put on the note list (NoteList_BuildReleaseAllFrame,
 ;   source 1) is released through each part as NoteRouting_Previous routed it (NoteFrame_SelectForPart,
 ;   NoteRouting_ForPartFromMidiIn, PartNotes_ApplyFrame; the three outputs, MIDI OUT unless +0x293 bit 5).  Path 0:
 ;   each part that received on the channel (previous block: +0x22 = channel, record bit 6) releases its MIDI IN notes
@@ -123357,7 +123400,7 @@ NoteChange_ReleaseMidiInChannelNotes:
 	popw hl                                              ; FC9A9D  4b
 	unlk XIZ                                             ; FC9A9E  ee 0d
 	ret                                                  ; FC9AA0  0e
-; NoteChange_ReleaseOldMidiOutScheme: kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_ListChannel
+; NoteChange_ReleaseOldMidiOutScheme: kind 8 (old bit 5, 0xFF, old channel), queued when NoteRouting_MidiFlags bit 5 changed or NoteRouting_SingleChannel
 ;   changed while it stays set.  When source 0's note list holds notes: with 0 (MIDI OUT was per part) each part's
 ;   source-0 notes get MIDI OUT note-offs; with 1 (MIDI OUT carried source 0 on the one channel) the note list's
 ;   note-offs go out on the old channel (PartFrame_SendToMidiOut).  With 0, each part's source-1 notes then get MIDI
@@ -124737,7 +124780,7 @@ PartFrame_SendToToneGen:
 ;   is skipped.  When the part's note list is empty after a note went out, [0xB0, part, 0x7B, 0] follows and the
 ;   state is 0x80.  A = the new state.  On screen 0xDA the part byte is SoundSel_Group | 0xF0.  Status bit 3 is set
 ;   when (0x7F02) & 0xF0 is 0x10 and the frame came by the note-list path (source 0, or source 1 in mode 2 or on
-;   NoteRouting_ListChannel in mode 1); what it means on the link is not established.
+;   NoteRouting_SingleChannel in mode 1); what it means on the link is not established.
 PartFrame_SendPolyToToneGen:
 	link XIZ,0xfff0                                      ; FCA738  ee 0c f0 ff
 	pushw hl                                             ; FCA73C  2b
@@ -124768,7 +124811,7 @@ PartFrame_SendPolyToToneGen:
 	cp a, 0x01:i3                                          ; FCA77D  c9 d9
 	jr nz, .LFCA78D                                      ; FCA77F  6e 0c
 	ld L,(XBC+0x03)                                      ; FCA781  89 03 27
-	ld a, (NoteRouting_ListChannel:24)                                 ; FCA784  c2 92 24 60 21
+	ld a, (NoteRouting_SingleChannel:24)                                 ; FCA784  c2 92 24 60 21
 	cp A,L                                               ; FCA789  cf f1
 	jr z, .LFCA79C                                       ; FCA78B  66 0f
 .LFCA78D:
@@ -124945,7 +124988,7 @@ PartFrame_SendMonoToToneGen:
 	cp a, 0x01:i3                                          ; FCA933  c9 d9
 	jr nz, .LFCA943                                      ; FCA935  6e 0c
 	ld H,(XBC+0x03)                                      ; FCA937  89 03 26
-	ld a, (NoteRouting_ListChannel:24)                                 ; FCA93A  c2 92 24 60 21
+	ld a, (NoteRouting_SingleChannel:24)                                 ; FCA93A  c2 92 24 60 21
 	cp A,H                                               ; FCA93F  ce f1
 	jr z, .LFCA952                                       ; FCA941  66 0f
 .LFCA943:
@@ -125392,7 +125435,9 @@ PartFrame_RecordToSeqBuf:
 	popw hl                                              ; FCAD78  4b
 	unlk XIZ                                             ; FCAD79  ee 0d
 	ret                                                  ; FCAD7B  0e
-sub_FCAD7C:
+; NoteRouting_DefaultRecordPtrs: T_NoteRouting_DefaultRecordPtrs (out): the three 32-bit pointers at out +0 / +4 / +8 = 0x602ACA, the default output record.
+;   NoteRouting_OnPartMidiEvent copies them to a part's tone-generator record +2 and MIDI record +2 / +6.
+NoteRouting_DefaultRecordPtrs:
 	link XIZ,0x0000                                      ; FCAD7C  ee 0c 00 00
 	push XIX                                             ; FCAD80  3c
 	lda xix, (0x602aca:24)                               ; FCAD81  f2 ca 2a 60 34
