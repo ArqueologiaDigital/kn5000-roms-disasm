@@ -110839,7 +110839,7 @@ SoundRemap_ResetToDefault:
 	push XIY                                             ; FC01B3  3d
 	ldw bc, 0x0650                                       ; FC01B4  31 50 06
 	ld XIY,RamDefault_SoundRemap                             ; FC01B7  45 10 08 f3 00
-	ld XIX,0x00005210                                    ; FC01BC  44 10 52 00 00
+	ld XIX,SoundRemap_Ram                                    ; FC01BC  44 10 52 00 00
 	ldir85                                               ; FC01C1  85 11
 	pop XIY                                              ; FC01C3  5d
 	pop XIX                                              ; FC01C4  5c
@@ -110852,7 +110852,7 @@ CombiRemap_ResetToDefault:
 	push XIY                                             ; FC01C9  3d
 	ldw bc, 0x0650                                       ; FC01CA  31 50 06
 	ld XIY,RamDefault_CombiRemap                             ; FC01CD  45 60 0e f3 00
-	ld XIX,0x00005860                                    ; FC01D2  44 60 58 00 00
+	ld XIX,CombiRemap_Ram                                    ; FC01D2  44 60 58 00 00
 	ldir85                                               ; FC01D7  85 11
 	pop XIY                                              ; FC01D9  5d
 	pop XIX                                              ; FC01DA  5c
@@ -110865,7 +110865,7 @@ DrumMap_ResetToDefault:
 	push XIY                                             ; FC01DF  3d
 	ldw bc, 0x01d0                                       ; FC01E0  31 d0 01
 	ld XIY,RamDefault_DrumMap                             ; FC01E3  45 b0 14 f3 00
-	ld XIX,0x00005eb0                                    ; FC01E8  44 b0 5e 00 00
+	ld XIX,DrumMap_Ram                                    ; FC01E8  44 b0 5e 00 00
 	ldir85                                               ; FC01ED  85 11
 	pop XIY                                              ; FC01EF  5d
 	pop XIX                                              ; FC01F0  5c

@@ -380,6 +380,11 @@ GROUPS = [
         0x21D7: ("Disk_WindowEnd", "end of that window (32-bit); clamped to start + the file size", "DiskApi_ReadFileToWindow"),
         0x2725: ("Disk_ContentType", "the SAVE / LOAD content type, 0 ALL .. 8 DRUM MAP", "prom_b DL_F583F0 draws it from DLText_F585AD; DiskLoad_ByContentType"),
     }),
+    ("wsa1/notes/FINDINGS-prom_b-disk-and-file-menus.md", "2026-10-04: the extensions a WSA1 disk DOES carry (content types 6-8)", {
+        0x5210: ("SoundRemap_Ram", "the SOUND RE-MAP block, 0x650 bytes (0x230 used by a non-'1' file)", "DiskLoad_SoundRemap / DiskSave_SoundRemap; SoundRemap_ResetToDefault"),
+        0x5860: ("CombiRemap_Ram", "the COMBI RE-MAP block, 0x650 bytes", "DiskLoad_CombiRemap / DiskSave_CombiRemap; CombiRemap_ResetToDefault"),
+        0x5EB0: ("DrumMap_Ram", "the DRUM MAP block, 0x1D0 bytes", "DiskLoad_DrumMap / DiskSave_DrumMap; DrumMap_ResetToDefault"),
+    }),
     ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "2. The MIDI-in rings", {
         0x600C1E: ("MidiIn_PortARing", "MIDI port A's received-byte ring (0x400)", "MidiIn_PumpPortA, MidiIn_RoutePortA"),
         0x601028: ("MidiIn_PortBRing", "MIDI port B's received-byte ring (0x400)", "MidiIn_PumpPortB, MidiIn_RoutePortB"),
