@@ -119,12 +119,13 @@ for reader, addr, needle, why in (
         (0xFF4596, 0xFF459E, "cp H,0x20", "Dispatch_FF3880 = 32"),
         (0xFF4995, 0xFF499D, "cp H,0x20", "Dispatch_FF3900 = 32"),
         (0xFF522F, 0xFF5237, "cp H,0x20", "Dispatch_FF3980 = 32"),
-        (0xFF548A, 0xFF548A, "0x2229, 0x06", "ScreenEnterPages_DiskSaveFile = 6"),
-        (0xFF572E, 0xFF573B, "0x2229, 0x06", "Dispatch_FF3A29 = 6 rows"),
-        (0xFF5C3E, 0xFF5C3E, "0x2229, 0x03", "ScreenEnterPages_MidiFileSave = 4 (jr UGT)"),
-        (0xFF5ED1, 0xFF5EDE, "0x2229, 0x05", "Dispatch_FF3D39 matrix reader"),
-        (0xFF672D, 0xFF672D, "0x2229, 0x02", "ScreenEnterPages_L0adSingleS0und = 2"),
-        (0xFF6DB7, 0xFF6DB7, "0x2229, 0x02", "ScreenEnterPages_L0adSingleC0mbination = 2"),
+        # (0x2229) is spelled UI_ScreenPage since 2026-10-04 (scripts/tools/name_wsa1_ram.py)
+        (0xFF548A, 0xFF548A, "UI_ScreenPage, 0x06", "ScreenEnterPages_DiskSaveFile = 6"),
+        (0xFF572E, 0xFF573B, "UI_ScreenPage, 0x06", "Dispatch_FF3A29 = 6 rows"),
+        (0xFF5C3E, 0xFF5C3E, "UI_ScreenPage, 0x03", "ScreenEnterPages_MidiFileSave = 4 (jr UGT)"),
+        (0xFF5ED1, 0xFF5EDE, "UI_ScreenPage, 0x05", "Dispatch_FF3D39 matrix reader"),
+        (0xFF672D, 0xFF672D, "UI_ScreenPage, 0x02", "ScreenEnterPages_L0adSingleS0und = 2"),
+        (0xFF6DB7, 0xFF6DB7, "UI_ScreenPage, 0x02", "ScreenEnterPages_L0adSingleC0mbination = 2"),
         (0xFF70B6, 0xFF70CF, "cp HL,0x0010", "PtrTable_FF4251 = 16")):
     check(has(addr, needle), "reader 0x%06X: `%s` at 0x%06X -- %s"
           % (reader, needle, addr, why))
