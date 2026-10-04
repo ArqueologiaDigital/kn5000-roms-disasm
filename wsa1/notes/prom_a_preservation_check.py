@@ -2663,6 +2663,19 @@ RENAMES = {
     "sub_FB28BE": "SysExSession_AnswerByStatus",
     "sub_FB374D": "SysExParam_CheckValueWhiteList",
     "sub_FB4D62": "SysExTx_SendParamValue",
+    "sub_FAA82A": "ParamModule_BootPhase0",
+    "sub_FAA882": "ParamModule_BootPhase2_MemoryLost",
+    "sub_FAA8EC": "ParamModule_BootPhase4",
+    "sub_FAA8F0": "ParamModule_BootPhase1_MemoryIntact",
+    "sub_FAA94E": "ParamModule_BootPhase3",
+    "sub_F44042": "BStore_BootPhase0",
+    "sub_F44095": "BStore_BootPhase2And4",
+    "sub_F440C4": "BStore_BootPhase3",
+    "sub_FC018E": "Msg0716_BootPhase2_MemoryLost",
+    "sub_FE0000": "Disk_PhaseVector",
+    "sub_FE0000_Nop": "Disk_PhaseVector_Ret",
+    "sub_FE1C12": "Disk_BootPhase3",
+    "sub_FE833F": "EditScreen_BootPhase2And4",
 }
 
 

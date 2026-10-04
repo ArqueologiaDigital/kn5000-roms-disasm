@@ -77196,11 +77196,11 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; The stale vector: each slot holds the live slot's target (ParamModule_PhaseVector) minus how far that
 ; routine moved -- 0x400, the distance between the copies, for slots 0 and 2.
 sub_FAA000:
-	jp	sub_FAA82A - 0x400                                ; FAA000  1b 2a a4 fa
-	jp	sub_FAA8F0 - 0x439                                ; FAA004  1b b7 a4 fa
-	jp	sub_FAA882 - 0x400                                ; FAA008  1b 82 a4 fa
-	jp	sub_FAA94E - 0x477                                ; FAA00C  1b d7 a4 fa
-	jp	sub_FAA8EC - 0x439                                ; FAA010  1b b3 a4 fa
+	jp	ParamModule_BootPhase0 - 0x400                                ; FAA000  1b 2a a4 fa
+	jp	ParamModule_BootPhase1_MemoryIntact - 0x439                                ; FAA004  1b b7 a4 fa
+	jp	ParamModule_BootPhase2_MemoryLost - 0x400                                ; FAA008  1b 82 a4 fa
+	jp	ParamModule_BootPhase3 - 0x477                                ; FAA00C  1b d7 a4 fa
+	jp	ParamModule_BootPhase4 - 0x439                                ; FAA010  1b b3 a4 fa
 	ret                                                  ; FAA014  0e
 	nop                                                  ; FAA015  00
 	nop                                                  ; FAA016  00
@@ -77701,11 +77701,11 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 ;          Was decoded as `tset 0,(0x2a1b76)` + `swi 2`, the copy's cut-off instruction run on into it.
 ; ---------------------------------------------------------------------
 ParamModule_PhaseVector:
-	jp	sub_FAA82A                                        ; FAA400  1b 2a a8 fa
-	jp sub_FAA8F0                                        ; FAA404  1b f0 a8 fa
-	jp sub_FAA882                                        ; FAA408  1b 82 a8 fa
-	jp sub_FAA94E                                        ; FAA40C  1b 4e a9 fa
-	jp sub_FAA8EC                                        ; FAA410  1b ec a8 fa
+	jp	ParamModule_BootPhase0                                        ; FAA400  1b 2a a8 fa
+	jp ParamModule_BootPhase1_MemoryIntact                                        ; FAA404  1b f0 a8 fa
+	jp ParamModule_BootPhase2_MemoryLost                                        ; FAA408  1b 82 a8 fa
+	jp ParamModule_BootPhase3                                        ; FAA40C  1b 4e a9 fa
+	jp ParamModule_BootPhase4                                        ; FAA410  1b ec a8 fa
 	ret                                                  ; FAA414  0e
 	nop                                                  ; FAA415  00
 	nop                                                  ; FAA416  00
@@ -78339,7 +78339,9 @@ sub_FAA808:
 	pop XIZ                                              ; FAA827  5e
 	ret                                                  ; FAA828  0e
 	ret                                                  ; FAA829  0e
-sub_FAA82A:
+; ParamModule_BootPhase0: module 11's boot phase 0 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 0
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+ParamModule_BootPhase0:
 	pushw hl                                             ; FAA82A  2b
 	ld h, 0xff:opc                                          ; FAA82B  26 ff
 	ld (0x2000:16), h                                   ; FAA82D  f1 00 20 46
@@ -78360,7 +78362,9 @@ sub_FAA82A:
 	calr sub_FAA82A_Nop                                      ; FAA87D  1e 8e 03
 	popw hl                                              ; FAA880  4b
 	ret                                                  ; FAA881  0e
-sub_FAA882:
+; ParamModule_BootPhase2_MemoryLost: module 11's boot phase 2 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 2
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+ParamModule_BootPhase2_MemoryLost:
 	pushw hl                                             ; FAA882  2b
 	ld	c, (0x97:8)                                      ; FAA883  c0 97 23
 	and C,0x10                                           ; FAA886  cb cc 10
@@ -78411,10 +78415,14 @@ sub_FAA882:
 	jr ule, .LFAA8B5                                     ; FAA8E8  63 cb
 	popw hl                                              ; FAA8EA  4b
 	ret                                                  ; FAA8EB  0e
-sub_FAA8EC:
-	calr sub_FAA882                                      ; FAA8EC  1e 93 ff
+; ParamModule_BootPhase4: module 11's boot phase 4 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 4
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+ParamModule_BootPhase4:
+	calr ParamModule_BootPhase2_MemoryLost                                      ; FAA8EC  1e 93 ff
 	ret                                                  ; FAA8EF  0e
-sub_FAA8F0:
+; ParamModule_BootPhase1_MemoryIntact: module 11's boot phase 1 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 1
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+ParamModule_BootPhase1_MemoryIntact:
 	pushw hl                                             ; FAA8F0  2b
 	push XDE                                             ; FAA8F1  3a
 	push XHL                                             ; FAA8F2  3b
@@ -78460,7 +78468,9 @@ sub_FAA8F0:
 	jr ule, .LFAA917                                     ; FAA94A  63 cb
 	popw hl                                              ; FAA94C  4b
 	ret                                                  ; FAA94D  0e
-sub_FAA94E:
+; ParamModule_BootPhase3: module 11's boot phase 3 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 3
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+ParamModule_BootPhase3:
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAA94E  f2 ea cd fa 31
 	ld (IndexedTable_Base:24), xbc                               ; FAA953  f2 18 f0 60 61
 	m_cp_mi8 MB24, 0x60f2d8, 0x00                        ; FAA958  c2 d8 f2 60 3f 00
@@ -110626,7 +110636,7 @@ Msg0716_InitAllRecords_Entry:
 	nop                                                  ; FC0005  00
 	nop                                                  ; FC0006  00
 	nop                                                  ; FC0007  00
-	jp sub_FC018E                                        ; FC0008  1b 8e 01 fc
+	jp Msg0716_BootPhase2_MemoryLost                                        ; FC0008  1b 8e 01 fc
 	jp RemoteImage_LoadHeader                            ; FC000C  1b 76 00 fc
 	ret                                                  ; FC0010  0e
 	nop                                                  ; FC0011  00
@@ -110799,7 +110809,9 @@ RemoteImage_LoadHeader:
 	ret                                                  ; FC018C  0e
 T_F40FF4_Nop:
 	ret                                                  ; FC018D  0e
-sub_FC018E:
+; Msg0716_BootPhase2_MemoryLost: module 20's boot phase 2 handler -- ModuleInitDirectory_F82641[20]'s vector 0xFC0000, slot 2
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+Msg0716_BootPhase2_MemoryLost:
 	calr sub_FC019B                                      ; FC018E  1e 0a 00
 	calr sub_FC01B1                                      ; FC0191  1e 1d 00
 	calr sub_FC01C7                                      ; FC0194  1e 30 00
@@ -158828,14 +158840,18 @@ ExitKey_SoundEditFilterLfo:
 ;     `calr`.  ⚠ The reference scan is opcode-anchored, so a few of those labels
 ;     may sit on a byte coincidence rather than a real entry point; the byte gate
 ;     cannot tell, and neither can this file.
-sub_FE0000:
-	jp sub_FE0000_Nop                                        ; FE0000  1b 18 00 fe
-	jp sub_FE0000_Nop                                        ; FE0004  1b 18 00 fe
-	jp sub_FE0000_Nop                                        ; FE0008  1b 18 00 fe
-	jp sub_FE1C12                                        ; FE000C  1b 12 1c fe
-	jp sub_FE0000_Nop                                        ; FE0010  1b 18 00 fe
-	jp sub_FE0000_Nop                                        ; FE0014  1b 18 00 fe
-sub_FE0000_Nop:
+; Disk_PhaseVector: module 23's boot phase vector -- ModuleInitDirectory_F82641[23] reaches it; the walker calls
+;   slot k (`jp`, 4 bytes) for boot phase k (notes/prom_a_module_boot_phase_names.py).
+Disk_PhaseVector:
+	jp Disk_PhaseVector_Ret                                        ; FE0000  1b 18 00 fe
+	jp Disk_PhaseVector_Ret                                        ; FE0004  1b 18 00 fe
+	jp Disk_PhaseVector_Ret                                        ; FE0008  1b 18 00 fe
+	jp Disk_BootPhase3                                        ; FE000C  1b 12 1c fe
+	jp Disk_PhaseVector_Ret                                        ; FE0010  1b 18 00 fe
+	jp Disk_PhaseVector_Ret                                        ; FE0014  1b 18 00 fe
+; Disk_PhaseVector_Ret: the bare `ret` module 23's phase-vector slots jump to for the phases it does nothing in
+;   (notes/prom_a_module_boot_phase_names.py).
+Disk_PhaseVector_Ret:
 	ret                                                  ; FE0018  0e
 ; LCD_SwiTextCall_SaveRegs_Copy: an exact copy of LCD_SwiTextCall_SaveRegs (prom_a 0xFF7895) -- all 17 instructions equal, operands included,
 ;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
@@ -162127,7 +162143,9 @@ sub_FE1C0B:
 	calr sub_FE11D9                                          ; FE1C0B  1e cb f5
 	calr Ring_InitTenOfFourteen                                          ; FE1C0E  1e 18 01
 	ret                                                  ; FE1C11  0e
-sub_FE1C12:
+; Disk_BootPhase3: module 23's boot phase 3 handler -- ModuleInitDirectory_F82641[23]'s vector 0xFE0000, slot 3
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+Disk_BootPhase3:
 	calr sub_FE2F39                                          ; FE1C12  1e 24 13
 	ret                                                  ; FE1C15  0e
 T_F42580_Nop:
@@ -173928,9 +173946,9 @@ ScreenLeave_DrumEditPartSelect:
 	ret                                                  ; FE8045  0e
 	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8046  1b 5e 80 fe
 	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE804A  1b 5e 80 fe
-	jp sub_FE833F                                        ; FE804E  1b 3f 83 fe
+	jp EditScreen_BootPhase2And4                                        ; FE804E  1b 3f 83 fe
 	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8052  1b 5e 80 fe
-	jp sub_FE833F                                        ; FE8056  1b 3f 83 fe
+	jp EditScreen_BootPhase2And4                                        ; FE8056  1b 3f 83 fe
 	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE805A  1b 5e 80 fe
 ScreenLeave_DrumEditPartSelect_Nop:
 	ret                                                  ; FE805E  0e
@@ -174583,7 +174601,9 @@ BStore_GetHeapBase:
 	ld xiy, (BStore_HeapBase:16)                                 ; FE8334  e1 04 36 25
 	add XIY,0x00000000                                   ; FE8338  ed c8 00 00 00 00
 	ret                                                  ; FE833E  0e
-sub_FE833F:
+; EditScreen_BootPhase2And4: module 24's boot phase 2/4 handler -- ModuleInitDirectory_F82641[24]'s vector 0xFE8046, slots 2, 4
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+EditScreen_BootPhase2And4:
 	ldw (0x601f4f:24), 0x30                             ; FE833F  f2 4f 1f 60 02 30 00
 	ldw (0x601f51:24), 0x30                             ; FE8346  f2 51 1f 60 02 30 00
 	ldw (0x601f4b:24), 0x26                             ; FE834D  f2 4b 1f 60 02 26 00

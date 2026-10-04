@@ -619,8 +619,10 @@ def selftest():
     chk("LAST slot address, kind and target", (("T_%06X" % last[0]), last[1],
                                                ("0x%06X" % last[2])),
         ("T_F44010", "jp", "0xF44095"))
-    chk("LAST slot's target label and grade -- it is NOT promotable",
-        (last[3], last[4]), ("sub_F44095", "sub"))
+    # 2026-10-04: the target was sub_F44095 (grade "sub") until notes/prom_a_module_boot_phase_names.py
+    # named it from its slot in the module boot-phase vector; the slot itself is still T_F44010.
+    chk("LAST slot's target label and grade -- content-named since 2026-10-04",
+        (last[3], last[4]), ("BStore_BootPhase2And4", "content"))
     a, b = TT.load()
     o = last[0] - 0xF00000
     chk("LAST slot's ROM bytes really spell `jp <target>`",

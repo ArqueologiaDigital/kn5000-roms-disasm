@@ -1706,7 +1706,7 @@
 	.set	ScreenButton_SoundEditFilterEnvelope1, 0xFDE64F
 	.set	ScreenButton_SoundEditFilterEnvelope2, 0xFDE6AF
 	.set	ScreenButton_SoundEditFilterLfo, 0xFDE70F
-	.set	sub_FE0000, 0xFE0000
+	.set	Disk_PhaseVector, 0xFE0000
 	.set	sub_FE02AB, 0xFE02AB
 	.set	sub_FE0391, 0xFE0391
 	.set	sub_FE0435, 0xFE0435
@@ -1782,7 +1782,7 @@
 	.set	Paint_Sequencer, 0xFE812C
 	.set	ScreenLeave_Sequencer, 0xFE8165
 	.set	sub_FE82D7, 0xFE82D7
-	.set	sub_FE833F, 0xFE833F
+	.set	EditScreen_BootPhase2And4, 0xFE833F
 	.set	ShowScreen_NoteEditPartSelect, 0xFE836F
 	.set	ShowScreen_DrumEditPartSelect, 0xFE83A3
 	.set	ScreenLeave_NoteEditPartSelect, 0xFE8564
@@ -88375,7 +88375,7 @@ T_ScreenLeave_DrumEdit:	jp ScreenLeave_DrumEdit  ; -> prom_a 0x68C1F
 T_ScreenButton_DrumEdit:	jp ScreenButton_DrumEdit  ; -> prom_a 0x69B8D
 T_ScreenLeave_DrumEditPartSelect_3:	jp ScreenLeave_DrumEditPartSelect  ; -> prom_a 0x68045
 T_F402FC:	jp sub_FE82D7  ; -> prom_a 0x682D7
-T_F40300:	jp sub_FE833F  ; -> prom_a 0x6833F   x2
+T_F40300:	jp EditScreen_BootPhase2And4  ; -> prom_a 0x6833F   x2
 T_F40304:	jp sub_FE8026  ; -> prom_a 0x68026   x2
 T_F40308:	jp sub_FE8000  ; -> prom_a 0x68000   x1
 T_F4030C:	jp sub_FE8005  ; -> prom_a 0x68005   x1
@@ -90139,7 +90139,7 @@ T_F4251C:	jp Msg0716_EventPartPostCC13_GeneralPurpose4IfEnabled  ; -> prom_a 0x4
 T_F42520:	jp Msg0716_EventPartPostCC02_BreathIfEnabled  ; -> prom_a 0x40845
 T_F42524:	jp Msg0716_EventPartPostCC04_FootIfEnabled  ; -> prom_a 0x4086A
 	.fill 0x48, 1, 0x0E  ; 0xF42528: 72 x ret
-T_F42570:	.long sub_FE0000	; ptr -> 0xFE0000 (prom_a 0x60000)
+T_F42570:	.long Disk_PhaseVector	; ptr -> 0xFE0000 (prom_a 0x60000)
 T_F42574:	jp sub_FE1BCE  ; -> prom_a 0x61BCE   x8
 T_F42578:	jp sub_FE1BDE  ; -> prom_a 0x61BDE   x8
 T_F4257C:	jp sub_FE152E  ; -> prom_a 0x6152E   x5
@@ -91143,11 +91143,11 @@ T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
 T_F434F4:	jp sub_F4C42E  ; -> prom_b 0x4C42E
 	.fill 0xB08, 1, 0x0E  ; 0xF434F8: 2824 x ret
-T_F44000:	jp sub_F44042  ; -> prom_b 0x44042
+T_F44000:	jp BStore_BootPhase0  ; -> prom_b 0x44042
 T_F44004:	jp T_F44004_Nop  ; -> prom_b 0x4425F
-T_F44008:	jp sub_F44095  ; -> prom_b 0x44095
-T_F4400C:	jp sub_F440C4  ; -> prom_b 0x440C4
-T_F44010:	jp sub_F44095  ; -> prom_b 0x44095
+T_F44008:	jp BStore_BootPhase2And4  ; -> prom_b 0x44095
+T_F4400C:	jp BStore_BootPhase3  ; -> prom_b 0x440C4
+T_F44010:	jp BStore_BootPhase2And4  ; -> prom_b 0x44095
 	.fill 0x4, 1, 0x0E  ; 0xF44014: 4 x ret
 
 ; ==============================================================================
@@ -91397,7 +91397,7 @@ sub_F4403F:		; <- T_F40A74
 	jrl	sub_F45263	; F4403F  jrl T,0xf45263
 
 ; --------------------------------------------------------------------------
-; sub_F44042
+; BStore_BootPhase0
 ; Called from: T_F44000 (x0)
 ; Touches:   |  0x003604
 ; Calls:   sub_F45E49
@@ -91408,7 +91408,9 @@ sub_F4403F:		; <- T_F40A74
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44042:		; <- T_F44000
+; BStore_BootPhase0: module 19's boot phase 0 handler -- ModuleInitDirectory_F82641[19]'s vector 0xF44000, slot 0
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+BStore_BootPhase0:		; <- T_F44000
 	push	xix	; F44042  push XIX
 	push	xiy	; F44043  push XIY
 	push	xhl	; F44044  push XHL
@@ -91440,7 +91442,7 @@ sub_F4403C_Join:
 	ret	; F44094  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44095
+; BStore_BootPhase2And4
 ; Called from: T_F44008 (x0), T_F44010 (x0)
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F44260 T_F42574 sub_F440A0
@@ -91451,7 +91453,9 @@ sub_F4403C_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44095:		; <- T_F44008, T_F44010
+; BStore_BootPhase2And4: module 19's boot phase 2/4 handler -- ModuleInitDirectory_F82641[19]'s vector 0xF44000, slots 2, 4
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+BStore_BootPhase2And4:		; <- T_F44008, T_F44010
 	calr	sub_F44260	; F44095  calr 0xf44260
 	call	T_F42574	; F44098  call 0xf42574
 	calr	sub_F440A0	; F4409C  calr 0xf440a0
@@ -91485,7 +91489,7 @@ sub_F440A0_Loop:
 	ret	; F440C3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F440C4
+; BStore_BootPhase3
 ; Called from: T_F4400C (x0)
 ; Touches: (0x34D3) (0x3552) (0x360A) (0x360C)
 ; Calls:   sub_F45B0A sub_F45975 sub_F4542D T_F427FC T_F427B8 T_BStore_LatchHeapBase_Veneer
@@ -91498,7 +91502,9 @@ sub_F440A0_Loop:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F440C4:		; <- T_F4400C
+; BStore_BootPhase3: module 19's boot phase 3 handler -- ModuleInitDirectory_F82641[19]'s vector 0xF44000, slot 3
+;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
+BStore_BootPhase3:		; <- T_F4400C
 	m_cp_mi8 MB8, Variant_Flag, 0x02	; F440C4  cp (0xc4),0x02
 	jr	nz, sub_F440A0_Skip	; F440C8  jr NZ,0xf440d7
 	xor	xwa, xwa	; F440CA  xor XWA,XWA
