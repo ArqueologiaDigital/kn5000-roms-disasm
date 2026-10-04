@@ -171,15 +171,18 @@ check(ROM[0xFF3A18 - BASE:0xFF3A29 - BASE] == b"??" + b" " * 14 + b"\x00",
 check(ROM[0xFF4291 - BASE:0xFF42A1 - BASE] == b" " * 16,
       "Text_FF4291 is 16 spaces")
 check(ROM[0xFF42A1 - BASE:0xFF42B1 - BASE] == b"U1 -U2 -UD1-UD2-",
-      'Text_FF42A1 is "U1 -U2 -UD1-UD2-", four four-character labels')
+      'Text_UserBankAbbrevs is "U1 -U2 -UD1-UD2-", four four-character labels')
 
 print("\n7. the module-variant site the emulation notes already knew")
 # (0xC4) is spelled Variant_Flag since 2026-10-03 (scripts/tools/name_wsa1_ram.py)
 check(has(0xFF42EE, "Variant_Flag"),
       "0xFF42EE tests the model-variant strap (0x0000C4) -- this module owns "
       "the screen whose two display lists that strap chooses between")
+# the operands are spelled by label now (DL_* names), so look for the address in the ENCODED bytes of the
+# listing column -- little-endian, the same whether the source spells it as a number or a name (2026-10-04)
 for a in (0xF580B0, 0xF58127, 0xF58162, 0xF58014):
-    check(("0x%06x" % a) in SRC[SRC.index("Dispatch_FF3800:"):],
+    le = "%02x %02x %02x" % (a & 0xFF, (a >> 8) & 0xFF, a >> 16)
+    check(le in SRC[SRC.index("Dispatch_FF3800:"):],
           "0x%06X, a prom_b display list, is named in this module" % a)
 
 print()

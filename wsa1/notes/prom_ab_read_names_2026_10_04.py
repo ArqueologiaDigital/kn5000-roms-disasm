@@ -891,7 +891,7 @@ ROWS = [
      "slots 6 and 7 of page 1 of both screens: moves the cursor row (0x2739, 0..7) and scrolls the list top (0x273A, up to 8)\n"
      "when the cursor is at an end; refused for a drum bank.  DL_F5915B is the row highlight (source 0x2739)."),
     ("FF7436", "L0adSingle_DrawBankAndNumber",
-     "(n): Text_FF42A1[(0x2728)]'s 4 characters, then n + 1 in 1..3 digits, drawn at 0x19A5.  Called by the\n"
+     "(n): Text_UserBankAbbrevs[(0x2728)]'s 4 characters, then n + 1 in 1..3 digits, drawn at 0x19A5.  Called by the\n"
      "SoftKeyCols3_4 page-0 handlers with (0x2735)."),
     ("FF7224", "L0adSingleS0und_DrawGroupName",
      "T_SoundGroupName_CopyToBuffer(bank Table_FF4039[(0x2736)], group (0x2737)) into 0x2940, drawn at 0x0C1E."),

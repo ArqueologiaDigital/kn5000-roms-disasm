@@ -96,9 +96,11 @@ often in this module is the one line in it with **no label**. All 459 references
 to 0xFF42B1 are 32-bit pointers, and the block generator labels only
 call/jp/calr targets.
 
-**`Text_FF42A1` is four four-character labels — `"U1 -" "U2 -" "UD1-" "UD2-"`**,
-indexed by `(0x2728)` at stride 4. What U1 and UD1 stand for is not established
-and is not guessed.
+**`Text_UserBankAbbrevs` is four four-character labels — `"U1 -" "U2 -" "UD1-" "UD2-"`**,
+indexed by `(0x2728)` at stride 4. ~~What U1 and UD1 stand for is not established
+and is not guessed.~~ ★ **Settled 2026-10-04:** USER 1 / USER 2 / USER1 DRUM / USER2 DRUM. prom_b's
+`DLText_F59128` holds those long forms in the same order, and `DL_F590F1`'s first record
+indexes it by the same `(0x2728)`. The bare `ret` after the labels is now `DispatchMatrix_NoAction`.
 
 ## 2. 0xFEB330-0xFEF746 — the drum-kit name table
 

@@ -3259,4 +3259,6 @@ RENAMES = [
     ("sub_FF725D", "L0adSingleC0mbination_DrawGroupName"),
     ("sub_FF7296", "L0adSingleS0und_DrawGroupSounds"),
     ("sub_FF7399", "L0adSingleC0mbination_DrawGroupCombinations"),
+    ("Text_FF42A1", "Text_UserBankAbbrevs"),
+    ("Text_FF42A1__FF42B1", "DispatchMatrix_NoAction"),
 ]
