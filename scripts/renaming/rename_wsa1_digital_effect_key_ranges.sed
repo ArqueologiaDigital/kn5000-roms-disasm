@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bPtrTable_F0AE2F\b/SoftKeyCol1_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0AE5F\b/SoftKeyCol1_SoundEditDigitalEffect_Range0To50/g
+s/\bsub_F0AE65\b/SoftKeyCol1_SoundEditDigitalEffect_Range0To30/g
+s/\bsub_F0AE6B\b/SoftKeyCol1_SoundEditDigitalEffect_Range0To1/g
+s/\bPtrTable_F0AEF6\b/SoftKeyCol2_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0AF26\b/SoftKeyCol2_SoundEditDigitalEffect_Range0To50/g
+s/\bsub_F0AF2C\b/SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50/g
+s/\bsub_F0AF36\b/SoftKeyCol2_SoundEditDigitalEffect_Range0To30/g
+s/\bPtrTable_F0AFC1\b/SoftKeyCol3_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0AFF1\b/SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50/g
+s/\bsub_F0AFFB\b/SoftKeyCol3_SoundEditDigitalEffect_Range0To50/g
+s/\bsub_F0B001\b/SoftKeyCol3_SoundEditDigitalEffect_Range0To3/g
+s/\bsub_F0B007\b/SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24/g
+s/\bsub_F0B011\b/SoftKeyCol3_SoundEditDigitalEffect_Range0To30/g
+s/\bPtrTable_F0B09B\b/SoftKeyCol4_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0B0C3\b/SoftKeyCol4_SoundEditDigitalEffect_Range0To50/g
+s/\bsub_F0B0C9\b/SoftKeyCol4_SoundEditDigitalEffect_Range0To100/g
+s/\bsub_F0B0CF\b/SoftKeyCol4_SoundEditDigitalEffect_Range0To30/g
+s/\bPtrTable_F0B157\b/SoftKeyCol5_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0B16F\b/SoftKeyCol5_SoundEditDigitalEffect_Range0To100/g
+s/\bsub_F0B179\b/SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50/g
+s/\bPtrTable_F0B282\b/SoftKeyCol7_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0B2B2\b/SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50/g
+s/\bsub_F0B2DE\b/SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType/g
+s/\bPtrTable_F0B33C\b/SoftKeyCol8_SoundEditDigitalEffect_RangeByType/g
+s/\bsub_F0B36C\b/SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50/g

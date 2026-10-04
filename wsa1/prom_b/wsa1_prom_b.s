@@ -20829,12 +20829,12 @@ SoftKeyCol1_SoundEditDigitalEffect:
 	cp	bc, 11	; F0AE1B  cp BC,0x000b
 	jrl	ugt, sub_F0AE6B_Skip	; F0AE1F  jrl UGT,0xf0ae97
 	sll	bc, 2	; F0AE22  sll 0x02,BC
-	add	xbc, PtrTable_F0AE2F	; F0AE25  add XBC,0x00f0ae2f
+	add	xbc, SoftKeyCol1_SoundEditDigitalEffect_RangeByType	; F0AE25  add XBC,0x00f0ae2f
 	ld	xbc, (xbc)	; F0AE2B  ld XBC,(XBC)
 	jp	(xbc)	; F0AE2D  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0AE2F -- 12 32-bit entries, all inside this block
+; SoftKeyCol1_SoundEditDigitalEffect_RangeByType -- 12 32-bit entries, all inside this block
 ;                    (0xF0AE5F-0xF0AE6B), naming 3 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -20847,23 +20847,25 @@ SoftKeyCol1_SoundEditDigitalEffect:
 ;           at 0xF0AE5F.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0AE2F:
-	.long	sub_F0AE5F	; F0AE2F  [0] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE33  [1] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE37  [2] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE3B  [3] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE3F  [4] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE43  [5] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE47  [6] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE4B  [7] -> sub_F0AE5F
-	.long	sub_F0AE5F	; F0AE4F  [8] -> sub_F0AE5F
-	.long	sub_F0AE65	; F0AE53  [9] -> sub_F0AE65
-	.long	sub_F0AE6B	; F0AE57  [10] -> sub_F0AE6B
-	.long	sub_F0AE6B	; F0AE5B  [11] -> sub_F0AE6B
+; SoftKeyCol1_SoundEditDigitalEffect_RangeByType: SoftKeyCol1_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 12 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol1_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE2F  [0] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE33  [1] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE37  [2] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE3B  [3] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE3F  [4] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE43  [5] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE47  [6] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE4B  [7] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To50	; F0AE4F  [8] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To30	; F0AE53  [9] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To30
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To1	; F0AE57  [10] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To1
+	.long	SoftKeyCol1_SoundEditDigitalEffect_Range0To1	; F0AE5B  [11] -> SoftKeyCol1_SoundEditDigitalEffect_Range0To1
 
 
 ; --------------------------------------------------------------------------
-; sub_F0AE5F
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To50
 ; Called from: table 0xF0AE2F[0], 0xF0AE2F[1], 0xF0AE2F[2], 0xF0AE2F[3],
 ;              0xF0AE2F[4], 0xF0AE2F[5] +3 more
 ; Touches: nothing with an absolute address
@@ -20873,12 +20875,14 @@ PtrTable_F0AE2F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AE5F:
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To50: an arm of SoftKeyCol1_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 50 for type(s) 0,1,2,3,4,5,6,7,8
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol1_SoundEditDigitalEffect_Range0To50:
 	ld	(xix+8), 50	; F0AE5F  ld (XIX+0x08),0x32
 	jr	sub_F0AE6B_Join	; F0AE63  jr T,0xf0ae6f
 
 ; --------------------------------------------------------------------------
-; sub_F0AE65
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To30
 ; Called from: table 0xF0AE2F[9]
 ; Touches: nothing with an absolute address
 ; Evidence: word [9] of the pointer table at 0xF0AE2F reads 0x00F0AE65, that
@@ -20887,12 +20891,14 @@ sub_F0AE5F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AE65:
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To30: an arm of SoftKeyCol1_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 30 for type(s) 9
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol1_SoundEditDigitalEffect_Range0To30:
 	ld	(xix+8), 30	; F0AE65  ld (XIX+0x08),0x1e
 	jr	sub_F0AE6B_Join	; F0AE69  jr T,0xf0ae6f
 
 ; --------------------------------------------------------------------------
-; sub_F0AE6B
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To1
 ; Called from: table 0xF0AE2F[10], 0xF0AE2F[11]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7435 0xFD7C01
@@ -20902,7 +20908,9 @@ sub_F0AE65:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AE6B:
+; SoftKeyCol1_SoundEditDigitalEffect_Range0To1: an arm of SoftKeyCol1_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 1 for type(s) 10,11
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol1_SoundEditDigitalEffect_Range0To1:
 	ld	(xix+8), 1	; F0AE6B  ld (XIX+0x08),0x01
 sub_F0AE6B_Join:
 	ld	(xix+9), 0	; F0AE6F  ld (XIX+0x09),0x00
@@ -20966,12 +20974,12 @@ SoftKeyCol2_SoundEditDigitalEffect:
 	cp	bc, 11	; F0AEE2  cp BC,0x000b
 	jrl	ugt, sub_F0AF36_Skip	; F0AEE6  jrl UGT,0xf0af62
 	sll	bc, 2	; F0AEE9  sll 0x02,BC
-	add	xbc, PtrTable_F0AEF6	; F0AEEC  add XBC,0x00f0aef6
+	add	xbc, SoftKeyCol2_SoundEditDigitalEffect_RangeByType	; F0AEEC  add XBC,0x00f0aef6
 	ld	xbc, (xbc)	; F0AEF2  ld XBC,(XBC)
 	jp	(xbc)	; F0AEF4  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0AEF6 -- 12 32-bit entries, all inside this block
+; SoftKeyCol2_SoundEditDigitalEffect_RangeByType -- 12 32-bit entries, all inside this block
 ;                    (0xF0AF26-0xF0AF36), naming 3 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -20984,23 +20992,25 @@ SoftKeyCol2_SoundEditDigitalEffect:
 ;           at 0xF0AF26.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0AEF6:
-	.long	sub_F0AF26	; F0AEF6  [0] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AEFA  [1] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AEFE  [2] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF02  [3] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF06  [4] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF0A  [5] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF0E  [6] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF12  [7] -> sub_F0AF26
-	.long	sub_F0AF2C	; F0AF16  [8] -> sub_F0AF2C
-	.long	sub_F0AF36	; F0AF1A  [9] -> sub_F0AF36
-	.long	sub_F0AF26	; F0AF1E  [10] -> sub_F0AF26
-	.long	sub_F0AF26	; F0AF22  [11] -> sub_F0AF26
+; SoftKeyCol2_SoundEditDigitalEffect_RangeByType: SoftKeyCol2_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 12 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol2_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AEF6  [0] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AEFA  [1] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AEFE  [2] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF02  [3] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF06  [4] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF0A  [5] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF0E  [6] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF12  [7] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50	; F0AF16  [8] -> SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To30	; F0AF1A  [9] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To30
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF1E  [10] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol2_SoundEditDigitalEffect_Range0To50	; F0AF22  [11] -> SoftKeyCol2_SoundEditDigitalEffect_Range0To50
 
 
 ; --------------------------------------------------------------------------
-; sub_F0AF26
+; SoftKeyCol2_SoundEditDigitalEffect_Range0To50
 ; Called from: table 0xF0AEF6[0], 0xF0AEF6[1], 0xF0AEF6[2], 0xF0AEF6[3],
 ;              0xF0AEF6[4], 0xF0AEF6[5] +4 more
 ; Touches: nothing with an absolute address
@@ -21010,12 +21020,14 @@ PtrTable_F0AEF6:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AF26:
+; SoftKeyCol2_SoundEditDigitalEffect_Range0To50: an arm of SoftKeyCol2_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 50 for type(s) 0,1,2,3,4,5,6,7,10,11
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol2_SoundEditDigitalEffect_Range0To50:
 	ld	(xix+8), 50	; F0AF26  ld (XIX+0x08),0x32
 	jr	sub_F0AF26_Skip	; F0AF2A  jr T,0xf0af3a
 
 ; --------------------------------------------------------------------------
-; sub_F0AF2C
+; SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50
 ; Called from: table 0xF0AEF6[8]
 ; Touches: nothing with an absolute address
 ; Evidence: word [8] of the pointer table at 0xF0AEF6 reads 0x00F0AF2C, that
@@ -21024,13 +21036,15 @@ sub_F0AF26:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AF2C:
+; SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50: an arm of SoftKeyCol2_SoundEditDigitalEffect_RangeByType -- MIN -50, MAX 50 for type(s) 8
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol2_SoundEditDigitalEffect_RangeM50To50:
 	ld	(xix+8), 50	; F0AF2C  ld (XIX+0x08),0x32
 	ld	(xix+9), 206	; F0AF30  ld (XIX+0x09),0xce
 	jr	sub_F0AF36_Join	; F0AF34  jr T,0xf0af3e
 
 ; --------------------------------------------------------------------------
-; sub_F0AF36
+; SoftKeyCol2_SoundEditDigitalEffect_Range0To30
 ; Called from: table 0xF0AEF6[9]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7435 0xFD7C01
@@ -21040,7 +21054,9 @@ sub_F0AF2C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AF36:
+; SoftKeyCol2_SoundEditDigitalEffect_Range0To30: an arm of SoftKeyCol2_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 30 for type(s) 9
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol2_SoundEditDigitalEffect_Range0To30:
 	ld	(xix+8), 30	; F0AF36  ld (XIX+0x08),0x1e
 sub_F0AF26_Skip:
 	ld	(xix+9), 0	; F0AF3A  ld (XIX+0x09),0x00
@@ -21105,12 +21121,12 @@ SoftKeyCol3_SoundEditDigitalEffect:
 	cp	bc, 11	; F0AFAD  cp BC,0x000b
 	jrl	ugt, sub_F0B011_Skip	; F0AFB1  jrl UGT,0xf0b03d
 	sll	bc, 2	; F0AFB4  sll 0x02,BC
-	add	xbc, PtrTable_F0AFC1	; F0AFB7  add XBC,0x00f0afc1
+	add	xbc, SoftKeyCol3_SoundEditDigitalEffect_RangeByType	; F0AFB7  add XBC,0x00f0afc1
 	ld	xbc, (xbc)	; F0AFBD  ld XBC,(XBC)
 	jp	(xbc)	; F0AFBF  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0AFC1 -- 12 32-bit entries, all inside this block
+; SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- 12 32-bit entries, all inside this block
 ;                    (0xF0AFF1-0xF0B011), naming 5 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -21123,23 +21139,25 @@ SoftKeyCol3_SoundEditDigitalEffect:
 ;           at 0xF0AFF1.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0AFC1:
-	.long	sub_F0AFF1	; F0AFC1  [0] -> sub_F0AFF1
-	.long	sub_F0AFF1	; F0AFC5  [1] -> sub_F0AFF1
-	.long	sub_F0AFF1	; F0AFC9  [2] -> sub_F0AFF1
-	.long	sub_F0AFF1	; F0AFCD  [3] -> sub_F0AFF1
-	.long	sub_F0AFFB	; F0AFD1  [4] -> sub_F0AFFB
-	.long	sub_F0AFFB	; F0AFD5  [5] -> sub_F0AFFB
-	.long	sub_F0B001	; F0AFD9  [6] -> sub_F0B001
-	.long	sub_F0AFFB	; F0AFDD  [7] -> sub_F0AFFB
-	.long	sub_F0B007	; F0AFE1  [8] -> sub_F0B007
-	.long	sub_F0B011	; F0AFE5  [9] -> sub_F0B011
-	.long	sub_F0AFFB	; F0AFE9  [10] -> sub_F0AFFB
-	.long	sub_F0AFFB	; F0AFED  [11] -> sub_F0AFFB
+; SoftKeyCol3_SoundEditDigitalEffect_RangeByType: SoftKeyCol3_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 12 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50	; F0AFC1  [0] -> SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50	; F0AFC5  [1] -> SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50	; F0AFC9  [2] -> SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50	; F0AFCD  [3] -> SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To50	; F0AFD1  [4] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To50	; F0AFD5  [5] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To3	; F0AFD9  [6] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To3
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To50	; F0AFDD  [7] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24	; F0AFE1  [8] -> SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To30	; F0AFE5  [9] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To30
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To50	; F0AFE9  [10] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol3_SoundEditDigitalEffect_Range0To50	; F0AFED  [11] -> SoftKeyCol3_SoundEditDigitalEffect_Range0To50
 
 
 ; --------------------------------------------------------------------------
-; sub_F0AFF1
+; SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50
 ; Called from: table 0xF0AFC1[0], 0xF0AFC1[1], 0xF0AFC1[2], 0xF0AFC1[3]
 ; Touches: nothing with an absolute address
 ; Evidence: word [0] of the pointer table at 0xF0AFC1 reads 0x00F0AFF1, that
@@ -21148,13 +21166,15 @@ PtrTable_F0AFC1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AFF1:
+; SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50: an arm of SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- MIN -50, MAX 50 for type(s) 0,1,2,3
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_RangeM50To50:
 	ld	(xix+8), 50	; F0AFF1  ld (XIX+0x08),0x32
 	ld	(xix+9), 206	; F0AFF5  ld (XIX+0x09),0xce
 	jr	sub_F0B011_Join2	; F0AFF9  jr T,0xf0b019
 
 ; --------------------------------------------------------------------------
-; sub_F0AFFB
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To50
 ; Called from: table 0xF0AFC1[4], 0xF0AFC1[5], 0xF0AFC1[7], 0xF0AFC1[10],
 ;              0xF0AFC1[11]
 ; Touches: nothing with an absolute address
@@ -21164,12 +21184,14 @@ sub_F0AFF1:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0AFFB:
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To50: an arm of SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 50 for type(s) 4,5,7,10,11
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_Range0To50:
 	ld	(xix+8), 50	; F0AFFB  ld (XIX+0x08),0x32
 	jr	sub_F0B011_Join	; F0AFFF  jr T,0xf0b015
 
 ; --------------------------------------------------------------------------
-; sub_F0B001
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To3
 ; Called from: table 0xF0AFC1[6]
 ; Touches: nothing with an absolute address
 ; Evidence: word [6] of the pointer table at 0xF0AFC1 reads 0x00F0B001, that
@@ -21178,12 +21200,14 @@ sub_F0AFFB:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B001:
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To3: an arm of SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 3 for type(s) 6
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_Range0To3:
 	ld	(xix+8), 3	; F0B001  ld (XIX+0x08),0x03
 	jr	sub_F0B011_Join	; F0B005  jr T,0xf0b015
 
 ; --------------------------------------------------------------------------
-; sub_F0B007
+; SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24
 ; Called from: table 0xF0AFC1[8]
 ; Touches: nothing with an absolute address
 ; Evidence: word [8] of the pointer table at 0xF0AFC1 reads 0x00F0B007, that
@@ -21192,13 +21216,15 @@ sub_F0B001:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B007:
+; SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24: an arm of SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- MIN -24, MAX 24 for type(s) 8
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_RangeM24To24:
 	ld	(xix+8), 24	; F0B007  ld (XIX+0x08),0x18
 	ld	(xix+9), 232	; F0B00B  ld (XIX+0x09),0xe8
 	jr	sub_F0B011_Join2	; F0B00F  jr T,0xf0b019
 
 ; --------------------------------------------------------------------------
-; sub_F0B011
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To30
 ; Called from: table 0xF0AFC1[9]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7435 0xFD7C01
@@ -21208,7 +21234,9 @@ sub_F0B007:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B011:
+; SoftKeyCol3_SoundEditDigitalEffect_Range0To30: an arm of SoftKeyCol3_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 30 for type(s) 9
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol3_SoundEditDigitalEffect_Range0To30:
 	ld	(xix+8), 30	; F0B011  ld (XIX+0x08),0x1e
 sub_F0B011_Join:
 	ld	(xix+9), 0	; F0B015  ld (XIX+0x09),0x00
@@ -21273,12 +21301,12 @@ SoftKeyCol4_SoundEditDigitalEffect:
 	cp	bc, 9	; F0B088  cp BC,0x0009
 	jr	ugt, sub_F0B0CF_Skip	; F0B08C  jr UGT,0xf0b0fb
 	sll	bc, 2	; F0B08E  sll 0x02,BC
-	add	xbc, PtrTable_F0B09B	; F0B091  add XBC,0x00f0b09b
+	add	xbc, SoftKeyCol4_SoundEditDigitalEffect_RangeByType	; F0B091  add XBC,0x00f0b09b
 	ld	xbc, (xbc)	; F0B097  ld XBC,(XBC)
 	jp	(xbc)	; F0B099  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0B09B -- 10 32-bit entries, all inside this block
+; SoftKeyCol4_SoundEditDigitalEffect_RangeByType -- 10 32-bit entries, all inside this block
 ;                    (0xF0B0C3-0xF0B0CF), naming 3 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -21291,21 +21319,23 @@ SoftKeyCol4_SoundEditDigitalEffect:
 ;           at 0xF0B0C3.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0B09B:
-	.long	sub_F0B0C3	; F0B09B  [0] -> sub_F0B0C3
-	.long	sub_F0B0C3	; F0B09F  [1] -> sub_F0B0C3
-	.long	sub_F0B0C3	; F0B0A3  [2] -> sub_F0B0C3
-	.long	sub_F0B0C3	; F0B0A7  [3] -> sub_F0B0C3
-	.long	sub_F0B0C3	; F0B0AB  [4] -> sub_F0B0C3
-	.long	sub_F0B0C3	; F0B0AF  [5] -> sub_F0B0C3
-	.long	sub_F0B0C9	; F0B0B3  [6] -> sub_F0B0C9
-	.long	sub_F0B0C3	; F0B0B7  [7] -> sub_F0B0C3
-	.long	sub_F0B0C9	; F0B0BB  [8] -> sub_F0B0C9
-	.long	sub_F0B0CF	; F0B0BF  [9] -> sub_F0B0CF
+; SoftKeyCol4_SoundEditDigitalEffect_RangeByType: SoftKeyCol4_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 10 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol4_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B09B  [0] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B09F  [1] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B0A3  [2] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B0A7  [3] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B0AB  [4] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B0AF  [5] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To100	; F0B0B3  [6] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To50	; F0B0B7  [7] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To50
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To100	; F0B0BB  [8] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol4_SoundEditDigitalEffect_Range0To30	; F0B0BF  [9] -> SoftKeyCol4_SoundEditDigitalEffect_Range0To30
 
 
 ; --------------------------------------------------------------------------
-; sub_F0B0C3
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To50
 ; Called from: table 0xF0B09B[0], 0xF0B09B[1], 0xF0B09B[2], 0xF0B09B[3],
 ;              0xF0B09B[4], 0xF0B09B[5] +1 more
 ; Touches: nothing with an absolute address
@@ -21315,12 +21345,14 @@ PtrTable_F0B09B:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B0C3:
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To50: an arm of SoftKeyCol4_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 50 for type(s) 0,1,2,3,4,5,7
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol4_SoundEditDigitalEffect_Range0To50:
 	ld	(xix+8), 50	; F0B0C3  ld (XIX+0x08),0x32
 	jr	sub_F0B0CF_Join	; F0B0C7  jr T,0xf0b0d3
 
 ; --------------------------------------------------------------------------
-; sub_F0B0C9
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To100
 ; Called from: table 0xF0B09B[6], 0xF0B09B[8]
 ; Touches: nothing with an absolute address
 ; Evidence: word [6] of the pointer table at 0xF0B09B reads 0x00F0B0C9, that
@@ -21329,12 +21361,14 @@ sub_F0B0C3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B0C9:
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To100: an arm of SoftKeyCol4_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 100 for type(s) 6,8
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol4_SoundEditDigitalEffect_Range0To100:
 	ld	(xix+8), 100	; F0B0C9  ld (XIX+0x08),0x64
 	jr	sub_F0B0CF_Join	; F0B0CD  jr T,0xf0b0d3
 
 ; --------------------------------------------------------------------------
-; sub_F0B0CF
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To30
 ; Called from: table 0xF0B09B[9]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7435 0xFD7C01
@@ -21344,7 +21378,9 @@ sub_F0B0C9:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B0CF:
+; SoftKeyCol4_SoundEditDigitalEffect_Range0To30: an arm of SoftKeyCol4_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 30 for type(s) 9
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol4_SoundEditDigitalEffect_Range0To30:
 	ld	(xix+8), 30	; F0B0CF  ld (XIX+0x08),0x1e
 sub_F0B0CF_Join:
 	ld	(xix+9), 0	; F0B0D3  ld (XIX+0x09),0x00
@@ -21408,12 +21444,12 @@ SoftKeyCol5_SoundEditDigitalEffect:
 	cp	bc, 5:i3	; F0B146  cp BC,5
 	jr	ugt, sub_F0B179_Skip	; F0B148  jr UGT,0xf0b1a5
 	sll	bc, 2	; F0B14A  sll 0x02,BC
-	add	xbc, PtrTable_F0B157	; F0B14D  add XBC,0x00f0b157
+	add	xbc, SoftKeyCol5_SoundEditDigitalEffect_RangeByType	; F0B14D  add XBC,0x00f0b157
 	ld	xbc, (xbc)	; F0B153  ld XBC,(XBC)
 	jp	(xbc)	; F0B155  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0B157 -- 6 32-bit entries, all inside this block
+; SoftKeyCol5_SoundEditDigitalEffect_RangeByType -- 6 32-bit entries, all inside this block
 ;                    (0xF0B16F-0xF0B179), naming 2 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -21426,17 +21462,19 @@ SoftKeyCol5_SoundEditDigitalEffect:
 ;           at 0xF0B16F.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0B157:
-	.long	sub_F0B16F	; F0B157  [0] -> sub_F0B16F
-	.long	sub_F0B16F	; F0B15B  [1] -> sub_F0B16F
-	.long	sub_F0B16F	; F0B15F  [2] -> sub_F0B16F
-	.long	sub_F0B16F	; F0B163  [3] -> sub_F0B16F
-	.long	sub_F0B179	; F0B167  [4] -> sub_F0B179
-	.long	sub_F0B179	; F0B16B  [5] -> sub_F0B179
+; SoftKeyCol5_SoundEditDigitalEffect_RangeByType: SoftKeyCol5_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 6 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol5_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol5_SoundEditDigitalEffect_Range0To100	; F0B157  [0] -> SoftKeyCol5_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol5_SoundEditDigitalEffect_Range0To100	; F0B15B  [1] -> SoftKeyCol5_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol5_SoundEditDigitalEffect_Range0To100	; F0B15F  [2] -> SoftKeyCol5_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol5_SoundEditDigitalEffect_Range0To100	; F0B163  [3] -> SoftKeyCol5_SoundEditDigitalEffect_Range0To100
+	.long	SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50	; F0B167  [4] -> SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50	; F0B16B  [5] -> SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50
 
 
 ; --------------------------------------------------------------------------
-; sub_F0B16F
+; SoftKeyCol5_SoundEditDigitalEffect_Range0To100
 ; Called from: table 0xF0B157[0], 0xF0B157[1], 0xF0B157[2], 0xF0B157[3]
 ; Touches: nothing with an absolute address
 ; Evidence: word [0] of the pointer table at 0xF0B157 reads 0x00F0B16F, that
@@ -21445,13 +21483,15 @@ PtrTable_F0B157:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B16F:
+; SoftKeyCol5_SoundEditDigitalEffect_Range0To100: an arm of SoftKeyCol5_SoundEditDigitalEffect_RangeByType -- MIN 0, MAX 100 for type(s) 0,1,2,3
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol5_SoundEditDigitalEffect_Range0To100:
 	ld	(xix+8), 100	; F0B16F  ld (XIX+0x08),0x64
 	ld	(xix+9), 0	; F0B173  ld (XIX+0x09),0x00
 	jr	sub_F0B179_Join	; F0B177  jr T,0xf0b181
 
 ; --------------------------------------------------------------------------
-; sub_F0B179
+; SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50
 ; Called from: table 0xF0B157[4], 0xF0B157[5]
 ; Touches: nothing with an absolute address
 ; Calls:   0xFD7435 0xFD7C01
@@ -21461,7 +21501,9 @@ sub_F0B16F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B179:
+; SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50: an arm of SoftKeyCol5_SoundEditDigitalEffect_RangeByType -- MIN -50, MAX 50 for type(s) 4,5
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol5_SoundEditDigitalEffect_RangeM50To50:
 	ld	(xix+8), 50	; F0B179  ld (XIX+0x08),0x32
 	ld	(xix+9), 206	; F0B17D  ld (XIX+0x09),0xce
 sub_F0B179_Join:
@@ -21587,14 +21629,14 @@ SoftKeyCol7_SoundEditDigitalEffect:
 	add	xsp, 18	; F0B267  add XSP,0x00000012
 	extz	xbc	; F0B26D  extz XBC
 	cp	bc, 11	; F0B26F  cp BC,0x000b
-	jr	ugt, sub_F0B2DE	; F0B273  jr UGT,0xf0b2de
+	jr	ugt, SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType	; F0B273  jr UGT,0xf0b2de
 	sll	bc, 2	; F0B275  sll 0x02,BC
-	add	xbc, PtrTable_F0B282	; F0B278  add XBC,0x00f0b282
+	add	xbc, SoftKeyCol7_SoundEditDigitalEffect_RangeByType	; F0B278  add XBC,0x00f0b282
 	ld	xbc, (xbc)	; F0B27E  ld XBC,(XBC)
 	jp	(xbc)	; F0B280  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0B282 -- 12 32-bit entries, all inside this block
+; SoftKeyCol7_SoundEditDigitalEffect_RangeByType -- 12 32-bit entries, all inside this block
 ;                    (0xF0B2B2-0xF0B2DE), naming 2 distinct targets.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -21607,23 +21649,25 @@ SoftKeyCol7_SoundEditDigitalEffect:
 ;           at 0xF0B2B2.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0B282:
-	.long	sub_F0B2B2	; F0B282  [0] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B286  [1] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B28A  [2] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B28E  [3] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B292  [4] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B296  [5] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B29A  [6] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B29E  [7] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B2A2  [8] -> sub_F0B2B2
-	.long	sub_F0B2B2	; F0B2A6  [9] -> sub_F0B2B2
-	.long	sub_F0B2DE	; F0B2AA  [10] -> sub_F0B2DE
-	.long	sub_F0B2B2	; F0B2AE  [11] -> sub_F0B2B2
+; SoftKeyCol7_SoundEditDigitalEffect_RangeByType: SoftKeyCol7_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 12 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol7_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B282  [0] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B286  [1] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B28A  [2] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B28E  [3] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B292  [4] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B296  [5] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B29A  [6] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B29E  [7] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B2A2  [8] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B2A6  [9] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType	; F0B2AA  [10] -> SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType
+	.long	SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50	; F0B2AE  [11] -> SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
 
 
 ; --------------------------------------------------------------------------
-; sub_F0B2B2
+; SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50
 ; Called from: table 0xF0B282[0], 0xF0B282[1], 0xF0B282[2], 0xF0B282[3],
 ;              0xF0B282[4], 0xF0B282[5] +5 more
 ; Touches: nothing with an absolute address
@@ -21634,7 +21678,9 @@ PtrTable_F0B282:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B2B2:
+; SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50: an arm of SoftKeyCol7_SoundEditDigitalEffect_RangeByType -- MIN -50, MAX 50 for type(s) 0,1,2,3,4,5,6,7,8,9,11
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol7_SoundEditDigitalEffect_RangeM50To50:
 	ld	(xix+8), 50	; F0B2B2  ld (XIX+0x08),0x32
 	ld	(xix+9), 206	; F0B2B6  ld (XIX+0x09),0xce
 	push	xix	; F0B2BA  push XIX
@@ -21652,7 +21698,7 @@ sub_F0B2B2:
 	inc	6, xsp	; F0B2DC  inc 6,XSP
 
 ; --------------------------------------------------------------------------
-; sub_F0B2DE
+; SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType
 ; Called from: table 0xF0B282[10]
 ; Touches: nothing with an absolute address
 ; Evidence: word [10] of the pointer table at 0xF0B282 reads 0x00F0B2DE, that
@@ -21661,7 +21707,9 @@ sub_F0B2B2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B2DE:
+; SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType: an arm of SoftKeyCol7_SoundEditDigitalEffect_RangeByType -- goes straight to the epilogue: type(s) 10 have no field on this key
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol7_SoundEditDigitalEffect_NoFieldForType:
 	pop	xix	; F0B2DE  pop XIX
 	unlk XIZ	; F0B2DF  unlk XIZ
 	ret	; F0B2E1  ret
@@ -21708,12 +21756,12 @@ SoftKeyCol8_SoundEditDigitalEffect:
 	cp	bc, 11	; F0B329  cp BC,0x000b
 	jr	ugt, sub_F0B36C_Skip	; F0B32D  jr UGT,0xf0b398
 	sll	bc, 2	; F0B32F  sll 0x02,BC
-	add	xbc, PtrTable_F0B33C	; F0B332  add XBC,0x00f0b33c
+	add	xbc, SoftKeyCol8_SoundEditDigitalEffect_RangeByType	; F0B332  add XBC,0x00f0b33c
 	ld	xbc, (xbc)	; F0B338  ld XBC,(XBC)
 	jp	(xbc)	; F0B33A  jp T,XBC
 
 ; --------------------------------------------------------------------------
-; PtrTable_F0B33C -- 12 32-bit entries, all inside this block
+; SoftKeyCol8_SoundEditDigitalEffect_RangeByType -- 12 32-bit entries, all inside this block
 ;                    (0xF0B36C-0xF0B36C), naming 1 distinct target.  A jump
 ;                    table, not a call table: the reader ends `ld XBC,(XBC) /
 ;                    jp (XBC)`.
@@ -21726,23 +21774,25 @@ SoftKeyCol8_SoundEditDigitalEffect:
 ;           at 0xF0B36C.
 ; Unknown: what the index enumerates.  FRAMED name kept.
 ; --------------------------------------------------------------------------
-PtrTable_F0B33C:
-	.long	sub_F0B36C	; F0B33C  [0] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B340  [1] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B344  [2] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B348  [3] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B34C  [4] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B350  [5] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B354  [6] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B358  [7] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B35C  [8] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B360  [9] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B364  [10] -> sub_F0B36C
-	.long	sub_F0B36C	; F0B368  [11] -> sub_F0B36C
+; SoftKeyCol8_SoundEditDigitalEffect_RangeByType: SoftKeyCol8_SoundEditDigitalEffect's switch on the DIGITAL EFFECT type (Arr27A6[0] & 0x0F), 12 entries; each arm
+;   sets the edit descriptor's MIN / MAX for that type (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol8_SoundEditDigitalEffect_RangeByType:
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B33C  [0] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B340  [1] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B344  [2] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B348  [3] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B34C  [4] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B350  [5] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B354  [6] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B358  [7] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B35C  [8] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B360  [9] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B364  [10] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
+	.long	SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50	; F0B368  [11] -> SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
 
 
 ; --------------------------------------------------------------------------
-; sub_F0B36C
+; SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50
 ; Called from: table 0xF0B33C[0], 0xF0B33C[1], 0xF0B33C[2], 0xF0B33C[3],
 ;              0xF0B33C[4], 0xF0B33C[5] +6 more
 ; Touches: nothing with an absolute address
@@ -21753,7 +21803,9 @@ PtrTable_F0B33C:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F0B36C:
+; SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50: an arm of SoftKeyCol8_SoundEditDigitalEffect_RangeByType -- MIN -50, MAX 50 for type(s) 0,1,2,3,4,5,6,7,8,9,10,11
+;   (notes/prom_b_digital_effect_key_ranges.py).
+SoftKeyCol8_SoundEditDigitalEffect_RangeM50To50:
 	ld	(xix+8), 50	; F0B36C  ld (XIX+0x08),0x32
 	ld	(xix+9), 206	; F0B370  ld (XIX+0x09),0xce
 	push	xix	; F0B374  push XIX
