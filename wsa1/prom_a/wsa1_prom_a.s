@@ -52319,7 +52319,7 @@ ReMapEdit_AssignSourceToReMap:
 	ret                                                  ; F9C9F3  0e
 ; Screen_SoundCombinationManager_Enter -- Enter (+0) method of screen 0x6D: restarts task 2's callback queue and posts the painter of the SOUND/COMBINATION MANAGER menu
 ; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_Screen_SoundCombinationManager_Enter; prom_b T_Screen_SoundCombinationManager_Enter/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
-; Evidence: posts .LF9CAE0 (T_CallbackQueue_Post + T_Kernel_SemaSignal_StackArg 1), which runs DisplayList_FA353B-FA3678 on layer 2: title 'SOUND/COMBINATION MANAGER', items SOUND GROUP NAMING / DATA LOAD FILTER / COMBI.GROUP NAMING / MEMORY PROTECT / SOUND COPY / SOUND MUTE / COMBINATION COPY.
+; Evidence: posts .LF9CAE0 (T_CallbackQueue_Post + T_Kernel_SemaSignal_StackArg 1), which runs DL_SoundCombinationManagerSystem-FA3678 on layer 2: title 'SOUND/COMBINATION MANAGER', items SOUND GROUP NAMING / DATA LOAD FILTER / COMBI.GROUP NAMING / MEMORY PROTECT / SOUND COPY / SOUND MUTE / COMBINATION COPY.
 ; Screen id 0x6D is what Screen_System's row-3 right key requests (0xF9FF95).
 Screen_SoundCombinationManager_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9C9F4  1d 80 2e f4
@@ -52334,7 +52334,7 @@ T_F4197C_Nop:
 	ret                                                  ; F9CA0C  0e
 ; Screen_SoundCombinationManager_Button -- Button (+8) method: maps the panel code to a slot (T_F42C74 = PanelCode_ToSlotAndFlags) and jumps through HandlerTable23_FA1712
 ; Evidence: PanelScreen_VtableTable_ViewB [109] (0xF870F5) = T_Screen_SoundCombinationManager_Enter; prom_b T_Screen_SoundCombinationManager_Enter/7C/80/84 jp 0xF9C9F4/0xF9CA0C/0xF9CA0D/0xF9CA34.
-; Slots 9-12 (LCD-row pairs 2-5) request screens 0x5B/0x61, 0x5C/0x6E, 0x5E/0x5D, 0x5F (left/right labels of DisplayList_FA353B); slot 15 (EXIT) requests 0x60 (SYSTEM).
+; Slots 9-12 (LCD-row pairs 2-5) request screens 0x5B/0x61, 0x5C/0x6E, 0x5E/0x5D, 0x5F (left/right labels of DL_SoundCombinationManagerSystem); slot 15 (EXIT) requests 0x60 (SYSTEM).
 Screen_SoundCombinationManager_Button:
 	link XIZ,0x0000                                      ; F9CA0D  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9CA11  9e 0a 04
@@ -52430,9 +52430,9 @@ T_F41984_Nop:
 .LF9CAE0:
 	call T_F42E10                                        ; F9CAE0  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F9CAE4  f1 40 25 00 02
-	lda xbc, (DisplayList_FA3678:24)                     ; F9CAE9  f2 78 36 fa 31
+	lda xbc, (DL_SoundGroupNaming:24)                     ; F9CAE9  f2 78 36 fa 31
 	push XBC                                             ; F9CAEE  39
-	lda xwa, (DisplayList_FA353B:24)                     ; F9CAEF  f2 3b 35 fa 30
+	lda xwa, (DL_SoundCombinationManagerSystem:24)                     ; F9CAEF  f2 3b 35 fa 30
 	push XWA                                             ; F9CAF4  38
 	call T_DisplayList_Run_Stack                         ; F9CAF5  1d 00 2e f4
 	call T_F42E14                                        ; F9CAF9  1d 14 2e f4
@@ -52906,15 +52906,15 @@ sub_F9CC9F:
 Paint_SoundGroupNaming:
 	call T_F42E10                                        ; F9CDE4  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9CDE8  f1 40 25 00 00
-	lda xbc, (DisplayList_FA3690:24)                     ; F9CDED  f2 90 36 fa 31
+	lda xbc, (DL_SoundGroupNamingSystemWrite:24)                     ; F9CDED  f2 90 36 fa 31
 	push XBC                                             ; F9CDF2  39
-	lda xwa, (DisplayList_FA3678:24)                     ; F9CDF3  f2 78 36 fa 30
+	lda xwa, (DL_SoundGroupNaming:24)                     ; F9CDF3  f2 78 36 fa 30
 	push XWA                                             ; F9CDF8  38
 	call T_DisplayList_Run_Stack                         ; F9CDF9  1d 00 2e f4
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F9CDFD  f1 40 25 00 02
 	lda xbc, (DisplayList_FA377A:24)                     ; F9CE02  f2 7a 37 fa 31
 	push XBC                                             ; F9CE07  39
-	lda xwa, (DisplayList_FA36E0:24)                     ; F9CE08  f2 e0 36 fa 30
+	lda xwa, (DL_SystemNamingBankGroup:24)                     ; F9CE08  f2 e0 36 fa 30
 	push XWA                                             ; F9CE0D  38
 	call T_DisplayList_Run_Stack                         ; F9CE0E  1d 00 2e f4
 	call T_F42E14                                        ; F9CE12  1d 14 2e f4
@@ -52950,9 +52950,9 @@ Paint_SoundGroupNaming:
 ; ---------------------------------------------------------------------
 Paint_SoundGroupNamingWrite:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9CE1B  f1 40 25 00 00
-	lda xbc, (DisplayList_FA36E0:24)                     ; F9CE20  f2 e0 36 fa 31
+	lda xbc, (DL_SystemNamingBankGroup:24)                     ; F9CE20  f2 e0 36 fa 31
 	push XBC                                             ; F9CE25  39
-	lda xwa, (DisplayList_FA3690:24)                     ; F9CE26  f2 90 36 fa 30
+	lda xwa, (DL_SoundGroupNamingSystemWrite:24)                     ; F9CE26  f2 90 36 fa 30
 	push XWA                                             ; F9CE2B  38
 	call T_DisplayList_Run_Stack                         ; F9CE2C  1d 00 2e f4
 	inc 8,XSP                                            ; F9CE30  ef 60
@@ -53554,15 +53554,15 @@ CombinationGroupNaming_AdjustGroup:
 Paint_CombinationGroupNaming:
 	call T_F42E10                                        ; F9D24C  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9D250  f1 40 25 00 00
-	lda xbc, (DisplayList_FA39FC:24)                     ; F9D255  f2 fc 39 fa 31
+	lda xbc, (DL_CombinationGroupNamingSystem:24)                     ; F9D255  f2 fc 39 fa 31
 	push XBC                                             ; F9D25A  39
-	lda xwa, (DisplayList_FA39DE:24)                     ; F9D25B  f2 de 39 fa 30
+	lda xwa, (DL_CombinationGroupNaming:24)                     ; F9D25B  f2 de 39 fa 30
 	push XWA                                             ; F9D260  38
 	call T_DisplayList_Run_Stack                         ; F9D261  1d 00 2e f4
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F9D265  f1 40 25 00 02
 	lda xbc, (DisplayList_FA377A:24)                     ; F9D26A  f2 7a 37 fa 31
 	push XBC                                             ; F9D26F  39
-	lda xwa, (DisplayList_FA36E0:24)                     ; F9D270  f2 e0 36 fa 30
+	lda xwa, (DL_SystemNamingBankGroup:24)                     ; F9D270  f2 e0 36 fa 30
 	push XWA                                             ; F9D275  38
 	call T_DisplayList_Run_Stack                         ; F9D276  1d 00 2e f4
 	call T_F42E14                                        ; F9D27A  1d 14 2e f4
@@ -53600,7 +53600,7 @@ Paint_CombinationGroupNamingWrite:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9D283  f1 40 25 00 00
 	lda xbc, (DisplayList_FA3A52:24)                     ; F9D288  f2 52 3a fa 31
 	push XBC                                             ; F9D28D  39
-	lda xwa, (DisplayList_FA39FC:24)                     ; F9D28E  f2 fc 39 fa 30
+	lda xwa, (DL_CombinationGroupNamingSystem:24)                     ; F9D28E  f2 fc 39 fa 30
 	push XWA                                             ; F9D293  38
 	call T_DisplayList_Run_Stack                         ; F9D294  1d 00 2e f4
 	inc 8,XSP                                            ; F9D298  ef 60
@@ -54390,7 +54390,7 @@ JumpTable_F9D966:
 	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D97E  [  6]
 	.long Paint_ErrorImpossibleCopyDrumKit                                 ; F9D982  [  7]
 ; Paint_SoundCopyGroup -- paints SOUND COPY in GROUP mode ((0x269A)=0): the 'GROUP/SINGLE' legend and the BANK/GROUP-to-BANK/GROUP layout
-; Evidence: JumpTable_F9D966 entry 0; layer 0 DisplayList_FA3BA8-FA3BD1 ('GROUP/SINGLE'), layer 2 DisplayList_FA3A9C-FA3BA8 ('SOUND COPY','SYSTEM','OK','BANK','GROUP','GROUP','BANK'); shares the tail .LF9DA04 of Paint_SoundCopy.
+; Evidence: JumpTable_F9D966 entry 0; layer 0 DisplayList_FA3BA8-FA3BD1 ('GROUP/SINGLE'), layer 2 DL_SoundCopySystemOkBankGroup-FA3BA8 ('SOUND COPY','SYSTEM','OK','BANK','GROUP','GROUP','BANK'); shares the tail .LF9DA04 of Paint_SoundCopy.
 Paint_SoundCopyGroup:   ; entry: named by 1 `.long` operand, first at 0xF9D966
 	ld (XIX),0x00                                        ; F9D986  b4 00 00
 	lda xbc, (DisplayList_FA3BD1:24)                     ; F9D989  f2 d1 3b fa 31
@@ -54402,7 +54402,7 @@ Paint_SoundCopyGroup:   ; entry: named by 1 `.long` operand, first at 0xF9D966
 	inc 8,XSP                                            ; F9D99C  ef 60
 	lda xbc, (DisplayList_FA3BA8:24)                     ; F9D99E  f2 a8 3b fa 31
 	push XBC                                             ; F9D9A3  39
-	lda xwa, (DisplayList_FA3A9C:24)                     ; F9D9A4  f2 9c 3a fa 30
+	lda xwa, (DL_SoundCopySystemOkBankGroup:24)                     ; F9D9A4  f2 9c 3a fa 30
 	push XWA                                             ; F9D9A9  38
 	jr .LF9DA04                                          ; F9D9AA  68 58
 ; Paint_SoundCopySingle -- paints SOUND COPY in SINGLE mode ((0x269A)=1): the legend and the BANK/GROUP/SOUND layout of both columns
@@ -54425,7 +54425,7 @@ Paint_SoundCopySingle:   ; entry: named by 1 `.long` operand, first at 0xF9D96A
 ; Evidence: JumpTable_F9D966 entries 2-3; layer 0 DisplayList_FA3BD1-FA3C39 ('SOUND COPY','The memory to which you','are copying will be','overwritten.') then DisplayList_FA302F-FA30A6 ('YES','NO','ATTENTI0N!','Are You Sure?').
 Paint_SoundCopyAreYouSure:   ; entry: named by 2 `.long` operands, first at 0xF9D96E
 	ld (XIX),0x00                                        ; F9D9D2  b4 00 00
-	lda xbc, (DisplayList_FA3C39:24)                     ; F9D9D5  f2 39 3c fa 31
+	lda xbc, (DL_ErrorItIsImpossibleToCopyADrumKit:24)                     ; F9D9D5  f2 39 3c fa 31
 	push XBC                                             ; F9D9DA  39
 	lda xwa, (DisplayList_FA3BD1:24)                     ; F9D9DB  f2 d1 3b fa 30
 	push XWA                                             ; F9D9E0  38
@@ -54437,13 +54437,13 @@ Paint_SoundCopyAreYouSure:   ; entry: named by 2 `.long` operands, first at 0xF9
 	push XWA                                             ; F9D9F2  38
 	jr .LF9DA04                                          ; F9D9F3  68 0f
 ; Paint_ErrorImpossibleCopyDrumKit -- paints SOUND COPY's error page ((0x269A) bit 2 set): 'ERROR! It is impossible to copy a Drum Kit.'
-; Evidence: JumpTable_F9D966 entries 4-7; layer 0 DisplayList_FA3C39-FA3CA0 ('ERROR!','It is impossible to copy a Drum Kit.','Please select a Sound other than a','Drum Kit.'); same naming pattern as Paint_ErrorImpossibleDrumMap.
+; Evidence: JumpTable_F9D966 entries 4-7; layer 0 DL_ErrorItIsImpossibleToCopyADrumKit-FA3CA0 ('ERROR!','It is impossible to copy a Drum Kit.','Please select a Sound other than a','Drum Kit.'); same naming pattern as Paint_ErrorImpossibleDrumMap.
 ; The state is set by SoundCopy_Execute (0xF9DEEC) when SoundCopy_ReadExtGroupDrumFlag is non-zero.
 Paint_ErrorImpossibleCopyDrumKit:   ; entry: named by 4 `.long` operands, first at 0xF9D976
 	ld (XIX),0x00                                        ; F9D9F5  b4 00 00
 	lda xbc, (DisplayList_FA3CA0:24)                     ; F9D9F8  f2 a0 3c fa 31
 	push XBC                                             ; F9D9FD  39
-	lda xwa, (DisplayList_FA3C39:24)                     ; F9D9FE  f2 39 3c fa 30
+	lda xwa, (DL_ErrorItIsImpossibleToCopyADrumKit:24)                     ; F9D9FE  f2 39 3c fa 30
 	push XWA                                             ; F9DA03  38
 .LF9DA04:
 	call T_DisplayList_Run_Stack                         ; F9DA04  1d 00 2e f4
@@ -55682,9 +55682,9 @@ Paint_CombinationCopy:
 	jp (xix)                                             ; F9E555  b4 d8
 .LF9E557:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; F9E557  f1 40 25 00 02
-	lda xbc, (DisplayList_FA3A9C+0xE6:24)                ; F9E55C  f2 82 3b fa 31
+	lda xbc, (DL_SoundCopySystemOkBankGroup+0xE6:24)                ; F9E55C  f2 82 3b fa 31
 	push XBC                                             ; F9E561  39
-	lda xwa, (DisplayList_FA3A9C:24)                     ; F9E562  f2 9c 3a fa 30
+	lda xwa, (DL_SoundCopySystemOkBankGroup:24)                     ; F9E562  f2 9c 3a fa 30
 	push XWA                                             ; F9E567  38
 	lda xiy, (.LF9E570:24)                               ; F9E568  f2 70 e5 f9 35
 	push XIY                                             ; F9E56D  3d
@@ -56341,7 +56341,7 @@ CombinationCopy_Execute:
 	ret                                                  ; F9EB74  0e
 ; Screen_DataLoadFilter_Enter -- Enter (+0) method of screen 0x61, DATA LOAD FILTER: resets the item cursor (0x26A5) on a new entry and posts the painter, value and cursor callbacks
 ; Evidence: PanelScreen_VtableTable_ViewB [97] (0xF870C5) = T_Screen_DataLoadFilter_Enter; prom_b T_Screen_DataLoadFilter_Enter/9C/A0/A4 jp 0xF9EB75/0xF9EBED/0xF9EBEE/0xF9EC15.
-; Evidence: posts .LF9ECE0 (DisplayList_FA427B-FA43C9: 'DATA LOAD FILTER', 'EFFECT & OUTPUT :', 'R.T.CREATOR 1_6 :', 'OCTAVE', 'MIDI SETTING', 'KEY&VEL LAYER', 'MAIN OUT EQ', 'KEY SCALING'), .LF9ED00 (values) and .LF9ED18 (cursor); id 0x61 = MANAGER's 'DATA LOAD FILTER' key (0xF9CA54).
+; Evidence: posts .LF9ECE0 (DL_DataLoadFilterSystemOverall-FA43C9: 'DATA LOAD FILTER', 'EFFECT & OUTPUT :', 'R.T.CREATOR 1_6 :', 'OCTAVE', 'MIDI SETTING', 'KEY&VEL LAYER', 'MAIN OUT EQ', 'KEY SCALING'), .LF9ED00 (values) and .LF9ED18 (cursor); id 0x61 = MANAGER's 'DATA LOAD FILTER' key (0xF9CA54).
 Screen_DataLoadFilter_Enter:
 	push XIX                                             ; F9EB75  3c
 	lda xix, (T_Kernel_SemaSignal_StackArg:24)           ; F9EB76  f2 c0 2d f4 34
@@ -56452,13 +56452,13 @@ JumpTable_F9EC58:
 	.long DataLoadFilter_SetMainOutEq                                 ; F9EC6C  [  5]
 	.long DataLoadFilter_SetKeyScaling                                 ; F9EC70  [  6]
 ; DataLoadFilter_AdjustEffectOutput -- steps the 'EFFECT & OUTPUT' load filter (OFF / COMBI / SOUND&COMBI) through IndexedParam_AdjustField
-; Evidence: entry 0 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 0 of 0xFA443D lies on the 'EFFECT & OUTPUT :' row of DisplayList_FA427B; pushes Descriptor9_FA1B2D (+0=2, mask 0x0F, max 2) and index 0x7A; record FA43C9 shows var 0x7EE4 & 0x0F from 'OFF','COMBI','SOUND&COMBI'.
+; Evidence: entry 0 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 0 of 0xFA443D lies on the 'EFFECT & OUTPUT :' row of DL_DataLoadFilterSystemOverall; pushes Descriptor9_FA1B2D (+0=2, mask 0x0F, max 2) and index 0x7A; record FA43C9 shows var 0x7EE4 & 0x0F from 'OFF','COMBI','SOUND&COMBI'.
 DataLoadFilter_AdjustEffectOutput:   ; entry: named by 1 `.long` operand, first at 0xF9EC58
 	lda xbc, (Descriptor9_FA1B2D:24)                     ; F9EC74  f2 2d 1b fa 31
 	push XBC                                             ; F9EC79  39
 	jr .LF9EC82                                          ; F9EC7A  68 06
 ; DataLoadFilter_AdjustRtCreator -- steps the 'R.T.CREATOR 1_6' load filter through IndexedParam_AdjustField
-; Evidence: entry 1 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 1 of 0xFA443D lies on the 'R.T.CREATOR 1_6 :' row of DisplayList_FA427B; Descriptor9_FA1B36 (+0=2, mask 0xF0, shift 4, max 2) with index 0x7A; record FA43D8 shows var 0x7EE4 >> 4.
+; Evidence: entry 1 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 1 of 0xFA443D lies on the 'R.T.CREATOR 1_6 :' row of DL_DataLoadFilterSystemOverall; Descriptor9_FA1B36 (+0=2, mask 0xF0, shift 4, max 2) with index 0x7A; record FA43D8 shows var 0x7EE4 >> 4.
 DataLoadFilter_AdjustRtCreator:   ; entry: named by 1 `.long` operand, first at 0xF9EC5C
 	lda xbc, (Descriptor9_FA1B36:24)                     ; F9EC7C  f2 36 1b fa 31
 	push XBC                                             ; F9EC81  39
@@ -56469,31 +56469,31 @@ DataLoadFilter_AdjustRtCreator:   ; entry: named by 1 `.long` operand, first at 
 	inc 6,XSP                                            ; F9EC89  ef 66
 	jr .LF9ECBC                                          ; F9EC8B  68 2f
 ; DataLoadFilter_SetOctave -- sets or clears the 'OCTAVE' load-filter bit (0x7F07 bit 2) according to which key of the pair was pressed
-; Evidence: entry 2 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 2 of 0xFA443D lies on the 'OCTAVE' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B3F) forces bit mask 0x04 on/off by pair position; record FA43E7 shows var 0x7F07 bit 2 as 'ON '/'OFF'.
+; Evidence: entry 2 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 2 of 0xFA443D lies on the 'OCTAVE' row of DL_DataLoadFilterSystemOverall; IndexedParam_SetBit(0x98, Descriptor3_FA1B3F) forces bit mask 0x04 on/off by pair position; record FA43E7 shows var 0x7F07 bit 2 as 'ON '/'OFF'.
 DataLoadFilter_SetOctave:   ; entry: named by 1 `.long` operand, first at 0xF9EC60
 	lda xbc, (Descriptor3_FA1B3F:24)                     ; F9EC8D  f2 3f 1b fa 31
 	push XBC                                             ; F9EC92  39
 	jr .LF9ECB3                                          ; F9EC93  68 1e
 ; DataLoadFilter_SetMidiSetting -- sets or clears the 'MIDI SETTING' load-filter bit (0x7F07 bit 1)
-; Evidence: entry 3 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 3 of 0xFA443D lies on the 'MIDI SETTING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B42) forces bit mask 0x02 on/off by pair position; record FA43F6 shows var 0x7F07 bit 1 as 'ON '/'OFF'.
+; Evidence: entry 3 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 3 of 0xFA443D lies on the 'MIDI SETTING' row of DL_DataLoadFilterSystemOverall; IndexedParam_SetBit(0x98, Descriptor3_FA1B42) forces bit mask 0x02 on/off by pair position; record FA43F6 shows var 0x7F07 bit 1 as 'ON '/'OFF'.
 DataLoadFilter_SetMidiSetting:   ; entry: named by 1 `.long` operand, first at 0xF9EC64
 	lda xbc, (Descriptor3_FA1B42:24)                     ; F9EC95  f2 42 1b fa 31
 	push XBC                                             ; F9EC9A  39
 	jr .LF9ECB3                                          ; F9EC9B  68 16
 ; DataLoadFilter_SetKeyVelLayer -- sets or clears the 'KEY&VEL LAYER' load-filter bit (0x7F07 bit 0)
-; Evidence: entry 4 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 4 of 0xFA443D lies on the 'KEY&VEL LAYER' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B45) forces bit mask 0x01 on/off by pair position; record FA4405 shows var 0x7F07 bit 0 as 'ON '/'OFF'.
+; Evidence: entry 4 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 4 of 0xFA443D lies on the 'KEY&VEL LAYER' row of DL_DataLoadFilterSystemOverall; IndexedParam_SetBit(0x98, Descriptor3_FA1B45) forces bit mask 0x01 on/off by pair position; record FA4405 shows var 0x7F07 bit 0 as 'ON '/'OFF'.
 DataLoadFilter_SetKeyVelLayer:   ; entry: named by 1 `.long` operand, first at 0xF9EC68
 	lda xbc, (Descriptor3_FA1B45:24)                     ; F9EC9D  f2 45 1b fa 31
 	push XBC                                             ; F9ECA2  39
 	jr .LF9ECB3                                          ; F9ECA3  68 0e
 ; DataLoadFilter_SetMainOutEq -- sets or clears the 'MAIN OUT EQ' load-filter bit (0x7F07 bit 3)
-; Evidence: entry 5 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 5 of 0xFA443D lies on the 'MAIN OUT EQ' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B48) forces bit mask 0x08 on/off by pair position; record FA4414 shows var 0x7F07 bit 3 as 'ON '/'OFF'.
+; Evidence: entry 5 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 5 of 0xFA443D lies on the 'MAIN OUT EQ' row of DL_DataLoadFilterSystemOverall; IndexedParam_SetBit(0x98, Descriptor3_FA1B48) forces bit mask 0x08 on/off by pair position; record FA4414 shows var 0x7F07 bit 3 as 'ON '/'OFF'.
 DataLoadFilter_SetMainOutEq:   ; entry: named by 1 `.long` operand, first at 0xF9EC6C
 	lda xbc, (Descriptor3_FA1B48:24)                     ; F9ECA5  f2 48 1b fa 31
 	push XBC                                             ; F9ECAA  39
 	jr .LF9ECB3                                          ; F9ECAB  68 06
 ; DataLoadFilter_SetKeyScaling -- sets or clears the 'KEY SCALING' load-filter bit (0x7F07 bit 4)
-; Evidence: entry 6 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 6 of 0xFA443D lies on the 'KEY SCALING' row of DisplayList_FA427B; IndexedParam_SetBit(0x98, Descriptor3_FA1B4B) forces bit mask 0x10 on/off by pair position; record FA4423 shows var 0x7F07 bit 4 as 'ON '/'OFF'.
+; Evidence: entry 6 of JumpTable_F9EC58, indexed by the item cursor (0x26A5) whose box 6 of 0xFA443D lies on the 'KEY SCALING' row of DL_DataLoadFilterSystemOverall; IndexedParam_SetBit(0x98, Descriptor3_FA1B4B) forces bit mask 0x10 on/off by pair position; record FA4423 shows var 0x7F07 bit 4 as 'ON '/'OFF'.
 ; Note: the label's extent runs on through the shared tail .LF9ECB3, the EXIT handler 0xF9ECBD and the paint callbacks .LF9ECE0-.LF9ED18.
 DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0xF9EC70
 	lda xbc, (Descriptor3_FA1B4B:24)                     ; F9ECAD  f2 4b 1b fa 31
@@ -56522,7 +56522,7 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9ECE4  f1 40 25 00 00
 	lda xbc, (DisplayList_FA43C9:24)                     ; F9ECE9  f2 c9 43 fa 31
 	push XBC                                             ; F9ECEE  39
-	lda xwa, (DisplayList_FA427B:24)                     ; F9ECEF  f2 7b 42 fa 30
+	lda xwa, (DL_DataLoadFilterSystemOverall:24)                     ; F9ECEF  f2 7b 42 fa 30
 	push XWA                                             ; F9ECF4  38
 	call T_DisplayList_Run_Stack                         ; F9ECF5  1d 00 2e f4
 	call T_F42E14                                        ; F9ECF9  1d 14 2e f4
@@ -56549,7 +56549,7 @@ DataLoadFilter_SetKeyScaling:   ; entry: named by 1 `.long` operand, first at 0x
 	ret                                                  ; F9ED33  0e
 ; Screen_MemoryProtect_Enter -- Enter (+0) method of screen 0x6E, MEMORY PROTECT: resets the cursor (0x26A6) on a new entry and posts the painter, value and cursor callbacks
 ; Evidence: PanelScreen_VtableTable_ViewB [110] (0xF870F9) = T_Screen_MemoryProtect_Enter; prom_b T_Screen_MemoryProtect_Enter/8C/90/94 jp 0xF9ED34/0xF9EDA1/0xF9EDA2/0xF9EDC9.
-; Evidence: posts .LF9EE57 (DisplayList_FA44E8-FA458F: 'MEMORY PROTECT', 'SOUND :', 'COMBINATION :'), .LF9EE77 (records FA458F/FA459E: (0x7FD6) bits 0/1 as OFF/ON) and .LF9EE8F (cursor on (0x26A6)); id 0x6E = MANAGER's 'MEMORY PROTECT' key (0xF9CA7B).
+; Evidence: posts .LF9EE57 (DL_MemoryProtectSystemSound-FA458F: 'MEMORY PROTECT', 'SOUND :', 'COMBINATION :'), .LF9EE77 (records FA458F/FA459E: (0x7FD6) bits 0/1 as OFF/ON) and .LF9EE8F (cursor on (0x26A6)); id 0x6E = MANAGER's 'MEMORY PROTECT' key (0xF9CA7B).
 ; Note: sub_F9ED44 (the `ld (0x26a6),0` after `jr z` at 0xF9ED42) is a label inside this routine, not a separate entry.
 Screen_MemoryProtect_Enter:
 	push XIX                                             ; F9ED34  3c
@@ -56681,7 +56681,7 @@ T_F41994_Nop:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9EE5B  f1 40 25 00 00
 	lda xbc, (DisplayList_FA458F:24)                     ; F9EE60  f2 8f 45 fa 31
 	push XBC                                             ; F9EE65  39
-	lda xwa, (DisplayList_FA44E8:24)                     ; F9EE66  f2 e8 44 fa 30
+	lda xwa, (DL_MemoryProtectSystemSound:24)                     ; F9EE66  f2 e8 44 fa 30
 	push XWA                                             ; F9EE6B  38
 	call T_DisplayList_Run_Stack                         ; F9EE6C  1d 00 2e f4
 	call T_F42E14                                        ; F9EE70  1d 14 2e f4
@@ -56708,7 +56708,7 @@ T_F41994_Nop:
 	ret                                                  ; F9EEAA  0e
 ; Screen_SoundMute_Enter -- Enter (+0) method of screen 0x5D, SOUND MUTE: posts the painter (unless only a refresh is pending) and the ON/OFF value callback
 ; Evidence: PanelScreen_VtableTable_ViewB [93] (0xF870B5) = T_Screen_SoundMute_Enter; prom_b T_Screen_SoundMute_Enter/C4/C8/CC jp 0xF9EEAB/0xF9EEDF/0xF9EEE0/0xF9EF07.
-; Evidence: .LF9EF3B runs DisplayList_FA45D2-FA46B4 ('SOUND MUTE', 'If you want held notes to continue ... Please turn off Sound Mute.', 'SOUND MUTE :'); .LF9EF5B runs record FA46B4 ((0x7F0B) bit 0 as 'ON '/'OFF'); id 0x5D = MANAGER's 'SOUND MUTE' key (0xF9CAA2).
+; Evidence: .LF9EF3B runs DL_SoundMuteSystemIfYouWantHeldNotesToContinue-FA46B4 ('SOUND MUTE', 'If you want held notes to continue ... Please turn off Sound Mute.', 'SOUND MUTE :'); .LF9EF5B runs record FA46B4 ((0x7F0B) bit 0 as 'ON '/'OFF'); id 0x5D = MANAGER's 'SOUND MUTE' key (0xF9CAA2).
 Screen_SoundMute_Enter:
 	ld c, (UI_ScreenFlags:16)                                   ; F9EEAB  c1 95 20 23
 	and C,0x10                                           ; F9EEAF  cb cc 10
@@ -56774,7 +56774,7 @@ T_F434CC_Nop:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9EF3F  f1 40 25 00 00
 	lda xbc, (DisplayList_FA46B4:24)                     ; F9EF44  f2 b4 46 fa 31
 	push XBC                                             ; F9EF49  39
-	lda xwa, (DisplayList_FA45D2:24)                     ; F9EF4A  f2 d2 45 fa 30
+	lda xwa, (DL_SoundMuteSystemIfYouWantHeldNotesToContinue:24)                     ; F9EF4A  f2 d2 45 fa 30
 	push XWA                                             ; F9EF4F  38
 	call T_DisplayList_Run_Stack                         ; F9EF50  1d 00 2e f4
 	call T_F42E14                                        ; F9EF54  1d 14 2e f4
@@ -56789,14 +56789,14 @@ T_F434CC_Nop:
 	ret                                                  ; F9EF6B  0e
 ; Screen_MainOutEqualizer_Enter -- Enter (+0) method of screen 0x6B, MAIN OUT EQUALIZER: forwards to the prom_b screen code (T_F42F68 -> sub_F122C5)
 ; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84.
-; Evidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+; Evidence: sub_F122C5 posts sub_F123C2, which runs DL_MainOutEqualizer_F1774D ('MAIN OUT EQUALIZER'); id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DL_TestSystemTuneScaleInitial is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Enter:
 	call T_F42F68                                        ; F9EF6C  1d 68 2f f4
 	ret                                                  ; F9EF70  0e
 T_F4195C_Nop:
 	ret                                                  ; F9EF71  0e
 ; Screen_MainOutEqualizer_Button -- Button (+8) method of MAIN OUT EQUALIZER: re-pushes the two button arguments and calls prom_b sub_F12334 (T_F42F6C), which maps them with T_F42C74 and dispatches through DispatchTable_F1394F
-; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DisplayList_FA1F21 is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
+; Evidence: PanelScreen_VtableTable_ViewB [107] (0xF870ED) = T_Screen_MainOutEqualizer_Enter; prom_b T_Screen_MainOutEqualizer_Enter/5C/60/64 jp 0xF9EF6C/0xF9EF71/0xF9EF72/0xF9EF84; id 0x6B is requested by Screen_System's row-5 RIGHT key (0xF9FFF5, pair position 1), whose label in DL_TestSystemTuneScaleInitial is 'MAIN OUT'/'EQUALIZER' (pos 0x1D00/0x1F30, column 24).
 Screen_MainOutEqualizer_Button:
 	link XIZ,0x0000                                      ; F9EF72  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; F9EF76  9e 0a 04
@@ -57409,9 +57409,9 @@ DrumsMap_StoreMapCode:
 Paint_DrumsMapNaming:
 	call T_F42E10                                        ; F9F39C  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9F3A0  f1 40 25 00 00
-	lda xbc, (DisplayList_FA47B2:24)                     ; F9F3A5  f2 b2 47 fa 31
+	lda xbc, (DL_DrumsMapSystemWrite:24)                     ; F9F3A5  f2 b2 47 fa 31
 	push XBC                                             ; F9F3AA  39
-	lda xwa, (DisplayList_FA46C3:24)                     ; F9F3AB  f2 c3 46 fa 30
+	lda xwa, (DL_DrumsMapSystemMapNamingDrumsMap:24)                     ; F9F3AB  f2 c3 46 fa 30
 	push XWA                                             ; F9F3B0  38
 	call T_DisplayList_Run_Stack                         ; F9F3B1  1d 00 2e f4
 	call T_F42E14                                        ; F9F3B5  1d 14 2e f4
@@ -57446,9 +57446,9 @@ Paint_DrumsMapNaming:
 ; ---------------------------------------------------------------------
 Paint_DrumsMapWrite:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9F3BC  f1 40 25 00 00
-	lda xbc, (DisplayList_FA47FE:24)                     ; F9F3C1  f2 fe 47 fa 31
+	lda xbc, (DL_ErrorItIsImpossibleToSetADrumMapFor:24)                     ; F9F3C1  f2 fe 47 fa 31
 	push XBC                                             ; F9F3C6  39
-	lda xwa, (DisplayList_FA47B2:24)                     ; F9F3C7  f2 b2 47 fa 30
+	lda xwa, (DL_DrumsMapSystemWrite:24)                     ; F9F3C7  f2 b2 47 fa 30
 	push XWA                                             ; F9F3CC  38
 	call T_DisplayList_Run_Stack                         ; F9F3CD  1d 00 2e f4
 	inc 8,XSP                                            ; F9F3D1  ef 60
@@ -57486,7 +57486,7 @@ Paint_ErrorImpossibleDrumMap:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9F3D8  f1 40 25 00 00
 	lda xbc, (DisplayList_FA4881:24)                     ; F9F3DD  f2 81 48 fa 31
 	push XBC                                             ; F9F3E2  39
-	lda xwa, (DisplayList_FA47FE:24)                     ; F9F3E3  f2 fe 47 fa 30
+	lda xwa, (DL_ErrorItIsImpossibleToSetADrumMapFor:24)                     ; F9F3E3  f2 fe 47 fa 30
 	push XWA                                             ; F9F3E8  38
 	call T_DisplayList_Run_Stack                         ; F9F3E9  1d 00 2e f4
 	call T_F42E14                                        ; F9F3ED  1d 14 2e f4
@@ -58704,7 +58704,7 @@ PanelMode_System_Leave:
 	ret                                                  ; F9FEE6  0e
 ; Screen_System_Enter -- Enter (+0) method of screen 0x60, the SYSTEM menu: restarts task 2's queue and posts its painter
 ; Evidence: PanelScreen_VtableTable_ViewB [96] (0xF870C1) = T_Screen_System_Enter; prom_b T_Screen_System_Enter/1C/20/24 jp 0xF9FEE7/0xF9FEFF/0xF9FF00/0xF9FF27.
-; Evidence: .LFA0020 runs DisplayList_FA1F21-FA204B (or FA1F2E-FA2070 when (0xC4) = 1): title 'SYSTEM', 'TUNE & SCALE', 'INITIAL', 'C0NTR0LLER ASSIGN', 'RE-MAP EDIT', 'S0UND/C0MBI MANAGER', 'MIXER', 'DRUMS MAP', 'MAIN OUT EQUALIZER', 'DSP EFFECT'; 0x60 is the EXIT target of all its sub-screens.
+; Evidence: .LFA0020 runs DL_TestSystemTuneScaleInitial-FA204B (or FA1F2E-FA2070 when (0xC4) = 1): title 'SYSTEM', 'TUNE & SCALE', 'INITIAL', 'C0NTR0LLER ASSIGN', 'RE-MAP EDIT', 'S0UND/C0MBI MANAGER', 'MIXER', 'DRUMS MAP', 'MAIN OUT EQUALIZER', 'DSP EFFECT'; 0x60 is the EXIT target of all its sub-screens.
 Screen_System_Enter:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F9FEE7  1d 80 2e f4
 	lda xbc, (.LFA0020:24)                               ; F9FEEB  f2 20 00 fa 31
@@ -58850,15 +58850,15 @@ T_F41924_Nop:
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FA0024  f1 40 25 00 02
 	m_cp_mi8 MB8, Variant_Flag, 0x01                             ; FA0029  c0 c4 3f 01
 	jr nz, .LFA003D                                      ; FA002D  6e 0e
-	lda xbc, (DisplayList_FA2070:24)                     ; FA002F  f2 70 20 fa 31
+	lda xbc, (DL_TuneScaleSystemMasterTune:24)                     ; FA002F  f2 70 20 fa 31
 	push XBC                                             ; FA0034  39
-	lda xwa, (DisplayList_FA1F21+0xD:24)                 ; FA0035  f2 2e 1f fa 30
+	lda xwa, (DL_TestSystemTuneScaleInitial+0xD:24)                 ; FA0035  f2 2e 1f fa 30
 	push XWA                                             ; FA003A  38
 	jr .LFA0049                                          ; FA003B  68 0c
 .LFA003D:
-	lda xbc, (DisplayList_FA204B:24)                     ; FA003D  f2 4b 20 fa 31
+	lda xbc, (DL_0verallT0uchSensitivity:24)                     ; FA003D  f2 4b 20 fa 31
 	push XBC                                             ; FA0042  39
-	lda xwa, (DisplayList_FA1F21:24)                     ; FA0043  f2 21 1f fa 30
+	lda xwa, (DL_TestSystemTuneScaleInitial:24)                     ; FA0043  f2 21 1f fa 30
 	push XWA                                             ; FA0048  38
 .LFA0049:
 	call T_DisplayList_Run_Stack                         ; FA0049  1d 00 2e f4
@@ -58889,14 +58889,14 @@ TuneScale_KeyScalingCodeToIndex:
 	ret                                                  ; FA007A  0e
 ; Screen_DspEffect_Enter -- Enter (+0) method of screen 0x66, DSP EFFECT: forwards to the prom_b screen code (T_F42F4C -> sub_F0F105)
 ; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093.
-; Evidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05).
+; Evidence: id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DL_TestSystemTuneScaleInitial (pos 0x1E05, column 5); the 'DSP EFFECT' + 'SYSTEM' title record at prom_b 0xF13D8F is run by the same prom_b module (0xF0F857, 0xF0FE05).
 Screen_DspEffect_Enter:
 	call T_F42F4C                                        ; FA007B  1d 4c 2f f4
 	ret                                                  ; FA007F  0e
 T_F419AC_Nop:
 	ret                                                  ; FA0080  0e
 ; Screen_DspEffect_Button -- Button (+8) method of DSP EFFECT: re-pushes the two button arguments and calls prom_b sub_F0F17C (T_F42F50), which maps them with T_F42C74 and dispatches through DispatchTable_F135FD
-; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DisplayList_FA1F21 (pos 0x1E05, column 5).
+; Evidence: PanelScreen_VtableTable_ViewB [102] (0xF870D9) = T_Screen_DspEffect_Enter; prom_b T_Screen_DspEffect_Enter/AC/B0/B4 jp 0xFA007B/0xFA0080/0xFA0081/0xFA0093; id 0x66 is requested by Screen_System's row-5 LEFT key (0xF9FFEC, pair position 0), labelled 'DSP EFFECT' in DL_TestSystemTuneScaleInitial (pos 0x1E05, column 5).
 Screen_DspEffect_Button:
 	link XIZ,0x0000                                      ; FA0081  ee 0c 00 00
 	m_push MWD+r6, 0x0a                                  ; FA0085  9e 0a 04
@@ -58909,7 +58909,7 @@ T_F419B4_Nop:
 	ret                                                  ; FA0093  0e
 ; Screen_TuneScale_Enter -- Enter (+0) method of screen 0x62, TUNE & SCALE: on a new entry sets the item cursor (0x2690)=0x10, posts the painter, loads the fields and posts the value callback
 ; Evidence: PanelScreen_VtableTable_ViewB [98] (0xF870C9) = T_Screen_TuneScale_Enter; prom_b T_Screen_TuneScale_Enter/2C/30/34 jp 0xFA0094/0xFA00E9/0xFA00EA/0xFA0111.
-; Evidence: .LFA04F2 runs DisplayList_FA2070-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E).
+; Evidence: .LFA04F2 runs DL_TuneScaleSystemMasterTune-FA21BF ('TUNE & SCALE','MASTER TUNE','KEY TRANSPOSE','KEY SCALING MODE','TOTAL KEY SCALING','KEY SCALING SHIFT','[KEY:  ]') and FA2315-FA244B; then TuneScale_LoadFields and .LFA05DE; id 0x62 = SYSTEM row-1 left key (0xF9FF3E).
 Screen_TuneScale_Enter:
 	ld c, (UI_ScreenLatch:16)                                   ; FA0094  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FA0098  c1 7b 20 f3
@@ -59395,7 +59395,7 @@ TuneScale_AdjustSelectedItem_Cases:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FA04F6  f1 40 25 00 00
 	lda xbc, (DisplayList_FA21BF:24)                     ; FA04FB  f2 bf 21 fa 31
 	push XBC                                             ; FA0500  39
-	lda xwa, (DisplayList_FA2070:24)                     ; FA0501  f2 70 20 fa 30
+	lda xwa, (DL_TuneScaleSystemMasterTune:24)                     ; FA0501  f2 70 20 fa 30
 	push XWA                                             ; FA0506  38
 	call T_DisplayList_Run_Stack                         ; FA0507  1d 00 2e f4
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FA050B  f1 40 25 00 02
@@ -60015,7 +60015,7 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FA0AB0  f1 40 25 00 00
 	lda xbc, (DisplayList_FA262B:24)                     ; FA0AB5  f2 2b 26 fa 31
 	push XBC                                             ; FA0ABA  39
-	lda xwa, (DisplayList_FA252C:24)                     ; FA0ABB  f2 2c 25 fa 30
+	lda xwa, (DL_TouchSensitivitySystemVelocityCurve:24)                     ; FA0ABB  f2 2c 25 fa 30
 	push XWA                                             ; FA0AC0  38
 	call T_DisplayList_Run_Stack                         ; FA0AC1  1d 00 2e f4
 	call T_F42E14                                        ; FA0AC5  1d 14 2e f4
@@ -60024,9 +60024,9 @@ sub_FA0A58:   ; entry: named by 1 `.long` operand, first at 0xFA09D1
 .LFA0ACC:
 	call T_F42E10                                        ; FA0ACC  1d 10 2e f4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FA0AD0  f1 40 25 00 00
-	lda xbc, (DisplayList_FA4D19:24)                     ; FA0AD5  f2 19 4d fa 31
+	lda xbc, (DL_Value:24)                     ; FA0AD5  f2 19 4d fa 31
 	push XBC                                             ; FA0ADA  39
-	lda xwa, (DisplayList_FA4C34:24)                     ; FA0ADB  f2 34 4c fa 30
+	lda xwa, (DL_TestSystemTestModeNoteVelocity:24)                     ; FA0ADB  f2 34 4c fa 30
 	push XWA                                             ; FA0AE0  38
 	call T_DisplayList_Run_Stack                         ; FA0AE1  1d 00 2e f4
 	call T_F42E14                                        ; FA0AE5  1d 14 2e f4
@@ -60067,9 +60067,9 @@ sub_FA0B2B:   ; entry: named by 2 `.long` operands, first at 0xFA0B13
 	lda xbc, (DisplayList_FA4D90:24)                     ; FA0B32  f2 90 4d fa 31
 	push XBC                                             ; FA0B37  39
 	call T_DisplayList_RunOne_Stack                      ; FA0B38  1d 08 2e f4
-	lda xbc, (DisplayList_FA4D40:24)                     ; FA0B3C  f2 40 4d fa 31
+	lda xbc, (DL_NoteVelocity:24)                     ; FA0B3C  f2 40 4d fa 31
 	push XBC                                             ; FA0B41  39
-	lda xwa, (DisplayList_FA4D19:24)                     ; FA0B42  f2 19 4d fa 30
+	lda xwa, (DL_Value:24)                     ; FA0B42  f2 19 4d fa 30
 	push XWA                                             ; FA0B47  38
 	call T_DisplayList_Run_Stack                         ; FA0B48  1d 00 2e f4
 	and (XIX),0xfd                                       ; FA0B4C  84 3c fd
@@ -60083,7 +60083,7 @@ sub_FA0B51:   ; entry: named by 4 `.long` operands, first at 0xFA0B1B
 	call T_DisplayList_RunOne_Stack                      ; FA0B5E  1d 08 2e f4
 	lda xbc, (DisplayList_FA4D90:24)                     ; FA0B62  f2 90 4d fa 31
 	push XBC                                             ; FA0B67  39
-	lda xwa, (DisplayList_FA4D40:24)                     ; FA0B68  f2 40 4d fa 30
+	lda xwa, (DL_NoteVelocity:24)                     ; FA0B68  f2 40 4d fa 30
 	push XWA                                             ; FA0B6D  38
 	call T_DisplayList_Run_Stack                         ; FA0B6E  1d 00 2e f4
 	m_or_mi8 MBI+r4, 0, 0x02                             ; FA0B72  84 3e 02
@@ -60735,15 +60735,15 @@ sub_FA10CD:
 	jr nz, .LFA11A2                                      ; FA1175  6e 2b
 	m_cp_mi8 MB16, 0x26f0, 0x00                          ; FA1177  c1 f0 26 3f 00
 	jr nz, .LFA118C                                      ; FA117C  6e 0e
-	lda xbc, (DisplayList_FA28D8:24)                     ; FA117E  f2 d8 28 fa 31
+	lda xbc, (DL_ControllerAssignPage2SystemFootSw1Polarity:24)                     ; FA117E  f2 d8 28 fa 31
 	push XBC                                             ; FA1183  39
-	lda xwa, (DisplayList_FA2688:24)                     ; FA1184  f2 88 26 fa 30
+	lda xwa, (DL_ControllerAssignPage2SystemRTCreatorX:24)                     ; FA1184  f2 88 26 fa 30
 	push XWA                                             ; FA1189  38
 	jr .LFA1198                                          ; FA118A  68 0c
 .LFA118C:
-	lda xbc, (DisplayList_FA29A0:24)                     ; FA118C  f2 a0 29 fa 31
+	lda xbc, (DL_ControllerAssignSystemRTCreatorX:24)                     ; FA118C  f2 a0 29 fa 31
 	push XBC                                             ; FA1191  39
-	lda xwa, (DisplayList_FA28D8:24)                     ; FA1192  f2 d8 28 fa 30
+	lda xwa, (DL_ControllerAssignPage2SystemFootSw1Polarity:24)                     ; FA1192  f2 d8 28 fa 30
 	push XWA                                             ; FA1197  38
 .LFA1198:
 	call T_DisplayList_Run_Stack                         ; FA1198  1d 00 2e f4
@@ -60752,7 +60752,7 @@ sub_FA10CD:
 .LFA11A2:
 	lda xbc, (DisplayList_FA2ACA:24)                     ; FA11A2  f2 ca 2a fa 31
 	push XBC                                             ; FA11A7  39
-	lda xwa, (DisplayList_FA29A0:24)                     ; FA11A8  f2 a0 29 fa 30
+	lda xwa, (DL_ControllerAssignSystemRTCreatorX:24)                     ; FA11A8  f2 a0 29 fa 30
 	push XWA                                             ; FA11AD  38
 	call T_DisplayList_Run_Stack                         ; FA11AE  1d 00 2e f4
 .LFA11B2:
@@ -60990,7 +60990,7 @@ T_F4267C_Nop:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FA13A2  f1 40 25 00 00
 	lda xbc, (DisplayList_FA2F57:24)                     ; FA13A7  f2 57 2f fa 31
 	push XBC                                             ; FA13AC  39
-	lda xwa, (DisplayList_FA2DFF:24)                     ; FA13AD  f2 ff 2d fa 30
+	lda xwa, (DL_InitialSystemResetTheTotalOrIndividualSections:24)                     ; FA13AD  f2 ff 2d fa 30
 	push XWA                                             ; FA13B2  38
 	call T_DisplayList_Run_Stack                         ; FA13B3  1d 00 2e f4
 	inc 8,XSP                                            ; FA13B7  ef 60
@@ -61050,7 +61050,7 @@ T_F4267C_Nop:
 ; after this follow-up.
 sub_FA1404:   ; entry: reachable-run entry
 	push XBC                                             ; FA1404  39
-	lda xwa, (DisplayList_FA2FB9:24)                     ; FA1405  f2 b9 2f fa 30
+	lda xwa, (DL_InitialUsingInitialSettingWill:24)                     ; FA1405  f2 b9 2f fa 30
 	push XWA                                             ; FA140A  38
 	call T_DisplayList_Run_Stack                         ; FA140B  1d 00 2e f4
 	lda xbc, (DisplayList_FA30A6:24)                     ; FA140F  f2 a6 30 fa 31
@@ -62866,7 +62866,7 @@ Descriptor9_FA1F0F:
 Descriptor9_FA1F18:
 	.byte 0x00, 0x02, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1F18
 ; ---------------------------------------------------------------------
-; DisplayList_FA1F21 -- 298 bytes, kind=display_list
+; DL_TestSystemTuneScaleInitial -- 298 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -62876,7 +62876,8 @@ Descriptor9_FA1F18:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA1F21:
+; DL_TestSystemTuneScaleInitial: the display list whose text records draw "TEST" / "SYSTEM" / "TUNE & SCALE" / "INITIAL" / "C0NTR0LLER" / "ASSIGN" ... (notes/prom_a_dl_text_names.py).
+DL_TestSystemTuneScaleInitial:
 	.byte 0x20, 0x08                                ; FA1F21  op 20, 8 bytes -> handler 0xF31A3A  text at row 115, col 5
 	.short 0x11fd                                   ; FA1F23
 	.ascii "TEST"                                   ; FA1F25
@@ -62994,7 +62995,7 @@ DisplayList_FA1F21:
 	.short 0x0074                                   ; FA2048
 	.byte 0x10                                      ; FA204A  glyph codes below 0x20
 ; ---------------------------------------------------------------------
-; DisplayList_FA204B -- 37 bytes, kind=display_list
+; DL_0verallT0uchSensitivity -- 37 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): frames as A records between 0xFA204B and 0xFA2070
@@ -63004,7 +63005,8 @@ DisplayList_FA1F21:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA204B:
+; DL_0verallT0uchSensitivity: the display list whose text records draw "0VERALL T0UCH" / "SENSITIVITY" (notes/prom_a_dl_text_names.py).
+DL_0verallT0uchSensitivity:
 	.byte 0x20, 0x11                                ; FA204B  op 20, 17 bytes -> handler 0xF31A3A  text at row 107, col 5
 	.short 0x10bd                                   ; FA204D
 	.ascii "0VERALL T0UCH"                          ; FA204F
@@ -63015,7 +63017,7 @@ DisplayList_FA204B:
 	.byte 0x08                                      ; FA206D
 	.short 0x10e1                                   ; FA206E
 ; ---------------------------------------------------------------------
-; DisplayList_FA2070 -- 335 bytes, kind=display_list
+; DL_TuneScaleSystemMasterTune -- 335 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -63025,7 +63027,8 @@ DisplayList_FA204B:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA2070:
+; DL_TuneScaleSystemMasterTune: the display list whose text records draw "TUNE & SCALE" / "SYSTEM" / "MASTER TUNE        :" / "4  . Hz" / "ITEM" / "KEY TRANSPOSE      :" ... (notes/prom_a_dl_text_names.py).
+DL_TuneScaleSystemMasterTune:
 	.byte 0x23, 0x05                                ; FA2070  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x07                                      ; FA2072
 	.short 0x0030                                   ; FA2073
@@ -63415,7 +63418,7 @@ DisplayList_FA2518:
 DisplayList_FA2522:
 	.byte 0x1b, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00, 0xe6, 0x00          ; FA2522
 ; ---------------------------------------------------------------------
-; DisplayList_FA252C -- 255 bytes, kind=display_list
+; DL_TouchSensitivitySystemVelocityCurve -- 255 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -63425,7 +63428,8 @@ DisplayList_FA2522:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA252C:
+; DL_TouchSensitivitySystemVelocityCurve: the display list whose text records draw "TOUCH SENSITIVITY" / "SYSTEM" / "VELOCITY CURVE        :" / "VELOCITY OFFSET       :" / "AFTER TOUCH CURVE     :" / "AFTER TOUCH THRESHOLD :" ... (notes/prom_a_dl_text_names.py).
+DL_TouchSensitivitySystemVelocityCurve:
 	.byte 0x23, 0x05                                ; FA252C  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x08                                      ; FA252E
 	.short 0x002f                                   ; FA252F
@@ -63558,7 +63562,7 @@ OperandTable_FA265E:
 DisplayList_FA267E:
 	.byte 0x1b, 0x0a, 0x21, 0x00, 0x42, 0x00, 0x1f, 0x01, 0x9f, 0x00          ; FA267E
 ; ---------------------------------------------------------------------
-; DisplayList_FA2688 -- 592 bytes, kind=display_list
+; DL_ControllerAssignPage2SystemRTCreatorX -- 592 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): frames as A records between 0xFA2688 and 0xFA28D8
@@ -63568,7 +63572,8 @@ DisplayList_FA267E:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA2688:
+; DL_ControllerAssignPage2SystemRTCreatorX: the display list whose text records draw "CONTROLLER ASSIGN" / "PAGE /2" / "SYSTEM" / "R.T.CREATOR    X( ):" / "R.T.CONTROLLER X( ):" / "MODULATION 1       :" ... (notes/prom_a_dl_text_names.py).
+DL_ControllerAssignPage2SystemRTCreatorX:
 	.byte 0x23, 0x05                                ; FA2688  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x09                                      ; FA268A
 	.short 0x002f                                   ; FA268B
@@ -63788,7 +63793,7 @@ DisplayList_FA2688:
 	.short 0x009d                                   ; FA28D4
 	.short 0x006c                                   ; FA28D6
 ; ---------------------------------------------------------------------
-; DisplayList_FA28D8 -- 200 bytes, kind=display_list
+; DL_ControllerAssignPage2SystemFootSw1Polarity -- 200 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -63798,7 +63803,8 @@ DisplayList_FA2688:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA28D8:
+; DL_ControllerAssignPage2SystemFootSw1Polarity: the display list whose text records draw "CONTROLLER ASSIGN" / "PAGE /2" / "SYSTEM" / "FOOT SW1 POLARITY     :" / "FOOT SW2 POLARITY     :" / "ITEM" ... (notes/prom_a_dl_text_names.py).
+DL_ControllerAssignPage2SystemFootSw1Polarity:
 	.byte 0x23, 0x05                                ; FA28D8  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x09                                      ; FA28DA
 	.short 0x002f                                   ; FA28DB
@@ -63867,7 +63873,7 @@ DisplayList_FA28D8:
 	.short 0x013c                                   ; FA299C
 	.short 0x00e3                                   ; FA299E
 ; ---------------------------------------------------------------------
-; DisplayList_FA29A0 -- 298 bytes, kind=display_list
+; DL_ControllerAssignSystemRTCreatorX -- 298 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -63877,7 +63883,8 @@ DisplayList_FA28D8:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA29A0:
+; DL_ControllerAssignSystemRTCreatorX: the display list whose text records draw "CONTROLLER ASSIGN" / "SYSTEM" / "R.T.CREATOR    X( ):" / "ITEM" / "VALUE" (notes/prom_a_dl_text_names.py).
+DL_ControllerAssignSystemRTCreatorX:
 	.byte 0x23, 0x05                                ; FA29A0  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x09                                      ; FA29A2
 	.short 0x002f                                   ; FA29A3
@@ -64215,7 +64222,7 @@ DisplayList_FA2DEB:
 	.byte 0x1b, 0x0a, 0x09, 0x00, 0x2a, 0x00, 0x37, 0x01, 0xbf, 0x00, 0x1b, 0x0a, 0x21, 0x00, 0x51, 0x00  ; FA2DEB
 	.byte 0x1f, 0x01, 0x80, 0x00                                              ; FA2DFB
 ; ---------------------------------------------------------------------
-; DisplayList_FA2DFF -- 344 bytes, kind=display_list
+; DL_InitialSystemResetTheTotalOrIndividualSections -- 344 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64225,7 +64232,8 @@ DisplayList_FA2DEB:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA2DFF:
+; DL_InitialSystemResetTheTotalOrIndividualSections: the display list whose text records draw "INITIAL" / "SYSTEM" / "Reset the total or individual sections" / "to the original factory settings" / "except SOUND and COMBINATION area." / "OK" ... (notes/prom_a_dl_text_names.py).
+DL_InitialSystemResetTheTotalOrIndividualSections:
 	.byte 0x23, 0x05                                ; FA2DFF  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x0c                                      ; FA2E01
 	.short 0x0034                                   ; FA2E02
@@ -64381,7 +64389,7 @@ OperandTable_FA2F6F:
 DisplayList_FA2FAF:
 	.byte 0x1b, 0x0a, 0x4f, 0x00, 0x5d, 0x00, 0xc9, 0x00, 0xde, 0x00          ; FA2FAF
 ; ---------------------------------------------------------------------
-; DisplayList_FA2FB9 -- 118 bytes, kind=display_list
+; DL_InitialUsingInitialSettingWill -- 118 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64391,7 +64399,8 @@ DisplayList_FA2FAF:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA2FB9:
+; DL_InitialUsingInitialSettingWill: the display list whose text records draw "INITIAL" / "Using Initial Setting will" / "replace any current data" / "with the original factory" / "settings!" (notes/prom_a_dl_text_names.py).
+DL_InitialUsingInitialSettingWill:
 	.byte 0x23, 0x05                                ; FA2FB9  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x0c                                      ; FA2FBB
 	.short 0x0034                                   ; FA2FBC
@@ -64738,7 +64747,7 @@ OperandTable_FA34F1:
 DisplayList_FA3531:
 	.byte 0x1b, 0x0a, 0xac, 0x00, 0x5e, 0x00, 0x33, 0x01, 0xc4, 0x00          ; FA3531
 ; ---------------------------------------------------------------------
-; DisplayList_FA353B -- 317 bytes, kind=display_list
+; DL_SoundCombinationManagerSystem -- 317 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64748,7 +64757,8 @@ DisplayList_FA3531:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA353B:
+; DL_SoundCombinationManagerSystem: the display list whose text records draw "SOUND/COMBINATION MANAGER" / "SYSTEM" / "SOUND GROUP" / "NAMING" / "DATA LOAD" / "FILTER" ... (notes/prom_a_dl_text_names.py).
+DL_SoundCombinationManagerSystem:
 	.byte 0x23, 0x05                                ; FA353B  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x0e                                      ; FA353D
 	.short 0x002f                                   ; FA353E
@@ -64861,7 +64871,7 @@ DisplayList_FA353B:
 	.short 0x002e                                   ; FA3674
 	.short 0x0012                                   ; FA3676
 ; ---------------------------------------------------------------------
-; DisplayList_FA3678 -- 24 bytes, kind=display_list
+; DL_SoundGroupNaming -- 24 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64871,13 +64881,14 @@ DisplayList_FA353B:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA3678:
+; DL_SoundGroupNaming: the display list whose text records draw "SOUND GROUP NAMING" (notes/prom_a_dl_text_names.py).
+DL_SoundGroupNaming:
 	.byte 0x1c, 0x18                                ; FA3678  op 1c, 24 bytes -> handler 0xF31A52  text at row 1, col 19
 	.short 0x003b                                   ; FA367A
 	.short 0x0005                                   ; FA367C
 	.ascii "SOUND GROUP NAMING"                     ; FA367E
 ; ---------------------------------------------------------------------
-; DisplayList_FA3690 -- 80 bytes, kind=display_list
+; DL_SoundGroupNamingSystemWrite -- 80 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64887,7 +64898,8 @@ DisplayList_FA3678:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA3690:
+; DL_SoundGroupNamingSystemWrite: the display list whose text records draw "SOUND GROUP NAMING" / "SYSTEM" / "WRITE" (notes/prom_a_dl_text_names.py).
+DL_SoundGroupNamingSystemWrite:
 	.byte 0x1c, 0x18                                ; FA3690  op 1c, 24 bytes -> handler 0xF31A52  text at row 1, col 19
 	.short 0x003b                                   ; FA3692
 	.short 0x0005                                   ; FA3694
@@ -64918,7 +64930,7 @@ DisplayList_FA3690:
 	.short 0x003b                                   ; FA36DC
 	.short 0x002f                                   ; FA36DE
 ; ---------------------------------------------------------------------
-; DisplayList_FA36E0 -- 154 bytes, kind=display_list
+; DL_SystemNamingBankGroup -- 154 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -64928,7 +64940,8 @@ DisplayList_FA3690:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA36E0:
+; DL_SystemNamingBankGroup: the display list whose text records draw "SYSTEM" / "NAMING" / "BANK" / "GROUP" (notes/prom_a_dl_text_names.py).
+DL_SystemNamingBankGroup:
 	.byte 0x17, 0x0c                                ; FA36E0  op 17, 12 bytes -> handler 0xF31A52  text at row 0, col 7
 	.short 0x0007                                   ; FA36E2
 	.short 0x0008                                   ; FA36E4
@@ -65118,7 +65131,7 @@ OperandTable_FA3954:
 DisplayList_FA39D4:
 	.byte 0x1b, 0x0a, 0x04, 0x00, 0x55, 0x00, 0x3b, 0x01, 0xbb, 0x00          ; FA39D4
 ; ---------------------------------------------------------------------
-; DisplayList_FA39DE -- 30 bytes, kind=display_list
+; DL_CombinationGroupNaming -- 30 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -65128,13 +65141,14 @@ DisplayList_FA39D4:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA39DE:
+; DL_CombinationGroupNaming: the display list whose text records draw "COMBINATION GROUP NAMING" (notes/prom_a_dl_text_names.py).
+DL_CombinationGroupNaming:
 	.byte 0x1c, 0x1e                                ; FA39DE  op 1c, 30 bytes -> handler 0xF31A52  text at row 1, col 11
 	.short 0x0033                                   ; FA39E0
 	.short 0x0005                                   ; FA39E2
 	.ascii "COMBINATION GROUP NAMING"               ; FA39E4
 ; ---------------------------------------------------------------------
-; DisplayList_FA39FC -- 86 bytes, kind=display_list
+; DL_CombinationGroupNamingSystem -- 86 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -65144,7 +65158,8 @@ DisplayList_FA39DE:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA39FC:
+; DL_CombinationGroupNamingSystem: the display list whose text records draw "COMBINATION GROUP NAMING" / "SYSTEM" / "WRITE" (notes/prom_a_dl_text_names.py).
+DL_CombinationGroupNamingSystem:
 	.byte 0x1c, 0x1e                                ; FA39FC  op 1c, 30 bytes -> handler 0xF31A52  text at row 1, col 11
 	.short 0x0033                                   ; FA39FE
 	.short 0x0005                                   ; FA3A00
@@ -65207,7 +65222,7 @@ OperandTable_FA3A6C:
 	.ascii "  RE-MAP 2  "                       ; FA3A84  [2]
 	.ascii "  RE-MAP 3  "                       ; FA3A90  [3]
 ; ---------------------------------------------------------------------
-; DisplayList_FA3A9C -- 268 bytes, kind=display_list
+; DL_SoundCopySystemOkBankGroup -- 268 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): frames as A records between 0xFA3A9C and 0xFA3BA8
@@ -65217,7 +65232,8 @@ OperandTable_FA3A6C:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA3A9C:
+; DL_SoundCopySystemOkBankGroup: the display list whose text records draw "SOUND COPY" / "SYSTEM" / "OK" / "BANK" / "GROUP" / "GROUP" ... (notes/prom_a_dl_text_names.py).
+DL_SoundCopySystemOkBankGroup:
 	.byte 0x1c, 0x10                                ; FA3A9C  op 1c, 16 bytes -> handler 0xF31A52  text at row 2, col 18
 	.short 0x0062                                   ; FA3A9E
 	.short 0x0005                                   ; FA3AA0
@@ -65381,7 +65397,7 @@ DisplayList_FA3BD1:
 	.byte 0x20, 0x77, 0x69, 0x6c, 0x6c, 0x20, 0x62, 0x65, 0x06, 0x10, 0xf4, 0x14, 0x6f, 0x76, 0x65, 0x72  ; FA3C21
 	.byte 0x77, 0x72, 0x69, 0x74, 0x74, 0x65, 0x6e, 0x2e                      ; FA3C31
 ; ---------------------------------------------------------------------
-; DisplayList_FA3C39 -- 103 bytes, kind=display_list
+; DL_ErrorItIsImpossibleToCopyADrumKit -- 103 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -65391,7 +65407,8 @@ DisplayList_FA3BD1:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA3C39:
+; DL_ErrorItIsImpossibleToCopyADrumKit: the display list whose text records draw "ERROR!" / "It is impossible to copy a Drum Kit." / "Please select a Sound other than a" / "Drum Kit." (notes/prom_a_dl_text_names.py).
+DL_ErrorItIsImpossibleToCopyADrumKit:
 	.byte 0x1c, 0x0c                                ; FA3C39  op 1c, 12 bytes -> handler 0xF31A52  text at row 3, col 2
 	.short 0x007a                                   ; FA3C3B
 	.short 0x0005                                   ; FA3C3D
@@ -65813,7 +65830,7 @@ DisplayList_FA4265:
 DisplayList_FA4270:
 	.byte 0x03, 0x0b, 0x0d, 0x27, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA4270
 ; ---------------------------------------------------------------------
-; DisplayList_FA427B -- 334 bytes, kind=display_list
+; DL_DataLoadFilterSystemOverall -- 334 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -65823,7 +65840,8 @@ DisplayList_FA4270:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA427B:
+; DL_DataLoadFilterSystemOverall: the display list whose text records draw "DATA LOAD FILTER" / "SYSTEM" / "OVERALL" / "EFFECT & OUTPUT :" / "R.T.CREATOR 1_6 :" / "COMBINATION" ... (notes/prom_a_dl_text_names.py).
+DL_DataLoadFilterSystemOverall:
 	.byte 0x1c, 0x16                                ; FA427B  op 1c, 22 bytes -> handler 0xF31A52  text at row 1, col 21
 	.short 0x003d                                   ; FA427D
 	.short 0x0005                                   ; FA427F
@@ -66051,7 +66069,7 @@ OperandTable_FA44E2:
 	.ascii "OFF"                                ; FA44E2  [0]
 	.ascii "ON "                                ; FA44E5  [1]
 ; ---------------------------------------------------------------------
-; DisplayList_FA44E8 -- 167 bytes, kind=display_list
+; DL_MemoryProtectSystemSound -- 167 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66061,7 +66079,8 @@ OperandTable_FA44E2:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA44E8:
+; DL_MemoryProtectSystemSound: the display list whose text records draw "MEMORY PROTECT" / "SYSTEM" / "SOUND         :" / "COMBINATION   :" / "ITEM" / "VALUE" (notes/prom_a_dl_text_names.py).
+DL_MemoryProtectSystemSound:
 	.byte 0x1c, 0x14                                ; FA44E8  op 1c, 20 bytes -> handler 0xF31A52  text at row 1, col 35
 	.short 0x004b                                   ; FA44EA
 	.short 0x0005                                   ; FA44EC
@@ -66178,7 +66197,7 @@ OperandTable_FA45B8:
 DisplayList_FA45C8:
 	.byte 0x1b, 0x0a, 0x15, 0x00, 0x58, 0x00, 0x14, 0x01, 0x8a, 0x00          ; FA45C8
 ; ---------------------------------------------------------------------
-; DisplayList_FA45D2 -- 226 bytes, kind=display_list
+; DL_SoundMuteSystemIfYouWantHeldNotesToContinue -- 226 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66188,7 +66207,8 @@ DisplayList_FA45C8:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA45D2:
+; DL_SoundMuteSystemIfYouWantHeldNotesToContinue: the display list whose text records draw "SOUND MUTE" / "SYSTEM" / "If you want held notes to continue" / "sounding when you change Sound or" / "Combination." / "Please turn off Sound Mute." ... (notes/prom_a_dl_text_names.py).
+DL_SoundMuteSystemIfYouWantHeldNotesToContinue:
 	.byte 0x1c, 0x10                                ; FA45D2  op 1c, 16 bytes -> handler 0xF31A52  text at row 2, col 18
 	.short 0x0062                                   ; FA45D4
 	.short 0x0005                                   ; FA45D6
@@ -66255,7 +66275,7 @@ DisplayList_FA45D2:
 DisplayList_FA46B4:
 	.byte 0x02, 0x0f, 0x0b, 0x7f, 0x01, 0x00, 0x07, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x99, 0x16  ; FA46B4
 ; ---------------------------------------------------------------------
-; DisplayList_FA46C3 -- 239 bytes, kind=display_list
+; DL_DrumsMapSystemMapNamingDrumsMap -- 239 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66265,7 +66285,8 @@ DisplayList_FA46B4:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA46C3:
+; DL_DrumsMapSystemMapNamingDrumsMap: the display list whose text records draw "DRUMS MAP" / "SYSTEM" / "MAP" / "NAMING" / "DRUMS MAP" / "NOTE" ... (notes/prom_a_dl_text_names.py).
+DL_DrumsMapSystemMapNamingDrumsMap:
 	.byte 0x23, 0x05                                ; FA46C3  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x0f                                      ; FA46C5
 	.short 0x0031                                   ; FA46C6
@@ -66377,7 +66398,7 @@ DisplayList_FA46C3:
 	.short 0x00ac                                   ; FA47AE
 	.short 0x00cd                                   ; FA47B0
 ; ---------------------------------------------------------------------
-; DisplayList_FA47B2 -- 76 bytes, kind=display_list
+; DL_DrumsMapSystemWrite -- 76 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66387,7 +66408,8 @@ DisplayList_FA46C3:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA47B2:
+; DL_DrumsMapSystemWrite: the display list whose text records draw "DRUMS MAP" / "SYSTEM" / "WRITE" (notes/prom_a_dl_text_names.py).
+DL_DrumsMapSystemWrite:
 	.byte 0x23, 0x05                                ; FA47B2  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x0f                                      ; FA47B4
 	.short 0x0031                                   ; FA47B5
@@ -66421,7 +66443,7 @@ DisplayList_FA47B2:
 	.short 0x003b                                   ; FA47FA
 	.short 0x002f                                   ; FA47FC
 ; ---------------------------------------------------------------------
-; DisplayList_FA47FE -- 131 bytes, kind=display_list
+; DL_ErrorItIsImpossibleToSetADrumMapFor -- 131 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66431,7 +66453,8 @@ DisplayList_FA47B2:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA47FE:
+; DL_ErrorItIsImpossibleToSetADrumMapFor: the display list whose text records draw "ERROR!" / "It is impossible to set a drum map for" / "a Sound other than a Drum Kit." / "Please select a Drum Kit and try again." (notes/prom_a_dl_text_names.py).
+DL_ErrorItIsImpossibleToSetADrumMapFor:
 	.byte 0x1c, 0x0c                                ; FA47FE  op 1c, 12 bytes -> handler 0xF31A52  text at row 3, col 2
 	.short 0x007a                                   ; FA4800
 	.short 0x0005                                   ; FA4802
@@ -66814,7 +66837,7 @@ OperandTable_FA4BAA:
 DisplayList_FA4C2A:
 	.byte 0x1b, 0x0a, 0x67, 0x00, 0x2e, 0x00, 0x35, 0x01, 0xc8, 0x00          ; FA4C2A
 ; ---------------------------------------------------------------------
-; DisplayList_FA4C34 -- 229 bytes, kind=display_list
+; DL_TestSystemTestModeNoteVelocity -- 229 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66824,7 +66847,8 @@ DisplayList_FA4C2A:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA4C34:
+; DL_TestSystemTestModeNoteVelocity: the display list whose text records draw "TEST" / "SYSTEM" / "TEST" / "MODE" / "NOTE" / "VELOCITY" ... (notes/prom_a_dl_text_names.py).
+DL_TestSystemTestModeNoteVelocity:
 	.byte 0x23, 0x05                                ; FA4C34  op 23, 5 bytes -> handler 0xF31ACE
 	.byte 0x30                                      ; FA4C36
 	.short 0x0036                                   ; FA4C37
@@ -66933,7 +66957,7 @@ DisplayList_FA4C34:
 	.short 0x0094                                   ; FA4D15
 	.short 0x00e3                                   ; FA4D17
 ; ---------------------------------------------------------------------
-; DisplayList_FA4D19 -- 39 bytes, kind=display_list
+; DL_Value -- 39 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66943,7 +66967,8 @@ DisplayList_FA4C34:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA4D19:
+; DL_Value: the display list whose text records draw "VALUE" (notes/prom_a_dl_text_names.py).
+DL_Value:
 	.byte 0x20, 0x09                                ; FA4D19  op 20, 9 bytes -> handler 0xF31A3A  text at row 205, col 28
 	.short 0x2024                                   ; FA4D1B
 	.ascii "VALUE"                                  ; FA4D1D
@@ -66964,7 +66989,7 @@ DisplayList_FA4D19:
 	.short 0x013c                                   ; FA4D3C
 	.short 0x00e3                                   ; FA4D3E
 ; ---------------------------------------------------------------------
-; DisplayList_FA4D40 -- 80 bytes, kind=display_list
+; DL_NoteVelocity -- 80 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -66974,7 +66999,8 @@ DisplayList_FA4D19:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA4D40:
+; DL_NoteVelocity: the display list whose text records draw "NOTE" / "VELOCITY" (notes/prom_a_dl_text_names.py).
+DL_NoteVelocity:
 	.byte 0x20, 0x08                                ; FA4D40  op 20, 8 bytes -> handler 0xF31A3A  text at row 205, col 23
 	.short 0x201f                                   ; FA4D42
 	.ascii "NOTE"                                   ; FA4D44

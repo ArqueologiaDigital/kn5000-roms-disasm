@@ -5,13 +5,13 @@ QUESTION IT ANSWERS
   Screen_System_Button's header lists the screen each LCD-row key opens, left / right
   (PanelEvent_Flags bit 0 set = left): 0x62 TUNE & SCALE / 0x6A, 0x65 / 0x6C RE-MAP EDIT,
   0x64 / 0x6D SOUND/COMBI MANAGER, 0xB7 / 0x67 DRUMS MAP, 0x66 DSP EFFECT / 0x6B MAIN OUT EQUALIZER.
-  Three left/right slots had no name.  The menu's display list DisplayList_FA1F21 (interpreter A,
+  Three left/right slots had no name.  The menu's display list DL_TestSystemTuneScaleInitial (interpreter A,
   run by the SYSTEM screen's paint callback 0xFA0020) holds the item text as records
   `20 len lo hi text` -- the 16-bit VRAM offset lo|hi at 40 bytes a row (`06` the same, one other font).
   Decoded from the ROM below, rows and columns:
       row 36  col 5 TUNE & SCALE       col 24 INITIAL
       row 68  col 5 C0NTR0LLER (82: ASSIGN)    row 75 col 24 RE-MAP EDIT
-      row 115 col 5 TEST  / rows 107-121 col 5 0VERALL T0UCH SENSITIVITY (DisplayList_FA204B)
+      row 115 col 5 TEST  / rows 107-121 col 5 0VERALL T0UCH SENSITIVITY (DL_0verallT0uchSensitivity)
                                        col 24 S0UND/C0MBI MANAGER
       row 153 col 5 MIXER              col 24 DRUMS MAP
       row 192 col 5 DSP EFFECT         rows 185-199 col 24 MAIN OUT EQUALIZER

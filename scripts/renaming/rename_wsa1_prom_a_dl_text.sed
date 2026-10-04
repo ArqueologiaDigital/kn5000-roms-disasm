@@ -1,0 +1,27 @@
+# WSA1 naming step (session 53b889a2, wsa1_rename.py)
+s/\bDisplayList_FA1F21\b/DL_TestSystemTuneScaleInitial/g
+s/\bDisplayList_FA204B\b/DL_0verallT0uchSensitivity/g
+s/\bDisplayList_FA2070\b/DL_TuneScaleSystemMasterTune/g
+s/\bDisplayList_FA252C\b/DL_TouchSensitivitySystemVelocityCurve/g
+s/\bDisplayList_FA2688\b/DL_ControllerAssignPage2SystemRTCreatorX/g
+s/\bDisplayList_FA28D8\b/DL_ControllerAssignPage2SystemFootSw1Polarity/g
+s/\bDisplayList_FA29A0\b/DL_ControllerAssignSystemRTCreatorX/g
+s/\bDisplayList_FA2DFF\b/DL_InitialSystemResetTheTotalOrIndividualSections/g
+s/\bDisplayList_FA2FB9\b/DL_InitialUsingInitialSettingWill/g
+s/\bDisplayList_FA353B\b/DL_SoundCombinationManagerSystem/g
+s/\bDisplayList_FA3678\b/DL_SoundGroupNaming/g
+s/\bDisplayList_FA3690\b/DL_SoundGroupNamingSystemWrite/g
+s/\bDisplayList_FA36E0\b/DL_SystemNamingBankGroup/g
+s/\bDisplayList_FA39DE\b/DL_CombinationGroupNaming/g
+s/\bDisplayList_FA39FC\b/DL_CombinationGroupNamingSystem/g
+s/\bDisplayList_FA3A9C\b/DL_SoundCopySystemOkBankGroup/g
+s/\bDisplayList_FA3C39\b/DL_ErrorItIsImpossibleToCopyADrumKit/g
+s/\bDisplayList_FA427B\b/DL_DataLoadFilterSystemOverall/g
+s/\bDisplayList_FA44E8\b/DL_MemoryProtectSystemSound/g
+s/\bDisplayList_FA45D2\b/DL_SoundMuteSystemIfYouWantHeldNotesToContinue/g
+s/\bDisplayList_FA46C3\b/DL_DrumsMapSystemMapNamingDrumsMap/g
+s/\bDisplayList_FA47B2\b/DL_DrumsMapSystemWrite/g
+s/\bDisplayList_FA47FE\b/DL_ErrorItIsImpossibleToSetADrumMapFor/g
+s/\bDisplayList_FA4C34\b/DL_TestSystemTestModeNoteVelocity/g
+s/\bDisplayList_FA4D19\b/DL_Value/g
+s/\bDisplayList_FA4D40\b/DL_NoteVelocity/g
