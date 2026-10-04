@@ -55,7 +55,7 @@ THE CENSUS -- both axes, measured at round 7's barrier
       prints the current value.  They were 300/672 an hour later.
 
 ★ A CORRECTION TO A COMMITTED NUMBER.  Round 6 published "302 reached by
-    nothing".  It is 301.  `sub_FADF08` is published as prom_b slot
+    nothing".  It is 301.  `Msg0716_AllPartsResetBendAndModulation_Call` is published as prom_b slot
     `T_F40894: jp 0xFADF08` and called from prom_a 0xF82071, and an
     address-keyed census cannot see it because its label carries NO ADDRESS in
     the listing -- it is one of 61 labels inside gen_prom_a_fad800_module.py's
@@ -1672,7 +1672,7 @@ def selftest():
     # the reference census
     rc = ref_class()
     # ★ round 6 published 302 here.  It is 301, and the one that moved is a
-    # CORRECTION, not a drift: sub_FADF08 has no address in the listing (its
+    # CORRECTION, not a drift: Msg0716_AllPartsResetBendAndModulation_Call has no address in the listing (its
     # emitter prints no address column), so an address-keyed census cannot see
     # that prom_b slot `T_F40894: jp 0xFADF08` publishes it and that prom_a
     # 0xF82071 calls that slot.  --selftest pins both halves.
@@ -1685,9 +1685,9 @@ def selftest():
           sum(1 for v in rc.values() if v == "none") <= 301, True)
     print("        (currently %d)" % sum(1 for v in rc.values() if v == "none"))
     check("the one round 6 counted as unreferenced that is not",
-          rc["sub_FADF08"], "dir_called")
+          rc["Msg0716_AllPartsResetBendAndModulation_Call"], "dir_called")
     check("...and its single caller", 
-          [(t, "0x%06X" % a, c, k, sl) for t, a, c, k, sl in indirect_refs()["sub_FADF08"]],
+          [(t, "0x%06X" % a, c, k, sl) for t, a, c, k, sl in indirect_refs()["Msg0716_AllPartsResetBendAndModulation_Call"]],
           [("prom_a", "0xF82071", "sub_F82028", "call", "T_F40894")])
     check("published by a thunk slot nothing in either listing calls <= 685",
           sum(1 for v in rc.values() if v == "dir_only") <= 685, True)

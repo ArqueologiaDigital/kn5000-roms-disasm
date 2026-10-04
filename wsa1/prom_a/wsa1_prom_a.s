@@ -988,9 +988,9 @@
 	.set DL_CopyCompletedIntroFillInsUndEndingDesVon, 0x00F3006A
 	.set DL_CopyCompletedDasVonLhnenGew,          0x00F30105
 	.set RamDefault_F30800,                       0x00F30800
-	.set RamDefault_F30810,                       0x00F30810
-	.set RamDefault_F30E60,                       0x00F30E60
-	.set RamDefault_F314B0,                       0x00F314B0
+	.set RamDefault_SoundRemap,                       0x00F30810
+	.set RamDefault_CombiRemap,                       0x00F30E60
+	.set RamDefault_DrumMap,                       0x00F314B0
 	.set DL_F3934C,                               0x00F3934C
 	.set DL_F394E3,                               0x00F394E3
 	.set DL_F39551,                               0x00F39551
@@ -84435,21 +84435,22 @@ ParamReset_SixParamsForIndex:
 .LFADF07:
 	ret
 ; ---------------------------------------------------------------------
-; sub_FADF08 -- a five-byte veneer: `call 0xf40fd0 / ret`
+; Msg0716_AllPartsResetBendAndModulation_Call -- a five-byte veneer: `call 0xf40fd0 / ret`
 ;
 ; Called from: prom_b directory slot T_F40894.
 ; ★ IT KEEPS A sub_XXXXXX NAME ON PURPOSE.  It is a published entry point
 ;          and so it needs a label -- before this pass the twenty slots of
 ;          T_Evt2030_RunList-T_ParamApply_OneHotOfSix pointed at twenty addresses with no label at
 ;          all -- but its whole body is one call to T_F40FD0, which is
-;          prom_a 0xFC10DD, and that routine is `sub_FC10DD`.  A veneer
+;          prom_a 0xFC10DD, and that routine is `Msg0716_AllPartsResetBendAndModulation`.  A veneer
 ;          can be named no better than its target, so this one is not
 ;          named.  A stated gap beats a plausible guess.
 ; Evidence: `call 0xf40fd0` at 0xFADF08 and `ret` at 0xFADF0C; prom_b's
 ;          directory line `T_F40FD0: jp 0xFC10DD`.
 ; Unknown:  everything 0xFC10DD does.
 ; ---------------------------------------------------------------------
-sub_FADF08:
+; Msg0716_AllPartsResetBendAndModulation_Call: calls Msg0716_AllPartsResetBendAndModulation and returns -- `call T_F40FD0 / ret`.
+Msg0716_AllPartsResetBendAndModulation_Call:
 	call T_F40FD0
 	ret
 ; ---------------------------------------------------------------------
@@ -99836,7 +99837,8 @@ Transport_StartCAndB_SaveRegs:
 	pop XIZ                                              ; FB905D  5e
 	pop XIX                                              ; FB905E  5c
 	ret                                                  ; FB905F  0e
-sub_FB9060:
+; Msg0716_AllPartsResetBendAndModulation_SaveRegs: calls Msg0716_AllPartsResetBendAndModulation with the registers it pushes saved around it -- `push XIX / push XIZ / push XHL / push XDE / call T_F40FD0 / pop XDE / pop XHL / pop XIZ / pop XIX / ret`.
+Msg0716_AllPartsResetBendAndModulation_SaveRegs:
 	push XIX                                             ; FB9060  3c
 	push XIZ                                             ; FB9061  3e
 	push XHL                                             ; FB9062  3b
@@ -99985,7 +99987,7 @@ sub_FB9176:
 	calr MidiFilePlay_ClearPosition                                      ; FB918A  1e 8e 07
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB918D  1e d1 0c
 	calr sub_FB9E69                                      ; FB9190  1e d6 0c
-	call sub_FB9060                                      ; FB9193  1d 60 90 fb
+	call Msg0716_AllPartsResetBendAndModulation_SaveRegs                                      ; FB9193  1d 60 90 fb
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB9197  1e 02 01
 	call Transport_StopAllRunning_SaveRegs                                      ; FB919A  1d 46 90 fb
 	ld	d, (TransportB_State:8)                                      ; FB919E  c0 96 24
@@ -100021,7 +100023,7 @@ MidiFilePlay_Stop:
 	calr MidiFilePlay_ClearPosition                                      ; FB91E1  1e 37 07
 	calr MidiFilePlay_ClearPosition_Copy                                      ; FB91E4  1e 7a 0c
 	calr sub_FB9E69                                      ; FB91E7  1e 7f 0c
-	call sub_FB9060                                      ; FB91EA  1d 60 90 fb
+	call Msg0716_AllPartsResetBendAndModulation_SaveRegs                                      ; FB91EA  1d 60 90 fb
 sub_FB91EE:
 	calr MidiInQueue_InjectHoldPedalOff_AllChannels                                      ; FB91EE  1e ab 00
 	call Transport_StopAllRunning_SaveRegs                                      ; FB91F1  1d 46 90 fb
@@ -110811,10 +110813,11 @@ T_F40FF4_Nop:
 ;   (phase 1 runs when both power-fail checksums verify, phase 2 when one fails; notes/prom_a_module_boot_phase_names.py).
 Msg0716_BootPhase2_MemoryLost:
 	calr sub_FC019B                                      ; FC018E  1e 0a 00
-	calr sub_FC01B1                                      ; FC0191  1e 1d 00
-	calr sub_FC01C7                                      ; FC0194  1e 30 00
-sub_FC0197:
-	calr sub_FC01DD                                      ; FC0197  1e 43 00
+	calr SoundRemap_ResetToDefault                                      ; FC0191  1e 1d 00
+	calr CombiRemap_ResetToDefault                                      ; FC0194  1e 30 00
+; DrumMap_ResetToDefault_Call: calls DrumMap_ResetToDefault and returns -- `calr DrumMap_ResetToDefault / ret`.
+DrumMap_ResetToDefault_Call:
+	calr DrumMap_ResetToDefault                                      ; FC0197  1e 43 00
 	ret                                                  ; FC019A  0e
 sub_FC019B:
 	pushw bc                                             ; FC019B  29
@@ -110828,36 +110831,40 @@ sub_FC019B:
 	pop XIX                                              ; FC01AE  5c
 	popw bc                                              ; FC01AF  49
 	ret                                                  ; FC01B0  0e
-sub_FC01B1:
+; SoundRemap_ResetToDefault: copies 0x650 bytes from RamDefault_SoundRemap to RAM 0x5210 -- the block DiskLoad_SoundRemap fills from a .SRM file.
+;   Called by Msg0716_BootPhase2_MemoryLost.
+SoundRemap_ResetToDefault:
 	pushw bc                                             ; FC01B1  29
 	push XIX                                             ; FC01B2  3c
 	push XIY                                             ; FC01B3  3d
 	ldw bc, 0x0650                                       ; FC01B4  31 50 06
-	ld XIY,RamDefault_F30810                             ; FC01B7  45 10 08 f3 00
+	ld XIY,RamDefault_SoundRemap                             ; FC01B7  45 10 08 f3 00
 	ld XIX,0x00005210                                    ; FC01BC  44 10 52 00 00
 	ldir85                                               ; FC01C1  85 11
 	pop XIY                                              ; FC01C3  5d
 	pop XIX                                              ; FC01C4  5c
 	popw bc                                              ; FC01C5  49
 	ret                                                  ; FC01C6  0e
-sub_FC01C7:
+; CombiRemap_ResetToDefault: copies 0x650 bytes from RamDefault_CombiRemap to RAM 0x5860 -- the block DiskLoad_CombiRemap fills from a .CRM file.
+CombiRemap_ResetToDefault:
 	pushw bc                                             ; FC01C7  29
 	push XIX                                             ; FC01C8  3c
 	push XIY                                             ; FC01C9  3d
 	ldw bc, 0x0650                                       ; FC01CA  31 50 06
-	ld XIY,RamDefault_F30E60                             ; FC01CD  45 60 0e f3 00
+	ld XIY,RamDefault_CombiRemap                             ; FC01CD  45 60 0e f3 00
 	ld XIX,0x00005860                                    ; FC01D2  44 60 58 00 00
 	ldir85                                               ; FC01D7  85 11
 	pop XIY                                              ; FC01D9  5d
 	pop XIX                                              ; FC01DA  5c
 	popw bc                                              ; FC01DB  49
 	ret                                                  ; FC01DC  0e
-sub_FC01DD:
+; DrumMap_ResetToDefault: copies 0x1D0 bytes from RamDefault_DrumMap to RAM 0x5EB0 -- the block DiskLoad_DrumMap fills from a .DRM file.
+DrumMap_ResetToDefault:
 	pushw bc                                             ; FC01DD  29
 	push XIX                                             ; FC01DE  3c
 	push XIY                                             ; FC01DF  3d
 	ldw bc, 0x01d0                                       ; FC01E0  31 d0 01
-	ld XIY,RamDefault_F314B0                             ; FC01E3  45 b0 14 f3 00
+	ld XIY,RamDefault_DrumMap                             ; FC01E3  45 b0 14 f3 00
 	ld XIX,0x00005eb0                                    ; FC01E8  44 b0 5e 00 00
 	ldir85                                               ; FC01ED  85 11
 	pop XIY                                              ; FC01EF  5d
@@ -112524,7 +112531,7 @@ sub_FC1042:
 	sra b, 0x01                                          ; FC109E  ca ed 01
 	jr nc, .LFC10A9                                      ; FC10A1  6f 06
 	pushw bc                                             ; FC10A3  29
-	call sub_FC1975                                      ; FC10A4  1d 75 19 fc
+	call Msg0716_PostCC40_SustainOff                                      ; FC10A4  1d 75 19 fc
 	popw bc                                              ; FC10A8  49
 .LFC10A9:
 	inc 1,C                                              ; FC10A9  cb 61
@@ -112538,7 +112545,7 @@ sub_FC1042:
 	ld XIZ,Msg0716_ObjectRecords                         ; FC10BE  46 90 08 fc 00
 .LFC10C3:
 	push C                                               ; FC10C3  cb 04
-	call sub_FC1975                                      ; FC10C5  1d 75 19 fc
+	call Msg0716_PostCC40_SustainOff                                      ; FC10C5  1d 75 19 fc
 	pop C                                                ; FC10C9  cb 05
 	inc 1,C                                              ; FC10CB  cb 61
 	cp c, 0x07:i3                                          ; FC10CD  cb df
@@ -112552,7 +112559,9 @@ T_F40FE4_Nop:
 T_F40FE0_Nop:
 	ret                                                  ; FC10DB  0e
 	ret                                                  ; FC10DC  0e
-sub_FC10DD:
+; Msg0716_AllPartsResetBendAndModulation: for the 32 object records: Msg0716_PostPitchBendCenter and Msg0716_PostCC01_ModulationZero.  Called by Msg0716_AllPartsResetBendAndModulation_Call
+;   and Msg0716_AllPartsResetBendAndModulation_SaveRegs.
+Msg0716_AllPartsResetBendAndModulation:
 	ld XIX,0x00000716                                    ; FC10DD  44 16 07 00 00
 	ld XIZ,Msg0716_ObjectRecords                         ; FC10E2  46 90 08 fc 00
 	ldw bc, 0x20                                         ; FC10E7  31 20 00
@@ -112564,13 +112573,14 @@ sub_FC10DD:
 	add IZ,0x0008                                        ; FC10F2  de c8 08 00
 	djnz16 bc, .LFC10EA                                  ; FC10F6  d9 1c f1
 	ret                                                  ; FC10F9  0e
-sub_FC10FA:
+; Msg0716_AllPartsSustainOff: for the 32 object records from Msg0716_ObjectRecords (8 bytes each): Msg0716_PostCC40_SustainOff.
+Msg0716_AllPartsSustainOff:
 	ld XIX,0x00000716                                    ; FC10FA  44 16 07 00 00
 	ld XIZ,Msg0716_ObjectRecords                         ; FC10FF  46 90 08 fc 00
 	ldw bc, 0x20                                         ; FC1104  31 20 00
 .LFC1107:
 	pushw bc                                             ; FC1107  29
-	calr sub_FC1975                                          ; FC1108  1e 6a 08
+	calr Msg0716_PostCC40_SustainOff                                          ; FC1108  1e 6a 08
 	popw bc                                              ; FC110B  49
 	add XIZ,0x00000008                                   ; FC110C  ee c8 08 00 00 00
 	djnz16 bc, .LFC1107                                  ; FC1112  d9 1c f2
@@ -113596,7 +113606,8 @@ Msg0716_PostCC01_ModulationZero:
 	ldw bc, 0x04                                         ; FC196E  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1971  1e a6 00
 	ret                                                  ; FC1974  0e
-sub_FC1975:
+; Msg0716_PostCC40_SustainOff: posts B0 <part (XIZ+6)> 40 00 -- MIDI controller 0x40, Sustain, value 0 -- through Msg0716_Post_Trampoline.
+Msg0716_PostCC40_SustainOff:
 	ld (XIX),0xb0                                        ; FC1975  b4 00 b0
 	ld A,(XIZ+0x06)                                      ; FC1978  8e 06 21
 	ld (XIX+0x01),A                                      ; FC197B  bc 01 41

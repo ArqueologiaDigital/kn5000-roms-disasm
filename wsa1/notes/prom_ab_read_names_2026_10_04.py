@@ -590,6 +590,22 @@ ROWS = [
      "at beat > 0: EditCursor_Beat - 1 with EditCursor_Tick = 0x5F (the beat's last of 96 ticks); at beat 0, the previous\n"
      "measure's last tick (EditCursor_Measure - 1) or the boundary handling of (0x601F5D) / (0x601F5B).  The counterpart of\n"
      "EditCursor_NextBeat."),
+    # prom_a 0xFC01B1-0xFC1975: Msg0716 module, the reset copies and two all-parts loops.  The three RAM blocks are the ones the
+    # DISK LOAD content types 6-8 fill (DiskLoad_SoundRemap 0x5210, _CombiRemap 0x5860, _DrumMap 0x5EB0).
+    ("FC01B1", "SoundRemap_ResetToDefault",
+     "copies 0x650 bytes from RamDefault_SoundRemap to RAM 0x5210 -- the block DiskLoad_SoundRemap fills from a .SRM file.\n"
+     "Called by Msg0716_BootPhase2_MemoryLost."),
+    ("FC01C7", "CombiRemap_ResetToDefault",
+     "copies 0x650 bytes from RamDefault_CombiRemap to RAM 0x5860 -- the block DiskLoad_CombiRemap fills from a .CRM file."),
+    ("FC01DD", "DrumMap_ResetToDefault",
+     "copies 0x1D0 bytes from RamDefault_DrumMap to RAM 0x5EB0 -- the block DiskLoad_DrumMap fills from a .DRM file."),
+    ("FC1975", "Msg0716_PostCC40_SustainOff",
+     "posts B0 <part (XIZ+6)> 40 00 -- MIDI controller 0x40, Sustain, value 0 -- through Msg0716_Post_Trampoline."),
+    ("FC10FA", "Msg0716_AllPartsSustainOff",
+     "for the 32 object records from Msg0716_ObjectRecords (8 bytes each): Msg0716_PostCC40_SustainOff."),
+    ("FC10DD", "Msg0716_AllPartsResetBendAndModulation",
+     "for the 32 object records: Msg0716_PostPitchBendCenter and Msg0716_PostCC01_ModulationZero.  Called by Msg0716_AllPartsResetBendAndModulation_Call\n"
+     "and Msg0716_AllPartsResetBendAndModulation_SaveRegs."),
 ]
 
 

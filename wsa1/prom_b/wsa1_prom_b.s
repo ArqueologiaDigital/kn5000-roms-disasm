@@ -994,7 +994,7 @@
 	.set	ParamShadow_FlushAll, 0xFADA26
 	.set	Evt2030_RunList, 0xFADB2C
 	.set	ParamReset_SixParamsForIndex, 0xFADE8D
-	.set	sub_FADF08, 0xFADF08
+	.set	Msg0716_AllPartsResetBendAndModulation_Call, 0xFADF08
 	.set	ParamApply_ByModeOfParam80, 0xFADF1E
 	.set	ParamApply_StorePairAndDerive, 0xFAE223
 	.set	T_F41F2C_Nop, 0xFAE800
@@ -1188,9 +1188,9 @@
 	.set	T_F41A24_Nop, 0xFBFB33
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
 	.set	T_F40FF4_Nop, 0xFC018D
-	.set	sub_FC01B1, 0xFC01B1
-	.set	sub_FC01C7, 0xFC01C7
-	.set	sub_FC01DD, 0xFC01DD
+	.set	SoundRemap_ResetToDefault, 0xFC01B1
+	.set	CombiRemap_ResetToDefault, 0xFC01C7
+	.set	DrumMap_ResetToDefault, 0xFC01DD
 	.set	sub_FC01F3, 0xFC01F3
 	.set	sub_FC0206, 0xFC0206
 	.set	Msg0716_PostSysEx50_92_SaveRegs, 0xFC020F
@@ -1319,8 +1319,8 @@
 	.set	T_F40FBC_Nop, 0xFC0FBE
 	.set	T_F40FE4_Nop, 0xFC10DA
 	.set	T_F40FE0_Nop, 0xFC10DB
-	.set	sub_FC10DD, 0xFC10DD
-	.set	sub_FC10FA, 0xFC10FA
+	.set	Msg0716_AllPartsResetBendAndModulation, 0xFC10DD
+	.set	Msg0716_AllPartsSustainOff, 0xFC10FA
 	.set	sub_FC1116, 0xFC1116
 	.set	sub_FC11FB, 0xFC11FB
 	.set	sub_FC182F, 0xFC182F
@@ -65882,7 +65882,7 @@ RamDefault_F30800:
 ;   (0x10 + 0x650 + 0x650 + 0x1D0 = 0xE80), which is what says this
 ;   part of the range is NOT display lists.
 ; ------------------------------------------------------------------
-RamDefault_F30810:
+RamDefault_SoundRemap:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F30810  WSA1 ...........
 	.byte 0x20, 0x00, 0x00, 0x00, 0x30, 0x02, 0x00, 0x00, 0x40, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F30820   ...0...@.......
 	.byte 0x53, 0x4F, 0x55, 0x4E, 0x44, 0x20, 0x52, 0x45, 0x2D, 0x4D, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20 ; F30830  SOUND RE-MAP 1  
@@ -65992,7 +65992,7 @@ RamDefault_F30810:
 ;   (0x10 + 0x650 + 0x650 + 0x1D0 = 0xE80), which is what says this
 ;   part of the range is NOT display lists.
 ; ------------------------------------------------------------------
-RamDefault_F30E60:
+RamDefault_CombiRemap:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F30E60  WSA1 ...........
 	.byte 0x20, 0x00, 0x00, 0x00, 0x30, 0x02, 0x00, 0x00, 0x40, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F30E70   ...0...@.......
 	.byte 0x43, 0x4F, 0x4D, 0x42, 0x49, 0x20, 0x52, 0x45, 0x2D, 0x4D, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20 ; F30E80  COMBI RE-MAP 1  
@@ -66102,7 +66102,7 @@ RamDefault_F30E60:
 ;   (0x10 + 0x650 + 0x650 + 0x1D0 = 0xE80), which is what says this
 ;   part of the range is NOT display lists.
 ; ------------------------------------------------------------------
-RamDefault_F314B0:
+RamDefault_DrumMap:
 	.byte 0x57, 0x53, 0x41, 0x31, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F314B0  WSA1 ...........
 	.byte 0x20, 0x00, 0x00, 0x00, 0xB0, 0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F314C0   .......@.......
 	.byte 0x55, 0x53, 0x45, 0x52, 0x20, 0x44, 0x52, 0x55, 0x4D, 0x20, 0x4D, 0x41, 0x50, 0x20, 0x31, 0x20 ; F314D0  USER DRUM MAP 1 
@@ -88563,7 +88563,7 @@ T_ParamApply_PublishStagedPair:	jp ParamApply_PublishStagedPair  ; -> prom_a 0x2
 T_ParamApply_WriteStagedAndPublish_Copy:	jp ParamApply_WriteStagedAndPublish_Copy  ; -> prom_a 0x2D9B0   x5
 T_ParamApply_PublishStagedPair_Copy:	jp ParamApply_PublishStagedPair_Copy  ; -> prom_a 0x2D8DD   x7
 T_ParamReset_SixParamsForIndex:	jp ParamReset_SixParamsForIndex  ; -> prom_a 0x2DE8D
-T_F40894:	jp sub_FADF08  ; -> prom_a 0x2DF08   x1
+T_F40894:	jp Msg0716_AllPartsResetBendAndModulation_Call  ; -> prom_a 0x2DF08   x1
 T_ParamShadow_FlushAll:	jp ParamShadow_FlushAll  ; -> prom_a 0x2DA26   x3
 T_ParamApply_OneHotOfSix:	jp ParamApply_OneHotOfSix  ; -> prom_a 0x2D9CB   x1
 	.fill 0x40, 1, 0x0E  ; 0xF408A0: 64 x ret
@@ -88924,8 +88924,8 @@ T_F40FBC:	jp T_F40FBC_Nop  ; -> prom_a 0x40FBE
 	.fill 0x3, 1, 0x00  ; 0xF40FC5: 3 x nop
 T_F40FC8:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
 T_F40FCC:	jp sub_FC0E6B  ; -> prom_a 0x40E6B
-T_F40FD0:	jp sub_FC10DD  ; -> prom_a 0x410DD   x2
-T_F40FD4:	jp sub_FC10FA  ; -> prom_a 0x410FA
+T_F40FD0:	jp Msg0716_AllPartsResetBendAndModulation  ; -> prom_a 0x410DD   x2
+T_F40FD4:	jp Msg0716_AllPartsSustainOff  ; -> prom_a 0x410FA
 T_F40FD8:	jp T_F40FD8_Nop  ; -> prom_a 0x419DC
 T_F40FDC:	jp sub_FC18AA  ; -> prom_a 0x418AA   x1
 T_F40FE0:	jp T_F40FE0_Nop  ; -> prom_a 0x410DB
@@ -88958,9 +88958,9 @@ T_F41038:	jp sub_FC1E68  ; -> prom_a 0x41E68   x4
 T_F4103C:	jp sub_FC1D92  ; -> prom_a 0x41D92   x1
 T_F41040:	jp sub_FC25A8  ; -> prom_a 0x425A8   x1
 T_F41044:	jp sub_FC25A2  ; -> prom_a 0x425A2   x1
-T_F41048:	jp sub_FC01B1  ; -> prom_a 0x401B1   x2
-T_F4104C:	jp sub_FC01C7  ; -> prom_a 0x401C7   x2
-T_F41050:	jp sub_FC01DD  ; -> prom_a 0x401DD   x2
+T_F41048:	jp SoundRemap_ResetToDefault  ; -> prom_a 0x401B1   x2
+T_F4104C:	jp CombiRemap_ResetToDefault  ; -> prom_a 0x401C7   x2
+T_F41050:	jp DrumMap_ResetToDefault  ; -> prom_a 0x401DD   x2
 T_F41054:	jp sub_FC11FB  ; -> prom_a 0x411FB   x4
 T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1

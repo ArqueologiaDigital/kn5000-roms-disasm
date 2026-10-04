@@ -1288,15 +1288,15 @@ INSERTS = [
         "Evidence: the five instructions at 0xFADF0D-0xFADF1D.",
         "Unknown:  what device 0x7F is -- FINDINGS-memory-map.md already records",
         "         that as open, and this routine does not settle it."]),
-    (0xFADF08, "sub_FADF08", [
-        "sub_FADF08 -- a five-byte veneer: `call 0xf40fd0 / ret`",
+    (0xFADF08, "Msg0716_AllPartsResetBendAndModulation_Call", [
+        "Msg0716_AllPartsResetBendAndModulation_Call -- a five-byte veneer: `call 0xf40fd0 / ret`",
         "",
         "Called from: prom_b directory slot T_F40894.",
         "★ IT KEEPS A sub_XXXXXX NAME ON PURPOSE.  It is a published entry point",
         "         and so it needs a label -- before this pass the twenty slots of",
         "         T_F40850-T_F4089C pointed at twenty addresses with no label at",
         "         all -- but its whole body is one call to T_F40FD0, which is",
-        "         prom_a 0xFC10DD, and that routine is `sub_FC10DD`.  A veneer",
+        "         prom_a 0xFC10DD, and that routine is `Msg0716_AllPartsResetBendAndModulation`.  A veneer",
         "         can be named no better than its target, so this one is not",
         "         named.  A stated gap beats a plausible guess.",
         "Evidence: `call 0xf40fd0` at 0xFADF08 and `ret` at 0xFADF0C; prom_b's",

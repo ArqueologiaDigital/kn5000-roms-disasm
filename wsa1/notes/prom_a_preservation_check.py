@@ -2818,6 +2818,18 @@ RENAMES = {
     "sub_FE9F74": "EditCursor_TickMinus1",
     "sub_FE9F95": "EditCursor_TickMinus5",
     "sub_FE9FC7": "EditCursor_PrevBeat",
+    "sub_FC01B1": "SoundRemap_ResetToDefault",
+    "sub_FC01C7": "CombiRemap_ResetToDefault",
+    "sub_FC01DD": "DrumMap_ResetToDefault",
+    "sub_FC1975": "Msg0716_PostCC40_SustainOff",
+    "sub_FC10FA": "Msg0716_AllPartsSustainOff",
+    "sub_FC10DD": "Msg0716_AllPartsResetBendAndModulation",
+    "RamDefault_F30810": "RamDefault_SoundRemap",
+    "RamDefault_F30E60": "RamDefault_CombiRemap",
+    "RamDefault_F314B0": "RamDefault_DrumMap",
+    "sub_FADF08": "Msg0716_AllPartsResetBendAndModulation_Call",
+    "sub_FB9060": "Msg0716_AllPartsResetBendAndModulation_SaveRegs",
+    "sub_FC0197": "DrumMap_ResetToDefault_Call",
 }
 
 
