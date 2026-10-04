@@ -110863,14 +110863,14 @@ sub_F53052_Join2:
 	m_cp_rm MB16, UI_ScreenId_Previous, 3	; F530F1  cp C,(0x207d)
 	jr	z, sub_F53052_Skip6	; F530F5  jr Z,0xf5310e
 	call	T_CallbackQueue_ResetAndRestartTask2	; F530F7  call 0xf42e80
-	lda	xbc, (ExitKey_DrawbarScreen + 0x39:24)	; F530FB  lda XBC,0xf536bc
+	lda	xbc, (Paint_DrawbarScreenTitle:24)	; F530FB  lda XBC,0xf536bc
 	push	xbc	; F53100  push XBC
 	call	T_CallbackQueue_Post	; F53101  call 0xf42e84
 	pushw	1	; F53105  push 0x0001
 	call	T_Kernel_SemaSignal_StackArg	; F53108  call 0xf42dc0
 	inc	6, xsp	; F5310C  inc 6,XSP
 sub_F53052_Skip6:
-	lda	xbc, (PaintAllDrawbars + 0x23:24)	; F5310E  lda XBC,0xf53722
+	lda	xbc, (Paint_DrawbarScreenLayout:24)	; F5310E  lda XBC,0xf53722
 	push	xbc	; F53113  push XBC
 	call	T_CallbackQueue_Post	; F53114  call 0xf42e84
 	pushw	1	; F53118  push 0x0001
@@ -112251,8 +112251,13 @@ sub_F533DC_Epilogue10:
 	pop	xix	; F536BA  pop XIX
 	ret	; F536BB  ret
 
-; --- 0xF536BC-0xF536C4  data (9 bytes) ---
-	.byte 0x1d, 0x10, 0x2e, 0xf4, 0xf1, 0x40, 0x25, 0x00, 0x00   ; F536BC  .....@%..
+; Re-typed 2026-10-04 (was: --- 0xF536BC-0xF536C4  data (9 bytes) ---): these bytes are `call 0xf42e10` /
+;   `ld (0x2540),0x00`, the first two instructions of a painter.  ScreenEnterBody_DrawbarScreen posts 0xF536BC to
+;   the callback queue.  The painter draws the title DL_DrawbarTitle .. DL_PercussiveToneHeader, then
+;   DL_PercussiveToneHeader+0x7D .. DL_SoundEditBar, or DL_DrawbarSettingPage when PanelModeGroup is 0x17.
+Paint_DrawbarScreenTitle:
+	call	T_F42E10	; F536BC  call 0xf42e10
+	ld	(LCD_CurrentLayer:16), 0	; F536C0  ld (0x2540),0x00
 	lda	xbc, (DL_PercussiveToneHeader:24)	; F536C5  lda XBC,0xf54416
 	push	xbc	; F536CA  push XBC
 	lda	xwa, (DL_DrawbarTitle:24)	; F536CB  lda XWA,0xf543d6
@@ -112301,9 +112306,19 @@ PaintAllDrawbars:
 PaintAllDrawbars_Return:
 	ret	; F53721  ret
 
-; --- 0xF53722-0xF5373C  data (27 bytes) ---
-	.byte 0x2b, 0x3c, 0xf1, 0x40, 0x25, 0x34, 0xf0, 0xc6, 0xb8, 0xc1, 0x9e, 0x28, 0x23, 0xc1, 0x9f, 0x28   ; F53722  +<.@%4.....(#..(
-	.byte 0xf3, 0x76, 0x97, 0x00, 0xf1, 0x9f, 0x28, 0x43, 0xb4, 0x00, 0x00   ; F53732  .v....(C...
+; Re-typed 2026-10-04 (was: --- 0xF53722-0xF5373C  data (27 bytes) ---): a painter's prologue.  ScreenEnterBody_
+;   DrawbarScreen posts 0xF53722.  It sets (0xC6) bit 0, and redraws the title layers when (0x289E) differs from
+;   its copy (0x289F); then the footage scale and the page.
+Paint_DrawbarScreenLayout:
+	pushw	hl	; F53722  push HL
+	push	xix	; F53723  push XIX
+	lda	xix, (LCD_CurrentLayer:16)	; F53724  lda XIX,0x2540
+	set	0, (0xc6:8)	; F53728  set 0,(0xc6)
+	ld	c, (10398:16)	; F5372B  ld C,(0x289e)
+	m_cp_rm MB16, 0x289f, 3	; F5372F  cp C,(0x289f)
+	jrl	z, Paint_DrawbarScreenLayout_Unchanged	; F53733  jrl Z,0xf537cd
+	ld	(10399:16), c	; F53736  ld (0x289f),C
+	ld	(xix), 0	; F5373A  ld (XIX),0x00
 	lda	xbc, (DL_DrawbarTitle:24)	; F5373D  lda XBC,0xf543d6
 	push	xbc	; F53742  push XBC
 	lda	xwa, (DL_F543C4:24)	; F53743  lda XWA,0xf543c4
@@ -112352,6 +112367,7 @@ PaintAllDrawbars_Skip:
 PaintAllDrawbars_Join:
 	call	T_DisplayList_Run_Stack	; F537C7  call 0xf42e00
 	inc	8, xsp	; F537CB  inc 0,XSP
+Paint_DrawbarScreenLayout_Unchanged:
 	ld	(xix), 1	; F537CD  ld (XIX),0x01
 	m_cp_mi8 MB16, 0x289e, 0x00	; F537D0  cp (0x289e),0x00
 	jr	nz, PaintAllDrawbars_Skip2	; F537D5  jr NZ,0xf537e5

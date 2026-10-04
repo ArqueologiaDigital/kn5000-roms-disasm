@@ -121,6 +121,7 @@ def main():
     old = [l.rstrip("\n") for l in base_lines(rev)]
     new = [l.rstrip("\n") for l in image_lines(ROOT, REL)]
     have = collections.Counter(new)
+    new_label_set = {LABEL.match(l).group(1) for l in new if LABEL.match(l)}
 
     def rewrite(line):
         out = line
@@ -179,6 +180,12 @@ def main():
                     return cand
         return None
 
+    old_labels = {LABEL.match(l).group(1) for l in old if LABEL.match(l)}
+    newlabeled = collections.defaultdict(list)
+    for l in new:
+        for m in re.finditer(r"\b([A-Za-z_]\w*)\b", l.split(";")[0]):
+            if m.group(1) in new_label_set and m.group(1) not in old_labels:
+                newlabeled[l[:m.start()] + "@" + l[m.end():]].append(l)
     retyped = set()
     for l in new:
         m = re.match(r'^\s*\.(ascii|byte)\s+(.*?)\s*;\s*(F[0-9A-F]{5})\b', l)
@@ -237,6 +244,15 @@ def main():
             have[c] -= 1
             symbolic += 1
             continue
+        # `Label + 0xN` that became the name of a label now defined AT that address (2026-10-04: a posted painter
+        # entry inside another routine's block got its own label); the byte gate checks the address
+        if re.search(r"\b\w+ \+ 0x[0-9A-Fa-f]+\b", ln.split(";")[0]):
+            key = re.sub(r"\b\w+ \+ 0x[0-9A-Fa-f]+\b", "@", ln)
+            hit = next((c for c in newlabeled.get(key, ()) if have[c] > 0), None)
+            if hit is not None:
+                have[hit] -= 1
+                symbolic += 1
+                continue
         # an instruction line that was really data (text decoded as code) and is now inside a `.ascii` / `.byte`
         # line of the working tree that covers its address; the byte gate checks the bytes (2026-10-04)
         ma = re.search(r";\s*(F[0-9A-F]{5})\b", ln)
