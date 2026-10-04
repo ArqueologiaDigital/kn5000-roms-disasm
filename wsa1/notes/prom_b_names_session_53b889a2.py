@@ -4055,4 +4055,11 @@ RENAMES = [
     ("T_F411BC", "T_NoteRouting_Rebuild"),
     ("T_F411EC", "T_NoteRouting_SetSoloAndRebuild"),
     ("sub_FE8040", "NoteRouting_RebuildForSong_Call"),
+    ("sub_FC5B26", "NoteRouting_KeyboardToSelectedPart"),
+    ("sub_FC5B8A", "NoteRouting_BuildForSequencerModes"),
+    ("sub_FC5BCC", "NoteRouting_BuildForCombiEditPart"),
+    ("sub_FC5BB5", "NoteRouting_BuildForMode13"),
+    ("sub_FC5C4C", "NoteRouting_BuildForSoundCopy"),
+    ("sub_FC5C5C", "NoteRouting_BuildForModes23To27"),
+    ("Dispatch32_FC6546", "NoteRouting_BuildByPanelMode"),
 ]

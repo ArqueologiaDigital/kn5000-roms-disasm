@@ -1645,10 +1645,10 @@ check("Bytes_00_to_1F (0xFAD1EA) is named by NOTHING in either image",
 check("Bytes_00_to_1F_FC64A5: 0x00..0x1F then a single 0xFF",
       list(a(0xFC64A5, 32)) == list(range(32)) and a(0xFC64C5, 1) == b"\xff")
 _D32 = [_le32(0xFC6546 + 4 * k) for k in range(32)]
-check("Dispatch32_FC6546: 32 entries, 7 distinct, all in 0xFC5B26-0xFC5C6C",
+check("NoteRouting_BuildByPanelMode: 32 entries, 7 distinct, all in 0xFC5B26-0xFC5C6C",
       len(set(_D32)) == 7 and min(_D32) == 0xFC5B26 and max(_D32) == 0xFC5C6C,
       "distinct %d" % len(set(_D32)))
-check("Dispatch32_FC6546: LAST-ENTRY TEST -- 0xFC6546 + 32*4 = 0xFC65C6 and the "
+check("NoteRouting_BuildByPanelMode: LAST-ENTRY TEST -- 0xFC6546 + 32*4 = 0xFC65C6 and the "
       "bytes there are 00 01 02 03",
       0xFC6546 + 128 == 0xFC65C6 and a(0xFC65C6, 4) == bytes([0, 1, 2, 3]))
 check("Bytes_00_to_1F_x3_FC65C6: three identical 32-byte identity runs",

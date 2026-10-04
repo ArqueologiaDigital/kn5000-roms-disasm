@@ -1992,7 +1992,7 @@ ROWS = [
      "note-off for each sounding note; A = the low byte of their ORed voice masks."),
     ("FC54C6", "NoteRouting_RebuildForSong",
      "T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then\n"
-     "block +0 = (0x4C22) | (0x4C21), Dispatch32_FC6546[PanelMode] with 0, NoteRouting_UpdateActivePartMask,\n"
+     "block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,\n"
      "NoteRouting_RebuildOutputs."),
     ("FC5518", "NoteRouting_Rebuild",
      "T_NoteRouting_Rebuild (C0mbinati0nM0de_StepSelectedPart, ModeLeave_SeqPlay, MainTask_PhaseVector): the same without\n"
@@ -2006,6 +2006,21 @@ ROWS = [
     ("FC6153", "NoteRouting_UpdateActivePartMask",
      "(0x4C06) = BitMask32_Table_FC64C6[block +1], or block +0 when +1 is 0xFF; when it changed,\n"
      "T_ParamMsg_RefreshPartMasks."),
+    # the per-mode routing builders, NoteRouting_BuildByPanelMode[PanelMode] (mode names from PanelScreen_VtableTable view A)
+    ("FC5B26", "NoteRouting_KeyboardToSelectedPart",
+     "the default builder (modes 0-2, 4, 8, 10-12, 14-16, 18, 19, 22: SOUND, COMBINATION, SEQ PLAY, SYSTEM, MIDI ...):\n"
+     "block +1 = the part UI_PartIndex selects (Bytes_00_to_1F_x3_FC65C6 + 0x40); with block +0x298 bit 4 and a part\n"
+     "below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_RebuildFlags |= 3."),
+    ("FC5B8A", "NoteRouting_BuildForSequencerModes",
+     "modes 3, 5, 6, 7 (Sequencer, Realtime Record, Step Record, Edit): with NoteRouting_Mode bit 6, block +1 =\n"
+     "(0x4C20) and flag bit 1; otherwise NoteRouting_KeyboardToSelectedPart."),
+    ("FC5BCC", "NoteRouting_BuildForCombiEditPart",
+     "mode 9 (CombiEditPart): on screens 0x61 / 0x63, block +1 = the part UI_PartIndex selects, flag bit 1; otherwise\n"
+     "NoteRouting_KeyboardToSelectedPart."),
+    ("FC5BB5", "NoteRouting_BuildForMode13",
+     "mode 13: NoteRouting_Mode |= 4, then NoteRouting_KeyboardToSelectedPart."),
+    ("FC5C4C", "NoteRouting_BuildForSoundCopy", "modes 20 / 21 (SoundCopy): NoteRouting_KeyboardToSelectedPart."),
+    ("FC5C5C", "NoteRouting_BuildForModes23To27", "modes 23-27: NoteRouting_KeyboardToSelectedPart."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

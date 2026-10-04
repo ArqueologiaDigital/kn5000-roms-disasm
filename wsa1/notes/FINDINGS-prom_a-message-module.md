@@ -174,7 +174,7 @@ block is `.byte` with no count claimed.
 | `Bytes_0F_FAD3CB` | 32 bytes | ⚠ the run itself; no second reader |
 | `Bytes_00_to_1F_FC64A5` | 32 bytes + one 0xFF | its END is named by eight readers |
 | `BitMask32_Table_FC64C6` | 32 LE32 | between two independently named addresses |
-| `Dispatch32_FC6546` | 32 LE32 | its END is named by the reader at `0xFC5BE8` |
+| `NoteRouting_BuildByPanelMode` | 32 LE32 | its END is named by the reader at `0xFC5BE8` |
 | `Bytes_00_to_1F_x3_FC65C6` | 3 × 32 bytes | the three runs, then a value that is not identity |
 | `MixedTables_FAD28A`/`_FC6626` | — | **no reader found; no count claimed** |
 

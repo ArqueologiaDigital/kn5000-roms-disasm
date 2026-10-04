@@ -111,7 +111,7 @@ A missing output points at the default record 0x602ACA.
 
 Each entry point:
 1. sets byte +0 = (0x4C22) | (0x4C21);
-2. runs the per-mode builder `Dispatch32_FC6546[PanelMode]`;
+2. runs the per-mode builder `NoteRouting_BuildByPanelMode[PanelMode]`;
 3. refreshes `NoteRouting_ActivePartMask` (0x4C06), which is `BitMask32_Table_FC64C6[+1]`, or the +0 byte
    when +1 is 0xFF; the part masks are re-sent when it changes;
 4. runs `NoteRouting_RebuildOutputs`, which rebuilds the output tables `NoteRouting_RebuildFlags` (0x4C04)

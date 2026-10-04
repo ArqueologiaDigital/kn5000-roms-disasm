@@ -118433,7 +118433,7 @@ sub_FC546A:
 	ld c, 0x04:opc                                          ; FC548C  23 04
 	m_mul MB16, PanelMode, 3                                ; FC548E  c1 78 20 43
 	extz XBC                                             ; FC5492  e9 12
-	add XBC,Dispatch32_FC6546                            ; FC5494  e9 c8 46 65 fc 00
+	add XBC,NoteRouting_BuildByPanelMode                            ; FC5494  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC549A  a1 21
 	ld XIX,XBC                                           ; FC549C  e9 8c
 	ld (xiz-4), xbc                                      ; FC549E  be fc 61
@@ -118454,7 +118454,7 @@ sub_FC546A:
 	unlk XIZ                                             ; FC54C3  ee 0d
 	ret                                                  ; FC54C5  0e
 ; NoteRouting_RebuildForSong: T_NoteRouting_RebuildForSong (BStore_BootPhase3, S0ngSelectName_Leave, ScreenEnter_CyclePlayEditScreen): sub_FC61A6 first, then
-;   block +0 = (0x4C22) | (0x4C21), Dispatch32_FC6546[PanelMode] with 0, NoteRouting_UpdateActivePartMask,
+;   block +0 = (0x4C22) | (0x4C21), NoteRouting_BuildByPanelMode[PanelMode] with 0, NoteRouting_UpdateActivePartMask,
 ;   NoteRouting_RebuildOutputs.
 NoteRouting_RebuildForSong:
 	link XIZ,0xfffc                                      ; FC54C6  ee 0c fc ff
@@ -118466,7 +118466,7 @@ NoteRouting_RebuildForSong:
 	ld c, 0x04:opc                                          ; FC54DE  23 04
 	m_mul MB16, PanelMode, 3                                ; FC54E0  c1 78 20 43
 	extz XBC                                             ; FC54E4  e9 12
-	add XBC,Dispatch32_FC6546                            ; FC54E6  e9 c8 46 65 fc 00
+	add XBC,NoteRouting_BuildByPanelMode                            ; FC54E6  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC54EC  a1 21
 	ld XIX,XBC                                           ; FC54EE  e9 8c
 	ld (xiz-4), xbc                                      ; FC54F0  be fc 61
@@ -118497,7 +118497,7 @@ NoteRouting_Rebuild:
 	ld c, 0x04:opc                                          ; FC552C  23 04
 	m_mul MB16, PanelMode, 3                                ; FC552E  c1 78 20 43
 	extz XBC                                             ; FC5532  e9 12
-	add XBC,Dispatch32_FC6546                            ; FC5534  e9 c8 46 65 fc 00
+	add XBC,NoteRouting_BuildByPanelMode                            ; FC5534  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC553A  a1 21
 	ld XIX,XBC                                           ; FC553C  e9 8c
 	ld (xiz-4), xbc                                      ; FC553E  be fc 61
@@ -118535,7 +118535,7 @@ NoteRouting_SetSoloAndRebuild:
 	ld c, 0x04:opc                                          ; FC5590  23 04
 	m_mul MB16, PanelMode, 3                                ; FC5592  c1 78 20 43
 	extz XBC                                             ; FC5596  e9 12
-	add XBC,Dispatch32_FC6546                            ; FC5598  e9 c8 46 65 fc 00
+	add XBC,NoteRouting_BuildByPanelMode                            ; FC5598  e9 c8 46 65 fc 00
 	ld XBC,(XBC)                                         ; FC559E  a1 21
 	ld XIX,XBC                                           ; FC55A0  e9 8c
 	ld (xiz-4), xbc                                      ; FC55A2  be fc 61
@@ -119104,7 +119104,10 @@ sub_FC5ACC:
 	ret                                                  ; FC5B24  0e
 T_F411E4_Nop:
 	ret                                                  ; FC5B25  0e
-sub_FC5B26:
+; NoteRouting_KeyboardToSelectedPart: the default builder (modes 0-2, 4, 8, 10-12, 14-16, 18, 19, 22: SOUND, COMBINATION, SEQ PLAY, SYSTEM, MIDI ...):
+;   block +1 = the part UI_PartIndex selects (Bytes_00_to_1F_x3_FC65C6 + 0x40); with block +0x298 bit 4 and a part
+;   below 8, block +0 = its bit (bit 5) and +1 = 0xFF instead; NoteRouting_RebuildFlags |= 3.
+NoteRouting_KeyboardToSelectedPart:
 	pushw hl                                             ; FC5B26  2b
 	pushw de                                             ; FC5B27  2a
 	push XIX                                             ; FC5B28  3c
@@ -119145,7 +119148,9 @@ sub_FC5B26:
 	popw de                                              ; FC5B87  4a
 	popw hl                                              ; FC5B88  4b
 	ret                                                  ; FC5B89  0e
-sub_FC5B8A:   ; entry: named by 4 `.long` operands, first at 0xFC6552
+; NoteRouting_BuildForSequencerModes: modes 3, 5, 6, 7 (Sequencer, Realtime Record, Step Record, Edit): with NoteRouting_Mode bit 6, block +1 =
+;   (0x4C20) and flag bit 1; otherwise NoteRouting_KeyboardToSelectedPart.
+NoteRouting_BuildForSequencerModes:   ; entry: named by 4 `.long` operands, first at 0xFC6552
 	link XIZ,0x0000                                      ; FC5B8A  ee 0c 00 00
 	ld bc, (NoteRouting_Mode:24)                                ; FC5B8E  d2 98 24 60 21
 	and BC,0x0040                                        ; FC5B93  d9 cc 40 00
@@ -119157,21 +119162,24 @@ sub_FC5B8A:   ; entry: named by 4 `.long` operands, first at 0xFC6552
 .LFC5BA9:
 	push 0x00                                            ; FC5BA9  09 00
 	m_push MBD+r6, 0x08                                  ; FC5BAB  8e 08 04
-	calr sub_FC5B26                                      ; FC5BAE  1e 75 ff
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5BAE  1e 75 ff
 	popw bc                                              ; FC5BB1  49
 .LFC5BB2:
 	unlk XIZ                                             ; FC5BB2  ee 0d
 	ret                                                  ; FC5BB4  0e
-sub_FC5BB5:   ; entry: named by 1 `.long` operand, first at 0xFC657A
+; NoteRouting_BuildForMode13: mode 13: NoteRouting_Mode |= 4, then NoteRouting_KeyboardToSelectedPart.
+NoteRouting_BuildForMode13:   ; entry: named by 1 `.long` operand, first at 0xFC657A
 	link XIZ,0x0000                                      ; FC5BB5  ee 0c 00 00
 	orw	(NoteRouting_Mode:24), 0x0004                ; FC5BB9  d2 98 24 60 3e 04 00
 	push 0x00                                            ; FC5BC0  09 00
 	m_push MBD+r6, 0x08                                  ; FC5BC2  8e 08 04
-	calr sub_FC5B26                                      ; FC5BC5  1e 5e ff
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5BC5  1e 5e ff
 	popw bc                                              ; FC5BC8  49
 	unlk XIZ                                             ; FC5BC9  ee 0d
 	ret                                                  ; FC5BCB  0e
-sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
+; NoteRouting_BuildForCombiEditPart: mode 9 (CombiEditPart): on screens 0x61 / 0x63, block +1 = the part UI_PartIndex selects, flag bit 1; otherwise
+;   NoteRouting_KeyboardToSelectedPart.
+NoteRouting_BuildForCombiEditPart:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 	link XIZ,0x0000                                      ; FC5BCC  ee 0c 00 00
 	pushw hl                                             ; FC5BD0  2b
 	m_cp_mi8 MB16, UI_ScreenLatch, 0x61                          ; FC5BD1  c1 7a 20 3f 61
@@ -119192,7 +119200,7 @@ sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 .LFC5BFF:
 	push 0x00                                            ; FC5BFF  09 00
 	m_push MBD+r6, 0x08                                  ; FC5C01  8e 08 04
-	calr sub_FC5B26                                      ; FC5C04  1e 1f ff
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5C04  1e 1f ff
 	popw bc                                              ; FC5C07  49
 .LFC5C08:
 	popw hl                                              ; FC5C08  4b
@@ -119218,25 +119226,27 @@ sub_FC5BCC:   ; entry: named by 1 `.long` operand, first at 0xFC656A
 .LFC5C3F:
 	push 0x00                                            ; FC5C3F  09 00
 	m_push MBD+r6, 0x08                                  ; FC5C41  8e 08 04
-	calr sub_FC5B26                                      ; FC5C44  1e df fe
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5C44  1e df fe
 	popw bc                                              ; FC5C47  49
 .LFC5C48:
 	popw hl                                              ; FC5C48  4b
 	unlk XIZ                                             ; FC5C49  ee 0d
 	ret                                                  ; FC5C4B  0e
-sub_FC5C4C:   ; entry: named by 2 `.long` operands, first at 0xFC6596
+; NoteRouting_BuildForSoundCopy: modes 20 / 21 (SoundCopy): NoteRouting_KeyboardToSelectedPart.
+NoteRouting_BuildForSoundCopy:   ; entry: named by 2 `.long` operands, first at 0xFC6596
 	link XIZ,0x0000                                      ; FC5C4C  ee 0c 00 00
 	push 0x00                                            ; FC5C50  09 00
 	m_push MBD+r6, 0x08                                  ; FC5C52  8e 08 04
-	calr sub_FC5B26                                      ; FC5C55  1e ce fe
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5C55  1e ce fe
 	popw bc                                              ; FC5C58  49
 	unlk XIZ                                             ; FC5C59  ee 0d
 	ret                                                  ; FC5C5B  0e
-sub_FC5C5C:   ; entry: named by 5 `.long` operands, first at 0xFC65A2
+; NoteRouting_BuildForModes23To27: modes 23-27: NoteRouting_KeyboardToSelectedPart.
+NoteRouting_BuildForModes23To27:   ; entry: named by 5 `.long` operands, first at 0xFC65A2
 	link XIZ,0x0000                                      ; FC5C5C  ee 0c 00 00
 	push 0x00                                            ; FC5C60  09 00
 	m_push MBD+r6, 0x08                                  ; FC5C62  8e 08 04
-	calr sub_FC5B26                                      ; FC5C65  1e be fe
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5C65  1e be fe
 	popw bc                                              ; FC5C68  49
 	unlk XIZ                                             ; FC5C69  ee 0d
 	ret                                                  ; FC5C6B  0e
@@ -119244,7 +119254,7 @@ sub_FC5C5C:   ; entry: named by 5 `.long` operands, first at 0xFC65A2
 	link XIZ,0x0000                                      ; FC5C6C  ee 0c 00 00
 	push 0x00                                            ; FC5C70  09 00
 	m_push MBD+r6, 0x08                                  ; FC5C72  8e 08 04
-	calr sub_FC5B26                                      ; FC5C75  1e ae fe
+	calr NoteRouting_KeyboardToSelectedPart                                      ; FC5C75  1e ae fe
 	popw bc                                              ; FC5C78  49
 	unlk XIZ                                             ; FC5C79  ee 0d
 	ret                                                  ; FC5C7B  0e
@@ -120101,7 +120111,7 @@ Bytes_00_to_1F_FC64A5:
 ;          checked whole; entry 31 is 0x80000000.
 ; ENTRY COUNT 32: 128 bytes between two independently named addresses --
 ;          0xFC64C6 (eight readers) and 0xFC6546 (four readers, it is
-;          Dispatch32_FC6546's base).
+;          NoteRouting_BuildByPanelMode's base).
 ; ★ This is a SECOND, independent copy of the same 128 bytes that
 ;   BitMask32_Table at 0xFAD20A holds; the two are byte-identical and each is
 ;   read only by sites inside its own module.  A shared constant table
@@ -120143,7 +120153,7 @@ BitMask32_Table_FC64C6:
 	.long 0x40000000                                 ; FC653E  [ 30]
 	.long 0x80000000                                 ; FC6542  [ 31]
 ; ---------------------------------------------------------------------
-; Dispatch32_FC6546 -- 32 LE32 handler addresses, only 7 of them distinct
+; NoteRouting_BuildByPanelMode -- 32 LE32 handler addresses, only 7 of them distinct
 ;
 ; Read by: FOUR sites, all `add XBC,0x00FC6546` -- 0xFC5495, 0xFC54E7,
 ;          0xFC5535, 0xFC5599.
@@ -120159,35 +120169,36 @@ BitMask32_Table_FC64C6:
 ;          0xFC65C6 are 00 01 02 03 -- the start of an ascending byte run, not
 ;          an address.
 ; ---------------------------------------------------------------------
-Dispatch32_FC6546:
-	.long sub_FC5B26                                 ; FC6546  [  0]
-	.long sub_FC5B26                                 ; FC654A  [  1]
-	.long sub_FC5B26                                 ; FC654E  [  2]
-	.long sub_FC5B8A                                 ; FC6552  [  3]
-	.long sub_FC5B26                                 ; FC6556  [  4]
-	.long sub_FC5B8A                                 ; FC655A  [  5]
-	.long sub_FC5B8A                                 ; FC655E  [  6]
-	.long sub_FC5B8A                                 ; FC6562  [  7]
-	.long sub_FC5B26                                 ; FC6566  [  8]
-	.long sub_FC5BCC                                 ; FC656A  [  9]
-	.long sub_FC5B26                                 ; FC656E  [ 10]
-	.long sub_FC5B26                                 ; FC6572  [ 11]
-	.long sub_FC5B26                                 ; FC6576  [ 12]
-	.long sub_FC5BB5                                 ; FC657A  [ 13]
-	.long sub_FC5B26                                 ; FC657E  [ 14]
-	.long sub_FC5B26                                 ; FC6582  [ 15]
-	.long sub_FC5B26                                 ; FC6586  [ 16]
+; NoteRouting_BuildByPanelMode: the per-mode routing builders, indexed by PanelMode (NoteRouting_Rebuild*; notes/prom_ab_read_names_2026_10_04.py)
+NoteRouting_BuildByPanelMode:
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6546  [  0]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC654A  [  1]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC654E  [  2]
+	.long NoteRouting_BuildForSequencerModes                                 ; FC6552  [  3]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6556  [  4]
+	.long NoteRouting_BuildForSequencerModes                                 ; FC655A  [  5]
+	.long NoteRouting_BuildForSequencerModes                                 ; FC655E  [  6]
+	.long NoteRouting_BuildForSequencerModes                                 ; FC6562  [  7]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6566  [  8]
+	.long NoteRouting_BuildForCombiEditPart                                 ; FC656A  [  9]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC656E  [ 10]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6572  [ 11]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6576  [ 12]
+	.long NoteRouting_BuildForMode13                                 ; FC657A  [ 13]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC657E  [ 14]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6582  [ 15]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6586  [ 16]
 	.long .LFC5C6C                                   ; FC658A  [ 17]
-	.long sub_FC5B26                                 ; FC658E  [ 18]
-	.long sub_FC5B26                                 ; FC6592  [ 19]
-	.long sub_FC5C4C                                 ; FC6596  [ 20]
-	.long sub_FC5C4C                                 ; FC659A  [ 21]
-	.long sub_FC5B26                                 ; FC659E  [ 22]
-	.long sub_FC5C5C                                 ; FC65A2  [ 23]
-	.long sub_FC5C5C                                 ; FC65A6  [ 24]
-	.long sub_FC5C5C                                 ; FC65AA  [ 25]
-	.long sub_FC5C5C                                 ; FC65AE  [ 26]
-	.long sub_FC5C5C                                 ; FC65B2  [ 27]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC658E  [ 18]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC6592  [ 19]
+	.long NoteRouting_BuildForSoundCopy                                 ; FC6596  [ 20]
+	.long NoteRouting_BuildForSoundCopy                                 ; FC659A  [ 21]
+	.long NoteRouting_KeyboardToSelectedPart                                 ; FC659E  [ 22]
+	.long NoteRouting_BuildForModes23To27                                 ; FC65A2  [ 23]
+	.long NoteRouting_BuildForModes23To27                                 ; FC65A6  [ 24]
+	.long NoteRouting_BuildForModes23To27                                 ; FC65AA  [ 25]
+	.long NoteRouting_BuildForModes23To27                                 ; FC65AE  [ 26]
+	.long NoteRouting_BuildForModes23To27                                 ; FC65B2  [ 27]
 	.long .LFC5C6C                                   ; FC65B6  [ 28]
 	.long .LFC5C6C                                   ; FC65BA  [ 29]
 	.long .LFC5C6C                                   ; FC65BE  [ 30]
