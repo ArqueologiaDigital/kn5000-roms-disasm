@@ -1146,7 +1146,30 @@
 	.set	sub_FBB3DC, 0xFBB3DC
 	.set	sub_FBB800, 0xFBB800
 	.set	sub_FBB93C, 0xFBB93C
+	.set	PartParam_RefuseNumberEntry, 0xFBBA83
+	.set	PartParam_StepVolume, 0xFBBAA3
+	.set	PartParam_EnterVolume, 0xFBBABB
+	.set	PartParam_StepPanpot, 0xFBBAD3
+	.set	PartParam_StepKeyShift, 0xFBBAEB
+	.set	PartParam_EnterKeyShift, 0xFBBB03
+	.set	PartParam_StepFineTune, 0xFBBB1B
+	.set	PartParam_EnterFineTune, 0xFBBB33
+	.set	PartParam_StepPitchBendRange, 0xFBBB4B
+	.set	PartParam_EnterPitchBendRange, 0xFBBB63
+	.set	PartParam_StepEffect1Send, 0xFBBB7B
+	.set	PartParam_EnterEffect1Send, 0xFBBB93
+	.set	PartParam_StepEffect2, 0xFBBBAB
+	.set	PartParam_StepReverbSend, 0xFBBC2B
+	.set	PartParam_EnterReverbSend, 0xFBBC43
 	.set	sub_FBBCBC, 0xFBBCBC
+	.set	PartParam_StepAssignMode, 0xFBBDF9
+	.set	PartParam_StepVelocityOffset, 0xFBBE11
+	.set	PartParam_EnterVelocityOffset, 0xFBBE29
+	.set	PartParam_StepBasicChannel, 0xFBBE41
+	.set	PartParam_StepMidiOutKeyTranspose_F1ADAC, 0xFBC10D
+	.set	PartParam_EnterMidiOutKeyTranspose_F1ADAC, 0xFBC125
+	.set	PartParam_StepMidiOutKeyTranspose_F1AE12, 0xFBC53B
+	.set	PartParam_EnterMidiOutKeyTranspose_F1AE12, 0xFBC553
 	.set	ScreenEnter_CombiEditConfigure_B2, 0xFBC56B
 	.set	ScreenLeave_CombiEditConfigure_B2, 0xFBC56F
 	.set	ScreenButton_CombiEditConfigure_B2, 0xFBC573
@@ -50528,14 +50551,14 @@ Record_F1AAEC:
 ; --------------------------------------------------------------------------
 PtrTable_F1AB13:
 	.long 0x00FBBA8E                       ; F1AB13  [0]   -> prom_a 0xFBBA8E
-	.long 0x00FBBAA3                       ; F1AB17  [1]   -> prom_a 0xFBBAA3
-	.long 0x00FBBAD3                       ; F1AB1B  [2]   -> prom_a 0xFBBAD3
-	.long 0x00FBBAEB                       ; F1AB1F  [3]   -> prom_a 0xFBBAEB
-	.long 0x00FBBB1B                       ; F1AB23  [4]   -> prom_a 0xFBBB1B
-	.long 0x00FBBB4B                       ; F1AB27  [5]   -> prom_a 0xFBBB4B
-	.long 0x00FBBB7B                       ; F1AB2B  [6]   -> prom_a 0xFBBB7B
-	.long 0x00FBBBAB                       ; F1AB2F  [7]   -> prom_a 0xFBBBAB
-	.long 0x00FBBC2B                       ; F1AB33  [8]   -> prom_a 0xFBBC2B
+	.long PartParam_StepVolume                       ; F1AB17  [1]   -> prom_a 0xFBBAA3
+	.long PartParam_StepPanpot                       ; F1AB1B  [2]   -> prom_a 0xFBBAD3
+	.long PartParam_StepKeyShift                       ; F1AB1F  [3]   -> prom_a 0xFBBAEB
+	.long PartParam_StepFineTune                       ; F1AB23  [4]   -> prom_a 0xFBBB1B
+	.long PartParam_StepPitchBendRange                       ; F1AB27  [5]   -> prom_a 0xFBBB4B
+	.long PartParam_StepEffect1Send                       ; F1AB2B  [6]   -> prom_a 0xFBBB7B
+	.long PartParam_StepEffect2                       ; F1AB2F  [7]   -> prom_a 0xFBBBAB
+	.long PartParam_StepReverbSend                       ; F1AB33  [8]   -> prom_a 0xFBBC2B
 	.long 0x00FBBC5B                       ; F1AB37  [9]   -> prom_a 0xFBBC5B
 	.long 0x00FBBC73                       ; F1AB3B  [10]   -> prom_a 0xFBBC73
 	.long 0x00FBBC8B                       ; F1AB3F  [11]   -> prom_a 0xFBBC8B
@@ -50551,9 +50574,9 @@ PtrTable_F1AB13:
 PtrTable_F1AB4B:
 	.long sub_FBBCBC                       ; F1AB4B  [0]   -> prom_a 0xFBBCBC
 	.long 0x00FBBD4F                       ; F1AB4F  [1]   -> prom_a 0xFBBD4F
-	.long 0x00FBBDF9                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
-	.long 0x00FBBE11                       ; F1AB57  [3]   -> prom_a 0xFBBE11
-	.long 0x00FBBE41                       ; F1AB5B  [4]   -> prom_a 0xFBBE41
+	.long PartParam_StepAssignMode                       ; F1AB53  [2]   -> prom_a 0xFBBDF9
+	.long PartParam_StepVelocityOffset                       ; F1AB57  [3]   -> prom_a 0xFBBE11
+	.long PartParam_StepBasicChannel                       ; F1AB5B  [4]   -> prom_a 0xFBBE41
 	.long 0x00FBBE59                       ; F1AB5F  [5]   -> prom_a 0xFBBE59
 	.long 0x00FBBE94                       ; F1AB63  [6]   -> prom_a 0xFBBE94
 	.long 0x00FBBECF                       ; F1AB67  [7]   -> prom_a 0xFBBECF
@@ -50601,7 +50624,7 @@ PtrTable_F1ABA3:
 	.long 0x00FBC0C5                       ; F1ABAF  [3]   -> prom_a 0xFBC0C5
 	.long 0x00FBC0DD                       ; F1ABB3  [4]   -> prom_a 0xFBC0DD
 	.long 0x00FBC0F5                       ; F1ABB7  [5]   -> prom_a 0xFBC0F5
-	.long 0x00FBC10D                       ; F1ABBB  [6]   -> prom_a 0xFBC10D
+	.long PartParam_StepMidiOutKeyTranspose_F1ADAC                       ; F1ABBB  [6]   -> prom_a 0xFBC10D
 	.long 0x00FBC13D                       ; F1ABBF  [7]   -> prom_a 0xFBC13D
 	.long 0x00FBC155                       ; F1ABC3  [8]   -> prom_a 0xFBC155
 	.long 0x00FBC16D                       ; F1ABC7  [9]   -> prom_a 0xFBC16D
@@ -50627,7 +50650,7 @@ PtrTable_F1ABE7:
 	.long 0x00FBC47E                       ; F1ABF7  [4]   -> prom_a 0xFBC47E
 	.long 0x00FBC495                       ; F1ABFB  [5]   -> prom_a 0xFBC495
 	.long 0x00FBC4E8                       ; F1ABFF  [6]   -> prom_a 0xFBC4E8
-	.long 0x00FBC53B                       ; F1AC03  [7]   -> prom_a 0xFBC53B
+	.long PartParam_StepMidiOutKeyTranspose_F1AE12                       ; F1AC03  [7]   -> prom_a 0xFBC53B
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AC07 -- pointer table, 0xF1AC07-0xF1AC3E (56 bytes)
@@ -50636,20 +50659,20 @@ PtrTable_F1ABE7:
 ; Evidence: 14 entries of 4 bytes; base and width from prom_a 0xFBB9C7
 ; --------------------------------------------------------------------------
 PtrTable_F1AC07:
-	.long 0x00FBBA83                       ; F1AC07  [0]   -> prom_a 0xFBBA83
-	.long 0x00FBBABB                       ; F1AC0B  [1]   -> prom_a 0xFBBABB
-	.long 0x00FBBA83                       ; F1AC0F  [2]   -> prom_a 0xFBBA83
-	.long 0x00FBBB03                       ; F1AC13  [3]   -> prom_a 0xFBBB03
-	.long 0x00FBBB33                       ; F1AC17  [4]   -> prom_a 0xFBBB33
-	.long 0x00FBBB63                       ; F1AC1B  [5]   -> prom_a 0xFBBB63
-	.long 0x00FBBB93                       ; F1AC1F  [6]   -> prom_a 0xFBBB93
-	.long 0x00FBBA83                       ; F1AC23  [7]   -> prom_a 0xFBBA83
-	.long 0x00FBBC43                       ; F1AC27  [8]   -> prom_a 0xFBBC43
-	.long 0x00FBBA83                       ; F1AC2B  [9]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC2F  [10]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC33  [11]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC37  [12]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC3B  [13]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC07  [0]   -> prom_a 0xFBBA83
+	.long PartParam_EnterVolume                       ; F1AC0B  [1]   -> prom_a 0xFBBABB
+	.long PartParam_RefuseNumberEntry                       ; F1AC0F  [2]   -> prom_a 0xFBBA83
+	.long PartParam_EnterKeyShift                       ; F1AC13  [3]   -> prom_a 0xFBBB03
+	.long PartParam_EnterFineTune                       ; F1AC17  [4]   -> prom_a 0xFBBB33
+	.long PartParam_EnterPitchBendRange                       ; F1AC1B  [5]   -> prom_a 0xFBBB63
+	.long PartParam_EnterEffect1Send                       ; F1AC1F  [6]   -> prom_a 0xFBBB93
+	.long PartParam_RefuseNumberEntry                       ; F1AC23  [7]   -> prom_a 0xFBBA83
+	.long PartParam_EnterReverbSend                       ; F1AC27  [8]   -> prom_a 0xFBBC43
+	.long PartParam_RefuseNumberEntry                       ; F1AC2B  [9]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC2F  [10]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC33  [11]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC37  [12]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC3B  [13]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AC3F -- pointer table, 0xF1AC3F-0xF1AC62 (36 bytes)
@@ -50658,15 +50681,15 @@ PtrTable_F1AC07:
 ; Evidence: 9 entries of 4 bytes; base and width from prom_a 0xFBB9E8
 ; --------------------------------------------------------------------------
 PtrTable_F1AC3F:
-	.long 0x00FBBA83                       ; F1AC3F  [0]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC43  [1]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC47  [2]   -> prom_a 0xFBBA83
-	.long 0x00FBBE29                       ; F1AC4B  [3]   -> prom_a 0xFBBE29
-	.long 0x00FBBA83                       ; F1AC4F  [4]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC53  [5]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC57  [6]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC5B  [7]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC5F  [8]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC3F  [0]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC43  [1]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC47  [2]   -> prom_a 0xFBBA83
+	.long PartParam_EnterVelocityOffset                       ; F1AC4B  [3]   -> prom_a 0xFBBE29
+	.long PartParam_RefuseNumberEntry                       ; F1AC4F  [4]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC53  [5]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC57  [6]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC5B  [7]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC5F  [8]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AC63 -- pointer table, 0xF1AC63-0xF1AC8A (40 bytes)
@@ -50675,16 +50698,16 @@ PtrTable_F1AC3F:
 ; Evidence: 10 entries of 4 bytes; base and width from prom_a 0xFBBA09
 ; --------------------------------------------------------------------------
 PtrTable_F1AC63:
-	.long 0x00FBBA83                       ; F1AC63  [0]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC67  [1]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC6B  [2]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC6F  [3]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC73  [4]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC77  [5]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC7B  [6]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC7F  [7]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC83  [8]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC87  [9]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC63  [0]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC67  [1]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC6B  [2]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC6F  [3]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC73  [4]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC77  [5]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC7B  [6]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC7F  [7]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC83  [8]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC87  [9]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AC8B -- pointer table, 0xF1AC8B-0xF1AC96 (12 bytes)
@@ -50693,9 +50716,9 @@ PtrTable_F1AC63:
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBBA29
 ; --------------------------------------------------------------------------
 PtrTable_F1AC8B:
-	.long 0x00FBBA83                       ; F1AC8B  [0]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC8F  [1]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC93  [2]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC8B  [0]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC8F  [1]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC93  [2]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1AC97 -- pointer table, 0xF1AC97-0xF1ACDA (68 bytes)
@@ -50704,23 +50727,23 @@ PtrTable_F1AC8B:
 ; Evidence: 17 entries of 4 bytes; base and width from prom_a 0xFBBA49
 ; --------------------------------------------------------------------------
 PtrTable_F1AC97:
-	.long 0x00FBBA83                       ; F1AC97  [0]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC9B  [1]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1AC9F  [2]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACA3  [3]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACA7  [4]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACAB  [5]   -> prom_a 0xFBBA83
-	.long 0x00FBC125                       ; F1ACAF  [6]   -> prom_a 0xFBC125
-	.long 0x00FBBA83                       ; F1ACB3  [7]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACB7  [8]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACBB  [9]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACBF  [10]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACC3  [11]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACC7  [12]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACCB  [13]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACCF  [14]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACD3  [15]   -> prom_a 0xFBBA83
-	.long 0x00FBBA83                       ; F1ACD7  [16]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC97  [0]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC9B  [1]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1AC9F  [2]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACA3  [3]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACA7  [4]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACAB  [5]   -> prom_a 0xFBBA83
+	.long PartParam_EnterMidiOutKeyTranspose_F1ADAC                       ; F1ACAF  [6]   -> prom_a 0xFBC125
+	.long PartParam_RefuseNumberEntry                       ; F1ACB3  [7]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACB7  [8]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACBB  [9]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACBF  [10]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACC3  [11]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACC7  [12]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACCB  [13]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACCF  [14]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACD3  [15]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACD7  [16]   -> prom_a 0xFBBA83
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1ACDB -- pointer table, 0xF1ACDB-0xF1ACFA (32 bytes)
@@ -50733,58 +50756,65 @@ PtrTable_F1ACDB:
 	.long 0x00FBC38F                       ; F1ACDF  [1]   -> prom_a 0xFBC38F
 	.long 0x00FBC3EF                       ; F1ACE3  [2]   -> prom_a 0xFBC3EF
 	.long 0x00FBC442                       ; F1ACE7  [3]   -> prom_a 0xFBC442
-	.long 0x00FBBA83                       ; F1ACEB  [4]   -> prom_a 0xFBBA83
+	.long PartParam_RefuseNumberEntry                       ; F1ACEB  [4]   -> prom_a 0xFBBA83
 	.long 0x00FBC4AC                       ; F1ACEF  [5]   -> prom_a 0xFBC4AC
 	.long 0x00FBC4FF                       ; F1ACF3  [6]   -> prom_a 0xFBC4FF
-	.long 0x00FBC553                       ; F1ACF7  [7]   -> prom_a 0xFBC553
+	.long PartParam_EnterMidiOutKeyTranspose_F1AE12                       ; F1ACF7  [7]   -> prom_a 0xFBC553
 
 ; --------------------------------------------------------------------------
-; Record_F1ACFB -- record, 0xF1ACFB-0xF1AD03 (9 bytes)
+; PartParamField_Volume -- record, 0xF1ACFB-0xF1AD03 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAA7
 ; --------------------------------------------------------------------------
-Record_F1ACFB:
+; PartParamField_Volume: the part-parameter field descriptor of VOLUME -- offset 3, mask 0x7F, 0..127 -- the only PART parameter with that field: VOLUME (notes/prom_ab_part_param_fields.py)
+PartParamField_Volume:
 	.byte 0x03, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1ACFB  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD04 -- record, 0xF1AD04-0xF1AD0C (9 bytes)
+; PartParamField_Panpot -- record, 0xF1AD04-0xF1AD0C (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAD7
 ; --------------------------------------------------------------------------
-Record_F1AD04:
+; PartParamField_Panpot: the part-parameter field descriptor of PANPOT -- named by position: PtrTable_F1AB13[2], between VOLUME [1] and KEY SHIFT [3] as on the INTERNAL SOUND page (notes/prom_ab_part_param_fields.py)
+PartParamField_Panpot:
 	.byte 0x08, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x00   ; F1AD04  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD0D -- record, 0xF1AD0D-0xF1AD15 (9 bytes)
+; PartParamField_KeyShift -- record, 0xF1AD0D-0xF1AD15 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBAEF
 ; --------------------------------------------------------------------------
-Record_F1AD0D:
+; PartParamField_KeyShift: the part-parameter field descriptor of KEY SHIFT -- offset 9, mask 0x7F, 28..100 -- the only PART parameter with that field: KEY SHIFT (notes/prom_ab_part_param_fields.py)
+PartParamField_KeyShift:
 	.byte 0x09, 0x7f, 0x00, 0x64, 0x1c, 0x01, 0x02, 0x08, 0x12   ; F1AD0D  ...d.....
 
 ; --------------------------------------------------------------------------
-; Record_F1AD16 -- record, 0xF1AD16-0xF1AD1E (9 bytes)
+; PartParamField_FineTune -- record, 0xF1AD16-0xF1AD1E (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB1F
 ; --------------------------------------------------------------------------
-Record_F1AD16:
+; PartParamField_FineTune: the part-parameter field descriptor of FINE TUNE -- offset 10, mask 0xFF, 0..255 -- the only PART parameter with that field: FINE TUNE (notes/prom_ab_part_param_fields.py)
+PartParamField_FineTune:
 	.byte 0x0a, 0xff, 0x00, 0xff, 0x00, 0x04, 0x0a, 0x08, 0x23   ; F1AD16  ........#
 
 ; --------------------------------------------------------------------------
-; Record_F1AD1F -- record, 0xF1AD1F-0xF1AD27 (9 bytes)
+; PartParamField_PitchBendRange -- record, 0xF1AD1F-0xF1AD27 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB4F
 ; --------------------------------------------------------------------------
-Record_F1AD1F:
+; PartParamField_PitchBendRange: the part-parameter field descriptor of PITCH BEND RANGE -- offset 11, mask 0x7F, 0..12 -- the only PART parameter with that field: PITCH BEND RANGE (notes/prom_ab_part_param_fields.py)
+PartParamField_PitchBendRange:
 	.byte 0x0b, 0x7f, 0x00, 0x0c, 0x00, 0x01, 0x02, 0x08, 0x02   ; F1AD1F  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD28 -- record, 0xF1AD28-0xF1AD30 (9 bytes)
+; PartParamField_Effect1Send -- record, 0xF1AD28-0xF1AD30 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBB7F
 ; --------------------------------------------------------------------------
-Record_F1AD28:
+; PartParamField_Effect1Send: the part-parameter field descriptor of EFFECT1 SEND -- offset 5, mask 0x7F, 0..127 -- the only PART parameter with that field: EFFECT1 SEND (notes/prom_ab_part_param_fields.py)
+PartParamField_Effect1Send:
 	.byte 0x05, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD28  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD31 -- record, 0xF1AD31-0xF1AD39 (9 bytes)
+; PartParamField_ReverbSend -- record, 0xF1AD31-0xF1AD39 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBC2F
 ; --------------------------------------------------------------------------
-Record_F1AD31:
+; PartParamField_ReverbSend: the part-parameter field descriptor of REVERB SEND -- named by position: PtrTable_F1AB13[8], the id the DSP EFFECT screen asks for its REVERB block (notes/prom_ab_part_param_fields.py)
+PartParamField_ReverbSend:
 	.byte 0x07, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x08, 0x03   ; F1AD31  .........
 
 ; --------------------------------------------------------------------------
@@ -50816,38 +50846,43 @@ Record_F1AD43:
 	.byte 0x0c, 0x08, 0x00   ; F1AD43  ...
 
 ; --------------------------------------------------------------------------
-; Record_F1AD46 -- record, 0xF1AD46-0xF1AD4E (9 bytes)
+; PartParamField_MainOut -- record, 0xF1AD46-0xF1AD4E (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBCDD
 ; --------------------------------------------------------------------------
-Record_F1AD46:
+; PartParamField_MainOut: the part-parameter field descriptor of MAIN OUT -- offset 3, mask 0xFF, 0..1 -- the only PART parameter with that field: MAIN OUT (notes/prom_ab_part_param_fields.py)
+PartParamField_MainOut:
 	.byte 0x03, 0xff, 0x00, 0x01, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD46  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD4F -- record, 0xF1AD4F-0xF1AD57 (9 bytes)
+; PartParamField_SubOut -- record, 0xF1AD4F-0xF1AD57 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBD70
 ; --------------------------------------------------------------------------
-Record_F1AD4F:
+; PartParamField_SubOut: the part-parameter field descriptor of SUB OUT -- offset 4, mask 0xFF, 0..4 -- the only PART parameter with that field: SUB OUT (notes/prom_ab_part_param_fields.py)
+PartParamField_SubOut:
 	.byte 0x04, 0xff, 0x00, 0x04, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD4F  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD58 -- record, 0xF1AD58-0xF1AD60 (9 bytes)
+; PartParamField_AssignMode -- record, 0xF1AD58-0xF1AD60 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBDFD
 ; --------------------------------------------------------------------------
-Record_F1AD58:
+; PartParamField_AssignMode: the part-parameter field descriptor of ASSIGN MODE -- offset 6, mask 0x0F, 0..1 -- the only PART parameter with that field: ASSIGN MODE (notes/prom_ab_part_param_fields.py)
+PartParamField_AssignMode:
 	.byte 0x06, 0x0f, 0x00, 0x01, 0x00, 0x01, 0x01, 0x10, 0x00   ; F1AD58  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AD61 -- record, 0xF1AD61-0xF1AD69 (9 bytes)
+; PartParamField_VelocityOffset -- record, 0xF1AD61-0xF1AD69 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBE15
 ; --------------------------------------------------------------------------
-Record_F1AD61:
+; PartParamField_VelocityOffset: the part-parameter field descriptor of VELOCITY OFFSET -- offset 5, mask 0xFF, 0..48 -- the only PART parameter with that field: VELOCITY OFFSET (notes/prom_ab_part_param_fields.py)
+PartParamField_VelocityOffset:
 	.byte 0x05, 0xff, 0x00, 0x30, 0x00, 0x01, 0x02, 0x10, 0x32   ; F1AD61  ...0....2
 
 ; --------------------------------------------------------------------------
-; Record_F1AD6A -- record, 0xF1AD6A-0xF1AD72 (9 bytes)
+; PartParamField_BasicChannel -- record, 0xF1AD6A-0xF1AD72 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBBE45
 ; --------------------------------------------------------------------------
-Record_F1AD6A:
+; PartParamField_BasicChannel: the part-parameter field descriptor of BASIC CHANNEL -- offset 13, mask 0x1F, 0..31 -- the only PART parameter with that field: BASIC CHANNEL (notes/prom_ab_part_param_fields.py)
+PartParamField_BasicChannel:
 	.byte 0x0d, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x01, 0x00, 0x00   ; F1AD6A  .........
 
 ; --------------------------------------------------------------------------
@@ -50984,10 +51019,11 @@ Record_F1ADA9:
 	.byte 0x14, 0x20, 0x10   ; F1ADA9  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1ADAC -- record, 0xF1ADAC-0xF1ADB4 (9 bytes)
+; PartParamField_MidiOutKeyTranspose_F1ADAC -- record, 0xF1ADAC-0xF1ADB4 (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC111
 ; --------------------------------------------------------------------------
-Record_F1ADAC:
+; PartParamField_MidiOutKeyTranspose_F1ADAC: the part-parameter field descriptor of MIDI OUT KEY TRANSPOSE -- offset 23, mask 0xFF, 28..100 -- the only PART parameter with that field: MIDI OUT KEY TRANSPOSE (notes/prom_ab_part_param_fields.py)
+PartParamField_MidiOutKeyTranspose_F1ADAC:
 	.byte 0x17, 0xff, 0x00, 0x64, 0x1c, 0x01, 0x01, 0x10, 0x12   ; F1ADAC  ...d.....
 
 ; --------------------------------------------------------------------------
@@ -51061,10 +51097,11 @@ Record_F1ADD0:
 	.byte 0x13, 0x20, 0x10   ; F1ADD0  . .
 
 ; --------------------------------------------------------------------------
-; Record_F1ADD3 -- record, 0xF1ADD3-0xF1ADDB (9 bytes)
+; PartParamField_MidiMultipleMessagesOutputProgramChange -- record, 0xF1ADD3-0xF1ADDB (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC285
 ; --------------------------------------------------------------------------
-Record_F1ADD3:
+; PartParamField_MidiMultipleMessagesOutputProgramChange: the part-parameter field descriptor of MIDI MULTIPLE MESSAGES OUTPUT: PROGRAM CHANGE -- offset 14, mask 0xFF, 0..129 -- the only PART parameter with that field: MIDI MULTIPLE MESSAGES OUTPUT: PROGRAM CHANGE (notes/prom_ab_part_param_fields.py)
+PartParamField_MidiMultipleMessagesOutputProgramChange:
 	.byte 0x0e, 0xff, 0x00, 0x81, 0x00, 0x04, 0x0a, 0x00, 0x00   ; F1ADD3  .........
 
 ; --------------------------------------------------------------------------
@@ -51110,10 +51147,11 @@ Record_F1AE09:
 	.byte 0x13, 0xff, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x03   ; F1AE09  .........
 
 ; --------------------------------------------------------------------------
-; Record_F1AE12 -- record, 0xF1AE12-0xF1AE1A (9 bytes)
+; PartParamField_MidiOutKeyTranspose_F1AE12 -- record, 0xF1AE12-0xF1AE1A (9 bytes)
 ; Evidence: descriptor, 9 bytes to the next anchor; prom_a 0xFBC53F
 ; --------------------------------------------------------------------------
-Record_F1AE12:
+; PartParamField_MidiOutKeyTranspose_F1AE12: the part-parameter field descriptor of MIDI OUT KEY TRANSPOSE -- offset 23, mask 0xFF, 28..100 -- the only PART parameter with that field: MIDI OUT KEY TRANSPOSE (notes/prom_ab_part_param_fields.py)
+PartParamField_MidiOutKeyTranspose_F1AE12:
 	.byte 0x17, 0xff, 0x00, 0x64, 0x1c, 0x01, 0x01, 0x10, 0x12   ; F1AE12  ...d.....
 
 ; --------------------------------------------------------------------------

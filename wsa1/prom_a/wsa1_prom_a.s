@@ -687,22 +687,22 @@
 	.set PtrTable_F1AC8B,                         0x00F1AC8B
 	.set PtrTable_F1AC97,                         0x00F1AC97
 	.set PtrTable_F1ACDB,                         0x00F1ACDB
-	.set Record_F1ACFB,                           0x00F1ACFB
-	.set Record_F1AD04,                           0x00F1AD04
-	.set Record_F1AD0D,                           0x00F1AD0D
-	.set Record_F1AD16,                           0x00F1AD16
-	.set Record_F1AD1F,                           0x00F1AD1F
-	.set Record_F1AD28,                           0x00F1AD28
-	.set Record_F1AD31,                           0x00F1AD31
+	.set PartParamField_Volume,                           0x00F1ACFB
+	.set PartParamField_Panpot,                           0x00F1AD04
+	.set PartParamField_KeyShift,                           0x00F1AD0D
+	.set PartParamField_FineTune,                           0x00F1AD16
+	.set PartParamField_PitchBendRange,                           0x00F1AD1F
+	.set PartParamField_Effect1Send,                           0x00F1AD28
+	.set PartParamField_ReverbSend,                           0x00F1AD31
 	.set Record_F1AD3A,                           0x00F1AD3A
 	.set Record_F1AD3D,                           0x00F1AD3D
 	.set Record_F1AD40,                           0x00F1AD40
 	.set Record_F1AD43,                           0x00F1AD43
-	.set Record_F1AD46,                           0x00F1AD46
-	.set Record_F1AD4F,                           0x00F1AD4F
-	.set Record_F1AD58,                           0x00F1AD58
-	.set Record_F1AD61,                           0x00F1AD61
-	.set Record_F1AD6A,                           0x00F1AD6A
+	.set PartParamField_MainOut,                           0x00F1AD46
+	.set PartParamField_SubOut,                           0x00F1AD4F
+	.set PartParamField_AssignMode,                           0x00F1AD58
+	.set PartParamField_VelocityOffset,                           0x00F1AD61
+	.set PartParamField_BasicChannel,                           0x00F1AD6A
 	.set Record_F1AD73,                           0x00F1AD73
 	.set Record_F1AD76,                           0x00F1AD76
 	.set Record_F1AD79,                           0x00F1AD79
@@ -722,7 +722,7 @@
 	.set Record_F1ADA3,                           0x00F1ADA3
 	.set Record_F1ADA6,                           0x00F1ADA6
 	.set Record_F1ADA9,                           0x00F1ADA9
-	.set Record_F1ADAC,                           0x00F1ADAC
+	.set PartParamField_MidiOutKeyTranspose_F1ADAC,                           0x00F1ADAC
 	.set Record_F1ADB5,                           0x00F1ADB5
 	.set Record_F1ADB8,                           0x00F1ADB8
 	.set Record_F1ADBB,                           0x00F1ADBB
@@ -733,14 +733,14 @@
 	.set Record_F1ADCA,                           0x00F1ADCA
 	.set Record_F1ADCD,                           0x00F1ADCD
 	.set Record_F1ADD0,                           0x00F1ADD0
-	.set Record_F1ADD3,                           0x00F1ADD3
+	.set PartParamField_MidiMultipleMessagesOutputProgramChange,                           0x00F1ADD3
 	.set Record_F1ADDC,                           0x00F1ADDC
 	.set Record_F1ADE5,                           0x00F1ADE5
 	.set Record_F1ADEE,                           0x00F1ADEE
 	.set Record_F1ADF7,                           0x00F1ADF7
 	.set Record_F1AE00,                           0x00F1AE00
 	.set Record_F1AE09,                           0x00F1AE09
-	.set Record_F1AE12,                           0x00F1AE12
+	.set PartParamField_MidiOutKeyTranspose_F1AE12,                           0x00F1AE12
 	.set Record_F1AE1B,                           0x00F1AE1B
 	.set Record_F1AE24,                           0x00F1AE24
 	.set Record_F1AE2D,                           0x00F1AE2D
@@ -103686,6 +103686,8 @@ sub_FBB93C:
 	popw hl                                              ; FBBA7F  4b
 	unlk XIZ                                             ; FBBA80  ee 0d
 	ret                                                  ; FBBA82  0e
+; PartParam_RefuseNumberEntry: the number-entry slot of a field that takes none: Blink_SetEnable(0), returns 0 (notes/prom_ab_part_param_fields.py)
+PartParam_RefuseNumberEntry:
 	pushw 0x00                                           ; FBBA83  0b 00 00
 	call T_Blink_SetEnable                               ; FBBA86  1d 28 2e f4
 	popw bc                                              ; FBBA8A  49
@@ -103699,8 +103701,10 @@ sub_FBB93C:
 	popw bc                                              ; FBBA9F  49
 	unlk XIZ                                             ; FBBAA0  ee 0d
 	ret                                                  ; FBBAA2  0e
+; PartParam_StepVolume: the adjust handler of PartParamField_Volume (VOLUME), slot PtrTable_F1AB13[1] (notes/prom_ab_part_param_fields.py)
+PartParam_StepVolume:
 	link XIZ,0x0000                                      ; FBBAA3  ee 0c 00 00
-	lda xbc, (Record_F1ACFB:24)                          ; FBBAA7  f2 fb ac f1 31
+	lda xbc, (PartParamField_Volume:24)                          ; FBBAA7  f2 fb ac f1 31
 	push XBC                                             ; FBBAAC  39
 	push 0x00                                            ; FBBAAD  09 00
 	m_push MBD+r6, 0x08                                  ; FBBAAF  8e 08 04
@@ -103708,8 +103712,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBAB6  ef 66
 	unlk XIZ                                             ; FBBAB8  ee 0d
 	ret                                                  ; FBBABA  0e
+; PartParam_EnterVolume: the number-entry handler of PartParamField_Volume (VOLUME), slot PtrTable_F1AC07[1] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterVolume:
 	link XIZ,0x0000                                      ; FBBABB  ee 0c 00 00
-	lda xbc, (Record_F1ACFB:24)                          ; FBBABF  f2 fb ac f1 31
+	lda xbc, (PartParamField_Volume:24)                          ; FBBABF  f2 fb ac f1 31
 	push XBC                                             ; FBBAC4  39
 	push 0x00                                            ; FBBAC5  09 00
 	m_push MBD+r6, 0x08                                  ; FBBAC7  8e 08 04
@@ -103717,8 +103723,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBACE  ef 66
 	unlk XIZ                                             ; FBBAD0  ee 0d
 	ret                                                  ; FBBAD2  0e
+; PartParam_StepPanpot: the adjust handler of PartParamField_Panpot (PANPOT), slot PtrTable_F1AB13[2] (notes/prom_ab_part_param_fields.py)
+PartParam_StepPanpot:
 	link XIZ,0x0000                                      ; FBBAD3  ee 0c 00 00
-	lda xbc, (Record_F1AD04:24)                          ; FBBAD7  f2 04 ad f1 31
+	lda xbc, (PartParamField_Panpot:24)                          ; FBBAD7  f2 04 ad f1 31
 	push XBC                                             ; FBBADC  39
 	push 0x00                                            ; FBBADD  09 00
 	m_push MBD+r6, 0x08                                  ; FBBADF  8e 08 04
@@ -103726,8 +103734,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBAE6  ef 66
 	unlk XIZ                                             ; FBBAE8  ee 0d
 	ret                                                  ; FBBAEA  0e
+; PartParam_StepKeyShift: the adjust handler of PartParamField_KeyShift (KEY SHIFT), slot PtrTable_F1AB13[3] (notes/prom_ab_part_param_fields.py)
+PartParam_StepKeyShift:
 	link XIZ,0x0000                                      ; FBBAEB  ee 0c 00 00
-	lda xbc, (Record_F1AD0D:24)                          ; FBBAEF  f2 0d ad f1 31
+	lda xbc, (PartParamField_KeyShift:24)                          ; FBBAEF  f2 0d ad f1 31
 	push XBC                                             ; FBBAF4  39
 	push 0x00                                            ; FBBAF5  09 00
 	m_push MBD+r6, 0x08                                  ; FBBAF7  8e 08 04
@@ -103735,8 +103745,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBAFE  ef 66
 	unlk XIZ                                             ; FBBB00  ee 0d
 	ret                                                  ; FBBB02  0e
+; PartParam_EnterKeyShift: the number-entry handler of PartParamField_KeyShift (KEY SHIFT), slot PtrTable_F1AC07[3] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterKeyShift:
 	link XIZ,0x0000                                      ; FBBB03  ee 0c 00 00
-	lda xbc, (Record_F1AD0D:24)                          ; FBBB07  f2 0d ad f1 31
+	lda xbc, (PartParamField_KeyShift:24)                          ; FBBB07  f2 0d ad f1 31
 	push XBC                                             ; FBBB0C  39
 	push 0x00                                            ; FBBB0D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB0F  8e 08 04
@@ -103744,8 +103756,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB16  ef 66
 	unlk XIZ                                             ; FBBB18  ee 0d
 	ret                                                  ; FBBB1A  0e
+; PartParam_StepFineTune: the adjust handler of PartParamField_FineTune (FINE TUNE), slot PtrTable_F1AB13[4] (notes/prom_ab_part_param_fields.py)
+PartParam_StepFineTune:
 	link XIZ,0x0000                                      ; FBBB1B  ee 0c 00 00
-	lda xbc, (Record_F1AD16:24)                          ; FBBB1F  f2 16 ad f1 31
+	lda xbc, (PartParamField_FineTune:24)                          ; FBBB1F  f2 16 ad f1 31
 	push XBC                                             ; FBBB24  39
 	push 0x00                                            ; FBBB25  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB27  8e 08 04
@@ -103753,8 +103767,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB2E  ef 66
 	unlk XIZ                                             ; FBBB30  ee 0d
 	ret                                                  ; FBBB32  0e
+; PartParam_EnterFineTune: the number-entry handler of PartParamField_FineTune (FINE TUNE), slot PtrTable_F1AC07[4] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterFineTune:
 	link XIZ,0x0000                                      ; FBBB33  ee 0c 00 00
-	lda xbc, (Record_F1AD16:24)                          ; FBBB37  f2 16 ad f1 31
+	lda xbc, (PartParamField_FineTune:24)                          ; FBBB37  f2 16 ad f1 31
 	push XBC                                             ; FBBB3C  39
 	push 0x00                                            ; FBBB3D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB3F  8e 08 04
@@ -103762,8 +103778,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB46  ef 66
 	unlk XIZ                                             ; FBBB48  ee 0d
 	ret                                                  ; FBBB4A  0e
+; PartParam_StepPitchBendRange: the adjust handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PtrTable_F1AB13[5] (notes/prom_ab_part_param_fields.py)
+PartParam_StepPitchBendRange:
 	link XIZ,0x0000                                      ; FBBB4B  ee 0c 00 00
-	lda xbc, (Record_F1AD1F:24)                          ; FBBB4F  f2 1f ad f1 31
+	lda xbc, (PartParamField_PitchBendRange:24)                          ; FBBB4F  f2 1f ad f1 31
 	push XBC                                             ; FBBB54  39
 	push 0x00                                            ; FBBB55  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB57  8e 08 04
@@ -103771,8 +103789,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB5E  ef 66
 	unlk XIZ                                             ; FBBB60  ee 0d
 	ret                                                  ; FBBB62  0e
+; PartParam_EnterPitchBendRange: the number-entry handler of PartParamField_PitchBendRange (PITCH BEND RANGE), slot PtrTable_F1AC07[5] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterPitchBendRange:
 	link XIZ,0x0000                                      ; FBBB63  ee 0c 00 00
-	lda xbc, (Record_F1AD1F:24)                          ; FBBB67  f2 1f ad f1 31
+	lda xbc, (PartParamField_PitchBendRange:24)                          ; FBBB67  f2 1f ad f1 31
 	push XBC                                             ; FBBB6C  39
 	push 0x00                                            ; FBBB6D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB6F  8e 08 04
@@ -103780,8 +103800,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB76  ef 66
 	unlk XIZ                                             ; FBBB78  ee 0d
 	ret                                                  ; FBBB7A  0e
+; PartParam_StepEffect1Send: the adjust handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PtrTable_F1AB13[6] (notes/prom_ab_part_param_fields.py)
+PartParam_StepEffect1Send:
 	link XIZ,0x0000                                      ; FBBB7B  ee 0c 00 00
-	lda xbc, (Record_F1AD28:24)                          ; FBBB7F  f2 28 ad f1 31
+	lda xbc, (PartParamField_Effect1Send:24)                          ; FBBB7F  f2 28 ad f1 31
 	push XBC                                             ; FBBB84  39
 	push 0x00                                            ; FBBB85  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB87  8e 08 04
@@ -103789,8 +103811,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBB8E  ef 66
 	unlk XIZ                                             ; FBBB90  ee 0d
 	ret                                                  ; FBBB92  0e
+; PartParam_EnterEffect1Send: the number-entry handler of PartParamField_Effect1Send (EFFECT1 SEND), slot PtrTable_F1AC07[6] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterEffect1Send:
 	link XIZ,0x0000                                      ; FBBB93  ee 0c 00 00
-	lda xbc, (Record_F1AD28:24)                          ; FBBB97  f2 28 ad f1 31
+	lda xbc, (PartParamField_Effect1Send:24)                          ; FBBB97  f2 28 ad f1 31
 	push XBC                                             ; FBBB9C  39
 	push 0x00                                            ; FBBB9D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBB9F  8e 08 04
@@ -103798,6 +103822,8 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBBA6  ef 66
 	unlk XIZ                                             ; FBBBA8  ee 0d
 	ret                                                  ; FBBBAA  0e
+; PartParam_StepEffect2: PtrTable_F1AB13[7], EFFECT2 on the INTERNAL SOUND page: byte 6 of the part record toggles 0 <-> 0x7F (notes/prom_ab_part_param_fields.py)
+PartParam_StepEffect2:
 	link XIZ,0x0000                                      ; FBBBAB  ee 0c 00 00
 	pushw hl                                             ; FBBBAF  2b
 	push XIX                                             ; FBBBB0  3c
@@ -103856,8 +103882,10 @@ sub_FBB93C:
 	popw hl                                              ; FBBC27  4b
 	unlk XIZ                                             ; FBBC28  ee 0d
 	ret                                                  ; FBBC2A  0e
+; PartParam_StepReverbSend: the adjust handler of PartParamField_ReverbSend (REVERB SEND), slot PtrTable_F1AB13[8] (notes/prom_ab_part_param_fields.py)
+PartParam_StepReverbSend:
 	link XIZ,0x0000                                      ; FBBC2B  ee 0c 00 00
-	lda xbc, (Record_F1AD31:24)                          ; FBBC2F  f2 31 ad f1 31
+	lda xbc, (PartParamField_ReverbSend:24)                          ; FBBC2F  f2 31 ad f1 31
 	push XBC                                             ; FBBC34  39
 	push 0x00                                            ; FBBC35  09 00
 	m_push MBD+r6, 0x08                                  ; FBBC37  8e 08 04
@@ -103865,8 +103893,10 @@ sub_FBB93C:
 	inc 6,XSP                                            ; FBBC3E  ef 66
 	unlk XIZ                                             ; FBBC40  ee 0d
 	ret                                                  ; FBBC42  0e
+; PartParam_EnterReverbSend: the number-entry handler of PartParamField_ReverbSend (REVERB SEND), slot PtrTable_F1AC07[8] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterReverbSend:
 	link XIZ,0x0000                                      ; FBBC43  ee 0c 00 00
-	lda xbc, (Record_F1AD31:24)                          ; FBBC47  f2 31 ad f1 31
+	lda xbc, (PartParamField_ReverbSend:24)                          ; FBBC47  f2 31 ad f1 31
 	push XBC                                             ; FBBC4C  39
 	push 0x00                                            ; FBBC4D  09 00
 	m_push MBD+r6, 0x08                                  ; FBBC4F  8e 08 04
@@ -103926,7 +103956,7 @@ sub_FBBCBC:
 	ld XIX,XIY                                           ; FBBCD6  ed 8c
 	ld C,(XIY)                                           ; FBBCD8  85 23
 	ld (xiz-1), c                                        ; FBBCDA  be ff 43
-	lda xbc, (Record_F1AD46:24)                          ; FBBCDD  f2 46 ad f1 31
+	lda xbc, (PartParamField_MainOut:24)                          ; FBBCDD  f2 46 ad f1 31
 	push XBC                                             ; FBBCE2  39
 	lda xwa, (xiz-1)                                     ; FBBCE3  be ff 30
 	push XWA                                             ; FBBCE6  38
@@ -103989,7 +104019,7 @@ sub_FBBCBC:
 	ld XIX,XIY                                           ; FBBD69  ed 8c
 	ld C,(XIY)                                           ; FBBD6B  85 23
 	ld (xiz-1), c                                        ; FBBD6D  be ff 43
-	lda xbc, (Record_F1AD4F:24)                          ; FBBD70  f2 4f ad f1 31
+	lda xbc, (PartParamField_SubOut:24)                          ; FBBD70  f2 4f ad f1 31
 	push XBC                                             ; FBBD75  39
 	lda xwa, (xiz-1)                                     ; FBBD76  be ff 30
 	push XWA                                             ; FBBD79  38
@@ -104000,7 +104030,7 @@ sub_FBBCBC:
 	jrl nz, .LFBBDF4                                     ; FBBD84  7e 6d 00
 	m_cp_mi8 MBD+r6, 0xff, 0x01                          ; FBBD87  8e ff 3f 01
 	jr nz, .LFBBD9D                                      ; FBBD8B  6e 10
-	lda xbc, (Record_F1AD4F:24)                          ; FBBD8D  f2 4f ad f1 31
+	lda xbc, (PartParamField_SubOut:24)                          ; FBBD8D  f2 4f ad f1 31
 	push XBC                                             ; FBBD92  39
 	lda xwa, (xiz-1)                                     ; FBBD93  be ff 30
 	push XWA                                             ; FBBD96  38
@@ -104047,8 +104077,10 @@ sub_FBBCBC:
 	popw hl                                              ; FBBDF5  4b
 	unlk XIZ                                             ; FBBDF6  ee 0d
 	ret                                                  ; FBBDF8  0e
+; PartParam_StepAssignMode: the adjust handler of PartParamField_AssignMode (ASSIGN MODE), slot PtrTable_F1AB4B[2] (notes/prom_ab_part_param_fields.py)
+PartParam_StepAssignMode:
 	link XIZ,0x0000                                      ; FBBDF9  ee 0c 00 00
-	lda xbc, (Record_F1AD58:24)                          ; FBBDFD  f2 58 ad f1 31
+	lda xbc, (PartParamField_AssignMode:24)                          ; FBBDFD  f2 58 ad f1 31
 	push XBC                                             ; FBBE02  39
 	push 0x00                                            ; FBBE03  09 00
 	m_push MBD+r6, 0x08                                  ; FBBE05  8e 08 04
@@ -104056,8 +104088,10 @@ sub_FBBCBC:
 	inc 6,XSP                                            ; FBBE0C  ef 66
 	unlk XIZ                                             ; FBBE0E  ee 0d
 	ret                                                  ; FBBE10  0e
+; PartParam_StepVelocityOffset: the adjust handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PtrTable_F1AB4B[3] (notes/prom_ab_part_param_fields.py)
+PartParam_StepVelocityOffset:
 	link XIZ,0x0000                                      ; FBBE11  ee 0c 00 00
-	lda xbc, (Record_F1AD61:24)                          ; FBBE15  f2 61 ad f1 31
+	lda xbc, (PartParamField_VelocityOffset:24)                          ; FBBE15  f2 61 ad f1 31
 	push XBC                                             ; FBBE1A  39
 	push 0x00                                            ; FBBE1B  09 00
 	m_push MBD+r6, 0x08                                  ; FBBE1D  8e 08 04
@@ -104065,8 +104099,10 @@ sub_FBBCBC:
 	inc 6,XSP                                            ; FBBE24  ef 66
 	unlk XIZ                                             ; FBBE26  ee 0d
 	ret                                                  ; FBBE28  0e
+; PartParam_EnterVelocityOffset: the number-entry handler of PartParamField_VelocityOffset (VELOCITY OFFSET), slot PtrTable_F1AC3F[3] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterVelocityOffset:
 	link XIZ,0x0000                                      ; FBBE29  ee 0c 00 00
-	lda xbc, (Record_F1AD61:24)                          ; FBBE2D  f2 61 ad f1 31
+	lda xbc, (PartParamField_VelocityOffset:24)                          ; FBBE2D  f2 61 ad f1 31
 	push XBC                                             ; FBBE32  39
 	push 0x00                                            ; FBBE33  09 00
 	m_push MBD+r6, 0x08                                  ; FBBE35  8e 08 04
@@ -104074,8 +104110,10 @@ sub_FBBCBC:
 	inc 6,XSP                                            ; FBBE3C  ef 66
 	unlk XIZ                                             ; FBBE3E  ee 0d
 	ret                                                  ; FBBE40  0e
+; PartParam_StepBasicChannel: the adjust handler of PartParamField_BasicChannel (BASIC CHANNEL), slot PtrTable_F1AB4B[4] (notes/prom_ab_part_param_fields.py)
+PartParam_StepBasicChannel:
 	link XIZ,0x0000                                      ; FBBE41  ee 0c 00 00
-	lda xbc, (Record_F1AD6A:24)                          ; FBBE45  f2 6a ad f1 31
+	lda xbc, (PartParamField_BasicChannel:24)                          ; FBBE45  f2 6a ad f1 31
 	push XBC                                             ; FBBE4A  39
 	push 0x00                                            ; FBBE4B  09 00
 	m_push MBD+r6, 0x08                                  ; FBBE4D  8e 08 04
@@ -104346,8 +104384,10 @@ sub_FBBCBC:
 	inc 6,XSP                                            ; FBC108  ef 66
 	unlk XIZ                                             ; FBC10A  ee 0d
 	ret                                                  ; FBC10C  0e
+; PartParam_StepMidiOutKeyTranspose_F1ADAC: the adjust handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ABA3[6] (notes/prom_ab_part_param_fields.py)
+PartParam_StepMidiOutKeyTranspose_F1ADAC:
 	link XIZ,0x0000                                      ; FBC10D  ee 0c 00 00
-	lda xbc, (Record_F1ADAC:24)                          ; FBC111  f2 ac ad f1 31
+	lda xbc, (PartParamField_MidiOutKeyTranspose_F1ADAC:24)                          ; FBC111  f2 ac ad f1 31
 	push XBC                                             ; FBC116  39
 	push 0x00                                            ; FBC117  09 00
 	m_push MBD+r6, 0x08                                  ; FBC119  8e 08 04
@@ -104355,8 +104395,10 @@ sub_FBBCBC:
 	inc 6,XSP                                            ; FBC120  ef 66
 	unlk XIZ                                             ; FBC122  ee 0d
 	ret                                                  ; FBC124  0e
+; PartParam_EnterMidiOutKeyTranspose_F1ADAC: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1ADAC (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1AC97[6] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterMidiOutKeyTranspose_F1ADAC:
 	link XIZ,0x0000                                      ; FBC125  ee 0c 00 00
-	lda xbc, (Record_F1ADAC:24)                          ; FBC129  f2 ac ad f1 31
+	lda xbc, (PartParamField_MidiOutKeyTranspose_F1ADAC:24)                          ; FBC129  f2 ac ad f1 31
 	push XBC                                             ; FBC12E  39
 	push 0x00                                            ; FBC12F  09 00
 	m_push MBD+r6, 0x08                                  ; FBC131  8e 08 04
@@ -104493,7 +104535,7 @@ sub_FBC22D:
 	jr z, .LFBC285                                       ; FBC27F  66 04
 	ld (xiz-1), 0x00                                     ; FBC281  be ff 00 00
 .LFBC285:
-	lda xbc, (Record_F1ADD3:24)                          ; FBC285  f2 d3 ad f1 31
+	lda xbc, (PartParamField_MidiMultipleMessagesOutputProgramChange:24)                          ; FBC285  f2 d3 ad f1 31
 	push XBC                                             ; FBC28A  39
 	lda xwa, (xiz-1)                                     ; FBC28B  be ff 30
 	push XWA                                             ; FBC28E  38
@@ -104791,8 +104833,10 @@ sub_FBC22D:
 	popw hl                                              ; FBC537  4b
 	unlk XIZ                                             ; FBC538  ee 0d
 	ret                                                  ; FBC53A  0e
+; PartParam_StepMidiOutKeyTranspose_F1AE12: the adjust handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ABE7[7] (notes/prom_ab_part_param_fields.py)
+PartParam_StepMidiOutKeyTranspose_F1AE12:
 	link XIZ,0x0000                                      ; FBC53B  ee 0c 00 00
-	lda xbc, (Record_F1AE12:24)                          ; FBC53F  f2 12 ae f1 31
+	lda xbc, (PartParamField_MidiOutKeyTranspose_F1AE12:24)                          ; FBC53F  f2 12 ae f1 31
 	push XBC                                             ; FBC544  39
 	push 0x00                                            ; FBC545  09 00
 	m_push MBD+r6, 0x08                                  ; FBC547  8e 08 04
@@ -104800,8 +104844,10 @@ sub_FBC22D:
 	inc 6,XSP                                            ; FBC54E  ef 66
 	unlk XIZ                                             ; FBC550  ee 0d
 	ret                                                  ; FBC552  0e
+; PartParam_EnterMidiOutKeyTranspose_F1AE12: the number-entry handler of PartParamField_MidiOutKeyTranspose_F1AE12 (MIDI OUT KEY TRANSPOSE), slot PtrTable_F1ACDB[7] (notes/prom_ab_part_param_fields.py)
+PartParam_EnterMidiOutKeyTranspose_F1AE12:
 	link XIZ,0x0000                                      ; FBC553  ee 0c 00 00
-	lda xbc, (Record_F1AE12:24)                          ; FBC557  f2 12 ae f1 31
+	lda xbc, (PartParamField_MidiOutKeyTranspose_F1AE12:24)                          ; FBC557  f2 12 ae f1 31
 	push XBC                                             ; FBC55C  39
 	push 0x00                                            ; FBC55D  09 00
 	m_push MBD+r6, 0x08                                  ; FBC55F  8e 08 04

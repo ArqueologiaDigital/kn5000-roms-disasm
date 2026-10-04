@@ -3641,6 +3641,21 @@ RENAMES = {
     "sub_F7267E": "SmfCC_Effect3Depth_MultiTrack",
     "sub_F726A2": "SmfCC_Effect4Depth_MultiTrack",
     "DispatchTable_F72323": "SmfCC_HandlersByNumber_MultiTrack",
+    "Record_F1ACFB": "PartParamField_Volume",
+    "Record_F1AD04": "PartParamField_Panpot",
+    "Record_F1AD0D": "PartParamField_KeyShift",
+    "Record_F1AD16": "PartParamField_FineTune",
+    "Record_F1AD1F": "PartParamField_PitchBendRange",
+    "Record_F1AD28": "PartParamField_Effect1Send",
+    "Record_F1AD31": "PartParamField_ReverbSend",
+    "Record_F1AD46": "PartParamField_MainOut",
+    "Record_F1AD4F": "PartParamField_SubOut",
+    "Record_F1AD58": "PartParamField_AssignMode",
+    "Record_F1AD61": "PartParamField_VelocityOffset",
+    "Record_F1AD6A": "PartParamField_BasicChannel",
+    "Record_F1ADAC": "PartParamField_MidiOutKeyTranspose_F1ADAC",
+    "Record_F1ADD3": "PartParamField_MidiMultipleMessagesOutputProgramChange",
+    "Record_F1AE12": "PartParamField_MidiOutKeyTranspose_F1AE12",
 }
 
 
