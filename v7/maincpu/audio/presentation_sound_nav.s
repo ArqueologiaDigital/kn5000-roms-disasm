@@ -1312,7 +1312,7 @@ DirmdEmulator:
 	ld bc, (xbc)
 	lda xix, (DirmdEmulator_Dispatch:24)
 	jp	t, (xix+bc)
-DirmdEmulator_Dispatch:
+DirmdEmulator_Dispatch:	; EVT_HIDE: method 1
 	push	xde
 	push	xhl
 	push	xix
@@ -1324,6 +1324,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	DirmdEmu_DefaultCase
+DirmdEmu_OnAllPaint:	; EVT_ALL_PAINT: clear the redraw mode, reset the drawing state, method 0
 	ld	(58138:16), 0
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
@@ -1343,6 +1344,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	DirmdEmu_DefaultCase
+DirmdEmu_OnParaDraw:	; EVT_PARA_DRAW: method 0 with the redraw mode at 16
 	ld	(58138:16), 16
 	push	xde
 	push	xhl
@@ -1356,6 +1358,7 @@ DirmdEmulator_Dispatch:
 	pop	xde
 	ld	(58138:16), 0
 	jr	DirmdEmu_DefaultCase
+DirmdEmu_OnSwitchIn:	; EVT_SW_IN: switches 0..255 only; method 2 (switch & 31, bit 7)
 	cp	xde, 255
 	jr	ugt, DirmdEmu_DefaultCase
 	push	xde

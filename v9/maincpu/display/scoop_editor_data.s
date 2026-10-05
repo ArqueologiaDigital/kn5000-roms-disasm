@@ -4,12 +4,12 @@
 ;
 ; CODE, not data: 3,422 TLCS-900 instructions and not one .byte/.ascii/.long
 ; directive, re-assembled byte-identical to the dump.  Entered at
-; Scoop_SoundEditorData -- named by one `.long` of the pointer table
-; GUI_DisplayStructData_0xAF8 in kn5000_v*_program.s,
+; SeWrtSndTitleFunc_OnDraw -- named by one `.long` of the pointer table
+; SeTonTon1TitleFunc_Methods in kn5000_v*_program.s,
 ; where 187 more `.long`s point into this file as bare numbers -- and at the
 ; 15 interior offsets that the title-function stubs of
 ; audio/sound_editor_routines.s reach by `jp Scoop_SoundEditorData_0x..`
-; (e.g. SeAmpAmp1TitleFunc_DisplayData).  The body is almost all calls to
+; (e.g. SeAmpAmp1TitleFunc_OnDraw).  The body is almost all calls to
 ; SeMenu_* (SeMenu_SendEvent, SeMenu_LoadPartParam, SeMenu_LoadObjEntries...).
 ; Framing: control-flow trace, `scripts/converters/scoop_reframe.py plan`
 ; (commands in notes/scoop-lane-2026-09-25/README.md).  In v10 it reaches
@@ -23,15 +23,17 @@
 ; data and every byte assembles back to the ROM as an instruction, so the
 ; claim is withdrawn (the 177 .byte/.long lines of the v10/v9 source and the 9
 ; romslices of v7 that it may have rested on are re-spelled as instructions).
-; The label name Scoop_SoundEditorData is kept: it is referenced from files
+; The label name SeWrtSndTitleFunc_OnDraw is kept: it is referenced from files
 ; outside this lane.
 ; =============================================================================
 
 
 
-Scoop_SoundEditorData:
+SeWrtSndTitleFunc_OnDraw:
 	jp	SeMenu_CopyWriteUpdate_Step3_Join
+SeWrtSndTitleFunc_OnHide:
 	jp	SeMenu_CopyWriteUpdate_Step3_Return30
+SeWrtSndTitleFunc_OnSwitchIn:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
 	call	Scoop_SoundEditorData_Helper12
@@ -47,13 +49,14 @@ Scoop_SoundEditorData_Skip:
 	ld	xwa, 0:i3
 	ld	xbc, EVT_SW_IN
 	jp	DeleteEvent
+SeWrtSndTitleFunc_Nop:
 	jp	SeMenu_CopyWriteUpdate_Step3_Return31
-Scoop_SoundEditorData_Join48:
+SeAmpAmp1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue
 	ld	a, (xsp)
@@ -61,7 +64,7 @@ Scoop_SoundEditorData_Join48:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xCD8:24)
+	lda	xde, (SeAmpAmp1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -69,12 +72,12 @@ Scoop_SoundEditorData_Join48:
 Scoop_SoundEditorData_Epilogue:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join49:
+SeAmpAmp2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue2
 	ld	a, (xsp)
@@ -82,7 +85,7 @@ Scoop_SoundEditorData_Join49:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xD20:24)
+	lda	xde, (SeAmpAmp2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -90,12 +93,12 @@ Scoop_SoundEditorData_Join49:
 Scoop_SoundEditorData_Epilogue2:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join50:
+SeAmpEnv1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue3
 	ld	a, (xsp)
@@ -103,7 +106,7 @@ Scoop_SoundEditorData_Join50:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xD68:24)
+	lda	xde, (SeAmpEnv1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -111,12 +114,12 @@ Scoop_SoundEditorData_Join50:
 Scoop_SoundEditorData_Epilogue3:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join51:
+SeAmpEnv2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue4
 	ld	a, (xsp)
@@ -124,7 +127,7 @@ Scoop_SoundEditorData_Join51:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xDB0:24)
+	lda	xde, (SeAmpEnv2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -132,12 +135,12 @@ Scoop_SoundEditorData_Join51:
 Scoop_SoundEditorData_Epilogue4:
 	inc	4, xsp
 	ret
-SeAmpLfo1_DisplayDispatch:
+SeAmpLfo1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue5
 	ld	a, (xsp)
@@ -145,7 +148,7 @@ SeAmpLfo1_DisplayDispatch:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xDF8:24)
+	lda	xde, (SeAmpLfo1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1684,12 +1687,12 @@ Scoop_SoundEditorData_Skip26:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
-Scoop_SoundEditorData_Join53:
+SeFilLpq1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue10
 	ld	a, (xsp)
@@ -1697,7 +1700,7 @@ Scoop_SoundEditorData_Join53:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xE40:24)
+	lda	xde, (SeFilLpq1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1705,12 +1708,12 @@ Scoop_SoundEditorData_Join53:
 Scoop_SoundEditorData_Epilogue10:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join54:
+SeFilHpq1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue11
 	ld	a, (xsp)
@@ -1718,7 +1721,7 @@ Scoop_SoundEditorData_Join54:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xE88:24)
+	lda	xde, (SeFilHpq1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1726,12 +1729,12 @@ Scoop_SoundEditorData_Join54:
 Scoop_SoundEditorData_Epilogue11:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join55:
+SeFilL241TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue12
 	ld	a, (xsp)
@@ -1739,7 +1742,7 @@ Scoop_SoundEditorData_Join55:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xED0:24)
+	lda	xde, (SeFilL241TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1747,12 +1750,12 @@ Scoop_SoundEditorData_Join55:
 Scoop_SoundEditorData_Epilogue12:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join56:
+SeFilH241TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue13
 	ld	a, (xsp)
@@ -1760,7 +1763,7 @@ Scoop_SoundEditorData_Join56:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xF18:24)
+	lda	xde, (SeFilH241TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1768,12 +1771,12 @@ Scoop_SoundEditorData_Join56:
 Scoop_SoundEditorData_Epilogue13:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join57:
+SeFilBpf1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue14
 	ld	a, (xsp)
@@ -1781,7 +1784,7 @@ Scoop_SoundEditorData_Join57:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xF60:24)
+	lda	xde, (SeFilBpf1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1789,12 +1792,12 @@ Scoop_SoundEditorData_Join57:
 Scoop_SoundEditorData_Epilogue14:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join58:
+SeFilBcf1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue15
 	ld	a, (xsp)
@@ -1802,7 +1805,7 @@ Scoop_SoundEditorData_Join58:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xFA8:24)
+	lda	xde, (SeFilBcf1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1810,12 +1813,12 @@ Scoop_SoundEditorData_Join58:
 Scoop_SoundEditorData_Epilogue15:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join59:
+SeFilFil2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue16
 	ld	a, (xsp)
@@ -1823,7 +1826,7 @@ Scoop_SoundEditorData_Join59:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0xFF0:24)
+	lda	xde, (SeFilFil2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1831,12 +1834,12 @@ Scoop_SoundEditorData_Join59:
 Scoop_SoundEditorData_Epilogue16:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join60:
+SeFilEnv1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue17
 	ld	a, (xsp)
@@ -1844,7 +1847,7 @@ Scoop_SoundEditorData_Join60:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x1038:24)
+	lda	xde, (SeFilEnv1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1852,12 +1855,12 @@ Scoop_SoundEditorData_Join60:
 Scoop_SoundEditorData_Epilogue17:
 	inc	4, xsp
 	ret
-Scoop_SoundEditorData_Join61:
+SeFilEnv2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue18
 	ld	a, (xsp)
@@ -1865,7 +1868,7 @@ Scoop_SoundEditorData_Join61:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x1080:24)
+	lda	xde, (SeFilEnv2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1873,12 +1876,12 @@ Scoop_SoundEditorData_Join61:
 Scoop_SoundEditorData_Epilogue18:
 	inc	4, xsp
 	ret
-SeFilLfo1_DisplayDispatch:
+SeFilLfo1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue19
 	ld	a, (xsp)
@@ -1886,7 +1889,7 @@ SeFilLfo1_DisplayDispatch:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x10C8:24)
+	lda	xde, (SeFilLfo1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)

@@ -2876,12 +2876,12 @@ SeMenu_CopyWriteUpdate_Step3_Join33:
 	jp	SeMenu_ResetSubIndex
 SeMenu_CopyWriteUpdate_Step3_Return34:
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join34:
+SeCtr2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue3
 	ld	a, (xsp)
@@ -2889,7 +2889,7 @@ SeMenu_CopyWriteUpdate_Step3_Join34:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x136F:24)
+	lda	xde, (SeCtr2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -2897,12 +2897,12 @@ SeMenu_CopyWriteUpdate_Step3_Join34:
 SeMenu_CopyWriteUpdate_Epilogue3:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join35:
+SeCtr3TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue4
 	ld	a, (xsp)
@@ -2910,7 +2910,7 @@ SeMenu_CopyWriteUpdate_Step3_Join35:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x13B7:24)
+	lda	xde, (SeCtr3TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3098,7 +3098,7 @@ SeMenu_CopyWriteUpdate_Epilogue5:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join36:
+SeMenuTitleFunc_DispatchSwitch:
 	lda	xsp, (xsp-12)
 	pushw	iz
 	ld	(xsp+12), bc
@@ -3117,7 +3117,7 @@ SeMenu_CopyWriteUpdate_Skip4:
 	push	xwa
 	ld	wa, iz
 	ld	bc, (xsp+16)
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue6
 	call	SeMenu_GetPartConfigBit3
@@ -3825,12 +3825,12 @@ SeMenu_CopyWriteUpdate_Epilogue12:
 	ld	wa, 2:i3
 	call	SeMenu_ClearNotification
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join37:
+SeTonTon1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue13
 	ld	a, (xsp)
@@ -3838,7 +3838,7 @@ SeMenu_CopyWriteUpdate_Step3_Join37:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x1E:24)
+	lda	xde, (SeTonTon1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3846,12 +3846,12 @@ SeMenu_CopyWriteUpdate_Step3_Join37:
 SeMenu_CopyWriteUpdate_Epilogue13:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join38:
+SeTonTon2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue14
 	ld	a, (xsp)
@@ -3859,7 +3859,7 @@ SeMenu_CopyWriteUpdate_Step3_Join38:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x66:24)
+	lda	xde, (SeTonTon2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3867,12 +3867,12 @@ SeMenu_CopyWriteUpdate_Step3_Join38:
 SeMenu_CopyWriteUpdate_Epilogue14:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join39:
+SeTonRan1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue15
 	ld	a, (xsp)
@@ -3880,7 +3880,7 @@ SeMenu_CopyWriteUpdate_Step3_Join39:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0xAE:24)
+	lda	xde, (SeTonRan1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3888,12 +3888,12 @@ SeMenu_CopyWriteUpdate_Step3_Join39:
 SeMenu_CopyWriteUpdate_Epilogue15:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join40:
+SeTonRan2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue16
 	ld	a, (xsp)
@@ -3901,7 +3901,7 @@ SeMenu_CopyWriteUpdate_Step3_Join40:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0xF6:24)
+	lda	xde, (SeTonRan2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3909,12 +3909,12 @@ SeMenu_CopyWriteUpdate_Step3_Join40:
 SeMenu_CopyWriteUpdate_Epilogue16:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join41:
+SeTonHyb1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue17
 	ld	a, (xsp)
@@ -3922,7 +3922,7 @@ SeMenu_CopyWriteUpdate_Step3_Join41:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x13E:24)
+	lda	xde, (SeTonHyb1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5448,12 +5448,12 @@ SeMenu_CopyWriteUpdate_Join15:
 SeMenu_CopyWriteUpdate_Epilogue25:
 	inc	2, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join42:
+SeEasyTitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue26
 	ld	a, (xsp)
@@ -5461,7 +5461,7 @@ SeMenu_CopyWriteUpdate_Step3_Join42:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x186:24)
+	lda	xde, (SeEasyTitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5469,12 +5469,12 @@ SeMenu_CopyWriteUpdate_Step3_Join42:
 SeMenu_CopyWriteUpdate_Epilogue26:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join43:
+SeCopyTitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue27
 	ld	a, (xsp)
@@ -5482,7 +5482,7 @@ SeMenu_CopyWriteUpdate_Step3_Join43:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x2A6:24)
+	lda	xde, (SeCopyTitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5490,12 +5490,12 @@ SeMenu_CopyWriteUpdate_Step3_Join43:
 SeMenu_CopyWriteUpdate_Epilogue27:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join44:
+SeWrtMemTitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue28
 	ld	a, (xsp)
@@ -5503,7 +5503,7 @@ SeMenu_CopyWriteUpdate_Step3_Join44:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (ToneGen_ParamTable_0x1CE:24)
+	lda	xde, (SeWrtMemTitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5516,7 +5516,7 @@ Scoop_SoundEditorData_Helper12:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue29
 	ld	a, (xsp)
@@ -5532,7 +5532,7 @@ Scoop_SoundEditorData_Helper12:
 SeMenu_CopyWriteUpdate_Epilogue29:
 	inc	4, xsp
 	ret
-SeMenu_CopyWriteUpdate_Step3_Join45:
+SeDigEffTitleFunc_DispatchSwitch:
 	dec	8, xsp
 	pushw	iz
 	ld	(xsp+8), bc
@@ -5546,7 +5546,7 @@ SeMenu_CopyWriteUpdate_Step3_Join45:
 	push	xwa
 	ld	wa, iz
 	ld	bc, (xsp+12)
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue30
 	ld	a, (xsp+4)

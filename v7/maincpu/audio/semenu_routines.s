@@ -2182,7 +2182,15 @@ SeMenu_SetupPartDisplay_Loop5:
 	cp w, e
 	jr c, SeMenu_SetupPartDisplay_Loop5
 	ret
-Scoop_SoundEditorData_Helper6:
+; SeTitle_DecodeSwitch -- turn an EVT_SW_IN switch number into a title's switch-handler index.
+; In: WA = switch number (the title passes switch & 31), BC = bank word (bit 15 = second bank),
+;     XDE -> index byte, (XSP+4) -> bank byte.  Out: HL = 0 when the switch is handled, 0xFFFF when not.
+;   bank byte = 1 for the second bank, else 0
+;   switches 0..16  -> index = switch
+;   switches 17..24 -> index = switch - 17, and bit 7 of the bank byte set
+;   switch 25       -> index 16
+; Called by every <Title>_DispatchSwitch, which then calls <Title>_SwitchHandlers[index] with WA = the bank byte.
+SeTitle_DecodeSwitch:
 	ld XHL,(XSP+0x04)
 	bit 0x0f,BC
 	jr z, .Lc_f07315
@@ -6393,7 +6401,7 @@ SeMenu_RefreshPartDisplay:
 SeMenu_RefreshPartDisplay_Data:
 	; Disassembled from the committed romslice (no source of any kind existed):
 	; llvm-mc round-trips these 13 B byte-exact. v9/v10 name offset +13 into
-	; this same label SeMenu_RefreshPartDisplay_Join5 -- exactly where these
+	; this same label SePitPit1TitleFunc_DispatchSwitch -- exactly where these
 	; 13 bytes end -- and v9/v10's own bytes at offsets 0 and 6 are the identical
 	; "stdi8 (1709),0 / ret" pair this decodes to. Structural match, not just a
 	; clean decode.
@@ -6402,12 +6410,12 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	(1709:16), 0
 	ret
 	ret
-SeMenu_RefreshPartDisplay_Join5:
+SePitPit1TitleFunc_DispatchSwitch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)
 	push XHL
-	call Scoop_SoundEditorData_Helper6
+	call SeTitle_DecodeSwitch
 	cp HL,0xffff
 	jr z, .Lc_f09ad1
 	ld A,(XSP)
@@ -6415,7 +6423,7 @@ SeMenu_RefreshPartDisplay_Join5:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda xde, (GUI_DisplayStructData_0x1222:24)
+	lda xde, (SePitPit1TitleFunc_SwitchHandlers:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -6423,12 +6431,12 @@ SeMenu_RefreshPartDisplay_Join5:
 .Lc_f09ad1:
 	inc 4,XSP
 	ret
-SeMenu_RefreshPartDisplay_Join6:
+SePitEnv1TitleFunc_DispatchSwitch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)
 	push XHL
-	call Scoop_SoundEditorData_Helper6
+	call SeTitle_DecodeSwitch
 	cp HL,0xffff
 	jr z, .Lc_f09aff
 	ld A,(XSP)
@@ -6436,7 +6444,7 @@ SeMenu_RefreshPartDisplay_Join6:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda xde, (GUI_DisplayStructData_0x126A:24)
+	lda xde, (SePitEnv1TitleFunc_SwitchHandlers:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -6444,12 +6452,12 @@ SeMenu_RefreshPartDisplay_Join6:
 .Lc_f09aff:
 	inc 4,XSP
 	ret
-SeMenu_RefreshPartDisplay_Join7:
+SePitEnv2TitleFunc_DispatchSwitch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)
 	push XHL
-	call Scoop_SoundEditorData_Helper6
+	call SeTitle_DecodeSwitch
 	cp HL,0xffff
 	jr z, .Lc_f09b2d
 	ld A,(XSP)
@@ -6457,7 +6465,7 @@ SeMenu_RefreshPartDisplay_Join7:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda xde, (GUI_DisplayStructData_0x12B2:24)
+	lda xde, (SePitEnv2TitleFunc_SwitchHandlers:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -6465,12 +6473,12 @@ SeMenu_RefreshPartDisplay_Join7:
 .Lc_f09b2d:
 	inc 4,XSP
 	ret
-SeMenu_RefreshPartDisplay_Join8:
+SePitLfo1TitleFunc_DispatchSwitch:
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)
 	push XHL
-	call Scoop_SoundEditorData_Helper6
+	call SeTitle_DecodeSwitch
 	cp HL,0xffff
 	jr z, .Lc_f09b5b
 	ld A,(XSP)
@@ -6478,7 +6486,7 @@ SeMenu_RefreshPartDisplay_Join8:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda xde, (GUI_DisplayStructData_0x12FA:24)
+	lda xde, (SePitLfo1TitleFunc_SwitchHandlers:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)

@@ -2170,7 +2170,15 @@ SeMenu_SetupPartDisplay_End_Loop4:
 	cp	w, e
 	jr	c, SeMenu_SetupPartDisplay_End_Loop4
 	ret
-Scoop_SoundEditorData_Helper7:
+; SeTitle_DecodeSwitch -- turn an EVT_SW_IN switch number into a title's switch-handler index.
+; In: WA = switch number (the title passes switch & 31), BC = bank word (bit 15 = second bank),
+;     XDE -> index byte, (XSP+4) -> bank byte.  Out: HL = 0 when the switch is handled, 0xFFFF when not.
+;   bank byte = 1 for the second bank, else 0
+;   switches 0..16  -> index = switch
+;   switches 17..24 -> index = switch - 17, and bit 7 of the bank byte set
+;   switch 25       -> index 16
+; Called by every <Title>_DispatchSwitch, which then calls <Title>_SwitchHandlers[index] with WA = the bank byte.
+SeTitle_DecodeSwitch:
 	ld	xhl, (xsp+4)
 	bit	15, bc
 	jr	z, SeMenu_SetupPartDisplay_End_Skip4
@@ -2195,7 +2203,7 @@ SeMenu_SetupPartDisplay_End_Skip5:
 	jr	ugt, SeMenu_SetupPartDisplay_End_Skip6
 	sub	c, 17
 	ld	(xde), c
-	.byte 0xb3, 0xbf
+	set	7, (xhl)
 	jr	SeMenu_SetupPartDisplay_End_Join3
 SeMenu_SetupPartDisplay_End_Skip6:
 	cp	wa, 25
@@ -6373,12 +6381,12 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	(1709:16), 0
 	ret
 	ret
-SeMenu_RefreshPartDisplay_Join8:
+SePitPit1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue
 	ld	a, (xsp)
@@ -6386,7 +6394,7 @@ SeMenu_RefreshPartDisplay_Join8:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x1222:24)
+	lda	xde, (SePitPit1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6394,12 +6402,12 @@ SeMenu_RefreshPartDisplay_Join8:
 SeMenu_RefreshPartDisplay_Epilogue:
 	inc	4, xsp
 	ret
-SeMenu_RefreshPartDisplay_Join9:
+SePitEnv1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue2
 	ld	a, (xsp)
@@ -6407,7 +6415,7 @@ SeMenu_RefreshPartDisplay_Join9:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x126A:24)
+	lda	xde, (SePitEnv1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6415,12 +6423,12 @@ SeMenu_RefreshPartDisplay_Join9:
 SeMenu_RefreshPartDisplay_Epilogue2:
 	inc	4, xsp
 	ret
-SeMenu_RefreshPartDisplay_Join10:
+SePitEnv2TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue3
 	ld	a, (xsp)
@@ -6428,7 +6436,7 @@ SeMenu_RefreshPartDisplay_Join10:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x12B2:24)
+	lda	xde, (SePitEnv2TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6436,12 +6444,12 @@ SeMenu_RefreshPartDisplay_Join10:
 SeMenu_RefreshPartDisplay_Epilogue3:
 	inc	4, xsp
 	ret
-SeMenu_RefreshPartDisplay_Join11:
+SePitLfo1TitleFunc_DispatchSwitch:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	Scoop_SoundEditorData_Helper7
+	call	SeTitle_DecodeSwitch
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue4
 	ld	a, (xsp)
@@ -6449,7 +6457,7 @@ SeMenu_RefreshPartDisplay_Join11:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (GUI_DisplayStructData_0x12FA:24)
+	lda	xde, (SePitLfo1TitleFunc_SwitchHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)

@@ -222,12 +222,26 @@ DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd:	.incbin "includes/generated/naka_dis
 ; [nakarest] points into it; reached through source references PostTitle_Function_Skip
 ; [nakarest] (audio/presentation_sound_nav.s: `ld xwa, DirmdTitleFunc_Str_DirmdTitleCur`).
 DirmdTitleFunc_Str_DirmdTitleCur:	.incbin "includes/generated/naka_disk_warning.bin", 0xF00, 0x12	; "DirmdTitleCur();"
-; [nakarest] naka_disk_warning+0xf12  +0xf12..+0xf32 (0xea9bbe, 32 B)
-; [nakarest] purpose not established: layout of 32 B at 0xea9bbe not derived; readers below
-; [nakarest] Readers: source references DirmdEmulator (audio/presentation_sound_nav.s: `add xbc,
-; [nakarest] DirmdEmulator_Data`).
+; DirmdEmulator's case table: one 16-bit offset from DirmdEmulator_Dispatch per event EVT_NONE .. EVT_NONE+15
+; (DirmdEmulator subtracts EVT_NONE, rejects anything outside 0..15, then `jp t, (xix+bc)`).  Four events
+; have cases; the rest go straight to DirmdEmu_DefaultCase.  Was a 32-byte slice of naka_disk_warning.bin.
 DirmdEmulator_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xF12, 0x20
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_NONE
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_SHOW
+	.short DirmdEmulator_Dispatch - DirmdEmulator_Dispatch	; EVT_HIDE
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_NONE+3
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_NONE+4
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_NONE+5
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_ACTION
+	.short DirmdEmu_OnSwitchIn - DirmdEmulator_Dispatch	; EVT_SW_IN
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_SW_ON
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_SW_OFF
+	.short DirmdEmu_OnAllPaint - DirmdEmulator_Dispatch	; EVT_ALL_PAINT
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_PAINT
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_REPAINT
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_DRAW
+	.short DirmdEmu_DefaultCase - DirmdEmulator_Dispatch	; EVT_SELE_DRAW
+	.short DirmdEmu_OnParaDraw - DirmdEmulator_Dispatch	; EVT_PARA_DRAW
 ; [nakarest] naka_disk_warning+0xf32  +0xf32..+0xf46 (0xea9bde, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea9bde not derived; readers below
 ; [nakarest] Readers: source references WindowProc (audio/presentation_sound_nav.s: `add xbc,
