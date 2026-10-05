@@ -8,7 +8,7 @@ CLAUDE.md "Code-Coverage Evidence Ledger".
 | script | what question it answers | how to run (repository root) |
 |---|---|---|
 | `build_maps.py` | For every byte of each image, which source line emits it, what kind of line it is, and which ELF symbols sit where? It reuses `scripts/analysis/data_range_census.py`'s marked-mirror instrument unchanged, and refuses an image whose mirror does not rebuild byte-identical. | `python3 scripts/analysis/dispatch_table_census/build_maps.py` (~2 min, 11 images) |
-| `census.py` | For each jump/call table, does every entry that points into code land on a labelled, disassembled instruction, spelled symbolically? Which tables do not, and what blocks their targets? The table detectors, target classes and blocker rules are in its docstring. | `python3 scripts/analysis/dispatch_table_census/census.py --report` (also `--top`, `--list KEY`, `--snapshot DIR`, `--compare FILE.json`) |
+| `census.py` | For each jump/call table, does every entry that points into code land on a labelled, disassembled instruction, spelled symbolically? Which tables do not, and what blocks their targets? The table detectors, target classes and blocker rules are in its docstring. | `python3 scripts/analysis/dispatch_table_census/census.py --report` (also `--top`, `--list KEY`, `--unresolved KEY`, `--snapshot DIR`, `--compare FILE.json`) |
 
 `make dispatch-census` runs all three steps: build the maps, compare with the newest committed snapshot
 (exit 1 if anything rose), and write today's snapshot into `docs/coverage/`.
@@ -19,7 +19,12 @@ scratch can be regenerated, so delete it when you are done.
 
 Known limits. These are stated so that a zero is never over-read:
 - the counts are a lower bound;
-- offset tables spelled as plain numbers, `addr24` bytecode, and tables whose every target is undecoded
-  are not detected;
+- `addr24` bytecode, and tables whose every target is undecoded, are not detected;
+- 16-bit offset tables are found two ways: O by their `.short Sym - Base` spelling, and D (since
+  2026-10-06) from the `jp t, (xR+rr)` code that reads them, whatever the spelling. D sees only that
+  compiled-switch shape (base, table and bound within 10 instruction lines). The sites it cannot read
+  are counted in the `D-unres` column and listed by `--unresolved KEY`. In v10, 92.8% of D's entries
+  land on instruction starts. The rest (mid-instruction, fill, text) are either mis-framed code or
+  misreads; both block, so neither is hidden;
 - unframed runs carry about 10% false positives, which the null-control column measures;
 - the code-table test leaves out record tables whose pointers are mostly data.

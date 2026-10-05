@@ -25,6 +25,16 @@ TABLE DETECTORS (each a separate, stated rule)
      `.long` slots are pointers).
   O  16-bit offset tables: `.short/.word/.hword/.2byte` lines whose every operand
      is `Sym - Base`; the target is Sym's ELF value.
+  D  16-bit offset tables found from the CODE that reads them, whatever their spelling
+     (added 2026-10-06: offset tables inside compiled-C .incbins were invisible to O):
+     every `jp t, (xR+rr)` whose preceding <= 10 instruction lines of the same file
+     hold the base (`lda xR, (B:24)` / `lda xR, B` / `ld xR, B`; B may be `Sym + 0xN`), the table
+     (`lda xQ, (T:24)` or `add xQQ, T` / `ld xQQ, T`, T != B) and an upper bound
+     (`cp r, N` or `cp r, N:i3`, then `jr`/`jrl`/`ret` ugt/gt -> N+1 entries, uge/ge/nc -> N).  The N
+     words at T are read from the dump; each target is B + word.  An entry is
+     spelled symbolically iff the source line holding it is `.short Sym - Base`.
+     A table O already reports (same address) is not reported again; sites with no
+     readable base, table or bound are counted as `unresolved` in the report.
   U  UNFRAMED runs in non-`.long` bytes (.incbin, .byte, code lines): anchor =
      >= 3 consecutive LE32 words (stride 4, any offset) each equal to a LABELLED
      instruction start, >= 3 distinct; grown both ways over words equal to ANY
@@ -40,7 +50,7 @@ TARGET CLASSES (looked up in the owning image's map)
   midinsn   inside an instruction line                           ("hidden"/stale)
   incbin_raw / incbin_C / incbin_asset / databyte / text / dataother / fill
 
-CODE-TABLE TEST (A, O; J and U are code tables by construction)
+CODE-TABLE TEST (A, O; J, D and U are code tables by construction)
   >= 1 entry on an instruction start AND >= half of the pointer entries in
   CODEISH = {code, nolabel, midinsn, incbin_raw}.
 
@@ -55,6 +65,7 @@ RUN (from the repository root; `make dispatch-census` does the first and the --s
   python3 scripts/analysis/dispatch_table_census/census.py --report     # the per-image table
   python3 scripts/analysis/dispatch_table_census/census.py --top        # summary + top-10 framed tables per image
   python3 scripts/analysis/dispatch_table_census/census.py --list KEY   # every not-used framed table of one image
+  python3 scripts/analysis/dispatch_table_census/census.py --unresolved KEY   # D sites it could not read, and why
   python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
         # writes dispatch-census-<date>-NN.txt (report + top) and .json (per-image summary, every not-used table);
         # NN numbers the day's snapshots, so a committed one is never overwritten
@@ -411,6 +422,87 @@ def detect_O(key):
     return tables
 
 
+JPIDX = re.compile(r'^jp\s+t,\s*\((x[a-z]+)\s*\+\s*([a-z]+)\)$', re.I)
+SYM = r'([A-Za-z_.$][\w.$@]*(?: \+ 0x[0-9a-fA-F]+)?|0x[0-9a-fA-F]+|\d+)'
+UNRESOLVED = {}
+UNRESOLVED_SITES = {}
+
+
+def _val(m, tok):
+    if re.match(r'^(0x[0-9a-fA-F]+|\d+)$', tok):
+        return int(tok, 0)
+    mm = re.match(r'^(\S+) \+ (0x[0-9a-fA-F]+)$', tok)        # table_data's boot view: Sym + 0x600000
+    if mm:
+        v = m["byname"].get(mm.group(1))
+        return None if v is None else v + int(mm.group(2), 16)
+    return m["byname"].get(tok)
+
+
+def detect_D(key, skip_addrs):
+    m = load(key)
+    rows = m["rows"]
+    code = [i for i, r in enumerate(rows) if is_insn_row(key, r)]
+    tables, unresolved = [], 0
+    sites = UNRESOLVED_SITES.setdefault(key, [])
+    for ci, i in enumerate(code):
+        r = rows[i]
+        c = re.sub(r'\s+', ' ', r[6].split(";", 1)[0]).strip()
+        c = re.sub(r'^[A-Za-z_.$][\w.$@]*:\s*', '', c)
+        mj = JPIDX.match(c)
+        if not mj:
+            continue
+        xr = mj.group(1).lower()
+        back = [rows[j] for j in code[max(0, ci - 10):ci] if rows[j][2] == r[2]]
+        texts = [re.sub(r'\s+', ' ', re.sub(r'^[A-Za-z_.$][\w.$@]*:\s*', '', b[6].split(";", 1)[0].strip())) for b in back]
+        base = tab = bound = None
+        for t in reversed(texts):
+            mb = re.match(r'^(?:lda|ld) %s, \(?%s(?::24)?\)?$' % (xr, SYM), t, re.I)
+            if mb and base is None:
+                base = mb.group(1)
+                continue
+            mt = re.match(r'^(?:lda (x[a-z]+), \(%s:24\)|lda (x[a-z]+), %s|add (x[a-z]+), %s|ld (x[a-z]+), %s)$'
+                          % (SYM, SYM, SYM, SYM), t, re.I)
+            if mt and base is not None and tab is None:
+                tok = next(g for g in mt.groups()[1::2] if g)      # groups 2/4/6/8 hold T
+                if tok != base and _val(m, tok) is not None and not re.match(r'^(0x[0-9a-fA-F]{1,2}|\d{1,3})$', tok):
+                    tab = tok
+        for k in range(len(texts) - 1):
+            mc = re.match(r'^cp ([a-z]+), (0x[0-9a-fA-F]+|\d+)(?::i3)?$', texts[k], re.I)
+            mjr = re.match(r'^(?:jrl? (ugt|gt|uge|ge|nc),|ret (ugt|gt|uge|ge|nc)$)', texts[k + 1], re.I) if mc else None
+            if mjr:
+                nn = int(mc.group(2), 0)
+                bound = nn + 1 if (mjr.group(1) or mjr.group(2)).lower() in ("ugt", "gt") else nn
+        B, T = (_val(m, base) if base else None), (_val(m, tab) if tab else None)
+        where = "%s:%d" % (r[2], r[3] + 1)
+        if T is not None and T in skip_addrs:
+            continue                        # the O detector already reports this table
+        if B is None or T is None or not bound or bound > 512:
+            unresolved += 1
+            sites.append((where, "base=%s table=%s bound=%s" % (base, tab, bound)))
+            continue
+        o = owner(key, T)
+        if o is None or o[0] != key:
+            unresolved += 1
+            sites.append((where, "table %s outside the image" % tab))
+            continue
+        T = o[1]                            # the table's address in this image's own map
+        ents = []
+        for n_ in range(bound):
+            at = T + 2 * n_
+            val = (B + le(m, at, 2)) & 0xFFFFFF
+            rr = find(m, at)
+            sym = bool(rr and rr[4] == "data" and rr[5] in (".short", ".word", ".hword", ".2byte")
+                       and all(DIFF.match(x) for x in operands(rr[6])))
+            e = mk_entry(key, val, not sym, "%s+%d" % (tab, 2 * n_))
+            if e:
+                e["at"], e["jump"] = at, True
+                ents.append(e)
+        tables.append(dict(kind="D", addr=T, name=tab, nwords=bound,
+                           file="%s:%d" % (r[2], r[3] + 1), ents=ents))
+    UNRESOLVED[key] = unresolved
+    return tables
+
+
 TREES = {"v10": "v10/maincpu", "v9": "v9/maincpu", "v7": "v7/maincpu",
          "hdae5000": "hdae5000", "tabledata": "table_data", "customdata": "custom_data",
          "v142": "v142/subcpu", "subboot": "subcpu/boot"}
@@ -516,7 +608,7 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3):
 def is_code_table(t):
     """J/U: by construction.  A/O: >= 1 entry on an instruction start AND at least
     half of the pointer entries land in code-ish territory (CODEISH)."""
-    if t["kind"] in ("J", "U"):
+    if t["kind"] in ("J", "D", "U"):
         return True
     n = len(t["ents"])
     st = sum(1 for e in t["ents"] if e["tcls"] in INSN_START)
@@ -556,11 +648,12 @@ def main():
     args = sys.argv[1:]
     res = {}
     for key in KEYS:
-        tabs = detect_A(key) + detect_J(key) + detect_O(key)
+        o_tabs = detect_O(key)
+        tabs = detect_A(key) + detect_J(key) + o_tabs + detect_D(key, {t["addr"] for t in o_tabs})
         tabs = [t for t in tabs if t["ents"] and is_code_table(t)]
         un = detect_U(key)
         null = detect_U(key, shift=1)
-        res[key] = dict(tables=tabs, unframed=un, null=len(null))
+        res[key] = dict(tables=tabs, unframed=un, null=len(null), d_unresolved=UNRESOLVED.get(key, 0))
     if "--json" in args:
         json.dump(res, open(args[args.index("--json") + 1], "w"), indent=0, default=str)
     if "--report" in args:
@@ -571,6 +664,11 @@ def main():
         return
     if "--compare" in args:
         sys.exit(compare(res, args[args.index("--compare") + 1]))
+    if "--unresolved" in args:
+        key = args[args.index("--unresolved") + 1]
+        for where, why in UNRESOLVED_SITES.get(key, []):
+            print("%-60s %s" % (where, why))
+        return
     if "--list" in args:
         key = args[args.index("--list") + 1]
         for t in res[key]["tables"]:
@@ -617,17 +715,18 @@ def top(res):
 
 def report(res):
     """The per-image answer: framed tables (A/J/O) and unframed runs (U) separately."""
-    hdr = ("image", "framed", "used", "NOT", "newT", "newT(x)", "spellT", "U", "U-NOT", "U-newT", "null")
-    print("%-10s %6s %5s %4s %6s %7s %6s | %3s %5s %6s %4s" % hdr)
+    hdr = ("image", "framed", "used", "NOT", "newT", "newT(x)", "spellT", "U", "U-NOT", "U-newT", "null", "D-unres")
+    print("%-10s %6s %5s %4s %6s %7s %6s | %3s %5s %6s %4s | %7s" % hdr)
     for key in KEYS:
         S = summarise(key, res)
         un = res[key]["unframed"]
         unot = [t for t in un if blockers(t)]
         unew = {(e["owner"], e["val"]) for t in unot for e in t["ents"]
                 if blocker(t, e) and blocker(t, e) != "numeric"}
-        print("%-10s %6d %5d %4d %6d %7d %6d | %3d %5d %6d %4d" % (
+        print("%-10s %6d %5d %4d %6d %7d %6d | %3d %5d %6d %4d | %7d" % (
             key, S["n"], S["used"], S["notu"], len(S["newp_same"]), len(S["newp_other"]),
-            len(S["nump"]), len(un), len(unot), len(unew), res[key]["null"]))
+            len(S["nump"]), len(un), len(unot), len(unew), res[key]["null"], res[key].get("d_unresolved", 0)))
+    print("D-unres: `jp t, (xR+rr)` dispatch sites whose base, table or bound the D detector could not read")
     print("\ndistinct new-entry-point targets by blocking class (framed tables, all owners):")
     for key in KEYS:
         S = summarise(key, res)
@@ -656,7 +755,8 @@ def summary_json(res):
         out[key] = dict(framed=S["n"], used=S["used"], not_used=S["notu"], new_targets_same_image=len(S["newp_same"]),
                         new_targets_other_image=len(S["newp_other"]), spelling_only_targets=len(S["nump"]),
                         unframed_runs=len(un), unframed_not_used=len(unot), unframed_new_targets=len(unew),
-                        null_control=res[key]["null"], not_used_tables=tabs)
+                        null_control=res[key]["null"], d_unresolved_sites=res[key].get("d_unresolved", 0),
+                        not_used_tables=tabs)
     return out
 
 
@@ -708,7 +808,9 @@ def compare(res, old_path):
         if o is None:
             continue
         for f in ("not_used", "new_targets_same_image", "new_targets_other_image", "spelling_only_targets",
-                  "unframed_not_used", "unframed_new_targets"):
+                  "unframed_not_used", "unframed_new_targets", "d_unresolved_sites"):
+            if f not in o:
+                continue
             if n[f] > o[f]:
                 rose += 1
                 print("ROSE  %-10s %-26s %d -> %d" % (key, f, o[f], n[f]))

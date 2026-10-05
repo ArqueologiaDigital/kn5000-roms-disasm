@@ -1,0 +1,93 @@
+dispatch-table census, 2026-10-06, measured at 2737346a (+ uncommitted changes)
+tool: scripts/analysis/dispatch_table_census/ (rules in census.py's docstring)
+
+image      framed  used  NOT   newT newT(x) spellT |   U U-NOT U-newT null | D-unres
+v10           654   340  314   1416       0    688 |  31    11     23    3 |       0
+v9            652   338  314   1420       0    684 |  33    13     23    4 |       0
+v7            650   292  358   1447       0    695 |  32    32     17    4 |       1
+v142           43    43    0      0       0      0 |   0     0      0    0 |       0
+subboot         2     2    0      0       0      0 |   0     0      0    0 |       0
+tabledata      13    13    0      0       0      0 |   0     0      0    0 |       0
+customdata      0     0    0      0       0      0 |   0     0      0    0 |       0
+hdae5000       68    68    0      0       0      0 |   0     0      0    0 |       0
+prom_a        424   421    3     12       0      1 |   0     0      0    0 |       0
+prom_b        291   284    7     44     179      1 |   0     0      0    0 |       0
+prom_c         47    46    1      5       0      0 |   0     0      0    0 |       0
+D-unres: `jp t, (xR+rr)` dispatch sites whose base, table or bound the D detector could not read
+
+distinct new-entry-point targets by blocking class (framed tables, all owners):
+  v10        {'databyte': 1, 'dataother': 1, 'fill': 17, 'midinsn': 86, 'nolabel': 1298, 'text': 13}
+  v9         {'databyte': 1, 'dataother': 1, 'fill': 17, 'midinsn': 87, 'nolabel': 1301, 'text': 13}
+  v7         {'databyte': 9, 'fill': 15, 'midinsn': 85, 'nolabel': 1327, 'text': 11}
+  v142       {}
+  subboot    {}
+  tabledata  {}
+  customdata {}
+  hdae5000   {}
+  prom_a     {'midinsn': 11, 'nolabel': 1}
+  prom_b     {'databyte': 8, 'dataother': 1, 'midinsn': 140, 'nolabel': 70, 'text': 4}
+  prom_c     {'midinsn': 5}
+
+
+== v10: top not-used tables
+  D 0xE34D20 SqedtFunc_CaseTable                          entries=40   ptrs=40   unusedT=40   {'numeric': 1, 'nolabel/num': 39}  sequencer/sequencer_ui.s:13840
+  D 0xEED496 ParamSx_SwitchB                              entries=77   ptrs=77   unusedT=40   {'numeric': 20, 'nolabel/num': 20, 'midinsn/num': 34, 'fill/num': 3}  audio/note_voice_mapping.s:25038
+  D 0xEED43B ParamSx_SwitchA                              entries=77   ptrs=77   unusedT=36   {'numeric': 13, 'nolabel/num': 22, 'midinsn/num': 37, 'fill/num': 5}  audio/note_voice_mapping.s:25101
+  D 0xEA9B02 CtrlPanel_FuncDispatch_Data_2                entries=39   ptrs=39   unusedT=34   {'numeric': 5, 'nolabel/num': 15, 'midinsn/num': 19}  ui/ui_control_panel.s:3419
+  D 0xEED4FE ParamSx_SwitchE                              entries=41   ptrs=41   unusedT=28   {'numeric': 11, 'nolabel/num': 10, 'midinsn/num': 8, 'fill/num': 12}  audio/note_voice_mapping.s:25224
+  D 0xEA9A04 CtrlPanel_DispatchByIndex_Data               entries=43   ptrs=43   unusedT=25   {'numeric': 21, 'nolabel/num': 22}  ui/ui_control_panel.s:3101
+  D 0xE34E54 Equalizer_FormatDispatch_CaseTable           entries=44   ptrs=44   unusedT=20   {'numeric': 4, 'nolabel/num': 14, 'midinsn/num': 26}  sequencer/sequencer_ui.s:15588
+  D 0xE448F6 AppEvent_ChainDispatch1_CaseTable            entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20335
+  D 0xE44992 AppEvent_InlineHandler_CaseTable             entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20912
+  D 0xEAA8A4 ObjectProc_Data                              entries=20   ptrs=20   unusedT=19   {'numeric': 20}  ui/ui_widget_defs.s:8413
+
+== v9: top not-used tables
+  D 0xE34D20 SqedtFunc_CaseTable                          entries=40   ptrs=40   unusedT=40   {'numeric': 1, 'nolabel/num': 39}  sequencer/sequencer_ui.s:13840
+  D 0xEED496 ParamSx_SwitchB                              entries=77   ptrs=77   unusedT=40   {'numeric': 19, 'nolabel/num': 21, 'midinsn/num': 34, 'fill/num': 3}  audio/note_voice_mapping.s:25037
+  D 0xEED43B ParamSx_SwitchA                              entries=77   ptrs=77   unusedT=36   {'numeric': 12, 'nolabel/num': 23, 'midinsn/num': 37, 'fill/num': 5}  audio/note_voice_mapping.s:25100
+  D 0xEA9B02 CtrlPanel_FuncDispatch_Data_2                entries=39   ptrs=39   unusedT=34   {'numeric': 5, 'nolabel/num': 15, 'midinsn/num': 19}  ui/ui_control_panel.s:3418
+  D 0xEED4FE ParamSx_SwitchE                              entries=41   ptrs=41   unusedT=28   {'numeric': 8, 'nolabel/num': 11, 'midinsn/num': 10, 'fill/num': 12}  audio/note_voice_mapping.s:25223
+  D 0xEA9A04 CtrlPanel_DispatchByIndex_Data               entries=43   ptrs=43   unusedT=25   {'numeric': 21, 'nolabel/num': 22}  ui/ui_control_panel.s:3100
+  D 0xE34E54 Equalizer_FormatDispatch_CaseTable           entries=44   ptrs=44   unusedT=20   {'numeric': 4, 'nolabel/num': 14, 'midinsn/num': 26}  sequencer/sequencer_ui.s:15588
+  D 0xE448F6 AppEvent_ChainDispatch1_CaseTable            entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20339
+  D 0xE44992 AppEvent_InlineHandler_CaseTable             entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20916
+  D 0xEAA8A4 ObjectProc_Data                              entries=20   ptrs=20   unusedT=19   {'numeric': 20}  ui/ui_widget_defs.s:8413
+
+== v7: top not-used tables
+  D 0xE34D20 SqedtFunc_CaseTable                          entries=40   ptrs=40   unusedT=40   {'numeric': 1, 'nolabel/num': 39}  sequencer/sequencer_ui.s:14121
+  D 0xEED496 ParamSx_SwitchB                              entries=77   ptrs=77   unusedT=40   {'numeric': 19, 'nolabel/num': 21, 'midinsn/num': 34, 'fill/num': 3}  audio/note_voice_mapping.s:23331
+  D 0xEED43B ParamSx_SwitchA                              entries=77   ptrs=77   unusedT=36   {'numeric': 12, 'nolabel/num': 23, 'midinsn/num': 37, 'fill/num': 5}  audio/note_voice_mapping.s:23396
+  D 0xEA9B02 CtrlPanel_FuncDispatch_Data_2                entries=39   ptrs=39   unusedT=34   {'numeric': 5, 'nolabel/num': 15, 'midinsn/num': 19}  ui/ui_control_panel.s:3450
+  D 0xEED4FE ParamSx_SwitchE                              entries=41   ptrs=41   unusedT=28   {'numeric': 8, 'nolabel/num': 11, 'midinsn/num': 10, 'fill/num': 12}  audio/note_voice_mapping.s:23524
+  D 0xEA9A04 CtrlPanel_DispatchByIndex_Data               entries=43   ptrs=43   unusedT=25   {'numeric': 21, 'nolabel/num': 22}  ui/ui_control_panel.s:3132
+  D 0xE34E54 Equalizer_FormatDispatch_CaseTable           entries=44   ptrs=44   unusedT=20   {'numeric': 4, 'nolabel/num': 37, 'midinsn/num': 3}  sequencer/sequencer_ui.s:15846
+  D 0xE448F6 AppEvent_ChainDispatch1_CaseTable            entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20388
+  D 0xE44992 AppEvent_InlineHandler_CaseTable             entries=32   ptrs=32   unusedT=19   {'numeric': 1, 'nolabel/num': 31}  sequencer/sequencer_engine.s:20965
+  D 0xEAA8A4 ObjectProc_Data                              entries=20   ptrs=20   unusedT=19   {'numeric': 20}  ui/ui_widget_defs.s:8511
+
+== v142: top not-used tables
+
+== subboot: top not-used tables
+
+== tabledata: top not-used tables
+
+== customdata: top not-used tables
+
+== hdae5000: top not-used tables
+
+== prom_a: top not-used tables
+  A 0xF8E77C AddrTable_F8E77C                             entries=8    ptrs=8    unusedT=6    {'midinsn/num': 3, 'numeric': 2, 'midinsn': 2}  prom_a/wsa1_prom_a.s:25805
+  J 0xFAA000 ParamModule_PhaseVector_StaleCopy            entries=5    ptrs=5    unusedT=5    {'midinsn': 4, 'nolabel': 1}  prom_a/wsa1_prom_a.s:77900
+  A 0xF8E7A9 AddrTable_F8E7A9                             entries=9    ptrs=9    unusedT=3    {'midinsn/num': 2, 'numeric': 3}  prom_a/wsa1_prom_a.s:25820
+
+== prom_b: top not-used tables
+  A 0xF014EE PtrArray_F014EE                              entries=196  ptrs=185  unusedT=134  {'nolabel/num': 48, 'midinsn/num': 135, 'numeric': 1}  prom_b/wsa1_prom_b.s:4683
+  A 0xF00762 PtrTable_F00762                              entries=39   ptrs=37   unusedT=22   {'midinsn/num': 31, 'nolabel/num': 6}  prom_b/wsa1_prom_b.s:3109
+  A 0xF0EE6C OldBuild_ValueGlyph_Table                    entries=29   ptrs=29   unusedT=19   {'midinsn': 14, 'nolabel': 5}  prom_b/wsa1_prom_b.s:28616
+  J 0xF40000 prom_b routine directory                     entries=2002 ptrs=2002 unusedT=19   {'midinsn/num': 5, 'nolabel/num': 1, 'text': 4, 'databyte': 8, 'dataother': 1}  prom_b/wsa1_prom_b.s
+  A 0xF00C4E PtrArray_F00C4E                              entries=21   ptrs=21   unusedT=18   {'midinsn/num': 11, 'nolabel/num': 7}  prom_b/wsa1_prom_b.s:3560
+  A 0xF0ED50 OldBuild_DLHandlerTables_Tail                entries=39   ptrs=39   unusedT=12   {'midinsn': 17, 'nolabel': 4}  prom_b/wsa1_prom_b.s:28518
+  A 0xF00340 PtrTable_F00340                              entries=35   ptrs=33   unusedT=1    {'midinsn/num': 7}  prom_b/wsa1_prom_b.s:2732
+
+== prom_c: top not-used tables
+  J 0xFFF0D1 UNREFERENCED_TRAMPOLINES                     entries=5    ptrs=5    unusedT=5    {'midinsn': 5}  prom_c/boot/reset_and_vectors.s:233

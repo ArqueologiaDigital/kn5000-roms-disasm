@@ -25,9 +25,11 @@ the newest **committed** snapshot.
 - **spellT**: the target is labelled code but the entry is a number.
 - **U**: unframed pointer runs found in `.incbin` / `.byte` / code bytes. **null** is the false-positive
   control for them.
+- **D-unres**: `jp t, (xR+rr)` dispatch sites whose offset table the D detector could not read. A full-coverage
+  claim needs this at zero as well (first recorded in `dispatch-census-2026-10-06-04`).
 
 ## When full coverage may be claimed
 
-Only on a committed snapshot whose every image shows NOT = 0, newT = newT(x) = spellT = 0 and U-NOT = 0,
+Only on a committed snapshot whose every image shows NOT = 0, newT = newT(x) = spellT = 0, U-NOT = 0 and D-unres = 0,
 together with the spec's other L1 / L2 measurements. The claim names the snapshot file and its commit.
 A zero means "none that the census detects". The census's stated limits are part of the claim.

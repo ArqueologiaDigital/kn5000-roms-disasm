@@ -854,8 +854,8 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
 3. **Monotonic.** `census.py --compare` exits 1 when any image's not-used tables, unused targets,
    spelling-only targets or not-used unframed runs ROSE. A rise is a regression unless the commit message
    says why. Example: a table found by hand, or a detector widened.
-4. **What a full-coverage claim needs.** Every image shows NOT = 0, newT = newT(x) = spellT = 0 and
-   U-NOT = 0 on a committed snapshot. The spec's other L1/L2 measurements must also hold. The claim names
+4. **What a full-coverage claim needs.** Every image shows NOT = 0, newT = newT(x) = spellT = 0, U-NOT = 0
+   and D-unres = 0 on a committed snapshot. The spec's other L1/L2 measurements must also hold. The claim names
    the snapshot file and its commit.
 5. **The limits are part of the evidence.** The census is a lower bound, and its README lists what it
    cannot see. A table found by hand that the census misses is a detector gap: widen the detector or list
@@ -864,8 +864,15 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    `.incbin`. Almost every blocked target is an already-decoded instruction start with no label:
    - KN5000: `GUI_DisplayStructData_*` and `Label+N` targets;
    - WSA1: entries into the middle of instructions from stale or other-build tables.
-   So what remains is mostly LABELLING and STALE-TABLE work rather than undisassembled code. Re-read this
-   paragraph against each new snapshot and update it when it stops being true.
+   So what remains is mostly LABELLING and STALE-TABLE work rather than undisassembled code.
+   **Corrected 2026-10-06 (`dispatch-census-2026-10-06-04`).** That reading came from detectors that could
+   not see 16-bit offset tables held as plain numbers or inside compiled-C `.incbin`s. The new D detector
+   finds them from the `jp t, (xR+rr)` code that reads them: about 285 compiled `switch` tables per maincpu
+   tree. KN5000 not-used tables rose to v10 314, v9 314, v7 358, and unused targets to about 1,420 per tree.
+   They are still mostly unlabelled instruction starts (v10: 1,337 of 2,938 D entries). About 7% land
+   mid-instruction, in fill or in text, which points at mis-framed code, such as `push` runs spelled as
+   `.ascii "89:;<=>"`. Re-read this paragraph against each new snapshot and update it when it stops being
+   true.
 
 ### Binary Include Splitting (MANDATORY)
 
