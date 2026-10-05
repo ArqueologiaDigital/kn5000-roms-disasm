@@ -145,6 +145,21 @@
 	.equ SoundConv_Result1,				0x60f015	; result byte 1 (bank, member, or bank select) -- SoundSel_* / CombiSel_* / PartSound_*
 	.equ SoundConv_Result2,				0x60f016	; result byte 2 (bank code, or the program to transmit) -- SoundSel_FromProgramAndBank, PartSound_ToProgramChange
 
+; ---- wsa1/notes/FINDINGS-prom_ab-parameter-events.md -- "COMBINATION EDIT MIXER cells"
+	.equ CombiEditMixer_DirtySound,			0x2770	; the parts of the edited group (bit = part & 7) whose Sound cell waits for a repaint -- CombiEditMixer_RepaintMarkedSound
+	.equ CombiEditMixer_DirtyLocalControl,		0x2771	; the parts of the edited group (bit = part & 7) whose LocalControl cell waits for a repaint -- CombiEditMixer_RepaintMarkedLocalControl
+	.equ CombiEditMixer_DirtyPanpot,		0x2772	; the parts of the edited group (bit = part & 7) whose Panpot cell waits for a repaint -- CombiEditMixer_RepaintMarkedPanpot
+	.equ CombiEditMixer_DirtyVolume,		0x2773	; the parts of the edited group (bit = part & 7) whose Volume cell waits for a repaint -- CombiEditMixer_RepaintMarkedVolume
+	.equ CombiEditMixer_DirtyReverbSend,		0x2774	; the parts of the edited group (bit = part & 7) whose ReverbSend cell waits for a repaint -- CombiEditMixer_RepaintMarkedReverbSend
+	.equ CombiEditMixer_DirtyEffect1Send,		0x2775	; the parts of the edited group (bit = part & 7) whose Effect1Send cell waits for a repaint -- CombiEditMixer_RepaintMarkedEffect1Send
+	.equ CombiEditMixer_DirtyEffect2OnOff,		0x2776	; the parts of the edited group (bit = part & 7) whose Effect2OnOff cell waits for a repaint -- CombiEditMixer_RepaintMarkedEffect2OnOff
+	.equ CombiEditMixer_DirtySubOut,		0x2777	; the parts of the edited group (bit = part & 7) whose SubOut cell waits for a repaint -- CombiEditMixer_RepaintMarkedSubOut
+	.equ CombiEditMixer_DirtyMainOut,		0x2778	; the parts of the edited group (bit = part & 7) whose MainOut cell waits for a repaint -- CombiEditMixer_RepaintMarkedMainOut
+	.equ CombiEditMixer_DirtyMidiOutSetting,	0x2779	; the parts of the edited group (bit = part & 7) whose MidiOutSetting cell waits for a repaint -- CombiEditMixer_RepaintMarkedMidiOutSetting
+	.equ CombiEditMixer_DirtyMidiInSetting,		0x277a	; the parts of the edited group (bit = part & 7) whose MidiInSetting cell waits for a repaint -- CombiEditMixer_RepaintMarkedMidiInSetting
+	.equ CombiEditMixer_DirtyBasicChannel,		0x277b	; the parts of the edited group (bit = part & 7) whose BasicChannel cell waits for a repaint -- CombiEditMixer_RepaintMarkedBasicChannel
+	.equ CombiEditMixer_DirtyKeyShift,		0x277c	; the parts of the edited group (bit = part & 7) whose KeyShift cell waits for a repaint -- CombiEditMixer_RepaintMarkedKeyShift
+
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers"
 	.equ Drawbar_ReloadMark,			0x28a0	; 15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it -- Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked
 

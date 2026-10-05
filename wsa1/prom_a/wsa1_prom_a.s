@@ -105465,26 +105465,26 @@ CombiEditMixer_OnPartParamEvent:
 	jr .LFBC829                                          ; FBC7DE  68 49
 .LFBC7E0:
 	ld C,H                                               ; FBC7E0  ce 8b
-	or (0x2770:16), c                                   ; FBC7E2  c1 70 27 eb
+	or (CombiEditMixer_DirtySound:16), c                                   ; FBC7E2  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC7E6  f1 7d 27 00 01
 	jr .LFBC829                                          ; FBC7EB  68 3c
 .LFBC7ED:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBC7ED  c1 76 20 3f 16
 	jr nz, .LFBC829                                      ; FBC7F2  6e 35
 	ld C,H                                               ; FBC7F4  ce 8b
-	or (0x2771:16), c                                   ; FBC7F6  c1 71 27 eb
+	or (CombiEditMixer_DirtyLocalControl:16), c                                   ; FBC7F6  c1 71 27 eb
 	lda xbc, (.LFBE74D:24)                               ; FBC7FA  f2 4d e7 fb 31
 	push XBC                                             ; FBC7FF  39
 	jr .LFBC81C                                          ; FBC800  68 1a
 .LFBC802:
 	ld C,H                                               ; FBC802  ce 8b
-	or (0x2772:16), c                                   ; FBC804  c1 72 27 eb
+	or (CombiEditMixer_DirtyPanpot:16), c                                   ; FBC804  c1 72 27 eb
 	lda xbc, (.LFBE7E0:24)                               ; FBC808  f2 e0 e7 fb 31
 	push XBC                                             ; FBC80D  39
 	jr .LFBC81C                                          ; FBC80E  68 0c
 .LFBC810:
 	ld C,H                                               ; FBC810  ce 8b
-	or (0x2773:16), c                                   ; FBC812  c1 73 27 eb
+	or (CombiEditMixer_DirtyVolume:16), c                                   ; FBC812  c1 73 27 eb
 	lda xbc, (.LFBE868:24)                               ; FBC816  f2 68 e8 fb 31
 	push XBC                                             ; FBC81B  39
 .LFBC81C:
@@ -105549,36 +105549,36 @@ CombiEditMixer_OnPartParamEvent:
 	jr .LFBC90A                                          ; FBC8AA  68 5e
 .LFBC8AC:
 	ld C,H                                               ; FBC8AC  ce 8b
-	or (0x2770:16), c                                   ; FBC8AE  c1 70 27 eb
+	or (CombiEditMixer_DirtySound:16), c                                   ; FBC8AE  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC8B2  f1 7d 27 00 01
 	jr .LFBC90A                                          ; FBC8B7  68 51
 .LFBC8B9:
 	ld C,H                                               ; FBC8B9  ce 8b
-	or (0x2774:16), c                                   ; FBC8BB  c1 74 27 eb
+	or (CombiEditMixer_DirtyReverbSend:16), c                                   ; FBC8BB  c1 74 27 eb
 	lda xbc, (.LFBE8F0:24)                               ; FBC8BF  f2 f0 e8 fb 31
 	push XBC                                             ; FBC8C4  39
 	jr .LFBC8FD                                          ; FBC8C5  68 36
 .LFBC8C7:
 	ld C,H                                               ; FBC8C7  ce 8b
-	or (0x2775:16), c                                   ; FBC8C9  c1 75 27 eb
+	or (CombiEditMixer_DirtyEffect1Send:16), c                                   ; FBC8C9  c1 75 27 eb
 	lda xbc, (.LFBE978:24)                               ; FBC8CD  f2 78 e9 fb 31
 	push XBC                                             ; FBC8D2  39
 	jr .LFBC8FD                                          ; FBC8D3  68 28
 .LFBC8D5:
 	ld C,H                                               ; FBC8D5  ce 8b
-	or (0x2776:16), c                                   ; FBC8D7  c1 76 27 eb
+	or (CombiEditMixer_DirtyEffect2OnOff:16), c                                   ; FBC8D7  c1 76 27 eb
 	lda xbc, (.LFBE9E7:24)                               ; FBC8DB  f2 e7 e9 fb 31
 	push XBC                                             ; FBC8E0  39
 	jr .LFBC8FD                                          ; FBC8E1  68 1a
 .LFBC8E3:
 	ld C,H                                               ; FBC8E3  ce 8b
-	or (0x2778:16), c                                   ; FBC8E5  c1 78 27 eb
+	or (CombiEditMixer_DirtyMainOut:16), c                                   ; FBC8E5  c1 78 27 eb
 	lda xbc, (.LFBEA5B:24)                               ; FBC8E9  f2 5b ea fb 31
 	push XBC                                             ; FBC8EE  39
 	jr .LFBC8FD                                          ; FBC8EF  68 0c
 .LFBC8F1:
 	ld C,H                                               ; FBC8F1  ce 8b
-	or (0x277c:16), c                                   ; FBC8F3  c1 7c 27 eb
+	or (CombiEditMixer_DirtyKeyShift:16), c                                   ; FBC8F3  c1 7c 27 eb
 	lda xbc, (.LFBEC88:24)                               ; FBC8F7  f2 88 ec fb 31
 	push XBC                                             ; FBC8FC  39
 .LFBC8FD:
@@ -105638,7 +105638,7 @@ CombiEditMixer_OnPartParamEvent:
 	jrl .LFBCA2D                                         ; FBC981  78 a9 00
 .LFBC984:
 	ld C,L                                               ; FBC984  cf 8b
-	or (0x2770:16), c                                   ; FBC986  c1 70 27 eb
+	or (CombiEditMixer_DirtySound:16), c                                   ; FBC986  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC98A  f1 7d 27 00 01
 	jrl .LFBCA2D                                         ; FBC98F  78 9b 00
 .LFBC992:
@@ -105649,7 +105649,7 @@ CombiEditMixer_OnPartParamEvent:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBC99F  c1 76 20 3f 16
 	jr z, .LFBC9BF                                       ; FBC9A4  66 19
 	ld C,L                                               ; FBC9A6  cf 8b
-	or (0x2771:16), c                                   ; FBC9A8  c1 71 27 eb
+	or (CombiEditMixer_DirtyLocalControl:16), c                                   ; FBC9A8  c1 71 27 eb
 	lda xbc, (.LFBE74D:24)                               ; FBC9AC  f2 4d e7 fb 31
 	push XBC                                             ; FBC9B1  39
 	call T_CallbackQueue_Post                            ; FBC9B2  1d 84 2e f4
@@ -105661,7 +105661,7 @@ CombiEditMixer_OnPartParamEvent:
 	and C,0x40                                           ; FBC9C1  cb cc 40
 	jr z, .LFBC9DF                                       ; FBC9C4  66 19
 	ld C,L                                               ; FBC9C6  cf 8b
-	or (0x2779:16), c                                   ; FBC9C8  c1 79 27 eb
+	or (CombiEditMixer_DirtyMidiOutSetting:16), c                                   ; FBC9C8  c1 79 27 eb
 	lda xbc, (.LFBEAC8:24)                               ; FBC9CC  f2 c8 ea fb 31
 	push XBC                                             ; FBC9D1  39
 	call T_CallbackQueue_Post                            ; FBC9D2  1d 84 2e f4
@@ -105673,7 +105673,7 @@ CombiEditMixer_OnPartParamEvent:
 	and C,0x80                                           ; FBC9E1  cb cc 80
 	jr z, .LFBC9FF                                       ; FBC9E4  66 19
 	ld C,L                                               ; FBC9E6  cf 8b
-	or (0x277a:16), c                                   ; FBC9E8  c1 7a 27 eb
+	or (CombiEditMixer_DirtyMidiInSetting:16), c                                   ; FBC9E8  c1 7a 27 eb
 	lda xbc, (.LFBEB35:24)                               ; FBC9EC  f2 35 eb fb 31
 	push XBC                                             ; FBC9F1  39
 	call T_CallbackQueue_Post                            ; FBC9F2  1d 84 2e f4
@@ -105685,13 +105685,13 @@ CombiEditMixer_OnPartParamEvent:
 	and C,0x1f                                           ; FBCA01  cb cc 1f
 	jr z, .LFBCA2D                                       ; FBCA04  66 27
 	ld C,L                                               ; FBCA06  cf 8b
-	or (0x277b:16), c                                   ; FBCA08  c1 7b 27 eb
+	or (CombiEditMixer_DirtyBasicChannel:16), c                                   ; FBCA08  c1 7b 27 eb
 	lda xbc, (.LFBEBA6:24)                               ; FBCA0C  f2 a6 eb fb 31
 	push XBC                                             ; FBCA11  39
 	jr .LFBCA20                                          ; FBCA12  68 0c
 .LFBCA14:
 	ld C,L                                               ; FBCA14  cf 8b
-	or (0x2777:16), c                                   ; FBCA16  c1 77 27 eb
+	or (CombiEditMixer_DirtySubOut:16), c                                   ; FBCA16  c1 77 27 eb
 	lda xbc, (.LFBEC1C:24)                               ; FBCA1A  f2 1c ec fb 31
 	push XBC                                             ; FBCA1F  39
 .LFBCA20:
@@ -105755,7 +105755,7 @@ CombiEditConfigure_OnPartParamEvent:
 	jr .LFBCAAA                                          ; FBCA9D  68 0b
 .LFBCA9F:
 	ld C,H                                               ; FBCA9F  ce 8b
-	or (0x2770:16), c                                   ; FBCAA1  c1 70 27 eb
+	or (CombiEditMixer_DirtySound:16), c                                   ; FBCAA1  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBCAA5  f1 7d 27 00 01
 .LFBCAAA:
 	ld bc, (0x2767:16)                                 ; FBCAAA  d1 67 27 21
@@ -108587,21 +108587,21 @@ sub_FBE2A4:
 	add H,C                                              ; FBE402  cb 86
 	push 0x00                                            ; FBE404  09 00
 	push H                                               ; FBE406  ce 04
-	calr sub_FBE5EE                                      ; FBE408  1e e3 01
+	calr CombiEditMixer_DrawSound                                      ; FBE408  1e e3 01
 	popw bc                                              ; FBE40B  49
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBE40C  c1 76 20 3f 16
 	jr nz, .LFBE41B                                      ; FBE411  6e 08
 	push 0x00                                            ; FBE413  09 00
 	push H                                               ; FBE415  ce 04
-	calr sub_FBE70F                                      ; FBE417  1e f5 02
+	calr CombiEditMixer_DrawLocalControl                                      ; FBE417  1e f5 02
 	popw bc                                              ; FBE41A  49
 .LFBE41B:
 	push 0x00                                            ; FBE41B  09 00
 	push H                                               ; FBE41D  ce 04
-	calr sub_FBE788                                      ; FBE41F  1e 66 03
+	calr CombiEditMixer_DrawPanpot                                      ; FBE41F  1e 66 03
 	push 0x00                                            ; FBE422  09 00
 	push H                                               ; FBE424  ce 04
-	calr sub_FBE81B                                      ; FBE426  1e f2 03
+	calr CombiEditMixer_DrawVolume                                      ; FBE426  1e f2 03
 	inc 1,L                                              ; FBE429  cf 61
 	pop XIY                                              ; FBE42B  5d
 	cp L,0x08                                            ; FBE42C  cf cf 08
@@ -108617,15 +108617,15 @@ sub_FBE2A4:
 	ld L,C                                               ; FBE442  cb 8f
 	add L,H                                              ; FBE444  ce 87
 	pushw hl                                             ; FBE446  2b
-	calr sub_FBE8A3                                      ; FBE447  1e 59 04
+	calr CombiEditMixer_DrawReverbSend                                      ; FBE447  1e 59 04
 	pushw hl                                             ; FBE44A  2b
-	calr sub_FBE92B                                      ; FBE44B  1e dd 04
+	calr CombiEditMixer_DrawEffect1Send                                      ; FBE44B  1e dd 04
 	pushw hl                                             ; FBE44E  2b
-	calr sub_FBE9B3                                      ; FBE44F  1e 61 05
+	calr CombiEditMixer_DrawEffect2OnOff                                      ; FBE44F  1e 61 05
 	pushw hl                                             ; FBE452  2b
-	calr sub_FBEA22                                      ; FBE453  1e cc 05
+	calr CombiEditMixer_DrawMainOut                                      ; FBE453  1e cc 05
 	pushw hl                                             ; FBE456  2b
-	calr sub_FBEC57                                      ; FBE457  1e fd 07
+	calr CombiEditMixer_DrawKeyShift                                      ; FBE457  1e fd 07
 	inc 1,H                                              ; FBE45A  ce 61
 	inc 8,XSP                                            ; FBE45C  ef 60
 	inc 2,XSP                                            ; FBE45E  ef 62
@@ -108645,28 +108645,32 @@ sub_FBE2A4:
 	jr z, .LFBE489                                       ; FBE47F  66 08
 	push 0x00                                            ; FBE481  09 00
 	push H                                               ; FBE483  ce 04
-	calr sub_FBE70F                                      ; FBE485  1e 87 02
+	calr CombiEditMixer_DrawLocalControl                                      ; FBE485  1e 87 02
 	popw bc                                              ; FBE488  49
 .LFBE489:
 	push 0x00                                            ; FBE489  09 00
 	push H                                               ; FBE48B  ce 04
-	calr sub_FBEA96                                      ; FBE48D  1e 06 06
+	calr CombiEditMixer_DrawMidiOutSetting                                      ; FBE48D  1e 06 06
 	push 0x00                                            ; FBE490  09 00
 	push H                                               ; FBE492  ce 04
-	calr sub_FBEB03                                      ; FBE494  1e 6c 06
+	calr CombiEditMixer_DrawMidiInSetting                                      ; FBE494  1e 6c 06
 	push 0x00                                            ; FBE497  09 00
 	push H                                               ; FBE499  ce 04
-	calr sub_FBEB70                                      ; FBE49B  1e d2 06
+	calr CombiEditMixer_DrawBasicChannel                                      ; FBE49B  1e d2 06
 	push 0x00                                            ; FBE49E  09 00
 	push H                                               ; FBE4A0  ce 04
-	calr sub_FBEBE1                                      ; FBE4A2  1e 3c 07
+	calr CombiEditMixer_DrawSubOut                                      ; FBE4A2  1e 3c 07
 	inc 1,L                                              ; FBE4A5  cf 61
 	inc 8,XSP                                            ; FBE4A7  ef 60
 	cp L,0x08                                            ; FBE4A9  cf cf 08
 	jr c, .LFBE46F                                       ; FBE4AC  67 c1
 	popw hl                                              ; FBE4AE  4b
 	ret                                                  ; FBE4AF  0e
-sub_FBE4B0:
+; CombiEditMixer_DrawSwitchCell: (part, state, y): copies the 10-word display-list record Record_F1AABF, moves its x fields to the part's column
+;   (part & 7) x 0x28, puts y + 1 / + 7 and y + 9 / + 0xF into the two halves in the order the state (1 or not)
+;   selects, and runs it on layer 1 -- the two-position switch of an ON/OFF cell.  Callers: the LOCAL CONTROL,
+;   EFFECT2, MAIN OUT, MIDI OUT and MIDI IN cells.  Basis: body + callers.
+CombiEditMixer_DrawSwitchCell:
 	link XIZ,0xffec                                      ; FBE4B0  ee 0c ec ff
 	pushw hl                                             ; FBE4B4  2b
 	pushw de                                             ; FBE4B5  2a
@@ -108728,7 +108732,10 @@ sub_FBE4B0_Join:
 	popw hl                                              ; FBE542  4b
 	unlk XIZ                                             ; FBE543  ee 0d
 	ret                                                  ; FBE545  0e
-sub_FBE546:
+; CombiEditMixer_DrawValueCell: (part, value, y): the 6-word record Record_F1AAD3 with the value in UI_DrawScratch, x moved to the part's column
+;   and y set, run on layer 0 (T_DisplayListB_RunOne_Stack).  Callers: the VOLUME, REVERB SEND and EFFECT1 SEND
+;   cells.  Basis: body + callers.
+CombiEditMixer_DrawValueCell:
 	link XIZ,0xfff4                                      ; FBE546  ee 0c f4 ff
 	push XIX                                             ; FBE54A  3c
 	lda xix, (xiz-12)                                    ; FBE54B  be f4 34
@@ -108753,7 +108760,9 @@ sub_FBE546:
 	pop XIX                                              ; FBE581  5c
 	unlk XIZ                                             ; FBE582  ee 0d
 	ret                                                  ; FBE584  0e
-sub_FBE585:
+; CombiEditMixer_DrawKeyShiftValue: (part, value, y, b): CombiEditMixer_DrawValueCell's shape with the 13-byte record Record_F1AADF and one more
+;   byte at +0x0C; its one caller is CombiEditMixer_DrawKeyShift.  Basis: body + caller.
+CombiEditMixer_DrawKeyShiftValue:
 	link XIZ,0xfff3                                      ; FBE585  ee 0c f3 ff
 	push XIX                                             ; FBE589  3c
 	lda xix, (xiz-13)                                    ; FBE58A  be f3 34
@@ -108793,7 +108802,8 @@ sub_FBE5CA:
 	inc 8,XSP                                            ; FBE5E9  ef 60
 	inc 2,XSP                                            ; FBE5EB  ef 62
 	ret                                                  ; FBE5ED  0e
-sub_FBE5EE:
+; CombiEditMixer_DrawSound: (part) the MIXER cell of one part -- the part's sound: in panel-mode group 0x16 the second record's +0x1D bank, +0x1B group, +0x1C member (number = group x 8 + member + 1), otherwise T_F42CA0's text.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawSound:
 	link XIZ,0xfff4                                      ; FBE5EE  ee 0c f4 ff
 	pushw hl                                             ; FBE5F2  2b
 	pushw de                                             ; FBE5F3  2a
@@ -108883,12 +108893,14 @@ sub_FBE5EE:
 	popw hl                                              ; FBE6C0  4b
 	unlk XIZ                                             ; FBE6C1  ee 0d
 	ret                                                  ; FBE6C3  0e
+; CombiEditMixer_RepaintMarkedSound: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtySound (0x2770) under ei 6, then CombiEditMixer_DrawSound for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedSound:
 .LFBE6C4:
 	pushw hl                                             ; FBE6C4  2b
 	pushw de                                             ; FBE6C5  2a
 	ei 0x06                                              ; FBE6C6  06 06
-	ld e, (0x2770:16)                                   ; FBE6C8  c1 70 27 25
-	ld (0x2770:16), 0x00                                 ; FBE6CC  f1 70 27 00 00
+	ld e, (CombiEditMixer_DirtySound:16)                                   ; FBE6C8  c1 70 27 25
+	ld (CombiEditMixer_DirtySound:16), 0x00                                 ; FBE6CC  f1 70 27 00 00
 	ei 0x00                                              ; FBE6D1  06 00
 	ld d, 0x01:opc                                          ; FBE6D3  24 01
 	ld l, (0x2765:16)                                   ; FBE6D5  c1 65 27 27
@@ -108902,7 +108914,7 @@ sub_FBE5EE:
 	m_cp_mi8 MB16, 0x2767, 0x00                          ; FBE6E9  c1 67 27 3f 00
 	jr nz, .LFBE6F5                                      ; FBE6EE  6e 05
 	pushw hl                                             ; FBE6F0  2b
-	calr sub_FBE5EE                                      ; FBE6F1  1e fa fe
+	calr CombiEditMixer_DrawSound                                      ; FBE6F1  1e fa fe
 	popw bc                                              ; FBE6F4  49
 .LFBE6F5:
 	m_cp_rm MB16, 0x2765, r7                             ; FBE6F5  c1 65 27 f7
@@ -108919,7 +108931,8 @@ sub_FBE5EE:
 	popw de                                              ; FBE70C  4a
 	popw hl                                              ; FBE70D  4b
 	ret                                                  ; FBE70E  0e
-sub_FBE70F:
+; CombiEditMixer_DrawLocalControl: (part) the MIXER cell of one part -- reads the first record byte 13 & 0x20: LOCAL CONTROL.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawLocalControl:
 	link XIZ,0x0000                                      ; FBE70F  ee 0c 00 00
 	pushw hl                                             ; FBE713  2b
 	pushw 0x0d                                           ; FBE714  0b 0d 00
@@ -108945,17 +108958,19 @@ sub_FBE70F:
 	push H                                               ; FBE73D  ce 04
 	push 0x00                                            ; FBE73F  09 00
 	m_push MBD+r6, 0x08                                  ; FBE741  8e 08 04
-	calr sub_FBE4B0                                      ; FBE744  1e 69 fd
+	calr CombiEditMixer_DrawSwitchCell                                      ; FBE744  1e 69 fd
 	inc 6,XSP                                            ; FBE747  ef 66
 	popw hl                                              ; FBE749  4b
 	unlk XIZ                                             ; FBE74A  ee 0d
 	ret                                                  ; FBE74C  0e
+; CombiEditMixer_RepaintMarkedLocalControl: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyLocalControl (0x2771) under ei 6, then CombiEditMixer_DrawLocalControl for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedLocalControl:
 .LFBE74D:
 	pushw hl                                             ; FBE74D  2b
 	pushw de                                             ; FBE74E  2a
 	ei 0x06                                              ; FBE74F  06 06
-	ld e, (0x2771:16)                                   ; FBE751  c1 71 27 25
-	ld (0x2771:16), 0x00                                 ; FBE755  f1 71 27 00 00
+	ld e, (CombiEditMixer_DirtyLocalControl:16)                                   ; FBE751  c1 71 27 25
+	ld (CombiEditMixer_DirtyLocalControl:16), 0x00                                 ; FBE755  f1 71 27 00 00
 	ei 0x00                                              ; FBE75A  06 00
 	ld d, 0x01:opc                                          ; FBE75C  24 01
 	ld l, (0x2765:16)                                   ; FBE75E  c1 65 27 27
@@ -108967,7 +108982,7 @@ sub_FBE70F:
 	and C,E                                              ; FBE76E  cd c3
 	jr z, .LFBE777                                       ; FBE770  66 05
 	pushw hl                                             ; FBE772  2b
-	calr sub_FBE70F                                      ; FBE773  1e 99 ff
+	calr CombiEditMixer_DrawLocalControl                                      ; FBE773  1e 99 ff
 	popw bc                                              ; FBE776  49
 .LFBE777:
 	inc 1,L                                              ; FBE777  cf 61
@@ -108980,7 +108995,8 @@ sub_FBE70F:
 	popw de                                              ; FBE785  4a
 	popw hl                                              ; FBE786  4b
 	ret                                                  ; FBE787  0e
-sub_FBE788:
+; CombiEditMixer_DrawPanpot: (part) the MIXER cell of one part -- reads the first record byte 8: PANPOT.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawPanpot:
 	link XIZ,0x0000                                      ; FBE788  ee 0c 00 00
 	pushw hl                                             ; FBE78C  2b
 	pushw 0x08                                           ; FBE78D  0b 08 00
@@ -109013,12 +109029,14 @@ sub_FBE788:
 	popw hl                                              ; FBE7DC  4b
 	unlk XIZ                                             ; FBE7DD  ee 0d
 	ret                                                  ; FBE7DF  0e
+; CombiEditMixer_RepaintMarkedPanpot: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyPanpot (0x2772) under ei 6, then CombiEditMixer_DrawPanpot for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedPanpot:
 .LFBE7E0:
 	pushw hl                                             ; FBE7E0  2b
 	pushw de                                             ; FBE7E1  2a
 	ei 0x06                                              ; FBE7E2  06 06
-	ld e, (0x2772:16)                                   ; FBE7E4  c1 72 27 25
-	ld (0x2772:16), 0x00                                 ; FBE7E8  f1 72 27 00 00
+	ld e, (CombiEditMixer_DirtyPanpot:16)                                   ; FBE7E4  c1 72 27 25
+	ld (CombiEditMixer_DirtyPanpot:16), 0x00                                 ; FBE7E8  f1 72 27 00 00
 	ei 0x00                                              ; FBE7ED  06 00
 	ld d, 0x01:opc                                          ; FBE7EF  24 01
 	ld l, (0x2765:16)                                   ; FBE7F1  c1 65 27 27
@@ -109030,7 +109048,7 @@ sub_FBE788:
 	and C,E                                              ; FBE801  cd c3
 	jr z, .LFBE80A                                       ; FBE803  66 05
 	pushw hl                                             ; FBE805  2b
-	calr sub_FBE788                                      ; FBE806  1e 7f ff
+	calr CombiEditMixer_DrawPanpot                                      ; FBE806  1e 7f ff
 	popw bc                                              ; FBE809  49
 .LFBE80A:
 	inc 1,L                                              ; FBE80A  cf 61
@@ -109043,7 +109061,8 @@ sub_FBE788:
 	popw de                                              ; FBE818  4a
 	popw hl                                              ; FBE819  4b
 	ret                                                  ; FBE81A  0e
-sub_FBE81B:
+; CombiEditMixer_DrawVolume: (part) the MIXER cell of one part -- reads the first record byte 3: VOLUME.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawVolume:
 	link XIZ,0x0000                                      ; FBE81B  ee 0c 00 00
 	pushw hl                                             ; FBE81F  2b
 	ld H,(XIZ+0x08)                                      ; FBE820  8e 08 26
@@ -109057,7 +109076,7 @@ sub_FBE81B:
 	pushw hl                                             ; FBE837  2b
 	push 0x00                                            ; FBE838  09 00
 	push H                                               ; FBE83A  ce 04
-	calr sub_FBE546                                      ; FBE83C  1e 07 fd
+	calr CombiEditMixer_DrawValueCell                                      ; FBE83C  1e 07 fd
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE83F  f1 40 25 00 02
 	ld c, (UI_DrawScratch:16)                                   ; FBE844  c1 40 26 23
 	pushw bc                                             ; FBE848  29
@@ -109074,12 +109093,14 @@ sub_FBE81B:
 	popw hl                                              ; FBE864  4b
 	unlk XIZ                                             ; FBE865  ee 0d
 	ret                                                  ; FBE867  0e
+; CombiEditMixer_RepaintMarkedVolume: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyVolume (0x2773) under ei 6, then CombiEditMixer_DrawVolume for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedVolume:
 .LFBE868:
 	pushw hl                                             ; FBE868  2b
 	pushw de                                             ; FBE869  2a
 	ei 0x06                                              ; FBE86A  06 06
-	ld e, (0x2773:16)                                   ; FBE86C  c1 73 27 25
-	ld (0x2773:16), 0x00                                 ; FBE870  f1 73 27 00 00
+	ld e, (CombiEditMixer_DirtyVolume:16)                                   ; FBE86C  c1 73 27 25
+	ld (CombiEditMixer_DirtyVolume:16), 0x00                                 ; FBE870  f1 73 27 00 00
 	ei 0x00                                              ; FBE875  06 00
 	ld d, 0x01:opc                                          ; FBE877  24 01
 	ld l, (0x2765:16)                                   ; FBE879  c1 65 27 27
@@ -109091,7 +109112,7 @@ sub_FBE81B:
 	and C,E                                              ; FBE889  cd c3
 	jr z, .LFBE892                                       ; FBE88B  66 05
 	pushw hl                                             ; FBE88D  2b
-	calr sub_FBE81B                                      ; FBE88E  1e 8a ff
+	calr CombiEditMixer_DrawVolume                                      ; FBE88E  1e 8a ff
 	popw bc                                              ; FBE891  49
 .LFBE892:
 	inc 1,L                                              ; FBE892  cf 61
@@ -109104,7 +109125,8 @@ sub_FBE81B:
 	popw de                                              ; FBE8A0  4a
 	popw hl                                              ; FBE8A1  4b
 	ret                                                  ; FBE8A2  0e
-sub_FBE8A3:
+; CombiEditMixer_DrawReverbSend: (part) the MIXER cell of one part -- reads the first record byte 7: REVERB SEND.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawReverbSend:
 	link XIZ,0x0000                                      ; FBE8A3  ee 0c 00 00
 	pushw hl                                             ; FBE8A7  2b
 	ld H,(XIZ+0x08)                                      ; FBE8A8  8e 08 26
@@ -109118,7 +109140,7 @@ sub_FBE8A3:
 	pushw hl                                             ; FBE8BF  2b
 	push 0x00                                            ; FBE8C0  09 00
 	push H                                               ; FBE8C2  ce 04
-	calr sub_FBE546                                      ; FBE8C4  1e 7f fc
+	calr CombiEditMixer_DrawValueCell                                      ; FBE8C4  1e 7f fc
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE8C7  f1 40 25 00 02
 	ld c, (UI_DrawScratch:16)                                   ; FBE8CC  c1 40 26 23
 	pushw bc                                             ; FBE8D0  29
@@ -109135,12 +109157,14 @@ sub_FBE8A3:
 	popw hl                                              ; FBE8EC  4b
 	unlk XIZ                                             ; FBE8ED  ee 0d
 	ret                                                  ; FBE8EF  0e
+; CombiEditMixer_RepaintMarkedReverbSend: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyReverbSend (0x2774) under ei 6, then CombiEditMixer_DrawReverbSend for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedReverbSend:
 .LFBE8F0:
 	pushw hl                                             ; FBE8F0  2b
 	pushw de                                             ; FBE8F1  2a
 	ei 0x06                                              ; FBE8F2  06 06
-	ld e, (0x2774:16)                                   ; FBE8F4  c1 74 27 25
-	ld (0x2774:16), 0x00                                 ; FBE8F8  f1 74 27 00 00
+	ld e, (CombiEditMixer_DirtyReverbSend:16)                                   ; FBE8F4  c1 74 27 25
+	ld (CombiEditMixer_DirtyReverbSend:16), 0x00                                 ; FBE8F8  f1 74 27 00 00
 	ei 0x00                                              ; FBE8FD  06 00
 	ld d, 0x01:opc                                          ; FBE8FF  24 01
 	ld l, (0x2765:16)                                   ; FBE901  c1 65 27 27
@@ -109152,7 +109176,7 @@ sub_FBE8A3:
 	and C,E                                              ; FBE911  cd c3
 	jr z, .LFBE91A                                       ; FBE913  66 05
 	pushw hl                                             ; FBE915  2b
-	calr sub_FBE8A3                                      ; FBE916  1e 8a ff
+	calr CombiEditMixer_DrawReverbSend                                      ; FBE916  1e 8a ff
 	popw bc                                              ; FBE919  49
 .LFBE91A:
 	inc 1,L                                              ; FBE91A  cf 61
@@ -109165,7 +109189,8 @@ sub_FBE8A3:
 	popw de                                              ; FBE928  4a
 	popw hl                                              ; FBE929  4b
 	ret                                                  ; FBE92A  0e
-sub_FBE92B:
+; CombiEditMixer_DrawEffect1Send: (part) the MIXER cell of one part -- reads the first record byte 5: EFFECT1 SEND.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawEffect1Send:
 	link XIZ,0x0000                                      ; FBE92B  ee 0c 00 00
 	pushw hl                                             ; FBE92F  2b
 	ld H,(XIZ+0x08)                                      ; FBE930  8e 08 26
@@ -109179,7 +109204,7 @@ sub_FBE92B:
 	pushw hl                                             ; FBE947  2b
 	push 0x00                                            ; FBE948  09 00
 	push H                                               ; FBE94A  ce 04
-	calr sub_FBE546                                      ; FBE94C  1e f7 fb
+	calr CombiEditMixer_DrawValueCell                                      ; FBE94C  1e f7 fb
 	ld (LCD_CurrentLayer:16), 0x02                                 ; FBE94F  f1 40 25 00 02
 	ld c, (UI_DrawScratch:16)                                   ; FBE954  c1 40 26 23
 	pushw bc                                             ; FBE958  29
@@ -109196,13 +109221,15 @@ sub_FBE92B:
 	popw hl                                              ; FBE974  4b
 	unlk XIZ                                             ; FBE975  ee 0d
 	ret                                                  ; FBE977  0e
+; CombiEditMixer_RepaintMarkedEffect1Send: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyEffect1Send (0x2775) under ei 6, then CombiEditMixer_DrawEffect1Send for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedEffect1Send:
 .LFBE978:
 	pushw hl                                             ; FBE978  2b
 	pushw de                                             ; FBE979  2a
 	ei 0x06                                              ; FBE97A  06 06
-	ld e, (0x2775:16)                                   ; FBE97C  c1 75 27 25
-	ld (0x2775:16), 0x00                                 ; FBE980  f1 75 27 00 00
-; (sub_FBE985 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FBE92B;
+	ld e, (CombiEditMixer_DirtyEffect1Send:16)                                   ; FBE97C  c1 75 27 25
+	ld (CombiEditMixer_DirtyEffect1Send:16), 0x00                                 ; FBE980  f1 75 27 00 00
+; (sub_FBE985 removed 2026-10-04: no code names it and the line above falls through into it -- part of CombiEditMixer_DrawEffect1Send;
 ;  notes/prom_a_stray_label_removal.py)
 	ei 0x00                                              ; FBE985  06 00
 	ld d, 0x01:opc                                          ; FBE987  24 01
@@ -109215,7 +109242,7 @@ sub_FBE92B:
 	and C,E                                              ; FBE999  cd c3
 	jr z, .LFBE9A2                                       ; FBE99B  66 05
 	pushw hl                                             ; FBE99D  2b
-	calr sub_FBE92B                                      ; FBE99E  1e 8a ff
+	calr CombiEditMixer_DrawEffect1Send                                      ; FBE99E  1e 8a ff
 	popw bc                                              ; FBE9A1  49
 .LFBE9A2:
 	inc 1,L                                              ; FBE9A2  cf 61
@@ -109228,7 +109255,8 @@ sub_FBE92B:
 	popw de                                              ; FBE9B0  4a
 	popw hl                                              ; FBE9B1  4b
 	ret                                                  ; FBE9B2  0e
-sub_FBE9B3:
+; CombiEditMixer_DrawEffect2OnOff: (part) the MIXER cell of one part -- reads the first record byte 6 & 0x7F: EFFECT2 ON/OFF.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawEffect2OnOff:
 	link XIZ,0x0000                                      ; FBE9B3  ee 0c 00 00
 	pushw hl                                             ; FBE9B7  2b
 	pushw 0x06                                           ; FBE9B8  0b 06 00
@@ -109249,17 +109277,19 @@ sub_FBE9B3:
 	push H                                               ; FBE9D7  ce 04
 	push 0x00                                            ; FBE9D9  09 00
 	m_push MBD+r6, 0x08                                  ; FBE9DB  8e 08 04
-	calr sub_FBE4B0                                      ; FBE9DE  1e cf fa
+	calr CombiEditMixer_DrawSwitchCell                                      ; FBE9DE  1e cf fa
 	inc 6,XSP                                            ; FBE9E1  ef 66
 	popw hl                                              ; FBE9E3  4b
 	unlk XIZ                                             ; FBE9E4  ee 0d
 	ret                                                  ; FBE9E6  0e
+; CombiEditMixer_RepaintMarkedEffect2OnOff: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyEffect2OnOff (0x2776) under ei 6, then CombiEditMixer_DrawEffect2OnOff for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedEffect2OnOff:
 .LFBE9E7:
 	pushw hl                                             ; FBE9E7  2b
 	pushw de                                             ; FBE9E8  2a
 	ei 0x06                                              ; FBE9E9  06 06
-	ld e, (0x2776:16)                                   ; FBE9EB  c1 76 27 25
-	ld (0x2776:16), 0x00                                 ; FBE9EF  f1 76 27 00 00
+	ld e, (CombiEditMixer_DirtyEffect2OnOff:16)                                   ; FBE9EB  c1 76 27 25
+	ld (CombiEditMixer_DirtyEffect2OnOff:16), 0x00                                 ; FBE9EF  f1 76 27 00 00
 	ei 0x00                                              ; FBE9F4  06 00
 	ld d, 0x01:opc                                          ; FBE9F6  24 01
 	ld l, (0x2765:16)                                   ; FBE9F8  c1 65 27 27
@@ -109271,7 +109301,7 @@ sub_FBE9B3:
 	and C,E                                              ; FBEA08  cd c3
 	jr z, .LFBEA11                                       ; FBEA0A  66 05
 	pushw hl                                             ; FBEA0C  2b
-	calr sub_FBE9B3                                      ; FBEA0D  1e a3 ff
+	calr CombiEditMixer_DrawEffect2OnOff                                      ; FBEA0D  1e a3 ff
 	popw bc                                              ; FBEA10  49
 .LFBEA11:
 	inc 1,L                                              ; FBEA11  cf 61
@@ -109284,7 +109314,8 @@ sub_FBE9B3:
 	popw de                                              ; FBEA1F  4a
 	popw hl                                              ; FBEA20  4b
 	ret                                                  ; FBEA21  0e
-sub_FBEA22:
+; CombiEditMixer_DrawMainOut: (part) the MIXER cell of one part -- reads the second record byte 3 & 0xFF: MAIN OUT.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawMainOut:
 	link XIZ,0x0000                                      ; FBEA22  ee 0c 00 00
 	pushw hl                                             ; FBEA26  2b
 	pushw 0x03                                           ; FBEA27  0b 03 00
@@ -109307,17 +109338,19 @@ sub_FBEA22:
 	push H                                               ; FBEA4B  ce 04
 	push 0x00                                            ; FBEA4D  09 00
 	m_push MBD+r6, 0x08                                  ; FBEA4F  8e 08 04
-	calr sub_FBE4B0                                      ; FBEA52  1e 5b fa
+	calr CombiEditMixer_DrawSwitchCell                                      ; FBEA52  1e 5b fa
 	inc 6,XSP                                            ; FBEA55  ef 66
 	popw hl                                              ; FBEA57  4b
 	unlk XIZ                                             ; FBEA58  ee 0d
 	ret                                                  ; FBEA5A  0e
+; CombiEditMixer_RepaintMarkedMainOut: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMainOut (0x2778) under ei 6, then CombiEditMixer_DrawMainOut for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedMainOut:
 .LFBEA5B:
 	pushw hl                                             ; FBEA5B  2b
 	pushw de                                             ; FBEA5C  2a
 	ei 0x06                                              ; FBEA5D  06 06
-	ld e, (0x2778:16)                                   ; FBEA5F  c1 78 27 25
-	ld (0x2778:16), 0x00                                 ; FBEA63  f1 78 27 00 00
+	ld e, (CombiEditMixer_DirtyMainOut:16)                                   ; FBEA5F  c1 78 27 25
+	ld (CombiEditMixer_DirtyMainOut:16), 0x00                                 ; FBEA63  f1 78 27 00 00
 	ei 0x00                                              ; FBEA68  06 00
 	ld d, 0x01:opc                                          ; FBEA6A  24 01
 	ld l, (0x2765:16)                                   ; FBEA6C  c1 65 27 27
@@ -109329,7 +109362,7 @@ sub_FBEA22:
 	and C,E                                              ; FBEA7C  cd c3
 	jr z, .LFBEA85                                       ; FBEA7E  66 05
 	pushw hl                                             ; FBEA80  2b
-	calr sub_FBEA22                                      ; FBEA81  1e 9e ff
+	calr CombiEditMixer_DrawMainOut                                      ; FBEA81  1e 9e ff
 	popw bc                                              ; FBEA84  49
 .LFBEA85:
 	inc 1,L                                              ; FBEA85  cf 61
@@ -109342,7 +109375,8 @@ sub_FBEA22:
 	popw de                                              ; FBEA93  4a
 	popw hl                                              ; FBEA94  4b
 	ret                                                  ; FBEA95  0e
-sub_FBEA96:
+; CombiEditMixer_DrawMidiOutSetting: (part) the MIXER cell of one part -- reads the first record byte 13 & 0x40: MIDI OUT SETTING.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawMidiOutSetting:
 	link XIZ,0x0000                                      ; FBEA96  ee 0c 00 00
 	pushw hl                                             ; FBEA9A  2b
 	pushw 0x0d                                           ; FBEA9B  0b 0d 00
@@ -109362,17 +109396,19 @@ sub_FBEA96:
 	push H                                               ; FBEAB8  ce 04
 	push 0x00                                            ; FBEABA  09 00
 	m_push MBD+r6, 0x08                                  ; FBEABC  8e 08 04
-	calr sub_FBE4B0                                      ; FBEABF  1e ee f9
+	calr CombiEditMixer_DrawSwitchCell                                      ; FBEABF  1e ee f9
 	inc 6,XSP                                            ; FBEAC2  ef 66
 	popw hl                                              ; FBEAC4  4b
 	unlk XIZ                                             ; FBEAC5  ee 0d
 	ret                                                  ; FBEAC7  0e
+; CombiEditMixer_RepaintMarkedMidiOutSetting: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMidiOutSetting (0x2779) under ei 6, then CombiEditMixer_DrawMidiOutSetting for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedMidiOutSetting:
 .LFBEAC8:
 	pushw hl                                             ; FBEAC8  2b
 	pushw de                                             ; FBEAC9  2a
 	ei 0x06                                              ; FBEACA  06 06
-	ld e, (0x2779:16)                                   ; FBEACC  c1 79 27 25
-	ld (0x2779:16), 0x00                                 ; FBEAD0  f1 79 27 00 00
+	ld e, (CombiEditMixer_DirtyMidiOutSetting:16)                                   ; FBEACC  c1 79 27 25
+	ld (CombiEditMixer_DirtyMidiOutSetting:16), 0x00                                 ; FBEAD0  f1 79 27 00 00
 	ei 0x00                                              ; FBEAD5  06 00
 	ld d, 0x01:opc                                          ; FBEAD7  24 01
 	ld l, (0x2765:16)                                   ; FBEAD9  c1 65 27 27
@@ -109384,7 +109420,7 @@ sub_FBEA96:
 	and C,E                                              ; FBEAE9  cd c3
 	jr z, .LFBEAF2                                       ; FBEAEB  66 05
 	pushw hl                                             ; FBEAED  2b
-	calr sub_FBEA96                                      ; FBEAEE  1e a5 ff
+	calr CombiEditMixer_DrawMidiOutSetting                                      ; FBEAEE  1e a5 ff
 	popw bc                                              ; FBEAF1  49
 .LFBEAF2:
 	inc 1,L                                              ; FBEAF2  cf 61
@@ -109397,7 +109433,8 @@ sub_FBEA96:
 	popw de                                              ; FBEB00  4a
 	popw hl                                              ; FBEB01  4b
 	ret                                                  ; FBEB02  0e
-sub_FBEB03:
+; CombiEditMixer_DrawMidiInSetting: (part) the MIXER cell of one part -- reads the first record byte 13 & 0x80: MIDI IN SETTING.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawMidiInSetting:
 	link XIZ,0x0000                                      ; FBEB03  ee 0c 00 00
 	pushw hl                                             ; FBEB07  2b
 	pushw 0x0d                                           ; FBEB08  0b 0d 00
@@ -109417,17 +109454,19 @@ sub_FBEB03:
 	push H                                               ; FBEB25  ce 04
 	push 0x00                                            ; FBEB27  09 00
 	m_push MBD+r6, 0x08                                  ; FBEB29  8e 08 04
-	calr sub_FBE4B0                                      ; FBEB2C  1e 81 f9
+	calr CombiEditMixer_DrawSwitchCell                                      ; FBEB2C  1e 81 f9
 	inc 6,XSP                                            ; FBEB2F  ef 66
 	popw hl                                              ; FBEB31  4b
 	unlk XIZ                                             ; FBEB32  ee 0d
 	ret                                                  ; FBEB34  0e
+; CombiEditMixer_RepaintMarkedMidiInSetting: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMidiInSetting (0x277A) under ei 6, then CombiEditMixer_DrawMidiInSetting for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedMidiInSetting:
 .LFBEB35:
 	pushw hl                                             ; FBEB35  2b
 	pushw de                                             ; FBEB36  2a
 	ei 0x06                                              ; FBEB37  06 06
-	ld e, (0x277a:16)                                   ; FBEB39  c1 7a 27 25
-	ld (0x277a:16), 0x00                                 ; FBEB3D  f1 7a 27 00 00
+	ld e, (CombiEditMixer_DirtyMidiInSetting:16)                                   ; FBEB39  c1 7a 27 25
+	ld (CombiEditMixer_DirtyMidiInSetting:16), 0x00                                 ; FBEB3D  f1 7a 27 00 00
 	ei 0x00                                              ; FBEB42  06 00
 	ld d, 0x01:opc                                          ; FBEB44  24 01
 	ld l, (0x2765:16)                                   ; FBEB46  c1 65 27 27
@@ -109439,7 +109478,7 @@ sub_FBEB03:
 	and C,E                                              ; FBEB56  cd c3
 	jr z, .LFBEB5F                                       ; FBEB58  66 05
 	pushw hl                                             ; FBEB5A  2b
-	calr sub_FBEB03                                      ; FBEB5B  1e a5 ff
+	calr CombiEditMixer_DrawMidiInSetting                                      ; FBEB5B  1e a5 ff
 	popw bc                                              ; FBEB5E  49
 .LFBEB5F:
 	inc 1,L                                              ; FBEB5F  cf 61
@@ -109452,7 +109491,8 @@ sub_FBEB03:
 	popw de                                              ; FBEB6D  4a
 	popw hl                                              ; FBEB6E  4b
 	ret                                                  ; FBEB6F  0e
-sub_FBEB70:
+; CombiEditMixer_DrawBasicChannel: (part) the MIXER cell of one part -- reads the first record byte 13: BASIC CHANNEL; no mask; offset 13's bits 5-7 have cells of their own, so BASIC CHANNEL (bits 0-4) by elimination.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawBasicChannel:
 	link XIZ,0x0000                                      ; FBEB70  ee 0c 00 00
 	pushw 0x0d                                           ; FBEB74  0b 0d 00
 	push 0x00                                            ; FBEB77  09 00
@@ -109471,12 +109511,14 @@ sub_FBEB70:
 	inc 8,XSP                                            ; FBEBA1  ef 60
 	unlk XIZ                                             ; FBEBA3  ee 0d
 	ret                                                  ; FBEBA5  0e
+; CombiEditMixer_RepaintMarkedBasicChannel: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyBasicChannel (0x277B) under ei 6, then CombiEditMixer_DrawBasicChannel for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedBasicChannel:
 .LFBEBA6:
 	pushw hl                                             ; FBEBA6  2b
 	pushw de                                             ; FBEBA7  2a
 	ei 0x06                                              ; FBEBA8  06 06
-	ld e, (0x277b:16)                                   ; FBEBAA  c1 7b 27 25
-	ld (0x277b:16), 0x00                                 ; FBEBAE  f1 7b 27 00 00
+	ld e, (CombiEditMixer_DirtyBasicChannel:16)                                   ; FBEBAA  c1 7b 27 25
+	ld (CombiEditMixer_DirtyBasicChannel:16), 0x00                                 ; FBEBAE  f1 7b 27 00 00
 	ei 0x00                                              ; FBEBB3  06 00
 	ld d, 0x01:opc                                          ; FBEBB5  24 01
 	ld l, (0x2765:16)                                   ; FBEBB7  c1 65 27 27
@@ -109488,7 +109530,7 @@ sub_FBEB70:
 	and C,E                                              ; FBEBC7  cd c3
 	jr z, .LFBEBD0                                       ; FBEBC9  66 05
 	pushw hl                                             ; FBEBCB  2b
-	calr sub_FBEB70                                      ; FBEBCC  1e a1 ff
+	calr CombiEditMixer_DrawBasicChannel                                      ; FBEBCC  1e a1 ff
 	popw bc                                              ; FBEBCF  49
 .LFBEBD0:
 	inc 1,L                                              ; FBEBD0  cf 61
@@ -109501,7 +109543,8 @@ sub_FBEB70:
 	popw de                                              ; FBEBDE  4a
 	popw hl                                              ; FBEBDF  4b
 	ret                                                  ; FBEBE0  0e
-sub_FBEBE1:
+; CombiEditMixer_DrawSubOut: (part) the MIXER cell of one part -- reads the second record byte 4: SUB OUT.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawSubOut:
 	link XIZ,0x0000                                      ; FBEBE1  ee 0c 00 00
 	pushw 0x04                                           ; FBEBE5  0b 04 00
 	ld BC,(XIZ+0x08)                                     ; FBEBE8  9e 08 21
@@ -109522,12 +109565,14 @@ sub_FBEBE1:
 	inc 8,XSP                                            ; FBEC17  ef 60
 	unlk XIZ                                             ; FBEC19  ee 0d
 	ret                                                  ; FBEC1B  0e
+; CombiEditMixer_RepaintMarkedSubOut: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtySubOut (0x2777) under ei 6, then CombiEditMixer_DrawSubOut for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedSubOut:
 .LFBEC1C:
 	pushw hl                                             ; FBEC1C  2b
 	pushw de                                             ; FBEC1D  2a
 	ei 0x06                                              ; FBEC1E  06 06
-	ld e, (0x2777:16)                                   ; FBEC20  c1 77 27 25
-	ld (0x2777:16), 0x00                                 ; FBEC24  f1 77 27 00 00
+	ld e, (CombiEditMixer_DirtySubOut:16)                                   ; FBEC20  c1 77 27 25
+	ld (CombiEditMixer_DirtySubOut:16), 0x00                                 ; FBEC24  f1 77 27 00 00
 	ei 0x00                                              ; FBEC29  06 00
 	ld d, 0x01:opc                                          ; FBEC2B  24 01
 	ld l, (0x2765:16)                                   ; FBEC2D  c1 65 27 27
@@ -109539,7 +109584,7 @@ sub_FBEBE1:
 	and C,E                                              ; FBEC3D  cd c3
 	jr z, .LFBEC46                                       ; FBEC3F  66 05
 	pushw hl                                             ; FBEC41  2b
-	calr sub_FBEBE1                                      ; FBEC42  1e 9c ff
+	calr CombiEditMixer_DrawSubOut                                      ; FBEC42  1e 9c ff
 	popw bc                                              ; FBEC45  49
 .LFBEC46:
 	inc 1,L                                              ; FBEC46  cf 61
@@ -109552,7 +109597,8 @@ sub_FBEBE1:
 	popw de                                              ; FBEC54  4a
 	popw hl                                              ; FBEC55  4b
 	ret                                                  ; FBEC56  0e
-sub_FBEC57:
+; CombiEditMixer_DrawKeyShift: (part) the MIXER cell of one part -- reads the first record byte 9: KEY SHIFT.  Basis: table (descriptor match) (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_DrawKeyShift:
 	link XIZ,0x0000                                      ; FBEC57  ee 0c 00 00
 	pushw hl                                             ; FBEC5B  2b
 	pushw 0x09                                           ; FBEC5C  0b 09 00
@@ -109567,18 +109613,20 @@ sub_FBEC57:
 	push H                                               ; FBEC76  ce 04
 	push 0x00                                            ; FBEC78  09 00
 	m_push MBD+r6, 0x08                                  ; FBEC7A  8e 08 04
-	calr sub_FBE585                                      ; FBEC7D  1e 05 f9
+	calr CombiEditMixer_DrawKeyShiftValue                                      ; FBEC7D  1e 05 f9
 	inc 8,XSP                                            ; FBEC80  ef 60
 	inc 4,XSP                                            ; FBEC82  ef 64
 	popw hl                                              ; FBEC84  4b
 	unlk XIZ                                             ; FBEC85  ee 0d
 	ret                                                  ; FBEC87  0e
+; CombiEditMixer_RepaintMarkedKeyShift: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyKeyShift (0x277C) under ei 6, then CombiEditMixer_DrawKeyShift for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+CombiEditMixer_RepaintMarkedKeyShift:
 .LFBEC88:
 	pushw hl                                             ; FBEC88  2b
 	pushw de                                             ; FBEC89  2a
 	ei 0x06                                              ; FBEC8A  06 06
-	ld e, (0x277c:16)                                   ; FBEC8C  c1 7c 27 25
-	ld (0x277c:16), 0x00                                 ; FBEC90  f1 7c 27 00 00
+	ld e, (CombiEditMixer_DirtyKeyShift:16)                                   ; FBEC8C  c1 7c 27 25
+	ld (CombiEditMixer_DirtyKeyShift:16), 0x00                                 ; FBEC90  f1 7c 27 00 00
 	ei 0x00                                              ; FBEC95  06 00
 	ld d, 0x01:opc                                          ; FBEC97  24 01
 	ld l, (0x2765:16)                                   ; FBEC99  c1 65 27 27
@@ -109590,7 +109638,7 @@ sub_FBEC57:
 	and C,E                                              ; FBECA9  cd c3
 	jr z, .LFBECB2                                       ; FBECAB  66 05
 	pushw hl                                             ; FBECAD  2b
-	calr sub_FBEC57                                      ; FBECAE  1e a6 ff
+	calr CombiEditMixer_DrawKeyShift                                      ; FBECAE  1e a6 ff
 	popw bc                                              ; FBECB1  49
 .LFBECB2:
 	inc 1,L                                              ; FBECB2  cf 61
@@ -110476,7 +110524,7 @@ ScreenEnterBody_CombiEditConfigure:
 	incm8 0x01, (xix)                                    ; FBF35E  84 61
 	inc 0x01, (0x276a:16)                                ; FBF360  c1 6a 27 61
 	inc 0x01, (0x2766:16)                                ; FBF364  c1 66 27 61
-	ld (0x2770:16), 0xff                                 ; FBF368  f1 70 27 00 ff
+	ld (CombiEditMixer_DirtySound:16), 0xff                                 ; FBF368  f1 70 27 00 ff
 	ld (0x277e:16), 0x00                                 ; FBF36D  f1 7e 27 00 00
 .LFBF372:
 	m_set 0, MD16, UI_RequestBits                                ; FBF372  f1 75 20 b8
@@ -110629,7 +110677,7 @@ SoftKeyCol2_CombiEditConfigure:
 	ld (0x276b:16), d                                   ; FBF4F1  f1 6b 27 44
 	cp H,D                                               ; FBF4F5  cc f6
 	jr z, .LFBF4FE                                       ; FBF4F7  66 05
-	ld (0x2770:16), 0xff                                 ; FBF4F9  f1 70 27 00 ff
+	ld (CombiEditMixer_DirtySound:16), 0xff                                 ; FBF4F9  f1 70 27 00 ff
 .LFBF4FE:
 	call T_F42C9C                                        ; FBF4FE  1d 9c 2c f4
 	ld	(0x2765:16), (UI_PartIndex:16)             ; FBF502  c1 50 22 19 65 27
@@ -110939,8 +110987,8 @@ sub_FBF79C:
 	pushw hl                                             ; FBF7A0  2b
 	pushw de                                             ; FBF7A1  2a
 	push XIX                                             ; FBF7A2  3c
-	ld e, (0x2770:16)                                   ; FBF7A3  c1 70 27 25
-	ld (0x2770:16), 0x00                                 ; FBF7A7  f1 70 27 00 00
+	ld e, (CombiEditMixer_DirtySound:16)                                   ; FBF7A3  c1 70 27 25
+	ld (CombiEditMixer_DirtySound:16), 0x00                                 ; FBF7A7  f1 70 27 00 00
 	ld l, 0x01:opc                                          ; FBF7AC  27 01
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBF7AE  f1 40 25 00 00
 	lda xbc, (RecordArray_F1A037:24)                     ; FBF7B3  f2 37 a0 f1 31

@@ -43,3 +43,33 @@ Not established:
 - records 0xA8 and 0xA9 and byte 9 of record 0x80 have no descriptor;
 - the handlers of 0xA8 byte 17 (`sub_F4E525` -> T_F409E0, 24 callers, unnamed) and of 0x9A;
 - the Msg0716 entry stubs `sub_FC0430` / `sub_FC0450` / `sub_FC0460`.
+
+## COMBINATION EDIT MIXER cells (2026-10-05)
+
+The MIXER screens (0x3A / 0xB7) draw 8 parts by 13 cells. Each cell painter reads one byte of a part record
+through `T_IndexedTable_GetByte`. The (record, offset, mask) of that read matches exactly one PART parameter in
+the SysEx descriptors, which is how they are named (`notes/prom_a_combi_mixer_cells.py`):
+
+| cell painter | record byte | parameter | dirty mask |
+|---|---|---|---|
+| `CombiEditMixer_DrawSound` | second record +0x1B..+0x1D (or `T_F42CA0`'s text) | the sound | 0x2770 |
+| `CombiEditMixer_DrawLocalControl` | first 13 & 0x20 | LOCAL CONTROL | 0x2771 |
+| `CombiEditMixer_DrawPanpot` | first 8 | PANPOT | 0x2772 |
+| `CombiEditMixer_DrawVolume` | first 3 | VOLUME | 0x2773 |
+| `CombiEditMixer_DrawReverbSend` | first 7 | REVERB SEND | 0x2774 |
+| `CombiEditMixer_DrawEffect1Send` | first 5 | EFFECT1 SEND | 0x2775 |
+| `CombiEditMixer_DrawEffect2OnOff` | first 6 & 0x7F | EFFECT2 ON/OFF | 0x2776 |
+| `CombiEditMixer_DrawSubOut` | second 4 | SUB OUT | 0x2777 |
+| `CombiEditMixer_DrawMainOut` | second 3 | MAIN OUT | 0x2778 |
+| `CombiEditMixer_DrawMidiOutSetting` | first 13 & 0x40 | MIDI OUT SETTING | 0x2779 |
+| `CombiEditMixer_DrawMidiInSetting` | first 13 & 0x80 | MIDI IN SETTING | 0x277A |
+| `CombiEditMixer_DrawBasicChannel` | first 13 (no mask; by elimination) | BASIC CHANNEL | 0x277B |
+| `CombiEditMixer_DrawKeyShift` | first 9 | KEY SHIFT | 0x277C |
+
+When a parameter event arrives, `CombiEditMixer_OnPartParamEvent`'s page routine ORs the part's bit into the
+dirty mask and posts the matching `CombiEditMixer_RepaintMarked*` callback. That callback takes the mask and
+clears it with interrupts held (`ei 6`), then repaints the marked parts of the edited group.
+
+The switches go through `CombiEditMixer_DrawSwitchCell` and the levels through `CombiEditMixer_DrawValueCell`.
+The basis is the descriptor match, which is a table-index basis. Not established: `sub_FBE5CA` (the
+edited-part header) and the page painters, which are still `.L` labels in 0xFBE2E9..0xFBE4AF.

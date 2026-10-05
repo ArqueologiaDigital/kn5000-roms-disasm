@@ -3413,7 +3413,7 @@ RENAMES = {
     "sub_FB7E7C": "sub_FB7E6C",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FB91EE": "MidiFilePlay_Stop",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FB94DB": "SmfPlay_DecodeVlq3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FBE985": "sub_FBE92B",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FBE985": "CombiEditMixer_DrawEffect1Send",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBFB8A": "ScreenButton_CombiEditMenu",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBFDFB": "ScreenButtonBody_Effect2OutputConflict",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FBFE2C": "ScreenButtonBody_Effect2OutputConflict",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4386,6 +4386,22 @@ RENAMES = {
     "T_F41008": "T_PartSound_ToProgramChange",
     "T_F41024": "T_CombiSel_ToNumberAndBank",
     "T_F41028": "T_CombiSel_FromNumberAndBank",
+    "sub_FBE5EE": "CombiEditMixer_DrawSound",
+    "sub_FBE70F": "CombiEditMixer_DrawLocalControl",
+    "sub_FBE788": "CombiEditMixer_DrawPanpot",
+    "sub_FBE81B": "CombiEditMixer_DrawVolume",
+    "sub_FBE8A3": "CombiEditMixer_DrawReverbSend",
+    "sub_FBE92B": "CombiEditMixer_DrawEffect1Send",
+    "sub_FBE9B3": "CombiEditMixer_DrawEffect2OnOff",
+    "sub_FBEA22": "CombiEditMixer_DrawMainOut",
+    "sub_FBEA96": "CombiEditMixer_DrawMidiOutSetting",
+    "sub_FBEB03": "CombiEditMixer_DrawMidiInSetting",
+    "sub_FBEB70": "CombiEditMixer_DrawBasicChannel",
+    "sub_FBEBE1": "CombiEditMixer_DrawSubOut",
+    "sub_FBEC57": "CombiEditMixer_DrawKeyShift",
+    "sub_FBE4B0": "CombiEditMixer_DrawSwitchCell",
+    "sub_FBE546": "CombiEditMixer_DrawValueCell",
+    "sub_FBE585": "CombiEditMixer_DrawKeyShiftValue",
 }
 
 

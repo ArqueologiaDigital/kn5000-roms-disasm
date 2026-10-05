@@ -2363,6 +2363,19 @@ ROWS = [
      "bank above 7 -> 0, 0; a pair found in SoundRemap3_Map at index i -> program i, bank select 0; otherwise\n"
      "ProgramChangeOut_ByProgramAndBank[program x 8 + bank & 7] (low byte the program, high byte to _Result1).  Callers:\n"
      "Smf_WriteFile and its sizing passes, Evt2030_ProgChgMode3_Notify.  Basis: body + callers."),
+    # COMBINATION EDIT MIXER draw helpers (the cells and callbacks: notes/prom_a_combi_mixer_cells.py)
+    ("FBE4B0", "CombiEditMixer_DrawSwitchCell",
+     "(part, state, y): copies the 10-word display-list record Record_F1AABF, moves its x fields to the part's column\n"
+     "(part & 7) x 0x28, puts y + 1 / + 7 and y + 9 / + 0xF into the two halves in the order the state (1 or not)\n"
+     "selects, and runs it on layer 1 -- the two-position switch of an ON/OFF cell.  Callers: the LOCAL CONTROL,\n"
+     "EFFECT2, MAIN OUT, MIDI OUT and MIDI IN cells.  Basis: body + callers."),
+    ("FBE546", "CombiEditMixer_DrawValueCell",
+     "(part, value, y): the 6-word record Record_F1AAD3 with the value in UI_DrawScratch, x moved to the part's column\n"
+     "and y set, run on layer 0 (T_DisplayListB_RunOne_Stack).  Callers: the VOLUME, REVERB SEND and EFFECT1 SEND\n"
+     "cells.  Basis: body + callers."),
+    ("FBE585", "CombiEditMixer_DrawKeyShiftValue",
+     "(part, value, y, b): CombiEditMixer_DrawValueCell's shape with the 13-byte record Record_F1AADF and one more\n"
+     "byte at +0x0C; its one caller is CombiEditMixer_DrawKeyShift.  Basis: body + caller."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
