@@ -31,7 +31,9 @@ TABLE DETECTORS (each a separate, stated rule)
      hold the base (`lda xR, (B:24)` / `lda xR, B` / `ld xR, B`; B may be `Sym + 0xN`), the table
      (`lda xQ, (T:24)` or `add xQQ, T` / `ld xQQ, T`, T != B) and an upper bound
      (`cp r, N` or `cp r, N:i3`, then `jr`/`jrl`/`ret` ugt/gt -> N+1 entries, uge/ge/nc -> N).  The N
-     words at T are read from the dump; each target is B + word.  An entry is
+     words at T are read from the dump; each target is B + the word, sign-extended.
+     A two-level switch (a byte map read through `extz`, then the offset table)
+     takes its bound from the map: the table has max(map[0..N-1]) + 1 entries.  An entry is
      spelled symbolically iff the source line holding it is `.short Sym - Base`.
      A table O already reports (same address) is not reported again; sites with no
      readable base, table or bound are counted as `unresolved` in the report.
@@ -454,20 +456,28 @@ def detect_D(key, skip_addrs):
         xr = mj.group(1).lower()
         back = [rows[j] for j in code[max(0, ci - 10):ci] if rows[j][2] == r[2]]
         texts = [re.sub(r'\s+', ' ', re.sub(r'^[A-Za-z_.$][\w.$@]*:\s*', '', b[6].split(";", 1)[0].strip())) for b in back]
-        base = tab = bound = None
-        for t in reversed(texts):
-            mb = re.match(r'^(?:lda|ld) %s, \(?%s(?::24)?\)?$' % (xr, SYM), t, re.I)
+        base = tab = bound = cmap = None
+        tab_at = None
+        for idx in range(len(texts) - 1, -1, -1):
+            t = texts[idx]
+            mb = re.match(r'^(?:lda|ld) %s, ?\(?%s(?::24)?\)?$' % (xr, SYM), t, re.I)
             if mb and base is None:
                 base = mb.group(1)
                 continue
-            mt = re.match(r'^(?:lda (x[a-z]+), \(%s:24\)|lda (x[a-z]+), %s|add (x[a-z]+), %s|ld (x[a-z]+), %s)$'
+            mt = re.match(r'^(?:lda (x[a-z]+), ?\(%s:24\)|lda (x[a-z]+), ?%s|add (x[a-z]+), ?%s|ld (x[a-z]+), ?%s)$'
                           % (SYM, SYM, SYM, SYM), t, re.I)
             if mt and base is not None and tab is None:
                 tok = next(g for g in mt.groups()[1::2] if g)      # groups 2/4/6/8 hold T
                 if tok != base and _val(m, tok) is not None and not re.match(r'^(0x[0-9a-fA-F]{1,2}|\d{1,3})$', tok):
-                    tab = tok
+                    tab, tab_at = tok, idx
+            elif mt and tab is not None and cmap is None:
+                tok = next(g for g in mt.groups()[1::2] if g)
+                # a byte map read through `extz` before the offset table: the bound counts the map
+                if tok not in (base, tab) and _val(m, tok) is not None and \
+                        any(x.startswith("extz") for x in texts[idx + 1:tab_at]):
+                    cmap = tok
         for k in range(len(texts) - 1):
-            mc = re.match(r'^cp ([a-z]+), (0x[0-9a-fA-F]+|\d+)(?::i3)?$', texts[k], re.I)
+            mc = re.match(r'^cp ([a-z]+), ?(0x[0-9a-fA-F]+|\d+)(?::i3)?$', texts[k], re.I)
             mjr = re.match(r'^(?:jrl? (ugt|gt|uge|ge|nc),|ret (ugt|gt|uge|ge|nc)$)', texts[k + 1], re.I) if mc else None
             if mjr:
                 nn = int(mc.group(2), 0)
@@ -486,10 +496,18 @@ def detect_D(key, skip_addrs):
             sites.append((where, "table %s outside the image" % tab))
             continue
         T = o[1]                            # the table's address in this image's own map
+        if cmap is not None:                # two-level switch: the table has max(map) + 1 entries
+            M = owner(key, _val(m, cmap))
+            if M is None or M[0] != key:
+                unresolved += 1
+                sites.append((where, "case map %s outside the image" % cmap))
+                continue
+            bound = max(le(m, M[1] + k_, 1) for k_ in range(bound)) + 1
         ents = []
         for n_ in range(bound):
             at = T + 2 * n_
-            val = (B + le(m, at, 2)) & 0xFFFFFF
+            w = le(m, at, 2)
+            val = (B + (w - 0x10000 if w & 0x8000 else w)) & 0xFFFFFF   # the 16-bit index is sign-extended
             rr = find(m, at)
             sym = bool(rr and rr[4] == "data" and rr[5] in (".short", ".word", ".hword", ".2byte")
                        and all(DIFF.match(x) for x in operands(rr[6])))

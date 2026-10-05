@@ -7841,7 +7841,14 @@ SeMenu_DisplayPartValue:
 	pop	xwa
 	pop	xiz
 	ret
-SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
+SeMenu_DisplayPartValue_Data:
+	push	xiz	; was .ascii ">89:;<="
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
 	ld	wa, (xiz+8)
 	cp	wa, 50
 	jr	nz, SeMenu_DisplayPartValue_Data_Code_Skip
@@ -7885,7 +7892,12 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	ld	(COLORBLIT_MODE:24), 0
 	call	SeGfx_StaticOp09_FromBuf
 	pop	xiy
-	.ascii "\\[ZYX^"
+	pop	xix	; was .ascii "\\[ZYX^"
+	pop	xhl
+	pop	xde
+	pop	xbc
+	pop	xwa
+	pop	xiz
 	ret
 SeMenu_ApplyPartEdit_AltStore_Helper:
 	push xiz

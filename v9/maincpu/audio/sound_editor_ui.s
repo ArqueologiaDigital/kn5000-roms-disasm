@@ -7853,7 +7853,14 @@ SeMenu_DisplayPartValue:
 	pop xiz
 	ret
 
-SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
+SeMenu_DisplayPartValue_Data:
+	push	xiz	; was .ascii ">89:;<="
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
 	ld	wa, (xiz+8)
 	cp	wa, 50
 	jr	nz, SeMenu_DisplayPartValue_Data_Code_Skip

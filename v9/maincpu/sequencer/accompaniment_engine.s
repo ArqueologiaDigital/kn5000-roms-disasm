@@ -13578,17 +13578,34 @@ AccTuning_ComplexBytecodeData_Code_Helper3:
 	pop	xiz
 	ret
 	push	xix
-	.ascii "=>89:;"
+	push	xiy	; was .ascii "=>89:;"
+	push	xiz
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
 	xor	xwa, xwa
 	ld	a, (0x33d4:16)
 	call	AccPedal_DirectionA_Wrap_Helper
-	.ascii "[ZYX^]\\"
+	pop	xhl	; was .ascii "[ZYX^]\\"
+	pop	xde
+	pop	xbc
+	pop	xwa
+	pop	xiz
+	pop	xiy
+	pop	xix
 	ret
 	.ascii "<=>89:;è"
 	.byte 0xd0
 	ld	a, (0x33d4:16)
 	call	AccPedal_DirectionA_Wrap_Helper2
-	.ascii "[ZYX^]\\"
+	pop	xhl	; was .ascii "[ZYX^]\\"
+	pop	xde
+	pop	xbc
+	pop	xwa
+	pop	xiz
+	pop	xiy
+	pop	xix
 	ret
 
 AccTone_CallWithSaveAll:
@@ -13627,7 +13644,14 @@ AccVoice_IncrementBarWithSave:
 	pop xix
 	ret
 
-AccTuning_DispatchDataBlock_A:	.ascii "<=>89:;"
+AccTuning_DispatchDataBlock_A:
+	push	xix	; was .ascii "<=>89:;"
+	push	xiy
+	push	xiz
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
 	call	AccVoice_BarCounterBytecodeData
 	pop	xhl
 	pop	xde
@@ -13661,9 +13685,21 @@ AccTuning_DispatchDataBlock_A:	.ascii "<=>89:;"
 	push	xde
 	push	xhl
 	call	AccVoice_IncrementBarWithSave_Helper2
-	.ascii "[ZYX^]\\"
+	pop	xhl	; was .ascii "[ZYX^]\\"
+	pop	xde
+	pop	xbc
+	pop	xwa
+	pop	xiz
+	pop	xiy
+	pop	xix
 	ret
-	.ascii "<=>89:;"
+	push	xix	; was .ascii "<=>89:;"
+	push	xiy
+	push	xiz
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
 	call	AccVoice_IncrementBarWithSave_Helper3
 	pop	xhl
 	pop	xde
@@ -13711,7 +13747,12 @@ AccTuning_CallWithSaveRestore:
 	pop xix
 	ret
 
-AccTuning_DispatchDataBlock_B:	.ascii "<=>9;"
+AccTuning_DispatchDataBlock_B:
+	push	xix	; was .ascii "<=>9;"
+	push	xiy
+	push	xiz
+	push	xbc
+	push	xhl
 	call	AccTuning_ComplexBytecodeData
 	pop	xhl
 	pop	xbc
@@ -30411,7 +30452,10 @@ CmpRealTtlFunc:
 	jp	t, (xix+de)
 ; CmpRealTtlFunc title dispatch
 CmpRealTtl_Dispatch:
-	.ascii ":;<>"
+	push	xde	; was .ascii ":;<>"
+	push	xhl
+	push	xix
+	push	xiz
 	call	RhythmFillIn_PatternTable_Sub
 	pop	xiz
 	pop	xix
@@ -30681,7 +30725,10 @@ CmpBkslTtlFunc:
 	jp	t, (xix+de)
 ; CmpBkslTtlFunc title dispatch
 CmpBkslTtl_Dispatch:
-	.ascii ":;<>"
+	push	xde	; was .ascii ":;<>"
+	push	xhl
+	push	xix
+	push	xiz
 	call	CmpBkslTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
@@ -30886,7 +30933,10 @@ CmpBksl_STtlFunc:
 	jp	t, (xix+de)
 ; CmpBksl_STtlFunc title dispatch
 CmpBkslSTtl_Dispatch:
-	.ascii ":;<>"
+	push	xde	; was .ascii ":;<>"
+	push	xhl
+	push	xix
+	push	xiz
 	call	RhythmPatInit_Wrapper
 	pop	xiz
 	pop	xix
@@ -31068,7 +31118,10 @@ CmpNcpTtlFunc:
 	jp	t, (xix+de)
 ; CmpNcpTtlFunc title dispatch
 CmpNcpTtl_Dispatch:
-	.ascii ":;<>"
+	push	xde	; was .ascii ":;<>"
+	push	xhl
+	push	xix
+	push	xiz
 	call	CmpNcpTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
@@ -33506,7 +33559,10 @@ SndArgTtlFunc_Skip:
 	push	xix
 	push	xiz
 	call	AccStyle_InlinedBlock
-	.ascii "^\\[Z"
+	pop	xiz	; was .ascii "^\\[Z"
+	pop	xix
+	pop	xhl
+	pop	xde
 
 SndArgTtl_ReturnZero:
 	ld xhl, 0:i3

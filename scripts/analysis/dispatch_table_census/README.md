@@ -23,8 +23,8 @@ Known limits. These are stated so that a zero is never over-read:
 - 16-bit offset tables are found two ways: O by their `.short Sym - Base` spelling, and D (since
   2026-10-06) from the `jp t, (xR+rr)` code that reads them, whatever the spelling. D sees only that
   compiled-switch shape (base, table and bound within 10 instruction lines). The sites it cannot read
-  are counted in the `D-unres` column and listed by `--unresolved KEY`. In v10, 92.8% of D's entries
-  land on instruction starts. The rest (mid-instruction, fill, text) are either mis-framed code or
-  misreads; both block, so neither is hidden;
+  are counted in the `D-unres` column and listed by `--unresolved KEY`. Offsets are sign-extended, as the
+  CPU does. A two-level switch is bounded by its byte map's largest entry. In v10, 99.8% of D's 2,642
+  entries land on instruction starts. The other 4 are code spelled as text or bytes;
 - unframed runs carry about 10% false positives, which the null-control column measures;
 - the code-table test leaves out record tables whose pointers are mostly data.

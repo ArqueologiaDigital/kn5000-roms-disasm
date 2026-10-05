@@ -869,10 +869,15 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    not see 16-bit offset tables held as plain numbers or inside compiled-C `.incbin`s. The new D detector
    finds them from the `jp t, (xR+rr)` code that reads them: about 285 compiled `switch` tables per maincpu
    tree. KN5000 not-used tables rose to v10 314, v9 314, v7 358, and unused targets to about 1,420 per tree.
-   They are still mostly unlabelled instruction starts (v10: 1,337 of 2,938 D entries). About 7% land
-   mid-instruction, in fill or in text, which points at mis-framed code, such as `push` runs spelled as
-   `.ascii "89:;<=>"`. Re-read this paragraph against each new snapshot and update it when it stops being
-   true.
+   **Corrected again (`dispatch-census-2026-10-06-05`).** The `-04` reading said about 7% of D's entries
+   land mid-instruction, in fill or in text. That was the detector's own error: it read the offsets as
+   unsigned, but the CPU sign-extends the 16-bit index, and it bounded two-level switches by their byte
+   map instead of their table. Fixed, D reads 2,642 entries in v10. 99.8% land on instruction starts:
+   1,353 labelled and 1,285 not. Only 4 land in text or bytes, which is code spelled as data; the 36
+   `push`/`pop` runs spelled `.ascii "89:;<=>"` were respelled in the same commit. So the remaining
+   KN5000 work is again mostly LABELLING the case targets of compiled `switch` statements, about 1,075
+   distinct ones in v10, and respelling their offset tables as `.short Case - Base`. Re-read this
+   paragraph against each new snapshot and update it when it stops being true.
 
 ### Binary Include Splitting (MANDATORY)
 
