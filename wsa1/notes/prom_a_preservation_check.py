@@ -4449,6 +4449,7 @@ RENAMES = {
     "sub_F54051": "Drawbar_QueryElementBlocks",
     "sub_F53E04": "Drawbar_OnCpu2Reply",
     "T_F42E64": "T_Drawbar_OnCpu2Reply",
+    "sub_FBD127": "CombiEditSound_PageIndex",
 }
 
 

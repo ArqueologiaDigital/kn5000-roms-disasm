@@ -1147,6 +1147,7 @@
 	.set T_Queue2C00_DrainPassAB,                                                       0x00F40018
 	.set T_SeqBuf_FlushStaged,                                                          0x00F40024
 	.set T_Queue2C00_DrainPassB,                                                        0x00F40038
+	.set T_MainTask_Entry,                                                              0x00F4005C
 	.set T_LCD_EntryThunks,                                                             0x00F400A0
 	.set T_SWI7_ServiceCall_Dispatch,                                                   0x00F400A4
 	.set T_Paint_GateArrayCheck,                                                        0x00F400D0
@@ -1938,6 +1939,7 @@
 	.set T_F42E68,                                                                      0x00F42E68
 	.set T_F42E6C,                                                                      0x00F42E6C
 	.set T_CallbackQueue_Post,                                                          0x00F42E84
+	.set T_Task2_CallbackDispatcher,                                                    0x00F42E88
 	.set T_F42E90,                                                                      0x00F42E90
 	.set T_StepRecord_OnEnter,                                                                      0x00F42EC0
 	.set T_StepRecord_OnLeave,                                                                      0x00F42EC4
@@ -2000,6 +2002,7 @@
 	.set T_MidiIn_PumpPortB,                                                            0x00F43358
 	.set T_MidiFileL0ad_LcdKeyRow1,                                                                      0x00F43380
 	.set T_F43384,                                                                      0x00F43384
+	.set T_MidiFileStream_ReaderTask,                                                   0x00F433C0
 	.set T_ScreenEnter_SoundEditDigitalEffect,                                                                      0x00F433D0
 	.set T_F433E0,                                                                      0x00F433E0
 	.set T_SoundName_CopyToBuffer,                                                      0x00F43400
@@ -11212,13 +11215,13 @@ INTT3_KernelTick:
 ;           in the other processor's image.
 ; ---------------------------------------------------------------------
 EntryPoint_Records:
-	.long 0x00F4005C, 0x0060E800			; F85E8A  thunk -> 0xF827C8
+	.long T_MainTask_Entry, 0x0060E800			; F85E8A  thunk -> 0xF827C8
 	.short 0x8800, 0x0003
-	.long 0x00F42E88, 0x0060E980			; F85E96  thunk -> 0xF8DA00
+	.long T_Task2_CallbackDispatcher, 0x0060E980			; F85E96  thunk -> 0xF8DA00
 	.short 0x8800, 0x0003
 	.long DSP_RefreshTask, 0x0060EC80			; F85EA2  DSP_RefreshTask, in prom_a
 	.short 0x8800, 0x0001
-	.long 0x00F433C0, 0x0060EB00			; F85EAE  thunk -> 0xFE02AB
+	.long T_MidiFileStream_ReaderTask, 0x0060EB00			; F85EAE  thunk -> 0xFE02AB
 	.short 0x8800, 0x0003
 	; 0xF85EBA-0xF85EC1: IDENTIFIED 2026-08-25 -- it is a ROM IMAGE OF RAM.
 	; Kernel_InitRam (0xF85653-0xF85661, converted above) does
@@ -105354,7 +105357,7 @@ CombiEdit_RunPendingRepaint:
 	ret                                                  ; FBC6CF  0e
 ; CombiEditPage_OnPartParamEvent: for the edited part ((0x2765) = class & 0x1F) the byte index, + 0x80 for the second record: 0, 1 and 0x9B..0x9D set
 ;   (0x277D) = 1; any other sets UI_ScreenFlags bit 4 (repaint) when the current page's field list
-;   (PtrTable_F1AE71[sub_FBD127()], 0xFF-terminated) holds it.
+;   (PtrTable_F1AE71[CombiEditSound_PageIndex()], 0xFF-terminated) holds it.
 CombiEditPage_OnPartParamEvent:
 	pushw hl                                             ; FBC6D0  2b
 	pushw de                                             ; FBC6D1  2a
@@ -105386,7 +105389,7 @@ CombiEditPage_OnPartParamEvent:
 	ld (0x277d:16), 0x01                                 ; FBC70E  f1 7d 27 00 01
 	jr .LFBC74B                                          ; FBC713  68 36
 .LFBC715:
-	calr sub_FBD127                                      ; FBC715  1e 0f 0a
+	calr CombiEditSound_PageIndex                                      ; FBC715  1e 0f 0a
 	ld H,A                                               ; FBC718  c9 8e
 	cp A,0xff                                            ; FBC71A  c9 cf ff
 	jr z, .LFBC74B                                       ; FBC71D  66 2c
@@ -105903,6 +105906,11 @@ ScreenButton_CombiEditPartMenu:
 	ret                                                  ; FBCBA8  0e
 T_F41854_Nop:
 	ret                                                  ; FBCBA9  0e
+; LcdKeyRow1_CombiEditPartSelect: slot 8 (LCD key row 1, prom_a_panel_control_map.py) of ScreenButtons_CombiEditPartMenu and
+;   ScreenButtons_CombiEditInternalSound: on the press, UI_PartIndex stepped through Record_F1AE1B (Record_F1AE24 in
+;   panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_F42C9C, CombiEdit_Part = UI_PartIndex and a
+;   repaint.  Basis: table (button code) + body.
+LcdKeyRow1_CombiEditPartSelect:
 	pushw hl                                             ; FBCBAA  2b
 	push XIX                                             ; FBCBAB  3c
 	lda xix, (PanelEvent_Flags:16)                                ; FBCBAC  f1 b0 28 34
@@ -105933,6 +105941,9 @@ T_F41854_Nop:
 	pop XIX                                              ; FBCBEE  5c
 	popw hl                                              ; FBCBEF  4b
 	ret                                                  ; FBCBF0  0e
+; LcdKeyRow2_CombiEditPartSelect: slot 9 (LCD key row 2) of the same two tables: the same part step on the press; on the release in panel-mode group
+;   0x16, sub_FBFC32.  Basis: table (button code) + body.
+LcdKeyRow2_CombiEditPartSelect:
 	pushw hl                                             ; FBCBF1  2b
 	ld c, (PanelEvent_Flags:16)                                   ; FBCBF2  c1 b0 28 23
 	and C,0x01                                           ; FBCBF6  cb cc 01
@@ -106080,7 +106091,7 @@ sub_FBCCB1:
 	lda xbc, (DL_F191F8:24)                              ; FBCD38  f2 f8 91 f1 31
 	push XBC                                             ; FBCD3D  39
 	call T_DisplayListB_RunOne_Stack                     ; FBCD3E  1d 0c 2e f4
-	calr sub_FBD127                                      ; FBCD42  1e e2 03
+	calr CombiEditSound_PageIndex                                      ; FBCD42  1e e2 03
 	add XSP,0x00000016                                   ; FBCD45  ef c8 16 00 00 00
 	cp a, 0x00:i3                                          ; FBCD4B  c9 d8
 	jrl nz, .LFBCDE3                                     ; FBCD4D  7e 93 00
@@ -106367,7 +106378,7 @@ SoftKeyCols1to4_CombiEditInternalSound:
 	lda xiy, (Record_F1AAA0:24)                          ; FBCF8B  f2 a0 aa f1 35
 	lda xix, (xiz-10)                                    ; FBCF90  be f6 34
 	ldir85                                               ; FBCF93  85 11
-	calr sub_FBD127                                      ; FBCF95  1e 8f 01
+	calr CombiEditSound_PageIndex                                      ; FBCF95  1e 8f 01
 	ld H,A                                               ; FBCF98  c9 8e
 	ld (xiz-1), a                                        ; FBCF9A  be ff 41
 	cp H,0xff                                            ; FBCF9D  ce cf ff
@@ -106397,7 +106408,7 @@ sub_FBCF81_Skip:
 SoftKeyCols5to8_CombiEditInternalSound:
 	pushw hl                                             ; FBCFD1  2b
 	push XIX                                             ; FBCFD2  3c
-	calr sub_FBD127                                      ; FBCFD3  1e 51 01
+	calr CombiEditSound_PageIndex                                      ; FBCFD3  1e 51 01
 	ld H,A                                               ; FBCFD6  c9 8e
 	cp A,0xff                                            ; FBCFD8  c9 cf ff
 	jr z, .LFBD003                                       ; FBCFDB  66 26
@@ -106494,7 +106505,7 @@ PageKey_CombiEditInternalSound:
 NumberPadKey_CombiEditInternalSound:
 	pushw hl                                             ; FBD0A4  2b
 	push XIX                                             ; FBD0A5  3c
-	calr sub_FBD127                                      ; FBD0A6  1e 7e 00
+	calr CombiEditSound_PageIndex                                      ; FBD0A6  1e 7e 00
 	ld H,A                                               ; FBD0A9  c9 8e
 	cp A,0xff                                            ; FBD0AB  c9 cf ff
 	jr z, .LFBD0EB                                       ; FBD0AE  66 3b
@@ -106528,7 +106539,7 @@ NumberPadKey_CombiEditInternalSound:
 sub_FBD0EE:
 	pushw hl                                             ; FBD0EE  2b
 	push XIX                                             ; FBD0EF  3c
-	calr sub_FBD127                                      ; FBD0F0  1e 34 00
+	calr CombiEditSound_PageIndex                                      ; FBD0F0  1e 34 00
 	ld H,A                                               ; FBD0F3  c9 8e
 	cp A,0xff                                            ; FBD0F5  c9 cf ff
 	jr z, .LFBD124                                       ; FBD0F8  66 2a
@@ -106552,7 +106563,10 @@ sub_FBD0EE:
 	pop XIX                                              ; FBD124  5c
 	popw hl                                              ; FBD125  4b
 	ret                                                  ; FBD126  0e
-sub_FBD127:
+; CombiEditSound_PageIndex: A = the INTERNAL SOUND page painter's index for the screen and CombiEdit_Page: screens 0x37 / 0xB4 pages 0 / 1 / 2
+;   -> 0 / 1 / 2, screen 0xB5 pages 0 / 1 -> 3 / 4, screen 0x38 pages 0 / 1 / 2 -> 5 / 3 / 4, else 0xFF.  Callers include
+;   CombiEditPage_OnPartParamEvent and the INTERNAL SOUND soft keys.  Basis: body.
+CombiEditSound_PageIndex:
 	pushw hl                                             ; FBD127  2b
 	ld h, (CombiEdit_Page:16)                                   ; FBD128  c1 67 27 26
 	ld bc, (UI_ScreenId:16)                                 ; FBD12C  d1 7c 20 21
@@ -106686,7 +106700,7 @@ sub_FBD127:
 	cp h, 0x02:i3                                          ; FBD23D  ce da
 	jr ule, .LFBD225                                     ; FBD23F  63 e4
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBD241  f1 40 25 00 00
-	calr sub_FBD127                                      ; FBD246  1e de fe
+	calr CombiEditSound_PageIndex                                      ; FBD246  1e de fe
 	extz WA                                              ; FBD249  d8 12
 	extz XWA                                             ; FBD24B  e8 12
 	cp wa, 0x05:i3                                         ; FBD24D  d8 dd
@@ -106777,7 +106791,7 @@ Draw_ReverbDepth:   ; entry: named by 1 `.long` operand, first at 0xFBD273
 	ret                                                  ; FBD301  0e
 .LFBD302:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FBD302  f1 40 25 00 01
-	calr sub_FBD127                                          ; FBD307  1e 1d fe
+	calr CombiEditSound_PageIndex                                          ; FBD307  1e 1d fe
 	extz WA                                              ; FBD30A  d8 12
 	extz XWA                                             ; FBD30C  e8 12
 	cp wa, 0x05:i3                                         ; FBD30E  d8 dd
@@ -106869,7 +106883,7 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	pop XIY                                              ; FBD3BD  5d
 .LFBD3BE:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBD3BE  f1 40 25 00 00
-	calr sub_FBD127                                          ; FBD3C3  1e 61 fd
+	calr CombiEditSound_PageIndex                                          ; FBD3C3  1e 61 fd
 	ld H,A                                               ; FBD3C6  c9 8e
 	cp A,0xff                                            ; FBD3C8  c9 cf ff
 	jr z, .LFBD3E2                                       ; FBD3CB  66 15
@@ -106884,6 +106898,10 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBD3E2  1d 14 2e f4
 	popw hl                                              ; FBD3E6  4b
 	ret                                                  ; FBD3E7  0e
+; CombiEditSound_PaintLevelsPage: PtrTable_F1AFBD[0]: the edited part's VOLUME (first record 3), PANPOT (8), EFFECT1 SEND (5), EFFECT2 ON/OFF (6),
+;   REVERB SEND (7), KEY SHIFT (9), FINE TUNE (10), PITCH BEND RANGE (11) and MAIN OUT (second record 3), each through
+;   its display list.  Basis: table (descriptor match of every byte it reads).
+CombiEditSound_PaintLevelsPage:
 	push XIX                                             ; FBD3E8  3c
 	lda xix, (UI_DrawScratch:16)                                ; FBD3E9  f1 40 26 34
 	pushw 0x03                                           ; FBD3ED  0b 03 00
@@ -107050,6 +107068,9 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	inc 4,XSP                                            ; FBD58F  ef 64
 	pop XIX                                              ; FBD591  5c
 	ret                                                  ; FBD592  0e
+; CombiEditSound_PaintControllerFilterPage: PtrTable_F1AFBD[1]: second record bytes 11-14 -- the CONTROLLER INTERNAL FILTER bits -- into UI_DrawScratch, drawn
+;   by DL_F19818.  Basis: table (descriptor match).
+CombiEditSound_PaintControllerFilterPage:
 	link XIZ,0xfffc                                      ; FBD593  ee 0c fc ff
 	push XIX                                             ; FBD597  3c
 	lda xix, (UI_DrawScratch:16)                                ; FBD598  f1 40 26 34
@@ -107081,6 +107102,9 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	pop XIX                                              ; FBD5E4  5c
 	unlk XIZ                                             ; FBD5E5  ee 0d
 	ret                                                  ; FBD5E7  0e
+; CombiEditSound_PaintAssignAndInputFilterPage: PtrTable_F1AFBD[2]: ASSIGN MODE (second record 6), KEY SCALING (first record 12), VELOCITY OFFSET (second 5) and the
+;   MIDI INPUT FILTER bytes (second 15, 16).  Basis: table (descriptor match).
+CombiEditSound_PaintAssignAndInputFilterPage:
 	push XIX                                             ; FBD5E8  3c
 	lda xix, (UI_DrawScratch:16)                                ; FBD5E9  f1 40 26 34
 	pushw 0x06                                           ; FBD5ED  0b 06 00
@@ -107152,6 +107176,9 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	add XSP,0x00000018                                   ; FBD6B0  ef c8 18 00 00 00
 	pop XIX                                              ; FBD6B6  5c
 	ret                                                  ; FBD6B7  0e
+; CombiEditSound_PaintMidiOutPage: PtrTable_F1AFBD[3]: MIDI OUTPUT FILTER bytes (second record 19, 20, the latter four times for its bits) and MIDI OUT
+;   KEY TRANSPOSE (second 23), the last field blinking when CombiEdit_Row is 5.  Basis: table (descriptor match).
+CombiEditSound_PaintMidiOutPage:
 	pushw hl                                             ; FBD6B8  2b
 	pushw de                                             ; FBD6B9  2a
 	push XIX                                             ; FBD6BA  3c
@@ -107230,6 +107257,9 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	popw de                                              ; FBD781  4a
 	popw hl                                              ; FBD782  4b
 	ret                                                  ; FBD783  0e
+; CombiEditSound_PaintMidiOutFilterPage: PtrTable_F1AFBD[4]: second record bytes 19-22 -- the MIDI OUTPUT FILTER bits -- into UI_DrawScratch, drawn by
+;   DL_F1995A.  Basis: table (descriptor match).
+CombiEditSound_PaintMidiOutFilterPage:
 	link XIZ,0xfffc                                      ; FBD784  ee 0c fc ff
 	push XIX                                             ; FBD788  3c
 	lda xix, (UI_DrawScratch:16)                                ; FBD789  f1 40 26 34
@@ -107261,6 +107291,10 @@ sub_FBD37E:   ; entry: named by 1 `.long` operand, first at 0xFBD334
 	pop XIX                                              ; FBD7D5  5c
 	unlk XIZ                                             ; FBD7D6  ee 0d
 	ret                                                  ; FBD7D8  0e
+; CombiEditSound_PaintMultipleMessagesPage: PtrTable_F1AFBD[5]: first record bytes 14-21 -- MIDI MULTIPLE MESSAGES OUTPUT (PROGRAM CHANGE, BANK SELECT, VOLUME,
+;   PANPOT, CHORUS DEPTH, REVERB DEPTH) -- copied to UI_DrawScratch, the first blinking when CombiEdit_Row is 0.
+;   Basis: table (descriptor match).
+CombiEditSound_PaintMultipleMessagesPage:
 	link XIZ,0xfff2                                      ; FBD7D9  ee 0c f2 ff
 	pushw hl                                             ; FBD7DD  2b
 	pushw de                                             ; FBD7DE  2a
@@ -111865,6 +111899,10 @@ LcdKeyRow3_WriteProtectError:
 	ld (UI_Request:16), 0x6e                                 ; FBFF13  f1 70 20 00 6e
 .LFBFF18:
 	ret                                                  ; FBFF18  0e
+; WriteProtectError_Dismiss: slots 11 (LCD key row 4) and 15 (EXIT) of ScreenButtons_WriteProtectError: on the release, either UI_ScreenHoldPending
+;   = 1 (while UI_ScreenHoldState bit 0, with UI_RequestBits bit 7 cleared) or UI_Request = 1 with UI_Request_Hi bit 1.
+;   Basis: table (button code) + body.
+WriteProtectError_Dismiss:
 	ld c, (PanelEvent_Flags:16)                                   ; FBFF19  c1 b0 28 23
 	and C,0x01                                           ; FBFF1D  cb cc 01
 	jr nz, .LFBFF3F                                      ; FBFF20  6e 1d

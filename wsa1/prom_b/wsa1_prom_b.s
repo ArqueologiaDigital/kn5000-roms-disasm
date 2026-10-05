@@ -1258,6 +1258,8 @@
 	.set	T_F4184C_Nop, 0xFBCB81
 	.set	ScreenButton_CombiEditPartMenu, 0xFBCB82
 	.set	T_F41854_Nop, 0xFBCBA9
+	.set	LcdKeyRow1_CombiEditPartSelect, 0xFBCBAA
+	.set	LcdKeyRow2_CombiEditPartSelect, 0xFBCBF1
 	.set	LcdKeyRow3_CombiEditPartMenu, 0xFBCC3D
 	.set	LcdKeyRow4_CombiEditPartMenu, 0xFBCC64
 	.set	LcdKeyRow5_CombiEditPartMenu, 0xFBCC8B
@@ -1287,6 +1289,12 @@
 	.set	ExitKey_CombiEditInternalSound, 0xFBD016
 	.set	PageKey_CombiEditInternalSound, 0xFBD044
 	.set	NumberPadKey_CombiEditInternalSound, 0xFBD0A4
+	.set	CombiEditSound_PaintLevelsPage, 0xFBD3E8
+	.set	CombiEditSound_PaintControllerFilterPage, 0xFBD593
+	.set	CombiEditSound_PaintAssignAndInputFilterPage, 0xFBD5E8
+	.set	CombiEditSound_PaintMidiOutPage, 0xFBD6B8
+	.set	CombiEditSound_PaintMidiOutFilterPage, 0xFBD784
+	.set	CombiEditSound_PaintMultipleMessagesPage, 0xFBD7D9
 	.set	ScreenEnter_CombiEditMixer, 0xFBDB91
 	.set	ScreenEnterBody_CombiEditMixer, 0xFBDB95
 	.set	ScreenLeave_CombiEditMixer, 0xFBDD0D
@@ -1354,6 +1362,7 @@
 	.set	SoftKeyCol1_CombiEditMenu, 0xFBFC53
 	.set	ExitKey_Effect2OutputConflict, 0xFBFE1F
 	.set	LcdKeyRow3_WriteProtectError, 0xFBFF02
+	.set	WriteProtectError_Dismiss, 0xFBFF19
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
 	.set	T_F40FF4_Nop, 0xFC018D
 	.set	SoundRemap_ResetToDefault, 0xFC01B1
@@ -51420,8 +51429,8 @@ ScreenButtons_CombiEditPartMenu:
 	.long T_TableDefault_Ret                       ; F1AEC9  [5]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1AECD  [6]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1AED1  [7]   -> prom_b 0xF42C70
-	.long 0x00FBCBAA                       ; F1AED5  [8]   -> prom_a 0xFBCBAA
-	.long 0x00FBCBF1                       ; F1AED9  [9]   -> prom_a 0xFBCBF1
+	.long LcdKeyRow1_CombiEditPartSelect                       ; F1AED5  [8]   -> prom_a 0xFBCBAA
+	.long LcdKeyRow2_CombiEditPartSelect                       ; F1AED9  [9]   -> prom_a 0xFBCBF1
 	.long LcdKeyRow3_CombiEditPartMenu                       ; F1AEDD  [10]   -> prom_a 0xFBCC3D
 	.long LcdKeyRow4_CombiEditPartMenu                       ; F1AEE1  [11]   -> prom_a 0xFBCC64
 	.long LcdKeyRow5_CombiEditPartMenu                       ; F1AEE5  [12]   -> prom_a 0xFBCC8B
@@ -51452,8 +51461,8 @@ ScreenButtons_CombiEditInternalSound:
 	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF25  [5]   -> prom_a 0xFBCFD1
 	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF29  [6]   -> prom_a 0xFBCFD1
 	.long SoftKeyCols5to8_CombiEditInternalSound                       ; F1AF2D  [7]   -> prom_a 0xFBCFD1
-	.long 0x00FBCBAA                       ; F1AF31  [8]   -> prom_a 0xFBCBAA
-	.long 0x00FBCBF1                       ; F1AF35  [9]   -> prom_a 0xFBCBF1
+	.long LcdKeyRow1_CombiEditPartSelect                       ; F1AF31  [8]   -> prom_a 0xFBCBAA
+	.long LcdKeyRow2_CombiEditPartSelect                       ; F1AF35  [9]   -> prom_a 0xFBCBF1
 	.long T_TableDefault_Ret                       ; F1AF39  [10]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1AF3D  [11]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1AF41  [12]   -> prom_b 0xF42C70
@@ -51544,12 +51553,12 @@ PtrTable_F1AFA5:
 ; Evidence: 6 entries of 4 bytes; base and width from prom_a 0xFBD3D2
 ; --------------------------------------------------------------------------
 PtrTable_F1AFBD:
-	.long 0x00FBD3E8                       ; F1AFBD  [0]   -> prom_a 0xFBD3E8
-	.long 0x00FBD593                       ; F1AFC1  [1]   -> prom_a 0xFBD593
-	.long 0x00FBD5E8                       ; F1AFC5  [2]   -> prom_a 0xFBD5E8
-	.long 0x00FBD6B8                       ; F1AFC9  [3]   -> prom_a 0xFBD6B8
-	.long 0x00FBD784                       ; F1AFCD  [4]   -> prom_a 0xFBD784
-	.long 0x00FBD7D9                       ; F1AFD1  [5]   -> prom_a 0xFBD7D9
+	.long CombiEditSound_PaintLevelsPage                       ; F1AFBD  [0]   -> prom_a 0xFBD3E8
+	.long CombiEditSound_PaintControllerFilterPage                       ; F1AFC1  [1]   -> prom_a 0xFBD593
+	.long CombiEditSound_PaintAssignAndInputFilterPage                       ; F1AFC5  [2]   -> prom_a 0xFBD5E8
+	.long CombiEditSound_PaintMidiOutPage                       ; F1AFC9  [3]   -> prom_a 0xFBD6B8
+	.long CombiEditSound_PaintMidiOutFilterPage                       ; F1AFCD  [4]   -> prom_a 0xFBD784
+	.long CombiEditSound_PaintMultipleMessagesPage                       ; F1AFD1  [5]   -> prom_a 0xFBD7D9
 
 ; --------------------------------------------------------------------------
 ; ScreenButtons_CombiEditMixer -- pointer table, 0xF1AFD5-0xF1B030 (92 bytes)
@@ -51982,11 +51991,11 @@ ScreenButtons_WriteProtectError:
 	.long T_TableDefault_Ret                       ; F1B36D  [8]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1B371  [9]   -> prom_b 0xF42C70
 	.long LcdKeyRow3_WriteProtectError                       ; F1B375  [10]   -> prom_a 0xFBFF02
-	.long 0x00FBFF19                       ; F1B379  [11]   -> prom_a 0xFBFF19
+	.long WriteProtectError_Dismiss                       ; F1B379  [11]   -> prom_a 0xFBFF19
 	.long T_TableDefault_Ret                       ; F1B37D  [12]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1B381  [13]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1B385  [14]   -> prom_b 0xF42C70
-	.long 0x00FBFF19                       ; F1B389  [15]   -> prom_a 0xFBFF19
+	.long WriteProtectError_Dismiss                       ; F1B389  [15]   -> prom_a 0xFBFF19
 	.long T_TableDefault_Ret                       ; F1B38D  [16]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1B391  [17]   -> prom_b 0xF42C70
 	.long T_TableDefault_Ret                       ; F1B395  [18]   -> prom_b 0xF42C70

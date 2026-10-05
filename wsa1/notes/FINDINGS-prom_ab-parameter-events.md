@@ -107,3 +107,23 @@ pointers and had no label.
   `CombiEditMixer_DirtySound` for one commit.
 - **CONFIGURE pages.** They draw the MIDI settings (byte 13), KEY LAYER and VELOCITY LAYER of the parts. The
   layer pages show parts 0-7 only.
+
+### COMBINATION EDIT INTERNAL SOUND pages (2026-10-05)
+
+`CombiEditSound_PageIndex` maps the screen and `CombiEdit_Page` to one of six page painters. They sat in
+prom_b's `PtrTable_F1AFBD` as numbers and had no labels; the dispatch census flagged them. Each is named by the
+part-record bytes it draws, matched to the SysEx descriptors:
+
+| index | screens / pages | painter | parameters |
+|---|---|---|---|
+| 0 | 0x37 / 0xB4 page 0 | `CombiEditSound_PaintLevelsPage` | VOLUME, PANPOT, EFFECT1 SEND, EFFECT2, REVERB SEND, KEY SHIFT, FINE TUNE, BEND RANGE, MAIN OUT |
+| 1 | 0x37 / 0xB4 page 1 | `CombiEditSound_PaintControllerFilterPage` | CONTROLLER INTERNAL FILTER (second record 11-14) |
+| 2 | 0x37 / 0xB4 page 2 | `CombiEditSound_PaintAssignAndInputFilterPage` | ASSIGN MODE, KEY SCALING, VELOCITY OFFSET, MIDI INPUT FILTER |
+| 3 | 0xB5 page 0, 0x38 page 1 | `CombiEditSound_PaintMidiOutPage` | MIDI OUTPUT FILTER (19, 20), MIDI OUT KEY TRANSPOSE |
+| 4 | 0xB5 page 1, 0x38 page 2 | `CombiEditSound_PaintMidiOutFilterPage` | MIDI OUTPUT FILTER (19-22) |
+| 5 | 0x38 page 0 | `CombiEditSound_PaintMultipleMessagesPage` | MIDI MULTIPLE MESSAGES OUTPUT (first record 14-21) |
+
+The census also flagged two button-table targets with no labels:
+- slots 8 and 9 (LCD key rows 1 and 2) of the PART MENU and INTERNAL SOUND button tables, both stepping the
+  edited part (`LcdKeyRow1_` / `LcdKeyRow2_CombiEditPartSelect`);
+- WRITE PROTECT ERROR's LCD row 4 and EXIT (`WriteProtectError_Dismiss`).

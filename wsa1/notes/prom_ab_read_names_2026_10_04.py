@@ -2257,7 +2257,7 @@ ROWS = [
     ("FBC6D0", "CombiEditPage_OnPartParamEvent",
      "for the edited part ((0x2765) = class & 0x1F) the byte index, + 0x80 for the second record: 0, 1 and 0x9B..0x9D set\n"
      "(0x277D) = 1; any other sets UI_ScreenFlags bit 4 (repaint) when the current page's field list\n"
-     "(PtrTable_F1AE71[sub_FBD127()], 0xFF-terminated) holds it."),
+     "(PtrTable_F1AE71[CombiEditSound_PageIndex()], 0xFF-terminated) holds it."),
     ("FBC74F", "CombiEditMixer_OnPartParamEvent",
      "the MIXER screens' handler: calls PtrTable_F1AE89[(0x2767)], one routine per mixer page."),
     ("FBCA31", "CombiEditConfigure_OnPartParamEvent",
@@ -2477,6 +2477,11 @@ ROWS = [
      "reply tagged 0xA3, server 0x81 offset 0x10 sets Drawbar_ReloadMark from the byte's bits 6-7 (0 -> 0; 0x40 -> 1,\n"
      "Drawbar_QueryElementBlocks(0) and (0x2890) / (0x2891) = 0; 0x80 -> 2); 0x82 / 0x83 replies go to their own arms;\n"
      "on screen 0xA3 a repaint is requested.  Basis: body + caller."),
+    # COMBINATION EDIT INTERNAL SOUND pages and button-slot targets the dispatch census flagged (docs/coverage/dispatch-census-2026-10-05)
+    ("FBD127", "CombiEditSound_PageIndex",
+     "A = the INTERNAL SOUND page painter's index for the screen and CombiEdit_Page: screens 0x37 / 0xB4 pages 0 / 1 / 2\n"
+     "-> 0 / 1 / 2, screen 0xB5 pages 0 / 1 -> 3 / 4, screen 0x38 pages 0 / 1 / 2 -> 5 / 3 / 4, else 0xFF.  Callers include\n"
+     "CombiEditPage_OnPartParamEvent and the INTERNAL SOUND soft keys.  Basis: body."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2519,6 +2524,38 @@ PLACED = [
     ("FBC90D", "CombiEditMixer_OnMidiPageEvent",
      "PtrTable_F1AE89[2], page 2: the sound bytes as on page 0; 13 (LOCAL CONTROL, MIDI OUT / MIDI IN SETTING, BASIC\n"
      "CHANNEL, each by its bits) and 0x84 (second record byte 4, SUB OUT) -> dirty mask + callback.  Basis: body."),
+    ("FBD3E8", "CombiEditSound_PaintLevelsPage",
+     "PtrTable_F1AFBD[0]: the edited part's VOLUME (first record 3), PANPOT (8), EFFECT1 SEND (5), EFFECT2 ON/OFF (6),\n"
+     "REVERB SEND (7), KEY SHIFT (9), FINE TUNE (10), PITCH BEND RANGE (11) and MAIN OUT (second record 3), each through\n"
+     "its display list.  Basis: table (descriptor match of every byte it reads)."),
+    ("FBD593", "CombiEditSound_PaintControllerFilterPage",
+     "PtrTable_F1AFBD[1]: second record bytes 11-14 -- the CONTROLLER INTERNAL FILTER bits -- into UI_DrawScratch, drawn\n"
+     "by DL_F19818.  Basis: table (descriptor match)."),
+    ("FBD5E8", "CombiEditSound_PaintAssignAndInputFilterPage",
+     "PtrTable_F1AFBD[2]: ASSIGN MODE (second record 6), KEY SCALING (first record 12), VELOCITY OFFSET (second 5) and the\n"
+     "MIDI INPUT FILTER bytes (second 15, 16).  Basis: table (descriptor match)."),
+    ("FBD6B8", "CombiEditSound_PaintMidiOutPage",
+     "PtrTable_F1AFBD[3]: MIDI OUTPUT FILTER bytes (second record 19, 20, the latter four times for its bits) and MIDI OUT\n"
+     "KEY TRANSPOSE (second 23), the last field blinking when CombiEdit_Row is 5.  Basis: table (descriptor match)."),
+    ("FBD784", "CombiEditSound_PaintMidiOutFilterPage",
+     "PtrTable_F1AFBD[4]: second record bytes 19-22 -- the MIDI OUTPUT FILTER bits -- into UI_DrawScratch, drawn by\n"
+     "DL_F1995A.  Basis: table (descriptor match)."),
+    ("FBD7D9", "CombiEditSound_PaintMultipleMessagesPage",
+     "PtrTable_F1AFBD[5]: first record bytes 14-21 -- MIDI MULTIPLE MESSAGES OUTPUT (PROGRAM CHANGE, BANK SELECT, VOLUME,\n"
+     "PANPOT, CHORUS DEPTH, REVERB DEPTH) -- copied to UI_DrawScratch, the first blinking when CombiEdit_Row is 0.\n"
+     "Basis: table (descriptor match)."),
+    ("FBCBAA", "LcdKeyRow1_CombiEditPartSelect",
+     "slot 8 (LCD key row 1, prom_a_panel_control_map.py) of ScreenButtons_CombiEditPartMenu and\n"
+     "ScreenButtons_CombiEditInternalSound: on the press, UI_PartIndex stepped through Record_F1AE1B (Record_F1AE24 in\n"
+     "panel-mode group 0x16) by T_EditValue_StepBitField; when it moved, T_F42C9C, CombiEdit_Part = UI_PartIndex and a\n"
+     "repaint.  Basis: table (button code) + body."),
+    ("FBCBF1", "LcdKeyRow2_CombiEditPartSelect",
+     "slot 9 (LCD key row 2) of the same two tables: the same part step on the press; on the release in panel-mode group\n"
+     "0x16, sub_FBFC32.  Basis: table (button code) + body."),
+    ("FBFF19", "WriteProtectError_Dismiss",
+     "slots 11 (LCD key row 4) and 15 (EXIT) of ScreenButtons_WriteProtectError: on the release, either UI_ScreenHoldPending\n"
+     "= 1 (while UI_ScreenHoldState bit 0, with UI_RequestBits bit 7 cleared) or UI_Request = 1 with UI_Request_Hi bit 1.\n"
+     "Basis: table (button code) + body."),
 ]
 
 
