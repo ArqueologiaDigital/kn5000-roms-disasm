@@ -4241,4 +4241,12 @@ RENAMES = [
     ("T_F418D8", "T_CombiEdit_RestoreEditedIfComparing"),
     ("T_F41A00", "T_CombiEdit_Begin"),
     ("T_F41A04", "T_CombiEdit_End"),
+    ("sub_F4466D", "Seq_LocateToSongPosition"),
+    ("sub_F44E6B", "Seq_StopPlaybackOnRequest"),
+    ("sub_F45B1F", "Seq_RewindToStart"),
+    ("sub_FAEC8A", "SeqEvt_ResetPlayingSlotControllers"),
+    ("sub_FE144E", "MidiFilePlay_OnSongSelect"),
+    ("T_F42584", "T_MidiFilePlay_OnSongSelect"),
+    ("sub_F44033", "Seq_RewindToStart_Veneer"),
+    ("T_F40A6C", "T_Seq_RewindToStart_Veneer"),
 ]

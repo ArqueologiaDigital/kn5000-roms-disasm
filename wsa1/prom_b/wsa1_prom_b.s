@@ -1011,7 +1011,7 @@
 	.set	SeqBuf_EncodeQueue2C00, 0xFAE921
 	.set	T_F41F24_Nop, 0xFAEBAA
 	.set	T_F41F1C_Nop, 0xFAEC78
-	.set	sub_FAEC8A, 0xFAEC8A
+	.set	SeqEvt_ResetPlayingSlotControllers, 0xFAEC8A
 	.set	sub_FAED76, 0xFAED76
 	.set	T_F41F20_Nop, 0xFAF48F
 	.set	T_F41F28_Nop, 0xFAF490
@@ -1879,7 +1879,7 @@
 	.set	MidiFileStream_GetByte, 0xFE0391
 	.set	MidiFileStream_Close, 0xFE0435
 	.set	MidiFileStream_Open, 0xFE04BE
-	.set	sub_FE144E, 0xFE144E
+	.set	MidiFilePlay_OnSongSelect, 0xFE144E
 	.set	sub_FE152E, 0xFE152E
 	.set	SysPartMidi_ResetBlock1Default_Call, 0xFE1BCA
 	.set	sub_FE1BCE, 0xFE1BCE
@@ -89275,7 +89275,9 @@ T_SeqBufRing_Discard_Veneer:	jp SeqBufRing_Discard_Veneer  ; F40A60 (was T_F40A6
 ;           TimedEventRing_Discard_Veneer (graded CONTENT).  DERIVATIVE name.
 T_TimedEventRing_Discard_Veneer:	jp TimedEventRing_Discard_Veneer  ; F40A64 (was T_F40A64) -> prom_b 0x44030
 	.fill 0x4, 1, 0x00  ; 0xF40A68: 4 x nop
-T_F40A6C:	jp sub_F44033  ; -> prom_b 0x44033
+; Evidence: slot 0xF40A6C is `jp 0xF44033`; prom_b 0xF44033 carries the label
+;           Seq_RewindToStart_Veneer (graded CONTENT).  DERIVATIVE name.
+T_Seq_RewindToStart_Veneer:	jp Seq_RewindToStart_Veneer  ; F40A6C (was T_F40A6C) -> prom_b 0x44033
 T_F40A70:	jp sub_F4566A  ; -> prom_b 0x4566A   x1
 T_F40A74:	jp sub_F4403F  ; -> prom_b 0x4403F
 T_F40A78:	jp sub_F4401B  ; -> prom_b 0x4401B   x1
@@ -90717,7 +90719,7 @@ T_BStore_GetAnyBankPassword:	jp BStore_GetAnyBankPassword  ; F41F04 (was T_F41F0
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
 T_F41F10:	jp sub_FAED76  ; -> prom_a 0x2ED76   x1
 T_F41F14:	jp sub_FAE84D  ; -> prom_a 0x2E84D   x5
-T_F41F18:	jp sub_FAEC8A  ; -> prom_a 0x2EC8A   x9
+T_F41F18:	jp SeqEvt_ResetPlayingSlotControllers  ; -> prom_a 0x2EC8A   x9
 T_F41F1C:	jp T_F41F1C_Nop  ; -> prom_a 0x2EC78
 T_F41F20:	jp T_F41F20_Nop  ; -> prom_a 0x2F48F
 T_F41F24:	jp T_F41F24_Nop  ; -> prom_a 0x2EBAA
@@ -91056,7 +91058,9 @@ T_F42574:	jp sub_FE1BCE  ; -> prom_a 0x61BCE   x8
 T_F42578:	jp sub_FE1BDE  ; -> prom_a 0x61BDE   x8
 T_F4257C:	jp sub_FE152E  ; -> prom_a 0x6152E   x5
 T_F42580:	jp T_F42580_Nop  ; -> prom_a 0x61C16   x6
-T_F42584:	jp sub_FE144E  ; -> prom_a 0x6144E   x1
+; Evidence: slot 0xF42584 is `jp 0xFE144E`; prom_a 0xFE144E carries the label
+;           MidiFilePlay_OnSongSelect (graded CONTENT).  DERIVATIVE name.
+T_MidiFilePlay_OnSongSelect:	jp MidiFilePlay_OnSongSelect  ; F42584 (was T_F42584) -> prom_a 0x6144E   x1
 T_F42588:	jp sub_FE1C17  ; -> prom_a 0x61C17
 T_F4258C:	jp T_F4258C_Nop  ; -> prom_a 0x61C1E
 T_Disk_PortA3_Release_Call_Call:	jp Disk_PortA3_Release_Call_Call  ; -> prom_a 0x61C1F   x4
@@ -92367,18 +92371,19 @@ TimedEventRing_Discard_Veneer:		; <- T_TimedEventRing_Discard_Veneer
 	jrl	TimedEventRing_Discard	; F44030  jrl T,0xf45b0a
 
 ; --------------------------------------------------------------------------
-; sub_F44033
-; Called from: T_F40A6C (x0); in-module: 0xF446C8
+; Seq_RewindToStart_Veneer
+; Called from: T_Seq_RewindToStart_Veneer (x0); in-module: 0xF446C8
 ; Touches: nothing with an absolute address
-; Evidence: thunk slot T_F40A6C holds `jp 0x00F44033`, and 0xF44033 is an
+; Evidence: thunk slot T_Seq_RewindToStart_Veneer holds `jp 0x00F44033`, and 0xF44033 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44033:		; <- T_F40A6C
-	jrl	sub_F45B1F	; F44033  jrl T,0xf45b1f
+; Seq_RewindToStart_Veneer: jumps to Seq_RewindToStart (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+Seq_RewindToStart_Veneer:		; <- T_Seq_RewindToStart_Veneer
+	jrl	Seq_RewindToStart	; F44033  jrl T,0xf45b1f
 
 ; --------------------------------------------------------------------------
 ; sub_F44036
@@ -93087,7 +93092,7 @@ sub_F44516_Skip2:
 ; Touches: (0x207A) (0x207C) (0x2095) (0x3000) (0x349F) (0x34B2) (0x34D4)
 ;          (0x34D9) (0x3738) (0x373A) +1 more
 ; Calls:   sub_F44623 sub_F44809 sub_F4491C sub_F4493E sub_F4495A T_F40D14
-;          sub_F45FCA sub_F4466D sub_F44964 T_F40BD0 sub_F44D94 sub_F44E6B
+;          sub_F45FCA Seq_LocateToSongPosition sub_F44964 T_F40BD0 sub_F44D94 Seq_StopPlaybackOnRequest
 ;          +1 more
 ; Evidence: thunk slot T_F409C8 holds `jp 0x00F44582`, and 0xF44582 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -93125,11 +93130,11 @@ sub_F44516_Skip5:
 	call	T_F40D14	; F445CB  call 0xf40d14
 	calr	sub_F45FCA	; F445CF  calr 0xf45fca
 	m_and_mi8 MB16, 0x34d4, 0x7f	; F445D2  and (0x34d4),0x7f
-	calr	sub_F4466D	; F445D7  calr 0xf4466d
+	calr	Seq_LocateToSongPosition	; F445D7  calr 0xf4466d
 	calr	sub_F44964	; F445DA  calr 0xf44964
 	call	T_F40BD0	; F445DD  call 0xf40bd0
 	calr	sub_F44D94	; F445E1  calr 0xf44d94
-	calr	sub_F44E6B	; F445E4  calr 0xf44e6b
+	calr	Seq_StopPlaybackOnRequest	; F445E4  calr 0xf44e6b
 	ld	c, 0:opc	; F445E7  ld C,0x00
 sub_F44516_Loop2:
 	ld	(13471:16), c	; F445E9  ld (0x349f),C
@@ -93199,11 +93204,11 @@ sub_F44623_Return:
 	ret	; F4466C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4466D
+; Seq_LocateToSongPosition
 ; Called from: in-module: 0xF445D7
 ; Touches: (0x0C55) (0x0D4A) (0x207C) (0x3456) (0x3458) (0x345E) (0x349A)
 ;          (0x349C) (0x349F) (0x34BB) +3 more  |  0x000000
-; Calls:   sub_F44033 sub_F455E6 T_F40C90 sub_F45FE5 sub_F4477F T_F40B54
+; Calls:   Seq_RewindToStart_Veneer sub_F455E6 T_F40C90 sub_F45FE5 sub_F4477F T_F40B54
 ;          TimedEventRing_Discard_Veneer Nop_CallsEmptyDirectorySlot_Veneer
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4466D is an instruction boundary.
@@ -93211,16 +93216,22 @@ sub_F44623_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F4466D:
-	bit	7, (0xa5:8)	; F4466D  bit 7,(0xa5)
+; Seq_LocateToSongPosition: from the sequencer tick (sub_F44582): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a
+;   received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position
+;   >> 2 (sixteenths to beats) and Seq_BeatTick = WorkspaceDefaults+0x77[position & 3] -- the bytes 0 / 24 / 48 / 72,
+;   a sixteenth at 96 ticks a beat.  Position 0 goes to Seq_RewindToStart_Veneer; any other locates each of the 17 tracks
+;   (T_F40C90 per track, sub_F4477F) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared
+;   at the end.  Basis: body + the writer's header (MidiIn_SongPosition).
+Seq_LocateToSongPosition:
+	bit	7, (MidiIn_SongPositionHi:8)	; F4466D  bit 7,(0xa5)
 	jrl	z, sub_F4466D_Join2	; F44670  jrl Z,0xf4477a
 	ld	xwa, (6304798:24)	; F44673  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44678  cp XWA,0x00000000
 	jrl	z, sub_F4466D_Join2	; F4467E  jrl Z,0xf4477a
 	bit	2, (TransportB_State:8)	; F44681  bit 2,(0x96)
 	jrl	nz, sub_F4466D_Join2	; F44684  jrl NZ,0xf4477a
-	ld	w, (0xa5:8)	; F44687  ld W,(0xa5)
-	ld	a, (0xa4:8)	; F4468A  ld A,(0xa4)
+	ld	w, (MidiIn_SongPositionHi:8)	; F44687  ld W,(0xa5)
+	ld	a, (MidiIn_SongPositionLo:8)	; F4468A  ld A,(0xa4)
 	and	a, 127	; F4468D  and A,0x7f
 	rrc	w	; F44690  rrc 0x01,W
 	jr	nc, sub_F4466D_Skip	; F44693  jr NC,0xf44698
@@ -93241,7 +93252,7 @@ sub_F4466D_Skip:
 	jr	nz, sub_F4466D_Skip2	; F446C0  jr NZ,0xf446cf
 	m_cp_mi8 MB8, Seq_BeatTick, 0x00	; F446C2  cp (0x93),0x00
 	jr	nz, sub_F4466D_Skip2	; F446C6  jr NZ,0xf446cf
-	call	sub_F44033	; F446C8  call 0xf44033
+	call	Seq_RewindToStart_Veneer	; F446C8  call 0xf44033
 	jrl	sub_F4466D_Join2	; F446CC  jrl T,0xf4477a
 sub_F4466D_Skip2:
 	xor	xde, xde	; F446CF  xor XDE,XDE
@@ -93304,7 +93315,7 @@ sub_F4466D_Skip5:
 sub_F4466D_Skip6:
 	ld	(168:8), 0:io	; F44777  ld (0xa8),0x00
 sub_F4466D_Join2:
-	m_and_mi8 MB8, 0xa5, 0x7f	; F4477A  and (0xa5),0x7f
+	m_and_mi8 MB8, MidiIn_SongPositionHi, 0x7f	; F4477A  and (0xa5),0x7f
 	ret	; F4477E  ret
 
 ; --------------------------------------------------------------------------
@@ -93383,7 +93394,7 @@ sub_F4477F_Return:
 ; Called from: in-module: 0xF445BF
 ; Touches: (0x0C05) (0x207A) (0x2095) (0x3000) (0x34D3) (0x34D8) (0x3552)
 ;          (0x361E) (0x3622)  |  0x000000
-; Calls:   sub_F448C6 sub_F4403C T_F42578 sub_F448A3 sub_F45B1F sub_F44CA7
+; Calls:   sub_F448C6 sub_F4403C T_F42578 sub_F448A3 Seq_RewindToStart sub_F44CA7
 ;          T_F40784
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF44809 is an instruction boundary.
@@ -93436,7 +93447,7 @@ sub_F44809_Join:
 	jr	nz, sub_F44809_Skip4	; F4488B  jr NZ,0xf44890
 	calr	sub_F448A3	; F4488D  calr 0xf448a3
 sub_F44809_Skip4:
-	calr	sub_F45B1F	; F44890  calr 0xf45b1f
+	calr	Seq_RewindToStart	; F44890  calr 0xf45b1f
 	calr	sub_F44CA7	; F44893  calr 0xf44ca7
 	ld	(168:8), 0:io	; F44896  ld (0xa8),0x00
 	m_and_mi8 MB16, 0x34d8, 0x7f	; F44899  and (0x34d8),0x7f
@@ -94229,7 +94240,7 @@ sub_F44E58:
 	ret	; F44E6A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F44E6B
+; Seq_StopPlaybackOnRequest
 ; Called from: in-module: 0xF445E4 0xF44EED 0xF44F24 0xF44FC6 0xF44FFD
 ; Touches: (0x34D2)
 ; Calls:   T_PartNotes_ReleaseAllTrackNotes T_F41F18 T_F40CB4 T_NoteRouting_RebuildForSong
@@ -94239,7 +94250,9 @@ sub_F44E58:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F44E6B:
+; Seq_StopPlaybackOnRequest: (0x34D2) bit 1 taken and cleared: T_PartNotes_ReleaseAllTrackNotes, T_F41F18 (SeqEvt_ResetPlayingSlotControllers),
+;   the playing-track mask (0x60341E) = 0, T_F40CB4 (a bare ret), T_NoteRouting_RebuildForSong.  Basis: body.
+Seq_StopPlaybackOnRequest:
 	m_bit 1, MD16, 0x34d2	; F44E6B  bit 1,(0x34d2)
 	jr	z, sub_F44E6B_Return	; F44E6F  jr Z,0xf44e8d
 	m_and_mi8 MB16, 0x34d2, 0xfd	; F44E71  and (0x34d2),0xfd
@@ -94257,7 +94270,7 @@ sub_F44E6B_Return:
 ; Called from: T_F40AA0 (x0); in-module: 0xF4460E 0xF45338
 ; Touches: (0x3008) (0x349F) (0x34D2) (0x3738) (0x373A)  |  0x000000
 ;          0x600800
-; Calls:   sub_F44E6B TimedEventRing_Discard sub_F454B3 sub_F45B6E sub_F450B2
+; Calls:   Seq_StopPlaybackOnRequest TimedEventRing_Discard sub_F454B3 sub_F45B6E sub_F450B2
 ; Evidence: thunk slot T_F40AA0 holds `jp 0x00F44E8E`, and 0xF44E8E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94297,7 +94310,7 @@ sub_F44E8E_Join:
 	m_or_mi8 MB16, 0x34d2, 0x02	; F44EDE  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44EE3  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F44EE8  ld (0x60341e),XWA
-	calr	sub_F44E6B	; F44EED  calr 0xf44e6b
+	calr	Seq_StopPlaybackOnRequest	; F44EED  calr 0xf44e6b
 	xor	xwa, xwa	; F44EF0  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44EF2  ld (0x60341e),XWA
 	calr	TimedEventRing_Discard	; F44EF7  calr 0xf45b0a
@@ -94313,7 +94326,7 @@ sub_F44E8E_Skip2:
 	m_or_mi8 MB16, 0x34d2, 0x02	; F44F15  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44F1A  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F44F1F  ld (0x60341e),XWA
-	calr	sub_F44E6B	; F44F24  calr 0xf44e6b
+	calr	Seq_StopPlaybackOnRequest	; F44F24  calr 0xf44e6b
 	xor	xwa, xwa	; F44F27  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44F29  ld (0x60341e),XWA
 	calr	TimedEventRing_Discard	; F44F2E  calr 0xf45b0a
@@ -94348,7 +94361,7 @@ sub_F44E8E_Return:
 ; Called from: T_F40ABC (x2)
 ; Touches: (0x3008) (0x349F) (0x34D2) (0x3738) (0x373A)  |  0x000000
 ;          0x600800
-; Calls:   sub_F44E6B TimedEventRing_Discard sub_F454B3 sub_F45B6E
+; Calls:   Seq_StopPlaybackOnRequest TimedEventRing_Discard sub_F454B3 sub_F45B6E
 ; Evidence: thunk slot T_F40ABC holds `jp 0x00F44F67`, and 0xF44F67 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94388,7 +94401,7 @@ sub_F44E8E_Join3:
 	m_or_mi8 MB16, 0x34d2, 0x02	; F44FB7  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44FBC  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F44FC1  ld (0x60341e),XWA
-	calr	sub_F44E6B	; F44FC6  calr 0xf44e6b
+	calr	Seq_StopPlaybackOnRequest	; F44FC6  calr 0xf44e6b
 	xor	xwa, xwa	; F44FC9  xor XWA,XWA
 	ld	(6304798:24), xwa	; F44FCB  ld (0x60341e),XWA
 	calr	TimedEventRing_Discard	; F44FD0  calr 0xf45b0a
@@ -94404,7 +94417,7 @@ sub_F44E8E_Skip6:
 	m_or_mi8 MB16, 0x34d2, 0x02	; F44FEE  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44FF3  ld XWA,0xffffffff
 	ld	(6304798:24), xwa	; F44FF8  ld (0x60341e),XWA
-	calr	sub_F44E6B	; F44FFD  calr 0xf44e6b
+	calr	Seq_StopPlaybackOnRequest	; F44FFD  calr 0xf44e6b
 	xor	xwa, xwa	; F45000  xor XWA,XWA
 	ld	(6304798:24), xwa	; F45002  ld (0x60341e),XWA
 	calr	TimedEventRing_Discard	; F45007  calr 0xf45b0a
@@ -94946,7 +94959,7 @@ sub_F4542D_Return:
 ; sub_F45445
 ; Called from: T_F409E4 (x1)
 ; Touches: (0x34D0)  |  0x000000
-; Calls:   sub_F45B1F
+; Calls:   Seq_RewindToStart
 ; Evidence: thunk slot T_F409E4 holds `jp 0x00F45445`, and 0xF45445 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -94958,7 +94971,7 @@ sub_F45445:		; <- T_F409E4
 	ld	xwa, (6304798:24)	; F45445  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4544A  cp XWA,0x00000000
 	jr	z, sub_F4542D_Skip	; F45450  jr Z,0xf45455
-	calr	sub_F45B1F	; F45452  calr 0xf45b1f
+	calr	Seq_RewindToStart	; F45452  calr 0xf45b1f
 sub_F4542D_Skip:
 	m_and_mi8 MB16, 0x34d0, 0xdf	; F45455  and (0x34d0),0xdf
 	ret	; F4545A  ret
@@ -95051,7 +95064,7 @@ sub_F45478:
 ; sub_F45489
 ; Called from: T_F409F4 (x2)
 ; Touches: (0x3010)  |  0x000000
-; Calls:   T_F40CB4 sub_F45B1F T_NoteRouting_RebuildForSong
+; Calls:   T_F40CB4 Seq_RewindToStart T_NoteRouting_RebuildForSong
 ; Evidence: thunk slot T_F409F4 holds `jp 0x00F45489`, and 0xF45489 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -95065,7 +95078,7 @@ sub_F45489:		; <- T_F409F4
 	call	T_F40CB4	; F45492  call 0xf40cb4
 	cp	xwa, 0	; F45496  cp XWA,0x00000000
 	jr	z, sub_F45478_Return	; F4549C  jr Z,0xf454a5
-	calr	sub_F45B1F	; F4549E  calr 0xf45b1f
+	calr	Seq_RewindToStart	; F4549E  calr 0xf45b1f
 	call	T_NoteRouting_RebuildForSong	; F454A1  call 0xf411b8
 sub_F45478_Return:
 	ret	; F454A5  ret
@@ -95979,7 +95992,7 @@ TimedEventRing_Discard:		; <- T_TimedEventRing_Discard
 	ret	; F45B1E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F45B1F
+; Seq_RewindToStart
 ; Called from: in-module: 0xF44890 0xF45452 0xF4549E 0xF45C07
 ; Touches: (0x3008) (0x300C) (0x34BB) (0x34D0)
 ; Calls:   sub_F459AA sub_F44B95
@@ -95989,7 +96002,10 @@ TimedEventRing_Discard:		; <- T_TimedEventRing_Discard
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F45B1F:
+; Seq_RewindToStart: under ei 6 TransportB_Beat = 0 and Seq_BeatTick = 0; unless (0x34D0) bit 5, the 32-bit (0x3008) and (0x300C) = 0;
+;   (0x34BB) bit 3 cleared, sub_F459AA, sub_F44B95.  Seq_LocateToSongPosition calls it (through the veneer
+;   Seq_RewindToStart_Veneer) for a received position of 0.  Basis: body + caller.
+Seq_RewindToStart:
 	ei	6	; F45B1F  ei 0x06
 	ldw	(TransportB_Beat:8), 0:io	; F45B21  ld (0x91),0x0000
 	ld	(Seq_BeatTick:8), 0:io	; F45B25  ld (0x93),0x00
@@ -96109,7 +96125,7 @@ sub_F45BCD:		; <- T_F40AB0
 ; Called from: T_F409DC (x1); in-module: 0xF44C42
 ; Touches: (0x0C90) (0x0D4A) (0x3456) (0x3458) (0x345E) (0x349A) (0x349C)
 ;          (0x349F) (0x34BB) (0x34D4) +6 more  |  0x000000
-; Calls:   sub_F45B1F sub_F45B48 sub_F44CA7 sub_F455E6 T_F40C5C T_F40B54
+; Calls:   Seq_RewindToStart sub_F45B48 sub_F44CA7 sub_F455E6 T_F40C5C T_F40B54
 ;          TimedEventRing_Discard Nop_CallsEmptyDirectorySlot
 ; Evidence: thunk slot T_F409DC holds `jp 0x00F45BD3`, and 0xF45BD3 is an
 ;           instruction boundary of this transcription (re-asserted on every
@@ -96138,7 +96154,7 @@ sub_F45BD3_Skip:
 sub_F45BD3_Skip2:
 	m_bit 0, MD16, 0x3735	; F45C01  bit 0,(0x3735)
 	jr	nz, sub_F45BD3_Skip3	; F45C05  jr NZ,0xf45c0c
-	calr	sub_F45B1F	; F45C07  calr 0xf45b1f
+	calr	Seq_RewindToStart	; F45C07  calr 0xf45b1f
 	jr	sub_F45BD3_Join2	; F45C0A  jr T,0xf45c0f
 sub_F45BD3_Skip3:
 	calr	sub_F45B48	; F45C0C  calr 0xf45b48

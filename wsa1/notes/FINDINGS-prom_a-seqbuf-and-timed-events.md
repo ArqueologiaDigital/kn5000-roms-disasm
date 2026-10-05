@@ -26,3 +26,26 @@ ring address; the four rings whose contents are now known have semantic families
 `SeqBufRing_*`, `Ring60080A_*` -> `TimedEventRing_*`, `Ring600C1E_*` -> `MidiInARing_*`, `Ring601028_*`
 -> `MidiInBRing_*` (37 routines, and their 36 prom_b thunks `T_...`).  The other ten rings keep their
 address names: what they carry is still not established.
+
+## MIDI Song Position Pointer and Song Select (2026-10-05)
+
+The MIDI IN handlers `MidiIn_SongPosition` (0xF2) and `MidiIn_SongSelect` (0xF3) store the message and set bit 7
+as a "pending" flag. Bit 7 is set only when that message's receive enable is on: (0x7F34) bit 2 for the
+position, (0x7F33) bit 3 for the select.
+- `MidiIn_SongPositionLo` / `_Hi` (0xA4 / 0xA5) hold the 14-bit position in sixteenth notes.
+- `MidiIn_SongSelectValue` (0xA3) holds the song number.
+
+Two consumers handle them:
+- **The sequencer tick**, through `Seq_LocateToSongPosition`, while tracks are playing and transport B is
+  stopped:
+  - beats = position >> 2;
+  - tick in the beat = `WorkspaceDefaults+0x77[position & 3]`, the bytes 0 / 24 / 48 / 72 (a sixteenth at 96
+    ticks a beat);
+  - position 0 rewinds (`Seq_RewindToStart`);
+  - any other position locates each of the 17 tracks.
+- **The MIDI file player**, through `MidiFilePlay_OnSongSelect` (`T_MidiFilePlay_OnSongSelect`), while transport C is stopped: the
+  song number selects directory entry N (at most 0x13), and that file is loaded.
+
+Related: `Seq_StopPlaybackOnRequest` ((0x34D2) bit 1) releases the tracks' notes and resets the controllers of
+the playing slots (`SeqEvt_ResetPlayingSlotControllers`: pressure 0, modulation 0, pitch bend centre, expression
+127). Then it clears the playing-track mask (0x60341E).

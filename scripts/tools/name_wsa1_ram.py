@@ -214,6 +214,11 @@ GROUPS = [
         0x2767: ("CombiEdit_Page", "the page of the INTERNAL SOUND / MIXER / CONFIGURE screen, 0..2", "ScreenEnter_CombiEditInternalSound; ScreenEnterBody_CombiEditMixer / _Configure; PtrTable_F1B03F / F1AE89 readers"),
         0x2769: ("CombiEdit_Row", "the selected field on the page", "ScreenEnter* / PageKey_*; CombiEditMixer_ColumnKey (IndexMap_F1B031[row])"),
     }),
+    ("wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md", "MIDI Song Position Pointer and Song Select", {
+        0x00A3: ("MidiIn_SongSelectValue", "the last MIDI Song Select's song number; bit 7 = pending (set only while (0x7F33) bit 3 enables it)", "MidiIn_SongSelect writes it; MidiFilePlay_OnSongSelect takes it"),
+        0x00A4: ("MidiIn_SongPositionLo", "the last MIDI Song Position Pointer's low 7 bits (sixteenth notes)", "MidiIn_SongPosition writes it; Seq_LocateToSongPosition takes it"),
+        0x00A5: ("MidiIn_SongPositionHi", "its high 7 bits; bit 7 = pending (set only while (0x7F34) bit 2 enables it)", "MidiIn_SongPosition; Seq_LocateToSongPosition clears bit 7"),
+    }),
     ("wsa1/prom_b/wsa1_prom_b.s", "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers", {
         0x28A0: ("Drawbar_ReloadMark", "15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it",
                  "Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked"),

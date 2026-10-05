@@ -2421,6 +2421,32 @@ ROWS = [
     ("FBFA4D", "CombiEditConfigure_DrawVelocityLayers",
      "CONFIGURE page 2: the second records of parts 0..7, bytes 9 / 10 -- VELOCITY LAYER LOW / HIGH -- into\n"
      "UI_DrawScratch, drawn by DL_F1A7AF.  Basis: table (descriptor match)."),
+    # the sequencer's MIDI system-message side: Song Position Pointer, Song Select, stop and the slot controller reset
+    ("F4466D", "Seq_LocateToSongPosition",
+     "from the sequencer tick (sub_F44582): when MidiIn_SongPositionHi bit 7 is set -- MidiIn_SongPosition stored a\n"
+     "received 0xF2 -- while (0x60341E) has tracks and transport B is stopped: TransportB_Beat = the 14-bit position\n"
+     ">> 2 (sixteenths to beats) and Seq_BeatTick = WorkspaceDefaults+0x77[position & 3] -- the bytes 0 / 24 / 48 / 72,\n"
+     "a sixteenth at 96 ticks a beat.  Position 0 goes to Seq_RewindToStart_Veneer; any other locates each of the 17 tracks\n"
+     "(T_F40C90 per track, sub_F4477F) and collects the located ones in (0x349A) / (0x349C).  The pending bit is cleared\n"
+     "at the end.  Basis: body + the writer's header (MidiIn_SongPosition)."),
+    ("F44E6B", "Seq_StopPlaybackOnRequest",
+     "(0x34D2) bit 1 taken and cleared: T_PartNotes_ReleaseAllTrackNotes, T_F41F18 (SeqEvt_ResetPlayingSlotControllers),\n"
+     "the playing-track mask (0x60341E) = 0, T_F40CB4 (a bare ret), T_NoteRouting_RebuildForSong.  Basis: body."),
+    ("F45B1F", "Seq_RewindToStart",
+     "under ei 6 TransportB_Beat = 0 and Seq_BeatTick = 0; unless (0x34D0) bit 5, the 32-bit (0x3008) and (0x300C) = 0;\n"
+     "(0x34BB) bit 3 cleared, sub_F459AA, sub_F44B95.  Seq_LocateToSongPosition calls it (through the veneer\n"
+     "Seq_RewindToStart_Veneer) for a received position of 0.  Basis: body + caller."),
+    ("FAEC8A", "SeqEvt_ResetPlayingSlotControllers",
+     "T_F41F18: for each of the 17 sequencer slots whose bit is set in the playing mask (0x60341E), with its part from\n"
+     "BStore_TrackToPart: channel pressure 0 (D0), modulation 0 (D1), pitch bend centre (D2 0x00 0x40) through\n"
+     "SeqEvt_ApplyCtrlEvent, and a B0 / 0xB5 0x7F event through SeqEvt_ApplyParamEvent; then SeqEvt_FlushShadows,\n"
+     "sub_FAF772, T_Queue2C00_DrainPassB.  SeqEvt_FlushShadows' header calls it the slot-reset routine.  Basis: body."),
+    ("FE144E", "MidiFilePlay_OnSongSelect",
+     "T_MidiFilePlay_OnSongSelect: when MidiIn_SongSelectValue bit 7 is set (MidiIn_SongSelect stored a received 0xF3) and transport C is stopped:\n"
+     "the disk is mounted if needed (Disk_MountAndScanDirectory), Disk_SelectedEntry = the song number (at most 0x13),\n"
+     "that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (sub_FE0250,\n"
+     "sub_FE05AE ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.\n"
+     "Basis: body + the writer's header (MidiIn_SongSelect)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place

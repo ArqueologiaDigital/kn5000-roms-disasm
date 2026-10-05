@@ -1771,7 +1771,7 @@
 	.set T_F42574,                                                                      0x00F42574
 	.set T_F42578,                                                                      0x00F42578
 	.set T_F42580,                                                                      0x00F42580
-	.set T_F42584,                                                                      0x00F42584
+	.set T_MidiFilePlay_OnSongSelect,                                                                      0x00F42584
 	.set T_Disk_PortA3_Release_Call_Call,                                               0x00F42590
 	.set T_F42594,                                                                      0x00F42594
 	.set T_DiskApi_ReadFileToWindow_Entry,                                                                      0x00F425A8
@@ -6281,9 +6281,9 @@ MainTask_Loop:
 	call T_PartNotes_ReleaseAllTrackNotes                                        ; F8219D  1d c8 13 f4
 	call T_F41F18                                        ; F821A1  1d 18 1f f4
 .LF821A5:
-	bit	7, (0xa3:8)                                   ; F821A5  f0 a3 cf
+	bit	7, (MidiIn_SongSelectValue:8)                                   ; F821A5  f0 a3 cf
 	jr z, .LF821AE                                       ; F821A8  66 04
-	call T_F42584                                        ; F821AA  1d 84 25 f4
+	call T_MidiFilePlay_OnSongSelect                                        ; F821AA  1d 84 25 f4
 .LF821AE:
 	calr MainTask_RearmTickCountdown                                      ; F821AE  1e 17 00
 	calr MainTask_ServiceTimedEvents                                      ; F821B1  1e f0 01
@@ -70476,12 +70476,12 @@ MidiIn_SystemSubTable:
 ; ---------------------------------------------------------------------
 MidiIn_SongPosition:   ; entry: MidiIn_SystemSubTable[2]
 	ld wa, (MidiIn_MsgData1:16)                          ; FA61A4  d1 41 19 20   ld WA,(0x1941)
-	ld	(0xa4:8), a                               ; FA61A8  f0 a4 41   ld (0xa4),A
+	ld	(MidiIn_SongPositionLo:8), a                               ; FA61A8  f0 a4 41   ld (0xa4),A
 	m_bit 2, MD16, 0x7f34                         ; FA61AB  f1 34 7f ca   bit 2,(0x7f34)
 	jr z, .LFA61B4                                ; FA61AF  66 03
 	set 0x07,W                                    ; FA61B1  c8 31 07
 .LFA61B4:
-	ld	(0xa5:8), w                               ; FA61B4  f0 a5 40   ld (0xa5),W
+	ld	(MidiIn_SongPositionHi:8), w                               ; FA61B4  f0 a5 40   ld (0xa5),W
 	ret                                           ; FA61B7  0e
 
 ; ---------------------------------------------------------------------
@@ -70499,7 +70499,7 @@ MidiIn_SongSelect:   ; entry: MidiIn_SystemSubTable[3]
 	jr z, .LFA61C5                                ; FA61C0  66 03
 	set 0x07,A                                    ; FA61C2  c9 31 07
 .LFA61C5:
-	ld	(0xa3:8), a                               ; FA61C5  f0 a3 41   ld (0xa3),A
+	ld	(MidiIn_SongSelectValue:8), a                               ; FA61C5  f0 a3 41   ld (0xa3),A
 	ret                                           ; FA61C8  0e
 
 ; ---------------------------------------------------------------------
@@ -86528,7 +86528,11 @@ T_F41F1C_Nop:
 	call T_Dev7F_WriteSlot8_Slot2
 	call T_Dev7F_WriteSlot8_Slot3
 	ret
-sub_FAEC8A:
+; SeqEvt_ResetPlayingSlotControllers: T_F41F18: for each of the 17 sequencer slots whose bit is set in the playing mask (0x60341E), with its part from
+;   BStore_TrackToPart: channel pressure 0 (D0), modulation 0 (D1), pitch bend centre (D2 0x00 0x40) through
+;   SeqEvt_ApplyCtrlEvent, and a B0 / 0xB5 0x7F event through SeqEvt_ApplyParamEvent; then SeqEvt_FlushShadows,
+;   sub_FAF772, T_Queue2C00_DrainPassB.  SeqEvt_FlushShadows' header calls it the slot-reset routine.  Basis: body.
+SeqEvt_ResetPlayingSlotControllers:
 	ld (0x60f31d:24), 0x00
 .LFAEC90:
 	xor XWA,XWA
@@ -87324,7 +87328,7 @@ T_F41F28_Nop:
 	ret
 ; SeqEvt_FlushShadows -- for each of the 17 sequencer slots, post every deferred value (bit 7 set) and clear its flag: 0x60F630 -> SeqEvt_PostChanPressure, 0x60F5B0 -> SeqEvt_PostModulation, 0x60F5D0 (16-bit) -> SeqEvt_PostPitchBend, 0x60F590 -> the expression post at 0xFAF352, 0x60F610 -> SeqEvt_PostPartVolume
 ; Evidence: five `ldw BC,0x11` sweeps with `bit 7,(XIY) / res 7,(XIY)` at 0xFAF491-0xFAF55C, each setting (0x60F31D) to the slot index before the call.
-; Called from: the playback entry sub_FAED76 (directory T_F41F10) and the slot-reset routine sub_FAEC8A (T_F41F18).
+; Called from: the playback entry sub_FAED76 (directory T_F41F10) and the slot-reset routine SeqEvt_ResetPlayingSlotControllers (T_F41F18).
 SeqEvt_FlushShadows:
 	ld XIY,SeqEvt_PressureShadow
 	ldw bc, 0x11
@@ -163305,15 +163309,20 @@ Delay_Ticks:
 	popw hl                                              ; FE144A  4b
 	unlk XIZ                                             ; FE144B  ee 0d
 	ret                                                  ; FE144D  0e
-sub_FE144E:
+; MidiFilePlay_OnSongSelect: T_MidiFilePlay_OnSongSelect: when MidiIn_SongSelectValue bit 7 is set (MidiIn_SongSelect stored a received 0xF3) and transport C is stopped:
+;   the disk is mounted if needed (Disk_MountAndScanDirectory), Disk_SelectedEntry = the song number (at most 0x13),
+;   that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (sub_FE0250,
+;   sub_FE05AE ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.
+;   Basis: body + the writer's header (MidiIn_SongSelect).
+MidiFilePlay_OnSongSelect:
 	push XHL                                             ; FE144E  3b
 	push XIX                                             ; FE144F  3c
 	ld	c, (TransportC_State:8)                                      ; FE1450  c0 95 23
 	and C,0x04                                           ; FE1453  cb cc 04
-; (sub_FE1456 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FE144E;
+; (sub_FE1456 removed 2026-10-04: no code names it and the line above falls through into it -- part of MidiFilePlay_OnSongSelect;
 ;  notes/prom_a_stray_label_removal.py)
 	jrl nz, .LFE14CC                                         ; FE1456  7e 73 00
-	ld	c, (0xa3:8)                                      ; FE1459  c0 a3 23
+	ld	c, (MidiIn_SongSelectValue:8)                                      ; FE1459  c0 a3 23
 	and C,0x80                                           ; FE145C  cb cc 80
 	jrl z, .LFE14CC                                          ; FE145F  76 6a 00
 	calr sub_FE16FE                                          ; FE1462  1e 99 02
@@ -163322,7 +163331,7 @@ sub_FE144E:
 	jr z, .LFE146F                                           ; FE146A  66 03
 	calr Disk_MountAndScanDirectory                                          ; FE146C  1e b8 f0
 .LFE146F:
-	ld	h, (0xa3:8)                                      ; FE146F  c0 a3 26
+	ld	h, (MidiIn_SongSelectValue:8)                                      ; FE146F  c0 a3 26
 	res 0x07,H                                           ; FE1472  ce 30 07
 	ld (Disk_SelectedEntry:16), h                                   ; FE1475  f1 24 27 46
 	cp H,0x13                                            ; FE1479  ce cf 13
@@ -163357,7 +163366,7 @@ sub_FE144E:
 	calr sub_FE01BD                                          ; FE14C6  1e f4 ec
 	calr sub_FE1705                                          ; FE14C9  1e 39 02
 .LFE14CC:
-	res	7, (0xa3:8)                                   ; FE14CC  f0 a3 b7
+	res	7, (MidiIn_SongSelectValue:8)                                   ; FE14CC  f0 a3 b7
 	m_cp_mi8 MB16, Disk_LastError, 0x01                          ; FE14CF  c1 43 22 3f 01
 	jr nz, .LFE14DC                                          ; FE14D4  6e 06
 	m_set 4, MD16, UI_Request_Hi                                ; FE14D6  f1 71 20 bc

@@ -3485,7 +3485,7 @@ RENAMES = {
     "sub_FDE529": "ScreenButton_SoundEditFilterHpf24",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE0047": "SeqFile_Save_SaveRegs",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE07D0": "DiskSave_ComparePassword",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FE1456": "sub_FE144E",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FE1456": "MidiFilePlay_OnSongSelect",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE1DF9": "DiskLoad_ByContentType",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE2971": "DiskSave_CopyWordsToBuffer",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FE3B32": "sub_FE3B30",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4431,6 +4431,14 @@ RENAMES = {
     "T_F418D8": "T_CombiEdit_RestoreEditedIfComparing",
     "T_F41A00": "T_CombiEdit_Begin",
     "T_F41A04": "T_CombiEdit_End",
+    "sub_F4466D": "Seq_LocateToSongPosition",
+    "sub_F44E6B": "Seq_StopPlaybackOnRequest",
+    "sub_F45B1F": "Seq_RewindToStart",
+    "sub_FAEC8A": "SeqEvt_ResetPlayingSlotControllers",
+    "sub_FE144E": "MidiFilePlay_OnSongSelect",
+    "T_F42584": "T_MidiFilePlay_OnSongSelect",
+    "sub_F44033": "Seq_RewindToStart_Veneer",
+    "T_F40A6C": "T_Seq_RewindToStart_Veneer",
 }
 
 

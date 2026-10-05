@@ -169,6 +169,11 @@
 	.equ CombiEdit_EntryPart,			0x276d	; UI_PartIndex when COMBINATION EDIT began; restored when it ends -- CombiEdit_Begin / CombiEdit_End
 	.equ Combination_Current,			0x7620	; the current combination, one 0x2C0-byte record in CPU 2's preset format (0x7620..0x78DF) -- Combination_ReadFromCpu2 fills it; ParamImage_SnapshotCombination; CombiEdit_SwapForCompare
 
+; ---- wsa1/notes/FINDINGS-prom_a-seqbuf-and-timed-events.md -- "MIDI Song Position Pointer and Song Select"
+	.equ MidiIn_SongSelectValue,			0x00a3	; the last MIDI Song Select's song number; bit 7 = pending (set only while (0x7F33) bit 3 enables it) -- MidiIn_SongSelect writes it; MidiFilePlay_OnSongSelect takes it
+	.equ MidiIn_SongPositionLo,			0x00a4	; the last MIDI Song Position Pointer's low 7 bits (sixteenth notes) -- MidiIn_SongPosition writes it; Seq_LocateToSongPosition takes it
+	.equ MidiIn_SongPositionHi,			0x00a5	; its high 7 bits; bit 7 = pending (set only while (0x7F34) bit 2 enables it) -- MidiIn_SongPosition; Seq_LocateToSongPosition clears bit 7
+
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers"
 	.equ Drawbar_ReloadMark,			0x28a0	; 15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it -- Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked
 
