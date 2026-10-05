@@ -32,7 +32,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: wsa1 wsa1-clean everything gate gate-wsa1 gate-all
-.PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
+.PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website dispatch-census
 .SECONDARY:
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
@@ -1128,6 +1128,13 @@ issues:
 
 rom-status:
 	python scripts/build/generate_rom_status_diagram.py
+
+# Code-coverage evidence ledger (CLAUDE.md "Code-Coverage Evidence Ledger"): rebuild the address maps in scratch,
+# compare with the newest committed snapshot (exit 1 if a figure rose), then write today's snapshot to docs/coverage/.
+dispatch-census:
+	python3 scripts/analysis/dispatch_table_census/build_maps.py
+	python3 scripts/analysis/dispatch_table_census/census.py --compare $$(ls docs/coverage/dispatch-census-*.json | sort | tail -1)
+	python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
 
 website: gallery issues rom-status
 	@echo "Website content updated. Don't forget to commit technics-docs."

@@ -1,0 +1,99 @@
+dispatch-table census, 2026-10-05, measured at 9c61e39b
+tool: scripts/analysis/dispatch_table_census/ (rules in census.py's docstring)
+
+image      framed  used  NOT   newT newT(x) spellT |   U U-NOT U-newT null
+v10           366   307   59    284       0      0 |  31    11     23    3
+v9            364   305   59    284       0      0 |  33    13     23    4
+v7            361   259  102    316       0      0 |  32    32     17    4
+v142           43    43    0      0       0      0 |   0     0      0    0
+subboot         2     1    1      0       0     44 |   0     0      0    0
+tabledata       9     9    0      0       0      0 |   0     0      0    0
+customdata      0     0    0      0       0      0 |   0     0      0    0
+hdae5000       68    68    0      0       0      0 |   0     0      0    0
+prom_a        424   418    6     12       0      4 |   0     0      0    0
+prom_b        291   280   11     44     188      1 |   0     0      0    0
+prom_c         47    46    1      5       0      0 |   0     0      0    0
+
+distinct new-entry-point targets by blocking class (framed tables, all owners):
+  v10        {'dataother': 1, 'nolabel': 283}
+  v9         {'dataother': 1, 'nolabel': 283}
+  v7         {'databyte': 1, 'nolabel': 315}
+  v142       {}
+  subboot    {}
+  tabledata  {}
+  customdata {}
+  hdae5000   {}
+  prom_a     {'midinsn': 11, 'nolabel': 1}
+  prom_b     {'databyte': 8, 'dataother': 1, 'midinsn': 140, 'nolabel': 79, 'text': 4}
+  prom_c     {'midinsn': 5}
+
+
+== v10: top not-used tables
+  A 0xE0DD46 GUI_DisplayStructData_0xD68                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v10_program.s:489
+  A 0xE0DD8E GUI_DisplayStructData_0xDB0                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v10_program.s:510
+  A 0xE0DE66 GUI_DisplayStructData_0xE88                  entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v10_program.s:573
+  A 0xE0E016 GUI_DisplayStructData_0x1038                 entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v10_program.s:699
+  A 0xE0DDD6 GUI_DisplayStructData_0xDF8                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v10_program.s:531
+  A 0xE0DF3E GUI_DisplayStructData_0xF60                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v10_program.s:636
+  A 0xE0E05E GUI_DisplayStructData_0x1080                 entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v10_program.s:720
+  A 0xE0E0A6 GUI_DisplayStructData_0x10C8                 entries=14   ptrs=14   unusedT=12   {'nolabel': 12}  kn5000_v10_program.s:741
+  A 0xE0DCFE GUI_DisplayStructData_0xD20                  entries=18   ptrs=17   unusedT=11   {'nolabel': 11}  kn5000_v10_program.s:468
+  A 0xE0DEF6 GUI_DisplayStructData_0xF18                  entries=18   ptrs=17   unusedT=11   {'nolabel': 11}  kn5000_v10_program.s:615
+
+== v9: top not-used tables
+  A 0xE0DD46 GUI_DisplayStructData_0xD68                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v9_program.s:489
+  A 0xE0DD8E GUI_DisplayStructData_0xDB0                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v9_program.s:510
+  A 0xE0DE66 GUI_DisplayStructData_0xE88                  entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v9_program.s:573
+  A 0xE0E016 GUI_DisplayStructData_0x1038                 entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v9_program.s:699
+  A 0xE0DDD6 GUI_DisplayStructData_0xDF8                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v9_program.s:531
+  A 0xE0DF3E GUI_DisplayStructData_0xF60                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v9_program.s:636
+  A 0xE0E05E GUI_DisplayStructData_0x1080                 entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v9_program.s:720
+  A 0xE0E0A6 GUI_DisplayStructData_0x10C8                 entries=14   ptrs=14   unusedT=12   {'nolabel': 12}  kn5000_v9_program.s:741
+  A 0xE0DCFE GUI_DisplayStructData_0xD20                  entries=18   ptrs=17   unusedT=11   {'nolabel': 11}  kn5000_v9_program.s:468
+  A 0xE0DEF6 GUI_DisplayStructData_0xF18                  entries=18   ptrs=17   unusedT=11   {'nolabel': 11}  kn5000_v9_program.s:615
+
+== v7: top not-used tables
+  A 0xE0DD46 GUI_DisplayStructData_0xD68                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v7_program.s:489
+  A 0xE0DD8E GUI_DisplayStructData_0xDB0                  entries=18   ptrs=17   unusedT=15   {'nolabel': 15}  kn5000_v7_program.s:510
+  A 0xE0DE66 GUI_DisplayStructData_0xE88                  entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v7_program.s:573
+  A 0xE0E016 GUI_DisplayStructData_0x1038                 entries=18   ptrs=17   unusedT=14   {'nolabel': 14}  kn5000_v7_program.s:699
+  A 0xE0DDD6 GUI_DisplayStructData_0xDF8                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v7_program.s:531
+  A 0xE0DF3E GUI_DisplayStructData_0xF60                  entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v7_program.s:636
+  A 0xE0E05E GUI_DisplayStructData_0x1080                 entries=18   ptrs=17   unusedT=13   {'nolabel': 13}  kn5000_v7_program.s:720
+  A 0xEE2D6C SeqChan_CommandHandlers                      entries=39   ptrs=39   unusedT=13   {'nolabel': 13}  ui_widgets/widget_dispatch.s:1299
+  A 0xE0E0A6 GUI_DisplayStructData_0x10C8                 entries=14   ptrs=14   unusedT=12   {'nolabel': 12}  kn5000_v7_program.s:741
+  A 0xE0DCFE GUI_DisplayStructData_0xD20                  entries=18   ptrs=17   unusedT=11   {'nolabel': 11}  kn5000_v7_program.s:468
+
+== v142: top not-used tables
+
+== subboot: top not-used tables
+  A 0xFFFF00 VECTOR_TABLE                                 entries=45   ptrs=45   unusedT=44   {'numeric': 44}  kn5000_subcpu_boot.s:3002
+
+== tabledata: top not-used tables
+
+== customdata: top not-used tables
+
+== hdae5000: top not-used tables
+
+== prom_a: top not-used tables
+  A 0xF8E77C AddrTable_F8E77C                             entries=8    ptrs=8    unusedT=6    {'midinsn/num': 3, 'numeric': 2, 'midinsn': 2}  prom_a/wsa1_prom_a.s:25802
+  J 0xFAA000 ParamModule_PhaseVector_StaleCopy            entries=5    ptrs=5    unusedT=5    {'midinsn': 4, 'nolabel': 1}  prom_a/wsa1_prom_a.s:77897
+  A 0xF8E7A9 AddrTable_F8E7A9                             entries=9    ptrs=9    unusedT=3    {'midinsn/num': 2, 'numeric': 3}  prom_a/wsa1_prom_a.s:25817
+  A 0xF85E8A EntryPoint_Records                           entries=2    ptrs=1    unusedT=1    {'numeric': 1}  prom_a/wsa1_prom_a.s:11215
+  A 0xF85E96 EntryPoint_Records                           entries=2    ptrs=1    unusedT=1    {'numeric': 1}  prom_a/wsa1_prom_a.s:11217
+  A 0xF85EAE EntryPoint_Records                           entries=2    ptrs=1    unusedT=1    {'numeric': 1}  prom_a/wsa1_prom_a.s:11221
+
+== prom_b: top not-used tables
+  A 0xF014EE PtrArray_F014EE                              entries=196  ptrs=185  unusedT=134  {'nolabel/num': 48, 'midinsn/num': 135, 'numeric': 1}  prom_b/wsa1_prom_b.s:4674
+  A 0xF00762 PtrTable_F00762                              entries=39   ptrs=37   unusedT=22   {'midinsn/num': 31, 'nolabel/num': 6}  prom_b/wsa1_prom_b.s:3100
+  A 0xF0EE6C OldBuild_ValueGlyph_Table                    entries=29   ptrs=29   unusedT=19   {'midinsn': 14, 'nolabel': 5}  prom_b/wsa1_prom_b.s:28607
+  J 0xF40000 prom_b routine directory                     entries=2002 ptrs=2002 unusedT=19   {'midinsn/num': 5, 'nolabel/num': 1, 'text': 4, 'databyte': 8, 'dataother': 1}  prom_b/wsa1_prom_b.s
+  A 0xF00C4E PtrArray_F00C4E                              entries=21   ptrs=21   unusedT=18   {'midinsn/num': 11, 'nolabel/num': 7}  prom_b/wsa1_prom_b.s:3551
+  A 0xF0ED50 OldBuild_DLHandlerTables_Tail                entries=39   ptrs=39   unusedT=12   {'midinsn': 17, 'nolabel': 4}  prom_b/wsa1_prom_b.s:28509
+  A 0xF1AFBD PtrTable_F1AFBD                              entries=6    ptrs=6    unusedT=6    {'nolabel/num': 6}  prom_b/wsa1_prom_b.s:51547
+  A 0xF1AEB5 ScreenButtons_CombiEditPartMenu              entries=23   ptrs=23   unusedT=2    {'nolabel/num': 2}  prom_b/wsa1_prom_b.s:51415
+  A 0xF1AF11 ScreenButtons_CombiEditInternalSound         entries=23   ptrs=23   unusedT=2    {'nolabel/num': 2}  prom_b/wsa1_prom_b.s:51447
+  A 0xF00340 PtrTable_F00340                              entries=35   ptrs=33   unusedT=1    {'midinsn/num': 7}  prom_b/wsa1_prom_b.s:2723
+
+== prom_c: top not-used tables
+  J 0xFFF0D1 UNREFERENCED_TRAMPOLINES                     entries=5    ptrs=5    unusedT=5    {'midinsn': 5}  prom_c/boot/reset_and_vectors.s:233

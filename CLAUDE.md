@@ -827,6 +827,45 @@ This is a strict, iterative policy:
 
 **This policy exists because** jump tables are the primary dispatch mechanism in the firmware. Undocumented tables and their targets represent significant gaps in firmware understanding. Systematic coverage ensures complete reverse engineering.
 
+### Code-Coverage Evidence Ledger (STRICT POLICY)
+
+**"Full code coverage" -- or "every entry point is known", spec L2 -- may only be claimed with a committed
+census that shows it.** The instrument is `scripts/analysis/dispatch_table_census/`, whose README says
+what each script answers. The ledger is `docs/coverage/`, holding dated `.txt` + `.json` snapshots. Set up
+2026-10-05 at the owner's request: *"establish a longterm policy to keep track of that kind of info, so
+that we can have strong evidence whenever we reach true full code-coverage"*.
+
+1. **What it tracks.** For every image of both models (KN5000 v10/v9/v7, v142, subboot, table data,
+   custom data, HD-AE5000; WSA1 prom_a/b/c), each jump/call table is tracked: `.long` tables, jump-vector
+   runs, offset tables, the prom_b directory, and unframed pointer runs. For each table the ledger records:
+   - whether every entry that points into code lands on a labelled, disassembled instruction and is
+     spelled symbolically;
+   - if not, what blocks it: a hidden routine with no label, mid-instruction, `.incbin`, data, text, or a
+     numeric spelling.
+2. **When to run it: `make dispatch-census`.** Run it after any change that:
+   - adds or removes a table;
+   - converts `.incbin` / `.byte` bytes to code;
+   - places labels at table targets;
+   - or before quoting any coverage figure.
+   It compares with the newest snapshot, then writes today's. Commit the new snapshot **in the same commit**
+   as the change that moved the numbers. One snapshot per day is enough; a second run the same day
+   overwrites that day's file.
+3. **Monotonic.** `census.py --compare` exits 1 when any image's not-used tables, unused targets,
+   spelling-only targets or not-used unframed runs ROSE. A rise is a regression unless the commit message
+   says why. Example: a table found by hand, or a detector widened.
+4. **What a full-coverage claim needs.** Every image shows NOT = 0, newT = newT(x) = spellT = 0 and
+   U-NOT = 0 on a committed snapshot. The spec's other L1/L2 measurements must also hold. The claim names
+   the snapshot file and its commit.
+5. **The limits are part of the evidence.** The census is a lower bound, and its README lists what it
+   cannot see. A table found by hand that the census misses is a detector gap: widen the detector or list
+   the table in it in the same commit, so the census never knows less than the people do.
+6. **Reading the first snapshot** (2026-10-05, measured at 9c61e39b). No not-used table points into an
+   `.incbin`. Almost every blocked target is an already-decoded instruction start with no label:
+   - KN5000: `GUI_DisplayStructData_*` and `Label+N` targets;
+   - WSA1: entries into the middle of instructions from stale or other-build tables.
+   So what remains is mostly LABELLING and STALE-TABLE work rather than undisassembled code. Re-read this
+   paragraph against each new snapshot and update it when it stops being true.
+
 ### Binary Include Splitting (MANDATORY)
 
 **When disassembled code references an address inside a binary include, the binary must be split.**

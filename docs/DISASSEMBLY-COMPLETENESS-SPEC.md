@@ -75,6 +75,12 @@ For CODE territory:
 **Measurement:** routines named / total; routines with a complete header / total; address-shaped
 names remaining (must be zero); symbol-reference rows that disagree with the build (must be zero).
 
+*Added 2026-10-05:* the "every entry point is known ... through jump tables" clause is measured by
+`scripts/analysis/dispatch_table_census/` (`make dispatch-census`). Its dated snapshots in
+`docs/coverage/` are the ledger. Not-used tables, unused targets, spelling-only targets and not-used
+unframed runs must all be zero, on a committed snapshot, for this clause to hold (CLAUDE.md
+"Code-Coverage Evidence Ledger").
+
 ### L3 -- Data structures: specified, parsed, and round-tripped
 
 For DATA territory, for each distinct structure:
