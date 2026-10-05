@@ -47,6 +47,7 @@ LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):')
 # that asked it would forgive every loss the moment the work was done.  A
 # declaration has to survive the thing it declares.
 RENAMES = {
+    "CombiEditMixer_DirtySound": "CombiEdit_DirtySound",   # 2026-10-05: shared by MIXER and CONFIGURE
     "NoteRouting_ListChannel": "NoteRouting_SingleChannel",   # 2026-10-04: the Reference Guide's SINGLE CHANNEL
     "NoteRouting_PreviousListChannel": "NoteRouting_PreviousSingleChannel",   # 2026-10-04: with it
     "NoteRouting_RebuildFlags": "NoteRouting_ChangeFlags",   # 2026-10-04: RAM equate renamed (the builders' change bits, not outputs)
@@ -4405,6 +4406,31 @@ RENAMES = {
     "sub_FBE05D": "CombiEditMixer_ColumnKey",
     "sub_FBE0B9": "CombiEditMixer_ResetRowForPage",
     "sub_FBE0EF": "CombiEditMixer_SetDialButtons",
+    ".LFBE6C4": "CombiEditMixer_RepaintMarkedSound",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE74D": "CombiEditMixer_RepaintMarkedLocalControl",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE7E0": "CombiEditMixer_RepaintMarkedPanpot",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE868": "CombiEditMixer_RepaintMarkedVolume",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE8F0": "CombiEditMixer_RepaintMarkedReverbSend",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE978": "CombiEditMixer_RepaintMarkedEffect1Send",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBE9E7": "CombiEditMixer_RepaintMarkedEffect2OnOff",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEA5B": "CombiEditMixer_RepaintMarkedMainOut",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEAC8": "CombiEditMixer_RepaintMarkedMidiOutSetting",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEB35": "CombiEditMixer_RepaintMarkedMidiInSetting",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEBA6": "CombiEditMixer_RepaintMarkedBasicChannel",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEC1C": "CombiEditMixer_RepaintMarkedSubOut",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    ".LFBEC88": "CombiEditMixer_RepaintMarkedKeyShift",   # merged into the named label at its address (scripts/tools/wsa1_merge_local_aliases.py)
+    "sub_FBECC3": "CombiEdit_Begin",
+    "sub_FBED02": "CombiEdit_End",
+    "sub_FBED21": "CombiEdit_SaveOriginalForCompare",
+    "sub_FBEDD5": "CombiEdit_SwapForCompare",
+    "sub_FBEE83": "CombiEdit_RestoreEditedIfComparing",
+    "sub_FBF79C": "CombiEditConfigure_RepaintMarkedSounds",
+    "sub_FBF92F": "CombiEditConfigure_DrawMidiSettings",
+    "sub_FBF971": "CombiEditConfigure_DrawKeyLayers",
+    "sub_FBFA4D": "CombiEditConfigure_DrawVelocityLayers",
+    "T_F418D8": "T_CombiEdit_RestoreEditedIfComparing",
+    "T_F41A00": "T_CombiEdit_Begin",
+    "T_F41A04": "T_CombiEdit_End",
 }
 
 

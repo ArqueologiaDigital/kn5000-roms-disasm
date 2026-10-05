@@ -25,7 +25,7 @@ WHERE THE BOUNDARIES COME FROM
 
     C1  0xF1A037-0xF1A0BE is ONE interpreter-B record_array of 8 x 17, not two
         objects.  0xF1A048 is the STRIDE OPERAND of the loop in prom_a's
-        sub_FBF79C -- `lda_24 xwa,(0xf1a037)` at 0xFBF7C9, `lda_24
+        CombiEditConfigure_RepaintMarkedSounds -- `lda_24 xwa,(0xf1a037)` at 0xFBF7C9, `lda_24
         xix,(0xf1a048)` at 0xFBF7D1, `sub XIX,XWA` at 0xFBF7D6 -- not a
         boundary, and 0xF1A037 + 8*17 = 0xF1A0BF lands on the next proven run.
     C2  0xF1814E and 0xF181D6 are interpreter B, not AMBIG: the routine that
@@ -485,7 +485,7 @@ def structure():
 
 CORRECTION_TEXT = {
     "C1": "notes/prom_b_f17559_layout.py splits this object at 0xF1A048.  That "
-          "address is the STRIDE OPERAND of the loop in prom_a's sub_FBF79C: "
+          "address is the STRIDE OPERAND of the loop in prom_a's CombiEditConfigure_RepaintMarkedSounds: "
           "`lda_24 xwa,(0xf1a037)` at 0xFBF7C9, `lda_24 xix,(0xf1a048)` at "
           "0xFBF7D1, `sub XIX,XWA` at 0xFBF7D6 -- so 0xF1A048 is 0xF1A037 plus "
           "ONE RECORD, computed to get the stride 17, and not an object "

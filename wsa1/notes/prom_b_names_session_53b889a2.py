@@ -8,6 +8,7 @@ prom_b sees the prom_a ones through its `.set` imports.  The list is STATIC, wri
 so it outlives the sed files' application (the rule notes/prom_a_preservation_check.py states).
 """
 RENAMES = [
+    ("CombiEditMixer_DirtySound", "CombiEdit_DirtySound"),   # 2026-10-05: shared by MIXER and CONFIGURE
     ("NoteRouting_ListChannel", "NoteRouting_SingleChannel"),   # 2026-10-04: the Reference Guide's SINGLE CHANNEL
     ("NoteRouting_PreviousListChannel", "NoteRouting_PreviousSingleChannel"),   # 2026-10-04: with it
     ("NoteRouting_RebuildFlags", "NoteRouting_ChangeFlags"),   # 2026-10-04: RAM equate renamed (the builders' change bits, not outputs)
@@ -4228,4 +4229,16 @@ RENAMES = [
     ("sub_FBE05D", "CombiEditMixer_ColumnKey"),
     ("sub_FBE0B9", "CombiEditMixer_ResetRowForPage"),
     ("sub_FBE0EF", "CombiEditMixer_SetDialButtons"),
+    ("sub_FBECC3", "CombiEdit_Begin"),
+    ("sub_FBED02", "CombiEdit_End"),
+    ("sub_FBED21", "CombiEdit_SaveOriginalForCompare"),
+    ("sub_FBEDD5", "CombiEdit_SwapForCompare"),
+    ("sub_FBEE83", "CombiEdit_RestoreEditedIfComparing"),
+    ("sub_FBF79C", "CombiEditConfigure_RepaintMarkedSounds"),
+    ("sub_FBF92F", "CombiEditConfigure_DrawMidiSettings"),
+    ("sub_FBF971", "CombiEditConfigure_DrawKeyLayers"),
+    ("sub_FBFA4D", "CombiEditConfigure_DrawVelocityLayers"),
+    ("T_F418D8", "T_CombiEdit_RestoreEditedIfComparing"),
+    ("T_F41A00", "T_CombiEdit_Begin"),
+    ("T_F41A04", "T_CombiEdit_End"),
 ]

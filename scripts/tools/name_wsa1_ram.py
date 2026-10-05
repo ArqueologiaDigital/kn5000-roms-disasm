@@ -191,7 +191,7 @@ GROUPS = [
         0x5DB0: ("CombiRemap3_Map", "COMBI RE-MAP 3: 128 (number, bank) words", "CombiSel_ToNumberThroughRemap"),
     }),
     ("wsa1/notes/FINDINGS-prom_ab-parameter-events.md", "COMBINATION EDIT MIXER cells", {
-        0x2770: ("CombiEditMixer_DirtySound", "the parts of the edited group (bit = part & 7) whose Sound cell waits for a repaint", "CombiEditMixer_RepaintMarkedSound"),
+        0x2770: ("CombiEdit_DirtySound", "the parts of the edited group (bit = part & 7) whose sound waits for a repaint; MIXER and CONFIGURE both set it", "CombiEditMixer_RepaintMarkedSound; CombiEditConfigure_RepaintMarkedSounds"),
         0x2771: ("CombiEditMixer_DirtyLocalControl", "the parts of the edited group (bit = part & 7) whose LocalControl cell waits for a repaint", "CombiEditMixer_RepaintMarkedLocalControl"),
         0x2772: ("CombiEditMixer_DirtyPanpot", "the parts of the edited group (bit = part & 7) whose Panpot cell waits for a repaint", "CombiEditMixer_RepaintMarkedPanpot"),
         0x2773: ("CombiEditMixer_DirtyVolume", "the parts of the edited group (bit = part & 7) whose Volume cell waits for a repaint", "CombiEditMixer_RepaintMarkedVolume"),
@@ -206,6 +206,10 @@ GROUPS = [
         0x277C: ("CombiEditMixer_DirtyKeyShift", "the parts of the edited group (bit = part & 7) whose KeyShift cell waits for a repaint", "CombiEditMixer_RepaintMarkedKeyShift"),
     }),
     ("wsa1/notes/FINDINGS-prom_ab-parameter-events.md", "COMBINATION EDIT state", {
+        0x7620: ("Combination_Current", "the current combination, one 0x2C0-byte record in CPU 2's preset format (0x7620..0x78DF)", "Combination_ReadFromCpu2 fills it; ParamImage_SnapshotCombination; CombiEdit_SwapForCompare"),
+        0x1400: ("CombiEdit_CompareOriginal", "the combination as COMBINATION EDIT found it (0x2C0 bytes) -- what COMPARE shows", "CombiEdit_SaveOriginalForCompare; CombiEdit_SwapForCompare"),
+        0x1D00: ("CombiEdit_CompareEdited", "the edited combination, saved while COMPARE shows the original (0x2C0 bytes)", "CombiEdit_SwapForCompare; CombiEdit_RestoreEditedIfComparing"),
+        0x276D: ("CombiEdit_EntryPart", "UI_PartIndex when COMBINATION EDIT began; restored when it ends", "CombiEdit_Begin / CombiEdit_End"),
         0x2765: ("CombiEdit_Part", "the part the COMBINATION EDIT screens edit, 0..31; its group of 8 is & 0xF8", "ModeEnter_CombiEditPart; ScreenEnterBody_CombiEditMixer / _Configure; CombiEditMixer_ColumnKey"),
         0x2767: ("CombiEdit_Page", "the page of the INTERNAL SOUND / MIXER / CONFIGURE screen, 0..2", "ScreenEnter_CombiEditInternalSound; ScreenEnterBody_CombiEditMixer / _Configure; PtrTable_F1B03F / F1AE89 readers"),
         0x2769: ("CombiEdit_Row", "the selected field on the page", "ScreenEnter* / PageKey_*; CombiEditMixer_ColumnKey (IndexMap_F1B031[row])"),

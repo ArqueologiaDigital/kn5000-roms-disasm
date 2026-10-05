@@ -1306,10 +1306,10 @@
 	.set	CombiEditMixer_PaintSoundPanVolumePage, 0xFBE3F1
 	.set	CombiEditMixer_PaintSendsPage, 0xFBE433
 	.set	CombiEditMixer_PaintMidiPage, 0xFBE467
-	.set	sub_FBECC3, 0xFBECC3
-	.set	sub_FBED02, 0xFBED02
+	.set	CombiEdit_Begin, 0xFBECC3
+	.set	CombiEdit_End, 0xFBED02
 	.set	CompareKey_CombiEdit, 0xFBEDBE
-	.set	sub_FBEE83, 0xFBEE83
+	.set	CombiEdit_RestoreEditedIfComparing, 0xFBEE83
 	.set	ScreenEnter_CombiEditMenuRedirect, 0xFBEED9
 	.set	T_F41A0C_Nop, 0xFBEEE3
 	.set	T_F41A10_Nop, 0xFBEEE4
@@ -49563,7 +49563,7 @@ DL_F1A02D:
 ;           0xf42e0c` at prom_a 0xFBF7EA
 ; ★ CORRECTION C1: notes/prom_b_f17559_layout.py splits this object at
 ;                  0xF1A048.  That address is the STRIDE OPERAND of the loop
-;                  in prom_a's sub_FBF79C: `lda_24 xwa,(0xf1a037)` at
+;                  in prom_a's CombiEditConfigure_RepaintMarkedSounds: `lda_24 xwa,(0xf1a037)` at
 ;                  0xFBF7C9, `lda_24 xix,(0xf1a048)` at 0xFBF7D1, `sub
 ;                  XIX,XWA` at 0xFBF7D6 -- so 0xF1A048 is 0xF1A037 plus ONE
 ;                  RECORD, computed to get the stride 17, and not an object
@@ -90159,7 +90159,9 @@ T_PartParam_StepFieldById:	jp PartParam_StepFieldById  ; F418D0 (was T_F418D0) -
 ; Evidence: slot 0xF418D4 is `jp 0xFBB93C`; prom_a 0xFBB93C carries the label
 ;           PartParam_EnterFieldById (graded CONTENT).  DERIVATIVE name.
 T_PartParam_EnterFieldById:	jp PartParam_EnterFieldById  ; F418D4 (was T_F418D4) -> prom_a 0x3B93C
-T_F418D8:	jp sub_FBEE83  ; -> prom_a 0x3EE83
+; Evidence: slot 0xF418D8 is `jp 0xFBEE83`; prom_a 0xFBEE83 carries the label
+;           CombiEdit_RestoreEditedIfComparing (graded CONTENT).  DERIVATIVE name.
+T_CombiEdit_RestoreEditedIfComparing:	jp CombiEdit_RestoreEditedIfComparing  ; F418D8 (was T_F418D8) -> prom_a 0x3EE83
 	.fill 0x34, 1, 0x0E  ; 0xF418DC: 52 x ret
 T_PanelMode_System_Enter:	jp PanelMode_System_Enter  ; -> prom_a 0x1FED1
 T_PanelMode_System_Leave:	jp PanelMode_System_Leave  ; -> prom_a 0x1FEE2
@@ -90208,8 +90210,12 @@ T_Screen_DrumsMapNaming_Leave:	jp Screen_DrumsMapNaming_Leave  ; -> prom_a 0x1EF
 T_Screen_DrumsMapNaming_Button:	jp Screen_DrumsMapNaming_Button  ; -> prom_a 0x1F006
 T_F419C4:	jp T_F419C4_Nop  ; -> prom_a 0x1F034
 	.fill 0x38, 1, 0x0E  ; 0xF419C8: 56 x ret
-T_F41A00:	jp sub_FBECC3  ; -> prom_a 0x3ECC3
-T_F41A04:	jp sub_FBED02  ; -> prom_a 0x3ED02
+; Evidence: slot 0xF41A00 is `jp 0xFBECC3`; prom_a 0xFBECC3 carries the label
+;           CombiEdit_Begin (graded CONTENT).  DERIVATIVE name.
+T_CombiEdit_Begin:	jp CombiEdit_Begin  ; F41A00 (was T_F41A00) -> prom_a 0x3ECC3
+; Evidence: slot 0xF41A04 is `jp 0xFBED02`; prom_a 0xFBED02 carries the label
+;           CombiEdit_End (graded CONTENT).  DERIVATIVE name.
+T_CombiEdit_End:	jp CombiEdit_End  ; F41A04 (was T_F41A04) -> prom_a 0x3ED02
 ; Evidence: slot 0xF41A08 is `jp 0xFBEED9`; prom_a 0xFBEED9 carries the label
 ;           ScreenEnter_CombiEditMenuRedirect (graded CONTENT).  DERIVATIVE name.
 T_ScreenEnter_CombiEditMenuRedirect:	jp ScreenEnter_CombiEditMenuRedirect  ; F41A08 (was T_F41A08) -> prom_a 0x3EED9

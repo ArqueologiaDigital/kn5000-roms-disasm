@@ -2387,6 +2387,40 @@ ROWS = [
     ("FBE0EF", "CombiEditMixer_SetDialButtons",
      "ScreenEnterBody_CombiEditMixer: PanelDial_UpButton = CombiEdit_Part & 7, PanelDial_DownButton = the same + 0x80.\n"
      "Basis: body."),
+    # COMBINATION EDIT entry / exit, COMPARE, and the CONFIGURE page painters
+    ("FBECC3", "CombiEdit_Begin",
+     "T_CombiEdit_Begin: T_Mode_SwitchToCombination, T_SoundGroup_ReloadSelection, (0x2134) bit 1; the current part (UI_PartIndex)\n"
+     "becomes CombiEdit_Part and is kept in CombiEdit_EntryPart (0x276D); T_NoteRouting_SetSoloAndRebuild(0),\n"
+     "(0x276F) = 0, then CombiEdit_SaveOriginalForCompare.  Basis: body."),
+    ("FBED02", "CombiEdit_End",
+     "T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_F42C9C, T_NoteRouting_SetSoloAndRebuild(0),\n"
+     "(0x276F) = 0, CombiEdit_CompareOff.  Basis: body."),
+    ("FBED21", "CombiEdit_SaveOriginalForCompare",
+     "CombiEdit_Comparing = 0, (0x216E) = 0, (0x213B) bit 2, and the 0x2C0-byte current combination\n"
+     "(Combination_Current, 0x7620..0x78DF) copied word by word to CombiEdit_CompareOriginal (0x1400) -- what COMPARE\n"
+     "shows.  Basis: body + caller (CombiEdit_Begin)."),
+    ("FBEDD5", "CombiEdit_SwapForCompare",
+     "T_ParamImage_SnapshotCombination_Entry, then: COMPARE turned on (CombiEdit_Comparing 1) -> the edited combination\n"
+     "is saved to CombiEdit_CompareEdited (0x1D00) and CombiEdit_CompareOriginal loaded into Combination_Current; turned\n"
+     "off -> CombiEdit_CompareEdited restored; then T_ParamImage_QueueDiffCombination sends what changed.  Callers:\n"
+     "CombiEdit_CompareOn / _CompareOff.  Basis: body + callers."),
+    ("FBEE83", "CombiEdit_RestoreEditedIfComparing",
+     "T_CombiEdit_RestoreEditedIfComparing: in COMBINATION EDIT (PanelModeGroup 0x16) while CombiEdit_Comparing is 1, CombiEdit_CompareEdited\n"
+     "copied back into Combination_Current (the flag is left as it is).  Basis: body."),
+    ("FBF79C", "CombiEditConfigure_RepaintMarkedSounds",
+     "posted by CombiEdit_RunPendingRepaint, and called by the CONFIGURE page repaint: takes and clears\n"
+     "CombiEdit_DirtySound, then for the 8 parts shown from (0x276B) whose bit is set, T_F42CA0 and the part's\n"
+     "record of RecordArray_F1A037 (one record per part, stride from the array).  Basis: body."),
+    ("FBF92F", "CombiEditConfigure_DrawMidiSettings",
+     "CONFIGURE page 0 (CombiEdit_Page): byte 13 of the 8 parts from (0x276B) -- BASIC CHANNEL, LOCAL CONTROL, MIDI\n"
+     "OUT / IN SETTING (SysEx PART descriptors, offset 13) -- into UI_DrawScratch, drawn by DL_F1A2AD with\n"
+     "StringTable_F1A515.  Basis: table (descriptor match) + the page switch at 0xFBF904."),
+    ("FBF971", "CombiEditConfigure_DrawKeyLayers",
+     "CONFIGURE page 1: the second records of parts 0..7 (0x20..0x27), bytes 7 / 8 -- KEY LAYER LOW / HIGH -- each\n"
+     "divided by 3 into an x position of the keyboard bar (Record_F1AAEC).  Basis: table (descriptor match)."),
+    ("FBFA4D", "CombiEditConfigure_DrawVelocityLayers",
+     "CONFIGURE page 2: the second records of parts 0..7, bytes 9 / 10 -- VELOCITY LAYER LOW / HIGH -- into\n"
+     "UI_DrawScratch, drawn by DL_F1A7AF.  Basis: table (descriptor match)."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2420,7 +2454,7 @@ PLACED = [
      "0x16), _DrawMidiOutSetting, _DrawMidiInSetting, _DrawBasicChannel, _DrawSubOut.  Basis: body."),
     ("FBC768", "CombiEditMixer_OnSoundPanVolumePageEvent",
      "PtrTable_F1AE89[0], run by CombiEditMixer_OnPartParamEvent on page 0, for a part of the edited group: byte 0 / 1\n"
-     "/ 0x9B-0x9D (the sound) -> CombiEditMixer_DirtySound and (0x277D) = 1; 13 (LOCAL CONTROL, panel-mode group 0x16)\n"
+     "/ 0x9B-0x9D (the sound) -> CombiEdit_DirtySound and (0x277D) = 1; 13 (LOCAL CONTROL, panel-mode group 0x16)\n"
      "/ 8 (PANPOT) / 3 (VOLUME) -> the part's bit in that cell's dirty mask and its CombiEditMixer_RepaintMarked*\n"
      "callback posted (T_CallbackQueue_Post, T_Kernel_SemaSignal_StackArg).  Basis: body."),
     ("FBC82C", "CombiEditMixer_OnSendsPageEvent",

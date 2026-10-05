@@ -146,7 +146,7 @@
 	.equ SoundConv_Result2,				0x60f016	; result byte 2 (bank code, or the program to transmit) -- SoundSel_FromProgramAndBank, PartSound_ToProgramChange
 
 ; ---- wsa1/notes/FINDINGS-prom_ab-parameter-events.md -- "COMBINATION EDIT MIXER cells"
-	.equ CombiEditMixer_DirtySound,			0x2770	; the parts of the edited group (bit = part & 7) whose Sound cell waits for a repaint -- CombiEditMixer_RepaintMarkedSound
+	.equ CombiEdit_DirtySound,			0x2770	; the parts of the edited group (bit = part & 7) whose sound waits for a repaint; MIXER and CONFIGURE both set it -- CombiEditMixer_RepaintMarkedSound; CombiEditConfigure_RepaintMarkedSounds
 	.equ CombiEditMixer_DirtyLocalControl,		0x2771	; the parts of the edited group (bit = part & 7) whose LocalControl cell waits for a repaint -- CombiEditMixer_RepaintMarkedLocalControl
 	.equ CombiEditMixer_DirtyPanpot,		0x2772	; the parts of the edited group (bit = part & 7) whose Panpot cell waits for a repaint -- CombiEditMixer_RepaintMarkedPanpot
 	.equ CombiEditMixer_DirtyVolume,		0x2773	; the parts of the edited group (bit = part & 7) whose Volume cell waits for a repaint -- CombiEditMixer_RepaintMarkedVolume
@@ -161,9 +161,13 @@
 	.equ CombiEditMixer_DirtyKeyShift,		0x277c	; the parts of the edited group (bit = part & 7) whose KeyShift cell waits for a repaint -- CombiEditMixer_RepaintMarkedKeyShift
 
 ; ---- wsa1/notes/FINDINGS-prom_ab-parameter-events.md -- "COMBINATION EDIT state"
+	.equ CombiEdit_CompareOriginal,			0x1400	; the combination as COMBINATION EDIT found it (0x2C0 bytes) -- what COMPARE shows -- CombiEdit_SaveOriginalForCompare; CombiEdit_SwapForCompare
+	.equ CombiEdit_CompareEdited,			0x1d00	; the edited combination, saved while COMPARE shows the original (0x2C0 bytes) -- CombiEdit_SwapForCompare; CombiEdit_RestoreEditedIfComparing
 	.equ CombiEdit_Part,				0x2765	; the part the COMBINATION EDIT screens edit, 0..31; its group of 8 is & 0xF8 -- ModeEnter_CombiEditPart; ScreenEnterBody_CombiEditMixer / _Configure; CombiEditMixer_ColumnKey
 	.equ CombiEdit_Page,				0x2767	; the page of the INTERNAL SOUND / MIXER / CONFIGURE screen, 0..2 -- ScreenEnter_CombiEditInternalSound; ScreenEnterBody_CombiEditMixer / _Configure; PtrTable_F1B03F / F1AE89 readers
 	.equ CombiEdit_Row,				0x2769	; the selected field on the page -- ScreenEnter* / PageKey_*; CombiEditMixer_ColumnKey (IndexMap_F1B031[row])
+	.equ CombiEdit_EntryPart,			0x276d	; UI_PartIndex when COMBINATION EDIT began; restored when it ends -- CombiEdit_Begin / CombiEdit_End
+	.equ Combination_Current,			0x7620	; the current combination, one 0x2C0-byte record in CPU 2's preset format (0x7620..0x78DF) -- Combination_ReadFromCpu2 fills it; ParamImage_SnapshotCombination; CombiEdit_SwapForCompare
 
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers"
 	.equ Drawbar_ReloadMark,			0x28a0	; 15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it -- Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked

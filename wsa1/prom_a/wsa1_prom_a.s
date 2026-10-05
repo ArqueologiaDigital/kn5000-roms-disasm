@@ -1572,7 +1572,7 @@
 	.set T_Screen_DataLoadFilter_Enter,                                                 0x00F41998
 	.set T_Screen_DspEffect_Enter,                                                      0x00F419A8
 	.set T_Screen_DrumsMapNaming_Enter,                                                 0x00F419B8
-	.set T_F41A00,                                                                      0x00F41A00
+	.set T_CombiEdit_Begin,                                                                      0x00F41A00
 	.set T_ScreenEnter_CombiEditMenuRedirect,                                                                      0x00F41A08
 	.set T_ScreenEnter_CombiEditMenu,                                                                      0x00F41A18
 	.set T_F41A28,                                                                      0x00F41A28
@@ -7854,7 +7854,7 @@ VersionScreen_Glyphs:
 PowerFail_VerifySavedBlocks:
 	ld XHL,0x00007fd1                                    ; F82C80  43 d1 7f 00 00
 	ld (XHL),0x00                                        ; F82C85  b3 00 00
-	ld XIY,0x00007620                                    ; F82C88  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F82C88  45 20 76 00 00
 	ld XIX,0x00007fd2                                    ; F82C8D  44 d2 7f 00 00
 	calr PowerFail_VerifyChecksum512                                      ; F82C92  1e 3e 00
 	jr c, .LF82C99                                       ; F82C95  67 02
@@ -8611,7 +8611,7 @@ NMI_PowerFail_SaveAndHalt:
 	jr z, NMI_PowerFail__stop                                ; F8307C  66 22
 	call T_F4030C                                 ; F8307E  1d 0c 03 f4
 	call T_F40A28                                 ; F83082  1d 28 0a f4
-	ld XIY,0x00007620                             ; F83086  45 20 76 00 00
+	ld XIY,Combination_Current                             ; F83086  45 20 76 00 00
 	ld XIX,0x00007fd2                             ; F8308B  44 d2 7f 00 00
 	calr PowerFail_Checksum512                                 ; F83090  1e 23 00
 	ld XIY,0x00617800                             ; F83093  45 00 78 61 00
@@ -13797,7 +13797,7 @@ PanelScreen_VtableTable:
 	.long PanelScreen_NullVtable                ; F86F0D  [19]   -> PanelScreen_NullVtable
 	.long T_ModeEnter_SoundCopy                              ; F86F11  [20]   -> 0xF42254
 	.long T_ModeEnter_SoundCopy_Call                              ; F86F15  [21]   -> 0xF4225C
-	.long T_F41A00                              ; F86F19  [22]   -> 0xF41A00
+	.long T_CombiEdit_Begin                              ; F86F19  [22]   -> 0xF41A00
 	.long T_F41F54                              ; F86F1D  [23]   -> 0xF41F54
 	.long PanelScreen_NullVtable                ; F86F21  [24]   -> PanelScreen_NullVtable
 	.long PanelScreen_NullVtable                ; F86F25  [25]   -> PanelScreen_NullVtable
@@ -32449,13 +32449,13 @@ Mode_SwitchToCombination:
 	ld d, 0x00:opc                                          ; F90C3B  24 00
 	ld w, 0xf0:opc                                          ; F90C3D  20 f0
 	call T_Queue2C00_AppendRegs                          ; F90C3F  1d 38 0f f4
-	ld XIY,0x00007620                                    ; F90C43  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F90C43  45 20 76 00 00
 	ld XIX,0x00007000                                    ; F90C48  44 00 70 00 00
 	ld XBC,0x00000160                                    ; F90C4D  41 60 01 00 00
 	ldirw                                                ; F90C52  95 11
 	call T_ParamImage_SnapshotCombination_Entry                                        ; F90C54  1d 4c 02 f4
 	ld XIY,0x00007300                                    ; F90C58  45 00 73 00 00
-	ld XIX,0x00007620                                    ; F90C5D  44 20 76 00 00
+	ld XIX,Combination_Current                                    ; F90C5D  44 20 76 00 00
 	ld XBC,0x00000160                                    ; F90C62  41 60 01 00 00
 	ldirw                                                ; F90C67  95 11
 	call T_ParamImage_QueueDiffCombination                                        ; F90C69  1d 48 02 f4
@@ -32478,13 +32478,13 @@ Mode_SwitchToSound:
 	ld d, 0x00:opc                                          ; F90C8B  24 00
 	ld w, 0xf0:opc                                          ; F90C8D  20 f0
 	call T_Queue2C00_AppendRegs                          ; F90C8F  1d 38 0f f4
-	ld XIY,0x00007620                                    ; F90C93  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F90C93  45 20 76 00 00
 	ld XIX,0x00007300                                    ; F90C98  44 00 73 00 00
 	ld XBC,0x00000160                                    ; F90C9D  41 60 01 00 00
 	ldirw                                                ; F90CA2  95 11
 	call T_ParamImage_SnapshotCombination_Entry                                        ; F90CA4  1d 4c 02 f4
 	ld XIY,0x00007000                                    ; F90CA8  45 00 70 00 00
-	ld XIX,0x00007620                                    ; F90CAD  44 20 76 00 00
+	ld XIX,Combination_Current                                    ; F90CAD  44 20 76 00 00
 	ld XBC,0x00000160                                    ; F90CB2  41 60 01 00 00
 	ldirw                                                ; F90CB7  95 11
 	call T_ParamImage_QueueDiffCombination                                        ; F90CB9  1d 48 02 f4
@@ -42054,7 +42054,7 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	ld (0x218a:16), a                                   ; F96030  f1 8a 21 41
 	ld xwa, (0x78b3:16)                                 ; F96034  e1 b3 78 20
 	ld (0x2181:16), xwa                                 ; F96038  f1 81 21 60
-	ld XIY,0x00007620                                    ; F9603C  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F9603C  45 20 76 00 00
 	ld XIX,0x00608000                                    ; F96041  44 00 80 60 00
 	ld XBC,0x000004b0                                    ; F96046  41 b0 04 00 00
 	ldirw                                                ; F9604B  95 11
@@ -42090,7 +42090,7 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	cp XIY,0x0000095e                                    ; F96098  ed cf 5e 09 00 00
 	jrl nc, .LF96145                                     ; F9609E  7f a4 00
 	m_and_mi8 MB16, 0x2180, 0xfc                         ; F960A1  c1 80 21 3c fc
-	ld D,(XIY+0x7620)                                    ; F960A6  c3 f5 20 76 24
+	ld D,(XIY+Combination_Current)                                    ; F960A6  c3 f5 20 76 24
 	cp D,0xff                                            ; F960AB  cc cf ff
 	jr nz, .LF960B6                                      ; F960AE  6e 06
 	inc 1,IY                                             ; F960B0  dd 61
@@ -42100,12 +42100,12 @@ T_F401F0_Nop:   ; entry: prom_b routine directory
 	inc 1,IY                                             ; F960B6  dd 61
 	xor E,E                                              ; F960B8  cd d5
 	xor B,B                                              ; F960BA  ca d2
-	ld C,(XIY+0x7620)                                    ; F960BC  c3 f5 20 76 23
+	ld C,(XIY+Combination_Current)                                    ; F960BC  c3 f5 20 76 23
 	and BC,BC                                            ; F960C1  d9 c1
 	jr z, .LF96140                                       ; F960C3  66 7b
 .LF960C5:
 	inc 1,IY                                             ; F960C5  dd 61
-	ld A,(XIY+0x7620)                                    ; F960C7  c3 f5 20 76 21
+	ld A,(XIY+Combination_Current)                                    ; F960C7  c3 f5 20 76 21
 	ld XIZ,0x00608000                                    ; F960CC  46 00 80 60 00
 	cp	a, (xiz+iy)                          ; F960D1  c3 07 f8 f4 f1
 	jr z, .LF9613B                                       ; F960D6  66 63
@@ -42219,7 +42219,7 @@ ParamImage_QueuePartFieldChange:   ; entry: reachable-run entry
 	inc 1,IX                                             ; F961D1  dc 61
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x00                    ; F961D3  f3 07 f8 f0 00 00
 	inc 1,IX                                             ; F961D9  dc 61
-	ld W,(XIY+0x7620)                                    ; F961DB  c3 f5 20 76 20
+	ld W,(XIY+Combination_Current)                                    ; F961DB  c3 f5 20 76 20
 	mx_st_mr8 MXD, ra_IZ, ra_IX, r0                      ; F961E0  f3 07 f8 f0 40
 	inc 1,IX                                             ; F961E5  dc 61
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0xff                    ; F961E7  f3 07 f8 f0 00 ff
@@ -42243,7 +42243,7 @@ ParamImage_QueueProgramBankPair:   ; entry: reachable-run entry
 	inc 1,IX                                             ; F96213  dc 61
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x01                    ; F96215  f3 07 f8 f0 00 01
 	inc 1,IX                                             ; F9621B  dc 61
-	ld W,(XIY+0x7620)                                    ; F9621D  c3 f5 20 76 20
+	ld W,(XIY+Combination_Current)                                    ; F9621D  c3 f5 20 76 20
 	mx_st_mr8 MXD, ra_IZ, ra_IX, r0                      ; F96222  f3 07 f8 f0 40
 	inc 1,IX                                             ; F96227  dc 61
 	mx_ld_mi8 MXD, ra_IZ, ra_IX, 0x7f                    ; F96229  f3 07 f8 f0 00 7f
@@ -42360,7 +42360,7 @@ ParamImage_SanitizeAll:   ; entry: branch/call in converted code
 	call T_DspEffect_SanitizeBlock                                        ; F9644A  1d 5c 2f f4
 	popw wa                                              ; F9644E  48
 	pop XWA                                              ; F9644F  58
-	ld XIY,0x00007620                                    ; F96450  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F96450  45 20 76 00 00
 	ld XIX,ScriptTableA_F969DD                           ; F96455  44 dd 69 f9 00
 	calr .LF964B9                                        ; F9645A  1e 5c 00
 	calr .LF96471                                        ; F9645D  1e 11 00
@@ -42377,7 +42377,7 @@ ParamImage_SanitizeAllAndHook:   ; entry: branch/call in converted code
 	calr .LF96469                                        ; F9646D  1e f9 ff
 	ret                                                  ; F96470  0e
 .LF96471:
-	ld XIY,0x00007620                                    ; F96471  45 20 76 00 00
+	ld XIY,Combination_Current                                    ; F96471  45 20 76 00 00
 	ld XIX,ScriptTableB_F96AA1                           ; F96476  44 a1 6a f9 00
 	calr .LF964B9                                        ; F9647B  1e 3b 00
 	ret                                                  ; F9647E  0e
@@ -43378,7 +43378,7 @@ Queue2C00_DrainPassB_SaveRegs:   ; entry: reachable-run entry
 ParamImage_SnapshotCombination:
 	push XIX                                             ; F97425  3c
 	lda xix, (0x608000:24)                               ; F97426  f2 00 80 60 34
-	lda xiy, (0x7620:16)                                ; F9742B  f1 20 76 35
+	lda xiy, (Combination_Current:16)                                ; F9742B  f1 20 76 35
 	ldw bc, 0x015f                                       ; F9742F  31 5f 01
 	ldirw                                                ; F97432  95 11
 	pop XIX                                              ; F97434  5c
@@ -43394,7 +43394,7 @@ ParamImage_SnapshotCombinationAndParts:
 	ld xwa, (0x78b3:16)                                 ; F97438  e1 b3 78 20
 	ld (0x2181:16), xwa                                 ; F9743C  f1 81 21 60
 	lda xix, (0x608000:24)                               ; F97440  f2 00 80 60 34
-	lda xiy, (0x7620:16)                                ; F97445  f1 20 76 35
+	lda xiy, (Combination_Current:16)                                ; F97445  f1 20 76 35
 	ldw bc, 0x046f                                       ; F97449  31 6f 04
 	ldirw                                                ; F9744C  95 11
 	pop XIX                                              ; F9744E  5c
@@ -43643,7 +43643,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld c, (0x76a2:16)                                   ; F975D0  c1 a2 76 23
 	cpl C                                                ; F975D4  cb 06
 	ld H,C                                               ; F975D6  cb 8e
-	ldw de, 0x7620                                       ; F975D8  32 20 76
+	ldw de, Combination_Current                                       ; F975D8  32 20 76
 	ldw bc, 0x76a2                                       ; F975DB  31 a2 76
 	sub BC,DE                                            ; F975DE  da a1
 	exts XBC                                             ; F975E0  e9 13
@@ -43717,7 +43717,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld c, (0x7f07:16)                                   ; F97676  c1 07 7f 23
 	and C,0x04                                           ; F9767A  cb cc 04
 	jr z, .LF97695                                       ; F9767D  66 16
-	ldw hl, 0x7620                                       ; F9767F  33 20 76
+	ldw hl, Combination_Current                                       ; F9767F  33 20 76
 	ldw bc, 0x78b2                                       ; F97682  31 b2 78
 	sub BC,HL                                            ; F97685  db a1
 	exts XBC                                             ; F97687  e9 13
@@ -43732,7 +43732,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,HL                                             ; F976A1  db 89
 	inc 1,BC                                             ; F976A3  d9 61
 	ld DE,BC                                             ; F976A5  d9 8a
-	ldw ix, 0x7620                                       ; F976A7  34 20 76
+	ldw ix, Combination_Current                                       ; F976A7  34 20 76
 	sub BC,IX                                            ; F976AA  dc a1
 	exts XBC                                             ; F976AC  e9 13
 	add XBC,0x00608000                                   ; F976AE  e9 c8 00 80 60 00
@@ -43775,7 +43775,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ldw bc, 0x78a2                                       ; F97712  31 a2 78
 	add BC,IX                                            ; F97715  dc 81
 	ld (xiz-4), bc                                       ; F97717  be fc 51
-	ldw wa, 0x7620                                       ; F9771A  30 20 76
+	ldw wa, Combination_Current                                       ; F9771A  30 20 76
 	sub BC,WA                                            ; F9771D  d8 a1
 	exts XBC                                             ; F9771F  e9 13
 	add XBC,0x00608000                                   ; F97721  e9 c8 00 80 60 00
@@ -43792,7 +43792,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,HL                                             ; F97741  db 89
 	inc 7,BC                                             ; F97743  d9 67
 	ld DE,BC                                             ; F97745  d9 8a
-	ldw ix, 0x7620                                       ; F97747  34 20 76
+	ldw ix, Combination_Current                                       ; F97747  34 20 76
 	sub BC,IX                                            ; F9774A  dc a1
 	exts XBC                                             ; F9774C  e9 13
 	add XBC,0x00608000                                   ; F9774E  e9 c8 00 80 60 00
@@ -44064,7 +44064,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97A53  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97A55  9e fc 81
 	ld (xiz-6), bc                                       ; F97A58  be fa 51
-	ldw wa, 0x7620                                       ; F97A5B  30 20 76
+	ldw wa, Combination_Current                                       ; F97A5B  30 20 76
 	sub BC,WA                                            ; F97A5E  d8 a1
 	exts XBC                                             ; F97A60  e9 13
 	add XBC,0x00608000                                   ; F97A62  e9 c8 00 80 60 00
@@ -44096,7 +44096,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97AA7  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97AA9  9e fc 81
 	ld (xiz-6), bc                                       ; F97AAC  be fa 51
-	ldw wa, 0x7620                                       ; F97AAF  30 20 76
+	ldw wa, Combination_Current                                       ; F97AAF  30 20 76
 	sub BC,WA                                            ; F97AB2  d8 a1
 	exts XBC                                             ; F97AB4  e9 13
 	add XBC,0x00608000                                   ; F97AB6  e9 c8 00 80 60 00
@@ -44128,7 +44128,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97AFB  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97AFD  9e fc 81
 	ld (xiz-6), bc                                       ; F97B00  be fa 51
-	ldw wa, 0x7620                                       ; F97B03  30 20 76
+	ldw wa, Combination_Current                                       ; F97B03  30 20 76
 	sub BC,WA                                            ; F97B06  d8 a1
 	exts XBC                                             ; F97B08  e9 13
 	add XBC,0x00608000                                   ; F97B0A  e9 c8 00 80 60 00
@@ -44160,7 +44160,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97B4F  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97B51  9e fc 81
 	ld (xiz-6), bc                                       ; F97B54  be fa 51
-	ldw wa, 0x7620                                       ; F97B57  30 20 76
+	ldw wa, Combination_Current                                       ; F97B57  30 20 76
 	sub BC,WA                                            ; F97B5A  d8 a1
 	exts XBC                                             ; F97B5C  e9 13
 	add XBC,0x00608000                                   ; F97B5E  e9 c8 00 80 60 00
@@ -44192,7 +44192,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97BA3  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97BA5  9e fc 81
 	ld (xiz-6), bc                                       ; F97BA8  be fa 51
-	ldw wa, 0x7620                                       ; F97BAB  30 20 76
+	ldw wa, Combination_Current                                       ; F97BAB  30 20 76
 	sub BC,WA                                            ; F97BAE  d8 a1
 	exts XBC                                             ; F97BB0  e9 13
 	add XBC,0x00608000                                   ; F97BB2  e9 c8 00 80 60 00
@@ -44224,7 +44224,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97BF7  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97BF9  9e fc 81
 	ld (xiz-6), bc                                       ; F97BFC  be fa 51
-	ldw wa, 0x7620                                       ; F97BFF  30 20 76
+	ldw wa, Combination_Current                                       ; F97BFF  30 20 76
 	sub BC,WA                                            ; F97C02  d8 a1
 	exts XBC                                             ; F97C04  e9 13
 	add XBC,0x00608000                                   ; F97C06  e9 c8 00 80 60 00
@@ -44256,7 +44256,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97C4B  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97C4D  9e fc 81
 	ld (xiz-6), bc                                       ; F97C50  be fa 51
-	ldw wa, 0x7620                                       ; F97C53  30 20 76
+	ldw wa, Combination_Current                                       ; F97C53  30 20 76
 	sub BC,WA                                            ; F97C56  d8 a1
 	exts XBC                                             ; F97C58  e9 13
 	add XBC,0x00608000                                   ; F97C5A  e9 c8 00 80 60 00
@@ -44288,7 +44288,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97C9F  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97CA1  9e fc 81
 	ld (xiz-6), bc                                       ; F97CA4  be fa 51
-	ldw wa, 0x7620                                       ; F97CA7  30 20 76
+	ldw wa, Combination_Current                                       ; F97CA7  30 20 76
 	sub BC,WA                                            ; F97CAA  d8 a1
 	exts XBC                                             ; F97CAC  e9 13
 	add XBC,0x00608000                                   ; F97CAE  e9 c8 00 80 60 00
@@ -44320,7 +44320,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97CF3  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97CF5  9e fc 81
 	ld (xiz-6), bc                                       ; F97CF8  be fa 51
-	ldw wa, 0x7620                                       ; F97CFB  30 20 76
+	ldw wa, Combination_Current                                       ; F97CFB  30 20 76
 	sub BC,WA                                            ; F97CFE  d8 a1
 	exts XBC                                             ; F97D00  e9 13
 	add XBC,0x00608000                                   ; F97D02  e9 c8 00 80 60 00
@@ -44352,7 +44352,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97D47  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97D49  9e fc 81
 	ld (xiz-6), bc                                       ; F97D4C  be fa 51
-	ldw wa, 0x7620                                       ; F97D4F  30 20 76
+	ldw wa, Combination_Current                                       ; F97D4F  30 20 76
 	sub BC,WA                                            ; F97D52  d8 a1
 	exts XBC                                             ; F97D54  e9 13
 	add XBC,0x00608000                                   ; F97D56  e9 c8 00 80 60 00
@@ -44384,7 +44384,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97D9B  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97D9D  9e fc 81
 	ld (xiz-6), bc                                       ; F97DA0  be fa 51
-	ldw wa, 0x7620                                       ; F97DA3  30 20 76
+	ldw wa, Combination_Current                                       ; F97DA3  30 20 76
 	sub BC,WA                                            ; F97DA6  d8 a1
 	exts XBC                                             ; F97DA8  e9 13
 	add XBC,0x00608000                                   ; F97DAA  e9 c8 00 80 60 00
@@ -44416,7 +44416,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97DEF  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97DF1  9e fc 81
 	ld (xiz-6), bc                                       ; F97DF4  be fa 51
-	ldw wa, 0x7620                                       ; F97DF7  30 20 76
+	ldw wa, Combination_Current                                       ; F97DF7  30 20 76
 	sub BC,WA                                            ; F97DFA  d8 a1
 	exts XBC                                             ; F97DFC  e9 13
 	add XBC,0x00608000                                   ; F97DFE  e9 c8 00 80 60 00
@@ -44448,7 +44448,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97E43  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97E45  9e fc 81
 	ld (xiz-6), bc                                       ; F97E48  be fa 51
-	ldw wa, 0x7620                                       ; F97E4B  30 20 76
+	ldw wa, Combination_Current                                       ; F97E4B  30 20 76
 	sub BC,WA                                            ; F97E4E  d8 a1
 	exts XBC                                             ; F97E50  e9 13
 	add XBC,0x00608000                                   ; F97E52  e9 c8 00 80 60 00
@@ -44480,7 +44480,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97E97  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97E99  9e fc 81
 	ld (xiz-6), bc                                       ; F97E9C  be fa 51
-	ldw wa, 0x7620                                       ; F97E9F  30 20 76
+	ldw wa, Combination_Current                                       ; F97E9F  30 20 76
 	sub BC,WA                                            ; F97EA2  d8 a1
 	exts XBC                                             ; F97EA4  e9 13
 	add XBC,0x00608000                                   ; F97EA6  e9 c8 00 80 60 00
@@ -44512,7 +44512,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97EEB  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97EED  9e fc 81
 	ld (xiz-6), bc                                       ; F97EF0  be fa 51
-	ldw wa, 0x7620                                       ; F97EF3  30 20 76
+	ldw wa, Combination_Current                                       ; F97EF3  30 20 76
 	sub BC,WA                                            ; F97EF6  d8 a1
 	exts XBC                                             ; F97EF8  e9 13
 	add XBC,0x00608000                                   ; F97EFA  e9 c8 00 80 60 00
@@ -44544,7 +44544,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,DE                                             ; F97F3F  da 89
 	m_add_rm MWD+r6, 0xfc, r1                            ; F97F41  9e fc 81
 	ld (xiz-6), bc                                       ; F97F44  be fa 51
-	ldw wa, 0x7620                                       ; F97F47  30 20 76
+	ldw wa, Combination_Current                                       ; F97F47  30 20 76
 	sub BC,WA                                            ; F97F4A  d8 a1
 	exts XBC                                             ; F97F4C  e9 13
 	add XBC,0x00608000                                   ; F97F4E  e9 c8 00 80 60 00
@@ -44566,7 +44566,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	add WA,BC                                            ; F97F73  d9 80
 	ld (xiz-4), wa                                       ; F97F75  be fc 50
 	ld IX,WA                                             ; F97F78  d8 8c
-	ldw de, 0x7620                                       ; F97F7A  32 20 76
+	ldw de, Combination_Current                                       ; F97F7A  32 20 76
 	sub WA,DE                                            ; F97F7D  da a0
 	exts XWA                                             ; F97F7F  e8 13
 	add XWA,0x00608000                                   ; F97F81  e8 c8 00 80 60 00
@@ -44617,7 +44617,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ldw bc, 0x7634                                       ; F97FEF  31 34 76
 	m_add_rm MWD+r6, 0xfe, r1                            ; F97FF2  9e fe 81
 	ld (xiz-4), bc                                       ; F97FF5  be fc 51
-	ldw wa, 0x7620                                       ; F97FF8  30 20 76
+	ldw wa, Combination_Current                                       ; F97FF8  30 20 76
 	sub BC,WA                                            ; F97FFB  d8 a1
 	exts XBC                                             ; F97FFD  e9 13
 	add XBC,XIX                                          ; F97FFF  ec 81
@@ -44632,7 +44632,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld BC,HL                                             ; F98014  db 89
 	inc 3,BC                                             ; F98016  d9 63
 	ld DE,BC                                             ; F98018  d9 8a
-	ldw wa, 0x7620                                       ; F9801A  30 20 76
+	ldw wa, Combination_Current                                       ; F9801A  30 20 76
 	ld (xiz-2), wa                                       ; F9801D  be fe 50
 	sub BC,WA                                            ; F98020  d8 a1
 	exts XBC                                             ; F98022  e9 13
@@ -44955,7 +44955,7 @@ Combination_Recall:   ; entry: prom_b routine directory
 	ld (xiz-4), bc                                       ; F98329  be fc 51
 	add BC,HL                                            ; F9832C  db 81
 	ld (xiz-6), bc                                       ; F9832E  be fa 51
-	ldw wa, 0x7620                                       ; F98331  30 20 76
+	ldw wa, Combination_Current                                       ; F98331  30 20 76
 	ld (xiz-8), wa                                       ; F98334  be f8 50
 	sub BC,WA                                            ; F98337  d8 a1
 	exts XBC                                             ; F98339  e9 13
@@ -45550,7 +45550,7 @@ Combination_ReadFromCpu2:   ; entry: prom_b routine directory
 	ld XIX,XBC                                           ; F98966  e9 8c
 	add XIX,XWA                                          ; F98968  e8 84
 .LF9896A:
-	lda xbc, (0x7620:16)                                ; F9896A  f1 20 76 31
+	lda xbc, (Combination_Current:16)                                ; F9896A  f1 20 76 31
 	push XBC                                             ; F9896E  39
 	pushw 0x02c0                                         ; F9896F  0b c0 02
 	push XIX                                             ; F98972  3c
@@ -45594,7 +45594,7 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	lda xwa, (0x2c00:16)                                ; F9899D  f1 00 2c 30
 	ld (xiz-8), xwa                                      ; F989A1  be f8 60
 	ldw hl, 0x00                                         ; F989A4  33 00 00
-	ldw de, 0x7620                                       ; F989A7  32 20 76
+	ldw de, Combination_Current                                       ; F989A7  32 20 76
 	ldw bc, 0x78de                                       ; F989AA  31 de 78
 	ld IX,BC                                             ; F989AD  d9 8c
 	sub IX,DE                                            ; F989AF  da a4
@@ -45603,11 +45603,11 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	jrl nc, .LF98AC5                                     ; F989B3  7f 0f 01
 	m_res 0, MD16, 0x2180                                ; F989B6  f1 80 21 b0
 	extz XHL                                             ; F989BA  eb 12
-	ld E,(XHL+0x7620)                                    ; F989BC  c3 ed 20 76 25
+	ld E,(XHL+Combination_Current)                                    ; F989BC  c3 ed 20 76 25
 	ld d, 0x00:opc                                          ; F989C1  24 00
 	inc 1,HL                                             ; F989C3  db 61
 	extz XHL                                             ; F989C5  eb 12
-	ld C,(XHL+0x7620)                                    ; F989C7  c3 ed 20 76 23
+	ld C,(XHL+Combination_Current)                                    ; F989C7  c3 ed 20 76 23
 	ld (xiz-1), c                                        ; F989CC  be ff 43
 	jrl .LF98AB9                                         ; F989CF  78 e7 00
 .LF989D2:
@@ -45618,7 +45618,7 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	ld A,(XBC)                                           ; F989DE  81 21
 	ld (xiz-10), a                                       ; F989E0  be f6 41
 	extz XHL                                             ; F989E3  eb 12
-	ld B,(XHL+0x7620)                                    ; F989E5  c3 ed 20 76 22
+	ld B,(XHL+Combination_Current)                                    ; F989E5  c3 ed 20 76 22
 	cp B,A                                               ; F989EA  c9 f2
 	jrl z, .LF98AB4                                      ; F989EC  76 c5 00
 	m_cp_mi16 MWD+r6, 0xfc, 0x01f4                       ; F989EF  9e fc 3f f4 01
@@ -45662,7 +45662,7 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	ld (xiz-14), hl                                      ; F98A59  be f2 53
 	ld wa, (xiz-14)                                      ; F98A5C  9e f2 20
 	extz XWA                                             ; F98A5F  e8 12
-	ld C,(XWA+0x7620)                                    ; F98A61  c3 e1 20 76 23
+	ld C,(XWA+Combination_Current)                                    ; F98A61  c3 e1 20 76 23
 	ld (xiz-16), c                                       ; F98A66  be f0 43
 	ld bc, (xiz-12)                                      ; F98A69  9e f4 21
 	extz XBC                                             ; F98A6C  e9 12
@@ -45679,7 +45679,7 @@ ParamImage_QueueDiffCombination:   ; entry: prom_b routine directory
 	ld (xiz-20), w                                       ; F98A8D  be ec 40
 	ld bc, (xiz-14)                                      ; F98A90  9e f2 21
 	extz XBC                                             ; F98A93  e9 12
-	ld A,(XBC+0x7620)                                    ; F98A95  c3 e5 20 76 21
+	ld A,(XBC+Combination_Current)                                    ; F98A95  c3 e5 20 76 21
 	xor A,W                                              ; F98A9A  c8 d1
 	ld (xiz-22), a                                       ; F98A9C  be ea 41
 	ld bc, (xiz-18)                                      ; F98A9F  9e ee 21
@@ -45733,14 +45733,14 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld (xiz-6), xwa                                      ; F98B11  be fa 60
 	ldw ix, 0x00                                         ; F98B14  34 00 00
 .LF98B17:
-	ldw hl, 0x7620                                       ; F98B17  33 20 76
+	ldw hl, Combination_Current                                       ; F98B17  33 20 76
 	ldw bc, 0x7efe                                       ; F98B1A  31 fe 7e
 	sub BC,HL                                            ; F98B1D  db a1
 	cp IX,BC                                             ; F98B1F  d9 f4
 	jrl nc, .LF98C2B                                     ; F98B21  7f 07 01
 	m_res 0, MD16, 0x2180                                ; F98B24  f1 80 21 b0
 	extz XIX                                             ; F98B28  ec 12
-	ld L,(XIX+0x7620)                                    ; F98B2A  c3 f1 20 76 27
+	ld L,(XIX+Combination_Current)                                    ; F98B2A  c3 f1 20 76 27
 	cp L,0xff                                            ; F98B2F  cf cf ff
 	jr nz, .LF98B39                                      ; F98B32  6e 05
 	inc 1,IX                                             ; F98B34  dc 61
@@ -45749,7 +45749,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld h, 0x00:opc                                          ; F98B39  26 00
 	inc 1,IX                                             ; F98B3B  dc 61
 	extz XIX                                             ; F98B3D  ec 12
-	ld D,(XIX+0x7620)                                    ; F98B3F  c3 f1 20 76 24
+	ld D,(XIX+Combination_Current)                                    ; F98B3F  c3 f1 20 76 24
 	jrl .LF98C21                                         ; F98B44  78 da 00
 .LF98B47:
 	inc 1,IX                                             ; F98B47  dc 61
@@ -45758,7 +45758,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	add XBC,0x00608000                                   ; F98B4D  e9 c8 00 80 60 00
 	ld E,(XBC)                                           ; F98B53  81 25
 	extz XIX                                             ; F98B55  ec 12
-	ld A,(XIX+0x7620)                                    ; F98B57  c3 f1 20 76 21
+	ld A,(XIX+Combination_Current)                                    ; F98B57  c3 f1 20 76 21
 	cp A,E                                               ; F98B5C  cd f1
 	jrl z, .LF98C1D                                      ; F98B5E  76 bc 00
 	m_cp_mi16 MWD+r6, 0xfe, 0x01f4                       ; F98B61  9e fe 3f f4 01
@@ -45802,7 +45802,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld (xiz-12), ix                                      ; F98BCB  be f4 54
 	ld wa, (xiz-12)                                      ; F98BCE  9e f4 20
 	extz XWA                                             ; F98BD1  e8 12
-	ld E,(XWA+0x7620)                                    ; F98BD3  c3 e1 20 76 25
+	ld E,(XWA+Combination_Current)                                    ; F98BD3  c3 e1 20 76 25
 	extz XBC                                             ; F98BD8  e9 12
 	add XBC,0x00002c00                                   ; F98BDA  e9 c8 00 2c 00 00
 	ld (XBC),E                                           ; F98BE0  b1 45
@@ -45815,7 +45815,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld E,(XWA)                                           ; F98BF4  80 25
 	ld wa, (xiz-12)                                      ; F98BF6  9e f4 20
 	extz XWA                                             ; F98BF9  e8 12
-	ld C,(XWA+0x7620)                                    ; F98BFB  c3 e1 20 76 23
+	ld C,(XWA+Combination_Current)                                    ; F98BFB  c3 e1 20 76 23
 	xor C,E                                              ; F98C00  cd d3
 	ld (xiz-16), c                                       ; F98C02  be f0 43
 	ld bc, (xiz-14)                                      ; F98C05  9e f2 21
@@ -45875,7 +45875,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld WA,(XIZ+0x0c)                                     ; F98C7A  9e 0c 20
 	ld (xiz-4), wa                                       ; F98C7D  be fc 50
 	extz XWA                                             ; F98C80  e8 12
-	ld D,(XWA+0x7620)                                    ; F98C82  c3 e1 20 76 24
+	ld D,(XWA+Combination_Current)                                    ; F98C82  c3 e1 20 76 24
 	extz XBC                                             ; F98C87  e9 12
 	add XBC,(XIZ+0x0e)                                   ; F98C89  ae 0e 81
 	ld (XBC),D                                           ; F98C8C  b1 44
@@ -45887,7 +45887,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld H,(XBC)                                           ; F98C9D  81 26
 	ld bc, (xiz-4)                                       ; F98C9F  9e fc 21
 	extz XBC                                             ; F98CA2  e9 12
-	ld A,(XBC+0x7620)                                    ; F98CA4  c3 e5 20 76 21
+	ld A,(XBC+Combination_Current)                                    ; F98CA4  c3 e5 20 76 21
 	ld L,A                                               ; F98CA9  c9 8f
 	xor L,H                                              ; F98CAB  ce d7
 	ld BC,IX                                             ; F98CAD  dc 89
@@ -45904,7 +45904,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	res 0x07,E                                           ; F98CC8  cd 30 07
 	ld HL,(XIZ+0x0c)                                     ; F98CCB  9e 0c 23
 	extz XHL                                             ; F98CCE  eb 12
-	ld A,(XHL+0x7620)                                    ; F98CD0  c3 ed 20 76 21
+	ld A,(XHL+Combination_Current)                                    ; F98CD0  c3 ed 20 76 21
 	res 0x07,A                                           ; F98CD5  c9 30 07
 	cp A,E                                               ; F98CD8  cd f1
 	jrl z, .LF98DDD                                      ; F98CDA  76 00 01
@@ -45925,7 +45925,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	inc 1,BC                                             ; F98D02  d9 61
 	ld (xiz-4), bc                                       ; F98D04  be fc 51
 	extz XHL                                             ; F98D07  eb 12
-	ld E,(XHL+0x7620)                                    ; F98D09  c3 ed 20 76 25
+	ld E,(XHL+Combination_Current)                                    ; F98D09  c3 ed 20 76 25
 	extz XBC                                             ; F98D0E  e9 12
 	add XBC,(XIZ+0x0e)                                   ; F98D10  ae 0e 81
 	ld (XBC),E                                           ; F98D13  b1 45
@@ -45949,7 +45949,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld BC,HL                                             ; F98D40  db 89
 	dec 1,BC                                             ; F98D42  d9 69
 	extz XBC                                             ; F98D44  e9 12
-	ld H,(XBC+0x7620)                                    ; F98D46  c3 e5 20 76 26
+	ld H,(XBC+Combination_Current)                                    ; F98D46  c3 e5 20 76 26
 	ld BC,IX                                             ; F98D4B  dc 89
 	extz XBC                                             ; F98D4D  e9 12
 	add XBC,(XIZ+0x0e)                                   ; F98D4F  ae 0e 81
@@ -45974,7 +45974,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	ld (xiz-4), wa                                       ; F98D7C  be fc 50
 	inc 1,WA                                             ; F98D7F  d8 61
 	extz XWA                                             ; F98D81  e8 12
-	ld E,(XWA+0x7620)                                    ; F98D83  c3 e1 20 76 25
+	ld E,(XWA+Combination_Current)                                    ; F98D83  c3 e1 20 76 25
 	extz XBC                                             ; F98D88  e9 12
 	add XBC,(XIZ+0x0e)                                   ; F98D8A  ae 0e 81
 	ld (XBC),E                                           ; F98D8D  b1 45
@@ -45997,7 +45997,7 @@ ParamImage_QueueDiffCombinationAndParts:   ; entry: prom_b routine directory
 	inc 5,IX                                             ; F98DB4  dc 65
 	ld bc, (xiz-4)                                       ; F98DB6  9e fc 21
 	extz XBC                                             ; F98DB9  e9 12
-	ld H,(XBC+0x7620)                                    ; F98DBB  c3 e5 20 76 26
+	ld H,(XBC+Combination_Current)                                    ; F98DBB  c3 e5 20 76 26
 	ld BC,IX                                             ; F98DC0  dc 89
 	extz XBC                                             ; F98DC2  e9 12
 	add XBC,(XIZ+0x0e)                                   ; F98DC4  ae 0e 81
@@ -79346,7 +79346,7 @@ sub_FAAAB5:
 	calr sub_FAACC0                                      ; FAAAC9  1e f4 01
 	m_set 5, MD24, 0x60f021                              ; FAAACC  f2 21 f0 60 bd
 	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAAD1  1e 47 00
-	lda xix, (0x7620:16)                                ; FAAAD4  f1 20 76 34
+	lda xix, (Combination_Current:16)                                ; FAAAD4  f1 20 76 34
 	inc 8,XSP                                            ; FAAAD8  ef 60
 .LFAAADA:
 	lda xbc, (0x7f7e:16)                                ; FAAADA  f1 7e 7f 31
@@ -79398,7 +79398,7 @@ Queue2C00_DrainPassB_SaveRegs2:
 sub_FAAB28:
 	link XIZ,0xfff8                                      ; FAAB28  ee 0c f8 ff
 	push XIX                                             ; FAAB2C  3c
-	lda xix, (0x7620:16)                                ; FAAB2D  f1 20 76 34
+	lda xix, (Combination_Current:16)                                ; FAAB2D  f1 20 76 34
 	lda xbc, (Rec_F3F400:24)                             ; FAAB31  f2 00 f4 f3 31
 	ld (xiz-8), xbc                                      ; FAAB36  be f8 61
 	ldw wa, 0x7f7e                                       ; FAAB39  30 7e 7f
@@ -79455,7 +79455,7 @@ sub_FAABB3:
 	push XIX                                             ; FAABB8  3c
 	lda xbc, (0x7000:16)                                ; FAABB9  f1 00 70 31
 	ld (xiz-8), xbc                                      ; FAABBD  be f8 61
-	lda xix, (0x7620:16)                                ; FAABC0  f1 20 76 34
+	lda xix, (Combination_Current:16)                                ; FAABC0  f1 20 76 34
 	ldw wa, 0x78de                                       ; FAABC4  30 de 78
 ; (sub_FAABC7 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAABB3;
 ;  notes/prom_a_stray_label_removal.py)
@@ -79800,7 +79800,7 @@ PartSettings_ResetToDefault:
 	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAAF0D  1e 0b fc
 	lda xbc, (0x76a0:16)                                ; FAAF10  f1 a0 76 31
 	ld (xiz-14), xbc                                     ; FAAF14  be f2 61
-	ldw hl, 0x7620                                       ; FAAF17  33 20 76
+	ldw hl, Combination_Current                                       ; FAAF17  33 20 76
 	ldw wa, 0x76a0                                       ; FAAF1A  30 a0 76
 	ld DE,WA                                             ; FAAF1D  d8 8a
 	sub DE,HL                                            ; FAAF1F  db a2
@@ -80003,7 +80003,7 @@ SystemSettings_ResetToDefault:
 	calr Queue2C00_DrainPassB_SaveRegs2                                      ; FAB0C6  1e 52 fa
 	calr sub_FAAD19                                      ; FAB0C9  1e 4d fc
 	call Tempo_ApplyBpm                                      ; FAB0CC  1d 42 a7 fa
-	lda xix, (0x7620:16)                                ; FAB0D0  f1 20 76 34
+	lda xix, (Combination_Current:16)                                ; FAB0D0  f1 20 76 34
 	lda xbc, (0x7000:16)                                ; FAB0D4  f1 00 70 31
 	ld (xiz-16), xbc                                     ; FAB0D8  be f0 61
 	lda xwa, (0x7300:16)                                ; FAB0DB  f1 00 73 30
@@ -80030,7 +80030,7 @@ SystemSettings_ResetToDefault:
 	jr .LFAB0E2                                          ; FAB10D  68 d3
 .LFAB10F:
 	lda xix, (0x78a0:16)                                ; FAB10F  f1 a0 78 34
-	ldw hl, 0x7620                                       ; FAB113  33 20 76
+	ldw hl, Combination_Current                                       ; FAB113  33 20 76
 	ldw bc, 0x78a0                                       ; FAB116  31 a0 78
 	ld DE,BC                                             ; FAB119  d9 8a
 	sub DE,HL                                            ; FAB11B  db a2
@@ -95010,7 +95010,7 @@ SysExParam_SetCombinationWriteRequest:
 	ld xbc, (xiz-12)                                     ; FB52A6  ae f4 21
 	push XBC                                             ; FB52A9  39
 	pushw 0x02c0                                         ; FB52AA  0b c0 02
-	lda xwa, (0x7620:16)                                ; FB52AD  f1 20 76 30
+	lda xwa, (Combination_Current:16)                                ; FB52AD  f1 20 76 30
 	push XWA                                             ; FB52B1  38
 	call T_Link_SendCommandE4                            ; FB52B2  1d 30 12 f4
 	ld xbc, (xiz-12)                                     ; FB52B6  ae f4 21
@@ -95592,7 +95592,7 @@ sub_FB585E:
 	call T_F42574                                        ; FB5882  1d 74 25 f4
 	lda xbc, (0x608000:24)                               ; FB5886  f2 00 80 60 31
 	ld (xiz-8), xbc                                      ; FB588B  be f8 61
-	ldw ix, 0x7620                                       ; FB588E  34 20 76
+	ldw ix, Combination_Current                                       ; FB588E  34 20 76
 	exts XIX                                             ; FB5891  ec 13
 	ld (xiz-12), xix                                     ; FB5893  be f4 64
 	lda xwa, (0x7f7e:16)                                ; FB5896  f1 7e 7f 30
@@ -95757,7 +95757,7 @@ GmMode_ApplyChange:
 	ret                                                  ; FB5A00  0e
 sub_FB5A01:
 	pushw hl                                             ; FB5A01  2b
-	ldw hl, 0x7620                                       ; FB5A02  33 20 76
+	ldw hl, Combination_Current                                       ; FB5A02  33 20 76
 	ldw bc, 0x76a2                                       ; FB5A05  31 a2 76
 	sub BC,HL                                            ; FB5A08  db a1
 	exts XBC                                             ; FB5A0A  e9 13
@@ -98908,7 +98908,7 @@ SysExXfer_SetJobTotal_TotalKeyboard:
 	ld (XIX),XBC                                         ; FB74A8  b4 61
 	calr SysExDump_SequencerUsedBytes                                      ; FB74AA  1e 9b 02
 	ld (xiz-4), xiy                                      ; FB74AD  be fc 65
-	ldw hl, 0x7620                                       ; FB74B0  33 20 76
+	ldw hl, Combination_Current                                       ; FB74B0  33 20 76
 	ldw bc, 0x7f7e                                       ; FB74B3  31 7e 7f
 	sub BC,HL                                            ; FB74B6  db a1
 	exts XBC                                             ; FB74B8  e9 13
@@ -98935,7 +98935,7 @@ SysExXfer_SetJobTotal_SystemPartMidi:
 	ld (XIX),XBC                                         ; FB74E5  b4 61
 	lda xbc, (0x7600:16)                                ; FB74E7  f1 00 76 31
 	ld (xiz-4), xbc                                      ; FB74EB  be fc 61
-	ldw hl, 0x7620                                       ; FB74EE  33 20 76
+	ldw hl, Combination_Current                                       ; FB74EE  33 20 76
 	ldw wa, 0x7f7e                                       ; FB74F1  30 7e 7f
 	ld DE,WA                                             ; FB74F4  d8 8a
 	sub DE,HL                                            ; FB74F6  db a2
@@ -99038,7 +99038,7 @@ SysExXfer_SetPart_SystemPart2:
 	push XIX                                             ; FB75EA  3c
 	ld XIX,(XIZ+0x08)                                    ; FB75EB  ae 08 24
 	ldw hl, 0x7600                                       ; FB75EE  33 00 76
-	ldw de, 0x7620                                       ; FB75F1  32 20 76
+	ldw de, Combination_Current                                       ; FB75F1  32 20 76
 	ld BC,DE                                             ; FB75F4  da 89
 	sub BC,HL                                            ; FB75F6  db a1
 	ld (xiz-2), bc                                       ; FB75F8  be fe 51
@@ -105333,11 +105333,11 @@ CombiEdit_RunPendingRepaint:
 	push XBC                                             ; FBC6AC  39
 	jr .LFBC6BD                                          ; FBC6AD  68 0e
 .LFBC6AF:
-	lda xbc, (.LFBE6C4:24)                               ; FBC6AF  f2 c4 e6 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedSound:24)                               ; FBC6AF  f2 c4 e6 fb 31
 	push XBC                                             ; FBC6B4  39
 	jr .LFBC6BD                                          ; FBC6B5  68 06
 .LFBC6B7:
-	lda xbc, (sub_FBF79C:24)                             ; FBC6B7  f2 9c f7 fb 31
+	lda xbc, (CombiEditConfigure_RepaintMarkedSounds:24)                             ; FBC6B7  f2 9c f7 fb 31
 	push XBC                                             ; FBC6BC  39
 .LFBC6BD:
 	call T_CallbackQueue_Post                            ; FBC6BD  1d 84 2e f4
@@ -105424,7 +105424,7 @@ CombiEditMixer_OnPartParamEvent:
 .LFBC767:
 	ret                                                  ; FBC767  0e
 ; CombiEditMixer_OnSoundPanVolumePageEvent: PtrTable_F1AE89[0], run by CombiEditMixer_OnPartParamEvent on page 0, for a part of the edited group: byte 0 / 1
-;   / 0x9B-0x9D (the sound) -> CombiEditMixer_DirtySound and (0x277D) = 1; 13 (LOCAL CONTROL, panel-mode group 0x16)
+;   / 0x9B-0x9D (the sound) -> CombiEdit_DirtySound and (0x277D) = 1; 13 (LOCAL CONTROL, panel-mode group 0x16)
 ;   / 8 (PANPOT) / 3 (VOLUME) -> the part's bit in that cell's dirty mask and its CombiEditMixer_RepaintMarked*
 ;   callback posted (T_CallbackQueue_Post, T_Kernel_SemaSignal_StackArg).  Basis: body.
 CombiEditMixer_OnSoundPanVolumePageEvent:
@@ -105477,7 +105477,7 @@ CombiEditMixer_OnSoundPanVolumePageEvent:
 	jr .LFBC829                                          ; FBC7DE  68 49
 .LFBC7E0:
 	ld C,H                                               ; FBC7E0  ce 8b
-	or (CombiEditMixer_DirtySound:16), c                                   ; FBC7E2  c1 70 27 eb
+	or (CombiEdit_DirtySound:16), c                                   ; FBC7E2  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC7E6  f1 7d 27 00 01
 	jr .LFBC829                                          ; FBC7EB  68 3c
 .LFBC7ED:
@@ -105485,19 +105485,19 @@ CombiEditMixer_OnSoundPanVolumePageEvent:
 	jr nz, .LFBC829                                      ; FBC7F2  6e 35
 	ld C,H                                               ; FBC7F4  ce 8b
 	or (CombiEditMixer_DirtyLocalControl:16), c                                   ; FBC7F6  c1 71 27 eb
-	lda xbc, (.LFBE74D:24)                               ; FBC7FA  f2 4d e7 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedLocalControl:24)                               ; FBC7FA  f2 4d e7 fb 31
 	push XBC                                             ; FBC7FF  39
 	jr .LFBC81C                                          ; FBC800  68 1a
 .LFBC802:
 	ld C,H                                               ; FBC802  ce 8b
 	or (CombiEditMixer_DirtyPanpot:16), c                                   ; FBC804  c1 72 27 eb
-	lda xbc, (.LFBE7E0:24)                               ; FBC808  f2 e0 e7 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedPanpot:24)                               ; FBC808  f2 e0 e7 fb 31
 	push XBC                                             ; FBC80D  39
 	jr .LFBC81C                                          ; FBC80E  68 0c
 .LFBC810:
 	ld C,H                                               ; FBC810  ce 8b
 	or (CombiEditMixer_DirtyVolume:16), c                                   ; FBC812  c1 73 27 eb
-	lda xbc, (.LFBE868:24)                               ; FBC816  f2 68 e8 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedVolume:24)                               ; FBC816  f2 68 e8 fb 31
 	push XBC                                             ; FBC81B  39
 .LFBC81C:
 	call T_CallbackQueue_Post                            ; FBC81C  1d 84 2e f4
@@ -105564,37 +105564,37 @@ CombiEditMixer_OnSendsPageEvent:
 	jr .LFBC90A                                          ; FBC8AA  68 5e
 .LFBC8AC:
 	ld C,H                                               ; FBC8AC  ce 8b
-	or (CombiEditMixer_DirtySound:16), c                                   ; FBC8AE  c1 70 27 eb
+	or (CombiEdit_DirtySound:16), c                                   ; FBC8AE  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC8B2  f1 7d 27 00 01
 	jr .LFBC90A                                          ; FBC8B7  68 51
 .LFBC8B9:
 	ld C,H                                               ; FBC8B9  ce 8b
 	or (CombiEditMixer_DirtyReverbSend:16), c                                   ; FBC8BB  c1 74 27 eb
-	lda xbc, (.LFBE8F0:24)                               ; FBC8BF  f2 f0 e8 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedReverbSend:24)                               ; FBC8BF  f2 f0 e8 fb 31
 	push XBC                                             ; FBC8C4  39
 	jr .LFBC8FD                                          ; FBC8C5  68 36
 .LFBC8C7:
 	ld C,H                                               ; FBC8C7  ce 8b
 	or (CombiEditMixer_DirtyEffect1Send:16), c                                   ; FBC8C9  c1 75 27 eb
-	lda xbc, (.LFBE978:24)                               ; FBC8CD  f2 78 e9 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedEffect1Send:24)                               ; FBC8CD  f2 78 e9 fb 31
 	push XBC                                             ; FBC8D2  39
 	jr .LFBC8FD                                          ; FBC8D3  68 28
 .LFBC8D5:
 	ld C,H                                               ; FBC8D5  ce 8b
 	or (CombiEditMixer_DirtyEffect2OnOff:16), c                                   ; FBC8D7  c1 76 27 eb
-	lda xbc, (.LFBE9E7:24)                               ; FBC8DB  f2 e7 e9 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedEffect2OnOff:24)                               ; FBC8DB  f2 e7 e9 fb 31
 	push XBC                                             ; FBC8E0  39
 	jr .LFBC8FD                                          ; FBC8E1  68 1a
 .LFBC8E3:
 	ld C,H                                               ; FBC8E3  ce 8b
 	or (CombiEditMixer_DirtyMainOut:16), c                                   ; FBC8E5  c1 78 27 eb
-	lda xbc, (.LFBEA5B:24)                               ; FBC8E9  f2 5b ea fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedMainOut:24)                               ; FBC8E9  f2 5b ea fb 31
 	push XBC                                             ; FBC8EE  39
 	jr .LFBC8FD                                          ; FBC8EF  68 0c
 .LFBC8F1:
 	ld C,H                                               ; FBC8F1  ce 8b
 	or (CombiEditMixer_DirtyKeyShift:16), c                                   ; FBC8F3  c1 7c 27 eb
-	lda xbc, (.LFBEC88:24)                               ; FBC8F7  f2 88 ec fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedKeyShift:24)                               ; FBC8F7  f2 88 ec fb 31
 	push XBC                                             ; FBC8FC  39
 .LFBC8FD:
 	call T_CallbackQueue_Post                            ; FBC8FD  1d 84 2e f4
@@ -105656,7 +105656,7 @@ CombiEditMixer_OnMidiPageEvent:
 	jrl .LFBCA2D                                         ; FBC981  78 a9 00
 .LFBC984:
 	ld C,L                                               ; FBC984  cf 8b
-	or (CombiEditMixer_DirtySound:16), c                                   ; FBC986  c1 70 27 eb
+	or (CombiEdit_DirtySound:16), c                                   ; FBC986  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBC98A  f1 7d 27 00 01
 	jrl .LFBCA2D                                         ; FBC98F  78 9b 00
 .LFBC992:
@@ -105668,7 +105668,7 @@ CombiEditMixer_OnMidiPageEvent:
 	jr z, .LFBC9BF                                       ; FBC9A4  66 19
 	ld C,L                                               ; FBC9A6  cf 8b
 	or (CombiEditMixer_DirtyLocalControl:16), c                                   ; FBC9A8  c1 71 27 eb
-	lda xbc, (.LFBE74D:24)                               ; FBC9AC  f2 4d e7 fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedLocalControl:24)                               ; FBC9AC  f2 4d e7 fb 31
 	push XBC                                             ; FBC9B1  39
 	call T_CallbackQueue_Post                            ; FBC9B2  1d 84 2e f4
 	pushw 0x01                                           ; FBC9B6  0b 01 00
@@ -105680,7 +105680,7 @@ CombiEditMixer_OnMidiPageEvent:
 	jr z, .LFBC9DF                                       ; FBC9C4  66 19
 	ld C,L                                               ; FBC9C6  cf 8b
 	or (CombiEditMixer_DirtyMidiOutSetting:16), c                                   ; FBC9C8  c1 79 27 eb
-	lda xbc, (.LFBEAC8:24)                               ; FBC9CC  f2 c8 ea fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedMidiOutSetting:24)                               ; FBC9CC  f2 c8 ea fb 31
 	push XBC                                             ; FBC9D1  39
 	call T_CallbackQueue_Post                            ; FBC9D2  1d 84 2e f4
 	pushw 0x01                                           ; FBC9D6  0b 01 00
@@ -105692,7 +105692,7 @@ CombiEditMixer_OnMidiPageEvent:
 	jr z, .LFBC9FF                                       ; FBC9E4  66 19
 	ld C,L                                               ; FBC9E6  cf 8b
 	or (CombiEditMixer_DirtyMidiInSetting:16), c                                   ; FBC9E8  c1 7a 27 eb
-	lda xbc, (.LFBEB35:24)                               ; FBC9EC  f2 35 eb fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedMidiInSetting:24)                               ; FBC9EC  f2 35 eb fb 31
 	push XBC                                             ; FBC9F1  39
 	call T_CallbackQueue_Post                            ; FBC9F2  1d 84 2e f4
 	pushw 0x01                                           ; FBC9F6  0b 01 00
@@ -105704,13 +105704,13 @@ CombiEditMixer_OnMidiPageEvent:
 	jr z, .LFBCA2D                                       ; FBCA04  66 27
 	ld C,L                                               ; FBCA06  cf 8b
 	or (CombiEditMixer_DirtyBasicChannel:16), c                                   ; FBCA08  c1 7b 27 eb
-	lda xbc, (.LFBEBA6:24)                               ; FBCA0C  f2 a6 eb fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedBasicChannel:24)                               ; FBCA0C  f2 a6 eb fb 31
 	push XBC                                             ; FBCA11  39
 	jr .LFBCA20                                          ; FBCA12  68 0c
 .LFBCA14:
 	ld C,L                                               ; FBCA14  cf 8b
 	or (CombiEditMixer_DirtySubOut:16), c                                   ; FBCA16  c1 77 27 eb
-	lda xbc, (.LFBEC1C:24)                               ; FBCA1A  f2 1c ec fb 31
+	lda xbc, (CombiEditMixer_RepaintMarkedSubOut:24)                               ; FBCA1A  f2 1c ec fb 31
 	push XBC                                             ; FBCA1F  39
 .LFBCA20:
 	call T_CallbackQueue_Post                            ; FBCA20  1d 84 2e f4
@@ -105773,7 +105773,7 @@ CombiEditConfigure_OnPartParamEvent:
 	jr .LFBCAAA                                          ; FBCA9D  68 0b
 .LFBCA9F:
 	ld C,H                                               ; FBCA9F  ce 8b
-	or (CombiEditMixer_DirtySound:16), c                                   ; FBCAA1  c1 70 27 eb
+	or (CombiEdit_DirtySound:16), c                                   ; FBCAA1  c1 70 27 eb
 	ld (0x277d:16), 0x01                                 ; FBCAA5  f1 7d 27 00 01
 .LFBCAAA:
 	ld bc, (CombiEdit_Page:16)                                 ; FBCAAA  d1 67 27 21
@@ -105828,7 +105828,7 @@ ModeEnter_CombiEditPart:
 	pushw hl                                             ; FBCB06  2b
 	m_set 1, MD16, 0x2134                                ; FBCB07  f1 34 21 b9
 	ld h, (UI_PartIndex:16)                                   ; FBCB0B  c1 50 22 26
-	ld (0x276d:16), h                                   ; FBCB0F  f1 6d 27 46
+	ld (CombiEdit_EntryPart:16), h                                   ; FBCB0F  f1 6d 27 46
 	ld (0x2766:16), h                                   ; FBCB13  f1 66 27 46
 	ld (CombiEdit_Part:16), h                                   ; FBCB17  f1 65 27 46
 	ld C,H                                               ; FBCB1B  ce 8b
@@ -105847,7 +105847,7 @@ ModeEnter_CombiEditPart:
 	ret                                                  ; FBCB30  0e
 sub_FBCB31:
 	m_set 1, MD16, 0x2134                                ; FBCB31  f1 34 21 b9
-	ld	(UI_PartIndex:16), (0x276d:16)             ; FBCB35  c1 6d 27 19 50 22
+	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBCB35  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBCB3B  1d 9c 2c f4
 	ret                                                  ; FBCB3F  0e
 ; ScreenEnter_CombiEditPartMenu: the +0 ENTER method of the screen object for screen id 0xB0 -- PanelScreen_VtableTable entry 0xD0
@@ -107677,7 +107677,7 @@ ScreenEnterBody_CombiEditMixer:
 	m_cp_mi8 MB16, PanelModeGroup, 0x0a                          ; FBDBB7  c1 76 20 3f 0a
 	jr nz, .LFBDBEC                                      ; FBDBBC  6e 2e
 	ld h, (UI_PartIndex:16)                                   ; FBDBBE  c1 50 22 26
-	ld (0x276d:16), h                                   ; FBDBC2  f1 6d 27 46
+	ld (CombiEdit_EntryPart:16), h                                   ; FBDBC2  f1 6d 27 46
 	ld (0x2766:16), h                                   ; FBDBC6  f1 66 27 46
 	ld (CombiEdit_Part:16), h                                   ; FBDBCA  f1 65 27 46
 	ld (0x2768:16), 0x00                                 ; FBDBCE  f1 68 27 00 00
@@ -107703,7 +107703,7 @@ ScreenEnterBody_CombiEditMixer:
 	m_cp_mi8 MB16, 0x277e, 0x02                          ; FBDBFF  c1 7e 27 3f 02
 	jr z, .LFBDC28                                       ; FBDC04  66 22
 	ld h, (UI_PartIndex:16)                                   ; FBDC06  c1 50 22 26
-	ld (0x276d:16), h                                   ; FBDC0A  f1 6d 27 46
+	ld (CombiEdit_EntryPart:16), h                                   ; FBDC0A  f1 6d 27 46
 	ld (0x2766:16), h                                   ; FBDC0E  f1 66 27 46
 	ld (CombiEdit_Part:16), h                                   ; FBDC12  f1 65 27 46
 	ld (0x2768:16), 0x00                                 ; FBDC16  f1 68 27 00 00
@@ -107821,7 +107821,7 @@ ScreenLeaveBody_CombiEditMixer:
 	jr z, .LFBDD56                                       ; FBDD45  66 0f
 	cp H,0xa1                                            ; FBDD47  ce cf a1
 	jr z, .LFBDD56                                       ; FBDD4A  66 0a
-	ld	(UI_PartIndex:16), (0x276d:16)             ; FBDD4C  c1 6d 27 19 50 22
+	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBDD4C  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBDD52  1d 9c 2c f4
 .LFBDD56:
 	ld c, (UI_ScreenLatch:16)                                   ; FBDD56  c1 7a 20 23
@@ -107830,7 +107830,7 @@ ScreenLeaveBody_CombiEditMixer:
 	ld A,(XIX)                                           ; FBDD60  84 21
 	cp A,0x0a                                            ; FBDD62  c9 cf 0a
 	jr nz, .LFBDD7D                                      ; FBDD65  6e 16
-	ld	(UI_PartIndex:16), (0x276d:16)             ; FBDD67  c1 6d 27 19 50 22
+	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBDD67  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBDD6D  1d 9c 2c f4
 	push XDE                                             ; FBDD71  3a
 	push XHL                                             ; FBDD72  3b
@@ -108929,14 +108929,13 @@ CombiEditMixer_DrawSound:
 	popw hl                                              ; FBE6C0  4b
 	unlk XIZ                                             ; FBE6C1  ee 0d
 	ret                                                  ; FBE6C3  0e
-; CombiEditMixer_RepaintMarkedSound: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtySound (0x2770) under ei 6, then CombiEditMixer_DrawSound for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
+; CombiEditMixer_RepaintMarkedSound: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEdit_DirtySound (0x2770) under ei 6, then CombiEditMixer_DrawSound for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedSound:
-.LFBE6C4:
 	pushw hl                                             ; FBE6C4  2b
 	pushw de                                             ; FBE6C5  2a
 	ei 0x06                                              ; FBE6C6  06 06
-	ld e, (CombiEditMixer_DirtySound:16)                                   ; FBE6C8  c1 70 27 25
-	ld (CombiEditMixer_DirtySound:16), 0x00                                 ; FBE6CC  f1 70 27 00 00
+	ld e, (CombiEdit_DirtySound:16)                                   ; FBE6C8  c1 70 27 25
+	ld (CombiEdit_DirtySound:16), 0x00                                 ; FBE6CC  f1 70 27 00 00
 	ei 0x00                                              ; FBE6D1  06 00
 	ld d, 0x01:opc                                          ; FBE6D3  24 01
 	ld l, (CombiEdit_Part:16)                                   ; FBE6D5  c1 65 27 27
@@ -109001,7 +109000,6 @@ CombiEditMixer_DrawLocalControl:
 	ret                                                  ; FBE74C  0e
 ; CombiEditMixer_RepaintMarkedLocalControl: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyLocalControl (0x2771) under ei 6, then CombiEditMixer_DrawLocalControl for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedLocalControl:
-.LFBE74D:
 	pushw hl                                             ; FBE74D  2b
 	pushw de                                             ; FBE74E  2a
 	ei 0x06                                              ; FBE74F  06 06
@@ -109067,7 +109065,6 @@ CombiEditMixer_DrawPanpot:
 	ret                                                  ; FBE7DF  0e
 ; CombiEditMixer_RepaintMarkedPanpot: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyPanpot (0x2772) under ei 6, then CombiEditMixer_DrawPanpot for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedPanpot:
-.LFBE7E0:
 	pushw hl                                             ; FBE7E0  2b
 	pushw de                                             ; FBE7E1  2a
 	ei 0x06                                              ; FBE7E2  06 06
@@ -109131,7 +109128,6 @@ CombiEditMixer_DrawVolume:
 	ret                                                  ; FBE867  0e
 ; CombiEditMixer_RepaintMarkedVolume: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyVolume (0x2773) under ei 6, then CombiEditMixer_DrawVolume for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedVolume:
-.LFBE868:
 	pushw hl                                             ; FBE868  2b
 	pushw de                                             ; FBE869  2a
 	ei 0x06                                              ; FBE86A  06 06
@@ -109195,7 +109191,6 @@ CombiEditMixer_DrawReverbSend:
 	ret                                                  ; FBE8EF  0e
 ; CombiEditMixer_RepaintMarkedReverbSend: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyReverbSend (0x2774) under ei 6, then CombiEditMixer_DrawReverbSend for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedReverbSend:
-.LFBE8F0:
 	pushw hl                                             ; FBE8F0  2b
 	pushw de                                             ; FBE8F1  2a
 	ei 0x06                                              ; FBE8F2  06 06
@@ -109259,7 +109254,6 @@ CombiEditMixer_DrawEffect1Send:
 	ret                                                  ; FBE977  0e
 ; CombiEditMixer_RepaintMarkedEffect1Send: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyEffect1Send (0x2775) under ei 6, then CombiEditMixer_DrawEffect1Send for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedEffect1Send:
-.LFBE978:
 	pushw hl                                             ; FBE978  2b
 	pushw de                                             ; FBE979  2a
 	ei 0x06                                              ; FBE97A  06 06
@@ -109320,7 +109314,6 @@ CombiEditMixer_DrawEffect2OnOff:
 	ret                                                  ; FBE9E6  0e
 ; CombiEditMixer_RepaintMarkedEffect2OnOff: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyEffect2OnOff (0x2776) under ei 6, then CombiEditMixer_DrawEffect2OnOff for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedEffect2OnOff:
-.LFBE9E7:
 	pushw hl                                             ; FBE9E7  2b
 	pushw de                                             ; FBE9E8  2a
 	ei 0x06                                              ; FBE9E9  06 06
@@ -109381,7 +109374,6 @@ CombiEditMixer_DrawMainOut:
 	ret                                                  ; FBEA5A  0e
 ; CombiEditMixer_RepaintMarkedMainOut: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMainOut (0x2778) under ei 6, then CombiEditMixer_DrawMainOut for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedMainOut:
-.LFBEA5B:
 	pushw hl                                             ; FBEA5B  2b
 	pushw de                                             ; FBEA5C  2a
 	ei 0x06                                              ; FBEA5D  06 06
@@ -109439,7 +109431,6 @@ CombiEditMixer_DrawMidiOutSetting:
 	ret                                                  ; FBEAC7  0e
 ; CombiEditMixer_RepaintMarkedMidiOutSetting: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMidiOutSetting (0x2779) under ei 6, then CombiEditMixer_DrawMidiOutSetting for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedMidiOutSetting:
-.LFBEAC8:
 	pushw hl                                             ; FBEAC8  2b
 	pushw de                                             ; FBEAC9  2a
 	ei 0x06                                              ; FBEACA  06 06
@@ -109497,7 +109488,6 @@ CombiEditMixer_DrawMidiInSetting:
 	ret                                                  ; FBEB34  0e
 ; CombiEditMixer_RepaintMarkedMidiInSetting: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyMidiInSetting (0x277A) under ei 6, then CombiEditMixer_DrawMidiInSetting for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedMidiInSetting:
-.LFBEB35:
 	pushw hl                                             ; FBEB35  2b
 	pushw de                                             ; FBEB36  2a
 	ei 0x06                                              ; FBEB37  06 06
@@ -109549,7 +109539,6 @@ CombiEditMixer_DrawBasicChannel:
 	ret                                                  ; FBEBA5  0e
 ; CombiEditMixer_RepaintMarkedBasicChannel: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyBasicChannel (0x277B) under ei 6, then CombiEditMixer_DrawBasicChannel for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedBasicChannel:
-.LFBEBA6:
 	pushw hl                                             ; FBEBA6  2b
 	pushw de                                             ; FBEBA7  2a
 	ei 0x06                                              ; FBEBA8  06 06
@@ -109603,7 +109592,6 @@ CombiEditMixer_DrawSubOut:
 	ret                                                  ; FBEC1B  0e
 ; CombiEditMixer_RepaintMarkedSubOut: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtySubOut (0x2777) under ei 6, then CombiEditMixer_DrawSubOut for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedSubOut:
-.LFBEC1C:
 	pushw hl                                             ; FBEC1C  2b
 	pushw de                                             ; FBEC1D  2a
 	ei 0x06                                              ; FBEC1E  06 06
@@ -109657,7 +109645,6 @@ CombiEditMixer_DrawKeyShift:
 	ret                                                  ; FBEC87  0e
 ; CombiEditMixer_RepaintMarkedKeyShift: the callback CombiEditMixer_OnPartParamEvent posts: takes and clears CombiEditMixer_DirtyKeyShift (0x277C) under ei 6, then CombiEditMixer_DrawKeyShift for each part of the edited group whose bit is set.  Basis: body (notes/prom_a_combi_mixer_cells.py)
 CombiEditMixer_RepaintMarkedKeyShift:
-.LFBEC88:
 	pushw hl                                             ; FBEC88  2b
 	pushw de                                             ; FBEC89  2a
 	ei 0x06                                              ; FBEC8A  06 06
@@ -109687,7 +109674,10 @@ CombiEditMixer_RepaintMarkedKeyShift:
 	popw de                                              ; FBECC0  4a
 	popw hl                                              ; FBECC1  4b
 	ret                                                  ; FBECC2  0e
-sub_FBECC3:
+; CombiEdit_Begin: T_CombiEdit_Begin: T_Mode_SwitchToCombination, T_SoundGroup_ReloadSelection, (0x2134) bit 1; the current part (UI_PartIndex)
+;   becomes CombiEdit_Part and is kept in CombiEdit_EntryPart (0x276D); T_NoteRouting_SetSoloAndRebuild(0),
+;   (0x276F) = 0, then CombiEdit_SaveOriginalForCompare.  Basis: body.
+CombiEdit_Begin:
 	pushw hl                                             ; FBECC3  2b
 	push XDE                                             ; FBECC4  3a
 	push XHL                                             ; FBECC5  3b
@@ -109701,7 +109691,7 @@ sub_FBECC3:
 	pop XDE                                              ; FBECD3  5a
 	m_set 1, MD16, 0x2134                                ; FBECD4  f1 34 21 b9
 	ld h, (UI_PartIndex:16)                                   ; FBECD8  c1 50 22 26
-	ld (0x276d:16), h                                   ; FBECDC  f1 6d 27 46
+	ld (CombiEdit_EntryPart:16), h                                   ; FBECDC  f1 6d 27 46
 	ld (0x2766:16), h                                   ; FBECE0  f1 66 27 46
 	ld (CombiEdit_Part:16), h                                   ; FBECE4  f1 65 27 46
 	ld C,H                                               ; FBECE8  ce 8b
@@ -109710,13 +109700,15 @@ sub_FBECC3:
 	pushw 0x00                                           ; FBECF0  0b 00 00
 	call T_NoteRouting_SetSoloAndRebuild                                        ; FBECF3  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBECF7  f1 6f 27 00 00
-	calr sub_FBED21                                      ; FBECFC  1e 22 00
+	calr CombiEdit_SaveOriginalForCompare                                      ; FBECFC  1e 22 00
 	popw bc                                              ; FBECFF  49
 	popw hl                                              ; FBED00  4b
 	ret                                                  ; FBED01  0e
-sub_FBED02:
+; CombiEdit_End: T_CombiEdit_End: (0x2134) bit 1, UI_PartIndex = CombiEdit_EntryPart, T_F42C9C, T_NoteRouting_SetSoloAndRebuild(0),
+;   (0x276F) = 0, CombiEdit_CompareOff.  Basis: body.
+CombiEdit_End:
 	m_set 1, MD16, 0x2134                                ; FBED02  f1 34 21 b9
-	ld	(UI_PartIndex:16), (0x276d:16)             ; FBED06  c1 6d 27 19 50 22
+	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBED06  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBED0C  1d 9c 2c f4
 	pushw 0x00                                           ; FBED10  0b 00 00
 	call T_NoteRouting_SetSoloAndRebuild                                        ; FBED13  1d ec 11 f4
@@ -109724,7 +109716,10 @@ sub_FBED02:
 	calr CombiEdit_CompareOff                                      ; FBED1C  1e 58 00
 	popw bc                                              ; FBED1F  49
 	ret                                                  ; FBED20  0e
-sub_FBED21:
+; CombiEdit_SaveOriginalForCompare: CombiEdit_Comparing = 0, (0x216E) = 0, (0x213B) bit 2, and the 0x2C0-byte current combination
+;   (Combination_Current, 0x7620..0x78DF) copied word by word to CombiEdit_CompareOriginal (0x1400) -- what COMPARE
+;   shows.  Basis: body + caller (CombiEdit_Begin).
+CombiEdit_SaveOriginalForCompare:
 	link XIZ,0xfffa                                      ; FBED21  ee 0c fa ff
 	pushw hl                                             ; FBED25  2b
 	pushw de                                             ; FBED26  2a
@@ -109732,11 +109727,11 @@ sub_FBED21:
 	ld (CombiEdit_Comparing:16), 0x00                                 ; FBED28  f1 7f 27 00 00
 	ld (0x216e:16), 0x00                                 ; FBED2D  f1 6e 21 00 00
 	m_set 2, MD16, 0x213b                                ; FBED32  f1 3b 21 ba
-	lda xbc, (0x7620:16)                                ; FBED36  f1 20 76 31
+	lda xbc, (Combination_Current:16)                                ; FBED36  f1 20 76 31
 	ld (xiz-4), xbc                                      ; FBED3A  be fc 61
-	lda xix, (0x1400:16)                                ; FBED3D  f1 00 14 34
+	lda xix, (CombiEdit_CompareOriginal:16)                                ; FBED3D  f1 00 14 34
 	ldw hl, 0x00                                         ; FBED41  33 00 00
-	ldw wa, 0x7620                                       ; FBED44  30 20 76
+	ldw wa, Combination_Current                                       ; FBED44  30 20 76
 	ld (xiz-6), wa                                       ; FBED47  be fa 50
 	ldw bc, 0x78de                                       ; FBED4A  31 de 78
 	sub BC,WA                                            ; FBED4D  d8 a1
@@ -109762,7 +109757,7 @@ sub_FBED21:
 	popw hl                                              ; FBED73  4b
 	unlk XIZ                                             ; FBED74  ee 0d
 	ret                                                  ; FBED76  0e
-; CombiEdit_CompareOff: when (0x277F) is 1: (0x277F) = 0, (0x216E) = 0, (0x213B) bit 2, sub_FBEDD5, a repaint.  CompareKey_CombiEdit
+; CombiEdit_CompareOff: when (0x277F) is 1: (0x277F) = 0, (0x216E) = 0, (0x213B) bit 2, CombiEdit_SwapForCompare, a repaint.  CompareKey_CombiEdit
 ;   calls it in COMBINATION EDIT (PanelModeGroup 0x16) while comparing.
 CombiEdit_CompareOff:
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBED77  c1 7f 27 3f 01
@@ -109770,18 +109765,18 @@ CombiEdit_CompareOff:
 	ld (CombiEdit_Comparing:16), 0x00                                 ; FBED7E  f1 7f 27 00 00
 	ld (0x216e:16), 0x00                                 ; FBED83  f1 6e 21 00 00
 	m_set 2, MD16, 0x213b                                ; FBED88  f1 3b 21 ba
-	calr sub_FBEDD5                                      ; FBED8C  1e 46 00
+	calr CombiEdit_SwapForCompare                                      ; FBED8C  1e 46 00
 	m_set 4, MD16, UI_ScreenFlags                                ; FBED8F  f1 95 20 bc
 .LFBED93:
 	ret                                                  ; FBED93  0e
-; CombiEdit_CompareOn: when (0x277F) is 0: (0x277F) = 1, (0x216E) = 1, (0x213B) bit 2, sub_FBEDD5, T_NoteRouting_SetSoloAndRebuild(0), (0x276F) = 0, a repaint.
+; CombiEdit_CompareOn: when (0x277F) is 0: (0x277F) = 1, (0x216E) = 1, (0x213B) bit 2, CombiEdit_SwapForCompare, T_NoteRouting_SetSoloAndRebuild(0), (0x276F) = 0, a repaint.
 CombiEdit_CompareOn:
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x00                          ; FBED94  c1 7f 27 3f 00
 	jr nz, .LFBEDBD                                      ; FBED99  6e 22
 	ld (CombiEdit_Comparing:16), 0x01                                 ; FBED9B  f1 7f 27 00 01
 	ld (0x216e:16), 0x01                                 ; FBEDA0  f1 6e 21 00 01
 	m_set 2, MD16, 0x213b                                ; FBEDA5  f1 3b 21 ba
-	calr sub_FBEDD5                                      ; FBEDA9  1e 29 00
+	calr CombiEdit_SwapForCompare                                      ; FBEDA9  1e 29 00
 	pushw 0x00                                           ; FBEDAC  0b 00 00
 	call T_NoteRouting_SetSoloAndRebuild                                        ; FBEDAF  1d ec 11 f4
 	ld (0x276f:16), 0x00                                 ; FBEDB3  f1 6f 27 00 00
@@ -109803,7 +109798,11 @@ CompareKey_CombiEdit:
 	calr CombiEdit_CompareOn                                      ; FBEDD1  1e c0 ff
 .LFBEDD4:
 	ret                                                  ; FBEDD4  0e
-sub_FBEDD5:
+; CombiEdit_SwapForCompare: T_ParamImage_SnapshotCombination_Entry, then: COMPARE turned on (CombiEdit_Comparing 1) -> the edited combination
+;   is saved to CombiEdit_CompareEdited (0x1D00) and CombiEdit_CompareOriginal loaded into Combination_Current; turned
+;   off -> CombiEdit_CompareEdited restored; then T_ParamImage_QueueDiffCombination sends what changed.  Callers:
+;   CombiEdit_CompareOn / _CompareOff.  Basis: body + callers.
+CombiEdit_SwapForCompare:
 	link XIZ,0xfff6                                      ; FBEDD5  ee 0c f6 ff
 	pushw hl                                             ; FBEDD9  2b
 	pushw de                                             ; FBEDDA  2a
@@ -109817,15 +109816,15 @@ sub_FBEDD5:
 	pop XIX                                              ; FBEDE5  5c
 	pop XHL                                              ; FBEDE6  5b
 	pop XDE                                              ; FBEDE7  5a
-	lda xbc, (0x7620:16)                                ; FBEDE8  f1 20 76 31
+	lda xbc, (Combination_Current:16)                                ; FBEDE8  f1 20 76 31
 	ld (xiz-4), xbc                                      ; FBEDEC  be fc 61
-	lda xix, (0x1400:16)                                ; FBEDEF  f1 00 14 34
-	lda xwa, (0x1d00:16)                                ; FBEDF3  f1 00 1d 30
+	lda xix, (CombiEdit_CompareOriginal:16)                                ; FBEDEF  f1 00 14 34
+	lda xwa, (CombiEdit_CompareEdited:16)                                ; FBEDF3  f1 00 1d 30
 	ld (xiz-8), xwa                                      ; FBEDF7  be f8 60
 	ldw de, 0x00                                         ; FBEDFA  32 00 00
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEDFD  c1 7f 27 3f 01
 	jr nz, .LFBEE43                                      ; FBEE02  6e 3f
-	ldw bc, 0x7620                                       ; FBEE04  31 20 76
+	ldw bc, Combination_Current                                       ; FBEE04  31 20 76
 	ld (xiz-10), bc                                      ; FBEE07  be f6 51
 	ldw bc, 0x78de                                       ; FBEE0A  31 de 78
 	m_sub_rm MWD+r6, 0xf6, r1                            ; FBEE0D  9e f6 a1
@@ -109853,7 +109852,7 @@ sub_FBEDD5:
 	inc 1,DE                                             ; FBEE3F  da 61
 	jr .LFBEE1A                                          ; FBEE41  68 d7
 .LFBEE43:
-	ldw ix, 0x7620                                       ; FBEE43  34 20 76
+	ldw ix, Combination_Current                                       ; FBEE43  34 20 76
 	ldw bc, 0x78de                                       ; FBEE46  31 de 78
 	sub BC,IX                                            ; FBEE49  dc a1
 	inc 2,BC                                             ; FBEE4B  d9 62
@@ -109888,7 +109887,9 @@ sub_FBEDD5:
 	popw hl                                              ; FBEE7F  4b
 	unlk XIZ                                             ; FBEE80  ee 0d
 	ret                                                  ; FBEE82  0e
-sub_FBEE83:
+; CombiEdit_RestoreEditedIfComparing: T_CombiEdit_RestoreEditedIfComparing: in COMBINATION EDIT (PanelModeGroup 0x16) while CombiEdit_Comparing is 1, CombiEdit_CompareEdited
+;   copied back into Combination_Current (the flag is left as it is).  Basis: body.
+CombiEdit_RestoreEditedIfComparing:
 	link XIZ,0xfffa                                      ; FBEE83  ee 0c fa ff
 	pushw hl                                             ; FBEE87  2b
 	pushw de                                             ; FBEE88  2a
@@ -109897,11 +109898,11 @@ sub_FBEE83:
 	jr nz, .LFBEED3                                      ; FBEE8F  6e 42
 	m_cp_mi8 MB16, CombiEdit_Comparing, 0x01                          ; FBEE91  c1 7f 27 3f 01
 	jr nz, .LFBEED3                                      ; FBEE96  6e 3b
-	lda xbc, (0x7620:16)                                ; FBEE98  f1 20 76 31
+	lda xbc, (Combination_Current:16)                                ; FBEE98  f1 20 76 31
 	ld (xiz-4), xbc                                      ; FBEE9C  be fc 61
-	lda xix, (0x1d00:16)                                ; FBEE9F  f1 00 1d 34
+	lda xix, (CombiEdit_CompareEdited:16)                                ; FBEE9F  f1 00 1d 34
 	ldw hl, 0x00                                         ; FBEEA3  33 00 00
-	ldw wa, 0x7620                                       ; FBEEA6  30 20 76
+	ldw wa, Combination_Current                                       ; FBEEA6  30 20 76
 	ld (xiz-6), wa                                       ; FBEEA9  be fa 50
 	ldw bc, 0x78de                                       ; FBEEAC  31 de 78
 	sub BC,WA                                            ; FBEEAF  d8 a1
@@ -110207,7 +110208,7 @@ sub_FBF03A:
 	ld xbc, (xiz-8)                                      ; FBF080  ae f8 21
 	push XBC                                             ; FBF083  39
 	pushw 0x02c0                                         ; FBF084  0b c0 02
-	lda xwa, (0x7620:16)                                ; FBF087  f1 20 76 30
+	lda xwa, (Combination_Current:16)                                ; FBF087  f1 20 76 30
 	push XWA                                             ; FBF08B  38
 	call T_Link_SendCommandE4                            ; FBF08C  1d 30 12 f4
 	ld xbc, (xiz-8)                                      ; FBF090  ae f8 21
@@ -110334,7 +110335,7 @@ ScreenEnterBody_CombinationNaming:
 	jr nz, .LFBF1BE                                      ; FBF196  6e 26
 	lda xbc, (DiskSave_PasswordEntry:16)                                ; FBF198  f1 f0 22 31
 	ld (xiz-4), xbc                                      ; FBF19C  be fc 61
-	ldw wa, 0x1d00                                       ; FBF19F  30 00 1d
+	ldw wa, CombiEdit_CompareEdited                                       ; FBF19F  30 00 1d
 	inc 2,WA                                             ; FBF1A2  d8 62
 	extz XWA                                             ; FBF1A4  e8 12
 	ld XIX,XWA                                           ; FBF1A6  e8 8c
@@ -110539,7 +110540,7 @@ ScreenEnterBody_CombiEditConfigure:
 	m_cp_mi8 MB16, PanelModeGroup, 0x12                          ; FBF312  c1 76 20 3f 12
 	jr nz, .LFBF329                                      ; FBF317  6e 10
 	ld h, (UI_PartIndex:16)                                   ; FBF319  c1 50 22 26
-	ld (0x276d:16), h                                   ; FBF31D  f1 6d 27 46
+	ld (CombiEdit_EntryPart:16), h                                   ; FBF31D  f1 6d 27 46
 	ld (0x2766:16), h                                   ; FBF321  f1 66 27 46
 	ld (CombiEdit_Part:16), h                                   ; FBF325  f1 65 27 46
 .LFBF329:
@@ -110560,7 +110561,7 @@ ScreenEnterBody_CombiEditConfigure:
 	incm8 0x01, (xix)                                    ; FBF35E  84 61
 	inc 0x01, (0x276a:16)                                ; FBF360  c1 6a 27 61
 	inc 0x01, (0x2766:16)                                ; FBF364  c1 66 27 61
-	ld (CombiEditMixer_DirtySound:16), 0xff                                 ; FBF368  f1 70 27 00 ff
+	ld (CombiEdit_DirtySound:16), 0xff                                 ; FBF368  f1 70 27 00 ff
 	ld (0x277e:16), 0x00                                 ; FBF36D  f1 7e 27 00 00
 .LFBF372:
 	m_set 0, MD16, UI_RequestBits                                ; FBF372  f1 75 20 b8
@@ -110632,7 +110633,7 @@ ScreenLeaveBody_CombiEditConfigure:
 	jr z, .LFBF441                                       ; FBF42E  66 11
 	m_cp_mi8 MB16, PanelModeGroup_Previous, 0x12                          ; FBF430  c1 77 20 3f 12
 	jr nz, .LFBF441                                      ; FBF435  6e 0a
-	ld	(UI_PartIndex:16), (0x276d:16)             ; FBF437  c1 6d 27 19 50 22
+	ld	(UI_PartIndex:16), (CombiEdit_EntryPart:16)             ; FBF437  c1 6d 27 19 50 22
 	call T_F42C9C                                        ; FBF43D  1d 9c 2c f4
 .LFBF441:
 	ret                                                  ; FBF441  0e
@@ -110713,7 +110714,7 @@ SoftKeyCol2_CombiEditConfigure:
 	ld (0x276b:16), d                                   ; FBF4F1  f1 6b 27 44
 	cp H,D                                               ; FBF4F5  cc f6
 	jr z, .LFBF4FE                                       ; FBF4F7  66 05
-	ld (CombiEditMixer_DirtySound:16), 0xff                                 ; FBF4F9  f1 70 27 00 ff
+	ld (CombiEdit_DirtySound:16), 0xff                                 ; FBF4F9  f1 70 27 00 ff
 .LFBF4FE:
 	call T_F42C9C                                        ; FBF4FE  1d 9c 2c f4
 	ld	(CombiEdit_Part:16), (UI_PartIndex:16)             ; FBF502  c1 50 22 19 65 27
@@ -111018,13 +111019,16 @@ ExitKey_CombiEditConfigure:
 .LFBF79A:
 	pop XIX                                              ; FBF79A  5c
 	ret                                                  ; FBF79B  0e
-sub_FBF79C:
+; CombiEditConfigure_RepaintMarkedSounds: posted by CombiEdit_RunPendingRepaint, and called by the CONFIGURE page repaint: takes and clears
+;   CombiEdit_DirtySound, then for the 8 parts shown from (0x276B) whose bit is set, T_F42CA0 and the part's
+;   record of RecordArray_F1A037 (one record per part, stride from the array).  Basis: body.
+CombiEditConfigure_RepaintMarkedSounds:
 	link XIZ,0xfff8                                      ; FBF79C  ee 0c f8 ff
 	pushw hl                                             ; FBF7A0  2b
 	pushw de                                             ; FBF7A1  2a
 	push XIX                                             ; FBF7A2  3c
-	ld e, (CombiEditMixer_DirtySound:16)                                   ; FBF7A3  c1 70 27 25
-	ld (CombiEditMixer_DirtySound:16), 0x00                                 ; FBF7A7  f1 70 27 00 00
+	ld e, (CombiEdit_DirtySound:16)                                   ; FBF7A3  c1 70 27 25
+	ld (CombiEdit_DirtySound:16), 0x00                                 ; FBF7A7  f1 70 27 00 00
 	ld l, 0x01:opc                                          ; FBF7AC  27 01
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBF7AE  f1 40 25 00 00
 	lda xbc, (RecordArray_F1A037:24)                     ; FBF7B3  f2 37 a0 f1 31
@@ -111134,7 +111138,7 @@ sub_FBF79C:
 	call T_DisplayListB_Run_Stack                        ; FBF8CD  1d 04 2e f4
 	inc 8,XSP                                            ; FBF8D1  ef 60
 .LFBF8D3:
-	calr sub_FBF79C                                      ; FBF8D3  1e c6 fe
+	calr CombiEditConfigure_RepaintMarkedSounds                                      ; FBF8D3  1e c6 fe
 	res	0, (0xc6:8)                                   ; FBF8D6  f0 c6 b0
 	pop XIX                                              ; FBF8D9  5c
 	popw hl                                              ; FBF8DA  4b
@@ -111166,18 +111170,21 @@ sub_FBF79C:
 	jr z, .LFBF922                                       ; FBF914  66 0c
 	jr .LFBF925                                          ; FBF916  68 0d
 .LFBF918:
-	calr sub_FBF92F                                      ; FBF918  1e 14 00
+	calr CombiEditConfigure_DrawMidiSettings                                      ; FBF918  1e 14 00
 	jr .LFBF925                                          ; FBF91B  68 08
 .LFBF91D:
-	calr sub_FBF971                                      ; FBF91D  1e 51 00
+	calr CombiEditConfigure_DrawKeyLayers                                      ; FBF91D  1e 51 00
 	jr .LFBF925                                          ; FBF920  68 03
 .LFBF922:
-	calr sub_FBFA4D                                      ; FBF922  1e 28 01
+	calr CombiEditConfigure_DrawVelocityLayers                                      ; FBF922  1e 28 01
 .LFBF925:
 	call T_LCD_ShowAllLayers_StackFrame_Copy                                        ; FBF925  1d 14 2e f4
 	ld (0x277e:16), 0x01                                 ; FBF929  f1 7e 27 00 01
 	ret                                                  ; FBF92E  0e
-sub_FBF92F:
+; CombiEditConfigure_DrawMidiSettings: CONFIGURE page 0 (CombiEdit_Page): byte 13 of the 8 parts from (0x276B) -- BASIC CHANNEL, LOCAL CONTROL, MIDI
+;   OUT / IN SETTING (SysEx PART descriptors, offset 13) -- into UI_DrawScratch, drawn by DL_F1A2AD with
+;   StringTable_F1A515.  Basis: table (descriptor match) + the page switch at 0xFBF904.
+CombiEditConfigure_DrawMidiSettings:
 	pushw hl                                             ; FBF92F  2b
 	push XIX                                             ; FBF930  3c
 	ld l, (0x276b:16)                                   ; FBF931  c1 6b 27 27
@@ -111207,7 +111214,9 @@ sub_FBF92F:
 	pop XIX                                              ; FBF96E  5c
 	popw hl                                              ; FBF96F  4b
 	ret                                                  ; FBF970  0e
-sub_FBF971:
+; CombiEditConfigure_DrawKeyLayers: CONFIGURE page 1: the second records of parts 0..7 (0x20..0x27), bytes 7 / 8 -- KEY LAYER LOW / HIGH -- each
+;   divided by 3 into an x position of the keyboard bar (Record_F1AAEC).  Basis: table (descriptor match).
+CombiEditConfigure_DrawKeyLayers:
 	link XIZ,0xffda                                      ; FBF971  ee 0c da ff
 	pushw hl                                             ; FBF975  2b
 	pushw de                                             ; FBF976  2a
@@ -111292,7 +111301,9 @@ sub_FBF971:
 	popw hl                                              ; FBFA49  4b
 	unlk XIZ                                             ; FBFA4A  ee 0d
 	ret                                                  ; FBFA4C  0e
-sub_FBFA4D:
+; CombiEditConfigure_DrawVelocityLayers: CONFIGURE page 2: the second records of parts 0..7, bytes 9 / 10 -- VELOCITY LAYER LOW / HIGH -- into
+;   UI_DrawScratch, drawn by DL_F1A7AF.  Basis: table (descriptor match).
+CombiEditConfigure_DrawVelocityLayers:
 	link XIZ,0xfffc                                      ; FBFA4D  ee 0c fc ff
 	pushw hl                                             ; FBFA51  2b
 	push XIX                                             ; FBFA52  3c
@@ -111553,11 +111564,11 @@ SoftKeyCol1_CombiEditMenu:
 	pop XIX                                              ; FBFC63  5c
 	pop XHL                                              ; FBFC64  5b
 	pop XDE                                              ; FBFC65  5a
-	lda xix, (0x7620:16)                                ; FBFC66  f1 20 76 34
+	lda xix, (Combination_Current:16)                                ; FBFC66  f1 20 76 34
 	lda xbc, (0x7000:16)                                ; FBFC6A  f1 00 70 31
 	ld (xiz-4), xbc                                      ; FBFC6E  be fc 61
 	ldw hl, 0x00                                         ; FBFC71  33 00 00
-	ldw wa, 0x7620                                       ; FBFC74  30 20 76
+	ldw wa, Combination_Current                                       ; FBFC74  30 20 76
 	ld (xiz-6), wa                                       ; FBFC77  be fa 50
 	ldw bc, 0x78de                                       ; FBFC7A  31 de 78
 	sub BC,WA                                            ; FBFC7D  d8 a1

@@ -91,3 +91,19 @@ The MIXER's three pages, by the cells they draw:
 
 Each page has a matching event handler, `CombiEditMixer_On*PageEvent`. All six were reached only through prom_b
 pointers and had no label.
+
+### COMBINATION EDIT entry, exit and COMPARE (2026-10-05)
+
+- **Entry.** `CombiEdit_Begin` (`T_CombiEdit_Begin`) switches to combination mode and makes the current part
+  `CombiEdit_Part`, keeping the previous one in `CombiEdit_EntryPart`. It then copies the current combination
+  (`Combination_Current`, the 0x2C0-byte record at 0x7620 in CPU 2's preset format) to
+  `CombiEdit_CompareOriginal` (0x1400), using `CombiEdit_SaveOriginalForCompare`.
+- **COMPARE on.** `CombiEdit_SwapForCompare` first saves the edited record to `CombiEdit_CompareEdited` (0x1D00).
+  It then loads the original into `Combination_Current`.
+- **COMPARE off.** It restores the edited record, then queues the parameter differences
+  (`T_ParamImage_QueueDiffCombination`).
+- **Exit.** `CombiEdit_End` (`T_CombiEdit_End`) restores the part and turns COMPARE off.
+- **Shared dirty mask.** `CombiEdit_DirtySound` (0x2770) is set by both the MIXER and CONFIGURE handlers. It was
+  `CombiEditMixer_DirtySound` for one commit.
+- **CONFIGURE pages.** They draw the MIDI settings (byte 13), KEY LAYER and VELOCITY LAYER of the parts. The
+  layer pages show parts 0-7 only.
