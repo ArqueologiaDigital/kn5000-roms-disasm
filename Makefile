@@ -1133,7 +1133,7 @@ rom-status:
 # compare with the newest committed snapshot (exit 1 if a figure rose), then write today's snapshot to docs/coverage/.
 dispatch-census:
 	python3 scripts/analysis/dispatch_table_census/build_maps.py
-	python3 scripts/analysis/dispatch_table_census/census.py --compare $$(ls docs/coverage/dispatch-census-*.json | sort | tail -1)
+	python3 scripts/analysis/dispatch_table_census/census.py --compare $$(git ls-files 'docs/coverage/dispatch-census-*.json' | sort | tail -1)
 	python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
 
 website: gallery issues rom-status

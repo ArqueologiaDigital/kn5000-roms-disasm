@@ -56,7 +56,8 @@ RUN (from the repository root; `make dispatch-census` does the first and the --s
   python3 scripts/analysis/dispatch_table_census/census.py --top        # summary + top-10 framed tables per image
   python3 scripts/analysis/dispatch_table_census/census.py --list KEY   # every not-used framed table of one image
   python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
-        # writes dispatch-census-<date>.txt (report + top) and .json (per-image summary, every not-used table)
+        # writes dispatch-census-<date>-NN.txt (report + top) and .json (per-image summary, every not-used table);
+        # NN numbers the day's snapshots, so a committed one is never overwritten
   python3 scripts/analysis/dispatch_table_census/census.py --compare docs/coverage/dispatch-census-<date>.json
         # exit 1 when an image's not-used tables, unused targets or not-used unframed runs ROSE
 
@@ -659,6 +660,22 @@ def summary_json(res):
     return out
 
 
+def snapshot_number(outdir, day):
+    """The sequence number for today's snapshot: committed snapshots are never rewritten, so a later commit on the
+    same day gets the next number; an uncommitted snapshot of today (a re-run before committing) is reused."""
+    import glob
+    import re
+    import subprocess
+    nums = sorted(int(m.group(1)) for f in glob.glob(os.path.join(outdir, "dispatch-census-%s-[0-9][0-9].json" % day))
+                  for m in [re.search(r"-(\d\d)\.json$", f)] if m)
+    if not nums:
+        return 1
+    last = os.path.join(outdir, "dispatch-census-%s-%02d.json" % (day, nums[-1]))
+    tracked = subprocess.run(["git", "-C", REPO, "ls-files", "--error-unmatch", os.path.abspath(last)],
+                             capture_output=True).returncode == 0
+    return nums[-1] + 1 if tracked else nums[-1]
+
+
 def snapshot(res, outdir):
     import contextlib
     import datetime
@@ -676,7 +693,7 @@ def snapshot(res, outdir):
         print()
         top(res)
     os.makedirs(outdir, exist_ok=True)
-    base = os.path.join(outdir, "dispatch-census-%s" % day)
+    base = os.path.join(outdir, "dispatch-census-%s-%02d" % (day, snapshot_number(outdir, day)))
     open(base + ".txt", "w").write(buf.getvalue())
     json.dump(dict(date=day, head=head, dirty=dirty, images=summary_json(res)), open(base + ".json", "w"), indent=1)
     print("wrote %s.txt and %s.json" % (base, base))

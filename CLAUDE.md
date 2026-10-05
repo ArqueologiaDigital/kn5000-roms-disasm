@@ -847,9 +847,10 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    - converts `.incbin` / `.byte` bytes to code;
    - places labels at table targets;
    - or before quoting any coverage figure.
-   It compares with the newest snapshot, then writes today's. Commit the new snapshot **in the same commit**
-   as the change that moved the numbers. One snapshot per day is enough; a second run the same day
-   overwrites that day's file.
+   It compares with the newest **committed** snapshot, then writes `dispatch-census-<date>-NN`. Commit the
+   new snapshot **in the same commit** as the change that moved the numbers. A committed snapshot is never
+   rewritten: a later commit on the same day gets the next NN, and a re-run before committing reuses that
+   day's uncommitted file.
 3. **Monotonic.** `census.py --compare` exits 1 when any image's not-used tables, unused targets,
    spelling-only targets or not-used unframed runs ROSE. A rise is a regression unless the commit message
    says why. Example: a table found by hand, or a detector widened.
