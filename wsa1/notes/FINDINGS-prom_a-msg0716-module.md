@@ -317,3 +317,39 @@ that spelled 0xF80300 and 0xF80000 as this image's own labels now use those equa
 `Link_ReceiveEchoedReply` waits for the request's six bytes to come back before it copies the payload into
 0x810. The 0x81 / 0x85 query in 0xFC1E68 (two 6-bit values per slot, drawn by `Paint_SoundModeFields` as
 13-character labels) is not named yet. What its two parameters are is not established.
+
+## CPU 1 -> CPU 2 requests, paired with prom_c's arms (2026-10-05)
+
+CPU 1 asks CPU 2 for data with 6-byte link packets:
+
+| byte | holds |
+|---|---|
+| +0 | server, 0x80..0x8F |
+| +1 | part |
+| +2 | opcode or record offset |
+| +3 | count or argument |
+| +4 | reply channel |
+| +5 | tag or argument |
+
+prom_c's `ToneMsg_Dispatch` decodes +0: bits 0-2 pick the arm, and bit 3 picks the family.
+- **Queries (0x80-0x87):**
+  - 0x80 `ToneQuery_Dispatch`, with +2 its opcode;
+  - 0x81 `LinkQuery_ReplyPartRecordBytes`;
+  - 0x82 / 0x83 the element blocks;
+  - 0x84 the wave select;
+  - 0x85 `LinkQuery_ReplyToneRecordBytes`;
+  - 0x86 / 0x87 not named.
+- **Writes (0x88-0x8F):** 0x88 `ToneEdit_Dispatch`, with +2 its opcode; 0x89-0x8F prom_c 0xFBB793 ... 0xFBD6FC.
+
+`notes/prom_ab_link_requests.py` lists every CPU 1 routine that sends such a packet, with the arm it reaches.
+On 2026-10-05 it lists 16 pairings. Named from them:
+- `Cpu2Query_SendPartRecordRead` / `_SendToneRecordRead` (`_ReplyCh4` variants, and offset-fixed `...Read87` /
+  `...Read52`);
+- `Drawbar_QueryPart0Byte10`, `Drawbar_QueryElementBlocks` and the reply side `Drawbar_OnCpu2Reply`. The
+  DRAWBAR requests carry the tag 0xA3, which is the screen's own id, and prom_a's reply handler `sub_FD2014`
+  routes replies tagged 0xA3 to it.
+
+This settles two things prom_c's headers record as unknown:
+- `ToneQuery_Dispatch` opcode 4 is the sound-name query (`SoundName_SendQuery`: [0x80, bank, 4, number]);
+- `ToneEdit_Dispatch` opcodes 11, 12 and 4..8 are the drawbar values (`Drawbar_SendPartParams`).
+The prom_c arm labels themselves are left to prom_c's own naming process.

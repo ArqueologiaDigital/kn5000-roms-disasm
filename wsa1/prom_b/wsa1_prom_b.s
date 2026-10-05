@@ -91667,7 +91667,9 @@ T_F42E5C:	jp T_F42E58_Nop  ; -> prom_b 0x5301A
 ; Evidence: slot 0xF42E60 is `jp 0xF53DF4`; prom_b 0xF53DF4 carries the label
 ;           Drawbar_ReloadIfMarked (graded CONTENT).  DERIVATIVE name.
 T_Drawbar_ReloadIfMarked:	jp Drawbar_ReloadIfMarked  ; F42E60 (was T_F42E60) -> prom_b 0x53DF4
-T_F42E64:	jp sub_F53E04  ; -> prom_b 0x53E04   x1
+; Evidence: slot 0xF42E64 is `jp 0xF53E04`; prom_b 0xF53E04 carries the label
+;           Drawbar_OnCpu2Reply (graded CONTENT).  DERIVATIVE name.
+T_Drawbar_OnCpu2Reply:	jp Drawbar_OnCpu2Reply  ; F42E64 (was T_F42E64) -> prom_b 0x53E04   x1
 T_F42E68:	jp sub_F541FF  ; -> prom_b 0x541FF   x3
 T_F42E6C:	jp sub_F54210  ; -> prom_b 0x54210   x12
 	.fill 0x10, 1, 0x0E  ; 0xF42E70: 16 x ret
@@ -114934,26 +114936,30 @@ Drawbar9_1ft_Update_Return:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-; Drawbar_ReloadIfMarked: T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls sub_F540C3 (sends the 6-byte link
+; Drawbar_ReloadIfMarked: T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls Drawbar_QueryPart0Byte10 (sends the 6-byte link
 ;   message 81 00 10 01 01 A3).
 Drawbar_ReloadIfMarked:		; <- T_Drawbar_ReloadIfMarked
 	m_cp_mi8 MB16, Drawbar_ReloadMark, 0x0f	; F53DF4  cp (0x28a0),0x0f
 	jr	nz, Drawbar9_1ft_Update_Return2	; F53DF9  jr NZ,0xf53e03
 	ld	(Drawbar_ReloadMark:16), 240	; F53DFB  ld (0x28a0),0xf0
-	calr	sub_F540C3	; F53E00  calr 0xf540c3
+	calr	Drawbar_QueryPart0Byte10	; F53E00  calr 0xf540c3
 Drawbar9_1ft_Update_Return2:
 	ret	; F53E03  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53E04
-; Called from: thunk slot T_F42E64
+; Drawbar_OnCpu2Reply
+; Called from: thunk slot T_Drawbar_OnCpu2Reply
 ; Evidence: 0xF53E04 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F53E04:		; <- T_F42E64
+; Drawbar_OnCpu2Reply: T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler sub_FD2014 when the reply's tag (0x2335) is 0xA3: for a part-0
+;   reply tagged 0xA3, server 0x81 offset 0x10 sets Drawbar_ReloadMark from the byte's bits 6-7 (0 -> 0; 0x40 -> 1,
+;   Drawbar_QueryElementBlocks(0) and (0x2890) / (0x2891) = 0; 0x80 -> 2); 0x82 / 0x83 replies go to their own arms;
+;   on screen 0xA3 a repaint is requested.  Basis: body + caller.
+Drawbar_OnCpu2Reply:		; <- T_Drawbar_OnCpu2Reply
 	push	xix	; F53E04  push XIX
 	lda	xix, (9008:16)	; F53E05  lda XIX,0x2330
 	extz	xix	; F53E09  extz XIX
@@ -114994,7 +115000,7 @@ Drawbar9_1ft_Update_Skip4:
 Drawbar9_1ft_Update_Skip5:
 	ld	(Drawbar_ReloadMark:16), 1	; F53E67  ld (0x28a0),0x01
 	pushw	0	; F53E6C  push 0x0000
-	calr	sub_F54051	; F53E6F  calr 0xf54051
+	calr	Drawbar_QueryElementBlocks	; F53E6F  calr 0xf54051
 	ld	(10384:16), 0	; F53E72  ld (0x2890),0x00
 	ld	(10385:16), 0	; F53E77  ld (0x2891),0x00
 	popw	bc	; F53E7C  pop BC
@@ -115156,7 +115162,7 @@ Drawbar9_1ft_Update_Epilogue:
 	ret	; F54050  ret
 
 ; --------------------------------------------------------------------------
-; sub_F54051
+; Drawbar_QueryElementBlocks
 ; Called from: call from 0xF53E6F
 ; Evidence: 0xF54051 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -115164,7 +115170,9 @@ Drawbar9_1ft_Update_Epilogue:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F54051:
+; Drawbar_QueryElementBlocks: (part): four requests tagged 0xA3 on reply channel 1 -- [0x82, part, 2, 2] and [0x82, part, 0x82, 2], then the same
+;   with 0x83 -- to LinkQuery_ReplyElementBlockBytes_Elements01 / _Elements23.  Basis: protocol pairing.
+Drawbar_QueryElementBlocks:
 	link XIZ,0xfffa	; F54051  link XIZ,0xfffa
 	push	xix	; F54055  push XIX
 	lda	xix, (xiz-6)	; F54056  lda XIX,XIZ+0xfa
@@ -115204,7 +115212,7 @@ sub_F54051:
 	ret	; F540C2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F540C3
+; Drawbar_QueryPart0Byte10
 ; Called from: call from 0xF53E00
 ; Evidence: 0xF540C3 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
@@ -115212,7 +115220,10 @@ sub_F54051:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F540C3:
+; Drawbar_QueryPart0Byte10: [0x81, 0, 0x10, 1, 1, 0xA3]: one byte of part 0's record at offset 0x10 (LinkQuery_ReplyPartRecordBytes), reply
+;   channel 1, tagged 0xA3 -- the DRAWBAR screen's id, which Drawbar_OnCpu2Reply checks.  Called by
+;   Drawbar_ReloadIfMarked.  Basis: protocol pairing + callers.
+Drawbar_QueryPart0Byte10:
 	link XIZ,0xfffa	; F540C3  link XIZ,0xfffa
 	push	xix	; F540C7  push XIX
 	lda	xix, (xiz-6)	; F540C8  lda XIX,XIZ+0xfa

@@ -1934,7 +1934,7 @@
 	.set T_ScreenEnter_DrawbarScreen,                                                                      0x00F42E44
 	.set T_Drawbar_MarkReloadOnSoundEvent,                                                                      0x00F42E54
 	.set T_Drawbar_ReloadIfMarked,                                                                      0x00F42E60
-	.set T_F42E64,                                                                      0x00F42E64
+	.set T_Drawbar_OnCpu2Reply,                                                                      0x00F42E64
 	.set T_F42E68,                                                                      0x00F42E68
 	.set T_F42E6C,                                                                      0x00F42E6C
 	.set T_CallbackQueue_Post,                                                          0x00F42E84
@@ -115652,7 +115652,7 @@ sub_FC1CD4:
 	pop_a                                                ; FC1CE1  15
 	ldw de, 0x49                                         ; FC1CE2  32 49 00
 	ld XIY,0x00000850                                    ; FC1CE5  45 50 08 00 00
-	call sub_FC1CFB                                      ; FC1CEA  1d fb 1c fc
+	call Cpu2Query_SendPartRecordRead87                                      ; FC1CEA  1d fb 1c fc
 	ld a, 0x04:opc                                          ; FC1CEE  21 04
 	call T_Kernel_SemaSignal                             ; FC1CF0  1d 88 2d f4
 	popw hl                                              ; FC1CF4  4b
@@ -115661,7 +115661,9 @@ sub_FC1CD4:
 	pop W                                                ; FC1CF7  c8 05
 	pop XIX                                              ; FC1CF9  5c
 	ret                                                  ; FC1CFA  0e
-sub_FC1CFB:
+; Cpu2Query_SendPartRecordRead87: [0x81, B, 0x87, E, 4, 0]: E bytes of the part record from offset 0x87, reply channel 4.  What offset 0x87 holds is
+;   not established.  Basis: protocol pairing.
+Cpu2Query_SendPartRecordRead87:
 	pushw de                                             ; FC1CFB  2a
 	pushw bc                                             ; FC1CFC  29
 	ld (XIY),0x81                                        ; FC1CFD  b5 00 81
@@ -115690,7 +115692,7 @@ sub_FC1D22:
 	pop_a                                                ; FC1D2F  15
 	ldw de, 0x46                                         ; FC1D30  32 46 00
 	ld XIY,0x00000850                                    ; FC1D33  45 50 08 00 00
-	call sub_FC1D49                                      ; FC1D38  1d 49 1d fc
+	call Cpu2Query_SendToneRecordRead52                                      ; FC1D38  1d 49 1d fc
 	ld a, 0x04:opc                                          ; FC1D3C  21 04
 	call T_Kernel_SemaSignal                             ; FC1D3E  1d 88 2d f4
 	popw hl                                              ; FC1D42  4b
@@ -115699,7 +115701,8 @@ sub_FC1D22:
 	pop W                                                ; FC1D45  c8 05
 	pop XIX                                              ; FC1D47  5c
 	ret                                                  ; FC1D48  0e
-sub_FC1D49:
+; Cpu2Query_SendToneRecordRead52: [0x85, B, 0x52, E, 4, 0]: E bytes of the tone record from offset 0x52, reply channel 4.  Basis: protocol pairing.
+Cpu2Query_SendToneRecordRead52:
 	pushw de                                             ; FC1D49  2a
 	pushw bc                                             ; FC1D4A  29
 	ld (XIY),0x85                                        ; FC1D4B  b5 00 85
@@ -115885,7 +115888,7 @@ sub_FC1E68:
 	ld C,A                                               ; FC1EBB  c9 8b
 	ldw de, 0x01                                         ; FC1EBD  32 01 00
 	ld XIY,0x00000800                                    ; FC1EC0  45 00 08 00 00
-	calr sub_FC1F4B                                      ; FC1EC5  1e 83 00
+	calr Cpu2Query_SendPartRecordRead                                      ; FC1EC5  1e 83 00
 	pushw bc                                             ; FC1EC8  29
 	ld c, 0x00:opc                                          ; FC1EC9  23 00
 	calr Link_ReceiveEchoedReply                                          ; FC1ECB  1e 0e fd
@@ -115895,7 +115898,7 @@ sub_FC1E68:
 	add C,0x03                                           ; FC1ED7  cb c8 03
 	ldw de, 0x01                                         ; FC1EDA  32 01 00
 	ld XIY,0x00000800                                    ; FC1EDD  45 00 08 00 00
-	calr sub_FC1F4B                                      ; FC1EE2  1e 66 00
+	calr Cpu2Query_SendPartRecordRead                                      ; FC1EE2  1e 66 00
 	ld c, 0x01:opc                                          ; FC1EE5  23 01
 	calr Link_ReceiveEchoedReply                                          ; FC1EE7  1e f2 fc
 	cp XIY,0xffffffff                                    ; FC1EEA  ed cf ff ff ff ff
@@ -115906,7 +115909,7 @@ sub_FC1E68:
 	ld C,A                                               ; FC1EF7  c9 8b
 	ldw de, 0x01                                         ; FC1EF9  32 01 00
 	ld XIY,0x00000800                                    ; FC1EFC  45 00 08 00 00
-	calr sub_FC1F71                                      ; FC1F01  1e 6d 00
+	calr Cpu2Query_SendToneRecordRead                                      ; FC1F01  1e 6d 00
 	pushw bc                                             ; FC1F04  29
 	ld c, 0x00:opc                                          ; FC1F05  23 00
 	calr Link_ReceiveEchoedReply                                          ; FC1F07  1e d2 fc
@@ -115916,7 +115919,7 @@ sub_FC1E68:
 	add C,0x03                                           ; FC1F13  cb c8 03
 	ldw de, 0x01                                         ; FC1F16  32 01 00
 	ld XIY,0x00000800                                    ; FC1F19  45 00 08 00 00
-	calr sub_FC1F71                                      ; FC1F1E  1e 50 00
+	calr Cpu2Query_SendToneRecordRead                                      ; FC1F1E  1e 50 00
 	ld c, 0x01:opc                                          ; FC1F21  23 01
 	calr Link_ReceiveEchoedReply                                          ; FC1F23  1e b6 fc
 	cp XIY,0xffffffff                                    ; FC1F26  ed cf ff ff ff ff
@@ -115939,7 +115942,11 @@ sub_FC1E68:
 sub_FC1E68__FC1F49:
 	nop                                                  ; FC1F49  00
 	nop                                                  ; FC1F4A  00
-sub_FC1F4B:
+; Cpu2Query_SendPartRecordRead: the 6-byte link request [0x81, B part, C offset, E count, reply channel 0, 0] at XIY, sent with
+;   T_Link_SendBlockIn32ByteChunks.  Server byte 0x81 reaches prom_c's LinkQuery_ReplyPartRecordBytes (ToneMsg_Dispatch:
+;   bits 0-2 = query arm 1, bit 3 clear), which returns E bytes of the part's record from offset C.
+;   Basis: protocol pairing (notes/prom_ab_link_requests.py).
+Cpu2Query_SendPartRecordRead:
 	pushw de                                             ; FC1F4B  2a
 	pushw bc                                             ; FC1F4C  29
 	ld (XIY),0x81                                        ; FC1F4D  b5 00 81
@@ -115957,7 +115964,9 @@ sub_FC1F6C:
 	popw bc                                              ; FC1F6E  49
 	popw de                                              ; FC1F6F  4a
 	ret                                                  ; FC1F70  0e
-sub_FC1F71:
+; Cpu2Query_SendToneRecordRead: [0x85, B, C, E, 0, 0]: the same request to LinkQuery_ReplyToneRecordBytes (query arm 5) -- E bytes of the tone
+;   record from offset C.  Basis: protocol pairing.
+Cpu2Query_SendToneRecordRead:
 	pushw de                                             ; FC1F71  2a
 	pushw bc                                             ; FC1F72  29
 	ld (XIY),0x85                                        ; FC1F73  b5 00 85
@@ -115987,7 +115996,7 @@ sub_FC1F97:
 	ld c, 0x23:opc                                          ; FC1FA5  23 23
 	ldw de, 0x02                                         ; FC1FA7  32 02 00
 	ld XIY,0x00000850                                    ; FC1FAA  45 50 08 00 00
-	calr sub_FC1FE7                                      ; FC1FAF  1e 35 00
+	calr Cpu2Query_SendPartRecordRead_ReplyCh4                                      ; FC1FAF  1e 35 00
 	ld a, 0x04:opc                                          ; FC1FB2  21 04
 	call T_Kernel_SemaSignal                             ; FC1FB4  1d 88 2d f4
 	popw hl                                              ; FC1FB8  4b
@@ -116009,7 +116018,7 @@ sub_FC1FBF:
 	ld c, 0x20:opc                                          ; FC1FCD  23 20
 	ldw de, 0x02                                         ; FC1FCF  32 02 00
 	ld XIY,0x00000850                                    ; FC1FD2  45 50 08 00 00
-	calr sub_FC200D                                      ; FC1FD7  1e 33 00
+	calr Cpu2Query_SendToneRecordRead_ReplyCh4                                      ; FC1FD7  1e 33 00
 	ld a, 0x04:opc                                          ; FC1FDA  21 04
 	call T_Kernel_SemaSignal                             ; FC1FDC  1d 88 2d f4
 	popw hl                                              ; FC1FE0  4b
@@ -116018,7 +116027,8 @@ sub_FC1FBF:
 	pop W                                                ; FC1FE3  c8 05
 	pop XIX                                              ; FC1FE5  5c
 	ret                                                  ; FC1FE6  0e
-sub_FC1FE7:
+; Cpu2Query_SendPartRecordRead_ReplyCh4: Cpu2Query_SendPartRecordRead with reply channel 4 at +4.  Basis: protocol pairing.
+Cpu2Query_SendPartRecordRead_ReplyCh4:
 	pushw de                                             ; FC1FE7  2a
 	pushw bc                                             ; FC1FE8  29
 	ld (XIY),0x81                                        ; FC1FE9  b5 00 81
@@ -116035,7 +116045,8 @@ sub_FC1FE7:
 	popw bc                                              ; FC200A  49
 	popw de                                              ; FC200B  4a
 	ret                                                  ; FC200C  0e
-sub_FC200D:
+; Cpu2Query_SendToneRecordRead_ReplyCh4: Cpu2Query_SendToneRecordRead with reply channel 4.  Basis: protocol pairing.
+Cpu2Query_SendToneRecordRead_ReplyCh4:
 	pushw de                                             ; FC200D  2a
 	pushw bc                                             ; FC200E  29
 	ld (XIY),0x85                                        ; FC200F  b5 00 85
@@ -133575,7 +133586,7 @@ sub_FD2014:
 	ld c, (0x2335:16)                                   ; FD24F1  c1 35 23 23
 	cp C,0xa3                                            ; FD24F5  cb cf a3
 	jr nz, .LFD24FE                                      ; FD24F8  6e 04
-	call T_F42E64                                        ; FD24FA  1d 64 2e f4
+	call T_Drawbar_OnCpu2Reply                                        ; FD24FA  1d 64 2e f4
 .LFD24FE:
 	pop XIX                                              ; FD24FE  5c
 	pop XDE                                              ; FD24FF  5a

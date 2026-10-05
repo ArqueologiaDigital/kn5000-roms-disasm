@@ -2282,7 +2282,7 @@ ROWS = [
      "T_Drawbar_MarkReloadOnSoundEvent, UiListB_Class00 / 20 (part 0's records): byte index 0, 1 or 0x9B..0x9D -> (0x28A0) = 15.  The byte\n"
      "after the drawbar values at 0x2890 (Drawbar_SendPartParams); this code follows Drawbar9_1ft_Update."),
     ("F53DF4", "Drawbar_ReloadIfMarked",
-     "T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls sub_F540C3 (sends the 6-byte link\n"
+     "T_Drawbar_ReloadIfMarked, in UiEventPassB_TailList: when (0x28A0) is 15, sets it to 240 and calls Drawbar_QueryPart0Byte10 (sends the 6-byte link\n"
      "message 81 00 10 01 01 A3)."),
     # sound / combination / group name lookups over the CPU 1 - CPU 2 link
     ("FC1B81", "SoundName_Lookup",
@@ -2447,6 +2447,36 @@ ROWS = [
      "that directory entry's 8-character name is copied to Disk_FileName and the file is loaded (sub_FE0250,\n"
      "sub_FE05AE ...); the pending bit is then cleared and the screen repainted or set to 1 on a disk error.\n"
      "Basis: body + the writer's header (MidiIn_SongSelect)."),
+    # CPU 1 -> CPU 2 link requests, paired with prom_c's ToneMsg_Dispatch arms (notes/prom_ab_link_requests.py)
+    ("FC1F4B", "Cpu2Query_SendPartRecordRead",
+     "the 6-byte link request [0x81, B part, C offset, E count, reply channel 0, 0] at XIY, sent with\n"
+     "T_Link_SendBlockIn32ByteChunks.  Server byte 0x81 reaches prom_c's LinkQuery_ReplyPartRecordBytes (ToneMsg_Dispatch:\n"
+     "bits 0-2 = query arm 1, bit 3 clear), which returns E bytes of the part's record from offset C.\n"
+     "Basis: protocol pairing (notes/prom_ab_link_requests.py)."),
+    ("FC1F71", "Cpu2Query_SendToneRecordRead",
+     "[0x85, B, C, E, 0, 0]: the same request to LinkQuery_ReplyToneRecordBytes (query arm 5) -- E bytes of the tone\n"
+     "record from offset C.  Basis: protocol pairing."),
+    ("FC1FE7", "Cpu2Query_SendPartRecordRead_ReplyCh4",
+     "Cpu2Query_SendPartRecordRead with reply channel 4 at +4.  Basis: protocol pairing."),
+    ("FC200D", "Cpu2Query_SendToneRecordRead_ReplyCh4",
+     "Cpu2Query_SendToneRecordRead with reply channel 4.  Basis: protocol pairing."),
+    ("FC1CFB", "Cpu2Query_SendPartRecordRead87",
+     "[0x81, B, 0x87, E, 4, 0]: E bytes of the part record from offset 0x87, reply channel 4.  What offset 0x87 holds is\n"
+     "not established.  Basis: protocol pairing."),
+    ("FC1D49", "Cpu2Query_SendToneRecordRead52",
+     "[0x85, B, 0x52, E, 4, 0]: E bytes of the tone record from offset 0x52, reply channel 4.  Basis: protocol pairing."),
+    ("F540C3", "Drawbar_QueryPart0Byte10",
+     "[0x81, 0, 0x10, 1, 1, 0xA3]: one byte of part 0's record at offset 0x10 (LinkQuery_ReplyPartRecordBytes), reply\n"
+     "channel 1, tagged 0xA3 -- the DRAWBAR screen's id, which Drawbar_OnCpu2Reply checks.  Called by\n"
+     "Drawbar_ReloadIfMarked.  Basis: protocol pairing + callers."),
+    ("F54051", "Drawbar_QueryElementBlocks",
+     "(part): four requests tagged 0xA3 on reply channel 1 -- [0x82, part, 2, 2] and [0x82, part, 0x82, 2], then the same\n"
+     "with 0x83 -- to LinkQuery_ReplyElementBlockBytes_Elements01 / _Elements23.  Basis: protocol pairing."),
+    ("F53E04", "Drawbar_OnCpu2Reply",
+     "T_Drawbar_OnCpu2Reply, called by prom_a's link-reply handler sub_FD2014 when the reply's tag (0x2335) is 0xA3: for a part-0\n"
+     "reply tagged 0xA3, server 0x81 offset 0x10 sets Drawbar_ReloadMark from the byte's bits 6-7 (0 -> 0; 0x40 -> 1,\n"
+     "Drawbar_QueryElementBlocks(0) and (0x2890) / (0x2891) = 0; 0x80 -> 2); 0x82 / 0x83 replies go to their own arms;\n"
+     "on screen 0xA3 a repaint is requested.  Basis: body + caller."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
