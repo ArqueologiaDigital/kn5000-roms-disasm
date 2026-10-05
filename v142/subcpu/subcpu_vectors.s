@@ -18,7 +18,7 @@
 
 	.org 0x400 - 0x400, 0xFF
 
-; NAME UNCHANGED (already a real name) -- documentation only.
+; PAYLOAD_ENTRY (was INT_HANDLER_00 until 2026-10-06): the boot ROM's name for the same address.
 ; This slot is NOT an interrupt entry. The TMP94C241 hardware vector table lives in the boot
 ; mask ROM at 0xFFFF00 and its entry 0 points at 0xFFFEE0 (RESET_HANDLER in ROM), never here.
 ; 0x000400 is the PAYLOAD ENTRY POINT: the boot ROM does `call PAYLOAD_ENTRY` (= call 0x400,
@@ -26,7 +26,10 @@
 ; Body is `jp RESET` (0x01F924) + a never-reached `ret`, encoded 1b 24 f9 01 0e.
 ; Verified: boot's own trampoline image (VECTOR_TRAMPOLINES, 0xFF8F6C) is copied to 0x400 at
 ; reset and is then OVERWRITTEN by the payload image, which ships its own 45 trampolines here.
-; --- 0x000400-0x0004E0  INT_HANDLER_00..INT_HANDLER_2C -- 45 interrupt trampolines, 5 bytes each
+; --- 0x000400-0x0004E0  PAYLOAD_ENTRY + 44 IntTramp_<vector> -- 45 interrupt trampolines, 5 bytes each
+; Each IntTramp_ is named for the TMP94C241F vector that the boot ROM's VECTOR_TABLE points at it
+; (renamed 2026-10-06 from the slot-numbered INT_HANDLER_00..INT_HANDLER_2C by
+; scripts/renaming/rename_subcpu_int_trampolines.sed; the boot ROM declares the same names).
 ; Layout: `jp <24-bit target>` (4 bytes, opcode 0x1B) + `ret` (0x0E) = 5 bytes; 45*5 = 225 = 0xE1.
 ; These 225 bytes live in DRAM, so they are WRITABLE at runtime (a wild store can repoint any
 ; interrupt). They are the payload's copy; the boot ROM has an identical-shaped table at 0xFF8F6C.
@@ -42,199 +45,199 @@
 ;   payload's own code and cross-checked against the boot ROM's trampolines:
 ;     vec  0      RESET                         -> ROM 0xFFFEE0
 ;     vec  1..7   SWI1..SWI7                    -> slots 1..7,  all EMPTY_HANDLER (reti)
-;     vec  8      NMI                           -> slot 44 = INT_HANDLER_2C -> MUTE_AND_HALT
-;     vec  9      INTWD (watchdog)              -> slot  8 = INT_HANDLER_08 -> EMPTY_HANDLER_WITH_RESET
-;     vec 10      INT0 (main->sub latch)        -> slot  9 = INT_HANDLER_09 -> INT0_HANDLER (0x020E86)
+;     vec  8      NMI                           -> slot 44 = IntTramp_NMI -> MUTE_AND_HALT
+;     vec  9      INTWD (watchdog)              -> slot  8 = IntTramp_INTWD -> EMPTY_HANDLER_WITH_RESET
+;     vec 10      INT0 (main->sub latch)        -> slot  9 = IntTramp_INT0 -> INT0_HANDLER (0x020E86)
 ;     vec 11..19  remaining external INTs       -> slots 10..18, all EMPTY_HANDLER
 ;     vec 20..31  INTT0..INTTB (12 timers)      -> slots 19..30
-;                   vec 21 INTT1 -> slot 20 = INT_HANDLER_14 -> Timer_AudioTick_Handler (0x01FB41)
-;                   vec 23 INTT3 -> slot 22 = INT_HANDLER_16 -> INT16_TaskSwitch_Handler (0x01FDC8)
+;                   vec 21 INTT1 -> slot 20 = IntTramp_INTT1 -> Timer_AudioTick_Handler (0x01FB41)
+;                   vec 23 INTT3 -> slot 22 = IntTramp_INTT3 -> INTT3_TaskSwitch_Handler (0x01FDC8)
 ;     vec 32/33   INTRX0 / INTTX0               -> slots 31/32, EMPTY_HANDLER (SC0 unused)
-;     vec 34      INTRX1                        -> slot 33 = INT_HANDLER_21 -> INTRX1_HANDLER (0x01F736)
-;     vec 35      INTTX1                        -> slot 34 = INT_HANDLER_22 -> INTTX1_HANDLER (0x01F765)
+;     vec 34      INTRX1                        -> slot 33 = IntTramp_INTRX1 -> INTRX1_HANDLER (0x01F736)
+;     vec 35      INTTX1                        -> slot 34 = IntTramp_INTTX1 -> INTTX1_HANDLER (0x01F765)
 ;     vec 36      INTAD                         -> slot 35, EMPTY_HANDLER
 ;     vec 37..44  INTTC0..INTTC7 (micro-DMA)    -> slots 36..43
-;                   vec 37 INTTC0 -> slot 36 = INT_HANDLER_24 -> MICRODMA_CH0_HANDLER (0x020F1F)
-;                   vec 39 INTTC2 -> slot 38 = INT_HANDLER_26 -> MICRODMA_CH2_HANDLER (0x020F01)
+;                   vec 37 INTTC0 -> slot 36 = IntTramp_INTTC0 -> MICRODMA_CH0_HANDLER (0x020F1F)
+;                   vec 39 INTTC2 -> slot 38 = IntTramp_INTTC2 -> MICRODMA_CH2_HANDLER (0x020F01)
 ;   Counts corroborate: 6 INTETxx registers = 12 timers; INTES0/INTES1 = 2 serial channels;
 ;   4 INTETCxx registers and DMA0V..DMA7V = 8 micro-DMA channels; total = 45 vectors exactly.
 ;   Timer identity: RESET (0x01F924) leaves INTET01 (SFR 0xE4) as (x & 0x8F) | 0x30, i.e. it
 ;   enables INTT1 at level 3 and nothing else in that pair -- so the audio tick is INTT1.
 ;
 ; Only SEVEN of the 45 slots do anything; 38 are `jp EMPTY_HANDLER` (a bare reti at 0x01FBBC).
-INT_HANDLER_00:	; 0400
+PAYLOAD_ENTRY:
 	jp RESET
 	ret
 
-INT_HANDLER_01:	; 0405
+IntTramp_SWI1:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_02:	; 040A
+IntTramp_SWI2:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_03:	; 040F
+IntTramp_SWI3:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_04:	; 0414
+IntTramp_SWI4:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_05:	; 0419
+IntTramp_SWI5:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_06:	; 041E
+IntTramp_SWI6:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_07:	; 0423
+IntTramp_SWI7:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_08:	; 0428: watchdog
+IntTramp_INTWD:
 	jp EMPTY_HANDLER_WITH_RESET
 	ret
 
-INT_HANDLER_09:	; 042D: Interrupt #0: Receive data from main-cpu via 8bit latch
+IntTramp_INT0:	; the main CPU -> sub CPU latch byte
 	jp INT0_HANDLER
 	ret
 
-INT_HANDLER_0A:
+IntTramp_INT4:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_0B:
+IntTramp_INT5:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_0C:
+IntTramp_INT6:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_0D:
+IntTramp_INT7:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_0E:
+IntTramp_Reserved:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_0F:
+IntTramp_INT8:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_10:
+IntTramp_INT9:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_11:
+IntTramp_INTA:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_12:
+IntTramp_INTB:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_13:
+IntTramp_INTT0:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_14:
+IntTramp_INTT1:
 	jp Timer_AudioTick_Handler
 	ret
 
-INT_HANDLER_15:
+IntTramp_INTT2:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_16:
-	jp INT16_TaskSwitch_Handler
+IntTramp_INTT3:
+	jp INTT3_TaskSwitch_Handler
 	ret
 
-INT_HANDLER_17:
+IntTramp_INTTR4:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_18:
+IntTramp_INTTR5:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_19:
+IntTramp_INTTR6:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1A:
+IntTramp_INTTR7:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1B:
+IntTramp_INTTR8:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1C:
+IntTramp_INTTR9:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1D:
+IntTramp_INTTRA:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1E:
+IntTramp_INTTRB:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_1F:
+IntTramp_INTRX0:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_20:
+IntTramp_INTTX0:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_21:
+IntTramp_INTRX1:
 	jp INTRX1_HANDLER
 	ret
 
-INT_HANDLER_22:
+IntTramp_INTTX1:
 	jp INTTX1_HANDLER
 	ret
 
-INT_HANDLER_23:
+IntTramp_INTAD:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_24:
+IntTramp_INTTC0:
 	jp MICRODMA_CH0_HANDLER	; Channel #0 completion
 	ret
 
-INT_HANDLER_25:
+IntTramp_INTTC1:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_26:
+IntTramp_INTTC2:
 	jp MICRODMA_CH2_HANDLER	; Channel #2 completion (STOP AND CLEAR TIMER #2)
 	ret
 
-INT_HANDLER_27:
+IntTramp_INTTC3:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_28:
+IntTramp_INTTC4:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_29:
+IntTramp_INTTC5:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_2A:
+IntTramp_INTTC6:
 	jp EMPTY_HANDLER
 	ret
 
-INT_HANDLER_2B:
+IntTramp_INTTC7:
 	jp EMPTY_HANDLER
 	ret
 
@@ -243,7 +246,7 @@ INT_HANDLER_2B:
 ; On this machine NMI is the power-down / power-fail detect. See FINDINGS below: this is the
 ; only path in the whole payload that stops the main loop while leaving the interrupt-driven
 ; main->sub receive path (INT0 + micro-DMA ch0) fully functional.
-INT_HANDLER_2C:
+IntTramp_NMI:
 	jp MUTE_AND_HALT
 	ret
 

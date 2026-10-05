@@ -1,0 +1,3334 @@
+{
+ "date": "2026-10-06",
+ "head": "4afefdf6",
+ "dirty": true,
+ "images": {
+  "v10": {
+   "framed": 366,
+   "used": 307,
+   "not_used": 59,
+   "new_targets_same_image": 284,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 31,
+   "unframed_not_used": 11,
+   "unframed_new_targets": 23,
+   "null_control": 3,
+   "not_used_tables": [
+    {
+     "kind": "U",
+     "addr": "0xE0CC32",
+     "name": "Scoop_EventLoop_12Entry_Data",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 12,
+     "blockers": {
+      "numeric": 36
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0D72E",
+     "name": "GUI_DisplayStructData_0x750",
+     "entries": 33,
+     "pointers": 33,
+     "unused_targets": 33,
+     "blockers": {
+      "numeric": 33
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DADE",
+     "name": "GUI_DisplayStructData_0xAF8",
+     "entries": 2,
+     "pointers": 2,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAE6",
+     "name": "GUI_DisplayStructData_0xB08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAF6",
+     "name": "GUI_DisplayStructData_0xB18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB06",
+     "name": "GUI_DisplayStructData_0xB28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB16",
+     "name": "GUI_DisplayStructData_0xB38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB26",
+     "name": "GUI_DisplayStructData_0xB48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB36",
+     "name": "GUI_DisplayStructData_0xB58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB46",
+     "name": "GUI_DisplayStructData_0xB68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB56",
+     "name": "GUI_DisplayStructData_0xB78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB66",
+     "name": "GUI_DisplayStructData_0xB88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB76",
+     "name": "GUI_DisplayStructData_0xB98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB86",
+     "name": "GUI_DisplayStructData_0xBA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB96",
+     "name": "GUI_DisplayStructData_0xBB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBA6",
+     "name": "GUI_DisplayStructData_0xBC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBB6",
+     "name": "GUI_DisplayStructData_0xBD8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBC6",
+     "name": "GUI_DisplayStructData_0xBE8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBD6",
+     "name": "GUI_DisplayStructData_0xBF8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBE6",
+     "name": "GUI_DisplayStructData_0xC08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBF6",
+     "name": "GUI_DisplayStructData_0xC18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC06",
+     "name": "GUI_DisplayStructData_0xC28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC16",
+     "name": "GUI_DisplayStructData_0xC38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC26",
+     "name": "GUI_DisplayStructData_0xC48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC36",
+     "name": "GUI_DisplayStructData_0xC58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC46",
+     "name": "GUI_DisplayStructData_0xC68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC56",
+     "name": "GUI_DisplayStructData_0xC78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC66",
+     "name": "GUI_DisplayStructData_0xC88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC76",
+     "name": "GUI_DisplayStructData_0xC98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC86",
+     "name": "GUI_DisplayStructData_0xCA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC96",
+     "name": "GUI_DisplayStructData_0xCB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCA6",
+     "name": "GUI_DisplayStructData_0xCC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCB6",
+     "name": "GUI_DisplayStructData_0xCD8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 10,
+     "blockers": {
+      "nolabel": 10
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCFE",
+     "name": "GUI_DisplayStructData_0xD20",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD46",
+     "name": "GUI_DisplayStructData_0xD68",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD8E",
+     "name": "GUI_DisplayStructData_0xDB0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DDD6",
+     "name": "GUI_DisplayStructData_0xDF8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE1E",
+     "name": "GUI_DisplayStructData_0xE40",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE66",
+     "name": "GUI_DisplayStructData_0xE88",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEAE",
+     "name": "GUI_DisplayStructData_0xED0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEF6",
+     "name": "GUI_DisplayStructData_0xF18",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF3E",
+     "name": "GUI_DisplayStructData_0xF60",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF86",
+     "name": "GUI_DisplayStructData_0xFA8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DFCE",
+     "name": "GUI_DisplayStructData_0xFF0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E016",
+     "name": "GUI_DisplayStructData_0x1038",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E05E",
+     "name": "GUI_DisplayStructData_0x1080",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E0A6",
+     "name": "GUI_DisplayStructData_0x10C8",
+     "entries": 14,
+     "pointers": 14,
+     "unused_targets": 12,
+     "blockers": {
+      "nolabel": 12
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0E72D",
+     "name": "ToneGen_ParamTable_0x326",
+     "entries": 32,
+     "pointers": 32,
+     "unused_targets": 32,
+     "blockers": {
+      "numeric": 32
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1FFB6",
+     "name": "WidgetDispatch_FDTestPtrTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE4A044",
+     "name": "TimeSig_ProcTable",
+     "entries": 24,
+     "pointers": 24,
+     "unused_targets": 6,
+     "blockers": {
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE9F11C",
+     "name": "PsMixer_ControlHelper_Data",
+     "entries": 11,
+     "pointers": 11,
+     "unused_targets": 11,
+     "blockers": {
+      "numeric": 11
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 48,
+     "pointers": 48,
+     "unused_targets": 22,
+     "blockers": {
+      "numeric": 7,
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEE1574",
+     "name": "NakaInst_SoundConfig_LookupTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84AC",
+     "name": "SwbtB2_Code63_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84EC",
+     "name": "SwbtB2_Code69_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8504",
+     "name": "SwbtB2_Code6B_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8534",
+     "name": "SwbtB2_Code71_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85B4",
+     "name": "SwbtB2_Code93_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85FC",
+     "name": "SwbtB2_Code9A_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8608",
+     "name": "SwbtB2_CodeA8_Listeners",
+     "entries": 14,
+     "pointers": 13,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE86B4",
+     "name": "SwbtBank2_PostCallbacks",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8B71",
+     "name": "SwbtB3_Code48_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C05",
+     "name": "SwbtB3_CodeA8_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C15",
+     "name": "SwbtB3_CodeA9_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C29",
+     "name": "SwbtB3_CodeAA_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5ADFD",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 5,
+      "nolabel/num": 2
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C573",
+     "name": "AccStyle_JumpTable2",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "dataother": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E907",
+     "name": "AccTone_LookupByProgramWrapped_Join",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF6F068",
+     "name": "TempoScale_1Beat",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v9": {
+   "framed": 364,
+   "used": 305,
+   "not_used": 59,
+   "new_targets_same_image": 284,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 33,
+   "unframed_not_used": 13,
+   "unframed_new_targets": 23,
+   "null_control": 4,
+   "not_used_tables": [
+    {
+     "kind": "U",
+     "addr": "0xE0CC32",
+     "name": "Scoop_EventLoop_12Entry_Data",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 12,
+     "blockers": {
+      "numeric": 36
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0D72E",
+     "name": "GUI_DisplayStructData_0x750",
+     "entries": 33,
+     "pointers": 33,
+     "unused_targets": 33,
+     "blockers": {
+      "numeric": 33
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DADE",
+     "name": "GUI_DisplayStructData_0xAF8",
+     "entries": 2,
+     "pointers": 2,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAE6",
+     "name": "GUI_DisplayStructData_0xB08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAF6",
+     "name": "GUI_DisplayStructData_0xB18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB06",
+     "name": "GUI_DisplayStructData_0xB28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB16",
+     "name": "GUI_DisplayStructData_0xB38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB26",
+     "name": "GUI_DisplayStructData_0xB48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB36",
+     "name": "GUI_DisplayStructData_0xB58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB46",
+     "name": "GUI_DisplayStructData_0xB68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB56",
+     "name": "GUI_DisplayStructData_0xB78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB66",
+     "name": "GUI_DisplayStructData_0xB88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB76",
+     "name": "GUI_DisplayStructData_0xB98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB86",
+     "name": "GUI_DisplayStructData_0xBA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB96",
+     "name": "GUI_DisplayStructData_0xBB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBA6",
+     "name": "GUI_DisplayStructData_0xBC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBB6",
+     "name": "GUI_DisplayStructData_0xBD8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBC6",
+     "name": "GUI_DisplayStructData_0xBE8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBD6",
+     "name": "GUI_DisplayStructData_0xBF8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBE6",
+     "name": "GUI_DisplayStructData_0xC08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBF6",
+     "name": "GUI_DisplayStructData_0xC18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC06",
+     "name": "GUI_DisplayStructData_0xC28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC16",
+     "name": "GUI_DisplayStructData_0xC38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC26",
+     "name": "GUI_DisplayStructData_0xC48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC36",
+     "name": "GUI_DisplayStructData_0xC58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC46",
+     "name": "GUI_DisplayStructData_0xC68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC56",
+     "name": "GUI_DisplayStructData_0xC78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC66",
+     "name": "GUI_DisplayStructData_0xC88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC76",
+     "name": "GUI_DisplayStructData_0xC98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC86",
+     "name": "GUI_DisplayStructData_0xCA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC96",
+     "name": "GUI_DisplayStructData_0xCB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCA6",
+     "name": "GUI_DisplayStructData_0xCC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCB6",
+     "name": "GUI_DisplayStructData_0xCD8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 10,
+     "blockers": {
+      "nolabel": 10
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCFE",
+     "name": "GUI_DisplayStructData_0xD20",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD46",
+     "name": "GUI_DisplayStructData_0xD68",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD8E",
+     "name": "GUI_DisplayStructData_0xDB0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DDD6",
+     "name": "GUI_DisplayStructData_0xDF8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE1E",
+     "name": "GUI_DisplayStructData_0xE40",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE66",
+     "name": "GUI_DisplayStructData_0xE88",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEAE",
+     "name": "GUI_DisplayStructData_0xED0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEF6",
+     "name": "GUI_DisplayStructData_0xF18",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF3E",
+     "name": "GUI_DisplayStructData_0xF60",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF86",
+     "name": "GUI_DisplayStructData_0xFA8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DFCE",
+     "name": "GUI_DisplayStructData_0xFF0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E016",
+     "name": "GUI_DisplayStructData_0x1038",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E05E",
+     "name": "GUI_DisplayStructData_0x1080",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E0A6",
+     "name": "GUI_DisplayStructData_0x10C8",
+     "entries": 14,
+     "pointers": 14,
+     "unused_targets": 12,
+     "blockers": {
+      "nolabel": 12
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0E72D",
+     "name": "ToneGen_ParamTable_0x326",
+     "entries": 32,
+     "pointers": 32,
+     "unused_targets": 32,
+     "blockers": {
+      "numeric": 32
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1FFB6",
+     "name": "WidgetDispatch_FDTestPtrTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE4A044",
+     "name": "TimeSig_ProcTable",
+     "entries": 24,
+     "pointers": 24,
+     "unused_targets": 6,
+     "blockers": {
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE9F11C",
+     "name": "PsMixer_ControlHelper_Data",
+     "entries": 11,
+     "pointers": 11,
+     "unused_targets": 11,
+     "blockers": {
+      "numeric": 11
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 48,
+     "pointers": 48,
+     "unused_targets": 22,
+     "blockers": {
+      "numeric": 7,
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEE1574",
+     "name": "NakaInst_SoundConfig_LookupTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84AC",
+     "name": "SwbtB2_Code63_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84EC",
+     "name": "SwbtB2_Code69_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8504",
+     "name": "SwbtB2_Code6B_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8534",
+     "name": "SwbtB2_Code71_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85B4",
+     "name": "SwbtB2_Code93_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85FC",
+     "name": "SwbtB2_Code9A_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8608",
+     "name": "SwbtB2_CodeA8_Listeners",
+     "entries": 14,
+     "pointers": 13,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE86B4",
+     "name": "SwbtBank2_PostCallbacks",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8B71",
+     "name": "SwbtB3_Code48_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C05",
+     "name": "SwbtB3_CodeA8_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C15",
+     "name": "SwbtB3_CodeA9_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C29",
+     "name": "SwbtB3_CodeAA_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5ADFD",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 7,
+     "pointers": 7,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 5,
+      "nolabel/num": 2
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C573",
+     "name": "AccStyle_JumpTable2",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "dataother": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E907",
+     "name": "AccTone_LookupByProgramWrapped_Join",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF6F068",
+     "name": "TempoScale_1Beat",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xFCB46F",
+     "name": "VoiceParam_ModeDispatch_Table",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xFCB6F9",
+     "name": "MidiVoiceNote_Dispatch_Table",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v7": {
+   "framed": 361,
+   "used": 259,
+   "not_used": 102,
+   "new_targets_same_image": 316,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 32,
+   "unframed_not_used": 32,
+   "unframed_new_targets": 17,
+   "null_control": 4,
+   "not_used_tables": [
+    {
+     "kind": "U",
+     "addr": "0xE0CC32",
+     "name": "Scoop_EventLoop_12Entry_Data",
+     "entries": 36,
+     "pointers": 36,
+     "unused_targets": 12,
+     "blockers": {
+      "numeric": 36
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0D72E",
+     "name": "GUI_DisplayStructData_0x750",
+     "entries": 33,
+     "pointers": 33,
+     "unused_targets": 33,
+     "blockers": {
+      "numeric": 33
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DADE",
+     "name": "GUI_DisplayStructData_0xAF8",
+     "entries": 2,
+     "pointers": 2,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAE6",
+     "name": "GUI_DisplayStructData_0xB08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DAF6",
+     "name": "GUI_DisplayStructData_0xB18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB06",
+     "name": "GUI_DisplayStructData_0xB28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB16",
+     "name": "GUI_DisplayStructData_0xB38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB26",
+     "name": "GUI_DisplayStructData_0xB48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB36",
+     "name": "GUI_DisplayStructData_0xB58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB46",
+     "name": "GUI_DisplayStructData_0xB68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB56",
+     "name": "GUI_DisplayStructData_0xB78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB66",
+     "name": "GUI_DisplayStructData_0xB88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB76",
+     "name": "GUI_DisplayStructData_0xB98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB86",
+     "name": "GUI_DisplayStructData_0xBA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DB96",
+     "name": "GUI_DisplayStructData_0xBB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBA6",
+     "name": "GUI_DisplayStructData_0xBC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBB6",
+     "name": "GUI_DisplayStructData_0xBD8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBC6",
+     "name": "GUI_DisplayStructData_0xBE8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBD6",
+     "name": "GUI_DisplayStructData_0xBF8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBE6",
+     "name": "GUI_DisplayStructData_0xC08",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DBF6",
+     "name": "GUI_DisplayStructData_0xC18",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC06",
+     "name": "GUI_DisplayStructData_0xC28",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC16",
+     "name": "GUI_DisplayStructData_0xC38",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC26",
+     "name": "GUI_DisplayStructData_0xC48",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC36",
+     "name": "GUI_DisplayStructData_0xC58",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC46",
+     "name": "GUI_DisplayStructData_0xC68",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC56",
+     "name": "GUI_DisplayStructData_0xC78",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC66",
+     "name": "GUI_DisplayStructData_0xC88",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC76",
+     "name": "GUI_DisplayStructData_0xC98",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC86",
+     "name": "GUI_DisplayStructData_0xCA8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DC96",
+     "name": "GUI_DisplayStructData_0xCB8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCA6",
+     "name": "GUI_DisplayStructData_0xCC8",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "nolabel": 3
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCB6",
+     "name": "GUI_DisplayStructData_0xCD8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 10,
+     "blockers": {
+      "nolabel": 10
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DCFE",
+     "name": "GUI_DisplayStructData_0xD20",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD46",
+     "name": "GUI_DisplayStructData_0xD68",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DD8E",
+     "name": "GUI_DisplayStructData_0xDB0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 15,
+     "blockers": {
+      "nolabel": 15
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DDD6",
+     "name": "GUI_DisplayStructData_0xDF8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE1E",
+     "name": "GUI_DisplayStructData_0xE40",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DE66",
+     "name": "GUI_DisplayStructData_0xE88",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEAE",
+     "name": "GUI_DisplayStructData_0xED0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DEF6",
+     "name": "GUI_DisplayStructData_0xF18",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF3E",
+     "name": "GUI_DisplayStructData_0xF60",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DF86",
+     "name": "GUI_DisplayStructData_0xFA8",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0DFCE",
+     "name": "GUI_DisplayStructData_0xFF0",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 11,
+     "blockers": {
+      "nolabel": 11
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E016",
+     "name": "GUI_DisplayStructData_0x1038",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 14,
+     "blockers": {
+      "nolabel": 14
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E05E",
+     "name": "GUI_DisplayStructData_0x1080",
+     "entries": 18,
+     "pointers": 17,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xE0E0A6",
+     "name": "GUI_DisplayStructData_0x10C8",
+     "entries": 14,
+     "pointers": 14,
+     "unused_targets": 12,
+     "blockers": {
+      "nolabel": 12
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE0E72D",
+     "name": "ToneGen_ParamTable_0x326",
+     "entries": 32,
+     "pointers": 32,
+     "unused_targets": 32,
+     "blockers": {
+      "numeric": 32
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE1F0EC",
+     "name": "InitializeHama_Data_8",
+     "entries": 84,
+     "pointers": 84,
+     "unused_targets": 84,
+     "blockers": {
+      "numeric": 84
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE201B4",
+     "name": "SqStepTtlFunc_Data",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE20260",
+     "name": "Yoko_ApFunctionTable_127",
+     "entries": 46,
+     "pointers": 46,
+     "unused_targets": 45,
+     "blockers": {
+      "numeric": 45
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE3051C",
+     "name": "Kubo_MainFunctionTable_148",
+     "entries": 34,
+     "pointers": 34,
+     "unused_targets": 34,
+     "blockers": {
+      "numeric": 34
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE44636",
+     "name": "WidgetData_CharsetMappingTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE4A064",
+     "name": "TimeSig_ProcTable",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "numeric": 4,
+      "nolabel/num": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE814F4",
+     "name": "InitializeMurai_PtrTable_5",
+     "entries": 37,
+     "pointers": 37,
+     "unused_targets": 36,
+     "blockers": {
+      "numeric": 36
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE9F11C",
+     "name": "PsMixer_ControlHelper_Data",
+     "entries": 11,
+     "pointers": 11,
+     "unused_targets": 11,
+     "blockers": {
+      "numeric": 11
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xE9FCE2",
+     "name": "FDemoText_ByteData_VoiceProbeC_Data_3",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEA066C",
+     "name": "DiskOp_ChannelCfgTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEA135A",
+     "name": "InitializeCheap_PtrTable",
+     "entries": 13,
+     "pointers": 13,
+     "unused_targets": 13,
+     "blockers": {
+      "numeric": 13
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEA7FCE",
+     "name": "InitializeCheap_PtrTable_8",
+     "entries": 57,
+     "pointers": 57,
+     "unused_targets": 57,
+     "blockers": {
+      "numeric": 57
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAAF14",
+     "name": "GraphicsRender_ProcessEntries_PtrTable",
+     "entries": 48,
+     "pointers": 48,
+     "unused_targets": 33,
+     "blockers": {
+      "numeric": 33,
+      "nolabel/num": 15
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAB2B4",
+     "name": "Root_ApFunctionTable_120",
+     "entries": 12,
+     "pointers": 12,
+     "unused_targets": 12,
+     "blockers": {
+      "numeric": 12
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEAFA6E",
+     "name": "Root_FunctionTable_100",
+     "entries": 352,
+     "pointers": 352,
+     "unused_targets": 347,
+     "blockers": {
+      "numeric": 347
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEB3698",
+     "name": "Root_MainFunctionTable_140",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEB36AC",
+     "name": "Root_MainFunctionTable_140",
+     "entries": 8,
+     "pointers": 8,
+     "unused_targets": 8,
+     "blockers": {
+      "numeric": 8
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEB7932",
+     "name": "WidgetStyleDataTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xED9D1E",
+     "name": "SoundParam_EncoderMappingData",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xED9D64",
+     "name": "FileIO_BytecodeData_Code_Entry8_PtrTable",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 6,
+     "blockers": {
+      "numeric": 6
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xED9D82",
+     "name": "FileIO_BytecodeData_Code_Entry8_PtrTable_2",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "numeric": 5
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xED9EAC",
+     "name": "FileIO_BytecodeData_Code_Entry8_PtrTable_3",
+     "entries": 20,
+     "pointers": 20,
+     "unused_targets": 20,
+     "blockers": {
+      "numeric": 20
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEDA02C",
+     "name": "EffectMode_DispatchTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEDA0BC",
+     "name": "ENCODER_HANDLER_TABLE",
+     "entries": 32,
+     "pointers": 32,
+     "unused_targets": 7,
+     "blockers": {
+      "numeric": 32
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEE1574",
+     "name": "NakaInst_SoundConfig_LookupTable",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2D6C",
+     "name": "SeqChan_CommandHandlers",
+     "entries": 39,
+     "pointers": 39,
+     "unused_targets": 13,
+     "blockers": {
+      "nolabel": 13
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2EBE",
+     "name": "MidiSysEx_BlockHandlers",
+     "entries": 22,
+     "pointers": 22,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 22
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE2F8C",
+     "name": "SeqData_Handlers",
+     "entries": 39,
+     "pointers": 39,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE4F9A",
+     "name": "MidiCtl_AssSwbHandlers",
+     "entries": 6,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE7FA8",
+     "name": "SwbtB2_Code00_Listeners",
+     "entries": 11,
+     "pointers": 10,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE7FD4",
+     "name": "SwbtB2_Code01_Listeners",
+     "entries": 10,
+     "pointers": 9,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE7FFC",
+     "name": "SwbtB2_Code02_Listeners",
+     "entries": 9,
+     "pointers": 8,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8020",
+     "name": "SwbtB2_Code03_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8040",
+     "name": "SwbtB2_Code04_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8060",
+     "name": "SwbtB2_Code05_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8080",
+     "name": "SwbtB2_Code06_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE80A0",
+     "name": "SwbtB2_Code07_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE80C0",
+     "name": "SwbtB2_Code08_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE80E0",
+     "name": "SwbtB2_Code09_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8100",
+     "name": "SwbtB2_Code0A_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8120",
+     "name": "SwbtB2_Code0B_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8140",
+     "name": "SwbtB2_Code0C_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8160",
+     "name": "SwbtB2_Code0D_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8180",
+     "name": "SwbtB2_Code0E_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE81A0",
+     "name": "SwbtB2_Code0F_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE81C0",
+     "name": "SwbtB2_Code10_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE81DC",
+     "name": "SwbtB2_Code11_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE81F8",
+     "name": "SwbtB2_Code12_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8214",
+     "name": "SwbtB2_Code13_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8230",
+     "name": "SwbtB2_Code14_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE824C",
+     "name": "SwbtB2_Code15_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8268",
+     "name": "SwbtB2_Code16_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8284",
+     "name": "SwbtB2_Code17_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE82A0",
+     "name": "SwbtB2_Code18_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE82BC",
+     "name": "SwbtB2_Code19_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE82D8",
+     "name": "SwbtB2_Code1A_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE82F4",
+     "name": "SwbtB2_Code1B_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8310",
+     "name": "SwbtB2_Code1C_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE832C",
+     "name": "SwbtB2_Code1D_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8348",
+     "name": "SwbtB2_Code1E_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8364",
+     "name": "SwbtB2_Code1F_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8448",
+     "name": "SwbtB2_Code48_Listeners",
+     "entries": 8,
+     "pointers": 7,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84AC",
+     "name": "SwbtB2_Code63_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE84EC",
+     "name": "SwbtB2_Code69_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8504",
+     "name": "SwbtB2_Code6B_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE851C",
+     "name": "SwbtB2_Code70_Listeners",
+     "entries": 6,
+     "pointers": 5,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8534",
+     "name": "SwbtB2_Code71_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8558",
+     "name": "SwbtB2_Code80_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8570",
+     "name": "SwbtB2_Code90_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE858C",
+     "name": "SwbtB2_Code91_Listeners",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85B4",
+     "name": "SwbtB2_Code93_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85C8",
+     "name": "SwbtB2_Code98_Listeners",
+     "entries": 10,
+     "pointers": 9,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE85FC",
+     "name": "SwbtB2_Code9A_Listeners",
+     "entries": 3,
+     "pointers": 2,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8608",
+     "name": "SwbtB2_CodeA8_Listeners",
+     "entries": 14,
+     "pointers": 13,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE86B4",
+     "name": "SwbtBank2_PostCallbacks",
+     "entries": 7,
+     "pointers": 6,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8B71",
+     "name": "SwbtB3_Code48_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C05",
+     "name": "SwbtB3_CodeA8_Listeners",
+     "entries": 4,
+     "pointers": 3,
+     "unused_targets": 2,
+     "blockers": {
+      "nolabel": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C15",
+     "name": "SwbtB3_CodeA9_Listeners",
+     "entries": 5,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8C29",
+     "name": "SwbtB3_CodeAA_Listeners",
+     "entries": 2,
+     "pointers": 1,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEE8CF4",
+     "name": "AudioVoiceHandler_Table",
+     "entries": 32,
+     "pointers": 32,
+     "unused_targets": 7,
+     "blockers": {
+      "nolabel": 12
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xEEAE04",
+     "name": "Harmony_HandlerTable",
+     "entries": 16,
+     "pointers": 16,
+     "unused_targets": 1,
+     "blockers": {
+      "nolabel": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xEEE718",
+     "name": "Naka_DrawbarOrgan_Screens",
+     "entries": 18,
+     "pointers": 18,
+     "unused_targets": 18,
+     "blockers": {
+      "numeric": 18
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5AA05",
+     "name": "AccPlayMode_Dispatch_Execute_Data",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "nolabel/num": 1,
+      "numeric": 3
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF5C154",
+     "name": "AccStyle_Entry",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 1,
+     "blockers": {
+      "databyte": 1
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF5E503",
+     "name": "AccTone_JumpTableData",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 4,
+     "blockers": {
+      "numeric": 4
+     }
+    },
+    {
+     "kind": "U",
+     "addr": "0xF6EC64",
+     "name": "TempoScale_1Beat",
+     "entries": 4,
+     "pointers": 4,
+     "unused_targets": 3,
+     "blockers": {
+      "numeric": 4
+     }
+    }
+   ]
+  },
+  "v142": {
+   "framed": 43,
+   "used": 43,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": []
+  },
+  "subboot": {
+   "framed": 2,
+   "used": 2,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": []
+  },
+  "tabledata": {
+   "framed": 9,
+   "used": 9,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": []
+  },
+  "customdata": {
+   "framed": 0,
+   "used": 0,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": []
+  },
+  "hdae5000": {
+   "framed": 68,
+   "used": 68,
+   "not_used": 0,
+   "new_targets_same_image": 0,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": []
+  },
+  "prom_a": {
+   "framed": 424,
+   "used": 421,
+   "not_used": 3,
+   "new_targets_same_image": 12,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 1,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": [
+    {
+     "kind": "A",
+     "addr": "0xF8E77C",
+     "name": "AddrTable_F8E77C",
+     "entries": 8,
+     "pointers": 8,
+     "unused_targets": 6,
+     "blockers": {
+      "midinsn/num": 3,
+      "numeric": 2,
+      "midinsn": 2
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF8E7A9",
+     "name": "AddrTable_F8E7A9",
+     "entries": 9,
+     "pointers": 9,
+     "unused_targets": 3,
+     "blockers": {
+      "midinsn/num": 2,
+      "numeric": 3
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xFAA000",
+     "name": "ParamModule_PhaseVector_StaleCopy",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "midinsn": 4,
+      "nolabel": 1
+     }
+    }
+   ]
+  },
+  "prom_b": {
+   "framed": 291,
+   "used": 284,
+   "not_used": 7,
+   "new_targets_same_image": 44,
+   "new_targets_other_image": 179,
+   "spelling_only_targets": 1,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": [
+    {
+     "kind": "A",
+     "addr": "0xF00340",
+     "name": "PtrTable_F00340",
+     "entries": 35,
+     "pointers": 33,
+     "unused_targets": 1,
+     "blockers": {
+      "midinsn/num": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF00762",
+     "name": "PtrTable_F00762",
+     "entries": 39,
+     "pointers": 37,
+     "unused_targets": 22,
+     "blockers": {
+      "midinsn/num": 31,
+      "nolabel/num": 6
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF00C4E",
+     "name": "PtrArray_F00C4E",
+     "entries": 21,
+     "pointers": 21,
+     "unused_targets": 18,
+     "blockers": {
+      "midinsn/num": 11,
+      "nolabel/num": 7
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF014EE",
+     "name": "PtrArray_F014EE",
+     "entries": 196,
+     "pointers": 185,
+     "unused_targets": 134,
+     "blockers": {
+      "nolabel/num": 48,
+      "midinsn/num": 135,
+      "numeric": 1
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF0ED50",
+     "name": "OldBuild_DLHandlerTables_Tail",
+     "entries": 39,
+     "pointers": 39,
+     "unused_targets": 12,
+     "blockers": {
+      "midinsn": 17,
+      "nolabel": 4
+     }
+    },
+    {
+     "kind": "A",
+     "addr": "0xF0EE6C",
+     "name": "OldBuild_ValueGlyph_Table",
+     "entries": 29,
+     "pointers": 29,
+     "unused_targets": 19,
+     "blockers": {
+      "midinsn": 14,
+      "nolabel": 5
+     }
+    },
+    {
+     "kind": "J",
+     "addr": "0xF40000",
+     "name": "prom_b routine directory",
+     "entries": 2002,
+     "pointers": 2002,
+     "unused_targets": 19,
+     "blockers": {
+      "midinsn/num": 5,
+      "nolabel/num": 1,
+      "text": 4,
+      "databyte": 8,
+      "dataother": 1
+     }
+    }
+   ]
+  },
+  "prom_c": {
+   "framed": 47,
+   "used": 46,
+   "not_used": 1,
+   "new_targets_same_image": 5,
+   "new_targets_other_image": 0,
+   "spelling_only_targets": 0,
+   "unframed_runs": 0,
+   "unframed_not_used": 0,
+   "unframed_new_targets": 0,
+   "null_control": 0,
+   "not_used_tables": [
+    {
+     "kind": "J",
+     "addr": "0xFFF0D1",
+     "name": "UNREFERENCED_TRAMPOLINES",
+     "entries": 5,
+     "pointers": 5,
+     "unused_targets": 5,
+     "blockers": {
+      "midinsn": 5
+     }
+    }
+   ]
+  }
+ }
+}

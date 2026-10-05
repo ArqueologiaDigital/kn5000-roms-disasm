@@ -37,6 +37,55 @@
 ; ==============================================================================
 
 .equ PAYLOAD_ENTRY, 0x400	; Entry point of loaded payload
+; RAM interrupt trampolines, 5 bytes each (`jp target` + `ret`) at PAYLOAD_ENTRY + 5*slot.  COPY_VECTORS
+; fills them from VECTOR_TRAMPOLINES; a loaded payload overwrites them with its own (v142/subcpu/subcpu_vectors.s
+; labels the same addresses with the same names).  Named for the TMP94C241F vector that VECTOR_TABLE points at
+; each one (vector order: MAME tmp94c241_irq_vector_map; vector 0x3C is unassigned there, hence _Reserved).
+; Slot = vector for SWI1..SWI7, NMI is slot 44, and every later vector n is slot n - 1.
+.equ IntTramp_SWI1, 0x405
+.equ IntTramp_SWI2, 0x40a
+.equ IntTramp_SWI3, 0x40f
+.equ IntTramp_SWI4, 0x414
+.equ IntTramp_SWI5, 0x419
+.equ IntTramp_SWI6, 0x41e
+.equ IntTramp_SWI7, 0x423
+.equ IntTramp_INTWD, 0x428
+.equ IntTramp_INT0, 0x42d
+.equ IntTramp_INT4, 0x432
+.equ IntTramp_INT5, 0x437
+.equ IntTramp_INT6, 0x43c
+.equ IntTramp_INT7, 0x441
+.equ IntTramp_Reserved, 0x446
+.equ IntTramp_INT8, 0x44b
+.equ IntTramp_INT9, 0x450
+.equ IntTramp_INTA, 0x455
+.equ IntTramp_INTB, 0x45a
+.equ IntTramp_INTT0, 0x45f
+.equ IntTramp_INTT1, 0x464
+.equ IntTramp_INTT2, 0x469
+.equ IntTramp_INTT3, 0x46e
+.equ IntTramp_INTTR4, 0x473
+.equ IntTramp_INTTR5, 0x478
+.equ IntTramp_INTTR6, 0x47d
+.equ IntTramp_INTTR7, 0x482
+.equ IntTramp_INTTR8, 0x487
+.equ IntTramp_INTTR9, 0x48c
+.equ IntTramp_INTTRA, 0x491
+.equ IntTramp_INTTRB, 0x496
+.equ IntTramp_INTRX0, 0x49b
+.equ IntTramp_INTTX0, 0x4a0
+.equ IntTramp_INTRX1, 0x4a5
+.equ IntTramp_INTTX1, 0x4aa
+.equ IntTramp_INTAD, 0x4af
+.equ IntTramp_INTTC0, 0x4b4
+.equ IntTramp_INTTC1, 0x4b9
+.equ IntTramp_INTTC2, 0x4be
+.equ IntTramp_INTTC3, 0x4c3
+.equ IntTramp_INTTC4, 0x4c8
+.equ IntTramp_INTTC5, 0x4cd
+.equ IntTramp_INTTC6, 0x4d2
+.equ IntTramp_INTTC7, 0x4d7
+.equ IntTramp_NMI, 0x4dc
 .equ PAYLOAD_LOADED_FLAG, 0x4FE	; Bit 6: payload ready, Bit 7: transfer complete
 .equ DMA_SETUP_PARAMS, 0x502	; DMA setup block: src(4), dst(4), count(2)
 .equ E1_XFER_PARAMS, 0x50C	; E1 command params: dest_addr(4), count(2)
@@ -3000,50 +3049,50 @@ ToneGen_ChannelInit_Config:
 
 VECTOR_TABLE:
 	.long RESET_HANDLER	; Reset - points to ROM handler at 0xFFFEE0
-	.long 0x405	; Handler 1 at 0x0405
-	.long 0x40A	; Handler 2 at 0x040A
-	.long 0x40F	; Handler 3 at 0x040F
-	.long 0x414	; Handler 4 at 0x0414
-	.long 0x419	; Handler 5 at 0x0419
-	.long 0x41E	; Handler 6 at 0x041E
-	.long 0x423	; Handler 7 at 0x0423
-	.long 0x4DC	; Handler 8 at 0x04DC (different!)
-	.long 0x428	; Handler 9 at 0x0428
-	.long 0x42D	; Handler 10
-	.long 0x432	; Handler 11
-	.long 0x437	; Handler 12
-	.long 0x43C	; Handler 13
-	.long 0x441	; Handler 14
-	.long 0x446	; Handler 15
-	.long 0x44B	; Handler 16
-	.long 0x450	; Handler 17
-	.long 0x455	; Handler 18
-	.long 0x45A	; Handler 19
-	.long 0x45F	; Handler 20
-	.long 0x464	; Handler 21
-	.long 0x469	; Handler 22
-	.long 0x46E	; Handler 23
-	.long 0x473	; Handler 24
-	.long 0x478	; Handler 25
-	.long 0x47D	; Handler 26
-	.long 0x482	; Handler 27
-	.long 0x487	; Handler 28
-	.long 0x48C	; Handler 29
-	.long 0x491	; Handler 30
-	.long 0x496	; Handler 31
-	.long 0x49B	; Handler 32
-	.long 0x4A0	; Handler 33
-	.long 0x4A5	; Handler 34
-	.long 0x4AA	; Handler 35
-	.long 0x4AF	; Handler 36
-	.long 0x4B4	; Handler 37
-	.long 0x4B9	; Handler 38
-	.long 0x4BE	; Handler 39
-	.long 0x4C3	; Handler 40
-	.long 0x4C8	; Handler 41
-	.long 0x4CD	; Handler 42
-	.long 0x4D2	; Handler 43
-	.long 0x4D7	; Handler 44
+	.long IntTramp_SWI1
+	.long IntTramp_SWI2
+	.long IntTramp_SWI3
+	.long IntTramp_SWI4
+	.long IntTramp_SWI5
+	.long IntTramp_SWI6
+	.long IntTramp_SWI7
+	.long IntTramp_NMI	; slot 44: the one entry out of slot order
+	.long IntTramp_INTWD
+	.long IntTramp_INT0
+	.long IntTramp_INT4
+	.long IntTramp_INT5
+	.long IntTramp_INT6
+	.long IntTramp_INT7
+	.long IntTramp_Reserved
+	.long IntTramp_INT8
+	.long IntTramp_INT9
+	.long IntTramp_INTA
+	.long IntTramp_INTB
+	.long IntTramp_INTT0
+	.long IntTramp_INTT1
+	.long IntTramp_INTT2
+	.long IntTramp_INTT3
+	.long IntTramp_INTTR4
+	.long IntTramp_INTTR5
+	.long IntTramp_INTTR6
+	.long IntTramp_INTTR7
+	.long IntTramp_INTTR8
+	.long IntTramp_INTTR9
+	.long IntTramp_INTTRA
+	.long IntTramp_INTTRB
+	.long IntTramp_INTRX0
+	.long IntTramp_INTTX0
+	.long IntTramp_INTRX1
+	.long IntTramp_INTTX1
+	.long IntTramp_INTAD
+	.long IntTramp_INTTC0
+	.long IntTramp_INTTC1
+	.long IntTramp_INTTC2
+	.long IntTramp_INTTC3
+	.long IntTramp_INTTC4
+	.long IntTramp_INTTC5
+	.long IntTramp_INTTC6
+	.long IntTramp_INTTC7
 	; Fill rest with FF
 	.byte 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff

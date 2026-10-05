@@ -343,7 +343,7 @@ DSP_Init_Channels_FromBootTable_Done:
 	ret
 
 
-; NMI handler (via INT_HANDLER_2C).  The same three instructions as the boot ROM's HALT_LOOP
+; NMI handler (via IntTramp_NMI).  The same three instructions as the boot ROM's HALT_LOOP
 ; (0xFF8490): clear PE bit 0, then HALT forever -- the `jr t` below re-enters the HALT after
 ; any wake-up.  CORRECTED: that `jr t` (0x01FBF8) used to sit under the label
 ; Timer_StatusHelper as the first instruction of an unrelated routine; it belongs here, and
@@ -712,7 +712,10 @@ TaskSched_NullTimerCallback:
 	ret
 
 
-INT16_TaskSwitch_Handler:
+; INTT3 (8-bit timer 3) interrupt, entered through IntTramp_INTT3: bumps the counters at 4306 and 4165,
+; runs Task_DequeueDispatch_Prio3, then leaves through TaskSwitch_Countdown.  Was INT16_TaskSwitch_Handler,
+; after its trampoline slot (0x16), not an interrupt source -- the TMP94C241F has no INT16.
+INTT3_TaskSwitch_Handler:
 	incw 1, (4306:16)
 	inc 1, (4165:16)
 	pushw wa
