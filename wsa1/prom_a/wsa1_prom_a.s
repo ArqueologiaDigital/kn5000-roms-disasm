@@ -392,8 +392,8 @@
 	.set GroupMaxMemberIndex_DrumGroupsSecondWindow, 0x00F06ED4
 	.set GroupMaxMemberIndex_ToneGroupsCopy,      0x00F06EE4
 	.set SoundCodeByGroupMember_ModeOffsetGroup,  0x00F06EF4
-	.set SoundCodeByGroupMember_ByteGroup,        0x00F07134
-	.set SoundCodeByGroupMember_SevenBitGroup,    0x00F08514
+	.set PanelSoundSel_ByProgramAndBank,        0x00F07134
+	.set ProgramChangeOut_ByProgramAndBank,    0x00F08514
 	.set SoftKeyCol2_SoundEditPitchTune,                              0x00F0A162
 	.set SoftKeyCol3_SoundEditPitchTune,                              0x00F0A1D1
 	.set SoftKeyCol4_SoundEditPitchTune,                              0x00F0A240
@@ -1355,16 +1355,16 @@
 	.set T_F40FEC,                                                                      0x00F40FEC
 	.set T_F40FF0,                                                                      0x00F40FF0
 	.set T_F40FF4,                                                                      0x00F40FF4
-	.set T_F40FFC,                                                                      0x00F40FFC
-	.set T_F41000,                                                                      0x00F41000
-	.set T_F41004,                                                                      0x00F41004
-	.set T_F41008,                                                                      0x00F41008
+	.set T_SoundSel_ToProgramAndBank,                                                                      0x00F40FFC
+	.set T_SoundSel_FromProgramAndBank,                                                                      0x00F41000
+	.set T_PartSound_FromProgramChange,                                                                      0x00F41004
+	.set T_PartSound_ToProgramChange,                                                                      0x00F41008
 	.set T_Msg0716_PostSysEx50_A3,                                                                      0x00F4100C
 	.set T_SoundName_Lookup,                                                                      0x00F41010
 	.set T_SoundGroupName_Lookup,                                                                      0x00F41018
 	.set T_SoundGroup_MaxMemberIndex_Get,                                               0x00F4101C
-	.set T_F41024,                                                                      0x00F41024
-	.set T_F41028,                                                                      0x00F41028
+	.set T_CombiSel_ToNumberAndBank,                                                                      0x00F41024
+	.set T_CombiSel_FromNumberAndBank,                                                                      0x00F41028
 	.set T_CombiName_Lookup,                                                                      0x00F4102C
 	.set T_CombiGroupName_Lookup,                                                                      0x00F41030
 	.set T_SoundGroup_MaxMemberIndex_GetToneCopy,                                       0x00F41034
@@ -41122,16 +41122,16 @@ Paint_SineWaveCheckMode:
 	call T_DisplayList_Run_Stack                         ; F95829  1d 00 2e f4
 	ld C,(XIX)                                           ; F9582D  84 23
 	and C,0xff                                           ; F9582F  cb cc ff
-	ld (0x60f010:24), c                                 ; F95832  f2 10 f0 60 43
+	ld (SoundConv_Arg0:24), c                                 ; F95832  f2 10 f0 60 43
 	ld C,(XIX+0x01)                                      ; F95837  8c 01 23
 	res 0x07,C                                           ; F9583A  cb 30 07
-	ld (0x60f011:24), c                                 ; F9583D  f2 11 f0 60 43
-	ld (0x60f012:24), 0x00                             ; F95842  f2 12 f0 60 00 00
+	ld (SoundConv_Arg1:24), c                                 ; F9583D  f2 11 f0 60 43
+	ld (SoundConv_Arg2:24), 0x00                             ; F95842  f2 12 f0 60 00 00
 	push XDE                                             ; F95848  3a
 	push XHL                                             ; F95849  3b
 	push XIX                                             ; F9584A  3c
 	push XIZ                                             ; F9584B  3e
-	call T_F41000                                        ; F9584C  1d 00 10 f4
+	call T_SoundSel_FromProgramAndBank                                        ; F9584C  1d 00 10 f4
 	pop XIZ                                              ; F95850  5e
 	pop XIX                                              ; F95851  5c
 	pop XHL                                              ; F95852  5b
@@ -53200,7 +53200,7 @@ SoundGroupNaming_StoreGroupName__F9CEE6:
 	add WA,BC                                            ; F9CF34  d9 80
 	ld DE,WA                                             ; F9CF36  d8 8a
 	sub DE,0x0420                                        ; F9CF38  da ca 20 04
-	ldw bc, 0x5240                                       ; F9CF3C  31 40 52
+	ldw bc, SoundRemap1_GroupNames                                       ; F9CF3C  31 40 52
 	add BC,DE                                            ; F9CF3F  da 81
 	extz XBC                                             ; F9CF41  e9 12
 	ld (xiz-4), xbc                                      ; F9CF43  be fc 61
@@ -53867,7 +53867,7 @@ CombinationGroupNaming_StoreGroupName:
 	add WA,BC                                            ; F9D386  d9 80
 	ld DE,WA                                             ; F9D388  d8 8a
 	sub DE,0x0210                                        ; F9D38A  da ca 10 02
-	ldw bc, 0x5890                                       ; F9D38E  31 90 58
+	ldw bc, CombiRemap1_GroupNames                                       ; F9D38E  31 90 58
 	add BC,DE                                            ; F9D391  da 81
 	extz XBC                                             ; F9D393  e9 12
 	ld (xiz-4), xbc                                      ; F9D395  be fc 61
@@ -80635,25 +80635,25 @@ sub_FAB658:
 	ld (XIX+0x01),0x00                                   ; FAB68F  bc 01 00 00
 .LFAB693:
 	ld C,(XIX)                                           ; FAB693  84 23
-	ld (0x60f010:24), c                                 ; FAB695  f2 10 f0 60 43
+	ld (SoundConv_Arg0:24), c                                 ; FAB695  f2 10 f0 60 43
 	ld C,(XIX+0x01)                                      ; FAB69A  8c 01 23
-	ld (0x60f011:24), c                                 ; FAB69D  f2 11 f0 60 43
+	ld (SoundConv_Arg1:24), c                                 ; FAB69D  f2 11 f0 60 43
 	ld c, (0x60f01c:24)                                 ; FAB6A2  c2 1c f0 60 23
-	ld (0x60f012:24), c                                 ; FAB6A7  f2 12 f0 60 43
+	ld (SoundConv_Arg2:24), c                                 ; FAB6A7  f2 12 f0 60 43
 	ld C,(XIX+0x02)                                      ; FAB6AC  8c 02 23
-	ld (0x60f013:24), c                                 ; FAB6AF  f2 13 f0 60 43
+	ld (SoundConv_Arg3:24), c                                 ; FAB6AF  f2 13 f0 60 43
 	push XDE                                             ; FAB6B4  3a
 	push XHL                                             ; FAB6B5  3b
 	push XIX                                             ; FAB6B6  3c
 	push XIZ                                             ; FAB6B7  3e
-	call T_F40FFC                                        ; FAB6B8  1d fc 0f f4
+	call T_SoundSel_ToProgramAndBank                                        ; FAB6B8  1d fc 0f f4
 	pop XIZ                                              ; FAB6BC  5e
 	pop XIX                                              ; FAB6BD  5c
 	pop XHL                                              ; FAB6BE  5b
 	pop XDE                                              ; FAB6BF  5a
-	ld c, (0x60f014:24)                                 ; FAB6C0  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FAB6C0  c2 14 f0 60 23
 	ld (0x60f164:24), c                                 ; FAB6C5  f2 64 f1 60 43
-	ld c, (0x60f015:24)                                 ; FAB6CA  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FAB6CA  c2 15 f0 60 23
 	ld (0x60f165:24), c                                 ; FAB6CF  f2 65 f1 60 43
 .LFAB6D4:
 	pop XIX                                              ; FAB6D4  5c
@@ -80665,25 +80665,25 @@ sub_FAB6D7:
 	m_cp_mi8 MB24, 0x60f01d, 0x1f                        ; FAB6DD  c2 1d f0 60 3f 1f
 	jr ugt, .LFAB726                                     ; FAB6E3  6b 41
 	ld c, (0x60f168:24)                                 ; FAB6E5  c2 68 f1 60 23
-	ld (0x60f010:24), c                                 ; FAB6EA  f2 10 f0 60 43
+	ld (SoundConv_Arg0:24), c                                 ; FAB6EA  f2 10 f0 60 43
 	ld c, (0x60f169:24)                                 ; FAB6EF  c2 69 f1 60 23
-	ld (0x60f011:24), c                                 ; FAB6F4  f2 11 f0 60 43
+	ld (SoundConv_Arg1:24), c                                 ; FAB6F4  f2 11 f0 60 43
 	ld c, (0x60f01d:24)                                 ; FAB6F9  c2 1d f0 60 23
-	ld (0x60f012:24), c                                 ; FAB6FE  f2 12 f0 60 43
+	ld (SoundConv_Arg2:24), c                                 ; FAB6FE  f2 12 f0 60 43
 	push XDE                                             ; FAB703  3a
 	push XHL                                             ; FAB704  3b
 	push XIX                                             ; FAB705  3c
 	push XIZ                                             ; FAB706  3e
-	call T_F41000                                        ; FAB707  1d 00 10 f4
+	call T_SoundSel_FromProgramAndBank                                        ; FAB707  1d 00 10 f4
 	pop XIZ                                              ; FAB70B  5e
 	pop XIX                                              ; FAB70C  5c
 	pop XHL                                              ; FAB70D  5b
 	pop XDE                                              ; FAB70E  5a
-	ld c, (0x60f014:24)                                 ; FAB70F  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FAB70F  c2 14 f0 60 23
 	ld (XIX),C                                           ; FAB714  b4 43
-	ld c, (0x60f015:24)                                 ; FAB716  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FAB716  c2 15 f0 60 23
 	ld (XIX+0x01),C                                      ; FAB71B  bc 01 43
-	ld c, (0x60f016:24)                                 ; FAB71E  c2 16 f0 60 23
+	ld c, (SoundConv_Result2:24)                                 ; FAB71E  c2 16 f0 60 23
 	ld (XIX+0x02),C                                      ; FAB723  bc 02 43
 .LFAB726:
 	pop XIX                                              ; FAB726  5c
@@ -80694,25 +80694,25 @@ sub_FAB728:
 	m_cp_mi8 MB24, 0x60f180, 0x98                        ; FAB72E  c2 80 f1 60 3f 98
 	jr nz, .LFAB777                                      ; FAB734  6e 41
 	ld c, (0x60f189:24)                                 ; FAB736  c2 89 f1 60 23
-	ld (0x60f010:24), c                                 ; FAB73B  f2 10 f0 60 43
+	ld (SoundConv_Arg0:24), c                                 ; FAB73B  f2 10 f0 60 43
 	ld c, (0x60f18a:24)                                 ; FAB740  c2 8a f1 60 23
-	ld (0x60f011:24), c                                 ; FAB745  f2 11 f0 60 43
+	ld (SoundConv_Arg1:24), c                                 ; FAB745  f2 11 f0 60 43
 	ld c, (0x60f180:24)                                 ; FAB74A  c2 80 f1 60 23
-	ld (0x60f012:24), c                                 ; FAB74F  f2 12 f0 60 43
+	ld (SoundConv_Arg2:24), c                                 ; FAB74F  f2 12 f0 60 43
 	push XDE                                             ; FAB754  3a
 	push XHL                                             ; FAB755  3b
 	push XIX                                             ; FAB756  3c
 	push XIZ                                             ; FAB757  3e
-	call T_F41028                                        ; FAB758  1d 28 10 f4
+	call T_CombiSel_FromNumberAndBank                                        ; FAB758  1d 28 10 f4
 	pop XIZ                                              ; FAB75C  5e
 	pop XIX                                              ; FAB75D  5c
 	pop XHL                                              ; FAB75E  5b
 	pop XDE                                              ; FAB75F  5a
-	ld c, (0x60f014:24)                                 ; FAB760  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FAB760  c2 14 f0 60 23
 	ld (XIX),C                                           ; FAB765  b4 43
-	ld c, (0x60f015:24)                                 ; FAB767  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FAB767  c2 15 f0 60 23
 	ld (XIX+0x01),C                                      ; FAB76C  bc 01 43
-	ld c, (0x60f016:24)                                 ; FAB76F  c2 16 f0 60 23
+	ld c, (SoundConv_Result2:24)                                 ; FAB76F  c2 16 f0 60 23
 	ld (XIX+0x02),C                                      ; FAB774  bc 02 43
 .LFAB777:
 	pop XIX                                              ; FAB777  5c
@@ -80734,25 +80734,25 @@ sub_FAB779:
 	ld (XIX+0x01),0x00                                   ; FAB79F  bc 01 00 00
 .LFAB7A3:
 	ld C,(XIX)                                           ; FAB7A3  84 23
-	ld (0x60f010:24), c                                 ; FAB7A5  f2 10 f0 60 43
+	ld (SoundConv_Arg0:24), c                                 ; FAB7A5  f2 10 f0 60 43
 	ld C,(XIX+0x01)                                      ; FAB7AA  8c 01 23
-	ld (0x60f011:24), c                                 ; FAB7AD  f2 11 f0 60 43
+	ld (SoundConv_Arg1:24), c                                 ; FAB7AD  f2 11 f0 60 43
 	ld c, (0x60f17f:24)                                 ; FAB7B2  c2 7f f1 60 23
-	ld (0x60f012:24), c                                 ; FAB7B7  f2 12 f0 60 43
+	ld (SoundConv_Arg2:24), c                                 ; FAB7B7  f2 12 f0 60 43
 	ld C,(XIX+0x02)                                      ; FAB7BC  8c 02 23
-	ld (0x60f013:24), c                                 ; FAB7BF  f2 13 f0 60 43
+	ld (SoundConv_Arg3:24), c                                 ; FAB7BF  f2 13 f0 60 43
 	push XDE                                             ; FAB7C4  3a
 	push XHL                                             ; FAB7C5  3b
 	push XIX                                             ; FAB7C6  3c
 	push XIZ                                             ; FAB7C7  3e
-	call T_F41024                                        ; FAB7C8  1d 24 10 f4
+	call T_CombiSel_ToNumberAndBank                                        ; FAB7C8  1d 24 10 f4
 	pop XIZ                                              ; FAB7CC  5e
 	pop XIX                                              ; FAB7CD  5c
 	pop XHL                                              ; FAB7CE  5b
 	pop XDE                                              ; FAB7CF  5a
-	ld c, (0x60f014:24)                                 ; FAB7D0  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FAB7D0  c2 14 f0 60 23
 	ld (0x60f185:24), c                                 ; FAB7D5  f2 85 f1 60 43
-	ld c, (0x60f015:24)                                 ; FAB7DA  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FAB7DA  c2 15 f0 60 23
 	ld (0x60f186:24), c                                 ; FAB7DF  f2 86 f1 60 43
 .LFAB7E4:
 	pop XIX                                              ; FAB7E4  5c
@@ -84449,10 +84449,10 @@ Evt2030_Class00to1F_JumpTable_FADBA9:
 ; ---------------------------------------------------------------------
 Evt2030_Class00to1F_Op01:   ; entry: pointer-table entry
 	ret
-; Evt2030_ProgChgMode3_Notify -- PROG CHANGE MODE value 3 (no caption) of Evt2030_Class00to1F_Op00, a part's program change (class 0): map the part's sound bytes through T_F41008 and notify bank select (param 0x81) and program (class 0)
+; Evt2030_ProgChgMode3_Notify -- PROG CHANGE MODE value 3 (no caption) of Evt2030_Class00to1F_Op00, a part's program change (class 0): map the part's sound bytes through T_PartSound_ToProgramChange and notify bank select (param 0x81) and program (class 0)
 ; Evidence: arm 3 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE31A reads 0x00FADBDA; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3.
 ; (0x7F32) & 3 is PROG CHANGE MODE: sub_F9A4B0 copies it to (0x2740) and draws it with DL_NormalTechRemap at screen offset 0x15F8, right after the 18-char "PROG CHANGE MODE: " text at 0x15E6 of DL_TotalModeMidiMidiInputMode; DLTable_NormalTechRemap holds only NORMAL/TECH/REMAP.
-; Body: unless C == 0x48, (0x60F010) = word at ParamNumber_RecordPtrs[C], (0x60F012) = C, `call T_F41008` (sub_FC2526), then ParamChange_NotifyClearSource {0x81, part, (0x60F014..15)} and {part, 0, (0x60F016), 0xFF}.  MidiOut_ParamNumberTable[129] is MidiOut_BankSelect_Pair; class 0 is MidiOut_ProgramChange.
+; Body: unless C == 0x48, (0x60F010) = word at ParamNumber_RecordPtrs[C], (0x60F012) = C, `call T_PartSound_ToProgramChange` (PartSound_ToProgramChange), then ParamChange_NotifyClearSource {0x81, part, (0x60F014..15)} and {part, 0, (0x60F016), 0xFF}.  MidiOut_ParamNumberTable[129] is MidiOut_BankSelect_Pair; class 0 is MidiOut_ProgramChange.
 Evt2030_ProgChgMode3_Notify:   ; entry: pointer-table entry
 	cp C,0x48
 	jr z, .LFADC1F
@@ -84462,16 +84462,16 @@ Evt2030_ProgChgMode3_Notify:   ; entry: pointer-table entry
 	ld xix, (IndexedTable_Base:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	ld WA,(XIX)
-	ld (0x60f010:24), wa
-	ld (0x60f012:24), c
-	call T_F41008
+	ld (SoundConv_Arg0:24), wa
+	ld (SoundConv_Arg2:24), c
+	call T_PartSound_ToProgramChange
 	ld B,C
 	ld c, 0x81:opc
-	ld de, (0x60f014:24)
+	ld de, (SoundConv_Result0:24)
 	call T_ParamChange_NotifyClearSource
 	ld c, (0x60f0bc:24)
 	xor B,B
-	ld e, (0x60f016:24)
+	ld e, (SoundConv_Result2:24)
 	ld d, 0xff:opc
 	call T_ParamChange_NotifyClearSource
 .LFADC1F:
@@ -85271,12 +85271,12 @@ ParamApply_ByModeOfParam80_JumpTable_FADF77:
 	.long ParamApply_Param98Tech   ; -> ParamApply_Param98Tech   ; FADF7B
 	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF7F
 	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF83
-; ParamApply_Param98Normal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for C == 0x98: store the packed value into record 0x7F02's bytes +6..+8, map it through T_F41024, and write+publish {0x98,2,..,0x3F} and {0x98,1,..,0x7F}
+; ParamApply_Param98Normal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for C == 0x98: store the packed value into record 0x7F02's bytes +6..+8, map it through T_CombiSel_ToNumberAndBank, and write+publish {0x98,2,..,0x3F} and {0x98,1,..,0x7F}
 ; Evidence: arm 0 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF77 reads 0x00FADF87; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = "NORMAL").
-; Body: (0x7F0A)=(0x60F013)=A, (0x7F09)=(0x60F011)=E&7, (0x7F08)=(0x60F010)=E>>3, (0x60F012)=0x98; call T_F41024 (sub_FC239B); T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending with (0x60F015)/0x3F and (0x60F014)/0x7F; falls into the shared `ret` 0xFAE02D.
+; Body: (0x7F0A)=(0x60F013)=A, (0x7F09)=(0x60F011)=E&7, (0x7F08)=(0x60F010)=E>>3, (0x60F012)=0x98; call T_CombiSel_ToNumberAndBank (CombiSel_ToNumberAndBank); T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending with (0x60F015)/0x3F and (0x60F014)/0x7F; falls into the shared `ret` 0xFAE02D.
 ParamApply_Param98Normal:   ; entry: pointer-table entry
 	ld XIX,0x00007f02
-	ld XIY,0x0060f010
+	ld XIY,SoundConv_Arg0
 	ld (XIX+0x08),A
 	ld (XIY+0x03),A
 	ld A,E
@@ -85287,21 +85287,21 @@ ParamApply_Param98Normal:   ; entry: pointer-table entry
 	ld (XIX+0x06),E
 	m_st_mr8 MDD+r5, 0x00, r5
 	ld (XIY+0x02),0x98
-	call T_F41024
+	call T_CombiSel_ToNumberAndBank
 	ldw bc, 0x0298
-	ld e, (0x60f015:24)
+	ld e, (SoundConv_Result1:24)
 	ld d, 0x3f:opc
 	call T_ParamRecord_WriteFieldAndStage
 	call T_Queue2C00_PublishStagedIfPending
 	ldw bc, 0x0198
-	ld e, (0x60f014:24)
+	ld e, (SoundConv_Result0:24)
 	ld d, 0x7f:opc
 	call T_ParamRecord_WriteFieldAndStage
 	call T_Queue2C00_PublishStagedIfPending
 	jr .LFAE02D
-; ParamApply_Param98Tech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for C == 0x98: write+publish {0x98,2,A,0x3F} and the MIDI-in record (0x1950), map through T_F41028 and copy the result to 0x7F08..0x7F0A
+; ParamApply_Param98Tech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for C == 0x98: write+publish {0x98,2,A,0x3F} and the MIDI-in record (0x1950), map through T_CombiSel_FromNumberAndBank and copy the result to 0x7F08..0x7F0A
 ; Evidence: arm 1 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF7B reads 0x00FADFD9; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = "TECH").
-; Body: `ldw BC,0x0298` + T_ParamRecord_WriteFieldAndStage/T_Queue2C00_PublishStagedIfPending; again with BC/DE = (0x1950)/(0x1952); (0x60F010)=(0x1952), (0x60F011)=E, (0x60F012)=0x98, `call T_F41028` (sub_FC24E3); (0x60F014..16) -> (0x7F08..0x7F0A).
+; Body: `ldw BC,0x0298` + T_ParamRecord_WriteFieldAndStage/T_Queue2C00_PublishStagedIfPending; again with BC/DE = (0x1950)/(0x1952); (0x60F010)=(0x1952), (0x60F011)=E, (0x60F012)=0x98, `call T_CombiSel_FromNumberAndBank` (CombiSel_FromNumberAndBank); (0x60F014..16) -> (0x7F08..0x7F0A).
 ParamApply_Param98Tech:   ; entry: pointer-table entry
 	ldw bc, 0x0298
 	ld E,A
@@ -85315,15 +85315,15 @@ ParamApply_Param98Tech:   ; entry: pointer-table entry
 	call T_Queue2C00_PublishStagedIfPending
 	popw de
 	ld a, (0x1952:16)
-	ld (0x60f010:24), a
-	ld (0x60f011:24), e
-	ld (0x60f012:24), 0x98
-	call T_F41028
-	ld a, (0x60f014:24)
+	ld (SoundConv_Arg0:24), a
+	ld (SoundConv_Arg1:24), e
+	ld (SoundConv_Arg2:24), 0x98
+	call T_CombiSel_FromNumberAndBank
+	ld a, (SoundConv_Result0:24)
 	ld (0x7f08:16), a
-	ld a, (0x60f015:24)
+	ld a, (SoundConv_Result1:24)
 	ld (0x7f09:16), a
-	ld a, (0x60f016:24)
+	ld a, (SoundConv_Result2:24)
 	ld (0x7f0a:16), a
 .LFAE02D:
 ; ---------------------------------------------------------------------
@@ -85486,9 +85486,9 @@ ParamApply_PartProgTech:   ; entry: pointer-table entry
 ; ---------------------------------------------------------------------
 Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2:   ; entry: pointer-table entry
 	ret
-; ParamApply_PartProgMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_ByModeOfParam80 for a part: map the stored bank pair through T_F41004 and apply the result as part C's program
+; ParamApply_PartProgMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_ByModeOfParam80 for a part: map the stored bank pair through T_PartSound_FromProgramChange and apply the result as part C's program
 ; Evidence: arm 3 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE059 reads 0x00FAE189; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3; DLTable_NormalTechRemap has no entry 3.
-; Body: (0x60F010) = (0x60F530)[2*C], (0x60F012) = DE, `call T_F41004` (sub_FC24EB), (0x60F014..15) -> rec[0]/rec[1], T_F40790 then second-half +0x1B..+0x1D, publish {C,1,D,0x7F} and {C,0,E,0xFF}.
+; Body: (0x60F010) = (0x60F530)[2*C], (0x60F012) = DE, `call T_PartSound_FromProgramChange` (PartSound_FromProgramChange), (0x60F014..15) -> rec[0]/rec[1], T_F40790 then second-half +0x1B..+0x1D, publish {C,1,D,0x7F} and {C,0,E,0xFF}.
 ParamApply_PartProgMode3:   ; entry: pointer-table entry
 	ld bc, (0x1950:16)
 	ld de, (0x1952:16)
@@ -85505,10 +85505,10 @@ ParamApply_PartProgMode3:   ; entry: pointer-table entry
 	sll l, 0x01
 	ld XIY,0x0060f530
 	mx_ld_rm MXW, ra_IY, ra_HL, r0
-	ld (0x60f010:24), wa
-	ld (0x60f012:24), de
-	call T_F41004
-	ld de, (0x60f014:24)
+	ld (SoundConv_Arg0:24), wa
+	ld (SoundConv_Arg2:24), de
+	call T_PartSound_FromProgramChange
+	ld de, (SoundConv_Result0:24)
 	m_st_mr8 MDD+r4, 0x00, r5
 	ld (XIX+0x01),D
 	ld (0x60f01d:24), c
@@ -92220,14 +92220,14 @@ SysExParam_SetProgramChangeAndBank:
 	ld (XIX+0x03),A                                      ; FB3A4B  bc 03 41
 	push XIX                                             ; FB3A4E  3c
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A4F  1d 90 78 fb
-	ld (0x60f010:24), d                                 ; FB3A53  f2 10 f0 60 44
-	ld (0x60f011:24), e                                 ; FB3A58  f2 11 f0 60 45
-	ld (0x60f012:24), h                                 ; FB3A5D  f2 12 f0 60 46
+	ld (SoundConv_Arg0:24), d                                 ; FB3A53  f2 10 f0 60 44
+	ld (SoundConv_Arg1:24), e                                 ; FB3A58  f2 11 f0 60 45
+	ld (SoundConv_Arg2:24), h                                 ; FB3A5D  f2 12 f0 60 46
 	push XDE                                             ; FB3A62  3a
 	push XHL                                             ; FB3A63  3b
 	push XIX                                             ; FB3A64  3c
 	push XIZ                                             ; FB3A65  3e
-	call T_F41000                                        ; FB3A66  1d 00 10 f4
+	call T_SoundSel_FromProgramAndBank                                        ; FB3A66  1d 00 10 f4
 	pop XIZ                                              ; FB3A6A  5e
 	pop XIX                                              ; FB3A6B  5c
 	pop XHL                                              ; FB3A6C  5b
@@ -92236,21 +92236,21 @@ SysExParam_SetProgramChangeAndBank:
 	set 0x05,L                                           ; FB3A70  cf 31 05
 	ld (XIX),L                                           ; FB3A73  b4 47
 	ld (XIX+0x01),0x1b                                   ; FB3A75  bc 01 00 1b
-	ld c, (0x60f014:24)                                 ; FB3A79  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FB3A79  c2 14 f0 60 23
 	ld (XIX+0x02),C                                      ; FB3A7E  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3A81  bc 03 00 ff
 	push XIX                                             ; FB3A85  3c
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A86  1d 90 78 fb
 	ld (XIX),L                                           ; FB3A8A  b4 47
 	ld (XIX+0x01),0x1c                                   ; FB3A8C  bc 01 00 1c
-	ld c, (0x60f015:24)                                 ; FB3A90  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FB3A90  c2 15 f0 60 23
 	ld (XIX+0x02),C                                      ; FB3A95  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3A98  bc 03 00 ff
 	push XIX                                             ; FB3A9C  3c
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3A9D  1d 90 78 fb
 	ld (XIX),L                                           ; FB3AA1  b4 47
 	ld (XIX+0x01),0x1d                                   ; FB3AA3  bc 01 00 1d
-	ld c, (0x60f016:24)                                 ; FB3AA7  c2 16 f0 60 23
+	ld c, (SoundConv_Result2:24)                                 ; FB3AA7  c2 16 f0 60 23
 	ld (XIX+0x02),C                                      ; FB3AAC  bc 02 43
 	ld (XIX+0x03),0xff                                   ; FB3AAF  bc 03 00 ff
 	push XIX                                             ; FB3AB3  3c
@@ -116069,13 +116069,13 @@ SoundGroupName_Lookup:
 .LFC20F3:
 	ret                                                  ; FC20F3  0e
 .LFC20F4:
-	ld XIY,0x00005240                                    ; FC20F4  45 40 52 00 00
+	ld XIY,SoundRemap1_GroupNames                                    ; FC20F4  45 40 52 00 00
 	jr .LFC2107                                          ; FC20F9  68 0c
 .LFC20FB:
-	ld XIY,0x00005450                                    ; FC20FB  45 50 54 00 00
+	ld XIY,SoundRemap2_GroupNames                                    ; FC20FB  45 50 54 00 00
 	jr .LFC2107                                          ; FC2100  68 05
 .LFC2102:
-	ld XIY,0x00005660                                    ; FC2102  45 60 56 00 00
+	ld XIY,SoundRemap3_GroupNames                                    ; FC2102  45 60 56 00 00
 .LFC2107:
 	push XWA                                             ; FC2107  38
 	xor W,W                                              ; FC2108  c8 d0
@@ -116181,13 +116181,13 @@ CombiGroupName_Lookup:
 .LFC21B1:
 	ret                                                  ; FC21B1  0e
 .LFC21B2:
-	ld XIY,0x00005890                                    ; FC21B2  45 90 58 00 00
+	ld XIY,CombiRemap1_GroupNames                                    ; FC21B2  45 90 58 00 00
 	jr .LFC21C5                                          ; FC21B7  68 0c
 .LFC21B9:
-	ld XIY,0x00005aa0                                    ; FC21B9  45 a0 5a 00 00
+	ld XIY,CombiRemap2_GroupNames                                    ; FC21B9  45 a0 5a 00 00
 	jr .LFC21C5                                          ; FC21BE  68 05
 .LFC21C0:
-	ld XIY,0x00005cb0                                    ; FC21C0  45 b0 5c 00 00
+	ld XIY,CombiRemap3_GroupNames                                    ; FC21C0  45 b0 5c 00 00
 .LFC21C5:
 	push XWA                                             ; FC21C5  38
 	xor W,W                                              ; FC21C6  c8 d0
@@ -116341,22 +116341,26 @@ SoundGroup_MaxMemberIndex_GetToneCopy:
 	pop W                                                ; FC22B6  c8 05
 	pop XIX                                              ; FC22B8  5c
 	ret                                                  ; FC22B9  0e
-sub_FC22BA:
+; SoundSel_ToProgramAndBank: T_SoundSel_ToProgramAndBank (SoundConv_Arg0 group, _Arg1 member, _Arg3 bank code) -> SoundConv_Result0 program, _Result1 bank: the
+;   preset banks (bank & 0x18 == 0: R1 0x00, R2 0x01, RD 0x20) through SoundCode_FromGroupMember_ModeOffset, the
+;   RE-MAP banks 0x18-0x1A through SoundSel_ToProgramThroughRemap, the others (U1 / U2 0x08 / 0x09, E1 0x10)
+;   through PanelSel_ToNumberDirect.  Basis: body; the bank codes are SoundSel_Bank's.
+SoundSel_ToProgramAndBank:
 	push XWA                                             ; FC22BA  38
 	push XBC                                             ; FC22BB  39
-	ld a, (0x60f013:24)                                 ; FC22BC  c2 13 f0 60 21
+	ld a, (SoundConv_Arg3:24)                                 ; FC22BC  c2 13 f0 60 21
 	and A,0x18                                           ; FC22C1  c9 cc 18
 	cp a, 0x00:i3                                          ; FC22C4  c9 d8
 	jr z, .LFC22D3                                       ; FC22C6  66 0b
 	cp A,0x18                                            ; FC22C8  c9 cf 18
 	jr z, .LFC22D9                                       ; FC22CB  66 0c
-	call sub_FC2330                                      ; FC22CD  1d 30 23 fc
+	call PanelSel_ToNumberDirect                                      ; FC22CD  1d 30 23 fc
 	jr .LFC22DD                                          ; FC22D1  68 0a
 .LFC22D3:
 	call SoundCode_FromGroupMember_ModeOffset                                      ; FC22D3  1d e0 22 fc
 	jr .LFC22DD                                          ; FC22D7  68 04
 .LFC22D9:
-	call sub_FC234F                                      ; FC22D9  1d 4f 23 fc
+	call SoundSel_ToProgramThroughRemap                                      ; FC22D9  1d 4f 23 fc
 .LFC22DD:
 	pop XBC                                              ; FC22DD  59
 	pop XWA                                              ; FC22DE  58
@@ -116385,10 +116389,10 @@ sub_FC22BA:
 ; Was `sub_FC22E0`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------
 SoundCode_FromGroupMember_ModeOffset:
-	ld a, (0x60f010:24)                                 ; FC22E0  c2 10 f0 60 21
-	m_cp_mi8 MB24, 0x60f013, 0x01                        ; FC22E5  c2 13 f0 60 3f 01
+	ld a, (SoundConv_Arg0:24)                                 ; FC22E0  c2 10 f0 60 21
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x01                        ; FC22E5  c2 13 f0 60 3f 01
 	jr z, .LFC22F7                                       ; FC22EB  66 0a
-	m_cp_mi8 MB24, 0x60f013, 0x20                        ; FC22ED  c2 13 f0 60 3f 20
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x20                        ; FC22ED  c2 13 f0 60 3f 20
 	jr z, .LFC22FC                                       ; FC22F3  66 07
 	jr .LFC230A                                          ; FC22F5  68 13
 .LFC22F7:
@@ -116404,114 +116408,128 @@ SoundCode_FromGroupMember_ModeOffset:
 .LFC230A:
 	xor W,W                                              ; FC230A  c8 d0
 	mul WA,0x0010                                        ; FC230C  d8 08 10 00
-	ld c, (0x60f011:24)                                 ; FC2310  c2 11 f0 60 23
+	ld c, (SoundConv_Arg1:24)                                 ; FC2310  c2 11 f0 60 23
 	xor B,B                                              ; FC2315  ca d2
 	mul BC,0x0002                                        ; FC2317  d9 08 02 00
 	add XBC,XWA                                          ; FC231B  e8 81
 	add XBC,SoundCodeByGroupMember_ModeOffsetGroup       ; FC231D  e9 c8 f4 6e f0 00
 	ld WA,(XBC)                                          ; FC2323  91 20
-	ld (0x60f014:24), a                                 ; FC2325  f2 14 f0 60 41
-	ld (0x60f015:24), w                                 ; FC232A  f2 15 f0 60 40
+	ld (SoundConv_Result0:24), a                                 ; FC2325  f2 14 f0 60 41
+	ld (SoundConv_Result1:24), w                                 ; FC232A  f2 15 f0 60 40
 	ret                                                  ; FC232F  0e
-sub_FC2330:
-	ld a, (0x60f010:24)                                 ; FC2330  c2 10 f0 60 21
-	ld w, (0x60f011:24)                                 ; FC2335  c2 11 f0 60 20
+; PanelSel_ToNumberDirect: SoundConv_Result0 = SoundConv_Arg0 x 8 + _Arg1 (group x 8 + member), _Result1 = _Arg3 (the bank code).  Shared
+;   by SoundSel_ToProgramAndBank and CombiSel_ToNumberAndBank.  Basis: body.
+PanelSel_ToNumberDirect:
+	ld a, (SoundConv_Arg0:24)                                 ; FC2330  c2 10 f0 60 21
+	ld w, (SoundConv_Arg1:24)                                 ; FC2335  c2 11 f0 60 20
 	sla a, 0x03                                          ; FC233A  c9 ec 03
 	or A,W                                               ; FC233D  c8 e1
-	ld (0x60f014:24), a                                 ; FC233F  f2 14 f0 60 41
-	ld a, (0x60f013:24)                                 ; FC2344  c2 13 f0 60 21
-	ld (0x60f015:24), a                                 ; FC2349  f2 15 f0 60 41
+	ld (SoundConv_Result0:24), a                                 ; FC233F  f2 14 f0 60 41
+	ld a, (SoundConv_Arg3:24)                                 ; FC2344  c2 13 f0 60 21
+	ld (SoundConv_Result1:24), a                                 ; FC2349  f2 15 f0 60 41
 	ret                                                  ; FC234E  0e
-sub_FC234F:
-	ld a, (0x60f010:24)                                 ; FC234F  c2 10 f0 60 21
+; SoundSel_ToProgramThroughRemap: the word at SoundRemap1_Map / 2 / 3 (bank code 0x18 / 0x19 / 0x1A) + group x 16 + member x 2 ->
+;   SoundConv_Result0 (program) / _Result1 (bank).  Basis: body; the maps sit in SoundRemap_Ram after each
+;   bank's 16 group names (SoundGroupName_Lookup reads those).
+SoundSel_ToProgramThroughRemap:
+	ld a, (SoundConv_Arg0:24)                                 ; FC234F  c2 10 f0 60 21
 	push XIX                                             ; FC2354  3c
-	m_cp_mi8 MB24, 0x60f013, 0x19                        ; FC2355  c2 13 f0 60 3f 19
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x19                        ; FC2355  c2 13 f0 60 3f 19
 	jr z, .LFC236C                                       ; FC235B  66 0f
-	m_cp_mi8 MB24, 0x60f013, 0x1a                        ; FC235D  c2 13 f0 60 3f 1a
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x1a                        ; FC235D  c2 13 f0 60 3f 1a
 	jr z, .LFC2373                                       ; FC2363  66 0e
-	ld XIX,0x00005340                                    ; FC2365  44 40 53 00 00
+	ld XIX,SoundRemap1_Map                                    ; FC2365  44 40 53 00 00
 	jr .LFC2378                                          ; FC236A  68 0c
 .LFC236C:
-	ld XIX,0x00005550                                    ; FC236C  44 50 55 00 00
+	ld XIX,SoundRemap2_Map                                    ; FC236C  44 50 55 00 00
 	jr .LFC2378                                          ; FC2371  68 05
 .LFC2373:
-	ld XIX,0x00005760                                    ; FC2373  44 60 57 00 00
+	ld XIX,SoundRemap3_Map                                    ; FC2373  44 60 57 00 00
 .LFC2378:
 	xor W,W                                              ; FC2378  c8 d0
 	mul WA,0x0010                                        ; FC237A  d8 08 10 00
-	ld c, (0x60f011:24)                                 ; FC237E  c2 11 f0 60 23
+	ld c, (SoundConv_Arg1:24)                                 ; FC237E  c2 11 f0 60 23
 	xor B,B                                              ; FC2383  ca d2
 	mul BC,0x0002                                        ; FC2385  d9 08 02 00
 	add XBC,XWA                                          ; FC2389  e8 81
 	add XIX,XBC                                          ; FC238B  e9 84
 	ld WA,(XIX)                                          ; FC238D  94 20
-	ld (0x60f014:24), a                                 ; FC238F  f2 14 f0 60 41
-	ld (0x60f015:24), w                                 ; FC2394  f2 15 f0 60 40
+	ld (SoundConv_Result0:24), a                                 ; FC238F  f2 14 f0 60 41
+	ld (SoundConv_Result1:24), w                                 ; FC2394  f2 15 f0 60 40
 	pop XIX                                              ; FC2399  5c
 	ret                                                  ; FC239A  0e
-sub_FC239B:
+; CombiSel_ToNumberAndBank: T_CombiSel_ToNumberAndBank: the combination twin of SoundSel_ToProgramAndBank -- RE-MAP banks (bank & 0x18 == 0x18) through
+;   CombiSel_ToNumberThroughRemap, every other bank PanelSel_ToNumberDirect.  Basis: body.
+CombiSel_ToNumberAndBank:
 	push XWA                                             ; FC239B  38
 	push XBC                                             ; FC239C  39
-	ld a, (0x60f013:24)                                 ; FC239D  c2 13 f0 60 21
+	ld a, (SoundConv_Arg3:24)                                 ; FC239D  c2 13 f0 60 21
 	and A,0x18                                           ; FC23A2  c9 cc 18
 	cp A,0x18                                            ; FC23A5  c9 cf 18
 	jr z, .LFC23B0                                       ; FC23A8  66 06
-	call sub_FC2330                                      ; FC23AA  1d 30 23 fc
+	call PanelSel_ToNumberDirect                                      ; FC23AA  1d 30 23 fc
 	jr .LFC23B4                                          ; FC23AE  68 04
 .LFC23B0:
-	call sub_FC23B7                                      ; FC23B0  1d b7 23 fc
+	call CombiSel_ToNumberThroughRemap                                      ; FC23B0  1d b7 23 fc
 .LFC23B4:
 	pop XBC                                              ; FC23B4  59
 	pop XWA                                              ; FC23B5  58
 	ret                                                  ; FC23B6  0e
-sub_FC23B7:
-	ld a, (0x60f010:24)                                 ; FC23B7  c2 10 f0 60 21
+; CombiSel_ToNumberThroughRemap: the word at CombiRemap1_Map / 2 / 3 (0x5990 / 0x5BA0 / 0x5DB0, bank code 0x18 / 0x19 / 0x1A) + group x 16 +
+;   member x 2 -> SoundConv_Result0 / _Result1.  Basis: body; CombiGroupName_Lookup reads the names before each map.
+CombiSel_ToNumberThroughRemap:
+	ld a, (SoundConv_Arg0:24)                                 ; FC23B7  c2 10 f0 60 21
 	push XIX                                             ; FC23BC  3c
-	m_cp_mi8 MB24, 0x60f013, 0x19                        ; FC23BD  c2 13 f0 60 3f 19
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x19                        ; FC23BD  c2 13 f0 60 3f 19
 	jr z, .LFC23D4                                       ; FC23C3  66 0f
-	m_cp_mi8 MB24, 0x60f013, 0x1a                        ; FC23C5  c2 13 f0 60 3f 1a
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x1a                        ; FC23C5  c2 13 f0 60 3f 1a
 	jr z, .LFC23DB                                       ; FC23CB  66 0e
-	ld XIX,0x00005990                                    ; FC23CD  44 90 59 00 00
+	ld XIX,CombiRemap1_Map                                    ; FC23CD  44 90 59 00 00
 	jr .LFC23E0                                          ; FC23D2  68 0c
 .LFC23D4:
-	ld XIX,0x00005ba0                                    ; FC23D4  44 a0 5b 00 00
+	ld XIX,CombiRemap2_Map                                    ; FC23D4  44 a0 5b 00 00
 	jr .LFC23E0                                          ; FC23D9  68 05
 .LFC23DB:
-	ld XIX,0x00005db0                                    ; FC23DB  44 b0 5d 00 00
+	ld XIX,CombiRemap3_Map                                    ; FC23DB  44 b0 5d 00 00
 .LFC23E0:
 	xor W,W                                              ; FC23E0  c8 d0
 	mul WA,0x0010                                        ; FC23E2  d8 08 10 00
-	ld c, (0x60f011:24)                                 ; FC23E6  c2 11 f0 60 23
+	ld c, (SoundConv_Arg1:24)                                 ; FC23E6  c2 11 f0 60 23
 	xor B,B                                              ; FC23EB  ca d2
 	mul BC,0x0002                                        ; FC23ED  d9 08 02 00
 	add XBC,XWA                                          ; FC23F1  e8 81
 	add XIX,XBC                                          ; FC23F3  e9 84
 	ld WA,(XIX)                                          ; FC23F5  94 20
-	ld (0x60f014:24), a                                 ; FC23F7  f2 14 f0 60 41
-	ld (0x60f015:24), w                                 ; FC23FC  f2 15 f0 60 40
+	ld (SoundConv_Result0:24), a                                 ; FC23F7  f2 14 f0 60 41
+	ld (SoundConv_Result1:24), w                                 ; FC23FC  f2 15 f0 60 40
 	pop XIX                                              ; FC2401  5c
 	ret                                                  ; FC2402  0e
-sub_FC2403:
+; SoundSel_FromProgramAndBank: T_SoundSel_FromProgramAndBank (SoundConv_Arg0 program, _Arg1 bank, _Arg2 part) -> SoundConv_Result0 group, _Result1 member,
+;   _Result2 bank code: banks with bits 3-4 (0x08-0x1F) through PanelSel_FromNumberDirect, the preset banks through
+;   SoundSel_FromPresetProgramAndBank.  SysExParam_SetProgramChangeAndBank calls it after storing PROGRAM CHANGE &
+;   BANK and writes the three results to the part's second record +0x1B / +0x1C / +0x1D, the bytes
+;   SoundGroup_LoadSelectionFromPart reads as group / member / bank.  Basis: body + caller.
+SoundSel_FromProgramAndBank:
 	push XWA                                             ; FC2403  38
 	push XBC                                             ; FC2404  39
 	push XIX                                             ; FC2405  3c
-	ld a, (0x60f011:24)                                 ; FC2406  c2 11 f0 60 21
+	ld a, (SoundConv_Arg1:24)                                 ; FC2406  c2 11 f0 60 21
 	ld W,A                                               ; FC240B  c9 88
 	and A,0x18                                           ; FC240D  c9 cc 18
 	cp a, 0x00:i3                                          ; FC2410  c9 d8
 	jr z, .LFC241A                                       ; FC2412  66 06
-	call sub_FC24C1                                      ; FC2414  1d c1 24 fc
+	call PanelSel_FromNumberDirect                                      ; FC2414  1d c1 24 fc
 	jr .LFC241E                                          ; FC2418  68 04
 .LFC241A:
-	call SoundCode_FromGroupMember_ByteGroup                                      ; FC241A  1d 22 24 fc
+	call SoundSel_FromPresetProgramAndBank                                      ; FC241A  1d 22 24 fc
 .LFC241E:
 	pop XIX                                              ; FC241E  5c
 	pop XBC                                              ; FC241F  59
 	pop XWA                                              ; FC2420  58
 	ret                                                  ; FC2421  0e
 ; ---------------------------------------------------------------------
-; SoundCode_FromGroupMember_ByteGroup -- the same (group, member) -> (0x60F014)/(0x60F015) lookup,
-;                                        against SoundCodeByGroupMember_ByteGroup, with a RAM table
+; SoundSel_FromPresetProgramAndBank -- the same (group, member) -> (0x60F014)/(0x60F015) lookup,
+;                                        against PanelSoundSel_ByProgramAndBank, with a RAM table
 ;                                        searched first when bit 2 of (0x7F4D) is set
 ;
 ; Evidence: 0xFC2422 `m_bit 2, MD16, 0x7f4d` chooses the arm. RAM arm:
@@ -116522,7 +116540,7 @@ sub_FC2403:
 ;           (0x60F011) is set -- the FULL BYTE index that `ByteGroup`
 ;           names -- 0xFC246F `and C,0x07` masks the column, and
 ;           0xFC2472 `ld XIX,0x00F07134` is
-;           SoundCodeByGroupMember_ByteGroup's base; 0xFC24B1 and
+;           PanelSoundSel_ByProgramAndBank's base; 0xFC24B1 and
 ;           0xFC24B6 store the halves. prom_b's header for that table
 ;           cites `prom_a 0xFC245D-0xFC2489` for exactly this
 ;           arithmetic. One call site, 0xFC241A
@@ -116531,12 +116549,20 @@ sub_FC2403:
 ;           select
 ; Was `sub_FC2422`, named by notes/prom_a_census_round8.py (bucket round 9).
 ; ---------------------------------------------------------------------
-SoundCode_FromGroupMember_ByteGroup:
+; CORRECTED 2026-10-05 (was SoundCode_FromGroupMember_ByteGroup): it reads (program, bank), not (group, member).
+;   SoundConv_Arg0 is the program and _Arg1 the bank (SysExParam_SetProgramChangeAndBank, sub_FAB6D7 fill them so).
+;   The table row is the program (| 0x80 when bank bit 5 is set), the column bank & 7; the word's low byte is the
+;   group across R1 / R2 (+0x10) / RD (+0x20) -- classified into bank code 0x00 / 0x01 / 0x20 -- and its high byte
+;   the member.  In GM mode (0x7F4D bit 2) a pair found in SoundRemap3_Map at index i gives group i >> 3, member
+;   i & 7, bank 0x1A (RE-MAP 3).  All 272 panel selections of R1 / R2 / RD round-trip through
+;   SoundCode_FromGroupMember_ModeOffset and this routine's table: notes/prom_ab_sound_selection_tables.py.
+;   Basis: body + callers + ROM round trip.
+SoundSel_FromPresetProgramAndBank:
 	m_bit 2, MD16, 0x7f4d                                ; FC2422  f1 4d 7f ca
 	jr z, .LFC245D                                       ; FC2426  66 35
-	ld c, (0x60f010:24)                                 ; FC2428  c2 10 f0 60 23
-	ld b, (0x60f011:24)                                 ; FC242D  c2 11 f0 60 22
-	ld XIX,0x00005760                                    ; FC2432  44 60 57 00 00
+	ld c, (SoundConv_Arg0:24)                                 ; FC2428  c2 10 f0 60 23
+	ld b, (SoundConv_Arg1:24)                                 ; FC242D  c2 11 f0 60 22
+	ld XIX,SoundRemap3_Map                                    ; FC2432  44 60 57 00 00
 	ld a, 0x00:opc                                          ; FC2437  21 00
 	xor W,W                                              ; FC2439  c8 d0
 .LFC243B:
@@ -116554,14 +116580,14 @@ SoundCode_FromGroupMember_ByteGroup:
 	ld c, 0x1a:opc                                          ; FC2459  23 1a
 	jr .LFC24B1                                          ; FC245B  68 54
 .LFC245D:
-	ld a, (0x60f010:24)                                 ; FC245D  c2 10 f0 60 21
-	ld c, (0x60f011:24)                                 ; FC2462  c2 11 f0 60 23
+	ld a, (SoundConv_Arg0:24)                                 ; FC245D  c2 10 f0 60 21
+	ld c, (SoundConv_Arg1:24)                                 ; FC2462  c2 11 f0 60 23
 	bit 0x05,C                                           ; FC2467  cb 33 05
 	jr z, .LFC246F                                       ; FC246A  66 03
 	or A,0x80                                            ; FC246C  c9 ce 80
 .LFC246F:
 	and C,0x07                                           ; FC246F  cb cc 07
-	ld XIX,SoundCodeByGroupMember_ByteGroup              ; FC2472  44 34 71 f0 00
+	ld XIX,PanelSoundSel_ByProgramAndBank              ; FC2472  44 34 71 f0 00
 	xor W,W                                              ; FC2477  c8 d0
 	extz XWA                                             ; FC2479  e8 12
 	mul WA,0x0010                                        ; FC247B  d8 08 10 00
@@ -116589,59 +116615,73 @@ SoundCode_FromGroupMember_ByteGroup:
 	sub A,0x20                                           ; FC24AC  c9 ca 20
 	ld c, 0x20:opc                                          ; FC24AF  23 20
 .LFC24B1:
-	ld (0x60f014:24), a                                 ; FC24B1  f2 14 f0 60 41
-	ld (0x60f015:24), w                                 ; FC24B6  f2 15 f0 60 40
-	ld (0x60f016:24), c                                 ; FC24BB  f2 16 f0 60 43
+	ld (SoundConv_Result0:24), a                                 ; FC24B1  f2 14 f0 60 41
+	ld (SoundConv_Result1:24), w                                 ; FC24B6  f2 15 f0 60 40
+	ld (SoundConv_Result2:24), c                                 ; FC24BB  f2 16 f0 60 43
 	ret                                                  ; FC24C0  0e
-sub_FC24C1:
-	ld a, (0x60f010:24)                                 ; FC24C1  c2 10 f0 60 21
+; PanelSel_FromNumberDirect: SoundConv_Result0 = SoundConv_Arg0 >> 3 (group), _Result1 = _Arg0 & 7 (member), _Result2 = _Arg1 (the bank
+;   code).  Basis: body.
+PanelSel_FromNumberDirect:
+	ld a, (SoundConv_Arg0:24)                                 ; FC24C1  c2 10 f0 60 21
 	ld W,A                                               ; FC24C6  c9 88
 	sra a, 0x03                                          ; FC24C8  c9 ed 03
 	and W,0x07                                           ; FC24CB  c8 cc 07
-	ld (0x60f014:24), a                                 ; FC24CE  f2 14 f0 60 41
-	ld (0x60f015:24), w                                 ; FC24D3  f2 15 f0 60 40
-	ld w, (0x60f011:24)                                 ; FC24D8  c2 11 f0 60 20
-	ld (0x60f016:24), w                                 ; FC24DD  f2 16 f0 60 40
+	ld (SoundConv_Result0:24), a                                 ; FC24CE  f2 14 f0 60 41
+	ld (SoundConv_Result1:24), w                                 ; FC24D3  f2 15 f0 60 40
+	ld w, (SoundConv_Arg1:24)                                 ; FC24D8  c2 11 f0 60 20
+	ld (SoundConv_Result2:24), w                                 ; FC24DD  f2 16 f0 60 40
 	ret                                                  ; FC24E2  0e
-sub_FC24E3:
+; CombiSel_FromNumberAndBank: T_CombiSel_FromNumberAndBank: PanelSel_FromNumberDirect with XWA saved -- for a combination every bank is numbered group x 8 +
+;   member.  Callers: ParamApply_Param98Tech and sub_FAB728 (event class 0x98, COMBINATION NUMBER and BANK).
+;   Basis: body + caller.
+CombiSel_FromNumberAndBank:
 	push XWA                                             ; FC24E3  38
-	call sub_FC24C1                                      ; FC24E4  1d c1 24 fc
+	call PanelSel_FromNumberDirect                                      ; FC24E4  1d c1 24 fc
 	pop XWA                                              ; FC24E8  58
 	ret                                                  ; FC24E9  0e
 	ret                                                  ; FC24EA  0e
-sub_FC24EB:
+; PartSound_FromProgramChange: T_PartSound_FromProgramChange (SoundConv_Arg2 program number, _Arg3 part) -> SoundConv_Result0 / _Result1 = the part's PROGRAM
+;   CHANGE & BANK pair: parts 9 / 0x19 (the drum parts) take (the program, bank 0x20); the others the word
+;   SoundRemap3_Map[program].  Callers: SmfEvent_ProgramChange / _MultiTrack (SMF playback),
+;   ParamApply_PartProgMode3, which stores the pair to the part record's bytes 0 / 1.  Basis: body + callers.
+PartSound_FromProgramChange:
 	push XIX                                             ; FC24EB  3c
 	pushw bc                                             ; FC24EC  29
 	pushw wa                                             ; FC24ED  28
-	m_cp_mi8 MB24, 0x60f013, 0x09                        ; FC24EE  c2 13 f0 60 3f 09
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x09                        ; FC24EE  c2 13 f0 60 3f 09
 	jr z, .LFC2500                                       ; FC24F4  66 0a
-	m_cp_mi8 MB24, 0x60f013, 0x19                        ; FC24F6  c2 13 f0 60 3f 19
+	m_cp_mi8 MB24, SoundConv_Arg3, 0x19                        ; FC24F6  c2 13 f0 60 3f 19
 	jr z, .LFC2500                                       ; FC24FC  66 02
 	jr T,.LFC2509                                        ; FC24FE  68 09
 .LFC2500:
-	ld c, (0x60f012:24)                                 ; FC2500  c2 12 f0 60 23
+	ld c, (SoundConv_Arg2:24)                                 ; FC2500  c2 12 f0 60 23
 	ld b, 0x20:opc                                          ; FC2505  22 20
 	jr .LFC251D                                          ; FC2507  68 14
 .LFC2509:
-	ld XIX,0x00005760                                    ; FC2509  44 60 57 00 00
-	ld a, (0x60f012:24)                                 ; FC250E  c2 12 f0 60 21
+	ld XIX,SoundRemap3_Map                                    ; FC2509  44 60 57 00 00
+	ld a, (SoundConv_Arg2:24)                                 ; FC250E  c2 12 f0 60 21
 	xor W,W                                              ; FC2513  c8 d0
 	sla wa, 0x01                                         ; FC2515  d8 ec 01
 	mx_ld_rm MXW, ra_IX, ra_WA, r1                       ; FC2518  d3 07 f0 e0 21
 .LFC251D:
-	ld (0x60f014:24), bc                                ; FC251D  f2 14 f0 60 51
+	ld (SoundConv_Result0:24), bc                                ; FC251D  f2 14 f0 60 51
 	popw wa                                              ; FC2522  48
 	popw bc                                              ; FC2523  49
 	pop XIX                                              ; FC2524  5c
 	ret                                                  ; FC2525  0e
-sub_FC2526:
+; PartSound_ToProgramChange: T_PartSound_ToProgramChange (SoundConv_Arg0 / _Arg1 the part's PROGRAM CHANGE & BANK, _Arg2 part) -> SoundConv_Result0 / _Result1
+;   a bank-select pair and _Result2 the program number to transmit: drum parts 9 / 0x19 -> the program, bank select 0;
+;   bank above 7 -> 0, 0; a pair found in SoundRemap3_Map at index i -> program i, bank select 0; otherwise
+;   ProgramChangeOut_ByProgramAndBank[program x 8 + bank & 7] (low byte the program, high byte to _Result1).  Callers:
+;   Smf_WriteFile and its sizing passes, Evt2030_ProgChgMode3_Notify.  Basis: body + callers.
+PartSound_ToProgramChange:
 	push XIX                                             ; FC2526  3c
 	pushw bc                                             ; FC2527  29
 	pushw wa                                             ; FC2528  28
-	ld bc, (0x60f010:24)                                ; FC2529  d2 10 f0 60 21
-	m_cp_mi8 MB24, 0x60f012, 0x09                        ; FC252E  c2 12 f0 60 3f 09
+	ld bc, (SoundConv_Arg0:24)                                ; FC2529  d2 10 f0 60 21
+	m_cp_mi8 MB24, SoundConv_Arg2, 0x09                        ; FC252E  c2 12 f0 60 3f 09
 	jr z, .LFC2540                                       ; FC2534  66 0a
-	m_cp_mi8 MB24, 0x60f012, 0x19                        ; FC2536  c2 12 f0 60 3f 19
+	m_cp_mi8 MB24, SoundConv_Arg2, 0x19                        ; FC2536  c2 12 f0 60 3f 19
 	jr z, .LFC2540                                       ; FC253C  66 02
 	jr .LFC2546                                          ; FC253E  68 06
 .LFC2540:
@@ -116655,7 +116695,7 @@ sub_FC2526:
 	ld a, 0x00:opc                                          ; FC254C  21 00
 	jr .LFC2594                                          ; FC254E  68 44
 .LFC2550:
-	ld XIX,0x00005760                                    ; FC2550  44 60 57 00 00
+	ld XIX,SoundRemap3_Map                                    ; FC2550  44 60 57 00 00
 	ld a, 0x00:opc                                          ; FC2555  21 00
 	xor W,W                                              ; FC2557  c8 d0
 .LFC2559:
@@ -116677,13 +116717,13 @@ sub_FC2526:
 	sla bc, 0x03                                         ; FC257E  d9 ec 03
 	or C,A                                               ; FC2581  c9 e3
 	sla bc, 0x01                                         ; FC2583  d9 ec 01
-	ld XIX,SoundCodeByGroupMember_SevenBitGroup          ; FC2586  44 14 85 f0 00
+	ld XIX,ProgramChangeOut_ByProgramAndBank          ; FC2586  44 14 85 f0 00
 	mx_ld_rm MXW, ra_IX, ra_BC, r1                       ; FC258B  d3 07 f0 e4 21
 	ld A,C                                               ; FC2590  cb 89
 	xor C,C                                              ; FC2592  cb d3
 .LFC2594:
-	ld (0x60f014:24), bc                                ; FC2594  f2 14 f0 60 51
-	ld (0x60f016:24), a                                 ; FC2599  f2 16 f0 60 41
+	ld (SoundConv_Result0:24), bc                                ; FC2594  f2 14 f0 60 51
+	ld (SoundConv_Result2:24), a                                 ; FC2599  f2 16 f0 60 41
 	popw wa                                              ; FC259E  48
 	popw bc                                              ; FC259F  49
 	pop XIX                                              ; FC25A0  5c
@@ -144364,7 +144404,7 @@ sub_FD7A24:
 sub_FD7ADD:
 	link XIZ,0x0000                                      ; FD7ADD  ee 0c 00 00
 	push XIX                                             ; FD7AE1  3c
-	lda xix, (0x60f010:24)                               ; FD7AE2  f2 10 f0 60 34
+	lda xix, (SoundConv_Arg0:24)                               ; FD7AE2  f2 10 f0 60 34
 	ld C,(XIZ+0x0a)                                      ; FD7AE7  8e 0a 23
 	ld (XIX),C                                           ; FD7AEA  b4 43
 	ld C,(XIZ+0x0c)                                      ; FD7AEC  8e 0c 23
@@ -144378,11 +144418,11 @@ sub_FD7ADD:
 sub_FD7B00:
 	link XIZ,0x0000                                      ; FD7B00  ee 0c 00 00
 	pushw hl                                             ; FD7B04  2b
-	ld c, (0x60f014:24)                                 ; FD7B05  c2 14 f0 60 23
+	ld c, (SoundConv_Result0:24)                                 ; FD7B05  c2 14 f0 60 23
 	ld H,C                                               ; FD7B0A  cb 8e
 	ld XBC,(XIZ+0x08)                                    ; FD7B0C  ae 08 21
 	ld (XBC),H                                           ; FD7B0F  b1 46
-	ld c, (0x60f015:24)                                 ; FD7B11  c2 15 f0 60 23
+	ld c, (SoundConv_Result1:24)                                 ; FD7B11  c2 15 f0 60 23
 	ld H,C                                               ; FD7B16  cb 8e
 	ld XBC,(XIZ+0x0c)                                    ; FD7B18  ae 0c 21
 	ld (XBC),H                                           ; FD7B1B  b1 46
@@ -144392,7 +144432,7 @@ sub_FD7B00:
 sub_FD7B21:
 	link XIZ,0x0000                                      ; FD7B21  ee 0c 00 00
 	push XIX                                             ; FD7B25  3c
-	lda xix, (0x60f010:24)                               ; FD7B26  f2 10 f0 60 34
+	lda xix, (SoundConv_Arg0:24)                               ; FD7B26  f2 10 f0 60 34
 	ld C,(XIZ+0x08)                                      ; FD7B2B  8e 08 23
 	ld (XIX),C                                           ; FD7B2E  b4 43
 	ld C,(XIZ+0x0a)                                      ; FD7B30  8e 0a 23
@@ -144405,7 +144445,7 @@ sub_FD7B3E:
 	link XIZ,0x0000                                      ; FD7B3E  ee 0c 00 00
 	pushw hl                                             ; FD7B42  2b
 	push XIX                                             ; FD7B43  3c
-	lda xix, (0x60f014:24)                               ; FD7B44  f2 14 f0 60 34
+	lda xix, (SoundConv_Result0:24)                               ; FD7B44  f2 14 f0 60 34
 	ld C,(XIX)                                           ; FD7B49  84 23
 	ld H,C                                               ; FD7B4B  cb 8e
 	ld XBC,(XIZ+0x08)                                    ; FD7B4D  ae 08 21
@@ -154524,7 +154564,7 @@ ScreenEnter_SoundEditCopy:
 	extz BC                                              ; FDD17F  d9 12
 	pushw bc                                             ; FDD181  29
 	call sub_FD7B21                                      ; FDD182  1d 21 7b fd
-	call T_F41000                                        ; FDD186  1d 00 10 f4
+	call T_SoundSel_FromProgramAndBank                                        ; FDD186  1d 00 10 f4
 	lda xbc, (xiz-10)                                    ; FDD18A  be f6 31
 	push XBC                                             ; FDD18D  39
 	lda xwa, (xiz-12)                                    ; FDD18E  be f4 30

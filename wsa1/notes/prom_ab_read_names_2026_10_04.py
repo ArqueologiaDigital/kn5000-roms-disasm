@@ -2320,6 +2320,49 @@ ROWS = [
      "Msg0716_Str_GroupPair_B."),
     ("FC21D0", "CombiGroupName_RequestRead",
      "T_Link_SendCommandE2 for the 16 bytes at CPU-2 XIX + 0x200 + A x 16 into 0x810."),
+    # panel sound selection <-> PROGRAM CHANGE & BANK converters (FINDINGS-prom_ab-sound-selection.md); from here on each row ends with its basis
+    ("FC22BA", "SoundSel_ToProgramAndBank",
+     "T_SoundSel_ToProgramAndBank (SoundConv_Arg0 group, _Arg1 member, _Arg3 bank code) -> SoundConv_Result0 program, _Result1 bank: the\n"
+     "preset banks (bank & 0x18 == 0: R1 0x00, R2 0x01, RD 0x20) through SoundCode_FromGroupMember_ModeOffset, the\n"
+     "RE-MAP banks 0x18-0x1A through SoundSel_ToProgramThroughRemap, the others (U1 / U2 0x08 / 0x09, E1 0x10)\n"
+     "through PanelSel_ToNumberDirect.  Basis: body; the bank codes are SoundSel_Bank's."),
+    ("FC2330", "PanelSel_ToNumberDirect",
+     "SoundConv_Result0 = SoundConv_Arg0 x 8 + _Arg1 (group x 8 + member), _Result1 = _Arg3 (the bank code).  Shared\n"
+     "by SoundSel_ToProgramAndBank and CombiSel_ToNumberAndBank.  Basis: body."),
+    ("FC234F", "SoundSel_ToProgramThroughRemap",
+     "the word at SoundRemap1_Map / 2 / 3 (bank code 0x18 / 0x19 / 0x1A) + group x 16 + member x 2 ->\n"
+     "SoundConv_Result0 (program) / _Result1 (bank).  Basis: body; the maps sit in SoundRemap_Ram after each\n"
+     "bank's 16 group names (SoundGroupName_Lookup reads those)."),
+    ("FC239B", "CombiSel_ToNumberAndBank",
+     "T_CombiSel_ToNumberAndBank: the combination twin of SoundSel_ToProgramAndBank -- RE-MAP banks (bank & 0x18 == 0x18) through\n"
+     "CombiSel_ToNumberThroughRemap, every other bank PanelSel_ToNumberDirect.  Basis: body."),
+    ("FC23B7", "CombiSel_ToNumberThroughRemap",
+     "the word at CombiRemap1_Map / 2 / 3 (0x5990 / 0x5BA0 / 0x5DB0, bank code 0x18 / 0x19 / 0x1A) + group x 16 +\n"
+     "member x 2 -> SoundConv_Result0 / _Result1.  Basis: body; CombiGroupName_Lookup reads the names before each map."),
+    ("FC2403", "SoundSel_FromProgramAndBank",
+     "T_SoundSel_FromProgramAndBank (SoundConv_Arg0 program, _Arg1 bank, _Arg2 part) -> SoundConv_Result0 group, _Result1 member,\n"
+     "_Result2 bank code: banks with bits 3-4 (0x08-0x1F) through PanelSel_FromNumberDirect, the preset banks through\n"
+     "SoundSel_FromPresetProgramAndBank.  SysExParam_SetProgramChangeAndBank calls it after storing PROGRAM CHANGE &\n"
+     "BANK and writes the three results to the part's second record +0x1B / +0x1C / +0x1D, the bytes\n"
+     "SoundGroup_LoadSelectionFromPart reads as group / member / bank.  Basis: body + caller."),
+    ("FC24C1", "PanelSel_FromNumberDirect",
+     "SoundConv_Result0 = SoundConv_Arg0 >> 3 (group), _Result1 = _Arg0 & 7 (member), _Result2 = _Arg1 (the bank\n"
+     "code).  Basis: body."),
+    ("FC24E3", "CombiSel_FromNumberAndBank",
+     "T_CombiSel_FromNumberAndBank: PanelSel_FromNumberDirect with XWA saved -- for a combination every bank is numbered group x 8 +\n"
+     "member.  Callers: ParamApply_Param98Tech and sub_FAB728 (event class 0x98, COMBINATION NUMBER and BANK).\n"
+     "Basis: body + caller."),
+    ("FC24EB", "PartSound_FromProgramChange",
+     "T_PartSound_FromProgramChange (SoundConv_Arg2 program number, _Arg3 part) -> SoundConv_Result0 / _Result1 = the part's PROGRAM\n"
+     "CHANGE & BANK pair: parts 9 / 0x19 (the drum parts) take (the program, bank 0x20); the others the word\n"
+     "SoundRemap3_Map[program].  Callers: SmfEvent_ProgramChange / _MultiTrack (SMF playback),\n"
+     "ParamApply_PartProgMode3, which stores the pair to the part record's bytes 0 / 1.  Basis: body + callers."),
+    ("FC2526", "PartSound_ToProgramChange",
+     "T_PartSound_ToProgramChange (SoundConv_Arg0 / _Arg1 the part's PROGRAM CHANGE & BANK, _Arg2 part) -> SoundConv_Result0 / _Result1\n"
+     "a bank-select pair and _Result2 the program number to transmit: drum parts 9 / 0x19 -> the program, bank select 0;\n"
+     "bank above 7 -> 0, 0; a pair found in SoundRemap3_Map at index i -> program i, bank select 0; otherwise\n"
+     "ProgramChangeOut_ByProgramAndBank[program x 8 + bank & 7] (low byte the program, high byte to _Result1).  Callers:\n"
+     "Smf_WriteFile and its sizing passes, Evt2030_ProgChgMode3_Notify.  Basis: body + callers."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2367,6 +2410,25 @@ RELABEL = [
      ""),
     ("FC61A5", "NoteRouting_RebuildStep_Nop",
      ""),
+    ("FC2422", "SoundSel_FromPresetProgramAndBank",
+     "CORRECTED 2026-10-05 (was SoundCode_FromGroupMember_ByteGroup): it reads (program, bank), not (group, member).\n"
+     "SoundConv_Arg0 is the program and _Arg1 the bank (SysExParam_SetProgramChangeAndBank, sub_FAB6D7 fill them so).\n"
+     "The table row is the program (| 0x80 when bank bit 5 is set), the column bank & 7; the word's low byte is the\n"
+     "group across R1 / R2 (+0x10) / RD (+0x20) -- classified into bank code 0x00 / 0x01 / 0x20 -- and its high byte\n"
+     "the member.  In GM mode (0x7F4D bit 2) a pair found in SoundRemap3_Map at index i gives group i >> 3, member\n"
+     "i & 7, bank 0x1A (RE-MAP 3).  All 272 panel selections of R1 / R2 / RD round-trip through\n"
+     "SoundCode_FromGroupMember_ModeOffset and this routine's table: notes/prom_ab_sound_selection_tables.py.\n"
+     "Basis: body + callers + ROM round trip."),
+    ("F07134", "PanelSoundSel_ByProgramAndBank",
+     "CORRECTED 2026-10-05 (was SoundCodeByGroupMember_ByteGroup): indexed by (program, bank), not (group, member):\n"
+     "row = program (+0x80 for the drum banks), column = bank & 7, word = (group, member).  It is the exact inverse of\n"
+     "SoundCodeByGroupMember_ModeOffsetGroup on all 272 panel selections (notes/prom_ab_sound_selection_tables.py);\n"
+     "the 1-in-2048 round trip quoted above compared it with 0xF08514, which is indexed by (program, bank) as well."),
+    ("F08514", "ProgramChangeOut_ByProgramAndBank",
+     "CORRECTED 2026-10-05 (was SoundCodeByGroupMember_SevenBitGroup): indexed by (program & 0x7F) x 8 + (bank & 7)\n"
+     "(PartSound_ToProgramChange); the word's low byte is the program it transmits and its high byte goes to the\n"
+     "bank-select result.  What those values are for a given sound is not established; it is not an identity map\n"
+     "(notes/prom_ab_sound_selection_tables.py)."),
 ]
 
 

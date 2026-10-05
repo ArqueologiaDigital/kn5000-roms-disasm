@@ -124,6 +124,27 @@
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "EffectAlgoMaps header (0xF133E4)"
 	.equ Effect_BlockIndex,				0x2797	; which DSP effect block: IndexedTable entry 97, 98 or 99, minus 97 -- EffectAlgoMaps: (0x2797) = entry - 97
 
+; ---- wsa1/notes/FINDINGS-prom_ab-sound-selection.md -- "1. Two stored forms of a part's sound"
+	.equ SoundRemap1_GroupNames,			0x5240	; SOUND RE-MAP 1 (bank code 0x18): 16 group names x 16 bytes -- SoundGroupName_Lookup
+	.equ SoundRemap1_Map,				0x5340	; SOUND RE-MAP 1: 128 (program, bank) words, index group x 8 + member -- SoundSel_ToProgramThroughRemap
+	.equ SoundRemap2_GroupNames,			0x5450	; SOUND RE-MAP 2 (bank code 0x19): 16 group names -- SoundGroupName_Lookup
+	.equ SoundRemap2_Map,				0x5550	; SOUND RE-MAP 2: 128 (program, bank) words -- SoundSel_ToProgramThroughRemap
+	.equ SoundRemap3_GroupNames,			0x5660	; SOUND RE-MAP 3 (bank code 0x1A): 16 group names -- SoundGroupName_Lookup
+	.equ SoundRemap3_Map,				0x5760	; SOUND RE-MAP 3: 128 (program, bank) words; also the program-change map of PartSound_FromProgramChange and the GM-mode search -- SoundSel_ToProgramThroughRemap; PartSound_FromProgramChange / _ToProgramChange
+	.equ CombiRemap1_GroupNames,			0x5890	; COMBI RE-MAP 1 (bank code 0x18): 16 group names -- CombiGroupName_Lookup
+	.equ CombiRemap1_Map,				0x5990	; COMBI RE-MAP 1: 128 (number, bank) words, index group x 8 + member -- CombiSel_ToNumberThroughRemap
+	.equ CombiRemap2_GroupNames,			0x5aa0	; COMBI RE-MAP 2 (bank code 0x19): 16 group names -- CombiGroupName_Lookup
+	.equ CombiRemap2_Map,				0x5ba0	; COMBI RE-MAP 2: 128 (number, bank) words -- CombiSel_ToNumberThroughRemap
+	.equ CombiRemap3_GroupNames,			0x5cb0	; COMBI RE-MAP 3 (bank code 0x1A): 16 group names -- CombiGroupName_Lookup
+	.equ CombiRemap3_Map,				0x5db0	; COMBI RE-MAP 3: 128 (number, bank) words -- CombiSel_ToNumberThroughRemap
+	.equ SoundConv_Arg0,				0x60f010	; argument byte 0 of the sound-selection converters (program, or group -- per routine, FINDINGS) -- SoundSel_* / CombiSel_* / PartSound_*; their callers fill it
+	.equ SoundConv_Arg1,				0x60f011	; argument byte 1 (bank, or member) -- SoundSel_* / CombiSel_* / PartSound_*
+	.equ SoundConv_Arg2,				0x60f012	; argument byte 2 (the part, or the received program number) -- SoundSel_* / CombiSel_* / PartSound_*
+	.equ SoundConv_Arg3,				0x60f013	; argument byte 3 (the bank code, or the part) -- SoundSel_* / CombiSel_* / PartSound_*
+	.equ SoundConv_Result0,				0x60f014	; result byte 0 (program, group, or bank select) -- SoundSel_* / CombiSel_* / PartSound_*
+	.equ SoundConv_Result1,				0x60f015	; result byte 1 (bank, member, or bank select) -- SoundSel_* / CombiSel_* / PartSound_*
+	.equ SoundConv_Result2,				0x60f016	; result byte 2 (bank code, or the program to transmit) -- SoundSel_FromProgramAndBank, PartSound_ToProgramChange
+
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers"
 	.equ Drawbar_ReloadMark,			0x28a0	; 15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it -- Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked
 

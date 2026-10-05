@@ -1500,12 +1500,12 @@
 	.set	sub_FC2213, 0xFC2213
 	.set	SoundGroup_MaxMemberIndex_Get, 0xFC2222
 	.set	SoundGroup_MaxMemberIndex_GetToneCopy, 0xFC2282
-	.set	sub_FC22BA, 0xFC22BA
-	.set	sub_FC239B, 0xFC239B
-	.set	sub_FC2403, 0xFC2403
-	.set	sub_FC24E3, 0xFC24E3
-	.set	sub_FC24EB, 0xFC24EB
-	.set	sub_FC2526, 0xFC2526
+	.set	SoundSel_ToProgramAndBank, 0xFC22BA
+	.set	CombiSel_ToNumberAndBank, 0xFC239B
+	.set	SoundSel_FromProgramAndBank, 0xFC2403
+	.set	CombiSel_FromNumberAndBank, 0xFC24E3
+	.set	PartSound_FromProgramChange, 0xFC24EB
+	.set	PartSound_ToProgramChange, 0xFC2526
 	.set	sub_FC25A2, 0xFC25A2
 	.set	sub_FC25A8, 0xFC25A8
 	.set	DigitalEffect_Frame, 0xFC4000
@@ -16727,7 +16727,7 @@ SoundCodeByGroupMember_ModeOffsetGroup:
 
 
 ; --------------------------------------------------------------------------
-; SoundCodeByGroupMember_ByteGroup -- 256 rows of 8 16-bit words: a (group,
+; PanelSoundSel_ByProgramAndBank -- 256 rows of 8 16-bit words: a (group,
 ;                                     member) pair selects one word, and the
 ;                                     word is stored to (0x60F014)/(0x60F015).
 ;                                     This is one of THREE tables of the same
@@ -16754,7 +16754,11 @@ SoundCodeByGroupMember_ModeOffsetGroup:
 ;          trips 1 pair of 2048 in either orientation (--selftest pins it), so
 ;          do not describe any of them as a reverse lookup.
 ; --------------------------------------------------------------------------
-SoundCodeByGroupMember_ByteGroup:
+; CORRECTED 2026-10-05 (was SoundCodeByGroupMember_ByteGroup): indexed by (program, bank), not (group, member):
+;   row = program (+0x80 for the drum banks), column = bank & 7, word = (group, member).  It is the exact inverse of
+;   SoundCodeByGroupMember_ModeOffsetGroup on all 272 panel selections (notes/prom_ab_sound_selection_tables.py);
+;   the 1-in-2048 round trip quoted above compared it with 0xF08514, which is indexed by (program, bank) as well.
+PanelSoundSel_ByProgramAndBank:
 	.short	0x0000, 0x0000, 0x0500, 0x0000, 0x0600, 0x0000, 0x0000, 0x0000	; F07134  [0]
 	.short	0x0300, 0x0300, 0x0300, 0x0700, 0x0300, 0x0300, 0x0300, 0x0300	; F07144  [1]
 	.short	0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100, 0x0100	; F07154  [2]
@@ -17350,7 +17354,7 @@ RecordArray_F08334:
 
 
 ; --------------------------------------------------------------------------
-; SoundCodeByGroupMember_SevenBitGroup -- 124 rows of 8 16-bit words: a
+; ProgramChangeOut_ByProgramAndBank -- 124 rows of 8 16-bit words: a
 ;                                         (group, member) pair selects one
 ;                                         word, and the word is stored to
 ;                                         (0x60F014)/(0x60F015).  This is one
@@ -17377,7 +17381,11 @@ RecordArray_F08334:
 ;          trips 1 pair of 2048 in either orientation (--selftest pins it), so
 ;          do not describe any of them as a reverse lookup.
 ; --------------------------------------------------------------------------
-SoundCodeByGroupMember_SevenBitGroup:
+; CORRECTED 2026-10-05 (was SoundCodeByGroupMember_SevenBitGroup): indexed by (program & 0x7F) x 8 + (bank & 7)
+;   (PartSound_ToProgramChange); the word's low byte is the program it transmits and its high byte goes to the
+;   bank-select result.  What those values are for a given sound is not established; it is not an identity map
+;   (notes/prom_ab_sound_selection_tables.py).
+ProgramChangeOut_ByProgramAndBank:
 	.short	0x0007, 0x0007, 0x0007, 0x0007, 0x0007, 0x0007, 0x0007, 0x0007	; F08514  [0]
 	.short	0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006	; F08524  [1]
 	.short	0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006, 0x0006	; F08534  [2]
@@ -23854,7 +23862,7 @@ sub_F0BF04_Skip4:
 ; SoftKeyCol1_SoundEditCopy
 ; Called from: table 0xFCF80C[270]
 ; Touches: nothing with an absolute address
-; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80 sub_F0C291 0xFD7ADD T_F40FFC 0xFD7B00
+; Calls:   0xFDA0CA 0xFD6C7B T_Dispatch_Code80 sub_F0C291 0xFD7ADD T_SoundSel_ToProgramAndBank 0xFD7B00
 ;          0xFD648D 0xFD7C01
 ; Evidence: word [270] of the pointer table at 0xFCF80C reads 0x00F0C0BB, that
 ;           table's reader TRANSFERS to the word it loads, and 0xF0C0BB is an
@@ -24022,7 +24030,7 @@ sub_F0C1B9_Resume:
 	extz	bc	; F0C21D  extz BC
 	pushw	bc	; F0C21F  push BC
 	call	sub_FD7ADD	; F0C220  call 0xfd7add
-	call	T_F40FFC	; F0C224  call 0xf40ffc
+	call	T_SoundSel_ToProgramAndBank	; F0C224  call 0xf40ffc
 	lda	xbc, (xiz-12)	; F0C228  lda XBC,XIZ+0xf4
 	push	xbc	; F0C22B  push XBC
 	lda	xwa, (xiz-14)	; F0C22C  lda XWA,XIZ+0xf2
@@ -24074,7 +24082,7 @@ sub_F0BF04_Skip11:
 ; sub_F0C291
 ; Called from: in-module: 0xF0C131 0xF0C3B8
 ; Touches:   |  0xFCFCD4
-; Calls:   0xFD6C7B 0xFD7ADD T_F40FFC 0xFD7B00 T_Dispatch_Code80
+; Calls:   0xFD6C7B 0xFD7ADD T_SoundSel_ToProgramAndBank 0xFD7B00 T_Dispatch_Code80
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription (the
 ;           sites are listed above), so 0xF0C291 is an instruction boundary.
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
@@ -24136,7 +24144,7 @@ sub_F0C2F4_Resume:
 	extz	bc	; F0C30E  extz BC
 	pushw	bc	; F0C310  push BC
 	call	sub_FD7ADD	; F0C311  call 0xfd7add
-	call	T_F40FFC	; F0C315  call 0xf40ffc
+	call	T_SoundSel_ToProgramAndBank	; F0C315  call 0xf40ffc
 	lda	xbc, (xiz-6)	; F0C319  lda XBC,XIZ+0xfa
 	push	xbc	; F0C31C  push XBC
 	lda	xwa, (xiz-8)	; F0C31D  lda XWA,XIZ+0xf8
@@ -89609,10 +89617,18 @@ T_F40FEC:	jp sub_FC0206  ; -> prom_a 0x40206   x3
 T_F40FF0:	jp sub_FC01F3  ; -> prom_a 0x401F3   x2
 T_F40FF4:	jp T_F40FF4_Nop  ; -> prom_a 0x4018D   x1
 T_F40FF8:	jp T_F40FF8_Nop  ; -> prom_a 0x4024F
-T_F40FFC:	jp sub_FC22BA  ; -> prom_a 0x422BA   x3
-T_F41000:	jp sub_FC2403  ; -> prom_a 0x42403   x4
-T_F41004:	jp sub_FC24EB  ; -> prom_a 0x424EB   x4
-T_F41008:	jp sub_FC2526  ; -> prom_a 0x42526   x7
+; Evidence: slot 0xF40FFC is `jp 0xFC22BA`; prom_a 0xFC22BA carries the label
+;           SoundSel_ToProgramAndBank (graded CONTENT).  DERIVATIVE name.
+T_SoundSel_ToProgramAndBank:	jp SoundSel_ToProgramAndBank  ; F40FFC (was T_F40FFC) -> prom_a 0x422BA   x3
+; Evidence: slot 0xF41000 is `jp 0xFC2403`; prom_a 0xFC2403 carries the label
+;           SoundSel_FromProgramAndBank (graded CONTENT).  DERIVATIVE name.
+T_SoundSel_FromProgramAndBank:	jp SoundSel_FromProgramAndBank  ; F41000 (was T_F41000) -> prom_a 0x42403   x4
+; Evidence: slot 0xF41004 is `jp 0xFC24EB`; prom_a 0xFC24EB carries the label
+;           PartSound_FromProgramChange (graded CONTENT).  DERIVATIVE name.
+T_PartSound_FromProgramChange:	jp PartSound_FromProgramChange  ; F41004 (was T_F41004) -> prom_a 0x424EB   x4
+; Evidence: slot 0xF41008 is `jp 0xFC2526`; prom_a 0xFC2526 carries the label
+;           PartSound_ToProgramChange (graded CONTENT).  DERIVATIVE name.
+T_PartSound_ToProgramChange:	jp PartSound_ToProgramChange  ; F41008 (was T_F41008) -> prom_a 0x42526   x7
 ; Evidence: slot 0xF4100C is `jp 0xFC188F`; prom_a 0xFC188F carries the label
 ;           Msg0716_PostSysEx50_A3 (graded CONTENT).  DERIVATIVE name.
 T_Msg0716_PostSysEx50_A3:	jp Msg0716_PostSysEx50_A3  ; F4100C (was T_F4100C) -> prom_a 0x4188F   x1
@@ -89627,8 +89643,12 @@ T_SoundGroupName_Lookup:	jp SoundGroupName_Lookup  ; F41018 (was T_F41018) -> pr
 ;           SoundGroup_MaxMemberIndex_Get (graded CONTENT).  DERIVATIVE name.
 T_SoundGroup_MaxMemberIndex_Get:	jp SoundGroup_MaxMemberIndex_Get  ; F4101C (was T_F4101C) -> prom_a 0x42222   x14
 T_F41020:	jp Msg0716_PostSysEx50_87  ; -> prom_a 0x418B2   x3
-T_F41024:	jp sub_FC239B  ; -> prom_a 0x4239B   x2
-T_F41028:	jp sub_FC24E3  ; -> prom_a 0x424E3   x2
+; Evidence: slot 0xF41024 is `jp 0xFC239B`; prom_a 0xFC239B carries the label
+;           CombiSel_ToNumberAndBank (graded CONTENT).  DERIVATIVE name.
+T_CombiSel_ToNumberAndBank:	jp CombiSel_ToNumberAndBank  ; F41024 (was T_F41024) -> prom_a 0x4239B   x2
+; Evidence: slot 0xF41028 is `jp 0xFC24E3`; prom_a 0xFC24E3 carries the label
+;           CombiSel_FromNumberAndBank (graded CONTENT).  DERIVATIVE name.
+T_CombiSel_FromNumberAndBank:	jp CombiSel_FromNumberAndBank  ; F41028 (was T_F41028) -> prom_a 0x424E3   x2
 ; Evidence: slot 0xF4102C is `jp 0xFC1C59`; prom_a 0xFC1C59 carries the label
 ;           CombiName_Lookup (graded CONTENT).  DERIVATIVE name.
 T_CombiName_Lookup:	jp CombiName_Lookup  ; F4102C (was T_F4102C) -> prom_a 0x41C59   x4
@@ -168295,7 +168315,7 @@ sub_F6FFAE_Return:
 ; SmfEvent_ProgramChange
 ; Called from: in-module: 0xF6FFAA
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x1238) (0x1239) (0x124B) (0x2732)
-; Calls:   sub_F71417 sub_F701F1 T_F41004 TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
+; Calls:   sub_F71417 sub_F701F1 T_PartSound_FromProgramChange TrackCursor_Load BStore_PutByteAndAdvance Smf_TicksToPpq96
 ;          sub_F7129A TrackCursor_Save
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -168331,27 +168351,27 @@ sub_F70008_Skip3:
 	push	xix	; F70047  push XIX
 	ld	xix, 4260	; F70048  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F7004D  ld L,(XIX+IY)
-	ld	(6352912:24), l	; F70052  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F70052  ld (0x60f010),L
 	ld	xix, 4242	; F70057  ld XIX,0x00001092
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F7005C  ld L,(XIX+IY)
-	ld	(6352913:24), l	; F70061  ld (0x60f011),L
+	ld	(SoundConv_Arg1:24), l	; F70061  ld (0x60f011),L
 	ld	l, (4305:16)	; F70066  ld L,(0x10d1)
-	ld	(6352914:24), l	; F7006A  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F7006A  ld (0x60f012),L
 	ld	xix, ByteMap_F70298 + 0x10	; F7006F  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F70074  ld L,(XIX+IY)
-	ld	(6352915:24), l	; F70079  ld (0x60f013),L
+	ld	(SoundConv_Arg3:24), l	; F70079  ld (0x60f013),L
 	pop	xix	; F7007E  pop XIX
-	call	T_F41004	; F7007F  call 0xf41004
+	call	T_PartSound_FromProgramChange	; F7007F  call 0xf41004
 	push	xiy	; F70083  push XIY
 	push	xhl	; F70084  push XHL
 	calr	TrackCursor_Load	; F70085  calr 0xf7124e
 	pop	xhl	; F70088  pop XHL
 	ld	a, 192:opc	; F70089  ld A,0xc0
-	ld	w, (6352916:24)	; F7008B  ld W,(0x60f014)
+	ld	w, (SoundConv_Result0:24)	; F7008B  ld W,(0x60f014)
 	and	w, 128	; F70090  and W,0x80
 	rlc	w	; F70093  rlc 0x01,W
 	or	a, w	; F70096  or A,W
-	ld	w, (6352917:24)	; F70098  ld W,(0x60f015)
+	ld	w, (SoundConv_Result1:24)	; F70098  ld W,(0x60f015)
 	and	w, 128	; F7009D  and W,0x80
 	.byte 0xC8, 0xE8, 0x02	; F700A0  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F700A3  or A,W
@@ -168398,14 +168418,14 @@ sub_F70008_Skip3:
 	pop	xhl	; F700FE  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700FF  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F70104  jrl NZ,0xf701f0
-	ld	a, (6352916:24)	; F70107  ld A,(0x60f014)
+	ld	a, (SoundConv_Result0:24)	; F70107  ld A,(0x60f014)
 	and	a, 127	; F7010C  and A,0x7f
 	push	xiy	; F7010F  push XIY
 	calr	BStore_PutByteAndAdvance	; F70110  calr 0xf70fda
 	pop	xiy	; F70113  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70114  cp (0x1238),0x00
 	jrl	nz, sub_F70008_Return	; F70119  jrl NZ,0xf701f0
-	ld	a, (6352917:24)	; F7011C  ld A,(0x60f015)
+	ld	a, (SoundConv_Result1:24)	; F7011C  ld A,(0x60f015)
 	and	a, 127	; F70121  and A,0x7f
 	push	xiy	; F70124  push XIY
 	calr	BStore_PutByteAndAdvance	; F70125  calr 0xf70fda
@@ -168498,7 +168518,7 @@ sub_F70008_Return:
 ; sub_F701F1
 ; Called from: in-module: 0xF70037 0xF71EC2
 ; Touches: (0x10D0) (0x10D1) (0x1239)
-; Calls:   0xF702B8 T_F41004
+; Calls:   0xF702B8 T_PartSound_FromProgramChange
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF701F1 is an instruction boundary of this
@@ -168519,22 +168539,22 @@ sub_F701F1:
 	and	e, 15	; F70204  and E,0x0f
 	ld	xix, 4260	; F70207  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_DE, 7	; F7020C  ld L,(XIX+DE)
-	ld	(6352912:24), l	; F70211  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F70211  ld (0x60f010),L
 	ld	xix, 4242	; F70216  ld XIX,0x00001092
 	mx_ld_rm MXB, ra_IX, ra_DE, 7	; F7021B  ld L,(XIX+DE)
-	ld	(6352913:24), l	; F70220  ld (0x60f011),L
+	ld	(SoundConv_Arg1:24), l	; F70220  ld (0x60f011),L
 	ld	l, (4305:16)	; F70225  ld L,(0x10d1)
-	ld	(6352914:24), l	; F70229  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F70229  ld (0x60f012),L
 	ld	xix, ByteMap_F70298 + 0x10	; F7022E  ld XIX,0x00f702a8
 	mx_ld_rm MXB, ra_IX, ra_DE, 7	; F70233  ld L,(XIX+DE)
-	ld	(6352915:24), l	; F70238  ld (0x60f013),L
+	ld	(SoundConv_Arg3:24), l	; F70238  ld (0x60f013),L
 	pop	xde	; F7023D  pop XDE
 	pop	xix	; F7023E  pop XIX
 	push	xiy	; F7023F  push XIY
-	call	T_F41004	; F70240  call 0xf41004
+	call	T_PartSound_FromProgramChange	; F70240  call 0xf41004
 	pop	xiy	; F70244  pop XIY
-	ld	l, (6352916:24)	; F70245  ld L,(0x60f014)
-	ld	h, (6352917:24)	; F7024A  ld H,(0x60f015)
+	ld	l, (SoundConv_Result0:24)	; F70245  ld L,(0x60f014)
+	ld	h, (SoundConv_Result1:24)	; F7024A  ld H,(0x60f015)
 	ld	(xiy+2), l	; F7024F  ld (XIY+0x02),L
 	ld	(xiy+3), h	; F70252  ld (XIY+0x03),H
 	jr	sub_F701F1_Epilogue	; F70255  jr T,0xf70296
@@ -172654,7 +172674,7 @@ sub_F71E21_Return:
 ; Called from: in-module: 0xF71E1D
 ; Touches: (0x10D0) (0x10D1) (0x11B1) (0x11B2) (0x1238) (0x1239) (0x124B)
 ;          (0x2732)
-; Calls:   sub_F71417 Smf_TrackToSlot sub_F701F1 T_F41004 BStore_LoadTrackCursor BStore_PutByteAndAdvance
+; Calls:   sub_F71417 Smf_TrackToSlot sub_F701F1 T_PartSound_FromProgramChange BStore_LoadTrackCursor BStore_PutByteAndAdvance
 ;          Smf_TicksToPpq96 sub_F7129A BStore_SaveTrackCursor
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -172695,28 +172715,28 @@ sub_F71E89_Skip3:
 	and	iy, 15	; F71ED8  and IY,0x000f
 	ld	xix, 4260	; F71EDC  ld XIX,0x000010a4
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F71EE1  ld L,(XIX+IY)
-	ld	(6352912:24), l	; F71EE6  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F71EE6  ld (0x60f010),L
 	ld	xix, 4242	; F71EEB  ld XIX,0x00001092
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F71EF0  ld L,(XIX+IY)
-	ld	(6352913:24), l	; F71EF5  ld (0x60f011),L
+	ld	(SoundConv_Arg1:24), l	; F71EF5  ld (0x60f011),L
 	ld	l, (4305:16)	; F71EFA  ld L,(0x10d1)
-	ld	(6352914:24), l	; F71EFE  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F71EFE  ld (0x60f012),L
 	ld	xix, ByteMap_F7207D	; F71F03  ld XIX,0x00f7207d
 	mx_ld_rm MXB, ra_IX, ra_IY, 7	; F71F08  ld L,(XIX+IY)
 	pop	xiy	; F71F0D  pop XIY
 	pop	xix	; F71F0E  pop XIX
-	ld	(6352915:24), l	; F71F0F  ld (0x60f013),L
-	call	T_F41004	; F71F14  call 0xf41004
+	ld	(SoundConv_Arg3:24), l	; F71F0F  ld (0x60f013),L
+	call	T_PartSound_FromProgramChange	; F71F14  call 0xf41004
 	push	xiy	; F71F18  push XIY
 	push	xhl	; F71F19  push XHL
 	calr	BStore_LoadTrackCursor	; F71F1A  calr 0xf727c8
 	pop	xhl	; F71F1D  pop XHL
 	ld	a, 192:opc	; F71F1E  ld A,0xc0
-	ld	w, (6352916:24)	; F71F20  ld W,(0x60f014)
+	ld	w, (SoundConv_Result0:24)	; F71F20  ld W,(0x60f014)
 	and	w, 128	; F71F25  and W,0x80
 	rlc	w	; F71F28  rlc 0x01,W
 	or	a, w	; F71F2B  or A,W
-	ld	w, (6352917:24)	; F71F2D  ld W,(0x60f015)
+	ld	w, (SoundConv_Result1:24)	; F71F2D  ld W,(0x60f015)
 	and	w, 128	; F71F32  and W,0x80
 	.byte 0xC8, 0xE8, 0x02	; F71F35  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F71F38  or A,W
@@ -172761,14 +172781,14 @@ sub_F71E89_Skip3:
 	pop	xhl	; F71F8E  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F8F  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71F94  jrl NZ,0xf7207c
-	ld	a, (6352916:24)	; F71F97  ld A,(0x60f014)
+	ld	a, (SoundConv_Result0:24)	; F71F97  ld A,(0x60f014)
 	and	a, 127	; F71F9C  and A,0x7f
 	push	xiy	; F71F9F  push XIY
 	calr	BStore_PutByteAndAdvance	; F71FA0  calr 0xf70fda
 	pop	xiy	; F71FA3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FA4  cp (0x1238),0x00
 	jrl	nz, sub_F71E89_Return	; F71FA9  jrl NZ,0xf7207c
-	ld	a, (6352917:24)	; F71FAC  ld A,(0x60f015)
+	ld	a, (SoundConv_Result1:24)	; F71FAC  ld A,(0x60f015)
 	and	a, 127	; F71FB1  and A,0x7f
 	push	xiy	; F71FB4  push XIY
 	call	BStore_PutByteAndAdvance	; F71FB5  call 0xf70fda
@@ -176678,19 +176698,19 @@ Smf_WriteFile_Join2:
 	jr	nz, Smf_WriteFile_Skip12	; F73BC6  jr NZ,0xf73c3e
 	ld	a, (3184:16)	; F73BC8  ld A,(0x0c70)
 	ld	l, c	; F73BCC  ld L,C
-	ld	(6352912:24), l	; F73BCE  ld (0x60f010),L
-	ld	(6352913:24), d	; F73BD3  ld (0x60f011),D
+	ld	(SoundConv_Arg0:24), l	; F73BCE  ld (0x60f010),L
+	ld	(SoundConv_Arg1:24), d	; F73BD3  ld (0x60f011),D
 	ld	l, (xiy)	; F73BD8  ld L,(XIY)
-	ld	(6352914:24), l	; F73BDA  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F73BDA  ld (0x60f012),L
 	pushw	bc	; F73BDF  push BC
 	pushw	de	; F73BE0  push DE
-	call	T_F41008	; F73BE1  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F73BE1  call 0xf41008
 	popw	de	; F73BE5  pop DE
 	popw	bc	; F73BE6  pop BC
 	ld	a, (3184:16)	; F73BE7  ld A,(0x0c70)
 	or	a, 176	; F73BEB  or A,0xb0
 	xor	w, w	; F73BEE  xor W,W
-	ld	l, (6352917:24)	; F73BF0  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F73BF0  ld L,(0x60f015)
 	pushw	wa	; F73BF5  push WA
 	pushw	bc	; F73BF6  push BC
 	pushw	de	; F73BF7  push DE
@@ -176701,7 +176721,7 @@ Smf_WriteFile_Join2:
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73BFF  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F73C04  jrl NZ,0xf747dc
 	ld	w, 32:opc	; F73C07  ld W,0x20
-	ld	l, (6352916:24)	; F73C09  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F73C09  ld L,(0x60f014)
 	pushw	bc	; F73C0E  push BC
 	pushw	de	; F73C0F  push DE
 	call	SmfWrite_WriteChannelEvent	; F73C10  call 0xf74ac5
@@ -176711,7 +176731,7 @@ Smf_WriteFile_Join2:
 	jrl	nz, Smf_WriteFile_Join10	; F73C1B  jrl NZ,0xf747dc
 	ld	a, (3184:16)	; F73C1E  ld A,(0x0c70)
 	or	a, 192	; F73C22  or A,0xc0
-	ld	w, (6352918:24)	; F73C25  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F73C25  ld W,(0x60f016)
 	and	w, 127	; F73C2A  and W,0x7f
 	pushw	bc	; F73C2D  push BC
 	pushw	de	; F73C2E  push DE
@@ -177212,14 +177232,14 @@ Smf_WriteFile_Skip25:
 	rrc	l	; F7417D  rrc 0x01,L
 	ld	a, (4508:16)	; F74180  ld A,(0x119c)
 	or	l, a	; F74184  or L,A
-	ld	(6352912:24), l	; F74186  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F74186  ld (0x60f010),L
 	ld	l, (Smf_VlqValue:16)	; F7418B  ld L,(0x1198)
 	and	l, 2	; F7418F  and L,0x02
 	.byte 0xCF, 0xE9, 0x02	; F74192  rrc 0x02,L   [llvm-mc cannot encode this]
 	ld	a, (4509:16)	; F74195  ld A,(0x119d)
 	and	a, 127	; F74199  and A,0x7f
 	or	a, l	; F7419C  or A,L
-	ld	(6352913:24), a	; F7419E  ld (0x60f011),A
+	ld	(SoundConv_Arg1:24), a	; F7419E  ld (0x60f011),A
 	push	xix	; F741A3  push XIX
 	xor	hl, hl	; F741A4  xor HL,HL
 	ld	l, (4506:16)	; F741A6  ld L,(0x119a)
@@ -177227,14 +177247,14 @@ Smf_WriteFile_Skip25:
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F741AF  ld L,(XIX+HL)
 	ld	xix, ByteMap_F7484A	; F741B4  ld XIX,0x00f7484a
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F741B9  ld L,(XIX+HL)
-	ld	(6352914:24), l	; F741BE  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F741BE  ld (0x60f012),L
 	pop	xix	; F741C3  pop XIX
-	call	T_F41008	; F741C4  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F741C4  call 0xf41008
 	ld	a, 176:opc	; F741C8  ld A,0xb0
 	ld	w, (4506:16)	; F741CA  ld W,(0x119a)
 	or	a, w	; F741CE  or A,W
 	xor	w, w	; F741D0  xor W,W
-	ld	l, (6352917:24)	; F741D2  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F741D2  ld L,(0x60f015)
 	pushw	wa	; F741D7  push WA
 	call	SmfWrite_WriteChannelEvent	; F741D8  call 0xf74ac5
 	popw	wa	; F741DC  pop WA
@@ -177243,7 +177263,7 @@ Smf_WriteFile_Skip25:
 	ldw	(Smf_VlqBytes:16), 0	; F741E5  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F741EB  ld (0x1195),0x00
 	ld	w, 32:opc	; F741F0  ld W,0x20
-	ld	l, (6352916:24)	; F741F2  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F741F2  ld L,(0x60f014)
 	call	SmfWrite_WriteChannelEvent	; F741F7  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F741FB  cp (0x1238),0x03
 	jrl	nz, Smf_WriteFile_Join10	; F74200  jrl NZ,0xf747dc
@@ -177251,7 +177271,7 @@ Smf_WriteFile_Skip25:
 	ld	w, (4506:16)	; F74205  ld W,(0x119a)
 	and	w, 15	; F74209  and W,0x0f
 	or	a, w	; F7420C  or A,W
-	ld	w, (6352918:24)	; F7420E  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F7420E  ld W,(0x60f016)
 	xor	l, l	; F74213  xor L,L
 	calr	SmfWrite_WriteChannelEvent	; F74215  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74218  cp (0x1238),0x03
@@ -179315,7 +179335,7 @@ Data_F75675:
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x1193) (0x1195) (0x1198) +18 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A700 0x60AAFF
-; Calls:   SmfSize_StageTempo SmfSize_WriteTempoEvent SmfSize_CommitOutputByte T_F41008 SmfSize_WriteChannelEvent sub_F75685_Nop
+; Calls:   SmfSize_StageTempo SmfSize_WriteTempoEvent SmfSize_CommitOutputByte T_PartSound_ToProgramChange SmfSize_WriteChannelEvent sub_F75685_Nop
 ;          SmfSize_ReadSongByte SmfSize_AdvanceSongCursor SmfSize_ClearEventFields SmfSize_EncodeDeltaTime SmfSize_AgePendingNoteOffs SmfSize_WriteControlChange
 ;          +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -179479,20 +179499,20 @@ sub_F75685_Join2:
 	jr	nz, sub_F75685_Skip4	; F75832  jr NZ,0xf75895
 	ld	a, (3184:16)	; F75834  ld A,(0x0c70)
 	ld	l, c	; F75838  ld L,C
-	ld	(6352912:24), l	; F7583A  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F7583A  ld (0x60f010),L
 	ld	h, d	; F7583F  ld H,D
-	ld	(6352913:24), h	; F75841  ld (0x60f011),H
+	ld	(SoundConv_Arg1:24), h	; F75841  ld (0x60f011),H
 	ld	l, (xiy)	; F75846  ld L,(XIY)
-	ld	(6352914:24), l	; F75848  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F75848  ld (0x60f012),L
 	pushw	bc	; F7584D  push BC
 	pushw	de	; F7584E  push DE
-	call	T_F41008	; F7584F  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F7584F  call 0xf41008
 	popw	de	; F75853  pop DE
 	popw	bc	; F75854  pop BC
 	ld	a, (3184:16)	; F75855  ld A,(0x0c70)
 	or	a, 176	; F75859  or A,0xb0
 	xor	w, w	; F7585C  xor W,W
-	ld	l, (6352917:24)	; F7585E  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F7585E  ld L,(0x60f015)
 	pushw	wa	; F75863  push WA
 	pushw	bc	; F75864  push BC
 	pushw	de	; F75865  push DE
@@ -179501,7 +179521,7 @@ sub_F75685_Join2:
 	popw	bc	; F7586B  pop BC
 	popw	wa	; F7586C  pop WA
 	ld	w, 32:opc	; F7586D  ld W,0x20
-	ld	l, (6352916:24)	; F7586F  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F7586F  ld L,(0x60f014)
 	pushw	bc	; F75874  push BC
 	pushw	de	; F75875  push DE
 	call	SmfSize_WriteChannelEvent	; F75876  call 0xf7626a
@@ -179509,7 +179529,7 @@ sub_F75685_Join2:
 	popw	bc	; F7587B  pop BC
 	ld	a, (3184:16)	; F7587C  ld A,(0x0c70)
 	or	a, 192	; F75880  or A,0xc0
-	ld	w, (6352918:24)	; F75883  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F75883  ld W,(0x60f016)
 	and	w, 127	; F75888  and W,0x7f
 	pushw	bc	; F7588B  push BC
 	pushw	de	; F7588C  push DE
@@ -179950,13 +179970,13 @@ sub_F75685_Skip18:
 	rrc	l	; F75CF2  rrc 0x01,L
 	ld	a, (4508:16)	; F75CF5  ld A,(0x119c)
 	or	l, a	; F75CF9  or L,A
-	ld	(6352912:24), l	; F75CFB  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F75CFB  ld (0x60f010),L
 	and	h, 2	; F75D00  and H,0x02
 	.byte 0xCE, 0xE9, 0x02	; F75D03  rrc 0x02,H   [llvm-mc cannot encode this]
 	ld	a, (4509:16)	; F75D06  ld A,(0x119d)
 	and	a, 127	; F75D0A  and A,0x7f
 	or	h, a	; F75D0D  or H,A
-	ld	(6352913:24), h	; F75D0F  ld (0x60f011),H
+	ld	(SoundConv_Arg1:24), h	; F75D0F  ld (0x60f011),H
 	push	xix	; F75D14  push XIX
 	xor	hl, hl	; F75D15  xor HL,HL
 	ld	l, (4506:16)	; F75D17  ld L,(0x119a)
@@ -179964,28 +179984,28 @@ sub_F75685_Skip18:
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F75D20  ld L,(XIX+HL)
 	ld	xix, ByteMap_F7609E	; F75D25  ld XIX,0x00f7609e
 	mx_ld_rm MXB, ra_IX, ra_HL, 7	; F75D2A  ld L,(XIX+HL)
-	ld	(6352914:24), l	; F75D2F  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F75D2F  ld (0x60f012),L
 	pop	xix	; F75D34  pop XIX
-	call	T_F41008	; F75D35  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F75D35  call 0xf41008
 	ld	a, 176:opc	; F75D39  ld A,0xb0
 	ld	w, (4506:16)	; F75D3B  ld W,(0x119a)
 	and	w, 15	; F75D3F  and W,0x0f
 	or	a, w	; F75D42  or A,W
 	xor	w, w	; F75D44  xor W,W
-	ld	l, (6352917:24)	; F75D46  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F75D46  ld L,(0x60f015)
 	pushw	wa	; F75D4B  push WA
 	call	SmfSize_WriteChannelEvent	; F75D4C  call 0xf7626a
 	popw	wa	; F75D50  pop WA
 	ldw	(Smf_VlqBytes:16), 0	; F75D51  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D57  ld (0x1195),0x00
 	ld	w, 32:opc	; F75D5C  ld W,0x20
-	ld	l, (6352916:24)	; F75D5E  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F75D5E  ld L,(0x60f014)
 	call	SmfSize_WriteChannelEvent	; F75D63  call 0xf7626a
 	ld	a, 192:opc	; F75D67  ld A,0xc0
 	ld	w, (4506:16)	; F75D69  ld W,(0x119a)
 	and	w, 15	; F75D6D  and W,0x0f
 	or	a, w	; F75D70  or A,W
-	ld	w, (6352918:24)	; F75D72  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F75D72  ld W,(0x60f016)
 	xor	l, l	; F75D77  xor L,L
 	calr	SmfSize_WriteChannelEvent	; F75D79  calr 0xf7626a
 	jrl	sub_F75685_Loop4	; F75D7C  jrl T,0xf75ad2
@@ -182447,20 +182467,20 @@ sub_F76E74_Join2:
 	jr	nz, sub_F76E74_Skip3	; F7700D  jr NZ,0xf77070
 	ld	a, (3184:16)	; F7700F  ld A,(0x0c70)
 	ld	l, c	; F77013  ld L,C
-	ld	(6352912:24), l	; F77015  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F77015  ld (0x60f010),L
 	ld	h, d	; F7701A  ld H,D
-	ld	(6352913:24), h	; F7701C  ld (0x60f011),H
+	ld	(SoundConv_Arg1:24), h	; F7701C  ld (0x60f011),H
 	ld	l, (xiy)	; F77021  ld L,(XIY)
-	ld	(6352914:24), l	; F77023  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F77023  ld (0x60f012),L
 	pushw	bc	; F77028  push BC
 	pushw	de	; F77029  push DE
-	call	T_F41008	; F7702A  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F7702A  call 0xf41008
 	popw	de	; F7702E  pop DE
 	popw	bc	; F7702F  pop BC
 	ld	a, (3184:16)	; F77030  ld A,(0x0c70)
 	or	a, 176	; F77034  or A,0xb0
 	xor	w, w	; F77037  xor W,W
-	ld	l, (6352917:24)	; F77039  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F77039  ld L,(0x60f015)
 	pushw	wa	; F7703E  push WA
 	pushw	bc	; F7703F  push BC
 	pushw	de	; F77040  push DE
@@ -182469,7 +182489,7 @@ sub_F76E74_Join2:
 	popw	bc	; F77046  pop BC
 	popw	wa	; F77047  pop WA
 	ld	w, 32:opc	; F77048  ld W,0x20
-	ld	l, (6352916:24)	; F7704A  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F7704A  ld L,(0x60f014)
 	pushw	bc	; F7704F  push BC
 	pushw	de	; F77050  push DE
 	call	SmfSizeCopy_WriteChannelEvent	; F77051  call 0xf779d5
@@ -182477,7 +182497,7 @@ sub_F76E74_Join2:
 	popw	bc	; F77056  pop BC
 	ld	a, (3184:16)	; F77057  ld A,(0x0c70)
 	or	a, 192	; F7705B  or A,0xc0
-	ld	w, (6352918:24)	; F7705E  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F7705E  ld W,(0x60f016)
 	and	w, 127	; F77063  and W,0x7f
 	pushw	bc	; F77066  push BC
 	pushw	de	; F77067  push DE
@@ -182908,13 +182928,13 @@ sub_F76E74_Skip15:
 	rrc	l	; F774AB  rrc 0x01,L
 	ld	a, (4508:16)	; F774AE  ld A,(0x119c)
 	or	l, a	; F774B2  or L,A
-	ld	(6352912:24), l	; F774B4  ld (0x60f010),L
+	ld	(SoundConv_Arg0:24), l	; F774B4  ld (0x60f010),L
 	and	h, 2	; F774B9  and H,0x02
 	.byte 0xCE, 0xE9, 0x02	; F774BC  rrc 0x02,H   [llvm-mc cannot encode this]
 	ld	a, (4509:16)	; F774BF  ld A,(0x119d)
 	and	a, 127	; F774C3  and A,0x7f
 	or	h, a	; F774C6  or H,A
-	ld	(6352913:24), h	; F774C8  ld (0x60f011),H
+	ld	(SoundConv_Arg1:24), h	; F774C8  ld (0x60f011),H
 	push	xix	; F774CD  push XIX
 	xor	hl, hl	; F774CE  xor HL,HL
 	ld	l, (4506:16)	; F774D0  ld L,(0x119a)
@@ -182922,28 +182942,28 @@ sub_F76E74_Skip15:
 	ld	l, (xix+hl)	; F774D9  ld L,(XIX+HL)
 	ld	xix, ByteMap_F77815	; F774DE  ld XIX,0x00f77815
 	ld	l, (xix+hl)	; F774E3  ld L,(XIX+HL)
-	ld	(6352914:24), l	; F774E8  ld (0x60f012),L
+	ld	(SoundConv_Arg2:24), l	; F774E8  ld (0x60f012),L
 	pop	xix	; F774ED  pop XIX
-	call	T_F41008	; F774EE  call 0xf41008
+	call	T_PartSound_ToProgramChange	; F774EE  call 0xf41008
 	ld	a, 176:opc	; F774F2  ld A,0xb0
 	ld	w, (4506:16)	; F774F4  ld W,(0x119a)
 	and	w, 15	; F774F8  and W,0x0f
 	or	a, w	; F774FB  or A,W
 	xor	w, w	; F774FD  xor W,W
-	ld	l, (6352917:24)	; F774FF  ld L,(0x60f015)
+	ld	l, (SoundConv_Result1:24)	; F774FF  ld L,(0x60f015)
 	pushw	wa	; F77504  push WA
 	call	SmfSizeCopy_WriteChannelEvent	; F77505  call 0xf779d5
 	popw	wa	; F77509  pop WA
 	ldw	(Smf_VlqBytes:16), 0	; F7750A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F77510  ld (0x1195),0x00
 	ld	w, 32:opc	; F77515  ld W,0x20
-	ld	l, (6352916:24)	; F77517  ld L,(0x60f014)
+	ld	l, (SoundConv_Result0:24)	; F77517  ld L,(0x60f014)
 	call	SmfSizeCopy_WriteChannelEvent	; F7751C  call 0xf779d5
 	ld	a, 192:opc	; F77520  ld A,0xc0
 	ld	w, (4506:16)	; F77522  ld W,(0x119a)
 	and	w, 15	; F77526  and W,0x0f
 	or	a, w	; F77529  or A,W
-	ld	w, (6352918:24)	; F7752B  ld W,(0x60f016)
+	ld	w, (SoundConv_Result2:24)	; F7752B  ld W,(0x60f016)
 	xor	l, l	; F77530  xor L,L
 	calr	SmfSizeCopy_WriteChannelEvent	; F77532  calr 0xf779d5
 	jrl	sub_F76E74_Loop4	; F77535  jrl T,0xf7728b

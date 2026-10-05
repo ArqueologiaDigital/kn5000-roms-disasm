@@ -46,7 +46,7 @@ print(f"instruction lines indexed: {len(addr2ins)}  bytes covered: {len(covered)
 NEW=["Ring601850_ServiceIfNotEmpty","Ring_InitAllFourteen","Ring601432_SpinUntilEmpty",
 "Ring600C1E_InitIfPanelMode79","Ring601646_InitIrqMasked","Ring60000C_GetWithRetry",
 "SoundGroup_MaxMemberIndex_Get","SoundGroup_MaxMemberIndex_GetToneCopy",
-"SoundCode_FromGroupMember_ModeOffset","SoundCode_FromGroupMember_ByteGroup",
+"SoundCode_FromGroupMember_ModeOffset","SoundSel_FromPresetProgramAndBank",
 "Ring608A0A_DrainAll","Disk_FormatSelectedMedia_Veneer","MidiIn_ServiceDeferred_Veneer",
 "UiEventList_Publish_Veneer","INT5_Dev7B_Receive_Alias","INTTC0_uDMA0Done_Alias",
 "Fdc_ServiceDataByte_Isr","RecordNameSource_Select","DLB_Handler_StringTable_Veneer",

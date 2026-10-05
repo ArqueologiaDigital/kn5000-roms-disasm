@@ -23,7 +23,7 @@ WHAT IT FOUND (2026-08-30, working tree, gate green)
         FIVE values.  It tests TWENTY-FOUR, at 57 sites.  (The name itself is
         fine: the 0x79 gate is exact, and `mode` for (0x207A) is carried by the
         Msg0716 module banner -- just not by the header this one cites.)
-      * SoundCode_FromGroupMember_ByteGroup says the RAM arm compares 127
+      * SoundSel_FromPresetProgramAndBank says the RAM arm compares 127
         entries.  The loop compares 128 (offsets 0,2,..,254).
       * SoundGroup_MaxMemberIndex_GetToneCopy says its ladder has FOUR fewer
         tests than SoundGroup_MaxMemberIndex_Get's.  11 comparisons vs 6 is
@@ -171,7 +171,7 @@ def main(argv):
     R.append(("207a_distinct", len(vals)))
 
     e = q_bytegroup_entries()
-    say("2. SoundCode_FromGroupMember_ByteGroup RAM-arm loop .LFC243B")
+    say("2. SoundSel_FromPresetProgramAndBank RAM-arm loop .LFC243B")
     say("     entries compared: %d   (header says 127)", e)
     say("     -> header claim REFUTED (off by one)\n" if e != 127 else "     -> holds\n")
     R.append(("bytegroup_entries", e))
@@ -212,7 +212,7 @@ def main(argv):
     say("5. call-site counts the headers quote")
     for nm, want in [("Ring60000C_GetWithRetry", 7),
                      ("SoundCode_FromGroupMember_ModeOffset", 1),
-                     ("SoundCode_FromGroupMember_ByteGroup", 1),
+                     ("SoundSel_FromPresetProgramAndBank", 1),
                      ("Ring601432_SpinUntilEmpty", 2),
                      ("MidiInARing_InitIfPanelMode79", 4),
                      ("Ring601646_InitIrqMasked", 1),

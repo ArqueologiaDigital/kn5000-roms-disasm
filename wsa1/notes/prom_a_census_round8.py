@@ -1902,9 +1902,9 @@ SOUND_NAMES = [
      "same arithmetic. One call site, 0xFC22D3",
      "what the 16-bit word ENCODES -- prom_b's own header says the low byte "
      "is a kind and the high byte a value, and neither is decoded"),
-    ("sub_FC2422", "SoundCode_FromGroupMember_ByteGroup",
+    ("sub_FC2422", "SoundSel_FromPresetProgramAndBank",
      "the same (group, member) -> (0x60F014)/(0x60F015) lookup, against "
-     "SoundCodeByGroupMember_ByteGroup, with a RAM table searched first when "
+     "PanelSoundSel_ByProgramAndBank, with a RAM table searched first when "
      "bit 2 of (0x7F4D) is set",
      "0xFC2422 `m_bit 2, MD16, 0x7f4d` chooses the arm. RAM arm: 0xFC2432 `ld "
      "XIX,0x00005760` and the 0xFC243B loop compare the BC pair against 127 "
@@ -1912,7 +1912,7 @@ SOUND_NAMES = [
      "read the same two cells, 0xFC2467 or's 0x80 into the group when bit 5 "
      "of (0x60F011) is set -- the FULL BYTE index that `ByteGroup` names -- "
      "0xFC246F `and C,0x07` masks the column, and 0xFC2472 `ld "
-     "XIX,0x00F07134` is SoundCodeByGroupMember_ByteGroup's base; 0xFC24B1 "
+     "XIX,0x00F07134` is PanelSoundSel_ByProgramAndBank's base; 0xFC24B1 "
      "and 0xFC24B6 store the halves. prom_b's header for that table cites "
      "`prom_a 0xFC245D-0xFC2489` for exactly this arithmetic. One call site, "
      "0xFC241A",
