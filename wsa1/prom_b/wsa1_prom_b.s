@@ -1249,6 +1249,9 @@
 	.set	T_F418B4_Nop, 0xFBC5F0
 	.set	CombiEdit_OnPartParamEvent, 0xFBC5F1
 	.set	CombiEdit_RunPendingRepaint, 0xFBC64F
+	.set	CombiEditMixer_OnSoundPanVolumePageEvent, 0xFBC768
+	.set	CombiEditMixer_OnSendsPageEvent, 0xFBC82C
+	.set	CombiEditMixer_OnMidiPageEvent, 0xFBC90D
 	.set	ModeEnter_CombiEditPart, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
 	.set	ScreenEnter_CombiEditPartMenu, 0xFBCB40
@@ -1300,6 +1303,9 @@
 	.set	LcdKeyRow5_CombiEditMixer, 0xFBDF86
 	.set	ExitKey_CombiEditMixer, 0xFBDFCC
 	.set	PageKey_CombiEditMixer, 0xFBE038
+	.set	CombiEditMixer_PaintSoundPanVolumePage, 0xFBE3F1
+	.set	CombiEditMixer_PaintSendsPage, 0xFBE433
+	.set	CombiEditMixer_PaintMidiPage, 0xFBE467
 	.set	sub_FBECC3, 0xFBECC3
 	.set	sub_FBED02, 0xFBED02
 	.set	CompareKey_CombiEdit, 0xFBEDBE
@@ -51379,9 +51385,9 @@ PtrTable_F1AE71:
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBC757
 ; --------------------------------------------------------------------------
 PtrTable_F1AE89:
-	.long 0x00FBC768                       ; F1AE89  [0]   -> prom_a 0xFBC768
-	.long 0x00FBC82C                       ; F1AE8D  [1]   -> prom_a 0xFBC82C
-	.long 0x00FBC90D                       ; F1AE91  [2]   -> prom_a 0xFBC90D
+	.long CombiEditMixer_OnSoundPanVolumePageEvent                       ; F1AE89  [0]   -> prom_a 0xFBC768
+	.long CombiEditMixer_OnSendsPageEvent                       ; F1AE8D  [1]   -> prom_a 0xFBC82C
+	.long CombiEditMixer_OnMidiPageEvent                       ; F1AE91  [2]   -> prom_a 0xFBC90D
 
 ; --------------------------------------------------------------------------
 ; BitTable_F1AE95 -- bit table, 0xF1AE95-0xF1AEB4 (32 bytes)
@@ -51605,9 +51611,9 @@ IndexMap_F1B031:
 ; Evidence: 3 entries of 4 bytes; base and width from prom_a 0xFBE3DB
 ; --------------------------------------------------------------------------
 PtrTable_F1B03F:
-	.long 0x00FBE3F1                       ; F1B03F  [0]   -> prom_a 0xFBE3F1
-	.long 0x00FBE433                       ; F1B043  [1]   -> prom_a 0xFBE433
-	.long 0x00FBE467                       ; F1B047  [2]   -> prom_a 0xFBE467
+	.long CombiEditMixer_PaintSoundPanVolumePage                       ; F1B03F  [0]   -> prom_a 0xFBE3F1
+	.long CombiEditMixer_PaintSendsPage                       ; F1B043  [1]   -> prom_a 0xFBE433
+	.long CombiEditMixer_PaintMidiPage                       ; F1B047  [2]   -> prom_a 0xFBE467
 
 ; --------------------------------------------------------------------------
 ; PtrTable_F1B04B -- pointer table, 0xF1B04B-0xF1B06A (32 bytes)

@@ -2376,6 +2376,17 @@ ROWS = [
     ("FBE585", "CombiEditMixer_DrawKeyShiftValue",
      "(part, value, y, b): CombiEditMixer_DrawValueCell's shape with the 13-byte record Record_F1AADF and one more\n"
      "byte at +0x0C; its one caller is CombiEditMixer_DrawKeyShift.  Basis: body + caller."),
+    ("FBE05D", "CombiEditMixer_ColumnKey",
+     "(column 0..7), from SoftKeyCols1to8_CombiEditMixer: the part = the edited group ((CombiEdit_Part) & 0xF8) +\n"
+     "column.  When it is already CombiEdit_Part (or while UI_RequestBits bit 2 is set) its field\n"
+     "IndexMap_F1B031[CombiEdit_Row] is stepped (PartParam_StepFieldById); otherwise it becomes the edited part\n"
+     "(UI_PartIndex and CombiEdit_Part, T_F42C9C, a repaint request).  Basis: body + caller."),
+    ("FBE0B9", "CombiEditMixer_ResetRowForPage",
+     "PageKey_CombiEditMixer: CombiEdit_Row (and (0x276A)) = the page's first row -- 3 on page 0, 4 on page 1,\n"
+     "0x0A on page 2 (9 outside panel-mode group 0x16).  Basis: body + caller."),
+    ("FBE0EF", "CombiEditMixer_SetDialButtons",
+     "ScreenEnterBody_CombiEditMixer: PanelDial_UpButton = CombiEdit_Part & 7, PanelDial_DownButton = the same + 0x80.\n"
+     "Basis: body."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2397,6 +2408,27 @@ PLACED = [
      "for each of the 32 parts, kind 4 (part, new, old) when its tone-generator part (block +0x02) changed.  Nothing\n"
      "calls it: neither ROM holds 27 60 FC (a 24-bit pointer, call or jp to it) and no prom_a calr reaches it.  Kind 4's\n"
      "handler is a bare ret (NoteChange_PartToneGen_Nop)."),
+    ("FBE3F1", "CombiEditMixer_PaintSoundPanVolumePage",
+     "PtrTable_F1B03F[0], MIXER page 0 ((0x2767) = 0): for the 8 parts of the edited group ((0x2765) & 0xF8 + 0..7)\n"
+     "CombiEditMixer_DrawSound, _DrawLocalControl (in panel-mode group 0x16 only), _DrawPanpot, _DrawVolume.\n"
+     "Basis: body (the cells it draws)."),
+    ("FBE433", "CombiEditMixer_PaintSendsPage",
+     "PtrTable_F1B03F[1], MIXER page 1: for the 8 parts CombiEditMixer_DrawReverbSend, _DrawEffect1Send,\n"
+     "_DrawEffect2OnOff, _DrawMainOut, _DrawKeyShift.  Basis: body."),
+    ("FBE467", "CombiEditMixer_PaintMidiPage",
+     "PtrTable_F1B03F[2], MIXER page 2: for the 8 parts CombiEditMixer_DrawLocalControl (outside panel-mode group\n"
+     "0x16), _DrawMidiOutSetting, _DrawMidiInSetting, _DrawBasicChannel, _DrawSubOut.  Basis: body."),
+    ("FBC768", "CombiEditMixer_OnSoundPanVolumePageEvent",
+     "PtrTable_F1AE89[0], run by CombiEditMixer_OnPartParamEvent on page 0, for a part of the edited group: byte 0 / 1\n"
+     "/ 0x9B-0x9D (the sound) -> CombiEditMixer_DirtySound and (0x277D) = 1; 13 (LOCAL CONTROL, panel-mode group 0x16)\n"
+     "/ 8 (PANPOT) / 3 (VOLUME) -> the part's bit in that cell's dirty mask and its CombiEditMixer_RepaintMarked*\n"
+     "callback posted (T_CallbackQueue_Post, T_Kernel_SemaSignal_StackArg).  Basis: body."),
+    ("FBC82C", "CombiEditMixer_OnSendsPageEvent",
+     "PtrTable_F1AE89[1], page 1: the sound bytes as on page 0; 7 REVERB SEND, 5 EFFECT1 SEND, 6 EFFECT2 ON/OFF, 0x83\n"
+     "(second record byte 3, MAIN OUT), 9 KEY SHIFT -> dirty mask + callback.  Basis: body."),
+    ("FBC90D", "CombiEditMixer_OnMidiPageEvent",
+     "PtrTable_F1AE89[2], page 2: the sound bytes as on page 0; 13 (LOCAL CONTROL, MIDI OUT / MIDI IN SETTING, BASIC\n"
+     "CHANNEL, each by its bits) and 0x84 (second record byte 4, SUB OUT) -> dirty mask + callback.  Basis: body."),
 ]
 
 

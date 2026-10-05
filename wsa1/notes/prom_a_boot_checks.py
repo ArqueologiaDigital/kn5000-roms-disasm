@@ -297,7 +297,7 @@ check("8.2 0xF82C80 is a `calr` target from 0xF827D5, which pins the block's end
 LABELS = ["ModuleInitDirectory_F82641", "BlinkArgPtrs_F8024D",
           "BlinkArgPtrs_F80754", "BlinkArgPtrs_F80AAD", "BlinkArgPtrs_F80E12",
           "BlinkArgPtrs_F81344", "CharSet_F81768", "Data_F82000",
-          "ExtBoardMagic_F828C7", "LedNibblePatterns_F829F4",
+          "ExtBoardMagic_Wsa1Extbd", "LedNibblePatterns_F829F4",   # ExtBoardMagic_F828C7 until round 10 renamed it (framed -> content); fixed 2026-10-05
           "VersionScreen_DisplayLists", "VersionScreen_Glyphs"]
 text = open(SRC, encoding="utf-8").read()
 for nm in LABELS:

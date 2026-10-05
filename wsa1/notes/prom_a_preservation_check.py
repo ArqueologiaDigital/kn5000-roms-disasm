@@ -4402,6 +4402,9 @@ RENAMES = {
     "sub_FBE4B0": "CombiEditMixer_DrawSwitchCell",
     "sub_FBE546": "CombiEditMixer_DrawValueCell",
     "sub_FBE585": "CombiEditMixer_DrawKeyShiftValue",
+    "sub_FBE05D": "CombiEditMixer_ColumnKey",
+    "sub_FBE0B9": "CombiEditMixer_ResetRowForPage",
+    "sub_FBE0EF": "CombiEditMixer_SetDialButtons",
 }
 
 

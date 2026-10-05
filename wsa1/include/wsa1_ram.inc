@@ -160,6 +160,11 @@
 	.equ CombiEditMixer_DirtyBasicChannel,		0x277b	; the parts of the edited group (bit = part & 7) whose BasicChannel cell waits for a repaint -- CombiEditMixer_RepaintMarkedBasicChannel
 	.equ CombiEditMixer_DirtyKeyShift,		0x277c	; the parts of the edited group (bit = part & 7) whose KeyShift cell waits for a repaint -- CombiEditMixer_RepaintMarkedKeyShift
 
+; ---- wsa1/notes/FINDINGS-prom_ab-parameter-events.md -- "COMBINATION EDIT state"
+	.equ CombiEdit_Part,				0x2765	; the part the COMBINATION EDIT screens edit, 0..31; its group of 8 is & 0xF8 -- ModeEnter_CombiEditPart; ScreenEnterBody_CombiEditMixer / _Configure; CombiEditMixer_ColumnKey
+	.equ CombiEdit_Page,				0x2767	; the page of the INTERNAL SOUND / MIXER / CONFIGURE screen, 0..2 -- ScreenEnter_CombiEditInternalSound; ScreenEnterBody_CombiEditMixer / _Configure; PtrTable_F1B03F / F1AE89 readers
+	.equ CombiEdit_Row,				0x2769	; the selected field on the page -- ScreenEnter* / PageKey_*; CombiEditMixer_ColumnKey (IndexMap_F1B031[row])
+
 ; ---- wsa1/prom_b/wsa1_prom_b.s -- "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers"
 	.equ Drawbar_ReloadMark,			0x28a0	; 15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it -- Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked
 

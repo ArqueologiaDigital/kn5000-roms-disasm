@@ -73,3 +73,21 @@ clears it with interrupts held (`ei 6`), then repaints the marked parts of the e
 The switches go through `CombiEditMixer_DrawSwitchCell` and the levels through `CombiEditMixer_DrawValueCell`.
 The basis is the descriptor match, which is a table-index basis. Not established: `sub_FBE5CA` (the
 edited-part header) and the page painters, which are still `.L` labels in 0xFBE2E9..0xFBE4AF.
+
+### COMBINATION EDIT state (2026-10-05)
+
+The INTERNAL SOUND, MIXER and CONFIGURE screens share three RAM bytes:
+- `CombiEdit_Part` (0x2765): the edited part, 0..31. Its group of 8 is `& 0xF8`. `ModeEnter_CombiEditPart`, the
+  screens' enter bodies and `CombiEditMixer_ColumnKey` set it.
+- `CombiEdit_Page` (0x2767): the screen's page, 0..2. Each enter routine sets it to 0. The MIXER chooses its page
+  painter (`PtrTable_F1B03F`) and its page event handler (`PtrTable_F1AE89`) by it.
+- `CombiEdit_Row` (0x2769): the selected field on the page. The enter and PAGE routines reset it.
+  `CombiEditMixer_ColumnKey` steps field `IndexMap_F1B031[row]` of the part.
+
+The MIXER's three pages, by the cells they draw:
+- `CombiEditMixer_PaintSoundPanVolumePage`: sound, LOCAL CONTROL in group 0x16, PANPOT, VOLUME.
+- `CombiEditMixer_PaintSendsPage`: REVERB, EFFECT1, EFFECT2, MAIN OUT, KEY SHIFT.
+- `CombiEditMixer_PaintMidiPage`: LOCAL CONTROL, MIDI OUT / IN, BASIC CHANNEL, SUB OUT.
+
+Each page has a matching event handler, `CombiEditMixer_On*PageEvent`. All six were reached only through prom_b
+pointers and had no label.

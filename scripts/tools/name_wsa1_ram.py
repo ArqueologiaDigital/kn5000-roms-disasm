@@ -205,6 +205,11 @@ GROUPS = [
         0x2777: ("CombiEditMixer_DirtySubOut", "the parts of the edited group (bit = part & 7) whose SubOut cell waits for a repaint", "CombiEditMixer_RepaintMarkedSubOut"),
         0x277C: ("CombiEditMixer_DirtyKeyShift", "the parts of the edited group (bit = part & 7) whose KeyShift cell waits for a repaint", "CombiEditMixer_RepaintMarkedKeyShift"),
     }),
+    ("wsa1/notes/FINDINGS-prom_ab-parameter-events.md", "COMBINATION EDIT state", {
+        0x2765: ("CombiEdit_Part", "the part the COMBINATION EDIT screens edit, 0..31; its group of 8 is & 0xF8", "ModeEnter_CombiEditPart; ScreenEnterBody_CombiEditMixer / _Configure; CombiEditMixer_ColumnKey"),
+        0x2767: ("CombiEdit_Page", "the page of the INTERNAL SOUND / MIXER / CONFIGURE screen, 0..2", "ScreenEnter_CombiEditInternalSound; ScreenEnterBody_CombiEditMixer / _Configure; PtrTable_F1B03F / F1AE89 readers"),
+        0x2769: ("CombiEdit_Row", "the selected field on the page", "ScreenEnter* / PageKey_*; CombiEditMixer_ColumnKey (IndexMap_F1B031[row])"),
+    }),
     ("wsa1/prom_b/wsa1_prom_b.s", "Drawbar_MarkReloadOnSoundEvent / Drawbar_ReloadIfMarked headers", {
         0x28A0: ("Drawbar_ReloadMark", "15 when a part-0 sound event asks for the reload, 240 once Drawbar_ReloadIfMarked has sent it",
                  "Drawbar_MarkReloadOnSoundEvent; Drawbar_ReloadIfMarked"),
