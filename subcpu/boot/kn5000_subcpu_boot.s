@@ -765,8 +765,7 @@ BOOT_INIT__clock_done2:
 	call INIT_DMA_SERIAL	; 0xFF85AE - DMA/Serial init
 	call INIT_TONE_GEN	; 0xFF84A8 - Tone generator init
 
-	jr __jrt_nop_FF840C	; Jump to main loop (2-byte NOP in fall-through)
-__jrt_nop_FF840C:
+	jr MAIN_LOOP	; Jump to main loop (2-byte NOP in fall-through)
 
 ; ==============================================================================
 ; Main Loop - Wait for payload ready, then call it
@@ -2365,8 +2364,8 @@ HARDWARE_CALIBRATION_SEQUENCE:
 	ldw (0x100000:24), 0x0840; Write 0x0840 to hardware reg
 	nop
 	ldw (0x100002:24), 0xff00; Write 0xFF00 to hardware reg+2
-	jr __jrt_nop_FF8C95	; Short delay (jump to next instruction)
-__jrt_nop_FF8C95:
+	jr HARDWARE_CALIBRATION_SEQUENCE_Next	; Short delay (jump to next instruction)
+HARDWARE_CALIBRATION_SEQUENCE_Next:
 	nop
 	nop
 	nop
@@ -2375,8 +2374,8 @@ __jrt_nop_FF8C95:
 	ldw (0x100000:24), 0x0800; Write 0x0800 to hardware reg
 	nop
 	ldw (0x100002:24), 0xff80; Write 0xFF80 to hardware reg+2
-	jr __jrt_nop_FF8CA9	; Short delay
-__jrt_nop_FF8CA9:
+	jr HARDWARE_CALIBRATION_SEQUENCE_Next2	; Short delay
+HARDWARE_CALIBRATION_SEQUENCE_Next2:
 	nop
 	nop
 	nop
@@ -2408,8 +2407,8 @@ HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	ldw (0x100000:24), 0x0840
 	nop
 	ldw (0x100002:24), 0xff00
-	jr __jrt_nop_FF8CE3
-__jrt_nop_FF8CE3:
+	jr HARDWARE_CALIBRATION_SEQUENCE__retry_loop_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_CALIBRATION_SEQUENCE__retry_loop_Next:
 	nop
 	nop
 	nop
@@ -2418,8 +2417,8 @@ __jrt_nop_FF8CE3:
 	ldw (0x100000:24), 0x0800
 	nop
 	ldw (0x100002:24), 0xff80
-	jr __jrt_nop_FF8CF7
-__jrt_nop_FF8CF7:
+	jr HARDWARE_CALIBRATION_SEQUENCE__retry_loop_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_CALIBRATION_SEQUENCE__retry_loop_Next2:
 	nop
 	nop
 	nop
@@ -2464,8 +2463,8 @@ HARDWARE_PARAM_BLOCK_WRITE:
 	ld xbc, (xsp + 2)	; Restore XBC
 	ld wa, (xbc + 2)	; Get param[2:3]
 	ld (0x100002:24), wa; Write data
-	jr __jrt_nop_FF8D2B
-__jrt_nop_FF8D2B:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next:
 	nop
 	nop
 	nop
@@ -2478,8 +2477,8 @@ __jrt_nop_FF8D2B:
 	ld wa, (xbc + 4)	; Get param[4:5]
 	set 15, wa	; Set bit 15
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8D47
-__jrt_nop_FF8D47:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next2	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next2:
 	nop
 	nop
 	nop
@@ -2491,8 +2490,8 @@ __jrt_nop_FF8D47:
 	nop
 	ld wa, (xbc + 6)	; Get param[6:7]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8D60
-__jrt_nop_FF8D60:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next3	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next3:
 	nop
 	nop
 	nop
@@ -2504,8 +2503,8 @@ __jrt_nop_FF8D60:
 	nop
 	ld wa, (xbc + 8)	; Get param[8:9]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8D79
-__jrt_nop_FF8D79:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next4	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next4:
 	nop
 	nop
 	nop
@@ -2517,8 +2516,8 @@ __jrt_nop_FF8D79:
 	nop
 	ld wa, (xbc + 10)	; Get param[10:11]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8D92
-__jrt_nop_FF8D92:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next5	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next5:
 	nop
 	nop
 	nop
@@ -2530,8 +2529,8 @@ __jrt_nop_FF8D92:
 	nop
 	ld wa, (xbc + 12)	; Get param[12:13]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8DAB
-__jrt_nop_FF8DAB:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next6	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next6:
 	nop
 	nop
 	nop
@@ -2543,8 +2542,8 @@ __jrt_nop_FF8DAB:
 	nop
 	ld wa, (xbc + 14)	; Get param[14:15]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8DC4
-__jrt_nop_FF8DC4:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next7	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next7:
 	nop
 	nop
 	nop
@@ -2556,8 +2555,8 @@ __jrt_nop_FF8DC4:
 	nop
 	ld wa, (xbc + 16)	; Get param[16:17]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8DDD
-__jrt_nop_FF8DDD:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next8	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next8:
 	nop
 	nop
 	nop
@@ -2569,8 +2568,8 @@ __jrt_nop_FF8DDD:
 	nop
 	ld wa, (xbc + 18)	; Get param[18:19]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8DF6
-__jrt_nop_FF8DF6:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next9	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next9:
 	nop
 	nop
 	nop
@@ -2582,8 +2581,8 @@ __jrt_nop_FF8DF6:
 	nop
 	ld wa, (xbc + 20)	; Get param[20:21]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E0F
-__jrt_nop_FF8E0F:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next10	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next10:
 	nop
 	nop
 	nop
@@ -2595,8 +2594,8 @@ __jrt_nop_FF8E0F:
 	nop
 	ld wa, (xbc + 22)	; Get param[22:23]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E28
-__jrt_nop_FF8E28:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next11	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next11:
 	nop
 	nop
 	nop
@@ -2608,8 +2607,8 @@ __jrt_nop_FF8E28:
 	nop
 	ld wa, (xbc + 24)	; Get param[24:25]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E41
-__jrt_nop_FF8E41:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next12	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next12:
 	nop
 	nop
 	nop
@@ -2618,8 +2617,8 @@ __jrt_nop_FF8E41:
 	ld (0x100000:24), iz; Write base offset
 	nop
 	ldw (0x100002:24), 0x8100; Write 0x8100
-	jr __jrt_nop_FF8E53
-__jrt_nop_FF8E53:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next13	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next13:
 	nop
 	nop
 	nop
@@ -2631,8 +2630,8 @@ __jrt_nop_FF8E53:
 	nop
 	ld wa, (xbc + 26)	; Get param[26:27]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E6C
-__jrt_nop_FF8E6C:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next14	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next14:
 	nop
 	nop
 	nop
@@ -2644,8 +2643,8 @@ __jrt_nop_FF8E6C:
 	nop
 	ld wa, (xbc + 28)	; Get param[28:29]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E85
-__jrt_nop_FF8E85:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next15	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next15:
 	nop
 	nop
 	nop
@@ -2657,8 +2656,8 @@ __jrt_nop_FF8E85:
 	nop
 	ld wa, (xbc + 30)	; Get param[30:31]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8E9E
-__jrt_nop_FF8E9E:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next16	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next16:
 	nop
 	nop
 	nop
@@ -2670,8 +2669,8 @@ __jrt_nop_FF8E9E:
 	nop
 	ld wa, (xbc + 32)	; Get param[32:33]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8EB7
-__jrt_nop_FF8EB7:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next17	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next17:
 	nop
 	nop
 	nop
@@ -2683,8 +2682,8 @@ __jrt_nop_FF8EB7:
 	nop
 	ld wa, (xbc + 34)	; Get param[34:35]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8ED0
-__jrt_nop_FF8ED0:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next18	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next18:
 	nop
 	nop
 	nop
@@ -2696,8 +2695,8 @@ __jrt_nop_FF8ED0:
 	nop
 	ld wa, (xbc + 36)	; Get param[36:37]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8EE9
-__jrt_nop_FF8EE9:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next19	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next19:
 	nop
 	nop
 	nop
@@ -2709,8 +2708,8 @@ __jrt_nop_FF8EE9:
 	nop
 	ld wa, (xbc + 38)	; Get param[38:39]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8F02
-__jrt_nop_FF8F02:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next20	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next20:
 	nop
 	nop
 	nop
@@ -2722,8 +2721,8 @@ __jrt_nop_FF8F02:
 	nop
 	ld wa, (xbc + 40)	; Get param[40:41]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8F1B
-__jrt_nop_FF8F1B:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next21	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next21:
 	nop
 	nop
 	nop
@@ -2735,8 +2734,8 @@ __jrt_nop_FF8F1B:
 	nop
 	ld wa, (xbc + 42)	; Get param[42:43]
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8F34
-__jrt_nop_FF8F34:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next22	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next22:
 	nop
 	nop
 	nop
@@ -2749,8 +2748,8 @@ __jrt_nop_FF8F34:
 	ld wa, (xbc + 4)	; Get param[4:5] again
 	res 15, wa	; Clear bit 15 (was set earlier)
 	ld (0x100002:24), wa
-	jr __jrt_nop_FF8F50
-__jrt_nop_FF8F50:
+	jr HARDWARE_PARAM_BLOCK_WRITE_Next23	; `jr` to the next instruction + three `nop`s: the settling gap after the register write
+HARDWARE_PARAM_BLOCK_WRITE_Next23:
 	nop
 	nop
 	nop
@@ -2777,8 +2776,8 @@ HARDWARE_VERIFY_WRITE:
 	ld (0x100000:24), wa; Write address/command
 	nop
 	ld (0x100002:24), iz; Write data from IZ
-	jr __jrt_nop_FF8F67	; Short delay
-__jrt_nop_FF8F67:
+	jr HARDWARE_VERIFY_WRITE_Next	; Short delay
+HARDWARE_VERIFY_WRITE_Next:
 	nop
 	nop
 	nop

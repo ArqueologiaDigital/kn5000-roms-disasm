@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""resolve_jrt_nop_labels.py -- the `__jrt_nop_XXXXXX` labels of the sub-CPU payload and table data are resolved.
+"""resolve_jrt_nop_labels.py -- the `__jrt_nop_XXXXXX` labels of the sub-CPU payload and boot and table data are resolved.
 
 QUESTION IT ANSWERS
   The conversion from ASL left a positional label after every compiled `jr` whose target is the very next
@@ -7,8 +7,8 @@ QUESTION IT ANSWERS
       jr  __jrt_nop_01FACB
   __jrt_nop_01FACB:
   The CLAUDE.md canonical-label rule names `__jrt_nop_XXXXXX` as an alias to remove.  In v142 (the payload and
-  subcpu_fp_math.s) and table data, each such label is referenced once, by the `jr` on the line before it.  It is
-  one of two things:
+  subcpu_fp_math.s), the sub-CPU boot ROM and table data, each such label is referenced once, by the `jr` on the
+  line before it.  It is one of two things:
     - ALIAS: the next code line is another label (e.g. Audio_System_Init).  The compiler jumps into the next routine.
       The `jr` now names that label and the alias line goes.  A comment that says "(alias symbol __jrt_nop_X is the
       same address)" goes with it.
@@ -26,7 +26,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-FILES = ["v142/subcpu/kn5000_subprogram_v142.s", "v142/subcpu/subcpu_fp_math.s", "table_data/kn5000_table_data.s"]
+FILES = ["v142/subcpu/kn5000_subprogram_v142.s", "v142/subcpu/subcpu_fp_math.s", "table_data/kn5000_table_data.s",
+         "subcpu/boot/kn5000_subcpu_boot.s"]
 JRT = re.compile(r'__jrt_nop_[0-9A-F]{6}')
 LAB = re.compile(r'^([A-Za-z_.$][\w.$]*):\s*(;.*)?$')
 DEF = re.compile(r'^([A-Za-z_][\w$]*):')
