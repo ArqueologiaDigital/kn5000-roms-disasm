@@ -73,12 +73,12 @@ DkMdlyPly_SendAudioCmd_Data:			.incbin "includes/generated/sepaout_config.bin", 
 DkMdlyPly_HandleResult_Data:			.incbin "includes/generated/sepaout_config.bin", 0x8E, 0x40
 DisplayMode_DispatchEvents_Data:
 	.short	DisplayMode_BatchEventSend - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case112 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case113 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case114 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case115 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case116 - DisplayMode_BatchEventSend
-	.short	DisplayMode_DispatchEvents_Case117 - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpdoc - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDppd - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpsmflyr - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlysmf - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlydoc - DisplayMode_BatchEventSend
+	.short	DisplayMode_DispatchEvents_OnTitleDpmdlypd - DisplayMode_BatchEventSend
 DpMdlyDocTtlFunc_Data:
 	.short	DpMdlyDocTtl_Dispatch - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDocTtlFunc_Case3 - DpMdlyDocTtl_Dispatch
@@ -235,8 +235,8 @@ SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct:	.incbin "includes/generated/sepao
 SeqInit_LookupDispatchEntry_Data:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
 PlayMode_SendStopEvent_Data:
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Case112 - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Case113 - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpdoc - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDppd - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_Thunk1 - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_Thunk3 - SqTrSel_CaseG_JumpTable

@@ -236,8 +236,8 @@ SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct:	.incbin "includes/generated/sepao
 SeqInit_LookupDispatchEntry_Data:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
 PlayMode_SendStopEvent_Data:
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Case112 - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Case113 - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpdoc - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDppd - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_Thunk1 - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_Thunk3 - SqTrSel_CaseG_JumpTable

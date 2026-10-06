@@ -20509,23 +20509,23 @@ AppEvtHandler_Branch_006_Code:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
-AppEvtHandler_Branch_006_Case158:
+AppEvtHandler_Branch_006_OnTitleSqvelocng:
 	lda	xiz, (61993:16)
 	lda	xwa, (9722:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
-AppEvtHandler_Branch_006_Case157:
+AppEvtHandler_Branch_006_OnTitleSqtrns:
 	lda	xiz, (9758:16)
 	lda	xwa, (9760:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
-AppEvtHandler_Branch_006_Case163:
+AppEvtHandler_Branch_006_OnTitleSqmdel:
 	lda	xiz, (61911:16)
 	lda	xwa, (9772:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
-AppEvtHandler_Branch_006_Case161:
+AppEvtHandler_Branch_006_OnTitleSqmers:
 	lda	xiz, (61916:16)
 	lda	xwa, (9766:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
-AppEvtHandler_Branch_006_Case156:
+AppEvtHandler_Branch_006_OnTitleSqqtz:
 	lda	xiz, (61938:16)
 	lda	xwa, (9724:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
@@ -21054,23 +21054,23 @@ AppEvent_SubDispatch_Code:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch2_Case158:
+AppEvent_InlineHandler_Switch2_OnTitleSqvelocng:
 	lda	xiz, (61993:16)
 	lda	xwa, (9722:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch2_Case157:
+AppEvent_InlineHandler_Switch2_OnTitleSqtrns:
 	lda	xiz, (9758:16)
 	lda	xwa, (9760:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch2_Case163:
+AppEvent_InlineHandler_Switch2_OnTitleSqmdel:
 	lda	xiz, (61911:16)
 	lda	xwa, (9772:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch2_Case161:
+AppEvent_InlineHandler_Switch2_OnTitleSqmers:
 	lda	xiz, (61916:16)
 	lda	xwa, (9766:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch2_Case156:
+AppEvent_InlineHandler_Switch2_OnTitleSqqtz:
 	lda	xiz, (61938:16)
 	lda	xwa, (9724:16)
 	jr	AppEvent_InlineHandler_Join
@@ -21121,23 +21121,23 @@ AppEvent_SubDispatch_Code_2:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
 	jr	AppEvent_InlineHandler_Join2
-AppEvent_InlineHandler_Switch3_Case158:
+AppEvent_InlineHandler_Switch3_OnTitleSqvelocng:
 	lda	xiz, (61993:16)
 	lda	xwa, (9722:16)
 	jr	AppEvent_InlineHandler_Join2
-AppEvent_InlineHandler_Switch3_Case157:
+AppEvent_InlineHandler_Switch3_OnTitleSqtrns:
 	lda	xiz, (9758:16)
 	lda	xwa, (9760:16)
 	jr	AppEvent_InlineHandler_Join2
-AppEvent_InlineHandler_Switch3_Case163:
+AppEvent_InlineHandler_Switch3_OnTitleSqmdel:
 	lda	xiz, (61911:16)
 	lda	xwa, (9772:16)
 	jr	AppEvent_InlineHandler_Join2
-AppEvent_InlineHandler_Switch3_Case161:
+AppEvent_InlineHandler_Switch3_OnTitleSqmers:
 	lda	xiz, (61916:16)
 	lda	xwa, (9766:16)
 	jr	AppEvent_InlineHandler_Join2
-AppEvent_InlineHandler_Switch3_Case156:
+AppEvent_InlineHandler_Switch3_OnTitleSqqtz:
 	lda	xiz, (61938:16)
 	lda	xwa, (9724:16)
 	jr	AppEvent_InlineHandler_Join2

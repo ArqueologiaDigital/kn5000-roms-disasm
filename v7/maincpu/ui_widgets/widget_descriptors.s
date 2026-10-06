@@ -4395,14 +4395,14 @@ AppEvtHandler_Branch_021_CaseTable:
 ; AppEvtHandler_Branch_006_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_006_CaseTable:
-	.short	AppEvtHandler_Branch_006_Case156 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case157 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case158 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqqtz - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqtrns - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqvelocng - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_006_Code - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case161 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqmers - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case163 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqmdel - AppEvtHandler_Branch_006_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_CaseTable
 ; AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
@@ -4531,14 +4531,14 @@ AppEvent_SubDispatch_CaseTable_2:
 ; AppEvent_SubDispatch_Table[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table:
-	.short	AppEvent_InlineHandler_Switch3_Case156 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case157 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case158 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqqtz - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqtrns - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqvelocng - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_SubDispatch_Code_2 - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_InlineHandler_Skip6 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case161 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmers - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_InlineHandler_Skip6 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case163 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmdel - AppEvent_SubDispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_Table_2
 ; AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
@@ -4550,14 +4550,14 @@ AppEvent_SubDispatch_Table:
 ; AppEvent_SubDispatch_Table_2[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table_2:
-	.short	AppEvent_InlineHandler_Switch2_Case156 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case157 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case158 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqqtz - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqtrns - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqvelocng - AppEvent_SubDispatch_Code
 	.short	AppEvent_SubDispatch_Code - AppEvent_SubDispatch_Code
 	.short	AppEvent_InlineHandler_Skip3 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case161 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmers - AppEvent_SubDispatch_Code
 	.short	AppEvent_InlineHandler_Skip3 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case163 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmdel - AppEvent_SubDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_RamPtrs
 ; AppEvent_SubDispatch_RamPtrs -- Byte-identical to

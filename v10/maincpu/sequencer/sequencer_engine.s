@@ -20099,7 +20099,7 @@ SeqEvent_Dispatch:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x21
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case159:
+SeqEvent_MainHandler_OnTitleSqnotecng:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
@@ -20120,7 +20120,7 @@ SeqEvent_MainHandler_Case159:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xb
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case158:
+SeqEvent_MainHandler_OnTitleSqvelocng:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
@@ -20137,7 +20137,7 @@ SeqEvent_MainHandler_Case158:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 5:i3
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case157:
+SeqEvent_MainHandler_OnTitleSqtrns:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
@@ -20154,7 +20154,7 @@ SeqEvent_MainHandler_Case157:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 4:i3
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case163:
+SeqEvent_MainHandler_OnTitleSqmdel:
 	ld wa, (0xf1d7:16)
 	add wa, (0xf1d9:16)
 	dec 1, wa
@@ -20171,7 +20171,7 @@ SeqEvent_MainHandler_Case163:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 2:i3
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case161:
+SeqEvent_MainHandler_OnTitleSqmers:
 	ld wa, (0xf1dc:16)
 	add wa, (0xf1de:16)
 	dec 1, wa
@@ -20192,7 +20192,7 @@ SeqEvent_MainHandler_Case161:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 6:i3
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case156:
+SeqEvent_MainHandler_OnTitleSqqtz:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
@@ -20217,7 +20217,7 @@ SeqEvent_MainHandler_Case156:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x9
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case155:
+SeqEvent_MainHandler_OnTitleSqtrkmrg:
 	ld xwa, (0x2972:16)
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xc
@@ -20230,7 +20230,7 @@ SeqEvent_MainHandler_Case155:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0xe
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case162:
+SeqEvent_MainHandler_OnTitleSqmcp:
 	ld wa, (0xf1ea:16)
 	add wa, (0xf1ec:16)
 	dec 1, wa
@@ -20259,7 +20259,7 @@ SeqEvent_MainHandler_Case162:
 	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x14
 	jrl AppEvent_PostEvent_Stub
-SeqEvent_MainHandler_Case164:
+SeqEvent_MainHandler_OnTitleSqmins:
 	ld wa, (0xf1e2:16)
 	add wa, (0xf1e4:16)
 	dec 1, wa
@@ -20389,23 +20389,23 @@ AppEvtHandler_Branch_002_Code:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_002_Case158:
+AppEvtHandler_Branch_002_OnTitleSqvelocng:
 	lda xiz, (0xf229:16)
 	lda xwa, (9722:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_002_Case157:
+AppEvtHandler_Branch_002_OnTitleSqtrns:
 	lda xiz, (9758:16)
 	lda xwa, (9760:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_002_Case163:
+AppEvtHandler_Branch_002_OnTitleSqmdel:
 	lda xiz, (0xf1d7:16)
 	lda xwa, (9772:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_002_Case161:
+AppEvtHandler_Branch_002_OnTitleSqmers:
 	lda xiz, (0xf1dc:16)
 	lda xwa, (9766:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_002_Case156:
+AppEvtHandler_Branch_002_OnTitleSqqtz:
 	lda xiz, (0xf1f2:16)
 	lda xwa, (9724:16)
 	jr AppEvtHandler_Branch_004
@@ -20456,23 +20456,23 @@ AppEvtHandler_Branch_006_Code:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_006_Case158:
+AppEvtHandler_Branch_006_OnTitleSqvelocng:
 	lda xiz, (0xf229:16)
 	lda xwa, (9722:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_006_Case157:
+AppEvtHandler_Branch_006_OnTitleSqtrns:
 	lda xiz, (9758:16)
 	lda xwa, (9760:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_006_Case163:
+AppEvtHandler_Branch_006_OnTitleSqmdel:
 	lda xiz, (0xf1d7:16)
 	lda xwa, (9772:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_006_Case161:
+AppEvtHandler_Branch_006_OnTitleSqmers:
 	lda xiz, (0xf1dc:16)
 	lda xwa, (9766:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_006_Case156:
+AppEvtHandler_Branch_006_OnTitleSqqtz:
 	lda xiz, (0xf1f2:16)
 	lda xwa, (9724:16)
 	jr AppEvtHandler_Branch_008
@@ -21002,23 +21002,23 @@ AppEvent_SubDispatch_Code:
 	lda_d16	xiz, (9744)
 	lda	xwa, (9746:16)
 	jr	AppEvent_InlineHandler_Join9
-AppEvent_InlineHandler_Switch2_Case158:
+AppEvent_InlineHandler_Switch2_OnTitleSqvelocng:
 	lda	xiz, (0xf229:16)
 	lda_d16	xwa, (9722)
 	jr	AppEvent_InlineHandler_Join9
-AppEvent_InlineHandler_Switch2_Case157:
+AppEvent_InlineHandler_Switch2_OnTitleSqtrns:
 	lda	xiz, (9758:16)
 	lda_d16	xwa, (9760)
 	jr	AppEvent_InlineHandler_Join9
-AppEvent_InlineHandler_Switch2_Case163:
+AppEvent_InlineHandler_Switch2_OnTitleSqmdel:
 	lda_d16	xiz, (61911)
 	lda_d16	xwa, (9772)
 	jr	AppEvent_InlineHandler_Join9
-AppEvent_InlineHandler_Switch2_Case161:
+AppEvent_InlineHandler_Switch2_OnTitleSqmers:
 	lda	xiz, (0xf1dc:16)
 	lda	xwa, (9766:16)
 	jr	AppEvent_InlineHandler_Join9
-AppEvent_InlineHandler_Switch2_Case156:
+AppEvent_InlineHandler_Switch2_OnTitleSqqtz:
 	lda	xiz, (0xf1f2:16)
 	lda	xwa, (9724:16)
 	jr	AppEvent_InlineHandler_Join9
@@ -21069,23 +21069,23 @@ AppEvent_SubDispatch_Code_2:
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch3_Case158:
+AppEvent_InlineHandler_Switch3_OnTitleSqvelocng:
 	lda_d16	xiz, (61993)
 	lda_d16	xwa, (9722)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch3_Case157:
+AppEvent_InlineHandler_Switch3_OnTitleSqtrns:
 	lda_d16	xiz, (9758)
 	lda	xwa, (9760:16)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch3_Case163:
+AppEvent_InlineHandler_Switch3_OnTitleSqmdel:
 	lda	xiz, (0xf1d7:16)
 	lda_d16	xwa, (9772)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch3_Case161:
+AppEvent_InlineHandler_Switch3_OnTitleSqmers:
 	lda	xiz, (0xf1dc:16)
 	lda_d16	xwa, (9766)
 	jr	AppEvent_InlineHandler_Join
-AppEvent_InlineHandler_Switch3_Case156:
+AppEvent_InlineHandler_Switch3_OnTitleSqqtz:
 	lda	xiz, (0xf1f2:16)
 	lda	xwa, (9724:16)
 	jr	AppEvent_InlineHandler_Join

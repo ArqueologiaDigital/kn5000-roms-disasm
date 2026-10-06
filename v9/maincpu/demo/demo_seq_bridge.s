@@ -660,9 +660,9 @@ SqTrSel_CaseG:
 SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
 	jrl CDlikeSwTtl_SongBit1Check
-SqTrSel_CaseG_Case112:
+SqTrSel_CaseG_OnTitleDpdoc:
 	jrl CDlikeSwTtl_DocBitCheck
-SqTrSel_CaseG_Case113:
+SqTrSel_CaseG_OnTitleDppd:
 	jrl CDlikeSwTtl_PdBitCheck
 SqTrSel_CaseG_Thunk1:
 	push xde

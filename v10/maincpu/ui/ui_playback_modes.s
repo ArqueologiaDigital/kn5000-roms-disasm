@@ -1713,12 +1713,12 @@ DisplayMode_BatchEventSend:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
-DisplayMode_DispatchEvents_Case115:
+DisplayMode_DispatchEvents_OnTitleDpmdlysmf:
 	ld	xwa, 0x73000c
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
-DisplayMode_DispatchEvents_Case112:
+DisplayMode_DispatchEvents_OnTitleDpdoc:
 	ld	xwa, 0x700007
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1731,7 +1731,7 @@ DisplayMode_DispatchEvents_Case112:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
-DisplayMode_DispatchEvents_Case116:
+DisplayMode_DispatchEvents_OnTitleDpmdlydoc:
 	ld	xwa, 0x74000a
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1744,7 +1744,7 @@ DisplayMode_DispatchEvents_Case116:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
-DisplayMode_DispatchEvents_Case113:
+DisplayMode_DispatchEvents_OnTitleDppd:
 	ld	xwa, 0x710007
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1753,7 +1753,7 @@ DisplayMode_DispatchEvents_Case113:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
-DisplayMode_DispatchEvents_Case117:
+DisplayMode_DispatchEvents_OnTitleDpmdlypd:
 	ld	xwa, 0x750009
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1763,7 +1763,7 @@ DisplayMode_DispatchEvents_Case117:
 	ld	xde, 0:i3
 DisplayMode_DispatchEvents_Join:
 	call	ApPostEvent
-DisplayMode_DispatchEvents_Case114:
+DisplayMode_DispatchEvents_OnTitleDpsmflyr:
 	ret
 
 DisplayMode_RefreshState:

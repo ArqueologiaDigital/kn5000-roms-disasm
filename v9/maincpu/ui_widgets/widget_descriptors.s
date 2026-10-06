@@ -4331,16 +4331,16 @@ AppEvent_RecordDispatch_BitMasks:
 ; SeqEvent_MainHandler_CaseTable[14].
 ; -----------------------------------------------------------------------------
 SeqEvent_MainHandler_CaseTable:
-	.short	SeqEvent_MainHandler_Case155 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case156 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case157 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case158 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case159 - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqtrkmrg - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqqtz - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqtrns - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqvelocng - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqnotecng - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case161 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case162 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case163 - SeqEvent_Dispatch
-	.short	SeqEvent_MainHandler_Case164 - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmers - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmcp - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmdel - SeqEvent_Dispatch
+	.short	SeqEvent_MainHandler_OnTitleSqmins - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
 	.short	AppEvent_PostDefaultEvents - SeqEvent_Dispatch
@@ -4396,14 +4396,14 @@ AppEvtHandler_Branch_021_CaseTable:
 ; AppEvtHandler_Branch_006_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_006_CaseTable:
-	.short	AppEvtHandler_Branch_006_Case156 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case157 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case158 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqqtz - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqtrns - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqvelocng - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_006_Code - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case161 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqmers - AppEvtHandler_Branch_006_Code
 	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Case163 - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqmdel - AppEvtHandler_Branch_006_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_CaseTable
 ; AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
@@ -4417,14 +4417,14 @@ AppEvtHandler_Branch_006_CaseTable:
 ; AppEvtHandler_Branch_002_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_002_CaseTable:
-	.short	AppEvtHandler_Branch_002_Case156 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case157 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case158 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqqtz - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqtrns - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqvelocng - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_002_Code - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case161 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqmers - AppEvtHandler_Branch_002_Code
 	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Case163 - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqmdel - AppEvtHandler_Branch_002_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_RamPtrs
 ; AppEvtHandler_Branch_002_RamPtrs -- Nine u32 RAM addresses (0xf1f1,
@@ -4532,14 +4532,14 @@ AppEvent_SubDispatch_CaseTable_2:
 ; AppEvent_SubDispatch_Table[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table:
-	.short	AppEvent_InlineHandler_Switch3_Case156 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case157 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case158 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqqtz - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqtrns - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqvelocng - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_SubDispatch_Code_2 - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_InlineHandler_Skip19 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case161 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmers - AppEvent_SubDispatch_Code_2
 	.short	AppEvent_InlineHandler_Skip19 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_Case163 - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmdel - AppEvent_SubDispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_Table_2
 ; AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
@@ -4551,14 +4551,14 @@ AppEvent_SubDispatch_Table:
 ; AppEvent_SubDispatch_Table_2[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table_2:
-	.short	AppEvent_InlineHandler_Switch2_Case156 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case157 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case158 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqqtz - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqtrns - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqvelocng - AppEvent_SubDispatch_Code
 	.short	AppEvent_SubDispatch_Code - AppEvent_SubDispatch_Code
 	.short	AppEvent_InlineHandler_Skip17 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case161 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmers - AppEvent_SubDispatch_Code
 	.short	AppEvent_InlineHandler_Skip17 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_Case163 - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmdel - AppEvent_SubDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_RamPtrs
 ; AppEvent_SubDispatch_RamPtrs -- Byte-identical to
